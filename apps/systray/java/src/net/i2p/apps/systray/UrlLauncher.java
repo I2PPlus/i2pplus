@@ -38,7 +38,7 @@ import net.i2p.util.SystemVersion;
  * default browser for the host platform first, then popular third-party
  * browsers if that was not successful.
  * <p>
- * Handles Galeon, Internet Explorer, Konqueror, Links, Lynx, Mozilla, Mozilla
+ * Handles Galeon, Internet Explorer, Falkon, Konqueror, Links, Lynx, Mozilla, Mozilla
  * Firefox, Netscape, Opera, and Safari.
  *
  * @author hypercubus
