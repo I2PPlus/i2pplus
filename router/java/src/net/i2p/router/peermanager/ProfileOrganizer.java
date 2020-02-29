@@ -394,7 +394,7 @@ public class ProfileOrganizer {
                 _log.debug("Need " + howMany + " Fast peer for tunnel build; " + matches.size() + " found - selecting remainder from High Capacity tier");
             selectHighCapacityPeers(howMany, exclude, matches, mask);
         } else {
-            if (_log.shouldLog(Log.DEBUG))
+            if (_log.shouldDebug())
                 if (howMany != 1)
                 _log.debug(howMany + " Fast peers selected for tunnel build");
                 else
@@ -465,7 +465,7 @@ public class ProfileOrganizer {
                 _log.debug("Need " + howMany + " Fast peers for tunnel build; " + matches.size() + " found - selecting remainder from High Capacity peers");
             selectHighCapacityPeers(howMany, exclude, matches, 2);
         } else {
-            if (_log.shouldLog(Log.DEBUG))
+            if (_log.shouldDebug())
                 _log.debug(howMany + " Fast peers selected for tunnel build");
         }
         return;
@@ -502,7 +502,7 @@ public class ProfileOrganizer {
                 _log.debug("Need " + howMany + " High Capacity peers for tunnel build; " + matches.size() + " found - selecting remainder from Not Failing peers");
             selectActiveNotFailingPeers2(howMany, exclude, matches, mask);
         } else {
-            if (_log.shouldLog(Log.DEBUG))
+            if (_log.shouldDebug())
                 _log.debug(howMany + " High Capacity peers selected for tunnel build");
         }
         return;
@@ -536,7 +536,7 @@ public class ProfileOrganizer {
                 _log.debug("Need " + howMany + " Integrated peers for tunnel build; " + matches.size() + " found - selecting remainder from Not Failing peers");
             selectNotFailingPeers(howMany, exclude, matches, mask);
         } else {
-            if (_log.shouldLog(Log.DEBUG))
+            if (_log.shouldDebug())
                 _log.debug(howMany + " Integrated peers selected for tunnel build");
         }
 
@@ -639,7 +639,7 @@ public class ProfileOrganizer {
                 _log.debug("Need " + howMany + " Not Failing peers for tunnel build; " + matches.size() + " found - selecting remainder from most reliable Failing peers");
             selectNotFailingPeers(howMany, exclude, matches, mask);
         } else {
-            if (_log.shouldLog(Log.DEBUG))
+            if (_log.shouldDebug())
                 _log.debug(howMany + " Not Failing peers selected for tunnel build");
         }
     }
