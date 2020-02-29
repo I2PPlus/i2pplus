@@ -258,7 +258,7 @@ ${book.loadBookMessages}
 <td><input type="text" name="hostname" value="${book.hostname}" required x-moz-errormessage="<%=intl._t("Please supply a hostname.")%>" size="54"></td>
 </tr>
 <tr>
-<td><b><%=intl._t("Destination")%></b></td>
+<td><b><%=intl._t("Destination or Base 32 Address")%></b></td>
 <td><textarea name="destination" required x-moz-errormessage="<%=intl._t("Please supply a Base64 destination for this hostname.")%>" rows="1" style="height:3em" wrap="off" cols="70" spellcheck="false">${book.destination}</textarea></td>
 </tr>
 </table>
