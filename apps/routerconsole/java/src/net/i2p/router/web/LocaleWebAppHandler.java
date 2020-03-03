@@ -43,7 +43,7 @@ public class LocaleWebAppHandler extends HandlerWrapper
         _wac.setServletHandler(servletHandler);
         setHandler(_wac);
     }
-    
+
     /**
      *  Handle foo.jsp by converting to foo_xx.jsp
      *  for language xx, where xx is the language for the default locale,
@@ -61,7 +61,14 @@ public class LocaleWebAppHandler extends HandlerWrapper
         if (pathInContext.equals("/") || pathInContext.equals("/index.html")) {
             // home page
             pathInContext = "/index.jsp";
-        } else if (pathInContext.indexOf('/', 1) < 0 &&
+        }
+        if (pathInContext.equals("/help/") || pathInContext.equals("/help/index")) {
+            // help section table of contents
+            pathInContext = "/help/index.jsp";
+        }
+        if ((pathInContext.contains("/help/") && (!pathInContext.endsWith(".jsp")))) {
+            pathInContext += ".jsp";
+        } else if ((pathInContext.indexOf('/', 1) < 0) &&
                    (!pathInContext.endsWith(".jsp")) &&
                    (!pathInContext.endsWith(".log")) &&
                    (!pathInContext.endsWith(".txt"))) {

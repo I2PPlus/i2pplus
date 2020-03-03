@@ -22,8 +22,8 @@ class FloodOnlyLookupSelector implements MessageSelector {
         _log = ctx.logManager().getLog(getClass());
     }
 
-    public boolean continueMatching() { 
-        return _search.getLookupsRemaining() > 0 && !_matchFound && _context.clock().now() < getExpiration(); 
+    public boolean continueMatching() {
+        return _search.getLookupsRemaining() > 0 && !_matchFound && _context.clock().now() < getExpiration();
     }
 
     public long getExpiration() { return (_matchFound ? -1 : _search.getExpiration()); }
@@ -56,13 +56,14 @@ class FloodOnlyLookupSelector implements MessageSelector {
                 // Only process if we don't know enough floodfills or are starting up
                 if (_search.shouldProcessDSRM()) {
                     if (_log.shouldLog(Log.INFO))
-                        _log.info(_search.getJobId() + ": Processing DSRM via SingleLookupJob, apparently from " + dsrm.getFromHash());
+                        _log.info("[Job " + _search.getJobId() + "] Processing DbSearchReplyMsg via SingleLookupJob from [" +
+                                  dsrm.getFromHash().toBase64().substring(0,6) + "]");
                     // Chase the hashes from the reply
                     _context.jobQueue().addJob(new SingleLookupJob(_context, dsrm));
                 } else if (_log.shouldLog(Log.INFO)) {
                     int remaining = _search.getLookupsRemaining();
-                    _log.info(_search.getJobId() + ": got a DSRM apparently from " + dsrm.getFromHash() + " when we were looking for " 
-                              + _search.getKey() + ", with " + remaining + " outstanding searches");
+                    _log.info("[Job " + _search.getJobId() + "] DbSearchReplyMsg from [" + dsrm.getFromHash().toBase64().substring(0,6) + "] while looking for ["
+                              + _search.getKey().toBase64().substring(0,6) + "] with " + remaining + " outstanding searches");
                 }
 
                 // if no more left, time to fail
@@ -71,10 +72,10 @@ class FloodOnlyLookupSelector implements MessageSelector {
             }
         }
         return false;
-    }   
+    }
 
     /** @since 0.9.12 */
     public String toString() {
-        return "FOL Selector for " + _search.getKey();
+        return "FloodOnlyLookup Selector for " + _search.getKey();
     }
 }

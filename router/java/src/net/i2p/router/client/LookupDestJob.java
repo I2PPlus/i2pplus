@@ -132,10 +132,10 @@ class LookupDestJob extends JobImpl {
         _name = name;
         _blindData = bd;
     }
-    
+
     public String getName() { return _name != null ?
-                                     "HostName Lookup for Client" :
-                                     "LeaseSet Lookup for Client";
+                                     "Lookup Hostname for Client" :
+                                     "Lookup LeaseSet for Client";
     }
 
     public void runJob() {
@@ -195,7 +195,7 @@ class LookupDestJob extends JobImpl {
         public DoneJob(RouterContext enclosingContext) { 
             super(enclosingContext);
         }
-        public String getName() { return "LeaseSet Lookup Reply to Client"; }
+        public String getName() { return "Lookup LeaseSet &amp; Reply to Client"; }
         public void runJob() {
             Destination dest = getContext().netDb().lookupDestinationLocally(_hash);
             if (dest == null && _blindData != null) {

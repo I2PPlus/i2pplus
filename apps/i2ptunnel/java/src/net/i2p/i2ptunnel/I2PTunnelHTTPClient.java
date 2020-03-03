@@ -133,7 +133,7 @@ public class I2PTunnelHTTPClient extends I2PTunnelHTTPClientBase implements Runn
             "\r\n" +
             "<html><body><H1>I2P ERROR: No outproxy found</H1>" +
             "Your request was for a site outside of I2P, but you have no " +
-            "HTTP outproxy configured.  Please configure an outproxy in I2PTunnel";
+            "HTTP outproxy configured. Please configure an outproxy in I2PTunnel";
 
     private final static String ERR_AHELPER_CONFLICT =
             "HTTP/1.1 409 Conflict\r\n" +
@@ -420,14 +420,15 @@ public class I2PTunnelHTTPClient extends I2PTunnelHTTPClientBase implements Runn
             while((line = reader.readLine(method)) != null) {
                 line = line.trim();
                 if(_log.shouldLog(Log.DEBUG)) {
-                    _log.debug(getPrefix(requestId) + "Line=[" + line + "]");
+                    if (line != null)
+                        _log.debug(getPrefix(requestId) + "Request header: " + line);
                 }
 
                 String lowercaseLine = line.toLowerCase(Locale.US);
 
                 if(method == null) { // first line (GET /base64/realaddr)
                     if(_log.shouldLog(Log.DEBUG)) {
-                        _log.debug(getPrefix(requestId) + "First line [" + line + "]");
+                        _log.debug(getPrefix(requestId) + "First line: " + line);
                     }
 
                     String[] params = DataHelper.split(line, " ", 3);
@@ -566,7 +567,7 @@ public class I2PTunnelHTTPClient extends I2PTunnelHTTPClientBase implements Runn
                     protocol = requestURI.getScheme();
                     host = requestURI.getHost();
                     if(protocol == null || host == null) {
-                        _log.warn("Null protocol or host: " + request + ' ' + protocol + ' ' + host);
+                        _log.warn("[HTTPClient] Null protocol or host: " + request + ' ' + protocol + ' ' + host);
                         method = null;
                         break;
                     }
@@ -617,7 +618,7 @@ public class I2PTunnelHTTPClient extends I2PTunnelHTTPClientBase implements Runn
                                 break;
                             }
                         } else {
-                            _log.warn("Bad http://i2p/b64dest " + request);
+                            _log.warn("[HTTPClient] Bad i2p/b64dest " + request);
                             host = null;
                             break;
                         }
@@ -762,7 +763,8 @@ public class I2PTunnelHTTPClient extends I2PTunnelHTTPClientBase implements Runn
                                         String header = getErrorPage("ahelper-conflict", ERR_AHELPER_CONFLICT);
                                         out.write(header.getBytes("UTF-8"));
                                         out.write("<p>".getBytes("UTF-8"));
-                                        out.write(_t("To visit the destination in your address book, click <a href=\"{0}\">here</a>. To visit the conflicting addresshelper destination, click <a href=\"{1}\">here</a>.",
+                                        out.write(_t("To visit the destination in your address book, click <a href=\"{0}\">here</a>. " +
+                                                     "To visit the conflicting addresshelper destination, click <a href=\"{1}\">here</a>.",
                                                     trustedURL, conflictURL).getBytes("UTF-8"));
                                         out.write("</p>".getBytes("UTF-8"));
                                         Hash h1 = ConvertToHash.getHash(requestURI.getHost());
@@ -855,7 +857,7 @@ public class I2PTunnelHTTPClient extends I2PTunnelHTTPClientBase implements Runn
                                     usingInternalOutproxy = true;
                                     targetRequest = requestURI.toASCIIString();
                                     if(_log.shouldLog(Log.DEBUG))
-                                        _log.debug(getPrefix(requestId) + " [" + host + "]: outproxy!");
+                                        _log.debug(getPrefix(requestId) + "via outproxy -> " + host);
                                 }
                             }
                         }
@@ -865,19 +867,21 @@ public class I2PTunnelHTTPClient extends I2PTunnelHTTPClientBase implements Runn
                             }
                             // The request must be forwarded to a WWW proxy
                             if(_log.shouldLog(Log.DEBUG)) {
-                                _log.debug("Before selecting outproxy for " + host);
+                                _log.debug("[HTTPClient] Forwarding request for " + host + " to outproxy");
                             }
                             if ("https".equals(protocol) ||
-                                method.toUpperCase(Locale.US).equals("CONNECT"))
+                                method.toUpperCase(Locale.US).equals("CONNECT")){
                                 currentProxy = selectSSLProxy(hostLowerCase);
-                            else
+                                if(_log.shouldLog(Log.DEBUG))
+                                    _log.debug("[HTTPClient] Selected [" + currentProxy + "] SSL outproxy for " + host);
+                            } else {
                                 currentProxy = selectProxy(hostLowerCase);
-                            if(_log.shouldLog(Log.DEBUG)) {
-                                _log.debug("After selecting outproxy for " + host + ": " + currentProxy);
+                                if(_log.shouldLog(Log.DEBUG))
+                                    _log.debug("[HTTPClient] Selected [" + currentProxy + "] outproxy for " + host);
                             }
                             if(currentProxy == null) {
                                 if(_log.shouldLog(Log.WARN)) {
-                                    _log.warn("No outproxy configured for request: " + requestURI);
+                                    _log.warn("[HTTPClient] Cannot connect to site; no outproxy configured \n* Request: " + requestURI);
                                 }
                                 try {
                                     out.write(getErrorPage("noproxy", ERR_NO_OUTPROXY).getBytes("UTF-8"));
@@ -892,7 +896,7 @@ public class I2PTunnelHTTPClient extends I2PTunnelHTTPClientBase implements Runn
                             usingWWWProxy = true;
                             targetRequest = requestURI.toASCIIString();
                             if(_log.shouldLog(Log.DEBUG)) {
-                                _log.debug(getPrefix(requestId) + " [" + host + "]: wwwProxy!");
+                                _log.debug(getPrefix(requestId) + " for [" + host + "] forwarded \n* Outproxy: " + destination);
                             }
                         }
                     } else {
@@ -901,7 +905,7 @@ public class I2PTunnelHTTPClient extends I2PTunnelHTTPClientBase implements Runn
                         // Perhaps something in privatehosts.txt ...
                         // Rather than look it up, just bail out.
                         if(_log.shouldLog(Log.WARN)) {
-                            _log.warn("NODOTS, NOI2P: " + request);
+                            _log.warn("[HTTPClient] Malformed hostname " + request + " - aborting");
                         }
                         try {
                             out.write(getErrorPage("denied", ERR_REQUEST_DENIED).getBytes("UTF-8"));
@@ -932,9 +936,9 @@ public class I2PTunnelHTTPClient extends I2PTunnelHTTPClientBase implements Runn
                     }
 
                     if(_log.shouldLog(Log.DEBUG)) {
-                        _log.debug(getPrefix(requestId) + "NEWREQ: \"" + line + "\"");
-                        _log.debug(getPrefix(requestId) + "HOST  : \"" + host + "\"");
-                        _log.debug(getPrefix(requestId) + "DEST  : \"" + destination + "\"");
+                        _log.debug(getPrefix(requestId) + "NEWREQ: " + line);
+                        _log.debug(getPrefix(requestId) + "HOST: " + host);
+                        _log.debug(getPrefix(requestId) + "DEST: " + destination);
                     }
 
                 // end first line processing
@@ -954,8 +958,8 @@ public class I2PTunnelHTTPClient extends I2PTunnelHTTPClientBase implements Runn
                         // Note that we only pass the original Host: line through to the outproxy
                         // But we don't create a Host: line if it wasn't sent to us
                         line = "Host: " + host;
-                        if (_log.shouldDebug()) {
-                            _log.debug(getPrefix(requestId) + "Setting host = " + host);
+                        if(_log.shouldLog(Log.DEBUG)) {
+                            _log.info(getPrefix(requestId) + "Setting Host: " + host);
                         }
                     } else if(lowercaseLine.startsWith("user-agent: ")) {
                         // save for deciding whether to offer address book form
@@ -1113,7 +1117,7 @@ public class I2PTunnelHTTPClient extends I2PTunnelHTTPClientBase implements Runn
             } // end header processing
 
             if(_log.shouldLog(Log.DEBUG)) {
-                _log.debug(getPrefix(requestId) + "NewRequest header: [" + newRequest.toString() + "]");
+                _log.debug(getPrefix(requestId) + "NewRequest header\n\t" + newRequest.toString());
             }
 
             if(method == null || (destination == null && !usingInternalOutproxy)) {
@@ -1203,7 +1207,7 @@ public class I2PTunnelHTTPClient extends I2PTunnelHTTPClientBase implements Runn
                     // remove bad entries
                     addressHelpers.remove(destination.toLowerCase(Locale.US));
                     if(_log.shouldLog(Log.WARN)) {
-                        _log.warn(getPrefix(requestId) + "Could not find destination for " + addressHelper);
+                        _log.warn(getPrefix(requestId) + "[HTTPClient] Could not find destination for " + addressHelper);
                     }
                     String header = getErrorPage("ahelper-notfound", ERR_AHELPER_NOTFOUND);
                     try {
@@ -1230,12 +1234,12 @@ public class I2PTunnelHTTPClient extends I2PTunnelHTTPClientBase implements Runn
                     try {
                         BlindData bd = Blinding.decode(_context, destination);
                         if (_log.shouldWarn())
-                            _log.warn("Resolved b33 " + bd);
+                            _log.warn("[HTTPClient] Resolved b33: " + bd);
                         // TESTING
                         //sess.sendBlindingInfo(bd, 24*60*60*1000);
                     } catch (IllegalArgumentException iae) {
                         if (_log.shouldWarn())
-                            _log.warn("Unable to resolve b33 " + destination, iae);
+                            _log.warn("[HTTPClient] Unable to resolve b33: " + destination, iae);
                         // b33 error page
                         String header = getErrorPage("b32", ERR_DESTINATION_UNKNOWN);
                         try {
@@ -1252,7 +1256,7 @@ public class I2PTunnelHTTPClient extends I2PTunnelHTTPClientBase implements Runn
                         byte[] hData = Base32.decode(destination.substring(0, 52));
                         if (hData != null) {
                             if (_log.shouldInfo())
-                                _log.info("lookup b32 in-session " + destination);
+                                _log.info("[HTTPClient] Looking up b32 in-session: " + destination);
                             Hash hash = Hash.create(hData);
                             clientDest = sess.lookupDest(hash, 20*1000);
                         } else {
@@ -1260,13 +1264,13 @@ public class I2PTunnelHTTPClient extends I2PTunnelHTTPClientBase implements Runn
                         }
                     } else if (len >= 64) {
                         if (_log.shouldInfo())
-                            _log.info("lookup b33 in-session " + destination);
+                            _log.info("[HTTPClient] Lookup b33 in-session " + destination);
                         LookupResult lresult = sess.lookupDest2(destination, 20*1000);
                         clientDest = lresult.getDestination();
                         int code = lresult.getResultCode();
                         if (code != LookupResult.RESULT_SUCCESS) {
                             if (_log.shouldWarn())
-                                _log.warn("Unable to resolve b33 " + destination + " error code " + code);
+                                _log.warn("[HTTPClient] Unable to resolve b33 " + destination + " error code " + code);
                             if (code != LookupResult.RESULT_FAILURE) {
                                 // form to supply missing data
                                 writeB32SaveForm(out, destination, code, targetRequest);
@@ -1277,20 +1281,20 @@ public class I2PTunnelHTTPClient extends I2PTunnelHTTPClientBase implements Runn
                     }
                 } else {
                     if (_log.shouldInfo())
-                        _log.info("lookup b32 out of session " + destination);
+                        _log.info("[HTTPClient] B32 lookup out of session for: " + destination);
                     // TODO can't get result code from here
                     clientDest = _context.namingService().lookup(destination);
                 }
             } else {
                 if (_log.shouldInfo())
-                    _log.info("lookup hostname " + destination);
+                    _log.info("[HTTPClient] Looking up hostname: " + destination);
                 clientDest = _context.namingService().lookup(destination);
             }
 
             if(clientDest == null) {
                 //l.log("Could not resolve " + destination + ".");
                 if(_log.shouldLog(Log.WARN)) {
-                    _log.warn("Unable to resolve " + destination + " (proxy? " + usingWWWProxy + ", request: " + targetRequest);
+                    _log.warn("[HTTPClient] Unable to resolve " + destination + "-> Proxy? " + usingWWWProxy + "\n* Request: " + targetRequest);
                 }
                 String header;
                 String jumpServers = null;
@@ -1301,7 +1305,7 @@ public class I2PTunnelHTTPClient extends I2PTunnelHTTPClientBase implements Runn
                     header = getErrorPage("dnfb", ERR_DESTINATION_UNKNOWN);
                 } else if(destination.length() >= 60 && destination.toLowerCase(Locale.US).endsWith(".b32.i2p")) {
                     header = getErrorPage("nols", ERR_DESTINATION_UNKNOWN);
-                    extraMessage = _t("Destination lease set not found");
+                    extraMessage = _t("Destination LeaseSet not found");
                 } else {
                     header = getErrorPage("dnfh", ERR_DESTINATION_UNKNOWN);
                     jumpServers = getTunnel().getClientOptions().getProperty(PROP_JUMP_SERVERS);
@@ -1332,7 +1336,7 @@ public class I2PTunnelHTTPClient extends I2PTunnelHTTPClientBase implements Runn
                     // ignore
                 }
                 if (_log.shouldLog(Log.WARN))
-                    _log.warn("SSL to i2p destinations denied by configuration: " + targetRequest);
+                    _log.warn("[HTTPClient] SSL to i2p destinations denied by configuration \n* Request: " + targetRequest);
                 return;
             }
 
@@ -1357,7 +1361,7 @@ public class I2PTunnelHTTPClient extends I2PTunnelHTTPClientBase implements Runn
             if (ahelperPresent && !"POST".equals(method) && !"PUT".equals(method)) {
                 String uri = targetRequest;
                 if(_log.shouldLog(Log.DEBUG)) {
-                    _log.debug("Auto redirecting to " + uri);
+                    _log.debug("[HTTPClient] Auto redirecting to " + uri);
                 }
                 try {
                     out.write(("HTTP/1.1 301 Address Helper Accepted\r\n" +
@@ -1615,8 +1619,8 @@ public class I2PTunnelHTTPClient extends I2PTunnelHTTPClientBase implements Runn
     public static final String DEFAULT_JUMP_SERVERS =
             //"http://i2host.i2p/cgi-bin/i2hostjump?," +
             "http://stats.i2p/cgi-bin/jump.cgi?a=," +
-	    "http://no.i2p/jump/," +
-	    "http://i2pjump.i2p/jump/";
+            "http://no.i2p/jump/," +
+            "http://i2pjump.i2p/jump/";
             //"http://i2jump.i2p/";
 
     /** @param host ignored */

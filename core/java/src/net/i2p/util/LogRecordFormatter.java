@@ -2,9 +2,9 @@ package net.i2p.util;
 
 /*
  * free (adj.): unencumbered; not under the control of others
- * Written by jrandom in 2003 and released into the public domain 
- * with no warranty of any kind, either expressed or implied.  
- * It probably won't make your computer catch on fire, or eat 
+ * Written by jrandom in 2003 and released into the public domain
+ * with no warranty of any kind, either expressed or implied.
+ * It probably won't make your computer catch on fire, or eat
  * your children, but it might.  Use at your own risk.
  *
  */
@@ -25,9 +25,8 @@ import net.i2p.data.DataHelper;
 class LogRecordFormatter {
     final static String NL = System.getProperty("line.separator");
     // arbitrary max length for the classname property (this makes is it lines up nicely)
-    private final static int MAX_WHERE_LENGTH = 30;
-    // if we're going to have one for where... be consistent
-    private final static int MAX_THREAD_LENGTH = 12;
+    private final static int MAX_WHERE_LENGTH = 16;
+    private final static int MAX_THREAD_LENGTH = 11;
     private final static int MAX_PRIORITY_LENGTH = 5;
 
     public static String formatRecord(LogManager manager, LogRecord rec) {
@@ -59,7 +58,7 @@ class LogRecordFormatter {
                 buf.append(getThread(rec));
                 break;
             case LogManager.PRIORITY:
-                buf.append(getPriority(rec, manager.getContext()));
+                buf.append("| " + getPriority(rec, manager.getContext()));
                 break;
             case LogManager.MESSAGE:
                 String msg = getWhat(rec);
@@ -115,6 +114,9 @@ class LogRecordFormatter {
             len = 8;  // KRITISCH
         else
             len = MAX_PRIORITY_LENGTH;
+        StringBuilder buf = new StringBuilder();
+        while (buf.length() < len)
+            buf.append(' ');
         return toString(Translate.getString(Log.toLevelString(rec.getPriority()), ctx, BUNDLE_NAME), len);
     }
 
@@ -130,9 +132,14 @@ class LogRecordFormatter {
 
     /** truncates or pads to the specified size */
     private static String toString(String str, int size) {
+    String utf16 = "2026"; // ellipsis
+    String ellipsis = String.valueOf(Character.toChars(Integer.parseInt(utf16, 16)));
         StringBuilder buf = new StringBuilder();
         if (str == null) str = "";
-        if (str.length() > size) str = str.substring(str.length() - size);
+        if (str.length() > size) {
+            str = str.substring(str.length() - size);
+            buf.append(ellipsis);
+        }
         buf.append(str);
         while (buf.length() < size)
             buf.append(' ');

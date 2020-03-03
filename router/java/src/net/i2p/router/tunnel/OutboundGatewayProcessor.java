@@ -11,22 +11,22 @@ import net.i2p.util.SimpleByteCache;
 /**
  * Turn the preprocessed tunnel data into something that can be delivered to the
  * first hop in the tunnel.  The crypto used in this class is also used by the
- * InboundEndpointProcessor, as its the same 'undo' function of the tunnel crypto.
+ * InboundEndpointProcessor, as it's the same 'undo' function of the tunnel crypto.
  *
  */
 class OutboundGatewayProcessor {
     private final I2PAppContext _context;
     //private final Log _log;
     private final TunnelCreatorConfig _config;
-        
+
     public OutboundGatewayProcessor(I2PAppContext ctx, TunnelCreatorConfig cfg) {
         _context = ctx;
         //_log = ctx.logManager().getLog(OutboundGatewayProcessor.class);
         _config = cfg;
     }
-    
+
     /**
-     * Since we are the outbound gateway, pick a random IV and wrap the preprocessed 
+     * Since we are the outbound gateway, pick a random IV and wrap the preprocessed
      * data so that it will be exposed at the endpoint.
      *
      * @param orig original data with an extra 16 byte IV prepended.
@@ -36,14 +36,14 @@ class OutboundGatewayProcessor {
      */
     public void process(byte orig[], int offset, int length) {
         //if (_log.shouldLog(Log.DEBUG)) {
-        //    _log.debug("Orig random IV: " + Base64.encode(orig, offset, IV_LENGTH));
+        //    _log.debug("Original random IV: " + Base64.encode(orig, offset, IV_LENGTH));
         //    _log.debug("data:  " + Base64.encode(orig, IV_LENGTH, length - IV_LENGTH));
         //}
         decrypt(_config, orig, offset, length);
         //if (_log.shouldLog(Log.DEBUG))
-        //    _log.debug("finished processing the preprocessed data");
+        //    _log.debug("Finished processing the preprocessed data for first hop from our Outbound Gateway.");
     }
-    
+
     /**
      * Iteratively undo the crypto that the various layers in the tunnel added.  This is used
      * by the outbound gateway (preemptively undoing the crypto peers will add).
@@ -63,7 +63,7 @@ class OutboundGatewayProcessor {
             //}
         }
     }
-    
+
     /**
      * Undo the crypto for a single hop.  This is used
      * by both the outbound gateway (preemptively undoing the crypto peers will add)

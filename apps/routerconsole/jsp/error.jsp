@@ -13,7 +13,7 @@
     if (ERROR_CODE != null)
         response.setStatus(ERROR_CODE.intValue());
     else
-        ERROR_CODE = Integer.valueOf(0);
+        ERROR_CODE = Integer.valueOf(404);
     if (ERROR_URI != null)
         ERROR_URI = net.i2p.data.DataHelper.escapeHTML(ERROR_URI);
     else
@@ -21,17 +21,25 @@
     if (ERROR_MESSAGE != null)
         ERROR_MESSAGE = net.i2p.data.DataHelper.escapeHTML(ERROR_MESSAGE);
     else
-        ERROR_MESSAGE = "";
+        ERROR_MESSAGE = "Not Found";
     // If it can't find the iframe or viewtheme.jsp I wonder if the whole thing blows up...
 %>
-<html><head>
+<html>
+<head>
 <%@include file="css.jsi" %>
 <%=intl.title("Page Not Found")%>
+<script nonce="<%=cspNonce%>" type="text/javascript">if (window.location !== window.top.location) {window.top.location = window.location;}</script>
 <%@include file="summaryajax.jsi" %>
-</head><body>
+</head>
+<body>
+<script nonce="<%=cspNonce%>" type="text/javascript">progressx.show();</script>
 <%@include file="summary.jsi" %>
-<h1><%=ERROR_CODE%>&nbsp;<%=ERROR_MESSAGE%></h1>
+<h1 class="err"><%=ERROR_CODE%>&nbsp;<%=ERROR_MESSAGE%></h1>
 <div class="sorry" id="warning">
-<%=intl._t("Sorry! You appear to be requesting a non-existent Router Console page or resource.")%><hr>
+<%=intl._t("Sorry! You appear to be requesting a non-existent Router Console page or resource.")%>
+<hr>
 <%=intl._t("Error 404")%>: <%=ERROR_URI%>&nbsp;<%=intl._t("not found")%>.
-</div></body></html>
+</div>
+<script nonce="<%=cspNonce%>" type="text/javascript">progressx.hide();</script>
+</body>
+</html>

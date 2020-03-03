@@ -6,7 +6,15 @@
  *
  * Do not tag this file for translation.
  */
+
 net.i2p.I2PAppContext ctx = net.i2p.I2PAppContext.getGlobalContext();
+
+/*
+String lang = ctx.getProperty("routerconsole.lang");
+if (lang == null)
+    lang = "en";
+*/
+
 net.i2p.router.web.StatSummarizer ss = net.i2p.router.web.StatSummarizer.instance(ctx);
 if (ss == null) {
     response.sendError(403, "Stats disabled");
@@ -88,16 +96,16 @@ if ( !rendered && ((rs != null) || fakeBw) ) {
   } catch (NumberFormatException nfe) {}
 }
 /*
- *  Send a 403 instead of a 404, because the server sends error.jsp
+ *  Send a 400 (bad request) instead of a 404, because the server sends error.jsp
  *  for 404 errors, complete with the summary bar, which would be
  *  a huge load for a page full of graphs if there's a problem
  */
 if (!rendered) {
     if (stat != null) {
         stat = net.i2p.data.DataHelper.stripHTML(stat);
-        response.sendError(403, "The stat " + stat + " is not available, it must be enabled for graphing on the stats configuration page.");
+        response.sendError(400, "The stat " + stat + " is not available - it must be enabled for graphing on the stats configuration page.");
     } else {
-        response.sendError(403, "No stat specified");
+        response.sendError(400, "No stat specified");
     }
 }
 %>

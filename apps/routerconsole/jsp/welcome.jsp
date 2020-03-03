@@ -1,4 +1,7 @@
-<%@page contentType="text/html"%><%@page pageEncoding="UTF-8"%><jsp:useBean class="net.i2p.router.web.helpers.WizardHelper" id="wizhelper" scope="session" /><%
+<%@page contentType="text/html"%>
+<%@page pageEncoding="UTF-8"%>
+<jsp:useBean class="net.i2p.router.web.helpers.WizardHelper" id="wizhelper" scope="session" />
+<%
     // note that for the helper we use a session scope, not a request scope,
     // so that we can access the NDT test results.
     // The MLabHelper singleton will prevent multiple simultaneous tests, even across sessions.
@@ -58,8 +61,10 @@
         response.getOutputStream().close();
         return;
     }
-%><!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
-<html><head>
+%>
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+<html>
+<head>
 <%@include file="css.jsi" %>
 <%=intl.title("New Install Wizard")%>
 <%
@@ -81,18 +86,16 @@
 <%
     }  // ipg == 4
 %>
-</head><body>
-<div id="wizard" class="overlay">
-
+</head>
+<body>
+<h2><%=intl._t("New Install Wizard")%> <%=ipg%>/<%=LAST_PAGE%></h2>
+<div id="wizard">
 <jsp:useBean class="net.i2p.router.web.helpers.WizardHandler" id="formhandler" scope="request" />
-
 <%
     // Bind the session-scope Helper to the request-scope Handler
     formhandler.setWizardHelper(wizhelper);
 %>
-<div class="wizardnotice">
 <%@include file="formhandler.jsi" %>
-</div>
 <form action="" method="POST">
 <input type="hidden" name="nonce" value="<%=pageNonce%>">
 <input type="hidden" name="action" value="blah" >
@@ -105,37 +108,28 @@
 <jsp:setProperty name="uihelper" property="contextId" value="<%=i2pcontextId%>" />
 <%-- needed for CSS: --%><div id="config_ui">
 <%-- needed for lang setting in css.jsi: --%><input type="hidden" name="consoleNonce" value="<%=net.i2p.router.web.CSSHelper.getNonce()%>" >
-<img class="wizard progress" src="/themes/console/images/wizard/logogrey1.png">
-<h3 id="wizardheading" class="wizard"><%=uihelper._t("Router Console Language")%></h3>
-<img class="wizardimg" src="/themes/console/images/wizard/undraw_globe.png">
-<div id="wizlangsettings" class="wizard">
+<h3 id="langheading"><%=uihelper._t("Router Console Language")%></h3>
+<div id="langsettings">
 <jsp:getProperty name="uihelper" property="langSettings" />
-</div>
-</div>
+</div></div>
 <%
 
     } else if (ipg == 2) {
         // I2P Philosophy
         // license info?
 %>
-<img class="wizard progress" src="/themes/console/images/wizard/logogrey2.png">
-<h3 id="wizardheading" class="wizard"><%=intl._t("Why I2P?")%></h3>
-<img class="wizardimg" src="/themes/console/images/wizard/undraw_connected_world.png">
-<div class="wizardtext">
-<p>
+<h3><%=intl._t("Why I2P?")%></h3>
+<table class="configtable"><tr><td>
 <%=intl._t("I2P is a communication tool for people who value privacy and wish to remain anonymous online.")%>
 <%=intl._t("I2P is a peer to peer network where you can browse and create hidden services.")%>
-</p>
-</div>
+</td></tr></table>
 <%
 
     } else if (ipg == 3) {
         // Overview of bandwidth test
 %>
-<img class="wizard progress" src="/themes/console/images/wizard/logogrey3.png">
-<h3 id="wizardheading" class="wizard"><%=intl._t("Bandwidth Test")%></h3>
-<img class="wizardimg" src="/themes/console/images/wizard/undraw_speed_test.png">
-<div class="wizardtext">
+<h3><%=intl._t("Bandwidth Test")%></h3>
+<table class="configtable"><tr><td>
 <p>
 <%=intl._t("I2P will now test your internet connection to identify the optimal speed settings.")%>
 <%=intl._t("Bandwidth participation improves the anonymity level of all users on the network and maximizes your download speed.")%>
@@ -147,20 +141,18 @@
 <a href="https://www.measurementlab.net/privacy/" target="_blank"><%=intl._t("M-Lab Privacy Policy")%></a>
 <br><a href="https://github.com/m-lab/mlab-ns/blob/master/MLAB-NS_PRIVACY_POLICY.md" target="_blank"><%=intl._t("M-Lab Name Server Privacy Policy")%></a>
 </p>
-</div>
+</td></tr></table>
 <%
 
     } else if (ipg == 4) {
         // Bandwidth test in progress (w/ AJAX)
 %>
-<img class="wizard progress" src="/themes/console/images/wizard/logogrey4.png">
-<h3 id="wizardheading" class="wizard"><%=intl._t("Bandwidth Test in Progress")%></h3>
-<img class="wizardimg" src="themes/console/images/wizard/undraw_in_progress.png">
-<div id="xhr" class="notifcation">
+<h3><%=intl._t("Bandwidth Test in Progress")%></h3>
+<div id="xhr">
 <!-- for non-script -->
 <%=intl._t("Javascript is disabled - wait 60 seconds for the bandwidth test to complete and then click Next")%>
 </div>
-<div id="xhr2" class="notification">
+<div id="xhr2">
 </div>
 <%
 
@@ -174,9 +166,8 @@
         if (request.getParameter("skipbw") == null) {
             // don't display this if we skipped the test
 %>
-<img class="wizard progress bwtest" src="/themes/console/images/wizard/logogrey5.png">
-<h3 id="wizardheading" class="wizard bwtest"><%=intl._t("Bandwidth Test Results")%></h3>
-<table class="mlabtable">
+<h3><%=intl._t("Bandwidth Test Results")%></h3>
+<table class="configtable">
 <tr><td><%=intl._t("Test running?")%></td><td><%=wizhelper.isNDTRunning()%></td></tr>
 <tr><td><%=intl._t("Test complete?")%></td><td><%=wizhelper.isNDTComplete()%></td></tr>
 <tr><td><%=intl._t("Test server location")%></td><td><%=wizhelper.getServerLocation()%></td></tr>
@@ -190,39 +181,30 @@
 <tr><td><%=intl._t("Upstream Bandwidth")%></td><td><%=net.i2p.data.DataHelper.formatSize2Decimal(wizhelper.getUpBandwidth())%>Bps</td></tr>
 <tr><td><%=intl._t("Share of Bandwidth for I2P")%></td><td><%=Math.round(net.i2p.router.web.helpers.WizardHelper.BW_SCALE * 100)%>%</td></tr>
 <%
-            } // sucessful
+            } // successful
 %>
 </table>
 <%
         } // skipbw
 %>
-<img class="wizard progress" src="/themes/console/images/wizard/logogrey6.png">
-<h3 id="wizardheading" class="wizard"><%=intl._t("Bandwidth Configuration")%></h3>
-<style>
-.bwtest {
-    display: none;
-}
-</style>
-<table id="bandwidthconfig" class="configtable wizardtable">
-<tr><td class="infohelp infodiv" colspan="2">
+<h3><%=intl._t("Bandwidth Configuration")%></h3>
+<table id="bandwidthconfig" class="configtable">
+<tr><td class="infohelp" colspan="2">
 <%=intl._t("I2P will work best if you configure your rates to match the speed of your internet connection.")%>
 </td></tr>
 <tr><td><input style="text-align: right; width: 5em;" name="inboundrate" type="text" size="5" maxlength="5" value="<jsp:getProperty name="wizhelper" property="inboundBurstRate" />" >
 <%=intl._t("KBps In")%>
 </td><td>(<jsp:getProperty name="wizhelper" property="inboundBurstRateBits" />)</td>
-</tr>
-<tr>
+</tr><tr>
 <%-- display burst, set standard, handler will fix up --%>
 <td><input style="text-align: right; width: 5em;" name="outboundrate" type="text" size="5" maxlength="5" value="<jsp:getProperty name="wizhelper" property="outboundBurstRate" />" >
 <%=intl._t("KBps Out")%>
 </td><td>(<jsp:getProperty name="wizhelper" property="outboundBurstRateBits" />)</td>
-</tr>
-<tr>
+</tr><tr>
 <td><jsp:getProperty name="nethelper" property="sharePercentageBox" /> <%=intl._t("Share")%></td>
 <td>(<jsp:getProperty name="wizhelper" property="shareRateBits" />)
 </td></tr>
-</table>
-<div id="infodiv">
+<tr><td class="infohelp" colspan="2">
 <% int share = Math.round(wizhelper.getShareBandwidth() * 1.024f);
     if (share < 12) {
         out.print("<b>");
@@ -240,23 +222,16 @@
 
         out.print(intl._t("The higher the share bandwidth the more you improve your anonymity and help the network."));
     }
-%>
-</div>
+%></td></tr>
+</table>
 <%
 
     } else if (ipg == 6) {
         // Browser setup
 %>
-<img class="wizard progress" src="/themes/console/images/wizard/logogrey7.png">
-<h3 id="wizardheading" class="wizard"><%=intl._t("Browser Setup")%></h3>
-<img class="wizardimg" src="/themes/console/images/wizard/undraw_startup_life.png">
-<div class="wizardtext"><p>
+<h3><%=intl._t("Browser Setup")%></h3>
+<table class="configtable"><tr><td><p>
 <%=intl._t("Your browser needs to be configured to work with I2P.")%>
-<%=intl._t("We currently provide an I2P Browser which configures itself automatically")%>
-<a href="https://geti2p.net/browser" target="_blank"><%=intl._t("that you may retrieve from here.")%></a>
-<%=intl._t("Be aware that this product is currently in beta-testing.")%>
-</p><p>
-<%=intl._t("Alternatively, you can configure your browser of choice to use I2P.")%>
 <a href="https://geti2p.net/htproxyports" target="_blank"><%=intl._t("If you want to do this yourself, here are instructions.")%></a>
 <%
         if (net.i2p.util.SystemVersion.isWindows()) {
@@ -269,60 +244,61 @@
 <%
         } //isWindows()
 %>
-</p></div>
+</p></td></tr></table>
 <%
 
     } else if (ipg == LAST_PAGE) {
         // Done
 %>
-<h3 id="wizardheading" class="wizard"><%=intl._t("Welcome to I2P!")%></h3>
-<img class="wizardimg" src="/themes/console/images/wizard/undraw_High_five.png">
-<div class="wizardtext">
+<h3><%=intl._t("Welcome to I2P!")%></h3>
+<table class="configtable"><tr><td>
 <p>
 <%=intl._t("When you start I2P, it may take a few minutes to bootstrap (integrate) your router into the network and find additional peers, so please be patient.")%>
 </p><p>
 <%=intl._t("When I2P starts up, and during normal operation, I2P's tunnel build readiness indicator in the side panel may indicate that I2P is \"Rejecting Tunnels\"; this is normal behavior.")%>
 <%=intl._t("Once green stars are indicated next to your Local Tunnels, there is a wide variety of things you can do with I2P.")%>
 </p>
-</div>
+</td></tr></table>
 <%
 
     } else {
 %>
-<table class="configtable wizard"><tr><td>unknown wizard page</td></tr></table>
+<table class="configtable"><tr><td>unknown wizard page</td></tr></table>
 <%
     }
 %>
-<div class="wizardbuttons wizard">
-<table class="configtable wizard"><tr class="wizard"><td class="optionsave wizard">
+<div class="wizardbuttons">
+<table class="configtable"><tr><td class="optionsave">
 <%
     if (ipg != 1) {
 %>
-<input type="submit" class="back wizardbutton" name="prev" value="<%=intl._t("Previous")%>" >
+<input type="submit" class="back" name="prev" value="<%=intl._t("Previous")%>" >
 <%
     }
     if (ipg != LAST_PAGE) {
 %>
-<input type="submit" class="cancel wizardbutton" name="skip" value="<%=intl._t("Skip Setup")%>" >
+<input type="submit" class="cancel" name="skip" value="<%=intl._t("Skip Setup")%>" >
 <%
         if (ipg == 3) {
 %>
-<input type="submit" class="cancel wizardbutton" name="skipbw" value="<%=intl._t("Skip Bandwidth Test")%>" >
+<input type="submit" class="cancel" name="skipbw" value="<%=intl._t("Skip Bandwidth Test")%>" >
 <%
         } else if (ipg == 4) {
 %>
-<input type="submit" class="cancel wizardbutton" name="cancelbw" value="<%=intl._t("Cancel Bandwidth Test")%>" >
+<input type="submit" class="cancel" name="cancelbw" value="<%=intl._t("Cancel Bandwidth Test")%>" >
 <%
         }
 %>
-<input type="submit" class="go wizardbutton" name="next" value="<%=intl._t("Next")%>" >
+<input type="submit" class="go" name="next" value="<%=intl._t("Next")%>" >
 <%
     } else {
 %>
-<input type="submit" class="accept wizardbutton" name="done" value="<%=intl._t("Finished")%>" >
+<input type="submit" class="accept" name="done" value="<%=intl._t("Finished")%>" >
 <%
     }
 %>
 </td></tr></table></div>
 </form>
-</div></body></html>
+</div><script nonce="<%=cspNonce%>" type="text/javascript">progressx.hide();</script>
+<script nonce="<%=cspNonce%>" type="text/javascript">progressx.hide();</script>
+</body></html>

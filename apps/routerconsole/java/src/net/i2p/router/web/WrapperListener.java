@@ -86,12 +86,12 @@ class WrapperListener {
                 return;
             } else if (!(event instanceof WrapperControlEvent)) {
                 if (log.shouldWarn())
-                    log.warn("Got unhandled event: " + event);
+                    log.warn("Received unhandled event: " + event);
                 return;
             }
             WrapperControlEvent wce = (WrapperControlEvent) event;
             if (log.shouldLog(Log.WARN))
-                log.warn("Got signal: " + wce.getControlEventName());
+                log.warn("Received signal: " + wce.getControlEventName());
             int sig = wce.getControlEvent();
             switch (sig) {
               case WrapperManager.WRAPPER_CTRL_HUP_EVENT:

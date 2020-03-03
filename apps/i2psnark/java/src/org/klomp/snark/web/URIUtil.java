@@ -33,7 +33,7 @@ import net.i2p.data.DataHelper;
  * <P>UTF-8 encoding is used by default for % encoded characters. This
  * may be overridden with the org.eclipse.jetty.util.URI.charset system property.
  * see UrlEncoded
- * 
+ *
  * I2P modded from Jetty 8.1.15
  * @since 0.9.15
  */
@@ -50,11 +50,11 @@ class URIUtil
     {
         if (path==null || path.length()==0)
             return path;
-        
+
         StringBuilder buf = encodePath(null,path);
         return buf==null?path:buf.toString();
     }
-        
+
     /** Encode a URI path.
      *
      *  Somewhat oddly, this encodes all chars &gt;= 0x80 if buf is null, (strict RFC 2396)
@@ -99,20 +99,20 @@ class URIUtil
                             buf=new StringBuilder(path.length()*2);
                             break loop;
                         }
-                       
+
                 }
             }
             if (buf==null)
                 return null;
         }
-        
+
         //synchronized(buf)
         //{
             if (bytes!=null)
             {
                 for (int i=0;i<bytes.length;i++)
                 {
-                    byte c=bytes[i];       
+                    byte c=bytes[i];
                     switch(c)
                     {
                       case '%':
@@ -173,13 +173,13 @@ class URIUtil
                           continue;
                     }
                 }
-                
+
             }
             else
             {
                 for (int i=0;i<path.length();i++)
                 {
-                    char c=path.charAt(i);       
+                    char c=path.charAt(i);
                     switch(c)
                     {
                         case '%':
@@ -240,7 +240,7 @@ class URIUtil
 
         return buf;
     }
-    
+
     /**
      *  Modded from Jetty TypeUtil
      */
@@ -252,7 +252,7 @@ class URIUtil
             d=0xf&b;
             buf.append((char)((d>9?('A'-10):'0')+d));
     }
-    
+
     /**
      *  UTF-8
      */

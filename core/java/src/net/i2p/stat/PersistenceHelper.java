@@ -16,13 +16,10 @@ class PersistenceHelper {
     private final static String NL = System.getProperty("line.separator");
 
     public final static void add(StringBuilder buf, boolean addComments, String prefix, String name, String description, double value) {
-        if (addComments) {
-            buf.append("# ").append(prefix).append(name).append(NL);
-            buf.append("# ").append(description).append(NL);
-        }
-        buf.append(prefix).append(name).append('=').append(value).append(NL);
         if (addComments)
-           buf.append(NL);
+            buf.append("# ").append(description).append(NL);
+        else
+            buf.append(prefix).append(name).append('=').append(value).append(NL);
     }
 
     /** @since 0.8.5 */
@@ -47,13 +44,10 @@ class PersistenceHelper {
 
     /** @param value non-negative */
     public final static void add(StringBuilder buf, boolean addComments, String prefix, String name, String description, long value) {
-        if (addComments) {
-            buf.append("# ").append(prefix).append(name).append(NL);
-            buf.append("# ").append(description).append(NL);
-        }
-        buf.append(prefix).append(name).append('=').append(value).append(NL);
         if (addComments)
-           buf.append(NL);
+            buf.append("# ").append(description).append(NL);
+        else
+            buf.append(prefix).append(name).append('=').append(value).append(NL);
     }
 
     /**

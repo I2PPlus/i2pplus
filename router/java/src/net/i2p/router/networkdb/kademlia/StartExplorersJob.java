@@ -18,6 +18,9 @@ import net.i2p.router.Router;
 import net.i2p.router.RouterContext;
 import net.i2p.util.Log;
 
+import java.util.Random;
+import net.i2p.router.CommSystemFacade.Status;
+
 /**
  * Fire off search jobs for random keys from the explore pool, up to MAX_PER_RUN
  * at a time.
@@ -30,55 +33,76 @@ import net.i2p.util.Log;
 class StartExplorersJob extends JobImpl {
     private final Log _log;
     private final KademliaNetworkDatabaseFacade _facade;
-    
+
     /** don't explore more than 1 bucket at a time */
-    private static final int MAX_PER_RUN = 1;
-    /** dont explore the network more often than this */
+//    private static final int MAX_PER_RUN = 1;
+    private static final int MAX_PER_RUN = 2;
+    /** don't explore the network more often than this */
     private static final int MIN_RERUN_DELAY_MS = 55*1000;
     /** explore the network at least this often */
-    private static final int MAX_RERUN_DELAY_MS = 15*60*1000;
+//    private static final int MAX_RERUN_DELAY_MS = 15*60*1000;
+    private static final int MAX_RERUN_DELAY_MS = 10*60*1000;
     /** aggressively explore during this time - same as KNDF expiration grace period */
-    private static final int STARTUP_TIME = 60*60*1000;
+//    private static final int STARTUP_TIME = 60*60*1000;
+    private static final int STARTUP_TIME = 24*60*60*1000; // let's give it 24 hours
     /** super-aggressively explore if we have less than this many routers.
         The goal here is to avoid reseeding.
      */
     /** very aggressively explore if we have less than this many routers */
-    private static final int MIN_ROUTERS = 3 * KademliaNetworkDatabaseFacade.MIN_RESEED;
+//    private static final int MIN_ROUTERS = 3 * KademliaNetworkDatabaseFacade.MIN_RESEED;
+    private static final int MIN_ROUTERS = 2000;
     /** aggressively explore if we have less than this many routers */
-    private static final int LOW_ROUTERS = 2 * MIN_ROUTERS;
+//    private static final int LOW_ROUTERS = 2 * MIN_ROUTERS;
+    private static final int LOW_ROUTERS = 3000;
     /** explore slowly if we have more than this many routers */
-    private static final int MAX_ROUTERS = 2 * LOW_ROUTERS;
-    private static final int MIN_FFS = 50;
+//    private static final int MAX_ROUTERS = 2 * LOW_ROUTERS;
+    private static final int MAX_ROUTERS = 4000;
+//    private static final int MIN_FFS = 50;
+    private static final int MIN_FFS = 1500;
     static final int LOW_FFS = 2 * MIN_FFS;
+    private static final long MAX_LAG = 150;
+    private static final long MAX_MSG_DELAY = 750;
+    static final String PROP_EXPLORE_DELAY_MS = "router.explorePeersDelay";
+    static final String PROP_EXPLORE_BUCKETS = "router.exploreBuckets";
+    static final String PROP_FORCE_EXPLORE = "router.exploreWhenFloodfill";
 
-    private static final long MAX_LAG = 100;
-    private static final long MAX_MSG_DELAY = 1500;
-    
     public StartExplorersJob(RouterContext context, KademliaNetworkDatabaseFacade facade) {
         super(context);
         _log = context.logManager().getLog(StartExplorersJob.class);
         _facade = facade;
     }
-    
-    public String getName() { return "Start Explorers Job"; }
+
+    public String getName() { return "Start NetDb Explorers"; }
 
     public void runJob() {
-        if (! (_facade.floodfillEnabled() ||
+        String forceExplore = getContext().getProperty("router.exploreWhenFloodfill");
+        if (! ((_facade.floodfillEnabled() && forceExplore == null) ||
                getContext().jobQueue().getMaxLag() > MAX_LAG ||
                getContext().throttle().getMessageDelay() > MAX_MSG_DELAY ||
-               // message delay limit also?
+               getContext().commSystem().getStatus() == Status.DISCONNECTED ||
                getContext().router().gracefulShutdownInProgress())) {
             int num = MAX_PER_RUN;
             int count = _facade.getDataStore().size();
+        String exploreBuckets = getContext().getProperty("router.exploreBuckets");
+        if (exploreBuckets == null) {
             if (count < MIN_ROUTERS)
-                num *= 15;  // at less than 3x MIN_RESEED, explore extremely aggressively
+//                num *= 15;  // at less than 3x MIN_RESEED, explore extremely aggressively
+                num *= 8;  // at less than 3x MIN_RESEED, explore extremely aggressively
             else if (count < LOW_ROUTERS)
-                num *= 10;  // 3x was not sufficient to keep hidden routers from losing peers
+//                num *= 10;  // 3x was not sufficient to keep hidden routers from losing peers
+                num *= 5;  // 3x was not sufficient to keep hidden routers from losing peers
             if (getContext().router().getUptime() < STARTUP_TIME)
                 num *= 2;
+            if (getContext().jobQueue().getMaxLag() > 250 || getContext().throttle().getMessageDelay() > 500)
+                num = 2;
+            if (getContext().jobQueue().getMaxLag() > 500 || getContext().throttle().getMessageDelay() > 1000)
+                num = 1;
+            } else {
+                num = Integer.valueOf(exploreBuckets);
+            }
             Set<Hash> toExplore = selectKeysToExplore(num);
-            if (_log.shouldLog(Log.DEBUG))
-                _log.debug("Keys to explore during this run: " + toExplore + ", wanted " + num + ", got " + toExplore.size());
+            if (_log.shouldLog(Log.INFO))
+                _log.info("Exploring up to " + num + " buckets during this run");
             _facade.removeFromExploreKeys(toExplore);
             long delay = 0;
 
@@ -99,17 +123,34 @@ class StartExplorersJob extends JobImpl {
                     j.getTiming().setStartAfter(getContext().clock().now() + delay);
                 getContext().jobQueue().addJob(j);
                 // spread them out
-                delay += 1000 + getContext().random().nextInt(512);
+                Random random = getContext().random();
+                delay += 750 + (random.nextInt(500) * random.nextInt(5)) - random.nextInt(550);
+                if (_log.shouldLog(Log.INFO) && realexpl)
+                    _log.info("Exploring for new peers in " + delay + "ms");
+                else
+                    _log.info("Exploring for new floodfills in " + delay + "ms");
             }
         }
+        String exploreDelay = getContext().getProperty("router.explorePeersDelay");
         long delay = getNextRunDelay();
-        if (_log.shouldLog(Log.DEBUG))
-            _log.debug("Reenqueueing the exploration with a delay of " + delay);
-        requeue(delay);
+        long laggedDelay = 3*60*1000;
+        if (exploreDelay != null) {
+            if (_log.shouldLog(Log.INFO))
+                _log.info("Next Peer Exploration run in " + Integer.valueOf(exploreDelay) + "s");
+            requeue(Integer.valueOf(exploreDelay) * 1000);
+        } else if (getContext().jobQueue().getMaxLag() > 750 || getContext().throttle().getMessageDelay() > 1000) {
+            if (_log.shouldLog(Log.INFO))
+                _log.info("Next Peer Exploration run in " + (laggedDelay / 1000) + "s");
+            requeue(laggedDelay);
+        } else {
+            if (_log.shouldLog(Log.INFO))
+                _log.info("Next Peer Exploration run in " + (delay / 1000) + "s");
+            requeue(delay);
+        }
     }
-    
-    /** 
-     * the exploration has found some new peers - update the schedule so that 
+
+    /**
+     * the exploration has found some new peers - update the schedule so that
      * we'll explore appropriately.
      */
     public void updateExploreSchedule() {
@@ -119,9 +160,9 @@ class StartExplorersJob extends JobImpl {
         //long delay = getNextRunDelay();
         //if (_log.shouldLog(Log.DEBUG))
         //    _log.debug("Updating exploration schedule with a delay of " + delay);
-        //requeue(delay);        
+        //requeue(delay);
     }
-    
+
     /**
      *  How long should we wait before exploring?
      *  We wait as long as it's been since we were last successful,
@@ -146,14 +187,14 @@ class StartExplorersJob extends JobImpl {
             return MAX_RERUN_DELAY_MS;
 
         long delay = getContext().clock().now() - _facade.getLastExploreNewDate();
-        if (delay < MIN_RERUN_DELAY_MS) 
+        if (delay < MIN_RERUN_DELAY_MS)
             return MIN_RERUN_DELAY_MS;
         else if (delay > MAX_RERUN_DELAY_MS)
             return MAX_RERUN_DELAY_MS;
         else
             return delay;
     }
-    
+
     /**
      * Run through the explore pool and pick out some values
      *
@@ -162,8 +203,6 @@ class StartExplorersJob extends JobImpl {
      */
     private Set<Hash> selectKeysToExplore(int num) {
         Set<Hash> queued = _facade.getExploreKeys();
-        if (_log.shouldLog(Log.DEBUG))
-            _log.debug("Keys waiting for exploration: " + queued.size());
         Set<Hash> rv = new HashSet<Hash>(num);
         for (Hash key : queued) {
             rv.add(key);
@@ -175,6 +214,8 @@ class StartExplorersJob extends JobImpl {
             Hash key = new Hash(hash);
             rv.add(key);
         }
+        if (_log.shouldLog(Log.INFO))
+            _log.info("Keys waiting for exploration: " + queued.size());
         return rv;
     }
 }

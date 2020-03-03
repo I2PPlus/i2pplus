@@ -2,9 +2,9 @@ package net.i2p.client.impl;
 
 /*
  * free (adj.): unencumbered; not under the control of others
- * Written by jrandom in 2003 and released into the public domain 
- * with no warranty of any kind, either expressed or implied.  
- * It probably won't  make your computer catch on fire, or eat 
+ * Written by jrandom in 2003 and released into the public domain
+ * with no warranty of any kind, either expressed or implied.
+ * It probably won't  make your computer catch on fire, or eat
  * your children, but it might.  Use at your own risk.
  *
  */
@@ -88,7 +88,7 @@ class RequestLeaseSetMessageHandler extends HandlerImpl {
         // not clear why there would ever be more than one
         _existingLeaseSets = new ConcurrentHashMap<Destination, LeaseInfo>(4);
     }
-    
+
     /**
      *  Do we send a LeaseSet or a LeaseSet2?
      *
@@ -124,7 +124,7 @@ class RequestLeaseSetMessageHandler extends HandlerImpl {
 
     public void handleMessage(I2CPMessage message, I2PSessionImpl session) {
         if (_log.shouldLog(Log.DEBUG))
-            _log.debug("Handle message " + message);
+            _log.debug("Handle " + message);
         RequestLeaseSetMessage msg = (RequestLeaseSetMessage) message;
         boolean isLS2 = requiresLS2(session);
         LeaseSet leaseSet;
@@ -224,7 +224,7 @@ class RequestLeaseSetMessageHandler extends HandlerImpl {
                     if (pk.equals(e.getKey().getPublicKey())) {
                         privKeys.addAll(e.getValue().getPrivateKeys());
                         if (_log.shouldLog(Log.DEBUG))
-                            _log.debug("Creating new leaseInfo keys for " + dest + " with private key from " + e.getKey());
+                            _log.debug("Creating new LeaseInfo keys for " + dest + " with private key from " + e.getKey());
                         break;
                     }
                 }
@@ -233,7 +233,7 @@ class RequestLeaseSetMessageHandler extends HandlerImpl {
                 if (signingPrivKey != null) {
                     li = new LeaseInfo(privKeys, signingPrivKey);
                     if (_log.shouldLog(Log.DEBUG))
-                        _log.debug("Creating new leaseInfo keys for " + dest + " WITH configured private keys");
+                        _log.debug("Creating new LeaseInfo keys for " + dest + " with configured private keys");
                 } else {
                     li = new LeaseInfo(privKeys, dest);
                 }
@@ -272,13 +272,12 @@ class RequestLeaseSetMessageHandler extends HandlerImpl {
                 }
                 li = new LeaseInfo(dest, types);
                 if (_log.shouldLog(Log.DEBUG))
-                    _log.debug("Creating new leaseInfo keys for " + dest + " without configured private keys");
+                    _log.debug("Creating new LeaseInfo keys for " + dest + " without configured private keys");
             }
             _existingLeaseSets.put(dest, li);
         } else {
             if (_log.shouldLog(Log.DEBUG))
-                _log.debug("Caching the old leaseInfo keys for " 
-                           + dest);
+                _log.debug("Caching old LeaseInfo keys\n* Destination: " + dest);
         }
 
         if (isLS2) {
@@ -309,7 +308,7 @@ class RequestLeaseSetMessageHandler extends HandlerImpl {
                 leaseSet.encrypt(key);
                 _context.keyRing().put(h, key);
             } catch (DataFormatException dfe) {
-                _log.error("Bad leaseset key: " + sk);
+                _log.error("Bad LeaseSet key: " + sk);
                 _context.keyRing().remove(h);
             }
         } else {
@@ -417,18 +416,18 @@ class RequestLeaseSetMessageHandler extends HandlerImpl {
             if (_log.shouldDebug())
                 _log.debug("Created and signed LeaseSet: " + leaseSet);
         } catch (DataFormatException dfe) {
-            session.propogateError("Error signing the leaseSet", dfe);
+            session.propogateError("Error signing the LeaseSet", dfe);
             session.destroySession();
         } catch (I2PSessionException ise) {
             if (session.isClosed()) {
                 // race, closed while signing leaseset
                 // EOFExceptions are logged at WARN level (see I2PSessionImpl.propogateError())
                 // so the user won't see this
-                EOFException eof = new EOFException("Session closed while signing leaseset");
+                EOFException eof = new EOFException("Session closed while signing LeaseSet");
                 eof.initCause(ise);
-                session.propogateError("Session closed while signing leaseset", eof);
+                session.propogateError("Session closed while signing LeaseSet", eof);
             } else {
-                session.propogateError("Error sending the signed leaseSet", ise);
+                session.propogateError("Error sending the signed LeaseSet", ise);
             }
         }
     }

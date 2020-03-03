@@ -22,10 +22,23 @@
  *
  * $Revision: 1.1 $
  */
+
+    // http://www.crazysquirrel.com/computing/general/form-encoding.jspx
+    if (request.getCharacterEncoding() == null)
+        request.setCharacterEncoding("UTF-8");
+
+    response.setHeader("X-Frame-Options", "SAMEORIGIN");
+    response.setHeader("Content-Security-Policy", "default-src 'self'; style-src 'self' 'unsafe-inline'; script-src 'self' 'unsafe-inline'; form-action 'self'; frame-ancestors 'self'; object-src 'none'; media-src 'none'");
+    response.setHeader("X-XSS-Protection", "1; mode=block");
+    response.setHeader("X-Content-Type-Options", "nosniff");
+    response.setHeader("Referrer-Policy", "no-referrer");
+    response.setHeader("Accept-Ranges", "none");
+
 %>
-<%@include file="headers.jsi" %>
+<% //@include file="headers.jsi" %>
 <%@page pageEncoding="UTF-8"%>
 <%@ page contentType="text/html" %>
+<%@page trimDirectiveWhitespaces="true"%>
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
 <jsp:useBean id="version" class="i2p.susi.dns.VersionBean" scope="application"/>
 <jsp:useBean id="cfg" class="i2p.susi.dns.ConfigBean" scope="session"/>
@@ -38,10 +51,11 @@
 <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
 <title><%=intl._t("configuration")%> - susidns</title>
 <link rel="stylesheet" type="text/css" href="<%=base.getTheme()%>susidns.css?<%=net.i2p.CoreVersion.VERSION%>">
+<link rel="stylesheet" type="text/css" href="<%=base.getTheme()%>override.css?<%=net.i2p.CoreVersion.VERSION%>">
+<script type="text/javascript" src="/js/iframeResizer/iframeResizer.contentWindow.js?<%=net.i2p.CoreVersion.VERSION%>"></script>
 </head>
-<body>
+<body id="cfg">
 <div class="page">
-<hr>
 <div id="navi">
 <a id="overview" href="index"><%=intl._t("Overview")%></a>&nbsp;
 <a class="abook" href="addressbook?book=private&amp;filter=none"><%=intl._t("Private")%></a>&nbsp;
@@ -49,15 +63,16 @@
 <a class="abook" href="addressbook?book=router&amp;filter=none"><%=intl._t("Router")%></a>&nbsp;
 <a class="abook" href="addressbook?book=published&amp;filter=none"><%=intl._t("Published")%></a>&nbsp;
 <a id="subs" href="subscriptions"><%=intl._t("Subscriptions")%></a>&nbsp;
-<a id="config" class="active" href="config"><%=intl._t("Configuration")%></a>
+<a id="config" class="selected" href="config"><%=intl._t("Configuration")%></a>
 </div>
 <hr>
 <div class="headline" id="configure">
 <h3><%=intl._t("Configuration")%></h3>
-<h4><%=intl._t("File location")%>: ${cfg.fileName}</h4>
+<h4><%=intl._t("File location")%>: <span class="storage">${cfg.fileName}</span></h4>
 </div>
+<script src="/js/closeMessage.js?<%=net.i2p.CoreVersion.VERSION%>" type="text/javascript"></script>
 <div id="messages">${cfg.messages}</div>
-<form method="POST" action="config">
+<form method="POST" action="config#navi">
 <div id="config">
 <input type="hidden" name="serial" value="${cfg.serial}" >
 <textarea name="config" rows="10" cols="80" spellcheck="false">${cfg.config}</textarea>
@@ -74,11 +89,11 @@
 <%=intl._t("File and directory paths here are relative to the addressbook's working directory, which is normally ~/.i2p/addressbook/ (Linux) or %LOCALAPPDATA%\\I2P\\addressbook\\ (Windows).")%>
 </li>
 <li>
-<%=intl._t("If you want to manually add lines to an addressbook, add them to the private or master addressbooks.")%>
+<%=intl._t("If you want to manually add lines to an addressbook, add them to the private or master addressbooks.")%>&nbsp;<wbr>
 <%=intl._t("The router addressbook and the published addressbook are updated by the addressbook application.")%>
 </li>
 <li>
-<%=intl._t("When you publish your addressbook, ALL destinations from the master and router addressbooks appear there.")%>
+<%=intl._t("When you publish your addressbook, ALL destinations from the master and router addressbooks appear there.")%>&nbsp;<wbr>
 <%=intl._t("Use the private addressbook for private destinations, these are not published.")%>
 </li>
 </ol>
@@ -121,7 +136,7 @@
 <%=intl._t("File to log activity to (change to /dev/null if you like)")%>
 </li>
 <li><b>theme</b> -
-<%=intl._t("Name of the theme to use (defaults to 'light')")%>
+<%=intl._t("Name of override theme to use (defaults to console-selected theme)")%>
 </li>
 </ul>
 </div>
@@ -130,5 +145,7 @@
 <p class="footer">susidns v${version.version} &copy; <a href="${version.url}" target="_top">susi</a> 2005 </p>
 </div>
 </div>
+<span data-iframe-height></span>
+
 </body>
 </html>

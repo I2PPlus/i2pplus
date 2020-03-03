@@ -31,7 +31,7 @@ class BanlistRenderer {
     public BanlistRenderer(RouterContext context) {
         _context = context;
     }
-    
+
     /**
      *  As of 0.9.29, sorts in true binary order, not base64 string
      */
@@ -46,7 +46,7 @@ class BanlistRenderer {
         // move to the jsp
         //buf.append("<h2>Banned Peers</h2>");
         Map<Hash, Banlist.Entry> entries = new TreeMap<Hash, Banlist.Entry>(new HashComparator());
-        
+
         entries.putAll(_context.banlist().getEntries());
         if (entries.isEmpty()) {
             buf.append("<i>").append(_t("none")).append("</i>");
@@ -55,7 +55,7 @@ class BanlistRenderer {
         }
 
         buf.append("<ul id=\"banlist\">");
-        
+
         for (Map.Entry<Hash, Banlist.Entry> e : entries.entrySet()) {
             Hash key = e.getKey();
             Banlist.Entry entry = e.getValue();
@@ -70,12 +70,12 @@ class BanlistRenderer {
             else if (expires < 5l*24*60*60*1000)
                 buf.append(_t("Temporary ban expiring in {0}", expireString));
             else
-                buf.append(_t("Banned until restart or in {0}", expireString));
+                buf.append(_t("Banned for {0} / until restart", expireString));
             Set<String> transports = entry.transports;
             if ( (transports != null) && (!transports.isEmpty()) )
                 buf.append(" on the following transport: ").append(transports);
             if (entry.cause != null) {
-                buf.append("<br>\n");
+                buf.append("<hr>\n");
                 if (entry.causeCode != null)
                     buf.append(_t(entry.cause, entry.causeCode));
                 else
@@ -83,7 +83,7 @@ class BanlistRenderer {
             }
             if (!key.equals(Hash.FAKE_HASH)) {
                 buf.append(" <a href=\"configpeer?peer=").append(key.toBase64())
-                   .append("#unsh\">[").append(_t("unban now")).append("]</a>");
+                   .append("#unsh\" title=\"Unban\">[").append(_t("unban now")).append("]</a>");
             }
             buf.append("</li>\n");
         }

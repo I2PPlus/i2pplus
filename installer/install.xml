@@ -4,12 +4,15 @@
 
     <info>
         <appname>i2p</appname>
-        <appversion>0.9.45</appversion>
+        <appversion>0.9.45+</appversion>
+<!--
         <authors>
-            <author name="I2P" email="https://geti2p.net/"/>
+            <author name="The Invisible Internet Project" email=""/>
+            <author name="dr|z3d (I2P+)" email="z3d@mail.i2p"/>
         </authors>
-        <url>https://geti2p.net/</url>
-        <javaversion>1.7</javaversion>
+-->
+<!--        <url>https://geti2p.net/</url>-->
+        <javaversion>1.8</javaversion>
 
         <!-- use pack200 compression, saves about 33%
              see http://java.sun.com/j2se/1.5.0/docs/guide/deployment/deployment-guide/pack200.html
@@ -22,28 +25,38 @@
              but see http://www.nabble.com/Classpath-security-issues-on-Vista-td22456230.html
              which says it isn't sufficient:
 
-		Just to let you know that I managed to identify and resolve the problem (in
-		case anyone else has it).  The default installation directory for Vista is
-		under "Program Files" which is a "special" directory which can only be
-		written to (create sub-directories) by administrators.  However, stupid
-		Vista downgrades an administrator to a normal user when the program is run
-		via the application shortcut menu.  As you suggested, I added a script which
-		runs ICACLS which resolved the problem, i.e.
+      Just to let you know that I managed to identify and resolve the problem (in
+      case anyone else has it).  The default installation directory for Vista is
+      under "Program Files" which is a "special" directory which can only be
+      written to (create sub-directories) by administrators.  However, stupid
+      Vista downgrades an administrator to a normal user when the program is run
+      via the application shortcut menu.  As you suggested, I added a script which
+      runs ICACLS which resolved the problem, i.e.
 
-		icacls %1 /grant Users:F /T > priv.log
+      icacls %1 /grant Users:F /T > priv.log
 
-		The command needs to be run as a Process rather than as an executable tag in
-		order to pass $INSTALL_PATH as a parameter.
+      The command needs to be run as a Process rather than as an executable tag in
+      order to pass $INSTALL_PATH as a parameter.
          -->
         <run-privileged condition="izpack.windowsinstall.vista|izpack.windowsinstall.7"/>
     </info>
 
-    <guiprefs width="590" height="356" resizable="yes">
-        <laf name="liquid">
-            <os family="unix"/>
+<!--    <guiprefs width="590" height="356" resizable="yes">-->
+    <guiprefs width="600" height="500" resizable="yes">
+<!--
+        <laf name="substance">
+            <os family="windows" />
+            <os family="unix" />
+            <os family="mac" />
+            <param name="variant" value="dust" />
         </laf>
+-->
         <!-- full names, not iso3 codes -->
         <modifier key="langDisplayType" value="native" />
+        <!-- no icons on buttons -->
+        <modifier key="useButtonIcons" value="no"/>
+        <!-- no icons in panel headers -->
+        <modifier key="useLabelIcons" value="no"/>
     </guiprefs>
 
     <locale>
@@ -96,7 +109,7 @@
 
     <resources>
         <res id="Installer.image" src="installer/resources/i2plogo.png" />
-        <res id="InfoPanel.info" src="installer/resources/readme.license.txt"/>
+<!--        <res id="InfoPanel.info" src="installer/resources/readme.license.txt"/>-->
         <!-- <res id="ProcessPanel.Spec.xml" src="installer/resources/ProcessPanel.Spec.xml"/> -->
         <res id="shortcutSpec.xml" src="installer/resources/shortcutSpec.xml" />
         <res id="XInfoPanel.info" src="installer/resources/start-i2p.txt" />
@@ -115,7 +128,13 @@
 
     <panels>
         <panel classname="HelloPanel"/>
-        <panel classname="InfoPanel"/>
+<!--
+        <panel classname="InfoPanel">
+            <configuration>
+                <param name="console-text-wordwrap" value="true" />
+            </configuration>
+        </panel>
+-->
         <panel classname="PacksPanel"><os family="windows" /></panel>
         <panel classname="TargetPanel"/>
         <panel classname="ShortcutPanel"><os family="windows" /></panel>
@@ -126,7 +145,7 @@
         <!--
          Using the condition this way, the panel is shown on everything *but* Windows.
          -->
-        <panel classname="XInfoPanel" condition="!izpack.windowsinstall" />
+<!--        <panel classname="XInfoPanel" condition="!izpack.windowsinstall" /> -->
         <panel classname="SimpleFinishPanel"/>
     </panels>
 
@@ -330,7 +349,8 @@
 
         <!-- to disable by default, add preselected="no" -->
         <pack name="Windows Service" required="no" preselected="no">
-            <description>Automatically start I2P in the background</description>
+<!--            <description>Automatically start I2P in the background</description>-->
+            <description>Install Windows service and automatically start I2P when system starts</description>
             <os family="windows" />
             <executable targetfile="$INSTALL_PATH/set_config_dir_for_nt_service.bat" stage="postinstall" failure="warn" keep="true" />
             <executable targetfile="$INSTALL_PATH/install_i2p_service_winnt.bat" stage="postinstall" failure="warn" keep="true" />

@@ -37,10 +37,10 @@ class TestJob extends JobImpl {
     private PooledTunnelCreatorConfig _otherTunnel;
     /** save this so we can tell the SKM to kill it if the test fails */
     private SessionTag _encryptTag;
-    
+
     /** base to randomize the test delay on */
     private static final int TEST_DELAY = 40*1000;
-    
+
     public TestJob(RouterContext ctx, PooledTunnelCreatorConfig cfg, TunnelPool pool) {
         super(ctx);
         _log = ctx.logManager().getLog(TestJob.class);
@@ -55,7 +55,7 @@ class TestJob extends JobImpl {
         // stats are created in TunnelPoolManager
     }
 
-    public String getName() { return "Test tunnel"; }
+    public String getName() { return "Test Local Tunnel"; }
 
     public void runJob() {
         if (_pool == null || !_pool.isAlive())
@@ -63,7 +63,7 @@ class TestJob extends JobImpl {
         long lag = getContext().jobQueue().getMaxLag();
         if (lag > 3000) {
             if (_log.shouldLog(Log.WARN))
-                _log.warn("Deferring test of " + _cfg + " due to job lag = " + lag);
+                _log.warn("Deferred test due to job lag (" + lag + "ms)" + _cfg);
             getContext().statManager().addRateData("tunnel.testAborted", _cfg.getLength(), 0);
             scheduleRetest();
             return;
@@ -88,7 +88,7 @@ class TestJob extends JobImpl {
             _outTunnel = _cfg;
             _otherTunnel = (PooledTunnelCreatorConfig) _replyTunnel;
         }
-        
+
         if ( (_replyTunnel == null) || (_outTunnel == null) ) {
             if (_log.shouldLog(Log.WARN))
                 _log.warn("Insufficient tunnels to test " + _cfg + " with: " + _replyTunnel + " / " + _outTunnel);
@@ -109,7 +109,7 @@ class TestJob extends JobImpl {
             sendTest(m);
         }
     }
-    
+
     private void sendTest(I2NPMessage m) {
         // garlic route that DeliveryStatusMessage to ourselves so the endpoints and gateways
         // can't tell its a test.  to simplify this, we encrypt it with a random key and tag,
@@ -150,36 +150,36 @@ class TestJob extends JobImpl {
                                                          _replyTunnel.getReceiveTunnelId(0),
                                                          _replyTunnel.getPeer(0));
     }
-    
+
     public void testSuccessful(int ms) {
         if (_pool == null || !_pool.isAlive())
             return;
         getContext().statManager().addRateData("tunnel.testSuccessLength", _cfg.getLength(), 0);
         getContext().statManager().addRateData("tunnel.testSuccessTime", ms, 0);
-    
+
         _outTunnel.incrementVerifiedBytesTransferred(1024);
         // reply tunnel is marked in the inboundEndpointProcessor
         //_replyTunnel.incrementVerifiedBytesTransferred(1024);
-        
+
         noteSuccess(ms, _outTunnel);
         noteSuccess(ms, _replyTunnel);
-        
+
         _cfg.testJobSuccessful(ms);
         // credit the expl. tunnel too
         if (_otherTunnel.getLength() > 1)
             _otherTunnel.testJobSuccessful(ms);
 
         if (_log.shouldLog(Log.DEBUG))
-            _log.debug("Tunnel test successful in " + ms + "ms: " + _cfg);
+            _log.debug("Tunnel test succeeded in " + ms + "ms " + _cfg);
         scheduleRetest();
     }
-    
+
     private void noteSuccess(long ms, TunnelInfo tunnel) {
         if (tunnel != null)
             for (int i = 0; i < tunnel.getLength(); i++)
                 getContext().profileManager().tunnelTestSucceeded(tunnel.getPeer(i), ms);
     }
-    
+
     private void testFailed(long timeToFail) {
         if (_pool == null || !_pool.isAlive())
             return;
@@ -193,7 +193,7 @@ class TestJob extends JobImpl {
         else
             getContext().statManager().addRateData("tunnel.testFailedTime", timeToFail, timeToFail);
         if (_log.shouldLog(Log.WARN))
-            _log.warn("Tunnel test failed in " + timeToFail + "ms: " + _cfg);
+            _log.warn("Tunnel test failed in " + timeToFail + "ms " + _cfg);
         boolean keepGoing = _cfg.tunnelFailed();
         // blame the expl. tunnel too
         if (_otherTunnel.getLength() > 1)
@@ -207,7 +207,7 @@ class TestJob extends JobImpl {
                 getContext().statManager().addRateData("tunnel.testFailedCompletelyTime", timeToFail, timeToFail);
         }
     }
-    
+
     /** randomized time we should wait before testing */
     private int getDelay() { return TEST_DELAY + getContext().random().nextInt(TEST_DELAY / 3); }
 
@@ -246,7 +246,7 @@ class TestJob extends JobImpl {
                 requeue(delay);
         }
     }
-    
+
     private class ReplySelector implements MessageSelector {
         private final RouterContext _context;
         private final long _id;
@@ -258,7 +258,7 @@ class TestJob extends JobImpl {
             _expiration = expiration;
             _found = false;
         }
-        
+
         public boolean continueMatching() { return !_found && _context.clock().now() < _expiration; }
 
         public long getExpiration() { return _expiration; }
@@ -269,18 +269,19 @@ class TestJob extends JobImpl {
             }
             return false;
         }
-        
+
         @Override
         public String toString() {
             StringBuilder rv = new StringBuilder(64);
+            rv.append("[Job ").append(_id).append("] ");
             rv.append("Testing tunnel ").append(_cfg.toString()).append(" waiting for ");
             rv.append(_id).append(" found? ").append(_found);
             return rv.toString();
         }
     }
-    
+
     /**
-     * Test successfull (w00t)
+     * Test successful (w00t)
      */
     private class OnTestReply extends JobImpl implements ReplyJob {
         private long _successTime;
@@ -288,11 +289,11 @@ class TestJob extends JobImpl {
 
         public OnTestReply(RouterContext ctx) { super(ctx); }
 
-        public String getName() { return "Tunnel test success"; }
+        public String getName() { return "Verify Tunnel Test"; }
 
         public void setSentMessage(OutNetMessage m) { _sentMessage = m; }
 
-        public void runJob() { 
+        public void runJob() {
             if (_sentMessage != null)
                 getContext().messageRegistry().unregisterPending(_sentMessage);
             if (_successTime < getTestPeriod())
@@ -306,32 +307,33 @@ class TestJob extends JobImpl {
         public void setMessage(I2NPMessage message) {
             _successTime = getContext().clock().now() - ((DeliveryStatusMessage)message).getArrival();
         }
-        
+
         @Override
         public String toString() {
             StringBuilder rv = new StringBuilder(64);
+            rv.append("[Job ").append(_id).append("] ");
             rv.append("Testing tunnel ").append(_cfg.toString());
-            rv.append(" successful after ").append(_successTime);
+            rv.append(" successful after ").append(_successTime).append("ms");
             return rv.toString();
         }
     }
-    
+
     /**
      * Test failed (boo, hiss)
      */
     private class OnTestTimeout extends JobImpl {
         private final long _started;
 
-        public OnTestTimeout(RouterContext ctx) { 
-            super(ctx); 
+        public OnTestTimeout(RouterContext ctx) {
+            super(ctx);
             _started = ctx.clock().now();
         }
 
-        public String getName() { return "Tunnel test timeout"; }
+        public String getName() { return "Timeout Tunnel Test"; }
 
         public void runJob() {
             if (_log.shouldLog(Log.WARN))
-                _log.warn("Timeout: found? " + _found);
+                _log.warn("Tunnel test timed out -> Found? " + _found);
             if (!_found) {
                 // don't clog up the SKM with old one-tag tagsets
                 if (_cfg.isInbound() && !_pool.getSettings().isExploratory()) {
@@ -344,10 +346,11 @@ class TestJob extends JobImpl {
                 testFailed(getContext().clock().now() - _started);
             }
         }
-        
+
         @Override
         public String toString() {
             StringBuilder rv = new StringBuilder(64);
+            rv.append("[Job ").append(_id).append("] ");
             rv.append("Testing tunnel ").append(_cfg.toString());
             rv.append(" timed out");
             return rv.toString();

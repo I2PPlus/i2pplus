@@ -18,6 +18,9 @@ import net.i2p.router.web.RouterConsoleRunner;
 import net.i2p.util.FileUtil;
 import net.i2p.util.Translate;
 
+import net.i2p.router.web.CSSHelper;
+import java.util.regex.*;
+
 public class LogsHelper extends HelperBase {
 
     private static final String _jstlVersion = jstlVersion();
@@ -70,9 +73,15 @@ public class LogsHelper extends HelperBase {
      */
     public String getLogs() {
         String str = formatMessages(_context.logManager().getBuffer().getMostRecentMessages());
-        return "<p>" + _t("File location") + ": <a href=\"/router.log\" target=\"_blank\">" + _context.logManager().currentFile() + "</a></p>" + str;
+        boolean embedApps = _context.getBooleanProperty(CSSHelper.PROP_EMBED_APPS);
+        if (!embedApps) {
+            return "<p>" + _t("File location") + ": <a href=\"/router.log\" target=\"_blank\">" + _context.logManager().currentFile() + "</a></p>" + str;
+        } else {
+            return "<p>" + _t("File location") + ": <a href=\"/router.log\" target=\"_blank\">" + _context.logManager().currentFile() + "</a>&nbsp; " +
+                    "<a class=\"embedlink script\" href=\"/embed?url=/router.log&amp;name=Router+Log\">" + _t("Embedded Log") + "</a></p>" + str;
+        }
     }
-    
+
     /**
      *  Side effect - calls logManager.flush()
      */
@@ -84,6 +93,7 @@ public class LogsHelper extends HelperBase {
     public String getServiceLogs() {
         File f = ConfigServiceHandler.wrapperLogFile(_context);
         String str;
+        boolean embedApps = _context.getBooleanProperty(CSSHelper.PROP_EMBED_APPS);
         if (_context.hasWrapper()) {
             // platform encoding
             str = readTextFile(f, 250);
@@ -95,10 +105,16 @@ public class LogsHelper extends HelperBase {
             return "<p>" + _t("File not found") + ": <b><code>" + f.getAbsolutePath() + "</code></b></p>";
         } else {
             str = str.replace("&", "&amp;").replace("<", "&lt;").replace(">", "&gt;");
-            return "<p>" + _t("File location") + ": <a href=\"/wrapper.log\" target=\"_blank\">" + f.getAbsolutePath() + "</a></p></td></tr>\n<tr><td><pre id=\"servicelogs\">" + str + "</pre>";
+            if (!embedApps) {
+                return "<p>" + _t("File location") + ": <a href=\"/wrapper.log\" target=\"_blank\">" + f.getAbsolutePath() + "</a></p></td></tr>\n<tr><td><pre id=\"servicelogs\">" + str + "</pre>";
+            } else {
+                return "<p>" + _t("File location") + ": <a href=\"/wrapper.log\" target=\"_blank\">" + f.getAbsolutePath() + "</a>" +
+                        "&nbsp; <a class=\"embedlink script\" href=\"/embed?url=/wrapper.log&amp;name=Wrapper+Log\">" + _t("Embedded Log") + "</a>" +
+                        "</p></td></tr>\n<tr><td><pre id=\"servicelogs\">" + str + "</pre>";
+            }
         }
     }
-   
+
     /**
      * @since 0.9.35
      */
@@ -114,31 +130,69 @@ public class LogsHelper extends HelperBase {
         }
         return "Undefined";
     }
-    
+
     private final static String NL = System.getProperty("line.separator");
 
     /** formats in forward order */
     private String formatMessages(List<String> msgs) {
         if (msgs.isEmpty())
-            return "</td></tr><tr><td><p><i>" + _t("No log messages") + "</i></p>";
+            return "</td></tr><tr><td><p class=\"nologs\"><i>" + _t("No log messages") + "</i></p>";
         boolean colorize = _context.getBooleanPropertyDefaultTrue("routerconsole.logs.color");
-        StringBuilder buf = new StringBuilder(16*1024); 
+        StringBuilder buf = new StringBuilder(16*1024);
         buf.append("</td></tr><tr><td><ul>");
-        // newest first
-        // for (int i = msgs.size() - 1; i >= 0; i--) { 
-        // oldest first
         boolean displayed = false;
-        for (int i = 0; i < msgs.size(); i++) { 
+        // newest first
+        for (int i = msgs.size() - 1; i >= 0; i--) {
+        // oldest first
+        // for (int i = 0; i < msgs.size(); i++) {
             String msg = msgs.get(i);
             // don't display the dup message if it is last
             //if (i == 0 && msg.contains("&darr;"))
             // don't display the dup message if it is first
-            if (!displayed && msg.contains("&uarr;"))
+            if (!displayed && msg.contains("&uarr;") || !displayed && msg.contains("&darr;"))
                 continue;
             displayed = true;
             msg = msg.replace("&", "&amp;").replace("<", "&lt;").replace(">", "&gt;");
-            //msg = msg.replace("&amp;darr;", "&darr;");  // hack - undo the damage (LogWriter)
+            msg = msg.replace("&amp;darr;", "&darr;");  // hack - undo the damage (LogWriter) BUFFER_DISPLAYED_REVERSE = true;
             msg = msg.replace("&amp;uarr;", "&uarr;");  // hack - undo the damage (LogWriter)
+            msg = msg.replace("&amp;#10140;", "&#10140;");
+            msg = msg.replace("--&gt;", " &#10140; ");
+            msg = msg.replace(" -&gt;", " &#10140;");
+            msg = msg.replace("-&gt;", " &#10140; ");
+            msg = msg.replace("  &#10140;  ", " &#10140; ");
+            msg = msg.replace("…obQueue", "JobQueue");
+            msg = msg.replace("[DBWriter   ]", "[NetDB Writer]");
+            msg = msg.replace("[NTCP Pumper", "[ NTCP Pumper");
+            msg = msg.replace("[…ueue Pumper", "[Queue Pumper");
+            msg = msg.replace("[UDPSender", "[UDP Sender");
+            msg = msg.replace("[BWRefiller", "[BW Refiller");
+            msg = msg.replace("[Addressbook]", "[Addressbook ]");
+            msg = msg.replace("[Thread-", "[ Thread-");
+            msg = msg.replace("[Timestamper]", "[Timestamper ]");
+            msg = msg.replace("[DHT Explore]", "[DHT Explore ]");
+            //msg = msg.replace("false", "no");
+            msg = msg.replace("false", "[&#10008;]"); // no (cross)
+            //msg = msg.replace("true", "yes");
+            msg = msg.replace("true", "[&#10004;]"); // yes (tick)
+            msg = msg.replace("[[&#10004;]]", "[&#10004;]");
+            msg = msg.replace("[[&#10008;]]", "[&#10008;]");
+            msg = msg.replace("=[&#10004;]", "=true");
+            msg = msg.replace("=[&#10008;]", "=false");
+            msg = msg.replace("[IRC Client] Inbound message", "[IRC Client] &#11167;");
+            msg = msg.replace("[IRC Client] Outbound message", "[IRC Client] &#11165;");
+            msg = msg.replace(":  ", ": ");
+            msg = msg.replace("\n* ", "\n&bullet; ");
+            msg = msg.replace("\n\t* ", "\n\t&bullet; ");
+            msg = msg.replace("\r\n\r\n", "");
+            msg = msg.replace("<br>:", " ");
+            // highlight log level indicators
+            msg = msg.replace("| DEBUG", " <span class=\"log_debug\">DEBUG</span> ");
+            msg = msg.replace("| INFO ", " <span class=\"log_info\">INFO</span> ");
+            msg = msg.replace("| WARN ", " <span class=\"log_warn\">WARN</span> ");
+            msg = msg.replace("| ERROR", " <span class=\"log_error\">ERROR</span> ");
+            msg = msg.replace("| CRIT ", " <span class=\"log_crit\">CRIT</span> ");
+            msg = msg.replace("| &darr;&darr;&darr; ", " <span class=\"log_omitted\">&darr;&darr;&darr;</span> "); // LogWriter BUFFER_DISPLAYED_REVERSE = true;
+            msg = msg.replace("| &uarr;&uarr;&uarr; ", " <span class=\"log_omitted\">&uarr;&uarr;&uarr;</span> ");
             // remove  last \n that LogRecordFormatter added
             if (msg.endsWith(NL))
                 msg = msg.substring(0, msg.length() - NL.length());
@@ -171,13 +225,13 @@ public class LogsHelper extends HelperBase {
             buf.append("</li>\n");
         }
         buf.append("</ul>\n");
-        
+
         return buf.toString();
     }
 
     /**
      * Read in the last few lines of a (newline delimited) textfile, or null if
-     * the file doesn't exist.  
+     * the file doesn't exist.
      *
      * Same as FileUtil.readTextFile but uses platform encoding,
      * not UTF-8, since the wrapper log cannot be configured:

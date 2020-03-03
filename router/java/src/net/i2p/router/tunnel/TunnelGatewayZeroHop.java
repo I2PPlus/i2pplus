@@ -18,7 +18,7 @@ class TunnelGatewayZeroHop extends TunnelGateway {
     private final TunnelCreatorConfig _config;
     private OutboundMessageDistributor _outDistributor;
     private InboundMessageDistributor _inDistributor;
-    
+
     /**
      *
      */
@@ -30,7 +30,7 @@ class TunnelGatewayZeroHop extends TunnelGateway {
         else
             _outDistributor = new OutboundMessageDistributor(context, OutNetMessage.PRIORITY_MY_DATA);
     }
-    
+
     /**
      * Add a message to be sent down the tunnel, where we are the inbound gateway.
      * This requires converting the message included in the TGM from an
@@ -50,14 +50,14 @@ class TunnelGatewayZeroHop extends TunnelGateway {
                     imsg = umsg.convert();
                 } catch (I2NPMessageException ime) {
                     if (_log.shouldLog(Log.WARN))
-                        _log.warn("Unable to convert to std. msg. class at zero-hop IBGW", ime);
+                        _log.warn("Unable to convert to standard message class at zero-hop IBGW", ime);
                     return;
                 }
             }
         }
         add(imsg, null, null);
     }
-    
+
     /**
      * Add a message to be sent down the tunnel (immediately forwarding it to the
      * {@link InboundMessageDistributor} or {@link OutboundMessageDistributor}, as
@@ -70,10 +70,10 @@ class TunnelGatewayZeroHop extends TunnelGateway {
     @Override
     public void add(I2NPMessage msg, Hash toRouter, TunnelId toTunnel) {
         if (_log.shouldLog(Log.DEBUG))
-            _log.debug("zero hop gateway: distribute " + (_config.isInbound() ? "inbound" : " outbound")
-                       + " to " + (toRouter != null ? toRouter.toBase64().substring(0,4) : "" )
-                       + "." + (toTunnel != null ? toTunnel.getTunnelId() + "" : "")
-                       + ": " + msg);
+            _log.debug("Zero hop gateway: distribute" + (_config.isInbound() ? "Inbound" : " Outbound")
+                       + " to [" + (toRouter != null ? toRouter.toBase64().substring(0,6) + "]" : "" )
+                       + " " + (toTunnel != null ? toTunnel.getTunnelId() + "" : "")
+                       + " " + msg);
         if (_config.isInbound()) {
             _inDistributor.distribute(msg, toRouter, toTunnel);
         } else {

@@ -89,7 +89,7 @@ class InboundEstablishState extends EstablishBase implements NTCP2Payload.Payloa
         EnumSet.of(State.IB_NTCP2_INIT, State.IB_NTCP2_GOT_X, State.IB_NTCP2_GOT_PADDING,
                    State.IB_NTCP2_SENT_Y, State.IB_NTCP2_GOT_RI, State.IB_NTCP2_READ_RANDOM);
 
-    
+
     public InboundEstablishState(RouterContext ctx, NTCPTransport transport, NTCPConnection con) {
         super(ctx, transport, con);
         _state = State.IB_INIT;
@@ -131,8 +131,8 @@ class InboundEstablishState extends EstablishBase implements NTCP2Payload.Payloa
             if (STATES_NTCP2.contains(_state))
                 return 2;
             return 1;
-        } 
-    } 
+        }
+    }
 
     /**
      *  we are Bob, so receive these bytes as part of an inbound connection
@@ -455,7 +455,7 @@ class InboundEstablishState extends EstablishBase implements NTCP2Payload.Payloa
             long now = _context.clock().now();
             // rtt from sending #2 to receiving #3
             long rtt = now - _con.getCreated();
-            _peerSkew = (now - (tsA * 1000) - (rtt / 2) + 500) / 1000; 
+            _peerSkew = (now - (tsA * 1000) - (rtt / 2) + 500) / 1000;
 
             ByteArrayOutputStream baos = new ByteArrayOutputStream(768);
             baos.write(_X);
@@ -502,7 +502,7 @@ class InboundEstablishState extends EstablishBase implements NTCP2Payload.Payloa
                 }
                 releaseBufs(true);
                 if (_log.shouldLog(Log.INFO))
-                    _log.info(prefix()+"Verified remote peer as " + aliceHash);
+                    _log.info(prefix()+"Verified remote peer as [" + aliceHash + "]");
             } else {
                 _context.statManager().addRateData("ntcp.invalidInboundSignature", 1);
                 // verifyInbound(aliceHash) called fail()
@@ -529,15 +529,15 @@ class InboundEstablishState extends EstablishBase implements NTCP2Payload.Payloa
         byte[] ip = (addr == null) ? null : addr.getAddress();
         if (_context.banlist().isBanlistedForever(aliceHash)) {
             if (_log.shouldLog(Log.WARN))
-                _log.warn("Dropping inbound connection from permanently banlisted peer: " + aliceHash);
+                _log.warn("Dropping inbound connection from permanently banlisted peer [" + aliceHash + "]");
             // So next time we will not accept the con from this IP,
             // rather than doing the whole handshake
             if(ip != null)
                _context.blocklist().add(ip);
             if (getVersion() < 2)
-                fail("Peer is banlisted forever: " + aliceHash);
+                fail("Peer is banlisted forever [" + aliceHash  + "]");
             else if (_log.shouldWarn())
-                _log.warn("Peer is banlisted forever: " + aliceHash);
+                _log.warn("Peer is banlisted forever [" + aliceHash + "]");
             _msg3p2FailReason = NTCPConnection.REASON_BANNED;
             return false;
         }
@@ -561,7 +561,7 @@ class InboundEstablishState extends EstablishBase implements NTCP2Payload.Payloa
             // Only banlist if we know what time it is
             _context.banlist().banlistRouter(DataHelper.formatDuration(diff),
                                              aliceHash,
-                                               _x("Excessive clock skew: {0}"));
+                                             " <b>➜</b> " + _x("Excessive clock skew: {0}"));
             _transport.setLastBadSkew(_peerSkew);
             if (getVersion() < 2)
                 fail("Clocks too skewed (" + diff + " ms)", null, true);
@@ -592,7 +592,7 @@ class InboundEstablishState extends EstablishBase implements NTCP2Payload.Payloa
         if (!rv) {
             Hash aliceHash = alice.getHash();
             if (_log.shouldLog(Log.WARN))
-                _log.warn("Dropping inbound connection from wrong network: " + aliceID + ' ' + aliceHash);
+                _log.warn("Dropping inbound connection from wrong network: " + aliceID + " [" + aliceHash + "]");
             // So next time we will not accept the con from this IP,
             // rather than doing the whole handshake
             InetAddress addr = _con.getChannel().socket().getInetAddress();
@@ -600,7 +600,7 @@ class InboundEstablishState extends EstablishBase implements NTCP2Payload.Payloa
                 byte[] ip = addr.getAddress();
                 _context.blocklist().add(ip);
             }
-            _context.banlist().banlistRouterForever(aliceHash, "Not in our network: " + aliceID);
+            _context.banlist().banlistRouterForever(aliceHash, " <b>➜</b> " + "Not in our network: " + aliceID);
             _transport.markUnreachable(aliceHash);
             _msg3p2FailReason = NTCPConnection.REASON_BANNED;
         }
@@ -677,7 +677,7 @@ class InboundEstablishState extends EstablishBase implements NTCP2Payload.Payloa
             // replay check using encrypted key
             if (!_transport.isHXHIValid(_X)) {
                 _context.statManager().addRateData("ntcp.replayHXxorBIH", 1);
-                fail("Replay msg 1, eX = " + Base64.encode(_X, 0, KEY_SIZE));
+                fail("\n* Replay Message 1: eX = " + Base64.encode(_X, 0, KEY_SIZE));
                 return;
             }
 
@@ -751,7 +751,7 @@ class InboundEstablishState extends EstablishBase implements NTCP2Payload.Payloa
             // In NTCP2, it comes in msg 1, so just guess.
             // We could defer this to msg 3 to calculate the RTT?
             long rtt = 250;
-            _peerSkew = (now - (tsA * 1000) - (rtt / 2) + 500) / 1000; 
+            _peerSkew = (now - (tsA * 1000) - (rtt / 2) + 500) / 1000;
             if ((_peerSkew > MAX_SKEW || _peerSkew < 0 - MAX_SKEW) &&
                 !_context.clock().getUpdatedSuccessfully()) {
                 // If not updated successfully, allow it.
@@ -965,8 +965,8 @@ class InboundEstablishState extends EstablishBase implements NTCP2Payload.Payloa
         } else {
             if (_log.shouldDebug()) {
                 _log.debug("Finished establishment for " + this +
-                          "\nGenerated SipHash key for A->B: " + Base64.encode(sip_ab) +
-                          "\nGenerated SipHash key for B->A: " + Base64.encode(sip_ba));
+                          "\n* Generated SipHash key for A -> B: " + Base64.encode(sip_ab) +
+                          "\n* Generated SipHash key for B -> A: " + Base64.encode(sip_ba));
             }
             // skew in seconds
             _con.finishInboundEstablishment(sender, rcvr, sip_ba, sip_ab, _peerSkew, _hisPadding);
@@ -975,7 +975,7 @@ class InboundEstablishState extends EstablishBase implements NTCP2Payload.Payloa
                 // process "extra" data
                 // This is very likely for inbound, as data should come right after message 3
                 if (_log.shouldInfo())
-                    _log.info("extra data " + buf.remaining() + " on " + this);
+                    _log.info("Extra data " + buf.remaining() + " on " + this);
                  _con.recvEncryptedI2NP(buf);
             }
         }
@@ -1067,7 +1067,7 @@ class InboundEstablishState extends EstablishBase implements NTCP2Payload.Payloa
         NTCP2Options hisPadding = NTCP2Options.fromByteArray(options);
         if (hisPadding == null) {
             if (_log.shouldWarn())
-                _log.warn("Got options length " + options.length + " on: " + this);
+                _log.warn("Received options length " + options.length + " on: " + this);
             return;
         }
         _hisPadding = hisPadding;

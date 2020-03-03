@@ -15,7 +15,7 @@ class InboundGatewayReceiver implements TunnelGateway.Receiver {
     private final RouterContext _context;
     private final HopConfig _config;
     private RouterInfo _target;
-    
+
     private static final long MAX_LOOKUP_TIME = 15*1000;
     private static final int PRIORITY = OutNetMessage.PRIORITY_PARTICIPATING;
 
@@ -47,7 +47,7 @@ class InboundGatewayReceiver implements TunnelGateway.Receiver {
         }
         if (alreadySearched)
             _context.statManager().addRateData("tunnel.inboundLookupSuccess", 1);
-        
+
         // We do this before the preprocessor now (i.e. before fragmentation)
         //if (_context.tunnelDispatcher().shouldDropParticipatingMessage("IBGW", encrypted.length))
         //    return -1;
@@ -56,12 +56,12 @@ class InboundGatewayReceiver implements TunnelGateway.Receiver {
         TunnelDataMessage msg = new TunnelDataMessage(_context);
         msg.setData(encrypted);
         msg.setTunnelId(_config.getSendTunnel());
-        
+
         OutNetMessage out = new OutNetMessage(_context, msg, msg.getMessageExpiration(), PRIORITY, _target);
         _context.outNetMessagePool().add(out);
         return msg.getUniqueId();
     }
-    
+
     /**
      * The next hop
      * @return non-null
@@ -79,7 +79,7 @@ class InboundGatewayReceiver implements TunnelGateway.Receiver {
             _encrypted = data;
         }
 
-        public String getName() { return "IBGW lookup first hop"; }
+        public String getName() { return "Lookup IBGW First Hop"; }
 
         public void runJob() {
             receiveEncrypted(_encrypted, true);

@@ -336,8 +336,8 @@ public class LoadClientAppsJob extends JobImpl {
         }
     }
 
-    public String getName() { return "Load up any client applications"; }
-    
+    public String getName() { return "Load Client Applications"; }
+
 /****
     public static void main(String args[]) {
         test(null);

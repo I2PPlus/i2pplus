@@ -2,9 +2,9 @@ package net.i2p.data.i2cp;
 
 /*
  * free (adj.): unencumbered; not under the control of others
- * Written by jrandom in 2003 and released into the public domain 
- * with no warranty of any kind, either expressed or implied.  
- * It probably won't make your computer catch on fire, or eat 
+ * Written by jrandom in 2003 and released into the public domain
+ * with no warranty of any kind, either expressed or implied.
+ * It probably won't make your computer catch on fire, or eat
  * your children, but it might.  Use at your own risk.
  *
  */
@@ -87,12 +87,12 @@ public class MessagePayloadMessage extends I2CPMessageImpl {
     protected byte[] doWriteMessage() throws I2CPMessageException, IOException {
         throw new UnsupportedOperationException();
     }
-    
+
     /**
-     * Write out the full message to the stream, including the 4 byte size and 1 
+     * Write out the full message to the stream, including the 4 byte size and 1
      * byte type header.
      *
-     * @throws IOException 
+     * @throws IOException
      */
     @Override
     public void writeMessage(OutputStream out) throws I2CPMessageException, IOException {
@@ -123,11 +123,10 @@ public class MessagePayloadMessage extends I2CPMessageImpl {
     @Override
     public String toString() {
         StringBuilder buf = new StringBuilder();
-        buf.append("[MessagePayloadMessage: ");
-        buf.append("\n\tSessionId: ").append(_sessionId);
-        buf.append("\n\tMessageId: ").append(_messageId);
-        buf.append("\n\tPayload: ").append(_payload);
-        buf.append("]");
+        buf.append(" MessagePayloadMessage\n*");
+        buf.append(" SessionID: ").append(_sessionId);
+        buf.append(" [MsgID ").append(_messageId);
+        buf.append("] [").append(_payload).append("]");
         return buf.toString();
     }
 }

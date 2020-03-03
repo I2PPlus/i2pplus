@@ -32,7 +32,7 @@ class FloodfillMonitorJob extends JobImpl {
     private final FloodfillNetworkDatabaseFacade _facade;
     private long _lastChanged;
     private boolean _deferredFlood;
-    
+
     private static final int REQUEUE_DELAY = 60*60*1000;
     private static final long MIN_UPTIME = 2*60*60*1000;
     private static final long MIN_CHANGE_DELAY = 6*60*60*1000;
@@ -40,14 +40,14 @@ class FloodfillMonitorJob extends JobImpl {
     private static final int MIN_FF = 5000;
     private static final int MAX_FF = 999999;
     static final String PROP_FLOODFILL_PARTICIPANT = "router.floodfillParticipant";
-    
+
     public FloodfillMonitorJob(RouterContext context, FloodfillNetworkDatabaseFacade facade) {
         super(context);
         _facade = facade;
         _log = context.logManager().getLog(FloodfillMonitorJob.class);
     }
-    
-    public String getName() { return "Monitor the floodfill pool"; }
+
+    public String getName() { return "Monitor Floodfill Pool"; }
 
     public synchronized void runJob() {
         boolean wasFF = _facade.floodfillEnabled();
@@ -69,7 +69,7 @@ class FloodfillMonitorJob extends JobImpl {
                     routerInfoFlood.getTiming().setStartAfter(getContext().clock().now() + 5*60*1000);
                     getContext().jobQueue().addJob(routerInfoFlood);
                     if (_log.shouldLog(Log.DEBUG))
-                        _log.logAlways(Log.DEBUG, "Deferring our FloodfillRouterInfoFloodJob run because of low uptime.");
+                        _log.logAlways(Log.DEBUG, "Deferred our FloodfillRouterInfoFloodJob run because of low uptime.");
                 }
             } else {
                 routerInfoFlood.runJob();
@@ -79,7 +79,7 @@ class FloodfillMonitorJob extends JobImpl {
             }
         }
         if (_log.shouldLog(Log.INFO))
-            _log.info("Should we be floodfill? " + ff);
+            _log.info("Should we be a Floodfill? " + ff);
         int delay = (REQUEUE_DELAY / 2) + getContext().random().nextInt(REQUEUE_DELAY);
         // there's a lot of eligible non-floodfills, keep them from all jumping in at once
         // TODO: somehow assess the size of the network to make this adaptive?
@@ -225,7 +225,7 @@ class FloodfillMonitorJob extends JobImpl {
             final String log = String.format(
                     "FF criteria breakdown: happy=%b, capabilities=%s, maxLag=%d, known=%d, " +
                     "active=%d, participating=%d, offset=%d, ssuAddr=%s ElG=%f",
-                    happy, 
+                    happy,
                     rc.router().getRouterInfo().getCapabilities(),
                     rc.jobQueue().getMaxLag(),
                     _facade.getKnownRouters(),
@@ -262,5 +262,5 @@ class FloodfillMonitorJob extends JobImpl {
             _log.info("Have " + good + " ff peers, not changing, enabled? " + wasFF + "; reachable? " + happy);
         return wasFF;
     }
-    
+
 }

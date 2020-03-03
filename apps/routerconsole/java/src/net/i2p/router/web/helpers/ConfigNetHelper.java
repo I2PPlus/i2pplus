@@ -20,7 +20,7 @@ import net.i2p.util.Addresses;
  * Used for both /config and /confignet
  */
 public class ConfigNetHelper extends HelperBase {
-    
+
     /** copied from various private components */
     final static String PROP_I2NP_NTCP_HOSTNAME = "i2np.ntcp.hostname";
     final static String PROP_I2NP_NTCP_PORT = "i2np.ntcp.port";
@@ -28,17 +28,17 @@ public class ConfigNetHelper extends HelperBase {
     final static String PROP_I2NP_NTCP_AUTO_IP = "i2np.ntcp.autoip";
 
     public String getUdphostname() {
-        return _context.getProperty(UDPTransport.PROP_EXTERNAL_HOST, ""); 
+        return _context.getProperty(UDPTransport.PROP_EXTERNAL_HOST, "");
     }
 
     public String getNtcphostname() {
         return _context.getProperty(PROP_I2NP_NTCP_HOSTNAME, "");
     }
 
-    public String getNtcpport() { 
-        return _context.getProperty(PROP_I2NP_NTCP_PORT, ""); 
+    public String getNtcpport() {
+        return _context.getProperty(PROP_I2NP_NTCP_PORT, "");
     }
-    
+
     /** @return host or "unknown" */
     public String getUdpIP() {
         String rv = _context.getProperty(UDPTransport.PROP_IP);
@@ -106,7 +106,7 @@ public class ConfigNetHelper extends HelperBase {
     }
 
     public String getTcpAutoPortChecked(int mode) {
-        String port = _context.getProperty(PROP_I2NP_NTCP_PORT); 
+        String port = _context.getProperty(PROP_I2NP_NTCP_PORT);
         boolean specified = port != null && port.length() > 0;
         if ((mode == 1 && specified) ||
             (mode == 2 && !specified))
@@ -116,7 +116,7 @@ public class ConfigNetHelper extends HelperBase {
 
     public String getTcpAutoIPChecked(int mode) {
         boolean enabled = TransportManager.isNTCPEnabled(_context);
-        String hostname = _context.getProperty(PROP_I2NP_NTCP_HOSTNAME); 
+        String hostname = _context.getProperty(PROP_I2NP_NTCP_HOSTNAME);
         boolean specified = hostname != null && hostname.length() > 0;
         String auto = _context.getProperty(PROP_I2NP_NTCP_AUTO_IP, "true");
         if ((mode == 0 && (!specified) && auto.equals("false") && enabled) ||
@@ -204,7 +204,7 @@ public class ConfigNetHelper extends HelperBase {
             return CHECKED;
         return "";
     }
-    
+
     public Set<String> getAddresses() {
         // exclude local, include IPv6
         return Addresses.getAddresses(false, true);
@@ -235,20 +235,20 @@ public class ConfigNetHelper extends HelperBase {
             }
         }
         StringBuilder buf = new StringBuilder(128);
-        for (String addr : addrs) {
-            buf.append("<input type=\"checkbox\" class=\"optbox\" value=\"foo\" name=\"addr_");
-            buf.append(addr);
-            buf.append('"');
-            if (addrs.size() == 1 || configs.contains(addr))
-                buf.append(CHECKED);
-            buf.append("> ");
-            buf.append(addr);
-            buf.append("<br>\n");
-        }
-        if (!addrs.isEmpty()) {
-            buf.append(_t("Add host name or IP"))
-               .append(": ");
-        }
+//        for (String addr : addrs) {
+//            buf.append("<input type=\"checkbox\" class=\"optbox\" value=\"foo\" name=\"addr_");
+//            buf.append(addr);
+//            buf.append('"');
+//            if (addrs.size() == 1 || configs.contains(addr))
+//                buf.append(CHECKED);
+//            buf.append("> ");
+//            buf.append(addr);
+//            buf.append("<br>\n");
+//        }
+//        if (!addrs.isEmpty()) {
+//            buf.append(_t("Add host name or IP"))
+//               .append(": ");
+//        }
         buf.append("<input name=\"udpHost1\" type=\"text\" size=\"16\" >");
         return buf.toString();
     }
@@ -280,9 +280,11 @@ public class ConfigNetHelper extends HelperBase {
 
     /** @param kbytes binary K */
     private String kbytesToBits(float kbytes) {
-        return DataHelper.formatSize2Decimal((long) (kbytes * (8 * 1024))) + _t("bits per second") +
-               "; " +
-               _t("{0}Bytes per month maximum", DataHelper.formatSize2Decimal((long) (kbytes * (1024L * 60 * 60 * 24 * 31))));
+        return ("<span class=\"net_bwrate\">"
+                 + DataHelper.formatSize2Decimal((long) (kbytes * (8 * 1024))) + _t("bps")
+                 + "</span><br><span class=\"net_datausage\">"
+                 + _t("{0}B maximum data transfer per month", DataHelper.formatSize2Decimal((long) (kbytes * (1024L * 60 * 60 * 24 * 31))))
+                 + "</span>");
     }
 
     /** @return decimal */
@@ -304,7 +306,7 @@ public class ConfigNetHelper extends HelperBase {
             numSeconds = burstKB / rateKBps;
         return getBurstFactor(numSeconds, "inboundburstfactor");
     }
-    
+
     public String getOutboundBurstFactorBox() {
         int numSeconds = 1;
         int rateKBps = _context.bandwidthLimiter().getOutboundBurstKBytesPerSecond();
@@ -313,7 +315,7 @@ public class ConfigNetHelper extends HelperBase {
             numSeconds = burstKB / rateKBps;
         return getBurstFactor(numSeconds, "outboundburstfactor");
     }
-    
+
     private static String getBurstFactor(int numSeconds, String name) {
         StringBuilder buf = new StringBuilder(256);
         buf.append("<select name=\"").append(name).append("\">\n");
@@ -337,12 +339,12 @@ public class ConfigNetHelper extends HelperBase {
         buf.append("</select>\n");
         return buf.toString();
     }
-    
+
     public String getEnableLoadTesting() {
         return "";
     }
 ****/
-    
+
     public String getSharePercentageBox() {
         int pct = (int) (100 * _context.router().getSharePercentage());
         StringBuilder buf = new StringBuilder(256);

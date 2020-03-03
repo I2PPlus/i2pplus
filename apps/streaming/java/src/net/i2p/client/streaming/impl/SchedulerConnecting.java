@@ -30,37 +30,37 @@ import net.i2p.util.Log;
  *
  */
 class SchedulerConnecting extends SchedulerImpl {
-    
+
     public SchedulerConnecting(I2PAppContext ctx) {
         super(ctx);
     }
-    
+
     public boolean accept(Connection con) {
         if (con == null) return false;
         boolean notYetConnected = (con.getIsConnected()) &&
                                   //(con.getSendStreamId() == null) && // not null on recv
                                   (con.getLastSendId() >= 0) &&
-                                  (con.getHighestAckedThrough() < 0) && 
+                                  (con.getHighestAckedThrough() < 0) &&
                                   (!con.getResetReceived());
         return notYetConnected;
     }
-    
+
     public void eventOccurred(Connection con) {
         long waited = _context.clock().now() - con.getCreatedOn();
-        if ( (con.getOptions().getConnectTimeout() > 0) && 
+        if ( (con.getOptions().getConnectTimeout() > 0) &&
              (con.getOptions().getConnectTimeout() <= waited) ) {
             con.setConnectionError("Timeout waiting for ack (waited " + waited + "ms)");
             con.disconnect(false);
             reschedule(0, con);
             if (_log.shouldLog(Log.DEBUG))
-                _log.debug("waited too long: " + waited);
+                _log.debug("Waited too long: " + waited);
             return;
         } else {
             // should we be doing a con.sendAvailable here?
             if (con.getOptions().getConnectTimeout() > 0)
                 reschedule(con.getOptions().getConnectTimeout(), con);
         }
-        /*        
+        /*
         long timeTillSend = con.getNextSendTime() - _context.clock().now();
         if ( (timeTillSend <= 0) && (con.getNextSendTime() > 0) ) {
             if (_log.shouldLog(Log.DEBUG))

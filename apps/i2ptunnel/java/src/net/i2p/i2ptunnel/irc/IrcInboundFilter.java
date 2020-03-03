@@ -48,46 +48,47 @@ public class IrcInboundFilter implements Runnable {
             output=local.getOutputStream();
         } catch (IOException e) {
             if (_log.shouldLog(Log.WARN))
-                _log.warn("IrcInboundFilter: no streams",e);
+                _log.warn("[IRC Client] Inbound Filter: No streams",e);
             return;
         }
         if (_log.shouldLog(Log.DEBUG))
-            _log.debug("IrcInboundFilter: Running.");
+            _log.debug("[IRC Client] Inbound Filter: Running");
         try {
             while(true)
             {
                 try {
                     String inmsg = in.readLine();
-                    if(inmsg==null)
+                    if(inmsg == null)
                         break;
                     if(inmsg.endsWith("\r"))
                         inmsg=inmsg.substring(0,inmsg.length()-1);
-                    if (_log.shouldLog(Log.DEBUG))
-                        _log.debug("in: [" + inmsg + "]");
+                    // dupe of info level log
+                    //if (_log.shouldLog(Log.DEBUG))
+                    //    _log.debug("[IRC Client] In: [" + inmsg + "]");
                     String outmsg = IRCFilter.inboundFilter(inmsg, expectedPong, _dccHelper);
-                    if(outmsg!=null)
+                    if(outmsg != null)
                     {
                         if(!inmsg.equals(outmsg)) {
                             if (_log.shouldLog(Log.WARN)) {
-                                _log.warn("inbound FILTERED: "+outmsg);
-                                _log.warn(" - inbound was: "+inmsg);
+                                _log.warn("[IRC Client] Inbound message FILTERED [" + outmsg + "]");
+                                _log.warn("[IRC Client] Inbound message [" + inmsg + "]");
                             }
                         } else {
                             if (_log.shouldLog(Log.INFO))
-                                _log.info("inbound: "+outmsg);
+                                _log.info("[IRC Client] Inbound message [" + outmsg + "]");
                         }
-                        outmsg=outmsg+"\r\n";   // rfc1459 sec. 2.3
+                        outmsg = outmsg + "\r\n";   // rfc1459 sec. 2.3
                         output.write(outmsg.getBytes("ISO-8859-1"));
                         // probably doesn't do much but can't hurt
                         if (!in.ready())
                             output.flush();
                     } else {
                         if (_log.shouldLog(Log.WARN))
-                            _log.warn("inbound BLOCKED: "+inmsg);
+                            _log.warn("[IRC Client] Inbound message BLOCKED [" + inmsg + "]");
                     }
                 } catch (IOException e1) {
                     if (_log.shouldLog(Log.WARN))
-                        _log.warn("IrcInboundFilter: disconnected",e1);
+                        _log.warn("[IRC Client] Inbound Filter: Disconnected", e1);
                     break;
                 }
             }
@@ -98,6 +99,6 @@ public class IrcInboundFilter implements Runnable {
             try { local.close(); } catch(IOException e) {}
         }
         if(_log.shouldLog(Log.DEBUG))
-            _log.debug("IrcInboundFilter: Done.");
+            _log.debug("[IRC Client] Inbound Filter: Stopped");
     }
 }

@@ -24,7 +24,7 @@ import net.i2p.util.SimpleByteCache;
 
 /**
  * Big ol' class to do all our packet formatting.  The UDPPackets generated are
- * fully authenticated, encrypted, and configured for delivery to the peer. 
+ * fully authenticated, encrypted, and configured for delivery to the peer.
  *
  * The following is from udp.html on the website:
 
@@ -32,8 +32,8 @@ import net.i2p.util.SimpleByteCache;
 All UDP datagrams begin with a 16 byte MAC (Message Authentication Code)
 and a 16 byte IV (Initialization Vector
 followed by a variable
-size payload encrypted with the appropriate key.  The MAC used is 
-HMAC-MD5, truncated to 16 bytes, while the key is a full 32 byte AES256 
+size payload encrypted with the appropriate key.  The MAC used is
+HMAC-MD5, truncated to 16 bytes, while the key is a full 32 byte AES256
 key.  The specific construct of the MAC is the first 16 bytes from:</p>
 <pre>
   HMAC-MD5(payload || IV || (payloadLength ^ protocolVersion), macKey)
@@ -41,11 +41,11 @@ key.  The specific construct of the MAC is the first 16 bytes from:</p>
 
 <p>The protocol version is currently 0.</p>
 
-<p>The payload itself is AES256/CBC encrypted with the IV and the 
-sessionKey, with replay prevention addressed within its body, 
-explained below.  The payloadLength in the MAC is a 2 byte unsigned 
+<p>The payload itself is AES256/CBC encrypted with the IV and the
+sessionKey, with replay prevention addressed within its body,
+explained below.  The payloadLength in the MAC is a 2 byte unsigned
 integer in 2s complement.</p>
-  
+
 <p>The protocolVersion is a 2 byte unsigned integer in 2s complement,
 and currently set to 0.  Peers using a different protocol version will
 not be able to communicate with this peer, though earlier versions not
@@ -54,8 +54,8 @@ using this flag are.</p>
 <h2 id="payload">Payload</h2>
 
 <p>Within the AES encrypted payload, there is a minimal common structure
-to the various messages - a one byte flag and a four byte sending 
-timestamp (*seconds* since the unix epoch).  The flag byte contains 
+to the various messages - a one byte flag and a four byte sending
+timestamp (*seconds* since the unix epoch).  The flag byte contains
 the following bitfields:</p>
 <pre>
 Bit order: 76543210
@@ -65,18 +65,18 @@ Bit order: 76543210
   bits 1-0: reserved
 </pre>
 
-<p>If the rekey flag is set, 64 bytes of keying material follow the 
-timestamp.  If the extended options flag is set, a one byte option 
-size value is appended to, followed by that many extended option 
+<p>If the rekey flag is set, 64 bytes of keying material follow the
+timestamp.  If the extended options flag is set, a one byte option
+size value is appended to, followed by that many extended option
 bytes, which are currently uninterpreted.</p>
 
-<p>When rekeying, the first 32 bytes of the keying material is fed 
+<p>When rekeying, the first 32 bytes of the keying material is fed
 into a SHA256 to produce the new MAC key, and the next 32 bytes are
 fed into a SHA256 to produce the new session key, though the keys are
-not immediately used.  The other side should also reply with the 
-rekey flag set and that same keying material.  Once both sides have 
-sent and received those values, the new keys should be used and the 
-previous keys discarded.  It may be useful to keep the old keys 
+not immediately used.  The other side should also reply with the
+rekey flag set and that same keying material.  Once both sides have
+sent and received those values, the new keys should be used and the
+previous keys discarded.  It may be useful to keep the old keys
 around briefly, to address packet loss and reordering.</p>
 
 <p>NOTE: Rekeying is currently unimplemented.</p>
@@ -104,7 +104,7 @@ class PacketBuilder {
     private final RouterContext _context;
     private final Log _log;
     private final UDPTransport _transport;
-    
+
     /**
      *  For debugging and stats only - does not go out on the wire.
      *  These are chosen to be higher than the highest I2NP message type,
@@ -129,7 +129,7 @@ class PacketBuilder {
      *  If we ever change this, uncomment below and in UDPPacket
     static final int PROTOCOL_VERSION = 0;
      */
-    
+
     /** if no extended options or rekey data, which we don't support  = 37 */
     public static final int HEADER_SIZE = UDPPacket.MAC_SIZE + UDPPacket.IV_SIZE + 1 + 4;
 
@@ -180,7 +180,7 @@ class PacketBuilder {
     private static final byte DATA_FLAG_BYTE = UDPPacket.PAYLOAD_TYPE_DATA << 4;
     private static final byte PEER_TEST_FLAG_BYTE = UDPPacket.PAYLOAD_TYPE_TEST << 4;
     private static final byte SESSION_DESTROY_FLAG_BYTE = (byte) (UDPPacket.PAYLOAD_TYPE_SESSION_DESTROY << 4);
-    
+
     /**
      *  @param transport may be null for unit testing only
      */
@@ -190,7 +190,7 @@ class PacketBuilder {
         _log = ctx.logManager().getLog(PacketBuilder.class);
         // all createRateStat in UDPTransport
     }
-    
+
 /****
     public UDPPacket buildPacket(OutboundMessageState state, int fragment, PeerState peer) {
         return buildPacket(state, fragment, peer, null, null);
@@ -213,7 +213,7 @@ class PacketBuilder {
 
         @Override
         public String toString() {
-            return "Fragment " + num + " (" + state.fragmentSize(num) + " bytes) of " + state;
+            return "Fragment " + num + " (" + state.fragmentSize(num) + " bytes)" + state;
         }
     }
 
@@ -272,7 +272,7 @@ class PacketBuilder {
      * it's (47 + 4*explict acks + padding) added to the
      * fragment length.
      *
-     * @param ackIdsRemaining list of messageIds (Long) that should be acked by this packet.  
+     * @param ackIdsRemaining list of messageIds (Long) that should be acked by this packet.
      *                        The list itself is passed by reference, and if a messageId is
      *                        transmitted it will be removed from the list.
      *                        Not all message IDs will necessarily be sent, there may not be room.
@@ -281,7 +281,7 @@ class PacketBuilder {
      * @param newAckCount the number of ackIdsRemaining entries that are new. These must be the first
      *                    ones in the list
      *
-     * @param partialACKsRemaining list of messageIds (ACKBitfield) that should be acked by this packet.  
+     * @param partialACKsRemaining list of messageIds (ACKBitfield) that should be acked by this packet.
      *                        The list itself is passed by reference, and if a messageId is
      *                        included, it should be removed from the list.
      *                        Full acks in this list are skipped, they are NOT transmitted.
@@ -308,7 +308,7 @@ class PacketBuilder {
         StringBuilder msg = null;
         if (_log.shouldLog(Log.INFO)) {
             msg = new StringBuilder(256);
-            msg.append("Data pkt to ").append(peer.getRemotePeer().toBase64());
+            msg.append("Data packet sent to [").append(peer.getRemotePeer().toBase64().substring(0,6) + "]");
         }
 
         // calculate data size
@@ -321,13 +321,13 @@ class PacketBuilder {
             int sz = state.fragmentSize(fragment);
             dataSize += sz;
             if (msg != null) {
-                msg.append(" Fragment ").append(i);
-                msg.append(": msg ").append(state.getMessageId()).append(' ').append(fragment);
-                msg.append('/').append(state.getFragmentCount());
-                msg.append(' ').append(sz);
+                msg.append("\n* Fragment ").append(i);
+                msg.append(": [MsgID ").append(state.getMessageId()).append("] ").append(fragment);
+                msg.append(" of ").append(state.getFragmentCount());
+                msg.append(" Size: ").append(sz).append(" bytes");
             }
         }
-        
+
         if (dataSize < 0)
             return null;
 
@@ -353,7 +353,7 @@ class PacketBuilder {
         int off = HEADER_SIZE;
 
         // ok, now for the body...
-        
+
         // just always ask for an ACK for now...
         data[off] |= UDPPacket.DATA_FLAG_WANT_REPLY;
 
@@ -397,13 +397,13 @@ class PacketBuilder {
         off++;
 
         if (msg != null) {
-            msg.append(" Total data: ").append(dataSize).append(" bytes, mtu: ")
-               .append(currentMTU).append(", ")
-               .append(newAckCount).append(" new full acks requested, ")
-               .append(ackIdsRemaining.size() - newAckCount).append(" resend acks requested, ")
-               .append(partialACKsRemaining.size()).append(" partial acks requested, ")
-               .append(availableForAcks).append(" avail. for all acks, ")
-               .append(availableForExplicitAcks).append(" for full acks, ");
+            msg.append("\n* Total data: ").append(dataSize).append(" bytes; MTU: ")
+               .append(currentMTU).append("; ")
+               .append(newAckCount).append(" new full ACKs requested: ")
+               .append(ackIdsRemaining.size() - newAckCount).append(" Resend ACKs requested; ")
+               .append(partialACKsRemaining.size()).append(" Partial ACKs requested\n* ")
+               .append(availableForAcks).append(" Available for all ACKs; ")
+               .append(availableForExplicitAcks).append(" Available for full ACKs");
         }
 
         // always send all the new acks if we have room
@@ -412,7 +412,7 @@ class PacketBuilder {
                                                Math.min((availableForExplicitAcks - 1) / 4, ackIdsRemaining.size())));
         if (explicitToSend > 0) {
             if (msg != null)
-                msg.append(explicitToSend).append(" full acks included:");
+                msg.append("\n* ").append(explicitToSend).append(" full ACKs included:");
             DataHelper.toLong(data, off, 1, explicitToSend);
             off++;
             Iterator<Long> iter = ackIdsRemaining.iterator();
@@ -421,7 +421,7 @@ class PacketBuilder {
                 iter.remove();
                 // NPE here, how did a null get in the List?
                 DataHelper.toLong(data, off, 4, ackId.longValue());
-                off += 4;        
+                off += 4;
                 if (msg != null) // logging it
                     msg.append(' ').append(ackId.longValue());
             }
@@ -430,7 +430,7 @@ class PacketBuilder {
 
         if (partialAcksToSend > 0) {
             if (msg != null)
-                msg.append(partialAcksToSend).append(" partial acks included:");
+                msg.append("\n* ").append(partialAcksToSend).append(" partial ACKs included:");
             int origNumRemaining = partialACKsRemaining.size();
             int numPartialOffset = off;
             // leave it blank for now, since we could skip some
@@ -454,7 +454,7 @@ class PacketBuilder {
                         data[off] = (byte)(1 << 7);
                     else
                         data[off] = 0;
-                    
+
                     for (int curBit = 0; curBit < 7; curBit++) {
                         if (bitfield.received(curBit + 7*curByte))
                             data[off] |= (byte)(1 << curBit);
@@ -463,19 +463,19 @@ class PacketBuilder {
                 }
                 iter.remove();
                 if (msg != null) // logging it
-                    msg.append(' ').append(bitfield).append(" with ack bytes: ").append(size);
+                    msg.append(' ').append(bitfield).append(" with ACK bytes: ").append(size);
             }
             //acksIncluded = true;
             // now jump back and fill in the number of bitfields *actually* included
             DataHelper.toLong(data, numPartialOffset, 1, origNumRemaining - partialACKsRemaining.size());
         }
-        
+
         //if ( (msg != null) && (acksIncluded) )
         //  _log.debug(msg.toString());
-        
+
         DataHelper.toLong(data, off, 1, numFragments);
         off++;
-        
+
         // now write each fragment
         int sizeWritten = 0;
         for (int i = 0; i < numFragments; i++) {
@@ -485,17 +485,17 @@ class PacketBuilder {
 
             DataHelper.toLong(data, off, 4, state.getMessageId());
             off += 4;
-        
+
             data[off] = (byte) (fragment << 1);
             if (fragment == state.getFragmentCount() - 1)
                 data[off] |= 1; // isLast
             off++;
-        
+
             int fragSize = state.fragmentSize(fragment);
             DataHelper.toLong(data, off, 2, fragSize);
             data[off] &= (byte)0x3F; // 2 highest bits are reserved
             off += 2;
-        
+
             int sz = state.writeFragment(data, off, fragment);
             off += sz;
             sizeWritten += sz;
@@ -513,7 +513,7 @@ class PacketBuilder {
             packet.release();
             return null;
         //} else if (_log.shouldLog(Log.DEBUG)) {
-        //    _log.debug("Size written: " + sizeWritten + " for fragment " + fragment 
+        //    _log.debug("Size written: " + sizeWritten + " for fragment " + fragment
         //               + " of " + state.getMessageId());
         }
 
@@ -522,7 +522,7 @@ class PacketBuilder {
             // OK according to the protocol but if we send it, it's a bug
             _log.error("Sending zero-size fragment??? for " + DataHelper.toString(fragments));
         }
-        
+
         // pad up so we're on the encryption boundary
         off = pad1(data, off);
         off = pad2(data, off, currentMTU - (ipHeaderSize + UDP_HEADER_SIZE));
@@ -543,7 +543,7 @@ class PacketBuilder {
             //        msg.append(net.i2p.util.HexDump.dump(data, 0, off));
             //    }
             //}
-            msg.append(" pkt size ").append(off + (ipHeaderSize + UDP_HEADER_SIZE));
+            msg.append("; Packet size ").append(off + (ipHeaderSize + UDP_HEADER_SIZE) + " bytes");
             _log.info(msg.toString());
         }
 
@@ -561,17 +561,17 @@ class PacketBuilder {
                        " data size " + dataSize +
                        " pkt size " + (off + (ipHeaderSize + UDP_HEADER_SIZE)) +
                        " MTU " + currentMTU +
-                       ' ' + availableForAcks + " for all acks, " +
-                       availableForExplicitAcks + " for full acks, " + 
-                       explicitToSend + " full acks included, " +
-                       partialAcksToSend + " partial acks included, " +
+                       ' ' + availableForAcks + " for all ACKs, " +
+                       availableForExplicitAcks + " for full ACKs, " +
+                       explicitToSend + " full ACKs included, " +
+                       partialAcksToSend + " partial ACKs included, " +
                        " Fragments: " + DataHelper.toString(fragments), new Exception());
             }
         }
-        
+
         return packet;
     }
-    
+
     /**
      * An ACK packet with no acks.
      * We use this for keepalive purposes.
@@ -597,11 +597,11 @@ class PacketBuilder {
         DatagramPacket pkt = packet.getPacket();
         byte data[] = pkt.getData();
         int off = HEADER_SIZE;
-        
+
         StringBuilder msg = null;
         if (_log.shouldLog(Log.DEBUG)) {
             msg = new StringBuilder(128);
-            msg.append("building ACK packet to ").append(peer.getRemotePeer().toBase64().substring(0,6));
+            msg.append("Building ACK packet to [").append(peer.getRemotePeer().toBase64().substring(0,6) + "]\n* ");
         }
 
         int fullACKCount = 0;
@@ -615,7 +615,7 @@ class PacketBuilder {
         // FIXME do better than this, we could still exceed MTU
         if (fullACKCount > ABSOLUTE_MAX_ACKS ||
             partialACKCount > ABSOLUTE_MAX_ACKS)
-            throw new IllegalArgumentException("Too many acks full/partial " + fullACKCount +
+            throw new IllegalArgumentException("Too many ACKs full/partial " + fullACKCount +
                                                '/' + partialACKCount);
 
         // ok, now for the body...
@@ -625,7 +625,7 @@ class PacketBuilder {
             data[off] |= UDPPacket.DATA_FLAG_ACK_BITFIELDS;
         // add ECN if (peer.getSomethingOrOther())
         off++;
-        
+
         if (fullACKCount > 0) {
             DataHelper.toLong(data, off, 1, fullACKCount);
             off++;
@@ -635,11 +635,11 @@ class PacketBuilder {
                     DataHelper.toLong(data, off, 4, bf.getMessageId());
                     off += 4;
                     if (msg != null) // logging it
-                        msg.append(" full ack: ").append(bf.getMessageId());
+                        msg.append(" Full ACK: ").append(bf.getMessageId());
                 }
             }
         }
-        
+
         if (partialACKCount > 0) {
             DataHelper.toLong(data, off, 1, partialACKCount);
             off++;
@@ -659,25 +659,25 @@ class PacketBuilder {
                         data[off] = (byte)(1 << 7);
                     else
                         data[off] = 0;
-                    
+
                     for (int curBit = 0; curBit < 7; curBit++) {
                         if (bitfield.received(curBit + 7*curByte))
                             data[off] |= (byte)(1 << curBit);
                     }
                     off++;
                 }
-                
+
                 if (msg != null) // logging it
-                    msg.append(" partial ack: ").append(bitfield).append(" with ack bytes: ").append(size);
+                    msg.append(" partial ACK: ").append(bitfield).append(" with ACK bytes: ").append(size);
             }
         }
-        
+
         DataHelper.toLong(data, off, 1, 0); // no fragments in this message
         off++;
-        
+
         if (msg != null)
             _log.debug(msg.toString());
-        
+
         // pad up so we're on the encryption boundary
         off = pad1(data, off);
         off = pad2(data, off);
@@ -686,11 +686,11 @@ class PacketBuilder {
         setTo(packet, peer.getRemoteIPAddress(), peer.getRemotePort());
         return packet;
     }
-    
+
     /**
-     * Build a new SessionCreated packet for the given peer, encrypting it 
+     * Build a new SessionCreated packet for the given peer, encrypting it
      * as necessary.
-     * 
+     *
      * @return ready to send packet, or null if there was a problem
      */
     public UDPPacket buildSessionCreatedPacket(InboundEstablishState state, int externalPort, SessionKey ourIntroKey) {
@@ -698,23 +698,23 @@ class PacketBuilder {
         DatagramPacket pkt = packet.getPacket();
         byte data[] = pkt.getData();
         int off = HEADER_SIZE;
-        
+
         InetAddress to = null;
         try {
             to = InetAddress.getByAddress(state.getSentIP());
         } catch (UnknownHostException uhe) {
             if (_log.shouldLog(Log.ERROR))
-                _log.error("How did we think this was a valid IP?  " + state.getRemoteHostId().toString());
+                _log.error("How did we think this was a valid IP address?  " + state.getRemoteHostId().toString());
             packet.release();
             return null;
         }
 
         state.prepareSessionCreated();
-        
+
         byte sentIP[] = state.getSentIP();
         if ( (sentIP == null) || (sentIP.length <= 0) || (!_transport.isValid(sentIP))) {
             if (_log.shouldLog(Log.ERROR))
-                _log.error("How did our sent IP become invalid? " + state);
+                _log.error("How did our sent IP address become invalid? " + state);
             state.fail();
             packet.release();
             return null;
@@ -748,29 +748,29 @@ class PacketBuilder {
         } else {
             padding = 0;
         }
-        
+
         if (_log.shouldLog(Log.DEBUG)) {
             StringBuilder buf = new StringBuilder(128);
-            buf.append("Sending sessionCreated:");
+            buf.append("Sending SessionCreated:");
             buf.append(" Alice: ").append(Addresses.toString(sentIP, state.getSentPort()));
             buf.append(" Bob: ").append(Addresses.toString(state.getReceivedOurIP(), externalPort));
             buf.append(" RelayTag: ").append(state.getSentRelayTag());
             buf.append(" SignedOn: ").append(state.getSentSignedOnTime());
-            buf.append(" signature: ").append(Base64.encode(sig.getData()));
-            buf.append("\nRawCreated: ").append(Base64.encode(data, 0, off)); 
-            buf.append("\nsignedTime: ").append(Base64.encode(data, off - padding - siglen - 4, 4));
+            buf.append(" Signature: ").append(Base64.encode(sig.getData()));
+            buf.append("\nRawCreated: ").append(Base64.encode(data, 0, off));
+            buf.append("\nSignedTime: ").append(Base64.encode(data, off - padding - siglen - 4, 4));
             _log.debug(buf.toString());
         }
-        
+
         // ok, now the full data is in there, but we also need to encrypt
         // the signature, which means we need the IV
         byte[] iv = SimpleByteCache.acquire(UDPPacket.IV_SIZE);
         _context.random().nextBytes(iv);
-        
+
         int encrWrite = siglen + padding;
         int sigBegin = off - encrWrite;
         _context.aes().encrypt(data, sigBegin, data, sigBegin, state.getCipherKey(), iv, encrWrite);
-        
+
         // pad up so we're on the encryption boundary
         off = pad1(data, off);
         off = pad2(data, off);
@@ -781,11 +781,11 @@ class PacketBuilder {
         packet.setMessageType(TYPE_CREAT);
         return packet;
     }
-    
+
     /**
-     * Build a new SessionRequest packet for the given peer, encrypting it 
+     * Build a new SessionRequest packet for the given peer, encrypting it
      * as necessary.
-     * 
+     *
      * @return ready to send packet, or null if there was a problem
      */
     public UDPPacket buildSessionRequestPacket(OutboundEstablishState state) {
@@ -798,7 +798,7 @@ class PacketBuilder {
             if (intro)
                 options[1] = (byte) UDPPacket.SESS_REQ_EXT_FLAG_REQUEST_RELAY_TAG;
             if (_log.shouldInfo())
-                _log.info("send sess req. w/ ext. options, need intro? " + intro + ' ' + state);
+                _log.info("Sending SessionRequest with extended options; need intro? " + intro + ' ' + state);
             off += UDPPacket.SESS_REQ_MIN_EXT_OPTIONS_LENGTH + 1;
         } else {
             options = null;
@@ -817,13 +817,13 @@ class PacketBuilder {
             to = InetAddress.getByAddress(toIP);
         } catch (UnknownHostException uhe) {
             if (_log.shouldLog(Log.ERROR))
-                _log.error("How did we think this was a valid IP?  " + state.getRemoteHostId().toString());
+                _log.error("How did we think this was a valid IP address? " + state.getRemoteHostId().toString());
             packet.release();
             return null;
         }
         if (_log.shouldLog(Log.DEBUG))
-            _log.debug("Sending request to " + Addresses.toString(toIP));
-        
+            _log.debug("Sending SessionRequest to " + Addresses.toString(toIP));
+
         // now for the body
         byte[] x = state.getSentX();
         System.arraycopy(x, 0, data, off, x.length);
@@ -835,9 +835,9 @@ class PacketBuilder {
         int port = state.getSentPort();
         DataHelper.toLong(data, off, 2, port);
         off += 2;
-        
+
         // we can pad here if we want, maybe randomized?
-        
+
         // pad up so we're on the encryption boundary
         off = pad1(data, off);
         off = pad2(data, off);
@@ -849,17 +849,17 @@ class PacketBuilder {
     }
 
     private static final int MAX_IDENTITY_FRAGMENT_SIZE = 512;
-    
+
     /**
-     * Build a new series of SessionConfirmed packets for the given peer, 
+     * Build a new series of SessionConfirmed packets for the given peer,
      * encrypting it as necessary.
      *
      * Note that while a SessionConfirmed could in theory be fragmented,
      * in practice a RouterIdentity is 387 bytes and a single fragment is 512 bytes max,
      * so it will never be fragmented.
-     * 
+     *
      * @return ready to send packets, or null if there was a problem
-     * 
+     *
      * TODO: doesn't really return null, and caller doesn't handle null return
      * (null SigningPrivateKey should cause this?)
      * Should probably return null if buildSessionConfirmedPacket() returns null for any fragment
@@ -877,7 +877,7 @@ class PacketBuilder {
 
     /**
      * Build a new SessionConfirmed packet for the given peer
-     * 
+     *
      * @return ready to send packets, or null if there was a problem
      */
     private UDPPacket buildSessionConfirmedPacket(OutboundEstablishState state, int fragmentNum, int numFragments, byte identity[]) {
@@ -891,33 +891,33 @@ class PacketBuilder {
             to = InetAddress.getByAddress(state.getSentIP());
         } catch (UnknownHostException uhe) {
             if (_log.shouldLog(Log.ERROR))
-                _log.error("How did we think this was a valid IP?  " + state.getRemoteHostId().toString());
+                _log.error("How did we think this was a valid IP address? " + state.getRemoteHostId().toString());
             packet.release();
             return null;
         }
-        
+
         // now for the body
         data[off] = (byte) (fragmentNum << 4);
         data[off] |= (numFragments & 0xF);
         off++;
-        
+
         int curFragSize = MAX_IDENTITY_FRAGMENT_SIZE;
         if (fragmentNum == numFragments-1) {
             if (identity.length % MAX_IDENTITY_FRAGMENT_SIZE != 0)
                 curFragSize = identity.length % MAX_IDENTITY_FRAGMENT_SIZE;
         }
-        
+
         DataHelper.toLong(data, off, 2, curFragSize);
         off += 2;
-        
+
         int curFragOffset = fragmentNum * MAX_IDENTITY_FRAGMENT_SIZE;
         System.arraycopy(identity, curFragOffset, data, off, curFragSize);
         off += curFragSize;
-        
+
         if (fragmentNum == numFragments - 1) {
             DataHelper.toLong(data, off, 4, state.getSentSignedOnTime());
             off += 4;
-            
+
             // handle variable signature size
             // we need to pad this so we're at the encryption boundary
             Signature sig = state.getSentSignature();
@@ -932,7 +932,7 @@ class PacketBuilder {
             // We cannot have non-mod16 (pad2) padding here, since the signature
             // is at the end. As of 0.9.7 we won't decrypt past the end of the packet
             // so trailing non-mod-16 data is ignored. That truncates the sig.
-            
+
             // BUG: NPE here if null signature
             System.arraycopy(sig.getData(), 0, data, off, siglen);
             off += siglen;
@@ -944,7 +944,7 @@ class PacketBuilder {
             off = pad1(data, off);
             // allowed but untested
             //off = pad2(data, off);
-        } 
+        }
         pkt.setLength(off);
         authenticate(packet, state.getCipherKey(), state.getMACKey());
         setTo(packet, to, state.getSentPort());
@@ -952,7 +952,7 @@ class PacketBuilder {
         return packet;
     }
 
-    
+
     /**
      *  Build a destroy packet, which contains a header but no body.
      *  Session must be established or this will NPE in authenticate().
@@ -962,7 +962,7 @@ class PacketBuilder {
      */
     public UDPPacket buildSessionDestroyPacket(PeerState peer) {
         if (_log.shouldLog(Log.DEBUG)) {
-            _log.debug("building session destroy packet to " + peer.getRemotePeer());
+            _log.debug("Building SessionDestroy packet to " + peer.getRemotePeer());
         }
         return buildSessionDestroyPacket(peer.getCurrentCipherKey(), peer.getCurrentMACKey(),
                                          peer.getRemoteIPAddress(), peer.getRemotePort());
@@ -982,7 +982,7 @@ class PacketBuilder {
         int port = peer.getSentPort();
         if (cipherKey == null || macKey == null || ip == null || port <= 0) {
             if (_log.shouldLog(Log.DEBUG))
-                _log.debug("Cannot send destroy, incomplete " + peer);
+                _log.debug("Cannot send SessionDestroy packet to " + peer + " - incomplete info");
             return null;
         }
         InetAddress addr;
@@ -992,7 +992,7 @@ class PacketBuilder {
             return null;
         }
         if (_log.shouldLog(Log.DEBUG))
-            _log.debug("building session destroy packet to " + peer);
+            _log.debug("Building SessionDestroy packet to " + peer);
         return buildSessionDestroyPacket(cipherKey, macKey, addr, port);
     }
 
@@ -1011,7 +1011,7 @@ class PacketBuilder {
         int port = peer.getSentPort();
         if (cipherKey == null || macKey == null || ip == null || port <= 0) {
             if (_log.shouldLog(Log.DEBUG))
-                _log.debug("Cannot send destroy, incomplete " + peer);
+                _log.debug("Cannot send SessionDestroy packet to " + peer + " - incomplete info");
             return null;
         }
         InetAddress addr;
@@ -1021,7 +1021,7 @@ class PacketBuilder {
             return null;
         }
         if (_log.shouldLog(Log.DEBUG))
-            _log.debug("building session destroy packet to " + peer);
+            _log.debug("Building SessionDestroy packet to " + peer);
         return buildSessionDestroyPacket(cipherKey, macKey, addr, port);
     }
 
@@ -1034,9 +1034,9 @@ class PacketBuilder {
     private UDPPacket buildSessionDestroyPacket(SessionKey cipherKey, SessionKey macKey, InetAddress addr, int port) {
         UDPPacket packet = buildPacketHeader(SESSION_DESTROY_FLAG_BYTE);
         int off = HEADER_SIZE;
-        
+
         // no body in this message
-        
+
         // pad up so we're on the encryption boundary
         DatagramPacket pkt = packet.getPacket();
         byte data[] = pkt.getData();
@@ -1047,11 +1047,11 @@ class PacketBuilder {
         setTo(packet, addr, port);
         return packet;
     }
-    
+
     /**
-     * Build a packet as if we are Alice and we either want Bob to begin a 
+     * Build a packet as if we are Alice and we either want Bob to begin a
      * peer test or Charlie to finish a peer test.
-     * 
+     *
      * @return ready to send packet, or null if there was a problem
      */
     public UDPPacket buildPeerTestFromAlice(InetAddress toIP, int toPort, SessionKey toIntroKey, long nonce, SessionKey aliceIntroKey) {
@@ -1059,9 +1059,9 @@ class PacketBuilder {
     }
 
     /**
-     * Build a packet as if we are Alice and we either want Bob to begin a 
+     * Build a packet as if we are Alice and we either want Bob to begin a
      * peer test or Charlie to finish a peer test.
-     * 
+     *
      * @return ready to send packet, or null if there was a problem
      */
     public UDPPacket buildPeerTestFromAlice(InetAddress toIP, int toPort, SessionKey toCipherKey, SessionKey toMACKey,
@@ -1071,8 +1071,8 @@ class PacketBuilder {
         byte data[] = pkt.getData();
         int off = HEADER_SIZE;
         if (_log.shouldLog(Log.DEBUG))
-            _log.debug("Sending peer test " + nonce + " to Bob");
-        
+            _log.debug("Sending Peer Test " + nonce + " to Bob");
+
         // now for the body
         DataHelper.toLong(data, off, 4, nonce);
         off += 4;
@@ -1082,7 +1082,7 @@ class PacketBuilder {
         off += 2;
         System.arraycopy(aliceIntroKey.getData(), 0, data, off, SessionKey.KEYSIZE_BYTES);
         off += SessionKey.KEYSIZE_BYTES;
-        
+
         // pad up so we're on the encryption boundary
         off = pad1(data, off);
         off = pad2(data, off);
@@ -1095,7 +1095,7 @@ class PacketBuilder {
 
     /**
      * Build a packet as if we are either Bob or Charlie and we are helping test Alice.
-     * 
+     *
      * @return ready to send packet, or null if there was a problem
      */
     public UDPPacket buildPeerTestToAlice(InetAddress aliceIP, int alicePort,
@@ -1105,8 +1105,8 @@ class PacketBuilder {
         byte data[] = pkt.getData();
         int off = HEADER_SIZE;
         if (_log.shouldLog(Log.DEBUG))
-            _log.debug("Sending peer test " + nonce + " to Alice");
-        
+            _log.debug("Sending Peer Test " + nonce + " to Alice");
+
         // now for the body
         DataHelper.toLong(data, off, 4, nonce);
         off += 4;
@@ -1119,7 +1119,7 @@ class PacketBuilder {
         off += 2;
         System.arraycopy(charlieIntroKey.getData(), 0, data, off, SessionKey.KEYSIZE_BYTES);
         off += SessionKey.KEYSIZE_BYTES;
-        
+
         // pad up so we're on the encryption boundary
         off = pad1(data, off);
         off = pad2(data, off);
@@ -1132,19 +1132,19 @@ class PacketBuilder {
 
     /**
      * Build a packet as if we are Bob sending Charlie a packet to help test Alice.
-     * 
+     *
      * @return ready to send packet, or null if there was a problem
      */
-    public UDPPacket buildPeerTestToCharlie(InetAddress aliceIP, int alicePort, SessionKey aliceIntroKey, long nonce, 
-                                            InetAddress charlieIP, int charliePort, 
+    public UDPPacket buildPeerTestToCharlie(InetAddress aliceIP, int alicePort, SessionKey aliceIntroKey, long nonce,
+                                            InetAddress charlieIP, int charliePort,
                                             SessionKey charlieCipherKey, SessionKey charlieMACKey) {
         UDPPacket packet = buildPacketHeader(PEER_TEST_FLAG_BYTE);
         DatagramPacket pkt = packet.getPacket();
         byte data[] = pkt.getData();
         int off = HEADER_SIZE;
         if (_log.shouldLog(Log.DEBUG))
-            _log.debug("Sending peer test " + nonce + " to Charlie");
-        
+            _log.debug("Sending Peer Test " + nonce + " to Charlie");
+
         // now for the body
         DataHelper.toLong(data, off, 4, nonce);
         off += 4;
@@ -1157,7 +1157,7 @@ class PacketBuilder {
         off += 2;
         System.arraycopy(aliceIntroKey.getData(), 0, data, off, SessionKey.KEYSIZE_BYTES);
         off += SessionKey.KEYSIZE_BYTES;
-        
+
         // pad up so we're on the encryption boundary
         off = pad1(data, off);
         off = pad2(data, off);
@@ -1167,10 +1167,10 @@ class PacketBuilder {
         packet.setMessageType(TYPE_TBC);
         return packet;
     }
-    
+
     /**
      * Build a packet as if we are Charlie sending Bob a packet verifying that we will help test Alice.
-     * 
+     *
      * @return ready to send packet, or null if there was a problem
      */
     public UDPPacket buildPeerTestToBob(InetAddress bobIP, int bobPort, InetAddress aliceIP, int alicePort,
@@ -1181,8 +1181,8 @@ class PacketBuilder {
         byte data[] = pkt.getData();
         int off = HEADER_SIZE;
         if (_log.shouldLog(Log.DEBUG))
-            _log.debug("Sending peer test " + nonce + " to Bob");
-        
+            _log.debug("Sending Peer Test " + nonce + " to Bob");
+
         // now for the body
         DataHelper.toLong(data, off, 4, nonce);
         off += 4;
@@ -1195,7 +1195,7 @@ class PacketBuilder {
         off += 2;
         System.arraycopy(aliceIntroKey.getData(), 0, data, off, SessionKey.KEYSIZE_BYTES);
         off += SessionKey.KEYSIZE_BYTES;
-        
+
         // pad up so we're on the encryption boundary
         off = pad1(data, off);
         off = pad2(data, off);
@@ -1211,7 +1211,7 @@ class PacketBuilder {
     // FIXME IPv4 addr must be specified when sent over IPv6
     private byte[] getOurExplicitIP() { return null; }
     private int getOurExplicitPort() { return 0; }
-    
+
     /**
      *  build intro packets for each of the published introducers
      *
@@ -1240,8 +1240,8 @@ class PacketBuilder {
                 // FIXME this will have already failed in isValid() above, right?
                 (Arrays.equals(iaddr.getAddress(), _transport.getExternalIP()) && !_transport.allowLocal())) {
                 if (_log.shouldLog(Log.WARN))
-                    _log.warn("Cannot build a relay request for " + state.getRemoteIdentity().calculateHash()
-                               + ", as the introducer address is invalid: " + iaddr + ':' + iport);
+                    _log.warn("Cannot build a relay request for [" + state.getRemoteIdentity().calculateHash().toBase64().substring(0,6)
+                               + "], as the introducer address is invalid: " + iaddr + ':' + iport);
                 // TODO implement some sort of introducer banlist
                 continue;
             }
@@ -1268,10 +1268,10 @@ class PacketBuilder {
                 cipherKey = new SessionKey(ikey);
                 macKey = cipherKey;
                 if (_log.shouldLog(Log.INFO))
-                    _log.info("Sending relay request (w/ intro key) to " + iaddr + ":" + iport);
+                    _log.info("Sending RelayRequest (with intro key) to " + iaddr + ":" + iport);
             } else {
                 if (_log.shouldLog(Log.INFO))
-                    _log.info("Sending relay request (in-session) to " + iaddr + ":" + iport);
+                    _log.info("Sending RelayRequest (in-session) to " + iaddr + ":" + iport);
             }
 
             rv.add(buildRelayRequest(iaddr, iport, cipherKey, macKey, tag,
@@ -1279,7 +1279,7 @@ class PacketBuilder {
         }
         return rv;
     }
-    
+
     /**
      *  TODO Alice IP/port in packet will always be null/0, must be fixed to
      *  send a RelayRequest over IPv6
@@ -1292,11 +1292,11 @@ class PacketBuilder {
         DatagramPacket pkt = packet.getPacket();
         byte data[] = pkt.getData();
         int off = HEADER_SIZE;
-        
+
         // FIXME must specify these if request is going over IPv6
         byte ourIP[] = getOurExplicitIP();
         int ourPort = getOurExplicitPort();
-        
+
         // now for the body
         DataHelper.toLong(data, off, 4, introTag);
         off += 4;
@@ -1309,26 +1309,26 @@ class PacketBuilder {
             DataHelper.toLong(data, off, 1, 0);
             off++;
         }
-        
+
         DataHelper.toLong(data, off, 2, ourPort);
         off += 2;
-        
+
         // challenge...
         DataHelper.toLong(data, off, 1, 0);
         off++;
         //off += 0; // *cough*
-        
+
         System.arraycopy(ourIntroKey.getData(), 0, data, off, SessionKey.KEYSIZE_BYTES);
         off += SessionKey.KEYSIZE_BYTES;
-        
+
         if (_log.shouldLog(Log.DEBUG))
-            _log.debug("wrote alice intro key: " + Base64.encode(data, off-SessionKey.KEYSIZE_BYTES, SessionKey.KEYSIZE_BYTES) 
+            _log.debug("Wrote Alice intro key: " + Base64.encode(data, off-SessionKey.KEYSIZE_BYTES, SessionKey.KEYSIZE_BYTES)
                       + " with nonce " + introNonce + " size=" + (off+4 + (16 - (off+4)%16))
                       + " and data: " + Base64.encode(data, 0, off));
-        
+
         DataHelper.toLong(data, off, 4, introNonce);
         off += 4;
-        
+
         // pad up so we're on the encryption boundary
         off = pad1(data, off);
         off = pad2(data, off);
@@ -1346,7 +1346,7 @@ class PacketBuilder {
         int off = HEADER_SIZE;
         if (_log.shouldLog(Log.INFO))
             _log.info("Sending intro to " + charlie + " for " + alice);
-        
+
         // now for the body
         byte ip[] = alice.getIP();
         DataHelper.toLong(data, off, 1, ip.length);
@@ -1355,7 +1355,7 @@ class PacketBuilder {
         off += ip.length;
         DataHelper.toLong(data, off, 2, alice.getPort());
         off += 2;
-        
+
         int sz = request.readChallengeSize();
         DataHelper.toLong(data, off, 1, sz);
         off++;
@@ -1363,7 +1363,7 @@ class PacketBuilder {
             request.readChallengeSize(data, off);
             off += sz;
         }
-        
+
         // pad up so we're on the encryption boundary
         off = pad1(data, off);
         off = pad2(data, off);
@@ -1373,7 +1373,7 @@ class PacketBuilder {
         packet.setMessageType(TYPE_INTRO);
         return packet;
     }
-    
+
     UDPPacket buildRelayResponse(RemoteHostId alice, PeerState charlie, long nonce,
                                  SessionKey cipherKey, SessionKey macKey) {
         InetAddress aliceAddr = null;
@@ -1382,14 +1382,14 @@ class PacketBuilder {
         } catch (UnknownHostException uhe) {
             return null;
         }
-        
+
         UDPPacket packet = buildPacketHeader(PEER_RELAY_RESPONSE_FLAG_BYTE);
         DatagramPacket pkt = packet.getPacket();
         byte data[] = pkt.getData();
         int off = HEADER_SIZE;
-        
+
         if (_log.shouldLog(Log.INFO))
-            _log.info("Sending relay response to " + alice + " for " + charlie + " with key " + cipherKey);
+            _log.info("Sending RelayResponse to " + alice + " for " + charlie + " with key " + cipherKey);
 
         // now for the body
         byte charlieIP[] = charlie.getRemoteIP();
@@ -1399,7 +1399,7 @@ class PacketBuilder {
         off += charlieIP.length;
         DataHelper.toLong(data, off, 2, charlie.getRemotePort());
         off += 2;
-        
+
         // Alice IP/Port currently ignored on receive - see UDPPacketReader
         byte aliceIP[] = alice.getIP();
         DataHelper.toLong(data, off, 1, aliceIP.length);
@@ -1408,10 +1408,10 @@ class PacketBuilder {
         off += aliceIP.length;
         DataHelper.toLong(data, off, 2, alice.getPort());
         off += 2;
-        
+
         DataHelper.toLong(data, off, 4, nonce);
         off += 4;
-        
+
         // pad up so we're on the encryption boundary
         off = pad1(data, off);
         off = pad2(data, off);
@@ -1421,7 +1421,7 @@ class PacketBuilder {
         packet.setMessageType(TYPE_RESP);
         return packet;
     }
-    
+
     /**
      *  Creates an empty unauthenticated packet for hole punching.
      *  Parameters must be validated previously.
@@ -1435,11 +1435,11 @@ class PacketBuilder {
         // its just for hole punching
         packet.getPacket().setLength(0);
         setTo(packet, to, port);
-        
+
         packet.setMessageType(TYPE_PUNCH);
         return packet;
     }
-    
+
     /**
      *  TESTING ONLY.
      *  Creates an arbitrary packet for unit testing.
@@ -1455,7 +1455,7 @@ class PacketBuilder {
         setTo(packet, to, port);
         return packet;
     }
-    
+
     /**
      *  Create a new packet and add the flag byte and the time stamp.
      *  Caller should add data starting at HEADER_SIZE.
@@ -1484,7 +1484,7 @@ class PacketBuilder {
         byte data[] = packet.getPacket().getData();
         Arrays.fill(data, 0, data.length, (byte)0x0);
         int off = UDPPacket.MAC_SIZE + UDPPacket.IV_SIZE;
-        
+
         // header
         if (extendedOptions != null)
             flagByte |= UDPPacket.HEADER_FLAG_EXTENDED_OPTIONS;
@@ -1573,12 +1573,12 @@ class PacketBuilder {
     }
 
     /**
-     * Encrypt the packet with the cipher key and a new random IV, generate a 
+     * Encrypt the packet with the cipher key and a new random IV, generate a
      * MAC for that encrypted data and IV, and store the result in the packet.
      *
      * @param packet prepared packet with the first 32 bytes empty and a length
      *               whose size is mod 16
-     * @param cipherKey key to encrypt the payload 
+     * @param cipherKey key to encrypt the payload
      * @param macKey key to generate the, er, MAC
      */
     private void authenticate(UDPPacket packet, SessionKey cipherKey, SessionKey macKey) {
@@ -1587,18 +1587,18 @@ class PacketBuilder {
         authenticate(packet, cipherKey, macKey, iv);
         SimpleByteCache.release(iv);
     }
-    
+
     /**
-     * Encrypt the packet with the cipher key and the given IV, generate a 
+     * Encrypt the packet with the cipher key and the given IV, generate a
      * MAC for that encrypted data and IV, and store the result in the packet.
-     * The MAC used is: 
+     * The MAC used is:
      *     HMAC-SHA256(payload || IV || (payloadLength ^ protocolVersion), macKey)[0:15]
      *
      * @param packet prepared packet with the first 32 bytes empty and a length
      *               whose size is mod 16.
      *               As of 0.9.7, length non-mod-16 is allowed; the
      *               last 1-15 bytes are included in the MAC calculation but are not encrypted.
-     * @param cipherKey key to encrypt the payload 
+     * @param cipherKey key to encrypt the payload
      * @param macKey key to generate the, er, MAC
      * @param iv IV to deliver
      */
@@ -1615,7 +1615,7 @@ class PacketBuilder {
         int encryptSize = totalSize - mod;
         byte data[] = pkt.getData();
         _context.aes().encrypt(data, encryptOffset, data, encryptOffset, cipherKey, iv, encryptSize);
-        
+
         // ok, now we need to prepare things for the MAC, which requires reordering
         // Payload + IV + payloadLength
         System.arraycopy(data, encryptOffset, data, off, totalSize);
@@ -1630,17 +1630,17 @@ class PacketBuilder {
             plval ^= (netid - 2) << 8;
         }
         DataHelper.toLong(data, off, 2, plval);
-        
+
         int hmacLen = totalSize + UDPPacket.IV_SIZE + 2;
         //Hash hmac = _context.hmac().calculate(macKey, data, hmacOff, hmacLen);
         byte[] ba = SimpleByteCache.acquire(Hash.HASH_LENGTH);
         _transport.getHMAC().calculate(macKey, data, hmacOff, hmacLen, ba, 0);
-        
+
         if (_log.shouldLog(Log.DEBUG))
-            _log.debug("Authenticating " + pkt.getLength() +
-                       "\nIV: " + Base64.encode(iv) +
-                       "\nraw mac: " + Base64.encode(ba) +
-                       "\nMAC key: " + macKey);
+            _log.debug("Authenticating UDP packet (" + pkt.getLength() + " bytes)" +
+                       "\n* IV: " + Base64.encode(iv) +
+                       "\n* Raw MAC: " + Base64.encode(ba) +
+                       "\n* MAC key: " + macKey);
         // ok, now lets put it back where it belongs...
         // MAC + IV + payload
         System.arraycopy(data, hmacOff, data, encryptOffset, totalSize);

@@ -2,9 +2,9 @@ package net.i2p.data;
 
 /*
  * free (adj.): unencumbered; not under the control of others
- * Written by jrandom in 2003 and released into the public domain 
- * with no warranty of any kind, either expressed or implied.  
- * It probably won't make your computer catch on fire, or eat 
+ * Written by jrandom in 2003 and released into the public domain
+ * with no warranty of any kind, either expressed or implied.
+ * It probably won't make your computer catch on fire, or eat
  * your children, but it might.  Use at your own risk.
  *
  */
@@ -18,7 +18,7 @@ import java.util.Arrays;
  * Defines a certificate that can be attached to various I2P structures, such
  * as RouterIdentity and Destination, allowing routers and clients to help
  * manage denial of service attacks and the network utilization.  Certificates
- * can even be defined to include identifiable information signed by some 
+ * can even be defined to include identifiable information signed by some
  * certificate authority, though that use probably isn't appropriate for an
  * anonymous network ;)
  *
@@ -155,7 +155,7 @@ public class Certificate extends DataStructureImpl {
             throw new IllegalStateException("already set");
         _payload = payload;
     }
-    
+
     /**
      *  @throws IllegalStateException if already set
      */
@@ -173,7 +173,7 @@ public class Certificate extends DataStructureImpl {
                                               + ")");
         }
     }
-    
+
     public void writeBytes(OutputStream out) throws DataFormatException, IOException {
         if (_type < 0) throw new DataFormatException("Invalid certificate type: " + _type);
         //if ((_type != 0) && (_payload == null)) throw new DataFormatException("Payload is required for non null type");
@@ -188,8 +188,8 @@ public class Certificate extends DataStructureImpl {
     }
 
     /**
-     *  @return the written length (NOT the new offset)    
-     */    
+     *  @return the written length (NOT the new offset)
+     */
     public int writeBytes(byte target[], int offset) {
         int cur = offset;
         DataHelper.toLong(target, cur, 1, _type);
@@ -205,7 +205,7 @@ public class Certificate extends DataStructureImpl {
         }
         return cur - offset;
     }
-    
+
     /**
      *  @throws IllegalStateException if already set
      */
@@ -223,7 +223,7 @@ public class Certificate extends DataStructureImpl {
         cur += 2;
         if (length > 0) {
             if (length + cur > source.length)
-                throw new DataFormatException("Payload on the certificate is insufficient (len=" 
+                throw new DataFormatException("Payload on the certificate is insufficient (len="
                                               + source.length + " off=" + offset + " cur=" + cur
                                               + " payloadLen=" + length);
             _payload = new byte[length];
@@ -232,11 +232,11 @@ public class Certificate extends DataStructureImpl {
         }
         return cur - offset;
     }
-    
+
     public int size() {
         return 1 + 2 + (_payload != null ? _payload.length : 0);
     }
-    
+
     /**
      *  Up-convert this to a KeyCertificate
      *
@@ -265,7 +265,7 @@ public class Certificate extends DataStructureImpl {
     @Override
     public String toString() {
         StringBuilder buf = new StringBuilder(64);
-        buf.append("[Certificate: type: ");
+        buf.append("\n* Certificate: Type: ");
         if (getCertificateType() == CERTIFICATE_TYPE_NULL)
             buf.append("Null");
         else if (getCertificateType() == CERTIFICATE_TYPE_KEY)
@@ -280,13 +280,13 @@ public class Certificate extends DataStructureImpl {
             buf.append("Unknown type (").append(getCertificateType()).append(')');
 
         if (_payload == null) {
-            buf.append(" payload: null");
+            buf.append("; Payload: null");
         } else {
-            buf.append(" payload size: ").append(_payload.length);
+            buf.append("; Payload size: ").append(_payload.length);
             if (getCertificateType() == CERTIFICATE_TYPE_HASHCASH) {
-                buf.append(" Stamp: ").append(DataHelper.getUTF8(_payload));
+                buf.append("; Stamp: ").append(DataHelper.getUTF8(_payload));
             } else if (getCertificateType() == CERTIFICATE_TYPE_SIGNED && _payload.length == CERTIFICATE_LENGTH_SIGNED_WITH_HASH) {
-                buf.append(" Signed by hash: ").append(Base64.encode(_payload, Signature.SIGNATURE_BYTES, Hash.HASH_LENGTH));
+                buf.append("; Signed by hash: ").append(Base64.encode(_payload, Signature.SIGNATURE_BYTES, Hash.HASH_LENGTH));
             } else {
                 int len = 32;
                 if (len > _payload.length) len = _payload.length;
@@ -294,7 +294,6 @@ public class Certificate extends DataStructureImpl {
                 buf.append(DataHelper.toString(_payload, len));
             }
         }
-        buf.append("]");
         return buf.toString();
     }
 
@@ -322,38 +321,38 @@ public class Certificate extends DataStructureImpl {
         public void setPayload(byte[] payload) {
             throw new RuntimeException("Data already set");
         }
-    
+
         /** @throws RuntimeException always */
         @Override
         public void readBytes(InputStream in) throws DataFormatException, IOException {
             throw new RuntimeException("Data already set");
         }
-    
+
         /** Overridden for efficiency */
         @Override
         public void writeBytes(OutputStream out) throws IOException {
             out.write(NULL_DATA);
         }
-    
+
         /** Overridden for efficiency */
         @Override
         public int writeBytes(byte target[], int offset) {
             System.arraycopy(NULL_DATA, 0, target, offset, NULL_LENGTH);
             return NULL_LENGTH;
         }
-    
+
         /** @throws RuntimeException always */
         @Override
         public int readBytes(byte source[], int offset) throws DataFormatException {
             throw new RuntimeException("Data already set");
         }
-    
+
         /** Overridden for efficiency */
         @Override
         public int size() {
             return NULL_LENGTH;
         }
-    
+
         /** Overridden for efficiency */
         @Override
         public int hashCode() {

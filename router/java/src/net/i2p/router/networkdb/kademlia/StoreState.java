@@ -55,38 +55,38 @@ class StoreState {
 
     public Hash getTarget() { return _key; }
     public DatabaseEntry getData() { return _data; }
-    public Set<Hash> getPending() { 
+    public Set<Hash> getPending() {
         synchronized (_pendingPeers) {
-            return new HashSet<Hash>(_pendingPeers); 
+            return new HashSet<Hash>(_pendingPeers);
         }
     }
-    public Set<Hash> getAttempted() { 
+    public Set<Hash> getAttempted() {
         synchronized (_attemptedPeers) {
-            return new HashSet<Hash>(_attemptedPeers); 
+            return new HashSet<Hash>(_attemptedPeers);
         }
     }
-    public Set<Hash> getSuccessful() { 
+    public Set<Hash> getSuccessful() {
         synchronized (_successfulPeers) {
-            return new HashSet<Hash>(_successfulPeers); 
+            return new HashSet<Hash>(_successfulPeers);
         }
     }
     /** unused */
 /****
-    public Set<Hash> getSuccessfulExploratory() { 
+    public Set<Hash> getSuccessfulExploratory() {
         synchronized (_successfulExploratoryPeers) {
-            return (Set<Hash>)_successfulExploratoryPeers.clone(); 
+            return (Set<Hash>)_successfulExploratoryPeers.clone();
         }
     }
 ****/
 
     /** getFailed */
-    public Set<Hash> getFailed() { 
+    public Set<Hash> getFailed() {
         synchronized (_failedPeers) {
-            return new HashSet<Hash>(_failedPeers); 
+            return new HashSet<Hash>(_failedPeers);
         }
     }
     public boolean completed() { return _completed != -1; }
-    public void complete(boolean completed) { 
+    public void complete(boolean completed) {
         if (completed && _completed <= 0)
             _completed = _context.clock().now();
     }
@@ -124,7 +124,7 @@ class StoreState {
     public void addPending(Collection<Hash> pending) {
         synchronized (_pendingPeers) {
             _pendingPeers.addAll(pending);
-            for (Hash peer : pending) 
+            for (Hash peer : pending)
                 _pendingPeerTimes.put(peer, Long.valueOf(_context.clock().now()));
         }
         synchronized (_attemptedPeers) {
@@ -180,40 +180,48 @@ class StoreState {
     }
 
     @Override
-    public String toString() { 
+    public String toString() {
         StringBuilder buf = new StringBuilder(256);
-        buf.append("Storing ").append(_key);
+        buf.append("\n* Storing ").append(_key);
         buf.append(" ");
-        if (_completed <= 0)
-            buf.append(" completed? false ");
+        if (_successfulPeers.size() <= 0)
+            buf.append(" - Completed? false ");
         else
-            buf.append(" completed on ").append(new Date(_completed));
-        buf.append(" Attempted: ");
-        synchronized (_attemptedPeers) {
-            buf.append(_attemptedPeers.size()).append(' ');
-            for (Hash peer : _attemptedPeers) {
-                buf.append(peer.toBase64()).append(" ");
+            buf.append(" - Completed? true ");
+        if (_attemptedPeers.size() > 0) {
+            buf.append("\n* Queried: ");
+            synchronized (_attemptedPeers) {
+                buf.append(_attemptedPeers.size()).append(' ');
+                for (Hash peer : _attemptedPeers) {
+                    buf.append("[").append(peer.toBase64().substring(0,6)).append("] ");
+                }
             }
         }
-        buf.append(" Pending: ");
-        synchronized (_pendingPeers) {
-            buf.append(_pendingPeers.size()).append(' ');
-            for (Hash peer : _pendingPeers) {
-                buf.append(peer.toBase64()).append(" ");
+        if (_pendingPeers.size() > 0) {
+            buf.append("\n* Pending: ");
+            synchronized (_pendingPeers) {
+                buf.append(_pendingPeers.size()).append(' ');
+                for (Hash peer : _pendingPeers) {
+                    buf.append("[").append(peer.toBase64().substring(0,6)).append("] ");
+                }
             }
         }
-        buf.append(" Failed: ");
-        synchronized (_failedPeers) { 
-            buf.append(_failedPeers.size()).append(' ');
-            for (Hash peer : _failedPeers) {
-                buf.append(peer.toBase64()).append(" ");
+        if (_failedPeers.size() > 0) {
+            buf.append("\n* Failed: ");
+            synchronized (_failedPeers) {
+                buf.append(_failedPeers.size()).append(' ');
+                for (Hash peer : _failedPeers) {
+                    buf.append("[").append(peer.toBase64().substring(0,6)).append("] ");
+                }
             }
         }
-        buf.append(" Successful: ");
-        synchronized (_successfulPeers) {
-            buf.append(_successfulPeers.size()).append(' ');
-            for (Hash peer : _successfulPeers) {
-                buf.append(peer.toBase64()).append(" ");
+        if (_successfulPeers.size() > 0) {
+            buf.append("\n* Successful: ");
+            synchronized (_successfulPeers) {
+                buf.append(_successfulPeers.size()).append(' ');
+                for (Hash peer : _successfulPeers) {
+                    buf.append("[").append(peer.toBase64().substring(0,6)).append("] ");
+                }
             }
         }
 /****

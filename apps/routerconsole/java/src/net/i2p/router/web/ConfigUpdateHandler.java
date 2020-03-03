@@ -67,7 +67,7 @@ public class ConfigUpdateHandler extends FormHandler {
     public static final String PROP_UPDATE_DISABLED = "router.updateDisabled";
     /** no default */
     public static final String PROP_ZIP_URL = "router.updateUnsignedURL";
-    
+
     public static final String PROP_UPDATE_URL = "router.updateURL";
 
     /**
@@ -151,7 +151,7 @@ public class ConfigUpdateHandler extends FormHandler {
     public static final String SU3_UPDATE_URLS = USE_SU3_UPDATE ? DEFAULT_SU3_UPDATE_URLS : "";
 
     public static final String PROP_TRUSTED_KEYS = "router.trustedUpdateKeys";
-    
+
     /**
      *  Convenience method for updaters
      *  @return the configured value, else the registered HTTP proxy, else the default
@@ -226,7 +226,7 @@ public class ConfigUpdateHandler extends FormHandler {
                 }
             }
         }
-        
+
         if (_proxyHost != null && _proxyHost.length() > 0 && !_proxyHost.equals(_t("internal"))) {
             String oldHost = _context.router().getConfigSetting(PROP_PROXY_HOST);
             if ( (oldHost == null) || (!_proxyHost.equals(oldHost)) ) {
@@ -234,7 +234,7 @@ public class ConfigUpdateHandler extends FormHandler {
                 addFormNotice(_t("Updating proxy host to {0}", _proxyHost));
             }
         }
-        
+
         if (_proxyPort != null && _proxyPort.length() > 0 && !_proxyPort.equals(_t("internal"))) {
             String oldPort = _context.router().getConfigSetting(PROP_PROXY_PORT);
             if ( (oldPort == null) || (!_proxyPort.equals(oldPort)) ) {
@@ -242,7 +242,7 @@ public class ConfigUpdateHandler extends FormHandler {
                 addFormNotice(_t("Updating proxy port to {0}", _proxyPort));
             }
         }
-        
+
         if (isAdvanced()) {
             changes.put(PROP_SHOULD_PROXY_NEWS, Boolean.toString(_newsThroughProxy));
             if (!_context.getBooleanProperty(PROP_UPDATE_DISABLED)) {
@@ -251,7 +251,7 @@ public class ConfigUpdateHandler extends FormHandler {
                 changes.put(PROP_UPDATE_DEV_SU3, Boolean.toString(_updateDevSU3));
             }
         }
-        
+
         String oldFreqStr = _context.getProperty(PROP_REFRESH_FREQUENCY, DEFAULT_REFRESH_FREQUENCY);
         long oldFreq = DEFAULT_REFRESH_FREQ;
         try { oldFreq = Long.parseLong(oldFreqStr); } catch (NumberFormatException nfe) {}
@@ -292,7 +292,7 @@ public class ConfigUpdateHandler extends FormHandler {
                 }
             }
         }
-        
+
         if ( (_zipURL != null) && (_zipURL.length() > 0) ) {
             String oldURL = _context.router().getConfigSetting(PROP_ZIP_URL);
             if ( (oldURL == null) || (!_zipURL.equals(oldURL)) ) {
@@ -304,7 +304,7 @@ public class ConfigUpdateHandler extends FormHandler {
                 }
             }
         }
-        
+
         if ( (_devSU3URL != null) && (_devSU3URL.length() > 0) ) {
             String oldURL = _context.router().getConfigSetting(PROP_DEV_SU3_URL);
             if ( (oldURL == null) || (!_devSU3URL.equals(oldURL)) ) {
@@ -316,10 +316,10 @@ public class ConfigUpdateHandler extends FormHandler {
                 }
             }
         }
-        
+
         _context.router().saveConfig(changes, null);
     }
-    
+
     public void setNewsURL(String url) { _newsURL = url; }
     public void setRefreshFrequency(String freq) {
         try { _refreshFrequency = Long.parseLong(freq); } catch (NumberFormatException nfe) {}

@@ -25,7 +25,7 @@ import net.i2p.util.SimpleTimer;
  *  the netDb/ directory, not when the console starts.
  */
 public class ReseedChecker {
-    
+
     private final RouterContext _context;
     private final Log _log;
     private final AtomicBoolean _inProgress = new AtomicBoolean();
@@ -33,8 +33,10 @@ public class ReseedChecker {
     private volatile String _lastError = "";
     private volatile boolean _networkLogged;
 
-    public static final int MINIMUM = 50;
-    private static final long STATUS_CLEAN_TIME = 20*60*1000;
+    //public static final int MINIMUM = 50;
+    public static final int MINIMUM = 400; // minimum number of router infos before automatic reseed attempted
+    //private static final long STATUS_CLEAN_TIME = 20*60*1000;
+    private static final long STATUS_CLEAN_TIME = 3*60*1000; // sidebar notification persistence
 
     /**
      *  All reseeding must be done through this instance.
@@ -75,15 +77,15 @@ public class ReseedChecker {
             // no ngettext, this is rare
             String s;
             if (x > 0)
-                s = "Only " + x + " peers remaining but reseed disabled by shutdown in progress";
+                s = "Only " + x + " peers remaining but reseed prevented by router shutdown";
             else
-                s = "No peers remaining but reseed disabled by shutdown in progress";
+                s = "No peers remaining but reseed prevented by router shutdown";
             _lastError = s;
             _log.logAlways(Log.WARN, s);
             return false;
         }
 
-        // we check the i2p installation directory for a flag telling us not to reseed, 
+        // we check the i2p installation directory for a flag telling us not to reseed,
         // but also check the home directory for that flag too, since new users installing i2p
         // don't have an installation directory that they can put the flag in yet.
         File noReseedFile = new File(new File(System.getProperty("user.home")), ".i2pnoreseed");
@@ -93,7 +95,7 @@ public class ReseedChecker {
         if (!noReseedFile.exists() && !noReseedFileAlt1.exists() && !noReseedFileAlt2.exists() && !noReseedFileAlt3.exists()) {
             if (!Addresses.isConnected()) {
                 if (!_networkLogged) {
-                    _log.logAlways(Log.WARN, "Cannot reseed, no network connection");
+                    _log.logAlways(Log.WARN, "Cannot reseed - no network connection");
                     _networkLogged = true;
                 }
                 return false;

@@ -13,7 +13,11 @@
 <jsp:setProperty name="searchhelper" property="contextId" value="<%=i2pcontextId%>" />
 <jsp:setProperty name="searchhelper" property="engine" value="<%=request.getParameter(\"engine\")%>" />
 <jsp:setProperty name="searchhelper" property="query" value="<%=request.getParameter(\"query\")%>" />
-<html><head></head><body><b>
+<html>
+<head>
+</head>
+<body>
+<b>
 <%
     String url = searchhelper.getURL();
     if (url != null) {
@@ -40,4 +44,6 @@ No search engines found!
         }
     }
 %>
-</b></body></html>
+</b>
+</body>
+</html>

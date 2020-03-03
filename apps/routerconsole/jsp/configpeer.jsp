@@ -1,13 +1,15 @@
 <%@page contentType="text/html"%>
 <%@page pageEncoding="UTF-8"%>
 <!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
-<html><head>
+<html>
+<head>
 <%@include file="css.jsi" %>
 <%=intl.title("config peers")%>
 <%@include file="summaryajax.jsi" %>
-</head><body>
+</head>
+<script nonce="<%=cspNonce%>" type="text/javascript">progressx.show();</script>
 <%@include file="summary.jsi" %>
-<h1><%=intl._t("I2P Peer Configuration")%></h1>
+<h1 class="conf"><%=intl._t("Peer Manager")%></h1>
 <div class="main" id="config_peers">
  <%@include file="confignav.jsi" %>
  <jsp:useBean class="net.i2p.router.web.helpers.ConfigPeerHandler" id="formhandler" scope="request" />
@@ -40,7 +42,7 @@
    <tr><th colspan="2"><%=intl._t("Adjust Profile Bonuses")%></th></tr>
    <tr>
      <td class="infohelp" colspan="2">
-     <%=intl._t("Bonuses may be positive or negative, and affect the peer's inclusion in Fast and High Capacity tiers. Fast peers are used for client tunnels, and High Capacity peers are used for some exploratory tunnels. Current bonuses are displayed on the")%> <a href="profiles"><%=intl._t("profiles page")%></a>.
+     <%=intl._t("Bonuses may be positive or negative, and affect the peer's inclusion in Fast and High Capacity tiers. Fast peers are used for client tunnels, and High Capacity peers are used for some exploratory tunnels. Current bonuses are displayed on the")%>&ensp;<a href="profiles"><%=intl._t("profiles page")%></a>.
      </td>
    </tr>
    <tr>
@@ -67,4 +69,7 @@
  <jsp:getProperty name="profilesHelper" property="banlistSummary" />
  <h3 class="tabletitle"><%=intl._t("Banned IPs")%></h3>
  <jsp:getProperty name="peerhelper" property="blocklistSummary" />
- </div></body></html>
+ </div>
+<script nonce="<%=cspNonce%>" type="text/javascript">progressx.hide();</script>
+</body>
+</html>

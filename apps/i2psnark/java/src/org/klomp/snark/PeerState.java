@@ -2,17 +2,17 @@
    Copyright (C) 2003 Mark J. Wielaard
 
    This file is part of Snark.
-   
+
    This program is free software; you can redistribute it and/or modify
    it under the terms of the GNU General Public License as published by
    the Free Software Foundation; either version 2, or (at your option)
    any later version.
- 
+
    This program is distributed in the hope that it will be useful,
    but WITHOUT ANY WARRANTY; without even the implied warranty of
    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
    GNU General Public License for more details.
- 
+
    You should have received a copy of the GNU General Public License
    along with this program; if not, write to the Free Software Foundation,
    Inc., 59 Temple Place - Suite 330, Boston, MA 02111-1307, USA.
@@ -69,8 +69,10 @@ class PeerState implements DataLoader
   private Request lastRequest = null;
 
   // FIXME if piece size < PARTSIZE, pipeline could be bigger
-  private final static int MAX_PIPELINE = 5;               // this is for outbound requests
-  private final static int MAX_PIPELINE_BYTES = 128*1024;  // this is for inbound requests
+//  private final static int MAX_PIPELINE = 5;               // this is for outbound requests
+  private final static int MAX_PIPELINE = 7;               // this is for outbound requests
+//  private final static int MAX_PIPELINE_BYTES = 128*1024;  // this is for inbound requests
+  private final static int MAX_PIPELINE_BYTES = 4096*1024;  // this is for inbound requests
   public final static int PARTSIZE = 16*1024; // outbound request
   private final static int MAX_PARTSIZE = 64*1024; // Don't let anybody request more than this
   private static final Integer PIECE_ALL = Integer.valueOf(-1);
@@ -94,14 +96,14 @@ class PeerState implements DataLoader
   void keepAliveMessage()
   {
     if (_log.shouldLog(Log.DEBUG))
-        _log.debug(peer + " rcv alive");
+        _log.debug("Received keepalive request from [" + peer + "]");
     /* XXX - ignored */
   }
 
   void chokeMessage(boolean choke)
   {
     if (_log.shouldLog(Log.DEBUG))
-        _log.debug(peer + " rcv " + (choke ? "" : "un") + "choked");
+        _log.debug("Received " + (choke ? "" : "un") + "choked status message from [" + peer + "]");
 
     boolean resend = choked && !choke;
     choked = choke;
@@ -120,7 +122,7 @@ class PeerState implements DataLoader
         List<Request> pcs = returnPartialPieces();
         if (!pcs.isEmpty()) {
             if (_log.shouldLog(Log.DEBUG))
-                _log.debug(peer + " got choked, returning partial pieces to the PeerCoordinator: " + pcs);
+                _log.debug("[" + peer + "] got choked, returning partial pieces to the PeerCoordinator: " + pcs);
             listener.savePartialPieces(this.peer, pcs);
         }
     }
@@ -129,7 +131,7 @@ class PeerState implements DataLoader
   void interestedMessage(boolean interest)
   {
     if (_log.shouldLog(Log.DEBUG))
-      _log.debug(peer + " rcv " + (interest ? "" : "un")
+      _log.debug("[" + peer + "] rcv " + (interest ? "" : "un")
                  + "interested");
     interested = interest;
     listener.gotInterest(peer, interest);
@@ -138,18 +140,18 @@ class PeerState implements DataLoader
   void haveMessage(int piece)
   {
     if (_log.shouldLog(Log.DEBUG))
-      _log.debug(peer + " rcv have(" + piece + ")");
+      _log.debug("[" + peer + "] rcv have(" + piece + ")");
     // Sanity check
     if (piece < 0) {
         if (_log.shouldWarn())
-            _log.warn("Got strange 'have: " + piece + "' message from " + peer);
+            _log.warn("Received strange 'have: " + piece + "' message from [" + peer + "]");
         return;
     }
 
     synchronized(this) {
         if (metainfo == null) {
             if (_log.shouldWarn())
-                _log.warn("Got HAVE " + piece + " before metainfo from " + peer);
+                _log.warn("Received HAVE " + piece + " before metainfo from [" + peer + "]");
             if (bitfield != null) {
                 if (piece < bitfield.size())
                       bitfield.set(piece);
@@ -160,7 +162,7 @@ class PeerState implements DataLoader
                 } else if (havesBeforeMetaInfo.size() > 1000) {
                     // don't blow up
                     if (_log.shouldWarn())
-                        _log.warn("Got too many haves before metainfo from " + peer);
+                        _log.warn("Received too many haves before metainfo from [" + peer + "]");
                     return;
                 }
                 havesBeforeMetaInfo.add(Integer.valueOf(piece));
@@ -172,7 +174,7 @@ class PeerState implements DataLoader
         if (piece >= metainfo.getPieces()) {
             // XXX disconnect?
             if (_log.shouldLog(Log.WARN))
-                _log.warn("Got strange 'have: " + piece + "' message from " + peer);
+                _log.warn("Received strange 'have: " + piece + "' message from [" + peer + "]");
             return;
         }
 
@@ -198,11 +200,11 @@ class PeerState implements DataLoader
   private void bitfieldMessage(byte[] bitmap, boolean isAll) {
     if (_log.shouldLog(Log.DEBUG)) {
         if (bitmap != null)
-            _log.debug(peer + " rcv bitfield bytes: " + bitmap.length);
-        else if (isAll) 
-            _log.debug(peer + " rcv bitfield HAVE_ALL");
+            _log.debug("[" + peer + "] rcv bitfield bytes: " + bitmap.length);
+        else if (isAll)
+            _log.debug("[" + peer + "] rcv bitfield HAVE_ALL");
         else
-            _log.debug(peer + " rcv bitfield HAVE_NONE");
+            _log.debug("[" + peer + "] rcv bitfield HAVE_NONE");
     }
 
     synchronized(this) {
@@ -210,10 +212,10 @@ class PeerState implements DataLoader
           {
             // XXX - Be liberal in what you accept?
             if (_log.shouldLog(Log.WARN))
-              _log.warn("Got unexpected bitfield message from " + peer);
+              _log.warn("Received unexpected bitfield message from [" + peer + "]");
             return;
           }
-        
+
         // XXX - Check for weird bitfield and disconnect?
         // Will have to regenerate the bitfield after we know exactly
         // how many pieces there are, as we don't know how many spare bits there are.
@@ -223,7 +225,7 @@ class PeerState implements DataLoader
                 bitfield = new BitField(bitmap, bitmap.length * 8);
             } else {
                 if (_log.shouldLog(Log.WARN))
-                    _log.warn("have_x w/o metainfo: " + isAll);
+                    _log.warn("Have_x without metainfo: " + isAll);
                 if (isAll) {
                     // note reception for later
                     if (havesBeforeMetaInfo == null)
@@ -260,7 +262,7 @@ class PeerState implements DataLoader
                     try {
                         if (bev.getMap().get(ExtensionHandler.TYPE_COMMENT) != null) {
                             if (_log.shouldLog(Log.WARN))
-                                _log.warn("Allowing seed that connects to seeds for comments: " + peer);
+                                _log.warn("Allowing seed that connects to seeds for comments: [" + peer + "]");
                             setInteresting(interest);
                             return;
                         }
@@ -269,7 +271,7 @@ class PeerState implements DataLoader
             }
         }
         if (_log.shouldLog(Log.WARN))
-            _log.warn("Disconnecting seed that connects to seeds: " + peer);
+            _log.warn("Disconnecting seed that connects to seeds: [" + peer + "]");
         peer.disconnect(true);
     } else {
         setInteresting(interest);
@@ -279,18 +281,18 @@ class PeerState implements DataLoader
   void requestMessage(int piece, int begin, int length)
   {
     if (_log.shouldLog(Log.DEBUG))
-      _log.debug(peer + " rcv request("
+      _log.debug("Request received from [" + peer + "] for ("
                   + piece + ", " + begin + ", " + length + ") ");
     if (metainfo == null)
         return;
     if (choking) {
         if (peer.supportsFast()) {
-            if (_log.shouldInfo())
-              _log.info("Request received, sending reject to choked " + peer);
+            if (_log.shouldLog(Log.DEBUG))
+              _log.debug("Request received, sending reject to choked [" + peer + "]");
             out.sendReject(piece, begin, length);
         } else {
-            if (_log.shouldInfo())
-              _log.info("Request received, but choking " + peer);
+            if (_log.shouldLog(Log.DEBUG))
+              _log.debug("Request received, but choking [" + peer + "]");
         }
         return;
     }
@@ -306,11 +308,10 @@ class PeerState implements DataLoader
         || length > MAX_PARTSIZE)
       {
         // XXX - Protocol error -> disconnect?
-        if (_log.shouldLog(Log.WARN))
-          _log.warn("Got strange 'request: " + piece
-                      + ", " + begin
-                      + ", " + length
-                      + "' message from " + peer);
+        if (_log.shouldLog(Log.DEBUG))
+          _log.debug("Received strange request from [" + peer + "] for ("
+                     + piece + ", " + begin + ", " + length
+                      + ") - protocol error");
         if (peer.supportsFast())
             out.sendReject(piece, begin, length);
         return;
@@ -322,19 +323,19 @@ class PeerState implements DataLoader
     if (out.queuedBytes() + length > MAX_PIPELINE_BYTES)
       {
         if (peer.supportsFast()) {
-            if (_log.shouldWarn())
-                _log.warn("Rejecting request over pipeline limit from " + peer);
+            if (_log.shouldLog(Log.DEBUG))
+                _log.debug("Rejecting request over pipeline limit from [" + peer + "]");
             out.sendReject(piece, begin, length);
         } else {
-            if (_log.shouldWarn())
-                _log.warn("Discarding request over pipeline limit from " + peer);
+            if (_log.shouldLog(Log.DEBUG))
+                _log.debug("Discarding request over pipeline limit from [" + peer + "]");
         }
         return;
       }
 
     if (_log.shouldLog(Log.DEBUG))
         _log.debug("Queueing (" + piece + ", " + begin + ", "
-                + length + ")" + " to " + peer);
+                + length + ")" + " to [" + peer + "]");
 
     // don't load the data into mem now, let PeerConnectionOut do it
     out.sendPiece(piece, begin, length, this);
@@ -352,8 +353,8 @@ class PeerState implements DataLoader
     if (pieceBytes == null)
       {
         // XXX - Protocol error-> diconnect?
-        if (_log.shouldLog(Log.WARN))
-          _log.warn("Got request for unknown piece: " + piece);
+        if (_log.shouldLog(Log.DEBUG))
+          _log.debug("Received request for unknown piece [" + piece + "]");
         if (peer.supportsFast())
             out.sendReject(piece, begin, length);
         return null;
@@ -363,11 +364,11 @@ class PeerState implements DataLoader
     if (length != pieceBytes.getData().length)
       {
         // XXX - Protocol error-> disconnect?
-        if (_log.shouldLog(Log.WARN))
-          _log.warn("Got out of range 'request: " + piece
+        if (_log.shouldLog(Log.DEBUG))
+          _log.debug("Received out of range 'request: " + piece
                       + ", " + begin
                       + ", " + length
-                      + "' message from " + peer);
+                      + "' message from [" + peer + "]");
         if (peer.supportsFast())
             out.sendReject(piece, begin, length);
         return null;
@@ -375,7 +376,7 @@ class PeerState implements DataLoader
 
     if (_log.shouldLog(Log.DEBUG))
         _log.debug("Sending (" + piece + ", " + begin + ", "
-                + length + ")" + " to " + peer);
+                + length + ")" + " to [" + peer + "]");
     return pieceBytes;
   }
 
@@ -409,9 +410,9 @@ class PeerState implements DataLoader
     listener.downloaded(peer, size);
 
     if (_log.shouldLog(Log.DEBUG))
-      _log.debug("got end of Chunk("
-                  + req.getPiece() + "," + req.off + "," + req.len + ") from "
-                  + peer);
+      _log.debug("Received end of chunk ("
+                  + req.getPiece() + "," + req.off + "," + req.len + ") from ["
+                  + peer + "]");
 
     // Last chunk needed for this piece?
     // FIXME if priority changed to skip, we will think we're done when we aren't
@@ -421,12 +422,12 @@ class PeerState implements DataLoader
         if (listener.gotPiece(peer, req.getPartialPiece()))
           {
             if (_log.shouldLog(Log.DEBUG))
-              _log.debug("Got " + req.getPiece() + ": " + peer);
+              _log.debug("Received piece [" + req.getPiece() + "] from [" + peer + "]");
           }
         else
           {
-            if (_log.shouldLog(Log.WARN))
-              _log.warn("Got BAD " + req.getPiece() + " from " + peer);
+            if (_log.shouldLog(Log.DEBUG))
+              _log.debug("Received BAD piece [" + req.getPiece() + "] from [" + peer + "]");
             synchronized(this) {
                 // so we don't ask again
                 if (bitfield != null)
@@ -462,9 +463,8 @@ class PeerState implements DataLoader
   Request getOutstandingRequest(int piece, int begin, int length)
   {
     if (_log.shouldLog(Log.DEBUG))
-      _log.debug("got start of Chunk("
-                  + piece + "," + begin + "," + length + ") from "
-                  + peer);
+      _log.debug("Received start of chunk ("
+                  + piece + "," + begin + "," + length + ") from [" + peer + "]");
 
     // Lookup the correct piece chunk request from the list.
     Request req;
@@ -474,10 +474,9 @@ class PeerState implements DataLoader
 
         // Unrequested piece number?
         if (r == -1) {
-            if (_log.shouldLog(Log.INFO))
-                _log.info("Unrequested 'piece: " + piece + ", "
-                      + begin + ", " + length + "' received from "
-                      + peer);
+            if (_log.shouldLog(Log.DEBUG))
+                _log.debug("Unrequested piece: " + piece + ", "
+                      + begin + ", " + length + " received from [" + peer + "]");
             return null;
         }
 
@@ -488,36 +487,36 @@ class PeerState implements DataLoader
             r++;
             req = outstandingRequests.get(r);
           }
-        
+
         // Something wrong?
         if (req.getPiece() != piece || req.off != begin || req.len != length)
           {
-            if (_log.shouldLog(Log.INFO))
-              _log.info("Unrequested or unneeded 'piece: "
+            if (_log.shouldLog(Log.DEBUG))
+              _log.debug("Unrequested or unneeded 'piece: "
                           + piece + ", "
                           + begin + ", "
-                          + length + "' received from "
-                          + peer);
+                          + length + "' from ["
+                          + peer + "]");
             return null;
           }
 
         // note that this request is being read
         pendingRequest = req;
-        
+
         // Report missing requests.
         if (r != 0)
           {
-            if (_log.shouldLog(Log.WARN))
-              _log.warn("Some requests dropped, got " + req
-                               + ", wanted for peer: " + peer);
+            if (_log.shouldLog(Log.DEBUG))
+              _log.debug("Some requests dropped, got " + req
+                               + ", wanted for [" + peer + "]");
             for (int i = 0; i < r; i++)
               {
                 Request dropReq = outstandingRequests.remove(0);
                 outstandingRequests.add(dropReq);
                 if (!choked)
                   out.sendRequest(dropReq);
-                if (_log.shouldLog(Log.WARN))
-                  _log.warn("dropped " + dropReq + " with peer " + peer);
+                if (_log.shouldLog(Log.DEBUG))
+                  _log.debug("Dropped " + dropReq + " with [" + peer + "]");
               }
           }
         outstandingRequests.remove(0);
@@ -548,7 +547,7 @@ class PeerState implements DataLoader
           rv = pendingRequest;
 
       if (_log.shouldLog(Log.DEBUG))
-          _log.debug(peer + " lowest for " + piece + " is " + rv + " out of " + pendingRequest + " and " + outstandingRequests);
+          _log.debug("[" + peer + "] lowest for piece [" + piece + "] is " + rv + " out of " + pendingRequest + " and " + outstandingRequests);
       return rv;
   }
 
@@ -596,7 +595,7 @@ class PeerState implements DataLoader
   void cancelMessage(int piece, int begin, int length)
   {
     if (_log.shouldLog(Log.DEBUG))
-      _log.debug("Got cancel message ("
+      _log.debug("Received cancel message ("
                   + piece + ", " + begin + ", " + length + ")");
     out.cancelRequest(piece, begin, length);
   }
@@ -607,8 +606,8 @@ class PeerState implements DataLoader
       if (metainfo != null && metainfo.isPrivate() &&
           (id == ExtensionHandler.ID_METADATA || id == ExtensionHandler.ID_PEX)) {
           // shouldn't get this since we didn't advertise it but they could send it anyway
-          if (_log.shouldLog(Log.WARN))
-              _log.warn("Private torrent, ignoring ext msg " + id);
+          if (_log.shouldLog(Log.DEBUG))
+              _log.debug("Private torrent, ignoring extension message " + id);
           return;
       }
       ExtensionHandler.handleMessage(peer, listener, id, bs);
@@ -645,15 +644,15 @@ class PeerState implements DataLoader
               for (Integer i : havesBeforeMetaInfo) {
                   if (i.equals(PIECE_ALL)) {
                       bitfield.setAll();
-                      if (_log.shouldLog(Log.WARN))
-                          _log.warn("set have_all after rcv metainfo");
+                      if (_log.shouldLog(Log.DEBUG))
+                          _log.debug("Setting have_all after rcv metainfo");
                       break;
                   }
                   int piece = i.intValue();
                   if (piece >= 0 && piece < meta.getPieces())
                       bitfield.set(piece);
-                  if (_log.shouldLog(Log.WARN))
-                      _log.warn("set have " + piece + " after rcv metainfo");
+                  if (_log.shouldLog(Log.DEBUG))
+                      _log.debug("Setting have " + piece + " after rcv metainfo");
               }
               havesBeforeMetaInfo = null;
           }
@@ -680,8 +679,8 @@ class PeerState implements DataLoader
    *  @since 0.9.21
    */
   void suggestMessage(int piece) {
-      if (_log.shouldInfo()) 
-          _log.info("Handling suggest as have(" + piece + ") from " + peer);
+      if (_log.shouldLog(Log.DEBUG))
+          _log.debug("Handling suggest as have(" + piece + ") from [" + peer + "]");
       haveMessage(piece);
   }
 
@@ -706,8 +705,9 @@ class PeerState implements DataLoader
    *  @since 0.9.21
    */
   void rejectMessage(int piece, int begin, int length) {
-      if (_log.shouldInfo()) 
-           _log.info("Got reject(" + piece + ',' + begin + ',' + length + ") from " + peer);
+// Duplicates logging message from PeerConnectionIn
+//      if (_log.shouldInfo())
+//           _log.info("Received reject(" + piece + ',' + begin + ',' + length + ") from [" + peer + "]");
       out.cancelRequest(piece, begin, length);
       synchronized(this) {
           Request deletedRequest = null;
@@ -736,8 +736,8 @@ class PeerState implements DataLoader
                   req = new Request(pp, downloaded, 1);
               List<Request> pcs = Collections.singletonList(req);
               listener.savePartialPieces(this.peer, pcs);
-              if (_log.shouldWarn()) 
-                  _log.warn("Returned to coord. w/ offset " + pp.getDownloaded() + " due to reject(" + piece + ',' + begin + ',' + length + ") from " + peer);
+              if (_log.shouldLog(Log.DEBUG))
+                  _log.debug("Returned to coord. with offset " + pp.getDownloaded() + " due to reject(" + piece + ',' + begin + ',' + length + ") from [" + peer + "]");
           }
           if (lastRequest != null && lastRequest.getPiece() == piece &&
               lastRequest.off == begin && lastRequest.len == length)
@@ -751,15 +751,15 @@ class PeerState implements DataLoader
    *  @since 0.9.21
    */
   void allowedFastMessage(int piece) {
-      if (_log.shouldInfo()) 
-          _log.info("Ignoring allowed_fast(" + piece + ") from " + peer);
+      if (_log.shouldLog(Log.DEBUG))
+          _log.debug("Ignoring allowed_fast(" + piece + ") from [" + peer + "]");
   }
 
   void unknownMessage(int type, byte[] bs)
   {
-    if (_log.shouldLog(Log.WARN))
-      _log.warn("Warning: Ignoring unknown message type: " + type
-                  + " length: " + bs.length);
+    if (_log.shouldLog(Log.DEBUG))
+      _log.debug("Warning: Ignoring unknown message type: " + type
+                  + " length: " + bs.length + " bytes");
   }
 
   /////////// end message handlers /////////
@@ -771,7 +771,7 @@ class PeerState implements DataLoader
   void havePiece(int piece)
   {
     if (_log.shouldLog(Log.DEBUG))
-      _log.debug("Tell " + peer + " havePiece(" + piece + ")");
+      _log.debug("Notifying [" + peer + "] havePiece(" + piece + ")");
 
         // Tell the other side that we are no longer interested in any of
         // the outstanding requests for this piece.
@@ -779,10 +779,10 @@ class PeerState implements DataLoader
 
     // Tell the other side that we really have this piece.
     out.sendHave(piece);
-    
+
     // Request something else if necessary.
     addRequest();
-    
+
    /**** taken care of in addRequest()
     synchronized(this)
       {
@@ -801,7 +801,7 @@ class PeerState implements DataLoader
   synchronized void cancelPiece(int piece) {
         if (lastRequest != null && lastRequest.getPiece() == piece)
           lastRequest = null;
-        
+
         Iterator<Request> it = outstandingRequests.iterator();
         while (it.hasNext())
           {
@@ -846,7 +846,7 @@ class PeerState implements DataLoader
             if (!outstandingRequests.isEmpty()) {
                 out.sendRequests(outstandingRequests);
                 if (_log.shouldLog(Log.DEBUG))
-                    _log.debug("Resending requests to " + peer + outstandingRequests);
+                    _log.debug("Resending requests to [" + peer + "]\n* " + outstandingRequests);
             }
         }
       }
@@ -890,10 +890,10 @@ class PeerState implements DataLoader
               if (listener.needPiece(this.peer, bitfield)) {
                   setInteresting(true);
                   if (_log.shouldLog(Log.DEBUG))
-                      _log.debug(peer + " addRequest() we need something, setting interesting, delaying requestNextPiece()");
+                      _log.debug("[" + peer + "] addRequest() we need something, setting interesting, delaying requestNextPiece()");
               } else {
                   if (_log.shouldLog(Log.DEBUG))
-                      _log.debug(peer + " addRequest() needs nothing");
+                      _log.debug("[" + peer + "] addRequest() needs nothing");
               }
               return;
           }
@@ -901,7 +901,7 @@ class PeerState implements DataLoader
               // If choked, delay pulling
               // a request from the PeerCoordinator until unchoked.
               if (_log.shouldLog(Log.DEBUG))
-                  _log.debug(peer + " addRequest() we are choked, delaying requestNextPiece()");
+                  _log.debug("[" + peer + "] addRequest() we are choked, delaying requestNextPiece()");
               return;
           }
           // huh? rv unused
@@ -940,7 +940,7 @@ class PeerState implements DataLoader
         setInteresting(false);
 
     if (_log.shouldLog(Log.DEBUG))
-      _log.debug(peer + " requests " + outstandingRequests);
+      _log.debug("Requesting from [" + peer + "]\n* Pieces: " + outstandingRequests);
   }
 
   /**
@@ -964,8 +964,8 @@ class PeerState implements DataLoader
                 lastRequest = r;
                 return true;
             } else {
-                if (_log.shouldLog(Log.WARN))
-                    _log.warn("Got dup from coord: " + pp);
+                if (_log.shouldLog(Log.DEBUG))
+                    _log.debug("Received duplicate piece from coord: " + pp);
                 pp.release();
             }
         }
@@ -978,12 +978,12 @@ class PeerState implements DataLoader
         if (nextPiece != -1
             && (lastRequest == null || lastRequest.getPiece() != nextPiece)) {
                 if (_log.shouldLog(Log.DEBUG))
-                    _log.debug(peer + " want piece " + nextPiece);
+                    _log.debug("[" + peer + "] want piece " + nextPiece);
                 // Fail safe to make sure we are interested
                 // When we transition into the end game we may not be interested...
                 if (!interesting) {
                     if (_log.shouldLog(Log.DEBUG))
-                        _log.debug(peer + " transition to end game, setting interesting");
+                        _log.debug("[" + peer + "] transition to end game, setting interesting");
                     interesting = true;
                     out.sendInterest(true);
                 }
@@ -997,7 +997,7 @@ class PeerState implements DataLoader
                   _log.warn("Out of memory, can't request piece " + nextPiece, oom);
                   return false;
                 }
-                
+
                 int length = Math.min(piece_length, PARTSIZE);
                 Request req = new Request(nextPiece, bs, 0, length);
                 outstandingRequests.add(req);
@@ -1007,7 +1007,7 @@ class PeerState implements DataLoader
                 return true;
         } else {
                 if (_log.shouldLog(Log.DEBUG))
-                    _log.debug(peer + " no more pieces to request");
+                    _log.debug("[" + peer + "] no more pieces to request");
         }
      *******/
     }
@@ -1025,7 +1025,7 @@ class PeerState implements DataLoader
         interesting = false;
         out.sendInterest(false);
         if (_log.shouldLog(Log.DEBUG))
-            _log.debug(peer + " nothing more to request, now uninteresting");
+            _log.debug("[" + peer + "] nothing more to request, now uninteresting");
     }
     return false;
   }
@@ -1035,7 +1035,7 @@ class PeerState implements DataLoader
     if (interest != interesting)
       {
         if (_log.shouldLog(Log.DEBUG))
-            _log.debug(peer + " setInteresting(" + interest + ")");
+            _log.debug("[" + peer + "] setInteresting(" + interest + ")");
         interesting = interest;
         out.sendInterest(interest);
 
@@ -1049,7 +1049,7 @@ class PeerState implements DataLoader
     if (choking != choke)
       {
         if (_log.shouldLog(Log.DEBUG))
-            _log.debug(peer + " setChoking(" + choke + ")");
+            _log.debug("[" + peer + "] setChoking(" + choke + ")");
         choking = choke;
         out.sendChoke(choke);
       }

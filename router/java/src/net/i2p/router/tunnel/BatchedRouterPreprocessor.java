@@ -5,7 +5,7 @@ import java.util.Properties;
 
 import net.i2p.router.RouterContext;
 
-/** 
+/**
  * Honor the 'batchFrequency' tunnel pool setting or the 'router.batchFrequency'
  * router config setting, and track fragmentation.
  *
@@ -14,8 +14,8 @@ class BatchedRouterPreprocessor extends BatchedPreprocessor {
     private final TunnelCreatorConfig _config;
     protected final HopConfig _hopConfig;
     private final long _sendDelay;
-    
-    /** 
+
+    /**
      * How frequently should we flush non-full messages, in milliseconds
      * This goes in I2CP custom options for the pool.
      * Only applies to OBGWs.
@@ -29,7 +29,7 @@ class BatchedRouterPreprocessor extends BatchedPreprocessor {
     public static final int OB_EXPL_BATCH_FREQ = 100;
     /** for IBGWs for efficiency (not our data) */
     public static final int DEFAULT_BATCH_FREQUENCY = 150;
-    
+
     /** for OBGWs */
     public BatchedRouterPreprocessor(RouterContext ctx, TunnelCreatorConfig cfg) {
         super(ctx, getName(cfg));
@@ -45,23 +45,23 @@ class BatchedRouterPreprocessor extends BatchedPreprocessor {
         _hopConfig = cfg;
         _sendDelay = initialSendDelay();
     }
-    
+
     private static String getName(HopConfig cfg) {
         if (cfg == null) return "IB??";
         if (cfg.getReceiveTunnel() != null)
-            return "IB " + cfg.getReceiveTunnel().getTunnelId();
+            return "[Inbound " + cfg.getReceiveTunnel().getTunnelId() + "]";
         else if (cfg.getSendTunnel() != null)
-            return "IB " + cfg.getSendTunnel().getTunnelId();
+            return "[Inbound " + cfg.getSendTunnel().getTunnelId() + "]";
         else
             return "IB??";
     }
-    
+
     private static String getName(TunnelCreatorConfig cfg) {
         if (cfg == null) return "OB??";
         if (cfg.getReceiveTunnelId(0) != null)
-            return "OB " + cfg.getReceiveTunnelId(0).getTunnelId();
+            return "[Outbound " + cfg.getReceiveTunnelId(0).getTunnelId() + "]";
         else if (cfg.getSendTunnelId(0) != null)
-            return "OB " + cfg.getSendTunnelId(0).getTunnelId();
+            return "[Outbound " + cfg.getSendTunnelId(0).getTunnelId() + "]";
         else
             return "OB??";
     }
@@ -104,7 +104,7 @@ class BatchedRouterPreprocessor extends BatchedPreprocessor {
         }
         return _context.getProperty(PROP_ROUTER_BATCH_FREQUENCY, def);
     }
-    
+
     @Override
     protected void notePreprocessing(long messageId, int numFragments, int totalLength, List<Long> messageIds, String msg) {
         if (_config != null)

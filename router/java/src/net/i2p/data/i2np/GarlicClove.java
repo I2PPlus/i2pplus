@@ -37,12 +37,12 @@ public class GarlicClove extends DataStructureImpl {
     private long _cloveId;
     private Date _expiration;
     private Certificate _certificate;
-    
+
     public GarlicClove(I2PAppContext context) {
         _context = context;
         _cloveId = -1;
     }
-    
+
     public DeliveryInstructions getInstructions() { return _instructions; }
     public void setInstructions(DeliveryInstructions instr) { _instructions = instr; }
     public I2NPMessage getData() { return _msg; }
@@ -53,7 +53,7 @@ public class GarlicClove extends DataStructureImpl {
     public void setExpiration(Date exp) { _expiration = exp; }
     public Certificate getCertificate() { return _certificate; }
     public void setCertificate(Certificate cert) { _certificate = cert; }
-    
+
     /**
      *  @deprecated unused, use byte array method to avoid copying
      *  @throws UnsupportedOperationException always
@@ -156,15 +156,15 @@ public class GarlicClove extends DataStructureImpl {
     public int getSizeRatchet() {
         return _instructions.getSize() + _msg.getMessageSize() - 7;
     }
-    
+
     public int estimateSize() {
         return _instructions.getSize()
-               + _msg.getMessageSize() 
+               + _msg.getMessageSize()
                + 4 // cloveId
                + DataHelper.DATE_LENGTH
                + _certificate.size(); // certificate
     }
-    
+
     @Override
     public boolean equals(Object obj) {
         if ( (obj == null) || !(obj instanceof GarlicClove))
@@ -176,7 +176,7 @@ public class GarlicClove extends DataStructureImpl {
                DataHelper.eq(_expiration, clove._expiration) &&
                DataHelper.eq(_instructions,  clove._instructions);
     }
-    
+
     @Override
     public int hashCode() {
         return DataHelper.hashCode(_certificate) ^
@@ -185,17 +185,16 @@ public class GarlicClove extends DataStructureImpl {
                DataHelper.hashCode(_expiration) ^
                DataHelper.hashCode(_instructions);
     }
-    
+
     @Override
     public String toString() {
         StringBuilder buf = new StringBuilder(128);
-        buf.append("[GarlicClove: ");
-        buf.append("\n\tInstructions: ").append(_instructions);
+//        buf.append("GarlicClove");
+        buf.append(_instructions);
+        buf.append("\n* Expires: ").append(_expiration);
         buf.append("\n\tCertificate: ").append(_certificate);
-        buf.append("\n\tClove ID: ").append(_cloveId);
-        buf.append("\n\tExpiration: ").append(_expiration);
+        buf.append("\n* Clove ID: ").append(_cloveId);
         buf.append("\n\tData: ").append(_msg);
-        buf.append("]");
         return buf.toString();
     }
 }

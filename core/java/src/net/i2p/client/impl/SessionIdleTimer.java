@@ -19,7 +19,9 @@ import net.i2p.util.SimpleTimer;
  * @author zzz
  */
 class SessionIdleTimer implements SimpleTimer.TimedEvent {
-    public static final long MINIMUM_TIME = 5*60*1000;
+    //public static final long MINIMUM_TIME = 5*60*1000;
+    // allow close time of 60 seconds
+    public static final long MINIMUM_TIME = 1*60*1000;
     private static final long DEFAULT_REDUCE_TIME = 20*60*1000;
     private static final long DEFAULT_CLOSE_TIME = 30*60*1000;
     private final Log _log;
@@ -90,25 +92,25 @@ class SessionIdleTimer implements SimpleTimer.TimedEvent {
             return;
         long now = _context.clock().now();
         long lastActivity = _session.lastActivity();
-        if (_log.shouldDebug())
-            _log.debug("Fire idle timer, last activity: " + DataHelper.formatDuration(now - lastActivity) + " ago ");
+            if (_log.shouldLog(Log.INFO))
+            _log.info("Firing idle timer -> last activity detected " + DataHelper.formatDuration(now - lastActivity) + " ago ");
         long nextDelay = 0;
         if (_shutdownEnabled && now - lastActivity >= _shutdownTime) {
             if (_log.shouldLog(Log.WARN))
-                _log.warn("Closing on idle " + _session);
+                _log.warn("Closing tunnels on idle -> " + _session);
             _session.destroySession();
             return;
         } else if (lastActivity <= _lastActive && !_shutdownEnabled) {
             if (_log.shouldDebug())
-                _log.debug("Still idle, sleeping again " + _session);
+                _log.debug("Still idle, sleeping again -> " + _session);
             nextDelay = _reduceTime;
         } else if (_reduceEnabled && now - lastActivity >= _reduceTime) {
-            if (_log.shouldDebug())
-                _log.debug("Reducing quantity on idle " + _session);
+            if (_log.shouldLog(Log.INFO))
+                _log.info("Reducing tunnel quantity on idle -> " + _session + ' ');
             try {
                 _session.getProducer().updateTunnels(_session, _reduceQuantity);
             } catch (I2PSessionException ise) {
-                _log.error("bork idle reduction " + ise);
+                _log.error("Error attempting to reduce tunnel count on idle" + ise);
             }
             _session.setReduced();
             _lastActive = lastActivity;

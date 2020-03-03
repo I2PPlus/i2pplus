@@ -72,7 +72,7 @@ public class I2PTunnelConnectClient extends I2PTunnelHTTPClientBase implements R
          "<html><body><H1>I2P ERROR: METHOD NOT ALLOWED</H1>"+
          "The request uses a bad protocol. "+
          "The Connect Proxy supports CONNECT requests ONLY. Other methods such as GET are not allowed - Maybe you wanted the HTTP Proxy?.<BR>";
-    
+
     private final static String ERR_LOCALHOST =
          "HTTP/1.1 403 Access Denied\r\n"+
          "Content-Type: text/html; charset=iso-8859-1\r\n"+
@@ -82,7 +82,7 @@ public class I2PTunnelConnectClient extends I2PTunnelHTTPClientBase implements R
          "\r\n"+
          "<html><body><H1>I2P ERROR: REQUEST DENIED</H1>"+
          "Your browser is misconfigured. Do not use the proxy to access the router console or other localhost destinations.<BR>";
-    
+
     /**
      *  As of 0.9.20 this is fast, and does NOT connect the manager to the router,
      *  or open the local socket. You MUST call startRunning() for that.
@@ -90,8 +90,8 @@ public class I2PTunnelConnectClient extends I2PTunnelHTTPClientBase implements R
      * @throws IllegalArgumentException if the I2PTunnel does not contain
      *                                  valid config to contact the router
      */
-    public I2PTunnelConnectClient(int localPort, Logging l, boolean ownDest, 
-                               String wwwProxy, EventDispatcher notifyThis, 
+    public I2PTunnelConnectClient(int localPort, Logging l, boolean ownDest,
+                               String wwwProxy, EventDispatcher notifyThis,
                                I2PTunnel tunnel) throws IllegalArgumentException {
         super(localPort, ownDest, l, notifyThis, "HTTPS Proxy on " + tunnel.listenHost + ':' + localPort, tunnel);
 
@@ -104,7 +104,7 @@ public class I2PTunnelConnectClient extends I2PTunnelHTTPClientBase implements R
         setName("HTTPS Proxy on " + tunnel.listenHost + ':' + localPort);
     }
 
-    /** 
+    /**
      * Create the default options (using the default timeout, etc).
      * Warning, this does not make a copy of I2PTunnel's client options,
      * it modifies them directly.
@@ -123,7 +123,7 @@ public class I2PTunnelConnectClient extends I2PTunnelHTTPClientBase implements R
             opts.setConnectTimeout(DEFAULT_CONNECT_TIMEOUT);
         return opts;
     }
-    
+
     @Override
     public void startRunning() {
         super.startRunning();
@@ -172,8 +172,9 @@ public class I2PTunnelConnectClient extends I2PTunnelHTTPClientBase implements R
                 }
                 line = line.trim();
                 if (_log.shouldLog(Log.DEBUG))
-                    _log.debug(getPrefix(requestId) + "Line=[" + line + "]");
-                
+                    if (line != null)
+                        _log.debug(getPrefix(requestId) + "Request: " + line);
+
                 if (method == null) { // first line CONNECT blah.i2p:80 HTTP/1.1
                     int pos = line.indexOf(' ');
                     if (pos == -1) break;    // empty first line
@@ -248,11 +249,11 @@ public class I2PTunnelConnectClient extends I2PTunnelHTTPClientBase implements R
 
                     if (_log.shouldLog(Log.DEBUG)) {
                         _log.debug(getPrefix(requestId) + "METHOD:" + method + ":\n" +
-                                   "HOST  :" + host + ":\n" +
-                                   "PORT  :" + remotePort + ":\n" +
-                                   "REST  :" + restofline + ":\n" +
-                                   "DEST  :" + destination + ":\n" +
-                                   "www proxy? " + usingWWWProxy + " internal proxy? " + usingInternalOutproxy);
+                                   "HOST:" + host + ":\n" +
+                                   "PORT:" + remotePort + ":\n" +
+                                   "REST:" + restofline + ":\n" +
+                                   "DEST:" + destination + ":\n" +
+                                   "WWW Proxy? " + usingWWWProxy + " Internal Proxy? " + usingInternalOutproxy);
                     }
                 } else if (line.toLowerCase(Locale.US).startsWith("proxy-authorization: ")) {
                     // strip Proxy-Authenticate from the response in HTTPResponseOutputStream
@@ -296,7 +297,7 @@ public class I2PTunnelConnectClient extends I2PTunnelHTTPClientBase implements R
                 writeErrorMessage(ERR_BAD_PROTOCOL, out);
                 return;
             }
-            
+
             // no destination, going to outproxy plugin
             if (usingInternalOutproxy) {
                 Socket outSocket = outproxy.connect(host, remotePort);
@@ -312,7 +313,7 @@ public class I2PTunnelConnectClient extends I2PTunnelHTTPClientBase implements R
                 writeErrorMessage(ERR_BAD_PROTOCOL, out);
                 return;
             }
-            
+
             // Authorization
             AuthResult result = authorize(s, requestId, method, authorization);
             if (result != AuthResult.AUTH_GOOD) {

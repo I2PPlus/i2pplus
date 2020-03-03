@@ -2,17 +2,17 @@
    Copyright (C) 2003 Mark J. Wielaard
 
    This file is part of Snark.
-   
+
    This program is free software; you can redistribute it and/or modify
    it under the terms of the GNU General Public License as published by
    the Free Software Foundation; either version 2, or (at your option)
    any later version.
- 
+
    This program is distributed in the hope that it will be useful,
    but WITHOUT ANY WARRANTY; without even the implied warranty of
    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
    GNU General Public License for more details.
- 
+
    You should have received a copy of the GNU General Public License
    along with this program; if not, write to the Free Software Foundation,
    Inc., 59 Temple Place - Suite 330, Boston, MA 02111-1307, USA.
@@ -75,19 +75,24 @@ public class TrackerClient implements Runnable {
   private static final String NOT_REGISTERED  = "torrent not registered"; //bytemonsoon
   private static final String NOT_REGISTERED_2  = "torrent not found";    // diftracker
   private static final String NOT_REGISTERED_3  = "torrent unauthorised"; // vuze
-  private static final String ERROR_GOT_HTML  = "received html";             // fake return
+  private static final String ERROR_GOT_HTML  = "received html (invalid response)";             // fake return
 
   private final static int SLEEP = 5; // 5 minutes.
   private final static int DELAY_MIN = 2000; // 2 secs.
   private final static int DELAY_RAND = 6*1000;
   private final static int MAX_REGISTER_FAILS = 10; // * INITIAL_SLEEP = 15m to register
   private final static int INITIAL_SLEEP = 90*1000;
-  private final static int MAX_CONSEC_FAILS = 5;    // slow down after this
-  private final static int LONG_SLEEP = 30*60*1000; // sleep a while after lots of fails
-  private final static long MIN_TRACKER_ANNOUNCE_INTERVAL = 15*60*1000;
-  private final static long MIN_DHT_ANNOUNCE_INTERVAL = 39*60*1000;
+//  private final static int MAX_CONSEC_FAILS = 5;    // slow down after this
+  private final static int MAX_CONSEC_FAILS = 10;    // slow down after this
+//  private final static int LONG_SLEEP = 30*60*1000; // sleep a while after lots of fails
+  private final static int LONG_SLEEP = 10*60*1000; // sleep a while after lots of fails
+//  private final static long MIN_TRACKER_ANNOUNCE_INTERVAL = 15*60*1000;
+  private final static long MIN_TRACKER_ANNOUNCE_INTERVAL = 10*60*1000;
+//  private final static long MIN_DHT_ANNOUNCE_INTERVAL = 39*60*1000;
+  private final static long MIN_DHT_ANNOUNCE_INTERVAL = 15*60*1000;
   /** No guidance in BEP 5; standard practice is K (=8) */
-  private static final int DHT_ANNOUNCE_PEERS = 4;
+//  private static final int DHT_ANNOUNCE_PEERS = 4;
+  private static final int DHT_ANNOUNCE_PEERS = 8;
   public static final int PORT = 6881;
   private static final int MAX_TRACKERS = 12;
   // tracker.welterde.i2p
@@ -165,10 +170,10 @@ public class TrackerClient implements Runnable {
       _thread.start();
       started = true;
   }
-  
+
   public boolean halted() { return stop; }
   public boolean started() { return started; }
-  
+
   /**
    * Interrupts this Thread to stop it.
    * @param fast if true, limit the life of the unannounce threads
@@ -226,7 +231,7 @@ public class TrackerClient implements Runnable {
     }
     return !stop && _util.connected();
   }
-  
+
   /**
    *  Setup the first time only,
    *  then one pass (usually) through the trackers, PEX, and DHT.
@@ -289,13 +294,13 @@ public class TrackerClient implements Runnable {
         if (isNewValidTracker(trackerHashes, primary)) {
             trackers.add(new TCTracker(primary, true));
             if (_log.shouldLog(Log.DEBUG))
-                _log.debug("Announce: [" + primary + "] infoHash: " + infoHash);
+                _log.debug("Announce: [" + primary + "] [InfoHash " + infoHash + "]");
         } else {
             if (_log.shouldLog(Log.WARN))
-                _log.warn("Skipping invalid or non-i2p announce: " + primary + " for torrent " + snark.getBaseName());
+                _log.warn("Skipping invalid or non-i2p announce: " + primary + "\n* + Torrent: " + snark.getBaseName());
         }
     } else {
-        _log.warn("No primary announce");
+        _log.warn("No primary announce for: " + snark.getBaseName());
     }
 
     // announce list
@@ -309,7 +314,7 @@ public class TrackerClient implements Runnable {
                         continue;
                     trackers.add(new TCTracker(url, trackers.isEmpty()));
                     if (_log.shouldLog(Log.DEBUG))
-                        _log.debug("Additional announce (list): [" + url + "] for infoHash: " + infoHash);
+                        _log.debug("Additional announce (list): [" + url + "] for [InfoHash " + infoHash + "]");
                 }
             }
             if (trackers.size() > 2) {
@@ -331,7 +336,7 @@ public class TrackerClient implements Runnable {
             // opentrackers are primary if we don't have primary
             trackers.add(new TCTracker(url, trackers.isEmpty()));
             if (_log.shouldLog(Log.DEBUG))
-                _log.debug("Additional announce: [" + url + "] for infoHash: " + infoHash);
+                _log.debug("Additional announce: [" + url + "] for [InfoHash " + infoHash + "]");
         }
     }
 
@@ -344,7 +349,7 @@ public class TrackerClient implements Runnable {
                 continue;
             backupTrackers.add(new TCTracker(url, false));
             if (_log.shouldLog(Log.DEBUG))
-                _log.debug("Backup announce: [" + url + "] for infoHash: " + infoHash);
+                _log.debug("Backup announce: [" + url + "] for [InfoHash " + infoHash + "]");
         }
         if (backupTrackers.isEmpty()) {
             backupTrackers.add(new TCTracker(SnarkManager.DEFAULT_BACKUP_TRACKER, false));
@@ -366,7 +371,7 @@ public class TrackerClient implements Runnable {
       Hash h = getHostHash(ann);
       if (h == null) {
           if (_log.shouldLog(Log.WARN))
-              _log.warn("Bad announce URL: [" + ann + "] for torrent " + snark.getBaseName());
+              _log.warn("Bad announce URL: [" + ann + "] \n* Torrent:" + snark.getBaseName());
           return false;
       }
       // comment this out if tracker.welterde.i2p upgrades
@@ -374,19 +379,19 @@ public class TrackerClient implements Runnable {
           Destination dest = _util.getMyDestination();
           if (dest != null && dest.getSigType() != SigType.DSA_SHA1) {
               if (_log.shouldLog(Log.WARN))
-                  _log.warn("Skipping incompatible tracker: " + ann + " for torrent " + snark.getBaseName());
+                  _log.warn("Skipping incompatible tracker: " + ann + "\n* Torrent: " + snark.getBaseName());
               return false;
           }
       }
       if (existing.size() >= MAX_TRACKERS) {
           if (_log.shouldLog(Log.INFO))
-              _log.info("Not using announce URL, we have enough: [" + ann + "] for torrent " + snark.getBaseName());
+              _log.info("Not using announce URL, we have enough: [" + ann + "] \n* Torrent: " + snark.getBaseName());
           return false;
       }
       boolean rv = existing.add(h);
       if (!rv) {
           if (_log.shouldLog(Log.INFO))
-             _log.info("Dup announce URL: [" + ann + "] for torrent " + snark.getBaseName());
+             _log.info("Duplicate announce URL: [" + ann + "] \n* Torrent: " + snark.getBaseName());
       }
       return rv;
   }
@@ -484,7 +489,7 @@ public class TrackerClient implements Runnable {
    */
   private int getPeersFromTrackers(List<TCTracker> trckrs) {
             long left = coordinator.getLeft();   // -1 in magnet mode
-            
+
             // First time we got a complete download?
             boolean newlyCompleted;
             if (!completed && left == 0) {
@@ -583,9 +588,9 @@ public class TrackerClient implements Runnable {
                   }
                 catch (IOException ioe)
                   {
-                    // Probably not fatal (if it doesn't last to long...)
+                    // Probably not fatal (if it doesn't last too long...)
                     if (_log.shouldLog(Log.WARN))
-                        _log.warn("Could not contact tracker at '" + tr.announce + "': " + ioe);
+                        _log.warn("Error communicating with tracker [" + tr.announce + "]\n* " + ioe.getMessage());
                     tr.trackerProblems = ioe.getMessage();
                     // don't show secondary tracker problems to the user
                     // ... and only if we don't have any peers at all. Otherwise, PEX/DHT will save us.
@@ -618,8 +623,8 @@ public class TrackerClient implements Runnable {
                   }
               } else {
                   if (_log.shouldLog(Log.INFO))
-                      _log.info("Not announcing to " + tr.announce + " last announce was " +
-                               new Date(tr.lastRequestTime) + " interval is " + DataHelper.formatDuration(tr.interval));
+                      _log.info("Not announcing to " + tr.announce + "\n* Last announce: " +
+                               new Date(tr.lastRequestTime) + " (interval: " + DataHelper.formatDuration(tr.interval) + ")");
               }
               if ((!tr.stop) && maxSeenPeers < tr.seenPeers)
                   maxSeenPeers = tr.seenPeers;
@@ -638,7 +643,7 @@ public class TrackerClient implements Runnable {
                 Set<PeerID> pids = coordinator.getPEXPeers();
                 if (!pids.isEmpty()) {
                     if (_log.shouldLog(Log.INFO))
-                        _log.info("Got " + pids.size() + " from PEX");
+                        _log.info("Received " + pids.size() + " from PEX");
                     List<Peer> peers = new ArrayList<Peer>(pids.size());
                     for (PeerID pID : pids) {
                         peers.add(new Peer(pID, snark.getID(), snark.getInfoHash(), snark.getMetaInfo()));
@@ -691,7 +696,9 @@ public class TrackerClient implements Runnable {
                     lastDHTAnnounce = 0;
                 }
                 if (_log.shouldLog(Log.INFO))
-                    _log.info("Got " + hashes + " from DHT");
+                    _log.info("Received " + hashes.size() + " peer hashes from DHT");
+                if (_log.shouldLog(Log.DEBUG))
+                    _log.debug("DHT Peers: " + hashes);
 
                 // now try these peers
                 if ((!stop) && !hashes.isEmpty()) {
@@ -779,7 +786,7 @@ public class TrackerClient implements Runnable {
         tr.reset();
      }
   }
-  
+
   /**
    *
    *  Note: IOException message text gets displayed in the UI
@@ -818,9 +825,9 @@ public class TrackerClient implements Runnable {
     else
         buf.append(_util.getMaxConnections());
     String s = buf.toString();
-    if (_log.shouldLog(Log.INFO))
-        _log.info("Sending TrackerClient request: " + s);
-      
+    if (_log.shouldLog(Log.DEBUG))
+        _log.debug("Sending TrackerClient request\n* URL: " + s);
+
     tr.lastRequestTime = System.currentTimeMillis();
     // Don't wait for a response to stopped when shutting down
     boolean fast = _fastUnannounce && event.equals(STOPPED_EVENT);
@@ -833,7 +840,7 @@ public class TrackerClient implements Runnable {
     // otherwise we already threw an IOE.
     if (fetched[0] == '<')
         throw new IOException(ERROR_GOT_HTML + " from " + tr.host);
-    
+
         InputStream in = new ByteArrayInputStream(fetched);
 
         TrackerInfo info = new TrackerInfo(in, snark.getID(),
@@ -843,7 +850,7 @@ public class TrackerClient implements Runnable {
 
         String failure = info.getFailureReason();
         if (failure != null)
-            throw new IOException("Tracker " + tr.host + " responded with: " + failure);
+            throw new IOException(tr.host + " response: " + failure);
 
         tr.interval = Math.max(MIN_TRACKER_ANNOUNCE_INTERVAL, info.getInterval() * 1000l);
         return info;
@@ -875,7 +882,7 @@ public class TrackerClient implements Runnable {
             sb.append(Integer.toHexString(c));
         }
       }
-         
+
     return sb.toString();
   }
 

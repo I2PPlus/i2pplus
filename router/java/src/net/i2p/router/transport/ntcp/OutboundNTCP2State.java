@@ -34,7 +34,7 @@ import net.i2p.util.Log;
  *  @since 0.9.35
  */
 class OutboundNTCP2State implements EstablishState {
-    
+
     private final RouterContext _context;
     private final Log _log;
     private final NTCPTransport _transport;
@@ -94,7 +94,7 @@ class OutboundNTCP2State implements EstablishState {
         VERIFIED,
         CORRUPT
     }
-    
+
     /**
      * @throws IllegalArgumentException on bad address in the con
      */
@@ -298,7 +298,7 @@ class OutboundNTCP2State implements EstablishState {
             long now = _context.clock().now();
             // rtt from sending #1 to receiving #2
             long rtt = now - _con.getCreated();
-            _peerSkew = (now - (tsB * 1000) - (rtt / 2) + 500) / 1000; 
+            _peerSkew = (now - (tsB * 1000) - (rtt / 2) + 500) / 1000;
             if (_peerSkew > MAX_SKEW || _peerSkew < 0 - MAX_SKEW) {
                 fail("Clock Skew: " + _peerSkew, null, true);
                 return;
@@ -445,7 +445,7 @@ class OutboundNTCP2State implements EstablishState {
         byte[] tmp = new byte[32 + SIPHASH.length];
         byte[] hash = state.getHandshakeHash();
         System.arraycopy(hash, 0, tmp, 0, 32);
-        System.arraycopy(SIPHASH, 0, tmp, 32, SIPHASH.length); 
+        System.arraycopy(SIPHASH, 0, tmp, 32, SIPHASH.length);
         byte[] sip_master = new byte[32];
         hkdf.calculate(ask_master, tmp, sip_master);
         Arrays.fill(ask_master, (byte) 0);
@@ -474,9 +474,11 @@ class OutboundNTCP2State implements EstablishState {
         if (_state == State.CORRUPT || _state == State.VERIFIED)
             return;
         changeState(State.CORRUPT);
-        if (_log.shouldWarn()) {
-            _log.warn(this + "Failed to establish: " + reason, e);
-            _log.warn("State at failure: " + _handshakeState.toString());
+        if (_log.shouldDebug()) {
+            _log.debug(this + "\n* Failed to establish: " + reason, e);
+        } else if (_log.shouldWarn()) {
+            _log.warn(this + "\n* Failed to establish: " + reason);
+            _log.warn("[NTCP2] Outbound handshake failure " + _handshakeState.toString());
         }
         _handshakeState.destroy();
         if (!bySkew)
@@ -497,7 +499,7 @@ class OutboundNTCP2State implements EstablishState {
     @Override
     public String toString() {
         StringBuilder buf = new StringBuilder(64);
-        buf.append("OBES2 ");
+        buf.append("OutboundEstablishState ");
         buf.append(_con.toString());
         buf.append(' ').append(_state);
         if (_con.isEstablished()) buf.append(" established");

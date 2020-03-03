@@ -33,13 +33,13 @@ import net.i2p.util.SimpleByteCache;
 public class UnknownI2NPMessage extends FastI2NPMessageImpl {
     private byte _data[];
     private final int _type;
-    
+
     /** @param type 0-255 */
     public UnknownI2NPMessage(I2PAppContext context, int type) {
         super(context);
         _type = type;
     }
-    
+
     /**
      *  @throws IllegalStateException if data previously set, to protect saved checksum
      */
@@ -52,10 +52,10 @@ public class UnknownI2NPMessage extends FastI2NPMessageImpl {
         _data = new byte[dataSize];
         System.arraycopy(data, offset, _data, 0, dataSize);
     }
-    
+
     /** calculate the message body's length (not including the header and footer */
-    protected int calculateWrittenLength() { 
-        if (_data == null) 
+    protected int calculateWrittenLength() {
+        if (_data == null)
             return 0;
         else
             return _data.length;
@@ -69,7 +69,7 @@ public class UnknownI2NPMessage extends FastI2NPMessageImpl {
         }
         return curIndex;
     }
-    
+
     /**
      *  Note that this returns the "true" type, so that
      *  the IBGW can correctly make drop decisions.
@@ -77,7 +77,7 @@ public class UnknownI2NPMessage extends FastI2NPMessageImpl {
      *  @return 0-255
      */
     public int getType() { return _type; }
-    
+
     /**
      *  Attempt to convert this message to a known message class.
      *  This does the delayed verification using the saved checksum.
@@ -109,7 +109,7 @@ public class UnknownI2NPMessage extends FastI2NPMessageImpl {
     public int hashCode() {
         return _type + DataHelper.hashCode(_data);
     }
-    
+
     @Override
     public boolean equals(Object object) {
         if ( (object != null) && (object instanceof UnknownI2NPMessage) ) {
@@ -119,14 +119,13 @@ public class UnknownI2NPMessage extends FastI2NPMessageImpl {
             return false;
         }
     }
-    
+
     @Override
     public String toString() {
         StringBuilder buf = new StringBuilder();
-        buf.append("[UnknownI2NPMessage: ");
-        buf.append("\n\tType: ").append(_type);
-        buf.append("\n\tLength: ").append(calculateWrittenLength());
-        buf.append("]");
+        buf.append("UnknownI2NPMessage: ");
+        buf.append("Type: ").append(_type);
+        buf.append("; Length: ").append(calculateWrittenLength());
         return buf.toString();
     }
 }

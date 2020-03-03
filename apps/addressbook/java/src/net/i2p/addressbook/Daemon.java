@@ -1,16 +1,16 @@
 /*
  * Copyright (c) 2004 Ragnarok
- * 
+ *
  * Permission is hereby granted, free of charge, to any person obtaining a copy
  * of this software and associated documentation files (the "Software"), to deal
  * in the Software without restriction, including without limitation the rights
  * to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
  * copies of the Software, and to permit persons to whom the Software is
  * furnished to do so, subject to the following conditions:
- * 
+ *
  * The above copyright notice and this permission notice shall be included in
  * all copies or substantial portions of the Software.
- * 
+ *
  * THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
  * IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
  * FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
@@ -44,7 +44,7 @@ import net.i2p.util.SystemVersion;
 /**
  * Main class of addressbook.  Performs updates, and runs the main loop.
  * As of 0.9.30, package private, run with DaemonThread.
- * 
+ *
  * @author Ragnarok
  *
  */
@@ -53,7 +53,13 @@ class Daemon {
     private volatile boolean _running;
     private static final boolean DEBUG = false;
     // If you change this, change in SusiDNS SubscriptionBean also
-    private static final String DEFAULT_SUB = "http://i2p-projekt.i2p/hosts.txt";
+// too many dead hosts
+//    private static final String DEFAULT_SUB = "http://i2p-projekt.i2p/hosts.txt";
+//    private static final String DEFAULT_SUB = "http://identiguy.i2p/hosts.txt";
+    private static final String DEFAULT_SUB = "http://stats.i2p/cgi-bin/newhosts.txt" + "\n" +
+                                                 "http://inr.i2p/export/alive-hosts.txt" + "\n" +
+                                                 "http://no.i2p/export/alive-hosts.txt" + "\n" +
+                                                 "http://identiguy.i2p/hosts.txt";
     /** @since 0.9.12 */
     static final String OLD_DEFAULT_SUB = "http://www.i2p2.i2p/hosts.txt";
     /** Any properties we receive from the subscription, we store to the
@@ -62,11 +68,11 @@ class Daemon {
      */
     private static final String RCVD_PROP_PREFIX = "=";
     private static final boolean MUST_VALIDATE = false;
-    
+
     /**
      * Update the router and published address books using remote data from the
      * subscribed address books listed in subscriptions.
-     * 
+     *
      * @param master
      *            The master AddressBook. This address book is never
      *            overwritten, so it is safe for the user to write to.
@@ -106,7 +112,7 @@ class Daemon {
      * Update the router and published address books using remote data from the
      * subscribed address books listed in subscriptions.
      * Merging of the "master" addressbook is NOT supported.
-     * 
+     *
      * @param router
      *            The NamingService to update, generally the root NamingService from the context.
      * @param published
@@ -203,13 +209,13 @@ class Daemon {
                         if (log != null) {
                             log.append("Bad signature of action " + action + " for key " +
                                        hprops.getProperty(HostTxtEntry.PROP_NAME) +
-                                       ". From: " + addressbook.getLocation());
+                                       ". [" + addressbook.getLocation() + "]");
                         }
                         invalid++;
                     } else if (key != null && mustValidate && !he.hasValidSig()) {
                         if (log != null) {
                             log.append("Bad signature of action " + action + " for key " + key +
-                                       ". From: " + addressbook.getLocation());
+                                       ". [" + addressbook.getLocation() + "]");
                         }
                         invalid++;
                     } else if (action != null || !isKnown) {
@@ -264,10 +270,10 @@ class Daemon {
                                             if (log != null) {
                                                 if (success)
                                                     log.append("Additional address for " + key +
-                                                               " added to address book. From: " + addressbook.getLocation());
+                                                               " added to address book. [" + addressbook.getLocation() + "]");
                                                 else
                                                     log.append("Failed to add additional address for " + key +
-                                                               " From: " + addressbook.getLocation());
+                                                               " [" + addressbook.getLocation() + "]");
                                             }
                                             // now update the published addressbook
                                             // ditto
@@ -331,7 +337,7 @@ class Daemon {
                                                 log.append("Action: " + action + " failed because" +
                                                            " old name " + poldname +
                                                            " is invalid" +
-                                                           ". From: " + addressbook.getLocation());
+                                                           ". [" + addressbook.getLocation() + "]");
                                             invalid++;
                                             continue;
                                         }
@@ -393,10 +399,10 @@ class Daemon {
                                             if (log != null) {
                                                 if (pod2.size() == 1)
                                                     log.append("Changing destination for " + key +
-                                                               ". From: " + addressbook.getLocation());
+                                                               ". [" + addressbook.getLocation() + "]");
                                                 else
                                                     log.append("Replacing " + pod2.size() + " destinations for " + key +
-                                                               ". From: " + addressbook.getLocation());
+                                                               " [" + addressbook.getLocation() + "]");
                                             }
                                             allowExistingKeyInPublished = true;
                                             props.setProperty("m", Long.toString(I2PAppContext.getGlobalContext().clock().now()));
@@ -435,11 +441,11 @@ class Daemon {
                                                 if (success)
                                                     log.append("Removed: " + poldname +
                                                                " to be replaced with " + key +
-                                                               ". From: " + addressbook.getLocation());
+                                                               " [" + addressbook.getLocation() + "]");
                                                 else
                                                     log.append("Remove failed for: " + poldname +
                                                                " to be replaced with " + key +
-                                                               ". From: " + addressbook.getLocation());
+                                                               " [" + addressbook.getLocation() + "]");
                                             }
                                             // now update the published addressbook
                                             if (publishedNS != null) {
@@ -462,7 +468,7 @@ class Daemon {
                                     // w/o name=dest handled below
                                     if (log != null)
                                         log.append("Action: " + action + " with name=dest invalid" +
-                                                   ". From: " + addressbook.getLocation());
+                                                   " [" + addressbook.getLocation() + "]");
                                     invalid++;
                                     continue;
                                 } else if (action.equals(HostTxtEntry.ACTION_UPDATE)) {
@@ -473,7 +479,7 @@ class Daemon {
                                 } else {
                                     if (log != null)
                                         log.append("Action: " + action + " unrecognized" +
-                                                   ". From: " + addressbook.getLocation());
+                                                   " [" + addressbook.getLocation() + "]");
                                     invalid++;
                                     continue;
                                 }
@@ -481,8 +487,8 @@ class Daemon {
                             boolean success = router.put(key, dest, props);
                             if (log != null) {
                                 if (success)
-                                    log.append("New address " + key +
-                                               " added to address book. From: " + addressbook.getLocation());
+                                    log.append("New domain " + key +
+                                               " added to addressbook [" + addressbook.getLocation() + "]");
                                 else
                                     log.append("Save to naming service " + router + " failed for new key " + key);
                             }
@@ -523,11 +529,11 @@ class Daemon {
                                                 if (success)
                                                     log.append("Removed: " + poldname +
                                                                " as requested" +
-                                                               ". From: " + addressbook.getLocation());
+                                                               " [" + addressbook.getLocation() + "]");
                                                 else
                                                     log.append("Remove failed for: " + poldname +
                                                                " as requested" +
-                                                               ". From: " + addressbook.getLocation());
+                                                               " [" + addressbook.getLocation() + "]");
                                             }
                                             // now update the published addressbook
                                             if (publishedNS != null) {
@@ -565,11 +571,11 @@ class Daemon {
                                                     if (success)
                                                         log.append("Removed: " + poldname +
                                                                    " as requested" +
-                                                                   ". From: " + addressbook.getLocation());
+                                                                   " [" + addressbook.getLocation() + "]");
                                                     else
                                                         log.append("Remove failed for: " + poldname +
                                                                    " as requested" +
-                                                                   ". From: " + addressbook.getLocation());
+                                                                   " [" + addressbook.getLocation() + "]");
                                                 }
                                                 // now update the published addressbook
                                                 if (publishedNS != null) {
@@ -598,11 +604,11 @@ class Daemon {
                                                     if (success)
                                                         log.append("Removed: " + rev +
                                                                    " as requested" +
-                                                                   ". From: " + addressbook.getLocation());
+                                                                   " [" + addressbook.getLocation() + "]");
                                                     else
                                                         log.append("Remove failed for: " + rev +
                                                                    " as requested" +
-                                                                   ". From: " + addressbook.getLocation());
+                                                                   " [" + addressbook.getLocation() + "]");
                                                 }
                                                 // now update the published addressbook
                                                 if (publishedNS != null) {
@@ -618,23 +624,23 @@ class Daemon {
                                     }
                                 } else {
                                     if (log != null)
-                                        log.append("Action: " + action + " w/o name=dest unrecognized" +
-                                                   ". From: " + addressbook.getLocation());
+                                        log.append("Action: " + action + " without name=dest unrecognized" +
+                                                   " [" + addressbook.getLocation() + "]");
                                     invalid++;
                                 }
                                 continue;
                             } else {
                                 if (log != null)
                                     log.append("No action in command line" +
-                                               ". From: " + addressbook.getLocation());
+                                               " [" + addressbook.getLocation() + "]");
                                 invalid++;
                                 continue;
                             }
                         } else if (log != null) {
-                            log.append("Bad hostname " + key + ". From: "
-                                   + addressbook.getLocation());
+                            log.append("Bad hostname " + key + " ["
+                                   + addressbook.getLocation() + "]");
                             invalid++;
-                        }        
+                        }
                   /****
                     } else if (false && DEBUG && log != null) {
                         // lookup the conflict if we haven't yet (O(n**2) for text file)
@@ -655,7 +661,7 @@ class Daemon {
                     }
                 } catch (DataFormatException dfe) {
                     if (log != null)
-                        log.append("Invalid b64 for " + key + " From: " + addressbook.getLocation());
+                        log.append("Invalid b64 for " + key + " [" + addressbook.getLocation() + "]");
                     invalid++;
                 }
             }  // entries
@@ -677,7 +683,7 @@ class Daemon {
             log.append("Action: " + action + " failed because" +
                        " inner signature for key " + name +
                        " failed" +
-                       ". From: " + addressbook.getLocation());
+                       " [" + addressbook.getLocation() + "]");
         }
     }
 
@@ -686,7 +692,7 @@ class Daemon {
         if (log != null) {
             log.append("Action: " + action + " for " + name +
                        " failed, missing required parameters" +
-                       ". From: " + addressbook.getLocation());
+                       " [" + addressbook.getLocation() + "]");
         }
     }
 
@@ -706,13 +712,13 @@ class Daemon {
                        " (" + buf + ')' +
                        " do not include" +
                        " (" + olddest.substring(0, 6) + ')' +
-                       ". From: " + addressbook.getLocation());
+                       " [" + addressbook.getLocation() + "]");
         }
     }
 
     /**
      * Run an update, using the Map settings to provide the parameters.
-     * 
+     *
      * @param settings
      *            A Map containg the parameters needed by update.
      * @param home
@@ -721,7 +727,7 @@ class Daemon {
     public static void update(Map<String, String> settings, String home) {
         File published = null;
         boolean should_publish = Boolean.parseBoolean(settings.get("should_publish"));
-        if (should_publish) 
+        if (should_publish)
             published = new File(home, settings.get("published_addressbook"));
         File subscriptionFile = new File(home, settings.get("subscriptions"));
         File logFile = new File(home, settings.get("log"));
@@ -735,11 +741,11 @@ class Daemon {
             delay = 12;
         }
         delay *= 60 * 60 * 1000;
-        
+
         List<String> defaultSubs = new ArrayList<String>(4);
         // defaultSubs.add("http://i2p/NF2RLVUxVulR3IqK0sGJR0dHQcGXAzwa6rEO4WAWYXOHw-DoZhKnlbf1nzHXwMEJoex5nFTyiNMqxJMWlY54cvU~UenZdkyQQeUSBZXyuSweflUXFqKN-y8xIoK2w9Ylq1k8IcrAFDsITyOzjUKoOPfVq34rKNDo7fYyis4kT5bAHy~2N1EVMs34pi2RFabATIOBk38Qhab57Umpa6yEoE~rbyR~suDRvD7gjBvBiIKFqhFueXsR2uSrPB-yzwAGofTXuklofK3DdKspciclTVzqbDjsk5UXfu2nTrC1agkhLyqlOfjhyqC~t1IXm-Vs2o7911k7KKLGjB4lmH508YJ7G9fLAUyjuB-wwwhejoWqvg7oWvqo4oIok8LG6ECR71C3dzCvIjY2QcrhoaazA9G4zcGMm6NKND-H4XY6tUWhpB~5GefB3YczOqMbHq4wi0O9MzBFrOJEOs3X4hwboKWANf7DT5PZKJZ5KorQPsYRSq0E3wSOsFCSsdVCKUGsAAAA/i2p/hosts.txt");
         defaultSubs.add(DEFAULT_SUB);
-        
+
         SubscriptionList subscriptions = new SubscriptionList(subscriptionFile,
                                                               etagsFile, lastModifiedFile, lastFetchedFile,
                                                               delay, defaultSubs, settings.get("proxy_host"),
@@ -780,7 +786,7 @@ class Daemon {
                     return rv;
             }
         }
-        return null;                
+        return null;
     }
 
     /** @return the configured NamingService, or the root NamingService */
@@ -788,14 +794,14 @@ class Daemon {
     {
         NamingService root = I2PAppContext.getGlobalContext().namingService();
         NamingService rv = searchNamingService(root, srch);
-        return rv != null ? rv : root;                
+        return rv != null ? rv : root;
     }
 
     /**
      * Load the settings, set the proxy, then enter into the main loop. The main
      * loop performs an immediate update, and then an update every number of
      * hours, as configured in the settings file.
-     * 
+     *
      * @param args
      *            Command line arguments. If there are any arguments provided,
      *            the first is taken as addressbook's home directory, and the
@@ -822,7 +828,7 @@ class Daemon {
         update(ns, published, subscriptions, log);
         ctx.logManager().flush();
     }
-    
+
     /**
      *  @param args may be null
      */
@@ -837,7 +843,7 @@ class Daemon {
         } else {
             homeFile = new SecureDirectory(System.getProperty("user.dir"));
         }
-        
+
         Map<String, String> defaultSettings = new HashMap<String, String>();
         defaultSettings.put("proxy_host", "127.0.0.1");
         defaultSettings.put("proxy_port", "4444");
@@ -850,10 +856,11 @@ class Daemon {
         defaultSettings.put("etags", "etags");
         defaultSettings.put("last_modified", "last_modified");
         defaultSettings.put("last_fetched", "last_fetched");
-        defaultSettings.put("update_delay", "12");
+        //defaultSettings.put("update_delay", "12");
+        defaultSettings.put("update_delay", "3");
         defaultSettings.put("update_direct", "false");
         defaultSettings.put("naming_service", "hosts.txt");
-        
+
         if (!homeFile.exists()) {
             boolean created = homeFile.mkdirs();
             if (!created)
@@ -861,22 +868,22 @@ class Daemon {
             //else
             //    System.out.println("INFO: Addressbook directory " + homeFile.getAbsolutePath() + " created");
         }
-        
+
         File settingsFile = new File(homeFile, settingsLocation);
-        
+
         Map<String, String> settings = ConfigParser.parse(settingsFile, defaultSettings);
         // wait
         try {
             Thread.sleep(5*60*1000 + I2PAppContext.getGlobalContext().random().nextLong(5*60*1000));
-	    // Static method, and redundent Thread.currentThread().sleep(5*60*1000);
+       // Static method, and redundent Thread.currentThread().sleep(5*60*1000);
         } catch (InterruptedException ie) {}
-        
+
         while (_running) {
             long delay = Long.parseLong(settings.get("update_delay"));
             if (delay < 1) {
                 delay = 1;
             }
-            
+
             update(settings, homeFile.getAbsolutePath());
             try {
                 synchronized (this) {
@@ -889,9 +896,9 @@ class Daemon {
             settings = ConfigParser.parse(settingsFile, defaultSettings);
         }
     }
- 
+
     /**
-     * Call this to get the addressbook to reread its config and 
+     * Call this to get the addressbook to reread its config and
      * refetch its subscriptions.
      */
     public void wakeup() {

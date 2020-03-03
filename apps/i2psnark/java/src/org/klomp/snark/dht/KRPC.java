@@ -155,10 +155,14 @@ public class KRPC implements I2PSessionMuxedListener, DHT {
     private static final long DEST_LOOKUP_TIMEOUT = 10*1000;
     /** stagger with other cleaners */
     private static final long CLEAN_TIME = 63*1000;
-    private static final long EXPLORE_TIME = 877*1000;
-    private static final long BLACKLIST_CLEAN_TIME = 67*60*1000;
+//    private static final long EXPLORE_TIME = 877*1000;
+    private static final long EXPLORE_TIME = 300*1000;
+//    private static final long BLACKLIST_CLEAN_TIME = 17*60*1000;
+    private static final long BLACKLIST_CLEAN_TIME = 10*60*1000;
     private static final int BLACKLIST_MAX_PEERS = 500;
-    private static final long NODES_SAVE_TIME = 3*60*60*1000;
+//    private static final long NODES_SAVE_TIME = 3*60*60*1000;
+//    private static final long NODES_SAVE_TIME = 15*60*1000; // frequency of save of local dht node list
+    private static final long NODES_SAVE_TIME = 10*60*1000; // frequency of save of local dht node list
     public static final String DHT_FILE_SUFFIX = ".dht.dat";
 
     private static final int SEND_CRYPTO_TAGS = 8;
@@ -262,7 +266,7 @@ public class KRPC implements I2PSessionMuxedListener, DHT {
         Set<NodeInfo> tried = new HashSet<NodeInfo>();
 
         if (_log.shouldLog(Log.INFO))
-            _log.info("Starting explore of " + target);
+            _log.info("Starting explore of [" + target + "]");
         for (int i = 0; i < maxNodes; i++) {
             if (!_isRunning)
                 break;
@@ -287,12 +291,12 @@ public class KRPC implements I2PSessionMuxedListener, DHT {
             int replyType = waiter.getReplyCode();
             if (replyType == REPLY_NONE) {
                  if (_log.shouldLog(Log.DEBUG))
-                     _log.debug("Got no reply");
+                     _log.debug("Received no reply");
             } else if (replyType == REPLY_NODES) {
                  List<NodeInfo> reply = (List<NodeInfo>) waiter.getReplyObject();
                  // It seems like we are just going to get back ourselves all the time
                  if (_log.shouldLog(Log.DEBUG))
-                     _log.debug("Got " + reply.size() + " nodes");
+                     _log.debug("Received " + reply.size() + " nodes");
                  for (NodeInfo ni : reply) {
                      if (! (ni.equals(_myNodeInfo) || (toTry.contains(ni) && tried.contains(ni))))
                          toTry.add(ni);
@@ -301,11 +305,11 @@ public class KRPC implements I2PSessionMuxedListener, DHT {
                  break;
             } else {
                  if (_log.shouldLog(Log.INFO))
-                     _log.info("Got unexpected reply " + replyType + ": " + waiter.getReplyObject());
+                     _log.info("Received unexpected reply " + replyType + ": " + waiter.getReplyObject());
             }
         }
         if (_log.shouldLog(Log.INFO))
-            _log.info("Finished explore of " + target);
+            _log.info("Finished explore of [" + target + "]");
     }
 
     /**
@@ -359,7 +363,7 @@ public class KRPC implements I2PSessionMuxedListener, DHT {
         SortedSet<NodeInfo> tried = new TreeSet<NodeInfo>(comp);
 
         if (_log.shouldLog(Log.INFO))
-            _log.info("Starting getPeers for " + iHash + " (b64: " + new NID(ih) + ") " + " with " + nodes.size() + " to try");
+            _log.info("Starting get_peers for " + iHash + " (b64: " + new NID(ih) + ") " + " with " + nodes.size() + " to try");
         for (int i = 0; i < maxNodes; i++) {
             if (!_isRunning)
                 break;
@@ -388,14 +392,14 @@ public class KRPC implements I2PSessionMuxedListener, DHT {
             int replyType = waiter.getReplyCode();
             if (replyType == REPLY_NONE) {
                  if (_log.shouldLog(Log.DEBUG))
-                     _log.debug("Got no reply");
+                     _log.debug("Received no reply");
             } else if (replyType == REPLY_PONG) {
                  if (_log.shouldLog(Log.DEBUG))
-                     _log.debug("Got pong");
+                     _log.debug("Received pong");
             } else if (replyType == REPLY_PEERS) {
                  heardFrom.add(waiter.getSentTo());
                  if (_log.shouldLog(Log.DEBUG))
-                     _log.debug("Got peers");
+                     _log.debug("Received peers");
                  List<Hash> reply = (List<Hash>) waiter.getReplyObject();
                  // shouldn't send us an empty peers list but through
                  // 0.9.8.1 it will
@@ -407,13 +411,13 @@ public class KRPC implements I2PSessionMuxedListener, DHT {
                      }
                  }
                  if (_log.shouldLog(Log.INFO))
-                     _log.info("Finished get Peers, got " + reply.size() + " from DHT, returning " + rv.size());
+                     _log.info("Finished get_peers: received " + reply.size() + " peers from DHT, returning " + rv.size() + " peers");
                  break;
             } else if (replyType == REPLY_NODES) {
                  heardFrom.add(waiter.getSentTo());
                  List<NodeInfo> reply = (List<NodeInfo>) waiter.getReplyObject();
                  if (_log.shouldLog(Log.DEBUG))
-                     _log.debug("Got " + reply.size() + " nodes");
+                     _log.debug("Received " + reply.size() + " nodes");
                  for (NodeInfo ni : reply) {
                      if (! (ni.equals(_myNodeInfo) || tried.contains(ni) || toTry.contains(ni)))
                          toTry.add(ni);
@@ -422,14 +426,15 @@ public class KRPC implements I2PSessionMuxedListener, DHT {
                  break;
             } else {
                  if (_log.shouldLog(Log.INFO))
-                     _log.info("Got unexpected reply " + replyType + ": " + waiter.getReplyObject());
+                     _log.info("Received unexpected reply " + replyType + ": " + waiter.getReplyObject());
             }
             if (_context.clock().now() > endTime)
                 break;
             if (!toTry.isEmpty() && !heardFrom.isEmpty() &&
                 comp.compare(toTry.first(), heardFrom.first()) >= 0) {
                 if (_log.shouldLog(Log.INFO))
-                    _log.info("Finished get Peers, nothing closer to try after " + (i+1));
+//                    _log.info("Finished get_peers, nothing closer to try after " + (i+1));
+                    _log.info("Finished get_peers, nothing closer after trying " + (i+1) + " nodes");
                 break;
             }
         }
@@ -442,7 +447,7 @@ public class KRPC implements I2PSessionMuxedListener, DHT {
             for (Iterator<NodeInfo> iter = heardFrom.iterator(); iter.hasNext() && annCnt < annMax && _isRunning; ) {
                 NodeInfo annTo = iter.next();
                 if (_log.shouldLog(Log.INFO))
-                    _log.info("Announcing to closest from get peers: " + annTo);
+                    _log.info("Announcing to closest from get_peers: " + annTo);
                 long toWait = annMaxWait > 0 ? Math.min(annMaxWait, 60*1000) : 0;
                 if (announce(ih, annTo, toWait, isSeed))
                     annCnt++;
@@ -456,14 +461,14 @@ public class KRPC implements I2PSessionMuxedListener, DHT {
             // spray it, but unlikely to work, we just went through the kbuckets,
             // so this is essentially just a retry
             if (_log.shouldLog(Log.INFO))
-               _log.info("Announcing to closest in kbuckets after get peers failed");
+               _log.info("Announcing to closest in kbuckets after get_peers failed");
             announce(ih, annMax, annMaxWait, isSeed);
         }
-        if (_log.shouldLog(Log.INFO)) {
-            _log.info("Finished get Peers, returning " + rv.size());
-            _log.info("Tried: " + tried);
-            _log.info("Heard from: " + heardFrom);
-            _log.info("Not tried: " + toTry);
+        if (_log.shouldLog(Log.DEBUG)) {
+            _log.debug("Finished get_peers, returning " + rv.size());
+            _log.debug("Tried: " + tried);
+            _log.debug("Heard from: " + heardFrom);
+            _log.debug("Not tried: " + toTry);
         }
         return rv;
     }
@@ -683,17 +688,18 @@ public class KRPC implements I2PSessionMuxedListener, DHT {
     public String renderStatusHTML() {
         long uptime = Math.max(1000, _context.clock().now() - _started);
         StringBuilder buf = new StringBuilder(256);
-        buf.append("<br><hr class=\"debug\"><b>DHT DEBUG</b><br><hr class=\"debug\"><hr><b>TX:</b> ").append(_txPkts.get()).append(" pkts / ")
+        buf.append("<br><br><div id=\"debugStats\">" +
+                   "<b>TX:</b> ").append(_txPkts.get()).append(" pkts / ")
            .append(DataHelper.formatSize2(_txBytes.get())).append("B / ")
-           .append(DataHelper.formatSize2Decimal(_txBytes.get() * 1000 / uptime)).append("Bps<br>" +
+           .append(DataHelper.formatSize2Decimal(_txBytes.get() * 1000 / uptime)).append("Bps &nbsp;" +
                    "<b>RX:</b> ").append(_rxPkts.get()).append(" pkts / ")
            .append(DataHelper.formatSize2(_rxBytes.get())).append("B / ")
            .append(DataHelper.formatSize2Decimal(_rxBytes.get() * 1000 / uptime)).append("Bps<br>" +
-                   "<b>DHT Peers:</b> ").append( _knownNodes.size()).append("<br>" +
-                   "<b>Blacklisted:</b> ").append(_blacklist.size()).append("<br>" +
-                   "<b>Sent tokens:</b> ").append(_outgoingTokens.size()).append("<br>" +
-                   "<b>Rcvd tokens:</b> ").append(_incomingTokens.size()).append("<br>" +
-                   "<b>Pending queries:</b> ").append(_sentQueries.size()).append("<br><br><hr class=\"debug\">");
+                   "<b>DHT Peers:</b> ").append( _knownNodes.size()).append(" &nbsp;" +
+                   "<b>Blacklisted:</b> ").append(_blacklist.size()).append(" &nbsp;" +
+                   "<b>Sent tokens:</b> ").append(_outgoingTokens.size()).append(" &nbsp;" +
+                   "<b>Rcvd tokens:</b> ").append(_incomingTokens.size()).append(" &nbsp;" +
+                   "<b>Pending queries:</b> ").append(_sentQueries.size()).append("</div>");
         _tracker.renderStatusHTML(buf);
         _knownNodes.renderStatusHTML(buf);
         return buf.toString();
@@ -714,8 +720,8 @@ public class KRPC implements I2PSessionMuxedListener, DHT {
      *  @return null on error
      */
     private ReplyWaiter sendPing(NodeInfo nInfo) {
-        if (_log.shouldLog(Log.INFO))
-            _log.info("Sending ping to: " + nInfo);
+        if (_log.shouldLog(Log.DEBUG))
+            _log.debug("Sending ping to " + nInfo);
         Map<String, Object> map = new HashMap<String, Object>();
         map.put("q", "ping");
         Map<String, Object> args = new HashMap<String, Object>();
@@ -732,7 +738,7 @@ public class KRPC implements I2PSessionMuxedListener, DHT {
      */
     private ReplyWaiter sendFindNode(NodeInfo nInfo, NID tID) {
         if (_log.shouldLog(Log.INFO))
-            _log.info("Sending find node of " + tID + " to: " + nInfo);
+            _log.info("Sending find_node of [" + tID + "]\n* Target: " + nInfo);
         Map<String, Object> map = new HashMap<String, Object>();
         map.put("q", "find_node");
         Map<String, Object> args = new HashMap<String, Object>();
@@ -750,7 +756,7 @@ public class KRPC implements I2PSessionMuxedListener, DHT {
      */
     private ReplyWaiter sendGetPeers(NodeInfo nInfo, InfoHash ih, boolean noSeeds) {
         if (_log.shouldLog(Log.INFO))
-            _log.info("Sending get peers of " + ih + " to: " + nInfo + " noseeds? " + noSeeds);
+            _log.info("Sending get_peers to " + nInfo + " noseeds? " + noSeeds + "\n* Torrent: " + ih);
         Map<String, Object> map = new HashMap<String, Object>();
         map.put("q", "get_peers");
         Map<String, Object> args = new HashMap<String, Object>();
@@ -774,7 +780,7 @@ public class KRPC implements I2PSessionMuxedListener, DHT {
      */
     private ReplyWaiter sendAnnouncePeer(NodeInfo nInfo, InfoHash ih, Token token, boolean isSeed) {
         if (_log.shouldLog(Log.INFO))
-            _log.info("Sending announce of " + ih + " to: " + nInfo + " seed? " + isSeed);
+            _log.info("Sending announce of " + ih + "\n* Target: " + nInfo + " seed? " + isSeed);
         Map<String, Object> map = new HashMap<String, Object>();
         map.put("q", "announce_peer");
         Map<String, Object> args = new HashMap<String, Object>();
@@ -797,8 +803,8 @@ public class KRPC implements I2PSessionMuxedListener, DHT {
      *  @return success
      */
     private boolean sendPong(NodeInfo nInfo, MsgID msgID) {
-        if (_log.shouldLog(Log.INFO))
-            _log.info("Sending pong to: " + nInfo);
+        if (_log.shouldLog(Log.DEBUG))
+            _log.debug("Sending pong to " + nInfo);
         Map<String, Object> map = new HashMap<String, Object>();
         Map<String, Object> resps = new HashMap<String, Object>();
         map.put("r", resps);
@@ -817,7 +823,7 @@ public class KRPC implements I2PSessionMuxedListener, DHT {
      */
     private boolean sendNodes(NodeInfo nInfo, MsgID msgID, Token token, byte[] ids) {
         if (_log.shouldLog(Log.INFO))
-            _log.info("Sending nodes to: " + nInfo);
+            _log.info("Sending nodes to " + nInfo);
         Map<String, Object> map = new HashMap<String, Object>();
         Map<String, Object> resps = new HashMap<String, Object>();
         map.put("r", resps);
@@ -830,7 +836,7 @@ public class KRPC implements I2PSessionMuxedListener, DHT {
     /** @param token non-null */
     private boolean sendPeers(NodeInfo nInfo, MsgID msgID, Token token, List<byte[]> peers) {
         if (_log.shouldLog(Log.INFO))
-            _log.info("Sending peers to: " + nInfo);
+            _log.info("Sending peers to " + nInfo);
         Map<String, Object> map = new HashMap<String, Object>();
         Map<String, Object> resps = new HashMap<String, Object>();
         map.put("r", resps);
@@ -874,7 +880,7 @@ public class KRPC implements I2PSessionMuxedListener, DHT {
         if (nInfo.equals(_myNodeInfo))
             throw new IllegalArgumentException("don't send to ourselves");
         if (_log.shouldLog(Log.DEBUG))
-            _log.debug("Sending query to: " + nInfo);
+            _log.debug("Sending query to " + nInfo);
         if (nInfo.getDestination() == null) {
             NodeInfo newInfo = _knownNodes.get(nInfo.getNID());
             if (newInfo != null && newInfo.getDestination() != null) {
@@ -882,14 +888,14 @@ public class KRPC implements I2PSessionMuxedListener, DHT {
             } else if (!repliable) {
                 // Don't lookup for announce query, we should already have it
                 if (_log.shouldLog(Log.WARN))
-                    _log.warn("Dropping non-repliable query, no dest for " + nInfo);
+                    _log.warn("Dropping non-repliable query, no destination for " + nInfo);
                 return null;
             } else {
                 // Lookup the dest for the hash
                 // TODO spin off into thread or queue? We really don't want to block here
                 if (!lookupDest(nInfo)) {
                     if (_log.shouldLog(Log.INFO))
-                        _log.info("Dropping repliable query, no dest for " + nInfo);
+                        _log.info("Dropping repliable query, no destination for " + nInfo);
                     timeout(nInfo);
                     return null;
                 }
@@ -924,7 +930,7 @@ public class KRPC implements I2PSessionMuxedListener, DHT {
         if (nInfo.equals(_myNodeInfo))
             throw new IllegalArgumentException("don't send to ourselves");
         if (_log.shouldLog(Log.DEBUG))
-            _log.debug("Sending response to: " + nInfo);
+            _log.debug("Sending response to " + nInfo);
         if (nInfo.getDestination() == null) {
             NodeInfo newInfo = _knownNodes.get(nInfo.getNID());
             if (newInfo != null && newInfo.getDestination() != null) {
@@ -932,7 +938,7 @@ public class KRPC implements I2PSessionMuxedListener, DHT {
             } else {
                 // lookup b32?
                 if (_log.shouldLog(Log.WARN))
-                    _log.warn("Dropping response, no dest for " + nInfo);
+                    _log.warn("Dropping response, no destination for " + nInfo);
                 return false;
             }
         }
@@ -954,7 +960,7 @@ public class KRPC implements I2PSessionMuxedListener, DHT {
         if (nInfo.equals(_myNodeInfo))
             throw new IllegalArgumentException("don't send to ourselves");
         if (_log.shouldLog(Log.INFO))
-            _log.info("Sending error to: " + nInfo);
+            _log.info("Sending error to " + nInfo);
         if (nInfo.getDestination() == null) {
             NodeInfo newInfo = _knownNodes.get(nInfo.getNID());
             if (newInfo != null && newInfo.getDestination() != null) {
@@ -962,7 +968,7 @@ public class KRPC implements I2PSessionMuxedListener, DHT {
             } else {
                 // lookup b32?
                 if (_log.shouldLog(Log.WARN))
-                    _log.warn("Dropping sendError, no dest for " + nInfo);
+                    _log.warn("Dropping sendError, no destination for " + nInfo);
                 return false;
             }
         }
@@ -978,22 +984,22 @@ public class KRPC implements I2PSessionMuxedListener, DHT {
      */
     private boolean lookupDest(NodeInfo nInfo) {
         if (_log.shouldLog(Log.INFO))
-            _log.info("looking up dest for " + nInfo);
+            _log.info("Looking up destination for " + nInfo);
         try {
             // use a short timeout for now
             Destination dest = _session.lookupDest(nInfo.getHash(), DEST_LOOKUP_TIMEOUT);
             if (dest != null) {
                 nInfo.setDestination(dest);
                 if (_log.shouldLog(Log.INFO))
-                    _log.info("lookup success for " + nInfo);
+                    _log.info("Lookup success for " + nInfo);
                 return true;
             }
         } catch (I2PSessionException ise) {
             if (_log.shouldLog(Log.WARN))
-                _log.warn("lookup fail", ise);
+                _log.warn("Lookup failed", ise);
         }
         if (_log.shouldLog(Log.INFO))
-            _log.info("lookup fail for " + nInfo);
+            _log.info("Lookup failed for " + nInfo);
         return false;
     }
 
@@ -1015,7 +1021,7 @@ public class KRPC implements I2PSessionMuxedListener, DHT {
         if (_log.shouldLog(Log.DEBUG)) {
             ByteArrayInputStream bais = new ByteArrayInputStream(payload);
             try {
-                _log.debug("Sending to: " + dest.calculateHash() + ' ' + BDecoder.bdecode(bais).toString());
+                _log.debug("Sending to [" + dest.calculateHash() + "]\n* " + BDecoder.bdecode(bais).toString());
             } catch (IOException ioe) {}
         }
 
@@ -1026,7 +1032,7 @@ public class KRPC implements I2PSessionMuxedListener, DHT {
             payload = dgMaker.makeI2PDatagram(payload);
             if (payload == null) {
                 if (_log.shouldLog(Log.WARN))
-                    _log.warn("DGM fail");
+                    _log.warn("DatagramMaker fail");
                 return false;
             }
         }
@@ -1069,7 +1075,7 @@ public class KRPC implements I2PSessionMuxedListener, DHT {
             BEValue bev = dec.bdecodeMap();
             Map<String, BEValue> map = bev.getMap();
             if (_log.shouldLog(Log.DEBUG))
-                _log.debug("Got KRPC message " + bev.toString());
+                _log.debug("Received KRPC message\n* " + bev.toString());
 
             // Lazy here, just let missing Map entries throw NPEs, caught below
 
@@ -1095,11 +1101,11 @@ public class KRPC implements I2PSessionMuxedListener, DHT {
                     }
                 } else {
                     if (_log.shouldLog(Log.WARN))
-                        _log.warn("Rcvd msg with no one waiting: " + bev.toString());
+                        _log.warn("Received message with no one waiting: " + bev.toString());
                 }
             } else {
                 if (_log.shouldLog(Log.WARN))
-                    _log.warn("Unknown msg type rcvd: " + bev.toString());
+                    _log.warn("Received unknown message type: " + bev.toString());
                 throw new InvalidBEncodingException("Unknown type: " + type);
             }
             // success
@@ -1169,7 +1175,7 @@ public class KRPC implements I2PSessionMuxedListener, DHT {
             receiveAnnouncePeer(msgID, ih, token, isSeed);
         } else {
             if (_log.shouldLog(Log.WARN))
-                _log.warn("Unknown query method rcvd: " + method);
+                _log.warn("Received unknown query method: " + method);
         }
     }
 
@@ -1185,7 +1191,7 @@ public class KRPC implements I2PSessionMuxedListener, DHT {
         NodeInfo oldInfo = _knownNodes.get(nID);
         if (oldInfo == null) {
             if (_log.shouldLog(Log.INFO))
-                _log.info("Adding node: " + nInfo);
+                _log.info("Adding node " + nInfo);
             oldInfo = nInfo;
             NodeInfo nInfo2 = _knownNodes.putIfAbsent(nInfo);
             if (nInfo2 != null)
@@ -1198,7 +1204,7 @@ public class KRPC implements I2PSessionMuxedListener, DHT {
         nID.setLastSeen();
         if (_blacklist.remove(nID)) {
             if (_log.shouldLog(Log.INFO))
-                _log.info("UN-blacklisted: " + nID);
+                _log.info("Unblacklisted " + nID);
         }
         return oldInfo;
     }
@@ -1231,7 +1237,7 @@ public class KRPC implements I2PSessionMuxedListener, DHT {
         if (remove) {
             if (_knownNodes.remove(nid) != null) {
                 if (_log.shouldLog(Log.INFO))
-                    _log.info("Removed after consecutive timeouts: " + nInfo);
+                    _log.info("Removed " + nInfo + " after consecutive timeouts");
             }
             // remove and add back with new date, may not be same object
             // used as when-added time
@@ -1240,7 +1246,7 @@ public class KRPC implements I2PSessionMuxedListener, DHT {
             _blacklist.add(nid);
             if (!already) {
                 if (_log.shouldLog(Log.INFO))
-                    _log.info("Blacklisted: " + nid);
+                    _log.info("Blacklisted: [" + nid + "]");
             }
         }
     }
@@ -1249,8 +1255,8 @@ public class KRPC implements I2PSessionMuxedListener, DHT {
      *  Handle and respond to the query
      */
     private void receivePing(MsgID msgID, NodeInfo nInfo) throws InvalidBEncodingException {
-        if (_log.shouldLog(Log.INFO))
-            _log.info("Rcvd ping from: " + nInfo);
+        if (_log.shouldLog(Log.DEBUG))
+            _log.debug("Received ping from " + nInfo);
         sendPong(nInfo, msgID);
     }
 
@@ -1260,7 +1266,7 @@ public class KRPC implements I2PSessionMuxedListener, DHT {
      */
     private void receiveFindNode(MsgID msgID, NodeInfo nInfo, NID tID) throws InvalidBEncodingException {
         if (_log.shouldLog(Log.INFO))
-             _log.info("Rcvd find_node from: " + nInfo + " for: " + tID);
+             _log.info("Received find_node from " + nInfo + "\n* Query: [" + tID + "]");
         NodeInfo peer = _knownNodes.get(tID);
         if (peer != null) {
             // success, one answer
@@ -1284,12 +1290,12 @@ public class KRPC implements I2PSessionMuxedListener, DHT {
     private void receiveGetPeers(MsgID msgID, NodeInfo nInfo,
                                  InfoHash ih, boolean noSeeds) throws InvalidBEncodingException {
         if (_log.shouldLog(Log.INFO))
-             _log.info("Rcvd get_peers from: " + nInfo + " for: " + ih + " noseeds? " + noSeeds);
+             _log.info("Received get_peers request from " + nInfo + "\n* Torrent: " + ih + " noseeds? " + noSeeds);
         // generate and save random token
         Token token = new Token(_context);
         _outgoingTokens.put(token, nInfo);
         if (_log.shouldLog(Log.INFO))
-             _log.info("Stored new OB token: " + token + " for: " + nInfo);
+             _log.info("Stored new Outbound token " + token + "\n* Target: " + nInfo);
 
         List<Hash> peers = _tracker.getPeers(ih, MAX_WANT, noSeeds);
         // Check this before removing him, so we don't needlessly send nodes
@@ -1332,13 +1338,13 @@ public class KRPC implements I2PSessionMuxedListener, DHT {
         NodeInfo nInfo = _outgoingTokens.get(token);
         if (nInfo == null) {
             if (_log.shouldLog(Log.WARN))
-                _log.warn("Unknown token in announce_peer: " + token);
+                _log.warn("Unknown token " + token + " in announce_peer");
             //if (_log.shouldLog(Log.INFO))
             //    _log.info("Current known tokens: " + _outgoingTokens.keySet());
             return;
         }
         if (_log.shouldLog(Log.INFO))
-             _log.info("Rcvd announce from: " + nInfo + " for: " + ih + " seed? " + isSeed);
+             _log.info("Received announce from " + nInfo + "\n* Torrent: " + ih + " seed? " + isSeed);
 
         _tracker.announce(ih, nInfo.getHash(), isSeed);
         // the reply for an announce is the same as the reply for a ping
@@ -1367,7 +1373,7 @@ public class KRPC implements I2PSessionMuxedListener, DHT {
                 Token token = new Token(_context, tok);
                 _incomingTokens.put(nInfo.getNID(), token);
                 if (_log.shouldLog(Log.DEBUG))
-                    _log.debug("Got token: " + token + ", must be a response to get_peers");
+                    _log.debug("Received token " + token + ", must be a response to get_peers");
             } else {
                 if (_log.shouldLog(Log.DEBUG))
                     _log.debug("No token and saved infohash, must be a response to find_node");
@@ -1406,14 +1412,14 @@ public class KRPC implements I2PSessionMuxedListener, DHT {
             NodeInfo nInf = new NodeInfo(ids, off);
             if (_blacklist.contains(nInf.getNID())) {
                 if (_log.shouldLog(Log.INFO))
-                    _log.info("Ignoring blacklisted " + nInf.getNID() + " from: " + nInfo);
+                    _log.info("Ignoring blacklisted node [" + nInf.getNID() + "]\n* Received from: " + nInfo);
                 continue;
             }
             nInf = heardAbout(nInf);
             rv.add(nInf);
         }
-        if (_log.shouldLog(Log.INFO))
-             _log.info("Rcvd nodes from: " + nInfo + ": " + DataHelper.toString(rv));
+        if (_log.shouldLog(Log.DEBUG))
+             _log.debug("Received nodes from " + nInfo + ": " + DataHelper.toString(rv));
         return rv;
     }
 
@@ -1423,14 +1429,14 @@ public class KRPC implements I2PSessionMuxedListener, DHT {
      */
     private List<Hash> receivePeers(NodeInfo nInfo, List<BEValue> peers) throws InvalidBEncodingException {
         if (_log.shouldLog(Log.INFO))
-             _log.info("Rcvd peers from: " + nInfo);
+             _log.info("Received peers from " + nInfo);
         int max = Math.min(MAX_WANT * 2, peers.size());
         List<Hash> rv = new ArrayList<Hash>(max);
         for (BEValue bev : peers) {
             byte[] b = bev.getBytes();
             if (b.length != Hash.HASH_LENGTH) {
                 if (_log.shouldWarn())
-                    _log.info("Bad peers entry from: " + nInfo);
+                    _log.info("Bad peers entry from " + nInfo);
                 continue;
             }
             //Hash h = new Hash(b);
@@ -1440,7 +1446,7 @@ public class KRPC implements I2PSessionMuxedListener, DHT {
                 break;
         }
         if (_log.shouldLog(Log.INFO))
-             _log.info("Rcvd " + peers.size() + " peers from: " + nInfo + ": " + DataHelper.toString(rv));
+             _log.info("Received " + peers.size() + " peers from " + nInfo + ": " + DataHelper.toString(rv));
         return rv;
     }
 
@@ -1456,8 +1462,8 @@ public class KRPC implements I2PSessionMuxedListener, DHT {
                 newInfo.setDestination(dest);
             heardFrom(newInfo);
         }
-        if (_log.shouldLog(Log.INFO))
-             _log.info("Rcvd pong from: " + nInfo);
+        if (_log.shouldLog(Log.DEBUG))
+             _log.debug("Received pong from " + nInfo);
     }
 
     // Errors.....
@@ -1470,7 +1476,7 @@ public class KRPC implements I2PSessionMuxedListener, DHT {
         int errorCode = error.get(0).getInt();
         String errorString = error.get(1).getString();
         if (_log.shouldLog(Log.WARN))
-            _log.warn("Rcvd error from: " + waiter +
+            _log.warn("Received error from " + waiter +
                       " num: " + errorCode +
                       " msg: " + errorString);
         // this calls heardFrom()
@@ -1563,7 +1569,7 @@ public class KRPC implements I2PSessionMuxedListener, DHT {
                 onTimeout.run();
             timeout(sentTo);
             if (_log.shouldLog(Log.INFO))
-                _log.warn("timeout waiting for reply from " + sentTo);
+                _log.warn("Timeout waiting for reply from " + sentTo);
             synchronized(this) {
                 this.notifyAll();
             }
@@ -1618,17 +1624,17 @@ public class KRPC implements I2PSessionMuxedListener, DHT {
                 receiveMessage(null, fromPort, payload);
             } else {
                 if (_log.shouldLog(Log.WARN))
-                    _log.warn("msg on bad port");
+                    _log.warn("Received message on bad port");
             }
         } catch (DataFormatException e) {
             if (_log.shouldLog(Log.WARN))
-                _log.warn("bad msg");
+                _log.warn("Bad message");
         } catch (I2PInvalidDatagramException e) {
             if (_log.shouldLog(Log.WARN))
-                _log.warn("bad msg");
+                _log.warn("Bad message");
         } catch (I2PSessionException e) {
             if (_log.shouldLog(Log.WARN))
-                _log.warn("bad msg");
+                _log.warn("Bad message");
         }
     }
 
@@ -1644,7 +1650,7 @@ public class KRPC implements I2PSessionMuxedListener, DHT {
 
     public void errorOccurred(I2PSession session, String message, Throwable error) {
         if (_log.shouldLog(Log.WARN))
-            _log.warn("KRPC got error msg: ", error);
+            _log.warn("KRPC got error message: ", error);
     }
 
     /**

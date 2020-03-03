@@ -39,7 +39,7 @@ public class FIFOBandwidthRefiller implements Runnable {
     /** how frequently do we check the config for updates? */
     private long _configCheckPeriodMs = 60*1000;
     private volatile boolean _isRunning;
- 
+
     public static final String PROP_INBOUND_BANDWIDTH = "i2np.bandwidth.inboundKBytesPerSecond";
     public static final String PROP_OUTBOUND_BANDWIDTH = "i2np.bandwidth.outboundKBytesPerSecond";
     public static final String PROP_INBOUND_BURST_BANDWIDTH = "i2np.bandwidth.inboundBurstKBytesPerSecond";
@@ -49,19 +49,21 @@ public class FIFOBandwidthRefiller implements Runnable {
     //public static final String PROP_REPLENISH_FREQUENCY = "i2np.bandwidth.replenishFrequencyMs";
 
     // no longer allow unlimited bandwidth - the user must specify a value, else use defaults below (KBps)
-    public static final int DEFAULT_INBOUND_BANDWIDTH = 300;
+//    public static final int DEFAULT_INBOUND_BANDWIDTH = 300;
+    public static final int DEFAULT_INBOUND_BANDWIDTH = 1000;
     /**
-     *  Caution, do not make DEFAULT_OUTBOUND_BANDWIDTH * DEFAULT_SHARE_PCT &gt; 32
+     *  Caution, do not make DEFAULT_OUTBOUND_BANDWIDTH * DEFAULT_SHARE_PCT > 32
      *  without thinking about the implications (default connection limits, for example)
      *  of moving the default bandwidth class from L to M, or maybe
      *  adjusting bandwidth class boundaries.
      */
     public static final int DEFAULT_OUTBOUND_BANDWIDTH = 60;
-    public static final int DEFAULT_INBOUND_BURST_BANDWIDTH = 300;
+//    public static final int DEFAULT_INBOUND_BURST_BANDWIDTH = 300;
+    public static final int DEFAULT_INBOUND_BURST_BANDWIDTH = 1000;
     public static final int DEFAULT_OUTBOUND_BURST_BANDWIDTH = 60;
 
     public static final int DEFAULT_BURST_SECONDS = 60;
-    
+
     /** For now, until there is some tuning and safe throttling, we set the floor at this inbound (KBps) */
     public static final int MIN_INBOUND_BANDWIDTH = 5;
     /** For now, until there is some tuning and safe throttling, we set the floor at this outbound (KBps) */
@@ -76,13 +78,13 @@ public class FIFOBandwidthRefiller implements Runnable {
      *  See util/DecayingBloomFilter and tunnel/BloomFilterIVValidator.
      */
     public static final int MAX_OUTBOUND_BANDWIDTH = 16384;
-    
-    /** 
-     * how often we replenish the queues.  
+
+    /**
+     * how often we replenish the queues.
      * the bandwidth limiter will get an update this often (ms)
      */
     private static final long REPLENISH_FREQUENCY = 40;
-    
+
     FIFOBandwidthRefiller(I2PAppContext context, FIFOBandwidthLimiter limiter) {
         _limiter = limiter;
         _context = context;
@@ -107,30 +109,30 @@ public class FIFOBandwidthRefiller implements Runnable {
                 now = _limiter.now();
                 _lastCheckConfigTime = now;
             }
-            
+
             updateParticipating(now);
             boolean updated = updateQueues(buffer, now);
             if (updated) {
                 _lastRefillTime = now;
             }
-            
+
             try { Thread.sleep(REPLENISH_FREQUENCY); } catch (InterruptedException ie) {}
         }
     }
-    
+
     synchronized void reinitialize() {
         _lastRefillTime = _limiter.now();
         checkConfig();
         _lastCheckConfigTime = _lastRefillTime;
     }
-    
+
     private boolean updateQueues(List<FIFOBandwidthLimiter.Request> buffer, long now) {
         long numMs = (now - _lastRefillTime);
         if (_log.shouldLog(Log.DEBUG))
-            _log.debug("Updating bandwidth after " + numMs + " (status: " + _limiter.getStatus().toString()
-                       + " rate in=" 
-                       + _inboundKBytesPerSecond + ", out=" 
-                       + _outboundKBytesPerSecond  +")");
+            _log.debug("Updating bandwidth after " + numMs + "ms"
+                       + "\n* Status: " + _limiter.getStatus().toString()
+                       + " Rate in: " + _inboundKBytesPerSecond + "KB/s;"
+                       + " Rate out: " + _outboundKBytesPerSecond + "KB/s");
         // clock skew
         if (numMs >= REPLENISH_FREQUENCY * 50 || numMs <= 0)
             numMs = REPLENISH_FREQUENCY;
@@ -155,11 +157,11 @@ public class FIFOBandwidthRefiller implements Runnable {
                 _limiter.setOutboundUnlimited(false);
             }
          ****/
-            
+
             long maxBurstIn = ((_inboundBurstKBytesPerSecond-_inboundKBytesPerSecond)*1024*numMs)/1000;
             long maxBurstOut = ((_outboundBurstKBytesPerSecond-_outboundKBytesPerSecond)*1024*numMs)/1000;
             _limiter.refillBandwidthQueues(buffer, inboundToAdd, outboundToAdd, maxBurstIn, maxBurstOut);
-            
+
             //if (_log.shouldLog(Log.DEBUG)) {
             //    _log.debug("Adding " + inboundToAdd + " bytes to inboundAvailable");
             //    _log.debug("Adding " + outboundToAdd + " bytes to outboundAvailable");
@@ -167,11 +169,11 @@ public class FIFOBandwidthRefiller implements Runnable {
             return true;
         } else {
             if (_log.shouldLog(Log.DEBUG))
-                _log.debug("Refresh delay too fast (" + numMs + ")");
+                _log.debug("Refresh delay too fast (" + numMs + "ms)");
             return false;
         }
     }
-    
+
     private void checkConfig() {
         updateInboundRate();
         updateOutboundRate();
@@ -179,24 +181,24 @@ public class FIFOBandwidthRefiller implements Runnable {
         updateOutboundBurstRate();
         updateInboundPeak();
         updateOutboundPeak();
-        
+
         // We are always limited for now
         //_limiter.setInboundUnlimited(_inboundKBytesPerSecond <= 0);
         //_limiter.setOutboundUnlimited(_outboundKBytesPerSecond <= 0);
     }
-    
+
     private void updateInboundRate() {
         int in = _context.getProperty(PROP_INBOUND_BANDWIDTH, DEFAULT_INBOUND_BANDWIDTH);
         if (in != _inboundKBytesPerSecond) {
             // bandwidth was specified *and* changed
-                if ( (in <= 0) || (in > MIN_INBOUND_BANDWIDTH) ) 
+                if ( (in <= 0) || (in > MIN_INBOUND_BANDWIDTH) )
                     _inboundKBytesPerSecond = in;
                 else
                     _inboundKBytesPerSecond = MIN_INBOUND_BANDWIDTH;
                 if (_log.shouldLog(Log.DEBUG))
-                    _log.debug("Updating inbound rate to " + _inboundKBytesPerSecond);
+                    _log.debug("Updating Inbound rate to " + _inboundKBytesPerSecond + " KB/s");
         }
-        
+
         if (_inboundKBytesPerSecond <= 0)
             _inboundKBytesPerSecond = DEFAULT_INBOUND_BANDWIDTH;
     }
@@ -212,32 +214,32 @@ public class FIFOBandwidthRefiller implements Runnable {
                 else
                     _outboundKBytesPerSecond = MIN_OUTBOUND_BANDWIDTH;
                 if (_log.shouldLog(Log.DEBUG))
-                    _log.debug("Updating outbound rate to " + _outboundKBytesPerSecond);
+                    _log.debug("Updating Outbound rate to " + _outboundKBytesPerSecond + " KB/s");
         }
-        
+
         if (_outboundKBytesPerSecond <= 0)
             _outboundKBytesPerSecond = DEFAULT_OUTBOUND_BANDWIDTH;
     }
-    
+
     private void updateInboundBurstRate() {
         int in = _context.getProperty(PROP_INBOUND_BURST_BANDWIDTH, DEFAULT_INBOUND_BURST_BANDWIDTH);
         if (in != _inboundBurstKBytesPerSecond) {
             // bandwidth was specified *and* changed
-                if ( (in <= 0) || (in >= _inboundKBytesPerSecond) ) 
+                if ( (in <= 0) || (in >= _inboundKBytesPerSecond) )
                     _inboundBurstKBytesPerSecond = in;
                 else
                     _inboundBurstKBytesPerSecond = _inboundKBytesPerSecond;
                 if (_log.shouldLog(Log.DEBUG))
-                    _log.debug("Updating inbound burst rate to " + _inboundBurstKBytesPerSecond);
+                    _log.debug("Updating Inbound burst rate to " + _inboundBurstKBytesPerSecond + " KB/s");
         }
-        
+
         if (_inboundBurstKBytesPerSecond <= 0)
             _inboundBurstKBytesPerSecond = DEFAULT_INBOUND_BURST_BANDWIDTH;
         if (_inboundBurstKBytesPerSecond < _inboundKBytesPerSecond)
             _inboundBurstKBytesPerSecond = _inboundKBytesPerSecond;
         _limiter.setInboundBurstKBps(_inboundBurstKBytesPerSecond);
     }
-    
+
     private void updateOutboundBurstRate() {
         int out = _context.getProperty(PROP_OUTBOUND_BURST_BANDWIDTH, DEFAULT_OUTBOUND_BURST_BANDWIDTH);
         if (out != _outboundBurstKBytesPerSecond) {
@@ -247,16 +249,16 @@ public class FIFOBandwidthRefiller implements Runnable {
                 else
                     _outboundBurstKBytesPerSecond = _outboundKBytesPerSecond;
                 if (_log.shouldLog(Log.DEBUG))
-                    _log.debug("Updating outbound burst rate to " + _outboundBurstKBytesPerSecond);
+                    _log.debug("Updating Outbound burst rate to " + _outboundBurstKBytesPerSecond + " KB/s");
         }
-        
+
         if (_outboundBurstKBytesPerSecond <= 0)
             _outboundBurstKBytesPerSecond = DEFAULT_OUTBOUND_BURST_BANDWIDTH;
         if (_outboundBurstKBytesPerSecond < _outboundKBytesPerSecond)
             _outboundBurstKBytesPerSecond = _outboundKBytesPerSecond;
         _limiter.setOutboundBurstKBps(_outboundBurstKBytesPerSecond);
     }
-    
+
     private void updateInboundPeak() {
         int in = _context.getProperty(PROP_INBOUND_BANDWIDTH_PEAK,
                                       DEFAULT_BURST_SECONDS * _inboundBurstKBytesPerSecond);
@@ -265,10 +267,10 @@ public class FIFOBandwidthRefiller implements Runnable {
                 if (in >= MIN_INBOUND_BANDWIDTH_PEAK) {
                     if (in < _inboundBurstKBytesPerSecond)
                         _limiter.setInboundBurstBytes(_inboundBurstKBytesPerSecond * 1024);
-                    else 
+                    else
                         _limiter.setInboundBurstBytes(in * 1024);
                 } else {
-                    if (MIN_INBOUND_BANDWIDTH_PEAK < _inboundBurstKBytesPerSecond) 
+                    if (MIN_INBOUND_BANDWIDTH_PEAK < _inboundBurstKBytesPerSecond)
                         _limiter.setInboundBurstBytes(_inboundBurstKBytesPerSecond * 1024);
                     else
                         _limiter.setInboundBurstBytes(MIN_INBOUND_BANDWIDTH_PEAK * 1024);
@@ -283,21 +285,21 @@ public class FIFOBandwidthRefiller implements Runnable {
                 if (in >= MIN_OUTBOUND_BANDWIDTH_PEAK) {
                     if (in < _outboundBurstKBytesPerSecond)
                         _limiter.setOutboundBurstBytes(_outboundBurstKBytesPerSecond * 1024);
-                    else 
+                    else
                         _limiter.setOutboundBurstBytes(in * 1024);
                 } else {
-                    if (MIN_OUTBOUND_BANDWIDTH_PEAK < _outboundBurstKBytesPerSecond) 
+                    if (MIN_OUTBOUND_BANDWIDTH_PEAK < _outboundBurstKBytesPerSecond)
                         _limiter.setOutboundBurstBytes(_outboundBurstKBytesPerSecond * 1024);
                     else
                         _limiter.setOutboundBurstBytes(MIN_OUTBOUND_BANDWIDTH_PEAK * 1024);
                 }
         }
     }
-    
-    int getOutboundKBytesPerSecond() { return _outboundKBytesPerSecond; } 
-    int getInboundKBytesPerSecond() { return _inboundKBytesPerSecond; } 
-    int getOutboundBurstKBytesPerSecond() { return _outboundBurstKBytesPerSecond; } 
-    int getInboundBurstKBytesPerSecond() { return _inboundBurstKBytesPerSecond; } 
+
+    int getOutboundKBytesPerSecond() { return _outboundKBytesPerSecond; }
+    int getInboundKBytesPerSecond() { return _inboundKBytesPerSecond; }
+    int getOutboundBurstKBytesPerSecond() { return _outboundBurstKBytesPerSecond; }
+    int getInboundBurstKBytesPerSecond() { return _inboundBurstKBytesPerSecond; }
 
     /**
      *  Participating counter stuff below here
@@ -394,10 +396,10 @@ public class FIFOBandwidthRefiller implements Runnable {
         }
         if (_lastIndex == 0 && _lastTotalTime > 0) {
             long bw = 1000l * _lastTotal / _lastTotalTime;
-            _context.statManager().addRateData("tunnel.participatingBandwidthOut", bw);
+            _context.statManager().addRateData("tunnel.participating OutBps", bw);
             if (_lastTotal > 0 && _log.shouldLog(Log.INFO))
-                _log.info(DataHelper.formatSize(_lastTotal) + " bytes out part. tunnels in last " + _lastTotalTime + " ms: " +
-                          DataHelper.formatSize(bw) + " Bps");
+                _log.info(DataHelper.formatSize(_lastTotal) + "B sent on Participating tunnels in last " + _lastTotalTime + " ms @ " +
+                          DataHelper.formatSize(bw) + "Bps");
         }
     }
 }

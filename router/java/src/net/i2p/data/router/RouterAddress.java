@@ -2,9 +2,9 @@ package net.i2p.data.router;
 
 /*
  * free (adj.): unencumbered; not under the control of others
- * Written by jrandom in 2003 and released into the public domain 
- * with no warranty of any kind, either expressed or implied.  
- * It probably won't make your computer catch on fire, or eat 
+ * Written by jrandom in 2003 and released into the public domain
+ * with no warranty of any kind, either expressed or implied.
+ * It probably won't make your computer catch on fire, or eat
  * your children, but it might.  Use at your own risk.
  *
  */
@@ -172,7 +172,7 @@ public class RouterAddress extends DataStructureImpl {
     }
 
     /**
-     * Retrieve the transport specific options necessary for communication 
+     * Retrieve the transport specific options necessary for communication
      *
      * @deprecated use getOptionsMap()
      * @return sorted, non-null, NOT a copy, do not modify
@@ -183,7 +183,7 @@ public class RouterAddress extends DataStructureImpl {
     }
 
     /**
-     * Retrieve the transport specific options necessary for communication 
+     * Retrieve the transport specific options necessary for communication
      *
      * @return an unmodifiable view, non-null, sorted
      * @since 0.8.13
@@ -212,7 +212,7 @@ public class RouterAddress extends DataStructureImpl {
             throw new IllegalStateException();
         _options.putAll(options);
     }
-    
+
     /**
      *  Caching version of InetAddress.getByName(getOption("host")).getAddress(), which is slow.
      *  Caches numeric host names, and negative caches also.
@@ -237,7 +237,7 @@ public class RouterAddress extends DataStructureImpl {
         }
         return _ip;
     }
-    
+
     /**
      *  Convenience, same as getOption("host").
      *  Does no parsing, so faster than getIP().
@@ -248,7 +248,7 @@ public class RouterAddress extends DataStructureImpl {
     public String getHost() {
         return _options.getProperty(PROP_HOST);
     }
-    
+
     /**
      *  Caching version of Integer.parseInt(getOption("port"))
      *  Caches valid ports 1-65535 only.
@@ -292,7 +292,7 @@ public class RouterAddress extends DataStructureImpl {
             _transportStyle = "NTCP2";
         DataHelper.readProperties(in, _options);
     }
-    
+
     /**
      *  As of 0.9.3, expiration MUST be all zeros as it is ignored on
      *  readin and the signature will fail.
@@ -305,7 +305,7 @@ public class RouterAddress extends DataStructureImpl {
         DataHelper.writeString(out, _transportStyle);
         DataHelper.writeProperties(out, _options);
     }
-    
+
     /**
      * Transport, host, and port only.
      * Never look at cost or other properties.
@@ -322,7 +322,7 @@ public class RouterAddress extends DataStructureImpl {
                //DataHelper.eq(_options, addr._options) &&
                //DataHelper.eq(_expiration, addr._expiration);
     }
-    
+
     /**
      *  Everything, including Transport, host, port, options, and cost
      *  @param addr may be null
@@ -334,7 +334,7 @@ public class RouterAddress extends DataStructureImpl {
                _cost == addr._cost &&
                _options.equals(addr._options);
     }
-    
+
     /**
      * Just use a few items for speed (expiration is always null).
      * Never look at cost or other properties.
@@ -345,7 +345,7 @@ public class RouterAddress extends DataStructureImpl {
                DataHelper.hashCode(getIP()) ^
                getPort();
     }
-    
+
     /**
      *  This is used on peers.jsp so sort options so it looks better.
      *  We don't just use OrderedProperties for _options because DataHelper.writeProperties()
@@ -354,18 +354,17 @@ public class RouterAddress extends DataStructureImpl {
     @Override
     public String toString() {
         StringBuilder buf = new StringBuilder(128);
-        buf.append("[RouterAddress: ");
-        buf.append("\n\tType: ").append(_transportStyle);
-        buf.append("\n\tCost: ").append(_cost);
-        if (_expiration > 0)
-            buf.append("\n\tExpiration: ").append(new Date(_expiration));
-        buf.append("\n\tOptions (").append(_options.size()).append("):");
+        buf.append(_transportStyle).append(":");
         for (Map.Entry<Object, Object> e : _options.entrySet()) {
             String key = (String) e.getKey();
             String val = (String) e.getValue();
-            buf.append("\n\t\t[").append(key).append("] = [").append(val).append("]");
+            String fkey = ("* " + key + ":");
+            buf.append("\n\t").append(fkey);
+            buf.append(" ").append(val);
         }
-        buf.append("]");
+        buf.append("\n\t* cost: ").append(_cost);
+        if (_expiration > 0)
+            buf.append("\n\t* expires: ").append(new Date(_expiration));
         return buf.toString();
     }
 }

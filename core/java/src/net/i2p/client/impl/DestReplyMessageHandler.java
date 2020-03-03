@@ -23,7 +23,7 @@ class DestReplyMessageHandler extends HandlerImpl {
     
     public void handleMessage(I2CPMessage message, I2PSessionImpl session) {
         if (_log.shouldLog(Log.DEBUG))
-            _log.debug("Handle message " + message);
+            _log.debug("Handle " + message);
         DestReplyMessage msg = (DestReplyMessage) message;
         Destination d = msg.getDestination();
         if (d != null) {

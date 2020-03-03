@@ -259,7 +259,7 @@ public class DNSOverHTTPS implements EepGet.StatusListener {
         if (eepget.fetch(TIMEOUT, TIMEOUT, TIMEOUT) &&
             eepget.getStatusCode() == 200 && baos.size() > 0) {
             long end = System.currentTimeMillis();
-            log("Got response in " + (end - fetchStart) + "ms");
+            log("Received response in " + (end - fetchStart) + "ms");
             byte[] b = baos.toByteArray();
             try {
                 String s = new String(b, "ISO-8859-1");
@@ -329,7 +329,7 @@ public class DNSOverHTTPS implements EepGet.StatusListener {
                         synchronized(cache) {
                             cache.put(host, new Result(data, expires));
                         }
-                        log("Got answer: " + name + ' ' + typ + ' ' + ttl + ' ' + data + " in " + (end - fetchStart) + "ms");
+                        log("Received answer: " + name + ' ' + typ + ' ' + ttl + ' ' + data + " in " + (end - fetchStart) + "ms");
                         return data;
                     } catch (Exception e) {
                         log("Fail parsing", e);
@@ -451,7 +451,7 @@ public class DNSOverHTTPS implements EepGet.StatusListener {
         else
             System.err.println(type + " lookup failed for " + url);
     }
-    
+
     private static void usage() {
         System.err.println("DNSOverHTTPS [-fs46] hostname\n" +
                            "             [-f] (IPv4 preferred) (default)\n" +

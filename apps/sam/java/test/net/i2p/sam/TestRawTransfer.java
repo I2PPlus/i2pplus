@@ -12,11 +12,11 @@ import net.i2p.util.Log;
 
 public class TestRawTransfer {
     private static Log _log = new Log(TestCreateSessionDatagram.class);
-    
+
     private static void runTest(String samHost, int samPort, String conOptions) {
         testTransfer(samHost, samPort, conOptions);
     }
-    
+
     private static void testTransfer(String host, int port, String conOptions) {
         String destName = "TRANSIENT";
         _log.info("\n\nTesting creating a new destination (should come back with 'SESSION STATUS RESULT=OK DESTINATION=someName)\n\n\n");
@@ -26,7 +26,7 @@ public class TestRawTransfer {
             out.write(DataHelper.getASCII("HELLO VERSION MIN=1.0 MAX=1.0\n"));
             BufferedReader reader = new BufferedReader(new InputStreamReader(s.getInputStream()));
             String line = reader.readLine();
-            _log.debug("line read for valid version: " + line);
+            _log.debug("Line read for valid version: " + line);
             String req = "SESSION CREATE STYLE=RAW DESTINATION=" + destName + " " + conOptions + "\n";
             out.write(DataHelper.getASCII(req));
             line = reader.readLine();
@@ -46,7 +46,7 @@ public class TestRawTransfer {
             } else {
                 _log.info("Alice is located at " + value);
             }
-            
+
             String send = "RAW SEND DESTINATION=" + value + " SIZE=3\nYo!";
             out.write(DataHelper.getASCII(send));
             line = reader.readLine();
@@ -60,8 +60,8 @@ public class TestRawTransfer {
             if ( (size == null) || (!size.equals("3")) ) {
                 _log.error("Reply of the datagram is incorrect: [" + line + "]");
                 return;
-            } 
-            
+            }
+
             char buf[] = new char[3];
             int read = reader.read(buf);
             if (read != 3) {
@@ -73,17 +73,17 @@ public class TestRawTransfer {
             } else {
                 _log.error("Payload is incorrect!  [" + new String(buf) + "]");
             }
-            
+
             try { Thread.sleep(5*1000); } catch (InterruptedException ie) {}
             s.close();
         } catch (Exception e) {
             _log.error("Error testing for valid version", e);
         }
     }
-    
+
     public static void main(String args[]) {
         // "i2cp.tcp.host=www.i2p.net i2cp.tcp.port=7765";
-        // "i2cp.tcp.host=localhost i2cp.tcp.port=7654 tunnels.inboundDepth=0"; 
+        // "i2cp.tcp.host=localhost i2cp.tcp.port=7654 tunnels.inboundDepth=0";
         String conOptions = "i2cp.tcp.host=dev.i2p.net i2cp.tcp.port=7002 tunnels.inboundDepth=0";
         if (args.length > 0) {
             conOptions = "";

@@ -1,9 +1,9 @@
 package net.i2p.router.networkdb.kademlia;
 /*
  * free (adj.): unencumbered; not under the control of others
- * Written by jrandom in 2003 and released into the public domain 
- * with no warranty of any kind, either expressed or implied.  
- * It probably won't make your computer catch on fire, or eat 
+ * Written by jrandom in 2003 and released into the public domain
+ * with no warranty of any kind, either expressed or implied.
+ * It probably won't make your computer catch on fire, or eat
  * your children, but it might.  Use at your own risk.
  *
  */
@@ -58,13 +58,13 @@ class HandleFloodfillDatabaseStoreMessageJob extends JobImpl {
         _fromHash = fromHash;
         _facade = facade;
     }
-    
+
     public void runJob() {
         //if (_log.shouldLog(Log.DEBUG))
         //    _log.debug("Handling database store message");
 
         long recvBegin = System.currentTimeMillis();
-        
+
         String invalidMessage = null;
         // set if invalid store but not his fault
         boolean dontBlamePeer = false;
@@ -76,23 +76,23 @@ class HandleFloodfillDatabaseStoreMessageJob extends JobImpl {
         if (DatabaseEntry.isLeaseSet(type)) {
             getContext().statManager().addRateData("netDb.storeLeaseSetHandled", 1);
             if (_log.shouldLog(Log.INFO))
-                _log.info("Handling dbStore of leaseset " + _message);
-                //_log.info("Handling dbStore of leasset " + key + " with expiration of " 
+                _log.info("Handling DbStore of LeaseSet [" + _message.toBase64().substring(0,6) + "]");
+                //_log.info("Handling DbStore of leasset " + key + " with expiration of "
                 //          + new Date(_message.getLeaseSet().getEarliestLeaseDate()));
-   
+
             try {
                 // Never store a leaseSet for a local dest received from somebody else.
                 // This generally happens from a FloodfillVerifyStoreJob.
                 // If it is valid, it shouldn't be newer than what we have - unless
-                // somebody has our keys... 
+                // somebody has our keys...
                 // This could happen with multihoming - where it's really important to prevent
                 // storing the other guy's leaseset, it will confuse us badly.
                 if (getContext().clientManager().isLocal(key)) {
                     //getContext().statManager().addRateData("netDb.storeLocalLeaseSetAttempt", 1, 0);
                     // throw rather than return, so that we send the ack below (prevent easy attack)
                     dontBlamePeer = true;
-                    throw new IllegalArgumentException("Peer attempted to store local leaseSet: " +
-                                                       key.toBase64().substring(0, 4));
+                    throw new IllegalArgumentException("Peer attempted to store local LeaseSet: " +
+                                                        key.toBase64().substring(0, 6));
                 }
                 LeaseSet ls = (LeaseSet) entry;
                 //boolean oldrar = ls.getReceivedAsReply();
@@ -101,8 +101,8 @@ class HandleFloodfillDatabaseStoreMessageJob extends JobImpl {
                 // FloodOnlyLookupMatchJob called setReceivedAsReply(),
                 // and we are seeing this only as a duplicate,
                 // so we don't set the receivedAsPublished() flag.
-                // Otherwise, mark it as something we received unsolicited, so we'll answer queries 
-                // for it.  This flag must NOT get set on entries that we 
+                // Otherwise, mark it as something we received unsolicited, so we'll answer queries
+                // for it.  This flag must NOT get set on entries that we
                 // receive in response to our own lookups.
                 // See ../HDLMJ for more info
                 if (!ls.getReceivedAsReply())
@@ -152,13 +152,13 @@ class HandleFloodfillDatabaseStoreMessageJob extends JobImpl {
             RouterInfo ri = (RouterInfo) entry;
             getContext().statManager().addRateData("netDb.storeRouterInfoHandled", 1);
             if (_log.shouldLog(Log.INFO))
-                _log.info("Handling dbStore of router " + key + " with publishDate of " 
+                _log.info("Handling DbStore of Router [" + key.toBase64().substring(0,6) + "]\n* Published: "
                           + new Date(ri.getPublished()));
             try {
                 // Never store our RouterInfo received from somebody else.
                 // This generally happens from a FloodfillVerifyStoreJob.
                 // If it is valid, it shouldn't be newer than what we have - unless
-                // somebody has our keys... 
+                // somebody has our keys...
                 if (getContext().routerHash().equals(key)) {
                     //getContext().statManager().addRateData("netDb.storeLocalRouterInfoAttempt", 1, 0);
                     // This is initiated by PeerTestJob from another peer
@@ -175,7 +175,7 @@ class HandleFloodfillDatabaseStoreMessageJob extends JobImpl {
                         if ((!getContext().banlist().isBanlistedForever(key)) &&
                             getContext().blocklist().isBlocklisted(ri) &&
                             _log.shouldLog(Log.WARN))
-                                _log.warn("Blocklisting new peer " + key + ' ' + ri);
+                                _log.warn("Blocklisting new peer [" + key.toBase64().substring(0,6) + "] " + ri);
                     } else {
                         Collection<RouterAddress> oldAddr = prevNetDb.getAddresses();
                         Collection<RouterAddress> newAddr = ri.getAddresses();
@@ -183,7 +183,7 @@ class HandleFloodfillDatabaseStoreMessageJob extends JobImpl {
                             (!getContext().banlist().isBanlistedForever(key)) &&
                             getContext().blocklist().isBlocklisted(ri) &&
                             _log.shouldLog(Log.WARN))
-                                _log.warn("New address received, Blocklisting old peer " + key + ' ' + ri);
+                                _log.warn("New address received, blocklisting old peer [" + key.toBase64().substring(0,6) + "] " + ri);
                     }
                 }
             } catch (UnsupportedCryptoException uce) {
@@ -194,22 +194,22 @@ class HandleFloodfillDatabaseStoreMessageJob extends JobImpl {
             }
         } else {
             if (_log.shouldLog(Log.ERROR))
-                _log.error("Invalid DatabaseStoreMessage data type - " + type
+                _log.error("Invalid DbStoreMessage data type - " + entry.getType()
                            + ": " + _message);
             // don't ack or flood
             return;
         }
-        
+
         long recvEnd = System.currentTimeMillis();
         getContext().statManager().addRateData("netDb.storeRecvTime", recvEnd-recvBegin);
-        
+
         // ack even if invalid
         // in particular, ack our own RI (from PeerTestJob)
         // TODO any cases where we shouldn't?
         if (_message.getReplyToken() > 0)
             sendAck(key);
         long ackEnd = System.currentTimeMillis();
-        
+
         if (_from != null)
             _fromHash = _from.getHash();
         if (_fromHash != null) {
@@ -219,11 +219,12 @@ class HandleFloodfillDatabaseStoreMessageJob extends JobImpl {
             } else {
                 // Should we record in the profile?
                 if (_log.shouldLog(Log.WARN))
-                    _log.warn("Peer " + _fromHash.toBase64() + " sent bad data: " + invalidMessage);
+                    _log.warn("Peer sent us invalid data \n* " + invalidMessage + _from);
             }
         } else if (invalidMessage != null && !dontBlamePeer) {
             if (_log.shouldLog(Log.WARN))
-                _log.warn("Unknown peer sent bad data: " + invalidMessage);
+//                _log.warn("Unknown peer sent bad data\n* " + invalidMessage);
+                _log.warn("Peer [unknown] sent us invalid data \n* " + invalidMessage);
         }
 
         // flood it
@@ -251,7 +252,7 @@ class HandleFloodfillDatabaseStoreMessageJob extends JobImpl {
             }
         }
     }
-    
+
     private void sendAck(Hash storedKey) {
         DeliveryStatusMessage msg = new DeliveryStatusMessage(getContext());
         msg.setMessageId(_message.getReplyToken());
@@ -274,8 +275,8 @@ class HandleFloodfillDatabaseStoreMessageJob extends JobImpl {
             RouterInfo me = getContext().router().getRouterInfo();
             msg2.setEntry(me);
             if (_log.shouldWarn())
-                _log.warn("Got a store w/ reply token, but we aren't ff: from: " + _from +
-                          " fromHash: " + _fromHash + " msg: " + _message, new Exception());
+                _log.warn("Received a DbStoreMessage with Reply token, but we aren't Floodfill\n* From: [" + _from.toBase64().substring(0,6) +
+                          "]\n* FromHash: " + _fromHash + "\n* Message: " + _message, new Exception());
         }
         Hash toPeer = _message.getReplyGateway();
         boolean toUs = getContext().routerHash().equals(toPeer);
@@ -386,7 +387,7 @@ class HandleFloodfillDatabaseStoreMessageJob extends JobImpl {
             TunnelInfo outTunnel = getContext().tunnelManager().selectOutboundExploratoryTunnel(toPeer);
             if (outTunnel == null) {
                 if (_log.shouldLog(Log.WARN))
-                    _log.warn("No outbound tunnel could be found");
+                    _log.warn("No Outbound tunnel could be found");
                 return;
             }
             getContext().tunnelDispatcher().dispatchOutbound(msg, outTunnel.getSendTunnelId(0),
@@ -395,9 +396,9 @@ class HandleFloodfillDatabaseStoreMessageJob extends JobImpl {
                 getContext().tunnelDispatcher().dispatchOutbound(msg2, outTunnel.getSendTunnelId(0),
                                                                  replyTunnel, toPeer);
     }
- 
-    public String getName() { return "Handle Database Store Message"; }
-    
+
+    public String getName() { return "Handle Floodfill DbStoreMessage"; }
+
     @Override
     public void dropped() {
         getContext().messageHistory().messageProcessingError(_message.getUniqueId(), _message.getClass().getName(), "Dropped due to overload");

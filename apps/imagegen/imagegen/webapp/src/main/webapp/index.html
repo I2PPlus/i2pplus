@@ -1,24 +1,18 @@
-<!DOCTYPE html
-        PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
-        "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
-<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en" lang="en">
+<!DOCTYPE html>
+<html lang="en">
 <head>
-    <title>I2P Imagegen</title>
-    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
-    <link rel="icon" href="/themes/console/classic/images/favicon.ico">
-    <link rel="stylesheet" href="/themes/imagegen/imagegen.css" type="text/css">
+<title>I2P Imagegen</title>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+<link rel="icon" href="/themes/console/classic/images/favicon.ico">
+<link rel="stylesheet" href="/themes/imagegen/imagegen.css" type="text/css">
+<script type="text/javascript" src="/js/iframeResizer/iframeResizer.contentWindow.js"></script>
 </head>
-<body>
+<body id="imagegen">
 
 <h1>I2P Identification Image Generator</h1>
 
 <p>
-This is the webapp that creates identification images. They can be found in the host list and
-<a href="http://127.0.0.1:7657/susidns/details?h=i2p-projekt.i2p">hostname details section</a>
-of the addressbook, and in the <a href="http://127.0.0.1:7657/netdb?f=3">Sybils section</a> of
-the network database. You may generate a QR code for your .i2p named website or hidden
-service in the edit section of the <a href="http://127.0.0.1:7657/i2ptunnelmgr">Tunnel Manager</a>.
-You may also use the tools below to generate arbitrary identicons, QR codes and "random art" images.
+This is the webapp that creates identification images. They can be found in the host list and <a href="http://127.0.0.1:7657/susidns/details?h=i2p-projekt.i2p&amp;book=router">hostname details section</a> of the addressbook, and in the <a href="http://127.0.0.1:7657/netdb?f=3">Sybils section</a> of the network database. You may generate a QR code for your .i2p named website or hidden service in the edit section of the <a href="http://127.0.0.1:7657/i2ptunnelmgr">Tunnel Manager</a>. You may also use the tools below to generate arbitrary identicons, QR codes and "random art" images (for .i2p domains in your addressbook).
 </p>
 
 <h2>Identicons</h2>
@@ -68,7 +62,6 @@ You may also use the tools below to generate arbitrary identicons, QR codes and 
 <h2>QR Codes</h2>
 
 <div id="qr">
-
 <table cellspacing="10" align="center">
 <tr>
 <th colspan="3" class="title">QR Codes for URL: <i>https://geti2p.net</i></th>
@@ -100,10 +93,11 @@ You may also use the tools below to generate arbitrary identicons, QR codes and 
 
 <h2>Random Art</h2>
 
-<p>This technique renders an ASCII-Art representation of a digital fingerprint so the human brain can profit from its built-in pattern recognition ability. <span class="reference"><a href="http://people.eecs.berkeley.edu/~dawnsong/papers/randomart.pdf" target="_blank">"Hash Visualization: a New Technique to improve Real-World Security" by Perrig A. and Song D.</a></span></p>
+<p>
+This technique renders an ASCII-Art representation of a digital fingerprint so the human brain can profit from its built-in pattern recognition ability. <span class="reference"><a href="http://people.eecs.berkeley.edu/~dawnsong/papers/randomart.pdf" target="_blank">"Hash Visualization: a New Technique to improve Real-World Security" by Perrig A. and Song D.</a></span>
+</p>
 
 <div id="randomart">
-
 <table>
 <tr>
 <th colspan="2" class="title">Random Art for the hostname: <i>i2p-projekt.i2p</i></th>
@@ -112,23 +106,22 @@ You may also use the tools below to generate arbitrary identicons, QR codes and 
 <th>HTML Test</th><th>UTF-8 Text Test</th>
 </tr>
 <tr>
-<td><iframe src="ra?c=i2p-projekt.i2p&amp;m=html" width=300 height=300><a href="ra?c=i2p-projekt.i2p&amp;m=html">HTML test</a></iframe></td>
-<td><iframe src="ra?c=i2p-projekt.i2p&amp;m=text" width=300 height=300><a href="ra?c=i2p-projekt.i2p&amp;m=text">UTF-8 text test</a></iframe></td>
+<td><iframe src="ra?c=i2p-projekt.i2p&amp;m=html" width="300" height="300" scrolling="no"><a href="ra?c=i2p-projekt.i2p&amp;m=html">HTML test</a></iframe></td>
+<td><iframe src="ra?c=i2p-projekt.i2p&amp;m=text" width="300" height="300" scrolling="no"><a href="ra?c=i2p-projekt.i2p&amp;m=text">UTF-8 text test</a></iframe></td>
 </tr>
 </table>
 
 <form action="/imagegen/ra" method="get" target="_blank">
 <div class="formtitle">Random Art Generator</div>
-<input type="text" name="c" required x-moz-errormessage="You must provide an I2P hostname for the image generation to work!" placeholder="I2P hostname to encode" title="Enter I2P hostname">
+<input type="text" name="c" required x-moz-errormessage="You must provide an I2P hostname for the image generation to work!" placeholder="I2P hostname to encode" title="Enter I2P hostname (must be in the addressbook)">
 <input hidden="hidden" name="m" value="html">
 <button>Create Random Art</button>
 </form>
-
 </div>
 
 <hr>
 
 <div id="nav"><a href="../">Return to I2P Console</a></div>
-
+<span data-iframe-height></span>
 </body>
 </html>

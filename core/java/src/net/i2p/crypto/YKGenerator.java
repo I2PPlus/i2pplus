@@ -2,9 +2,9 @@ package net.i2p.crypto;
 
 /*
  * free (adj.): unencumbered; not under the control of others
- * Written by jrandom in 2003 and released into the public domain 
- * with no warranty of any kind, either expressed or implied.  
- * It probably won't  make your computer catch on fire, or eat 
+ * Written by jrandom in 2003 and released into the public domain
+ * with no warranty of any kind, either expressed or implied.
+ * It probably won't  make your computer catch on fire, or eat
  * your children, but it might.  Use at your own risk.
  *
  */
@@ -21,11 +21,11 @@ import net.i2p.util.SystemVersion;
  * Precalculate the Y and K for ElGamal encryption operations.
  *
  * This class precalcs a set of values on its own thread, using those transparently
- * when a new instance is created.  By default, the minimum threshold for creating 
+ * when a new instance is created.  By default, the minimum threshold for creating
  * new values for the pool is 20, and the max pool size is 50.  Whenever the pool has
- * less than the minimum, it fills it up again to the max.  There is a delay after 
+ * less than the minimum, it fills it up again to the max.  There is a delay after
  * each precalculation so that the CPU isn't hosed during startup.
- * These three parameters are controlled by java environmental variables and 
+ * These three parameters are controlled by java environmental variables and
  * can be adjusted via:
  *  -Dcrypto.yk.precalc.min=40 -Dcrypto.yk.precalc.max=100 -Dcrypto.yk.precalc.delay=60000
  *
@@ -74,8 +74,8 @@ final class YKGenerator {
         //    _log.debug("ElGamal YK Precalc (minimum: " + MIN_NUM_BUILDERS + " max: " + MAX_NUM_BUILDERS + ", delay: "
         //               + CALC_DELAY + ")");
 
-        ctx.statManager().createRateStat("crypto.YKUsed", "Need a YK from the queue", "Encryption", new long[] { 60*60*1000 });
-        ctx.statManager().createRateStat("crypto.YKEmpty", "YK queue empty", "Encryption", new long[] { 60*60*1000 });
+        ctx.statManager().createRateStat("crypto.YKUsed", "How often a precalculated ephemeral key (YK) is needed from the queue", "Encryption", new long[] { 60*60*1000 });
+        ctx.statManager().createRateStat("crypto.YKEmpty", "How often the precalculated ephemeral key (YK) queue is empty", "Encryption", new long[] { 60*60*1000 });
     }
 
     /**

@@ -32,11 +32,11 @@ import net.i2p.crypto.SHA256Generator;
  */
 public abstract class SimpleDataStructure extends DataStructureImpl {
     protected byte[] _data;
-    
+
     /** A new instance with the data set to null. Call readBytes(), setData(), or fromByteArray() after this to set the data */
     public SimpleDataStructure() {
     }
-    
+
     /** @throws IllegalArgumentException if data is not the legal number of bytes (but null is ok) */
     public SimpleDataStructure(byte data[]) {
         setData(data);
@@ -83,12 +83,12 @@ public abstract class SimpleDataStructure extends DataStructureImpl {
         // Throws on incomplete read
         read(in, _data);
     }
-    
+
     public void writeBytes(OutputStream out) throws DataFormatException, IOException {
         if (_data == null) throw new DataFormatException("No data to write out");
         out.write(_data);
     }
-    
+
     @Override
     public String toBase64() {
         if (_data == null)
@@ -148,16 +148,14 @@ public abstract class SimpleDataStructure extends DataStructureImpl {
     @Override
     public String toString() {
         StringBuilder buf = new StringBuilder(64);
-        buf.append('[').append(getClass().getSimpleName()).append(": ");
         int length = length();
         if (_data == null) {
             buf.append("null");
         } else if (length <= 32) {
             buf.append(toBase64());
         } else {
-            buf.append("size: ").append(Integer.toString(length));
+            buf.append(Integer.toString(length)).append(" bytes");
         }
-        buf.append(']');
         return buf.toString();
     }
 

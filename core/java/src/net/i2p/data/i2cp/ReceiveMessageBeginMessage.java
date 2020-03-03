@@ -2,9 +2,9 @@ package net.i2p.data.i2cp;
 
 /*
  * free (adj.): unencumbered; not under the control of others
- * Written by jrandom in 2003 and released into the public domain 
- * with no warranty of any kind, either expressed or implied.  
- * It probably won't make your computer catch on fire, or eat 
+ * Written by jrandom in 2003 and released into the public domain
+ * with no warranty of any kind, either expressed or implied.
+ * It probably won't make your computer catch on fire, or eat
  * your children, but it might.  Use at your own risk.
  *
  */
@@ -17,7 +17,7 @@ import net.i2p.data.DataFormatException;
 import net.i2p.data.DataHelper;
 
 /**
- * Defines the message a client sends to a router when asking the 
+ * Defines the message a client sends to a router when asking the
  * router to start sending a message to it.
  *
  * @author jrandom
@@ -74,16 +74,16 @@ public class ReceiveMessageBeginMessage extends I2CPMessageImpl {
         throw new UnsupportedOperationException("This shouldn't be called... use writeMessage(out)");
     }
 
-    
-    /** 
+
+    /**
      * Override to reduce mem churn
-     * @throws IOException 
+     * @throws IOException
      */
     @Override
     public void writeMessage(OutputStream out) throws I2CPMessageException, IOException {
         int len = 2 + // sessionId
                   4; // messageId
-        
+
         try {
             DataHelper.writeLong(out, 4, len);
             out.write((byte) MESSAGE_TYPE);
@@ -93,7 +93,7 @@ public class ReceiveMessageBeginMessage extends I2CPMessageImpl {
             throw new I2CPMessageException("Unable to write the message length or type", dfe);
         }
     }
-    
+
     public int getType() {
         return MESSAGE_TYPE;
     }
@@ -102,8 +102,8 @@ public class ReceiveMessageBeginMessage extends I2CPMessageImpl {
     public String toString() {
         StringBuilder buf = new StringBuilder();
         buf.append("[ReceiveMessageBeginMessage: ");
-        buf.append("\n\tSessionId: ").append(_sessionId);
-        buf.append("\n\tMessageId: ").append(_messageId);
+        buf.append(" SessionId: ").append(_sessionId);
+        buf.append("; MessageId: ").append(_messageId);
         buf.append("]");
         return buf.toString();
     }

@@ -1,9 +1,9 @@
 package net.i2p.router.networkdb.kademlia;
 /*
  * free (adj.): unencumbered; not under the control of others
- * Written by jrandom in 2003 and released into the public domain 
- * with no warranty of any kind, either expressed or implied.  
- * It probably won't make your computer catch on fire, or eat 
+ * Written by jrandom in 2003 and released into the public domain
+ * with no warranty of any kind, either expressed or implied.
+ * It probably won't make your computer catch on fire, or eat
  * your children, but it might.  Use at your own risk.
  *
  */
@@ -25,19 +25,19 @@ import net.i2p.util.Log;
  *  Stores through this class always request a reply.
  *
  */
-class FloodfillStoreJob extends StoreJob {    
+class FloodfillStoreJob extends StoreJob {
     private final FloodfillNetworkDatabaseFacade _facade;
 
     private static final String PROP_RI_VERIFY = "router.verifyRouterInfoStore";
 
     /**
      * Send a data structure to the floodfills
-     * 
+     *
      */
     public FloodfillStoreJob(RouterContext context, FloodfillNetworkDatabaseFacade facade, Hash key, DatabaseEntry data, Job onSuccess, Job onFailure, long timeoutMs) {
         this(context, facade, key, data, onSuccess, onFailure, timeoutMs, null);
     }
-    
+
     /**
      * @param toSkip set of peer hashes of people we dont want to send the data to (e.g. we
      *               already know they have it).  This can be null.
@@ -66,15 +66,15 @@ class FloodfillStoreJob extends StoreJob {
 
             if (_facade.isVerifyInProgress(key)) {
                 if (shouldLog)
-                    _log.info("Skipping verify, one already in progress for: " + key);
+                    _log.info("Skipping verify, one already in progress for: [" + key.toBase64().substring(0,6) + "]");
                 return;
             }
             if (getContext().router().gracefulShutdownInProgress()) {
                 if (shouldLog)
-                    _log.info("Skipping verify, shutdown in progress for: " + key);
+                    _log.info("Skipping verify, shutdown in progress for: [" + key.toBase64().substring(0,6) + "]");
                 return;
             }
-            // Get the time stamp from the data we sent, so the Verify job can meke sure that
+            // Get the time stamp from the data we sent, so the Verify job can make sure that
             // it finds something stamped with that time or newer.
             DatabaseEntry data = _state.getData();
             final int type = data.getType();
@@ -109,11 +109,11 @@ class FloodfillStoreJob extends StoreJob {
                                                    published, type,
                                                    sentTo, _facade);
             if (shouldLog)
-                _log.info(getJobId() + ": Succeeded sending key " + key +
-                          ", queueing verify job " + fvsj.getJobId());
+                _log.info("[Job " + getJobId() + "] Succeeded sending key [" + key.toBase64().substring(0,6) +
+                          "] - queueing VerifyFloodfillStore Job [" + fvsj.getJobId() + "]");
             getContext().jobQueue().addJob(fvsj);
     }
-    
+
     @Override
-    public String getName() { return "Floodfill netDb store"; }
+    public String getName() { return "Verify Floodfill Store"; }
 }

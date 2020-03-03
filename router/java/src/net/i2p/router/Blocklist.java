@@ -80,7 +80,7 @@ public class Blocklist {
     private boolean _started;
     // temp
     private Map<Hash, String> _peerBlocklist = new HashMap<Hash, String>(4);
-    
+
     private static final String PROP_BLOCKLIST_ENABLED = "router.blocklist.enable";
     private static final String PROP_BLOCKLIST_DETAIL = "router.blocklist.detail";
     private static final String PROP_BLOCKLIST_FILE = "router.blocklist.file";
@@ -98,7 +98,7 @@ public class Blocklist {
     private final Set<Integer> _singleIPBlocklist = new ConcurrentHashSet<Integer>(4);
     private final Map<BigInteger, Object> _singleIPv6Blocklist = new LHMCache<BigInteger, Object>(MAX_IPV6_SINGLES);
 
-    private static final Object DUMMY = Integer.valueOf(0);    
+    private static final Object DUMMY = Integer.valueOf(0);
 
     /**
      *  Router MUST call startup()
@@ -108,7 +108,7 @@ public class Blocklist {
         _log = context.logManager().getLog(Blocklist.class);
         _blocklistFeedFile = new File(context.getConfigDir(), BLOCKLIST_FEED_FILE);
     }
-    
+
     /** only for testing with main() */
     private Blocklist() {
         _context = null;
@@ -540,7 +540,7 @@ public class Blocklist {
         }
         return lines;
     }
-    
+
     /**
      * Merge and remove overlapping entries from a sorted list.
      * Returns number of removed entries.
@@ -598,7 +598,7 @@ public class Blocklist {
         else
             rv = false;
         if (rv && _log.shouldLog(Log.WARN))
-            _log.warn("Adding IP to blocklist: " + Addresses.toString(ip));
+            _log.warn("Adding IP address to blocklist: " + Addresses.toString(ip));
     }
 
     /**
@@ -707,7 +707,7 @@ public class Blocklist {
             return false;
         for (byte[] ip : ips) {
             if (isBlocklisted(ip)) {
-                if (! _context.banlist().isBanlisted(peer))
+                if (!_context.banlist().isBanlisted(peer))
                     // nice knowing you...
                     banlist(peer, ip);
                 return true;
@@ -728,7 +728,7 @@ public class Blocklist {
         for (byte[] ip : ips) {
             if (isBlocklisted(ip)) {
                 Hash peer = pinfo.getHash();
-                if (! _context.banlist().isBanlisted(peer))
+                if (!_context.banlist().isBanlisted(peer))
                     // nice knowing you...
                     banlist(peer, ip);
                 return true;
@@ -768,7 +768,7 @@ public class Blocklist {
      * is a sorted array of longs.
      * The array is sorted in signed order, but we don't care.
      * Each long is ((from << 32) | to)
-     */ 
+     **/
     private boolean isBlocklisted(int ip) {
         if (isOnSingleList(ip))
             return true;
@@ -798,9 +798,9 @@ public class Blocklist {
             // make sure we get the last one
             if (hi - lo <= 1) {
                 if (lo == cur)
-                    cur = hi;        
-                else        
-                    cur = lo;        
+                    cur = hi;
+                else
+                    cur = lo;
                 break;
             } else {
                 cur = lo + ((hi - lo) / 2);
@@ -905,9 +905,9 @@ public class Blocklist {
      */
     private void banlist(Hash peer, byte[] ip) {
         // Temporary reason, until the job finishes
-        String reason = _x("IP banned by blocklist.txt entry {0}");
+        String reason = " <b>➜</b> " + _x("IP banned by blocklist.txt entry {0}").replace("blocklist.txt", "blocklist").replace(" entry", "");
         _context.banlist().banlistRouterForever(peer, reason, Addresses.toString(ip));
-        if (!  _context.getBooleanPropertyDefaultTrue(PROP_BLOCKLIST_DETAIL))
+        if (!_context.getBooleanPropertyDefaultTrue(PROP_BLOCKLIST_DETAIL))
             return;
         boolean shouldRunJob;
         int number;
@@ -932,7 +932,7 @@ public class Blocklist {
             _peer = p;
             _ips = ips;
         }
-        public String getName() { return "Ban Peer by IP"; }
+        public String getName() { return "Enforce Blocklist IP Ban"; }
         public void runJob() {
             banlistForever(_peer, _ips);
             synchronized (_inProcess) {
@@ -970,7 +970,7 @@ public class Blocklist {
             // just ban it and be done
             if (_log.shouldLog(Log.WARN))
                 _log.warn("Banlisting " + peer);
-            _context.banlist().banlistRouterForever(peer, "Banned");
+            _context.banlist().banlistRouterForever(peer, " <b>➜</b> " + "Banned");
             return;
         }
 
@@ -991,7 +991,7 @@ public class Blocklist {
                     }
                     if (match(ipint, toEntry(e.ip1, e.ip2))) {
                         try { br.close(); } catch (IOException ioe) {}
-                        String reason = _x("IP banned by blocklist.txt entry {0}");
+                        String reason = " <b>➜</b> " + _x("IP banned by blocklist.txt entry {0}").replace("blocklist.txt", "blocklist").replace(" entry", "");
                         // only one translate parameter for now
                         //for (int i = 0; i < 4; i++) {
                         //    reason = reason + (ip[i] & 0xff);

@@ -22,24 +22,24 @@ public class EchoLargeIT extends StreamingITBase {
     private Log _log;
     private I2PSession _client;
     private I2PSession _server;
-    
+
     @Test
     public void test() throws Exception {
         I2PAppContext context = I2PAppContext.getGlobalContext();
         _log = context.logManager().getLog(ConnectIT.class);
-        _log.debug("creating server session");
+        _log.debug("Creating server session");
         _server = createSession();
-        _log.debug("running server");
+        _log.debug("Running server");
         Thread server = runServer(context, _server);
-        _log.debug("creating client session");
+        _log.debug("Creating client session");
         _client = createSession();
-        _log.debug("running client");
+        _log.debug("Running client");
         Thread client = runClient(context, _client);
         client.join();
     }
-    
-    
-    
+
+
+
     @Override
     protected Properties getProperties() {
         return new Properties();
@@ -61,21 +61,21 @@ public class EchoLargeIT extends StreamingITBase {
         public ServerRunner(I2PAppContext ctx, I2PSession session) {
             super(ctx,session);
         }
-        
+
         public void run() {
             try {
                 Properties opts = new Properties();
                 I2PSocketManager mgr = new I2PSocketManagerFull(
                     _context, _session, opts, "client", IncomingConnectionFilter.ALLOW);
-                _log.debug("manager created");
+                _log.debug("I2P Socket Manager created");
                 I2PServerSocket ssocket = mgr.getServerSocket();
-                _log.debug("server socket created");
+                _log.debug("Server socket created");
                 while (true) {
                     I2PSocket socket = ssocket.accept();
-                    _log.debug("socket accepted: " + socket);
+                    _log.debug("Socket accepted: " + socket);
                     InputStream in = socket.getInputStream();
                     OutputStream out = socket.getOutputStream();
-                    _log.debug("server streams built");
+                    _log.debug("Server streams built");
                     byte buf[] = new byte[128*1024];
                     while (buf != null) {
                         for (int i = 0; i < buf.length; i++) {
@@ -101,22 +101,22 @@ public class EchoLargeIT extends StreamingITBase {
                 _log.error("error running", e);
             }
         }
-        
+
     }
-    
+
     private class ClientRunner extends RunnerBase {
         public ClientRunner(I2PAppContext ctx, I2PSession session) {
             super(ctx,session);
         }
-        
+
         public void run() {
             try {
                 Properties opts = new Properties();
                 I2PSocketManager mgr = new I2PSocketManagerFull(
                     _context, _session, opts, "client", IncomingConnectionFilter.ALLOW);
-                _log.debug("manager created");
+                _log.debug("I2P Socket Manager created");
                 I2PSocket socket = mgr.connect(_server.getMyDestination());
-                _log.debug("socket created");
+                _log.debug("Socket created");
                 InputStream in = socket.getInputStream();
                 OutputStream out = socket.getOutputStream();
                 for (int i = 0; i < 3; i++) {
@@ -125,17 +125,17 @@ public class EchoLargeIT extends StreamingITBase {
                     byte orig[] = new byte[buf.length];
                     System.arraycopy(buf, 0, orig, 0, buf.length);
                     out.write(buf);
-                    _log.debug("client wrote a buffer");
+                    _log.debug("Client wrote a buffer");
                     out.flush();
-                    _log.debug("client flushed");
-                    
+                    _log.debug("Client flushed");
+
                     byte rbuf[] = new byte[buf.length];
                     for (int j = 0; j < buf.length; j++) {
                         int c = in.read();
                         if (c == -1) {
                             buf = null;
                             break;
-                        } else {                
+                        } else {
                             //_log.debug("client read: " + ((char)c));
                             if (c < 0) c += 256;
                             rbuf[j] = (byte)(c & 0xFF);
@@ -156,13 +156,13 @@ public class EchoLargeIT extends StreamingITBase {
                 if (_log.shouldLog(Log.DEBUG))
                     _log.debug("Closing the client socket");
                 socket.close();
-                _log.debug("socket closed");
-                
+                _log.debug("Socket closed");
+
                 Thread.sleep(5*1000);
             } catch (Exception e) {
-                _log.error("error running", e);
+                _log.error("Error running", e);
             }
         }
-        
+
     }
 }

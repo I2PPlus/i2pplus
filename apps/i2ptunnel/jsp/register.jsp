@@ -1,6 +1,7 @@
-<%@include file="headers.jsi"
-%><%@page pageEncoding="UTF-8"
-%><%@page contentType="text/html" import="java.io.InputStream,net.i2p.i2ptunnel.web.EditBean,net.i2p.servlet.RequestWrapper,net.i2p.client.I2PSessionException,net.i2p.client.naming.HostTxtEntry,net.i2p.data.PrivateKeyFile,net.i2p.data.SigningPrivateKey,net.i2p.util.OrderedProperties"
+<%@include file="headers.jsi"%>
+<%@include file="headers-unsafe.jsi"%>
+<%@page pageEncoding="UTF-8"%>
+<%@page contentType="text/html"  import="java.io.InputStream,net.i2p.i2ptunnel.web.EditBean,net.i2p.servlet.RequestWrapper,net.i2p.client.I2PSessionException,net.i2p.client.naming.HostTxtEntry,net.i2p.data.PrivateKeyFile,net.i2p.data.SigningPrivateKey,net.i2p.util.OrderedProperties"
 %><%@page
 %><?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
@@ -22,15 +23,17 @@
      }
    }
 %>
-<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en" lang="en">
+<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en" lang="en" id="tman">
 <head>
-    <title><%=intl._t("Hidden Services Manager")%> - <%=intl._t("Registration Helper")%></title>
+    <title><%=intl._t("Tunnel Manager")%> - <%=intl._t("Registration Helper")%></title>
     <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
     <link href="/themes/console/images/favicon.ico" type="image/x-icon" rel="shortcut icon" />
+    <script type="text/javascript" src="/js/iframeResizer/iframeResizer.contentWindow.js?<%=net.i2p.CoreVersion.VERSION%>"></script>
 
     <% if (editBean.allowCSS()) {
   %><link rel="icon" href="<%=editBean.getTheme()%>images/favicon.ico" />
-    <link href="<%=editBean.getTheme()%>i2ptunnel.css?<%=net.i2p.CoreVersion.VERSION%>" rel="stylesheet" type="text/css" /> 
+    <link href="<%=editBean.getTheme()%>i2ptunnel.css?<%=net.i2p.CoreVersion.VERSION%>" rel="stylesheet" type="text/css" />
+    <link href="<%=editBean.getTheme()%>override.css?<%=net.i2p.CoreVersion.VERSION%>" rel="stylesheet" type="text/css" />
     <% }
   %>
 <style type='text/css'>
@@ -53,11 +56,11 @@ input.default { width: 1px; height: 1px; visibility: hidden; }
     if (curTunnel >= 0) {
         tunnelTypeName = editBean.getTunnelType(curTunnel);
         tunnelType = editBean.getInternalType(curTunnel);
-      %><h2><%=intl._t("Registration Helper")%> (<%=editBean.getTunnelName(curTunnel)%>)</h2><% 
+      %><h2><%=intl._t("Registration Helper")%> (<%=editBean.getTunnelName(curTunnel)%>)</h2><%
     } else {
         tunnelTypeName = "new";
         tunnelType = "new";
-      %><h2>Fail</h2><p>Tunnel not found</p><% 
+      %><h2>Fail</h2><p>Tunnel not found</p><%
     }
     String b64 = editBean.getDestinationBase64(curTunnel);
     String name = editBean.getSpoofedHost(curTunnel);
@@ -72,7 +75,7 @@ input.default { width: 1px; height: 1px; visibility: hidden; }
     String curEncryptMode = editBean.getEncryptMode(curTunnel);
     if (!"0".equals(curEncryptMode)) {
 %>
-      <table><tr><td class="infohelp">
+      <table id="regDisabled"><tr><td class="infohelp">
         <%=intl._t("This service uses encrypted leasesets. Registration is not recommended. Registration authentication is disabled.")%>
       </td></tr>
 <%
@@ -342,16 +345,24 @@ input.default { width: 1px; height: 1px; visibility: hidden; }
                        props2.setProperty(HostTxtEntry.PROP_OLDDEST, b64);
                        he2.signInner(spk);
                        he2.sign(spk3);
-                %><tr><td><div class="displayText" tabindex="0" title="<%=intl._t("Copy and paste this to the registration site")%>"><% he2.write(out); %></div></td></tr>
-                <tr><td class="infohelp"><%=intl._t("This will add an alternate destination for {0}", name)%></td></tr>
+%>
+                <tr>
+                    <td>
+                        <div class="displayText" tabindex="0" title="<%=intl._t("Copy and paste this to the registration site")%>"><% he2.write(out); %></div>
+                    </td>
+                </tr>
+                <tr>
+                    <td class="infohelp"><%=intl._t("This will add an alternate destination for {0}", name)%></td>
+                </tr>
 <%
                    } else {
-                %><tr><td class="infohelp"><%=intl._t("This tunnel must be configured with the new destination.")%>
+%>
+                <tr><td class="infohelp"><%=intl._t("This tunnel must be configured with the new destination.")%>
                   &nbsp;<%=intl._t("Enter old destination below.")%></td></tr>
 <%
                    }  // spk3
                }  // spk2
-          %>
+%>
 
 <%
 
@@ -406,8 +417,8 @@ input.default { width: 1px; height: 1px; visibility: hidden; }
     if (!valid && curTunnel >= 0) {
         %>
     <tr>
-        <td>
-            <a href="edit?tunnel=<%=curTunnel%>"><%=intl._t("Go back and edit the tunnel")%></a>
+        <td class="buttons">
+            <a href="edit?tunnel=<%=curTunnel%>" class="control"><%=intl._t("Return to Tunnel Configuration")%></a>
         </td>
     </tr>
         <%
@@ -467,5 +478,6 @@ input.default { width: 1px; height: 1px; visibility: hidden; }
   }  // isInitialized()
 
 %>
+<span data-iframe-height></span>
 </body>
 </html>

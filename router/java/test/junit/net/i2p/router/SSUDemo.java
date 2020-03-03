@@ -31,7 +31,7 @@ public class SSUDemo {
         SSUDemo demo = new SSUDemo();
         demo.run(testNTCP);
     }
-    
+
     public SSUDemo() {}
 
     public void run(boolean testNTCP) {
@@ -51,7 +51,7 @@ public class SSUDemo {
         // this call never returns
         loadPeers();
     }
-    
+
     private static Properties getEnv(boolean testNTCP) {
         Properties envProps = new Properties();
         // disable one of the transports and UPnP
@@ -113,7 +113,7 @@ public class SSUDemo {
         envProps.setProperty("i2p.naming.impl", "net.i2p.client.naming.HostsTxtNamingService");
         return envProps;
     }
-    
+
     private void setupHandlers() {
         // netDb store is sent on connection establishment, which includes contact info
         // for the peer.  the DBStoreJobBuilder builds a new asynchronous Job to process
@@ -122,10 +122,10 @@ public class SSUDemo {
         // handle any Foo messages by displaying them on stdout
         _us.inNetMessagePool().registerHandlerJobBuilder(FooMessage.MESSAGE_TYPE, new FooJobBuilder());
     }
-    
+
     /** random place for storing router info files - written as $dir/base64(SHA256(info.getIdentity)) */
     private static File getInfoDir() { return new File("/tmp/ssuDemoInfo/"); }
-    
+
     private static void storeMyInfo(RouterInfo info) {
         File infoDir = getInfoDir();
         if (!infoDir.exists())
@@ -146,7 +146,7 @@ public class SSUDemo {
 
         System.out.println("Our info stored at: " + infoFile.getAbsolutePath());
     }
-    
+
     private void loadPeers() {
         File infoDir = getInfoDir();
         if (!infoDir.exists())
@@ -177,13 +177,13 @@ public class SSUDemo {
             try { Thread.sleep(30*1000); } catch (InterruptedException ie) {}
         }
     }
-    
+
     private void peerRead(RouterInfo ri) {
         RouterInfo old = _us.netDb().store(ri.getIdentity().calculateHash(), ri);
         if (old == null)
             newPeerRead(ri);
     }
-    
+
     private void newPeerRead(RouterInfo ri) {
         FooMessage data = new FooMessage(_us, new byte[] { 0x0, 0x1, 0x2, 0x3 });
         // _us.clock() is an ntp synchronized clock.  give up on sending this message
@@ -192,7 +192,7 @@ public class SSUDemo {
         System.out.println("SEND: " + Base64.encode(data.getData()) + " to " +
                            ri.getIdentity().calculateHash());
         // job fired if we can't contact them, or if it takes too long to get an ACK
-        out.setOnFailedSendJob(null); 
+        out.setOnFailedSendJob(null);
         // job fired once the transport gets a full ACK of the message
         out.setOnSendJob(new AfterACK());
         // queue up the message, establishing a new SSU session if necessary, using
@@ -204,17 +204,17 @@ public class SSUDemo {
         // will be responsible for fetching such information.
         _us.outNetMessagePool().add(out);
     }
- 
+
     /** fired if and only if the FooMessage is ACKed before we time out */
     private class AfterACK extends JobImpl {
         public AfterACK() { super(_us); }
         public void runJob() { System.out.println("Foo message sent completely"); }
-        public String getName() { return "After Foo message send"; }
+        public String getName() { return "After Foo Message Send"; }
     }
-    
+
     ////
     // Foo and netDb store handling below
-    
+
     /**
      * Deal with an Foo message received
      */
@@ -251,7 +251,7 @@ public class SSUDemo {
     private static class FooBuilder implements I2NPMessageImpl.Builder {
         public I2NPMessage build(I2PAppContext ctx) { return new FooMessage(ctx, null); }
     }
-    
+
     /**
      * Just carry some data...
      */
@@ -269,7 +269,7 @@ public class SSUDemo {
 
         /** specify the payload to be sent */
         public void setData(byte data[]) { _data = data; }
-        
+
         public int getType() { return MESSAGE_TYPE; }
 
         protected int calculateWrittenLength() { return _data.length; }
@@ -284,10 +284,10 @@ public class SSUDemo {
             return curIndex + _data.length;
         }
     }
-    
+
     ////
     // netDb store handling below
-    
+
     /**
      * Handle any netDb stores from the peer - they send us their netDb as part of
      * their SSU establishment (and we send them ours).
@@ -318,6 +318,6 @@ public class SSUDemo {
             }
         }
 
-        public String getName() { return "Handle netDb store"; }
+        public String getName() { return "Handle NetDb Store"; }
     }
 }

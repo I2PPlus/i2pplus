@@ -7,7 +7,7 @@ import net.i2p.util.Log;
 
 /**
  * Double buffered hash set.
- * Since DecayingBloomFilter was instantiated 4 times for a total memory usage  
+ * Since DecayingBloomFilter was instantiated 4 times for a total memory usage
  * of 8MB, it seemed like we could do a lot better, given these usage stats
  * on a class L router:
  *
@@ -58,9 +58,9 @@ import net.i2p.util.Log;
 public class DecayingHashSet extends DecayingBloomFilter {
     private ConcurrentHashSet<ArrayWrapper> _current;
     private ConcurrentHashSet<ArrayWrapper> _previous;
-   
+
     /**
-     * Create a double-buffered hash set that will decay its entries over time.  
+     * Create a double-buffered hash set that will decay its entries over time.
      *
      * @param durationMs entries last for at least this long, but no more than twice this long
      * @param entryBytes how large are the entries to be added?  1 to 32 bytes
@@ -81,34 +81,34 @@ public class DecayingHashSet extends DecayingBloomFilter {
                      " cycle (s) = " + (durationMs / 1000));
         // try to get a handle on memory usage vs. false positives
         context.statManager().createRateStat("router.decayingHashSet." + name + ".size",
-             "Size", "Router", new long[] { 10 * Math.max(60*1000, durationMs) });
+             "Size", "Router [DecayingHashSet]", new long[] { 10 * Math.max(60*1000, durationMs) });
         context.statManager().createRateStat("router.decayingHashSet." + name + ".dups",
-             "1000000 * Duplicates/Size", "Router", new long[] { 10 * Math.max(60*1000, durationMs) });
+             "1000000 * Duplicates/Size", "Router [DecayingHashSet]", new long[] { 10 * Math.max(60*1000, durationMs) });
     }
-    
+
     /** unsynchronized but only used for logging elsewhere */
     @Override
-    public int getInsertedCount() { 
-        return _current.size() + _previous.size(); 
+    public int getInsertedCount() {
+        return _current.size() + _previous.size();
     }
 
     /** pointless, only used for logging elsewhere */
     @Override
-    public double getFalsePositiveRate() { 
+    public double getFalsePositiveRate() {
         if (_entryBytes <= 8)
-            return 0d; 
+            return 0d;
         return 1d / Math.pow(2d, 64d);  // 5.4E-20
     }
-    
-    /** 
+
+    /**
      * @return true if the entry added is a duplicate
      */
     @Override
     public boolean add(byte entry[], int off, int len) {
-        if (entry == null) 
+        if (entry == null)
             throw new IllegalArgumentException("Null entry");
-        if (len != _entryBytes) 
-            throw new IllegalArgumentException("Bad entry [" + len + ", expected " 
+        if (len != _entryBytes)
+            throw new IllegalArgumentException("Bad entry [" + len + ", expected "
                                                + _entryBytes + "]");
         ArrayWrapper w = new ArrayWrapper(entry, off, len);
         getReadLock();
@@ -117,8 +117,8 @@ public class DecayingHashSet extends DecayingBloomFilter {
         } finally { releaseReadLock(); }
     }
 
-    /** 
-     * @return true if the entry added is a duplicate.  the number of low order 
+    /**
+     * @return true if the entry added is a duplicate.  the number of low order
      * bits used is determined by the entryBytes parameter used on creation of the
      * filter.
      *
@@ -127,8 +127,8 @@ public class DecayingHashSet extends DecayingBloomFilter {
     public boolean add(long entry) {
         return add(entry, true);
     }
-    
-    /** 
+
+    /**
      * @return true if the entry is already known.  this does NOT add the
      * entry however.
      *
@@ -145,7 +145,7 @@ public class DecayingHashSet extends DecayingBloomFilter {
             return locked_add(w, addIfNew);
         } finally { releaseReadLock(); }
     }
-    
+
     /**
      *  @param addIfNew if true, add the element to current if it is not already there or in previous;
      *                  if false, only check
@@ -166,21 +166,21 @@ public class DecayingHashSet extends DecayingBloomFilter {
         }
         return seen;
     }
-    
+
     @Override
     public void clear() {
         _current.clear();
         _previous.clear();
         _currentDuplicates = 0;
     }
-    
+
     /** super doesn't call clear, but neither do the users, so it seems like we should here */
     @Override
     public void stopDecaying() {
         _keepDecaying = false;
         clear();
     }
-    
+
     @Override
     protected void decay() {
         int currentCount;
@@ -198,7 +198,7 @@ public class DecayingHashSet extends DecayingBloomFilter {
         } finally { releaseWriteLock(); }
 
         if (_log.shouldLog(Log.DEBUG))
-            _log.debug("Decaying the filter " + _name + " after inserting " + currentCount 
+            _log.debug("Decaying the filter " + _name + " after inserting " + currentCount
                        + " elements and " + dups + " false positives");
         _context.statManager().addRateData("router.decayingHashSet." + _name + ".size",
                                            currentCount);
@@ -206,7 +206,7 @@ public class DecayingHashSet extends DecayingBloomFilter {
             _context.statManager().addRateData("router.decayingHashSet." + _name + ".dups",
                                                1000l*1000*dups/currentCount);
     }
-    
+
     /**
      *  This saves the data as-is if the length is &lt;= 8 bytes,
      *  otherwise it stores an 8-byte hash.

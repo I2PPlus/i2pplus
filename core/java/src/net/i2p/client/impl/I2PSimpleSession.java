@@ -1,8 +1,8 @@
 package net.i2p.client.impl;
 
 /*
- * Released into the public domain 
- * with no warranty of any kind, either expressed or implied.  
+ * Released into the public domain
+ * with no warranty of any kind, either expressed or implied.
  */
 
 import java.io.BufferedInputStream;
@@ -54,7 +54,7 @@ public class I2PSimpleSession extends I2PSessionImpl2 {
     }
 
     /**
-     * Connect to the router and establish a session.  This call blocks until 
+     * Connect to the router and establish a session.  This call blocks until
      * a session is granted.
      *
      * NOT threadsafe, do not call from multiple threads.

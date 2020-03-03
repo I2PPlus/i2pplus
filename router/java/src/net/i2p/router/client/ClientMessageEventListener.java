@@ -1,9 +1,9 @@
 package net.i2p.router.client;
 /*
  * free (adj.): unencumbered; not under the control of others
- * Written by jrandom in 2003 and released into the public domain 
- * with no warranty of any kind, either expressed or implied.  
- * It probably won't make your computer catch on fire, or eat 
+ * Written by jrandom in 2003 and released into the public domain
+ * with no warranty of any kind, either expressed or implied.
+ * It probably won't make your computer catch on fire, or eat
  * your children, but it might.  Use at your own risk.
  *
  */
@@ -71,7 +71,7 @@ class ClientMessageEventListener implements I2CPMessageReader.I2CPMessageEventLi
     protected final ClientConnectionRunner _runner;
     private final boolean  _enforceAuth;
     private volatile boolean _authorized;
-    
+
     private static final String PROP_AUTH = "i2cp.auth";
     /** if true, user/pw must be in GetDateMessage */
     private static final String PROP_AUTH_STRICT = "i2cp.strictAuth";
@@ -86,9 +86,9 @@ class ClientMessageEventListener implements I2CPMessageReader.I2CPMessageEventLi
         _enforceAuth = enforceAuth;
         if ((!_enforceAuth) || !_context.getBooleanProperty(PROP_AUTH))
             _authorized = true;
-        _context.statManager().createRateStat("client.distributeTime", "How long it took to inject the client message into the router", "ClientMessages", new long[] { 60*1000, 10*60*1000, 60*60*1000 });
+        _context.statManager().createRateStat("client.distributeTime", "Time to inject client message into the router", "ClientMessages", new long[] { 60*1000, 10*60*1000, 60*60*1000 });
     }
-    
+
     /**
      * Handle an incoming message and dispatch it to the appropriate handler
      *
@@ -172,18 +172,18 @@ class ClientMessageEventListener implements I2CPMessageReader.I2CPMessageEventLi
     public void readError(I2CPMessageReader reader, Exception error) {
         if (_runner.isDead()) return;
         if (_log.shouldLog(Log.ERROR))
-            _log.error("Error occurred", error);
+            _log.error("Unclassified error occurred", error);
         // Is this is a little drastic for an unknown message type?
         // Send the whole exception string over for diagnostics
         _runner.disconnectClient(error.toString());
         _runner.stopRunning();
     }
-  
+
     public void disconnected(I2CPMessageReader reader) {
         if (_runner.isDead()) return;
         _runner.disconnected();
     }
-    
+
     /**
      *  Defaults in GetDateMessage options are NOT honored.
      *  Defaults are not serialized out-of-JVM, and the router does not recognize defaults in-JVM.
@@ -212,8 +212,8 @@ class ClientMessageEventListener implements I2CPMessageReader.I2CPMessageEventLi
     private void handleSetDate(SetDateMessage message) {
         //_context.clock().setNow(message.getDate().getTime());
     }
-    
-    /** 
+
+    /**
      * Handle a CreateSessionMessage.
      * On errors, we could perhaps send a SessionStatusMessage with STATUS_INVALID before
      * sending the DisconnectMessage... but right now the client will send _us_ a
@@ -276,7 +276,7 @@ class ClientMessageEventListener implements I2CPMessageReader.I2CPMessageEventLi
             if (pcfg != null) {
                 props.putAll(pcfg.getOptions());
             } else {
-                _log.error("no primary config?");
+                _log.error("No primary config?");
             }
         }
         props.putAll(inProps);
@@ -305,7 +305,7 @@ class ClientMessageEventListener implements I2CPMessageReader.I2CPMessageEventLi
             SigType stype = dest.getSigningPublicKey().getType();
             if (stype != SigType.EdDSA_SHA512_Ed25519 &&
                 stype != SigType.RedDSA_SHA512_Ed25519) {
-                _runner.disconnectClient("Invalid sig type for encrypted LS");
+                _runner.disconnectClient("Invalid sig type for encrypted LeaseSet");
                 return;
             }
         } else if ("7".equals(lsType)) {
@@ -362,14 +362,14 @@ class ClientMessageEventListener implements I2CPMessageReader.I2CPMessageEventLi
                     // FIXME cleanup
                 }
             } else {
-                _log.error("no primary config?");
+                _log.error("No primary config?");
                 status = SessionStatusMessage.STATUS_INVALID;
                 sendStatusMessage(id, status);
                 // FIXME cleanup
             }
         }
     }
-    
+
     /**
      *  Side effect - sets _authorized.
      *  Side effect - disconnects session if not authorized.
@@ -402,7 +402,7 @@ class ClientMessageEventListener implements I2CPMessageReader.I2CPMessageEventLi
                 return false;
             }
             if (_log.shouldLog(Log.INFO))
-                _log.info("I2CP auth success user: " + user);
+                _log.info("I2CP auth success for user: " + user);
         }
         _authorized = true;
         return true;
@@ -416,7 +416,7 @@ class ClientMessageEventListener implements I2CPMessageReader.I2CPMessageEventLi
     protected void startCreateSessionJob(SessionConfig config) {
         _context.jobQueue().addJob(new CreateSessionJob(_context, config));
     }
-    
+
     /**
      * Handle a SendMessageMessage: give it a message Id, have the ClientManager distribute
      * it, and send the client an ACCEPTED message
@@ -440,7 +440,7 @@ class ClientMessageEventListener implements I2CPMessageReader.I2CPMessageEventLi
                 status.setMessageId(_runner.getNextMessageId());
                 status.setSessionId(sid.getSessionId());
                 status.setSize(0);
-                status.setNonce(message.getNonce()); 
+                status.setNonce(message.getNonce());
                 status.setStatus(MessageStatusMessage.STATUS_SEND_FAILURE_BAD_SESSION);
                 try {
                     _runner.doSend(status);
@@ -480,12 +480,12 @@ class ClientMessageEventListener implements I2CPMessageReader.I2CPMessageEventLi
         _runner.ackSendMessage(sid, id, message.getNonce());
         _context.statManager().addRateData("client.distributeTime", timeToDistribute);
         if ( (timeToDistribute > 50) && (_log.shouldLog(Log.DEBUG)) )
-            _log.debug("Took too long to distribute the message (which holds up the ack): " + timeToDistribute);
+            _log.debug("Took too long to distribute the message (which holds up the ACK): " + timeToDistribute);
     }
 
-    
+
     /**
-     * The client asked for a message, so we send it to them.  
+     * The client asked for a message, so we send it to them.
      *
      * This is only when not in fast receive mode.
      * In the default fast receive mode, data is sent in MessageReceivedJob.
@@ -501,8 +501,8 @@ class ClientMessageEventListener implements I2CPMessageReader.I2CPMessageEventLi
         Payload payload = _runner.getPayload(new MessageId(message.getMessageId()));
         if (payload == null) {
             if (_log.shouldLog(Log.WARN))
-                _log.warn("Payload for message id [" + message.getMessageId() 
-                           + "] is null!  Dropped or Unknown message id");
+                _log.warn("Payload for [MsgID " + message.getMessageId()
+                           + "] is null! Dropped or Unknown message ID");
             return;
         }
         msg.setPayload(payload);
@@ -517,24 +517,24 @@ class ClientMessageEventListener implements I2CPMessageReader.I2CPMessageEventLi
             _runner.removePayload(new MessageId(message.getMessageId()));
         }
     }
-    
+
     /**
      * The client told us that the message has been received completely.  This currently
-     * does not do any security checking prior to removing the message from the 
+     * does not do any security checking prior to removing the message from the
      * pending queue, though it should.
      *
      */
     private void handleReceiveEnd(ReceiveMessageEndMessage message) {
         _runner.removePayload(new MessageId(message.getMessageId()));
     }
-    
+
     private void handleDestroySession(DestroySessionMessage message) {
         SessionId id = message.getSessionId();
         if (id != null) {
             _runner.removeSession(id);
         } else {
             if (_log.shouldLog(Log.WARN))
-                _log.warn("destroy session with null ID");
+                _log.warn("Destroyed session with null ID");
         }
         int left = _runner.getSessionIds().size();
         if (left <= 0 || id == null) {
@@ -544,14 +544,14 @@ class ClientMessageEventListener implements I2CPMessageReader.I2CPMessageEventLi
                 _log.info("Still " + left + " sessions left");
         }
     }
-    
+
     /** override for testing */
     protected void handleCreateLeaseSet(CreateLeaseSetMessage message) {
         LeaseSet ls = message.getLeaseSet();
         if (ls == null) {
             if (_log.shouldLog(Log.ERROR))
-                _log.error("Null lease set granted: " + message);
-            _runner.disconnectClient("Invalid CreateLeaseSetMessage - null LS");
+                _log.error("Null LeaseSet granted: " + message);
+            _runner.disconnectClient("Invalid CreateLeaseSetMessage - null LeaseSet");
             return;
         }
         int type = ls.getType();
@@ -594,7 +594,7 @@ class ClientMessageEventListener implements I2CPMessageReader.I2CPMessageEventLi
                 ls.setDestination(dest);
             } catch (RuntimeException re) {
                 if (_log.shouldError())
-                    _log.error("Error decrypting leaseset from client", re);
+                    _log.error("Error decrypting LeaseSet from client", re);
                 _runner.disconnectClient(re.toString());
                 return;
             }
@@ -610,16 +610,16 @@ class ClientMessageEventListener implements I2CPMessageReader.I2CPMessageEventLi
             // we have to do this before checking encryption keys below
             if (!ls.verifySignature()) {
                 if (_log.shouldError())
-                    _log.error("Error decrypting leaseset from client");
-                _runner.disconnectClient("Error decrypting leaseset from client");
+                    _log.error("Error decrypting LeaseSet from client");
+                _runner.disconnectClient("Error decrypting LeaseSet from client");
                 return;
             }
         } else {
             Destination ndest = ls.getDestination();
             if (!dest.equals(ndest)) {
                 if (_log.shouldLog(Log.ERROR))
-                    _log.error("Different destination in LS");
-                _runner.disconnectClient("Different destination in LS");
+                    _log.error("Different destination in LeaseSet");
+                _runner.disconnectClient("Different destination in LeaseSet");
                 return;
             }
         }
@@ -637,14 +637,14 @@ class ClientMessageEventListener implements I2CPMessageReader.I2CPMessageEventLi
                         pk = message.getPrivateKey().toPublic();
                     } catch (IllegalArgumentException iae) {
                         if (_log.shouldLog(Log.ERROR))
-                            _log.error("Bad private key in LS");
-                        _runner.disconnectClient("Bad private key in LS");
+                            _log.error("Bad private key in LeaseSet");
+                        _runner.disconnectClient("Bad private key in LeaseSet");
                         return;
                     }
                     if (!pk.equals(ls.getEncryptionKey())) {
                         if (_log.shouldLog(Log.ERROR))
-                            _log.error("Private/public crypto key mismatch in LS");
-                        _runner.disconnectClient("Private/public crypto key mismatch in LS");
+                            _log.error("Private/public crypto key mismatch in LeaseSet");
+                        _runner.disconnectClient("Private/public crypto key mismatch in LeaseSet");
                         return;
                     }
                     // just register new SPK, don't verify, unused
@@ -663,13 +663,13 @@ class ClientMessageEventListener implements I2CPMessageReader.I2CPMessageEventLi
                         } catch (IllegalArgumentException iae) {
                             if (_log.shouldLog(Log.ERROR))
                                 _log.error("Bad private key in LS: " + i);
-                            _runner.disconnectClient("Bad private key in LS: " + i);
+                            _runner.disconnectClient("Bad private key in LeaseSet: " + i);
                             return;
                         }
                         if (!pk.equals(ek)) {
                             if (_log.shouldLog(Log.ERROR))
-                                _log.error("Private/public crypto key mismatch in LS for key: " + i);
-                            _runner.disconnectClient("Private/public crypto key mismatch in LS for key: " + i);
+                                _log.error("Private/public crypto key mismatch in LeaseSet for key: " + i);
+                            _runner.disconnectClient("Private/public crypto key mismatch in LeaseSet for key: " + i);
                             return;
                         }
                     }
@@ -706,12 +706,12 @@ class ClientMessageEventListener implements I2CPMessageReader.I2CPMessageEventLi
             }
         } catch (IllegalArgumentException iae) {
             if (_log.shouldLog(Log.ERROR))
-                _log.error("Invalid leaseset from client", iae);
-            _runner.disconnectClient("Invalid leaseset: " + iae);
+                _log.error("Invalid LeaseSet from client", iae);
+            _runner.disconnectClient("Invalid LeaseSet: " + iae);
             return;
         }
         if (_log.shouldLog(Log.INFO))
-            _log.info("New lease set granted for destination " + dest);
+            _log.info("New LeaseSet created \nDestination: " + dest);
 
         // leaseSetCreated takes care of all the LeaseRequestState stuff (including firing any jobs)
         _runner.leaseSetCreated(ls);
@@ -774,7 +774,7 @@ class ClientMessageEventListener implements I2CPMessageReader.I2CPMessageEventLi
         if (_log.shouldLog(Log.INFO))
             _log.info("Updating options - old: " + cfg + " new: " + message.getSessionConfig());
         if (!message.getSessionConfig().getDestination().equals(cfg.getDestination())) {
-            _log.error("Dest mismatch");
+            _log.error("Destination mismatch");
             sendStatusMessage(id, SessionStatusMessage.STATUS_INVALID);
             _runner.stopRunning();
             return;
@@ -791,7 +791,7 @@ class ClientMessageEventListener implements I2CPMessageReader.I2CPMessageEventLi
                                                      settings.getOutboundSettings());
         sendStatusMessage(id, SessionStatusMessage.STATUS_UPDATED);
     }
-    
+
     private void sendStatusMessage(SessionId id, int status) {
         SessionStatusMessage msg = new SessionStatusMessage();
         msg.setSessionId(id);
@@ -813,7 +813,7 @@ class ClientMessageEventListener implements I2CPMessageReader.I2CPMessageEventLi
      */
     protected void handleGetBWLimits(GetBandwidthLimitsMessage message) {
         if (_log.shouldLog(Log.INFO))
-            _log.info("Got BW Limits request");
+            _log.info("Received Bandwidth Limits request");
         int in = _context.bandwidthLimiter().getInboundKBytesPerSecond() * 4 / 7;
         int out = _context.bandwidthLimiter().getOutboundKBytesPerSecond() * 4 / 7;
         BandwidthLimitsMessage msg = new BandwidthLimitsMessage(in, out);
@@ -821,7 +821,7 @@ class ClientMessageEventListener implements I2CPMessageReader.I2CPMessageEventLi
             _runner.doSend(msg);
         } catch (I2CPMessageException ime) {
             if (_log.shouldLog(Log.WARN))
-                _log.warn("Error writing bw limits msg", ime);
+                _log.warn("Error writing Bandwidth Limits message", ime);
         }
     }
 

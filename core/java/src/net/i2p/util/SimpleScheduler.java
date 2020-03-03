@@ -74,7 +74,7 @@ public class SimpleScheduler {
         // don't bother saving ref to remove hook if somebody else calls stop
         context.addShutdownTask(new Shutdown());
     }
-    
+
     /**
      * @since 0.8.8
      */
@@ -97,7 +97,7 @@ public class SimpleScheduler {
      * Queue up the given event to be fired no sooner than timeoutMs from now.
      *
      * @param event
-     * @param timeoutMs 
+     * @param timeoutMs
      */
     public void addEvent(SimpleTimer.TimedEvent event, long timeoutMs) {
         if (event == null)
@@ -105,7 +105,7 @@ public class SimpleScheduler {
         RunnableEvent re = new RunnableEvent(event, timeoutMs);
         re.schedule();
     }
-    
+
     /**
      * Queue up the given event to be fired after timeoutMs and every
      * timeoutMs thereafter. The TimedEvent must not do its own rescheduling.
@@ -116,7 +116,7 @@ public class SimpleScheduler {
     public void addPeriodicEvent(SimpleTimer.TimedEvent event, long timeoutMs) {
         addPeriodicEvent(event, timeoutMs, timeoutMs);
     }
-    
+
     /**
      * Queue up the given event to be fired after initialDelay and every
      * timeoutMs thereafter. The TimedEvent must not do its own rescheduling.
@@ -126,7 +126,7 @@ public class SimpleScheduler {
      *
      * @param event
      * @param initialDelay (ms)
-     * @param timeoutMs 
+     * @param timeoutMs
      */
     public void addPeriodicEvent(SimpleTimer.TimedEvent event, long initialDelay, long timeoutMs) {
         if (event == null)
@@ -134,7 +134,7 @@ public class SimpleScheduler {
         RunnableEvent re = new PeriodicRunnableEvent(event, initialDelay, timeoutMs);
         re.schedule();
     }
-    
+
     private class CustomThreadFactory implements ThreadFactory {
         public Thread newThread(Runnable r) {
             Thread rv = Executors.defaultThreadFactory().newThread(r);
@@ -158,7 +158,7 @@ public class SimpleScheduler {
 
         public RunnableEvent(SimpleTimer.TimedEvent t, long timeoutMs) {
             if (_log.shouldLog(Log.DEBUG))
-                _log.debug("Creating w/ delay " + timeoutMs + " : " + t);
+                _log.debug("Creating with delay of " + timeoutMs + " : " + t);
             _timedEvent = t;
             _scheduled = timeoutMs + System.currentTimeMillis();
         }
@@ -172,7 +172,7 @@ public class SimpleScheduler {
             if (_log.shouldLog(Log.WARN) && before < _scheduled - 100)
                 _log.warn(_name + " early execution " + (_scheduled - before) + ": " + _timedEvent);
             else if (_log.shouldLog(Log.WARN) && before > _scheduled + 1000)
-                _log.warn("late execution " + (before - _scheduled) + ": " + _timedEvent + debug());
+                _log.warn("Late execution (" + (before - _scheduled) + "ms): " + _timedEvent + debug());
             try {
                 _timedEvent.timeReached();
             } catch (Throwable t) {
@@ -180,7 +180,7 @@ public class SimpleScheduler {
             }
             long time = System.currentTimeMillis() - before;
             if (time > 1000 && _log.shouldLog(Log.WARN))
-                _log.warn(_name + " event execution took " + time + ": " + _timedEvent);
+                _log.warn(_name + " event execution took " + time + "ms: " + _timedEvent);
             if (_log.shouldLog(Log.INFO)) {
                  // this call is slow - iterates through a HashMap -
                  // would be better to have a local AtomicLong if we care
@@ -214,10 +214,10 @@ public class SimpleScheduler {
 
     private String debug() {
         return
-            " Pool: " + _name +
-            " Active: " + _executor.getActiveCount() + '/' + _executor.getPoolSize() +
-            " Completed: " + _executor.getCompletedTaskCount() +
-            " Queued: " + _executor.getQueue().size();
+            "\n* Pool: " + _name +
+            "; Active: " + _executor.getActiveCount() + '/' + _executor.getPoolSize() +
+            "; Completed: " + _executor.getCompletedTaskCount() +
+            "; Queued: " + _executor.getQueue().size();
     }
 }
 

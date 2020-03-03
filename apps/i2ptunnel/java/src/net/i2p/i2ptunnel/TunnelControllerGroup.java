@@ -130,7 +130,7 @@ public class TunnelControllerGroup implements ClientApp {
                 } // else wait for the router to start it
             } else {
                 if (SystemVersion.isAndroid() && _instance._context != ctx) {
-                    ctx.logManager().getLog(TunnelControllerGroup.class).warn("Old context in TCG");
+                    ctx.logManager().getLog(TunnelControllerGroup.class).warn("Old context in TunnelControllerGroup");
                     _instance.shutdown();
                     _instance = new TunnelControllerGroup(ctx, null, null);
                  }
@@ -993,7 +993,7 @@ public class TunnelControllerGroup implements ClientApp {
             owners.add(controller);
         }
         if (_log.shouldLog(Log.INFO))
-            _log.info("Acquiring session " + session + " for " + controller);
+            _log.info("Acquiring session " + session + "\n* For: " + controller);
 
     }
 

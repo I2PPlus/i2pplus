@@ -42,24 +42,24 @@ import net.i2p.data.SessionKey;
  */
 public class BuildRequestRecord {
     private final byte[] _data;
-    
-    /** 
+
+    /**
      * If set in the flag byte, any peer may send a message into this tunnel, but if
      * not set, only the current predecessor may send messages in.  This is only set on
      * an inbound tunnel gateway.
      */
-    private static final int FLAG_UNRESTRICTED_PREV = (1 << 7); 
+    private static final int FLAG_UNRESTRICTED_PREV = (1 << 7);
     /**
      * If set in the flag byte, this is an outbound tunnel endpoint, which means that
      * there is no 'next hop' and that the next hop fields contain the tunnel to which the
      * reply message should be sent.
      */
     private static final int FLAG_OUTBOUND_ENDPOINT = (1 << 6);
-    
+
     public static final int IV_SIZE = 16;
     /** we show 16 bytes of the peer hash outside the elGamal block */
     public static final int PEER_SIZE = 16;
-    
+
     /**
      *  @return 222 bytes, non-null
      */
@@ -79,10 +79,10 @@ public class BuildRequestRecord {
     private static final int PADDING_SIZE = 29;
     // 222
     private static final int LENGTH = OFF_SEND_MSG_ID + 4 + PADDING_SIZE;
-    
-    
+
+
     /** what tunnel ID should this receive messages on */
-    public long readReceiveTunnelId() { 
+    public long readReceiveTunnelId() {
         return DataHelper.fromLong(_data, OFF_RECV_TUNNEL, 4);
     }
 
@@ -141,7 +141,7 @@ public class BuildRequestRecord {
         return iv;
     }
 
-    /** 
+    /**
      * The current hop is the inbound gateway.  If this is true, it means anyone can send messages to
      * this tunnel, but if it is false, only the current predecessor can.
      *
@@ -154,7 +154,7 @@ public class BuildRequestRecord {
      * The current hop is the outbound endpoint.  If this is true, the next identity and next tunnel
      * fields refer to where the reply should be sent.
      */
-    public boolean readIsOutboundEndpoint() { 
+    public boolean readIsOutboundEndpoint() {
         return (_data[OFF_FLAG] & FLAG_OUTBOUND_ENDPOINT) != 0;
     }
 
@@ -173,7 +173,7 @@ public class BuildRequestRecord {
     public long readReplyMessageId() {
         return DataHelper.fromLong(_data, OFF_SEND_MSG_ID, 4);
     }
-    
+
     /**
      * Encrypt the record to the specified peer.  The result is formatted as: <pre>
      *   bytes 0-15: truncated SHA-256 of the current hop's identity (the toPeer parameter)
@@ -192,7 +192,7 @@ public class BuildRequestRecord {
         System.arraycopy(encrypted, 258, out, 256 + PEER_SIZE, 256);
         return new EncryptedBuildRecord(out);
     }
-    
+
     /**
      * Decrypt the data from the specified record, writing the decrypted record into this instance's
      * data buffer
@@ -217,7 +217,7 @@ public class BuildRequestRecord {
     }
 
     /**
-     * Populate this instance with data.  A new buffer is created to contain the data, with the 
+     * Populate this instance with data.  A new buffer is created to contain the data, with the
      * necessary randomized padding.
      *
      * @param receiveTunnelId tunnel the current hop will receive messages on
@@ -238,7 +238,7 @@ public class BuildRequestRecord {
                              boolean isOutEndpoint) {
         byte buf[] = new byte[LENGTH];
         _data = buf;
-        
+
        /*   bytes     0-3: tunnel ID to receive messages as
         *   bytes    4-35: local router identity hash
         *   bytes   36-39: next tunnel ID
@@ -272,7 +272,7 @@ public class BuildRequestRecord {
         DataHelper.toLong(buf, OFF_REQ_TIME, 4, truncatedHour);
         DataHelper.toLong(buf, OFF_SEND_MSG_ID, 4, nextMsgId);
         ctx.random().nextBytes(buf, OFF_SEND_MSG_ID+4, PADDING_SIZE);
-        
+
         byte wroteIV[] = readReplyIV();
         if (!DataHelper.eq(iv, wroteIV))
             throw new RuntimeException("foo");
@@ -284,27 +284,28 @@ public class BuildRequestRecord {
     @Override
     public String toString() {
         StringBuilder buf = new StringBuilder(256);
-        buf.append("BRR ");
+        buf.append("\n* BuildRequestRecord: [");
         boolean isIBGW = readIsInboundGateway();
         boolean isOBEP = readIsOutboundEndpoint();
         if (isIBGW) {
-            buf.append("IBGW in: ").append(readReceiveTunnelId())
-               .append(" out ").append(readNextTunnelId());
+            buf.append("InboundGateway -> In: ").append(readReceiveTunnelId())
+               .append("; Out: ").append(readNextTunnelId());
         } else if (isOBEP) {
-            buf.append("OBEP in: ").append(readReceiveTunnelId());
+            buf.append("OutboundEndpoint -> In: ").append(readReceiveTunnelId());
         } else {
-            buf.append("part. in: ").append(readReceiveTunnelId())
-               .append(" out: ").append(readNextTunnelId());
+            buf.append("Participating ->  In: ").append(readReceiveTunnelId())
+               .append("; Out: ").append(readNextTunnelId());
         }
-        buf.append(" to: ").append(readNextIdentity())
-           .append(" layer key: ").append(readLayerKey())
-           .append(" IV key: ").append(readIVKey())
-           .append(" reply key: ").append(readReplyKey())
-           .append(" reply IV: ").append(Base64.encode(readReplyIV()))
-           .append(" hour: ").append(new Date(readRequestTime()))
-           .append(" reply msg id: ").append(readReplyMessageId());
+        buf.append("]");
+        buf.append("\n* Target: [").append(readNextIdentity().toBase64().substring(0,6)).append("]")
+           .append("\n* Layer key: ").append(readLayerKey())
+           .append("\n* IV key: ").append(readIVKey())
+           .append("\n* Reply key: ").append(readReplyKey())
+           .append("\n* Reply IV: ").append(Base64.encode(readReplyIV()))
+           .append("\n* Reply MsgID: ").append(readReplyMessageId())
+           .append("\n* Time: ").append(new Date(readRequestTime()));
         // to chase i2pd bug
         //buf.append('\n').append(net.i2p.util.HexDump.dump(readReplyKey().getData()));
         return buf.toString();
     }
-}   
+}

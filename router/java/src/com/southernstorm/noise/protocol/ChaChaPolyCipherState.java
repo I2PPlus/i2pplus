@@ -111,10 +111,10 @@ public class ChaChaPolyCipherState implements CipherState {
 	public boolean hasKey() {
 		return haskey;
 	}
-	
+
 	/**
 	 * Set up to encrypt or decrypt the next packet.
-	 * 
+	 *
 	 * @param ad The associated data for the packet.
 	 */
 	private void setup(byte[] ad)
@@ -136,7 +136,7 @@ public class ChaChaPolyCipherState implements CipherState {
 
 	/**
 	 * Puts a 64-bit integer into a buffer in little-endian order.
-	 * 
+	 *
 	 * @param output The output buffer.
 	 * @param offset The offset into the output buffer.
 	 * @param value The 64-bit integer value.
@@ -155,7 +155,7 @@ public class ChaChaPolyCipherState implements CipherState {
 
 	/**
 	 * Finishes up the authentication tag for a packet.
-	 * 
+	 *
 	 * @param ad The associated data.
 	 * @param length The length of the plaintext data.
 	 */
@@ -170,7 +170,7 @@ public class ChaChaPolyCipherState implements CipherState {
 
 	/**
 	 * Encrypts or decrypts a buffer of bytes for the active packet.
-	 * 
+	 *
 	 * @param plaintext The plaintext data to be encrypted.
 	 * @param plaintextOffset The offset to the first plaintext byte.
 	 * @param ciphertext The ciphertext data that results from encryption.
@@ -286,24 +286,22 @@ public class ChaChaPolyCipherState implements CipherState {
 	@Override
 	public String toString() {
 		StringBuilder buf = new StringBuilder();
-		buf.append("  Cipher State:\n" +
-		           "    nonce: ");
+		buf.append("Cipher State:" +
+		           "\n* Nonce: ");
 		buf.append(n);
-		// I2P debug
-		if (DEBUG) {
-			buf.append("\n" +
-			           "    init key: ");
+                // I2P debug
+                if (DEBUG) {
+                    buf.append("\n* Init key: ");
 			if (haskey)
-				buf.append(net.i2p.data.Base64.encode(initialKey));
-			else
-				buf.append("null");
-		}
-		buf.append("\n    poly key: ");
+                            buf.append(net.i2p.data.Base64.encode(initialKey));
+                         else
+                            buf.append("null");
+                }
+		buf.append("\n* Poly key: ");
 		if (haskey)
 			buf.append(net.i2p.data.Base64.encode(polyKey));
 		else
 			buf.append("null");
-		buf.append('\n');
 		return buf.toString();
 	}
 }

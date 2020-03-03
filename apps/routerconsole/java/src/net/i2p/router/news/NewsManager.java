@@ -129,8 +129,8 @@ public class NewsManager implements ClientApp {
     public synchronized void startup() {
         changeState(STARTING);
         _currentNews = PersistNews.load(_context);
-        if (_log.shouldWarn())
-            _log.warn("Initialized with " + _currentNews.size() + " entries");
+        if (_log.shouldInfo())
+            _log.info("Initialized News Manager with " + _currentNews.size() + " entries");
         changeState(RUNNING);
         if (_cmgr != null)
             _cmgr.register(this);
@@ -206,12 +206,12 @@ public class NewsManager implements ClientApp {
                 rv.get(0).updated = _context.clock().now();
             } else {
                 if (_log.shouldWarn())
-                    _log.warn("failed to load " + file);
+                    _log.warn("Failed to load " + file);
             }
             return rv;
         } catch (IOException ioe) {
             if (_log.shouldWarn())
-                _log.warn("failed to load " + file, ioe);
+                _log.warn("Failed to load " + file, ioe);
             return Collections.emptyList();
         } finally {
             try {

@@ -108,7 +108,7 @@ public class NTCPTransport extends TransportImpl {
     private static final String PROP_ADVANCED = "routerconsole.advanced";
     private static final int DEFAULT_COST = 10;
     private static final int NTCP2_OUTBOUND_COST = 14;
-    
+
     /** this is rarely if ever used, default is to bind to wildcard address */
     public static final String PROP_BIND_INTERFACE = "i2np.ntcp.bindInterface";
 
@@ -156,71 +156,71 @@ public class NTCPTransport extends TransportImpl {
         _xdhFactory = xdh;
         _log = ctx.logManager().getLog(getClass());
 
-        _context.statManager().createRateStat("ntcp.sendTime", "Total message lifetime when sent completely", "ntcp", RATES);
-        _context.statManager().createRateStat("ntcp.sendQueueSize", "How many messages were ahead of the current one on the connection's queue when it was first added", "ntcp", RATES);
-        _context.statManager().createRateStat("ntcp.receiveTime", "How long it takes to receive an inbound message", "ntcp", RATES);
-        _context.statManager().createRateStat("ntcp.receiveSize", "How large the received message was", "ntcp", RATES);
-        _context.statManager().createRateStat("ntcp.sendBacklogTime", "How long the head of the send queue has been waiting when we fail to add a new one to the queue (period is the number of messages queued)", "ntcp", RATES);
-        _context.statManager().createRateStat("ntcp.failsafeWrites", "How many times do we need to proactively add in an extra nio write to a peer at any given failsafe pass?", "ntcp", RATES);
-        _context.statManager().createRateStat("ntcp.failsafeCloses", "How many times do we need to proactively close an idle connection to a peer at any given failsafe pass?", "ntcp", RATES);
-        _context.statManager().createRateStat("ntcp.failsafeInvalid", "How many times do we close a connection to a peer to work around a JVM bug?", "ntcp", RATES);
-        _context.statManager().createRateStat("ntcp.failsafeThrottle", "Delay event pumper", "ntcp", RATES);
-        _context.statManager().createRateStat("ntcp.accept", "", "ntcp", RATES);
-        _context.statManager().createRateStat("ntcp.attemptBanlistedPeer", "", "ntcp", RATES);
-        _context.statManager().createRateStat("ntcp.attemptUnreachablePeer", "", "ntcp", RATES);
-        _context.statManager().createRateStat("ntcp.closeOnBacklog", "", "ntcp", RATES);
-        _context.statManager().createRateStat("ntcp.connectFailedIOE", "", "ntcp", RATES);
-        //_context.statManager().createRateStat("ntcp.connectFailedInvalidPort", "", "ntcp", RATES);
-        //_context.statManager().createRateStat("ntcp.bidRejectedLocalAddress", "", "ntcp", RATES);
-        //_context.statManager().createRateStat("ntcp.bidRejectedNoNTCPAddress", "", "ntcp", RATES);
-        _context.statManager().createRateStat("ntcp.connectFailedTimeout", "", "ntcp", RATES);
-        _context.statManager().createRateStat("ntcp.connectFailedTimeoutIOE", "", "ntcp", RATES);
-        _context.statManager().createRateStat("ntcp.connectFailedUnresolved", "", "ntcp", RATES);
-        //_context.statManager().createRateStat("ntcp.connectImmediate", "", "ntcp", RATES);
-        _context.statManager().createRateStat("ntcp.connectSuccessful", "", "ntcp", RATES);
-        _context.statManager().createRateStat("ntcp.corruptDecryptedI2NP", "", "ntcp", RATES);
-        _context.statManager().createRateStat("ntcp.corruptI2NPCRC", "", "ntcp", RATES);
-        _context.statManager().createRateStat("ntcp.corruptI2NPIME", "", "ntcp", RATES);
-        _context.statManager().createRateStat("ntcp.corruptI2NPIOE", "", "ntcp", RATES);
-        _context.statManager().createRateStat("ntcp.corruptMetaCRC", "", "ntcp", RATES);
-        _context.statManager().createRateStat("ntcp.corruptSkew", "", "ntcp", RATES);
-        _context.statManager().createRateStat("ntcp.corruptTooLargeI2NP", "", "ntcp", RATES);
-        _context.statManager().createRateStat("ntcp.dontSendOnBacklog", "", "ntcp", RATES);
-        //_context.statManager().createRateStat("ntcp.inboundCheckConnection", "", "ntcp", RATES);
-        _context.statManager().createRateStat("ntcp.inboundEstablished", "", "ntcp", RATES);
-        _context.statManager().createRateStat("ntcp.inboundEstablishedDuplicate", "", "ntcp", RATES);
-        _context.statManager().createRateStat("ntcp.inboundIPv4Conn", "Inbound IPv4 NTCP Connection", "ntcp", RATES);
-        _context.statManager().createRateStat("ntcp.inboundIPv6Conn", "Inbound IPv6 NTCP Connection", "ntcp", RATES);
-        //_context.statManager().createRateStat("ntcp.infoMessageEnqueued", "", "ntcp", RATES);
-        //_context.statManager().createRateStat("ntcp.floodInfoMessageEnqueued", "", "ntcp", RATES);
-        _context.statManager().createRateStat("ntcp.invalidDH", "", "ntcp", RATES);
-        _context.statManager().createRateStat("ntcp.invalidHXY", "", "ntcp", RATES);
-        _context.statManager().createRateStat("ntcp.invalidHXxorBIH", "", "ntcp", RATES);
-        _context.statManager().createRateStat("ntcp.invalidInboundDFE", "", "ntcp", RATES);
-        _context.statManager().createRateStat("ntcp.invalidInboundIOE", "", "ntcp", RATES);
-        _context.statManager().createRateStat("ntcp.invalidInboundSignature", "", "ntcp", RATES);
-        _context.statManager().createRateStat("ntcp.invalidInboundSize", "", "ntcp", RATES);
-        _context.statManager().createRateStat("ntcp.invalidInboundSkew", "", "ntcp", RATES);
-        _context.statManager().createRateStat("ntcp.invalidSignature", "", "ntcp", RATES);
-        //_context.statManager().createRateStat("ntcp.liveReadBufs", "", "ntcp", RATES);
-        _context.statManager().createRateStat("ntcp.multipleCloseOnRemove", "", "ntcp", RATES);
-        _context.statManager().createRateStat("ntcp.outboundEstablishFailed", "", "ntcp", RATES);
-        _context.statManager().createRateStat("ntcp.outboundFailedIOEImmediate", "", "ntcp", RATES);
-        _context.statManager().createRateStat("ntcp.invalidOutboundSkew", "", "ntcp", RATES);
-        _context.statManager().createRateStat("ntcp.noBidTooLargeI2NP", "send size", "ntcp", RATES);
-        _context.statManager().createRateStat("ntcp.queuedRecv", "", "ntcp", RATES);
-        _context.statManager().createRateStat("ntcp.read", "", "ntcp", RATES);
-        //_context.statManager().createRateStat("ntcp.readEOF", "", "ntcp", RATES);
-        _context.statManager().createRateStat("ntcp.readError", "", "ntcp", RATES);
-        _context.statManager().createRateStat("ntcp.receiveCorruptEstablishment", "", "ntcp", RATES);
-        _context.statManager().createRateStat("ntcp.receiveMeta", "", "ntcp", RATES);
-        _context.statManager().createRateStat("ntcp.registerConnect", "", "ntcp", RATES);
-        _context.statManager().createRateStat("ntcp.replayHXxorBIH", "", "ntcp", RATES);
-        _context.statManager().createRateStat("ntcp.throttledReadComplete", "", "ntcp", RATES);
-        _context.statManager().createRateStat("ntcp.throttledWriteComplete", "", "ntcp", RATES);
-        _context.statManager().createRateStat("ntcp.wantsQueuedWrite", "", "ntcp", RATES);
-        //_context.statManager().createRateStat("ntcp.write", "", "ntcp", RATES);
-        _context.statManager().createRateStat("ntcp.writeError", "", "ntcp", RATES);
+        _context.statManager().createRateStat("ntcp.sendTime", "Total message lifetime when sent completely", "Transport [NTCP]", RATES);
+        _context.statManager().createRateStat("ntcp.sendQueueSize", "Number of messages ahead of current one on the connection's queue when it was first added", "Transport [NTCP]", RATES);
+        _context.statManager().createRateStat("ntcp.receiveTime", "Time to receive an Inbound message", "Transport [NTCP]", RATES);
+        _context.statManager().createRateStat("ntcp.receiveSize", "How large the received message was", "Transport [NTCP]", RATES);
+        _context.statManager().createRateStat("ntcp.sendBacklogTime", "How long head of send queue has been waiting when we fail to add a new one to the queue (period is number of messages queued)", "Transport [NTCP]", RATES);
+        _context.statManager().createRateStat("ntcp.failsafeWrites", "Number of times extra nio write proactively added to a peer at any given failsafe pass", "Transport [NTCP]", RATES);
+        _context.statManager().createRateStat("ntcp.failsafeCloses", "Number of times idle connection to peer proactively closed at any given failsafe pass", "Transport [NTCP]", RATES);
+        _context.statManager().createRateStat("ntcp.failsafeInvalid", "Number of times connection to peer closed to work around a JVM bug", "Transport [NTCP]", RATES);
+        _context.statManager().createRateStat("ntcp.failsafeThrottle", "Delay event pumper", "Transport [NTCP]", RATES);
+        _context.statManager().createRateStat("ntcp.accept", "Number of times NTCP request accepted", "Transport [NTCP]", RATES);
+        _context.statManager().createRateStat("ntcp.attemptBanlistedPeer", "Number of attempts to connect to banlisted NTCP peer", "Transport [NTCP]", RATES);
+        _context.statManager().createRateStat("ntcp.attemptUnreachablePeer", "Number of attempts to connect to unreachable NTCP peer", "Transport [NTCP]", RATES);
+        _context.statManager().createRateStat("ntcp.closeOnBacklog", "Number of times we closed an NTCP connection due to backlog", "Transport [NTCP]", RATES);
+        _context.statManager().createRateStat("ntcp.connectFailedIOE", "Number failed connection attempts to NTCP peer (IOerror)", "Transport [NTCP]", RATES);
+        //_context.statManager().createRateStat("ntcp.connectFailedInvalidPort", "", "Transport [NTCP]", RATES);
+        //_context.statManager().createRateStat("ntcp.bidRejectedLocalAddress", "", "Transport [NTCP]", RATES);
+        //_context.statManager().createRateStat("ntcp.bidRejectedNoNTCPAddress", "", "Transport [NTCP]", RATES);
+        _context.statManager().createRateStat("ntcp.connectFailedTimeout", "Number of failed connection attempt timeouts to NTCP peer", "Transport [NTCP]", RATES);
+        _context.statManager().createRateStat("ntcp.connectFailedTimeoutIOE", "Number of failed connection attempt timeouts to NTCP peer (IOerror)", "Transport [NTCP]", RATES);
+        _context.statManager().createRateStat("ntcp.connectFailedUnresolved", "Number of unresolved connection attempts to NTCP peer", "Transport [NTCP]", RATES);
+        //_context.statManager().createRateStat("ntcp.connectImmediate", "", "Transport [NTCP]", RATES);
+        _context.statManager().createRateStat("ntcp.connectSuccessful", "Number of successful connection attempts to NTCP peer", "Transport [NTCP]", RATES);
+        _context.statManager().createRateStat("ntcp.corruptDecryptedI2NP", "Number of corrupt NTCP messages decrypted", "Transport [NTCP]", RATES);
+        _context.statManager().createRateStat("ntcp.corruptI2NPCRC", "Number of corrupt NTCP messages decrypted (CRC fail)", "Transport [NTCP]", RATES);
+        _context.statManager().createRateStat("ntcp.corruptI2NPIME", "Number of corrupt NTCP messages decrypted (IME)", "Transport [NTCP]", RATES);
+        _context.statManager().createRateStat("ntcp.corruptI2NPIOE", "Number of corrupt NTCP messages decrypted (IOerror)", "Transport [NTCP]", RATES);
+        _context.statManager().createRateStat("ntcp.corruptMetaCRC", "Number of corrupt MetaCRCs received from NTCP peer", "Transport [NTCP]", RATES);
+        _context.statManager().createRateStat("ntcp.corruptSkew", "Number of corrupt clock skews received from NTCP peer", "Transport [NTCP]", RATES);
+        _context.statManager().createRateStat("ntcp.corruptTooLargeI2NP", "Number of corrupt NTCP TooLargeI2NP events", "Transport [NTCP]", RATES);
+        _context.statManager().createRateStat("ntcp.dontSendOnBacklog", "Number of dropped message sends to NTCP peer because of backlog", "Transport [NTCP]", RATES);
+        //_context.statManager().createRateStat("ntcp.inboundCheckConnection", "", "Transport [NTCP]", RATES);
+        _context.statManager().createRateStat("ntcp.inboundEstablished", "Number of established Inbound NTCP connections", "Transport [NTCP]", RATES);
+        _context.statManager().createRateStat("ntcp.inboundEstablishedDuplicate", "Number of duplicate established Inbound NTCP connections", "Transport [NTCP]", RATES);
+        _context.statManager().createRateStat("ntcp.inboundIPv4Conn", "Number of Inbound IPv4 NTCP connections", "Transport [NTCP]", RATES);
+        _context.statManager().createRateStat("ntcp.inboundIPv6Conn", "Number of Inbound IPv6 NTCP connections", "Transport [NTCP]", RATES);
+        //_context.statManager().createRateStat("ntcp.infoMessageEnqueued", "", "Transport [NTCP]", RATES);
+        //_context.statManager().createRateStat("ntcp.floodInfoMessageEnqueued", "", "Transport [NTCP]", RATES);
+        _context.statManager().createRateStat("ntcp.invalidDH", "Number of invalid NTCP Diffie-Hellman key exchange attempts", "Transport [NTCP]", RATES);
+        _context.statManager().createRateStat("ntcp.invalidHXY", "Number of invalid NTCP HXY encryption attempts", "Transport [NTCP]", RATES); // ?
+        _context.statManager().createRateStat("ntcp.invalidHXxorBIH", "Number of invalid NTCP HXxorBIH encryption attempts", "Transport [NTCP]", RATES); // ?
+        _context.statManager().createRateStat("ntcp.invalidInboundDFE", "Number of invalid NTCP Inbound DFEs", "Transport [NTCP]", RATES); // ?
+        _context.statManager().createRateStat("ntcp.invalidInboundIOE", "Number of invalid NTCP Inbound ioerrors", "Transport [NTCP]", RATES);
+        _context.statManager().createRateStat("ntcp.invalidInboundSignature", "Number of invalid Inbound signatures received from NTCP peer", "Transport [NTCP]", RATES);
+        _context.statManager().createRateStat("ntcp.invalidInboundSize", "Number of invalid Inbound messages received from NTCP peer (incorrect size)", "Transport [NTCP]", RATES);
+        _context.statManager().createRateStat("ntcp.invalidInboundSkew", "Number of invalid clockskew reports received from NTCP peer", "Transport [NTCP]", RATES);
+        _context.statManager().createRateStat("ntcp.invalidSignature", "Total number of invalid signatures received from NTCP peer", "Transport [NTCP]", RATES);
+        //_context.statManager().createRateStat("ntcp.liveReadBufs", "", "Transport [NTCP]", RATES);
+        _context.statManager().createRateStat("ntcp.multipleCloseOnRemove", "Number of NTCP multipleCloseOnRemove events", "Transport [NTCP]", RATES);
+        _context.statManager().createRateStat("ntcp.outboundEstablishFailed", "Number of failed NTCP Outbound Tunnel Establishment events", "Transport [NTCP]", RATES);
+        _context.statManager().createRateStat("ntcp.outboundFailedIOEImmediate", "Number of failed NTCP Outbound Tunnel events (IOerror)", "Transport [NTCP]", RATES);
+        _context.statManager().createRateStat("ntcp.invalidOutboundSkew", "Number of invalid NTCP Outbound clock skews", "Transport [NTCP]", RATES);
+        _context.statManager().createRateStat("ntcp.noBidTooLargeI2NP", "NTCP tunnel send size", "Transport [NTCP]", RATES);
+        _context.statManager().createRateStat("ntcp.queuedRecv", "Number of queued NTCP RECV packets", "Transport [NTCP]", RATES);
+        _context.statManager().createRateStat("ntcp.read", "Number of NTCP read events", "Transport [NTCP]", RATES);
+        //_context.statManager().createRateStat("ntcp.readEOF", "", "Transport [NTCP]", RATES);
+        _context.statManager().createRateStat("ntcp.readError", "Number of NTCP read errors", "Transport [NTCP]", RATES);
+        _context.statManager().createRateStat("ntcp.receiveCorruptEstablishment", "Number of corrupt NTCP establishment events received", "Transport [NTCP]", RATES);
+        _context.statManager().createRateStat("ntcp.receiveMeta", "Number of NTCP receiveMeta events", "Transport [NTCP]", RATES);
+        _context.statManager().createRateStat("ntcp.registerConnect", "Number of NTCP registerConnect events", "Transport [NTCP]", RATES);
+        _context.statManager().createRateStat("ntcp.replayHXxorBIH", "Number of NTCP replayHXxorBIH events", "Transport [NTCP]", RATES);
+        _context.statManager().createRateStat("ntcp.throttledReadComplete", "Number of throttled NTCP ReadComplete events", "Transport [NTCP]", RATES);
+        _context.statManager().createRateStat("ntcp.throttledWriteComplete", "Number of throttled NTCP WriteComplete events", "Transport [NTCP]", RATES);
+        _context.statManager().createRateStat("ntcp.wantsQueuedWrite", "Number of wanted NTCP QueuedWrite events", "Transport [NTCP]", RATES);
+        //_context.statManager().createRateStat("ntcp.write", "", "Transport [NTCP]", RATES);
+        _context.statManager().createRateStat("ntcp.writeError", "Number of NTCP write errors", "Transport [NTCP]", RATES);
         _endpoints = new HashSet<InetSocketAddress>(4);
         _establishing = new ConcurrentHashSet<NTCPConnection>(16);
         _conLock = new Object();
@@ -307,7 +307,7 @@ public class NTCPTransport extends TransportImpl {
             _b64Ntcp2StaticIV = null;
         }
     }
-    
+
     /**
      *  Pick a port if not previously configured.
      *  Only if UDP is disabled.
@@ -394,7 +394,7 @@ public class NTCPTransport extends TransportImpl {
             if (fail) {
                 // race, RI changed out from under us, maybe SSU can handle it
                 if (_log.shouldLog(Log.WARN))
-                    _log.warn("we bid on a peer who doesn't have an ntcp address? " + target);
+                    _log.warn("We bid on a peer who doesn't have an ntcp address? " + target);
                 afterSend(msg, false);
                 return;
             }
@@ -536,9 +536,9 @@ public class NTCPTransport extends TransportImpl {
             return _fastBid;
         }
         if (toAddress.getNetworkId() != _networkID) {
-            _context.banlist().banlistRouterForever(peer, "Not in our network: " + toAddress.getNetworkId());
+            _context.banlist().banlistRouterForever(peer, " <b>➜</b> " + "Not in our network: " + toAddress.getNetworkId());
             markUnreachable(peer);
-            return null;    
+            return null;
         }
         if (dataSize > NTCPConnection.NTCP1_MAX_MSG_SIZE) {
             // Not established, too big for NTCP 1, let SSU deal with it
@@ -630,7 +630,7 @@ public class NTCPTransport extends TransportImpl {
         }
         return null;
     }
-    
+
     /**
      * An IPv6 address is only valid if we are configured to support IPv6
      * AND we have a public IPv6 address.
@@ -715,8 +715,8 @@ public class NTCPTransport extends TransportImpl {
     public int countPeers() {
             return _conByIdent.size();
     }
-    
-    /** 
+
+    /**
      * For /peers UI only. Not a public API, not for external use.
      *
      * @return not a copy, do not modify
@@ -725,8 +725,8 @@ public class NTCPTransport extends TransportImpl {
     public Collection<NTCPConnection> getPeers() {
         return _conByIdent.values();
     }
-    
-    /** 
+
+    /**
      * Connected peers.
      *
      * @return a copy, modifiable
@@ -829,8 +829,10 @@ public class NTCPTransport extends TransportImpl {
 
     private static final int MIN_CONCURRENT_READERS = 2;  // unless < 32MB
     private static final int MIN_CONCURRENT_WRITERS = 2;  // unless < 32MB
-    private static final int MAX_CONCURRENT_READERS = 4;
-    private static final int MAX_CONCURRENT_WRITERS = 4;
+//    private static final int MAX_CONCURRENT_READERS = 4;
+//    private static final int MAX_CONCURRENT_WRITERS = 4;
+    private static final int MAX_CONCURRENT_READERS = SystemVersion.usableCores();
+    private static final int MAX_CONCURRENT_WRITERS = Math.min(SystemVersion.usableCores(), 3);
 
     /**
      *  Called by TransportManager.
@@ -1392,7 +1394,7 @@ public class NTCPTransport extends TransportImpl {
                             v6 = true;
                         valid++;
                         if (_log.shouldDebug())
-                            _log.debug("adding " + Addresses.toString(ip) + " for " + h);
+                            _log.debug("Adding " + Addresses.toString(ip) + " for " + h);
                         ipstrings.add(Addresses.toString(ip));
                     }
                 }
@@ -1420,7 +1422,7 @@ public class NTCPTransport extends TransportImpl {
             ip = ipstrings.get(0);
         return ip;
     }
-    
+
     private int getDefaultCost(boolean isIPv6) {
         int rv = DEFAULT_COST;
         if (isIPv6) {
@@ -1496,7 +1498,8 @@ public class NTCPTransport extends TransportImpl {
     @Override
     public void externalAddressRemoved(AddressSource source, boolean ipv6) {
         if (_log.shouldWarn())
-            _log.warn("Removing address, ipv6? " + ipv6 + " from: " + source, new Exception());
+//            _log.warn("Removing external address: (ipv6 enabled? " + ipv6 + ") from: " + source, new Exception());
+            _log.warn("Removing external address: (ipv6 enabled? " + ipv6 + ") from: " + source);
         // ignore UPnP for now, get everything from SSU if it's enabled
         boolean ssuEnabled = _context.getBooleanPropertyDefaultTrue(TransportManager.PROP_ENABLE_UDP);
         if (source != SOURCE_SSU && ssuEnabled)
@@ -1506,7 +1509,7 @@ public class NTCPTransport extends TransportImpl {
         if (changed && !ssuEnabled) {
             addressChanged(old);
         }
-    }    
+    }
 
     /**
      *  Only called if SSU is disabled AND our address changed.
@@ -1526,7 +1529,7 @@ public class NTCPTransport extends TransportImpl {
         }
         _context.router().rebuildRouterInfo();
     }
-    
+
     /**
      *  UDP changed addresses, tell NTCP and restart.
      *  Port may be set to indicate requested port even if ip is null.
@@ -1704,7 +1707,7 @@ public class NTCPTransport extends TransportImpl {
         restartListening(newAddr, isIPv6);
         if (_log.shouldLog(Log.WARN))
             _log.warn("Updating NTCP Address (ipv6? " + isIPv6 + ") with " + newAddr);
-        return true;     	
+        return true;
     }
 
     /**
@@ -1729,7 +1732,7 @@ public class NTCPTransport extends TransportImpl {
         // getReachabilityStatus() should report correctly after address is updated.
         //if (!_context.getBooleanPropertyDefaultTrue(TransportManager.PROP_ENABLE_UDP)) {
         //    if (success && ip != null && isValid(ip) && !isIPv4Firewalled()) {
-        //        ...
+        //
         //    }
         //}
     }
@@ -1766,7 +1769,7 @@ public class NTCPTransport extends TransportImpl {
      *
      * Previously returned short, now enum as of 0.9.20
      */
-    public Status getReachabilityStatus() { 
+    public Status getReachabilityStatus() {
         if (!isAlive())
             return Status.UNKNOWN;
         TransportUtil.IPv6Config config = getIPv6Config();
@@ -1851,7 +1854,7 @@ public class NTCPTransport extends TransportImpl {
      *  before calling startListening() or restartListening()
      */
     public synchronized void stopListening() {
-        if (_log.shouldLog(Log.WARN)) _log.warn("Stopping ntcp transport");
+        if (_log.shouldLog(Log.WARN)) _log.warn("Stopping NTCP transport");
         _pumper.stopPumping();
         _writer.stopWriting();
         _reader.stopReading();

@@ -147,22 +147,34 @@ public class JSONRPC2Servlet extends HttpServlet {
     protected void doGet(HttpServletRequest httpServletRequest, HttpServletResponse httpServletResponse) throws ServletException, IOException {
         httpServletResponse.setContentType("text/html");
         PrintWriter out = httpServletResponse.getWriter();
-        out.println("<p>I2PControl RPC Service version " + I2PControlVersion.VERSION + " : Running");
-	if ("/password".equals(httpServletRequest.getServletPath())) {
-            out.println("<form method=\"POST\" action=\"password\">");
+        out.println("<!DOCTYPE html>\n");
+        out.println("<html>\n<head>\n");
+        out.println("<meta http-equiv=\"Content-Type\" content=\"text/html; charset=UTF-8\">\n");
+//        out.println("<title>I2PControl - I2P Router Console</title>");
+        out.println("<title>I2PControl - I2P+</title>\n");
+        out.println("<link rel=\"icon\" href=\"/themes/console/dark/images/favicon.ico\">\n");
+        out.println("<link href=\"/themes/i2pcontrol/i2pcontrol.css\" rel=\"stylesheet\" type=\"text/css\">\n");
+        out.println("</head>\n<body>\n");
+        out.println("<h1>I2PControl RPC Service&nbsp;&nbsp;<a href=\"/configwebapps\" title=\"Control and configure service\">" +
+                    "<img src=\"/themes/console/images/info/configure.png\" height=\"16\" width=\"16\"></a></h1>\n");
+        out.println("<p><b>Version:</b> " + I2PControlVersion.VERSION + "<br>");
+        out.println("<b>Status:</b> Running</p>");
+   if ("/password".equals(httpServletRequest.getServletPath())) {
+            out.println("<hr>\n<form method=\"POST\" action=\"password\">\n");
             if (_secMan.isDefaultPasswordValid()) {
-                out.println("<p>The current API password is the default, \"" + _secMan.DEFAULT_AUTH_PASSWORD + "\". You should change it.");
-            } else {	
-                out.println("<p>Current API password:<input name=\"password\" type=\"password\">");
+                out.println("<p>The current API password is the default, \"" + _secMan.DEFAULT_AUTH_PASSWORD + "\". You should change it.</p>");
+            } else {
+                out.println("<p><span class=\"prompt\">Current API password:</span> <input name=\"password\" type=\"password\"></p>");
             }
-            out.println("<p>New API password (twice):<input name=\"password2\" type=\"password\">" +
-                        "<input name=\"password3\" type=\"password\">" +
-                        "<input name=\"save\" type=\"submit\" value=\"Change API Password\">" +
-                        "<p>If you forget the API password, stop i2pcontrol, delete the file <tt>" + _conf.getConfFile() +
-                        "</tt>, and restart i2pcontrol.");
-        } else {	
-            out.println("<p><a href=\"password\">Change API Password</a>");
+            out.println("\n<p><span class=\"prompt\">New API password (twice):</span> <input name=\"password2\" type=\"password\">&nbsp;" +
+                        "<input name=\"password3\" type=\"password\">" + "</p>\n" +
+                        "<p id=\"password\"><input name=\"save\" type=\"submit\" value=\"Change API Password\"></p>\n" +
+                        "<hr><p>If you forget the API password, stop I2PControl, delete the config file and restart I2PControl.\n" +
+                        "<br><b>Location:</b> <code>" + _conf.getConfFile() + "</code></p>\n</form>");
+        } else {
+            out.println("<hr><p id=\"password\"><a href=\"password\">Change API Password</a></p>");
         }
+        out.println("\n</body>\n</html>");
         out.close();
     }
 
@@ -177,28 +189,39 @@ public class JSONRPC2Servlet extends HttpServlet {
             pw = pw.trim();
         String pw2 = req.getParameter("password2");
         String pw3 = req.getParameter("password3");
+        out.println("<!DOCTYPE html>\n");
+        out.println("<html>\n<head>\n");
+        out.println("<meta http-equiv=\"Content-Type\" content=\"text/html; charset=UTF-8\">\n");
+//        out.println("<title>I2PControl - I2P Router Console</title>");
+        out.println("<title>I2PControl - I2P+</title>\n");
+        out.println("<link rel=\"icon\" href=\"/themes/console/dark/images/favicon.ico\">\n");
+        out.println("<link href=\"/themes/i2pcontrol/i2pcontrol.css\" rel=\"stylesheet\" type=\"text/css\">\n");
+        out.println("</head>\n<body>\n");
+        out.println("<h1>I2PControl RPC Service&nbsp;&nbsp;<a href=\"/configwebapps\" title=\"Control and configure service\">" +
+                    "<img src=\"/themes/console/images/info/configure.png\" height=\"16\" width=\"16\"></a></h1>\n");
         if (pw2 == null || pw3 == null) {
-            out.println("<p>Enter new password twice!");
+            out.println("<p>Enter new password twice!</p>\n");
         } else {
             pw2 = pw2.trim();
             pw3 = pw3.trim();
             if (!pw2.equals(pw3)) {
-                out.println("<p>New passwords don't match!");
+                out.println("<p>New passwords don't match!</p>\n");
             } else if (pw2.length() <= 0) {
-                out.println("<p>Enter new password twice!");
+                out.println("<p>Enter new password twice!</p>\n");
             } else if (_secMan.isValid(pw)) {
                 _secMan.setPasswd(pw2);
-                out.println("<p>API Password changed");
-            } else {	
-                out.println("<p>Incorrect old password, not changed");
+                out.println("<p>API Password changed</p>\n");
+            } else {
+                out.println("<p>Incorrect old password, not changed</p>\n");
             }
         }
-        out.println("<p><a href=\"password\">Change API Password</a>");
+        out.println("<hr>\n<p id=\"password\"><a href=\"password\">Change API Password</a></p>\n");
+        out.println("</body>\n</html>");
     }
 
     @Override
     protected void doPost(HttpServletRequest httpServletRequest, HttpServletResponse httpServletResponse) throws ServletException, IOException {
-	if ("/password".equals(httpServletRequest.getServletPath())) {
+   if ("/password".equals(httpServletRequest.getServletPath())) {
             doPasswordChange(httpServletRequest, httpServletResponse);
             return;
         }

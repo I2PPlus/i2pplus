@@ -2,7 +2,7 @@
 <p>
   <%=intl._t("While I2P will work fine behind most firewalls, your speeds and network integration will generally improve if the I2P port is forwarded for both UDP and TCP.")%>&nbsp;
   <%=intl._t("If you think you have opened up your firewall and I2P still thinks you are firewalled, remember that you may have multiple firewalls, for example both software packages and external hardware routers.")%>&nbsp;
-  <%=intl._t("If there is an error, the <a href=\"logs.jsp\">logs</a> may also help diagnose the problem.")%>
+  <%=intl._t("If there is an error, the <a href=\"/logs\">logs</a> may also help diagnose the problem.")%>
 </p>
 <ul id="reachability">
   <li><b><%=intl._t("OK")%>:</b>
@@ -11,7 +11,7 @@
   <li><b><%=intl._t("Firewalled")%>:</b>
      <%=intl._t("Your UDP port appears to be firewalled.")%>&nbsp;
      <%=intl._t("As the firewall detection methods are not 100% reliable, this may occasionally be displayed in error.")%>&nbsp;
-     <%=intl._t("However, if it appears consistently, you should check whether both your external and internal firewalls are open for your port.")%>&nbsp; 
+     <%=intl._t("However, if it appears consistently, you should check whether both your external and internal firewalls are open for your port.")%>&nbsp;
      <%=intl._t("I2P will work fine when firewalled, there is no reason for concern. When firewalled, the router uses \"introducers\" to relay inbound connections.")%>&nbsp;
      <%=intl._t("However, you will get more participating traffic and help the network if you open your firewall.")%>&nbsp;
      <%=intl._t("If you think you have already done so, remember that you may have both a hardware and a software firewall, or be behind an additional, institutional firewall you cannot control.")%>&nbsp;
@@ -34,7 +34,7 @@
   </li>
   <li><b><%=intl._t("WARN - Firewalled with Inbound TCP Enabled")%>:</b>
      <%=intl._t("You have configured inbound TCP, however your UDP port is firewalled, and therefore it is likely that your TCP port is firewalled as well.")%>
-     <%=intl._t("If your TCP port is firewalled with inbound TCP enabled, routers will not be able to contact you via TCP, which will hurt the network.")%> 
+     <%=intl._t("If your TCP port is firewalled with inbound TCP enabled, routers will not be able to contact you via TCP, which will hurt the network.")%>
      <%=intl._t("Please open your firewall or disable inbound TCP above.")%>
   </li>
   <li><b><%=intl._t("WARN - Firewalled with UDP Disabled")%>:</b>
@@ -47,7 +47,7 @@
      <%=intl._t("Correct your clock setting if this error persists.")%>
   </li>
   <li><b><%=intl._t("ERR - Private TCP Address")%>:</b>
-     <%=intl._t("You must never advertise an unroutable IP address such as 127.0.0.1 or 192.168.1.1 as your external address.")%> 
+     <%=intl._t("You must never advertise an unroutable IP address such as 127.0.0.1 or 192.168.1.1 as your external address.")%>
      <%=intl._t("Correct the address or disable inbound TCP on the Network Configuration page.")%>
   </li>
   <li><b><%=intl._t("ERR - SymmetricNAT")%>:</b>
@@ -57,7 +57,7 @@
   <li><b><%=intl._t("ERR - UDP Port In Use - Set i2np.udp.internalPort=xxxx in advanced config and restart")%>:</b>
      <%=intl._t("I2P was unable to bind to the configured port noted on the advanced network configuration page .")%>&nbsp;
      <%=intl._t("Check to see if another program is using the configured port. If so, stop that program or configure I2P to use a different port.")%>&nbsp;
-     <%=intl._t("This may be a transient error, if the other program is no longer using the port.")%>&nbsp; 
+     <%=intl._t("This may be a transient error, if the other program is no longer using the port.")%>&nbsp;
      <%=intl._t("However, a restart is always required after this error.")%>
   </li>
   <li><b><%=intl._t("ERR - UDP Disabled and Inbound TCP host/port not set")%>:</b>
@@ -73,8 +73,8 @@
 
 <h3><%=intl._t("Clock Skew")%></h3>
 <p>
-<%=intl._t("The skew (offset) of your computer's clock relative to the network-synced time.")%>
-<%=intl._t("I2P requires your computer's time be accurate.")%>
-<%=intl._t("If the skew is more than a few seconds, please correct the problem by adjusting your computer's time.")%>
+<%=intl._t("The skew (offset) of your computer's clock relative to the network-synced time.")%>&nbsp;
+<%=intl._t("I2P requires your computer's time be accurate.")%>&nbsp;
+<%=intl._t("If the skew is more than a few seconds, please correct the problem by adjusting your computer's time.")%>&nbsp;
 <%=intl._t("If I2P cannot connect to the internet, a reading of 0ms may be indicated.")%>
 </p>

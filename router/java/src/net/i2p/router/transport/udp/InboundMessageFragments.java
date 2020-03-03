@@ -28,10 +28,10 @@ class InboundMessageFragments /*implements UDPTransport.PartialACKSource */{
     private final ACKSender _ackSender;
     private final MessageReceiver _messageReceiver;
     private volatile boolean _alive;
-    
+
     /** decay the recently completed every 20 seconds */
     private static final int DECAY_PERIOD = 10*1000;
-        
+
     public InboundMessageFragments(RouterContext ctx, OutboundMessageFragments outbound, UDPTransport transport) {
         _context = ctx;
         _log = ctx.logManager().getLog(InboundMessageFragments.class);
@@ -40,19 +40,19 @@ class InboundMessageFragments /*implements UDPTransport.PartialACKSource */{
         _transport = transport;
         _ackSender = new ACKSender(_context, _transport);
         _messageReceiver = new MessageReceiver(_context, _transport);
-        _context.statManager().createRateStat("udp.receivedCompleteTime", "How long it takes to receive a full message", "udp", UDPTransport.RATES);
-        _context.statManager().createRateStat("udp.receivedCompleteFragments", "How many fragments go in a fully received message", "udp", UDPTransport.RATES);
-        _context.statManager().createRateStat("udp.receivedACKs", "How many messages were ACKed at a time", "udp", UDPTransport.RATES);
-        _context.statManager().createRateStat("udp.ignoreRecentDuplicate", "Take note that we received a packet for a recently completed message", "udp", UDPTransport.RATES);
-        //_context.statManager().createRateStat("udp.receiveMessagePeriod", "How long it takes to pull the message fragments out of a packet", "udp", UDPTransport.RATES);
-        //_context.statManager().createRateStat("udp.receiveACKPeriod", "How long it takes to pull the ACKs out of a packet", "udp", UDPTransport.RATES);
-        _context.statManager().createRateStat("udp.receivePiggyback", "How many acks were included in a packet with data fragments (time == # data fragments)", "udp", UDPTransport.RATES);
+        _context.statManager().createRateStat("udp.receivedCompleteTime", "How long it takes to receive a full message", "Transport [UDP]", UDPTransport.RATES);
+        _context.statManager().createRateStat("udp.receivedCompleteFragments", "How many fragments go in a fully received message", "Transport [UDP]", UDPTransport.RATES);
+        _context.statManager().createRateStat("udp.receivedACKs", "How many messages were ACKed at a time", "Transport [UDP]", UDPTransport.RATES);
+        _context.statManager().createRateStat("udp.ignoreRecentDuplicate", "Take note that we received a packet for a recently completed message", "Transport [UDP]", UDPTransport.RATES);
+        //_context.statManager().createRateStat("udp.receiveMessagePeriod", "How long it takes to pull the message fragments out of a packet", "Transport [UDP]", UDPTransport.RATES);
+        //_context.statManager().createRateStat("udp.receiveACKPeriod", "How long it takes to pull the ACKs out of a packet", "Transport [UDP]", UDPTransport.RATES);
+        _context.statManager().createRateStat("udp.receivePiggyback", "How many acks were included in a packet with data fragments (time = # data fragments)", "Transport [UDP]", UDPTransport.RATES);
     }
-    
-    public synchronized void startup() { 
-        _alive = true; 
-        // may want to extend the DecayingBloomFilter so we can use a smaller 
-        // array size (currently its tuned for 10 minute rates for the 
+
+    public synchronized void startup() {
+        _alive = true;
+        // may want to extend the DecayingBloomFilter so we can use a smaller
+        // array size (currently its tuned for 10 minute rates for the
         // messageValidator)
         _recentlyCompletedMessages = new DecayingHashSet(_context, DECAY_PERIOD, 4, "UDPIMF");
         _ackSender.startup();
@@ -78,10 +78,10 @@ class InboundMessageFragments /*implements UDPTransport.PartialACKSource */{
             rcvData(from, data);
         } catch (DataFormatException dfe) {
             if (_log.shouldLog(Log.WARN))
-                _log.warn("Bad pkt from: " + from, dfe);
+                _log.warn("Bad packet from: " + from, dfe);
         } catch (IndexOutOfBoundsException ioobe) {
             if (_log.shouldLog(Log.WARN))
-                _log.warn("Bad pkt from: " + from, ioobe);
+                _log.warn("Bad packet from: " + from, ioobe);
         }
     }
 
@@ -94,7 +94,7 @@ class InboundMessageFragments /*implements UDPTransport.PartialACKSource */{
         //long afterMsgs = _context.clock().now();
         int acksIncluded = receiveACKs(from, data);
         //long afterACKs = _context.clock().now();
-        
+
         from.packetReceived(data.getPacketSize());
         // each of these was less than 0.1 ms
         //_context.statManager().addRateData("udp.receiveMessagePeriod", afterMsgs-beforeMsgs, afterACKs-beforeMsgs);
@@ -102,7 +102,7 @@ class InboundMessageFragments /*implements UDPTransport.PartialACKSource */{
         if ( (fragmentsIncluded > 0) && (acksIncluded > 0) )
             _context.statManager().addRateData("udp.receivePiggyback", acksIncluded, fragmentsIncluded);
     }
-    
+
     /**
      * Pull out all the data fragments and shove them into InboundMessageStates.
      * Along the way, if any state expires, or a full message arrives, move it
@@ -114,7 +114,7 @@ class InboundMessageFragments /*implements UDPTransport.PartialACKSource */{
         int fragments = data.readFragmentCount();
         if (fragments <= 0) return fragments;
         Hash fromPeer = from.getRemotePeer();
-            
+
         Map<Long, InboundMessageState> messages = from.getInboundMessages();
 
         for (int i = 0; i < fragments; i++) {
@@ -129,20 +129,20 @@ class InboundMessageFragments /*implements UDPTransport.PartialACKSource */{
                     from.messageFullyReceived(messageId, -1);
                     _ackSender.ackPeer(from);
                     if (_log.shouldLog(Log.INFO))
-                        _log.info("Message received is a dup: " + mid + " dups: " 
-                                  + _recentlyCompletedMessages.getCurrentDuplicateCount() + " out of " 
+                        _log.info("Message received is a duplicate: " + mid + " dups: "
+                                  + _recentlyCompletedMessages.getCurrentDuplicateCount() + " out of "
                                   + _recentlyCompletedMessages.getInsertedCount());
                     _context.messageHistory().droppedInboundMessage(mid, from.getRemotePeer(), "dup");
                 }
                 continue;
             }
-            
+
             InboundMessageState state;
             boolean messageComplete = false;
             boolean messageExpired = false;
             boolean fragmentOK;
             boolean partialACK = false;
-         
+
             synchronized (messages) {
                 boolean isNew = false;
                 state = messages.get(messageId);
@@ -154,8 +154,8 @@ class InboundMessageFragments /*implements UDPTransport.PartialACKSource */{
                 } else {
                     fragmentOK = state.receiveFragment(data, i);
                 }
-                
-             
+
+
                 if (state.isComplete()) {
                     messageComplete = true;
                     if (!isNew)
@@ -177,7 +177,7 @@ class InboundMessageFragments /*implements UDPTransport.PartialACKSource */{
                 _ackSender.ackPeer(from);
 
                 if (_log.shouldLog(Log.DEBUG))
-                    _log.debug("Message received completely!  " + state);
+                    _log.debug("Complete message received\n* " + state);
 
                 _context.statManager().addRateData("udp.receivedCompleteTime", state.getLifetime(), state.getLifetime());
                 if (state.getFragmentCount() > 0)
@@ -187,7 +187,7 @@ class InboundMessageFragments /*implements UDPTransport.PartialACKSource */{
                 _messageReceiver.receiveMessage(state);
             } else if (messageExpired) {
                 if (_log.shouldLog(Log.WARN))
-                    _log.warn("Message expired while only being partially read: " + state);
+                    _log.warn("Message expired while only being partially read\n* " + state);
                 _context.messageHistory().droppedInboundMessage(state.getMessageId(), state.getFrom(), "expired while partially read: " + state.toString());
                 // all state access must be before this
                 state.releaseResources();
@@ -206,7 +206,7 @@ class InboundMessageFragments /*implements UDPTransport.PartialACKSource */{
         from.expireInboundMessages();
         return fragments;
     }
-    
+
     /**
      *  @return the number of bitfields in the ack? why?
      */
@@ -224,7 +224,7 @@ class InboundMessageFragments /*implements UDPTransport.PartialACKSource */{
                     long id = data.readACK(i);
                     if (from.acked(id)) {
                         if (_log.shouldLog(Log.DEBUG))
-                            _log.debug("First full ACK of message " + id + " received from " + from.getRemotePeer());
+                            _log.debug("First full ACK of [MsgID " + id + "] received from [" + from.getRemotePeer().toBase64().substring(0,6) + "]");
                         newAck = true;
                     //} else if (_log.shouldLog(Log.DEBUG)) {
                     //    _log.debug("Dup full ACK of message " + id + " received from " + from.getRemotePeer());
@@ -243,10 +243,10 @@ class InboundMessageFragments /*implements UDPTransport.PartialACKSource */{
                 for (int i = 0; i < bitfields.length; i++) {
                     if (from.acked(bitfields[i])) {
                         if (_log.shouldLog(Log.DEBUG))
-                            _log.debug("Final partial ACK received: " + bitfields[i] + " from " + from.getRemotePeer());
+                            _log.debug("Final partial ACK received: " + bitfields[i] + " from [" + from.getRemotePeer().toBase64().substring(0,6) + "]");
                         newAck = true;
                     } else if (_log.shouldLog(Log.DEBUG)) {
-                        _log.debug("Partial ACK received: " + bitfields[i] + " from " + from.getRemotePeer());
+                        _log.debug("Partial ACK received: " + bitfields[i] + " from [" + from.getRemotePeer().toBase64().substring(0,6) + "]");
                     }
                 }
             }

@@ -85,13 +85,13 @@ import org.tanukisoftware.wrapper.WrapperManager;
  *  Start the router console.
  */
 public class RouterConsoleRunner implements RouterApp {
-        
+
     static {
         // To take effect, must be set before any Jetty classes are loaded
         try {
             Log.setLog(new I2PLogger());
         } catch (Throwable t) {
-            System.err.println("INFO: I2P Jetty logging class not found, logging to wrapper log");
+            System.err.println("WARN: I2P Jetty logging class not found, logging to wrapper log");
         }
         // This way it doesn't try to load Slf4jLog first
         // This causes an NPE in AbstractLifeCycle
@@ -216,7 +216,7 @@ public class RouterConsoleRunner implements RouterApp {
         }
         _state = INITIALIZED;
     }
-    
+
     public static void main(String args[]) {
         List<RouterContext> contexts = RouterContext.listContexts();
         if (contexts == null || contexts.isEmpty())
@@ -224,7 +224,7 @@ public class RouterConsoleRunner implements RouterApp {
         RouterConsoleRunner runner = new RouterConsoleRunner(contexts.get(0), null, args);
         runner.startup();
     }
-    
+
     /////// ClientApp methods
 
     /** @since 0.9.4 */
@@ -328,7 +328,7 @@ public class RouterConsoleRunner implements RouterApp {
                                         (sdtg == null && (SystemVersion.isWindows() || SystemVersion.isMac()));
             if (desktopguiEnabled) {
                 System.setProperty("java.awt.headless", "false");
-                net.i2p.desktopgui.Main dtg = new net.i2p.desktopgui.Main(_context, _mgr, null);    
+                net.i2p.desktopgui.Main dtg = new net.i2p.desktopgui.Main(_context, _mgr, null);
                 dtg.startup();
             } else {
                 // required true for jrobin to work
@@ -537,7 +537,7 @@ public class RouterConsoleRunner implements RouterApp {
                     lport = Integer.parseInt(_listenPort);
                 } catch (NumberFormatException nfe) {}
                 if (lport <= 0)
-                    System.err.println("Bad routerconsole port " + _listenPort);
+                    System.err.println("Bad RouterConsole port " + _listenPort);
             }
             if (lport > 0) {
                 List<String> hosts = new ArrayList<String>(2);
@@ -599,7 +599,7 @@ public class RouterConsoleRunner implements RouterApp {
                     sslPort = Integer.parseInt(_sslListenPort);
                 } catch (NumberFormatException nfe) {}
                 if (sslPort <= 0)
-                    System.err.println("Bad routerconsole SSL port " + _sslListenPort);
+                    System.err.println("Bad RouterConsole SSL port " + _sslListenPort);
             }
             if (sslPort > 0) {
                 File keyStore = new File(_context.getConfigDir(), "keystore/console.ks");
@@ -668,7 +668,7 @@ public class RouterConsoleRunner implements RouterApp {
                             boundAddresses++;
                             hosts.add(host);
                         } catch (Exception e) {
-                            System.err.println("Unable to bind routerconsole to " + host + " port " + sslPort + " for SSL: " + e);
+                            System.err.println("Unable to bind RouterConsole to " + host + " port " + sslPort + " for SSL: " + e);
                             if (SystemVersion.isGNU())
                                 System.err.println("Probably because GNU classpath does not support Sun keystores");
                             System.err.println("You may ignore this warning if the console is still available at https://localhost:" + sslPort);
@@ -689,7 +689,7 @@ public class RouterConsoleRunner implements RouterApp {
             }
 
             if (boundAddresses <= 0) {
-                System.err.println("Unable to bind routerconsole to any address on port " + _listenPort + (sslPort > 0 ? (" or SSL port " + sslPort) : ""));
+                System.err.println("Unable to bind RouterConsole to any address on port " + _listenPort + (sslPort > 0 ? (" or SSL port " + sslPort) : ""));
                 return;
             }
             // Each address spawns a Connector and an Acceptor thread
@@ -755,7 +755,7 @@ public class RouterConsoleRunner implements RouterApp {
             _server.start();
         } catch (Throwable me) {
             // NoClassFoundDefError from a webapp is a throwable, not an exception
-            System.err.println("Error starting the Router Console server: " + me);
+            System.err.println("Error starting the RouterConsole server: " + me);
             me.printStackTrace();
         }
 
@@ -780,7 +780,7 @@ public class RouterConsoleRunner implements RouterApp {
             }
             if (error) {
                 String port = (_listenPort != null) ? _listenPort : ((_sslListenPort != null) ? _sslListenPort : Integer.toString(DEFAULT_LISTEN_PORT));
-                System.err.println("WARNING: Error starting one or more listeners of the Router Console server.\n" +
+                System.err.println("WARNING: Error starting one or more listeners of the RouterConsole server.\n" +
                                "If your console is still accessible at http://127.0.0.1:" + port + "/,\n" +
                                "this may be a problem only with binding to the IPV6 address ::1.\n" +
                                "If so, you may ignore this error, or remove the\n" +
@@ -834,7 +834,7 @@ public class RouterConsoleRunner implements RouterApp {
                     _mgr.register(this);
             }
         } else {
-            System.err.println("ERROR: Router console did not start, not starting webapps");
+            System.err.println("ERROR: RouterConsole did not start, not starting webapps");
             changeState(START_FAILED);
         }
 
@@ -865,12 +865,12 @@ public class RouterConsoleRunner implements RouterApp {
         Thread t = new I2PAppThread(new StatSummarizer(_context), "StatSummarizer", true);
         t.setPriority(Thread.NORM_PRIORITY - 1);
         t.start();
-        
+
             ConsoleUpdateManager um = new ConsoleUpdateManager(_context, _mgr, null);
             um.start();
             NewsManager nm = new NewsManager(_context, _mgr, null);
             nm.startup();
-        
+
             if (PluginStarter.pluginsEnabled(_context)) {
                 t = new I2PAppThread(new PluginStarter(_context), "PluginStarter", true);
                 t.setPriority(Thread.NORM_PRIORITY - 1);
@@ -889,7 +889,7 @@ public class RouterConsoleRunner implements RouterApp {
                 Analysis.getInstance(_context);
             }
     }
-    
+
     /**
      * @return success if it exists and we have a password, or it was created successfully.
      * @since 0.8.3
@@ -900,7 +900,7 @@ public class RouterConsoleRunner implements RouterApp {
             KeyStoreUtil.logCertExpiration(ks, ksPW, 180*24*60*60*1000L);
             boolean rv = _context.getProperty(PROP_KEY_PASSWORD) != null;
             if (!rv)
-                System.err.println("Console SSL error, must set " + PROP_KEY_PASSWORD + " in " +
+                System.err.println("RouterConsole SSL error, must set " + PROP_KEY_PASSWORD + " in " +
                                    (new File(_context.getConfigDir(), "router.config")).getAbsolutePath());
             return rv;
         }
@@ -1085,18 +1085,18 @@ public class RouterConsoleRunner implements RouterApp {
             UserIdentity rv = super.login(username, credentials);
             if (rv == null)
                 //_log.logAlways(net.i2p.util.Log.WARN, "Console authentication failed, webapp: " + _webapp + ", user: " + username);
-                _log.logAlways(net.i2p.util.Log.WARN, "Console authentication failed, user: " + username);
+                _log.logAlways(net.i2p.util.Log.WARN, "RouterConsole authentication failed for user: " + username);
             return rv;
         }
     }
-    
+
     /** @since 0.8.8 */
     private class ServerShutdown implements Runnable {
         public void run() {
             shutdown(null);
         }
     }
-    
+
     private Properties webAppProperties() {
         return webAppProperties(_context.getConfigDir().getAbsolutePath());
     }
@@ -1111,13 +1111,13 @@ public class RouterConsoleRunner implements RouterApp {
         // String webappConfigFile = _context.getProperty(PROP_WEBAPP_CONFIG_FILENAME, DEFAULT_WEBAPP_CONFIG_FILENAME);
         String webappConfigFile = DEFAULT_WEBAPP_CONFIG_FILENAME;
         File cfgFile = new File(dir, webappConfigFile);
-        
+
         try {
             DataHelper.loadProps(rv, cfgFile);
         } catch (IOException ioe) {
             // _log.warn("Error loading the client app properties from " + cfgFile.getName(), ioe);
         }
-        
+
         return rv;
     }
 
@@ -1125,7 +1125,7 @@ public class RouterConsoleRunner implements RouterApp {
         // String webappConfigFile = _context.getProperty(PROP_WEBAPP_CONFIG_FILENAME, DEFAULT_WEBAPP_CONFIG_FILENAME);
         String webappConfigFile = DEFAULT_WEBAPP_CONFIG_FILENAME;
         File cfgFile = new File(ctx.getConfigDir(), webappConfigFile);
-        
+
         try {
             DataHelper.storeProps(props, cfgFile);
         } catch (IOException ioe) {
@@ -1192,7 +1192,7 @@ public class RouterConsoleRunner implements RouterApp {
              return l.compareTo(r);
         }
     }
-    
+
     /**
      * Just to set the name and set Daemon
      * @since Jetty 6

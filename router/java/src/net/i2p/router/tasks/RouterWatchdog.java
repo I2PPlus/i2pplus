@@ -22,16 +22,17 @@ public class RouterWatchdog implements Runnable {
     private int _consecutiveErrors;
     private volatile boolean _isRunning;
     private long _lastDump;
-    
-    private static final long MAX_JOB_RUN_LAG = 60*1000;
+
+//    private static final long MAX_JOB_RUN_LAG = 60*1000;
+    private static final long MAX_JOB_RUN_LAG = 3*60*1000;
     private static final long MIN_DUMP_INTERVAL= 6*60*60*1000;
-    
+
     public RouterWatchdog(RouterContext ctx) {
         _context = ctx;
         _log = ctx.logManager().getLog(RouterWatchdog.class);
         _isRunning = true;
     }
-    
+
     /** @since 0.8.8 */
     public void shutdown() {
         _isRunning = false;
@@ -39,7 +40,7 @@ public class RouterWatchdog implements Runnable {
 
     public boolean verifyJobQueueLiveliness() {
         long when = _context.jobQueue().getLastJobBegin();
-        if (when < 0) 
+        if (when < 0)
             return true;
         long howLongAgo = _context.clock().now() - when;
         if (howLongAgo > MAX_JOB_RUN_LAG) {
@@ -57,11 +58,11 @@ public class RouterWatchdog implements Runnable {
             return true;
         }
     }
-    
+
     public boolean verifyClientLiveliness() {
         return _context.clientManager().verifyClientLiveliness();
     }
-    
+
     private boolean shutdownOnHang() {
         // prop default false
         if (!_context.getBooleanProperty("watchdog.haltOnHang"))
@@ -73,31 +74,31 @@ public class RouterWatchdog implements Runnable {
             return true;
         return false;
     }
-    
+
     private void dumpStatus() {
         if (_log.shouldLog(Log.ERROR)) {
             /*
             Job cur = _context.jobQueue().getLastJob();
-            if (cur != null) 
+            if (cur != null)
                 _log.error("Most recent job: " + cur);
-            _log.error("Last job began: " 
+            _log.error("Last job began: "
                        + DataHelper.formatDuration(_context.clock().now()-_context.jobQueue().getLastJobBegin())
                        + " ago");
-            _log.error("Last job ended: " 
+            _log.error("Last job ended: "
                        + DataHelper.formatDuration(_context.clock().now()-_context.jobQueue().getLastJobEnd())
                        + " ago");
             */
             _log.error("Ready and waiting jobs: " + _context.jobQueue().getReadyCount());
             _log.error("Job lag: " + _context.jobQueue().getMaxLag());
-            _log.error("Participating tunnel count: " + _context.tunnelManager().getParticipatingCount());
-            
+            _log.error("Participating tunnels: " + _context.tunnelManager().getParticipatingCount());
+
             RateStat rs = _context.statManager().getRate("transport.sendProcessingTime");
             Rate r = null;
             if (rs != null)
                 r = rs.getRate(60*1000);
             double processTime = (r != null ? r.getAverageValue() : 0);
             _log.error("1 minute send processing time: " + DataHelper.formatDuration((long)processTime));
-            
+
             rs = _context.statManager().getRate("bw.sendBps");
             r = null;
             if (rs != null)
@@ -108,7 +109,7 @@ public class RouterWatchdog implements Runnable {
             long used = Runtime.getRuntime().totalMemory() - Runtime.getRuntime().freeMemory();
             _log.error("Memory: " + DataHelper.formatSize(used) + "B / " + DataHelper.formatSize(max) + 'B');
             if (_consecutiveErrors == 1) {
-                _log.log(Log.CRIT, "Router appears hung, or there is severe network congestion.  Watchdog starts barking!");
+                _log.log(Log.CRIT, "Router appears hung, or there is severe network congestion. Watchdog starts barking!");
                  _context.router().eventLog().addEvent(EventLog.WATCHDOG);
                 // This works on linux...
                 // It won't on windows, and we can't call i2prouter.bat either, it does something
@@ -121,14 +122,14 @@ public class RouterWatchdog implements Runnable {
             }
         }
     }
-    
+
     public void run() {
         while (_isRunning) {
             try { Thread.sleep(60*1000); } catch (InterruptedException ie) {}
             monitorRouter();
         }
     }
-    
+
     public void monitorRouter() {
         boolean ok = verifyJobQueueLiveliness();
         // If we aren't connected to the network that's why there's nobody to talk to
@@ -145,14 +146,14 @@ public class RouterWatchdog implements Runnable {
         }
 
         ok = ok && (verifyClientLiveliness() || netErrors >= 5);
-        
+
         if (ok) {
             _consecutiveErrors = 0;
         } else {
             _consecutiveErrors++;
             dumpStatus();
             if (shutdownOnHang()) {
-                _log.log(Log.CRIT, "Router hung!  Restart forced by watchdog!");
+                _log.log(Log.CRIT, "Router hung! Restart forced by Watchdog!");
                 try { Thread.sleep(30*1000); } catch (InterruptedException ie) {}
                 // halt and not system.exit, since some of the shutdown hooks might be misbehaving
                 Runtime.getRuntime().halt(Router.EXIT_HARD_RESTART);

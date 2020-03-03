@@ -91,7 +91,7 @@ public class I2PTunnelDCCServer extends I2PTunnelServer {
     @Override
     protected void blockingHandle(I2PSocket socket) {
         if (_log.shouldLog(Log.INFO))
-            _log.info("Incoming connection to '" + toString() + "' from: " + socket.getPeerDestination().calculateHash().toBase64());
+            _log.info("Incoming connection to '" + toString() + "' \n* From: " + socket.getPeerDestination().calculateHash().toBase64());
 
         try {
             expireOutbound();

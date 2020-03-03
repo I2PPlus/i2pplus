@@ -10,7 +10,7 @@ import java.io.IOException;
 import java.io.OutputStream;
 import java.io.OutputStreamWriter;
 import java.security.GeneralSecurityException;
-import java.security.NoSuchAlgorithmException; 
+import java.security.NoSuchAlgorithmException;
 import java.util.Date;
 import java.util.EnumSet;
 import java.util.Locale;
@@ -67,14 +67,14 @@ import net.i2p.util.SecureFileOutputStream;
  */
 
 public class PrivateKeyFile {
-    
+
     private static final int HASH_EFFORT = VerifiedDestination.MIN_HASHCASH_EFFORT;
-    
+
     protected final File file;
     private final I2PClient client;
     protected Destination dest;
     protected PrivateKey privKey;
-    protected SigningPrivateKey signingPrivKey; 
+    protected SigningPrivateKey signingPrivKey;
     private long _offlineExpiration;
     private Signature _offlineSignature;
     private SigningPrivateKey _transientSigningPrivKey; 
@@ -83,12 +83,12 @@ public class PrivateKeyFile {
     /**
      *  Create a new PrivateKeyFile, or modify an existing one, with various
      *  types of Certificates.
-     *  
+     *
      *  Changing a Certificate does not change the public or private keys.
      *  But it does change the Destination Hash, which effectively makes it
      *  a new Destination. In other words, don't change the Certificate on
      *  a Destination you've already registered in a hosts.txt key add form.
-     *  
+     *
      *  Copied and expanded from that in Destination.java
      */
     public static void main(String args[]) {
@@ -264,7 +264,7 @@ public class PrivateKeyFile {
                 he.sign(pkf.getSigningPrivKey());
                 System.out.println("Addressbook Authentication String:");
                 OutputStreamWriter out = new OutputStreamWriter(System.out);
-                he.write(out); 
+                he.write(out);
                 out.flush();
                 System.out.println("");
                 return;
@@ -375,7 +375,7 @@ public class PrivateKeyFile {
         }
         System.out.println(buf.toString());
     }
-    
+
     public PrivateKeyFile(String file) {
         this(new File(file), I2PClientFactory.createClient());
     }
@@ -388,12 +388,12 @@ public class PrivateKeyFile {
         this.file = file;
         this.client = client;
     }
-    
+
     /** @since 0.8.9 */
     public PrivateKeyFile(File file, I2PSession session) {
         this(file, session.getMyDestination(), session.getDecryptionKey(), session.getPrivateKey());
     }
-    
+
     /**
      *  @throws IllegalArgumentException on mismatch of spubkey and spk types
      *  @since 0.8.9
@@ -407,7 +407,7 @@ public class PrivateKeyFile {
         this.privKey = pk;
         this.signingPrivKey = spk;
     }
-    
+
     /**
      *  @throws IllegalArgumentException on mismatch of spubkey and spk types
      *  @since 0.8.9
@@ -416,7 +416,7 @@ public class PrivateKeyFile {
                           PrivateKey pk, SigningPrivateKey spk) {
         this(file, pubkey, spubkey, cert, pk, spk, null);
     }
-    
+
     /**
      *  @param padding null OK, must be non-null if spubkey length &lt; 128
      *  @throws IllegalArgumentException on mismatch of spubkey and spk types
@@ -437,7 +437,7 @@ public class PrivateKeyFile {
         this.privKey = pk;
         this.signingPrivKey = spk;
     }
-    
+
     /**
      *  Can't be used for writing
      *  @since 0.9.26
@@ -449,11 +449,11 @@ public class PrivateKeyFile {
         this.privKey = s.getDecryptionKey();
         this.signingPrivKey = s.getPrivateKey();
     }
-    
+
     /**
      *  Create with the default signature type if nonexistent.
      *
-     *  Also reads in the file to get the privKey and signingPrivKey, 
+     *  Also reads in the file to get the privKey and signingPrivKey,
      *  which aren't available from I2PClient.
      */
     public Destination createIfAbsent() throws I2PException, IOException, DataFormatException {
@@ -463,7 +463,7 @@ public class PrivateKeyFile {
     /**
      *  Create with the specified signature type if nonexistent.
      *
-     *  Also reads in the file to get the privKey and signingPrivKey, 
+     *  Also reads in the file to get the privKey and signingPrivKey,
      *  which aren't available from I2PClient.
      *
      *  @since 0.9.26
@@ -579,7 +579,7 @@ public class PrivateKeyFile {
     public void setDestination(Destination d) {
         this.dest = d;
     }
-    
+
     /**
      * Change cert type - caller must also call write().
      * Side effect - creates new Destination object.
@@ -597,7 +597,7 @@ public class PrivateKeyFile {
         dest = newdest;
         return c;
     }
-    
+
     /**
      * Change cert type - caller must also call write().
      * Side effect - creates new Destination object.
@@ -634,7 +634,7 @@ public class PrivateKeyFile {
         dest = newdest;
         return c;
     }
-    
+
     /** change to hashcash cert - caller must also call write() */
     public Certificate setHashCashCert(int effort) {
         Certificate c = setCertType(Certificate.CERTIFICATE_TYPE_HASHCASH);
@@ -670,7 +670,7 @@ public class PrivateKeyFile {
         c.setPayload(DataHelper.getUTF8(hcs));
         return c;
     }
-    
+
     /** sign this dest by dest found in pkf2 - caller must also call write() */
     public Certificate setSignedCert(PrivateKeyFile pkf2) {
         Certificate c = setCertType(Certificate.CERTIFICATE_TYPE_SIGNED);
@@ -688,7 +688,7 @@ public class PrivateKeyFile {
         System.out.println("Signing With Dest:");
         System.out.println(pkf2.toString());
 
-        int len = PublicKey.KEYSIZE_BYTES + SigningPublicKey.KEYSIZE_BYTES; // no cert 
+        int len = PublicKey.KEYSIZE_BYTES + SigningPublicKey.KEYSIZE_BYTES; // no cert
         byte[] data = new byte[len];
         System.arraycopy(this.dest.getPublicKey().getData(), 0, data, 0, PublicKey.KEYSIZE_BYTES);
         System.arraycopy(this.dest.getSigningPublicKey().getData(), 0, data, PublicKey.KEYSIZE_BYTES, SigningPublicKey.KEYSIZE_BYTES);
@@ -705,7 +705,7 @@ public class PrivateKeyFile {
         c.setPayload(payload);
         return c;
     }
-    
+
     /**
      *  @return null on error or if not initialized
      */
@@ -731,7 +731,7 @@ public class PrivateKeyFile {
         }
         return this.signingPrivKey;
     }
-    
+
     //// offline methods
 
     /**
@@ -826,7 +826,7 @@ public class PrivateKeyFile {
             }
         }
     }
-    
+
     /**
      *  Copied from I2PClientImpl.createDestination()
      */
@@ -891,7 +891,7 @@ public class PrivateKeyFile {
         s.append(this.dest);
         s.append("\nPrivate Key: ");
         s.append(this.privKey);
-        s.append("\nSigining Private Key: ");
+        s.append("\nSigning Private Key: ");
         if (isOffline()) {
             s.append("offline\nOffline Signature Expires: ");
             s.append(new Date(getOfflineExpiration()));
@@ -907,7 +907,7 @@ public class PrivateKeyFile {
         }
         return s.toString();
     }
-    
+
     public static String estimateHashCashTime(int hashEffort) {
         if (hashEffort <= 0 || hashEffort > 160)
             return "Bad HashCash value: " + hashEffort;
@@ -926,8 +926,8 @@ public class PrivateKeyFile {
                  :
                    "longer than three years!"
                );
-    }    
-    
+    }
+
     /**
      *  Sample code to verify a 3rd party signature.
      *  This just goes through all the hosts.txt files and tries everybody.
@@ -943,7 +943,7 @@ public class PrivateKeyFile {
     public static boolean verifySignature(Destination d) {
         if (d.getCertificate().getCertificateType() != Certificate.CERTIFICATE_TYPE_SIGNED)
             return false;
-        int len = PublicKey.KEYSIZE_BYTES + SigningPublicKey.KEYSIZE_BYTES; // no cert 
+        int len = PublicKey.KEYSIZE_BYTES + SigningPublicKey.KEYSIZE_BYTES; // no cert
         byte[] data = new byte[len];
         System.arraycopy(d.getPublicKey().getData(), 0, data, 0, PublicKey.KEYSIZE_BYTES);
         System.arraycopy(d.getSigningPublicKey().getData(), 0, data, PublicKey.KEYSIZE_BYTES, SigningPublicKey.KEYSIZE_BYTES);
@@ -967,10 +967,10 @@ public class PrivateKeyFile {
             System.out.println("Bad signed cert - length = " + payload.length);
             return false;
         }
-     
+
         String[] filenames = new String[] {"privatehosts.txt", "userhosts.txt", "hosts.txt"};
         int tried = 0;
-        for (int i = 0; i < filenames.length; i++) { 
+        for (int i = 0; i < filenames.length; i++) {
             Properties hosts = new Properties();
             try {
                 File f = new File(filenames[i]);
@@ -982,7 +982,7 @@ public class PrivateKeyFile {
                         if (signerHash == null)
                             System.out.println("Attempting to verify using " + sz + " hosts, this may take a while");
                     }
-                    
+
                     for (Map.Entry<Object, Object> entry : hosts.entrySet())  {
                         String s = (String) entry.getValue();
                         Destination signer = new Destination(s);

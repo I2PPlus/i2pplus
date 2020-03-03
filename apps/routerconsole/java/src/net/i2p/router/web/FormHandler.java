@@ -38,13 +38,13 @@ public abstract class FormHandler {
     private boolean _processed;
     private boolean _valid;
     protected Writer _out;
-    
+
     public FormHandler() {
         _errors = new ArrayList<String>();
         _notices = new ArrayList<String>();
         _valid = true;
     }
-    
+
     /**
      * Configure this bean to query a particular router context
      *
@@ -125,7 +125,7 @@ public abstract class FormHandler {
         _nonce1 = n1;
         _nonce2 = n2;
     }
-    
+
     /**
      * Implement this to perform the final processing (in turn, adding formNotice
      * and formError messages, etc)
@@ -133,7 +133,7 @@ public abstract class FormHandler {
      * Will only be called if _action is non-null and the nonce is valid.
      */
     protected abstract void processForm();
-    
+
     /**
      * Add an error message to display
      * Use if it does not include a link.
@@ -143,7 +143,7 @@ public abstract class FormHandler {
         if (errorMsg == null) return;
         _errors.add(DataHelper.escapeHTML(errorMsg));
     }
-    
+
     /**
      * Add a non-error message to display
      * Use if it does not include a link.
@@ -153,7 +153,7 @@ public abstract class FormHandler {
         if (msg == null) return;
         _notices.add(DataHelper.escapeHTML(msg));
     }
-    
+
     /**
      * Add a non-error message to display
      * Use if it includes a link or other formatting.
@@ -164,7 +164,7 @@ public abstract class FormHandler {
         if (msg == null) return;
         _notices.add(msg);
     }
-    
+
     /**
      * Add an error message to display
      * Use if it includes a link or other formatting.
@@ -175,17 +175,19 @@ public abstract class FormHandler {
         if (msg == null) return;
         _errors.add(msg);
     }
-    
+
     /**
      * Display everything, wrap it in a div for consistent presentation
      *
      */
-    public String getAllMessages() { 
+    public String getAllMessages() {
         validate();
         process();
         if (_errors.isEmpty() && _notices.isEmpty())
             return "";
         StringBuilder buf = new StringBuilder(512);
+        buf.append("<script src=\"/js/closeMessage.js?<%=net.i2p.CoreVersion.VERSION%>\" type=\"text/javascript\"></script>");
+//        buf.append("<div class=\"messages\" id=\"messages\" onclick=\"this.remove()\">");
         buf.append("<div class=\"messages\" id=\"messages\">");
         if (!_errors.isEmpty()) {
             buf.append("<div class=\"error\">");
@@ -200,38 +202,38 @@ public abstract class FormHandler {
         buf.append("</div>");
         return buf.toString();
     }
-    
+
     /**
-     * Display any error messages (processing the form if it hasn't 
+     * Display any error messages (processing the form if it hasn't
      * been yet)
      *
      */
-    public String getErrors() { 
+    public String getErrors() {
         validate();
         process();
         return render(_errors);
     }
-    
+
     /**
-     * Display any non-error messages (processing the form if it hasn't 
+     * Display any non-error messages (processing the form if it hasn't
      * been yet)
      *
      */
-    public String getNotices() { 
+    public String getNotices() {
         validate();
         process();
         return render(_notices);
     }
-    
+
     /**
-     * Make sure the nonce was set correctly, otherwise someone could just 
+     * Make sure the nonce was set correctly, otherwise someone could just
      * create a link like /confignet.jsp?hostname=localhost and break the
      * user's node (or worse).
      *
      */
     private void validate() {
         if (_processed) return;
-        
+
         _valid = true;
         if (_action == null) {
             // not a form submit
@@ -254,12 +256,12 @@ public abstract class FormHandler {
             _valid = false;
             return;
         }
-        
+
         String sharedNonce = CSSHelper.getNonce();
         if (sharedNonce.equals(_nonce)) {
             return;
         }
-        
+
         if (!_nonce.equals(_nonce1) && !_nonce.equals(_nonce2)) {
                 addFormError(_t("Invalid form submission, probably because you used the 'back' or 'reload' button on your browser. Please resubmit.")
                              + ' ' +
@@ -267,7 +269,7 @@ public abstract class FormHandler {
                 _valid = false;
         }
     }
-    
+
     private void process() {
         if (!_processed) {
             if (_valid)
@@ -275,7 +277,7 @@ public abstract class FormHandler {
             _processed = true;
         }
     }
-    
+
     private static String render(List<String> source) {
         if (source.isEmpty()) {
             return "";
@@ -291,7 +293,7 @@ public abstract class FormHandler {
             return buf.toString();
         }
     }
-    
+
     /**
      *  Generate a new nonce.
      *  Only call once per page!

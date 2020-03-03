@@ -12,7 +12,7 @@ import net.i2p.util.Log;
 import net.i2p.util.PortMapper;
 import net.i2p.util.RFC822Date;
 
-    
+
 /**
  *  Eepget the .zip file to the temp dir, then notify.r
  *  Moved from UnsignedUpdateHandler and turned into an UpdateTask.
@@ -21,7 +21,7 @@ import net.i2p.util.RFC822Date;
  */
 class UnsignedUpdateRunner extends UpdateRunner {
 
-    public UnsignedUpdateRunner(RouterContext ctx, ConsoleUpdateManager mgr, List<URI> uris) { 
+    public UnsignedUpdateRunner(RouterContext ctx, ConsoleUpdateManager mgr, List<URI> uris) {
         super(ctx, mgr, ROUTER_UNSIGNED, uris);
         if (!uris.isEmpty())
             _currentURI = uris.get(0);
@@ -59,7 +59,7 @@ class UnsignedUpdateRunner extends UpdateRunner {
             if (!this.done)
                 _mgr.notifyTaskFailed(this, "", null);
         }
-        
+
         /** eepget listener callback Overrides */
         @Override
         public void transferComplete(long alreadyTransferred, long bytesTransferred, long bytesRemaining, String url, String outputFile, boolean notModified) {

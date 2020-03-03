@@ -54,24 +54,29 @@
 #   * For further information and downloads:
 #   *   http://www.bluetack.co.uk/forums/index.php?autocom=faq&CODE=02&qid=17
 #   *   http://blocklist.googlepages.com/
-#   *   http://www.team-cymru.org/Services/Bogons/http.html
+#   *   https://www.team-cymru.com/bogon-reference.html
 #
 Chinese Floodfill Flooder:159.226.40.7
 Friend of the Chinese Floodfill Flooder:159.226.40.3
-<a href="http://www.team-cymru.org/Services/Bogons/http.html">The Team Cymru Bogon List v6.8 03 FEB 2011</a>:0.0.0.0/8
-<a href="http://www.team-cymru.org/Services/Bogons/http.html">The Team Cymru Bogon List v6.8 03 FEB 2011</a>:10.0.0.0/8
-<a href="http://tools.ietf.org/html/rfc6598">Shared Address Space</a>:100.64.0.0/10
-<a href="http://www.team-cymru.org/Services/Bogons/http.html">The Team Cymru Bogon List v6.8 03 FEB 2011</a>:127.0.0.0/8
-<a href="http://www.team-cymru.org/Services/Bogons/http.html">The Team Cymru Bogon List v6.8 03 FEB 2011</a>:169.254.0.0/16
-<a href="http://www.team-cymru.org/Services/Bogons/http.html">The Team Cymru Bogon List v6.8 03 FEB 2011</a>:172.16.0.0/12
-<a href="http://www.team-cymru.org/Services/Bogons/http.html">The Team Cymru Bogon List v6.8 03 FEB 2011</a>:192.0.0.0/24
-<a href="http://www.team-cymru.org/Services/Bogons/http.html">The Team Cymru Bogon List v6.8 03 FEB 2011</a>:192.0.2.0/24
-<a href="http://tools.ietf.org/html/rfc3068">6to4 Anycast</a>:192.88.99.0/24
-<a href="http://www.team-cymru.org/Services/Bogons/http.html">The Team Cymru Bogon List v6.8 03 FEB 2011</a>:192.168.0.0/16
-<a href="http://www.team-cymru.org/Services/Bogons/http.html">The Team Cymru Bogon List v6.8 03 FEB 2011</a>:198.18.0.0/15
-<a href="http://www.team-cymru.org/Services/Bogons/http.html">The Team Cymru Bogon List v6.8 03 FEB 2011</a>:198.51.100.0/24
-<a href="http://www.team-cymru.org/Services/Bogons/http.html">The Team Cymru Bogon List v6.8 03 FEB 2011</a>:203.0.113.0/24
-<a href="http://www.team-cymru.org/Services/Bogons/http.html">The Team Cymru Bogon List v6.8 03 FEB 2011</a>:224.0.0.0/3
+<a href="https://www.team-cymru.com/bogon-reference.html" target="_blank">Bogon</a>:0.0.0.0/8
+<a href="https://www.team-cymru.com/bogon-reference.html" target="_blank">Bogon</a>:10.0.0.0/8
+<a href="https://www.team-cymru.com/bogon-reference.html" target="_blank">Bogon</a>:100.64.0.0/10
+<a href="https://www.team-cymru.com/bogon-reference.html" target="_blank">Bogon</a>:127.0.0.0/8
+<a href="https://www.team-cymru.com/bogon-reference.html" target="_blank">Bogon</a>:169.254.0.0/16
+<a href="https://www.team-cymru.com/bogon-reference.html" target="_blank">Bogon</a>:172.16.0.0/12
+# <a href="https://www.team-cymru.com/bogon-reference.html" target="_blank">Bogon</a>:192.0.0.0/24
+<a href="https://tools.ietf.org/html/rfc6890#ref-2" target="_blank">Bogon</a>:192.0.0.0/29
+<a href="https://www.team-cymru.com/bogon-reference.html" target="_blank">Bogon</a>:192.0.0.8/32
+<a href="https://www.team-cymru.com/bogon-reference.html" target="_blank">Bogon</a>:192.0.0.170/32
+<a href="https://www.team-cymru.com/bogon-reference.html" target="_blank">Bogon</a>:192.0.0.171/32
+<a href="https://www.team-cymru.com/bogon-reference.html" target="_blank">Bogon</a>:192.0.2.0/24
+<a href="https://www.team-cymru.com/bogon-reference.html" target="_blank">Bogon</a>:192.168.0.0/16
+<a href="https://www.team-cymru.com/bogon-reference.html" target="_blank">Bogon</a>:198.18.0.0/15
+<a href="https://www.team-cymru.com/bogon-reference.html" target="_blank">Bogon</a>:198.51.100.0/24
+<a href="https://www.team-cymru.com/bogon-reference.html" target="_blank">Bogon</a>:203.0.113.0/24
+<a href="https://www.team-cymru.com/bogon-reference.html" target="_blank">Bogon</a>:224.0.0.0/4
+<a href="https://www.team-cymru.com/bogon-reference.html" target="_blank">Bogon</a>:240.0.0.0/4
+
 Sybil:45.32.60.71
 Sybil:45.32.62.37
 Sybil:45.32.125.149

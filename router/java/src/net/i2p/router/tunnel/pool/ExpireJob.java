@@ -43,7 +43,7 @@ class ExpireJob extends JobImpl {
     }
 
     public String getName() {
-        return "Expire our tunnel";
+        return "Expire Local Tunnel";
     }
 
     public void runJob() {

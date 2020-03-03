@@ -1,9 +1,9 @@
 package net.i2p.router.networkdb.kademlia;
 /*
  * free (adj.): unencumbered; not under the control of others
- * Written by jrandom in 2003 and released into the public domain 
- * with no warranty of any kind, either expressed or implied.  
- * It probably won't make your computer catch on fire, or eat 
+ * Written by jrandom in 2003 and released into the public domain
+ * with no warranty of any kind, either expressed or implied.
+ * It probably won't make your computer catch on fire, or eat
  * your children, but it might.  Use at your own risk.
  *
  */
@@ -30,16 +30,16 @@ public class FloodfillDatabaseLookupMessageHandler implements HandlerJobBuilder 
         _context = context;
         _facade = facade;
         _log = context.logManager().getLog(FloodfillDatabaseLookupMessageHandler.class);
-        _context.statManager().createRateStat("netDb.lookupsReceived", "How many netDb lookups have we received?", "NetworkDatabase", new long[] { 60*60*1000l });
-        _context.statManager().createRateStat("netDb.lookupsDropped", "How many netDb lookups did we drop due to throttling?", "NetworkDatabase", new long[] { 60*60*1000l });
+        _context.statManager().createRateStat("netDb.lookupsReceived", "Number of NetDb lookups we have received", "NetworkDatabase", new long[] { 60*60*1000l });
+        _context.statManager().createRateStat("netDb.lookupsDropped", "Number of NetDb lookups we dropped due to throttling", "NetworkDatabase", new long[] { 60*60*1000l });
         // following are for ../HDLMJ
-        _context.statManager().createRateStat("netDb.lookupsHandled", "How many netDb lookups have we handled?", "NetworkDatabase", new long[] { 60*60*1000l });
-        _context.statManager().createRateStat("netDb.lookupsMatched", "How many netDb lookups did we have the data for?", "NetworkDatabase", new long[] { 60*60*1000l });
-        _context.statManager().createRateStat("netDb.lookupsMatchedLeaseSet", "How many netDb leaseSet lookups did we have the data for?", "NetworkDatabase", new long[] { 60*60*1000l });
-        _context.statManager().createRateStat("netDb.lookupsMatchedReceivedPublished", "How many netDb lookups did we have the data for that were published to us?", "NetworkDatabase", new long[] { 60*60*1000l });
-        _context.statManager().createRateStat("netDb.lookupsMatchedLocalClosest", "How many netDb lookups for local data were received where we are the closest peers?", "NetworkDatabase", new long[] { 60*60*1000l });
-        _context.statManager().createRateStat("netDb.lookupsMatchedLocalNotClosest", "How many netDb lookups for local data were received where we are NOT the closest peers?", "NetworkDatabase", new long[] { 60*60*1000l });
-        _context.statManager().createRateStat("netDb.lookupsMatchedRemoteNotClosest", "How many netDb lookups for remote data were received where we are NOT the closest peers?", "NetworkDatabase", new long[] { 60*60*1000l });
+        _context.statManager().createRateStat("netDb.lookupsHandled", "Number of NetDb lookups we have handled", "NetworkDatabase", new long[] { 60*60*1000l });
+        _context.statManager().createRateStat("netDb.lookupsMatched", "Number of NetDb lookups we had the data for", "NetworkDatabase", new long[] { 60*60*1000l });
+        _context.statManager().createRateStat("netDb.lookupsMatchedLeaseSet", "Number of NetDb LeaseSet lookups we had the data for", "NetworkDatabase", new long[] { 60*60*1000l });
+        _context.statManager().createRateStat("netDb.lookupsMatchedReceivedPublished", "Number of NetDb lookups we had the data for that were published to us", "NetworkDatabase", new long[] { 60*60*1000l });
+        _context.statManager().createRateStat("netDb.lookupsMatchedLocalClosest", "Number of NetDb lookups received for local data where we were the closest peer", "NetworkDatabase", new long[] { 60*60*1000l });
+        _context.statManager().createRateStat("netDb.lookupsMatchedLocalNotClosest", "Number of NetDb lookups received for local data where we were NOT the closest peer", "NetworkDatabase", new long[] { 60*60*1000l });
+        _context.statManager().createRateStat("netDb.lookupsMatchedRemoteNotClosest", "Number of NetDb lookups received for remote data where we were NOT the closest peer", "NetworkDatabase", new long[] { 60*60*1000l });
     }
 
     public Job createJob(I2NPMessage receivedMessage, RouterIdentity from, Hash fromHash) {
@@ -52,12 +52,12 @@ public class FloodfillDatabaseLookupMessageHandler implements HandlerJobBuilder 
             //    // might as well inline it, all the heavy lifting is queued up in later jobs, if necessary
             //    j.runJob();
             //    return null;
-            //} else {                
+            //} else {
                 return j;
             //}
         } else {
-            if (_log.shouldLog(Log.WARN)) 
-                _log.warn("Dropping lookup request for " + dlm.getSearchKey() + " (throttled), reply was to: " + dlm.getFrom() + " tunnel: " + dlm.getReplyTunnel());
+            if (_log.shouldLog(Log.WARN))
+                _log.warn("Dropping lookup request for [" + dlm.getSearchKey().toBase64().substring(0,6) + "] (throttled)\n* Reply was to: [" + dlm.getFrom().toBase64().substring(0,6) + "] - [Tunnel " + dlm.getReplyTunnel() + "]");
             _context.statManager().addRateData("netDb.lookupsDropped", 1, 1);
             return null;
         }

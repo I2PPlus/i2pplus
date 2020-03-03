@@ -24,7 +24,7 @@ import net.i2p.util.SimpleByteCache;
  *  @since 0.9.35 pulled out of EstablishState
  */
 class OutboundEstablishState extends EstablishBase {
-    
+
     public OutboundEstablishState(RouterContext ctx, NTCPTransport transport, NTCPConnection con) {
         super(ctx, transport, con);
         _state = State.OB_INIT;
@@ -128,7 +128,7 @@ class OutboundEstablishState extends EstablishBase {
             long rtt = now - _con.getCreated();
             // our (Alice's) timestamp in seconds
             _tsA = (now + 500) / 1000;
-            _peerSkew = (now - (_tsB * 1000) - (rtt / 2) + 500) / 1000; 
+            _peerSkew = (now - (_tsB * 1000) - (rtt / 2) + 500) / 1000;
             if (_log.shouldLog(Log.DEBUG))
                 _log.debug(prefix()+"h(X+Y) is correct, skew = " + _peerSkew);
 
@@ -148,7 +148,7 @@ class OutboundEstablishState extends EstablishBase {
                 // Only banlist if we know what time it is
                 _context.banlist().banlistRouter(DataHelper.formatDuration(diff),
                                                    _con.getRemotePeer().calculateHash(),
-                                                   _x("Excessive clock skew: {0}"));
+                                                   " <b>➜</b> " + _x("Excessive clock skew: {0}"));
                 _transport.setLastBadSkew(_peerSkew);
                 fail("Clocks too skewed (" + diff + " ms)", null, true);
                 return;

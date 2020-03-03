@@ -2,9 +2,9 @@ package net.i2p.data;
 
 /*
  * free (adj.): unencumbered; not under the control of others
- * Written by jrandom in 2003 and released into the public domain 
- * with no warranty of any kind, either expressed or implied.  
- * It probably won't make your computer catch on fire, or eat 
+ * Written by jrandom in 2003 and released into the public domain
+ * with no warranty of any kind, either expressed or implied.
+ * It probably won't make your computer catch on fire, or eat
  * your children, but it might.  Use at your own risk.
  *
  */
@@ -110,7 +110,7 @@ public class Lease extends DataStructureImpl {
         if (_end == null) return true;
         return _end.getTime() < Clock.getInstance().now() - fudgeFactor;
     }
-    
+
     public void readBytes(InputStream in) throws DataFormatException, IOException {
         //_gateway = new Hash();
         //_gateway.readBytes(in);
@@ -119,7 +119,7 @@ public class Lease extends DataStructureImpl {
         _tunnelId.readBytes(in);
         _end = DataHelper.readDate(in);
     }
-    
+
     public void writeBytes(OutputStream out) throws DataFormatException, IOException {
         if ((_gateway == null) || (_tunnelId == null))
             throw new DataFormatException("Not enough data to write out a Lease");
@@ -128,7 +128,7 @@ public class Lease extends DataStructureImpl {
         _tunnelId.writeBytes(out);
         DataHelper.writeDate(out, _end);
     }
-    
+
     @Override
     public boolean equals(Object object) {
         if (object == this) return true;
@@ -139,21 +139,20 @@ public class Lease extends DataStructureImpl {
                && DataHelper.eq(_gateway, lse.getGateway());
 
     }
-    
+
     @Override
     public int hashCode() {
         return DataHelper.hashCode(_end) + DataHelper.hashCode(_gateway)
                + DataHelper.hashCode(_tunnelId);
     }
-    
+
     @Override
     public String toString() {
         StringBuilder buf = new StringBuilder(128);
-        buf.append("[Lease: ");
-        buf.append("\n\tEnd Date: ").append(_end);
-        buf.append("\n\tGateway: ").append(_gateway);
-        buf.append("\n\tTunnelId: ").append(_tunnelId);
-        buf.append("]");
+        buf.append("\n* Lease:");
+        buf.append(" [TunnelID ").append(_tunnelId).append("]");
+        buf.append("\n* Gateway: [").append(_gateway.toBase64().substring(0,6) + "]");
+        buf.append("\n* Expires: ").append(_end);
         return buf.toString();
     }
 }

@@ -2,9 +2,9 @@ package net.i2p.data;
 
 /*
  * free (adj.): unencumbered; not under the control of others
- * Written by jrandom in 2003 and released into the public domain 
- * with no warranty of any kind, either expressed or implied.  
- * It probably won't make your computer catch on fire, or eat 
+ * Written by jrandom in 2003 and released into the public domain
+ * with no warranty of any kind, either expressed or implied.
+ * It probably won't make your computer catch on fire, or eat
  * your children, but it might.  Use at your own risk.
  *
  */
@@ -178,7 +178,7 @@ public class LeaseSet extends DatabaseEntry {
             throw new IllegalArgumentException("Signing key type mismatch");
         _signingKey = key;
     }
-    
+
     /**
      * If true, we received this LeaseSet by a remote peer publishing it to
      * us, rather than by searching for it ourselves or locally creating it.
@@ -297,7 +297,7 @@ public class LeaseSet extends DatabaseEntry {
 
     /**
      * Determine whether ANY lease is currently valid, at least within a given
-     * fudge factor 
+     * fudge factor
      *
      * @param fudge milliseconds fudge factor to allow between the current time
      * @return true if there are current leases, false otherwise
@@ -333,7 +333,7 @@ public class LeaseSet extends DatabaseEntry {
             _byteified = rv;
         return rv;
     }
-    
+
     /**
      *  This does NOT validate the signature
      *
@@ -366,7 +366,7 @@ public class LeaseSet extends DatabaseEntry {
         _signature = new Signature(type);
         _signature.readBytes(in);
     }
-    
+
     /**
      *  This does NOT validate the signature
      */
@@ -383,7 +383,7 @@ public class LeaseSet extends DatabaseEntry {
         }
         _signature.writeBytes(out);
     }
-    
+
     /**
      *  Number of bytes, NOT including signature
      */
@@ -394,7 +394,7 @@ public class LeaseSet extends DatabaseEntry {
              + 1 // number of leases
              + _leases.size() * 44;
     }
-    
+
     @Override
     public boolean equals(Object object) {
         if (object == this) return true;
@@ -407,7 +407,7 @@ public class LeaseSet extends DatabaseEntry {
                && DataHelper.eq(_signingKey, ls.getSigningKey())
                && DataHelper.eq(_destination, ls.getDestination());
     }
-    
+
     /** the destination has enough randomness in it to use it by itself for speed */
     @Override
     public int hashCode() {
@@ -415,22 +415,20 @@ public class LeaseSet extends DatabaseEntry {
             return 0;
         return _destination.hashCode();
     }
-    
+
     @Override
     public String toString() {
         StringBuilder buf = new StringBuilder(128);
-        buf.append("[LeaseSet: ");
         if (_destination != null) {
-            buf.append("\n\tDestination: ").append(_destination);
-            buf.append("\n\tB32: ").append(_destination.toBase32());
+            buf.append("\n* Destination: ").append(_destination);
+            buf.append("\n* B32: ").append(_destination.toBase32());
         }
-        buf.append("\n\tEncryptionKey: ").append(_encryptionKey);
-        buf.append("\n\tSigningKey: ").append(_signingKey);
-        buf.append("\n\tSignature: ").append(_signature);
-        buf.append("\n\tLeases: #").append(getLeaseCount());
+        buf.append("\n* EncryptionKey: ").append(_encryptionKey);
+        buf.append("\n* SigningKey: ").append(_signingKey);
+        buf.append("\n* Signature: ").append(_signature);
+        buf.append("\n* Leases: ").append(getLeaseCount());
         for (int i = 0; i < getLeaseCount(); i++)
-            buf.append("\n\t\t").append(getLease(i));
-        buf.append("]");
+            buf.append(getLease(i));
         return buf.toString();
     }
 

@@ -52,20 +52,20 @@ public class SummaryListener implements RateSummaryListener {
     private Sample _sample;
     private SummaryRenderer _renderer;
     private int _rows;
-    
+
     static final int PERIODS = 60 * 24;  // 1440
     private static final int MIN_ROWS = PERIODS;
     /** @since public since 0.9.33, was package private */
     public static final int MAX_ROWS = 91 * MIN_ROWS;
     private static final long THREE_MONTHS = 91l * 24 * 60 * 60 * 1000;
-    
+
     public SummaryListener(Rate r) {
         _context = I2PAppContext.getGlobalContext();
         _rate = r;
         _log = _context.logManager().getLog(SummaryListener.class);
         _isPersistent = _context.getBooleanPropertyDefaultTrue(PROP_PERSISTENT);
     }
-    
+
     public void add(double totalValue, long eventCount, double totalEventTime, long period) {
         long now = now();
         long when = now / 1000;
@@ -102,16 +102,16 @@ public class SummaryListener implements RateSummaryListener {
             }
         }
     }
-    
+
     /**
      * JRobin can only deal with 20 character data source names, so we need to create a unique,
      * munged version from the user/developer-visible name.
      *
      */
-    static String createName(I2PAppContext ctx, String wanted) { 
+    static String createName(I2PAppContext ctx, String wanted) {
         return ctx.sha().calculateHash(DataHelper.getUTF8(wanted)).toBase64().substring(0,20);
     }
-    
+
     public Rate getRate() { return _rate; }
 
     /**
@@ -221,7 +221,7 @@ public class SummaryListener implements RateSummaryListener {
                           boolean hideTitle, boolean showEvents, int periodCount,
                           int end, boolean showCredit) throws IOException {
         renderPng(out, width, height, hideLegend, hideGrid, hideTitle, showEvents, periodCount,
-                  end, showCredit, null, null); 
+                  end, showCredit, null, null);
     }
 
     /**
@@ -237,7 +237,7 @@ public class SummaryListener implements RateSummaryListener {
         if (_renderer == null || _db == null)
             throw new IOException("No RRD, check logs for previous errors");
         _renderer.render(out, width, height, hideLegend, hideGrid, hideTitle, showEvents, periodCount,
-                         end, showCredit, lsnr2, titleOverride); 
+                         end, showCredit, lsnr2, titleOverride);
     }
 
     public void renderPng(OutputStream out) throws IOException {
@@ -245,7 +245,7 @@ public class SummaryListener implements RateSummaryListener {
             throw new IOException("No RRD, check logs for previous errors");
         _renderer.render(out);
     }
- 
+
     String getName() { return _name; }
 
     String getEventName() { return _eventName; }
@@ -253,7 +253,7 @@ public class SummaryListener implements RateSummaryListener {
     RrdDb getData() { return _db; }
 
     long now() { return _context.clock().now(); }
-    
+
     /** @since 0.8.7 */
     String getBackendName() {
         return _isPersistent ? "NIO" : "MEMORY";

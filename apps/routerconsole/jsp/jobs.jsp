@@ -2,32 +2,41 @@
 <%@page trimDirectiveWhitespaces="true"%>
 <%@page pageEncoding="UTF-8"%>
 <!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
-<html><head>
+<html>
+<head>
 <%@include file="css.jsi" %>
+<%@include file="csp-unsafe.jsi" %>
 <%=intl.title("job queue")%>
 <%@include file="summaryajax.jsi" %>
-</head><body>
-<%@include file="summary.jsi" %><h1><%=intl._t("I2P Router Job Queue")%></h1>
+<!-- tablesort.js https://github.com/tristen/tablesort/ -->
+<script nonce="<%=cspNonce%>" src="/js/tablesort/tablesort.js" type="text/javascript"></script>
+<script nonce="<%=cspNonce%>" src="/js/tablesort/tablesort.number.js" type="text/javascript"></script>
+<link href="/themes/console/tablesort.css" rel="stylesheet" type="text/css">
+<!-- end tablesort.js -->
+</head>
+<body id="routerjobs">
+<script nonce="<%=cspNonce%>" type="text/javascript">progressx.show();</script>
+<%@include file="summary.jsi" %><h1 class="sched"><%=intl._t("Job Queue")%></h1>
 <div class="main" id="jobs">
  <jsp:useBean class="net.i2p.router.web.helpers.JobQueueHelper" id="jobQueueHelper" scope="request" />
  <jsp:setProperty name="jobQueueHelper" property="contextId" value="<%=i2pcontextId%>" />
  <% jobQueueHelper.storeWriter(out); %>
-<%-- This page is hidden behind advanced config, don't bother translating --%>
-<h2>Congestion</h2><div class="joblog">
-<p>Some basic indications of router overload:</p>
-<ul><li>
-<b>Job Lag:</b> How long jobs are waiting before execution. 
-Unfortunately, there are several other job queues in the router that may be congested, and their status is not available in the router console. 
-The job lag should generally be zero. 
-If it is consistently higher than 500ms, your computer is very slow, your network is experiencing connectivity issues, or the router has serious problems. 
-</li><li>
-<b>Message Delay:</b> How long an outbound message waits in the queue. 
-This should generally be a few hundred milliseconds or less. 
-If it is consistently higher than 1000ms, your computer is very slow, or you should adjust your bandwidth limits, or your (Bittorrent?) clients may be sending too much data and should have their transmit bandwidth limit reduced. 
-</li><li>
-<b>Accepting/Rejecting:</b> Your router's status on accepting or rejecting requests from other routers to build a participating tunnel through your router. 
-Your router may accept all requests, accept or reject a percentage of requests, or reject all requests for a number of reasons, to control the bandwidth and CPU demands and maintain capacity for local clients. 
-<b>Note:</b> It will take several minutes after startup to begin accepting participating tunnels. This ensures your router is stable and successfully bootstrapped to the network.
-</li></ul></div>
  <jsp:getProperty name="jobQueueHelper" property="jobQueueSummary" />
-</div></body></html>
+</div>
+<script nonce="<%=cspNonce%>" type="javascript">new Tablesort(document.getElementById("jobstats"));</script>
+<script nonce="<%=cspNonce%>" type="text/javascript">
+  setInterval(function() {
+    var xhr = new XMLHttpRequest();
+    xhr.open('GET', '/jobs?' + new Date().getTime(), true);
+    xhr.responseType = "text";
+    xhr.onreadystatechange = function () {
+      if (xhr.readyState==4 && xhr.status==200) {
+        document.getElementById("routerjobs").innerHTML = xhr.responseText;
+      }
+    }
+    xhr.send();
+  }, 15000);
+</script>
+<script nonce="<%=cspNonce%>" type="text/javascript">progressx.hide();</script>
+</body>
+</html>

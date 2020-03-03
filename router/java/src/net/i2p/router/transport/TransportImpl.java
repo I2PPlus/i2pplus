@@ -88,14 +88,14 @@ public abstract class TransportImpl implements Transport {
         _context = context;
         _log = _context.logManager().getLog(getClass());
 
-        _context.statManager().createRateStat("transport.sendMessageFailureLifetime", "How long the lifetime of messages that fail are?", "Transport", new long[] { 60*1000l, 10*60*1000l, 60*60*1000l, 24*60*60*1000l });
+        _context.statManager().createRateStat("transport.sendMessageFailureLifetime", "Lifetime of failed sent messages", "Transport", new long[] { 60*1000l, 10*60*1000l, 60*60*1000l, 24*60*60*1000l });
         _context.statManager().createRequiredRateStat("transport.sendMessageSize", "Size of sent messages (bytes)", "Transport", new long[] { 60*1000l, 5*60*1000l, 60*60*1000l, 24*60*60*1000l });
         _context.statManager().createRequiredRateStat("transport.receiveMessageSize", "Size of received messages (bytes)", "Transport", new long[] { 60*1000l, 5*60*1000l, 60*60*1000l, 24*60*60*1000l });
-        _context.statManager().createRateStat("transport.receiveMessageTime", "How long it takes to read a message?", "Transport", new long[] { 60*1000l, 5*60*1000l, 10*60*1000l, 60*60*1000l, 24*60*60*1000l });
-        _context.statManager().createRateStat("transport.receiveMessageTimeSlow", "How long it takes to read a message (when it takes more than a second)?", "Transport", new long[] { 60*1000l, 5*60*1000l, 10*60*1000l, 60*60*1000l, 24*60*60*1000l });
+        _context.statManager().createRateStat("transport.receiveMessageTime", "Time to read a received message", "Transport", new long[] { 60*1000l, 5*60*1000l, 10*60*1000l, 60*60*1000l, 24*60*60*1000l });
+        _context.statManager().createRateStat("transport.receiveMessageTimeSlow", "Time to read a received message (when it takes more than a second)", "Transport", new long[] { 60*1000l, 5*60*1000l, 10*60*1000l, 60*60*1000l, 24*60*60*1000l });
         _context.statManager().createRequiredRateStat("transport.sendProcessingTime", "Time to process and send a message (ms)", "Transport", new long[] { 60*1000l, 10*60*1000l, 60*60*1000l, 24*60*60*1000l });
         //_context.statManager().createRateStat("transport.sendProcessingTime." + getStyle(), "Time to process and send a message (ms)", "Transport", new long[] { 60*1000l });
-        _context.statManager().createRateStat("transport.expiredOnQueueLifetime", "How long a message that expires on our outbound queue is processed", "Transport", new long[] { 60*1000l, 10*60*1000l, 60*60*1000l, 24*60*60*1000l } );
+        _context.statManager().createRateStat("transport.expiredOnQueueLifetime", "Time to process a message that expires on our outbound queue", "Transport", new long[] { 60*1000l, 10*60*1000l, 60*60*1000l, 24*60*60*1000l } );
 
         _currentAddresses = new CopyOnWriteArrayList<RouterAddress>();
         if (getStyle().equals("NTCP"))
@@ -277,10 +277,10 @@ public abstract class TransportImpl implements Transport {
 
         if (msToSend > 1500) {
             if (debug)
-                _log.debug(getStyle() + " afterSend slow: " + (sendSuccessful ? "success " : "FAIL ")
-                          + msg.getMessageSize() + " byte "
-                          + msg.getMessageType() + ' ' + msg.getMessageId() + " to "
-                          + msg.getTarget().getIdentity().calculateHash().toBase64().substring(0,6) + " took " + msToSend + " ms");
+                _log.debug("[" + getStyle() + "] afterSend slow: " + (sendSuccessful ? "success! " : "FAIL! ")
+                          + "\n* " + msg.getMessageSize() + " byte "
+                          + msg.getMessageType() + "[MsgID "+ msg.getMessageId() + "] to ["
+                          + msg.getTarget().getIdentity().calculateHash().toBase64().substring(0,6) + "] took " + msToSend + " ms");
         }
         //if (true)
         //    _log.error("(not error) I2NP message sent? " + sendSuccessful + " " + msg.getMessageId() + " after " + msToSend + "/" + msg.getTransmissionTime());
@@ -291,22 +291,22 @@ public abstract class TransportImpl implements Transport {
             //if (!sendSuccessful)
             //    level = Log.DEBUG;
             if (_log.shouldLog(level))
-                _log.log(level, getStyle() + " afterSend slow (" + (sendSuccessful ? "success " : "FAIL ")
-                          + lifetime + "/" + msToSend + "): " + msg.getMessageSize() + " byte "
-                          + msg.getMessageType() + " " + msg.getMessageId() + " from " + _context.routerHash().toBase64().substring(0,6)
-                          + " to " + msg.getTarget().getIdentity().calculateHash().toBase64().substring(0,6) + ": " + msg.toString());
+                _log.log(level, "[" + getStyle() + "] afterSend slow: " + (sendSuccessful ? "success! " : "FAIL! ")
+                          + "(Lifetime: " + lifetime + "ms / Time taken: " + msToSend + "ms)\n* " + msg.getMessageSize() + " byte "
+                          + msg.getMessageType() + " [MsgID " + msg.getMessageId() + "] from [" + _context.routerHash().toBase64().substring(0,6)
+                          + "] to [" + msg.getTarget().getIdentity().calculateHash().toBase64().substring(0,6) + "]: " + msg.toString());
         } else {
             if (debug)
-                _log.debug(getStyle() + " afterSend: " + (sendSuccessful ? "success " : "FAIL ")
-                          + msg.getMessageSize() + " byte "
-                          + msg.getMessageType() + " " + msg.getMessageId() + " from " + _context.routerHash().toBase64().substring(0,6)
-                          + " to " + msg.getTarget().getIdentity().calculateHash().toBase64().substring(0,6) + "\n" + msg.toString());
+                _log.debug("[" + getStyle() + "] afterSend: " + (sendSuccessful ? "success! " : "FAIL! ")
+                          + "\n* " + msg.getMessageSize() + " byte "
+                          + msg.getMessageType() + " [MsgID " + msg.getMessageId() + "] from [" + _context.routerHash().toBase64().substring(0,6)
+                          + "] to [" + msg.getTarget().getIdentity().calculateHash().toBase64().substring(0,6) + "] " + msg.toString());
         }
 
         if (sendSuccessful) {
             if (debug)
-                _log.debug(getStyle() + " Sent " + msg.getMessageType() + " successfully to "
-                           + msg.getTarget().getIdentity().getHash().toBase64());
+                _log.debug("[" + getStyle() + "] Sent " + msg.getMessageType() + " successfully to ["
+                           + msg.getTarget().getIdentity().getHash().toBase64().substring(0,6) + "]");
             Job j = msg.getOnSendJob();
             if (j != null)
                 _context.jobQueue().addJob(j);
@@ -314,9 +314,8 @@ public abstract class TransportImpl implements Transport {
             msg.discardData();
         } else {
             if (debug)
-                _log.debug(getStyle() + " Failed to send " + msg.getMessageType()
-                          + " to " + msg.getTarget().getIdentity().getHash().toBase64()
-                          + " (details: " + msg + ')');
+                _log.debug("[" + getStyle() + "] Failed to send " + msg.getMessageType() +
+                          " to [" + msg.getTarget().getIdentity().getHash().toBase64().substring(0,6) + "]" + msg);
             if (msg.getExpiration() < _context.clock().now())
                 _context.statManager().addRateData("transport.expiredOnQueueLifetime", lifetime);
 
@@ -328,9 +327,7 @@ public abstract class TransportImpl implements Transport {
                     // don't discard the data yet!
                 } else {
                     if (debug)
-                        _log.debug("No more time left (" + new Date(msg.getExpiration())
-                                  + ", expiring without sending successfully the "
-                                  + msg.getMessageType());
+                        _log.debug("[" + getStyle() + "] Failed to send the " + msg.getMessageType() + " (out of time)\n* Expired: " + new Date(msg.getExpiration()));
                     if (msg.getOnFailedSendJob() != null)
                         _context.jobQueue().addJob(msg.getOnFailedSendJob());
                     MessageSelector selector = msg.getReplySelector();
@@ -343,9 +340,8 @@ public abstract class TransportImpl implements Transport {
             } else {
                 MessageSelector selector = msg.getReplySelector();
                 if (debug)
-                    _log.debug("Failed and no requeue allowed for a "
-                              + msg.getMessageSize() + " byte "
-                              + msg.getMessageType() + " message with selector " + selector, new Exception("fail cause"));
+                    _log.debug("[" + getStyle() + "] Failed and no requeue allowed for " + msg.getMessageSize() + " byte " +
+                              msg.getMessageType() + " with selector " + selector);
                 if (msg.getOnFailedSendJob() != null)
                     _context.jobQueue().addJob(msg.getOnFailedSendJob());
                 if (msg.getOnFailedReplyJob() != null)
@@ -373,17 +369,17 @@ public abstract class TransportImpl implements Transport {
         long allTime = now - msg.getCreated();
         if (allTime > 5*1000) {
             if (debug)
-                _log.debug("Took too long from preparation to afterSend(ok? " + sendSuccessful
-                          + "): " + allTime + "ms/" + sendTime + "ms after failing on: "
-                          + msg.getFailedTransports()
-                          + (sendSuccessful ? (" and succeeding on " + getStyle()) : ""));
+                _log.debug("Took too long (" + allTime + "ms) from preparation to afterSend (ok? " + sendSuccessful +
+                          ")\n* Sent: " + new Date(sendTime) + " after failing on " +
+                          msg.getFailedTransports() + 
+                          (sendSuccessful ? (" and succeeding on " + getStyle()) : ""));
             if ( (allTime > 60*1000) && (sendSuccessful) ) {
                 // VERY slow
                 if (_log.shouldLog(Log.WARN))
-                    _log.warn("Severe latency? More than a minute slow? " + msg.getMessageType()
-                              + " of id " + msg.getMessageId() + " (send begin on "
-                              + new Date(msg.getSendBegin()) + " / created on "
-                              + new Date(msg.getCreated()) + "): " + msg);
+                    _log.warn("Severe latency? More than a minute slow? " + msg.getMessageType() +
+                              " of [MsgID " + msg.getMessageId() + "] (send begin on " +
+                              new Date(msg.getSendBegin()) + " / created on " +
+                              new Date(msg.getCreated()) + "): " + msg);
                 _context.messageHistory().messageProcessingError(msg.getMessageId(),
                                                                  msg.getMessageType(),
                                                                  "Took too long to send [" + allTime + "ms]");
@@ -421,7 +417,7 @@ public abstract class TransportImpl implements Transport {
     public void send(OutNetMessage msg) {
         if (msg.getTarget() == null) {
             if (_log.shouldLog(Log.ERROR))
-                _log.error("Error - bad message enqueued [target is null]: " + msg, new Exception("Added by"));
+                _log.error("Error - Bad message enqueued (target is null): " + msg, new Exception("Added by"));
             return;
         }
         try {
@@ -460,17 +456,16 @@ public abstract class TransportImpl implements Transport {
         //    level = Log.WARN;
         if (_log.shouldLog(level)) {
             StringBuilder buf = new StringBuilder(128);
-            buf.append("Message received: ").append(inMsg.getClass().getSimpleName());
-            buf.append(" / ").append(inMsg.getUniqueId());
-            buf.append(" in ").append(msToReceive).append("ms containing ");
-            buf.append(bytesReceived).append(" bytes ");
-            buf.append(" from ");
+            buf.append("Received ").append(inMsg.getClass().getSimpleName()).append(" [MsgID ").append(inMsg.getUniqueId()).append("]");
+            buf.append(" (").append(bytesReceived).append(" bytes)");
+            buf.append(" in ").append(msToReceive).append("ms");
+            buf.append(" from [");
             if (remoteIdentHash != null) {
-                buf.append(remoteIdentHash.toBase64());
+                buf.append(remoteIdentHash.toBase64().substring(0,6) + "]");
             } else if (remoteIdent != null) {
-                buf.append(remoteIdent.getHash().toBase64());
+                buf.append(remoteIdent.getHash().toBase64().substring(0,6) + "]");
             } else {
-                buf.append("[unknown]");
+                buf.append("unknown]");
             }
             _log.log(level, buf.toString());
         }
@@ -561,7 +556,8 @@ public abstract class TransportImpl implements Transport {
      */
     protected void replaceAddress(RouterAddress address) {
         if (_log.shouldLog(Log.WARN))
-             _log.warn("Replacing address with " + address, new Exception());
+//             _log.warn("Replacing address with " + address, new Exception());
+             _log.warn("Replacing existing address\n* " + address);
         if (address == null) {
             _currentAddresses.clear();
         } else {
@@ -574,7 +570,7 @@ public abstract class TransportImpl implements Transport {
             _currentAddresses.add(address);
         }
         if (_log.shouldLog(Log.WARN))
-             _log.warn(getStyle() + " now has " + _currentAddresses.size() + " addresses");
+             _log.warn("[" + getStyle() + "] now has " + _currentAddresses.size() + " addresses");
         if (_listener != null)
             _listener.transportAddressChanged();
     }
@@ -589,17 +585,18 @@ public abstract class TransportImpl implements Transport {
      */
     protected void removeAddress(RouterAddress address) {
         if (_log.shouldWarn())
-             _log.warn("Removing address " + address, new Exception());
+//             _log.warn("[" + getStyle() + "] Removing address " + address, new Exception());
+             _log.warn("Removing exisiting address\n* " + address);
         boolean changed = _currentAddresses.remove(address);
             changed = true;
         if (changed) {
             if (_log.shouldWarn())
-                 _log.warn(getStyle() + " now has " + _currentAddresses.size() + " addresses");
+                 _log.warn("[" + getStyle() + "] now has " + _currentAddresses.size() + " addresses");
             if (_listener != null)
                 _listener.transportAddressChanged();
         } else {
             if (_log.shouldWarn())
-                 _log.warn(getStyle() + " no addresses removed");
+                 _log.warn("[" + getStyle() + "] No addresses removed");
         }
     }
 
@@ -613,7 +610,8 @@ public abstract class TransportImpl implements Transport {
      */
     protected void removeAddress(boolean ipv6) {
         if (_log.shouldWarn())
-             _log.warn("Removing addresses, ipv6? " + ipv6, new Exception());
+//             _log.warn("Removing addresses, ipv6? " + ipv6, new Exception());
+             _log.warn("Removing addresses, ipv6? " + ipv6);
         boolean changed = false;
         for (RouterAddress ra : _currentAddresses) {
             if (ipv6 == TransportUtil.isIPv6(ra)) {
@@ -624,12 +622,12 @@ public abstract class TransportImpl implements Transport {
         }
         if (changed) {
             if (_log.shouldWarn())
-                 _log.warn(getStyle() + " now has " + _currentAddresses.size() + " addresses");
+                 _log.warn("[" + getStyle() + "] now has " + _currentAddresses.size() + " addresses");
             if (_listener != null)
                 _listener.transportAddressChanged();
         } else {
             if (_log.shouldWarn())
-                 _log.warn(getStyle() + " no addresses removed");
+                 _log.warn("[" + getStyle() + "] No addresses removed");
         }
     }
 
@@ -948,8 +946,8 @@ public abstract class TransportImpl implements Transport {
             }
         }
         if (_log.shouldDebug())
-            _log.debug(this.getStyle() + " setting wasUnreachable to " + yes + " for " + peer,
-                      yes ? new Exception() : null);
+            _log.debug("[" +  this.getStyle() + "] Adding [" + peer.toBase64().substring(0,6) +  "] to Unreachable list");
+//                      yes ? new Exception() : null);
     }
 
     /**

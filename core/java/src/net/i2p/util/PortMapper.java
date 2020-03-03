@@ -321,7 +321,8 @@ public class PortMapper {
      */
     public void renderStatusHTML(Writer out) throws IOException {
         List<String> services = new ArrayList<String>(_dir.keySet());
-        out.write("<h2 id=\"debug_portmapper\">Port Mapper</h2><table id=\"portmapper\"><tr><th>Service<th>Host<th>Port\n");
+        out.write("<h2 id=\"debug_portmapper\">Port Mapper</h2>\n" +
+                  "<table id=\"portmapper\" data-sortable>\n<thead>\n<tr><th>Service</th><th>Host</th><th>Port</th></tr>\n</thead>\n");
         Collections.sort(services, Collator.getInstance());
         for (String s : services) {
             InetSocketAddress ia = _dir.get(s);
@@ -329,6 +330,8 @@ public class PortMapper {
                 continue;
             out.write("<tr><td>" + s + "<td>" + convertWildcard(ia.getHostName(), DEFAULT_HOST) + "<td>" + ia.getPort() + '\n');
         }
+        String cspNonce = Integer.toHexString(net.i2p.util.RandomSource.getInstance().nextInt());
+        out.write("<script nonce=\"" + cspNonce + "\" type=\"text/javascript\">new Tablesort(document.getElementById(\"portmapper\"));</script>");
         out.write("</table>\n");
     }
 }

@@ -25,13 +25,13 @@ public class UDPEndpointTestStandalone {
     private UDPEndpoint _endpoints[];
     private volatile boolean _beginTest;
     private final Set<ByteArray> _sentNotReceived;
-    
+
     public UDPEndpointTestStandalone(RouterContext ctx) {
         _context = ctx;
         _log = ctx.logManager().getLog(UDPEndpointTestStandalone.class);
         _sentNotReceived = new ConcurrentHashSet<ByteArray>(128);
     }
-    
+
     public void runTest(int numPeers) {
         _log.debug("Run test("+numPeers+")");
         _endpoints = new UDPEndpoint[numPeers];
@@ -56,7 +56,7 @@ public class UDPEndpointTestStandalone {
         _beginTest = true;
         _log.debug("Test begin");
     }
-    
+
     private class TestRead implements Runnable {
         private final UDPEndpoint _endpoint;
         public TestRead(UDPEndpoint peer) {
@@ -88,7 +88,7 @@ public class UDPEndpointTestStandalone {
             }
         }
     }
-    
+
     private class TestWrite implements Runnable {
         private final UDPEndpoint _endpoint;
         public TestWrite(UDPEndpoint peer) {
@@ -122,7 +122,7 @@ public class UDPEndpointTestStandalone {
                 UDPPacket packet = builder.buildPacket(data, localhost, _endpoints[curPeer].getListenPort());
                 int outstanding = _sentNotReceived.size() + 1;
                 _sentNotReceived.add(new ByteArray(data));
-                _log.debug("Sending packet " + curPacket + " with " + sz + " byte payload, outstanding " + outstanding);
+                _log.debug("Sending packet: " + curPacket + " with " + sz + " byte payload, outstanding " + outstanding);
                 try {
                     _endpoint.send(packet);
                 } catch (Exception e) {
@@ -151,7 +151,7 @@ public class UDPEndpointTestStandalone {
             }
         }
     }
-    
+
     public static void main(String args[]) {
         try { System.out.println("Current dir: " + new java.io.File(".").getCanonicalPath()); } catch (Exception e) {}
         new java.io.File("udpEndpointTest.stats").delete();

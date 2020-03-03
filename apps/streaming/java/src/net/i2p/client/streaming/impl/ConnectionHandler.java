@@ -32,7 +32,7 @@ class ConnectionHandler {
     private volatile boolean _active;
     private int _acceptTimeout;
     private boolean _restartPending;
-    
+
     /** max time after receiveNewSyn() and before the matched accept() */
     private static final int DEFAULT_ACCEPT_TIMEOUT = 3*1000;
 
@@ -42,7 +42,7 @@ class ConnectionHandler {
      *  Don't make this too big because the removal by all the TimeoutSyns is O(n**2) - sortof.
      */
     private static final int MAX_QUEUE_SIZE = 64;
-    
+
     /** Creates a new instance of ConnectionHandler */
     public ConnectionHandler(I2PAppContext context, ConnectionManager mgr, SimpleTimer2 timer) {
         _context = context;
@@ -52,19 +52,19 @@ class ConnectionHandler {
         _synQueue = new LinkedBlockingQueue<Packet>(MAX_QUEUE_SIZE);
         _acceptTimeout = DEFAULT_ACCEPT_TIMEOUT;
     }
-    
+
     /**
      * The router told us it's going to restart.
      * Call instead of setActive(false).
      *
      * @since 0.9.34
      */
-    public synchronized void setRestartPending() { 
+    public synchronized void setRestartPending() {
         _restartPending = true;
         setActive(false);
     }
 
-    public synchronized void setActive(boolean active) { 
+    public synchronized void setActive(boolean active) {
         // FIXME active=false this only kills for one thread in accept()
         // if there are more, they won't get a poison packet.
         if (_log.shouldInfo())
@@ -75,7 +75,7 @@ class ConnectionHandler {
             _synQueue.clear();
         }
         boolean wasActive = _active;
-        _active = active; 
+        _active = active;
         if (wasActive && !active) {
             // stopping, clear any pending sockets
             _synQueue.clear();
@@ -84,9 +84,9 @@ class ConnectionHandler {
     }
 
     public boolean getActive() { return _active; }
-    
+
     /**
-     * Non-SYN packets with a zero SendStreamID may also be queued here so 
+     * Non-SYN packets with a zero SendStreamID may also be queued here so
      * that they don't get thrown away while the SYN packet before it is queued.
      *
      * Additional overload protection may be required here...
@@ -98,7 +98,7 @@ class ConnectionHandler {
         if (!_active) {
             if (packet.isFlagSet(Packet.FLAG_SYNCHRONIZE)) {
                 if (_log.shouldLog(Log.WARN))
-                    _log.warn("Dropping new SYN request, as we're not listening");
+                    _log.warn("Dropping new SYN request because we're not listening");
                 sendReset(packet);
             } else {
                 if (_log.shouldLog(Log.WARN))
@@ -112,27 +112,27 @@ class ConnectionHandler {
             return;
         }
         if (_log.shouldLog(Log.INFO))
-            _log.info("Receive new SYN: " + packet + ": timeout in " + _acceptTimeout);
+            _log.info("Received new SYN packet: " + packet + "; Timeout in " + (_acceptTimeout / 1000) + "s");
         // also check if expiration of the head is long past for overload detection with peek() ?
         boolean success = _synQueue.offer(packet); // fail immediately if full
         if (success) {
             _timer.addEvent(new TimeoutSyn(packet), _acceptTimeout);
         } else {
             if (_log.shouldLog(Log.WARN))
-                _log.warn("Dropping new SYN request, as the queue is full");
+                _log.warn("Dropping new SYN request because queue is full");
             if (packet.isFlagSet(Packet.FLAG_SYNCHRONIZE))
                 sendReset(packet);
         }
     }
-    
+
     /**
      * Receive an incoming connection (built from a received SYN)
-     * Non-SYN packets with a zero SendStreamID may also be queued here so 
+     * Non-SYN packets with a zero SendStreamID may also be queued here so
      * that they don't get thrown away while the SYN packet before it is queued.
      *
-     * @param timeoutMs max amount of time to wait for a connection (if less 
+     * @param timeoutMs max amount of time to wait for a connection (if less
      *                  than 1ms, wait indefinitely)
-     * @return connection received. Prior to 0.9.17, or null if there was a timeout or the 
+     * @return connection received. Prior to 0.9.17, or null if there was a timeout or the
      *                  handler was shut down. As of 0.9.17, never null.
      * @throws RouterRestartException (extends I2PException) if the router is apparently restarting, since 0.9.34
      * @throws ConnectException since 0.9.17, returned null before;
@@ -160,11 +160,11 @@ class ConnectionHandler {
                     throw new RouterRestartException();
                 throw new ConnectException("ServerSocket closed");
             }
-            
+
             Packet syn = null;
             while ( _active && syn == null) {
                 if (_log.shouldLog(Log.DEBUG))
-                    _log.debug("Accept("+ timeoutMs+"): active=" + _active + " queue: " 
+                    _log.debug("Accept("+ timeoutMs+"): active=" + _active + " queue: "
                                + _synQueue.size());
                 if (timeoutMs <= 0) {
                     try {
@@ -178,8 +178,8 @@ class ConnectionHandler {
                     long remaining = expiration - _context.clock().now();
                     // (dont think this applies anymore for LinkedBlockingQueue)
                     // BUGFIX
-                    // The specified amount of real time has elapsed, more or less. 
-                    // If timeout is zero, however, then real time is not taken into consideration 
+                    // The specified amount of real time has elapsed, more or less.
+                    // If timeout is zero, however, then real time is not taken into consideration
                     // and the thread simply waits until notified.
                     if (remaining < 1)
                         break;
@@ -220,7 +220,7 @@ class ConnectionHandler {
                         // only drop it on a destination match too
                         if (from.equals(oldcon.getRemotePeer())) {
                             if (_log.shouldLog(Log.WARN))
-                                _log.warn("Dropping dup SYN: " + syn);
+                                _log.warn("Dropping duplicate SYN packet: " + syn);
                             continue;
                         }
                     }
@@ -245,7 +245,7 @@ class ConnectionHandler {
         if (con != null) {
             // Send it through the packet handler again
             if (_log.shouldLog(Log.WARN))
-                _log.warn("Found con for queued non-syn packet: " + packet);
+                _log.warn("Connection found for queued non-SYN packet: " + packet);
             // false -> don't requeue, fixes a race where a SYN gets dropped
             // between here and PacketHandler, causing the packet to loop forever....
             _manager.getPacketHandler().receivePacketDirect(packet, false);
@@ -257,7 +257,7 @@ class ConnectionHandler {
 
             // goodbye
             if (_log.shouldLog(Log.WARN))
-                _log.warn("Did not find con for queued non-syn packet, dropping: " + packet);
+                _log.warn("Connection not found for queued non-SYN packet, dropping: " + packet);
             packet.releasePayload();
         }
     }
@@ -274,7 +274,7 @@ class ConnectionHandler {
         _cache.release(ba);
         if (!ok) {
             if (_log.shouldWarn())
-                _log.warn("Can't send reset in response to packet: " + packet);
+                _log.warn("Can't send RESET in response to packet: " + packet);
             return;
         }
         PacketLocal reply = new PacketLocal(_context, packet.getOptionalFrom(), packet.getSession());
@@ -286,21 +286,21 @@ class ConnectionHandler {
         // Removed in 0.9.39
         //reply.setOptionalFrom();
         if (_log.shouldLog(Log.DEBUG))
-            _log.debug("Sending RST: " + reply + " because of " + packet);
+            _log.debug("Sending RESET: " + reply + " because of " + packet);
         // this just sends the packet - no retries or whatnot
         _manager.getPacketQueue().enqueue(reply);
     }
-    
+
     private class TimeoutSyn implements SimpleTimer.TimedEvent {
         private final Packet _synPacket;
 
         public TimeoutSyn(Packet packet) {
             _synPacket = packet;
         }
-        
+
         public void timeReached() {
             boolean removed = _synQueue.remove(_synPacket);
-            
+
             if (removed) {
                 if (_synPacket.isFlagSet(Packet.FLAG_SYNCHRONIZE)) {
                     if (_log.shouldLog(Log.WARN))

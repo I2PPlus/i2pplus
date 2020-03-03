@@ -5,16 +5,20 @@ Connection: close
 Proxy-Connection: close
 
 <!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
-<html><head>
+<html>
+<head>
 <title>_("Warning: Invalid Destination")</title>
 <noscript><style type="text/css">.script {display: none;}</style></noscript>
-<link rel="shortcut icon" href="http://proxy.i2p/themes/console/images/favicon.ico">
+<link rel="shortcut icon" href="http://proxy.i2p/themes/console/default/images/favicon.ico">
 <link href="http://proxy.i2p/themes/console/default/console.css" rel="stylesheet" type="text/css">
 </head>
-<body>
+<body id="proxy_error">
 <div class="logo">
- <a href="http://127.0.0.1:7657/" title="_("Router Console")"><img src="http://proxy.i2p/themes/console/images/i2plogo.png" alt="_("I2P Router Console")" border="0"></a><hr>
- <a href="http://127.0.0.1:7657/config">_("Configuration")</a> <a href="http://127.0.0.1:7657/help">_("Help")</a> <a href="http://127.0.0.1:7657/dns">_("Addressbook")</a>
+<a href="http://127.0.0.1:7657/" title="_("Router Console")"><img src="http://proxy.i2p/themes/console/default/images/i2plogo.png" alt="_("I2P Router Console")" border="0"></a>
+<hr>
+<a href="http://127.0.0.1:7657/dns">_("Addressbook")</a>
+<a href="http://127.0.0.1:7657/config">_("Configuration")</a>
+<a href="http://127.0.0.1:7657/help/">_("Help")</a>
 </div>
 <div class="warning" id="warning">
 <h3>_("Warning: Invalid Destination")</h3>
@@ -22,9 +26,14 @@ Proxy-Connection: close
 _("The website destination specified was not valid, or was otherwise unreachable.")
 _("Perhaps you pasted in the wrong Base 64 string or the link you are following is bad.")
 _("The I2P host could also be offline.")
-<span class="script">_("You may want to {0}retry{1}.", "<a href=\"javascript:window.location.reload()\">", "</a>")</span>
-<noscript>_("You may want to retry.")</noscript>
+<span class="script">
+_("You may want to {0}retry{1}.", "<a href=\"javascript:window.location.reload()\">", "</a>")
+</span>
+<noscript>
+_("You may want to retry.")
+</noscript>
 </p>
 <hr>
-<p><b>_("Could not find the following destination:")</b>
-</p>
+<p><b>
+_("Could not find the following destination:")
+</b></p>

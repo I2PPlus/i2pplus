@@ -22,10 +22,23 @@
  *
  * $Revision: 1.2 $
  */
+
+    // http://www.crazysquirrel.com/computing/general/form-encoding.jspx
+    if (request.getCharacterEncoding() == null)
+        request.setCharacterEncoding("UTF-8");
+
+    response.setHeader("X-Frame-Options", "SAMEORIGIN");
+    response.setHeader("Content-Security-Policy", "default-src 'self'; style-src 'self' 'unsafe-inline'; script-src 'self' 'unsafe-inline'; form-action 'self'; frame-ancestors 'self'; object-src 'none'; media-src 'none'");
+    response.setHeader("X-XSS-Protection", "1; mode=block");
+    response.setHeader("X-Content-Type-Options", "nosniff");
+    response.setHeader("Referrer-Policy", "no-referrer");
+    response.setHeader("Accept-Ranges", "none");
+
 %>
-<%@include file="headers.jsi" %>
+<% //@include file="headers.jsi" %>
 <%@page pageEncoding="UTF-8"%>
 <%@ page contentType="text/html"%>
+<%@page trimDirectiveWhitespaces="true"%>
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core"%>
 <jsp:useBean id="version" class="i2p.susi.dns.VersionBean" scope="application" />
 <jsp:useBean id="subs" class="i2p.susi.dns.SubscriptionsBean" scope="session" />
@@ -37,10 +50,11 @@
 <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
 <title><%=intl._t("subscriptions")%> - susidns</title>
 <link rel="stylesheet" type="text/css" href="<%=subs.getTheme()%>susidns.css?<%=net.i2p.CoreVersion.VERSION%>">
+<link rel="stylesheet" type="text/css" href="<%=subs.getTheme()%>override.css?<%=net.i2p.CoreVersion.VERSION%>">
+<script type="text/javascript" src="/js/iframeResizer/iframeResizer.contentWindow.js?<%=net.i2p.CoreVersion.VERSION%>"></script>
 </head>
-<body>
+<body id="sbs">
 <div class="page">
-<hr>
 <div id="navi">
 <a id="overview" href="index"><%=intl._t("Overview")%></a>&nbsp;
 <a class="abook" href="addressbook?book=private&amp;filter=none"><%=intl._t("Private")%></a>&nbsp;
@@ -52,27 +66,29 @@
 </div>
 <hr>
 <div class="headline" id="subscriptions">
-<h3><%=intl._t("Subscriptions")%></h3>
-<h4><%=intl._t("File location")%>: ${subs.fileName}</h4>
+<h3><%=intl._t("Subscriptions")%>&nbsp;&nbsp;<span><a href="log.jsp">View Log</a></h3>
+<h4><%=intl._t("File location")%>: <span class="storage">${subs.fileName}</span></h4>
 </div>
+<script src="/js/closeMessage.js?<%=net.i2p.CoreVersion.VERSION%>" type="text/javascript"></script>
 <div id="messages">${subs.messages}</div>
-<form method="POST" action="subscriptions">
+<form method="POST" action="subscriptions#navi">
 <div id="content">
 <input type="hidden" name="serial" value="${subs.serial}" >
 <textarea name="content" rows="10" cols="80">${subs.content}</textarea>
 </div>
 <div id="buttons">
-<input class="reload" type="submit" name="action" value="<%=intl._t("Reload")%>" >
+<input class="update" style="float: left;" type="submit" name="action" value="<%=intl._t("Update")%>" >
+<!--<input class="reload" type="submit" name="action" value="<%=intl._t("Reload")%>" >-->
 <input class="accept" type="submit" name="action" value="<%=intl._t("Save")%>" >
 </div>
 </form>
 <div class="help" id="helpsubs">
 <p class="help">
-<%=intl._t("The subscription file contains a list of i2p URLs.")%>
-<%=intl._t("The addressbook application regularly checks this list for new eepsites.")%>
-<%=intl._t("Those URLs refer to published hosts.txt files.")%>
-<%=intl._t("The default subscription is the hosts.txt from {0}, which is updated infrequently.", "i2p-projekt.i2p")%>
-<%=intl._t("So it is a good idea to add additional subscriptions to sites that have the latest addresses.")%>
+<%=intl._t("The subscription file contains a list of i2p URLs.")%>&nbsp;<wbr>
+<%=intl._t("The addressbook application regularly checks this list for new eepsites.")%>&nbsp;<wbr>
+<%=intl._t("Those URLs refer to published hosts.txt files.")%>&nbsp;<wbr>
+<%=intl._t("The default subscription is the hosts.txt from {0}, which is updated infrequently.", "i2p-projekt.i2p")%>&nbsp;<wbr>
+<%=intl._t("So it is a good idea to add additional subscriptions to sites that have the latest addresses.")%>&nbsp;<wbr>
 <a href="/help#addressbooksubs" target="_top"><%=intl._t("See the FAQ for a list of subscription URLs.")%></a>
 </p>
 </div>
@@ -81,5 +97,7 @@
 <p class="footer">susidns v${version.version} &copy; <a href="${version.url}" target="_top">susi</a> 2005</p>
 </div>
 </div>
+<span data-iframe-height></span>
+
 </body>
 </html>

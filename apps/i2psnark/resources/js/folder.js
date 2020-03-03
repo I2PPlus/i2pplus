@@ -9,11 +9,11 @@ const priorityclicked=()=>{
 }
 
 const updatesetallbuttons=()=>{
-	let notNorm = true, notHigh = true, notSkip = true, i = 0, len, ele, elems = document.forms[0].elements;	
+	let notNorm = true, notHigh = true, notSkip = true, i = 0, len, ele, elems = document.forms[0].elements;
 	for( len = elems.length ; i < len && (notNorm || notHigh || notSkip) ; ) {
 		ele = elems[i++];
 		if (ele.type == 'radio' && !ele.checked) {
-			if (ele.className == 'prinorm') notNorm = false; 
+			if (ele.className == 'prinorm') notNorm = false;
 			else if (ele.className == 'prihigh') notHigh = false;
 			else notSkip = false;
 		}

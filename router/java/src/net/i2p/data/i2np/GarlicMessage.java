@@ -19,35 +19,35 @@ import net.i2p.data.DataHelper;
 public class GarlicMessage extends FastI2NPMessageImpl {
     public final static int MESSAGE_TYPE = 11;
     private byte[] _data;
-    
+
     public GarlicMessage(I2PAppContext context) {
         super(context);
     }
-    
-    public byte[] getData() { 
-        return _data; 
+
+    public byte[] getData() {
+        return _data;
     }
 
     /**
      *  @throws IllegalStateException if data previously set, to protect saved checksum
      */
-    public void setData(byte[] data) { 
+    public void setData(byte[] data) {
         if (_data != null)
             throw new IllegalStateException();
-        _data = data; 
+        _data = data;
     }
-    
+
     public void readMessage(byte data[], int offset, int dataSize, int type) throws I2NPMessageException {
         if (type != MESSAGE_TYPE) throw new I2NPMessageException("Message type is incorrect for this message");
         int curIndex = offset;
-        
+
         long len = DataHelper.fromLong(data, curIndex, 4);
         curIndex += 4;
         if ( (len <= 0) || (len > MAX_SIZE) ) throw new I2NPMessageException("size="+len);
         _data = new byte[(int)len];
         System.arraycopy(data, curIndex, _data, 0, (int)len);
     }
-    
+
     /** calculate the message body's length (not including the header and footer */
     protected int calculateWrittenLength() {
         return 4 + _data.length;
@@ -60,14 +60,14 @@ public class GarlicMessage extends FastI2NPMessageImpl {
         curIndex += _data.length;
         return curIndex;
     }
-    
+
     public int getType() { return MESSAGE_TYPE; }
-    
+
     @Override
     public int hashCode() {
         return DataHelper.hashCode(getData());
     }
-    
+
     @Override
     public boolean equals(Object object) {
         if ( (object != null) && (object instanceof GarlicMessage) ) {
@@ -77,13 +77,11 @@ public class GarlicMessage extends FastI2NPMessageImpl {
             return false;
         }
     }
-    
+
     @Override
     public String toString() {
         StringBuilder buf = new StringBuilder();
-        buf.append("[GarlicMessage: ");
-        buf.append("Data length: ").append(getData().length).append(" bytes");
-        buf.append("]");
+        buf.append("GarlicMessage (").append(getData().length).append(" bytes)");
         return buf.toString();
     }
 }

@@ -93,14 +93,14 @@ class SOCKS4aServer extends SOCKSServer {
             sendRequestReply(Reply.CONNECTION_REFUSED, InetAddress.getByName("127.0.0.1"), 0, out);
             throw new SOCKSException("BIND command not supported");
         default:
-            _log.debug("unknown command in request (" + Integer.toHexString(command) + ")");
+            _log.debug("Unknown command in request (" + Integer.toHexString(command) + ")");
             sendRequestReply(Reply.CONNECTION_REFUSED, InetAddress.getByName("127.0.0.1"), 0, out);
             throw new SOCKSException("Invalid command in request");
         }
 
         connPort = in.readUnsignedShort();
         if (connPort == 0) {
-            _log.debug("trying to connect to TCP port 0?  Dropping!");
+            _log.debug("Trying to connect to TCP port 0?  Dropping!");
             sendRequestReply(Reply.CONNECTION_REFUSED, InetAddress.getByName("127.0.0.1"), 0, out);
             throw new SOCKSException("Invalid port number in request");
         }
@@ -220,7 +220,7 @@ class SOCKS4aServer extends SOCKSServer {
                     throw new SOCKSException("Host not found");
                 }
                 if (_log.shouldDebug())
-                    _log.debug("connecting to " + connHostName + "...");
+                    _log.debug("Connecting to " + connHostName + "...");
                 Properties overrides = new Properties();
                 I2PSocketOptions sktOpts = t.buildOptions(overrides);
                 sktOpts.setPort(connPort);
@@ -277,14 +277,14 @@ class SOCKS4aServer extends SOCKSServer {
                         throw new SOCKSException("Outproxy not found");
                     }
                     if (_log.shouldDebug())
-                        _log.debug("connecting to port " + connPort + " proxy " + proxy + " for " + connHostName + "...");
+                        _log.debug("Connecting to port " + connPort + " proxy " + proxy + " for " + connHostName + "...");
                     // this isn't going to work, these need to be socks outproxies so we need
                     // to do a socks session to them?
                     destSock = t.createI2PSocket(dest);
                 }
             }
             confirmConnection();
-            _log.debug("connection confirmed - exchanging data...");
+            _log.debug("Connection confirmed - exchanging data...");
         } catch (DataFormatException e) {
             try {
                 sendRequestReply(Reply.CONNECTION_REFUSED, InetAddress.getByName("127.0.0.1"), 0, out);

@@ -27,7 +27,7 @@ import net.i2p.util.Log;
 class CreateSessionJob extends JobImpl {
     private final Log _log;
     private final SessionConfig _config;
-    
+
     public CreateSessionJob(RouterContext context, SessionConfig config) {
         super(context);
         _log = context.logManager().getLog(CreateSessionJob.class);
@@ -35,29 +35,29 @@ class CreateSessionJob extends JobImpl {
         if (_log.shouldLog(Log.DEBUG))
             _log.debug("CreateSessionJob for config: " + config);
     }
-    
-    public String getName() { return "Request tunnels for a new client"; }
+
+    public String getName() { return "Request Tunnels for New Client"; }
 
     public void runJob() {
         Hash dest = _config.getDestination().calculateHash();
         if (_log.shouldLog(Log.INFO))
-            _log.info("Requesting lease set for destination " + dest);
+            _log.info("Requesting LeaseSet for destination: " + dest);
         ClientTunnelSettings settings = new ClientTunnelSettings(dest);
         Properties props = new Properties();
-        
+
         // We're NOT going to force all clients to use the router's defaults, since that may be
         // excessive.  This means that unless the user says otherwise, we'll be satisfied with whatever
         // is available.  Otherwise, when the router starts up, if there aren't sufficient tunnels with the
         // adequate number of hops, the user will have to wait.  Once peer profiles are persistent, we can
         // reenable this, since on startup we'll have a sufficient number of high enough ranked peers to
         // tunnel through.  (perhaps).
-        
+
         // XXX take the router's defaults
         // XXX props.putAll(Router.getInstance().getConfigMap());
-        
+
         // override them by the client's settings
         props.putAll(_config.getOptions());
-        
+
         // and load 'em up (using anything not yet set as the software defaults)
         settings.readFromProperties(props);
         getContext().tunnelManager().buildTunnels(_config.getDestination(), settings);

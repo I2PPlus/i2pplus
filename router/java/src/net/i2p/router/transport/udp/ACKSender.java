@@ -13,7 +13,7 @@ import net.i2p.util.Log;
 
 /**
  * Blocking thread that is given peers by the inboundFragment pool, sending out
- * any outstanding ACKs.  
+ * any outstanding ACKs.
  * The ACKs are sent directly to UDPSender,
  * bypassing OutboundMessageFragments and PacketPusher.
  */
@@ -26,10 +26,10 @@ class ACKSender implements Runnable {
     private final BlockingQueue<PeerState> _peersToACK;
     private volatile boolean _alive;
     private static final long POISON_PS = -9999999999l;
-    
+
     /** how frequently do we want to send ACKs to a peer? */
     static final int ACK_FREQUENCY = 150;
-    
+
     public ACKSender(RouterContext ctx, UDPTransport transport) {
         _context = ctx;
         _log = ctx.logManager().getLog(ACKSender.class);
@@ -37,12 +37,12 @@ class ACKSender implements Runnable {
         _peersToACK = new LinkedBlockingQueue<PeerState>();
         _builder = new PacketBuilder(_context, transport);
         _alive = true;
-        _context.statManager().createRateStat("udp.sendACKCount", "how many ack messages were sent to a peer", "udp", UDPTransport.RATES);
-        _context.statManager().createRateStat("udp.ackFrequency", "how long ago did we send an ACK to this peer?", "udp", UDPTransport.RATES);
-        _context.statManager().createRateStat("udp.sendACKRemaining", "when we ack a peer, how many peers are left waiting to ack?", "udp", UDPTransport.RATES);
-        _context.statManager().createRateStat("udp.abortACK", "How often do we schedule up an ACK send only to find it had already been sent (through piggyback)?", "udp", UDPTransport.RATES);
+        _context.statManager().createRateStat("udp.sendACKCount", "Number of ACK messages sent to a peer", "Transport [UDP]", UDPTransport.RATES);
+        _context.statManager().createRateStat("udp.ackFrequency", "How long ago we sent an ACK to this peer", "Transport [UDP]", UDPTransport.RATES);
+        _context.statManager().createRateStat("udp.sendACKRemaining", "Number of remaining peers waiting to ACK when we ACK a peer", "Transport [UDP]", UDPTransport.RATES);
+        _context.statManager().createRateStat("udp.abortACK", "How often we schedule up an ACK send only to find it had already been sent (through piggyback)", "Transport [UDP]", UDPTransport.RATES);
     }
-    
+
     /**
      *  Add to the queue.
      *  For speed, don't check for duplicates here.
@@ -52,15 +52,15 @@ class ACKSender implements Runnable {
         if (_alive)
             _peersToACK.offer(peer);
     }
-    
+
     public synchronized void startup() {
         _alive = true;
         _peersToACK.clear();
         I2PThread t = new I2PThread(this, "UDP ACK sender", true);
         t.start();
     }
-    
-    public synchronized void shutdown() { 
+
+    public synchronized void shutdown() {
         _alive = false;
         PeerState poison = new PeerState(_context, _transport, new byte[4], 0, null, false, 0);
         poison.setTheyRelayToUsAs(POISON_PS);
@@ -72,7 +72,7 @@ class ACKSender implements Runnable {
         }
         _peersToACK.clear();
     }
-    
+
     private static long ackFrequency(long timeSinceACK, long rtt) {
         // if we are actively pumping lots of data to them, we can depend upon
         // the unsentACKThreshold to figure out when to send an ACK instead of
@@ -82,7 +82,7 @@ class ACKSender implements Runnable {
         else
             return ACK_FREQUENCY;
     }
-    
+
     public void run() {
         try {
             run2();
@@ -136,13 +136,13 @@ class ACKSender implements Runnable {
                             } catch (NoSuchElementException nsee) {}
                             notYet.clear();
                             break;
-                        } else { 
+                        } else {
                             // not yet, go around again
                             // moving from the Queue to the Set and then back removes duplicates
                             boolean added = notYet.add(cur);
                             if (added && _log.shouldLog(Log.DEBUG))
-                                _log.debug("Pending ACK (delta = " + delta + ") for " + cur);
-                        } 
+                                _log.debug("Pending ACK (delta: " + delta + ") for " + cur);
+                        }
                     } else if (!notYet.isEmpty()) {
                         // put them all back and wait a while
                         try {
@@ -150,7 +150,7 @@ class ACKSender implements Runnable {
                             _peersToACK.addAll(notYet);
                         } catch (RuntimeException e) {}
                         if (_log.shouldLog(Log.DEBUG))
-                            _log.debug("sleeping, pending size = " + notYet.size());
+                            _log.debug("Sleeping... [Pending size = " + notYet.size() + "]");
                         notYet.clear();
                         try {
                             // sleep a little longer than the divided frequency,
@@ -159,19 +159,19 @@ class ACKSender implements Runnable {
                         } catch (InterruptedException ie) {}
                     } // else go around again where we will wait at take()
                 } // inner while()
-                    
+
             if (peer != null) {
                 long lastSend = peer.getLastACKSend();
                 // set above before the break
                 //long wanted = peer.getWantedACKSendSince();
                 List<ACKBitfield> ackBitfields = peer.retrieveACKBitfields(false);
-                
+
                 if (wanted < 0) {
                     if (_log.shouldLog(Log.WARN))
-                        _log.warn("why are we acking something they dont want?  remaining=" + remaining + ", peer=" + peer + ", bitfields=" + ackBitfields);
+                        _log.warn("Why are we acking something they don't want? [Remaining=" + remaining + ", Peer=" + peer + ", Bitfields=" + ackBitfields + "]");
                     continue;
                 }
-                
+
                 if (!ackBitfields.isEmpty()) {
                     _context.statManager().addRateData("udp.sendACKCount", ackBitfields.size());
                     if (remaining > 0)
@@ -186,15 +186,15 @@ class ACKSender implements Runnable {
                     ack.markType(1);
                     ack.setFragmentCount(-1);
                     ack.setMessageType(PacketBuilder.TYPE_ACK);
-                    
+
                     if (_log.shouldLog(Log.INFO))
-                        _log.info("Sending " + ackBitfields + " to " + peer);
+                        _log.info("Sending to " + peer + ":\n* " + ackBitfields);
                     // locking issues, we ignore the result, and acks are small,
                     // so don't even bother allocating
                     //peer.allocateSendingBytes(ack.getPacket().getLength(), true);
                     // ignore whether its ok or not, its a bloody ack.  this should be fixed, probably.
                     _transport.send(ack);
-                    
+
                     if ( (wanted > 0) && (wanted <= peer.getWantedACKSendSince()) ) {
                         // still full packets left to be ACKed, since wanted time
                         // is reset by retrieveACKBitfields when all of the IDs are

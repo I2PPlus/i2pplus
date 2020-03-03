@@ -221,7 +221,7 @@ public class BlockFile implements Closeable {
 			int len = PAGESIZE - pageCounter;
 			if(len <= 0) {
 				if (curNextPage <= 0)
-					throw new IOException("not enough pages to read data still need " + (arr.length - dct));
+					throw new IOException("Not enough pages to read data still need " + (arr.length - dct));
 				BlockFile.pageSeek(this.file, curNextPage);
 				int magic = this.file.readInt();
 				if (magic != MAGIC_CONT)

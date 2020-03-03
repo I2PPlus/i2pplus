@@ -2,21 +2,22 @@
 # Copyright (C) 2009 The I2P Project
 # This file is distributed under the same license as the routerconsole package.
 # To contribute translations, see http://www.i2p2.de/newdevelopers
-# 
+#
 # Translators:
 # Agustín Wu <losangwuyts@gmail.com>, 2016
 msgid ""
 msgstr ""
 "Project-Id-Version: I2P\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2013-07-13 21:46+0000\n"
+"POT-Creation-Date: 2018-06-16 12:58+0000\n"
 "PO-Revision-Date: 2017-06-30 21:33+0000\n"
 "Last-Translator: 黃彥儒 <r1235613@gmail.com>\n"
-"Language-Team: Chinese (Taiwan) (http://www.transifex.com/otf/I2P/language/zh_TW/)\n"
+"Language-Team: Chinese (Taiwan) (http://www.transifex.com/otf/I2P/language/"
+"zh_TW/)\n"
+"Language: zh_TW\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"Language: zh_TW\n"
 "Plural-Forms: nplurals=1; plural=0;\n"
 
 msgid "Congratulations on getting I2P installed!"
@@ -31,18 +32,19 @@ msgstr "敬請{0}耐心等候{1} I2P 啟動以及尋找其他使用者。"
 
 #, java-format
 msgid ""
-"While you are waiting, please {0}adjust your bandwidth settings{1} on the "
-"{2}configuration page{3}."
+"While you are waiting, please {0}adjust your bandwidth settings{1} on the {2}"
+"configuration page{3}."
 msgstr "在您等候的同時，煩請在{2}設定頁面{3}裡{0}調整您的頻寬設定{1}。"
 
-msgid ""
-"Also you can setup your browser to use the I2P proxy to reach eepsites."
+msgid "Also you can setup your browser to use the I2P proxy to reach eepsites."
 msgstr "您也可以將瀏覽器設定成使用 I2P 代理伺服器來連上 eepsite 網站。"
 
 msgid ""
 "Just enter 127.0.0.1 (or localhost) port 4444 as a http proxy into your "
 "browser settings."
-msgstr "請輸入 127.0.0.1 (或是 localhost)以及埠號 4444 作為您瀏覽器中的 HTTP 代理伺服器。"
+msgstr ""
+"請輸入 127.0.0.1 (或是 localhost)以及埠號 4444 作為您瀏覽器中的 HTTP 代理伺服"
+"器。"
 
 msgid "Do not use SOCKS for this."
 msgstr "不要於此使用 SOCKS。"
@@ -54,12 +56,14 @@ msgstr "您可以在 {0}I2P 瀏覽器之代理伺服器設定頁面{1}中找到�
 
 #, java-format
 msgid ""
-"Once you have a \"shared clients\" destination listed on the left, please "
-"{0}check out{1} our {2}FAQ{3}."
-msgstr "當您的左方出現「共享客戶端」目的地清單時，請 {0}參考{1}我們的 {2}FAQ{3}。"
+"Once you have a \"shared clients\" destination listed on the left, please {0}"
+"check out{1} our {2}FAQ{3}."
+msgstr ""
+"當您的左方出現「共享客戶端」目的地清單時，請 {0}參考{1}我們的 {2}FAQ{3}。"
 
 #, java-format
 msgid ""
-"Point your IRC client to {0}localhost:6668{1} and say hi to us on "
-"{2}#i2p{3}."
-msgstr "將您的 IRC 客戶端連線指向 {0}localhost:6668{1} 並且在 {2}#i2p{3} 上面跟我們打聲招呼。"
+"Point your IRC client to {0}localhost:6668{1} and say hi to us on {2}#i2p{3}."
+msgstr ""
+"將您的 IRC 客戶端連線指向 {0}localhost:6668{1} 並且在 {2}#i2p{3} 上面跟我們打"
+"聲招呼。"

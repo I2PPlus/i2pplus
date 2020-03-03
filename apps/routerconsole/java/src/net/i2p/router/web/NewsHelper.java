@@ -17,7 +17,7 @@ import static net.i2p.update.UpdateType.*;
  *  @since 0.8.2
  */
 public class NewsHelper extends ContentHelper {
-    
+
     public static final String PROP_LAST_UPDATE_TIME = "router.updateLastDownloaded";
     /** @since 0.8.12 */
     private static final String PROP_LAST_HIDDEN = "routerconsole.newsLastHidden";
@@ -299,10 +299,14 @@ public class NewsHelper extends ContentHelper {
          }
          buf.append("</i></span><span id=\"newsDisplay\">");
          String consoleNonce = CSSHelper.getNonce();
+         boolean oldHome = ctx.getBooleanProperty("routerconsole.oldHomePage");
          if (lastUpdated > 0 && consoleNonce != null) {
              if (shouldShowNews(ctx)) {
                  buf.append(" <a href=\"/?news=0&amp;consoleNonce=").append(consoleNonce).append("\">")
                     .append(Messages.getString("Hide news", ctx));
+             } else if (oldHome) {
+                 buf.append(" <a href=\"/sitemap?news=1&amp;consoleNonce=").append(consoleNonce).append("\">")
+                    .append(Messages.getString("Show news", ctx));
              } else {
                  buf.append(" <a href=\"/?news=1&amp;consoleNonce=").append(consoleNonce).append("\">")
                     .append(Messages.getString("Show news", ctx));
@@ -314,21 +318,21 @@ public class NewsHelper extends ContentHelper {
          }
          return buf.toString();
     }
-    
+
     /**
      *  @since 0.9.4 moved from NewsFetcher
      */
     public static boolean dontInstall(RouterContext ctx) {
         return isUpdateDisabled(ctx) || isBaseReadonly(ctx);
     }
-    
+
     /**
      *  @since 0.9.9
      */
     public static boolean isUpdateDisabled(RouterContext ctx) {
         return ctx.getBooleanProperty(ConfigUpdateHandler.PROP_UPDATE_DISABLED);
     }
-    
+
     /**
      *  @since 0.9.9
      */

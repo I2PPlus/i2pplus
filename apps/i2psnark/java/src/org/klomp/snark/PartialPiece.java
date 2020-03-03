@@ -48,7 +48,8 @@ class PartialPiece implements Comparable<PartialPiece> {
     private static final ByteCache _cache = ByteCache.getInstance(16, BUFSIZE);
 
     // Any bigger than this, use temp file instead of heap
-    private static final int MAX_IN_MEM = 128 * 1024;
+//    private static final int MAX_IN_MEM = 128 * 1024;
+    private static final int MAX_IN_MEM = 512 * 1024;
     // May be reduced on OOM
     private static int _max_in_mem = MAX_IN_MEM;
 
@@ -78,7 +79,7 @@ class PartialPiece implements Comparable<PartialPiece> {
                     if (_max_in_mem > PeerState.PARTSIZE)
                         _max_in_mem /= 2;
                     Log log = I2PAppContext.getGlobalContext().logManager().getLog(PartialPiece.class);
-                    log.logAlways(Log.WARN, "OOM creating new partial piece");
+                    log.logAlways(Log.WARN, "OOM creating new partial piece -> RAM cache reduced to " + _max_in_mem / 1024 + "KB");
                     // fall through to use temp file
                 }
             }
@@ -191,7 +192,7 @@ class PartialPiece implements Comparable<PartialPiece> {
         }
         return sha1.digest();
     }
-    
+
     /**
      *  Blocking.
      *  If offset matches the previous downloaded amount
@@ -274,7 +275,7 @@ class PartialPiece implements Comparable<PartialPiece> {
                 _cache.release(ba, false);
         }
     }
-    
+
     /**
      *  Release all resources.
      *
@@ -290,7 +291,7 @@ class PartialPiece implements Comparable<PartialPiece> {
             //    I2PAppContext.getGlobalContext().logManager().getLog(PartialPiece.class).warn("Released " + tempfile);
         }
     }
-    
+
     /**
      *  Caller must synchronize
      *
@@ -316,7 +317,7 @@ class PartialPiece implements Comparable<PartialPiece> {
             return d;
         return opp.off - this.off;  // reverse
     }
-    
+
     @Override
     public int hashCode() {
         return piece.getId() * 7777;

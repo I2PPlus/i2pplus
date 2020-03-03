@@ -1,5 +1,5 @@
 package net.i2p.router.tunnel;
-    
+
 import java.util.ArrayList;
 import java.util.List;
 
@@ -24,7 +24,7 @@ class PendingGatewayMessage implements CDQEntry {
     protected final long _created;
     private List<Long> _messageIds;
     private long _enqueueTime;
-    
+
     public PendingGatewayMessage(I2NPMessage message, Hash toRouter, TunnelId toTunnel) {
         _toRouter = toRouter;
         _toTunnel = toTunnel;
@@ -65,7 +65,7 @@ class PendingGatewayMessage implements CDQEntry {
      *  Add an ID to the list of the TunnelDataMssages this message was fragmented into.
      *  Unused except in notePreprocessing() calls for debugging
      */
-    public void addMessageId(long id) { 
+    public void addMessageId(long id) {
         synchronized (this) {
             if (_messageIds == null)
                 _messageIds = new ArrayList<Long>();
@@ -77,13 +77,13 @@ class PendingGatewayMessage implements CDQEntry {
      *  The IDs of the TunnelDataMssages this message was fragmented into.
      *  Unused except in notePreprocessing() calls for debugging
      */
-    public List<Long> getMessageIds() { 
-        synchronized (this) { 
+    public List<Long> getMessageIds() {
+        synchronized (this) {
             if (_messageIds != null)
-                return new ArrayList<Long>(_messageIds); 
+                return new ArrayList<Long>(_messageIds);
             else
                 return new ArrayList<Long>();
-        } 
+        }
     }
 
     /**
@@ -108,26 +108,28 @@ class PendingGatewayMessage implements CDQEntry {
      */
     public void drop() {
     }
-    
+
     @Override
     public String toString() {
         StringBuilder buf = new StringBuilder(64);
-        buf.append("Message ").append(_messageId); //.append(" on ");
+        buf.append("[MsgID ").append(_messageId).append("]");
         //buf.append(TunnelGateway.this.toString());
         if (_toRouter != null) {
-            buf.append(" targetting ");
-            buf.append(_toRouter.toBase64()).append(" ");
+            buf.append(" targeting [");
+            buf.append(_toRouter.toBase64().substring(0,6) + "] ");
             if (_toTunnel != null)
-                buf.append(_toTunnel.getTunnelId());
+                buf.append("\n* [TunnelID ").append(_toTunnel.getTunnelId() + "]: ");
         }
-        buf.append(" actual lifetime ");
+        if (_toTunnel == null)
+            buf.append("\n* ");
+        buf.append("Actual lifetime: ");
         buf.append(getLifetime()).append("ms");
-        buf.append(" potential lifetime ");
+        buf.append("; Potential lifetime: ");
         buf.append(_expiration - _created).append("ms");
-        buf.append(" size ").append(_remaining.length);
-        buf.append(" offset ").append(_offset);
-        buf.append(" frag ").append(_fragmentNumber);
+        buf.append("; Size: ").append(_remaining.length);
+        buf.append("; Offset: ").append(_offset);
+        buf.append("; Frag: ").append(_fragmentNumber);
         return buf.toString();
     }
 }
-    
+

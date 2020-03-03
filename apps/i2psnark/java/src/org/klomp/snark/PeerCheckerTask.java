@@ -2,17 +2,17 @@
    Copyright (C) 2003 Mark J. Wielaard
 
    This file is part of Snark.
-   
+
    This program is free software; you can redistribute it and/or modify
    it under the terms of the GNU General Public License as published by
    the Free Software Foundation; either version 2, or (at your option)
    any later version.
- 
+
    This program is distributed in the hope that it will be useful,
    but WITHOUT ANY WARRANTY; without even the implied warranty of
    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
    GNU General Public License for more details.
- 
+
    You should have received a copy of the GNU General Public License
    along with this program; if not, write to the Free Software Foundation,
    Inc., 59 Temple Place - Suite 330, Boston, MA 02111-1307, USA.
@@ -98,8 +98,8 @@ class PeerCheckerTask implements Runnable
 
             if (peer.getInactiveTime() > peer.getMaxInactiveTime()) {
                 if (_log.shouldLog(Log.WARN))
-                    _log.warn("Disconnecting peer idle " +
-                              DataHelper.formatDuration(peer.getInactiveTime()) + ": " + peer);
+                    _log.warn("Disconnecting peer [" + peer + "]: idle " +
+                              DataHelper.formatDuration(peer.getInactiveTime()));
                 peer.disconnect();
                 continue;
             }
@@ -113,11 +113,11 @@ class PeerCheckerTask implements Runnable
             uploaded += upload;
             long download = peer.getDownloaded();
             downloaded += download;
-	    peer.setRateHistory(upload, download);
+        peer.setRateHistory(upload, download);
             peer.resetCounters();
 
             if (_log.shouldLog(Log.DEBUG)) {
-                _log.debug(peer + ":"
+                _log.debug("[" + peer + "]"
                         + " ul: " + upload*1024/KILOPERSECOND
                         + " dl: " + download*1024/KILOPERSECOND
                         + " i: " + peer.isInterested()
@@ -149,18 +149,18 @@ class PeerCheckerTask implements Runnable
                     // Note that we only choke if we are over our limits,
                     // so a peer may remain unchoked even if uninterested.
                     if (_log.shouldLog(Log.DEBUG))
-                        _log.debug("Choke uninterested peer: " + peer);
+                        _log.debug("Choking uninterested peer [" + peer + "]");
                     peer.setChoking(true);
                     uploaders--;
                     coordinator.decrementUploaders(false);
-                    
+
                     // Put it at the back of the list
                     removed.add(peer);
                   }
                 else if (overBWLimitChoke)
                   {
                     if (_log.shouldLog(Log.DEBUG))
-                        _log.debug("BW limit (" + upload + "/" + uploaded + "), choke peer: " + peer);
+                        _log.debug("Bandwidth limit reached, choking peer [" + peer + "] (" + upload + "/" + uploaded + ")");
                     peer.setChoking(true);
                     uploaders--;
                     interestedUploaders--;
@@ -174,13 +174,13 @@ class PeerCheckerTask implements Runnable
                   {
                     // If they are choking us make someone else a downloader
                     if (_log.shouldLog(Log.DEBUG))
-                        _log.debug("Choke choking peer: " + peer);
+                        _log.debug("Choking peer that's choking us [" + peer + "]");
                     peer.setChoking(true);
                     uploaders--;
                     interestedUploaders--;
                     coordinator.decrementUploaders(true);
                     removedCount++;
-                    
+
                     // Put it at the back of the list
                     removed.add(peer);
                   }
@@ -188,13 +188,13 @@ class PeerCheckerTask implements Runnable
                   {
                     // If they aren't interesting make someone else a downloader
                     if (_log.shouldLog(Log.DEBUG))
-                        _log.debug("Choke uninteresting peer: " + peer);
+                        _log.debug("Choking uninteresting peer [" + peer + "]");
                     peer.setChoking(true);
                     uploaders--;
                     interestedUploaders--;
                     coordinator.decrementUploaders(true);
                     removedCount++;
-                    
+
                     // Put it at the back of the list
                     removed.add(peer);
                   }
@@ -204,13 +204,13 @@ class PeerCheckerTask implements Runnable
                   {
                     // We are downloading but didn't receive anything...
                     if (_log.shouldLog(Log.DEBUG))
-                        _log.debug("Choke downloader that doesn't deliver: " + peer);
+                        _log.debug("Choking downloader that doesn't deliver [" + peer + "]");
                     peer.setChoking(true);
                     uploaders--;
                     interestedUploaders--;
                     coordinator.decrementUploaders(true);
                     removedCount++;
-                    
+
                     // Put it at the back of the list
                     removed.add(peer);
                   }
@@ -257,7 +257,7 @@ class PeerCheckerTask implements Runnable
             && worstDownloader != null)
           {
             if (_log.shouldLog(Log.DEBUG))
-                _log.debug("Choke worst downloader: " + worstDownloader);
+                _log.debug("Choking worst downloader [" + worstDownloader + "]");
 
             worstDownloader.setChoking(true);
             coordinator.decrementUploaders(worstDownloader.isInterested());
@@ -266,7 +266,7 @@ class PeerCheckerTask implements Runnable
             // Put it at the back of the list
             removed.add(worstDownloader);
           }
-        
+
         boolean coordOver = coordinator.overUpBWLimit(uploaded);
         synchronized (coordinator.peers) {
             if ((!overBWLimit) && !coordOver) {
@@ -275,7 +275,7 @@ class PeerCheckerTask implements Runnable
                 coordinator.unchokePeer();
             }
             // Put peers back at the end of the list that we removed earlier.
-            for(Peer peer : removed) { 
+            for(Peer peer : removed) {
                 if (coordinator.peers.remove(peer))
                     coordinator.peers.add(peer);
             }
@@ -283,8 +283,8 @@ class PeerCheckerTask implements Runnable
 
         coordinator.addInterestedAndChoking(removedCount);
 
-	// store the rates
-	coordinator.setRateHistory(uploaded, downloaded);
+    // store the rates
+    coordinator.setRateHistory(uploaded, downloaded);
         if (_log.shouldLog(Log.DEBUG))
             _log.debug("END peers: " + peerList.size() + " uploaders: " + uploaders +
                        " interested: " + interestedUploaders);

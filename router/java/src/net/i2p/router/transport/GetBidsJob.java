@@ -25,7 +25,7 @@ class GetBidsJob extends JobImpl {
     private final Log _log;
     private final TransportManager _tmgr;
     private final OutNetMessage _msg;
-    
+
     /**
      *  @deprecated unused, see static getBids()
      */
@@ -36,35 +36,35 @@ class GetBidsJob extends JobImpl {
         _tmgr = tmgr;
         _msg = msg;
     }
-    
+
     public String getName() { return "Fetch bids for a message to be delivered"; }
     public void runJob() {
         getBids(getContext(), _tmgr, _msg);
     }
-    
+
     static void getBids(RouterContext context, TransportManager tmgr, OutNetMessage msg) {
         Log log = context.logManager().getLog(GetBidsJob.class);
         Hash to = msg.getTarget().getIdentity().getHash();
         msg.timestamp("bid");
-        
+
         if (context.banlist().isBanlisted(to)) {
-            if (log.shouldLog(Log.WARN))
-                log.warn("Attempt to send a message to a banlisted peer - " + to);
+            if (log.shouldLog(Log.INFO))
+                log.info("Attempted to send message to banlisted peer [" + to.toBase64().substring(0,6) + "]");
             //context.messageRegistry().peerFailed(to);
             context.statManager().addRateData("transport.bidFailBanlisted", msg.getLifetime());
             fail(context, msg);
             return;
         }
-        
+
         Hash us = context.routerHash();
         if (to.equals(us)) {
             if (log.shouldLog(Log.ERROR))
-                log.error("send a message to ourselves?  nuh uh. msg = " + msg);
+                log.error("Send a message to ourselves? nuh uh. msg = " + msg);
             context.statManager().addRateData("transport.bidFailSelf", msg.getLifetime());
             fail(context, msg);
             return;
         }
-        
+
         TransportBid bid = tmgr.getNextBid(msg);
         if (bid == null) {
             int failedCount = msg.getFailedTransports().size();
@@ -80,12 +80,12 @@ class GetBidsJob extends JobImpl {
             fail(context, msg);
         } else {
             if (log.shouldLog(Log.INFO))
-                log.info("Attempting to send on transport " + bid.getTransport().getStyle() + ": " + bid);
+                log.info("Attempting to send on transport [" + bid.getTransport().getStyle() + "]: " + bid);
             bid.getTransport().send(msg);
         }
     }
-    
-    
+
+
     static void fail(RouterContext context, OutNetMessage msg) {
         if (msg.getOnFailedSendJob() != null) {
             context.jobQueue().addJob(msg.getOnFailedSendJob());
@@ -97,9 +97,9 @@ class GetBidsJob extends JobImpl {
         if (selector != null) {
             context.messageRegistry().unregisterPending(msg);
         }
-        
+
         context.profileManager().messageFailed(msg.getTarget().getIdentity().getHash());
-        
+
         msg.discardData();
     }
 

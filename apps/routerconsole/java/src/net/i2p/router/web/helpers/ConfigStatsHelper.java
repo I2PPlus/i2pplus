@@ -3,7 +3,6 @@ package net.i2p.router.web.helpers;
 import java.text.Collator;
 import java.util.ArrayList;
 import java.util.Comparator;
-import java.util.HashMap;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
@@ -37,7 +36,7 @@ public class ConfigStatsHelper extends HelperBase {
     private boolean _currentIsLogged;
     private boolean _currentIsGraphed;
     private boolean _currentCanBeGraphed;
-    
+
     public ConfigStatsHelper() {
         _stats = new ArrayList<String>();
         _filters = new HashSet<String>();
@@ -54,17 +53,17 @@ public class ConfigStatsHelper extends HelperBase {
     public void setContextId(String contextId) {
         super.setContextId(contextId);
         _log = _context.logManager().getLog(ConfigStatsHelper.class);
-        
+
         Map<String, SortedSet<String>> unsorted = _context.statManager().getStatsByGroup();
         Map<String, Set<String>> groups = new TreeMap<String, Set<String>>(new AlphaComparator());
         groups.putAll(unsorted);
         for (Set<String> stats : groups.values()) {
              _stats.addAll(stats);
         }
-        _filter = _context.statManager().getStatFilter(); 
+        _filter = _context.statManager().getStatFilter();
         if (_filter == null)
             _filter = "";
-        
+
         StringTokenizer tok = new StringTokenizer(_filter, ",");
         while (tok.hasMoreTokens())
             _filters.add(tok.nextToken().trim());
@@ -89,8 +88,8 @@ public class ConfigStatsHelper extends HelperBase {
     }
 
     public String getFilename() { return _context.statManager().getStatFile(); }
-    
-    /** 
+
+    /**
      * move the cursor to the next known stat, returning true if a valid
      * stat is available.
      *
@@ -142,14 +141,14 @@ public class ConfigStatsHelper extends HelperBase {
                 return false;
             }
         }
-        
+
         if (_filters.contains("*") || _filters.contains(_currentStatName))
             _currentIsLogged = true;
         else
             _currentIsLogged = false;
         return true;
     }
-    
+
     /** Is the current stat the first in the group? */
     public boolean groupRequired() {
         if (_currentIsFirstInGroup) {
@@ -159,16 +158,8 @@ public class ConfigStatsHelper extends HelperBase {
             return false;
         }
     }
-    /**
-     *  What group is the current stat in, untranslated, not for display
-     *  @return single word, no spaces
-     */
+    /** What group is the current stat in */
     public String getCurrentGroupName() { return _currentGroup; }
-    /**
-     *  What group is the current stat in, display name, translated
-     *  @since 0.9.45
-     */
-    public String getTranslatedGroupName() { return translateGroup(_currentGroup); }
     public String getCurrentStatName() { return _currentStatName; }
     public String getCurrentGraphName() { return _currentGraphName; }
     public String getCurrentStatDescription() { return _currentStatDescription; }
@@ -176,9 +167,7 @@ public class ConfigStatsHelper extends HelperBase {
     public boolean getCurrentIsGraphed() { return _currentIsGraphed; }
     public boolean getCurrentCanBeGraphed() { return _currentCanBeGraphed; }
     public String getExplicitFilter() { return _filter; }
-    public boolean getIsFull() {
-        return _context.getBooleanProperty(StatManager.PROP_STAT_FULL);
-    }
+    public boolean getIsFull() { return _context.getBooleanProperty(StatManager.PROP_STAT_FULL); }
 
     /**
      *  Translated sort
@@ -187,19 +176,17 @@ public class ConfigStatsHelper extends HelperBase {
      */
     private class AlphaComparator implements Comparator<String> {
         public int compare(String lhs, String rhs) {
-            String lname = translateGroup(lhs);
-            String rname = translateGroup(rhs);
+            String lname = _t(lhs);
+            String rname = _t(rhs);
+
+            boolean lrouter = lname.startsWith("Router");
+            boolean rrouter = rname.startsWith("Router");
+            if (lrouter && !rrouter)
+                return -1;
+            if (rrouter && !lrouter)
+                return 1;
+
             return Collator.getInstance().compare(lname, rname);
         }
-    }
-
-    /**
-     *  @since 0.9.45
-     */
-    private String translateGroup(String group) {
-         String disp = StatsGenerator.groupNames.get(group);
-         if (disp != null)
-             group = disp;
-         return _t(group);
     }
 }

@@ -2,9 +2,9 @@ package net.i2p.data.i2cp;
 
 /*
  * free (adj.): unencumbered; not under the control of others
- * Written by jrandom in 2003 and released into the public domain 
- * with no warranty of any kind, either expressed or implied.  
- * It probably won't make your computer catch on fire, or eat 
+ * Written by jrandom in 2003 and released into the public domain
+ * with no warranty of any kind, either expressed or implied.
+ * It probably won't make your computer catch on fire, or eat
  * your children, but it might.  Use at your own risk.
  *
  */
@@ -16,7 +16,7 @@ import java.io.InputStream;
 import net.i2p.data.DataFormatException;
 
 /**
- * Defines the message a client sends to a router when asking the 
+ * Defines the message a client sends to a router when asking the
  * router what its address visibility is
  *
  * @author jrandom
@@ -116,11 +116,11 @@ public class ReportAbuseMessage extends I2CPMessageImpl {
     @Override
     public String toString() {
         StringBuilder buf = new StringBuilder();
-        buf.append("[ReportAbuseMessage: ");
-        buf.append("\n\tSessionID: ").append(getSessionId());
-        buf.append("\n\tSeverity: ").append(getSeverity());
-        buf.append("\n\tReason: ").append(getReason());
-        buf.append("\n\tMessageId: ").append(getMessageId());
+        buf.append("ReportAbuseMessage: ");
+        buf.append("SessionID: ").append(getSessionId());
+        buf.append("; Severity: ").append(getSeverity());
+        buf.append("; Reason: ").append(getReason());
+        buf.append("; [MsgID ").append(getMessageId());
         buf.append("]");
         return buf.toString();
     }

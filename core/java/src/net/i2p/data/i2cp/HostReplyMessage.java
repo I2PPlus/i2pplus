@@ -1,8 +1,8 @@
 package net.i2p.data.i2cp;
 
 /*
- * Released into the public domain 
- * with no warranty of any kind, either expressed or implied.  
+ * Released into the public domain
+ * with no warranty of any kind, either expressed or implied.
  *
  */
 
@@ -155,13 +155,12 @@ public class HostReplyMessage extends I2CPMessageImpl {
     @Override
     public String toString() {
         StringBuilder buf = new StringBuilder();
-        buf.append("[HostReplyMessage: ");
-        buf.append("\n\t").append(_sessionId);
-        buf.append("\n\tReqID: ").append(_reqID);
-        buf.append("\n\tResult: ").append(_code);
+        buf.append("HostReplyMessage ");
+        buf.append("\n* ").append(_sessionId);
+        buf.append(" ReqID: ").append(_reqID);
+        buf.append(" Result: ").append(_code);
         if (_code == RESULT_SUCCESS)
-            buf.append("\n\tDestination: ").append(_dest);
-        buf.append("]");
+            buf.append("\n* Destination: ").append(_dest);
         return buf.toString();
     }
 }

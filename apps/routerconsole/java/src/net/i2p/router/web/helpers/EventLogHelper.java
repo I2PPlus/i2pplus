@@ -69,8 +69,8 @@ public class EventLogHelper extends FormHandler {
             _xevents.put(_events[i], _t(_events[i + 1]));
         }
     }
-    
-    public void setFrom(String s) { 
+
+    public void setFrom(String s) {
         try {
             _age = Long.parseLong(s);
             if (_age > 0)
@@ -80,18 +80,18 @@ public class EventLogHelper extends FormHandler {
         } catch (NumberFormatException nfe) {
             _age = 0;
             _from = 0;
-        }	
+        }
     }
 
-    //public void setTo(String s) { 
+    //public void setTo(String s) {
     //   _to = s;
     //}
 
-    public void setType(String s) { 
+    public void setType(String s) {
         _event = s;
     }
 
-    public String getForm() { 
+    public String getForm() {
         // too hard to use the standard formhandler.jsi / FormHandler.java session nonces
         // since graphs.jsp needs the refresh value in its <head>.
         // So just use the "shared/console nonce".
@@ -121,7 +121,7 @@ public class EventLogHelper extends FormHandler {
         } catch (IOException ioe) {
             ioe.printStackTrace();
         }
-        return ""; 
+        return "";
     }
 
     private void writeOption(String key, String val) throws IOException {
@@ -165,15 +165,15 @@ public class EventLogHelper extends FormHandler {
         if (events.isEmpty()) {
             if (isAll) {
                 if (_age == 0)
-                    return ("<table id=\"eventlog\"><tr><td class=\"infohelp\">") + _t("No events found") + ("</td></tr></table>");;
-                return ("<table id=\"eventlog\"><tr><td>") + _t("No events found in previous {0}", DataHelper.formatDuration2(_age)) + ("</td></tr></table>");
+                    return ("<table id=\"eventlog\">\n<tr><td class=\"infohelp\">") + _t("No events found") + ("</td></tr></table>");;
+                return ("<table id=\"eventlog\"><tr><td>") + _t("No events found in previous {0}", DataHelper.formatDuration2(_age)) + ("</td></tr></table>\n");
             }
             if (_age == 0)
-                return ("<table id=\"eventlog\"><tr><td  class=\"infohelp\">") + _t("No \"{0}\" events found", xev) + ("</td></tr></table>");
-            return ("<table id=\"eventlog\"><tr><td class=\"infohelp\">") + _t("No \"{0}\" events found in previous {1}", xev, DataHelper.formatDuration2(_age)) + ("</td></tr></table>");
+                return ("<table id=\"eventlog\" data-sortable>\n<tr><td  class=\"infohelp\">") + _t("No \"{0}\" events found", xev) + ("</td></tr></table>\n");
+            return ("<table id=\"eventlog\">\n<tr><td class=\"infohelp\">") + _t("No \"{0}\" events found in previous {1}", xev, DataHelper.formatDuration2(_age)) + ("</td></tr></table>\n");
         }
         StringBuilder buf = new StringBuilder(2048);
-        buf.append("<table id=\"eventlog\"><tr><th>");
+        buf.append("<table id=\"eventlog\"><thead><tr><th>");
         buf.append(_t("Time"));
         buf.append("</th><th>");
         if (isAll) {
@@ -183,15 +183,26 @@ public class EventLogHelper extends FormHandler {
         } else {
             buf.append(xev);
         }
-        buf.append("</th></tr>");
+        buf.append("</th></tr></thead>\n");
 
         List<Map.Entry<Long, String>> entries = new ArrayList<Map.Entry<Long, String>>(events.entrySet());
         Collections.reverse(entries);
         for (Map.Entry<Long, String> e : entries) {
             long time = e.getKey().longValue();
             String event = e.getValue();
-            buf.append("<tr><td>");
-            buf.append(DataHelper.formatTime(time));
+            String type = event;
+            while (type.length() < 8) {
+                type = type + (' ');
+            }
+            // create a class from truncated event type so we can style the tr's by event severity
+            type = type.substring(0,8).replaceAll(" .+$", "").replaceAll("\\d", "").toLowerCase();
+            if (isAll) {
+                buf.append("<tr class=\"").append(type).append("\">");
+            } else {
+                buf.append("<tr>");
+            }
+            buf.append("<td>");
+            buf.append(DataHelper.formatTime(time).replace("-", " "));
             buf.append("</td><td>");
             if (isAll) {
                  String[] s = DataHelper.split(event, " ", 2);
@@ -205,9 +216,11 @@ public class EventLogHelper extends FormHandler {
             } else {
                  buf.append(event);
             }
-            buf.append("</td></tr>");
+            buf.append("</td></tr>\n");
         }
-        buf.append("</table>");
+        String cspNonce = Integer.toHexString(net.i2p.util.RandomSource.getInstance().nextInt());
+        buf.append("<script nonce=\"" + cspNonce + "\" type=\"text/javascript\">new Tablesort(document.getElementById(\"eventlog\"));</script>\n");
+        buf.append("</table>\n");
         return buf.toString();
     }
 }

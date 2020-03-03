@@ -16,14 +16,14 @@ class SchedulerChooser {
     private final TaskScheduler _nullScheduler;
     /** list of TaskScheduler objects */
     private final List<TaskScheduler> _schedulers;
-    
+
     public SchedulerChooser(I2PAppContext context) {
         _context = context;
         _log = context.logManager().getLog(SchedulerChooser.class);
         _schedulers = createSchedulers();
         _nullScheduler = new NullScheduler();
     }
-    
+
     public TaskScheduler getScheduler(Connection con) {
         for (int i = 0; i < _schedulers.size(); i++) {
             TaskScheduler scheduler = _schedulers.get(i);
@@ -35,7 +35,7 @@ class SchedulerChooser {
         }
         return _nullScheduler;
     }
-    
+
     private List<TaskScheduler> createSchedulers() {
         List<TaskScheduler> rv = new ArrayList<TaskScheduler>(8);
         rv.add(new SchedulerHardDisconnected(_context));

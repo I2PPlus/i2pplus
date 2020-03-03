@@ -107,7 +107,7 @@ public class LeaseSet2 extends LeaseSet {
     public void setBlindedWhenPublished() {
         _flags |= FLAG_BLINDED;
     }
-    
+
     /**
      * If true, we received this LeaseSet by a remote peer publishing it to
      * us, AND the unpublished flag is not set.
@@ -383,7 +383,7 @@ public class LeaseSet2 extends LeaseSet {
             _byteified = rv;
         return rv;
     }
-    
+
     /**
      *  This does NOT validate the signature
      *
@@ -487,7 +487,7 @@ public class LeaseSet2 extends LeaseSet {
             lease.writeBytes(out);
         }
     }
-    
+
     protected void readHeader(InputStream in) throws DataFormatException, IOException {
         _destination = Destination.create(in);
         _published = DataHelper.readLong(in, 4) * 1000;
@@ -533,7 +533,7 @@ public class LeaseSet2 extends LeaseSet {
         _transientSigningPublicKey.writeBytes(out);
         _offlineSignature.writeBytes(out);
     }
-    
+
     /**
      *  Number of bytes, NOT including signature
      */
@@ -594,7 +594,7 @@ public class LeaseSet2 extends LeaseSet {
             throw new DataFormatException("Signature failed", ioe);
         }
         byte data[] = out.toByteArray();
-        // now sign with the key 
+        // now sign with the key
         _signature = DSAEngine.getInstance().sign(data, key);
         if (_signature == null)
             throw new DataFormatException("Signature failed with " + key.getType() + " key");
@@ -642,7 +642,7 @@ public class LeaseSet2 extends LeaseSet {
         byte data[] = out.toByteArray();
         return DSAEngine.getInstance().verifySignature(_signature, data, spk);
     }
-    
+
     @Override
     public boolean equals(Object object) {
         if (object == this) return true;
@@ -654,7 +654,7 @@ public class LeaseSet2 extends LeaseSet {
                && DataHelper.eq(getEncryptionKey(), ls.getEncryptionKey())
                && DataHelper.eq(_destination, ls.getDestination());
     }
-    
+
     /** the destination has enough randomness in it to use it by itself for speed */
     @Override
     public int hashCode() {
@@ -662,7 +662,7 @@ public class LeaseSet2 extends LeaseSet {
             return 0;
         return _destination.hashCode();
     }
-    
+
     @Override
     public String toString() {
         StringBuilder buf = new StringBuilder(128);

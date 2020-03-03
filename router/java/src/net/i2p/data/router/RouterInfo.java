@@ -2,9 +2,9 @@ package net.i2p.data.router;
 
 /*
  * free (adj.): unencumbered; not under the control of others
- * Written by jrandom in 2003 and released into the public domain 
- * with no warranty of any kind, either expressed or implied.  
- * It probably won't make your computer catch on fire, or eat 
+ * Written by jrandom in 2003 and released into the public domain
+ * with no warranty of any kind, either expressed or implied.
+ * It probably won't make your computer catch on fire, or eat
  * your children, but it might.  Use at your own risk.
  *
  */
@@ -46,7 +46,7 @@ import net.i2p.util.SystemVersion;
 
 /**
  * Defines the data that a router either publishes to the global routing table or
- * provides to trusted peers.  
+ * provides to trusted peers.
  *
  * For efficiency, the methods and structures here are now unsynchronized.
  * Initialize the RI with readBytes(), or call the setters and then sign() in a single thread.
@@ -98,7 +98,7 @@ public class RouterInfo extends DatabaseEntry {
         Router.CAPABILITY_BW64 +
         Router.CAPABILITY_BW32 +
         Router.CAPABILITY_BW12;
-    
+
     public RouterInfo() {
         _addresses = new ArrayList<RouterAddress>(2);
         _options = new OrderedProperties();
@@ -142,7 +142,7 @@ public class RouterInfo extends DatabaseEntry {
 
     /**
      * Configure the identity of the router represented
-     * 
+     *
      * @throws IllegalStateException if RouterInfo is already signed
      */
     public void setIdentity(RouterIdentity ident) {
@@ -303,7 +303,7 @@ public class RouterInfo extends DatabaseEntry {
             _options.putAll(options);
     }
 
-    /** 
+    /**
      * Write out the raw payload of the routerInfo, excluding the signature.  This
      * caches the data in memory if possible.
      *
@@ -323,7 +323,7 @@ public class RouterInfo extends DatabaseEntry {
         return data;
     }
 
-    /** 
+    /**
      * Write out the raw payload of the routerInfo, excluding the signature.  This
      * caches the data in memory if possible.
      *
@@ -417,7 +417,7 @@ public class RouterInfo extends DatabaseEntry {
     /**
      * Is this a hidden node?
      *
-     * @return true if either 'H' is in the capbilities, or router indentity contains a hidden cert.
+     * @return true if either 'H' is in the capbilities, or router identity contains a hidden cert.
      */
     public boolean isHidden() {
         return (getCapabilities().indexOf(CAPABILITY_HIDDEN) >= 0) ||
@@ -457,8 +457,8 @@ public class RouterInfo extends DatabaseEntry {
 
         return true;
     }
-    
-    
+
+
     /**
      * Pull the first workable target address for the given transport.
      * Use to check for any address. For all addresses, use getTargetAddresses(),
@@ -466,12 +466,12 @@ public class RouterInfo extends DatabaseEntry {
      */
     public RouterAddress getTargetAddress(String transportStyle) {
         for (RouterAddress addr :  _addresses) {
-            if (addr.getTransportStyle().equals(transportStyle)) 
+            if (addr.getTransportStyle().equals(transportStyle))
                 return addr;
         }
         return null;
     }
-    
+
     /**
      *  For multiple addresses per-transport (IPv4 or IPv6)
      *  @return non-null
@@ -485,7 +485,7 @@ public class RouterInfo extends DatabaseEntry {
         }
         return ret;
     }
-    
+
     /**
      *  For multiple addresses per-transport (IPv4 or IPv6)
      *  Return addresses matching either of two styles
@@ -513,13 +513,13 @@ public class RouterInfo extends DatabaseEntry {
         if (!_isValid) {
             Log log = I2PAppContext.getGlobalContext().logManager().getLog(RouterInfo.class);
             if (log.shouldWarn()) {
-                log.warn("Sig verify fail: " + toString(), new Exception("from"));
+                log.warn("Signature verify fail: " + toString(), new Exception("from"));
             //} else {
             //    log.error("RI Sig verify fail: " + _identity.getHash());
             }
         }
     }
-    
+
     /**
      *  This does NOT validate the signature
      *
@@ -611,9 +611,9 @@ public class RouterInfo extends DatabaseEntry {
             }
         }
 
-        //_log.debug("Read routerInfo: " + toString());
+        //_log.debug("Read RouterInfo: " + toString());
     }
-    
+
     /**
      *  This does NOT validate the signature
      */
@@ -622,7 +622,7 @@ public class RouterInfo extends DatabaseEntry {
         writeDataBytes(out);
         _signature.writeBytes(out);
     }
-    
+
     @Override
     public boolean equals(Object object) {
         if (object == this) return true;
@@ -631,13 +631,13 @@ public class RouterInfo extends DatabaseEntry {
         return
                _published == info.getPublished()
                && DataHelper.eq(_signature, info.getSignature())
-               && DataHelper.eq(_identity, info.getIdentity());
+               && DataHelper.eq(_identity, info.getIdentity())
                // Let's speed up the NetDB
-               //&& DataHelper.eq(_addresses, info.getAddresses())
-               //&& DataHelper.eq(_options, info.getOptions()) 
-               //&& DataHelper.eq(getPeers(), info.getPeers());
+               && DataHelper.eq(_addresses, info.getAddresses())
+               && DataHelper.eq(_options, info.getOptions())
+               && DataHelper.eq(getPeers(), info.getPeers());
     }
-    
+
     @Override
     public int hashCode() {
         if (!_hashCodeInitialized) {
@@ -646,34 +646,33 @@ public class RouterInfo extends DatabaseEntry {
         }
         return _hashCode;
     }
-    
+
     @Override
     public String toString() {
         //if (_stringified != null) return _stringified;
         StringBuilder buf = new StringBuilder(1024);
-        buf.append("[RouterInfo: ");
-        buf.append("\n\tIdentity: ").append(_identity);
-        buf.append("\n\tSignature: ").append(_signature);
-        buf.append("\n\tPublished: ").append(new Date(_published));
+        buf.append("\n RouterInfo: ");
+        buf.append("\n* Identity: ").append(_identity);
+        buf.append("\n* Signature: ").append(_signature);
+        buf.append("\n* Published: ").append(new Date(_published));
         if (_peers != null) {
-            buf.append("\n\tPeers (").append(_peers.size()).append("):");
+            buf.append("\n* Peers (").append(_peers.size()).append("):");
             for (Hash hash : _peers) {
-                buf.append("\n\t\tPeer hash: ").append(hash);
+                buf.append("\n* Peer hash: ").append(hash);
             }
         }
-        buf.append("\n\tOptions (").append(_options.size()).append("):");
+        buf.append("\nOptions (").append(_options.size()).append("):");
         for (Map.Entry<Object, Object> e : _options.entrySet()) {
             String key = (String) e.getKey();
             String val = (String) e.getValue();
-            buf.append("\n\t\t[").append(key).append("] = [").append(val).append("]");
+            buf.append("\n* ").append(key).append(": ").append(val);
         }
         if (!_addresses.isEmpty()) {
-            buf.append("\n\tAddresses (").append(_addresses.size()).append("):");
+            buf.append("\nAddresses (").append(_addresses.size()).append("):");
             for (RouterAddress addr : _addresses) {
-                buf.append("\n\t").append(addr);
+                buf.append("\n    ").append(addr);
             }
         }
-        buf.append("]");
         String rv = buf.toString();
         //_stringified = rv;
         return rv;
@@ -699,7 +698,7 @@ public class RouterInfo extends DatabaseEntry {
                  if (ri.isValid()) {
                      System.out.println(ri.toString());
                   } else {
-                     System.err.println("Router info " + args[i] + " is invalid");
+                     System.err.println("RouterInfo " + args[i] + " is invalid");
                      fail = true;
                   }
              } catch (IOException e) {

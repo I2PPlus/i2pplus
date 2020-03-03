@@ -13,6 +13,7 @@ class Dummy {
         _t("i2psnark");
         _t("i2ptunnel");
         _t("susimail");
+        _t("I2PMail");
         _t("susidns");
         _t("routerconsole");
 
@@ -23,29 +24,50 @@ class Dummy {
         _t("SAM application bridge");
         _t("Application tunnels");
         _t("My eepsite web server");
-        _t("I2P webserver (eepsite)");        
+        _t("I2P webserver (eepsite)");
+        _t("I2P Web Server (eepsite)");
         _t("Browser launch at startup");
         _t("BOB application bridge");
         _t("I2P Router Console");
-        _t("Open Router Console in web browser at startup");        
-        
+        _t("I2P+ Router Console");
+        _t("Open Router Console in web browser at startup");
+
         // tunnel nicknames, taken from i2ptunnel.config so they will display
         // nicely under 'local destinations' in the summary bar
         // note that if the wording changes in i2ptunnel.config, we have to
         // keep the old string here as well for existing installs
         _t("shared clients");
+        _t("Shared Clients");
         _t("shared clients (DSA)");
-        _t("IRC proxy");
-        _t("eepsite");
+        _t("Shared Clients (DSA)");
+        _t("I2PMail SMTP Server");
+        _t("I2PMail POP3 Server");
+        _t("Postman's SMTP Mail Server (smtp.postman.i2p)");
+        _t("Postman's POP3 Mail Server (pop3.postman.i2p)");
+//        _t("IRC proxy");
+        _t("I2P IRC Network");
+        _t("Proxy to connect to I2P's anonymized IRC chat network");
+//        _t("eepsite");
         _t("I2P webserver");
-        _t("HTTP Proxy");        
+        _t("I2P Webserver");
+        _t("I2P Web Server");
+        _t("Personal I2P Webserver (eepsite)");
+        _t("HTTP Proxy");
+        // older names for pre-0.7.4 installs
+        _t("eepProxy");
+        _t("ircProxy");
         // hardcoded in i2psnark
         _t("I2PSnark");
-
+        // hardcoded in iMule?
+        _t("iMule");
+        _t("I2P Monotone DVCS");
+        _t("Official I2P Source Repository");
 
         // standard themes for ConfigUIHelper
         _t("dark");
         _t("light");
+        _t("midnight");
+        _t("vanilla");
 
         // stat groups for stats.jsp
         // See StatsGenerator for groups mapped to a display name

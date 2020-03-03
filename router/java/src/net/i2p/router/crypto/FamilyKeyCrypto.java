@@ -74,7 +74,7 @@ public class FamilyKeyCrypto {
     public static final String OPT_KEY = "family.key";
 
 
-    /** 
+    /**
      *  For signing and verification.
      *
      *  If the context property netdb.family.name is set, this can be used for signing,
@@ -96,8 +96,8 @@ public class FamilyKeyCrypto {
         _negativeCache = new ConcurrentHashSet<Hash>(4);
         _ourFamily = (_privkey != null) ? new ConcurrentHashSet<Hash>(4) : Collections.<Hash>emptySet();
     }
-    
-    /** 
+
+    /**
      * Create (if necessary) and load the key store, then run.
      */
     private SigningPrivateKey initialize() throws GeneralSecurityException {
@@ -106,8 +106,8 @@ public class FamilyKeyCrypto {
         verifyKeyStore(keyStore);
         return getPrivKey(keyStore);
     }
-    
-    /** 
+
+    /**
      * Clears the caches
      */
     public void shutdown() {
@@ -115,7 +115,7 @@ public class FamilyKeyCrypto {
         _negativeCache.clear();
     }
 
-    /** 
+    /**
      *  Caller must add family to RI also.
      *  throws on all errors
      *
@@ -150,7 +150,7 @@ public class FamilyKeyCrypto {
         return rv;
     }
 
-    /** 
+    /**
      *  Do we have a valid family?
      *  @since 0.9.28
      */
@@ -158,7 +158,7 @@ public class FamilyKeyCrypto {
         return _pubkey != null;
     }
 
-    /** 
+    /**
      *  Get verified members of our family.
      *  Will not contain ourselves.
      *
@@ -169,7 +169,7 @@ public class FamilyKeyCrypto {
         return _ourFamily;
     }
 
-    /** 
+    /**
      *  Get our family name.
      *
      *  @return name or null
@@ -179,7 +179,7 @@ public class FamilyKeyCrypto {
         return _fname;
     }
 
-    /** 
+    /**
      *  Verify the family signature in a RouterInfo.
      *  @return true if good sig or if no family specified at all
      */
@@ -190,7 +190,7 @@ public class FamilyKeyCrypto {
         return verify(ri, name);
     }
 
-    /** 
+    /**
      *  Verify the family in a RouterInfo matches ours and the signature is good.
      *  Returns false if we don't have a family and sig, or they don't.
      *  Returns false for ourselves.
@@ -212,15 +212,15 @@ public class FamilyKeyCrypto {
         boolean rv = verify(ri, name);
         if (rv) {
             _ourFamily.add(h);
-            _log.logAlways(Log.INFO, "Found and verified member of our family (" + _fname + "): " + h);
+            _log.logAlways(Log.INFO, "Found and verified member of our Family (" + _fname + "): [" + h.toBase64().substring(0,6) + "]");
         } else {
             if (_log.shouldWarn())
-                _log.warn("Found spoofed member of our family (" + _fname + "): " + h);
+                _log.warn("Found spoofed member of our Family (" + _fname + "): [" + h.toBase64().substring(0,6) + "]");
         }
         return rv;
     }
 
-    /** 
+    /**
      *  Verify the family in a RouterInfo, name already retrieved
      *  @since 0.9.28
      */
@@ -229,7 +229,7 @@ public class FamilyKeyCrypto {
         String ssig = ri.getOption(OPT_SIG);
         if (ssig == null) {
             if (_log.shouldInfo())
-                _log.info("No sig for " + h + ' ' + name);
+                _log.info("No signature detected for [" + h.toBase64().substring(0,6) + "] (Family:" + name + ")");
             return false;
         }
         String nameAndSig = _verified.get(h);
@@ -268,20 +268,20 @@ public class FamilyKeyCrypto {
                             }
                         } catch (NumberFormatException e) {
                             if (_log.shouldInfo())
-                                _log.info("Bad b64 family key: " + ri, e);
+                                _log.info("Bad b64 Family key: " + ri, e);
                         } catch (IllegalArgumentException e) {
                             if (_log.shouldInfo())
-                                _log.info("Bad b64 family key: " + ri, e);
+                                _log.info("Bad b64 Family key: " + ri, e);
                         } catch (ArrayIndexOutOfBoundsException e) {
                             if (_log.shouldInfo())
-                                _log.info("Bad b64 family key: " + ri, e);
+                                _log.info("Bad b64 Family key: " + ri, e);
                         }
                     }
                 }
                 if (spk == null) {
                     _negativeCache.add(h);
                     if (_log.shouldInfo())
-                        _log.info("No cert or valid key for " + h + ' ' + name);
+                        _log.info("No cert or valid key for [" + h.toBase64().substring(0,6) + "] Family: " + name);
                     return false;
                 }
             }
@@ -289,14 +289,14 @@ public class FamilyKeyCrypto {
         if (!spk.getType().isAvailable()) {
             _negativeCache.add(h);
             if (_log.shouldInfo())
-                _log.info("Unsupported crypto for sig for " + h);
+                _log.info("Unsupported crypto for signature for [" + h.toBase64().substring(0,6) + "]");
             return false;
         }
         byte[] bsig = Base64.decode(ssig);
         if (bsig == null) {
             _negativeCache.add(h);
             if (_log.shouldInfo())
-                _log.info("Bad sig for " + h + ' ' + name + ' ' + ssig);
+                _log.info("Bad signature [" + ssig + "] detected for [" + h.toBase64().substring(0,6) + "] Family: " + name);
             return false;
         }
         Signature sig;
@@ -306,7 +306,7 @@ public class FamilyKeyCrypto {
             // wrong size (type mismatch)
             _negativeCache.add(h);
             if (_log.shouldInfo())
-                _log.info("Bad sig for " + ri, iae);
+                _log.info("Bad signature detected for [" + ri.toBase64().substring(0,6) + "]", iae);
             return false;
         }
         byte[] nb = DataHelper.getUTF8(name);
@@ -319,7 +319,8 @@ public class FamilyKeyCrypto {
         else
             _negativeCache.add(h);
         if (_log.shouldInfo())
-            _log.info("Verified? " + rv + " for " + h + ' ' + name + ' ' + ssig);
+            _log.info("Family: " + name + " belonging to [" + h.toBase64().substring(0,6) + "] -> Verified? " + rv +
+                      "\n* Signature: " + ssig);
         return rv;
     }
 
@@ -351,7 +352,7 @@ public class FamilyKeyCrypto {
         try {
             createKeyStore(ks);
         } catch (IOException ioe) {
-            throw new GeneralSecurityException("Failed to create NetDb family keystore", ioe);
+            throw new GeneralSecurityException("Failed to create NetDb Family keystore", ioe);
         }
     }
 
@@ -394,7 +395,7 @@ public class FamilyKeyCrypto {
         exportCRL(ks.getParentFile(), crl);
     }
 
-    /** 
+    /**
      * Save the public key certificate
      * so the clients can get to it.
      */
@@ -405,20 +406,20 @@ public class FamilyKeyCrypto {
             File out = new File(sdir, name);
             boolean success = CertUtil.saveCert(cert, out);
             if (success) {
-                _log.logAlways(Log.INFO, "Created new public key certificate for netdb family \"" + _fname +
+                _log.logAlways(Log.INFO, "Created new public key certificate for NetDb Family \"" + _fname +
                            "\" in file: " + out.getAbsolutePath() + "\n" +
                            "The certificate will be associated with your router identity.\n" +
-                           "Copy the certificate to the directory $I2P/" + CERT_DIR + " for each of the other routers in the family.\n" +
+                           "Copy the certificate to the directory $I2P/" + CERT_DIR + " for each of the other routers in the Family.\n" +
                            "Give this certificate to an I2P developer for inclusion in the next I2P release.");
             } else {
-                _log.error("Error saving family key certificate");
+                _log.error("Error saving Family key certificate");
             }
         } else {
-            _log.error("Error saving family key certificate");
+            _log.error("Error saving Family key certificate");
         }
     }
 
-    /** 
+    /**
      * Save the CRL just in case.
      * @param ksdir parent of directory to save in
      * @since 0.9.25
@@ -430,7 +431,7 @@ public class FamilyKeyCrypto {
             File out = new File(sdir, name);
             boolean success = CertUtil.saveCRL(crl, out);
             if (success) {
-                _log.logAlways(Log.INFO, "Created certificate revocation list (CRL) for netdb family \"" + _fname +
+                _log.logAlways(Log.INFO, "Created certificate revocation list (CRL) for NetDb Family \"" + _fname +
                            "\" in file: " + out.getAbsolutePath() + "\n" +
                            "Back up the keystore and CRL files and keep them secure.\n" +
                            "If your private key is ever compromised, give the CRL to an I2P developer for publication.");
@@ -442,7 +443,7 @@ public class FamilyKeyCrypto {
         }
     }
 
-    /** 
+    /**
      * Load a public key from a cert.
      *
      * @return null on all errors
@@ -460,14 +461,14 @@ public class FamilyKeyCrypto {
             PublicKey pk = CertUtil.loadKey(file);
             return SigUtil.fromJavaKey(pk);
         } catch (GeneralSecurityException gse) {
-            _log.error("Error loading family key " + familyName, gse);
+            _log.error("Error loading Family key " + familyName, gse);
         } catch (IOException ioe) {
-            _log.error("Error loading family key " + familyName, ioe);
+            _log.error("Error loading Family key " + familyName, ioe);
         }
         return null;
     }
 
-    /** 
+    /**
      * Get the private key from the keystore
      * @return non-null, throws on all errors
      */
@@ -483,7 +484,7 @@ public class FamilyKeyCrypto {
                 throw new GeneralSecurityException("Family key not found: " + _fname);
             return SigUtil.fromJavaKey(pk);
         } catch (IOException ioe) {
-            throw new GeneralSecurityException("Error loading family key " + _fname, ioe);
+            throw new GeneralSecurityException("Error loading Family key " + _fname, ioe);
         }
     }
 

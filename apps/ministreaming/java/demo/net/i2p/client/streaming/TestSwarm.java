@@ -27,7 +27,7 @@ public class TestSwarm {
     private I2PSocketManager _manager;
     private String _conOptions; // unused? used elsewhere?
     private boolean _dead; // unused? used elsewhere?
-    
+
     public static void main(String args[]) {
         if (args.length < 1) {
             System.err.println("Usage: TestSwarm myDestFile [peerDestFile ]*");
@@ -39,7 +39,7 @@ public class TestSwarm {
         TestSwarm swarm = new TestSwarm(ctx, args[0], files);
         swarm.startup();
     }
-    
+
     public TestSwarm(I2PAppContext ctx, String destFile, String peerDestFiles[]) {
         _context = ctx;
         _log = ctx.logManager().getLog(TestSwarm.class);
@@ -48,7 +48,7 @@ public class TestSwarm {
         _peerDestFiles = peerDestFiles;
         _conOptions = "";
     }
-    
+
     public void startup() {
         _log.debug("Starting up");
         File keys = new File(_destFile);
@@ -69,11 +69,11 @@ public class TestSwarm {
 
         I2PThread listener = new I2PThread(new Listener(), "Listener");
         listener.start();
-        
+
         connectWithPeers();
     }
-    
-    
+
+
     private void connectWithPeers() {
         if (_peerDestFiles != null) {
             for (int i = 0; i < _peerDestFiles.length; i++) {
@@ -81,7 +81,7 @@ public class TestSwarm {
                     FileInputStream fin = new FileInputStream(_peerDestFiles[i]);
                     Destination dest = new Destination();
                     dest.readBytes(fin);
-                    
+
                     I2PThread flooder = new I2PThread(new Flooder(dest), "Flooder+" + dest.calculateHash().toBase64().substring(0,4));
                     flooder.start();
                 } catch (Exception e) {
@@ -90,7 +90,7 @@ public class TestSwarm {
             }
         }
     }
-    
+
     private class Listener implements Runnable {
         public void run() {
             try {
@@ -105,7 +105,7 @@ public class TestSwarm {
             }
         }
     }
-    
+
     private static volatile long __conId = 0;
     private class Flooder implements Runnable {
         private Destination _remoteDestination;
@@ -117,7 +117,7 @@ public class TestSwarm {
         private long _lastReceived;
         private long _lastReceivedOn;
         private long _connectionId;
-        
+
         public Flooder(Destination dest) {
             _socket = null;
             _remoteDestination = dest;
@@ -130,7 +130,7 @@ public class TestSwarm {
             _context.statManager().createRateStat("swarm." + _connectionId + ".started", "When we start", "swarm", new long[] { 5*60*1000 });
             _context.statManager().createRateStat("swarm." + _connectionId + ".lifetime", "How long we talk to a peer", "swarm", new long[] { 5*60*1000 });
         }
-        
+
         public Flooder(I2PSocket socket) {
             _socket = socket;
             _remoteDestination = socket.getPeerDestination();
@@ -143,10 +143,10 @@ public class TestSwarm {
             _context.statManager().createRateStat("swarm." + _connectionId + ".started", "When we start", "swarm", new long[] { 5*60*1000 });
             _context.statManager().createRateStat("swarm." + _connectionId + ".lifetime", "How long we talk to a peer", "swarm", new long[] { 5*60*1000 });
         }
-        
+
         public long getConnectionId() { return _connectionId; }
         public Destination getDestination() { return _remoteDestination; }
-        
+
         public void run() {
             _started = _context.clock().now();
             _context.statManager().addRateData("swarm." + _connectionId + ".started", 1, 0);
@@ -158,14 +158,14 @@ public class TestSwarm {
                 try {
                     _socket = _manager.connect(_remoteDestination);
                 } catch (Exception e) {
-                    _log.error("Error connecting to " + _remoteDestination.calculateHash().toBase64().substring(0,4));
+                    _log.error("Error connecting to " + _remoteDestination.calculateHash().toBase64().substring(0,6));
                     return;
                 }
             }
-            
+
             I2PThread floodListener = new I2PThread(new FloodListener(), "FloodListener" + _connectionId);
             floodListener.start();
-            
+
             try {
                 OutputStream out = _socket.getOutputStream();
                 while (!_closed) {
@@ -187,7 +187,7 @@ public class TestSwarm {
                 _log.error("Error sending", e);
             }
         }
-        
+
         private class FloodListener implements Runnable {
             public void run() {
                 long lastRead = System.currentTimeMillis();
@@ -209,7 +209,7 @@ public class TestSwarm {
             }
         }
     }
-    
+
     private boolean shouldSend() {
         return Boolean.valueOf(_context.getProperty("shouldSend", "false")).booleanValue();
     }

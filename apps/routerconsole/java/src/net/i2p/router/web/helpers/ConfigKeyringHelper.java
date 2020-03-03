@@ -20,7 +20,7 @@ import net.i2p.router.web.HelperBase;
 
 public class ConfigKeyringHelper extends HelperBase {
     public ConfigKeyringHelper() {}
-    
+
     public String getSummary() {
         StringWriter sw = new StringWriter(4*1024);
         try {
@@ -41,7 +41,7 @@ public class ConfigKeyringHelper extends HelperBase {
         buf.append("<h3>").append(_t("Remote encrypted destinations")).append("</h3>");
         boolean rv2 = render(buf, false);
         if (rv1 || rv2) {
-            buf.append("\n<table id=\"addkeyring\"><tr><td align=\"right\">" +
+            buf.append("\n<table id=\"keyringbuttons\"><tr><td align=\"right\" class=\"optionsave\">" +
                        "<input type=\"reset\" class=\"cancel\" value=\"").append(_t("Cancel")).append("\">" +
                        "<input type=\"submit\" name=\"action\" class=\"delete\" value=\"").append(_t("Delete key")).append("\">" +
                        "</td></tr></table>");
@@ -57,19 +57,26 @@ public class ConfigKeyringHelper extends HelperBase {
      */
     private boolean render(StringBuilder buf, boolean local) {
         boolean rv = false;
-        buf.append("\n<table class=\"configtable\"><tr>");
+        buf.append("\n<table class=\"configtable encDests\">\n<tr>");
+        buf.append("<th align=\"left\">").append(_t("Name"));
+        buf.append("<th align=\"left\">").append(_t("Destination")).append("<th align=\"left\">");
         if (!local)
-            buf.append("<th align=\"left\">").append(_t("Delete"));
-        buf.append("<th align=\"left\">").append(_t("Destination"))
-           .append("<th align=\"left\">").append(_t("Name"));
-        if (!local)
-            buf.append("<th align=\"left\">").append(_t("Type"));
+            buf.append(_t("Type"));
+        buf.append("</th>");
         buf.append("<th align=\"left\">").append(_t("Encryption Key"));
-        if (!local) {
-            buf.append("<th align=\"left\">").append(_t("Lookup Password"));
-            buf.append("<th align=\"left\">").append(_t("Created"));
-            buf.append("<th align=\"left\">").append(_t("Expires"));
-        }
+        buf.append("</th><th>");
+        if (!local)
+            buf.append(_t("Lookup Password"));
+        buf.append("</th><th align=\"left\">");
+        if (!local)
+            buf.append(_t("Created"));
+        buf.append("</th><th align=\"left\">");
+        if (!local)
+            buf.append(_t("Expires"));
+        buf.append("</th><th align=\"center\">");
+        if (!local)
+            buf.append(_t("Delete"));
+        buf.append("</th>");
         buf.append("</tr>");
         // Enc. LS1
         for (Map.Entry<Hash, SessionKey> e : _context.keyRing().entrySet()) {
@@ -77,11 +84,7 @@ public class ConfigKeyringHelper extends HelperBase {
             if (local != _context.clientManager().isLocal(h))
                 continue;
             buf.append("\n<tr><td>");
-            String b32 = h.toBase32();
-            if (!local)
-                buf.append("<input value=\"").append(b32).append("\" type=\"checkbox\" name=\"revokeClient\" class=\"tickbox\"/></td><td>");
-            buf.append(b32);
-            buf.append("</td><td>");
+
             Destination dest = _context.netDb().lookupDestinationLocally(h);
             if (dest != null && local) {
                 TunnelPoolSettings in = _context.tunnelManager().getInboundSettings(h);
@@ -92,14 +95,19 @@ public class ConfigKeyringHelper extends HelperBase {
                 if (host != null)
                     buf.append(host);
             }
-            buf.append("</td><td>");
+            buf.append("</td><td><code>");
+            String b32 = h.toBase32();
+            buf.append(b32);
+            buf.append("</code></td><td>");
             if (!local)
-                buf.append(_t("Encrypted")).append(" (AES)</td><td>");
+                buf.append(_t("Encrypted")).append(" (AES)");
             SessionKey sk = e.getValue();
+            buf.append("</td><td><code>");
             buf.append(sk.toBase64());
+            buf.append("</code></td><td>");
             if (!local)
-                buf.append("</td><td></td><td></td><td>");
-            buf.append("</td></tr>\n");
+                buf.append("</td><td></td><td></td><td><input value=\"").append(b32).append("\" type=\"checkbox\" name=\"revokeClient\" class=\"optbox\"/>");
+            buf.append("</td></tr>");
             rv = true;
         }
         // LS2
@@ -108,19 +116,17 @@ public class ConfigKeyringHelper extends HelperBase {
             if (bdata.size() > 1)
                 Collections.sort(bdata, new BDComparator());
             for (BlindData bd : bdata) {
-                buf.append("\n<tr><td>");
-                String b32 = bd.toBase32();
-                if (!local)
-                    buf.append("<input value=\"").append(b32).append("\" type=\"checkbox\" name=\"revokeClient\" class=\"tickbox\"/></td><td>");
-                buf.append(b32);
-                buf.append("</td><td>");
+                buf.append("\n<tr><td class=\"hostname\">");
                 Hash h = bd.getDestHash();
                 if (h != null) {
                     String host = _context.namingService().reverseLookup(h);
                     if (host != null)
                         buf.append(host);
                 }
-                buf.append("</td><td>");
+                buf.append("</td><td class=\"b32\"><code>");
+                String b32 = bd.toBase32();
+                buf.append(b32);
+                buf.append("</code></td><td class=\"encType\">");
                 int type = bd.getAuthType();
                 PrivateKey pk = bd.getAuthPrivKey();
                 String secret = bd.getSecret();
@@ -135,14 +141,14 @@ public class ConfigKeyringHelper extends HelperBase {
                         s = _t("Encrypted with lookup password") + " (PSK)";
                     else
                         s = _t("Encrypted") + " (PSK)";
-                } else  {
+                } else {
                     if (secret != null)
                         s = _t("Blinded with lookup password");
                     else
                         s = _t("Blinded");
                 }
                 buf.append(s);
-                buf.append("</td><td>");
+                buf.append("</td><td class=\"encKey\">");
                 if (pk != null) {
                     // display pubkey for DH for sharing with server
                     if (type == BlindData.AUTH_DH)
@@ -150,26 +156,30 @@ public class ConfigKeyringHelper extends HelperBase {
                     else
                         buf.append(pk.toBase64());
                 }
-                buf.append("</td><td>");
+                buf.append("</td><td class=\"password\">");
                 if (secret != null)
                     buf.append(secret);
-                buf.append("</td><td>");
+                buf.append("</td><td class=\"created\">");
                 long t = bd.getDate();
                 if (t > 0)
                     buf.append(DataHelper.formatDate(t));
-                buf.append("</td><td>");
+                buf.append("</td><td class=\"expires\">");
                 t = bd.getExpiration();
                 if (t > 0)
                     buf.append(DataHelper.formatDate(t));
+                buf.append("</td><td class=\"revoke\">");
+                if (!local)
+                    buf.append("<input value=\"").append(b32).append("\" type=\"checkbox\" name=\"revokeClient\" class=\"optbox\"/>");
                 buf.append("</td></tr>");
                 rv = true;
             }
         }
         if (!rv) {
-            buf.append("<tr><td align=\"center\" colspan=\"").append(local ? '3' : '8').append("\"><i>")
+//            buf.append("<tr><td align=\"center\" colspan=\"").append(local ? '3' : '8').append("\"><i>")
+            buf.append("<tr><td align=\"center\" colspan=\"8\"><i>")
                .append(_t("none")).append("</i></td></tr>");
         }
-        buf.append("</table>\n");
+        buf.append("\n</table>\n");
         return rv;
     }
 

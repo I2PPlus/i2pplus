@@ -39,7 +39,7 @@ public class TestSwarm {
     private SAMEventHandler _eventHandler;
     /** Connection id (Integer) to peer (Flooder) */
     private Map _remotePeers;
-    
+
     public static void main(String args[]) {
         if (args.length < 3) {
             System.err.println("Usage: TestSwarm samHost samPort myDestFile [peerDestFile ]*");
@@ -51,7 +51,7 @@ public class TestSwarm {
         TestSwarm swarm = new TestSwarm(ctx, args[0], args[1], args[2], files);
         swarm.startup();
     }
-    
+
     public TestSwarm(I2PAppContext ctx, String samHost, String samPort, String destFile, String peerDestFiles[]) {
         _context = ctx;
         _log = ctx.logManager().getLog(TestSwarm.class);
@@ -64,7 +64,7 @@ public class TestSwarm {
         _eventHandler = new SwarmEventHandler(_context);
         _remotePeers = new HashMap();
     }
-    
+
     public void startup() {
         _log.debug("Starting up");
         boolean ok = connect();
@@ -80,12 +80,12 @@ public class TestSwarm {
                 _log.debug("Dest written");
                 if (written) {
                     connectWithPeers();
-                    _log.debug("connected with peers");
+                    _log.debug("Connected with peers");
                 }
             }
         }
     }
-    
+
     private class SwarmEventHandler extends SAMEventHandler {
         public SwarmEventHandler(I2PAppContext ctx) { super(ctx); }
         public void streamClosedReceived(String result, int id, String message) {
@@ -97,7 +97,7 @@ public class TestSwarm {
                 flooder.closed();
                 _log.debug("Connection " + flooder.getConnectionId() + " closed to " + flooder.getDestination());
             } else {
-                _log.error("not connected to " + id + " but we were just closed?");
+                _log.error("Not connected to " + id + " but we were just closed?");
             }
         }
         public void streamDataReceived(int id, byte data[], int offset, int length) {
@@ -112,7 +112,7 @@ public class TestSwarm {
                 _log.error("not connected to " + id + " but we received " + value + "?");
             }
         }
-        public void streamConnectedReceived(String dest, int id) {  
+        public void streamConnectedReceived(String dest, int id) {
             _log.debug("Connection " + id + " received from " + dest);
 
             Flooder flooder = new Flooder(id, dest);
@@ -124,7 +124,7 @@ public class TestSwarm {
         }
 
     }
-    
+
     private boolean connect() {
         try {
             _samSocket = new Socket(_samHost, Integer.parseInt(_samPort));
@@ -136,7 +136,7 @@ public class TestSwarm {
             return false;
         }
     }
-    
+
     private String handshake() {
         synchronized (_samOut) {
             try {
@@ -173,7 +173,7 @@ public class TestSwarm {
             }
         }
     }
-    
+
     private boolean writeDest(String dest) {
         try {
             FileOutputStream fos = new FileOutputStream(_destFile);
@@ -185,7 +185,7 @@ public class TestSwarm {
             return false;
         }
     }
-    
+
     private void connectWithPeers() {
         if (_peerDestFiles != null) {
             for (int i = 0; i < _peerDestFiles.length; i++) {
@@ -193,7 +193,7 @@ public class TestSwarm {
                     FileInputStream fin = new FileInputStream(_peerDestFiles[i]);
                     byte dest[] = new byte[1024];
                     int read = DataHelper.read(fin, dest);
-                    
+
                     String remDest = new String(dest, 0, read);
                     int con = 0;
                     Flooder flooder = null;
@@ -202,7 +202,7 @@ public class TestSwarm {
                         flooder = new Flooder(con, remDest);
                         _remotePeers.put(new Integer(con), flooder);
                     }
-                    
+
                     byte msg[] = (DataHelper.getUTF8("STREAM CONNECT ID=" + con + " DESTINATION=" + remDest + "\n"));
                     synchronized (_samOut) {
                         _samOut.write(msg);
@@ -217,9 +217,9 @@ public class TestSwarm {
             }
         }
     }
-    
+
     private class Flooder implements Runnable {
-        private int _connectionId; 
+        private int _connectionId;
         private String _remoteDestination;
         private boolean _closed;
         private long _started;
@@ -228,7 +228,7 @@ public class TestSwarm {
         private long _lastReceived;
         private long _lastReceivedOn;
         private boolean _outOfSync;
-        
+
         public Flooder(int conId, String remDest) {
             _connectionId = conId;
             _remoteDestination = remDest;
@@ -241,10 +241,10 @@ public class TestSwarm {
             _context.statManager().createRateStat("swarm." + conId + ".started", "When we start", "swarm", new long[] { 5*60*1000 });
             _context.statManager().createRateStat("swarm." + conId + ".lifetime", "How long we talk to a peer", "swarm", new long[] { 5*60*1000 });
         }
-        
+
         public int getConnectionId() { return _connectionId; }
         public String getDestination() { return _remoteDestination; }
-        
+
         public void closed() {
             _closed = true;
             long lifetime = _context.clock().now() - _started;
@@ -288,10 +288,10 @@ public class TestSwarm {
             _context.statManager().addRateData("swarm." + getConnectionId() + ".totalReceived", _totalReceived, 0);
             if (value != _lastReceived + 1) {
                 if (!_outOfSync)
-                    _log.error("Received " + value + " when expecting " + (_lastReceived+1) + " on " 
+                    _log.error("Received " + value + " when expecting " + (_lastReceived+1) + " on "
                                + _connectionId + " with " + _remoteDestination.substring(0,6));
                 else
-                    _log.debug("(out of sync) Received " + value + " when expecting " + (_lastReceived+1) + " on " 
+                    _log.debug("(out of sync) Received " + value + " when expecting " + (_lastReceived+1) + " on "
                                + _connectionId + " with " + _remoteDestination.substring(0,6));
             } else {
                 _log.debug("Received " + value + " on " + _connectionId + " after " + (_context.clock().now()-_lastReceivedOn)

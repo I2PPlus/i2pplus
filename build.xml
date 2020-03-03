@@ -30,6 +30,7 @@
         <echo message="  tarball:   tar the full install into i2p.tar.bz2 (extracts to build a new clean install)" />
         <echo message="  updater:   Package the built files in i2pupdate.zip (extracts safely over existing installs)" />
         <echo message="  updater200: Updater compressed with pack200 (creates i2pupdate200.zip, 60% smaller)" />
+        <echo message="  updater200WithGeoIP: Updater compressed with pack200 including GeoIP Files" />
         <echo message="  signed-updater200: Signed updater compressed with pack200 (creates i2pupdate.su3, 60% smaller)" />
         <echo message="  updaterWithJavadoc: updater including the javadocs, for display in the console" />
         <echo message="  updater200WithJavadoc: updater including the javadocs, for display in the console (creates i2pupdate200.zip)" />
@@ -43,6 +44,9 @@
         <echo message="  updaterWithJettyFixes: updater including local jetty patches" />
         <echo message="  updaterWithGeoIP: updater including GeoIP Files" />
         <echo message="  updaterWithJettyFixesAndGeoIP" />
+        <echo message="  updater200WithJettyFixesAndGeoIP" />
+        <echo message="  updater200WithJettyAndGeoIP: Updater including Jetty and GeopIP files" />
+        <echo message="  updater200WithJettyAndGeoIPAndLicenses: Updater including Jetty and GeoIP files and Licenses" />
         <echo message="  updaterWithJettyFixesAndJbigi" />
         <echo message="  updaterWithJbigi" />
         <echo message="  updater200WithJbigi" />
@@ -590,7 +594,11 @@
         <jar destfile="./build/launchi2p.jar">
             <manifest>
                 <attribute name="Main-Class" value="net.i2p.router.RouterLaunch" />
-                <attribute name="Class-Path" value="lib/i2p.jar lib/router.jar lib/jbigi.jar lib/BOB.jar lib/sam.jar lib/mstreaming.jar lib/streaming.jar lib/routerconsole.jar lib/i2ptunnel.jar lib/org.mortbay.jetty.jar lib/javax.servlet.jar lib/jasper-runtime.jar lib/commons-el.jar lib/wrapper.jar lib/systray.jar lib/desktopgui.jar lib/i2psnark.jar lib/jrobin.jar lib/jstl.jar lib/standard.jar lib/jetty-continuation.jar lib/jetty-deploy.jar lib/jetty-http.jar lib/jetty-i2p.jar lib/jetty-io.jar lib/jetty-rewrite-handler.jar lib/jetty-security.jar lib/jetty-servlet.jar lib/jetty-servlets.jar lib/jetty-start.jar lib/jetty-util.jar lib/jetty-webapp.jar lib/jetty-xml.jar" />
+<!--                <attribute name="Class-Path" value="lib/i2p.jar lib/router.jar lib/jbigi.jar lib/BOB.jar lib/sam.jar lib/mstreaming.jar lib/streaming.jar lib/routerconsole.jar lib/i2ptunnel.jar lib/org.mortbay.jetty.jar lib/javax.servlet.jar lib/jasper-runtime.jar lib/commons-el.jar lib/wrapper.jar lib/systray.jar lib/desktopgui.jar lib/i2psnark.jar lib/jrobin.jar lib/jstl.jar lib/standard.jar lib/jetty-continuation.jar lib/jetty-deploy.jar lib/jetty-http.jar lib/jetty-i2p.jar lib/jetty-io.jar lib/jetty-rewrite-handler.jar lib/jetty-security.jar lib/jetty-servlet.jar lib/jetty-servlets.jar lib/jetty-start.jar lib/jetty-util.jar lib/jetty-webapp.jar lib/jetty-xml.jar" />-->
+<!--
+                <attribute name="Class-Path" value="lib/i2p.jar lib/router.jar lib/jbigi.jar lib/BOB.jar lib/sam.jar lib/mstreaming.jar lib/streaming.jar lib/routerconsole.jar lib/i2ptunnel.jar lib/org.mortbay.jetty.jar lib/javax.servlet.jar lib/jasper-runtime.jar lib/commons-el.jar lib/wrapper.jar lib/systray.jar lib/desktopgui.jar lib/i2psnark.jar lib/jrobin.jar lib/jstl.jar lib/standard.jar lib/jetty-continuation.jar lib/jetty-deploy.jar lib/jetty-http.jar lib/jetty-i2p.jar lib/jetty-io.jar lib/jetty-rewrite-handler.jar lib/jetty-security.jar lib/jetty-servlet.jar lib/jetty-servlets.jar lib/jetty-start.jar lib/jetty-util.jar lib/jetty-webapp.jar lib/jetty-xml.jar lib/jetty-proxy.xml.jar lib/fcgi-client.jar lib/fcgi-server.jar lib/ecj.jar" />
+-->
+                <attribute name="Class-Path" value="lib/i2p.jar lib/router.jar lib/jbigi.jar lib/BOB.jar lib/sam.jar lib/mstreaming.jar lib/streaming.jar lib/routerconsole.jar lib/i2ptunnel.jar lib/org.mortbay.jetty.jar lib/javax.servlet.jar lib/jasper-runtime.jar lib/commons-el.jar lib/wrapper.jar lib/systray.jar lib/desktopgui.jar lib/i2psnark.jar lib/jrobin.jar lib/jstl.jar lib/standard.jar lib/jetty-continuation.jar lib/jetty-deploy.jar lib/jetty-http.jar lib/jetty-i2p.jar lib/jetty-io.jar lib/jetty-rewrite-handler.jar lib/jetty-security.jar lib/jetty-servlet.jar lib/jetty-servlets.jar lib/jetty-start.jar lib/jetty-util.jar lib/jetty-webapp.jar lib/jetty-xml.jar lib/fcgi-client.jar lib/fcgi-server.jar lib/ecj.jar" />
                 <attribute name="Built-By" value="${build.built-by}" />
                 <attribute name="Build-Date" value="${build.timestamp}" />
                 <attribute name="Base-Revision" value="${workspace.version}" />
@@ -1135,7 +1143,7 @@
 	<defaultexcludes remove="**/*~"/>
 
         <delete>
-            <fileset dir="." includes="**/*.class **/*.java~ **/*.txt~ **/*.xml~ **/*.sh~ **/*.SlackBuild~" />
+            <fileset dir="." includes="**/*.class **/*.java~ **/*.txt~ **/*.xml~ **/*.sh~ **/*.SlackBuild~ **/*.*~" />
 	    <!--
 	    	Less common, but they pollute my workspace here, so we
             	might as well nuke these as well. Are there any others?
@@ -1282,6 +1290,10 @@
         <copy file="installer/resources/install_i2p_service_winnt.bat" todir="pkg-temp/" />
         <copy file="installer/resources/set_config_dir_for_nt_service.bat" todir="pkg-temp/" />
         <copy file="installer/resources/uninstall_i2p_service_winnt.bat" todir="pkg-temp/" />
+        <copy file="installer/resources/StartI2P+Service.bat" todir="pkg-temp/" />
+        <copy file="installer/resources/StopI2P+Service.bat" todir="pkg-temp/" />
+        <copy file="installer/resources/EnableI2P+Service.bat" todir="pkg-temp/" />
+        <copy file="installer/resources/DisableI2P+Service.bat" todir="pkg-temp/" />
         <copy file="build/utility.jar" todir="pkg-temp" />
         <copy todir="pkg-temp/lib/wrapper/win32/">
             <fileset dir="installer/lib/wrapper/win32/" excludes="*.txt" />
@@ -1341,12 +1353,14 @@
         <copy file="apps/proxyscript/i2pProxy.pac" todir="pkg-temp/scripts/" />
         <copy file="installer/resources/startconsole.html" todir="pkg-temp/docs/" />
         <copy file="installer/resources/start.ico" todir="pkg-temp/docs/" />
+        <copy file="installer/resources/stop.ico" todir="pkg-temp/docs/" />
         <copy file="installer/resources/console.ico" todir="pkg-temp/docs/" />
         <copy file="installer/resources/uninstall.ico" todir="pkg-temp/docs/" />
         <!-- Eepsite stuff here -->
         <mkdir dir="pkg-temp/eepsite" />
         <copy todir="pkg-temp/eepsite/" >
             <fileset dir="installer/resources/eepsite/" excludes="**/.placeholder" />
+            <fileset dir="installer/resources/eepsite/docroot/.resources/" />
         </copy>
         <copy file="installer/resources/themes/console/images/favicon.ico" tofile="pkg-temp/eepsite/docroot/favicon.ico" />
     </target>
@@ -1362,7 +1376,7 @@
             <fileset dir="installer/resources/icons/flags/" includes="az.png cn.png de.png es.png fr.png hu.png id.png ir.png it.png jp.png nl.png pl.png pt.png ro.png ru.png se.png tr.png us.png" />
         </copy>
         <copy todir="pkg-temp/docs/icons/flags" >
-          <!-- base flags/ dir only. flags16x11/ dir already copied by prepConsoleDocs target -->
+          <!-- base flags/ dir only. flags16x11/ and flags48x48/ dirs already copied by prepConsoleDocs target -->
           <fileset dir="installer/resources/icons/flags" />
         </copy>
     </target>
@@ -1451,8 +1465,48 @@
 
     <target name="prepthemeupdates">
         <copy todir="pkg-temp/docs/themes/" >
-            <fileset dir="installer/resources/themes/" />
+            <fileset dir="installer/resources/themes/">
+            <exclude name="**/*.*~"/>
+            </fileset>
         </copy>
+    </target>
+
+    <target name="minifycss">
+<!--
+        <mkdir dir="pkg-temp/docs/themes_uncompressed/" />
+        <copy todir="pkg-temp/docs/themes_uncompressed" >
+            <fileset dir="installer/resources/themes/">
+            <include name="**/*.css" />
+            </fileset>
+        </copy>
+-->
+        <copy todir="pkg-temp/docs/themes/minified/" >
+            <fileset dir="installer/resources/themes/">
+            <include name="**/*.*" />
+            </fileset>
+        </copy>
+        <delete><fileset dir="pkg-temp/docs/themes/minified/" includes="**/*.css"/></delete>
+        <echo message="Minifying console and webapp themes... this may take some time"/>
+        <apply executable="java" parallel="false" dest="pkg-temp/docs/themes/minified/">
+            <fileset dir="pkg-temp/docs/themes/" includes="**/*.css" />
+              <arg line="-jar"/>
+              <arg path="yuicompressor-2.4.8.jar" />
+              <arg line="-v --line-break=0 --charset=utf-8"/>
+              <srcfile/>
+              <arg line="-o"/>
+              <mapper type="glob" from="*.css" to="*.css"/>
+              <targetfile/>
+        </apply>
+        <echo message="Tidying minified CSS files..."/>
+        <move todir="pkg-temp/docs/themes/">
+            <fileset dir="pkg-temp/docs/themes/minified/">
+                <include name="**/*.css"/>
+        </fileset>
+        </move>
+        <delete dir="pkg-temp/docs/themes/minified/"/>
+        <replaceregexp match="\}.\}" replace="\}\}" flags="gs" encoding="utf-8">
+            <fileset dir="pkg-temp/docs/themes/" includes="**/*.css"/>
+        </replaceregexp>
     </target>
 
     <!-- SSL Certs -->
@@ -1495,7 +1549,7 @@
     <target name="-areRouterInfosEnabled">
         <fail message="Option requires &quot;bundle.routerInfos&quot; to be configured. Please read &quot;build.properties&quot; for more info." >
             <condition>
-                <isfalse value="${bundle.routerInfos}" />
+                <isfalse value="${bundle.routerInfos}" />m
             </condition>
         </fail>
     </target>
@@ -1542,6 +1596,8 @@
                which may be symlinked in package installs.
            -->
           <fileset dir="installer/resources/" includes="icons/flags16x11/*" />
+          <!-- flags48x48 added in 0.9.32 -->
+          <fileset dir="installer/resources/" includes="icons/flags48x48/*" />
         </copy>
     </target>
 
@@ -1555,14 +1611,21 @@
         </copy>
     </target>
 
-    <target name="updater200" depends="prepupdate, preplicenses, pack200, zipit200" />
-    <target name="updater200WithJetty" depends="prepjupdate, preplicenses, pack200, zipit200" />
+    <target name="updater200" depends="prepupdate, pack200, zipit200" />
+    <target name="updater200WithMinifyCSS" depends="prepupdate, minifycss, pack200, zipit200" />
+    <target name="updater200WithLicences" depends="prepupdate, preplicenses, pack200, zipit200" />
+    <target name="updater200WithGeoIP" depends="prepupdate, prepgeoupdate, preplicenses, pack200, zipit200" />
+    <target name="updater200WithJetty" depends="prepjupdate, pack200, zipit200" />
+    <target name="updater200WithJettyAndLicences" depends="prepjupdate, preplicenses, pack200, zipit200" />
     <target name="updater200WithJettyAndJbigi" depends="prepjupdate, prepjbigiupdate, preplicenses, pack200, zipit200" />
-    <target name="updater200WithJettyAndGeoIP" depends="prepjupdate, prepgeoupdate, preplicenses, pack200, zipit200" />
+    <target name="updater200WithJettyAndGeoIP" depends="prepjupdate, prepgeoupdate, pack200, zipit200" />
+    <target name="updater200WithJettyAndGeoIPAndLicenses" depends="prepjupdate, prepgeoupdate, preplicenses, pack200, zipit200" />
     <target name="updater200WithJettyFixes" depends="prepjupdatefixes, preplicenses, pack200, zipit200" />
     <target name="updater200WithJettyFixesAndJbigi" depends="prepjupdatefixes, prepjbigiupdate, preplicenses, pack200, zipit200" />
     <target name="updater200WithJbigi" depends="prepupdate, prepjbigiupdate, preplicenses, pack200, zipit200" />
-    <target name="updater" depends="prepupdate, preplicenses, zipit" />
+    <target name="updater" depends="prepupdate, zipit" />
+    <target name="updaterWithMinifyCSS" depends="prepupdate, minifycss, zipit" />
+    <target name="updaterWithLicenses" depends="prepupdate, preplicenses, zipit" />
     <target name="updaterRepack" depends="prepupdate, preplicenses, repack200, zipit" />
     <target name="updaterWithJavadoc" depends="prepupdate, preplicenses, copyJavadoc, zipit" />
     <target name="updater200WithJavadoc" depends="prepupdate, preplicenses, copyJavadoc, pack200, zipit200" />
@@ -1570,14 +1633,13 @@
     <target name="updater200WithJavadocAndJetty" depends="prepjupdate, preplicenses, copyJavadoc, pack200, zipit200" />
     <target name="updaterWithGeoIP" depends="prepupdate, prepgeoupdate, preplicenses, zipit" />
     <target name="updaterWithJetty" depends="prepjupdate, preplicenses, zipit" />
-    <target name="updaterWithJettyAndGeoIP" depends="prepjupdate, prepgeoupdate, preplicenses, zipit" />
-    <target name="updaterWithJettyAndJbigi" depends="prepjupdate, prepjbigiupdate, preplicenses, zipit" />
     <target name="updaterWithJettyRepack" depends="prepjupdate, preplicenses, repack200, zipit" />
     <target name="updaterWithJettyAndJbigiRepack" depends="prepjupdate, prepjbigiupdate, preplicenses, repack200, zipit" />
     <target name="updaterWithJettyAndGeoIPRepack" depends="prepjupdate, prepgeoupdate, preplicenses, repack200, zipit" />
     <target name="updaterWithJettyFixes" depends="prepjupdatefixes, preplicenses, zipit" />
     <target name="updaterWithJettyFixesAndJbigi" depends="prepjupdatefixes, prepjbigiupdate, preplicenses, zipit" />
     <target name="updaterWithJettyFixesAndGeoIP" depends="prepjupdatefixes, prepgeoupdate, preplicenses, zipit" />
+    <target name="updater200WithJettyFixesAndGeoIP" depends="prepjupdatefixes, prepgeoupdate, preplicenses, repack200, zipit" />
     <target name="updaterWithJbigi" depends="prepupdate, prepjbigiupdate, preplicenses, zipit" />
     <target name="updaterSmall" depends="prepupdateSmall, zipit" />
     <target name="updaterRouter" depends="prepupdateRouter, zipit" />
@@ -1757,6 +1819,9 @@
         <copy todir="pkg-temp/eepsite-jetty9" >
             <fileset dir="installer/resources/eepsite" includes="*.xml contexts/* etc/*" />
         </copy>
+        <copy todir="pkg-temp/eepsite/docroot" >
+            <fileset dir="installer/resources/eepsite/docroot" includes=".resources/*" />
+        </copy>
     </target>
 
     <target name="delete-j6-update">
@@ -1867,12 +1932,17 @@
 
              More info: https://izpack.atlassian.net/wiki/spaces/IZPACK/pages/491541/IzPack+Utilities
          -->
+
         <exec executable="${izpack5.home}/utils/wrappers/izpack2exe/izpack2exe.py" failonerror="true">
             <arg value="--file=${basedir}/install.jar" />
-            <arg value="--with-7z=${izpack5.home}/utils/wrappers/izpack2exe/7za" />
+<!--
+            <arg value="-\-with-7z=${izpack5.home}/utils/wrappers/izpack2exe/7za" />
+-->
+            <arg value="--with-7z=/usr/bin/7zr" />
             <arg value="--no-upx" />
             <arg value="--output=${basedir}/i2pinstall.exe" />
         </exec>
+
     </target>
 
     <!-- Custom installers -->
@@ -1887,7 +1957,6 @@
         <fixcrlf srcdir="pkg-temp" includes="*.config **/*.xml **/*.properties **/*.txt scripts/*" encoding="utf8" eol="lf" />
         <izpack5 input="${basedir}/installer/install5.xml" output="${basedir}/i2pinstall_${full.version}.jar" installerType="standard" basedir="${basedir}" />
     </target>
-
 
     <target name="installer-freebsd" depends="clean, preppkg-freebsd-only, izpack-patches" >
         <fixcrlf srcdir="pkg-temp" includes="*.config **/*.xml **/*.properties **/*.txt scripts/*" encoding="utf8" eol="lf" />
@@ -1906,11 +1975,18 @@
         <izpack5 input="${basedir}/installer/install5.xml" output="${basedir}/i2pinstall_${full.version}_linux-only.jar" installerType="standard" basedir="${basedir}" />
     </target>
 
-
     <target name="installer-osx" depends="clean, checkForIzpack2App, preppkg-osx-only, izpack-patches">
         <fixcrlf srcdir="pkg-temp" includes="*.config **/*.xml **/*.properties **/*.txt scripts/*" encoding="utf8" eol="lf" />
         <mkdir dir="pkg-temp/osx" />
         <izpack input="${basedir}/installer/install.xml" output="${basedir}/i2pinstall_${full.version}_osx-only.jar" installerType="standard" basedir="${basedir}" />
+        <ant target="installer2app" />
+        <delete dir="pkg-temp/osx" />
+    </target>
+
+    <target name="installer5-osx" depends="clean, checkForIzpack2App, izpack5-patches, preppkg-osx-only">
+        <fixcrlf srcdir="pkg-temp" includes="*.config **/*.xml **/*.properties **/*.txt scripts/*" encoding="utf8" eol="lf" />
+        <mkdir dir="pkg-temp/osx" />
+        <izpack5 input="${basedir}/installer/install5.xml" output="${basedir}/i2pinstall_${full.version}_osx-only.jar" installerType="standard" basedir="${basedir}" />
         <ant target="installer2app" />
         <delete dir="pkg-temp/osx" />
     </target>
@@ -2181,19 +2257,11 @@
     <!-- this is the same dependency as pkg, but with updater200 in the middle,
          since preppkg puts too much stuff in pkg-temp -->
 
-    <!-- Release targets - pick one: with Jbigi, GeoIP, or neither; pack200, repack, or not -->
+    <!-- Release targets - pick one: with Jbigi, GeoIP, or neither -->
 
-    <target name="release"          depends="verifyReleaseBuildNumbers, -pre-release, distclean, testscripts, updaterWithJetty, delete-j6-update, installer5-nowindows, delete-nonwindows, installer5-windows, -releaseit" />
-    <target name="releaseWithJbigi" depends="verifyReleaseBuildNumbers, -pre-release, distclean, testscripts, updaterWithJettyAndJbigi, delete-j6-update, installer5-nowindows, delete-nonwindows, installer5-windows, -releaseit" />
-    <target name="releaseWithGeoIP" depends="verifyReleaseBuildNumbers, -pre-release, distclean, testscripts, updaterWithJettyAndGeoIP, delete-j6-update, installer5-nowindows, delete-nonwindows, installer5-windows, -releaseit" />
-
-    <target name="releaseRepack"          depends="verifyReleaseBuildNumbers, -pre-release, distclean, testscripts, updaterWithJettyRepack, delete-j6-update, installer5-nowindows, delete-nonwindows, installer5-windows, -releaseit" />
-    <target name="releaseWithJbigiRepack" depends="verifyReleaseBuildNumbers, -pre-release, distclean, testscripts, updaterWithJettyAndJbigiRepack, delete-j6-update, installer5-nowindows, delete-nonwindows, installer5-windows, -releaseit" />
-    <target name="releaseWithGeoIPRepack" depends="verifyReleaseBuildNumbers, -pre-release, distclean, testscripts, updaterWithJettyAndGeoIPRepack, delete-j6-update, installer5-nowindows, delete-nonwindows, installer5-windows, -releaseit" />
-
-    <target name="release200"          depends="verifyReleaseBuildNumbers, -pre-release, distclean, testscripts, updaterWithJettyRepack, updater200WithJetty, delete-j6-update, installer5-nowindows, delete-nonwindows, installer5-windows, -releaseit" />
-    <target name="releaseWithJbigi200" depends="verifyReleaseBuildNumbers, -pre-release, distclean, testscripts, updaterWithJettyAndJbigiRepack, updater200WithJettyAndJbigi, delete-j6-update, installer5-nowindows, delete-nonwindows, installer5-windows, -releaseit" />
-    <target name="releaseWithGeoIP200" depends="verifyReleaseBuildNumbers, -pre-release, distclean, testscripts, updaterWithJettyAndGeoIPRepack, updater200WithJettyAndGeoIP, delete-j6-update, installer5-nowindows, delete-nonwindows, installer5-windows, -releaseit" />
+    <target name="release"          depends="verifyReleaseBuildNumbers, -pre-release, distclean, testscripts, updaterWithJettyRepack, updater200WithJetty, delete-j6-update, installer5-nowindows, delete-nonwindows, installer5-windows, -releaseit" />
+    <target name="releaseWithJbigi" depends="verifyReleaseBuildNumbers, -pre-release, distclean, testscripts, updaterWithJettyAndJbigiRepack, updater200WithJettyAndJbigi, delete-j6-update, installer5-nowindows, delete-nonwindows, installer5-windows, -releaseit" />
+    <target name="releaseWithGeoIP" depends="verifyReleaseBuildNumbers, -pre-release, distclean, testscripts, updaterWithJettyAndGeoIPRepack, updater200WithJettyAndGeoIP, delete-j6-update, installer5-nowindows, delete-nonwindows, installer5-windows, -releaseit" />
 
     <target name="-releaseit">
         <echo message="New version number is ${release.number}" />
@@ -2208,6 +2276,7 @@
         <!-- now build and verify the packed su3 from the packed zip -->
         <!-- TODO if i2pupdate200.zip is present zip it instead -->
         <su3sign infile="i2pupdate.zip" sigtype="ROUTER" outfile="i2pupdate.su3" su3.ver="${release.number}" />
+<!--        <su3sign infile="i2pupdate200.zip" sigtype="ROUTER" outfile="i2pupdate.su3" su3.ver="${release.number}" /> -->
         <!-- this will use the monotonerc file in the current workspace -->
         <echo message="Checking out fresh copy into ../i2p-${release.number} for tarballing:" />
         <delete dir="../i2p-${release.number}" />
@@ -2236,7 +2305,7 @@
         </fail>
 
         <!-- the gpgsign macro sets the permission of signed files and the sigs themselves to 444 -->
-      <!--
+       <!--
         <gpgsign file="i2pinstall_${release.number}_windows.exe" />
        -->
         <gpgsign file="i2pinstall_${release.number}.jar" />
@@ -2251,14 +2320,14 @@
         <echo message="File sizes:" />
         <exec executable="ls" failonerror="true">
             <arg value="-l" />
-          <!--
+           <!--
             <arg value="i2pinstall_${release.number}_windows.exe" />
            -->
             <arg value="i2pinstall_${release.number}.jar" />
             <arg value="i2psource_${release.number}.tar.bz2" />
             <arg value="i2pupdate_${release.number}.zip" />
             <arg value="i2pupdate.su3" />
-          <!--
+           <!--
             <arg value="i2pinstall_${release.number}_windows.exe.sig" />
            -->
             <arg value="i2pinstall_${release.number}.jar.sig" />
@@ -2268,7 +2337,7 @@
         <echo message="   TBD    i2pinstall_${release.number}_windows.exe" />
         <echo message="   TBD    i2pinstall_${release.number}_windows.exe.sig" />
         <echo message="SHA256 sums:" />
-      <!--
+       <!--
         <sha256sum file="i2pinstall_${release.number}_windows.exe" />
        -->
         <echo message="   TBD    i2pinstall_${release.number}_windows.exe" />
@@ -2927,7 +2996,7 @@
 <!-- *2* os independent procedure  -->
 	<target name="preppkg-portable-basic" >
 		<mkdir dir="pkg-temp" />
-			<!-- non OS dependent configurations only, dont add *nux/win stuff here -->
+			<!-- non OS dependent configurations only, don't add *nux/win stuff here -->
 			<copy todir="pkg-temp">
 				<fileset dir="installer/resources/portable/configs/" />
 			</copy>
@@ -2970,12 +3039,12 @@
 				<fileset dir="build/" includes="**.jar" />
 			</copy>
 			<!-- 3rd party jars from apps/  -->
-				<!-- jrobin - without jobin , you lost graph and get a lot error entry in logs -->
+				<!-- jrobin - without jobin , you lose graphs and get a lot of error entries in logs -->
 			<copy file="build/jrobin.jar" tofile="pkg-temp/lib/jrobin.jar" />
 	</target>
 <!-- *3* os dependent procedure/commands -->
 	<target name = "preppkg-portable-win32" depends="preppkg-portable-win32-jbigi,preppkg-portable-basic">
-			<!--wrapper - dont even think about it. i2p cosumes appreantly more mem without it on win32-->
+			<!--wrapper - don't even think about it! i2p consumes apparently more mem without it on win32-->
 		<copy file="installer/lib/wrapper/win32/wrapper.dll" todir="pkg-temp/lib" />
 		<copy file="installer/lib/wrapper/all/wrapper.jar" todir="pkg-temp/lib" />
 		<copy file="installer/lib/wrapper/win32/I2Psvc.exe" tofile="pkg-temp/i2psvc.ex_" />

@@ -18,7 +18,7 @@
       <servlet-class>net.i2p.servlet.ErrorServlet</servlet-class>
       <init-param>
         <param-name>name</param-name>
-        <param-value>Hidden Services Manager</param-value>
+        <param-value>Tunnel Manager</param-value>
       </init-param>
     </servlet>
 

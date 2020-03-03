@@ -23,8 +23,7 @@ public class ConfigNavHelper extends HelperBase {
     private static final String pages[] =
                                           {"", "net", "ui", "sidebar", "home", "service", "update", "tunnels",
                                            "clients", "peer", "keyring", "logging", "stats",
-                                           "i2cp", "plugins", "webapps",
-                                           "reseed", "advanced", "family" };
+                                           "i2cp", "plugins", "webapps",  "reseed", "advanced", "family"};
 
     private static final String titles[] =
                                           {_x("Bandwidth"), _x("Network"), _x("UI"), _x("Sidebar"), _x("Home Page"),
@@ -73,7 +72,7 @@ public class ConfigNavHelper extends HelperBase {
         }
         Collections.sort(tabs, new TabComparator());
         for (int i = 0; i < tabs.size(); i++) {
-            String page = "config" + tabs.get(i).page;
+                String page = "config" + tabs.get(i).page;
             if (requestURI.endsWith(page) || requestURI.endsWith(page + ".jsp")) {
                 // we are there
                 if (span)
@@ -83,6 +82,8 @@ public class ConfigNavHelper extends HelperBase {
                 // we are not there, make a link
                 if (span)
                     buf.append("<span class=\"tab\">");
+                if (page.equals("configembed"))
+                    page = "embed";
                 buf.append("<a href=\"").append(page).append("\">").append(tabs.get(i).title).append("</a>");
             }
             if (span)

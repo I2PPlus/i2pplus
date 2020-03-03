@@ -25,30 +25,30 @@ import net.i2p.util.Log;
  * </ul>
  */
 class SchedulerPreconnect extends SchedulerImpl {
-    
+
     public SchedulerPreconnect(I2PAppContext ctx) {
         super(ctx);
     }
-    
+
     public boolean accept(Connection con) {
-        return (con != null) && 
+        return (con != null) &&
                (con.getSendStreamId() <= 0) &&
                (con.getLastSendId() < 0);
     }
-    
+
     public void eventOccurred(Connection con) {
         if (con.getNextSendTime() < 0)
             con.setNextSendTime(_context.clock().now() + con.getOptions().getConnectDelay());
-        
+
         long timeTillSend = con.getNextSendTime() - _context.clock().now();
         if (timeTillSend <= 0) {
             if (_log.shouldLog(Log.DEBUG))
-                _log.debug("Send available for the SYN on " + con);
+                _log.debug("Sending available for the SYN on " + con);
             con.sendAvailable();
             con.setNextSendTime(-1);
         } else {
             if (_log.shouldLog(Log.DEBUG))
-                _log.debug("Wait " + timeTillSend + " before sending the SYN on " + con);
+                _log.debug("Waiting " + timeTillSend + "ms before sending the SYN on " + con);
             reschedule(timeTillSend, con);
         }
     }

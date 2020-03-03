@@ -49,7 +49,7 @@ public class AsyncFortunaStandalone extends FortunaStandalone implements Runnabl
         context.statManager().createRateStat("prng.bufferFillTime", "Time to fill random number buffer (ms)", "Encryption", new long[] { 60*1000, 10*60*1000, 60*60*1000 } );
         _log = context.logManager().getLog(AsyncFortunaStandalone.class);
     }
-    
+
     public void startup() {
         for (int i = 0; i < _bufferCount; i++)
             _emptyBuffers.offer(new AsyncBuffer(_bufferSize));
@@ -81,10 +81,10 @@ public class AsyncFortunaStandalone extends FortunaStandalone implements Runnabl
         init(props);
         //fillBlock();
     }
-  
+
     @Override
     protected void allocBuffer() {}
-    
+
     private static class AsyncBuffer {
         public final byte[] buffer;
 
@@ -123,7 +123,7 @@ public class AsyncFortunaStandalone extends FortunaStandalone implements Runnabl
             buffer = nextBuffer.buffer;
         }
     }
-    
+
     /**
      *  The refiller thread
      */
@@ -135,7 +135,7 @@ public class AsyncFortunaStandalone extends FortunaStandalone implements Runnabl
             } catch (InterruptedException ie) {
                 continue;
             }
-            
+
                 long before = System.currentTimeMillis();
                 doFill(aBuff.buffer);
                 long after = System.currentTimeMillis();
@@ -159,7 +159,7 @@ public class AsyncFortunaStandalone extends FortunaStandalone implements Runnabl
     {
         rotateBuffer();
     }
-    
+
     private void doFill(byte buf[]) {
         //long start = System.currentTimeMillis();
         if (pool0Count >= MIN_POOL_SIZE
@@ -182,12 +182,12 @@ public class AsyncFortunaStandalone extends FortunaStandalone implements Runnabl
         //long refillTime = now-start;
         //System.out.println("Refilling " + (++refillCount) + " after " + diff + " for the PRNG took " + refillTime);
     }
-    
+
 /*****
     public static void main(String args[]) {
         try {
             AsyncFortunaStandalone rand = new AsyncFortunaStandalone(null);  // Will cause NPEs above; fix this if you want to test! Sorry...
-            
+
             byte seed[] = new byte[1024];
             rand.seed(seed);
             System.out.println("Before starting prng");

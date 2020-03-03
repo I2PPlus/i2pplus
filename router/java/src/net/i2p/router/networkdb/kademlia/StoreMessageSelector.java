@@ -9,7 +9,7 @@ import net.i2p.router.RouterContext;
 import net.i2p.util.Log;
 
 /**
- * Check to see the message is a reply from the peer regarding the current 
+ * Check to see the message is a reply from the peer regarding the current
  * store
  *
  */
@@ -25,7 +25,7 @@ class StoreMessageSelector implements MessageSelector {
      *  @param storeJobId just for logging
      *  @param peer just for logging
      */
-    public StoreMessageSelector(RouterContext ctx, long storeJobId, RouterInfo peer, long waitingForId, 
+    public StoreMessageSelector(RouterContext ctx, long storeJobId, RouterInfo peer, long waitingForId,
                                 long expiration) {
         _log = ctx.logManager().getLog(StoreMessageSelector.class);
         _peer = peer.getIdentity().getHash();
@@ -39,25 +39,27 @@ class StoreMessageSelector implements MessageSelector {
     public long getExpiration() { return _expiration; }
 
     public boolean isMatch(I2NPMessage message) {
-        //if (_log.shouldDebug())
-        //    _log.debug(_storeJobId + ": isMatch(" + message.getClass().getSimpleName() + ") [want DSM from " 
-        //               + _peer + ']');
+//        if (_log.shouldDebug())
+//            _log.debug("[Job " + _storeJobId + "] isMatch -> " + message.getClass().getName().replace("net.i2p.data.i2np.", "").replace("Message", "Msg").replace("Database", "Db") +
+//                       "\n* Requested: DeliveryStatusMsg from [" + _peer.toBase64().substring(0,6) + "]");
+//            _log.debug("[Job " + _storeJobId + "] isMatch -> " + message.getClass().getSimpleName() +
+//                       "\n* Requested: DeliveryStatusMsg from [" + _peer.toBase64().substring(0,6) + "]");
         if (message.getType() == DeliveryStatusMessage.MESSAGE_TYPE) {
             DeliveryStatusMessage msg = (DeliveryStatusMessage)message;
             if (msg.getMessageId() == _waitingForId) {
                 if (_log.shouldInfo())
-                    _log.info(_storeJobId + ": Found match for the key we're waiting for: " + _waitingForId);
+                    _log.info("[Job " + _storeJobId + "] Found match for the key we're waiting for [MsgID " + _waitingForId  + "]");
                 _found = true;
                 return true;
             } else {
-                //if (_log.shouldDebug())
-                //    _log.debug(_storeJobId + ": DeliveryStatusMessage of " + msg.getMessageId() +
-                //               " but waiting for " + _waitingForId);
+//                if (_log.shouldDebug())
+//                    _log.debug("[Job " + _storeJobId + "] Received DeliveryStatusMsg [MsgID " + msg.getMessageId() +
+//                               "] but waiting for [MsgID " + _waitingForId + "]");
                 return false;
             }
         } else {
-            //if (_log.shouldLog(Log.DEBUG))
-            //    _log.debug(_storeJobId + ": Not a DeliveryStatusMessage");
+                //if (_log.shouldDebug())
+                //_log.debug("[Job " + _storeJobId + "] Not a DeliveryStatusMsg");
             return false;
         }
     }
@@ -65,8 +67,8 @@ class StoreMessageSelector implements MessageSelector {
     @Override
     public String toString() {
         StringBuilder rv = new StringBuilder(128);
-        rv.append("Waiting for netDb confirm from ").append(_peer).append(", found? ");
-        rv.append(_found).append(" waiting for ").append(_waitingForId);
+        rv.append("Waiting for NetDb confirm from ").append(_peer).append(", found? ");
+        rv.append(_found).append(" waiting for [MsgID ").append(_waitingForId).append("]");
         return rv.toString();
     }
 }

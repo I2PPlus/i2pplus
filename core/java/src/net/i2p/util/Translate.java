@@ -153,6 +153,24 @@ public abstract class Translate {
         return lang;
     }
 
+    /*  Are we configured for a right-to-left language?
+     *  @return true for supported RTL languages
+     *  @since 0.9.46
+     */
+    public static boolean isRTL(I2PAppContext ctx) {
+        return isRTL(getLanguage(ctx));
+    }
+
+    /**
+     *  Is this a right-to-left language?
+     *  @param lang Two- or three-letter lower case
+     *  @return true for supported RTL languages
+     *  @since 0.9.46
+     */
+    public static boolean isRTL(String lang) {
+        return lang.equals("ar") || lang.equals("fa") || lang.equals("iw");
+    }
+
     /**
      *  Are we configured for a right-to-left language?
      *  @return true for supported RTL languages

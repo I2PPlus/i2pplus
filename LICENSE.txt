@@ -292,16 +292,10 @@ Applications:
          - All other flag icons: public domain, courtesy mjames@gmail.com http://www.famfamfam.com/
        FatCow icons: See licenses/LICENSE-FatCowIcons.txt
        Fugue Icons: See licenses/LICENSE-FugueIcons.txt
-       Feather icons: Copyright (c) 2013-2017 Cole Bemis; see licenses/LICENSE-Feather.txt
-
-   Router Console unthemed, light, and dark theme logos:
-   Copyright (c) 2019 The Invisible Internet Project. All rights reserved.
-   Creative Commons Attribution-ShareAlike 4.0 International License
-   See https://creativecommons.org/licenses/by-sa/4.0/
 
    Router Console and I2PSnark themes:
-   Some images licensed under a Creative Commons 2.0 license.
-       Silk icons: See licenses/LICENSE-SilkIcons.txt
+   - "Man with hat over face" & related images licensed under a Creative Commons 2.0 license.
+   - Original photos by Florian Kuhlmann. http://www.flickr.com/photos/floriankuhlmann/3117758155
 
    Router Console M-Lab subsystem:
    Copyright 2010 Vuze, Inc.  All rights reserved.

@@ -1,31 +1,31 @@
 package net.i2p.crypto;
 
-/* 
+/*
  * Copyright (c) 2003, TheCrypto
  * All rights reserved.
- * 
- * Redistribution and use in source and binary forms, with or without 
+ *
+ * Redistribution and use in source and binary forms, with or without
  * modification, are permitted provided that the following conditions are met:
- * 
- * - Redistributions of source code must retain the above copyright notice, this 
+ *
+ * - Redistributions of source code must retain the above copyright notice, this
  *   list of conditions and the following disclaimer.
- * - Redistributions in binary form must reproduce the above copyright notice, 
- *   this list of conditions and the following disclaimer in the documentation 
+ * - Redistributions in binary form must reproduce the above copyright notice,
+ *   this list of conditions and the following disclaimer in the documentation
  *   and/or other materials provided with the distribution.
- * -  Neither the name of the TheCrypto may be used to endorse or promote 
- *    products derived from this software without specific prior written 
+ * -  Neither the name of the TheCrypto may be used to endorse or promote
+ *    products derived from this software without specific prior written
  *    permission.
  *
- * THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS "AS IS" 
- * AND ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO, THE 
- * IMPLIED WARRANTIES OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE 
- * ARE DISCLAIMED. IN NO EVENT SHALL THE COPYRIGHT OWNER OR CONTRIBUTORS BE 
- * LIABLE FOR ANY DIRECT, INDIRECT, INCIDENTAL, SPECIAL, EXEMPLARY, OR 
- * CONSEQUENTIAL DAMAGES (INCLUDING, BUT NOT LIMITED TO, PROCUREMENT OF 
- * SUBSTITUTE GOODS OR SERVICES; LOSS OF USE, DATA, OR PROFITS; OR BUSINESS 
- * INTERRUPTION) HOWEVER CAUSED AND ON ANY THEORY OF LIABILITY, WHETHER IN 
- * CONTRACT, STRICT LIABILITY, OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE) 
- * ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE 
+ * THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS "AS IS"
+ * AND ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO, THE
+ * IMPLIED WARRANTIES OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE
+ * ARE DISCLAIMED. IN NO EVENT SHALL THE COPYRIGHT OWNER OR CONTRIBUTORS BE
+ * LIABLE FOR ANY DIRECT, INDIRECT, INCIDENTAL, SPECIAL, EXEMPLARY, OR
+ * CONSEQUENTIAL DAMAGES (INCLUDING, BUT NOT LIMITED TO, PROCUREMENT OF
+ * SUBSTITUTE GOODS OR SERVICES; LOSS OF USE, DATA, OR PROFITS; OR BUSINESS
+ * INTERRUPTION) HOWEVER CAUSED AND ON ANY THEORY OF LIABILITY, WHETHER IN
+ * CONTRACT, STRICT LIABILITY, OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE)
+ * ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE
  * POSSIBILITY OF SUCH DAMAGE.
  */
 
@@ -109,11 +109,11 @@ public final class DSAEngine {
             try {
                 rv = altVerifySig(signature, signedData, offset, size, verifyingKey);
                 if ((!rv) && _log.shouldLog(Log.WARN))
-                    _log.warn(type + " Sig Verify Fail");
+                    _log.warn(type + " Signature Verify Fail");
                 return rv;
             } catch (GeneralSecurityException gse) {
                 if (_log.shouldLog(Log.WARN))
-                    _log.warn(type + " Sig Verify Fail", gse);
+                    _log.warn(type + " Signature Verify Fail", gse);
                 return false;
             }
         }
@@ -121,17 +121,17 @@ public final class DSAEngine {
             try {
                 rv = altVerifySigSHA1(signature, signedData, offset, size, verifyingKey);
                 if ((!rv) && _log.shouldLog(Log.WARN))
-                    _log.warn("Lib DSA Sig Verify Fail");
+                    _log.warn("Lib DSA Signature Verify Fail");
                 return rv;
             } catch (GeneralSecurityException gse) {
                 if (_log.shouldLog(Log.WARN))
-                    _log.warn("Lib DSA Sig Verify Fail");
+                    _log.warn("Lib DSA Signature Verify Fail");
                 // now try TheCrypto
             }
         }
         rv = verifySignature(signature, calculateHash(signedData, offset, size), verifyingKey);
         if ((!rv) && _log.shouldLog(Log.WARN))
-            _log.warn("TheCrypto DSA Sig Verify Fail");
+            _log.warn("TheCrypto DSA Signature Verify Fail");
         return rv;
     }
 
@@ -180,7 +180,7 @@ public final class DSAEngine {
             return altVerifySigRaw(signature, hash, verifyingKey);
         } catch (GeneralSecurityException gse) {
             if (_log.shouldLog(Log.WARN))
-                _log.warn(type + " Sig Verify Fail", gse);
+                _log.warn("Failed to verify signature [" + type + "]", gse);
             return false;
         }
     }
@@ -201,7 +201,7 @@ public final class DSAEngine {
             return altVerifySigRaw(signature, hash, pubKey);
         } catch (GeneralSecurityException gse) {
             if (_log.shouldLog(Log.WARN))
-                _log.warn(signature.getType() + " Sig Verify Fail", gse);
+                _log.warn("Failed to verify signature [" + signature.getType() + "]", gse);
             return false;
         }
     }
@@ -213,7 +213,7 @@ public final class DSAEngine {
      */
     private boolean verifySig(Signature signature, SimpleDataStructure hash, SigningPublicKey verifyingKey) {
         if (signature.getType() != SigType.DSA_SHA1)
-            throw new IllegalArgumentException("Bad sig type " + signature.getType());
+            throw new IllegalArgumentException("Bad signature type " + signature.getType());
         if (verifyingKey.getType() != SigType.DSA_SHA1)
             throw new IllegalArgumentException("Bad key type " + verifyingKey.getType());
         long start = _context.clock().now();
@@ -254,7 +254,7 @@ public final class DSAEngine {
 
             long diff = _context.clock().now() - start;
             if (diff > 1000) {
-                if (_log.shouldLog(Log.WARN)) 
+                if (_log.shouldLog(Log.WARN))
                     _log.warn("Took too long to verify the signature (" + diff + "ms)");
             }
             return ok;
@@ -303,7 +303,7 @@ public final class DSAEngine {
         SHA1Hash h = calculateHash(data, offset, length);
         return sign(h, signingKey);
     }
-    
+
     /**
      *  Sign using DSA-SHA1 ONLY.
      *  Reads the stream until EOF. Does not close the stream.
@@ -424,7 +424,7 @@ public final class DSAEngine {
 
         // (q^random)%p is computationally random
         _context.random().harvester().feedEntropy("DSA.sign", rbytes, 0, rbytes.length);
-        
+
         if (rbytes.length == 20) {
             //System.arraycopy(rbytes, 0, out, 0, 20);
             for (int i = 0; i < 20; i++) {
@@ -471,7 +471,7 @@ public final class DSAEngine {
 
         return new Signature(out);
     }
-    
+
     /**
      *  Reads the stream until EOF. Does not close the stream.
      *

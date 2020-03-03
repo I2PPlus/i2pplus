@@ -1,72 +1,63 @@
 /* disable snark's collapsible panels and make section headings inert */
 
 input#toggle_addtorrent:not(checked) + label + hr + table, input#toggle_createtorrent:not(checked) + label + hr + table,
-input#toggle_addtorrent:checked + label + hr + table, input#toggle_createtorrent:checked + label + hr + table {
-     display: table !important;
+input#toggle_addtorrent:checked + label + hr + table, input#toggle_createtorrent:checked + label + hr + table,
+input#toggle_createtorrent:checked + label + hr + table, input#toggle_createtorrent:checked + label + hr + table + table,
+input#toggle_createtorrent:not(:checked) + label + hr + table, input#toggle_createtorrent:not(:checked) + label + hr + table + table {
+    display: table !important;
 }
 
-label.toggleview:hover, label.toggleview:active, .toggle_input:focus + .toggleview {
-     border: 1px solid #101 !important;
-     border-top: none !important;
-     text-shadow: 0 0 1px #000 !important;
-     box-shadow: inset 0 0 1px 0 #313, 0 0 0 1px rgba(16, 0, 16, 0.4) !important;
-     cursor: default !important;
+.mainsection[id] table {
+    display: table !important;
 }
 
-label.toggleview, label.toggleview:hover, label.toggleview:active, .toggle_input:focus + .toggleview {
-     background: #101 url(images/snarknav.png) repeat-x scroll center center !important;
-     background: linear-gradient(to bottom, #5f475d 0%, #4f3b4f 50%, #1f001f 50%, #1f001f 100%) !important;
-     color: #d2baff !important;
+.mainsection[id] table:first-child {
+    margin-top: 10px !important;
 }
 
-.toggle_input:focus + .toggleview img, .toggleview:hover img {
-     filter: drop-shadow(0 0 1px #000) !important;
+.mainsection[id] hr {
+    margin-bottom: 7px !important;
 }
 
-label.toggleview img:active, label.toggleview:active img {
-     transform: none !important;
+.toggleview, .toggleview:hover, .toggleview:focus, .toggleview:active {
+    cursor: default !important;
+    border: 1px solid #212;
+    border-bottom: 1px solid #101;
+    border-top: none;
+    background: linear-gradient(to bottom, #656, #323 51%, #202 51%, #101) !important;
+    box-shadow: inset 0 0 1px #838 !important;
+    filter: drop-shadow(0 1px 1px rgba(17,0,17,0.6)) !important;
 }
 
-/* alternative iconified section tabs for iframed view */
-
-.iframed label.toggleview, .iframed label.toggleview:hover, .iframed label.toggleview:focus, .iframed .toggle_input:focus + .toggleview,
-.iframed .configsection .snarkConfigTitle {
-     min-width: 0;
-     width: 200px !important;
-     padding: 1px 5px !important;
-     font-size: 0;
-     border: 1px solid #878 !important;
-     border-bottom: 1px solid #767 !important;
-     border-top: none !important;
-     border-radius: 0 0 3px 3px;
-     background: linear-gradient(to bottom, #434, #656 48%, #434 52%, #212 54%, #101) !important;
-     filter: drop-shadow(0 1px 2px #101) !important;
+.iframed .toggleview, .iframed .toggleview:hover, .iframed .toggleview:focus, .iframed .toggleview:active {
+    border: 1px solid #878;
+    border-bottom: 1px solid #767;
+    border-top: none;
+    box-shadow: inset 0 0 1px #535 !important;
+    filter: drop-shadow(0 1px 2px #101) !important;
 }
 
-.iframed .configsection .snarkConfigTitle {
-     background: linear-gradient(to bottom, #4a3d49 0%, #3d303d 50%, #0d000d 50%, #0d000d 100%) !important;
+.toggleview img, .toggleview img:active, .toggleview:hover img,
+.toggleview:focus img, .toggleview img:active, .toggleview:active img,
+.mainsection[id] .toggleview img, .mainsection[id] .toggleview img:active, .mainsection[id]:hover .toggleview img,
+.mainsection[id] .toggleview:focus img, .mainsection[id] .toggleview img:active, .mainsection[id] .toggleview:active img,
+input:not(:checked) + .toggleview > img, #snarkCommentSection input:not(:checked) + .toggleview > img {
+    background: linear-gradient(to bottom, #767 50%, #323 50%, #212) !important;
+    mix-blend-mode: normal !important;
+    transform: none !important;
+    filter: none !important;
+    box-shadow: none !important;
 }
 
-.iframed .configsection .snarkConfigTitle:hover {
-     background: linear-gradient(to bottom, #434, #656 48%, #434 52%, #212 54%, #101) !important;
+.addtorrentsection:hover table, .newtorrentsection:hover table:not(#trackerselect),
+.configsection .snarkConfigTitle, .toggleview {
+    will-change: auto !important;
 }
 
-.iframed .configsection .snarkConfigTitle img, .iframed .newtorrentsection .toggleview img, .iframed label.toggleview img,
-.iframed label.toggleview:hover img, .iframed .toggle_input:focus + .toggleview img, .iframed .addtorrentsection .toggleview img {
-     background: #323;
-     background: linear-gradient(to bottom, #878 50%, #434 50%);
-     border-radius: 50%;
-     padding: 3px !important;
-     margin: 0 !important;
-     border: 2px solid #101 !important;
-     box-shadow: none !important;
-     filter: none !important;
-     mix-blend-mode: normal !important;
+.addtorrentsection table, .newtorrentsection table:not(#trackerselect) {
+    animation: none !important;
 }
 
-.iframed .configsection .snarkConfigTitle:hover img, .iframed .configsection .snarkConfigTitle:focus img {
-     filter: drop-shadow(0 0 3px #730) !important;
-     box-shadow: none !important;
-     mix-blend-mode: normal !important;
+.toggle_input {
+    display: none !important;
 }
-

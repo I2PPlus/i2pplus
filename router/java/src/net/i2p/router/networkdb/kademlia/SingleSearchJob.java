@@ -30,7 +30,7 @@ class SingleSearchJob extends FloodOnlySearchJob {
     }
 
     @Override
-    public String getName() { return "NetDb search key from DSRM"; }
+    public String getName() { return "Start DbStoreReplyMsg Search for NetDb key"; }
 
     @Override
     public boolean shouldProcessDSRM() { return false; } // don't loop
@@ -50,9 +50,9 @@ class SingleSearchJob extends FloodOnlySearchJob {
         dlm.setReplyTunnel(replyTunnel.getReceiveTunnelId(0));
         dlm.setSearchKey(_key);
         dlm.setSearchType(DatabaseLookupMessage.Type.RI);
-        
+
         if (_log.shouldLog(Log.INFO))
-            _log.info(getJobId() + ": Single search for " + _key + " to " + _to);
+            _log.info("[Job " + getJobId() + "] SingleSearch for [" + _key.toBase64().substring(0,6) + "] sent to [" + _to.toBase64().substring(0,6) + "]");
         getContext().tunnelDispatcher().dispatchOutbound(dlm, outTunnel.getSendTunnelId(0), _to);
         _lookupsRemaining.set(1);
     }

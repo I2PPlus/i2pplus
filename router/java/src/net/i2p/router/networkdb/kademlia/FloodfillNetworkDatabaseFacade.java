@@ -24,11 +24,21 @@ import net.i2p.util.ConcurrentHashSet;
 import net.i2p.util.Log;
 import net.i2p.util.SystemVersion;
 
+import net.i2p.router.CommSystemFacade.Status;
+
 /**
  *  The network database
  */
 public class FloodfillNetworkDatabaseFacade extends KademliaNetworkDatabaseFacade {
     public static final char CAPABILITY_FLOODFILL = 'f';
+    public static final char CAPABILITY_UNREACHABLE = 'U';
+    public static final char CAPABILITY_BW12 = 'K';
+    public static final char CAPABILITY_BW32 = 'L';
+    public static final char CAPABILITY_BW64 = 'M';
+    public static final char CAPABILITY_BW128 = 'N';
+    public static final char CAPABILITY_BW256 = 'O';
+    public static final char CAPABILITY_BW512 = 'P';
+    public static final char CAPABILITY_BW_UNLIMITED = 'X';
     private final Map<Hash, FloodSearchJob> _activeFloodQueries;
     private boolean _floodfillEnabled;
     private final Set<Hash> _verifiesInProgress;
@@ -42,34 +52,37 @@ public class FloodfillNetworkDatabaseFacade extends KademliaNetworkDatabaseFacad
      *  Was 7 through release 0.9; 5 for 0.9.1.
      *  4 as of 0.9.2; 3 as of 0.9.9
      */
-    public static final int MAX_TO_FLOOD = 3;
-    
+//    public static final int MAX_TO_FLOOD = 3;
+    public static final int MAX_TO_FLOOD = 8;
+
     private static final int FLOOD_PRIORITY = OutNetMessage.PRIORITY_NETDB_FLOOD;
     private static final int FLOOD_TIMEOUT = 30*1000;
     private static final long NEXT_RKEY_RI_ADVANCE_TIME = 45*60*1000;
     private static final long NEXT_RKEY_LS_ADVANCE_TIME = 10*60*1000;
-    private static final int NEXT_FLOOD_QTY = 2;
-    
+//    private static final int NEXT_FLOOD_QTY = 2;
+    private static final int NEXT_FLOOD_QTY = 5;
+
     public FloodfillNetworkDatabaseFacade(RouterContext context) {
         super(context);
         _activeFloodQueries = new HashMap<Hash, FloodSearchJob>();
          _verifiesInProgress = new ConcurrentHashSet<Hash>(8);
 
-        _context.statManager().createRequiredRateStat("netDb.successTime", "Time for successful lookup (ms)", "NetworkDatabase", new long[] { 60*60*1000l, 24*60*60*1000l });
-        _context.statManager().createRateStat("netDb.failedTime", "How long a failed search takes", "NetworkDatabase", new long[] { 60*60*1000l, 24*60*60*1000l });
-        _context.statManager().createRateStat("netDb.failedRetries", "How many additional queries for an iterative search", "NetworkDatabase", new long[] { 60*60*1000l });
-        _context.statManager().createRateStat("netDb.successRetries", "How many additional queries for an iterative search", "NetworkDatabase", new long[] { 60*60*1000l });
-        _context.statManager().createRateStat("netDb.failedAttemptedPeers", "How many peers we sent a search to when the search fails", "NetworkDatabase", new long[] { 10*60*1000l });
-        _context.statManager().createRateStat("netDb.successPeers", "How many peers are contacted in a successful search", "NetworkDatabase", new long[] { 60*60*1000l, 24*60*60*1000l });
-        _context.statManager().createRateStat("netDb.failedPeers", "How many peers fail to respond to a lookup?", "NetworkDatabase", new long[] { 60*60*1000l, 24*60*60*1000l });
-        _context.statManager().createRateStat("netDb.searchCount", "Overall number of searches sent", "NetworkDatabase", new long[] { 5*60*1000l, 10*60*1000l, 60*60*1000l, 3*60*60*1000l, 24*60*60*1000l });
-        _context.statManager().createRateStat("netDb.searchMessageCount", "Overall number of mesages for all searches sent", "NetworkDatabase", new long[] { 5*60*1000l, 10*60*1000l, 60*60*1000l, 3*60*60*1000l, 24*60*60*1000l });
-        _context.statManager().createRateStat("netDb.searchReplyValidated", "How many search replies we get that we are able to validate (fetch)", "NetworkDatabase", new long[] { 5*60*1000l, 10*60*1000l, 60*60*1000l, 3*60*60*1000l, 24*60*60*1000l });
-        _context.statManager().createRateStat("netDb.searchReplyNotValidated", "How many search replies we get that we are NOT able to validate (fetch)", "NetworkDatabase", new long[] { 5*60*1000l, 10*60*1000l, 60*60*1000l, 3*60*60*1000l, 24*60*60*1000l });
-        _context.statManager().createRateStat("netDb.searchReplyValidationSkipped", "How many search replies we get from unreliable peers that we skip?", "NetworkDatabase", new long[] { 5*60*1000l, 10*60*1000l, 60*60*1000l, 3*60*60*1000l, 24*60*60*1000l });
-        _context.statManager().createRateStat("netDb.republishQuantity", "How many peers do we need to send a found leaseSet to?", "NetworkDatabase", new long[] { 10*60*1000l, 60*60*1000l, 3*60*60*1000l, 24*60*60*1000l });
+        _context.statManager().createRequiredRateStat("netDb.successTime", "Time for successful NetDb lookup", "NetworkDatabase", new long[] { 10*60*1000l, 60*60*1000l, 24*60*60*1000l });
+        _context.statManager().createRateStat("netDb.failedTime", "Time a failed NetDb search takes", "NetworkDatabase", new long[] { 10*60*1000l, 60*60*1000l, 24*60*60*1000l });
+        _context.statManager().createRateStat("netDb.failedAttemptedPeers", "Number of peers we sent a search to that failed", "NetworkDatabase", new long[] { 10*60*1000l });
+        _context.statManager().createRateStat("netDb.successPeers", "Number of peers we sent a search to that succeeded", "NetworkDatabase", new long[] { 10*60*1000l, 60*60*1000l, 24*60*60*1000l });
+        _context.statManager().createRateStat("netDb.failedPeers", "Number of peers failing to respond to a NetDb lookup", "NetworkDatabase", new long[] { 10*60*1000l, 60*60*1000l, 24*60*60*1000l });
+        _context.statManager().createRateStat("netDb.searchCount", "Total number of searches sent", "NetworkDatabase", new long[] { 10*60*1000l, 60*60*1000l, 3*60*60*1000l, 24*60*60*1000l });
+        _context.statManager().createRateStat("netDb.failedRetries", "Number of additional queries for a failed Iterative search", "NetworkDatabase", new long[] { 10*60*1000l, 60*60*1000l });
+
+        _context.statManager().createRateStat("netDb.successRetries", "Number of additional queries for a successful Iterative search", "NetworkDatabase", new long[] { 10*60*1000l, 60*60*1000l });
+        _context.statManager().createRateStat("netDb.searchMessageCount", "Total number of messages for all searches sent", "NetworkDatabase", new long[] { 10*60*1000l, 60*60*1000l, 3*60*60*1000l, 24*60*60*1000l });
+        _context.statManager().createRateStat("netDb.searchReplyValidated", "Number of NetDb search replies we are able to validate (fetch)", "NetworkDatabase", new long[] { 10*60*1000l, 60*60*1000l, 3*60*60*1000l, 24*60*60*1000l });
+        _context.statManager().createRateStat("netDb.searchReplyNotValidated", "Number of NetDb search replies we are NOT able to validate (fetch)", "NetworkDatabase", new long[] { 10*60*1000l, 60*60*1000l, 3*60*60*1000l, 24*60*60*1000l });
+        _context.statManager().createRateStat("netDb.searchReplyValidationSkipped", "Number of NetDb search replies from unreliable peers that we skip", "NetworkDatabase", new long[] { 10*60*1000l, 60*60*1000l, 3*60*60*1000l, 24*60*60*1000l });
+        _context.statManager().createRateStat("netDb.republishQuantity", "Number of peers we need to send a found LeaseSet to", "NetworkDatabase", new long[] { 10*60*1000l, 60*60*1000l, 3*60*60*1000l, 24*60*60*1000l });
         // for ISJ
-        _context.statManager().createRateStat("netDb.RILookupDirect", "Was an iterative RI lookup sent directly?", "NetworkDatabase", new long[] { 60*60*1000 });
+        _context.statManager().createRateStat("netDb.RILookupDirect", "Number of direct Iterative RouterInfo lookups", "NetworkDatabase", new long[] { 10*60*1000l, 60*60*1000 });
         _ffMonitor = new FloodfillMonitorJob(_context, this);
     }
 
@@ -90,7 +103,7 @@ public class FloodfillNetworkDatabaseFacade extends KademliaNetworkDatabaseFacad
         _context.inNetMessagePool().registerHandlerJobBuilder(DatabaseLookupMessage.MESSAGE_TYPE, new FloodfillDatabaseLookupMessageHandler(_context, this));
         _context.inNetMessagePool().registerHandlerJobBuilder(DatabaseStoreMessage.MESSAGE_TYPE, new FloodfillDatabaseStoreMessageHandler(_context, this));
     }
-    
+
     /**
      *  If we are floodfill, turn it off and tell everybody.
      *  @since 0.8.9
@@ -126,41 +139,42 @@ public class FloodfillNetworkDatabaseFacade extends KademliaNetworkDatabaseFacad
      *  because we are sending direct, but unresponsive floodfills may take a while due to timeouts.
      */
     static final long PUBLISH_TIMEOUT = 90*1000;
-    
+
     /**
      * Send our RI to the closest floodfill.
      * @throws IllegalArgumentException if the local router info is invalid
      */
     @Override
     public void publish(RouterInfo localRouterInfo) throws IllegalArgumentException {
-        if (localRouterInfo == null) throw new IllegalArgumentException("impossible: null localRouterInfo?");
+        if (localRouterInfo == null) throw new IllegalArgumentException("Impossible: null local RouterInfo?");
         // should this be after super? why not publish locally?
         if (_context.router().isHidden()) return; // DE-nied!
         super.publish(localRouterInfo);
         // wait until we've read in the RI's so we can find the closest floodfill
         if (!isInitialized()) {
             if (_log.shouldWarn())
-                _log.warn("publish() before initialized: " + localRouterInfo, new Exception("I did it"));
+//                _log.warn("Attempted to publish our RouterInfo before NetDb initialized: " + localRouterInfo, new Exception("I did it"));
+                _log.warn("Attempted to publish our RouterInfo before NetDb initialized " + localRouterInfo);
             return;
         }
         // no use sending if we have no addresses
         // (unless maybe we used to have addresses? not worth it
         if (localRouterInfo.getAddresses().isEmpty())
             return;
-        _log.info("Publishing our RI");
+        _log.info("Publishing our RouterInfo...");
         // Don't delay, helps IB tunnel builds
         //if (_context.router().getUptime() > PUBLISH_JOB_DELAY)
             sendStore(localRouterInfo.getIdentity().calculateHash(), localRouterInfo, null, null, PUBLISH_TIMEOUT, null);
     }
-    
+
     @Override
     public void sendStore(Hash key, DatabaseEntry ds, Job onSuccess, Job onFailure, long sendTimeout, Set<Hash> toIgnore) {
-        // if we are a part of the floodfill netDb, don't send out our own leaseSets as part 
+        // if we are a part of the floodfill netDb, don't send out our own leaseSets as part
         // of the flooding - instead, send them to a random floodfill peer so *they* can flood 'em out.
         // perhaps statistically adjust this so we are the source every 1/N times... or something.
         if (floodfillEnabled() && (ds.getType() == DatabaseEntry.KEY_TYPE_ROUTERINFO)) {
             flood(ds);
-            if (onSuccess != null) 
+            if (onSuccess != null)
                 _context.jobQueue().addJob(onSuccess);
         } else {
             _context.jobQueue().addJob(new FloodfillStoreJob(_context, this, key, ds, onSuccess, onFailure, sendTimeout, toIgnore));
@@ -230,7 +244,7 @@ public class FloodfillNetworkDatabaseFacade extends KademliaNetworkDatabaseFacad
         long until = gen.getTimeTillMidnight();
         if (until < NEXT_RKEY_LS_ADVANCE_TIME ||
             (type == DatabaseEntry.KEY_TYPE_ROUTERINFO && until < NEXT_RKEY_RI_ADVANCE_TIME)) {
-            // to avoid lookup faulures after midnight, also flood to some closest to the
+            // to avoid lookup failures after midnight, also flood to some closest to the
             // next routing key for a period of time before midnight.
             Hash nkey = gen.getNextRoutingKey(key);
             List<Hash> nextPeers = sel.selectFloodfillParticipants(nkey, NEXT_FLOOD_QTY, getKBuckets());
@@ -252,7 +266,7 @@ public class FloodfillNetworkDatabaseFacade extends KademliaNetworkDatabaseFacad
             if (i > 0) {
                 max += i;
                 if (_log.shouldInfo())
-                    _log.info("Flooding the entry for " + key + " to " + i + " more, just before midnight");
+                _log.info("Flooding the entry for [" + key.toBase64().substring(0,6) + "] to " + i + " more, just before midnight");
             }
         }
         int flooded = 0;
@@ -261,7 +275,7 @@ public class FloodfillNetworkDatabaseFacade extends KademliaNetworkDatabaseFacad
             RouterInfo target = lookupRouterInfoLocally(peer);
             if (!shouldFloodTo(key, type, lsSigType, peer, target)) {
                 if (_log.shouldDebug())
-                    _log.debug("Too old, not flooding " + key.toBase64() + " to " + peer.toBase64());
+                    _log.debug("Too old, not flooding [" + key.toBase64().substring(0,6) + "] to [" + peer.toBase64().substring(0,6) + "]");
                 continue;
             }
             DatabaseStoreMessage msg = new DatabaseStoreMessage(_context);
@@ -276,11 +290,11 @@ public class FloodfillNetworkDatabaseFacade extends KademliaNetworkDatabaseFacad
             _context.commSystem().processMessage(m);
             flooded++;
             if (_log.shouldLog(Log.INFO))
-                _log.info("Flooding the entry for " + key.toBase64() + " to " + peer.toBase64());
+                _log.info("Flooding the entry for [" + key.toBase64().substring(0,6) + "] to [" + peer.toBase64().substring(0,6)+ "]");
             if (flooded >= MAX_TO_FLOOD)
                 break;
         }
-        
+
         if (_log.shouldLog(Log.INFO))
             _log.info("Flooded the data to " + flooded + " of " + peers.size() + " peers");
     }
@@ -316,7 +330,7 @@ public class FloodfillNetworkDatabaseFacade extends KademliaNetworkDatabaseFacad
     /** note in the profile that the store failed */
     private static class FloodFailedJob extends JobImpl {
         private final Hash _peer;
-    
+
         public FloodFailedJob(RouterContext ctx, Hash peer) {
             super(ctx);
             _peer = peer;
@@ -333,7 +347,7 @@ public class FloodfillNetworkDatabaseFacade extends KademliaNetworkDatabaseFacad
      */
     private static class FloodSuccessJob extends JobImpl {
         private final Hash _peer;
-    
+
         public FloodSuccessJob(RouterContext ctx, Hash peer) {
             super(ctx);
             _peer = peer;
@@ -346,7 +360,7 @@ public class FloodfillNetworkDatabaseFacade extends KademliaNetworkDatabaseFacad
 
     @Override
     protected PeerSelector createPeerSelector() { return new FloodfillPeerSelector(_context); }
-    
+
     /**
      *  Public, called from console. This wakes up the floodfill monitor,
      *  which will rebuild the RI and log in the event log,
@@ -359,7 +373,7 @@ public class FloodfillNetworkDatabaseFacade extends KademliaNetworkDatabaseFacad
             _context.jobQueue().addJob(_ffMonitor);
         }
     }
-    
+
     /**
      *  Package private, called from FloodfillMonitorJob. This does not wake up the floodfill monitor.
      *  @since 0.9.34
@@ -368,16 +382,16 @@ public class FloodfillNetworkDatabaseFacade extends KademliaNetworkDatabaseFacad
         _floodfillEnabled = yes;
         if (yes && _floodThrottler == null) {
             _floodThrottler = new FloodThrottler();
-            _context.statManager().createRateStat("netDb.floodThrottled", "How often do we decline to flood?", "NetworkDatabase", new long[] { 60*60*1000l });
+            _context.statManager().createRateStat("netDb.floodThrottled", "How often we decline to flood the NetDb", "NetworkDatabase", new long[] { 60*60*1000l });
             // following are for HFDSMJ
-            _context.statManager().createRateStat("netDb.storeFloodNew", "How long it takes to flood out a newly received entry?", "NetworkDatabase", new long[] { 60*60*1000l });
-            _context.statManager().createRateStat("netDb.storeFloodOld", "How often we receive an old entry?", "NetworkDatabase", new long[] { 60*60*1000l });
+            _context.statManager().createRateStat("netDb.storeFloodNew", "Time to flood out a newly received NetDb entry", "NetworkDatabase", new long[] { 60*60*1000l });
+            _context.statManager().createRateStat("netDb.storeFloodOld", "How often we receive an old NetDb entry", "NetworkDatabase", new long[] { 60*60*1000l });
         }
     }
 
     @Override
     public boolean floodfillEnabled() { return _floodfillEnabled; }
-    
+
     /**
      *  @param peer may be null, returns false if null
      */
@@ -398,7 +412,7 @@ public class FloodfillNetworkDatabaseFacade extends KademliaNetworkDatabaseFacad
         }
         return rv;
     }
-    
+
     /**
      * Lookup using exploratory tunnels.
      *
@@ -427,7 +441,7 @@ public class FloodfillNetworkDatabaseFacade extends KademliaNetworkDatabaseFacad
     SearchJob search(Hash key, Job onFindJob, Job onFailedLookupJob, long timeoutMs, boolean isLease,
                      Hash fromLocalDest) {
         //if (true) return super.search(key, onFindJob, onFailedLookupJob, timeoutMs, isLease);
-        if (key == null) throw new IllegalArgumentException("searchin for nothin, eh?");
+        if (key == null) throw new IllegalArgumentException("Searchin' for nothing, eh?");
         boolean isNew = false;
         FloodSearchJob searchJob;
         synchronized (_activeFloodQueries) {
@@ -444,21 +458,21 @@ public class FloodfillNetworkDatabaseFacade extends KademliaNetworkDatabaseFacad
                 isNew = true;
             }
         }
-        
+
         if (isNew) {
             if (_log.shouldLog(Log.DEBUG))
-                _log.debug("this is the first search for that key, fire off the FloodSearchJob");
+                _log.debug("Started FloodSearch for key [" + key.toBase64().substring(0,6) + "]");
             _context.jobQueue().addJob(searchJob);
         } else {
             if (_log.shouldLog(Log.INFO))
-                _log.info("Deferring flood search for " + key.toBase64() + " with " + _activeFloodQueries.size() + " in progress");
+                _log.info("Deferred FloodSearch for [" + key.toBase64().substring(0,6) + "] with " + _activeFloodQueries.size() + " in progress");
             searchJob.addDeferred(onFindJob, onFailedLookupJob, timeoutMs, isLease);
             // not necessarily LS
             _context.statManager().addRateData("netDb.lookupDeferred", 1, searchJob.getExpiration()-_context.clock().now());
         }
         return null;
     }
-    
+
     /**
      * Ok, the initial set of searches to the floodfill peers timed out, lets fall back on the
      * wider kademlia-style searches
@@ -468,14 +482,14 @@ public class FloodfillNetworkDatabaseFacade extends KademliaNetworkDatabaseFacad
 /*****
     void searchFull(Hash key, List<Job> onFind, List<Job> onFailed, long timeoutMs, boolean isLease) {
         synchronized (_activeFloodQueries) { _activeFloodQueries.remove(key); }
-        
+
         Job find = null;
         Job fail = null;
         if (onFind != null) {
             synchronized (onFind) {
                 if (!onFind.isEmpty())
                     find = onFind.remove(0);
-            } 
+            }
         }
         if (onFailed != null) {
             synchronized (onFailed) {
@@ -486,7 +500,7 @@ public class FloodfillNetworkDatabaseFacade extends KademliaNetworkDatabaseFacad
         SearchJob job = super.search(key, find, fail, timeoutMs, isLease);
         if (job != null) {
             if (_log.shouldLog(Log.INFO))
-                _log.info("Floodfill search timed out for " + key.toBase64() + ", falling back on normal search (#" 
+                _log.info("Floodfill search timed out for " + key.toBase64() + ", falling back on normal search (#"
                           + job.getJobId() + ") with " + timeoutMs + " remaining");
             long expiration = timeoutMs + _context.clock().now();
             List<Job> removed = null;
@@ -518,7 +532,7 @@ public class FloodfillNetworkDatabaseFacade extends KademliaNetworkDatabaseFacad
     void complete(Hash key) {
         synchronized (_activeFloodQueries) { _activeFloodQueries.remove(key); }
     }
-    
+
     /** list of the Hashes of currently known floodfill peers;
       * Returned list will not include our own hash.
       *  List is not sorted and not shuffled.
@@ -527,7 +541,7 @@ public class FloodfillNetworkDatabaseFacade extends KademliaNetworkDatabaseFacad
         FloodfillPeerSelector sel = (FloodfillPeerSelector)getPeerSelector();
         return sel.selectFloodfillParticipants(getKBuckets());
     }
-    
+
     /** @since 0.7.10 */
     boolean isVerifyInProgress(Hash h) {
         return _verifiesInProgress.contains(h);
@@ -545,17 +559,19 @@ public class FloodfillNetworkDatabaseFacade extends KademliaNetworkDatabaseFacad
 
     /** NTCP cons drop quickly but SSU takes a while, so it's prudent to keep this
      *  a little higher than 1 or 2. */
-    protected final static int MIN_ACTIVE_PEERS = 5;
+//    protected final static int MIN_ACTIVE_PEERS = 5;
+    protected final static int MIN_ACTIVE_PEERS = 10;
 
     /** @since 0.8.7 */
     private static final int MAX_DB_BEFORE_SKIPPING_SEARCH;
     static {
         long maxMemory = SystemVersion.getMaxMemory();
         // 250 for every 32 MB, min of 250, max of 1250
-        MAX_DB_BEFORE_SKIPPING_SEARCH = (int) Math.max(250l, Math.min(1250l, maxMemory / ((32 * 1024 * 1024l) / 250)));
+//        MAX_DB_BEFORE_SKIPPING_SEARCH = (int) Math.max(250l, Math.min(1250l, maxMemory / ((32 * 1024 * 1024l) / 250)));
+        MAX_DB_BEFORE_SKIPPING_SEARCH = 20000;
     }
 
-    /** 
+    /**
       * Search for a newer router info, drop it from the db if the search fails,
       * unless just started up or have bigger problems.
       */
@@ -565,45 +581,70 @@ public class FloodfillNetworkDatabaseFacade extends KademliaNetworkDatabaseFacad
         // drop the peer in these cases
         // yikes don't do this - stack overflow //  getFloodfillPeers().size() == 0 ||
         // yikes2 don't do this either - deadlock! // getKnownRouters() < MIN_REMAINING_ROUTERS ||
+        String nofail = _context.getProperty("router.noFailGracePeriod");
+        if (nofail != null)
+            DONT_FAIL_PERIOD = Long.valueOf(nofail)*60*1000;
         if (info.getNetworkId() == _networkID &&
             (getKBucketSetSize() < MIN_REMAINING_ROUTERS ||
              _context.router().getUptime() < DONT_FAIL_PERIOD ||
-             _context.commSystem().countActivePeers() <= MIN_ACTIVE_PEERS)) {
-            if (_log.shouldInfo())
-                _log.info("Not failing " + peer.toBase64() + " as we are just starting up or have problems");
+             _context.commSystem().countActivePeers() <= MIN_ACTIVE_PEERS) ||
+             _context.commSystem().getStatus() == Status.DISCONNECTED) {
+            if (_context.router().getUptime() < DONT_FAIL_PERIOD) {
+                if (_log.shouldLog(Log.INFO))
+                    _log.info("Lookup of [" + peer.toBase64().substring(0,6) + "] failed; not dropping (startup grace period)");
+            } else {
+                if (_log.shouldLog(Log.INFO))
+                    _log.info("Lookup of [" + peer.toBase64().substring(0,6) + "] failed; not dropping (router has issues)");
+            }
             return;
         }
 
         // should we skip the search?
-        if (_floodfillEnabled ||
-            _context.jobQueue().getMaxLag() > 500 ||
-            _context.banlist().isBanlistedForever(peer) ||
-            getKBucketSetSize() > MAX_DB_BEFORE_SKIPPING_SEARCH) {
+        String forceExplore = _context.getProperty("router.exploreWhenFloodfill");
+        if ((_floodfillEnabled && forceExplore == null) ||
+            _context.jobQueue().getMaxLag() > 1000 ||
+            _context.banlist().isBanlistedForever(peer)) {
+//            getKBucketSetSize() > MAX_DB_BEFORE_SKIPPING_SEARCH) {
             // don't try to overload ourselves (e.g. failing 3000 router refs at
             // once, and then firing off 3000 netDb lookup tasks)
             // Also don't queue a search if we have plenty of routerinfos
             // (KBucketSetSize() includes leasesets but avoids locking)
-            super.lookupBeforeDropping(peer, info);
-            return; 
+//            super.lookupBeforeDropping(peer, info); // we don't want the routerinfo deleted, so this is commented out
+            if (_floodfillEnabled && forceExplore == null) {
+                if (_log.shouldLog(Log.INFO))
+                    _log.info("Skipping lookup of [" + peer.toBase64().substring(0,6) + "] - Floodfill mode active");
+            } else if (_context.banlist().isBanlistedForever(peer)) {
+                if (_log.shouldLog(Log.INFO))
+                    _log.info("Skipping lookup of [" + peer.toBase64().substring(0,6) + "] - banlisted");
+//            } else if (getKBucketSetSize() > MAX_DB_BEFORE_SKIPPING_SEARCH) {
+//                if (_log.shouldLog(Log.INFO))
+//                    _log.info("Skipping lookup of [" + peer.toBase64().substring(0,6) + "] - kbucket is full");
+            } else
+                if (_log.shouldLog(Log.INFO))
+                    _log.info("Skipping lookup of [" + peer.toBase64().substring(0,6) + "] - router overload");
+            return;
         }
         // this sends out the search to the floodfill peers even if we already have the
         // entry locally, firing no job if it gets a reply with an updated value (meaning
         // we shouldn't drop them but instead use the new data), or if they all time out,
         // firing the dropLookupFailedJob, which actually removes out local reference
-        search(peer, new DropLookupFoundJob(_context, peer, info), new DropLookupFailedJob(_context, peer, info), 10*1000, false);
+//        search(peer, new DropLookupFoundJob(_context, peer, info), new DropLookupFailedJob(_context, peer, info), 10*1000, false);
+        search(peer, new DropLookupFoundJob(_context, peer, info), new DropLookupFailedJob(_context, peer, info), 15*1000, false);
     }
-    
+
     private class DropLookupFailedJob extends JobImpl {
         private final Hash _peer;
         private final RouterInfo _info;
-    
+
         public DropLookupFailedJob(RouterContext ctx, Hash peer, RouterInfo info) {
             super(ctx);
             _peer = peer;
             _info = info;
         }
-        public String getName() { return "Lookup on failure of netDb peer timed out"; }
+        public String getName() { return "Timeout NetDb Lookup for Failing Peer"; }
         public void runJob() {
+//            if (_log.shouldLog(Log.INFO))
+//                _log.info("Dropped RouterInfo [" + _peer.toBase64().substring(0,6) + "]");
             dropAfterLookupFailed(_peer);
         }
     }
@@ -611,18 +652,20 @@ public class FloodfillNetworkDatabaseFacade extends KademliaNetworkDatabaseFacad
     private class DropLookupFoundJob extends JobImpl {
         private final Hash _peer;
         private final RouterInfo _info;
-    
+
         public DropLookupFoundJob(RouterContext ctx, Hash peer, RouterInfo info) {
             super(ctx);
             _peer = peer;
             _info = info;
         }
-        public String getName() { return "Lookup on failure of netDb peer matched"; }
+        public String getName() { return "Verify NetDb Lookup for Failing Peer"; }
         public void runJob() {
             RouterInfo updated = lookupRouterInfoLocally(_peer);
             if ( (updated != null) && (updated.getPublished() > _info.getPublished()) ) {
                 // great, a legitimate update
             } else {
+//                if (_log.shouldLog(Log.INFO))
+//                    _log.info("Dropped RouterInfo [" + _peer.toBase64().substring(0,6) + "]");
                 // they just sent us what we already had.  kill 'em both
                 dropAfterLookupFailed(_peer);
             }

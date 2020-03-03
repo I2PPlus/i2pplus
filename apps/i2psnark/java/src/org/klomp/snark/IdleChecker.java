@@ -1,6 +1,6 @@
 /*
- * Released into the public domain 
- * with no warranty of any kind, either expressed or implied.  
+ * Released into the public domain
+ * with no warranty of any kind, either expressed or implied.
  */
 package org.klomp.snark;
 
@@ -105,11 +105,15 @@ class IdleChecker extends SimpleTimer2.TimedEvent {
      */
     private void reduceTunnels() {
         _isIdle = true;
+        int ibtunnels = Integer.parseInt(_util.getI2CPOptions().get("inbound.quantity"));
+        int obtunnels = Integer.parseInt(_util.getI2CPOptions().get("outbound.quantity"));
+        if (ibtunnels > 1 || obtunnels > 1)
+//            _mgr.addMessage(_util.getString("Idle connection, reducing tunnel count; will restore tunnels when needed."));
         if (_log.shouldLog(Log.INFO))
-            _log.info("Reducing tunnels on idle");
+            _log.info("Reducing I2PSnark tunnels on idle");
         setTunnels("1", "1", "0", "0");
     }
-    
+
     /**
      *  Restore or adjust tunnel count based on current peer count
      *  @param peerCount greater than zero
@@ -156,7 +160,7 @@ class IdleChecker extends SimpleTimer2.TimedEvent {
         if (!(_lastIn.equals(i) && _lastOut.equals(o)))
             setTunnels(i, o, ib, ob);
     }
-    
+
     /**
      *  Set in / out / in backup / out backup tunnel counts
      */
@@ -167,7 +171,7 @@ class IdleChecker extends SimpleTimer2.TimedEvent {
             I2PSession sess = mgr.getSession();
             if (sess != null) {
                 if (_log.shouldLog(Log.INFO))
-                    _log.info("New tunnel settings " + i + " / " + o + " / " + ib + " / " + ob);
+                    _log.info("Tunnel settings updated: [" + i + " inbound / " + o + " outbound / " + ib + " inbound backup / " + ob + " outbound backup]");
                 Properties newProps = new Properties();
                 newProps.setProperty("inbound.quantity", i);
                 newProps.setProperty("outbound.quantity", o);

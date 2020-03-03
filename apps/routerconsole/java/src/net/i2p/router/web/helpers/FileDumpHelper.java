@@ -34,8 +34,8 @@ public class FileDumpHelper extends HelperBase {
     private static final boolean isWindows = SystemVersion.isWindows();
     public String getFileSummary() {
         StringBuilder buf = new StringBuilder(16*1024);
-        buf.append("<table id=\"jardump\">\n<tr><th>File</th><th>Size</th><th>Date</th><th>SHA 256</th><th>Revision</th>" +
-                   "<th>JDK</th><th>Built</th><th>By</th><th>Mods</th></tr>\n");
+        buf.append("<table id=\"jardump\">\n<thead>\n<tr><th>File</th><th>Size</th><th>Date</th><th>SHA 256</th><th>Revision</th>" +
+                   "<th>JDK</th><th>Built</th><th>By</th><th>Mods</th></tr>\n</thead>\n");
 
         // jars added in wrapper.config
         ClassLoader loader = ClassLoader.getSystemClassLoader();
@@ -154,7 +154,9 @@ public class FileDumpHelper extends HelperBase {
         buf.append("</td><td>");
         s = getAtt(att, "Created-By");
         if (s != null)
-            buf.append(s);
+            buf.append(s.replace("(Oracle Corporation)", "(Oracle)")
+                        .replace("Apache Maven", "Maven")
+                        .replace("(Sun Microsystems Inc.)", "(Sun)"));
         buf.append("</td><td>");
         s = getAtt(att, "Build-Date");
         if (s != null)

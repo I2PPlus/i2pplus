@@ -40,7 +40,8 @@ class DHTNodes {
     private static final long MAX_EXPIRE_TIME = 30*60*1000;
     private static final long MIN_EXPIRE_TIME = 10*60*1000;
     private static final long DELTA_EXPIRE_TIME = 3*60*1000;
-    private static final int MAX_PEERS = 799;
+//    private static final int MAX_PEERS = 799;
+    private static final int MAX_PEERS = 2000;
     /** Buckets older than this are refreshed - BEP 5 says 15 minutes */
     private static final long MAX_BUCKET_AGE = 15*60*1000;
     private static final int KAD_K = 8;
@@ -138,7 +139,7 @@ class DHTNodes {
      * @since 0.9.4
      */
     public void renderStatusHTML(StringBuilder buf) {
-        buf.append(_kad.toString().replace("\n", "<br><hr class=\"debug\">\n"));
+        buf.append(_kad.toString().replace("\n", "<br>\n"));
     }
 
     /** */
@@ -169,8 +170,8 @@ class DHTNodes {
                 _expireTime = Math.min(_expireTime + DELTA_EXPIRE_TIME, MAX_EXPIRE_TIME);
 
             if (_log.shouldLog(Log.DEBUG))
-                _log.debug("DHT storage cleaner done, now with " +
-                         peerCount + " peers, " +
+                _log.debug("DHT storage cleaner done - now with " +
+                         peerCount + " / " + MAX_PEERS + " peers, " +
                          DataHelper.formatDuration(_expireTime) + " expiration");
 
             schedule(CLEAN_TIME);

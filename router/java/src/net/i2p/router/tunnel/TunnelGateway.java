@@ -12,7 +12,7 @@ import net.i2p.util.Log;
 import net.i2p.util.SimpleTimer2;
 
 /**
- * Serve as the gatekeeper for a tunnel, accepting messages, coallescing and/or
+ * Serve as the gatekeeper for a tunnel, accepting messages, coalescing and/or
  * fragmenting them before wrapping them up for tunnel delivery. The flow here
  * is: <ol>
  * <li>add an I2NPMessage (and a target tunnel/router, if necessary)</li>
@@ -20,13 +20,13 @@ import net.i2p.util.SimpleTimer2;
  *     assigned QueuePreprocessor.</li>
  * <li>that QueuePreprocessor may then take off any of the TunnelGateway.Pending
  *     messages or instruct the TunnelGateway to offer it the messages again in
- *     a short while (in an attempt to coallesce them).
+ *     a short while (in an attempt to coalesce them).
  * <li>when the QueueProcessor accepts a TunnelGateway.Pending, it preprocesses
- *     it into fragments, forwarding each preprocessed fragment group through 
+ *     it into fragments, forwarding each preprocessed fragment group through
  *     the Sender.</li>
- * <li>the Sender then encrypts the preprocessed data and delivers it to the 
+ * <li>the Sender then encrypts the preprocessed data and delivers it to the
  *     Receiver.</li>
- * <li>the Receiver now has the encrypted message and may do with it as it 
+ * <li>the Receiver now has the encrypted message and may do with it as it
  *     pleases (e.g. wrap it as necessary and enqueue it onto the OutNetMessagePool,
  *     or if debugging, verify that it can be decrypted properly)</li>
  * </ol>
@@ -44,13 +44,13 @@ abstract class TunnelGateway {
     //protected int _flushFrequency;
     protected final DelayedFlush _delayedFlush;// FIXME Exporting non-public type through public API FIXME
     protected int _messagesSent;
-    
+
     /**
      * @param preprocessor this pulls Pending messages off a list, builds some
      *                     full preprocessed messages, and pumps those into the sender
-     * @param sender this takes a preprocessed message, encrypts it, and sends it to 
+     * @param sender this takes a preprocessed message, encrypts it, and sends it to
      *               the receiver
-     * @param receiver this receives the encrypted message and forwards it off 
+     * @param receiver this receives the encrypted message and forwards it off
      *                 to the first hop
      */
     protected TunnelGateway(RouterContext context, QueuePreprocessor preprocessor, Sender sender, Receiver receiver) {
@@ -66,7 +66,7 @@ abstract class TunnelGateway {
         //_context.statManager().createRateStat("tunnel.lockedGatewayAdd", "How long do we block when adding a message to a tunnel gateway's queue", "Tunnels", new long[] { 60*1000, 10*60*1000 });
         //_context.statManager().createRateStat("tunnel.lockedGatewayCheck", "How long do we block when flushing a tunnel gateway's queue", "Tunnels", new long[] { 60*1000, 10*60*1000 });
     }
-    
+
     /**
      * Add a message to be sent down the tunnel, where we are the inbound gateway.
      *
@@ -75,10 +75,10 @@ abstract class TunnelGateway {
     public void add(TunnelGatewayMessage msg) {
         add(msg.getMessage(), null, null);
     }
-    
+
     /**
      * Add a message to be sent down the tunnel, either sending it now (perhaps
-     * coallesced with other pending messages) or after a brief pause (_flushFrequency).
+     * coalesced with other pending messages) or after a brief pause (_flushFrequency).
      * If it is queued up past its expiration, it is silently dropped
      *
      * UNUSED - see overrides
@@ -110,7 +110,7 @@ abstract class TunnelGateway {
             if (delayedFlush)
                 delayAmount = _preprocessor.getDelayAmount();
             _lastFlush = _context.clock().now();
-            
+
             // expire any as necessary, even if its framented
             for (int i = 0; i < _queue.size(); i++) {
                 Pending m = _queue.get(i);
@@ -126,7 +126,7 @@ abstract class TunnelGateway {
             if ( (remaining > 0) && (_log.shouldLog(Log.DEBUG)) )
                 _log.debug("Remaining after preprocessing: " + _queue);
         }
-        
+
         if (delayedFlush) {
             _delayedFlush.reschedule(delayAmount);
         }
@@ -143,9 +143,9 @@ abstract class TunnelGateway {
         }
 ****/
     }
-    
+
     public int getMessagesSent() { return _messagesSent; }
-    
+
     public interface Sender {
         /**
          * Take the preprocessed data containing zero or more fragments, encrypt
@@ -156,9 +156,9 @@ abstract class TunnelGateway {
          */
         public long sendPreprocessed(byte preprocessed[], Receiver receiver);
     }
-        
+
     public interface QueuePreprocessor {
-        /** 
+        /**
          * Caller must synchronize on the list!
          *
          * @param pending list of Pending objects for messages either unsent
@@ -168,14 +168,14 @@ abstract class TunnelGateway {
          *                The status of unsent and partially-sent messages is stored in
          *                the Pending structure.
          *
-         * @return true if we should delay before preprocessing again 
+         * @return true if we should delay before preprocessing again
          */
         public boolean preprocessQueue(List<PendingGatewayMessage> pending, Sender sender, Receiver receiver);
-        
+
         /** how long do we want to wait before flushing */
         public long getDelayAmount();
     }
-    
+
     public interface Receiver {
         /**
          * Take the encrypted data and send it off to the next hop
@@ -220,12 +220,12 @@ abstract class TunnelGateway {
                 }
                 //remaining = _queue.size();
             }
-            
+
             if (wantRequeue)
                 schedule(delayAmount);
             else
                 _lastFlush = _context.clock().now();
-            
+
             //_context.statManager().addRateData("tunnel.lockedGatewayCheck", afterChecked-beforeLock, remaining);
         }
     }

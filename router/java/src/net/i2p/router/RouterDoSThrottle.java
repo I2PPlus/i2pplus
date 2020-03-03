@@ -14,7 +14,7 @@ import net.i2p.data.Hash;
 class RouterDoSThrottle extends RouterThrottleImpl {
     public RouterDoSThrottle(RouterContext context) {
         super(context);
-        context.statManager().createRateStat("router.throttleNetDbDoS", "How many netDb lookup messages have we received so far during a period with a DoS detected", "Throttle", new long[] { 60*1000, 10*60*1000, 60*60*1000, 24*60*60*1000 });
+        context.statManager().createRateStat("router.throttleNetDbDoS", "How many netDb lookup messages have we received so far during a period with a DoS detected", "Router [Throttle]", new long[] { 60*1000, 10*60*1000, 60*60*1000, 24*60*60*1000 });
     }
     
     private volatile long _currentLookupPeriod;

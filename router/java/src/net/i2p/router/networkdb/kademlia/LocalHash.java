@@ -2,9 +2,9 @@ package net.i2p.router.networkdb.kademlia;
 
 /*
  * free (adj.): unencumbered; not under the control of others
- * Written by jrandom in 2003 and released into the public domain 
- * with no warranty of any kind, either expressed or implied.  
- * It probably won't make your computer catch on fire, or eat 
+ * Written by jrandom in 2003 and released into the public domain
+ * with no warranty of any kind, either expressed or implied.
+ * It probably won't make your computer catch on fire, or eat
  * your children, but it might.  Use at your own risk.
  *
  */
@@ -30,7 +30,7 @@ class LocalHash extends Hash {
     private /* FIXME final FIXME */ Map<Hash, byte[]> _xorCache;
 
     private static final int MAX_CACHED_XOR = 1024;
-    
+
     public LocalHash(Hash h) {
         super(h.getData());
     }
@@ -51,32 +51,32 @@ class LocalHash extends Hash {
                 _xorCache = new HashMap<Hash, byte[]>(MAX_CACHED_XOR);
         }
     }
-    
+
     /**
-     * Calculate the xor with the current object and the specified hash, 
+     * Calculate the xor with the current object and the specified hash,
      * caching values where possible.  Currently this keeps up to MAX_CACHED_XOR
-     * (1024) entries, and uses an essentially random ejection policy.  Later 
-     * perhaps go for an LRU or FIFO?  
+     * (1024) entries, and uses an essentially random ejection policy.  Later
+     * perhaps go for an LRU or FIFO?
      *
-     * @throws IllegalStateException if you try to use the cache without first 
+     * @throws IllegalStateException if you try to use the cache without first
      *                               preparing this object's cache via .prepareCache()
      */
     public byte[] cachedXor(Hash key) throws IllegalStateException {
         if (_xorCache == null)
             throw new IllegalStateException("To use the cache, you must first prepare it");
         byte[] distance = _xorCache.get(key);
-        
+
         if (distance == null) {
             synchronized (_xorCache) {
                 int toRemove = _xorCache.size() + 1 - MAX_CACHED_XOR;
                 if (toRemove > 0) {
                     Set<Hash> keys = new HashSet<Hash>(toRemove);
-                    // this removes essentially random keys - we dont maintain any sort
+                    // this removes essentially random keys - we don't maintain any sort
                     // of LRU or age.  perhaps we should?
                     int removed = 0;
-                    for (Iterator<Hash> iter = _xorCache.keySet().iterator(); iter.hasNext() && removed < toRemove; removed++) 
+                    for (Iterator<Hash> iter = _xorCache.keySet().iterator(); iter.hasNext() && removed < toRemove; removed++)
                         keys.add(iter.next());
-                    for (Iterator<Hash> iter = keys.iterator(); iter.hasNext(); ) 
+                    for (Iterator<Hash> iter = keys.iterator(); iter.hasNext(); )
                         _xorCache.remove(iter.next());
                 }
                 distance = DataHelper.xor(key.getData(), getData());
@@ -106,20 +106,20 @@ class LocalHash extends Hash {
         }
         return distance;
     }
-    
+
     public void clearXorCache() {
         synchronized (_xorCache) {
             _xorCache.clear();
         }
     }
-    
+
 /********
     public static void main(String args[]) {
         testFill();
         testOverflow();
         testFillCheck();
     }
-    
+
     private static void testFill() {
         Hash local = new Hash(new byte[HASH_LENGTH]); // all zeroes
         local.prepareCache();
@@ -130,7 +130,7 @@ class LocalHash extends Hash {
             Hash cur = new Hash(t);
             local.cachedXor(cur);
             if (local._xorCache.size() != i+1) {
-                _log.error("xor cache size where i=" + i + " isn't correct!  size = " 
+                _log.error("xor cache size where i=" + i + " isn't correct!  size = "
                            + local._xorCache.size());
                 return;
             }
@@ -148,13 +148,13 @@ class LocalHash extends Hash {
             local.cachedXor(cur);
             if (i < MAX_CACHED_XOR) {
                 if (local._xorCache.size() != i+1) {
-                    _log.error("xor cache size where i=" + i + " isn't correct!  size = " 
+                    _log.error("xor cache size where i=" + i + " isn't correct!  size = "
                                + local._xorCache.size());
                     return;
                 }
             } else {
                 if (local._xorCache.size() > MAX_CACHED_XOR) {
-                    _log.error("xor cache size where i=" + i + " isn't correct!  size = " 
+                    _log.error("xor cache size where i=" + i + " isn't correct!  size = "
                                + local._xorCache.size());
                     return;
                 }
@@ -175,22 +175,22 @@ class LocalHash extends Hash {
             hashes.add(cur);
             local.cachedXor(cur);
             if (local._xorCache.size() != i+1) {
-                _log.error("xor cache size where i=" + i + " isn't correct!  size = " 
+                _log.error("xor cache size where i=" + i + " isn't correct!  size = "
                            + local._xorCache.size());
                 return;
             }
         }
-        // now lets recheck using those same hash objects 
+        // now lets recheck using those same hash objects
         // and see if they're cached
         for (Iterator iter = hashes.iterator(); iter.hasNext(); ) {
             Hash cur = (Hash)iter.next();
             if (!local._xorCache.containsKey(cur)) {
-                _log.error("checking the cache, we dont have " 
+                _log.error("checking the cache, we dont have "
                            + DataHelper.toHexString(cur.getData()));
                 return;
             }
         }
-        // now lets recheck with new objects but the same values 
+        // now lets recheck with new objects but the same values
         // and see if they'return cached
         for (int i = 0; i < MAX_CACHED_XOR; i++) {
             byte t[] = new byte[HASH_LENGTH];
@@ -198,7 +198,7 @@ class LocalHash extends Hash {
                 t[j] = (byte)((i >> j) & 0xFF);
             Hash cur = new Hash(t);
             if (!local._xorCache.containsKey(cur)) {
-                _log.error("checking the cache, we do NOT have " 
+                _log.error("checking the cache, we do NOT have "
                            + DataHelper.toHexString(cur.getData()));
                 return;
             }

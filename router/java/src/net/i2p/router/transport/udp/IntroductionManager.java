@@ -41,14 +41,14 @@ first contacts a few peers, choosing some to serve as introducers.  Each
 of these peers (Bob, Bill, Betty, etc) provide Charlie with an introduction
 tag - a 4 byte random number - which he then makes available to the public
 as methods of contacting him.  Alice, a router who has Charlie's published
-contact methods, first sends a RelayRequest packet to one or more of the 
-introducers, asking each to introduce her to Charlie (offering the 
+contact methods, first sends a RelayRequest packet to one or more of the
+introducers, asking each to introduce her to Charlie (offering the
 introduction tag to identify Charlie).  Bob then forwards a RelayIntro
 packet to Charlie including Alice's public IP and port number, then sends
 Alice back a RelayResponse packet containing Charlie's public IP and port
 number.  When Charlie receives the RelayIntro packet, he sends off a small
 random packet to Alice's IP and port (poking a hole in his NAT/firewall),
-and when Alice receives Bob's RelayResponse packet, she begins a new 
+and when Alice receives Bob's RelayResponse packet, she begins a new
 full direction session establishment with the specified IP and port.</p>
 <p>
 Alice first connects to introducer Bob, who relays the request to Charlie.
@@ -109,17 +109,17 @@ class IntroductionManager {
         _outbound = new ConcurrentHashMap<Long, PeerState>(MAX_OUTBOUND);
         _inbound = new ConcurrentHashSet<PeerState>(MAX_INBOUND);
         _recentHolePunches = new HashSet<InetAddress>(16);
-        ctx.statManager().createRateStat("udp.receiveRelayIntro", "How often we get a relayed request for us to talk to someone?", "udp", UDPTransport.RATES);
-        ctx.statManager().createRateStat("udp.receiveRelayRequest", "How often we receive a good request to relay to someone else?", "udp", UDPTransport.RATES);
-        ctx.statManager().createRateStat("udp.receiveRelayRequestBadTag", "Received relay requests with bad/expired tag", "udp", UDPTransport.RATES);
-        ctx.statManager().createRateStat("udp.relayBadIP", "Received IP or port was bad", "udp", UDPTransport.RATES);
+        ctx.statManager().createRateStat("udp.receiveRelayIntro", "How often we get a relayed request for us to talk to someone", "Transport [UDP]", UDPTransport.RATES);
+        ctx.statManager().createRateStat("udp.receiveRelayRequest", "How often we receive a good request to relay to someone else", "Transport [UDP]", UDPTransport.RATES);
+        ctx.statManager().createRateStat("udp.receiveRelayRequestBadTag", "Received relay requests with bad/expired tag", "Transport [UDP]", UDPTransport.RATES);
+        ctx.statManager().createRateStat("udp.relayBadIP", "Received IP or port was bad", "Transport [UDP]", UDPTransport.RATES);
     }
-    
+
     public void reset() {
         _inbound.clear();
         _outbound.clear();
     }
-    
+
     public void add(PeerState peer) {
         if (peer == null) return;
         // let's not use an introducer on a privileged port, sounds like trouble
@@ -129,32 +129,32 @@ class IntroductionManager {
         if (peer.getRemoteIP().length != 4)
             return;
         if (_log.shouldLog(Log.DEBUG))
-            _log.debug("Adding peer " + peer.getRemoteHostId() + ", weRelayToThemAs " 
+            _log.debug("Adding peer " + peer.getRemoteHostId() + ", weRelayToThemAs "
                        + peer.getWeRelayToThemAs() + ", theyRelayToUsAs " + peer.getTheyRelayToUsAs());
-        if (peer.getWeRelayToThemAs() > 0) 
+        if (peer.getWeRelayToThemAs() > 0)
             _outbound.put(Long.valueOf(peer.getWeRelayToThemAs()), peer);
         if (peer.getTheyRelayToUsAs() > 0 && _inbound.size() < MAX_INBOUND) {
             _inbound.add(peer);
         }
     }
-    
+
     public void remove(PeerState peer) {
         if (peer == null) return;
         if (_log.shouldLog(Log.DEBUG))
-            _log.debug("removing peer " + peer.getRemoteHostId() + ", weRelayToThemAs " 
+            _log.debug("Removing peer " + peer.getRemoteHostId() + ", weRelayToThemAs "
                        + peer.getWeRelayToThemAs() + ", theyRelayToUsAs " + peer.getTheyRelayToUsAs());
-        long id = peer.getWeRelayToThemAs(); 
-        if (id > 0) 
+        long id = peer.getWeRelayToThemAs();
+        if (id > 0)
             _outbound.remove(Long.valueOf(id));
         if (peer.getTheyRelayToUsAs() > 0) {
             _inbound.remove(peer);
         }
     }
-    
+
     private PeerState get(long id) {
         return _outbound.get(Long.valueOf(id));
     }
-    
+
     /**
      * Grab a bunch of peers who are willing to be introducers for us that
      * are locally known (duh) and have published their own SSU address (duh^2).
@@ -191,7 +191,7 @@ class IntroductionManager {
             RouterInfo ri = _context.netDb().lookupRouterInfoLocally(cur.getRemotePeer());
             if (ri == null) {
                 if (_log.shouldLog(Log.INFO))
-                    _log.info("Picked peer has no local routerInfo: " + cur);
+                    _log.info("Picked peer has no local RouterInfo: " + cur);
                 continue;
             }
             // FIXME we can include all his addresses including IPv6 even if we don't support IPv6 (isValid() is false)
@@ -296,23 +296,23 @@ class IntroductionManager {
         public int compareTo(Introducer i) {
             return skey.compareTo(i.skey);
         }
-        
+
         @Override
         public boolean equals(Object o) {
-        	if (o == null) {
-        		return false;
-        	}
-        	if (!(o instanceof Introducer)) {
-        		return false;
-        	}
-        	
-        	Introducer i = (Introducer) o;
-        	return this.compareTo(i) == 0;
+         if (o == null) {
+            return false;
+         }
+         if (!(o instanceof Introducer)) {
+            return false;
+         }
+
+         Introducer i = (Introducer) o;
+         return this.compareTo(i) == 0;
         }
-        
+
         @Override
         public int hashCode() {
-        	return skey.hashCode(); 
+         return skey.hashCode();
         }
     }
 
@@ -335,7 +335,7 @@ class IntroductionManager {
             }
         }
     }
-    
+
     /**
      * Not as elaborate as pickInbound() above.
      * Just a quick check to see how many volunteers we know,
@@ -345,7 +345,7 @@ class IntroductionManager {
     int introducerCount() {
             return _inbound.size();
     }
-    
+
     /**
      *  @return number of peers we have volunteered to introduce
      *  @since 0.9.3
@@ -371,10 +371,10 @@ class IntroductionManager {
 
         if (!_transport.allowConnection()) {
             if (_log.shouldLog(Log.WARN))
-                _log.warn("Dropping RelayIntro, over conn limit");
+                _log.warn("Dropping RelayIntro, over connection limit");
             return;
         }
-        
+
         int ipSize = reader.getRelayIntroReader().readIPSize();
         byte ip[] = new byte[ipSize];
         reader.getRelayIntroReader().readIP(ip, 0);
@@ -382,14 +382,14 @@ class IntroductionManager {
 
         if ((!isValid(ip, port)) || (!isValid(bob.getIP(), bob.getPort()))) {
             if (_log.shouldLog(Log.WARN))
-                _log.warn("Bad relay intro from " + bob + " for " + Addresses.toString(ip, port));
+                _log.warn("Bad RelayIntro received from " + bob + " for " + Addresses.toString(ip, port));
             _context.statManager().addRateData("udp.relayBadIP", 1);
             return;
         }
 
         if (_log.shouldLog(Log.INFO))
-            _log.info("Receive relay intro from " + bob + " for " + Addresses.toString(ip, port));
-        
+            _log.info("Received RelayIntro from " + bob + " for " + Addresses.toString(ip, port));
+
         InetAddress to = null;
         try {
             to = InetAddress.getByAddress(ip);
@@ -400,7 +400,7 @@ class IntroductionManager {
             _context.statManager().addRateData("udp.relayBadIP", 1);
             return;
         }
-        
+
         RemoteHostId alice = new RemoteHostId(ip, port);
         if (_transport.getPeerState(alice) != null) {
             if (_log.shouldLog(Log.INFO))
@@ -448,13 +448,13 @@ class IntroductionManager {
             // This check will trigger a lot, as Alice sends RelayRequests to
             // several introducers at once.
             if (_log.shouldLog(Log.INFO))
-                _log.info("Ignoring dup RelayIntro for " + to);
+                _log.info("Ignoring duplicate RelayIntro for " + to);
             return;
         }
 
         _transport.send(_builder.buildHolePunch(to, port));
     }
-    
+
     /**
      *  We are Bob and we got this from Alice.
      *  Send a RelayIntro to Charlie and a RelayResponse to Alice.
@@ -507,13 +507,13 @@ class IntroductionManager {
         PeerState charlie = get(tag);
         if (charlie == null) {
             if (_log.shouldLog(Log.INFO))
-                _log.info("Receive relay request from " + alice 
+                _log.info("Receive relay request from " + alice
                       + " with unknown tag");
             _context.statManager().addRateData("udp.receiveRelayRequestBadTag", 1);
             return;
         }
         if (_log.shouldLog(Log.INFO))
-            _log.info("Receive relay request from " + alice 
+            _log.info("Receive relay request from " + alice
                       + " for tag " + tag
                       + " and relaying with " + charlie);
 
@@ -541,7 +541,7 @@ class IntroductionManager {
             cipherKey = new SessionKey(key);
             macKey = cipherKey;
             if (_log.shouldLog(Log.INFO))
-                _log.info("Sending relay response (w/ intro key) to " + alice);
+                _log.info("Sending relay response (with intro key) to " + alice);
         } else {
             if (_log.shouldLog(Log.INFO))
                 _log.info("Sending relay response (in-session) to " + alice);

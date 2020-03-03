@@ -5,6 +5,8 @@ import java.util.Map;
 import java.util.Set;
 import java.util.TreeSet;
 
+import java.util.Properties;
+
 import net.i2p.router.web.CSSHelper;
 import net.i2p.router.web.ConsolePasswordManager;
 import net.i2p.router.web.HelperBase;
@@ -30,18 +32,21 @@ public class ConfigUIHelper extends HelperBase {
         }
         Set<String> themes = themeSet();
         for (String theme : themes) {
-            buf.append("<label for=\"").append(theme).append("\"><div class=\"themechoice\">" +
+            buf.append("<label for=\"").append(theme).append("\"><div class=\"themechoice\" style=\"display: inline-block; text-align: center;\">" +
                        "<input type=\"radio\" class=\"optbox\" name=\"theme\" ");
             if (theme.equals(current))
                 buf.append(CHECKED);
             buf.append("value=\"").append(theme).append("\" id=\"").append(theme).append("\">" +
+//                       "<object height=\"48\" width=\"48\" data=\"/themes/console/").append(theme).append("/images/thumbnail.png\">" +
                        "<img height=\"48\" width=\"48\" alt=\"\" src=\"/themes/console/").append(theme).append("/images/thumbnail.png\">" +
-                       "<div class=\"themelabel\">").append(_t(theme)).append("</div>" +
+//                       "</object><br>" +
+                       "<br>" +
+                       "<div class=\"themelabel\" style=\"text-align: center;\">" + _t(theme) + "</div>" +
                        "</div></label>\n");
         }
         boolean universalTheming = _context.getBooleanProperty(CSSHelper.PROP_UNIVERSAL_THEMING);
         buf.append("</div><div id=\"themeoptions\">" +
-                   "<label><input type=\"checkbox\" name=\"universalTheming\" ");
+                   "<label><input type=\"checkbox\" class=\"optbox\" name=\"universalTheming\" ");
         if (universalTheming)
             buf.append(CHECKED);
         buf.append("value=\"1\">")
@@ -53,7 +58,7 @@ public class ConfigUIHelper extends HelperBase {
     public String getForceMobileConsole() {
         StringBuilder buf = new StringBuilder(256);
         boolean forceMobileConsole = _context.getBooleanProperty(CSSHelper.PROP_FORCE_MOBILE_CONSOLE);
-        buf.append("<label><input type=\"checkbox\" name=\"forceMobileConsole\" ");
+        buf.append("<label><input type=\"checkbox\" class=\"optbox\" name=\"forceMobileConsole\" ");
         if (forceMobileConsole)
             buf.append(CHECKED);
         buf.append("value=\"1\">")
@@ -62,11 +67,11 @@ public class ConfigUIHelper extends HelperBase {
         boolean embedApps = _context.getBooleanProperty(CSSHelper.PROP_EMBED_APPS);
         buf.append("<label title=\"")
            .append(_t("Enabling the Universal Theming option is recommended when embedding these applications"))
-           .append("\"><input type=\"checkbox\" name=\"embedApps\" ");
+           .append("\"><input type=\"checkbox\" class=\"optbox\" name=\"embedApps\" ");
         if (embedApps)
             buf.append(CHECKED);
         buf.append("value=\"1\">")
-           .append(_t("Embed Email and Torrent applications in the console"))
+           .append(_t("Embed I2PSnark and I2PMail in the console"))
            .append("</label></div>\n");
         return buf.toString();
     }
@@ -133,6 +138,7 @@ public class ConfigUIHelper extends HelperBase {
         { "fr", "fr", "Français", null },
         { "gl", "lang_gl", "Galego", null },
         { "el", "gr", "Greek Ελληνικά", null },
+        //{ "iw", "il", "Hebrew עברית", null },
         { "in", "id", "bahasa Indonesia", null },
         { "it", "it", "Italiano", null },
         { "ja", "jp", "Japanese 日本語", null },
@@ -185,18 +191,18 @@ public class ConfigUIHelper extends HelperBase {
                 current = "en";
         }
         StringBuilder buf = new StringBuilder(512);
-        buf.append("  <select name=\"lang\" id=\"langsettings\">\n");
         for (int i = 0; i < langs.length; i++) {
             String lang = langs[i][0];
             if (lang.equals("xx") && !isAdvanced())
                 continue;
             // we use "lang" so it is set automagically in CSSHelper
-            buf.append("    <option class=\"optbox\" name=\"lang\" ");
+            buf.append("<label for=\"").append(lang).append("\"><div class=\"langselect\" style=\"display: inline-block; text-align: center;\">")
+               .append("<input type=\"radio\" class=\"optbox\" name=\"lang\" ");
             if (lang.equals(current))
-                buf.append(SELECTED);
-
-            buf.append(" value=\"").append(lang).append("\"");
-            buf.append(" id=\"").append(lang).append("\"").append(">");
+                buf.append(CHECKED);
+            buf.append("value=\"").append(lang).append("\" id=\"").append(lang).append("\">")
+               .append("<img height=\"48\" width=\"48\" alt=\"\" src=\"/flags.jsp?s=48&amp;c=").append(langs[i][1]).append("\">")
+               .append("<div class=\"ui_lang\" style=\"text-align: center;\">");
             int under = lang.indexOf('_');
             String slang = (under > 0) ? lang.substring(0, under) : lang;
             buf.append(langs[i][2]);
@@ -206,9 +212,8 @@ public class ConfigUIHelper extends HelperBase {
                    .append(name)
                    .append(')');
             }
-            buf.append("</option>\n");
+            buf.append("</div></div></label>\n");
         }
-        buf.append("  </select>\n");
         return buf.toString();
     }
 
@@ -217,38 +222,30 @@ public class ConfigUIHelper extends HelperBase {
         StringBuilder buf = new StringBuilder(512);
         ConsolePasswordManager mgr = new ConsolePasswordManager(_context);
         Map<String, String> userpw = mgr.getMD5(RouterConsoleRunner.PROP_CONSOLE_PW);
-        buf.append("<table id=\"consolepass\">");
+        Properties config = net.i2p.I2PAppContext.getGlobalContext().getProperties();
+        // only show delete user button if user(s) configured
+        if (!config.toString().contains("routerconsole.auth.i2prouter"))
+            buf.append("<style>#consolepass .delete {display: none !important;)</style>\n");
+        buf.append("<table id=\"consolepass\">\n");
         if (userpw.isEmpty()) {
-            buf.append("<tr><td colspan=\"3\">");
-            buf.append(_t("Add a user and password to enable."));
-            buf.append("</td></tr>");
+            buf.append("<tr><td colspan=\"3\">" +
+                       _t("Add a user and password to enable.") +
+                       "</td></tr>\n");
         } else {
-            buf.append("<tr><th title=\"")
-               .append(_t("Mark for deletion"))
-               .append("\">")
-               .append(_t("Remove"))
-               .append("</th><th>")
-               .append(_t("Username"))
-               .append("</th><th>&nbsp;</th></tr>\n");
+            buf.append("<tr><td colspan=\"3\">" +
+                       _t("Router console password is enabled.") +
+                       "</td></tr>\n");
+            buf.append("<tr><th title=\"" + _t("Mark for deletion") + "\">" + _t("Remove") + "</th><th>" + _t("Username") + "</th><th>&nbsp;</th></tr>\n");
             for (String name : userpw.keySet()) {
-                buf.append("<tr><td align=\"center\"><input type=\"checkbox\" class=\"optbox\" id=\"")
-                   .append(name)
-                   .append("\" name=\"delete_")
-                   .append(name)
-                   .append("\"></td><td colspan=\"2\"><label for=\"")
-                   .append(name)
-                   .append("\">")
-                   .append(name)
-                   .append("</label></td></tr>\n");
+                buf.append("<tr><td align=\"center\"><input type=\"checkbox\" class=\"optbox\" id=\"" + name + "\" name=\"delete_" + name + "\"></td>" +
+                           "<td colspan=\"2\"><label for=\"" + name + "\">" + name + "</label></td></tr>\n");
             }
         }
         buf.append("<tr><td id=\"pw_adduser\" align=\"left\" colspan=\"3\">" +
-                   "<b>").append(_t("Username")).append(":</b> " +
-                   "<input type=\"text\" name=\"name\">" +
-                   "<b>").append(_t("Password")).append(":</b> " +
-                   "<input type=\"password\" size=\"40\" name=\"nofilter_pw\">" +
-                   "</td></tr>" +
-                   "</table>\n");
+                   "<b>" + _t("Username") + ":</b> " + "<input type=\"text\" name=\"name\" title=\"" +
+                   _t("Please supply a username") + "\"><b>" + _t("Password") + ":</b> " +
+                   "<input type=\"password\" size=\"40\" name=\"nofilter_pw\" title=\"" +
+                   _t("Please supply a password") + "\">" + "</td></tr>\n</table>\n");
         return buf.toString();
     }
 }

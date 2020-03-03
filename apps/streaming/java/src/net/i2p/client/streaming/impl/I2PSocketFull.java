@@ -23,7 +23,7 @@ class I2PSocketFull implements I2PSocket {
     private final Destination _remotePeer;
     private final Destination _localPeer;
     private final AtomicBoolean _closed = new AtomicBoolean();
-    
+
     public I2PSocketFull(Connection con, I2PAppContext context) {
         log = context.logManager().getLog(I2PSocketFull.class);
         _connection = con;
@@ -33,7 +33,7 @@ class I2PSocketFull implements I2PSocket {
         } else
             _remotePeer = _localPeer = null;
     }
-    
+
     /**
      *  Closes this socket.
      *
@@ -52,7 +52,8 @@ class I2PSocketFull implements I2PSocket {
         Connection c = _connection;
         if (c == null) return;
         if (log.shouldLog(Log.INFO))
-            log.info("close() called, connected? " + c.getIsConnected() + " : " + c, new Exception());
+//            log.info("close() called, connected? " + c.getIsConnected() + " : " + c, new Exception());
+            log.info("close() called, connected? " + c.getIsConnected() + " : " + c);
         if (c.getIsConnected()) {
             MessageInputStream in = c.getInputStream();
             in.close();
@@ -66,7 +67,7 @@ class I2PSocketFull implements I2PSocket {
         }
         destroy();
     }
-    
+
     /**
      *  Resets and closes this socket. Sends a RESET indication to the far-end.
      *  This is the equivalent of setSoLinger(true, 0) followed by close() on a Java Socket.
@@ -92,9 +93,9 @@ class I2PSocketFull implements I2PSocket {
         }
         destroy();
     }
-    
+
     Connection getConnection() { return _connection; }
-    
+
     /**
      *  As of 0.9.9 will throw an IOE if socket is closed.
      *  Prior to that would return null instead of throwing IOE.
@@ -106,7 +107,7 @@ class I2PSocketFull implements I2PSocket {
             return c.getInputStream();
         throw new IOException("Socket closed");
     }
-    
+
     public I2PSocketOptions getOptions() {
         Connection c = _connection;
         if (c != null)
@@ -126,7 +127,7 @@ class I2PSocketFull implements I2PSocket {
     public synchronized SelectableChannel getChannel() {
         return null;
     }
-    
+
     /**
      *  As of 0.9.9 will throw an IOE if socket is closed.
      *  Prior to that would return null instead of throwing IOE.
@@ -138,66 +139,66 @@ class I2PSocketFull implements I2PSocket {
             return c.getOutputStream();
         throw new IOException("Socket closed");
     }
-    
+
     public Destination getPeerDestination() { return _remotePeer; }
-    
+
     public long getReadTimeout() {
         I2PSocketOptions opts = getOptions();
-        if (opts != null) 
+        if (opts != null)
             return opts.getReadTimeout();
-        else 
+        else
             return -1;
     }
-    
+
     public Destination getThisDestination() { return _localPeer; }
-    
+
     public void setOptions(I2PSocketOptions options) {
         Connection c = _connection;
         if (c == null) return;
-        
+
         if (options instanceof ConnectionOptions)
             c.setOptions((ConnectionOptions)options);
         else
             c.setOptions(new ConnectionOptions(options));
     }
-    
+
     public void setReadTimeout(long ms) {
         Connection c = _connection;
         if (c == null) return;
-        
+
         if (ms > Integer.MAX_VALUE)
             ms = Integer.MAX_VALUE;
         c.getInputStream().setReadTimeout((int)ms);
         c.getOptions().setReadTimeout(ms);
     }
-    
+
     /**
      *  Deprecated, unimplemented, does nothing
      */
     public void setSocketErrorListener(I2PSocket.SocketErrorListener lsnr) {
     }
-    
-    public boolean isClosed() { 
+
+    public boolean isClosed() {
         Connection c = _connection;
         return ((c == null) ||
-                (!c.getIsConnected()) || 
+                (!c.getIsConnected()) ||
                 (c.getResetReceived()) ||
                 (c.getResetSent()));
     }
-    
-    void destroy() { 
+
+    void destroy() {
         destroy2();
     }
-    
+
     /**
      *  Call from Connection.disconnectComplete()
      *  instead of destroy() so we don't loop
      *  @since 0.8.13
      */
-    void destroy2() { 
+    void destroy2() {
         _connection = null;
     }
-    
+
     /**
      * The remote port.
      * @return the port or 0 if unknown

@@ -42,14 +42,16 @@ public class HostCheckHandler extends GzipHandler
         _context = ctx;
         _portMapper = ctx.portMapper();
         _listenHosts = new HashSet<String>(8);
-        setMinGzipSize(64*1024);
+        //setMinGzipSize(64*1024);
+        // set this super small so we clobber almost everything
+        // this has the side effect of faster page loads with less progressive rendering
+        // include js so we hit the lightbox snark script -> 26/6K
+        setMinGzipSize(256);
         if (_context.getBooleanPropertyDefaultTrue(PROP_GZIP)) {
             addIncludedMimeTypes(
-                                 // our js is very small
-                                 //"application/javascript", "application/x-javascript",
-                                 "application/xhtml+xml", "application/xml",
-                                 // ditto svg
-                                 //"image/svg+xml",
+                                 "application/javascript", "application/x-javascript",
+                                 "application/xhtml+xml", "application/xml", "application/pdf",
+                                 "image/svg+xml", "application/x-font-ttf", "application/x-font-truetype",
                                  "text/css", "text/html", "text/plain"
                                 );
         } else {
@@ -59,7 +61,7 @@ public class HostCheckHandler extends GzipHandler
             addIncludedMimeTypes("xyzzy");
         }
     }
-    
+
     /**
      *  Set the legal hosts.
      *  Not synched. Call this BEFORE starting.

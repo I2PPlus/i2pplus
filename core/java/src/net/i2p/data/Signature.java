@@ -2,9 +2,9 @@ package net.i2p.data;
 
 /*
  * free (adj.): unencumbered; not under the control of others
- * Written by jrandom in 2003 and released into the public domain 
- * with no warranty of any kind, either expressed or implied.  
- * It probably won't make your computer catch on fire, or eat 
+ * Written by jrandom in 2003 and released into the public domain
+ * with no warranty of any kind, either expressed or implied.
+ * It probably won't make your computer catch on fire, or eat
  * your children, but it might.  Use at your own risk.
  *
  */
@@ -15,7 +15,7 @@ import net.i2p.crypto.SigType;
 
 /**
  * Defines the signature as defined by the I2P data structure spec.
- * By default, a signature is a 40-byte array verifying the authenticity of some data 
+ * By default, a signature is a 40-byte array verifying the authenticity of some data
  * using the DSA-SHA1 algorithm.
  *
  * The signature is the 20-byte R followed by the 20-byte S,
@@ -93,16 +93,15 @@ public class Signature extends SimpleDataStructure {
     @Override
     public String toString() {
         StringBuilder buf = new StringBuilder(64);
-        buf.append('[').append(getClass().getSimpleName()).append(' ').append(_type).append(": ");
+        buf.append(_type).append(" (");
         int length = length();
         if (_data == null) {
             buf.append("null");
         } else if (length <= 32) {
             buf.append(toBase64());
         } else {
-            buf.append("size: ").append(Integer.toString(length));
+            buf.append("Size: ").append(Integer.toString(length)).append(" bytes)");
         }
-        buf.append(']');
         return buf.toString();
     }
 

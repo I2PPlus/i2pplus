@@ -1,82 +1,84 @@
 <%@page contentType="text/html"%>
 <%@page pageEncoding="UTF-8"%>
 <!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
-<html><head>
+<html>
+<head>
 <%@include file="css.jsi" %>
 <%=intl.title("config plugins")%>
-<style type='text/css'>
-button span.hide{
-    display:none;
-}
-input.default { width: 1px; height: 1px; visibility: hidden; }
-</style>
+<style type="text/css">input.default{width: 1px; height: 1px; visibility: hidden;}</style>
 <%@include file="summaryajax.jsi" %>
-</head><body>
+</head>
+<body>
+<script nonce="<%=cspNonce%>" type="text/javascript">progressx.show();</script>
 <%@include file="summary.jsi" %>
 <jsp:useBean class="net.i2p.router.web.helpers.ConfigClientsHelper" id="clientshelper" scope="request" />
 <jsp:setProperty name="clientshelper" property="contextId" value="<%=i2pcontextId%>" />
 <jsp:setProperty name="clientshelper" property="edit" value="<%=request.getParameter(\"edit\")%>" />
-<h1><%=intl._t("Plugin Configuration")%></h1>
+<h1 class="conf"><%=intl._t("Plugins")%></h1>
 <div class="main" id="config_plugins">
- <%@include file="confignav.jsi" %>
-
- <jsp:useBean class="net.i2p.router.web.helpers.ConfigClientsHandler" id="formhandler" scope="request" />
-<%@include file="formhandler.jsi" %>
- <div class="configure">
+<%@include file="confignav.jsi" %>
 <%
    if (clientshelper.showPlugins()) {
-       if (clientshelper.isPluginUpdateEnabled()) {
 %>
-<h3 id="pconfig"><%=intl._t("Plugin Configuration")%></h3><p id="pluginconfigtext">
- <%=intl._t("The plugins listed below are started by the webConsole client.")%>
- </p><div class="wideload">
-<form action="" method="POST">
-<input type="hidden" name="nonce" value="<%=pageNonce%>" >
- <jsp:getProperty name="clientshelper" property="form3" />
-<div class="formaction" id="pluginconfigactions">
- <input type="submit" class="cancel" name="foo" value="<%=intl._t("Cancel")%>" />
- <input type="submit" name="action" class="accept" value="<%=intl._t("Save Plugin Configuration")%>" />
-</div></form></div>
-<%
-       } // pluginUpdateEnabled
-       if (clientshelper.isPluginInstallEnabled()) {
-%>
-<h3 id="pluginmanage"><a name="plugin"></a><%=intl._t("Plugin Installation")%></h3><p>
+<jsp:useBean class="net.i2p.router.web.helpers.ConfigClientsHandler" id="formhandler" scope="request" />
+<%@include file="formhandler.jsi" %>
+ <div class="configure">
+<h3 id="pluginmanage"><%=intl._t("Plugin Installation")%>&nbsp;
+<span class="h3navlinks">
+<a href="configclients" title="<%=intl._t("Client Configuration")%>">Clients</a>&nbsp;
+<a href="configwebapps" title="<%=intl._t("WebApp Configuration")%>">WebApps</a>
+</span>
+</h3><p>
 <form action="configplugins" method="POST">
 <table id="plugininstall" class="configtable">
-<tr><td class="infohelp" colspan="2">
- <%=intl._t("Look for available plugins on {0}.", "<a href=\"http://i2pwiki.i2p/index.php?title=Plugins\" target=\"_blank\">i2pwiki.i2p</a>")%>
-</td></tr>
-<tr><th colspan="2">
- <%=intl._t("Installation from URL")%>
-</th></tr>
 <tr>
-<td>
- <input type="hidden" name="nonce" value="<%=pageNonce%>" >
- <b>URL:</b>
- <input type="text" size="60" name="pluginURL" title="<%=intl._t("To install a plugin, enter the download URL:")%>" >
-</td>
-<td class="optionsave" align="right">
- <input type="submit" name="action" class="default hideme" value="<%=intl._t("Install Plugin")%>" />
- <input type="submit" class="cancel" name="foo" value="<%=intl._t("Cancel")%>" />
- <input type="submit" name="action" class="download" value="<%=intl._t("Install Plugin")%>" />
+<td class="infohelp" colspan="2">
+<%=intl._t("For available plugins, visit {0}.", "<a href=\"http://stats.i2p/i2p/plugins/\" target=\"_blank\">zzz's plugin page</a>")%>
 </td>
 </tr>
-</table></form>
-<form action="configplugins" method="POST" enctype="multipart/form-data" accept-charset="UTF-8">
-<table id="plugininstall2" class="configtable">
-<tr><th colspan="2">
-<a name="plugin"></a><%=intl._t("Installation from File")%>
-</th></tr>
+<tr>
+<td colspan="2">
+<b class="suboption"><%=intl._t("Enter xpi2p or su3 plugin URL")%></b><br>
+<div class="optionsingle" id="installPluginUrl">
+<%
+       if (clientshelper.isPluginInstallEnabled()) {
+%>
+<table>
 <tr>
 <td>
 <input type="hidden" name="nonce" value="<%=pageNonce%>" >
-<b><%=intl._t("Select xpi2p or su3 file")%>:</b>
+<input type="text" size="60" name="pluginURL" required x-moz-errormessage="<%=intl._t("Please supply a valid plugin URL")%>" title="<%=intl._t("To install a plugin, enter the download URL:")%>" >
+</td>
+<td align="right">
+<input type="submit" name="action" class="default hideme" value="<%=intl._t("Install Plugin")%>" />
+<input type="submit" class="cancel" name="foo" value="<%=intl._t("Cancel")%>" />
+<input type="submit" name="action" class="download" value="<%=intl._t("Install Plugin")%>" />
+</td>
+</tr>
+</table>
+</div>
+</td>
+</tr>
+</table>
+</form>
+<form action="configplugins" method="POST" enctype="multipart/form-data" accept-charset="UTF-8">
+<table id="plugininstall2" class="configtable">
+<tr>
+<td colspan="2">
+<b class="suboption"><%=intl._t("Select xpi2p or su3 file")%></b><br>
+<div class="optionsingle" id="installPluginFile">
+<table>
+<tr>
+<td>
+<input type="hidden" name="nonce" value="<%=pageNonce%>" >
 <input type="file" name="pluginFile" accept=".xpi2p,.su3" >
 </td>
-<td class="optionsave" align="right">
-<input type="submit" name="action" class="download" value="<%=intl._t("Install Plugin from File")%>" />
+<td align="right">
+<input type="submit" name="action" class="download" required x-moz-errormessage="<%=intl._t("Please supply a valid plugin file")%>" value="<%=intl._t("Install Plugin from File")%>" />
 </td>
+</tr>
+</table>
+</div>
 </tr>
 </table>
 </form>
@@ -84,14 +86,30 @@ input.default { width: 1px; height: 1px; visibility: hidden; }
        } // pluginInstallEnabled
        if (clientshelper.isPluginUpdateEnabled()) {
 %>
-<h4 id="updateplugins" class="embeddedtitle"><a name="plugin"></a><%=intl._t("Update All Plugins")%></h4>
-<div class="formaction" id="pluginupdater">
+<h3 id="pconfig"><%=intl._t("Plugin Manager")%></h3>
 <form action="configplugins" method="POST">
+<p id="pluginconfigtext">
+<%=intl._t("The plugins listed below are started by the webConsole client.")%>
 <input type="hidden" name="nonce" value="<%=pageNonce%>" >
- <input type="submit" name="action" class="reload" value="<%=intl._t("Update All Installed Plugins")%>" />
-</form></div>
+<input type="submit" name="action" class="reload" value="<%=intl._t("Update All Installed Plugins")%>" />
+</p>
+</form>
+<div class="wideload">
+<form action="" method="POST">
+<input type="hidden" name="nonce" value="<%=pageNonce%>" >
+<jsp:getProperty name="clientshelper" property="form3" />
+<div class="formaction" id="pluginconfigactions">
+<input type="submit" class="cancel" name="foo" value="<%=intl._t("Cancel")%>" />
+<input type="submit" name="action" class="accept" value="<%=intl._t("Save Plugin Configuration")%>" />
+</div>
+</form>
+</div>
 <%
        } // pluginUpdateEnabled
    } // showPlugins
 %>
-</div></div></body></html>
+</div>
+</div>
+<script nonce="<%=cspNonce%>" type="text/javascript">progressx.hide();</script>
+</body>
+</html>

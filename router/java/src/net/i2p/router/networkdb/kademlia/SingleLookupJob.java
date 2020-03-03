@@ -35,7 +35,7 @@ class SingleLookupJob extends JobImpl {
         _dsrm = dsrm;
     }
 
-    public void runJob() { 
+    public void runJob() {
         Hash from = _dsrm.getFromHash();
         int limit = Math.min(_dsrm.getNumReplies(), MAX_TO_FOLLOW);
         for (int i = 0; i < limit; i++) {
@@ -53,5 +53,5 @@ class SingleLookupJob extends JobImpl {
         }
     }
 
-    public String getName() { return "NetDb process DSRM"; }
+    public String getName() { return "Process DbStoreReplyMsg"; }
 }

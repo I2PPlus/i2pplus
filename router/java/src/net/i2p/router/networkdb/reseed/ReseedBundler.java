@@ -45,7 +45,8 @@ public class ReseedBundler {
     private final RouterContext _context;
     private final static String ROUTERINFO_PREFIX = "routerInfo-";
     private final static String ROUTERINFO_SUFFIX = ".dat";
-    private static final int MINIMUM = 50;
+    //private static final int MINIMUM = 50;
+    private static final int MINIMUM = 200;
 
     public ReseedBundler(RouterContext ctx) {
         _context = ctx;
@@ -83,10 +84,12 @@ public class ReseedBundler {
                 continue;
             if (ri.getCapabilities().contains("K"))
                 continue;
+            if (ri.getCapabilities().contains("H"))
+                continue;
             Collection<RouterAddress> addrs = ri.getAddresses();
             if (addrs.isEmpty())
                 continue;
-            
+
             String name = getRouterInfoName(key);
             boolean hasIntro = false;
             boolean hasIPv4 = false;

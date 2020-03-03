@@ -2,9 +2,9 @@ package net.i2p.client.impl;
 
 /*
  * free (adj.): unencumbered; not under the control of others
- * Written by jrandom in 2003 and released into the public domain 
- * with no warranty of any kind, either expressed or implied.  
- * It probably won't  make your computer catch on fire, or eat 
+ * Written by jrandom in 2003 and released into the public domain
+ * with no warranty of any kind, either expressed or implied.
+ * It probably won't  make your computer catch on fire, or eat
  * your children, but it might.  Use at your own risk.
  *
  */
@@ -39,7 +39,7 @@ class I2PClientMessageHandlerMap {
         // 39 = highest type expected from router
         // http://i2p-projekt.i2p/spec/i2cp#message-types
         this(HostReplyMessage.MESSAGE_TYPE);
-        
+
         _handlers[DisconnectMessage.MESSAGE_TYPE] = new DisconnectMessageHandler(context);
         _handlers[SessionStatusMessage.MESSAGE_TYPE] = new SessionStatusMessageHandler(context);
         _handlers[RequestLeaseSetMessage.MESSAGE_TYPE] = new RequestLeaseSetMessageHandler(context);

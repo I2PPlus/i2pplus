@@ -23,15 +23,15 @@ class MessageHandler implements I2PSessionMuxedListener {
     private final Log _log;
     private final Set<I2PSocketManager.DisconnectListener> _listeners;
     private boolean _restartPending;
-    
+
     public MessageHandler(I2PAppContext ctx, ConnectionManager mgr) {
         _manager = mgr;
         _context = ctx;
         _listeners = new CopyOnWriteArraySet<DisconnectListener>();
         _log = ctx.logManager().getLog(MessageHandler.class);
-        _context.statManager().createRateStat("stream.packetReceiveFailure", "When do we fail to decrypt or otherwise receive a packet sent to us?", "Stream", new long[] { 60*60*1000, 24*60*60*1000 });
+        _context.statManager().createRateStat("stream.packetReceiveFailure", "Number of times we fail to decrypt or otherwise receive a packet sent to us", "Stream", new long[] { 60*60*1000, 24*60*60*1000 });
     }
-        
+
     /** Instruct the client that the given session has received a message with
      * size # of bytes.
      * This shouldn't be called anymore since we are registering as a muxed listener.
@@ -62,14 +62,14 @@ class MessageHandler implements I2PSessionMuxedListener {
         }
         if (data == null) {
             if (_log.shouldLog(Log.WARN))
-                _log.warn("Received null data on " + session + " proto: " + proto +
+                _log.warn("Received null data on " + session + "\n* Protocol: " + proto +
                           " fromPort: " + fromPort + " toPort: " + toPort);
             return;
         }
         if (_log.shouldLog(Log.DEBUG))
             _log.debug("Received " + data.length + " bytes on " + session +
-                       " (" + _manager + ')' +
-                       " proto: " + proto +
+                       "\n* " + _manager +
+                       "\n* Protocol: " + proto +
                        " fromPort: " + fromPort + " toPort: " + toPort);
         Packet packet = new Packet(session);
         try {
@@ -115,7 +115,7 @@ class MessageHandler implements I2PSessionMuxedListener {
         } else {
             _manager.getConnectionHandler().setActive(false);
         }
-        
+
         for (I2PSocketManager.DisconnectListener lsnr : _listeners) {
             lsnr.sessionDisconnected();
         }
@@ -132,11 +132,11 @@ class MessageHandler implements I2PSessionMuxedListener {
     public void errorOccurred(I2PSession session, String message, Throwable error) {
         _restartPending = message.contains("restart");
         if (_log.shouldLog(Log.WARN))
-            _log.warn("error occurred: " + message, error); 
+            _log.warn("Error occurred: " + message, error);
         //_manager.disconnectAllHard();
     }
-    
-    public void addDisconnectListener(I2PSocketManager.DisconnectListener lsnr) { 
+
+    public void addDisconnectListener(I2PSocketManager.DisconnectListener lsnr) {
             _listeners.add(lsnr);
     }
     public void removeDisconnectListener(I2PSocketManager.DisconnectListener lsnr) {

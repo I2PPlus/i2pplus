@@ -6,7 +6,7 @@ package net.i2p.crypto;
  * It was also freely contributed to the Bitzi public domain sources.
  * @author  Philippe Verdy
  */
- 
+
 /* Sun may wish to change the following package name, if integrating this
  * class in the Sun JCE Security Provider for Java 1.5 (code-named Tiger).
  *
@@ -66,12 +66,12 @@ import net.i2p.util.SystemVersion;
  * </ol>
  */
 public final class SHA1 extends MessageDigest implements Cloneable {
- 
+
     /**
      * This implementation returns a fixed-size digest.
      */
     static final int HASH_LENGTH = 20; // bytes == 160 bits
- 
+
     /**
      * Private context for incomplete blocks and padding bytes.
      * INVARIANT: padding must be in 0..63.
@@ -80,18 +80,18 @@ public final class SHA1 extends MessageDigest implements Cloneable {
      */
     private byte[] pad;
     private int padding;
- 
+
     /**
      * Private contextual byte count, sent in the next block,
      * after the ending padding block.
      */
     private long bytes;
- 
+
     /**
      * Private context that contains the current digest key.
      */
     private int hA, hB, hC, hD, hE;
- 
+
     private static final boolean _useBitzi;
     static {
         // oddly, Bitzi is faster than Oracle - see test results below
@@ -117,7 +117,7 @@ public final class SHA1 extends MessageDigest implements Cloneable {
         pad = new byte[64];
         init();
     }
- 
+
     /**
      *  @return the fastest digest, either new SHA1() or MessageDigest.getInstance("SHA-1")
      *  @since 0.8.7
@@ -140,7 +140,7 @@ public final class SHA1 extends MessageDigest implements Cloneable {
         that.pad = this.pad.clone();
         return that;
     }
- 
+
     /**
      * Returns the digest length in bytes.
      *
@@ -155,7 +155,7 @@ public final class SHA1 extends MessageDigest implements Cloneable {
     public int engineGetDigestLength() {
         return HASH_LENGTH;
     }
- 
+
     /**
      * Reset athen initialize the digest context.
      *
@@ -175,7 +175,7 @@ public final class SHA1 extends MessageDigest implements Cloneable {
         bytes = 0;
         init();
     }
- 
+
     /**
      * Initialize the digest context.
      */
@@ -186,7 +186,7 @@ public final class SHA1 extends MessageDigest implements Cloneable {
         hD = 0x10325476;
         hE = 0xc3d2e1f0;
     }
- 
+
     /**
      * Updates the digest using the specified byte.
      * Requires internal buffering, and may be slow.
@@ -205,7 +205,7 @@ public final class SHA1 extends MessageDigest implements Cloneable {
         computeBlock(pad, 0);
         padding = 0;
     }
- 
+
     /**
      * Updates the digest using the specified array of bytes,
      * starting at the specified offset.
@@ -260,7 +260,7 @@ public final class SHA1 extends MessageDigest implements Cloneable {
         }
         throw new ArrayIndexOutOfBoundsException(offset);
     }
- 
+
     /**
      * Completes the hash computation by performing final operations
      * such as padding. Computes the final hash and returns the final
@@ -285,7 +285,7 @@ public final class SHA1 extends MessageDigest implements Cloneable {
             return null;
         }
     }
- 
+
     /**
      * Completes the hash computation by performing final operations
      * such as padding. Once engineDigest has been called, the engine
@@ -402,7 +402,7 @@ public final class SHA1 extends MessageDigest implements Cloneable {
         }
         throw new DigestException("partial digests not returned");
     }
- 
+
     /**
      * Updates the digest using the specified array of bytes,
      * starting at the specified offset, but an implied length
@@ -744,7 +744,7 @@ public final class SHA1 extends MessageDigest implements Cloneable {
      *
      *  Results: 2011-05 eeepc Atom
      *  <pre>
-     *  JVM	strlen	GNU ms	JVM  ms 
+     *  JVM	strlen	GNU ms	JVM  ms
      *	Oracle	387	  1406	 2357
      *	Oracle	 40	   522	  475
      *	Harmony	387	  5504	 3474

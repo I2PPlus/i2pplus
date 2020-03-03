@@ -85,8 +85,8 @@ public class CoDelBlockingQueue<E extends CDQEntry> extends LinkedBlockingQueue<
         _capacity = capacity;
         STAT_DROP = ("codel." + name + ".drop").intern();
         STAT_DELAY = ("codel." + name + ".delay").intern();
-        ctx.statManager().createRateStat(STAT_DROP, "queue delay of dropped items", "Router", RATES);
-        ctx.statManager().createRateStat(STAT_DELAY, "average queue delay", "Router", RATES);
+        ctx.statManager().createRateStat(STAT_DROP, "Queue delay of dropped items", "Router [CoDel]", RATES);
+        ctx.statManager().createRateStat(STAT_DELAY, "Average queue delay", "Router [CoDel]", RATES);
         _id = __id.incrementAndGet();
     }
 
@@ -301,11 +301,11 @@ public class CoDelBlockingQueue<E extends CDQEntry> extends LinkedBlockingQueue<
         long delay = _context.clock().now() - entry.getEnqueueTime();
         _context.statManager().addRateData(STAT_DROP, delay);
         if (_log.shouldLog(Log.WARN))
-            _log.warn("CDQ #" + _id + ' ' + _name + " dropped item with delay " + delay + ", " +
+            _log.warn("CDQ #" + _id + ' ' + _name + " dropped item with " + delay + "ms delay\n* " +
                       DataHelper.formatDuration(_context.clock().now() - _first_above_time) + " since first above, " +
                       DataHelper.formatDuration(_context.clock().now() - _drop_next) + " since drop next, " +
                       (_count+1) + " dropped in this phase, " +
-                      size() + " remaining in queue: " + entry);
+                      size() + " remaining in queue " + entry);
         entry.drop();
     }
 

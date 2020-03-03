@@ -2,9 +2,9 @@ package net.i2p.data;
 
 /*
  * free (adj.): unencumbered; not under the control of others
- * Written by jrandom in 2003 and released into the public domain 
- * with no warranty of any kind, either expressed or implied.  
- * It probably won't make your computer catch on fire, or eat 
+ * Written by jrandom in 2003 and released into the public domain
+ * with no warranty of any kind, either expressed or implied.
+ * It probably won't make your computer catch on fire, or eat
  * your children, but it might.  Use at your own risk.
  *
  */
@@ -19,7 +19,7 @@ import net.i2p.util.SimpleByteCache;
 
 /**
  * Defines the SigningPrivateKey as defined by the I2P data structure spec.
- * A signing private key is by default a 20 byte Integer. The private key represents only the 
+ * A signing private key is by default a 20 byte Integer. The private key represents only the
  * exponent, not the primes, which are constant and defined in the crypto spec.
  * This key varies from the PrivateKey in its usage (signing, not decrypting)
  *

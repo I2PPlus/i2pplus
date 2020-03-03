@@ -25,12 +25,14 @@ class OutboundMessageDistributor {
     private final Set<Hash> _toRouters;
     private int _newRouterCount;
     private long _newRouterTime;
-    
+
     private static final long MAX_DISTRIBUTE_TIME = 15*1000;
     // This is probably too high, to be reduced later
-    private static final int MAX_ROUTERS_PER_PERIOD = 60;
-    private static final long NEW_ROUTER_PERIOD = 30*1000;
-    
+//    private static final int MAX_ROUTERS_PER_PERIOD = 60;
+    private static final int MAX_ROUTERS_PER_PERIOD = 240;
+//    private static final long NEW_ROUTER_PERIOD = 30*1000;
+    private static final long NEW_ROUTER_PERIOD = 60*1000;
+
     /**
      *  @param priority OutNetMessage.PRIORITY_PARTICIPATING for somebody else's OBEP, or
      *                  OutNetMessage.PRIORITY_MY_DATA for our own zero-hop OBGW/EP
@@ -47,7 +49,7 @@ class OutboundMessageDistributor {
         }
         // all createRateStat() in TunnelDispatcher
     }
-    
+
     public void distribute(I2NPMessage msg, Hash target) {
         distribute(msg, target, null);
     }
@@ -56,14 +58,15 @@ class OutboundMessageDistributor {
         if (shouldDrop(target)) {
             _context.statManager().addRateData("tunnel.dropAtOBEP", 1);
             if (_log.shouldLog(Log.WARN))
-                 _log.warn("Drop msg at OBEP (new conn throttle) to " + target + ' ' + msg);
+                 _log.warn("Dropping " + msg + " at Outbound Endpoint [TunnelID " + tunnel.getTunnelId() + "] (new connection throttle) \n* Target: ["
+                            + target.toBase64().substring(0,6) + "]");
             return;
         }
         RouterInfo info = _context.netDb().lookupRouterInfoLocally(target);
         if (info == null) {
             if (_log.shouldLog(Log.INFO))
-                _log.info("outbound distributor to " + target
-                           + "." + (tunnel != null ? tunnel.getTunnelId() + "" : "")
+                _log.info("Outbound distributor to [" + target.toBase64().substring(0,6)
+                           + "]." + (tunnel != null ? tunnel.getTunnelId() + "" : "")
                            + ": no info locally, searching...");
             // TODO - should we set the search timeout based on the message timeout,
             // or is that a bad idea due to clock skews?
@@ -73,7 +76,7 @@ class OutboundMessageDistributor {
             distribute(msg, info, tunnel);
         }
     }
-    
+
     /**
      *  Throttle msgs to unconnected routers after we hit
      *  the limit of new routers in a given time period.
@@ -109,23 +112,23 @@ class OutboundMessageDistributor {
             t.setMessageExpiration(m.getMessageExpiration());
             m = t;
         }
-        
+
         if (_context.routerHash().equals(target.getIdentity().calculateHash())) {
             if (_log.shouldLog(Log.DEBUG))
-                _log.debug("queueing inbound message to ourselves: " + m);
+                _log.debug("Queueing Inbound message to ourselves: " + m);
             // TODO if UnknownI2NPMessage, convert it.
             // See FragmentHandler.receiveComplete()
-            _context.inNetMessagePool().add(m, null, null); 
+            _context.inNetMessagePool().add(m, null, null);
             return;
         } else {
             OutNetMessage out = new OutNetMessage(_context, m, _context.clock().now() + MAX_DISTRIBUTE_TIME, _priority, target);
 
             if (_log.shouldLog(Log.DEBUG))
-                _log.debug("queueing outbound message to " + target.getIdentity().calculateHash());
+                _log.debug("Queueing Outbound message to: [" + target.getIdentity().calculateHash().toBase64().substring(0,6) + "]");
             _context.outNetMessagePool().add(out);
         }
     }
-    
+
     private class DistributeJob extends JobImpl {
         private final I2NPMessage _message;
         private final Hash _target;
@@ -138,21 +141,21 @@ class OutboundMessageDistributor {
             _tunnel = id;
         }
 
-        public String getName() { return "OBEP distribute after lookup"; }
+        public String getName() { return "Distribute OBEP after Lookup"; }
 
         public void runJob() {
             RouterInfo info = getContext().netDb().lookupRouterInfoLocally(_target);
             int stat;
             if (info != null) {
                 if (_log.shouldLog(Log.DEBUG))
-                    _log.debug("outbound distributor to " + _target
+                    _log.debug("Outbound distributor to " + _target
                            + "." + (_tunnel != null ? _tunnel.getTunnelId() + "" : "")
                            + ": found on search");
                 distribute(_message, info, _tunnel);
                 stat = 1;
             } else {
                 if (_log.shouldLog(Log.WARN))
-                    _log.warn("outbound distributor to " + _target
+                    _log.warn("Outbound distributor to " + _target
                            + "." + (_tunnel != null ? _tunnel.getTunnelId() + "" : "")
                            + ": NOT found on search");
                 stat = 0;

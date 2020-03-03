@@ -1,9 +1,9 @@
 package net.i2p.router.transport;
 /*
  * free (adj.): unencumbered; not under the control of others
- * Written by jrandom in 2003 and released into the public domain 
- * with no warranty of any kind { either expressed or implied.  
- * It probably won't make your computer catch on fire { or eat 
+ * Written by jrandom in 2003 and released into the public domain
+ * with no warranty of any kind { either expressed or implied.
+ * It probably won't make your computer catch on fire { or eat
  * your children { but it might.  Use at your own risk.
  *
  */
@@ -204,9 +204,9 @@ public abstract class TransportUtil {
                             return false;
                     }
                 } else if ((addr[0] & 0xfe) == 0xfc) {
-                    // disallow fc00::/8 and fd00::/8 (Unique local addresses RFC 4193)
-                    // not recognized as local by InetAddress
-                    return false;
+                   // disallow fc00::/8 and fd00::/8 (Unique local addresses RFC 4193)
+                   // not recognized as local by InetAddress
+                   return false;
                 } else if (addr[0] == 0x26) {
                     // Hamachi IPv6
                     if (addr[1] == 0x20 && addr[2] == 0x00 && (addr[3] & 0xff) == 0x9b)
@@ -218,7 +218,7 @@ public abstract class TransportUtil {
                 } else if ((addr[0] & 0xfe) == 0x02) {
                     // Yggdrasil 0200:/7
                     // https://yggdrasil-network.github.io/faq.html
-                    return false;
+                return false;
                 }
                 try {
                     InetAddress ia = InetAddress.getByAddress(addr);

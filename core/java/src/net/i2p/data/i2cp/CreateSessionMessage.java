@@ -2,9 +2,9 @@ package net.i2p.data.i2cp;
 
 /*
  * free (adj.): unencumbered; not under the control of others
- * Written by jrandom in 2003 and released into the public domain 
- * with no warranty of any kind, either expressed or implied.  
- * It probably won't make your computer catch on fire, or eat 
+ * Written by jrandom in 2003 and released into the public domain
+ * with no warranty of any kind, either expressed or implied.
+ * It probably won't make your computer catch on fire, or eat
  * your children, but it might.  Use at your own risk.
  *
  */
@@ -16,7 +16,7 @@ import java.io.InputStream;
 import net.i2p.data.DataFormatException;
 
 /**
- * Defines the message a client sends to a router when establishing a new 
+ * Defines the message a client sends to a router when establishing a new
  * session.
  *
  * @author jrandom
@@ -72,9 +72,8 @@ public class CreateSessionMessage extends I2CPMessageImpl {
     @Override
     public String toString() {
         StringBuilder buf = new StringBuilder();
-        buf.append("[CreateSessionMessage: ");
-        buf.append("\n\tConfig: ").append(_sessionConfig);
-        buf.append("]");
+        buf.append("CreateSessionMessage: ");
+        buf.append("\n* Config: ").append(_sessionConfig);
         return buf.toString();
     }
 }

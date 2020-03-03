@@ -31,9 +31,9 @@ class PeerTestState {
     private long _receiveBobTime;
     private long _receiveCharlieTime;
     private final AtomicInteger _packetsRelayed = new AtomicInteger();
-    
+
     public enum Role {ALICE, BOB, CHARLIE};
-    
+
     public PeerTestState(Role role, boolean isIPv6, long nonce, long now) {
         _ourRole = role;
         _isIPv6 = isIPv6;
@@ -54,7 +54,7 @@ class PeerTestState {
 
     /**
      * If we are Alice, this will contain the IP that Bob says we
-     * can be reached at - the IP Charlie says we can be reached 
+     * can be reached at - the IP Charlie says we can be reached
      * at is _aliceIPFromCharlie
      *
      */
@@ -78,10 +78,10 @@ class PeerTestState {
     public void setBobPort(int bobPort) { _bobPort = bobPort; }
     public int getCharliePort() { return _charliePort; }
     public void setCharliePort(int charliePort) { _charliePort = charliePort; }
-    
+
     public int getAlicePortFromCharlie() { return _alicePortFromCharlie; }
     public void setAlicePortFromCharlie(int alicePortFromCharlie) { _alicePortFromCharlie = alicePortFromCharlie; }
-    
+
     public SessionKey getAliceIntroKey() { return _aliceIntroKey; }
     public void setAliceIntroKey(SessionKey key) { _aliceIntroKey = key; }
     public SessionKey getCharlieIntroKey() { return _charlieIntroKey; }
@@ -90,7 +90,7 @@ class PeerTestState {
     public void setBobCipherKey(SessionKey key) { _bobCipherKey = key; }
     public SessionKey getBobMACKey() { return _bobMACKey; }
     public void setBobMACKey(SessionKey key) { _bobMACKey = key; }
-    
+
     /** when did this test begin? */
     public long getBeginTime() { return _beginTime; }
 
@@ -111,31 +111,31 @@ class PeerTestState {
     /** when did we last hear from charlie? */
     public long getReceiveCharlieTime() { return _receiveCharlieTime; }
     public void setReceiveCharlieTime(long when) { _receiveCharlieTime = when; }
-    
+
     /** @return new value */
     public int incrementPacketsRelayed() { return _packetsRelayed.incrementAndGet(); }
-    
+
     @Override
     public String toString() {
         StringBuilder buf = new StringBuilder(256);
         buf.append("PeerTest ").append(_testNonce)
-           .append(" as ").append(_ourRole.toString());
+           .append(" as ").append(_ourRole.toString()).append("\n*");
         if (_aliceIP != null)
-            buf.append("; Alice: ").append(_aliceIP).append(':').append(_alicePort);
+            buf.append(" [Alice: ").append(_aliceIP).append(':').append(_alicePort).append("]");
         if (_aliceIPFromCharlie != null)
-            buf.append(" (fromCharlie ").append(_aliceIPFromCharlie).append(':').append(_alicePortFromCharlie).append(')');
+            buf.append(" [from Charlie: ").append(_aliceIPFromCharlie).append(':').append(_alicePortFromCharlie).append("]");
         if (_bobIP != null)
-            buf.append("; Bob: ").append(_bobIP).append(':').append(_bobPort);
+            buf.append(" [Bob: ").append(_bobIP).append(':').append(_bobPort).append("]");
         if (_charlieIP != null)
-            buf.append(" Charlie: ").append(_charlieIP).append(':').append(_charliePort);
-        buf.append("; last send after ").append(_lastSendTime - _beginTime);
+            buf.append(" [Charlie: ").append(_charlieIP).append(':').append(_charliePort).append("]");
+        buf.append("\n* Last send after ").append(_lastSendTime - _beginTime).append("ms");
         if (_receiveAliceTime > 0)
-            buf.append("; rcvd from Alice after ").append(_receiveAliceTime - _beginTime);
+            buf.append("; Rcvd from Alice after ").append(_receiveAliceTime - _beginTime).append("ms");
         if (_receiveBobTime > 0)
-            buf.append("; rcvd from Bob after ").append(_receiveBobTime - _beginTime);
+            buf.append("; Rcvd from Bob after ").append(_receiveBobTime - _beginTime).append("ms");
         if (_receiveCharlieTime > 0)
-            buf.append("; rcvd from Charlie after ").append(_receiveCharlieTime - _beginTime);
-        buf.append("; pkts relayed: ").append(_packetsRelayed.get());
+            buf.append("; Rcvd from Charlie after ").append(_receiveCharlieTime - _beginTime).append("ms");
+        buf.append("; Packets relayed: ").append(_packetsRelayed.get());
         return buf.toString();
     }
 }

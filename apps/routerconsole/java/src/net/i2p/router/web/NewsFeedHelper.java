@@ -19,7 +19,7 @@ import net.i2p.util.SystemVersion;
  *  @since 0.9.23
  */
 public class NewsFeedHelper extends HelperBase {
-    
+
     private int _start;
     private int _limit = 2;
 
@@ -75,15 +75,15 @@ public class NewsFeedHelper extends HelperBase {
                 if (i > start && entry.updated > 0 && ageLimit > 0 &&
                     entry.updated < ctx.clock().now() - ageLimit)
                     break;
-                buf.append("<div class=\"newsentry\"><h3>");
+                buf.append("<div class=\"newsentry\">\n<h3>");
                 if (entry.updated > 0) {
                     Date date = new Date(entry.updated);
                     buf.append("<span class=\"newsDate\">")
-                       .append(fmt.format(date))
+                       .append(fmt.format(date).replace("-", " "))
                        .append("</span> ");
                 }
                 if (entry.link != null)
-                    buf.append("<a href=\"").append(DataHelper.escapeHTML(entry.link)).append("\">");
+                    buf.append("<a href=\"").append(DataHelper.escapeHTML(entry.link)).append("\" target=\"_blank\">");
                 buf.append(entry.title);
                 if (entry.link != null)
                     buf.append("</a>");
@@ -95,7 +95,7 @@ public class NewsFeedHelper extends HelperBase {
                 }
                 buf.append("</h3>\n<div class=\"newscontent\">\n")
                    .append(entry.content)
-                   .append("\n</div></div>\n");
+                   .append("\n</div>\n</div>\n");
                 if (++i >= start + max)
                     break;
             }

@@ -39,7 +39,7 @@ class UpdateRunner implements UpdateTask, CompleteListener {
     private static final long CHECK_INTERVAL = 3*60*1000;
 
     public UpdateRunner(I2PAppContext ctx, UpdateManager umgr, SnarkManager smgr,
-                        UpdateType type, List<URI> uris, String newVersion) { 
+                        UpdateType type, List<URI> uris, String newVersion) {
         _context = ctx;
         _log = ctx.logManager().getLog(getClass());
         _umgr = umgr;
@@ -229,7 +229,7 @@ class UpdateRunner implements UpdateTask, CompleteListener {
     private void notifyProgress() {
         if (_hasMetaInfo) {
             long total = _snark.getTotalLength();
-            long remaining = _snark.getRemainingLength(); 
+            long remaining = _snark.getRemainingLength();
             String status = "<b>" + _smgr.util().getString("Updating") + "</b>";
             _umgr.notifyProgress(this, status, total - remaining, total);
         }

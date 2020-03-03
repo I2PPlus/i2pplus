@@ -568,7 +568,7 @@ class PluginUpdateRunner extends UpdateRunner {
             }
             _updated = true;
             to.delete();
-            // install != update. Changing the user's settings like this is probabbly a bad idea.
+            // install != update. Changing the user's settings like this is probably a bad idea.
             if (Boolean.valueOf( props.getProperty("dont-start-at-install")).booleanValue()) {
                 statusDone("<b>" + _t("Plugin {0} installed", appName + ' ' + version) + "</b>");
                 if(!update) {

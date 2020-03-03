@@ -44,7 +44,7 @@ import net.i2p.util.SystemVersion;
  *  @since 0.9.9
  */
 public final class KeyStoreUtil {
-        
+
     private static boolean _blacklistLogged;
 
     public static final String DEFAULT_KEYSTORE_PASSWORD = "changeit";
@@ -361,21 +361,20 @@ public final class KeyStoreUtil {
                                 if (expiresIn < expiresWithin) {
                                     Log l = I2PAppContext.getGlobalContext().logManager().getLog(KeyStoreUtil.class);
                                     String subj = cert.getIssuerX500Principal().toString();
-                                    l.logAlways(Log.WARN, "Certificate \"" + subj + "\" in key store " + location +
+                                    l.logAlways(Log.WARN, "Certificate " + subj + " in key store " + location +
                                                           " will expire in " + DataHelper.formatDuration2(expiresIn).replace("&nbsp;", " ") +
-                                                          "\nYou should renew the certificate soon." +
+                                                          "\n* You should renew the certificate soon." +
                                                           // TODO better help or tools, or autorenew
-                                                          "\nFor a local self-signed certificate, you may delete the keystore and restart," +
+                                                          "\n* For a local self-signed certificate, you may delete the keystore and restart," +
                                                           " or ask for help on how to renew.");
                                 }
                             } catch (CertificateExpiredException cee) {
                                 String subj = cert.getIssuerX500Principal().toString();
-                                error("Expired certificate \"" + subj + "\" in key store " + location +
-                                      "\nYou must renew the certificate." +
+                                error("Expired certificate " + subj + " in key store " + location +
+                                      "\n* You must renew the certificate." +
                                       // TODO better help or tools, or autorenew
-                                      "\nFor a local self-signed certificate, you may simply delete the keystore and restart," +
-                                      "\nor ask for help on how to renew.",
-                                      null);
+                                      "\n* For a local self-signed certificate, you may simply delete the keystore and restart," +
+                                      " or ask for help on how to renew.", null);
                                 rv = false;
                             } catch (CertificateNotYetValidException cnyve) {
                                 String subj = cert.getIssuerX500Principal().toString();
@@ -439,10 +438,10 @@ public final class KeyStoreUtil {
                                     BigInteger serial = xc.getSerialNumber();
                                     String cn = CertUtil.getIssuerValue(xc, "CN");
                                     String ou = CertUtil.getIssuerValue(xc, "OU");
-                                    warn("Ignoring blacklisted certificate \"" + alias +
-                                         "\" CN: \"" + cn +
-                                         "\" OU: \"" + ou +
-                                         "\" s/n: " + serial.toString(16), null);
+                                    warn("Ignoring blacklisted certificate: " + alias +
+                                         "\n* CN: " + cn +
+                                         "\n* OU: " + ou +
+                                         "\n* S/N: " + serial.toString(16), null);
                                 }
                             }
                         } else {
@@ -531,9 +530,9 @@ public final class KeyStoreUtil {
         try {
             X509Certificate cert = CertUtil.loadCert(file);
             info("Read X509 Certificate from " + file.getAbsolutePath() +
-                          " Issuer: " + cert.getIssuerX500Principal() +
-                          " Serial: " + cert.getSerialNumber().toString(16) +
-                          "; Valid From: " + cert.getNotBefore() +
+                          "\n* Issuer: " + cert.getIssuerX500Principal() +
+                          "\n* Serial: " + cert.getSerialNumber().toString(16) +
+                          "\n* Valid From: " + cert.getNotBefore() +
                           " To: " + cert.getNotAfter());
             if (cs != null && CertUtil.isRevoked(cs, cert)) {
                 error("Certificate is revoked: " + file, new Exception());
@@ -1004,7 +1003,7 @@ public final class KeyStoreUtil {
         return hash + "with" + keyalg;
     }
 
-    /** 
+    /**
      *  Get a private key out of a keystore
      *
      *  @param ks path to the keystore
@@ -1031,7 +1030,7 @@ public final class KeyStoreUtil {
         }
     }
 
-    /** 
+    /**
      *  Export the private key and certificate chain (if any) out of a keystore.
      *  Does NOT close the output stream. Throws on all errors.
      *
@@ -1064,7 +1063,7 @@ public final class KeyStoreUtil {
         }
     }
 
-    /** 
+    /**
      *  Renew the the private key certificate in a keystore.
      *  Closes the input and output streams. Throws on all errors.
      *
@@ -1120,7 +1119,7 @@ public final class KeyStoreUtil {
         }
     }
 
-    /** 
+    /**
      *  Import the private key and certificate chain to a keystore.
      *  Keystore will be created if it does not exist.
      *  Private key MUST be first in the stream.
@@ -1163,7 +1162,7 @@ public final class KeyStoreUtil {
         }
     }
 
-    /** 
+    /**
      *  Import the private key and certificate chain to a keystore.
      *  Keystore will be created if it does not exist.
      *  Private key MUST be first in the stream.
@@ -1193,7 +1192,7 @@ public final class KeyStoreUtil {
         }
     }
 
-    /** 
+    /**
      *  Get a cert out of a keystore
      *
      *  @param ks path to the keystore
@@ -1215,7 +1214,7 @@ public final class KeyStoreUtil {
         }
     }
 
-    /** 
+    /**
      *  Pull the cert back OUT of the keystore and save it in Base64-encoded X.509 format
      *  so the clients can get to it.
      *

@@ -1,9 +1,9 @@
 package net.i2p.router.networkdb.kademlia;
 /*
  * free (adj.): unencumbered; not under the control of others
- * Written by jrandom in 2003 and released into the public domain 
- * with no warranty of any kind, either expressed or implied.  
- * It probably won't make your computer catch on fire, or eat 
+ * Written by jrandom in 2003 and released into the public domain
+ * with no warranty of any kind, either expressed or implied.
+ * It probably won't make your computer catch on fire, or eat
  * your children, but it might.  Use at your own risk.
  *
  */
@@ -45,7 +45,7 @@ class FloodfillPeerSelector extends PeerSelector {
     public FloodfillPeerSelector(RouterContext ctx) {
         super(ctx);
     }
-    
+
     /**
      * Pick out peers with the floodfill capacity set, returning them first, but then
      * after they're complete, sort via kademlia.
@@ -57,7 +57,7 @@ class FloodfillPeerSelector extends PeerSelector {
      * @return List of Hash for the peers selected
      */
     @Override
-    List<Hash> selectMostReliablePeers(Hash key, int maxNumRouters, Set<Hash> peersToIgnore, KBucketSet<Hash> kbuckets) { 
+    List<Hash> selectMostReliablePeers(Hash key, int maxNumRouters, Set<Hash> peersToIgnore, KBucketSet<Hash> kbuckets) {
         return selectNearestExplicitThin(key, maxNumRouters, peersToIgnore, kbuckets, true);
     }
 
@@ -72,7 +72,7 @@ class FloodfillPeerSelector extends PeerSelector {
      * @return List of Hash for the peers selected
      */
     @Override
-    List<Hash> selectNearestExplicitThin(Hash key, int maxNumRouters, Set<Hash> peersToIgnore, KBucketSet<Hash> kbuckets) { 
+    List<Hash> selectNearestExplicitThin(Hash key, int maxNumRouters, Set<Hash> peersToIgnore, KBucketSet<Hash> kbuckets) {
         return selectNearestExplicitThin(key, maxNumRouters, peersToIgnore, kbuckets, false);
     }
 
@@ -85,7 +85,7 @@ class FloodfillPeerSelector extends PeerSelector {
      * @param peersToIgnore can be null
      * @return List of Hash for the peers selected
      */
-    List<Hash> selectNearestExplicitThin(Hash key, int maxNumRouters, Set<Hash> peersToIgnore, KBucketSet<Hash> kbuckets, boolean preferConnected) { 
+    List<Hash> selectNearestExplicitThin(Hash key, int maxNumRouters, Set<Hash> peersToIgnore, KBucketSet<Hash> kbuckets, boolean preferConnected) {
         if (peersToIgnore == null)
             peersToIgnore = Collections.singleton(_context.routerHash());
         else
@@ -95,13 +95,27 @@ class FloodfillPeerSelector extends PeerSelector {
         if (kbuckets == null) return new ArrayList<Hash>();
         kbuckets.getAll(matches);
         List<Hash> rv = matches.get(maxNumRouters, preferConnected);
+        StringBuilder buf = new StringBuilder();
+        buf.append("Searching for " + maxNumRouters + " peers close to [" + key.toBase64().substring(0,6) + "]");
+        buf.append("\n* All Hashes: " + matches.size());
+        buf.append("\n* Ignoring: ");
+        for (Hash h : peersToIgnore) {
+            buf.append("[").append(h.toBase64().substring(0,6)).append("]"); buf.append(" ");
+        }
+        buf.append("\n* Matched: ");
+        for (Hash h : rv) {
+            buf.append("[").append(h.toBase64().substring(0,6)).append("]"); buf.append(" ");
+        }
         if (_log.shouldLog(Log.DEBUG))
-            _log.debug("Searching for " + maxNumRouters + " peers close to " + key + ": " 
-                       + rv + " (not including " + peersToIgnore + ") [allHashes.size = " 
-                       + matches.size() + "]", new Exception("Search by"));
+            _log.debug(buf.toString());
+
+//            _log.debug("Searching for " + maxNumRouters + " peers close to [" + key.toBase64().substring(0,6) + "]"
+//                       + "\n* All Hashes: " + matches.size()
+//                       + "\n* Ignoring: " + peersToIgnore
+//                       + "\n* Matched: " + rv); //, new Exception("Search by"));
         return rv;
     }
-    
+
     /**
      *  @param kbuckets now unused
      *  @return all floodfills not banlisted forever.
@@ -139,7 +153,7 @@ class FloodfillPeerSelector extends PeerSelector {
         }
         return rv;
     }
-    
+
     /**
      *  Sort the floodfills. The challenge here is to keep the good ones
      *  at the front and the bad ones at the back. If they are all good or bad,
@@ -174,7 +188,7 @@ class FloodfillPeerSelector extends PeerSelector {
     // TODO we need better tracking of floodfill first-heard-about times
     // before we can do this. Old profiles get deleted.
     //private static final long HEARD_AGE = 48*60*60*1000L;
-    private static final long HEARD_AGE = 60*60*1000L;
+    private static final long HEARD_AGE = 36*60*60*1000L;
     private static final long INSTALL_AGE = HEARD_AGE + (60*60*1000L);
 
     /**
@@ -245,22 +259,23 @@ class FloodfillPeerSelector extends PeerSelector {
                 if (!maskedIPs.add(ip))
                     sameIP = true;
             }
+
             if (sameIP) {
                 badff.add(entry);
                 if (_log.shouldLog(Log.DEBUG))
-                    _log.debug("Same /16, family, or port: " + entry);
+                    _log.debug("Floodfill Sort: Same /16, family, or port [" + entry.toBase64().substring(0,6) + "]");
             } else if (info != null && now - info.getPublished() > 3*60*60*1000) {
                 badff.add(entry);
                 if (_log.shouldLog(Log.DEBUG))
-                    _log.debug("Old: " + entry);
+                    _log.debug("Floodfill Sort: Old [" + entry.toBase64().substring(0,6) + "]");
             } else if (info != null && _context.commSystem().isInStrictCountry(info)) {
                 badff.add(entry);
                 if (_log.shouldLog(Log.DEBUG))
-                    _log.debug("Bad country: " + entry);
+                    _log.debug("Floodfill Sort: Bad country [" + entry.toBase64().substring(0,6) + "]");
             } else if (info != null && info.getBandwidthTier().equals("L")) {
                 badff.add(entry);
                 if (_log.shouldLog(Log.DEBUG))
-                    _log.debug("Slow: " + entry);
+                    _log.debug("Floodfill Sort: Slow [" + entry.toBase64().substring(0,6) + "]");
             } else {
                 PeerProfile prof = _context.profileOrganizer().getProfile(entry);
                 double maxGoodRespTime = MAX_GOOD_RESP_TIME;
@@ -273,7 +288,7 @@ class FloodfillPeerSelector extends PeerSelector {
                 if (prof != null) {
                     if (enforceHeard && prof.getFirstHeardAbout() > now - HEARD_AGE) {
                         if (_log.shouldLog(Log.DEBUG))
-                            _log.debug("Bad (new): " + entry);
+                            _log.debug("Floodfill Sort: Bad (too new) [" + entry.toBase64().substring(0,6) + "]");
                         badff.add(entry);
                     } else if (prof.getDBHistory() != null) {
                         if (prof.getDbResponseTime().getRate(10*60*1000).getAverageValue() < maxGoodRespTime
@@ -282,7 +297,7 @@ class FloodfillPeerSelector extends PeerSelector {
                             && prof.getDBHistory().getFailedLookupRate().getRate(60*60*1000).getAverageValue() < maxFailRate) {
                             // good
                             if (_log.shouldLog(Log.DEBUG))
-                                _log.debug("Good: " + entry);
+                                _log.debug("Floodfill Sort: Good [" + entry.toBase64().substring(0,6) + "]");
                             rv.add(entry);
                             found++;
                         } else if (prof.getDBHistory().getLastStoreFailed() <= prof.getDBHistory().getLastStoreSuccessful()
@@ -290,29 +305,50 @@ class FloodfillPeerSelector extends PeerSelector {
                                    || (prof.getDBHistory().getLastStoreFailed() < now - NO_FAIL_STORE_OK
                                        && prof.getDBHistory().getLastLookupFailed() < now - NO_FAIL_LOOKUP_OK)) {
                             if (_log.shouldLog(Log.DEBUG))
-                                _log.debug("OK: " + entry);
+                                _log.debug("Floodfill Sort: OK [" + entry.toBase64().substring(0,6) + "]");
                             okff.add(entry);
                         } else {
                             if (_log.shouldLog(Log.DEBUG))
-                                _log.debug("Bad (DB): " + entry);
+                                _log.debug("Floodfill Sort: Bad (DB) [" + entry.toBase64().substring(0,6) + "]");
                             badff.add(entry);
                         }
                     } else {
                         // no DBHistory
                         if (_log.shouldLog(Log.DEBUG))
-                            _log.debug("Bad (no hist): " + entry);
+                            _log.debug("Floodfill Sort: Bad (no DB history) [" + entry.toBase64().substring(0,6) + "]");
                         badff.add(entry);
                     }
                 } else {
                     // no profile
                     if (_log.shouldLog(Log.DEBUG))
-                        _log.debug("Bad (no prof): " + entry);
+                        _log.debug("Floodfill Sort: Bad (no profile) [" + entry.toBase64().substring(0,6) + "]");
                     badff.add(entry);
                 }
             }
         }
+        StringBuilder buf = new StringBuilder();
+        buf.append("Floodfill Sort");
+        if (!rv.isEmpty()) {
+            buf.append("\n* Good: ");
+            for (Hash h : rv) {
+                buf.append("[").append(h.toBase64().substring(0,6)).append("]"); buf.append(" ");
+            }
+        }
+        if (!okff.isEmpty()) {
+            buf.append("\n* OK: ");
+            for (Hash h : okff) {
+                buf.append("[").append(h.toBase64().substring(0,6)).append("]"); buf.append(" ");
+            }
+        }
+        if (!badff.isEmpty()) {
+            buf.append("\n* Bad: ");
+            for (Hash h : badff) {
+                buf.append("[").append(h.toBase64().substring(0,6)).append("]"); buf.append(" ");
+            }
+        }
         if (_log.shouldLog(Log.INFO))
-            _log.info("Good: " + rv + " OK: " + okff + " Bad: " + badff);
+//            _log.info("Floodfill Sort\n* Good: " + rv + "\n* OK: " + okff + "\n* Bad: " + badff);
+            _log.info(buf.toString());
 
         // Put the ok floodfills after the good floodfills
         for (int i = 0; found < howMany && i < okff.size(); i++) {
@@ -327,7 +363,7 @@ class FloodfillPeerSelector extends PeerSelector {
 
         return rv;
     }
-    
+
     private class FloodfillSelectionCollector implements SelectionCollector<Hash> {
         private final TreeSet<Hash> _sorted;
         private final List<Hash>  _floodfillMatches;
@@ -366,7 +402,7 @@ class FloodfillPeerSelector extends PeerSelector {
             RouterInfo info = _context.netDb().lookupRouterInfoLocally(entry);
             //if (info == null)
             //    return;
-            
+
             if (info != null && FloodfillNetworkDatabaseFacade.isFloodfill(info)) {
                 _floodfillMatches.add(entry);
             } else {
@@ -388,13 +424,13 @@ class FloodfillPeerSelector extends PeerSelector {
         }
 
         /**
-         *  @return list of all with the 'f' mark in their netdb except for banlisted ones.
+         *  @return list of all with the 'f' mark in their NetDb except for banlisted ones.
          *  Will return non-floodfills only if there aren't enough floodfills.
          *
          *  The list is in 3 groups - unsorted (shuffled) within each group.
          *  Group 1: If preferConnected = true, the peers we are directly
          *           connected to, that meet the group 2 criteria
-         *  Group 2: Netdb published less than 3h ago, no bad send in last 30m.
+         *  Group 2: NetDb published less than 3h ago, no bad send in last 30m.
          *  Group 3: All others
          *  Group 4: Non-floodfills, sorted by closest-to-the-key
          */
@@ -413,17 +449,17 @@ class FloodfillPeerSelector extends PeerSelector {
                 if (info != null && now - info.getPublished() > 3*60*60*1000) {
                     badff.add(entry);
                     if (_log.shouldLog(Log.DEBUG))
-                        _log.debug("Skipping, published a while ago: " + entry);
+                        _log.debug("Floodfill Sort: Skipping [" + entry.toBase64().substring(0,6) + "] - Published over 3 hours ago");
                 } else {
                     PeerProfile prof = _context.profileOrganizer().getProfile(entry);
                     if (prof != null && now - prof.getLastSendFailed() < 30*60*1000) {
                         badff.add(entry);
                         if (_log.shouldLog(Log.DEBUG))
-                            _log.debug("Skipping, recent failed send: " + entry);
+                            _log.debug("Floodfill Sort: Skipping [" + entry.toBase64().substring(0,6) + "] - Recent failed send");
                     } else if (preferConnected && !_context.commSystem().isEstablished(entry)) {
                         unconnectedff.add(entry);
                         if (_log.shouldLog(Log.DEBUG))
-                            _log.debug("Skipping, unconnected: " + entry);
+                            _log.debug("Floodfill Sort: Skipping [" + entry.toBase64().substring(0,6) + "] - Not connected");
                     } else {
                         rv.add(entry);
                         found++;
@@ -452,7 +488,7 @@ class FloodfillPeerSelector extends PeerSelector {
         }
         public int size() { return _matches; }
     }
-    
+
     /**
      * Floodfill peers only. Used only by HandleDatabaseLookupMessageJob to populate the DSRM.
      * UNLESS peersToIgnore contains Hash.FAKE_HASH (all zeros), in which case this is an exploratory

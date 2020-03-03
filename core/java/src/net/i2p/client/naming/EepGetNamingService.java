@@ -1,6 +1,6 @@
 /*
- * By zzz 2008, released into the public domain 
- * with no warranty of any kind, either expressed or implied.  
+ * By zzz 2008, released into the public domain
+ * with no warranty of any kind, either expressed or implied.
  */
 package net.i2p.client.naming;
 
@@ -40,16 +40,16 @@ public class EepGetNamingService extends DummyNamingService {
     private final static String PROP_EEPGET_LIST = "i2p.naming.eepget.list";
     private final static String DEFAULT_EEPGET_LIST = "http://i2host.i2p/cgi-bin/i2hostquery?";
 
-    /** 
-     * The naming service should only be constructed and accessed through the 
-     * application context.  This constructor should only be used by the 
+    /**
+     * The naming service should only be constructed and accessed through the
+     * application context.  This constructor should only be used by the
      * appropriate application context itself.
      *
      */
     public EepGetNamingService(I2PAppContext context) {
         super(context);
     }
-    
+
     private List<String> getURLs() {
         String list = _context.getProperty(PROP_EEPGET_LIST, DEFAULT_EEPGET_LIST);
         StringTokenizer tok = new StringTokenizer(list, ",");
@@ -58,7 +58,7 @@ public class EepGetNamingService extends DummyNamingService {
             rv.add(tok.nextToken());
         return rv;
     }
-    
+
     @Override
     public Destination lookup(String hostname, Properties lookupOptions, Properties storedOptions) {
         Destination d = super.lookup(hostname, null, null);
@@ -75,7 +75,7 @@ public class EepGetNamingService extends DummyNamingService {
             return null;
 
         // prevent lookup loops - this cannot be the only lookup service
-        for (int i = 0; i < URLs.size(); i++) { 
+        for (int i = 0; i < URLs.size(); i++) {
             String url = URLs.get(i);
             if (url.startsWith("http://" + hostname + "/")) {
                 _log.error("Lookup loop: " + hostname);
@@ -84,9 +84,9 @@ public class EepGetNamingService extends DummyNamingService {
         }
 
         // lookup
-        for (int i = 0; i < URLs.size(); i++) { 
+        for (int i = 0; i < URLs.size(); i++) {
             String url = URLs.get(i);
-            String key = fetchAddr(url, hostname);	  	
+            String key = fetchAddr(url, hostname);
             if (key != null) {
                 _log.error("Success: " + url + hostname);
                 d = lookupBase64(key);
@@ -101,7 +101,7 @@ public class EepGetNamingService extends DummyNamingService {
     private static final int MAX_RESPONSE = DEST_SIZE + 68 + 10; // allow for hostname= and some trailing stuff
     private String fetchAddr(String url, String hostname) {
         ByteArrayOutputStream baos = new ByteArrayOutputStream(MAX_RESPONSE);
-        
+
         try {
             // Do a proxied eepget into our ByteArrayOutputStream with 0 retries
             EepGet get = new EepGet(_context, true, "localhost", 4444, 0, DEST_SIZE, MAX_RESPONSE,
@@ -114,7 +114,7 @@ public class EepGetNamingService extends DummyNamingService {
                 }
                 String key = baos.toString();
                 if (key.startsWith(hostname + "="))  // strip hostname=
-                    key = key.substring(hostname.length() + 1); 
+                    key = key.substring(hostname.length() + 1);
                 key = key.substring(0, DEST_SIZE);   // catch IndexOutOfBounds exception below
                 if (!key.endsWith("AA")) {
                     _log.error("Invalid key: " + url + hostname);

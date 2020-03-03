@@ -17,7 +17,7 @@ import net.i2p.util.I2PThread;
 import net.i2p.util.Log;
 
 /**
- * Listen to a destination, receiving any sockets and writing anything they 
+ * Listen to a destination, receiving any sockets and writing anything they
  * send to a new file. See the {@link #main}
  *
  */
@@ -28,9 +28,9 @@ public class StreamSinkServer {
     private String _i2cpHost;
     private int _i2cpPort;
     private int _handlers;
-    
+
     /**
-     * Create but do not start the streaming server.  
+     * Create but do not start the streaming server.
      *
      * @param sinkDir Directory to store received files in
      * @param ourDestFile filename to write our binary destination to
@@ -46,17 +46,17 @@ public class StreamSinkServer {
         _handlers = handlers;
         _log = I2PAppContext.getGlobalContext().logManager().getLog(StreamSinkServer.class);
     }
-    
+
     /**
-     * Actually fire up the server - this call blocks forever (or until the server 
+     * Actually fire up the server - this call blocks forever (or until the server
      * socket closes)
-     * 
+     *
      */
     public void runServer() {
         I2PSocketManager mgr = null;
         if (_i2cpHost != null)
             mgr = I2PSocketManagerFactory.createManager(_i2cpHost, _i2cpPort, new Properties());
-        else 
+        else
             mgr = I2PSocketManagerFactory.createManager();
         Destination dest = mgr.getSession().getMyDestination();
         if (_log.shouldLog(Log.INFO))
@@ -74,11 +74,11 @@ public class StreamSinkServer {
         } finally {
             if (fos != null) try { fos.close(); } catch (IOException ioe) {}
         }
-        
+
         I2PServerSocket sock = mgr.getServerSocket();
         startup(sock);
     }
-    
+
     public void startup(I2PServerSocket sock) {
         for (int i = 0; i < _handlers; i++) {
             I2PThread t = new I2PThread(new ClientRunner(sock));
@@ -87,7 +87,7 @@ public class StreamSinkServer {
             t.start();
         }
     }
-    
+
     /**
      * Actually deal with a client - pull anything they send us and write it to a file.
      *
@@ -111,10 +111,10 @@ public class StreamSinkServer {
                     return;
                 } catch(SocketTimeoutException ste) {
                     // ignored
-                }       
+                }
             }
         }
-        
+
         private void handle(I2PSocket sock) {
             FileOutputStream fos = null;
             try {
@@ -129,7 +129,7 @@ public class StreamSinkServer {
                 _log.error("Error creating sink", ioe);
                 return;
             }
-            
+
             long start = System.currentTimeMillis();
             try {
                 InputStream in = sock.getInputStream();
@@ -140,11 +140,11 @@ public class StreamSinkServer {
                     //_fos.write(buf, 0, read);
                     written += read;
                     if (_log.shouldLog(Log.DEBUG))
-                        _log.debug("read and wrote " + read + " (" + written + ")");
+                        _log.debug("Read and wrote " + read + " (" + written + ")");
                 }
                 fos.write((DataHelper.getUTF8("written: [" + written + "]\n")));
                 long lifetime = System.currentTimeMillis() - start;
-                _log.info("Got EOF from client socket [written=" + written + " lifetime=" + lifetime + "]");
+                _log.info("Received EOF from client socket [written=" + written + " lifetime=" + lifetime + "]");
             } catch (IOException ioe) {
                 _log.error("Error writing the sink", ioe);
             } finally {
@@ -154,7 +154,7 @@ public class StreamSinkServer {
             }
         }
     }
-    
+
     /**
      * Fire up the streaming server.  <code>Usage: StreamSinkServer [i2cpHost i2cpPort] sinkDir ourDestFile [numHandlers]</code><br>
      * <ul>
@@ -181,7 +181,7 @@ public class StreamSinkServer {
                         handlers = Integer.parseInt(args[4]);
                     } catch (NumberFormatException nfe) {}
                 }
-                try { 
+                try {
                     int port = Integer.parseInt(args[1]);
                     server = new StreamSinkServer(args[2], args[3], args[0], port, handlers);
                 } catch (NumberFormatException nfe) {

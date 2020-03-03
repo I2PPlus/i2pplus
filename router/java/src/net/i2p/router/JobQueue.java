@@ -1,9 +1,9 @@
 package net.i2p.router;
 /*
  * free (adj.): unencumbered; not under the control of others
- * Written by jrandom in 2003 and released into the public domain 
- * with no warranty of any kind, either expressed or implied.  
- * It probably won't make your computer catch on fire, or eat 
+ * Written by jrandom in 2003 and released into the public domain
+ * with no warranty of any kind, either expressed or implied.
+ * It probably won't make your computer catch on fire, or eat
  * your children, but it might.  Use at your own risk.
  *
  */
@@ -43,7 +43,7 @@ import net.i2p.util.SystemVersion;
 public class JobQueue {
     private final Log _log;
     private final RouterContext _context;
-    
+
     /** Integer (runnerId) to JobQueueRunner for created runners */
     private final Map<Integer, JobQueueRunner> _queueRunners;
     /** a counter to identify a job runner */
@@ -59,103 +59,115 @@ public class JobQueue {
     private volatile boolean _allowParallelOperation;
     /** have we been killed or are we alive? */
     private volatile boolean _alive;
-    
+
     private final Object _jobLock;
     private volatile long _nextPumperRun;
-    
+
     /** how many when we go parallel */
     private static final int RUNNERS;
     static {
         long maxMemory = SystemVersion.getMaxMemory();
+/**
         if (maxMemory < 64*1024*1024)
             RUNNERS = 3;
         else if (maxMemory < 256*1024*1024)
             RUNNERS = 4;
-        else
+        else if (maxMemory < 512*1024*1024)
             RUNNERS = 5;
+        else if (maxMemory < 1024*1024*1024)
+            RUNNERS = 6;
+        else
+            RUNNERS = 8;
+**/
+        RUNNERS = Math.min(SystemVersion.usableCores(), 8);
     }
 
     /** default max # job queue runners operating */
-    private final static int DEFAULT_MAX_RUNNERS = 1;
+    private final static int DEFAULT_MAX_RUNNERS = Math.min(SystemVersion.usableCores(), 8);
     /** router.config parameter to override the max runners */
     private final static String PROP_MAX_RUNNERS = "router.maxJobRunners";
-    
+
     /** how frequently should we check and update the max runners */
-    private final static long MAX_LIMIT_UPDATE_DELAY = 60*1000;
-    
+    private final static long MAX_LIMIT_UPDATE_DELAY = 3*60*1000;
+
     /** if a job is this lagged, spit out a warning, but keep going */
     private long _lagWarning = DEFAULT_LAG_WARNING;
-    private final static long DEFAULT_LAG_WARNING = 5*1000;
+//    private final static long DEFAULT_LAG_WARNING = 5*1000;
+    private final static long DEFAULT_LAG_WARNING = 8*1000;
     /** @deprecated unimplemented */
     @Deprecated
     private final static String PROP_LAG_WARNING = "router.jobLagWarning";
-    
-    /** if a job is this lagged, the router is hosed, so spit out a warning (dont shut it down) */
+
+    /** if a job is this lagged, the router is hosed, so spit out a warning (don't shut it down) */
     private long _lagFatal = DEFAULT_LAG_FATAL;
     private final static long DEFAULT_LAG_FATAL = 30*1000;
     /** @deprecated unimplemented */
     @Deprecated
     private final static String PROP_LAG_FATAL = "router.jobLagFatal";
-    
+
     /** if a job takes this long to run, spit out a warning, but keep going */
     private long _runWarning = DEFAULT_RUN_WARNING;
-    private final static long DEFAULT_RUN_WARNING = 5*1000;
+//    private final static long DEFAULT_RUN_WARNING = 5*1000;
+    private final static long DEFAULT_RUN_WARNING = 8*1000;
     /** @deprecated unimplemented */
     @Deprecated
     private final static String PROP_RUN_WARNING = "router.jobRunWarning";
-    
-    /** if a job takes this long to run, the router is hosed, so spit out a warning (dont shut it down) */
+
+    /** if a job takes this long to run, the router is hosed, so spit out a warning (don't shut it down) */
     private long _runFatal = DEFAULT_RUN_FATAL;
     private final static long DEFAULT_RUN_FATAL = 30*1000;
     /** @deprecated unimplemented */
     @Deprecated
     private final static String PROP_RUN_FATAL = "router.jobRunFatal";
-    
+
     /** don't enforce fatal limits until the router has been up for this long */
     private long _warmupTime = DEFAULT_WARMUP_TIME;
-    private final static long DEFAULT_WARMUP_TIME = 10*60*1000;
+//    private final static long DEFAULT_WARMUP_TIME = 10*60*1000;
+    private final static long DEFAULT_WARMUP_TIME = 30*60*1000;
     /** @deprecated unimplemented */
     @Deprecated
     private final static String PROP_WARMUP_TIME = "router.jobWarmupTime";
-    
+
     /** max ready and waiting jobs before we start dropping 'em */
     private int _maxWaitingJobs = DEFAULT_MAX_WAITING_JOBS;
-    private final static int DEFAULT_MAX_WAITING_JOBS = 25;
-    private final static long MIN_LAG_TO_DROP = 500;
+//    private final static int DEFAULT_MAX_WAITING_JOBS = 25;
+    private final static int DEFAULT_MAX_WAITING_JOBS = 100;
+//    private final static long MIN_LAG_TO_DROP = 500;
+    private final static long MIN_LAG_TO_DROP = 750;
 
     /** @deprecated unimplemented */
     @Deprecated
     private final static String PROP_MAX_WAITING_JOBS = "router.maxWaitingJobs";
 
-    /** 
-     * queue runners wait on this whenever they're not doing anything, and 
+    /**
+     * queue runners wait on this whenever they're not doing anything, and
      * this gets notified *once* whenever there are ready jobs
      */
     private final Object _runnerLock = new Object();
-    
-    /** 
+
+    /**
      *  Does not start the pumper. Caller MUST call startup.
      */
     public JobQueue(RouterContext context) {
         _context = context;
         _log = context.logManager().getLog(JobQueue.class);
-        _context.statManager().createRateStat("jobQueue.readyJobs", 
-                                              "How many ready and waiting jobs there are?", 
-                                              "JobQueue", 
+        _context.statManager().createRateStat("jobQueue.readyJobs",
+                                              "Number of ready and waiting scheduled jobs",
+                                              "JobQueue",
                                               new long[] { 60*1000l, 60*60*1000l, 24*60*60*1000l });
-        _context.statManager().createRateStat("jobQueue.droppedJobs", 
-                                              "How many jobs do we drop due to insane overload?", 
-                                              "JobQueue", 
+        _context.statManager().createRateStat("jobQueue.droppedJobs",
+                                              "Number of scheduled jobs dropped due to insane overload",
+                                              "JobQueue",
                                               new long[] { 60*1000l, 60*60*1000l, 24*60*60*1000l });
         _context.statManager().createRateStat("jobQueue.queuedJobs",
-                                              "How many scheduled jobs are there?",
+                                              "Number of scheduled jobs",
                                               "JobQueue",
                                               new long[] { 60*1000l, 60*60*1000l, 24*60*60*1000l });
         // following are for JobQueueRunner
-        _context.statManager().createRateStat("jobQueue.jobRun", "How long jobs take", "JobQueue", new long[] { 60*60*1000l, 24*60*60*1000l });
-        _context.statManager().createRateStat("jobQueue.jobRunSlow", "How long jobs that take over a second take", "JobQueue", new long[] { 60*60*1000l, 24*60*60*1000l });
-        _context.statManager().createRequiredRateStat("jobQueue.jobLag", "Job run delay (ms)", "JobQueue", new long[] { 60*1000l, 60*60*1000l, 24*60*60*1000l });
-        _context.statManager().createRateStat("jobQueue.jobWait", "How long does a job sit on the job queue?", "JobQueue", new long[] { 60*60*1000l, 24*60*60*1000l });
+        _context.statManager().createRateStat("jobQueue.jobRun", "Duration of scheduled jobs", "JobQueue", new long[] { 60*60*1000l, 24*60*60*1000l });
+        _context.statManager().createRateStat("jobQueue.jobRunSlow", "Duration of scheduled jobs that take over a second", "JobQueue", new long[] { 60*60*1000l, 24*60*60*1000l });
+        _context.statManager().createRequiredRateStat("jobQueue.jobLag", "Lag of scheduled jobs", "JobQueue", new long[] { 60*1000l, 60*60*1000l, 24*60*60*1000l });
+        _context.statManager().createRateStat("jobQueue.jobWait", "Time a scheduled job stays in the queue before running", "JobQueue", new long[] { 60*60*1000l, 24*60*60*1000l });
 
         _readyJobs = new LinkedBlockingQueue<Job>();
         _timedJobs = new TreeSet<Job>(new JobComparator());
@@ -164,7 +176,7 @@ public class JobQueue {
         _jobStats = new ConcurrentHashMap<String,JobStats>();
         _pumper = new QueuePumper();
     }
-    
+
     /**
      * Enqueue the specified job
      *
@@ -181,7 +193,7 @@ public class JobQueue {
         if (start > now + 3*24*60*60*1000L) {
             // catch bugs, Job.requeue() argument is a delay not a time
             if (_log.shouldLog(Log.WARN))
-                _log.warn("Scheduling job far in the future: " + (new Date(start)) + ' ' + job);
+                _log.warn(job + " scheduled far in the future: " + (new Date(start)));
         }
         synchronized (_jobLock) {
             if (_readyJobs.contains(job))
@@ -194,7 +206,7 @@ public class JobQueue {
                 // re-sorted in the TreeSet.
                 boolean removed = _timedJobs.remove(job);
                 if (removed && _log.shouldLog(Log.WARN))
-                    _log.warn("Rescheduling job: " + job);
+                    _log.warn(job + " rescheduled");
             }
 
             if ((!alreadyExists) && shouldDrop(job, numReady)) {
@@ -218,14 +230,13 @@ public class JobQueue {
                 }
             }
         }
-        
+
         _context.statManager().addRateData("jobQueue.readyJobs", numReady);
         _context.statManager().addRateData("jobQueue.queuedJobs", _timedJobs.size());
         if (dropped) {
             _context.statManager().addRateData("jobQueue.droppedJobs", 1);
             if (_log.shouldLog(Log.WARN))
-                _log.warn("Dropping job due to overload!  # ready jobs: " 
-                          + numReady + ": job = " + job);
+                _log.warn(job + " dropped due to backlog: " + numReady + " jobs already queued");
             String key = job.getName();
             JobStats stats = _jobStats.get(key);
             if (stats == null) {
@@ -237,7 +248,7 @@ public class JobQueue {
             stats.jobDropped();
         }
     }
-    
+
     public void removeJob(Job job) {
         synchronized (_jobLock) {
             boolean removed = _timedJobs.remove(job);
@@ -246,7 +257,7 @@ public class JobQueue {
                 _readyJobs.remove(job);
         }
     }
-    
+
     /**
      * Returns <code>true</code> if a given job is waiting or running;
      * <code>false</code> if the job is finished or doesn't exist in the queue.
@@ -264,7 +275,7 @@ public class JobQueue {
                 return true;
         return false;
     }
-    
+
     /**
      *  @deprecated contention - see JobTiming.setStartAfter() comments
      */
@@ -274,12 +285,12 @@ public class JobQueue {
             _jobLock.notifyAll();
         }
     }
-    
-    public int getReadyCount() { 
+
+    public int getReadyCount() {
             return _readyJobs.size();
     }
 
-    public long getMaxLag() { 
+    public long getMaxLag() {
             // first job is the one that has been waiting the longest
             Job j = _readyJobs.peek();
             if (j == null) return 0;
@@ -290,11 +301,11 @@ public class JobQueue {
             long startAfter = jt.getStartAfter();
             return _context.clock().now() - startAfter;
     }
-    
-    /** 
-     * are we so overloaded that we should drop the given job?  
+
+    /**
+     * are we so overloaded that we should drop the given job?
      * This is driven both by the numReady and waiting jobs, the type of job
-     * in question, and what the router's router.maxWaitingJobs config parameter 
+     * in question, and what the router's router.maxWaitingJobs config parameter
      * is set to.
      *
      */
@@ -306,7 +317,7 @@ public class JobQueue {
             // lets not try to drop too many tunnel messages...
             //if (cls == HandleTunnelMessageJob.class)
             //    return true;
-                
+
             // we don't really *need* to answer DB lookup messages
             // This is pretty lame, there's actually a ton of different jobs we
             // could drop, but is it worth making a list?
@@ -337,13 +348,13 @@ public class JobQueue {
         }
         return false;
     }
-    
-    public void allowParallelOperation() { 
-        _allowParallelOperation = true; 
+
+    public void allowParallelOperation() {
+        _allowParallelOperation = true;
         runQueue(_context.getProperty(PROP_MAX_RUNNERS, RUNNERS));
     }
-    
-    /** 
+
+    /**
      *  Start the pumper.
      *  @since 0.9.19
      */
@@ -363,9 +374,9 @@ public class JobQueue {
             _jobLock.notifyAll();
         }
     }
-    
-    void shutdown() { 
-        _alive = false; 
+
+    void shutdown() {
+        _alive = false;
         synchronized (_jobLock) {
             _timedJobs.clear();
             _readyJobs.clear();
@@ -412,10 +423,10 @@ public class JobQueue {
                 }
             }
             buf.append("\nready jobs: ").append(_readyJobs.size()).append("\n\t");
-            for (int i = 0; i < _readyJobs.size(); i++) 
+            for (int i = 0; i < _readyJobs.size(); i++)
                 buf.append(_readyJobs.get(i).toString()).append("\n\t");
             buf.append("\n\ntimed jobs: ").append(_timedJobs.size()).append("\n\t");
-            for (int i = 0; i < _timedJobs.size(); i++) 
+            for (int i = 0; i < _timedJobs.size(); i++)
                 buf.append(_timedJobs.get(i).toString()).append("\n\t");
             _log.log(Log.WARN, buf.toString());
         }
@@ -423,36 +434,36 @@ public class JobQueue {
     }
 
     boolean isAlive() { return _alive; }
-    
+
     /**
      * When did the most recently begin job start?
      */
-    public long getLastJobBegin() { 
+    public long getLastJobBegin() {
         long when = -1;
         for (JobQueueRunner runner : _queueRunners.values()) {
             long cur = runner.getLastBegin();
             if (cur > when)
                 cur = when;
         }
-        return when; 
+        return when;
     }
     /**
      * When did the most recently begin job start?
      */
-    public long getLastJobEnd() { 
+    public long getLastJobEnd() {
         long when = -1;
         for (JobQueueRunner runner : _queueRunners.values()) {
             long cur = runner.getLastEnd();
             if (cur > when)
                 cur = when;
         }
-        return when; 
+        return when;
     }
-    /** 
+    /**
      * retrieve the most recently begin and still currently active job, or null if
      * no jobs are running
      */
-    public Job getLastJob() { 
+    public Job getLastJob() {
         Job j = null;
         long when = -1;
         for (JobQueueRunner cur : _queueRunners.values()) {
@@ -463,7 +474,7 @@ public class JobQueue {
         }
         return j;
     }
-    
+
     /**
      * Blocking call to retrieve the next ready job
      *
@@ -478,13 +489,13 @@ public class JobQueue {
             } catch (InterruptedException ie) {}
         }
         if (_log.shouldLog(Log.WARN))
-            _log.warn("No longer alive, returning null");
+            _log.warn("Job no longer alive; returning null");
         return null;
     }
-    
+
     /**
      * Start up the queue with the specified number of concurrent processors.
-     * If this method has already been called, it will increase the number of 
+     * If this method has already been called, it will increase the number of
      * runners if necessary.  This does not ever stop or reduce threads.
      */
     public synchronized void runQueue(int numThreads) {
@@ -496,7 +507,7 @@ public class JobQueue {
             // specified
             if (_queueRunners.size() < numThreads) {
                 if (_log.shouldLog(Log.INFO))
-                    _log.info("Increasing the number of queue runners from " 
+                    _log.info("Increasing the number of queue runners from "
                               + _queueRunners.size() + " to " + numThreads);
                 for (int i = _queueRunners.size(); i < numThreads; i++) {
                     JobQueueRunner runner = new JobQueueRunner(_context, i);
@@ -519,17 +530,17 @@ public class JobQueue {
                     _log.warn("Already have " + _queueRunners.size() + " threads, not decreasing");
             }
     }
-        
+
     void removeRunner(int id) { _queueRunners.remove(Integer.valueOf(id)); }
-    
+
     /**
-     * Responsible for moving jobs from the timed queue to the ready queue, 
-     * adjusting the number of queue runners, as well as periodically updating the 
+     * Responsible for moving jobs from the timed queue to the ready queue,
+     * adjusting the number of queue runners, as well as periodically updating the
      * max number of runners.
      *
      */
     private final class QueuePumper implements Runnable, Clock.ClockUpdateListener, RouterClock.ClockShiftListener {
-        public QueuePumper() { 
+        public QueuePumper() {
             _context.clock().addUpdateListener(this);
             ((RouterClock) _context.clock()).addShiftListener(this);
         }
@@ -548,8 +559,9 @@ public class JobQueue {
                                 // find jobs due to start before now
                                 long timeLeft = j.getTiming().getStartAfter() - now;
                                 if (lastJob != null && lastTime > j.getTiming().getStartAfter()) {
-                                    _log.error("Job " + lastJob + " out of order with job " + j +
-                                             " difference of " + DataHelper.formatDuration(lastTime - j.getTiming().getStartAfter()));
+                                    if (_log.shouldLog(Log.INFO))
+                                        _log.info(lastJob + " out of order with " + j + "\n* Difference: " +
+                                                   DataHelper.formatDuration(lastTime - j.getTiming().getStartAfter()));
                                 }
                                 lastJob = j;
                                 lastTime = lastJob.getTiming().getStartAfter();
@@ -574,15 +586,15 @@ public class JobQueue {
                                     // break and go around again
                                     if (timeToWait > 10*1000 && iter.hasNext()) {
                                         if (_log.shouldLog(Log.INFO))
-                                            _log.info("Failsafe re-sort job " + j +
-                                                " with delay " + DataHelper.formatDuration(timeToWait));
+                                            _log.info(j + " deferred for " + DataHelper.formatDuration(timeToWait));
                                         iter.remove();
                                         Job nextJob = iter.next();
                                         _timedJobs.add(j);
                                         long nextTimeLeft = nextJob.getTiming().getStartAfter() - now;
                                         if (timeToWait > nextTimeLeft) {
-                                            _log.error("Job " + j + " out of order with job " + nextJob +
-                                                " difference of " + DataHelper.formatDuration(timeToWait - nextTimeLeft));
+                                            if (_log.shouldLog(Log.INFO))
+                                                _log.info(j + " out of order with " + nextJob + "\n* Difference: " +
+                                                           DataHelper.formatDuration(timeToWait - nextTimeLeft));
                                             timeToWait = Math.max(10, nextTimeLeft);
                                         }
                                     }
@@ -592,7 +604,8 @@ public class JobQueue {
                                 if (timeToWait < 0)
                                     timeToWait = 1000;
                                 else if (timeToWait < 10)
-                                    timeToWait = 10;
+//                                    timeToWait = 10;
+                                    timeToWait = 100;
                                 else if (timeToWait > 10*1000)
                                     timeToWait = 10*1000;
                                 //if (_log.shouldLog(Log.DEBUG))
@@ -604,7 +617,7 @@ public class JobQueue {
                 } // while (_alive)
             } catch (Throwable t) {
                 if (_log.shouldLog(Log.ERROR))
-                    _log.error("pumper killed?!", t);
+                    _log.error("Pumper killed?!", t);
             } finally {
                 _context.clock().removeUpdateListener(this);
                 ((RouterClock) _context.clock()).removeShiftListener(this);
@@ -635,7 +648,7 @@ public class JobQueue {
         }
 
     }
-    
+
     /**
      * Update the clock data for all jobs in process or scheduled for
      * completion.
@@ -657,12 +670,12 @@ public class JobQueue {
             }
         }
     }
-    
+
     /**
      * calculate and update the job timings
      * if it was lagged too much or took too long to run, spit out
      * a warning (and if its really excessive, kill the router)
-     */ 
+     */
     void updateStats(Job job, long doStart, long origStartAfter, long duration) {
         if (_context.router() == null) return;
         String key = job.getName();
@@ -672,7 +685,7 @@ public class JobQueue {
 
         if (lag < 0) lag = 0;
         if (duration < 0) duration = 0;
-        
+
         JobStats stats = _jobStats.get(key);
         if (stats == null) {
             stats = new JobStats(key);
@@ -685,9 +698,9 @@ public class JobQueue {
         String dieMsg = null;
 
         if (lag > _lagWarning) {
-            dieMsg = "Lag too long for job " + job.getName() + " [" + lag + "ms and a run time of " + duration + "ms]";
+            dieMsg = "Too much lag for " + job.getName() + " Job: " + lag + "ms with run time of " + duration + "ms";
         } else if (duration > _runWarning) {
-            dieMsg = "Job run too long for job " + job.getName() + " [" + lag + "ms lag and run time of " + duration + "ms]";
+            dieMsg = "Run too long for " + job.getName() + " Job: " + lag + "ms lag with run time of " + duration + "ms";
         }
 
         if (dieMsg != null) {
@@ -701,23 +714,23 @@ public class JobQueue {
             // this is fscking bad - the network at this size shouldn't have this much real contention
             // so we're going to DIE DIE DIE
             if (_log.shouldLog(Log.WARN))
-                _log.log(Log.WARN, "The router is either incredibly overloaded or (more likely) there's an error.", new Exception("ttttooooo mmmuuuccccchhhh llllaaagggg"));
+                _log.log(Log.WARN, "Router is incredibly overloaded or there's an error.");
             //try { Thread.sleep(5000); } catch (InterruptedException ie) {}
             //Router.getInstance().shutdown();
             return;
         }
-        
+
         if ( (uptime > _warmupTime) && (duration > _runFatal) ) {
             // slow CPUs can get hosed with ElGamal, but 10s is too much.
             if (_log.shouldLog(Log.WARN))
-                _log.log(Log.WARN, "The router is incredibly overloaded - either you have a 386, or (more likely) there's an error. ", new Exception("ttttooooo sssllloooowww"));
+                _log.log(Log.WARN, "Router is incredibly overloaded (slow cpu?) or there's an error.");
             //try { Thread.sleep(5000); } catch (InterruptedException ie) {}
             //Router.getInstance().shutdown();
             return;
         }
     }
-    
-        
+
+
     /** job ID counter changed from int to long so it won't wrap negative */
     private static final int POISON_ID = -99999;
 
@@ -784,7 +797,7 @@ public class JobQueue {
             }
         }
         synchronized (_jobLock) {
-            readyJobs.addAll(_readyJobs); 
+            readyJobs.addAll(_readyJobs);
             timedJobs.addAll(_timedJobs);
         }
         return _queueRunners.size();

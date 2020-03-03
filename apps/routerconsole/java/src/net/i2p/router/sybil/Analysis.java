@@ -60,7 +60,7 @@ public class Analysis extends JobImpl implements RouterApp {
     /**
      *  The name we register with the ClientAppManager
      */
-    public static final String APP_NAME = "sybil";
+    public static final String APP_NAME = "Sybil Scan";
     public static final String PROP_FREQUENCY = "router.sybilFrequency";
     public static final String PROP_THRESHOLD = "router.sybilThreshold";
     public static final String PROP_BLOCK = "router.sybilEnableBlocking";
@@ -403,7 +403,8 @@ public class Analysis extends JobImpl implements RouterApp {
                              _context.blocklist().add(ip);
                     }
                 }
-                String reason = "Sybil analysis " + day + " with " + fmt.format(p) + " threat points";
+//                String reason = " <b>➜</b> " + day + ": Sybil scan (" + fmt.format(p) + " threat points)";
+                String reason = " <b>➜</b> " + day + ": Sybil Scan (" + fmt.format(p).replace(".00", "") + " points)";
                 _context.banlist().banlistRouter(h, reason, null, null, blockUntil);
             }
         }
@@ -716,11 +717,11 @@ public class Analysis extends JobImpl implements RouterApp {
         for (RouterInfo info : ris) {
             Hash h = info.getHash();
             if (_context.banlist().isBanlisted(h)) {
-                StringBuilder buf = new StringBuilder("Banlisted");
+                StringBuilder buf = new StringBuilder("Banlist");
                 Banlist.Entry entry = banEntries.get(h);
                 if (entry != null) {
                     if (entry.cause != null) {
-                        buf.append(": ");
+//                        buf.append(": ");
                         if (entry.causeCode != null)
                             buf.append(_t(entry.cause, entry.causeCode));
                         else
@@ -741,7 +742,7 @@ public class Analysis extends JobImpl implements RouterApp {
                         // (POINTS_NEW / 48) for every hour under 48, max POINTS_NEW
                         double point = Math.min(POINTS_NEW, (2 * DAY - age) / (2 * DAY / POINTS_NEW));
                         addPoints(points, h, point,
-                                  "First heard about: " + _t("{0} ago", DataHelper.formatDuration2(age)));
+                                  "First heard about: " + _t("{0} ago", DataHelper.formatDuration2(age).replace("&nbsp;", "")));
                     }
                 }
                 DBHistory dbh = prof.getDBHistory();
@@ -799,7 +800,7 @@ public class Analysis extends JobImpl implements RouterApp {
             int howOld = minor - hisMinor;
             if (howOld < 3)
                 continue;
-            addPoints(points, h, howOld * VERSION_FACTOR, howOld + " versions behind: " + DataHelper.escapeHTML(hisFullVer));
+            addPoints(points, h, howOld * VERSION_FACTOR, howOld + " versions behind (" + DataHelper.escapeHTML(hisFullVer) + ")");
         }
     }
 

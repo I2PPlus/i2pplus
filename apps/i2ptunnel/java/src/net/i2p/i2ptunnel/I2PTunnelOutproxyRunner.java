@@ -35,7 +35,7 @@ public class I2PTunnelOutproxyRunner extends I2PAppThread {
 
     private static final AtomicLong __runnerId = new AtomicLong();
     private final long _runnerId;
-    /** 
+    /**
      * max bytes streamed in a packet - smaller ones might be filled
      * up to this size. Larger ones are not split (at least not on
      * Sun's impl of BufferedOutputStream), but that is the streaming
@@ -61,7 +61,7 @@ public class I2PTunnelOutproxyRunner extends I2PAppThread {
     private long totalReceived;
 
     private static final AtomicLong __forwarderId = new AtomicLong();
-    
+
     /**
      *  Does NOT start itself. Caller must call start().
      *
@@ -87,9 +87,9 @@ public class I2PTunnelOutproxyRunner extends I2PAppThread {
         setName("OutproxyRunner " + _runnerId);
     }
 
-    /** 
-     * have we closed at least one (if not both) of the streams 
-     * [aka we're done running the streams]? 
+    /**
+     * have we closed at least one (if not both) of the streams
+     * [aka we're done running the streams]?
      *
      * @deprecated unused
      */
@@ -98,8 +98,8 @@ public class I2PTunnelOutproxyRunner extends I2PAppThread {
         return finished;
     }
 
-    /** 
-     * When was the last data for this runner sent or received?  
+    /**
+     * When was the last data for this runner sent or received?
      * As of 0.9.20, returns -1 always!
      *
      * @return date (ms since the epoch), or -1 if no data has been transferred yet
@@ -126,7 +126,7 @@ public class I2PTunnelOutproxyRunner extends I2PAppThread {
 
     protected InputStream getSocketIn() throws IOException { return s.getInputStream(); }
     protected OutputStream getSocketOut() throws IOException { return s.getOutputStream(); }
-    
+
     @Override
     public void run() {
         try {
@@ -143,7 +143,7 @@ public class I2PTunnelOutproxyRunner extends I2PAppThread {
                 out.write(initialSocketData);
             }
             if (_log.shouldLog(Log.DEBUG))
-                _log.debug("Initial data " + (initialI2PData != null ? initialI2PData.length : 0) 
+                _log.debug("Initial data " + (initialI2PData != null ? initialI2PData.length : 0)
                            + " written to the outproxy, " + (initialSocketData != null ? initialSocketData.length : 0)
                            + " written to the socket, starting forwarders");
             if (!(s instanceof InternalSocket))
@@ -160,17 +160,17 @@ public class I2PTunnelOutproxyRunner extends I2PAppThread {
             }
             if (_log.shouldLog(Log.DEBUG))
                 _log.debug("At least one forwarder completed, closing and joining");
-            
+
             // this task is useful for the httpclient
             if (onTimeout != null) {
                 if (_log.shouldLog(Log.DEBUG))
-                    _log.debug("runner has a timeout job, totalReceived = " + totalReceived
+                    _log.debug("Runner has a timeout job, totalReceived = " + totalReceived
                                + " totalSent = " + totalSent + " job = " + onTimeout);
                 // Run even if totalSent > 0, as that's probably POST data.
                 if (totalReceived <= 0)
                     onTimeout.onFail(null);
             }
-            
+
             // now one connection is dead - kill the other as well, after making sure we flush
             close(out, in, i2pout, i2pin, s, i2ps, t1, t2);
         } catch (InterruptedException ex) {
@@ -205,52 +205,52 @@ public class I2PTunnelOutproxyRunner extends I2PAppThread {
             }
         }
     }
-    
+
     protected void close(OutputStream out, InputStream in, OutputStream i2pout, InputStream i2pin,
                          Socket s, Socket i2ps, Thread t1, Thread t2) throws InterruptedException {
-        try { 
-            out.flush(); 
-        } catch (IOException ioe) { 
+        try {
+            out.flush();
+        } catch (IOException ioe) {
             // ignore
         }
-        try { 
+        try {
             i2pout.flush();
         } catch (IOException ioe) {
             // ignore
         }
-        try { 
+        try {
             in.close();
-        } catch (IOException ioe) { 
+        } catch (IOException ioe) {
             // ignore
         }
-        try { 
+        try {
             i2pin.close();
-        } catch (IOException ioe) { 
+        } catch (IOException ioe) {
             // ignore
         }
         // ok, yeah, there's a race here in theory, if data comes in after flushing and before
         // closing, but its better than before...
-        try { 
+        try {
             s.close();
-        } catch (IOException ioe) { 
+        } catch (IOException ioe) {
             // ignore
         }
-        try { 
+        try {
             i2ps.close();
-        } catch (IOException ioe) { 
+        } catch (IOException ioe) {
             // ignore
         }
         t1.join(30*1000);
         t2.join(30*1000);
     }
-    
+
     public void errorOccurred() {
         synchronized (finishLock) {
             finished = true;
             finishLock.notifyAll();
         }
     }
-    
+
     /**
      *  Forward data in one direction
      */
@@ -280,10 +280,10 @@ public class I2PTunnelOutproxyRunner extends I2PAppThread {
             String to = "todo";
 
             if (_log.shouldLog(Log.DEBUG)) {
-                _log.debug(direction + ": Forwarding between " 
+                _log.debug(direction + ": Forwarding between "
                            + from + " and " + to);
             }
-            
+
             ByteArray ba = _cache.acquire();
             byte[] buffer = ba.getData(); // new byte[NETWORK_BUFFER_SIZE];
             try {
@@ -308,7 +308,7 @@ public class I2PTunnelOutproxyRunner extends I2PAppThread {
                             } catch (InterruptedException e) {
                                 e.printStackTrace();
                             }
-                            
+
                             if (in.available() <= 0)
                                 out.flush();
                         } else {
@@ -338,8 +338,8 @@ public class I2PTunnelOutproxyRunner extends I2PAppThread {
             } finally {
                 _cache.release(ba);
                 if (_log.shouldLog(Log.INFO)) {
-                    _log.info(direction + ": done forwarding between " 
-                              + from + " and " + to);
+                    _log.info(direction + ": Done forwarding between ["
+                              + from + "] and [" + to + "]");
                 }
                 try {
                     in.close();
@@ -351,7 +351,7 @@ public class I2PTunnelOutproxyRunner extends I2PAppThread {
                     if (!(onTimeout != null && (!_toI2P) && totalReceived <= 0))
                         out.close();
                     else if (_log.shouldLog(Log.INFO))
-                        _log.info(direction + ": not closing so we can write the error message");
+                        _log.info(direction + ": Not closing so we can write the error message");
                 } catch (IOException ioe) {
                     if (_log.shouldLog(Log.WARN))
                         _log.warn(direction + ": Error flushing to close", ioe);

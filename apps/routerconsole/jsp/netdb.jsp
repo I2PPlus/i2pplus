@@ -2,13 +2,22 @@
 <%@page trimDirectiveWhitespaces="true"%>
 <%@page pageEncoding="UTF-8"%>
 <!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
-<html><head>
+<html>
+<head>
 <%@include file="css.jsi" %>
+<%@include file="csp-unsafe.jsi" %>
 <%=intl.title("network database")%>
+<!-- tablesort.js https://github.com/tristen/tablesort/ -->
+<script nonce="<%=cspNonce%>" src="/js/tablesort/tablesort.js" type="text/javascript"></script>
+<script nonce="<%=cspNonce%>" src="/js/tablesort/tablesort.number.js" type="text/javascript"></script>
+<link href="/themes/console/tablesort.css" rel="stylesheet" type="text/css">
+<!-- end tablesort.js -->
 <%@include file="summaryajax.jsi" %>
-</head><body>
+</head>
+<body>
+<script nonce="<%=cspNonce%>" type="text/javascript">progressx.show();</script>
 <%@include file="summary.jsi" %>
-<h1><%=intl._t("I2P Network Database")%></h1>
+<h1 class="netwrk"><%=intl._t("Network Database")%></h1>
 <div class="main" id="netdb">
  <jsp:useBean class="net.i2p.router.web.helpers.NetDbHelper" id="formhandler" scope="request" />
 <%
@@ -39,4 +48,7 @@
  <jsp:setProperty name="formhandler" property="date" value="<%=request.getParameter(\"date\")%>" />
 <%@include file="formhandler.jsi" %>
  <jsp:getProperty name="formhandler" property="netDbSummary" />
-</div></body></html>
+</div>
+<script nonce="<%=cspNonce%>" type="text/javascript">progressx.hide();</script>
+</body>
+</html>

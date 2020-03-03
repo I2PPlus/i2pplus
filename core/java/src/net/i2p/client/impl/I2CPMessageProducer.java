@@ -2,9 +2,9 @@ package net.i2p.client.impl;
 
 /*
  * free (adj.): unencumbered; not under the control of others
- * Written by jrandom in 2003 and released into the public domain 
- * with no warranty of any kind, either expressed or implied.  
- * It probably won't  make your computer catch on fire, or eat 
+ * Written by jrandom in 2003 and released into the public domain
+ * with no warranty of any kind, either expressed or implied.
+ * It probably won't  make your computer catch on fire, or eat
  * your children, but it might.  Use at your own risk.
  *
  */
@@ -76,11 +76,11 @@ class I2CPMessageProducer {
         _context = context;
         _log = context.logManager().getLog(I2CPMessageProducer.class);
         _lock = new ReentrantLock(true);
-        context.statManager().createRateStat("client.sendThrottled", "Times waited for bandwidth", "ClientMessages", new long[] { 60*1000 });
-        context.statManager().createRateStat("client.sendDropped", "Length of msg dropped waiting for bandwidth", "ClientMessages", new long[] { 60*1000 });
+        context.statManager().createRateStat("client.sendThrottled", "Time we waited for bandwidth (throttled)", "ClientMessages", new long[] { 60*1000 });
+        context.statManager().createRateStat("client.sendDropped", "Length of message dropped while waiting for bandwidth", "ClientMessages", new long[] { 60*1000 });
     }
-    
-    /** 
+
+    /**
      * Update the bandwidth setting
      * @since 0.8.4
      */
@@ -97,7 +97,7 @@ class I2CPMessageProducer {
             } catch (NumberFormatException nfe) {}
         }
         if (_log.shouldLog(Log.DEBUG))
-            _log.debug("Setting " + _maxBytesPerSecond + " BPS max");
+            _log.debug("Setting " + _maxBytesPerSecond + "Bps max");
     }
 
     /** 
@@ -116,7 +116,7 @@ class I2CPMessageProducer {
 
     /** 
      * Send all the messages that a client needs to send to a router to establish
-     * a new session.  
+     * a new session.
      */
     public void connect(I2PSessionImpl session) throws I2PSessionException {
         updateBandwidth(session);
@@ -152,7 +152,7 @@ class I2CPMessageProducer {
         DestroySessionMessage dmsg = new DestroySessionMessage();
         dmsg.setSessionId(session.getSessionId());
         session.sendMessage_unchecked(dmsg);
-        // use DisconnectMessage only if we fail and drop connection... 
+        // use DisconnectMessage only if we fail and drop connection...
         // todo: update the code to fire off DisconnectMessage on socket error
         //DisconnectMessage msg = new DisconnectMessage();
         //msg.setReason("Destroy called");
@@ -196,7 +196,7 @@ class I2CPMessageProducer {
         msg.setDestination(dest);
         SessionId sid = session.getSessionId();
         if (sid == null) {
-            _log.error(session.toString() + " send message w/o session", new Exception());
+            _log.error(session.toString() + " send message without session", new Exception());
             return;
         }
         msg.setSessionId(sid);
@@ -223,7 +223,7 @@ class I2CPMessageProducer {
         msg.setDestination(dest);
         SessionId sid = session.getSessionId();
         if (sid == null) {
-            _log.error(session.toString() + " send message w/o session", new Exception());
+            _log.error(session.toString() + " send message without session", new Exception());
             return;
         }
         msg.setSessionId(sid);
@@ -278,7 +278,7 @@ class I2CPMessageProducer {
                     // just say no to bufferbloat... drop the message right here
                     _context.statManager().addRateData("client.sendDropped", len, 0);
                     if (_log.shouldLog(Log.WARN))
-                        _log.warn("Dropping " + len + " byte msg expired in queue");
+                        _log.warn("Dropping " + len + " byte message - expired in queue");
                     return false;
                 }
 
@@ -288,7 +288,7 @@ class I2CPMessageProducer {
                     _sendPeriodBytes = len;
                     _sendPeriodBeginTime = now;
                     if (_log.shouldLog(Log.DEBUG))
-                        _log.debug("New period after idle, " + len + " bytes");
+                        _log.debug("New period after idle -> " + len + " bytes");
                     return true;
                 }
 
@@ -302,7 +302,7 @@ class I2CPMessageProducer {
                         _sendPeriodBytes = len;
                     _sendPeriodBeginTime += 1000;
                     if (_log.shouldLog(Log.DEBUG))
-                        _log.debug("New period, " + len + " bytes");
+                        _log.debug("New period -> " + len + " bytes");
                     return true;
                 }
 
@@ -310,7 +310,7 @@ class I2CPMessageProducer {
                     // still bytes available in this period
                     _sendPeriodBytes += len;
                     if (_log.shouldLog(Log.DEBUG))
-                        _log.debug("Sending " + len + ", Elapsed " + period + "ms, total " + _sendPeriodBytes + " bytes");
+                        _log.debug("Sending " + len + " bytes (elapsed: " + period + "ms) -> Total: " + _sendPeriodBytes + " bytes");
                     return true;
                 }
 
@@ -318,7 +318,7 @@ class I2CPMessageProducer {
                     // just say no to bufferbloat... drop the message right here
                     _context.statManager().addRateData("client.sendDropped", len, 0);
                     if (_log.shouldLog(Log.WARN))
-                        _log.warn("Dropping " + len + " byte msg after waiting " + waitCount + " times");
+                        _log.warn("Dropping " + len + " byte message after waiting " + waitCount + " times");
                     return false;
                 }
 
@@ -390,7 +390,7 @@ class I2CPMessageProducer {
         msg.setLeaseSet(leaseSet);
         SessionId sid = session.getSessionId();
         if (sid == null) {
-            _log.error(session.toString() + " create LS w/o session", new Exception());
+            _log.error(session.toString() + " create LeaseSet without session", new Exception());
             return;
         }
         msg.setSessionId(sid);
@@ -399,7 +399,7 @@ class I2CPMessageProducer {
 
     /**
      * Update number of tunnels
-     * 
+     *
      * @param tunnels 0 for original configured number
      */
     public void updateTunnels(I2PSessionImpl session, int tunnels) throws I2PSessionException {
@@ -417,12 +417,12 @@ class I2CPMessageProducer {
         try {
             cfg.signSessionConfig(session.getPrivateKey());
         } catch (DataFormatException dfe) {
-            throw new I2PSessionException("Unable to sign the session config", dfe);
+            throw new I2PSessionException("Unable to sign the session configuration", dfe);
         }
         msg.setSessionConfig(cfg);
         SessionId sid = session.getSessionId();
         if (sid == null) {
-            _log.error(session.toString() + " update config w/o session", new Exception());
+            _log.error(session.toString() + " update configuration without session", new Exception());
             return;
         }
         msg.setSessionId(sid);

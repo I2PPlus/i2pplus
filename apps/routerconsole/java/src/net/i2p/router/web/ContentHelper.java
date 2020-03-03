@@ -10,13 +10,13 @@ public class ContentHelper extends HelperBase {
     private int _maxLines;
     private boolean _startAtBeginning;
     private String _lang;
-    
+
     /**
      * Caution, use absolute paths only, do not assume files are in CWD
      */
     public void setPage(String page) { _page = page; }
-    public void setStartAtBeginning(String moo) { 
-        _startAtBeginning = Boolean.parseBoolean(moo); 
+    public void setStartAtBeginning(String moo) {
+        _startAtBeginning = Boolean.parseBoolean(moo);
     }
     public void setLang(String l) {
 /*****
@@ -40,7 +40,7 @@ public class ContentHelper extends HelperBase {
         }
 *****/
     }
-    
+
     public void setMaxLines(String lines) {
         if (lines != null) {
             try {
@@ -51,17 +51,17 @@ public class ContentHelper extends HelperBase {
         } else {
             _maxLines = -1;
         }
-    } 
+    }
     public String getContent() {
         String str = FileUtil.readTextFile(filename(), _maxLines, _startAtBeginning);
-        if (str == null) 
+        if (str == null)
             return "";
-        else 
+        else
             return str;
-    } 
+    }
     public String getTextContent() {
         String str = FileUtil.readTextFile(filename(), _maxLines, _startAtBeginning);
-        if (str == null) 
+        if (str == null)
             return "";
         else {
             StringBuilder sb = new StringBuilder(str.length()+11);
@@ -76,7 +76,7 @@ public class ContentHelper extends HelperBase {
                 }
             }
             return sb.append("</pre>").toString();
-	}
+   }
     }
 
     /**

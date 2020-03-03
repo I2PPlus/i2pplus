@@ -19,7 +19,7 @@ import net.i2p.util.SystemVersion;
 
 /**
  * Pull fully completed fragments off the {@link InboundMessageFragments} queue,
- * parse 'em into I2NPMessages, and stick them on the 
+ * parse 'em into I2NPMessages, and stick them on the
  * {@link net.i2p.router.InNetMessagePool} by way of the {@link UDPTransport}.
  */
 class MessageReceiver {
@@ -32,12 +32,13 @@ class MessageReceiver {
     //private ByteCache _cache;
 
     private static final int MIN_THREADS = 2;  // unless < 32MB
-    private static final int MAX_THREADS = 5;
+//    private static final int MAX_THREADS = 5;
+    private static final int MAX_THREADS = SystemVersion.usableCores();
     private static final int MIN_QUEUE_SIZE = 32;  // unless < 32MB
     private static final int MAX_QUEUE_SIZE = 128;
     private final int _threadCount;
     private static final long POISON_IMS = -99999999999l;
-    
+
     public MessageReceiver(RouterContext ctx, UDPTransport transport) {
         _context = ctx;
         _log = ctx.logManager().getLog(MessageReceiver.class);
@@ -59,16 +60,16 @@ class MessageReceiver {
 
         // the runners run forever, no need to have a cache
         //_cache = ByteCache.getInstance(64, I2NPMessage.MAX_SIZE);
-        _context.statManager().createRateStat("udp.inboundExpired", "How many messages were expired before reception?", "udp", UDPTransport.RATES);
-        //_context.statManager().createRateStat("udp.inboundRemaining", "How many messages were remaining when a message is pulled off the complete queue?", "udp", UDPTransport.RATES);
-        //_context.statManager().createRateStat("udp.inboundReady", "How many messages were ready when a message is added to the complete queue?", "udp", UDPTransport.RATES);
-        //_context.statManager().createRateStat("udp.inboundReadTime", "How long it takes to parse in the completed fragments into a message?", "udp", UDPTransport.RATES);
-        //_context.statManager().createRateStat("udp.inboundReceiveProcessTime", "How long it takes to add the message to the transport?", "udp", UDPTransport.RATES);
-        //_context.statManager().createRateStat("udp.inboundLag", "How long the oldest ready message has been sitting on the queue (period is the queue size)?", "udp", UDPTransport.RATES);
-        
+        _context.statManager().createRateStat("udp.inboundExpired", "Number of inbound messages expired before reception", "Transport [UDP]", UDPTransport.RATES);
+        //_context.statManager().createRateStat("udp.inboundRemaining", "How many messages were remaining when a message is pulled off the complete queue?", "Transport [UDP]", UDPTransport.RATES);
+        //_context.statManager().createRateStat("udp.inboundReady", "How many messages were ready when a message is added to the complete queue?", "Transport [UDP]", UDPTransport.RATES);
+        //_context.statManager().createRateStat("udp.inboundReadTime", "How long it takes to parse in the completed fragments into a message?", "Transport [UDP]", UDPTransport.RATES);
+        //_context.statManager().createRateStat("udp.inboundReceiveProcessTime", "How long it takes to add the message to the transport?", "Transport [UDP]", UDPTransport.RATES);
+        //_context.statManager().createRateStat("udp.inboundLag", "How long the oldest ready message has been sitting on the queue (period is the queue size)?", "Transport [UDP]", UDPTransport.RATES);
+
         _alive = true;
     }
-    
+
     public synchronized void startup() {
         _alive = true;
         for (int i = 0; i < _threadCount; i++) {
@@ -76,13 +77,13 @@ class MessageReceiver {
             t.start();
         }
     }
-    
+
     private class Runner implements Runnable {
         private final I2NPMessageHandler _handler;
         public Runner() { _handler = new I2NPMessageHandler(_context); }
         public void run() { loop(_handler); }
     }
-    
+
     public synchronized void shutdown() {
         _alive = false;
         _completeMessages.clear();
@@ -97,7 +98,7 @@ class MessageReceiver {
         }
         _completeMessages.clear();
     }
-    
+
     /**
      *  This queues the message for processing.
      *  Processing will call state.releaseResources(), do not access state after calling this.
@@ -121,7 +122,7 @@ class MessageReceiver {
         //if (lag > 1000)
         //    _context.statManager().addRateData("udp.inboundLag", lag, total);
     }
-    
+
     public void loop(I2NPMessageHandler handler) {
         InboundMessageState message = null;
         //ByteArray buf = _cache.acquire();
@@ -145,10 +146,10 @@ class MessageReceiver {
                         //remaining = _completeMessages.size();
                 }
             } catch (InterruptedException ie) {}
-            
+
             if (expired > 0)
                 _context.statManager().addRateData("udp.inboundExpired", expired, expiredLifetime);
-            
+
             if (message != null) {
                 //long before = System.currentTimeMillis();
                 //if (remaining > 0)
@@ -174,11 +175,11 @@ class MessageReceiver {
                 //    _context.statManager().addRateData("udp.inboundReceiveProcessTime", after - afterRead, remaining);
             }
         }
-        
+
         // no need to zero it out, as these buffers are only used with an explicit getCompleteSize
-        //_cache.release(buf, false); 
+        //_cache.release(buf, false);
     }
-    
+
     /**
      *  Assemble all the fragments into an I2NP message.
      *  This calls state.releaseResources(), do not access state after calling this.
@@ -197,9 +198,9 @@ class MessageReceiver {
                 for (int i = 0; i < numFragments; i++) {
                     System.arraycopy(fragments[i].getData(), 0, buf.getData(), off, fragments[i].getValid());
                     //if (_log.shouldLog(Log.DEBUG))
-                    //    _log.debug("Raw fragment[" + i + "] for " + state.getMessageId() + ": " 
+                    //    _log.debug("Raw fragment[" + i + "] for " + state.getMessageId() + ": "
                     //               + Base64.encode(fragments[i].getData(), 0, fragments[i].getValid())
-                    //               + " (valid: " + fragments[i].getValid() 
+                    //               + " (valid: " + fragments[i].getValid()
                     //               + " raw: " + Base64.encode(fragments[i].getData()) + ")");
                     off += fragments[i].getValid();
                 }
@@ -238,7 +239,7 @@ class MessageReceiver {
                     _transport.sendDestroy(ps);
                     _transport.dropPeer(ps, true, "Corrupt DSM");
                     _context.banlist().banlistRouterForever(state.getFrom(),
-                                                            "Sent corrupt message");  // don't bother translating
+                                                            " <b>➜</b> " + "Sent corrupt message");  // don't bother translating
                 }
             }
             _context.messageHistory().droppedInboundMessage(state.getMessageId(), state.getFrom(), "error: " + ime.toString() + ": " + state.toString());

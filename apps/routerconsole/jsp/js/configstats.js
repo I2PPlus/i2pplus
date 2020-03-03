@@ -1,7 +1,7 @@
 function init()
 {
 	checkAll = false;
-	var buttons = document.getElementsByClassName("script");
+	var buttons = document.getElementsByClassName("toggle");
 	for(index = 0; index < buttons.length; index++)
 	{
 		var button = buttons[index];

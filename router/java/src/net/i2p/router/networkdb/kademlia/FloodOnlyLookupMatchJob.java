@@ -21,10 +21,11 @@ class FloodOnlyLookupMatchJob extends JobImpl implements ReplyJob {
         _search = job;
     }
 
-    public void runJob() { 
+    public void runJob() {
         if (getContext().netDb().lookupLocally(_search.getKey()) != null) {
             if (_log.shouldLog(Log.INFO))
-                _log.info(_search.getJobId() + ": search match and found locally");
+                _log.info("[Job " + _search.getJobId() + "] Search for [" + _search.getKey().toBase64().substring(0,6) +
+                          "] found locally");
             _search.success();
         } else {
             // In practice, we always have zero remaining when this is called,
@@ -33,7 +34,7 @@ class FloodOnlyLookupMatchJob extends JobImpl implements ReplyJob {
         }
     }
 
-    public String getName() { return "NetDb flood search match"; }
+    public String getName() { return "Match NetDb FloodSearch"; }
 
     public void setMessage(I2NPMessage message) {
         if (message.getType() == DatabaseSearchReplyMessage.MESSAGE_TYPE) {
@@ -46,8 +47,8 @@ class FloodOnlyLookupMatchJob extends JobImpl implements ReplyJob {
         try {
             DatabaseStoreMessage dsm = (DatabaseStoreMessage)message;
             if (_log.shouldLog(Log.INFO))
-                _log.info(_search.getJobId() + ": got a DSM for " 
-                          + dsm.getKey().toBase64());
+                _log.info("[Job " + _search.getJobId() + "] Received a DbStoreMsg for ["
+                          + dsm.getKey().toBase64().substring(0,6) + "]");
             // This store will be duplicated by HFDSMJ
             // We do it here first to make sure it is in the DB before
             // runJob() and search.success() is called???
@@ -73,7 +74,8 @@ class FloodOnlyLookupMatchJob extends JobImpl implements ReplyJob {
             return;
         } catch (IllegalArgumentException iae) {
             if (_log.shouldLog(Log.WARN))
-                _log.warn(_search.getJobId() + ": Received an invalid store reply", iae);
+//                _log.warn(_search.getJobId() + ": Received invalid store reply", iae);
+                _log.warn("[Job" + _search.getJobId() + "] Received invalid store reply\n* " + iae.getMessage());
         }
     }
 }

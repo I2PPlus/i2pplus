@@ -29,7 +29,7 @@ class PluginUpdateChecker extends UpdateRunner {
     private final String _oldVersion;
 
     public PluginUpdateChecker(RouterContext ctx, ConsoleUpdateManager mgr,
-                               List<URI> uris, String appName, String oldVersion ) { 
+                               List<URI> uris, String appName, String oldVersion ) {
         super(ctx, mgr, UpdateType.PLUGIN, uris, oldVersion);
         if (!uris.isEmpty())
             _currentURI = uris.get(0);
@@ -39,7 +39,7 @@ class PluginUpdateChecker extends UpdateRunner {
 
     @Override
     public String getID() { return _appName; }
-    
+
         @Override
         protected void update() {
             // must be set for super
@@ -59,7 +59,7 @@ class PluginUpdateChecker extends UpdateRunner {
                 _mgr.notifyCheckComplete(this, false, false);
                 return;
             }
-            updateStatus("<b>" + _t("Checking for update of plugin {0}", _appName) + "</b>");
+            updateStatus("<b><i>" + _t("Checking for update of plugin {0}", _appName) + "&hellip;</i></b>");
             _baos.reset();
             try {
                 _get = new PartialEepGet(_context, proxyHost, proxyPort, _baos, _currentURI.toString(), TrustedUpdate.HEADER_BYTES);
@@ -69,7 +69,7 @@ class PluginUpdateChecker extends UpdateRunner {
                 _log.error("Error checking update for plugin", t);
             }
         }
-        
+
         @Override
         public void bytesTransferred(long alreadyTransferred, int currentWrite, long bytesTransferred, long bytesRemaining, String url) {
         }
@@ -95,4 +95,4 @@ class PluginUpdateChecker extends UpdateRunner {
             _mgr.notifyCheckComplete(this, false, false);
         }
 }
-    
+

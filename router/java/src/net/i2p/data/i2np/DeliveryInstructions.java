@@ -45,18 +45,18 @@ public class DeliveryInstructions extends DataStructureImpl {
     private TunnelId _tunnelId;
     private boolean _delayRequested;
     private long _delaySeconds;
-    
+
     private final static int FLAG_MODE_LOCAL = 0;
     private final static int FLAG_MODE_DESTINATION = 1;
     private final static int FLAG_MODE_ROUTER = 2;
     private final static int FLAG_MODE_TUNNEL = 3;
-    
+
     /** @deprecated unused */
     @Deprecated
     private final static int FLAG_ENCRYPTED = 128;
     private final static int FLAG_MODE = 96;
     private final static int FLAG_DELAY = 16;
-    
+
     /**
      *  Immutable local instructions, no options
      *
@@ -80,14 +80,14 @@ public class DeliveryInstructions extends DataStructureImpl {
     public DeliveryInstructions() {
         _deliveryMode = -1;
     }
-    
+
     /**
      * For cloves only (not tunnels), default false, unused
      * @deprecated unused
      */
     @Deprecated
     public boolean getEncrypted() { return /* _encrypted */ false; }
-    
+
     /**
      * For cloves only (not tunnels), default false, unused
      * @deprecated unused
@@ -132,28 +132,28 @@ public class DeliveryInstructions extends DataStructureImpl {
 
     /** required for TUNNEL */
     public void setTunnelId(TunnelId id) { _tunnelId = id; }
-    
+
     /**
      * default false, unused
      * @deprecated unused
      */
     @Deprecated
     public boolean getDelayRequested() { return _delayRequested; }
-    
+
     /**
      * default false, unused
      * @deprecated unused
      */
     @Deprecated
     public void setDelayRequested(boolean req) { _delayRequested = req; }
-    
+
     /**
      * default 0, unused
      * @deprecated unused
      */
     @Deprecated
     public long getDelaySeconds() { return _delaySeconds; }
-    
+
     /**
      * default 0, unused
      * @deprecated unused
@@ -169,14 +169,14 @@ public class DeliveryInstructions extends DataStructureImpl {
     public void readBytes(InputStream in) {
         throw new UnsupportedOperationException();
     }
-    
+
     public int readBytes(byte data[], int offset) throws DataFormatException {
         int cur = offset;
         int flags = data[cur] & 0xff;
         cur++;
         //if (_log.shouldLog(Log.DEBUG))
         //    _log.debug("Read flags: " + flags + " mode: " +  flagMode(flags));
-        
+
      /****
         if (flagEncrypted(flags)) {
             byte kd[] = new byte[SessionKey.KEYSIZE_BYTES];
@@ -188,7 +188,7 @@ public class DeliveryInstructions extends DataStructureImpl {
             setEncrypted(false);
         }
       ****/
-        
+
         setDeliveryMode(flagMode(flags));
         switch (flagMode(flags)) {
             case FLAG_MODE_LOCAL:
@@ -217,7 +217,7 @@ public class DeliveryInstructions extends DataStructureImpl {
                 cur += 4;
                 break;
         }
-        
+
         if (flagDelay(flags)) {
             long delay = DataHelper.fromLong(data, cur, 4);
             cur += 4;
@@ -228,8 +228,8 @@ public class DeliveryInstructions extends DataStructureImpl {
         }
         return cur - offset;
     }
-    
-    
+
+
     /**
      * For cloves only (not tunnels), default false, unused
      * @deprecated unused
@@ -239,19 +239,19 @@ public class DeliveryInstructions extends DataStructureImpl {
         return (0 != (flags & FLAG_ENCRYPTED));
     }
 ****/
-    
+
     /** high bits */
     private static int flagMode(int flags) {
         int v = flags & FLAG_MODE;
         v >>>= 5;
         return v;
     }
-    
+
     /**  unused */
     private static boolean flagDelay(int flags) {
         return (0 != (flags & FLAG_DELAY));
     }
-    
+
     private int getFlags() {
         int val = 0;
      /****
@@ -277,7 +277,7 @@ public class DeliveryInstructions extends DataStructureImpl {
         //    _log.debug("getFlags() = " + val);
         return val;
     }
-    
+
     private int getAdditionalInfoSize() {
         int additionalSize = 0;
      /****
@@ -305,13 +305,13 @@ public class DeliveryInstructions extends DataStructureImpl {
                 additionalSize += 4; // tunnelId
                 break;
         }
-        
+
         if (getDelayRequested()) {
             additionalSize += 4;
         }
         return additionalSize;
     }
-    
+
 /****
     private byte[] getAdditionalInfo() {
         int additionalSize = getAdditionalInfoSize();
@@ -368,7 +368,7 @@ public class DeliveryInstructions extends DataStructureImpl {
                 DataHelper.toLong(rv, offset, 4, _tunnelId.getTunnelId());
                 offset += 4;
                 //if (_log.shouldLog(Log.DEBUG))
-                //    _log.debug("mode = tunnel, tunnelId = " + _tunnelId.getTunnelId() 
+                //    _log.debug("mode = tunnel, tunnelId = " + _tunnelId.getTunnelId()
                 //               + ", routerHash = " + _routerHash);
                 break;
         }
@@ -383,7 +383,7 @@ public class DeliveryInstructions extends DataStructureImpl {
         }
         return offset - origOffset;
     }
-    
+
     /**
      * @deprecated unused
      * @throws UnsupportedOperationException always
@@ -392,7 +392,7 @@ public class DeliveryInstructions extends DataStructureImpl {
     public void writeBytes(OutputStream out) {
         throw new UnsupportedOperationException();
     }
-    
+
     /**
      * @return the number of bytes written to the target
      */
@@ -400,19 +400,19 @@ public class DeliveryInstructions extends DataStructureImpl {
         if ( (_deliveryMode < 0) || (_deliveryMode > FLAG_MODE_TUNNEL) ) throw new IllegalStateException("Invalid data: mode = " + _deliveryMode);
         int flags = getFlags();
         //if (_log.shouldLog(Log.DEBUG))
-        //    _log.debug("Write flags: " + flags + " mode: " + getDeliveryMode() 
+        //    _log.debug("Write flags: " + flags + " mode: " + getDeliveryMode()
         //               + " =?= " + flagMode(flags));
         int origOffset = offset;
         target[offset++] = (byte) flags;
         offset += getAdditionalInfo(target, offset);
         return offset - origOffset;
     }
-    
+
     public int getSize() {
         return 1 // flags
                + getAdditionalInfoSize();
     }
-    
+
     @Override
     public boolean equals(Object obj) {
         if ( (obj == null) || !(obj instanceof DeliveryInstructions))
@@ -427,7 +427,7 @@ public class DeliveryInstructions extends DataStructureImpl {
                DataHelper.eq(getRouter(), instr.getRouter()) &&
                DataHelper.eq(getTunnelId(), instr.getTunnelId());
     }
-    
+
     @Override
     public int hashCode() {
         return (int)getDelaySeconds() +
@@ -437,12 +437,12 @@ public class DeliveryInstructions extends DataStructureImpl {
                     DataHelper.hashCode(getRouter()) +
                     DataHelper.hashCode(getTunnelId());
     }
-    
+
     @Override
     public String toString() {
         StringBuilder buf = new StringBuilder(128);
-        buf.append("[DeliveryInstructions: ");
-        buf.append("\n\tDelivery mode: ");
+        buf.append("\n\tDelivery Instructions: ");
+        buf.append("\n* Delivery mode: ");
         switch (getDeliveryMode()) {
             case DELIVERY_MODE_LOCAL:
                 buf.append("local");
@@ -457,14 +457,13 @@ public class DeliveryInstructions extends DataStructureImpl {
                 buf.append("tunnel");
                 break;
         }
-        buf.append("\n\tDelay requested: ").append(getDelayRequested());
-        buf.append("\n\tDelay seconds: ").append(getDelaySeconds());
-        buf.append("\n\tDestination: ").append(getDestination());
-        //buf.append("\n\tEncrypted: ").append(getEncrypted());
-        buf.append("\n\tEncryption key: ").append(getEncryptionKey());
-        buf.append("\n\tRouter: ").append(getRouter());
-        buf.append("\n\tTunnelId: ").append(getTunnelId());
-        
+        buf.append("\n* Delay requested: ").append(getDelayRequested());
+        buf.append("\n* Delay seconds: ").append(getDelaySeconds());
+        buf.append("\n* Destination: ").append(getDestination());
+        //buf.append("\n* Encrypted: ").append(getEncrypted());
+        buf.append("\n* Encryption key: ").append(getEncryptionKey());
+        buf.append("\n* Router: ").append(getRouter());
+        buf.append("\n* TunnelId: ").append(getTunnelId());
         return buf.toString();
     }
 
@@ -538,9 +537,8 @@ public class DeliveryInstructions extends DataStructureImpl {
 
         @Override
         public String toString() {
-            return "[DeliveryInstructions: " +
-                   "\n\tDelivery mode: " +
-                   "local]";
+            return "\n\tDelivery Instructions:" +
+                    "\n* Delivery mode: local";
         }
     }
 }

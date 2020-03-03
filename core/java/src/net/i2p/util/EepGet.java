@@ -99,10 +99,13 @@ public class EepGet {
 
     /** this will be replaced by the HTTP Proxy if we are using it */
     protected static final String USER_AGENT = "Wget/1.11.4";
-    protected static final int CONNECT_TIMEOUT = 45*1000;
-    protected static final int INACTIVITY_TIMEOUT = 60*1000;
+//    protected static final int CONNECT_TIMEOUT = 45*1000;
+    protected static final int CONNECT_TIMEOUT = 90*1000;
+//    protected static final int INACTIVITY_TIMEOUT = 60*1000;
+    protected static final int INACTIVITY_TIMEOUT = 2*60*1000;
     /** maximum times to try without getting any data at all, even if numRetries is higher @since 0.7.14 */
-    protected static final int MAX_COMPLETE_FAILS = 5;
+//    protected static final int MAX_COMPLETE_FAILS = 5;
+    protected static final int MAX_COMPLETE_FAILS = 10;
 
     public EepGet(I2PAppContext ctx, String proxyHost, int proxyPort, int numRetries, String outputFile, String url) {
         this(ctx, true, proxyHost, proxyPort, numRetries, outputFile, url);
@@ -338,7 +341,7 @@ public class EepGet {
 
     /**
      * Parse URL for a viable filename.
-     * 
+     *
      * @param   url  a URL giving the location of an online resource
      * @return       a filename to save the resource as on local filesystem
      */
@@ -428,7 +431,7 @@ public class EepGet {
                            "       [-u username] [-x password] url\n" +
                            "       (use -c or -p :0 for no proxy)");
     }
-    
+
     public static interface StatusListener {
         /**
          *  alreadyTransferred - total of all attempts, not including currentWrite
@@ -473,10 +476,10 @@ public class EepGet {
         private long _lastComplete;
         private boolean _firstTime;
         private final DecimalFormat _pct = new DecimalFormat("00.0%");
-        public CLIStatusListener() { 
+        public CLIStatusListener() {
             this(1024, 40);
         }
-        public CLIStatusListener(int markSize, int lineSize) { 
+        public CLIStatusListener(int markSize, int lineSize) {
             _markSize = markSize;
             _lineSize = lineSize;
             _lastComplete = _context.clock().now();
@@ -501,7 +504,7 @@ public class EepGet {
                 _written++;
                 if ( (_markSize > 0) && (_written % _markSize == 0) ) {
                     System.out.print("#");
-                    
+
                     if ( (_lineSize > 0) && (_written % ((long)_markSize*(long)_lineSize) == 0l) ) {
                         long now = _context.clock().now();
                         long timeToSend = now - _lastComplete;
@@ -521,7 +524,7 @@ public class EepGet {
                             double kbps = lineKBytes/(timeToSend/1000.0d);
                             fmt.format("%7.2f", Double.valueOf(kbps));
                             buf.append(" KBps");
-                            
+
                             buf.append(" / ");
                             long lifetime = _context.clock().now() - _startedOn;
                             double lifetimeKBps = (1000.0d*(_written)/(lifetime*1024.0d));
@@ -565,7 +568,7 @@ public class EepGet {
             long timeToSend = _context.clock().now() - _startedOn;
             System.out.println("== Transfer time: " + DataHelper.formatDuration(timeToSend));
             if (_etag != null)
-                System.out.println("== ETag: " + _etag);            
+                System.out.println("== ETag: " + _etag);
             if (transferred > 0) {
                 StringBuilder buf = new StringBuilder(64);
                 buf.append("== Transfer rate: ");
@@ -606,11 +609,11 @@ public class EepGet {
         public void attempting(String url) {}
         public void headerReceived(String url, int currentAttempt, String key, String val) {}
     }
-    
+
     public void addStatusListener(StatusListener lsnr) {
         synchronized (_listeners) { _listeners.add(lsnr); }
     }
-    
+
     public void stopFetching() { _keepFetching = false; }
 
     /**
@@ -659,14 +662,14 @@ public class EepGet {
                 timeout.setTimeoutCommand(new Runnable() {
                     public void run() {
                         if (_log.shouldLog(Log.DEBUG))
-                            _log.debug("timeout reached on " + _url + ": " + stimeout);
+                            _log.debug("Timeout reached on " + _url + ": " + stimeout);
                         _aborted = true;
                     }
                 });
                 timeout.setTotalTimeoutPeriod(_fetchEndTime);
             }
             try {
-                for (int i = 0; i < _listeners.size(); i++) 
+                for (int i = 0; i < _listeners.size(); i++)
                     _listeners.get(i).attempting(_url);
                 sendRequest(timeout);
                 if (timeout != null)
@@ -680,10 +683,10 @@ public class EepGet {
             } catch (IOException ioe) {
                 if (timeout != null)
                     timeout.cancel();
-                for (int i = 0; i < _listeners.size(); i++) 
+                for (int i = 0; i < _listeners.size(); i++)
                     _listeners.get(i).attemptFailed(_url, _bytesTransferred, _bytesRemaining, _currentAttempt, _numRetries, ioe);
                 if (_log.shouldLog(Log.WARN))
-                    _log.warn("ERR: doFetch failed ", ioe);
+                    _log.warn("Eepget error: Fetch of [" + _url + "] failed (" + ioe.getMessage() + ")");
                 if (ioe instanceof MalformedURLException ||
                     ioe instanceof UnknownHostException ||
                     ioe instanceof ConnectException) // proxy or nonproxied host Connection Refused
@@ -696,8 +699,8 @@ public class EepGet {
                     _out = null;
                 }
                 if (_proxy != null) {
-                    try { 
-                        _proxy.close(); 
+                    try {
+                        _proxy.close();
                         _proxy = null;
                     } catch (IOException ioe) {}
                 }
@@ -706,19 +709,19 @@ public class EepGet {
             _currentAttempt++;
             if (_currentAttempt > _numRetries ||
                 (_alreadyTransferred == 0 && _currentAttempt > MAX_COMPLETE_FAILS) ||
-                !_keepFetching) 
+                !_keepFetching)
                 break;
             _redirects = 0;
-            try { 
+            try {
                 long delay = _context.random().nextInt(60*1000);
-                Thread.sleep(5*1000+delay); 
+                Thread.sleep(5*1000+delay);
             } catch (InterruptedException ie) {}
         }
 
-        for (int i = 0; i < _listeners.size(); i++) 
+        for (int i = 0; i < _listeners.size(); i++)
             _listeners.get(i).transferFailed(_url, _bytesTransferred, _bytesRemaining, _currentAttempt);
         if (_log.shouldLog(Log.WARN))
-            _log.warn("All attempts failed for " + _url);
+            _log.warn("Eepget error: All attempts failed for [" + _url + "]");
         return false;
     }
 
@@ -730,8 +733,8 @@ public class EepGet {
         _aborted = false;
         readHeaders();
         if (_aborted)
-            throw new IOException("Timed out reading the HTTP headers");
-        
+            throw new IOException("Eepget error: Timed out reading the HTTP headers");
+
         if (timeout != null) {
             timeout.resetTimer();
             if (_fetchInactivityTimeout > 0)
@@ -747,7 +750,7 @@ public class EepGet {
             else
                 _proxy.setSoTimeout(INACTIVITY_TIMEOUT);
         }
-        
+
         if (_redirectLocation != null) {
             // we also are here after a 407
             try {
@@ -759,8 +762,8 @@ public class EepGet {
                         throw new IOException("Redirect to https unsupported");
                     if (_postData != null)
                         throw new IOException("Redirect to https unsupported");
-                    try { 
-                        _proxy.close(); 
+                    try {
+                        _proxy.close();
                         _proxy = null;
                     } catch (IOException ioe) {}
                     if (timeout != null)
@@ -813,7 +816,7 @@ public class EepGet {
                     _lastModified = get.getLastModified();
                     _notModified = get.getNotModified();
                     return;
-                } else { 
+                } else {
                     // the Location: field has been required to be an absolute URI at least since
                     // RFC 1945 (HTTP/1.0 1996), so it isn't clear what the point of this is.
                     // This oddly adds a ":" even if no port, but that seems to work.
@@ -867,10 +870,10 @@ public class EepGet {
             doFetch(timeout);
             return;
         }
-        
+
         if (_log.shouldLog(Log.DEBUG))
             _log.debug("Headers read completely");
-        
+
         boolean strictSize = (_bytesRemaining >= 0);
 
         // If minimum or maximum size defined, ensure they aren't exceeded
@@ -932,12 +935,12 @@ public class EepGet {
             if (_bytesRemaining >= read) // else chunked?
                 _bytesRemaining -= read;
             if (read > 0) {
-                for (int i = 0; i < _listeners.size(); i++) 
+                for (int i = 0; i < _listeners.size(); i++)
                     _listeners.get(i).bytesTransferred(
-                            _alreadyTransferred, 
-                            read, 
-                            _bytesTransferred, 
-                            _encodingChunked?-1:_bytesRemaining, 
+                            _alreadyTransferred,
+                            read,
+                            _bytesTransferred,
+                            _encodingChunked?-1:_bytesRemaining,
                             _url);
                 // This seems necessary to properly resume a partial download into a stream,
                 // as nothing else increments _alreadyTransferred, and there's no file length to check.
@@ -945,11 +948,11 @@ public class EepGet {
                 _alreadyTransferred += read;
             }
         }
-            
+
         if (_out != null)
             _out.close();
         _out = null;
-        
+
         if (_isGzippedResponse) {
             try {
                 pusher.join();
@@ -964,10 +967,10 @@ public class EepGet {
 
         if (_aborted)
             throw new IOException("Timed out reading the HTTP data");
-        
+
         if (timeout != null)
             timeout.cancel();
-        
+
         if (_log.shouldLog(Log.DEBUG))
             _log.debug("Done transferring " + _bytesTransferred + " (ok? " + !_transferFailed + ")");
 
@@ -989,13 +992,13 @@ public class EepGet {
         } else if ((_minSize > 0) && (_alreadyTransferred < _minSize)) {
             throw new IOException("Bytes transferred " + _alreadyTransferred + " violates minimum of " + _minSize + " bytes");
         } else if ( (_bytesRemaining == -1) || (remaining == 0) ) {
-            for (int i = 0; i < _listeners.size(); i++) 
+            for (int i = 0; i < _listeners.size(); i++)
                 _listeners.get(i).transferComplete(
-                        _alreadyTransferred, 
-                        _bytesTransferred, 
-                        _encodingChunked?-1:_bytesRemaining, 
-                        _url, 
-                        _outputFile, 
+                        _alreadyTransferred,
+                        _bytesTransferred,
+                        _encodingChunked?-1:_bytesRemaining,
+                        _url,
+                        _outputFile,
                         _notModified);
         } else {
             throw new IOException("Disconnection on attempt " + _currentAttempt + " after " + _bytesTransferred);
@@ -1010,7 +1013,7 @@ public class EepGet {
         if (!read) throw new IOException("Unable to read the first line");
         _responseCode = handleStatus(buf.toString());
         boolean redirect = false;
-        
+
         if (_log.shouldLog(Log.DEBUG))
             _log.debug("rc: " + _responseCode + " for " + _actualURL);
         boolean rcOk = false;
@@ -1044,8 +1047,8 @@ public class EepGet {
             case 206: // partial
                 if (_outputStream != null)
                     _out = _outputStream;
-		else
-		    _out = new FileOutputStream(_outputFile, true);
+                else
+                    _out = new FileOutputStream(_outputFile, true);
                 rcOk = true;
                 break;
             case 301: // various redirections
@@ -1061,7 +1064,7 @@ public class EepGet {
                 _bytesRemaining = 0;
                 _keepFetching = false;
                 _notModified = true;
-                return; 
+                return;
             case 400: // bad req
             case 401: // server auth
             case 402: // payment required
@@ -1182,7 +1185,7 @@ public class EepGet {
         while (true) {
             int cur = _proxyIn.read();
             switch (cur) {
-                case -1: 
+                case -1:
                     throw new IOException("EOF reading headers");
                 case ':':
                     if (key == null) {
@@ -1220,19 +1223,19 @@ public class EepGet {
                     buf.append((char)cur);
                     increment(lookahead, cur);
             }
-            
+
             if (buf.length() > 4096)
                 throw new IOException("Header line too long: " + buf.toString());
         }
     }
-    
+
     protected long readChunkLength() throws IOException {
         StringBuilder buf = new StringBuilder(8);
         int nl = 0;
         while (true) {
             int cur = _proxyIn.read();
             switch (cur) {
-                case -1: 
+                case -1:
                     throw new IOException("Chunk ended too soon");
                 case '\n':
                 case '\r':
@@ -1240,11 +1243,11 @@ public class EepGet {
                 default:
                     buf.append((char)cur);
             }
-            
+
             if (nl >= 2)
                 break;
         }
-        
+
         String len = buf.toString().trim();
         try {
             long bytes = Long.parseLong(len, 16);
@@ -1258,8 +1261,8 @@ public class EepGet {
 
     /**
      * parse the first status line and grab the response code.
-     * e.g. "HTTP/1.1 206 OK" vs "HTTP/1.1 200 OK" vs 
-     * "HTTP/1.1 404 NOT FOUND", etc.  
+     * e.g. "HTTP/1.1 206 OK" vs "HTTP/1.1 200 OK" vs
+     * "HTTP/1.1 404 NOT FOUND", etc.
      *
      * Side effect - stores status text in _responseText
      *
@@ -1272,7 +1275,7 @@ public class EepGet {
         String[] toks = DataHelper.split(line, " ", 3);
         if (toks.length < 2) {
             if (_log.shouldLog(Log.WARN))
-                _log.warn("ERR: status "+  line);
+                _log.warn("Error: status "+  line);
             return -1;
         }
         String rc = toks[1];
@@ -1281,10 +1284,10 @@ public class EepGet {
                 _responseText = toks[2].trim();
             else
                 _responseText = null;
-            return Integer.parseInt(rc); 
+            return Integer.parseInt(rc);
         } catch (NumberFormatException nfe) {
             if (_log.shouldLog(Log.WARN))
-                _log.warn("ERR: status is invalid: " + line, nfe);
+                _log.warn("Error: status is invalid: " + line, nfe);
             return -1;
         }
     }
@@ -1292,9 +1295,9 @@ public class EepGet {
     private void handle(String key, String val) {
         key = key.trim();
         val = val.trim();
-        for (int i = 0; i < _listeners.size(); i++) 
+        for (int i = 0; i < _listeners.size(); i++)
             _listeners.get(i).headerReceived(_url, _currentAttempt, key, val);
-        
+
         if (_log.shouldLog(Log.DEBUG))
             _log.debug("Header line: [" + key + "] = [" + val + "]");
         key = key.toLowerCase(Locale.US);
@@ -1349,7 +1352,7 @@ public class EepGet {
             // for which we cannot easily determine how much we've written.
             // Assume that _alreadyTransferred holds the right value
             // (we should never be restarted to work on an old stream).
-	} else {
+        } else {
             File outFile = new File(_outputFile);
             if (outFile.exists())
                 _alreadyTransferred = outFile.length();
@@ -1372,9 +1375,9 @@ public class EepGet {
                         throw new MalformedURLException("URL is not supported:" + _actualURL);
                     String hostlc = host.toLowerCase(Locale.US);
                     if (hostlc.endsWith(".i2p"))
-                        throw new UnknownHostException("I2P addresses must be proxied");
+                        throw new UnknownHostException("I2P addresses must be proxied. ");
                     if (hostlc.endsWith(".onion"))
-                        throw new UnknownHostException("Tor addresses must be proxied");
+                        throw new UnknownHostException("Tor addresses must be proxied. ");
                     int port = url.getPort();
                     if (port == -1)
                         port = 80;
@@ -1398,17 +1401,17 @@ public class EepGet {
         if (!(_proxy instanceof InternalSocket))
               _proxyIn = new BufferedInputStream(_proxyIn);
         _proxyOut = _proxy.getOutputStream();
-        
+
         if (timeout != null)
             timeout.setSocket(_proxy);
-        
+
         _proxyOut.write(DataHelper.getUTF8(req));
         _proxyOut.flush();
-        
+
         if (_log.shouldLog(Log.DEBUG))
             _log.debug("Request flushed");
     }
-    
+
     protected String getRequest() throws IOException {
         StringBuilder buf = new StringBuilder(2048);
         boolean post = false;
@@ -1524,7 +1527,7 @@ public class EepGet {
     public String getETag() {
         return _etag;
     }
-    
+
     /**
      *  After fetch, the received value from the server, or null if none.
      *  Before fetch, and after some errors, may be the value passed in the constructor.
@@ -1532,21 +1535,21 @@ public class EepGet {
     public String getLastModified() {
         return _lastModified;
     }
-    
+
     /**
      *  @return true if the server returned 304
      */
     public boolean getNotModified() {
         return _notModified;
     }
-    
+
     /**
      *  After fetch, the received value from the server, or null if none.
      */
     public String getContentType() {
         return _contentType;
     }
-    
+
     /**
      *  The server response (200, etc).
      *  @return -1 if invalid, or if the proxy never responded,
@@ -1561,7 +1564,7 @@ public class EepGet {
     public int getStatusCode() {
         return _responseCode;
     }
-    
+
     /**
      *  The server text ("OK", "Not Found",  etc).
      *  Note that the text may contain % encoding.
@@ -1624,7 +1627,7 @@ public class EepGet {
         if (_shouldProxy) {
             // Could only do this for Basic
             // Now we always wait for the 407, in the hope we can use Digest
-            //addHeader("Proxy-Authorization", 
+            //addHeader("Proxy-Authorization",
             //          "Basic " + Base64.encode(DataHelper.getUTF8(userName + ':' + password), true));  // true = use standard alphabet
             if (_authState != null)
                 throw new IllegalStateException();
@@ -1896,8 +1899,8 @@ public class EepGet {
                 _decompressException = new IOException("OOM in HTTP Decompressor");
                 _log.error("OOM in HTTP Decompressor", oom);
             } finally {
-                if (_out != null) try { 
-                    _out.close(); 
+                if (_out != null) try {
+                    _out.close();
                 } catch (IOException ioe) {}
                 ReusableGZIPInputStream.release(in);
             }

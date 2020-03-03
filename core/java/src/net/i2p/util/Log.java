@@ -2,9 +2,9 @@ package net.i2p.util;
 
 /*
  * free (adj.): unencumbered; not under the control of others
- * Written by jrandom in 2003 and released into the public domain 
- * with no warranty of any kind, either expressed or implied.  
- * It probably won't make your computer catch on fire, or eat 
+ * Written by jrandom in 2003 and released into the public domain
+ * with no warranty of any kind, either expressed or implied.
+ * It probably won't make your computer catch on fire, or eat
  * your children, but it might.  Use at your own risk.
  *
  */
@@ -14,7 +14,7 @@ import java.util.Locale;
 import net.i2p.I2PAppContext;
 
 /**
- * Wrapper class for whatever logging system I2P uses.  This class should be 
+ * Wrapper class for whatever logging system I2P uses.  This class should be
  * instantiated and kept as a variable for each class it is used by, ala:
  *  <code>private final Log _log = context.logManager().getLog(MyClassName.class);</code>
  *
@@ -104,13 +104,13 @@ public class Log {
         _name = name;
         _minPriority = DEBUG;
         _scope = new LogScope(name, cls);
-        //_manager.addRecord(new LogRecord(Log.class, null, Thread.currentThread().getName(), Log.DEBUG, 
+        //_manager.addRecord(new LogRecord(Log.class, null, Thread.currentThread().getName(), Log.DEBUG,
         //                                 "Log created with manager " + manager + " for class " + cls, null));
     }
 
     public void log(int priority, String msg) {
         if (priority >= _minPriority) {
-            _manager.addRecord(new LogRecord(_class, _name, 
+            _manager.addRecord(new LogRecord(_class, _name,
                                              Thread.currentThread().getName(), priority,
                                              msg, null));
         }
@@ -121,19 +121,19 @@ public class Log {
         //if (t != null && t instanceof RuntimeException && !(t instanceof IllegalArgumentException))
         //    priority = CRIT;
         if (priority >= _minPriority) {
-            _manager.addRecord(new LogRecord(_class, _name, 
+            _manager.addRecord(new LogRecord(_class, _name,
                                              Thread.currentThread().getName(), priority,
                                              msg, t));
         }
     }
 
     /**
-     *  Always log this messge with the given priority, ignoring current minimum priority level.
+     *  Always log this message with the given priority, ignoring current minimum priority level.
      *  This allows an INFO message about changing port numbers, for example, to always be logged.
      *  @since 0.8.2
      */
     public void logAlways(int priority, String msg) {
-            _manager.addRecord(new LogRecord(_class, _name, 
+            _manager.addRecord(new LogRecord(_class, _name,
                                              Thread.currentThread().getName(), priority,
                                              msg, null));
     }
@@ -176,8 +176,8 @@ public class Log {
 
     public void setMinimumPriority(int priority) {
         _minPriority = priority;
-        //_manager.addRecord(new LogRecord(Log.class, null, Thread.currentThread().getName(), Log.DEBUG, 
-        //                                 "Log with manager " + _manager + " for class " + _class 
+        //_manager.addRecord(new LogRecord(Log.class, null, Thread.currentThread().getName(), Log.DEBUG,
+        //                                 "Log with manager " + _manager + " for class " + _class
         //                                 + " new priority " + toLevelString(priority), null));
     }
 
@@ -204,10 +204,10 @@ public class Log {
     public boolean shouldError() {
         return ERROR >= _minPriority;
     }
-    
+
     /**
      * logs a loop when closing a resource with level DEBUG
-     * This method is for debugging purposes only and 
+     * This method is for debugging purposes only and
      * is subject to change or removal w/o notice.
      * NOT a supported API.
      * @param desc vararg description
@@ -216,10 +216,10 @@ public class Log {
     public void logCloseLoop(Object... desc) {
         logCloseLoop(Log.DEBUG, desc);
     }
-    
+
     /**
      * Logs a close loop when closing a resource
-     * This method is for debugging purposes only and 
+     * This method is for debugging purposes only and
      * is subject to change or removal w/o notice.
      * NOT a supported API.
      * @param desc vararg description of the resource
@@ -227,9 +227,9 @@ public class Log {
      * @since 0.9.8
      */
     public void logCloseLoop(int level, Object... desc) {
-        if (!shouldLog(level)) 
+        if (!shouldLog(level))
             return;
-        
+
         // catenate all toString()s
         StringBuilder builder = new StringBuilder();
         builder.append("close() loop in");
@@ -237,21 +237,21 @@ public class Log {
             builder.append(" ");
             builder.append(String.valueOf(o));
         }
-        
+
         Exception e = new Exception("check stack trace");
         log(level,builder.toString(),e);
     }
 
     public String getName() {
         if (_className != null) return _className;
-    
+
         return _name;
     }
-    
+
     /** @return the LogScope (private class) */
     public Object getScope() { return _scope; }
 
-    static String getScope(String name, Class<?> cls) { 
+    static String getScope(String name, Class<?> cls) {
         if ( (name == null) && (cls == null) ) return "f00";
         if (cls == null) return name;
         if (name == null) return cls.getName();
@@ -280,7 +280,7 @@ public class Log {
             } else if (obj instanceof String) {
                 return obj.equals(_scopeCache);
             }
-            
+
             return false;
         }
     }

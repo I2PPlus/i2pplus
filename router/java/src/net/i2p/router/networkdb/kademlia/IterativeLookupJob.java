@@ -34,13 +34,13 @@ class IterativeLookupJob extends JobImpl {
         _search = search;
     }
 
-    public void runJob() { 
+    public void runJob() {
                 Hash from = _dsrm.getFromHash();
                 // dsrm.getFromHash() can't be trusted - check against the list of
                 // those we sent the search to in _search
                 if (!_search.wasQueried(from)) {
                     if (_log.shouldLog(Log.WARN))
-                        _log.warn(_search.getJobId() + ": ILJ DSRM from unqueried peer: " + _dsrm);
+                        _log.warn("[Job" + _search.getJobId() + "] IterativeLookup -> DbSearchReplyMsg from unqueried peer " + _dsrm);
                     return;
                 }
 
@@ -102,7 +102,8 @@ class IterativeLookupJob extends JobImpl {
                     }
                 }
                 if (_log.shouldLog(Log.INFO))
-                    _log.info(_search.getJobId() + ": ILJ DSRM processed " + newPeers + '/' + oldPeers + '/' + invalidPeers + " new/old/invalid hashes");
+                    _log.info("[Job " + _search.getJobId() + "] IterativeLookup -> DbSearchReplyMsg" +
+                              "\n* Processed: " + newPeers + " new, " + oldPeers + " old, and " + invalidPeers + " invalid hashes");
                 long timeSent = _search.timeSent(from);
                 // assume 0 dup
                 if (timeSent > 0) {
@@ -113,5 +114,5 @@ class IterativeLookupJob extends JobImpl {
                 _search.failed(_dsrm.getFromHash(), false);
     }
 
-    public String getName() { return "NetDb process DSRM"; }
+    public String getName() { return "Process DbStoreReplyMsg"; }
 }

@@ -48,23 +48,23 @@ import net.i2p.util.SecureFileOutputStream;
  */
 class RebuildRouterInfoJob extends JobImpl {
     private final Log _log;
-    
-    private final static long REBUILD_DELAY = 45*1000; // every 30 seconds
-    
+
+    private final static long REBUILD_DELAY = 45*1000; // every 45 seconds
+
     public RebuildRouterInfoJob(RouterContext context) {
         super(context);
         _log = context.logManager().getLog(RebuildRouterInfoJob.class);
     }
-    
-    public String getName() { return "Rebuild Router Info"; }
-    
+
+    public String getName() { return "Rebuild RouterInfo"; }
+
     public void runJob() {
         throw new UnsupportedOperationException();
 /****
         _log.debug("Testing to rebuild router info");
         File info = new File(getContext().getRouterDir(), CreateRouterInfoJob.INFO_FILENAME);
         File keyFile = new File(getContext().getRouterDir(), CreateRouterInfoJob.KEYS2_FILENAME);
-        
+
         if (!info.exists() || !keyFile.exists()) {
             _log.info("Router info file [" + info.getAbsolutePath() + "] or private key file [" + keyFile.getAbsolutePath() + "] deleted, rebuilding");
             rebuildRouterInfo();
@@ -75,7 +75,7 @@ class RebuildRouterInfoJob extends JobImpl {
         getContext().jobQueue().addJob(this);
 ****/
     }
-    
+
     void rebuildRouterInfo() {
         rebuildRouterInfo(true);
     }
@@ -89,7 +89,7 @@ class RebuildRouterInfoJob extends JobImpl {
         File infoFile = new File(getContext().getRouterDir(), CreateRouterInfoJob.INFO_FILENAME);
         File keyFile = new File(getContext().getRouterDir(), CreateRouterInfoJob.KEYS_FILENAME);
         File keyFile2 = new File(getContext().getRouterDir(), CreateRouterInfoJob.KEYS2_FILENAME);
-        
+
         if (keyFile2.exists() || keyFile.exists()) {
             // ok, no need to rebuild a brand new identity, just update what we can
             RouterInfo oldinfo = getContext().router().getRouterInfo();
@@ -115,14 +115,14 @@ class RebuildRouterInfoJob extends JobImpl {
                 // Make a new RI from the old identity, or else info.setAddresses() will throw an ISE
                 info = new RouterInfo(oldinfo);
             }
-            
+
             try {
                 info.setAddresses(getContext().commSystem().createAddresses());
                 Properties stats = getContext().statPublisher().publishStatistics(info.getHash());
                 info.setOptions(stats);
                 // info.setPeers(new HashSet()); // this would have the trusted peers
                 info.setPublished(CreateRouterInfoJob.getCurrentPublishDate(getContext()));
-                
+
                 info.sign(getContext().keyManager().getSigningPrivateKey());
             } catch (DataFormatException dfe) {
                 _log.log(Log.CRIT, "Error rebuilding the new router info", dfe);
@@ -147,7 +147,7 @@ class RebuildRouterInfoJob extends JobImpl {
                     if (fos != null) try { fos.close(); } catch (IOException ioe) {}
                 }
             }
-            
+
         } else {
             _log.warn("Private key file " + keyFile.getAbsolutePath() + " deleted!  Rebuilding a brand new router identity!");
             // this proc writes the keys and info to the file as well as builds the latest and greatest info
@@ -156,10 +156,10 @@ class RebuildRouterInfoJob extends JobImpl {
                 info = j.createRouterInfo();
             }
         }
-        
+
         //MessageHistory.initialize();
         getContext().router().setRouterInfo(info);
         _log.info("Router info rebuilt and stored at " + infoFile + " [" + info + "]");
     }
-    
+
 }

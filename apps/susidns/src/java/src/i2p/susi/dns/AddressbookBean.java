@@ -1,8 +1,8 @@
 /*
  * Created on Sep 02, 2005
- * 
+ *
  *  This file is part of susidns project, see http://susi.i2p/
- *  
+ *
  *  Copyright (C) 2005 <susi23@mail.i2p>
  *
  *  This program is free software; you can redistribute it and/or modify
@@ -18,7 +18,7 @@
  *  You should have received a copy of the GNU General Public License
  *  along with this program; if not, write to the Free Software
  *  Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
- *  
+ *
  * $Revision: 1.2 $
  */
 
@@ -121,7 +121,7 @@ public class AddressbookBean extends BaseBean
 				!book.equalsIgnoreCase( "private" ) &&
 				!book.equalsIgnoreCase( "published" )))
 			book = "router";
-		
+
 		return book;
 	}
 	public void setBook(String book) {
@@ -134,7 +134,7 @@ public class AddressbookBean extends BaseBean
 		// Config and addressbook now loaded here, hence not needed in getMessages()
 		loadConfig();
 		addressbook = new Properties();
-		
+
 		String message = "";
 		FileInputStream fis = null;
 		try {
@@ -239,7 +239,7 @@ public class AddressbookBean extends BaseBean
 	{
 		// Loading config and addressbook moved into getLoadBookMessages()
 		String message = "";
-		
+
 		if( action != null ) {
                         if (_context.getBooleanProperty(PROP_PW_ENABLE) ||
 			    (serial != null && serial.equals(lastSerial))) {
@@ -327,16 +327,16 @@ public class AddressbookBean extends BaseBean
 						message += "<br>" + _t("ERROR: Could not write addressbook file.");
 					}
 				}
-			}			
+			}
 			else {
 				message = _t("Invalid form submission, probably because you used the \"back\" or \"reload\" button on your browser. Please resubmit.")
-                                          + ' ' +
-                                          _t("If the problem persists, verify that you have cookies enabled in your browser.");
+                         + "<br>" +
+                         _t("If the problem persists, verify that you have cookies enabled in your browser.");
 			}
 		}
-		
+
 		action = null;
-		
+
 		if( message.length() > 0 )
 			message = "<p class=\"messages\">" + message + "</p>";
 		return message;
@@ -345,7 +345,7 @@ public class AddressbookBean extends BaseBean
 	private void save() throws IOException
 	{
 		String filename = properties.getProperty( getBook() + "_addressbook" );
-		
+
 		FileOutputStream fos = null;
 		try {
 			fos = new SecureFileOutputStream(new File(addressbookDir(), filename));

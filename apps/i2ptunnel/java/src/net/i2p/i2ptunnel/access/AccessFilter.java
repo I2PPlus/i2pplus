@@ -27,7 +27,7 @@ import net.i2p.client.streaming.StatefulConnectionFilter;
 /**
  * A filter for incoming connections which can be configured
  * based on access list rules.
- * 
+ *
  * It keeps a track of known destinations - those defined in existing access
  * lists and unknown ones - those who are not defined in such lists but have
  * recently attempted to connect to us.
@@ -71,7 +71,7 @@ class AccessFilter implements StatefulConnectionFilter {
      * @param context the context, used for scheduling and timer purposes
      * @param definition definition of this filter
      */
-    AccessFilter(I2PAppContext context, FilterDefinition definition) 
+    AccessFilter(I2PAppContext context, FilterDefinition definition)
             throws IOException {
         this.context = context;
         this.definition = definition;
@@ -128,7 +128,7 @@ class AccessFilter implements StatefulConnectionFilter {
                 knownDests.put(newHash, tmp.get(newHash));
             }    
         }
-        
+
     }
 
     private void record() throws IOException {
@@ -140,9 +140,9 @@ class AccessFilter implements StatefulConnectionFilter {
 
             // if the file already exists, add previously breached b32s
             if (file.exists() && file.isFile()) {
-                BufferedReader reader = null; 
+                BufferedReader reader = null;
                 try {
-                    reader = new BufferedReader(new FileReader(file)); 
+                    reader = new BufferedReader(new FileReader(file));
                     String b32;
                     while((b32 = reader.readLine()) != null) {
                         breached.add(b32);
@@ -164,7 +164,7 @@ class AccessFilter implements StatefulConnectionFilter {
             if (breached.isEmpty() || !newBreaches)
                 continue;
 
-            BufferedWriter writer = null; 
+            BufferedWriter writer = null;
             try {
                 writer = new BufferedWriter(
                     new OutputStreamWriter(
@@ -181,7 +181,7 @@ class AccessFilter implements StatefulConnectionFilter {
 
     private void purge() {
         long olderThan = context.clock().now() - definition.getPurgeSeconds() * 1000;
-        
+
         synchronized(knownDests) {
             for (DestTracker tracker : knownDests.values()) {
                 tracker.purge(olderThan);
@@ -231,14 +231,14 @@ class AccessFilter implements StatefulConnectionFilter {
                         record();
                         reload();
                         Syncer syncer = AccessFilter.this.syncer;
-                        if (syncer != null) 
+                        if (syncer != null)
                             syncer.schedule(SYNC_INTERVAL);
                     } catch (IOException bad) {
                         Log log = context.logManager().getLog(AccessFilter.class);
-                       log.log(Log.CRIT, "syncing access list failed", bad);
+                       log.log(Log.CRIT, "Syncing access list failed", bad);
                     }
                 }
             });
-         }   
+         }
     }
 }

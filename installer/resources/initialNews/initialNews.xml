@@ -1,11 +1,12 @@
 <div>
-<h3>_("Congratulations on getting I2P installed!")</h3>
+<h3>_("I2P+ installation complete!")</h3>
 <p>
-<b>_("Welcome to I2P!")</b>
-_("Please {0}have patience{1} as I2P boots up and finds peers.", "<b>", "</b>")
+<b>_("Welcome to I2P+!")</b>
+_("Please {0}have patience{1} as I2P+ boots up and finds peers.", "<b>", "</b>")
 </p>
 <p>
 _("While you are waiting, please {0}adjust your bandwidth settings{1} on the {2}configuration page{3}.", "<b>", "</b>", "<a href=\"config.jsp\">", "</a>")
+You can also run the bandwidth test via the Setup Wizard to help with determining your bandwidth, and a guide for new users and additional documentation is available in the <a href="/help/">help section</a>.
 </p>
 <p>
 _("Also you can setup your browser to use the I2P proxy to reach eepsites.")
@@ -14,7 +15,7 @@ _("Do not use SOCKS for this.")
 _("More information can be found on the {0}I2P browser proxy setup page{1}.", "<a href=\"https://geti2p.net/en/about/browser-config\">", "</a>")
 </p>
 <p>
-_("Once you have a \"shared clients\" destination listed on the left, please {0}check out{1} our {2}FAQ{3}.", "<b>", "</b>", "<a href=\"http://i2p-projekt.i2p/faq\">", "</a>")
+_("Once you have a \"Shared Clients\" destination indicated on the sidebar, please {0}check out{1} our {2}FAQ{3}.", "<b>", "</b>", "<a href=\"http://i2p-projekt.i2p/faq\">", "</a>")
 </p>
 <p>
 _("Point your IRC client to {0}localhost:6668{1} and say hi to us on {2}#i2p{3}.", "<b>", "</b>", "<a href=\"irc://127.0.0.1:6668/i2p\">", "</a>")

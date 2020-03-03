@@ -17,19 +17,19 @@ import net.i2p.router.RouterContext;
  */
 class BuildTrustedLinksJob extends JobImpl {
     private final Job _next;
-    
+
     public BuildTrustedLinksJob(RouterContext context, Job next) {
         super(context);
         _next = next;
     }
-    
-    public String getName() { return "Build Trusted Links"; }
-    
+
+    public String getName() { return "Build Trusted Links with Peers"; }
+
     public void runJob() {
         // create trusted links with peers
-        
+
         //try { Thread.sleep(5000); } catch (InterruptedException ie) {}
-        
+
         getContext().jobQueue().addJob(_next);
     }
 }

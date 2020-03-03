@@ -17,7 +17,7 @@ public class OldConsoleHelper extends HelperBase {
     private boolean _full;
 
     public OldConsoleHelper() {}
-    
+
     public void setFull(String f) {
         _full = f != null && f.length() > 0;
     }
@@ -36,7 +36,7 @@ public class OldConsoleHelper extends HelperBase {
             return "<b>Error displaying the console.</b>";
         }
     }
-    
+
     public String getStats() {
         StatsGenerator gen = new StatsGenerator(_context);
         try {
@@ -62,7 +62,7 @@ public class OldConsoleHelper extends HelperBase {
      */
     private void renderStatusHTML(Writer out) throws IOException {
         StringBuilder buf = new StringBuilder(4*1024);
-        
+
         // Please don't change the text or formatting, tino matches it in his scripts
         Hash h = _context.routerHash();
         if (h != null)
@@ -71,13 +71,13 @@ public class OldConsoleHelper extends HelperBase {
         buf.append("<b>RouterUptime: </b> " ).append(DataHelper.formatDuration(_context.router().getUptime())).append(" <br>\n");
         buf.append("<b>Started on: </b> ").append(new Date(_context.router().getWhenStarted())).append("<br>\n");
         buf.append("<b>Clock offset: </b> ").append(_context.clock().getOffset()).append("ms (OS time: ").append(new Date(_context.clock().now() - _context.clock().getOffset())).append(")<br>\n");
-        buf.append("<b>RouterVersion:</b> ").append(RouterVersion.FULL_VERSION).append(" / SDK: ").append(CoreVersion.VERSION).append("<br>\n"); 
+        buf.append("<b>RouterVersion:</b> ").append(RouterVersion.FULL_VERSION).append(" / SDK: ").append(CoreVersion.VERSION).append("<br>\n");
         long tot = Runtime.getRuntime().totalMemory()/1024;
         long free = Runtime.getRuntime().freeMemory()/1024;
-        buf.append("<b>Memory:</b> In use: ").append((tot-free)).append("KB Free: ").append(free).append("KB <br>\n"); 
+        buf.append("<b>Memory:</b> In use: ").append((tot-free)).append("KB Free: ").append(free).append("KB <br>\n");
 
         out.write(buf.toString());
         out.flush();
     }
-    
+
 }

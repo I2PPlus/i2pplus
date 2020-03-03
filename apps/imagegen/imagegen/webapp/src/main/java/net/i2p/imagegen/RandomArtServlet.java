@@ -16,7 +16,7 @@ import net.i2p.util.ConvertToHash;
 
 /**
  * This servlet generates random art (visual identifier) images.
- * 
+ *
  * @author modiied from identicon
  * @since 0.9.25
  */
@@ -57,7 +57,7 @@ public class RandomArtServlet extends HttpServlet {
 				StringBuilder buf = new StringBuilder(512);
 				if (html) {
 					response.setContentType("text/html");
-					buf.append("<html><head><meta http-equiv=\"Content-Type\" content=\"text/html; charset=UTF-8\"></head><body>");
+					buf.append("<!DOCTYPE html>\n<html>\n<head>\n<meta http-equiv=\"Content-Type\" content=\"text/html; charset=UTF-8\">\n</head>\n<body>\n");
 				} else {
 					response.setContentType("text/plain");
 					response.setCharacterEncoding("UTF-8");
@@ -66,7 +66,7 @@ public class RandomArtServlet extends HttpServlet {
 				response.setHeader("Accept-Ranges", "none");
 				buf.append(RandomArt.gnutls_key_fingerprint_randomart(h.getData(), "SHA", 256, "", true, html));
 				if (html)
-					buf.append("</body></html>");
+					buf.append("\n</body>\n</html>");
 
 				// set ETag and, if code was provided, Expires header
 				response.setHeader("ETag", identiconETag);
@@ -75,7 +75,7 @@ public class RandomArtServlet extends HttpServlet {
 							+ identiconExpiresInMillis;
 					response.addDateHeader("Expires", expires);
 				}
-	
+
 				// return image bytes to requester
 				byte[] imageBytes = buf.toString().getBytes("UTF-8");
 				response.setContentLength(imageBytes.length);

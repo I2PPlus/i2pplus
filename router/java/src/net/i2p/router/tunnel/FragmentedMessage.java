@@ -10,7 +10,7 @@ import net.i2p.util.Log;
 import net.i2p.util.SimpleTimer2;
 
 /**
- * Gather fragments of I2NPMessages at a tunnel endpoint, making them available 
+ * Gather fragments of I2NPMessages at a tunnel endpoint, making them available
  * for reading when complete.
  *
  * Warning - this is all unsynchronized here - receivers must implement synchronization
@@ -29,12 +29,12 @@ class FragmentedMessage {
     private boolean _completed;
     private long _releasedAfter;
     private SimpleTimer2.TimedEvent _expireEvent;
-    
+
     private static final ByteCache _cache = ByteCache.getInstance(512, TrivialPreprocessor.PREPROCESSED_SIZE);
     // 64 is pretty absurd, 32 is too, most likely
     private static final int MAX_FRAGMENTS = 64;
     private static final int MAX_FRAGMENT_SIZE = 996;
-    
+
     public FragmentedMessage(I2PAppContext ctx, long messageId) {
         _context = ctx;
         _log = ctx.logManager().getLog(FragmentedMessage.class);
@@ -44,7 +44,7 @@ class FragmentedMessage {
         _releasedAfter = -1;
         _createdOn = ctx.clock().now();
     }
-    
+
     /**
      * Receive a followup fragment, though one of these may arrive at the endpoint
      * prior to the fragment # 0.
@@ -68,11 +68,11 @@ class FragmentedMessage {
         }
         if (offset + length > payload.length) {
             if (_log.shouldLog(Log.WARN))
-                _log.warn("Length is impossible (" + length + "/" + offset + " out of " + payload.length + ") for messageId " + _messageId);
+                _log.warn("Length is impossible (" + length + "/" + offset + " out of " + payload.length + ") for [MsgID " + _messageId + "]");
             return false;
         }
         if (_log.shouldLog(Log.DEBUG))
-            _log.debug("Receive message " + _messageId + " fragment " + fragmentNum + " with " + length + " bytes (last? " + isLast + ") offset = " + offset);
+            _log.debug("Received [MsgID " + _messageId + "] fragment " + fragmentNum + " with " + length + " bytes (last? " + isLast + ") offset = " + offset);
         // we should just use payload[] and use an offset/length on it
         ByteArray ba = _cache.acquire(); //new ByteArray(payload, offset, length); //new byte[length]);
         System.arraycopy(payload, offset, ba.getData(), 0, length);
@@ -80,7 +80,7 @@ class FragmentedMessage {
         ba.setOffset(0);
         //System.arraycopy(payload, offset, ba.getData(), 0, length);
         //if (_log.shouldLog(Log.DEBUG))
-        //    _log.debug("fragment[" + fragmentNum + "/" + offset + "/" + length + "]: " 
+        //    _log.debug("fragment[" + fragmentNum + "/" + offset + "/" + length + "]: "
         //               + Base64.encode(ba.getData(), ba.getOffset(), ba.getValid()));
 
         _fragments[fragmentNum] = ba;
@@ -89,7 +89,7 @@ class FragmentedMessage {
             _highFragmentNum = fragmentNum;
         return true;
     }
-    
+
     /**
      * Receive the first fragment (#0) and related metadata.  This may not be the first
      * one to arrive at the endpoint however.
@@ -104,23 +104,24 @@ class FragmentedMessage {
     public boolean receive(byte payload[], int offset, int length, boolean isLast, Hash toRouter, TunnelId toTunnel) {
         if (length <= 0 || length > MAX_FRAGMENT_SIZE) {
             if (_log.shouldLog(Log.WARN))
-                _log.warn("Length is impossible (" + length + ") for messageId " + _messageId);
+                _log.warn("Invalid length (" + length + ") for [MsgID " + _messageId + "]");
             return false;
         }
         if (offset + length > payload.length) {
             if (_log.shouldLog(Log.WARN))
-                _log.warn("Length is impossible (" + length + "/" + offset + " out of " + payload.length + ") for messageId " + _messageId);
+                _log.warn("Invalid length (" + length + "/" + offset + " out of " + payload.length + ") for [MsgID " + _messageId + "]");
             return false;
         }
         if (_log.shouldLog(Log.DEBUG))
-            _log.debug("Receive message " + _messageId + " with " + length + " bytes (last? " + isLast + ") targetting " + toRouter + " / " + toTunnel + " offset=" + offset);
+            _log.debug("Receiving [MsgID " + _messageId + "] with " + length + " bytes (last? " + isLast + ") targeting [" +
+                       toRouter + "] / " + toTunnel + " offset=" + offset);
         ByteArray ba = _cache.acquire(); // new ByteArray(payload, offset, length); // new byte[length]);
         System.arraycopy(payload, offset, ba.getData(), 0, length);
         ba.setValid(length);
         ba.setOffset(0);
         //System.arraycopy(payload, offset, ba.getData(), 0, length);
         //if (_log.shouldLog(Log.DEBUG))
-        //    _log.debug("fragment[0/" + offset + "/" + length + "]: " 
+        //    _log.debug("fragment[0/" + offset + "/" + length + "]: "
         //               + Base64.encode(ba.getData(), ba.getOffset(), ba.getValid()));
         _fragments[0] = ba;
         _lastReceived = _lastReceived || isLast;
@@ -130,12 +131,12 @@ class FragmentedMessage {
             _highFragmentNum = 0;
         return true;
     }
-    
+
     public long getMessageId() { return _messageId; }
     public Hash getTargetRouter() { return _toRouter; }
     public TunnelId getTargetTunnel() { return _toTunnel; }
 
-    public int getFragmentCount() { 
+    public int getFragmentCount() {
         int found = 0;
         for (int i = 0; i < _fragments.length; i++)
             if (_fragments[i] != null)
@@ -147,7 +148,7 @@ class FragmentedMessage {
     public SimpleTimer2.TimedEvent getExpireEvent() { return _expireEvent; }
 
     public void setExpireEvent(SimpleTimer2.TimedEvent evt) { _expireEvent = evt; }
-    
+
     /** have we received all of the fragments? */
     public boolean isComplete() {
         if (!_lastReceived)
@@ -158,7 +159,7 @@ class FragmentedMessage {
         return true;
     }
     public int getCompleteSize() {
-        if (!_lastReceived) 
+        if (!_lastReceived)
             throw new IllegalStateException("don't get the completed size when we're not complete!");
         if (_releasedAfter > 0) {
              RuntimeException e = new RuntimeException("use after free in FragmentedMessage");
@@ -169,18 +170,18 @@ class FragmentedMessage {
         for (int i = 0; i <= _highFragmentNum; i++) {
             ByteArray ba = _fragments[i];
             // NPE seen here, root cause unknown
-            if (ba == null) 
+            if (ba == null)
                 throw new IllegalStateException("don't get the completed size when we're not complete! - null fragment i=" + i + " of " + _highFragmentNum);
             size += ba.getValid();
         }
         return size;
     }
-    
+
     /** how long has this fragmented message been alive?  */
     public long getLifetime() { return _context.clock().now() - _createdOn; }
     public boolean getReleased() { return _completed; }
-    
-    
+
+
 /****
     public void writeComplete(OutputStream out) throws IOException {
         if (_releasedAfter > 0) {
@@ -220,7 +221,7 @@ class FragmentedMessage {
             return rv;
         }
     }
-    
+
     public long getReleasedAfter() { return _releasedAfter; }
     public void failed() {
         synchronized (this) {
@@ -247,7 +248,7 @@ class FragmentedMessage {
             }
         }
     }
-    
+
 /****
     public InputStream getInputStream() { return new FragmentInputStream(); }
     private class FragmentInputStream extends InputStream {
@@ -273,34 +274,34 @@ class FragmentedMessage {
         }
     }
 ****/
-    
+
     /** toString */
     @Override
     public String toString() {
         StringBuilder buf = new StringBuilder(128);
-        buf.append("Fragments for ").append(_messageId).append(": ");
+        buf.append("[MsgID ").append(_messageId).append("]\n* ");
         for (int i = 0; i <= _highFragmentNum; i++) {
             ByteArray ba = _fragments[i];
             if (ba != null)
-                buf.append(i).append(":").append(ba.getValid()).append(" bytes ");
+                buf.append("Fragment [").append(i).append("] ").append(ba.getValid()).append(" bytes; ");
             else
-                buf.append(i).append(":missing ");
+                buf.append("Fragment [").append(i).append("] missing; ");
         }
-        buf.append(" highest received: ").append(_highFragmentNum);
-        buf.append(" last received? ").append(_lastReceived);
-        buf.append(" lifetime: ").append(DataHelper.formatDuration(_context.clock().now()-_createdOn));
+        buf.append("Highest received: [").append(_highFragmentNum);
+        buf.append("]; Last received: ").append(_lastReceived);
+        buf.append("; Lifetime: ").append(DataHelper.formatDuration(_context.clock().now()-_createdOn));
         if (_toRouter != null) {
-            buf.append(" targetting ").append(_toRouter.toBase64().substring(0,4));
+            buf.append("\n* Target: [").append(_toRouter.toBase64().substring(0,6) + "]");
             if (_toTunnel != null)
                 buf.append(":").append(_toTunnel.getTunnelId());
         }
         if (_completed)
-            buf.append(" completed");
+            buf.append("; completed");
         if (_releasedAfter > 0)
-            buf.append(" released after " + DataHelper.formatDuration(_releasedAfter));
+            buf.append("; released after " + DataHelper.formatDuration(_releasedAfter));
         return buf.toString();
     }
-    
+
 /*****
     public static void main(String args[]) {
         try {
@@ -311,16 +312,16 @@ class FragmentedMessage {
             m.setMessageExpiration(ctx.clock().now() + 60*1000);
             m.setUniqueId(ctx.random().nextLong(I2NPMessage.MAX_ID_VALUE));
             byte data[] = m.toByteArray();
-            
+
             I2NPMessage r0 = new I2NPMessageHandler(ctx).readMessage(data);
             System.out.println("peq? " + r0.equals(m));
-            
+
             FragmentedMessage msg = new FragmentedMessage(ctx);
             msg.receive(m.getUniqueId(), data, 0, 500, false, null, null);
             msg.receive(m.getUniqueId(), 1, data, 500, 500, false);
             msg.receive(m.getUniqueId(), 2, data, 1000, data.length-1000, true);
             if (!msg.isComplete()) throw new RuntimeException("Not complete?");
-            
+
             byte recv[] = msg.toByteArray();
             I2NPMessage r = new I2NPMessageHandler(ctx).readMessage(recv);
             System.out.println("eq? " + m.equals(r));

@@ -2,9 +2,9 @@ package net.i2p.data.i2cp;
 
 /*
  * free (adj.): unencumbered; not under the control of others
- * Written by jrandom in 2003 and released into the public domain 
- * with no warranty of any kind, either expressed or implied.  
- * It probably won't make your computer catch on fire, or eat 
+ * Written by jrandom in 2003 and released into the public domain
+ * with no warranty of any kind, either expressed or implied.
+ * It probably won't make your computer catch on fire, or eat
  * your children, but it might.  Use at your own risk.
  *
  */
@@ -60,8 +60,8 @@ public class SessionConfig extends DataStructureImpl {
      */
     public static final String PROP_OFFLINE_SIGNATURE = "i2cp.leaseSetOfflineSignature";
 
-    /** 
-     * If the client authorized this session more than the specified period ago, 
+    /**
+     * If the client authorized this session more than the specified period ago,
      * refuse it, since it may be a replay attack.
      *
      * Really? See also ClientManager.REQUEST_LEASESET_TIMEOUT.
@@ -103,7 +103,7 @@ public class SessionConfig extends DataStructureImpl {
 
     /**
      * Retrieve any configuration options for the session
-     * 
+     *
      * @return Properties of this session
      */
     public Properties getOptions() {
@@ -220,7 +220,7 @@ public class SessionConfig extends DataStructureImpl {
     }
 
     /**
-     * Sign the structure using the supplied private key 
+     * Sign the structure using the supplied private key
      *
      * @param signingKey SigningPrivateKey to sign with.
      *                   If offline data is set, must be with the transient key.
@@ -371,7 +371,7 @@ public class SessionConfig extends DataStructureImpl {
                    && DataHelper.eq(getCreationDate(), cfg.getCreationDate())
                    && DataHelper.eq(getOptions(), cfg.getOptions());
         }
-         
+
         return false;
     }
 
@@ -382,11 +382,11 @@ public class SessionConfig extends DataStructureImpl {
 
     @Override
     public String toString() {
-        StringBuilder buf = new StringBuilder("[SessionConfig: ");
-        buf.append("\n\tDestination: ").append(getDestination());
-        buf.append("\n\tSignature: ").append(getSignature());
-        buf.append("\n\tCreation Date: ").append(getCreationDate());
-        buf.append("\n\tOptions: #: ").append(_options.size());
+        StringBuilder buf = new StringBuilder("SessionConfig: ");
+        buf.append("\n* Destination: ").append(getDestination());
+        buf.append("\n* Signature: ").append(getSignature());
+        buf.append("\n* Creation Date: ").append(getCreationDate());
+        buf.append("\n* Options: #: ").append(_options.size());
         Properties sorted = new OrderedProperties();
         sorted.putAll(_options);
         for (Map.Entry<Object, Object> e : sorted.entrySet()) {
@@ -394,7 +394,6 @@ public class SessionConfig extends DataStructureImpl {
             String val = (String) e.getValue();
             buf.append("\n\t\t[").append(key).append("] = [").append(val).append("]");
         }
-        buf.append("]");
         return buf.toString();
     }
 }

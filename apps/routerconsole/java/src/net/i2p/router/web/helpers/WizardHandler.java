@@ -18,7 +18,7 @@ import net.i2p.router.web.FormHandler;
 public class WizardHandler extends FormHandler {
 
     private WizardHelper _helper;
-    
+
     /**
      *  Bind the helper (scope session) to this handler (scope request)
      */
@@ -45,9 +45,9 @@ public class WizardHandler extends FormHandler {
                 // Saved in CSSHelper, assume success
                 addFormNoticeNoEscape(_t("Console language saved."));
             }
-            if ("4".equals(page)) {
+            if ("3".equals(page)) {
                 startNDT();
-            } else if ("5".equals(page)) {
+            } else if ("4".equals(page)) {
                 synchronized (_helper) {
                     if (_helper.isNDTSuccessful()) {
                         addFormNotice(_t("Bandwidth test completed successfully"));
@@ -60,7 +60,7 @@ public class WizardHandler extends FormHandler {
                         addFormError(_t("Bandwidth test did not complete"));
                     }
                 }
-            } else if ("6".equals(page)) {
+            } else if ("5".equals(page)) {
                 Map<String, String> changes = new HashMap<String, String>();
                 boolean updated = updateRates(changes);
                 if (updated) {
@@ -107,7 +107,7 @@ public class WizardHandler extends FormHandler {
                 changes.put(FIFOBandwidthRefiller.PROP_INBOUND_BANDWIDTH_PEAK, Integer.toString(Math.round(kb)));
                 rate -= Math.min(rate * ConfigNetHandler.DEF_BURST_PCT / 100, 50);
                 changes.put(FIFOBandwidthRefiller.PROP_INBOUND_BANDWIDTH, Integer.toString(Math.round(rate)));
-	        bwUpdated = true;
+            bwUpdated = true;
             } catch (NumberFormatException nfe) {
                 addFormError(_t("Invalid bandwidth"));
             }
@@ -122,7 +122,7 @@ public class WizardHandler extends FormHandler {
                 changes.put(FIFOBandwidthRefiller.PROP_OUTBOUND_BANDWIDTH_PEAK, Integer.toString(Math.round(kb)));
                 rate -= Math.min(rate * ConfigNetHandler.DEF_BURST_PCT / 100, 50);
                 changes.put(FIFOBandwidthRefiller.PROP_OUTBOUND_BANDWIDTH, Integer.toString(Math.round(rate)));
-	        bwUpdated = true;
+            bwUpdated = true;
             } catch (NumberFormatException nfe) {
                 addFormError(_t("Invalid bandwidth"));
             }
@@ -131,7 +131,7 @@ public class WizardHandler extends FormHandler {
             addFormNotice(_t("Updated bandwidth limits"));
             updated = true;
         }
-        return updated; 
+        return updated;
     }
 
     /** start the test */

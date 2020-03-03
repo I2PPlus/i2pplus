@@ -190,7 +190,7 @@ public class IBSkipSpan<K extends Comparable<? super K>, V> extends BSkipSpan<K,
 			try {
 				curPage = this.bf.readMultiPageData(k, curPage, pageCounter, curNextPage);
 			} catch (IOException ioe) {
-				bf.log.error("Lost " + (this.nKeys - i) + " entries - Error loading " + this + " on page " + curPage, ioe);
+				bf.log.error("Lost " + (this.nKeys - i) + " entries - Error loading [" + this + "] on page " + curPage, ioe);
 				lostEntries(i, curPage);
 				break;
 			}
@@ -210,7 +210,7 @@ public class IBSkipSpan<K extends Comparable<? super K>, V> extends BSkipSpan<K,
 				try {
 					curPage = this.bf.readMultiPageData(v, curPage, pageCounter, curNextPage);
 				} catch (IOException ioe) {
-					bf.log.error("Lost " + (this.nKeys - i) + " entries - Error loading " + this + " on page " + curPage, ioe);
+					bf.log.error("Lost " + (this.nKeys - i) + " entries - Error loading [" + this + "] on page " + curPage, ioe);
 					lostEntries(i, curPage);
 					break;
 				}

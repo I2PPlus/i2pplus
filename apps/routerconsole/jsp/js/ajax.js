@@ -29,6 +29,13 @@ function ajaxDone(url, target, refresh) {
     if (req.status == 200) {
       fails = 0;
       results = req.responseText;
+
+    // conditionally display graph so ajax call doesn't interfere with refreshGraph.js
+    var graph = document.getElementById("sb_graphcontainer");
+    if (graph) {
+        graph.style.backgroundImage = "url(/viewstat.jsp?stat=bw.combined&periodCount=20&width=250&height=50&hideLegend=true&hideGrid=true&hideTitle=true&time=" + new Date().getTime();
+    }
+
       document.getElementById(target).innerHTML = results;
       //document.getElementsbyClassName("hideifdown").style.display="block";
     } else if (fails == 0) {
@@ -37,12 +44,6 @@ function ajaxDone(url, target, refresh) {
     } else {
       document.getElementById(target).innerHTML = failMessage;
       //document.getElementByClassName("hideifdown").style.display="none";
-    }
-
-    // conditionally display graph so ajax call doesn't interfere with refreshGraph.js
-    var graph = document.getElementById("sb_graphcontainer");
-      if (graph) {
-      graph.style.backgroundImage = "url(/viewstat.jsp?stat=bw.combined&periodCount=20&width=220&height=50&hideLegend=true&hideGrid=true&time=" + new Date().getTime();
     }
 
     setTimeout(function() {ajax(url, target, refresh);}, refresh);

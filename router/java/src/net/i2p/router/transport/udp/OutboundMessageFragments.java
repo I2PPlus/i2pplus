@@ -72,25 +72,28 @@ class OutboundMessageFragments {
         _builder = new PacketBuilder(ctx, transport);
         _alive = true;
         // _allowExcess = false;
-        _context.statManager().createRateStat("udp.sendVolleyTime", "Long it takes to send a full volley", "udp", UDPTransport.RATES);
-        _context.statManager().createRateStat("udp.sendConfirmTime", "How long it takes to send a message and get the ACK", "udp", UDPTransport.RATES);
-        _context.statManager().createRateStat("udp.sendConfirmFragments", "How many fragments are included in a fully ACKed message", "udp", UDPTransport.RATES);
-        _context.statManager().createRateStat("udp.sendFragmentsPerPacket", "How many fragments are sent in a data packet", "udp", UDPTransport.RATES);
-        _context.statManager().createRateStat("udp.sendConfirmVolley", "How many times did fragments need to be sent before ACK", "udp", UDPTransport.RATES);
-        _context.statManager().createRateStat("udp.sendFailed", "How many sends a failed message was pushed", "udp", UDPTransport.RATES);
-        _context.statManager().createRateStat("udp.sendAggressiveFailed", "How many volleys was a packet sent before we gave up", "udp", UDPTransport.RATES);
-        _context.statManager().createRateStat("udp.outboundActiveCount", "How many messages are in the peer's active pool", "udp", UDPTransport.RATES);
-        _context.statManager().createRateStat("udp.outboundActivePeers", "How many peers we are actively sending to", "udp", UDPTransport.RATES);
-        _context.statManager().createRateStat("udp.sendRejected", "What volley are we on when the peer was throttled", "udp", UDPTransport.RATES);
-        _context.statManager().createRateStat("udp.partialACKReceived", "How many fragments were partially ACKed", "udp", UDPTransport.RATES);
-        //_context.statManager().createRateStat("udp.sendSparse", "How many fragments were partially ACKed and hence not resent (time == message lifetime)", "udp", UDPTransport.RATES);
-        _context.statManager().createRateStat("udp.sendPiggyback", "How many acks were piggybacked on a data packet (time == message lifetime)", "udp", UDPTransport.RATES);
-        _context.statManager().createRateStat("udp.sendPiggybackPartial", "How many partial acks were piggybacked on a data packet (time == message lifetime)", "udp", UDPTransport.RATES);
-        _context.statManager().createRequiredRateStat("udp.packetsRetransmitted", "Lifetime of packets during retransmission (ms)", "udp", UDPTransport.RATES);
-        _context.statManager().createRateStat("udp.peerPacketsRetransmitted", "How many packets have been retransmitted to the peer (lifetime) when a burst of packets are retransmitted (period == packets transmitted, lifetime)", "udp", UDPTransport.RATES);
-        _context.statManager().createRateStat("udp.blockedRetransmissions", "How packets have been transmitted to the peer when we blocked a retransmission to them?", "udp", UDPTransport.RATES);
-        _context.statManager().createRateStat("udp.sendCycleTime", "How long it takes to cycle through all of the active messages?", "udp", UDPTransport.RATES);
-        _context.statManager().createRateStat("udp.sendCycleTimeSlow", "How long it takes to cycle through all of the active messages, when its going slowly?", "udp", UDPTransport.RATES);
+//        _context.statManager().createRequiredRateStat("udp.sendVolleyTime", "Time (ms) to send a full volley", "Transport [UDP]", UDPTransport.RATES);
+        _context.statManager().createRateStat("udp.sendVolleyTime", "Time (ms) to send a full volley", "Transport [UDP]", UDPTransport.RATES);
+        _context.statManager().createRateStat("udp.sendConfirmTime", "Time (ms) to send a message and get the ACK", "Transport [UDP]", UDPTransport.RATES);
+        _context.statManager().createRateStat("udp.sendConfirmFragments", "Number of fragments included in a fully ACKed message", "Transport [UDP]", UDPTransport.RATES);
+        _context.statManager().createRateStat("udp.sendFragmentsPerPacket", "Number of fragments sent in a data packet", "Transport [UDP]", UDPTransport.RATES);
+        _context.statManager().createRateStat("udp.sendConfirmVolley", "Number of times fragments need to be sent before ACK", "Transport [UDP]", UDPTransport.RATES);
+        _context.statManager().createRateStat("udp.sendFailed", "Number of times a failed message was pushed", "Transport [UDP]", UDPTransport.RATES);
+        _context.statManager().createRateStat("udp.sendAggressiveFailed", "Number of volleys a packet was sent before we gave up", "Transport [UDP]", UDPTransport.RATES);
+        _context.statManager().createRateStat("udp.outboundActiveCount", "Number of messages in the peer's active pool", "Transport [UDP]", UDPTransport.RATES);
+//        _context.statManager().createRequiredRateStat("udp.outboundActivePeers", "Number of peers we are actively sending to", "Transport [UDP]", UDPTransport.RATES);
+        _context.statManager().createRateStat("udp.outboundActivePeers", "Number of peers we are actively sending to", "Transport [UDP]", UDPTransport.RATES);
+        _context.statManager().createRateStat("udp.sendRejected", "What volley we were on when the peer was throttled", "Transport [UDP]", UDPTransport.RATES);
+        _context.statManager().createRateStat("udp.partialACKReceived", "Number of fragments partially ACKed", "Transport [UDP]", UDPTransport.RATES);
+        //_context.statManager().createRateStat("udp.sendSparse", "How many fragments were partially ACKed and hence not resent (time = message lifetime)", "Transport [UDP]", UDPTransport.RATES);
+        _context.statManager().createRateStat("udp.sendPiggyback", "Number of ACKs piggybacked on a data packet (time = message lifetime)", "Transport [UDP]", UDPTransport.RATES);
+        _context.statManager().createRateStat("udp.sendPiggybackPartial", "Number of partial ACKs piggybacked on a data packet (time = message lifetime)", "Transport [UDP]", UDPTransport.RATES);
+//        _context.statManager().createRequiredRateStat("udp.packetsRetransmitted", "Lifetime (ms) of packets during retransmission", "Transport [UDP]", UDPTransport.RATES);
+        _context.statManager().createRateStat("udp.packetsRetransmitted", "Lifetime (ms) of packets during retransmission", "Transport [UDP]", UDPTransport.RATES);
+        _context.statManager().createRateStat("udp.peerPacketsRetransmitted", "Number of packets retransmitted to the peer (lifetime) when a burst of packets are retransmitted (period = packets transmitted, lifetime)", "Transport [UDP]", UDPTransport.RATES);
+        _context.statManager().createRateStat("udp.blockedRetransmissions", "Number of packets transmitted to the peer when we blocked a retransmission to them", "Transport [UDP]", UDPTransport.RATES);
+        _context.statManager().createRateStat("udp.sendCycleTime", "Time to cycle through all of the active messages", "Transport [UDP]", UDPTransport.RATES);
+        _context.statManager().createRateStat("udp.sendCycleTimeSlow", "Time to cycle through all of the active messages (when its going slowly)", "Transport [UDP]", UDPTransport.RATES);
     }
 
     public synchronized void startup() { _alive = true; }
@@ -218,10 +221,10 @@ class OutboundMessageFragments {
         boolean added = _activePeers.add(peer);
         if (added) {
             if (_log.shouldLog(Log.DEBUG))
-                _log.debug("Add a new message to a new peer " + peer.getRemotePeer());
+                _log.debug("Adding a new message to new peer [" + peer.getRemotePeer().toBase64().substring(0,6) + "]");
         } else {
             if (_log.shouldLog(Log.DEBUG))
-                _log.debug("Add a new message to an existing peer " + peer.getRemotePeer());
+                _log.debug("Adding a new message to an existing peer [" + peer.getRemotePeer().toBase64().substring(0,6) + "]");
         }
         _context.statManager().addRateData("udp.outboundActivePeers", _activePeers.size());
 
@@ -256,7 +259,7 @@ class OutboundMessageFragments {
          }
      }
 ****/
- 
+
     /**
      * Fetch all the packets for a message volley, blocking until there is a
      * message which can be fully transmitted (or the transport is shut down).
@@ -294,7 +297,7 @@ class OutboundMessageFragments {
                             // race with add()
                             _iterator.remove();
                             if (_log.shouldLog(Log.DEBUG))
-                                _log.debug("No more pending messages for " + peer.getRemotePeer());
+                                _log.debug("No more pending messages for [" + peer.getRemotePeer().toBase64().substring(0,6) + "]");
                             continue;
                         }
                         peersProcessed++;
@@ -343,13 +346,13 @@ class OutboundMessageFragments {
                         }
                     //} else {
                     //    if (_log.shouldLog(Log.DEBUG))
-                    //        _log.debug("dont wait: alive=" + _alive + " state = " + state);
+                    //        _log.debug("don't wait: alive=" + _alive + " state = " + state);
                     }
 
         } // while alive && state == null
 
         if (_log.shouldLog(Log.DEBUG))
-            _log.debug("Sending " + DataHelper.toString(states));
+            _log.debug("Sending to " + peer + DataHelper.toString(states));
 
         List<UDPPacket> packets = preparePackets(states, peer);
 
@@ -431,7 +434,7 @@ class OutboundMessageFragments {
             OutNetMessage msg = state.getMessage();
             int msgType = (msg != null) ? msg.getMessageTypeId() : -1;
             if (_log.shouldLog(Log.INFO))
-                _log.info("Building packet for " + next + " to " + peer);
+                _log.info("Sending UDP packet for " + next + " to: " + peer);
             int curTotalDataSize = state.fragmentSize(next.num);
             // now stuff in more fragments if they fit
             if (i +1 < toSend.size()) {
@@ -449,7 +452,7 @@ class OutboundMessageFragments {
                         curTotalDataSize += nextDataSize;
                         maxAvail = PacketBuilder.getMaxAdditionalFragmentSize(peer, sendNext.size(), curTotalDataSize);
                         if (_log.shouldLog(Log.INFO))
-                            _log.info("Adding in additional " + next + " to " + peer);
+                            _log.info("Adding in additional " + next + " to: " + peer);
                     }  // else too big
                 }
             }
@@ -458,13 +461,13 @@ class OutboundMessageFragments {
             UDPPacket pkt = _builder.buildPacket(sendNext, peer, remaining, newFullAckCount, partialACKBitfields);
             if (pkt != null) {
                 if (_log.shouldLog(Log.INFO))
-                    _log.info("Built packet with " + sendNext.size() + " fragments totalling " + curTotalDataSize +
-                              " data bytes to " + peer);
+                    _log.info("Sent UDP packet with " + sendNext.size() + " fragments (" + curTotalDataSize +
+                              " data bytes)\n* Target: " + peer);
                 _context.statManager().addRateData("udp.sendFragmentsPerPacket", sendNext.size());
             }
             if (pkt == null) {
                 if (_log.shouldLog(Log.WARN))
-                    _log.info("Build packet FAIL for " + DataHelper.toString(sendNext) + " to " + peer);
+                    _log.info("Send UDP packet FAIL for " + DataHelper.toString(sendNext) + " to: " + peer);
                 sendNext.clear();
                 continue;
             }
@@ -501,7 +504,7 @@ class OutboundMessageFragments {
         peer.packetsTransmitted(sent);
         if (_log.shouldLog(Log.INFO))
             _log.info("Sent " + fragmentsToSend + " fragments of " + states.size() +
-                      " messages in " + sent + " packets to " + peer);
+                      " messages in " + sent + " packets\n* Target: " + peer);
 
         return rv;
     }

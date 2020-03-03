@@ -26,9 +26,9 @@ class IterativeLookupSelector implements MessageSelector {
         _log = ctx.logManager().getLog(getClass());
     }
 
-    public boolean continueMatching() { 
+    public boolean continueMatching() {
         // don't use remaining searches count
-        return (!_matchFound) && _context.clock().now() < getExpiration(); 
+        return (!_matchFound) && _context.clock().now() < getExpiration();
     }
 
     public long getExpiration() { return (_matchFound ? -1 : _search.getExpiration()); }
@@ -52,7 +52,8 @@ class IterativeLookupSelector implements MessageSelector {
                 // Got a netDb reply pointing us at other floodfills...
                 if (_log.shouldLog(Log.INFO)) {
                     Hash from = dsrm.getFromHash();
-                    _log.info(_search.getJobId() + ": Processing DSRM via IterativeLookupJob, apparently from " + from);
+                    _log.info("[Job " + _search.getJobId() + "] Processing DbSearchReplyMsg via IterativeLookup from [" +
+                              from.toBase64().substring(0,6) + "]");
                 }
 
                 // was inline, now in IterativeLookupJob due to deadlocks
@@ -62,7 +63,7 @@ class IterativeLookupSelector implements MessageSelector {
             }
         }
         return false;
-    }   
+    }
 
     /** @since 0.9.12 */
     public String toString() {

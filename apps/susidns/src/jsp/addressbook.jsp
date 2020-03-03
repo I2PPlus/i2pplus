@@ -28,14 +28,15 @@
         request.setCharacterEncoding("UTF-8");
 
     response.setHeader("X-Frame-Options", "SAMEORIGIN");
-    response.setHeader("Content-Security-Policy", "default-src 'self'; style-src 'self' 'unsafe-inline'; script-src 'self'; form-action 'self'; frame-ancestors 'self'; object-src 'none'; media-src 'none'");
+    response.setHeader("Content-Security-Policy", "default-src 'self'; style-src 'self' 'unsafe-inline'; script-src 'self' 'unsafe-inline'; form-action 'self'; frame-ancestors 'self'; object-src 'none'; media-src 'none'");
     response.setHeader("X-XSS-Protection", "1; mode=block");
     response.setHeader("X-Content-Type-Options", "nosniff");
     response.setHeader("Referrer-Policy", "no-referrer");
     response.setHeader("Accept-Ranges", "none");
 
-%><%@page pageEncoding="UTF-8" contentType="text/html" import="net.i2p.servlet.RequestWrapper"
-%><%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core"%>
+%>
+<%@ page pageEncoding="UTF-8" contentType="text/html" trimDirectiveWhitespaces="true" import="net.i2p.servlet.RequestWrapper"%>
+<%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core"%>
 <jsp:useBean id="version" class="i2p.susi.dns.VersionBean" scope="application" />
 <jsp:useBean id="book" class="i2p.susi.dns.NamingServiceBean" scope="session" />
 <jsp:useBean id="intl" class="i2p.susi.dns.Messages" scope="application" />
@@ -57,11 +58,21 @@
 <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
 <title>${book.book} <%=intl._t("address book")%> - susidns</title>
 <link rel="stylesheet" type="text/css" href="<%=book.getTheme()%>susidns.css?<%=net.i2p.CoreVersion.VERSION%>">
+<link rel="stylesheet" type="text/css" href="<%=book.getTheme()%>override.css?<%=net.i2p.CoreVersion.VERSION%>">
+<script type="text/javascript" src="/js/iframeResizer/iframeResizer.contentWindow.js?<%=net.i2p.CoreVersion.VERSION%>"></script>
 <script src="/js/resetScroll.js?<%=net.i2p.CoreVersion.VERSION%>" type="text/javascript"></script>
+<script src="/js/scrollTo.js?<%=net.i2p.CoreVersion.VERSION%>" type="text/javascript"></script>
+<% String cspNonce = Integer.toHexString(net.i2p.util.RandomSource.getInstance().nextInt()); %>
+<script nonce="<%=cspNonce%>" type="text/javascript">
+  if (self == top) {
+    nav = document.getElementById("navi");
+  } else {
+    nav = document.getElementById("susidnsframe").contentWindow.document.getElementById("navi");
+  }
+</script>
 </head>
-<body>
+<body id="bk">
 <div class="page">
-<hr>
 <div id="navi" class="${book.getBook()}">
 <a id="overview" href="index"><%=intl._t("Overview")%></a>&nbsp;
 <a class="abook private" href="addressbook?book=private&amp;filter=none"><%=intl._t("Private")%></a>&nbsp;
@@ -74,20 +85,22 @@
 <hr>
 <div class="headline" id="addressbook">
 <h3><%=intl._t("Address book")%>: <%=intl._t(book.getBook())%></h3>
-<h4><%=intl._t("Storage")%>: ${book.displayName}</h4>
+<h4><%=intl._t("Storage")%>: <span class="storage">${book.displayName}</span></h4>
 </div>
-
-<div id="messages">${book.messages}<%
+<script src="/js/closeMessage.js?<%=net.i2p.CoreVersion.VERSION%>" type="text/javascript"></script>
+<div id="messages">${book.messages}
+<%
    if (importMessages != null) {
        %><%=importMessages%><%
    }
-%></div>
+%>
+</div>
 
 ${book.loadBookMessages}
 
 <c:if test="${book.notEmpty}">
 <% if (book.getEntries().length > 0) { /* Don't show if no results. Can't figure out how to do this with c:if */ %>
-<form action="export" method="GET" target="_top">
+<form action="export" method="GET" target="_blank">
 <div id="export">
 <input type="hidden" name="book" value="${book.book}">
 <c:if test="${book.search} != null && ${book.search}.length() > 0">
@@ -175,7 +188,7 @@ ${book.loadBookMessages}
 <th><%=intl._t("Link (b32)")%></th>
 <th>Helper</th>
 <th>Details</th>
-<th><%=intl._t("Destination")%></th>
+<th><%=intl._t("Destination")%> (b64)</th>
 
 <c:if test="${book.validBook}">
 <th title="<%=intl._t("Select hosts for deletion from addressbook")%>"></th>
@@ -203,7 +216,7 @@ ${book.loadBookMessages}
 <td class="destinations"><div class="destaddress" name="dest_${addr.name}" width="200px" tabindex="0" onblur="resetScrollLeft(this)">${addr.destination}</div></td>
 
 <c:if test="${book.validBook}">
-<td class="checkbox"><input type="checkbox" name="checked" value="${addr.name}" title="<%=intl._t("Mark for deletion")%>"></td>
+<td class="checkbox"><input type="checkbox" class="optbox" name="checked" value="${addr.name}" title="<%=intl._t("Mark for deletion")%>"></td>
 </c:if>
 
 </tr>
@@ -218,7 +231,7 @@ ${book.loadBookMessages}
 <div id="buttons">
 <p class="buttons">
 <input class="cancel" type="reset" value="<%=intl._t("Cancel")%>" >
-<input class="delete" type="submit" name="action" value="<%=intl._t("Delete Selected")%>" >
+<input class="delete" type="submit" name="action" value="<%=intl._t("Delete Selected")%>" onclick="smoothScroll(nav)">
 </p>
 </div>
 </c:if>
@@ -232,7 +245,7 @@ ${book.loadBookMessages}
 </div>
 </c:if>
 
-<form method="POST" action="addressbook">
+<form method="POST" action="addressbook#navi">
 <input type="hidden" name="book" value="${book.book}">
 <input type="hidden" name="serial" value="<%=susiNonce%>">
 <input type="hidden" name="begin" value="0">
@@ -242,20 +255,20 @@ ${book.loadBookMessages}
 <table>
 <tr>
 <td><b><%=intl._t("Hostname")%></b></td>
-<td><input type="text" name="hostname" value="${book.hostname}" size="54"></td>
+<td><input type="text" name="hostname" value="${book.hostname}" required x-moz-errormessage="<%=intl._t("Please supply a hostname.")%>" size="54"></td>
 </tr>
 <tr>
 <td><b><%=intl._t("Destination")%></b></td>
-<td><textarea name="destination" rows="1" style="height:3em" wrap="off" cols="70" spellcheck="false">${book.destination}</textarea></td>
+<td><textarea name="destination" required x-moz-errormessage="<%=intl._t("Please supply a Base64 destination for this hostname.")%>" rows="1" style="height:3em" wrap="off" cols="70" spellcheck="false">${book.destination}</textarea></td>
 </tr>
 </table>
 <p class="buttons">
 <input class="cancel" type="reset" value="<%=intl._t("Cancel")%>" >
-<input class="accept" type="submit" name="action" value="<%=intl._t("Replace")%>" >
+<input class="accept" type="submit" name="action" value="<%=intl._t("Replace")%>" onclick="smoothScroll(nav)">
 <% if (!book.getBook().equals("published")) { %>
-  <input class="add" type="submit" name="action" value="<%=intl._t("Add Alternate")%>" >
+  <input class="add" type="submit" name="action" value="<%=intl._t("Add Alternate")%>" onclick="smoothScroll(nav)">
 <% } %>
-<input class="add" type="submit" name="action" value="<%=intl._t("Add")%>" >
+<input class="add" type="submit" name="action" value="<%=intl._t("Add")%>" onclick="smoothScroll(nav)">
 </p>
 </div>
 </form>
@@ -276,7 +289,7 @@ ${book.loadBookMessages}
 </table>
 <p class="buttons">
 <input class="cancel" type="reset" value="<%=intl._t("Cancel")%>" >
-<input class="download" type="submit" name="action" value="<%=intl._t("Import")%>" >
+<input class="download" type="submit" name="action" value="<%=intl._t("Import")%>" onclick="smoothScroll(nav)">
 </p>
 </div>
 </form>
@@ -287,5 +300,6 @@ ${book.loadBookMessages}
 <p class="footer">susidns v${version.version} &copy; <a href="${version.url}" target="_top">susi</a> 2005</p>
 </div>
 </div>
+<span data-iframe-height></span>
 </body>
 </html>

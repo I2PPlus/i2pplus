@@ -63,24 +63,24 @@ public class HandshakeState implements Destroyable, Cloneable {
 	 * handshake has not started.
 	 */
 	public static final int NO_ACTION = 0;
-	
+
 	/**
 	 * The HandshakeState expects the application to write the
 	 * next message payload for the handshake.
 	 */
 	public static final int WRITE_MESSAGE = 1;
-	
+
 	/**
 	 * The HandshakeState expects the application to read the
 	 * next message payload from the handshake.
 	 */
 	public static final int READ_MESSAGE = 2;
-	
+
 	/**
 	 * The handshake has failed due to some kind of error.
 	 */
 	public static final int FAILED = 3;
-	
+
 	/**
 	 * The handshake is over and the application is expected to call
 	 * split() and begin data session communications.
@@ -92,27 +92,27 @@ public class HandshakeState implements Destroyable, Cloneable {
 	 * have been split() out successfully.
 	 */
 	public static final int COMPLETE = 5;
-	
+
 	/**
 	 * Local static keypair is required for the handshake.
 	 */
 	private static final int LOCAL_REQUIRED = 0x01;
-	
+
 	/**
 	 * Remote static keypai is required for the handshake.
 	 */
 	private static final int REMOTE_REQUIRED = 0x02;
-	
+
 	/**
 	 * Pre-shared key is required for the handshake.
 	 */
 	private static final int PSK_REQUIRED = 0x04;
-	
+
 	/**
 	 * Ephemeral key for fallback pre-message has been provided.
 	 */
 	private static final int FALLBACK_PREMSG = 0x08;
-	
+
 	/**
 	 * The local public key is part of the pre-message.
 	 */
@@ -174,14 +174,14 @@ public class HandshakeState implements Destroyable, Cloneable {
 	/**
 	 * Creates a new Noise handshake.
 	 * Noise protocol name is hardcoded.
-	 * 
+	 *
 	 * @param patternId XK or IK
 	 * @param role The role, HandshakeState.INITIATOR or HandshakeState.RESPONDER.
 	 * @param xdh The key pair factory for ephemeral keys
-	 * 
+	 *
 	 * @throws IllegalArgumentException The protocolName is not
 	 * formatted correctly, or the role is not recognized.
-	 * 
+	 *
 	 * @throws NoSuchAlgorithmException One of the cryptographic algorithms
 	 * that is specified in the protocolName is not supported.
 	 */
@@ -213,7 +213,7 @@ public class HandshakeState implements Destroyable, Cloneable {
 		action = NO_ACTION;
 		requirements = extraReqs | computeRequirements(flags, prefix, role, false);
 		patternIndex = 1;
-		
+
 		// Create the DH objects that we will need later.
 		if ((flags & Pattern.FLAG_LOCAL_STATIC) != 0)
 			localKeyPair = new Curve25519DHState(xdh);
@@ -223,7 +223,7 @@ public class HandshakeState implements Destroyable, Cloneable {
 			remotePublicKey = new Curve25519DHState(xdh);
 		if ((flags & Pattern.FLAG_REMOTE_EPHEMERAL) != 0)
 			remoteEphemeral = new Curve25519DHState(xdh);
-		
+
 	}
 
 	/**
@@ -267,7 +267,7 @@ public class HandshakeState implements Destroyable, Cloneable {
 	}
 
 	/**
-	 * Gets the name of the Noise protocol. 
+	 * Gets the name of the Noise protocol.
 	 *
 	 * @return The protocol name.
 	 */
@@ -275,20 +275,20 @@ public class HandshakeState implements Destroyable, Cloneable {
 	{
 		return symmetric.getProtocolName();
 	}
-	
+
 	/**
 	 * Gets the role for this handshake.
-	 * 
+	 *
 	 * @return The role, HandshakeState.INITIATOR or HandshakeState.RESPONDER.
 	 */
 	public int getRole()
 	{
 		return isInitiator ? INITIATOR : RESPONDER;
 	}
-	
+
 	/**
 	 * Gets the keypair object for the local static key.
-	 * 
+	 *
 	 * @return The keypair, or null if a local static key is not required.
 	 */
 	public DHState getLocalKeyPair()
@@ -298,9 +298,9 @@ public class HandshakeState implements Destroyable, Cloneable {
 
 	/**
 	 * Gets the keypair object for the local ephemeral key.
-	 * 
+	 *
 	 * I2P
-	 * 
+	 *
 	 * @return The keypair, or null if a local ephemeral key is not required or has not been generated.
 	 * @since 0.9.44
 	 */
@@ -311,9 +311,9 @@ public class HandshakeState implements Destroyable, Cloneable {
 
 	/**
 	 * Determine if this handshake requires a local static key.
-	 * 
+	 *
 	 * @return true if a local static key is needed; false if not.
-	 * 
+	 *
 	 * If the local static key has already been set, then this function
 	 * will return false.
 	 */
@@ -328,7 +328,7 @@ public class HandshakeState implements Destroyable, Cloneable {
 	/**
 	 * Determine if this handshake has already been configured
 	 * with a local static key.
-	 * 
+	 *
 	 * @return true if the local static key has been configured;
 	 * false if not.
 	 */
@@ -339,10 +339,10 @@ public class HandshakeState implements Destroyable, Cloneable {
 		else
 			return false;
 	}
-	
+
 	/**
 	 * Gets the public key object for the remote static key.
-	 * 
+	 *
 	 * @return The public key, or null if a remote static key
 	 * is not required.
 	 */
@@ -350,12 +350,12 @@ public class HandshakeState implements Destroyable, Cloneable {
 	{
 		return remotePublicKey;
 	}
-	
+
 	/**
 	 * Determine if this handshake requires a remote static key.
-	 * 
+	 *
 	 * @return true if a remote static key is needed; false if not.
-	 * 
+	 *
 	 * If the remote static key has already been set, then this function
 	 * will return false.
 	 */
@@ -366,11 +366,11 @@ public class HandshakeState implements Destroyable, Cloneable {
 		else
 			return false;
 	}
-	
+
 	/**
 	 * Determine if this handshake has already been configured
 	 * with a remote static key.
-	 * 
+	 *
 	 * @return true if the remote static key has been configured;
 	 * false if not.
 	 */
@@ -387,19 +387,19 @@ public class HandshakeState implements Destroyable, Cloneable {
 
 	/**
 	 * Starts the handshake running.
-	 * 
+	 *
 	 * This function is called after all of the handshake parameters have been
 	 * provided to the HandshakeState object.  This function should be followed
 	 * by calls to writeMessage() or readMessage() to process the handshake
 	 * messages.  The getAction() function indicates the action to take next.
-	 * 
+	 *
 	 * @throws IllegalStateException The handshake has already started, or one or
 	 * more of the required parameters has not been supplied.
-	 * 
+	 *
 	 * @throws UnsupportedOperationException An attempt was made to start a
 	 * fallback handshake pattern without first calling fallback() on a
 	 * previous handshake.
-	 * 
+	 *
 	 * @see #getAction()
 	 * @see #writeMessage(byte[], int, byte[], int, int)
 	 * @see #readMessage(byte[], int, int, byte[], int)
@@ -416,7 +416,7 @@ public class HandshakeState implements Destroyable, Cloneable {
 			throw new UnsupportedOperationException
 				("Cannot start a fallback pattern");
 		}
-		
+
 		// Check that we have satisfied all of the pattern requirements.
 		if ((requirements & LOCAL_REQUIRED) != 0) {
 			if (localKeyPair == null || !localKeyPair.hasPrivateKey())
@@ -426,10 +426,10 @@ public class HandshakeState implements Destroyable, Cloneable {
 			if (remotePublicKey == null || !remotePublicKey.hasPublicKey())
 				throw new IllegalStateException("Remote static key required");
 		}
-		
+
 		// Hash the prologue value.
 		symmetric.mixHash(emptyPrologue, 0, 0);
-		
+
 		// Mix the pre-supplied public keys into the handshake hash.
 		if (isInitiator) {
 			if ((requirements & LOCAL_PREMSG) != 0)
@@ -448,7 +448,7 @@ public class HandshakeState implements Destroyable, Cloneable {
 			if ((requirements & LOCAL_PREMSG) != 0)
 				symmetric.mixPublicKey(localKeyPair);
 		}
-		
+
 		// The handshake has officially started - set the first action.
 		if (isInitiator)
 			action = WRITE_MESSAGE;
@@ -459,7 +459,7 @@ public class HandshakeState implements Destroyable, Cloneable {
 	/**
 	 * Gets the next action that the application should perform for
 	 * the handshake part of the protocol.
-	 * 
+	 *
 	 * @return One of HandshakeState.NO_ACTION, HandshakeState.WRITE_MESSAGE,
 	 * HandshakeState.READ_MESSAGE, HandshakeState.SPLIT, or
 	 * HandshakeState.FAILED.
@@ -471,7 +471,7 @@ public class HandshakeState implements Destroyable, Cloneable {
 
 	/**
 	 * Mixes the result of a Diffie-Hellman calculation into the chaining key.
-	 * 
+	 *
 	 * @param local Local private key object.
 	 * @param remote Remote public key object.
 	 */
@@ -491,7 +491,7 @@ public class HandshakeState implements Destroyable, Cloneable {
 
 	/**
 	 * Writes a message payload during the handshake.
-	 * 
+	 *
 	 * @param message The buffer that will be populated with the
 	 * handshake packet to be written to the transport.
 	 * @param messageOffset First offset within the message buffer
@@ -501,17 +501,17 @@ public class HandshakeState implements Destroyable, Cloneable {
 	 * @param payloadOffset Offset into the payload buffer of the
 	 * first payload buffer.
 	 * @param payloadLength Length of the payload in bytes.
-	 * 
+	 *
 	 * @return The length of the data written to the message buffer.
-	 * 
+	 *
 	 * @throws IllegalStateException The action is not WRITE_MESSAGE.
-	 * 
+	 *
 	 * @throws IllegalArgumentException The payload is null, but
 	 * payloadOffset or payloadLength is non-zero.
-	 * 
+	 *
 	 * @throws ShortBufferException The message buffer does not have
-	 * enough space for the handshake message. 
-	 * 
+	 * enough space for the handshake message.
+	 *
 	 * @see #getAction()
 	 * @see #readMessage(byte[], int, int, byte[], int)
 	 */
@@ -531,7 +531,7 @@ public class HandshakeState implements Destroyable, Cloneable {
 		if (messageOffset > message.length) {
 			throw new ShortBufferException();
 		}
-		
+
 		// Format the message.
 		try {
 			// Process tokens until the direction changes or the patten ends.
@@ -626,7 +626,7 @@ public class HandshakeState implements Destroyable, Cloneable {
 					}
 				}
 			}
-			
+
 			// Add the payload to the message buffer and encrypt it.
 			if (payload != null)
 				messagePosn += symmetric.encryptAndHash(payload, payloadOffset, message, messagePosn, payloadLength);
@@ -646,7 +646,7 @@ public class HandshakeState implements Destroyable, Cloneable {
 
 	/**
 	 * Reads a message payload during the handshake.
-	 * 
+	 *
 	 * @param message Buffer containing the incoming handshake
 	 * that was read from the transport.
 	 * @param messageOffset Offset of the first message byte.
@@ -654,18 +654,18 @@ public class HandshakeState implements Destroyable, Cloneable {
 	 * @param payload Buffer that will be populated with the message payload.
 	 * @param payloadOffset Offset of the first byte in the
 	 * payload buffer to be populated with payload data.
-	 * 
+	 *
 	 * @return The length of the payload.
-	 * 
+	 *
 	 * @throws IllegalStateException The action is not READ_MESSAGE.
-	 * 
+	 *
 	 * @throws ShortBufferException The message buffer does not have
 	 * sufficient bytes for a valid message or the payload buffer does
-	 * not have enough space for the decrypted payload. 
-	 * 
+	 * not have enough space for the decrypted payload.
+	 *
 	 * @throws BadPaddingException A MAC value in the message failed
 	 * to verify.
-	 * 
+	 *
 	 * @see #getAction()
 	 * @see #writeMessage(byte[], int, byte[], int, int)
 	 */
@@ -673,7 +673,7 @@ public class HandshakeState implements Destroyable, Cloneable {
 	{
 		boolean success = false;
 		int messageEnd = messageOffset + messageLength;
-		
+
 		// Validate the parameters.
 		if (action != READ_MESSAGE) {
 			throw new IllegalStateException
@@ -685,7 +685,7 @@ public class HandshakeState implements Destroyable, Cloneable {
 		if (messageLength > (message.length - messageOffset)) {
 			throw new ShortBufferException();
 		}
-		
+
 		// Process the message.
 		try {
 			// Process tokens until the direction changes or the patten ends.
@@ -728,7 +728,7 @@ public class HandshakeState implements Destroyable, Cloneable {
 						messageOffset += len;
 					}
 					break;
-	
+
 					case Pattern.S:
 					{
 						// Decrypt and read the remote static key.
@@ -749,14 +749,14 @@ public class HandshakeState implements Destroyable, Cloneable {
 						messageOffset += len + macLen;
 					}
 					break;
-	
+
 					case Pattern.EE:
 					{
 						// DH operation with initiator and responder ephemeral keys.
 						mixDH(localEphemeral, remoteEphemeral);
 					}
 					break;
-	
+
 					case Pattern.ES:
 					{
 						// DH operation with initiator ephemeral and responder static keys.
@@ -766,7 +766,7 @@ public class HandshakeState implements Destroyable, Cloneable {
 							mixDH(localKeyPair, remoteEphemeral);
 					}
 					break;
-	
+
 					case Pattern.SE:
 					{
 						// DH operation with initiator static and responder ephemeral keys.
@@ -783,7 +783,7 @@ public class HandshakeState implements Destroyable, Cloneable {
 						mixDH(localKeyPair, remotePublicKey);
 					}
 					break;
-	
+
 					default:
 					{
 						// Unknown token code.  Abort.
@@ -791,7 +791,7 @@ public class HandshakeState implements Destroyable, Cloneable {
 					}
 				}
 			}
-			
+
 			// Decrypt the message payload.
 			int payloadLength = symmetric.decryptAndHash(message, messageOffset, payload, payloadOffset, messageEnd - messageOffset);
 			success = true;
@@ -809,9 +809,9 @@ public class HandshakeState implements Destroyable, Cloneable {
 	/**
 	 * Splits the transport encryption CipherState objects out of
 	 * this HandshakeState object once the handshake completes.
-	 * 
+	 *
 	 * @return The pair of ciphers for sending and receiving.
-	 * 
+	 *
 	 * @throws IllegalStateException The action is not SPLIT.
 	 */
 	public CipherStatePair split()
@@ -830,15 +830,15 @@ public class HandshakeState implements Destroyable, Cloneable {
 	/**
 	 * Splits the transport encryption CipherState objects out of
 	 * this HandshakeObject after mixing in a secondary symmetric key.
-	 * 
+	 *
 	 * @param secondaryKey The buffer containing the secondary key.
 	 * @param offset The offset of the first secondary key byte.
 	 * @param length The length of the secondary key in bytes, which
 	 * must be either 0 or 32.
 	 * @return The pair of ciphers for sending and receiving.
-	 * 
+	 *
 	 * @throws IllegalStateException The action is not SPLIT.
-	 * 
+	 *
 	 * @throws IllegalArgumentException The length is not 0 or 32.
 	 */
 	public CipherStatePair split(byte[] secondaryKey, int offset, int length)
@@ -856,12 +856,12 @@ public class HandshakeState implements Destroyable, Cloneable {
 		action = COMPLETE;
 		return pair;
 	}
-	
+
 	/**
 	 * Gets the current value of the handshake hash.
-	 * 
+	 *
 	 * @return The handshake hash.  This must not be modified by the caller.
-	 * 
+	 *
 	 * @throws IllegalStateException The action is not SPLIT or COMPLETE.
 	 */
 	public byte[] getHandshakeHash()
@@ -886,17 +886,17 @@ public class HandshakeState implements Destroyable, Cloneable {
 		if (remoteEphemeral != null)
 			remoteEphemeral.destroy();
 	}
-	
+
 	/**
 	 * Computes the requirements for a handshake.
-	 * 
+	 *
 	 * @param flags The flags from the handshake's pattern.
 	 * @param prefix The prefix from the protocol name; typically
 	 * "Noise" or "NoisePSK".
 	 * @param role The role, HandshakeState.INITIATOR or HandshakeState.RESPONDER.
 	 * @param isFallback Set to true if we need the requirements for a
 	 * fallback pattern; false for a regular pattern.
-	 * 
+	 *
 	 * @return The set of requirements for the handshake.
 	 */
 	private static int computeRequirements(short flags, String prefix, int role, boolean isFallback)
@@ -954,33 +954,31 @@ public class HandshakeState implements Destroyable, Cloneable {
 	public String toString() {
 		StringBuilder buf = new StringBuilder(256);
 		buf.append(patternId);
-		buf.append(" Handshake State:\n");
+		buf.append(" -> Handshake State:\n");
 		buf.append(symmetric.toString());
 
 		byte[] tmp = new byte[32];
 
 		DHState dh = localKeyPair;
-		buf.append("Local static public key (s) :      ");
+		buf.append("\n* Local static public key (s) :      ");
 		if (dh != null && dh.hasPublicKey()) {
 			dh.getPublicKey(tmp, 0);
 			buf.append(net.i2p.data.Base64.encode(tmp));
 		} else {
 			buf.append("null");
 		}
-		buf.append('\n');
 
 		dh = remotePublicKey;
-		buf.append("Remote static public key (rs) :    ");
+		buf.append("\n* Remote static public key (rs) :    ");
 		if (dh != null && dh.hasPublicKey()) {
 			dh.getPublicKey(tmp, 0);
 			buf.append(net.i2p.data.Base64.encode(tmp));
 		} else {
 			buf.append("null");
 		}
-		buf.append('\n');
 
 		dh = localEphemeral;
-		buf.append("Local ephemeral public key (e) :   ");
+		buf.append("\n* Local ephemeral public key (e) :   ");
 		if (dh != null && dh.hasPublicKey()) {
 			dh.getPublicKey(tmp, 0);
 			buf.append(net.i2p.data.Base64.encode(tmp));
@@ -993,17 +991,15 @@ public class HandshakeState implements Destroyable, Cloneable {
 		} else {
 			buf.append("null");
 		}
-		buf.append('\n');
 
 		dh = remoteEphemeral;
-		buf.append("Remote ephemeral public key (re) : ");
+		buf.append("\n* Remote ephemeral public key (re) : ");
 		if (dh != null && dh.hasPublicKey()) {
 			dh.getPublicKey(tmp, 0);
 			buf.append(net.i2p.data.Base64.encode(tmp));
 		} else {
 			buf.append("null");
 		}
-		buf.append('\n');
 
 		return buf.toString();
 	}

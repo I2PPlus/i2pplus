@@ -17,10 +17,10 @@ class FloodOnlyLookupTimeoutJob extends JobImpl {
 
     public void runJob() {
         Log log = getContext().logManager().getLog(getClass());
-        if (log.shouldLog(Log.INFO))
-            log.info(_search.getJobId() + ": search timed out");
+        if (log.shouldLog(Log.DEBUG))
+            log.debug("[Job " + _search.getJobId() + "] FloodSearch timed out");
         _search.failed();
     }
 
-    public String getName() { return "NetDb flood search timeout"; }
+    public String getName() { return "Timeout NetDb FloodSearch"; }
 }

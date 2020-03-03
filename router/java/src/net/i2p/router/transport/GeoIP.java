@@ -68,7 +68,7 @@ public class GeoIP {
     private final Set<Long> _notFound;
     private final AtomicBoolean _lock;
     private int _lookupRunCount;
-    
+
     static final String PROP_GEOIP_ENABLED = "routerconsole.geoip.enable";
     public static final String PROP_GEOIP_DIR = "geoip.dir";
     public static final String GEOIP_DIR_DEFAULT = "geoip";

@@ -29,29 +29,37 @@ import net.i2p.util.Log;
 class ExpireLeasesJob extends JobImpl {
     private final Log _log;
     private final KademliaNetworkDatabaseFacade _facade;
-    
+
     private final static long RERUN_DELAY_MS = 1*60*1000;
-    
+
     public ExpireLeasesJob(RouterContext ctx, KademliaNetworkDatabaseFacade facade) {
         super(ctx);
         _log = ctx.logManager().getLog(ExpireLeasesJob.class);
         _facade = facade;
     }
-    
-    public String getName() { return "Expire Lease Sets Job"; }
+
+    public String getName() { return "Expire Leases"; }
 
     public void runJob() {
         Set<Hash> toExpire = selectKeysToExpire();
-        _log.info("Leases to expire: " + toExpire);
-        for (Hash key : toExpire) {
-            _facade.fail(key);
-            //_log.info("Lease " + key + " is expiring, so lets look for it again", new Exception("Expire and search"));
-            //_facade.lookupLeaseSet(key, null, null, RERUN_DELAY_MS);
+        if (!toExpire.isEmpty()) {
+        StringBuilder buf = new StringBuilder();
+        buf.append("Leases to expire:\n* ");
+        for (Hash h : toExpire) {
+            buf.append("[").append(h.toBase64().substring(0,6)).append("]"); buf.append(" ");
+        }
+//            _log.info("Leases to expire:\n* " + toExpire);
+            _log.info(buf.toString());
+            for (Hash key : toExpire) {
+                _facade.fail(key);
+                //_log.info("Lease " + key + " is expiring, so lets look for it again", new Exception("Expire and search"));
+                //_facade.lookupLeaseSet(key, null, null, RERUN_DELAY_MS);
+            }
         }
         //_facade.queueForExploration(toExpire); // don't do explicit searches, just explore passively
         requeue(RERUN_DELAY_MS);
     }
-    
+
     /**
      * Run through the entire data store, finding all expired leaseSets (ones that
      * don't have any leases that haven't yet passed, even with the CLOCK_FUDGE_FACTOR)
@@ -66,7 +74,7 @@ class ExpireLeasesJob extends JobImpl {
                 if (!ls.isCurrent(Router.CLOCK_FUDGE_FACTOR))
                     toExpire.add(entry.getKey());
                 else if (_log.shouldLog(Log.DEBUG))
-                    _log.debug("Lease " + ls.getDestination().calculateHash() + " is current, no need to expire");
+                    _log.debug("Lease [" + ls.getDestination().calculateHash().toBase64().substring(0,6) + "] is current - not expiring");
             }
         }
         return toExpire;

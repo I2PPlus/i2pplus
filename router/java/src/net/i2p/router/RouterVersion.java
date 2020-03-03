@@ -1,9 +1,9 @@
 package net.i2p.router;
 /*
  * free (adj.): unencumbered; not under the control of others
- * Written by jrandom in 2003 and released into the public domain 
- * with no warranty of any kind, either expressed or implied.  
- * It probably won't make your computer catch on fire, or eat 
+ * Written by jrandom in 2003 and released into the public domain
+ * with no warranty of any kind, either expressed or implied.
+ * It probably won't make your computer catch on fire, or eat
  * your children, but it might.  Use at your own risk.
  *
  */
@@ -21,7 +21,7 @@ public class RouterVersion {
     public final static long BUILD = 2;
 
     /** for example "-test" */
-    public final static String EXTRA = "";
+    public final static String EXTRA = "+";
     public final static String FULL_VERSION = VERSION + "-" + BUILD + EXTRA;
     public static void main(String args[]) {
         System.out.println("I2P Router version: " + FULL_VERSION);

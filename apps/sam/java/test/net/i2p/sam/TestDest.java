@@ -10,11 +10,11 @@ import net.i2p.util.Log;
 
 public class TestDest {
     private static Log _log = new Log(TestDest.class);
-    
+
     private static void runTest(String samHost, int samPort, String conOptions) {
         test(samHost, samPort, conOptions);
     }
-    
+
     private static void test(String host, int port, String conOptions) {
         _log.info("\n\nTesting a DEST generate (should come back with 'DEST REPLY PUB=val PRIV=val')\n\n\n");
         try {
@@ -23,7 +23,7 @@ public class TestDest {
             out.write(DataHelper.getASCII("HELLO VERSION MIN=1.0 MAX=1.0\n"));
             BufferedReader reader = new BufferedReader(new InputStreamReader(s.getInputStream()));
             String line = reader.readLine();
-            _log.debug("line read for valid version: " + line);
+            _log.debug("Line read for valid version: " + line);
             String req = "SESSION CREATE STYLE=STREAM DESTINATION=testNaming " + conOptions + "\n";
             out.write(DataHelper.getASCII(req));
             line = reader.readLine();
@@ -40,10 +40,10 @@ public class TestDest {
             _log.error("Error testing for valid version", e);
         }
     }
-    
+
     public static void main(String args[]) {
         // "i2cp.tcp.host=www.i2p.net i2cp.tcp.port=7765 tunnels.inboundDepth=0";
-        // "i2cp.tcp.host=localhost i2cp.tcp.port=7654 tunnels.inboundDepth=0"; 
+        // "i2cp.tcp.host=localhost i2cp.tcp.port=7654 tunnels.inboundDepth=0";
         String conOptions = "i2cp.tcp.host=www.i2p.net i2cp.tcp.port=7765 tunnels.inboundDepth=0"; // "i2cp.tcp.host=localhost i2cp.tcp.port=7654 tunnels.inboundDepth=0";
         if (args.length > 0) {
             conOptions = "";

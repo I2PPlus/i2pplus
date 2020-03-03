@@ -10,16 +10,16 @@ public class ProfilesHelper extends HelperBase {
     private boolean _graphical;
 
     private static final String titles[] =
-                                          {_x("High Capacity"),                 // 0
-                                           _x("Floodfill"),                     // 1
-                                           _x("Banned"),                        // 2
-                                           _x("All"),      };                   // 3
+                                          {_x("All"),                           // 0
+                                           _x("High Capacity"),                 // 1
+                                           _x("Floodfill"),                     // 2
+                                           _x("Banned"),   };                   // 3
 
     private static final String links[] =
                                           {"",                                  // 0
-                                           "?f=2",                              // 1
-                                           "?f=3",                              // 2
-                                           "?f=1"          };                   // 3
+                                           "?f=1",                              // 1
+                                           "?f=2",                              // 2
+                                           "?f=3"          };                   // 3
 
     public void setFull(String f) {
         if (f != null) {
@@ -64,11 +64,15 @@ public class ProfilesHelper extends HelperBase {
         }
         return "";
     }
-    
+
     /** @return empty string, writes directly to _out */
     public String getBanlistSummary() {
         try {
             BanlistRenderer rend = new BanlistRenderer(_context);
+            StringBuilder buf = new StringBuilder(1024);
+            buf.append("<p class=\"infohelp\" id=\"bannedpeercount\">").append(_t("Total number of banned peers")).append(": ")
+               .append(_context.banlist().getRouterCount()).append("</p>");
+            _out.write(buf.toString());
             rend.renderStatusHTML(_out);
         } catch (IOException ioe) {
             ioe.printStackTrace();
@@ -80,11 +84,11 @@ public class ProfilesHelper extends HelperBase {
      *  @since 0.9.1
      */
     private int getTab() {
-        if (_full == 2)
-            return 1;
-        if (_full == 3)
-            return 2;
         if (_full == 1)
+            return 1;
+        if (_full == 2)
+            return 2;
+        if (_full == 3)
             return 3;
         return 0;
     }

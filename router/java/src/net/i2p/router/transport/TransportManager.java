@@ -1,9 +1,9 @@
 package net.i2p.router.transport;
 /*
  * free (adj.): unencumbered; not under the control of others
- * Written by jrandom in 2003 and released into the public domain 
- * with no warranty of any kind, either expressed or implied.  
- * It probably won't make your computer catch on fire, or eat 
+ * Written by jrandom in 2003 and released into the public domain
+ * with no warranty of any kind, either expressed or implied.
+ * It probably won't make your computer catch on fire, or eat
  * your children, but it might.  Use at your own risk.
  *
  */
@@ -90,20 +90,20 @@ public class TransportManager implements TransportEventListener {
     private static final boolean DEFAULT_NTCP2_ENABLE = true;
 
     private static final String PROP_ADVANCED = "routerconsole.advanced";
-    
+
     /** not forever, since they may update */
     private static final long SIGTYPE_BANLIST_DURATION = 36*60*60*1000L;
 
     public TransportManager(RouterContext context) {
         _context = context;
         _log = _context.logManager().getLog(TransportManager.class);
-        _context.statManager().createRateStat("transport.banlistOnUnreachable", "Add a peer to the banlist since none of the transports can reach them", "Transport", new long[] { 60*1000, 10*60*1000, 60*60*1000 });
-        _context.statManager().createRateStat("transport.banlistOnUsupportedSigType", "Add a peer to the banlist since signature type is unsupported", "Transport", new long[] { 60*1000, 10*60*1000, 60*60*1000 });
-        _context.statManager().createRateStat("transport.noBidsYetNotAllUnreachable", "Add a peer to the banlist since none of the transports can reach them", "Transport", new long[] { 60*1000, 10*60*1000, 60*60*1000 });
-        _context.statManager().createRateStat("transport.bidFailBanlisted", "Could not attempt to bid on message, as they were banlisted", "Transport", new long[] { 60*1000, 10*60*1000, 60*60*1000 });
-        _context.statManager().createRateStat("transport.bidFailSelf", "Could not attempt to bid on message, as it targeted ourselves", "Transport", new long[] { 60*1000, 10*60*1000, 60*60*1000 });
-        _context.statManager().createRateStat("transport.bidFailNoTransports", "Could not attempt to bid on message, as none of the transports could attempt it", "Transport", new long[] { 60*1000, 10*60*1000, 60*60*1000 });
-        _context.statManager().createRateStat("transport.bidFailAllTransports", "Could not attempt to bid on message, as all of the transports had failed", "Transport", new long[] { 60*1000, 10*60*1000, 60*60*1000 });
+        _context.statManager().createRateStat("transport.banlistOnUnreachable", "Add peer to banlist (unreachable on any transport)", "Transport", new long[] { 60*1000, 10*60*1000, 60*60*1000 });
+        _context.statManager().createRateStat("transport.banlistOnUsupportedSigType", "Add peer to banlist (unsupported signature type)", "Transport", new long[] { 60*1000, 10*60*1000, 60*60*1000 });
+        _context.statManager().createRateStat("transport.noBidsYetNotAllUnreachable", "Add peer to banlist (unreachable on any transport)", "Transport", new long[] { 60*1000, 10*60*1000, 60*60*1000 });
+        _context.statManager().createRateStat("transport.bidFailBanlisted", "Failed to bid on message (banlisted peer)", "Transport", new long[] { 60*1000, 10*60*1000, 60*60*1000 });
+        _context.statManager().createRateStat("transport.bidFailSelf", "Failed to bid on message (self as target)", "Transport", new long[] { 60*1000, 10*60*1000, 60*60*1000 });
+        _context.statManager().createRateStat("transport.bidFailNoTransports", "Failed to bid on message (unreachable on any transport)", "Transport", new long[] { 60*1000, 10*60*1000, 60*60*1000 });
+        _context.statManager().createRateStat("transport.bidFailAllTransports", "Failed to bid on message (failed on all transports)", "Transport", new long[] { 60*1000, 10*60*1000, 60*60*1000 });
         _transports = new ConcurrentHashMap<String, Transport>(2);
         _pluggableTransports = new HashMap<String, Transport>(2);
         if (_context.getBooleanPropertyDefaultTrue(PROP_ENABLE_UPNP))
@@ -129,7 +129,7 @@ public class TransportManager implements TransportEventListener {
         if (style.equals(NTCPTransport.STYLE) || style.equals(UDPTransport.STYLE))
             throw new IllegalArgumentException("Builtin transport");
         if (_transports.containsKey(style) || _pluggableTransports.containsKey(style))
-            throw new IllegalStateException("Dup transport");
+            throw new IllegalStateException("Duplicate transport");
         boolean shouldStart = !_transports.isEmpty();
         _pluggableTransports.put(style, t);
         addTransport(t);
@@ -166,21 +166,21 @@ public class TransportManager implements TransportEventListener {
     DHSessionKeyBuilder.Factory getDHFactory() {
         return _dhThread;
     }
-    
+
     private void addTransport(Transport transport) {
         if (transport == null) return;
         Transport old = _transports.put(transport.getStyle(), transport);
         if (old != null && old != transport && _log.shouldLog(Log.WARN))
-            _log.warn("Replacing transport " + transport.getStyle());
+            _log.warn("Replacing transport [" + transport.getStyle() + "]");
         transport.setListener(this);
     }
-    
+
     private void removeTransport(Transport transport) {
         if (transport == null) return;
         transport.setListener(null);
         Transport old = _transports.remove(transport.getStyle());
         if (old != null && _log.shouldLog(Log.WARN))
-            _log.warn("Removing transport " + transport.getStyle());
+            _log.warn("Removing transport [" + transport.getStyle() + "]");
     }
 
     private void configTransports() {
@@ -209,13 +209,13 @@ public class TransportManager implements TransportEventListener {
             }
         }
         if (_transports.isEmpty())
-            _log.log(Log.CRIT, "No transports are enabled");
+            _log.log(Log.CRIT, "No transports are enabled - router cannot function!");
     }
-    
+
     public static boolean isNTCPEnabled(RouterContext ctx) {
         return ctx.getBooleanPropertyDefaultTrue(PROP_ENABLE_NTCP);
     }
-    
+
     /**
      *  Notify transport of ALL routable interface addresses, including IPv6.
      *  It's the transport's job to ignore what it can't handle.
@@ -223,7 +223,7 @@ public class TransportManager implements TransportEventListener {
     private void initializeAddress(Transport t) {
         initializeAddress(Collections.singleton(t));
     }
-    
+
     /**
      *  Notify all transports of ALL routable interface addresses, including IPv6.
      *  It's the transport's job to ignore what it can't handle.
@@ -232,7 +232,7 @@ public class TransportManager implements TransportEventListener {
     void initializeAddress() {
         initializeAddress(_transports.values());
     }
-    
+
     /**
      *  Notify transports of ALL routable interface addresses, including IPv6.
      *  It's the transport's job to ignore what it can't handle.
@@ -287,12 +287,12 @@ public class TransportManager implements TransportEventListener {
                 _log.error("UDP failed to bind to local address", e);
             }
         }
-        // we only use these if we don't have a preferred adress
+        // we only use these if we don't have a preferred address
         if (!nonPreferredV6Addresses.isEmpty()) {
             if (hasPreferredV6Address) {
                 if (_log.shouldWarn()) {
                     for (Inet6Address addr : nonPreferredV6Addresses) {
-                        _log.warn("Not binding to address " + addr.getHostAddress());
+                        _log.warn("Not binding to address: " + addr.getHostAddress());
                     }
                 }
             } else {
@@ -379,7 +379,7 @@ public class TransportManager implements TransportEventListener {
         if (_upnpManager != null && (SystemVersion.isAndroid() || Addresses.getAnyAddress() == null))
             _upnpManager.start();
         configTransports();
-        _log.debug("Starting up the transport manager");
+        _log.debug("Starting up the transport manager...");
         // Let's do this in a predictable order to make testing easier
         // Start NTCP first so it can get notified from SSU
         List<Transport> tps = new ArrayList<Transport>();
@@ -396,20 +396,20 @@ public class TransportManager implements TransportEventListener {
         for (Transport t : tps) {
             t.startListening();
             if (_log.shouldLog(Log.DEBUG))
-                _log.debug("Transport " + t.getStyle() + " started");
+                _log.debug("Transport [" + t.getStyle() + "] started");
         }
         // kick UPnP - Do this to get the ports opened even before UDP registers an address
         transportAddressChanged();
         _log.debug("Done start listening on transports");
         _context.router().rebuildRouterInfo();
     }
-    
+
     synchronized void restart() {
         stopListening();
         try { Thread.sleep(5*1000); } catch (InterruptedException ie) {}
         startListening();
     }
-    
+
     /**
      *  Can be restarted.
      */
@@ -421,8 +421,8 @@ public class TransportManager implements TransportEventListener {
         }
         _transports.clear();
     }
-    
-    
+
+
     /**
      *  Cannot be restarted.
      *  @since 0.9
@@ -436,13 +436,13 @@ public class TransportManager implements TransportEventListener {
         Addresses.clearCaches();
         TransportImpl.clearCaches();
     }
-    
+
     Transport getTransport(String style) {
         return _transports.get(style);
     }
-    
+
     int getTransportCount() { return _transports.size(); }
-    
+
     /**
      *  @return SortedMap of style to Transport (a copy)
      *  @since 0.9.31
@@ -459,47 +459,47 @@ public class TransportManager implements TransportEventListener {
      *  How many peers are we currently connected to, that we have
      *  sent a message to or received a message from in the last five minutes.
      */
-    int countActivePeers() { 
+    int countActivePeers() {
         int peers = 0;
         for (Transport t : _transports.values()) {
             peers += t.countActivePeers();
         }
         return peers;
     }
-    
+
     /**
      *  How many peers are we currently connected to, that we have
      *  sent a message to in the last minute.
      *  Unused for anything, to be removed.
      */
-    int countActiveSendPeers() { 
+    int countActiveSendPeers() {
         int peers = 0;
         for (Transport t : _transports.values()) {
             peers += t.countActiveSendPeers();
         }
         return peers;
     }
-    
+
     /**
       * Is at least one transport below its outbound connection limit + some margin
       * Use for throttling in the router.
       *
       * @param pct percent of limit 0-100
       */
-    boolean haveOutboundCapacity(int pct) { 
+    boolean haveOutboundCapacity(int pct) {
         for (Transport t : _transports.values()) {
             if (t.haveCapacity(pct))
                 return true;
         }
         return false;
     }
-    
+
     private static final int HIGH_CAPACITY_PCT = 50;
     /**
       * Are all transports well below their outbound connection limit
       * Use for throttling in the router.
       */
-    boolean haveHighOutboundCapacity() { 
+    boolean haveHighOutboundCapacity() {
         if (_transports.isEmpty())
             return false;
         for (Transport t : _transports.values()) {
@@ -508,21 +508,21 @@ public class TransportManager implements TransportEventListener {
         }
         return true;
     }
-    
+
     /**
       * Is at least one transport below its inbound connection limit + some margin
       * Use for throttling in the router.
       *
       * @param pct percent of limit 0-100
       */
-    boolean haveInboundCapacity(int pct) { 
+    boolean haveInboundCapacity(int pct) {
         for (Transport t : _transports.values()) {
             if (t.hasCurrentAddress() && t.haveCapacity(pct))
                 return true;
         }
         return false;
     }
-    
+
     /**
      * Return our peer clock skews on all transports.
      * Vector composed of Long, each element representing a peer skew in seconds.
@@ -540,12 +540,12 @@ public class TransportManager implements TransportEventListener {
         //    _log.debug("Transport manager returning " + skews.size() + " peer clock skews.");
         return skews;
     }
-    
+
     /**
      *  Previously returned short, now enum as of 0.9.20
      *  @return the best status of any transport
      */
-    Status getReachabilityStatus() { 
+    Status getReachabilityStatus() {
         Status rv = Status.UNKNOWN;
         for (Transport t : _transports.values()) {
             Status s = t.getReachabilityStatus();
@@ -559,7 +559,7 @@ public class TransportManager implements TransportEventListener {
      * @deprecated unused
      */
     @Deprecated
-    void recheckReachability() { 
+    void recheckReachability() {
         for (Transport t : _transports.values())
             t.recheckReachability();
     }
@@ -570,16 +570,16 @@ public class TransportManager implements TransportEventListener {
                 return true;
         }
         return false;
-    }    
-    
+    }
+
     boolean isEstablished(Hash peer) {
         for (Transport t : _transports.values()) {
             if (t.isEstablished(peer))
                 return true;
         }
         return false;
-    }    
-    
+    }
+
     /**
      *  @return a new set, may be modified
      *  @since 0.9.34
@@ -597,7 +597,7 @@ public class TransportManager implements TransportEventListener {
             rv.addAll(t.getEstablished());
         return rv;
     }
-    
+
     /**
      * Tell the transports that we may disconnect from this peer.
      * This is advisory only.
@@ -609,7 +609,7 @@ public class TransportManager implements TransportEventListener {
              t.mayDisconnect(peer);
         }
     }
-    
+
     /**
      * Tell the transports to disconnect from this peer.
      *
@@ -620,7 +620,7 @@ public class TransportManager implements TransportEventListener {
              t.forceDisconnect(peer);
         }
     }
-    
+
     /**
      * Was the peer UNreachable (outbound only) on any transport,
      * based on the last time we tried it for each transport?
@@ -632,8 +632,8 @@ public class TransportManager implements TransportEventListener {
                 return false;
         }
         return true;
-    }    
-    
+    }
+
     /**
      * IP of the peer from the last connection (in or out, any transport).
      * This may be different from that advertised in the netDb,
@@ -647,8 +647,8 @@ public class TransportManager implements TransportEventListener {
      */
     byte[] getIP(Hash peer) {
         return TransportImpl.getIP(peer);
-    }    
-    
+    }
+
     /**
      *  This forces a rebuild
      */
@@ -662,7 +662,7 @@ public class TransportManager implements TransportEventListener {
         }
         return rv;
     }
-    
+
     /**
      *  @since IPv6
      */
@@ -711,7 +711,7 @@ public class TransportManager implements TransportEventListener {
         }
         return rv;
     }
-    
+
     TransportBid getBid(OutNetMessage msg) {
         List<TransportBid> bids = getBids(msg);
         if ( (bids == null) || (bids.isEmpty()) )
@@ -722,7 +722,7 @@ public class TransportManager implements TransportEventListener {
 
     List<TransportBid> getBids(OutNetMessage msg) {
         if (msg == null)
-            throw new IllegalArgumentException("Null message?  no bidding on a null outNetMessage!");
+            throw new IllegalArgumentException("Null message? No bidding on a null outNetMessage!");
         if (_context.router().getRouterInfo().equals(msg.getTarget()))
             throw new IllegalArgumentException("Bids for a message bound to ourselves?");
 
@@ -731,7 +731,7 @@ public class TransportManager implements TransportEventListener {
         for (Transport t : _transports.values()) {
             if (failedTransports.contains(t.getStyle())) {
                 if (_log.shouldLog(Log.DEBUG))
-                    _log.debug("Skipping transport " + t.getStyle() + " as it already failed");
+                    _log.debug("Skipping transport [" + t.getStyle() + "] as it already failed");
                 continue;
             }
             // we always want to try all transports, in case there is a faster bidirectional one
@@ -740,16 +740,16 @@ public class TransportManager implements TransportEventListener {
             TransportBid bid = t.bid(msg.getTarget(), msg.getMessageSize());
             if (bid != null) {
                 if (_log.shouldLog(Log.DEBUG))
-                    _log.debug("Transport " + t.getStyle() + " bid: " + bid);
+                    _log.debug("Transport [" + t.getStyle() + "] Bid: " + bid);
                 rv.add(bid);
             } else {
                 if (_log.shouldLog(Log.DEBUG))
-                    _log.debug("Transport " + t.getStyle() + " did not produce a bid");
+                    _log.debug("Transport [" + t.getStyle() + "] did not produce a bid");
             }
         }
         return rv;
     }
-    
+
     TransportBid getNextBid(OutNetMessage msg) {
         int unreachableTransports = 0;
         Hash peer = msg.getTarget().getIdentity().calculateHash();
@@ -765,7 +765,7 @@ public class TransportManager implements TransportEventListener {
             }
             if (failedTransports.contains(t.getStyle())) {
                 if (_log.shouldLog(Log.DEBUG))
-                    _log.debug("Skipping transport " + t.getStyle() + " as it already failed");
+                    _log.debug("Skipping transport [" + t.getStyle() + "] as it has already failed");
                 continue;
             }
             // we always want to try all transports, in case there is a faster bidirectional one
@@ -777,13 +777,13 @@ public class TransportManager implements TransportEventListener {
                     // this keeps GetBids() from banlisting for "no common transports"
                     msg.transportFailed(t.getStyle());
                 else if ( (rv == null) || (rv.getLatencyMs() > bid.getLatencyMs()) )
-                    rv = bid;    
+                    rv = bid;
                 if (_log.shouldLog(Log.DEBUG))
-                    _log.debug("Transport " + t.getStyle() + " bid: " + bid + " currently winning? " + (rv == bid) 
+                    _log.debug("Transport [" + t.getStyle() + "] Bid: " + bid + " currently winning? " + (rv == bid)
                                + " (winning latency: " + rv.getLatencyMs() + " / " + rv + ")");
             } else {
                 if (_log.shouldLog(Log.DEBUG))
-                    _log.debug("Transport " + t.getStyle() + " did not produce a bid");
+                    _log.debug("Transport [" + t.getStyle() + "] did not produce a bid");
                 if (t.isUnreachable(peer))
                     unreachableTransports++;
             }
@@ -792,7 +792,7 @@ public class TransportManager implements TransportEventListener {
             if (msg.getTarget().getIdentity().getSigningPublicKey().getType() == null) {
                 // we don't support his crypto
                 _context.statManager().addRateData("transport.banlistOnUnsupportedSigType", 1);
-                _context.banlist().banlistRouterForever(peer, _x("Unsupported signature type"));
+                _context.banlist().banlistRouterForever(peer, " <b>➜</b> " + _x("Unsupported signature type"));
             } else if (unreachableTransports >= _transports.size() && countActivePeers() > 0) {
                 // Don't banlist if we aren't talking to anybody, as we may have a network connection issue
                 // TODO if we are IPv6 only, ban for longer
@@ -810,11 +810,11 @@ public class TransportManager implements TransportEventListener {
                 if (incompat) {
                     // they don't support our crypto
                     _context.statManager().addRateData("transport.banlistOnUnsupportedSigType", 1);
-                    _context.banlist().banlistRouter(peer, _x("No support for our signature type"), null, null,
+                    _context.banlist().banlistRouter(peer, " <b>➜</b> " + _x("No support for our signature type"), null, null,
                                                      _context.clock().now() + SIGTYPE_BANLIST_DURATION);
                 } else {
                     _context.statManager().addRateData("transport.banlistOnUnreachable", msg.getLifetime(), msg.getLifetime());
-                    _context.banlist().banlistRouter(peer, _x("Unreachable on any transport"));
+                    _context.banlist().banlistRouter(peer, " <b>➜</b> " + _x("Unreachable on any transport"));
                 }
             }
         } else if (rv == null) {
@@ -822,7 +822,7 @@ public class TransportManager implements TransportEventListener {
         }
         return rv;
     }
-    
+
     /**
      * Message received
      *
@@ -878,14 +878,14 @@ public class TransportManager implements TransportEventListener {
         }
     }
 
-    List<String> getMostRecentErrorMessages() { 
+    List<String> getMostRecentErrorMessages() {
         List<String> rv = new ArrayList<String>(16);
         for (Transport t : _transports.values()) {
             rv.addAll(t.getMostRecentErrorMessages());
         }
         return rv;
     }
-    
+
     /**
      *  As of 0.9.31, only outputs UPnP status
      *
@@ -898,10 +898,12 @@ public class TransportManager implements TransportEventListener {
         } else if (_upnpManager != null) {
             out.write(_upnpManager.renderStatusHTML());
         } else {
-            out.write("<h3 id=\"upnpstatus\"><a name=\"upnp\"></a>" + _t("UPnP is not enabled") + "</h3>\n");
+            out.write("<p class=\"infohelp\" id=\"upnpstatus\"><a name=\"upnp\"></a>" + _t("UPnP is not enabled")
+                      .replace("not enabled", "not enabled on this router. To enable UPnP, see the <a href=\"/confignet#ipv4config\">network configuration page</a>.") +
+                      "</p>\n");
         }
     }
-    
+
     /**
      *  Mark a string for extraction by xgettext and translation.
      *  Use this only in static initializers.

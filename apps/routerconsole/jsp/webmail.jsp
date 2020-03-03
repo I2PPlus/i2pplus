@@ -22,28 +22,41 @@
     } else {
 %>
 <!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
-<html><head>
+<html>
+<head>
 <%@include file="css.jsi" %>
 <%@include file="csp-unsafe.jsi" %>
 <%=intl.title("webmail")%>
-<script src="/js/iframed.js?<%=net.i2p.CoreVersion.VERSION%>" type="text/javascript"></script>
-<%@include file="summaryajax.jsi" %>
+<script type="text/javascript" src="/js/iframedClassInject.js?<%=net.i2p.CoreVersion.VERSION%>"></script>
 <script nonce="<%=cspNonce%>" type="text/javascript">
   function setupFrame() {
       f = document.getElementById("susimailframe");
       injectClass(f);
-      resizeFrame(f);
   }
 </script>
-</head><body>
+<script type="text/javascript" src="/js/iframeResizer/iframeResizer.js?<%=net.i2p.CoreVersion.VERSION%>"></script>
+<%@include file="summaryajax.jsi" %>
+</head>
+<body class="embed">
+<script nonce="<%=cspNonce%>" type="text/javascript">progressx.show();</script>
 <%@include file="summary.jsi" %>
-<h1><%=intl._t("I2P Webmail")%> <span class="newtab"><a href="/susimail/" target="_blank" title="<%=intl._t("Open in new tab")%>"><img src="<%=intl.getTheme(request.getHeader("User-Agent"))%>images/newtab.png" /></a></span></h1>
+<h1 class="mail"><%=intl._t("Webmail")%> <span class="newtab"><a href="/susimail/" target="_blank" title="<%=intl._t("Open in new tab")%>"><img src="<%=intl.getTheme(request.getHeader("User-Agent"))%>images/newtab.png" /></a></span></h1>
 <div class="main" id="webmail">
-<iframe src="/susimail/" width="100%" height="100%" frameborder="0" border="0" name="susimailframe" id="susimailframe" onload="setupFrame()" allowtransparency="true">
+<style>iframe {width: 1px; min-width: 100%;}</style>
+<noscript><style type="text/css">iframe {display: none}</style><p class="infohelp" style="margin: 10px;">Javascript is required to view <a href="/susimail/" target="_blank">the webmail client</a> in embedded mode.</p></noscript>
+<iframe src="/susimail/" width="100%" frameborder="0" border="0" scrolling="no" name="susimailframe" id="susimailframe" onload="setupFrame()" allowtransparency="true">
 <%=intl._t("Your browser does not support iFrames.")%>
 &nbsp;<a href="/susimail/"><%=intl._t("Click here to continue.")%></a>
 </iframe>
-</div></body></html>
+<script nonce="<%=cspNonce%>" type="text/javascript">
+document.addEventListener('DOMContentLoaded', function(event) {
+var iframes = iFrameResize({log: false, interval: 0, heightCalculationMethod: 'taggedElement', warningTimeout: 0}, '#susimailframe')
+});
+</script>
+</div>
+<script nonce="<%=cspNonce%>" type="text/javascript">progressx.hide();</script>
+</body>
+</html>
 <%
     }
 %>

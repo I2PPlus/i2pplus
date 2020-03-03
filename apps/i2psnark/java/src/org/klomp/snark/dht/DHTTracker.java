@@ -41,7 +41,8 @@ class DHTTracker {
     private static final int MAX_PEERS = 2000;
     private static final int MAX_PEERS_PER_TORRENT = 150;
     private static final int ABSOLUTE_MAX_PER_TORRENT = MAX_PEERS_PER_TORRENT * 2;
-    private static final int MAX_TORRENTS = 400;
+//    private static final int MAX_TORRENTS = 400;
+    private static final int MAX_TORRENTS = 1000;
 
     DHTTracker(I2PAppContext ctx) {
         _context = ctx;
@@ -140,9 +141,9 @@ class DHTTracker {
      * Debug info, HTML formatted
      */
     public void renderStatusHTML(StringBuilder buf) {
-        buf.append("<b>DHT tracker:</b> ").append(_torrentCount).append(" torrents ")
-           .append(_peerCount).append(" peers ")
-           .append(DataHelper.formatDuration(_expireTime)).append(" expiration<br>");
+        buf.append("<div id=\"debugDHT\"><b>DHT tracker:</b> ").append(_torrentCount).append(" torrents &bullet; ")
+           .append(_peerCount).append(" peers &bullet; ")
+           .append(DataHelper.formatDuration(_expireTime)).append(" expiration</div><hr class=\"debug\">");
     }
 
     private class Cleaner extends SimpleTimer2.TimedEvent {

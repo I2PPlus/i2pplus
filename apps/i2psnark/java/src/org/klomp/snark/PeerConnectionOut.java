@@ -2,17 +2,17 @@
    Copyright (C) 2003 Mark J. Wielaard
 
    This file is part of Snark.
-   
+
    This program is free software; you can redistribute it and/or modify
    it under the terms of the GNU General Public License as published by
    the Free Software Foundation; either version 2, or (at your option)
    any later version.
- 
+
    This program is distributed in the hope that it will be useful,
    but WITHOUT ANY WARRANTY; without even the implied warranty of
    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
    GNU General Public License for more details.
- 
+
    You should have received a copy of the GNU General Public License
    along with this program; if not, write to the Free Software Foundation,
    Inc., 59 Temple Place - Suite 330, Boston, MA 02111-1307, USA.
@@ -45,10 +45,10 @@ class PeerConnectionOut implements Runnable
 
   // Contains Messages.
   private final BlockingQueue<Message> sendQueue = new LinkedBlockingQueue<Message>();
-  
+
   private static final AtomicLong __id = new AtomicLong();
   private final long _id;
-  
+
   long lastSent;
 
   public PeerConnectionOut(Peer peer, DataOutputStream dout)
@@ -59,7 +59,7 @@ class PeerConnectionOut implements Runnable
 
     lastSent = System.currentTimeMillis();
   }
-  
+
   public void startup() {
     thread = new I2PAppThread(this, "Snark sender " + _id + ": " + peer);
     thread.start();
@@ -96,7 +96,7 @@ class PeerConnectionOut implements Runnable
                         // Make sure everything will reach the other side.
                         // don't flush while holding lock, could take a long time
                         // dout.flush();
-                        
+
                         // Wait till more data arrives.
                         sendQueue.wait(60*1000);
                       }
@@ -109,13 +109,13 @@ class PeerConnectionOut implements Runnable
                 if (!quit && state != null && peer.isConnected())
                   {
                     // Piece messages are big. So if there are other
-                    // (control) messages make sure they are send first.
+                    // (control) messages make sure they are sent first.
                     // Also remove request messages from the queue if
                     // we are currently being choked to prevent them from
-                    // being send even if we get unchoked a little later.
-                    // (Since we will resent them anyway in that case.)
+                    // being sent even if we get unchoked a little later.
+                    // (Since we will resend them anyway in that case.)
                     // And remove piece messages if we are choking.
-                    
+
                     // this should get fixed for starvation
                     Iterator<Message> it = sendQueue.iterator();
                     while (m == null && it.hasNext())
@@ -129,7 +129,7 @@ class PeerConnectionOut implements Runnable
                               if (peer.supportsFast()) {
                                   Message r = new Message(Message.REJECT, nm.piece, nm.begin, nm.length);
                                   if (_log.shouldLog(Log.DEBUG))
-                                      _log.debug("Send " + peer + ": " + r);
+                                      _log.debug("Sending [" + peer + "]: " + r);
                                    r.sendMessage(dout);
                               }
                             }
@@ -141,7 +141,7 @@ class PeerConnectionOut implements Runnable
                             //SimpleTimer.getInstance().removeEvent(nm.expireEvent);
                             nm = null;
                           }
-                          
+
                         if (nm != null)
                           {
                             m = nm;
@@ -158,7 +158,7 @@ class PeerConnectionOut implements Runnable
             if (m != null)
               {
                 if (_log.shouldLog(Log.DEBUG))
-                    _log.debug("Send " + peer + ": " + m);
+                    _log.debug("Sending [" + peer + "]: " + m);
 
                 // This can block for quite a while.
                 // To help get slow peers going, and track the bandwidth better,
@@ -197,11 +197,12 @@ class PeerConnectionOut implements Runnable
       {
         // Ignore, probably other side closed connection.
         if (_log.shouldLog(Log.INFO))
-            _log.info("IOError sending to " + peer, ioe);
+//            _log.info("IOError sending to [" + peer + "]", ioe);
+            _log.info("IOError sending to [" + peer + "] \n* " + ioe.getMessage());
       }
     catch (Throwable t)
       {
-        _log.error("Error sending to " + peer, t);
+        _log.error("Error sending to [" + peer + "]", t);
         if (t instanceof OutOfMemoryError)
             throw (OutOfMemoryError)t;
       }
@@ -218,11 +219,11 @@ class PeerConnectionOut implements Runnable
       {
         //if (quit == true)
         //  return;
-        
+
         quit = true;
         if (thread != null)
             thread.interrupt();
-        
+
         sendQueue.clear();
         sendQueue.notifyAll();
       }
@@ -247,7 +248,7 @@ class PeerConnectionOut implements Runnable
         sendQueue.notifyAll();
       }
   }
-  
+
   /** remove messages not sent in 3m */
   private static final int SEND_TIMEOUT = 3*60*1000;
 
@@ -258,7 +259,7 @@ class PeerConnectionOut implements Runnable
           _m = m;
           m.expireEvent = RemoveTooSlow.this;
       }
-      
+
       public void timeReached() {
           boolean removed = false;
           synchronized (sendQueue) {
@@ -293,7 +294,7 @@ class PeerConnectionOut implements Runnable
                 if (type == Message.PIECE && peer.supportsFast()) {
                     Message r = new Message(Message.REJECT, m.piece, m.begin, m.length);
                     if (_log.shouldLog(Log.DEBUG))
-                        _log.debug("Send " + peer + ": " + r);
+                        _log.debug("Sending [" + peer + "]: " + r);
                     try {
                         r.sendMessage(dout);
                     } catch (IOException ioe) {}
@@ -390,7 +391,7 @@ class PeerConnectionOut implements Runnable
         Request req = it.next();
         if(now > req.sendTime + REQ_TIMEOUT) {
           if (_log.shouldLog(Log.DEBUG))
-              _log.debug("Retransmit request " + req + " to peer " + peer);
+              _log.debug("Retransmitting request " + req + " to [" + peer + "]");
           sendRequest(req);
         }
       }
@@ -420,7 +421,7 @@ class PeerConnectionOut implements Runnable
                 m.begin == req.off && m.length == req.len)
               {
                 if (_log.shouldLog(Log.DEBUG))
-                  _log.debug("Discarding duplicate request " + req + " to peer " + peer);
+                  _log.debug("Discarding duplicate request " + req + " to [" + peer + "]");
                 return;
               }
           }

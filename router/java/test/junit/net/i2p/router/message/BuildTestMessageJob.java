@@ -45,7 +45,7 @@ public class BuildTestMessageJob extends JobImpl {
     private long _timeoutMs;
     private int _priority;
     private long _testMessageKey;
-    
+
     /**
      *
      * @param target router being tested
@@ -66,15 +66,15 @@ public class BuildTestMessageJob extends JobImpl {
         _priority = priority;
         _testMessageKey = -1;
     }
-    
+
     public String getName() { return "Build Test Message"; }
-    
+
     public void runJob() {
         if (alreadyKnownReachable()) {
             getContext().jobQueue().addJob(_onSend);
             return;
         }
-        
+
         // This is a test message - build a garlic with a DeliveryStatusMessage that
         // first goes to the peer then back to us.
         if (_log.shouldLog(Log.DEBUG))
@@ -86,7 +86,7 @@ public class BuildTestMessageJob extends JobImpl {
         SendGarlicJob job = new SendGarlicJob(getContext(), config, null, _onSendFailed, replyJob, _onSendFailed, _timeoutMs, _priority, sel);
         getContext().jobQueue().addJob(job);
     }
-    
+
     private boolean alreadyKnownReachable() {
         PeerProfile profile = getContext().profileOrganizer().getProfile(_target.getIdentity().getHash());
         if ( (profile == null) || (!profile.getIsActive()) )
@@ -94,11 +94,11 @@ public class BuildTestMessageJob extends JobImpl {
         else
             return true;
     }
-    
+
     private MessageSelector buildMessageSelector() {
         return new TestMessageSelector(_testMessageKey, _timeoutMs + getContext().clock().now());
     }
-    
+
     private GarlicConfig buildGarlicCloveConfig() {
         _testMessageKey = getContext().random().nextLong(I2NPMessage.MAX_ID_VALUE);
         if (_log.shouldLog(Log.INFO))
@@ -118,19 +118,19 @@ public class BuildTestMessageJob extends JobImpl {
         config.addClove(ackClove);
         
         config.setRecipient(_target);
-        
+
         return config;
     }
-    
+
     /**
      * Build a clove that sends a DeliveryStatusMessage to us
      */
     private PayloadGarlicConfig buildAckClove() {
-        
+
         DeliveryInstructions ackInstructions = new DeliveryInstructions();
         ackInstructions.setDeliveryMode(DeliveryInstructions.DELIVERY_MODE_ROUTER);
         ackInstructions.setRouter(_replyTo); // yikes!
-        
+
         DeliveryStatusMessage msg = new DeliveryStatusMessage(getContext());
         msg.setArrival(getContext().clock().now());
         msg.setMessageId(_testMessageKey);
@@ -143,10 +143,10 @@ public class BuildTestMessageJob extends JobImpl {
                                                                ackInstructions,
                                                                msg);
         ackClove.setRecipient(_target);
-        
+
         return ackClove;
     }
-    
+
     /**
      * Search inbound messages for delivery status messages with our key
      */
@@ -167,7 +167,7 @@ public class BuildTestMessageJob extends JobImpl {
             }
         }
     }
-    
+
     /**
      * On reply, fire off the specified job
      *
@@ -186,20 +186,20 @@ public class BuildTestMessageJob extends JobImpl {
             _keyDelivered = keyUsed;
             _sessionTagsDelivered = tagsDelivered;
         }
-        public String getName() { return "Reply To Test Message Received"; }
+        public String getName() { return "Reply to Test Message Received"; }
         public void runJob() {
-            if ( (_keyDelivered != null) && 
-                 (_sessionTagsDelivered != null) && 
+            if ( (_keyDelivered != null) &&
+                 (_sessionTagsDelivered != null) &&
                  (_sessionTagsDelivered.size() > 0) )
                 getContext().sessionKeyManager().tagsDelivered(_target, _keyDelivered, _sessionTagsDelivered);
-            
+
             getContext().jobQueue().addJob(_job);
         }
-        
+
         public void setMessage(I2NPMessage message) {
             // ignored, this is just a ping
         }
-        
+
     }
 }
 

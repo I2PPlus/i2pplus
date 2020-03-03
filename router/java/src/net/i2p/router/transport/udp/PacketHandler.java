@@ -18,11 +18,11 @@ import net.i2p.util.SystemVersion;
 
 /**
  * Pull inbound packets from the inbound receiver's queue, figure out what
- * peer session they belong to (if any), authenticate and decrypt them 
- * with the appropriate keys, and push them to the appropriate handler.  
- * Data and ACK packets go to the InboundMessageFragments, the various 
+ * peer session they belong to (if any), authenticate and decrypt them
+ * with the appropriate keys, and push them to the appropriate handler.
+ * Data and ACK packets go to the InboundMessageFragments, the various
  * establishment packets go to the EstablishmentManager, and, once implemented,
- * relay packets will go to the relay manager.  At the moment, this is 
+ * relay packets will go to the relay manager.  At the moment, this is
  * an actual pool of packet handler threads, each pulling off the inbound
  * receiver's queue and pushing them as necessary.
  *
@@ -40,16 +40,17 @@ class PacketHandler {
     private final Map<RemoteHostId, Object> _failCache;
     private final BlockingQueue<UDPPacket> _inboundQueue;
     private static final Object DUMMY = new Object();
-    
+
     private static final int TYPE_POISON = -99999;
     private static final int MIN_QUEUE_SIZE = 16;
     private static final int MAX_QUEUE_SIZE = 192;
-    private static final int MIN_NUM_HANDLERS = 1;  // unless < 32MB
-    private static final int MAX_NUM_HANDLERS = 1;
+    private static final int MIN_NUM_HANDLERS = 1;  // if < 32MB
+//    private static final int MAX_NUM_HANDLERS = 1;
+    private static final int MAX_NUM_HANDLERS = 4;
     /** let packets be up to 30s slow */
     private static final long GRACE_PERIOD = Router.CLOCK_FUDGE_FACTOR + 30*1000;
     private static final long MAX_SKEW = 90*24*60*60*1000L;
-    
+
     private enum AuthType { NONE, INTRO, BOBINTRO, SESSION }
 
     PacketHandler(RouterContext ctx, UDPTransport transport, EstablishmentManager establisher,
@@ -78,46 +79,46 @@ class PacketHandler {
             _handlers[i] = new Handler();
         }
 
-        //_context.statManager().createRateStat("udp.handleTime", "How long it takes to handle a received packet after its been pulled off the queue", "udp", UDPTransport.RATES);
-        //_context.statManager().createRateStat("udp.queueTime", "How long after a packet is received can we begin handling it", "udp", UDPTransport.RATES);
-        _context.statManager().createRateStat("udp.receivePacketSkew", "How long ago after the packet was sent did we receive it", "udp", UDPTransport.RATES);
-        _context.statManager().createRateStat("udp.droppedInvalidUnkown", "How old the packet we dropped due to invalidity (unkown type) was", "udp", UDPTransport.RATES);
-        _context.statManager().createRateStat("udp.droppedInvalidReestablish", "How old the packet we dropped due to invalidity (doesn't use existing key, not an establishment) was", "udp", UDPTransport.RATES);
-        _context.statManager().createRateStat("udp.droppedInvalidEstablish", "How old the packet we dropped due to invalidity (establishment, bad key) was", "udp", UDPTransport.RATES);
-        _context.statManager().createRateStat("udp.droppedInvalidEstablish.inbound", "How old the packet we dropped due to invalidity (even though we have an active inbound establishment with the peer) was", "udp", UDPTransport.RATES);
-        _context.statManager().createRateStat("udp.droppedInvalidEstablish.outbound", "How old the packet we dropped due to invalidity (even though we have an active outbound establishment with the peer) was", "udp", UDPTransport.RATES);
-        _context.statManager().createRateStat("udp.droppedInvalidEstablish.new", "How old the packet we dropped due to invalidity (even though we do not have any active establishment with the peer) was", "udp", UDPTransport.RATES);
-        _context.statManager().createRateStat("udp.droppedInvalidInboundEstablish", "How old the packet we dropped due to invalidity (inbound establishment, bad key) was", "udp", UDPTransport.RATES);
-        _context.statManager().createRateStat("udp.droppedInvalidSkew", "How skewed the packet we dropped due to invalidity (valid except bad skew) was", "udp", UDPTransport.RATES);
-        _context.statManager().createRateStat("udp.destroyedInvalidSkew", "Destroyed session due to bad skew", "udp", UDPTransport.RATES);
-        //_context.statManager().createRateStat("udp.packetDequeueTime", "How long it takes the UDPReader to pull a packet off the inbound packet queue (when its slow)", "udp", UDPTransport.RATES);
-        //_context.statManager().createRateStat("udp.packetVerifyTime", "How long it takes the PacketHandler to verify a data packet after dequeueing (period is dequeue time)", "udp", UDPTransport.RATES);
-        //_context.statManager().createRateStat("udp.packetVerifyTimeSlow", "How long it takes the PacketHandler to verify a data packet after dequeueing when its slow (period is dequeue time)", "udp", UDPTransport.RATES);
-        //_context.statManager().createRateStat("udp.packetValidateMultipleCount", "How many times we validate a packet, if done more than once (period = afterValidate-enqueue)", "udp", UDPTransport.RATES);
-        //_context.statManager().createRateStat("udp.packetNoValidationLifetime", "How long packets that are never validated are around for", "udp", UDPTransport.RATES);
-        //_context.statManager().createRateStat("udp.receivePacketSize.sessionRequest", "Packet size of the given inbound packet type (period is the packet's lifetime)", "udp", UDPTransport.RATES);
-        //_context.statManager().createRateStat("udp.receivePacketSize.sessionConfirmed", "Packet size of the given inbound packet type (period is the packet's lifetime)", "udp", UDPTransport.RATES);
-        //_context.statManager().createRateStat("udp.receivePacketSize.sessionCreated", "Packet size of the given inbound packet type (period is the packet's lifetime)", "udp", UDPTransport.RATES);
-        _context.statManager().createRateStat("udp.receivePacketSize.dataKnown", "Packet size of the given inbound packet type (period is the packet's lifetime)", "udp", UDPTransport.RATES);
-        _context.statManager().createRateStat("udp.receivePacketSize.dataKnownAck", "Packet size of the given inbound packet type (period is the packet's lifetime)", "udp", UDPTransport.RATES);
-        _context.statManager().createRateStat("udp.receivePacketSize.dataUnknown", "Packet size of the given inbound packet type (period is the packet's lifetime)", "udp", UDPTransport.RATES);
-        _context.statManager().createRateStat("udp.receivePacketSize.dataUnknownAck", "Packet size of the given inbound packet type (period is the packet's lifetime)", "udp", UDPTransport.RATES);
-        //_context.statManager().createRateStat("udp.receivePacketSize.test", "Packet size of the given inbound packet type (period is the packet's lifetime)", "udp", UDPTransport.RATES);
-        //_context.statManager().createRateStat("udp.receivePacketSize.relayRequest", "Packet size of the given inbound packet type (period is the packet's lifetime)", "udp", UDPTransport.RATES);
-        //_context.statManager().createRateStat("udp.receivePacketSize.relayIntro", "Packet size of the given inbound packet type (period is the packet's lifetime)", "udp", UDPTransport.RATES);
-        //_context.statManager().createRateStat("udp.receivePacketSize.relayResponse", "Packet size of the given inbound packet type (period is the packet's lifetime)", "udp", UDPTransport.RATES);
+        //_context.statManager().createRateStat("udp.handleTime", "How long it takes to handle a received packet after its been pulled off the queue", "Transport [UDP]", UDPTransport.RATES);
+        //_context.statManager().createRateStat("udp.queueTime", "How long after a packet is received can we begin handling it", "Transport [UDP]", UDPTransport.RATES);
+        _context.statManager().createRateStat("udp.receivePacketSkew", "How long ago after the packet was sent did we receive it", "Transport [UDP]", UDPTransport.RATES);
+        _context.statManager().createRateStat("udp.droppedInvalidUnkown", "How old the packet we dropped due to invalidity (unkown type) was", "Transport [UDP]", UDPTransport.RATES);
+        _context.statManager().createRateStat("udp.droppedInvalidReestablish", "How old the packet we dropped due to invalidity (doesn't use existing key, not an establishment) was", "Transport [UDP]", UDPTransport.RATES);
+        _context.statManager().createRateStat("udp.droppedInvalidEstablish", "How old the packet we dropped due to invalidity (establishment, bad key) was", "Transport [UDP]", UDPTransport.RATES);
+        _context.statManager().createRateStat("udp.droppedInvalidEstablish.inbound", "How old the packet we dropped due to invalidity (even though we have an active inbound establishment with the peer) was", "Transport [UDP]", UDPTransport.RATES);
+        _context.statManager().createRateStat("udp.droppedInvalidEstablish.outbound", "How old the packet we dropped due to invalidity (even though we have an active outbound establishment with the peer) was", "Transport [UDP]", UDPTransport.RATES);
+        _context.statManager().createRateStat("udp.droppedInvalidEstablish.new", "How old the packet we dropped due to invalidity (even though we do not have any active establishment with the peer) was", "Transport [UDP]", UDPTransport.RATES);
+        _context.statManager().createRateStat("udp.droppedInvalidInboundEstablish", "How old the packet we dropped due to invalidity (inbound establishment, bad key) was", "Transport [UDP]", UDPTransport.RATES);
+        _context.statManager().createRateStat("udp.droppedInvalidSkew", "How skewed the packet we dropped due to invalidity (valid except bad skew) was", "Transport [UDP]", UDPTransport.RATES);
+        _context.statManager().createRateStat("udp.destroyedInvalidSkew", "Destroyed session due to bad skew", "Transport [UDP]", UDPTransport.RATES);
+        //_context.statManager().createRateStat("udp.packetDequeueTime", "How long it takes the UDPReader to pull a packet off the inbound packet queue (when its slow)", "Transport [UDP]", UDPTransport.RATES);
+        //_context.statManager().createRateStat("udp.packetVerifyTime", "How long it takes the PacketHandler to verify a data packet after dequeueing (period is dequeue time)", "Transport [UDP]", UDPTransport.RATES);
+        //_context.statManager().createRateStat("udp.packetVerifyTimeSlow", "How long it takes the PacketHandler to verify a data packet after dequeueing when its slow (period is dequeue time)", "Transport [UDP]", UDPTransport.RATES);
+        //_context.statManager().createRateStat("udp.packetValidateMultipleCount", "How many times we validate a packet, if done more than once (period = afterValidate-enqueue)", "Transport [UDP]", UDPTransport.RATES);
+        //_context.statManager().createRateStat("udp.packetNoValidationLifetime", "How long packets that are never validated are around for", "Transport [UDP]", UDPTransport.RATES);
+        //_context.statManager().createRateStat("udp.receivePacketSize.sessionRequest", "Packet size of the given inbound packet type (period is the packet's lifetime)", "Transport [UDP]", UDPTransport.RATES);
+        //_context.statManager().createRateStat("udp.receivePacketSize.sessionConfirmed", "Packet size of the given inbound packet type (period is the packet's lifetime)", "Transport [UDP]", UDPTransport.RATES);
+        //_context.statManager().createRateStat("udp.receivePacketSize.sessionCreated", "Packet size of the given inbound packet type (period is the packet's lifetime)", "Transport [UDP]", UDPTransport.RATES);
+        _context.statManager().createRateStat("udp.receivePacketSize.dataKnown", "Packet size of the given inbound packet type (period is the packet's lifetime)", "Transport [UDP]", UDPTransport.RATES);
+        _context.statManager().createRateStat("udp.receivePacketSize.dataKnownAck", "Packet size of the given inbound packet type (period is the packet's lifetime)", "Transport [UDP]", UDPTransport.RATES);
+        _context.statManager().createRateStat("udp.receivePacketSize.dataUnknown", "Packet size of the given inbound packet type (period is the packet's lifetime)", "Transport [UDP]", UDPTransport.RATES);
+        _context.statManager().createRateStat("udp.receivePacketSize.dataUnknownAck", "Packet size of the given inbound packet type (period is the packet's lifetime)", "Transport [UDP]", UDPTransport.RATES);
+        //_context.statManager().createRateStat("udp.receivePacketSize.test", "Packet size of the given inbound packet type (period is the packet's lifetime)", "Transport [UDP]", UDPTransport.RATES);
+        //_context.statManager().createRateStat("udp.receivePacketSize.relayRequest", "Packet size of the given inbound packet type (period is the packet's lifetime)", "Transport [UDP]", UDPTransport.RATES);
+        //_context.statManager().createRateStat("udp.receivePacketSize.relayIntro", "Packet size of the given inbound packet type (period is the packet's lifetime)", "Transport [UDP]", UDPTransport.RATES);
+        //_context.statManager().createRateStat("udp.receivePacketSize.relayResponse", "Packet size of the given inbound packet type (period is the packet's lifetime)", "Transport [UDP]", UDPTransport.RATES);
     }
-    
-    public synchronized void startup() { 
+
+    public synchronized void startup() {
         _keepReading = true;
         for (int i = 0; i < _handlers.length; i++) {
             I2PThread t = new I2PThread(_handlers[i], "UDP Packet handler " + (i+1) + '/' + _handlers.length, true);
             t.start();
         }
     }
-    
-    public synchronized void shutdown() { 
-        _keepReading = false; 
+
+    public synchronized void shutdown() {
+        _keepReading = false;
         stopQueue();
     }
 
@@ -126,7 +127,7 @@ class PacketHandler {
         rv.append("Handlers: ").append(_handlers.length);
         for (int i = 0; i < _handlers.length; i++) {
             Handler handler = _handlers[i];
-            rv.append(" handler ").append(i).append(" state: ").append(handler._state);
+            rv.append(" handler ").append(i).append("; State: ").append(handler._state);
         }
         return rv.toString();
     }
@@ -195,8 +196,8 @@ class PacketHandler {
     private static final short INBOUND_FALLBACK = 2;
     /** the packet is not from anyone we know */
     private static final short NEW_PEER = 3;
-    
-    private class Handler implements Runnable { 
+
+    private class Handler implements Runnable {
         private final UDPPacketReader _reader;
         // TODO comment out all uses of _state
         public /* volatile */ int _state;
@@ -204,7 +205,7 @@ class PacketHandler {
         public Handler() {
             _reader = new UDPPacketReader(_context);
         }
-        
+
         public void run() {
             _state = 1;
             while (_keepReading) {
@@ -215,7 +216,7 @@ class PacketHandler {
 
                 packet.received();
                 //if (_log.shouldLog(Log.DEBUG))
-                //    _log.debug("Received: " + packet);
+                //    _log.debug("UDP packet received: " + packet);
                 _state = 4;
                 //long queueTime = packet.getLifetime();
                 //long handleStart = _context.clock().now();
@@ -226,7 +227,7 @@ class PacketHandler {
                 } catch (RuntimeException e) {
                     _state = 7;
                     if (_log.shouldLog(Log.ERROR))
-                        _log.error("Crazy error handling a packet: " + packet, e);
+                        _log.error("Crazy error handling a UDP packet: " + packet, e);
                 }
                 //long handleTime = _context.clock().now() - handleStart;
                 //packet.afterHandling();
@@ -236,20 +237,20 @@ class PacketHandler {
 
                 //if (_log.shouldLog(Log.DEBUG))
                 //    _log.debug("Done receiving: " + packet);
-                
+
            /********
                 if (handleTime > 1000) {
                     if (_log.shouldLog(Log.WARN))
-                        _log.warn("Took " + handleTime + " to process the packet " 
+                        _log.warn("Took " + handleTime + " to process the packet "
                                   + packet + ": " + _reader);
                 }
-                
+
                 long enqueueTime = packet.getEnqueueTime();
                 long recvTime = packet.getReceivedTime();
                 long beforeValidateTime = packet.getBeforeValidate();
                 long afterValidateTime = packet.getAfterValidate();
                 int validateCount = packet.getValidateCount();
-                
+
                 long timeToDequeue = recvTime - enqueueTime;
                 long timeToValidate = 0;
                 long authTime = 0;
@@ -271,7 +272,7 @@ class PacketHandler {
                 else if (validateCount <= 0)
                     _context.statManager().addRateData("udp.packetNoValidationLifetime", packet.getLifetime(), 0);
             ********/
-                
+
                 // back to the cache with thee!
                 packet.release();
                 _state = 9;
@@ -286,7 +287,7 @@ class PacketHandler {
         private void handlePacket(UDPPacketReader reader, UDPPacket packet) {
 
             _state = 10;
-            
+
             RemoteHostId rem = packet.getRemoteHost();
             PeerState state = _transport.getPeerState(rem);
             if (state == null) {
@@ -296,7 +297,7 @@ class PacketHandler {
                 InboundEstablishState est = _establisher.getInboundState(rem);
                 if (est != null) {
                     if (_log.shouldLog(Log.DEBUG))
-                        _log.debug("Packet received IS for an inbound establishment");
+                        _log.debug("Packet received IS for an Inbound establishment");
                     _state = 12;
                     receivePacket(reader, packet, est);
                 } else {
@@ -306,12 +307,12 @@ class PacketHandler {
                     OutboundEstablishState oest = _establisher.getOutboundState(rem);
                     if (oest != null) {
                         if (_log.shouldLog(Log.DEBUG))
-                            _log.debug("Packet received IS for an outbound establishment");
+                            _log.debug("Packet received IS for an Outbound establishment");
                         _state = 14;
                         receivePacket(reader, packet, oest);
                     } else {
                         if (_log.shouldLog(Log.DEBUG))
-                            _log.debug("Packet received is not for an inbound or outbound establishment");
+                            _log.debug("Packet received is not for an Inbound or Outbound establishment");
                         // ok, not already known establishment, try as a new one
                         // Last chance for success, using our intro key
                         _state = 15;
@@ -341,7 +342,7 @@ class PacketHandler {
                 if (!isValid) {
                     _state = 19;
                     if (_log.shouldLog(Log.INFO))
-                        _log.info("Failed validation with existing con, trying as new con: " + packet);
+                        _log.info("Failed validation with existing connection; trying as new connection: " + packet);
 
                     isValid = validate(packet, _transport.getIntroKey());
                     if (isValid) {
@@ -352,7 +353,7 @@ class PacketHandler {
                         //  be any stray packets)
                         // These are generally PeerTest packets
                         if (_log.shouldLog(Log.DEBUG))
-                            _log.debug("Validation with existing con failed, but validation as reestablish/stray passed");
+                            _log.debug("Failed validation with existing connection, but validation as reestablish/stray passed");
                         packet.decrypt(_transport.getIntroKey());
                         auth = AuthType.INTRO;
                     } else {
@@ -360,12 +361,12 @@ class PacketHandler {
                         InboundEstablishState est = _establisher.getInboundState(packet.getRemoteHost());
                         if (est != null) {
                             if (_log.shouldLog(Log.DEBUG))
-                                _log.debug("Packet from an existing peer IS for an inbound establishment");
+                                _log.debug("Packet from an existing peer IS for an Inbound establishment");
                             _state = 22;
                             receivePacket(reader, packet, est, false);
                         } else {
                             if (_log.shouldLog(Log.WARN))
-                                _log.warn("Validation with existing con failed, and validation as reestablish failed too.  DROP " + packet);
+                                _log.warn("Failed validation with existing connection, and validation as reestablish failed too; dropping " + packet);
                             _context.statManager().addRateData("udp.droppedInvalidReestablish", packet.getLifetime());
                         }
                         return;
@@ -413,13 +414,13 @@ class PacketHandler {
                 boolean alreadyFailed;
                 synchronized(_failCache) {
                     alreadyFailed = _failCache.get(remoteHost) != null;
-                }                
+                }
                 if (!alreadyFailed) {
                     // this is slow, that's why we cache it above.
                     List<PeerState> peers = _transport.getPeerStatesByIP(remoteHost);
                     if (!peers.isEmpty()) {
                         StringBuilder buf = new StringBuilder(256);
-                        buf.append("Established peers with this IP: ");
+                        buf.append("Established peers with this IP address: ");
                         boolean foundSamePort = false;
                         PeerState state = null;
                         int newPort = remoteHost.getPort();
@@ -428,8 +429,8 @@ class PacketHandler {
                             if (_log.shouldLog(Log.WARN)) {
                                 long now = _context.clock().now();
                                 buf.append(ps.getRemoteHostId().toString())
-                                   .append(" last sent: ").append(now - ps.getLastSendTime())
-                                   .append(" last rcvd: ").append(now - ps.getLastReceiveTime());
+                                   .append("\n* Last sent: ").append(now - ps.getLastSendTime())
+                                   .append("; Last rcvd: ").append(now - ps.getLastReceiveTime());
                             }
                             if (ps.getRemotePort() == newPort) {
                                 foundSamePort = true;
@@ -437,7 +438,7 @@ class PacketHandler {
                                 packet.decrypt(ps.getCurrentCipherKey());
                                 reader.initialize(packet);
                                 if (_log.shouldLog(Log.WARN))
-                                    buf.append(" VALID type ").append(reader.readPayloadType()).append("; ");
+                                    buf.append("; VALID (type ").append(reader.readPayloadType()).append("); ");
                                 valid = true;
                                 if (state == null)
                                     state = ps;
@@ -449,7 +450,7 @@ class PacketHandler {
                         if (state != null && !foundSamePort) {
                             _transport.changePeerPort(state, newPort);
                             if (_log.shouldLog(Log.WARN)) {
-                                buf.append(" CHANGED PORT TO ").append(newPort).append(" AND HANDLED");
+                                buf.append(" Changed port to: ").append(newPort).append(" and handled");
                                 _log.warn(buf.toString());
                             }
                             handlePacket(reader, packet, state, null, null, AuthType.SESSION);
@@ -460,10 +461,10 @@ class PacketHandler {
                     }
                     synchronized(_failCache) {
                         _failCache.put(remoteHost, DUMMY);
-                    }                
+                    }
                 }
                 if (_log.shouldLog(Log.WARN))
-                    _log.warn("Cannot validate rcvd pkt (path) wasCached? " + alreadyFailed + ": " + packet);
+                    _log.warn("Cannot validate received packet; (path) wasCached? " + alreadyFailed + packet);
 
                 _context.statManager().addRateData("udp.droppedInvalidEstablish", packet.getLifetime());
                 switch (peerType) {
@@ -481,7 +482,7 @@ class PacketHandler {
                 return;
             } else {
                 if (_log.shouldLog(Log.DEBUG))
-                    _log.debug("Valid introduction packet received: " + packet);
+                    _log.debug("Valid Introduction packet received " + packet);
             }
 
             // Packets that get here are probably one of:
@@ -513,10 +514,10 @@ class PacketHandler {
             _state = 31;
             if (_log.shouldLog(Log.DEBUG)) {
                 StringBuilder buf = new StringBuilder(128);
-                buf.append("Attempting to receive a packet on a known inbound state: ");
+                buf.append("Attempting to receive a packet on a known Inbound state ");
                 buf.append(state);
-                buf.append(" MAC key: ").append(state.getMACKey());
-                buf.append(" intro key: ").append(_transport.getIntroKey());
+                buf.append("\n* MAC key: ").append(state.getMACKey());
+                buf.append("\n* Intro key: ").append(_transport.getIntroKey());
                 _log.debug(buf.toString());
             }
             boolean isValid = false;
@@ -524,7 +525,7 @@ class PacketHandler {
                 isValid = validate(packet, state.getMACKey());
                 if (isValid) {
                     if (_log.shouldLog(Log.INFO))
-                        _log.info("Valid introduction packet received for inbound con: " + packet);
+                        _log.info("Valid introduction packet received for Inbound connnection " + packet);
 
                     _state = 32;
                     packet.decrypt(state.getCipherKey());
@@ -532,11 +533,11 @@ class PacketHandler {
                     return;
                 } else {
                     if (_log.shouldLog(Log.WARN))
-                        _log.warn("Invalid introduction packet received for inbound con, falling back: " + packet);
+                        _log.warn("Invalid introduction packet received for Inbound connection, falling back " + packet);
                     _state = 33;
                 }
             }
-            if (allowFallback) { 
+            if (allowFallback) {
                 // ok, we couldn't handle it with the established stuff, so fall back
                 // on earlier state packets
                 _state = 34;
@@ -556,10 +557,10 @@ class PacketHandler {
             _state = 35;
             if (_log.shouldLog(Log.DEBUG)) {
                 StringBuilder buf = new StringBuilder(128);
-                buf.append("Attempting to receive a packet on a known outbound state: ");
+                buf.append("Attempting to receive a packet on a known Outbound state ");
                 buf.append(state);
-                buf.append(" MAC key: ").append(state.getMACKey());
-                buf.append(" intro key: ").append(state.getIntroKey());
+                buf.append("\n* MAC key: ").append(state.getMACKey());
+                buf.append("\n* Intro key: ").append(state.getIntroKey());
                 _log.debug(buf.toString());
             }
 
@@ -570,7 +571,7 @@ class PacketHandler {
                 if (isValid) {
                     // this should be the Session Confirmed packet
                     if (_log.shouldLog(Log.INFO))
-                        _log.info("Valid introduction packet received for outbound established con: " + packet);
+                        _log.info("Valid introduction packet received for Outbound established connection " + packet);
                     _state = 37;
                     packet.decrypt(state.getCipherKey());
                     handlePacket(reader, packet, null, state, null, AuthType.SESSION);
@@ -583,7 +584,7 @@ class PacketHandler {
             isValid = validate(packet, state.getIntroKey());
             if (isValid) {
                 if (_log.shouldLog(Log.INFO))
-                    _log.info("Valid packet received for " + state + " with Bob's intro key: " + packet);
+                    _log.info("Valid packet received for " + state + " with Bob's intro key " + packet);
                 _state = 39;
                 packet.decrypt(state.getIntroKey());
                 // the only packet we should be getting with Bob's intro key is Session Created
@@ -592,7 +593,7 @@ class PacketHandler {
                 return;
             } else {
                 if (_log.shouldLog(Log.WARN))
-                    _log.warn("Invalid introduction packet received for outbound established con with old intro key, falling back: " + packet);
+                    _log.warn("Invalid introduction packet received for Outbound established connection with old intro key, falling back " + packet);
             }
 
             // ok, we couldn't handle it with the established stuff, so fall back
@@ -630,7 +631,7 @@ class PacketHandler {
             // update skew whether or not we will be dropping the packet for excessive skew
             if (state != null) {
                 if (_log.shouldLog(Log.DEBUG))
-                    _log.debug("Received packet from " + state.getRemoteHostId().toString() + " with skew " + skew);
+                    _log.debug("Received packet from " + state.getRemoteHostId().toString() + " with skew of " + skew + "ms");
                 if (auth == AuthType.SESSION && typeOK && (skewOK || state.getMessagesReceived() <= 0))
                     state.adjustClockSkew(skew);
             }
@@ -655,16 +656,16 @@ class PacketHandler {
                     if (state.getRemotePort() == 65520) {
                         // distinct port of buggy router
                         _context.banlist().banlistRouterForever(state.getRemotePeer(),
-                                                                _x("Excessive clock skew: {0}"),
+                                                                " <b>➜</b> " + _x("Excessive clock skew: {0}"),
                                                                 DataHelper.formatDuration(skew));
                     } else {
                         _context.banlist().banlistRouter(DataHelper.formatDuration(skew),
                                                          state.getRemotePeer(),
-                                                         _x("Excessive clock skew: {0}"));
+                                                         " <b>➜</b> " + _x("Excessive clock skew: {0}"));
                     }
                     _context.statManager().addRateData("udp.destroyedInvalidSkew", skew);
                     if (_log.shouldWarn())
-                        _log.warn("Dropped conn, packet too far in the past: " + new Date(sendOn) + ": " + packet +
+                        _log.warn("Dropped connection - packet too far in the past: " + new Date(sendOn) + ": " + packet +
                                   " PeerState: " + state);
                 } else {
                     if (_log.shouldWarn())
@@ -680,21 +681,21 @@ class PacketHandler {
                     if (state.getRemotePort() == 65520) {
                         // distinct port of buggy router
                         _context.banlist().banlistRouterForever(state.getRemotePeer(),
-                                                                _x("Excessive clock skew: {0}"),
+                                                                " <b>➜</b> " + _x("Excessive clock skew: {0}"),
                                                                 DataHelper.formatDuration(0 - skew));
                     } else {
                         _context.banlist().banlistRouter(DataHelper.formatDuration(0 - skew),
                                                          state.getRemotePeer(),
-                                                         _x("Excessive clock skew: {0}"));
+                                                         " <b>➜</b> " + _x("Excessive clock skew: {0}"));
                     }
                     _context.statManager().addRateData("udp.destroyedInvalidSkew", 0-skew);
                     if (_log.shouldWarn())
-                        _log.warn("Dropped conn, packet too far in the future: " + new Date(sendOn) + ": " + packet +
-                                  " PeerState: " + state);
+                        _log.warn("Dropped connection - packet [" + packet + "] too far in the future: " + new Date(sendOn) +
+                                  "; PeerState: " + state);
                 } else {
                     if (_log.shouldWarn())
-                        _log.warn("Packet too far in the future: " + new Date(sendOn) + ": " + packet +
-                                  " PeerState: " + state);
+                        _log.warn("Packet [" + packet + "] too far in the future: " + new Date(sendOn) +
+                                  "; PeerState: " + state);
                 }
                 return;
             }
@@ -705,7 +706,7 @@ class PacketHandler {
             _state = 45;
             RemoteHostId from = packet.getRemoteHost();
             _state = 46;
-            
+
             switch (type) {
                 case UDPPacket.PAYLOAD_TYPE_SESSION_REQUEST:
                     _state = 47;
@@ -753,18 +754,18 @@ class PacketHandler {
                     if (state != null) {
                         if (_log.shouldLog(Log.DEBUG)) {
                             StringBuilder msg = new StringBuilder(512);
-                            msg.append("Receive ").append(System.identityHashCode(packet));
-                            msg.append(" from ").append(state.getRemotePeer().toBase64()).append(" ").append(state.getRemoteHostId());
+                            msg.append("Received IDENTITY packet [").append(System.identityHashCode(packet));
+                            msg.append("] from [").append(state.getRemotePeer().toBase64().substring(0,6)).append("] ").append(state.getRemoteHostId());
                             try {
                                 int count = dr.readFragmentCount();
                                 for (int i = 0; i < count; i++) {
-                                    msg.append(" msg ").append(dr.readMessageId(i));
-                                    msg.append(":").append(dr.readMessageFragmentNum(i));
+                                    msg.append("\n* [MsgID ").append(dr.readMessageId(i)).append("]");
+                                    msg.append(" Fragment: ").append(dr.readMessageFragmentNum(i));
                                     if (dr.readMessageIsLast(i))
                                         msg.append("*");
                                 }
                             } catch (DataFormatException dfe) {}
-                            msg.append(": ").append(dr.toString());
+                            msg.append(dr.toString());
                             _log.debug(msg.toString());
                         }
                         //packet.beforeReceiveFragments();
@@ -798,7 +799,7 @@ class PacketHandler {
                         break;
                     }
                     if (_log.shouldLog(Log.INFO))
-                        _log.info("Received relay request packet: " + reader + " from " + from);
+                        _log.info("Received Relay Request packet: " + reader + " from " + from);
                     _introManager.receiveRelayRequest(from, reader);
                     //_context.statManager().addRateData("udp.receivePacketSize.relayRequest", packet.getPacket().getLength(), packet.getLifetime());
                     break;
@@ -809,7 +810,7 @@ class PacketHandler {
                         break;
                     }
                     if (_log.shouldLog(Log.INFO))
-                        _log.info("Received relay intro packet: " + reader + " from " + from);
+                        _log.info("Received Relay Intro packet: " + reader + " from " + from);
                     _introManager.receiveRelayIntro(from, reader);
                     //_context.statManager().addRateData("udp.receivePacketSize.relayIntro", packet.getPacket().getLength(), packet.getLifetime());
                     break;
@@ -820,7 +821,7 @@ class PacketHandler {
                         break;
                     }
                     if (_log.shouldLog(Log.INFO))
-                        _log.info("Received relay response packet: " + reader + " from " + from);
+                        _log.info("Received Relay Response packet: " + reader + " from " + from);
                     _establisher.receiveRelayResponse(from, reader);
                     //_context.statManager().addRateData("udp.receivePacketSize.relayResponse", packet.getPacket().getLength(), packet.getLifetime());
                     break;

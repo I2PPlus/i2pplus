@@ -21,7 +21,7 @@ class OutboundReceiver implements TunnelGateway.Receiver {
     private final TunnelCreatorConfig _config;
     private RouterInfo _nextHopCache;
     private final int _priority;
-    
+
     private static final long MAX_LOOKUP_TIME = 15*1000;
     private static final int PRIORITY = OutNetMessage.PRIORITY_MY_DATA;
 
@@ -33,14 +33,14 @@ class OutboundReceiver implements TunnelGateway.Receiver {
         _priority = PRIORITY + cfg.getPriority();
         // all createRateStat() in TunnelDispatcher
     }
-    
+
     public long receiveEncrypted(byte encrypted[]) {
         TunnelDataMessage msg = new TunnelDataMessage(_context);
         msg.setData(encrypted);
         msg.setTunnelId(_config.getConfig(0).getSendTunnel());
 
         if (_log.shouldLog(Log.DEBUG))
-            _log.debug("received encrypted, sending out " + _config + ": " + msg);
+            _log.debug("Received encrypted message, sending out via " + _config + ": " + msg);
         RouterInfo ri = _nextHopCache;
         if (ri == null)
             ri = _context.netDb().lookupRouterInfoLocally(_config.getPeer(1));
@@ -51,7 +51,7 @@ class OutboundReceiver implements TunnelGateway.Receiver {
         } else {
             // It should be rare to forget the router info for a peer in our own tunnel.
             if (_log.shouldLog(Log.WARN))
-                _log.warn("lookup of " + _config.getPeer(1)
+                _log.warn("Lookup of " + _config.getPeer(1)
                            + " required for " + msg);
             _context.netDb().lookupRouterInfo(_config.getPeer(1), new SendJob(_context, msg),
                                               new FailedJob(_context), MAX_LOOKUP_TIME);
@@ -70,7 +70,7 @@ class OutboundReceiver implements TunnelGateway.Receiver {
 
     private void send(TunnelDataMessage msg, RouterInfo ri) {
         if (_log.shouldLog(Log.DEBUG))
-            _log.debug("forwarding encrypted data out " + _config + ": " + msg.getUniqueId());
+            _log.debug("Forwarding encrypted message via " + _config + " [MsgID" + msg.getUniqueId() + "]");
         OutNetMessage m = new OutNetMessage(_context, msg, msg.getMessageExpiration(), _priority, ri);
         _context.outNetMessagePool().add(m);
         _config.incrementProcessedMessages();
@@ -84,12 +84,12 @@ class OutboundReceiver implements TunnelGateway.Receiver {
             _msg = msg;
         }
 
-        public String getName() { return "OBGW send after lookup"; }
+        public String getName() { return "Send to OBGW after Lookup"; }
 
         public void runJob() {
             RouterInfo ri = _context.netDb().lookupRouterInfoLocally(_config.getPeer(1));
             if (_log.shouldLog(Log.DEBUG))
-                _log.debug("lookup of " + _config.getPeer(1)
+                _log.debug("Lookup of " + _config.getPeer(1)
                            + " successful? " + (ri != null));
             int stat;
             if (ri != null) {
@@ -102,17 +102,17 @@ class OutboundReceiver implements TunnelGateway.Receiver {
             _context.statManager().addRateData("tunnel.outboundLookupSuccess", stat);
         }
     }
-    
+
     private class FailedJob extends JobImpl {
         public FailedJob(RouterContext ctx) {
             super(ctx);
         }
 
-        public String getName() { return "OBGW lookup fail"; }
+        public String getName() { return "Timeout OBGW Lookup"; }
 
         public void runJob() {
             if (_log.shouldLog(Log.WARN))
-                _log.warn("lookup of " + _config.getPeer(1)
+                _log.warn("Lookup of " + _config.getPeer(1)
                            + " failed for " + _config);
             _context.statManager().addRateData("tunnel.outboundLookupSuccess", 0);
         }

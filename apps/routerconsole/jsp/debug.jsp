@@ -7,14 +7,20 @@
    *   Do not tag this file for translation.
    */
 %>
-<html><head><title>I2P Router Console - Debug</title>
+<html>
+<head>
 <%@include file="css.jsi" %>
+<%=intl.title("Debug")%>
+<script  nonce="<%=cspNonce%>" src="/js/tablesort/tablesort.js" type="text/javascript"></script>
+<script  nonce="<%=cspNonce%>" src="/js/tablesort/tablesort.number.js" type="text/javascript"></script>
+<link href="/themes/console/tablesort.css" rel="stylesheet" type="text/css">
 <%@include file="summaryajax.jsi" %>
-</head><body>
+</head>
+<body>
+<script nonce="<%=cspNonce%>" type="text/javascript">progressx.show();</script>
 <%@include file="summary.jsi" %>
-<h1>Router Debug</h1>
+<h1 class="conf adv">Debug</h1>
 <div class="main" id="debug">
-
 <div class="confignav">
 <span class="tab"><a href="#debug_portmapper">Port Mapper</a></span>
 <span class="tab"><a href="#appmanager">App Manager</a></span>
@@ -22,7 +28,6 @@
 <span class="tab"><a href="#skm">Session Key Manager</a></span>
 <span class="tab"><a href="#dht">Router DHT</a></span>
 </div>
-
 <%
     /*
      *  Quick and easy place to put debugging stuff
@@ -66,7 +71,7 @@
      *  Print out the status for all the SessionKeyManagers
      */
     out.print("<div class=\"debug_section\" id=\"skm\">");
-    out.print("<h2>Router Session Key Manager</h2>");
+    out.print("<h2>Session Key Manager: Router</h2>");
     ctx.sessionKeyManager().renderStatusHTML(out);
     java.util.Set<net.i2p.data.Destination> clients = ctx.clientManager().listClients();
     out.print("</div>");
@@ -75,7 +80,7 @@
         net.i2p.crypto.SessionKeyManager skm = ctx.clientManager().getClientSessionKeyManager(h);
         if (skm != null) {
             out.print("<div class=\"debug_section\">");
-            out.print("<h2><font size=\"-2\">" + dest.toBase32() + "</font> Session Key Manager</h2>");
+            out.print("<h2>Session Key Manager: <span id=\"skm_dest\">" + dest.toBase32() + "</span></h2>");
             skm.renderStatusHTML(out);
             out.print("</div>");
         }
@@ -88,4 +93,7 @@
     ctx.netDb().renderStatusHTML(out);
 
 %>
-</div></body></html>
+</div>
+<script nonce="<%=cspNonce%>" type="text/javascript">progressx.hide();</script>
+</body>
+</html>

@@ -23,7 +23,7 @@ class InfoHash extends SHA1Hash {
         if (_data == null) {
             return super.toString();
         } else {
-            return "[InfoHash: " + I2PSnarkUtil.toHex(_data) + ']';
+            return "[InfoHash " + I2PSnarkUtil.toHex(_data) + "]";
         }
     }
 }

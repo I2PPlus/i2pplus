@@ -14,7 +14,7 @@ import net.i2p.util.Log;
 
 /**
  * Weighted priority queue implementation for the outbound messages, coupled
- * with code to fail messages that expire.  
+ * with code to fail messages that expire.
  *
  * WARNING - UNUSED since 0.6.1.11
  * See comments in DummyThrottle.java and mtn history ca. 2006-02-19
@@ -47,13 +47,13 @@ class TimedWeightedPriorityMessageQueue implements MessageQueue, OutboundMessage
     private FailedListener _listener;
     /** set of peers (Hash) whose congestion window is exceeded in the active queue */
     private Set<Hash> _chokedPeers;
-    
+
     /**
      * Build up a new queue
      *
-     * @param priorityLimits ordered breakpoint for the different message 
+     * @param priorityLimits ordered breakpoint for the different message
      *                       priorities, with the lowest limit first.
-     * @param weighting how much to prefer a given priority grouping.  
+     * @param weighting how much to prefer a given priority grouping.
      *                  specifically, this means how many messages in this queue
      *                  should be pulled off in a row before moving on to the next.
      */
@@ -79,40 +79,40 @@ class TimedWeightedPriorityMessageQueue implements MessageQueue, OutboundMessage
         _nextLock = this;
         _chokedPeers = Collections.synchronizedSet(new HashSet<Hash>(16));
         _listener = lsnr;
-        _context.statManager().createRateStat("udp.timeToEntrance", "Message lifetime until it reaches the UDP system", "udp", UDPTransport.RATES);
-        _context.statManager().createRateStat("udp.messageQueueSize", "How many messages are on the current class queue at removal", "udp", UDPTransport.RATES);
+        _context.statManager().createRateStat("udp.timeToEntrance", "Message lifetime until it reaches the UDP system", "Transport [UDP]", UDPTransport.RATES);
+        _context.statManager().createRateStat("udp.messageQueueSize", "How many messages are on the current class queue at removal", "Transport [UDP]", UDPTransport.RATES);
         _expirer = new Expirer();
         I2PThread t = new I2PThread(_expirer, "UDP outbound expirer");
         t.setDaemon(true);
         t.start();
     }
-    
+
     public void add(OutNetMessage message) {
         if (message == null) return;
-        
+
         _context.statManager().addRateData("udp.timeToEntrance", message.getLifetime(), message.getLifetime());
-                    
+
         int queue = pickQueue(message);
         long size = message.getMessageSize();
         synchronized (_queue[queue]) {
             _queue[queue].add(message);
             _bytesQueued[queue] += size;
         }
-        
+
         if (_log.shouldLog(Log.DEBUG))
             _log.debug("Added a " + size + " byte message to queue " + queue);
-        
+
         synchronized (_nextLock) {
             _addedSincePassBegan = true;
             _nextLock.notifyAll();
         }
         message.timestamp("added to queue " + queue);
     }
-    
+
     /**
      * Grab the next message out of the next queue.  This only advances
      * the _nextQueue var after pushing _weighting[currentQueue] messages
-     * or the queue is empty.  This call blocks until either a message 
+     * or the queue is empty.  This call blocks until either a message
      * becomes available or the queue is shut down.
      *
      * @param blockUntil expiration, or -1 if indefinite
@@ -129,10 +129,10 @@ class TimedWeightedPriorityMessageQueue implements MessageQueue, OutboundMessage
                         Hash to = msg.getTarget().getIdentity().getHash();
                         if (_chokedPeers.contains(to))
                             continue;
-                        
+
                         // not choked, lets push it to active
                         _queue[currentQueue].remove(j);
-                        
+
                         long size = msg.getMessageSize();
                         _bytesQueued[currentQueue] -= size;
                         _bytesTransferred[currentQueue] += size;
@@ -144,34 +144,34 @@ class TimedWeightedPriorityMessageQueue implements MessageQueue, OutboundMessage
                         int sz = _queue[currentQueue].size();
                         _context.statManager().addRateData("udp.messageQueueSize", sz, currentQueue);
                         if (_log.shouldLog(Log.DEBUG))
-                            _log.debug("Pulling a message off queue " + currentQueue + " with " 
+                            _log.debug("Pulling a message off queue " + currentQueue + " with "
                                        + sz + " remaining");
-                        
-                        
+
+
                         msg.timestamp("made active with remaining queue size " + sz);
                         return msg;
                     }
-                    
+
                     // nothing waiting, or only choked peers
                     _messagesFlushed[currentQueue] = 0;
                     if (_log.shouldLog(Log.DEBUG))
                         _log.debug("Nothing available on queue " + currentQueue);
                 }
             }
-            
+
             long remaining = blockUntil - _context.clock().now();
             if ( (blockUntil > 0) && (remaining < 0) ) {
                 if (_log.shouldLog(Log.DEBUG))
                     _log.debug("Nonblocking, or block time has expired");
                 return null;
             }
-            
+
             try {
                 synchronized (_nextLock) {
                     if (!_addedSincePassBegan && _alive) {
-                        // nothing added since we begun iterating through, 
-                        // so we can safely wait for the full period.  otoh, 
-                        // even if this is true, we might be able to safely 
+                        // nothing added since we begun iterating through,
+                        // so we can safely wait for the full period.  otoh,
+                        // even if this is true, we might be able to safely
                         // wait, but it doesn't hurt to loop again.
                         if (_log.shouldLog(Log.DEBUG))
                             _log.debug("Wait for activity (up to " + remaining + "ms)");
@@ -183,17 +183,17 @@ class TimedWeightedPriorityMessageQueue implements MessageQueue, OutboundMessage
                 }
             } catch (InterruptedException ie) {}
         }
-        
+
         return null;
     }
-    
+
     public void shutdown() {
         _alive = false;
         synchronized (_nextLock) {
             _nextLock.notifyAll();
         }
     }
-    
+
     public void choke(Hash peer) {
         if (true) return;
         _chokedPeers.add(peer);
@@ -211,7 +211,7 @@ class TimedWeightedPriorityMessageQueue implements MessageQueue, OutboundMessage
     public boolean isChoked(Hash peer) {
         return _chokedPeers.contains(peer);
     }
-    
+
     private int pickQueue(OutNetMessage message) {
         int target = message.getPriority();
         for (int i = 0; i < _priorityLimits.length; i++) {
@@ -224,11 +224,11 @@ class TimedWeightedPriorityMessageQueue implements MessageQueue, OutboundMessage
         }
         return _priorityLimits.length-1;
     }
-    
+
     public interface FailedListener {
         public void failed(OutNetMessage msg, String reason);
     }
-    
+
     /**
      * Drop expired messages off the queues
      */
@@ -251,14 +251,14 @@ class TimedWeightedPriorityMessageQueue implements MessageQueue, OutboundMessage
                         }
                     }
                 }
-                
+
                 for (int i = 0; i < removed.size(); i++) {
                     OutNetMessage m = removed.get(i);
                     m.timestamp("expirer killed it");
                     _listener.failed(m, "expired before getting on the active pool");
                 }
                 removed.clear();
-                
+
                 try { Thread.sleep(1000); } catch (InterruptedException ie) {}
             }
         }

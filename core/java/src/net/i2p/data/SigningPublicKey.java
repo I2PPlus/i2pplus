@@ -2,9 +2,9 @@ package net.i2p.data;
 
 /*
  * free (adj.): unencumbered; not under the control of others
- * Written by jrandom in 2003 and released into the public domain 
- * with no warranty of any kind, either expressed or implied.  
- * It probably won't make your computer catch on fire, or eat 
+ * Written by jrandom in 2003 and released into the public domain
+ * with no warranty of any kind, either expressed or implied.
+ * It probably won't make your computer catch on fire, or eat
  * your children, but it might.  Use at your own risk.
  *
  */
@@ -19,7 +19,7 @@ import net.i2p.crypto.SigType;
 
 /**
  * Defines the SigningPublicKey as defined by the I2P data structure spec.
- * A signing public key is by default 128 byte Integer. The public key represents only the 
+ * A signing public key is by default 128 byte Integer. The public key represents only the
  * exponent, not the primes, which are constant and defined in the crypto spec.
  * This key varies from the PrivateKey in its usage (verifying signatures, not encrypting)
  *
@@ -181,7 +181,7 @@ public class SigningPublicKey extends SimpleDataStructure {
         System.arraycopy(_data, 0, pad, 0, padLen);
         return pad;
     }
-    
+
     /**
      *  Write the data up to a max of 128 bytes.
      *  If longer, the rest will be written in the KeyCertificate.
@@ -214,16 +214,16 @@ public class SigningPublicKey extends SimpleDataStructure {
     @Override
     public String toString() {
         StringBuilder buf = new StringBuilder(64);
-        buf.append("[SigningPublicKey ").append((_type != null) ? _type.toString() : "unknown type").append(' ');
+        buf.append("SigningPublicKey ").append((_type != null) ? _type.toString() : "unknown type").append(' ');
         int length = length();
         if (_data == null) {
             buf.append("null");
         } else if (length <= 32) {
-            buf.append(toBase64());
+            buf.append(toBase64().substring(0,6));
         } else {
-            buf.append("size: ").append(length);
+            buf.append("Size: ").append(length);
         }
-        buf.append(']');
+        buf.append(" bytes");
         return buf.toString();
     }
 

@@ -1,4 +1,5 @@
 <%@page contentType="text/html"%>
+<%@page trimDirectiveWhitespaces="true"%>
 <%@page pageEncoding="UTF-8"%>
 <!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
 <%
@@ -23,30 +24,38 @@
     else
         ERROR_MESSAGE = "";
 %>
-<html><head>
+<html>
+<head>
 <%@include file="css.jsi" %>
 <%=intl.title("Internal Error")%>
-</head><body>
+</head>
+<body id="error500">
 <div class="routersummaryouter">
 <div class="routersummary">
-<a href="/" title="<%=intl._t("Router Console")%>"><img src="/themes/console/images/i2plogo.png" alt="<%=intl._t("I2P Router Console")%>" border="0"></a><hr>
-<a href="/config"><%=intl._t("Configuration")%></a> <a href="/help"><%=intl._t("Help")%></a>
-</div></div>
-<h1><%=ERROR_CODE%> <%=ERROR_MESSAGE%></h1>
+<a href="/" title="<%=intl._t("Router Console")%>">
+<img src="<%=intl.getTheme(request.getHeader("User-Agent"))%>images/i2plogo.png" alt="<%=intl._t("I2P Router Console").replace("I2P", "I2P+")%>" border="0"></a>
+<hr>
+<a href="/config"><%=intl._t("Configuration")%></a><br>
+<a href="/help"><%=intl._t("Help")%></a>
+</div>
+</div>
+<h1 class="err"><%=intl._t("ERROR")%>&ensp;<%=ERROR_CODE%>: <%=intl._t("Internal Server Error")%><br>
+<!--<span id="errmsg"><%=ERROR_MESSAGE%></span>--></h1>
 <div class="sorry" id="warning">
 <%=intl._t("Sorry! There has been an internal error.")%>
 <hr>
 <p>
-<% /* note to translators - both parameters are URLs */
-%><%=intl._t("Please report bugs on {0} or {1}.",
-          "<a href=\"http://trac.i2p2.i2p/newticket\">trac.i2p2.i2p</a>",
-          "<a href=\"https://trac.i2p2.de/newticket\">trac.i2p2.de</a>")%>
-<p><%=intl._t("Please include this information in bug reports")%>:
-</p></div><div class="sorry" id="warning2">
+<% /* note to translators - both parameters are URLs */%>
+<%=intl._t("Please report bugs on {0} or {1}.",
+           "<a href=\"http://trac.i2p2.i2p/newticket\">trac.i2p2.i2p</a>",
+           "<a href=\"https://trac.i2p2.de/newticket\">trac.i2p2.de</a>")%>
+<p><%=intl._t("Please include this information in bug reports")%>:</p>
+</div>
+<div class="sorry" id="warning2">
 <h3><%=intl._t("Error Details")%></h3>
+<div id="stacktrace">
+<p><%=intl._t("Error {0}", ERROR_CODE)%>: &ensp;<%=ERROR_URI%>&ensp;-&ensp;<%=ERROR_MESSAGE%></p>
 <p>
-<%=intl._t("Error {0}", ERROR_CODE)%>: <%=ERROR_URI%> - <%=ERROR_MESSAGE%>
-</p><p>
 <%
     if (ERROR_THROWABLE != null) {
         java.io.StringWriter sw = new java.io.StringWriter(2048);
@@ -60,20 +69,25 @@
     }
 %>
 </p>
+</div>
 <h3><%=intl._t("I2P Version and Running Environment")%></h3>
-<p>
-<b>I2P version:</b> <%=net.i2p.router.RouterVersion.FULL_VERSION%><br>
-<b>Java version:</b> <%=System.getProperty("java.vendor")%> <%=System.getProperty("java.version")%> (<%=System.getProperty("java.runtime.name")%> <%=System.getProperty("java.runtime.version")%>)<br>
+<p id="sysinfo">
+<b>I2P version:</b>&ensp;<%=net.i2p.router.RouterVersion.FULL_VERSION%><br>
+<b>Java version:</b>&ensp;<%=System.getProperty("java.vendor")%>&ensp;<%=System.getProperty("java.version")%>&ensp;(<%=System.getProperty("java.runtime.name")%> <%=System.getProperty("java.runtime.version")%>)<br>
  <jsp:useBean class="net.i2p.router.web.helpers.LogsHelper" id="logsHelper" scope="request" />
  <jsp:setProperty name="logsHelper" property="contextId" value="<%=i2pcontextId%>" />
 <jsp:getProperty name="logsHelper" property="unavailableCrypto" />
-<b>Wrapper version:</b> <%=System.getProperty("wrapper.version", "none")%><br>
-<b>Server version:</b> <jsp:getProperty name="logsHelper" property="jettyVersion" /><br>
-<b>Servlet version:</b> <%=getServletInfo()%><br>
-<b>Platform:</b> <%=System.getProperty("os.name")%> <%=System.getProperty("os.arch")%> <%=System.getProperty("os.version")%><br>
-<b>Processor:</b> <%=net.i2p.util.NativeBigInteger.cpuModel()%> (<%=net.i2p.util.NativeBigInteger.cpuType()%>)<br>
-<b>JBigI status:</b> <%=net.i2p.util.NativeBigInteger.loadStatus()%><br>
-<b>Encoding:</b> <%=System.getProperty("file.encoding")%><br>
-<b>Charset:</b> <%=java.nio.charset.Charset.defaultCharset().name()%></p>
+<b>Wrapper version:</b>&ensp;<%=System.getProperty("wrapper.version", "none")%><br>
+<b>Server version:</b>&ensp;<jsp:getProperty name="logsHelper" property="jettyVersion" /><br>
+<b>Servlet version:</b>&ensp;<%=getServletInfo()%><br>
+<b>Platform:</b>&ensp;<%=System.getProperty("os.name")%>&ensp;<%=System.getProperty("os.arch")%>&ensp;<%=System.getProperty("os.version")%><br>
+<b>Processor:</b>&ensp;<%=net.i2p.util.NativeBigInteger.cpuModel()%>&ensp;(<%=net.i2p.util.NativeBigInteger.cpuType()%>)<br>
+<b>JBigI:</b>&ensp;<%=net.i2p.util.NativeBigInteger.loadStatus()%><br>
+<b>Encoding:</b>&ensp;<%=System.getProperty("file.encoding")%><br>
+<b>Charset:</b>&ensp;<%=java.nio.charset.Charset.defaultCharset().name()%></p>
 <p><%=intl._t("Note that system information, log timestamps, and log messages may provide clues to your location; please review everything you include in a bug report.")%></p>
-</div></body></html>
+</div>
+<script nonce="<%=cspNonce%>" type="text/javascript">progressx.hide();</script>
+<script nonce="<%=cspNonce%>" type="text/javascript">progressx.hide();</script>
+</body>
+</html>

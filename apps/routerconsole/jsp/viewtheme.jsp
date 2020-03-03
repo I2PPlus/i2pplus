@@ -8,7 +8,6 @@
  *
  * Do not tag this file for translation.
  */
-
 String uri = request.getRequestURI();
 if (uri.endsWith(".css")) {
   response.setContentType("text/css");

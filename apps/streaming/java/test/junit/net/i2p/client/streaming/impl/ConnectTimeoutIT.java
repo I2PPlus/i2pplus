@@ -21,40 +21,40 @@ public class ConnectTimeoutIT  extends StreamingITBase {
     private Log _log;
     private I2PSession _client;
     private Destination _serverDest;
-    
+
     @Test
     public void testNonexistant() throws Exception {
         I2PAppContext context = I2PAppContext.getGlobalContext();
         _log = context.logManager().getLog(ConnectIT.class);
-        _log.debug("creating server dest");
+        _log.debug("Creating server destination");
         _serverDest = I2PClientFactory.createClient().createDestination(new ByteArrayOutputStream());
-        _log.debug("creating client session");
+        _log.debug("Creating client session");
         _client = createSession();
-        _log.debug("running client");
+        _log.debug("Running client");
         runClient(context, _client).join();
     }
-    
+
     protected Runnable getClient(I2PAppContext ctx, I2PSession session) {
         return new ClientRunner(ctx,session);
     }
-    
+
     private class ClientRunner extends RunnerBase {
         public ClientRunner(I2PAppContext ctx, I2PSession session) {
             super(ctx,session);
         }
-        
+
         public void run() {
             I2PSocketManager mgr = I2PSocketManagerFactory.createManager("localhost", 10001, getProperties());
             assertNull(mgr);
         }
 
     }
-    
+
     @Override
     protected Runnable getServer(I2PAppContext ctx, I2PSession session) {
         return null;
     }
-    
+
     @Override
     protected Properties getProperties() {
         Properties p = new Properties();

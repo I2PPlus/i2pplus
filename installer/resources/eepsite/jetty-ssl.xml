@@ -45,7 +45,7 @@
 <!--                                                                 -->
 <!-- Step 1:                                                         -->
 <!-- Get the b32 for your wehsite, it's the link at the              -->
-<!-- "preview" button in the Hidden Services Manager in              -->
+<!-- "preview" button in the Tunnel Manager in                       -->
 <!-- the console. If you aren't running i2p, you can                 -->
 <!-- get it from your private key file                               -->
 <!-- (probably ~/.i2p/eepsite/eepPriv.dat)                           -->

@@ -2,9 +2,9 @@ package net.i2p.router.crypto;
 
 /*
  * free (adj.): unencumbered; not under the control of others
- * Written by jrandom in 2003 and released into the public domain 
- * with no warranty of any kind, either expressed or implied.  
- * It probably won't  make your computer catch on fire, or eat 
+ * Written by jrandom in 2003 and released into the public domain
+ * with no warranty of any kind, either expressed or implied.
+ * It probably won't  make your computer catch on fire, or eat
  * your children, but it might.  Use at your own risk.
  *
  */
@@ -14,6 +14,8 @@ import java.util.Collections;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
+
+import java.util.Base64;
 
 import net.i2p.I2PAppContext;
 import net.i2p.crypto.AESEngine;
@@ -49,21 +51,21 @@ public final class ElGamalAESEngine {
     public ElGamalAESEngine(I2PAppContext ctx) {
         _context = ctx;
         _log = _context.logManager().getLog(ElGamalAESEngine.class);
-        
+
         _context.statManager().createFrequencyStat("crypto.elGamalAES.encryptNewSession",
-                                                   "how frequently we encrypt to a new ElGamal/AES+SessionTag session?",
+                                                   "How often we encrypt to a new ElGamal/AES+SessionTag session",
                                                    "Encryption", new long[] { 60*60*1000l});
         _context.statManager().createFrequencyStat("crypto.elGamalAES.encryptExistingSession",
-                                                   "how frequently we encrypt to an existing ElGamal/AES+SessionTag session?",
+                                                   "How often we encrypt to an existing ElGamal/AES+SessionTag session",
                                                    "Encryption", new long[] { 60*60*1000l});
         _context.statManager().createFrequencyStat("crypto.elGamalAES.decryptNewSession",
-                                                   "how frequently we decrypt with a new ElGamal/AES+SessionTag session?",
+                                                   "How often we decrypt with a new ElGamal/AES+SessionTag session",
                                                    "Encryption", new long[] { 60*60*1000l});
         _context.statManager().createFrequencyStat("crypto.elGamalAES.decryptExistingSession",
-                                                   "how frequently we decrypt with an existing ElGamal/AES+SessionTag session?",
+                                                   "How often we decrypt with an existing ElGamal/AES+SessionTag session",
                                                    "Encryption", new long[] { 60*60*1000l});
         _context.statManager().createFrequencyStat("crypto.elGamalAES.decryptFailed",
-                                                   "how frequently we fail to decrypt with ElGamal/AES+SessionTag?",
+                                                   "How often we fail to decrypt with ElGamal/AES+SessionTag",
                                                    "Encryption", new long[] { 60*60*1000l});
     }
 
@@ -114,54 +116,78 @@ public final class ElGamalAESEngine {
         if (key != null) {
             //if (_log.shouldLog(Log.DEBUG)) _log.debug("Key is known for tag " + st);
             if (shouldDebug)
-                _log.debug("Decrypting existing session encrypted with tag: " + st.toString() + ": key: " + key.toBase64() + ": " + data.length + " bytes " /* + Base64.encode(data, 0, 64) */ );
-            
+                _log.debug("Decrypting existing session " + "(" + data.length + " bytes)" +
+                           "\n* Tag: " + st.toString() +
+                           "\n* Key: " + key.toBase64() /* + Base64.encode(data, 0, 64) */ );
+
             decrypted = decryptExistingSession(data, key, targetPrivateKey, foundTags, usedKey, foundKey);
-            if (decrypted != null) {
-                _context.statManager().updateFrequency("crypto.elGamalAES.decryptExistingSession");
-                if (!foundTags.isEmpty() && shouldDebug)
-                    _log.debug("ElG/AES decrypt success with " + st + ": found tags: " + foundTags);
-                wasExisting = true;
+                if (decrypted != null) {
+                    _context.statManager().updateFrequency("crypto.elGamalAES.decryptExistingSession");
+                    StringBuilder buf = new StringBuilder();
+                    if (!foundTags.isEmpty()) {
+                        for (SessionTag t : foundTags) {
+                            buf.append("[").append(t.toString().substring(0,6)).append("]"); buf.append(" ");
+                        }
+                        if (!foundTags.isEmpty() && shouldDebug)
+                            _log.debug("ElGamal/AES decrypt success with [" + st.toString().substring(0,6) + "]\n* Found Tags: " + buf.toString());
+                        wasExisting = true;
+                    }
+                } else {
+                    _context.statManager().updateFrequency("crypto.elGamalAES.decryptFailed");
+                    if (_log.shouldLog(Log.WARN)) {
+                        _log.warn("ElGamal decrypt fail: Known Tag [" + st.toString().substring(0,6) + "], failed decrypt");
+                    }
+                }
             } else {
-                _context.statManager().updateFrequency("crypto.elGamalAES.decryptFailed");
-                if (_log.shouldLog(Log.WARN)) {
-                    _log.warn("ElG decrypt fail: known tag [" + st + "], failed decrypt");
+                if (shouldDebug) _log.debug("Key NOT known for Tag [" + st.toString().substring(0,6) + "]");
+                decrypted = decryptNewSession(data, targetPrivateKey, foundTags, usedKey, foundKey);
+                if (decrypted != null) {
+                    _context.statManager().updateFrequency("crypto.elGamalAES.decryptNewSession");
+                    if (!foundTags.isEmpty()) {
+                        StringBuilder buf = new StringBuilder();
+                        for (SessionTag t : foundTags) {
+                            buf.append("[").append(t.toString().substring(0,6)).append("]"); buf.append(" ");
+                        }
+                        if (!foundTags.isEmpty() && shouldDebug)
+                            _log.debug("ElGamal decrypt success!\n* Found Tags: " + buf.toString());
+                    }
+                } else {
+                    _context.statManager().updateFrequency("crypto.elGamalAES.decryptFailed");
+                    if (_log.shouldLog(Log.WARN))
+                        _log.warn("ElGamal decrypt fail: Unknown Tag " + st.toString());
                 }
             }
-        } else {
-            if (shouldDebug) _log.debug("Key is NOT known for tag " + st);
-            decrypted = decryptNewSession(data, targetPrivateKey, foundTags, usedKey, foundKey);
-            if (decrypted != null) {
-                _context.statManager().updateFrequency("crypto.elGamalAES.decryptNewSession");
-                if (!foundTags.isEmpty() && shouldDebug)
-                    _log.debug("ElG decrypt success: found tags: " + foundTags);
-            } else {
-                _context.statManager().updateFrequency("crypto.elGamalAES.decryptFailed");
-                if (_log.shouldLog(Log.WARN))
-                    _log.warn("ElG decrypt fail: unknown tag: " + st);
-            }
-        }
 
-        //if ((key == null) && (decrypted == null)) {
-            //_log.debug("Unable to decrypt the data starting with tag [" + st + "] - did the tag expire recently?", new Exception("Decrypt failure"));
-        //}
+            //if ((key == null) && (decrypted == null)) {
+                //_log.debug("Unable to decrypt the data starting with tag [" + st + "] - did the tag expire recently?", new Exception("Decrypt failure"));
+            //}
 
-        if (!foundTags.isEmpty()) {
-            if (foundKey.getData() != null) {
-                if (shouldDebug) 
-                    _log.debug("Found key: " + foundKey.toBase64() + " tags: " + foundTags + " wasExisting? " + wasExisting);
-                keyManager.tagsReceived(foundKey, foundTags);
-            } else if (usedKey.getData() != null) {
-                if (shouldDebug) 
-                    _log.debug("Used key: " + usedKey.toBase64() + " tags: " + foundTags + " wasExisting? " + wasExisting);
-                keyManager.tagsReceived(usedKey, foundTags);
+            if (!foundTags.isEmpty()) {
+                if (foundKey.getData() != null) {
+                    StringBuilder buf = new StringBuilder();
+                    for (SessionTag t : foundTags) {
+                        buf.append("[").append(t.toString().substring(0,6)).append("]"); buf.append(" ");
+                    }
+                    if (shouldDebug)
+                    _log.debug("Found key: " + foundKey.toBase64().substring(0,6) + " wasExisting? " + wasExisting +
+                               "\n* Tags: " + buf.toString());
+                    keyManager.tagsReceived(foundKey, foundTags);
+                } else if (usedKey.getData() != null) {
+                    StringBuilder buf = new StringBuilder();
+                    for (SessionTag t : foundTags) {
+                        buf.append("[").append(t.toString().substring(0,6)).append("]"); buf.append(" ");
+                    }
+                    if (shouldDebug)
+                        _log.debug("Used key [" + usedKey.toBase64().substring(0,6) + "] wasExisting? " + wasExisting +
+                                   "\n* Tags: " + buf.toString());
+                    keyManager.tagsReceived(usedKey, foundTags);
+                }
             }
-        }
         return decrypted;
     }
 
     /**
-     * scenario 1: 
+     * scenario 1:
      * Begin with 222 bytes, ElG encrypted, containing:
      * <pre>
      *  - 32 byte SessionKey
@@ -220,7 +246,7 @@ public final class ElGamalAESEngine {
         SimpleByteCache.release(preIV);
 
         // feed the extra bytes into the PRNG
-        _context.random().harvester().feedEntropy("ElG/AES", elgDecr, offset, elgDecr.length - offset); 
+        _context.random().harvester().feedEntropy("ElG/AES", elgDecr, offset, elgDecr.length - offset);
 
         byte aesDecr[] = decryptAESBlock(data, ELG_ENCRYPTED_LENGTH, data.length - ELG_ENCRYPTED_LENGTH,
                                          usedKey, iv, null, foundTags, foundKey);
@@ -233,7 +259,7 @@ public final class ElGamalAESEngine {
     }
 
     /**
-     * scenario 2: 
+     * scenario 2:
      * The data begins with 32 byte session tag, which also serves as the preIV.
      * Then decrypt with AES using that session key and the first 16 bytes of the SHA256 of the pre-IV:
      * <pre>
@@ -281,7 +307,7 @@ public final class ElGamalAESEngine {
                 if (rv == null)
                     _log.warn("Decrypting failed with a known existing tag as either an existing message or a new session");
                 else
-                    _log.warn("Decrypting suceeded as a new session, even though it used an existing tag!");
+                    _log.warn("Decrypting succeeded as a new session, even though it used an existing tag!");
             }
             return rv;
         }
@@ -314,7 +340,7 @@ public final class ElGamalAESEngine {
      * @return decrypted data or null on failure
      */
 /****
-    private byte[] decryptAESBlock(byte encrypted[], SessionKey key, byte iv[], 
+    private byte[] decryptAESBlock(byte encrypted[], SessionKey key, byte iv[],
                            byte sentTag[], Set foundTags, SessionKey foundKey) throws DataFormatException {
         return decryptAESBlock(encrypted, 0, encrypted.length, key, iv, sentTag, foundTags, foundKey);
     }
@@ -323,9 +349,9 @@ public final class ElGamalAESEngine {
     /*
      * Note: package private for ElGamalTest.testAES()
      */
-    byte[] decryptAESBlock(byte encrypted[], int offset, int encryptedLen, SessionKey key, byte iv[], 
+    byte[] decryptAESBlock(byte encrypted[], int offset, int encryptedLen, SessionKey key, byte iv[],
                            byte sentTag[], Set<SessionTag> foundTags, SessionKey foundKey) throws DataFormatException {
-        //_log.debug("iv for decryption: " + DataHelper.toString(iv, 16));	
+        //_log.debug("iv for decryption: " + DataHelper.toString(iv, 16));
         //_log.debug("decrypting AES block.  encr.length = " + (encrypted == null? -1 : encrypted.length) + " sentTag: " + DataHelper.toString(sentTag, 32));
         byte decrypted[] = new byte[encryptedLen];
         _context.aes().decrypt(encrypted, offset, decrypted, 0, key, iv, encryptedLen);
@@ -347,14 +373,14 @@ public final class ElGamalAESEngine {
             }
             for (int i = 0; i < numTags; i++) {
                 byte tag[] = new byte[SessionTag.BYTE_LENGTH];
-                System.arraycopy(decrypted, cur, tag, 0, SessionTag.BYTE_LENGTH); 
+                System.arraycopy(decrypted, cur, tag, 0, SessionTag.BYTE_LENGTH);
                 cur += SessionTag.BYTE_LENGTH;
                 tags.add(new SessionTag(tag));
             }
             long len = DataHelper.fromLong(decrypted, cur, 4);
             cur += 4;
             //_log.debug("len: " + len);
-            if ((len < 0) || (len > decrypted.length - cur - Hash.HASH_LENGTH - 1)) 
+            if ((len < 0) || (len > decrypted.length - cur - Hash.HASH_LENGTH - 1))
                 throw new IllegalArgumentException("Invalid size of payload (" + len + ", remaining " + (decrypted.length-cur) +")");
             //byte hashval[] = new byte[Hash.HASH_LENGTH];
             //System.arraycopy(decrypted, cur, hashval, 0, Hash.HASH_LENGTH);
@@ -381,7 +407,7 @@ public final class ElGamalAESEngine {
             _context.sha().calculateHash(unencrData, 0, (int) len, calcHash, 0);
             boolean eq = DataHelper.eq(decrypted, hashIndex, calcHash, 0, 32);
             SimpleByteCache.release(calcHash);
-            
+
             if (eq) {
                 // everything matches.  w00t.
                 if (tags != null)
@@ -398,8 +424,8 @@ public final class ElGamalAESEngine {
     }
 
     /**
-     * Encrypt the unencrypted data to the target.  The total size returned will be 
-     * no less than the paddedSize parameter, but may be more.  This method uses the 
+     * Encrypt the unencrypted data to the target.  The total size returned will be
+     * no less than the paddedSize parameter, but may be more.  This method uses the
      * ElGamal+AES algorithm in the data structure spec.
      *
      * @param target public key to which the data should be encrypted, must be ELGAMAL_2048.
@@ -434,7 +460,9 @@ public final class ElGamalAESEngine {
         _context.statManager().updateFrequency("crypto.elGamalAES.encryptExistingSession");
         byte rv[] = encryptExistingSession(data, key, tagsForDelivery, currentTag, newKey, paddedSize);
         if (_log.shouldLog(Log.DEBUG))
-            _log.debug("Existing session encrypted with tag: " + currentTag.toString() + ": " + rv.length + " bytes and key: " + key.toBase64() /* + ": " + Base64.encode(rv, 0, 64) */);
+            _log.debug("Encrypting existing session " + "(" + rv.length + " bytes)" +
+                       "\n* Tag: " + currentTag.toString() +
+                       "\n* Key: " + key.toBase64() /* + ": " + Base64.encode(rv, 0, 64) */);
         return rv;
     }
 
@@ -501,7 +529,7 @@ public final class ElGamalAESEngine {
     }
 
     /**
-     * scenario 1: 
+     * scenario 1:
      * Begin with 222 bytes, ElG encrypted, containing:
      * <pre>
      *  - 32 byte SessionKey
@@ -550,7 +578,7 @@ public final class ElGamalAESEngine {
             elgEncr = elg;
         }
         //_log.debug("ElGamal encrypted length: " + elgEncr.length + " elGamal source length: " + elgSrc.toByteArray().length);
-        
+
         // should we also feed the encrypted elG block into the harvester?
 
         // use alternate calculateHash() method to avoid object churn and caching
@@ -575,7 +603,7 @@ public final class ElGamalAESEngine {
     }
 
     /**
-     * scenario 2: 
+     * scenario 2:
      * Begin with 32 byte session tag, which also serves as the preIV.
      * Then encrypt with AES using that session key and the first 16 bytes of the SHA256 of the pre-IV:
      * <pre>
@@ -603,7 +631,7 @@ public final class ElGamalAESEngine {
         //byte iv[] = new byte[16];
         //System.arraycopy(ivHash.getData(), 0, iv, 0, 16);
         byte[] iv = halfHash(rawTag);
-        
+
         byte aesEncr[] = encryptAESBlock(data, key, iv, tagsForDelivery, newKey, paddedSize, SessionTag.BYTE_LENGTH);
         SimpleByteCache.release(iv);
         // that prepended SessionTag.BYTE_LENGTH bytes at the beginning of the buffer
@@ -632,7 +660,7 @@ public final class ElGamalAESEngine {
 
     /**
      * For both scenarios, this method encrypts the AES area using the given key, iv
-     * and making sure the resulting data is at least as long as the paddedSize and 
+     * and making sure the resulting data is at least as long as the paddedSize and
      * also mod 16 bytes.  The contents of the encrypted data is:
      * <pre>
      *  - 2 byte integer specifying the # of session tags
@@ -690,7 +718,7 @@ public final class ElGamalAESEngine {
         //System.arraycopy(hash.getData(), 0, aesData, cur, Hash.HASH_LENGTH);
         _context.sha().calculateHash(data, 0, data.length, aesData, cur);
         cur += Hash.HASH_LENGTH;
-        
+
         //_log.debug("hash of data: " + DataHelper.toString(hash.getData(), 32));
         if (newKey == null) {
             aesData[cur++] = 0x00; // don't rekey

@@ -35,6 +35,7 @@ import net.i2p.stat.RateStat;
 import net.i2p.util.PortMapper;
 import net.i2p.util.SystemVersion;
 
+
 /**
  * Simple helper to query the appropriate router for data necessary to render
  * the summary sections on the router console.
@@ -48,9 +49,14 @@ public class SummaryHelper extends HelperBase {
     static final String THINSP = " / ";
     private static final char S = ',';
     static final String PROP_SUMMARYBAR = "routerconsole.summaryBar.";
+    net.i2p.I2PAppContext ctx = net.i2p.I2PAppContext.getGlobalContext();
+    boolean oldHome = ctx.getBooleanProperty("routerconsole.oldHomePage");
+    String firstVersion = ctx.getProperty("router.firstVersion");
+    String version = net.i2p.CoreVersion.VERSION;
 
-    static final String DEFAULT_FULL =
+    static final String DEFAULT_FULL_NEWUSER =
         "RouterInfo" + S +
+        "MemoryBar" + S +
         "UpdateStatus" + S +
         "Bandwidth" + S +
         "NetworkReachability" + S +
@@ -59,11 +65,62 @@ public class SummaryHelper extends HelperBase {
         "I2PInternals" + S +
         "HelpAndFAQ" + S +
         "Peers" + S +
-        "RestartStatus" + S +
         "Tunnels" + S +
         "TunnelStatus" + S +
+        "RestartStatus" + S +
         "Destinations" + S +
         "";
+
+    static final String DEFAULT_FULL =
+        "RouterInfo" + S +
+        "MemoryBar" + S +
+        "UpdateStatus" + S +
+        "Bandwidth" + S +
+        "NetworkReachability" + S +
+        "FirewallAndReseedStatus" + S +
+        "I2PServices" + S +
+        "I2PInternals" + S +
+        "Peers" + S +
+        "Tunnels" + S +
+        "TunnelStatus" + S +
+        "RestartStatus" + S +
+        "Destinations" + S +
+        "";
+
+    static final String DEFAULT_FULL_OLDHOME_NEWUSER =
+        "RouterInfo" + S +
+        "MemoryBar" + S +
+        "UpdateStatus" + S +
+        "Bandwidth" + S +
+        "NetworkReachability" + S +
+        "FirewallAndReseedStatus" + S +
+        "I2PServices" + S +
+        "I2PInternals" + S +
+        "HelpAndFAQ" + S +
+        "Peers" + S +
+        "Tunnels" + S +
+        "TunnelStatus" + S +
+        "NewsHeadings" + S +
+        "RestartStatus" + S +
+        "Destinations" + S +
+        "";
+
+    static final String DEFAULT_FULL_OLDHOME =
+        "RouterInfo" + S +
+        "MemoryBar" + S +
+        "UpdateStatus" + S +
+        "Bandwidth" + S +
+        "NetworkReachability" + S +
+        "FirewallAndReseedStatus" + S +
+        "I2PServices" + S +
+        "I2PInternals" + S +
+        "Peers" + S +
+        "Tunnels" + S +
+        "TunnelStatus" + S +
+        "NewsHeadings" + S +
+        "RestartStatus" + S +
+        "Destinations" + S +
+         "";
 
     static final String DEFAULT_FULL_ADVANCED =
         "AdvancedRouterInfo" + S +
@@ -76,20 +133,42 @@ public class SummaryHelper extends HelperBase {
         "I2PInternals" + S +
         "Advanced" + S +
         "Peers" + S +
-        "RestartStatus" + S +
         "Tunnels" + S +
         "TunnelStatus" + S +
         "Congestion" + S +
+        "RestartStatus" + S +
+        "Destinations" + S +
+        "";
+
+    static final String DEFAULT_FULL_ADVANCED_OLDHOME =
+        "AdvancedRouterInfo" + S +
+        "MemoryBar" + S +
+        "UpdateStatus" + S +
+        "Bandwidth" + S +
+        "NetworkReachability" + S +
+        "FirewallAndReseedStatus" + S +
+        "I2PServices" + S +
+        "I2PInternals" + S +
+        "Advanced" + S +
+        "Peers" + S +
+        "Tunnels" + S +
+        "TunnelStatus" + S +
+        "Congestion" + S +
+        "NewsHeadings" + S +
+        "RestartStatus" + S +
         "Destinations" + S +
         "";
 
     static final String DEFAULT_MINIMAL =
         "ShortRouterInfo" + S +
-        "Bandwidth" + S +
+        "MemoryBar" + S +
         "UpdateStatus" + S +
-        "NewsHeadings" + S +
+        "Bandwidth" + S +
         "NetworkReachability" + S +
         "FirewallAndReseedStatus" + S +
+        "Peers" + S +
+        "Tunnels" + S +
+        "NewsHeadings" + S +
         "RestartStatus" + S +
         "Destinations" + S +
         "";
@@ -98,11 +177,14 @@ public class SummaryHelper extends HelperBase {
     static final String DEFAULT_MINIMAL_ADVANCED =
         "AdvancedRouterInfo" + S +
         "MemoryBar" + S +
-        "Bandwidth" + S +
         "UpdateStatus" + S +
-        "NewsHeadings" + S +
+        "Bandwidth" + S +
         "NetworkReachability" + S +
         "FirewallAndReseedStatus" + S +
+        "Peers" + S +
+        "Tunnels" + S +
+        "Congestion" + S +
+        "NewsHeadings" + S +
         "RestartStatus" + S +
         "Destinations" + S +
         "";
@@ -112,7 +194,7 @@ public class SummaryHelper extends HelperBase {
      * the current JVM at the given context.
      *
      */
-    public String getIdent() { 
+    public String getIdent() {
         if (_context == null) return "[no router]";
 
         if (_context.routerHash() != null)
@@ -124,18 +206,18 @@ public class SummaryHelper extends HelperBase {
      * Retrieve the version number of the router.
      *
      */
-    public String getVersion() { 
+    public String getVersion() {
         return RouterVersion.FULL_VERSION;
     }
     /**
      * Retrieve a pretty printed uptime count (ala 4d or 7h or 39m)
      *
      */
-    public String getUptime() { 
+    public String getUptime() {
         if (_context == null) return "[no router]";
 
         Router router = _context.router();
-        if (router == null) 
+        if (router == null)
             return "[not up]";
         else
             return DataHelper.formatDuration2(router.getUptime());
@@ -225,7 +307,8 @@ public class SummaryHelper extends HelperBase {
             !_context.clientManager().isAlive() &&
             !_context.router().gracefulShutdownInProgress() &&
             !_context.router().isRestarting())
-            return new NetworkStateMessage(NetworkState.ERROR, _t("ERR-Client Manager I2CP Error - check logs"));  // not a router problem but the user should know
+            return new NetworkStateMessage(NetworkState.ERROR, _t("Client Manager I2CP Error"));
+            // TODO: display advice in .sb_warning i.e. repurposed showFirewallWarning  ->  _t("Check logs!"));  // not a router problem but the user should know
 */
         // Warn based on actual skew from peers, not update status, so if we successfully offset
         // the clock, we don't complain.
@@ -233,13 +316,16 @@ public class SummaryHelper extends HelperBase {
         long skew = _context.commSystem().getFramedAveragePeerClockSkew(33);
         // Display the actual skew, not the offset
         if (Math.abs(skew) > 30*1000)
-            return new NetworkStateMessage(NetworkState.CLOCKSKEW, _t("ERR-Clock Skew of {0}", DataHelper.formatDuration2(Math.abs(skew))));
+            return new NetworkStateMessage(NetworkState.CLOCKSKEW, _t("Clock Skew of {0}", DataHelper.formatDuration2(Math.abs(skew))));
         if (_context.router().isHidden())
             return new NetworkStateMessage(NetworkState.HIDDEN, _t("Hidden"));
         RouterInfo routerInfo = _context.router().getRouterInfo();
         if (routerInfo == null)
             return new NetworkStateMessage(NetworkState.TESTING, _t("Testing"));
 
+// TODO: Migrate/decouple + enhance .sb_netstatus linked advice to Network Reachability section,
+// add tooltips to .sb_netstatus to explain status/nature of error (user may have Reachability section hidden),
+// color .sb_netstatus text according to status,
         Status status = _context.commSystem().getStatus();
         String txstatus = _context.commSystem().getLocalizedStatusString();
         NetworkState state = NetworkState.RUNNING;
@@ -262,37 +348,38 @@ public class SummaryHelper extends HelperBase {
                 if (ip == null) {
                     // Usually a transient issue during state transitions, possibly with hidden mod, don't show this
                     // NTCP2 addresses may not have an IP
-                    //return new NetworkStateMessage(NetworkState.ERROR, _t("ERR-Unresolved TCP Address"));
+                    //return new NetworkStateMessage(NetworkState.ERROR, _t("Unresolved TCP Address"));
                     return new NetworkStateMessage(NetworkState.RUNNING, txstatus);
                 }
                 // TODO set IPv6 arg based on configuration?
                 if (TransportUtil.isPubliclyRoutable(ip, true))
                     return new NetworkStateMessage(NetworkState.RUNNING, txstatus);
-                return new NetworkStateMessage(NetworkState.ERROR, _t("ERR-Private TCP Address"));
+                return new NetworkStateMessage(NetworkState.ERROR, _t("Private TCP Address"));
 
             case IPV4_SNAT_IPV6_UNKNOWN:
             case DIFFERENT:
-                return new NetworkStateMessage(NetworkState.ERROR, _t("ERR-SymmetricNAT"));
+                return new NetworkStateMessage(NetworkState.ERROR, _t("SymmetricNAT"));
 
             case REJECT_UNSOLICITED:
                 state = NetworkState.FIREWALLED;
             case IPV4_DISABLED_IPV6_FIREWALLED:
                 if (routerInfo.getTargetAddress("NTCP") != null)
-                    return new NetworkStateMessage(NetworkState.WARN, _t("WARN-Firewalled with Inbound TCP Enabled"));
+                    return new NetworkStateMessage(NetworkState.WARN, _t("Firewalled with Inbound TCP Enabled"));
                 // fall through...
             case IPV4_FIREWALLED_IPV6_OK:
             case IPV4_FIREWALLED_IPV6_UNKNOWN:
                 if (((FloodfillNetworkDatabaseFacade)_context.netDb()).floodfillEnabled())
-                    return new NetworkStateMessage(NetworkState.WARN, _t("WARN-Firewalled and Floodfill"));
+                    return new NetworkStateMessage(NetworkState.WARN, _t("Firewalled &amp; Floodfill"));
                 //if (_context.router().getRouterInfo().getCapabilities().indexOf('O') >= 0)
                 //    return new NetworkStateMessage(NetworkState.WARN, _t("WARN-Firewalled and Fast"));
                 return new NetworkStateMessage(state, txstatus);
 
             case DISCONNECTED:
-                return new NetworkStateMessage(NetworkState.TESTING, _t("Disconnected - check network connection"));
+                return new NetworkStateMessage(NetworkState.ERROR, _t("Disconnected")); // .sb_warning shows -> _t("Check Network Connection"));
 
             case HOSED:
-                return new NetworkStateMessage(NetworkState.ERROR, _t("ERR-UDP Port In Use - Set i2np.udp.internalPort=xxxx in advanced config and restart"));
+                return new NetworkStateMessage(NetworkState.ERROR, _t("UDP Port In Use"));
+                // TODO: display advice in .sb_warning -> _t("Set i2np.udp.internalPort=xxxx in advanced config and restart"));
 
             case UNKNOWN:
                 state = NetworkState.TESTING;
@@ -302,12 +389,12 @@ public class SummaryHelper extends HelperBase {
                 RouterAddress ra = routerInfo.getTargetAddress("SSU");
                 if (ra == null && _context.router().getUptime() > 5*60*1000) {
                     if (getActivePeers() <= 0)
-                        return new NetworkStateMessage(NetworkState.ERROR, _t("ERR-No Active Peers, Check Network Connection and Firewall"));
+                        return new NetworkStateMessage(NetworkState.ERROR, _t("No Active Peers")); // TODO: display advice in .sb_warning -> _t("Check Network Connection and Firewall"));
                     else if (_context.getProperty(ConfigNetHelper.PROP_I2NP_NTCP_HOSTNAME) == null ||
                         _context.getProperty(ConfigNetHelper.PROP_I2NP_NTCP_PORT) == null)
-                        return new NetworkStateMessage(NetworkState.ERROR, _t("ERR-UDP Disabled and Inbound TCP host/port not set"));
+                        return new NetworkStateMessage(NetworkState.ERROR, _t("UDP Disabled &amp; Inbound TCP host/port not set"));
                     else
-                        return new NetworkStateMessage(NetworkState.WARN, _t("WARN-Firewalled with UDP Disabled"));
+                        return new NetworkStateMessage(NetworkState.WARN, _t("Firewalled with UDP Disabled"));
                 }
                 return new NetworkStateMessage(state, txstatus);
         }
@@ -364,7 +451,7 @@ public class SummaryHelper extends HelperBase {
         // return integerFormatter.format(used) + "MB (" + usedPc + "%)";
         // return integerFormatter.format(used) + "MB / " + free + " MB";
         return "<div class=\"percentBarOuter\" id=\"sb_memoryBar\"><div class=\"percentBarText\">RAM: " +
-               integerFormatter.format(used) + " / " + total + " MiB" +
+               integerFormatter.format(used) + " / " + total + " M" +
                "</div><div class=\"percentBarInner\" style=\"width: " + integerFormatter.format(usedPc) +
                "%;\"></div></div>";
     }
@@ -389,7 +476,11 @@ public class SummaryHelper extends HelperBase {
                _context.router().getUptime() > 2*60*1000 &&
                (!_context.commSystem().isDummy()) &&
                _context.commSystem().countActivePeers() <= 0 &&
-               _context.netDb().getKnownRouters() > 5;
+               _context.netDb().getKnownRouters() > 5 ||
+               _context.netDb().isInitialized() &&
+               _context.router().getUptime() > 2*60*1000 &&
+               (!_context.commSystem().isDummy()) &&
+               _context.commSystem().countActivePeers() <= 0;
     }
 
     /**
@@ -455,6 +546,15 @@ public class SummaryHelper extends HelperBase {
             return _context.banlist().getRouterCount();
     }
 
+    /**
+     * How many peers are unreachable.
+     *
+     */
+    public int getUnreachablePeers() {
+        if (_context == null)
+            return 0;
+        return _context.peerManager().getPeersByCapability(FloodfillNetworkDatabaseFacade.CAPABILITY_UNREACHABLE).size();
+    }
 
     /**
      *    @return "x.xx / y.yy {K|M}"
@@ -579,11 +679,11 @@ public class SummaryHelper extends HelperBase {
            .append(_t("Add/remove/edit &amp; control your client and server tunnels"))
            .append("\">");
         }
-        buf.append(_t("Local Tunnels"));
+        buf.append(_t("Service Tunnels"));
         if (link) {
            buf.append("</a>");
         }
-        buf.append("</h3><hr class=\"b\">");
+        buf.append("</h3>\n<hr class=\"b\">\n");
         if (!clients.isEmpty()) {
             Collections.sort(clients, new AlphaComparator());
             buf.append("<table id=\"sb_localtunnels\">");
@@ -591,13 +691,27 @@ public class SummaryHelper extends HelperBase {
             for (Destination client : clients) {
                 String name = getName(client);
                 Hash h = client.calculateHash();
+                Boolean server = _context.clientManager().shouldPublishLeaseSet(h);
 
-                buf.append("<tr><td align=\"right\"><img src=\"/themes/console/images/");
-                if (_context.clientManager().shouldPublishLeaseSet(h))
-                    buf.append("server.png\" alt=\"Server\" title=\"").append(_t("Hidden Service")).append("\">");
-                else
-                    buf.append("client.png\" alt=\"Client\" title=\"").append(_t("Client")).append("\">");
-                buf.append("</td><td align=\"left\"><b><a href=\"tunnels#").append(h.toBase64().substring(0,4));
+                buf.append("<tr><td ");
+                if (server)
+                    buf.append("class=\"tunnelServer\" ");
+                buf.append("align=\"right\"><img src=\"/themes/console/images/");
+                if (server) {
+                    buf.append("server.png\" alt=\"Server\" title=\"").append(_t("Server"));
+                    if (!isAdvanced()) {
+                        buf.append(" (").append(_t("service may be available to peers")).append(")");
+                     }
+                    buf.append("\" width=\"16\" height=\"16\">");
+                }
+                else {
+                    buf.append("client.png\" alt=\"Client\" title=\"").append(_t("Client"));
+                    if (!isAdvanced()) {
+                        buf.append(" (").append(_t("service is only available locally")).append(")");
+                    }
+                    buf.append("\" width=\"16\" height=\"16\">");
+                }
+                buf.append("</td><td align=\"left\"><b><a href=\"/tunnels#").append(h.toBase64().substring(0,4));
                 buf.append("\" target=\"_top\" title=\"").append(_t("Show tunnels")).append("\">");
                 // Increase permitted max length of tunnel name & handle overflow with css
                 if (name.length() <= 32)
@@ -607,22 +721,27 @@ public class SummaryHelper extends HelperBase {
                 buf.append("</a></b></td>\n");
                 LeaseSet ls = _context.netDb().lookupLeaseSetLocally(h);
                 if (ls != null && _context.tunnelManager().getOutboundClientTunnelCount(h) > 0) {
-                    if (!ls.isCurrent(0)) {
-                        // yellow light
-                        buf.append("<td><img src=\"/themes/console/images/local_inprogress.png\" alt=\"").append(_t("Rebuilding")).append("&hellip;\" title=\"").append(_t("Leases expired"));
-                        buf.append(", ").append(_t("Rebuilding")).append("&hellip;\"></td></tr>\n");
+                    long timeToExpire = ls.getEarliestLeaseDate() - _context.clock().now();
+                        if ((timeToExpire < 0) && !ls.isCurrent(0)) {
+                        // red or yellow light
+                        buf.append("<td class=\"tunnelBuilding\"><img src=\"/themes/console/images/local_down.png\" alt=\"")
+                           .append(_t("Rebuilding")).append("&hellip;\" title=\"").append(_t("Leases expired")).append(" ")
+                           .append(DataHelper.formatDuration2(0 - timeToExpire));
+                        buf.append(" ").append(_t("ago")).append(". ").append(_t("Rebuilding")).append("&hellip;\" width=\"16\" height=\"16\"></td></tr>\n");
                     } else {
                         // green light
-                        buf.append("<td><img src=\"/themes/console/images/local_up.png\" alt=\"Ready\" title=\"").append(_t("Ready")).append("\"></td></tr>\n");
+                        buf.append("<td class=\"tunnelReady\"><img src=\"/themes/console/images/local_up.png\" alt=\"Ready\" title=\"")
+                           .append(_t("Ready")).append("\" width=\"16\" height=\"16\"></td></tr>\n");
                     }
                 } else {
                     // yellow light
-                    buf.append("<td><img src=\"/themes/console/images/local_inprogress.png\" alt=\"").append(_t("Building")).append("&hellip;\" title=\"").append(_t("Building tunnels")).append("&hellip;\"></td></tr>\n");
+                    buf.append("<td class=\"tunnelBuilding\"><img src=\"/themes/console/images/local_inprogress.png\" alt=\"")
+                       .append(_t("Building")).append("&hellip;\" title=\"").append(_t("Building tunnels")).append("&hellip;\" width=\"16\" height=\"16\"></td></tr>\n");
                 }
             }
             buf.append("</table>");
         } else {
-            buf.append("<center><i>").append(_t("none")).append("</i></center>");
+            buf.append("<center><i>").append(_t("none")).append("</i></center>\n");
         }
         return buf.toString();
     }
@@ -632,13 +751,13 @@ public class SummaryHelper extends HelperBase {
      *  Inner class, can't be Serializable
      */
     private class AlphaComparator implements Comparator<Destination> {
-        private final String xsc = _t("shared clients");
+        private final String xsc = _t("Shared Clients");
 
         public int compare(Destination lhs, Destination rhs) {
             String lname = getName(lhs);
             String rname = getName(rhs);
-            boolean lshared = lname.startsWith("shared clients") || lname.startsWith(xsc);
-            boolean rshared = rname.startsWith("shared clients") || rname.startsWith(xsc);
+            boolean lshared = lname.startsWith("Shared Clients") || lname.startsWith(xsc);
+            boolean rshared = rname.startsWith("Shared Clients") || rname.startsWith(xsc);
             if (lshared && !rshared)
                 return -1;
             if (rshared && !lshared)
@@ -718,7 +837,7 @@ public class SummaryHelper extends HelperBase {
         else
             return _context.tunnelManager().getParticipatingCount();
     }
- 
+
     /** @since 0.7.10 */
     public String getShareRatio() {
         if (_context == null)
@@ -743,9 +862,9 @@ public class SummaryHelper extends HelperBase {
         Rate lagRate = rs.getRate(60*1000);
         return DataHelper.formatDuration2((long)lagRate.getAverageValue());
     }
- 
+
     /**
-     * How long it takes us to pump out a message, averaged over the last minute 
+     * How long it takes us to pump out a message, averaged over the last minute
      * (pretty printed with the units attached)
      *
      */
@@ -835,11 +954,11 @@ public class SummaryHelper extends HelperBase {
             else
                 needSpace = true;
             buf.append("<h4 class=\"sb_info sb_update\"><b>").append(_t("Update downloaded")).append("<br>");
+            buf.append("[").append(_t("{0}", DataHelper.escapeHTML(dver))).append("]<br>");
             if (_context.hasWrapper())
                 buf.append(_t("Click Restart to install"));
             else
                 buf.append(_t("Click Shutdown and restart to install"));
-            buf.append(' ').append(_t("Version {0}", DataHelper.escapeHTML(dver)));
             buf.append("</b></h4>");
         }
         boolean avail = updateAvailable();
@@ -901,25 +1020,33 @@ public class SummaryHelper extends HelperBase {
                 buf.append("<form action=\"").append(uri).append("\" method=\"POST\">\n");
                 buf.append("<input type=\"hidden\" name=\"updateNonce\" value=\"").append(nonce).append("\" >\n");
                 if (avail) {
-                    buf.append("<button type=\"submit\" class=\"download\" name=\"updateAction\" value=\"signed\" >")
+                    buf.append("<span id=\"updateAvailable\">").append(_t("Release update available")).append("<br><i>")
+                       .append(_t("Version")).append(": ").append(getUpdateVersion());
+                    buf.append("</i></span><br><button type=\"submit\" class=\"download\" name=\"updateAction\" value=\"signed\" >")
                        // Note to translators: parameter is a version, e.g. "0.8.4"
-                       .append(_t("Download {0} Update", getUpdateVersion()))
+//                       .append(_t("Download {0} Update", getUpdateVersion()))
+                       .append(_t("Download I2P Update"))
                        .append("</button><br>\n");
                 }
                 if (devSU3Avail) {
-                    buf.append("<button type=\"submit\" class=\"download\" name=\"updateAction\" value=\"DevSU3\" >")
+                    buf.append("<span id=\"updateAvailable\">").append(_t("Signed development update available")).append("<br><i>")
+                       .append(_t("Version")).append(": ").append(getDevSU3UpdateVersion());
+                    buf.append("</i></span><br><button type=\"submit\" class=\"download\" name=\"updateAction\" value=\"DevSU3\" >")
                        // Note to translators: parameter is a router version, e.g. "0.9.19-16"
                        // <br> is optional, to help the browser make the lines even in the button
                        // If the translation is shorter than the English, you should probably not include <br>
-                       .append(_t("Download Signed<br>Development Update<br>{0}", getDevSU3UpdateVersion()))
+//                       .append(_t("Download Signed<br>Development Update<br>{0}", getDevSU3UpdateVersion()))
+                       .append(_t("Download I2P Update"))
                        .append("</button><br>\n");
                 }
                 if (unsignedAvail) {
-                    buf.append("<button type=\"submit\" class=\"download\" name=\"updateAction\" value=\"Unsigned\" >")
+                    buf.append("<span id=\"updateAvailable\">").append(_t("Unsigned update available")).append("<br><i>").append(getUnsignedUpdateVersion());
+                    buf.append("</i></span><br><button type=\"submit\" class=\"download\" name=\"updateAction\" value=\"Unsigned\" >")
                        // Note to translators: parameter is a date and time, e.g. "02-Mar 20:34 UTC"
                        // <br> is optional, to help the browser make the lines even in the button
                        // If the translation is shorter than the English, you should probably not include <br>
-                       .append(_t("Download Unsigned<br>Update {0}", getUnsignedUpdateVersion()))
+//                       .append(_t("Download Unsigned<br>Update {0}", getUnsignedUpdateVersion()))
+                       .append(_t("Download I2P Update"))
                        .append("</button><br>\n");
                 }
                 buf.append("</form>\n");
@@ -942,11 +1069,11 @@ public class SummaryHelper extends HelperBase {
     public String getFirewallAndReseedStatus() {
         StringBuilder buf = new StringBuilder(256);
         if (showFirewallWarning()) {
-            buf.append("<h4 id=\"sb_warning\"><a href=\"/help#configurationhelp\" target=\"_top\" title=\"")
+            buf.append("<h4 id=\"sb_warning\"><span><a href=\"/help#configurationhelp\" target=\"_top\" title=\"")
                .append(_t("Help with firewall configuration"))
                .append("\">")
-               .append(_t("Check network connection and NAT/firewall"))
-               .append("</a></h4>");
+               .append(_t("Check network connection and NAT/firewall!"))
+               .append("</a></span></h4>");
         }
 
         ReseedChecker checker = _context.netDb().reseedChecker();
@@ -990,10 +1117,20 @@ public class SummaryHelper extends HelperBase {
         String config;
         if ("home".equals(page)) {
             config = _context.getProperty(PROP_SUMMARYBAR + page, isAdvanced() ? DEFAULT_MINIMAL_ADVANCED : DEFAULT_MINIMAL);
+        } else if (oldHome) {
+            config = _context.getProperty(PROP_SUMMARYBAR + page);
+            if (config == null)
+                if (version.equals(firstVersion))
+                    config = _context.getProperty(PROP_SUMMARYBAR + "default", isAdvanced() ? DEFAULT_FULL_ADVANCED_OLDHOME : DEFAULT_FULL_OLDHOME_NEWUSER);
+                else
+                    config = _context.getProperty(PROP_SUMMARYBAR + "default", isAdvanced() ? DEFAULT_FULL_ADVANCED_OLDHOME : DEFAULT_FULL_OLDHOME);
         } else {
             config = _context.getProperty(PROP_SUMMARYBAR + page);
             if (config == null)
-                config = _context.getProperty(PROP_SUMMARYBAR + "default", isAdvanced() ? DEFAULT_FULL_ADVANCED : DEFAULT_FULL);
+                if (version.equals(firstVersion))
+                    config = _context.getProperty(PROP_SUMMARYBAR + "default", isAdvanced() ? DEFAULT_FULL_ADVANCED : DEFAULT_FULL_NEWUSER);
+                else
+                    config = _context.getProperty(PROP_SUMMARYBAR + "default", isAdvanced() ? DEFAULT_FULL_ADVANCED : DEFAULT_FULL);
         }
         if (config.length() <= 0)
             return Collections.emptyList();

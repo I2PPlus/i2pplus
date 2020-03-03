@@ -1,9 +1,9 @@
 package net.i2p.router.client;
 /*
  * free (adj.): unencumbered; not under the control of others
- * Written by jrandom in 2003 and released into the public domain 
- * with no warranty of any kind, either expressed or implied.  
- * It probably won't make your computer catch on fire, or eat 
+ * Written by jrandom in 2003 and released into the public domain
+ * with no warranty of any kind, either expressed or implied.
+ * It probably won't make your computer catch on fire, or eat
  * your children, but it might.  Use at your own risk.
  *
  */
@@ -37,7 +37,7 @@ import net.i2p.util.Log;
  */
 public class ClientManagerFacadeImpl extends ClientManagerFacade implements InternalClientManager {
     private final Log _log;
-    private ClientManager _manager; 
+    private ClientManager _manager;
     private final RouterContext _context;
     /** note that this is different than the property the client side uses, i2cp.tcp.port */
     public final static String PROP_CLIENT_PORT = "i2cp.port";
@@ -45,20 +45,20 @@ public class ClientManagerFacadeImpl extends ClientManagerFacade implements Inte
     /** note that this is different than the property the client side uses, i2cp.tcp.host */
     public final static String PROP_CLIENT_HOST = "i2cp.hostname";
     public final static String DEFAULT_HOST = "127.0.0.1";
-    
+
     public ClientManagerFacadeImpl(RouterContext context) {
         _context = context;
         _log = _context.logManager().getLog(ClientManagerFacadeImpl.class);
         //_log.debug("Client manager facade created");
     }
-    
+
     public synchronized void startup() {
         _log.info("Starting up the client subsystem");
         int port = _context.getProperty(PROP_CLIENT_PORT, DEFAULT_PORT);
         _manager = new ClientManager(_context, port);
         _manager.start();
-    }    
-    
+    }
+
     public synchronized void shutdown() {
         shutdown("Router shutdown");
     }
@@ -71,14 +71,14 @@ public class ClientManagerFacadeImpl extends ClientManagerFacade implements Inte
         if (_manager != null)
             _manager.shutdown(msg);
     }
-    
+
     public synchronized void restart() {
         if (_manager != null)
             _manager.restart();
         else
             startup();
     }
-    
+
     @Override
     public boolean isAlive() { return _manager != null && _manager.isAlive(); }
 
@@ -97,16 +97,16 @@ public class ClientManagerFacadeImpl extends ClientManagerFacade implements Inte
             long howLongAgo = _context.clock().now() - ls.getEarliestLeaseDate();
             if (howLongAgo > MAX_TIME_TO_REBUILD) {
                 if (_log.shouldLog(Log.ERROR))
-                    _log.error("Client " + dest.toBase32()
-                               + " has a leaseSet that expired " + DataHelper.formatDuration(howLongAgo) + " ago");
+                    _log.error("Client [" + dest.toBase32().substring(0,6) +
+                               "] has LeaseSet that expired " + DataHelper.formatDuration(howLongAgo) + " ago");
                 lively = false;
             }
         }
         return lively;
     }
-    
+
     /**
-     * Request that a particular client authorize the Leases contained in the 
+     * Request that a particular client authorize the Leases contained in the
      * LeaseSet, after which the onCreateJob is queued up.  If that doesn't occur
      * within the timeout specified, queue up the onFailedJob.  This call does not
      * block.
@@ -114,7 +114,7 @@ public class ClientManagerFacadeImpl extends ClientManagerFacade implements Inte
      * UNUSED, the call below without jobs is always used.
      *
      * @param dest Destination from which the LeaseSet's authorization should be requested
-     * @param set LeaseSet with requested leases - this object must be updated to contain the 
+     * @param set LeaseSet with requested leases - this object must be updated to contain the
      *            signed version (as well as any changed/added/removed Leases)
      *            The LeaseSet contains Leases only; it is unsigned and does not have the destination set.
      * @param timeout ms to wait before failing
@@ -127,22 +127,22 @@ public class ClientManagerFacadeImpl extends ClientManagerFacade implements Inte
         else
             _log.error("Null manager on requestLeaseSet!");
     }
-    
+
     /**
-     * Request that a particular client authorize the Leases contained in the 
+     * Request that a particular client authorize the Leases contained in the
      * LeaseSet.
      *
      * @param dest Destination from which the LeaseSet's authorization should be requested
-     * @param set LeaseSet with requested leases - this object must be updated to contain the 
+     * @param set LeaseSet with requested leases - this object must be updated to contain the
      *            signed version (as well as any changed/added/removed Leases).
      *            The LeaseSet contains Leases only; it is unsigned and does not have the destination set.
      */
-    public void requestLeaseSet(Hash dest, LeaseSet set) { 
+    public void requestLeaseSet(Hash dest, LeaseSet set) {
         if (_manager != null)
             _manager.requestLeaseSet(dest, set);
     }
 
-    
+
     /**
      * Instruct the client (or all clients) that they are under attack.  This call
      * does not block.
@@ -160,7 +160,7 @@ public class ClientManagerFacadeImpl extends ClientManagerFacade implements Inte
     /**
      * Determine if the destination specified is managed locally.  This call
      * DOES block.
-     * 
+     *
      * @param dest Destination to be checked
      */
     public boolean isLocal(Destination dest) {
@@ -174,7 +174,7 @@ public class ClientManagerFacadeImpl extends ClientManagerFacade implements Inte
     /**
      * Determine if the destination specified is managed locally.  This call
      * DOES block.
-     * 
+     *
      * @param destHash Hash of Destination to be checked
      */
     public boolean isLocal(Hash destHash) {
@@ -188,7 +188,7 @@ public class ClientManagerFacadeImpl extends ClientManagerFacade implements Inte
 
     @Override
     public boolean shouldPublishLeaseSet(Hash destinationHash) { return _manager.shouldPublishLeaseSet(destinationHash); }
-    
+
     /**
      *  @param id the router's ID for this message
      *  @param messageNonce the client's ID for this message
@@ -200,14 +200,14 @@ public class ClientManagerFacadeImpl extends ClientManagerFacade implements Inte
         else
             _log.error("Null manager on messageDeliveryStatusUpdate!");
     }
-    
-    public void messageReceived(ClientMessage msg) { 
+
+    public void messageReceived(ClientMessage msg) {
         if (_manager != null)
-            _manager.messageReceived(msg); 
+            _manager.messageReceived(msg);
         else
             _log.error("Null manager on messageReceived!");
     }
-    
+
     /**
      * Return the client's current config, or null if not connected
      *
@@ -220,7 +220,7 @@ public class ClientManagerFacadeImpl extends ClientManagerFacade implements Inte
             return null;
         }
     }
-    
+
     /**
      * Return the client's current manager or null if not connected
      *
@@ -233,15 +233,15 @@ public class ClientManagerFacadeImpl extends ClientManagerFacade implements Inte
             return null;
         }
     }
-    
+
     /** @deprecated unused */
     @Override
     @Deprecated
-    public void renderStatusHTML(Writer out) throws IOException { 
+    public void renderStatusHTML(Writer out) throws IOException {
         if (_manager != null)
-            _manager.renderStatusHTML(out); 
+            _manager.renderStatusHTML(out);
     }
-    
+
     /**
      * Return the list of locally connected clients
      *

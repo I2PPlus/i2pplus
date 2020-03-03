@@ -10,13 +10,13 @@ import net.i2p.util.Log;
 
 public class TestCreateSessionDatagram {
     private static Log _log = new Log(TestCreateSessionDatagram.class);
-    
+
     private static void runTest(String samHost, int samPort, String conOptions) {
         testTransient(samHost, samPort, conOptions);
         testNewDest(samHost, samPort, conOptions);
         testOldDest(samHost, samPort, conOptions);
     }
-    
+
     private static void testTransient(String host, int port, String conOptions) {
         testDest(host, port, conOptions, "TRANSIENT");
         _log.debug("\n\nTest of transient complete\n\n\n");
@@ -35,7 +35,7 @@ public class TestCreateSessionDatagram {
         testDest(host, port, conOptions, destName);
         _log.debug("\n\nTest of subsequent contact complete\n\n");
     }
-    
+
     private static void testDest(String host, int port, String conOptions, String destName) {
         _log.info("\n\nTesting creating a new destination (should come back with 'SESSION STATUS RESULT=OK DESTINATION=someName)\n\n\n");
         try {
@@ -44,7 +44,7 @@ public class TestCreateSessionDatagram {
             out.write(DataHelper.getASCII("HELLO VERSION MIN=1.0 MAX=1.0\n"));
             BufferedReader reader = new BufferedReader(new InputStreamReader(s.getInputStream()));
             String line = reader.readLine();
-            _log.debug("line read for valid version: " + line);
+            _log.debug("Line read for valid version: " + line);
             String req = "SESSION CREATE STYLE=DATAGRAM DESTINATION=" + destName + " " + conOptions + "\n";
             out.write(DataHelper.getASCII(req));
             line = reader.readLine();
@@ -56,10 +56,10 @@ public class TestCreateSessionDatagram {
             _log.error("Error testing for valid version", e);
         }
     }
-    
+
     public static void main(String args[]) {
         // "i2cp.tcp.host=www.i2p.net i2cp.tcp.port=7765";
-        // "i2cp.tcp.host=localhost i2cp.tcp.port=7654 tunnels.inboundDepth=0"; 
+        // "i2cp.tcp.host=localhost i2cp.tcp.port=7654 tunnels.inboundDepth=0";
         String conOptions = "i2cp.tcp.host=localhost i2cp.tcp.port=7654 tunnels.inboundDepth=0"; // "i2cp.tcp.host=dev.i2p.net i2cp.tcp.port=7002 tunnels.inboundDepth=0";
         if (args.length > 0) {
             conOptions = "";

@@ -37,11 +37,11 @@ class OutboundMessageState implements CDPQEntry {
     // we can't use the ones in _message since it is null for injections
     private long _enqueueTime;
     private long _seqNum;
-    
+
     public static final int MAX_MSG_SIZE = 32 * 1024;
 
     private static final long EXPIRATION = 10*1000;
-    
+
 
     /**
      *  "injected" message from the establisher.
@@ -52,7 +52,7 @@ class OutboundMessageState implements CDPQEntry {
     public OutboundMessageState(I2PAppContext context, I2NPMessage msg, PeerState peer) {
         this(context, null, msg, peer);
     }
-    
+
     /**
      *  Normal constructor.
      *
@@ -62,7 +62,7 @@ class OutboundMessageState implements CDPQEntry {
     public OutboundMessageState(I2PAppContext context, OutNetMessage m, PeerState peer) {
         this(context, m, m.getMessage(), peer);
     }
-    
+
     /**
      *  Internal.
      *  @param m null if msg is "injected"
@@ -98,7 +98,7 @@ class OutboundMessageState implements CDPQEntry {
         // all 1's where we care
         _fragmentAcks = _numFragments < 64 ? mask(_numFragments) - 1L : -1L;
     }
-    
+
     /**
      *  @param fragment 0-63
      */
@@ -113,14 +113,14 @@ class OutboundMessageState implements CDPQEntry {
     public PeerState getPeer() { return _peer; }
 
     public boolean isExpired() {
-        return _expiration < _context.clock().now(); 
+        return _expiration < _context.clock().now();
     }
 
     /**
      * @since 0.9.38
      */
     public boolean isExpired(long now) {
-        return _expiration < now; 
+        return _expiration < now;
     }
 
     public synchronized boolean isComplete() {
@@ -150,7 +150,7 @@ class OutboundMessageState implements CDPQEntry {
     }
 
     public long getLifetime() { return _context.clock().now() - _startedOn; }
-    
+
     /**
      * Ack all the fragments in the ack list.
      *
@@ -165,7 +165,7 @@ class OutboundMessageState implements CDPQEntry {
         }
         return isComplete();
     }
-    
+
     public long getNextSendTime() { return _nextSendTime; }
     public void setNextSendTime(long when) { _nextSendTime = when; }
 
@@ -186,10 +186,10 @@ class OutboundMessageState implements CDPQEntry {
      * Increments push count (and max sends... why?)
      * @return true if this is the first push
      */
-    public synchronized boolean push() { 
+    public synchronized boolean push() {
         boolean rv = _pushCount == 0;
         // these will never be different...
-        _pushCount++; 
+        _pushCount++;
         _maxSends = _pushCount;
         return rv;
     }
@@ -197,8 +197,8 @@ class OutboundMessageState implements CDPQEntry {
     /**
      * How many fragments in the message.
      */
-    public int getFragmentCount() { 
-            return _numFragments; 
+    public int getFragmentCount() {
+            return _numFragments;
     }
 
     /**
@@ -209,7 +209,7 @@ class OutboundMessageState implements CDPQEntry {
     /**
      * The size in bytes of the fragment
      *
-     * @param fragmentNum the number of the fragment 
+     * @param fragmentNum the number of the fragment
      * @return the size of the fragment specified by the number
      */
     public int fragmentSize(int fragmentNum) {
@@ -246,7 +246,7 @@ class OutboundMessageState implements CDPQEntry {
         }
         return -1;
     }
-    
+
     /**
      *  For CDQ
      *  @since 0.9.3
@@ -299,17 +299,17 @@ class OutboundMessageState implements CDPQEntry {
     @Override
     public String toString() {
         StringBuilder buf = new StringBuilder(256);
-        buf.append("OB Message ").append(_i2npMessage.getUniqueId());
-        buf.append(" type ").append(_i2npMessage.getType());
+        buf.append("\n* Outbound Message: [").append(_i2npMessage.getUniqueId());
+        buf.append("] type ").append(_i2npMessage.getType());
         buf.append(" with ").append(_numFragments).append(" fragments");
         buf.append(" of size ").append(_messageBuf.length);
-        buf.append(" volleys: ").append(_maxSends);
-        buf.append(" lifetime: ").append(getLifetime());
+        buf.append("; Volleys: ").append(_maxSends);
+        buf.append("; Lifetime: ").append(getLifetime()).append("ms");
         if (!isComplete()) {
-            buf.append(" pending fragments: ");
+            buf.append("\n* Pending fragments: ");
             for (int i = 0; i < _numFragments; i++) {
                 if (needsSending(i))
-                    buf.append(i).append(' ');
+                    buf.append(i);
             }
         }
         //buf.append(" to: ").append(_peer.toString());

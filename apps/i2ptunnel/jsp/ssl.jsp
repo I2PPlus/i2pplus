@@ -1,8 +1,10 @@
-<%@include file="headers.jsi"
-%><%@page pageEncoding="UTF-8"
-%><%@page contentType="text/html" import="java.io.File,java.io.IOException,net.i2p.crypto.KeyStoreUtil,net.i2p.data.DataHelper,net.i2p.jetty.JettyXmlConfigurationParser"
-%><%@page
-%><?xml version="1.0" encoding="UTF-8"?>
+<%@include file="headers.jsi"%>
+<%@include file="headers-unsafe.jsi"%>
+<%@page pageEncoding="UTF-8"%>
+<%@page contentType="text/html" import="java.io.File,java.io.IOException,net.i2p.crypto.KeyStoreUtil,net.i2p.data.DataHelper,net.i2p.jetty.JettyXmlConfigurationParser"%>
+<%@page trimDirectiveWhitespaces="true"%>
+<%@page%>
+<?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
 <%
   /* right now using EditBean instead of IndexBean for getSpoofedHost() */
@@ -21,42 +23,40 @@
      }
    }
 %>
-<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en" lang="en">
+<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en" lang="en" id="tman">
 <head>
-    <title><%=intl._t("Hidden Services Manager")%> - <%=intl._t("SSL Helper")%></title>
-    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
-    <link href="/themes/console/images/favicon.ico" type="image/x-icon" rel="shortcut icon" />
-    <% if (editBean.allowCSS()) {
-  %><link rel="icon" href="<%=editBean.getTheme()%>images/favicon.ico" />
-    <link href="<%=editBean.getTheme()%>i2ptunnel.css?<%=net.i2p.CoreVersion.VERSION%>" rel="stylesheet" type="text/css" /> 
-    <% }
-  %>
-<style type='text/css'>
-input.default { width: 1px; height: 1px; visibility: hidden; }
-</style>
+<title><%=intl._t("Tunnel Manager")%> - <%=intl._t("SSL Helper")%></title>
+<meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
+<link href="/themes/console/images/favicon.ico" type="image/x-icon" rel="shortcut icon" />
+<script type="text/javascript" src="/js/iframeResizer/iframeResizer.contentWindow.js?<%=net.i2p.CoreVersion.VERSION%>"></script>
+<%     if (editBean.allowCSS()) { %>
+<link rel="icon" href="<%=editBean.getTheme()%>images/favicon.ico" />
+<link href="<%=editBean.getTheme()%>i2ptunnel.css?<%=net.i2p.CoreVersion.VERSION%>" rel="stylesheet" type="text/css" />
+<link href="<%=editBean.getTheme()%>override.css?<%=net.i2p.CoreVersion.VERSION%>" rel="stylesheet" type="text/css" />
+<%     } %>
+<style type="text/css">input.default {width: 1px; height: 1px; visibility: hidden;}</style>
 </head>
 <body id="tunnelSSL">
 <%
-
   net.i2p.I2PAppContext ctx = net.i2p.I2PAppContext.getGlobalContext();
-  if (!ctx.isRouterContext()) {
-      %>Unsupported in app context<%
-  } else if (curTunnel < 0) {
-      %>Tunnel not found<% 
-  } else if (editBean.isClient(curTunnel)) {
-      %>Not supported for client tunnels<%
-  } else if (editBean.isInitialized()) {
-
-%>
-<div class="panel" id="ssl">
+  if (!ctx.isRouterContext()) { %>
+<p>Unsupported in app context</p>
+<%
+  } else if (curTunnel < 0) { %>
+<p>Tunnel not found</p>
+<%
+  } else if (editBean.isClient(curTunnel)) { %>
+<p>Not supported for client tunnels</p>
+<%
+  } else if (editBean.isInitialized()) { %>
 <%
     String tunnelTypeName;
     String tunnelType;
     boolean valid = false;
     tunnelTypeName = editBean.getTunnelType(curTunnel);
     tunnelType = editBean.getInternalType(curTunnel);
-%><h2><%=intl._t("SSL Wizard")%> (<%=editBean.getTunnelName(curTunnel)%>)</h2><% 
-
+%>
+<%
     // set a bunch of variables for the current configuration
     String b64 = editBean.getDestinationBase64(curTunnel);
     String b32 = editBean.getDestHashBase32(curTunnel);
@@ -169,7 +169,7 @@ input.default { width: 1px; height: 1px; visibility: hidden; }
                 boolean ok = true;
 
                 if (action.equals("Generate")) {
-                    // generate selfsigned cert
+                    // generate self-signed cert
                     java.util.Set<String> altNames = new java.util.HashSet<String>(4);
                     altNames.add(b32);
                     altNames.add(name);
@@ -199,7 +199,7 @@ input.default { width: 1px; height: 1px; visibility: hidden; }
                         int sz = haveEC ? 256 : 2048;
                         Object[] rv = KeyStoreUtil.createKeysAndCRL(ks, kspw, "eepsite", name, altNames, b32,
                                                                     3652, alg, sz, newpw);
-                        msgs.append("Created selfsigned cert\n");
+                        msgs.append("Created self-signed certificate\n");
                         // save cert
                         java.security.cert.X509Certificate cert = (java.security.cert.X509Certificate) rv[2];
                         File f = new net.i2p.util.SecureFile(ctx.getConfigDir(), "certificates");
@@ -215,16 +215,16 @@ input.default { width: 1px; height: 1px; visibility: hidden; }
                         }
                         ok = net.i2p.crypto.CertUtil.saveCert(cert, f);
                         if (ok)
-                            msgs.append("selfsigned cert stored\n");
+                            msgs.append("Self-signed certificate stored\n");
                         else
-                            msgs.append("selfsigned cert store failed\n");
+                            msgs.append("Self-signed certificate store failed\n");
                     } catch (IOException ioe) {
                         ioe.printStackTrace();
-                        msgs.append("selfsigned cert store failed ").append(DataHelper.escapeHTML(ioe.toString())).append('\n');
+                        msgs.append("Self-signed certificate store failed ").append(DataHelper.escapeHTML(ioe.toString())).append('\n');
                         ok = false;
                     } catch (java.security.GeneralSecurityException gse) {
                         gse.printStackTrace();
-                        msgs.append("selfsigned cert store failed ").append(DataHelper.escapeHTML(gse.toString())).append('\n');
+                        msgs.append("Self-signed certificate store failed ").append(DataHelper.escapeHTML(gse.toString())).append('\n');
                         ok = false;
                     }
 
@@ -265,7 +265,7 @@ input.default { width: 1px; height: 1px; visibility: hidden; }
                             }
                         } catch (org.xml.sax.SAXException saxe) {
                             saxe.printStackTrace();
-                            msgs.append("Jetty config parse failed ").append(DataHelper.escapeHTML(saxe.toString())).append('\n');
+                            msgs.append("Jetty configuration parse failed ").append(DataHelper.escapeHTML(saxe.toString())).append('\n');
                             ok = false;
                         }
                     }
@@ -374,11 +374,12 @@ input.default { width: 1px; height: 1px; visibility: hidden; }
                         }
                     } else {
                         //msgs.append("Unable to restart Jetty server\n");
-                        msgs.append("You must start the Jetty server on <a target=\"_top\" href=\"/configclients\">the configure clients page</a>.\n");
+                        // no embedded urls here!
+                        msgs.append("You must start the Jetty server on the Client Configuration page.\n");
                     }
                 } else if (ok) {
                     //msgs.append("Unable to restart Jetty server\n");
-                    msgs.append("You must start the Jetty server on <a target=\"_top\" href=\"/configclients\">the configure clients page</a>.\n");
+                    msgs.append("You must start the Jetty server on the Client Configuration page.\n");
                 }
 
                 // rewrite i2ptunnel.config
@@ -484,29 +485,36 @@ input.default { width: 1px; height: 1px; visibility: hidden; }
 </div>
 <%
         } // action != null
-
 %>
 
+<div class="panel" id="ssl">
+<h2><%=intl._t("SSL Wizard")%> (<%=editBean.getTunnelName(curTunnel)%>)</h2>
 <form method="post" action="ssl" accept-charset="UTF-8">
 <input type="hidden" name="tunnel" value="<%=curTunnel%>" />
 <input type="hidden" name="nonce" value="<%=net.i2p.i2ptunnel.web.IndexBean.getNextNonce()%>" />
 <input type="hidden" name="type" value="<%=tunnelType%>" />
 <input type="submit" class="default" name="action" value="Save changes" />
 <table>
-<tr><td colspan="4" class="infohelp"><%=intl._t("Experts only!")%></td></tr>
+<!--<tr><td colspan="4" class="infohelp"><%=intl._t("Experts only!")%></td></tr>-->
 <%
       if (("httpserver".equals(tunnelType)) || ("httpbidirserver".equals(tunnelType))) {
 %>
-<tr><td colspan="4"><b><%=intl._t("Website Hostname")%>:</b> <%=editBean.getSpoofedHost(curTunnel)%></td></tr>
+<tr><td colspan="4"><b><%=intl._t("Hostname")%>:</b> <%=editBean.getSpoofedHost(curTunnel)%></td></tr>
 <%
        }
        if (b64 == null || b64.length() < 516) {
-           %><tr><td class="infohelp"><%=intl._t("Local destination is not available. Start the tunnel.")%></td></tr><%
+%>
+<tr><td class="infohelp"><%=intl._t("Local destination is not available. Start the tunnel.")%></td></tr>
+<%
        } else if (name == null || name.equals("") || name.contains(" ") || !name.endsWith(".i2p")) {
            if (("httpserver".equals(tunnelType)) || ("httpbidirserver".equals(tunnelType))) {
-               %><tr><td class="infohelp"><%=intl._t("To enable registration verification, edit tunnel and set name (or website name) to a valid host name ending in '.i2p'")%></td></tr><%
+%>
+<tr><td class="infohelp"><%=intl._t("To enable registration verification, edit tunnel and set name (or website name) to a valid host name ending in '.i2p'")%></td></tr>
+<%
            } else {
-               %><tr><td class="infohelp"><%=intl._t("To enable registration verification, edit tunnel and set name to a valid host name ending in '.i2p'")%></td></tr><%
+%>
+<tr><td class="infohelp"><%=intl._t("To enable registration verification, edit tunnel and set name to a valid host name ending in '.i2p'")%></td></tr>
+<%
            }
        } else {
            valid = true;
@@ -520,10 +528,10 @@ input.default { width: 1px; height: 1px; visibility: hidden; }
     }  // altb32
     final String CHECK = "&nbsp;&nbsp;&#x2714;";
 %>
-<tr><td colspan="4"></td></tr>
-<tr><th colspan="4"><%=intl._t("Incoming I2P Port Routing")%></th></tr>
-<tr><th><%=intl._t("I2P Port")%></th><th><%=intl._t("Virtual Host")%></th><th><%=intl._t("SSL")%></th><th><%=intl._t("Server")%></th></tr>
-<tr><td><a target="_top" href="http://<%=b32%>/"><%=intl._t("Default")%></a></td><td><%=name%></td><td><%=(sslToTarget ? CHECK : "")%></td><td><%=targetLink%></td></tr>
+<!--<tr><th colspan="4"><%=intl._t("Incoming I2P Port Routing")%></th></tr>-->
+<tr><th colspan="2"><%=intl._t("Virtual Host")%></th><!--<th><%=intl._t("Via SSL?")%></th>--><th><%=intl._t("Points at")%></th><th><%=intl._t("Preview")%></th></tr>
+<!-- TODO: check if tunnel is running, else display "No preview" text -->
+<tr><td colspan="2">http://<%=name%></td><!--<td><%=sslToTarget%></td>--><td><%=targetLink%></td><td><a class="control" title="<%=intl._t("Test HTTP server through I2P")%>" target="_blank" href="http://<%=b32%>/"><%=intl._t("Preview")%></a></td></tr>
 <%
     // output vhost and targets
     for (Integer port : ports) {
@@ -545,35 +553,32 @@ input.default { width: 1px; height: 1px; visibility: hidden; }
             if (shouldLinkify) {
                 String url = "://" + tgt + "\">" + tgt + "</a>";
                 if (ssl)
-                    tgt = "<a target=\"_top\" href=\"https" + url;
+                    tgt = "<a target=\"_blank\" href=\"https" + url;
                 else
-                    tgt = "<a target=\"_top\" href=\"http" + url;
+                    tgt = "<a target=\"_blank\" href=\"http" + url;
             }
         } else {
             tgt = targetLink;
         }
         String portTgt = sslPort ? "https" : "http";
 %>
-<tr><td><a target="_top" href="<%=portTgt%>://<%=b32%>:<%=port%>/"><%=port%></a></td><td><%=spoof%></td><td><%=(ssl ? CHECK : "")%></td><td><%=tgt%></td></tr>
+<!--<tr><td><a target="_blank" href="<%=portTgt%>://<%=b32%>:<%=port%>/"><%=port%></a></td><td><%=spoof%></td><td><%=ssl%></td><td><%=tgt%></td></tr>-->
+<!--TODO: logic to determine if destination is available-->
+<tr><td colspan="2">https://<%=spoof%></td><!--<td><%=ssl%></td>--><td><%=tgt%></td><td>
+<a class="control" title="<%=intl._t("Test HTTPS server through I2P")%>" target="_blank" href="<%=portTgt%>://<%=b32%>:<%=port%>/"><%=intl._t("Preview")%></a></td></tr>
 <%
     }
 %>
 <%--
 <tr><th colspan="4"><%=intl._t("Add Port Routing")%></th></tr>
-<tr><td>
-    <input type="text" size="6" maxlength="5" id="i2pPort" name="i2pPort" title="<%=intl._t("Specify the port the server is running on")%>" value="" class="freetext port" placeholder="required" />
-</td><td>
-    <input type="text" size="20" id="websiteName" name="spoofedHost" title="<%=intl._t("Website Hostname e.g. mysite.i2p")%>" value="<%=name%>" class="freetext" />
-</td><td>
-    <input value="1" type="checkbox" name="useSSL" class="tickbox" />
-</td><td>
-    <input type="text" size="20" name="targetHost" title="<%=intl._t("Hostname or IP address of the target server")%>" value="<%=targetHost%>" class="freetext host" /> :
-    <input type="text" size="6" maxlength="5" id="targetPort" name="targetPort" title="<%=intl._t("Specify the port the server is running on")%>" value="" class="freetext port" placeholder="required" />
+<tr><td><input type="text" size="6" maxlength="5" id="i2pPort" name="i2pPort" title="<%=intl._t("Specify the port the server is running on")%>" value="" class="freetext port" placeholder="<%=intl._t("required")%>" /></td>
+<td><input type="text" size="20" id="websiteName" name="spoofedHost" title="<%=intl._t("Website Hostname e.g. mysite.i2p")%>" value="<%=name%>" class="freetext" /></td>
+<td><input value="1" type="checkbox" name="useSSL" class="optbox" /></td>
+<td><input type="text" size="20" name="targetHost" title="<%=intl._t("Hostname or IP address of the target server")%>" value="<%=targetHost%>" class="freetext host" /> :
+<input type="text" size="6" maxlength="5" id="targetPort" name="targetPort" title="<%=intl._t("Specify the port the server is running on")%>" value="" class="freetext port" placeholder="<%=intl._t("required")%>" />
 </td></tr>
 --%>
-<tr><td colspan="4"></td></tr>
-<tr><th colspan="4"><%=intl._t("Jetty Server")%></th></tr>
-<tr><th><%=intl._t("Server")%></th><th><%=intl._t("Configuration Files")%></th><th><%=intl._t("Enabled")%></th><th><%=intl._t("SSL")%></th></tr>
+<tr><th><%=intl._t("Server")%></th><th colspan="2"><%=intl._t("Configuration")%></th><th><!--<%=intl._t("SSL Activation")%>--></th></tr>
 <%
     // Now try to find the Jetty server in clients.config
     File configDir = ctx.getConfigDir();
@@ -625,7 +630,7 @@ input.default { width: 1px; height: 1px; visibility: hidden; }
             prop = "clientApp." + i + ".name";
             String clName = clientProps.getProperty(prop);
             if (clName == null)
-                clName = intl._t("I2P webserver (eepsite)");
+                clName = intl._t("I2P webserver (eepsite)").replace("webserver", "Web Server");
             prop = "clientApp." + i + ".startOnLoad";
             String clStart = clientProps.getProperty(prop);
             boolean start = true;
@@ -738,30 +743,37 @@ input.default { width: 1px; height: 1px; visibility: hidden; }
             // now start the output for this client
 
 %>
-<tr><td><%=DataHelper.escapeHTML(clName)%></td><td>
+<tr><td><%=DataHelper.escapeHTML(clName)%></td><td colspan="2">
 <%
             for (String arg : argList) {
-                %><%=DataHelper.escapeHTML(arg)%><br /><%
+%>
+<%=DataHelper.escapeHTML(arg)%><br />
+<%
             }
 %>
-    </td><td><%=(start ? CHECK : "")%></td><td><%=(ssl ? CHECK : "")%></td></tr>
+</td><td>
+</td>
+<!--</td><td><%=start%></td><td><%=ssl%></td></tr>-->
 <%
             if (!jettySSLFileExists) {
 %>
-<tr><td colspan="4">Cannot configure, Jetty SSL configuration file does not exist: <%=jettySSLFile.toString()%></td></tr>
+</td><td></td></tr>
+<tr class="configerror"><td colspan="4">Cannot configure, Jetty SSL configuration file does not exist: <code><%=jettySSLFile.toString()%></code></td></tr>
 <%
             } else if (!jettySSLFileValid) {
 %>
-<tr><td colspan="4">Cannot configure, Jetty SSL configuration file is too old or invalid: <%=jettySSLFile.toString()%></td></tr>
+</td><td></td></tr>
+<tr class="configerror"><td colspan="4">Cannot configure, Jetty SSL configuration file is too old or invalid: <code><%=jettySSLFile.toString()%></code></td></tr>
 <%
                 if (error.length() > 0) {
 %>
-<tr><td colspan="4"><%=error%></td></tr>
+</td></tr>
+<tr class="configerror"><td colspan="4"><%=error%></td></tr>
 <%
                 }
             } else {
 %>
-<tr><td colspan="4">
+<tr style="display: none;" hidden="hidden"><td colspan="4">
 <input type="hidden" name="clientAppNumber" value="<%=i%>" />
 <input type="hidden" name="clientConfigFile" value="<%=clientsConfig.getName()%>" />
 <input type="hidden" name="isSSLEnabled" value="<%=isEnabled%>" />
@@ -779,22 +791,21 @@ input.default { width: 1px; height: 1px; visibility: hidden; }
                 }
 %>
 </td></tr>
-<tr><td class="buttons" colspan="4">
 <%
                 if (isEnabled && !isPWDefault) {
 %>
-<b><%=intl._t("SSL is enabled")%></b>
-<button id="controlSave" class="control" type="submit" name="action" value="Disable"><%=intl._t("Disable SSL")%></button>
+<tr><td class="buttons" colspan="4">
+<button id="controlSave" class="control" type="submit" name="action" value="Disable"><%=intl._t("Disable SSL")%></button></td></tr>
 <%
                 } else if (!isPWDefault) {
 %>
-<b><%=intl._t("SSL is disabled")%></b>
-<button id="controlSave" class="control" type="submit" name="action" value="Enable"><%=intl._t("Enable SSL")%></button>
+<tr><td class="buttons" colspan="4">
+<button id="controlSave" class="control" type="submit" name="action" value="Enable"><%=intl._t("Enable SSL")%></button></td></tr>
 <%
                 } else {
 %>
-<b><%=intl._t("New Certificate Password")%>:</b>
-<input type="password" name="nofilter_keyPassword" title="<%=intl._t("Set password required to access this service")%>" value="" class="freetext password" />
+<tr><td class="buttons" colspan="4"><b><%=intl._t("New Certificate Password")%>:</b>
+<input type="password" name="nofilter_keyPassword" title="<%=intl._t("Password (required to encrypt the certificate)")%>" value="" class="freetext password" placeholder="<%=intl._t("required")%>" />
 <%
                     if (isEnabled) {
 %>
@@ -814,12 +825,12 @@ input.default { width: 1px; height: 1px; visibility: hidden; }
         }  // while (for each client or client file)
         if (!foundClientConfig) {
 %>
-<tr><td colspan="4">Cannot configure, no Jetty server found in <a href="/configclients">client configurations</a> that matches this tunnel</td></tr>
-<tr><td colspan="4">Support for non-Jetty servers will be added in a future release</td></tr>
+<tr class="configerror"><td colspan="4"><%=intl._t("Cannot configure, no Jetty server found in {0}client configurations{1} that matches this tunnel", "<a href=\"/configclients\">", "</a>")%><br><%=intl._t("Support for non-Jetty servers will be added in a future release")%></td></tr>
 <%
         }
     } catch (IOException ioe) { ioe.printStackTrace(); }
 %>
+<tr><td colspan="4" class="buttons"><a class="control" href="list"><%=intl._t("Return to Tunnel Manager Index")%></a></td></tr>
 </table>
 </form>
 <%
@@ -828,7 +839,7 @@ input.default { width: 1px; height: 1px; visibility: hidden; }
     if (!valid && curTunnel >= 0) {
 %>
 <table>
-  <tr><td><a href="edit?tunnel=<%=curTunnel%>"><%=intl._t("Go back and edit the tunnel")%></a></td></tr>
+<tr><td class="buttons"><a class="control" href="edit?tunnel=<%=curTunnel%>"><%=intl._t("Return to Tunnel Editor")%></a></td></tr>
 </table>
 <%
     }  // !valid
@@ -837,9 +848,10 @@ input.default { width: 1px; height: 1px; visibility: hidden; }
 <%
   } else {
 %>
-<div id="notReady"><%=intl._t("Tunnels are not initialized yet, please reload in two minutes.")%></div>
+<div id="notReady"><%=intl._t("Tunnels not initialized yet; please retry in a few moments.").replace("yet;", "yet&hellip;<br>")%></div>
 <%
   }  // isInitialized()
 %>
+<span data-iframe-height></span>
 </body>
 </html>

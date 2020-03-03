@@ -12,7 +12,7 @@ import javax.servlet.ServletException;
 import net.i2p.CoreVersion;
 import net.i2p.I2PAppContext;
 import net.i2p.util.TranslateReader;
- 
+
 /**
  * Translate a svg file on-the-fly.
  * svg file must contain strings tagged with _("...")
@@ -28,7 +28,7 @@ import net.i2p.util.TranslateReader;
  * @since 0.9.34
  */
 public class TranslateSVGServlet extends HttpServlet {
- 
+
     private static final long serialVersionUID = 18638760L;
     private final I2PAppContext _context;
     private static final String DIR = "/svg";
@@ -78,7 +78,7 @@ public class TranslateSVGServlet extends HttpServlet {
             int read;
             while ((read = tr.read(buf)) != -1) {
                 out.write(buf, 0, read);
-            }   
+            }
         } finally {
             if (tr != null) try { tr.close(); } catch (IOException ioe) {}
             try { in.close(); } catch (IOException ioe) {}

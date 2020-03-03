@@ -39,11 +39,13 @@ import net.i2p.util.PortMapper;
 
 import org.eclipse.jetty.server.handler.ContextHandlerCollection;
 
+import net.i2p.router.web.CSSHelper;
+
 /**
  *  Saves changes to clients.config or webapps.config
  */
 public class ConfigClientsHandler extends FormHandler {
-    
+
     @Override
     protected void processForm() {
         // set action for when CR is hit in a text input box
@@ -163,7 +165,7 @@ public class ConfigClientsHandler extends FormHandler {
 
         // value
         if (_action.startsWith("Stop ")) {
-            
+
             String app = _action.substring(5);
             int appnum = -1;
             try {
@@ -243,7 +245,7 @@ public class ConfigClientsHandler extends FormHandler {
         }
 
     }
-    
+
     private void saveClientChanges() {
         try {
             synchronized(ClientAppConfig.class) {
@@ -428,7 +430,13 @@ public class ConfigClientsHandler extends FormHandler {
                         File path = new File(_context.getBaseDir(), "webapps");
                         path = new File(path, app + ".war");
                         WebAppStarter.startWebApp(_context, s, app, path.getAbsolutePath());
-                        addFormNoticeNoEscape(_t("WebApp") + " <a href=\"/" + app + "/\">" + _t(app) + "</a> " + _t("started") + '.');
+                        boolean embedApps = _context.getBooleanProperty(CSSHelper.PROP_EMBED_APPS);
+                        if ((embedApps) && app.contains("imagegen")) {
+                            addFormNoticeNoEscape(_t("WebApp") + " <a href=\"/embed?url=/imagegen&name=" + _t("Identification Image Generator") +
+                            "\">" + _t(app) + "</a> " + _t("started") + '.');
+                        } else {
+                            addFormNoticeNoEscape(_t("WebApp") + " <a href=\"/" + app + "/\" target=\"_blank\">" + _t(app) + "</a> " + _t("started") + '.');
+                        }
                     } catch (Throwable e) {
                         addFormError(_t("Failed to start") + ' ' + _t(app) + ": " + e);
                         _log.error("Failed to start webapp " + app, e);
@@ -628,7 +636,16 @@ public class ConfigClientsHandler extends FormHandler {
                 name = ConfigClientsHelper.stripHTML(props, "consoleLinkName");
             String url = ConfigClientsHelper.stripHTML(props, "consoleLinkURL");
             if (name != null && url != null && name.length() > 0 && url.length() > 0) {
+                boolean embedApps = _context.getBooleanProperty(CSSHelper.PROP_EMBED_APPS);
+                if (name.contains("SecureMail") && (embedApps)) {
+                    app = "<a href=\"/embed?url=/i2pbote/index.jsp&amp;name=BoteMail\">" + name + "</a>";
+//                } else if (name.contains("Orchid") && (embedApps)) {
+//                    app = "<a href=\"/embed?url=/orchid/&amp;name=Orchid+Tor+Controller\">" + name + "</a>";
+                } else if (name.contains("BwSchedule") && (embedApps)) {
+                    app = "<a href=\"/embed?url=/" + name + "/home&amp;name=Bandwidth+Scheduler\">" + name + "</a>";
+                } else {
                 app = "<a href=\"" + url + "\">" + name + "</a>";
+                }
                 addFormNoticeNoEscape(_t("Started plugin {0}", app));
             } else {
                 addFormNotice(_t("Started plugin {0}", app));

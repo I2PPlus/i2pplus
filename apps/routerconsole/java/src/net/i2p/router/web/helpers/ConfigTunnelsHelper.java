@@ -24,45 +24,46 @@ public class ConfigTunnelsHelper extends HelperBase {
         Set<Destination> clients = _context.clientManager().listClients();
         for (Destination dest : clients) {
             buf.append("<input type=\"hidden\" name=\"pool.").append(cur).append("\" value=\"");
-            buf.append(dest.calculateHash().toBase64()).append("\" >\n");    
+            buf.append(dest.calculateHash().toBase64()).append("\" >\n");
             cur++;
         }
 
         buf.append("<table id=\"tunnelconfig\">\n");
         TunnelPoolSettings exploratoryIn = _context.tunnelManager().getInboundSettings();
         TunnelPoolSettings exploratoryOut = _context.tunnelManager().getOutboundSettings();
-        
+
         renderForm(buf, 0, "exploratory", _t("Exploratory tunnels"), exploratoryIn, exploratoryOut);
-        
+
         cur = 1;
         for (Destination dest : clients) {
             TunnelPoolSettings in = _context.tunnelManager().getInboundSettings(dest.calculateHash());
             TunnelPoolSettings out = _context.tunnelManager().getOutboundSettings(dest.calculateHash());
-            
+
             if (in == null || in.getAliasOf() != null ||
                 out == null || out.getAliasOf() != null) {
                 cur++;
                 continue;
             }
-            
+
             String name = in.getDestinationNickname();
             if (name == null) {
                 name = out.getDestinationNickname();
                 if (name == null)
                     name = dest.calculateHash().toBase32();
             }
-        
+
             String prefix = dest.calculateHash().toBase64().substring(0,4);
             renderForm(buf, cur, prefix, _t("Client tunnels for {0}", DataHelper.escapeHTML(_t(name))), in, out);
             cur++;
         }
-        
+
         buf.append("</table>\n");
         return buf.toString();
     }
 
     private static final int WARN_LENGTH = 4;
-    private static final int MAX_LENGTH = 4;
+//    private static final int MAX_LENGTH = 4;
+    private static final int MAX_LENGTH = 5;
     private static final int MAX_ADVANCED_LENGTH = 7;
     private static final int WARN_QUANTITY = 5;
     private static final int MAX_QUANTITY = 6;
@@ -82,44 +83,50 @@ public class ConfigTunnelsHelper extends HelperBase {
             in.getLength() + in.getLengthVariance() <= 0 ||
             out.getLength() <= 0 ||
             out.getLength() + out.getLengthVariance() <= 0) {
-            buf.append("<tr><th colspan=\"3\"><font color=\"red\">" + _t("ANONYMITY WARNING - Settings include 0-hop tunnels.") + "</font></th></tr>");
+            buf.append("<tr><th colspan=\"3\"><font color=\"#900\">" + _t("ANONYMITY WARNING - Settings include 0-hop tunnels.") + "</font></th></tr>");
             if (TransportUtil.getIPv6Config(_context, "SSU") == TransportUtil.IPv6Config.IPV6_ONLY) {
                 // rare, don't bother translating
-                buf.append("<tr><th colspan=\"3\"><font color=\"red\">WARNING - 0-hop tunnels not recommended for IPv6-only routers.</font></th></tr>");
+                buf.append("<tr><th colspan=\"3\"><font color=\"#900\">WARNING - 0-hop tunnels not recommended for IPv6-only routers.</font></th></tr>");
             }
             if ((in.getLength() <= 0 || in.getLength() + in.getLengthVariance() <= 0) &&
                 _context.router().isHidden()) {
                 // rare, don't bother translating
-                buf.append("<tr><th colspan=\"3\"><font color=\"red\">WARNING - Inbound 0-hop tunnels not recommended for hidden routers.</font></th></tr>");
+                buf.append("<tr><th colspan=\"3\"><font color=\"#900\">WARNING - Inbound 0-hop tunnels not recommended for hidden routers.</font></th></tr>");
             }
         } else if (in.getLength() <= 1 ||
             in.getLength() + in.getLengthVariance() <= 1 ||
             out.getLength() <= 1 ||
             out.getLength() + out.getLengthVariance() <= 1) {
-            buf.append("<tr><th colspan=\"3\"><font color=\"red\">" + _t("ANONYMITY WARNING - Settings include 1-hop tunnels.") + "</font></th></tr>");
+            buf.append("<tr><th colspan=\"3\"><font color=\"#900\">" + _t("ANONYMITY WARNING - Settings include 1-hop tunnels.") + "</font></th></tr>");
         }
         if (in.getLength() + Math.abs(in.getLengthVariance()) >= WARN_LENGTH ||
             out.getLength() + Math.abs(out.getLengthVariance()) >= WARN_LENGTH)
-            buf.append("<tr><th colspan=\"3\"><font color=\"red\">" + _t("PERFORMANCE WARNING - Settings include very long tunnels.") + "</font></th></tr>");
+            buf.append("<tr><th colspan=\"3\"><font color=\"#900\">" + _t("PERFORMANCE WARNING - Settings include very long tunnels.") + "</font></th></tr>");
         if (in.getTotalQuantity() >= WARN_QUANTITY ||
             out.getTotalQuantity() >= WARN_QUANTITY)
-            buf.append("<tr><th colspan=\"3\"><font color=\"red\">" + _t("PERFORMANCE WARNING - Settings include high tunnel quantities.") + "</font></th></tr>");
+            buf.append("<tr><th colspan=\"3\"><font color=\"#900\">" + _t("PERFORMANCE WARNING - Settings include high tunnel quantities.") + "</font></th></tr>");
 
-        buf.append("<tr><th></th><th><img src=\"/themes/console/images/inbound.png\" alt=\"Inbound\" title=\"Inbound Tunnels\">&nbsp;&nbsp;" + _t("Inbound") + "</th><th><img src=\"/themes/console/images/outbound.png\" alt=\"Outbound Tunnels\" title=\"Outbound\">&nbsp;&nbsp;" + _t("Outbound") + "</th></tr>\n");
+        buf.append("<tr><th></th><th><img src=\"/themes/console/images/inbound.png\" alt=\"Inbound\" title=\"Inbound Tunnels\">&nbsp;&nbsp;" +
+                _t("Inbound") + "</th><th><img src=\"/themes/console/images/outbound.png\" alt=\"Outbound Tunnels\" title=\"Outbound\">&nbsp;&nbsp;" +
+                _t("Outbound") + "</th></tr>\n");
 
-//        buf.append("<tr><th></th><th>Inbound</th><th>Outbound</th></tr>\n");
-        
         // tunnel depth
         int maxLength = advanced ? MAX_ADVANCED_LENGTH : MAX_LENGTH;
         buf.append("<tr><td align=\"right\"><b>" + _t("Length") + ":</b></td>\n");
-        buf.append("<td align=\"center\"><select name=\"").append(index).append(".depthInbound\">\n");
+        buf.append("<td align=\"center\"><select name=\"").append(index).append(".depthInbound\"");
+        if (!advanced && prefix != "exploratory")
+            buf.append(" disabled");
+        buf.append(">\n");
         int now = in.getLength();
         renderOptions(buf, 0, maxLength, now, "", HOP);
         if (now > maxLength)
             renderOptions(buf, now, now, now, "", HOP);
         buf.append("</select></td>\n");
 
-        buf.append("<td align=\"center\"><select name=\"").append(index).append(".depthOutbound\">\n");
+        buf.append("<td align=\"center\"><select name=\"").append(index).append(".depthOutbound\"");
+        if (!advanced && prefix != "exploratory")
+            buf.append(" disabled");
+        buf.append(">\n");
         now = out.getLength();
         renderOptions(buf, 0, maxLength, now, "", HOP);
         if (now > maxLength)
@@ -128,40 +135,47 @@ public class ConfigTunnelsHelper extends HelperBase {
         buf.append("</tr>\n");
 
         // tunnel depth variance
-        buf.append("<tr><td align=\"right\"><b>" + _t("Randomization") + ":</b></td>\n");
-        buf.append("<td align=\"center\"><select name=\"").append(index).append(".varianceInbound\">\n");
-        now = in.getLengthVariance();
-        renderOptions(buf, 0, 0, now, "", HOP);
-        renderOptions(buf, 1, MAX_VARIANCE, now, "+ 0-", HOP);
-        renderOptions(buf, MIN_NEG_VARIANCE, -1, now, "+/- 0", HOP);
-        if (now > MAX_VARIANCE)
-            renderOptions(buf, now, now, now, "+ 0-", HOP);
-        else if (now < MIN_NEG_VARIANCE)
-            renderOptions(buf, now, now, now, "+/- 0", HOP);
-        buf.append("</select></td>\n");
+        if (advanced) {
+            buf.append("<tr><td align=\"right\"><b>" + _t("Randomization") + ":</b></td>\n");
+            buf.append("<td align=\"center\"><select name=\"").append(index).append(".varianceInbound\">\n");
+            now = in.getLengthVariance();
+            renderOptions(buf, 0, 0, now, "", HOP);
+            renderOptions(buf, 1, MAX_VARIANCE, now, "+ 0-", HOP);
+            renderOptions(buf, MIN_NEG_VARIANCE, -1, now, "+/- 0", HOP);
+            if (now > MAX_VARIANCE)
+                renderOptions(buf, now, now, now, "+ 0-", HOP);
+            else if (now < MIN_NEG_VARIANCE)
+                renderOptions(buf, now, now, now, "+/- 0", HOP);
+            buf.append("</select></td>\n");
 
-        buf.append("<td align=\"center\"><select name=\"").append(index).append(".varianceOutbound\">\n");
-        now = out.getLengthVariance();
-        renderOptions(buf, 0, 0, now, "", HOP);
-        renderOptions(buf, 1, MAX_VARIANCE, now, "+ 0-", HOP);
-        renderOptions(buf, MIN_NEG_VARIANCE, -1, now, "+/- 0", HOP);
-        if (now > MAX_VARIANCE)
-            renderOptions(buf, now, now, now, "+ 0-", HOP);
-        else if (now < MIN_NEG_VARIANCE)
-            renderOptions(buf, now, now, now, "+/- 0", HOP);
-        buf.append("</select></td>\n");
-
+            buf.append("<td align=\"center\"><select name=\"").append(index).append(".varianceOutbound\">\n");
+            now = out.getLengthVariance();
+            renderOptions(buf, 0, 0, now, "", HOP);
+            renderOptions(buf, 1, MAX_VARIANCE, now, "+ 0-", HOP);
+            renderOptions(buf, MIN_NEG_VARIANCE, -1, now, "+/- 0", HOP);
+            if (now > MAX_VARIANCE)
+                renderOptions(buf, now, now, now, "+ 0-", HOP);
+            else if (now < MIN_NEG_VARIANCE)
+                renderOptions(buf, now, now, now, "+/- 0", HOP);
+            buf.append("</select></td>\n");
+        }
         // tunnel quantity
         int maxQuantity = advanced ? MAX_ADVANCED_QUANTITY : MAX_QUANTITY;
         buf.append("<tr><td align=\"right\"><b>" + _t("Quantity") + ":</b></td>\n");
-        buf.append("<td align=\"center\"><select name=\"").append(index).append(".quantityInbound\">\n");
+        buf.append("<td align=\"center\"><select name=\"").append(index).append(".quantityInbound\"");
+        if (!advanced && prefix != "exploratory")
+            buf.append(" disabled");
+        buf.append(">\n");
         now = in.getQuantity();
         renderOptions(buf, 1, maxQuantity, now, "", TUNNEL);
         if (now > maxQuantity)
             renderOptions(buf, now, now, now, "", TUNNEL);
         buf.append("</select></td>\n");
 
-        buf.append("<td align=\"center\"><select name=\"").append(index).append(".quantityOutbound\">\n");
+        buf.append("<td align=\"center\"><select name=\"").append(index).append(".quantityOutbound\"");
+        if (!advanced && prefix != "exploratory")
+            buf.append(" disabled");
+        buf.append(">\n");
         now = out.getQuantity();
         renderOptions(buf, 1, maxQuantity, now, "", TUNNEL);
         if (now > maxQuantity)
@@ -170,22 +184,24 @@ public class ConfigTunnelsHelper extends HelperBase {
         buf.append("</tr>\n");
 
         // tunnel backup quantity
-        int maxBQuantity = advanced ? MAX_ADVANCED_BACKUP_QUANTITY : MAX_BACKUP_QUANTITY;
-        buf.append("<tr><td align=\"right\"><b>" + _t("Backup quantity") + ":</b></td>\n");
-        buf.append("<td align=\"center\"><select name=\"").append(index).append(".backupInbound\">\n");
-        now = in.getBackupQuantity();
-        renderOptions(buf, 0, maxBQuantity, now, "", TUNNEL);
-        if (now > maxBQuantity)
-            renderOptions(buf, now, now, now, "", TUNNEL);
-        buf.append("</select></td>\n");
+        if (advanced) {
+            int maxBQuantity = advanced ? MAX_ADVANCED_BACKUP_QUANTITY : MAX_BACKUP_QUANTITY;
+            buf.append("<tr><td align=\"right\"><b>" + _t("Backup quantity") + ":</b></td>\n");
+            buf.append("<td align=\"center\"><select name=\"").append(index).append(".backupInbound\">\n");
+            now = in.getBackupQuantity();
+            renderOptions(buf, 0, maxBQuantity, now, "", TUNNEL);
+            if (now > maxBQuantity)
+                renderOptions(buf, now, now, now, "", TUNNEL);
+            buf.append("</select></td>\n");
 
-        buf.append("<td align=\"center\"><select name=\"").append(index).append(".backupOutbound\">\n");
-        now = out.getBackupQuantity();
-        renderOptions(buf, 0, maxBQuantity, now, "", TUNNEL);
-        if (now > maxBQuantity)
-            renderOptions(buf, now, now, now, "", TUNNEL);
-        buf.append("</select></td>\n");
-        buf.append("</tr>\n");
+            buf.append("<td align=\"center\"><select name=\"").append(index).append(".backupOutbound\">\n");
+            now = out.getBackupQuantity();
+            renderOptions(buf, 0, maxBQuantity, now, "", TUNNEL);
+            if (now > maxBQuantity)
+                renderOptions(buf, now, now, now, "", TUNNEL);
+            buf.append("</select></td>\n");
+            buf.append("</tr>\n");
+        }
 
         // custom options
         // There is no facility to set these, either in ConfigTunnelsHandler or
@@ -215,7 +231,6 @@ public class ConfigTunnelsHelper extends HelperBase {
             }
             buf.append("\"></td></tr>\n");
         }
-//        buf.append("<tr><td colspan=\"3\"><br></td></tr>\n");
     }
 
     /** to fool xgettext so the following isn't tagged */

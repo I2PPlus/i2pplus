@@ -101,13 +101,18 @@ public class TunnelController implements Logging {
     public static final String PROP_MAX_TOTAL_CONNS_DAY = "i2p.streaming.maxTotalConnsPerDay";
     public static final String PROP_MAX_STREAMS = "i2p.streaming.maxConcurrentStreams";
     public static final String PROP_LIMITS_SET = "i2p.streaming.limitsManuallySet";
-    public static final int DEFAULT_MAX_CONNS_MIN = 30;
-    public static final int DEFAULT_MAX_CONNS_HOUR = 80;
-    public static final int DEFAULT_MAX_CONNS_DAY = 200;
-    public static final int DEFAULT_MAX_TOTAL_CONNS_MIN = 50;
+//    public static final int DEFAULT_MAX_CONNS_MIN = 30;
+    public static final int DEFAULT_MAX_CONNS_MIN = 50;
+//    public static final int DEFAULT_MAX_CONNS_HOUR = 80;
+    public static final int DEFAULT_MAX_CONNS_HOUR = 200;
+//    public static final int DEFAULT_MAX_CONNS_DAY = 200;
+    public static final int DEFAULT_MAX_CONNS_DAY = 600;
+//    public static final int DEFAULT_MAX_TOTAL_CONNS_MIN = 60;
+    public static final int DEFAULT_MAX_TOTAL_CONNS_MIN = 80;
     public static final int DEFAULT_MAX_TOTAL_CONNS_HOUR = 0;
     public static final int DEFAULT_MAX_TOTAL_CONNS_DAY = 0;
-    public static final int DEFAULT_MAX_STREAMS = 30;
+//    public static final int DEFAULT_MAX_STREAMS = 30;
+    public static final int DEFAULT_MAX_STREAMS = 50;
 
     /** @since 0.9.34 */
     public static final String PROP_LIMIT_ACTION = "i2p.streaming.limitAction";
@@ -252,7 +257,7 @@ public class TunnelController implements Logging {
                 if (type != null && type.isAvailable())
                     stype = type;
                 else
-                    log("Unsupported sig type " + st + ", reverting to " + stype);
+                    log("Unsupported signature type " + st + ", reverting to " + stype);
             }
             Destination dest = client.createDestination(fos, stype);
             String destStr = dest.toBase64();
@@ -408,8 +413,8 @@ public class TunnelController implements Logging {
         try {
             doStartTunnel();
         } catch (RuntimeException e) {
-            _log.error("Error starting the tunnel " + getName(), e);
-            log("Error starting the tunnel " + getName() + ": " + e.getMessage());
+            _log.error("Error starting tunnel [" + getName() + "]", e);
+            log("Error starting tunnel [" + getName() + "] \n* " + e.getMessage());
             // if we don't acquire() then the release() in stopTunnel() won't work
             acquire();
             stopTunnel();
@@ -429,7 +434,7 @@ public class TunnelController implements Logging {
         if ( (type == null) || (type.length() <= 0) ) {
             changeState(TunnelState.STOPPED);
             if (_log.shouldLog(Log.ERROR))
-                _log.error("Cannot start the tunnel - no type specified");
+                _log.error("Cannot start tunnel - no type specified");
             return;
         }
         // Config options may have changed since instantiation, so do this again.
@@ -438,7 +443,7 @@ public class TunnelController implements Logging {
             boolean ok = createPrivateKey();
             if (!ok) {
                 changeState(TunnelState.STOPPED);
-                log("Failed to start tunnel " + getName() + " as the private key file could not be created");
+                log("Failed to start tunnel [" + getName() + "] as private key file could not be created");
                 return;
             }
             if (!isClient() && !getType().equals(TYPE_STREAMR_SERVER)) {
@@ -596,8 +601,8 @@ public class TunnelController implements Logging {
             }
             _sessions = sessions;
         } else {
-            if (_log.shouldLog(Log.WARN))
-                _log.warn("No sessions to acquire? for " + getName());
+            if (_log.shouldLog(Log.INFO))
+                _log.info("No sessions to acquire for " + getName() + " (standby mode)");
         }
     }
 
@@ -616,8 +621,8 @@ public class TunnelController implements Logging {
             }
             // _sessions.clear() ????
         } else {
-            if (_log.shouldLog(Log.WARN))
-                _log.warn("No sessions to release? for " + getName());
+            if (_log.shouldLog(Log.INFO))
+                _log.info("No sessions to release for " + getName());
         }
     }
 
@@ -1311,6 +1316,6 @@ public class TunnelController implements Logging {
      */
     @Override
     public String toString() {
-        return "TC " + getType() + ' ' + getName() + " for " + _tunnel + ' ' + _state;
+        return "[Tunnel Controller: " + getType() + "] " + getName() + "for " + _tunnel + ' ' + _state;
     }
 }

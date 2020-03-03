@@ -254,17 +254,16 @@ public class KeyCertificate extends Certificate {
     @Override
     public String toString() {
         StringBuilder buf = new StringBuilder(64);
-        buf.append("[Certificate: type: Key certificate");
+        buf.append("Key");
         if (_payload == null) {
             buf.append(" null payload");
         } else {
-            buf.append("\n\tCrypto type: ").append(getCryptoTypeCode());
-            buf.append("\n\tSig type: ").append(getSigTypeCode())
+            buf.append("\n* Crypto type: ").append(getCryptoTypeCode());
+            buf.append("\n* Sig type: ").append(getSigTypeCode())
                .append(" (").append(getSigType()).append(')');
             if (_payload.length > HEADER_LENGTH)
-                buf.append("\n\tKey data: ").append(_payload.length - HEADER_LENGTH).append(" bytes");
+                buf.append("\n* Key data: ").append(_payload.length - HEADER_LENGTH).append(" bytes");
         }
-        buf.append("]");
         return buf.toString();
     }
 
@@ -294,38 +293,38 @@ public class KeyCertificate extends Certificate {
         public void setPayload(byte[] payload) {
             throw new RuntimeException("Data already set");
         }
-    
+
         /** @throws RuntimeException always */
         @Override
         public void readBytes(InputStream in) throws DataFormatException, IOException {
             throw new RuntimeException("Data already set");
         }
-    
+
         /** Overridden for efficiency */
         @Override
         public void writeBytes(OutputStream out) throws IOException {
             out.write(ECDSA256_DATA);
         }
-    
+
         /** Overridden for efficiency */
         @Override
         public int writeBytes(byte target[], int offset) {
             System.arraycopy(ECDSA256_DATA, 0, target, offset, ECDSA256_LENGTH);
             return ECDSA256_LENGTH;
         }
-    
+
         /** @throws RuntimeException always */
         @Override
         public int readBytes(byte source[], int offset) throws DataFormatException {
             throw new RuntimeException("Data already set");
         }
-    
+
         /** Overridden for efficiency */
         @Override
         public int size() {
             return ECDSA256_LENGTH;
         }
-    
+
         /** Overridden for efficiency */
         @Override
         public int hashCode() {
@@ -362,38 +361,38 @@ public class KeyCertificate extends Certificate {
         public void setPayload(byte[] payload) {
             throw new RuntimeException("Data already set");
         }
-    
+
         /** @throws RuntimeException always */
         @Override
         public void readBytes(InputStream in) throws DataFormatException, IOException {
             throw new RuntimeException("Data already set");
         }
-    
+
         /** Overridden for efficiency */
         @Override
         public void writeBytes(OutputStream out) throws IOException {
             out.write(ED_DATA);
         }
-    
+
         /** Overridden for efficiency */
         @Override
         public int writeBytes(byte target[], int offset) {
             System.arraycopy(ED_DATA, 0, target, offset, ED_LENGTH);
             return ED_LENGTH;
         }
-    
+
         /** @throws RuntimeException always */
         @Override
         public int readBytes(byte source[], int offset) throws DataFormatException {
             throw new RuntimeException("Data already set");
         }
-    
+
         /** Overridden for efficiency */
         @Override
         public int size() {
             return ED_LENGTH;
         }
-    
+
         /** Overridden for efficiency */
         @Override
         public int hashCode() {

@@ -33,17 +33,19 @@ public class NetDbHelper extends FormHandler {
 
     private static final int DEFAULT_LIMIT = SystemVersion.isARM() ? 250 : 500;
     private static final int DEFAULT_PAGE = 0;
-    
+
     private static final String titles[] =
                                           {_x("Summary"),                       // 0
                                            _x("Local Router"),                  // 1
                                            _x("Router Lookup"),                 // 2
-                                           // advanced below here
                                            _x("All Routers"),                   // 3
-                                           _x("All Routers with Full Stats"),   // 4
+//                                           _x("All Routers with Stats"),   // 4
+                                           _x("All Routers"),   // 4
                                            _x("LeaseSets"),                     // 5
-                                           "LeaseSet Debug",                    // 6
-                                           "Sybil",                             // 7
+                                           // advanced below here
+//                                           "LeaseSet Debug",                    // 6
+                                           _x("LeaseSets"),                     // 6
+                                           _x("Sybil Analysis"),                // 7
                                            "Advanced Lookup"   };               // 8
 
     private static final String links[] =
@@ -197,7 +199,7 @@ public class NetDbHelper extends FormHandler {
                 _page = 0;
         } catch (NumberFormatException nfe) {}
     }
-    
+
     /**
      *  call for non-text-mode browsers
      *  @since 0.9.1
@@ -205,7 +207,7 @@ public class NetDbHelper extends FormHandler {
     public void allowGraphical() {
         _graphical = true;
     }
-    
+
     /**
      *  Override to save it
      *  @since 0.9.38
@@ -221,8 +223,8 @@ public class NetDbHelper extends FormHandler {
      *  @since 0.9.38
      */
     protected void processForm() {
-        _postOK = "Run new analysis".equals(_action) ||
-                  "Review analysis".equals(_action);
+        _postOK = "Start Scan".equals(_action) ||
+                  "Review".equals(_action);
         if ("Save".equals(_action)) {
                 try {
                     Map<String, String> toSave = new HashMap<String, String>(4);
@@ -301,7 +303,7 @@ public class NetDbHelper extends FormHandler {
     private int getTab() {
         if (_debug)
             return 6;
-        if (_lease)
+        else if (_lease && !_debug)
             return 5;
         if (".".equals(_routerPrefix))
             return 1;
@@ -334,7 +336,13 @@ public class NetDbHelper extends FormHandler {
         for (int i = 0; i < titles.length; i++) {
             if (i == 2 && tab != 2)
                 continue;   // can't nav to lookup
-            if (i > 2 && i != tab && !isAdvanced())
+            if (i == 3 && isAdvanced())
+                continue; // only show All Routers (with full stats) in adv. mode
+            if (i == 4 && !isAdvanced())
+                continue; // and hide Routers (with full stats) from normal mode
+            if (i == 5 && isAdvanced())
+                continue; // hide standard Leasesets tab in adv. mode
+            if (i > 5 && !isAdvanced())
                 continue;
             if (i == tab) {
                 // we are there
@@ -362,27 +370,44 @@ public class NetDbHelper extends FormHandler {
      *  @since 0.9.28
      */
     private void renderLookupForm() throws IOException {
-        _out.write("<form action=\"/netdb\" method=\"POST\">\n" + 
+        _out.write("<form action=\"/netdb\" method=\"POST\">\n" +
                    "<input type=\"hidden\" name=\"nonce\" value=\"" + _newNonce + "\" >\n" +
-                   "<table id=\"netdblookup\"><tr><th colspan=\"3\">Network Database Search</th></tr>\n" +
-                   "<tr><td colspan=\"3\" class=\"subheading\"><b>Enter one search field <i>only</i>:</b></td></tr>\n" +
-                   "<tr><td>Capabilities:</td><td><input type=\"text\" name=\"caps\"></td><td>e.g. f or XOfR</td></tr>\n" +
-                   "<tr><td>Cost:</td><td><input type=\"text\" name=\"cost\"></td><td></td></tr>\n" +
-                   "<tr><td>Country Code:</td><td><input type=\"text\" name=\"c\"></td><td>e.g. ru</td></tr>\n" +
-                   "<tr><td>Router Family:</td><td><input type=\"text\" name=\"fam\"></td><td></td></tr>\n" +
-                   "<tr><td>Hash Prefix:</td><td><input type=\"text\" name=\"r\"></td><td></td></tr>\n" +
-                   "<tr><td>IP or Hostname:</td><td><input type=\"text\" name=\"ip\"></td><td>host name, IPv4, or IPv6, /24,/16,/8 suffixes optional for IPv4, prefix ok for IPv6</td></tr>\n" +
-                   "<tr><td>IPv6 Prefix:</td><td><input type=\"text\" name=\"ipv6\"></td><td></td></tr>\n" +
-                   "<tr><td>MTU:</td><td><input type=\"text\" name=\"mtu\"></td><td></td></tr>\n" +
-                   "<tr><td>Port Number:</td><td><input type=\"text\" name=\"port\"></td><td></td></tr>\n" +
-                   "<tr><td>Signature Type:</td><td><input type=\"text\" name=\"type\"></td><td></td></tr>\n" +
-                   "<tr><td>SSU Capabilities:</td><td><input type=\"text\" name=\"ssucaps\"></td><td></td></tr>\n" +
-                   "<tr><td>Transport:</td><td><input type=\"text\" name=\"tr\"></td><td></td></tr>\n" +
-                   "<tr><td>Router Version:</td><td><input type=\"text\" name=\"v\"></td><td></td></tr>\n" +
-                   "<tr><td colspan=\"3\" class=\"subheading\"><b>Add Sybil analysis (must pick one above):</b></td></tr>\n" +
-                   "<tr><td>Sybil close to:</td><td><input type=\"text\" name=\"sybil2\"></td><td>Router hash, dest hash, b32, or from address book</td>\n" +
-                   "<tr><td><label for=\"closetorouter\">or Sybil close to this router:</label></td><td><input type=\"checkbox\" class=\"optbox\" value=\"1\" name=\"sybil\" id=\"closetorouter\"></td><td></td></tr>\n" +
-                   "<tr><td colspan=\"3\" class=\"optionsave\"><button type=\"submit\" class=\"search\" value=\"Lookup\">Lookup</button></td></tr>\n" +
+                   "<div id=\"lookupCondensed\">" +
+                   "<select name=\"netdbLookup\">" +
+                   "<option value=\"caps\" selected=\"selected\">Capabilities</option>" +
+                   "<option value=\"cost\">Cost</option>" +
+                   "<option value=\"c\">Country Code</option>" +
+                   "<option value=\"fam\">Family</option>" +
+                   "<option value=\"r\">Hash Prefix</option>" +
+                   "<option value=\"ip\">IP or Hostname</option>" +
+                   "<option value=\"ipv6\">IPV6 Prefix</option>" +
+                   "<option value=\"mtu\">MTU</option>" +
+                   "<option value=\"port\">Port Number</option>" +
+                   "<option value=\"type\">Signature Type</option>" +
+                   "<option value=\"ssucaps\">SSU Capabilities</option>" +
+                   "<option value=\"v\">Router Version</option>" +
+                   "</select>" +
+                   "<input type=\"text\" size=\"30\"></div>" +
+
+                   "<table id=\"netdblookup\"><tr><th colspan=\"4\">Network Database Search</th></tr>\n" +
+                   "<tr><td colspan=\"4\" class=\"subheading\"><b>Enter one search field <i>only</i></b></td></tr>\n" +
+                   "<tr><td><b>Capabilities</b></td><td><input type=\"text\" name=\"caps\" title=\"e.g. f or XOfR\"></td>\n" +
+                   "<td><b>Cost</b></td><td><input type=\"text\" name=\"cost\"></td></tr>\n" +
+                   "<tr><td><b>Country Code</b></td><td><input type=\"text\" name=\"c\" title=\"e.g. ru\"></td>\n" +
+                   "<td><b>Router Family</b></td><td><input type=\"text\" name=\"fam\"></td></tr>\n" +
+                   "<tr><td><b>Hash Prefix</b></td><td><input type=\"text\" name=\"r\"></td>\n" +
+                   "<td><b>IP or Hostname</b></td><td><input type=\"text\" name=\"ip\" title=\"host name, IPv4, or IPv6, /24,/16,/8 suffixes optional for IPv4, prefix ok for IPv6\"></td></tr>\n" +
+                   "<tr><td><b>IPv6 Prefix</b></td><td><input type=\"text\" name=\"ipv6\"></td>\n" +
+                   "<td><b>MTU</b></td><td><input type=\"text\" name=\"mtu\"></td></tr>\n" +
+                   "<tr><td><b>Port Number</b></td><td><input type=\"text\" name=\"port\"></td>\n" +
+                   "<td><b>Signature Type</b></td><td><input type=\"text\" name=\"type\"></td></tr>\n" +
+                   "<tr><td><b>SSU Capabilities</b></td><td><input type=\"text\" name=\"ssucaps\"></td>\n" +
+                   "<td><b>Transport</b></td><td><input type=\"text\" name=\"tr\" title=\"e.g. SSU or NTCP2\"></td></tr>\n" +
+                   "<tr><td><b>Router Version</b></td><td><input type=\"text\" name=\"v\"><td></td><td></td></tr>\n" +
+                   "<tr><td colspan=\"4\" class=\"subheading\"><b>Add Sybil analysis (must pick one above)</b></td></tr>\n" +
+                   "<tr id=\"sybilSearch\"><td><b>Sybil close to</b></td><td colspan=\"3\"><input type=\"text\" name=\"sybil2\" title=\"Router hash, dest hash, b32, or from address book\">&nbsp;" +
+                   "<label for=\"closetorouter\"><b>or Sybil close to this router</b></label><input type=\"checkbox\" class=\"optbox\" value=\"1\" name=\"sybil\" id=\"closetorouter\"></td></tr>\n" +
+                   "<tr><td colspan=\"4\" class=\"optionsave\"><button type=\"submit\" class=\"search\" value=\"Lookup\">Lookup</button></td></tr>\n" +
                    "</table>\n</form>\n");
     }
 }

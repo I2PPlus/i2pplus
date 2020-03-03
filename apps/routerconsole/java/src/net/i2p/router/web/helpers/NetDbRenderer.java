@@ -42,13 +42,14 @@ import net.i2p.router.TunnelPoolSettings;
 import net.i2p.router.util.HashDistance;   // debug
 import net.i2p.router.networkdb.kademlia.FloodfillNetworkDatabaseFacade;
 import static net.i2p.router.sybil.Util.biLog2;
-import net.i2p.router.web.HelperBase;
 import net.i2p.router.web.Messages;
 import net.i2p.router.web.WebAppStarter;
 import net.i2p.util.Log;
 import net.i2p.util.ObjectCounter;
 import net.i2p.util.Translate;
 import net.i2p.util.VersionComparator;
+
+import net.i2p.router.peermanager.PeerProfile;
 
 class NetDbRenderer {
     private final RouterContext _context;
@@ -107,9 +108,9 @@ class NetDbRenderer {
         StringBuilder buf = new StringBuilder(4*1024);
         List<Hash> sybils = sybil != null ? new ArrayList<Hash>(128) : null;
         if (".".equals(routerPrefix)) {
-            buf.append("<table><tr><td class=\"infohelp\">")
+            buf.append("<p class=\"infowarn\"><b>")
                .append(_t("Never reveal your router identity to anyone, as it is uniquely linked to your IP address in the network database."))
-               .append("</td></tr></table>");
+               .append("</b></p>\n");
             renderRouterInfo(buf, _context.router().getRouterInfo(), true, true);
         } else {
             StringBuilder ubuf = new StringBuilder();
@@ -142,13 +143,13 @@ class NetDbRenderer {
             if (sybil != null)
                 ubuf.append("&amp;sybil=").append(sybil);
             if (page > 0) {
-                buf.append("<div class=\"netdbnotfound\">" +
+                buf.append("<p class=\"infohelp\" id=\"pagenav\">" +
                            "<a href=\"/netdb?pg=").append(page)
                    .append("&amp;ps=").append(pageSize).append(ubuf).append("\">");
                 buf.append(_t("Previous Page"));
                 buf.append("</a>&nbsp;&nbsp;&nbsp;");
                 buf.append(_t("Page")).append(' ').append(page + 1);
-                buf.append("</div>");
+                buf.append("</p>");
             }
             boolean notFound = true;
             Set<RouterInfo> routers = _context.netDb().getRouters();
@@ -344,7 +345,7 @@ class NetDbRenderer {
                 buf.append(' ').append(_t("not found in network database"));
                 buf.append("</div>");
             } else if (page > 0 || morePages) {
-                buf.append("<div class=\"netdbnotfound\">");
+                buf.append("<p class=\"infohelp\" id=\"pagenav\">");
                 if (page > 0) {
                     buf.append("<a href=\"/netdb?pg=").append(page)
                        .append("&amp;ps=").append(pageSize).append(ubuf).append("\">");
@@ -358,7 +359,7 @@ class NetDbRenderer {
                     buf.append(_t("Next Page"));
                     buf.append("</a>");
                 }
-                buf.append("</div>");
+                buf.append("</p>");
             }
         }
         out.write(buf.toString());
@@ -390,7 +391,7 @@ class NetDbRenderer {
     public void renderLeaseSetHTML(Writer out, boolean debug) throws IOException {
         StringBuilder buf = new StringBuilder(4*1024);
         if (debug)
-            buf.append("<p id=\"debugmode\">Debug mode - Sorted by hash distance, closest first</p>\n");
+            buf.append("<p id=\"debugmode\">Debug mode - Sorted by hash distance, closest first. <a href=\"/netdb?l=1\">[Compact mode]</a></p>\n");
         Hash ourRKey;
         Set<LeaseSet> leases;
         DecimalFormat fmt;
@@ -435,8 +436,8 @@ class NetDbRenderer {
         buf.append("</table>\n");
 
         if (leases.isEmpty()) {
-            //if (!debug)
-            //    buf.append("<div id=\"noleasesets\"><i>").append(_t("No Leasesets currently active.")).append("</i></div>");
+            if (!debug)
+                buf.append("<div id=\"noleasesets\"><i>").append(_t("No Leasesets currently active.")).append("</i></div>");
         } else {
           if (debug) {
             // Find the center of the RAP leasesets
@@ -537,22 +538,22 @@ class NetDbRenderer {
             buf.append("</b></td></tr>\n");
             if (debug) {
                 buf.append("<tr><td colspan=\"2\">");
-                buf.append("<b>RAP?</b> ").append(ls.getReceivedAsPublished());
-                buf.append("&nbsp;&nbsp;<b>RAR?</b> ").append(ls.getReceivedAsReply());
+                buf.append("<b title=\"").append(_t("Received as published?")).append("\">RAP?</b> ").append(ls.getReceivedAsPublished());
+                buf.append("&nbsp;&nbsp;<b title=\"").append(_t("Received as reply?")).append("\">RAR?</b> ").append(ls.getReceivedAsReply());
                 BigInteger dist = HashDistance.getDistance(ourRKey, ls.getRoutingKey());
                 if (ls.getReceivedAsPublished()) {
                     if (c++ == medianCount)
                         median = dist;
                 }
-                buf.append("&nbsp;&nbsp;<b>Distance: </b>").append(fmt.format(biLog2(dist)));
-                buf.append("&nbsp;&nbsp;<b>Type: </b>").append(type);
+                buf.append("&nbsp;&nbsp;<b>").append(_t("Distance")).append(": </b>").append(fmt.format(biLog2(dist)));
+                buf.append("&nbsp;&nbsp;<b>").append(_t("Type")).append(": </b>").append(type);
                 if (type != DatabaseEntry.KEY_TYPE_LEASESET) {
                     LeaseSet2 ls2 = (LeaseSet2) ls;
-                    buf.append("&nbsp;&nbsp;<b>Unpublished? </b>").append(ls2.isUnpublished());
+                    buf.append("&nbsp;&nbsp;<b>").append(_t("Unpublished?")).append("</b> ").append(ls2.isUnpublished());
                     boolean isOff = ls2.isOffline();
-                    buf.append("&nbsp;&nbsp;<b>Offline signed? </b>").append(isOff);
+                    buf.append("&nbsp;&nbsp;<b>").append(_t("Offline signed?")).append("</b> ").append(isOff);
                     if (isOff)
-                        buf.append("&nbsp;&nbsp;<b>Type: </b>").append(ls2.getTransientSigningKey().getType());
+                        buf.append("&nbsp;&nbsp;<b>").append(_t("Type")).append(":</b> ").append(ls2.getTransientSigningKey().getType());
                 }
                 buf.append("</td></tr>\n<tr><td colspan=\"2\">");
                 //buf.append(dest.toBase32()).append("<br>");
@@ -564,13 +565,13 @@ class NetDbRenderer {
                     buf.append(ls.getSigningKey().getType());
                 }
                 if (type == DatabaseEntry.KEY_TYPE_LEASESET) {
-                    buf.append("</td></tr>\n<tr><td colspan=\"2\"><b>Encryption Key:</b> ELGAMAL_2048 ")
+                    buf.append("&nbsp;&nbsp;<b>").append(_t("Encryption Key")).append(":</b> ELGAMAL_2048 ")
                        .append(ls.getEncryptionKey().toBase64().substring(0, 20))
                        .append("&hellip;");
                 } else if (type == DatabaseEntry.KEY_TYPE_LS2) {
                     LeaseSet2 ls2 = (LeaseSet2) ls;
                     for (PublicKey pk : ls2.getEncryptionKeys()) {
-                        buf.append("</td></tr>\n<tr><td colspan=\"2\"><b>Encryption Key:</b> ");
+                        buf.append("&nbsp;&nbsp;<b>").append(_t("Encryption Key")).append(":</b> ");
                         EncType etype = pk.getType();
                         if (etype != null)
                             buf.append(etype);
@@ -582,7 +583,7 @@ class NetDbRenderer {
                     }
                 }
                 buf.append("</td></tr>\n<tr><td colspan=\"2\">");
-                buf.append("<b>Routing Key:</b> ").append(ls.getRoutingKey().toBase64());
+                buf.append("<b>").append(_t("Routing Key")).append(":</b> ").append(ls.getRoutingKey().toBase64());
                 buf.append("</td></tr>");
 
             }
@@ -596,15 +597,15 @@ class NetDbRenderer {
                 buf.append(_context.commSystem().renderPeerHTML(lease.getGateway()));
                 buf.append("</span> ");
                 if (!isMeta) {
-                    buf.append("<span class=\"netdb_tunnel\">").append(_t("Tunnel")).append(" <span class=\"tunnel_id\">")
-                       .append(lease.getTunnelId().getTunnelId()).append("</span></span> ");
+                    buf.append("</span> <span class=\"netdb_tunnel\">").append(_t("Tunnel")).append(" <span class=\"tunnel_id\">")
+                   .append(lease.getTunnelId().getTunnelId()).append("</span></span> ");
                 }
                 if (debug) {
                     long exl = lease.getEndDate().getTime() - now;
                     if (exl > 0)
-                        buf.append("<b class=\"netdb_expiry\">").append(_t("Expires in {0}", DataHelper.formatDuration2(exl))).append("</b>");
+                        buf.append("&#10140; <b class=\"netdb_expiry\">").append(_t("Expires in {0}", DataHelper.formatDuration2(exl))).append("</b>");
                     else
-                        buf.append("<b class=\"netdb_expiry\">").append(_t("Expired {0} ago", DataHelper.formatDuration2(0-exl))).append("</b>");
+                        buf.append("&#10140; <b class=\"netdb_expiry\">").append(_t("Expired {0} ago", DataHelper.formatDuration2(0-exl))).append("</b>");
                 }
                 buf.append("</li>");
             }
@@ -613,24 +614,30 @@ class NetDbRenderer {
             out.write(buf.toString());
             buf.setLength(0);
           } // for each
+          buf.append("</div>"); // close leaseset container
           if (debug) {
-              buf.append("<table id=\"leasesetdebug\"><tr><td><b>Network data (only valid if floodfill):</b></td><td colspan=\"3\">");
+              buf.append("<table class=\"leaseset\" id=\"leasesetsummary\">");
+              buf.append("<tr><th colspan=\"3\">").append(_t("Network Summary")).append("</th><th></th></tr>");
+              if (median == null) {
+                  buf.append("<tr><td colspan=\"4\" class=\"infohelp\">")
+                     .append(_t("This information is only available if your router is registered in the NetDb as a floodfill, and only after the router has had time to integrate with the network.")).append("</td></tr>");
+              }
+              buf.append("<tr><td><b>").append(_t("Network Data")).append(":</b></td><td colspan=\"3\">");
               //buf.append("</b></p><p><b>Center of Key Space (router hash): " + ourRKey.toBase64());
               if (median != null) {
                   double log2 = biLog2(median);
                   buf.append("</td></tr>")
-                     .append("<tr><td><b>Median distance (bits):</b></td><td colspan=\"3\">").append(fmt.format(log2)).append("</td></tr>\n");
+                     .append("<tr><td><b>").append(_t("Median distance (bits)")).append(":</b></td><td colspan=\"3\">").append(fmt.format(log2)).append("</td></tr>\n");
                   // 2 for 4 floodfills... -1 for median
                   // this can be way off for unknown reasons
                   int total = (int) Math.round(Math.pow(2, 2 + 256 - 1 - log2));
-                  buf.append("<tr><td><b>Estimated total floodfills:</b></td><td colspan=\"3\">").append(total).append("</td></tr>\n");
-                  buf.append("<tr><td><b>Estimated total leasesets:</b></td><td colspan=\"3\">").append(total * rapCount / 4);
+                  buf.append("<tr><td><b>").append(_t("Estimated total floodfills")).append(":</b></td><td colspan=\"3\">").append(total).append("</td></tr>\n");
+                  buf.append("<tr><td><b>").append(_t("Estimated total leasesets")).append(":</b></td><td colspan=\"3\">").append(total * rapCount / 4);
               } else {
-                  buf.append("<i>Not floodfill or no data.</i>");
+                  buf.append("<i>").append(_t("Not floodfill or no data.")).append("</i>");
               }
               buf.append("</td></tr></table>\n");
           } // median table
-          buf.append("</div>");
         }  // !empty
         out.write(buf.toString());
         out.flush();
@@ -660,8 +667,12 @@ class NetDbRenderer {
         int toSkip = pageSize * page;
         boolean nextpg = routers.size() > toSkip + pageSize;
         StringBuilder buf = new StringBuilder(8192);
+        if (showStats && full && page == 0)
+            buf.append("<p class=\"infohelp\" id=\"debugmode\">Advanced mode - includes all statistics published by floodfills. <a href=\"/netdb?f=2\">[Compact mode]</a></p>\n");
+        else if (shortStats && page == 0)
+            buf.append("<p class=\"infohelp\">Compact mode - does not include statistics published by floodfills. <a href=\"/netdb?f=1\">[Advanced mode]</a></p>\n");
         if (showStats && (page > 0 || nextpg)) {
-            buf.append("<div class=\"netdbnotfound\">");
+            buf.append("<p class=\"infohelp\" id=\"pagenav\">");
             if (page > 0) {
                 buf.append("<a href=\"/netdb?f=").append(mode).append("&amp;pg=").append(page)
                    .append("&amp;ps=").append(pageSize).append("\">");
@@ -675,7 +686,7 @@ class NetDbRenderer {
                 buf.append(_t("Next Page"));
                 buf.append("</a>");
             }
-            buf.append("</div>");
+            buf.append("</p>");
         }
         if (showStats && page == 0) {
             RouterInfo ourInfo = _context.router().getRouterInfo();
@@ -718,7 +729,7 @@ class NetDbRenderer {
             }
         }
         if (showStats && (page > 0 || morePages)) {
-            buf.append("<div class=\"netdbnotfound\">");
+            buf.append("<p class=\"infohelp\" id=\"pagenav\">");
             if (page > 0) {
                 buf.append("<a href=\"/netdb?f=").append(mode).append("&amp;pg=").append(page).append("&amp;ps=").append(pageSize).append("\">");
                 buf.append(_t("Previous Page"));
@@ -730,7 +741,7 @@ class NetDbRenderer {
                 buf.append(_t("Next Page"));
                 buf.append("</a>");
             }
-            buf.append("</div>");
+            buf.append("</p>");
         }
         if (log.shouldWarn()) {
             long end = System.currentTimeMillis();
@@ -744,24 +755,24 @@ class NetDbRenderer {
      if (!showStats) {
 
         // the summary table
-        buf.append("<table id=\"netdboverview\" border=\"0\" cellspacing=\"30\"><tr><th colspan=\"3\">")
+        buf.append("<table id=\"netdboverview\" border=\"0\" cellspacing=\"30\" align=\"center\" width=\"100%\">\n<tr><th colspan=\"3\">")
            .append(_t("Network Database Router Statistics"))
-           .append("</th></tr><tr><td style=\"vertical-align: top;\">");
+           .append("</th></tr>\n<tr><td style=\"vertical-align: top;\">");
         // versions table
         List<String> versionList = new ArrayList<String>(versions.objects());
         if (!versionList.isEmpty()) {
             Collections.sort(versionList, Collections.reverseOrder(new VersionComparator()));
             buf.append("<table id=\"netdbversions\">\n");
-            buf.append("<tr><th>" + _t("Version") + "</th><th>" + _t("Count") + "</th></tr>\n");
+            buf.append("<thead><tr><th>" + _t("Version") + "</th><th>" + _t("Count") + "</th></tr></thead>\n");
             for (String routerVersion : versionList) {
                 int num = versions.count(routerVersion);
                 String ver = DataHelper.stripHTML(routerVersion);
-                buf.append("<tr><td align=\"center\"><a href=\"/netdb?v=").append(ver).append("\">").append(ver);
-                buf.append("</a></td><td align=\"center\">").append(num).append("</td></tr>\n");
+                buf.append("<tr><td align=\"center\"><span class=\"version\"><a href=\"/netdb?v=").append(ver).append("\">").append(ver);
+                buf.append("</a></span></td><td align=\"center\">").append(num).append("</td></tr>\n");
             }
             buf.append("</table>\n");
         }
-        buf.append("</td><td style=\"vertical-align: top;\">");
+        buf.append("</td>\n<td style=\"vertical-align: top;\">\n");
         out.write(buf.toString());
         buf.setLength(0);
         if (log.shouldWarn()) {
@@ -770,35 +781,57 @@ class NetDbRenderer {
             start = end;
         }
 
+        // Bandwidth Tiers
+//        int tierO = Integer.valueOf(_context.peerManager().getPeersByCapability(FloodfillNetworkDatabaseFacade.CAPABILITY_O).size());
+//        int tierOP = Integer.valueOf(_context.peerManager().getPeersByCapability(FloodfillNetworkDatabaseFacade.CAPABILITY_P).size());
+//        int tierOX = Integer.valueOf(_context.peerManager().getPeersByCapability(FloodfillNetworkDatabaseFacade.CAPABILITY_X).size());
+//        int tierP = tierOP - tierO;
+//        int tierX = tierOX - tierO;
+        buf.append("<table id=\"netdbtiers\">\n");
+        buf.append("<thead><tr><th align=\"left\">" + _t("Bandwidth Tier") + "</th><th>" + _t("Count") + "</th></tr></thead>\n");
+        buf.append("<tr><td><a href=\"/netdb?caps=K\" title=\"Show all routers with this capability in the NetDb\"><b>K</b></a>Under 12&#8239;KB/s</td><td>")
+           .append(_context.peerManager().getPeersByCapability(FloodfillNetworkDatabaseFacade.CAPABILITY_BW12).size()).append("</td></tr>\n");
+        buf.append("<tr><td><a href=\"/netdb?caps=L\" title=\"Show all routers with this capability in the NetDb\"><b>L</b></a>12 - 48&#8239;KB/s</td><td>")
+           .append(_context.peerManager().getPeersByCapability(FloodfillNetworkDatabaseFacade.CAPABILITY_BW32).size()).append("</td></tr>\n");
+        buf.append("<tr><td><a href=\"/netdb?caps=M\" title=\"Show all routers with this capability in the NetDb\"><b>M</b></a>49 - 65&#8239;KB/s</td><td>")
+           .append(_context.peerManager().getPeersByCapability(FloodfillNetworkDatabaseFacade.CAPABILITY_BW64).size()).append("</td></tr>\n");
+        buf.append("<tr><td><a href=\"/netdb?caps=N\" title=\"Show all routers with this capability in the NetDb\"><b>N</b></a>66 - 130&#8239;KB/s</td><td>")
+           .append(_context.peerManager().getPeersByCapability(FloodfillNetworkDatabaseFacade.CAPABILITY_BW128).size()).append("</td></tr>\n");
+        buf.append("<tr><td><a href=\"/netdb?caps=O\" title=\"Show all routers with this capability in the NetDb\"><b>O</b></a>131 - 261&#8239;KB/s</td><td>")
+           .append(_context.peerManager().getPeersByCapability(FloodfillNetworkDatabaseFacade.CAPABILITY_BW256).size()).append("</td></tr>\n");
+        buf.append("<tr><td><a href=\"/netdb?caps=P\" title=\"Show all routers with this capability in the NetDb\"><b>P</b></a>262 - 2047&#8239;KB/s</td><td>")
+           .append(_context.peerManager().getPeersByCapability(FloodfillNetworkDatabaseFacade.CAPABILITY_BW512).size()).append("</td></tr>\n");
+        buf.append("<tr><td><a href=\"/netdb?caps=X\" title=\"Show all routers with this capability in the NetDb\"><b>X</b></a>Over 2048&#8239;KB/s</td><td>")
+           .append(_context.peerManager().getPeersByCapability(FloodfillNetworkDatabaseFacade.CAPABILITY_BW_UNLIMITED).size()).append("</td></tr>\n");
+        buf.append("</table>\n");
+        out.write(buf.toString());
+        buf.setLength(0);
+        if (log.shouldWarn()) {
+            long end = System.currentTimeMillis();
+            log.warn("part 3 took " + (end - start));
+            start = end;
+        }
+
         // transports table
-        boolean showTransports = _context.getBooleanProperty(HelperBase.PROP_ADVANCED);
-        if (showTransports) {
-            buf.append("<table id=\"netdbtransports\">\n");
-            buf.append("<tr><th align=\"left\">" + _t("Transports") + "</th><th>" + _t("Count") + "</th></tr>\n");
-            for (int i = 0; i < TNAMES.length; i++) {
-                int num = transportCount[i];
-                if (num > 0) {
-                    buf.append("<tr><td>").append(_t(TNAMES[i]));
-                    buf.append("</td><td align=\"center\">").append(num).append("</td></tr>\n");
-                }
-            }
-            buf.append("</table>\n");
-            buf.append("</td><td style=\"vertical-align: top;\">");
-            out.write(buf.toString());
-            buf.setLength(0);
-            if (log.shouldWarn()) {
-                long end = System.currentTimeMillis();
-                log.warn("part 3 took " + (end - start));
-                start = end;
+        buf.append("<table id=\"netdbtransports\">\n");
+        buf.append("<thead><tr><th align=\"left\">" + _t("Transports") + "</th><th>" + _t("Count") + "</th></tr></thead>\n");
+        for (int i = 0; i < TNAMES.length; i++) {
+            int num = transportCount[i];
+            if (num > 0) {
+                buf.append("<tr><td>").append(_t(TNAMES[i]));
+                buf.append("</td><td align=\"center\">").append(num).append("</td></tr>\n");
             }
         }
+        buf.append("</table>\n");
+        buf.append("</td>\n");
+        buf.append("<td style=\"vertical-align: top;\">\n");
 
         // country table
         List<String> countryList = new ArrayList<String>(countries.objects());
         if (!countryList.isEmpty()) {
             Collections.sort(countryList, new CountryComparator());
-            buf.append("<table id=\"netdbcountrylist\">\n");
-            buf.append("<tr><th align=\"left\">" + _t("Country") + "</th><th>" + _t("Count") + "</th></tr>\n");
+            buf.append("<table id=\"netdbcountrylist\" data-sortable>\n");
+            buf.append("<thead><tr><th align=\"left\">" + _t("Country") + "</th><th>" + _t("Count") + "</th></tr></thead>\n");
             for (String country : countryList) {
                 int num = countries.count(country);
                 buf.append("<tr><td><a href=\"/netdb?c=").append(country).append("\">");
@@ -808,9 +841,11 @@ class NetDbRenderer {
                 buf.append("</a></td><td align=\"center\">").append(num).append("</td></tr>\n");
             }
             buf.append("</table>\n");
+            String cspNonce = Integer.toHexString(net.i2p.util.RandomSource.getInstance().nextInt());
+            buf.append("<script nonce=\"" + cspNonce + "\" type=\"text/javascript\">new Tablesort(document.getElementById(\"netdbcountrylist\"));</script>\n");
         }
 
-        buf.append("</td></tr></table>");
+        buf.append("</td></tr>\n</table>\n");
         if (log.shouldWarn()) {
             long end = System.currentTimeMillis();
             log.warn("part 4 took " + (end - start));
@@ -824,7 +859,7 @@ class NetDbRenderer {
         out.write(buf.toString());
         out.flush();
     }
-    
+
     /**
      * Countries now in a separate bundle
      * @param code two-letter country code
@@ -880,52 +915,118 @@ class NetDbRenderer {
      *  to prevent vulnerabilities
      */
 
+
     private void renderRouterInfo(StringBuilder buf, RouterInfo info, boolean isUs, boolean full) {
         String hash = info.getIdentity().getHash().toBase64();
+        String family = info.getOption("family");
         buf.append("<table class=\"netdbentry\">")
-           .append("<tr><th colspan=\"2\"><a name=\"").append(hash.substring(0, 6)).append("\" ></a>");
+           .append("<tr id=\"").append(hash.substring(0, 6)).append("\"><th>");
         if (isUs) {
-            buf.append("<a name=\"our-info\" ></a><b>" + _t("Our info") + ":</b>&nbsp;<code>").append(hash).append("</code></th><th>");
+            buf.append("<b id=\"our-info\">" + _t("Our info") + ":</b></th><th><code>").append(hash)
+               .append("</code></th><th id=\"netdb_ourinfo\">");
         } else {
-            buf.append("<b>" + _t("Peer info for") + ":</b>&nbsp;<code>").append(hash).append("</code></th><th>");
+            buf.append("<b>" + _t("Router") + ":</b></th><th><code>").append(hash).append("</code></th><th>");
+        }
+        String tooltip = "\" title=\"" + _t("Show all routers with this capability in the NetDb") + "\"><span";
+        String caps = DataHelper.stripHTML(info.getCapabilities())
+            .replace("XO", "X")
+            .replace("PO", "P")
+            .replace("Kf", "fK")
+            .replace("Lf", "fL")
+            .replace("Mf", "fM")
+            .replace("Nf", "fN")
+            .replace("Of", "fO")
+            .replace("Pf", "fP")
+            .replace("Xf", "fX")
+            .replace("f", "<a href=\"/netdb?caps=f\"><span class=\"ff\">F</span></a>")
+            .replace("B", "<a href=\"/netdb?caps=B\"><span class=\"testing\">B</span></a>") // not shown?
+            .replace("C", "<a href=\"/netdb?caps=C\"><span class=\"ssuintro\">C</span></a>") // not shown?
+            .replace("H", "<a href=\"/netdb?caps=H\"><span class=\"hidden\">H</span></a>") // not shown?
+            .replace("R", "<a href=\"/netdb?caps=R\"><span class=\"reachable\">R</span></a>")
+            .replace("U", "<a href=\"/netdb?caps=U\"><span class=\"unreachable\">U</span></a>")
+            .replace("K", "<a href=\"/netdb?caps=K\"><span class=\"tier\">K</span></a>")
+            .replace("L", "<a href=\"/netdb?caps=L\"><span class=\"tier\">L</span></a>")
+            .replace("M", "<a href=\"/netdb?caps=M\"><span class=\"tier\">M</span></a>")
+            .replace("N", "<a href=\"/netdb?caps=N\"><span class=\"tier\">N</span></a>")
+            .replace("O", "<a href=\"/netdb?caps=O\"><span class=\"tier\">O</span></a>")
+            .replace("P", "<a href=\"/netdb?caps=P\"><span class=\"tier\">P</span></a>")
+            .replace("X", "<a href=\"/netdb?caps=X\"><span class=\"tier\">X</span></a>")
+            .replace("\"><span", tooltip);
+        buf.append(caps)
+            .append("&nbsp;<a href=\"/netdb?v=").append(DataHelper.stripHTML(info.getVersion())).append("\">")
+            .append("<span class=\"version\" title=\"").append(_t("Show all routers with this version in the NetDb"))
+            .append("\">").append(DataHelper.stripHTML(info.getVersion())).append("</span></a>");
+        if (!isUs) {
+            buf.append("<span class=\"netdb_header\">");
+            if (family != null) {
+                buf.append("<a class=\"familysearch\" href=\"/netdb?fam=").append(family)
+                   .append("\" title=\"").append(_t("Show all members of the {0} family in NetDb", family))
+                   .append("\" alt=\"[Family routers]\"><img src=\"/themes/console/images/info/family.png\" width=\"16\" height=\"16\"></a>");
+            }
+            buf.append("<a class=\"viewprofile\" href=\"/viewprofile?peer=").append(hash)
+               .append("\" title=\"").append(_t("View profile"))
+               .append("\" alt=\"[").append(_t("View profile")).append("]\"><img src=\"/themes/console/images/buttons/profile.png\"></a>");
+            if (!full) {
+                buf.append("<a class=\"viewfullentry\" href=\"/netdb?r=").append(hash.substring(0, 6))
+                   .append("\" title=\"").append(_t("View extended router info"))
+                   .append("\" alt=\"[").append(_t("Full entry")).append("]\"><img src=\"/themes/console/images/buttons/fullview.png\"></a>");
+            }
+            buf.append("<a class=\"configpeer\" href=\"/configpeer?peer=").append(hash)
+               .append("\" title=\"").append(_t("Configure peer"))
+               .append("\" alt=\"[").append(_t("Configure peer")).append("]\"><img src=\"/themes/console/images/buttons/edit2.png\"></a>");
             String country = _context.commSystem().getCountry(info.getIdentity().getHash());
             if (country != null) {
                 buf.append("<a href=\"/netdb?c=").append(country).append("\">");
                 buf.append("<img height=\"11\" width=\"16\" alt=\"").append(country.toUpperCase(Locale.US)).append('\"');
                 buf.append(" title=\"").append(getTranslatedCountry(country)).append('\"');
                 buf.append(" src=\"/flags.jsp?c=").append(country).append("\"> ").append("</a>");
+            } else {
+                buf.append("<img height=\"11\" width=\"16\" alt=\"??\"").append(" title=\"unknown\"").append(" src=\"/flags.jsp?c=a0\"></a>");
             }
-            if (!full) {
-                buf.append("<a title=\"").append(_t("View extended router info"))
-                   .append("\" class=\"viewfullentry\" href=\"netdb?r=").append(hash.substring(0, 6))
-                   .append("\" >[").append(_t("Full entry")).append("]</a>");
-            }
+            buf.append("</span>");
+        } else {
+            long used = (long) _context.statManager().getRate("router.memoryUsed").getRate(60*1000).getAvgOrLifetimeAvg();
+            used /= 1024*1024;
+            buf.append("&nbsp;<span id=\"netdb_ram\"><b>").append(_t("Memory usage")).append(":</b> ").append(used).append("M</span>");
         }
         buf.append("</th></tr>\n<tr>");
         long age = _context.clock().now() - info.getPublished();
         if (isUs && _context.router().isHidden()) {
             buf.append("<td><b>").append(_t("Hidden")).append(", ").append(_t("Updated")).append(":</b></td>")
-               .append("<td colspan=\"2\"><span class=\"netdb_info\">")
+               .append("<td><span class=\"netdb_info\">")
                .append(_t("{0} ago", DataHelper.formatDuration2(age)))
                .append("</span>&nbsp;&nbsp;");
         } else if (age > 0) {
             buf.append("<td><b>").append(_t("Published")).append(":</b></td>")
-               .append("<td colspan=\"2\"><span class=\"netdb_info\">")
+               .append("<td><span class=\"netdb_info\">")
                .append(_t("{0} ago", DataHelper.formatDuration2(age)))
                .append("</span>&nbsp;&nbsp;");
         } else {
             // shouldnt happen
-            buf.append("<td><b>").append(_t("Published")).append("</td><td colspan=\"2\">:</b> in ")
+            buf.append("<td><b>").append(_t("Published")).append("</td><td>:</b> in ")
                .append(DataHelper.formatDuration2(0-age)).append("<span class=\"netdb_info\">???</span>&nbsp;&nbsp;");
         }
-        buf.append("<b>").append(_t("Signing Key")).append(":</b> ")
-           .append(info.getIdentity().getSigningPublicKey().getType().toString());
-        buf.append("</td></tr>\n<tr>")
+        if (family != null) {
+            buf.append("<span class=\"netdb_family\"><b>").append(_t("Family"))
+               .append(":</b> <span class=\"familyname\">").append(family).append("</span></span>");
+        }
+        buf.append("</td><td>");
+        buf.append("<span class=\"signingkey\" title=\"").append(_t("Show all routers with this signature type in the NetDb"))
+           .append("\">").append("<a class=\"keysearch\" href=\"/netdb?type=")
+           .append(info.getIdentity().getSigningPublicKey().getType().toString())
+           .append("\">").append(info.getIdentity().getSigningPublicKey().getType().toString())
+           .append("</a></span></td></tr>\n<tr>")
            .append("<td><b>" + _t("Addresses") + ":</b></td>")
            .append("<td colspan=\"2\" class=\"netdb_addresses\">");
+//        if (!isUs) {
+            buf.append("<ul>");
+//        } else {
+//            buf.append("<span class=\"netdb_ouraddresses\">");
+//        }
+
         Collection<RouterAddress> addrs = info.getAddresses();
         if (addrs.isEmpty()) {
-            buf.append(_t("none"));
+            buf.append(_t("n/a"));
         } else {
             if (addrs.size() > 1) {
                 // addrs is unmodifiable
@@ -935,31 +1036,131 @@ class NetDbRenderer {
             }
             for (RouterAddress addr : addrs) {
                 String style = addr.getTransportStyle();
-                buf.append("<br><b class=\"netdb_transport\">").append(DataHelper.stripHTML(style)).append(":</b>");
+//                if (!isUs) {
+                    buf.append("<li>");
+//                }
+                buf.append("<b class=\"netdb_transport\"");
                 int cost = addr.getCost();
-                if (!((style.equals("SSU") && cost == 5) || (style.equals("NTCP") && cost == 10)))
-                    buf.append("&nbsp;<span class=\"netdb_name\">").append(_t("cost")).append("</span>: <span class=\"netdb_info\">").append("" + cost).append("</span>&nbsp;");
+                if (!((style.equals("SSU") && cost == 5) || (style.equals("NTCP") && cost == 10))) {
+                    buf.append(" title=\"").append(_t("Cost")).append(": ").append(cost).append("\"");
+                }
+                buf.append(">").append(DataHelper.stripHTML(style)).append("</b> ");
                 Map<Object, Object> p = addr.getOptionsMap();
                 for (Map.Entry<Object, Object> e : p.entrySet()) {
                     String name = (String) e.getKey();
                     String val = (String) e.getValue();
-                    buf.append(" <span class=\"nowrap\"><span class=\"netdb_name\">").append(_t(DataHelper.stripHTML(name)))
-                       .append(":</span> <span class=\"netdb_info\">").append(DataHelper.stripHTML(val)).append("</span></span>&nbsp;");
+                    // hide keys which are dupes of the router hash displayed in header and ntcp version
+                    if (name.contains("key") || name.contains("itag") || name.contains("iexp") || name.equals("v")) {
+                        buf.append("<span class=\"hide\"><span class=\"nowrap\"><span class=\"netdb_name\">")
+                           .append(_t(DataHelper.stripHTML(name)))
+                           .append(":</span> <span class=\"netdb_info\">").append(DataHelper.stripHTML(val)).append("</span></span></span>");
+                    // tag the hosts and ports so we can make them visually prominent and single clickable
+                    } else if (name.contains("host")) {
+                        buf.append("<span class=\"nowrap\"><span class=\"netdb_name\">")
+                           .append(_t(DataHelper.stripHTML(name)))
+                           .append(":</span> <span class=\"netdb_info host\">").append(DataHelper.stripHTML(val).replace("::", _t("n/a"))) // fix empty ipv6
+                           .append("</span></span> ");
+                    } else if (name.contains("port")) {
+                        buf.append("<span class=\"nowrap\"><span class=\"netdb_name\">")
+                           .append(_t(DataHelper.stripHTML(name)))
+                           .append(":</span> <span class=\"netdb_info port\">").append(DataHelper.stripHTML(val))
+                           .append("</span></span> ");
+                     } else {
+                        buf.append(" <span class=\"nowrap\"><span class=\"netdb_name\">");
+                        buf.append(_t(DataHelper.stripHTML(name)))
+                           .append(":</span> <span class=\"netdb_info\">").append(DataHelper.stripHTML(val)).append("</span></span> ");
+                     }
+                }
+                if (!isUs) {
+                    buf.append("</li>");
                 }
             }
-        }
-        buf.append("</td></tr>\n");
+//            if (!isUs) {
+                buf.append("</ul>");
+//            } else {
+//                buf.append("</span>");
+//            }
+            buf.append("</td></tr>\n");
+         }
         if (full) {
-            buf.append("<tr><td><b>" + _t("Stats") + ":</b><td colspan=\"2\"><code>");
+            buf.append("<tr><td><b>" + _t("Stats") + ":</b><td colspan=\"2\"><ul class=\"netdbStats\">");
             Map<Object, Object> p = info.getOptionsMap();
             for (Map.Entry<Object, Object> e : p.entrySet()) {
                 String key = (String) e.getKey();
+                String netDbKey = DataHelper.stripHTML(key)
+                   .replace("caps", "<li class=\"cap_stat hide\"><b>" + _t("Capabilities")) // hide caps as already in the header
+                   .replace("router.version", "<li class=\"hide\"><b>" + _t("Version")) // hide version as already in the header
+                   .replace("coreVersion", "<li class=\"hide\"><b>" + _t("Core version")) // do we need this?
+                   .replace("netdb.", "")
+                   .replace("netId", "<hr><li><b>" + _t("Network ID")) // do we need this?
+                   .replace("knownLeaseSets", "<li><b>" + _t("LeaseSets"))
+                   .replace("knownRouters", "<li><b>" + _t("Routers"))
+                   .replace("stat_", "")
+                   .replace("uptime", "<li><b>" + _t("Uptime"))
+                   // TODO: place family entries underneath general network stats
+                   .replace("family.", "Family ")
+                   // hide family name in css as it's already displayed above
+                   .replace("family", "<li class=\"longstat fam hide\"><b>" + _t("Family"))
+                   .replace("Family key", "<li class=\"longstat fam\"><b>" + _t("Family Key"))
+                   .replace("Family sig", "<li class=\"longstat fam\"><b>" + _t("Family Sig"))
+                   .replace("tunnel.buildExploratoryExpire.60m",  "<hr id=\"expl\"><li class=\"longstat\"><b>"   + _t("Exploratory tunnels expire (1h)"))
+                   .replace("tunnel.buildExploratoryReject.60m",  "<li class=\"longstat\"><b>"       + _t("Exploratory tunnels reject (1h)"))
+                   .replace("tunnel.buildExploratorySuccess.60m", "<li class=\"longstat\"><b>"       + _t("Exploratory tunnels build success (1h)"))
+                   .replace("tunnel.buildClientExpire.60m",       "<hr><li class=\"longstat \"><b>"  + _t("Client tunnels expire (1h)"))
+                   .replace("tunnel.buildClientReject.60m",       "<li class=\"longstat\"><b>"       + _t("Client tunnels reject (1h)"))
+                   .replace("tunnel.buildClientSuccess.60m",      "<li class=\"longstat\"><b>"       + _t("Client tunnels build success (1h)"))
+                   .replace("tunnel.participatingTunnels.60m",    "<li class=\"longstat\"><b>"       + _t("Participating tunnels build (1h)"))
+                   .replace("stat_bandwidthSendBps.60m",          "<li class=\"longstat\"><b>"       + _t("Bandwidth send rate (1h)"))
+                   .replace("stat_bandwidthReceiveBps.60m",       "<li class=\"longstat\"><b>"       + _t("Bandwidth receive rate (1h)"));
+                buf.append(netDbKey);
                 String val = (String) e.getValue();
-                buf.append(DataHelper.stripHTML(key)).append(" = ").append(DataHelper.stripHTML(val)).append("<br>\n");
+                String netDbValue = DataHelper.stripHTML(val)
+                   .replace("XO", "X")
+                   .replace("PO", "P")
+                   .replace("R", "")
+                   .replace("U", "")
+                   .replace(";", " <span class=\"bullet\">&bullet;</span> ")
+                   .replace("&bullet;</span> 555",  "&bullet;</span> " +_t("n/a"));
+                buf.append(":</b> ");
+                buf.append(netDbValue)
+                   .append("</li>");
             }
-            buf.append("</code></td></tr>\n");
-        }
-        buf.append("</table>\n");
+            long now = _context.clock().now();
+            if (!isUs) {
+                PeerProfile prof = _context.profileOrganizer().getProfileNonblocking(info.getHash());
+                if (prof != null) {
+                    long heard = prof.getFirstHeardAbout();
+                    if (heard > 0) {
+                        long peerAge = Math.max(now - heard, 1);
+                        buf.append("<hr id=\"hrd\"><li><b>").append(_t("First heard about")).append(":</b> ")
+                           .append(_t("{0} ago", DataHelper.formatDuration2(peerAge))).append("</li>");
+                    } else {
+                        buf.append("<hr id=\"hrd\"><li><b>").append(_t("First heard about")).append(":</b> ")
+                           .append(_t("n/a")).append("</li>");
+                    }
+                    heard = prof.getLastHeardAbout();
+                    if (heard > 0) {
+                        long peerAge = Math.max(now - heard, 1);
+                        buf.append("<li><b>").append(_t("Last heard about")).append(":</b> ")
+                           .append(_t("{0} ago", DataHelper.formatDuration2(peerAge))).append("</li>");
+                    } else {
+                        buf.append("<li><b>").append(_t("Last heard about")).append(":</b> ")
+                           .append(_t("n/a")).append("</li>");
+                    }
+                    heard = prof.getLastHeardFrom();
+                    if (heard > 0) {
+                        long peerAge = Math.max(now - heard, 1);
+                        buf.append("<li><b>").append(_t("Last heard from")).append(":</b> ")
+                           .append(_t("{0} ago", DataHelper.formatDuration2(peerAge))).append("</li>");
+                    } else {
+                        buf.append("<li><b>").append(_t("Last heard from")).append(":</b> ")
+                           .append(_t("n/a")).append("</li>");
+                    }
+                }
+            }
+            buf.append("</ul></td></tr>\n");
+       }
+       buf.append("</table>\n");
     }
 
     private static final int SSU = 1;

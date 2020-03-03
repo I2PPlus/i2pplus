@@ -1,9 +1,9 @@
 package net.i2p.router.message;
 /*
  * free (adj.): unencumbered; not under the control of others
- * Written by jrandom in 2003 and released into the public domain 
- * with no warranty of any kind, either expressed or implied.  
- * It probably won't make your computer catch on fire, or eat 
+ * Written by jrandom in 2003 and released into the public domain
+ * with no warranty of any kind, either expressed or implied.
+ * It probably won't make your computer catch on fire, or eat
  * your children, but it might.  Use at your own risk.
  *
  */
@@ -21,7 +21,7 @@ import net.i2p.util.Log;
 
 /**
  * Unencrypt a garlic message and handle each of the cloves - locally destined
- * messages are tossed into the inbound network message pool so they're handled 
+ * messages are tossed into the inbound network message pool so they're handled
  * as if they arrived locally.  Other instructions are not yet implemented (but
  * need to be. soon)
  *
@@ -41,7 +41,7 @@ public class HandleGarlicMessageJob extends JobImpl implements GarlicMessageRece
     //private Map _cloves; // map of clove Id --> Expiration of cloves we've already seen
     //private MessageHandler _handler;
     //private GarlicMessageParser _parser;
-   
+
     private final static int ROUTER_PRIORITY = OutNetMessage.PRIORITY_LOWEST;
     private final static int TUNNEL_PRIORITY = OutNetMessage.PRIORITY_LOWEST;
 
@@ -62,39 +62,39 @@ public class HandleGarlicMessageJob extends JobImpl implements GarlicMessageRece
         //_parser = new GarlicMessageParser(context);
         // all createRateStat in OCMOSJ.init()
     }
-    
+
     public String getName() { return "Handle Inbound Garlic Message"; }
     public void runJob() {
         GarlicMessageReceiver recv = new GarlicMessageReceiver(getContext(), this);
         recv.receive(_message);
     }
-    
+
     public void handleClove(DeliveryInstructions instructions, I2NPMessage data) {
         switch (instructions.getDeliveryMode()) {
             case DeliveryInstructions.DELIVERY_MODE_LOCAL:
                 if (_log.shouldLog(Log.DEBUG))
-                    _log.debug("local delivery instructions for clove: " + data);
+                    _log.debug("Local delivery instructions for clove: " + data);
                 getContext().inNetMessagePool().add(data, null, null);
                 return;
             case DeliveryInstructions.DELIVERY_MODE_DESTINATION:
                 if (_log.shouldLog(Log.ERROR))
-                    _log.error("this message didn't come down a tunnel, not forwarding to a destination: " 
+                    _log.error("This message didn't come down a tunnel, not forwarding to a destination: "
                                + instructions + " - " + data);
                 return;
             case DeliveryInstructions.DELIVERY_MODE_ROUTER:
                 if (getContext().routerHash().equals(instructions.getRouter())) {
                     if (_log.shouldLog(Log.DEBUG))
-                        _log.debug("router delivery instructions targetting us");
+                        _log.debug("Router delivery instructions targeting us");
                     getContext().inNetMessagePool().add(data, null, null);
                 } else {
                     if (_log.shouldLog(Log.DEBUG))
-                        _log.debug("router delivery instructions targetting " 
-                                   + instructions.getRouter().toBase64().substring(0,4) + " for " + data);
-                    SendMessageDirectJob j = new SendMessageDirectJob(getContext(), data, 
-                                                                      instructions.getRouter(), 
+                        _log.debug("Router delivery instructions targeting ["
+                                   + instructions.getRouter().toBase64().substring(0,6) + "] for " + data);
+                    SendMessageDirectJob j = new SendMessageDirectJob(getContext(), data,
+                                                                      instructions.getRouter(),
                                                                       10*1000, ROUTER_PRIORITY);
                     // run it inline (adds to the outNetPool if it has the router info, otherwise queue a lookup)
-                    j.runJob(); 
+                    j.runJob();
                     //getContext().jobQueue().addJob(j);
                 }
                 return;
@@ -104,13 +104,13 @@ public class HandleGarlicMessageJob extends JobImpl implements GarlicMessageRece
                 gw.setTunnelId(instructions.getTunnelId());
                 gw.setMessageExpiration(data.getMessageExpiration());
                 if (_log.shouldLog(Log.DEBUG))
-                    _log.debug("tunnel delivery instructions targetting " 
-                               + instructions.getRouter().toBase64().substring(0,4) + " for " + data);
-                SendMessageDirectJob job = new SendMessageDirectJob(getContext(), gw, 
-                                                                    instructions.getRouter(), 
+                    _log.debug("Tunnel delivery instructions targeting ["
+                               + instructions.getRouter().toBase64().substring(0,6) + "] for " + data);
+                SendMessageDirectJob job = new SendMessageDirectJob(getContext(), gw,
+                                                                    instructions.getRouter(),
                                                                     10*1000, TUNNEL_PRIORITY);
                 // run it inline (adds to the outNetPool if it has the router info, otherwise queue a lookup)
-                job.runJob(); 
+                job.runJob();
                 // getContext().jobQueue().addJob(job);
                 return;
             default:
@@ -118,11 +118,11 @@ public class HandleGarlicMessageJob extends JobImpl implements GarlicMessageRece
                 return;
         }
     }
-    
+
     @Override
     public void dropped() {
-        getContext().messageHistory().messageProcessingError(_message.getUniqueId(), 
-                                                         _message.getClass().getName(), 
+        getContext().messageHistory().messageProcessingError(_message.getUniqueId(),
+                                                         _message.getClass().getName(),
                                                          "Dropped due to overload");
     }
 }

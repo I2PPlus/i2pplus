@@ -2,9 +2,9 @@ package net.i2p.data.i2cp;
 
 /*
  * free (adj.): unencumbered; not under the control of others
- * Written by jrandom in 2003 and released into the public domain 
- * with no warranty of any kind, either expressed or implied.  
- * It probably won't make your computer catch on fire, or eat 
+ * Written by jrandom in 2003 and released into the public domain
+ * with no warranty of any kind, either expressed or implied.
+ * It probably won't make your computer catch on fire, or eat
  * your children, but it might.  Use at your own risk.
  *
  */
@@ -143,15 +143,14 @@ public class RequestLeaseSetMessage extends I2CPMessageImpl {
     @Override
     public String toString() {
         StringBuilder buf = new StringBuilder();
-        buf.append("[RequestLeaseSetMessage: ");
-        buf.append("\n\tSessionId: ").append(getSessionId());
-        buf.append("\n\tTunnels:");
+        buf.append("RequestLeaseSetMessage: ");
+        buf.append("\n* SessionId: ").append(getSessionId());
+        buf.append("\n* Tunnels:");
         for (int i = 0; i < getEndpoints(); i++) {
-            buf.append("\n\t\tRouterIdentity: ").append(getRouter(i));
-            buf.append("\n\t\tTunnelId: ").append(getTunnelId(i));
+            buf.append("\n* RouterIdentity: ").append(getRouter(i));
+            buf.append("\n* TunnelId: ").append(getTunnelId(i));
         }
-        buf.append("\n\tEndDate: ").append(getEndDate());
-        buf.append("]");
+        buf.append("\n* EndDate: ").append(getEndDate());
         return buf.toString();
     }
 

@@ -8,9 +8,10 @@
  * so they don't load in the iframe
  */
 %>
-<html><head>
+<html>
+<head>
 <%@include file="css.jsi" %>
-<title>Sidebar</title>
+<title>Sidebar - I2P+</title>
 <%
     // try hard to avoid an error page in the iframe after shutdown
     String action = request.getParameter("action");
@@ -53,7 +54,9 @@
         }
     }
 %>
-</head><body style="margin: 0;"><div class="routersummary">
+</head>
+<body style="margin: 0;">
+<div class="routersummary";>
 <jsp:useBean class="net.i2p.router.web.NewsHelper" id="newshelper" scope="request" />
 <jsp:setProperty name="newshelper" property="contextId" value="<%=i2pcontextId%>" />
 <%
@@ -65,7 +68,7 @@
 <%
     // d and shutdownSoon defined above
     if (!shutdownSoon) {
-        out.print("<hr>\n<div class=\"refresh\"><form action=\"summaryframe.jsp\" method=\"POST\">\n");
+        out.print("<hr>\n<div class=\"refresh\">\n<form action=\"summaryframe.jsp\" method=\"POST\">\n");
         if (intl.getDisableRefresh()) {
             out.print("<b>");
             out.print(intl._t("Refresh (s)"));
@@ -83,7 +86,10 @@
             String refreshTime = net.i2p.data.DataHelper.formatDuration2(refreshMS);
             out.print(intl._t("Disable {0} Refresh", refreshTime));
         }
-        out.print("</button></form></div>\n");
+        out.print("</button>\n</form>\n</div>\n");
     }
 %>
-</div></body></html>
+</div>
+<script nonce="<%=cspNonce%>" type="text/javascript">progressx.hide();</script>
+</body>
+</html>

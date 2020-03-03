@@ -12,7 +12,7 @@ public class ConfigPeerHandler extends FormHandler {
     private String _peer;
     private String _speed;
     private String _capacity;
-    
+
     @Override
     protected void processForm() {
         if ("Save Configuration".equals(_action)) {
@@ -21,7 +21,7 @@ public class ConfigPeerHandler extends FormHandler {
         } else if (_action.equals(_t("Ban peer until restart"))) {
             Hash h = getHash();
             if (h != null) {
-                _context.banlist().banlistRouterForever(h, _t("Manually banned via {0}"), "<a href=\"configpeer\">configpeer</a>");
+                _context.banlist().banlistRouterForever(h, " <b>➜</b> " + _t("Manually banned via {0}"), "<a href=\"configpeer\">configpeer</a>");
                 addFormNotice(_t("Peer") + " " + _peer + " " + _t("banned until restart") );
                 return;
             }
@@ -64,7 +64,7 @@ public class ConfigPeerHandler extends FormHandler {
             //addFormError(_t("Unsupported") + ' ' + _action + '.');
         }
     }
-    
+
     private Hash getHash() {
         if (_peer != null && _peer.length() == 44) {
             byte[] b = Base64.decode(_peer);

@@ -2,9 +2,9 @@ package net.i2p.router.transport.crypto;
 
 /*
  * free (adj.): unencumbered; not under the control of others
- * Written by jrandom in 2003 and released into the public domain 
- * with no warranty of any kind, either expressed or implied.  
- * It probably won't  make your computer catch on fire, or eat 
+ * Written by jrandom in 2003 and released into the public domain
+ * with no warranty of any kind, either expressed or implied.
+ * It probably won't  make your computer catch on fire, or eat
  * your children, but it might.  Use at your own risk.
  *
  */
@@ -31,14 +31,14 @@ import net.i2p.util.SystemVersion;
 
 /**
  * Generate a new session key through a diffie hellman exchange.  This uses the
- * constants defined in CryptoConstants, which causes the exchange to create a 
+ * constants defined in CryptoConstants, which causes the exchange to create a
  * 256 bit session key.
  *
  * This class precalcs a set of values on its own thread.
  * Whenever the pool has
- * less than the minimum, it fills it up again to the max.  There is a delay after 
- * each precalculation so that the CPU isn't hosed during startup.  
- * These three parameters are controlled by java environmental variables and 
+ * less than the minimum, it fills it up again to the max.  There is a delay after
+ * each precalculation so that the CPU isn't hosed during startup.
+ * These three parameters are controlled by java environmental variables and
  * can be adjusted via:
  *  -Dcrypto.dh.precalc.min=40 -Dcrypto.dh.precalc.max=100 -Dcrypto.dh.precalc.delay=60000
  *
@@ -85,7 +85,7 @@ public class DHSessionKeyBuilder {
         _myPublicValue = CryptoConstants.elgg.modPow(_myPrivateValue, CryptoConstants.elgp);
         _extraExchangedBytes = new ByteArray();
     }
-    
+
     /**
      * Conduct a DH exchange over the streams, returning the resulting data.
      *
@@ -96,10 +96,10 @@ public class DHSessionKeyBuilder {
 /****
     public static DHSessionKeyBuilder exchangeKeys(InputStream in, OutputStream out) throws IOException {
         DHSessionKeyBuilder builder = new DHSessionKeyBuilder();
-        
+
         // send: X
         writeBigI(out, builder.getMyPublicValue());
-        
+
         // read: Y
         BigInteger Y = readBigI(in);
         if (Y == null) return null;
@@ -113,7 +113,7 @@ public class DHSessionKeyBuilder {
         }
     }
 ****/
-    
+
     /**
      * unused
      */
@@ -127,9 +127,9 @@ public class DHSessionKeyBuilder {
         return new NativeBigInteger(1, Y);
     }
 ****/
-    
+
     /**
-     * Write out the integer as a 256 byte value.  This left pads with 0s so 
+     * Write out the integer as a 256 byte value.  This left pads with 0s so
      * to keep in 2s complement, and if it is already 257 bytes (due to
      * the sign bit) ignore that first byte.
      *
@@ -138,7 +138,7 @@ public class DHSessionKeyBuilder {
 /****
     private static void writeBigI(OutputStream out, BigInteger val) throws IOException {
         byte x[] = val.toByteArray();
-        for (int i = x.length; i < 256; i++) 
+        for (int i = x.length; i < 256; i++)
             out.write(0);
         if (x.length == 257)
             out.write(x, 1, 256);
@@ -146,11 +146,11 @@ public class DHSessionKeyBuilder {
             out.write(x);
         else if (x.length > 257)
             throw new IllegalArgumentException("Value is too large!  length="+x.length);
-        
+
         out.flush();
     }
 ****/
-    
+
     /**
      * Retrieve the private value used by the local participant in the DH exchange
      * unused
@@ -169,14 +169,14 @@ public class DHSessionKeyBuilder {
     }
 
     /**
-     * Return a 256 byte representation of our public key, with leading 0s 
+     * Return a 256 byte representation of our public key, with leading 0s
      * if necessary.
      *
      */
     public byte[] getMyPublicValueBytes() {
         return toByteArray(getMyPublicValue());
     }
-    
+
     /**
      *  @return exactly 256 bytes
      *  @throws IllegalArgumentException if requires more than 256 bytes
@@ -217,7 +217,7 @@ public class DHSessionKeyBuilder {
     }
 
     /**
-     * Return a 256 byte representation of his public key, with leading 0s 
+     * Return a 256 byte representation of his public key, with leading 0s
      * if necessary.
      *
      */
@@ -286,7 +286,7 @@ public class DHSessionKeyBuilder {
             // Will always be here, typ buf is 256 or 257 bytes
             System.arraycopy(buf, 0, val, 0, SessionKey.KEYSIZE_BYTES);
             // feed the extra bytes into the PRNG
-            RandomSource.getInstance().harvester().feedEntropy("DH", buf, val.length, buf.length-val.length); 
+            RandomSource.getInstance().harvester().feedEntropy("DH", buf, val.length, buf.length-val.length);
             byte remaining[] = new byte[buf.length - val.length];
             System.arraycopy(buf, val.length, remaining, 0, remaining.length);
             _extraExchangedBytes.setData(remaining);
@@ -296,7 +296,7 @@ public class DHSessionKeyBuilder {
         key.setData(val);
         long end = System.currentTimeMillis();
         long diff = end - start;
-        
+
         I2PAppContext.getGlobalContext().statManager().addRateData("crypto.dhCalculateSessionTime", diff);
         //if (diff > 1000) {
         //    if (_log.shouldLog(Log.WARN)) _log.warn("Generating session key took too long (" + diff + " ms");
@@ -305,7 +305,7 @@ public class DHSessionKeyBuilder {
         //}
         return key;
     }
-    
+
     /**
      * rfc2631:
      *  The following algorithm MAY be used to validate a received public key y.
@@ -317,32 +317,32 @@ public class DHSessionKeyBuilder {
      */
     private static final void validatePublic(BigInteger publicValue) throws InvalidPublicParameterException {
         int cmp = publicValue.compareTo(NativeBigInteger.ONE);
-        if (cmp <= 0) 
+        if (cmp <= 0)
             throw new InvalidPublicParameterException("Public value is below two: " + publicValue.toString());
-        
+
         cmp = publicValue.compareTo(CryptoConstants.elgp);
-        if (cmp >= 0) 
+        if (cmp >= 0)
             throw new InvalidPublicParameterException("Public value is above p-1: " + publicValue.toString());
-        
-        // todo: 
+
+        // todo:
         // whatever validation needs to be done to mirror the rfc's part 2 (we don't have a q, so can't do
         // if (NativeBigInteger.ONE.compareTo(publicValue.modPow(q, CryptoConstants.elgp)) != 0)
         //   throw new InvalidPublicParameterException("Invalid public value with y^q mod p != 1");
-        // 
+        //
     }
 
     /*
     private static void testValidation() {
         NativeBigInteger bi = new NativeBigInteger("-3416069082912684797963255430346582466254460710249795973742848334283491150671563023437888953432878859472362439146158925287289114133666004165938814597775594104058593692562989626922979416277152479694258099203456493995467386903611666213773085025718340335205240293383622352894862685806192183268523899615405287022135356656720938278415659792084974076416864813957028335830794117802560169423133816961503981757298122040391506600117301607823659479051969827845787626261515313227076880722069706394405554113103165334903531980102626092646197079218895216346725765704256096661045699444128316078549709132753443706200863682650825635513");
-        try { 
+        try {
             validatePublic(bi);
             System.err.println("valid?!");
         } catch (InvalidPublicParameterException ippe) {
             System.err.println("Ok, invalid.  cool");
         }
-        
+
         byte val[] = bi.toByteArray();
-        System.out.println("Len: " + val.length + " first is ok? " + ( (val[0] & 0x80) == 1) 
+        System.out.println("Len: " + val.length + " first is ok? " + ( (val[0] & 0x80) == 1)
                            + "\n" + DataHelper.toString(val, 64));
         NativeBigInteger bi2 = new NativeBigInteger(1, val);
         try {
@@ -353,11 +353,11 @@ public class DHSessionKeyBuilder {
         }
     }
     */
-    
+
 /******
     public static void main(String args[]) {
         //if (true) { testValidation(); return; }
-        
+
         RandomSource.getInstance().nextBoolean(); // warm it up
         try {
             Thread.sleep(20 * 1000);
@@ -452,10 +452,10 @@ public class DHSessionKeyBuilder {
             _context = ctx;
             _log = ctx.logManager().getLog(DHSessionKeyBuilder.class);
             ctx.statManager().createRateStat("crypto.dhGeneratePublicTime", "How long it takes to create x and X", "Encryption", new long[] { 60*60*1000 });
-            ctx.statManager().createRateStat("crypto.dhCalculateSessionTime", "How long it takes to create the session key", "Encryption", new long[] { 60*60*1000 });        
-            ctx.statManager().createRateStat("crypto.DHUsed", "Need a DH from the queue", "Encryption", new long[] { 60*60*1000 });
-            ctx.statManager().createRateStat("crypto.DHReused", "Unused DH requeued", "Encryption", new long[] { 60*60*1000 });
-            ctx.statManager().createRateStat("crypto.DHEmpty", "DH queue empty", "Encryption", new long[] { 60*60*1000 });
+            ctx.statManager().createRateStat("crypto.dhCalculateSessionTime", "How long it takes to create the session key", "Encryption", new long[] { 60*60*1000 });
+            ctx.statManager().createRateStat("crypto.DHUsed", "Need a Diffie–Hellman key exchange from the queue", "Encryption", new long[] { 60*60*1000 });
+            ctx.statManager().createRateStat("crypto.DHReused", "Unused Diffie–Hellman key exchange requeued", "Encryption", new long[] { 60*60*1000 });
+            ctx.statManager().createRateStat("crypto.DHEmpty", "Diffie–Hellman key exchange queue empty", "Encryption", new long[] { 60*60*1000 });
 
             // add to the defaults for every 128MB of RAM, up to 512MB
             long maxMemory = SystemVersion.getMaxMemory();
@@ -473,7 +473,7 @@ public class DHSessionKeyBuilder {
             if (!SystemVersion.isWindows())
                 setPriority(Thread.NORM_PRIORITY - 1);
         }
-        
+
         /**
          *  Note that this stops the singleton precalc thread.
          *  You don't want to do this if there are multiple routers in the JVM.
@@ -602,7 +602,7 @@ public class DHSessionKeyBuilder {
         }
 
     }
-    
+
     public static class InvalidPublicParameterException extends I2PException {
         public InvalidPublicParameterException() {
             super();

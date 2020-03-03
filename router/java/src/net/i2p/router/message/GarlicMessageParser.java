@@ -38,7 +38,7 @@ public class GarlicMessageParser {
      */
     private static final int MAX_CLOVES = 32;
 
-    public GarlicMessageParser(RouterContext context) { 
+    public GarlicMessageParser(RouterContext context) {
         _context = context;
         _log = _context.logManager().getLog(GarlicMessageParser.class);
     }
@@ -46,7 +46,7 @@ public class GarlicMessageParser {
     /**
      *  Supports both ELGAMAL_2048 and ECIES_X25519.
      *
-     *  @param encryptionKey either type
+     *  @param encryptionKey either type TODO need both for muxed
      *  @param skm use tags from this session key manager
      *  @return null on error
      */
@@ -92,8 +92,8 @@ public class GarlicMessageParser {
         }
         if (decrData == null) {
             // This is the usual error path and it's logged at WARN level in GarlicMessageReceiver
-            if (_log.shouldLog(Log.INFO))
-                _log.info("Decryption of garlic message failed", new Exception("Decrypt fail"));
+            if (_log.shouldLog(Log.DEBUG))
+                _log.debug("Decryption of garlic message failed", new Exception("Decrypt fail"));
             return null;
         } else {
             try {
@@ -159,7 +159,7 @@ public class GarlicMessageParser {
         int numCloves = data[offset] & 0xff;
         offset++;
         //if (_log.shouldLog(Log.DEBUG))
-        //    _log.debug("# cloves to read: " + numCloves);
+        //    _log.debug("Numer of cloves to read: " + numCloves);
         if (numCloves <= 0 || numCloves > MAX_CLOVES)
             throw new DataFormatException("bad clove count " + numCloves);
         GarlicClove[] cloves = new GarlicClove[numCloves];

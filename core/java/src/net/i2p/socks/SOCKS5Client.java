@@ -194,7 +194,7 @@ public class SOCKS5Client {
             in.readFully(addr);  // address
             in.readUnsignedShort();  // port
             if (reply != Reply.SUCCEEDED)
-                throw new SOCKSException("Proxy rejected request, response = " + reply);
+                throw new SOCKSException("Proxy rejected request (response = " + reply + ")");
             // throw away the address in the response
             // todo pass the response through?
         } catch (IOException e) {

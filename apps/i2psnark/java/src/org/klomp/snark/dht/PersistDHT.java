@@ -40,7 +40,7 @@ abstract class PersistDHT {
         BufferedReader br = null;
         try {
             br = new BufferedReader(new InputStreamReader(
-            		new FileInputStream(file), "ISO-8859-1"));
+                    new FileInputStream(file), "ISO-8859-1"));
             String line = null;
             while ( (line = br.readLine()) != null) {
                 if (line.startsWith("#"))
@@ -96,6 +96,6 @@ abstract class PersistDHT {
             if (out != null) out.close();
         }
         if (log.shouldLog(Log.INFO))
-            log.info("Stored " + count + " nodes to " + file);
+            log.info("Wrote " + count + " nodes to " + file);
     }
 }

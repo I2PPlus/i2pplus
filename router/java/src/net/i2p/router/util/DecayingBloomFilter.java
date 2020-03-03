@@ -14,7 +14,7 @@ import org.xlattice.crypto.filters.BloomSHA1;
  * Series of bloom filters which decay over time, allowing their continual use
  * for time sensitive data.  This has a fixed size (per
  * period, using two periods overall), allowing this to pump through hundreds of
- * entries per second with virtually no false positive rate.  Down the line, 
+ * entries per second with virtually no false positive rate.  Down the line,
  * this may be refactored to allow tighter control of the size necessary for the
  * contained bloom filters.
  *
@@ -40,12 +40,12 @@ public class DecayingBloomFilter {
     protected final String _name;
     /** synchronize against this lock when switching double buffers */
     protected final ReentrantReadWriteLock _reorganizeLock = new ReentrantReadWriteLock();
-    
+
     private static final int DEFAULT_M = 23;
     private static final int DEFAULT_K = 11;
     /** true for debugging */
     private static final boolean ALWAYS_MISS = false;
-   
+
     /** only for extension by DHS */
     protected DecayingBloomFilter(int durationMs, int entryBytes, String name, I2PAppContext context) {
         _context = context;
@@ -68,12 +68,12 @@ public class DecayingBloomFilter {
     }
 
     /**
-     * Create a bloom filter that will decay its entries over time.  
+     * Create a bloom filter that will decay its entries over time.
      * Uses default m of 23, memory usage is 2 MB.
      *
      * @param durationMs entries last for at least this long, but no more than twice this long
      * @param entryBytes how large are the entries to be added?  if this is less than 32 bytes,
-     *                   the entries added will be expanded by concatenating their XORing 
+     *                   the entries added will be expanded by concatenating their XORing
      *                   against with sufficient random values.
      */
     public DecayingBloomFilter(I2PAppContext context, int durationMs, int entryBytes) {
@@ -141,15 +141,15 @@ public class DecayingBloomFilter {
                      " numExtenders = " + numExtenders + " cycle (s) = " + (durationMs / 1000));
         // try to get a handle on memory usage vs. false positives
         context.statManager().createRateStat("router.decayingBloomFilter." + name + ".size",
-             "Size", "Router", new long[] { 10 * Math.max(60*1000, durationMs) });
+             "Size", "Router [DecayingBloomFilter]", new long[] { 10 * Math.max(60*1000, durationMs) });
         context.statManager().createRateStat("router.decayingBloomFilter." + name + ".dups",
-             "1000000 * Duplicates/Size", "Router", new long[] { 10 * Math.max(60*1000, durationMs) });
+             "1000000 * Duplicates/Size", "Router [DecayingBloomFilter]", new long[] { 10 * Math.max(60*1000, durationMs) });
         context.statManager().createRateStat("router.decayingBloomFilter." + name + ".log10(falsePos)",
              "log10 of the false positive rate (must have net.i2p.util.DecayingBloomFilter=DEBUG)",
-             "Router", new long[] { 10 * Math.max(60*1000, durationMs) });
+             "Router [DecayingBloomFilter]", new long[] { 10 * Math.max(60*1000, durationMs) });
         context.addShutdownTask(new Shutdown());
     }
-    
+
     /**
      * @since 0.8.8
      */
@@ -162,40 +162,40 @@ public class DecayingBloomFilter {
     public long getCurrentDuplicateCount() { return _currentDuplicates; }
 
     /** unsynchronized but only used for logging elsewhere */
-    public int getInsertedCount() { 
-            return _current.size() + _previous.size(); 
+    public int getInsertedCount() {
+            return _current.size() + _previous.size();
     }
 
     /** unsynchronized, only used for logging elsewhere */
-    public double getFalsePositiveRate() { 
-            return _current.falsePositives(); 
+    public double getFalsePositiveRate() {
+            return _current.falsePositives();
     }
-    
-    /** 
+
+    /**
      * @return true if the entry added is a duplicate
      */
     public boolean add(byte entry[]) {
         return add(entry, 0, entry.length);
     }
 
-    /** 
+    /**
      * @return true if the entry added is a duplicate
      */
     public boolean add(byte entry[], int off, int len) {
         if (ALWAYS_MISS) return false;
-        if (entry == null) 
+        if (entry == null)
             throw new IllegalArgumentException("Null entry");
-        if (len != _entryBytes) 
-            throw new IllegalArgumentException("Bad entry [" + len + ", expected " 
+        if (len != _entryBytes)
+            throw new IllegalArgumentException("Bad entry [" + len + ", expected "
                                                + _entryBytes + "]");
         getReadLock();
         try {
             return locked_add(entry, off, len, true);
         } finally { releaseReadLock(); }
     }
-    
-    /** 
-     * @return true if the entry added is a duplicate.  the number of low order 
+
+    /**
+     * @return true if the entry added is a duplicate.  the number of low order
      * bits used is determined by the entryBytes parameter used on creation of the
      * filter.
      *
@@ -205,7 +205,7 @@ public class DecayingBloomFilter {
         byte[] longToEntry = new byte[_entryBytes];
         if (_entryBytes <= 7)
             entry = ((entry ^ _longToEntryMask) & ((1 << 31)-1)) | (entry ^ _longToEntryMask);
-            //entry &= _longToEntryMask; 
+            //entry &= _longToEntryMask;
         if (entry < 0) {
             DataHelper.toLong(longToEntry, 0, _entryBytes, 0-entry);
             longToEntry[0] |= (1 << 7);
@@ -217,8 +217,8 @@ public class DecayingBloomFilter {
             return locked_add(longToEntry, 0, _entryBytes, true);
         } finally { releaseReadLock(); }
     }
-    
-    /** 
+
+    /**
      * @return true if the entry is already known.  this does NOT add the
      * entry however.
      *
@@ -227,7 +227,7 @@ public class DecayingBloomFilter {
         if (ALWAYS_MISS) return false;
         byte[] longToEntry = new byte[_entryBytes];
         if (_entryBytes <= 7)
-            entry = ((entry ^ _longToEntryMask) & ((1 << 31)-1)) | (entry ^ _longToEntryMask); 
+            entry = ((entry ^ _longToEntryMask) & ((1 << 31)-1)) | (entry ^ _longToEntryMask);
         if (entry < 0) {
             DataHelper.toLong(longToEntry, 0, _entryBytes, 0-entry);
             longToEntry[0] |= (1 << 7);
@@ -239,7 +239,7 @@ public class DecayingBloomFilter {
             return locked_add(longToEntry, 0, _entryBytes, false);
         } finally { releaseReadLock(); }
     }
-    
+
     private boolean locked_add(byte entry[], int offset, int len, boolean addIfNew) {
         if (_extenders != null) {
             // extend the entry to 32 bytes
@@ -281,7 +281,7 @@ public class DecayingBloomFilter {
             }
         }
     }
-    
+
     public void clear() {
         if (!getWriteLock())
             return;
@@ -291,12 +291,12 @@ public class DecayingBloomFilter {
             _currentDuplicates = 0;
         } finally { releaseWriteLock(); }
     }
-    
+
     public void stopDecaying() {
         _keepDecaying = false;
         _decayEvent.cancel();
     }
-    
+
     protected void decay() {
         int currentCount = 0;
         long dups = 0;
@@ -315,7 +315,7 @@ public class DecayingBloomFilter {
             _currentDuplicates = 0;
         } finally { releaseWriteLock(); }
         if (_log.shouldLog(Log.DEBUG))
-            _log.debug("Decaying the filter " + _name + " after inserting " + currentCount 
+            _log.debug("Decaying the filter " + _name + " after inserting " + currentCount
                        + " elements and " + dups + " false positives with FPR = " + fpr);
         _context.statManager().addRateData("router.decayingBloomFilter." + _name + ".size",
                                            currentCount);
@@ -329,7 +329,7 @@ public class DecayingBloomFilter {
                                                exponent);
         }
     }
-    
+
     private class DecayEvent extends SimpleTimer2.TimedEvent {
         /**
          *  Caller MUST schedule.
@@ -345,7 +345,7 @@ public class DecayingBloomFilter {
             }
         }
     }
-    
+
     /**
      *  Decays at 5 minutes after the top of the hour.
      *  This ignores leap seconds.
@@ -387,7 +387,7 @@ public class DecayingBloomFilter {
             return Math.max(5000, next - now);
         }
     }
-    
+
     /** @since 0.8.11 moved from DecayingHashSet */
     protected void getReadLock() {
         _reorganizeLock.readLock().lock();
@@ -534,7 +534,7 @@ public class DecayingBloomFilter {
                            + DataHelper.formatDuration(totalTime/numRuns) + " per run, there were "
                            + falsePositives + " false positives (" +
                            (((double) falsePositives) / iv.length) + ')');
-        //System.out.println("inserted: " + bloom.size() + " with " + bloom.capacity() 
+        //System.out.println("inserted: " + bloom.size() + " with " + bloom.capacity()
         //                   + " (" + bloom.falsePositives()*100.0d + "% false positive)");
     }
 *****/

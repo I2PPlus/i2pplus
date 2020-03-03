@@ -2,9 +2,9 @@ package net.i2p.client.impl;
 
 /*
  * free (adj.): unencumbered; not under the control of others
- * Written by jrandom in 2003 and released into the public domain 
- * with no warranty of any kind, either expressed or implied.  
- * It probably won't  make your computer catch on fire, or eat 
+ * Written by jrandom in 2003 and released into the public domain
+ * with no warranty of any kind, either expressed or implied.
+ * It probably won't  make your computer catch on fire, or eat
  * your children, but it might.  Use at your own risk.
  *
  */
@@ -31,10 +31,10 @@ class MessagePayloadMessageHandler extends HandlerImpl {
     public MessagePayloadMessageHandler(I2PAppContext context) {
         super(context, MessagePayloadMessage.MESSAGE_TYPE);
     }
-    
+
     public void handleMessage(I2CPMessage message, I2PSessionImpl session) {
         if (_log.shouldLog(Log.DEBUG))
-            _log.debug("Handle message " + message + " for session " + session);
+            _log.debug("Handle " + message + "\n* Session: " + session);
         try {
             MessagePayloadMessage msg = (MessagePayloadMessage) message;
             long id = msg.getMessageId();
@@ -73,7 +73,7 @@ class MessagePayloadMessageHandler extends HandlerImpl {
             payload.setUnencryptedData(payload.getEncryptedData());
             return payload;
         //}
-            
+
         //byte[] data = _context.elGamalAESEngine().decrypt(payload.getEncryptedData(), session.getDecryptionKey());
         //if (data == null) {
         //    if (_log.shouldLog(Log.WARN))

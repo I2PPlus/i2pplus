@@ -19,9 +19,9 @@ import net.i2p.util.Log;
 import net.i2p.util.SimpleTimer2;
 
 /**
- * Queue out packets to be sent through the session.  
+ * Queue out packets to be sent through the session.
  * Well, thats the theory at least... in practice we just
- * send them immediately with no blocking, since the 
+ * send them immediately with no blocking, since the
  * mode=bestEffort doesnt block in the SDK.
  *<p>
  * MessageOutputStream -&gt; ConnectionDataReceiver -&gt; Connection -&gt; PacketQueue -&gt; I2PSession
@@ -32,7 +32,7 @@ class PacketQueue implements SendMessageStatusListener, Closeable {
     private final ByteCache _cache = ByteCache.getInstance(64, 36*1024);
     private final Map<Long, Connection> _messageStatusMap;
     private volatile boolean _dead;
-    
+
     private static final int FLAGS_INITIAL_TAGS = Packet.FLAG_SYNCHRONIZE;
     private static final int FLAGS_FINAL_TAGS = Packet.FLAG_CLOSE |
                                               Packet.FLAG_RESET |
@@ -63,7 +63,7 @@ class PacketQueue implements SendMessageStatusListener, Closeable {
         _dead = true;
         _messageStatusMap.clear();
     }
-    
+
     /**
      * Add a new packet to be sent out ASAP.
      * This updates the acks.
@@ -74,7 +74,7 @@ class PacketQueue implements SendMessageStatusListener, Closeable {
     public boolean enqueue(PacketLocal packet) {
         if (_dead)
             return false;
-        
+
         //SessionKey keyUsed = packet.getKeyUsed();
         //if (keyUsed == null)
         //    keyUsed = new SessionKey();
@@ -93,7 +93,7 @@ class PacketQueue implements SendMessageStatusListener, Closeable {
             // this updates the ack/nack fields
             con.getInputStream().updateAcks(packet);
         }
-    
+
         ByteArray ba = _cache.acquire();
         byte buf[] = ba.getData();
 
@@ -113,7 +113,7 @@ class PacketQueue implements SendMessageStatusListener, Closeable {
 
             // last chance to short circuit...
             if (packet.getAckTime() > 0) return false;
-            
+
             // this should not block!
             begin = _context.clock().now();
             long expires = 0;
@@ -210,14 +210,14 @@ class PacketQueue implements SendMessageStatusListener, Closeable {
                                  options);
             }
             end = _context.clock().now();
-            
-            if ( (end-begin > 1000) && (_log.shouldLog(Log.WARN)) ) 
-                _log.warn("Took " + (end-begin) + "ms to sendMessage(...) " + packet);
-            
+
+            if ( (end-begin > 1000) && (_log.shouldLog(Log.WARN)) )
+                _log.warn("Took " + (end-begin) + "ms to send message: " + packet);
+
             _context.statManager().addRateData("stream.con.sendMessageSize", size, packet.getLifetime());
             if (packet.getNumSends() > 1)
                 _context.statManager().addRateData("stream.con.sendDuplicateSize", size, packet.getLifetime());
-            
+
             if (con != null) {
                 con.incrementBytesSent(size);
                 if (packet.getNumSends() > 1)
@@ -225,11 +225,12 @@ class PacketQueue implements SendMessageStatusListener, Closeable {
             }
         } catch (I2PSessionException ise) {
             if (_log.shouldLog(Log.WARN))
-                _log.warn("Unable to send the packet " + packet, ise);
+//                _log.warn("Unable to send the packet " + packet, ise);
+                _log.warn("Unable to send the packet " + packet + "\n* " + ise.getMessage());
         }
-        
+
         _cache.release(ba);
-        
+
         if (!sent) {
             if (_log.shouldLog(Log.WARN))
                 _log.warn("Send failed for " + packet);
@@ -240,14 +241,14 @@ class PacketQueue implements SendMessageStatusListener, Closeable {
             //packet.setTagsSent(tagsSent);
             packet.incrementSends();
             if (con != null && _log.shouldDebug()) {
-                String suffix = "wsize " + con.getOptions().getWindowSize() + " rto " + con.getOptions().getRTO();
+                String suffix = "Wsize " + con.getOptions().getWindowSize() + " RTO " + con.getOptions().getRTO();
                 con.getConnectionManager().getPacketHandler().displayPacket(packet, "SEND", suffix);
             }
             if (I2PSocketManagerFull.pcapWriter != null &&
                 _context.getBooleanProperty(I2PSocketManagerFull.PROP_PCAP))
                 packet.logTCPDump();
         }
-        
+
         if ( (packet.getSequenceNum() == 0) && (!packet.isFlagSet(Packet.FLAG_SYNCHRONIZE)) ) {
             // ack only, so release it asap
             packet.releasePayload();
@@ -280,7 +281,7 @@ class PacketQueue implements SendMessageStatusListener, Closeable {
         Connection con = _messageStatusMap.get(id);
         if (con == null) {
             if (_log.shouldLog(Log.WARN))
-                _log.warn("Rcvd status " + status + " for msg " + msgId + " on unknown connection");
+                _log.warn("Received status [" + status + "] for [MsgID " + msgId + "] on unknown connection");
             return;
         }
 
@@ -295,7 +296,7 @@ class PacketQueue implements SendMessageStatusListener, Closeable {
             // overflow in router-side I2CP queue, sent as of 0.9.29, will be retried
             case MessageStatusMessage.STATUS_SEND_FAILURE_LOCAL:
                 if (_log.shouldLog(Log.WARN))
-                    _log.warn("Rcvd soft failure status " + status + " for msg " + msgId + " on " + con);
+                    _log.warn("Received Soft Failure status [" + status + "] for [MsgID " + msgId + "] on " + con);
                 _messageStatusMap.remove(id);
                 break;
 
@@ -308,7 +309,7 @@ class PacketQueue implements SendMessageStatusListener, Closeable {
                 // we can't treat this one as a hard fail.
                 // Let the streaming retransmission paper over the problem.
                 if (_log.shouldLog(Log.WARN))
-                    _log.warn("LS lookup (soft) failure for msg " + msgId + " on " + con);
+                    _log.warn("LeaseSet lookup: Soft Failure for [MsgID " + msgId + "] on " + con);
                 _messageStatusMap.remove(id);
                 break;
 
@@ -328,13 +329,13 @@ class PacketQueue implements SendMessageStatusListener, Closeable {
                 if (con.getHighestAckedThrough() >= 0) {
                     // a retxed SYN succeeded before the first SYN failed
                     if (_log.shouldLog(Log.WARN))
-                        _log.warn("Rcvd hard failure but already connected, status " + status + " for msg " + msgId + " on " + con);
+                        _log.warn("Received Hard Failure but Already Connected status [" + status + "] for [MsgID " + msgId + "] on " + con);
                 } else if (!con.getIsConnected()) {
                     if (_log.shouldLog(Log.WARN))
-                        _log.warn("Rcvd hard failure but already closed, status " + status + " for msg " + msgId + " on " + con);
+                        _log.warn("Received Hard Failure but Already Closed status [" + status + "] for [MsgID " + msgId + "] on " + con);
                 } else {
                     if (_log.shouldLog(Log.WARN))
-                        _log.warn("Rcvd hard failure status " + status + " for msg " + msgId + " on " + con);
+                        _log.warn("Received Hard Failure status [" + status + "] for [MsgID " + msgId + "] on " + con);
                     _messageStatusMap.remove(id);
                     IOException ioe = new I2PSocketException(status);
                     con.getOutputStream().streamErrorOccurred(ioe);
@@ -348,18 +349,18 @@ class PacketQueue implements SendMessageStatusListener, Closeable {
             case MessageStatusMessage.STATUS_SEND_GUARANTEED_SUCCESS:
             case MessageStatusMessage.STATUS_SEND_SUCCESS_LOCAL:
                 if (_log.shouldLog(Log.INFO))
-                    _log.info("Rcvd success status " + status + " for msg " + msgId + " on " + con);
+                    _log.info("Received Success status [" + status + "] for [MsgID " + msgId + "] on " + con);
                 _messageStatusMap.remove(id);
                 break;
 
             case MessageStatusMessage.STATUS_SEND_ACCEPTED:
                 if (_log.shouldLog(Log.INFO))
-                    _log.info("Rcvd accept status " + status + " for msg " + msgId + " on " + con);
+                    _log.info("Received Accept status [" + status + "] for [MsgID " + msgId + "] on " + con);
                 break;
 
             default:
                 if (_log.shouldLog(Log.WARN))
-                    _log.warn("Rcvd unknown status " + status + " for msg " + msgId + " on " + con);
+                    _log.warn("Received unknown status [" + status + "] for [MsgID " + msgId + "] on " + con);
                 _messageStatusMap.remove(id);
                 break;
         }
@@ -371,7 +372,7 @@ class PacketQueue implements SendMessageStatusListener, Closeable {
      *  @since 0.9.14
      */
     private class RemoveExpired extends SimpleTimer2.TimedEvent {
-        
+
         public RemoveExpired(SimpleTimer2 timer) {
              super(timer, REMOVE_EXPIRED_TIME);
         }

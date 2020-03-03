@@ -26,7 +26,7 @@ import net.i2p.util.Log;
 /**
  * This servlet generates <i>identicon</i> (visual identifier) images ranging
  * from 16x16 to 512x512 in size.
- * 
+ *
  * <h2>Supported Image Formats</h2>
  * <p>
  * Currently only PNG is supported because <code>javax.imageio</code> package
@@ -55,7 +55,7 @@ import net.i2p.util.Log;
  * returned. Minimum size is 16 and maximum is 64. (Optional)</dd>
  * </dl>
  * </blockquote>
- * 
+ *
  * @author don
  * @since 0.9.25
  */
@@ -116,8 +116,8 @@ public class IdenticonServlet extends HttpServlet {
 				size = Integer.parseInt(sizeParam);
 				if (size < 16)
 					size = 16;
-				else if (size > 512)
-					size = 512;
+				else if (size > 1024)
+					size = 1024;
 			} catch (NumberFormatException nfe) {}
 		}
 

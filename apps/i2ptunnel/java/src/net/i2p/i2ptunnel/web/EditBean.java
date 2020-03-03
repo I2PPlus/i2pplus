@@ -1,9 +1,9 @@
 package net.i2p.i2ptunnel.web;
 /*
  * free (adj.): unencumbered; not under the control of others
- * Written by jrandom in 2005 and released into the public domain 
- * with no warranty of any kind, either expressed or implied.  
- * It probably won't make your computer catch on fire, or eat 
+ * Written by jrandom in 2005 and released into the public domain
+ * with no warranty of any kind, either expressed or implied.
+ * It probably won't make your computer catch on fire, or eat
  * your children, but it might.  Use at your own risk.
  *
  */
@@ -36,7 +36,7 @@ import net.i2p.util.Addresses;
  */
 public class EditBean extends IndexBean {
     public EditBean() { super(); }
-    
+
     /**
      *  Is it a client or server in the UI and I2P side?
      *  Note that a streamr client is a UI and I2P client but a server on the localhost side.
@@ -55,7 +55,7 @@ public class EditBean extends IndexBean {
             return false;
         }
     }
-    
+
     public String getTargetHost(int tunnel) {
         return DataHelper.escapeHTML(_helper.getTargetHost(tunnel));
     }
@@ -76,7 +76,7 @@ public class EditBean extends IndexBean {
     public String getAltPrivateKeyFile(int tunnel) {
         return _helper.getAltPrivateKeyFile(tunnel);
     }
-    
+
 /****
     public String getNameSignature(int tunnel) {
         String spoof = getSpoofedHost(tunnel);
@@ -108,7 +108,7 @@ public class EditBean extends IndexBean {
         return "";
     }
 ****/
-    
+
     /**
      *  @since 0.9.26
      *  @return key or null
@@ -127,105 +127,105 @@ public class EditBean extends IndexBean {
         }
         return null;
     }
-    
+
     public boolean startAutomatically(int tunnel) {
         return _helper.shouldStartAutomatically(tunnel);
     }
-    
+
     public boolean isSharedClient(int tunnel) {
         return _helper.isSharedClient(tunnel);
     }
-    
+
     public boolean shouldDelay(int tunnel) {
         return _helper.shouldDelayConnect(tunnel);
     }
-    
+
     public boolean isInteractive(int tunnel) {
         return _helper.isInteractive(tunnel);
     }
-    
+
     /** in or both in/out */
     public int getTunnelDepth(int tunnel, int defaultLength) {
         return _helper.getTunnelDepth(tunnel, defaultLength);
     }
-    
+
     /** in or both in/out */
     public int getTunnelQuantity(int tunnel, int defaultQuantity) {
         return _helper.getTunnelQuantity(tunnel, defaultQuantity);
     }
-   
+
     /** in or both in/out */
     public int getTunnelBackupQuantity(int tunnel, int defaultBackupQuantity) {
         return _helper.getTunnelBackupQuantity(tunnel, defaultBackupQuantity);
     }
-  
+
     /** in or both in/out */
     public int getTunnelVariance(int tunnel, int defaultVariance) {
         return _helper.getTunnelVariance(tunnel, defaultVariance);
     }
-    
+
     /** @since 0.9.33 */
     public int getTunnelDepthOut(int tunnel, int defaultLength) {
         return _helper.getTunnelDepthOut(tunnel, defaultLength);
     }
-    
+
     /** @since 0.9.33 */
     public int getTunnelQuantityOut(int tunnel, int defaultQuantity) {
         return _helper.getTunnelQuantityOut(tunnel, defaultQuantity);
     }
-   
+
     /** @since 0.9.33 */
     public int getTunnelBackupQuantityOut(int tunnel, int defaultBackupQuantity) {
         return _helper.getTunnelBackupQuantityOut(tunnel, defaultBackupQuantity);
     }
-  
+
     /** @since 0.9.33 */
     public int getTunnelVarianceOut(int tunnel, int defaultVariance) {
         return _helper.getTunnelVarianceOut(tunnel, defaultVariance);
     }
-    
+
     public boolean getReduce(int tunnel) {
         return _helper.getReduceOnIdle(tunnel, false);
     }
-    
+
     public int getReduceCount(int tunnel) {
         return _helper.getReduceCount(tunnel, 1);
     }
-    
+
     public int getReduceTime(int tunnel) {
         return _helper.getReduceTime(tunnel, 20);
     }
-    
+
     public int getCert(int tunnel) {
         return _helper.getCert(tunnel);
     }
-    
+
     public int getEffort(int tunnel) {
         return _helper.getEffort(tunnel);
     }
-    
+
     public String getSigner(int tunnel) {
         return _helper.getSigner(tunnel);
     }
-    
+
     public boolean getEncrypt(int tunnel) {
         return _helper.getEncrypt(tunnel);
     }
-    
+
     /**
      *  @since 0.9.40
      */
     public String getEncryptMode(int tunnel) {
         return Integer.toString(_helper.getEncryptMode(tunnel));
     }
-    
+
     /**
      *  @since 0.9.40
      */
     public String getBlindedPassword(int tunnel) {
         return _helper.getBlindedPassword(tunnel);
     }
-    
+
     /**
      *  List of b64 name : b64key
      *  Pubkeys for DH, privkeys for PSK
@@ -236,7 +236,7 @@ public class EditBean extends IndexBean {
     public List<String> getClientAuths(int tunnel, boolean isDH) {
         return _helper.getClientAuths(tunnel, isDH);
     }
-    
+
     /**
      *  @param newTunnelType used if tunnel &lt; 0
      *  @since 0.9.12
@@ -244,7 +244,7 @@ public class EditBean extends IndexBean {
     public int getSigType(int tunnel, String newTunnelType) {
         return _helper.getSigType(tunnel, newTunnelType);
     }
-    
+
     /** @since 0.9.12 */
     public boolean isSigTypeAvailable(int code) {
         return SigType.isAvailable(code);
@@ -295,11 +295,11 @@ public class EditBean extends IndexBean {
     public String getEncryptKey(int tunnel) {
         return _helper.getEncryptKey(tunnel);
     }
-    
+
     public String getAccessMode(int tunnel) {
         return Integer.toString(_helper.getAccessMode(tunnel));
     }
-    
+
     public String getAccessList(int tunnel) {
         return _helper.getAccessList(tunnel);
     }
@@ -310,27 +310,27 @@ public class EditBean extends IndexBean {
     public String getFilterDefinition(int tunnel) {
         return _helper.getFilterDefinition(tunnel);
     }
-    
+
     public String getJumpList(int tunnel) {
         return _helper.getJumpList(tunnel);
     }
-    
+
     public boolean getClose(int tunnel) {
         return _helper.getCloseOnIdle(tunnel, false);
     }
-    
+
     public int getCloseTime(int tunnel) {
         return _helper.getCloseTime(tunnel, 30);
     }
-    
+
     public boolean getNewDest(int tunnel) {
         return _helper.getNewDest(tunnel);
     }
-    
+
     public boolean getPersistentClientKey(int tunnel) {
         return _helper.getPersistentClientKey(tunnel);
     }
-    
+
     public boolean getDelayOpen(int tunnel) {
         return _helper.getDelayOpen(tunnel);
     }
@@ -364,7 +364,7 @@ public class EditBean extends IndexBean {
     public String getUserAgents(int tunnel) {
         return _helper.getUserAgents(tunnel);
     }
-    
+
     /** all proxy auth @since 0.8.2 */
     public boolean getProxyAuth(int tunnel) {
         return _helper.getProxyAuth(tunnel) != "false";
@@ -375,11 +375,11 @@ public class EditBean extends IndexBean {
                getOutproxyUsername(tunnel).length() > 0 &&
                getOutproxyPassword(tunnel).length() > 0;
     }
-    
+
     public String getOutproxyUsername(int tunnel) {
         return _helper.getOutproxyUsername(tunnel);
     }
-    
+
     public String getOutproxyPassword(int tunnel) {
         return _helper.getOutproxyPassword(tunnel);
     }
@@ -388,7 +388,7 @@ public class EditBean extends IndexBean {
     public String getSslProxies(int tunnel) {
         return _helper.getSslProxies(tunnel);
     }
-    
+
     /**
      *  Default true
      *  @since 0.9.11
@@ -449,12 +449,12 @@ public class EditBean extends IndexBean {
     public int getPostTotalBanTime(int tunnel) {
         return _helper.getPostTotalBanTime(tunnel);
     }
-    
+
     /** @since 0.9.13 */
     public boolean getUniqueLocal(int tunnel) {
         return _helper.getUniqueLocal(tunnel);
     }
-    
+
     /** @since 0.8.3 */
     public boolean isRouterContext() {
         return _context.isRouterContext();
@@ -479,7 +479,7 @@ public class EditBean extends IndexBean {
         else
             return "127.0.0.1";
     }
-    
+
     public String getI2CPPort(int tunnel) {
         if (_context.isRouterContext())
             return _t("internal");
@@ -496,8 +496,10 @@ public class EditBean extends IndexBean {
 
     private static final String PROP_ADVANCED = "routerconsole.advanced";
     private static final int DFLT_QUANTITY = 2;
-    private static final int MAX_CLIENT_QUANTITY = 3;
-    private static final int MAX_SERVER_QUANTITY = 6;
+//    private static final int MAX_CLIENT_QUANTITY = 3;
+    private static final int MAX_CLIENT_QUANTITY = 8;
+//    private static final int MAX_SERVER_QUANTITY = 6;
+    private static final int MAX_SERVER_QUANTITY = 8;
     private static final int MAX_ADVANCED_QUANTITY = 16;
 
     /**

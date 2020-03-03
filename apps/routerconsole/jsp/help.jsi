@@ -1,10 +1,10 @@
-<h2><%=intl._t("Further Assistance")%></h2>
-<p><%=intl._t("If you would like to help improve or translate the documentation, or help with other aspects of the project, please see the documentation for <a href=\"http://i2p-projekt.i2p/en/get-involved\" target=\"_blank\">volunteers.</a>")%></p>
-<p><%=intl._t("Further assistance is available here:")%></p>
+<h2>Further Assistance</h2>
+<p>If you'd like to help improve or translate the documentation, or help with other aspects of the project, please see the documentation for <a href="http://i2p-projekt.i2p/en/get-involved" target="_blank">volunteers.</a></p>
+<p>Further assistance is available here:</p>
 <ul class="links">
-<li><a href="http://i2p-projekt.i2p/en/faq" target="_blank"><%=intl._t("FAQ on i2p-projekt.i2p")%></a></li>
-<li><a href="http://i2pwiki.i2p/" target="_blank"><%=intl._t("I2P Wiki")%></a></li>
+<li><a href="http://i2pforum.i2p/" target="_blank">I2P Support Forum</a></li>
+<li><a href="http://zzz.i2p/" target="_blank">I2P Developers Forum</a></li>
+<li><a href="http://i2pwiki.i2p/" target="_blank">I2PWiki</a></li>
+<li>The FAQ on <a href="http://i2p-projekt.i2p/en/faq" target="_blank">i2p-projekt.i2p</a> or <a href="https://geti2p.net/en/faq" target="_blank">geti2p.net</a></li>
 </ul>
-<p><%=intl._t("You may also try {0} or {1}.",
-"<a href=\"http://i2pforum.i2p/\" target=\"_blank\">" + intl._t("I2P Forum") + "</a>",
-"<a href=\"irc://127.0.0.1:6668/i2p\">" + intl._t("I2P's IRC network") + "</a>")%></p>
+<p>You may also try <a href="irc://127.0.0.1:6668/i2p">I2P's IRC network</a>.</p>

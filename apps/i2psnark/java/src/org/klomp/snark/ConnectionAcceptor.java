@@ -2,17 +2,17 @@
    Copyright (C) 2003 Mark J. Wielaard
 
    This file is part of Snark.
-   
+
    This program is free software; you can redistribute it and/or modify
    it under the terms of the GNU General Public License as published by
    the Free Software Foundation; either version 2, or (at your option)
    any later version.
- 
+
    This program is distributed in the hope that it will be useful,
    but WITHOUT ANY WARRANTY; without even the implied warranty of
    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
    GNU General Public License for more details.
- 
+
    You should have received a copy of the GNU General Public License
    along with this program; if not, write to the Free Software Foundation,
    Inc., 59 Temple Place - Suite 330, Boston, MA 02111-1307, USA.
@@ -52,7 +52,8 @@ class ConnectionAcceptor implements Runnable
 
   // protocol errors before blacklisting.
   private static final int MAX_BAD = 1;
-  private static final long BAD_CLEAN_INTERVAL = 30*60*1000;
+//  private static final long BAD_CLEAN_INTERVAL = 30*60*1000;
+  private static final long BAD_CLEAN_INTERVAL = 20*60*1000;
 
   /**
    *  Multitorrent. Caller MUST call startAccepting()
@@ -62,14 +63,14 @@ class ConnectionAcceptor implements Runnable
       _cleaner = new Cleaner();
       peeracceptor = new PeerAcceptor(set);
   }
-  
+
   /**
    *  May be called even when already running. May be called to start up again after halt().
    */
   public synchronized void startAccepting() {
       stop = false;
       if (_log.shouldLog(Log.WARN))
-          _log.warn("ConnectionAcceptor startAccepting new thread? " + (thread == null));
+          _log.warn("ConnectionAcceptor: start accepting new thread? " + (thread == null));
       if (thread == null) {
           thread = new I2PAppThread(this, "I2PSnark acceptor");
           thread.setDaemon(true);
@@ -77,7 +78,7 @@ class ConnectionAcceptor implements Runnable
           _cleaner.reschedule(BAD_CLEAN_INTERVAL, false);
       }
   }
-  
+
   /**
    *  Unused (single torrent).
    *  Do NOT call startAccepting().
@@ -87,7 +88,7 @@ class ConnectionAcceptor implements Runnable
   {
     this.peeracceptor = peeracceptor;
     _util = util;
-    
+
     thread = new I2PAppThread(this, "I2PSnark acceptor");
     thread.setDaemon(true);
     thread.start();
@@ -127,7 +128,7 @@ class ConnectionAcceptor implements Runnable
     _badCounter.clear();
     _cleaner.cancel();
   }
-  
+
   /**
    *  Effectively unused, would only be called if we changed
    *  I2CP host/port, which is hidden in the gui if in router context
@@ -246,7 +247,7 @@ class ConnectionAcceptor implements Runnable
       if (_log.shouldLog(Log.WARN))
           _log.warn("ConnectionAcceptor closed");
   }
-  
+
   private class Handler implements Runnable {
       private final I2PSocket _socket;
 
@@ -261,22 +262,22 @@ class ConnectionAcceptor implements Runnable
               // this is for the readahead in PeerAcceptor.connection()
               in = new BufferedInputStream(in);
               if (_log.shouldLog(Log.DEBUG))
-                  _log.debug("Handling socket from " + _socket.getPeerDestination().calculateHash());
+                  _log.debug("Handling socket from [" + _socket.getPeerDestination().calculateHash() + "]");
               peeracceptor.connection(_socket, in, out);
           } catch (PeerAcceptor.ProtocolException ihe) {
               _badCounter.increment(_socket.getPeerDestination().calculateHash());
               if (_log.shouldLog(Log.INFO))
-                  _log.info("Protocol error from " + _socket.getPeerDestination().calculateHash(), ihe);
+                  _log.info("Protocol error from [" + _socket.getPeerDestination().calculateHash() + "]", ihe);
               try { _socket.close(); } catch (IOException ignored) { }
           } catch (IOException ioe) {
               if (_log.shouldLog(Log.DEBUG))
-                  _log.debug("Error handling connection from " + _socket.getPeerDestination().calculateHash(), ioe);
+                  _log.debug("Error handling connection from [" + _socket.getPeerDestination().calculateHash() + "]", ioe);
               try { _socket.close(); } catch (IOException ignored) { }
           }
       }
   }
 
-    /** @since 0.9.1 */    
+    /** @since 0.9.1 */
     private class Cleaner extends SimpleTimer2.TimedEvent {
 
         public Cleaner() {

@@ -11,7 +11,7 @@
     <target name="depend" if="depend.available">
         <depend
             cache="../../../build"
-            srcdir="./src" 
+            srcdir="./src"
             destdir="./build/obj" >
             <!-- Depend on classes instead of jars where available -->
             <classpath>
@@ -38,10 +38,10 @@
     <target name="compile" depends="depend">
         <mkdir dir="./build" />
         <mkdir dir="./build/obj" />
-        <javac 
-            srcdir="./src" 
-            debug="true" deprecation="on" source="${javac.version}" target="${javac.version}" 
-            destdir="./build/obj" 
+        <javac
+            srcdir="./src"
+            debug="true" deprecation="on" source="${javac.version}" target="${javac.version}"
+            destdir="./build/obj"
             encoding="UTF-8"
             includeAntRuntime="false" >
             <compilerarg line="${javac.compilerargs}" />
@@ -109,7 +109,7 @@
                 <isset property="mtn.available" />
             </and>
         </condition>
-    </target>    
+    </target>
 
     <!-- Ideally we would include
       -  only include the servlet, everything else is in the jar.
@@ -118,7 +118,7 @@
       -  So we must continue to duplicate everything in the war.
           <classes dir="./build/obj" includes="**/I2PSnarkServlet*.class" />
      -->
-    <target name="war" depends="jar, bundle, warUpToDate, listChangedFiles" unless="war.uptodate" > 
+    <target name="war" depends="jar, bundle, warUpToDate, listChangedFiles" unless="war.uptodate" >
         <!-- set if unset -->
         <property name="workspace.changes.tr" value="" />
         <copy todir="build/resources/.resources" >
@@ -163,7 +163,7 @@
         <exec executable="sh" osfamily="windows" failifexecutionfails="false" >
             <arg value="./bundle-messages.sh" />
         </exec>
-        <javac source="${javac.version}" target="${javac.version}" 
+        <javac source="${javac.version}" target="${javac.version}"
                includeAntRuntime="false"
                encoding="UTF-8"
                srcdir="build/messages-src" destdir="build/obj">
@@ -254,6 +254,12 @@
 
         <replace dir="build/standalone-resources/.resources/themes/snark"
             summary="true"
+            token="url(/themes/console/classic/images/"
+            value="url(/i2psnark/.resources/themes/snark/classic/images/" >
+            <include name="**/*.css" />
+        </replace>
+        <replace dir="build/standalone-resources/.resources/themes/snark"
+            summary="true"
             token="url(/themes/console/dark/images/"
             value="url(/i2psnark/.resources/themes/snark/dark/images/" >
             <include name="**/*.css" />
@@ -278,6 +284,12 @@
         </replace>
         <replace dir="build/standalone-resources/.resources/themes/snark"
             summary="true"
+            token="url(/themes/console/images/i2psnark.png"
+            value="url(/i2psnark/.resources/themes/snark/ubergine/images/i2psnark.png" >
+            <include name="**/*.css" />
+        </replace>
+        <replace dir="build/standalone-resources/.resources/themes/snark"
+            summary="true"
             token="url(/themes/console/images/info/"
             value="url(/i2psnark/.resources/themes/snark/ubergine/images/" >
             <include name="**/*.css" />
@@ -285,6 +297,8 @@
 
         <!-- Rather than pulling in all the console theme images, let's just specify the ones we need -->
         <copy file="../../../installer/resources/themes/console/images/transparent.gif"
+              todir="build/standalone-resources/.resources/themes/snark/ubergine/images" />
+        <copy file="../../../installer/resources/themes/console/images/i2psnark.png"
               todir="build/standalone-resources/.resources/themes/snark/ubergine/images" />
         <copy file="../../../installer/resources/themes/console/dark/images/header.png"
               todir="build/standalone-resources/.resources/themes/snark/dark/images" />
@@ -294,6 +308,8 @@
               todir="build/standalone-resources/.resources/themes/snark/dark/images" />
         <copy file="../../../installer/resources/themes/console/images/info/errortriangle.png"
               todir="build/standalone-resources/.resources/themes/snark/ubergine/images" />
+        <copy file="../../../installer/resources/themes/console/classic/images/bg0.png"
+              todir="build/standalone-resources/.resources/themes/snark/classic/images" />
 
         <mkdir dir="build/standalone-resources/.resources/js" />
         <copy file="../../routerconsole/jsp/js/ajax.js" todir="build/standalone-resources/.resources/js" />

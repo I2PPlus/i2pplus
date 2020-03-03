@@ -1,6 +1,6 @@
 /*
  *  This file is part of susidns project, see http://susi.i2p/
- *  
+ *
  *  Copyright (C) 2005 <susi23@mail.i2p>
  *
  *  This program is free software; you can redistribute it and/or modify
@@ -16,7 +16,7 @@
  *  You should have received a copy of the GNU General Public License
  *  along with this program; if not, write to the Free Software
  *  Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
- *  
+ *
  */
 
 package i2p.susi.dns;
@@ -127,7 +127,7 @@ public class NamingServiceBean extends AddressbookBean
 					return rv;
 			}
 		}
-		return null;		
+		return null;
 	}
 
 	private static String basename(String filename) {
@@ -141,8 +141,8 @@ public class NamingServiceBean extends AddressbookBean
 	private NamingService getNamingService()
 	{
 		NamingService root = _context.namingService();
-		NamingService rv = searchNamingService(root, getFileName());		
-		return rv != null ? rv : root;		
+		NamingService rv = searchNamingService(root, getFileName());
+		return rv != null ? rv : root;
 	}
 
 	/**
@@ -156,7 +156,8 @@ public class NamingServiceBean extends AddressbookBean
 		if (isDirect())
 			return super.getLoadBookMessages();
 		NamingService service = getNamingService();
-		debug("Searching within " + service + " with filename=" + getFileName() + " and with filter=" + filter + " and with search=" + search);
+//		debug("[" + service + "] Performing search for: '" + search + "' with filename=" + getFileName() + " and with filter=" + filter);
+		debug("[" + service + "] Performing search for: '" + search + "' with filter: '" + filter + "'");
 		String message = "";
 		try {
 			LinkedList<AddressBean> list = new LinkedList<AddressBean>();
@@ -181,7 +182,7 @@ public class NamingServiceBean extends AddressbookBean
 				searchProps.setProperty("search", search.toLowerCase(Locale.US));
 			results = service.getEntries(searchProps);
 
-			debug("Result count: " + results.size());
+			debug("Results returned by search: " + results.size());
 			for (Map.Entry<String, Destination> entry : results.entrySet()) {
 				String name = entry.getKey();
 				if( filter != null && filter.length() > 0 ) {
@@ -230,7 +231,7 @@ public class NamingServiceBean extends AddressbookBean
 			return super.getMessages();
 		// Loading config and addressbook moved into getLoadBookMessages()
 		String message = "";
-		
+
 		if( action != null ) {
 			Properties nsOptions = new Properties();
 			// only blockfile needs this
@@ -351,16 +352,16 @@ public class NamingServiceBean extends AddressbookBean
 				if( changed ) {
 					message += "<br>" + _t("Address book saved.");
 				}
-			}			
+			}
 			else {
 				message = _t("Invalid form submission, probably because you used the \"back\" or \"reload\" button on your browser. Please resubmit.")
                                           + ' ' +
                                           _t("If the problem persists, verify that you have cookies enabled in your browser.");
 			}
 		}
-		
+
 		action = null;
-		
+
 		if( message.length() > 0 )
 			message = styleMessage(message);
 		return message;
@@ -583,7 +584,7 @@ public class NamingServiceBean extends AddressbookBean
 	private static String styleMessage(String message) {
 		return "<p class=\"messages\">" + message + "</p>";
 	}
-	
+
 	/**
 	 *  @since 0.9.34
 	 */

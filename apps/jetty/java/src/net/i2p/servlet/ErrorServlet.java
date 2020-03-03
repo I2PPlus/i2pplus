@@ -15,7 +15,7 @@ import net.i2p.I2PAppContext;
 import net.i2p.data.DataHelper;
 import net.i2p.util.NativeBigInteger;
 import net.i2p.util.Translate;
- 
+
 import org.eclipse.jetty.server.Server;
 
 /**
@@ -43,7 +43,7 @@ import org.eclipse.jetty.server.Server;
  * @since 0.9.34 adapted from routerconsole error.jsp, error500.jsp, and CSSHelper
  */
 public class ErrorServlet extends HttpServlet {
- 
+
     private static final long serialVersionUID = 99356750L;
     private final I2PAppContext _context;
     private static final String CONSOLE_BUNDLE_NAME = "net.i2p.router.web.messages";
@@ -81,7 +81,7 @@ public class ErrorServlet extends HttpServlet {
         _bundleName = getInitParameter("bundle");
         _defaultBundle = _bundleName != null ? _bundleName : CONSOLE_BUNDLE_NAME;
     }
-    
+
     @Override
     protected void doGet(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
         resp.setCharacterEncoding("UTF-8");
@@ -90,7 +90,9 @@ public class ErrorServlet extends HttpServlet {
         resp.setDateHeader("Expires", 0);
         resp.setHeader("Cache-Control", "no-store, max-age=0, no-cache, must-revalidate");
         resp.setHeader("Pragma", "no-cache");
-        resp.setHeader("Content-Security-Policy", "default-src 'self'; script-src 'none'; form-action 'none'; frame-ancestors 'self'; object-src 'none'; media-src 'none'");
+//        resp.setHeader("Content-Security-Policy", "default-src 'self'; script-src 'none'");
+        // add unsafe-inline script-src to allow iframe escape to function
+        resp.setHeader("Content-Security-Policy", "default-src 'self'; script-src 'self unsafe-inline'; form-action 'none'; frame-ancestors 'self'; object-src 'none'; media-src 'none'");
         Integer ERROR_CODE = (Integer) req.getAttribute("javax.servlet.error.status_code");
         String ERROR_URI = (String) req.getAttribute("javax.servlet.error.request_uri");
         String ERROR_MESSAGE = (String) req.getAttribute("javax.servlet.error.message");
@@ -125,32 +127,38 @@ public class ErrorServlet extends HttpServlet {
         }
         resp.setContentType("text/html");
         PrintWriter out = resp.getWriter();
-        out.println("<!DOCTYPE HTML PUBLIC \"-//W3C//DTD HTML 4.01 Transitional//EN\">");
-        out.print("<html><head><title>");
+        out.println("<!DOCTYPE HTML PUBLIC \"-//W3C//DTD HTML 4.01 Transitional//EN\">\n");
+        out.print("<html>\n<head>\n<title>");
         if (errorCode == 404)
-            out.print(_t("Page Not Found"));
+            out.print(_t("Error 404: Page Not Found").replace("Page", "Resource"));
         else
-            out.print(_t("Internal Error"));
-        out.println("</title>");
+            out.print(_t("Error 500: Internal Error"));
+        out.println("</title>\n");
         out.println("<meta http-equiv=\"Content-Type\" content=\"text/html; charset=UTF-8\">");
         if (_icoPath != null)
-            out.println("<link rel=\"icon\" href=\"" + _icoPath + "\">");
-        out.println("<link href=\"" + _cssPath + '?' + CoreVersion.VERSION + "\" rel=\"stylesheet\" type=\"text/css\">");
-        out.println("</head><body>");
-        out.println("<div class=\"routersummaryouter\"><div class=\"routersummary\">");
+            out.println("\n<link rel=\"icon\" href=\"" + _icoPath + "\">");
+        out.println("\n<link href=\"" + _cssPath + '?' + CoreVersion.VERSION + "\" rel=\"stylesheet\" type=\"text/css\">");
+        out.println("<script type=\"text/javascript\">if (window.location !== window.top.location) {window.top.location = window.location;}</script>"); // breakout of iframe
+        out.println("<script type=\"text/javascript\" src=\"/js/iframeResizer/iframeResizer.contentWindow.js\"></script>"); // or ensure embedded correctly elsewise
+        out.println("</head>\n<body id=\"servletError\">");
+        out.println("<div class=\"logo\">");
         out.println("<a href=\"/\" title=\"" + _t("Router Console") +
-                    "\"><img src=\"/themes/console/images/i2plogo.png\" alt=\"" +
-                    _t("I2P Router Console") + "\" border=\"0\"></a><hr>");
+                    "\"><img src=\"" + BASE_THEME_PATH + _context.getProperty(PROP_THEME_NAME, DEFAULT_THEME) + "/images/i2plogo.png\" alt=\"" +
+                    _t("I2P Router Console").replace("I2P", "I2P+") + "\" border=\"0\"></a>\n<hr>\n");
         out.println("<a href=\"/config\">" + _t("Configuration") + "</a> <a href=\"/help\">" + _t("Help") + "</a>");
-        out.println("</div></div>");
-        out.println("<div class=\"sorry\" id=\"warning\">");
-        out.println("<h2>" + _t("Error {0}", errorCode) + ":&nbsp;" + ERROR_MESSAGE + "</h2>");
-        out.println("<h3>" + _t("WebApp") + ": " + _w(_webappName) + "</h3>");
+        out.println("</div>");
+        out.println("<div class=\"warning\" id=\"warning\">");
+        out.println("<h3>" + _w(_webappName) + ": ");
+        if (errorCode == 404)
+            out.print(_t("Page Not Found").replace("Page", "Resource"));
+        else
+            out.print(_t("Internal Server Error"));
+        out.print("</h3>\n");
         outputMessage(out, errorCode, ERROR_MESSAGE, ERROR_URI, ERROR_THROWABLE);
-        out.println("</div></body></html>");
+        out.println("<span data-iframe-height></span>\n</div>\n</body>\n</html>");
         out.close();
     }
-    
+
     /**
      *  Needed if the errored page was a POST
      *  @since 0.9.35
@@ -172,23 +180,24 @@ public class ErrorServlet extends HttpServlet {
      */
     protected void outputMessage(PrintWriter out, int errorCode, String errorMsg, String errorURI, Throwable errorCause) {
         if (errorCode == 404) {
-            out.println(_t("Sorry! You appear to be requesting a non-existent Router Console page or resource."));
+            // TODO: if service is available but not started, provide a link to /configclients or /configwebapps and explain the error
+            out.println("<p>" + _t("Sorry! You appear to be requesting a non-existent Router Console page or resource.") + "</p>");
             out.println("<hr>");
-            out.println(_t("Error {0}", 404) + ": " + errorURI + "&nbsp;" + _t("not found"));
+            out.println("<p><b>" + _t("Error {0}", 404) + ": " + errorURI + "&nbsp;" + _t("not found") + "</b></p>");
         } else if (errorCode == 403 || errorCode >= 500 || errorCause != null) {
-            out.println(_t("Sorry! There has been an internal error."));
+            out.println("<p><b>" + _t("Sorry! There has been an internal error.") + "</b></p>");
             out.println("<hr>");
             out.println("<p>");
-            out.println(_t("Please report bugs on {0} or {1}.",
+            out.println(_t("Please report bugs on {0} or {1}",
                            "<a href=\"http://trac.i2p2.i2p/newticket\">trac.i2p2.i2p</a>",
                            "<a href=\"https://trac.i2p2.de/newticket\">trac.i2p2.de</a>"));
-            out.println("<p>");
-            out.println(_t("Please include this information in bug reports") + ':');
-            out.print("</p></div><div class=\"sorry\" id=\"warning2\"><h3>");
+            out.print(".</p>");
+            out.println("<p>" + _t("Please include this information in bug reports") + ":</p>\n");
+            out.print("</div>\n<div class=\"sorry\" id=\"warning2\">\n<h3>");
             out.print(_t("Error Details"));
-            out.println("</h3><p>");
-            out.println(_t("Error {0}", errorCode) + ": " + errorURI + "&nbsp;" + errorMsg);
-            out.println("</p><p>");
+            out.print("</h3>\n<div id=\"stacktrace\">\n<p>");
+            out.print(_t("Error {0}", errorCode) + ": " + errorURI + "&nbsp;" + errorMsg);
+            out.print("</p>\n<p>");
             if (errorCause != null) {
                 StringWriter sw = new StringWriter(2048);
                 PrintWriter pw = new PrintWriter(sw);
@@ -199,9 +208,9 @@ public class ErrorServlet extends HttpServlet {
                 trace = trace.replace("\n", "<br>&nbsp;&nbsp;&nbsp;&nbsp;\n");
                 out.print(trace);
             }
-            out.print("</p><h3>");
-            out.println(_t("I2P Version and Running Environment"));
-            out.println("</h3><p>");
+            out.print("</p>\n</div>\n<h3>");
+            out.print(_t("I2P Version and Running Environment"));
+            out.print("</h3>\n<p id=\"sysinfo\">");
             // router puts its version here
             String version = System.getProperty("router.version", CoreVersion.VERSION);
             out.println("<b>I2P version:</b> " + version + "<br>");
@@ -220,9 +229,9 @@ public class ErrorServlet extends HttpServlet {
             out.println("<b>Charset:</b> " + Charset.defaultCharset().name());
             out.println("</p><p>");
             out.println(_t("Note that system information, log timestamps, and log messages may provide clues to your location; please review everything you include in a bug report."));
-            out.println("</p>");
+            out.println("</p>\n");
         } else {
-            out.println("<p>Unsupported error " + errorCode + "</p>");
+            out.println("<p>Unsupported error " + errorCode + "</p>\n");
         }
     }
 

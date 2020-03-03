@@ -24,7 +24,7 @@ public class ConfigRestartBean {
     private static final String _systemNonce = Long.toString(RandomSource.getInstance().nextLong());
 
     /** formerly System.getProperty("console.nonce") */
-    public static String getNonce() { 
+    public static String getNonce() {
         return _systemNonce;
     }
 
@@ -57,20 +57,20 @@ public class ConfigRestartBean {
                 ctx.router().shutdownGracefully();
             }
         }
-        
+
         boolean shuttingDown = isShuttingDown(ctx);
         boolean restarting = isRestarting(ctx);
         long timeRemaining = ctx.router().getShutdownTimeRemaining();
         StringBuilder buf = new StringBuilder(128);
         if ((shuttingDown || restarting) && timeRemaining <= 5*1000) {
-            buf.append("<h4>");
+            buf.append("<h4 id=\"sb_shutdownStatus\"><span>");
             if (restarting)
                 buf.append(_t("Restart imminent", ctx));
             else
                 buf.append(_t("Shutdown imminent", ctx));
-            buf.append("</h4>");
+            buf.append("</span></h4>");
         } else if (shuttingDown) {
-            buf.append("<h4>");
+            buf.append("<h4 id=\"sb_shutdownStatus\"><span>");
             buf.append(_t("Shutdown in {0}", DataHelper.formatDuration2(timeRemaining), ctx));
             int tuns = ctx.tunnelManager().getParticipatingCount();
             if (tuns > 0) {
@@ -78,10 +78,10 @@ public class ConfigRestartBean {
                                                 "Please wait for routing commitments to expire for {0} tunnels",
                                                 tuns, ctx));
             }
-            buf.append("</h4><hr>");
+            buf.append("</span></h4><hr>");
             buttons(ctx, buf, urlBase, systemNonce, SET1);
         } else if (restarting) {
-            buf.append("<h4>");
+            buf.append("<h4 id=\"sb_shutdownStatus\"><span>");
             buf.append(_t("Restart in {0}", DataHelper.formatDuration2(timeRemaining), ctx));
             int tuns = ctx.tunnelManager().getParticipatingCount();
             if (tuns > 0) {
@@ -89,7 +89,7 @@ public class ConfigRestartBean {
                                                 "Please wait for routing commitments to expire for {0} tunnels",
                                                 tuns, ctx));
             }
-            buf.append("</h4><hr>");
+            buf.append("</span></h4><hr>");
             buttons(ctx, buf, urlBase, systemNonce, SET2);
         } else {
             if (ctx.hasWrapper())
@@ -99,10 +99,10 @@ public class ConfigRestartBean {
         }
         return buf.toString();
     }
-    
+
     /** @param s value,class,label,... triplets */
     private static void buttons(RouterContext ctx, StringBuilder buf, String url, String nonce, String[] s) {
-        buf.append("<form action=\"").append(url).append("\" method=\"POST\">\n");
+        buf.append("<form id=\"sb_routerControl\" action=\"").append(url).append("\" method=\"POST\">\n");
         buf.append("<input type=\"hidden\" name=\"consoleNonce\" value=\"").append(nonce).append("\" >\n");
         for (int i = 0; i < s.length; i+= 3) {
             buf.append("<button type=\"submit\" name=\"action\" value=\"")

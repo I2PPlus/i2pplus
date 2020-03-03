@@ -134,7 +134,7 @@ public class I2PSocketManagerFull implements I2PSocketManager {
         // www.i2p2.i2p
         "im9gytzKT15mT1sB5LC9bHXCcwytQ4EPcrGQhoam-4w="
     };
-    
+
     static {
         for (int i = 0; i < EC_UNSUPPORTED_HASHES.length; i++) {
             String s = EC_UNSUPPORTED_HASHES[i];
@@ -173,7 +173,7 @@ public class I2PSocketManagerFull implements I2PSocketManager {
     public I2PSocketManagerFull() {
         throw new UnsupportedOperationException();
     }
-    
+
     /**
      * @deprecated use 4-arg constructor
      * @throws UnsupportedOperationException always
@@ -186,7 +186,7 @@ public class I2PSocketManagerFull implements I2PSocketManager {
     /**
      * This is what I2PSocketManagerFactory.createManager() returns.
      * Direct instantiation by others is deprecated.
-     * 
+     *
      * @param context non-null
      * @param session non-null
      * @param opts may be null
@@ -198,16 +198,18 @@ public class I2PSocketManagerFull implements I2PSocketManager {
         _session = session;
         _subsessions = new ConcurrentHashSet<I2PSession>(4);
         _log = _context.logManager().getLog(I2PSocketManagerFull.class);
-        
+
         _name = name + " " + (__managerId.incrementAndGet());
         _acceptTimeout = ACCEPT_TIMEOUT_DEFAULT;
         _defaultOptions = new ConnectionOptions(opts);
         _connectionManager = new ConnectionManager(_context, _session, _defaultOptions, connectionFilter);
         _serverSocket = new I2PServerSocketFull(this);
-        
+
         if (_log.shouldLog(Log.INFO)) {
-            _log.info("Socket manager created.  \ndefault options: " + _defaultOptions
-                      + "\noriginal properties: " + opts);
+            _log.info("Socket manager created. \n\tDefault Options:\n" + _defaultOptions.toString()
+                      .replace(" ", "\n\t").replace("=", " = ")
+                      + "\n\n\tOriginal Properties:\n" + opts.toString()
+                      .replace(",", "\n\t").replace("{", "").replace("}", "").replace("=", " = ")); // TODO: fix "line separator=,"
         }
         debugInit(context);
     }
@@ -229,14 +231,14 @@ public class I2PSocketManagerFull implements I2PSocketManager {
         curOpts.setProperties(opts);
         return curOpts;
     }
-    
+
     /**
      *  @return the session, non-null
      */
     public I2PSession getSession() {
         return _session;
     }
-    
+
     /**
      *  For a server, you must call connect() on the returned object.
      *  Connecting the primary session does NOT connect any subsessions.
@@ -290,7 +292,7 @@ public class I2PSocketManagerFull implements I2PSocketManager {
         int protocol = defaultOptions.getEnforceProtocol() ? I2PSession.PROTO_STREAMING : I2PSession.PROTO_ANY;
         rv.addMuxedSessionListener(_connectionManager.getMessageHandler(), protocol, defaultOptions.getLocalPort());
         if (_log.shouldLog(Log.WARN))
-            _log.warn("Added subsession " + rv);
+            _log.warn("Added subsession: " + rv);
         return rv;
     }
 
@@ -314,7 +316,7 @@ public class I2PSocketManagerFull implements I2PSocketManager {
         }
         return I2PClient.DEFAULT_SIGTYPE;
     }
-    
+
     /**
      *  Remove the subsession
      *
@@ -331,7 +333,7 @@ public class I2PSocketManagerFull implements I2PSocketManager {
                 _log.warn("Subsession not found to remove " + session);
         }
     }
-    
+
     /**
      *  @return a list of subsessions, non-null, does not include the primary session
      *  @since 0.9.21
@@ -339,17 +341,17 @@ public class I2PSocketManagerFull implements I2PSocketManager {
     public List<I2PSession> getSubsessions() {
         return _session.getSubsessions();
     }
-    
+
     public ConnectionManager getConnectionManager() {
         return _connectionManager;
     }
 
     /**
      * The accept() call.
-     * 
+     *
      * This only listens on the primary session. There is no way to get
      * incoming connections on a subsession.
-     * 
+     *
      * @return connected I2PSocket, or null through 0.9.16, non-null as of 0.9.17
      * @throws I2PException if session is closed
      * @throws net.i2p.client.streaming.RouterRestartException (extends I2PException) if the router is apparently restarting, since 0.9.34
@@ -363,15 +365,15 @@ public class I2PSocketManagerFull implements I2PSocketManager {
         con.setSocket(sock);
         return sock;
     }
-    
+
     /**
-     * Ping the specified peer, returning true if they replied to the ping within 
+     * Ping the specified peer, returning true if they replied to the ping within
      * the timeout specified, false otherwise.  This call blocks.
      *
      * Uses the ports from the default options.
-     * 
+     *
      * TODO There is no way to ping on a subsession.
-     * 
+     *
      * @param peer
      * @param timeoutMs timeout in ms, greater than zero
      * @return true on success, false on failure
@@ -385,11 +387,11 @@ public class I2PSocketManagerFull implements I2PSocketManager {
     }
 
     /**
-     * Ping the specified peer, returning true if they replied to the ping within 
+     * Ping the specified peer, returning true if they replied to the ping within
      * the timeout specified, false otherwise.  This call blocks.
      *
      * Uses the ports specified.
-     * 
+     *
      * TODO There is no way to ping on a subsession.
      *
      * @param peer Destination to ping
@@ -410,11 +412,11 @@ public class I2PSocketManagerFull implements I2PSocketManager {
     }
 
     /**
-     * Ping the specified peer, returning true if they replied to the ping within 
+     * Ping the specified peer, returning true if they replied to the ping within
      * the timeout specified, false otherwise.  This call blocks.
      *
      * Uses the ports specified.
-     * 
+     *
      * TODO There is no way to ping on a subsession.
      *
      * @param peer Destination to ping
@@ -437,7 +439,7 @@ public class I2PSocketManagerFull implements I2PSocketManager {
 
     /**
      * How long should we wait for the client to .accept() a socket before
-     * sending back a NACK/Close?  
+     * sending back a NACK/Close?
      *
      * @param ms milliseconds to wait, maximum
      */
@@ -449,7 +451,7 @@ public class I2PSocketManagerFull implements I2PSocketManager {
      *  Parameters in the I2PSocketOptions interface may be changed directly
      *  with the setters; no need to use this method for those.
      *  This does NOT update the underlying I2CP or tunnel options; use getSession().updateOptions() for that.
-     * 
+     *
      *  TODO There is no way to update the options on a subsession.
      *
      *  @param options as created from a call to buildOptions(properties), non-null
@@ -465,7 +467,7 @@ public class I2PSocketManagerFull implements I2PSocketManager {
 
     /**
      *  Current options, not a copy, setters may be used to make changes.
-     * 
+     *
      *  TODO There is no facility to specify the session.
      */
     public I2PSocketOptions getDefaultOptions() {
@@ -476,7 +478,7 @@ public class I2PSocketManagerFull implements I2PSocketManager {
      *  Returns non-null socket.
      *  This method does not throw exceptions, but methods on the returned socket
      *  may throw exceptions if the socket or socket manager is closed.
-     * 
+     *
      *  This only listens on the primary session. There is no way to get
      *  incoming connections on a subsession.
      *
@@ -489,10 +491,10 @@ public class I2PSocketManagerFull implements I2PSocketManager {
 
     /**
      *  Like getServerSocket but returns a real ServerSocket for easier porting of apps.
-     * 
+     *
      *  This only listens on the primary session. There is no way to get
      *  incoming connections on a subsession.
-     * 
+     *
      *  @since 0.8.4
      */
     public synchronized ServerSocket getStandardServerSocket() throws IOException {
@@ -514,7 +516,7 @@ public class I2PSocketManagerFull implements I2PSocketManager {
             return;
         session.connect();
     }
-    
+
     /**
      * Create a new connected socket. Blocks until the socket is created,
      * unless the connectDelay option (i2p.streaming.connectDelay) is
@@ -529,7 +531,7 @@ public class I2PSocketManagerFull implements I2PSocketManager {
      * @throws NoRouteToHostException if the peer is not found or not reachable
      * @throws I2PException if there is some other I2P-related problem
      */
-    public I2PSocket connect(Destination peer, I2PSocketOptions options) 
+    public I2PSocket connect(Destination peer, I2PSocketOptions options)
                              throws I2PException, NoRouteToHostException {
         if (peer == null)
             throw new NullPointerException();
@@ -540,10 +542,10 @@ public class I2PSocketManagerFull implements I2PSocketManager {
             opts = new ConnectionOptions((ConnectionOptions)options);
         else
             opts = new ConnectionOptions(options);
-        
+
         if (_log.shouldLog(Log.INFO))
-            _log.info("Connecting to " + peer.calculateHash().toBase64().substring(0,6) 
-                      + " with options: " + opts);
+            _log.info("Connecting to [" + peer.calculateHash().toBase64().substring(0,6)
+                      + "]\nOptions: " + opts);
         // pick the subsession here
         I2PSession session = _session;
         if (!_subsessions.isEmpty()) {
@@ -569,7 +571,7 @@ public class I2PSocketManagerFull implements I2PSocketManager {
             throw new TooManyStreamsException("Too many streams, max " + _defaultOptions.getMaxConns());
         I2PSocketFull socket = new I2PSocketFull(con,_context);
         con.setSocket(socket);
-        if (con.getConnectionError() != null) { 
+        if (con.getConnectionError() != null) {
             con.disconnect(false);
             throw new NoRouteToHostException(con.getConnectionError());
         }
@@ -737,9 +739,9 @@ public class I2PSocketManagerFull implements I2PSocketManager {
      *  For logging / diagnostics only
      */
     public void setName(String name) { _name = name; }
-    
-    
-    public void addDisconnectListener(I2PSocketManager.DisconnectListener lsnr) { 
+
+
+    public void addDisconnectListener(I2PSocketManager.DisconnectListener lsnr) {
         _connectionManager.getMessageHandler().addDisconnectListener(lsnr);
     }
     public void removeDisconnectListener(I2PSocketManager.DisconnectListener lsnr) {

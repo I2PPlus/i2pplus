@@ -38,13 +38,13 @@ class OutboundTunnelEndpoint {
             // If we pass it on to the handler, it will fail
             // If we don't, the data buf won't get released from the cache... that's ok
             if (_log.shouldLog(Log.WARN))
-                _log.warn("Invalid IV, dropping at OBEP " + _config);
+                _log.warn("Invalid IV, dropping at Outbound Endpoint " + _config);
             _context.statManager().addRateData("tunnel.corruptMessage", 1, 1);
             return;
         }
         _handler.receiveTunnelMessage(msg.getData(), 0, msg.getData().length);
     }
-    
+
     private class DefragmentedHandler implements FragmentHandler.DefragmentedReceiver {
         public void receiveComplete(I2NPMessage msg, Hash toRouter, TunnelId toTunnel) {
             if (toRouter == null) {
@@ -52,13 +52,13 @@ class OutboundTunnelEndpoint {
                 // We don't have any use for it yet.
                 // Don't send to OutboundMessageDistributor.distribute() which will NPE or fail
                 if (_log.shouldLog(Log.WARN))
-                    _log.warn("Dropping msg at OBEP with unsupported delivery instruction type LOCAL");
+                    _log.warn("Dropping messsage at Outbound Endpoint - unsupported delivery instruction type (LOCAL)");
                 return;
             }
             if (_log.shouldLog(Log.DEBUG))
-                _log.debug("outbound tunnel " + _config + " received a full message: " + msg
-                           + " to be forwarded on to "
-                           + toRouter.toBase64().substring(0,4)
+                _log.debug("Outbound tunnel " + _config + " received a full message: " + msg
+                           + " to be forwarded on to ["
+                           + toRouter.toBase64().substring(0,6) + "]"
                            + (toTunnel != null ? ":" + toTunnel.getTunnelId() : ""));
             int size = msg.getMessageSize();
             // don't drop it if we are the target

@@ -77,8 +77,8 @@ public class BuildMessageProcessor {
     }
 
     /**
-     * Decrypt the record targetting us, encrypting all of the other records with the included 
-     * reply key and IV.  The original, encrypted record targetting us is removed from the request
+     * Decrypt the record targeting us, encrypting all of the other records with the included 
+     * reply key and IV.  The original, encrypted record targeting us is removed from the request
      * message (so that the reply can be placed in that position after going through the decrypted
      * request record).
      *

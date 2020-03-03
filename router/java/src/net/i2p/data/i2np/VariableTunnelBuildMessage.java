@@ -32,12 +32,12 @@ public class VariableTunnelBuildMessage extends TunnelBuildMessage {
         if (r <= 0 || r > MAX_RECORD_COUNT)
             throw new I2NPMessageException("Bad record count " + r);
         RECORD_COUNT = r;
-        if (dataSize != calculateWrittenLength()) 
+        if (dataSize != calculateWrittenLength())
             throw new I2NPMessageException("Wrong length (expects " + calculateWrittenLength() + ", recv " + dataSize + ")");
         _records = new EncryptedBuildRecord[RECORD_COUNT];
         super.readMessage(data, offset + 1, dataSize, type);
     }
-    
+
     @Override
     protected int writeMessageBody(byte[] out, int curIndex) throws I2NPMessageException {
         int remaining = out.length - (curIndex + calculateWrittenLength());
@@ -54,13 +54,12 @@ public class VariableTunnelBuildMessage extends TunnelBuildMessage {
         }
         return curIndex;
     }
-    
+
     @Override
     public String toString() {
         StringBuilder buf = new StringBuilder(64);
-        buf.append("[VariableTunnelBuildMessage: " +
-                   "\n\tRecords: ").append(getRecordCount())
-           .append(']');
+        buf.append("VariableTunnelBuildMessage" +
+                   "; Records: ").append(getRecordCount());
         return buf.toString();
     }
 }

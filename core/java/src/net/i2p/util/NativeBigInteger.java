@@ -1328,7 +1328,7 @@ public class NativeBigInteger extends BigInteger {
             return "jbigi-os2-";
         if(_isSunos)
             return "jbigi-solaris-";
-        //throw new RuntimeException("Dont know jbigi library name for os type '"+System.getProperty("os.name")+"'");
+        //throw new RuntimeException("Don't know jbigi library name for os type '"+System.getProperty("os.name")+"'");
         // use linux as the default, don't throw exception
         return "jbigi-linux-";
     }

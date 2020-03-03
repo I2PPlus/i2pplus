@@ -185,6 +185,10 @@
        -->
         <copy preservelastmodified="true" file="${jetty.base}/lib/jetty-webapp-${jetty.ver}.jar" tofile="jettylib/jetty-webapp.jar" />
         <copy preservelastmodified="true" file="${jetty.base}/lib/jetty-xml-${jetty.ver}.jar" tofile="jettylib/jetty-xml.jar" />
+        <!-- I2P+ fastcgi support -->
+<!--        <copy preservelastmodified="true" file="${jetty.base}/lib/jetty-proxy-${jetty.ver}.jar" tofile="jettylib/jetty-proxy.jar" />-->
+<!--        <copy preservelastmodified="true" file="${jetty.base}/lib/fcgi/fcgi-client-${jetty.ver}.jar" tofile="jettylib/fcgi-client.jar" />-->
+<!--        <copy preservelastmodified="true" file="${jetty.base}/lib/fcgi/fcgi-server-${jetty.ver}.jar" tofile="jettylib/fcgi-server.jar" />-->
         <jar destfile="jettylib/jetty-java5-threadpool.jar" >
             <manifest>
                 <attribute name="Note" value="Intentionally empty" />
@@ -361,7 +365,7 @@
     <target name="depend" if="depend.available">
         <depend
             cache="../../build"
-            srcdir="./java/src" 
+            srcdir="./java/src"
             destdir="./build/obj" >
             <classpath>
                 <pathelement location="../../core/java/build/i2p.jar" />
@@ -383,10 +387,10 @@
     <target name="compile" depends="builddep, ensureJettylib, depend" >
         <mkdir dir="./build" />
         <mkdir dir="./build/obj" />
-        <javac 
-            srcdir="./java/src" 
-            debug="true" deprecation="on" source="${javac.version}" target="${javac.version}" 
-            destdir="./build/obj" 
+        <javac
+            srcdir="./java/src"
+            debug="true" deprecation="on" source="${javac.version}" target="${javac.version}"
+            destdir="./build/obj"
             encoding="UTF-8"
             includeAntRuntime="false" >
             <classpath>
@@ -442,7 +446,7 @@
                 <attribute name="X-Compile-Target-JDK" value="${javac.version}" />
             </manifest>
         </jar>
-    </target>    
+    </target>
 
     <target name="jarUpToDate">
         <uptodate property="jar.uptodate" targetfile="jettylib/jetty-i2p.jar" >
@@ -456,7 +460,7 @@
                 <isset property="mtn.available" />
             </and>
         </condition>
-    </target>    
+    </target>
 
     <!-- empty, uncomment below if needed -->
     <target name="buildPatches" unless="${with-libjetty9-java}" />
@@ -466,10 +470,10 @@
     <target name="compilePatches" unless="${with-libjetty9-java}" >
         <mkdir dir="./build" />
         <mkdir dir="./build/objPatches" />
-        <javac 
-            srcdir="./patches/jetty-util/src/main/java" 
-            debug="true" deprecation="on" source="${javac.version}" target="${javac.version}" 
-            destdir="./build/objPatches" 
+        <javac
+            srcdir="./patches/jetty-util/src/main/java"
+            debug="true" deprecation="on" source="${javac.version}" target="${javac.version}"
+            destdir="./build/objPatches"
             includeAntRuntime="false"
             encoding="UTF-8"
             classpath="" >
@@ -480,7 +484,7 @@
     <target name="jarPatches" depends="compilePatches, jarPatchesUpToDate" unless="jarPatches.uptodate" >
         <jar destfile="./build/jetty-util-patch.jar" basedir="./build/objPatches" includes="**/*.class" >
         </jar>
-    </target>    
+    </target>
 
     <target name="jarPatchesUpToDate" >
         <condition property="jarPatches.uptodate" >
@@ -491,13 +495,13 @@
                 </uptodate>
             </or>
         </condition>
-    </target>    
+    </target>
 -->
 
     <target name="clean" >
         <delete dir="./build" />
         <delete file="${verified.filename}" />
-    </target>    
+    </target>
     <target name="cleandep" depends="clean" />
     <target name="distclean" depends="clean">
         <delete dir="./jettylib" />
@@ -547,7 +551,7 @@
                 <attribute name="X-Compile-Target-JDK" value="${javac.version}" />
             </manifest>
         </jar>
-    </target>    
+    </target>
 
     <target name="servletJavadoc">
         <mkdir dir="./build" />

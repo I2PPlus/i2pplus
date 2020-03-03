@@ -14,35 +14,48 @@
     boolean testIFrame = tester.allowIFrame(request.getHeader("User-Agent"));
     if (!testIFrame) {
         response.setStatus(307);
-        response.setHeader("Location", "/susidns/index");
+        response.setHeader("Location", "/susidns/addressbook?book=router&amp;filter=none");
         // force commitment
         response.getOutputStream().close();
         return;
     } else {
 %>
 <!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
-<html><head>
+<html>
+<head>
 <%@include file="css.jsi" %>
 <%@include file="csp-unsafe.jsi" %>
 <%=intl.title("addressbook")%>
-<script src="/js/iframed.js?<%=net.i2p.CoreVersion.VERSION%>" type="text/javascript"></script>
+<script type="text/javascript" src="/js/iframeResizer/iframeResizer.js?<%=net.i2p.CoreVersion.VERSION%>"></script>
+<script type="text/javascript" src="/js/iframedClassInject.js?<%=net.i2p.CoreVersion.VERSION%>"></script>
 <%@include file="summaryajax.jsi" %>
 <script nonce="<%=cspNonce%>" type="text/javascript">
   function setupFrame() {
       f = document.getElementById("susidnsframe");
       injectClass(f);
-      resizeFrame(f);
   }
 </script>
-</head><body>
+</head>
+<body>
+<script nonce="<%=cspNonce%>" type="text/javascript">progressx.show();</script>
 <%@include file="summary.jsi" %>
-<h1><%=intl._t("I2P Addressbook")%> <span class="newtab"><a href="/susidns/index" target="_blank" title="<%=intl._t("Open in new tab")%>"><img src="<%=intl.getTheme(request.getHeader("User-Agent"))%>images/newtab.png" /></a></span></h1>
+<h1 class="addbook"><%=intl._t("Addressbook")%> <span class="newtab"><a href="/susidns/addressbook?book=router&amp;filter=none" target="_blank" title="<%=intl._t("Open in new tab")%>"><img src="<%=intl.getTheme(request.getHeader("User-Agent"))%>images/newtab.png" /></a></span></h1>
 <div class="main" id="dns">
-<iframe src="/susidns/index" width="100%" height="100%" frameborder="0" border="0" name="susidnsframe" id="susidnsframe" onload="setupFrame()" allowtransparency="true">
+<style>iframe {width: 1px; min-width: 100%;}</style>
+<noscript><style type="text/css">iframe {display: none}</style><p class="infohelp" style="margin: 10px;">Javascript is required to view <a href="/susidns/addressbook?book=router&amp;filter=none/" target="_blank">the Addressbook</a> in embedded mode.</p></noscript>
+<iframe src="/susidns/addressbook?book=router&amp;filter=none" width="100%" scrolling="no" frameborder="0" border="0" name="susidnsframe" id="susidnsframe" onload="setupFrame()" allowtransparency="true">
 <%=intl._t("Your browser does not support iFrames.")%>
-&nbsp;<a href="/susidns/index"><%=intl._t("Click here to continue.")%></a>
+&nbsp;<a href="/susidns/addressbook?book=router&amp;filter=none"><%=intl._t("Click here to continue.")%></a>
 </iframe>
-</div></body></html>
+<script nonce="<%=cspNonce%>" type="text/javascript">
+document.addEventListener('DOMContentLoaded', function(event) {
+var iframes = iFrameResize({log: false, interval: 0, heightCalculationMethod: 'taggedElement', warningTimeout: 0}, '#susidnsframe')
+});
+</script>
+</div>
+<script nonce="<%=cspNonce%>" type="text/javascript">progressx.hide();</script>
+</body>
+</html>
 <%
     }
 %>

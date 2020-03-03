@@ -26,11 +26,11 @@ public class RateStat {
         _groupName = group;
         if (periods.length == 0)
             throw new IllegalArgumentException();
-        
-        long [] periodsCopy = new long[periods.length]; 
+
+        long [] periodsCopy = new long[periods.length];
         System.arraycopy(periods, 0, periodsCopy, 0, periods.length);
         sort(periodsCopy);
-        
+
         _rates = new Rate[periodsCopy.length];
         for (int i = 0; i < periodsCopy.length; i++) {
             Rate rate = new Rate(periodsCopy[i]);
@@ -44,9 +44,9 @@ public class RateStat {
      *  Deprecated, unused, to be disabled in a future release.
      */
     public void setStatLog(StatLog sl) { _statLog = sl; }
-    
-    /** 
-     * update all of the rates for the various periods with the given value.  
+
+    /**
+     * update all of the rates for the various periods with the given value.
      */
     public void addData(long value, long eventDuration) {
         if (_statLog != null) _statLog.addData(_groupName, _statName, value, eventDuration);
@@ -54,8 +54,8 @@ public class RateStat {
             r.addData(value, eventDuration);
     }
 
-    /** 
-     * Update all of the rates for the various periods with the given value.  
+    /**
+     * Update all of the rates for the various periods with the given value.
      * Zero duration.
      * @since 0.8.10
      */
@@ -98,7 +98,7 @@ public class RateStat {
     }
 
     /**
-     * Returns rate with requested period if it exists, 
+     * Returns rate with requested period if it exists,
      * otherwise null
      * @param period ms
      * @return the Rate
@@ -108,7 +108,7 @@ public class RateStat {
             if (r.getPeriod() == period)
                 return r;
         }
-        
+
         return null;
     }
 
@@ -122,7 +122,7 @@ public class RateStat {
     public void addRate(long period) {
         throw new UnsupportedOperationException();
     }
-    
+
     /**
      * If a rate with the provided period exists, remove it.
      * @param period ms
@@ -132,7 +132,7 @@ public class RateStat {
     public void removeRate(long period) {
         throw new UnsupportedOperationException();
     }
-    
+
     /**
      * Tests if a rate with the provided period exists within this RateStat.
      * @param period ms
@@ -149,6 +149,7 @@ public class RateStat {
     }
 
     private final static String NL = System.getProperty("line.separator");
+    private final static String HR = "# ----------------------------------------------------------------------------------------";
 
     @Override
     public String toString() {
@@ -171,12 +172,12 @@ public class RateStat {
         if (obj == this)
             return true;
         RateStat rs = (RateStat) obj;
-        if (nameGroupDescEquals(rs)) 
+        if (nameGroupDescEquals(rs))
             return deepEquals(this._rates, rs._rates);
-        
+
         return false;
     }
-    
+
     boolean nameGroupDescEquals(RateStat rs) {
         return DataHelper.eq(getGroupName(), rs.getGroupName()) && DataHelper.eq(getDescription(), rs.getDescription())
                 && DataHelper.eq(getName(), rs.getName());
@@ -197,19 +198,17 @@ public class RateStat {
         StringBuilder buf = new StringBuilder(1024);
         if (addComments) {
             buf.append(NL);
-            buf.append("################################################################################").append(NL);
-            buf.append("# Rate: ").append(_groupName).append(": ").append(_statName).append(NL);
-            buf.append("# ").append(_description).append(NL);
-            buf.append("# ").append(NL).append(NL);
+            buf.append(HR).append(NL);
+            buf.append("# ").append(_description).append(" [").append(_statName).append("]").append(NL);
+            buf.append(HR).append(NL);
             out.write(buf.toString().getBytes("UTF-8"));
             buf.setLength(0);
         }
-        for (Rate r: _rates){
+        for (Rate r: _rates) {
             if (addComments) {
-                buf.append("#######").append(NL);
-                buf.append("# Period : ").append(DataHelper.formatDuration(r.getPeriod())).append(" for rate ")
-                    .append(_groupName).append(" - ").append(_statName).append(NL);
                 buf.append(NL);
+                buf.append("# Period: ").append(DataHelper.formatDuration(r.getPeriod())).append(" [").append(_statName).append("]").append(NL);
+                buf.append(HR).append(NL).append(NL);
             }
             String curPrefix = prefix + "." + DataHelper.formatDuration(r.getPeriod());
             r.store(curPrefix, buf, addComments);
@@ -219,9 +218,9 @@ public class RateStat {
     }
 
     /**
-     * Load this rate stat from the properties, populating all of the rates contained 
+     * Load this rate stat from the properties, populating all of the rates contained
      * underneath it.  The comes from the given prefix (e.g. if we are given the prefix
-     * "profile.dbIntroduction", a series of rates may be found underneath 
+     * "profile.dbIntroduction", a series of rates may be found underneath
      * "profile.dbIntroduction.60s", "profile.dbIntroduction.60m", and "profile.dbIntroduction.24h").
      * This RateStat must already be created, with the specified rate entries constructued - this
      * merely loads them with data.
@@ -252,7 +251,7 @@ public class RateStat {
             }
             rs.addData(i * 100, 20);
         }
-        
+
         rs.coalesceStats();
 
         java.io.ByteArrayOutputStream baos = new java.io.ByteArrayOutputStream(2048);

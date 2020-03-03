@@ -23,6 +23,8 @@ import net.i2p.router.web.RouterConsoleRunner;
 import net.i2p.router.web.WebAppStarter;
 import net.i2p.util.Addresses;
 
+import net.i2p.router.web.CSSHelper;
+
 public class ConfigClientsHelper extends HelperBase {
     private String _edit;
 
@@ -90,7 +92,7 @@ public class ConfigClientsHelper extends HelperBase {
         boolean bindAll = _context.getBooleanProperty(BIND_ALL_INTERFACES);
         if (bindAll && addr.equals("0.0.0.0") || addr.equals("::"))
             return true;
-        String host = _context.getProperty(ClientManagerFacadeImpl.PROP_CLIENT_HOST, 
+        String host = _context.getProperty(ClientManagerFacadeImpl.PROP_CLIENT_HOST,
                                            ClientManagerFacadeImpl.DEFAULT_HOST);
         return (host.equals(addr));
     }
@@ -117,10 +119,10 @@ public class ConfigClientsHelper extends HelperBase {
         StringBuilder buf = new StringBuilder(1024);
         buf.append("<table id=\"clientconfig\">\n" +
                    "<tr><th align=\"right\">").append(_t("Client")).append("</th><th>")
-           .append(_t("Run at Startup?")).append("</th><th>")
+           .append(_t("Run at Startup?").replace("?", "")).append("</th><th>")
            .append(_t("Control")).append("</th><th align=\"left\">")
            .append(_t("Class and arguments")).append("</th></tr>\n");
-        
+
         boolean allowEdit = isClientChangeEnabled();
         List<ClientAppConfig> clients = ClientAppConfig.getClientApps(_context);
         List<CAC> cacs = new ArrayList<CAC>(clients.size());
@@ -164,13 +166,13 @@ public class ConfigClientsHelper extends HelperBase {
                        // show edit button, show update button
                        // Don't allow edit if it's running or starting, or else we would lose the "handle" to the ClientApp to stop it.
                        allowEdit && showEdit,
-                       false, 
+                       false,
                        // show stop button
                        showStop,
                        // show delete button, show start button
                        allowEdit && !isConsole, showStart);
         }
-        
+
         if (allowEdit && "new".equals(_edit))
             renderForm(buf, Integer.toString(clients.size()), "", false, false, false, false, "", true, false, false, false, false, false);
         buf.append("</table>\n");
@@ -208,7 +210,7 @@ public class ConfigClientsHelper extends HelperBase {
         StringBuilder buf = new StringBuilder(1024);
         buf.append("<table id=\"webappconfig\">\n" +
                    "<tr><th align=\"right\">").append(_t("WebApp")).append("</th><th>")
-           .append(_t("Run at Startup?")).append("</th><th>")
+           .append(_t("Run at Startup?").replace("?", "")).append("</th><th>")
            .append(_t("Control")).append("</th><th align=\"left\">")
            .append(_t("Description")).append("</th></tr>\n");
         Properties props = RouterConsoleRunner.webAppProperties(_context);
@@ -225,7 +227,7 @@ public class ConfigClientsHelper extends HelperBase {
                 else if (app.equals("i2psnark"))
                     desc = _t("Torrents");
                 else if (app.equals("i2ptunnel"))
-                    desc = _t("Hidden Services Manager");
+                    desc = _t("Tunnel Manager");
                 else if (app.equals("imagegen"))
                     desc = _t("Identification Image Generator");
                 else if (app.equals("susidns"))
@@ -254,7 +256,7 @@ public class ConfigClientsHelper extends HelperBase {
         StringBuilder buf = new StringBuilder(1024);
         buf.append("<table id=\"pluginconfig\">\n" +
                    "<tr><th align=\"right\">").append(_t("Plugin")).append("</th><th>")
-           .append(_t("Run at Startup?")).append("</th><th>")
+           .append(_t("Run at Startup?").replace("?", "")).append("</th><th>")
            .append(_t("Control")).append("</th><th align=\"left\">")
            .append(_t("Description")).append("</th></tr>\n");
         Properties props = PluginStarter.pluginProperties();
@@ -270,9 +272,9 @@ public class ConfigClientsHelper extends HelperBase {
                 if (appProps.isEmpty())
                     continue;
                 StringBuilder desc = new StringBuilder(256);
-                desc.append("<table border=\"0\">")
+                desc.append("\n<table border=\"0\">\n")
                     .append("<tr><td><b>").append(_t("Version")).append("</b></td><td>").append(stripHTML(appProps, "version"))
-                    .append("<tr><td><b>")
+                    .append("</td></tr>\n<tr><td><b>")
                     .append(_t("Signed by")).append("</b></td><td>");
                 String s = stripHTML(appProps, "signer");
                 if (s != null) {
@@ -280,6 +282,7 @@ public class ConfigClientsHelper extends HelperBase {
                         desc.append("<a href=\"mailto:").append(s).append("\">").append(s).append("</a>");
                     else
                         desc.append(s);
+                    desc.append("</td></tr>\n");
                 }
                 s = stripHTML(appProps, "date");
                 if (s != null) {
@@ -301,6 +304,7 @@ public class ConfigClientsHelper extends HelperBase {
                         desc.append("<a href=\"mailto:").append(s).append("\">").append(s).append("</a>");
                     else
                         desc.append(s);
+                    desc.append("</td></tr>\n");
                 }
                 s = stripHTML(appProps, "description_" + Messages.getLanguage(_context));
                 if (s == null)
@@ -320,6 +324,7 @@ public class ConfigClientsHelper extends HelperBase {
                         .append(_t("Website")).append("</b></td><td><a href=\"")
                         .append(s).append("\" target=\"_blank\">").append(s).append("</a>");
                 }
+                desc.append("</td></tr>\n");
                 String updateURL = stripHTML(appProps, "updateURL.su3");
                 if (updateURL == null)
                     updateURL = stripHTML(appProps, "updateURL");
@@ -328,7 +333,7 @@ public class ConfigClientsHelper extends HelperBase {
                         .append(_t("Update link")).append("</b></td><td><a href=\"")
                         .append(updateURL).append("\">").append(updateURL).append("</a>");
                 }
-                desc.append("</table>");
+                desc.append("\n</table>\n");
                 boolean isRunning = PluginStarter.isPluginRunning(app, _context);
                 boolean enableStop = isRunning && !Boolean.parseBoolean(appProps.getProperty("disableStop"));
                 boolean enableStart = !isRunning;
@@ -357,8 +362,13 @@ public class ConfigClientsHelper extends HelperBase {
         if (urlify) {
             String link = "/";
             if (! RouterConsoleRunner.ROUTERCONSOLE.equals(name))
-                link += escapedName + "/";
-            buf.append("<a href=\"").append(link).append("\">").append(_t(escapedName)).append("</a>");
+                link += escapedName + "/\" target=\"_blank";
+                boolean embedApps = _context.getBooleanProperty(CSSHelper.PROP_EMBED_APPS);
+                if (name.contains(_t("imagegen")) && (embedApps)) {
+                    buf.append("<a href=\"/embed?url=/imagegen&name=").append(_t("Identification Image Generator")).append("\">").append(_t(escapedName)).append("</a>");
+                } else {
+                    buf.append("<a href=\"").append(link).append("\">").append(_t(escapedName)).append("</a>");
+             }
         } else if (edit && !ro) {
             buf.append("<input type=\"text\" name=\"nofilter_name").append(index).append("\" value=\"");
             if (name.length() > 0)
@@ -399,7 +409,7 @@ public class ConfigClientsHelper extends HelperBase {
                .append("')) { return false; }\">")
                .append(_t("Delete")).append("<span class=hide> ").append(index).append("</span></button>");
         }
-        buf.append("</td><td align=\"left\">");
+        buf.append("</td>\n<td align=\"left\">");
         if (edit && !ro) {
             buf.append("<input type=\"text\" size=\"80\" spellcheck=\"false\" name=\"nofilter_desc").append(index).append("\" value=\"");
             buf.append(escapedDesc);

@@ -12,14 +12,17 @@ import net.i2p.router.web.FormHandler;
 
 
 /**
- *  Simple sidebar configuration.
+ *  Simple summary bar configuration.
  *
  *  @since 0.9.1
  */
 public class ConfigSummaryHandler extends FormHandler {
-    
+
     @Override
     protected void processForm() {
+        if (_action == null) return;
+        net.i2p.I2PAppContext ctx = net.i2p.I2PAppContext.getGlobalContext();
+        boolean oldHome = ctx.getBooleanProperty("routerconsole.oldHomePage");
         String group = getJettyString("group");
         boolean deleting = _action.equals(_t("Delete selected"));
         boolean adding = _action.equals(_t("Add item"));
@@ -28,9 +31,12 @@ public class ConfigSummaryHandler extends FormHandler {
         if (_action.equals(_t("Save")) && "0".equals(group)) {
             try {
                 int refreshInterval = Integer.parseInt(getJettyString("refreshInterval"));
-                if (refreshInterval >= CSSHelper.MIN_REFRESH) {
+                if (refreshInterval >= CSSHelper.MIN_REFRESH && refreshInterval >= 1) {
                     _context.router().saveConfig(CSSHelper.PROP_REFRESH, Integer.toString(refreshInterval));
                     addFormNotice(_t("Refresh interval changed"));
+                } else if (refreshInterval <= 0) {
+                    _context.router().saveConfig(CSSHelper.PROP_DISABLE_REFRESH, "true");
+                    addFormNotice(_t("Sidebar refresh disabled"));
                 } else
                     addFormError(_t("Refresh interval must be at least {0} seconds", CSSHelper.MIN_REFRESH));
             } catch (java.lang.NumberFormatException e) {
@@ -38,13 +44,17 @@ public class ConfigSummaryHandler extends FormHandler {
                 return;
             }
         } else if (_action.equals(_t("Restore full default"))) {
+            if (oldHome) {
+            _context.router().saveConfig(SummaryHelper.PROP_SUMMARYBAR + "default", isAdvanced() ? SummaryHelper.DEFAULT_FULL_ADVANCED_OLDHOME : SummaryHelper.DEFAULT_FULL_OLDHOME);
+            } else {
             _context.router().saveConfig(SummaryHelper.PROP_SUMMARYBAR + "default", isAdvanced() ? SummaryHelper.DEFAULT_FULL_ADVANCED : SummaryHelper.DEFAULT_FULL);
-            addFormNotice(_t("Full sidebar default restored.") + " " +
-                          _t("Sidebar will refresh shortly."));
+            }
+            addFormNotice(_t("Full summary bar default restored.") + " " +
+                          _t("Summary bar will refresh shortly."));
         } else if (_action.equals(_t("Restore minimal default"))) {
             _context.router().saveConfig(SummaryHelper.PROP_SUMMARYBAR + "default", isAdvanced() ? SummaryHelper.DEFAULT_MINIMAL_ADVANCED : SummaryHelper.DEFAULT_MINIMAL);
-            addFormNotice(_t("Minimal sidebar default restored.") + " " +
-                          _t("Sidebar will refresh shortly."));
+            addFormNotice(_t("Minimal summary bar default restored.") + " " +
+                          _t("Summary bar will refresh shortly."));
         } else if (adding || deleting || saving || moving) {
             Map<Integer, String> sections = new TreeMap<Integer, String>();
             for (Object o : _settings.keySet()) {
@@ -137,7 +147,7 @@ public class ConfigSummaryHandler extends FormHandler {
             }
             SummaryHelper.saveSummaryBarSections(_context, "default", sections);
             addFormNotice(_t("Saved order of sections.") + " " +
-                          _t("Sidebar will refresh shortly."));
+                          _t("Summary bar will refresh shortly."));
         } else {
             //addFormError(_t("Unsupported"));
         }

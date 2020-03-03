@@ -21,6 +21,8 @@ import net.i2p.router.web.SummaryListener;
 import net.i2p.stat.Rate;
 import net.i2p.util.SystemVersion;
 
+import java.util.Date;
+
 /**
  *  /graphs.jsp, including form, and /graph.jsp
  */
@@ -41,11 +43,16 @@ public class GraphHelper extends FormHandler {
     private static final String PROP_PERIODS = "routerconsole.graphPeriods";
     private static final String PROP_EVENTS = "routerconsole.graphEvents";
     private static final String PROP_LEGEND = "routerconsole.graphHideLegend";
-    private static final int DEFAULT_REFRESH = 5*60;
+    private static final String PROP_HIDPI = "routerconsole.graphHiDpi";
+//    private static final int DEFAULT_REFRESH = 5*60;
+    private static final int DEFAULT_REFRESH = 1*60;
     private static final int DEFAULT_PERIODS = 60;
     private static final boolean DEFAULT_LEGEND = false;
-    private static final int MIN_X = 200;
-    private static final int MIN_Y = 60;
+    private static final boolean DEFAULT_HIDPI = false;
+//    private static final int MIN_X = 200;
+    private static final int MIN_X = 160;
+//    private static final int MIN_Y = 60;
+    private static final int MIN_Y = 40;
     private static final int MIN_C = 20;
     private static final int MAX_C = SummaryListener.MAX_ROWS;
     private static final int MIN_REFRESH = 15;
@@ -62,7 +69,7 @@ public class GraphHelper extends FormHandler {
     }
 
     /**
-     *  This must be output in the jsp since *lt;meta&gt; must be in the &lt;head&gt;
+     *  This must be output in the jsp since <meta> must be in the <head>
      *  @since 0.8.7
      */
     public String getRefreshMeta() {
@@ -70,10 +77,18 @@ public class GraphHelper extends FormHandler {
             ConfigRestartBean.getRestartTimeRemaining() < (1000 * (_refreshDelaySeconds + 30)))
             return "";
         // shorten the refresh by 3 seconds so we beat the iframe
-        return "<meta http-equiv=\"refresh\" content=\"" + (_refreshDelaySeconds - 3) + "\">";
+        return "<noscript><meta http-equiv=\"refresh\" content=\"" + (_refreshDelaySeconds - 3) + "\"></noscript>";
     }
 
-    public void setPeriodCount(String str) { 
+    public int getRefreshValue() {
+        return _refreshDelaySeconds;
+    }
+
+    public boolean getGraphHiDpi() {
+        return _context.getBooleanProperty(PROP_HIDPI);
+    }
+
+    public void setPeriodCount(String str) {
         setC(str);
     }
 
@@ -139,7 +154,7 @@ public class GraphHelper extends FormHandler {
         _stat = stat;
     }
 
-    public String getImages() { 
+    public String getImages() {
         StatSummarizer ss = StatSummarizer.instance(_context);
         if (ss == null)
             return "";
@@ -157,6 +172,7 @@ public class GraphHelper extends FormHandler {
                 else if (title.equals("bw.recvRate")) hasRx = true;
             }
             boolean hideLegend = _context.getProperty(PROP_LEGEND, DEFAULT_LEGEND);
+            boolean hiDPI = _context.getProperty(PROP_HIDPI, DEFAULT_HIDPI);
 
             if (hasTx && hasRx && !_showEvents) {
                 // remove individual tx/rx graphs if displaying combined
@@ -166,51 +182,84 @@ public class GraphHelper extends FormHandler {
                     if (title.equals("bw.sendRate") || title.equals("bw.recvRate"))
                         iter.remove();
                 }
+                if (hiDPI)
+                    _out.write("<span class=\"graphContainer\" id=\"hidpi\">");
+                else
+                    _out.write("<span class=\"graphContainer\">");
                 _out.write("<a href=\"graph?stat=bw.combined"
                            + "&amp;c=" + (3 * _periodCount )
-                           + "&amp;w=" + (3 * _width)
-                           + "&amp;h=" + (3 * _height)
+                           + "&amp;w=1000&amp;h=280"
+                           //+ "&amp;w=" + (3 * _width)
+                           //+ "&amp;h=" + (3 * _height)
                            + "\">");
                 String title = _t("Combined bandwidth graph");
-                _out.write("<img class=\"statimage\""
-                           + " src=\"viewstat.jsp?stat=bw.combined"
-                           + "&amp;periodCount=" + _periodCount
-                           + "&amp;width=" + _width);
-                if (!hideLegend) {
-                    // bw.combined graph has two entries in its legend
-                    // -26 pixels equalizes its height with the other images
-                    _out.write("&amp;height=" + (_height - 26));
+                if (hiDPI) {
+                    _out.write("<img class=\"statimage\""
+                               + " src=\"viewstat.jsp?stat=bw.combined"
+                               + "&amp;periodCount=" + _periodCount
+                               + "&amp;width=" + (_width * 2));
                 } else {
-                    // no legend, no height difference needed
-                    _out.write("&amp;height=" + (_height));
+                    _out.write("<img class=\"statimage\""
+                               + " src=\"viewstat.jsp?stat=bw.combined"
+                               + "&amp;periodCount=" + _periodCount
+                               + "&amp;width=" + _width);
                 }
-                _out.write("&amp;hideLegend=" + hideLegend
-                           + "\" alt=\"" + title + "\" title=\"" + title + "\"></a>\n");
+                if (!hideLegend) {
+                    if (hiDPI)
+                        // bw.combined graph has two entries in its legend
+                        // -26 pixels equalizes its height with the other images (standard dpi)
+                        _out.write("&amp;height=" + ((_height * 2) - 52));
+                    else
+                        _out.write("&amp;height=" + (_height - 26));
+                } else {
+                    if (hiDPI)
+                        // no legend, no height difference needed
+                        _out.write("&amp;height=" + (_height * 2));
+                    else
+                        _out.write("&amp;height=" + (_height));
+                }
+                _out.write("&amp;hideLegend=" + hideLegend + "&amp;time=" + System.currentTimeMillis()
+                           + "\" alt=\"" + title + "\" title=\"" + title + "\"></a></span>\n");
             }
 
             for (SummaryListener lsnr : ordered) {
                 Rate r = lsnr.getRate();
                 // e.g. "statname for 60m"
                 String title = _t("{0} for {1}", r.getRateStat().getName(), DataHelper.formatDuration2(_periodCount * r.getPeriod()));
+                if (hiDPI)
+                    _out.write("<span class=\"graphContainer\" id=\"hidpi\">");
+                else
+                    _out.write("<span class=\"graphContainer\">");
                 _out.write("<a href=\"graph?stat="
-                           + r.getRateStat().getName() 
-                           + '.' + r.getPeriod() 
-                           + "&amp;c=" + (3 * _periodCount)
-                           + "&amp;w=" + (3 * _width)
-                           + "&amp;h=" + (3 * _height)
-                           + (_showEvents ? "&amp;showEvents=1" : "")
+                           + r.getRateStat().getName()
+                           + '.' + r.getPeriod()
+                           + "&amp;c=" + (3 * _periodCount ));
+                           // let's set width & height predictably and reduce chance of downscaling
+                if (hiDPI)
+                    _out.write("&amp;w=2000&amp;h=560");
+                else
+                    _out.write("&amp;w=1000&amp;h=280");
+                           //+ "&amp;w=" + (3 * _width)
+                           //+ "&amp;h=" + (3 * _height)
+                _out.write((_showEvents ? "&amp;showEvents=1" : "")
                            + "\">");
                 _out.write("<img class=\"statimage\" border=\"0\""
                            + " src=\"viewstat.jsp?stat="
-                           + r.getRateStat().getName() 
+                           + r.getRateStat().getName()
                            + "&amp;showEvents=" + _showEvents
                            + "&amp;period=" + r.getPeriod()
-                           + "&amp;periodCount=" + _periodCount
-                           + "&amp;width=" + _width
-                           + "&amp;height=" + _height
-                           + "&amp;hideLegend=" + hideLegend
+                           + "&amp;periodCount=" + _periodCount);
+                if (hiDPI) {
+                    _out.write("&amp;width=" + (_width * 2)
+                           + "&amp;height=" + (_height * 2));
+                } else {
+                    _out.write("&amp;width=" + _width
+                           + "&amp;height=" + _height);
+                }
+                _out.write("&amp;hideLegend=" + hideLegend
+                           + "&amp;time=" + System.currentTimeMillis()
                            + "\" alt=\"" + title
-                           + "\" title=\"" + title + "\"></a>\n");
+                           + "\" title=\"" + title + "\"></a></span>\n");
             }
 
             // FIXME jrobin doesn't support setting the timezone, will have to mod TimeAxis.java
@@ -219,7 +268,7 @@ public class GraphHelper extends FormHandler {
         } catch (IOException ioe) {
             ioe.printStackTrace();
         }
-        return ""; 
+        return "";
     }
 
     /**
@@ -242,11 +291,11 @@ public class GraphHelper extends FormHandler {
             if (_stat.equals("bw.combined")) {
                 period = 60000;
                 name = _stat;
-                displayName = _t("Bandwidth usage");
+                displayName = ("[" + _t("Router") + "] " + _t("Bandwidth usage").replace("usage", "Usage"));
             } else {
                 Set<Rate> rates = ss.parseSpecs(_stat);
                 if (rates.size() != 1) {
-                    _out.write("Graphs not enabled for " + _stat);
+                    _out.write("<p class=\"infohelp\">Graphs not enabled for " + _stat + " or the tunnel or service isn't currently running.</p>");
                     return "";
                 }
                 Rate r = rates.iterator().next();
@@ -260,18 +309,31 @@ public class GraphHelper extends FormHandler {
                 _out.write(' ' + _t("ending {0} ago", DataHelper.formatDuration2(_end * period)));
 
             boolean hideLegend = _context.getProperty(PROP_LEGEND, DEFAULT_LEGEND);
-            _out.write("&nbsp;<a href=\"graphs\">[" + _t("Return to main graphs page") + "]</a></h3>\n"
-                       + "<div class=\"graphspanel\"><img class=\"statimage\" border=\"0\""
+            boolean hiDPI = _context.getProperty(PROP_HIDPI, DEFAULT_HIDPI);
+            _out.write("&nbsp;<a href=\"/graphs\">" + _t("Return to main graphs page") + "</a></h3>\n"
+                       + "<div class=\"graphspanel\">\n");
+            if (hiDPI)
+                _out.write("<span class=\"graphContainer\" id=\"hidpi\">");
+            else
+                _out.write("<span class=\"graphContainer\">");
+            _out.write("<a class=\"singlegraph\" href=\"/graphs\" title=\""
+                       + _t("Return to main graphs page") + "\"><img class=\"statimage\" id=\"graphSingle\" border=\"0\""
                        + " src=\"viewstat.jsp?stat="
                        + name
                        + "&amp;showEvents=" + _showEvents
                        + "&amp;period=" + period
                        + "&amp;periodCount=" + _periodCount
-                       + "&amp;end=" + _end
-                       + "&amp;width=" + _width
-                       + "&amp;height=" + _height
-                       + "&amp;hideLegend=" + hideLegend
-                       + "\"></div><p id=\"graphopts\">\n");
+                       + "&amp;end=" + _end);
+            if (hiDPI) {
+                _out.write("&amp;width=" + (_width * 2)
+                       + "&amp;height=" + (_height * 2));
+            } else {
+                _out.write("&amp;width=" + _width
+                       + "&amp;height=" + _height);
+            }
+            _out.write("&amp;hideLegend=" + hideLegend
+                       + "&amp;time=" + System.currentTimeMillis()
+                       + "\"></a></span>\n</div><p id=\"graphopts\">\n");
 
             if (_width < MAX_X && _height < MAX_Y) {
                 _out.write(link(_stat, _showEvents, _periodCount, _end, _width * 3 / 2, _height * 3 / 2));
@@ -319,10 +381,9 @@ public class GraphHelper extends FormHandler {
             if (_periodCount > MIN_C) {
                 _out.write(link(_stat, _showEvents, _periodCount / 2, _end, _width, _height));
                 _out.write(_t("Smaller interval"));
-                _out.write("</a>");
+                _out.write("</a> - ");
             }
 
-            _out.write("<br>");
             if (_periodCount < MAX_C) {
                 _out.write(link(_stat, _showEvents, _periodCount, _end + _periodCount, _width, _height));
                 _out.write(_t("Previous interval"));
@@ -340,7 +401,7 @@ public class GraphHelper extends FormHandler {
                 _out.write("</a> ");
             }
 
-            _out.write("<br>");
+            _out.write(" - ");
             _out.write(link(_stat, !_showEvents, _periodCount, _end, _width, _height));
             if (!_stat.equals("bw.combined"))
                 _out.write(_showEvents ? _t("Plot averages") : _t("plot events"));
@@ -350,7 +411,7 @@ public class GraphHelper extends FormHandler {
         } catch (IOException ioe) {
             ioe.printStackTrace();
         }
-        return ""; 
+        return "";
     }
 
     /** @since 0.9 */
@@ -370,7 +431,7 @@ public class GraphHelper extends FormHandler {
 
     private static final int[] times = { 15, 30, 60, 2*60, 5*60, 10*60, 30*60, 60*60, -1 };
 
-    public String getForm() { 
+    public String getForm() {
         StatSummarizer ss = StatSummarizer.instance(_context);
         if (ss == null)
             return "";
@@ -379,19 +440,17 @@ public class GraphHelper extends FormHandler {
         // So just use the "shared/console nonce".
         String nonce = CSSHelper.getNonce();
         try {
-            _out.write("<br><h3 id=\"graphdisplay\">" + _t("Configure Graph Display") + " <a href=\"configstats\">[" + _t("Select Stats") + "]</a></h3>");
-            _out.write("<form action=\"graphs\" method=\"POST\">\n" +
-                       "<table><tr><td><div class=\"optionlist\"><input type=\"hidden\" name=\"action\" value=\"save\">\n" +
+            _out.write("<br><h3 id=\"graphdisplay\">" + _t("Configure Graph Display") + " <a href=\"configstats\">" + _t("Select Stats") + "</a></h3>");
+            _out.write("<form action=\"/updategraphs\" method=\"POST\">\n" +
+                       "<table>\n<tr><td><div class=\"optionlist\">\n<input type=\"hidden\" name=\"action\" value=\"save\">\n" +
                        "<input type=\"hidden\" name=\"nonce\" value=\"" + nonce + "\" >\n");
             _out.write("<span class=\"nowrap\" title=\"" +
                        _t("Note: Dimensions are for graph only (excludes title, labels and legend).") +"\"><b>");
-            _out.write(_t("Graph size") + ":</b> <input size=\"4\" style=\"text-align: right;\" type=\"text\" name=\"width\" value=\"" + _width
+            _out.write(_t("Graph size") + ":</b>&nbsp; <input size=\"4\" style=\"text-align: right;\" type=\"text\" name=\"width\" value=\"" + _width
                        + "\">" + _t("pixels wide") + "&nbsp;&nbsp;&nbsp;<input size=\"4\" style=\"text-align: right;\" type=\"text\" name=\"height\" value=\"" + _height
-                       + "\">" + _t("pixels high") + "</span><br><span class=\"nowrap\">\n<b>");
-
-            _out.write(_t("Display period") + ":</b> <input size=\"5\" style=\"text-align: right;\" type=\"text\" name=\"periodCount\" value=\"" + _periodCount + "\">" + _t("minutes") + "</span><br><span class=\"nowrap\">\n<b>");
-
-
+                       + "\">" + _t("pixels high") + "</span><br>\n<span class=\"nowrap\">\n<b>");
+            _out.write(_t("Display period") + ":</b> <input size=\"5\" style=\"text-align: right;\" type=\"text\" name=\"periodCount\" value=\""
+                       + _periodCount + "\">" + _t("minutes") + "</span><br>\n<span class=\"nowrap\">\n<b>");
             _out.write(_t("Refresh delay") + ":</b> <select name=\"refreshDelay\">");
             for (int i = 0; i < times.length; i++) {
                 _out.write("<option value=\"");
@@ -406,11 +465,11 @@ public class GraphHelper extends FormHandler {
                     _out.write(_t("Never"));
                 _out.write("</option>\n");
             }
-            _out.write("</select></span><br><span class=\"nowrap\">\n<b>");
+            _out.write("</select></span><br>\n<span class=\"nowrap\">\n<b>");
 
             _out.write(_t("Plot type") + ":</b> ");
             _out.write("<label><input type=\"radio\" class=\"optbox\" name=\"showEvents\" value=\"false\" " + (_showEvents ? "" : HelperBase.CHECKED) + ">" + _t("Averages") + "</label>&nbsp;&nbsp;&nbsp;");
-            _out.write ("<label><input type=\"radio\" class=\"optbox\" name=\"showEvents\" value=\"true\" "+ (_showEvents ? HelperBase.CHECKED : "") + ">" + _t("Events") + "</label></span><br><span class=\"nowrap\">\n<b>");
+            _out.write ("<label><input type=\"radio\" class=\"optbox\" name=\"showEvents\" value=\"true\" "+ (_showEvents ? HelperBase.CHECKED : "") + ">" + _t("Events") + "</label></span><br>\n<span class=\"nowrap\">\n<b>");
             _out.write(_t("Hide legend") + ":</b> ");
             _out.write("<label><input type=\"checkbox\" class=\"optbox\" value=\"true\" name=\"hideLegend\"");
             boolean hideLegend = _context.getProperty(PROP_LEGEND, DEFAULT_LEGEND);
@@ -422,12 +481,12 @@ public class GraphHelper extends FormHandler {
             boolean persistent = _context.getBooleanPropertyDefaultTrue(SummaryListener.PROP_PERSISTENT);
             if (persistent)
                 _out.write(HelperBase.CHECKED);
-            _out.write(">" + _t("Store graph data on disk") + "</label></span></div></td></tr></table>" +
-                       "<hr><div class=\"formaction\" id=\"graphing\"><input type=\"submit\" class=\"accept\" value=\"" + _t("Save settings and redraw graphs") + "\"></div></form>");
+            _out.write(">" + _t("Store graph data on disk") + "</label></span>\n</div>\n</td></tr>\n</table>\n" +
+                       "<hr>\n<div class=\"formaction\" id=\"graphing\"><input type=\"submit\" class=\"accept\" value=\"" + _t("Save settings and redraw graphs") + "\"></div>\n</form>\n");
         } catch (IOException ioe) {
             ioe.printStackTrace();
         }
-        return ""; 
+        return "";
     }
 
     /**
@@ -437,7 +496,7 @@ public class GraphHelper extends FormHandler {
     @Override
     public String getAllMessages() {
         if (StatSummarizer.isDisabled(_context)) {
-            addFormError("Graphing not supported with this JVM or OS");
+            addFormError("Either the router hasn't initalized yet, or graph generation is not supported with this JVM or OS.");
             addFormNotice("JVM: " + System.getProperty("java.vendor") + ' ' +
                          System.getProperty("java.version") + " (" +
                          System.getProperty("java.runtime.name") + ' ' +
@@ -446,8 +505,8 @@ public class GraphHelper extends FormHandler {
                            System.getProperty("os.arch") + ' ' +
                            System.getProperty("os.version"));
             if (!SystemVersion.isMac() && !SystemVersion.isWindows())
-                addFormNotice("Installing the fonts-dejavu package and then restarting I2P may resolve the issue");
-            addFormNotice("Check logs for more information");
+                addFormNotice("Installing the fonts-dejavu package or the DroidSans and DroidSansMono fonts and then restarting I2P may resolve the issue.");
+            addFormNotice("Check logs for more information.");
             if (_context.getProperty(PROP_REFRESH, 0) >= 0) {
                 // force no refresh, save silently
                 _context.router().saveConfig(PROP_REFRESH, "-1");
@@ -487,12 +546,36 @@ public class GraphHelper extends FormHandler {
             changes.put(PROP_LEGEND, Boolean.toString(_graphHideLegend));
             changes.put(SummaryListener.PROP_PERSISTENT, Boolean.toString(_persistent));
             _context.router().saveConfig(changes, null);
-            addFormNotice(_t("Graph settings saved"));
+            addFormNotice(_t("Graph settings saved") + ".");
+        } else {
+            addFormNotice(_t("Graph settings unchanged") + ".");
         }
     }
 
     private static class AlphaComparator implements Comparator<SummaryListener>, Serializable {
         public int compare(SummaryListener l, SummaryListener r) {
+            // sort by group name
+            String lGName = l.getRate().getRateStat().getGroupName();
+            String rGName = r.getRate().getRateStat().getGroupName();
+
+            boolean lrouter = lGName.equals("Router");
+            boolean rrouter = rGName.equals("Router");
+            if (lrouter && !rrouter)
+                return -1;
+            if (rrouter && !lrouter)
+                return 1;
+
+            lrouter = lGName.startsWith("Router");
+            rrouter = rGName.startsWith("Router");
+            if (lrouter && !rrouter)
+                return -1;
+            if (rrouter && !lrouter)
+                return 1;
+
+            int sort = lGName.compareTo(rGName);
+            if (sort != 0)
+                return sort;
+            // sort by stat name
             String lName = l.getRate().getRateStat().getName();
             String rName = r.getRate().getRateStat().getName();
             int rv = lName.compareTo(rName);

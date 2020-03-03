@@ -8,6 +8,8 @@ import net.i2p.I2PAppContext;
 import net.i2p.time.BuildTime;
 import net.i2p.time.Timestamper;
 
+import java.util.concurrent.atomic.AtomicInteger;import java.util.concurrent.atomic.AtomicLong;
+
 /**
  * Alternate location for determining the time which takes into account an offset.
  * This offset will ideally be periodically updated so as to serve as the difference
@@ -27,7 +29,9 @@ public class Clock implements Timestamper.UpdateListener {
     protected volatile long _offset;
     protected boolean _alreadyChanged;
     private final Set<ClockUpdateListener> _listeners;
-    
+
+    private  AtomicInteger _iter = new AtomicInteger(0);    private  AtomicInteger _frequency = new AtomicInteger(0);    private  AtomicLong _savedTime = new AtomicLong(0);
+
     public Clock(I2PAppContext context) {
         _context = context;
         _listeners = new CopyOnWriteArraySet<ClockUpdateListener>();
@@ -58,12 +62,12 @@ public class Clock implements Timestamper.UpdateListener {
     public static Clock getInstance() {
         return I2PAppContext.getGlobalContext().clock();
     }
-    
+
     /**
      *  This is a dummy, see RouterClock and RouterTimestamper for the real thing
      */
     public Timestamper getTimestamper() { return new Timestamper(); }
-    
+
     /** we fetch it on demand to avoid circular dependencies (logging uses the clock) */
     protected Log getLog() { return _context.logManager().getLog(Clock.class); }
 
@@ -81,9 +85,9 @@ public class Clock implements Timestamper.UpdateListener {
      * @param offsetMs the delta from System.currentTimeMillis() (NOT the delta from now())
      */
     public void setOffset(long offsetMs) {
-        setOffset(offsetMs, false);        
+        setOffset(offsetMs, false);
     }
-    
+
     /**
      * Specify how far away from the "correct" time the computer is - a positive
      * value means that the system time is slow, while a negative value means the system time is fast.
@@ -101,7 +105,7 @@ public class Clock implements Timestamper.UpdateListener {
                     log.warn("Maximum offset shift exceeded [" + offsetMs + "], NOT HONORING IT");
                 return;
             }
-            
+
             // only allow substantial modifications before the first 10 minutes
             if (_alreadyChanged && (System.currentTimeMillis() - _startedOn > 10 * 60 * 1000)) {
                 if ( (delta > MAX_LIVE_OFFSET) || (delta < 0 - MAX_LIVE_OFFSET) ) {
@@ -112,7 +116,7 @@ public class Clock implements Timestamper.UpdateListener {
                     return;
                 }
             }
-            
+
             if ((delta < MIN_OFFSET_CHANGE) && (delta > 0 - MIN_OFFSET_CHANGE)) {
                 Log log = getLog();
                 if (log.shouldLog(Log.DEBUG))
@@ -126,9 +130,10 @@ public class Clock implements Timestamper.UpdateListener {
                 getLog().log(Log.CRIT, "Updating clock offset to " + offsetMs + "ms from " + _offset + "ms");
             else if (getLog().shouldLog(Log.INFO))
                 getLog().info("Updating clock offset to " + offsetMs + "ms from " + _offset + "ms");
-            
+
             if (!_statCreated) {
-                _context.statManager().createRateStat("clock.skew", "Clock step adjustment (ms)", "Clock", new long[] { 60*60*1000 });
+//                _context.statManager().createRateStat("clock.skew", "Clock step adjustment (ms)", "Router", new long[] { 10*60*1000, 3*60*60*1000, 24*60*60*1000 });
+                _context.statManager().createRateStat("clock.skew", "Clock step adjustment (ms)", "Router", new long[] { 60*1000, 3*60*60*1000, 24*60*60*1000 });
                 _statCreated = true;
             }
             _context.statManager().addRateData("clock.skew", delta, 0);
@@ -148,10 +153,10 @@ public class Clock implements Timestamper.UpdateListener {
     public synchronized long getOffset() {
         return _offset;
     }
-    
+
     public boolean getUpdatedSuccessfully() { return _alreadyChanged; }
-    
-    
+
+
     public void setNow(long realTime) {
         if (realTime < BuildTime.getEarliestTime() || realTime > BuildTime.getLatestTime()) {
             Log log = getLog();
@@ -182,7 +187,8 @@ public class Clock implements Timestamper.UpdateListener {
      *
      */
     public long now() {
-        return _offset + System.currentTimeMillis();
+//        return _offset + System.currentTimeMillis();
+        // aims to check currentTimeMillis twice per ms under constant load        // negative clock shift avg 0.25 ms under constant load        // saves 99% system calls at 200 calls / sec        if (_iter.incrementAndGet() <= _frequency.get())            return _savedTime.get();        _iter.set(0);        long newTime = _offset + System.currentTimeMillis();        if (newTime == _savedTime.getAndSet(newTime))            _frequency.incrementAndGet();        else            _frequency.decrementAndGet();            // _frequency.set(_frequency.Get() / 2); // alternate version            // saves > 94% system calls at 200 calls / sec            // negative clock shift avg < 0.06 ms at 200 calls / sec        return newTime;
     }
 
     public void addUpdateListener(ClockUpdateListener lsnr) {

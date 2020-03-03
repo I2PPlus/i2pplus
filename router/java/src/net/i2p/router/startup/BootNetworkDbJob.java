@@ -13,13 +13,13 @@ import net.i2p.router.RouterContext;
 
 /** start up the network database */
 class BootNetworkDbJob extends JobImpl {
-    
+
     public BootNetworkDbJob(RouterContext ctx) {
         super(ctx);
     }
-    
-    public String getName() { return "Boot Network Database"; }
-    
+
+    public String getName() { return "Boot NetDb"; }
+
     public void runJob() {
         getContext().netDb().startup();
     }

@@ -34,7 +34,8 @@ public class I2Ping extends I2PTunnelClientBase {
 
     public static final String PROP_COMMAND = "command";
 
-    private static final int PING_COUNT = 3;
+    //private static final int PING_COUNT = 3;
+    private static final int PING_COUNT = 10;
     private static final int CPING_COUNT = 5;
     private static final int PING_TIMEOUT = 30*1000;
 
@@ -202,7 +203,7 @@ public class I2Ping extends I2PTunnelClientBase {
     public static String usage() {
         return
             "ping <opts> <b64dest|host>\n" +
-            "ping <opts> -h (pings all hosts in hosts.txt)\n" +
+            "ping <opts> -h (pings all hosts in hosts.txt in current directory)\n" +
             "ping <opts> -l <destlistfile> (pings a list of hosts in a file)\n" +
             "Options:\n" +
             "     -c (require 5 consecutive pings to report success)\n" +
@@ -221,7 +222,8 @@ public class I2Ping extends I2PTunnelClientBase {
             l.log("There are still pings running!");
             return false;
         }
-        l.log("Closing pinger " + toString());
+        //l.log("Closing pinger " + toString());
+        l.log("Closing pinger " + "&hellip;");
         l.log("Pinger closed.");
         return true;
     }
@@ -288,7 +290,8 @@ public class I2Ping extends I2PTunnelClientBase {
             try {
                 Destination dest = lookup(destination);
                 if (dest == null) {
-                    l.log("Unresolvable: " + destination);
+                    //l.log("Unresolvable: " + destination); // if null dest, then won't display so..
+                    l.log("\n* Ignoring unresolvable destination");
                     return;
                 }
                 int pass = 0;
@@ -310,7 +313,7 @@ public class I2Ping extends I2PTunnelClientBase {
                                 pass++;
                                 long rtt = System.currentTimeMillis() - lastPingTime;
                                 totalTime += rtt;
-                                l.log((i+1) + ": + " + rtt + " ms");
+                                l.log((i+1) + ": + " + rtt + "ms");
                             } else {
                                 fail++;
                                 l.log((i+1) + ": -");
@@ -319,15 +322,15 @@ public class I2Ping extends I2PTunnelClientBase {
                             pingResults.append(sent ? "+ " : "- ");
                         }
                     }
-                    //		    System.out.println(sent+" -> "+destination);
+                    //    System.out.println(sent+" -> "+destination);
                 }
                 if (reportTimes) {
                     pingResults.append("  ").append(pass).append(" received ");
                     if (pass > 0)
-                        pingResults.append("(average time ").append(totalTime/pass).append(" ms) ");
-                    pingResults.append("and ").append(fail).append(" lost for destination: ");
+                        pingResults.append("(average time ").append(totalTime/pass).append("ms) ");
+                    pingResults.append("and ").append(fail).append(" lost for: ");
                 }
-                pingResults.append("  ").append(destination);
+                pingResults.append(destination);
                 l.log(pingResults.toString());
             } catch (I2PException ex) {
                 _log.error("Error pinging " + destination, ex);

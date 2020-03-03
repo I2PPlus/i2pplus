@@ -1,9 +1,9 @@
 package net.i2p.router;
 /*
  * free (adj.): unencumbered; not under the control of others
- * Written by jrandom in 2003 and released into the public domain 
- * with no warranty of any kind, either expressed or implied.  
- * It probably won't make your computer catch on fire, or eat 
+ * Written by jrandom in 2003 and released into the public domain
+ * with no warranty of any kind, either expressed or implied.
+ * It probably won't make your computer catch on fire, or eat
  * your children, but it might.  Use at your own risk.
  *
  */
@@ -19,28 +19,29 @@ public abstract class JobImpl implements Job {
     private final RouterContext _context;
     private final JobTiming _timing;
     private static final AtomicLong _idSrc = new AtomicLong();
-    private final long _id;
+    // make this public so we can reference the job number for tunnel builds on /jobs
+    public final long _id;
     private volatile long _madeReadyOn;
-    
+
     public JobImpl(RouterContext context) {
         _context = context;
         _timing = new JobTiming(context);
         _id = _idSrc.incrementAndGet();
     }
-    
+
     public long getJobId() { return _id; }
     public JobTiming getTiming() { return _timing; }
-    
+
     public final RouterContext getContext() { return _context; }
-    
+
     @Override
-    public String toString() { 
+    public String toString() {
         StringBuilder buf = new StringBuilder(128);
-        buf.append(getClass().getSimpleName());
-        buf.append(": Job ").append(_id).append(": ").append(getName());
+        buf.append("[Job ").append(_id).append("] ")
+           .append(getClass().getSimpleName());
         return buf.toString();
     }
-    
+
     /**
      *  @deprecated
      *  @return null always
@@ -52,12 +53,12 @@ public abstract class JobImpl implements Job {
     public long getMadeReadyOn() { return _madeReadyOn; }
     public void madeReady() { _madeReadyOn = _context.clock().now(); }
     public void dropped() {}
-    
+
     /**
      *  Warning - only call this from runJob() or if Job is not already queued,
      *  or else it gets the job queue out of order.
      */
-    protected void requeue(long delayMs) { 
+    protected void requeue(long delayMs) {
         getTiming().setStartAfter(_context.clock().now() + delayMs);
         _context.jobQueue().addJob(this);
     }

@@ -2,9 +2,9 @@ package net.i2p.data;
 
 /*
  * free (adj.): unencumbered; not under the control of others
- * Written by jrandom in 2003 and released into the public domain 
- * with no warranty of any kind, either expressed or implied.  
- * It probably won't make your computer catch on fire, or eat 
+ * Written by jrandom in 2003 and released into the public domain
+ * with no warranty of any kind, either expressed or implied.
+ * It probably won't make your computer catch on fire, or eat
  * your children, but it might.  Use at your own risk.
  *
  */
@@ -110,14 +110,14 @@ public class KeysAndCert extends DataStructureImpl {
             throw new IllegalStateException();
         _signingKey = key;
     }
-    
+
     /**
      * @since 0.9.16
      */
     public byte[] getPadding() {
         return _padding;
     }
-    
+
     /**
      * @throws IllegalStateException if was already set
      * @since 0.9.12
@@ -127,7 +127,7 @@ public class KeysAndCert extends DataStructureImpl {
             throw new IllegalStateException();
         _padding = padding;
     }
-    
+
     /**
      * @throws IllegalStateException if data already set
      */
@@ -152,7 +152,7 @@ public class KeysAndCert extends DataStructureImpl {
             _certificate = cert;
         }
     }
-    
+
     /**
      * @return null if both are null
      * @since 0.9.42
@@ -180,7 +180,7 @@ public class KeysAndCert extends DataStructureImpl {
         _signingKey.writeTruncatedBytes(out);
         _certificate.writeBytes(out);
     }
-    
+
     @Override
     public boolean equals(Object object) {
         if (object == this) return true;
@@ -192,7 +192,7 @@ public class KeysAndCert extends DataStructureImpl {
                && Arrays.equals(_padding, ident._padding)
                && DataHelper.eq(_certificate, ident._certificate);
     }
-    
+
     /** the signing key has enough randomness in it to use it by itself for speed */
     @Override
     public int hashCode() {
@@ -202,21 +202,22 @@ public class KeysAndCert extends DataStructureImpl {
             return 0;
         return _signingKey.hashCode();
     }
-    
+
     @Override
     public String toString() {
         StringBuilder buf = new StringBuilder(256);
-        buf.append('[').append(getClass().getSimpleName()).append(": ");
-        buf.append("\n\tHash: ").append(getHash().toBase64());
-        buf.append("\n\tCertificate: ").append(_certificate);
-        buf.append("\n\tPublicKey: ").append(_publicKey);
-        buf.append("\n\tSigningPublicKey: ").append(_signingKey);
+// Remove for now because 'Destination: Destination:' is fail
+//        buf.append(getClass().getSimpleName()).append(": ");
+        buf.append("\n* Hash: ").append(getHash().toBase64());
+        // TODO: avoid duplication of info: "Certificate type: Certificate: Type..."
+        buf.append("\n* Certificate type: ").append(_certificate);
+        buf.append("\n* Public Key size: ").append(_publicKey);
+        buf.append("\n* Public Signing Key: ").append(_signingKey);
         if (_padding != null)
-            buf.append("\n\tPadding: ").append(_padding.length).append(" bytes");
-        buf.append(']');
+            buf.append("\n* Padding: ").append(_padding.length).append(" bytes");
         return buf.toString();
     }
-    
+
     /**
      *  Throws IllegalStateException if keys and cert are not initialized,
      *  as of 0.9.12. Prior to that, returned null.

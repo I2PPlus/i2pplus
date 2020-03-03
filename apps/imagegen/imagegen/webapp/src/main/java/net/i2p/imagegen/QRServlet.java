@@ -49,158 +49,166 @@ import net.i2p.util.SystemVersion;
 
 /**
  * This servlet generates QR code images.
- * 
+ *
  * @author modiied from identicon
  * @since 0.9.25
  */
 public class QRServlet extends HttpServlet {
 
-	private static final long serialVersionUID = -3507466186902317988L;
-	private static final String INIT_PARAM_VERSION = "version";
-	private static final String INIT_PARAM_CACHE_PROVIDER = "cacheProvider";
-	private static final String PARAM_IDENTICON_SIZE_SHORT = "s";
-	private static final String PARAM_IDENTICON_CODE_SHORT = "c";
-	private static final String PARAM_IDENTICON_TEXT_SHORT = "t";
-	private static final String IDENTICON_IMAGE_FORMAT = "PNG";
-	private static final String IDENTICON_IMAGE_MIMETYPE = "image/png";
-	private static final long DEFAULT_IDENTICON_EXPIRES_IN_MILLIS = 24 * 60 * 60 * 1000;
-	private static final String DEFAULT_FONT_NAME = SystemVersion.isWindows() ?
-	                                                "Lucida Sans Typewriter" : Font.SANS_SERIF;	
-	private static final Font DEFAULT_LARGE_FONT = new Font(DEFAULT_FONT_NAME, Font.BOLD, 16);
+    private static final long serialVersionUID = -3507466186902317988L;
+    private static final String INIT_PARAM_VERSION = "version";
+    private static final String INIT_PARAM_CACHE_PROVIDER = "cacheProvider";
+    private static final String PARAM_IDENTICON_SIZE_SHORT = "s";
+    private static final String PARAM_IDENTICON_CODE_SHORT = "c";
+    private static final String PARAM_IDENTICON_TEXT_SHORT = "t";
+    private static final String IDENTICON_IMAGE_FORMAT = "PNG";
+    private static final String IDENTICON_IMAGE_MIMETYPE = "image/png";
+    private static final long DEFAULT_IDENTICON_EXPIRES_IN_MILLIS = 24 * 60 * 60 * 1000;
+    private static final String DEFAULT_FONT_NAME = SystemVersion.isWindows() ?
+                                                    "Lucida Sans Typewriter" : Font.MONOSPACED;
+    private static final Font DEFAULT_LARGE_FONT = new Font(DEFAULT_FONT_NAME, Font.BOLD, 16);
 
-	private int version = 1;
-	private IdenticonCache cache;
-	private long identiconExpiresInMillis = DEFAULT_IDENTICON_EXPIRES_IN_MILLIS;
+    private int version = 1;
+    private IdenticonCache cache;
+    private long identiconExpiresInMillis = DEFAULT_IDENTICON_EXPIRES_IN_MILLIS;
 
-	@Override
-	public void init(ServletConfig cfg) throws ServletException {
-		super.init(cfg);
+    @Override
+    public void init(ServletConfig cfg) throws ServletException {
+        super.init(cfg);
 
-		// Since identicons cache expiration is very long, version is
-		// used in ETag to force identicons to be updated as needed.
-		// Change veresion whenever rendering codes changes result in
-		// visual changes.
-		if (cfg.getInitParameter(INIT_PARAM_VERSION) != null)
-			this.version = Integer.parseInt(cfg
-					.getInitParameter(INIT_PARAM_VERSION));
+        // Since identicons cache expiration is very long, version is
+        // used in ETag to force identicons to be updated as needed.
+        // Change version whenever rendering codes changes result in
+        // visual changes.
+        if (cfg.getInitParameter(INIT_PARAM_VERSION) != null)
+            this.version = Integer.parseInt(cfg
+                    .getInitParameter(INIT_PARAM_VERSION));
 
-		String cacheProvider = cfg.getInitParameter(INIT_PARAM_CACHE_PROVIDER);
-		if (cacheProvider != null) {
-			try {
-				Class<?> cacheClass = Class.forName(cacheProvider);
-				this.cache = (IdenticonCache) cacheClass.getDeclaredConstructor().newInstance();
-			} catch (Exception e) {
-				e.printStackTrace();
-			}
-		}
-	}
+        String cacheProvider = cfg.getInitParameter(INIT_PARAM_CACHE_PROVIDER);
+        if (cacheProvider != null) {
+            try {
+                Class<?> cacheClass = Class.forName(cacheProvider);
+                this.cache = (IdenticonCache) cacheClass.getDeclaredConstructor().newInstance();
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
+        }
+    }
 
-	@Override
-	protected void doGet(HttpServletRequest request,
-			HttpServletResponse response) throws ServletException, IOException {
+    @Override
+    protected void doGet(HttpServletRequest request,
+            HttpServletResponse response) throws ServletException, IOException {
 
-		if (request.getCharacterEncoding() == null)
-			request.setCharacterEncoding("UTF-8");
-		String codeParam = request.getParameter(PARAM_IDENTICON_CODE_SHORT);
-		boolean codeSpecified = codeParam != null && codeParam.length() > 0;
-		if (!codeSpecified) {
-			response.setStatus(403);
-			return;
-		}
+        if (request.getCharacterEncoding() == null)
+            request.setCharacterEncoding("UTF-8");
+        String codeParam = request.getParameter(PARAM_IDENTICON_CODE_SHORT);
+        boolean codeSpecified = codeParam != null && codeParam.length() > 0;
+        if (!codeSpecified) {
+            response.setStatus(403);
+            return;
+        }
 
-		String sizeParam = request.getParameter(PARAM_IDENTICON_SIZE_SHORT);
-		// very rougly, number of "modules" is about 4 * sqrt(chars)
-		// (assuming 7 bit) default margin each side is 4
-		// assuming level L
-		// min modules is 21x21
-		// shoot for 2 pixels per module
+        String sizeParam = request.getParameter(PARAM_IDENTICON_SIZE_SHORT);
+        // very rougly, number of "modules" is about 4 * sqrt(chars)
+        // (assuming 7 bit) default margin each side is 4
+        // assuming level L
+        // min modules is 21x21
+        // shoot for 2 pixels per module
                 int size = Math.max(50, (2 * 4) + (int) (2 * 5 * Math.sqrt(codeParam.length())));
-		if (sizeParam != null) {
-			try {
-				size = Integer.parseInt(sizeParam);
-				if (size < 40)
-					size = 40;
-				else if (size > 512)
-					size = 512;
-			} catch (NumberFormatException nfe) {}
-		}
+        if (sizeParam != null) {
+            try {
+                size = Integer.parseInt(sizeParam);
+                if (size < 40)
+                    size = 40;
+                else if (size > 1024)
+                    size = 1024;
+            } catch (NumberFormatException nfe) {}
+        }
 
-		String identiconETag = IdenticonUtil.getIdenticonETag(codeParam.hashCode(), size,
-				version);
-		String requestETag = request.getHeader("If-None-Match");
+        String identiconETag = IdenticonUtil.getIdenticonETag(codeParam.hashCode(), size,
+                version);
+        String requestETag = request.getHeader("If-None-Match");
 
-		if (requestETag != null && requestETag.equals(identiconETag)) {
-			response.setStatus(HttpServletResponse.SC_NOT_MODIFIED);
-		} else {
-			byte[] imageBytes = null;
+        if (requestETag != null && requestETag.equals(identiconETag)) {
+            response.setStatus(HttpServletResponse.SC_NOT_MODIFIED);
+        } else {
+            byte[] imageBytes = null;
 
-			// retrieve image bytes from either cache or renderer
-			if (cache == null
-					|| (imageBytes = cache.get(identiconETag)) == null) {
-				ByteArrayOutputStream byteOut = new ByteArrayOutputStream();
-				QRCodeWriter qrcw = new QRCodeWriter();
-				BitMatrix matrix;
-				try {
-					matrix = qrcw.encode(codeParam, BarcodeFormat.QR_CODE, size, size);
-				} catch (WriterException we) {
-					throw new IOException("encode failed", we);
-				}
-				String text = request.getParameter(PARAM_IDENTICON_TEXT_SHORT);
-				if (text != null) {
-					// add 1 so it generates RGB instead of 1 bit,
-					// so text anti-aliasing works
-					MatrixToImageConfig cfg = new MatrixToImageConfig(MatrixToImageConfig.BLACK + 1,
-					                                                  MatrixToImageConfig.WHITE);
-					BufferedImage bi = MatrixToImageWriter.toBufferedImage(matrix, cfg);
-					Graphics2D g = bi.createGraphics();
-					// anti-aliasing and hinting for the text
-					g.setRenderingHint(RenderingHints.KEY_ANTIALIASING, RenderingHints.VALUE_ANTIALIAS_ON);
-					g.setRenderingHint(RenderingHints.KEY_TEXT_ANTIALIASING, RenderingHints.VALUE_TEXT_ANTIALIAS_ON);
-					g.setRenderingHint(RenderingHints.KEY_RENDERING, RenderingHints.VALUE_RENDER_QUALITY);
-					g.setRenderingHint(RenderingHints.KEY_STROKE_CONTROL, RenderingHints.VALUE_STROKE_NORMALIZE);
-					g.setRenderingHint(RenderingHints.KEY_ALPHA_INTERPOLATION, RenderingHints.VALUE_ALPHA_INTERPOLATION_QUALITY);
-					g.setRenderingHint(RenderingHints.KEY_FRACTIONALMETRICS, RenderingHints.VALUE_FRACTIONALMETRICS_ON);
-					// scale font
-					float shrink = Math.min(1.0f, 14.0f / text.length());
-					int pts = Math.round(shrink * 16.0f * size / 160);
-					Font font = new Font(DEFAULT_FONT_NAME, Font.BOLD, pts);
-					g.setFont(font);
-					Color color = Color.BLACK;
-					g.setColor(color);
-					int width = bi.getWidth();
-					int height = bi.getHeight();
-					double swidth = font.getStringBounds(text, 0, text.length(),
-					                                     g.getFontRenderContext()).getBounds().getWidth();
-					int x = (width - (int) swidth) / 2;
-					int y = height - 10;
-					g.drawString(text, x, y);
-					if (!ImageIO.write(bi, IDENTICON_IMAGE_FORMAT, byteOut))
-						throw new IOException("ImageIO.write() fail");
-				} else {
-					MatrixToImageWriter.writeToStream(matrix, IDENTICON_IMAGE_FORMAT, byteOut);
-				}
-				imageBytes = byteOut.toByteArray();
-				if (cache != null)
-					cache.add(identiconETag, imageBytes);
-			} else {
-				response.setStatus(403);
-				return;
-			}
+            // retrieve image bytes from either cache or renderer
+            if (cache == null
+                    || (imageBytes = cache.get(identiconETag)) == null) {
+                ByteArrayOutputStream byteOut = new ByteArrayOutputStream();
+                QRCodeWriter qrcw = new QRCodeWriter();
+                BitMatrix matrix;
+                try {
+                    matrix = qrcw.encode(codeParam, BarcodeFormat.QR_CODE, size, size);
+                } catch (WriterException we) {
+                    throw new IOException("encode failed", we);
+                }
+                String text = request.getParameter(PARAM_IDENTICON_TEXT_SHORT);
+                if (text != null) {
+                    // add 1 so it generates RGB instead of 1 bit,
+                    // so text anti-aliasing works
+                    MatrixToImageConfig cfg = new MatrixToImageConfig(MatrixToImageConfig.BLACK + 1,
+                                                                      MatrixToImageConfig.WHITE);
+                    BufferedImage bi = MatrixToImageWriter.toBufferedImage(matrix, cfg);
+                    Graphics2D g = bi.createGraphics();
+                    // anti-aliasing and hinting for the text
+                    //g.setRenderingHint(RenderingHints.KEY_ANTIALIASING, RenderingHints.VALUE_ANTIALIAS_ON);
+                    g.setRenderingHint(RenderingHints.KEY_TEXT_ANTIALIASING, RenderingHints.VALUE_TEXT_ANTIALIAS_ON);
+                    g.setRenderingHint(RenderingHints.KEY_RENDERING, RenderingHints.VALUE_RENDER_QUALITY);
+                    g.setRenderingHint(RenderingHints.KEY_STROKE_CONTROL, RenderingHints.VALUE_STROKE_PURE);
+                    //g.setRenderingHint(RenderingHints.KEY_STROKE_CONTROL, RenderingHints.VALUE_STROKE_NORMALIZE);
+                    //g.setRenderingHint(RenderingHints.KEY_ALPHA_INTERPOLATION, RenderingHints.VALUE_ALPHA_INTERPOLATION_QUALITY);
+                    //g.setRenderingHint(RenderingHints.KEY_FRACTIONALMETRICS, RenderingHints.VALUE_FRACTIONALMETRICS_ON);
 
-			// set ETag and, if code was provided, Expires header
-			response.setHeader("ETag", identiconETag);
-			if (codeSpecified) {
-				long expires = System.currentTimeMillis()
-						+ identiconExpiresInMillis;
-				response.addDateHeader("Expires", expires);
-			}
+                    // scale font
+                    int width = bi.getWidth();
+                    int height = bi.getHeight();
+                    float shrink = Math.min(1.0f, 14.0f / text.length());
+                    if (width >= 256)
+                        shrink = Math.min(1.0f, 16.0f / text.length());
+                    int pts = Math.round(shrink * 16.0f * size / 160);
+                    if (width >= 256)
+                        pts = Math.round(shrink * 16.0f * size / 180);
+                    Font font = new Font(DEFAULT_FONT_NAME, Font.BOLD, pts);
+                    g.setFont(font);
+                    Color color = Color.BLACK;
+                    g.setColor(color);
+                    double swidth = font.getStringBounds(text, 0, text.length(),
+                                                         g.getFontRenderContext()).getBounds().getWidth();
+                    int x = (width - (int) swidth) / 2;
+                    int y = height - 10;
+                    if (height >= 256)
+                        y = height - ((height / 50) + 10);
+                    g.drawString(text, x, y);
+                    if (!ImageIO.write(bi, IDENTICON_IMAGE_FORMAT, byteOut))
+                        throw new IOException("ImageIO.write() fail");
+                } else {
+                    MatrixToImageWriter.writeToStream(matrix, IDENTICON_IMAGE_FORMAT, byteOut);
+                }
+                imageBytes = byteOut.toByteArray();
+                if (cache != null)
+                    cache.add(identiconETag, imageBytes);
+            } else {
+                response.setStatus(403);
+                return;
+            }
 
-			// return image bytes to requester
-			response.setContentType(IDENTICON_IMAGE_MIMETYPE);
-			response.setHeader("X-Content-Type-Options", "nosniff");
-			response.setHeader("Accept-Ranges", "none");
-			response.setContentLength(imageBytes.length);
-			response.getOutputStream().write(imageBytes);
-		}
-	}
+            // set ETag and, if code was provided, Expires header
+            response.setHeader("ETag", identiconETag);
+            if (codeSpecified) {
+                long expires = System.currentTimeMillis()
+                        + identiconExpiresInMillis;
+                response.addDateHeader("Expires", expires);
+            }
+
+            // return image bytes to requester
+            response.setContentType(IDENTICON_IMAGE_MIMETYPE);
+            response.setHeader("X-Content-Type-Options", "nosniff");
+            response.setHeader("Accept-Ranges", "none");
+            response.setContentLength(imageBytes.length);
+            response.getOutputStream().write(imageBytes);
+        }
+    }
 }

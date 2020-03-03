@@ -2,12 +2,12 @@
   <headerType>0</headerType>
   <jar>../install.jar</jar>
   <outfile>../i2pinstall.exe</outfile>
-  <errTitle>I2P Installer</errTitle>
+  <errTitle>I2P+ Installer</errTitle>
   <chdir>.</chdir>
   <customProcName>false</customProcName>
   <icon>resources/console.ico</icon>
   <jre>
-    <minVersion>1.7.0</minVersion>
+    <minVersion>1.8.0</minVersion>
   </jre>
   <!--
   <splash>

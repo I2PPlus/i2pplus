@@ -46,14 +46,14 @@ class UDPPacket implements CDQEntry {
     private int _validateCount;
     // private boolean _isInbound;
     private FIFOBandwidthLimiter.Request _bandwidthRequest;
-  
+
     private static class PacketFactory implements TryCache.ObjectFactory<UDPPacket> {
         static RouterContext context;
         public UDPPacket newInstance() {
             return new UDPPacket(context);
         }
     }
-    
+
     //  Warning - this mixes contexts in a multi-router JVM
     private static final TryCache<UDPPacket> _packetCache;
     private static final TryCache.ObjectFactory<UDPPacket> _packetFactory;
@@ -71,7 +71,7 @@ class UDPPacket implements CDQEntry {
             _packetFactory = null;
         }
     }
-    
+
     /**
      *  Actually it is one less than this, we assume
      *  if a received packet is this big it is truncated.
@@ -87,7 +87,7 @@ class UDPPacket implements CDQEntry {
     static final int MAX_PACKET_SIZE = 1572;
     public static final int IV_SIZE = 16;
     public static final int MAC_SIZE = 16;
-    
+
     /** Message types, 4 bits max */
     public static final int PAYLOAD_TYPE_SESSION_REQUEST = 0;
     public static final int PAYLOAD_TYPE_SESSION_CREATED = 1;
@@ -100,7 +100,7 @@ class UDPPacket implements CDQEntry {
     /** @since 0.8.1 */
     public static final int PAYLOAD_TYPE_SESSION_DESTROY = 8;
     public static final int MAX_PAYLOAD_TYPE = PAYLOAD_TYPE_SESSION_DESTROY;
-    
+
     // various flag fields for use in the header
     /**
      *  Defined in the spec from the beginning, Unused
@@ -130,13 +130,13 @@ class UDPPacket implements CDQEntry {
     public static final byte DATA_FLAG_WANT_REPLY = (1 << 2);
     /** unused */
     public static final byte DATA_FLAG_EXTENDED = (1 << 1);
-    
+
     public static final byte BITFIELD_CONTINUATION = (byte)(1 << 7);
-    
+
     private static final int MAX_VALIDATE_SIZE = MAX_PACKET_SIZE;
 
     private UDPPacket(RouterContext ctx) {
-        //ctx.statManager().createRateStat("udp.fetchRemoteSlow", "How long it takes to grab the remote ip info", "udp", UDPTransport.RATES);
+        //ctx.statManager().createRateStat("udp.fetchRemoteSlow", "How long it takes to grab the remote ip info", "Transport [UDP]", UDPTransport.RATES);
         // the data buffer is clobbered on init(..), but we need it to bootstrap
         _data = new byte[MAX_PACKET_SIZE];
         _packet = new DatagramPacket(_data, MAX_PACKET_SIZE);
@@ -168,9 +168,9 @@ class UDPPacket implements CDQEntry {
         _receivedTime = 0;
         _fragmentCount = 0;
     }
-    
+
   /****
-    public void writeData(byte src[], int offset, int len) { 
+    public void writeData(byte src[], int offset, int len) {
         verifyNotReleased();
         System.arraycopy(src, offset, _data, 0, len);
         _packet.setLength(len);
@@ -187,13 +187,13 @@ class UDPPacket implements CDQEntry {
     public synchronized void resetBegin() { _initializeTime = _context.clock().now(); }
     /** flag this packet as a particular type for accounting purposes */
     public synchronized void markType(int type) { verifyNotReleased(); _markedType = type; }
-    /** 
+    /**
      * flag this packet as a particular type for accounting purposes, with
      * 1 implying the packet is an ACK, otherwise it is a data packet
      *
      */
     public synchronized int getMarkedType() { verifyNotReleased(); return _markedType; }
-    
+
     private int _messageType;
     private int _fragmentCount;
     /** only for debugging and stats, does not go on the wire */
@@ -220,21 +220,21 @@ class UDPPacket implements CDQEntry {
         }
         return _remoteHost;
     }
-    
+
     /**
      * Validate the packet against the MAC specified, returning true if the
      * MAC matches, false otherwise.
      *
      */
     public synchronized boolean validate(SessionKey macKey, HMACGenerator hmac) {
-        verifyNotReleased(); 
+        verifyNotReleased();
         //_beforeValidate = _context.clock().now();
         boolean eq = false;
         Arrays.fill(_validateBuf, (byte)0);
-        
+
         // validate by comparing _data[0:15] and
         // HMAC(payload + IV + (payloadLength ^ protocolVersion), macKey)
-        
+
         int payloadLength = _packet.getLength() - MAC_SIZE - IV_SIZE;
         if (payloadLength > 0) {
             int off = 0;
@@ -261,9 +261,9 @@ class UDPPacket implements CDQEntry {
                     byte[] calc = new byte[32];
                     hmac.calculate(macKey, _validateBuf, 0, off, calc, 0);
                     StringBuilder str = new StringBuilder(512);
-                    str.append("Bad HMAC:\n\t");
-                    str.append(_packet.getLength()).append(" byte pkt, ");
-                    str.append(payloadLength).append(" byte payload");
+                    str.append("Bad HMAC: (");
+                    str.append(_packet.getLength()).append(" byte packet, ");
+                    str.append(payloadLength).append(" byte payload)");
                     str.append("\n\tFrom: ").append(getRemoteHost().toString());
                     str.append("\n\tIV:   ").append(Base64.encode(_validateBuf, payloadLength, IV_SIZE));
                     str.append("\n\tIV2:  ").append(Base64.encode(_data, MAC_SIZE, IV_SIZE));
@@ -285,19 +285,19 @@ class UDPPacket implements CDQEntry {
                 log.warn("Payload length is " + payloadLength + ", too short! From: " + getRemoteHost() + '\n' +
                          net.i2p.util.HexDump.dump(_data, _packet.getOffset(), _packet.getLength()));
         }
-        
+
         //_afterValidate = _context.clock().now();
         _validateCount++;
         return eq;
     }
-    
+
     /**
      * Decrypt this valid packet, overwriting the _data buffer's payload
      * with the decrypted data (leaving the MAC and IV unaltered)
-     * 
+     *
      */
     public synchronized void decrypt(SessionKey cipherKey) {
-        verifyNotReleased(); 
+        verifyNotReleased();
         System.arraycopy(_data, MAC_SIZE, _ivBuf, 0, IV_SIZE);
         int len = _packet.getLength();
         // As of 0.9.7, ignore padding beyond the last mod 16,
@@ -324,8 +324,8 @@ class UDPPacket implements CDQEntry {
     /** a packet handler has decrypted and verified the packet and is about to parse out the good bits */
     //void beforeReceiveFragments() { _beforeReceiveFragments = _context.clock().now(); }
     /** a packet handler has finished parsing out the good bits */
-    //void afterHandling() { _afterHandlingTime = _context.clock().now(); } 
-      
+    //void afterHandling() { _afterHandlingTime = _context.clock().now(); }
+
     /**
      *  For CDQ
      *  @since 0.9.3
@@ -339,7 +339,7 @@ class UDPPacket implements CDQEntry {
     //long getTimeSinceReceiveFragments() { return (_beforeReceiveFragments > 0 ? _context.clock().now() - _beforeReceiveFragments : 0); }
     /** a packet handler has finished parsing out the good bits */
     //long getTimeSinceHandling() { return (_afterHandlingTime > 0 ? _context.clock().now() - _afterHandlingTime : 0); }
-    
+
     /**
      *  So that we can compete with NTCP, we want to request bandwidth
      *  in parallel, on the way into the queue, not on the way out.
@@ -352,7 +352,7 @@ class UDPPacket implements CDQEntry {
         verifyNotReleased();
         _bandwidthRequest = _context.bandwidthLimiter().requestInbound(_packet.getLength(), "UDP receiver");
     }
-    
+
     /**
      *  So that we can compete with NTCP, we want to request bandwidth
      *  in parallel, on the way into the queue, not on the way out.
@@ -363,7 +363,7 @@ class UDPPacket implements CDQEntry {
         verifyNotReleased();
         _bandwidthRequest = _context.bandwidthLimiter().requestOutbound(_packet.getLength(), 0, "UDP sender");
     }
-    
+
     /**
      *  So that we can compete with NTCP, we want to request bandwidth
      *  in parallel, on the way into the queue, not on the way out.
@@ -385,32 +385,34 @@ class UDPPacket implements CDQEntry {
     //long getAfterValidate() { return _afterValidate; }
     /** how many times we tried to validate the packet */
     //int getValidateCount() { return _validateCount; }
-    
+
     @Override
     public String toString() {
-        verifyNotReleased(); 
+        verifyNotReleased();
         StringBuilder buf = new StringBuilder(256);
-        buf.append(_packet.getLength());
-        buf.append(" byte pkt with ");
+        buf.append("\n* Address: ");
         buf.append(Addresses.toString(_packet.getAddress().getAddress(), _packet.getPort()));
+        buf.append("; Size: ");
+        buf.append(_packet.getLength());
+        buf.append(" bytes");
         //buf.append(" id=").append(System.identityHashCode(this));
         if (_messageType >= 0)
-            buf.append(" msgType=").append(_messageType);
+            buf.append("; Message Type: ").append(_messageType);
         if (_markedType >= 0)
-            buf.append(" markType=").append(_markedType);
+            buf.append("; Mark Type: ").append(_markedType);
         if (_fragmentCount > 0)
-            buf.append(" fragCount=").append(_fragmentCount);
+            buf.append("; Fragment Count: ").append(_fragmentCount);
 
         if (_enqueueTime > 0)
-            buf.append(" sinceEnqueued=").append(_context.clock().now() - _enqueueTime);
+            buf.append("; sinceEnqueued: ").append(_context.clock().now() - _enqueueTime);
         if (_receivedTime > 0)
-            buf.append(" sinceReceived=").append(_context.clock().now() - _receivedTime);
+            buf.append("; sinceReceived: ").append(_context.clock().now() - _receivedTime);
         //buf.append(" beforeReceiveFragments=").append((_beforeReceiveFragments > 0 ? _context.clock().now()-_beforeReceiveFragments : -1));
         //buf.append(" sinceHandled=").append((_afterHandlingTime > 0 ? _context.clock().now()-_afterHandlingTime : -1));
         //buf.append("\ndata=").append(Base64.encode(_packet.getData(), _packet.getOffset(), _packet.getLength()));
         return buf.toString();
     }
-    
+
     /**
      *  @param inbound unused
      */
@@ -452,7 +454,7 @@ class UDPPacket implements CDQEntry {
             return;
         _packetCache.release(this);
     }
-    
+
     /**
      *  Call at shutdown/startup to not hold ctx refs
      *  @since 0.9.2

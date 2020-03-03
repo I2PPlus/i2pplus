@@ -20,7 +20,7 @@ class BWLimitsMessageHandler extends HandlerImpl {
     
     public void handleMessage(I2CPMessage message, I2PSessionImpl session) {
         if (_log.shouldLog(Log.DEBUG))
-            _log.debug("Handle message " + message);
+            _log.debug("Handle " + message);
         BandwidthLimitsMessage msg = (BandwidthLimitsMessage) message;
         session.bwReceived(msg.getLimits());
     }

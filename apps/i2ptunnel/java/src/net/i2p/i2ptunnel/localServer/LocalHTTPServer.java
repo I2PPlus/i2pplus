@@ -148,6 +148,7 @@ public abstract class LocalHTTPServer {
                 else type = "text/html";
                 out.write("HTTP/1.1 200 OK\r\nContent-Type: ".getBytes("UTF-8"));
                 out.write(type.getBytes("UTF-8"));
+                out.write("\r\nAccess-Control-Allow-Origin: *".getBytes("UTF-8"));
                 out.write("\r\nCache-Control: max-age=86400\r\nConnection: close\r\nProxy-Connection: close\r\n\r\n".getBytes("UTF-8"));
                 FileUtil.readFile(filename, themesDir.getAbsolutePath(), out);
                 return;
@@ -284,25 +285,20 @@ public abstract class LocalHTTPServer {
                             PortMapper pm = context.portMapper();
                             String conURL = pm.getConsoleURL();
                             buf.append(NEWKEY)
-                               .append("<html><head><title>")
-                               .append(_t("Your new encryption key"))
-                               .append("</title>\n" +
-                                       "<link rel=\"shortcut icon\" href=\"http://proxy.i2p/themes/console/images/favicon.ico\" >\n" +
+                               .append("<!DOCTYPE html>\n<html>\n<head>\n" +
+                                       "<title>" + _t("Your new encryption key") + "</title>\n" +
+                                       "<link rel=\"shortcut icon\" href=\"http://proxy.i2p/themes/console/default/images/favicon.ico\" >\n" +
                                        "<link href=\"http://proxy.i2p/themes/console/default/console.css\" rel=\"stylesheet\" type=\"text/css\" >\n" +
-                                       "</head><body>\n" +
-                                       "<div class=logo>\n" +
-                                       "<a href=\"")
-                               .append(conURL).append("\" title=\"").append(_t("Router Console"))
-                               .append("\"><img src=\"http://proxy.i2p/themes/console/images/i2plogo.png\" alt=\"I2P Router Console\" border=\"0\"></a><hr>\n" +
-                                       "<a href=\"")
-                               .append(conURL).append("config\">").append(_t("Configuration")).append("</a> <a href=\"")
-                               .append(conURL).append("help.jsp\">").append(_t("Help")).append("</a>");
-                            if (pm.isRegistered(PortMapper.SVC_SUSIDNS)) {
-                                buf.append(" <a href=\"").append(conURL).append("susidns/index\">")
-                                   .append(_t("Addressbook")).append("</a>\n");
-                            }
+                                       "</head>\n<body>\n" +
+                                       "<div class=\"logo\">\n<a href=\"" + conURL + "\" title=\"" + _t("Router Console") + "\">" +
+                                       "<img src=\"http://proxy.i2p/themes/console/default/images/i2plogo.png\" " +
+                                       "alt=\"I2P+ Router Console\" border=\"0\"></a><hr>\n");
+                            if (pm.isRegistered(PortMapper.SVC_SUSIDNS))
+                                out.write(("<a href=\"" + conURL + "susidns/index\">" + _t("Addressbook") + "</a> ").getBytes("UTF-8"));
+                            out.write(("<a href=\"" + conURL + "config\">" + _t("Configuration") + "</a> " +
+                                       "<a href=\"" + conURL + "help/\">" + _t("Help") + "</a>\n").getBytes("UTF-8"));
                             buf.append("</div>" +
-                                       "<div class=warning id=warning>\n" +
+                                       "<div class=\"warning\" id=\"warning\">\n" +
                                        "<h3>")
                                .append(_t("Your new encryption key"))
                                .append("</h3>\n<p>" +
@@ -354,31 +350,29 @@ public abstract class LocalHTTPServer {
         PortMapper pm = I2PAppContext.getGlobalContext().portMapper();
         String conURL = pm.getConsoleURL();
         out.write(("HTTP/1.1 200 OK\r\n"+
-                  "Content-Type: text/html; charset=UTF-8\r\n"+
-                  "Referrer-Policy: no-referrer\r\n"+
-                  "Connection: close\r\n"+
-                  "Proxy-Connection: close\r\n"+
-                  "\r\n"+
-                  "<html><head>"+
+                  "Content-Type: text/html; charset=UTF-8\r\n" +
+                  "Referrer-Policy: no-referrer\r\n" +
+                  "Access-Control-Allow-Origin: *\r\n" +
+                  "Connection: close\r\n" +
+                  "Proxy-Connection: close\r\n\r\n" +
+                  "<!DOCTYPE html>\n<html>\n<head>\n"+
                   "<title>" + _t("Redirecting to {0}", host) + "</title>\n" +
-                  "<link rel=\"shortcut icon\" href=\"http://proxy.i2p/themes/console/images/favicon.ico\" >\n" +
+                  "<link rel=\"shortcut icon\" href=\"http://proxy.i2p/themes/console/default/images/favicon.ico\" >\n" +
                   "<link href=\"http://proxy.i2p/themes/console/default/console.css\" rel=\"stylesheet\" type=\"text/css\" >\n" +
-                  "<meta http-equiv=\"Refresh\" content=\"1; url=" + url + "\">\n" +
-                  "</head><body>\n" +
-                  "<div class=logo>\n" +
-                  "<a href=\"" + conURL + "\" title=\"" + _t("Router Console") + "\"><img src=\"http://proxy.i2p/themes/console/images/i2plogo.png\" alt=\"I2P Router Console\" border=\"0\"></a><hr>\n" +
-                  "<a href=\"" + conURL + "config\">" + _t("Configuration") + "</a> <a href=\"" + conURL + "help.jsp\">" + _t("Help") + "</a>").getBytes("UTF-8"));
+                  "<meta http-equiv=\"Refresh\" content=\"1; url=" + url + "\">\n</head>\n<body>\n" +
+                  "<div class=\"logo\">\n<a href=\"" + conURL + "\" title=\"" + _t("Router Console") + "\">" +
+                  "<img src=\"http://proxy.i2p/themes/console/default/images/i2plogo.png\" alt=\"I2P+ Router Console\" border=\"0\"></a><hr>\n").getBytes("UTF-8"));
         if (pm.isRegistered(PortMapper.SVC_SUSIDNS))
-            out.write((" <a href=\"" + conURL + "susidns/index\">" + _t("Addressbook") + "</a>\n").getBytes("UTF-8"));
-        out.write(("</div>" +
-                  "<div class=warning id=warning>\n" +
-                  "<h3>" +
+            out.write(("<a href=\"" + conURL + "susidns/index\">" + _t("Addressbook") + "</a> ").getBytes("UTF-8"));
+        out.write(("<a href=\"" + conURL + "config\">" + _t("Configuration") + "</a> " +
+                  "<a href=\"" + conURL + "help/\">" + _t("Help") + "</a>\n").getBytes("UTF-8"));
+        out.write(("</div>\n<div class=\"warning\" id=\"warning\">\n<h3>" + _t("Redirection in progress") + "</h3>\n<br>\n<p><b>" +
                   (success ?
                            _t("Saved {0} to the {1} addressbook, redirecting now.", host, tbook) :
                            _t("Failed to save {0} to the {1} addressbook, redirecting now.", host, tbook)) +
                   "</h3>\n<p><a href=\"" + url + "\">" +
                   _t("Click here if you are not redirected automatically.") +
-                  "</a></p></div>").getBytes("UTF-8"));
+                  "</a></p>\n</div>\n").getBytes("UTF-8"));
         I2PTunnelHTTPClientBase.writeFooter(out);
         out.flush();
     }
@@ -387,30 +381,28 @@ public abstract class LocalHTTPServer {
     private static void writeB32RedirectPage(OutputStream out, String host, String url) throws IOException {
         PortMapper pm = I2PAppContext.getGlobalContext().portMapper();
         String conURL = pm.getConsoleURL();
-        out.write(("HTTP/1.1 200 OK\r\n"+
-                  "Content-Type: text/html; charset=UTF-8\r\n"+
-                  "Referrer-Policy: no-referrer\r\n"+
-                  "Connection: close\r\n"+
-                  "Proxy-Connection: close\r\n"+
-                  "\r\n"+
-                  "<html><head>"+
+        out.write(("HTTP/1.1 200 OK\r\n" +
+                  "Content-Type: text/html; charset=UTF-8\r\n" +
+                  "Referrer-Policy: no-referrer\r\n" +
+                  "Access-Control-Allow-Origin: *\r\n" +
+                  "Connection: close\r\n" +
+                  "Proxy-Connection: close\r\n\r\n" +
+                  "<!DOCTYPE html>\n<html>\n<head>\n" +
                   "<title>" + _t("Redirecting to {0}", host) + "</title>\n" +
-                  "<link rel=\"shortcut icon\" href=\"http://proxy.i2p/themes/console/images/favicon.ico\" >\n" +
+                  "<link rel=\"shortcut icon\" href=\"http://proxy.i2p/themes/console/default/images/favicon.ico\" >\n" +
                   "<link href=\"http://proxy.i2p/themes/console/default/console.css\" rel=\"stylesheet\" type=\"text/css\" >\n" +
-                  "<meta http-equiv=\"Refresh\" content=\"1; url=" + url + "\">\n" +
-                  "</head><body>\n" +
-                  "<div class=logo>\n" +
-                  "<a href=\"" + conURL + "\" title=\"" + _t("Router Console") + "\"><img src=\"http://proxy.i2p/themes/console/images/i2plogo.png\" alt=\"I2P Router Console\" border=\"0\"></a><hr>\n" +
-                  "<a href=\"" + conURL + "config\">" + _t("Configuration") + "</a> <a href=\"" + conURL + "help.jsp\">" + _t("Help") + "</a>").getBytes("UTF-8"));
+                  "<meta http-equiv=\"Refresh\" content=\"1; url=" + url + "\">\n</head>\n<body>\n" +
+                  "<div class=\"logo\">\n<a href=\"" + conURL + "\" title=\"" + _t("Router Console") + "\">" +
+                  "<img src=\"http://proxy.i2p/themes/console/default/images/i2plogo.png\" alt=\"I2P Router Console\" border=\"0\"></a><hr>\n").getBytes("UTF-8"));
         if (pm.isRegistered(PortMapper.SVC_SUSIDNS))
-            out.write((" <a href=\"" + conURL + "susidns/index\">" + _t("Addressbook") + "</a>\n").getBytes("UTF-8"));
-        out.write(("</div>" +
-                  "<div class=warning id=warning>\n" +
-                  "<h3>" +
+            out.write(("<a href=\"" + conURL + "susidns/index\">" + _t("Addressbook") + "</a> ").getBytes("UTF-8"));
+        out.write(("<a href=\"" + conURL + "config\">" + _t("Configuration") + "</a> " +
+                  "<a href=\"" + conURL + "help/\">" + _t("Help") + "</a>\n").getBytes("UTF-8"));
+        out.write(("</div>\n<div class=\"warning\" id=\"warning\">\n<h3>" +
                   _t("Saved the authentication for {0}, redirecting now.", host) +
-                  "</h3>\n<p><a href=\"" + url + "\">" +
+                  "</b></p>\n<hr>\n<p><a href=\"" + url + "\">" +
                   _t("Click here if you are not redirected automatically.") +
-                  "</a></p></div>").getBytes("UTF-8"));
+                  "</a></p>\n</div>\n").getBytes("UTF-8"));
         I2PTunnelHTTPClientBase.writeFooter(out);
         out.flush();
     }

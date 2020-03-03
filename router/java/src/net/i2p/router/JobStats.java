@@ -19,7 +19,7 @@ public class JobStats {
     private final AtomicLong _totalPendingTime = new AtomicLong();
     private volatile long _maxPendingTime;
     private volatile long _minPendingTime;
-    
+
     public JobStats(String name) {
         _job = name;
         _maxTime = -1;
@@ -27,7 +27,7 @@ public class JobStats {
         _maxPendingTime = -1;
         _minPendingTime = -1;
     }
-    
+
     public void jobRan(long runTime, long lag) {
         _numRuns.incrementAndGet();
         _totalTime.addAndGet(runTime);
@@ -41,7 +41,7 @@ public class JobStats {
         if ( (_minPendingTime < 0) || (lag < _minPendingTime) )
             _minPendingTime = lag;
     }
-    
+
     /** @since 0.9.19 */
     public void jobDropped() {
         _numDropped.incrementAndGet();
@@ -56,25 +56,25 @@ public class JobStats {
     public long getMaxTime() { return _maxTime; }
     public long getMinTime() { return _minTime; }
 
-    public double getAvgTime() { 
+    public double getAvgTime() {
         long numRuns = _numRuns.get();
-        if (numRuns > 0) 
-            return _totalTime.get() / (double) numRuns; 
-        else 
-            return 0; 
+        if (numRuns > 0)
+            return _totalTime.get() / (double) numRuns;
+        else
+            return 0;
     }
     public long getTotalPendingTime() { return _totalPendingTime.get(); }
     public long getMaxPendingTime() { return _maxPendingTime; }
     public long getMinPendingTime() { return _minPendingTime; }
 
-    public double getAvgPendingTime() { 
+    public double getAvgPendingTime() {
         long numRuns = _numRuns.get();
-        if (numRuns > 0) 
-            return _totalPendingTime.get() / (double) numRuns; 
-        else 
-            return 0; 
+        if (numRuns > 0)
+            return _totalPendingTime.get() / (double) numRuns;
+        else
+            return 0;
     }
-    
+
 /****
     @Override
     public int hashCode() { return _job.hashCode(); }
@@ -92,7 +92,7 @@ public class JobStats {
             return false;
         }
     }
-    
+
     @Override
     public String toString() {
         StringBuilder buf = new StringBuilder();

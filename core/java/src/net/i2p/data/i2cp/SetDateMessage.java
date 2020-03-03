@@ -2,9 +2,9 @@ package net.i2p.data.i2cp;
 
 /*
  * free (adj.): unencumbered; not under the control of others
- * Written by jrandom in 2003 and released into the public domain 
- * with no warranty of any kind, either expressed or implied.  
- * It probably won't make your computer catch on fire, or eat 
+ * Written by jrandom in 2003 and released into the public domain
+ * with no warranty of any kind, either expressed or implied.
+ * It probably won't make your computer catch on fire, or eat
  * your children, but it might.  Use at your own risk.
  *
  */
@@ -84,7 +84,7 @@ public class SetDateMessage extends I2CPMessageImpl {
         }
         return os.toByteArray();
     }
-    
+
     public int getType() {
         return MESSAGE_TYPE;
     }
@@ -92,10 +92,9 @@ public class SetDateMessage extends I2CPMessageImpl {
     @Override
     public String toString() {
         StringBuilder buf = new StringBuilder();
-        buf.append("[SetDateMessage");
-        buf.append("\n\tDate: ").append(_date);
-        buf.append("\n\tVersion: ").append(_version);
-        buf.append("]");
+        buf.append("SetDateMessage:");
+        buf.append(_date);
+        buf.append(" [Version: ").append(_version).append("]");
         return buf.toString();
     }
 }

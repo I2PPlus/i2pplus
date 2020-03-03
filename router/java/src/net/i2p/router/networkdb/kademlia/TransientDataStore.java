@@ -30,25 +30,25 @@ class TransientDataStore implements DataStore {
     protected final Log _log;
     private final ConcurrentHashMap<Hash, DatabaseEntry> _data;
     protected final RouterContext _context;
-    
+
     public TransientDataStore(RouterContext ctx) {
         _context = ctx;
         _log = ctx.logManager().getLog(getClass());
         _data = new ConcurrentHashMap<Hash, DatabaseEntry>(1024);
         if (_log.shouldLog(Log.INFO))
-            _log.info("Data Store initialized");
+            _log.info("Transient DataStore initialized");
     }
-    
+
     public boolean isInitialized() { return true; }
 
     public void stop() {
         _data.clear();
     }
-    
+
     public void restart() {
         stop();
     }
-    
+
     public void rescan() {}
 
     /**
@@ -65,7 +65,7 @@ class TransientDataStore implements DataStore {
     public Set<Hash> getKeys() {
         return Collections.unmodifiableSet(_data.keySet());
     }
-    
+
     /**
      *  @return Unmodifiable view, not a copy
      *  @since 0.8.3
@@ -92,7 +92,7 @@ class TransientDataStore implements DataStore {
     public DatabaseEntry get(Hash key) {
         return _data.get(key);
     }
-    
+
     public boolean isKnown(Hash key) {
         return _data.containsKey(key);
     }
@@ -105,7 +105,7 @@ class TransientDataStore implements DataStore {
         }
         return count;
     }
-    
+
     /** for PersistentDataStore only - don't use here
       * @throws UnsupportedOperationException always
       */
@@ -120,7 +120,7 @@ class TransientDataStore implements DataStore {
     public boolean put(Hash key, DatabaseEntry data) {
         if (data == null) return false;
         if (_log.shouldLog(Log.DEBUG))
-            _log.debug("Storing key " + key);
+            _log.debug("Storing key [" + key.toBase64().substring(0,6) + "]");
         DatabaseEntry old = _data.putIfAbsent(key, data);
         boolean rv = false;
         int type = data.getType();
@@ -132,22 +132,22 @@ class TransientDataStore implements DataStore {
             if (old != null) {
                 RouterInfo ori = (RouterInfo)old;
                 if (ri.getPublished() < ori.getPublished()) {
-                    if (_log.shouldLog(Log.INFO))
-                        _log.info("Almost clobbered an old router! " + key + ": [old published on " + new Date(ori.getPublished()) +
-                                  " new on " + new Date(ri.getPublished()) + ']');
+//                    if (_log.shouldLog(Log.INFO))
+//                        _log.info("Almost clobbered a RouterInfo! [" + key.toBase64().substring(0,6) + "]\n* Old: " + new Date(ori.getPublished()) +
+//                                  "\n* New: " + new Date(ri.getPublished()));
                 } else if (ri.getPublished() == ori.getPublished()) {
-                    if (_log.shouldLog(Log.INFO))
-                        _log.info("Duplicate " + key);
+//                    if (_log.shouldLog(Log.INFO))
+//                        _log.info("Duplicate RouterInfo [" + key.toBase64().substring(0,6) + "] - not updating");
                 } else {
                     if (_log.shouldLog(Log.INFO))
-                        _log.info("Updated the old router for " + key + ": [old published on " + new Date(ori.getPublished()) +
-                                  " new on " + new Date(ri.getPublished()) + ']');
+                        _log.info("Updated RouterInfo [" + key.toBase64().substring(0,6) + "]\n* Old: "
+                                  + new Date(ori.getPublished()) + "\n* New: " + new Date(ri.getPublished()));
                     _data.put(key, data);
                     rv = true;
                 }
             } else {
                 if (_log.shouldLog(Log.INFO))
-                    _log.info("New router for " + key + ": published on " + new Date(ri.getPublished()));
+                    _log.info("New RouterInfo [" + key.toBase64().substring(0,6) + "]\n* Published: " + new Date(ri.getPublished()));
                 rv = true;
             }
         } else if (DatabaseEntry.isLeaseSet(type)) {
@@ -167,47 +167,47 @@ class TransientDataStore implements DataStore {
                 }
 
                 if (newDate < oldDate) {
-                    if (_log.shouldLog(Log.INFO))
-                        _log.info("Almost clobbered an old leaseSet! " + key + ": [old " + new Date(oldDate) +
-                                  " new " + new Date(newDate) + ']');
+//                    if (_log.shouldLog(Log.INFO))
+//                        _log.info("Almost clobbered a LeaseSet! [" + key.toBase64().substring(0,6) + "]\n* Old: " + new Date(ols.getEarliestLeaseDate()) +
+//                                  "\n* New: " + new Date(ls.getEarliestLeaseDate()));
                 } else if (newDate == oldDate) {
-                    if (_log.shouldLog(Log.INFO))
-                        _log.info("Duplicate " + key);
+//                    if (_log.shouldLog(Log.INFO))
+//                        _log.info("Duplicate RouterInfo [" + key.toBase64().substring(0,6) + "] - not updating");
                 } else {
                     if (_log.shouldLog(Log.INFO)) {
-                        _log.info("Updated old leaseSet " + key + ": [old " + new Date(oldDate) +
+                        _log.info("Updated LeaseSet [" + key.toBase64().substring(0,6) + "]\n* Old: " + new Date(ols.getEarliestLeaseDate()) +
                                   " new " + new Date(newDate) + ']');
                         if (_log.shouldLog(Log.DEBUG))
-                            _log.debug("RAP? " + ls.getReceivedAsPublished() + " RAR? " + ls.getReceivedAsReply());
+                            _log.debug("ReceivedAsPublished? [" + ls.getReceivedAsPublished() + "] ReceivedAsReply? [" + ls.getReceivedAsReply() + "]");
                     }
                     _data.put(key, data);
                     rv = true;
                 }
             } else {
                 if (_log.shouldLog(Log.INFO)) {
-                    _log.info("New leaseset for " + key + ": expires " + new Date(ls.getEarliestLeaseDate()));
+                    _log.info("New LeaseSet [" + key.toBase64().substring(0,6) + "]\n* Expires: " + new Date(ls.getEarliestLeaseDate()));
                     if (_log.shouldLog(Log.DEBUG))
-                        _log.debug("RAP? " + ls.getReceivedAsPublished() + " RAR? " + ls.getReceivedAsReply());
+                        _log.debug("ReceivedAsPublished? [" + ls.getReceivedAsPublished() + "] ReceivedAsReply? [" + ls.getReceivedAsReply() + "]");
                 }
                 rv = true;
             }
         }
         return rv;
     }
-    
+
     @Override
     public String toString() {
         StringBuilder buf = new StringBuilder();
-        buf.append("Transient DataStore: ").append(_data.size()).append("\nKeys: ");
+        buf.append("Transient DataStore: ").append(_data.size()).append("\n* Keys: ");
         for (Map.Entry<Hash, DatabaseEntry> e : _data.entrySet()) {
             Hash key = e.getKey();
             DatabaseEntry dp = e.getValue();
-            buf.append("\n\t*Key:   ").append(key.toString()).append("\n\tContent: ").append(dp.toString());
+            buf.append("\n* Key:   ").append(key.toString()).append("\n* Content: ").append(dp.toString());
         }
         buf.append("\n");
         return buf.toString();
     }
-    
+
     /** for PersistentDataStore only - don't use here
       * @throws UnsupportedOperationException always
       */
@@ -216,8 +216,9 @@ class TransientDataStore implements DataStore {
     }
 
     public DatabaseEntry remove(Hash key) {
-        if (_log.shouldLog(Log.DEBUG))
-            _log.debug("Removing key " + key);
+// logged elsewhere
+//        if (_log.shouldLog(Log.DEBUG))
+//            _log.debug("Deleting RouterInfo [" + key.toBase64().substring(0,6) + "] from disk");
         return _data.remove(key);
     }
 }

@@ -106,7 +106,7 @@ class I2PSessionMuxedImpl extends I2PSessionImpl2 {
         // discards the one in super(), sorry about that... (no it wasn't started yet)
         _availabilityNotifier = new MuxedAvailabilityNotifier();
     }
-    
+
     /** listen on all protocols and ports */
     @Override
     public void setSessionListener(I2PSessionListener lsnr) {
@@ -331,7 +331,7 @@ class I2PSessionMuxedImpl extends I2PSessionImpl2 {
         }
         int size = data.length;
         if (size < 10) {
-            _log.error(getPrefix() + "length too short for gzip header: " + size);
+            _log.error(getPrefix() + "Length too short for gzip header: " + size);
             return;
         }
         ((MuxedAvailabilityNotifier)_availabilityNotifier).available(id, size, getProto(msg),
@@ -381,13 +381,13 @@ class I2PSessionMuxedImpl extends I2PSessionImpl2 {
                 _msgs.put(new MsgData((int)(msgId & 0xffffffff), size, proto, fromPort, toPort));
             } catch (InterruptedException ie) {}
             if (!_alive && _log.shouldLog(Log.WARN))
-                _log.warn(getPrefix() + "message available but notifier not running");
+                _log.warn(getPrefix() + "Message available but notifier not running");
         }
 
         @Override
         public void run() {
             if (_log.shouldLog(Log.DEBUG))
-                _log.debug(getPrefix() + "starting muxed availability notifier");
+                _log.debug(getPrefix() + "Starting muxed availability notifier");
             _msgs.clear();
             _alive=true;
             while (_alive) {
@@ -425,7 +425,7 @@ class I2PSessionMuxedImpl extends I2PSessionImpl2 {
             toPort = t;
         }
     }
-    
+
     /**
      *  No, we couldn't put any protocol byte in front of everything and
      *  keep backward compatibility. But there are several bytes that
@@ -455,35 +455,35 @@ class I2PSessionMuxedImpl extends I2PSessionImpl2 {
     private static int getProto(MessagePayloadMessage msg) {
         int rv = getByte(msg, PROTO_BYTE) & 0xff;
         return rv == 0xff ? PROTO_UNSPECIFIED : rv;
-    }	
+    }
 
     /** Non-muxed sets the MTIME bytes to 0 */
     private static int getFromPort(MessagePayloadMessage msg) {
         return (((getByte(msg, FROMPORT_BYTES) & 0xff) << 8) |
                  (getByte(msg, FROMPORT_BYTES + 1) & 0xff));
-    }	
+    }
 
     /** Non-muxed sets the MTIME bytes to 0 */
     private static int getToPort(MessagePayloadMessage msg) {
         return (((getByte(msg, TOPORT_BYTES) & 0xff) << 8) |
                  (getByte(msg, TOPORT_BYTES + 1) & 0xff));
-    }	
+    }
 
     private static int getByte(MessagePayloadMessage msg, int i) {
         return msg.getPayload().getUnencryptedData()[i] & 0xff;
-    }	
+    }
 
     private static void setProto(byte[] payload, int p) {
         payload[PROTO_BYTE] = (byte) (p & 0xff);
-    }	
+    }
 
     private static void setFromPort(byte[] payload, int p) {
         payload[FROMPORT_BYTES] = (byte) ((p >> 8) & 0xff);
         payload[FROMPORT_BYTES + 1] = (byte) (p & 0xff);
-    }	
+    }
 
     private static void setToPort(byte[] payload, int p) {
         payload[TOPORT_BYTES] = (byte) ((p >> 8) & 0xff);
         payload[TOPORT_BYTES + 1] = (byte) (p & 0xff);
-    }	
+    }
 }

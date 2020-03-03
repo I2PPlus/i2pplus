@@ -91,7 +91,8 @@ abstract class FloodSearchJob extends JobImpl {
     /** using context clock */
     public long getExpiration() { return _expiration; }
 
-    protected static final int CONCURRENT_SEARCHES = 2;
+//    protected static final int CONCURRENT_SEARCHES = 2;
+    protected static final int CONCURRENT_SEARCHES = 3;
     private static final int FLOOD_SEARCH_TIME_FACTOR = 2;
     /**
      *  Deprecated, unused, see FOSJ override
@@ -110,7 +111,7 @@ abstract class FloodSearchJob extends JobImpl {
             Hash peer = (Hash)floodfillPeers.get(i);
             if (peer.equals(getContext().routerHash()))
                 continue;
-            
+
             DatabaseLookupMessage dlm = new DatabaseLookupMessage(getContext(), true);
             TunnelInfo replyTunnel = getContext().tunnelManager().selectInboundTunnel();
             TunnelInfo outTunnel = getContext().tunnelManager().selectOutboundTunnel();
@@ -130,16 +131,16 @@ abstract class FloodSearchJob extends JobImpl {
             dlm.setMessageExpiration(getContext().clock().now()+10*1000);
             dlm.setReplyTunnel(replyTunnel.getReceiveTunnelId(0));
             dlm.setSearchKey(_key);
-            
+
             if (_log.shouldLog(Log.INFO))
-                _log.info(getJobId() + ": Floodfill search for " + _key.toBase64() + " to " + peer.toBase64());
+                _log.info("[Job " + getJobId() + "] Floodfill search for " + _key.toBase64() + " to " + peer.toBase64());
             getContext().tunnelDispatcher().dispatchOutbound(dlm, outTunnel.getSendTunnelId(0), peer);
             _lookupsRemaining++;
         }
-        
+
         if (_lookupsRemaining <= 0) {
             if (_log.shouldLog(Log.INFO))
-                _log.info(getJobId() + ": Floodfill search for " + _key.toBase64() + " had no peers to send to");
+                _log.info("[Job " + getJobId() + "] Floodfill search for " + _key.toBase64() + " had no peers to send to");
             // no floodfill peers, go to the normal ones
             getContext().messageRegistry().unregisterPending(out);
             _facade.searchFull(_key, _onFind, _onFailed, _timeoutMs*FLOOD_SEARCH_TIME_FACTOR, _isLease);
@@ -150,8 +151,8 @@ abstract class FloodSearchJob extends JobImpl {
     /**
      *  Deprecated, unused, see FOSJ override
      */
-    public String getName() { return "NetDb search (phase 1)"; }
-    
+    public String getName() { return "NetDb Search (phase 1)"; }
+
     protected Hash getKey() { return _key; }
 
     /**
@@ -169,7 +170,7 @@ abstract class FloodSearchJob extends JobImpl {
     }
 
     protected int getLookupsRemaining() { return _lookupsRemaining.get(); }
-    
+
     /**
      *  Deprecated, unused, see FOSJ override
      */
@@ -180,7 +181,7 @@ abstract class FloodSearchJob extends JobImpl {
         _dead = true;
         int timeRemaining = (int)(_expiration - getContext().clock().now());
         if (_log.shouldLog(Log.INFO))
-            _log.info(getJobId() + ": Floodfill search for " + _key.toBase64() + " failed with " + timeRemaining);
+            _log.info("[Job " + getJobId() + "] Floodfill search for " + _key.toBase64() + " failed with " + timeRemaining);
         if (timeRemaining > 0) {
             _facade.searchFull(_key, _onFind, _onFailed, timeRemaining, _isLease);
         } else {
@@ -206,7 +207,7 @@ abstract class FloodSearchJob extends JobImpl {
         throw new UnsupportedOperationException("use override");
         if (_dead) return;
         if (_log.shouldLog(Log.INFO))
-            _log.info(getJobId() + ": Floodfill search for " + _key.toBase64() + " successful");
+            _log.info("[Job " + getJobId() + "] Floodfill search for " + _key.toBase64() + " successful");
         _dead = true;
         _facade.complete(_key);
         List<Job> removed = null;
@@ -232,7 +233,7 @@ abstract class FloodSearchJob extends JobImpl {
         public void runJob() {
             int remaining = _search.decrementRemaining();
             if (remaining <= 0)
-                _search.failed(); 
+                _search.failed();
         }
         public String getName() { return "NetDb search (phase 1) timeout"; }
     }
@@ -250,13 +251,13 @@ abstract class FloodSearchJob extends JobImpl {
             _log = ctx.logManager().getLog(FloodLookupMatchJob.class);
             _search = job;
         }
-        public void runJob() { 
+        public void runJob() {
             if (getContext().netDb().lookupLocally(_search.getKey()) != null) {
                 _search.success();
             } else {
                 int remaining = _search.getLookupsRemaining();
                 if (_log.shouldLog(Log.INFO))
-                    _log.info(getJobId() + "/" + _search.getJobId() + ": got a reply looking for " 
+                    _log.info(getJobId() + "/" + _search.getJobId() + ": got a reply looking for "
                               + _search.getKey().toBase64() + ", with " + remaining + " outstanding searches");
                 // netDb reply pointing us at other people
                 if (remaining <= 0)
@@ -298,7 +299,7 @@ abstract class FloodSearchJob extends JobImpl {
                 }
             }
             return false;
-        }   
+        }
     }
 ****/
 }

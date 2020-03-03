@@ -2,17 +2,17 @@
    Copyright (C) 2003 Mark J. Wielaard
 
    This file is part of Snark.
-   
+
    This program is free software; you can redistribute it and/or modify
    it under the terms of the GNU General Public License as published by
    the Free Software Foundation; either version 2, or (at your option)
    any later version.
- 
+
    This program is distributed in the hope that it will be useful,
    but WITHOUT ANY WARRANTY; without even the implied warranty of
    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
    GNU General Public License for more details.
- 
+
    You should have received a copy of the GNU General Public License
    along with this program; if not, write to the Free Software Foundation,
    Inc., 59 Temple Place - Suite 330, Boston, MA 02111-1307, USA.
@@ -48,7 +48,7 @@ import org.klomp.snark.bencode.InvalidBEncodingException;
  *
  */
 public class MetaInfo
-{  
+{
   private final Log _log = I2PAppContext.getGlobalContext().logManager().getLog(MetaInfo.class);
   private final String announce;
   private final byte[] info_hash;
@@ -93,7 +93,8 @@ public class MetaInfo
     this.announce_list = announce_list;
     this.comment = null;
     this.created_by = created_by;
-    this.creation_date = I2PAppContext.getGlobalContext().clock().now();
+    this.creation_date = 0;
+//    this.creation_date = I2PAppContext.getGlobalContext().clock().now();
 
     // TODO if we add a parameter for other keys
     //if (other != null) {
@@ -106,8 +107,8 @@ public class MetaInfo
   }
 
   /**
-   * Creates a new MetaInfo from the given InputStream.  The
-   * InputStream must start with a correctly bencoded dictonary
+   * Creates a new MetaInfo from the given InputStream. The
+   * InputStream must start with a correctly bencoded dictionary
    * describing the torrent.
    * Caller must close the stream.
    */
@@ -115,9 +116,9 @@ public class MetaInfo
   {
     this(new BDecoder(in));
   }
-  
+
   /**
-   * Creates a new MetaInfo from the given BDecoder.  The BDecoder
+   * Creates a new MetaInfo from the given BDecoder. The BDecoder
    * must have a complete dictionary describing the torrent.
    */
   private MetaInfo(BDecoder be) throws IOException
@@ -161,7 +162,7 @@ public class MetaInfo
         List<BEValue> bl1 = val.getList();
         for (BEValue bev : bl1) {
             List<BEValue> bl2 = bev.getList();
-            List<String> sl2 = new ArrayList<String>();           
+            List<String> sl2 = new ArrayList<String>();
             for (BEValue bev2 : bl2) {
                 sl2.add(bev2.getString());
             }
@@ -307,7 +308,7 @@ public class MetaInfo
             }
 
             m_files.add(Collections.unmodifiableList(file));
-            
+
             val = desc.get("path.utf-8");
             if (val != null) {
                 path_list = val.getList();
@@ -477,7 +478,7 @@ public class MetaInfo
     else
       throw new IndexOutOfBoundsException("no piece: " + piece);
   }
-        
+
   /**
    * Checks that the given piece has the same SHA1 hash as the given
    * byte array. Returns random results or IndexOutOfBoundsExceptions
@@ -512,7 +513,7 @@ public class MetaInfo
     return true;
   }
 ****/
-  
+
   private boolean fast_checkPiece(int piece, byte[] bs, int off, int length) {
     MessageDigest sha1 = SHA1.getInstance();
 
@@ -524,7 +525,7 @@ public class MetaInfo
     }
     return true;
   }
-  
+
   /**
    *  @return good
    *  @since 0.9.1
@@ -538,7 +539,10 @@ public class MetaInfo
         // Could be caused by closing a peer connnection
         // we don't want the exception to propagate through
         // to Storage.putPiece()
-        _log.warn("Error checking", ioe);
+//        _log.warn("Error checking piece " + piece + " for " + name, ioe);
+
+    if (_log.shouldLog(Log.DEBUG))
+        _log.debug("Error checking piece [" + piece + "] for " + name);
         return false;
     }
     for (int i = 0; i < 20; i++) {
@@ -559,14 +563,13 @@ public class MetaInfo
     @Override
   public String toString()
   {
-    return "MetaInfo[info_hash='" + I2PSnarkUtil.toHex(info_hash)
-      + "', announce='" + announce
-      + "', name='" + name
-      + "', files=" + files
-      + ", #pieces='" + piece_hashes.length/20
-      + "', piece_length='" + piece_length
-      + "', length='" + length
-      + "']";
+    return "MetaInfo for: " + name
+      + "\n* InfoHash: " + I2PSnarkUtil.toHex(info_hash)
+      + "\n* Announce: " + announce
+      + "\n* Size: " + length + " bytes, "
+      + "Files: " + files + ", "
+      + "Pieces: " + piece_hashes.length/20 + ", "
+      + "Piece Length: " + piece_length + " bytes";
   }
 
   /**
@@ -695,7 +698,7 @@ public class MetaInfo
         MessageDigest digest = SHA1.getInstance();
         byte hash[] = digest.digest(infoBytes);
         if (_log.shouldLog(Log.DEBUG))
-            _log.debug("info hash: " + I2PSnarkUtil.toHex(hash));
+            _log.debug("[InfoHash " + I2PSnarkUtil.toHex(hash) + "]");
         return hash;
   }
 

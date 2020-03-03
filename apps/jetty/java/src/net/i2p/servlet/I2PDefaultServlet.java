@@ -40,7 +40,9 @@ import org.eclipse.jetty.util.URIUtil;
 import org.eclipse.jetty.util.resource.Resource;
 import org.eclipse.jetty.util.resource.ResourceCollection;
 
+import org.eclipse.jetty.servlet.ErrorPageErrorHandler;
 
+import org.eclipse.jetty.security.LoginService;
 
 /**
  *  Extends DefaultServlet to set locale for the displayed time of directory listings,
@@ -53,11 +55,12 @@ public class I2PDefaultServlet extends DefaultServlet
 {
     // shadows of private fields in super
     private ContextHandler _contextHandler;
-    private boolean _dirAllowed=true;
+    private boolean _dirAllowed = true;
     private Resource _resourceBase;
     private Resource _stylesheet;
 
-    private static final String FORMAT = "yyyy-MM-dd HH:mm";
+//    private static final String FORMAT = "yyyy-MM-dd HH:mm";
+    private static final String FORMAT = "dd MMM yyyy HH:mm";
 
     /**
      * Overridden to save local copies of dirAllowed, locale, resourceBase, and stylesheet.
@@ -71,7 +74,7 @@ public class I2PDefaultServlet extends DefaultServlet
         _dirAllowed=getInitBoolean("dirAllowed",_dirAllowed);
 
         String rb=getInitParameter("resourceBase");
-        if (rb!=null)
+        if (rb != null)
         {
             try{_resourceBase=_contextHandler.newResource(rb);}
             catch (Exception e)
@@ -81,24 +84,18 @@ public class I2PDefaultServlet extends DefaultServlet
         }
 
         String css=getInitParameter("stylesheet");
-        try
-        {
-            if(css!=null)
-            {
+        try {
+            if (css != null) {
                 _stylesheet = Resource.newResource(css);
-                if(!_stylesheet.exists())
-                {
+                if (!_stylesheet.exists()) {
                     _stylesheet = null;
                 }
             }
-            if(_stylesheet == null)
-            {
+            if (_stylesheet == null) {
                 _stylesheet = Resource.newResource(this.getClass().getResource("/jetty-dir.css"));
             }
         }
-        catch(Exception e)
-        {
-        }
+        catch(Exception e) {}
     }
 
     /**
@@ -106,23 +103,25 @@ public class I2PDefaultServlet extends DefaultServlet
      * Calls super.
      */
     @Override
-    protected ContextHandler initContextHandler(ServletContext servletContext)
-    {
+    protected ContextHandler initContextHandler(ServletContext servletContext) {
         ContextHandler rv = super.initContextHandler(servletContext);
         _contextHandler = rv;
+        ErrorPageErrorHandler errorHandler = new ErrorPageErrorHandler();
+        errorHandler.addErrorPage(403, "/.resources/403.html");
+        errorHandler.addErrorPage(404, "/.resources/404.html");
+        rv.setErrorHandler(errorHandler);
         return rv;
     }
 
     /* copied from DefaultServlet unchanged */
-    private boolean getInitBoolean(String name, boolean dft)
-    {
-        String value=getInitParameter(name);
-        if (value==null || value.length()==0)
+    private boolean getInitBoolean(String name, boolean dft) {
+        String value = getInitParameter(name);
+        if (value == null || value.length() == 0)
             return dft;
-        return (value.startsWith("t")||
-                value.startsWith("T")||
-                value.startsWith("y")||
-                value.startsWith("Y")||
+        return (value.startsWith("t") ||
+                value.startsWith("T") ||
+                value.startsWith("y") ||
+                value.startsWith("Y") ||
                 value.startsWith("1"));
     }
 
@@ -137,20 +136,17 @@ public class I2PDefaultServlet extends DefaultServlet
             HttpServletResponse response,
             Resource resource,
             String pathInContext)
-    throws IOException
-    {
-        if (!_dirAllowed)
-        {
+    throws IOException {
+        if (!_dirAllowed) {
             response.sendError(HttpServletResponse.SC_FORBIDDEN);
             return;
         }
 
-        byte[] data=null;
+        byte[] data = null;
         String base = URIUtil.addPaths(request.getRequestURI(),URIUtil.SLASH);
 
         //If the DefaultServlet has a resource base set, use it
-        if (_resourceBase != null)
-        {
+        if (_resourceBase != null) {
             // handle ResourceCollection
             if (_resourceBase instanceof ResourceCollection)
                 resource=_resourceBase.addPath(pathInContext);
@@ -160,8 +156,7 @@ public class I2PDefaultServlet extends DefaultServlet
             resource=_contextHandler.getBaseResource().addPath(pathInContext);
 
         String dir = getListHTML(resource, base, pathInContext.length()>1);
-        if (dir==null)
-        {
+        if (dir == null) {
             response.sendError(HttpServletResponse.SC_FORBIDDEN,
             "No directory");
             return;
@@ -183,49 +178,48 @@ public class I2PDefaultServlet extends DefaultServlet
      * @return String of HTML
      */
     private static String getListHTML(Resource res, String base, boolean parent)
-        throws IOException
-    {
-        base=URIUtil.canonicalPath(base);
-        if (base==null || !res.isDirectory())
+        throws IOException {
+        base = URIUtil.canonicalPath(base);
+        if (base == null || !res.isDirectory())
             return null;
-        
+
         String[] ls = res.list();
-        if (ls==null)
+        if (ls == null)
             return null;
         Arrays.sort(ls);
-        
+
         String decodedBase = URIUtil.decodePath(base);
-        String title = "Directory: "+deTag(decodedBase);
+        String title = "Directory: " + deTag(decodedBase);
 
         StringBuilder buf=new StringBuilder(4096);
-        buf.append("<HTML><HEAD>");
-        buf.append("<LINK HREF=\"").append("jetty-dir.css").append("\" REL=\"stylesheet\" TYPE=\"text/css\"/><TITLE>");
+        buf.append("<!DOCTYPE HTML>\n<html>\n<head>\n<title>");
         buf.append(title);
-        buf.append("</TITLE></HEAD><BODY>\n<H1>");
+        buf.append("</title>\n<meta charset=\"utf-8\">\n");
+        buf.append("<link href=\"jetty-dir.css\" rel=\"stylesheet\" type=\"text/css\"/>\n");
+        buf.append("</head>\n<body>\n<h1>");
         buf.append(title);
-        buf.append("</H1>\n<TABLE BORDER=0>\n");
-        
-        if (parent)
-        {
-            buf.append("<TR><TD><A HREF=\"");
+        buf.append("</h1>\n<table border=0 width=100% cellspacing=10 class=\"listing\">\n");
+        buf.append("<thead>\n<tr><th align=left class=\"name\"><b>Name</b></th>" +
+                   "<th align=right nowrap class=\"lastmodified\"><b>Last modified (UTC)</b></th>" +
+                   "<th align=right nowrap class=\"size\"><b>Size (bytes)</b></th></tr>\n</thead>\n<tbody>\n");
+        if (parent) {
+            buf.append("<tr><td class=\"name\"><a href=\"");
             buf.append(URIUtil.addPaths(base,"../"));
-            buf.append("\">Parent Directory</A></TD><TD></TD><TD></TD></TR>\n");
+            buf.append("\">Parent Directory</a></td><td class=\"lastmodified\"></td><td class=\"size\"></td></tr>\n");
         }
-        
         String encodedBase = hrefEncodeURI(base);
-        
+
         DateFormat dfmt = new SimpleDateFormat(FORMAT, Locale.UK);
         TimeZone utc = TimeZone.getTimeZone("GMT");
         dfmt.setTimeZone(utc);
-        for (int i=0 ; i< ls.length ; i++)
-        {
+        for (int i = 0; i < ls.length; i++) {
             Resource item;
             try {
                 item = res.addPath(ls[i]);
-            } catch (IOException ioe) { 
+            } catch (IOException ioe) {
                 System.out.println("Skipping file in directory listing: " + ioe.getMessage());
                 continue;
-            } catch (RuntimeException re) { 
+            } catch (RuntimeException re) {
                 // Jetty bug, addPath() argument must be unencoded,
                 // but does not escape [],so it throws an unchecked exception:
                 //
@@ -240,58 +234,53 @@ public class I2PDefaultServlet extends DefaultServlet
                 System.out.println("Skipping file in directory listing: " + re.getMessage());
                 continue;
             }
-            
-            buf.append("\n<TR><TD><A HREF=\"");
-            String path=URIUtil.addPaths(encodedBase,URIUtil.encodePath(ls[i]));
-            
-            buf.append(path);
-            
-            boolean isDir = item.isDirectory();
-            if (isDir && !path.endsWith("/"))
-                buf.append(URIUtil.SLASH);
-            
-            buf.append("\">");
-            buf.append(deTag(ls[i]));
-            buf.append("</A></TD><TD ALIGN=right>");
-            if (!isDir) {
-                buf.append(item.length());
-                buf.append(" bytes&nbsp;");
-            }
-            buf.append("</TD><TD>");
-            if (!isDir) {
+
+            if (!(ls[i].startsWith(".") || ls[i].equals("jetty-dir.css") || ls[i].equals("favicon.ico") ||
+                  ls[i].endsWith("~") || ls[i].endsWith(".bak") || ls[i].endsWith(".old"))) {
+                buf.append("<tr><td class=\"name\"><a href=\"");
+                String path = URIUtil.addPaths(encodedBase,URIUtil.encodePath(ls[i]));
+
+                buf.append(path);
+
+                boolean isDir = item.isDirectory();
+                if (isDir && !path.endsWith("/"))
+                    buf.append(URIUtil.SLASH);
+
+                buf.append("\">");
+                buf.append(deTag(ls[i]));
+                buf.append("</a></td><td width=1% nowrap class=\"lastmodified\">");
                 buf.append(dfmt.format(new Date(item.lastModified())));
-                buf.append(" UTC");
+                buf.append("</td><td width=1% align=right class=\"size\">");
+                if (!isDir)
+                    buf.append(item.length());
+                buf.append("</td></tr>\n");
             }
-            buf.append("</TD></TR>");
         }
-        buf.append("</TABLE>\n");
-        buf.append("</BODY></HTML>\n");
-        
+        buf.append("</tbody>\n</table>\n");
+        buf.append("</body>\n</html>\n");
+
         return buf.toString();
     }
-    
+
     /**
      * Copied unchanged from Resource.java
      *
      * Encode any characters that could break the URI string in an HREF.
      * Such as &lt;a href="/path/to;&lt;script&gt;Window.alert("XSS"+'%20'+"here");&lt;/script&gt;"&gt;Link&lt;/a&gt;
-     * 
+     *
      * The above example would parse incorrectly on various browsers as the "&lt;" or '"' characters
      * would end the href attribute value string prematurely.
-     * 
+     *
      * @param raw the raw text to encode.
      * @return the defanged text.
      */
-    private static String hrefEncodeURI(String raw) 
-    {
+    private static String hrefEncodeURI(String raw) {
         StringBuffer buf = null;
 
         loop:
-        for (int i=0;i<raw.length();i++)
-        {
-            char c=raw.charAt(i);
-            switch(c)
-            {
+        for (int i = 0; i < raw.length(); i++) {
+            char c = raw.charAt(i);
+            switch(c) {
                 case '\'':
                 case '"':
                 case '<':
@@ -300,14 +289,12 @@ public class I2PDefaultServlet extends DefaultServlet
                     break loop;
             }
         }
-        if (buf==null)
+        if (buf == null)
             return raw;
 
-        for (int i=0;i<raw.length();i++)
-        {
-            char c=raw.charAt(i);       
-            switch(c)
-            {
+        for (int i = 0; i < raw.length(); i++) {
+            char c = raw.charAt(i);
+            switch(c) {
               case '"':
                   buf.append("%22");
                   continue;
@@ -328,12 +315,11 @@ public class I2PDefaultServlet extends DefaultServlet
 
         return buf.toString();
     }
-    
+
     /**
      * Copied unchanged from Resource.java
      */
-    private static String deTag(String raw) 
-    {
+    private static String deTag(String raw) {
         return StringUtil.sanitizeXmlString(raw);
     }
 }

@@ -1,9 +1,9 @@
 package net.i2p.router;
 /*
  * free (adj.): unencumbered; not under the control of others
- * Written by jrandom in 2003 and released into the public domain 
- * with no warranty of any kind, either expressed or implied.  
- * It probably won't make your computer catch on fire, or eat 
+ * Written by jrandom in 2003 and released into the public domain
+ * with no warranty of any kind, either expressed or implied.
+ * It probably won't make your computer catch on fire, or eat
  * your children, but it might.  Use at your own risk.
  *
  */
@@ -33,7 +33,7 @@ public class StatisticsManager {
     private final Log _log;
     private final RouterContext _context;
     private final String _networkID;
-    
+
     public final static String PROP_PUBLISH_RANKINGS = "router.publishPeerRankings";
     private static final String PROP_CONTACT_NAME = "netdb.contact";
     /** enhance anonymity by only including build stats one out of this many times */
@@ -49,17 +49,17 @@ public class StatisticsManager {
         _log = context.logManager().getLog(StatisticsManager.class);
         _networkID = Integer.toString(context.router().getNetworkID());
     }
-        
+
     /**
      *  Retrieve a snapshot of the statistics that should be published.
      *
      *  This includes all standard options (as of 0.9.24, network ID and caps)
      */
-    public Properties publishStatistics() { 
+    public Properties publishStatistics() {
         // if hash is null, will be caught in fkc.sign()
         return publishStatistics(_context.routerHash());
     }
-    
+
     /**
      *  Retrieve a snapshot of the statistics that should be published.
      *
@@ -68,7 +68,7 @@ public class StatisticsManager {
      *  @param h current router hash, non-null
      *  @since 0.9.24
      */
-    public Properties publishStatistics(Hash h) { 
+    public Properties publishStatistics(Hash h) {
         Properties stats = new Properties();
         stats.setProperty("router.version", RouterVersion.VERSION);
         // never used
@@ -101,7 +101,7 @@ public class StatisticsManager {
         if (newlines > 0)
             stats.setProperty("stat_identities", newlines+"");
 ***/
-        
+
         if (_context.getBooleanPropertyDefaultTrue(PROP_PUBLISH_RANKINGS) &&
             _context.random().nextInt(RANDOM_INCLUDE_STATS) == 0) {
             //long publishedUptime = _context.router().getUptime();
@@ -116,17 +116,17 @@ public class StatisticsManager {
             //includeRate("tunnel.fullFragments", stats, new long[] { 10*60*1000, 3*60*60*1000 });
             //includeRate("tunnel.smallFragments", stats, new long[] { 10*60*1000, 3*60*60*1000 });
             //includeRate("tunnel.testFailedTime", stats, new long[] { 10*60*1000 });
-            
+
             //includeRate("tunnel.batchDelaySent", stats, new long[] { 10*60*1000, 60*60*1000 });
             //includeRate("tunnel.batchMultipleCount", stats, new long[] { 10*60*1000, 60*60*1000 });
             //includeRate("tunnel.corruptMessage", stats, new long[] { 60*60*1000l, 3*60*60*1000l });
-            
+
             //includeRate("router.throttleTunnelProbTestSlow", stats, new long[] { 60*60*1000 });
             //includeRate("router.throttleTunnelProbTooFast", stats, new long[] { 60*60*1000 });
             //includeRate("router.throttleTunnelProcessingTime1m", stats, new long[] { 60*60*1000 });
 
             //includeRate("router.fastPeers", stats, new long[] { 60*60*1000 });
-            
+
             //includeRate("udp.statusOK", stats, new long[] { 20*60*1000 });
             //includeRate("udp.statusDifferent", stats, new long[] { 20*60*1000 });
             //includeRate("udp.statusReject", stats, new long[] { 20*60*1000 });
@@ -136,7 +136,7 @@ public class StatisticsManager {
             //includeRate("udp.addressTestInsteadOfUpdate", stats, new long[] { 1*60*1000 });
 
             //includeRate("clock.skew", stats, new long[] { 10*60*1000, 3*60*60*1000, 24*60*60*1000 });
-            
+
             //includeRate("transport.sendProcessingTime", stats, new long[] { 60*60*1000 });
             //includeRate("jobQueue.jobRunSlow", stats, new long[] { 10*60*1000l, 60*60*1000l });
             //includeRate("crypto.elGamal.encrypt", stats, new long[] { 60*60*1000 });
@@ -152,11 +152,11 @@ public class StatisticsManager {
             //includeRate("stream.con.receiveDuplicateSize", stats, new long[] { 60*60*1000 });
 
             //stats.setProperty("stat__rateKey", "avg;maxAvg;pctLifetime;[sat;satLim;maxSat;maxSatLim;][num;lifetimeFreq;maxFreq]");
-            
+
             //includeRate("tunnel.decryptRequestTime", stats, new long[] { 60*1000, 10*60*1000 });
             //includeRate("udp.packetDequeueTime", stats, new long[] { 60*1000 });
             //includeRate("udp.packetVerifyTime", stats, new long[] { 60*1000 });
-            
+
             //includeRate("tunnel.buildRequestTime", stats, new long[] { 10*60*1000 });
             long rate = 60*60*1000;
             //includeTunnelRates("Client", stats, rate);
@@ -172,6 +172,8 @@ public class StatisticsManager {
             int ri = _context.router().getUptime() > 30*60*1000 ?
                      _context.netDb().getKnownRouters() :
                      3000 + _context.random().nextInt(1000);   // so it isn't obvious we restarted
+            if (ri > 5000)
+                ri = ri / 2 + _context.random().nextInt(50); // hide our real number of known peers to avoid broadcasting that we're running I2P+
             stats.setProperty("netdb.knownRouters", String.valueOf(ri));
             int ls = _context.router().getUptime() > 30*60*1000 ?
                      _context.netDb().getKnownLeaseSets() :
@@ -223,7 +225,7 @@ public class StatisticsManager {
 
         return stats;
     }
-    
+
 /*****
     private void includeRate(String rateName, Properties stats, long selectedPeriods[]) {
         includeRate(rateName, stats, selectedPeriods, false);
@@ -232,10 +234,10 @@ public class StatisticsManager {
 
     /**
      * @param fudgeQuantity the data being published in this stat is too sensitive to, uh
-     *                      publish, so we're kludge the quantity (allowing the fairly safe
+     *                      publish, so we'll kludge the quantity (allowing the fairly safe
      *                      publication of the average values
      */
-    private void includeRate(String rateName, Properties stats, long selectedPeriods[], 
+    private void includeRate(String rateName, Properties stats, long selectedPeriods[],
                              boolean fudgeQuantity) {
         RateStat rate = _context.statManager().getRate(rateName);
         if (rate == null) return;
@@ -259,7 +261,7 @@ public class StatisticsManager {
             stats.setProperty("stat_" + rateName + '.' + getPeriod(curRate), renderRate(curRate, fudgeQuantity));
         }
     }
-    
+
     private String renderRate(Rate rate, boolean fudgeQuantity) {
         StringBuilder buf = new StringBuilder(128);
         buf.append(num(rate.getAverageValue())).append(';');
@@ -317,7 +319,7 @@ public class StatisticsManager {
             stats.setProperty("stat_" + rateName + '.' + getPeriod(curRate), renderRate(curRate, fudgeQuantity));
         }
     }
-    
+
     private String renderRate(Rate rate, double fudgeQuantity) {
         StringBuilder buf = new StringBuilder(128);
         buf.append(num(rate.getAverageValue())).append(';');
@@ -350,15 +352,15 @@ public class StatisticsManager {
 
     private static String getPeriod(Rate rate) { return DataHelper.formatDuration(rate.getPeriod()); }
 
-    private final String num(double num) { 
+    private final String num(double num) {
         if (num < 0) num = 0;
-        synchronized (_fmt) { return _fmt.format(num); } 
+        synchronized (_fmt) { return _fmt.format(num); }
     }
 
-    private final String pct(double num) { 
+    private final String pct(double num) {
         if (num < 0) num = 0;
-        synchronized (_pct) { return _pct.format(num); } 
+        synchronized (_pct) { return _pct.format(num); }
     }
-   
+
     public void renderStatusHTML(Writer out) { }
 }

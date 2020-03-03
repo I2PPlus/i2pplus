@@ -8,6 +8,7 @@ package net.i2p.router;
  *
  */
 
+//import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Date;
@@ -56,7 +57,7 @@ public class OutNetMessage implements CDPQEntry {
      * (some JVMs have less than 10ms resolution, so the Long above doesn't guarantee order)
      */
     private List<String> _timestampOrder;
-    
+
     /**
      *  Priorities, higher is higher priority.
      *  @since 0.9.3
@@ -116,16 +117,16 @@ public class OutNetMessage implements CDPQEntry {
         if (_shouldTimestamp)
             timestamp("Created");
         //_context.messageStateMonitor().outboundMessageAdded();
-        //_context.statManager().createRateStat("outNetMessage.timeToDiscard", 
+        //_context.statManager().createRateStat("outNetMessage.timeToDiscard",
         //                                      "How long until we discard an outbound msg?",
         //                                      "OutNetMessage", new long[] { 5*60*1000, 30*60*1000, 60*60*1000 });
     }
-    
+
     /**
      * Stamp the message's progress.
      * Only useful if log level is INFO or DEBUG
      *
-     * @param eventName what occurred 
+     * @param eventName what occurred
      */
     public void timestamp(String eventName) {
         if (_shouldTimestamp) {
@@ -173,14 +174,14 @@ public class OutNetMessage implements CDPQEntry {
             _timestampOrder = new ArrayList<String>(8);
         }
     }
-    
+
     /**
      * @deprecated
      * @return null always
      */
     @Deprecated
     public Exception getCreatedBy() { return null; }
-    
+
     /**
      * Specifies the router to which the message should be delivered.
      * Generally non-null but may be null in special cases.
@@ -203,7 +204,7 @@ public class OutNetMessage implements CDPQEntry {
 
     public int getMessageTypeId() { return _messageTypeId; }
     public long getMessageId() { return _messageId; }
-    
+
     /**
      * How large the message is, including the full 16 byte header.
      * Transports with different header sizes should adjust.
@@ -211,7 +212,7 @@ public class OutNetMessage implements CDPQEntry {
     public int getMessageSize() {
         return _messageSize;
     }
-    
+
     /**
      *  Copies the message data to outbuffer.
      *  Used only by VM Comm System.
@@ -225,7 +226,7 @@ public class OutNetMessage implements CDPQEntry {
             return len;
         }
     }
-    
+
     /**
      * Specify the priority of the message, where higher numbers are higher
      * priority.  Higher priority messages should be delivered before lower
@@ -279,17 +280,17 @@ public class OutNetMessage implements CDPQEntry {
      */
     public MessageSelector getReplySelector() { return _replySelector; }
     public void setReplySelector(MessageSelector selector) { _replySelector = selector; }
-    
-    public synchronized void transportFailed(String transportStyle) { 
+
+    public synchronized void transportFailed(String transportStyle) {
         if (_failedTransports == null)
             _failedTransports = new HashSet<String>(2);
-        _failedTransports.add(transportStyle); 
+        _failedTransports.add(transportStyle);
     }
 
-    public synchronized Set<String> getFailedTransports() { 
-        return (_failedTransports == null ? Collections.<String> emptySet() : _failedTransports); 
+    public synchronized Set<String> getFailedTransports() {
+        return (_failedTransports == null ? Collections.<String> emptySet() : _failedTransports);
     }
-    
+
     /** when did the sending process begin */
     public long getSendBegin() { return _sendBegin; }
 
@@ -354,49 +355,47 @@ public class OutNetMessage implements CDPQEntry {
         return _seqNum;
     }
 
-    /** 
+    /**
      * We've done what we need to do with the data from this message, though
      * we may keep the object around for a while to use its ID, jobs, etc.
      */
     public void discardData() {
     }
-    
+
     @Override
     public String toString() {
         StringBuilder buf = new StringBuilder(256);
-        buf.append("[OutNetMessage containing ");
+        buf.append("\n* OutNetMessage containing ");
         if (_message == null) {
             buf.append("*no message*");
         } else {
             buf.append("a ").append(_messageSize).append(" byte ");
             buf.append(getMessageType());
-            buf.append(" ID ").append(_messageId);
+            buf.append(" [MsgID ").append(_messageId).append("]");
         }
-        buf.append(" expiring ").append(new Date(_expiration));
-        buf.append(" priority ").append(_priority);
         if (_failedTransports != null)
-            buf.append(" failed transports: ").append(_failedTransports);
+            buf.append("\n* Delivery failure on transports ").append(_failedTransports);
         if (_target == null)
             buf.append(" (null target)");
         else
-            buf.append(" targetting ").append(_target.getIdentity().getHash().toBase64());
+            buf.append("\n* Target: [").append(_target.getIdentity().getHash().toBase64().substring(0,6) + "]");
         if (_onReply != null)
-            buf.append(" with onReply job: ").append(_onReply);
+            buf.append(" with onReply ").append(_onReply);
         if (_onSend != null)
-            buf.append(" with onSend job: ").append(_onSend);
+            buf.append("; with onSend ").append(_onSend);
         if (_onFailedReply != null)
-            buf.append(" with onFailedReply job: ").append(_onFailedReply);
+            buf.append("; with onFailedReply ").append(_onFailedReply);
         if (_onFailedSend != null)
-            buf.append(" with onFailedSend job: ").append(_onFailedSend);
+            buf.append("; with onFailedSend ").append(_onFailedSend);
+        buf.append("; Priority: ").append(_priority);
+        buf.append("\n* Expires: ").append(new Date(_expiration));
         if (_timestamps != null && _timestampOrder != null) {
-            buf.append(" {timestamps: \n");
+            buf.append("\n\t Timestamps: ");
             renderTimestamps(buf);
-            buf.append("}");
         }
-        buf.append("]");
         return buf.toString();
     }
-    
+
     /**
      *  Only useful if log level is INFO or DEBUG;
      *  locked_initTimestamps() must have been called previously
@@ -407,7 +406,7 @@ public class OutNetMessage implements CDPQEntry {
                 for (int i = 0; i < _timestampOrder.size(); i++) {
                     String name = _timestampOrder.get(i);
                     Long when = _timestamps.get(name);
-                    buf.append("\t[");
+                    buf.append("\n\t* ");
                     long diff = when.longValue() - lastWhen;
                     if ( (lastWhen > 0) && (diff > 500) )
                         buf.append("**");
@@ -415,9 +414,8 @@ public class OutNetMessage implements CDPQEntry {
                         buf.append(diff);
                     else
                         buf.append(0);
-                    buf.append("ms: \t").append(name);
-                    buf.append('=').append(new Date(when.longValue()));
-                    buf.append("]\n");
+                    buf.append("ms: ").append(name);
+                    buf.append(": ").append(new Date(when.longValue()));
                     lastWhen = when.longValue();
                 }
             }

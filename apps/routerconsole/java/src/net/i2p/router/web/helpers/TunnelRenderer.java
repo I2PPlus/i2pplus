@@ -24,6 +24,12 @@ import net.i2p.router.web.Messages;
 import net.i2p.stat.Rate;
 import net.i2p.stat.RateStat;
 
+import net.i2p.router.CommSystemFacade;
+import net.i2p.util.ObjectCounter;
+
+import java.util.HashSet;
+
+
 /**
  *  For /tunnels.jsp, used by TunnelHelper.
  */
@@ -39,9 +45,12 @@ class TunnelRenderer {
     public void renderStatusHTML(Writer out) throws IOException {
         TunnelPool ei = _context.tunnelManager().getInboundExploratoryPool();
         TunnelPool eo = _context.tunnelManager().getOutboundExploratoryPool();
-        out.write("<h3 class=\"tabletitle\" id=\"exploratorytunnels\"><a name=\"exploratory\" ></a>" + _t("Exploratory tunnels"));
+        boolean debug = _context.getBooleanProperty(HelperBase.PROP_ADVANCED);
+        out.write("<h3 class=\"tabletitle\" id=\"exploratory\">" + _t("Exploratory"));
+//        }
         // links are set to float:right in CSS so they will be displayed in reverse order
-        out.write(" <a href=\"/configtunnels#exploratory\" title=\"" + _t("Configure tunnels") + "\">[" + _t("configure") + "]</a>");
+        out.write(" <a href=\"/configtunnels#exploratory\" title=\"" +
+               _t("Configure tunnels") + "\">[" + _t("configure") + "]</a>");
         writeGraphLinks(out, ei, eo);
         out.write("</h3>\n");
         renderPool(out, ei, eo);
@@ -50,7 +59,6 @@ class TunnelRenderer {
         Map<Hash, TunnelPool> clientInboundPools = _context.tunnelManager().getInboundClientPools();
         Map<Hash, TunnelPool> clientOutboundPools = _context.tunnelManager().getOutboundClientPools();
         destinations = new ArrayList<Hash>(clientInboundPools.keySet());
-        boolean debug = _context.getBooleanProperty(HelperBase.PROP_ADVANCED);
         for (int i = 0; i < destinations.size(); i++) {
             Hash client = destinations.get(i);
             boolean isLocal = _context.clientManager().isLocal(client);
@@ -75,136 +83,180 @@ class TunnelRenderer {
             } else {
                 dname = DataHelper.escapeHTML(_t(name));
             }
-            out.write("<h3 class=\"tabletitle\" id=\"" + b64
-                      + "\" >" + _t("Client tunnels for {0}", dname));
             if (isLocal) {
+                out.write("<h3 class=\"");
+                if (_context.clientManager().shouldPublishLeaseSet(client)) {
+                    out.write("server ");
+                }
+                out.write("tabletitle\" ");
+                out.write("id=\"" + client.toBase64().substring(0,4) + "\" >");
+                out.write(dname);
                 // links are set to float:right in CSS so they will be displayed in reverse order
-                out.write(" <a href=\"/configtunnels#" + b64 + "\" title=\"" + _t("Configure tunnels for session") + "\">[" + _t("configure") + "]</a>");
+                if (debug)
+                    out.write(" <a href=\"/configtunnels#" + b64 +"\" title=\"" +
+                              _t("Configure tunnels for session") + "\">[" + _t("configure") + "]</a>");
+                else
+                    out.write(" <a href=\"/i2ptunnelmgr\" title=\"" +
+                              _t("Configure tunnels") + "\">[" + _t("configure") + "]</a>");
                 writeGraphLinks(out, in, outPool);
+                out.write(" <span class=\"b32\" title=\"" + _t("Truncated Local Destination (b32)") + "\">" +
+                          client.toBase32().substring(0,4) + "</span>");
                 out.write("</h3>\n");
-            } else {
-                out.write(" (" + _t("dead") + ")</h3>\n");
-            }
-            if (in != null) {
-                // list aliases
-                Set<Hash> aliases = in.getSettings().getAliases();
-                if (aliases != null) {
-                    for (Hash a : aliases) {
-                        TunnelPool ain = clientInboundPools.get(a);
-                        if (ain != null) {
-                            String aname = ain.getSettings().getDestinationNickname();
-                            String ab64 = a.toBase64().substring(0, 4);
-                            if (aname == null)
-                                aname = ab64;
-                            out.write("<h3 class=\"tabletitle\" id=\"" + ab64
-                                      + "\" >" + _t("Client tunnels for {0}", DataHelper.escapeHTML(_t(aname))));
-                            if (isLocal)
-                                out.write(" <a href=\"/configtunnels#" + b64 + "\" title=\"" + _t("Configure tunnels for session") + "\">[" + _t("configure") + "]</a></h3>\n");
+                if (in != null) {
+                    // list aliases
+                    Set<Hash> aliases = in.getSettings().getAliases();
+                    if (aliases != null) {
+                        for (Hash a : aliases) {
+                            TunnelPool ain = clientInboundPools.get(a);
+                            if (ain != null) {
+                                String aname = ain.getSettings().getDestinationNickname();
+                                String ab64 = a.toBase64().substring(0, 4);
+                                if (aname == null)
+                                    aname = ab64;
+                            out.write("<h3 class=\"tabletitle\" ");
+                            out.write("id=\"" + ab64 + "\" >");
+                            out.write(DataHelper.escapeHTML(_t(aname)));
+                            if (debug)
+                                out.write(" <a href=\"/configtunnels#" + b64 +"\" title=\"" +
+                                          _t("Configure tunnels for session") + "\">[" + _t("configure") + "]</a>");
                             else
-                                out.write(" (" + _t("dead") + ")</h3>\n");
+                                out.write(" <a href=\"/i2ptunnelmgr\" title=\"" +
+                                          _t("Configure tunnels") + "\">[" + _t("configure") + "]</a>");
+                            out.write("</h3>\n");
+                            }
                         }
                     }
-                }     
-            }         
-            renderPool(out, in, outPool);
-        }
-
-        List<HopConfig> participating = _context.tunnelDispatcher().listParticipatingTunnels();
-        out.write("<h3 class=\"tabletitle\" id=\"participating\">" + _t("Participating tunnels") + "</h3>\n");
-        int bwShare = getShareBandwidth();
-        if (bwShare > 12) {
-        // Don't bother re-indenting
-        if (!participating.isEmpty()) {
-            DataHelper.sort(participating, new TunnelComparator());
-            out.write("<table class=\"tunneldisplay tunnels_participating\"><tr><th>" + _t("Receive on") + "</th><th>" + _t("From") + "</th><th>"
-                  + _t("Send on") + "</th><th>" + _t("To") + "</th><th>" + _t("Expiration") + "</th>"
-                  + "<th>" + _t("Usage") + "</th><th>" + _t("Rate") + "</th><th>" + _t("Role") + "</th></tr>\n");
-        }
-        long processed = 0;
-        RateStat rs = _context.statManager().getRate("tunnel.participatingMessageCount");
-        if (rs != null)
-            processed = (long)rs.getRate(10*60*1000).getLifetimeTotalValue();
-        int inactive = 0;
-        int displayed = 0;
-        for (int i = 0; i < participating.size(); i++) {
-            HopConfig cfg = participating.get(i);
-            int count = cfg.getProcessedMessagesCount();
-            if (count <= 0) {
-                inactive++;
-                continue;
+                }
+                renderPool(out, in, outPool);
             }
-            // everything that isn't 'recent' is already in the tunnel.participatingMessageCount stat
-            processed += cfg.getRecentMessagesCount();
-            if (++displayed > DISPLAY_LIMIT)
-                continue;
-            out.write("<tr>");
-            if (cfg.getReceiveTunnel() != null)
-                out.write("<td class=\"cells\" align=\"center\" title=\"" + _t("Tunnel identity") + "\"><span class=\"tunnel_id\">" +
-                          cfg.getReceiveTunnel().getTunnelId() + "</span></td>");
-            else
-                out.write("<td class=\"cells\" align=\"center\">n/a</td>");
-            if (cfg.getReceiveFrom() != null)
-                out.write("<td class=\"cells\" align=\"center\"><span class=\"tunnel_peer\">" + netDbLink(cfg.getReceiveFrom()) +"</span></td>");
-            else
-                out.write("<td class=\"cells\">&nbsp;</td>");
-            if (cfg.getSendTunnel() != null)
-                out.write("<td class=\"cells\" align=\"center\" title=\"" + _t("Tunnel identity") + "\"><span class=\"tunnel_id\">" + cfg.getSendTunnel().getTunnelId() +"</span></td>");
-            else
-                out.write("<td class=\"cells\">&nbsp;</td>");
-            if (cfg.getSendTo() != null)
-                out.write("<td class=\"cells\" align=\"center\"><span class=\"tunnel_peer\">" + netDbLink(cfg.getSendTo()) +"</span></td>");
-            else
-                out.write("<td class=\"cells\">&nbsp;</td>");
-            long timeLeft = cfg.getExpiration()-_context.clock().now();
-            if (timeLeft > 0)
-                out.write("<td class=\"cells\" align=\"center\">" + DataHelper.formatDuration2(timeLeft) + "</td>");
-            else
-                out.write("<td class=\"cells\" align=\"center\">(" + _t("grace period") + ")</td>");
-            out.write("<td class=\"cells\" align=\"center\">" + (count * 1024 / 1000) + " KB</td>");
-            int lifetime = (int) ((_context.clock().now() - cfg.getCreation()) / 1000);
-            if (lifetime <= 0)
-                lifetime = 1;
-            if (lifetime > 10*60)
-                lifetime = 10*60;
-            long bps = 1024L * count / lifetime;
-            out.write("<td class=\"cells\" align=\"center\">" + DataHelper.formatSize2Decimal(bps) + "Bps</td>");
-            if (cfg.getSendTo() == null)
-                out.write("<td class=\"cells\" align=\"center\">" + _t("Outbound Endpoint") + "</td>");
-            else if (cfg.getReceiveFrom() == null)
-                out.write("<td class=\"cells\" align=\"center\">" + _t("Inbound Gateway") + "</td>");
-            else
-                out.write("<td class=\"cells\" align=\"center\">" + _t("Participant") + "</td>");
-            out.write("</tr>\n");
         }
-        if (!participating.isEmpty())
-            out.write("</table>\n");
-        if (displayed > DISPLAY_LIMIT)
-            out.write("<div class=\"statusnotes\"><b>" + _t("Limited display to the {0} tunnels with the highest usage", DISPLAY_LIMIT)  + "</b></div>\n");
-        if (inactive > 0)
-            out.write("<div class=\"statusnotes\"><b>" + _t("Inactive participating tunnels") + ":&nbsp;&nbsp;" + inactive + "</b></div>\n");
-        else if (displayed <= 0)
-            out.write("<div class=\"statusnotes\"><b>" + _t("none") + "</b></div>\n");
-        out.write("<div class=\"statusnotes\"><b>" + _t("Lifetime bandwidth usage") + ":&nbsp;&nbsp;" + DataHelper.formatSize2Decimal(processed*1024) + "B</b></div>\n");
-        } else {   // bwShare > 12
-            out.write("<div class=\"statusnotes noparticipate\"><b>" + _t("Not enough shared bandwidth to build participating tunnels.") +
-                      "</b> <a href=\"config\">[" + _t("Configure") + "]</a></div>\n");
-        }
-        //renderPeers(out);
 
+//        String maxTunnels = _context.getProperty("router.maxParticipatingTunnels");
+        List<HopConfig> participating = _context.tunnelDispatcher().listParticipatingTunnels();
+        if (!participating.isEmpty()) {
+            out.write("<h3 class=\"tabletitle\" id=\"participating\">");
+            out.write(_t("Participating"));
+            if (!debug)
+                out.write(' ' + _t(" tunnels"));
+            out.write("</h3>\n");
+            int bwShare = getShareBandwidth();
+            if (bwShare > 12) {
+                if (!participating.isEmpty()) {
+                    out.write("<table class=\"tunneldisplay tunnels_participating\"><thead><tr><th>" +
+                           _t("Role") + "</th><th>" + _t("Expiry") + "</th><th>" + _t("Usage") + "</th><th>" + _t("Rate") + "</th><th>");
+                    if (debug)
+                        out.write(_t("Receive on") + "</th><th>");
+                    out.write(_t("From") + "</th><th>");
+                    if (debug)
+                        out.write(_t("Send on") + "</th><th>");
+                    out.write(_t("To") + "</th></tr></thead>\n");
+                }
+                long processed = 0;
+                RateStat rs = _context.statManager().getRate("tunnel.participatingMessageCount");
+                if (rs != null)
+                    processed = (long)rs.getRate(10*60*1000).getLifetimeTotalValue();
+                int inactive = 0;
+                int displayed = 0;
+                for (int i = 0; i < participating.size(); i++) {
+                    HopConfig cfg = participating.get(i);
+                    int count = cfg.getProcessedMessagesCount();
+                    if (count <= 0) {
+                        inactive++;
+                        continue;
+                    }
+
+                DataHelper.sort(participating, new TunnelComparator());
+                // everything that isn't 'recent' is already in the tunnel.participatingMessageCount stat
+                processed += cfg.getRecentMessagesCount();
+                if (++displayed > DISPLAY_LIMIT)
+                    continue;
+                out.write("<tr>");
+                if (cfg.getSendTo() == null)
+                    out.write("<td class=\"cells obep\" align=\"center\" title=\"" + _t("Outbound Endpoint") + "\">" + _t("Outbound Endpoint") + "</td>");
+                else if (cfg.getReceiveFrom() == null)
+                    out.write("<td class=\"cells ibgw\" align=\"center\" title=\"" + _t("Inbound Gateway") + "\">" + _t("Inbound Gateway") + "</td>");
+                else
+                    out.write("<td class=\"cells ptcp\" align=\"center\" title=\"" + _t("Participant") + "\">" + _t("Participant") + "</td>");
+                long timeLeft = cfg.getExpiration()-_context.clock().now();
+                if (timeLeft > 0)
+                    out.write("<td class=\"cells\" align=\"center\">" + DataHelper.formatDuration2(timeLeft) + "</td>");
+                else
+                    out.write("<td class=\"cells\" align=\"center\"><i>" + _t("grace period") + "</i></td>");
+                out.write("<td class=\"cells\" align=\"center\">" + (count * 1024 / 1000) + " KB</td>");
+                int lifetime = (int) ((_context.clock().now() - cfg.getCreation()) / 1000);
+                if (lifetime <= 0)
+                    lifetime = 1;
+                if (lifetime > 10*60)
+                    lifetime = 10*60;
+                long bps = 1024L * count / lifetime;
+                out.write("<td class=\"cells\" align=\"center\">" + DataHelper.formatSize2Decimal(bps) + " Bps</td>");
+                if (debug) {
+                    if (cfg.getReceiveTunnel() != null)
+                        out.write("<td class=\"cells\" align=\"center\" title=\"" + _t("Tunnel identity") + "\"><span class=\"tunnel_id\">" +
+                                  cfg.getReceiveTunnel().getTunnelId() + "</span></td>");
+                    else
+                        out.write("<td class=\"cells\" align=\"center\">" + _t("n/a") + "</td>");
+                }
+                if (cfg.getReceiveFrom() != null)
+                    out.write("<td class=\"cells\" align=\"center\"><span class=\"tunnel_peer\">" + netDbLink(cfg.getReceiveFrom()) +
+                              "</span>&nbsp;<b class=\"tunnel_cap\" title=\"" + _t("Bandwidth tier") + "\">" + getCapacity(cfg.getReceiveFrom()) + "</b></td>");
+                else
+                    out.write("<td class=\"cells\"></td>");
+                if (debug) {
+                    if (cfg.getSendTunnel() != null)
+                        out.write("<td class=\"cells\" align=\"center\" title=\"" + _t("Tunnel identity") + "\"><span class=\"tunnel_id\">" +
+                                  cfg.getSendTunnel().getTunnelId() + "</span></td>");
+                    else
+                        out.write("<td class=\"cells\"></td>");
+                }
+                if (cfg.getSendTo() != null)
+                    out.write("<td class=\"cells\" align=\"center\"><span class=\"tunnel_peer\">" + netDbLink(cfg.getSendTo()) +
+                              "</span>&nbsp;<b class=\"tunnel_cap\" title=\"" + _t("Bandwidth tier") + "\">" + getCapacity(cfg.getSendTo()) + "</b></span></td>");
+                else
+                    out.write("<td class=\"cells\"></td>");
+                out.write("</tr>\n");
+            }
+            if (!participating.isEmpty())
+                out.write("</table>\n");
+            if (displayed > DISPLAY_LIMIT)
+//                out.write("<div class=\"statusnotes\"><b>" + _t("Limited display to the {0} tunnels with the highest usage", DISPLAY_LIMIT)  + "</b></div>\n");
+                out.write("<div class=\"statusnotes\"><b>" + _t("Limited display to the {0} most recent tunnels", DISPLAY_LIMIT)  + "</b></div>\n");
+            if (inactive > 0)
+                out.write("<div class=\"statusnotes\"><b>" + _t("Inactive participating tunnels") + ":&nbsp;&nbsp;" + inactive + "</b></div>\n");
+            else if (displayed <= 0)
+                out.write("<div class=\"statusnotes\"><b>" + _t("none") + "</b></div>\n");
+            out.write("<div class=\"statusnotes\"><b>" + _t("Lifetime bandwidth usage") + ":&nbsp;&nbsp;" +
+                      DataHelper.formatSize2Decimal(processed*1024) + "B</b></div>\n");
+            // TODO Display message if hidden mode active
+//            else if (_context.router().isHidden())
+//                out.write("<div class=\"statusnotes noparticipate\"><b>" + _t("Router is running in Hidden Mode; no participating tunnels will be built.") +
+//                          "</b> <a href=\"config\">[" + _t("Configure") + "]</a></div>\n");
+            } else { // bwShare < 12K/s
+                out.write("<div class=\"statusnotes noparticipate\"><b>" + _t("Not enough shared bandwidth to build participating tunnels.") +
+                          "</b> <a href=\"config\">[" + _t("Configure") + "]</a></div>\n");
+            }
+            //renderPeers(out);
+        }
         out.write("<h3 class=\"tabletitle\">" + _t("Bandwidth Tiers") + "</h3>\n");
         out.write("<table id=\"tunnel_defs\"><tbody>");
-        out.write("<tr><td>&nbsp;</td>"
-                  + "<td><span class=\"tunnel_cap\"><b>L</b></span></td><td>" + _t("{0} shared bandwidth", range(Router.MIN_BW_L, Router.MIN_BW_M)) + "</td>"
-                  + "<td><span class=\"tunnel_cap\"><b>M</b></span></td><td>" + _t("{0} shared bandwidth", range(Router.MIN_BW_M, Router.MIN_BW_N)) + "</td>"
-                  + "<td>&nbsp;</td></tr>");
-        out.write("<tr><td>&nbsp;</td>"
-                  + "<td><span class=\"tunnel_cap\"><b>N</b></span></td><td>" + _t("{0} shared bandwidth", range(Router.MIN_BW_N, Router.MIN_BW_O)) + "</td>"
-                  + "<td><span class=\"tunnel_cap\"><b>O</b></span></td><td>" + _t("{0} shared bandwidth", range(Router.MIN_BW_O, Router.MIN_BW_P)) + "</td>"
-                  + "<td>&nbsp;</td></tr>");
-        out.write("<tr><td>&nbsp;</td>"
-                  + "<td><span class=\"tunnel_cap\"><b>P</b></span></td><td>" + _t("{0} shared bandwidth", range(Router.MIN_BW_P, Router.MIN_BW_X)) + "</td>"
-                  + "<td><span class=\"tunnel_cap\"><b>X</b></span></td><td>" + _t("Over {0} shared bandwidth", Math.round(Router.MIN_BW_X * 1.024f) + " KBps") + "</td>"
-                  + "<td>&nbsp;</td></tr>");
+        out.write("<tr><td>&nbsp;</td>" +
+                  "<td><span class=\"tunnel_cap\"><b>L</b></span></td>" +
+                  "<td>" +_t("{0} shared bandwidth", range(Router.MIN_BW_L, Router.MIN_BW_M)) + "</td>" +
+                  "<td><span class=\"tunnel_cap\"><b>M</b></span></td>" +
+                  "<td>" + _t("{0} shared bandwidth", range(Router.MIN_BW_M, Router.MIN_BW_N)) + "</td>" +
+                  "<td>&nbsp;</td></tr>");
+        out.write("<tr><td>&nbsp;</td>" +
+                  "<td><span class=\"tunnel_cap\"><b>N</b></span></td>" +
+                  "<td>" + _t("{0} shared bandwidth", range(Router.MIN_BW_N, Router.MIN_BW_O)) + "</td>" +
+                  "<td><span class=\"tunnel_cap\"><b>O</b></span></td>" +
+                  "<td>" + _t("{0} shared bandwidth", range(Router.MIN_BW_O, Router.MIN_BW_P)) + "</td>" +
+                  "<td>&nbsp;</td></tr>");
+        out.write("<tr><td>&nbsp;</td>" +
+                  "<td><span class=\"tunnel_cap\"><b>P</b></span></td>" +
+                  "<td>" + _t("{0} shared bandwidth", range(Router.MIN_BW_P, Router.MIN_BW_X)) + "</td>" +
+                  "<td><span class=\"tunnel_cap\"><b>X</b></span></td>" +
+                  "<td>" + _t("Over {0} shared bandwidth", Math.round(Router.MIN_BW_X * 1.024f) + " KBps") + "</td>" +
+                  "<td>&nbsp;</td></tr>");
         out.write("</tbody></table>");
 
     }
@@ -216,7 +268,19 @@ class TunnelRenderer {
 
     private static class TunnelComparator implements Comparator<HopConfig>, Serializable {
          public int compare(HopConfig l, HopConfig r) {
-             return (r.getProcessedMessagesCount() - l.getProcessedMessagesCount());
+//             return (r.getProcessedMessagesCount() - l.getProcessedMessagesCount());
+//             return (l.getProcessedMessagesCount() - r.getProcessedMessagesCount());
+             long le = l.getExpiration();
+             long re = r.getExpiration();
+             if (le < 0)
+                 le = 0;
+             if (re < 0)
+                 re = 0;
+             if (le < re)
+                 return 1;
+             if (le > re)
+                 return -1;
+             return 0;
         }
     }
 
@@ -226,9 +290,11 @@ class TunnelRenderer {
              long le = l.getExpiration();
              long re = r.getExpiration();
              if (le < re)
-                 return -1;
-             if (le > re)
+//                 return -1;
                  return 1;
+             if (le > re)
+//                 return 1;
+                 return -1;
              return 0;
         }
     }
@@ -292,19 +358,21 @@ class TunnelRenderer {
             if (length > maxLength)
                 maxLength = length;
         }
-        out.write("<table class=\"tunneldisplay tunnels_client\"><tr><th title=\"" + _t("Inbound or outbound?") + ("\">") + _t("In/Out")
-                  + "</th><th>" + _t("Expiration") + "</th><th>" + _t("Usage") + "</th><th>" + _t("Gateway") + "</th>");
-        if (maxLength > 3) {
+        if (tunnels.size() != 0) {
+            out.write("<table class=\"tunneldisplay tunnels_client\"><tr><th title=\"" + _t("Inbound or outbound?") + ("\">") + _t("In/Out") +
+                      "</th><th>" + _t("Expiry") + "</th><th>" + _t("Usage") + "</th><th>" + _t("Gateway") + "</th>");
+            if (maxLength > 3) {
             out.write("<th align=\"center\" colspan=\"" + (maxLength - 2));
             out.write("\">" + _t("Participants") + "</th>");
+            }
+            else if (maxLength == 3) {
+                out.write("<th>" + _t("Participant") + "</th>");
+            }
+            if (maxLength > 1) {
+                out.write("<th>" + _t("Endpoint") + "</th>");
+            }
+            out.write("</tr>\n");
         }
-        else if (maxLength == 3) {
-            out.write("<th>" + _t("Participant") + "</th>");
-        }
-        if (maxLength > 1) {
-            out.write("<th>" + _t("Endpoint") + "</th>");
-        }
-        out.write("</tr>\n");
         final String tib = _t("Inbound");
         final String tob = _t("Outbound");
         for (int i = 0; i < tunnels.size(); i++) {
@@ -318,63 +386,81 @@ class TunnelRenderer {
                 out.write("<tr><td class=\"cells\" align=\"center\"><img src=\"/themes/console/images/inbound.png\" alt=\"" + tib + "\" title=\"" +
                           tib + "\"></td>");
             else
-                out.write("<tr><td class=\"cells\" align=\"center\"><img src=\"/themes/console/images/outbound.png\" alt=\"" + tob + "\" title=\"" +
-                          tob + "\"></td>");
+                out.write("<tr><td class=\"cells\" align=\"center\"><img src=\"/themes/console/images/outbound.png\" alt=\"" + tob + "\" title=\"" + tob + "\"></td>");
             out.write("<td class=\"cells\" align=\"center\">" + DataHelper.formatDuration2(timeLeft) + "</td>\n");
             int count = info.getProcessedMessagesCount() * 1024 / 1000;
-            out.write("<td class=\"cells\" align=\"center\">" + count + " KB</td>\n");
+            out.write("<td class=\"cells\" align=\"center\">");
+            if (count > 0)
+                out.write(count + " KB");
+            out.write("</td>\n");
             int length = info.getLength();
+            boolean debug = _context.getBooleanProperty(HelperBase.PROP_ADVANCED);
             for (int j = 0; j < length; j++) {
                 Hash peer = info.getPeer(j);
-                TunnelId id = (isInbound ? info.getReceiveTunnelId(j) : info.getSendTunnelId(j));
+                TunnelId id = (info.isInbound() ? info.getReceiveTunnelId(j) : info.getSendTunnelId(j));
+                    char cap = getCapacity(peer);
                 if (_context.routerHash().equals(peer)) {
                     if (length < maxLength && length == 1 && isInbound) {
                         // pad before inbound zero hop
                         for (int k = 1; k < maxLength; k++) {
-                            out.write("<td class=\"cells\" align=\"center\">&nbsp;</td>");
+                            out.write("<td class=\"cells\" align=\"center\"></td>");
                         }
                     }
                     // Add empty content placeholders to force alignment.
                     out.write(" <td class=\"cells\" align=\"center\"><span class=\"tunnel_peer tunnel_local\" title=\"" +
-                              _t("Locally hosted tunnel") + "\">" + _t("Local") + "</span>&nbsp;<span class=\"tunnel_id\" title=\"" +
-                              _t("Tunnel identity") + "\">" + (id == null ? "" : "" + id) +
-                              "</span><b class=\"tunnel_cap\" title=\"" + _t("Bandwidth tier") + "\"></b></td>");
+                              _t("Locally hosted tunnel") + "\">" + _t("Local") + "</span>&nbsp;" +
+                              "<b class=\"tunnel_cap\" title=\"" + _t("Bandwidth tier") + "\">" + cap + "</b>");
+                    if (debug) {
+                        out.write("<span class=\"tunnel_id\" title=\"" + _t("Tunnel identity") + "\">" +
+                                  (id == null ? "" : "" + id) + "</span>");
+                    }
+                    out.write("</td>");
                 } else {
-                    char cap = getCapacity(peer);
                     out.write(" <td class=\"cells\" align=\"center\"><span class=\"tunnel_peer\">" + netDbLink(peer) +
-                              "</span>&nbsp;<span class=\"nowrap\"><span class=\"tunnel_id\" title=\"" + _t("Tunnel identity") + "\">" +
-                              (id == null ? "" : " " + id) + "</span><b class=\"tunnel_cap\" title=\"" + _t("Bandwidth tier") + "\">" +
-                              cap + "</b></span></td>");
+                              "</span>&nbsp;<b class=\"tunnel_cap\" title=\"" + _t("Bandwidth tier") + "\">" + cap + "</b>");
+                    if (debug) {
+                        out.write("<span class=\"tunnel_id\" title=\"" + _t("Tunnel identity") + "\">" +
+                                  (id == null ? "" : " " + id) + "</span>");
+                    }
+                    out.write("</td>");
                 }
                 if (length < maxLength && ((length == 1 && !isInbound) || j == length - 2)) {
                     // pad out outbound zero hop; non-zero-hop pads in middle
                     for (int k = length; k < maxLength; k++) {
-                        out.write("<td class=\"cells\" align=\"center\">&nbsp;</td>");
+                        out.write("<td class=\"cells\" align=\"center\"></td>");
                     }
                 }
             }
             out.write("</tr>\n");
 
-            if (info.isInbound()) 
+            if (info.isInbound())
                 processedIn += count;
             else
                 processedOut += count;
         }
         out.write("</table>\n");
-        if (in != null) {
-            // PooledTunnelCreatorConfig
-            List<?> pending = in.listPending();
-            if (!pending.isEmpty()) {
-                out.write("<div class=\"statusnotes\"><center><b>" + _t("Build in progress") + ":&nbsp;&nbsp;" + pending.size() + " " + tib + "</b></center></div>\n");
-                live += pending.size();
-            }
-        }
-        if (outPool != null) {
-            // PooledTunnelCreatorConfig
-            List<?> pending = outPool.listPending();
-            if (!pending.isEmpty()) {
-                out.write("<div class=\"statusnotes\"><center><b>" + _t("Build in progress") + ":&nbsp;&nbsp;" + pending.size() + " " + tob + "</b></center></div>\n");
-                live += pending.size();
+        if (live > 0 && ((in != null || (outPool != null)))) {
+            List<?> pendingIn = in.listPending();
+            List<?> pendingOut = outPool.listPending();
+            if ((!pendingIn.isEmpty()) || (!pendingOut.isEmpty())) {
+                out.write("<div class=\"statusnotes\"><center><b>" + _t("Build in progress") + ":&nbsp;");
+                if (in != null) {
+                    // PooledTunnelCreatorConfig
+//                    List<?> pending = in.listPending();
+                    if (!pendingIn.isEmpty()) {
+                        out.write("&nbsp;<span class=\"pending\">" + pendingIn.size() + " " + tib + "</span>&nbsp;");
+                        live += pendingIn.size();
+                    }
+                }
+                if (outPool != null) {
+                    // PooledTunnelCreatorConfig
+//                    List<?> pending = outPool.listPending();
+                    if (!pendingOut.isEmpty()) {
+                        out.write("&nbsp;<span class=\"pending\">" + pendingOut.size() + " " + tob + "</span>&nbsp;");
+                        live += pendingOut.size();
+                    }
+                }
+                out.write("</b></center></div>\n");
             }
         }
         if (live <= 0)
@@ -384,8 +470,8 @@ class TunnelRenderer {
                   DataHelper.formatSize2Decimal(processedOut*1024) + "B " + _t("out") + "</b></center></div>");
     }
 
-/****
-    private void renderPeers(Writer out) throws IOException {
+
+    public void renderPeers(Writer out) throws IOException {
         // count up the peers in the local pools
         ObjectCounter<Hash> lc = new ObjectCounter();
         int tunnelCount = countTunnelsPerPeer(lc);
@@ -397,36 +483,78 @@ class TunnelRenderer {
         Set<Hash> peers = new HashSet(lc.objects());
         peers.addAll(pc.objects());
         List<Hash> peerList = new ArrayList(peers);
+        int peerCount = peerList.size();
         Collections.sort(peerList, new CountryComparator(this._context.commSystem()));
 
-        out.write("<h2><a name=\"peers\"></a>" + _t("Tunnel Counts By Peer") + "</h2>\n");
-        out.write("<table><tr><th>" + _t("Peer") + "</th><th>" + _t("Our Tunnels") + "</th><th>" + _t("% of total") + "</th><th>" + _t("Participating Tunnels") + "</th><th>" + _t("% of total") + "</th></tr>\n");
+        List<HopConfig> participating = _context.tunnelDispatcher().listParticipatingTunnels();
+
+        out.write("<h3 class=\"tabletitle\" id=\"peercount\">" + _t("Tunnel Count By Peer") +
+                  "&nbsp;&nbsp;<a style=\"float: right;\" href=\"/tunnelpeercount\"><img src=\"/themes/console/images/buttons/update.png\"></a></h3>\n");
+        out.write("<table id=\"tunnelPeerCount\" data-sortable>");
+        out.write("<thead>\n<tr><th>" + _t("Peer") + "</th><th title=\"Client and Exploratory Tunnels\">" + _t("Local Tunnels") + "</th><th>" + _t("% of total") + "</th>");
+        if (!participating.isEmpty())
+            out.write("<th>" + _t("Participating") + "</th><th>" + _t("% of total") + "</th>");
+        out.write("</tr>\n</thead>\n");
         for (Hash h : peerList) {
-             out.write("<tr> <td class=\"cells\" align=\"center\">");
-             out.write(netDbLink(h));
-             out.write(" <td class=\"cells\" align=\"center\">" + lc.count(h));
-             out.write(" <td class=\"cells\" align=\"center\">");
-             if (tunnelCount > 0)
-                 out.write("" + (lc.count(h) * 100 / tunnelCount));
-             else
-                 out.write('0');
-             out.write(" <td class=\"cells\" align=\"center\">" + pc.count(h));
-             out.write(" <td class=\"cells\" align=\"center\">");
-             if (partCount > 0)
-                 out.write("" + (pc.count(h) * 100 / partCount));
-             else
-                 out.write('0');
-             out.write('\n');
+            char cap = getCapacity(h);
+            RouterInfo info = _context.netDb().lookupRouterInfoLocally(h);
+            String v = info != null ? info.getOption("router.version") : null;
+            out.write("<tr><td class=\"cells\" align=\"center\">");
+            out.write(netDbLink(h) + "<b class=\"tunnel_cap\" title=\"" + _t("Bandwidth tier") + "\">" + cap + "</b>");
+            if (v != null)
+                out.write("<span class=\"version\" title=\"" + _t("Show all routers with this version in the NetDb") +
+                          "\"><a href=\"/netdb?v=" + DataHelper.stripHTML(v) + "\">" + DataHelper.stripHTML(v) +
+                          "</a></span>");
+            out.write("</td><td class=\"cells\" align=\"center\">");
+            if (lc.count(h) > 0)
+                out.write("" + lc.count(h));
+//            else
+//                out.write("–");
+            out.write("</td><td class=\"cells\" align=\"center\">");
+            if (lc.count(h) > 0) {
+                out.write("<span class=\"percentBarOuter\"><span class=\"percentBarInner\" style=\"width:");
+                out.write("" + (lc.count(h) * 100) / tunnelCount);
+                out.write("%\"><span class=\"percentBarText\">");
+                out.write("" + (lc.count(h) * 100) / tunnelCount);
+                out.write("%</span></span></span>");
+//            } else {
+//                out.write("–");
+            }
+            if (!participating.isEmpty()) {
+                out.write("</td><td class=\"cells\" align=\"center\">");
+                if (pc.count(h) > 0)
+                    out.write("" + pc.count(h));
+//                else
+//                    out.write("–");
+                out.write("</td><td class=\"cells\" align=\"center\">");
+                if (pc.count(h) > 0) {
+                    out.write("<span class=\"percentBarOuter\"><span class=\"percentBarInner\" style=\"width:");
+                    out.write("" + (pc.count(h) * 100) / partCount);
+                    out.write("%\"><span class=\"percentBarText\">");
+                    out.write("" + (pc.count(h) * 100) / partCount);
+                    out.write("%</span></span></span>");
+//                } else {
+//                    out.write("–");
+                }
+                out.write("</td>");
+            } else {
+                out.write("</td>");
+            }
+            out.write("</tr>\n");
         }
-        out.write("<tr class=\"tablefooter\"> <td align=\"center\"><b>" + _t("Totals") + "</b> <td align=\"center\"><b>" + tunnelCount);
-        out.write("</b> <td>&nbsp;</td> <td align=\"center\"><b>" + partCount);
-        out.write("</b> <td>&nbsp;</td></tr></table></div>\n");
+        out.write("<tr class=\"tablefooter\" data-sort-method=\"none\"><td align=\"center\" data-sort-method=\"none\"><b>" + peerCount + ' ' + _t("unique peers") +
+                  "</b></td><td align=\"center\" data-sort-method=\"none\"><b>" + tunnelCount + ' ' + _t("local tunnels") +
+                  "</b></td><td data-sort-method=\"none\"></td>");
+        if (!participating.isEmpty())
+            out.write("<td align=\"center\" data-sort-method=\"none\"><b>" + partCount + ' ' + _t("participating tunnels") +
+                      "</b></td><td data-sort-method=\"none\"></td>");
+        out.write("</tr>\n</table>\n</div>\n");
     }
-****/
+
 
     /* duplicate of that in tunnelPoolManager for now */
     /** @return total number of non-fallback expl. + client tunnels */
-/****
+
     private int countTunnelsPerPeer(ObjectCounter<Hash> lc) {
         List<TunnelPool> pools = new ArrayList();
         _context.tunnelManager().listPools(pools);
@@ -445,10 +573,10 @@ class TunnelRenderer {
         }
         return tunnelCount;
     }
-****/
+
 
     /** @return total number of part. tunnels */
-/****
+
     private int countParticipatingPerPeer(ObjectCounter<Hash> pc) {
         List<HopConfig> participating = _context.tunnelDispatcher().listParticipatingTunnels();
         for (HopConfig cfg : participating) {
@@ -481,9 +609,9 @@ class TunnelRenderer {
 
         private CommSystemFacade comm;
     }
-****/
 
-    /** @return cap char or ' ' */
+
+    /** @return cap char or '?' */
     private char getCapacity(Hash peer) {
         RouterInfo info = _context.netDb().lookupRouterInfoLocally(peer);
         if (info != null) {
@@ -494,7 +622,7 @@ class TunnelRenderer {
                     return c;
             }
         }
-        return ' ';
+        return '?';
     }
 
     private String netDbLink(Hash peer) {

@@ -52,7 +52,7 @@ import net.i2p.data.DataHelper;
 public class Folder<O extends Object> {
 	
 	public static final String PAGESIZE = "pager.pagesize";
-	public static final int DEFAULT_PAGESIZE = 10;
+	public static final int DEFAULT_PAGESIZE = 30;
 
 	public enum SortOrder {
 		/** lowest to highest */

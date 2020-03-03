@@ -1,9 +1,9 @@
 package net.i2p.i2ptunnel;
 /*
  * free (adj.): unencumbered; not under the control of others
- * Written by jrandom in 2005 and released into the public domain 
- * with no warranty of any kind, either expressed or implied.  
- * It probably won't make your computer catch on fire, or eat 
+ * Written by jrandom in 2005 and released into the public domain
+ * with no warranty of any kind, either expressed or implied.
+ * It probably won't make your computer catch on fire, or eat
  * your children, but it might.  Use at your own risk.
  *
  */
@@ -44,11 +44,12 @@ class HTTPResponseOutputStream extends FilterOutputStream {
     /** lower-case, trimmed */
     protected String _contentEncoding;
 
-    private static final int CACHE_SIZE = 8*1024;
+//    private static final int CACHE_SIZE = 8*1024;
+    private static final int CACHE_SIZE = 16*1024;
     private static final ByteCache _cache = ByteCache.getInstance(8, CACHE_SIZE);
     // OOM DOS prevention
     private static final int MAX_HEADER_SIZE = 64*1024;
-    
+
     public HTTPResponseOutputStream(OutputStream raw) {
         super(raw);
         _context = I2PAppContext.getGlobalContext();
@@ -65,8 +66,8 @@ class HTTPResponseOutputStream extends FilterOutputStream {
     }
 
     @Override
-    public void write(byte buf[]) throws IOException { 
-        write(buf, 0, buf.length); 
+    public void write(byte buf[]) throws IOException {
+        write(buf, 0, buf.length);
     }
 
     @Override
@@ -94,7 +95,7 @@ class HTTPResponseOutputStream extends FilterOutputStream {
             }
         }
     }
-    
+
     /**
      *  grow (and free) the buffer as necessary
      *  @throws IOException if the headers are too big
@@ -114,7 +115,7 @@ class HTTPResponseOutputStream extends FilterOutputStream {
             _headerBuffer = newBuf;
         }
     }
-    
+
     /** are the headers finished? */
     private boolean headerReceived() {
         if (_headerBuffer.getValid() < 3) return false;
@@ -124,7 +125,7 @@ class HTTPResponseOutputStream extends FilterOutputStream {
         return (isNL(second) && isNL(third)) || //   \n\n
                (isNL(first) && isNL(third));    // \n\r\n
     }
-    
+
     /**
      * Possibly tweak that first HTTP response line (HTTP/1.0 200 OK, etc).
      * Overridden on server side.
@@ -133,18 +134,18 @@ class HTTPResponseOutputStream extends FilterOutputStream {
     protected String filterResponseLine(String line) {
         return line;
     }
-    
+
     /** we ignore any potential \r, since we trim it on write anyway */
     private static final byte NL = '\n';
     private static boolean isNL(byte b) { return (b == NL); }
-    
+
     /** ok, received, now munge & write it */
     private void writeHeader() throws IOException {
         String responseLine = null;
 
         boolean connectionSent = false;
         boolean proxyConnectionSent = false;
-        
+
         int lastEnd = -1;
         for (int i = 0; i < _headerBuffer.getValid(); i++) {
             if (isNL(_headerBuffer.getData()[i])) {
@@ -168,10 +169,10 @@ class HTTPResponseOutputStream extends FilterOutputStream {
                                 val = "";
                             else
                                 val = DataHelper.getUTF8(_headerBuffer.getData(), j+2, valLen).trim();
-                            
+
                             if (_log.shouldLog(Log.INFO))
-                                _log.info("Response header [" + key + "] = [" + val + "]");
-                            
+                                _log.info("Response header sent\n* " + key + ": " + val);
+
                             String lcKey = key.toLowerCase(Locale.US);
                             if ("connection".equals(lcKey)) {
                                 if (val.toLowerCase(Locale.US).contains("upgrade")) {
@@ -224,18 +225,18 @@ class HTTPResponseOutputStream extends FilterOutputStream {
                 lastEnd = i;
             }
         }
-        
+
         if (!connectionSent)
             out.write(DataHelper.getASCII("Connection: close\r\n"));
         if (!proxyConnectionSent)
             out.write(DataHelper.getASCII("Proxy-Connection: close\r\n"));
-            
+
         finishHeaders();
 
         boolean shouldCompress = shouldCompress();
         if (_log.shouldLog(Log.INFO))
             _log.info("After headers: gzip? " + _gzip + " compress? " + shouldCompress);
-        
+
         // done, shove off
         if (_headerBuffer.getData().length == CACHE_SIZE)
             _cache.release(_headerBuffer);
@@ -245,23 +246,24 @@ class HTTPResponseOutputStream extends FilterOutputStream {
             beginProcessing();
         }
     }
-    
+
     protected boolean shouldCompress() { return _gzip; }
-    
+
     protected void finishHeaders() throws IOException {
         out.write(DataHelper.getASCII("\r\n")); // end of the headers
     }
-    
+
     @Override
     public void close() throws IOException {
         if (_log.shouldLog(Log.INFO))
-            _log.info("Closing " + out + " threaded?? " + shouldCompress(), new Exception("I did it"));
+//            _log.info("Closing " + out + " Threaded? " + shouldCompress(), new Exception("I did it"));
+            _log.info("Closing " + out + " Threaded? " + shouldCompress());
         synchronized(this) {
             // synch with changing out field below
             super.close();
         }
     }
-    
+
     protected void beginProcessing() throws IOException {
         //out.flush();
         OutputStream po = new GunzipOutputStream(out);
@@ -319,7 +321,7 @@ class HTTPResponseOutputStream extends FilterOutputStream {
         String blankval = "HTTP/1.0 200 OK\n" +
                           "A:\n" +
                           "\n";
-        
+
         test("Simple", simple, true);
         test("Filtered", filtered, true);
         test("Filtered windows", winfilter, true);
@@ -335,7 +337,7 @@ class HTTPResponseOutputStream extends FilterOutputStream {
         test("Invalid (bad headers2)", invalid6, false);
         test("Invalid (bad headers3)", invalid7, false);
     }
-    
+
     private static void test(String name, String orig, boolean shouldPass) {
         System.out.println("====Testing: " + name + "\n" + orig + "\n------------");
         try {

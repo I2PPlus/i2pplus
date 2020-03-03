@@ -1,7 +1,9 @@
 package net.i2p.router.tunnel;
 
+//import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.List;
+//import java.util.Locale;
 import java.util.Properties;
 
 import net.i2p.data.Base64;
@@ -11,7 +13,7 @@ import net.i2p.router.RouterContext;
 import net.i2p.router.TunnelInfo;
 
 /**
- * Coordinate the info that the tunnel creator keeps track of, including what 
+ * Coordinate the info that the tunnel creator keeps track of, including what
  * peers are in the tunnel and what their configuration is
  *
  * See PooledTunnelCreatorConfig for the non-abstract class
@@ -41,8 +43,9 @@ public abstract class TunnelCreatorConfig implements TunnelInfo {
     private long _peakThroughputLastCoallesce = System.currentTimeMillis();
     // Make configurable? - but can't easily get to pool options from here
     private static final int MAX_CONSECUTIVE_TEST_FAILURES = 3;
-    
-    /** 
+//    private static final SimpleDateFormat _fmt = new SimpleDateFormat("HH:mm:ss", Locale.UK);
+
+    /**
      * For exploratory only (null destination)
      * @param length 1 minimum (0 hop is length 1)
      */
@@ -50,7 +53,7 @@ public abstract class TunnelCreatorConfig implements TunnelInfo {
         this(ctx, length, isInbound, null);
     }
 
-    /** 
+    /**
      * @param length 1 minimum (0 hop is length 1)
      * @param destination null for exploratory
      */
@@ -66,38 +69,38 @@ public abstract class TunnelCreatorConfig implements TunnelInfo {
         _isInbound = isInbound;
         _destination = destination;
     }
-    
+
     /**
      *  How many hops are there in the tunnel?
      *  INCLUDING US.
      *  i.e. one more than the TunnelCreatorConfig length.
      */
     public int getLength() { return _config.length; }
-    
+
     public Properties getOptions() { return null; }
-    
-    /** 
+
+    /**
      * retrieve the config for the given hop.  the gateway is
      * hop 0.
      */
     public HopConfig getConfig(int hop) { return _config[hop]; }
     /**
-     * retrieve the tunnelId that the given hop receives messages on.  
+     * retrieve the tunnelId that the given hop receives messages on.
      * the gateway is hop 0.
      *
      */
     public TunnelId getReceiveTunnelId(int hop) { return _config[hop].getReceiveTunnel(); }
     /**
-     * retrieve the tunnelId that the given hop sends messages on.  
+     * retrieve the tunnelId that the given hop sends messages on.
      * the gateway is hop 0.
      *
      */
     public TunnelId getSendTunnelId(int hop) { return _config[hop].getSendTunnel(); }
-    
+
     /** retrieve the peer at the given hop.  the gateway is hop 0 */
     public Hash getPeer(int hop) { return _peers[hop]; }
     public void setPeer(int hop, Hash peer) { _peers[hop] = peer; }
-    
+
     /**
      *  For convenience
      *  @return getPeer(0)
@@ -133,17 +136,17 @@ public abstract class TunnelCreatorConfig implements TunnelInfo {
      *  @return null for exploratory
      */
     public Hash getDestination() { return _destination; }
-    
+
     public long getExpiration() { return _expiration; }
     public void setExpiration(long when) { _expiration = when; }
-    
+
     /** component ordering in the new style request */
     public List<Integer> getReplyOrder() { return _order; }
     public void setReplyOrder(List<Integer> order) { _order = order; }
     /** new style reply message id */
     public long getReplyMessageId() { return _replyMessageId; }
     public void setReplyMessageId(long id) { _replyMessageId = id; }
-    
+
     /** take note of a message being pumped through this tunnel */
     public synchronized void incrementProcessedMessages() { _messagesProcessed++; }
     public synchronized int getProcessedMessagesCount() { return _messagesProcessed; }
@@ -151,8 +154,8 @@ public abstract class TunnelCreatorConfig implements TunnelInfo {
     /**
      *  This calls profile manager tunnelDataPushed1m() for each peer
      */
-    public synchronized void incrementVerifiedBytesTransferred(int bytes) { 
-        _verifiedBytesTransferred += bytes; 
+    public synchronized void incrementVerifiedBytesTransferred(int bytes) {
+        _verifiedBytesTransferred += bytes;
         _peakThroughputCurrentTotal += bytes;
         long now = System.currentTimeMillis();
         long timeSince = now - _peakThroughputLastCoallesce;
@@ -175,7 +178,7 @@ public abstract class TunnelCreatorConfig implements TunnelInfo {
     public synchronized long getVerifiedBytesTransferred() { return _verifiedBytesTransferred; }
 
 /**** unused
-    public synchronized double getPeakThroughputKBps() { 
+    public synchronized double getPeakThroughputKBps() {
         double rv = 0;
         for (int i = 0; i < THROUGHPUT_COUNT; i++)
             rv += _peakThroughput[i];
@@ -189,7 +192,7 @@ public abstract class TunnelCreatorConfig implements TunnelInfo {
         //    _peakThroughput[i] = kBps*60;
     }
 ****/
-    
+
     /**
      * The tunnel failed a test, so (maybe) stop using it
      */
@@ -204,12 +207,12 @@ public abstract class TunnelCreatorConfig implements TunnelInfo {
     }
     public boolean getTunnelFailed() { return _failed; }
     public int getTunnelFailures() { return _failures; }
-    
+
     public void testSuccessful(int ms) {
         if (!_failed)
             _failures = 0;
     }
-    
+
     /**
      *  Did we reuse this tunnel?
      *  @since 0.8.11
@@ -238,42 +241,46 @@ public abstract class TunnelCreatorConfig implements TunnelInfo {
 
     @Override
     public String toString() {
-        // H0:1235-->H1:2345-->H2:2345
+        // H0:1235 -> H1:2345 -> H2:2345
         StringBuilder buf = new StringBuilder(128);
+        buf.append("\n* ");
         if (_isInbound)
-            buf.append("IB");
+            buf.append("Inbound");
         else
-            buf.append("OB");
+            buf.append("Outbound");
         if (_destination == null)
-            buf.append(" expl");
+            buf.append(" Exploratory tunnel");
         else
-            buf.append(" client ").append(Base64.encode(_destination.getData(), 0, 3));
-        buf.append(": GW ");
+            buf.append(" client tunnel [").append(Base64.encode(_destination.getData(), 0, 6)).append("]");
+        buf.append("\n* Gateway: ");
         for (int i = 0; i < _peers.length; i++) {
-            buf.append(_peers[i].toBase64().substring(0,4));
+            buf.append("[" + _peers[i].toBase64().substring(0,6) + "]");
             buf.append(':');
             if (_config[i].getReceiveTunnel() != null)
                 buf.append(_config[i].getReceiveTunnel());
             else
-                buf.append("me");
+                buf.append("local");
             if (_config[i].getSendTunnel() != null) {
                 buf.append('.');
                 buf.append(_config[i].getSendTunnel());
             } else if (_isInbound || i == 0) {
-                buf.append(".me");
+                buf.append(".local");
             }
             if (i + 1 < _peers.length)
-                buf.append("-->");
+                buf.append(" -> ");
         }
-        
-        buf.append(" exp. ").append(new Date(_expiration));
+
+        buf.append("\n* Expires: ").append(new Date(_expiration));
         if (_replyMessageId > 0)
-            buf.append(" replyMsgID ").append(_replyMessageId);
+            buf.append("; [ReplyMsgID ").append(_replyMessageId).append("]");
         if (_messagesProcessed > 0)
-            buf.append(" with ").append(_messagesProcessed).append("/").append(_verifiedBytesTransferred).append(" msgs/bytes");
-    
+            buf.append(" with ").append(_messagesProcessed).append(" messages (").append(_verifiedBytesTransferred).append(" bytes)");
+
         if (_failures > 0)
-            buf.append(" with ").append(_failures).append(" failures");
+            if (_failures == 1)
+                buf.append(" and ").append(_failures).append(" failure");
+            else
+                buf.append(" and ").append(_failures).append(" failures");
         return buf.toString();
     }
 }

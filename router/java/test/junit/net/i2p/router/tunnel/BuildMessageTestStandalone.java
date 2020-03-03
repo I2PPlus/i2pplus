@@ -24,7 +24,7 @@ import net.i2p.util.Log;
  * Simple test to create an encrypted TunnelBuildMessage, decrypt its layers (as it would be
  * during transmission), inject replies, then handle the TunnelBuildReplyMessage (unwrapping
  * the reply encryption and reading the replies).
- * 
+ *
  * ===
  * Update 1/5/2013 :
  * This test is renamed so it does not match the JUnit wildcard.
@@ -39,20 +39,20 @@ public class BuildMessageTestStandalone extends TestCase {
     private PublicKey _pubKeys[];
     private Hash _replyRouter;
     private long _replyTunnel;
-    
+
     public void testBuildMessage() {
         I2PAppContext ctx = I2PAppContext.getGlobalContext();
         Log log = ctx.logManager().getLog(getClass());
-        
+
         List<Integer> order = pickOrder();
-        
+
         TunnelCreatorConfig cfg = createConfig(ctx);
         _replyRouter = new Hash();
         byte h[] = new byte[Hash.HASH_LENGTH];
         Arrays.fill(h, (byte)0xFF);
         _replyRouter.setData(h);
         _replyTunnel = 42;
-        
+
         // populate and encrypt the message
         TunnelBuildMessage msg = new TunnelBuildMessage(ctx);
         for (int i = 0; i < order.size(); i++) {
@@ -63,14 +63,14 @@ public class BuildMessageTestStandalone extends TestCase {
             BuildMessageGenerator.createRecord(i, hop, msg, cfg, _replyRouter, _replyTunnel, ctx, key);
         }
         BuildMessageGenerator.layeredEncrypt(ctx, msg, cfg, order);
-        
+
         log.debug("\n================================================================" +
-                  "\nMessage fully encrypted" + 
+                  "\nMessage fully encrypted" +
                   "\n================================================================");
-        
+
         // now msg is fully encrypted, so lets go through the hops, decrypting and replying
         // as necessary
-        
+
         BuildMessageProcessor proc = new BuildMessageProcessor(ctx);
         for (int i = 0; i < cfg.getLength(); i++) {
             // this not only decrypts the current hop's record, but encrypts the other records
@@ -96,19 +96,19 @@ public class BuildMessageTestStandalone extends TestCase {
                     break;
                 }
             }
-            
-            log.debug("Read slot " + ourSlot + " containing hop " + i + " @ " + _peers[i].toBase64() 
-                      + " receives on " + ourId 
-                      + " w/ replyIV " + Base64.encode(replyIV) + " sending to " + nextId
+
+            log.debug("Read slot " + ourSlot + " containing hop " + i + " @ " + _peers[i].toBase64()
+                      + " receives on " + ourId
+                      + " with replyIV " + Base64.encode(replyIV) + " sending to " + nextId
                       + " on " + nextPeer.toBase64()
                       + " inGW? " + isInGW + " outEnd? " + isOutEnd + " time difference " + (now-time));
         }
-        
-        
+
+
         log.debug("\n================================================================" +
                   "\nAll hops traversed and replies gathered" +
                   "\n================================================================");
-        
+
         // now all of the replies are populated, toss 'em into a reply message and handle it
         TunnelBuildReplyMessage reply = new TunnelBuildReplyMessage(ctx);
         for (int i = 0; i < TunnelBuildMessage.MAX_RECORD_COUNT; i++)
@@ -123,14 +123,14 @@ public class BuildMessageTestStandalone extends TestCase {
             if (statuses[record] != 0)
                 allAgree = false;
             //else
-            //    penalize peer according to the rejection cause    
+            //    penalize peer according to the rejection cause
         }
-        
+
         log.debug("\n================================================================" +
-                  "\nAll peers agree? " + allAgree + 
+                  "\nAll peers agree? " + allAgree +
                   "\n================================================================");
     }
-    
+
     private static final List<Integer> pickOrder() {
         // pseudorandom, yet consistent (so we can be repeatable)
         List<Integer> rv = new ArrayList<Integer>(8);
@@ -144,7 +144,7 @@ public class BuildMessageTestStandalone extends TestCase {
         rv.add(new Integer(7));
         return rv;
     }
-    
+
     private TunnelCreatorConfig createConfig(I2PAppContext ctx) {
         return configOutbound(ctx);
     }
@@ -161,7 +161,7 @@ public class BuildMessageTestStandalone extends TestCase {
             _pubKeys[i] = (PublicKey)kp[0];
             _privKeys[i] = (PrivateKey)kp[1];
         }
-        
+
         TunnelCreatorConfig cfg = new TCConfig(null, _peers.length, false);
         long now = ctx.clock().now();
         // peers[] is ordered endpoint first, but cfg.getPeer() is ordered gateway first

@@ -2,17 +2,17 @@
    Copyright (C) 2003 Mark J. Wielaard
 
    This file is part of Snark.
-   
+
    This program is free software; you can redistribute it and/or modify
    it under the terms of the GNU General Public License as published by
    the Free Software Foundation; either version 2, or (at your option)
    any later version.
- 
+
    This program is distributed in the hope that it will be useful,
    but WITHOUT ANY WARRANTY; without even the implied warranty of
    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
    GNU General Public License for more details.
- 
+
    You should have received a copy of the GNU General Public License
    along with this program; if not, write to the Free Software Foundation,
    Inc., 59 Temple Place - Suite 330, Boston, MA 02111-1307, USA.
@@ -68,7 +68,7 @@ public class Peer implements Comparable<Peer>
   MagnetState magnetState;
 
   private I2PSocket sock;
-  
+
   private boolean deregister = true;
   private static final AtomicLong __id = new AtomicLong();
   private final long _id;
@@ -241,7 +241,7 @@ public class Peer implements Comparable<Peer>
       throw new IllegalStateException("Peer already started");
 
     if (_log.shouldLog(Log.DEBUG))
-        _log.debug("Running connection to " + peerID.toString(), new Exception("connecting"));    
+        _log.debug("Running connection to " + peerID.toString(), new Exception("connecting"));
     try
       {
         // Do we need to handshake?
@@ -274,7 +274,7 @@ public class Peer implements Comparable<Peer>
             if (_log.shouldLog(Log.DEBUG))
                 _log.debug("Already have din [" + sock + "] with " + toString());
           }
-        
+
         // bad idea?
         if (metainfo == null && (options & OPTION_EXTENSION) == 0) {
             if (_log.shouldLog(Log.INFO))
@@ -285,7 +285,7 @@ public class Peer implements Comparable<Peer>
         PeerConnectionIn in = new PeerConnectionIn(this, din);
         PeerConnectionOut out = new PeerConnectionOut(this, dout);
         PeerState s = new PeerState(this, listener, metainfo, in, out);
-        
+
         if ((options & OPTION_EXTENSION) != 0) {
             if (_log.shouldLog(Log.DEBUG))
                 _log.debug("Peer supports extensions, sending reply message");
@@ -299,12 +299,12 @@ public class Peer implements Comparable<Peer>
         // Send our bitmap
         if (bitfield != null)
           s.out.sendBitfield(bitfield);
-    
+
         // We are up and running!
         state = s;
         magnetState = mState;
         listener.connected(this);
-  
+
         if (_log.shouldLog(Log.DEBUG))
             _log.debug("Start running the reader with " + toString());
         // Use this thread for running the incoming connection.
@@ -342,7 +342,7 @@ public class Peer implements Comparable<Peer>
   {
     din = new DataInputStream(in);
     dout = new DataOutputStream(out);
-    
+
     // Handshake write - header
     dout.write(HANDSHAKE.length);
     dout.write(HANDSHAKE);
@@ -360,25 +360,25 @@ public class Peer implements Comparable<Peer>
     // Handshake write - peer id
     dout.write(my_id);
     dout.flush();
-    
+
     if (_log.shouldLog(Log.DEBUG))
-        _log.debug("Wrote my shared hash and ID to " + toString());
-    
+        _log.debug("Wrote our shared hash and ID to [" + toString() + "]");
+
     // Handshake read - header
     byte b = din.readByte();
     if (b != HANDSHAKE.length)
       throw new IOException("Handshake failure, expected 19, got "
                             + (b & 0xff) + " on " + sock);
-    
+
     byte[] bs = new byte[HANDSHAKE.length];
     din.readFully(bs);
     if (!Arrays.equals(HANDSHAKE, bs))
       throw new IOException("Handshake failure, expected "
                             + "'BitTorrent protocol'");
-    
+
     // Handshake read - options
     options = din.readLong();
-    
+
     // Handshake read - metainfo hash
     bs = new byte[20];
     din.readFully(bs);
@@ -505,8 +505,8 @@ public class Peer implements Comparable<Peer>
     sock = null;
     if ( (csock != null) && (!csock.isClosed()) ) {
         try {
-            csock.close(); 
-        } catch (IOException ioe) { 
+            csock.close();
+        } catch (IOException ioe) {
             _log.warn("Error disconnecting " + toString(), ioe);
         }
     }
@@ -668,7 +668,7 @@ public class Peer implements Comparable<Peer>
       downloaded.set(0);
       uploaded.set(0);
   }
-  
+
   public long getInactiveTime() {
       PeerState s = state;
       if (s != null) {
@@ -683,7 +683,7 @@ public class Peer implements Comparable<Peer>
           return -1; //"no state";
       }
   }
-  
+
   /** @since 0.9.36 */
   public long getMaxInactiveTime() {
       return isCompleted() && !isInteresting() ?

@@ -81,9 +81,9 @@ public class CoDelPriorityBlockingQueue<E extends CDPQEntry> extends PriBlocking
         STAT_DROP = ("codel." + name + ".drop.").intern();
         STAT_DELAY = ("codel." + name + ".delay").intern();
         for (int i = 0; i < PRIORITIES.length; i++) {
-            ctx.statManager().createRateStat(STAT_DROP + PRIORITIES[i], "queue delay of dropped items by priority", "Router", RATES);
+            ctx.statManager().createRateStat(STAT_DROP + PRIORITIES[i], "Queue delay of dropped items by priority [" + PRIORITIES[i] + "]", "Router [CoDel]", RATES);
         }
-        ctx.statManager().createRateStat(STAT_DELAY, "average queue delay", "Router", RATES);
+        ctx.statManager().createRateStat(STAT_DELAY, "Average queue delay", "Router [CoDel]", RATES);
         _id = __id.incrementAndGet();
     }
 
@@ -287,7 +287,7 @@ public class CoDelPriorityBlockingQueue<E extends CDPQEntry> extends PriBlocking
         int priority = entry.getPriority() / 100 * 100;
         _context.statManager().addRateData(STAT_DROP + priority, delay);
         if (_log.shouldLog(Log.WARN))
-            _log.warn("CDPQ #" + _id + ' ' + _name + " dropped item with delay " + delay + ", priority " +
+            _log.warn("[CDPQ " + _id + "] " + _name + " dropped item with delay " + delay + ", priority " +
                       entry.getPriority() + ", seq " +
                       entry.getSeqNum() + ", " +
                       DataHelper.formatDuration(_context.clock().now() - _first_above_time) + " since first above, " +

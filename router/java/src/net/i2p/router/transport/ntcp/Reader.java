@@ -13,7 +13,7 @@ import net.i2p.util.I2PThread;
 import net.i2p.util.Log;
 
 /**
- * Pool of running threads which will process any read bytes on any of the 
+ * Pool of running threads which will process any read bytes on any of the
  * NTCPConnections, including the decryption of the data read, connection
  * handshaking, parsing bytes into I2NP messages, etc.
  *
@@ -26,7 +26,7 @@ class Reader {
     private final Set<NTCPConnection> _liveReads;
     private final Set<NTCPConnection> _readAfterLive;
     private final List<Runner> _runners;
-    
+
     public Reader(RouterContext ctx) {
         _context = ctx;
         _log = ctx.logManager().getLog(getClass());
@@ -35,7 +35,7 @@ class Reader {
         _liveReads = new HashSet<NTCPConnection>(8);
         _readAfterLive = new HashSet<NTCPConnection>(8);
     }
-    
+
     public synchronized void startReading(int numReaders) {
         for (int i = 1; i <= numReaders; i++) {
             Runner r = new Runner();
@@ -55,7 +55,7 @@ class Reader {
             _pendingConnections.notifyAll();
         }
     }
-    
+
     public void wantsRead(NTCPConnection con) {
         boolean already = false;
         synchronized (_pendingConnections) {
@@ -79,7 +79,7 @@ class Reader {
             _pendingConnections.notify();
         }
     }
-    
+
     private class Runner implements Runnable {
         private volatile boolean _stop;
 
@@ -114,24 +114,24 @@ class Reader {
                 } catch (InterruptedException ie) {}
                 if (!_stop && (con != null) ) {
                     if (_log.shouldLog(Log.DEBUG))
-                        _log.debug("begin read for " + con);
+                        _log.debug("Begin read for " + con);
                     try {
                         processRead(con);
                     } catch (IllegalStateException ise) {
                         // FailedEstablishState.receive() (race - see below)
                         if (_log.shouldWarn())
-                            _log.warn("Error in the ntcp reader", ise);
+                            _log.warn("Error in the NTCP Reader", ise);
                     } catch (RuntimeException re) {
-                        _log.log(Log.CRIT, "Error in the ntcp reader", re);
+                        _log.log(Log.CRIT, "Error in the NTCP Reader", re);
                     }
                     if (_log.shouldLog(Log.DEBUG))
-                        _log.debug("end read for " + con);
+                        _log.debug("End read for " + con);
                 }
             }
-            if (_log.shouldLog(Log.INFO)) _log.info("Stopping reader");
+            if (_log.shouldLog(Log.INFO)) _log.info("Stopping NTCP Reader...");
         }
     }
-    
+
     /**
      * Process everything read.
      * Return read buffers back to the pool as we process them.
@@ -148,10 +148,10 @@ class Reader {
             if ((buf = con.getNextReadBuf()) == null)
                 return;
             EstablishState est = con.getEstablishState();
-            
+
             if (est.isComplete()) {
                 // why is it complete yet !con.isEstablished?
-                _log.error("establishment state [" + est + "] is complete, yet the connection isn't established? " 
+                _log.error("establishment state [" + est + "] is complete, yet the connection isn't established? "
                         + con.isEstablished() + " (inbound? " + con.isInbound() + " " + con + ")");
                 EventPumper.releaseBuf(buf);
                 break;

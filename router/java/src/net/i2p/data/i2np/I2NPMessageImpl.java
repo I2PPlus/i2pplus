@@ -22,6 +22,8 @@ import net.i2p.data.Hash;
 import net.i2p.util.Log;
 import net.i2p.util.SimpleByteCache;
 
+import java.util.Date;
+
 /**
  * Defines the base message implementation.
  *
@@ -142,7 +144,7 @@ public abstract class I2NPMessageImpl extends DataStructureImpl implements I2NPM
 
         int sz = Math.min(size, maxLen - headerSize);
         byte[] calc = SimpleByteCache.acquire(Hash.HASH_LENGTH);
-        
+
         // Compare the checksum in data to the checksum of the data after the checksum
         _context.sha().calculateHash(data, cur + CHECKSUM_LENGTH, sz, calc, 0);
         boolean eq = DataHelper.eq(data, cur, calc, 0, CHECKSUM_LENGTH);
@@ -154,7 +156,7 @@ public abstract class I2NPMessageImpl extends DataStructureImpl implements I2NPM
 
         //long start = _context.clock().now();
         if (_log.shouldLog(Log.DEBUG))
-            _log.debug("Reading bytes: type = " + type + " / uniqueId : " + _uniqueId + " / expiration : " + _expiration);
+            _log.debug("Reading bytes: [Type " + type + "] [ID " + _uniqueId + "]\n* Expires: " + new Date(_expiration));
         readMessage(data, cur, sz, type);
         cur += sz;
         //long time = _context.clock().now() - start;
@@ -225,10 +227,10 @@ public abstract class I2NPMessageImpl extends DataStructureImpl implements I2NPM
         return data;
     }
 
-    /** 
+    /**
      * write the message to the buffer, returning the number of bytes written.
      * the data is formatted so as to be self contained, with the type, size,
-     * expiration, unique id, as well as a checksum bundled along.  
+     * expiration, unique id, as well as a checksum bundled along.
      * Full 16 byte header for NTCP 1.
      *
      * @return the length written
@@ -237,10 +239,10 @@ public abstract class I2NPMessageImpl extends DataStructureImpl implements I2NPM
         return toByteArray(buffer, 0);
     }
 
-    /** 
+    /**
      * Write the message to the buffer, returning the new offset (NOT the length).
      * the data is formatted so as to be self contained, with the type, size,
-     * expiration, unique id, as well as a checksum bundled along.  
+     * expiration, unique id, as well as a checksum bundled along.
      * Full 16 byte header for NTCP 1.
      *
      * @param off the offset to start writing at

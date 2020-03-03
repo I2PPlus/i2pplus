@@ -1,9 +1,9 @@
 package net.i2p.router.transport;
 /*
  * free (adj.): unencumbered; not under the control of others
- * Written by jrandom in 2003 and released into the public domain 
- * with no warranty of any kind, either expressed or implied.  
- * It probably won't make your computer catch on fire, or eat 
+ * Written by jrandom in 2003 and released into the public domain
+ * with no warranty of any kind, either expressed or implied.
+ * It probably won't make your computer catch on fire, or eat
  * your children, but it might.  Use at your own risk.
  *
  */
@@ -35,6 +35,8 @@ import net.i2p.util.SimpleTimer2;
 import net.i2p.util.SystemVersion;
 import net.i2p.util.Translate;
 
+import net.i2p.data.DataHelper; // required for requestURI
+
 public class CommSystemFacadeImpl extends CommSystemFacade {
     private final Log _log;
     private final RouterContext _context;
@@ -51,7 +53,7 @@ public class CommSystemFacadeImpl extends CommSystemFacade {
 
     private static final String BUNDLE_NAME = "net.i2p.router.web.messages";
     private static final String COUNTRY_BUNDLE_NAME = "net.i2p.router.countries.messages";
-    
+
     public CommSystemFacadeImpl(RouterContext context) {
         _context = context;
         _log = _context.logManager().getLog(CommSystemFacadeImpl.class);
@@ -60,7 +62,7 @@ public class CommSystemFacadeImpl extends CommSystemFacade {
         _geoIP = new GeoIP(_context);
         _manager = new TransportManager(_context);
     }
-    
+
     public synchronized void startup() {
         _log.info("Starting up the comm system");
         _manager.startListening();
@@ -68,7 +70,7 @@ public class CommSystemFacadeImpl extends CommSystemFacade {
         startNetMonitor();
         _wasStarted = true;
     }
-    
+
     /**
      *  Cannot be restarted after calling this. Use restart() for that.
      */
@@ -76,14 +78,14 @@ public class CommSystemFacadeImpl extends CommSystemFacade {
         _manager.shutdown();
         _geoIP.shutdown();
     }
-    
+
     public synchronized void restart() {
         if (!_wasStarted)
             startup();
         else
             _manager.restart();
     }
-    
+
     /**
      *  How many peers are we currently connected to, that we have
      *  sent a message to or received a message from in the last five minutes.
@@ -97,15 +99,15 @@ public class CommSystemFacadeImpl extends CommSystemFacade {
      *  Unused for anything, to be removed.
      */
     @Override
-    public int countActiveSendPeers() { return _manager.countActiveSendPeers(); } 
+    public int countActiveSendPeers() { return _manager.countActiveSendPeers(); }
 
     @Override
-    public boolean haveInboundCapacity(int pct) { return _manager.haveInboundCapacity(pct); } 
+    public boolean haveInboundCapacity(int pct) { return _manager.haveInboundCapacity(pct); }
     @Override
-    public boolean haveOutboundCapacity(int pct) { return _manager.haveOutboundCapacity(pct); } 
+    public boolean haveOutboundCapacity(int pct) { return _manager.haveOutboundCapacity(pct); }
     @Override
-    public boolean haveHighOutboundCapacity() { return _manager.haveHighOutboundCapacity(); } 
-    
+    public boolean haveHighOutboundCapacity() { return _manager.haveHighOutboundCapacity(); }
+
     /**
      * @param percentToInclude 1-100
      * @return Framed average clock skew of connected peers in milliseconds, or the clock offset if we cannot answer.
@@ -127,7 +129,7 @@ public class CommSystemFacadeImpl extends CommSystemFacade {
         // Going to calculate, sort them
         Collections.sort(skews);
         if (_log.shouldLog(Log.DEBUG))
-            _log.debug("Clock skews: " + skews);
+            _log.debug("Peer clock skews (ms): \n* " + skews);
         // Calculate frame size
         int frameSize = Math.max((skews.size() * percentToInclude / 100), 1);
         int first = (skews.size() / 2) - (frameSize / 2);
@@ -143,9 +145,9 @@ public class CommSystemFacadeImpl extends CommSystemFacade {
         // Calculate average
         return sum * 1000 / frameSize;
     }
-    
+
     /** Send the message out */
-    public void processMessage(OutNetMessage msg) {	
+    public void processMessage(OutNetMessage msg) {
         if (isDummy()) {
             // testing
             GetBidsJob.fail(_context, msg);
@@ -158,35 +160,35 @@ public class CommSystemFacadeImpl extends CommSystemFacade {
         // < 0.4 ms
         //_context.statManager().addRateData("transport.getBidsJobTime", _context.clock().now() - before);
     }
-    
+
     @Override
-    public boolean isBacklogged(Hash peer) { 
-        return _manager.isBacklogged(peer); 
+    public boolean isBacklogged(Hash peer) {
+        return _manager.isBacklogged(peer);
     }
-    
+
     @Override
-    public boolean isEstablished(Hash peer) { 
-        return _manager.isEstablished(peer); 
+    public boolean isEstablished(Hash peer) {
+        return _manager.isEstablished(peer);
     }
 
     /**
      *  @return a new set, may be modified
      *  @since 0.9.34
-     */    
+     */
     public Set<Hash> getEstablished() {
         return _manager.getEstablished();
     }
 
     @Override
-    public boolean wasUnreachable(Hash peer) { 
-        return _manager.wasUnreachable(peer); 
+    public boolean wasUnreachable(Hash peer) {
+        return _manager.wasUnreachable(peer);
     }
-    
+
     @Override
-    public byte[] getIP(Hash peer) { 
-        return _manager.getIP(peer); 
+    public byte[] getIP(Hash peer) {
+        return _manager.getIP(peer);
     }
-    
+
     /**
      * Tell the comm system that we may disconnect from this peer.
      * This is advisory only.
@@ -195,9 +197,9 @@ public class CommSystemFacadeImpl extends CommSystemFacade {
      */
     @Override
     public void mayDisconnect(Hash peer) {
-        _manager.mayDisconnect(peer); 
+        _manager.mayDisconnect(peer);
     }
-    
+
     /**
      * Tell the comm system to disconnect from this peer.
      *
@@ -205,25 +207,25 @@ public class CommSystemFacadeImpl extends CommSystemFacade {
      */
     @Override
     public void forceDisconnect(Hash peer) {
-        _manager.forceDisconnect(peer); 
+        _manager.forceDisconnect(peer);
     }
-    
+
     @Override
-    public List<String> getMostRecentErrorMessages() { 
-        return _manager.getMostRecentErrorMessages(); 
+    public List<String> getMostRecentErrorMessages() {
+        return _manager.getMostRecentErrorMessages();
     }
 
     /**
      *  @since 0.9.20
      */
     @Override
-    public Status getStatus() { 
+    public Status getStatus() {
         if (!_netMonitorStatus)
             return Status.DISCONNECTED;
-        Status rv = _manager.getReachabilityStatus(); 
+        Status rv = _manager.getReachabilityStatus();
         if (rv != Status.HOSED && _context.router().isHidden())
             return Status.OK;
-        return rv; 
+        return rv;
     }
 
     /**
@@ -249,10 +251,10 @@ public class CommSystemFacadeImpl extends CommSystemFacade {
      *  will take many seconds if it has vanished.
      */
     @Override
-    public void renderStatusHTML(Writer out, String urlBase, int sortFlags) throws IOException { 
-        _manager.renderStatusHTML(out, urlBase, sortFlags); 
+    public void renderStatusHTML(Writer out, String urlBase, int sortFlags) throws IOException {
+        _manager.renderStatusHTML(out, urlBase, sortFlags);
     }
-    
+
     /**
      *  @return SortedMap of style to Transport (a copy)
      *  @since 0.9.31
@@ -260,7 +262,7 @@ public class CommSystemFacadeImpl extends CommSystemFacade {
     public SortedMap<String, Transport> getTransports() {
         return _manager.getTransports();
     }
-    
+
     /** @return non-null, possibly empty */
     @Override
     public List<RouterAddress> createAddresses() {
@@ -272,7 +274,7 @@ public class CommSystemFacadeImpl extends CommSystemFacade {
             _log.info("Creating addresses: " + addresses, new Exception("creator"));
         return addresses;
     }
-    
+
     /**
      * UDP changed addresses, tell NTCP and restart
      *
@@ -302,7 +304,7 @@ public class CommSystemFacadeImpl extends CommSystemFacade {
             notifyRemoveAddress(false);
     }
 
-    /** 
+    /**
      *  Tell other transports our address changed
      *
      *  @param address non-null; but address's host/IP may be null
@@ -316,7 +318,7 @@ public class CommSystemFacadeImpl extends CommSystemFacade {
                             address.getIP().length == 16);
     }
 
-    /** 
+    /**
      *  Tell other transports our address changed
      *
      *  @since 0.9.20
@@ -366,7 +368,7 @@ public class CommSystemFacadeImpl extends CommSystemFacade {
     public DHSessionKeyBuilder.Factory getDHFactory() {
         return _manager.getDHFactory();
     }
-    
+
     /*
      * GeoIP stuff
      *
@@ -385,8 +387,10 @@ public class CommSystemFacadeImpl extends CommSystemFacade {
     }
 
     /* We hope the routerinfos are read in and things have settled down by now, but it's not required to be so */
+    // TODO: Run this job on a schedule so country count doesn't become stale
     private static final int START_DELAY = SystemVersion.isSlow() ? 5*60*1000 : 5*1000;
-    private static final int LOOKUP_TIME = 30*60*1000;
+//    private static final int LOOKUP_TIME = 30*60*1000;
+    private static final int LOOKUP_TIME = 5*60*1000;
 
     private void startGeoIP() {
         _context.simpleTimer2().addEvent(new QueueAll(), START_DELAY);
@@ -434,7 +438,7 @@ public class CommSystemFacadeImpl extends CommSystemFacade {
             long start = System.currentTimeMillis();
             _geoIP.blockingLookup();
             if (_log.shouldLog(Log.INFO))
-                _log.info("GeoIP lookup took " + (System.currentTimeMillis() - start));
+                _log.info("GeoIP lookup took " + (System.currentTimeMillis() - start) + "ms");
         }
     }
 
@@ -507,7 +511,6 @@ public class CommSystemFacadeImpl extends CommSystemFacade {
     @Override
     public String getCountry(Hash peer) {
         byte[] ip = TransportImpl.getIP(peer);
-        //if (ip != null && ip.length == 4)
         if (ip != null)
             return _geoIP.get(ip);
         RouterInfo ri = _context.netDb().lookupRouterInfoLocally(peer);
@@ -545,8 +548,9 @@ public class CommSystemFacadeImpl extends CommSystemFacade {
      *  @return IP or null
      *  @since 0.9.18
      */
+
     private static byte[] getValidIP(RouterInfo ri) {
-        for (RouterAddress ra : ri.getAddresses()) {
+        for (RouterAddress ra : ri.getAddresses()) { // NPE?!!
             byte[] rv = ra.getIP();
             if (rv != null && TransportUtil.isPubliclyRoutable(rv, true))
                 return rv;
@@ -565,30 +569,55 @@ public class CommSystemFacadeImpl extends CommSystemFacade {
         return n;
     }
 
+
+
     /** Provide a consistent "look" for displaying router IDs in the console */
     @Override
     public String renderPeerHTML(Hash peer) {
-        String h = peer.toBase64().substring(0, 4);
         StringBuilder buf = new StringBuilder(128);
+        RouterInfo ri = _context.netDb().lookupRouterInfoLocally(peer);
         String c = getCountry(peer);
-        if (c != null) {
+        String h = peer.toBase64().substring(0, 4);
+        if (ri != null) {
+            String caps = ri.getCapabilities();
+            String v = ri.getVersion();
+            String ip = net.i2p.util.Addresses.toString(getValidIP(ri));
+        buf.append("<span class=\"routerid\"><span class=\"flag\">");
+        if (ri != null && c != null) {
             String countryName = getCountryName(c);
             if (countryName.length() > 2)
                 countryName = Translate.getString(countryName, _context, COUNTRY_BUNDLE_NAME);
-            buf.append("<img height=\"11\" width=\"16\" alt=\"").append(c.toUpperCase(Locale.US)).append("\" title=\"");
-            buf.append(countryName);
-            buf.append("\" src=\"/flags.jsp?c=").append(c).append("\"> ");
+            buf.append("<a href=\"/netdb?c=" + c + "\"><img height=\"11\" width=\"16\" alt=\"")
+               .append(c.toUpperCase(Locale.US)).append("\" title=\"");
+            buf.append(countryName).append(" &bullet; ");
+            if (ri != null && ip != null)
+                buf.append(ip);
+            buf.append("\" src=\"/flags.jsp?c=").append(c).append("\"></a></span> ");
+        } else {
+            buf.append("<img class=\"unknownflag\" height=\"11\" width=\"16\" alt=\"??\"" +
+                       " src=\"/flags.jsp?c=a0\" title=\"").append(_t("unknown")).append(" &bullet; ");
+            if (ri != null && ip != null)
+                buf.append(ip);
+            buf.append("\"></span> ");
         }
-        else
-            buf.append("<img class=\"unknownflag\" height=\"11\" width=\"16\" alt=\"??\" src=\"/flags.jsp?c=a0\" title=\"").append(_t("unknown")).append("\"> ");
         buf.append("<tt>");
-        boolean found = _context.netDb().lookupRouterInfoLocally(peer) != null;
-        if (found)
-            buf.append("<a title=\"").append(_t("NetDb entry")).append("\" href=\"netdb?r=").append(h).append("\">");
+        buf.append("<a title=\""); //.append(_t("NetDb entry"));
+        if (ri != null) {
+            if (caps.contains("f"))
+                buf.append("Floodfill &bullet;");
+            if (v != null)
+                buf.append(' ' + v);
+            buf.append("\" href=\"netdb?r=").append(h).append("\">");
+        }
         buf.append(h);
-        if (found)
+        if (ri != null)
             buf.append("</a>");
-        buf.append("</tt>");
+        buf.append("</tt></span>");
+        } else {
+            buf.append("<img class=\"unknownflag\" height=\"11\" width=\"16\" alt=\"??\"" +
+                       " src=\"/flags.jsp?c=a0\" title=\"").append(_t("unknown"));
+            buf.append("\"></span> ");
+        }
         return buf.toString();
     }
 

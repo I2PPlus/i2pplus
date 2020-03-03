@@ -49,7 +49,7 @@ public class I2PSnarkUtil {
     private final I2PAppContext _context;
     private final Log _log;
     private final String _baseName;
-    
+
     private boolean _shouldProxy;
     private String _proxyHost;
     private int _proxyPort;
@@ -66,6 +66,9 @@ public class I2PSnarkUtil {
     private final File _tmpDir;
     private int _startupDelay;
     private boolean _collapsePanels;
+    private boolean _showStatusFilter;
+    private boolean _enableLightbox;
+    private boolean _enableAddCreate;
     private boolean _shouldUseOT;
     private boolean _shouldUseDHT;
     private boolean _enableRatings, _enableComments;
@@ -75,12 +78,18 @@ public class I2PSnarkUtil {
     private DHT _dht;
     private long _startedTime;
 
-    private static final int EEPGET_CONNECT_TIMEOUT = 45*1000;
-    private static final int EEPGET_CONNECT_TIMEOUT_SHORT = 5*1000;
+//    private static final int EEPGET_CONNECT_TIMEOUT = 45*1000;
+    private static final int EEPGET_CONNECT_TIMEOUT = 120*1000;
+//    private static final int EEPGET_CONNECT_TIMEOUT_SHORT = 5*1000;
+    private static final int EEPGET_CONNECT_TIMEOUT_SHORT = 15*1000;
     public static final int DEFAULT_STARTUP_DELAY = 3;
     public static final boolean DEFAULT_COLLAPSE_PANELS = true;
+    public static final boolean DEFAULT_SHOW_STATUSFILTER = false;
+    public static final boolean DEFAULT_ENABLE_LIGHTBOX = true;
+    public static final boolean DEFAULT_ENABLE_ADDCREATE = false;
     public static final boolean DEFAULT_USE_OPENTRACKERS = true;
-    public static final int MAX_CONNECTIONS = 24; // per torrent
+//    public static final int MAX_CONNECTIONS = 24; // per torrent
+    public static final int MAX_CONNECTIONS = 200; // per torrent
     public static final String PROP_MAX_BW = "i2cp.outboundBytesPerSecond";
     public static final boolean DEFAULT_USE_DHT = true;
     public static final String EEPGET_USER_AGENT = "I2PSnark";
@@ -109,6 +118,9 @@ public class I2PSnarkUtil {
         _openTrackers = Collections.emptyList();
         _shouldUseDHT = DEFAULT_USE_DHT;
         _collapsePanels = DEFAULT_COLLAPSE_PANELS;
+        _showStatusFilter = DEFAULT_SHOW_STATUSFILTER;
+        _enableLightbox = DEFAULT_ENABLE_LIGHTBOX;
+        _enableAddCreate = DEFAULT_ENABLE_ADDCREATE;
         _enableRatings = _enableComments = true;
         _commentsName = "";
         // This is used for both announce replies and .torrent file downloads,
@@ -118,7 +130,7 @@ public class I2PSnarkUtil {
         //FileUtil.rmdir(_tmpDir, false);
         _tmpDir.mkdirs();
     }
-    
+
     /**
      * Specify what HTTP proxy tracker requests should go through (specify a null
      * host for no proxying)
@@ -138,12 +150,12 @@ public class I2PSnarkUtil {
         _configured = true;
     }
 ******/
-    
+
     /** @since 0.9.1 */
     public I2PAppContext getContext() { return _context; }
-    
+
     public boolean configured() { return _configured; }
-    
+
     @SuppressWarnings({"unchecked", "rawtypes"})
     public void setI2CPConfig(String i2cpHost, int i2cpPort, Map opts) {
         if (i2cpHost != null)
@@ -157,12 +169,12 @@ public class I2PSnarkUtil {
         setMaxUpBW(_maxUpBW);
         _configured = true;
     }
-    
+
     public void setMaxUploaders(int limit) {
         _maxUploaders = limit;
         _configured = true;
     }
-    
+
     /**
      *  This updates ALL the session options (not just the bw) and tells the router
      *  @param limit KBps
@@ -180,17 +192,17 @@ public class I2PSnarkUtil {
             }
         }
     }
-    
+
     public void setMaxConnections(int limit) {
         _maxConnections = limit;
         _configured = true;
     }
 
     public void setStartupDelay(int minutes) {
-	_startupDelay = minutes;
-	_configured = true;
+    _startupDelay = minutes;
+    _configured = true;
     }
-    
+
     public String getI2CPHost() { return _i2cpHost; }
     public int getI2CPPort() { return _i2cpPort; }
     public Map<String, String> getI2CPOptions() { return _opts; }
@@ -204,11 +216,11 @@ public class I2PSnarkUtil {
      */
     public int getMaxUpBW() { return _maxUpBW; }
     public int getMaxConnections() { return _maxConnections; }
-    public int getStartupDelay() { return _startupDelay; }  
-  
+    public int getStartupDelay() { return _startupDelay; }
+
     /** @since 0.8.9 */
     public boolean getFilesPublic() { return _areFilesPublic; }
-  
+
     /** @since 0.8.9 */
     public void setFilesPublic(boolean yes) { _areFilesPublic = yes; }
 
@@ -223,7 +235,8 @@ public class I2PSnarkUtil {
             _connecting = true;
             // try to find why reconnecting after stop
             if (_log.shouldLog(Log.DEBUG))
-                _log.debug("Connecting to I2P", new Exception("I did it"));
+                _log.debug("Connecting to I2P...", new Exception("I did it"));
+//                _log.debug("Connecting to I2P...");
             Properties opts = _context.getProperties();
             if (_opts != null) {
                 for (Map.Entry<String, String> entry : _opts.entrySet() )
@@ -263,14 +276,16 @@ public class I2PSnarkUtil {
                 opts.setProperty("outbound.nickname", _baseName.replace("i2psnark", "I2PSnark"));
             if (opts.getProperty("outbound.priority") == null)
                 opts.setProperty("outbound.priority", "-10");
-            // Dont do this for now, it is set in I2PSocketEepGet for announces,
+            // Don't do this for now, it is set in I2PSocketEepGet for announces,
             // we don't need fast handshake for peer connections.
             //if (opts.getProperty("i2p.streaming.connectDelay") == null)
             //    opts.setProperty("i2p.streaming.connectDelay", "500");
             if (opts.getProperty(I2PSocketOptions.PROP_CONNECT_TIMEOUT) == null)
-                opts.setProperty(I2PSocketOptions.PROP_CONNECT_TIMEOUT, "75000");
+                opts.setProperty(I2PSocketOptions.PROP_CONNECT_TIMEOUT, "600000"); // 10 minutes
+//                opts.setProperty(I2PSocketOptions.PROP_CONNECT_TIMEOUT, "300000"); // 5 minutes
             if (opts.getProperty("i2p.streaming.inactivityTimeout") == null)
-                opts.setProperty("i2p.streaming.inactivityTimeout", "240000");
+//                opts.setProperty("i2p.streaming.inactivityTimeout", "240000");
+                opts.setProperty("i2p.streaming.inactivityTimeout", "60000"); // 1 minute idle time before keepalive sent
             if (opts.getProperty("i2p.streaming.inactivityAction") == null)
                 opts.setProperty("i2p.streaming.inactivityAction", "1"); // 1 == disconnect, 2 == ping
             if (opts.getProperty("i2p.streaming.initialWindowSize") == null)
@@ -282,11 +297,14 @@ public class I2PSnarkUtil {
             //if (opts.getProperty("i2p.streaming.readTimeout") == null)
             //    opts.setProperty("i2p.streaming.readTimeout", "120000");
             if (opts.getProperty("i2p.streaming.maxConnsPerMinute") == null)
-                opts.setProperty("i2p.streaming.maxConnsPerMinute", "2");
+//                opts.setProperty("i2p.streaming.maxConnsPerMinute", "2"); // per peer max incoming connections
+                opts.setProperty("i2p.streaming.maxConnsPerMinute", "4");
             if (opts.getProperty("i2p.streaming.maxTotalConnsPerMinute") == null)
-                opts.setProperty("i2p.streaming.maxTotalConnsPerMinute", "8");
+//                opts.setProperty("i2p.streaming.maxTotalConnsPerMinute", "8");
+                opts.setProperty("i2p.streaming.maxTotalConnsPerMinute", "16"); // total incoming connections
             if (opts.getProperty("i2p.streaming.maxConnsPerHour") == null)
-                opts.setProperty("i2p.streaming.maxConnsPerHour", "20");
+//                opts.setProperty("i2p.streaming.maxConnsPerHour", "20");
+                opts.setProperty("i2p.streaming.maxConnsPerHour", "60");
             if (opts.getProperty("i2p.streaming.enforceProtocol") == null)
                 opts.setProperty("i2p.streaming.enforceProtocol", "true");
             if (opts.getProperty("i2p.streaming.disableRejectLogging") == null)
@@ -304,7 +322,7 @@ public class I2PSnarkUtil {
             _dht = new KRPC(_context, _baseName, _manager.getSession());
         return (_manager != null);
     }
-    
+
     /**
      * @return null if disabled or not started
      * @since 0.8.4
@@ -340,7 +358,7 @@ public class I2PSnarkUtil {
         _banlist.clear();
         if (mgr != null) {
             if (_log.shouldLog(Log.DEBUG))
-                _log.debug("Disconnecting from I2P", new Exception("I did it"));
+                _log.debug("Disconnecting from I2P...", new Exception("I did it"));
             mgr.destroySocketManager();
         }
         // this will delete a .torrent file d/l in progress so don't do that...
@@ -348,7 +366,7 @@ public class I2PSnarkUtil {
         // in case the user will d/l a .torrent file next...
         _tmpDir.mkdirs();
     }
-    
+
     /**
      * When did we connect to the network?
      * For RPC
@@ -371,7 +389,7 @@ public class I2PSnarkUtil {
             throw new IOException("Attempt to connect to myself");
         Hash dest = addr.calculateHash();
         if (_banlist.contains(dest))
-            throw new IOException("Not trying to contact " + dest.toBase64() + ", as they are banlisted");
+            throw new IOException("Not trying to contact banlisted peer [" + dest.toBase64().substring(0,6) + "]");
         try {
             // TODO opts.setPort(xxx); connect(addr, opts)
             // DHT moved above 6881 in 0.9.9
@@ -382,18 +400,18 @@ public class I2PSnarkUtil {
         } catch (I2PException ie) {
             _banlist.add(dest);
             _context.simpleTimer2().addEvent(new Unbanlist(dest), 10*60*1000);
-            IOException ioe = new IOException("Unable to reach the peer " + peer);
+            IOException ioe = new IOException("Unable to reach peer [" + peer + "]");
             ioe.initCause(ie);
             throw ioe;
         }
     }
-    
+
     private class Unbanlist implements SimpleTimer.TimedEvent {
         private Hash _dest;
         public Unbanlist(Hash dest) { _dest = dest; }
         public void timeReached() { _banlist.remove(_dest); }
     }
-    
+
     /**
      * Fetch the given URL, returning the file it is stored in, or null on error.
      * No retries.
@@ -411,7 +429,7 @@ public class I2PSnarkUtil {
     public File get(String url, int retries) { return get(url, true, retries); }
 
     /**
-     * @param retries if &lt; 0, set timeout to a few seconds
+     * @param retries if > 0, set timeout to a few seconds
      */
     public File get(String url, boolean rewrite, int retries) {
         if (_log.shouldLog(Log.DEBUG))
@@ -421,7 +439,7 @@ public class I2PSnarkUtil {
             // we could use the system tmp dir but deleteOnExit() doesn't seem to work on all platforms...
             out = SecureFile.createTempFile("i2psnark", null, _tmpDir);
         } catch (IOException ioe) {
-            _log.error("temp file error", ioe);
+            _log.error("Temp file error", ioe);
             if (out != null)
                 out.delete();
             return null;
@@ -450,7 +468,7 @@ public class I2PSnarkUtil {
         get.addHeader("User-Agent", EEPGET_USER_AGENT);
         if (get.fetch(timeout)) {
             if (_log.shouldLog(Log.DEBUG))
-                _log.debug("Fetch successful [" + url + "]: size=" + out.length());
+                _log.debug("Fetch successful [" + url + "] (Size: " + out.length() + " bytes)");
             return out;
         } else {
             if (_log.shouldLog(Log.WARN))
@@ -459,7 +477,7 @@ public class I2PSnarkUtil {
             return null;
         }
     }
-    
+
     /**
      * Fetch to memory
      * @param retries if &lt; 0, set timeout to a few seconds
@@ -492,7 +510,7 @@ public class I2PSnarkUtil {
         get.addHeader("User-Agent", EEPGET_USER_AGENT);
         if (get.fetch(timeout)) {
             if (_log.shouldLog(Log.DEBUG))
-                _log.debug("Fetch successful [" + url + "]: size=" + out.size());
+                _log.debug("Fetch successful [" + url + "] (Size: " + out.size() + " bytes)");
             return out.toByteArray();
         } else {
             if (_log.shouldLog(Log.WARN))
@@ -500,15 +518,15 @@ public class I2PSnarkUtil {
             return null;
         }
     }
-    
-    public I2PServerSocket getServerSocket() { 
+
+    public I2PServerSocket getServerSocket() {
         I2PSocketManager mgr = _manager;
         if (mgr != null)
             return mgr.getServerSocket();
         else
             return null;
     }
-    
+
     public String getOurIPString() {
         Destination dest = getMyDestination();
         if (dest != null)
@@ -566,7 +584,7 @@ public class I2PSnarkUtil {
                             //Hash h = new Hash(b);
                             Hash h = Hash.create(b);
                             if (_log.shouldLog(Log.INFO))
-                                _log.info("Using existing session for lookup of " + ip);
+                                _log.info("Using existing session for lookup of [" + ip + "]");
                             try {
                                 return sess.lookupDest(h, 15*1000);
                             } catch (I2PSessionException ise) {
@@ -575,11 +593,11 @@ public class I2PSnarkUtil {
                     }
                 }
                 if (_log.shouldLog(Log.INFO))
-                    _log.info("Using naming service for lookup of " + ip);
+                    _log.info("Using naming service for lookup of [" + ip + "]");
                 return _context.namingService().lookup(ip);
             }
             if (_log.shouldLog(Log.INFO))
-                _log.info("Creating Destination for " + ip);
+                _log.info("Creating Destination for [" + ip + "]");
             try {
                 return new Destination(ip.substring(0, ip.length()-4)); // sans .i2p
             } catch (DataFormatException dfe) {
@@ -587,7 +605,7 @@ public class I2PSnarkUtil {
             }
         } else {
             if (_log.shouldLog(Log.INFO))
-                _log.info("Creating Destination for " + ip);
+                _log.info("Creating Destination for [" + ip + "]");
             try {
                 return new Destination(ip);
             } catch (DataFormatException dfe) {
@@ -598,7 +616,7 @@ public class I2PSnarkUtil {
 
     public String lookup(String name) {
         Destination dest = getDestination(name);
-	if (dest == null)
+    if (dest == null)
             return null;
         return dest.toBase64();
     }
@@ -617,16 +635,16 @@ public class I2PSnarkUtil {
         //_log.debug("Rewriting [" + origAnnounce + "] as [" + rv + "]");
         return rv;
     }
-    
+
     /** @param ot non-null list of announce URLs */
-    public void setOpenTrackers(List<String> ot) { 
+    public void setOpenTrackers(List<String> ot) {
         _openTrackers = ot;
     }
 
     /** List of open tracker announce URLs to use as backups
      *  @return non-null, possibly unmodifiable, empty if disabled
      */
-    public List<String> getOpenTrackers() { 
+    public List<String> getOpenTrackers() {
         if (!shouldUseOpenTrackers())
             return Collections.emptyList();
         return _openTrackers;
@@ -637,7 +655,7 @@ public class I2PSnarkUtil {
      *
      *  @since 0.9.17
      */
-    public boolean isKnownOpenTracker(String url) { 
+    public boolean isKnownOpenTracker(String url) {
         try {
            URI u = new URI(url);
            String host = u.getHost();
@@ -652,10 +670,10 @@ public class I2PSnarkUtil {
      *  @return non-null
      *  @since 0.9.4
      */
-    public List<String> getBackupTrackers() { 
+    public List<String> getBackupTrackers() {
         return _openTrackers;
     }
-    
+
     public void setUseOpenTrackers(boolean yes) {
         _shouldUseOT = yes;
     }
@@ -663,7 +681,7 @@ public class I2PSnarkUtil {
     public boolean shouldUseOpenTrackers() {
         return _shouldUseOT;
     }
-    
+
     /** @since DHT */
     public synchronized void setUseDHT(boolean yes) {
         _shouldUseDHT = yes;
@@ -726,6 +744,36 @@ public class I2PSnarkUtil {
     /** @since 0.9.32 */
     public void setCollapsePanels(boolean yes) {
         _collapsePanels = yes;
+    }
+
+    /** @since 0.9.34 */
+    public boolean showStatusFilter() {
+        return _showStatusFilter;
+    }
+
+    /** @since 0.9.34 */
+    public void setShowStatusFilter(boolean yes) {
+        _showStatusFilter = yes;
+    }
+
+    /** @since 0.9.34 */
+    public boolean enableLightbox() {
+        return _enableLightbox;
+    }
+
+    /** @since 0.9.34 */
+    public void setEnableLightbox(boolean yes) {
+        _enableLightbox = yes;
+    }
+
+    /** @since 0.9.38 */
+    public boolean enableAddCreate() {
+        return _enableAddCreate;
+    }
+
+    /** @since 0.9.38 */
+    public void setEnableAddCreate(boolean yes) {
+        _enableAddCreate = yes;
     }
 
     /**

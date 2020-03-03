@@ -58,7 +58,7 @@ public class GarlicMessageBuilder {
             return skm.shouldSendTags(key, curKey, minTagOverride);
         return skm.shouldSendTags(key, curKey);
     }
-    
+
     /**
      * Unused and probably a bad idea.
      * ELGAMAL_2048 only.
@@ -109,8 +109,8 @@ public class GarlicMessageBuilder {
     ***/
 
     /**
-     * ELGAMAL_2048 only.
-     * Called by OCMJH.
+     * ELGAMAL_2048 only
+     * Called by OCMJH
      *
      * @param ctx scope
      * @param config how/what to wrap
@@ -170,13 +170,13 @@ public class GarlicMessageBuilder {
         
         if (log.shouldLog(Log.INFO))
             log.info("Encrypted with public key to expire on " + new Date(config.getExpiration()));
-        
+
         SessionKey curKey = skm.getCurrentOrNewKey(key);
         SessionTag curTag = skm.consumeNextAvailableTag(key, curKey);
-            
+
             if (log.shouldLog(Log.DEBUG)) {
                 int availTags = skm.getAvailableTags(key, curKey);
-                log.debug("Available tags for encryption: " + availTags + " low threshold: " + lowTagsThreshold);
+                log.debug("Available tags for encryption: " + availTags + "; Low threshold: " + lowTagsThreshold);
             }
 
             if (numTagsToDeliver > 0 && skm.shouldSendTags(key, curKey, lowTagsThreshold)) {
@@ -187,10 +187,10 @@ public class GarlicMessageBuilder {
             }
 
         wrappedKey.setData(curKey.getData());
-        
+
         return buildMessage(ctx, config, wrappedTags, key, curKey, curTag);
     }
-    
+
     /**
      *  ELGAMAL_2048 only.
      *  Used by TestJob, and directly above,
@@ -200,7 +200,7 @@ public class GarlicMessageBuilder {
      * @param config how/what to wrap
      * @param wrappedTags New tags to be sent along with the message.
      *                    200 max enforced at receiver; null OK
-     * @param target public key of the location being garlic routed to (may be null if we 
+     * @param target public key of the location being garlic routed to (may be null if we
      *               know the encryptKey and encryptTag)
      * @param encryptKey sessionKey used to encrypt the current message, non-null
      * @param encryptTag sessionTag used to encrypt the current message, null to force ElG
@@ -212,34 +212,34 @@ public class GarlicMessageBuilder {
         Log log = ctx.logManager().getLog(GarlicMessageBuilder.class);
         if (config == null)
             throw new IllegalArgumentException("Null config specified");
-        
+
         GarlicMessage msg = new GarlicMessage(ctx);
-        
+
         //noteWrap(ctx, msg, config);
-        
+
         byte cloveSet[] = buildCloveSet(ctx, config);
-        
+
         // TODO - 128 is the minimum padded size - should it be more? less? random?
         byte encData[] = ctx.elGamalAESEngine().encrypt(cloveSet, target, encryptKey, wrappedTags, encryptTag, 128);
         if (encData == null) {
             if (log.shouldWarn())
-                log.warn("ElG encrypt fail");
+                log.warn("ElGamal encrypt fail");
             return null;
         }
         msg.setData(encData);
         msg.setMessageExpiration(config.getExpiration());
-        
+
         long timeFromNow = config.getExpiration() - ctx.clock().now();
         if (timeFromNow < 1*1000) {
             if (log.shouldLog(Log.DEBUG))
                 log.debug("Building a message expiring in " + timeFromNow + "ms: " + config, new Exception("created by"));
             return null;
         }
-        
+
         if (log.shouldLog(Log.DEBUG))
-            log.debug("CloveSet (" + config.getCloveCount() + " cloves) for message " + msg.getUniqueId() + " is " + cloveSet.length
+            log.debug("CloveSet (" + config.getCloveCount() + " cloves) for [MsgID " + msg.getUniqueId() + "] is " + cloveSet.length
                      + " bytes and encrypted message data is " + encData.length + " bytes");
-        
+
         return msg;
     }
     
@@ -318,7 +318,7 @@ public class GarlicMessageBuilder {
         }
     }
 ****/
-    
+
     /**
      * Build the unencrypted GarlicMessage specified by the config.
      * It contains the number of cloves, followed by each clove,
@@ -347,7 +347,7 @@ public class GarlicMessageBuilder {
                         cloves[i] = buildClove(ctx, c);
                     }
                 }
-                
+
                 int len = 1;
                 for (int i = 0; i < cloves.length; i++)
                     len += cloves[i].length;
@@ -366,13 +366,13 @@ public class GarlicMessageBuilder {
         }
         return baos.toByteArray();
     }
-    
+
     private static byte[] buildClove(RouterContext ctx, PayloadGarlicConfig config) {
         GarlicClove clove = new GarlicClove(ctx);
         clove.setData(config.getPayload());
         return buildCommonClove(clove, config);
     }
-    
+
     /**
      *  UNUSED
      *
@@ -397,7 +397,7 @@ public class GarlicMessageBuilder {
         clove.setData(msg);
         return buildCommonClove(clove, config);
     }
-    
+
     private static byte[] buildCommonClove(GarlicClove clove, GarlicConfig config) {
         clove.setCertificate(config.getCertificate());
         clove.setCloveId(config.getId());

@@ -1,9 +1,9 @@
 package net.i2p.router.networkdb;
 /*
  * free (adj.): unencumbered; not under the control of others
- * Written by jrandom in 2003 and released into the public domain 
- * with no warranty of any kind, either expressed or implied.  
- * It probably won't make your computer catch on fire, or eat 
+ * Written by jrandom in 2003 and released into the public domain
+ * with no warranty of any kind, either expressed or implied.
+ * It probably won't make your computer catch on fire, or eat
  * your children, but it might.  Use at your own risk.
  *
  */
@@ -60,13 +60,13 @@ public class PublishLocalRouterInfoJob extends JobImpl {
     private static final long FIRST_TIME_DELAY = 90*1000;
     private volatile boolean _notFirstTime;
     private final AtomicInteger _runCount = new AtomicInteger();
-    
+
     public PublishLocalRouterInfoJob(RouterContext ctx) {
         super(ctx);
         _log = ctx.logManager().getLog(PublishLocalRouterInfoJob.class);
     }
-    
-    public String getName() { return "Publish Local Router Info"; }
+
+    public String getName() { return "Publish Local RouterInfo"; }
 
     public void runJob() {
         long last = getContext().netDb().getLastRouterInfoPublishTime();
@@ -78,7 +78,7 @@ public class PublishLocalRouterInfoJob extends JobImpl {
         }
         RouterInfo oldRI = getContext().router().getRouterInfo();
         if (_log.shouldLog(Log.DEBUG))
-            _log.debug("Old routerInfo contains " + oldRI.getAddresses().size() 
+            _log.debug("Old RouterInfo contains " + oldRI.getAddresses().size()
                        + " addresses and " + oldRI.getOptionsMap().size() + " options");
         try {
             List<RouterAddress> oldAddrs = new ArrayList<RouterAddress>(oldRI.getAddresses());
@@ -104,16 +104,16 @@ public class PublishLocalRouterInfoJob extends JobImpl {
                     }
                     if (!different) {
                         if (_log.shouldLog(Log.INFO))
-                            _log.info("Not republishing early because costs and caps and addresses are the same");
+                            _log.info("Not republishing early because costs, caps and addresses are the same");
                         requeue(getDelay());
                         return;
                     }
                 }
                 if (_log.shouldLog(Log.INFO))
                     _log.info("Republishing early because addresses or costs or caps have changed -" +
-                              " oldCaps: " + oldRI.getCapabilities() + " newCaps: " + newcaps +
-                              " old:\n" +
-                              oldAddrs + "\nnew:\n" + newAddrs);
+                              " Old Caps: " + oldRI.getCapabilities() + "; New Caps: " + newcaps +
+                              "\nOLD:\n" +
+                              oldAddrs + "\nNEW:\n" + newAddrs);
             }
             ri.setPublished(getContext().clock().now());
             Properties stats = getContext().statPublisher().publishStatistics();
@@ -122,16 +122,16 @@ public class PublishLocalRouterInfoJob extends JobImpl {
 
             SigningPrivateKey key = getContext().keyManager().getSigningPrivateKey();
             if (key == null) {
-                _log.log(Log.CRIT, "Internal error - signing private key not known?  rescheduling publish for 30s");
+                _log.log(Log.CRIT, "Internal error - signing private key not known; rescheduling publish for 30s");
                 requeue(30*1000);
                 return;
             }
             ri.sign(key);
             getContext().router().setRouterInfo(ri);
             if (_log.shouldLog(Log.INFO))
-                _log.info("Newly updated routerInfo is published with " + stats.size() 
-                          + "/" + ri.getOptionsMap().size() + " options on " 
-                          + new Date(ri.getPublished()));
+                _log.info("Newly updated RouterInfo is published with " + stats.size() +
+                          "/" + ri.getOptionsMap().size() + " options" +
+                          "\n* Published: " + new Date(ri.getPublished()));
             try {
                 // This won't really publish until the netdb is initialized.
                 getContext().netDb().publish(ri);

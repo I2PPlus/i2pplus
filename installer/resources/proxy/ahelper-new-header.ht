@@ -9,13 +9,16 @@ Proxy-Connection: close
 <html>
 <head>
 <title>_("Information: New Host Name")</title>
-<link rel="shortcut icon" href="http://proxy.i2p/themes/console/images/favicon.ico">
+<link rel="shortcut icon" href="http://proxy.i2p/themes/console/default/images/favicon.ico">
 <link href="http://proxy.i2p/themes/console/default/console.css" rel="stylesheet" type="text/css">
 </head>
 <body id="proxyNewAddressHelper">
 <div class="logo">
- <a href="http://127.0.0.1:7657/" title="_("Router Console")"><img src="http://proxy.i2p/themes/console/images/i2plogo.png" alt="_("I2P Router Console")" border="0"></a><hr>
- <a href="http://127.0.0.1:7657/config">_("Configuration")</a> <a href="http://127.0.0.1:7657/help">_("Help")</a> <a href="http://127.0.0.1:7657/dns">_("Addressbook")</a>
+<a href="http://127.0.0.1:7657/" title="_("Router Console")"><img src="http://proxy.i2p/themes/console/default/images/i2plogo.png" alt="_("I2P Router Console")" border="0"></a>
+<hr>
+<a href="http://127.0.0.1:7657/dns">_("Addressbook")</a>
+<a href="http://127.0.0.1:7657/config">_("Configuration")</a>
+<a href="http://127.0.0.1:7657/help/">_("Help")</a>
 </div>
 <div class="warning" id="warning">
 <h3>_("Information: New Host Name with Address Helper")</h3>

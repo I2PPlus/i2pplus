@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" viewBox="0 0 960 587">
   <style>
-    .a, .subs { fill: #fff; stroke-linejoin: round; stroke-width: 1.5; stroke: #000; } .b, .c, .d, .e, .f, .g { font-family: "Droid Sans", "Noto Sans", Ubuntu, "Segoe UI", "Lucida Grande", "Bitstream Vera Sans", Verdana, sans-serif; font-feature-settings: normal; font-variant-caps: normal; font-variant-ligatures: normal; font-variant-numeric: normal; text-align: center; text-anchor: middle; } .b, .c, .f, .g { font-size: 20px; } .d, .e { font-size: 30px; } .d, .f { font-weight: bold; } #space { fill: #edffff; stroke-linejoin: round; stroke-width: 1; stroke: #999; } text.tooltip:hover { fill: #090; } path.tooltip, rect.tooltip { fill: #F9FFEF; } .book:hover rect, .subscriptions:hover rect { fill: url(#hover); } .private:hover { fill: url(#hover2); } .pbook:hover rect { fill: url(#hover2); } path.tooltip:hover { fill: url(#arrow); } .private { fill: #ffffee; } .privatezone { stroke: #f00; fill: #efefd7; stroke-dasharray: 5,5; stroke-width: 1; stroke-linejoin: round; } .subs { stroke-dasharray: 3,3; stroke-width: 1; } a:hover text { cursor: pointer; fill: #f60; } a:active text { fill: #d30; } .a { filter: drop-shadow(0 0 2px rgba(64,64,64,0.5)); } .book rect:active, .pbook rect:active, #sublist:active rect { filter: none; } a { outline: none; } .hideonhover:hover #hoverhide, .hideonhover:active #hoverhide { fill: none; } .hideonhover:hover #hovershow { fill: #f60; } .hideonhover:active #hovershow { fill: #d30; } #hovershow { fill: none; }
+    .a, .subs {fill: #fff; stroke-linejoin: round; stroke-width: 1.5; stroke: #000} .b, .c, .d, .e, .f, .g {font-family: "Droid Sans", "Noto Sans", Ubuntu, "Segoe UI", "Lucida Grande", "Bitstream Vera Sans", Verdana, sans-serif; font-feature-settings: normal; font-variant-caps: normal; font-variant-ligatures: normal; font-variant-numeric: normal; text-align: center; text-anchor: middle} .b, .c, .f, .g {font-size: 20px} .d, .e {font-size: 30px} .d, .f {font-weight: bold} .e {text-transform: uppercase} #space {fill: #edffff; stroke-linejoin: round; stroke-width: 1; stroke: #999} text.tooltip:hover {fill: #090} path.tooltip, rect.tooltip {fill: #f9ffef} .book:hover rect, .subscriptions:hover rect {fill: url(#hover)} .private:hover {fill: url(#hover2)} .pbook:hover rect {fill: url(#hover2)} path.tooltip:hover {fill: url(#arrow)} a path.tooltip:hover {stroke: #f60} path.tooltip:hover {stroke: #090} .private {fill: #ffffee} .privatezone {stroke: #f00; fill: #efefd7; stroke-dasharray: 5,5; stroke-width: 1; stroke-linejoin: round} .subs {stroke-dasharray: 3,3; stroke-width: 1} a:hover text {cursor: pointer; fill: #f60} a:active text {fill: #d30} .a {filter: drop-shadow(0 0 2px rgba(64,64,64,0.5))} .book rect:active, .pbook rect:active, #sublist:active rect {filter: none} a {outline: none} .hideonhover:hover #hoverhide, .hideonhover:active #hoverhide {fill: none} .hideonhover:hover #hovershow {fill: #f60} .hideonhover:active #hovershow {fill: #d30} #hovershow {fill: none}
   </style>
   <defs>
     <linearGradient id="hover" x2="0" y2="1">
@@ -51,10 +51,10 @@
     <tspan class="e" x="243" y="51">_("Local Records")</tspan>
     <title>_("I2P applications (including the HTTP proxy) use the hosts in your local address books to resolve .i2p hostnames.")</title>
   </text>
-  <a xlink:href="/help#addressbooksubs" target="_top">
+  <a xlink:href="/help/faq#addressbooksubs" target="_top">
     <title>_("Additional subscriptions can be found in the FAQ section of the Router help page.")</title>
     <text class="d" x="716" y="51">
-      <tspan class="e" x="716" y="51">_("Subscriptions")</tspan>
+      <tspan class="e link" x="716" y="51">_("Subscriptions")</tspan>
     </text>
   </a>
   <g class="subscriptions hideonhover">
@@ -93,7 +93,9 @@
   <path class="a tooltip" d="M382 164v133h-21l22 31 22 31 23-31 22-31h-19V164h-49z">
     <title>_("Addresses manually added to your Master address book will merge with your Router address book.")</title>
   </path>
-  <path class="a tooltip" d="M553 164v133h-21l22 31 22 31 23-31 22-31h-19V164z">
-    <title>_("Hosts you receive from your subscriptions will merge with your Router address book.")</title>
-  </path>
+  <a xlink:href="/susidns/log.jsp" target="_parent" class="book">
+    <path class="a tooltip link" d="M553 164v133h-21l22 31 22 31 23-31 22-31h-19V164z">
+      <title>_("Hosts you receive from your subscriptions will merge with your Router address book.")</title>
+    </path>
+  </a>
 </svg>

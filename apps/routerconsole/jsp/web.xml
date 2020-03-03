@@ -26,38 +26,38 @@
     </servlet-mapping>
 
 
-    
+
     <!-- yeah, i'm lazy, using a jsp instead of a servlet.. -->
-    <servlet-mapping> 
+    <servlet-mapping>
       <servlet-name>net.i2p.router.web.jsp.viewtheme_jsp</servlet-name>
       <url-pattern>/themes/*</url-pattern>
     </servlet-mapping>
-    
-    <servlet-mapping> 
+
+    <servlet-mapping>
       <servlet-name>net.i2p.router.web.jsp.viewtheme_jsp</servlet-name>
       <url-pattern>/javadoc/*</url-pattern>
     </servlet-mapping>
-    
-    <servlet-mapping> 
+
+    <servlet-mapping>
       <servlet-name>net.i2p.router.web.jsp.viewhistory_jsp</servlet-name>
       <url-pattern>/history.txt</url-pattern>
     </servlet-mapping>
-    
-    <servlet-mapping> 
+
+    <servlet-mapping>
       <servlet-name>net.i2p.router.web.jsp.viewlicense_jsp</servlet-name>
       <url-pattern>/license.txt</url-pattern>
     </servlet-mapping>
-    
-    <servlet-mapping> 
+
+    <servlet-mapping>
       <servlet-name>net.i2p.router.web.jsp.viewrouterlog_jsp</servlet-name>
       <url-pattern>/router.log</url-pattern>
     </servlet-mapping>
-    
-    <servlet-mapping> 
+
+    <servlet-mapping>
       <servlet-name>net.i2p.router.web.jsp.viewwrapperlog_jsp</servlet-name>
       <url-pattern>/wrapper.log</url-pattern>
     </servlet-mapping>
-    
+
     <session-config>
         <session-timeout>
             30

@@ -2,20 +2,20 @@
 # Copyright (C) 2009 The I2P Project
 # This file is distributed under the same license as the routerconsole package.
 # To contribute translations, see http://www.i2p2.de/newdevelopers
-# 
+#
 # Translators:
 msgid ""
 msgstr ""
 "Project-Id-Version: I2P\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2013-07-13 21:46+0000\n"
+"POT-Creation-Date: 2018-06-16 12:58+0000\n"
 "PO-Revision-Date: 2019-01-28 21:25+0000\n"
 "Last-Translator: Besnik <besnik@programeshqip.org>\n"
 "Language-Team: Albanian (http://www.transifex.com/otf/I2P/language/sq/)\n"
+"Language: sq\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"Language: sq\n"
 "Plural-Forms: nplurals=2; plural=(n != 1);\n"
 
 msgid "Congratulations on getting I2P installed!"
@@ -30,12 +30,11 @@ msgstr "Ju lutemi, {0}bëni durim{1} teksa I2P-ja bën nisjen dhe gjen ortakë."
 
 #, java-format
 msgid ""
-"While you are waiting, please {0}adjust your bandwidth settings{1} on the "
-"{2}configuration page{3}."
+"While you are waiting, please {0}adjust your bandwidth settings{1} on the {2}"
+"configuration page{3}."
 msgstr "Teksa pritni, ju lutemi, {0}ujdisni rregullimet tuaja për bandën{1} te {2}faqja e formësimit{3}."
 
-msgid ""
-"Also you can setup your browser to use the I2P proxy to reach eepsites."
+msgid "Also you can setup your browser to use the I2P proxy to reach eepsites."
 msgstr "Mund ta rregulloni gjithashtu shfletuesin tuaj të përdorë ndërmjetësin I2P për të mbërritur në sajte eepsites."
 
 msgid ""
@@ -53,12 +52,11 @@ msgstr "Më tepër të dhëna mund të gjeni te {0}faqja e rregullimeve të ndë
 
 #, java-format
 msgid ""
-"Once you have a \"shared clients\" destination listed on the left, please "
-"{0}check out{1} our {2}FAQ{3}."
+"Once you have a \"shared clients\" destination listed on the left, please {0}"
+"check out{1} our {2}FAQ{3}."
 msgstr "Pasi të keni majtas një vendmbërritje \"klientë të përbashkët\", ju lutemi, {0}shihni{1} {2}FAQ{3} tona."
 
 #, java-format
 msgid ""
-"Point your IRC client to {0}localhost:6668{1} and say hi to us on "
-"{2}#i2p{3}."
+"Point your IRC client to {0}localhost:6668{1} and say hi to us on {2}#i2p{3}."
 msgstr "Drejtojeni klientin tuaj IRC te {0}localhost:6668{1} dhe na përshëndetni te kanali {2}#i2p{3}."

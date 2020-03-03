@@ -24,7 +24,7 @@ import net.i2p.util.SystemVersion;
 public class InstallUpdate {
 
     private static final String DELETE_FILE = "deletelist.txt";
-    
+
     /**
      * Context must be available.
      * Unzip update file found in the router dir OR base dir, to the base dir
@@ -51,7 +51,7 @@ public class InstallUpdate {
                 // carry on
                 return;
             }
-            System.out.println("INFO: Update file exists [" + Router.UPDATE_FILE + "] - installing");
+            System.out.println("INFO: Update file exists: " + Router.UPDATE_FILE + " - installing");
             // verify the whole thing first
             // we could remember this fails, and not bother restarting, but who cares...
             boolean ok = FileUtil.verifyZip(updateFile);
@@ -173,7 +173,7 @@ public class InstallUpdate {
             }
         }
     }
-    
+
     /**
      *  Delete all files listed in the delete file.
      *  Format: One file name per line, comment lines start with '#'.

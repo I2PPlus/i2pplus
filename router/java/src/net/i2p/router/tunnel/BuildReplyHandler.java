@@ -13,7 +13,7 @@ import net.i2p.util.Log;
 import net.i2p.util.SimpleByteCache;
 
 /**
- * Decrypt the layers of a tunnel build reply message, determining whether the individual 
+ * Decrypt the layers of a tunnel build reply message, determining whether the individual
  * hops agreed to participate in the tunnel, or if not, why not.
  *
  */
@@ -81,7 +81,7 @@ public class BuildReplyHandler {
     private int decryptRecord(TunnelBuildReplyMessage reply, TunnelCreatorConfig cfg, int recordNum, int hop) {
         if (BuildMessageGenerator.isBlank(cfg, hop)) {
             if (log.shouldLog(Log.DEBUG))
-                log.debug(reply.getUniqueId() + ": Record " + recordNum + "/" + hop + " is fake, so consider it valid...");
+                log.debug("[" + reply.getUniqueId() + "] Record " + recordNum + "/" + hop + " is fake, so consider it valid...");
             return 0;
         }
         EncryptedBuildRecord rec = reply.getRecord(recordNum);
@@ -95,16 +95,16 @@ public class BuildReplyHandler {
             SessionKey replyKey = hopConfig.getReplyKey();
             byte replyIV[] = hopConfig.getReplyIV();
             if (log.shouldLog(Log.DEBUG)) {
-                log.debug(reply.getUniqueId() + ": Decrypting record " + recordNum + "/" + hop + "/" + j + " with replyKey " 
+                log.debug("[" + reply.getUniqueId() + "] Decrypting record " + recordNum + "/" + hop + "/" + j + " with replyKey "
                           + replyKey.toBase64() + "/" + Base64.encode(replyIV) + ": " + cfg);
-                log.debug(reply.getUniqueId() + ": before decrypt: " + Base64.encode(data));
-                log.debug(reply.getUniqueId() + ": Full reply rec: sz=" + data.length + " data=" + Base64.encode(data, 0, TunnelBuildReplyMessage.RECORD_SIZE));
+                log.debug(reply.getUniqueId() + "; Before decrypt: " + Base64.encode(data));
+                log.debug("[" + reply.getUniqueId() + "] Full reply received: sz=" + data.length + " data=" + Base64.encode(data, 0, TunnelBuildReplyMessage.RECORD_SIZE));
             }
             ctx.aes().decrypt(data, 0, data, 0, replyKey, replyIV, 0, TunnelBuildReplyMessage.RECORD_SIZE);
             if (log.shouldLog(Log.DEBUG))
-                log.debug(reply.getUniqueId() + ": after decrypt: " + Base64.encode(data));
+                log.debug("[" + reply.getUniqueId() + "] After decrypt: " + Base64.encode(data));
         }
-        // ok, all of the layered encryption is stripped, so lets verify it 
+        // ok, all of the layered encryption is stripped, so lets verify it
         // (formatted per BuildResponseRecord.create)
         // don't cache the result
         //Hash h = ctx.sha().calculateHash(data, off + Hash.HASH_LENGTH, TunnelBuildReplyMessage.RECORD_SIZE-Hash.HASH_LENGTH);
@@ -113,16 +113,16 @@ public class BuildReplyHandler {
         boolean ok = DataHelper.eq(h, 0, data, 0, Hash.HASH_LENGTH);
         if (!ok) {
             if (log.shouldLog(Log.DEBUG))
-                log.debug(reply.getUniqueId() + ": Failed verification on " + recordNum + "/" + hop + ": " + Base64.encode(h) + " calculated, " +
-                          Base64.encode(data, 0, Hash.HASH_LENGTH) + " expected\n" +
-                          "Record: " + Base64.encode(data, Hash.HASH_LENGTH, TunnelBuildReplyMessage.RECORD_SIZE-Hash.HASH_LENGTH));
+                log.debug("[" + reply.getUniqueId() + "] Failed verification on " + recordNum + "/" + hop + ": " + Base64.encode(h) + " calculated, " +
+                          Base64.encode(data, 0, Hash.HASH_LENGTH) + " expected" +
+                          "\n* Record: " + Base64.encode(data, Hash.HASH_LENGTH, TunnelBuildReplyMessage.RECORD_SIZE-Hash.HASH_LENGTH));
             SimpleByteCache.release(h);
             return -1;
         } else {
             SimpleByteCache.release(h);
             int rv = data[TunnelBuildReplyMessage.RECORD_SIZE - 1] & 0xff;
             if (log.shouldLog(Log.DEBUG))
-                log.debug(reply.getUniqueId() + ": Verified: " + rv + " for record " + recordNum + "/" + hop);
+                log.debug("[" + reply.getUniqueId() + "] Verified: " + rv + " for record " + recordNum + "/" + hop);
             return rv;
         }
     }

@@ -50,7 +50,7 @@ class SAMv3StreamSession  extends SAMStreamSession implements Session
 
 		private static final int BUFFER_SIZE = 1024;
 		private static final int MAX_ACCEPT_QUEUE = 64;
-		
+
 		private final Object socketServerLock = new Object();
 		/** this is ONLY set for FORWARD, not for ACCEPT */
 		private I2PServerSocket socketServer;
@@ -60,13 +60,13 @@ class SAMv3StreamSession  extends SAMStreamSession implements Session
 		private final LinkedBlockingQueue<I2PSocket> _acceptQueue;
 
 		private static I2PSSLSocketFactory _sslSocketFactory;
-	
+
 		private final String nick ;
-		
+
 		public String getNick() {
 			return nick ;
 		}
-		
+
 	   /**
 	     * Create a new SAM STREAM session, according to information
 	     * registered with the given nickname
@@ -76,7 +76,7 @@ class SAMv3StreamSession  extends SAMStreamSession implements Session
 	     * @param login The nickname
 	     * @throws IOException
 	     * @throws DataFormatException
-	     * @throws SAMException 
+	     * @throws SAMException
 	     * @throws NullPointerException if login nickname is not registered
 	     */
 	    public SAMv3StreamSession(String login)
@@ -92,7 +92,7 @@ class SAMv3StreamSession  extends SAMStreamSession implements Session
 	    /**
 	     *   Build a Stream Session on an existing I2P session
 	     *   registered with the given nickname
-	     *   
+	     *
 	     * Caller MUST call start().
 	     *
 	     * @param login nickname of the session
@@ -110,7 +110,7 @@ class SAMv3StreamSession  extends SAMStreamSession implements Session
 	    /**
 	     * Put a socket on the accept queue.
 	     * Only for subsession, throws IllegalStateException otherwise.
-	     *   
+	     *
 	     * @return success, false if full
 	     * @since 0.9.25
 	     */
@@ -123,7 +123,7 @@ class SAMv3StreamSession  extends SAMStreamSession implements Session
 	    /**
 	     * Take a socket from the accept queue.
 	     * Only for subsession, throws IllegalStateException otherwise.
-	     *   
+	     *
 	     * @since 0.9.25
 	     */
 	    private I2PSocket acceptSocket() throws ConnectException {
@@ -157,10 +157,10 @@ class SAMv3StreamSession  extends SAMStreamSession implements Session
 	     * @throws NoRouteToHostException if the destination can't be reached
 	     * @throws InterruptedIOException if the connection timeouts
 	     * @throws I2PException if there's another I2P-related error
-	     * @throws IOException 
+	     * @throws IOException
 	     */
-	    public void connect ( SAMv3Handler handler, String dest, Properties props ) 
-	        throws I2PException, ConnectException, NoRouteToHostException, 
+	    public void connect ( SAMv3Handler handler, String dest, Properties props )
+	        throws I2PException, ConnectException, NoRouteToHostException,
 	    		DataFormatException, InterruptedIOException, IOException {
 
 	    	boolean verbose = !Boolean.parseBoolean(props.getProperty("SILENT"));
@@ -194,18 +194,18 @@ class SAMv3StreamSession  extends SAMStreamSession implements Session
 	        I2PSocket i2ps = socketMgr.connect(d, opts);
 
 	        SessionRecord rec = SAMv3Handler.sSessionsHash.get(nick);
-	        
+
 	        if ( rec==null ) throw new InterruptedIOException() ;
-	        
+
 	        handler.notifyStreamResult(verbose, "OK", null) ;
 
 	        handler.stealSocket() ;
-	        
+
 	        ReadableByteChannel fromClient = handler.getClientSocket();
 	        ReadableByteChannel fromI2P    = Channels.newChannel(i2ps.getInputStream());
 	        WritableByteChannel toClient   = handler.getClientSocket();
 	        WritableByteChannel toI2P      = Channels.newChannel(i2ps.getOutputStream());
-	        
+
 		SAMBridge bridge = handler.getBridge();
 		(new I2PAppThread(rec.getThreadGroup(),
 		            new Pipe(fromClient, toI2P, bridge),
@@ -230,9 +230,9 @@ class SAMv3StreamSession  extends SAMStreamSession implements Session
 	     * @throws NoRouteToHostException if the destination can't be reached
 	     * @throws InterruptedIOException if the connection timeouts
 	     * @throws I2PException if there's another I2P-related error
-	     * @throws IOException 
+	     * @throws IOException
 	     */
-	    public void accept(SAMv3Handler handler, boolean verbose) 
+	    public void accept(SAMv3Handler handler, boolean verbose)
 	    	throws I2PException, InterruptedIOException, IOException, SAMException {
 
 		synchronized(this.socketServerLock) {
@@ -267,7 +267,7 @@ class SAMv3StreamSession  extends SAMStreamSession implements Session
 	        ReadableByteChannel fromI2P    = Channels.newChannel(i2ps.getInputStream());
 	        WritableByteChannel toClient   = handler.getClientSocket();
 	        WritableByteChannel toI2P      = Channels.newChannel(i2ps.getOutputStream());
-	        
+
 		SAMBridge bridge = handler.getBridge();
 		(new I2PAppThread(rec.getThreadGroup(),
 		            new Pipe(fromClient, toI2P, bridge),
@@ -277,7 +277,7 @@ class SAMv3StreamSession  extends SAMStreamSession implements Session
 		            "AcceptV3 SAMPipeI2PToClient")).start();
 	    }
 
-	    
+
 	    /**
 	     *  Forward sockets from I2P to the host/port provided.
 	     *  Accepts and forwarding may not be done at the same time.
@@ -286,27 +286,27 @@ class SAMv3StreamSession  extends SAMStreamSession implements Session
 	    {
 	    	SessionRecord rec = SAMv3Handler.sSessionsHash.get(nick);
 	    	boolean verbose = !Boolean.parseBoolean(props.getProperty("SILENT"));
-	        
+
 	        if ( rec==null ) throw new InterruptedIOException() ;
-	        
+
 	    	String portStr = props.getProperty("PORT") ;
 	    	if ( portStr==null ) {
 	                if (_log.shouldLog(Log.DEBUG))
-	    			_log.debug("receiver port not specified");
+	    			_log.debug("Receiver port not specified");
 	    		throw new SAMException("receiver port not specified");
 	    	}
 	    	int port = Integer.parseInt(portStr);
-	    	
+
 	    	String host = props.getProperty("HOST");
 	    	if ( host==null ) {
 	    		host = rec.getHandler().getClientIP();
 	                if (_log.shouldLog(Log.DEBUG))
-		    		_log.debug("no host specified. Taken from the client socket : " + host +':'+port);
+		    		_log.debug("No host specified. Taken from the client socket : " + host +':'+port);
 	    	}
 		boolean isSSL = Boolean.parseBoolean(props.getProperty("SSL"));
 		if (_acceptors.get() > 0) {
 			if (_log.shouldWarn())
-				_log.warn("an accepting server is already defined for this destination");
+				_log.warn("An accepting server is already defined for this destination");
 			throw new SAMException("an accepting server is already defined for this destination");
 		}
 		synchronized(this.socketServerLock) {
@@ -317,11 +317,11 @@ class SAMv3StreamSession  extends SAMStreamSession implements Session
 			}
 	    		this.socketServer = this.socketMgr.getServerSocket();
 	    	}
-	    	
+
 	    	SocketForwarder forwarder = new SocketForwarder(host, port, isSSL, verbose, sendPorts);
 	    	(new I2PAppThread(rec.getThreadGroup(), forwarder, "SAMV3StreamForwarder")).start();
 	    }
-	    
+
 	    /**
 	     *  Forward sockets from I2P to the host/port provided
 	     */
@@ -330,7 +330,7 @@ class SAMv3StreamSession  extends SAMStreamSession implements Session
 	    	private final String host;
 	    	private final int port;
 	    	private final boolean isSSL, verbose, sendPorts;
-	    	
+
 	    	SocketForwarder(String host, int port, boolean isSSL,
 		                boolean verbose, boolean sendPorts) {
 	    		this.host = host ;
@@ -339,11 +339,11 @@ class SAMv3StreamSession  extends SAMStreamSession implements Session
 	    		this.sendPorts = sendPorts;
 			this.isSSL = isSSL;
 	    	}
-	    	
+
 	    	public void run()
 	    	{
 	    		while (getSocketServer() != null) {
-	    			
+
 	    			// wait and accept a connection from I2P side
 	    			I2PSocket i2ps;
 	    			try {
@@ -369,7 +369,7 @@ class SAMv3StreamSession  extends SAMStreamSession implements Session
 				}
 
 	    			// open a socket towards client
-	    			
+
 	    			SocketChannel clientServerSock;
 	    			try {
 					if (isSSL) {
@@ -447,7 +447,7 @@ class SAMv3StreamSession  extends SAMStreamSession implements Session
 	    	private final WritableByteChannel out ;
 	    	private final ByteBuffer buf ;
 		private final SAMBridge bridge;
-	    	
+
 		/**
 		 *  @param bridge may be null
 		 */
@@ -458,7 +458,7 @@ class SAMv3StreamSession  extends SAMStreamSession implements Session
 	    		this.buf = ByteBuffer.allocate(BUFFER_SIZE) ;
 			this.bridge = bridge;
 	    	}
-	    	
+
 		public void run() {
 			if (bridge != null)
 				bridge.register(this);
@@ -498,7 +498,7 @@ class SAMv3StreamSession  extends SAMStreamSession implements Session
 			} catch (IOException e) {}
 		}
 	    }
-	    
+
 	    protected I2PServerSocket getSocketServer()
 	    {
 	    	synchronized ( this.socketServerLock ) {
@@ -513,21 +513,21 @@ class SAMv3StreamSession  extends SAMStreamSession implements Session
 	    public void stopForwardingIncoming() throws SAMException, InterruptedIOException
 	    {
 	    	SessionRecord rec = SAMv3Handler.sSessionsHash.get(nick);
-	        
+
 	        if ( rec==null ) throw new InterruptedIOException() ;
-	        
+
 	    	I2PServerSocket server = null ;
 	    	synchronized( this.socketServerLock )
 	    	{
 	    		if (this.socketServer==null) {
 		                if (_log.shouldLog(Log.DEBUG))
-		    			_log.debug("no socket server is defined for this destination");
+		    			_log.debug("No socket server is defined for this destination");
 	    			throw new SAMException("no socket server is defined for this destination");
     			}
 	    		server = this.socketServer ;
 	    		this.socketServer = null ;
 	                if (_log.shouldLog(Log.DEBUG))
-		    		_log.debug("nulling socketServer in stopForwardingIncoming. Object " + this );
+		    		_log.debug("Nulling socketServer in stopForwardingIncoming. Object " + this );
 	    	}
 	    	try {
 	    		server.close();

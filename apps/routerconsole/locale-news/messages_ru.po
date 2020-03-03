@@ -2,7 +2,7 @@
 # Copyright (C) 2009 The I2P Project
 # This file is distributed under the same license as the routerconsole package.
 # To contribute translations, see http://www.i2p2.de/newdevelopers
-# 
+#
 # Translators:
 # tengo <akin@rbcmail.ru>, 2013
 # rlagutin <inactive+drbeep@transifex.com>, 2014
@@ -11,15 +11,18 @@ msgid ""
 msgstr ""
 "Project-Id-Version: I2P\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2013-07-13 21:46+0000\n"
+"POT-Creation-Date: 2018-06-16 12:58+0000\n"
 "PO-Revision-Date: 2017-06-30 21:33+0000\n"
 "Last-Translator: rlagutin <inactive+drbeep@transifex.com>\n"
-"Language-Team: Russian (Russia) (http://www.transifex.com/otf/I2P/language/ru_RU/)\n"
+"Language-Team: Russian (Russia) (http://www.transifex.com/otf/I2P/language/"
+"ru_RU/)\n"
+"Language: ru_RU\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"Language: ru_RU\n"
-"Plural-Forms: nplurals=4; plural=(n%10==1 && n%100!=11 ? 0 : n%10>=2 && n%10<=4 && (n%100<12 || n%100>14) ? 1 : n%10==0 || (n%10>=5 && n%10<=9) || (n%100>=11 && n%100<=14)? 2 : 3);\n"
+"Plural-Forms: nplurals=4; plural=(n%10==1 && n%100!=11 ? 0 : n%10>=2 && n"
+"%10<=4 && (n%100<12 || n%100>14) ? 1 : n%10==0 || (n%10>=5 && n%10<=9) || (n"
+"%100>=11 && n%100<=14)? 2 : 3);\n"
 
 msgid "Congratulations on getting I2P installed!"
 msgstr "Поздравляем с успешным завершением установки I2P!"
@@ -29,22 +32,30 @@ msgstr "Добро пожаловать в I2P!"
 
 #, java-format
 msgid "Please {0}have patience{1} as I2P boots up and finds peers."
-msgstr "Немного терпения! {0}{1} I2P-маршрутизатору потребуется пара минут для запуска модулей и первого подключения к сети I2P."
+msgstr ""
+"Немного терпения! {0}{1} I2P-маршрутизатору потребуется пара минут для "
+"запуска модулей и первого подключения к сети I2P."
 
 #, java-format
 msgid ""
-"While you are waiting, please {0}adjust your bandwidth settings{1} on the "
-"{2}configuration page{3}."
-msgstr "Пока Вы ждете, самое время зайти в {2}сетевые настройки{3} и {0}выставить ограничение скорости{1} в соответствии со скоростью Вашего подключения к интернету. "
+"While you are waiting, please {0}adjust your bandwidth settings{1} on the {2}"
+"configuration page{3}."
+msgstr ""
+"Пока Вы ждете, самое время зайти в {2}сетевые настройки{3} и {0}выставить "
+"ограничение скорости{1} в соответствии со скоростью Вашего подключения к "
+"интернету. "
 
-msgid ""
-"Also you can setup your browser to use the I2P proxy to reach eepsites."
-msgstr "Вы также можете настроить браузер на использование I2P-прокси, чтобы иметь доступ к I2P-сайтам (eepsites)."
+msgid "Also you can setup your browser to use the I2P proxy to reach eepsites."
+msgstr ""
+"Вы также можете настроить браузер на использование I2P-прокси, чтобы иметь "
+"доступ к I2P-сайтам (eepsites)."
 
 msgid ""
 "Just enter 127.0.0.1 (or localhost) port 4444 as a http proxy into your "
 "browser settings."
-msgstr "Просто введите адрес HTTP-прокси 127.0.0.1 (или localhost), порт 4444 в настройках браузера."
+msgstr ""
+"Просто введите адрес HTTP-прокси 127.0.0.1 (или localhost), порт 4444 в "
+"настройках браузера."
 
 msgid "Do not use SOCKS for this."
 msgstr "Не используйте SOCKS для этого."
@@ -56,12 +67,15 @@ msgstr "Дополнительная информация есть на {0}ст�
 
 #, java-format
 msgid ""
-"Once you have a \"shared clients\" destination listed on the left, please "
-"{0}check out{1} our {2}FAQ{3}."
-msgstr "{0}Не забудьте заглянуть{1} в наш {2}{3} <a href=\"http://www.i2p2.i2p/faq_ru.html\">FAQ</a>."
+"Once you have a \"shared clients\" destination listed on the left, please {0}"
+"check out{1} our {2}FAQ{3}."
+msgstr ""
+"{0}Не забудьте заглянуть{1} в наш {2}{3} <a href=\"http://www.i2p2.i2p/"
+"faq_ru.html\">FAQ</a>."
 
 #, java-format
 msgid ""
-"Point your IRC client to {0}localhost:6668{1} and say hi to us on "
-"{2}#i2p{3}."
-msgstr "Подключите IRC-клиент к {0}localhost:6668{1} и поприветствуйте нас на {2}#i2p{3}."
+"Point your IRC client to {0}localhost:6668{1} and say hi to us on {2}#i2p{3}."
+msgstr ""
+"Подключите IRC-клиент к {0}localhost:6668{1} и поприветствуйте нас на {2}"
+"#i2p{3}."

@@ -46,7 +46,7 @@ import net.i2p.util.PasswordManager;
 
 class SAMv3Handler extends SAMv1Handler
 {
-	
+
 	private Session session;
         // TODO remove singleton, hang off SAMBridge like dgserver
 	public static final SessionsDB sSessionsHash = new SessionsDB();
@@ -57,7 +57,7 @@ class SAMv3Handler extends SAMv1Handler
 	private static final int FIRST_READ_TIMEOUT = 60*1000;
 	private static final int READ_TIMEOUT = 3*60*1000;
 	private static final String AUTH_ERROR = "AUTH STATUS RESULT=I2P_ERROR";
-	
+
 	/**
 	 * Create a new SAM version 3 handler.  This constructor expects
 	 * that the SAM HELLO message has been still answered (and
@@ -103,7 +103,7 @@ class SAMv3Handler extends SAMv1Handler
 	{
 		return this.socket.socket().getInetAddress().getHostAddress();
 	}
-	
+
 	/**
 	 *  For SAMv3StreamSession connect and accept
 	 */
@@ -117,7 +117,7 @@ class SAMv3Handler extends SAMv1Handler
 		}
 		this.stopHandling();
 	}
-	
+
 	/**
 	 *  For SAMv3StreamSession
 	 *  @since 0.9.20
@@ -125,7 +125,7 @@ class SAMv3Handler extends SAMv1Handler
 	SAMBridge getBridge() {
 		return bridge;
 	}
-	
+
 	/**
 	 *  For SAMv3DatagramServer
 	 *  @return may be null
@@ -149,7 +149,7 @@ class SAMv3Handler extends SAMv1Handler
 	 */
 	void setSession(SAMv3DatagramSession sess) {
 		datagramSession = sess; session = sess;
-	}	
+	}
 
 	/**
 	 *  For subsessions created by MasterSession
@@ -157,7 +157,7 @@ class SAMv3Handler extends SAMv1Handler
 	 */
 	void setSession(SAMv3StreamSession sess) {
 		streamSession = sess; session = sess;
-	}	
+	}
 
 	@Override
 	public void handle() {
@@ -187,7 +187,7 @@ class SAMv3Handler extends SAMv1Handler
 					try {
 						ReadLine.readLine(socket, buf, READ_TIMEOUT);
 						line = buf.toString();
-						buf.setLength(0);					
+						buf.setLength(0);
 					} catch (SocketTimeoutException ste) {
 						long now = System.currentTimeMillis();
 						if (buf.length() <= 0) {
@@ -223,15 +223,15 @@ class SAMv3Handler extends SAMv1Handler
 								// go around again
 								_lastPing = -1;
 								if (_log.shouldWarn())
-									_log.warn("timeout after partial: " + buf);
+									_log.warn("Timeout after partial: " + buf);
 							}
 						}
 						if (_log.shouldDebug())
-							_log.debug("loop after timeout");
+							_log.debug("Loop after timeout");
 						continue;
 					}
 				} else {
-					buf.setLength(0);					
+					buf.setLength(0);
 					// first time, set a timeout
 					try {
 						ReadLine.readLine(socket, buf, gotFirstLine ? 0 : FIRST_READ_TIMEOUT);
@@ -322,7 +322,7 @@ class SAMv3Handler extends SAMv1Handler
 		} finally {
 			if (_log.shouldLog(Log.DEBUG))
 				_log.debug("Stopping handler");
-			
+
 			if (!this.stolenSocket)
 			{
 				try {
@@ -332,7 +332,7 @@ class SAMv3Handler extends SAMv1Handler
 						_log.warn("Error closing socket", e);
 				}
 			}
-			if (streamForwardingSocket) 
+			if (streamForwardingSocket)
 			{
 				if (this.getStreamSession()!=null) {
 					try {
@@ -375,7 +375,7 @@ class SAMv3Handler extends SAMv1Handler
 
 	private void die() {
 		SessionRecord rec = null ;
-		
+
 		if (session!=null) {
 			session.close();
 			rec = sSessionsHash.get(session.getNick());
@@ -390,7 +390,7 @@ class SAMv3Handler extends SAMv1Handler
 			sSessionsHash.del(session.getNick());
 		}
 	}
-	
+
 	/* Parse and execute a SESSION message */
 	@Override
 	protected boolean execSessionMessage(String opcode, Properties props) {
@@ -481,7 +481,7 @@ class SAMv3Handler extends SAMv1Handler
 					return writeString("SESSION STATUS RESULT=DUPLICATED_DEST\n");
 				}
 
-				
+
 				// Create the session
 
 				if (style.equals("RAW")) {
@@ -604,7 +604,7 @@ class SAMv3Handler extends SAMv1Handler
 			} catch (IOException e) {}
 			return false ;
 		}
-		
+
 		streamSession = rec.getHandler().streamSession ;
 		if (streamSession==null) {
 			if (_log.shouldLog(Log.DEBUG))
@@ -618,7 +618,7 @@ class SAMv3Handler extends SAMv1Handler
 		if ( opcode.equals ( "CONNECT" ) )
 		{
 			return execStreamConnect ( props );
-		} 
+		}
 		else if ( opcode.equals ( "ACCEPT" ) )
 		{
 			return execStreamAccept ( props );
@@ -651,7 +651,7 @@ class SAMv3Handler extends SAMv1Handler
 					_log.debug("No parameters specified in STREAM CONNECT message");
 				return false;
 			}
-		
+
 			String dest = (String) props.remove("DESTINATION");
 			if (dest == null) {
 				notifyStreamResult(verbose, "I2P_ERROR", "Destination not specified in STREAM CONNECT message");
@@ -706,7 +706,7 @@ class SAMv3Handler extends SAMv1Handler
 			}
 		} catch (IOException e) {
 		}
-		return false ;		
+		return false ;
 	}
 
 	private boolean execStreamAccept( Properties props )
@@ -736,7 +736,7 @@ class SAMv3Handler extends SAMv1Handler
 		}
 		return false ;
 	}
-	
+
 
 	/**
 	 * @param verbose if false, does nothing
@@ -747,7 +747,7 @@ class SAMv3Handler extends SAMv1Handler
 		if (!verbose) return ;
 		String msgString = createMessageString(message);
 		String out = "STREAM STATUS RESULT=" + result + msgString + '\n';
-        
+
 		if (!writeString(out)) {
 			throw new IOException ( "Error notifying connection to SAM client" );
 		}
@@ -768,13 +768,13 @@ class SAMv3Handler extends SAMv1Handler
 	        throw new IOException("Error notifying connection to SAM client");
 	    }
 	}
-	
+
 	public static void notifyStreamIncomingConnection(SocketChannel client, Destination d) throws IOException {
 	    if (!writeString(d.toBase64() + "\n", client)) {
 	        throw new IOException("Error notifying connection to SAM client");
 	    }
 	}
-	
+
 	/** @since 0.9.24 */
 	public static void notifyStreamIncomingConnection(SocketChannel client, Destination d,
 	                                                  int fromPort, int toPort) throws IOException {
@@ -851,10 +851,10 @@ class SAMv3Handler extends SAMv1Handler
 			if (expected.equals(s)) {
 				_lastPing = 0;
 				if (_log.shouldInfo())
-					_log.warn("Got expected pong: " + s);
+					_log.warn("Received expected pong: " + s);
 			} else {
 				if (_log.shouldInfo())
-					_log.warn("Got unexpected pong: " + s);
+					_log.warn("Received unexpected pong: " + s);
 			}
 		} else {
 			if (_log.shouldWarn())

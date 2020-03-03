@@ -4,8 +4,23 @@
 
 * 2020-02-25 0.9.45 released
 
+2020-02-24 dr|z3d
+ * Console:
+   - Add page to display tunnel count for both local and
+     participating tunnel groups per peer and add link to /tunnels
+   - Cleanup /profiles unit display
+ * I2PSnark:
+   - Replace livingstone tracker with fazanka
+   - Integrate TorrFreedom details links
+
 2020-02-21 zzz
  * Update translations
+
+2020-02-20 dr|z3d
+ * Router: Reduce time for re-evaluating peer caps, adjust
+   min/max values for fast and high cap peers and adjust
+   algorithm for calculating fast peers to pick better quality
+   peers for client tunnel usage
 
 2020-02-20 zzz
  * Build: Add non-pack200 release targets (ticket #2693)
@@ -24,41 +39,64 @@
  * Install: Remove commented-out GzipFilter in cgi-context.xml
  * i2psnark: Revert API changes that broke i2psnark-rpc plugin
 
-2020-02-15 zzz
- * Console: Fix jump-to-section on /stats
- * NTCP: Remove closed connections from write queue (ticket #2686)
+2020-02-15 dr|z3d
+ * Console: Migrate from JRobin to RRD4J for in-console graphs
 
-2020-02-12 zzz
- * I2CP: Place ECIES first in LS2
- * i2ptunnel: Change default sig type to Ed for non-shared HTTP client
+2020-02-14 dr|z3d
+ * Console: Reduce interval for updating country list on /netdb
+   from 1/2 hour to 5 minutes to keep the list fresh
 
-2020-02-10 zzz
- * Transport: Mark yggdrasil IPv6 prefix as not routable
+2020-02-12 dr|z3d
+ * Console:
+   - Remove ungraphable stats from /configstats and move graphable stats
+     from table rows to divs for better presentation; remove toggle all links
+   - Show router version tooltip and floodfill status on routerid with flags;
+     move ip address to flag tooltip
+   - Improved font handling for graphs that enables a css-style list
+     of supported fonts
+   - Fix NPE on graphs page (and sidebar when minigraph is enabled) when
+     no theme is explicitly configured
+   - Router: use I2PSpeed's thread management for more efficient allocation
+     of threads
 
-2020-02-09 zzz
- * Console: Show local tunnel status as green if any leases are valid
- * I2CP: I2CPMessageHandlerMap cleanup
+2020-01-27 dr|z3d
+ * Console:
+   - Add Peers and Tunnels sections to sidebar on /home when not in adv. mode
+   - Add Congestion section to sidebar on /home in advanced mode
+   - Hide Reseed URL configuration on /configreseed when not in advanced mode
+     and add a note about activating advanced mode to enable configuration
+   - Conditionally hide sidebar link sections on pages where the links are
+     presented (sitemap, help section)
 
-2020-02-05 zzz
- * SSU: Skip down interfaces when looking for MTU
+2020-01-23 dr|z3d
+ * Console: Only permit editing of session-only tunnel configuration on
+   /configtunnels when in advanced mode; replace client tunnels links on
+   /tunnels with tunnel manager link when not in advanced mode
+ * I2PSnark: Add tooltips to tunnel quantity dropdowns indicating number
+   of configured tunnels is maximum and may be lower in practice, and to
+   hop count indicating inadvisability of setting hops < 3
 
-2020-02-03 zzz
- * Graphs: Clean up font setting, fix bugs (ticket #2684)
-
-2020-01-26 idk
- * changed many icons on both light and dark themes out for Feather equivalents.
-
-2020-01-26 zzz
- * Tunnels: Don't test ECIES-only tunnels
-
-2020-01-21 zzz
- * SSU: Use same valid IP criteria for relay request and response
+2020-01-22 dr|z3d
+ * Console: Add override.css.charcoal to light theme directory;
+   improvements to dark override.css.ocean.blue override file
+ * SusiDNS: Add override.css.charcoal to light theme directory
+ * SusiMail: Add override.css.charcoal to light theme directory
 
 2020-01-21 zzz
  * Ratchet: Randomize two high bits of Elligator2 encoding
 
 2020-01-15 zzz
  * i2ptunnel: Fix NPE if no config file
+
+2020-01-15 dr|z3d
+ * Console: Show primary ip of router on tooltip for routerids with flags
+
+2020-01-12 dr|z3d
+ * Console: Do not display dead tunnels on /tunnels and hide
+   Participating tunnel section when no participating tunnels active
+ * TunnelManager: Add support for theme overrides
+ * SusiDNS: Add support for theme overrides
+ * SusiMail: Add support for theme overrides
 
 2020-01-11 zzz
  * SSU: Extend timeout for msgs with multiple fragments (ticket #2640)
@@ -68,25 +106,24 @@
  * Jetty 9.2.29.v20191105
  * Tomcat 8.5.50
 
+2020-01-06 dr|z3d
+ * Router: Bump default minimum version of routers allowed in NetDb to 0.9.29
+
 2020-01-03 zzz
  * Console:
    - Don't refresh bw graph unless enclosing sidebar refresh is longer
-   - Remove scroll-in-scroll for wrapper logs
    - Refactor the configstats js
- * i2psnark:
-   - CSS tweaks so the refresh isn't as glitchy
-   - Reduce default refresh to 15 sec
  * Tests: Drop empty unit test files
-
-2020-01-02 idk
- * Dark Theme: Colors, borders, icons were simplified across the board
- * Images: Checked in icons from Feather icons, which are under the MIT License
-  - https://github.com/feathericons/feather/blob/master/LICENSE
 
 2020-01-02 zzz
  * Util:
    - Add https redirect support to EepGet and SSLEepGet
    - Add https support to EepGet CLI
+
+2019-12-29 dr|z3d
+ * I2PSnark: Make comment section and file directories collapsible; only show
+   comments section uncollapsed if comments/ratings exist; only show directories
+   uncollapsed if 10 or less files in directory or not root dir for torrent
 
 2019-12-25 zzz
  * Console, webapps: CSP improvements
@@ -146,9 +183,6 @@
 2019-11-30 zzz
  * Pull translations
 
-2019-11-30 sadie
- * Console, SusiDNS: CSS updates
-
 2019-11-29 zzz
  * Console, proxy, SusiDNS: Add partial Persian translations
 
@@ -158,6 +192,9 @@
 2019-11-24 zzz
  * Debian: Add apparmor support for Java 11 (Github PR #19)
  * i2psnark: File system error message improvements
+
+2019-11-24 dr|z3d
+ * Console: Set default sidebar refresh to 3 seconds
 
 2019-11-23 zzz
  * Router:
@@ -203,13 +240,16 @@
  * KeyGenerator: Use new PrivateKey constructor
  * Router: Set default sig type to EdDSA for Android (ticket #2643)
 
+2019-11-10 dr|z3d
+ * I2PSnark: Enhance presentation of video thumbnails and enable
+   fullscreen playback of videos in iframe
+
 2019-11-08 zzz
  * i2psnark: Add HTML5 players on details page
 
 2019-11-06 idk
- * Router: Use Local Application Data(%LOCALAPPDATA%)
-   instead of Roaming for config (ticket #1258)
- * Console: Change home page organization and headers
+ * Router:
+  - Use Local Application Data(%LOCALAPPDATA%) instead of Roaming for config
 
 2019-11-05 zzz
  * Router: No longer check the clove ID in the Bloom filter
@@ -219,6 +259,10 @@
 
 2019-10-31 zzz
  * Router: Updates for proposal 144
+
+2019-10-29 dr|z3d
+ * Proxy: Update clearnet browser user agent to Firefox ESR 68 to sync with
+   latest Tor Browser
 
 2019-10-27 zzz
  * NetDB: Don't send encrypted lookup reply to ratchet dest
@@ -259,6 +303,9 @@
    - Register all LS2 keys with KeyManager
  * Startup: clients.config.d files must end in ".config"
 
+2019-10-23 dr|z3d
+ * SusiDNS: Enhance iframed midnight theme
+
 * 2019-10-22 0.9.43 released
 
 2019-10-18 zzz
@@ -274,15 +321,29 @@
 2019-10-06 zzz
  * I2NP: Remove unused I2NPMessageHandler methods
 
+2019-10-06 dr|z3d
+ * SusiDNS: Decouple update subscriptions function from 'Save' button
+   and add separate 'Update' button; hide 'Reload' button
+
+2019-10-05 dr|z3d
+ * Router: Wait at least 5 minutes after startup before building
+   participating tunnels (increased from 90s)
+ * SusiDNS: Implement per-theme css-styling of overview svg with
+   <noscript> fallback; custom styling for dark/midnight themes
+
 2019-10-03 zzz
  * i2psnark: Start with minimum tunnel count (ticket #2623)
 
-2019-10-03 idk
- * Console: Wizard updates (ticket #2415)
+2019-10-01 dr|z3d
+ * Console: Add :hover indicator on websites on /home and /sitemap when
+   javascript is required for the site to function
 
 2019-10-01 zzz
  * Console: Remove i2pwiki.i2p (ticket #2626)
  * PortMapper: Fix URL generation for IPv6 hosts
+
+2019-09-28 dr|z3d
+ * Console: Add glossary page to help section
 
 2019-09-21 zzz
  * Tomcat 8.5.46
@@ -313,6 +374,9 @@
  * I2CP: BlindingInfo fixes
  * i2ptunnel: New form for blinding info
 
+2019-09-12 dr|z3d
+ * Console: Add router floodfill status to /info
+
 2019-09-10 zzz
  * I2CP: New Blinding Info message (proposal 123)
  * i2ptunnel: New b32 error page
@@ -330,8 +394,15 @@
  * Jetty: Support annotation scanning of plugins for Servlet 3.0 @WebServlet
  * Transport: Detect IPv6 address changes (ticket #2175)
 
+2019-09-07 dr|z3d
+ * Susimail: Only show floating delete confirmation if page contains
+   more than 25 messages
+
 2019-09-06 zzz
  * Transports: Remove IPv6 addresses on transition to IPv6 firewalled
+
+2019-09-04 dr|z3d
+ * Console: Add explanatory text and location info to /certs
 
 2019-09-04 zzz
  * SSU: Don't mark peer unreachable if it reports
@@ -350,6 +421,9 @@
 2019-09-02 zzz
  * Unit test fixes
 
+2019-09-01 dr|z3d
+ * Console: Fix html on /configservices when not running via wrapper
+
 2019-08-30 zzz
  * Util: Consolidate and standardize date/time formatting (ticket #2016)
 
@@ -361,6 +435,19 @@
 
 * 2019-08-27 0.9.42 released
 
+2019-08-24 dr|z3d
+ * Console:
+   - Only show 'Delete User' button on console password section of /configui
+     if a user/pass has been configured
+   - Fix display of Windows only options on /configservice and simplify text
+   - Do not display "Rejecting tunnels - High message delay" in sidebar if
+     router.maxParticipatingTunnels=0
+   - Streamline /wizard and improve presentation
+   - Don't display Orchid plugin in iframe if embedded mode is enabled
+   - Make all external links on /home open in new tab and remove config option
+   - Only show cert sections on /certs if a certificate is active
+   - Fix placement of update download bar in sidebar (light/midnight)
+
 2019-08-23 zzz
  * Translation updates
 
@@ -370,12 +457,26 @@
 2019-08-18 zzz
  * Jetty: Log stack trace if 2nd arg is a Throwable (ticket #2592)
 
+2019-08-16 dr|z3d
+ * Router: Remove unnecessary sleep from NTCP Pumper and optimize
+   processing priority (patch from jogger)
+
 2019-08-15 zzz
  * SSU: Reduce ACK time to 150 (ticket #2574)
  * Tunnels: Reduce IBGW batching time (ticket #2586)
 
+2019-08-15 dr|z3d
+ * Router:
+   - Replace Tunnel Gateway Pumper threads with direct forwarding to the
+     appropriate tunnel to reduce latency, putting local traffic on a par
+     with direct dispatch method for participating traffic (patch from jogger)
+
 2019-08-14 zzz
  * Console: Clean up help text, tag for translation (ticket #2298)
+
+2019-08-12 dr|z3d
+ * Console: Add NetDb country link to routerinfo flags
+ * TunnelManager: Fix Encrypted LeaseSet options
 
 2019-08-10 str4d
  * EdDSA: Reduce diff between vendored code and upstream
@@ -386,6 +487,9 @@
      SingleFileNamingServiceTest
    - Unify core test resources across JUnit and ScalaTest
    - Fix streaming integration tests after access filtering changes
+
+2019-08-06 dr|z3d
+ * Console: Add section about Firefox to Configuration help page
 
 2019-08-05 zzz
  * i2ptunnel:
@@ -430,6 +534,9 @@
 2019-07-22 zzz
  * NetDB: Handle LS2 blinded flag bit
 
+2019-07-20 dr|z3d
+ * Console: Add mini-tutorial for Firefox config to Configuration help page
+
 2019-07-19 zzz
  * Console: Split up /help page, prep for translation (ticket #2298)
 
@@ -440,8 +547,19 @@
  * Build: Move SSU HMAC implementation from core to router
  * Test: Fix broken unit test build
 
+2019-07-12 dr|z3d
+ * Imagegen: Slightly decrease size of rendered font for QRcode if
+   width >= 256px and slightly increase size of font for long text
+   strings if width >= 256px
+
 2019-07-11 zzz
  * imagegen: Improve QR font rendering
+
+2019-07-10 dr|z3d
+ * Tunnel Manager: Increase ajax refresh for index to 30s
+ * I2PSnark: Remove Chihaya and ICU812 from list of opentrackers
+ * Imagegen: Enhance presentation of random art demos; increase max
+   size of identicons and qrcodes to 1024x1024
 
 2019-07-09 zzz
  * NetDb:
@@ -449,10 +567,16 @@
    - Pick alternate reply GW for netdb store reply
      if connected, to reduce connections
 
-2019-07-04 zzz
- * Console: Hide netdb RI and LS tabs (ticket #2558)
-
 * 2019-07-03 0.9.41 released
+
+2019-07-01 dr|z3d
+ * Console: Add section about theme overrides to UI help page
+
+2019-06-30 dr|z3d
+ * Console: Add 30 second ajax refresh to /logs
+
+2019-06-29 dr|z3d
+ * Console: Rationalize navigation links in NetDb section
 
 2019-06-28 zzz
  * Update translations from Transifex
@@ -468,8 +592,18 @@
    - Check that destinations match in signatures
    - Increase size of recently-closed cache
 
+2019-06-25 dr|z3d
+* Console: Add HiDPI mode for graph display
+
+2019-06-24 dr|z3d
+ * Console: Don't display help section on sidebar by default if not
+   a new installation
+
+2019-06-22 dr|z3d
+ * Console: Migrate /graphs and /graph to ajax refresh with meta refresh
+   fallback; stabilize rendering of graphs to avoid page resize on reload
+
 2019-06-22 zzz
- * Console: New logo
  * I2CP: Ensure that callbacks are called on abnormal close
 
 2019-06-21 zzz
@@ -487,13 +621,12 @@
 2019-06-16 zzz
  * i2psnark:
    - Increase DHT blacklist time (ticket #2275)
-   - Fix QupZilla detection (ticket #2026)
 
 2019-06-15 zzz
  * Console: Fix stopping webapps at shutdown (ticket #2508)
 
 2019-06-09 zzz
- * Eepsite Help page: Add links to Arabic, Hungarian, Indonesian.
+ * Eepsite Help page: Add links to Arabic, Hungarian, Indonesian;
    fix link to Italian
  * SusiMail: Add Farsi translation
  * Tests: Fix some bashisms, add more files to bashisms check
@@ -519,6 +652,9 @@
 2019-06-03 zzz
  * Transport: Fix large messages in SSU (ticket #2505)
 
+2019-06-02 dr|z3d
+ * Console: Replace tunnel status stars with hidpi versions
+
 2019-06-02 zzz
  * Build: Fix Debian (ticket #2517)
  * i2ptunnel: Add new getInstance() method for Android
@@ -527,6 +663,19 @@
 2019-06-01 zzz
  * NetDB: Don't wait for all RIs to be read in on Android
  * Tunnels: Ensure GW Pumper threads stop on Android
+
+2019-06-01 dr|z3d
+ * i2ptunnel:
+   - Differentiate between 'starting' and 'standby' mode for tunnels
+     on index page with different icons
+   - Add ajax refresh to index page to allow for better automatic
+     syncing of index and console sidebar tunnel status
+ * Console:
+   - Add automatic 15s refresh via ajax for /tunnels and /jobs
+   - Reverse sort order for tunnels on /tunnels (newest at top)
+
+2019-05-31 dr|z3d
+ * Console: Enhance presentation of /configkeyring
 
 2019-05-31 zzz
  * Blinding: Bug fixes
@@ -552,7 +701,15 @@
  * i2ptunnel:
    - Per-client auth config
    - Hide encryption key for per-client auth
-   - User-select: all for key fields
+
+2019-05-24 dr|z3d
+ * i2ptunnel:
+   - Reinstate generate button for encrypted leasesets
+   - Refactor layout to improve presentation and optimize space usage;
+     add Cancel, Delete and Save buttons to top half of edit pages
+   - Hide tunnel backup count and variance options unless in adv. mode
+ * Console: Hide backup count and variance options on /configtunnels
+   unless in adv. mode
 
 2019-05-23 zzz
  * i2ptunnel:
@@ -561,6 +718,10 @@
    - Refactor auto configuration
    - Add LS2 option, change to select box
    - Select box for sig type
+
+2019-05-23 dr|z3d
+ * Profiles: Enhance presentation of in-console router profiles by
+   only showing commented lines
 
 2019-05-22 zzz
  * Crypto: Add X25519 DH class
@@ -580,6 +741,13 @@
    - Improve error handling when loading files
    - Skip comment lines in stored files
  * Tunnels: Increase tunnel reuse probability
+
+2019-05-20 dr|z3d
+ * Sybil:
+   - Improve presentation of periodic analysis configuration
+   - Add 'hot' indicator for sybils scoring 100 or more points
+ * Console:
+   - Improve presentation of banlist on /profiles and /configpeer
 
 2019-05-19 zzz
  * Build: Remove dependencies on Nashorn (ticket #2367)
@@ -634,11 +802,30 @@
 
 * 2019-05-07 0.9.40 released
 
+2019-05-04 dr|z3d
+ * Tunnel Manager: Enhance presentation of status message screenlog
+ * Console: Add optional UTC clock to sidebar configuration
+
 2019-05-02 zzz
  * Android: Catch ISE from PRNG at shutdown (ticket #2077)
  * GeoIP Maxmind 2019-04-29
  * NTCP: Rare EventPumper 100% CPU fix (ticket #2476)
  * UPnP: Remove finalize() in HTTPSocket (ticket #2490)
+
+2019-05-02 dr|z3d
+ * Console: Ensure sidebar 'Service Tunnel' icons don't flicker/reload
+   during ajax refresh
+
+2019-04-27 dr|z3d
+ * Jetty:
+   - Add custom css with embedded images to jetty-util to provide
+     enhanced default directory listings for eepsite webserver and
+     ensure Last Modified timestamps are displayed in UTC
+   - Enhance error message presentation in jetty-server and remove
+     "Powered by Jetty" footer for console and eepsite errors
+
+2019-04-26 dr|z3d
+ * Jetty 9.2.28.v20190418
 
 2019-04-25 zzz
  * Build: Drop unmaintained sample apparmor script (ticket #2319)
@@ -648,6 +835,9 @@
 
 2019-04-24 zzz
  * Crypto: Catch ProviderException in KeyStoreUtil (ticket #2479)
+
+2019-04-20 dr|z3d
+ * Console: Add updated version of eepsite help to help section
 
 2019-04-22 zzz
  * Build:
@@ -662,11 +852,14 @@
  * Tests: Fix ministreaming tests after access filtering changes
 
 2019-04-20 zzz
- * Console, SusiDNS: New icons
  * Debian: Update Bionic/Cosmic to include patch for Jetty 9.4
  * Router:
    - Update NTCP checks for NTCP2
    - Remove old check for 0.6.1.32 and earlier routers
+
+2019-04-20 dr|z3d
+ * Jetty 9.2.27.v20190403
+ * Snark: Roll back themed error dialogs
 
 2019-04-18 zzz
  * Console: Improve error message when graphs disabled (ticket #2452)
@@ -675,13 +868,14 @@
 2019-04-17 zzz
  * Transport: More fixes for NTCP when SSU disabled (ticket #1417)
 
-2019-04-16 zzz
- * Console: More new icons
-
 2019-04-15 zzz
  * Console: Don't display I2CP error during soft restart (ticket #2468)
  * NamingService: Fix class selection in app context (ticket #2469)
  * Tomcat 8.5.40
+
+2019-04-15 dr|z3d
+ * Jetty:
+   - Reinstate displaying dates for directories in listings
 
 2019-04-13 zzz
  * i2ptunnel:
@@ -693,6 +887,15 @@
    - Fix NPE creating server tunnel
    - Add Red25519 sigtype option for servers
 
+2019-04-13 dr|z3d
+ * Jetty:
+   - Don't display files or directories in listings if they begin
+     with '.', end with '~', '.bak' or '.old' or are named
+     jetty-dir.css or favicon.ico
+   - Add table column headers for 'Name', 'Last Modified (UTC)'
+     and 'Size (bytes)' and remove trailing 'bytes' and 'UTC'
+     from individual entries
+
 2019-04-10 zzz
  * Jetty: Hide sizes and dates of directories in listings
  * NTCP2: Allow longer padding in msg 1 if NTCP1 disabled
@@ -700,11 +903,31 @@
 2019-04-08 zzz
  * Util: Fix memory leak in compressor (ticket #2471)
 
+2019-04-08 dr|z3d
+ * Snark: Linkify trackers in 'Create Torrent' section
+
+2019-04-07 dr|z3d
+ * Snark: Implement themed js confirmation dialogs
+
+2019-04-05 dr|z3d
+ * Console: Add page load progress bar (js)
+
+2019-04-04 dr|z3d
+ * Susimail: Add toggle password visibility button on login page (js)
+
 2019-04-03 zzz
  * I2PTunnel: Start/stop POST throttle timer
 
+2019-04-02 dr|z3d
+ * Tunnel Manager: Simplify and tidy access filtering UI
+ * Help section: Add page for tunnel filtering (access lists)
+
 2019-04-02 zab
  * I2PTunnel: Implement access filtering (ticket #2464)
+
+2019-04-01 dr|z3d
+ * Tunnel Manager: Add toggle info button to global control header and display
+   collapsed by default (requires js)
 
 2019-03-31 zzz
  * Data: Implement Destroyable for private keys (ticket #2462)
@@ -712,6 +935,23 @@
 2019-03-29 zzz
  * Crypto: SigContext (WIP) (proposal #148)
  * NetDB: Persist cached blinding data (proposal #123)
+
+2019-03-29 dr|z3d
+ * Snark:
+   - Replace vanilla theme icons with hidpi versions; various theme updates
+   - Add tracker.icu812.i2p and ptt.i2p to list of default open trackers
+ * Router: If we're running as a floodfill and have over 5000 known peers,
+   divide that by 2 before publishing to other routers to obfuscate the
+   fact that we're running I2P+
+
+2019-03-28 dr|z3d
+ * Console:
+   - Add h1 title images to midnight and classic themes
+   - Iconize roles for participating tunnels (midnight/light/classic)
+
+2019-03-27 dr|z3d
+ * Console: Hide Participating tunnel count and Share Ratio in sidebar if router
+   is tier 'K', participation is disabled via config, or hidden mode is active
 
 2019-03-27 zzz
  * NetDB: Cache blinding data for lookups and decryption (proposal #123)
@@ -728,6 +968,26 @@
 
 * 2019-03-21 0.9.39 released
 
+2019-03-19 dr|z3d
+ * Graphs:
+   - Add graphs for known, banned and unreachable peers
+   - Move all bandwidth related graphs to 60s average for consistency and
+     remove '60 sec avg' text from graph titles
+   - When graph width >= 600px, increase size of text
+   - Increase max size for graphs to 4K (3840 x 2160)
+   - Add link to single image graphs to return to graph overview
+   - Restore option to save graph data as xml while ensuring it doesn't load
+     inline
+
+2019-03-17 dr|z3d
+ * Console: Overhaul /stats page and replace dropdown section selector
+   with top navigation, displaying each section separately to avoid
+   information overload
+ * I2PSnark: Fix placement of comment indication star in main torrent listing
+   when torrent has comments
+ * Logging: Downgrade various log entries from info to debug; remove stack
+   trace from logging entries where a brief indication of failure is more apt
+
 2019-03-16 zzz
  * Fix Debian builds with Jetty 9.4.15 (ticket #2457)
 
@@ -737,8 +997,19 @@
  * I2PTunnel: make I2PTunnel default to negative startup delay value
    (ticket #2377)
 
-2019-03-11 zzz
- * Console: New home page icons
+2019-03-11 dr|z3d
+ * Graphs:
+   - When graph width is set to 280 pixels or less, reduce the title font
+     size when 'droid sans' font is locally installed, and reduce further
+     when width is 220px or less, to lessen chance of text truncation and
+     improve overall presentation
+   - Modifications to graph titles to lessen risk of title truncation
+     at narrow graph widths and provide more consistent naming
+   - If display period is >= 12 hours, or period >= 6 hours and
+     width is < 400px, reduce plot line width on combined b/w graph
+   - Add additional categories on /configstats for specific sub-categories
+     e.g. participating tunnels, and recategorize specific stats to group
+     related stats e.g. router-specific
 
 2019-03-09 zzz
  * Data: Consolidate offline key check
@@ -747,6 +1018,10 @@
 
 2019-03-07 zzz
  * NetDB: Minor performance improvement in selectors
+
+2019-03-06 dr|z3d
+ * Graphs: Natively render graphs in dark and midnight themes
+   with a custom palette instead of relying on css filters
 
 2019-03-06 zzz
  * NetDB: Fix flood version check, add version check for RedDSA
@@ -776,9 +1051,17 @@
    - Fix scheduling of peer test at startup (ticket #2441)
    - Fix RTT/RTO calculations (ticket #2443)
 
+2019-02-25 dr|z3d
+ * Console: Replace 'Welcome' heading on /home for new users with
+   multiflag icon in 'Apps and Configuration' header
+
 2019-02-25 zzz
  * NetDB: Fix dup publish of RI at startup
  * NTCP: Fix number of SendFinisher threads (ticket #2438)
+
+2019-02-24 dr|z3d
+ * Logging: More presentational and content improvements to router logging;
+   revert router log order so that newest router logs appear at top of page
 
 2019-02-23 zzz
  * Console: Flip order of router logs
@@ -802,12 +1085,42 @@
 2019-02-19 zzz
  * Crypto: Implement blinding, add sig type 11 (proposal 123)
 
+2019-02-18 dr|z3d
+ * Console:
+   - Reinstate midnight and classic themes
+   - Fix display bugs in midnight console theme at narrower screen widths
+     and begin global midnight theme overhaul
+
 2019-02-18 zzz
  * Console: Drop midnight and classic themes (ticket #2272)
  * Tomcat 8.5.38
  * Transport:
    - Fixes for NTCP when SSU disabled (ticket #1417)
    - Delay port forwarding until after UPnP rescan complete
+
+2019-02-13 dr|z3d
+ * Console:
+   - Add logic to /sitemap to open 'torrents' and 'webmail'
+     in new tabs if 'routerconsole.homeExtLinksToNewTab=true' and
+     embedded app mode is not enabled
+   - Add ttf fonts to list of mimetypes to be gzipped
+
+2019-02-11 dr|z3d
+ * Console: Optimize graph titles for tunnel bandwidth to improve legibility
+   and lessen chance of text truncation at narrower widths; reduce minimum
+   height and width; remove title from sidebar bandwidth graph
+
+2019-02-10 dr|z3d
+ * Console:
+   - Display transport status on /peers for all users
+   - More logging presentational improvements
+   - Fix some cosmetic issues with midnight theme
+   - Add tunnel names and direction to labels on /configstats
+ * Router:
+   - If 'router.expireRouterInfo' is configured, also apply to
+     floodfill-enabled router
+   - Add configuration option 'router.exploreWhenFloodfill' to enable
+     Explorer Job for floodfill routers
 
 2019-02-08 zzz
  * Console: Hide disabled transports on /peers
@@ -868,9 +1181,16 @@
  * Build: Fix javac.classpath in junit.compileTest targets (ticket #2333)
  * I2CP: Fixes for CreateLeaseset2 message with multiple keys
 
+2019-01-29 dr|z3d
+ * I2PControl: Add html markup and theme support
+
 2019-01-28 zzz
  * Bundle i2pcontrol
  * EdDSA: Make more classes serializable (Github PR #68)
+
+2019-01-27 dr|z3d
+ * I2PSnark: Fix issue that caused some torrents to stall after
+   partially downloading
 
 2019-01-27 zzz
  * NDT:
@@ -882,6 +1202,10 @@
    - Fix Debian control files (ticket #2401)
    - Add build option for libtomcat9 (ticket #2364)
    - Fix PPA builds for precise and trusty (ticket #2408)
+
+2019-01-23 dr|z3d
+ * Console: Fix issue that caused 503's to be display on various pages
+   when no console language was configured
 
 * 2019-01-22 0.9.38 released
 
@@ -907,12 +1231,42 @@
    - Fix update of draft folder after saving as draft
    - Change text of add attachment button for clarity
 
+2019-01-15 dr|z3d
+ * Console: Replace "Config" with "Configure" and "i2cp" with "I2CP"
+   in page titles if routerconsole.lang=en
+
+2019-01-14 dr|z3d
+ * Console: Add missing glyphs to Droid fonts so unicode characters display
+   correctly when there is no native font support (e.g. TorBrowser) and
+   tweak kerning pairs to improve presentation
+
 2019-01-13 zzz
  * I2CP: Set LS2 unpublished bit, show in debug output
+
+2019-01-13 dr|z3d
+ * Console: Reorder page title so page name precedes 'I2P Router Console' and
+   capitalize words on the fly
+ * Susimail: Add form validation to login page and migrate 'settings' button
+   to static link
 
 2019-01-12 zzz
  * NetDB: Use isSlow() in floodfill criteria
  * SSU: More consolidation of clock().now() calls
+
+2019-01-12 dr|z3d
+ * Console: Implement global font mechanism to ensure console and webapps
+   have a consistent appearance regardless of browser/OS
+ * I2PSnark: Add ui option to display add/create sections on all pages when
+   in multipage mode
+
+2019-01-11 dr|z3d
+ * Console:
+   - Reorder navigation bar links on /profiles for consistency
+   - Indicate inbound/outbound count for client and exploratory tunnels
+     on the sidebar and add total tunnel count
+   - Add Banned peer count to the Peers section on the sidebar and add links
+     to Active, High Capacity, Integrated, Unreachable and Banned labels
+   - Indicate number of banned peers on profiles sub-section and /configpeer
 
 2019-01-10 zzz
  * I2CP:
@@ -925,8 +1279,21 @@
  * I2CP: Stub out client-side creation of meta and enc. LS2
  * Wrapper: Increase default heap to 256 MB
 
+2019-01-08 dr|z3d
+ * Susimail:
+   - Display mail delete confirmation as pseudo-modal dialog box
+   - Fix issue with mail delete cancel button not working
+
+2019-01-06 dr|z3d
+ * Susimail: Add toggle headers function to received mail (requires js)
+
 2019-01-05 zzz
  * Crypto: Stub out EdDSA blinding (proposal 123)
+
+2019-01-04 dr|z3d
+ * Console:
+   - Add ransack.i2p to searchbar and sites of interest
+   - Add fs.i2p and isitup.i2p to sites of interest
 
 2019-01-04 zzz
  * Build: Check cert validity
@@ -940,7 +1307,6 @@
 
 2019-01-01 zzz
  * Console:
-   - New light background (ticket #738)
    - Add warning for OpenJDK Zero VM
  * Data:
    - Add support for LS2 multiple encryption keys (proposal 123)
@@ -954,11 +1320,17 @@
 2018-12-23 zzz
  * Console: Sybil tool background analysis setup form
 
+2018-12-23 dr|z3d
+ * Console: Improve presentation of NetDb sybil section
+
 2018-12-21 zzz
  * Transports: Improve banning of routers from wrong network
 
 2018-12-19 zzz
  * NTCP: Efficiency improvements (ticket #2355)
+
+2018-12-18 dr|z3d
+ * I2PSnark: Hide connected peer count in totals if no peers connected
 
 2018-12-17 zzz
  * Console: Sybil tool background analysis
@@ -968,6 +1340,12 @@
 
 2018-12-15 zzz
  * Console: Sybil tool refactoring
+
+2018-12-14 dr|z3d
+ * SusiDNS:
+   - Enhance presentation of host details page by making table more space
+     efficient
+   - Add trimDirectiveWhitespaces to jsps
 
 2018-12-13 zzz
  * Crypto: Add HKDF class for LS2 and NTCP2 (proposal 123)
@@ -998,8 +1376,15 @@
    - Set offline keys in generated LS2
    - Set and validate offline sig in SessionConfig
 
+2018-12-05 dr|z3d
+ * Console: Modify sidebar update indication for I2P updates, adding
+   separate update notification text and standardizing download button
+ * I2PSnark: Enhance presentation of logging to console and change some
+   info level logs to debug
+
 2018-12-04 zzz
- * Data: Add preliminary PrivateKeyFile support for LS2 offline keys (proposal #123)
+ * Data: Add preliminary PrivateKeyFile support for LS2 offline keys
+   (proposal #123)
  * I2CP: Add preliminary support for LS2 offline keys (proposal #123)
 
 2018-12-03 zzz
@@ -1025,6 +1410,18 @@
 2018-11-20 zzz
  * GeoIP: Add support for Maxmind GeoLite2 format (ticket #2268)
 
+2018-11-20 dr|z3d
+ * Console:
+   - Replace /console link from sidebar logo with /sitemap
+   - Migrate welcome page to /help/ section and display in lieu
+     of /sitemap if new install
+   - Only show news on /sitemap if routerconsole.oldHomePage=true
+   - Display site searchbar on /home and /sitemap and remove option
+     to disable
+ * I2PSnark:
+   - Add new 'zilvero' theme
+   - Replace old favicon with new hi-res favicon
+
 2018-11-19 zzz
  * Debian: Add libjson-simple-java dependency
  * Util: Change json lib from net.minidev.json to com.json.simple
@@ -1041,6 +1438,22 @@
    - Setup wizard (WIP) (ticket #1473)
  * Router: LS2 handling for proposal 123
 
+2018-11-12 dr|z3d
+ * Console:
+   - Add new sitemap page and link from /home and 'Internals' sidebar heading
+   - Only show 'config ui', 'config sidebar' and 'configure bandwidth' links
+     on /home if new install and not in advanced mode
+
+2018-10-27 dr|z3d
+ * Console: Remove 'Customize homepage' link from /home and replace with
+   configuration links on section headings
+
+2018-10-18 dr|z3d
+ * Console:
+   - If advanced mode is enabled, display a slightly different set of links
+     in the 'Apps and Configuration' section on /home
+   - Add Info link to Internals section on sidebar
+
 2018-10-13 zzz
  * Build: Add javac.classpath to junit.compileTest targets (ticket #2333)
  * Data: Add LS2 classes for proposal 123
@@ -1050,6 +1463,11 @@
 
 2018-10-10 zzz
  * Build: Provide option to prevent Class-Path in manifests (ticket #2317)
+
+2018-10-09 dr|z3d
+ * Console: Migrate transport addresses and UPnP status to /info and
+   clean up /peers, adding combined page for both ntcp and ssu; hide
+   Definitions table when in advanced mode
 
 2018-10-09 zzz
  * Console: Sybil tool refactoring
@@ -1061,6 +1479,10 @@
  * Build: Fix config with-libtomcat8-java but not
    with-libjetty9-java (ticket #1934)
  * Debian: Don't override dh_builddeb (ticket #2329)
+
+2018-10-06 dr|z3d
+ * Console: If we haven't heard from peers for over 15 minutes, don't
+   display them on /peers or /profiles
 
 2018-10-06 zzz
  * Console:
@@ -1080,20 +1502,56 @@
  * IRC: Make inbound whitelist static
  * Router: Don't add 'O' cap for P/X anymore
 
+2018-09-25 dr|z3d
+ * Console:
+   - Add Unreachable count to Peers sidebar section
+   - Add Bandwith Tier count to NetDB overview page
+ * I2PSnark: Increase max inbound/outbound tunnels to 16
+ * Susimail: Only show port mappings and host on login if portsfixed=false
+
 2018-09-24 zzz
  * Build: Compile jsps in-order for reproducibility (ticket #2279)
 
 2018-09-23 zzz
  * Plugins: Blacklist neodatis and seedless for Java 9+ (ticket #2295)
 
+2018-09-23 dr|z3d
+ * NetDb:
+   - Don't wait for routerinfo validation to remove unreachable peers
+   - Add config options to configure Kadmelia bucket size and Kad B value
+
 2018-09-22 zzz
  * NTCP:
    - Fix handling of multiple connections
    - Change termination code for expired RI
 
+2018-09-21 dr|z3d
+ * Console: Separate help section into separate pages (en) and add
+   table of contents page /help/ (coexists with existing single page
+   implementation for now)
+
 2018-09-16 zzz
  * Build: Fix hang with Tomcat 8.5.33+ (ticket #2307)
  * Tomcat 8.5.34
+
+2018-09-16 dr|z3d
+ * Console:
+   - Add legwork.i2p to homepage and search
+   - Add io.i2p to homepage
+   - Add information about Peer Exploration configuration options to
+     advanced help
+ * I2PSnark:
+   - Round up average rating to 1 decimal place
+   - Cosmetic improvements to comments section
+ * NetDb: Fix router.expireRouterInfo config
+
+2018-09-04 dr|z3d
+ * Proxy:
+   - Ensure proxy redirection page uses theme favicon and logo, and
+     reorganize layout to prevent itoopie truncation
+   - Update user agent string for clearnet browsing to Firefox 60 to
+     sync with latest Tor Browser
+ * I2PSnark: Add anodex.i2p and torrentfinder.i2p to navigation bar
 
 2018-08-27 zzz
  * Debian: Prevent dup version (ticket #2300)
@@ -1106,6 +1564,14 @@
  * NTCP2: Enable by default
 
 * 2018-08-23 0.9.36 released
+
+2018-08-21 dr|z3d
+ * NetDb: Delete unreachable peers older than 45 minutes from NetDb
+ * TunnelManager: Exclude 'L' bandwidth tier from tunnel builds
+ * Console:
+   - Add full Spanish translation of /help courtesy of trolly
+   - Add header icons and service/plugin iconized buttons to dark theme
+   - Add tome.i2p to /home and integrated search
 
 2018-08-20 zzz
  * Jetty 9.2.25.v20180606
@@ -1132,6 +1598,17 @@
  * NTCP2: Send termination on idle timeout
  * Streaming: More efficient copying in MessageInputStream
 
+2018-07-31 dr|z3d
+ * Console:
+   - Improve presentation of NetDb Search page
+   - Add information on the advanced settings section of /help about new
+     custom configuration options to modify various parameters controlling
+     the Router Refresh Job, the Explorer Job, and NetDb retention policy
+ * Router:
+   - Add new custom configuration options to permit fine-grained control
+     of Router Refresh, Peer Exploration and NetDb RouterInfo retention policy
+   - More tidyups of logging sub-system output
+
 2018-07-28 zzz
  * Console: Catch ISE in get/setAttribute() (ticket #1529)
  * Streaming: Throw exception on read timeout (ticket #2292)
@@ -1140,6 +1617,14 @@
  * Console: Split netdb output into pages
  * Router: Implement router.rejectStartupTime config (ticket #2285)
  * Transport: Defer NTCP 1/2 classification until receiving 64 bytes
+
+2018-07-24 dr|z3d
+ * Console: Complete renovation of dark theme
+ * Router: Introduce a random delay between netdb router refreshes, and skip
+   fresh routers when refreshing (freshness and pause length are determined
+   by size of netdb)
+ * NetDb: Exclude peers older than 0.9.30 from the NetDb and ban until restart
+ * Logging: More improvements to presentation
 
 2018-07-21 zzz
  * Build: Add check for libtaglibs package in debian builds
@@ -1158,6 +1643,13 @@
  * I2CP: Add option for forcing gzip on/off per-message
  * NTCP: Increase failsafe sleep threshold (ticket #2251)
  * Router: Add CLI tool to generate family keys
+
+2018-07-14 dr|z3d
+ * i2psnark:
+   - Enhance presentation of 'Download in order' configuration and reduce
+     vertical space wastage
+   - Indicate commented torrents with inline star overlay rather than
+     separate column to simplify/tidy UI
 
 2018-07-14 zzz
  * i2psnark: Recreate deleted files on recheck/reopen (ticket #2125)
@@ -1187,6 +1679,28 @@
    - Fix comments wrapping (ticket #2284)
  * NTCP2: Increase max message size
 
+2018-07-05 dr|z3d
+ * Console:
+   - Hide tunnel ids for participating tunnels when not in advanced mode
+     and add bandwidth tiers to peers
+   - Reorder columns on participating tunnels table to standardize layout
+   - Implement checks to ensure we don't error on /info when router.config
+     keys are absent
+   - Overhaul dark theme for console and webapps
+   - Add some additional stat monitoring when full stat mode not active
+   - Add info about router.maxJobRunners to advanced config section on /help
+ * Router:
+   - Enhance acquisition and retention of routerinfos to improve router
+     performance on network
+   - Introduce check for connectivity before spawning RefreshRouters,
+     ExpireRouters and StartExplorers jobs
+   - Refresh NetDb RouterInfos repeatedly, not just at router startup,
+     and increase time for per-RouterInfo scan (from 3 to 5 seconds)
+   - Increase time before service tunnel build attempts are aborted
+     (from 5 to 20 minutes) to mitigate temp outage at tunnel startup
+ * Logging: More presentational improvements to logging data
+ * Susimail: Overhaul dark theme, add icon buttons and improve presentation
+
 2018-07-04 zzz
  * NTCP: Don't advertise interface address when configured for force-firewalled
 
@@ -1195,29 +1709,55 @@
  * Crypto: Backport EdDSA versions 0.2/0.3 from github
  * NTCP2: Adjust padding defaults and size calculation
 
+2018-06-30 dr|z3d
+ * Snark:
+   - Hide total upload rate if no active upload peers
+   - Add ptt.i2p to list of open trackers
+
 2018-06-30 zzz
-  * Console: Fix reading flags when symlinked (ticket #2270)
-  * Router: Reselect jbigi lib when processor changes (ticket #2277)
+ * Console: Fix reading flags when symlinked (ticket #2270)
+ * Router: Reselect jbigi lib when processor changes (ticket #2277)
 
 2018-06-28 zzz
-  * Debian: Initial work on reproducible builds (ticket #2279)
+ * Debian: Initial work on reproducible builds (ticket #2279)
+
+2018-06-27 dr|z3d
+ * Snark: Only notify about idle connection if tunnel count > 1
 
 2018-06-27 zzz
-  * Debian: Add dependency for famfamfam-flag-png (ticket #2270)
+ * Debian: Add dependency for famfamfam-flag-png (ticket #2270)
 
 2018-06-26 zzz
-  * Console: Move modified flags to new dir (ticket #2270)
-  * Console servlets: Move to new package (ticket #2265)
-  * NTCP pumper: Reduce false positives in failsafe code (ticket #2237)
-  * NTCP2: Initial checkins (proposal #111)
-  * Streaming: Enforce valid port in setters
+ * Console: Move modified flags to new dir (ticket #2270)
+ * Console servlets: Move to new package (ticket #2265)
+ * NTCP pumper: Reduce false positives in failsafe code (ticket #2237)
+ * NTCP2: Initial checkins (proposal #111)
+ * Streaming: Enforce valid port in setters
 
 * 2018-06-26 0.9.35 released
+
+2018-06-23 dr|z3d
+ * Console:
+   - Add new router information page and link to it from sidebar
+     'router info' heading
+   - /tunnels: Only show KB usage if > 0
+ * Snark: Fix vertical alignment of action buttons
 
 2018-06-23 zzz
  * Pull translation updates from Transifex
  * New Azerbaijani translations
  * GeoIPv6 update from MaxMind 2018-06-04
+
+2018-06-21 dr|z3d
+ * Snark:
+   - Overhaul torrent info section: unescape characters in torrent url,
+     remove path from displayed .torrent, increase max size of comments
+     from 1 to 4K and place in scrollable div, reorder file info row
+   - Don't add creation date metainfo to our own snark-created torrents
+   - Fix persistence of lightbox and torrent filter bar settings
+   - Enhance themes in embedded mode so that they appear seamless
+   - Decrease polling time for new content in data dir from 60 to 30 seconds
+ * Console: Add updated Spanish translation from trolly
 
 2018-06-21 zzz
  * Console: Add Azerbaijani
@@ -1225,7 +1765,6 @@
 
 2018-06-19 zzz
  * Console:
-   - Restore line breaks in copy/pasted logs (ticket #2078)
    - Don't show individual tx/rx graphs if showing combined graph (ticket #2106)
  * SSU: Set volatile on field (ticket #2260)
 
@@ -1233,8 +1772,20 @@
  * NTCP: Log and fail messages on outbound queue overflow
 
 2018-06-16 zzz
- * GeoIP: Don't log error when reading to the end
-   of the geoipv6.dat file
+ * GeoIP: Don't log error when reading to the end of the geoipv6.dat file
+
+2018-06-15 dr|z3d
+ * Console: Hide tunnel identities for exploratory and client tunnels on
+   /tunnels when not in advanced mode
+ * Load theme specific I2P logo for servelet errors
+ * Replace itoopie with itoopie+ logo for internal and proxy error pages
+ * Add sidebar 'router down' animated bar (dark/midnight)
+ * Snark:
+   - Add javascript log toggle with buttons to expand/collapse screenlog
+   - Add direction indicator arrows to torrents footer columns
+   - Add support for override.css to permit update-persistent user changes
+     to themes and add a demo override.css to ubergine folder to hide
+     torrent status text
 
 2018-06-15 zzz
  * i2ptunnel: Add new irc server
@@ -1245,10 +1796,60 @@
  * NTCP: Fix clearing of write interest ops on
    inbound establishment (ticket #2237)
 
+2018-06-11 dr|z3d
+ * I2PSnark:
+   - Only show Bps for uploading and downloading when > 0
+   - Hide Sort icons for Uploading/Downloading/ETA when no activity
+   - Enable toggle for Debug Mode icon
+   - Replace "Checking.." text for finished torrents with percent bar
+     in main torrents table
+   - Add inactivity indicator bar to peers when show peers is active
+   - Colorize magnet links in screenlog and add single click to select
+   - Replace 'Tracker Error' with 'Net Error' in torrents table to optimize
+     column display and better reflect nature of error
+   - Add relevant icons to .snarkTorrentInfo table and enhance presentation
+   - Fix embedded snark from incorrectly resizing when view peers for
+     individual torrents clicked
+   - Iconize "Seed" text for peers and swap out choked text with bullets
+ * Console: Add support for loading override.css to modify theme styles
+   with user customizations which will be retained on update and add a couple
+   of demo override.css files to light theme dir
+
 2018-06-09 zzz
  * eepsite: Fix up help page in prep for translation (ticket #2214)
  * i2psnark: Fix torrent ignoring priority settings when
    autostart is enabled (ticket #2229)
+
+2018-06-05 dr|z3d
+ * Console:
+    - Fix theme changing on /configui so we don't need to manually refresh
+      page when a new theme is applied
+    - Replace iframe resize script so any embedded content automatically
+      resizes when the browser window or iframed window changes size
+    - Upgrade frame css injection script to include theme name in <body>
+      tag so we can apply custom themes to embedded content based on the
+      active console theme; inject link to embedd.css to enable styling of
+      content that doesn't provide its own css files (eg logviewer)
+    - Custom CSS for Bote, Orchid and BwScheduler if running in embedded mode
+    - Add autorefresh to embedded log view and embedded orchid plugin
+    - Add /embed page to create custom console or localhost embedded links
+    - Convert plugin (bote/orchid/bwscheduler), logfile and imagegen links to
+      embedded links if embedded mode is enabled
+    - Tidy up/rationalize /stats so information is easier to read; 2 column
+      responsive layout at > 1400px browser width
+    - Add metarefresh header to /graph so single graph view also updates
+      automatically with setting configured on /graph
+    - Add javascript table sort to portmapper on /debug and /events
+    - Add breakout script to pages to avoid recursive iframe trap
+ * I2PSnark:
+    - Adjust paramaters to allow up to 200 peers per download (was 24),
+      communicate with more DHT peers on startup (was 4, now 8), and update
+      the DHT peer known list and blacklist more frequently
+    - Truncate filesize measurement from GiB/KiB/MiB to G/M/K in columns
+      on torrent table but leave intact in footer totals section and tooltips
+    - Announce to all opentrackers when 'use opentrackers' is configured
+ * Logging: Standardize date format on logs so both wrapper and router logs
+   use the same format (yyyy/MM/dd HH:mm:ss) and set default size to 1MB
 
 2018-06-02 zzz
  * Console: Sort tunnels within pools by expiration (ticket #2232)
@@ -1256,6 +1857,16 @@
    - Refactor EstablishState in prep for NTCP2
    - Initial NTCP2 RI and payload code, disabled for now
    - Fix state lock, should not have been static
+
+2018-06-01 dr|z3d
+ * Console:
+   - /tunnels: Add tunnel type / bandwidth tier header indicators to indicate
+     tunnel pool type (exploratory/server/client/participating/bandwidth),
+     reinforcing indicators used in the sidebar and Tunnel Manager; shorten
+     headings for tunnel names in advanced mode and display truncated b32 dest
+   - First stage of /help and /console overhaul:
+     - migrate troubleshooting section on /console to its own section on /help
+ * SusiDNS: Enhance presentation of notes on domain details page and fix layout
 
 2018-06-01 zzz
  * SusiDNS: Fix deleting notes (ticket #1433)
@@ -1265,6 +1876,14 @@
    - Fix CSS preventing ordered lists (ticket #2075)
    - Change Java 10 warning to Java 11,
  * SusiDNS: Add notes form (ticket #1433)
+
+2018-05-30 dr|z3d
+ * Console
+   - More validation of text inputs to prevent form submission of empty,
+     required fields
+   - Enhance presentation to improve (intel)legibility of /debug DHT section
+ * Snark: Enhance presentation of DHT debug section and add hidden icon link
+   to debug mode in last footer column on main torrent table
 
 2018-05-30 zzz
  * Debian build fixes, remove things from source package
@@ -1283,9 +1902,28 @@
    - Fix fetches in check mail
    - CSS fixes
 
+2018-05-26 dr|z3d
+ * Console
+   - Add breakout of frame script to 404 and servlet errors
+   - Link 'Services' sidebar section header to /configwebapps
+   - Display active reseed host in sidebar when reseeding
+   - /tunnels: Improve differentiation between active + dead tunnel sets
+   - Change 'Disconnected' sidebar notification to error class
+   - Sanitize sidebar error for failed plugin installation
+ * Tunnel Manager
+   - Add link to Keyring Manager on Server Edit page
+   - Add 'Return to Index' link on SSL Wizard page
+ * I2PSnark
+  - (Classic) Fix placement of section headers; update icons
+  - Additional opentrackers added to default list
+  - Fix duplicate .snarkTorrents table header
+  - Hide ETA/RX Speed/TX Speed icons when no peers connected
+  - Replace b32 with domain in trackerlist for thebland and opentracker.dg2
+
 2018-05-26 zzz
  * /confignet: Reorganize (ticket #2217)
- * /configsidebar: Tag sections for translation; sort unselected sections by translated name
+ * /configsidebar: Tag sections for translation; sort unselected sections by
+   translated name
  * i2psnark:
    - Hide "0 Bps" if no peers (ticket #2152)
    - Hide peers button if no peers (ticket #2152)
@@ -1295,12 +1933,319 @@
  * ministreaming: Add classpath to jar (ticket #2228)
  * Router: Fix wrapper.config path in OOM message when installed as
    Debian package, but not running as a service (ticket #2223)
- * Summary Bar: Change header from "I2P Updates" to "Update Status" (ticket #2137)
+ * Summary Bar: Change header from "I2P Updates" to "Update Status"
+   (ticket #2137)
  * Utils: Disable DNSoverHTTPS by default (ticket #2201)
 
 2018-05-25 zzz
  * Console: Fix changes to wrong tunnel on /configtunnels (ticket #2227)
  * i2ptunnel: Fix dup tunnels clicking generate on new tunnel (ticket #2225)
+
+2018-05-23 dr|z3d
+ * Console
+   - /configreseed: Check reseed host/port/file/url fields to ensure empty
+     fields are rejected before submission, validate port field, and improve
+     error text for older browsers that don't support the 'required' modifier;
+     fix 'Reseed Now' button so it doesn't save settings
+   - /home: Additional links added to default apps and sites sections; check
+     search field for empty query and prompt user before form submit
+   - sidebar: link to /configreseed when reseeding has failed
+   - Fix various display issues with servlet error and enhance presentation
+   - Lossless compression of all png images for console and webapps
+ * Reseeding
+   - Adjust reseed parameters to acquire more router infos, timeout hosts
+     faster, and reduce the display time of the sidebar notification
+ * I2PSnark
+   - Add Freedom Torrents to list of available trackers and top navigation
+ * SusiDNS
+   - Enhance notifications and auto-disappear (light)
+   - Validate relevant inputs to ensure blank fields are not submitted
+   - Add subscription log viewer to subscription page and add link to svg
+   - Change default subscription polling interval from 12 to 6 hours
+
+2018-05-07 dr|z3d
+ * Console
+   - Configuration section overhaul:
+     - Aim to minimize horizontal whitespace, limit the amount of vertical
+       scrolling needed to review settings, dedupe/clarify text elements to
+       simplify configuration, rationalize presentation/order of elements,
+       reduce clutter and enhance UX
+       - /confignet: Multi-column presentation, simplify label strings
+       - /configupdate: Multi-column presentation for update dropdowns + proxy
+         host/port section; reorder/rationalize elements and options
+       - /configreseed: Multi-column presentation for HTTP proxy/authentication
+         sections; reorder/rationalize sections/elements; move extended help
+         text to own section on /help and add manual reseed section from FAQ to
+         avoid scenario where blocked user cannot view website; restore numeric
+         ordering for reseed help list (ticket #2075)
+       - /configservice: Responsive dual-column view for sections; hide systray
+         section unless running Windows (non-functional on Linux)
+       - /configi2cp: Rationalize elements; multi-column layout
+       - /configplugins: Reorder sections to ensure that install plugin remains
+         at the top of the page regardless of whether plugins are installed
+       - /configui: Promote visibility of password section by moving above
+         language section
+       - /config: Enhance presentation of content, emphasizing data rate (Kbps)
+         over monthly rate, standardize units to KB/Kb/Mbps
+       - /configfamily: Add note about not naming family with personally
+         identifiable information to avoid deanonymization
+       - Hide some info/warning text for advanced users and add explanatory
+         text to bandwidth allocation section for non-advanced users
+   - /graphs: Enhance multi-column presentation for options
+   - Apply fade-out to anchor-linked (:target) content to highlight linked
+     section (light)
+   - /config: remove unneeded space for Kbit/Mbit/Gbytes text strings;
+     add headings for in/out/share sections
+   - /help:
+       - Add 'router.excludePeerCaps' info to advanced section
+       - Add 'routerconsole.enableCompression' info to advanced section
+       - Add 'routerconsole.redirectToHTTPS' info to advanced section
+       - Add default browser config and clearnet torrent info to faq
+       - Add i2pforum link to 'further assistance' section
+       - Add tanuki wrapper and update link to Legal section
+   - Sidebar:
+     - Enhance presentation of reseeding, connectivity and tunnel build status
+       notifications; declutter/decouple connectivity status & info text
+     - Mitigate sidebar local tunnel icons resizing on refresh when more than
+       1 console view open in browser or metarefresh on graphs page
+     - Fix placement of reseed button in blink/webkit (light, classic)
+     - Fix update progressbar placement (light/dark)
+     - Add memory bar to (non-advanced) sidebar
+     - Add basic html markup to improve presentation of sidebar when no
+       stylesheet loaded
+     - Add Peers and Tunnels sections to /home sidebar for advanced users
+     - Enhance reachability indicator with per-state icons/colors and tooltips
+     - Rationalize entries in Internals/Advanced sections and move Tunnel
+       Manager & Addressbook to services section
+   - /configui:
+     - Fix alignment of flags on configui for Chinese translation (midnight)
+     - Fix broken layout when old IE useragent detected
+   - /configreseed: Only display host/port fields for SSL proxy config
+     when required
+   - Overhaul midnight theme and add HD responsive layout settings at >1840px
+   - Fix deadspace issue (no sidebar) with localhost proxy error
+   - Fix overlapping sidebar notifications when 2 are displayed together
+     (e.g. when reseeding from file fails)
+   - Fix display of bullet for multiple error notifications (ticket #2075)
+   - Fix minor responsive layout cosmetic issues @ >1500px
+   - /debug: Adjust titles of session key manager tables for consistency
+   - /jobs:
+     - Add leading icon to queued tasks and job stats on /jobs
+     - Cleanup text display and layout, provide consistent job names throughout
+     - Add extended job info on tooltip for lists (active/finished/ready/sched)
+     - Hide empty lists; implement normal/advanced display mode based on pref
+     - Simplify page for non-advanced users
+   - Remove conflicting id on the leaseset debug page (#leasesetdebug);
+     enhance presentation of network summary section; display infohelp
+     section in table when no network information is available
+   - Tag reseed help section in preparation for full tagging of /help
+   - Sort advanced help section entries by alphabetical order
+   - /configupdate: hide 'show/hide news' link; style 'Show all news'
+     (ticket #2149)
+   - /logs
+     - Fix copy/paste behavior for logs so we don't lose newlines (ticket #2078)
+     - Fixup typo appearing in logs (dont -> don't)
+     - Reformat logging output for better legibility and reword output where
+       appropriate to improve intelligibility
+   - /tunnels:
+     - Hide table headers when no tunnels active
+     - Enhance presentation of bandwidth tier indicators and routerids
+     - Add bandwidth indicator to our own tunnels
+     - Place bandwidth indication after router id and enhance alignment of
+       elements and improve page reflow at narrower screen widths
+     - Merge 'Build in progress' divs for inbound/outbound tunnels
+   - /jars: shorten JDK supplier name to reduce screen clutter/improve layout
+   - Enhance error 500 page presentation, ensure i2plogo is theme specific,
+     style h1 to improve legibility
+   - /graphs: Reduce chance of downscaling on single view graph
+   - Increase length of strings before truncation in logs (from 12 - 20 chars);
+     add '...' prefix where truncation occurs (ticket #497)
+   - NetDb:
+     - Rationalize and enhance display of content on the router
+       information pages
+     - Add a prominent indication of family name to entries and a header
+       button when router is a family member
+     - Add caps + version to entry headers, with links to search NetDb
+     - Add view profile link to header and buttonize full view icon
+     - enhance/declutter display of full stats on extended router infos
+       (ticket #2142)
+     - Add iconized indicator for signature type with NetDb search link
+     - Soft truncation of RI header destination with full view on mouseover
+     - Tag untranslated strings on sybils and leasesets pages
+     - Standardize labels on netdb routers and sybils pages
+     - Hide 'O' cap for P + X bandwidth tiers
+     - Add memory usage indicator to local router info header
+     - Add placeholder flag to routerinfo headers with no country flag
+     - Add supplementary info to stats section for routerinfo adv. view
+   - /profiles:
+     - Enhance presentation of tables, center content while maintaining
+       justification for numerical data
+     - Add hour/day fail rate percentage bars to floodfill page to improve
+       representation of data and enhance at-a-glance legibility
+     - Rationalize data to make table easier to read by replacing 0.00 with 0,
+       replacing '0' values with dashes, rationalizing column order, adding
+       links to NetDb search for caps and router version
+     - Buttonize view/edit links
+   - /peers:
+     - Migrate anchor links on table headings to ids
+     - Remove network status infohelp
+     - Move transport connection limits infohelp to top of page
+     - Add tooltips to ntcp/udp table headings
+     - Hide ntcp/udp table headers when no connections active
+     - Reformat Router Transport Address section + hide for non-advanced users
+     - Present Definitions section in reponsive multi-column
+     - Present advanced config aware notification about connection limits
+     - Enhance presentation of 'definitions' section with multi-column layout
+       and improved explanatory text
+     - Ensure columns with same content in tables align and add spacer column
+       to enforce column widths
+   - Refresh welcome page (en) with updated and new links, mini-section for
+     developers under troubleshooting etc
+   - Themes: Add custom radio and checkbox icons for all themes to ensure we
+     preserve the correct styling when non-standard widgets are loaded
+   - /home:
+     - Add preference to enable external links and webserver to open in new tab
+     - Add newtab overlay icon on hover
+     - Add markup to apps to improve presentation when no css loaded
+   - Colorize event entries on /events to indicate severity
+   - /stats:
+     - Reword explanatory text on /stats for consistency/intelligibility and add
+       text where missing (notably NTCP section)
+     - Migrate anchor links to ids
+   - Add H1 icons to indicate console page group (network/config/logs etc) and
+     rationalize heading names to better describe functions
+   - Buttonize all embedded h3 links and remove square brackets (ticket #1996)
+
+ * Susimail
+   - Fix broken header logo link
+   - Fix placement of notification messages in light theme so they appear
+     at top of page (ticket #2089)
+   - Reorder mail header so date is leading and subject is trailing
+   - Fix position of "no charset found" warning message (light)
+   - Standardize display of sender name in mail listing and add tooltip for
+     full name/mail address
+   - Standardize pagecount display for page navigation: page 1 of x -> 1/x
+   - Standardize use of 'messages' in notifications
+   - Merge new and spam flag columns, remove empty spacer columns, add column
+     names to make targeting easier
+   - Reorder columns in mail list view so date is leading, delete is trailing;
+     move Settings button to left, delete mail buttons to right
+   - Reduce size of mail list text headers to lessen chance of column headings
+     pushing width over budget
+   - Add class to active sort buttons to enable styling and remove inline
+     opacity so we don't conflate disabled and inactive buttons
+   - Add formatting/styling to display date on mail list page to enhance
+     legibility/optimize wrapping on mobile; align list date by separators;
+     add long date to tooltip
+   - Fix placement / enhance presentation of confirm mail delete dialog
+   - Fix size discrepancy/alignment of some buttons / inputs
+   - Remove dupe "Loading messages.." notification and replace with fixed
+     loading bar notification at top of page
+   - Remove superfluous "local server error: user logged out" notification
+     when susimail is accessed for the first time during session
+   - Add formatting to filesize in mail list, truncate units to single
+     character (K/M/G) to enhance alignment/presentation and legibility
+   - Standardize I2PMail name; new footer text attributing Postman for
+     service, Susi for mail reader (#ticket 2017)
+   - Hide footer when not on login page
+   - Make top toolbar sticky and, on Firefox 60+, mail list header and
+     list view confirm delete notification
+   - Hide notifications after 10 seconds (light)
+   - Hide javascript buttons (mark all/clear all) when js is disabled
+   - Style delete mail confirmation dialogs
+   - Add logged in user@domain + # messages indicator to top of mail list
+   - Add filename link to image file when displayed as attachment
+   - Enhance presentation of attached files section on compose page
+   - Enhance presentation of mail folders
+
+ * SusiDNS
+   - Move notifications to top of page (light) (ticket #2089)
+   - Add javascript snippet to close notifications onclick
+   - Jump to top of page on form process
+   - Fix placement of "Export in hosts.txt.." button (light)
+
+ * I2PSnark
+   - Fix alignment/sizing of i2cphost/port inputs in standalone
+   - Hide orphaned .snarkTorrents header images (torrents, downloaded) if no
+     torrents loaded
+   - Add application/pdf to list of mimetypes to open in new tab
+   - Iconify linked/active panel titles
+   - Replace cancel icon with warn icon for .snarkDirInfo not found warnings
+     and shift status text to icon tooltip to optimize space/minimize
+     translation-dependent column width discrepancy
+   - Add snark_big.css support for Chinese/Japanese/Korean translations
+   - Replace 'cancel' icon with new 'block' icon for snark priority to clarify
+     meaning/remove conflation with cancel/delete icons
+   - Add missing text tag to writable icons; migrate i2cpopts from textarea
+     to writable icon
+   - Fix user agent string for 'QupZilla' to disable collapsible panels (note
+     that circa v.2.1.2, Qupzilla supports this feature)
+   - Responsive multi-column layout for configuration page with
+     translation-specific optimizations
+   - Reduce maximum length of Comment Author name to 16 characters to prevent
+     UI from becoming congested
+   - Add html5 [pattern] validation for numerical inputs
+   - Shift "half available b/w.." and "universal theming is enabled" text to
+     touch-friendly html tooltip to reduce clutter and ensure responsive
+     layout doesn't break in translations
+   - Add link to switch between embedded/fullscreen mode on Configuration page
+   - Add #top target to form action to ensure we're at the top of the page
+     after a configuration change
+   - Add detected user agent string to tooltip when snark detects a browser
+     that doesn't support collapsible panels
+   - Cleanup header classes on .snarkDirInfo table
+   - Add experimental javascript lightbox to view image thumbnails
+   - Add UI option to enable/disable lightbox image browser
+   - Add html markup to allow for better positioning of page navigation;
+     remove hard-coded spacing and control with css
+   - Reclaim deadspace on .snarkTorrents by collapsing empty columns
+   - Overhaul midnight theme
+   - Add hover indicator to linked torrents and files to improve visual feedback
+   - Fix column span for average community ratings row
+   - Reposition peer destination in .snarkTorrents before client id and
+     consolidate display of destination and client id/version
+   - Add arrow before peer inactive status in debug mode
+   - Further transition to HiDPI icons with new snark status icons and
+     theme-specific updates
+   - Migrate extended download info for our torrents to on:hover popup
+     to accommodate wider text values without breaking UI
+   - Add experimental torrent status display bar to allow selective display
+     of torrents based on status with UI option to enable/disable
+   - Move page navigation out of table header to permit better placement
+   - Move peer count to its own column for better presentation/alignment
+   - Load theme css when ajax refresh is called to minimize screen flicker
+   - Add configuration panel link to supplemental pages when pagenav active
+   - Add page navigation to bottom of torrents table when pagesize >= 50
+   - Enhance presentation of Totals and our destination
+   - Reorder torrent columns so download/upload info is grouped
+   - Restore Forum link on navigation bar, pointing at i2pforum.i2p
+
+ * I2PTunnel
+   - Enhance presentation and error text for HTTP server error messages
+   - Fix panel positional issue in iframe that occurs when messagelog is hidden
+   - Correct log typo: subssession -> subsession
+   - Remove leading "/" typo in message log: e.g. Stopping tunnel /127.0.0.1:x
+   - Conditionally display "Inbound/Outbound Tunnel Options" title when advanced
+     console settings enabled to avoid double titles
+   - Add "Tunnels not ready" indication to homepage if tunnels not initialized
+   - Add conditional td.editDisabled to edit server/client pages to allow
+     targeting/styling of disabled 'Signature type' radio icons/labels
+   - Standardize server/client tunnel references
+   - Rationalize ssl wizard and remove cruft to enhance intelligibility;
+     fix placement of message log
+
+ * Imagegen
+   - Better alignment and spacing of random art iframes
+   - Italicize placeholder text and hide when text field has focus
+   - Fix link to i2p-projekt details section (add missing &book=router suffix)
+
+ * Proxy
+   - Add <br> to redirection message to avoid truncation of itoopie
+     (ticket #2131)
+   - Add meta refresh for relevant proxy errors (ticket #1689)
+   - Ensure proxy errors use theme-specific sidebar image
+   - Style localhost proxy error to remove whitespace where sidebar has been
+     removed and add additional help text to explain issue
 
 2018-05-06 meeh
  * launchers:
@@ -1308,9 +2253,11 @@
    - made CompleteDeployment which extracts i2pbase.zip
    - made a SBT task that creates i2pbase.zip
    - after the hassle I had even getting an JRE7, short: OSX assumes JRE8+
-   - started on a class SystemTrayManager which also holds router state info for menu item filter
+   - started on a class SystemTrayManager which also holds router state info
+     for menu item filter
    - "ant osxLauncher" produces now a valid app bundle under launchers/output
- * Updated ant and made osxLauncher work again (first time triggers SBT dl if not already installed.)
+ * Updated ant and made osxLauncher work again (first time triggers SBT dl
+   if not already installed.)
  * monotone ignore file update
 
 2018-05-05 zzz
@@ -1323,7 +2270,8 @@
  * launchers:
    - Added deployment profile for Mac OS X launcher.
    - Sourced out common code to a common library SBT project.
-   - Decided ~/Library/I2P should be base path on Mac OS X when using regular bundle (Non-BB).
+   - Decided ~/Library/I2P should be base path on Mac OS X when using
+     regular bundle (Non-BB).
 
 2018-04-29 zzz
  * Console: Fix NPE on /configsidebar (ticket #2220)
@@ -1342,8 +2290,10 @@
    - Building the I2P.app bundle is mostly done
      - It copies certificates, locale and manuals
      - It copies jar and war files to the bundle
- * Added new entries to mtn-ignore so we avoid any PEBCAK with commiting build directories
- * Added an SBT AutoPlugin named IconHelper to generate valid ICNS images for Mac OS X
+ * Added new entries to mtn-ignore so we avoid any PEBCAK with committing
+   build directories
+ * Added an SBT AutoPlugin named IconHelper to generate valid ICNS images
+   for Mac OS X
 
 2018-04-23 zzz
  * Clock: Fix early NPE via DoH

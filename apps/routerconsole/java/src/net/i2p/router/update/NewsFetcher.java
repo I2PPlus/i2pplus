@@ -79,8 +79,8 @@ class NewsFetcher extends UpdateRunner {
     static final String PROP_BLOCKLIST_TIME = "router.blocklistVersion";
     private static final String BLOCKLIST_DIR = "docs/feed/blocklist";
     private static final String BLOCKLIST_FILE = "blocklist.txt";
-    
-    public NewsFetcher(RouterContext ctx, ConsoleUpdateManager mgr, List<URI> uris) { 
+
+    public NewsFetcher(RouterContext ctx, ConsoleUpdateManager mgr, List<URI> uris) {
         super(ctx, mgr, NEWS, uris);
         _newsFile = new File(ctx.getRouterDir(), NewsHelper.NEWS_FILE);
         _tempFile = new File(ctx.getTempDir(), "tmp-" + ctx.random().nextLong() + TEMP_NEWS_FILE);
@@ -125,7 +125,7 @@ class NewsFetcher extends UpdateRunner {
 
             if (_tempFile.exists())
                 _tempFile.delete();
-        
+
             try {
                 EepGet get;
                 if (shouldProxy)
@@ -189,7 +189,7 @@ class NewsFetcher extends UpdateRunner {
             return uri;
         }
     }
-    
+
     // Fake XML parsing
     // Line must contain this, and full entry must be on one line
     private static final String VERSION_PREFIX = "<i2p.release ";
@@ -226,7 +226,7 @@ class NewsFetcher extends UpdateRunner {
                     String ver = args.get(VERSION_KEY);
                     if (ver != null) {
                         if (_log.shouldLog(Log.DEBUG))
-                            _log.debug("Found version: [" + ver + "]");
+                            _log.debug("Router is running version: " + ver);
                         if (TrustedUpdate.needsUpdate(RouterVersion.VERSION, ver)) {
                             if (NewsHelper.isUpdateDisabled(_context)) {
                                 String msg = _mgr._t("In-network updates disabled. Check package manager.");
@@ -274,7 +274,7 @@ class NewsFetcher extends UpdateRunner {
                                 }
                             }
                             if (_log.shouldLog(Log.DEBUG))
-                                _log.debug("Our version is out of date, update!");
+                                _log.debug("Router is out of date (" + ver + ") -> update advised!");
                             // TODO if minversion > our version, continue
                             // and look for a second entry with clearnet URLs
                             // TODO clearnet URLs, notify with HTTP_CLEARNET and/or HTTPS_CLEARNET
@@ -299,7 +299,7 @@ class NewsFetcher extends UpdateRunner {
                             //                            "", sourceMap, ver, "");
                         } else {
                             if (_log.shouldLog(Log.DEBUG))
-                                _log.debug("Our version is current");
+                                _log.debug("Router is up to date (" + ver + ")");
                         }
                         return;
                     } else {
@@ -319,11 +319,11 @@ class NewsFetcher extends UpdateRunner {
         } finally {
             if (in != null) try { in.close(); } catch (IOException ioe) {}
         }
-        
+
         if (_log.shouldLog(Log.WARN))
             _log.warn("No version found in news.xml file");
     }
-    
+
     /**
      *  Modified from LoadClientAppsJob and I2PTunnelHTTPClientBase
      *  All keys are mapped to lower case.
@@ -440,7 +440,7 @@ class NewsFetcher extends UpdateRunner {
     public void transferComplete(long alreadyTransferred, long bytesTransferred, long bytesRemaining, String url, String outputFile, boolean notModified) {
         if (_log.shouldLog(Log.INFO))
             _log.info("News fetched from " + url + " with " + (alreadyTransferred+bytesTransferred));
-        
+
         if (_tempFile.exists() && _tempFile.length() > 0) {
             File from;
             // sud/su2 disabled
@@ -563,8 +563,8 @@ class NewsFetcher extends UpdateRunner {
             out = new SecureFileOutputStream(to);
             DataHelper.copy(in, out);
         } finally {
-            if (out != null) try { 
-                out.close(); 
+            if (out != null) try {
+                out.close();
             } catch (IOException ioe) {}
             ReusableGZIPInputStream.release(in);
         }
@@ -630,8 +630,8 @@ class NewsFetcher extends UpdateRunner {
         long oldTime = _context.getProperty(PROP_BLOCKLIST_TIME, 0L);
         if (ble.updated <= oldTime) {
             if (_log.shouldWarn())
-                _log.warn("Not processing blocklist " + new Date(ble.updated) +
-                          ", already have " + new Date(oldTime));
+                _log.warn("Not updating blocklist " + new Date(ble.updated) +
+                          "; already have " + new Date(oldTime));
             return;
         }
         Blocklist bl = _context.blocklist();
@@ -704,8 +704,8 @@ class NewsFetcher extends UpdateRunner {
             _log.error("Error writing blocklist", ioe);
             fail = true;
         } finally {
-            if (out != null) try { 
-                out.close(); 
+            if (out != null) try {
+                out.close();
             } catch (IOException ioe) {}
         }
         if (!fail) {
@@ -777,8 +777,8 @@ class NewsFetcher extends UpdateRunner {
                 out.write("\n\n");
             }
         } finally {
-            if (out != null) try { 
-                out.close(); 
+            if (out != null) try {
+                out.close();
             } catch (IOException ioe) {}
         }
     }

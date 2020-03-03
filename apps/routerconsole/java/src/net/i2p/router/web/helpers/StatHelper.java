@@ -14,17 +14,17 @@ import net.i2p.servlet.util.WriterOutputStream;
  */
 public class StatHelper extends HelperBase {
     private String _peer;
-    
+
     /**
      * Caller should strip HTML (XSS)
      */
     public void setPeer(String peer) { _peer = peer; }
-    
+
     /**
      *  Look up based on a b64 prefix or full b64.
      *  Prefix is inefficient.
      */
-    public String getProfile() { 
+    public String getProfile() {
         if (_peer == null || _peer.length() <= 0)
             return "No peer specified";
         if (_peer.length() >= 44)
@@ -35,14 +35,15 @@ public class StatHelper extends HelperBase {
                 return dumpProfile(peer);
             }
         }
-        return "Unknown peer " + _peer;
+//        return "Peer profile unavailable for: " + _peer;
+        return "Peer profile unavailable";
     }
 
     /**
      *  Look up based on the full b64 - efficient
      *  @since 0.8.5
      */
-    private String outputProfile() { 
+    private String outputProfile() {
         Hash peer = new Hash();
         try {
             peer.fromBase64(_peer);
@@ -56,7 +57,7 @@ public class StatHelper extends HelperBase {
      *  dump the profile
      *  @since 0.8.5
      */
-    private String dumpProfile(Hash peer) { 
+    private String dumpProfile(Hash peer) {
         try {
             WriterOutputStream wos = new WriterOutputStream(_out);
             boolean success = _context.profileOrganizer().exportProfile(peer, wos);
@@ -65,7 +66,7 @@ public class StatHelper extends HelperBase {
                 _out.flush();
                 return "";
             } else {
-                return "Unknown peer " + _peer;
+                return "Peer profile unavailable for: " + _peer;
             }
         } catch (IOException e) {
             e.printStackTrace();

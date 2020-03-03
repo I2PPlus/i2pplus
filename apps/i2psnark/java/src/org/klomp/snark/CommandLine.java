@@ -22,6 +22,7 @@ public class CommandLine extends net.i2p.util.CommandLine {
         "org.klomp.snark.Storage",
         "org.klomp.snark.bencode.BDecoder",
         //"org.klomp.snark.web.RunStandalone",
+//        "org.klomp.snark.Mp3Test",
     });
 
     protected CommandLine() {}

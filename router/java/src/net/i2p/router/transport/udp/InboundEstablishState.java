@@ -52,7 +52,7 @@ class InboundEstablishState {
     private RouterIdentity _receivedUnconfirmedIdentity;
     // identical to uncomfirmed, but sig now verified
     private RouterIdentity _receivedConfirmedIdentity;
-    // general status 
+    // general status
     private final long _establishBegin;
     //private long _lastReceive;
     private long _lastSend;
@@ -66,7 +66,7 @@ class InboundEstablishState {
     private boolean _introductionRequested = true;
 
     private int _rtt;
-    
+
     public enum InboundState {
         /** nothin known yet */
         IB_STATE_UNKNOWN,
@@ -84,7 +84,7 @@ class InboundEstablishState {
         /** Successful completion, PeerState created and added to transport */
         IB_STATE_COMPLETE
     }
-    
+
     /** basic delay before backoff
      *  Transmissions at 0, 3, 9 sec
      *  Previously: 1500 (0, 1.5, 4.5, 10.5)
@@ -112,20 +112,20 @@ class InboundEstablishState {
         _queuedMessages = new LinkedBlockingQueue<OutNetMessage>();
         receiveSessionRequest(req);
     }
-    
+
     public synchronized InboundState getState() { return _currentState; }
 
     /** @return if previously complete */
-    public synchronized boolean isComplete() { 
+    public synchronized boolean isComplete() {
         return _currentState == InboundState.IB_STATE_COMPLETE ||
                _currentState == InboundState.IB_STATE_FAILED;
     }
 
     /** Notify successful completion */
-    public synchronized void complete() { 
+    public synchronized void complete() {
         _currentState = InboundState.IB_STATE_COMPLETE;
     }
-    
+
     /**
      *  Queue a message to be sent after the session is established.
      *  This will only happen if we decide to send something during establishment
@@ -144,7 +144,7 @@ class InboundEstablishState {
      *  @return null if none
      *  @since 0.9.2
      */
-    public OutNetMessage getNextQueuedMessage() { 
+    public OutNetMessage getNextQueuedMessage() {
         return _queuedMessages.poll();
     }
 
@@ -159,15 +159,15 @@ class InboundEstablishState {
         if (ext != null && ext.length >= UDPPacket.SESS_REQ_MIN_EXT_OPTIONS_LENGTH) {
             _introductionRequested = (ext[1] & (byte) UDPPacket.SESS_REQ_EXT_FLAG_REQUEST_RELAY_TAG) != 0;
             if (_log.shouldInfo())
-                _log.info("got sess req. w/ ext. options, need intro? " + _introductionRequested + ' ' + this);
+                _log.info("Received SessionRequest with extended options; need intro? " + _introductionRequested + ' ' + this);
         }
         if (_log.shouldLog(Log.DEBUG))
-            _log.debug("Receive sessionRequest, BobIP = " + Addresses.toString(_bobIP));
+            _log.debug("Received SessionRequest, BobIP = " + Addresses.toString(_bobIP));
         if (_currentState == InboundState.IB_STATE_UNKNOWN)
             _currentState = InboundState.IB_STATE_REQUEST_RECEIVED;
         packetReceived();
     }
-    
+
     public synchronized boolean sessionRequestReceived() { return _receivedX != null; }
     public synchronized byte[] getReceivedX() { return _receivedX; }
     public synchronized byte[] getReceivedOurIP() { return _bobIP; }
@@ -177,7 +177,7 @@ class InboundEstablishState {
      *  @since 0.9.24
      */
     public synchronized boolean isIntroductionRequested() { return _introductionRequested; }
-    
+
     /**
      *  Generates session key and mac key.
      */
@@ -193,10 +193,10 @@ class InboundEstablishState {
         _macKey = new SessionKey(new byte[SessionKey.KEYSIZE_BYTES]);
         System.arraycopy(extra.getData(), 0, _macKey.getData(), 0, SessionKey.KEYSIZE_BYTES);
         if (_log.shouldLog(Log.DEBUG))
-            _log.debug("Established inbound keys.  cipher: " + Base64.encode(_sessionKey.getData())
+            _log.debug("Established inbound keys. Cipher: " + Base64.encode(_sessionKey.getData())
                        + " mac: " + Base64.encode(_macKey.getData()));
     }
-    
+
     public synchronized SessionKey getCipherKey() { return _sessionKey; }
     public synchronized SessionKey getMACKey() { return _macKey; }
 
@@ -205,27 +205,27 @@ class InboundEstablishState {
 
     /** what port number do they appear to be coming from? */
     public int getSentPort() { return _alicePort; }
-    
+
     public synchronized byte[] getSentY() {
         if (_sentY == null)
             _sentY = _keyBuilder.getMyPublicValueBytes();
         return _sentY;
     }
-    
+
     public synchronized void fail() {
         _currentState = InboundState.IB_STATE_FAILED;
     }
-    
+
     public synchronized long getSentRelayTag() { return _sentRelayTag; }
     public synchronized void setSentRelayTag(long tag) { _sentRelayTag = tag; }
     public synchronized long getSentSignedOnTime() { return _sentSignedOnTime; }
-    
+
     public synchronized void prepareSessionCreated() {
         if (_sentSignature == null) signSessionCreated();
     }
-    
+
     public synchronized Signature getSentSignature() { return _sentSignature; }
-    
+
     /**
      * Sign: Alice's IP + Alice's port + Bob's IP + Bob's port + Alice's
      *       new relay tag + Bob's signed on time
@@ -238,7 +238,7 @@ class InboundEstablishState {
                                  + 4 // signed on time
                                  ];
         _sentSignedOnTime = _context.clock().now() / 1000;
-        
+
         int off = 0;
         System.arraycopy(_receivedX, 0, signed, off, _receivedX.length);
         off += _receivedX.length;
@@ -256,9 +256,9 @@ class InboundEstablishState {
         DataHelper.toLong(signed, off, 4, _sentRelayTag);
         off += 4;
         DataHelper.toLong(signed, off, 4, _sentSignedOnTime);
-        
+
         _sentSignature = _context.dsa().sign(signed, _context.keyManager().getSigningPrivateKey());
-        
+
         if (_log.shouldLog(Log.DEBUG)) {
             StringBuilder buf = new StringBuilder(128);
             buf.append("Signing sessionCreated:");
@@ -272,7 +272,7 @@ class InboundEstablishState {
             _log.debug(buf.toString());
         }
     }
-    
+
     /** note that we just sent a SessionCreated packet */
     public synchronized void createdPacketSent() {
         _lastSend = _context.clock().now();
@@ -324,7 +324,7 @@ class InboundEstablishState {
             conf.readFragmentData(fragment, 0);
             _receivedIdentity[cur] = fragment;
         }
-        
+
         if (cur == _receivedIdentity.length-1) {
             _receivedSignedOnTime = conf.readFinalFragmentSignedOnTime();
             // TODO verify time to prevent replay attacks
@@ -341,7 +341,7 @@ class InboundEstablishState {
                         _log.warn("Unsupported sig type from: " + toString());
                     // _x() in UDPTransport
                     _context.banlist().banlistRouterForever(_receivedUnconfirmedIdentity.calculateHash(),
-                                                            "Unsupported signature type");
+                                                            " <b>➜</b> " + "Unsupported signature type");
                     fail();
                 }
             } else {
@@ -350,8 +350,8 @@ class InboundEstablishState {
                 fail();
             }
         }
-        
-        if ( (_currentState == InboundState.IB_STATE_UNKNOWN) || 
+
+        if ( (_currentState == InboundState.IB_STATE_UNKNOWN) ||
              (_currentState == InboundState.IB_STATE_REQUEST_RECEIVED) ||
              (_currentState == InboundState.IB_STATE_CREATED_SENT) ) {
             if (confirmedFullyReceived())
@@ -359,14 +359,14 @@ class InboundEstablishState {
             else
                 _currentState = InboundState.IB_STATE_CONFIRMED_PARTIALLY;
         }
-        
+
         if (_createdSentCount == 1) {
             _rtt = (int) ( _context.clock().now() - _lastSend );
-        }	
+        }
 
         packetReceived();
     }
-    
+
     /**
      *  Have we fully received the SessionConfirmed messages from Alice?
      *  Caller must synch on this.
@@ -382,7 +382,7 @@ class InboundEstablishState {
             return false;
         }
     }
-    
+
     /**
      * Who is Alice (null if forged/unknown)
      *
@@ -425,7 +425,7 @@ class InboundEstablishState {
             // no need to copy
             ident = _receivedIdentity[0];
         }
-        ByteArrayInputStream in = new ByteArrayInputStream(ident); 
+        ByteArrayInputStream in = new ByteArrayInputStream(ident);
         RouterIdentity peer = new RouterIdentity();
         try {
             peer.readBytes(in);
@@ -438,10 +438,10 @@ class InboundEstablishState {
                 _log.warn("Improperly formatted yet fully received ident", ioe);
         }
     }
-            
+
 
     /**
-     * Determine if Alice sent us a valid confirmation packet.  The 
+     * Determine if Alice sent us a valid confirmation packet.  The
      * identity signs: Alice's IP + Alice's port + Bob's IP + Bob's port
      * + Alice's new relay key + Alice's signed on time
      *
@@ -491,25 +491,25 @@ class InboundEstablishState {
                     _log.warn("Signature failed from " + _receivedUnconfirmedIdentity);
             }
     }
-    
+
     /**
      *  Call from synchronized method only
      */
     private void packetReceived() {
         _nextSend = _context.clock().now();
     }
-    
+
     @Override
-    public String toString() {            
+    public String toString() {
         StringBuilder buf = new StringBuilder(128);
-        buf.append("IES ");
+        buf.append("InboundEstablishState ");
         buf.append(Addresses.toString(_aliceIP, _alicePort));
         //if (_receivedX != null)
         //    buf.append(" ReceivedX: ").append(Base64.encode(_receivedX, 0, 4));
         //if (_sentY != null)
         //    buf.append(" SentY: ").append(Base64.encode(_sentY, 0, 4));
         //buf.append(" Bob: ").append(Addresses.toString(_bobIP, _bobPort));
-        buf.append(" RelayTag: ").append(_sentRelayTag);
+        buf.append("; RelayTag: ").append(_sentRelayTag);
         //buf.append(" SignedOn: ").append(_sentSignedOnTime);
         buf.append(' ').append(_currentState);
         return buf.toString();

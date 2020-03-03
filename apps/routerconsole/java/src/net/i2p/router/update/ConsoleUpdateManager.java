@@ -13,6 +13,7 @@ import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
 import java.util.Properties;
+import java.util.regex.*;
 import java.util.StringTokenizer;
 import java.util.concurrent.ConcurrentHashMap;
 
@@ -56,7 +57,7 @@ import net.i2p.util.VersionComparator;
  *  @since 0.9.4
  */
 public class ConsoleUpdateManager implements UpdateManager, RouterApp {
-    
+
     private final RouterContext _context;
     private final Log _log;
     private final Collection<RegisteredUpdater> _registeredUpdaters;
@@ -80,7 +81,8 @@ public class ConsoleUpdateManager implements UpdateManager, RouterApp {
 
     private static final long DEFAULT_MAX_TIME = 3*60*60*1000L;
     private static final long DEFAULT_CHECK_TIME = 60*1000;
-    private static final long STATUS_CLEAN_TIME = 20*60*1000;
+    //private static final long STATUS_CLEAN_TIME = 20*60*1000;
+    private static final long STATUS_CLEAN_TIME = 5*60*1000; // 5 minutes sidebar notification persistence ?
     private static final long TASK_CLEANER_TIME = 15*60*1000;
     private static final String PROP_UNSIGNED_AVAILABLE = "router.updateUnsignedAvailable";
     private static final String PROP_DEV_SU3_AVAILABLE = "router.updateDevSU3Available";
@@ -738,7 +740,7 @@ public class ConsoleUpdateManager implements UpdateManager, RouterApp {
             _log.info("Unregistering " + ru);
         _registeredUpdaters.remove(ru);
     }
-    
+
     public void register(Checker updater, UpdateType type, UpdateMethod method, int priority) {
         RegisteredChecker rc = new RegisteredChecker(updater, type, method, priority);
         if (_log.shouldLog(Log.INFO))
@@ -755,7 +757,7 @@ public class ConsoleUpdateManager implements UpdateManager, RouterApp {
             _log.info("Unregistering " + rc);
         _registeredCheckers.remove(rc);
     }
-    
+
     /**
      *  Called by the Updater, either after check() was called, or it found out on its own.
      *  Use this if there is only one UpdateMethod; otherwise use the Map method below.
@@ -1072,8 +1074,9 @@ public class ConsoleUpdateManager implements UpdateManager, RouterApp {
                 buf.append(_t("Transfer failed from {0}", uri));
             }
             if (reason != null && reason.length() > 0) {
+                String trimmed = reason.replace("http://", "").replace("java.io.IOException", _t("Error")).replaceAll("for content.*", "");
                 buf.append("<br>");
-                buf.append(reason);
+                buf.append(trimmed);
             }
             if (t != null && t.getMessage() != null && t.getMessage().length() > 0) {
                 buf.append("<br>");
@@ -1220,7 +1223,7 @@ public class ConsoleUpdateManager implements UpdateManager, RouterApp {
         if (old != null && old.compareTo(ver) <= 0)
             _available.remove(ui);
     }
-    
+
     /** from NewsFetcher */
     boolean shouldInstall() {
         String policy = _context.getProperty(ConfigUpdateHandler.PROP_UPDATE_POLICY);
@@ -1230,7 +1233,7 @@ public class ConsoleUpdateManager implements UpdateManager, RouterApp {
         File zip = new File(_context.getRouterDir(), Router.UPDATE_FILE);
         return !zip.exists();
     }
-    
+
     /**
      *  Where to find various resources
      *  @return non-null may be empty
@@ -1580,7 +1583,7 @@ public class ConsoleUpdateManager implements UpdateManager, RouterApp {
 
         @Override
         public String toString() {
-            return "RegisteredUpdater " + updater.getClass().getName() + " for " + type + " (" + method + ") @pri " + priority;
+            return "RegisteredUpdater " + updater.getClass().getName() + " for " + type + " (" + method + ") @ priority " + priority;
         }
     }
 
@@ -1621,7 +1624,7 @@ public class ConsoleUpdateManager implements UpdateManager, RouterApp {
 
         @Override
         public String toString() {
-            return "RegisteredChecker " + checker.getClass().getName() + " for " + type + " (" + method + ") @pri " + priority;
+            return "RegisteredChecker " + checker.getClass().getName() + " for " + type + " (" + method + ") @ priority " + priority;
         }
     }
 
@@ -1737,10 +1740,12 @@ public class ConsoleUpdateManager implements UpdateManager, RouterApp {
         buf.append("<div class=\"debug_container\">");
         toString(buf, _available);
         buf.append("</div>");
-        buf.append("<h3>Downloaded</h3>");
-        buf.append("<div class=\"debug_container\">");
-        toString(buf, _downloaded);
-        buf.append("</div>");
+        if (_downloaded != null) {
+            buf.append("<h3>Downloaded</h3>");
+            buf.append("<div class=\"debug_container\">");
+            toString(buf, _downloaded);
+            buf.append("</div>");
+        }
         buf.append("<h3>Registered Checkers</h3>");
         buf.append("<div class=\"debug_container\">");
         toString(buf, _registeredCheckers);
@@ -1749,14 +1754,18 @@ public class ConsoleUpdateManager implements UpdateManager, RouterApp {
         buf.append("<div class=\"debug_container\">");
         toString(buf, _registeredUpdaters);
         buf.append("</div>");
-        buf.append("<h3>Active Checkers</h3>");
-        buf.append("<div class=\"debug_container\">");
-        toString(buf, _activeCheckers);
-        buf.append("</div>");
-        buf.append("<h3>Active Updaters</h3>");
-        buf.append("<div class=\"debug_container\">");
-        toString(buf, _downloaders);
-        buf.append("</div>");
+        if (_activeCheckers != null) {
+            buf.append("<h3>Active Checkers</h3>");
+            buf.append("<div class=\"debug_container\">");
+            toString(buf, _activeCheckers);
+            buf.append("</div>");
+        }
+        if (_downloaders != null) {
+            buf.append("<h3>Active Updaters</h3>");
+            buf.append("<div class=\"debug_container\">");
+            toString(buf, _downloaders);
+            buf.append("</div>");
+        }
         out.write(buf.toString());
     }
 

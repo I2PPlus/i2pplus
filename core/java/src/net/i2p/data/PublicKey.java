@@ -2,9 +2,9 @@ package net.i2p.data;
 
 /*
  * free (adj.): unencumbered; not under the control of others
- * Written by jrandom in 2003 and released into the public domain 
- * with no warranty of any kind, either expressed or implied.  
- * It probably won't make your computer catch on fire, or eat 
+ * Written by jrandom in 2003 and released into the public domain
+ * with no warranty of any kind, either expressed or implied.
+ * It probably won't make your computer catch on fire, or eat
  * your children, but it might.  Use at your own risk.
  *
  */
@@ -17,7 +17,7 @@ import net.i2p.crypto.EncType;
 
 /**
  * Defines the PublicKey as defined by the I2P data structure spec.
- * A public key is 256byte Integer. The public key represents only the 
+ * A public key is 256byte Integer. The public key represents only the
  * exponent, not the primes, which are constant and defined in the crypto spec.
  *
  * As of release 0.9.38, keys of arbitrary length and type are supported.
@@ -111,7 +111,7 @@ public class PublicKey extends SimpleDataStructure {
         this(DEF_TYPE);
         fromBase64(base64Data);
     }
-    
+
     public int length() {
         if (_type != null)
             return _type.getPubkeyLen();
@@ -214,9 +214,9 @@ public class PublicKey extends SimpleDataStructure {
             if (length <= 32)
                 buf.append(toBase64());
             else
-                buf.append("size: ").append(length);
+                buf.append("Size: ").append(length);
         }
-        buf.append(']');
+        buf.append(" bytes]");
         return buf.toString();
     }
 

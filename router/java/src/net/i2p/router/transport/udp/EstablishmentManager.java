@@ -90,7 +90,7 @@ class EstablishmentManager {
 
     /** "bloom filter" */
     private final DecayingBloomFilter _replayFilter;
-    
+
     /** max outbound in progress - max inbound is half of this */
     private final int DEFAULT_MAX_CONCURRENT_ESTABLISH;
     private static final int DEFAULT_LOW_MAX_CONCURRENT_ESTABLISH = 20;
@@ -102,7 +102,7 @@ class EstablishmentManager {
 
     /** max queued msgs per peer while the peer connection is queued */
     private static final int MAX_QUEUED_PER_PEER = 16;
-    
+
     private static final long MAX_NONCE = 0xFFFFFFFFl;
 
     /**
@@ -127,7 +127,7 @@ class EstablishmentManager {
 
     /** for the DSM and or netdb store */
     private static final int DATA_MESSAGE_TIMEOUT = 10*1000;
-    
+
     /**
      * Java I2P has always parsed the length of the extended options field,
      * but i2pd hasn't recognized it until this release.
@@ -155,44 +155,44 @@ class EstablishmentManager {
         DEFAULT_MAX_CONCURRENT_ESTABLISH = Math.max(DEFAULT_LOW_MAX_CONCURRENT_ESTABLISH,
                                                     Math.min(DEFAULT_HIGH_MAX_CONCURRENT_ESTABLISH,
                                                              ctx.bandwidthLimiter().getOutboundKBytesPerSecond() / 2));
-        _context.statManager().createRateStat("udp.inboundEstablishTime", "How long it takes for a new inbound session to be established", "udp", UDPTransport.RATES);
-        _context.statManager().createRateStat("udp.outboundEstablishTime", "How long it takes for a new outbound session to be established", "udp", UDPTransport.RATES);
-        //_context.statManager().createRateStat("udp.inboundEstablishFailedState", "What state a failed inbound establishment request fails in", "udp", UDPTransport.RATES);
-        //_context.statManager().createRateStat("udp.outboundEstablishFailedState", "What state a failed outbound establishment request fails in", "udp", UDPTransport.RATES);
-        _context.statManager().createRateStat("udp.sendIntroRelayRequest", "How often we send a relay request to reach a peer", "udp", UDPTransport.RATES);
-        _context.statManager().createRateStat("udp.sendIntroRelayTimeout", "How often a relay request times out before getting a response (due to the target or intro peer being offline)", "udp", UDPTransport.RATES);
-        _context.statManager().createRateStat("udp.receiveIntroRelayResponse", "How long it took to receive a relay response", "udp", UDPTransport.RATES);
-        _context.statManager().createRateStat("udp.establishDropped", "Dropped an inbound establish message", "udp", UDPTransport.RATES);
-        _context.statManager().createRateStat("udp.establishRejected", "How many pending outbound connections are there when we refuse to add any more?", "udp", UDPTransport.RATES);
-        _context.statManager().createRateStat("udp.establishOverflow", "How many messages were queued up on a pending connection when it was too much?", "udp", UDPTransport.RATES);
-        _context.statManager().createRateStat("udp.establishBadIP", "Received IP or port was bad", "udp", UDPTransport.RATES);
+        _context.statManager().createRateStat("udp.inboundEstablishTime", "Time taken for a new inbound session to be established", "Transport [UDP]", UDPTransport.RATES);
+        _context.statManager().createRateStat("udp.outboundEstablishTime", "Time taken for a new outbound session to be established", "Transport [UDP]", UDPTransport.RATES);
+        //_context.statManager().createRateStat("udp.inboundEstablishFailedState", "What state a failed inbound establishment request fails in", "Transport [UDP]", UDPTransport.RATES);
+        //_context.statManager().createRateStat("udp.outboundEstablishFailedState", "What state a failed outbound establishment request fails in", "Transport [UDP]", UDPTransport.RATES);
+        _context.statManager().createRateStat("udp.sendIntroRelayRequest", "How often we send a relay request to reach a peer", "Transport [UDP]", UDPTransport.RATES);
+        _context.statManager().createRateStat("udp.sendIntroRelayTimeout", "How often a relay request times out before getting a response (target or intro peer offline)", "Transport [UDP]", UDPTransport.RATES);
+        _context.statManager().createRateStat("udp.receiveIntroRelayResponse", "How long it took to receive a relay response", "Transport [UDP]", UDPTransport.RATES);
+        _context.statManager().createRateStat("udp.establishDropped", "Dropped an inbound establish message", "Transport [UDP]", UDPTransport.RATES);
+        _context.statManager().createRateStat("udp.establishRejected", "Number of pending outbound connections when we refuse to add any more", "Transport [UDP]", UDPTransport.RATES);
+        _context.statManager().createRateStat("udp.establishOverflow", "Number of messages queued up on a pending connection when it was too much", "Transport [UDP]", UDPTransport.RATES);
+        _context.statManager().createRateStat("udp.establishBadIP", "Received IP or port was bad", "Transport [UDP]", UDPTransport.RATES);
         // following are for PeerState
-        _context.statManager().createRateStat("udp.congestionOccurred", "How large the cwin was when congestion occurred (duration == sendBps)", "udp", UDPTransport.RATES);
-        _context.statManager().createRateStat("udp.congestedRTO", "retransmission timeout after congestion (duration == rtt dev)", "udp", UDPTransport.RATES);
-        _context.statManager().createRateStat("udp.sendACKPartial", "Number of partial ACKs sent (duration == number of full ACKs in that ack packet)", "udp", UDPTransport.RATES);
-        _context.statManager().createRateStat("udp.sendBps", "How fast we are transmitting when a packet is acked", "udp", UDPTransport.RATES);
-        _context.statManager().createRateStat("udp.receiveBps", "How fast we are receiving when a packet is fully received (at most one per second)", "udp", UDPTransport.RATES);
-        _context.statManager().createRateStat("udp.mtuIncrease", "How many retransmissions have there been to the peer when the MTU was increased", "udp", UDPTransport.RATES);
-        _context.statManager().createRateStat("udp.mtuDecrease", "How many retransmissions have there been to the peer when the MTU was decreased", "udp", UDPTransport.RATES);
-        _context.statManager().createRateStat("udp.rejectConcurrentActive", "How many messages are currently being sent to the peer when we reject it (period is how many concurrent packets we allow)", "udp", UDPTransport.RATES);
-        _context.statManager().createRateStat("udp.allowConcurrentActive", "How many messages are currently being sent to the peer when we accept it (period is how many concurrent packets we allow)", "udp", UDPTransport.RATES);
-        _context.statManager().createRateStat("udp.rejectConcurrentSequence", "How many consecutive concurrency rejections have we had when we stop rejecting (period is how many concurrent packets we are on)", "udp", UDPTransport.RATES);
-        //_context.statManager().createRateStat("udp.queueDropSize", "How many messages were queued up when it was considered full, causing a tail drop?", "udp", UDPTransport.RATES);
-        //_context.statManager().createRateStat("udp.queueAllowTotalLifetime", "When a peer is retransmitting and we probabalistically allow a new message, what is the sum of the pending message lifetimes? (period is the new message's lifetime)?", "udp", UDPTransport.RATES);
-        _context.statManager().createRateStat("udp.dupDHX", "Session request replay", "udp", new long[] { 24*60*60*1000L } );
+        _context.statManager().createRateStat("udp.congestionOccurred", "How large the cwin was when congestion occurred (duration = sendBps)", "Transport [UDP]", UDPTransport.RATES);
+        _context.statManager().createRateStat("udp.congestedRTO", "retransmission timeout after congestion (duration = rtt dev)", "Transport [UDP]", UDPTransport.RATES);
+        _context.statManager().createRateStat("udp.sendACKPartial", "Number of partial ACKs sent (duration = number of full ACKs in that ACK packet)", "Transport [UDP]", UDPTransport.RATES);
+        _context.statManager().createRateStat("udp.sendBps", "How fast we are transmitting when a packet is acked", "Transport [UDP]", UDPTransport.RATES);
+        _context.statManager().createRateStat("udp.receiveBps", "How fast we are receiving when a packet is fully received (at most one per second)", "Transport [UDP]", UDPTransport.RATES);
+        _context.statManager().createRateStat("udp.mtuIncrease", "Number of retransmissions have there been to the peer when the MTU was increased", "Transport [UDP]", UDPTransport.RATES);
+        _context.statManager().createRateStat("udp.mtuDecrease", "Number of retransmissions have there been to the peer when the MTU was decreased", "Transport [UDP]", UDPTransport.RATES);
+        _context.statManager().createRateStat("udp.rejectConcurrentActive", "Number of messages currently being sent to the peer when we reject it (period is how many concurrent packets we allow)", "Transport [UDP]", UDPTransport.RATES);
+        _context.statManager().createRateStat("udp.allowConcurrentActive", "Number of messages currently being sent to the peer when we accept it (period is how many concurrent packets we allow)", "Transport [UDP]", UDPTransport.RATES);
+        _context.statManager().createRateStat("udp.rejectConcurrentSequence", "Number of consecutive concurrency rejections we had when we stop rejecting (period is how many concurrent packets we are on)", "Transport [UDP]", UDPTransport.RATES);
+        //_context.statManager().createRateStat("udp.queueDropSize", "How many messages were queued up when it was considered full, causing a tail drop?", "Transport [UDP]", UDPTransport.RATES);
+        //_context.statManager().createRateStat("udp.queueAllowTotalLifetime", "When a peer is retransmitting and we probabalistically allow a new message, what is the sum of the pending message lifetimes? (period is the new message's lifetime)?", "Transport [UDP]", UDPTransport.RATES);
+        _context.statManager().createRateStat("udp.dupDHX", "Session request replay", "Transport [UDP]", new long[] { 24*60*60*1000L } );
     }
-    
+
     public synchronized void startup() {
         _alive = true;
         I2PThread t = new I2PThread(new Establisher(), "UDP Establisher", true);
         t.start();
     }
 
-    public synchronized void shutdown() { 
+    public synchronized void shutdown() {
         _alive = false;
         notifyActivity();
     }
-    
+
     /**
      * Grab the active establishing state
      * @return null if none
@@ -203,7 +203,7 @@ class EstablishmentManager {
             //     _log.debug("No inbound states for " + from + ", with remaining: " + _inboundStates);
             return state;
     }
-    
+
     /**
      * Grab the active establishing state
      * @return null if none
@@ -219,14 +219,14 @@ class EstablishmentManager {
             //     _log.debug("No outbound states for " + from + ", with remaining: " + _outboundStates);
             return state;
     }
-    
+
     /**
      * How many concurrent outbound sessions to deal with
      */
     private int getMaxConcurrentEstablish() {
         return _context.getProperty(PROP_MAX_CONCURRENT_ESTABLISH, DEFAULT_MAX_CONCURRENT_ESTABLISH);
     }
-    
+
     /**
      * Send the message to its specified recipient by establishing a connection
      * with them and sending it off.  This call does not block, and on failure,
@@ -252,7 +252,7 @@ class EstablishmentManager {
         RouterIdentity toIdentity = toRouterInfo.getIdentity();
         Hash toHash = toIdentity.calculateHash();
         if (toRouterInfo.getNetworkId() != _networkID) {
-            _context.banlist().banlistRouterForever(toHash, "Not in our network: " + toRouterInfo.getNetworkId());
+            _context.banlist().banlistRouterForever(toHash, " <b>➜</b> " + "Not in our network: " + toRouterInfo.getNetworkId());
             _transport.markUnreachable(toHash);
             _transport.failed(msg, "Remote peer is on the wrong network, cannot establish");
             return;
@@ -314,7 +314,7 @@ class EstablishmentManager {
         } else {
             to = maybeTo;
         }
-        
+
         OutboundEstablishState state = null;
         int deferred = 0;
         boolean rejected = false;
@@ -405,7 +405,7 @@ class EstablishmentManager {
                     }
                 }
             }
-        
+
         if (rejected) {
             if (_log.shouldLog(Log.WARN))
                 _log.warn("Too many pending, rejecting outbound establish to " + to);
@@ -418,30 +418,30 @@ class EstablishmentManager {
             _context.statManager().addRateData("udp.establishOverflow", queueCount, deferred);
             return;
         }
-        
+
         if (deferred > 0)
-            msg.timestamp("too many deferred establishers");
+            msg.timestamp("Too many deferred establishers");
         else if (state != null)
-            msg.timestamp("establish state already waiting");
+            msg.timestamp("Establish state already waiting");
         notifyActivity();
     }
-    
+
     /**
      * How many concurrent inbound sessions to deal with
      */
-    private int getMaxInboundEstablishers() { 
-        return getMaxConcurrentEstablish()/2; 
+    private int getMaxInboundEstablishers() {
+        return getMaxConcurrentEstablish()/2;
     }
-    
+
     /**
      * Should we allow another inbound establishment?
      * Used to throttle outbound hole punches.
      * @since 0.9.2
      */
     public boolean shouldAllowInboundEstablishment() {
-        return _inboundStates.size() < getMaxInboundEstablishers(); 
+        return _inboundStates.size() < getMaxInboundEstablishers();
     }
-    
+
     /**
      * Got a SessionRequest (initiates an inbound establishment)
      *
@@ -452,7 +452,7 @@ class EstablishmentManager {
                 _log.warn("Receive session request from invalid: " + from);
             return;
         }
-        
+
         boolean isNew = false;
 
             InboundEstablishState state = _inboundStates.get(from);
@@ -465,10 +465,10 @@ class EstablishmentManager {
                     _context.statManager().addRateData("udp.establishDropped", 1);
                     return; // drop the packet
                 }
-            
+
                 if (_context.blocklist().isBlocklisted(from.getIP())) {
                     if (_log.shouldLog(Log.WARN))
-                        _log.warn("Receive session request from blocklisted IP: " + from);
+                        _log.warn("Received SessionRequest from blocklisted IP address: " + from);
                     _context.statManager().addRateData("udp.establishBadIP", 1);
                     return; // drop the packet
                 }
@@ -509,18 +509,18 @@ class EstablishmentManager {
                 // we got an IB even though we were firewalled, hidden, not high cap, etc.
             }
             if (_log.shouldLog(Log.INFO))
-                _log.info("Received NEW session request " + state);
+                _log.info("Received NEW session request: " + state);
         } else {
             if (_log.shouldLog(Log.DEBUG))
                 _log.debug("Receive DUP session request from: " + state);
         }
-        
+
         notifyActivity();
     }
-    
-    /** 
-     * got a SessionConfirmed (should only happen as part of an inbound 
-     * establishment) 
+
+    /**
+     * got a SessionConfirmed (should only happen as part of an inbound
+     * establishment)
      */
     void receiveSessionConfirmed(RemoteHostId from, UDPPacketReader reader) {
         InboundEstablishState state = _inboundStates.get(from);
@@ -534,7 +534,7 @@ class EstablishmentManager {
                 _log.warn("Receive (DUP?) session confirmed from: " + from);
         }
     }
-    
+
     /**
      * Got a SessionCreated (in response to our outbound SessionRequest)
      *
@@ -559,7 +559,7 @@ class EstablishmentManager {
     void receiveSessionDestroy(RemoteHostId from, PeerState state) {
         if (_log.shouldLog(Log.DEBUG))
             _log.debug("Receive session destroy (EST) from: " + from);
-        _transport.dropPeer(state, false, "received destroy message");
+        _transport.dropPeer(state, false, "Received destroy message");
     }
 
     /**
@@ -571,7 +571,7 @@ class EstablishmentManager {
             _log.debug("Receive session destroy (OB) from: " + from);
         _outboundStates.remove(from);
         Hash peer = state.getRemoteIdentity().calculateHash();
-        _transport.dropPeer(peer, false, "received destroy message during OB establish");
+        _transport.dropPeer(peer, false, "Received destroy message during OB establish");
     }
 
     /**
@@ -616,7 +616,7 @@ class EstablishmentManager {
                         }
                     }
                 }
-                
+
         if (_outboundStates.size() < getMaxConcurrentEstablish() && !_queuedOutbound.isEmpty()) {
             locked_admitQueued();
         }
@@ -624,9 +624,9 @@ class EstablishmentManager {
 
         //if (admitted > 0)
         //    _log.log(Log.CRIT, "Admitted " + admitted + " with " + remaining + " remaining queued and " + active + " active");
-        
+
         if (_log.shouldLog(Log.INFO))
-            _log.info("Outbound established completely!  yay: " + state);
+            _log.info("Outbound SSU connection successfully established" + state);
         PeerState peer = handleCompletelyEstablished(state);
         notifyActivity();
         return peer;
@@ -667,7 +667,7 @@ class EstablishmentManager {
             }
             if (queued.isEmpty())
                 continue;
-            
+
             for (OutNetMessage m : queued) {
                 m.timestamp("no longer deferred... establishing");
                 establish(m, false);
@@ -676,22 +676,22 @@ class EstablishmentManager {
         }
         return admitted;
     }
-    
+
     private void notifyActivity() {
-        synchronized (_activityLock) { 
+        synchronized (_activityLock) {
             _activity++;
-            _activityLock.notifyAll(); 
+            _activityLock.notifyAll();
         }
     }
-    
-    /** 
+
+    /**
      * ok, fully received, add it to the established cons and queue up a
      * netDb store to them
      *
      */
     private void handleCompletelyEstablished(InboundEstablishState state) {
         if (state.isComplete()) return;
-        
+
         RouterIdentity remote = state.getConfirmedIdentity();
         PeerState peer = new PeerState(_context, _transport,
                                        state.getSentIP(), state.getSentPort(), remote.calculateHash(), true, state.getRTT());
@@ -707,7 +707,7 @@ class EstablishmentManager {
             if (addr != null) {
                 String smtu = addr.getOption(UDPAddress.PROP_MTU);
                 if (smtu != null) {
-                    try { 
+                    try {
                         boolean isIPv6 = state.getSentIP().length == 16;
                         int mtu = MTU.rectify(isIPv6, Integer.parseInt(smtu));
                         peer.setHisMTU(mtu);
@@ -717,20 +717,20 @@ class EstablishmentManager {
         }
         // 0 is the default
         //peer.setTheyRelayToUsAs(0);
-        
+
         if (_log.shouldLog(Log.DEBUG))
             _log.debug("Handle completely established (inbound): " + state
                        + " - " + peer.getRemotePeer());
-        
+
         //if (true) // for now, only support direct
         //    peer.setRemoteRequiresIntroduction(false);
-        
+
         _transport.addRemotePeerState(peer);
-        
+
         boolean isIPv6 = state.getSentIP().length == 16;
         _transport.inboundConnectionReceived(isIPv6);
         _transport.setIP(remote.calculateHash(), state.getSentIP());
-        
+
         _context.statManager().addRateData("udp.inboundEstablishTime", state.getLifetime());
         sendInboundComplete(peer);
         OutNetMessage msg;
@@ -747,21 +747,21 @@ class EstablishmentManager {
     }
 
     /**
-     * dont send our info immediately, just send a small data packet, and 5-10s later, 
-     * if the peer isnt banlisted, *then* send them our info.  this will help kick off
+     * Don't send our info immediately, just send a small data packet, and 5-10s later,
+     * if the peer isn't banlisted, *then* send them our info.  this will help kick off
      * the oldnet
      * The "oldnet" was < 0.6.1.10, it is long gone.
      * The delay really slows down the network.
      * The peer is unbanlisted and marked reachable by addRemotePeerState() which calls markReachable()
      * so the check below is fairly pointless.
      * If for some strange reason an oldnet router (NETWORK_ID == 1) does show up,
-     *  it's handled in UDPTransport.messageReceived()
+     * it's handled in UDPTransport.messageReceived()
      * (where it will get dropped, marked unreachable and banlisted at that time).
      */
     private void sendInboundComplete(PeerState peer) {
         // SimpleTimer.getInstance().addEvent(new PublishToNewInbound(peer), 10*1000);
         if (_log.shouldLog(Log.INFO))
-            _log.info("Completing to the peer after IB confirm: " + peer);
+            _log.info("Completing handshake with peer after Inbound confirmation: " + peer);
         DeliveryStatusMessage dsm = new DeliveryStatusMessage(_context);
         dsm.setArrival(_networkID); // overloaded, sure, but future versions can check this
                                            // This causes huge values in the inNetPool.droppedDeliveryStatusDelay stat
@@ -791,8 +791,8 @@ class EstablishmentManager {
                     _log.warn("NOT publishing to the peer after confirm plus delay (WITH banlist): " + (hash != null ? hash.toString() : "unknown"));
             }
     }
-    
-    /** 
+
+    /**
      * ok, fully received, add it to the established cons and send any
      * queued messages
      *
@@ -804,7 +804,7 @@ class EstablishmentManager {
             if (rem != null)
                 return _transport.getPeerState(rem.getHash());
         }
-        
+
         long now = _context.clock().now();
         RouterIdentity remote = state.getRemoteIdentity();
         // only if == state
@@ -822,15 +822,15 @@ class EstablishmentManager {
             peer.setHisMTU(mtu);
         // 0 is the default
         //peer.setWeRelayToThemAs(0);
-        
+
         if (_log.shouldLog(Log.DEBUG))
             _log.debug("Handle completely established (outbound): " + state
                        + " - " + peer.getRemotePeer());
-        
-        
+
+
         _transport.addRemotePeerState(peer);
         _transport.setIP(remote.calculateHash(), state.getSentIP());
-        
+
         _context.statManager().addRateData("udp.outboundEstablishTime", state.getLifetime());
         DatabaseStoreMessage dbsm = null;
         if (!state.isFirstMessageOurDSM()) {
@@ -838,7 +838,7 @@ class EstablishmentManager {
         } else if (_log.shouldLog(Log.INFO)) {
             _log.info("Skipping publish: " + state);
         }
-        
+
         List<OutNetMessage> msgs = new ArrayList<OutNetMessage>(8);
         OutNetMessage msg;
         while ((msg = state.getNextQueuedMessage()) != null) {
@@ -853,17 +853,17 @@ class EstablishmentManager {
         _transport.send(dbsm, msgs, peer);
         return peer;
     }
-    
+
 /****
     private void sendOurInfo(PeerState peer, boolean isInbound) {
         if (_log.shouldLog(Log.INFO))
-            _log.info("Publishing to the peer after confirm: " + 
+            _log.info("Publishing to the peer after confirm: " +
                       (isInbound ? " inbound con from " + peer : "outbound con to " + peer));
         DatabaseStoreMessage m = getOurInfo();
         _transport.send(m, peer);
     }
 ****/
-    
+
     /**
      *  A database store message with our router info
      *  @return non-null
@@ -875,17 +875,17 @@ class EstablishmentManager {
         m.setMessageExpiration(_context.clock().now() + DATA_MESSAGE_TIMEOUT);
         return m;
     }
-    
+
     /** the relay tag is a 4-byte field in the protocol */
     public static final long MAX_TAG_VALUE = 0xFFFFFFFFl;
-    
+
     /**
      *  This may be called more than once
      */
     private void sendCreated(InboundEstablishState state) {
         if (_log.shouldLog(Log.DEBUG))
             _log.debug("Send created to: " + state);
-        
+
         try {
             state.generateSessionKey();
         } catch (DHSessionKeyBuilder.InvalidPublicParameterException ippe) {
@@ -914,7 +914,7 @@ class EstablishmentManager {
      */
     private void sendRequest(OutboundEstablishState state) {
         if (_log.shouldLog(Log.DEBUG))
-            _log.debug("Send SessionRequest to: " + state);
+            _log.debug("Sent SessionRequest" + state);
         UDPPacket packet = _builder.buildSessionRequestPacket(state);
         if (packet != null) {
             _transport.send(packet);
@@ -924,7 +924,7 @@ class EstablishmentManager {
         }
         state.requestSent();
     }
-    
+
     /**
      *  Send RelayRequests to multiple introducers.
      *  This may be called multiple times, it sets the nonce the first time only
@@ -964,10 +964,10 @@ class EstablishmentManager {
         OutboundEstablishState state = _liveIntroductions.remove(Long.valueOf(nonce));
         if (state == null) {
             if (_log.shouldLog(Log.INFO))
-                _log.info("Dup or unknown RelayResponse: " + nonce);
+                _log.info("Duplicate or unknown RelayResponse: " + nonce);
             return; // already established
         }
-        
+
         // Note that we ignore the Alice (us) IP/Port in the RelayResponse
         int sz = reader.getRelayResponseReader().readCharlieIPSize();
         byte ip[] = new byte[sz];
@@ -975,7 +975,7 @@ class EstablishmentManager {
         int port = reader.getRelayResponseReader().readCharliePort();
         if ((!isValid(ip, port)) || (!isValid(bob.getIP(), bob.getPort()))) {
             if (_log.shouldLog(Log.WARN))
-                _log.warn("Bad relay resp from " + bob + " for " + Addresses.toString(ip, port));
+                _log.warn("Bad RelayResponse from " + bob + " for " + Addresses.toString(ip, port));
             _context.statManager().addRateData("udp.relayBadIP", 1);
             return;
         }
@@ -990,7 +990,7 @@ class EstablishmentManager {
         }
         _context.statManager().addRateData("udp.receiveIntroRelayResponse", state.getLifetime());
         if (_log.shouldLog(Log.INFO))
-            _log.info("Received RelayResponse for " + state.getRemoteIdentity().calculateHash() + " - they are on " 
+            _log.info("Received RelayResponse for [" + state.getRemoteIdentity().calculateHash().toBase64().substring(0,6) + "]\n* Address: "
                       + addr.toString() + ":" + port + " (according to " + bob + ") nonce=" + nonce);
         synchronized (state) {
             RemoteHostId oldId = state.getRemoteHostId();
@@ -1006,7 +1006,7 @@ class EstablishmentManager {
                 _outboundStates.remove(oldId);
                 _outboundStates.put(newId, state);
                 if (_log.shouldLog(Log.INFO))
-                    _log.info("RR replaced " + oldId + " with " + newId + ", claimed address was " + claimed);
+                    _log.info("RelayResponse replaced " + oldId + " with " + newId + ", claimed address was " + claimed);
             }
             //
             if (claimed != null)
@@ -1028,16 +1028,16 @@ class EstablishmentManager {
             boolean sendNow = state.receiveHolePunch();
             if (sendNow) {
                 if (_log.shouldLog(Log.INFO))
-                    _log.info("Hole punch from " + state + ", sending SessionRequest now");
+                    _log.info("Received hole punch" + state + ", sending SessionRequest now");
                 notifyActivity();
             } else {
                 if (_log.shouldLog(Log.INFO))
-                    _log.info("Hole punch from " + state + ", already sent SessionRequest");
+                    _log.info("Received hole punch" + state + ", already sent SessionRequest");
             }
         } else {
             // HolePunch received before RelayResponse, and we didn't know the IP/port, or it changed
             if (_log.shouldLog(Log.INFO))
-                _log.info("No state found for hole punch from " + from + " port " + fromPort);
+                _log.info("No state found for hole punch from " + from + ":" + fromPort);
         }
     }
 
@@ -1070,30 +1070,30 @@ class EstablishmentManager {
                 _log.warn("SessionCreated validate failed: " + state);
             return;
         }
-        
+
         if (!_transport.isValid(state.getReceivedIP()) || !_transport.isValid(state.getRemoteHostId().getIP())) {
             state.fail();
             return;
         }
-        
+
         // gives us the opportunity to "detect" our external addr
         _transport.externalAddressReceived(state.getRemoteIdentity().calculateHash(), state.getReceivedIP(), state.getReceivedPort());
-        
+
         // signs if we havent signed yet
         state.prepareSessionConfirmed();
-        
+
         // BUG - handle null return
         UDPPacket packets[] = _builder.buildSessionConfirmedPackets(state, _context.router().getRouterInfo().getIdentity());
-        
+
         if (_log.shouldLog(Log.DEBUG))
-            _log.debug("Send confirm to: " + state);
-        
+            _log.debug("Sending confirm " + state);
+
         for (int i = 0; i < packets.length; i++)
             _transport.send(packets[i]);
-        
+
         state.confirmedPacketsSent();
     }
-    
+
     /**
      *  Tell the other side never mind.
      *  This is only useful after we have received SessionCreated,
@@ -1111,7 +1111,7 @@ class EstablishmentManager {
             _transport.send(packet);
         }
     }
-    
+
     /**
      *  Tell the other side never mind.
      *  This is only useful after we have sent SessionCreated,
@@ -1129,7 +1129,7 @@ class EstablishmentManager {
             _transport.send(packet);
         }
     }
-    
+
     /**
      * Drive through the inbound establishment states, adjusting one of them
      * as necessary. Called from Establisher thread only.
@@ -1238,11 +1238,11 @@ class EstablishmentManager {
             // ok, since there was something to do, we want to loop again
             nextSendTime = now;
         }
-        
+
         return nextSendTime;
     }
-    
-    
+
+
     /**
      * Drive through the outbound establishment states, adjusting one of them
      * as necessary. Called from Establisher thread only.
@@ -1292,13 +1292,13 @@ class EstablishmentManager {
                     }
                 }
             }
-            
-            //admitted = locked_admitQueued();    
+
+            //admitted = locked_admitQueued();
             //remaining = _queuedOutbound.size();
 
         //if (admitted > 0)
         //    _log.log(Log.CRIT, "Admitted " + admitted + " in push with " + remaining + " remaining queued and " + active + " active");
-        
+
         if (outboundState != null) {
             //if (_log.shouldLog(Log.DEBUG))
             //    _log.debug("Processing for outbound: " + outboundState);
@@ -1359,14 +1359,14 @@ class EstablishmentManager {
                         break;
                 }
             }
-            
+
             // ok, since there was something to do, we want to loop again
             nextSendTime = now;
         }
-        
+
         return nextSendTime;
     }
-    
+
     /**
      *  Caller should probably synch on outboundState
      */
@@ -1391,10 +1391,10 @@ class EstablishmentManager {
         _outboundStates.remove(outboundState.getRemoteHostId(), outboundState);
         if (outboundState.getState() != OB_STATE_CONFIRMED_COMPLETELY) {
             if (_log.shouldLog(Log.INFO))
-                _log.info("Expired: " + outboundState + " Lifetime: " + outboundState.getLifetime());
+                _log.info("Session expired" + outboundState + "; Lifetime: " + outboundState.getLifetime() + "ms ");
             OutNetMessage msg;
             while ((msg = outboundState.getNextQueuedMessage()) != null) {
-                _transport.failed(msg, "Expired during failed establish");
+                _transport.failed(msg, "Expired during failed establishment attempt");
             }
             String err = "Took too long to establish OB connection, state = " + outboundState.getState();
             Hash peer = outboundState.getRemoteIdentity().calculateHash();
@@ -1411,7 +1411,7 @@ class EstablishmentManager {
         }
     }
 
-    
+
     /**
      *  Caller should probably synch on inboundState
      *  @since 0.9.2
@@ -1423,12 +1423,12 @@ class EstablishmentManager {
         }
     }
 
-    /**    
+    /**
      * Driving thread, processing up to one step for an inbound peer and up to
      * one step for an outbound peer.  This is prodded whenever any peer's state
      * changes as well.
      *
-     */    
+     */
     private class Establisher implements Runnable {
         public void run() {
             while (_alive) {
@@ -1450,7 +1450,7 @@ class EstablishmentManager {
         // Debugging
         private long _lastPrinted;
         private static final long PRINT_INTERVAL = 5*1000;
-    
+
         private void doPass() {
             long now = _context.clock().now();
             if (_log.shouldLog(Log.DEBUG) && _lastPrinted + PRINT_INTERVAL < now) {
@@ -1462,11 +1462,11 @@ class EstablishmentManager {
                     int live = _liveIntroductions.size();
                     int claimed = _outboundByClaimedAddress.size();
                     int hash = _outboundByHash.size();
-                    _log.debug("OB states: " + oactive + " IB states: " + iactive +
-                               " OB queued: " + queued + " intros: " + live +
-                               " OB claimed: " + claimed + " hash: " + hash);
+                    _log.debug("OB states: " + oactive + "; IB states: " + iactive +
+                               "; OB queued: " + queued + "; Intros: " + live +
+                               "; OB claimed: " + claimed + "; Hash: " + hash);
                 }
-            } 
+            }
             _activity = 0;
             if (_lastFailsafe + FAILSAFE_INTERVAL < now) {
                 _lastFailsafe = now;
@@ -1487,7 +1487,7 @@ class EstablishmentManager {
                 } catch (InterruptedException ie) {
                 }
                 // if (_log.shouldLog(Log.DEBUG))
-                //     _log.debug("After waiting w/ nextSend=" + nextSendTime 
+                //     _log.debug("After waiting w/ nextSend=" + nextSendTime
                 //                + " and delay=" + delay + " and interrupted=" + interrupted);
             }
         }

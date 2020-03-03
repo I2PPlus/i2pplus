@@ -108,9 +108,9 @@ public class ConnectChecker {
 
         boolean rv = (ct & cf) != 0;
         if (!rv && log.shouldWarn()) {
-            log.warn("Cannot connect: " +
-                     (usf ? "us" : from.toString()) + " with mask " + cf + "\nto " +
-                     (ust ? "us" : to.toString()) + " with mask " + ct);
+            log.warn("Cannot connect [" +
+                     (usf ? "us" : from.toString().substring(0,6)) + "] with mask " + cf + " -> [" +
+                     (ust ? "us" : to.toString().substring(0,6)) + "] with mask " + ct);
         }
         return rv;
     }
@@ -134,7 +134,7 @@ public class ConnectChecker {
         int ct = getConnectMask(ra);
         boolean rv = (ourMask & ct) != 0;
         //if (!rv && log.shouldWarn())
-        //    log.warn("Cannot connect: us with mask " + ourMask + " to " + to + " with mask " + ct);
+        //    log.warn("Cannot connect: us with mask " + ourMask + " -> " + to + " with mask " + ct);
         return rv;
     }
 
@@ -161,7 +161,7 @@ public class ConnectChecker {
             cf = getConnectMask(ra);
         boolean rv = (cf & ourMask) != 0;
         //if (!rv && log.shouldWarn())
-        //    log.warn("Cannot connect: " + from + " with mask " + cf + " to us with mask " + ourMask);
+        //    log.warn("Cannot connect: " + from + " with mask " + cf + " -> us with mask " + ourMask);
         return rv;
     }
 

@@ -16,7 +16,7 @@ import net.i2p.router.Router;
 /**
  * Fire up multiple routers in the same VM, all with their own RouterContext
  * (and all that entails).  In addition, this creates a root I2PAppContext for
- * any objects not booted through one of the RouterContexts.  Each of these 
+ * any objects not booted through one of the RouterContexts.  Each of these
  * contexts are configured through a simple properties file (where the name=value
  * contained in them are used for the context's getProperty(name)). <p>
  *
@@ -33,10 +33,10 @@ import net.i2p.router.Router;
  * Additionally, two other properties might be useful:<ul>
  *  <li>i2p.vmCommSystem=true</li>
  * </ul>
- * The first line tells the router to use an in-VM comm system for sending 
+ * The first line tells the router to use an in-VM comm system for sending
  * messages back and forth between routers (see net.i2p.transport.VMCommSystem).
- * 
- * To make the router console work, either run from a directory containing 
+ *
+ * To make the router console work, either run from a directory containing
  * lib/, webapps/, docs/, etc., or point i2p.dir.base to a directory containing the
  * above.
  *
@@ -44,15 +44,15 @@ import net.i2p.router.Router;
  * do on their own, so as before, you'll want to kill the proc or ^C it).
  */
 public class MultiRouter {
-	
+
 	private static final int BASE_PORT = 5000;
 
 	private static int nbrRouters;
-	
+
 	private static PrintStream _out;
 	private static ArrayList<Router> _routers = new ArrayList<Router>(8);
     private static I2PAppContext _defaultContext;
-    
+
     public static void main(String args[]) {
         if ( (args == null) || (args.length < 1) ) {
             usage();
@@ -73,13 +73,13 @@ public class MultiRouter {
         } finally {
             if (scan != null) scan.close();
         }
-        
+
         _out = System.out;
 
         buildClientProps(0);
         _defaultContext = new I2PAppContext(buildRouterProps(0));
         _defaultContext.clock().setOffset(0);
-        
+
         _out.println("RouterConsole for Router 0 is listening on: 127.0.0.1:" + (BASE_PORT-1));
 
         Runtime.getRuntime().addShutdownHook(new Thread() {
@@ -101,14 +101,14 @@ public class MultiRouter {
             _out.println("Router " + i + " was created");
             try { Thread.sleep(100); } catch (InterruptedException ie) {}
         }
-        
+
         for (int i = 0; i < nbrRouters; i++) {
         	final Router r = _routers.get(i);
             long offset = r.getContext().random().nextLong(Router.CLOCK_FUDGE_FACTOR/2);
             if (r.getContext().random().nextBoolean())
                 offset = 0 - offset;
             r.getContext().clock().setOffset(offset, true);
-            
+
             /* Start the routers in separate threads since it takes some time. */
             (new Thread() {
             	  public void run() {
@@ -116,22 +116,22 @@ public class MultiRouter {
             	  }
             }).start();
             try { Thread.sleep(100); } catch (InterruptedException ie) {}
-            
+
             _out.println("Router " + i + " was started with time offset " + offset);
         }
         _out.println("All routers have been started");
-        
+
         /* Wait for routers to start services and generate keys
          * before doing the internal reseed. */
         int waitForRouters = (nbrRouters/10)*1000;
-        _out.println("Waiting " + waitForRouters/1000 +  " seconds for routers to start" + 
+        _out.println("Waiting " + waitForRouters/1000 +  " seconds for routers to start" +
                      "before doing the internal reseed");
-        try { Thread.sleep(waitForRouters); } catch (InterruptedException ie) {}   
+        try { Thread.sleep(waitForRouters); } catch (InterruptedException ie) {}
         internalReseed();
-        
+
         waitForCompletion();
     }
-    
+
     private static void internalReseed() {
 
     	HashSet<RouterInfo> riSet = new HashSet<RouterInfo>();
@@ -145,7 +145,7 @@ public class MultiRouter {
     	}
 		_out.println(riSet.size() + " RouterInfos were reseeded");
     }
-    
+
     private static Properties buildRouterProps(int id) {
         Properties props = getRouterProps(id);
         File f = new File(props.getProperty("router.configLocation"));
@@ -159,7 +159,7 @@ public class MultiRouter {
         }
         return props;
     }
-    
+
     private static Properties getRouterProps(int id) {
         Properties props = new Properties();
 
@@ -176,7 +176,7 @@ public class MultiRouter {
         props.setProperty("router.rejectStartupTime", "0");
         props.setProperty("router.reseedDisable", "true");
         props.setProperty("i2p.dir.app", getBaseDir(id));
-        
+
         /* If MultiRouter is not run from a dir containing lib/, webapps/, docs/, etc.
          * point i2p.dir.base to a directory containing the above. */
         //props.setProperty("i2p.dir.base", getBaseDir(id));
@@ -191,11 +191,11 @@ public class MultiRouter {
         props.setProperty("i2np.udp.port", BASE_PORT + id + "");
         props.setProperty("i2np.allowLocal", "true");
         props.setProperty("i2np.udp.internalPort", BASE_PORT + id + "");
-        props.setProperty("i2cp.port", Integer.toString((BASE_PORT + nbrRouters + id)));   
+        props.setProperty("i2cp.port", Integer.toString((BASE_PORT + nbrRouters + id)));
 
         return props;
     }
-    
+
     private static Properties buildClientProps(int id) {
     	Properties rProps = getRouterProps(id);
         Properties props = getClientProps();
@@ -210,10 +210,10 @@ public class MultiRouter {
         }
         return props;
     }
-    
+
     private static Properties getClientProps() {
     	Properties props = new Properties();
-    	
+
     	props.setProperty("clientApp.0.args", (BASE_PORT-1) + " 127.0.0.1 ./webapps");
         props.setProperty("clientApp.0.main", "net.i2p.router.web.RouterConsoleRunner");
         props.setProperty("clientApp.0.name", "webconsole");
@@ -222,15 +222,15 @@ public class MultiRouter {
         props.setProperty("clientApp.1.main", "net.i2p.i2ptunnel.TunnelControllerGroup");
         props.setProperty("clientApp.1.name", "tunnels");
         props.setProperty("clientApp.1.delay", "6");
-        
+
         return props;
     }
-    
+
     private static String getBaseDir(int id) {
     	File f = new File(".");
     	return f.getAbsoluteFile().getParentFile().toString() + "/multirouter/"+ Integer.toString(id);
     }
-    
+
     private static void waitForCompletion() {
         while (true) {
             int alive = 0;
@@ -250,7 +250,7 @@ public class MultiRouter {
         }
         _out.println("All routers shut down");
     }
-    
+
     private static void usage() {
         System.err.println("Usage: MultiRouter nbr_routers");
         System.err.println("       Where nbr_routers > 0");

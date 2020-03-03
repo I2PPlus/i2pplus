@@ -8,7 +8,7 @@ import net.i2p.I2PAppContext;
 import net.i2p.data.ByteArray;
 
 /**
- * Cache the objects frequently used to reduce memory churn.  The ByteArray 
+ * Cache the objects frequently used to reduce memory churn.  The ByteArray
  * should be held onto as long as the  data referenced in it is needed.
  *
  * For small arrays where the management of valid bytes in ByteArray
@@ -71,7 +71,7 @@ public final class ByteCache extends TryCache<ByteArray> {
      * not operate after a restart on Android, as the old context's SimpleTimer2 will have shut down.
      * TODO tie this to the context or clean up all calls.
      *
-     * @param cacheSize how large we want the cache to grow 
+     * @param cacheSize how large we want the cache to grow
      *                  (number of objects, NOT memory size)
      *                  before discarding released objects.
      *                  Since 0.7.14, a limit of 1MB / size is enforced
@@ -106,12 +106,12 @@ public final class ByteCache extends TryCache<ByteArray> {
     }
 
     private final int _entrySize;
-    
+
     /** how often do we cleanup the cache */
     private static final int CLEANUP_FREQUENCY = 33*1000;
     /** if we haven't exceeded the cache size in 2 minutes, cut our cache in half */
     private static final long EXPIRE_PERIOD = 2*60*1000;
-    
+
     /** @since 0.9.36 */
     private static class ByteArrayFactory implements TryCache.ObjectFactory<ByteArray> {
         private final int sz;
@@ -133,13 +133,13 @@ public final class ByteCache extends TryCache<ByteArray> {
         _entrySize = entrySize;
         int stagger = SystemVersion.isAndroid() ? 0 : (entrySize % 777);
         SimpleTimer2.getInstance().addPeriodicEvent(new Cleanup(), CLEANUP_FREQUENCY + stagger);
-        I2PAppContext.getGlobalContext().statManager().createRateStat("byteCache.memory." + entrySize, "Memory usage (B)", "Router", new long[] { 10*60*1000 });
+        I2PAppContext.getGlobalContext().statManager().createRateStat("byteCache.memory." + entrySize, "Memory usage (B)", "Router [ByteCache]", new long[] { 10*60*1000 });
     }
-    
+
     private void resize(int maxCachedEntries) {
         // disabled since we're now extending TryCache
     }
-    
+
     /**
      * Put this structure back onto the available cache for reuse
      *
@@ -160,7 +160,7 @@ public final class ByteCache extends TryCache<ByteArray> {
         }
         entry.setValid(0);
         entry.setOffset(0);
-         
+
         if (shouldZero)
             Arrays.fill(entry.getData(), (byte)0x0);
         super.release(entry);
@@ -174,7 +174,7 @@ public final class ByteCache extends TryCache<ByteArray> {
                 origsz = items.size();
                 if (origsz > 1 && System.currentTimeMillis() - _lastUnderflow > EXPIRE_PERIOD) {
                     // we haven't exceeded the cache size in a few minutes, so lets
-                    // shrink the cache 
+                    // shrink the cache
                     int toRemove = origsz / 2;
                     for (int i = 0; i < toRemove; i++) {
                         items.remove(items.size() - 1);

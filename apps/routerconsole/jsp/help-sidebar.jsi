@@ -1,43 +1,125 @@
-<h2><%=intl._t("Sidebar Information")%></h2>
-<p><%=intl._t("Many of the stats on the sidebar may be <a href=\"configstats\">configured</a> to be <a href=\"graphs\">graphed</a> for further analysis.")%>
-<%=intl._t("You may also customize the sections that appear on the Sidebar and their positioning on the <a href=\"configsidebar\">Sidebar Configuration page</a>.")%>
+<h2>Sidebar Information</h2>
+
+<p>
+Many of the stats on the sidebar may be <a href="/configstats">configured</a> to be <a href="/graphs">graphed</a> for further analysis. You may also customize the sections that appear on the Sidebar and their positioning on the <a href="/configsidebar">Sidebar Configuration page</a>.
 </p>
 
-<h3><%=intl._t("Bandwidth in/out")%></h3>
-<p><%=intl._t("This section indicates your average bandwidth speeds and total usage for the session.")%> 
-<%=intl._t("All values are in bytes per second, not bits per second.")%>
-<%=intl._t("You may change your bandwidth limits on the <a href=\"config\">Bandwidth Configuration page</a>.")%>
-<%=intl._t("The more bandwidth you make available, the more you help the network and improve your own anonymity, so please take the time to review the settings.")%>
-<%=intl._t("Your upstream share amount (KBps Out) will determine your overall contribution to the network.")%>
-</p>
+<h3>Router Info</h3>
 
-
-<h3><%=intl._t("Peers")%></h3>
 <ul>
+
 <li>
-<b><%=intl._t("Active")%>:</b> <%=intl._t("The first number is the number of peers your router has sent or received a message from in the last few minutes.")%>
-<%=intl._t("This may range from 8-10 to several hundred, depending on your total bandwidth, shared bandwidth, and locally-generated traffic.")%>
-<%=intl._t("The second number is the number of peers seen in the last hour or so.")%>
-<%=intl._t("Do not be concerned if these numbers vary widely.")%>
-</li>
+<b>Local Identity:</b>
+If you hover over the <i>Router Info</i> heading, your truncated router identity will be shown (the first four characters (24 bits) of your 44-character (256-bit) Base64 router hash). The full hash is shown on your <a href="netdb?r=.">Network Database entry</a>. Never reveal this to anyone, as your router identity is uniquely linked to your IP address in the network database.</li>
+
 <li>
-<b><%=intl._t("Fast")%>:</b> <%=intl._t("This is the number of peers your router has available for building client tunnels.")%>
-<%=intl._t("These peers are shown on the <a href=\"profiles\">profiles page</a>.")%>
+<b>Version:</b>
+The version of the I2P software you are running. If a new version is available, you will be notified in the Sidebar. It is recommended to keep your router up to date to ensure optimal performance and security. Router updates are usually made available on average every 2-3 months.
 </li>
-<li><b><%=intl._t("High Capacity")%>:</b>
-<%=intl._t("This is the number of peers your router has available for building your exploratory tunnels which are used to determine network performance.")%>
-<%=intl._t("The fast peers are included in the high capacity tier.")%>
-<%=intl._t("These peers are shown on the <a href=\"profiles\">profiles page</a>.")%>
-</li>
+
 <li>
-<b><%=intl._t("Integrated")%>:</b> <%=intl._t("This is the number of peers your router will use for network database inquiries.")%>
-<%=intl._t("These are usually the floodfill routers responsible for maintaining network integrity.")%>
-<%=intl._t("These peers are shown on the <a href=\"profiles\">profiles page</a>.")%>
+<b>Clock Skew:</b>
+The skew (offset) of your computer's clock relative to the network-synced time (if known). I2P requires your computer's time be accurate. If the skew is more than a few seconds, please correct the problem by adjusting your computer's time. If I2P cannot connect to the internet, a reading of 0ms may be indicated. Note: This is only displayed in the <i>Router Information (advanced)</i> section. You may add this section to your Sidebar on the <a href="/configsidebar">Sidebar Configuration page</a>.
 </li>
+
 <li>
-<b><%=intl._t("Known")%>:</b> <%=intl._t("This is the total number of peers that are known by your router.")%>
-<%=intl._t("This may range from under 100 to several thousand.")%>
-<%=intl._t("This number is not the total size of the network; it may vary widely depending on your total bandwidth, shared bandwidth, and locally-generated traffic.")%>
-<%=intl._t("I2P does not require a router to know every other router in the network.")%>
+<b>Memory:</b>
+This indicates the amount of RAM I2P is using, and the total amount available, allocated by Java. If the usage is consistently high relative to the available RAM, this may indicate that you need to increase the ram allocated to the JVM. You can allocate more RAM by editing your <code>wrapper.config</code> file which is normally located in the I2P application directory. You will need to edit the <code>wrapper.java.maxmemory</code> parameter, which by default is set to 128(MB). <!--<b>Note:</b> Memory usage is only displayed in the <i>Router Information (advanced)</i> section or on the <i>Memory Usage Bar</i>, both of which may be added to your Sidebar on the <a href="configsidebar">Sidebar Configuration page</a>.-->
 </li>
+
 </ul>
+
+<h3>Peers</h3>
+
+<ul>
+
+<li>
+<b>Active:</b> The first number is the number of peers your router has sent or received a message from in the last few minutes. This may range from 8-10 to several hundred, depending on your total bandwidth, shared bandwidth, and locally-generated traffic. The second number is the number of peers seen in the last hour or so. Do not be concerned if these numbers vary widely. <a href="/configstats#router.activePeers">[Enable graphing]</a>.
+</li>
+
+<li>
+<b>Fast:</b> This is the number of peers your router has available for building client tunnels. It is generally in the range 8-30. Your fast peers are shown on the <a href="/profiles">Profiles page</a>. <a href="/configstats#router.fastPeers">[Enable graphing]</a>
+</li>
+
+<li>
+<b>High Capacity:</b>
+This is the number of peers your router has available for building your exploratory tunnels which are used to determine network performance. It is generally in the range 8-75. The fast peers are included in the high capacity tier.Your high capacity peers are shown on the <a href="/profiles">Profiles page</a>. <a href="/configstats#router.highCapacityPeers">[Enable graphing]</a>
+</li>
+
+<li>
+<b>Integrated:</b> This is the number of peers your router will use for network database inquiries. These are usually the "floodfill" routers which are responsible for maintaining network integrity. Your well integrated peers are shown on the bottom of the <a href="/profiles">Profiles page</a>.
+</li>
+
+<li>
+<b>Known:</b> This is the total number of peers that are known by your router. They are listed on the <a href="/netdb">Network Database page</a>. This may range from under 100 to 1000 or more. This number is not the total size of the network; it may vary widely depending on your total bandwidth, shared bandwidth, and locally-generated traffic. I2P does not require a router to know every other router in the network.
+</li>
+
+</ul>
+
+<h3>Bandwidth In/Out</h3>
+
+<p>
+This section indicates your average bandwidth speeds and total usage for the session. All values are in bytes per second. You may change your bandwidth limits on the <a href="/config">Bandwidth Configuration page</a>. The more bandwidth you make available, the more you help the network and improve your own anonymity, so please take the time to review the settings. If you are unsure of your network's speed, using a service such as <a href="http://speedtest.net/">SpeedTest</a> or similar will give you a good indication of your bandwidth capability. Your upstream share amount (KBps Out) will determine your overall contribution to the network. Bandwidth is <a href="/graphs">graphed</a> by default.
+</p>
+
+<h3>Local Destinations</h3>
+
+<p>
+These are the local services provided by your router. They may be clients started through the <a href="/i2ptunnelmgr">Tunnel Manager</a> or external programs connecting through SAM, BOB, or directly to I2CP. By default, most of your client services (mail, http proxy, IRC) will share the same set of tunnels and be listed as <i>Shared Clients</i> and <i>Shared Clients(DSA)</i>, which enhances anonymity by blending the traffic from all shared services, and reduces the overhead required to build and maintain tunnels. However, if you experience a tunnel failure, all your services will go offline at the same time, so in some scenarios you may wish to configure client services to use their own set of tunnels. This can be done by unchecking the <i>Share tunnels with other clients&hellip;</i> option listed under <i>Shared Clients</i> on the configuration page of the relevant client service in the Tunnel Manager, after which you will need to restart the client service from the <a href="/i2ptunnelmgr">main Tunnel Manager page</a>.
+</p>
+
+<h3>Tunnels</h3>
+
+<p>
+The actual tunnels are shown on the <a href="/tunnels">Tunnels page</a>.
+</p>
+
+<ul>
+
+<li>
+<b>Exploratory:</b> Tunnels built by your router and used for communication with the floodfill peers, building new tunnels, and testing existing tunnels.
+</li>
+
+<li>
+<b>Client:</b> Tunnels built by your router for each client's use.
+</li>
+
+<li>
+<b>Participating:</b> Tunnels built by other routers through your router. This may vary widely depending on network demand, your shared bandwidth, and amount of locally-generated traffic. The recommended method for limiting participating tunnels is to change your share percentage on the <a  href="/config">Bandwidth Configuration page</a>. You may also limit the total number by setting <code>router.maxParticipatingTunnels=nnn</code> on the <a href="/configadvanced">Advanced configuration page</a>. <a href="/configstats#tunnel.participatingTunnels">[Enable graphing]</a>.
+</li>
+
+<li>
+<b>Share Ratio:</b> The number of participating tunnels you route for others, divided by the total number of hops in all your exploratory and client tunnels. A number greater than 1.00 means you are contributing more tunnels to the network than you are using.
+</li>
+
+</ul>
+
+<h3>Congestion</h3>
+
+<p>
+Some basic indications of router overload:
+</p>
+
+<ul>
+
+<li>
+<b>Job Lag:</b> How long jobs are waiting before execution. The job queue is listed on the <a href="/jobs">Jobs page</a>. Unfortunately, there are several other job queues in the router that may be congested, and their status is not available in the router console. The job lag should generally be zero. If it is consistently higher than 500ms, your computer is very slow, your network is experiencing connectivity issues, or the router has serious problems. <a href="/configstats#jobQueue.jobLag">[Enable graphing]</a>.
+</li>
+
+<li>
+<b>Message Delay:</b> How long an outbound message waits in the queue. This should generally be a few hundred milliseconds or less. If it is consistently higher than 1000ms, your computer is very slow, or you should adjust your bandwidth limits, or your (BitTorrent?) clients may be sending too much data and should have their transmit bandwidth limit reduced. <a href="/configstats#transport.sendProcessingTime">[Enable graphing]</a> (transport.sendProcessingTime).
+</li>
+
+<li>
+<b>Backlog:</b> This is the number of pending requests from other routers to build a participating tunnel through your router. It should usually be close to zero. If it is consistently high, your computer is too slow, and you should reduce your share bandwidth limits.
+</li>
+
+<li>
+<b>Accepting/Rejecting:</b> Your router's status on accepting or rejecting requests from other routers to build a participating tunnel through your router. Your router may accept all requests, accept or reject a percentage of requests, or reject all requests for a number of reasons, to control the bandwidth and CPU demands and maintain capacity for local clients. <b>Note:</b> It will take at least 10 minutes from your router starting for it to accept building participating tunnels in order to ensure your router is stable and successfully bootstrapped to the network.
+</li>
+
+</ul>
+
+<p>
+<b>Note:</b> This section is not enabled by default unless <a href="/help/configuration#advancedconsole">Advanced Console mode</a> is enabled. You may enable it on the <a href="/configsidebar">Sidebar Configuration page</a>.
+</p>

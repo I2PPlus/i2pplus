@@ -22,42 +22,42 @@ import net.i2p.data.DataHelper;
 public class DataMessage extends FastI2NPMessageImpl {
     public final static int MESSAGE_TYPE = 20;
     private byte _data[];
-    
+
     public DataMessage(I2PAppContext context) {
         super(context);
     }
-    
-    public byte[] getData() { 
-        return _data; 
+
+    public byte[] getData() {
+        return _data;
     }
 
     /**
      *  @throws IllegalStateException if data previously set, to protect saved checksum
      */
-    public void setData(byte[] data) { 
+    public void setData(byte[] data) {
         if (_data != null)
             throw new IllegalStateException();
-        _data = data; 
+        _data = data;
     }
-    
-    public int getSize() { 
+
+    public int getSize() {
         return _data.length;
     }
-    
+
     public void readMessage(byte data[], int offset, int dataSize, int type) throws I2NPMessageException {
         if (type != MESSAGE_TYPE) throw new I2NPMessageException("Message type is incorrect for this message");
         int curIndex = offset;
         long size = DataHelper.fromLong(data, curIndex, 4);
         curIndex += 4;
         if (size > MAX_SIZE)
-            throw new I2NPMessageException("too large msg, size=" + size);
+            throw new I2NPMessageException("Message is too big (" + size + " bytes)");
         _data = new byte[(int)size];
         System.arraycopy(data, curIndex, _data, 0, (int)size);
     }
-    
+
     /** calculate the message body's length (not including the header and footer */
-    protected int calculateWrittenLength() { 
-        if (_data == null) 
+    protected int calculateWrittenLength() {
+        if (_data == null)
             return 4;
         else
             return 4 + _data.length;
@@ -78,14 +78,14 @@ public class DataMessage extends FastI2NPMessageImpl {
         }
         return curIndex;
     }
-    
+
     public int getType() { return MESSAGE_TYPE; }
-    
+
     @Override
     public int hashCode() {
         return DataHelper.hashCode(_data);
     }
-    
+
     @Override
     public boolean equals(Object object) {
         if ( (object != null) && (object instanceof DataMessage) ) {
@@ -95,17 +95,16 @@ public class DataMessage extends FastI2NPMessageImpl {
             return false;
         }
     }
-    
+
     @Override
     public String toString() {
         StringBuilder buf = new StringBuilder();
-        buf.append("[DataMessage: ");
-        buf.append("\n\tData: ");
+        buf.append("DataMessage");
+        buf.append("\n* Data: ");
         if (_data != null)
             buf.append(_data.length).append(" bytes: ").append(Base64.encode(_data));
         else
             buf.append("null");
-        buf.append("]");
         return buf.toString();
     }
 }

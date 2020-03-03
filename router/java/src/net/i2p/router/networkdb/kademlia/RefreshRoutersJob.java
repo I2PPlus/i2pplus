@@ -10,6 +10,17 @@ import net.i2p.router.JobImpl;
 import net.i2p.router.RouterContext;
 import net.i2p.util.Log;
 
+import java.util.Date;
+import java.util.Random;
+import net.i2p.router.CommSystemFacade.Status;
+
+import net.i2p.router.Job;
+import net.i2p.router.NetworkDatabaseFacade;
+
+import net.i2p.router.networkdb.kademlia.KademliaNetworkDatabaseFacade;
+
+
+
 /**
  * Go through all the routers once, after startup, and refetch their router infos.
  * This should be run once after startup (and preferably after any reseed is complete,
@@ -21,14 +32,6 @@ import net.i2p.util.Log;
  * To improve integration even more, we fetch the floodfills first.
  * Ideally this should complete within the first half-hour of uptime.
  *
- * As of 0.9.45, periodically rerun, to maintain a minimum number of
- * floodfills, primarily for hidden mode. StartExplorersJob will get us
- * to about 100 ffs and maintain that for a while, but they will eventually
- * start to expire. Use this to get us to 300 or more. Each pass of this
- * will gain us about 150 ffs. If we have more than 300 ffs, we just
- * requeue to check later. Otherwise this will grow our netdb
- * almost unbounded, as it prevents most normal expiration.
- *
  * @since 0.8.8
  */
 class RefreshRoutersJob extends JobImpl {
@@ -36,35 +39,35 @@ class RefreshRoutersJob extends JobImpl {
     private final FloodfillNetworkDatabaseFacade _facade;
     private List<Hash> _routers;
     private boolean _wasRun;
-    
+
     /** rerun fairly often. 1000 routers in 50 minutes
      *  Don't go faster as this overloads the expl. OBEP / IBGW
      */
-    private final static long RERUN_DELAY_MS = 2500;
-    private final static long EXPIRE = 2*60*60*1000;
-    private final static long NEW_LOOP_DELAY = 37*60*1000;
-    private static final int ENOUGH_FFS = 3 * StartExplorersJob.LOW_FFS;
-    
+    private final static long RERUN_DELAY_MS = 2*750; // 1.5 seconds * random value (see below)
+    static final String PROP_RERUN_DELAY_MS = "router.refreshRouterDelay";
+    static final String PROP_ROUTER_FRESHNESS = "router.refreshSkipIfYounger";
+    static final String PROP_ROUTER_REFRESH_TIMEOUT = "router.refreshTimeout";
+//    private final static long EXPIRE = 2*60*60*1000;
+    private final static long EXPIRE = 31*24*60*60*1000;
+    private final static long OLDER = 2*60*60*1000;
+    private final static long RESTART_DELAY_MS = 5*60*1000;
+
     public RefreshRoutersJob(RouterContext ctx, FloodfillNetworkDatabaseFacade facade) {
         super(ctx);
         _log = ctx.logManager().getLog(RefreshRoutersJob.class);
         _facade = facade;
     }
-    
-    public String getName() { return "Refresh Routers Job"; }
+
+    public String getName() { return "Refresh NetDb Routers"; }
 
     public void runJob() {
+        if (getContext().commSystem().getStatus() == Status.DISCONNECTED) {
+            if (_log.shouldLog(Log.WARN))
+            _log.warn("Suspending Refresh Routers job - network disconnected");
+            return;
+        }
         if (_facade.isInitialized()) {
-            if (_routers == null) {
-                if (_wasRun) {
-                    int ffs = getContext().peerManager().countPeersByCapability(FloodfillNetworkDatabaseFacade.CAPABILITY_FLOODFILL);
-                    if (ffs >= ENOUGH_FFS) {
-                        requeue(NEW_LOOP_DELAY);
-                        return;
-                    }
-                } else {
-                    _wasRun = true;
-                }
+            if (_routers == null || _routers.isEmpty()) {
                 // make a list of all routers, floodfill first
                 _routers = _facade.getFloodfillPeers();
                 int ff = _routers.size();
@@ -73,16 +76,13 @@ class RefreshRoutersJob extends JobImpl {
                 int non = all.size();
                 _routers.addAll(all);
                 if (_log.shouldLog(Log.INFO))
-                    _log.info("To check: " + ff + " floodfills and " + non + " non-floodfills");
+                    _log.info("To check: " + ff + " Floodfills and " + non + " non-Floodfills");
             }
             if (_routers.isEmpty()) {
-                if (_log.shouldLog(Log.INFO))
-                    _log.info("Finished");
-                // despite best efforts in StartExplorersJob,
-                // hidden mode routers have trouble keeping peers
-                // but we'll do this for everybody just in case
                 _routers = null;
-                requeue(NEW_LOOP_DELAY);
+                requeue(RESTART_DELAY_MS);
+                if (_log.shouldLog(Log.INFO))
+                    _log.info("Finished refreshing NetDb routers; job will rerun in " + (RESTART_DELAY_MS / 1000) + "s");
                 return;
             }
             long expire = getContext().clock().now() - EXPIRE;
@@ -92,18 +92,83 @@ class RefreshRoutersJob extends JobImpl {
                 if (h.equals(getContext().routerHash()))
                     continue;
                 if (_log.shouldLog(Log.DEBUG))
-                    _log.debug("Checking " + h);
+                    _log.debug("Checking RouterInfo [" + h.toBase64().substring(0,6) + "]");
                 RouterInfo ri = _facade.lookupRouterInfoLocally(h);
                 if (ri == null)
                     continue;
-                if (ri.getPublished() < expire) {
+//                if (ri.getPublished() < expire) {
+//                long older = getContext().clock().now() - OLDER;
+                long older = getContext().clock().now() - ri.getPublished();
+                int netDbCount = _facade.getAllRouters().size();
+                String freshness = getContext().getProperty("router.refreshSkipIfYounger");
+                int routerAge = 60*60*1000;
+                if (freshness == null) {
+                    if (netDbCount > 2000)
+                        routerAge = 2*60*60*1000;
+                    if (netDbCount > 4000)
+                        routerAge = 4*60*60*1000;
+                    if (netDbCount > 6000)
+                        routerAge = 8*60*60*1000;
+                    if (netDbCount > 8000)
+                        routerAge = 12*60*60*1000;
+                    if (netDbCount > 9000)
+                        routerAge = 14*60*60*1000;
+                } else {
+                    routerAge = Integer.valueOf(freshness)*60*60*1000;
+                }
+//                if (ri.getPublished() < older) {
+                String refreshTimeout = getContext().getProperty("router.refreshTimeout");
+                if (older > routerAge) {
                     if (_log.shouldLog(Log.INFO))
-                        _log.info("Refreshing " + h);
-                    _facade.search(h, null, null, 15*1000, false);
+                        if (refreshTimeout == null)
+                            _log.info("Refreshing Router [" + h.toBase64().substring(0,6) + "]" +
+                            "\n* Published: " + new Date(ri.getPublished()));
+                        else
+                            _log.info("Refreshing Router [" + h.toBase64().substring(0,6) + "] - " + Integer.valueOf(refreshTimeout) + "s timeout" +
+                            "\n* Published: " + new Date(ri.getPublished()));
+//                    _facade.search(h, null, null, 15*1000, false);
+//                    Job DropLookupFoundJob = new _facade.DropLookupFoundJob();
+//                    _facade.search(h, null, new DropLookupFoundJob(getContext(), h, ri) , 20*1000, false);
+                    if (refreshTimeout == null)
+                        _facade.search(h, null, null , 20*1000, false);
+                    else
+                        _facade.search(h, null, null , Integer.valueOf(refreshTimeout)*1000, false);
+                    break;
+                } else {
+                    if (_log.shouldLog(Log.DEBUG))
+                        if ((routerAge / 60 / 60 / 1000) <= 1) {
+                            _log.debug("Skipping refresh of Router [" + h.toBase64().substring(0,6) + "] - less than an hour old" +
+                        "\n* Published: " + new Date(ri.getPublished()));
+                    } else {
+                        _log.debug("Skipping refresh of Router [" + h.toBase64().substring(0,6) + "] - less than " + (routerAge / 60 / 60 / 1000) + " hours old" +
+                        "\n* Published: " + new Date(ri.getPublished()));
+                    }
                     break;
                 }
             }
         }
-        requeue(RERUN_DELAY_MS + getContext().random().nextInt(1024));
+
+        int netDbCount = _facade.getAllRouters().size();
+        Random rand = new Random();
+        int randomDelay = (1500 * (rand.nextInt(3) + 1)) + rand.nextInt(1000) + rand.nextInt(1000) + (rand.nextInt(1000) * (rand.nextInt(3) + 1)); // max 9.5 seconds
+        String refresh = getContext().getProperty("router.refreshRouterDelay");
+        if (refresh == null) {
+            if (getContext().jobQueue().getMaxLag() > 150 || getContext().throttle().getMessageDelay() > 750)
+                randomDelay = randomDelay * (rand.nextInt(3) + 1);
+            else if (netDbCount < 4000)
+                randomDelay = randomDelay - (rand.nextInt(2000));
+            else if (netDbCount < 6000)
+                randomDelay = randomDelay - (rand.nextInt(1250) + rand.nextInt(1250));
+            else
+                randomDelay = randomDelay - (rand.nextInt(750) / (rand.nextInt(3) + 1));
+            requeue(randomDelay);
+            if (_log.shouldLog(Log.DEBUG))
+                _log.debug("Next RouterInfo check in " + randomDelay + "ms");
+        } else {
+            requeue(Integer.valueOf(refresh));
+            if (_log.shouldLog(Log.DEBUG))
+                _log.debug("Next RouterInfo check in " + refresh + "ms");
+        }
     }
 }
+

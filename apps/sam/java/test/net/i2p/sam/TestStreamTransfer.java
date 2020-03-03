@@ -18,7 +18,7 @@ import net.i2p.util.Log;
 /**
  * <ol>
  *  <li>start up SAM</li>
- *  <li>Alice connects as 'Alice', gets her destination, stashes it away, and 
+ *  <li>Alice connects as 'Alice', gets her destination, stashes it away, and
  *      listens for any streams, echoing back whatever she receives.</li>
  *  <li>Bob connects as 'Bob', establishes a stream to the destination Alice
  *      stashed away, sends a few bundles of data, and closes the stream.</li>
@@ -32,7 +32,7 @@ public class TestStreamTransfer {
     private static boolean _dead = false;
     private static Object _counterLock = new Object();
     private static int _recvCounter = 0, _closeCounter = 0;
-    
+
     private static void runTest(String samHost, int samPort, String conOptions) {
         int nTests = 20;
         startAlice(samHost, samPort, conOptions);
@@ -57,7 +57,7 @@ public class TestStreamTransfer {
         /* Return, assuming the test has passed. */
         _log.info("Unit test passed.");
     }
-    
+
     private static void startAlice(String host, int port, String conOptions) {
         _log.info("\n\nStarting up Alice");
         try {
@@ -71,7 +71,7 @@ public class TestStreamTransfer {
             out.write(DataHelper.getASCII(req));
             line = reader.readLine();
             _log.info("Response to creating the session with destination Alice: " + line);
-            
+
             req = "NAMING LOOKUP NAME=ME\n";
             out.write(DataHelper.getASCII(req));
             line = reader.readLine();
@@ -91,7 +91,7 @@ public class TestStreamTransfer {
             _log.error("Error testing for valid version", e);
         }
     }
-    
+
     private static class AliceRunner implements Runnable {
         private BufferedReader _reader;
         private OutputStream _out;
@@ -171,8 +171,8 @@ public class TestStreamTransfer {
                 try { Thread.sleep(5*1000); } catch (InterruptedException ie) {}
                 /*
                 // now echo it back
-                String reply = "STREAM SEND ID=" + id + 
-                               " SIZE=" + payloadSize + 
+                String reply = "STREAM SEND ID=" + id +
+                               " SIZE=" + payloadSize +
                                "\n" + new String(payload);
                 _out.write(reply.getBytes());
                 _out.flush();
@@ -184,7 +184,7 @@ public class TestStreamTransfer {
             }
         }
     }
-    
+
     private static void testBob(String sessionName, String host, int port, String conOptions) {
         I2PThread t = new I2PThread(new TestBob(sessionName, host, port, conOptions), sessionName);
         t.start();
@@ -212,7 +212,7 @@ public class TestStreamTransfer {
             out.write(DataHelper.getASCII("HELLO VERSION MIN=1.0 MAX=1.0\n"));
             BufferedReader reader = new BufferedReader(new InputStreamReader(s.getInputStream()));
             String line = reader.readLine();
-            _log.debug("line read for valid version: " + line);
+            _log.debug("Line read for valid version: " + line);
             String req = "SESSION CREATE STYLE=STREAM DESTINATION=" + sessionName + " " + conOptions + "\n";
             out.write(DataHelper.getASCII(req));
             line = reader.readLine();
@@ -255,10 +255,10 @@ public class TestStreamTransfer {
             _log.error("Error testing for valid version", e);
         }
     }
-    
+
     public static void main(String args[]) {
         // "i2cp.tcp.host=www.i2p.net i2cp.tcp.port=7765 tunnels.inboundDepth=0";
-        // "i2cp.tcp.host=localhost i2cp.tcp.port=7654 tunnels.inboundDepth=0"; 
+        // "i2cp.tcp.host=localhost i2cp.tcp.port=7654 tunnels.inboundDepth=0";
         String conOptions = "i2cp.tcp.host=localhost i2cp.tcp.port=10001 tunnels.inboundDepth=0";
         if (args.length > 0) {
             conOptions = "";

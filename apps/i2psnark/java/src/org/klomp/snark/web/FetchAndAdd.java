@@ -1,8 +1,8 @@
 package org.klomp.snark.web;
 
 /*
- * Released into the public domain 
- * with no warranty of any kind, either expressed or implied.  
+ * Released into the public domain
+ * with no warranty of any kind, either expressed or implied.
  */
 
 import java.io.File;
@@ -61,7 +61,8 @@ public class FetchAndAdd extends Snark implements EepGet.StatusListener, Runnabl
     private Thread _thread;
     private EepGet _eepGet;
 
-    private static final int RETRIES = 3;
+//    private static final int RETRIES = 3;
+    private static final int RETRIES = 10;
 
     /**
      *   Caller should call _mgr.addDownloader(this), which
@@ -77,7 +78,7 @@ public class FetchAndAdd extends Snark implements EepGet.StatusListener, Runnabl
         _log = ctx.logManager().getLog(FetchAndAdd.class);
         _mgr = mgr;
         _url = url;
-        _name = _t("Download torrent file from {0}", url);
+        _name = _t("Downloading {0}", url);
         _dataDir = dataDir;
         byte[] fake = null;
         try {

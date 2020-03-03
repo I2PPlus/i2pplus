@@ -47,17 +47,21 @@ class PeerManager {
     private volatile long _lastStore;
 
     private static final long REORGANIZE_TIME = 45*1000;
-    private static final long REORGANIZE_TIME_MEDIUM = 123*1000;
+//    private static final long REORGANIZE_TIME_MEDIUM = 123*1000;
+    private static final long REORGANIZE_TIME_MEDIUM = 93*1000;
     /**
      *  We don't want this much longer than the average connect time,
      *  as the CapacityCalculator now includes connection as a factor.
      *  This must also be less than 10 minutes, which is the shortest
      *  Rate contained in the profile, as the Rates must be coalesced.
      */
-    private static final long REORGANIZE_TIME_LONG = 351*1000;
-    private static final long STORE_TIME = 19*60*60*1000;
+//    private static final long REORGANIZE_TIME_LONG = 351*1000;
+//    private static final long REORGANIZE_TIME_LONG = 238*1000;
+    private static final long REORGANIZE_TIME_LONG = 188*1000;
+//    private static final long STORE_TIME = 19*60*60*1000;
+    private static final long STORE_TIME = 4*60*60*1000;
     private static final long EXPIRE_AGE = 3*24*60*60*1000;
-    
+
     public static final String TRACKED_CAPS = "" +
         FloodfillNetworkDatabaseFacade.CAPABILITY_FLOODFILL +
         RouterInfo.CAPABILITY_HIDDEN +
@@ -91,7 +95,7 @@ class PeerManager {
         //new Reorg();
         //_context.jobQueue().addJob(new PersistProfilesJob(_context, this));
     }
-    
+
     private class Reorg extends SimpleTimer2.TimedEvent {
         public Reorg() {
             super(_context.simpleTimer2(), REORGANIZE_TIME);
@@ -130,10 +134,11 @@ class PeerManager {
             } else if (start - _lastStore > STORE_TIME) {
                 _lastStore = start;
                 try {
-                    _log.debug("Periodic profile store start");
+                    _log.info("Started writing peer profiles to disk");
                     storeProfiles();
                     _persistenceHelper.deleteOldProfiles(EXPIRE_AGE);
-                    _log.debug("Periodic profile store end");
+                    // TODO: Add total time taken and number of profiles written
+                    _log.info("Finished writing peer profiles to disk");
                 } catch (Throwable t) {
                     _log.log(Log.CRIT, "Error storing profiles", t);
                 }
@@ -149,7 +154,7 @@ class PeerManager {
             _event.schedule(delay);
         }
     }
-    
+
     void storeProfiles() {
         // Don't overwrite disk profiles when testing
         if (_context.commSystem().isDummy())
@@ -219,10 +224,10 @@ class PeerManager {
         for (PeerProfile prof : profiles) {
                 _organizer.addProfile(prof);
                 if (_log.shouldLog(Log.DEBUG))
-                    _log.debug("Profile for " + prof.getPeer().toBase64() + " loaded");
+                    _log.debug("Profile for [" + prof.getPeer().toBase64().substring(0,6) + "] loaded");
         }
     }
-    
+
     /**
      * Find some peers that meet the criteria and we have the netDb info for locally.
      * Returned list will not include ourselves.
@@ -249,10 +254,10 @@ class PeerManager {
                 break;
 /****
             case PeerSelectionCriteria.PURPOSE_TUNNEL:
-                // pull all of the fast ones, regardless of how many we 
+                // pull all of the fast ones, regardless of how many we
                 // want - we'll whittle them down later (40 lines from now)
                 // int num = _organizer.countFastPeers();
-                // if (num <= 0) 
+                // if (num <= 0)
                 //    num = criteria.getMaximumRequired();
                 // _organizer.selectFastPeers(num, exclude, curVals);
                 _organizer.selectFastPeers(criteria.getMaximumRequired(), exclude, peers);
@@ -269,28 +274,28 @@ class PeerManager {
         }
         if (peers.isEmpty()) {
             if (_log.shouldLog(Log.WARN))
-                _log.warn("We ran out of peers when looking for reachable ones after finding " 
-                          + "0 with "
-                          + _organizer.countHighCapacityPeers() + "/" 
-                          + _organizer.countFastPeers() + " high capacity/fast peers");
+                _log.warn("We ran out of peers when looking for reachable ones"
+                          + "\n* Found: 0 with "
+                          + _organizer.countHighCapacityPeers() + " High Capacity peers and "
+                          + _organizer.countFastPeers() + " Fast peers");
         }
         if (_log.shouldLog(Log.INFO))
-            _log.info("Peers selected: " + peers);
+            _log.info("Peers selected for testing: " + peers);
         return new ArrayList<Hash>(peers);
     }
-    
+
     /**
      *  @param caps non-null, case is ignored
      */
-    public void setCapabilities(Hash peer, String caps) { 
+    public void setCapabilities(Hash peer, String caps) {
         if (_log.shouldLog(Log.DEBUG))
-            _log.debug("Setting capabilities for " + peer.toBase64() + " to " + caps);
+            _log.debug("Capabilities for [" + peer.toBase64().substring(0,6) + "] set to " + caps.replace("XO", "X").replace("PO", "P"));
         caps = caps.toLowerCase(Locale.US);
 
         String oldCaps = _capabilitiesByPeer.put(peer, caps);
         if (caps.equals(oldCaps))
             return;
-            
+
             if (oldCaps != null) {
                 for (int i = 0; i < oldCaps.length(); i++) {
                     char c = oldCaps.charAt(i);
@@ -311,16 +316,16 @@ class PeerManager {
                         peers.add(peer);
                 }
     }
-    
+
     /** locking no longer req'd */
     private Set<Hash> locked_getPeers(char c) {
         c = Character.toLowerCase(c);
         return _peersByCapability.get(Character.valueOf(c));
     }
-    
-    public void removeCapabilities(Hash peer) { 
+
+    public void removeCapabilities(Hash peer) {
         if (_log.shouldLog(Log.DEBUG))
-            _log.debug("Removing capabilities from " + peer.toBase64());
+            _log.debug("Removing capabilities from [" + peer.toBase64().substring(0,6) + "]");
 
             String oldCaps = _capabilitiesByPeer.remove(peer);
             if (oldCaps != null) {
@@ -334,7 +339,7 @@ class PeerManager {
     }
 
 /*******
-    public Hash selectRandomByCapability(char capability) { 
+    public Hash selectRandomByCapability(char capability) {
         int index = _context.random().nextInt(Integer.MAX_VALUE);
         synchronized (_capabilitiesByPeer) {
             List peers = locked_getPeers(capability);
@@ -351,7 +356,7 @@ class PeerManager {
      *  @param capability case-insensitive
      *  @return non-null unmodifiable set
      */
-    public Set<Hash> getPeersByCapability(char capability) { 
+    public Set<Hash> getPeersByCapability(char capability) {
             Set<Hash> peers = locked_getPeers(capability);
             if (peers != null)
                 return Collections.unmodifiableSet(peers);
@@ -363,7 +368,7 @@ class PeerManager {
      *  @return how many
      *  @since 0.9.45
      */
-    public int countPeersByCapability(char capability) { 
+    public int countPeersByCapability(char capability) {
             Set<Hash> peers = locked_getPeers(capability);
             if (peers != null)
                 return peers.size();

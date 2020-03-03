@@ -25,10 +25,16 @@ public class ConfigHomeHandler extends FormHandler {
         if (_action.equals(_t("Save")) && "0".equals(group)) {
             boolean old = _context.getBooleanProperty(HomeHelper.PROP_OLDHOME);
             boolean nnew = getJettyString("oldHome") != null;
+//            boolean newTab = _context.getBooleanProperty(HomeHelper.PROP_NEWTAB);
+//            boolean newTabEnabled = getJettyString("newTabs") != null;
             if (old != nnew) {
                 _context.router().saveConfig(HomeHelper.PROP_OLDHOME, Boolean.toString(nnew));
                 addFormNotice(_t("Home page changed"));
             }
+//            if (newTab != newTabEnabled) {
+//                _context.router().saveConfig(HomeHelper.PROP_OLDHOME, "" + newTabEnabled);
+//                addFormNotice(_t("Behavior for external links and webapps changed on homepage"));
+//            }
         } else if (adding || deleting || restoring) {
             String prop;
             String dflt;
@@ -41,12 +47,15 @@ public class ConfigHomeHandler extends FormHandler {
             } else if ("3".equals(group)) {
                 prop = SearchHelper.PROP_ENGINES;
                 dflt = SearchHelper.ENGINES_DEFAULT;
+/*
             } else if ("4".equals(group)) {
                 prop = HomeHelper.PROP_CONFIG;
                 dflt = HomeHelper.DEFAULT_CONFIG;
             } else if ("5".equals(group)) {
                 prop = HomeHelper.PROP_MONITORING;
                 dflt = HomeHelper.DEFAULT_MONITORING;
+*/
+
             } else {
                 addFormError("Bad group");
                 return;
@@ -85,10 +94,14 @@ public class ConfigHomeHandler extends FormHandler {
                     app = new App(name, "", url, "/themes/console/images/eepsite.png");
                 else if ("2".equals(group))
                     app = new App(name, "", url, "/themes/console/images/title_window.png");
+/**
+                else if ("3".equals(group))
+                    app = new App(name, "", url, "/themes/console/images/question.png");
                 else if ("4".equals(group))
                     app = new App(name, "", url, "/themes/console/images/server.png");
                 else if ("5".equals(group))
                     app = new App(name, "", url, "/themes/console/images/chart_line.png");
+**/
                 else
                     app = new App(name, "", url, "/themes/console/images/question.png");
                 apps.add(app);

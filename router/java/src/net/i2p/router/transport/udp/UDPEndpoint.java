@@ -27,7 +27,7 @@ class UDPEndpoint implements SocketListener {
     private final InetAddress _bindAddress;
     private final boolean _isIPv4, _isIPv6;
     private static final AtomicInteger _counter = new AtomicInteger();
-    
+
     /**
      *  @param transport may be null for unit testing ONLY
      *  @param listenPort -1 or the requested port, may not be honored
@@ -42,7 +42,7 @@ class UDPEndpoint implements SocketListener {
         _isIPv4 = bindAddress == null || bindAddress instanceof Inet4Address;
         _isIPv6 = bindAddress == null || bindAddress instanceof Inet6Address;
     }
-    
+
     /**
      *  Caller should call getListenPort() after this to get the actual bound port and determine success .
      *
@@ -54,8 +54,8 @@ class UDPEndpoint implements SocketListener {
         shutdown();
         _socket = getSocket();
         if (_socket == null) {
-            _log.log(Log.CRIT, "UDP Unable to open a port");
-            throw new SocketException("SSU Unable to bind to a port on " + _bindAddress);
+            _log.log(Log.CRIT, "[UDP] Unable to open a port");
+            throw new SocketException("[SSU] Unable to bind to a port on " + _bindAddress);
         }
         int count = _counter.incrementAndGet();
         _sender = new UDPSender(_context, _socket, "UDPSender " + count, this);
@@ -65,7 +65,7 @@ class UDPEndpoint implements SocketListener {
             _receiver.startup();
         }
     }
-    
+
     public synchronized void shutdown() {
         if (_sender != null) {
             _sender.shutdown();
@@ -75,7 +75,7 @@ class UDPEndpoint implements SocketListener {
             _socket.close();
         }
     }
-    
+
     public void setListenPort(int newPort) { _listenPort = newPort; }
 
 /*******
@@ -96,7 +96,7 @@ class UDPEndpoint implements SocketListener {
         }
     }
 ********/
-    
+
     private static final int MAX_PORT_RETRIES = 20;
 
     /**
@@ -132,12 +132,12 @@ class UDPEndpoint implements SocketListener {
              port = -1;
         }
         if (socket == null) {
-            _log.log(Log.CRIT, "SSU Unable to bind to a port on " + _bindAddress);
+            _log.log(Log.CRIT, "[SSU] Unable to bind to a port on: " + _bindAddress);
         } else if (port != _listenPort) {
             if (_listenPort > 0)
-                _log.error("SSU Unable to bind to requested port " + _listenPort + ", using random port " + port);
+                _log.error("[SSU] Unable to bind to requested port " + _listenPort + ", using random port: " + port);
             else
-                _log.logAlways(Log.INFO, "UDP selected random port " + port);
+                _log.logAlways(Log.INFO, "UDP random port selected: " + port);
         }
         _listenPort = port;
         return socket;
@@ -147,16 +147,16 @@ class UDPEndpoint implements SocketListener {
     /** call after startup() to get actual port or -1 on startup failure */
     public int getListenPort() { return _listenPort; }
     public UDPSender getSender() { return _sender; }
-    
+
     /**
      * Add the packet to the outobund queue to be sent ASAP (as allowed by
      * the bandwidth limiter)
      * BLOCKING if queue is full.
      */
-    public void send(UDPPacket packet) { 
-        _sender.add(packet); 
+    public void send(UDPPacket packet) {
+        _sender.add(packet);
     }
-     
+
     /**
      * Blocking call to receive the next inbound UDP packet from any peer.
      *
@@ -165,17 +165,17 @@ class UDPEndpoint implements SocketListener {
      *
      * @return null if we have shut down, or on failure
      */
-    public UDPPacket receive() { 
+    public UDPPacket receive() {
         UDPPacket packet = UDPPacket.acquire(_context, true);
         try {
             _socket.receive(packet.getPacket());
-            return packet; 
+            return packet;
         } catch (IOException ioe) {
             packet.release();
             return null;
         }
     }
-    
+
     /**
      *  Clear outbound queue, probably in preparation for sending destroy() to everybody.
      *  @since 0.9.2

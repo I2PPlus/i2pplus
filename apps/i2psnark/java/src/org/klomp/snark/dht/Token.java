@@ -52,7 +52,8 @@ class Token extends ByteArray {
     @Override
     public String toString() {
         StringBuilder buf = new StringBuilder(64);
-        buf.append("[Token: ");
+//        buf.append("[Token: ");
+        buf.append("[");
         byte[] bs = getData();
         if (bs.length == 0) {
             buf.append("0 bytes");
@@ -66,9 +67,10 @@ class Token extends ByteArray {
                 buf.append(Integer.toHexString(b));
             }
         }
+        buf.append("]");
         if (lastSeen > 0)
-            buf.append(" created ").append((new Date(lastSeen)).toString());
-        buf.append(']');
+            buf.append("\n* Created: ").append((new Date(lastSeen)).toString());
+//        buf.append(']');
         return buf.toString();
     }
 }

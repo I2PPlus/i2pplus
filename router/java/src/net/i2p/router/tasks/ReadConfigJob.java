@@ -1,9 +1,9 @@
 package net.i2p.router.tasks;
 /*
  * free (adj.): unencumbered; not under the control of others
- * Written by jrandom in 2003 and released into the public domain 
- * with no warranty of any kind, either expressed or implied.  
- * It probably won't make your computer catch on fire, or eat 
+ * Written by jrandom in 2003 and released into the public domain
+ * with no warranty of any kind, either expressed or implied.
+ * It probably won't make your computer catch on fire, or eat
  * your children, but it might.  Use at your own risk.
  *
  */
@@ -35,7 +35,7 @@ public class ReadConfigJob extends JobImpl {
         super(ctx);
         _lastRead = ctx.clock().now();
     }
-    
+
     public String getName() { return "Read Router Configuration"; }
 
     public void runJob() {
@@ -49,7 +49,7 @@ public class ReadConfigJob extends JobImpl {
         }
         requeue(DELAY);
     }
-    
+
     private boolean shouldReread(File configFile) {
         // lastModified() returns 0 if not found
         //if (!configFile.exists()) return false;

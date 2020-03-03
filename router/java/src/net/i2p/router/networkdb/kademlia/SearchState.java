@@ -13,6 +13,8 @@ import net.i2p.data.Hash;
 import net.i2p.kademlia.XORComparator;
 import net.i2p.router.RouterContext;
 
+import net.i2p.util.Log;
+
 /**
  * Data related to a particular search
  *
@@ -29,8 +31,10 @@ class SearchState {
     private volatile long _completed;
     private volatile long _started;
     private volatile boolean _aborted;
-    
+    private final Log _log;
+
     public SearchState(RouterContext context, Hash key) {
+        _log = context.logManager().getLog(SearchState.class);
         _context = context;
         _searchKey = key;
         _pendingPeers = new HashSet<Hash>(16);
@@ -42,7 +46,7 @@ class SearchState {
         _completed = -1;
         _started = _context.clock().now();
     }
-    
+
     public Hash getTarget() { return _searchKey; }
     public Set<Hash> getPending() {
         synchronized (_pendingPeers) {
@@ -59,7 +63,7 @@ class SearchState {
             return locked_getClosest(_attemptedPeers, max, _searchKey);
         }
     }
-    
+
     private Set<Hash> locked_getClosest(Set<Hash> peers, int max, Hash target) {
         if (_attemptedPeers.size() <= max)
             return new HashSet<Hash>(_attemptedPeers);
@@ -72,7 +76,7 @@ class SearchState {
         }
         return rv;
     }
-    
+
     public boolean wasAttempted(Hash peer) {
         synchronized (_attemptedPeers) {
             return _attemptedPeers.contains(peer);
@@ -102,10 +106,10 @@ class SearchState {
     public void abort() {
         _aborted = true;
     }
-    
+
     public long getWhenStarted() { return _started; }
     public long getWhenCompleted() { return _completed; }
-    
+
     public void addPending(Collection<Hash> pending) {
         synchronized (_pendingPeers) {
             _pendingPeers.addAll(pending);
@@ -135,7 +139,7 @@ class SearchState {
             _attemptedPeers.remove(peer);
         }
     }
-    
+
     /** how long did it take to get the reply, or -1 if we don't know */
     public long dataFound(Hash peer) {
         long rv = -1;
@@ -150,7 +154,7 @@ class SearchState {
         }
         return rv;
     }
-    
+
     /** how long did it take to get the reply, or -1 if we dont know */
     public long replyFound(Hash peer) {
         synchronized (_repliedPeers) {
@@ -165,9 +169,9 @@ class SearchState {
                 return -1;
         }
     }
-    
+
     public Set<Hash> getRepliedPeers() { synchronized (_repliedPeers) { return new HashSet<Hash>(_repliedPeers); } }
-    
+
     public void replyTimeout(Hash peer) {
         synchronized (_pendingPeers) {
             _pendingPeers.remove(peer);
@@ -177,46 +181,57 @@ class SearchState {
             _failedPeers.add(peer);
         }
     }
-    
+
     @Override
     public String toString() {
+        Boolean debug = _log.shouldLog(Log.DEBUG);
         StringBuilder buf = new StringBuilder(256);
-        buf.append("Searching for ").append(_searchKey);
-        buf.append(" ");
-        if (_completed <= 0)
-            buf.append(" completed? false ");
+        buf.append(" Search for [").append(_searchKey.toBase64().substring(0,6)).append("]");
+        if (_successfulPeers.size() <= 0)
+            buf.append(" in progress");
         else
-            buf.append(" completed on ").append(new Date(_completed));
+            buf.append(" completed");
         if (_aborted)
-            buf.append("  (Aborted)");
-        buf.append("\n\tAttempted: ");
-        synchronized (_attemptedPeers) {
-            buf.append(_attemptedPeers.size()).append(' ');
-            for (Hash peer : _attemptedPeers) {
-                buf.append(peer.toBase64()).append(" ");
+            buf.append(" aborted");
+// this _should_ only show the following if debug logging is enabled, but currently it supresses it
+        if (debug) {
+            if (_attemptedPeers.size() > 0) {
+                buf.append("\n* Queried: ");
+                synchronized (_attemptedPeers) {
+                    buf.append(_attemptedPeers.size()).append(' ');
+                    for (Hash peer : _attemptedPeers) {
+                        buf.append("[").append(peer.toBase64().substring(0,6)).append("] ");
+                    }
+                }
+            }
+            if (_pendingPeers.size() > 0) {
+                buf.append("\n* Pending: ");
+                synchronized (_pendingPeers) {
+                    buf.append(_pendingPeers.size()).append(' ');
+                    for (Hash peer : _pendingPeers) {
+                        buf.append("[").append(peer.toBase64().substring(0,6)).append("] ");
+                    }
+                }
+            }
+            if (_failedPeers.size() > 0) {
+                buf.append("\n* Failed: ");
+                synchronized (_failedPeers) {
+                    buf.append(_failedPeers.size()).append(' ');
+                    for (Hash peer : _failedPeers) {
+                        buf.append("[").append(peer.toBase64().substring(0,6)).append("] ");
+                    }
+                }
+            }
+            if (_successfulPeers.size() > 0) {
+                buf.append("\n* Successful: ");
+                synchronized (_successfulPeers) {
+                    buf.append(_successfulPeers.size()).append(' ');
+                    for (Hash peer : _successfulPeers) {
+                        buf.append("[").append(peer.toBase64().substring(0,6)).append("] ");
+                    }
+                }
             }
         }
-        buf.append("\n\tPending: ");
-        synchronized (_pendingPeers) {
-            buf.append(_pendingPeers.size()).append(' ');
-            for (Hash peer : _pendingPeers) {
-                buf.append(peer.toBase64()).append(" ");
-            }
-        }
-        buf.append("\n\tFailed: ");
-        synchronized (_failedPeers) {
-            buf.append(_failedPeers.size()).append(' ');
-            for (Hash peer : _failedPeers) {
-                buf.append(peer.toBase64()).append(" ");
-            }
-        }
-        buf.append("\n\tSuccessful: ");
-        synchronized (_successfulPeers) {
-            buf.append(_successfulPeers.size()).append(' ');
-            for (Hash peer : _successfulPeers) {
-                buf.append(peer.toBase64()).append(" ");
-            }
-        }
-        return buf.toString();
+            return buf.toString();
     }
 }

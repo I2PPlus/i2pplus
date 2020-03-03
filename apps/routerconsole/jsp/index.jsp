@@ -6,7 +6,6 @@
  *
  * Do not tag this file for translation.
  */
-
     //
     //  Redirect to either /home or /console, depending on configuration,
     //  while preserving any query parameters
@@ -28,16 +27,21 @@
     String firstVersion = ctx.getProperty("router.firstVersion");
     String tgt;
     final boolean ENABLE_WIZARD_ON_FIRST_RUN = true;
-    if (oldHome) {
-        tgt = "console";
-    } else if (!ENABLE_WIZARD_ON_FIRST_RUN || wizRun || firstVersion == null) {
-        // wizard already run
-        tgt = "home";
+    String version = net.i2p.CoreVersion.VERSION;
+    if (wizRun && !version.equals(firstVersion)) {
+        if (!req.contains("index"))
+            tgt = "home";
+        else
+            tgt = "info";
+    } else if (!wizRun && firstVersion == null) {
+        tgt = "wizard";
     } else {
-        String version = net.i2p.CoreVersion.VERSION;
+        // wizard already run
         if (version.equals(firstVersion)) {
-            // first install 38 or later, still on same version
-            tgt = "welcome";
+        if (!req.contains("index"))
+            tgt = "home";
+        else
+            tgt = "help/newusers";
         } else {
             // they already upgraded
             tgt = "home";

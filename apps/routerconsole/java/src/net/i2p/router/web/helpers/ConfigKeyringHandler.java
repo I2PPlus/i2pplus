@@ -23,7 +23,7 @@ public class ConfigKeyringHandler extends FormHandler {
     private String _secret;
     private String[] _revokes;
     private int _mode;
-    
+
     @Override
     protected void processForm() {
         if (_action.equals(_t("Add key"))) {
@@ -55,7 +55,7 @@ public class ConfigKeyringHandler extends FormHandler {
                         addFormError(_t("Invalid destination"));
                     } else if (_context.clientManager().isLocal(h)) {
                         // don't bother translating
-                        addFormError("Cannot add key for local destination. Enable encryption in the Hidden Services Manager.");
+                        addFormError("Cannot add key for local destination. Enable encryption in the Tunnel Manager.");
                     } else {
                         SessionKey sk = new SessionKey(b);
                         _context.keyRing().put(h, sk);
@@ -93,7 +93,7 @@ public class ConfigKeyringHandler extends FormHandler {
                         d = bdold.getDestination();
                     if (d != null && _context.clientManager().isLocal(d)) {
                         // don't bother translating
-                        addFormError("Cannot add key for local destination. Enable encryption in the Hidden Services Manager.");
+                        addFormError("Cannot add key for local destination. Enable encryption in the Tunnel Manager.");
                         return;
                     }
 
@@ -154,7 +154,7 @@ public class ConfigKeyringHandler extends FormHandler {
                     }
                     if (bdold != null) {
                         if (_log.shouldDebug())
-                            _log.debug("already cached: " + bdold);
+                            _log.debug("Already cached: " + bdold);
                     }
                     try {
                         _context.netDb().setBlindData(bdout);
@@ -177,7 +177,7 @@ public class ConfigKeyringHandler extends FormHandler {
                     if (h != null) {
                         if (_context.clientManager().isLocal(h)) {
                             // don't bother translating
-                            addFormError("Cannot remove key for local destination. Disable encryption in the Hidden Services Manager.");
+                            addFormError("Cannot remove key for local destination. Disable encryption in the Tunnel Manager.");
                         } else if (_context.keyRing().remove(h) != null) {
                             removed = true;
                         }

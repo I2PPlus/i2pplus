@@ -129,7 +129,7 @@ public class MessageHistory {
         public void runJob() {
             initialize(true);
         }
-        public String getName() { return "Reinitialize message history"; }
+        public String getName() { return "Reinitialize Message History"; }
     }
     
     /**
@@ -621,7 +621,7 @@ public class MessageHistory {
         else if ((!_unwrittenEntries.isEmpty()) && !_doPause)
             writeEntries();
     }
-    
+
     /**
      * Actually write the specified entries
      *
@@ -644,21 +644,21 @@ public class MessageHistory {
             if (fos != null) try { fos.close(); } catch (IOException ioe) {}
         }
     }
-    
+
     /** write out the message history once per minute, if not sooner */
     private final static long WRITE_DELAY = 60*1000;
     private class WriteJob extends JobImpl {
         public WriteJob() {
             super(MessageHistory.this._context);
         }
-        public String getName() { return _doLog ? "Message debug log" : "Message debug log (disabled)"; }
+        public String getName() { return _doLog ? "Message Debug Log" : "Message Debug Log (disabled)"; }
         public void runJob() {
             flushEntries();
             updateSettings();
             requeue(WRITE_DELAY);
         }
     }
-    
+
 /****
     public static void main(String args[]) {
         RouterContext ctx = new RouterContext(null);

@@ -117,11 +117,11 @@ class SOCKS5Server extends SOCKSServer {
             verifyPassword(in, out);
             return;
           case Method.NO_AUTH_REQUIRED:
-            _log.debug("no authentication required");
+            _log.debug("No authentication required");
             sendInitReply(Method.NO_AUTH_REQUIRED, out);
             return;
           default:
-            _log.debug("no suitable authentication methods found (" + Integer.toHexString(method) + ")");
+            _log.debug("No suitable authentication methods found (" + Integer.toHexString(method) + ")");
             sendInitReply(Method.NO_ACCEPTABLE_METHODS, out);
             throw new SOCKSException("Unsupported authentication method");
         }
@@ -176,7 +176,7 @@ class SOCKS5Server extends SOCKSServer {
     private int manageRequest(DataInputStream in, DataOutputStream out) throws IOException {
         int socksVer = in.readUnsignedByte();
         if (socksVer != SOCKS_VERSION_5) {
-            _log.debug("error in SOCKS5 request (protocol != 5?)");
+            _log.debug("Error in SOCKS5 request (protocol != 5?)");
             throw new SOCKSException("Invalid protocol version in request: " + socksVer);
         }
 
@@ -196,7 +196,7 @@ class SOCKS5Server extends SOCKSServer {
            ***/
             break;
         default:
-            _log.debug("unknown command in request (" + Integer.toHexString(command) + ")");
+            _log.debug("Unknown command in request (" + Integer.toHexString(command) + ")");
             sendRequestReply(Reply.COMMAND_NOT_SUPPORTED, AddressType.DOMAINNAME, null, "0.0.0.0", 0, out);
             throw new SOCKSException("Invalid command in request");
         }
@@ -253,7 +253,7 @@ class SOCKS5Server extends SOCKSServer {
 
         connPort = in.readUnsignedShort();
         if (connPort == 0) {
-            _log.debug("trying to connect to TCP port 0?  Dropping!");
+            _log.debug("Trying to connect to TCP port 0?  Dropping!");
             sendRequestReply(Reply.CONNECTION_NOT_ALLOWED_BY_RULESET, AddressType.DOMAINNAME, null, "0.0.0.0", 0, out);
             throw new SOCKSException("Invalid port number in request");
         }
@@ -382,7 +382,7 @@ class SOCKS5Server extends SOCKSServer {
                     throw new SOCKSException("Host not found");
                 }
                 if (_log.shouldDebug())
-                    _log.debug("connecting to " + connHostName + "...");
+                    _log.debug("Connecting to " + connHostName + "...");
                 Properties overrides = new Properties();
                 I2PSocketOptions sktOpts = t.buildOptions(overrides);
                 sktOpts.setPort(connPort);
@@ -434,7 +434,7 @@ class SOCKS5Server extends SOCKSServer {
                     int p = _context.random().nextInt(proxies.size());
                     String proxy = proxies.get(p);
                     if (_log.shouldLog(Log.DEBUG))
-                        _log.debug("connecting to proxy " + proxy + " for " + connHostName + " port " + connPort);
+                        _log.debug("Connecting to proxy " + proxy + " for " + connHostName + " port " + connPort);
                     try {
                         destSock = outproxyConnect(t, proxy);
                     } catch (SOCKSException se) {
@@ -446,10 +446,10 @@ class SOCKS5Server extends SOCKSServer {
                 }
             }
             confirmConnection();
-            _log.debug("connection confirmed - exchanging data...");
+            _log.debug("Connection confirmed - exchanging data...");
         } catch (DataFormatException e) {
             if (_log.shouldLog(Log.WARN))
-                _log.warn("socks error", e);
+                _log.warn("SOCKS error", e);
             try {
                 sendRequestReply(Reply.HOST_UNREACHABLE, AddressType.DOMAINNAME, null, "0.0.0.0", 0, out);
             } catch (IOException ioe) {}

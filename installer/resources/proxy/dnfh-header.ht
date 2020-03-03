@@ -9,14 +9,16 @@ Proxy-Connection: close
 <html>
 <head>
 <title>_("Website Unknown")</title>
-<link rel="shortcut icon" href="http://proxy.i2p/themes/console/images/favicon.ico">
+<link rel="shortcut icon" href="http://proxy.i2p/themes/console/default/images/favicon.ico">
 <link href="http://proxy.i2p/themes/console/default/console.css" rel="stylesheet" type="text/css">
 </head>
-<body>
+<body id="proxy_error">
 <div class="logo">
- <a href="http://127.0.0.1:7657/" title="_("Router Console")"><img src="http://proxy.i2p/themes/console/images/i2plogo.png" alt="_("I2P Router Console")" border="0"></a>
- <hr>
- <a href="http://127.0.0.1:7657/config">_("Configuration")</a> <a href="http://127.0.0.1:7657/help">_("Help")</a> <a href="http://127.0.0.1:7657/dns">_("Addressbook")</a>
+<a href="http://127.0.0.1:7657/" title="_("Router Console")"><img src="http://proxy.i2p/themes/console/default/images/i2plogo.png" alt="_("I2P Router Console")" border="0"></a>
+<hr>
+<a href="http://127.0.0.1:7657/dns">_("Addressbook")</a>
+<a href="http://127.0.0.1:7657/config">_("Configuration")</a>
+<a href="http://127.0.0.1:7657/help/">_("Help")</a>
 </div>
 <div class="warning" id="warning">
 <h3>_("Website Not Found in Addressbook")</h3>
@@ -27,9 +29,9 @@ _("If you have the Base 64 address, {0}add it to your addressbook{1}.", "<a href
 _("Otherwise, find a Base 32 or address helper link, or use a jump service link below.")
 </p>
 <p>
-_("Seeing this page often? See {0}the FAQ{1} for help in {2}adding some subscriptions{3} to your addressbook.", "<a href=\"http://127.0.0.1:7657/help#addressbooksubs\">", "</a>", "<a href=\"http://127.0.0.1:7657/susidns/config\">", "</a>")
+_("Seeing this page often? See {0}the FAQ{1} for help in {2}adding some subscriptions{3} to your addressbook.", "<a href=\"http://127.0.0.1:7657/help/faq#addressbooksubs\">", "</a>", "<a href=\"http://127.0.0.1:7657/susidns/subscriptions\">", "</a>")
 </p>
 <hr>
-<p>
-<b>_("Could not find the following destination:")</b>
-</p>
+<p><b>
+_("Could not find the following destination:")
+</b></p>

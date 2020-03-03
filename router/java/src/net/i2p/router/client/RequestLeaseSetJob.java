@@ -35,7 +35,7 @@ class RequestLeaseSetJob extends JobImpl {
     private final Log _log;
     private final ClientConnectionRunner _runner;
     private final LeaseRequestState _requestState;
-    
+
     private static final long MAX_FUDGE = 2*1000;
 
     /** temp for testing */
@@ -49,8 +49,8 @@ class RequestLeaseSetJob extends JobImpl {
         _requestState = state;
         // all createRateStat in ClientManager
     }
-    
-    public String getName() { return "Request Lease Set"; }
+
+    public String getName() { return "Request LeaseSet from Client"; }
 
     public void runJob() {
         if (_runner.isDead()) return;
@@ -65,7 +65,7 @@ class RequestLeaseSetJob extends JobImpl {
                     isLS2 = true;
             }
         }
-        
+
         LeaseSet requested = _requestState.getRequested();
         long endTime = requested.getEarliestLeaseDate();
         // Add a small number of ms (0 to MAX_FUDGE) that increases as we approach the expire time.
@@ -128,7 +128,7 @@ class RequestLeaseSetJob extends JobImpl {
             }
             msg = rmsg;
         }
-        
+
         try {
             //_runner.setLeaseRequest(state);
             _runner.doSend(msg);
@@ -144,7 +144,7 @@ class RequestLeaseSetJob extends JobImpl {
             //_runner.disconnectClient("I2CP error requesting leaseSet");
         }
     }
-    
+
     /**
      * Schedule this job to be run after the request's expiration, so that if
      * it wasn't yet successful, we fire off the failure job and disconnect the
@@ -153,17 +153,17 @@ class RequestLeaseSetJob extends JobImpl {
      */
     private class CheckLeaseRequestStatus extends JobImpl {
         private final long _start;
-        
+
         public CheckLeaseRequestStatus() {
             super(RequestLeaseSetJob.this.getContext());
             _start = System.currentTimeMillis();
             getTiming().setStartAfter(_requestState.getExpiration());
         }
-        
+
         public void runJob() {
             if (_runner.isDead()) {
                 if (_log.shouldLog(Log.DEBUG))
-                    _log.debug("Already dead, dont try to expire the leaseSet lookup");
+                    _log.debug("Already dead, don't try to expire the leaseSet lookup");
                 return;
             }
             if (_requestState.getIsSuccessful()) {
@@ -183,6 +183,6 @@ class RequestLeaseSetJob extends JobImpl {
                 //_runner.disconnectClient("Took too long to request leaseSet");
             }
         }
-        public String getName() { return "Check LeaseRequest Status"; }
+        public String getName() { return "Check LeaseSet Request Status"; }
     }
 }

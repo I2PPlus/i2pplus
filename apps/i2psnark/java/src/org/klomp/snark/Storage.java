@@ -2,17 +2,17 @@
    Copyright (C) 2003 Mark J. Wielaard
 
    This file is part of Snark.
-   
+
    This program is free software; you can redistribute it and/or modify
    it under the terms of the GNU General Public License as published by
    the Free Software Foundation; either version 2, or (at your option)
    any later version.
- 
+
    This program is distributed in the hope that it will be useful,
    but WITHOUT ANY WARRANTY; without even the implied warranty of
    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
    GNU General Public License for more details.
- 
+
    You should have received a copy of the GNU General Public License
    along with this program; if not, write to the Free Software Foundation,
    Inc., 59 Temple Place - Suite 330, Boston, MA 02111-1307, USA.
@@ -152,7 +152,7 @@ public class Storage implements Closeable
     _preserveFileNames = true;
     // Create names, rafs and lengths arrays.
     _torrentFiles = getFiles(baseFile);
-    
+
     long total = 0;
     ArrayList<Long> lengthsList = new ArrayList<Long>(_torrentFiles.size());
     for (TorrentFile tf : _torrentFiles)
@@ -273,7 +273,7 @@ public class Storage implements Closeable
         if (files == null)
           {
             if (_log.shouldLog(Log.WARN))
-                _log.warn("WARNING: Skipping '" + f 
+                _log.warn("WARNING: Skipping '" + f
                         + "' not a normal file.");
             return;
           }
@@ -817,7 +817,7 @@ public class Storage implements Closeable
       // the following sets the needed variable
       changed = true;
       if (_log.shouldLog(Log.INFO))
-          _log.info("Forcing check");
+          _log.info("Forcing integrity check");
       checkCreateFiles(false);
     }
     if (complete()) {
@@ -1336,7 +1336,7 @@ public class Storage implements Closeable
               start -= raflen;
               raflen = _torrentFiles.get(i).length;
           }
-    
+
           int written = 0;
           int length = metainfo.getPieceLength(piece);
           while (written < length) {

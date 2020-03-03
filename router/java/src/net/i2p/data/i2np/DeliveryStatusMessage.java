@@ -21,7 +21,7 @@ public class DeliveryStatusMessage extends FastI2NPMessageImpl {
     public final static int MESSAGE_TYPE = 10;
     private long _id;
     private long _arrival;
-    
+
     /** 4 bytes unsigned */
     private static final long MAX_MSG_ID = (1L << 32) - 1;
 
@@ -30,7 +30,7 @@ public class DeliveryStatusMessage extends FastI2NPMessageImpl {
         _id = -1;
         _arrival = -1;
     }
-    
+
     public long getMessageId() { return _id; }
 
     /**
@@ -45,7 +45,7 @@ public class DeliveryStatusMessage extends FastI2NPMessageImpl {
             throw new IllegalArgumentException();
         _id = id;
     }
-    
+
     /**
      *  Misnamed, as it is generally (always?) set by the creator to the current time,
      *  in some future usage it could be set on arrival
@@ -63,39 +63,39 @@ public class DeliveryStatusMessage extends FastI2NPMessageImpl {
             _hasChecksum = false;
         _arrival = arrival;
     }
-    
+
     public void readMessage(byte data[], int offset, int dataSize, int type) throws I2NPMessageException {
         if (type != MESSAGE_TYPE) throw new I2NPMessageException("Message type is incorrect for this message");
         int curIndex = offset;
-        
+
         _id = DataHelper.fromLong(data, curIndex, 4);
         curIndex += 4;
         _arrival = DataHelper.fromLong(data, curIndex, DataHelper.DATE_LENGTH);
     }
-    
+
     /** calculate the message body's length (not including the header and footer */
-    protected int calculateWrittenLength() { 
+    protected int calculateWrittenLength() {
         return 4 + DataHelper.DATE_LENGTH; // id + arrival
     }
 
     /** write the message body to the output array, starting at the given index */
     protected int writeMessageBody(byte out[], int curIndex) throws I2NPMessageException {
         if ( (_id < 0) || (_arrival <= 0) ) throw new I2NPMessageException("Not enough data to write out");
-        
+
         DataHelper.toLong(out, curIndex, 4, _id);
         curIndex += 4;
         DataHelper.toLong(out, curIndex, DataHelper.DATE_LENGTH, _arrival);
         curIndex += DataHelper.DATE_LENGTH;
         return curIndex;
     }
-    
+
     public int getType() { return MESSAGE_TYPE; }
-    
+
     @Override
     public int hashCode() {
         return (int)getMessageId() ^ (int)getArrival();
     }
-    
+
     @Override
     public boolean equals(Object object) {
         if ( (object != null) && (object instanceof DeliveryStatusMessage) ) {
@@ -106,15 +106,13 @@ public class DeliveryStatusMessage extends FastI2NPMessageImpl {
             return false;
         }
     }
-    
+
     @Override
     public String toString() {
         StringBuilder buf = new StringBuilder();
-        buf.append("[DeliveryStatusMessage: ");
-        buf.append("\n\tMessage ID: ").append(getMessageId());
-        buf.append("\n\tArrival: ").append(_context.clock().now() - _arrival);
-        buf.append("ms in the past");
-        buf.append("]");
+        buf.append("\n* [MsgID ").append(getMessageId());
+        buf.append("] arrived ").append(_context.clock().now() - _arrival);
+        buf.append("ms ago");
         return buf.toString();
     }
 }

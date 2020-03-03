@@ -24,8 +24,8 @@ public class CSSHelper extends HelperBase {
     public static final String BASE_THEME_PATH = "/themes/console/";
     private static final String FORCE = "classic";
     public static final String PROP_REFRESH = "routerconsole.summaryRefresh";
-    public static final String DEFAULT_REFRESH = "60";
-    public static final int MIN_REFRESH = 3;
+    public static final String DEFAULT_REFRESH = "3";
+    public static final int MIN_REFRESH = 0;
     public static final String PROP_DISABLE_REFRESH = "routerconsole.summaryDisableRefresh";
     private static final String PROP_XFRAME = "routerconsole.disableXFrame";
     public static final String PROP_FORCE_MOBILE_CONSOLE = "routerconsole.forceMobileConsole";
@@ -33,7 +33,7 @@ public class CSSHelper extends HelperBase {
     public static final String PROP_EMBED_APPS = "routerconsole.embedApps";
     /** @since 0.9.36 */
     public static final String PROP_DISABLE_OLD = "routerconsole.disableOldThemes";
-    public static final boolean DEFAULT_DISABLE_OLD = true;
+    public static final boolean DEFAULT_DISABLE_OLD = false;
 
     private static final String _consoleNonce = Long.toString(RandomSource.getInstance().nextLong());
 
@@ -41,7 +41,7 @@ public class CSSHelper extends HelperBase {
      *  formerly stored in System.getProperty("router.consoleNonce")
      *  @since 0.9.4
      */
-    public static String getNonce() { 
+    public static String getNonce() {
         return _consoleNonce;
     }
 
@@ -170,10 +170,16 @@ public class CSSHelper extends HelperBase {
     /** translate the title and display consistently */
     public String title(String s) {
          StringBuilder buf = new StringBuilder(128);
+         String lang = _context.getProperty("routerconsole.lang");
+             if ((lang == null || lang.equals("en")) && s.startsWith("config "))
+                 s = s.replace(_t("config"), _t("Configure"));
+             if ((lang == null || lang.equals("en")) && s.contains("i2cp"))
+                 s = s.replace("i2cp", "I2CP");
          buf.append("<title>")
-            .append(_t("I2P Router Console"))
-            .append(" - ")
-            .append(_t(s))
+            .append(StringFormatter.capitalizeWord(_t(s)));
+         buf.append(" - ")
+//            .append(_t("I2P Router Console").replace("I2P", "I2P+"))
+            .append(_t("I2P+"))
             .append("</title>");
          return buf.toString();
     }
@@ -199,4 +205,21 @@ public class CSSHelper extends HelperBase {
     private static boolean shouldAllowIFrame(String ua) {
         return !ServletUtil.isSmallBrowser(ua);
     }
+
+    /** Capitalize first letter of each word of string
+     * https://www.javatpoint.com/java-program-to-capitalize-each-word-in-string
+     */
+    public static class StringFormatter {
+        public static String capitalizeWord(String str) {
+            String words[] = str.split("\\s");
+            String capitalizeWord = "";
+            for (String w:words) {
+                String first = w.substring(0,1);
+                String afterfirst = w.substring(1);
+                capitalizeWord += first.toUpperCase() + afterfirst + " ";
+            }
+        return capitalizeWord.trim();
+        }
+    }
+
 }

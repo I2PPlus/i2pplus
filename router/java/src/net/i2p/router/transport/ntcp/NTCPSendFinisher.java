@@ -43,9 +43,9 @@ class NTCPSendFinisher {
         _context = context;
         _log = _context.logManager().getLog(NTCPSendFinisher.class);
         _transport = transport;
-        //_context.statManager().createRateStat("ntcp.sendFinishTime", "How long to queue and excecute msg.afterSend()", "ntcp", new long[] {5*1000});
+        //_context.statManager().createRateStat("ntcp.sendFinishTime", "How long to queue and excecute msg.afterSend()", "Transport [NTCP]", new long[] {5*1000});
     }
-    
+
     public synchronized void start() {
         _executor = new CustomThreadPoolExecutor(THREADS);
     }
@@ -63,7 +63,7 @@ class NTCPSendFinisher {
             _log.warn("NTCP send finisher stopped, discarding msg.afterSend()");
         }
     }
-    
+
     // not really needed for now but in case we want to add some hooks like afterExecute()
     private static class CustomThreadPoolExecutor extends ThreadPoolExecutor {
         public CustomThreadPoolExecutor(int num) {

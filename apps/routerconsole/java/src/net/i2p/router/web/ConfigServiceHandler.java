@@ -25,7 +25,7 @@ import org.tanukisoftware.wrapper.WrapperManager;
  *
  */
 public class ConfigServiceHandler extends FormHandler {
-    
+
     private static WrapperListener _wrapperListener;
 
     private static final String LISTENER_AVAILABLE = "3.2.0";
@@ -41,7 +41,7 @@ public class ConfigServiceHandler extends FormHandler {
     private void registerWrapperNotifier(int code, boolean rekey) {
         registerWrapperNotifier(_context, code, rekey);
     }
-    
+
     /**
      *  Register two shutdown hooks, one to rekey and/or tell the wrapper we are stopping,
      *  and a final one to tell the wrapper we are stopped.
@@ -261,25 +261,30 @@ public class ConfigServiceHandler extends FormHandler {
             addFormNotice(_t("Rekeying after graceful shutdown"));
             registerWrapperNotifier(Router.EXIT_GRACEFUL, true);
             _context.router().shutdownGracefully(Router.EXIT_GRACEFUL);
-        } else if (_t("Run I2P on startup").equals(_action)) {
-            installService();
-        } else if (_t("Don't run I2P on startup").equals(_action)) {
-            uninstallService();
+        } else if (_t("Install I2P service").equals(_action)) {
+            enableService();
+            addFormNotice(_t("I2P+ Service now enabled on system start"));
+        } else if (_t("Enable I2P service").equals(_action)) {
+            enableService();
+            addFormNotice(_t("I2P+ Service now enabled on system start"));
+        } else if (_t("Disable I2P service").equals(_action)) {
+            disableService();
+            addFormNotice(_t("I2P+ Service now disabled on system start"));
         } else if (_t("Dump threads").equals(_action)) {
             try {
                 WrapperManager.requestThreadDump();
             } catch (Throwable t) {
-                addFormError("Warning: unable to contact the service manager - " + t.getLocalizedMessage());
+                addFormError("Warning: unable to contact the Service Manager - " + t.getLocalizedMessage());
             }
             File wlog = wrapperLogFile(_context);
             addFormNotice(_t("Threads dumped to {0}", wlog.getAbsolutePath()));
-        } else if (_t("View console on startup").equals(_action)) {
+        } else if (_t("Open console on startup").equals(_action)) {
             browseOnStartup(true);
             addFormNotice(_t("Console is to be shown on startup"));
-        } else if (_t("Do not view console on startup").equals(_action)) {
+        } else if (_t("No console on startup").equals(_action)) {
             browseOnStartup(false);
             addFormNotice(_t("Console is not to be shown on startup"));
-        } else if (_t("Force GC").equals(_action)) {
+        } else if (_t("Force garbage collection").equals(_action)) {
             Runtime.getRuntime().gc();
             addFormNotice(_t("Full garbage collection requested"));
         } else if (_t("Show systray icon").equals(_action)) {
@@ -290,7 +295,7 @@ public class ConfigServiceHandler extends FormHandler {
             //addFormNotice("Blah blah blah.  whatever.  I'm not going to " + _action);
         }
     }
-    
+
     /**
      *  Does not necessarily exist.
      *
@@ -321,22 +326,37 @@ public class ConfigServiceHandler extends FormHandler {
         }
         return f;
     }
-    
+
     private void installService() {
-        try { 
+        try {
             Runtime.getRuntime().exec("install_i2p_service_winnt.bat");
-            addFormNotice(_t("Service installed"));
+            addFormNotice(_t("Installed I2P+ system service"));
         } catch (IOException ioe) {
             addFormError(_t("Warning: unable to install the service") + " - " + ioe.getLocalizedMessage());
         }
     }
 
-    private void uninstallService() {
-        try { 
-            Runtime.getRuntime().exec("uninstall_i2p_service_winnt.bat");
-            addFormNotice(_t("Service removed"));
+    private void enableService() {
+        try {
+//            Runtime.getRuntime().exec("install_i2p_service_winnt.bat");
+            Runtime.getRuntime().exec("EnableI2P+Service.bat");
+//            addFormNotice(_t("Service installed"));
+            addFormNotice(_t("Enabled I2P+ service autostart at system startup"));
         } catch (IOException ioe) {
-            addFormError(_t("Warning: unable to remove the service") + " - " + ioe.getLocalizedMessage());
+//            addFormError(_t("Warning: unable to install the service") + " - " + ioe.getLocalizedMessage());
+            addFormError(_t("Warning: could not set the I2P+ service to autostart") + " - " + ioe.getLocalizedMessage());
+        }
+    }
+
+    private void disableService() {
+        try {
+//            Runtime.getRuntime().exec("uninstall_i2p_service_winnt.bat");
+            Runtime.getRuntime().exec("DisableI2P+Service.bat");
+//            addFormNotice(_t("Service removed"));
+            addFormNotice(_t("Disabled I2P+ Service autostart at system startup"));
+        } catch (IOException ioe) {
+//            addFormError(_t("Warning: unable to remove the service") + " - " + ioe.getLocalizedMessage());
+            addFormError(_t("Warning: could not set the I2P+ service to manual start") + " - " + ioe.getLocalizedMessage());
         }
     }
 
@@ -394,7 +414,7 @@ public class ConfigServiceHandler extends FormHandler {
                     if (Boolean.valueOf(System.getProperty("java.awt.headless"))) {
                         addFormError(_t("Restart required to take effect"));
                     } else {
-                        dtg = new net.i2p.desktopgui.Main(_context, mgr, null);    
+                        dtg = new net.i2p.desktopgui.Main(_context, mgr, null);
                         dtg.startup();
                         addFormNotice(_t("Enabled system tray"));
                     }
@@ -408,7 +428,7 @@ public class ConfigServiceHandler extends FormHandler {
         }
 
         boolean saved = _context.router().saveConfig(RouterConsoleRunner.PROP_DTG_ENABLED, Boolean.toString(enable));
-        if (saved) 
+        if (saved)
             addFormNotice(_t("Configuration saved successfully"));
         else
             addFormError(_t("Error saving the configuration (applied but not saved) - please see the error logs"));

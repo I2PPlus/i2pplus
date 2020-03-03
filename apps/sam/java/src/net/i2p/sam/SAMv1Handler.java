@@ -1,9 +1,9 @@
 package net.i2p.sam;
 /*
  * free (adj.): unencumbered; not under the control of others
- * Written by human in 2004 and released into the public domain 
- * with no warranty of any kind, either expressed or implied.  
- * It probably won't  make your computer catch on fire, or eat 
+ * Written by human in 2004 and released into the public domain
+ * with no warranty of any kind, either expressed or implied.
+ * It probably won't  make your computer catch on fire, or eat
  * your children, but it might.  Use at your own risk.
  *
  */
@@ -39,20 +39,20 @@ import net.i2p.util.Log;
  * @author human
  */
 class SAMv1Handler extends SAMHandler implements SAMRawReceiver, SAMDatagramReceiver, SAMStreamReceiver {
-    
+
     protected SAMMessageSess rawSession;
     protected SAMMessageSess datagramSession;
     protected SAMStreamSession streamSession;
 
     protected final SAMMessageSess getRawSession() { return rawSession; }
-    protected final SAMMessageSess getDatagramSession() { return datagramSession; }	
+    protected final SAMMessageSess getDatagramSession() { return datagramSession; }
     protected final SAMStreamSession getStreamSession() { return streamSession; }
 
     protected final long _id;
     private static final AtomicLong __id = new AtomicLong();
     private static final int FIRST_READ_TIMEOUT = 60*1000;
     protected static final String SESSION_ERROR = "SESSION STATUS RESULT=I2P_ERROR";
-    
+
     /**
      * Create a new SAM version 1 handler.  This constructor expects
      * that the SAM HELLO message has been still answered (and
@@ -62,7 +62,7 @@ class SAMv1Handler extends SAMHandler implements SAMRawReceiver, SAMDatagramRece
      * @param verMajor SAM major version to manage (should be 1)
      * @param verMinor SAM minor version to manage
      * @throws SAMException
-     * @throws IOException 
+     * @throws IOException
      */
     public SAMv1Handler(SocketChannel s, int verMajor, int verMinor,
                         SAMBridge parent) throws SAMException, IOException {
@@ -78,7 +78,7 @@ class SAMv1Handler extends SAMHandler implements SAMRawReceiver, SAMDatagramRece
      * @param verMinor SAM minor version to manage
      * @param i2cpProps properties to configure the I2CP connection (host, port, etc)
      * @throws SAMException
-     * @throws IOException 
+     * @throws IOException
      */
     public SAMv1Handler(SocketChannel s, int verMajor, int verMinor,
                         Properties i2cpProps, SAMBridge parent) throws SAMException, IOException {
@@ -230,21 +230,21 @@ class SAMv1Handler extends SAMHandler implements SAMRawReceiver, SAMDatagramRece
                         _log.debug("No parameters specified in SESSION CREATE message");
                     return writeString(SESSION_ERROR, "No parameters for SESSION CREATE");
                 }
-                
+
                 dest = (String) props.remove("DESTINATION");
                 if (dest == null) {
                     if (_log.shouldLog(Log.DEBUG))
                         _log.debug("SESSION DESTINATION parameter not specified");
                     return writeString(SESSION_ERROR, "DESTINATION not specified");
                 }
-                
+
                 String destKeystream = null;
-                
+
                 if (dest.equals("TRANSIENT")) {
                     _log.debug("TRANSIENT destination requested");
                     ByteArrayOutputStream priv = new ByteArrayOutputStream(640);
                     SAMUtils.genRandomKey(priv, null);
-                    
+
                     destKeystream = Base64.encode(priv.toByteArray());
                 } else {
                     destKeystream = bridge.getKeystream(dest);
@@ -260,14 +260,14 @@ class SAMv1Handler extends SAMHandler implements SAMRawReceiver, SAMDatagramRece
                             _log.debug("Custom destination specified [" + dest + "] and it is already known");
                     }
                 }
-                
+
                 String style = (String) props.remove("STYLE");
                 if (style == null) {
                     if (_log.shouldLog(Log.DEBUG))
                         _log.debug("SESSION STYLE parameter not specified");
                     return writeString(SESSION_ERROR, "No SESSION STYLE specified");
                 }
-                
+
 		// Unconditionally override what the client may have set
 		// (iMule sets BestEffort) as None is more efficient
 		// and the client has no way to access delivery notifications
@@ -291,7 +291,7 @@ class SAMv1Handler extends SAMHandler implements SAMRawReceiver, SAMDatagramRece
                             _log.debug("Unknown DIRECTION parameter value: [" + dir + "]");
                         return writeString(SESSION_ERROR, "Unknown DIRECTION parameter");
                     }
-                
+
                     streamSession = newSAMStreamSession(destKeystream, dir,props);
                     streamSession.start();
                 } else {
@@ -322,13 +322,13 @@ class SAMv1Handler extends SAMHandler implements SAMRawReceiver, SAMDatagramRece
         }
     }
 
-		
+
   private SAMStreamSession newSAMStreamSession(String destKeystream, String direction, Properties props )
     throws IOException, DataFormatException, SAMException
   {
     return new SAMStreamSession(destKeystream, direction, props, this) ;
   }
-		
+
     /* Parse and execute a DEST message*/
   protected boolean execDestMessage(String opcode, Properties props) {
 
@@ -348,7 +348,7 @@ class SAMv1Handler extends SAMHandler implements SAMRawReceiver, SAMDatagramRece
 
             ByteArrayOutputStream priv = new ByteArrayOutputStream(663);
             ByteArrayOutputStream pub = new ByteArrayOutputStream(387);
-            
+
             SAMUtils.genRandomKey(priv, pub, sigType);
             return writeString("DEST REPLY"
                                + " PUB="
@@ -393,11 +393,11 @@ class SAMv1Handler extends SAMHandler implements SAMRawReceiver, SAMDatagramRece
             	} catch (DataFormatException e) {
             	}
             }
-            
+
             if (dest == null) {
                 return writeString("NAMING REPLY RESULT=KEY_NOT_FOUND NAME=" + name + "\n");
             }
-            
+
             return writeString("NAMING REPLY RESULT=OK NAME=" + name
                                + " VALUE="
                                + dest.toBase64()
@@ -448,7 +448,7 @@ class SAMv1Handler extends SAMHandler implements SAMRawReceiver, SAMDatagramRece
                     _log.debug("No parameters specified in SEND message");
                 return false;
             }
-            
+
             String dest = props.getProperty("DESTINATION");
             if (dest == null) {
                 if (_log.shouldWarn())
@@ -575,7 +575,7 @@ class SAMv1Handler extends SAMHandler implements SAMRawReceiver, SAMDatagramRece
             return false;
         }
     }
-            
+
   protected boolean execStreamSend(Properties props) {
         if (props.isEmpty()) {
             if (_log.shouldLog(Log.DEBUG))
@@ -718,10 +718,10 @@ class SAMv1Handler extends SAMHandler implements SAMRawReceiver, SAMDatagramRece
         } catch (IOException e) {
             return false ;
         }
-    
+
         return true ;
     }
-    
+
   protected boolean execStreamClose(Properties props) {
         if (props.isEmpty()) {
             if (_log.shouldLog(Log.DEBUG))
@@ -761,7 +761,7 @@ class SAMv1Handler extends SAMHandler implements SAMRawReceiver, SAMDatagramRece
     private boolean checkDatagramSize(int size) {
         return ((size >= 1) && (size <= 31744));
     }
-    
+
     // SAMRawReceiver implementation
     public void receiveRawBytes(byte data[], int proto, int fromPort, int toPort) throws IOException {
         if (rawSession == null) {
@@ -779,9 +779,9 @@ class SAMv1Handler extends SAMHandler implements SAMRawReceiver, SAMDatagramRece
         }
         msg.write((byte) '\n');
         msg.write(data);
-        
+
         if (_log.shouldLog(Log.DEBUG))
-            _log.debug("sending to client: " + msgText);
+            _log.debug("Sending to client: " + msgText);
 
         writeBytes(ByteBuffer.wrap(msg.toByteArray()));
     }
@@ -821,9 +821,9 @@ class SAMv1Handler extends SAMHandler implements SAMRawReceiver, SAMDatagramRece
             msg.write(DataHelper.getASCII(msgText));
         }
         msg.write((byte) '\n');
-        
+
         if (_log.shouldLog(Log.DEBUG))
-            _log.debug("sending to client: " + msgText);
+            _log.debug("Sending to client: " + msgText);
         msg.write(data);
         msg.flush();
         writeBytes(ByteBuffer.wrap(msg.toByteArray()));
@@ -855,7 +855,7 @@ class SAMv1Handler extends SAMHandler implements SAMRawReceiver, SAMDatagramRece
             _log.error ( "BUG! Want to answer to stream SEND, but session is null!" );
             return;
         }
-    
+
         if ( !writeString ( "STREAM SEND ID=" + id
                         + " RESULT=" + result
                         + " STATE=" + bufferState
@@ -873,7 +873,7 @@ class SAMv1Handler extends SAMHandler implements SAMRawReceiver, SAMDatagramRece
             _log.error ( "BUG! Stream outgoing buffer is free, but session is null!" );
             return;
         }
-    
+
         if ( !writeString ( "STREAM READY_TO_SEND ID=" + id + "\n" ) )
         {
             throw new IOException ( "Error notifying connection to SAM client" );
@@ -949,7 +949,7 @@ class SAMv1Handler extends SAMHandler implements SAMRawReceiver, SAMDatagramRece
     protected boolean writeString(String s, String msg) {
         return writeString(s + createMessageString(msg) + '\n');
     }
-  
+
     public void receiveStreamBytes(int id, ByteBuffer data) throws IOException {
         if (streamSession == null) {
             _log.error("Received stream bytes, but session is null!");
@@ -958,10 +958,10 @@ class SAMv1Handler extends SAMHandler implements SAMRawReceiver, SAMDatagramRece
 
         String msgText = "STREAM RECEIVED ID=" + id +" SIZE=" + data.remaining() + "\n";
         if (_log.shouldLog(Log.DEBUG))
-            _log.debug("sending to client: " + msgText);
-        
+            _log.debug("Sending to client: " + msgText);
+
         ByteBuffer prefix = ByteBuffer.wrap(DataHelper.getASCII(msgText));
-        
+
         Object writeLock = getWriteLock();
         synchronized (writeLock) {
         	while (prefix.hasRemaining()) socket.write(prefix);

@@ -2,9 +2,9 @@ package net.i2p.util;
 
 /*
  * free (adj.): unencumbered; not under the control of others
- * Written by jrandom in 2003 and released into the public domain 
- * with no warranty of any kind, either expressed or implied.  
- * It probably won't make your computer catch on fire, or eat 
+ * Written by jrandom in 2003 and released into the public domain
+ * with no warranty of any kind, either expressed or implied.
+ * It probably won't make your computer catch on fire, or eat
  * your children, but it might.  Use at your own risk.
  *
  */
@@ -21,11 +21,13 @@ import java.util.Queue;
 abstract class LogWriter implements Runnable {
     /** every 10 seconds? why? Just have the gui force a reread after a change?? */
     private final static long CONFIG_READ_INTERVAL = 50 * 1000;
-    final static long FLUSH_INTERVAL = 29 * 1000;
-    private final static long MIN_FLUSH_INTERVAL = 2*1000;
+//    final static long FLUSH_INTERVAL = 29 * 1000;
+    final static long FLUSH_INTERVAL = 120 * 1000;
+//    private final static long MIN_FLUSH_INTERVAL = 2*1000;
+    private final static long MIN_FLUSH_INTERVAL = 15*1000;
     private final static long MAX_FLUSH_INTERVAL = 5*60*1000;
     // true for newest first on /logs page; false for oldest first
-    private static final boolean BUFFER_DISPLAYED_REVERSE = false;
+    private static final boolean BUFFER_DISPLAYED_REVERSE = true;
     private long _lastReadConfig;
     protected final LogManager _manager;
 
@@ -124,9 +126,9 @@ abstract class LogWriter implements Runnable {
             t.printStackTrace();
         } finally {
             if (shouldWait) {
-                try { 
+                try {
                     synchronized (this) {
-                        this.wait(_flushInterval); 
+                        this.wait(_flushInterval);
                     }
                 } catch (InterruptedException ie) { // nop
                 }
@@ -157,11 +159,11 @@ abstract class LogWriter implements Runnable {
         boolean nohtml = !html || SystemVersion.isAndroid();
         String arrows = reverse ? (nohtml ? "vvv" : "&darr;&darr;&darr;")
                                 : (nohtml ? "^^^" : "&uarr;&uarr;&uarr;");
-        return LogRecordFormatter.getWhen(_manager, lastRecord) + ' ' + arrows + ' ' +
-               ngettext("{0} similar message omitted", "{0} similar messages omitted", dupCount) + ' ' + arrows +
+        return LogRecordFormatter.getWhen(_manager, lastRecord) + " | " + arrows + ' ' +
+               ngettext("{0} similar message omitted", "{0} similar messages omitted", dupCount) +
                LogRecordFormatter.NL;
     }
-    
+
     private static final String BUNDLE_NAME = "net.i2p.util.messages";
 
     /**

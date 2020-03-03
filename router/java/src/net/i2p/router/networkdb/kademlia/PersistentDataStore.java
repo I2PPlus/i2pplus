@@ -57,8 +57,9 @@ public class PersistentDataStore extends TransientDataStore {
     private volatile boolean _initialized;
     private final boolean _flat;
     private final int _networkID;
-    
-    private final static int READ_DELAY = 2*60*1000;
+
+//    private final static int READ_DELAY = 2*60*1000;
+    private final static int READ_DELAY = 75*1000;
     private static final String PROP_FLAT = "router.networkDatabase.flat";
     static final String DIR_PREFIX = "r";
     private static final String B64 = Base64.ALPHABET_I2P;
@@ -74,10 +75,10 @@ public class PersistentDataStore extends TransientDataStore {
         _facade = facade;
         _readJob = new ReadJob();
         _context.jobQueue().addJob(_readJob);
-        ctx.statManager().createRateStat("netDb.writeClobber", "How often we clobber a pending netDb write", "NetworkDatabase", new long[] { 20*60*1000 });
-        ctx.statManager().createRateStat("netDb.writePending", "How many pending writes are there", "NetworkDatabase", new long[] { 60*1000 });
-        ctx.statManager().createRateStat("netDb.writeOut", "How many we wrote", "NetworkDatabase", new long[] { 20*60*1000 });
-        ctx.statManager().createRateStat("netDb.writeTime", "How long it took", "NetworkDatabase", new long[] { 20*60*1000 });
+        ctx.statManager().createRateStat("netDb.writeClobber", "How often we clobber a pending NetDb write", "NetworkDatabase", new long[] { 20*60*1000 });
+        ctx.statManager().createRateStat("netDb.writePending", "Number of pending NetDb writes", "NetworkDatabase", new long[] { 60*1000 });
+        ctx.statManager().createRateStat("netDb.writeOut", "Total number of NetDb writes", "NetworkDatabase", new long[] { 20*60*1000 });
+        ctx.statManager().createRateStat("netDb.writeTime", "Total time used for NetDb writes ", "NetworkDatabase", new long[] { 20*60*1000 });
         //ctx.statManager().createRateStat("netDb.readTime", "How long one took", "NetworkDatabase", new long[] { 20*60*1000 });
         _writer = new Writer();
         I2PThread writer = new I2PThread(_writer, "DBWriter");
@@ -95,12 +96,12 @@ public class PersistentDataStore extends TransientDataStore {
         super.stop();
         _writer.flush();
     }
-    
+
     @Override
     public void restart() {
         super.restart();
     }
-    
+
     @Override
     public void rescan() {
         if (_initialized)
@@ -128,7 +129,7 @@ public class PersistentDataStore extends TransientDataStore {
         Job rrj = new ReadRouterJob(getRouterInfoName(key), key));
          run in same thread
         rrj.runJob();
-*******/    
+*******/
         return rv;
     }
 
@@ -148,7 +149,7 @@ public class PersistentDataStore extends TransientDataStore {
         }
         return super.remove(key);
     }
-    
+
     @Override
     public boolean put(Hash key, DatabaseEntry data) {
         return put(key, data, true);
@@ -167,30 +168,34 @@ public class PersistentDataStore extends TransientDataStore {
             _writer.queue(key, data);
         return rv;
     }
-    
+
     private class RemoveJob extends JobImpl {
         private final Hash _key;
         public RemoveJob(Hash key) {
             super(PersistentDataStore.this._context);
             _key = key;
         }
-        public String getName() { return "Delete RI file"; }
+        public String getName() { return "Delete RouterInfo from NetDb"; }
         public void runJob() {
+            RouterInfo ri = new RouterInfo();
             if (_log.shouldLog(Log.INFO))
-                _log.info("Removing key " + _key /* , getAddedBy() */);
+                _log.info("Deleting RouterInfo [" + _key.toBase64().substring(0,6) + "] from " + _dbDir /* , getAddedBy() */);
             try {
                 removeFile(_key, _dbDir);
             } catch (IOException ioe) {
-                _log.error("Error removing key " + _key, ioe);
+            if (_log.shouldLog(Log.ERROR))
+                _log.error("Error removing RouterInfo [" + _key.toBase64().substring(0,6) + "] from " + _dbDir, ioe);
             }
         }
     }
-    
+
     /** How many files to write every 10 minutes. Doesn't make sense to limit it,
      *  they just back up in the queue hogging memory.
      */
-    private static final int WRITE_LIMIT = 10000;
-    private static final long WRITE_DELAY = 10*60*1000;
+//    private static final int WRITE_LIMIT = 10000;
+    private static final int WRITE_LIMIT = 5000;
+//    private static final long WRITE_DELAY = 10*60*1000;
+    private static final long WRITE_DELAY = 90*1000;
 
     /*
      * Queue up writes, write unlimited files every 10 minutes.
@@ -205,7 +210,7 @@ public class PersistentDataStore extends TransientDataStore {
         private final Object _waitLock;
         private volatile boolean _quit;
 
-        public Writer() { 
+        public Writer() {
             _keys = new ConcurrentHashMap<Hash, DatabaseEntry>(64);
             _waitLock = new Object();
         }
@@ -263,7 +268,7 @@ public class PersistentDataStore extends TransientDataStore {
                     if (lastCount > 0) {
                         long time = _context.clock().now() - startTime;
                         if (_log.shouldLog(Log.INFO))
-                            _log.info("Wrote " + lastCount + " entries to disk in " + time);
+                            _log.info(lastCount + " RouterInfo files saved to disk in " + time + "ms");
                          _context.statManager().addRateData("netDb.writeOut", lastCount);
                          _context.statManager().addRateData("netDb.writeTime", time);
                     }
@@ -286,10 +291,10 @@ public class PersistentDataStore extends TransientDataStore {
             }
         }
     }
-    
+
     private void write(Hash key, DatabaseEntry data) {
-        if (_log.shouldLog(Log.INFO))
-            _log.info("Writing key " + key);
+        if (_log.shouldLog(Log.DEBUG))
+            _log.debug("Writing RouterInfo [" + key.toBase64().substring(0,6) + "] to disk");
         OutputStream fos = null;
         File dbFile = null;
         try {
@@ -311,15 +316,14 @@ public class PersistentDataStore extends TransientDataStore {
                     fos.close();
                     dbFile.setLastModified(dataPublishDate);
                 } catch (DataFormatException dfe) {
-                    _log.error("Error writing out malformed object as " + key + ": " 
+                    _log.error("Error writing out malformed object as [" + key.toBase64().substring(0,6) + "]: "
                                + data, dfe);
                     dbFile.delete();
                 }
             } else {
                 // we've already written the file, no need to waste our time
                 if (_log.shouldLog(Log.DEBUG))
-                    _log.debug("Not writing " + key.toBase64() + ", as its up to date on disk (file mod-publish=" +
-                               (dbFile.lastModified()-dataPublishDate) + ")");
+                    _log.debug("Not writing RouterInfo [" + key.toBase64().substring(0,6) + "] to disk - Already up to date");
             }
         } catch (IOException ioe) {
             _log.error("Error writing out the object", ioe);
@@ -330,7 +334,7 @@ public class PersistentDataStore extends TransientDataStore {
     private long getPublishDate(DatabaseEntry data) {
         return data.getDate();
     }
-    
+
     /**
      *  This was mostly for manual reseeding, i.e. the user manually
      *  copies RI files to the directory. Nobody does this,
@@ -345,13 +349,14 @@ public class PersistentDataStore extends TransientDataStore {
         private volatile long _lastReseed;
         private volatile boolean _setNetDbReady;
         private static final int MIN_ROUTERS = KademliaNetworkDatabaseFacade.MIN_RESEED;
-        private static final long MIN_RESEED_INTERVAL = 90*60*1000;
+//        private static final long MIN_RESEED_INTERVAL = 90*60*1000;
+        private static final long MIN_RESEED_INTERVAL = 60*60*1000;
 
         public ReadJob() {
             super(PersistentDataStore.this._context);
         }
 
-        public String getName() { return "DB Read Job"; }
+        public String getName() { return "Read NetDb"; }
 
         public void runJob() {
             if (getContext().router().gracefulShutdownInProgress()) {
@@ -375,7 +380,7 @@ public class PersistentDataStore extends TransientDataStore {
                 }
             }
             if (shouldScan) {
-                _log.info("Rereading new files");
+                _log.info("Scanning " + _dbDir);
                 // synch with the writer job
                 synchronized (_dbDir) {
                     // _lastModified must be 0 for the first run
@@ -385,11 +390,11 @@ public class PersistentDataStore extends TransientDataStore {
             }
             requeue(READ_DELAY);
         }
-        
+
         public void wakeup() {
             requeue(0);
         }
-        
+
         private void readFiles() {
             int routerCount = 0;
 
@@ -448,7 +453,7 @@ public class PersistentDataStore extends TransientDataStore {
                             // Do not set _initialized yet so we don't start rescanning.
                             _setNetDbReady = true;
                             _context.router().setNetDbReady();
-                        } else if (i == 500 && !_setNetDbReady) {
+                        } else if (i >= 300 && !_setNetDbReady) {
                             // do this for faster systems also at 500
                             _setNetDbReady = true;
                             _context.router().setNetDbReady();
@@ -456,7 +461,6 @@ public class PersistentDataStore extends TransientDataStore {
                     }
                 }
             }
-            
             if (!_initialized) {
                 _initialized = true;
                 if (_facade.reseedChecker().checkReseed(routerCount)) {
@@ -490,7 +494,7 @@ public class PersistentDataStore extends TransientDataStore {
             }
         }
     }
-    
+
     private class ReadRouterJob extends JobImpl {
         private final File _routerFile;
         private final Hash _key;
@@ -506,7 +510,7 @@ public class PersistentDataStore extends TransientDataStore {
         }
 
         public String getName() { return "Read RouterInfo"; }
-        
+
         private boolean shouldRead() {
             // persist = false to call only super.get()
             DatabaseEntry data = get(_key, false);
@@ -518,7 +522,7 @@ public class PersistentDataStore extends TransientDataStore {
                 return fileDate > _knownDate + (60*60*1000);
             } else {
                 // safety measure - prevent injection from reseeding
-                _log.error("Prevented LS overwrite by RI " + _key + " from " + _routerFile);
+                _log.error("Prevented LeaseSet overwrite by RouterInfo [" + _key.toBase64().substring(0,6) + "] from " + _routerFile);
                 return false;
             }
         }
@@ -538,19 +542,20 @@ public class PersistentDataStore extends TransientDataStore {
                     if (ri.getNetworkId() != _networkID) {
                         corrupt = true;
                         if (_log.shouldLog(Log.ERROR))
-                            _log.error("The router "
-                                       + ri.getIdentity().calculateHash().toBase64() 
-                                       + " is from a different network");
+                            _log.error("Router ["
+                                       + ri.getIdentity().calculateHash().toBase64().substring(0,6)
+                                       + "] is from a different network");
                     } else if (!ri.getIdentity().calculateHash().equals(_key)) {
                         // prevent injection from reseeding
                         // this is checked in KNDF.validate() but catch it sooner and log as error.
                         corrupt = true;
                         if (_log.shouldLog(Log.WARN))
-                            _log.warn(ri.getIdentity().calculateHash() + " does not match " + _key + " from " + _routerFile);
+                            _log.warn("RouterInfo [" + ri.getIdentity().calculateHash().toBase64().substring(0,6) + "] does not match [" +
+                                      _key.toBase64().substring(0,6) + "] from " + _routerFile);
                     } else if (ri.getPublished() <= _knownDate) {
                         // Don't store but don't delete
                         if (_log.shouldLog(Log.WARN))
-                            _log.warn("Skipping since netdb newer than " + _routerFile);
+                            _log.warn("Skipping since NetDb copy is newer than " + _routerFile);
                     } else if (getContext().blocklist().isBlocklisted(ri)) {
                         corrupt = true;
                         if (_log.shouldLog(Log.WARN))
@@ -565,22 +570,22 @@ public class PersistentDataStore extends TransientDataStore {
                             getContext().profileManager().heardAbout(ri.getIdentity().getHash(), ri.getPublished());
                         } catch (IllegalArgumentException iae) {
                             if (_log.shouldLog(Log.INFO))
-                                _log.info("Refused locally loaded routerInfo - deleting", iae);
+                                _log.info("Rejected locally loaded RouterInfo [" + ri.getIdentity().calculateHash().toBase64().substring(0,6) + "]\n* " + iae.getMessage());
                             corrupt = true;
                         }
                     }
                 } catch (DataFormatException dfe) {
                     if (_log.shouldLog(Log.INFO))
-                        _log.info("Error reading the routerInfo from " + _routerFile.getName(), dfe);
+                        _log.info("Error reading the RouterInfo from " + _routerFile.getName() + "\n* " + dfe.getMessage());
                     corrupt = true;
                 } catch (IOException ioe) {
                     if (_log.shouldLog(Log.INFO))
-                        _log.info("Unable to read the router reference in " + _routerFile.getName(), ioe);
+                        _log.info("Unable to read the router reference in " + _routerFile.getName() + "\n* " + ioe.getMessage());
                     corrupt = true;
                 } catch (RuntimeException e) {
                     // key certificate problems, etc., don't let one bad RI kill the whole thing
                     if (_log.shouldLog(Log.INFO))
-                        _log.info("Unable to read the router reference in " + _routerFile.getName(), e);
+                        _log.info("Unable to read the router reference in " + _routerFile.getName() + "\n* " + e.getMessage());
                     corrupt = true;
                 } finally {
                     if (fis != null) try { fis.close(); } catch (IOException ioe) {}
@@ -588,21 +593,20 @@ public class PersistentDataStore extends TransientDataStore {
                 if (corrupt) _routerFile.delete();
         }
     }
-    
-    
+
     private File getDbDir(String dbDir) throws IOException {
         File f = new SecureDirectory(_context.getRouterDir(), dbDir);
         if (!f.exists()) {
             boolean created = f.mkdirs();
             if (!created)
-                throw new IOException("Unable to create the DB directory [" + f.getAbsolutePath() + "]");
+                throw new IOException("Unable to create the NetDb directory [" + f.getAbsolutePath() + "]");
         }
         if (!f.isDirectory())
-            throw new IOException("DB directory [" + f.getAbsolutePath() + "] is not a directory!");
+            throw new IOException("NetDb directory [" + f.getAbsolutePath() + "] is not a directory!");
         if (!f.canRead())
-            throw new IOException("DB directory [" + f.getAbsolutePath() + "] is not readable!");
+            throw new IOException("NetDb directory [" + f.getAbsolutePath() + "] is not readable!");
         if (!f.canWrite())
-            throw new IOException("DB directory [" + f.getAbsolutePath() + "] is not writable!");
+            throw new IOException("NetDb directory [" + f.getAbsolutePath() + "] is not writable!");
         if (_flat) {
             unmigrate(f);
         } else {
@@ -650,13 +654,13 @@ public class PersistentDataStore extends TransientDataStore {
             FileUtil.rename(from, to);
         }
     }
-    
+
     private final static String ROUTERINFO_PREFIX = "routerInfo-";
     private final static String ROUTERINFO_SUFFIX = ".dat";
 
     /** @since 0.9.34 */
     public static final FileFilter RI_FILTER = new FileSuffixFilter(ROUTERINFO_PREFIX, ROUTERINFO_SUFFIX);
-    
+
     private String getRouterInfoName(Hash hash) {
         String b64 = hash.toBase64();
         if (_flat)
@@ -678,14 +682,14 @@ public class PersistentDataStore extends TransientDataStore {
             return new File(dir, ROUTERINFO_PREFIX + b64 + ROUTERINFO_SUFFIX);
         return new File(dir, DIR_PREFIX + b64.charAt(0) + File.separatorChar + ROUTERINFO_PREFIX + b64 + ROUTERINFO_SUFFIX);
     }
-    
+
     /**
      *  Package private for installer BundleRouterInfos
      */
     static Hash getRouterInfoHash(String filename) {
         return getHash(filename, ROUTERINFO_PREFIX, ROUTERINFO_SUFFIX);
     }
-    
+
     private static Hash getHash(String filename, String prefix, String suffix) {
         try {
             String key = filename.substring(prefix.length());
@@ -703,17 +707,18 @@ public class PersistentDataStore extends TransientDataStore {
             return null;
         }
     }
-    
+
     private void removeFile(Hash key, File dir) throws IOException {
         String riName = getRouterInfoName(key);
         File f = new File(dir, riName);
         if (f.exists()) {
             boolean removed = f.delete();
-            if (!removed) {
-                if (_log.shouldLog(Log.WARN))
-                    _log.warn("Unable to remove router info at " + f.getAbsolutePath());
-            } else if (_log.shouldLog(Log.INFO)) {
-                _log.info("Removed router info at " + f.getAbsolutePath());
+            if (!removed && f.exists()) {
+                // change from warn to debug as we're likely to see only when failing to delete a previously deleted RI
+                if (_log.shouldLog(Log.DEBUG))
+                    _log.debug("Unable to delete " + f.getAbsolutePath());
+            } else if (_log.shouldLog(Log.DEBUG)) {
+                _log.debug("Deleted " + f.getAbsolutePath());
             }
             return;
         }

@@ -1,6 +1,6 @@
 /*
  * I2P - An anonymous, secure, and fully-distributed communication network.
- * 
+ *
  * UrlLauncher.java
  * 2004 The I2P Project
  * http://www.i2p.net
@@ -39,8 +39,8 @@ import net.i2p.util.SystemVersion;
  * browsers if that was not successful.
  * <p>
  * Handles Galeon, Internet Explorer, Konqueror, Links, Lynx, Mozilla, Mozilla
- * Firefox, Netscape, Opera, and Safari.    
- * 
+ * Firefox, Netscape, Opera, and Safari.
+ *
  * @author hypercubus
  */
 public class UrlLauncher implements ClientApp {
@@ -57,6 +57,7 @@ public class UrlLauncher implements ClientApp {
     private static final int MAX_TRIES = 99;
     private static final String REGISTERED_NAME = "UrlLauncher";
     private static final String PROP_BROWSER = "routerconsole.browser";
+    private static final boolean IS_SERVICE = SystemVersion.isService();
 
     /**
      *  Browsers to try IN-ORDER
@@ -77,6 +78,7 @@ public class UrlLauncher implements ClientApp {
             "chromium-browser",
             "mozilla",
             "netscape",
+            "falkon",
             "konqueror",
             "galeon",
             // Text Mode Browsers only below here
@@ -84,7 +86,7 @@ public class UrlLauncher implements ClientApp {
             "links",
             "lynx"
     };
-            
+
     /**
      *  ClientApp constructor used from clients.config
      *
@@ -103,7 +105,7 @@ public class UrlLauncher implements ClientApp {
         _shellCommand = new ShellCommand();
         _state = INITIALIZED;
     }
-            
+
     /**
      *  Constructor from SysTray
      *
@@ -176,20 +178,24 @@ public class UrlLauncher implements ClientApp {
      * to launch the given URL using the default browser for that platform; if
      * unsuccessful, an attempt is made to launch the URL using the most common
      * browsers.
-     * 
+     *
+     * As of 0.9.46, fails immediately if JVM is a Windows or Linux Service.
+     *
      * BLOCKING. This repeatedly probes the server port at the given url
      * until it is apparently ready.
-     * 
+     *
      * @param  url The URL to open.
      * @return     <code>true</code> if the operation was successful, otherwise
      *             <code>false</code>.
-     * 
+     *
      * @throws IOException
-     */ 
+     */
     public boolean openUrl(String url) throws IOException {
-        if (_log.shouldDebug()) _log.debug("Waiting for server");
+        if (IS_SERVICE)
+            return false;
+        if (_log.shouldDebug()) _log.debug("Waiting for router console to be ready before launching browser");
         waitForServer(url);
-        if (_log.shouldDebug()) _log.debug("Done waiting for server");
+        if (_log.shouldDebug()) _log.debug("Done waiting for router console to be ready for browser launch");
         if (validateUrlFormat(url)) {
             String cbrowser = _context.getProperty(PROP_BROWSER);
             if (cbrowser != null) {
@@ -277,17 +283,19 @@ public class UrlLauncher implements ClientApp {
      * Arguments may be surrounded by single or double quotes if
      * they contain spaces or tabs.
      * There is no mechanism to escape quotes or other chars with backslashes.
-     * 
+     *
      * BLOCKING. However, this does NOT probe the server port to see if it is ready.
-     * 
+     *
      * @param  url     The URL to open.
      * @param  browser The browser to use. See above for quoting rules.
      * @return         <code>true</code> if the operation was successful,
      *                 otherwise <code>false</code>.
-     * 
+     *
      * @throws IOException
      */
     public boolean openUrl(String url, String browser) throws IOException {
+        if (IS_SERVICE)
+            return false;
         waitForServer(url);
         if (validateUrlFormat(url)) {
             String[] args = parseArgs(browser, url);
@@ -383,9 +391,16 @@ public class UrlLauncher implements ClientApp {
 
     /**
      *  ClientApp interface
+     *  As of 0.9.46, stops immediately if JVM is a Windows or Linux Service.
+     *
      *  @since 0.9.18
      */
     public void startup() {
+        if (IS_SERVICE) {
+            // not START_FAILED so manager doesn't log CRIT
+            changeState(STOPPED);
+            return;
+        }
         String url = _args[0];
         if (!validateUrlFormat(url)) {
             changeState(START_FAILED, new MalformedURLException("Bad url: " + url));

@@ -43,14 +43,14 @@ class LoadRouterInfoJob extends JobImpl {
     private final Log _log;
     private RouterInfo _us;
     private static final AtomicBoolean _keyLengthChecked = new AtomicBoolean();
-    
+
     public LoadRouterInfoJob(RouterContext ctx) {
         super(ctx);
         _log = ctx.logManager().getLog(LoadRouterInfoJob.class);
     }
-    
-    public String getName() { return "Load Router Info"; }
-    
+
+    public String getName() { return "Load Local RouterInfo"; }
+
     public void runJob() {
         synchronized (getContext().router().routerInfoFileLock) {
             loadRouterInfo();
@@ -67,7 +67,7 @@ class LoadRouterInfoJob extends JobImpl {
             getContext().jobQueue().addJob(new BootCommSystemJob(getContext()));
         }
     }
-    
+
     /**
      *  Loads router.info and either router.keys.dat or router.keys.
      *
@@ -81,7 +81,7 @@ class LoadRouterInfoJob extends JobImpl {
         boolean keysExist = rkf.exists();
         File rkf2 = new File(getContext().getRouterDir(), CreateRouterInfoJob.KEYS2_FILENAME);
         boolean keys2Exist = rkf2.exists();
-        
+
         InputStream fis1 = null;
         try {
             // if we have a routerinfo but no keys, things go bad in a hurry:
@@ -98,7 +98,7 @@ class LoadRouterInfoJob extends JobImpl {
                 if (!info.isValid())
                     throw new DataFormatException("Our RouterInfo has a bad signature");
                 if (_log.shouldLog(Log.DEBUG))
-                    _log.debug("Reading in routerInfo from " + rif.getAbsolutePath() + " and it has " + info.getAddresses().size() + " addresses");
+                    _log.debug("Reading in RouterInfo from " + rif.getAbsolutePath() + " and it has " + info.getAddresses().size() + " addresses");
                 // don't reuse if family name changed
                 if (DataHelper.eq(info.getOption(FamilyKeyCrypto.OPT_NAME),
                                   getContext().getProperty(FamilyKeyCrypto.PROP_FAMILY_NAME))) {
@@ -107,7 +107,7 @@ class LoadRouterInfoJob extends JobImpl {
                     _log.logAlways(Log.WARN, "NetDb family name changed");
                 }
             }
-            
+
             if (keys2Exist || keysExist) {
                 KeyData kd = readKeyData(rkf, rkf2);
                 PublicKey pubkey = kd.routerIdentity.getPublicKey();
@@ -126,14 +126,14 @@ class LoadRouterInfoJob extends JobImpl {
                     if (getContext().random().nextInt(4) > 0) {
                         sigTypeChanged = false;
                         if (_log.shouldWarn())
-                            _log.warn("Deferring RI rekey from " + stype + " to " + cstype);
+                            _log.warn("Deferred RouterInfo rekey from " + stype + " to " + cstype);
                     }
                 }
 
                 if (sigTypeChanged || shouldRebuild(privkey)) {
                     if (_us != null) {
                         Hash h = _us.getIdentity().getHash();
-                        _log.logAlways(Log.WARN, "Deleting old router identity " + h.toBase64());
+                        _log.logAlways(Log.WARN, "Deleting old Router Identity [" + h.toBase64().substring(0,6) + "]");
                         // the netdb hasn't started yet, but we want to delete the RI
                         File f = PersistentDataStore.getRouterInfoFile(getContext(), h);
                         f.delete();
@@ -153,7 +153,7 @@ class LoadRouterInfoJob extends JobImpl {
                     rkf2.delete();
                     return;
                 }
-                
+
                 getContext().keyManager().setKeys(pubkey, privkey, signingPubKey, signingPrivKey);
             }
         } catch (IOException ioe) {

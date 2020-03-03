@@ -1,8 +1,8 @@
 /*
  * Created on Nov 9, 2004
- * 
+ *
  *  This file is part of susimail project, see http://susi.i2p/
- *  
+ *
  *  Copyright (C) 2004-2005  susi23@mail.i2p
  *
  *  This program is free software; you can redistribute it and/or modify
@@ -18,7 +18,7 @@
  *  You should have received a copy of the GNU General Public License
  *  along with this program; if not, write to the Free Software
  *  Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
- *  
+ *
  * $Revision: 1.2 $
  */
 package i2p.susi.webmail;
@@ -57,11 +57,11 @@ import net.i2p.util.SystemVersion;
 
 /**
  * data structure to hold a single message, mostly used with folder view and sorting
- * 
+ *
  * @author susi
  */
 class Mail {
-	
+
 	private static final String DATEFORMAT = "date.format";
 	private static final String unknown = "unknown";
 	private static final String P1 = "^[^@< \t]+@[^> \t]+$";
@@ -84,7 +84,8 @@ class Mail {
 		localFormattedDate,  // Current Locale, local time zone
 		shortSender,    // Either name or address but not both, HTML escaped, double-quotes removed, truncated with hellip
 		shortSubject,   // HTML escaped, truncated with hellip, non-null, default ""
-		quotedDate;  // Current Locale, local time zone, longer format
+		quotedDate,  // Current Locale, local time zone, longer format
+		dateOnly; // Long date only format for mail list date tooltips e.g. Tuesday 30th December, 1999
 	public final String uidl;
 	public Date date;
 	private Buffer header, body;
@@ -99,7 +100,7 @@ class Mail {
 
 	public boolean markForDeletion;
 	private final Log _log;
-	
+
 	public Mail(String uidl) {
 		this.uidl = uidl;
 		//formattedSender = unknown;
@@ -246,7 +247,7 @@ class Mail {
 	}
 
 	/**
-	 * 
+	 *
 	 * @param address E-mail address to be validated
 	 * @return Is the e-mail address valid?
 	 */
@@ -254,17 +255,17 @@ class Mail {
 	{
 		if( address == null || address.length() == 0 )
 			return false;
-		
+
 		address = address.trim();
-		
+
 		if( address.indexOf('\n') != -1 ||
 				address.indexOf('\r') != -1 )
 			return false;
-		
+
 		String[] tokens = DataHelper.split(address, "[ \t]+");
 
 		int addresses = 0;
-		
+
 		for( int i = 0; i < tokens.length; i++ ) {
 			if( tokens[i].matches( "^[^@< \t]+@[^> \t]+$" ) ||
 					tokens[i].matches( "^<[^@< \t]+@[^> \t]+>$" ) )
@@ -287,14 +288,14 @@ class Mail {
 			if (PATTERN2.matcher(tokens[i]).matches())
 				return tokens[i];
 		}
-		
+
 		return null;
 	}
 
 	/**
 	 * A little misnamed. Adds all addresses from the comma-separated
 	 * line in text to the recipients list.
-	 * 
+	 *
 	 * @param text comma-separated
 	 * @param recipients out param
 	 * @param ok will be returned
@@ -302,7 +303,7 @@ class Mail {
 	 */
 	public static boolean getRecipientsFromList( ArrayList<String> recipients, String text, boolean ok )
 	{
-		if( text != null && text.length() > 0 ) {			
+		if( text != null && text.length() > 0 ) {
 			String[] ccs = DataHelper.split(text, ",");
 			ok = getRecipientsFromList(recipients, ccs, ok);
 		}
@@ -312,7 +313,7 @@ class Mail {
 	/**
 	 * A little misnamed. Adds all addresses from the elements
 	 * in text to the recipients list.
-	 * 
+	 *
 	 * @param recipients out param
 	 * @param ok will be returned
 	 * @return true if ALL e-mail addresses are valid AND the in parameter was true
@@ -320,7 +321,7 @@ class Mail {
 	 */
 	public static boolean getRecipientsFromList( ArrayList<String> recipients, String[] ccs, boolean ok )
 	{
-		if (ccs != null && ccs.length > 0 ) {			
+		if (ccs != null && ccs.length > 0 ) {
 			for( int i = 0; i < ccs.length; i++ ) {
 				String recipient = ccs[i].trim();
 				if( validateAddress( recipient ) ) {
@@ -344,7 +345,7 @@ class Mail {
 	 * Adds all items from the list
 	 * to the builder, separated by tabs.
 	 * This is for SMTP/POP.
-	 * 
+	 *
 	 * @param buf out param
 	 * @param prefix prepended to the addresses
 	 */
@@ -364,7 +365,7 @@ class Mail {
 	 * Adds all items from the array
 	 * to the builder, separated by commas
 	 * This is for display of a forwarded email.
-	 * 
+	 *
 	 * @param prefix prepended to the addresses, includes trailing ": "
 	 * @since 0.9.35
 	 */
@@ -386,11 +387,14 @@ class Mail {
 	}
 
 	private static final DateFormat dateFormatter = new SimpleDateFormat("yyyy-MM-dd HH:mm");
+	private static final DateFormat dateOnlyFormatter = new SimpleDateFormat("EEEE dd MMMM, yyyy");
 	private static final DateFormat localDateFormatter = DateFormat.getDateTimeInstance(DateFormat.SHORT, DateFormat.SHORT);
+	private static final DateFormat longLocalDateFormatter = DateFormat.getDateTimeInstance(DateFormat.MEDIUM, DateFormat.SHORT);
 	static {
 		// the router sets the JVM time zone to UTC but saves the original here so we can get it
 		TimeZone tz = SystemVersion.getSystemTimeZone();
 		localDateFormatter.setTimeZone(tz);
+		longLocalDateFormatter.setTimeZone(tz);
 	}
 
 	/**
@@ -402,8 +406,10 @@ class Mail {
 		synchronized(dateFormatter) {
 			formattedDate = dateFormatter.format( date );
 			localFormattedDate = localDateFormatter.format( date );
+			quotedDate = longLocalDateFormatter.format(date);
+			dateOnly = dateOnlyFormatter.format(date);
 		}
-		quotedDate = DataHelper.formatTime(dateLong);
+//		quotedDate = DataHelper.formatTime(dateLong);
 	}
 
 	/**
@@ -416,14 +422,14 @@ class Mail {
 		if( header != null ) {
 
 			boolean ok = true;
-			
+
 			Encoding html = EncodingFactory.getEncoding( "HTML" );
-			
+
 			if( html == null ) {
 				error += "HTML encoder not found.\n";
 				ok = false;
 			}
-			
+
 			Encoding hl = EncodingFactory.getEncoding( "HEADERLINE" );
 
 			if( hl == null ) {
@@ -432,7 +438,7 @@ class Mail {
 			}
 
 			if( ok ) {
-				
+
 				try {
 					EOFOnMatchInputStream eofin = new EOFOnMatchInputStream(in, HEADER_MATCH);
 					MemoryBuffer decoded = new MemoryBuffer(4096);
@@ -492,7 +498,7 @@ class Mail {
 							} else if (cc == null) {
 								// Susimail bug before 0.9.33, sent 2nd To line that was really Cc
 								cc = list.toArray(new String[list.size()]);
-							} else {	
+							} else {
 								// add to the array, shouldn't happen
 								for (int i = 0; i < to.length; i++) {
 									list.add(i, to[i]);
@@ -507,7 +513,7 @@ class Mail {
 								// don't set
 							} else if (cc == null) {
 								cc = list.toArray(new String[list.size()]);
-							} else {	
+							} else {
 								// add to the array, shouldn't happen
 								for (int i = 0; i < cc.length; i++) {
 									list.add(i, cc[i]);
@@ -530,7 +536,7 @@ class Mail {
 				catch( Exception e ) {
 					error += "Error parsing mail header: " + e.getClass().getName() + '\n';
 					_log.error("Parse error", e);
-				}		
+				}
 			}
 		}
 		return headerLines;

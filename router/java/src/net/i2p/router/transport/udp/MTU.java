@@ -22,7 +22,7 @@ import net.i2p.util.SystemVersion;
 public class MTU {
 
     private static final boolean hasMTU = SystemVersion.isJava6();
-    
+
     private MTU() {};
 
     /**

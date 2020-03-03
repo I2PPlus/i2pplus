@@ -110,7 +110,7 @@ public abstract class I2PTunnelHTTPClientBase extends I2PTunnelClientBase implem
          "<html><body><H1>I2P ERROR: No outproxy found</H1>"+
          "Your request was for a site outside of I2P, but you have no "+
          "outproxy configured.  Please configure an outproxy in I2PTunnel";
-    
+
     protected final static String ERR_DESTINATION_UNKNOWN =
             "HTTP/1.1 503 Service Unavailable\r\n" +
             "Content-Type: text/html; charset=iso-8859-1\r\n" +
@@ -143,14 +143,14 @@ public abstract class I2PTunnelHTTPClientBase extends I2PTunnelClientBase implem
     private String _lastFailedSSLProxy;
 
     protected String getPrefix(long requestId) {
-        return "HTTPClient[" + _clientId + '/' + requestId + "]: ";
+        return "[HTTPClient] [Request: " + _clientId + '/' + requestId + "] ";
     }
 
     // TODO standard proxy config changes require tunnel restart;
     // SSL proxy config is parsed on the fly;
     // allow both to be changed and store the SSL proxy list.
     // TODO should track more than one failed proxy
-    
+
     /**
      *  Simple random selection, with caching by hostname,
      *  and avoidance of the last one to fail.
@@ -183,7 +183,7 @@ public abstract class I2PTunnelHTTPClientBase extends I2PTunnelClientBase implem
             }
         }
         if (_log.shouldInfo())
-            _log.info("Selected proxy for " + host + ": " + rv);
+            _log.info("[HTTPClient] Using outproxy [" + rv + "] for " + host);
         return rv;
     }
 
@@ -226,10 +226,10 @@ public abstract class I2PTunnelHTTPClientBase extends I2PTunnelClientBase implem
             }
         }
         if (_log.shouldInfo())
-            _log.info("Selected SSL proxy for " + host + ": " + rv);
+            _log.info("[HTTPClient] Using SSL outproxy [" + rv + "] for " + host);
         return rv;
     }
-    
+
     /**
      *  Update the cache and note if failed.
      *
@@ -267,8 +267,13 @@ public abstract class I2PTunnelHTTPClientBase extends I2PTunnelClientBase implem
                 }
             }
         }
-        if (_log.shouldInfo())
-            _log.info("Proxy result: to " + host + " through " + proxy + " SSL? " + isSSL + " success? " + ok);
+        if (isSSL == true) {
+            if (_log.shouldInfo())
+                _log.info("[HTTPClient] Request via SSL outproxy [" + proxy + "] -> Success? " + ok + " \n* Target: " + host);
+        } else {
+            if (_log.shouldInfo())
+                _log.info("[HTTPClient] Request via outproxy [" + proxy + "] -> Success? " + ok + " \n* Target: " + host);
+        }
     }
 
     /**
@@ -276,11 +281,11 @@ public abstract class I2PTunnelHTTPClientBase extends I2PTunnelClientBase implem
      *  so that large POSTs won't timeout on the read side
      */
     protected static final int DEFAULT_READ_TIMEOUT = -1;
-    
+
     protected static final AtomicLong __requestId = new AtomicLong();
 
-    public I2PTunnelHTTPClientBase(int localPort, boolean ownDest, Logging l, 
-                               EventDispatcher notifyThis, String handlerName, 
+    public I2PTunnelHTTPClientBase(int localPort, boolean ownDest, Logging l,
+                               EventDispatcher notifyThis, String handlerName,
                                I2PTunnel tunnel) throws IllegalArgumentException {
         super(localPort, ownDest, l, notifyThis, handlerName, tunnel);
         // force connect delay and bulk profile
@@ -425,7 +430,7 @@ public abstract class I2PTunnelHTTPClientBase extends I2PTunnelClientBase implem
             return AuthResult.AUTH_GOOD;
         if (s instanceof InternalSocket) {
             if (_log.shouldLog(Log.INFO))
-                _log.info(getPrefix(requestId) + "Internal access, no auth required");
+                _log.info(getPrefix(requestId) + "Access via internal socket: no authorization required!");
             return AuthResult.AUTH_GOOD;
         }
         if (authorization == null)
@@ -462,19 +467,19 @@ public abstract class I2PTunnelHTTPClientBase extends I2PTunnelClientBase implem
                             return AuthResult.AUTH_GOOD;
                         }
                     }
-                    _log.logAlways(Log.WARN, "HTTP proxy authentication failed, user: " + user);
+                    _log.logAlways(Log.WARN, "[HTTPClient] HTTP proxy authentication failed, user: " + user);
                 } catch (UnsupportedEncodingException uee) {
-                    _log.error(getPrefix(requestId) + "No UTF-8 support? B64: " + authorization, uee);
+                    _log.error(getPrefix(requestId) + "[HTTPClient] No UTF-8 support? B64: " + authorization, uee);
                 } catch (ArrayIndexOutOfBoundsException aioobe) {
                     // no ':' in response
                     if (_log.shouldLog(Log.WARN))
-                        _log.warn(getPrefix(requestId) + "Bad auth B64: " + authorization, aioobe);
+                        _log.warn(getPrefix(requestId) + "[HTTPClient] Bad auth B64: " + authorization, aioobe);
                     return AuthResult.AUTH_BAD_REQ;
                 }
                 return AuthResult.AUTH_BAD;
             } else {
                 if (_log.shouldLog(Log.WARN))
-                    _log.warn(getPrefix(requestId) + "Bad auth B64: " + authorization);
+                    _log.warn(getPrefix(requestId) + "[HTTPClient] Bad auth B64: " + authorization);
                 return AuthResult.AUTH_BAD_REQ;
             }
         } else if (authRequired.equals(DIGEST_AUTH)) {
@@ -485,7 +490,7 @@ public abstract class I2PTunnelHTTPClientBase extends I2PTunnelClientBase implem
             AuthResult rv = validateDigest(method, args);
             return rv;
         } else {
-            _log.error("Unknown proxy authorization type configured: " + authRequired);
+            _log.error("[HTTPClient] Unknown proxy authorization type configured: " + authRequired);
             return AuthResult.AUTH_BAD_REQ;
         }
     }
@@ -507,21 +512,21 @@ public abstract class I2PTunnelHTTPClientBase extends I2PTunnelClientBase implem
         if (user == null || realm == null || nonce == null || qop == null ||
             uri == null || cnonce == null || nc == null || response == null) {
             if (_log.shouldLog(Log.INFO))
-                _log.info("Bad digest request: " + DataHelper.toString(args));
+                _log.info("[HTTPClient] Bad digest request: " + DataHelper.toString(args));
             return AuthResult.AUTH_BAD_REQ;
         }
         // nonce check
         AuthResult check = verifyNonce(nonce, nc);
         if (check != AuthResult.AUTH_GOOD) {
             if (_log.shouldLog(Log.INFO))
-                _log.info("Bad digest nonce: " + check + ' ' + DataHelper.toString(args));
+                _log.info("[HTTPClient] Bad digest nonce: " + check + ' ' + DataHelper.toString(args));
             return check;
         }
         // get H(A1) == stored password
         String ha1 = getTunnel().getClientOptions().getProperty(PROP_PROXY_DIGEST_PREFIX + user +
                                                                 PROP_PROXY_DIGEST_SUFFIX);
         if (ha1 == null) {
-            _log.logAlways(Log.WARN, "HTTP proxy authentication failed, user: " + user);
+            _log.logAlways(Log.WARN, "[HTTPClient] HTTP proxy authentication failed, user: " + user);
             return AuthResult.AUTH_BAD;
         }
         // get H(A2)
@@ -531,13 +536,13 @@ public abstract class I2PTunnelHTTPClientBase extends I2PTunnelClientBase implem
         String kd = ha1 + ':' + nonce + ':' + nc + ':' + cnonce + ':' + qop + ':' + ha2;
         String hkd = PasswordManager.md5Hex(kd);
         if (!response.equals(hkd)) {
-            _log.logAlways(Log.WARN, "HTTP proxy authentication failed, user: " + user);
+            _log.logAlways(Log.WARN, "[HTTPClient] HTTP proxy authentication failed, user: " + user);
             if (_log.shouldLog(Log.INFO))
-                _log.info("Bad digest auth: " + DataHelper.toString(args));
+                _log.info("[HTTPClient] Bad digest auth: " + DataHelper.toString(args));
             return AuthResult.AUTH_BAD;
         }
         if (_log.shouldLog(Log.INFO))
-            _log.info("Good digest auth - user: " + user);
+            _log.info("[HTTPClient] Good digest auth - user: " + user);
         return AuthResult.AUTH_GOOD;
     }
 

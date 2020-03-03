@@ -32,7 +32,7 @@ class UDPSorters {
     static final int FLAG_DUP = 15;
     static final int FLAG_UPTIME = 16;
     static final int FLAG_DEBUG = 99;
-    
+
     static Comparator<PeerState> getComparator(int sortFlags) {
         Comparator<PeerState> rv;
         switch (Math.abs(sortFlags)) {
@@ -277,7 +277,7 @@ class UDPSorters {
                 return (int)rv;
         }
     }
-    
+
     static class PeerComparator implements Comparator<PeerState>, Serializable {
         public int compare(PeerState l, PeerState r) {
             return DataHelper.compareTo(l.getRemotePeer().getData(), r.getRemotePeer().getData());
@@ -286,20 +286,20 @@ class UDPSorters {
 
     static void appendSortLinks(StringBuilder buf, String urlBase, int sortFlags, String descr, int ascending) {
         if (ascending == FLAG_ALPHA) {  // 0
-            buf.append("<span class=\"sortdown\"><a href=\"").append(urlBase).append("?tx=ssu&amp;sort=0" +
+            buf.append("<span class=\"sortdown\"><a href=\"").append(urlBase).append("?transport=ssu&amp;sort=0" +
                        "\" title=\"").append(descr).append("\"><img src=\"/themes/console/images/inbound.png\" alt=\"V\"></a></span>");
         } else if (sortFlags == ascending) {
-            buf.append(" <span class=\"sortdown\"><a href=\"").append(urlBase).append("?tx=ssu&amp;sort=").append(0-ascending);
+            buf.append(" <span class=\"sortdown\"><a href=\"").append(urlBase).append("?transport=ssu&amp;sort=").append(0-ascending);
             buf.append("\" title=\"").append(descr).append("\"><img src=\"/themes/console/images/inbound.png\" alt=\"V\"></a></span>" +
                        "<span class=\"sortupactive\"><b><img src=\"/themes/console/images/outbound.png\" alt=\"^\"></b></span>");
         } else if (sortFlags == 0 - ascending) {
             buf.append(" <span class=\"sortdownactive\"><b><img src=\"/themes/console/images/inbound.png\" alt=\"V\"></b></span><span class=\"sortup\"><a href=\"")
-               .append(urlBase).append("?tx=ssu&amp;sort=").append(ascending);
+               .append(urlBase).append("?transport=ssu&amp;sort=").append(ascending);
             buf.append("\" title=\"").append(descr).append("\"><img src=\"/themes/console/images/outbound.png\" alt=\"^\"></a></span>");
         } else {
-            buf.append(" <span class=\"sortdown\"><a href=\"").append(urlBase).append("?tx=ssu&amp;sort=").append(0-ascending);
+            buf.append(" <span class=\"sortdown\"><a href=\"").append(urlBase).append("?transport=ssu&amp;sort=").append(0-ascending);
             buf.append("\" title=\"").append(descr).append("\"><img src=\"/themes/console/images/inbound.png\" alt=\"V\"></a></span>" +
-                       "<span class=\"sortup\"><a href=\"").append(urlBase).append("?tx=ssu&amp;sort=").append(ascending);
+                       "<span class=\"sortup\"><a href=\"").append(urlBase).append("?transport=ssu&amp;sort=").append(ascending);
             buf.append("\" title=\"").append(descr).append("\"><img src=\"/themes/console/images/outbound.png\" alt=\"^\"></a></span>");
         }
     }

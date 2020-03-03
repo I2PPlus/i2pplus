@@ -1,40 +1,38 @@
 /* disable snark's collapsible panels */
 /* fixes a browser engine bug present in Konqueror, Midori, Qupzilla et al */
 
-input#toggle_addtorrent:not(checked) + label + hr + table, input#toggle_createtorrent:not(checked) + label + hr + table,
-input#toggle_addtorrent:checked + label + hr + table, input#toggle_createtorrent:checked + label + hr + table {
-     display: table !important;
+input:not(checked) + label + hr + table, input:not(checked) + label + hr + table + table {
+    display: table !important;
 }
 
-.toggleview, .snarkConfigTitle {
-     border-radius: 0 0 3px 3px !important;
+.snarkConfigTitle {
+    border-radius: 0 0 3px 3px !important;
 }
 
-label.toggleview, label.toggleview:hover, label.toggleview:active, .toggle_input:focus + label.toggleview {
-     box-shadow: inset 0 0 0 1px #fff;
-     background: linear-gradient(to bottom, #fff 0%, #ddd 100%) !important;
-     background: linear-gradient(to bottom, #fff, #eef) !important;
-     cursor: default !important;
+input:checked + .toggleview, input:not(:checked) + .toggleview,
+.toggleview, .toggleview:hover, .toggleview:active {
+    cursor: default !important;
 }
 
-label.toggleview img, .toggle_input:focus + label.toggleview img, label.toggleview:hover img, label.toggleview img:active, label.toggleview:active img {
-     margin: 0 !important;
-     padding: 3px !important;
-     border-radius: 50%;
-     box-shadow: inset 0 0 0 2px #eee;
-     background: #020;
-     background: linear-gradient(to bottom, #99f 50%, #fff 50%);
-     mix-blend-mode: normal !important;
-     transform: none !important;
-     filter: drop-shadow(0 1px 1px #77f) !important;
+div[class] .toggleview img, div[class] .toggleview:hover img, div[class] .toggleview img:hover, div[class] .toggleview img:active, div[class] .toggleview:active img {
+    margin: 0 !important;
+    padding: 5px !important;
+    border: none !important;
+    box-shadow: none !important;
+    background: none !important;
+    background: #020;
+    mix-blend-mode: normal !important;
+    transform: none !important;
+    filter: none !important;
 }
 
-label.toggleview {
-     margin-bottom: -6px !important;
-     padding: 3px 0 !important;
-     min-width: 120px !important;
-     width: 120px !important;
-     font-size: 0 !important;
+div[class] .toggleview, div[class] .toggleview:hover, div[class] .toggleview:active,
+div[class] input:checked + .toggleview, div[class] input:not(:checked) + .toggleview {
+    margin-bottom: -6px !important;
+    padding: 3px 0 !important;
+    font-size: 0 !important;
+    box-shadow: inset 0 0 0 1px #fff !important;
+    background: linear-gradient(to bottom, #fff, #eef) !important;
 }
 
 .configsection .snarkConfigTitle a {
@@ -44,13 +42,18 @@ label.toggleview {
     display: block;
 }
 
-.configsection .snarkConfigTitle a img {
-     margin: -2px -2px 0 0 !important;
-     padding: 0 !important;
+.mainsection input:checked + label + hr + table, .mainsection input:not(checked) + label + hr + table {
+    margin-top: -14px !important;
 }
 
-.toggleview img, .configsection .snarkConfigTitle img {
-     margin: 0 !important;
-     padding: 0 !important;
-     text-align: center !important;
+.mainsection input:checked + .toggleview, .mainsection input:not(checked) + .toggleview {
+    display: none;
+}
+
+.mainsection table {
+    display: table !important;
+}
+
+.mainsection {
+    margin-top: -5px !important;
 }

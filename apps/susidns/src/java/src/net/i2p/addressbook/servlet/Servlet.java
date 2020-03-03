@@ -1,16 +1,16 @@
 /*
  * Copyright (c) 2004 Ragnarok
- * 
+ *
  * Permission is hereby granted, free of charge, to any person obtaining a copy
  * of this software and associated documentation files (the "Software"), to deal
  * in the Software without restriction, including without limitation the rights
  * to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
  * copies of the Software, and to permit persons to whom the Software is
  * furnished to do so, subject to the following conditions:
- * 
+ *
  * The above copyright notice and this permission notice shall be included in
  * all copies or substantial portions of the Software.
- * 
+ *
  * THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
  * IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
  * FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
@@ -36,10 +36,10 @@ import net.i2p.util.Log;
 
 /**
  * A wrapper for addressbook to allow it to be started as a web application.
- * 
+ *
  * This was a GenericServlet, we make it an HttpServlet solely to provide a
  * simple page to display status.
- * 
+ *
  * @since 0.9.30 moved from addressbook to SusiDNS
  * @author Ragnarok
  *
@@ -58,7 +58,7 @@ public class Servlet extends HttpServlet {
      * see javax.servlet.Servlet#service(javax.servlet.ServletRequest, javax.servlet.ServletResponse)
      */
     public void service(HttpServletRequest request, HttpServletResponse response) throws IOException {
-        //System.err.println("Got request nonce = " + request.getParameter("nonce"));
+        //System.err.println("Received request nonce = " + request.getParameter("nonce"));
         //if (this.thread != null && request.getParameter("wakeup") != null &&
         //    this.nonce != null && this.nonce.equals(request.getParameter("nonce"))) {
         //    //System.err.println("Sending interrupt");

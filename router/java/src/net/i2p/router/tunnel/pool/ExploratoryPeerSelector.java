@@ -31,7 +31,7 @@ class ExploratoryPeerSelector extends TunnelPeerSelector {
      * Returns ENDPOINT FIRST, GATEWAY LAST!!!!
      * In: us .. closest .. middle .. IBGW
      * Out: OBGW .. middle .. closest .. us
-     * 
+     *
      * @return ordered list of Hash objects (one per peer) specifying what order
      *         they should appear in a tunnel (ENDPOINT FIRST).  This includes
      *         the local router in the list.  If there are no tunnels or peers
@@ -40,19 +40,19 @@ class ExploratoryPeerSelector extends TunnelPeerSelector {
      */
     public List<Hash> selectPeers(TunnelPoolSettings settings) {
         int length = getLength(settings);
-        if (length < 0) { 
+        if (length < 0) {
             if (log.shouldLog(Log.DEBUG))
-                log.debug("Length requested is zero: " + settings);
+                log.debug("Tunnel length requested is zero: " + settings);
             return null;
         }
-        
+
         //if (false && shouldSelectExplicit(settings)) {
         //    List<Hash> rv = selectExplicit(settings, length);
         //    if (l.shouldLog(Log.DEBUG))
         //        l.debug("Explicit peers selected: " + rv);
         //    return rv;
         //}
-        
+
         boolean isInbound = settings.isInbound();
         Set<Hash> exclude = getExclude(isInbound, true);
         exclude.add(ctx.routerHash());
@@ -95,23 +95,23 @@ class ExploratoryPeerSelector extends TunnelPeerSelector {
                 // that the adjacent hop can connect to us.
                 // use only connected peers so we don't make more connections
                 if (log.shouldLog(Log.INFO))
-                    log.info("EPS SANFP closest " + (isInbound ? "IB" : "OB") + " exclude " + closestExclude.size());
+                    log.info("Selecting all Non-Failing peers: Closest " + (isInbound ? "Inbound" : "Outbound") + ", excluding " + closestExclude.size());
                 // SANFP adds all not-connected to exclude, so make a copy
                 Set<Hash> SANFPExclude = new HashSet<Hash>(closestExclude);
                 ctx.profileOrganizer().selectActiveNotFailingPeers(1, SANFPExclude, closest);
                 if (closest.isEmpty()) {
                     // ANFP does not fall back to non-connected
                     if (log.shouldLog(Log.INFO))
-                        log.info("EPS SFP closest " + (isInbound ? "IB" : "OB") + " exclude " + closestExclude.size());
+                        log.info("Selecting Fast peers: Closest " + (isInbound ? "Inbound" : "Outbound") + ", excluding " + closestExclude.size());
                     ctx.profileOrganizer().selectFastPeers(1, closestExclude, closest);
                 }
             } else if (exploreHighCap) {
                 if (log.shouldLog(Log.INFO))
-                    log.info("EPS SHCP closest " + (isInbound ? "IB" : "OB") + " exclude " + closestExclude.size());
+                    log.info("Selecting High Capacity peers: Closest " + (isInbound ? "Inbound" : "Outbound") + ", excluding " + closestExclude.size());
                 ctx.profileOrganizer().selectHighCapacityPeers(1, closestExclude, closest);
             } else {
                 if (log.shouldLog(Log.INFO))
-                    log.info("EPS SNFP closest " + (isInbound ? "IB" : "OB") + " exclude " + closestExclude.size());
+                    log.info("Selecting Non-Failing peers: Closest " + (isInbound ? "Inbound" : "Outbound") + ", excluding " + closestExclude.size());
                 ctx.profileOrganizer().selectNotFailingPeers(1, closestExclude, closest, false);
             }
             if (!closest.isEmpty()) {
@@ -151,14 +151,14 @@ class ExploratoryPeerSelector extends TunnelPeerSelector {
             if (pickFurthest) {
                 Set<Hash> furthest = new HashSet<Hash>(1);
                 if (log.shouldLog(Log.INFO))
-                    log.info("EPS SANFP furthest OB exclude " + exclude.size());
+                    log.info("Selecting all Non-Failing peers, excluding " + exclude.size() + " furthest Outbound");
                 // ANFP adds all not-connected to exclude, so make a copy
                 Set<Hash> SANFPExclude = new HashSet<Hash>(exclude);
                 ctx.profileOrganizer().selectActiveNotFailingPeers(1, SANFPExclude, furthest);
                 if (furthest.isEmpty()) {
                     // ANFP does not fall back to non-connected
                     if (log.shouldLog(Log.INFO))
-                        log.info("EPS SFP furthest OB exclude " + exclude.size());
+                        log.info("Selecting Fast peers, excluding " + exclude.size() + " furthest Outbound");
                     ctx.profileOrganizer().selectFastPeers(1, exclude, furthest);
                 }
                 if (!furthest.isEmpty()) {
@@ -183,7 +183,7 @@ class ExploratoryPeerSelector extends TunnelPeerSelector {
             //
             if (exploreHighCap) {
                 if (log.shouldLog(Log.INFO))
-                    log.info("EPS SHCP " + length + (isInbound ? " IB" : " OB") + " exclude " + exclude.size());
+                    log.info("Selecting " + length + " High Capacity peers for " + (isInbound ? " Inbound" : " Outbound") + " Exploratory tunnel, excluding " + exclude.size());
                 ctx.profileOrganizer().selectHighCapacityPeers(length, exclude, matches);
             } else {
                 // As of 0.9.23, we include a max of 2 not failing peers,
@@ -192,7 +192,7 @@ class ExploratoryPeerSelector extends TunnelPeerSelector {
                 if (length > 2)
                     ctx.profileOrganizer().selectHighCapacityPeers(length - 2, exclude, matches);
                 if (log.shouldLog(Log.INFO))
-                    log.info("EPS SNFP " + length + (isInbound ? " IB" : " OB") + " exclude " + exclude.size());
+                    log.info("Selecting " + length + " Non-Failing peers for " + (isInbound ? " Inbound" : " Outbound") + " Exploratory tunnel, excluding " + exclude.size());
                 ctx.profileOrganizer().selectNotFailingPeers(length, exclude, matches, false);
             }
             matches.remove(ctx.routerHash());
@@ -230,10 +230,12 @@ class ExploratoryPeerSelector extends TunnelPeerSelector {
         }
         return rv;
     }
-    
+
     private static final int MIN_NONFAILING_PCT = 15;
-    private static final int MIN_ACTIVE_PEERS_STARTUP = 6;
-    private static final int MIN_ACTIVE_PEERS = 12;
+//    private static final int MIN_ACTIVE_PEERS_STARTUP = 6;
+    private static final int MIN_ACTIVE_PEERS_STARTUP = 8;
+//    private static final int MIN_ACTIVE_PEERS = 12;
+    private static final int MIN_ACTIVE_PEERS = 20;
 
     /**
      *  Should we pick from the high cap pool instead of the larger not failing pool?
@@ -268,7 +270,7 @@ class ExploratoryPeerSelector extends TunnelPeerSelector {
 
         // ok, if we aren't explicitly asking for it, we should try to pick peers
         // randomly from the 'not failing' pool.  However, if we are having a
-        // hard time building exploratory tunnels, lets fall back again on the
+        // hard time building exploratory tunnels, let's fall back again on the
         // high capacity peers, at least for a little bit.
         int failPct;
         // getEvents() will be 0 for first 10 minutes
@@ -285,7 +287,7 @@ class ExploratoryPeerSelector extends TunnelPeerSelector {
         }
         return (failPct >= ctx.random().nextInt(100));
     }
-    
+
     /**
      * We should really use the difference between the exploratory fail rate
      * and the high capacity fail rate - but we don't have a stat for high cap,
@@ -321,11 +323,11 @@ class ExploratoryPeerSelector extends TunnelPeerSelector {
         double pct = (double)(reject + timeout) / (accept + reject + timeout);
         return (int)(100 * pct);
     }
-    
+
     /** Use current + last to get more recent and smoother data */
     private int getEvents(String stat, long period) {
         RateStat rs = ctx.statManager().getRate(stat);
-        if (rs == null) 
+        if (rs == null)
             return 0;
         Rate r = rs.getRate(period);
         if (r == null)

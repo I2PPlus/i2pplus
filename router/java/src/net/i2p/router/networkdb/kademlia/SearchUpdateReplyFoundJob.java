@@ -31,15 +31,15 @@ class SearchUpdateReplyFoundJob extends JobImpl implements ReplyJob {
     private final TunnelInfo _replyTunnel;
     private final boolean _isFloodfillPeer;
     private final long _sentOn;
-    
-    public SearchUpdateReplyFoundJob(RouterContext context, RouterInfo peer, 
-                                     SearchState state, KademliaNetworkDatabaseFacade facade, 
+
+    public SearchUpdateReplyFoundJob(RouterContext context, RouterInfo peer,
+                                     SearchState state, KademliaNetworkDatabaseFacade facade,
                                      SearchJob job) {
         this(context, peer, state, facade, job, null, null);
     }
 
-    public SearchUpdateReplyFoundJob(RouterContext context, RouterInfo peer, 
-                                     SearchState state, KademliaNetworkDatabaseFacade facade, 
+    public SearchUpdateReplyFoundJob(RouterContext context, RouterInfo peer,
+                                     SearchState state, KademliaNetworkDatabaseFacade facade,
                                      SearchJob job, TunnelInfo outTunnel, TunnelInfo replyTunnel) {
         super(context);
         _log = context.logManager().getLog(SearchUpdateReplyFoundJob.class);
@@ -52,8 +52,8 @@ class SearchUpdateReplyFoundJob extends JobImpl implements ReplyJob {
         _replyTunnel = replyTunnel;
         _sentOn = System.currentTimeMillis();
     }
-    
-    public String getName() { return "Update Reply Found for Kademlia Search"; }
+
+    public String getName() { return "Update Kademlia Search Reply Found "; }
 
     public void runJob() {
         if (_isFloodfillPeer)
@@ -61,13 +61,13 @@ class SearchUpdateReplyFoundJob extends JobImpl implements ReplyJob {
 
         I2NPMessage message = _message;
         if (_log.shouldLog(Log.INFO))
-            _log.info(getJobId() + ": Reply from " + _peer.toBase64() 
-                      + " with message " + message.getClass().getSimpleName());
-        
+            _log.info("[Job " + getJobId() + "] Reply from [" + _peer.toBase64().substring(0,6)
+                      + "] with " + message.getClass().getSimpleName().replace("Database", "Db").replace("Message", "Msg"));
+
         long howLong = System.currentTimeMillis() - _sentOn;
         // assume requests are 1KB (they're almost always much smaller, but tunnels have a fixed size)
         int msgSize = 1024;
-        
+
         if (_replyTunnel != null) {
             for (int i = 0; i < _replyTunnel.getLength(); i++)
                 getContext().profileManager().tunnelDataPushed(_replyTunnel.getPeer(i), howLong, msgSize);
@@ -78,7 +78,7 @@ class SearchUpdateReplyFoundJob extends JobImpl implements ReplyJob {
                 getContext().profileManager().tunnelDataPushed(_outTunnel.getPeer(i), howLong, msgSize);
             _outTunnel.incrementVerifiedBytesTransferred(msgSize);
         }
-        
+
         int type = message.getType();
         if (type == DatabaseStoreMessage.MESSAGE_TYPE) {
             long timeToReply = _state.dataFound(_peer);
@@ -94,7 +94,8 @@ class SearchUpdateReplyFoundJob extends JobImpl implements ReplyJob {
                 // searchNext() will call fail()
             } catch (IllegalArgumentException iae) {
                 if (_log.shouldLog(Log.WARN))
-                    _log.warn("Peer " + _peer + " sent us invalid data: ", iae);
+//                    _log.warn("Peer " + _peer + " sent us invalid data: ", iae);
+                    _log.warn("Peer [" + _peer.toBase64().substring(0,6) + "] sent us invalid data\n* " + iae.getMessage());
                 // blame the peer
                 getContext().profileManager().dbLookupReply(_peer, 0, 0, 1, 0, timeToReply);
             }
@@ -102,12 +103,12 @@ class SearchUpdateReplyFoundJob extends JobImpl implements ReplyJob {
             _job.replyFound((DatabaseSearchReplyMessage)message, _peer);
         } else {
             if (_log.shouldLog(Log.ERROR))
-                _log.error(getJobId() + ": What?! Reply job matched a strange message: " + message);
+                _log.error("[Job" + getJobId() + "] What?! Reply job matched a strange message: " + message);
             return;
         }
-        
+
         _job.searchNext();
     }
-    
+
     public void setMessage(I2NPMessage message) { _message = message; }
 }

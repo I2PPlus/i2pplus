@@ -47,14 +47,14 @@ class UDPReceiver {
         if (_handler == null)
             throw new IllegalStateException();
         _runner = new Runner();
-        //_context.statManager().createRateStat("udp.receivePacketSize", "How large packets received are", "udp", UDPTransport.RATES);
-        //_context.statManager().createRateStat("udp.receiveRemaining", "How many packets are left sitting on the receiver's queue", "udp", UDPTransport.RATES);
-        //_context.statManager().createRateStat("udp.droppedInbound", "How many packet are queued up but not yet received when we drop", "udp", UDPTransport.RATES);
-        _context.statManager().createRateStat("udp.receiveHolePunch", "How often we receive a NAT hole punch", "udp", UDPTransport.RATES);
-        _context.statManager().createRateStat("udp.ignorePacketFromDroplist", "Packet lifetime for those dropped on the drop list", "udp", UDPTransport.RATES);
-        _context.statManager().createRateStat("udp.receiveFailsafe", "limiter stuck?", "udp", new long[] { 24*60*60*1000L });
+        //_context.statManager().createRateStat("udp.receivePacketSize", "How large packets received are", "Transport [UDP]", UDPTransport.RATES);
+        //_context.statManager().createRateStat("udp.receiveRemaining", "How many packets are left sitting on the receiver's queue", "Transport [UDP]", UDPTransport.RATES);
+        //_context.statManager().createRateStat("udp.droppedInbound", "How many packet are queued up but not yet received when we drop", "Transport [UDP]", UDPTransport.RATES);
+        _context.statManager().createRateStat("udp.receiveHolePunch", "How often we receive a NAT hole punch", "Transport [UDP]", UDPTransport.RATES);
+        _context.statManager().createRateStat("udp.ignorePacketFromDroplist", "Packet lifetime for those dropped on the drop list", "Transport [UDP]", UDPTransport.RATES);
+        _context.statManager().createRateStat("udp.receiveFailsafe", "limiter stuck?", "Transport [UDP]", new long[] { 24*60*60*1000L });
     }
-    
+
     /**
      *  Cannot be restarted (socket is final)
      */
@@ -64,16 +64,16 @@ class UDPReceiver {
         I2PThread t = new I2PThread(_runner, _name, true);
         t.start();
     }
-    
+
     public synchronized void shutdown() {
         _keepRunning = false;
     }
-    
+
 /*********
     private void adjustDropProbability() {
         String p = _context.getProperty("i2np.udp.dropProbability");
         if (p != null) {
-            try { 
+            try {
                 ARTIFICIAL_DROP_PROBABILITY = Integer.parseInt(p);
             } catch (NumberFormatException nfe) {}
             if (ARTIFICIAL_DROP_PROBABILITY < 0) ARTIFICIAL_DROP_PROBABILITY = 0;
@@ -82,9 +82,9 @@ class UDPReceiver {
         }
     }
 **********/
-    
+
     /**
-     * Replace the old listen port with the new one, returning the old. 
+     * Replace the old listen port with the new one, returning the old.
      * NOTE: this closes the old socket so that blocking calls unblock!
      *
      */
@@ -96,21 +96,21 @@ class UDPReceiver {
 
     /** if a packet been sitting in the queue for a full second (meaning the handlers are overwhelmed), drop subsequent packets */
     private static final long MAX_QUEUE_PERIOD = 2*1000;
-    
+
 /*********
     private static int ARTIFICIAL_DROP_PROBABILITY = 0; // 4
-    
+
     private static final int ARTIFICIAL_DELAY = 0; // 200;
     private static final int ARTIFICIAL_DELAY_BASE = 0; //600;
 **********/
-    
+
     /** @return zero (was queue size) */
     private int receive(UDPPacket packet) {
 /*********
         //adjustDropProbability();
-        
-        if (ARTIFICIAL_DROP_PROBABILITY > 0) { 
-            // the first check is to let the compiler optimize away this 
+
+        if (ARTIFICIAL_DROP_PROBABILITY > 0) {
+            // the first check is to let the compiler optimize away this
             // random block on the live system when the probability is == 0
             // (not if it isn't final jr)
             int v = _context.random().nextInt(100);
@@ -123,7 +123,7 @@ class UDPReceiver {
                 _context.statManager().addRateData("udp.acceptedInboundProbabalistically", 1, 0);
             }
         }
-        
+
         if ( (ARTIFICIAL_DELAY > 0) || (ARTIFICIAL_DELAY_BASE > 0) ) {
             long delay = ARTIFICIAL_DELAY_BASE + _context.random().nextInt(ARTIFICIAL_DELAY);
             if (_log.shouldLog(Log.INFO))
@@ -132,7 +132,7 @@ class UDPReceiver {
             return -1;
         }
 **********/
-        
+
         return doReceive(packet);
     }
 
@@ -146,12 +146,12 @@ class UDPReceiver {
             return 0;
 
         if (_log.shouldLog(Log.INFO))
-            _log.info("Received: " + packet);
-        
+            _log.info("Received UDP packet" + packet);
+
         RemoteHostId from = packet.getRemoteHost();
         if (_transport.isInDropList(from)) {
             if (_log.shouldLog(Log.INFO))
-                _log.info("Ignoring packet from the drop-listed peer: " + from);
+                _log.info("Ignoring UDP packet from the drop-listed peer: " + from);
             _context.statManager().addRateData("udp.ignorePacketFromDroplist", packet.getLifetime());
             packet.release();
             return 0;
@@ -160,7 +160,7 @@ class UDPReceiver {
         // drop anything apparently from our IP (any port)
         if (Arrays.equals(from.getIP(), _transport.getExternalIP()) && !_transport.allowLocal()) {
             if (_log.shouldLog(Log.WARN))
-                _log.warn("Dropping (spoofed?) packet from ourselves");
+                _log.warn("Dropping (spoofed?) UDP packet from ourselves");
             packet.release();
             return 0;
         }
@@ -190,7 +190,7 @@ class UDPReceiver {
                 return 0;
 /****
             }
-        
+
         // rejected
         packet.release();
         _context.statManager().addRateData("udp.droppedInbound", queueSize, headPeriod);
@@ -207,7 +207,7 @@ class UDPReceiver {
         return queueSize;
 ****/
     }
-    
+
   /****
     private class ArtificiallyDelayedReceive implements SimpleTimer.TimedEvent {
         private UDPPacket _packet;
@@ -215,8 +215,8 @@ class UDPReceiver {
         public void timeReached() { doReceive(_packet); }
     }
   ****/
-    
-    
+
+
     private class Runner implements Runnable {
         //private volatile boolean _socketChanged;
 
@@ -234,13 +234,13 @@ class UDPReceiver {
                 // http://code.google.com/p/android/issues/detail?id=24748
                 if (_isAndroid)
                     dpacket.setLength(UDPPacket.MAX_PACKET_SIZE);
-                
+
                 // block before we read...
                 //if (_log.shouldLog(Log.DEBUG))
                 //    _log.debug("Before throttling receive");
                 while (!_context.throttle().acceptNetworkMessage())
                     try { Thread.sleep(10); } catch (InterruptedException ie) {}
-                
+
                 try {
                     //if (_log.shouldLog(Log.INFO))
                     //    _log.info("Before blocking socket.receive on " + System.identityHashCode(packet));
@@ -249,14 +249,14 @@ class UDPReceiver {
                     //}
                     int size = dpacket.getLength();
                     if (_log.shouldLog(Log.INFO))
-                        _log.info("After blocking socket.receive: packet is " + size + " bytes on " + System.identityHashCode(packet));
+                        _log.info("After blocking socket.receive, packet is " + size + " bytes on " + System.identityHashCode(packet));
                     packet.resetBegin();
-            
+
                     // and block after we know how much we read but before
                     // we release the packet to the inbound queue
                     if (size >= UDPPacket.MAX_PACKET_SIZE) {
                         // DatagramSocket javadocs: If the message is longer than the packet's length, the message is truncated.
-                        throw new IOException("packet too large! truncated and dropped from: " + packet.getRemoteHost());
+                        throw new IOException("Packet too large! Truncated and dropped from: " + packet.getRemoteHost());
                     }
                     if (_context.commSystem().isDummy()) {
                         // testing
@@ -276,14 +276,14 @@ class UDPReceiver {
                             req.abort();
                             _context.statManager().addRateData("udp.receiveFailsafe", 1);
                         }
-                        
+
                         receive(packet);
                         //_context.statManager().addRateData("udp.receivePacketSize", size);
                     } else {
                         _context.statManager().addRateData("udp.receiveHolePunch", 1);
                         // nat hole punch packets are 0 bytes
                         if (_log.shouldLog(Log.INFO))
-                            _log.info("Received a 0 byte udp packet from " + dpacket.getAddress() + ":" + dpacket.getPort());
+                            _log.info("Received a 0 byte udp packet from [" + dpacket.getAddress() + ":" + dpacket.getPort()+ "]");
                         _transport.getEstablisher().receiveHolePunch(dpacket.getAddress(), dpacket.getPort());
                         packet.release();
                     }
@@ -308,9 +308,9 @@ class UDPReceiver {
                 }
             }
             if (_log.shouldLog(Log.WARN))
-                _log.warn("Stop receiving on " + _endpoint);
+                _log.warn("Stopped receiving on: " + _endpoint);
         }
-        
+
      /******
         public DatagramSocket updateListeningPort(DatagramSocket socket, int newPort) {
             _name = "UDPReceive on " + newPort;

@@ -7,19 +7,19 @@ import java.util.Locale;
 
 /**
  * Sorters
- * 
+ *
  * @since 0.9.34 pulled out of WebMail
  */
 class Sorters {
 
 	/**
 	 * Base for the various sorters
-	 * 
+	 *
 	 * @since 0.9.13
 	 */
 	private abstract static class SorterBase implements Comparator<String>, Serializable {
 		private final MailCache mailCache;
-		
+
 		/**
 		 * Set MailCache object, where to get Mails from
 		 * @param mailCache
@@ -28,7 +28,7 @@ class Sorters {
 		{
 			this.mailCache = mailCache;
 		}
-		
+
 		/**
 		 *  Gets mail from the cache, checks for null, then compares
 		 */
@@ -43,7 +43,7 @@ class Sorters {
 			if (rv != 0)
 				return rv;
 			return fallbackCompare(a, b);
-		}		
+		}
 
 		/**
 		 * @param a non-null
@@ -62,7 +62,7 @@ class Sorters {
 
 	/**
 	 * sorts Mail objects by sender field
-	 * 
+	 *
 	 * @author susi
 	 */
 	public static class SenderSorter extends SorterBase {
@@ -73,7 +73,7 @@ class Sorters {
 		{
 			super(mailCache);
 		}
-		
+
 		protected int compare(Mail a, Mail b) {
 			String as = a.sender.replace("\"", "").replace("<", "").replace(">", "");
 			String bs = b.sender.replace("\"", "").replace("<", "").replace(">", "");
@@ -112,7 +112,7 @@ class Sorters {
 			if (b.to.length > minsz)
 				return -1;
 			return 0;
-		}		
+		}
 	}
 
 	/**
@@ -129,7 +129,7 @@ class Sorters {
 		{
 			super(mailCache);
 		}
-		
+
 		protected int compare(Mail a, Mail b) {
 			String as = a.subject;
 			String bs = b.subject;
@@ -160,7 +160,7 @@ class Sorters {
 				}
 			}
 			return collator.compare(as, bs);
-		}		
+		}
 	}
 
 	/**
@@ -173,7 +173,7 @@ class Sorters {
 		{
 			super(mailCache);
 		}
-		
+
 		protected int compare(Mail a, Mail b) {
 			return scompare(a, b);
 		}
@@ -185,7 +185,7 @@ class Sorters {
 		 */
 		public static int scompare(Mail a, Mail b) {
 			return a.date != null ? ( b.date != null ? a.date.compareTo( b.date ) : -1 ) : ( b.date != null ? 1 : 0 );
-		}		
+		}
 	}
 
 	/**
@@ -198,7 +198,7 @@ class Sorters {
 		{
 			super(mailCache);
 		}
-		
+
 		protected int compare(Mail a, Mail b) {
 			long as = a.getSize();
 			long bs = b.getSize();
@@ -207,6 +207,6 @@ class Sorters {
 			if (as < bs)
 				return -1;
 			return 0;
-		}		
+		}
 	}
 }

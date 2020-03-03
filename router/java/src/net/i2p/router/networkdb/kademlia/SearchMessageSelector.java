@@ -25,7 +25,7 @@ class SearchMessageSelector implements MessageSelector {
     private final int _id;
     private final long _exp;
     private final SearchState _state;
-    
+
     public SearchMessageSelector(RouterContext context, RouterInfo peer, long expiration, SearchState state) {
         _context = context;
         _log = context.logManager().getLog(SearchMessageSelector.class);
@@ -34,28 +34,28 @@ class SearchMessageSelector implements MessageSelector {
         _state = state;
         _id = __searchSelectorId.incrementAndGet();
         if (_log.shouldLog(Log.DEBUG))
-            _log.debug("[" + _id + "] Created: " + toString());
+            _log.debug("[ID " + _id + "] Created: " + toString());
     }
-    
+
     @Override
-    public String toString() { 
-        return "Search selector [" + _id + "] looking for a reply from " + _peer
-               + " with regards to " + _state.getTarget(); 
+    public String toString() {
+        return "Search selector \n* Looking for reply from [" + _peer.toBase64().substring(0,6) +
+                 "] concerning [" + _state.getTarget().toBase64().substring(0,6) + "]";
     }
-    
+
     public boolean continueMatching() {
         boolean expired = _context.clock().now() > _exp;
         if (expired) return false;
-        
+
         // so we dont drop outstanding replies after receiving the value
         // > 1 to account for the 'current' match
-        if (_state.getPending().size() > 1) 
+        if (_state.getPending().size() > 1)
             return true;
-        
+
         if (_found) {
             if (_log.shouldLog(Log.DEBUG))
-                _log.debug("[" + _id + "] Dont continue matching! looking for a reply from " 
-                           + _peer + " with regards to " + _state.getTarget());
+                _log.debug("[ID " + _id + "] Don't continue matching! Looking for reply from [" +
+                           _peer.toBase64().substring(0,6) + "] concerning [" + _state.getTarget().toBase64().substring(0,6) + "]");
             return false;
         } else {
             return true;
@@ -66,22 +66,22 @@ class SearchMessageSelector implements MessageSelector {
 
     public boolean isMatch(I2NPMessage message) {
         if (_log.shouldLog(Log.DEBUG))
-            _log.debug("[" + _id + "] isMatch("+message.getClass().getName() 
-                       + ") [want dbStore or dbSearchReply from " + _peer 
-                       + " for " + _state.getTarget() + "]");
+            _log.debug("[ID " + _id + "] isMatch -> " + message.getClass().getName().replace("net.i2p.data.i2np.", "").replace("Message", "Msg").replace("Database", "Db") +
+                       "\n* Requested: DbStore or DbSearchReply from [" + _peer.toBase64().substring(0,6) + "] for [" +
+                       _state.getTarget().toBase64().substring(0,6) + "]");
         int type = message.getType();
         if (type == DatabaseStoreMessage.MESSAGE_TYPE) {
             DatabaseStoreMessage msg = (DatabaseStoreMessage)message;
             if (msg.getKey().equals(_state.getTarget())) {
                 if (_log.shouldLog(Log.DEBUG))
-                    _log.debug("[" + _id + "] Was a DBStore of the key we're looking for.  " 
-                               + "May not have been from who we're checking against though, "
-                               + "but DBStore doesn't include that info");
+                    _log.debug("[ID " + _id + "] Received DbStore of the key we're looking for. " +
+                               "May not have been from peer we're checking against though, " +
+                               "but DBStore doesn't include that info");
                 _found = true;
                 return true;
             } else {
                 if (_log.shouldLog(Log.DEBUG))
-                    _log.debug("[" + _id + "] DBStore of a key we're not looking for");
+                    _log.debug("[ID " + _id + "] Received DbStore of a key we're not looking for");
                 return false;
             }
         } else if (type == DatabaseSearchReplyMessage.MESSAGE_TYPE) {
@@ -89,20 +89,18 @@ class SearchMessageSelector implements MessageSelector {
             if (_peer.equals(msg.getFromHash())) {
                 if (msg.getSearchKey().equals(_state.getTarget())) {
                     if (_log.shouldLog(Log.DEBUG))
-                        _log.debug("[" + _id + "] Was a DBSearchReply from who we're "
-                                   + "checking with for a key we're looking for");
+                        _log.debug("[ID " + _id + "] Received DbSearchReply from queried peer for a key we're looking for");
                     _found = true;
                     return true;
                 } else {
                     if (_log.shouldLog(Log.DEBUG))
-                        _log.debug("[" + _id + "] Was a DBSearchReply from who we're checking "
-                                   + "with but NOT for the key we're looking for");
+                        _log.debug("[ID " + _id + "] Received DbSearchReply from queried peer, but NOT for the key we're looking for");
                     return false;
                 }
             } else {
                 if (_log.shouldLog(Log.DEBUG))
-                    _log.debug("[" + _id + "] DBSearchReply from someone we are not checking with [" 
-                               + msg.getFromHash() + ", not " + _state.getTarget() + "]");
+                    _log.debug("[ID " + _id + "] DbSearchReply from unqueried peer [" +
+                               msg.getFromHash().toBase64().substring(0,6) + "] not [" + _state.getTarget().toBase64().substring(0,6) + "]");
                 return false;
             }
         } else {

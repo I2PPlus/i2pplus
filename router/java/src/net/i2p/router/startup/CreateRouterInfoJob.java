@@ -51,7 +51,7 @@ import net.i2p.util.SystemVersion;
 public class CreateRouterInfoJob extends JobImpl {
     private final Log _log;
     private final Job _next;
-    
+
     public static final String INFO_FILENAME = "router.info";
     public static final String KEYS_FILENAME = "router.keys";
     public static final String KEYS2_FILENAME = "router.keys.dat";
@@ -64,9 +64,9 @@ public class CreateRouterInfoJob extends JobImpl {
         _next = next;
         _log = ctx.logManager().getLog(CreateRouterInfoJob.class);
     }
-    
-    public String getName() { return "Create New Router Info"; }
-    
+
+    public String getName() { return "Create New Local Router Info"; }
+
     public void runJob() {
         _log.debug("Creating the new router info");
         // create a new router info and store it where LoadRouterInfoJob looks
@@ -75,7 +75,7 @@ public class CreateRouterInfoJob extends JobImpl {
         }
         getContext().jobQueue().addJob(_next);
     }
-    
+
     /**
      *  Writes 6 files: router.info (standard RI format),
      *  router.keys.dat, and 4 individual key files under keyBackup/
@@ -132,12 +132,12 @@ public class CreateRouterInfoJob extends JobImpl {
             info.setIdentity(ident);
             Properties stats = ctx.statPublisher().publishStatistics(ident.getHash());
             info.setOptions(stats);
-            
+
             info.sign(signingPrivKey);
 
             if (!info.isValid())
                 throw new DataFormatException("RouterInfo we just built is invalid: " + info);
-            
+
             // remove router.keys
             (new File(ctx.getRouterDir(), KEYS_FILENAME)).delete();
 
@@ -145,13 +145,13 @@ public class CreateRouterInfoJob extends JobImpl {
             File ifile = new File(ctx.getRouterDir(), INFO_FILENAME);
             fos1 = new BufferedOutputStream(new SecureFileOutputStream(ifile));
             info.writeBytes(fos1);
-            
+
             // write router.keys.dat
             File kfile = new File(ctx.getRouterDir(), KEYS2_FILENAME);
             PrivateKeyFile pkf = new PrivateKeyFile(kfile, pubkey, signingPubKey, cert,
                                                     privkey, signingPrivKey, padding);
             pkf.write();
-            
+
             // set or overwrite old random keys
             Map<String, String> map = new HashMap<String, String>(2);
             byte rk[] = new byte[32];
@@ -162,7 +162,7 @@ public class CreateRouterInfoJob extends JobImpl {
             ctx.router().saveConfig(map, null);
 
             ctx.keyManager().setKeys(pubkey, privkey, signingPubKey, signingPrivKey);
-            
+
             if (_log.shouldLog(Log.INFO))
                 _log.info("Router info created and stored at " + ifile.getAbsolutePath() + " with private keys stored at " + kfile.getAbsolutePath() + " [" + info + "]");
             ctx.router().eventLog().addEvent(EventLog.REKEYED, ident.calculateHash().toBase64());
@@ -177,7 +177,7 @@ public class CreateRouterInfoJob extends JobImpl {
         }
         return info;
     }
-    
+
     /**
      *  The configured SigType to expect on read-in
      *  @since 0.9.16
@@ -195,7 +195,7 @@ public class CreateRouterInfoJob extends JobImpl {
             cstype = SigType.DSA_SHA1;
         return cstype;
     }
-    
+
     /**
      * We probably don't want to expose the exact time at which a router published its info.
      * perhaps round down to the nearest minute?  10 minutes?  30 minutes?  day?

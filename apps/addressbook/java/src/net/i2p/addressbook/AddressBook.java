@@ -1,16 +1,16 @@
 /*
  * Copyright (c) 2004 Ragnarok
- * 
+ *
  * Permission is hereby granted, free of charge, to any person obtaining a copy
  * of this software and associated documentation files (the "Software"), to deal
  * in the Software without restriction, including without limitation the rights
  * to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
  * copies of the Software, and to permit persons to whom the Software is
  * furnished to do so, subject to the following conditions:
- * 
+ *
  * The above copyright notice and this permission notice shall be included in
  * all copies or substantial portions of the Software.
- * 
+ *
  * THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
  * IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
  * FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
@@ -38,11 +38,11 @@ import net.i2p.util.SecureFile;
  * An address book for storing human readable names mapped to base64 i2p
  * destinations. AddressBooks can be created from local and remote files, merged
  * together, and written out to local files.
- * 
+ *
  * Methods are NOT thread-safe.
- * 
+ *
  * @author Ragnarok
- *  
+ *
  */
 class AddressBook implements Iterable<Map.Entry<String, HostTxtEntry>> {
 
@@ -75,7 +75,7 @@ class AddressBook implements Iterable<Map.Entry<String, HostTxtEntry>> {
 
     /**
      * Construct an AddressBook from the contents of the Map addresses.
-     * 
+     *
      * @param addresses
      *            A Map containing human readable addresses as keys, mapped to
      *            base64 i2p destinations.
@@ -89,7 +89,7 @@ class AddressBook implements Iterable<Map.Entry<String, HostTxtEntry>> {
     /*
      * Construct an AddressBook from the contents of the file at url. If the
      * remote file cannot be read, construct an empty AddressBook
-     * 
+     *
      * @param url
      *            A URL pointing at a file with lines in the format "key=value",
      *            where key is a human readable name, and value is a base64 i2p
@@ -99,7 +99,7 @@ class AddressBook implements Iterable<Map.Entry<String, HostTxtEntry>> {
     public AddressBook(String url, String proxyHost, int proxyPort) {
         this.location = url;
         EepGet get = new EepGet(I2PAppContext.getGlobalContext(), true,
-                proxyHost, proxyPort, 0, "addressbook.tmp", url, true, 
+                proxyHost, proxyPort, 0, "addressbook.tmp", url, true,
                 null);
         get.fetch();
         try {
@@ -117,14 +117,14 @@ class AddressBook implements Iterable<Map.Entry<String, HostTxtEntry>> {
      * address book at subscription has not changed since the last time it was
      * read or cannot be read, return an empty AddressBook.
      * Set a maximum size of the remote book to make it a little harder for a malicious book-sender.
-     * 
+     *
      * Yes, the EepGet fetch() is done in this constructor.
-     * 
+     *
      * This stores the subscription in a temporary file and does not read the whole thing into memory.
      * An AddressBook created with this constructor may not be modified or written using write().
      * It may be a merge source (an parameter for another AddressBook's merge())
      * but may not be a merge target (this.merge() will throw an exception).
-     * 
+     *
      * @param subscription
      *            A Subscription instance pointing at a remote address book.
      * @param proxyHost hostname of proxy
@@ -137,13 +137,15 @@ class AddressBook implements Iterable<Map.Entry<String, HostTxtEntry>> {
         try {
             tmp = SecureFile.createTempFile("addressbook", null, I2PAppContext.getGlobalContext().getTempDir());
             EepGet get = new EepGet(I2PAppContext.getGlobalContext(), true,
-                    proxyHost, proxyPort, 0, -1l, MAX_SUB_SIZE, tmp.getAbsolutePath(), null,
+//                    proxyHost, proxyPort, 0, -1l, MAX_SUB_SIZE, tmp.getAbsolutePath(), null,
+                    proxyHost, proxyPort, 10, -1l, MAX_SUB_SIZE, tmp.getAbsolutePath(), null,
                     subscription.getLocation(), true, subscription.getEtag(), subscription.getLastModified(), null);
             if (get.fetch()) {
                 subscription.setEtag(get.getETag());
                 subscription.setLastModified(get.getLastModified());
                 subscription.setLastFetched(I2PAppContext.getGlobalContext().clock().now());
                 subf = tmp;
+                System.out.println("[" + subscription.getLocation() + "] Last modified: " + get.getLastModified());
             } else {
                 a = Collections.emptyMap();
                 tmp.delete();
@@ -163,7 +165,7 @@ class AddressBook implements Iterable<Map.Entry<String, HostTxtEntry>> {
      * file cannot be read, construct an empty AddressBook.
      * This reads the entire file into memory.
      * The resulting map is modifiable and may be a merge target.
-     * 
+     *
      * @param file
      *            A File pointing at a file with lines in the format
      *            "key=value", where key is a human readable name, and value is
@@ -183,7 +185,7 @@ class AddressBook implements Iterable<Map.Entry<String, HostTxtEntry>> {
 
     /**
      * Test only.
-     * 
+     *
      * @param testsubfile path to a file containing the simulated fetch of a subscription
      * @since 0.9.26
      */
@@ -224,7 +226,7 @@ class AddressBook implements Iterable<Map.Entry<String, HostTxtEntry>> {
 
     /**
      * Return the location of the file this AddressBook was constructed from.
-     * 
+     *
      * @return A String representing either an abstract path, or a url,
      *         depending on how the instance was constructed.
      *         Will be null if created with the Map constructor.
@@ -235,7 +237,7 @@ class AddressBook implements Iterable<Map.Entry<String, HostTxtEntry>> {
 
     /**
      * Return a string representation of the origin of the AddressBook.
-     * 
+     *
      * @return A String representing the origin of the AddressBook.
      */
     @Override
@@ -250,15 +252,15 @@ class AddressBook implements Iterable<Map.Entry<String, HostTxtEntry>> {
      * hostname was already converted to lower case by HostTxtParser.parse()
      */
     public static boolean isValidKey(String host) {
-	return
-		host.endsWith(".i2p") &&
-		host.length() > 4 &&
-		host.length() <= 67 &&          // 63 + ".i2p"
+   return
+      host.endsWith(".i2p") &&
+      host.length() > 4 &&
+      host.length() <= 67 &&          // 63 + ".i2p"
                 (! host.startsWith(".")) &&
                 (! host.startsWith("-")) &&
                 host.indexOf(".-") < 0 &&
                 host.indexOf("-.") < 0 &&
-		host.indexOf("..") < 0 &&
+      host.indexOf("..") < 0 &&
                 // IDN - basic check, not complete validation
                 (host.indexOf("--") < 0 || host.startsWith("xn--") || host.indexOf(".xn--") > 0) &&
                 HOST_PATTERN.matcher(host).matches() &&
@@ -275,21 +277,21 @@ class AddressBook implements Iterable<Map.Entry<String, HostTxtEntry>> {
                 (! host.endsWith(".proxy.i2p")) &&
                 (! host.endsWith(".router.i2p")) &&
                 (! host.endsWith(".console.i2p"))
-                ;	
+                ;
     }
 
     /**
      * Do basic validation of the b64 dest, without bothering to instantiate it
      */
     private static boolean isValidDest(String dest) {
-	return
+   return
                 // null cert ends with AAAA but other zero-length certs would be AA
-		((dest.length() == MIN_DEST_LENGTH && dest.endsWith("AA")) ||
-		 (dest.length() > MIN_DEST_LENGTH && dest.length() <= MAX_DEST_LENGTH)) &&
-		// B64 comes in groups of 2, 3, or 4 chars, but never 1
-		((dest.length() % 4) != 1) &&
+      ((dest.length() == MIN_DEST_LENGTH && dest.endsWith("AA")) ||
+       (dest.length() > MIN_DEST_LENGTH && dest.length() <= MAX_DEST_LENGTH)) &&
+      // B64 comes in groups of 2, 3, or 4 chars, but never 1
+      ((dest.length() % 4) != 1) &&
                 B64_PATTERN.matcher(dest).matches()
-                ;	
+                ;
     }
 
     /**
@@ -297,7 +299,7 @@ class AddressBook implements Iterable<Map.Entry<String, HostTxtEntry>> {
      * addresses or conflicts to log. Addresses in AddressBook other that are
      * not in this AddressBook are added to this AddressBook. In case of a
      * conflict, addresses in this AddressBook take precedence
-     * 
+     *
      * @param other
      *            An AddressBook to merge with.
      * @param overwrite True to overwrite
@@ -338,8 +340,8 @@ class AddressBook implements Iterable<Map.Entry<String, HostTxtEntry>> {
                     this.addresses.put(otherKey, otherValue);
                     this.modified = true;
                     if (log != null) {
-                        log.append("New address " + otherKey
-                            + " added to address book. From: " + other.location);
+                        log.append("New domain " + otherKey
+                            + " added to addressbook. [" + other.location + "]");
                     }
                 }
             }
@@ -349,7 +351,7 @@ class AddressBook implements Iterable<Map.Entry<String, HostTxtEntry>> {
     /**
      * Write the contents of this AddressBook out to the File file. If the file
      * cannot be writen to, this method will silently fail.
-     * 
+     *
      * @param file
      *            The file to write the contents of this AddressBook too.
      *
