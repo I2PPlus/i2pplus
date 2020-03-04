@@ -36,16 +36,16 @@ import java.util.HashSet;
 class TunnelRenderer {
     private final RouterContext _context;
 
-    private static final int DISPLAY_LIMIT = 200;
+    private static final int DISPLAY_LIMIT = 500;
 
     public TunnelRenderer(RouterContext ctx) {
         _context = ctx;
     }
 
     public void renderStatusHTML(Writer out) throws IOException {
+        boolean debug = _context.getBooleanProperty(HelperBase.PROP_ADVANCED);
         TunnelPool ei = _context.tunnelManager().getInboundExploratoryPool();
         TunnelPool eo = _context.tunnelManager().getOutboundExploratoryPool();
-        boolean debug = _context.getBooleanProperty(HelperBase.PROP_ADVANCED);
         out.write("<h3 class=\"tabletitle\" id=\"exploratory\">" + _t("Exploratory"));
 //        }
         // links are set to float:right in CSS so they will be displayed in reverse order
@@ -130,8 +130,10 @@ class TunnelRenderer {
                 renderPool(out, in, outPool);
             }
         }
+    }
 
-//        String maxTunnels = _context.getProperty("router.maxParticipatingTunnels");
+    public void renderParticipating(Writer out) throws IOException {
+        boolean debug = _context.getBooleanProperty(HelperBase.PROP_ADVANCED);
         List<HopConfig> participating = _context.tunnelDispatcher().listParticipatingTunnels();
         if (!participating.isEmpty()) {
             out.write("<h3 class=\"tabletitle\" id=\"participating\">");
@@ -142,7 +144,7 @@ class TunnelRenderer {
             int bwShare = getShareBandwidth();
             if (bwShare > 12) {
                 if (!participating.isEmpty()) {
-                    out.write("<table class=\"tunneldisplay tunnels_participating\"><thead><tr><th>" +
+                    out.write("<table class=\"tunneldisplay tunnels_participating\" data-sortable><thead><tr><th>" +
                            _t("Role") + "</th><th>" + _t("Expiry") + "</th><th>" + _t("Usage") + "</th><th>" + _t("Rate") + "</th><th>");
                     if (debug)
                         out.write(_t("Receive on") + "</th><th>");
@@ -227,16 +229,19 @@ class TunnelRenderer {
                 out.write("<div class=\"statusnotes\"><b>" + _t("none") + "</b></div>\n");
             out.write("<div class=\"statusnotes\"><b>" + _t("Lifetime bandwidth usage") + ":&nbsp;&nbsp;" +
                       DataHelper.formatSize2Decimal(processed*1024) + "B</b></div>\n");
-            // TODO Display message if hidden mode active
-//            else if (_context.router().isHidden())
-//                out.write("<div class=\"statusnotes noparticipate\"><b>" + _t("Router is running in Hidden Mode; no participating tunnels will be built.") +
-//                          "</b> <a href=\"config\">[" + _t("Configure") + "]</a></div>\n");
             } else { // bwShare < 12K/s
                 out.write("<div class=\"statusnotes noparticipate\"><b>" + _t("Not enough shared bandwidth to build participating tunnels.") +
                           "</b> <a href=\"config\">[" + _t("Configure") + "]</a></div>\n");
             }
             //renderPeers(out);
+        } else if (_context.router().isHidden()) {
+            out.write("<p class=\"infohelp\">" + _t("Router is currently operating in Hidden Mode which prevents participating tunnels from being built."));
+        } else {
+            out.write("<p class=\"infohelp\">" + _t("No participating tunnels currently active."));
         }
+    }
+
+    public void renderGuide(Writer out) throws IOException {
         out.write("<h3 class=\"tabletitle\">" + _t("Bandwidth Tiers") + "</h3>\n");
         out.write("<table id=\"tunnel_defs\"><tbody>");
         out.write("<tr><td>&nbsp;</td>" +

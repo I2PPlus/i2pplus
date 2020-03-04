@@ -7,22 +7,18 @@ import net.i2p.router.web.HelperBase;
 
 import net.i2p.router.RouterContext;
 
-public class TunnelHelper extends HelperBase {
-    public TunnelHelper() {}
+public class TunnelParticipatingHelper extends HelperBase {
+    public TunnelParticipatingHelper() {}
 
-    public String getTunnelSummary() {
+    public String getTunnelsParticipating() {
         TunnelRenderer renderer = new TunnelRenderer(_context);
         try {
             if (_out != null) {
-                renderer.renderStatusHTML(_out);
-//                renderer.renderParticipating(_out);
-                renderer.renderGuide(_out);
+                renderer.renderParticipating(_out);
                 return "";
             } else {
                 StringWriter sw = new StringWriter(32*1024);
-                renderer.renderStatusHTML(sw);
-//                renderer.renderParticipating(sw);
-                renderer.renderGuide(sw);
+                renderer.renderParticipating(sw);
                 return sw.toString();
             }
         } catch (IOException ioe) {
