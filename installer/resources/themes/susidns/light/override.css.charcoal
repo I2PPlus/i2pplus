@@ -1,0 +1,27 @@
+/* 'Charcoal' I2P+ SusiDNS theme override for light */
+/* Author: dr|z3d */
+
+.iframed table, .iframed tr, .iframed th, .iframed td, .iframed div, .iframed span, .iframed h2, .iframed h3, .iframed h4, .iframed p, .iframed a,
+.iframed img {
+    border-color: #ddd !important;
+    filter: none !important;
+}
+
+.iframed .optbox, .iframed input, .iframed textarea {
+    border-color: #ccc !important;
+    filter: none !important;
+}
+
+.iframed h2, .iframed input[type="submit"], .iframed input[type="text"], .iframed #navi a {
+    background-blend-mode: difference, normal, normal;
+}
+
+.iframed #host_list td:nth-child(n+3) span[class], .iframed #host_list td:nth-child(n+3) span[class] a, .iframed #host_list td:nth-child(n+3) a {
+    mix-blend-mode: difference;
+    filter: none !important;
+}
+
+.iframed .optbox:not(:checked) {
+    box-shadow: inset 0 0 0 2px #f8f8ff, inset 3px 3px 3px #fff;
+    background: #e0e0e0 !important;
+}

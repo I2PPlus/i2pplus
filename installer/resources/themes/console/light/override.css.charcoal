@@ -1,0 +1,708 @@
+/* 'Charcoal' I2P+ Console theme override for light */
+/* Author: dr|z3d */
+
+html, body {
+    min-height: 100% !important;
+}
+
+html:not(#tman) {
+    overflow-x: hidden;
+    filter: saturate(.125) invert(1) contrast(.9) hue-rotate(-45deg) !important;
+    scrollbar-color: #444 #000;
+}
+
+body {
+    background: #000 !important;
+    background: repeating-linear-gradient(to bottom, #131110, #030100 2px) #000 !important;
+}
+
+.routersummary #xhr hr + b {
+    border-color: #eee !important;
+    box-shadow: inset 0 0 0 1px #fff !important;
+}
+
+pre[id], textarea, #changelog pre {
+    scrollbar-color: #bbb transparent;
+}
+
+pre[id]:hover, textarea:hover {
+    scrollbar-color: #bbb #fff;
+}
+
+#pageloader {
+    filter: saturate(3) hue-rotate(180deg) opacity(1);
+    animation: fadeout ease-out 15s forwards;
+}
+
+@keyframes fadeout {
+0,90% {
+    filter: saturate(3) hue-rotate(180deg) opacity(1);
+}
+100% {
+    filter: saturate(3) hue-rotate(180deg) opacity(0);
+}
+}
+
+img:not([src*="i2plogo"]) {
+    filter: invert(1) saturate(1) !important;
+}
+
+img[src$="i2plogo.png"] {
+    filter: opacity(.75) grayscale(1) !important;
+}
+
+img[src$="i2plogo.png"]:hover {
+    filter: saturate(3) !important;
+}
+
+.optbox:not(:checked), input[type="submit"]:active, input[type="reset"]:active , button:active {
+    box-shadow: inset 0 0 0 2px #f8f8ff, inset 3px 3px 3px #fff !important;
+}
+
+.optbox:not(:checked) {
+    background: #e0e0e0 !important;
+}
+
+.optbox:checked {
+    box-shadow: none !important;
+    background: #fff !important;
+}
+
+input[type="checkbox"][disabled], input[type="radio"][disabled], input[type="checkbox"][disabled]:hover, input[type="radio"][disabled]:hover, input[type="checkbox"][disabled]:focus, input[type="radio"][disabled]:focus {
+    filter: none !important;
+    opacity: 0.3;
+}
+
+.tunnelBuildStatus::before {
+    filter: invert(1) !important;
+}
+
+.routersummary, h1[class], .main[id], #news {
+    box-shadow: inset 0 0 0 1px #fff;
+}
+
+.statimage, .graphspanel a img {
+    opacity: .85;
+}
+
+.graphspanel a:hover img {
+    opacity: 1;
+}
+
+.graphcontainer {
+    border: 1px solid #ddd;
+    box-shadow: none !important;
+}
+
+#sb_localtunnels td[class]:last-child img {
+    filter: invert(1) saturate(3) contrast(2) !important;
+}
+
+h2, h3, .routersummary h3, #config_stats h3, .tab, .tab2 {
+    background: #f9f9ff !important;
+    background: linear-gradient(to bottom, rgba(240,240,255,.4) 50%, rgba(255,255,255,.6) 50%) !important;
+}
+
+.routersummary h3 {
+    background: linear-gradient(to bottom, rgba(240,240,255,.4) 50%, rgba(255,255,255,.6) 50%) !important;
+}
+
+h4.app, h4.app2, .news h3, #oldhome td:first-child, #faq h2, #glossary h2, #console .welcome h2, #installPluginUrl, #installPluginFile, #pluginconfigtext,
+#tunnels h3, .sorry, #refreshsidebar tr:first-child td:first-child {
+    background-blend-mode: difference, normal, normal;
+}
+
+.sorry {
+    box-shadow: inset 0 0 0 1px #fff;
+}
+
+.sorry hr, .sorry hr:last-child {
+    background: #bbb;
+}
+
+#bugreports td.infohelp {
+    background: url(/themes/console/images/info/bugreport.png) no-repeat left center, linear-gradient(to right, #fff, #eef) !important;
+}
+
+#consolepass tr:first-child td, #floodfillconfig tr:first-child .infohelp, .infohelp, .infowarn, #bugreports td.infohelp,
+input[type="submit"], input[type="cancel"], input.cancel, button, #helptranslate, #faq h3, #debugmode, .messages {
+    background-blend-mode: difference, normal;
+}
+
+.main#proof, .main#oldconsole, #warning2, .news#news {
+    background-blend-mode: multiply, multiply, difference !important;
+}
+
+input.search[type="text"], input[type="text"], input[type="password"] {
+    border-color: #ddd;
+    box-shadow: inset 1px 1px 1px #fff;
+    background-blend-mode: difference !important;
+    filter: none;
+}
+
+.main, .routersummary, h1, .confignav, .news#news, table.search, .newsentry, .confignav, #help div.confignav {
+    box-shadow: none;
+    filter: none;
+}
+
+.messages {
+    filter: none;
+}
+
+.sb_netstatus[class] {
+    box-shadow: inset 0 0 0 1px #fff;
+    filter: none;
+}
+
+.sb_netstatus[class]::before {
+    filter: invert(1) saturate(3) !important;
+}
+
+.percentBarOuter, #sb_memorybar .percentBarInner, .main#console  {
+    box-shadow: inset 0 0 0 1px #fff !important;
+}
+
+#sb_memoryBar {
+    opacity: .7;
+}
+
+#sb_memoryBar.percentBarOuter {
+    background: linear-gradient(to right, rgba(255,0,0,.1) 50%, rgba(255,128,0,.05) 75% , rgba(255,255,0,.05) 90%, rgba(0,255,0,.05)),
+                repeating-linear-gradient(to right, rgba(180, 180, 255,.7) 1px, rgba(180, 180, 255, .7) 2px, rgba(221, 221, 255, .7) 2px, rgba(221, 221, 255, .7) 4px) !important;
+}
+
+#sb_memoryBar .percentBarInner {
+    background: linear-gradient(to bottom, rgba(140, 140, 255, .3) 50%, rgba(238, 238, 255, .5) 50%);
+}
+
+#sb_bandwidthgraph {
+    padding: 1px;
+    border: none;
+    box-shadow: none;
+}
+
+input[type="submit"], input[type="reset"], .routersummary input[class], button, select {
+    border-color: #ccc !important;
+    filter: none;
+}
+
+input[type="submit"]:hover, input[type="reset"]:hover, input[class]:hover, button:hover, select:hover {
+    border-color: #aaa !important;
+}
+
+#newsDisplay a {
+    filter: none !important;
+    border-color: #999 !important;
+    box-shadow: none;
+}
+
+.optbox, .optbox:checked {
+    border-color: #ccc !important;
+    filter: none !important;
+}
+
+.optbox:hover, .optbox:checked:hover {
+    border-color: #777 !important;
+}
+
+.routersummary, h1, h2, h3, h4, .news#news, .newscontent, .newsentry h3, .main, table.search, .formaction, .main#graphs form, #pluginconfig table, #fullhistory a,
+#bwlimiter a, #i2pclientconfig a, #config_logging h3 a, #graphdisplay a, #version a, #logs h3 a, #tunnels h3 a, #advancedconfig a, #iptransport a,
+#reseedsetup a, #graphinfo a, #config_service h3 a, .h3navlinks a, div, .infohelp, .infowarn, div[id] .infohelp, div[id] .infowarn, table[class], table[id],
+.embedlink, #themesettings .themelabel, table[class] tr, table[class] th, table[class] td, .optionsave, td.optionsave, .configtable tr:last-child td, th, td, tr,
+.statusnotes, .configtable, .statusnotes + .statusnotes, .tunneldisplay, .routersummary span[class], h4.app img, h4.app2 img, #sitemap h3 img, #newsDisplay a,
+.routersummary hr:not(.b), .tablefooter tr, .tablefooter td, #sitemap span, #sitemap span::before, #sitemap span::after, .app img::after, .app img::before,
+ul, ol, #routerinformation table, pre, #debug table, textarea, div.app:hover .appimg .extlink::after, div.app::before, .sitemaplink.extlink:hover::after,
+p, .tab, .tab2, .optionsingle, .suboption, .optionlist, .optionsingle, #reseedssl, table[id] .optionlist, span[class], b.tunnel_cap, #view_profile pre,
+#view_profile td span, #tunnels .b32, #banlist li, #banlist li > * {
+    border-color: #ddd !important;
+}
+
+#banlist li hr {
+    background: linear-gradient(to right, #ddd 70%, rgba(0,0,0,0) 95%);
+}
+
+.identicon, #view_profile .identicon {
+    border-color: #333 !important;
+}
+
+textarea, p#upnpstatus, p#keyringhelp, .widescroll + p.infohelp, #profiles ul#banlist, #config_reseed .confignav + p.infohelp p.sybilinfo,
+p#debugmode, #config_family p.infohelp, p#profiles_overview, p#gatherstats, #tunnels .b32 {
+    box-shadow: inset 1px 1px 1px #fff;
+    filter: none;
+}
+
+h4.app img, h4.app2 img, #sitemap h3 img {
+    filter: invert(1) !important;
+    border-color: #333 !important;
+}
+
+input[readonly], input[disabled], input[readonly]:focus, input[disabled]:focus {
+    background: #eee !important;
+    box-shadow: inset 0 0 0 1px #fff;
+    opacity: .7;
+}
+
+#bwlimiter a:hover, #i2pclientconfig a:hover, #config_logging h3 a:hover, #graphdisplay a:hover, #version a:hover, #logs h3 a:hover, #tunnels h3 a:hover, #advancedconfig a:hover, #iptransport a:hover, #reseedsetup a:hover, #config_service h3 a:hover, .h3navlinks a:hover {
+    background: #fff linear-gradient(to bottom, rgba(255, 232, 191, .6) 48%, rgba(239, 217, 179, .4) 48%, #fff) !important
+}
+
+#help #terms, #changelog pre {
+    column-rule: 1px solid #ddd !important;
+}
+
+h4.app img, h4.app2 img {
+    mix-blend-mode: difference;
+    border-color: #111 !important;
+}
+
+#sb_services a[href], #helptoc li, #helptoc li:hover, #helptoc li:last-child, #helptoc li:last-child:hover, #reseedcreatefile, #reseedurl, #reseedzip,
+#joinfamily .optionsingle, #newfamily .optionsingle, .optionsingle, .homelinksedit td:first-child:not(.optionsave) {
+    background-blend-mode: difference;
+}
+
+.homelinkedit .noicon {
+    background-image: none;
+}
+
+.homelinkedit .noicon::after {
+    content: "";
+    display: inline-block;
+    width: 20px;
+    height: 20px;
+    background: url(/themes/console/images/info/search.png);
+    background-size: 20px 20px;
+    mix-blend-mode: difference;
+}
+
+.homelinkedit tr:nth-child(n+2) td:first-child:not(.optionsave):not(.infohelp) {
+    background-color: #f4f4ff;
+}
+
+#helptoc li:hover {
+    box-shadow: inset 0 0 0 1px #f60;
+}
+
+#pluginconfig td:first-child label::before, a.viewprofile img, a.configpeer img, a.profiledump img, .config_experimental, a[href^="configpeer?peer"]::after,
+#bandwidthconfig span::before, .addtobook a::after, #leasesetdebug th a::after, table#leasesetsummary th a::after {
+    mix-blend-mode: difference;
+}
+
+.tunnelBuildStatus[class], .routersummary h4, .infowarn, .infohelp {
+    box-shadow: inset 0 0 0 1px #fff !important;
+}
+
+.main#jobs {
+    position: relative !important;
+}
+
+.sitelink {
+    padding: 0 5px 0 16px;
+    background: url(/themes/console/images/info/url.png) 2px center no-repeat, linear-gradient(to bottom, #eef, #fff);
+    background-size: 12px 12px, 100% 100% !important;
+    background-blend-mode: difference, normal;
+}
+
+.sitelink.external {
+    padding: 0 5px 0 18px;
+    background: url(/themes/console/images/world.png) 3px center no-repeat, linear-gradient(to bottom, #eef, #fff);
+    background-size: 12px 12px, 100% 100% !important;
+    background-blend-mode: difference, normal;
+}
+
+.chatlink {
+    padding: 0 5px 0 20px;
+    background: url(/themes/snark/ubergine/images/comment.png) 2px center no-repeat, linear-gradient(to bottom, #eef, #fff);
+    background-blend-mode: difference, normal;
+}
+
+div.app img, .sitemapLink img {
+    filter: invert(1) saturate(.1) !important;
+}
+
+div.app:hover img, .sitemapLink:hover img {
+    filter: invert(1) saturate(2) drop-shadow(0 0 1px #d30) drop-shadow(0 0 2px rgba(255,96,0,.5)) !important;
+    transition: none;
+}
+
+.main#config_update .messages {
+    background-blend-mode: difference, difference, normal;
+}
+
+#floodfills .percentBarInner {
+    box-shadow: inset 0 0 0 1px #fff;
+    background: linear-gradient(to bottom, #770 50%, #ff0 50%);
+    filter: hue-rotate(150deg);
+}
+
+#floodfills .percentBarInner[style="width:0%"] {
+    filter: hue-rotate(-90deg);
+}
+
+#floodfills .percentBarText {
+    color: #000;
+    text-shadow: 0 1px 1px #fff;
+}
+
+.links li::before {
+    margin-left: -21px;
+    margin-right: 6px;
+    width: 16px;
+    height: 16px;
+    display: inline-block;
+    content: "";
+    background: url(images/link.png);
+    mix-blend-mode: difference;
+}
+
+.confignav, #help div.confignav {
+    background: linear-gradient(to bottom, rgba(248,248,255,.6) 50%, #fbfbff 50%),
+                repeating-linear-gradient(135deg, rgba(255,255,255,.5) 2px, rgba(221,221,255,.3) 3px, #fff 4px) #fafaff !important
+}
+
+div.news h3, #news h3 {
+    background: url(images/news.png) 8px center no-repeat,
+                linear-gradient(to bottom, rgba(240,240,255,.4) 50%, rgba(255,255,255,.6) 50%),
+                linear-gradient(to right, #fafaff 5%, rgba(231, 231, 255, .8) 15%) #fff !important;
+}
+
+#console .welcome h2 {
+    background: url(/themes/console/images/eepsite.png) right 8px center no-repeat,
+                linear-gradient(to bottom, rgba(240,240,255,.4) 50%, rgba(255,255,255,.6) 50%),
+                linear-gradient(to right, #fcfcff 5%, rgba(231, 231, 255, .8) 25%) #fff !important;
+    background-size: 20px 20px, 100% 100%, 100% 100% !important;
+}
+
+td.optionsave, .formaction, form[action="configpeer"] tr:last-child td, table#addkeyring tr:last-child td, .iframed #wizardPanel .buttons, #tman .iframed .buttons {
+    background: linear-gradient(to bottom, rgba(220,220,255,.3), #fff),
+                repeating-linear-gradient(135deg, rgba(255,255,255,.5) 2px, rgba(221, 221, 255, .3) 3px, #fff 4px) #fff !important;
+}
+
+#oldhome td:first-child {
+    background: url(/themes/console/images/info/home.png) 12px center no-repeat,
+                linear-gradient(to bottom, rgba(220,220,255,.3), #fff),
+                repeating-linear-gradient(135deg, rgba(255,255,255,.5) 2px, rgba(221, 221, 255, .3) 3px, #fff 4px) #fff !important;
+}
+
+.tab, .tab2 {
+    filter: none;
+}
+
+td[nowrap] a.viewprofile, td[nowrap] a.configpeer, #bwlimiter a, #i2pclientconfig a, #config_logging h3 a, #graphdisplay a, #version a,
+#logs h3 a, #tunnels h3 a, #advancedconfig a, #iptransport a, #reseedsetup a, #graphinfo a, #config_service h3 a, .h3navlinks a {
+    background: none !important;
+}
+
+td[nowrap] a.viewprofile img, td[nowrap] a.configpeer img {
+    border-color: #ddd;
+    box-shadow: 1px solid #000 !important;
+    background: #ccc;
+}
+
+#config_network .optionlist:hover, #config_i2cp .optionlist:hover, #reseedssl:hover,
+#manualreseed .optionsingle:hover, .optiontextarea:hover, #reseed_urlselection:hover,
+.optionlist:hover, .optionsingle:hover, .optiontextarea:hover,
+#updatehelper .optionlist:hover, #updateProxyHostPort.optionlist:hover {
+    box-shadow: inset 0 0 0 1px #ccc !important;
+}
+
+.tab:hover {
+    background: linear-gradient(to bottom, rgba(239, 217, 179, .4) 50%, #fff 50%);
+}
+
+.tab:active {
+    box-shadow: inset 0 0 0 1px #fff, inset 3px 3px 3px #eee;
+    background: #037 !important;
+}
+
+.tab:active a {
+    color: #eee !important;
+    text-shadow: 0 1px 1px #333;
+}
+
+.tab2 {
+    background: #037 !important;
+    box-shadow: inset 0 0 0 1px #fff, inset 2px 2px 2px #ddd;
+}
+
+#help h2 {
+    background-blend-mode: difference, normal, normal;
+}
+
+#changelog h2 {
+    background: url(/themes/console/images/info/logs.png) 8px center no-repeat,
+                linear-gradient(to bottom, rgba(255,255,255,.6) 50%, #fcfcff 50%),
+                linear-gradient(to right, #fcfcff 5%, rgba(231, 231, 255, .8) 25%) !important;
+    background-size: 24px 24px, 100% 100%, 100% 100%, 100% 100% !important;
+}
+
+h1 {
+    background: url(images/netwrk.png) 8px center no-repeat,
+                linear-gradient(135deg, #fcfcff, rgba(252,252,255,0) 600px),
+                linear-gradient(to bottom, rgba(248,248,255,.6) 50%, #fcfcff 50%),
+                repeating-linear-gradient(135deg, rgba(255,255,255,.5) 2px, rgba(221, 221, 255, .3) 3px, #fff 4px) #fafaff !important;
+}
+
+h1[class] {
+    background-size: 34px auto, 100% 100%, 100% 100%, 100% 100% !important;
+}
+
+h1.home {
+    background: url(images/home.png) 10px center no-repeat,
+                linear-gradient(135deg, #fcfcff, rgba(252,252,255,0) 600px),
+                linear-gradient(to bottom, rgba(248,248,255,.6) 50%, #fcfcff 50%),
+                repeating-linear-gradient(135deg, rgba(255,255,255,.5) 2px, rgba(221, 221, 255, .3) 3px, #fff 4px) #fafaff !important;
+    background-size: 34px auto, 100% 100%, 100% 100%, 100% 100% !important;
+}
+
+h1.perf {
+    background: url(images/perf.png) 10px center no-repeat,
+                linear-gradient(135deg, #fcfcff, rgba(252,252,255,0) 600px),
+                linear-gradient(to bottom, rgba(248,248,255,.6) 50%, #fcfcff 50%),
+                repeating-linear-gradient(135deg, rgba(255,255,255,.5) 2px, rgba(221, 221, 255, .3) 3px, #fff 4px) #fafaff !important;
+    background-size: 34px auto, 100% 100%, 100% 100%, 100% 100% !important;
+}
+
+h1.nfo {
+    background: url(images/info.png) 10px center no-repeat,
+                linear-gradient(135deg, #fcfcff, rgba(252,252,255,0) 600px),
+                linear-gradient(to bottom, rgba(248,248,255,.6) 50%, #fcfcff 50%),
+                repeating-linear-gradient(135deg, rgba(255,255,255,.5) 2px, rgba(221, 221, 255, .3) 3px, #fff 4px) #fafaff !important;
+    background-size: 34px auto, 100% 100%, 100% 100%, 100% 100% !important;
+}
+
+h1.hlp {
+    background: url(images/header_help.png) 10px center no-repeat,
+                linear-gradient(135deg, #fcfcff, rgba(252,252,255,0) 600px),
+                linear-gradient(to bottom, rgba(248,248,255,.6) 50%, #fcfcff 50%),
+                repeating-linear-gradient(135deg, rgba(255,255,255,.5) 2px, rgba(221, 221, 255, .3) 3px, #fff 4px) #fafaff !important;
+    background-size: 34px auto, 100% 100%, 100% 100%, 100% 100% !important;
+}
+
+h1.addbook {
+    background: url(images/addbook.png) 10px center no-repeat,
+                linear-gradient(135deg, #fcfcff, rgba(252,252,255,0) 600px),
+                linear-gradient(to bottom, rgba(248,248,255,.6) 50%, #fcfcff 50%),
+                repeating-linear-gradient(135deg, rgba(255,255,255,.5) 2px, rgba(221, 221, 255, .3) 3px, #fff 4px) #fafaff !important;
+    background-size: 34px auto, 100% 100%, 100% 100%, 100% 100% !important;
+}
+
+h1.snark {
+    background: url(images/app_snark.png) 10px center no-repeat,
+                linear-gradient(135deg, #fcfcff, rgba(252,252,255,0) 600px),
+                linear-gradient(to bottom, rgba(248,248,255,.6) 50%, #fcfcff 50%),
+                repeating-linear-gradient(135deg, rgba(255,255,255,.5) 2px, rgba(221, 221, 255, .3) 3px, #fff 4px) #fafaff !important;
+    background-size: 34px auto, 100% 100%, 100% 100%, 100% 100% !important;
+}
+
+h1.mail {
+    background: url(images/app_mail.png) 8px center no-repeat,
+                linear-gradient(135deg, #fcfcff, rgba(252,252,255,0) 600px),
+                linear-gradient(to bottom, rgba(248,248,255,.6) 50%, #fcfcff 50%),
+                repeating-linear-gradient(135deg, rgba(255,255,255,.5) 2px, rgba(221, 221, 255, .3) 3px, #fff 4px) #fafaff !important;
+    background-size: 34px auto, 100% 100%, 100% 100%, 100% 100% !important;
+}
+
+h1.conf, #wizardpage h1 {
+                linear-gradient(135deg, #fcfcff, rgba(252,252,255,0) 600px),
+    background: url(images/cog.png) 10px center no-repeat,
+                linear-gradient(to bottom, rgba(248,248,255,.6) 50%, #fcfcff 50%),
+                repeating-linear-gradient(135deg, rgba(255,255,255,.5) 2px, rgba(221, 221, 255, .3) 3px, #fff 4px) #fafaff !important;
+    background-size: 34px auto, 100% 100%, 100% 100%, 100% 100% !important;
+}
+
+h1.adv {
+    background: url(images/info.png) 10px center no-repeat,
+                linear-gradient(135deg, #fcfcff, rgba(252,252,255,0) 600px),
+                linear-gradient(to bottom, rgba(248,248,255,.6) 50%, #fcfcff 50%),
+                repeating-linear-gradient(135deg, rgba(255,255,255,.5) 2px, rgba(221, 221, 255, .3) 3px, #fff 4px) #fafaff !important;
+    background-size: 34px auto, 100% 100%, 100% 100%, 100% 100% !important;
+}
+
+h1.err {
+    background: url(images/error.png) 10px center no-repeat,
+                linear-gradient(135deg, #fcfcff, rgba(252,252,255,0) 600px),
+                linear-gradient(to bottom, rgba(248,248,255,.6) 50%, #fcfcff 50%),
+                repeating-linear-gradient(135deg, rgba(255,255,255,.5) 2px, rgba(221, 221, 255, .3) 3px, #fff 4px) #fafaff !important;
+    background-size: 34px auto, 100% 100%, 100% 100%, 100% 100% !important;
+}
+
+h1.sched {
+    background: url(images/tasks.png) 10px center no-repeat,
+                linear-gradient(135deg, #fcfcff, rgba(252,252,255,0) 600px),
+                linear-gradient(to bottom, rgba(248,248,255,.6) 50%, #fcfcff 50%),
+                repeating-linear-gradient(135deg, rgba(255,255,255,.5) 2px, rgba(221, 221, 255, .3) 3px, #fff 4px) #fafaff !important;
+    background-size: 34px auto, 100% 100%, 100% 100%, 100% 100% !important;
+}
+
+h1.log {
+    background: url(images/logs.png) 10px center no-repeat,
+                linear-gradient(135deg, #fcfcff, rgba(252,252,255,0) 600px),
+                linear-gradient(to bottom, rgba(248,248,255,.6) 50%, #fcfcff 50%),
+                repeating-linear-gradient(135deg, rgba(255,255,255,.5) 2px, rgba(221, 221, 255, .3) 3px, #fff 4px) #fafaff !important;
+    background-size: 34px auto, 100% 100%, 100% 100%, 100% 100% !important;
+}
+
+h1.webapp {
+    background: url(images/webapp.png) 10px center no-repeat,
+                linear-gradient(135deg, #fcfcff, rgba(252,252,255,0) 600px),
+                linear-gradient(to bottom, rgba(248,248,255,.6) 50%, #fcfcff 50%),
+                repeating-linear-gradient(135deg, rgba(255,255,255,.5) 2px, rgba(221, 221, 255, .3) 3px, #fff 4px) #fafaff !important;
+    background-size: 34px auto, 100% 100%, 100% 100%, 100% 100% !important;
+}
+
+h4.app a img, h4.app2 a img {
+    border-color: #333 !important;
+    mix-blend-mode: difference;
+    filter: invert(0) !important;
+}
+
+h4.app {
+    background: url(/themes/console/images/eepsite.png) 10px center no-repeat,
+                linear-gradient(to bottom, rgba(255,255,255,.6)  50%, #fff 50%),
+                linear-gradient(to right, #fcfcff 5%, rgba(231, 231, 255, .8) 25%) #f8f8ff !important;
+    background-size: auto, auto, auto;
+    background-size: 16px 16px, 100% 100%, 100% 100% !important;
+}
+
+h4.app2 {
+    background: url(images/globe.png) 10px center no-repeat,
+                linear-gradient(to bottom, rgba(255,255,255,.6)  50%, #fff 50%),
+                linear-gradient(to right, #fcfcff 5%, rgba(231, 231, 255, .8) 25%) #f8f8ff !important;
+    background-size: 16px 16px, 100% 100%, 100% 100% !important;
+}
+
+.links li {
+    list-style: none !important;
+}
+
+.links li b {
+    font-size: 110% !important;
+}
+
+.newtab img {
+    filter: invert(0) !important;
+}
+
+#configinfo th {
+    color: #80f;
+}
+
+#tunnels h3.server {
+    padding-left: 28px;
+    background: url(/themes/console/images/info/server.png) 5px 5px no-repeat,
+                linear-gradient(to bottom, rgba(240,240,255,.4) 50%, #fff 50%),
+                linear-gradient(to right, #fafaff 5%, rgba(231, 231, 255, .8) 25%) !important;
+    background-size: 20px 20px, 100% 100%, 100% 100% !important;
+}
+
+#tunnels h3:not(#exploratory):not(#participating):not(.server):not(:last-of-type) {
+    padding-left: 28px;
+    background: url(/themes/console/images/info/client.png) 6px 7px no-repeat,
+                linear-gradient(to bottom, rgba(240,240,255,.4) 50%, #fff 50%),
+                linear-gradient(to right, #fafaff 5%, rgba(231, 231, 255, .8) 25%) !important;
+    background-size: 18px 18px, 100% 100%, 100% 100% !important;
+}
+
+#tunnels h3#participating {
+    background: url(/themes/console/images/info/share.png) 5px 5px no-repeat,
+                linear-gradient(to bottom, rgba(240,240,255,.4) 50%, #fff 50%),
+                linear-gradient(to right, #fafaff 5%, rgba(231, 231, 255, .8) 25%) !important;
+    background-size: 20px 20px, 100% 100%, 100% 100% !important;
+}
+
+#tunnels h3#exploratory {
+    background: url(/themes/console/images/info/globe.png) 6px 6px no-repeat,
+                linear-gradient(to bottom, rgba(240,240,255,.4) 50%, #fff 50%),
+                linear-gradient(to right, #fafaff 5%, rgba(231, 231, 255, .8) 25%) !important;
+    background-size: 18px 18px, 100% 100%, 100% 100% !important;
+}
+
+#tunnels h3:last-of-type {
+    background: url(/themes/console/images/info/bandwidth.png) 5px 5px no-repeat,
+                linear-gradient(to bottom, rgba(240,240,255,.4) 50%, #fff 50%),
+                linear-gradient(to right, #fafaff 5%, rgba(231, 231, 255, .8) 25%) !important;
+    background-size: 18px 18px, 100% 100%, 100% 100% !important;
+}
+
+#tunnels h3 a, #tunnels h3 a:hover {
+    background: none !important;
+}
+
+#tunnels h3 a[href^="/configtunnels#"]::after, #tunnels h3 a[href$="i2ptunnelmgr"]::after, #criticallogs + h3.tabletitle a::after {
+    opacity: .7;
+    filter: invert(1) !important;
+}
+
+#tunnels h3 a[href^="/configtunnels#"]:hover::after, #tunnels h3 a[href$="i2ptunnelmgr"]:hover::after,
+#tunnels h3 a[href^="/configtunnels#"]:focus::after, #tunnels h3 a[href$="i2ptunnelmgr"]:focus::after,
+#criticallogs + h3.tabletitle a:hover::after, #criticallogs + h3.tabletitle a:focus::after {
+    opacity: 1;
+}
+
+.statusnotes {
+    background: #fafaff !important;
+}
+
+.bw_title {
+   background: #fff;
+}
+
+@media screen and (min-width: 1400px) {
+.statsName {
+    border-color: #ddd !important;
+}
+}
+
+@media screen and (min-width: 1500px) {
+.routersummary div[style="height: 36px;"] {
+    margin-top: 3px !important;
+    height: 40px !important;
+}
+
+h1[class] {
+    background-size: 38px auto, 100% 100%, 100% 100%, 100% 100% !important;
+}
+}
+
+/* Tunnel Manager */
+
+.iframed #serverTunnels td, .iframed #clientTunnels td, #tman .iframed .buttons, #tman .iframed .netTunnel, .iframed .panel table,
+.iframed #ssl td, .iframed #wizardPanel td {
+    border-color: #ddd !important;
+}
+
+.iframed .control, .iframed button {
+    border-color: #ccc !important;
+}
+
+#tman .iframed div {
+    filter: none !important;
+}
+
+#tman .iframed textarea {
+    scrollbar-width: thin;
+}
+
+#tman .iframed td:not(.buttons):not(.newTunnel), #tman .iframed h2, .iframed #wizardPanel h2, #tman .iframed h3, #tman .iframed .freetext {
+    background-blend-mode: difference, normal, normal;
+}
+
+#tman .iframed div.text {
+    mix-blend-mode: difference;
+    filter: hue-rotate(50deg) saturate(1);
+}
+
+.iframed #wizardPanel td:not(.infohelp) {
+    box-shadow: none !important;
+    border-left: none !important;
+}
+
+#tman .iframed h2 {
+    background-color: #fff !important;
+}
+
+#tman .iframed #throttler td {
+    border-left-color: transparent !important;
+    border-right-color: transparent !important;
+    box-shadow: none !important;
+}

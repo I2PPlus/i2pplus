@@ -1,0 +1,16 @@
+/* 'Flat' I2P+ Console theme override for light */
+/* Author: dr|z3d */
+
+html {
+    overflow-x: hidden;
+    filter: hue-rotate(10deg) saturate(.3);
+}
+
+h2, h3, .routersummary h3 {
+    background: #f9f9ff !important;
+}
+
+.main, .routersummary, h1, .confignav, .news#news, table.search {
+    box-shadow: none;
+    filter: none;
+}

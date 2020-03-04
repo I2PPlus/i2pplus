@@ -1,0 +1,48 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE Configure PUBLIC "-//Jetty//Configure//EN" "http://www.eclipse.org/jetty/configure_9_3.dtd">
+<Configure class="org.eclipse.jetty.servlet.ServletContextHandler">
+  <Set name="contextPath">/resources</Set>
+  <Set name="resourceBase">./eepsite/resources/</Set>
+  <Call name="setInitParameter">
+    <Arg>org.eclipse.jetty.servlet.Default.dirAllowed</Arg>
+    <Arg>true</Arg>
+  </Call>
+  <Call name="setInitParameter">
+    <Arg>org.eclipse.jetty.servlet.Default.stylesheet</Arg>
+    <Arg>./eepsite/resources/jetty-dir.css</Arg>
+  </Call>
+  <Call name="addServlet">
+    <Arg>net.i2p.servlet.I2PDefaultServlet</Arg>
+    <Arg>/</Arg>
+  </Call>
+  <Call name="addFilter">
+    <Arg>
+      <New class="org.eclipse.jetty.servlet.FilterHolder" >
+        <Arg>
+          <New class="org.eclipse.jetty.servlets.GzipFilter" />
+        </Arg>
+        <Call name="setInitParameter">
+          <!-- minimum in Java is 1300 -->
+          <Arg>minGzipSize</Arg>
+          <Arg>512</Arg>
+        </Call>
+        <Call name="setInitParameter">
+          <!-- In Java we have a blacklist. This covers the most common cases. -->
+          <Arg>mimeTypes</Arg>
+          <Arg>application/pdf,application/x-javascript,application/xhtml+xml,application/xml,image/svg+xml,text/css,text/html,text/plain</Arg>
+        </Call>
+      </New>
+    </Arg>
+    <Arg>/*</Arg>
+    <Arg>
+      <!-- just guessing here -->
+      <Call class="java.util.EnumSet" name="of" >
+        <Arg>
+          <Call class="javax.servlet.DispatcherType" name="valueOf" >
+            <Arg>REQUEST</Arg>
+          </Call>
+        </Arg>
+      </Call>
+    </Arg>
+  </Call>
+</Configure>

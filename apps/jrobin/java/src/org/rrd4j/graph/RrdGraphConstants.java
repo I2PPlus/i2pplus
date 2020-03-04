@@ -178,16 +178,18 @@ public interface RrdGraphConstants {
     /**
      * Default arrow color
      */
-    Color DEFAULT_ARROW_COLOR = new Color(128, 31, 31);
+//    Color DEFAULT_ARROW_COLOR = new Color(128, 31, 31);
+    Color DEFAULT_ARROW_COLOR = new Color(0, 0, 0, 0);
     /**
      * Default x-axis color
      */
-    Color DEFAULT_XAXIS_COLOR = Color.BLACK;
+//    Color DEFAULT_XAXIS_COLOR = Color.BLACK;
+    Color DEFAULT_XAXIS_COLOR = new Color(51, 51, 63, 255);
     /**
      * Default x-axis color
      */
-    Color DEFAULT_YAXIS_COLOR = Color.BLACK;
-
+//    Color DEFAULT_YAXIS_COLOR = Color.BLACK;
+    Color DEFAULT_YAXIS_COLOR = new Color(51, 51, 63, 255);
     /**
      * An transparent color
      */
@@ -321,7 +323,8 @@ public interface RrdGraphConstants {
     /**
      * Used internally
      */
-    double LEGEND_BOX = 0.9; // chars
+//    double LEGEND_BOX = 0.9; // chars
+    double LEGEND_BOX = 0.7; // chars
     /**
      * Used internally
      */
@@ -329,19 +332,23 @@ public interface RrdGraphConstants {
     /**
      * Used internally
      */
-    int PADDING_LEFT = 10; // pix
+//    int PADDING_LEFT = 10; // pix
+    int PADDING_LEFT = 0; // pix
     /**
      * Used internally
      */
-    int PADDING_TOP = 12; // pix
+//    int PADDING_TOP = 12; // pix
+    int PADDING_TOP = 5; // pix
     /**
      * Used internally
      */
-    int PADDING_TITLE = 6; // pix
+//    int PADDING_TITLE = 6; // pix
+    int PADDING_TITLE = 7; // pix
     /**
      * Used internally
      */
-    int PADDING_RIGHT = 16; // pix
+//    int PADDING_RIGHT = 16; // pix
+    int PADDING_RIGHT = 20; // pix
     /**
      * Used internally
      */
@@ -349,7 +356,8 @@ public interface RrdGraphConstants {
     /**
      * Used internally
      */
-    int PADDING_LEGEND = 2; // chars
+//    int PADDING_LEGEND = 2; // chars
+    double PADDING_LEGEND = 2.1; // chars
     /**
      * Used internally
      */
@@ -357,7 +365,8 @@ public interface RrdGraphConstants {
     /**
      * Used internally
      */
-    int PADDING_VLABEL = 7; // pix
+//    int PADDING_VLABEL = 7; // pix
+    int PADDING_VLABEL = 8; // pix
 
     /**
      * Stroke used to draw grid

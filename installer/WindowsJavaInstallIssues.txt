@@ -1,0 +1,12 @@
+With newer versions of Java (newer than 1.8), or with
+alternative Java distrubutions (e.g. AdoptOpenJDK) you
+may run into problems running the install.exe file
+directly; when attempting to run the installer you may
+be told that you need to install Java, or that the
+installation is invalid or corrupt.
+
+This is normally easy to overcome by extracting the
+install.jar file from the install.exe file, and then
+running that instead.. if it doesn't start the installer
+on double click, run the following from a command line:
+java -jar \path\to\install.jar

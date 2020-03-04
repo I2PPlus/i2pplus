@@ -1,0 +1,35 @@
+/* Ocean Blue override.css for embedded snark 'dark' theme */
+/* Activate when console Ocean Blue override is also activated */
+/* Author: dr|z3d */
+
+body, td, td b, td[class], td[class] span[class], th, tfoot th[id], tfoot th[class], .snarkMessages li, .percentBarComplete,
+.section, .mainsection, .newtorrentsection, .addtorrentsection, .configsection, .configsectionpanel, input.r, input[type="text"],
+.snarkTorrentPeerCount a, .peerinfo tt, #ourDest tt, .percentBarText,
+.snarkTorrentRateUp:not(:empty), .snarkTorrentRateDown:not(:empty), .snarkTorrentDownloaded:not(:empty), .snarkTorrentUploaded:not(:empty) {
+    color: rgba(200,228,200,0.95) !important;
+}
+
+td img, .thumb:hover, tr:hover .thumb, .snarkMessages li::before, .peerSeed {
+    filter: hue-rotate(-120deg) !important;
+}
+
+.snarkTorrentInfo img, .snarkTrackerDetails img {
+    filter: hue-rotate(0) !important;
+}
+
+.snarkTorrentInfo img[src*="magnet"], .ParentDir img {
+    filter: hue-rotate(-120deg) !important;
+    mix-blend-mode: luminosity;
+}
+
+.trackerconfig th:first-child {
+    background-blend-mode: luminosity, normal;
+}
+
+#bwHoverHelp img {
+    mix-blend-mode: luminosity;
+}
+
+.snarkTorrents .infohash, .infohash {
+    background: #353;
+}

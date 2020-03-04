@@ -1,0 +1,11 @@
+html {
+    filter: invert(100%) saturate(.8) sepia(0.8) hue-rotate(20deg) brightness(0.7);
+}
+
+body {
+    background: #000 !important;
+}
+
+.langselect img, .app img {
+    filter: invert(100%) !important;
+}

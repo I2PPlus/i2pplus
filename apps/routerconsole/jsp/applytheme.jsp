@@ -1,0 +1,34 @@
+<%@page contentType="text/html"%>
+<%@page trimDirectiveWhitespaces="true"%>
+<%@page pageEncoding="UTF-8"%>
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+<html>
+<head>
+<%@include file="css.jsi" %>
+<%=intl.title("config UI")%>
+<style type="text/css">input.default {width: 1px; height: 1px; visibility: hidden;}</style>
+<script src="/js/ajax.js" type="text/javascript"></script>
+<%@include file="summaryajax.jsi" %>
+<meta http-equiv="Refresh" content= "0;URL=/configui">
+</head>
+<body>
+<script nonce="<%=cspNonce%>" type="text/javascript">progressx.show();</script>
+<%@include file="summary.jsi" %>
+<jsp:useBean class="net.i2p.router.web.helpers.ConfigUIHelper" id="uihelper" scope="request" />
+<jsp:setProperty name="uihelper" property="contextId" value="<%=(String)session.getAttribute(\"i2p.contextId\")%>" />
+<h1 class="conf"><%=uihelper._t("User Interface Configuration")%></h1>
+<div class="main" id="config_ui">
+<%@include file="confignav.jsi" %>
+<p class="infohelp">Applying Console theme preferences&hellip; You should be returned to the <a href="/configui"><%=uihelper._t("User Interface Configuration")%></a> shortly.</a></p>
+<div style="display: none;">
+<jsp:useBean class="net.i2p.router.web.helpers.ConfigUIHandler" id="formhandler" scope="request" />
+<%@include file="formhandler.jsi" %>
+ <form action="" method="POST">
+ <input type="hidden" name="consoleNonce" value="<%=net.i2p.router.web.CSSHelper.getNonce()%>" >
+ <input type="hidden" name="nonce" value="<%=pageNonce%>" >
+ <input type="hidden" name="action" value="blah" >
+</div>
+</div>
+<script nonce="<%=cspNonce%>" type="text/javascript">progressx.hide();</script>
+</body>
+</html>

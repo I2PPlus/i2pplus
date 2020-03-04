@@ -1,0 +1,29 @@
+/* Snark Ubergine override.css */
+/* Adds inbound graph to messages background */
+/* Requires the snark inbound bandwidth graph to be enabled
+/* Author: dr|z3d */
+
+.snarkMessages ul {
+    z-index: 10;
+    position: relative;
+}
+
+.snarkMessages::after {
+    content: "";
+    display: inline-block;
+    width: 100%;
+    height: 140%;
+    background: repeating-linear-gradient(to bottom, rgba(0,0,0,0) 1px, #fff 1px, #fff 2px, rgba(0,0,0,0) 3px), url(/viewstat.jsp?stat=tunnel.Bps.I2PSnark.in&showEvents=false&period=300000&periodCount=120&end=0&width=2000&height=400&hideLegend=true&hideGrid=true) center bottom no-repeat;
+    background-size: 120% 140%;
+    position: absolute;
+    bottom: -25%;
+    left: 0;
+    mix-blend-mode: multiply;
+    clip-path: inset(0 80px 16px 0);
+    filter: saturate(0) opacity(0.9);
+    overflow: hidden;
+}
+
+.snarkMessages:hover::after {
+    transform: translateX(11px);
+}

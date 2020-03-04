@@ -1,0 +1,21 @@
+/* Snark override.css to eliminate torrent status text for an icon only view */
+/* Author: dr|z3d */
+
+.snarkTorrentStatus {
+    font-size: 0 !important;
+    padding: 0 !important;
+    max-width: 0 !important;
+}
+
+th.snarkTorrentPeerCount a, th.snarkTorrentPeerCount {
+    font-size: 0 !important;
+}
+
+.snarkTorrentPeerCount, th.snarkTorrentPeerCount {
+    text-align: right !important;
+    padding-left: 1px !important;
+    padding-right: 10px !important;
+    width: 1%;
+    max-width: 48px !important;
+    font-weight: bold;
+}

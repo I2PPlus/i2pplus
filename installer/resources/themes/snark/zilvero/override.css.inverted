@@ -1,0 +1,36 @@
+html {
+	filter: invert(1) hue-rotate(90deg) !important;
+}
+
+* {
+	text-shadow: none !important;
+}
+
+body {
+	background: #000 !important;
+	background: repeating-linear-gradient(45deg, #000, #333 2px, #444 3px), repeating-linear-gradient(135deg, #000, #333 2px, #444 3px) !important;
+}
+
+img {
+	filter: invert(1) hue-rotate(-90deg) !important;
+}
+
+.snarkMessages img {
+	filter: invert(0) !important;
+}
+
+th img, .snarkTorrentInfo img {
+	filter: saturate(0) !important;
+}
+
+.percentBarText, .percentBarComplete {
+	color: #000 !important;
+}
+
+.addtorrentsection, .newtorrentsection, .configsection, .configsectionpanel, .snarkConfig, .snarknavbar, .snarkMessages {
+	background: linear-gradient(to bottom, #eee, #fafafa) !important;
+}
+
+.snarkNav, .toggleview, .snarkConfigTitle, .suboption, input[type="submit"], input[type="image"], a.control {
+	background: linear-gradient(to bottom, #eee 50%, #fafafa 50%) !important;
+}

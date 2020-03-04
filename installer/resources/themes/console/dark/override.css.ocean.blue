@@ -1,0 +1,147 @@
+/* Ocean Blue override.css for I2P+ console & tunnel manager 'dark' theme */
+/* Author: dr|z3d */
+
+body, html {
+    min-height: 100%;
+}
+
+html {
+    filter: hue-rotate(120deg);
+}
+
+body {
+    background: repeating-linear-gradient(to right, rgba(0,0,0,0.8) 1px, rgba(0,0,0,0.8) 2px, rgba(0,0,32,0.6) 3px) #000;
+}
+
+img, #sb_localtunnels img, .routersummary *::before, #routerlogs li, .tunnelBuildStatus {
+    filter: hue-rotate(-120deg) !important;
+}
+
+.statimage {
+    filter: hue-rotate(0) saturate(.8) !important;
+}
+
+#graphopts {
+    color: transparent !important;
+}
+
+.tunnelBuildStatus[class]::before {
+    filter: hue-rotate(0) !important;
+}
+
+.tunnelBuildStatus {
+    color: #99a !important;
+}
+
+h1, h2, h3, h4, h4 span, body, td, p, #news p, #newsStatus, #console p, #console li, th, .tab2, #updateAvailable,
+textarea, input[type="text"], input[type="file"], #configstats td b {
+    color: rgba(200,228,200,0.95) !important;
+}
+
+h1[class] {
+    background-blend-mode: luminosity, normal, exclusion, normal;
+}
+
+#sitemap h3:nth-of-type(n+1), h4.app, h4.app2 {
+    background-blend-mode: luminosity, normal, exclusion, exclusion !important
+}
+
+.main#console li b, code, .routersummary h4 {
+    color: rgba(100,228,160,0.95) !important;
+}
+
+#sb_peers b, #sb_peers a, #sb_peers a:visited, #sb_peers td, .themelabel, .ui_lang {
+    color: rgba(200,228,200,0.95) !important;
+}
+
+.newsAuthor {
+    mix-blend-mode: luminosity;
+}
+
+input[type="password"], input[name="name"], .infohelp, .infowarn, #consolepass tr:first-child td, .optionsingle, h4 {
+    background-blend-mode: luminosity !important;
+}
+
+.routersummary div[style] img {
+    filter: hue-rotate(0) saturate(0.5) !important;
+    mix-blend-mode: luminosity !important;
+}
+
+.routersummary div[style] img:hover {
+    filter: hue-rotate(0) saturate(1.5) !important;
+    mix-blend-mode: normal !important;
+}
+
+.infohelp, #bugreports td.infohelp, .infowarn, .bw_in, .bw_out, .bw_share {
+    background-blend-mode: luminosity !important;
+}
+
+#faq h3, #faq h2, #glossary h2, #help h2 {
+    background-blend-mode: luminosity, normal, normal;
+}
+
+#bugreports td.infohelp {
+    background-color: #000 !important;
+}
+
+.net_bwrate::before {
+    filter: sepia(1) saturate(0) !important;
+}
+
+#routerlogs li:hover, #criticallogs li:hover {
+    background: rgba(64,0,64,0.3);
+}
+
+#sb_localtunnels td[class] {
+    background: none !important;
+}
+
+#sb_localtunnels td[class] img, #sb_localtunnels td:first-child img  {
+    width: 16px !important;
+    height: 16px !important;
+    opacity: 1 !important;
+    filter: opacity(1) hue-rotate(-120deg) !important;
+    mix-blend-mode: normal !important;
+}
+
+#sb_localtunnels td:first-child img::after {
+    display: none;
+}
+
+#sb_localtunnels td:first-child img {
+    filter: opacity(1) saturate(0) !important;
+}
+
+/* Tunnel Manager */
+
+#tman .iframed .panel {
+    filter: hue-rotate(-120deg) !important;
+}
+
+#tman .iframed textarea {
+    scrollbar-width: thin;
+}
+
+#tman .iframed td:not(.buttons):not(.newTunnel), #tman .iframed h2, .iframed #wizardPanel h2, #tman .iframed h3, #tman .iframed .freetext {
+    background-blend-mode: difference, normal, normal !important;
+}
+
+#tman .iframed div.text {
+    mix-blend-mode: difference;
+    filter: hue-rotate(-120deg);
+}
+
+.iframed #wizardPanel td:not(.infohelp) {
+    box-shadow: none !important;
+    border-left: none !important;
+}
+
+#tman .iframed h2 {
+    background-color: #fff !important;
+}
+
+#tman .iframed #throttler td {
+    border-left-color: transparent !important;
+    border-right-color: transparent !important;
+    box-shadow: none !important;
+}

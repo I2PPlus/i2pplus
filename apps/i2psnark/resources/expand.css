@@ -1,0 +1,25 @@
+.snarkMessages {
+    height: auto !important;
+    max-height: 300px;
+    min-height: 56px !important;
+    background-position: right -4px bottom -10px, center center, center top !important;
+    background-size: auto 80px, 100% 100%, 100% 100% !important;
+}
+
+.snarkMessages:hover, .snarkMessages:focus {
+    overflow-y: auto;
+}
+
+#expand {
+    display: none !important;
+}
+
+#shrink {
+    display: inline-block !important;
+}
+
+@media screen and (min-width: 1500px) {
+.snarkMessages {
+    min-height: 60px !important;
+}
+}

@@ -1,0 +1,18 @@
+.notifications {
+  top: unset;
+  bottom: 0;
+}
+
+.iframed .notifications {
+  border-radius: 4px 4px 0 0;
+}
+
+@keyframes hide-up {
+from {
+  bottom: 0;
+}
+
+to {
+  bottom: -300px;
+}
+}

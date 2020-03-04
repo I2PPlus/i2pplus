@@ -1,0 +1,8 @@
+.iframed img, .iframed table[class] td img, .iframed table[id] td img {
+    filter: invert(1) saturate(3) hue-rotate(30deg) !important;
+}
+
+.iframed * {
+    border-color: #ddd !important;
+}
+

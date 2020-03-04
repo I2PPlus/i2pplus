@@ -1,0 +1,85 @@
+<%
+/*
+ * Created on Sep 02, 2005
+ *
+ *  This file is part of susidns project, see http://susi.i2p/
+ *
+ *  Copyright (C) 2005 <susi23@mail.i2p>
+ *
+ *  This program is free software; you can redistribute it and/or modify
+ *  it under the terms of the GNU General Public License as published by
+ *  the Free Software Foundation; either version 2 of the License, or
+ *  (at your option) any later version.
+ *
+ *  This program is distributed in the hope that it will be useful,
+ *  but WITHOUT ANY WARRANTY; without even the implied warranty of
+ *  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ *  GNU General Public License for more details.
+ *
+ *  You should have received a copy of the GNU General Public License
+ *  along with this program; if not, write to the Free Software
+ *  Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
+ *
+ * $Revision: 1.1 $
+ */
+
+    // http://www.crazysquirrel.com/computing/general/form-encoding.jspx
+    if (request.getCharacterEncoding() == null)
+        request.setCharacterEncoding("UTF-8");
+
+    response.setHeader("X-Frame-Options", "SAMEORIGIN");
+    response.setHeader("Content-Security-Policy", "default-src 'self'; style-src 'self' 'unsafe-inline'; script-src 'self' 'unsafe-inline'");
+    response.setHeader("X-XSS-Protection", "1; mode=block");
+    response.setHeader("X-Content-Type-Options", "nosniff");
+    response.setHeader("Referrer-Policy", "no-referrer");
+    response.setHeader("Accept-Ranges", "none");
+
+%>
+<%@page pageEncoding="UTF-8"%>
+<%@ page contentType="text/html" %>
+<%@page trimDirectiveWhitespaces="true"%>
+<%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core"%>
+<jsp:useBean id="version" class="i2p.susi.dns.VersionBean" scope="application" />
+<jsp:useBean id="log" class="i2p.susi.dns.LogBean" scope="session" />
+<jsp:useBean id="intl" class="i2p.susi.dns.Messages" scope="application" />
+<jsp:setProperty name="log" property="*" />
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+<html>
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+<title><%=intl._t("subscription log")%> - susidns</title>
+<link rel="stylesheet" type="text/css" href="<%=log.getTheme()%>susidns.css?<%=net.i2p.CoreVersion.VERSION%>">
+<link rel="stylesheet" type="text/css" href="<%=log.getTheme()%>override.css?<%=net.i2p.CoreVersion.VERSION%>">
+<script type="text/javascript" src="/js/iframeResizer/iframeResizer.contentWindow.js?<%=net.i2p.CoreVersion.VERSION%>"></script>
+</head>
+<body id="subsLog">
+<div class="page">
+<div id="navi">
+<a id="overview" href="index"><%=intl._t("Overview")%></a>&nbsp;
+<a class="abook" href="addressbook?book=private&amp;filter=none"><%=intl._t("Private")%></a>&nbsp;
+<a class="abook" href="addressbook?book=master&amp;filter=none"><%=intl._t("Master")%></a>&nbsp;
+<a class="abook" href="addressbook?book=router&amp;filter=none"><%=intl._t("Router")%></a>&nbsp;
+<a class="abook" href="addressbook?book=published&amp;filter=none"><%=intl._t("Published")%></a>&nbsp;
+<a id="subs" class="selected" href="subscriptions"><%=intl._t("Subscriptions")%></a>&nbsp;
+<a id="config" href="config"><%=intl._t("Configuration")%></a>
+</div>
+<hr>
+<div class="headline" id="subscriptions">
+<h3><%=intl._t("Subscription Log")%></h3>
+<h4><%=intl._t("File location")%>: <span class="storage">${log.logName}</span></h4>
+</div>
+<script src="/js/closeMessage.js?<%=net.i2p.CoreVersion.VERSION%>" type="text/javascript"></script>
+<div id="messages">${log.messages}</div>
+<form method="POST" action="config#navi">
+<div id="config">
+<textarea name="log" rows="50" cols="150" spellcheck="false">${log.logged}</textarea>
+</div>
+<div id="footer">
+<hr>
+<p class="footer">susidns v${version.version} &copy; <a href="${version.url}" target="_top">susi</a> 2005 </p>
+</div>
+</div>
+<span data-iframe-height></span>
+
+</body>
+</html>

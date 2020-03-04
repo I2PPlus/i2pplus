@@ -1,0 +1,7 @@
+html {
+    filter: invert(100%) saturate(.5) hue-rotate(90deg);
+}
+
+body {
+    background: #000 !important;
+}

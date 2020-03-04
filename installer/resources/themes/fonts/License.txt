@@ -1,0 +1,2 @@
+Droid Sans fonts licensed under the Apache License, version 2.
+A copy of the Apache license is located in the licenses directory in the I2P application directory.
