@@ -1,0 +1,47 @@
+stages:
+  - build
+
+before_script:
+  # install dependencies to build EXEs and packages
+  - apt-get update -yqq
+  - apt-get install -yqq libc6-i386 ant gettext
+  - java -version
+
+java 8:
+  stage: build
+  image: openjdk:8
+  script:
+    - ant pkg
+
+java 9:
+  stage: build
+  image: openjdk:9
+  script:
+    - ant pkg
+
+java 10:
+  stage: build
+  image: openjdk:10
+  script:
+    - ant pkg
+
+java 11:
+  stage: build
+  image: openjdk:11
+  script:
+    - ant pkg
+
+java 13:
+  stage: build
+  image: openjdk:13-buster
+  script:
+    - ant pkg
+
+java 14:
+  stage: build
+  image: openjdk:14-buster
+  # currently not well supported, needs some code fixes
+  # remove this line once code is fixed
+  allow_failure: true
+  script:
+    - ant pkg
