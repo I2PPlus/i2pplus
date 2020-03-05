@@ -1089,7 +1089,7 @@ class SummaryBarRenderer {
                           "<td align=\"left\"><b>")
                   .append(_t("Participating"))
                   .append("</b></td><td align=\"right\">")
-                  .append(_helper.getParticipatingTunnels())
+                  .append(partTunnels)
                   .append("</td></tr>\n");
            }
            buf.append("<tr title=\"")
