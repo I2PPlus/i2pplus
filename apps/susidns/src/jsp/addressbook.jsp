@@ -255,11 +255,11 @@ ${book.loadBookMessages}
 <table>
 <tr>
 <td><b><%=intl._t("Hostname")%></b></td>
-<td><input type="text" name="hostname" value="${book.hostname}" required x-moz-errormessage="<%=intl._t("Please supply a hostname.")%>" size="54"></td>
+<td><input type="text" name="hostname" value="${book.hostname}" required title="<%=intl._t("Please supply a hostname.")%>" size="54"></td>
 </tr>
 <tr>
-<td><b><%=intl._t("Destination or Base 32 Address")%></b></td>
-<td><input type="text" name="destination" required x-moz-errormessage="<%=intl._t("Please supply a Base64 destination for this hostname.")%>" value="${book.destination} size="70"></td>
+<td><b><%=intl._t("B64 or B32")%></b></td>
+<td><input type="text" name="destination" required title="<%=intl._t("Please supply a Base64 destination or Base32 address for this hostname.")%>" value="${book.destination} size="70"></td>
 </tr>
 </table>
 <p class="buttons">
