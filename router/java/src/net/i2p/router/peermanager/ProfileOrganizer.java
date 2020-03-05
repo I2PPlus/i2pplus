@@ -30,6 +30,8 @@ import net.i2p.stat.Rate;
 import net.i2p.stat.RateStat;
 import net.i2p.util.Log;
 
+import net.i2p.router.networkdb.kademlia.KademliaNetworkDatabaseFacade;
+
 /**
  * Keep the peer profiles organized according to the tiered model.  This does not
  * actively update anything - the reorganize() method should be called periodically
@@ -81,6 +83,8 @@ public class ProfileOrganizer {
     private static final int DEFAULT_MAXIMUM_FAST_PEERS = 150;
 //    private static final int ABSOLUTE_MAX_FAST_PEERS = 75;
     private static final int ABSOLUTE_MAX_FAST_PEERS = 200;
+
+//    private final int known = net.i2p.router.networkdb.kademlia.KademliaNetworkDatabaseFacade.getKnownRouters();
 
     /**
      * Defines the minimum number of 'high capacity' peers that the organizer should
@@ -394,7 +398,7 @@ public class ProfileOrganizer {
                 _log.debug("Need " + howMany + " Fast peer for tunnel build; " + matches.size() + " found - selecting remainder from High Capacity tier");
             selectHighCapacityPeers(howMany, exclude, matches, mask);
         } else {
-            if (_log.shouldDebug())
+            if (_log.shouldLog(Log.DEBUG))
                 if (howMany != 1)
                 _log.debug(howMany + " Fast peers selected for tunnel build");
                 else
@@ -465,7 +469,7 @@ public class ProfileOrganizer {
                 _log.debug("Need " + howMany + " Fast peers for tunnel build; " + matches.size() + " found - selecting remainder from High Capacity peers");
             selectHighCapacityPeers(howMany, exclude, matches, 2);
         } else {
-            if (_log.shouldDebug())
+            if (_log.shouldLog(Log.DEBUG))
                 _log.debug(howMany + " Fast peers selected for tunnel build");
         }
         return;
@@ -502,7 +506,7 @@ public class ProfileOrganizer {
                 _log.debug("Need " + howMany + " High Capacity peers for tunnel build; " + matches.size() + " found - selecting remainder from Not Failing peers");
             selectActiveNotFailingPeers2(howMany, exclude, matches, mask);
         } else {
-            if (_log.shouldDebug())
+            if (_log.shouldLog(Log.DEBUG))
                 _log.debug(howMany + " High Capacity peers selected for tunnel build");
         }
         return;
@@ -536,7 +540,7 @@ public class ProfileOrganizer {
                 _log.debug("Need " + howMany + " Integrated peers for tunnel build; " + matches.size() + " found - selecting remainder from Not Failing peers");
             selectNotFailingPeers(howMany, exclude, matches, mask);
         } else {
-            if (_log.shouldDebug())
+            if (_log.shouldLog(Log.DEBUG))
                 _log.debug(howMany + " Integrated peers selected for tunnel build");
         }
 
@@ -639,7 +643,7 @@ public class ProfileOrganizer {
                 _log.debug("Need " + howMany + " Not Failing peers for tunnel build; " + matches.size() + " found - selecting remainder from most reliable Failing peers");
             selectNotFailingPeers(howMany, exclude, matches, mask);
         } else {
-            if (_log.shouldDebug())
+            if (_log.shouldLog(Log.DEBUG))
                 _log.debug(howMany + " Not Failing peers selected for tunnel build");
         }
     }
@@ -1025,6 +1029,7 @@ public class ProfileOrganizer {
      */
     private void locked_demoteHighCapAsNecessary() {
         int maxHighCapPeers = getMaximumHighCapPeers();
+        NetworkDatabaseFacade netDb = _context.netDb();
         int numToDemote = _highCapacityPeers.size() - maxHighCapPeers;
         if (numToDemote > 0) {
             // sorted by capacity, highest-first
@@ -1512,12 +1517,20 @@ public class ProfileOrganizer {
 
     /** fixme add config  @since 0.7.10 */
     protected int getMaximumFastPeers() {
-        return ABSOLUTE_MAX_FAST_PEERS;
+        int known = _context.netDb().getKnownRouters();
+        if (known > 2000)
+            return known / 20;
+        else
+            return ABSOLUTE_MAX_FAST_PEERS;
     }
 
     /** fixme add config  @since 0.7.11 */
     protected int getMaximumHighCapPeers() {
-        return ABSOLUTE_MAX_HIGHCAP_PEERS;
+        int known = _context.netDb().getKnownRouters();
+        if (known > 2000)
+            return known / 10;
+        else
+            return ABSOLUTE_MAX_HIGHCAP_PEERS;
     }
 
     /**
