@@ -26,6 +26,9 @@ import net.i2p.stat.RateAverages;
 import net.i2p.stat.RateStat;
 import net.i2p.util.Log;
 
+import java.util.Random;
+import net.i2p.router.RouterContext;
+
 /**
  *  A group of tunnels for the router or a particular client, in a single direction.
  *  Public only for TunnelRenderer in router console.
@@ -98,8 +101,8 @@ public class TunnelPool {
         synchronized (_inProgress) {
             _inProgress.clear();
         }
-        if (_log.shouldLog(Log.INFO))
-            _log.info(toString() + ": Startup() called, was already alive? " + _alive, new Exception());
+        if (_log.shouldLog(Log.DEBUG))
+            _log.debug(toString() + ": Startup() called, was already alive? " + _alive, new Exception());
         _alive = true;
         _started = System.currentTimeMillis();
         _lastRateUpdate = _started;
@@ -177,10 +180,12 @@ public class TunnelPool {
     private long curPeriod() {
         long period = _context.clock().now();
         long ms = period % 1000;
-        if (ms > 500)
-            period = period - ms + 500;
-        else
-            period = period - ms;
+        Random random = _context.random();
+//        if (ms > 500)
+//            period = period - ms + 500;
+        period = period - ms + (random.nextInt(200) + 50 / (random.nextInt(4) + 1) * 7 + 100 + random.nextInt(150));
+//        else
+//            period = period - ms;
         return period;
     }
 
@@ -213,7 +218,8 @@ public class TunnelPool {
                 if (_log.shouldLog(Log.WARN))
                     _log.warn(toString() + ": No tunnels available");
             } else {
-                Collections.shuffle(_tunnels, _context.random());
+//                Collections.shuffle(_tunnels, _context.random());
+                Collections.rotate(_tunnels, 1);
 
                 // if there are nonzero hop tunnels and the zero hop tunnels are fallbacks,
                 // avoid the zero hop tunnels
