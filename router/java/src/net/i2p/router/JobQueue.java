@@ -79,11 +79,11 @@ public class JobQueue {
         else
             RUNNERS = 8;
 **/
-        RUNNERS = Math.min(SystemVersion.usableCores(), 8);
+        RUNNERS = Math.min(SystemVersion.usableCores() + 1, 8);
     }
 
     /** default max # job queue runners operating */
-    private final static int DEFAULT_MAX_RUNNERS = Math.min(SystemVersion.usableCores(), 8);
+    private final static int DEFAULT_MAX_RUNNERS = Math.min(SystemVersion.getCores(), 8);
     /** router.config parameter to override the max runners */
     private final static String PROP_MAX_RUNNERS = "router.maxJobRunners";
 
@@ -131,9 +131,8 @@ public class JobQueue {
     /** max ready and waiting jobs before we start dropping 'em */
     private int _maxWaitingJobs = DEFAULT_MAX_WAITING_JOBS;
 //    private final static int DEFAULT_MAX_WAITING_JOBS = 25;
-    private final static int DEFAULT_MAX_WAITING_JOBS = 100;
-//    private final static long MIN_LAG_TO_DROP = 500;
-    private final static long MIN_LAG_TO_DROP = 750;
+    private final static int DEFAULT_MAX_WAITING_JOBS = 40;
+    private final static long MIN_LAG_TO_DROP = 500;
 
     /** @deprecated unimplemented */
     @Deprecated
