@@ -1078,7 +1078,10 @@ class SummaryBarRenderer {
 
            String maxTunnels = _context.getProperty("router.maxParticipatingTunnels");
            RouterInfo ri = _context.router().getRouterInfo();
-           if ((maxTunnels == null || _helper.getParticipatingTunnels() > 0
+           int partTunnels = _helper.getParticipatingTunnels();
+           if (partTunnels >= 2)
+               partTunnels = partTunnels - 1; // fix duplicate display
+           if ((maxTunnels == null || partTunnels > 0
                || Integer.valueOf(maxTunnels) > 0) && !_context.router().isHidden() && ri != null && !ri.getBandwidthTier().equals("K")) {
                buf.append("<tr title=\"")
                   .append(_t("Tunnels we are participating in, directly contributing bandwidth to the network"))
@@ -1097,7 +1100,7 @@ class SummaryBarRenderer {
               .append("</b></td><td align=\"right\">")
               .append(_helper.getInboundTunnels() + _helper.getOutboundTunnels() +
                       _helper.getInboundClientTunnels() + _helper.getOutboundClientTunnels() +
-                      _helper.getParticipatingTunnels())
+                      partTunnels)
               .append("</td></tr>\n");
 
            if ((maxTunnels == null || Integer.valueOf(maxTunnels) > 0) && !_context.router().isHidden() && ri != null && !ri.getBandwidthTier().equals("K")) {
