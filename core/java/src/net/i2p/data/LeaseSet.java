@@ -423,9 +423,12 @@ public class LeaseSet extends DatabaseEntry {
             buf.append("\n* Destination: ").append(_destination);
             buf.append("\n* B32: ").append(_destination.toBase32());
         }
-        buf.append("\n* EncryptionKey: ").append(_encryptionKey);
-        buf.append("\n* SigningKey: ").append(_signingKey);
-        buf.append("\n* Signature: ").append(_signature);
+        if (_encryptionKey != null)
+            buf.append("\n* EncryptionKey: ").append(_encryptionKey);
+        if (_signingKey != null)
+            buf.append("\n* SigningKey: ").append(_signingKey);
+        if (_signature != null)
+            buf.append("\n* Signature: ").append(_signature);
         buf.append("\n* Leases: ").append(getLeaseCount());
         for (int i = 0; i < getLeaseCount(); i++)
             buf.append(getLease(i));
