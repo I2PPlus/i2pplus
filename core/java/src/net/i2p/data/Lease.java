@@ -151,8 +151,8 @@ public class Lease extends DataStructureImpl {
         StringBuilder buf = new StringBuilder(128);
         buf.append("\n* Lease:");
         buf.append(" [TunnelID ").append(_tunnelId).append("]");
-        buf.append("\n* Gateway: [").append(_gateway.toBase64().substring(0,6) + "]");
-        buf.append("\n* Expires: ").append(_end);
+        buf.append(" -> Gateway: [").append(_gateway.toBase64().substring(0,6) + "]");
+        buf.append(" -> Expires: ").append(_end);
         return buf.toString();
     }
 }
