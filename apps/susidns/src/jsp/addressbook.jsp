@@ -259,7 +259,7 @@ ${book.loadBookMessages}
 </tr>
 <tr>
 <td><b><%=intl._t("Destination or Base 32 Address")%></b></td>
-<td><textarea name="destination" required x-moz-errormessage="<%=intl._t("Please supply a Base64 destination for this hostname.")%>" rows="1" style="height:3em" wrap="off" cols="70" spellcheck="false">${book.destination}</textarea></td>
+<td><input type="text" name="destination" required x-moz-errormessage="<%=intl._t("Please supply a Base64 destination for this hostname.")%>" value="${book.destination} size="70"></td>
 </tr>
 </table>
 <p class="buttons">
