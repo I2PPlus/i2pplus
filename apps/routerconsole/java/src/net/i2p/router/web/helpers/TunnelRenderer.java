@@ -139,7 +139,7 @@ class TunnelRenderer {
             out.write("<h3 class=\"tabletitle\" id=\"participating\">");
             out.write(_t("Participating"));
             if (!debug)
-                out.write(' ' + _t(" tunnels"));
+                out.write(' ' + _t("tunnels"));
             out.write("</h3>\n");
             int bwShare = getShareBandwidth();
             if (bwShare > 12) {
@@ -218,17 +218,23 @@ class TunnelRenderer {
                     out.write("<td class=\"cells\"></td>");
                 out.write("</tr>\n");
             }
-            if (!participating.isEmpty())
-                out.write("</table>\n");
-            if (displayed > DISPLAY_LIMIT)
+            out.write("</table>\n");
+            if (displayed > DISPLAY_LIMIT) {
 //                out.write("<div class=\"statusnotes\"><b>" + _t("Limited display to the {0} tunnels with the highest usage", DISPLAY_LIMIT)  + "</b></div>\n");
                 out.write("<div class=\"statusnotes\"><b>" + _t("Limited display to the {0} most recent tunnels", DISPLAY_LIMIT)  + "</b></div>\n");
-            if (inactive > 0)
-                out.write("<div class=\"statusnotes\"><b>" + _t("Inactive participating tunnels") + ":&nbsp;&nbsp;" + inactive + "</b></div>\n");
-            else if (displayed <= 0)
-                out.write("<div class=\"statusnotes\"><b>" + _t("none") + "</b></div>\n");
-            out.write("<div class=\"statusnotes\"><b>" + _t("Lifetime bandwidth usage") + ":&nbsp;&nbsp;" +
-                      DataHelper.formatSize2Decimal(processed*1024) + "B</b></div>\n");
+            } else if (displayed >= 2) {
+                out.write("<div class=\"statusnotes\"><b>" + _t("Active")  + ":</b>&nbsp" + (displayed - 1));
+                if (inactive > 0) {
+                    out.write("&nbsp;&bullet;&nbsp;<b>" + _t("Inactive") + ":</b>&nbsp;" + inactive + "&nbsp;&bullet;&nbsp;<b>" + _t("Total") + ":</b>&nbsp;" + (inactive + displayed));
+                }
+            } else if (inactive > 0) {
+                out.write("<div class=\"statusnotes\"><b>" + _t("Inactive") + ":</b>&nbsp;" + inactive);
+            }
+            out.write("</div>\n");
+//            else if (displayed <= 0)
+//                out.write("<div class=\"statusnotes\"><b>" + _t("none") + "</b></div>\n");
+            out.write("<div class=\"statusnotes\"><b>" + _t("Lifetime bandwidth usage") + ":</b>&nbsp;" +
+                      DataHelper.formatSize2Decimal(processed*1024) + "B</div>\n");
             } else { // bwShare < 12K/s
                 out.write("<div class=\"statusnotes noparticipate\"><b>" + _t("Not enough shared bandwidth to build participating tunnels.") +
                           "</b> <a href=\"config\">[" + _t("Configure") + "]</a></div>\n");
