@@ -225,26 +225,24 @@ class TunnelRenderer {
             } else if (displayed >= 2) {
                 out.write("<div class=\"statusnotes\"><b>" + _t("Active")  + ":</b>&nbsp" + (displayed - 1));
                 if (inactive > 0) {
-                    out.write("&nbsp;&bullet;&nbsp;<b>" + _t("Inactive") + ":</b>&nbsp;" + inactive + "&nbsp;&bullet;&nbsp;<b>" + _t("Total") + ":</b>&nbsp;" + (inactive + displayed));
+                    out.write("&nbsp;&bullet;&nbsp;<b>" + _t("Inactive") + ":</b>&nbsp;" + inactive + "&nbsp;&bullet;&nbsp;<b>" + _t("Total") + ":</b>&nbsp;" + (inactive + displayed -1));
                 }
             } else if (inactive > 0) {
                 out.write("<div class=\"statusnotes\"><b>" + _t("Inactive") + ":</b>&nbsp;" + inactive);
             }
             out.write("</div>\n");
-//            else if (displayed <= 0)
-//                out.write("<div class=\"statusnotes\"><b>" + _t("none") + "</b></div>\n");
             out.write("<div class=\"statusnotes\"><b>" + _t("Lifetime bandwidth usage") + ":</b>&nbsp;" +
                       DataHelper.formatSize2Decimal(processed*1024) + "B</div>\n");
             } else { // bwShare < 12K/s
                 out.write("<div class=\"statusnotes noparticipate\"><b>" + _t("Not enough shared bandwidth to build participating tunnels.") +
                           "</b> <a href=\"config\">[" + _t("Configure") + "]</a></div>\n");
             }
-            //renderPeers(out);
         } else if (_context.router().isHidden()) {
             out.write("<p class=\"infohelp\">" + _t("Router is currently operating in Hidden Mode which prevents participating tunnels from being built."));
         } else {
             out.write("<p class=\"infohelp\">" + _t("No participating tunnels currently active."));
         }
+        out.write("</p>");
     }
 
     public void renderGuide(Writer out) throws IOException {
