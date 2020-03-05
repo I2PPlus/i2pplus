@@ -4886,6 +4886,20 @@ h3.dead span {
     padding-bottom: 8px;
 }
 
+#participatingtunnels .statusnotes:last-of-type {
+    margin-bottom: 10px;
+}
+
+@media screen and (max-width: 1200px) {
+#participatingtunnels .statusnotes:last-of-type {
+    margin-bottom: 6px;
+}
+}
+
+#tunnels .tunnels_participating tbody tr:first-child {
+    display: none !important;
+}
+
 .main#tunnels h3 a {
     float: right;
 }
@@ -13919,7 +13933,7 @@ h3 + table {
     font-weight: inherit;
 }
 
-#tunnels .tab. #tunnels .tab2 {
+#tunnels .tab, #tunnels .tab2 {
     padding: 5px 12px !important;
     line-height: 1 !important;
 }
