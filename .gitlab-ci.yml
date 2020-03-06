@@ -1,3 +1,13 @@
+default:
+  image: openjdk:11
+  artifacts:
+    name: "$CI_JOB_NAME"
+    paths:
+      - i2pinstall.exe
+      - i2pupdate.zip
+      - install.jar
+    expire_in: 2 weeks
+
 stages:
   - build
   - test
