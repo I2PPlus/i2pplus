@@ -1,10 +1,11 @@
 stages:
   - build
+  - test
 
 before_script:
   # install dependencies to build EXEs and packages
   - apt-get update -yqq
-  - apt-get install -yqq libc6-i386 ant gettext
+  - apt-get install -yqq libc6-i386 ant gettext libxml2-utils
   - java -version
 
 java 8:
@@ -45,3 +46,12 @@ java 14:
   allow_failure: true
   script:
     - ant pkg
+
+testing:
+  stage: test
+  script:
+    - ./tests/scripts/checkcerts.sh
+    - ./tests/scripts/checkpo.sh
+    - ./tests/scripts/checkscripts.sh
+    - ./tests/scripts/checkutf8.sh
+    - ./tests/scripts/checkxml.sh
