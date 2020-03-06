@@ -9003,7 +9003,7 @@ msgid ""
 msgstr ""
 "Si conoce y confía en alguien que ejecuta I2P, pídale que le envíe un "
 "fichero de resembrado que se genera usando esta página en la "
-"consola del routerde este."
+"consola del routerde este. {0}"
 
 #: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/help_005far_jsp.java:578
 #: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/help_005ffr_jsp.java:576
@@ -9014,11 +9014,11 @@ msgstr ""
 msgid ""
 "If you know and trust somebody that publishes reseed files, ask them for the "
 "URL. Then, click the <i>Reseed from URL</i> button on the {0} to reseed "
-"using the URL you received."
+"using the URL you received. {0}"
 msgstr ""
 "Si conoce y confía en alguien que publica ficheros de resembrado, pídale la"
-" URL."
-
+" URL. {0}"
+""
 #: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/help_005far_jsp.java:580
 #: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/help_005ffr_jsp.java:578
 #: ../jsp/WEB-INF/classes/net/i2p/router/web/jsp/help_005fnl_jsp.java:577
