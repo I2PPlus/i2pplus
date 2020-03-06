@@ -59,6 +59,10 @@ install it, and then run the following command(s):
     ant installer5-osx
     ant installer5-windows
 
+To build an unsigned update for an existing installation, run:
+
+    ant updater
+
 Run 'ant' with no arguments to see other build options.
 
 ## Contact info
