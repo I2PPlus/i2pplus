@@ -1,12 +1,12 @@
-# I2P
+# I2P+
 
-This is the source code for the reference Java implementation of I2P.
+This is the source code for the soft-fork of the Java implementation of I2P.
 
-Latest release: https://geti2p.net/download
+Latest release: https://i2pplus.com/
 
 ## Installing
 
-See INSTALL.txt or https://geti2p.net/download for installation instructions.
+See INSTALL.txt or https://i2pplus.com/ for installation instructions.
 
 ## Documentation
 
@@ -23,7 +23,7 @@ Please check out [HACKING.md](docs/HACKING.md) and other documents in the docs d
 
 ## Building packages from source
 
-To get development branch from source control: https://geti2p.net/newdevelopers
+To get development branch from source control: https://gitlab.com/i2p.plus/I2P.Plus/
 
 ### Prerequisites
 
@@ -50,31 +50,15 @@ On non-x86, use one of the following instead:
 
 Run 'ant' with no arguments to see other build options.
 
-### Gradle build process
-
-Full builds of installers or updates are not yet possible, but the code can be
-compiled with:
-
-    ./gradlew assemble
-
-This will download dependencies over the clearnet by default, including Gradle
-itself. To download through a SOCKS proxy (e.g. Tor), add the following lines to
-your `~/.gradle/gradle.properties`:
-
-    systemProp.socksProxyHost=localhost
-    systemProp.socksProxyPort=9150
-
 ## Contact info
 
-Need help? See the IRC channel #i2p on irc.freenode.net
+Need help? See the IRC channel #saltR on the I2P IRC network
 
-Bug reports: https://trac.i2p2.de/report/1
-
-Contact information, security issues, press inquiries: https://geti2p.net/en/contact
-
-Twitter: @i2p, @geti2p
+Bug reports: https://trac.i2p2.de/report/1 or https://gitlab.com/i2p.plus/I2P.Plus/issues
 
 ## Licenses
 
-See LICENSE.txt
+I2P+ is licensed under the AGPL v.3.
+
+For the various sub-component licenses, see: LICENSE.txt
 
