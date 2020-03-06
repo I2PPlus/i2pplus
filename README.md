@@ -1,5 +1,7 @@
 # I2P+
 
+中文版文档在[这里](README-zh.md)
+
 This is the source code for the soft-fork of the Java implementation of I2P.
 
 Latest release: https://i2pplus.com/
@@ -38,7 +40,7 @@ To get development branch from source control: https://gitlab.com/i2p.plus/I2P.P
 
 ### Ant build process
 
-On x86 systems do:
+On x86 systems run the following (this will build using IzPack4):
 
     ant pkg
 
@@ -47,6 +49,15 @@ On non-x86, use one of the following instead:
     ant installer-linux
     ant installer-freebsd
     ant installer-osx
+    ant installer-windows
+
+If you want to build with IzPack5, download from: http://izpack.org/downloads/ and then
+install it, and then run the following command(s):
+
+    ant installer5-linux
+    ant installer5-freebsd
+    ant installer5-osx
+    ant installer5-windows
 
 Run 'ant' with no arguments to see other build options.
 
