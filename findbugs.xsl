@@ -1,6 +1,5 @@
 <?xml version="1.0" encoding="UTF-8" ?>
 <xsl:stylesheet version="1.0" xmlns="http://www.w3.org/1999/xhtml" xmlns:xsl="http://www.w3.org/1999/XSL/Transform">
-
   <xsl:output method="xml" indent="yes" omit-xml-declaration="yes" standalone="yes" doctype-system="http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd" doctype-public="-//W3C//DTD XHTML 1.0 Transitional//EN" encoding="UTF-8" />
 
   <xsl:variable name="literalNbsp">&amp;nbsp;</xsl:variable>
@@ -39,6 +38,14 @@
             text-decoration: none;
           }
 
+          a:link {
+            font-weight: 600;
+          }
+
+          a:hover {
+            color: #f90;
+          }
+
           h1 {
             font-size: 16pt;
           }
@@ -54,26 +61,44 @@
           }
 
           table + h2 a[name], h2 a[name="Warnings_BAD_PRACTICE"], h2#summarytitle {
-            color: #ddd;
             padding-bottom: 6px;
             display: inline-block;
             font-size: 14pt;
+            color: #ddd;
           }
 
-          p {
-            margin-top: 0;
+          .tabletitle {
+            margin-bottom: -1px;
+            padding: 4px 16px 2px;
+            display: inline-block;
+            border: 1px solid #777;
+          }
+
+          .tabletitle, #summarytitle {
+            background: linear-gradient(to bottom, #222 50%, #000 50%);
+          }
+
+          .tabletitle a, #summarytitle {
+            font-size: 12pt !important;
+            line-height: 1;
+            display: inline-block;
+          }
+
+          #summarytitle {
+            padding-bottom: 8px !important;
           }
 
           table {
             padding: 1px;
             width: 100%;
             border: 1px solid #777;
+            border-collapse: collapse;
             background: #111;
           }
 
           th {
             background: linear-gradient(to bottom, #333, #111);
-            border-bottom: 1px solid #444;
+            border-bottom: 1px solid #777;
           }
 
           .warningtable th:first-child, .warningtable td:first-child {
@@ -83,7 +108,11 @@
             border-right: 1px solid #444;
           }
 
-          .warningtable th, .warningtable td:not([display="none;"]) {
+          .warningtable th {
+            padding: 4px 15px;
+          }
+
+          .warningtable td {
             padding: 0 15px;
           }
 
@@ -105,11 +134,10 @@
 
           .tableheader {
             background: #444;
-            font-size: larger;
           }
 
           .tablerow0:hover, .tablerow1:hover {
-            background: #000
+            background: #252
           }
 
           .priority-1 {
@@ -141,10 +169,20 @@
             columns: auto 300px;
           }
 
+          #defects {
+            text-align: right;
+          }
+
+          #version {
+            margin-top: -20px;
+            font-size: 80%;
+          }
+
           hr {
+            margin: 10px 0 5px;
             height: 1px;
-            background: #444;
             border: none;
+            background: #444;
           }
 
           pre {
@@ -153,23 +191,23 @@
             border-radius: 4px;
             background: #181818;
           }
-		</style>
+      </style>
         <script type="text/javascript">
-			function toggleRow(elid) {
-				if (document.getElementById) {
-					element = document.getElementById(elid);
-					if (element) {
-						if (element.style.display == 'none') {
-							element.style.display = 'block';
-							//window.status = 'Toggle on!';
-						} else {
-							element.style.display = 'none';
-							//window.status = 'Toggle off!';
-						}
-					}
-				}
-			}
-		</script>
+         function toggleRow(elid) {
+            if (document.getElementById) {
+               element = document.getElementById(elid);
+               if (element) {
+                  if (element.style.display == 'none') {
+                     element.style.display = 'block';
+                     //window.status = 'Toggle on!';
+                  } else {
+                     element.style.display = 'none';
+                     //window.status = 'Toggle off!';
+                  }
+               }
+            }
+         }
+      </script>
       </head>
 
       <xsl:variable name="unique-catkey" select="/BugCollection/BugCategory/@category" />
@@ -178,10 +216,10 @@
       <body>
 
         <xsl:apply-templates select="/BugCollection/Project" />
-
         <h2>Metrics</h2>
         <xsl:apply-templates select="/BugCollection/FindBugsSummary" />
 
+        <hr />
         <h2>Contents</h2>
         <ul id="contents">
           <xsl:for-each select="$unique-catkey">
@@ -200,8 +238,9 @@
             <a href="#Details">Details</a>
           </li>
         </ul>
+        <hr />
 
-        <h2 id="summarytitle">Summary</h2>
+        <h2 id="summarytitle" class="tabletitle">Summary</h2>
         <table width="500" cellpadding="5" cellspacing="2">
           <tr class="tableheader">
             <th align="left">Warning Type</th>
@@ -292,11 +331,11 @@
         </xsl:otherwise>
       </xsl:choose>
     </h1>
-    <p>
+    <p id="version">
       FindBugs version:
       <xsl:value-of select="/BugCollection/@version" />
     </p>
-
+    <hr />
     <p>Code analyzed:</p>
     <ul id="analyzed">
       <xsl:for-each select="./Jar">
@@ -365,7 +404,7 @@
     <xsl:param name="sectionTitle" />
     <xsl:param name="sectionId" />
 
-    <h2>
+    <h2 class="tabletitle">
       <a name="{$sectionId}">
         <xsl:value-of select="$sectionTitle" />
       </a>
@@ -385,13 +424,7 @@
 
     <p>
       <xsl:value-of select="@total_size" />
-      lines of code analyzed,
-	in
-      <xsl:value-of select="@total_classes" />
-      classes,
-	in
-      <xsl:value-of select="@num_packages" />
-      packages.
+      lines of code analyzed, in <xsl:value-of select="@total_classes" /> classes, in <xsl:value-of select="@num_packages" /> packages.
     </p>
     <table width="500" cellpadding="5" cellspacing="2">
       <tr class="tableheader">
@@ -484,12 +517,8 @@
         </xsl:choose>
       </tr>
     </table>
-    <p>
+    <p id="defects">
       <i>(* Defects per Thousand lines of non-commenting source statements)</i>
-    </p>
-    <p>
-      <br />
-      <br />
     </p>
 
   </xsl:template>
