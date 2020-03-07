@@ -1,47 +1,4 @@
 <?xml version="1.0" encoding="UTF-8" ?>
-
-<!--
-  FindBugs - Find bugs in Java programs
-  Copyright (C) 2004,2005 University of Maryland
-  Copyright (C) 2005, Chris Nappin
-
-  This library is free software; you can redistribute it and/or
-  modify it under the terms of the GNU Lesser General Public
-  License as published by the Free Software Foundation; either
-  version 2.1 of the License, or (at your option) any later version.
-
-  This library is distributed in the hope that it will be useful,
-  but WITHOUT ANY WARRANTY; without even the implied warranty of
-  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
-  Lesser General Public License for more details.
-
-  You should have received a copy of the GNU Lesser General Public
-  License along with this library; if not, write to the Free Software
-  Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
--->
-
-<!--
-  A simple XSLT stylesheet to transform FindBugs XML results
-  annotated with messages into HTML.
-
-  If you want to experiment with modifying this stylesheet,
-  or write your own, you need to generate XML output from FindBugs
-  using a special option which lets it know to include
-  human-readable messages in the XML.  Invoke the findbugs script
-  as follows:
-
-    findbugs -textui -xml:withMessages -project myProject.fb > results.xml
-
-  Then you can use your favorite XSLT implementation to transform
-  the XML output into HTML. (But don't use xsltproc. It generates well-nigh
-  unreadable output, and generates incorrect output for the
-  <script> element.)
-
-  Authors:
-  David Hovemeyer
-  Chris Nappin (summary table)
--->
-
 <xsl:stylesheet version="1.0" xmlns="http://www.w3.org/1999/xhtml" xmlns:xsl="http://www.w3.org/1999/XSL/Transform">
 
   <xsl:output method="xml" indent="yes" omit-xml-declaration="yes" standalone="yes" doctype-system="http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd" doctype-public="-//W3C//DTD XHTML 1.0 Transitional//EN" encoding="UTF-8" />
@@ -60,7 +17,7 @@
   <xsl:template match="/">
     <html>
       <head>
-        <title>FindBugs Report</title>
+        <title>I2P+ | FindBugs Report</title>
         <style type="text/css">
           html {
             background: #000;
@@ -82,13 +39,25 @@
             text-decoration: none;
           }
 
+          h1 {
+            font-size: 16pt;
+          }
+
           h2 {
-            font-size: 12pt;
+            font-size: 14pt;
             margin-bottom: 0;
           }
 
           h2 a[name] {
+            font-size: 11pt;
             color: #bb0;
+          }
+
+          table + h2 a[name], h2 a[name="Warnings_BAD_PRACTICE"], h2#summarytitle {
+            color: #ddd;
+            padding-bottom: 6px;
+            display: inline-block;
+            font-size: 14pt;
           }
 
           p {
@@ -104,9 +73,12 @@
 
           th {
             background: linear-gradient(to bottom, #333, #111);
+            border-bottom: 1px solid #444;
           }
 
           .warningtable th:first-child, .warningtable td:first-child {
+            width: 1%;
+            white-space: nowrap;
             text-align: center;
             border-right: 1px solid #444;
           }
@@ -159,6 +131,28 @@
             color: blue;
             font-weight: bold;
           }
+
+          #analyzed {
+            columns: auto 200px;
+          }
+
+
+          #contents {
+            columns: auto 300px;
+          }
+
+          hr {
+            height: 1px;
+            background: #444;
+            border: none;
+          }
+
+          pre {
+            padding: 8px;
+            color: #3a3;
+            border-radius: 4px;
+            background: #181818;
+          }
 		</style>
         <script type="text/javascript">
 			function toggleRow(elid) {
@@ -183,26 +177,20 @@
 
       <body>
 
-        <h1>
-          FindBugs Report
-        </h1>
-
-        <h2>Project Information</h2>
         <xsl:apply-templates select="/BugCollection/Project" />
 
         <h2>Metrics</h2>
         <xsl:apply-templates select="/BugCollection/FindBugsSummary" />
 
         <h2>Contents</h2>
-        <ul>
+        <ul id="contents">
           <xsl:for-each select="$unique-catkey">
             <xsl:sort select="." order="ascending" />
             <xsl:variable name="catkey" select="." />
             <xsl:variable name="catdesc" select="/BugCollection/BugCategory[@category=$catkey]/Description" />
 
             <li>
-              <a href="#Warnings_{$catkey}">
-                <xsl:value-of select="$catdesc" />
+              <a href="#Warnings_{$catkey}"><xsl:value-of select="$catdesc" />
                 Warnings
               </a>
             </li>
@@ -213,7 +201,7 @@
           </li>
         </ul>
 
-        <h1>Summary</h1>
+        <h2 id="summarytitle">Summary</h2>
         <table width="500" cellpadding="5" cellspacing="2">
           <tr class="tableheader">
             <th align="left">Warning Type</th>
@@ -233,8 +221,7 @@
 
             <tr class="{$styleclass}">
               <td>
-                <a href="#Warnings_{$catkey}">
-                  <xsl:value-of select="$catdesc" />
+                <a href="#Warnings_{$catkey}"><xsl:value-of select="$catdesc" />
                   Warnings
                 </a>
               </td>
@@ -262,7 +249,7 @@
           </tr>
         </table>
 
-        <h1>Warnings</h1>
+        <h2>Warnings</h2>
 
         <p>Click on a warning row to see full context information.</p>
 
@@ -273,20 +260,16 @@
 
           <xsl:call-template name="generateWarningTable">
             <xsl:with-param name="warningSet" select="/BugCollection/BugInstance[(@category=$catkey) and not(@last)]" />
-            <xsl:with-param name="sectionTitle">
-              <xsl:value-of select="$catdesc" />
+            <xsl:with-param name="sectionTitle"><xsl:value-of select="$catdesc" />
               Warnings
             </xsl:with-param>
-            <xsl:with-param name="sectionId">
-              Warnings_
-              <xsl:value-of select="$catkey" />
-            </xsl:with-param>
+            <xsl:with-param name="sectionId">Warnings_<xsl:value-of select="$catkey" /></xsl:with-param>
           </xsl:call-template>
         </xsl:for-each>
 
-        <h1>
+        <h2>
           <a name="Details">Details</a>
-        </h1>
+        </h2>
 
         <xsl:apply-templates select="/BugCollection/BugPattern">
           <xsl:sort select="@abbrev" />
@@ -298,7 +281,7 @@
   </xsl:template>
 
   <xsl:template match="Project">
-    <p>
+    <h1>
       Project:
       <xsl:choose>
         <xsl:when test="string-length(/BugCollection/Project/@projectName)>0">
@@ -308,24 +291,21 @@
           <xsl:value-of select="/BugCollection/Project/@filename" />
         </xsl:otherwise>
       </xsl:choose>
-    </p>
+    </h1>
     <p>
       FindBugs version:
       <xsl:value-of select="/BugCollection/@version" />
     </p>
 
     <p>Code analyzed:</p>
-    <ul>
+    <ul id="analyzed">
       <xsl:for-each select="./Jar">
         <li>
           <xsl:value-of select="text()" />
         </li>
       </xsl:for-each>
     </ul>
-    <p>
-      <br />
-      <br />
-    </p>
+    <hr />
   </xsl:template>
 
   <xsl:template match="BugInstance[not(@last)]">
@@ -338,8 +318,7 @@
       <td>
         <span>
           <xsl:attribute name="class">
-            priority-
-            <xsl:value-of select="@priority" />
+            priority-<xsl:value-of select="@priority" />
           </xsl:attribute>
           <xsl:value-of select="@abbrev" />
         </span>
