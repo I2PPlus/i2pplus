@@ -833,8 +833,8 @@
             splitindex="true"
             failonerror="true"
             additionalparam="-notimestamp"
-            doctitle="I2P Javadocs for Release ${release.number} Build ${i2p.build.number}${build.extra}"
-            windowtitle="I2P Anonymous Network - Java Documentation - Version ${release.number}">
+            doctitle="I2P+ Javadocs [${release.number}-${i2p.build.number}${build.extra}]"
+            windowtitle="I2P+ - Java Documentation - Version ${release.number}">
             <group title="Core SDK (i2p.jar)" packages="net.i2p:net.i2p.*:net.i2p.client:net.i2p.client.*:net.i2p.internal:net.i2p.internal.*:freenet.support.CPUInformation:gnu.crypto.*:gnu.getopt:gnu.gettext:com.nettgryppa.security:org.apache.http.conn.ssl:org.apache.http.conn.util:org.apache.http.util:org.json.simple:org.json.simple.*:com.southernstorm.noise.crypto.x25519:com.southernstorm.noise.crypto.chacha20" />
             <group title="Streaming Library" packages="net.i2p.client.streaming:net.i2p.client.streaming.impl" />
             <group title="Router" packages="net.i2p.router:net.i2p.router.*:net.i2p.data.i2np:net.i2p.data.router:org.cybergarage:org.cybergarage.*:org.freenetproject:org.xlattice.crypto.filters:com.maxmind.*:com.southernstorm.noise.*" />
@@ -2224,9 +2224,11 @@
             <arg value="-projectName"/>
             <arg value="i2p"/>
             <arg value="-sortByClass"/>
-            <arg value="-xml"/>
+<!--            <arg value="-xml"/> -->
+            <arg value="-html"/>
             <arg value="-output"/>
-            <arg value="i2p.fba"/>
+<!--            <arg value="i2p.fba"/> -->
+            <arg value="findbugs.html"/>
             <arg value="-auxclasspath"/>
             <arg value="build/commons-el.jar:build/jasper-runtime.jar:build/javax.servlet.jar:build/org.mortbay.jetty.jar:build/jrobin.jar:installer/lib/wrapper/all/wrapper.jar:apps/susidns/src/lib/standard.jar:apps/susidns/src/lib/jstl.jar"/>
             <arg value="-sourcepath"/>
@@ -2255,8 +2257,9 @@
             <arg value="build/systray.jar"/>
             <arg value="build/utility.jar"/>
         </exec>
-        <echo message="Findbugs output stored in i2p.fba" />
-        <echo message="Now run: findbugs i2p.fba" />
+        <echo message="Findbugs output written to findbugs.html" />
+<!--        <echo message="Findbugs output stored in i2p.fba" /> -->
+<!--        <echo message="Now run: findbugs i2p.fba" /> -->
     </target>
 
     <!-- this is the same dependency as pkg, but with updater200 in the middle,
