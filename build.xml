@@ -1117,6 +1117,11 @@
         <ant dir="installer/resources/locale" target="distclean" />
         <ant dir="installer/tools/java" target="distclean" />
         <delete dir="installer/lib/izpack5/patches/java/build" quiet="true" />
+        <delete dir="launchers/common/target" quiet="true" />
+        <delete dir="launchers/macosx/target" quiet="true" />
+        <delete dir="launchers/output" quiet="true" />
+        <delete dir="launchers/project/project" quiet="true" />
+        <delete dir="launchers/project/target" quiet="true" />
 	<!--
 		NOTE! We need to turn off the default excludes for these
 		patterns to work.
