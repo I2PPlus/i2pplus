@@ -60,14 +60,22 @@ testing:
   stage: test
   image: openjdk:8
   script:
-    - apt-get install -yqq libxml2-utils findbugs
+    - apt-get install -yqq libxml2-utils
     - ./tests/scripts/checkcerts.sh
     - ./tests/scripts/checkpo.sh
     - ./tests/scripts/checkscripts.sh
     - ./tests/scripts/checkutf8.sh
     - ./tests/scripts/checkxml.sh
+
+findbugs:
+  stage: test
+  image: openjdk:8
+  only:
+    - schedules
+  script:
+    - apt-get install -yqq findbugs
     - ant findbugs
   artifacts:
     expose_as: findbugs
     paths: ['findbugs.html']
-    expire_in: 2 weeks
+    expire_in: 1 month
