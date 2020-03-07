@@ -1,5 +1,4 @@
 default:
-  image: openjdk:11
   artifacts:
     name: "$CI_JOB_NAME"
     paths:
@@ -15,7 +14,7 @@ stages:
 before_script:
   # install dependencies to build EXEs and packages
   - apt-get update -yqq
-  - apt-get install -yqq libc6-i386 ant gettext libxml2-utils
+  - apt-get install -yqq libc6-i386 ant gettext
   - java -version
 
 java 8:
@@ -59,9 +58,16 @@ java 14:
 
 testing:
   stage: test
+  image: openjdk:8
   script:
+    - apt-get install -yqq libxml2-utils findbugs
     - ./tests/scripts/checkcerts.sh
     - ./tests/scripts/checkpo.sh
     - ./tests/scripts/checkscripts.sh
     - ./tests/scripts/checkutf8.sh
     - ./tests/scripts/checkxml.sh
+    - ant findbugs
+  artifacts:
+    expose_as: findbugs
+    paths: ['findbugs.html']
+    expire_in: 2 weeks
