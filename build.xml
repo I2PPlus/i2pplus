@@ -2222,10 +2222,10 @@
             <arg value="findbugs"/>
             <arg value="-textui"/>
             <arg value="-projectName"/>
-            <arg value="i2p"/>
+            <arg value="I2P+"/>
             <arg value="-sortByClass"/>
 <!--            <arg value="-xml"/> -->
-            <arg value="-html"/>
+            <arg value="-html:./findbugs.xsl"/>
             <arg value="-output"/>
 <!--            <arg value="i2p.fba"/> -->
             <arg value="findbugs.html"/>
