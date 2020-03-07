@@ -1,6 +1,6 @@
 default:
   artifacts:
-    name: "$CI_JOB_NAME"
+    name: "$CI_PROJECT_NAME Bundle $CI_COMMIT_SHORT_SHA $CI_JOB_NAME"
     paths:
       - i2pinstall.exe
       - i2pupdate.zip
@@ -17,37 +17,37 @@ before_script:
   - apt-get install -yqq libc6-i386 ant gettext
   - java -version
 
-java 8:
+Java8:
   stage: build
   image: openjdk:8
   script:
     - ant pkg
 
-java 9:
+Java9:
   stage: build
   image: openjdk:9
   script:
     - ant pkg
 
-java 10:
+Java10:
   stage: build
   image: openjdk:10
   script:
     - ant pkg
 
-java 11:
+Java11:
   stage: build
   image: openjdk:11
   script:
     - ant pkg
 
-java 13:
+Java13:
   stage: build
   image: openjdk:13-buster
   script:
     - ant pkg
 
-java 14:
+Java14:
   stage: build
   image: openjdk:14-buster
   # currently not well supported, needs some code fixes
