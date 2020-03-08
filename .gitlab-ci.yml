@@ -22,18 +22,39 @@ Java8:
   image: openjdk:8
   script:
     - ant pkg
+  except:
+    changes:
+      - "**/*.MD"
+      - "**/*.md"
+      - "**/*.TXT"
+      - "**/*.txt"
+      - "**/*.xsl"
 
 Java11:
   stage: build
   image: openjdk:11
   script:
     - ant pkg
+  except:
+    changes:
+      - "**/*.MD"
+      - "**/*.md"
+      - "**/*.TXT"
+      - "**/*.txt"
+      - "**/*.xsl"
 
 Java13:
   stage: build
   image: openjdk:13-buster
   script:
     - ant pkg
+  except:
+    changes:
+      - "**/*.MD"
+      - "**/*.md"
+      - "**/*.TXT"
+      - "**/*.txt"
+      - "**/*.xsl"
 
 Java14:
   stage: build
@@ -43,6 +64,13 @@ Java14:
   allow_failure: true
   script:
     - ant pkg
+  except:
+    changes:
+      - "**/*.MD"
+      - "**/*.md"
+      - "**/*.TXT"
+      - "**/*.txt"
+      - "**/*.xsl"
 
 testing:
   stage: test
@@ -54,6 +82,13 @@ testing:
     - ./tests/scripts/checkscripts.sh
     - ./tests/scripts/checkutf8.sh
     - ./tests/scripts/checkxml.sh
+  except:
+    changes:
+      - "**/*.MD"
+      - "**/*.md"
+      - "**/*.TXT"
+      - "**/*.txt"
+      - "**/*.xsl"
 
 findbugs:
   stage: test
