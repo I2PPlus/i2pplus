@@ -24,7 +24,7 @@
 
           body {
             margin: 0 5%;
-            padding: 5px 30px;
+            padding: 0 30px 5px;
             background: #111;
             color: #ddd;
             font-family: Open Sans, Noto Sans, Roboto Sans, sans-serif;
