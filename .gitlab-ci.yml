@@ -23,18 +23,6 @@ Java8:
   script:
     - ant pkg
 
-Java9:
-  stage: build
-  image: openjdk:9
-  script:
-    - ant pkg
-
-Java10:
-  stage: build
-  image: openjdk:10
-  script:
-    - ant pkg
-
 Java11:
   stage: build
   image: openjdk:11
