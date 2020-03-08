@@ -194,18 +194,16 @@
             background: blue;
           }
 
-          #analyzed, #contents {
-            padding: 8px 8px 8px 28px;
-            border-radius: 4px;
-            background: #222;
+          #metrics {
+            margin-top: -1px;
           }
 
           #analyzed {
+            margin: 0;
+            padding: 8px 8px 8px 28px;
+            border: 1px solid #555;
+            background: #222;
             columns: auto 200px;
-          }
-
-          #contents {
-            columns: auto 300px;
           }
 
           #defects {
@@ -288,8 +286,8 @@
         </div>
 
         <xsl:apply-templates select="/BugCollection/Project" />
-        <h2 class="tabletitle header">Metrics</h2>
-        <xsl:apply-templates select="/BugCollection/FindBugsSummary" />
+<!--        <h2 class="tabletitle header">Metrics</h2>-->
+<!--        <xsl:apply-templates select="/BugCollection/FindBugsSummary" />-->
 
         <h2 class="tabletitle header" id="summary">Summary</h2>
         <table width="500" cellpadding="5" cellspacing="2">
@@ -339,6 +337,8 @@
           </tr>
         </table>
 
+        <xsl:apply-templates select="/BugCollection/FindBugsSummary" />
+
         <xsl:for-each select="$unique-catkey">
           <xsl:sort select="." order="ascending" />
           <xsl:variable name="catkey" select="." />
@@ -386,7 +386,7 @@
     <xsl:variable name="kloc" select="@total_size div 1000.0"/>
     <xsl:variable name="format" select="'#######0.00'"/>
 
-    <h2>Analyzed packages</h2>
+    <h2 class="tabletitle header">Analyzed packages</h2>
     <ul id="analyzed">
       <xsl:for-each select="./Jar">
         <li>
@@ -394,7 +394,6 @@
         </li>
       </xsl:for-each>
     </ul>
-    <hr />
   </xsl:template>
 
   <xsl:template match="BugInstance[not(@last)]">
@@ -422,8 +421,8 @@
       <td />
       <td>
         <p id="{$warningId}" style="display: none;">
+          <b>Bug type:</b>
           <a href="#{@type}">
-            Bug type:
             <xsl:value-of select="@type" />
           </a>
           <xsl:for-each select="./*/Message">
@@ -469,7 +468,7 @@
     <xsl:variable name="kloc" select="@total_size div 1000.0" />
     <xsl:variable name="format" select="'#######0.00'" />
 
-    <table width="500" cellpadding="5" cellspacing="2">
+    <table id="metrics" width="500" cellpadding="5" cellspacing="2">
       <tr class="tableheader">
         <th align="left">Metric</th>
         <th align="right">Total</th>
