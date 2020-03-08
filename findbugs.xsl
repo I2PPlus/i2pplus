@@ -1,9 +1,14 @@
 <?xml version="1.0" encoding="UTF-8" ?>
+<!--
+  A simple XSLT stylesheet to transform FindBugs XML results annotated with messages into HTML.
+  Authors:
+  * David Hovemeyer
+  * Chris Nappin (summary table)
+  * dr|z3d (Dark theme and layout mods)
+-->
 <xsl:stylesheet version="1.0" xmlns="http://www.w3.org/1999/xhtml" xmlns:xsl="http://www.w3.org/1999/XSL/Transform">
   <xsl:output method="xml" indent="yes" omit-xml-declaration="yes" standalone="yes" doctype-system="http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd" doctype-public="-//W3C//DTD XHTML 1.0 Transitional//EN" encoding="UTF-8" />
-
   <xsl:variable name="literalNbsp">&amp;nbsp;</xsl:variable>
-
   <!--xsl:key name="bug-category-key" match="/BugCollection/BugInstance" use="@category"/-->
 
   <xsl:variable name="bugTableHeader">
@@ -286,8 +291,6 @@
         </div>
 
         <xsl:apply-templates select="/BugCollection/Project" />
-<!--        <h2 class="tabletitle header">Metrics</h2>-->
-<!--        <xsl:apply-templates select="/BugCollection/FindBugsSummary" />-->
 
         <h2 class="tabletitle header" id="summary">Summary</h2>
         <table width="500" cellpadding="5" cellspacing="2">
