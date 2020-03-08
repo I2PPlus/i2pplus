@@ -226,12 +226,12 @@
             border: 1px solid #555;
           }
 
-          #details h2 {
+          #bugdetails h2 {
             padding-top: 10px;
             border-top: 1px solid #444;
           }
 
-          #details h2:first-child {
+          #bugdetails h2:first-child {
             padding-top: 0;
             border-top: none;
           }
