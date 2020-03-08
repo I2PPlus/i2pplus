@@ -29,8 +29,8 @@
             color: #ddd;
             font-family: Open Sans, Noto Sans, Roboto Sans, sans-serif;
             font-size: 10pt;
-            border-left: 1px solid #444;
-            border-right: 1px solid #444;
+            border-left: 1px solid #666;
+            border-right: 1px solid #666;
           }
 
           a {
@@ -47,7 +47,7 @@
           }
 
           h1 {
-            font-size: 16pt;
+            font-size: 20pt;
           }
 
           h2 {
@@ -60,6 +60,10 @@
             color: #bb0;
           }
 
+          p[style] a {
+            font-size: 110%;
+          }
+
           table + h2 a[name], h2 a[name="Warnings_BAD_PRACTICE"], h2#summarytitle {
             padding-bottom: 6px;
             display: inline-block;
@@ -68,37 +72,41 @@
           }
 
           .tabletitle {
-            margin-bottom: -1px;
+            margin: 15px 0 -1px;
             padding: 4px 16px 2px;
             display: inline-block;
-            border: 1px solid #777;
+            border: 1px solid #555
           }
 
-          .tabletitle, #summarytitle {
+          .tabletitle {
             background: linear-gradient(to bottom, #222 50%, #000 50%);
           }
 
-          .tabletitle a, #summarytitle {
-            font-size: 12pt !important;
-            line-height: 1;
+          .tabletitle a, .header {
             display: inline-block;
+            line-height: 1;
+            font-size: 12pt !important;
           }
 
-          #summarytitle {
+          .header {
             padding-bottom: 8px !important;
           }
 
           table {
             padding: 1px;
             width: 100%;
-            border: 1px solid #777;
+            border: 1px solid #555;
             border-collapse: collapse;
             background: #111;
           }
 
           th {
             background: linear-gradient(to bottom, #333, #111);
-            border-bottom: 1px solid #777;
+            border-bottom: 1px solid #555;
+          }
+
+          tr[onclick] {
+            cursor: pointer;
           }
 
           .warningtable th:first-child, .warningtable td:first-child {
@@ -114,6 +122,11 @@
 
           .warningtable td {
             padding: 0 15px;
+            border-bottom: 1px solid rgba(16,16,16,.1);
+          }
+
+          .warningtable tr:last-child td {
+            border-bottom: none;
           }
 
           .tablerow0 {
@@ -140,30 +153,36 @@
             background: #252
           }
 
-          .priority-1 {
-            color: red;
+          .priority-1, .priority-2, .priority-3, .priority-4 {
             font-weight: bold;
+            color: #fff;
+          }
+
+          .priority-1 {
+            background: #900;
           }
 
           .priority-2 {
-            color: orange;
-            font-weight: bold;
+            background: #730;
           }
 
           .priority-3 {
-            color: green;
-            font-weight: bold;
+            background: #373;
           }
 
           .priority-4 {
-            color: blue;
-            font-weight: bold;
+            background: blue;
+          }
+
+          #analyzed, #contents {
+            padding: 8px 8px 8px 28px;
+            border-radius: 4px;
+            background: #222;
           }
 
           #analyzed {
             columns: auto 200px;
           }
-
 
           #contents {
             columns: auto 300px;
@@ -173,9 +192,28 @@
             text-align: right;
           }
 
-          #version {
-            margin-top: -20px;
+          .smaller {
             font-size: 80%;
+          }
+
+          #version {
+            margin-top: -16px;
+          }
+
+          #details {
+            margin-bottom: 20px;
+            padding: 0 20px;
+            border: 1px solid #555;
+          }
+
+          #details h2 {
+            padding-top: 10px;
+            border-top: 1px solid #444;
+          }
+
+          #details h2:first-child {
+            padding-top: 0;
+            border-top: none;
           }
 
           hr {
@@ -185,11 +223,14 @@
             background: #444;
           }
 
+          pre, code {
+            color: #3a3;
+          }
+
           pre {
             padding: 8px;
-            color: #3a3;
             border-radius: 4px;
-            background: #181818;
+            background: #222;
           }
       </style>
         <script type="text/javascript">
@@ -216,31 +257,10 @@
       <body>
 
         <xsl:apply-templates select="/BugCollection/Project" />
-        <h2>Metrics</h2>
+        <h2 class="tabletitle header">Metrics</h2>
         <xsl:apply-templates select="/BugCollection/FindBugsSummary" />
 
-        <hr />
-        <h2>Contents</h2>
-        <ul id="contents">
-          <xsl:for-each select="$unique-catkey">
-            <xsl:sort select="." order="ascending" />
-            <xsl:variable name="catkey" select="." />
-            <xsl:variable name="catdesc" select="/BugCollection/BugCategory[@category=$catkey]/Description" />
-
-            <li>
-              <a href="#Warnings_{$catkey}"><xsl:value-of select="$catdesc" />
-                Warnings
-              </a>
-            </li>
-          </xsl:for-each>
-
-          <li>
-            <a href="#Details">Details</a>
-          </li>
-        </ul>
-        <hr />
-
-        <h2 id="summarytitle" class="tabletitle">Summary</h2>
+        <h2 class="tabletitle header">Summary</h2>
         <table width="500" cellpadding="5" cellspacing="2">
           <tr class="tableheader">
             <th align="left">Warning Type</th>
@@ -288,10 +308,6 @@
           </tr>
         </table>
 
-        <h2>Warnings</h2>
-
-        <p>Click on a warning row to see full context information.</p>
-
         <xsl:for-each select="$unique-catkey">
           <xsl:sort select="." order="ascending" />
           <xsl:variable name="catkey" select="." />
@@ -306,15 +322,15 @@
           </xsl:call-template>
         </xsl:for-each>
 
-        <h2>
+        <h2 class="tabletitle">
           <a name="Details">Details</a>
         </h2>
-
-        <xsl:apply-templates select="/BugCollection/BugPattern">
-          <xsl:sort select="@abbrev" />
-          <xsl:sort select="ShortDescription" />
-        </xsl:apply-templates>
-
+        <div id="details">
+          <xsl:apply-templates select="/BugCollection/BugPattern">
+            <xsl:sort select="@abbrev" />
+            <xsl:sort select="ShortDescription" />
+          </xsl:apply-templates>
+        </div>
       </body>
     </html>
   </xsl:template>
@@ -331,12 +347,15 @@
         </xsl:otherwise>
       </xsl:choose>
     </h1>
-    <p id="version">
+    <p class="smaller" id="version">
       FindBugs version:
       <xsl:value-of select="/BugCollection/@version" />
     </p>
     <hr />
-    <p>Code analyzed:</p>
+    <xsl:variable name="kloc" select="@total_size div 1000.0"/>
+    <xsl:variable name="format" select="'#######0.00'"/>
+
+    <h2>Analyzed packages</h2>
     <ul id="analyzed">
       <xsl:for-each select="./Jar">
         <li>
@@ -355,12 +374,10 @@
     <tr class="tablerow{position() mod 2}" onclick="toggleRow('{$warningId}');">
 
       <td>
-        <span>
-          <xsl:attribute name="class">
-            priority-<xsl:value-of select="@priority" />
-          </xsl:attribute>
-          <xsl:value-of select="@abbrev" />
-        </span>
+        <xsl:attribute name="class">
+          priority-<xsl:value-of select="@priority" />
+        </xsl:attribute>
+        <xsl:value-of select="@abbrev" />
       </td>
 
       <td>
@@ -375,9 +392,8 @@
       <td>
         <p id="{$warningId}" style="display: none;">
           <a href="#{@type}">
-            Bug type
+            Bug type:
             <xsl:value-of select="@type" />
-            (click for details)
           </a>
           <xsl:for-each select="./*/Message">
             <br />
@@ -422,10 +438,6 @@
     <xsl:variable name="kloc" select="@total_size div 1000.0" />
     <xsl:variable name="format" select="'#######0.00'" />
 
-    <p>
-      <xsl:value-of select="@total_size" />
-      lines of code analyzed, in <xsl:value-of select="@total_classes" /> classes, in <xsl:value-of select="@num_packages" /> packages.
-    </p>
     <table width="500" cellpadding="5" cellspacing="2">
       <tr class="tableheader">
         <th align="left">Metric</th>
@@ -490,9 +502,9 @@
         </xsl:otherwise>
       </xsl:choose>
 
-      <tr class="$totalClass">
+      <tr>
         <td>
-          <b>Total Warnings</b>
+          <b>Total Warnings</b> <i class="smaller">*Defects per Thousand lines of non-commented source statements</i>
         </td>
         <td align="right">
           <b>
@@ -517,9 +529,6 @@
         </xsl:choose>
       </tr>
     </table>
-    <p id="defects">
-      <i>(* Defects per Thousand lines of non-commenting source statements)</i>
-    </p>
 
   </xsl:template>
 
