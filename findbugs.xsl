@@ -33,6 +33,26 @@
             border-right: 1px solid #666;
           }
 
+          #navbar {
+            margin: 0 -30px;
+            padding: 6px 4px 7px;
+            position: sticky;
+            top: 0;
+            text-align: center;
+            border-bottom: 1px solid #666;
+            background: #000;
+          }
+
+          #navbar span {
+            margin: 1px -1px;
+            padding: 2px 4px 5px;
+            display: inline-block;
+            line-height: 1;
+            text-transform: capitalize;
+            border: 1px solid #222;
+            background: linear-gradient(to bottom, #333 50%, #000 50%);
+          }
+
           a {
             color: #f60;
             text-decoration: none;
@@ -200,7 +220,7 @@
             margin-top: -16px;
           }
 
-          #details {
+          #bugdetails {
             margin-bottom: 20px;
             padding: 0 20px;
             border: 1px solid #555;
@@ -256,11 +276,22 @@
 
       <body>
 
+        <div id="navbar">
+          <span><a href="#summary">Summary</a></span>
+          <xsl:for-each select="$unique-catkey">
+            <xsl:sort select="." order="ascending"/>
+              <xsl:variable name="catkey" select="."/>
+              <xsl:variable name="catdesc" select="/BugCollection/BugCategory[@category=$catkey]/Description"/>
+              <span><a href="#Warnings_{$catkey}"><xsl:value-of select="$catdesc"/></a></span>
+          </xsl:for-each>
+          <span><a href="#Details">Details</a></span>
+        </div>
+
         <xsl:apply-templates select="/BugCollection/Project" />
         <h2 class="tabletitle header">Metrics</h2>
         <xsl:apply-templates select="/BugCollection/FindBugsSummary" />
 
-        <h2 class="tabletitle header">Summary</h2>
+        <h2 class="tabletitle header" id="summary">Summary</h2>
         <table width="500" cellpadding="5" cellspacing="2">
           <tr class="tableheader">
             <th align="left">Warning Type</th>
@@ -325,7 +356,7 @@
         <h2 class="tabletitle">
           <a name="Details">Details</a>
         </h2>
-        <div id="details">
+        <div id="bugdetails">
           <xsl:apply-templates select="/BugCollection/BugPattern">
             <xsl:sort select="@abbrev" />
             <xsl:sort select="ShortDescription" />
