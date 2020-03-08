@@ -29,6 +29,7 @@ import net.i2p.util.Log;
 import java.util.Random;
 import net.i2p.router.RouterContext;
 
+
 /**
  *  A group of tunnels for the router or a particular client, in a single direction.
  *  Public only for TunnelRenderer in router console.
@@ -51,6 +52,9 @@ public class TunnelPool {
     private long _lastLifetimeProcessed;
     private final String _rateName;
     private final long _firstInstalled;
+
+    // Round Robin
+    private int _lastSelectedIdx;
 
     private static final int TUNNEL_LIFETIME = 10*60*1000;
     /** if less than one success in this many, reduce quantity (exploratory only) */
@@ -219,14 +223,16 @@ public class TunnelPool {
                     _log.warn(toString() + ": No tunnels available");
             } else {
 //                Collections.shuffle(_tunnels, _context.random());
-                Collections.rotate(_tunnels, 1);
+//                Collections.rotate(_tunnels, 1);
 
                 // if there are nonzero hop tunnels and the zero hop tunnels are fallbacks,
                 // avoid the zero hop tunnels
                 TunnelInfo backloggedTunnel = null;
                 if (avoidZeroHop) {
                     for (int i = 0; i < _tunnels.size(); i++) {
-                        TunnelInfo info = _tunnels.get(i);
+//                        TunnelInfo info = _tunnels.get(i);
+                        _lastSelectedIdx++;
+                        TunnelInfo info = _tunnels.get((int)( _lastSelectedIdx % _tunnels.size()));
                         if ( (info.getLength() > 1) && (info.getExpiration() > _context.clock().now()) ) {
                             // avoid outbound tunnels where the 1st hop is backlogged
                             if (_settings.isInbound() || !_context.commSystem().isBacklogged(info.getPeer(1))) {
