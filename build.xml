@@ -2224,11 +2224,10 @@
             <arg value="-projectName"/>
             <arg value="I2P+"/>
             <arg value="-sortByClass"/>
-<!--            <arg value="-xml"/> -->
             <arg value="-html:./findbugs.xsl"/>
             <arg value="-output"/>
-<!--            <arg value="i2p.fba"/> -->
             <arg value="findbugs.html"/>
+            <arg value="-effort:max"/>
             <arg value="-auxclasspath"/>
             <arg value="build/commons-el.jar:build/jasper-runtime.jar:build/javax.servlet.jar:build/org.mortbay.jetty.jar:build/jrobin.jar:installer/lib/wrapper/all/wrapper.jar:apps/susidns/src/lib/standard.jar:apps/susidns/src/lib/jstl.jar"/>
             <arg value="-sourcepath"/>
