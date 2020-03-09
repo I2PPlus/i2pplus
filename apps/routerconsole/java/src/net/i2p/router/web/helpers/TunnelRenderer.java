@@ -191,7 +191,7 @@ class TunnelRenderer {
                 if (lifetime > 10*60)
                     lifetime = 10*60;
                 long bps = 1024L * count / lifetime;
-                out.write("<td class=\"cells\" align=\"center\">" + DataHelper.formatSize2Decimal(bps) + " Bps</td>");
+                out.write("<td class=\"cells\" align=\"center\">" + DataHelper.formatSize2Decimal(bps) + _t("B/s") + "</td>");
                 if (debug) {
                     if (cfg.getReceiveTunnel() != null)
                         out.write("<td class=\"cells\" align=\"center\" title=\"" + _t("Tunnel identity") + "\"><span class=\"tunnel_id\">" +
