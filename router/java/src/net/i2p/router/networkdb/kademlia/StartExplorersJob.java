@@ -44,21 +44,21 @@ class StartExplorersJob extends JobImpl {
     private static final int MAX_RERUN_DELAY_MS = 10*60*1000;
     /** aggressively explore during this time - same as KNDF expiration grace period */
 //    private static final int STARTUP_TIME = 60*60*1000;
-    private static final int STARTUP_TIME = 24*60*60*1000; // let's give it 24 hours
+    private static final int STARTUP_TIME = 2*60*60*1000; // let's give it 2 hours
     /** super-aggressively explore if we have less than this many routers.
         The goal here is to avoid reseeding.
      */
     /** very aggressively explore if we have less than this many routers */
 //    private static final int MIN_ROUTERS = 3 * KademliaNetworkDatabaseFacade.MIN_RESEED;
-    private static final int MIN_ROUTERS = 2000;
+    private static final int MIN_ROUTERS = 1000;
     /** aggressively explore if we have less than this many routers */
 //    private static final int LOW_ROUTERS = 2 * MIN_ROUTERS;
-    private static final int LOW_ROUTERS = 3000;
+    private static final int LOW_ROUTERS = 2000;
     /** explore slowly if we have more than this many routers */
 //    private static final int MAX_ROUTERS = 2 * LOW_ROUTERS;
     private static final int MAX_ROUTERS = 4000;
 //    private static final int MIN_FFS = 50;
-    private static final int MIN_FFS = 1500;
+    private static final int MIN_FFS = 200;
     static final int LOW_FFS = 2 * MIN_FFS;
     private static final long MAX_LAG = 150;
     private static final long MAX_MSG_DELAY = 750;
@@ -119,12 +119,13 @@ class StartExplorersJob extends JobImpl {
                 boolean realexpl = !((needffs && getContext().random().nextInt(2) == 0) ||
                                     (lowffs && getContext().random().nextInt(4) == 0));
                 ExploreJob j = new ExploreJob(getContext(), _facade, key, realexpl);
-                if (delay > 0)
-                    j.getTiming().setStartAfter(getContext().clock().now() + delay);
-                getContext().jobQueue().addJob(j);
                 // spread them out
                 Random random = getContext().random();
-                delay += 750 + (random.nextInt(500) * random.nextInt(5)) - random.nextInt(550);
+                delay += 100 + (random.nextInt(250));
+//                if (delay > 0)
+                    j.getTiming().setStartAfter(getContext().clock().now() + delay);
+                getContext().jobQueue().addJob(j);
+
                 if (_log.shouldLog(Log.INFO) && realexpl)
                     _log.info("Exploring for new peers in " + delay + "ms");
                 else
