@@ -88,12 +88,12 @@ public class JobQueue {
     private final static String PROP_MAX_RUNNERS = "router.maxJobRunners";
 
     /** how frequently should we check and update the max runners */
-    private final static long MAX_LIMIT_UPDATE_DELAY = 3*60*1000;
+//    private final static long MAX_LIMIT_UPDATE_DELAY = 3*60*1000;
+    private final static long MAX_LIMIT_UPDATE_DELAY = 90*1000;
 
     /** if a job is this lagged, spit out a warning, but keep going */
     private long _lagWarning = DEFAULT_LAG_WARNING;
-//    private final static long DEFAULT_LAG_WARNING = 5*1000;
-    private final static long DEFAULT_LAG_WARNING = 8*1000;
+    private final static long DEFAULT_LAG_WARNING = 5*1000;
     /** @deprecated unimplemented */
     @Deprecated
     private final static String PROP_LAG_WARNING = "router.jobLagWarning";
@@ -107,8 +107,7 @@ public class JobQueue {
 
     /** if a job takes this long to run, spit out a warning, but keep going */
     private long _runWarning = DEFAULT_RUN_WARNING;
-//    private final static long DEFAULT_RUN_WARNING = 5*1000;
-    private final static long DEFAULT_RUN_WARNING = 8*1000;
+    private final static long DEFAULT_RUN_WARNING = 5*1000;
     /** @deprecated unimplemented */
     @Deprecated
     private final static String PROP_RUN_WARNING = "router.jobRunWarning";
@@ -123,7 +122,7 @@ public class JobQueue {
     /** don't enforce fatal limits until the router has been up for this long */
     private long _warmupTime = DEFAULT_WARMUP_TIME;
 //    private final static long DEFAULT_WARMUP_TIME = 10*60*1000;
-    private final static long DEFAULT_WARMUP_TIME = 30*60*1000;
+    private final static long DEFAULT_WARMUP_TIME = 15*60*1000;
     /** @deprecated unimplemented */
     @Deprecated
     private final static String PROP_WARMUP_TIME = "router.jobWarmupTime";
@@ -131,7 +130,7 @@ public class JobQueue {
     /** max ready and waiting jobs before we start dropping 'em */
     private int _maxWaitingJobs = DEFAULT_MAX_WAITING_JOBS;
 //    private final static int DEFAULT_MAX_WAITING_JOBS = 25;
-    private final static int DEFAULT_MAX_WAITING_JOBS = 40;
+    private final static int DEFAULT_MAX_WAITING_JOBS = 30;
     private final static long MIN_LAG_TO_DROP = 500;
 
     /** @deprecated unimplemented */
@@ -150,21 +149,12 @@ public class JobQueue {
     public JobQueue(RouterContext context) {
         _context = context;
         _log = context.logManager().getLog(JobQueue.class);
-        _context.statManager().createRateStat("jobQueue.readyJobs",
-                                              "Number of ready and waiting scheduled jobs",
-                                              "JobQueue",
-                                              new long[] { 60*1000l, 60*60*1000l, 24*60*60*1000l });
-        _context.statManager().createRateStat("jobQueue.droppedJobs",
-                                              "Number of scheduled jobs dropped due to insane overload",
-                                              "JobQueue",
-                                              new long[] { 60*1000l, 60*60*1000l, 24*60*60*1000l });
-        _context.statManager().createRateStat("jobQueue.queuedJobs",
-                                              "Number of scheduled jobs",
-                                              "JobQueue",
-                                              new long[] { 60*1000l, 60*60*1000l, 24*60*60*1000l });
+        _context.statManager().createRateStat("jobQueue.readyJobs", "Number of ready and waiting scheduled jobs", "JobQueue", new long[] { 60*1000l, 60*60*1000l, 24*60*60*1000l });
+        _context.statManager().createRateStat("jobQueue.droppedJobs", "Scheduled jobs dropped due to insane overload", "JobQueue", new long[] { 60*1000l, 60*60*1000l, 24*60*60*1000l });
+        _context.statManager().createRateStat("jobQueue.queuedJobs", "Number of scheduled jobs", "JobQueue", new long[] { 60*1000l, 60*60*1000l, 24*60*60*1000l });
         // following are for JobQueueRunner
-        _context.statManager().createRateStat("jobQueue.jobRun", "Duration of scheduled jobs", "JobQueue", new long[] { 60*60*1000l, 24*60*60*1000l });
-        _context.statManager().createRateStat("jobQueue.jobRunSlow", "Duration of scheduled jobs that take over a second", "JobQueue", new long[] { 60*60*1000l, 24*60*60*1000l });
+        _context.statManager().createRateStat("jobQueue.jobRun", "Duration of scheduled jobs", "JobQueue", new long[] { 60*1000l, 60*60*1000l, 24*60*60*1000l });
+        _context.statManager().createRateStat("jobQueue.jobRunSlow", "Duration of scheduled jobs that take over a second", "JobQueue", new long[] { 60*1000l, 60*60*1000l, 24*60*60*1000l });
         _context.statManager().createRequiredRateStat("jobQueue.jobLag", "Lag of scheduled jobs", "JobQueue", new long[] { 60*1000l, 60*60*1000l, 24*60*60*1000l });
         _context.statManager().createRateStat("jobQueue.jobWait", "Time a scheduled job stays in the queue before running", "JobQueue", new long[] { 60*60*1000l, 24*60*60*1000l });
 
