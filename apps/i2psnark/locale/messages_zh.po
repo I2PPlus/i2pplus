@@ -48,7 +48,7 @@ msgstr "Magnet"
 #: ../java/src/org/klomp/snark/web/I2PSnarkServlet.java:1170
 #: ../java/src/org/klomp/snark/web/I2PSnarkServlet.java:1278
 msgid "No write permissions for data directory"
-msgstr ""
+msgstr "对目录没有写的权限"
 
 #: ../java/src/org/klomp/snark/SnarkManager.java:968
 #: ../java/src/org/klomp/snark/SnarkManager.java:1112
@@ -202,37 +202,37 @@ msgstr "DHT 修改生效需要关闭或重启。"
 
 #: ../java/src/org/klomp/snark/SnarkManager.java:1285
 msgid "Enabled Ratings."
-msgstr ""
+msgstr "评分已启用"
 
 #: ../java/src/org/klomp/snark/SnarkManager.java:1287
 msgid "Disabled Ratings."
-msgstr ""
+msgstr "评分已禁用"
 
 #: ../java/src/org/klomp/snark/SnarkManager.java:1294
 msgid "Enabled Comments."
-msgstr ""
+msgstr "评论已启用"
 
 #: ../java/src/org/klomp/snark/SnarkManager.java:1296
 msgid "Disabled Comments."
-msgstr ""
+msgstr "评论已禁用"
 
 #: ../java/src/org/klomp/snark/SnarkManager.java:1309
 #, java-format
 msgid "Comments name set to {0}."
-msgstr ""
+msgstr "评论的名称已设置为{0}"
 
 #: ../java/src/org/klomp/snark/SnarkManager.java:1316
 #, java-format
 msgid "{0} theme loaded."
-msgstr ""
+msgstr "{0} 背景已加载"
 
 #: ../java/src/org/klomp/snark/SnarkManager.java:1323
 msgid "Collapsible panels enabled."
-msgstr ""
+msgstr "可折叠面板已启用"
 
 #: ../java/src/org/klomp/snark/SnarkManager.java:1325
 msgid "Collapsible panels disabled."
-msgstr ""
+msgstr "可折叠面板已禁用"
 
 #: ../java/src/org/klomp/snark/SnarkManager.java:1335
 msgid "Configuration unchanged."
@@ -298,7 +298,7 @@ msgstr "具有相同Hash链接的种子已在下载中:{0}"
 #: ../java/src/org/klomp/snark/SnarkManager.java:1860
 #, java-format
 msgid "Torrent with the same data location is already running: {0}"
-msgstr ""
+msgstr "具有相同数据存储位置的种子已在下载中:{0}"
 
 #: ../java/src/org/klomp/snark/SnarkManager.java:1623
 #, java-format
@@ -803,7 +803,7 @@ msgstr "Magnet 已删除:{0}"
 #: ../java/src/org/klomp/snark/web/I2PSnarkServlet.java:1171
 #, java-format
 msgid "Torrent file could not be deleted: {0}"
-msgstr ""
+msgstr "种子不能被删除: {0}"
 
 #: ../java/src/org/klomp/snark/web/I2PSnarkServlet.java:1156
 #, java-format
@@ -963,7 +963,7 @@ msgstr "正做种"
 #, java-format
 msgid "Seeding to {0} peer"
 msgid_plural "Seeding to {0} peers"
-msgstr[0] ""
+msgstr[0] "正向 {0} 个用户做种"
 
 #: ../java/src/org/klomp/snark/web/I2PSnarkServlet.java:1659
 #: ../java/src/org/klomp/snark/web/I2PSnarkServlet.java:1675
@@ -976,7 +976,7 @@ msgstr "完成"
 #: ../java/src/org/klomp/snark/web/I2PSnarkServlet.java:1680
 #, java-format
 msgid "Downloading from {0} of {1} peers in swarm"
-msgstr ""
+msgstr "从{0}个用户（总计{1}个）中下载"
 
 #: ../java/src/org/klomp/snark/web/I2PSnarkServlet.java:1680
 #: ../java/src/org/klomp/snark/web/I2PSnarkServlet.java:1681
@@ -989,13 +989,13 @@ msgstr "正常"
 #, java-format
 msgid "Downloading from {0} peer"
 msgid_plural "Downloading from {0} peers"
-msgstr[0] ""
+msgstr[0] "从{0}个用户中下载"
 
 #: ../java/src/org/klomp/snark/web/I2PSnarkServlet.java:1691
 #, java-format
 msgid "Connected to {0} peer"
 msgid_plural "Connected to {0} peers"
-msgstr[0] ""
+msgstr[0] "连接到{0}个用户"
 
 #: ../java/src/org/klomp/snark/web/I2PSnarkServlet.java:1691
 #: ../java/src/org/klomp/snark/web/I2PSnarkServlet.java:1692
@@ -1008,7 +1008,7 @@ msgstr "等待"
 #: ../java/src/org/klomp/snark/web/I2PSnarkServlet.java:1702
 #, java-format
 msgid "Connected to {0} of {1} peers in swarm"
-msgstr ""
+msgstr "从{0}个用户（总计{1}个）处连接"
 
 #: ../java/src/org/klomp/snark/web/I2PSnarkServlet.java:1702
 #: ../java/src/org/klomp/snark/web/I2PSnarkServlet.java:1703
@@ -1091,7 +1091,7 @@ msgstr "移除"
 
 #: ../java/src/org/klomp/snark/web/I2PSnarkServlet.java:1911
 msgid "Delete the .torrent file and the associated data files"
-msgstr ""
+msgstr "删除.torrent文件并删除数据文件"
 
 #. Can't figure out how to escape double quotes inside the onclick string.
 #. Single quotes in translate strings with parameters must be doubled.
@@ -1109,7 +1109,7 @@ msgstr "删除"
 
 #: ../java/src/org/klomp/snark/web/I2PSnarkServlet.java:1936
 msgid "Peer attached to swarm"
-msgstr ""
+msgstr "连接的用户"
 
 #: ../java/src/org/klomp/snark/web/I2PSnarkServlet.java:1962
 msgid "Unknown"
@@ -1117,7 +1117,7 @@ msgstr "未知"
 
 #: ../java/src/org/klomp/snark/web/I2PSnarkServlet.java:1964
 msgid "Destination (identity) of peer"
-msgstr ""
+msgstr "用户的信息"
 
 #: ../java/src/org/klomp/snark/web/I2PSnarkServlet.java:1976
 msgid "Seed"
@@ -1246,7 +1246,7 @@ msgstr "数据文件夹"
 
 #: ../java/src/org/klomp/snark/web/I2PSnarkServlet.java:2368
 msgid "Directory where torrents and downloaded/shared files are stored"
-msgstr ""
+msgstr "数据与种子存储的目录"
 
 #: ../java/src/org/klomp/snark/web/I2PSnarkServlet.java:2373
 msgid "Files readable by all"
@@ -1256,7 +1256,7 @@ msgstr "文件对所有人可读"
 msgid ""
 "Set file permissions to allow other local users to access the downloaded "
 "files"
-msgstr ""
+msgstr "设置文件的权限以允许其他本地用户浏览下载"
 
 #: ../java/src/org/klomp/snark/web/I2PSnarkServlet.java:2381
 msgid "Auto start torrents"
@@ -1266,7 +1266,7 @@ msgstr "自动开始种子"
 msgid ""
 "Automatically start torrents when added and restart torrents when I2PSnark "
 "starts"
-msgstr ""
+msgstr "当种子添加后自动启动种子且当I2PSnark启动时自动启动种子"
 
 #: ../java/src/org/klomp/snark/web/I2PSnarkServlet.java:2389
 msgid "Smart torrent sorting"
@@ -1274,15 +1274,15 @@ msgstr "智能种子排序"
 
 #: ../java/src/org/klomp/snark/web/I2PSnarkServlet.java:2393
 msgid "Ignore words such as 'a' and 'the' when sorting"
-msgstr ""
+msgstr "筛选时忽略a或the之类的词"
 
 #: ../java/src/org/klomp/snark/web/I2PSnarkServlet.java:2397
 msgid "Collapsible panels"
-msgstr ""
+msgstr "可折叠面板"
 
 #: ../java/src/org/klomp/snark/web/I2PSnarkServlet.java:2402
 msgid "Your browser does not support this feature."
-msgstr ""
+msgstr "您的浏览器不支持这个特性"
 
 #: ../java/src/org/klomp/snark/web/I2PSnarkServlet.java:2405
 msgid ""
@@ -1330,7 +1330,7 @@ msgstr "启动延迟"
 
 #: ../java/src/org/klomp/snark/web/I2PSnarkServlet.java:2481
 msgid "How long before auto-started torrents are loaded when I2PSnark starts"
-msgstr ""
+msgstr "I2PSnark启动后要多少分钟启动种子"
 
 #: ../java/src/org/klomp/snark/web/I2PSnarkServlet.java:2483
 msgid "minutes"
