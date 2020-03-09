@@ -2245,7 +2245,7 @@
             <arg value="build/jrobin.jar"/>
             <arg value="build/jsonrpc.war"/>
             <arg value="build/mstreaming.jar"/>
-            <arg value="build/router.jar/"/>
+            <arg value="build/router.jar"/>
             <arg value="build/desktopgui.jar"/>
             <arg value="build/routerconsole.jar"/>
             <arg value="build/routerconsole.war"/>

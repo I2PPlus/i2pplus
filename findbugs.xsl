@@ -8,7 +8,9 @@
 -->
 <xsl:stylesheet version="1.0" xmlns="http://www.w3.org/1999/xhtml" xmlns:xsl="http://www.w3.org/1999/XSL/Transform">
   <xsl:output method="xml" indent="yes" omit-xml-declaration="yes" standalone="yes" doctype-system="http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd" doctype-public="-//W3C//DTD XHTML 1.0 Transitional//EN" encoding="UTF-8" />
+
   <xsl:variable name="literalNbsp">&amp;nbsp;</xsl:variable>
+
   <!--xsl:key name="bug-category-key" match="/BugCollection/BugInstance" use="@category"/-->
 
   <xsl:variable name="bugTableHeader">
@@ -28,7 +30,7 @@
           }
 
           body {
-            margin: 0 5%;
+            margin: 0 30px;
             padding: 0 30px 5px;
             background: #111;
             color: #ddd;
@@ -39,21 +41,26 @@
           }
 
           #navbar {
-            margin: 0 -30px;
+            margin: 0 -50px;
             padding: 6px 4px 7px;
             position: sticky;
             top: 0;
             text-align: center;
-            border-bottom: 1px solid #666;
-            background: #000;
+            border: 1px solid #666;
+            border-top: none;
+            border-radius: 0 0 2px 2px;
+            box-shadow: 0 3px 3px rgba(0,0,0,.3);
+            background: linear-gradient(to bottom, #222, #000);
           }
 
           #navbar span {
             margin: 1px -1px;
-            padding: 2px 4px 5px;
+            padding: 2px 6px 5px;
             display: inline-block;
             line-height: 1;
+            font-size: 105%;
             text-transform: capitalize;
+            text-shadow: 0 1px 1px #000;
             border: 1px solid #222;
             background: linear-gradient(to bottom, #333 50%, #000 50%);
           }
@@ -67,22 +74,35 @@
             font-weight: 600;
           }
 
+          #navbar a {
+            font-weight: 700;
+          }
+
           a:hover {
             color: #f90;
           }
 
+          #summary + table td a {
+            display: inline-block;
+            width: 100%;
+          }
+
           h1 {
-            font-size: 20pt;
+            font-size: 200%;
           }
 
           h2 {
-            font-size: 14pt;
+            font-size: 140%;
             margin-bottom: 0;
           }
 
           h2 a[name] {
-            font-size: 11pt;
+            font-size: 80%;
             color: #bb0;
+          }
+
+          h2 + p {
+            margin-top: 2px;
           }
 
           p[style] a {
@@ -98,7 +118,7 @@
 
           .tabletitle {
             margin: 15px 0 -1px;
-            padding: 4px 16px 2px;
+            padding: 4px 8px 2px;
             display: inline-block;
             border: 1px solid #555
           }
@@ -111,6 +131,7 @@
             display: inline-block;
             line-height: 1;
             font-size: 12pt !important;
+            text-shadow: 0 1px 1px #000;
           }
 
           .header {
@@ -139,6 +160,11 @@
             white-space: nowrap;
             text-align: center;
             border-right: 1px solid #444;
+          }
+
+          td, th {
+            padding-left: 8px;
+            padding-right: 8px;
           }
 
           .warningtable th {
@@ -254,6 +280,12 @@
             padding: 8px;
             border-radius: 4px;
             background: #222;
+          }
+
+          @media screen and (max-width: 1200px) {
+            body {
+              font-size: 9pt;
+            }
           }
       </style>
         <script type="text/javascript">
