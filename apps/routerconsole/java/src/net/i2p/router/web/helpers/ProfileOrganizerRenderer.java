@@ -83,7 +83,7 @@ class ProfileOrganizerRenderer {
       if (mode < 2) {
 
         buf.append("<p id=\"profiles_overview\" class=\"infohelp\">");
-        buf.append(ngettext("Showing 1 recent profile.", "Showing {0} recent profiles.", order.size())).append('\n');
+        buf.append(ngettext("Showing 1 recent profile.", "Showing {0} recent profiles.", order.size()).replace(".", " (active in the last 15 minutes).")).append('\n');
         if (older > 0)
             buf.append(ngettext("Hiding 1 older profile.", "Hiding {0} older profiles.", older)).append('\n');
         if (standard > 0)
@@ -216,12 +216,14 @@ class ProfileOrganizerRenderer {
             int speed = Integer.parseInt(speedApprox);
             long bonus = prof.getSpeedBonus();
             if (prof.getSpeedValue() > 0.5) {
-                buf.append("<span>");
+                buf.append("<span class=\"");
                 if (speed > 1025) {
                     speed = speed / 1024;
-                    buf.append(speed).append("K");
+                    buf.append("kilobytes\">");
+                    buf.append(speed).append("&#8239;K");
                 } else {
-                    buf.append(speed).append("B");
+                    buf.append("bytes\">");
+                    buf.append(speed).append("&#8239;B");
                 }
                 if (bonus != 0) {
                     if (bonus > 0)
