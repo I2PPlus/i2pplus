@@ -28,7 +28,8 @@ import net.i2p.util.Log;
  * to set routerconsole.advanced=true without restarting.
  */
 public class ReadConfigJob extends JobImpl {
-    private final static long DELAY = 30*1000; // reread every 30 seconds
+//    private final static long DELAY = 30*1000; // reread every 30 seconds
+    private final static long DELAY = 60*1000; // reread every minute
     private volatile long _lastRead;
 
     public ReadConfigJob(RouterContext ctx) {
