@@ -92,11 +92,11 @@ class JobQueueRunner extends I2PThread {
                     if (_log.shouldLog(Log.WARN))
                         _log.warn("Updating statistics for the job took too long (" + diff + "ms)");
                 }
-                if (_log.shouldLog(Log.DEBUG))
+                if (_log.shouldLog(Log.INFO))
                     if (doStart-origStartAfter > 0)
-                        _log.debug("[Job " + job.getJobId() + "] " + job.getName() + " completed in " + duration + "ms -> Lag: " + (doStart-origStartAfter) + "ms");
+                        _log.info("[Job " + job.getJobId() + "] " + job.getName() + " completed in " + duration + "ms -> Lag: " + (doStart-origStartAfter) + "ms");
                     else
-                        _log.debug("[Job " + job.getJobId() + "] " + job.getName() + " completed in " + duration + "ms");
+                        _log.info("[Job " + job.getJobId() + "] " + job.getName() + " completed in " + duration + "ms");
                 lastActive = _context.clock().now();
                 _lastJob = _currentJob;
                 _currentJob = null;
