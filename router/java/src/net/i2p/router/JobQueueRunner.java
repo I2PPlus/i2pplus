@@ -84,13 +84,13 @@ class JobQueueRunner extends I2PThread {
                         if (doStart-origStartAfter > 0)
                             _log.warn(_currentJob + " completed in " + duration + "ms -> Lag: " + (doStart-origStartAfter) + "ms");
                         else
-                            _log.warn(_currentJob + "completed in " + duration + "ms");
+                            _log.warn(_currentJob + " completed in " + duration + "ms");
                 }
 
 //                if (diff > 100) {
                 if (diff > 1000) {
                     if (_log.shouldLog(Log.WARN))
-                        _log.warn("Updating statistics for the job took too long (" + diff + "ms)");
+                        _log.warn("Updating stats for '" + job.getName() + "' took too long (" + diff + "ms)");
                 }
                 if (_log.shouldLog(Log.INFO))
                     if (doStart-origStartAfter > 0)
