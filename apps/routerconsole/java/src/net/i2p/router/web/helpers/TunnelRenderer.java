@@ -140,11 +140,11 @@ class TunnelRenderer {
             out.write(_t("Participating"));
             if (!debug)
                 out.write(' ' + _t("tunnels"));
-            out.write("</h3>\n");
+            out.write("&nbsp;&nbsp;<a style=\"float: right;\" href=\"/tunnelsparticipating\"><img src=\"/themes/console/images/buttons/update.png\"></a></h3>\n");
             int bwShare = getShareBandwidth();
             if (bwShare > 12) {
                 if (!participating.isEmpty()) {
-                    out.write("<table class=\"tunneldisplay tunnels_participating\" data-sortable><thead><tr><th>" +
+                    out.write("<table class=\"tunneldisplay tunnels_participating\" id=\"tunnels_part\" data-sortable><thead><tr><th>" +
                            _t("Role") + "</th><th>" + _t("Expiry") + "</th><th>" + _t("Usage") + "</th><th>" + _t("Rate") + "</th><th>");
                     if (debug)
                         out.write(_t("Receive on") + "</th><th>");
@@ -191,7 +191,12 @@ class TunnelRenderer {
                 if (lifetime > 10*60)
                     lifetime = 10*60;
                 long bps = 1024L * count / lifetime;
-                out.write("<td class=\"cells\" align=\"center\">" + DataHelper.formatSize2Decimal(bps) + _t("B/s") + "</td>");
+                out.write("<td class=\"cells bps\" align=\"center\"><span>" + DataHelper.formatSize2Decimal(bps) + "</span>");
+                if (bps > 1024)
+                    out.write(_t("K/s"));
+                else
+                    out.write(_t("B/s"));
+                out.write("</td>");
                 if (debug) {
                     if (cfg.getReceiveTunnel() != null)
                         out.write("<td class=\"cells\" align=\"center\" title=\"" + _t("Tunnel identity") + "\"><span class=\"tunnel_id\">" +

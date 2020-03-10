@@ -696,7 +696,7 @@ pre {
     line-height: 140%;
 }
 
-#sb_peers a, #sb_peersadvanced a {
+#sb_peers a, #sb_peersadvanced a, #sb_tunnels a {
     color: #ee9;
 }
 
@@ -3585,6 +3585,10 @@ h3[id="udpcon"] {
 #profilelist a[href^="viewprofile"] {
     display: inline-block;
     margin-bottom: 2px;
+}
+
+#profilelist .bytes {
+    opacity: .7;
 }
 
 .backlogged {
@@ -13833,17 +13837,17 @@ h3 + table {
     background-size: 20px 20px, 100% 100%, 100% 100%, 100% 100% !important;
 }
 
-#tunnels #peercount a {
+#tunnels #peercount a, #tunnels #participating a {
     padding: 0;
     vertical-align: middle;
     line-height: 0;
 }
 
-#tunnels #peercount img {
-    margin: 0 0 -2px;
+#tunnels #peercount img, #tunnels #participating img {
+    margin: 0 0 -2px !important;
     padding: 8px 6px 6px;
     vertical-align: middle;
-    border: none;
+    border: none !important;
 }
 
 #tunnelPeerCount {

@@ -22,7 +22,7 @@
 <jsp:setProperty name="tunnelParticipatingHelper" property="contextId" value="<%=i2pcontextId%>" />
 <% tunnelParticipatingHelper.storeWriter(out); %>
 <jsp:getProperty name="tunnelParticipatingHelper" property="tunnelsParticipating" />
-<script nonce=" + cspNonce + " type="text/javascript">new Tablesort(document.getElementById("participating"));</script>
+<script nonce=" + cspNonce + " type="text/javascript">new Tablesort(document.getElementById("tunnels_part"));</script>
 </div>
 <!--
 <script nonce="<%=cspNonce%>" type="text/javascript">
@@ -36,7 +36,7 @@
       }
     }
     xhr.send();
-    new Tablesort(document.getElementById("participating"));
+    new Tablesort(document.getElementById("tunnels_part"));
   }, 15000);
 </script>
 -->
