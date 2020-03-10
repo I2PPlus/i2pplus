@@ -191,9 +191,9 @@ class TunnelRenderer {
                 if (lifetime > 10*60)
                     lifetime = 10*60;
                 long bps = 1024L * count / lifetime;
-                out.write("<td class=\"cells bps\" align=\"center\"><span>" + DataHelper.formatSize2Decimal(bps) + "</span>");
+                out.write("<td class=\"cells bps\" align=\"center\">" + DataHelper.formatSize2Decimal(bps));
                 if (bps > 1024)
-                    out.write(_t("K/s"));
+                    out.write(_t("/s"));
                 else
                     out.write(_t("B/s"));
                 out.write("</td>");
@@ -228,14 +228,13 @@ class TunnelRenderer {
 //                out.write("<div class=\"statusnotes\"><b>" + _t("Limited display to the {0} tunnels with the highest usage", DISPLAY_LIMIT)  + "</b></div>\n");
                 out.write("<div class=\"statusnotes\"><b>" + _t("Limited display to the {0} most recent tunnels", DISPLAY_LIMIT)  + "</b></div>\n");
             } else if (displayed >= 2) {
-                out.write("<div class=\"statusnotes\"><b>" + _t("Active")  + ":</b>&nbsp" + (displayed - 1));
+                out.write("<div class=\"statusnotes\"><b>" + _t("Active")  + ":</b>&nbsp" + (displayed - 1) + "</div>");
                 if (inactive > 0) {
-                    out.write("&nbsp;&bullet;&nbsp;<b>" + _t("Inactive") + ":</b>&nbsp;" + inactive + "&nbsp;&bullet;&nbsp;<b>" + _t("Total") + ":</b>&nbsp;" + (inactive + displayed -1));
+                    out.write("&nbsp;&bullet;&nbsp;<b>" + _t("Inactive") + ":</b>&nbsp;" + inactive + "&nbsp;&bullet;&nbsp;<b>" + _t("Total") + ":</b>&nbsp;" + (inactive + displayed -1) + "</div>");
                 }
             } else if (inactive > 0) {
-                out.write("<div class=\"statusnotes\"><b>" + _t("Inactive") + ":</b>&nbsp;" + inactive);
+                out.write("<div class=\"statusnotes\"><b>" + _t("Inactive") + ":</b>&nbsp;" + inactive + "</div>");
             }
-            out.write("</div>\n");
             out.write("<div class=\"statusnotes\"><b>" + _t("Lifetime bandwidth usage") + ":</b>&nbsp;" +
                       DataHelper.formatSize2Decimal(processed*1024) + "B</div>\n");
             } else { // bwShare < 12K/s
