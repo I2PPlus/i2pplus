@@ -184,15 +184,15 @@ class TunnelRenderer {
                     out.write("<td class=\"cells\" align=\"center\">" + DataHelper.formatDuration2(timeLeft) + "</td>");
                 else
                     out.write("<td class=\"cells\" align=\"center\"><i>" + _t("grace period") + "</i></td>");
-                out.write("<td class=\"cells\" align=\"center\">" + (count * 1024 / 1000) + " KB</td>");
+                out.write("<td class=\"cells\" align=\"center\">" + (count * 1024 / 1000) +  "&#8239;K</td>");
                 int lifetime = (int) ((_context.clock().now() - cfg.getCreation()) / 1000);
                 if (lifetime <= 0)
                     lifetime = 1;
                 if (lifetime > 10*60)
                     lifetime = 10*60;
                 long bps = 1024L * count / lifetime;
-                out.write("<td class=\"cells bps\" align=\"center\">" + DataHelper.formatSize2Decimal(bps));
-                if (bps > 1024)
+                out.write("<td class=\"cells bps\" align=\"center\">" + DataHelper.formatSize2(bps, true).replace("i", ""));
+                if (bps > 1023)
                     out.write(_t("/s"));
                 else
                     out.write(_t("B/s"));
@@ -228,15 +228,16 @@ class TunnelRenderer {
 //                out.write("<div class=\"statusnotes\"><b>" + _t("Limited display to the {0} tunnels with the highest usage", DISPLAY_LIMIT)  + "</b></div>\n");
                 out.write("<div class=\"statusnotes\"><b>" + _t("Limited display to the {0} most recent tunnels", DISPLAY_LIMIT)  + "</b></div>\n");
             } else if (displayed >= 2) {
-                out.write("<div class=\"statusnotes\"><b>" + _t("Active")  + ":</b>&nbsp" + (displayed - 1) + "</div>");
+                out.write("<div class=\"statusnotes\"><b>" + _t("Active")  + ":</b>&nbsp" + (displayed - 1));
                 if (inactive > 0) {
-                    out.write("&nbsp;&bullet;&nbsp;<b>" + _t("Inactive") + ":</b>&nbsp;" + inactive + "&nbsp;&bullet;&nbsp;<b>" + _t("Total") + ":</b>&nbsp;" + (inactive + displayed -1) + "</div>");
+                    out.write("&nbsp;&bullet;&nbsp;<b>" + _t("Inactive") + ":</b>&nbsp;" + inactive + "&nbsp;&bullet;&nbsp;<b>" + _t("Total") + ":</b>&nbsp;" + (inactive + displayed -1));
                 }
+                out.write("</div>");
             } else if (inactive > 0) {
                 out.write("<div class=\"statusnotes\"><b>" + _t("Inactive") + ":</b>&nbsp;" + inactive + "</div>");
             }
             out.write("<div class=\"statusnotes\"><b>" + _t("Lifetime bandwidth usage") + ":</b>&nbsp;" +
-                      DataHelper.formatSize2Decimal(processed*1024) + "B</div>\n");
+                      DataHelper.formatSize2(processed*1024, true).replace("i", "") + "B</div>\n");
             } else { // bwShare < 12K/s
                 out.write("<div class=\"statusnotes noparticipate\"><b>" + _t("Not enough shared bandwidth to build participating tunnels.") +
                           "</b> <a href=\"config\">[" + _t("Configure") + "]</a></div>\n");
@@ -404,7 +405,7 @@ class TunnelRenderer {
             int count = info.getProcessedMessagesCount() * 1024 / 1000;
             out.write("<td class=\"cells\" align=\"center\">");
             if (count > 0)
-                out.write(count + " KB");
+                out.write(count + "&#8239;K");
             out.write("</td>\n");
             int length = info.getLength();
             boolean debug = _context.getBooleanProperty(HelperBase.PROP_ADVANCED);
@@ -479,8 +480,8 @@ class TunnelRenderer {
         if (live <= 0)
             out.write("<div class=\"statusnotes\"><center><b>" + _t("none") + "</b></center></div>\n");
         out.write("<div class=\"statusnotes\"><center><b>" + _t("Lifetime bandwidth usage") + ":&nbsp;&nbsp;" +
-                  DataHelper.formatSize2Decimal(processedIn*1024) + "B " + _t("in") + ", " +
-                  DataHelper.formatSize2Decimal(processedOut*1024) + "B " + _t("out") + "</b></center></div>");
+                  DataHelper.formatSize2(processedIn*1024, true).replace("i", "") + "B " + _t("in") + ", " +
+                  DataHelper.formatSize2(processedOut*1024, true).replace("i", "") + "B " + _t("out") + "</b></center></div>");
     }
 
 
