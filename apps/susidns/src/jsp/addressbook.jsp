@@ -255,11 +255,11 @@ ${book.loadBookMessages}
 <table>
 <tr>
 <td><b><%=intl._t("Hostname")%></b></td>
-<td><input type="text" name="hostname" value="${book.hostname}" required title="<%=intl._t("Please supply a hostname.")%>" size="54"></td>
+<td><input type="text" name="hostname" value="${book.hostname}" required title="<%=intl._t("Please supply a hostname.")%>"></td>
 </tr>
 <tr>
 <td><b><%=intl._t("B64 or B32")%></b></td>
-<td><input type="text" name="destination" required title="<%=intl._t("Please supply a Base64 destination or Base32 address for this hostname.")%>" value="${book.destination} size="70"></td>
+<td><input type="text" name="destination" required title="<%=intl._t("Please supply a Base64 destination or Base32 address for this hostname.")%>" value="${book.destination}"></td>
 </tr>
 </table>
 <p class="buttons">
@@ -283,7 +283,7 @@ ${book.loadBookMessages}
 <h3><%=intl._t("Import from hosts.txt file")%></h3>
 <table>
 <tr>
-<td><b><%=intl._t("File")%></b></td>
+<td><b><%=intl._t("Select file")%></b></td>
 <td><input name="file" type="file" accept=".txt" value="" /></td>
 </tr>
 </table>
