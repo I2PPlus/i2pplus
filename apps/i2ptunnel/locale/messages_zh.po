@@ -20,6 +20,7 @@
 # YFdyh000 <yfdyh000@gmail.com>, 2016
 # YFdyh000 <yfdyh000@gmail.com>, 2014-2017
 # yue gao <gaoyue@iie.ac.cn>, 2017
+# fzh2003 <fzh2003@i2pmail.org>, 2020
 msgid ""
 msgstr ""
 "Project-Id-Version: I2P\n"
@@ -407,7 +408,7 @@ msgid ""
 "Traffic from all clients with this feature enabled will be routed over the "
 "same set of tunnels. This will make profiling the tunnels by an adversary "
 "more difficult, but will link the clients together."
-msgstr ""
+msgstr "从支持这个特性的客户端中发出的带宽会被路由到同一个通道中。这会使对方分析通道更困难，但会使客户端连接在一起"
 
 #: ../jsp/WEB-INF/classes/net/i2p/i2ptunnel/jsp/edit_jsp.java:431
 msgid ""
@@ -734,7 +735,7 @@ msgid ""
 "Enabling this feature will ensure your tunnel identity (destination) remains"
 " static, for services offering features based on destination e.g. IRC user "
 "authentication"
-msgstr ""
+msgstr "启用此功能将确保您的隧道身份（目标）保持静态，用于提供基于目的的功能的服务，例如IRC用户身份验证"
 
 #: ../jsp/WEB-INF/classes/net/i2p/i2ptunnel/jsp/edit_jsp.java:724
 msgid "Generate key to enable persistent client tunnel identity"
@@ -762,7 +763,7 @@ msgstr "只读：本地目的地（如果已知）"
 
 #: ../jsp/WEB-INF/classes/net/i2p/i2ptunnel/jsp/edit_jsp.java:743
 msgid "Local Base32"
-msgstr ""
+msgstr "本地Base32地址"
 
 #: ../jsp/WEB-INF/classes/net/i2p/i2ptunnel/jsp/edit_jsp.java:754
 msgid "HTTP Filtering"
@@ -792,7 +793,7 @@ msgstr "不屏蔽 Referer 头"
 msgid ""
 "When enabled, the accept headers (mime types support) broadcast by your web "
 "browser will not be filtered, potentially reducing your anonymity"
-msgstr ""
+msgstr "启用后，浏览器发送的请求头将不会被过滤。这可能会降低您的匿名性"
 
 #: ../jsp/WEB-INF/classes/net/i2p/i2ptunnel/jsp/edit_jsp.java:772
 msgid "Do not block Accept headers"
@@ -800,7 +801,7 @@ msgstr "不屏蔽 Accept 头"
 
 #: ../jsp/WEB-INF/classes/net/i2p/i2ptunnel/jsp/edit_jsp.java:774
 msgid "Allow SSL to I2P addresses when enabled"
-msgstr ""
+msgstr "启用后允许 SSL 到 I2P 地址簿"
 
 #: ../jsp/WEB-INF/classes/net/i2p/i2ptunnel/jsp/edit_jsp.java:778
 msgid "Allow SSL to I2P addresses"
@@ -814,17 +815,17 @@ msgstr "签名类型"
 #: ../jsp/WEB-INF/classes/net/i2p/i2ptunnel/jsp/edit_jsp.java:789
 #: ../jsp/WEB-INF/classes/net/i2p/i2ptunnel/jsp/edit_jsp.java:2045
 msgid "Legacy option (deprecated), provided for backward compatibility"
-msgstr ""
+msgstr "旧版本选项（不建议使用），为向后兼容而提供"
 
 #: ../jsp/WEB-INF/classes/net/i2p/i2ptunnel/jsp/edit_jsp.java:818
 #: ../jsp/WEB-INF/classes/net/i2p/i2ptunnel/jsp/edit_jsp.java:2066
 msgid "This is the default, recommended option"
-msgstr ""
+msgstr "这是默认的选项"
 
 #: ../jsp/WEB-INF/classes/net/i2p/i2ptunnel/jsp/edit_jsp.java:832
 #: ../jsp/WEB-INF/classes/net/i2p/i2ptunnel/jsp/edit_jsp.java:2086
 msgid "Encryption types"
-msgstr ""
+msgstr "加密类型"
 
 #: ../jsp/WEB-INF/classes/net/i2p/i2ptunnel/jsp/edit_jsp.java:838
 #: ../jsp/WEB-INF/classes/net/i2p/i2ptunnel/jsp/edit_jsp.java:845
@@ -837,7 +838,7 @@ msgstr "仅供专家！"
 #: ../jsp/WEB-INF/classes/net/i2p/i2ptunnel/jsp/edit_jsp.java:842
 #: ../jsp/WEB-INF/classes/net/i2p/i2ptunnel/jsp/edit_jsp.java:2096
 msgid "Both encryption types"
-msgstr ""
+msgstr "两种加密方式"
 
 #: ../jsp/WEB-INF/classes/net/i2p/i2ptunnel/jsp/edit_jsp.java:853
 msgid "Local Authorization"
@@ -901,7 +902,7 @@ msgstr "跳转服务列表"
 msgid ""
 "List of helper URLs providing jump links when a host is not found in your "
 "addressbook"
-msgstr ""
+msgstr "在地址簿中找不到主机时提供跳转链接的帮助URL列表"
 
 #: ../jsp/WEB-INF/classes/net/i2p/i2ptunnel/jsp/edit_jsp.java:905
 #: ../jsp/WEB-INF/classes/net/i2p/i2ptunnel/jsp/edit_jsp.java:2177
@@ -1059,7 +1060,7 @@ msgstr "允许所有客户端连接到此服务"
 #: ../jsp/WEB-INF/classes/net/i2p/i2ptunnel/jsp/edit_jsp.java:1597
 #: ../jsp/WEB-INF/classes/net/i2p/i2ptunnel/jsp/edit_jsp.java:1625
 msgid "Send key to all users."
-msgstr ""
+msgstr "向所有用户发送密钥"
 
 #: ../jsp/WEB-INF/classes/net/i2p/i2ptunnel/jsp/edit_jsp.java:1601
 #: ../jsp/WEB-INF/classes/net/i2p/i2ptunnel/jsp/edit_jsp.java:1629
@@ -1079,7 +1080,7 @@ msgstr "已混淆"
 #: ../jsp/WEB-INF/classes/net/i2p/i2ptunnel/jsp/edit_jsp.java:1644
 #: ../jsp/WEB-INF/classes/net/i2p/i2ptunnel/jsp/edit_jsp.java:1657
 msgid "Send password to all users."
-msgstr ""
+msgstr "向所有用户发送密码"
 
 #: ../jsp/WEB-INF/classes/net/i2p/i2ptunnel/jsp/edit_jsp.java:1623
 msgid "Blinded with lookup password"
@@ -1087,7 +1088,7 @@ msgstr "使用查找密码混淆"
 
 #: ../jsp/WEB-INF/classes/net/i2p/i2ptunnel/jsp/edit_jsp.java:1631
 msgid "Send key and password to all users."
-msgstr ""
+msgstr "向所有用户发送密钥和密码"
 
 #: ../jsp/WEB-INF/classes/net/i2p/i2ptunnel/jsp/edit_jsp.java:1635
 msgid "Encrypted with lookup password"
@@ -1096,22 +1097,22 @@ msgstr "使用查找密码加密"
 #: ../jsp/WEB-INF/classes/net/i2p/i2ptunnel/jsp/edit_jsp.java:1637
 #: ../jsp/WEB-INF/classes/net/i2p/i2ptunnel/jsp/edit_jsp.java:1643
 msgid "Send individual key to each user."
-msgstr ""
+msgstr "把私钥发送给每个用户"
 
 #: ../jsp/WEB-INF/classes/net/i2p/i2ptunnel/jsp/edit_jsp.java:1641
 #: ../jsp/WEB-INF/classes/net/i2p/i2ptunnel/jsp/edit_jsp.java:1654
 msgid "Encrypted with per-user key"
-msgstr ""
+msgstr "用每个用户的密钥加密"
 
 #: ../jsp/WEB-INF/classes/net/i2p/i2ptunnel/jsp/edit_jsp.java:1648
 #: ../jsp/WEB-INF/classes/net/i2p/i2ptunnel/jsp/edit_jsp.java:1661
 msgid "Encrypted with lookup password and per-user key"
-msgstr ""
+msgstr "用查找到的密码与每个用户的密钥加密"
 
 #: ../jsp/WEB-INF/classes/net/i2p/i2ptunnel/jsp/edit_jsp.java:1650
 #: ../jsp/WEB-INF/classes/net/i2p/i2ptunnel/jsp/edit_jsp.java:1656
 msgid "Enter key from each user."
-msgstr ""
+msgstr "为每个用户输入密钥"
 
 #: ../jsp/WEB-INF/classes/net/i2p/i2ptunnel/jsp/edit_jsp.java:1674
 msgid "Optional lookup password"
@@ -1123,21 +1124,21 @@ msgstr "加密密钥"
 
 #: ../jsp/WEB-INF/classes/net/i2p/i2ptunnel/jsp/edit_jsp.java:1709
 msgid "Encryption key required to access this service"
-msgstr ""
+msgstr "此服务需要加密密钥"
 
 #: ../jsp/WEB-INF/classes/net/i2p/i2ptunnel/jsp/edit_jsp.java:1723
 msgid "Revoke"
-msgstr ""
+msgstr "取消"
 
 #: ../jsp/WEB-INF/classes/net/i2p/i2ptunnel/jsp/edit_jsp.java:1725
 #: ../jsp/WEB-INF/classes/net/i2p/i2ptunnel/jsp/edit_jsp.java:1762
 msgid "Client Name"
-msgstr ""
+msgstr "客户名称"
 
 #: ../jsp/WEB-INF/classes/net/i2p/i2ptunnel/jsp/edit_jsp.java:1727
 #: ../jsp/WEB-INF/classes/net/i2p/i2ptunnel/jsp/edit_jsp.java:1770
 msgid "Client Key"
-msgstr ""
+msgstr "客户密钥"
 
 #: ../jsp/WEB-INF/classes/net/i2p/i2ptunnel/jsp/edit_jsp.java:1744
 #: ../jsp/WEB-INF/classes/net/i2p/i2ptunnel/jsp/edit_jsp.java:1776
@@ -1154,7 +1155,7 @@ msgstr "限制访问列表"
 
 #: ../jsp/WEB-INF/classes/net/i2p/i2ptunnel/jsp/edit_jsp.java:1800
 msgid "Prevent listed clients from connecting to this service"
-msgstr ""
+msgstr "阻止被列入的客户连接到这个服务"
 
 #: ../jsp/WEB-INF/classes/net/i2p/i2ptunnel/jsp/edit_jsp.java:1804
 msgid "Blacklist"
@@ -1162,7 +1163,7 @@ msgstr "黑名单"
 
 #: ../jsp/WEB-INF/classes/net/i2p/i2ptunnel/jsp/edit_jsp.java:1806
 msgid "Only allow listed clients to connect to this service"
-msgstr ""
+msgstr "只有列入的客户能连接到这个服务"
 
 #: ../jsp/WEB-INF/classes/net/i2p/i2ptunnel/jsp/edit_jsp.java:1810
 msgid "Whitelist"
@@ -1194,7 +1195,7 @@ msgstr "格式规范"
 
 #: ../jsp/WEB-INF/classes/net/i2p/i2ptunnel/jsp/edit_jsp.java:1826
 msgid "Absolute path to file containing filter definition"
-msgstr ""
+msgstr "过滤器定义文件的路径"
 
 #: ../jsp/WEB-INF/classes/net/i2p/i2ptunnel/jsp/edit_jsp.java:1830
 msgid "Server Access Options"
@@ -1222,13 +1223,13 @@ msgstr "阻止这些 User-Agent"
 
 #: ../jsp/WEB-INF/classes/net/i2p/i2ptunnel/jsp/edit_jsp.java:1852
 msgid "comma separated, e.g. Mozilla,Opera (case-sensitive)"
-msgstr ""
+msgstr "用逗号分隔，如Mozilla,Opera（区分大小写）"
 
 #: ../jsp/WEB-INF/classes/net/i2p/i2ptunnel/jsp/edit_jsp.java:1859
 msgid ""
 "Use unique IP addresses for each connecting client (local non-SSL servers "
 "only)"
-msgstr ""
+msgstr "连接每个客户时使用独特的IP地址"
 
 #: ../jsp/WEB-INF/classes/net/i2p/i2ptunnel/jsp/edit_jsp.java:1863
 msgid "Unique Local Address per Client"
@@ -1236,7 +1237,7 @@ msgstr "每个客户端的唯一本地地址"
 
 #: ../jsp/WEB-INF/classes/net/i2p/i2ptunnel/jsp/edit_jsp.java:1865
 msgid "Only enable if you are hosting this service on multiple routers"
-msgstr ""
+msgstr "仅当您在多个路由上使用此服务时启用"
 
 #: ../jsp/WEB-INF/classes/net/i2p/i2ptunnel/jsp/edit_jsp.java:1869
 msgid "Optimize for Multihoming"
@@ -1294,19 +1295,19 @@ msgstr "总数"
 msgid ""
 "Total number of web page requests per minute before access to the server is "
 "blocked"
-msgstr ""
+msgstr "在服务器锁定前每分钟访问的网页"
 
 #: ../jsp/WEB-INF/classes/net/i2p/i2ptunnel/jsp/edit_jsp.java:1901
 msgid ""
 "Total number of web page requests per hour before access to the server is "
 "blocked"
-msgstr ""
+msgstr "在服务器锁定前每小时访问的网页"
 
 #: ../jsp/WEB-INF/classes/net/i2p/i2ptunnel/jsp/edit_jsp.java:1905
 msgid ""
 "Total number of web page requests per day before access to the server is "
 "blocked"
-msgstr ""
+msgstr "在服务器锁定前每天访问的网页"
 
 #: ../jsp/WEB-INF/classes/net/i2p/i2ptunnel/jsp/edit_jsp.java:1909
 msgid "Max concurrent connections (0=unlimited)"
@@ -1314,7 +1315,7 @@ msgstr "最大并发连接数(0=无限制)"
 
 #: ../jsp/WEB-INF/classes/net/i2p/i2ptunnel/jsp/edit_jsp.java:1911
 msgid "Maximum number of simultaneous client connections"
-msgstr ""
+msgstr "最大客户连接数"
 
 #: ../jsp/WEB-INF/classes/net/i2p/i2ptunnel/jsp/edit_jsp.java:1919
 msgid "POST limits (0=unlimited)"
@@ -1322,7 +1323,7 @@ msgstr "POST限制(0 =无限制)"
 
 #: ../jsp/WEB-INF/classes/net/i2p/i2ptunnel/jsp/edit_jsp.java:1921
 msgid "Per Period"
-msgstr ""
+msgstr "每段"
 
 #: ../jsp/WEB-INF/classes/net/i2p/i2ptunnel/jsp/edit_jsp.java:1923
 msgid "Ban Duration"
