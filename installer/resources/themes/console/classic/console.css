@@ -11232,18 +11232,38 @@ to {
     vertical-align: text-bottom !important;
 }
 
-#tunnels img[src$="bound.png"] {
+#tunnels img[src$="bound.png"], #peers img[src$="bound.png"] {
     opacity: 0;
 }
 
 .inbound, .outbound  {
     display: inline-block;
-    background: url(/themes/console/light/images/in.png) center center no-repeat;
-    background-size: 16px 16px !important;
     width: 16px;
     height: 16px;
+    vertical-align: middle;
+    background: url(images/in.png) center center no-repeat;
+    background-size: 16px 16px !important;
 }
 
 .outbound  {
-    background: url(/themes/console/light/images/out.png) center center no-repeat;
+    background: url(images/out.png) center center no-repeat;
+}
+
+.inbound.small, .outbound.small {
+    background-size: 12px 12px !important;
+    background-position: center center !important;
+}
+
+.small img {
+    margin: 0 !important;
+    padding 0 !important;
+}
+
+.direction .small {
+    width: 12px !important;
+    margin-left: -2px;
+}
+
+#peerdefs li {
+    line-height: 1.6 !important;
 }
