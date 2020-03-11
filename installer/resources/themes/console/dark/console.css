@@ -13963,3 +13963,19 @@ h3 + table {
     line-height: 1 !important;
     vertical-align: text-bottom !important;
 }
+
+#tunnels img[src$="bound.png"] {
+    opacity: 0;
+}
+
+.inbound, .outbound  {
+    display: inline-block;
+    background: url(images/in.png) center center no-repeat;
+    background-size: 16px 16px !important;
+    width: 16px;
+    height: 16px;
+}
+
+.outbound  {
+    background: url(images/out.png) center center no-repeat;
+}
