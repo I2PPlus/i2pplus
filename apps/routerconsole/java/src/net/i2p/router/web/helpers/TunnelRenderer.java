@@ -398,10 +398,11 @@ class TunnelRenderer {
             live++;
             boolean isInbound = info.isInbound();
             if (isInbound)
-                out.write("<tr><td class=\"cells\" align=\"center\"><img src=\"/themes/console/images/inbound.png\" alt=\"" + tib + "\" title=\"" +
-                          tib + "\"></td>");
+                out.write("<tr><td class=\"cells\" align=\"center\"><span class=\"inbound\" title=\"" + tib +
+                          "\"><img src=\"/themes/console/images/inbound.png\" alt=\"" + tib + "\"></span></td>");
             else
-                out.write("<tr><td class=\"cells\" align=\"center\"><img src=\"/themes/console/images/outbound.png\" alt=\"" + tob + "\" title=\"" + tob + "\"></td>");
+                out.write("<tr><td class=\"cells\" align=\"center\"><span class=\"outbound\" title=\"" + tob +
+                          "\"><img src=\"/themes/console/images/outbound.png\" alt=\"" + tob + "\"></span></td>");
             out.write("<td class=\"cells\" align=\"center\">" + DataHelper.formatDuration2(timeLeft) + "</td>\n");
             int count = info.getProcessedMessagesCount() * 1024 / 1000;
             out.write("<td class=\"cells datatransfer\" align=\"center\"><span class=\"right\">");
