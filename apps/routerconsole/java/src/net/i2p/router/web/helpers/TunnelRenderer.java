@@ -191,11 +191,12 @@ class TunnelRenderer {
                 if (lifetime > 10*60)
                     lifetime = 10*60;
                 long bps = 1024L * count / lifetime;
-                out.write("<td class=\"cells bps\" align=\"center\"><span class=\"right\">" + DataHelper.formatSize2(bps, true).replace("i", "") + "</span><span class=\"left\">");
+                out.write("<td class=\"cells bps\" align=\"center\"><span class=\"right\">" + DataHelper.formatSize2(bps, true).replace("i", "")
+                    .replace("K", "&#8239;</span><span class=\"left\">K").replace("M", "&#8239;</span><span class=\"left\">M"));
                 if (bps > 1023)
                     out.write(_t("/s"));
                 else
-                    out.write(_t("B/s"));
+                    out.write("</span><span class=\"left\">" + _t("B/s"));
                 out.write("</span></td>");
                 if (debug) {
                     if (cfg.getReceiveTunnel() != null)
