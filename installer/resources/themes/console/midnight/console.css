@@ -1755,13 +1755,14 @@ div.logo hr {
     color: #fc1c66 !important;
 }
 
-#sb_peers a, #sb_peersadvanced a {
+#sb_peers a, #sb_peersadvanced a, #sb_tunnels a {
     padding: 0;
     color: #c9ceff;
 }
 
 #sb_peers a:hover, #sb_peers a:focus,
-#sb_peersadvanced a:hover, #sb_peersadvanced a:focus {
+#sb_peersadvanced a:hover, #sb_peersadvanced a:focus,
+#sb_tunnels a:hover, #sb_tunnels a:focus {
     color: #bf2295;
 }
 
