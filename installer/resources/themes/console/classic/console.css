@@ -11223,3 +11223,11 @@ to {
     margin: -6px -6px 7px !important;
 }
 }
+
+#tunnels .left, #tunnels .right {
+    margin: 0 !important;
+    width: 50%;
+    display: inline-block !important;
+    line-height: 1 !important;
+    vertical-align: text-bottom !important;
+}

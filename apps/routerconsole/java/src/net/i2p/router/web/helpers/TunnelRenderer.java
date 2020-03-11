@@ -181,22 +181,22 @@ class TunnelRenderer {
                     out.write("<td class=\"cells ptcp\" align=\"center\" title=\"" + _t("Participant") + "\">" + _t("Participant") + "</td>");
                 long timeLeft = cfg.getExpiration()-_context.clock().now();
                 if (timeLeft > 0)
-                    out.write("<td class=\"cells\" align=\"center\">" + DataHelper.formatDuration2(timeLeft) + "</td>");
+                    out.write("<td class=\"cells expiry\" align=\"center\">" + DataHelper.formatDuration2(timeLeft) + "</td>");
                 else
                     out.write("<td class=\"cells\" align=\"center\"><i>" + _t("grace period") + "</i></td>");
-                out.write("<td class=\"cells\" align=\"center\">" + (count * 1024 / 1000) +  "&#8239;K</td>");
+                out.write("<td class=\"cells datatransfer\" align=\"center\"><span class=\"right\">" + (count * 1024 / 1000) +  "</span><span class=\"left\">&#8239;K</span></td>");
                 int lifetime = (int) ((_context.clock().now() - cfg.getCreation()) / 1000);
                 if (lifetime <= 0)
                     lifetime = 1;
                 if (lifetime > 10*60)
                     lifetime = 10*60;
                 long bps = 1024L * count / lifetime;
-                out.write("<td class=\"cells bps\" align=\"center\">" + DataHelper.formatSize2(bps, true).replace("i", ""));
+                out.write("<td class=\"cells bps\" align=\"center\"><span class=\"right\">" + DataHelper.formatSize2(bps, true).replace("i", "") + "</span><span class=\"left\">");
                 if (bps > 1023)
                     out.write(_t("/s"));
                 else
                     out.write(_t("B/s"));
-                out.write("</td>");
+                out.write("</span></td>");
                 if (debug) {
                     if (cfg.getReceiveTunnel() != null)
                         out.write("<td class=\"cells\" align=\"center\" title=\"" + _t("Tunnel identity") + "\"><span class=\"tunnel_id\">" +
@@ -218,7 +218,7 @@ class TunnelRenderer {
                 }
                 if (cfg.getSendTo() != null)
                     out.write("<td class=\"cells\" align=\"center\"><span class=\"tunnel_peer\">" + netDbLink(cfg.getSendTo()) +
-                              "</span>&nbsp;<b class=\"tunnel_cap\" title=\"" + _t("Bandwidth tier") + "\">" + getCapacity(cfg.getSendTo()) + "</b></span></td>");
+                              "</span>&nbsp;<b class=\"tunnel_cap\" title=\"" + _t("Bandwidth tier") + "\">" + getCapacity(cfg.getSendTo()) + "</b></td>");
                 else
                     out.write("<td class=\"cells\"></td>");
                 out.write("</tr>\n");
@@ -403,9 +403,9 @@ class TunnelRenderer {
                 out.write("<tr><td class=\"cells\" align=\"center\"><img src=\"/themes/console/images/outbound.png\" alt=\"" + tob + "\" title=\"" + tob + "\"></td>");
             out.write("<td class=\"cells\" align=\"center\">" + DataHelper.formatDuration2(timeLeft) + "</td>\n");
             int count = info.getProcessedMessagesCount() * 1024 / 1000;
-            out.write("<td class=\"cells\" align=\"center\">");
+            out.write("<td class=\"cells datatransfer\" align=\"center\"><span class=\"right\">");
             if (count > 0)
-                out.write(count + "&#8239;K");
+                out.write(count + "</span><span class=\"left\">&#8239;K</span>");
             out.write("</td>\n");
             int length = info.getLength();
             boolean debug = _context.getBooleanProperty(HelperBase.PROP_ADVANCED);
