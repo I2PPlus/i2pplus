@@ -510,13 +510,13 @@ class TunnelRenderer {
         out.write("<h3 class=\"tabletitle\" id=\"peercount\">" + _t("Tunnel Count By Peer") +
                   "&nbsp;&nbsp;<a style=\"float: right;\" href=\"/tunnelpeercount\"><img src=\"/themes/console/images/buttons/update.png\"></a></h3>\n");
         out.write("<table id=\"tunnelPeerCount\" data-sortable>");
-        out.write("<thead>\n<tr><th>" + _t("Peer") + "</th><th title=\"Primary IP address\">Address</th><th title=\"Client and Exploratory Tunnels\">" + _t("Local") + "</th><th>" + _t("% of total") + "</th>");
+        out.write("<thead>\n<tr><th>" + _t("Peer") + "</th><th title=\"Primary IP address\">Address</th><th title=\"Client and Exploratory Tunnels\">" + _t("Local") + "</th><th class=\"bar\">" + _t("% of total") + "</th>");
         if (!participating.isEmpty())
-            out.write("<th>" + _t("Participating") + "</th><th>" + _t("% of total") + "</th>");
+            out.write("<th>" + _t("Participating") + "</th><th class=\"bar\">" + _t("% of total") + "</th>");
         out.write("</tr>\n</thead>\n");
         for (Hash h : peerList) {
             char cap = getCapacity(h);
-            RouterInfo info = _context.netDb().lookupRouterInfoLocally(h);
+            RouterInfo info = h != null ? _context.netDb().lookupRouterInfoLocally(h) : null;
             String ip = info != null ? net.i2p.util.Addresses.toString(CommSystemFacadeImpl.getValidIP(info)) : null;
             String v = info != null ? info.getOption("router.version") : null;
             out.write("<tr><td class=\"cells\" align=\"center\">");
@@ -525,21 +525,23 @@ class TunnelRenderer {
                 out.write("<span class=\"version\" title=\"" + _t("Show all routers with this version in the NetDb") +
                           "\"><a href=\"/netdb?v=" + DataHelper.stripHTML(v) + "\">" + DataHelper.stripHTML(v) +
                           "</a></span>");
-            if (info.getHash() != null)
+            if (info != null && info.getHash() != null)
                 out.write("<a class=\"configpeer\" href=\"/configpeer?peer=" + info.getHash() + "\" title=\"Configure peer\" alt=\"[Configure peer]\">" +
                           "<img src=\"/themes/console/images/buttons/edit2.png\"></a>");
             out.write("</td><td class=\"cells\"><span class=\"ipaddress\">");
-            if (ip != null) {
+            if (info != null && ip != null) {
                 if (!ip.toString().equals("null"))
                     out.write("<a class=\"script\" href=\"https://gwhois.org/" + ip.toString() + "+dns\" target=\"blank\" title=\"" + _t("Lookup address on gwhois.org") +
                               "\">" + ip.toString() + "</a><noscript>" + ip.toString() + "</noscript>");
+                else
+                    out.write("<i>" + _t("unknown") + "</i>");
             } else {
-                out.write(_t("unknown"));
+                out.write("<i>" + _t("unknown") + "</i>");
             }
             out.write("</span></td><td class=\"cells\" align=\"center\">");
             if (lc.count(h) > 0)
                 out.write("" + lc.count(h));
-            out.write("</td><td class=\"cells\" align=\"center\">");
+            out.write("</td><td class=\"cells bar\" align=\"center\">");
             if (lc.count(h) > 0) {
                 out.write("<span class=\"percentBarOuter\"><span class=\"percentBarInner\" style=\"width:");
                 out.write("" + (lc.count(h) * 100) / tunnelCount);
@@ -551,7 +553,7 @@ class TunnelRenderer {
                 out.write("</td><td class=\"cells\" align=\"center\">");
                 if (pc.count(h) > 0)
                     out.write("" + pc.count(h));
-                out.write("</td><td class=\"cells\" align=\"center\">");
+                out.write("</td><td class=\"cells bar\" align=\"center\">");
                 if (pc.count(h) > 0) {
                     out.write("<span class=\"percentBarOuter\"><span class=\"percentBarInner\" style=\"width:");
                     out.write("" + (pc.count(h) * 100) / partCount);

@@ -13856,7 +13856,7 @@ h3 + table {
 
 #tunnels #tunnelPeerCount .cells {
     white-space: nowrap;
-    width: 20% !important;
+    width: auto !important;
     max-width: none !important;
     min-width: none !important;
 }
@@ -13871,9 +13871,17 @@ h3 + table {
 }
 
 #tunnelPeerCount th, #tunnelPeerCount .cells, #tunnelPeerCount .cells:first-child {
-    width: 20% !important;
+    width: auto !important;
     max-width: none !important;
     min-width: none !important;
+}
+
+#tunnels #tunnelPeerCount .cells.bar, #tunnels #tunnelPeerCount th.bar,
+#tunnels #tunnelPeerCount td:nth-child(n+3), #tunnels #tunnelPeerCount th:nth-child(n+3) {
+    padding-left: 8px !important;
+    padding-right: 8px !important;
+    width: 10% !important;
+    white-space: nowrap;
 }
 
 #tunnelPeerCount td:first-child, #tunnelPeerCount td:first-child > * {
