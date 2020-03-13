@@ -13876,6 +13876,11 @@ h3 + table {
     min-width: none !important;
 }
 
+#tunnelPeerCount td:first-child, #tunnelPeerCount td:first-child > * {
+    vertical-align: middle !important;
+    line-height: 1.4 !important;
+}
+
 #tunnelPeerCount tr:not(:last-child) td {
     padding: 3px !important;
     border: 1px solid #131;
@@ -13914,6 +13919,18 @@ h3 + table {
 
 #tunnelPeerCount .version {
     padding-bottom: 0;
+}
+
+#tunnelPeerCount .configpeer {
+    margin: 0 0 0 3px !important;
+    display: inline-block;
+    height: auto !important;
+    width: auto !important;
+    vertical-align: middle;
+}
+
+#tunnelPeerCount .configpeer img {
+    margin: 0 !important;
 }
 
 #tunnelPeerCount tr:not(:last-child):hover td {
@@ -13977,10 +13994,6 @@ h3 + table {
     background-size: 16px 16px !important;
 }
 
-.outbound  {
-    background: url(images/out.png) center center no-repeat;
-}
-
 .inbound.small, .outbound.small {
     background-size: 12px 12px !important;
     background-position: center center !important;
@@ -13994,6 +14007,10 @@ h3 + table {
 .direction .small {
     width: 12px !important;
     margin-left: -2px;
+}
+
+.outbound  {
+    background: url(images/out.png) center center no-repeat;
 }
 
 #peerdefs li {

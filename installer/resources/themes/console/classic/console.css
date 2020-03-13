@@ -11173,6 +11173,10 @@ to {
     vertical-align: middle;
 }
 
+#tunnelPeerCount td:nth-child(2) {
+    text-align: center;
+}
+
 #tunnelPeerCount .tunnel_cap {
     padding: 1px 2px 0;
 }
@@ -11183,6 +11187,12 @@ to {
 
 #tunnelPeerCount .version {
     padding-bottom: 0;
+}
+
+#tunnelPeerCount .configpeer {
+    margin: 0 0 0 3px !important;
+    display: inline-block;
+    vertical-align: middle;
 }
 
 #tunnelPeerCount tr:not(:last-child):hover td {

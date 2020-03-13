@@ -187,7 +187,7 @@ input[type=text], input[type=password], textarea {
     color: #7670c2 !important;
     background: linear-gradient(to bottom, #000, #000019);
     box-shadow: inset 0 0 3px 3px #000, 0 0 0 1px #000;
-    border: 1px solid #27235f !important;
+    border: 1px solid #1f1c4a !important;
     padding: 5px;
 }
 
@@ -263,7 +263,7 @@ select {
     font: bold 9pt "Droid Sans", "Open Sans", "Noto Sans", Ubuntu, "Segoe UI", "Bitstream Vera Sans", "DejaVu Sans", Verdana, "Lucida Grande", Helvetica, sans-serif;
     color: #6c66bc;
     text-align: center;
-    border: 1px solid #27235f;
+    border: 1px solid #1f1c4a;
     cursor: pointer;
     box-shadow: inset 0 0 0 1px #000, 0 0 0 1px #000;
     background: #000 url(images/dropdown.png) center right 1px no-repeat !important;
@@ -312,7 +312,7 @@ select:hover, select:focus, select:active {
 
 select[disabled], select[disabled]:hover, select[disabled]:focus, select[disabled]:active {
     color: #6c66bc !important;
-    border: 1px solid #27235f !important;
+    border: 1px solid #1f1c4a !important;
     box-shadow: inset 0 0 0 1px #000, 0 0 0 1px #000 !important;
     background: #000 !important;
     background: linear-gradient(to bottom, #11101c 50%, #000010 50%) !important;
@@ -346,7 +346,7 @@ button, button:visited, input[type="submit"], input[type="reset"] {
     text-align: center;
     text-shadow: 0 1px 1px #000;
     vertical-align: middle;
-    border: 1px solid #26225c;
+    border: 1px solid #1f1c4a;
     background: #000;
     background: linear-gradient(to bottom, #191a24 50%, #001 50%) !important;
 }
@@ -1049,7 +1049,7 @@ button::-moz-focus-inner, input[type="submit"]::-moz-focus-inner, input[type="re
 
 .routersummary .reload, .routersummary .reload[value$="restart"] {
     background: url(/themes/console/images/buttons/restart.png) center center no-repeat, linear-gradient(to bottom, #191a24 50%, #000 50%) !important;
-    background: url(/themes/console/images/buttons/restart.png) center center no-repeat, linear-gradient(to right, rgba(0,0,0,0), rgba(96,0,96,0.1), rgba(0,0,0,0)), linear-gradient(to right, rgba(0,0,16,0.5), rgba(0,0,0,0) 30%), linear-gradient(to bottom, #141221 50%, #001 50%) !important;
+    background: url(/themes/console/images/buttons/restart.png) center center no-repeat, linear-gradient(to right, rgba(0,0,0,0), rgba(96,0,96,0.1), rgba(0,0,0,0)), linear-gradient(to bottom, #141221 50%, #001 50%) !important;
 }
 
 .routersummary .reload:hover, .routersummary .reload:focus, .routersummary .reload[value$="restart"]:hover, .routersummary .reload[value$="restart"]:focus {
@@ -1065,7 +1065,7 @@ button::-moz-focus-inner, input[type="submit"]::-moz-focus-inner, input[type="re
 
 .routersummary .stop {
     background: url(/themes/console/images/buttons/shutdown.png) center 56% no-repeat, linear-gradient(to bottom, #191a24 50%, #000 50%) !important;
-    background: url(/themes/console/images/buttons/shutdown.png) center 56% no-repeat, linear-gradient(to right, rgba(0,0,0,0), rgba(96,0,96,0.1), rgba(0,0,0,0)), linear-gradient(to right, rgba(0,0,16,0.5), rgba(0,0,0,0) 30%), linear-gradient(to bottom, #141221 50%, #001 50%) !important;
+    background: url(/themes/console/images/buttons/shutdown.png) center 56% no-repeat, linear-gradient(to right, rgba(0,0,0,0), rgba(96,0,96,0.1), rgba(0,0,0,0)), linear-gradient(to bottom, #141221 50%, #001 50%) !important;
 }
 
 .routersummary .stop:hover, .routersummary .stop:focus {
@@ -13503,7 +13503,6 @@ to {
 
 #tunnelPeerCount tr:nth-last-child(2) td {
     border-bottom: 1px solid #171538;
-    background: #000;
 }
 
 #tunnelPeerCount tr:last-child td {
@@ -13534,6 +13533,16 @@ to {
 
 #tunnelPeerCount .version {
     padding-bottom: 0;
+}
+
+#tunnelPeerCount .configpeer {
+    margin: 0 0 0 3px !important;
+    display: inline-block !important;
+    vertical-align: middle;
+}
+
+#tunnelPeerCount .configpeer img {
+    margin: 0 !important;
 }
 
 #tunnelPeerCount tr:not(:last-child):hover td {

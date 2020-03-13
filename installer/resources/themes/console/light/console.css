@@ -12986,6 +12986,12 @@ to {
     width: 20% !important;
     max-width: none !important;
     min-width: none !important;
+    text-align: center;
+}
+
+#tunnelPeerCount .configpeer {
+    margin: 0 0 0 3px;
+    display: inline-block;
 }
 
 #tunnels .percentBarInner {
