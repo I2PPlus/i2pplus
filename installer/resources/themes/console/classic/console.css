@@ -11163,6 +11163,11 @@ to {
     white-space: nowrap;
 }
 
+#tunnels #tunnelPeerCount td:nth-child(2) {
+    white-space: normal;
+    word-break: break-all;
+}
+
 #tunnels .percentBarInner {
     background: #99c;
 }
@@ -11226,19 +11231,15 @@ to {
     margin-right: -5px;
     margin: -1px -5px -10px;
 }
-
-#tunnels .percentBarOuter, #tunnels .percentBarText {
-    width: 80px !important;
-}
 }
 
 @media screen and (max-width: 1200px) {
-#tunnels .percentBarOuter, #tunnels .percentBarText {
-    width: 90px !important;
-}
-
 #tunnels .confignav {
     margin: -6px -6px 7px !important;
+}
+#tunnels .percentBarOuter, #tunnels .percentBarText {
+    width: 70px !important;
+    margin: 0 2px;
 }
 }
 

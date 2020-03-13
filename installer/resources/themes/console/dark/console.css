@@ -13866,8 +13866,7 @@ h3 + table {
 }
 
 #tunnels .percentBarOuter:hover .percentBarInner {
-    box-shadow: none;
-    background: transparent;
+    background: rgba(0,48,0,.8);
 }
 
 #tunnelPeerCount th, #tunnelPeerCount .cells, #tunnelPeerCount .cells:first-child {
@@ -13887,6 +13886,11 @@ h3 + table {
 #tunnelPeerCount td:first-child, #tunnelPeerCount td:first-child > * {
     vertical-align: middle !important;
     line-height: 1.4 !important;
+}
+
+#tunnels #tunnelPeerCount td:nth-child(2) {
+    white-space: normal;
+    word-break: break-all;
 }
 
 #tunnelPeerCount tr:not(:last-child) td {
@@ -13958,6 +13962,10 @@ h3 + table {
     background: #000;
 }
 
+#tunnels .percentBarInner {
+    text-align: center !important;
+}
+
 #thresholds th {
     font-weight: inherit;
 }
@@ -13970,8 +13978,10 @@ h3 + table {
 #tunnelPeerCount {
     margin-bottom: 4px;
 }
+
 #tunnels .percentBarOuter, #tunnels .percentBarText {
-    width: 90px;
+    width: 70px;
+    margin: 0 2px;
 }
 }
 

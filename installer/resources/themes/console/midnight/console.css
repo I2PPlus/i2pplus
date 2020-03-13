@@ -13504,6 +13504,11 @@ to {
     white-space: nowrap;
 }
 
+#tunnels #tunnelPeerCount td:nth-child(2) {
+    white-space: normal;
+    word-break: break-all;
+}
+
 #tunnelPeerCount tr:not(:last-child) td {
     padding: 3px !important;
     border: 1px solid #171538;
@@ -13592,8 +13597,10 @@ to {
 #tunnelPeerCount {
     margin-bottom: 4px;
 }
+
 #tunnels .percentBarOuter, #tunnels .percentBarText {
-    width: 90px;
+    width: 70px;
+    margin: 0 2px;
 }
 }
 

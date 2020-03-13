@@ -12996,6 +12996,11 @@ to {
     white-space: nowrap;
 }
 
+#tunnels #tunnelPeerCount td:nth-child(2) {
+    white-space: normal;
+    word-break: break-all;
+}
+
 #tunnelPeerCount .configpeer {
     margin: 0 0 0 3px;
     display: inline-block;
@@ -13045,14 +13050,12 @@ to {
     margin-right: -5px;
     margin: -1px -5px -10px;
 }
-#tunnels .percentBarOuter, #tunnels .percentBarText {
-    width: 80px !important;
-}
 }
 
 @media screen and (max-width: 1200px) {
 #tunnels .percentBarOuter, #tunnels .percentBarText {
-    width: 90px;
+    width: 70px;
+    margin: 0 2px;
 }
 }
 
