@@ -85,6 +85,9 @@
 <tr><th>router.maxParticipatingTunnels={n}</th></tr>
 <tr><td>Determines the maximum number of participating tunnels the router can build. To disable participation completely, set to 0. [Automatically configured by default]</td></tr>
 
+<tr><th>router.maxTunnelPercentage={n}</th></tr>
+<tr><td>Defines the maximum percentage of active local tunnels (client and exploratory) that a peer will be used for. [Default is 25%]</td></tr>
+
 <tr><th>router.networkDatabase.flat={true|false}</th></tr>
 <tr><td>When set to true, the router info files stored in your profile's netDB directory will not be split into 64 sub-directories.</td></tr>
 
