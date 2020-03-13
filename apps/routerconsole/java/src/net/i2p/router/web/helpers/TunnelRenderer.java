@@ -525,7 +525,7 @@ class TunnelRenderer {
                 out.write("<span class=\"version\" title=\"" + _t("Show all routers with this version in the NetDb") +
                           "\"><a href=\"/netdb?v=" + DataHelper.stripHTML(v) + "\">" + DataHelper.stripHTML(v) +
                           "</a></span>");
-            if (info != null)
+            if (info.getHash() != null)
                 out.write("<a class=\"configpeer\" href=\"/configpeer?peer=" + info.getHash() + "\" title=\"Configure peer\" alt=\"[Configure peer]\">" +
                           "<img src=\"/themes/console/images/buttons/edit2.png\"></a>");
             out.write("</td><td class=\"cells\"><span class=\"ipaddress\">");
@@ -538,8 +538,6 @@ class TunnelRenderer {
             out.write("</span></td><td class=\"cells\" align=\"center\">");
             if (lc.count(h) > 0)
                 out.write("" + lc.count(h));
-//            else
-//                out.write("–");
             out.write("</td><td class=\"cells\" align=\"center\">");
             if (lc.count(h) > 0) {
                 out.write("<span class=\"percentBarOuter\"><span class=\"percentBarInner\" style=\"width:");
