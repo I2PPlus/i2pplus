@@ -517,7 +517,7 @@ class TunnelRenderer {
         for (Hash h : peerList) {
             char cap = getCapacity(h);
             RouterInfo info = _context.netDb().lookupRouterInfoLocally(h);
-            String ip = net.i2p.util.Addresses.toString(CommSystemFacadeImpl.getValidIP(info));
+            String ip = info != null ? net.i2p.util.Addresses.toString(CommSystemFacadeImpl.getValidIP(info)) : null;
             String v = info != null ? info.getOption("router.version") : null;
             out.write("<tr><td class=\"cells\" align=\"center\">");
             out.write(netDbLink(h) + "<b class=\"tunnel_cap\" title=\"" + _t("Bandwidth tier") + "\">" + cap + "</b>");
@@ -529,9 +529,10 @@ class TunnelRenderer {
                 out.write("<a class=\"configpeer\" href=\"/configpeer?peer=" + info.getHash() + "\" title=\"Configure peer\" alt=\"[Configure peer]\">" +
                           "<img src=\"/themes/console/images/buttons/edit2.png\"></a>");
             out.write("</td><td class=\"cells\"><span class=\"ipaddress\">");
-            if (!ip.toString().equals("null")) {
-                out.write("<a class=\"script\" href=\"https://gwhois.org/" + ip.toString() + "+dns\" target=\"blank\" title=\"" + _t("Lookup address on gwhois.org") +
-                         "\">" + ip.toString() + "</a><noscript>" + ip.toString() + "</noscript>");
+            if (ip != null) {
+                if (!ip.toString().equals("null"))
+                    out.write("<a class=\"script\" href=\"https://gwhois.org/" + ip.toString() + "+dns\" target=\"blank\" title=\"" + _t("Lookup address on gwhois.org") +
+                              "\">" + ip.toString() + "</a><noscript>" + ip.toString() + "</noscript>");
             } else {
                 out.write(_t("unknown"));
             }
