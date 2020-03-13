@@ -64,7 +64,7 @@ public class CommSystemFacadeImpl extends CommSystemFacade {
     }
 
     public synchronized void startup() {
-        _log.info("Starting up the comm system");
+        _log.info("Starting up the comm system...");
         _manager.startListening();
         startTimestamper();
         startNetMonitor();
@@ -549,7 +549,7 @@ public class CommSystemFacadeImpl extends CommSystemFacade {
      *  @since 0.9.18
      */
 
-    private static byte[] getValidIP(RouterInfo ri) {
+    public static byte[] getValidIP(RouterInfo ri) {
         for (RouterAddress ra : ri.getAddresses()) { // NPE?!!
             byte[] rv = ra.getIP();
             if (rv != null && TransportUtil.isPubliclyRoutable(rv, true))
@@ -568,7 +568,6 @@ public class CommSystemFacadeImpl extends CommSystemFacade {
             return c;
         return n;
     }
-
 
 
     /** Provide a consistent "look" for displaying router IDs in the console */
