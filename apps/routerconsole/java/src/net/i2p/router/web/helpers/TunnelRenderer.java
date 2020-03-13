@@ -516,7 +516,7 @@ class TunnelRenderer {
         out.write("</tr>\n</thead>\n");
         for (Hash h : peerList) {
             char cap = getCapacity(h);
-            RouterInfo info = h != null ? _context.netDb().lookupRouterInfoLocally(h) : null;
+            RouterInfo info = _context.netDb().lookupRouterInfoLocally(h);
             String ip = info != null ? net.i2p.util.Addresses.toString(CommSystemFacadeImpl.getValidIP(info)) : null;
             String v = info != null ? info.getOption("router.version") : null;
             out.write("<tr><td class=\"cells\" align=\"center\">");
