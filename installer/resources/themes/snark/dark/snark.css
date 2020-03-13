@@ -3849,10 +3849,6 @@ th#snarkTorrentSort {
     max-width: 150px !important;
 }
 
-.trackerconfig, form + form > .configsectionpanel, .snarkTorrentInfo tr:nth-child(n+2) {
-    display: none;
-}
-
 #trackerselect td a {
     max-width: 200px !important;
 }
@@ -5146,8 +5142,10 @@ tfoot .snarkTorrentRateUp:not(:empty)::before,tfoot .snarkTorrentUploaded:not(:e
     border-bottom: 1px solid #252 !important;
 }
 
+@media screen and (min-width: 1500px) {
 .iframed .page #snarkInfo ~ .mainsection {
-    margin: -1px 0 !important;
+    margin: -11px 0 10px !important;
+}
 }
 
 .iframed #snarkInfo + #snarkFiles {
