@@ -26,9 +26,17 @@ from the source tree root, and take a look at the files that get listed. A lot
 of hints of how this is peaced together lies there.
 
 
-## The .. Monotone part
+## Git
 
-Check out [MONOTONECHEATSHEET.md](MONOTONECHEATSHEET.md) file.
+For developers new to `git` or those seeking to deepen their level of knowledge,
+official Git documentation contains quite comprehensive knowledge base:
+https://git-scm.com/docs .
+
+Check out the **Guides** section.
+
+For developers new to `git` but familiar with the old Monotone, there's
+[MONOTONECHEATSHEET.md](MONOTONECHEATSHEET.md) that could be used for quick
+lookup of some of the mapping commands.
 
 ## SBT Behind proxy
 
