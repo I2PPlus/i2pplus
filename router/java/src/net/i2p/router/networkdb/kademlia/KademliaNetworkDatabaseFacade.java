@@ -1167,6 +1167,7 @@ public abstract class KademliaNetworkDatabaseFacade extends NetworkDatabaseFacad
         // flushing some from memory, while keeping all on disk.
         long adjustedExpiration;
         String expireRI = _context.getProperty("router.expireRouterInfo");
+        String routerId = routerInfo.toBase64().substring(0,6);
         if (expireRI != null)
             adjustedExpiration = Integer.valueOf(expireRI)*60*60*1000;
         else if (floodfillEnabled())
@@ -1194,44 +1195,44 @@ public abstract class KademliaNetworkDatabaseFacade extends NetworkDatabaseFacad
         if (routerInfo.getPublished() > now + 2*Router.CLOCK_FUDGE_FACTOR) {
             long age = routerInfo.getPublished() - _context.clock().now();
             if (_log.shouldLog(Log.INFO))
-                _log.info("Peer [" + routerInfo.getIdentity().getHash().toBase64().substring(0,6) + "] published their RouterInfo in the future\n* Publish date: "
+                _log.info("Peer [" + routerId + "] published their RouterInfo in the future\n* Publish date: "
                           + new Date(routerInfo.getPublished()), new Exception());
-            return "RouterInfo [" + routerInfo.getIdentity().getHash().toBase64().substring(0,6) + "] was published " + DataHelper.formatDuration(age) + " in the future";
+            return "RouterInfo [" + routerId + "] was published " + DataHelper.formatDuration(age) + " in the future";
         }
 //        if (upLongEnough && !routerInfo.isCurrent(ROUTER_INFO_EXPIRATION_INTRODUCED)) {
         if (!dontFail && !routerInfo.isCurrent(ROUTER_INFO_EXPIRATION_INTRODUCED)) {
             if (routerInfo.getAddresses().isEmpty())
-                return "RouterInfo [" + routerInfo.getIdentity().getHash().toBase64().substring(0,6) + "] has no addresses and was published over 45 minutes ago";
+                return "RouterInfo [" + routerId + "] has no addresses and was published over 45 minutes ago";
             // This should cover the introducers case below too
             // And even better, catches the case where the router is unreachable but knows no introducers
             if (routerInfo.getCapabilities().indexOf(Router.CAPABILITY_UNREACHABLE) >= 0)
-                return "RouterInfo [" + routerInfo.getIdentity().getHash().toBase64().substring(0,6) + "] is unreachable and was published over 45 minutes ago";
+                return "RouterInfo [" + routerId + "] is unreachable and was published over 45 minutes ago";
             // Just check all the addresses, faster than getting just the SSU ones
             for (RouterAddress ra : routerInfo.getAddresses()) {
                 // Introducers change often, introducee will ping introducer for 2 hours
                 if (ra.getOption("ihost0") != null)
-                    return "RouterInfo [" + routerInfo.getIdentity().getHash().toBase64().substring(0,6) + "] has SSU Introducers and was published over 45 minutes ago";
+                    return "RouterInfo [" + routerId + "] has SSU Introducers and was published over 45 minutes ago";
             }
         }
 //        if (upLongEnough && (routerInfo.getPublished() < now - 2*24*60*60*1000l) ) {
         if (expireRI != null) {
             if (upLongEnough && (routerInfo.getPublished() < now - Long.valueOf(expireRI)*24*60*60*1000l) ) {
                 long age = _context.clock().now() - routerInfo.getPublished();
-                return "RouterInfo [" + routerInfo.getIdentity().getHash().toBase64().substring(0,6) + "] was published " + DataHelper.formatDuration(age) + " ago";
+                return "RouterInfo [" + routerId + "] was published " + DataHelper.formatDuration(age) + " ago";
             }
         } else {
                 if (upLongEnough && (routerInfo.getPublished() < now - ROUTER_INFO_EXPIRATION) ) {
                     long age = _context.clock().now() - routerInfo.getPublished();
-                    return "RouterInfo [" + routerInfo.getIdentity().getHash().toBase64().substring(0,6) + "] was published " + DataHelper.formatDuration(age) + " ago";
+                    return "RouterInfo [" + routerId + "] was published " + DataHelper.formatDuration(age) + " ago";
                 }
         }
         if (!routerInfo.isCurrent(ROUTER_INFO_EXPIRATION_SHORT)) {
             for (RouterAddress ra : routerInfo.getAddresses()) {
                 if (routerInfo.getTargetAddresses("NTCP", "NTCP2").isEmpty() && ra.getOption("ihost0") == null) {
-                    return "Router [" + routerInfo.getIdentity().getHash().toBase64().substring(0,6) + "] is SSU only without introducers and was published over 45 minutes ago";
+                    return "Router [" + routerId + "] is SSU only without introducers and was published over 45 minutes ago";
                 } else {
                     if (routerInfo.getCapabilities().indexOf(Router.CAPABILITY_UNREACHABLE) >= 0)
-                    return "Router [" + routerInfo.getIdentity().getHash().toBase64().substring(0,6) + "] is unreachable on any transport and was published over 45 minutes ago";
+                    return "Router [" + routerId + "] is unreachable on any transport and was published over 45 minutes ago";
                 }
             }
         }
@@ -1240,13 +1241,13 @@ public abstract class KademliaNetworkDatabaseFacade extends NetworkDatabaseFacad
         String minVersionAllowed = _context.getProperty("router.minVersionAllowed");
         if (minVersionAllowed != null) {
             if (VersionComparator.comp(v, minVersionAllowed) < 0) {
-                _context.banlist().banlistRouterForever(routerInfo.getIdentity().getHash(), " <b>➜</b> " + "Router too old (" + v + ")");
-                return "Router [" + routerInfo.getIdentity().getHash().toBase64().substring(0,6) + "] is too old (" + v + ") - banned until restart";
+                _context.banlist().banlistRouterForever(routerInfo.getIdentity().getHash(), " <b>➜</b> " + "Router <code>" + routerId + "</code> too old (" + v + ")");
+                return "Router [" + routerId + "] is too old (" + v + ") - banned until restart";
             }
         } else {
             if (VersionComparator.comp(v, minRouterVersion) < 0) {
-                _context.banlist().banlistRouterForever(routerInfo.getIdentity().getHash(), " <b>➜</b> " + "Router too old (" + v + ")");
-                return "Router [" + routerInfo.getIdentity().getHash().toBase64().substring(0,6) + "] is too old (" + v + ") - banned until restart";
+                _context.banlist().banlistRouterForever(routerInfo.getIdentity().getHash(), " <b>➜</b> " + "Router <code>" + routerId + "</code> too old (" + v + ")");
+                return "Router [" + routerId + "] is too old (" + v + ") - banned until restart";
             }
         }
         return null;
