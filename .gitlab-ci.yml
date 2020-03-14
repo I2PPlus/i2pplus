@@ -5,6 +5,7 @@ default:
       - i2pinstall.exe
       - i2pupdate.zip
       - install.jar
+      - i2psnark-standalone.zip
     expire_in: 2 weeks
 
 stages:
@@ -22,6 +23,7 @@ Java8:
   image: openjdk:8
   script:
     - ant pkg
+    - ant i2psnark
 
 Java11:
   stage: build
