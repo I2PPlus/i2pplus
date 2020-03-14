@@ -58,7 +58,7 @@ class SearchJob extends JobImpl {
     private int _floodfillSearchesOutstanding;
 
 //    private static final int SEARCH_BREDTH = 3; // 10 peers at a time
-    private static int SEARCH_BREDTH = 4;
+    private static int SEARCH_BREDTH = 8;
     /** Only send the 10 closest "don't tell me about" refs */
 //    static final int MAX_CLOSEST = 10;
     static final int MAX_CLOSEST = 16;
@@ -132,6 +132,7 @@ class SearchJob extends JobImpl {
 
     /** this is now misnamed, as it is only used to determine whether to return floodfill peers only */
     static boolean onlyQueryFloodfillPeers(RouterContext ctx) {
+        String forceExplore = ctx.getProperty("router.exploreWhenFloodfill");
         //if (isCongested(ctx))
         //    return true;
         // If we are floodfill, we want the FloodfillPeerSelector (in add()) to include
@@ -141,7 +142,7 @@ class SearchJob extends JobImpl {
         // The other two places this was called (one below and one in FNDF)
         // have been commented out.
         // Returning false essentially enables kademlia as a backup to floodfill for search responses.
-        if (ctx.netDb().floodfillEnabled())
+        if (ctx.netDb().floodfillEnabled() || forceExplore == "true")
             return false;
         return ctx.getProperty("netDb.floodfillOnly", DEFAULT_FLOODFILL_ONLY);
     }
