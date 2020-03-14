@@ -51,7 +51,7 @@
 <li><code>http://no.i2p/export/alive-hosts.txt</code></li>
 <li><code>http://inr.i2p/export/alive-hosts.txt</code></li>
 <li><code>http://identiguy.i2p/hosts.txt</code></li>
-<li><code>http://skank.i2p/static/hosts.txt</code></li>
+<li><code>http://skank.i2p/hosts.txt</code></li>
 </ul>
 
 <p>Note that subscribing to a hosts.txt service is an act of trust, as a malicious subscription could give you incorrect addresses, so be careful subscribing to lists from unknown sources. The operators of these services may have various policies for listing hosts. Presence on this list does not imply endorsement.</p>

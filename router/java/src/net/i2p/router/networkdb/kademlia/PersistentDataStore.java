@@ -177,8 +177,8 @@ public class PersistentDataStore extends TransientDataStore {
         public String getName() { return "Delete RouterInfo from NetDb"; }
         public void runJob() {
             RouterInfo ri = new RouterInfo();
-            if (_log.shouldLog(Log.INFO))
-                _log.info("Deleting RouterInfo [" + _key.toBase64().substring(0,6) + "] from " + _dbDir /* , getAddedBy() */);
+            if (_log.shouldLog(Log.DEBUG))
+                _log.debug("Deleting RouterInfo [" + _key.toBase64().substring(0,6) + "] from " + _dbDir /* , getAddedBy() */);
             try {
                 removeFile(_key, _dbDir);
             } catch (IOException ioe) {
@@ -266,8 +266,8 @@ public class PersistentDataStore extends TransientDataStore {
                 if (count == 0) {
                     if (lastCount > 0) {
                         long time = _context.clock().now() - startTime;
-                        if (_log.shouldLog(Log.INFO))
-                            _log.info(lastCount + " RouterInfo files saved to disk in " + time + "ms");
+                        if (_log.shouldLog(Log.DEBUG))
+                            _log.debug(lastCount + " RouterInfo files saved to disk in " + time + "ms");
                          _context.statManager().addRateData("netDb.writeOut", lastCount);
                          _context.statManager().addRateData("netDb.writeTime", time);
                     }
