@@ -23,6 +23,7 @@ Java8:
   stage: build
   image: openjdk:8
   script:
+    - ./installer/resources/makegeoip.sh
     - ant pkg
     - ant i2psnark
     - ant javadoc-zip
@@ -31,12 +32,14 @@ Java11:
   stage: build
   image: openjdk:11
   script:
+    - ./installer/resources/makegeoip.sh
     - ant pkg
 
 Java13:
   stage: build
   image: openjdk:13-buster
   script:
+    - ./installer/resources/makegeoip.sh
     - ant pkg
 
 Java14:
@@ -46,6 +49,7 @@ Java14:
   # remove this line once code is fixed
   allow_failure: true
   script:
+    - ./installer/resources/makegeoip.sh
     - ant pkg
 
 testing:
