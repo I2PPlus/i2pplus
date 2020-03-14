@@ -831,7 +831,7 @@
             packagenames="*"
             use="true"
             splitindex="true"
-            failonerror="true"
+            failonerror="false"
             additionalparam="-notimestamp"
             doctitle="I2P+ Javadocs [${release.number}-${i2p.build.number}${build.extra}]"
             windowtitle="I2P+ - Java Documentation - Version ${release.number}">
