@@ -4,11 +4,17 @@ import java.awt.BasicStroke;
 import java.awt.Font;
 import java.awt.Paint;
 import java.awt.Stroke;
+import java.awt.image.BufferedImage;
+import java.io.File;
+import java.io.IOException;
+import java.net.URL;
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.List;
 import java.util.Locale;
 import java.util.TimeZone;
+
+import javax.imageio.ImageIO;
 
 import org.rrd4j.ConsolFun;
 import org.rrd4j.core.FetchData;
@@ -22,24 +28,24 @@ import org.rrd4j.data.Variable;
  * <p>Class which should be used to define new Rrd4j graph. Once constructed and populated with data
  * object of this class should be passed to the constructor of the {@link org.rrd4j.graph.RrdGraph} class which
  * will actually create the graph.</p>
- * 
+ *
  * <p>The text printed below the actual graph can be formated by appending
  * special escaped characters at the end of a text. When ever such a
  * character occurs, all pending text is pushed onto the graph according to
  * the character specified.</p>
- * 
+ *
  * <p>Valid markers are: \j for justified, \l for left aligned, \r for right
  * aligned and \c for centered.</p>
- * 
+ *
  * <p>Normally there are two space characters inserted between every two
  * items printed into the graph. The space following a string can be
  * suppressed by putting a \g at the end of the string. The \g also squashes
  * any space inside the string if it is at the very end of the string.
  * This can be used in connection with %s to suppress empty unit strings.</p>
- * 
+ *
  * <p>A special case is COMMENT:\s this inserts some additional vertical
  * space before placing the next row of legends.</p>
- * 
+ *
  * <p>When text has to be formated without special instructions from your
  * side, RRDTool will automatically justify the text as soon as one string
  * goes over the right edge. If you want to prevent the justification
@@ -47,6 +53,49 @@ import org.rrd4j.data.Variable;
  * the string to disable the auto justification.</p>
  */
 public class RrdGraphDef implements RrdGraphConstants {
+
+    /**
+     * <p>Implementations of this class can be used to generate image than can be
+     * layered on graph. The can be used for background image, a background image
+     * draw on canvas or an overlay image.</p>
+     * @author Fabrice Bacchella
+     *
+     */
+    public interface ImageSource {
+        /**
+         * A image of the required size that will be applied. If the generated image is too big, it will be clipped before being applied.
+         * @param w the width of the requested image
+         * @param h the high of the requested image
+         * @return an image to draw.
+         * @throws IOException
+         */
+        BufferedImage apply(int w, int h) throws IOException;
+    }
+
+    private static class FileImageSource implements ImageSource {
+        private final File imagesource;
+
+        FileImageSource(String imagesource) {
+            this.imagesource = new File(imagesource);
+        }
+
+        public BufferedImage apply(int w, int h) throws IOException {
+            return ImageIO.read(imagesource);
+        }
+    }
+
+    private static class UrlImageSource implements ImageSource {
+        private final URL imagesource;
+
+        private UrlImageSource(URL imagesource) {
+            this.imagesource = imagesource;
+        }
+
+        public BufferedImage apply(int w, int h) throws IOException {
+            return ImageIO.read(imagesource);
+        }
+    }
+
     boolean poolUsed = false; // ok
     boolean antiAliasing = false; // ok
     boolean textAntiAliasing = false; // ok
@@ -69,8 +118,9 @@ public class RrdGraphDef implements RrdGraphConstants {
     String imageInfo = null; // ok
     String imageFormat = DEFAULT_IMAGE_FORMAT; // ok
     float imageQuality = DEFAULT_IMAGE_QUALITY; // ok
-    String backgroundImage = null; // ok
-    String overlayImage = null; // ok
+    ImageSource backgroundImage = null; // ok
+    ImageSource canvasImage = null; // ok
+    ImageSource overlayImage = null; // ok
     String unit = null; // ok
     boolean lazy = false; // ok
     double minValue = Double.NaN; // ok
@@ -205,7 +255,7 @@ public class RrdGraphDef implements RrdGraphConstants {
      * <p>Configures x-axis grid and labels. The x-axis label is quite complex to configure.
      * So if you don't have very special needs, you can rely on the autoconfiguration to
      * get this right.</p>
-     * 
+     *
      * <p>Otherwise, you have to configure three elements making up the x-axis labels
      * and grid. The base grid, the major grid and the labels.
      * The configuration is based on the idea that you first specify a well
@@ -214,18 +264,18 @@ public class RrdGraphDef implements RrdGraphConstants {
      * you have to define two additional items: The precision of the label
      * in seconds and the format used to generate the text
      * of the label.</p>
-     * 
+     *
      * <p>For example, if you wanted a graph with a base grid every 10 minutes and a major
      * one every hour, with labels every hour you would use the following
      * x-axis definition.</p>
-     * 
+     *
      * <pre>
      * setTimeAxis(RrdGraphConstants.MINUTE, 10,
      *             RrdGraphConstants.HOUR, 1,
      *             RrdGraphConstants.HOUR, 1,
      *             0, "%H:%M")
      * </pre>
-     * 
+     *
      * <p>The precision in this example is 0 because the %X format is exact.
      * If the label was the name of the day, we would have had a precision
      * of 24 hours, because when you say something like 'Monday' you mean
@@ -256,7 +306,7 @@ public class RrdGraphDef implements RrdGraphConstants {
     /**
      * It configure the x-axis grid in the same way than {@link #setTimeAxis(int, int, int, int, int, int, int, String)}, but it allows
      * to use a {@link org.rrd4j.graph.TimeLabelFormat} to format the date label.
-     * 
+     *
      * @param minorUnit
      * @param minorUnitCount
      * @param majorUnit
@@ -275,7 +325,7 @@ public class RrdGraphDef implements RrdGraphConstants {
     /**
      * This allows to keep the default major and minor grid unit, but with changing only the label formatting,
      * using a {@link org.rrd4j.graph.TimeLabelFormat}
-     * 
+     *
      * @param format a custom dynamic time label format
      */
     public void setTimeLabelFormat(TimeLabelFormat format) {
@@ -449,7 +499,7 @@ public class RrdGraphDef implements RrdGraphConstants {
      * the {@link #print(String, ConsolFun, String)} function.
      * The format string is supplied with the following parameters:
      * filename, xsize and ysize (in that particular order).</p>
-     * 
+     *
      * <p>For example, in order to generate an IMG tag
      * suitable for including the graph into a web page, the command
      * would look like this:</p>
@@ -466,6 +516,7 @@ public class RrdGraphDef implements RrdGraphConstants {
 
     /**
      * Sets image format.
+     * ImageIO is used to save the image, so any supported format by ImageIO can be used, and it can be extended using https://github.com/geosolutions-it/imageio-ext.
      *
      * @param imageFormat Any value as return by {@link javax.imageio.ImageIO#getReaderFormatNames}
      */
@@ -474,22 +525,90 @@ public class RrdGraphDef implements RrdGraphConstants {
     }
 
     /**
-     * Sets background image - currently, only PNG images can be used as background.
+     * Sets background image.
+     * ImageIO is used to download, so any supported format by ImageIO can be used, and it can be extended using https://github.com/geosolutions-it/imageio-ext.
      *
      * @param backgroundImage Path to background image
      */
     public void setBackgroundImage(String backgroundImage) {
+        this.backgroundImage = new FileImageSource(backgroundImage);
+    }
+
+    /**
+     * Sets background image.
+     * ImageIO is used to download, so any supported format by ImageIO can be used, and it can be extended using https://github.com/geosolutions-it/imageio-ext.
+     *
+     * @param backgroundImageUrl URL to background image
+     */
+    public void setBackgroundImage(URL backgroundImageUrl) {
+        this.backgroundImage = new UrlImageSource(backgroundImageUrl);
+    }
+
+    /**
+     * Sets background image.
+     *
+     * @param backgroundImage An {@link ImageSource} that will provides a {@link BufferedImage}
+     */
+    public void setBackgroundImage(ImageSource backgroundImage) {
         this.backgroundImage = backgroundImage;
     }
 
     /**
-     * Sets overlay image - currently, only PNG images can be used as overlay. Overlay image is
-     * printed on the top of the image, once it is completely created.
+     * Sets canvas background image. Canvas image is printed on canvas area, under canvas color and plot.
+     * ImageIO is used to download, so any supported format by ImageIO can be used, and it can be extended using https://github.com/geosolutions-it/imageio-ext.
+     *
+     * @param canvasImage Path to canvas image
+     */
+    public void setCanvasImage(String canvasImage) {
+        this.canvasImage = new FileImageSource(canvasImage);
+    }
+
+    /**
+     * Sets canvas background image. Canvas image is printed on canvas area, under canvas color and plot.
+     * ImageIO is used to download, so any supported format by ImageIO can be used, and it can be extended using https://github.com/geosolutions-it/imageio-ext.
+     *
+     * @param canvasUrl URL to canvas image
+     */
+    public void setCanvasImage(URL canvasUrl) {
+        this.canvasImage = new UrlImageSource(canvasUrl);
+    }
+
+    /**
+     * Sets canvas background image. Canvas image is printed on canvas area, under canvas color and plot.
+     *
+     * @param canvasImageSource An {@link ImageSource} that will provides a {@link BufferedImage}
+     */
+    public void setCanvasImage(ImageSource canvasImageSource) {
+        this.canvasImage = canvasImageSource;
+    }
+
+    /**
+     * Sets overlay image. Overlay image is printed on the top of the image, once it is completely created.
+     * ImageIO is used to download, so any supported format by ImageIO can be used, and it can be extended using https://github.com/geosolutions-it/imageio-ext.
      *
      * @param overlayImage Path to overlay image
      */
     public void setOverlayImage(String overlayImage) {
-        this.overlayImage = overlayImage;
+        this.overlayImage = new FileImageSource(overlayImage);
+    }
+
+    /**
+     * Sets overlay image. Overlay image is printed on the top of the image, once it is completely created.
+     * ImageIO is used to download, so any supported format by ImageIO can be used, and it can be extended using https://github.com/geosolutions-it/imageio-ext.
+     *
+     * @param overlayImage URL to overlay image
+     */
+    public void setOverlayImage(URL overlayImage) {
+        this.overlayImage = new UrlImageSource(overlayImage);
+    }
+
+    /**
+     * Sets overlay image. Overlay image is printed on the top of the image, once it is completely created.
+     *
+     * @param overlayImageSource An {@link ImageSource} that will provides a {@link BufferedImage}
+     */
+    public void setOverlayImage(ImageSource overlayImageSource) {
+        this.overlayImage = overlayImageSource;
     }
 
     /**
@@ -526,7 +645,7 @@ public class RrdGraphDef implements RrdGraphConstants {
      * <p>Defines the value normally located at the upper border of the
      * graph. If the graph contains higher values, the upper border will
      * move upwards to accommodate these values as well.</p>
-     * 
+     *
      * <p>If you want to define an upper-limit which will not move in any
      * event you have to use {@link #setRigid(boolean)} method as well.</p>
      *
@@ -670,7 +789,7 @@ public class RrdGraphDef implements RrdGraphConstants {
      * This method reset the font set to it's default values. With the flag rrdtool set to true, it's not the old
      * default set that is used, but the one taken from rrdtool. So use false to keep compatibility with previous version
      * and true for a graph matching rrdtool's
-     * 
+     *
      * @param rrdtool true to use rrdtool font set
      */
     public void setFontSet(boolean rrdtool) {
@@ -693,7 +812,7 @@ public class RrdGraphDef implements RrdGraphConstants {
                     DEFAULT_SMALL_FONT,    // FONTTAG_UNIT
                     DEFAULT_SMALL_FONT,    // FONTTAG_LEGEND
                     GATOR_FONT             // FONTTAG_WATERMARK
-            };            
+            };
         }
     }
 
@@ -843,7 +962,7 @@ public class RrdGraphDef implements RrdGraphConstants {
      * @param dsName    Datasource name in the specified RRD file
      * @param consolFun Consolidation function (AVERAGE, MIN, MAX, LAST)
      * @param backend   Backend to be used while fetching data from a RRD file.
-     * 
+     *
      * @deprecated Uses {@link #datasource(String, String, String, ConsolFun, RrdBackendFactory)} instead
      */
     @Deprecated
@@ -919,7 +1038,7 @@ public class RrdGraphDef implements RrdGraphConstants {
 
     /**
      * Creates a new 'fetched' datasource. Datasource values are obtained from the
-     * given {@link org.rrd4j.core.FetchData} object. 
+     * given {@link org.rrd4j.core.FetchData} object.
      * Values will be extracted from the datasource dsName in the fetchData
      *
      * @param name      Source name.
@@ -960,11 +1079,11 @@ public class RrdGraphDef implements RrdGraphConstants {
      * and creates the result by using the given format string.  In
      * the format string there should be a '%[l]f', '%[l]g' or '%[l]e' marker in
      * the place where the number should be printed.</p>
-     * 
+     *
      * <p>If an additional '%s' is found AFTER the marker, the value will be
      * scaled and an appropriate SI magnitude unit will be printed in
      * place of the '%s' marker. The scaling will take the '--base' argument into consideration!</p>
-     * 
+     *
      * <p>If a '%S' is used instead of a '%s', then instead of calculating
      * the appropriate SI magnitude unit for this value, the previously
      * calculated SI magnitude unit will be used.  This is useful if you
@@ -974,7 +1093,7 @@ public class RrdGraphDef implements RrdGraphConstants {
      * it does not remember a SI magnitude unit and a SI magnitude unit
      * will only be calculated when the next '%s' is seen or the next '%S'
      * for a non-zero value.</p>
-     * 
+     *
      * <p>Print results are collected in the {@link org.rrd4j.graph.RrdGraphInfo} object which is retrieved
      * from the {@link RrdGraph object} once the graph is created.</p>
      *
@@ -995,11 +1114,11 @@ public class RrdGraphDef implements RrdGraphConstants {
      * <p>Read the value of a variable (VDEF) and prints the value by using the given format string.  In
      * the format string there should be a '%[l]f', '%[l]g' or '%[l]e' marker in
      * the place where the number should be printed.</p>
-     * 
+     *
      * <p>If an additional '%s' is found AFTER the marker, the value will be
      * scaled and an appropriate SI magnitude unit will be printed in
      * place of the '%s' marker. The scaling will take the '--base' argument into consideration!</p>
-     * 
+     *
      * <p>If a '%S' is used instead of a '%s', then instead of calculating
      * the appropriate SI magnitude unit for this value, the previously
      * calculated SI magnitude unit will be used.  This is useful if you
@@ -1009,7 +1128,7 @@ public class RrdGraphDef implements RrdGraphConstants {
      * it does not remember a SI magnitude unit and a SI magnitude unit
      * will only be calculated when the next '%s' is seen or the next '%S'
      * for a non-zero value.</p>
-     * 
+     *
      * <p>Print results are collected in the {@link org.rrd4j.graph.RrdGraphInfo} object which is retrieved
      * from the {@link RrdGraph object} once the graph is created.</p>
      *
@@ -1026,11 +1145,11 @@ public class RrdGraphDef implements RrdGraphConstants {
      * and creates the result by using the given format string.  In
      * the format string there should be a '%[l]f', '%[l]g' or '%[l]e' marker in
      * the place where the number should be printed.</p>
-     * 
+     *
      * <p>If an additional '%s' is found AFTER the marker, the value will be
      * scaled and an appropriate SI magnitude unit will be printed in
      * place of the '%s' marker. The scaling will take the '--base' argument into consideration!</p>
-     * 
+     *
      * <p>If a '%S' is used instead of a '%s', then instead of calculating
      * the appropriate SI magnitude unit for this value, the previously
      * calculated SI magnitude unit will be used.  This is useful if you
@@ -1040,7 +1159,7 @@ public class RrdGraphDef implements RrdGraphConstants {
      * it does not remember a SI magnitude unit and a SI magnitude unit
      * will only be calculated when the next '%s' is seen or the next '%S'
      * for a non-zero value.</p>
-     * 
+     *
      * <p>Print results are collected in the {@link org.rrd4j.graph.RrdGraphInfo} object which is retrieved
      * from the {@link RrdGraph object} once the graph is created.</p>
      *
@@ -1073,11 +1192,11 @@ public class RrdGraphDef implements RrdGraphConstants {
      * <p>Read the value of a variable (VDEF) and prints the value by using the given format string.  In
      * the format string there should be a '%[l]f', '%[l]g' or '%[l]e' marker in
      * the place where the number should be printed.</p>
-     * 
+     *
      * <p>If an additional '%s' is found AFTER the marker, the value will be
      * scaled and an appropriate SI magnitude unit will be printed in
      * place of the '%s' marker. The scaling will take the '--base' argument into consideration!</p>
-     * 
+     *
      * <p>If a '%S' is used instead of a '%s', then instead of calculating
      * the appropriate SI magnitude unit for this value, the previously
      * calculated SI magnitude unit will be used.  This is useful if you
@@ -1087,7 +1206,7 @@ public class RrdGraphDef implements RrdGraphConstants {
      * it does not remember a SI magnitude unit and a SI magnitude unit
      * will only be calculated when the next '%s' is seen or the next '%S'
      * for a non-zero value.</p>
-     * 
+     *
      * print results are added to the graph as a legend
      *
      * @param srcName   Virtual source name
@@ -1103,11 +1222,11 @@ public class RrdGraphDef implements RrdGraphConstants {
      * and creates the result by using the given format string.  In
      * the format string there should be a '%[l]f', '%[l]g' or '%[l]e' marker in
      * the place where the number should be printed.</p>
-     * 
+     *
      * <p>If an additional '%s' is found AFTER the marker, the value will be
      * scaled and an appropriate SI magnitude unit will be printed in
      * place of the '%s' marker. The scaling will take the '--base' argument into consideration!</p>
-     * 
+     *
      * <p>If a '%S' is used instead of a '%s', then instead of calculating
      * the appropriate SI magnitude unit for this value, the previously
      * calculated SI magnitude unit will be used.  This is useful if you
@@ -1117,7 +1236,7 @@ public class RrdGraphDef implements RrdGraphConstants {
      * it does not remember a SI magnitude unit and a SI magnitude unit
      * will only be calculated when the next '%s' is seen or the next '%S'
      * for a non-zero value.</p>
-     * 
+     *
      * <p>print results are added to the graph as a legend.</p>
      *
      * @param srcName   Virtual source name
@@ -1444,7 +1563,7 @@ public class RrdGraphDef implements RrdGraphConstants {
      * previous graph, the STACK will be either a LINE or an AREA.  This
      * obviously implies that the first STACK must be preceded by an AREA
      * or LINE.</p>
-     * 
+     *
      * <p>Note, that when you STACK onto *UNKNOWN* data, Rrd4j will not
      * draw any graphics ... *UNKNOWN* is not zero.</p>
      *
@@ -1464,7 +1583,7 @@ public class RrdGraphDef implements RrdGraphConstants {
      * previous graph, the STACK will be either a LINE or an AREA.  This
      * obviously implies that the first STACK must be preceded by an AREA
      * or LINE.</p>
-     * 
+     *
      * Note, that when you STACK onto *UNKNOWN* data, Rrd4j will not
      * draw any graphics ... *UNKNOWN* is not zero.
      *
@@ -1492,7 +1611,7 @@ public class RrdGraphDef implements RrdGraphConstants {
                 break;
             }
         }
-        if (parent == null) 
+        if (parent == null)
             throw new IllegalArgumentException("You have to stack graph onto something (line or area)");
         return parent;
     }
@@ -1630,7 +1749,7 @@ public class RrdGraphDef implements RrdGraphConstants {
      * Allows to set a downsampler, used to improved the visual representation of graph.
      * <p>
      * More details can be found on <a href="http://skemman.is/en/item/view/1946/15343">Sveinn Steinarsson's thesis</a>
-     * 
+     *
      * @param downsampler The downsampler that will be used
      */
     public void setDownsampler(DownSampler downsampler) {
