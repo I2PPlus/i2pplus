@@ -6,6 +6,7 @@ default:
       - i2pupdate.zip
       - install.jar
       - i2psnark-standalone.zip
+      - javadoc.zip
     expire_in: 2 weeks
 
 stages:
@@ -24,6 +25,7 @@ Java8:
   script:
     - ant pkg
     - ant i2psnark
+    - ant javadoc-zip
 
 Java11:
   stage: build
