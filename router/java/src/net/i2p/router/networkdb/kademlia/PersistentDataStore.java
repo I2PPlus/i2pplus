@@ -379,7 +379,8 @@ public class PersistentDataStore extends TransientDataStore {
                 }
             }
             if (shouldScan) {
-                _log.info("Scanning " + _dbDir);
+                if (_log.shouldLog(Log.DEBUG))
+                    _log.debug("Scanning for new RouterInfo files in: " + _dbDir);
                 // synch with the writer job
                 synchronized (_dbDir) {
                     // _lastModified must be 0 for the first run
