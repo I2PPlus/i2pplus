@@ -1174,7 +1174,7 @@
         <ant dir="apps/imagegen/" target="distclean" />
     </target>
 
-    <target name="pkg" depends="distclean, updater, preppkg, installer" />
+    <target name="pkg" depends="distclean, updaterWithGeoIP, preppkg, installer" />
 
     <target name="pkg200" depends="distclean, updater200, preppkg, installer" />
 
