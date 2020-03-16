@@ -1167,7 +1167,7 @@ public abstract class KademliaNetworkDatabaseFacade extends NetworkDatabaseFacad
         // flushing some from memory, while keeping all on disk.
         long adjustedExpiration;
         String expireRI = _context.getProperty("router.expireRouterInfo");
-        String routerId = routerInfo.toBase64().substring(0,6);
+        String routerId = routerInfo.toBase64().substring(0,4);
         if (expireRI != null)
             adjustedExpiration = Integer.valueOf(expireRI)*60*60*1000;
         else if (floodfillEnabled())
