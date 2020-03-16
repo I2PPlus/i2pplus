@@ -83,12 +83,12 @@ public class DNSOverHTTPS implements EepGet.StatusListener {
         v6urls.add("https://[2620:fe::fe:9]:5053/dns-query?");
         // cz.nic
         // https://www.nic.cz/odvr/
-        v4.urls.add("https://193.17.47.1/doh?");
-        v4.urls.add("https://185.43.135.1/doh?");
-        v6.urls.add("https://[2001:148f:ffff::1]/doh?");
-        v6.urls.add("https://[2001:148f:fffe::1]/doh?");
+        v4urls.add("https://193.17.47.1/doh?");
+        v4urls.add("https://185.43.135.1/doh?");
+        v6urls.add("https://[2001:148f:ffff::1]/doh?");
+        v6urls.add("https://[2001:148f:fffe::1]/doh?");
         // https://applied-privacy.net/services/dns/
-        v4.urls.add("https://doh.applied-privacy.net/query?");
+        v4urls.add("https://doh.applied-privacy.net/query?");
     }
 
     // keep the timeout very short, as we try multiple addresses,
