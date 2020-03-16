@@ -4781,3 +4781,25 @@ input[type="checkbox"][disabled]:checked, input[type="radio"][disabled]:checked,
 #snarkInfo + #snarkCommentSection, .iframed #snarkInfo + #snarkCommentSection {
     margin-top: -1px !important;
 }
+
+#completion {
+    position: relative;
+}
+
+#metainfo {
+    padding: 2px 8px 2px 4px;
+    background: #ffffee;
+    border: 1px solid #886;
+    box-shadow: inset 0 0 0 1px #fff;
+}
+
+#completion:not(:hover) #metainfo {
+    display: none;
+}
+
+#completion:hover #metainfo {
+    position: absolute;
+    top: 24px;
+    left: -120px;
+    display: inline-block !important;
+}

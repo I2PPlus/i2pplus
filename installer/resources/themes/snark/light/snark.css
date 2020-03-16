@@ -3543,6 +3543,7 @@ a, a:link, th, td, button, input, select, textarea {
     vertical-align: middle;
     overflow: hidden;
     text-overflow: ellipsis;
+    line-height: 110%;
     color: #ccccf0;
     box-shadow: 0 0 0 1px #ccf;
     border-radius: 3px;
@@ -3557,7 +3558,6 @@ a, a:link, th, td, button, input, select, textarea {
     vertical-align: middle;
     overflow: hidden;
     text-overflow: ellipsis;
-    line-height: 110%;
 }
 
 .info_tracker a[href*=".b32.i2p"] {
@@ -4688,4 +4688,26 @@ input:not(:checked) + .toggleview:hover img {
 
 .iframed #snarkCommentSection {
     padding-bottom: 5px;
+}
+
+#completion {
+    position: relative;
+}
+
+#metainfo {
+    padding: 2px 8px 2px 4px;
+    background: #f2f2ff;
+    border: 1px solid #99a;
+    box-shadow: inset 0 0 0 1px #fff;
+}
+
+#completion:not(:hover) #metainfo {
+    display: none;
+}
+
+#completion:hover #metainfo {
+    position: absolute;
+    top: 24px;
+    left: -120px;
+    display: inline-block !important;
 }

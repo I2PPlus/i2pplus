@@ -4609,3 +4609,25 @@ td.snarkTorrentPeerCount {
 .snarkFilename:hover .targetfile {
     display: inline-block !important;
 }
+
+#completion {
+    position: relative;
+}
+
+#metainfo {
+    background: #eef;
+    border: 1px solid #778;
+    padding: 4px 8px;
+}
+
+#completion:not(:hover) #metainfo {
+    display: none;
+}
+
+#completion:hover #metainfo {
+    position: absolute;
+    top: 28px;
+    left: -120px;
+    display: inline-block !important;
+}
+

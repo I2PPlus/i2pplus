@@ -2353,3 +2353,27 @@ tr:not(.peerinfo) .snarkTorrentUploaded:empty::after {
 .snarkFilename:hover .targetfile {
 	display: inline-block !important;
 }
+
+#completion {
+	position: relative;
+}
+
+#metainfo {
+	padding: 4px 8px 4px 4px;
+	line-height: 150%;
+	white-space: nowrap;
+	border: 1px solid #aaa;
+	box-shadow: inset 0 0 0 1px #fff;
+	background: #ffe;
+}
+
+#completion:not(:hover) #metainfo {
+	display: none;
+}
+
+#completion:hover #metainfo {
+	position: absolute;
+	top: 24px;
+	left: -120px;
+	display: inline-block !important;
+}
