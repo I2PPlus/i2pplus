@@ -2615,8 +2615,23 @@ public class I2PSnarkServlet extends BasicServlet {
         String trackerLinkUrl = getTrackerLinkUrl(announce, infohash);
         if (announce.startsWith("http://"))
             announce = announce.substring(7);
-        else if (announce.startsWith("udp://"))
-            announce = "";
+        else if (announce.startsWith("udp://tracker.")) {
+            announce = announce.substring(14) + " [ext]";
+            int colon = announce.indexOf(':');
+            String port = "";
+            if (colon > 0) {
+                port = announce.substring(colon);
+                announce = announce.substring(0, colon);
+            }
+        } else if (announce.startsWith("udp://")) {
+            announce = announce.substring(6) + " [ext]";
+            int colon = announce.indexOf(':');
+            String port = "";
+            if (colon > 0) {
+                port = announce.substring(colon);
+                announce = announce.substring(0, colon);
+            }
+        }
         // strip path
         int slsh = announce.indexOf('/');
         if (slsh > 0)
@@ -2642,10 +2657,11 @@ public class I2PSnarkServlet extends BasicServlet {
                     host = Base32.encode(h.getData()) + ".b32.i2p" + port;
                 }
             }
-            if (!host.startsWith("External"))
+            int space = host.indexOf(" ");
+            if (!host.endsWith("[ext]") || host.contains(".i2p"))
                 buf.append("<a href=\"http://").append(urlEncode(host)).append("/\" target=\"blank\">");
             else
-                buf.append(_t("Non-I2P UDP Tracker"));
+                host = host.substring(0, space);
         }
         // strip port
         int colon = announce.indexOf(':');
@@ -2654,6 +2670,8 @@ public class I2PSnarkServlet extends BasicServlet {
         if (announce.length() > 67)
             announce = DataHelper.escapeHTML(announce.substring(0, 40)) + "&hellip;" +
                        DataHelper.escapeHTML(announce.substring(announce.length() - 8));
+        if (announce.endsWith(".i2p") && !announce.endsWith(".b32.i2p"))
+            announce = announce.replace(".i2p", "");
         buf.append(announce);
         buf.append("</a>");
         return buf.toString();
