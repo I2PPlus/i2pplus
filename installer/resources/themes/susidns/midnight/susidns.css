@@ -75,7 +75,7 @@ div#navi  {
     text-align: center !important;
     font-weight: bold;
     font-size: 9pt;
-    border: 1px solid #2d295f;
+    border: 1px solid #171538;
     box-shadow: inset 0 0 0 1px #000;
     filter: drop-shadow(0 1px 3px #000);
     background: #002 url(/themes/console/midnight/images/titles.png) repeat-x scroll center center !important;
@@ -85,7 +85,7 @@ div#navi  {
 .iframed #navi {
     margin: 0 0 27px;
     padding: 5px !important;
-    border: 1px solid #26225d !important;
+    border: 1px solid #171538 !important;
 }
 
 #navi a, #navi a:visited {
@@ -97,7 +97,7 @@ div#navi  {
     color: #928fbf !important;
     text-transform: capitalize;
     text-shadow: 0 1px 1px #000;
-    border: 1px solid #2d295f;
+    border: 1px solid #171538;
     border-radius: 2px;
     box-shadow: inset 0 0 0 1px #000;
     filter: drop-shadow(0 0 1px #000);
@@ -203,11 +203,11 @@ div#filter {
     margin-top: -2px;
     padding: 0 0 15px;
     text-align: center;
-    border: 1px solid #2d295f;
+    border: 1px solid #171538;
 }
 
 div#filter + div#search {
-    border: 1px solid #2d295f;
+    border: 1px solid #171538;
     margin-top: 13px;
     margin-bottom: -18px;
 }
@@ -291,7 +291,7 @@ p#filtered {
     font-weight: bold;
     word-spacing: 0.1em;
     vertical-align: middle;
-    border: 1px solid #2d295f;
+    border: 1px solid #171538;
     border-radius: 0 0 2px 2px;
     padding: 5px 10px 8px !important;
     min-width: 300px;
@@ -349,7 +349,7 @@ p {
 }
 
 #messages + p, p.book {
-    border: 1px solid #2d295f;
+    border: 1px solid #171538;
     background: #001 url(/themes/susidns/images/addressbook.png) 10px center no-repeat;
     background-size: 24px 24px;
     padding: 20px 20px 20px 42px !important;
@@ -372,12 +372,12 @@ h3 {
     color: #c9ceff;
     font-size: 10pt;
     font-weight: bold;
-    border: 1px solid #2d295f;
+    border: 1px solid #171538;
     padding: 7px 10px;
     border-radius: 2px;
     background: #000 url(/themes/console/midnight/images/titles.png) repeat-x scroll center center;
     background: linear-gradient(to bottom, #12101c, #000008 75%);
-    background: linear-gradient(to right, rgba(0,0,16,0.5), rgba(0,0,0,0) 30%, rgba(16,0,16,0.1)), linear-gradient(to bottom, #191729 50%, #001 50%) !important;
+    background: linear-gradient(to bottom, #112 50%, #000 50%) !important;
     letter-spacing: 0.08em;
     word-spacing: 0.1em;
     text-shadow: 0 0 2px #010011;
@@ -454,7 +454,7 @@ h4 {
     font-size: 9pt;
     margin-top: -15px;
     word-spacing: 0.1em;
-    border: 1px solid #2d295f;
+    border: 1px solid #171538;
     padding: 8px 10px;
     margin-bottom: 30px !important;
     background: linear-gradient(to right, #000, #001);
@@ -499,8 +499,8 @@ th {
 }
 
 .iframed .book tr.head th {
-    border-top: 1px solid #2d295f;
-    border-bottom: 1px solid #2d295f;
+    border-top: 1px solid #171538;
+    border-bottom: 1px solid #171538;
 }
 
 table.book td:first-child {
@@ -531,7 +531,7 @@ td > img[width="320"], td > img[src^="/imagegen"] {
     border-radius: 2px;
     width: 240px;
     height: 240px;
-    border: 1px solid #2d295f;
+    border: 1px solid #171538;
     padding: 5px;
     margin: 10px 3px;
     background: #000;
@@ -565,7 +565,7 @@ tr.list0 {
 
 p.messages {
     color:#c9ceff;
-    border: 1px solid #2d295f;
+    border: 1px solid #171538;
     padding: 5px 5px 10px;
     margin: 5px 0 10px;
     margin: -15px 0 14px;
@@ -573,7 +573,7 @@ p.messages {
 }
 
 .help {
-    border: 1px solid #2d295f;
+    border: 1px solid #171538;
     padding: 20px 30px;
     background: #001;
     margin-bottom: 5px;
@@ -644,7 +644,7 @@ p.buttons, .buttons {
 }
 
 p.buttons {
-    border: 1px solid #2d295f;
+    border: 1px solid #171538;
     padding: 8px 5px;
 }
 
@@ -665,7 +665,7 @@ textarea[name="config"], textarea[name="content"] {
     border-radius: 0;
     margin-top: -26px;
     resize: none;
-    border: 1px solid #2d295f;
+    border: 1px solid #171538;
     font-size: 8.5pt;
 }
 
@@ -676,7 +676,7 @@ textarea[name="config"] {
 }
 
 div#config + div#buttons, div#content + div#buttons {
-    border: 1px solid #2d295f;
+    border: 1px solid #171538;
     margin-top: -3px;
     padding: 10px 5px;
     margin-bottom: 15px;
@@ -766,7 +766,7 @@ div#book, #emptybook {
 
 #book table {
     width: 100%;
-    border: 1px solid #2d295f !important;
+    border: 1px solid #171538 !important;
 }
 
 .iframed #book table {
@@ -775,13 +775,13 @@ div#book, #emptybook {
 }
 
 .iframed #book #host_details {
-    border-top: 1px solid #2d295f !important;
+    border-top: 1px solid #171538 !important;
 }
 
 #book table th {
     padding: 5px 0;
     font-size: 9pt;
-    border-bottom: 1px solid #2d295f;
+    border-bottom: 1px solid #171538;
     background: url(/themes/console/midnight/images/titles.png) repeat-x scroll center center #000;
     background: linear-gradient(to bottom, #12101c, #000008 75%) !important;
 }
@@ -857,13 +857,14 @@ div#book, #emptybook {
 }
 
 #visualid {
-    border: 1px solid #2d295f;
+    border: 1px solid #171538;
     margin-top: -10px;
     background: #001;
 }
 
 .iframed #visualid {
-    border: none;
+    margin-bottom: 20px;
+/*    border: none;*/
 }
 
 #visualid h3 {
@@ -879,13 +880,10 @@ div#book, #emptybook {
 #visualid table {
     width: 100%;
     margin-top: -15px;
-    margin-bottom: 1px;
+    margin-bottom: -1px;
     border-collapse: collapse;
     border-left: none !important;
     border-right: none !important;
-}
-
-#visualid td {
 }
 
 #visualid td:first-child {
@@ -894,16 +892,16 @@ div#book, #emptybook {
 
 #visualid td[colspan="2"] {
     text-align: right;
-    border-top: 1px solid #2d295f;
+    border-top: 1px solid #171538;
     padding: 17px 9px 15px !important;
 }
 
 .iframed #visualid td[colspan="2"] {
-    padding: 20px 9px 5px !important;
+    padding: 22px 19px 20px !important;
 }
 
 div#add, div#import {
-    border: 1px solid #2d295f;
+    border: 1px solid #171538;
     padding: 0 10px 15px;
     margin-top: -2px !important;
     background: #001;
@@ -943,7 +941,7 @@ div#add {
     padding: 0 0 10px;
     font-size: 9pt !important;
     color:#c9ceff;
-/*    border: 1px solid #2d295f;*/
+/*    border: 1px solid #171538;*/
     background: #000010;
 }
 
@@ -955,23 +953,20 @@ div#add {
 }
 
 input {
+    margin: 2px 4px 2px 0;
+    padding: 4px !important;
+    min-width: 64px !important;
+    font: bold 9pt "Droid Sans", "Open Sans", "Noto Sans", Ubuntu, "Segoe UI", "Bitstream Vera Sans", "DejaVu Sans", Verdana, "Lucida Grande", Helvetica, sans-serif;
     font-size: 9pt;
     font-weight: bold;
     text-align: left;
-    padding: 4px !important;
+    color: #4e47bf;
     border: 1px solid #26225d;
     background: #000 none !important;
-    color: #4e47bf;
-    margin: 2px 4px 2px 0;
-    font: bold 9pt "Droid Sans", "Open Sans", "Noto Sans", Ubuntu, "Segoe UI", "Bitstream Vera Sans", "DejaVu Sans", Verdana, "Lucida Grande", Helvetica, sans-serif;
-    min-width: 64px !important;
 }
 
-input[type="checkbox"], input[type="radio"], .optbox {
-    filter: invert(100%) sepia(100%) hue-rotate(200deg) saturate(200%); /* colorize radios and checkboxes */
-    background: none;
-    min-width: 16px !important;
-    min-height: 16px;
+input[type="text"] {
+    padding: 8px !important;
 }
 
 input[type=submit]::-moz-focus-inner, input[type=reset]::-moz-focus-inner {
@@ -1121,7 +1116,7 @@ input.export {
 .headline h3 {
     padding: 10px 5px 10px 40px;
     background: url(/themes/susidns/images/addressbook.png) 10px center no-repeat, linear-gradient(to bottom, #12101c, #000008 75%);
-    background: url(/themes/susidns/images/addressbook.png) 10px center no-repeat, linear-gradient(to right, rgba(0,0,16,0.5), rgba(0,0,0,0) 30%, rgba(16,0,16,0.1)), linear-gradient(to bottom, #191729 50%, #001 50%) !important;
+    background: url(/themes/susidns/images/addressbook.png) 10px center no-repeat, linear-gradient(to bottom, #112 50%, #000 50%) !important;
     font-size: 11pt;
     text-transform: uppercase;
     letter-spacing: 0.08em;
@@ -1130,7 +1125,7 @@ input.export {
 
 .headline#subscriptions h3 {
     background: url(/themes/susidns/images/subs_24.png) 10px center no-repeat, linear-gradient(to bottom, #12101c, #000008 75%);
-    background: url(/themes/susidns/images/subs_24.png) 10px center no-repeat, linear-gradient(to right, rgba(0,0,16,0.5), rgba(0,0,0,0) 30%, rgba(16,0,16,0.1)), linear-gradient(to bottom, #191729 50%, #001 50%) !important;
+    background: url(/themes/susidns/images/subs_24.png) 10px center no-repeat,linear-gradient(to bottom, #112 50%, #000 50%) !important;
 }
 
 .headline#subscriptions h3 a {
@@ -1139,7 +1134,7 @@ input.export {
 
 .headline#configure h3 {
     background: url(/themes/susidns/images/configure_24.png) 10px center no-repeat, linear-gradient(to bottom, #12101c, #000008 75%);
-    background: url(/themes/susidns/images/configure_24.png) 10px center no-repeat, linear-gradient(to right, rgba(0,0,16,0.5), rgba(0,0,0,0) 30%, rgba(16,0,16,0.1)), linear-gradient(to bottom, #191729 50%, #001 50%) !important;
+    background: url(/themes/susidns/images/configure_24.png) 10px center no-repeat, linear-gradient(to bottom, #112 50%, #000 50%) !important;
 }
 
 .headline h4 {
@@ -1177,7 +1172,7 @@ p.book {
 }
 
 #messages + p, p.book {
-    border: 1px solid #2d295f;
+    border: 1px solid #171538;
     background: #000 url(/themes/susidns/images/addressbook.png) 5px center no-repeat;
 }
 
@@ -1589,3 +1584,24 @@ input[type="checkbox"][disabled]:checked, input[type="radio"][disabled]:checked,
 }
 
 /* end custom radios/checkboxes */
+
+input::placeholder {
+    font-weight: normal;
+    font-style: italic;
+    color: #c9ceff;
+    opacity: .7;
+}
+
+input:focus::placeholder {
+    opacity: 0;
+}
+
+#add input[type="text"], #import input[type="file"] {
+    width: 100%;
+}
+
+#import table + p.buttons, #add table + p.buttons {
+    margin: 10px -10px -4px;
+    padding: 12px 8px 0;
+    border-top: 1px solid #171538;
+}

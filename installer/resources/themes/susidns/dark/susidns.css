@@ -980,9 +980,21 @@ input[type="submit"]:hover, input[type="reset"]:hover, input[type="submit"]:focu
     box-shadow: inset 0 0 0 1px #000, inset 0 0 2px 1px rgba(255,86,0,0.8), inset 0 0 0 3px #000 !important;
 }
 
+#add input[type="text"], #import input[type="file"] {
+    width: calc(100% - 2px);
+}
+
 #import input[type="file"] {
     border: none;
     background: none;
+}
+
+input::placeholder {
+    font-style: italic;
+}
+
+input:focus::placeholder {
+    opacity: 0;
 }
 
 .fakebutton, .fakebutton:visited {

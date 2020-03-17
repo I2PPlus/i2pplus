@@ -132,6 +132,18 @@ td.destinations {
     margin-bottom: 10px;
 }
 
+#add input[type="text"], #import input[type="file"] {
+    width: calc(100% - 2px);
+}
+
+input::placeholder {
+    font-style: italic;
+}
+
+input:focus::placeholder {
+    opacity: 0;
+}
+
 #navi {
     border: 1px solid #89f;
     background: linear-gradient(to bottom, #fff 50%, #eff2ff 50%);
@@ -614,7 +626,7 @@ p.buttons {
 
 input[type="text"], input[type="password"], textarea {
     margin: 3px 3px 3px 0;
-    padding: 3px 2px;
+    padding: 6px 10px;
     min-width: 160px;
     vertical-align: middle;
     font: 9pt/130% "Droid Sans", "Open Sans", "Noto Sans", Ubuntu, "Bitstream Vera Sans", "Lucida Grande", "DejaVu Sans", "Segoe UI", Verdana, Helvetica, sans-serif;

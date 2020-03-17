@@ -359,6 +359,18 @@ div#add, div#import {
     padding: 3px;
 }
 
+#add input[type="text"], #import input[type="file"] {
+    width: 100%;
+}
+
+input::placeholder {
+    font-style: italic;
+}
+
+input:focus::placeholder {
+    opacity: 0;
+}
+
 div#add p.buttons, div#import p.buttons {
     border: 1px solid #7e7fb9;
     margin: 0 -16px -6px;
