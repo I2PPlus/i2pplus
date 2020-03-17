@@ -534,7 +534,7 @@ public class I2PSnarkServlet extends BasicServlet {
                 // this should probably be done via a query string, but for now prototyping in js
                 // then we can persist the filter and show all matches, not just those on page, and paginate as required
                 // ensure we hide our torrent filter bar (if enabled) and js is disabled
-                out.write("<noscript><style type=\"text/css\">.script {display: none;}</style></noscript>\n");
+                out.write("\n<noscript><style type=\"text/css\">.script {display: none;}</style></noscript>\n");
                 if (!snarks.isEmpty()) {
                     out.write("<div id=\"torrentDisplay\" class=\"script\">\n" +
                               "<input type=\"radio\" name=\"torrentDisplay\" id=\"all\" checked=\"checked\" onclick=\"showAll();\"><label for=\"all\">Show All</label>");
@@ -3620,9 +3620,6 @@ public class I2PSnarkServlet extends BasicServlet {
             String baseName = encodePath((new File(fullPath)).getName());
             MetaInfo meta = snark.getMetaInfo();
             buf.append("<div class=\"mainsection\" id=\"snarkInfo\">");
-//            buf.append("<input class=\"toggle_input\" id=\"toggle_snarkinfo\" type=\"checkbox\"><label class=\"toggleview\" for=\"toggle_snarkinfo\">");
-//            buf.append(_t("Torrent Information"));
-//            buf.append("</label><hr>\n");
             buf.append("<table class=\"snarkTorrentInfo\">\n");
             buf.append("<tr><th></th><th><b>")
                .append(_t("Torrent"))
@@ -3816,22 +3813,9 @@ public class I2PSnarkServlet extends BasicServlet {
                         buf.append("&amp;tr=").append(announce);
                     buf.append("\">")
                        .append(toImg("magnet", ""))
-                       .append("</a></td></tr>\n");
-/**
-                } else {
-                    buf.append("<tr><td>");
-                    toThemeImg(buf, "details");
-                    buf.append("</td><td colspan=\"2\"><b>")
-                       .append(_t("Private torrent"))
-                       .append("</td></tr>\n");
+                       .append("</a>");
                 }
-                buf.append("<tr><td>");
-                toThemeImg(buf, "details");
-                buf.append("</td><td colspan=\"2\"><b>").append(_t("Primary Tracker")).append(":</b> <span class=\"info_tracker\">");
-                buf.append(getShortTrackerLink(announce, snark.getInfoHash()));
-                buf.append("</span></td></tr>");
-**/
-                }
+                buf.append("</td></tr>\n");
                 List<List<String>> alist = meta.getAnnounceList();
                 if (alist != null && !alist.isEmpty()) {
                     buf.append("<tr><td>");

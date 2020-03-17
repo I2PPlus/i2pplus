@@ -6129,7 +6129,8 @@ body:not(.iframed) .mainsection .snarkComments {
 
 #completion:hover #metainfo {
     position: absolute;
-    top: 20px;
+    top: 16px;
     left: -120px;
+    z-index: 9999;
     display: inline-block !important;
 }
