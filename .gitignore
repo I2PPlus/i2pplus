@@ -16,6 +16,8 @@
 web-fragment.xml
 web-out.xml
 *.out
+*.bak
+*.orig
 
 # Temporary/build dirs
 build/
@@ -27,6 +29,13 @@ dist/
 /apps/jetty/jettylib
 *_jsp.java
 *.class
+
+# OSX temp dirs
+launchers/common/target
+launchers/macosx/target
+launchers/output
+launchers/project/project
+launchers/project/target
 
 # Debian-related
 /debian/copyright
@@ -40,6 +49,7 @@ dist/
 *.fba
 sloccount.sc
 /reports/
+findbugs.html
 
 # Don't allow patches
 *.(diff|patch)
