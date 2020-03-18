@@ -572,6 +572,10 @@ p.messages {
     border-radius: 0;
 }
 
+.iframed p.messages {
+    margin: 5px 10px 10px;
+}
+
 .help {
     border: 1px solid #171538;
     padding: 20px 30px;

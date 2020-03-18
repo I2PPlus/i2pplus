@@ -4803,3 +4803,10 @@ input[type="checkbox"][disabled]:checked, input[type="radio"][disabled]:checked,
     left: -120px;
     display: inline-block !important;
 }
+
+#metacomment .commentWrapper {
+    margin: 7px 6px 6px;
+    padding: 9px 10px 10px;
+    box-shadow: 0 0 0 1px #fff inset, 0 0 1px 0 rgba(77, 69, 62, 0.7);
+    background: #fff6df;
+}

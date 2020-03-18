@@ -2615,6 +2615,8 @@ public class I2PSnarkServlet extends BasicServlet {
         String trackerLinkUrl = getTrackerLinkUrl(announce, infohash);
         if (announce.startsWith("http://"))
             announce = announce.substring(7);
+        else if (announce.startsWith("https://"))
+            announce = announce.substring(8);
         else if (announce.startsWith("udp://tracker.")) {
             announce = announce.substring(14) + " [ext]";
             int colon = announce.indexOf(':');
@@ -2670,8 +2672,15 @@ public class I2PSnarkServlet extends BasicServlet {
         if (announce.length() > 67)
             announce = DataHelper.escapeHTML(announce.substring(0, 40)) + "&hellip;" +
                        DataHelper.escapeHTML(announce.substring(announce.length() - 8));
-        if (announce.endsWith(".i2p") && !announce.endsWith(".b32.i2p"))
+        if (announce.endsWith(".i2p") && !announce.endsWith(".b32.i2p")) {
             announce = announce.replace(".i2p", "");
+            if (announce.equals("tracker2.postman"))
+                announce = "postman";
+            if (announce.startsWith("tracker."))
+                announce = announce.substring(8, announce.length());
+            if (announce.startsWith("opentracker."))
+                announce = announce.substring(12, announce.length());
+        }
         buf.append(announce);
         buf.append("</a>");
         return buf.toString();
@@ -3847,7 +3856,7 @@ public class I2PSnarkServlet extends BasicServlet {
                             boolean more = false;
                             for (String s : alist2) {
                                 if (more)
-                                    buf.append("<span class=\"info_tracker primary\">");
+                                    buf.append("<span class=\"info_tracker\">");
                                 else
                                     more = true;
                                 buf.append(getShortTrackerLink(DataHelper.stripHTML(s)
@@ -3860,7 +3869,7 @@ public class I2PSnarkServlet extends BasicServlet {
                                 buf.append("</span> ");
                             }
                         }
-                        buf.append("<span class=\"info_tracker primary\">");
+                        buf.append("<span class=\"info_tracker\">");
                         boolean more = false;
                         for (String s : alist2) {
                             if (more)
@@ -3897,7 +3906,7 @@ public class I2PSnarkServlet extends BasicServlet {
                         buf.append("<tr><td>");
                         toThemeImg(buf, "details");
                         buf.append("</td><td colspan=\"2\"><b>")
-                           .append(_t("Trackers")).append(":</b> ");
+                           .append(_t("Tracker")).append(":</b> ");
                         buf.append("<span class=\"info_tracker primary\">");
                         buf.append(getShortTrackerLink(announce, snark.getInfoHash()));
                         buf.append("</span> ");
@@ -3914,7 +3923,7 @@ public class I2PSnarkServlet extends BasicServlet {
                         com = com.substring(0, 4000) + "&hellip;";
                     buf.append("<tr><td>");
                     toThemeImg(buf, "comment");
-                    buf.append("</td><td colspan=\"2\" id=\"metacomment\"><div>")
+                    buf.append("</td><td colspan=\"2\" id=\"metacomment\"><div class=\"commentWrapper\">")
                        .append(DataHelper.stripHTML(com))
                        .append("</div></td></tr>\n");
                 }

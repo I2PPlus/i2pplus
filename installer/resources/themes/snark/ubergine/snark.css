@@ -4509,7 +4509,7 @@ span.trackerName::before {
 }
 
 .info_tracker a[href*=".b32.i2p"] {
-    max-width: 85px;
+    max-width: 60px;
     white-space: nowrap;
     overflow: hidden;
     text-overflow: ellipsis;
@@ -6133,4 +6133,11 @@ body:not(.iframed) .mainsection .snarkComments {
     left: -120px;
     z-index: 9999;
     display: inline-block !important;
+}
+
+#metacomment .commentWrapper {
+    margin: 5px 4px;
+    padding: 9px 10px 10px;
+    box-shadow: inset 0 0 0 1px #313, 0 0 1px 0 rgba(0,0,0,0.3);
+    background: #202;
 }
