@@ -283,7 +283,8 @@ td input[type="image"]::after {
 }
 
 .snarkNav:link, .snarkNav:hover, .snarkNav:focus, .snarkNav:active, .snarkNav:link:active,
-.iframed .snarkNav:link, .iframed .snarkNav:hover, .iframed .snarkNav:focus, .iframed .snarkNav:active, .iframed .snarkNav:link:active {
+.nav_search:link:hover, .nav_search:link:focus, .nav_forum:link:hover, .nav_forum:link:focus,
+.nav_main:link:hover, .nav_main:link:focus {
     background-size: 16px 16px, 100% 100%, 100% 100% !important;
 }
 
@@ -3286,7 +3287,8 @@ input.trackerhome, input.trackerannounce, .knownTracker a, #trackerselect a {
     padding-left: 24px !important;
 }
 
-.snarkNav:link, .snarkNav:hover, .snarkNav:focus, .snarkNav:active {
+.snarkNav:link, .snarkNav:hover, .snarkNav:focus, .snarkNav:active, .snarkNav:link:active,
+.nav_search:link:hover, .nav_search:link:focus, .nav_forum:link:hover, .nav_forum:link:focus, .nav_main:link:hover, .nav_main:link:focus{
     background-size: 14px 14px, 100% 100%, 100% 100% !important;
 }
 
