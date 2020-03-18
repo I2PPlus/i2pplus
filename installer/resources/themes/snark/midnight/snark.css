@@ -194,7 +194,7 @@ td input[type="image"]::after {
     text-shadow: 0 0 1px #000;
     border: 1px solid #26225C;
     border-radius: 0;
-    box-shadow: inset 0 0 0 1px #001, 0 0 1px #000;
+    box-shadow: inset 0 0 0 1px #000, inset 0 0 1px 1px #446;
     background: #001 url(images/button_tracker.png) 9px center no-repeat;
     background: url(images/button_tracker.png) 9px center no-repeat, linear-gradient(to bottom, #080818 50%, #000 50%);
     opacity: .7;
@@ -804,17 +804,16 @@ tfoot .snarkTorrentRateUp, tfoot .snarkTorrentRateDown {
     padding: 4px !important;
     vertical-align: middle;
     text-align: center;
-    border: 1px solid #171c3f !important;
-    border-radius: 2px !important;
-    box-shadow: inset 0 0 0 1px #000;
+    border: 1px solid #181833 !important;
+    box-shadow: inset 0 0 0 1px #000, inset 0 0 1px 1px #446;
     background: linear-gradient(to bottom, #181d4f 50%, #001 50%);
     mix-blend-mode: normal;
+    filter: none !important;
 }
 
 th.snarkTorrentAction input[type="image"] {
-    width: 20px;
     padding: 4px !important;
-    margin-bottom: 1px;
+    width: 20px;
 }
 
 td.snarkTorrentAction input[type="image"] {
@@ -823,13 +822,13 @@ td.snarkTorrentAction input[type="image"] {
 
 .snarkTorrentAction input[type="image"]:hover, .snarkTorrentAction input[type="image"]:focus {
     border: 1px solid #652787 !important;
-    background: linear-gradient(to bottom, #080818 50%, #000 50%);
+    box-shadow: inset 0 0 0 1px #000, inset 0 0 1px 1px #717;
+    background: linear-gradient(to bottom, #652787 50%, #3C1751 50%);
     filter: none !important;
 }
 
 .snarkTorrentAction input[type="image"]:active {
-    box-shadow: inset 3px 3px 2px #000;
-    background: linear-gradient(to bottom, #2f3260, #151947);
+    box-shadow: inset 0 0 0 1px #000, inset 3px 3px 2px #000;
     transform: none !important;
 }
 
@@ -1253,7 +1252,7 @@ _:-ms-lang(x), .snarkTorrentOdd, .snarkTorrentOdd td, .SnarkTorrentEven, .SnarkT
 .percentBarOuter {
     background: #000;
     background: repeating-linear-gradient(135deg, #001 1px, #001 5px, #002 6px, #002 11px);
-    border: 1px solid #171c3f;
+    border: 1px solid #113;
     box-shadow: none;
     box-shadow: 0 0 1px 1px rgba(0,0,0,0.8), inset 0 0 0 2px rgba(0,0,0,0.5);
     margin: 3px auto;
@@ -3373,7 +3372,12 @@ a, th, thead th, tfoot th, td, select, select option, .snarkAddInfo, .snarkFileN
     transform: translateX(46px) !important;
 }
 
+th.snarkTorrentAction input[type="image"], td.snarkTorrentAction input[type="image"] {
+    padding: 5px 6px !important;
+}
+
 th.snarkTorrentAction input[type="image"] {
+    margin-top: 1px;
     height: 12px;
     width: 24px;
 }
@@ -3448,9 +3452,9 @@ code, tt {
     padding-left: 28px !important;
 }
 
-.snarkTorrentAction input[type="image"] {
+/*.snarkTorrentAction input[type="image"] {
     padding: 4px 5px !important;
-}
+}*/
 
 #pagenavcontrols {
     transform: translateX(70px) !important;
@@ -4222,7 +4226,8 @@ input[type="checkbox"][disabled]:checked, input[type="radio"][disabled]:checked,
     display: inline-block;
     padding: 3px;
     position: relative;
-    top: -18px;
+    z-index: 999;
+    top: -22px;
     left: -32px;
     min-width: 140px !important;
     background: #000;
