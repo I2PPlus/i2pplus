@@ -57,7 +57,7 @@ body.iframed {
 
 .iframed form {
     border: 1px solid transparent !important;
-    border-top: 1px solid #26225d !important;
+/*    border-top: 1px solid #171538 !important;*/
 }
 
 div.header {
@@ -105,7 +105,7 @@ p.text {
 p.info, p.error {
     color: #c9ceff;
     display: block !important;
-    border: 1px solid #26225d;
+    border: 1px solid #171538;
     margin: 20px 20px 0 !important;
     padding: 15px 10px 15px 45px;
     background: #000 url(/themes/console/images/info/infohelp.png) 10px center no-repeat;
@@ -173,18 +173,18 @@ div.topbuttons {
     margin: -1px -1px -10px -1px;
     padding: 7px 0 8px !important;
     font-weight: bold;
-    border: 1px solid #26225d;
+    border: 1px solid #171538;
     border-bottom: 0 solid;
     border-radius: 2px 2px 0 0;
-    border-bottom: 1px solid #26225d;
+    border-bottom: 1px solid #171538;
     background: #000010 url(images/hatter_med.png) left bottom no-repeat;
     background-size: 144px 100px, 100% 100% !important;
 }
 
 .iframed .topbuttons {
-    border: none;
-    border-bottom: 1px solid #26225d;
-    border-top: 1px solid #26225d;
+    border: none !important;
+    border-bottom: 1px solid #171538 !important;
+/*    border-top: 1px solid #171538;*/
     border-radius: 0;
 }
 
@@ -225,7 +225,7 @@ td[colspan="7"] hr {
 }
 
 th.mailListDelete {
-    background: url(/themes/console/images/buttons/delete.png) center center no-repeat, linear-gradient(to bottom, #191729, #000 75%) !important;
+    background: url(/themes/console/images/buttons/delete.png) center center no-repeat, linear-gradient(to bottom, #080818, #001) !important;
     font-size: 0;
     padding: 0;
 }
@@ -235,14 +235,14 @@ th.mailListDelete {
 }
 
 th.mailListFlagged {
-    background: url(/themes/susimail/images/status.png) center center no-repeat, linear-gradient(to bottom, #191729, #000 75%) !important;
+    background: url(/themes/susimail/images/status.png) center center no-repeat, linear-gradient(to bottom, #080818, #001) !important;
     font-size: 0;
     padding: 0;
     background-blend-mode: luminosity, normal;
 }
 
 th.mailListAttachment {
-    background: url(/susimail/icons/attach.png) center center no-repeat, linear-gradient(to bottom, #191729, #000 75%) !important;
+    background: url(/susimail/icons/attach.png) center center no-repeat, linear-gradient(to bottom, #080818, #001) !important;
     font-size: 0;
     padding: 0;
 }
@@ -260,15 +260,28 @@ td.mailListSize {
 }
 
 #mailbox th {
-    padding: 8px;
+    padding: 8px 8px 8px 3px;
     font-weight: bold !important;
-    font-size: 8.5pt !important;
-    border-top: 1px solid #26225d !important;
+    font-size: 8.5pt;
+    font-size: 9pt;
+    white-space: nowrap;
+    text-transform: capitalize !important;
+    text-shadow: 0 1px 1px #000;
+    border-top: 1px solid #171538;
+    border-bottom: none;
+}
+
+#mailbox th img:hover {
+    opacity: 1 !important;
+}
+
+th.mailListSubject {
+    text-align: left;
 }
 
 #mailbox td {
     padding: 4px 8px;
-    border-right: 1px solid #002;
+    border-right: 1px solid #171538;
 }
 
 .bottombuttons td, .pagenav td {
@@ -276,7 +289,7 @@ td.mailListSize {
 }
 
 #mailbox td[colspan="3"], #mailbox td[colspan="4"] {
-    border-top: 1px solid #26225d !important;
+    border-top: 1px solid #171538 !important;
     padding: 6px 0 2px !important;
 }
 
@@ -348,7 +361,7 @@ td#deleteattached {
 
 tr.bottombuttons:last-child td {
     padding-bottom: 20px !important;
-    border-bottom: 1px solid #26225d !important;
+    border-bottom: 1px solid #171538 !important;
 }
 
 a:link {
@@ -377,7 +390,7 @@ td {
 }
 
 .list0 {
-    background-color: #010008;
+    background-color: #080811;
 }
 
 .list1 {
@@ -389,6 +402,8 @@ td {
 .list0 td, .list1 td {
     padding: 4px;
     color: #7670c2;
+    border-top: 1px solid #171538;
+    border-bottom: 1px solid #171538;
 }
 
 .list0:hover td, .list1:hover td {
@@ -396,7 +411,7 @@ td {
 }
 
 .list0:hover, .list1:hover, .list0:hover a, .list1:hover a {
-    background: #020020;
+    background: #1e0b28;
     color: #bf2295;
 }
 
@@ -436,27 +451,6 @@ td.mailListSender {
     font-weight: normal !important;
 }
 
-#mailbox th {
-    font-size: 9pt;
-    text-transform: capitalize !important;
-    padding-left: 3px;
-    text-shadow: 0 1px 1px #000;
-    border-top: none;
-    white-space: nowrap;
-}
-
-#mailbox th img {
-/*    filter: drop-shadow(0 0 1px #652787) hue-rotate(190deg);*/
-}
-
-#mailbox th img:hover {
-    opacity: 1 !important;
-}
-
-th.mailListSubject {
-    text-align: left;
-}
-
 img.sort {
     padding: 4px 3px;
     max-width: 10px !important;
@@ -465,7 +459,6 @@ img.sort {
     opacity: 0.6;
     border: 1px solid #26225c;
     border-radius: 2px;
-/*    filter: hue-rotate(180deg);*/
 }
 
 .sort.selected {
@@ -520,17 +513,17 @@ th {
     font-size: 9pt;
     font-weight: bold;
     background: #001;
-    background: linear-gradient(to bottom, #191729, #000 75%) !important;
+    background: linear-gradient(to bottom, #080818, #001) !important;
     padding: 7px;
-    border-bottom: 1px solid #26225d;
-    border-top: 1px solid #26225d;
+    border-bottom: 1px solid #171538;
+    border-top: 1px solid #171538;
 }
 
 form {
     margin: 0;
     padding-bottom: 0;
     line-height: 160%;
-    border: 1px solid #26225d;
+    border: 1px solid #171538;
     background: #000010;
 }
 
@@ -541,7 +534,7 @@ form table {
 textarea {
     background: #000;
     color: #c9ceff;
-    border: 1px solid #26225d;
+    border: 1px solid #171538;
     padding: 5px;
 }
 
@@ -570,7 +563,7 @@ td#attachedfile {
     font-size: 9pt;
     font-weight: bold;
     background: #002;
-    border: 1px solid #26225d;
+    border: 1px solid #171538;
     border-left: none;
     border-right: none;
 }
@@ -632,7 +625,7 @@ input {
     font: bold 9pt "Droid Sans", "Open Sans", "Noto Sans", Ubuntu, "Segoe UI", "Bitstream Vera Sans", "DejaVu Sans", Verdana, "Lucida Grande", Helvetica, sans-serif;
     color: #4e47bf;
     text-align: left;
-    border: 1px solid #26225d;
+    border: 1px solid #171538;
 }
 
 input.optbox {
@@ -772,7 +765,7 @@ input.delete {
     border: 1px solid #211e51;
     box-shadow: inset 0 0 0 1px #000;
     background: #020020 url("/themes/console/images/email.png") 8px center no-repeat;
-    background: url(images/mail.png) 8px center no-repeat, linear-gradient(to bottom, #191729, #000 75%) !important;
+    background: url(images/mail.png) 8px center no-repeat, linear-gradient(to bottom, #080818, #001) !important;
     background: url(images/mail.png) 8px center no-repeat, linear-gradient(to right, rgba(0,0,16,0.5), rgba(0,0,0,0) 30%, rgba(16,0,16,0.1)), linear-gradient(to bottom, #191729 50%, #001 50%) !important;
 }
 
@@ -861,7 +854,7 @@ div.notifications + div#dologin {
 }
 
 h3#config {
-    border: 1px solid #26225d;
+    border: 1px solid #171538;
     padding: 5px;
     margin: 9px auto 18px auto;
     width: 400px;
@@ -877,7 +870,7 @@ h3#config {
 #mailheader {
     padding: 10px;
     margin: 3px -1px;
-    border: 1px solid #26225d;
+    border: 1px solid #171538;
     font-size: 10pt !important;
     background: #020019;
 }
@@ -906,7 +899,7 @@ p.mailbody {
 }
 
 div.attached {
-    border: 1px solid #26225d;
+    border: 1px solid #171538;
     margin: 0 -1px -1px;
     border-radius: 0 0 2px 2px;
     padding: 10px 10px 10px 30px !important;
@@ -926,7 +919,7 @@ div.attached {
 }
 
 .attached img {
-    border: 1px solid #26225d;
+    border: 1px solid #171538;
     border-radius: 2px;
     image-orientation: from-image;
 }
@@ -947,12 +940,12 @@ div#emptymailbox {
 .pagenav {
     width: 100%;
     margin: 0 auto;
-    border-top: 1px solid #26225d;
+    border-top: 1px solid #171538;
     background: #000010;
 }
 
 .topbuttons .pagenav {
-    border-bottom: 1px solid #26225d;
+    border-bottom: 1px solid #171538;
 
 }
 
@@ -1484,7 +1477,7 @@ input[type="radio"], input[type="radio"]:checked, input[type="radio"][disabled],
     min-height: 19px !important;
     outline: none;
     vertical-align: middle !important;
-    border: 1px solid #26225d !important;
+    border: 1px solid #171538 !important;
     box-shadow: inset 0 0 0 1px #000, inset 3px 3px 3px 1px #000;
     background: #001;
     background: linear-gradient(to bottom, #030306, #112);
@@ -1610,7 +1603,8 @@ input[type="checkbox"][disabled]:checked, input[type="radio"][disabled]:checked,
     text-shadow: 0 1px 1px #000;
     border-radius: 3px;
     box-shadow: inset 0 0 0 1px #000;
-    background: #003;
+    background: #113;
+    background: linear-gradient(to bottom, #113, #080818);
 }
 
 #infoUser {

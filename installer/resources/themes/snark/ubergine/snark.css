@@ -4,6 +4,11 @@
 
 @import url("/themes/fonts/DroidSans.css");
 
+html, body {
+    min-height: 100%;
+    scrollbar-color: #441840 #180818;
+}
+
 body {
     font: 8pt "DejaVu Sans", Verdana, "Noto Sans", Ubuntu, Helvetica, sans-serif;
     color: #ddd;
@@ -73,6 +78,7 @@ input[type="image"], th img, a img {
     border-radius: 4px;
     border: 1px solid #101;
     box-shadow: inset 0 0 3px 0 #101, 0 0 2px 2px rgba(16,0,16,0.4);
+    will-change: transform;
 }
 
 .iframed .page {
@@ -158,7 +164,7 @@ _:-ms-lang(x), .snarknavbar {
     outline: none;
     border: 1px solid #730;
     border-radius: 0;
-    box-shadow: 0 0 1px #000, inset 0 0 0 1px rgba(16, 0, 16, 0.7);
+    box-shadow: 0 0 1px #000, inset 0 0 0 1px rgba(16, 0, 16, 0.7), inset 0 0 2px 0 rgba(255,128,0,.5);
     background: #310 url(images/button_tracker.png) 11px center no-repeat;
     background: url(images/button_tracker.png) 11px center no-repeat, linear-gradient(to bottom, #a68058 1%, #7a6045 27%, #5e4730 50%, #2e1700 51%, #1f0f00 100%);
     background-size: 16px auto, 100% 100%;
@@ -186,7 +192,7 @@ _:-ms-lang(x), .snarkNav:link, .snarkNav:visited {
 .snarkNav:hover, .snarkNav:visited:hover, .snarkNav:focus, .snarkNav:visited:focus {
     color: #d2baff !important;
     border: 1px solid #820b64;
-    box-shadow: 0 0 1px #000, inset 0 0 0 1px rgba(16, 0, 16, 0.9);
+    box-shadow: 0 0 1px #000, inset 0 0 0 1px rgba(16, 0, 16, 0.9), inset 0 0 2px 0 #515;
     background: #707 url(images/button_tracker_hover.png) 11px center no-repeat;
     background: url(images/button_tracker_hover.png) 11px center no-repeat, linear-gradient(to bottom, #a15b73 0%, #7e4062 50%, #591c3e 51%, #46133e 100%);
     background-size: 16px auto, 100% 100%;
@@ -538,13 +544,14 @@ tfoot td:first-child {
 /* main torrents listing */
 
 .snarkTorrents {
-    background: #212;
-    margin: 1px 0 0 0;
-    border: 1px solid #101;
+    margin: 1px 0;
+    width: calc(100% - 2px);
     border-collapse: separate;
+    border: 1px solid #101;
     border-spacing: 0;
     border-radius: 4px;
     box-shadow: 0 0 1px 1px rgba(16, 8, 16, 0.3);
+    background: #212;
 }
 
 /* mitigate header/column resize on refresh when multiple snark tabs open */
@@ -1742,7 +1749,7 @@ to {
     border: 1px solid #878;
     border-bottom: 1px solid #767;
     border-top: none;
-    box-shadow: inset 0 0 1px #868 !important;
+    box-shadow: inset 0 0 1px #868, inset 0 -2px 0 2px rgba(0,0,0,.3) !important;
     filter: drop-shadow(0 1px 2px #101);
     transition: none;
 }
@@ -1754,7 +1761,7 @@ to {
 
 .iframed .configsection .snarkConfigTitle:hover, .iframed .toggleview:hover,
 .iframed input:focus + .toggleview {
-    box-shadow: inset 0 0 1px #434 !important;
+    box-shadow: inset 0 0 1px #434, inset 0 -2px 0 2px rgba(0,0,0,.5) !important;
 }
 
 .configsection .snarkConfigTitle:active, .toggleview:active {
@@ -1812,7 +1819,7 @@ to {
 input:focus + .toggleview > img, input:checked:focus + .toggleview > img {
     background: linear-gradient(to bottom, #767, #989 50%, #434 50%, #323);
     border: 2px solid #101;
-    box-shadow: none !important;
+    box-shadow: 0 0 1px 1px rgba(255,128,0,.2) !important;
     filter: drop-shadow(0 0 2px #730) !important;
     mix-blend-mode: normal !important;
 }
@@ -1828,7 +1835,7 @@ input:checked:not(:focus) + .toggleview:not(:hover) > img {
     filter: none !important;
 }
 
-input:not(:checked) + .toggleview > img, #snarkCommentSection input:not(:checked) + .toggleview > img {
+input:not(:checked) + .toggleview:not(:hover) > img, #snarkCommentSection input:not(:checked) + .toggleview:not(:hover) > img {
     mix-blend-mode: luminosity !important;
 }
 
@@ -6111,10 +6118,10 @@ body:not(.iframed) .mainsection .snarkComments {
 }
 
 #metainfo {
-    padding: 6px 12px 6px 8px;
+    padding: 6px 12px 6px 6px;
     white-space: nowrap;
     border: 1px solid #000;
-    box-shadow: inset 0 0 0 1px #202, inset 0 0 1px 2px rgba(160,100,160,.5), 0 0 2px 2px rgba(0,0,0,.5);
+    box-shadow: inset 0 0 0 1px #202, inset 0 0 1px 1px rgba(160,100,160,.8), 0 0 2px 2px rgba(0,0,0,.5);
     background: #202;
 }
 
@@ -6131,8 +6138,10 @@ body:not(.iframed) .mainsection .snarkComments {
 }
 
 #metacomment .commentWrapper {
-    margin: 5px 4px;
-    padding: 9px 10px 10px;
-    box-shadow: inset 0 0 0 1px #313, 0 0 1px 0 rgba(0,0,0,0.3);
+    margin: 5px;
+    padding: 9px 15px;
+    color: #ccc;
+    text-shadow: 0 1px 1px #000;
+    box-shadow: inset 0 0 0 1px #313, inset 0 0 0 1px #737, 0 0 1px 0 rgba(0,0,0,0.3);
     background: #202;
 }

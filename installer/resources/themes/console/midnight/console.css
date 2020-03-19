@@ -305,7 +305,7 @@ select:hover, select:focus, select:active {
     color: #652787;
     text-shadow: 0 1px 1px #000;
     border: 1px solid #652787 !important;
-    box-shadow: inset 0 0 0 1px #000 !important;
+
     background: url(images/dropdown_hover.png) center right 4px no-repeat, linear-gradient(to bottom, #202 50%, #000 50%) !important;
     background-size: 14px auto, 100% 100%, 100% 100% !important;
 }
@@ -331,9 +331,9 @@ select::-ms-expand {
 
 /* buttons */
 
-button, input[type="submit"], input[type="reset"], button {
+button, input[type="submit"], input[type="reset"], button, select {
     cursor: pointer;
-    box-shadow: inset 0 0 0 1px #000;
+    box-shadow: inset 0 0 0 1px #000, inset 0 0 1px 1px #446, 0 0 0 1px #000;
     background: 8px 5px no-repeat, linear-gradient(to bottom, #191a24 50%, #000 50%);
 }
 
@@ -351,14 +351,12 @@ button, button:visited, input[type="submit"], input[type="reset"] {
     background: linear-gradient(to bottom, #191a24 50%, #001 50%) !important;
 }
 
-.main input[type="submit"], .main input[type="reset"] {
-    border-radius: 2px;
-}
-
-input[type="submit"]:hover, input[type="reset"]:hover, button:hover, button:focus, input[type="submit"]:focus, input[type="reset"]:focus {
+input[type="submit"]:hover, input[type="reset"]:hover, button:hover, button:focus,
+input[type="submit"]:focus, input[type="reset"]:focus, select:hover, select:focus {
     color: #652787;
     cursor: pointer;
     border: 1px solid #652787;
+    box-shadow: inset 0 0 0 1px #000, inset 0 0 1px 1px #757;
     background: #000;
 }
 
@@ -370,15 +368,14 @@ input[type="submit"], input[type="reset"], button {
 input[type="submit"]:hover, input[type="reset"]:hover, button:hover {
     background-blend-mode: luminosity;
     border: 1px solid #404 !important;
-    box-shadow: inset 0 0 0 1px #000 !important;
     background-size: 14px 14px, 100% 100%;
 }
 
 input[type="submit"]:active, input[type="reset"]:active, button:active {
-    color: #83529F !important;
-    text-shadow: 0 1px 1px #3C1751;
+    color: #83529f !important;
+    text-shadow: 0 1px 1px #3c1751;
     border: 1px solid #652787;
-    box-shadow: inset 0 0 0 1px #000, inset 3px 3px 3px #000 !important;
+    box-shadow: inset 0 0 0 1px #000, inset 3px 3px 3px #000;
     background: #652787;
     background-size: 14px 14px, 100% 100%;
     background-blend-mode: luminosity !important;
@@ -2820,11 +2817,12 @@ div.confignav {
 
 .tab {
     background: #010010 url(images/titles.png) center center repeat-x;
-    background: linear-gradient(to bottom, #1d1a2d 50%, #0a0910 50%) !important;
+    background: linear-gradient(to bottom, #181828 50%, #000 50%) !important;
+    box-shadow: inset 0 0 0 1px #000, inset 0 0 1px 1px #446;
 }
 
 .tab:hover {
-    box-shadow: inset 0 0 0 1px #000;
+    box-shadow: inset 0 0 0 1px #000, inset 0 0 1px 1px #757;
     background: #000 !important;
     background: linear-gradient(to bottom, #202 50%, #000 50%) !important;
 }
@@ -2850,7 +2848,7 @@ div.confignav {
     padding: 6px 14px;
     color: #c9ceff;
     text-shadow: 0 1px 1px #000;
-    box-shadow: inset 3px 3px 2px #000;
+    box-shadow: inset 0 0 0 1px #000, inset 0 0 1px 1px #404, inset 3px 3px 2px #000;
     background: #040033;
     background: linear-gradient(to bottom, #1a1b2f 50%, #000 50%) !important;
     background: linear-gradient(to right, rgba(96,0,96,0.2), rgba(96,0,96,0.2)), linear-gradient(to bottom, #1a1b2f 50%, #000 50%) !important;
@@ -3286,7 +3284,7 @@ tr:hover {
 tr:nth-child(even), #netdbversions tr:nth-child(even), #netdbtransports tr:nth-child(even), #netdbcountrylist tr:nth-child(even), #netdbtiers tr:nth-child(even),
 #pluginconfig table tr:nth-child(even) {
     vertical-align: middle;
-    background: #000013;
+    background: #080818;
 }
 
 tr:nth-child(odd), #netdbversions tr:nth-child(odd), #netdbtransports tr:nth-child(odd), #netdbcountrylist tr:nth-child(odd), #netdbtiers tr:nth-child(odd),
@@ -3299,7 +3297,13 @@ td {
     padding: 4px 6px;
     color: #c9ceff;
     vertical-align: middle;
-    border-top: 1px inset #120f35;
+    border-top: 1px solid #171538;
+    border-right: 1px solid #171538;
+}
+
+div[id^="config_"] td {
+    padding-left: 10px;
+    padding-right: 10px;
 }
 
 td img {
@@ -3469,7 +3473,7 @@ h1 {
 
 h1, h2, h3, .th_title {
     background: #000 url(images/header.png) center center;
-    background: linear-gradient(to bottom, #0a0910, #001) !important;
+    background:  linear-gradient(to bottom, #080818 50%, #000008 50%) !important;
 }
 
 h1, h2, h3 {
@@ -4744,6 +4748,10 @@ table#reseedconfig textarea {
 
 /* /configpeer */
 
+#config_peers td {
+    border-right: none;
+}
+
 #bannedpeercount {
 background: #000 url(/themes/console/images/info/blocked.png) 12px center no-repeat !important;
 }
@@ -5785,12 +5793,16 @@ ul#upnphelp li:last-child, #legal ul li:last-child {
     background: none;
 }
 
+#netdboverview table tr:hover td {
+    background: #202;
+}
+
 #netdboverview th {
-    background: linear-gradient(to right, rgba(16,0,16,0.1), rgba(0,0,0,0), rgba(16,0,16,0.1)), linear-gradient(to bottom, #141221 50%, #001 50%) !important;
+    background: linear-gradient(to bottom, #080818 50%, #000008 50%) !important;
 }
 
 #netdboverview table th {
-    background: linear-gradient(to bottom, #141221, #000008 75%) !important;
+    background: linear-gradient(to bottom, #080818, #000008) !important;
     box-shadow: none !important;
 }
 
@@ -6125,7 +6137,6 @@ a[name="criticallogs"] + p + h3 + p + ul {
 #logs #enviro td:first-child {
     width: 1%;
     text-align: right;
-    padding-right: 0;
     white-space: nowrap;
 }
 
@@ -6966,7 +6977,7 @@ table#jardump {
 
 #debug h2 {
     padding: 10px !important;
-    background: url(/themes/console/images/info/debug.png) right 5px center no-repeat, linear-gradient(to bottom, #141221, #001) !important;
+    background: url(/themes/console/images/info/debug.png) right 5px center no-repeat,  linear-gradient(to bottom, #080818 50%, #000008 50%) !important;
     background-size: 24px 24px, 100% 100%, 100% 100% !important;
     background-blend-mode: luminosity, normal;
 }
@@ -7165,7 +7176,7 @@ table#jardump {
     background: linear-gradient(to right, rgba(0,0,0,0), rgba(0,0,0,.7), rgba(0,0,0,0)), linear-gradient(to bottom, #001 50%, #000 50%);
 }
 
-#bucketSet code, .bucket {
+#bucketSet code, .bucket, .b32 {
     font-family: "Droid Sans Mono", "Noto Mono", "Lucida Console", "DejaVu Sans Mono", monospace;
 }
 
@@ -7518,7 +7529,7 @@ table.search {
 
 .search td:nth-child(2) {
     width: 50px;
-    padding: 4px 0 4px 20px;
+    padding: 4px 10px;
 }
 
 .search td:last-child {
@@ -7528,7 +7539,7 @@ table.search {
 
 input.search, input.search:hover {
     padding: 5px 5px 5px 24px;
-    width: 100%;
+    width: calc(100% - 20px);
     vertical-align: middle;
     background: #000 url(/themes/console/images/buttons/search.png) 4px center no-repeat;
     background: url(/themes/console/images/buttons/search.png) 4px center no-repeat, linear-gradient(to bottom, #000, #000019);
@@ -7597,7 +7608,7 @@ body.iframed {
 
 h3[id*="job"] {
     border: 1px solid #171538;
-    padding: 6px;
+    padding: 8px 10px;
     margin: 12px 0 10px 0;
     border-radius: 0;
     text-transform: uppercase;
@@ -8274,7 +8285,7 @@ h4.embeddedtitle#updateplugins {
 }
 
 #permabanned th, #banneduntilrestart th {
-    padding: 5px 10px !important;
+    padding: 8px 10px !important;
 }
 
 #permabanned, #banneduntilrestart {
@@ -8306,7 +8317,7 @@ h4.embeddedtitle#updateplugins {
 
 #ipv4, #ipv6, #permabanned tr:nth-child(2) {
     background: #000 url(images/titles.png) center center repeat-x;
-    background: linear-gradient(to bottom, #121225 50%, #00000d 50%);
+    background: linear-gradient(to bottom, #080818 50%, #000 50%);
     border-top: 1px solid #171538 !important;
     border-bottom: 1px solid #171538 !important;
 }
@@ -9240,7 +9251,7 @@ table#i2pupdates td:first-child {
 }
 
 .cells {
-    border: none;
+/*    border: none;*/
 }
 }
 
