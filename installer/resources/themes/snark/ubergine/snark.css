@@ -710,10 +710,6 @@ th.snarkTorrentUploaded a img {
 
 th.snarkTorrentAction input[type="image"] {
     margin-top: -2px !important;
-    border: 1px solid #281028;
-    border-top: 1px solid #212;
-    border-bottom: 1px solid #201020;
-    border-radius: 1px !important;
 }
 
 @supports not (-moz-appearance: none) {
@@ -729,29 +725,28 @@ th.snarkTorrentAction input[type="image"] {
     display: inline-block;
     max-height: 11px;
     vertical-align: middle;
-    border: 1px solid #101;
+    border: 1px solid #000;
     border-radius: 2px !important;
-    box-shadow: 0 0 1px #212;
+    box-shadow: inset 0 0 0 1px #414, inset 0 0 2px 0 #606;
     background: #101;
     background: linear-gradient(to bottom, #636, #737 50%, #101 50%);
     opacity: 0.8;
     cursor: pointer;
+    will-change: transform;
 }
 
 .snarkTorrentAction input[type="image"]:hover, .snarkTorrentAction input[type="image"]:focus {
     opacity: 1;
     border: 1px solid #414 !important;
-    box-shadow: 0 0 0 1px #f60;
-    box-shadow: 0 0 0 1px rgba(255,102,0, 0.6);
+    box-shadow: inset 0 0 0 1px #f60;
+    box-shadow: inset 0 0 0 1px rgba(255,102,0, 0.6);
     background: #313;
     background: linear-gradient(to bottom, #656, #858 50%, #212 50%, #000);
     filter: none;
 }
 
 .snarkTorrentAction input[type="image"]:active {
-    opacity: 0.6;
-    border: 1px solid #f30 !important;
-    box-shadow: inset 0 0 0 1px #000, inset 3px 3px 2px #101;
+    box-shadow: 0 0 0 1px #414, inset 0 0 0 1px rgba(255,102,0, 0.6), inset 4px 4px 4px rgba(0,0,0,.9);
     transform: scale(0.9);
     transition: ease transform 0.05s;
 }
@@ -3959,8 +3954,8 @@ th.snarkTorrentAction input[type="image"] {
 }
 
 .snarkTorrentAction input[type="image"] {
-    max-height: 13px !important;
-    padding: 4px !important;
+    max-height: 11px !important;
+    padding: 6px !important;
 }
 
 .snarkTorrentAction {
