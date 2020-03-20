@@ -1508,10 +1508,14 @@ public class ProfileOrganizer {
      * @return minimum number of peers to be placed in the 'fast' group
      */
     protected int getMinimumFastPeers() {
+        int known = _context.netDb().getKnownRouters();
         int def = Math.min(DEFAULT_MAXIMUM_FAST_PEERS,
-                           (10 *_context.clientManager().listClients().size()) + DEFAULT_MINIMUM_FAST_PEERS - 2);
+                          (10 *_context.clientManager().listClients().size()) + DEFAULT_MINIMUM_FAST_PEERS - 2);
+        if (known > 2000)
+            return _context.getProperty(PROP_MINIMUM_FAST_PEERS, Math.min((known / 60), def));
+        else
 //                           (6 *_context.clientManager().listClients().size()) + DEFAULT_MINIMUM_FAST_PEERS - 2);
-        return _context.getProperty(PROP_MINIMUM_FAST_PEERS, def);
+            return _context.getProperty(PROP_MINIMUM_FAST_PEERS, def);
     }
 
     /** fixme add config  @since 0.7.10 */
@@ -1542,7 +1546,11 @@ public class ProfileOrganizer {
      * @return minimum number of peers to be placed in the 'fast' group
      */
     protected int getMinimumHighCapacityPeers() {
-        return _context.getProperty(PROP_MINIMUM_HIGH_CAPACITY_PEERS, DEFAULT_MINIMUM_HIGH_CAPACITY_PEERS);
+        int known = _context.netDb().getKnownRouters();
+        if (known > 2000)
+            return _context.getProperty(PROP_MINIMUM_HIGH_CAPACITY_PEERS, (known / 40));
+        else
+            return _context.getProperty(PROP_MINIMUM_HIGH_CAPACITY_PEERS, DEFAULT_MINIMUM_HIGH_CAPACITY_PEERS);
     }
 
     private final static DecimalFormat _fmt = new DecimalFormat("###,##0.00", new DecimalFormatSymbols(Locale.UK));
