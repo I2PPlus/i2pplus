@@ -167,7 +167,7 @@ _:-ms-lang(x), .snarknavbar {
     box-shadow: 0 0 1px #000, inset 0 0 0 1px rgba(16, 0, 16, 0.7), inset 0 0 2px 0 rgba(255,128,0,.5);
     background: #310 url(images/button_tracker.png) 11px center no-repeat;
     background: url(images/button_tracker.png) 11px center no-repeat,
-                radial-gradient(at center bottom, rgba(148, 48, 0, .3), rgba(80, 16, 0, .15) 30%, rgba(0, 0, 0, 0)),
+                radial-gradient(at center bottom, rgba(148, 48, 0, .25), rgba(80, 16, 0, .15) 80%, rgba(0, 0, 0, 0)),
                 linear-gradient(to bottom, #a68058 1%, #7a6045 27%, #5e4730 50%, #2e1700 51%, #1f0f00 100%);
     background-size: 16px auto, 100% 100%;
     transition: ease-in-out box-shadow 0.1s;
@@ -228,7 +228,7 @@ _:-ms-lang(x), .snarkNav:link, .snarkNav:visited {
     padding-left: 28px !important;
     background: #310 url(images/button_snark.png) 11px center no-repeat;
     background: url(images/button_snark.png) 11px center no-repeat,
-                radial-gradient(at center bottom, rgba(148, 48, 0, .3), rgba(80, 16, 0, .15) 30%, rgba(0, 0, 0, 0)),
+                radial-gradient(at center bottom, rgba(148, 48, 0, .25), rgba(80, 16, 0, .15) 80%, rgba(0, 0, 0, 0)),
                 linear-gradient(to bottom, #a68058 1%, #7a6045 27%, #5e4730 50%, #2e1700 51%, #1f0f00 100%);
     background-size: 18px auto, 100% 100%;
 }
@@ -259,7 +259,7 @@ _:-ms-lang(x), .snarkNav:link, .snarkNav:visited {
 .nav_forum:link {
     background: #310 url(images/button_forum.png) 11px center no-repeat;
     background: url(images/button_forum.png) 11px center no-repeat,
-                radial-gradient(at center bottom, rgba(148, 48, 0, .3), rgba(80, 16, 0, .15) 30%, rgba(0, 0, 0, 0)),
+                radial-gradient(at center bottom, rgba(148, 48, 0, .25), rgba(80, 16, 0, .15) 80%, rgba(0, 0, 0, 0)),
                 linear-gradient(to bottom, #a68058 1%, #7a6045 27%, #5e4730 50%, #2e1700 51%, #1f0f00 100%);
     background-size: 16px auto, 100% 100%;
 }
@@ -285,7 +285,7 @@ _:-ms-lang(x), .snarkNav:link, .snarkNav:visited {
 .nav_search:link {
     background: #310 url(images/button_forum.png) 11px center no-repeat;
     background: url(images/button_search.png) 11px center no-repeat,
-                radial-gradient(at center bottom, rgba(148, 48, 0, .3), rgba(80, 16, 0, .15) 30%, rgba(0, 0, 0, 0)),
+                radial-gradient(at center bottom, rgba(148, 48, 0, .25), rgba(80, 16, 0, .15) 80%, rgba(0, 0, 0, 0)),
                 linear-gradient(to bottom, #a68058 1%, #7a6045 27%, #5e4730 50%, #2e1700 51%, #1f0f00 100%);
     background-size: 16px auto, 100% 100%;
 }
