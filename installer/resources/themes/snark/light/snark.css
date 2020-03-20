@@ -508,7 +508,7 @@ button::-moz-focus-inner, input::-moz-focus-inner {
 
 /* end screenlog */
 
-a:link, .trackerName a:visited {
+a:link, a:visited {
     color: #3b6bbf;
     color: rgba(59, 107, 191, .85);
     text-decoration: none;
@@ -517,11 +517,11 @@ a:link, .trackerName a:visited {
     font-size: 9pt;
 }
 
-a:visited {
+/*a:visited {
     color: #2c4e8f;
     color: rgba(44, 78, 143, 0.9);
     text-decoration: none;
-}
+}*/
 
 a:hover, a:focus, .trackerName a:visited:hover, .trackerName a:visited:focus {
     color: #f60;

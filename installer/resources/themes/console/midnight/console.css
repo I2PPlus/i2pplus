@@ -93,15 +93,15 @@ div.clearer {
     color: white;
 }
 
-.main * {
-    scrollbar-color: rgba(16,16,48,.8) rgba(0,0,0,0);
+html, .main * {
+    scrollbar-color: rgba(32,32,80,.8) rgba(0,0,0,0);
     transition: ease scrollbar-color .5s;
 }
 
-.main pre:hover, .main textarea:hover, .widescroll:hover {
+/*.main pre:hover, .main textarea:hover, .widescroll:hover {
     scrollbar-color: rgba(24,24,80,.8) rgba(0,0,0,.9);
     transition: ease scrollbar-color .2s;
-}
+}*/
 
 .routersummary img[src$="i2plogo.png"], .routersummary h3, .confignav, *::before, *::after, h1, h2, h3, h4, div.app,
 .clearer, .routersummary img, .formaction, label, #themeoptions, #helptranslate, #consolepass {
@@ -1489,7 +1489,7 @@ div.logo hr {
     text-transform: uppercase;
     border: 0;
     border-radius: 0;
-    background: linear-gradient(to right, rgba(0,0,0,0), rgba(96,0,96,0.1), rgba(0,0,0,0)), linear-gradient(to right, rgba(0,0,16,0.5), rgba(0,0,0,0) 30%), linear-gradient(to bottom, #0a0910 50%, #001 50%) !important;
+    background: radial-gradient(at center bottom, rgba(128, 0, 128, .2) 0, rgba(0, 0, 0, 0) 70%), linear-gradient(to right, rgba(0,0,0,0), rgba(96,0,96,0.1), rgba(0,0,0,0)), linear-gradient(to right, rgba(0,0,16,0.5), rgba(0,0,0,0) 30%), linear-gradient(to bottom, #0a0910 50%, #001 50%) !important;
 }
 
 @supports not (-moz-appearance: none) {
@@ -1501,7 +1501,7 @@ div.logo hr {
 .routersummary h3:hover {
     box-shadow: inset 0 0 0 1px #101;
     background: linear-gradient(to bottom, #001020 50%, #000 50%) !important;
-    background: linear-gradient(to right, rgba(64,0,64,.05), rgba(96,0,96,.1), rgba(64,0,64,.05)), linear-gradient(to bottom, #1d1a2d 50%, #000 50%) !important;
+    background: radial-gradient(at center bottom, rgba(96, 32, 96, .6) 0, rgba(0, 0, 0, 0) 80%), linear-gradient(to right, rgba(64,0,64,.05), rgba(96,0,96,.1), rgba(64,0,64,.05)), linear-gradient(to bottom, #1d1a2d 50%, #000 50%) !important;
 }
 
 .routersummary h3:hover a {
@@ -2824,7 +2824,7 @@ div.confignav {
 .tab:hover {
     box-shadow: inset 0 0 0 1px #000, inset 0 0 1px 1px #757;
     background: #000 !important;
-    background: linear-gradient(to bottom, #202 50%, #000 50%) !important;
+    background: radial-gradient(at center bottom, rgba(96, 32, 96, .6) 0, rgba(0, 0, 0, 0) 90%), linear-gradient(to bottom, #202 50%, #000 50%) !important;
 }
 
 .tab:hover a {
@@ -2836,7 +2836,7 @@ div.confignav {
 .tab:active {
     box-shadow: inset 0 0 0 1px #000, inset 3px 3px 3px 1px #2d103f !important;
     background: #652787 !important;
-    background: linear-gradient(to bottom, #652787 50%, #501f6c 50%) !important;
+    background: radial-gradient(at center bottom, rgba(200, 96, 200, .8) 0, rgba(0, 0, 0, 0) 90%), linear-gradient(to bottom, #652787 50%, #501f6c 50%) !important;
 }
 
 .tab:active a, #help .tab:active a {
@@ -2851,7 +2851,7 @@ div.confignav {
     box-shadow: inset 0 0 0 1px #000, inset 0 0 1px 1px #404, inset 3px 3px 2px #000;
     background: #040033;
     background: linear-gradient(to bottom, #1a1b2f 50%, #000 50%) !important;
-    background: linear-gradient(to right, rgba(96,0,96,0.2), rgba(96,0,96,0.2)), linear-gradient(to bottom, #1a1b2f 50%, #000 50%) !important;
+    background: radial-gradient(at center bottom, rgba(128, 0, 128, .4) 0, rgba(0, 0, 0, 0) 90%), linear-gradient(to right, rgba(96,0,96,0.2), rgba(96,0,96,0.2)), linear-gradient(to bottom, #1a1b2f 50%, #000 50%) !important;
 }
 
 @supports not (-moz-appearance: none) {
@@ -4748,12 +4748,13 @@ table#reseedconfig textarea {
 
 /* /configpeer */
 
-#config_peers td, #refreshsidebar td, #sidebarconf td, #netdblookup td {
+#config_peers td, #refreshsidebar td, #sidebarconf td, #netdblookup td, #config_logging td, #tunnel_defs td {
     border-right: none;
+    box-shadow: none;
 }
 
 #bannedpeercount {
-background: #000 url(/themes/console/images/info/blocked.png) 12px center no-repeat !important;
+    background: #000 url(/themes/console/images/info/blocked.png) 12px center no-repeat !important;
 }
 
 #banlist {
@@ -9720,6 +9721,11 @@ div[id^="config_"] td:not(.infowarn):not(.infohelp) {
     padding-bottom: 8px !important;
 }
 
+#advconf td {
+    padding-top: 0;
+    padding-bottom: 0;
+}
+
 #bandwidthconfig .bw_out, #bandwidthconfig .bw_in, #bandwidthconfig .bw_share {
     margin-left: 12px !important;
 }
@@ -9756,7 +9762,7 @@ div[id^="config_"] .tab, div[id^="config_"] .tab2 {
 }
 
 div[id^="config_"] .tab2 {
-    padding: 5px 6px;
+    padding: 6px 6px 4px;
 }
 
 div[id^="config_"] .tab a {

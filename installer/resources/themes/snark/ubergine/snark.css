@@ -194,8 +194,10 @@ _:-ms-lang(x), .snarkNav:link, .snarkNav:visited {
     border: 1px solid #820b64;
     box-shadow: 0 0 1px #000, inset 0 0 0 1px rgba(16, 0, 16, 0.9), inset 0 0 2px 0 #515;
     background: #707 url(images/button_tracker_hover.png) 11px center no-repeat;
-    background: url(images/button_tracker_hover.png) 11px center no-repeat, linear-gradient(to bottom, #a15b73 0%, #7e4062 50%, #591c3e 51%, #46133e 100%);
-    background-size: 16px auto, 100% 100%;
+    background: url(images/button_tracker_hover.png) 11px center no-repeat,
+                radial-gradient(at center bottom, rgba(200, 96, 200, .6) 0, rgba(0, 0, 0, 0) 90%),
+                linear-gradient(to bottom, #a15b73 0%, #7e4062 50%, #591c3e 51%, #46133e 100%);
+    background-size: 16px auto, 100% 100%, 100% 100%;
     transition: ease border 0.3s 0.1s, ease-in-out box-shadow 0.1s;
 }
 
@@ -213,8 +215,10 @@ _:-ms-lang(x), .snarkNav:link, .snarkNav:visited {
     border: 1px solid #730;
     box-shadow: 0 0 1px 0 #000, inset 0 0 0 1px #000, inset 3px 3px 3px 2px #3f1900 !important;
     background: #f60 url(images/button_tracker_active.png) 11px center no-repeat;
-    background: url(images/button_tracker_active.png) 11px center no-repeat, linear-gradient(to bottom, #f50, #f70);
-    background-size: 16px auto, 100% 100%;
+    background: url(images/button_tracker_active.png) 11px center no-repeat,
+                radial-gradient(at center bottom, rgba(255, 200, 0, .5) 0, rgba(0, 0, 0, 0) 70%),
+                linear-gradient(to bottom, #f50, #f70);
+    background-size: 16px auto, 100% 100%, 100% 100%;
     transition: ease box-shadow 0.1s;
 }
 
@@ -233,15 +237,19 @@ _:-ms-lang(x), .snarkNav:link, .snarkNav:visited {
 .nav_main:link:hover, .nav_main:link:focus {
     color: #d2baff !important;
     background: #707 url(images/button_snark_hover.png) 11px center no-repeat;
-    background: url(images/button_snark_hover.png) 11px center no-repeat, linear-gradient(to bottom, #a15b73 0%, #7e4062 50%, #591c3e 51%, #46133e 100%);
+    background: url(images/button_snark_hover.png) 11px center no-repeat,
+                radial-gradient(at center bottom, rgba(200, 96, 200, .6) 0, rgba(0, 0, 0, 0) 90%),
+                linear-gradient(to bottom, #a15b73 0%, #7e4062 50%, #591c3e 51%, #46133e 100%);
     background-size: 18px auto, 100% 100%;
 }
 
 .nav_main:link:active, .snarkNav:last-child[href="/i2psnark/"]:active {
     color: #fff !important;
     background: #f60 url(images/button_snark_active.png) 11px center no-repeat;
-    background: url(images/button_snark_active.png) 11px center no-repeat, linear-gradient(to bottom, #f50, #f70);
-    background-size: 18px auto, 100% 100%;
+    background: url(images/button_snark_active.png) 11px center no-repeat,
+                radial-gradient(at center bottom, rgba(255, 200, 0, .5) 0, rgba(0, 0, 0, 0) 70%),
+                linear-gradient(to bottom, #f50, #f70);
+    background-size: 18px auto, 100% 100%, 100% 100%;
 }
 
 .nav_forum:link {
@@ -253,15 +261,19 @@ _:-ms-lang(x), .snarkNav:link, .snarkNav:visited {
 .nav_forum:link:hover, .nav_forum:link:focus {
     color: #d2baff !important;
     background: #707 url(images/button_forum_hover.png) 11px center no-repeat;
-    background: url(images/button_forum_hover.png) 11px center no-repeat, linear-gradient(to bottom, #a15b73 0%, #7e4062 50%, #591c3e 51%, #46133e 100%);
+    background: url(images/button_forum_hover.png) 11px center no-repeat,
+                radial-gradient(at center bottom, rgba(200, 96, 200, .6) 0, rgba(0, 0, 0, 0) 90%),
+                linear-gradient(to bottom, #a15b73 0%, #7e4062 50%, #591c3e 51%, #46133e 100%);
     background-size: 16px auto, 100% 100%;
 }
 
 .nav_forum:link:active {
     color: #fff !important;
     background: #f60 url(images/button_forum_active.png) 11px center no-repeat;
-    background: url(images/button_forum_active.png) 11px center no-repeat, linear-gradient(to bottom, #f50, #f70);
-    background-size: 16px auto, 100% 100%;
+    background: url(images/button_forum_active.png) 11px center no-repeat,
+                radial-gradient(at center bottom, rgba(255, 200, 0, .5) 0, rgba(0, 0, 0, 0) 70%),
+                linear-gradient(to bottom, #f50, #f70);
+    background-size: 16px auto, 100% 100%, 100% 100%;
 }
 
 .nav_search:link {
@@ -273,15 +285,19 @@ _:-ms-lang(x), .snarkNav:link, .snarkNav:visited {
 .nav_search:link:hover, .nav_search:link:focus {
     color: #d2baff !important;
     background: #707 url(images/button_search_hover.png) 11px center no-repeat;
-    background: url(images/button_search_hover.png) 11px center no-repeat, linear-gradient(to bottom, #a15b73 0%, #7e4062 50%, #591c3e 51%, #46133e 100%);
+    background: url(images/button_search_hover.png) 11px center no-repeat,
+                radial-gradient(at center bottom, rgba(200, 96, 200, .6) 0, rgba(0, 0, 0, 0) 90%),
+                linear-gradient(to bottom, #a15b73 0%, #7e4062 50%, #591c3e 51%, #46133e 100%);
     background-size: 16px auto, 100% 100%;
 }
 
 .nav_search:link:active {
     color: #fff !important;
     background: #f60 url(images/button_search_active.png) 11px center no-repeat;
-    background: url(images/button_search_active.png) 11px center no-repeat, linear-gradient(to bottom, #f50, #f70);
-    background-size: 16px auto, 100% 100%;
+    background: url(images/button_search_active.png) 11px center no-repeat,
+                radial-gradient(at center bottom, rgba(255, 200, 0, .5) 0, rgba(0, 0, 0, 0) 70%),
+                linear-gradient(to bottom, #f50, #f70);
+    background-size: 16px auto, 100% 100%, 100% 100%;
 }
 
 .snarkNav:last-child {
@@ -1583,17 +1599,12 @@ hr {
     text-align: center;
 }
 
-a:link, .trackerName a:visited {
+a:link, a:visited {
     color: #f70;
     text-decoration: none;
     font-weight: bold;
     word-wrap: break-word;
     outline: none;
-}
-
-a:visited {
-    color: #f40;
-    text-decoration: none;
 }
 
 a:hover, a:visited:hover, a:focus, a:visited:focus {

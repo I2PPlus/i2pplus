@@ -87,12 +87,12 @@ table table {
 	border: none;
 }
 
-a:visited {
+/*a:visited {
 	text-decoration: none;
 	color: #723;
-}
+}*/
 
-a:link, .toggleview, .trackerName a:visited {
+a:link, .toggleview, a:visited {
 	text-decoration: none;
 	color: #b23 !important;
 	font-weight: bold;

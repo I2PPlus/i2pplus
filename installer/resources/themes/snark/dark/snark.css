@@ -186,7 +186,6 @@ _:-ms-lang(x), .snarknavbar {
     background: url(images/button_snark.png) 7px center no-repeat, linear-gradient(to bottom, #171 0%, #131 50%, #000 51%);
     background: url(images/button_snark.png) 7px center no-repeat, linear-gradient(to bottom, rgba(17, 119, 17, .75) 0%, rgba(17, 51, 17, .75) 50%, rgba(0, 0, 0, .75));
     background: #000 url(images/button_snark.png) 7px center no-repeat;
-/*    background: url(images/button_snark.png) 7px center no-repeat, linear-gradient(to bottom, #001800 50%, #000800);*/
 }
 
 .nav_forum:link {
@@ -944,9 +943,9 @@ tr.active .snarkTorrentStatus {
 }
 
 .snarkDirInfo .ParentDir a, .snarkDirInfo .snarkFileName a, .snarkTorrents .snarkTorrentName a {
-    display: inline-block;
-    width: 100%;
     padding: 2px 0;
+    width: 100%;
+    display: inline-block;
 }
 
 .snarkTorrents .snarkTorrentName {
@@ -958,20 +957,15 @@ tr.active .snarkTorrentStatus {
 }
 
 #setPriority, #torrentInfoControl, .commentAction[colspan="5"] {
-    background: url(/themes/console/dark/images/camotile2.png) repeat scroll center bottom #001100 !important;
-    background: repeating-linear-gradient(to right, #0080001a 1px, #0010004d 2px, #0010004d 3px), repeating-linear-gradient(to bottom, #000c 1px, #00100080 2px, #00100080 3px), linear-gradient(to bottom, #00100066, #00000080), url(/themes/console/dark/images/camotile2.png) top left repeat !important;
     border-top: 1px solid #252 !important;
     border-bottom: 1px solid #252 !important;
+    background: url(/themes/console/dark/images/camotile2.png) repeat scroll center bottom #001100 !important;
+    background: repeating-linear-gradient(to right, #0080001a 1px, #0010004d 2px, #0010004d 3px), repeating-linear-gradient(to bottom, #000c 1px, #00100080 2px, #00100080 3px), linear-gradient(to bottom, #00100066, #00000080), url(/themes/console/dark/images/camotile2.png) top left repeat !important;
 }
 
 _:-ms-lang(x), #setPriority, #torrentInfoControl {
     background: url(/themes/console/dark/images/camotile2.png) repeat scroll center bottom #001100 !important;
 }
-
-/*.SnarkDirInfo img {
-    max-height: 16px;
-    max-width: 16px;
-}*/
 
 .snarkDirInfo thead img {
     margin-right: 2px !important;
@@ -1046,10 +1040,10 @@ td {
 }
 
 .snarkTorrentName a, .snarkDirInfo td.snarkFileName a {
-    font-weight: bold !important;
     padding: 4px 0 !important;
     width: 100%;
     display: inline-block;
+    font-weight: bold !important;
 }
 
 .snarkTorrentName a:hover, .snarkFileName a:hover {
@@ -1086,8 +1080,8 @@ td {
 
 .snarkTorrentStatus {
     padding: 3px 5px 3px 1px !important;
-    line-height: 90%;
     min-width: 0;
+    line-height: 90%;
     text-align: left !important;
 }
 
@@ -1712,17 +1706,12 @@ hr {
     text-align: center;
 }
 
-a:link, .trackerName a:visited {
+a:link, a:visited {
     color: #7c7;
     text-decoration: none;
     word-wrap: break-word;
     border-radius: 0;
     outline: none;
-}
-
-a:visited {
-    color: #393;
-    text-decoration: none;
 }
 
 a:hover, a:focus {
@@ -1736,7 +1725,6 @@ a:active {
 input {
     text-align: left;
     padding: 3px 4px !important;
-/*    border-radius: 2px;*/
     border: 1px solid #252;
     background: #000;
     color: #494;
