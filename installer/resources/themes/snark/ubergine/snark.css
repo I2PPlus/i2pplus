@@ -316,6 +316,7 @@ _:-ms-lang(x), .snarkNav:link, .snarkNav:visited {
     background-position: right -4px bottom -10px, center center, center top !important;
     box-shadow: inset 0 0 0 1px rgba(180,152,180,0.3), inset 0 0 3px 1px rgba(16, 0, 16, 0.6), 0 0 1px 1px rgba(16, 8, 16, 0.3);
     outline: none;
+    scrollbar-width: thin;
 }
 
 .snarkMessages:hover, .snarkMessages:focus {
@@ -732,11 +733,11 @@ th.snarkTorrentAction input[type="image"] {
     display: inline-block;
     max-height: 11px;
     vertical-align: middle;
-    border: 1px solid #000;
+    border: 1px solid #000 !important;
     border-radius: 2px !important;
-    box-shadow: inset 0 0 0 1px #414, inset 0 0 2px 0 #606;
+    box-shadow: inset 0 0 0 1px #414, inset 0 0 2px 0 #717;
     background: #101;
-    background: linear-gradient(to bottom, #636, #737 50%, #101 50%);
+    background: linear-gradient(to bottom, #582858, #737 50%, #101 50%, #080008);
     opacity: 0.8;
     cursor: pointer;
     will-change: transform;
@@ -744,12 +745,12 @@ th.snarkTorrentAction input[type="image"] {
 
 .snarkTorrentAction input[type="image"]:hover, .snarkTorrentAction input[type="image"]:focus {
     opacity: 1;
-    border: 1px solid #414 !important;
     box-shadow: inset 0 0 0 1px #f60;
     box-shadow: inset 0 0 0 1px rgba(255,102,0, 0.6);
     background: #313;
-    background: linear-gradient(to bottom, #656, #858 50%, #212 50%, #000);
+    background: linear-gradient(to bottom, #656, #858 50%, #212 50%, #080008, #000);
     filter: none;
+    transition: ease box-shadow 0.1s;
 }
 
 .snarkTorrentAction input[type="image"]:active {

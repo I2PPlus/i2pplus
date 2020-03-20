@@ -2095,12 +2095,13 @@ img[src$="details.png"] {
 }
 
 #trackerselect tr:nth-child(even) {
-    background: #010008 !important;
+    border-bottom: 1px solid #120f35;
+    background: #080818 !important;
 }
 
 #trackerselect tr:nth-child(odd) {
-    border-bottom: 1px inset #000;
-    background: #010010;
+    border-bottom: 1px solid #120f35;
+    background: #040408;
 }
 
 _:-ms-lang(x), #trackerselect tr:nth-child(odd) {
@@ -2124,6 +2125,10 @@ _:-ms-lang(x), #trackerselect tr:last-child {
 #trackerselect td {
     padding: 5px 5px 5px 20px;
     font-size: 9pt;
+}
+
+#trackerselect td {
+    width: 10%;
 }
 
 #trackerselect td:first-child, #trackerselect td:last-child {

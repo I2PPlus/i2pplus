@@ -4748,7 +4748,7 @@ table#reseedconfig textarea {
 
 /* /configpeer */
 
-#config_peers td {
+#config_peers td, #refreshsidebar td, #sidebarconf td, #netdblookup td {
     border-right: none;
 }
 
@@ -5696,8 +5696,8 @@ ul#upnphelp li:last-child, #legal ul li:last-child {
 
 #faq h3 {
     padding: 8px 10px 8px 35px !important;
-    background: url(/themes/console/images/info/question.png) 10px 55% no-repeat, linear-gradient(to bottom, #141221, #001) !important;
-    background-size: 18px 18px, 100% 100%, 100% 100% !important;
+    background: #001 url(/themes/console/images/info/question.png) 10px 55% no-repeat !important;
+    background-size: 18px 18px !important;
     background-blend-mode: luminosity, normal;
     text-transform: none;
     font-size: 10.5pt !important;
@@ -7256,8 +7256,7 @@ h4.app, h4.app2 {
     word-spacing: 0.1em;
     letter-spacing: 2px;
     border: 1px solid #171538;
-    background: url(/themes/console/images/eepsite.png) 10px center no-repeat, linear-gradient(to bottom, #0a0910, #000 75%) !important;
-    background: url(/themes/console/images/eepsite.png) 10px center no-repeat, linear-gradient(to bottom, #0a0910, #001) !important;
+    background: url(/themes/console/images/eepsite.png) 10px center no-repeat, linear-gradient(to bottom, #080818 50%, #000008 50%) !important;
     background-size: 16px 16px, 100% 100%, 100% 100% !important;
     background-blend-mode: luminosity;
 }
@@ -7267,8 +7266,7 @@ h4.app2 {
     position: relative;
     top: -4px;
     clear: left;
-    background: url(/themes/console/light/images/globe.png) 10px center no-repeat, linear-gradient(to bottom, #0a0910, #000 75%) !important;
-    background: url(/themes/console/light/images/globe.png) 10px center no-repeat, linear-gradient(to bottom, #0a0910, #001) !important;
+    background: url(/themes/console/light/images/globe.png) 10px center no-repeat, linear-gradient(to bottom, #080818 50%, #000008 50%) !important;
 }
 
 h4.app a, h4.app2 a {
@@ -8774,7 +8772,8 @@ img + tt {
 }
 
 #ntcpconnections th, #udpconnections th {
-   text-align: center !important;
+    padding-top: 6px;
+    text-align: center !important;
 }
 
 #ntcpconnections td span:empty {
@@ -9234,6 +9233,10 @@ table#i2pupdates td:first-child {
 }
 
 @media screen and (min-width: 1200px) {
+#thresholds th, #thresholds td {
+    width: 33%;
+}
+
 #floodfills td:last-child {
     padding-right: 5px !important;
 }
@@ -9272,6 +9275,10 @@ table#i2pupdates td:first-child {
 @media screen and (min-width: 1500px) {
 body, .main, .main td, .news p, #news p, .statusnotes, textarea, th, .applabel a, tt, code, .messages, .messages #newsStatus, .messages #newsDisplay {
     font-size: 10pt !important;
+}
+
+#ntcpconnections th, #udpconnections th {
+    font-size: 90% !important;
 }
 
 .cells tt, #profilelist tt, #floodfills tt {
@@ -12168,7 +12175,7 @@ to {
     letter-spacing: 0.12em;
     font-size: 10.5pt;
     border: 1px solid #171538;
-    background: url(/themes/console/images/eepsite.png) 5px center no-repeat, linear-gradient(to bottom, #0a0910, #001) !important;
+    background: url(/themes/console/images/eepsite.png) 5px center no-repeat, linear-gradient(to bottom, #080818 50%, #000008 50%) !important;
     background-size: 18px 18px, 100% 100% !important;
 }
 
@@ -12185,23 +12192,23 @@ to {
 }
 
 #sitemap h3:nth-of-type(2) {
-    background: url(/themes/console/images/info_rhombus.png) 5px center no-repeat, repeating-linear-gradient(to right, rgba(0,0,0,.5) 1px, rgba(0,0,0,.5) 2px, rgba(0,0,16,.5) 3px), linear-gradient(to right, rgba(0,0,0,0), rgba(96,0,96,0.1), rgba(0,0,0,0)), linear-gradient(to right, rgba(0,0,24,0.5), rgba(0,0,8,.1) 30%), linear-gradient(to bottom, #141221 50%, #001 50%) !important;
-    background-size: 18px 18px, 100% 100%, 100% 100%, 100% 100%, 100% 100% !important;
+    background: url(/themes/console/images/info_rhombus.png) 5px center no-repeat, linear-gradient(to bottom, #080818 50%, #000008 50%) !important;
+    background-size: 18px 18px, 100% 100% !important;
 }
 
 #sitemap h3:nth-of-type(3) {
-    background: url(/themes/console/images/info/configure.png) 5px center no-repeat, repeating-linear-gradient(to right, rgba(0,0,0,.5) 1px, rgba(0,0,0,.5) 2px, rgba(0,0,16,.5) 3px), linear-gradient(to right, rgba(0,0,0,0), rgba(96,0,96,0.1), rgba(0,0,0,0)), linear-gradient(to right, rgba(0,0,24,0.5), rgba(0,0,8,.1) 30%), linear-gradient(to bottom, #141221 50%, #001 50%) !important;
-    background-size: 18px 18px, 100% 100%, 100% 100%, 100% 100%, 100% 100% !important;
+    background: url(/themes/console/images/info/configure.png) 5px center no-repeat, linear-gradient(to bottom, #080818 50%, #000008 50%) !important;
+    background-size: 18px 18px, 100% 100% !important;
 }
 
 #sitemap h3:nth-of-type(4) {
-    background: url(/themes/console/images/support.png) 5px center no-repeat, repeating-linear-gradient(to right, rgba(0,0,0,.5) 1px, rgba(0,0,0,.5) 2px, rgba(0,0,16,.5) 3px), linear-gradient(to right, rgba(0,0,0,0), rgba(96,0,96,0.1), rgba(0,0,0,0)), linear-gradient(to right, rgba(0,0,24,0.5), rgba(0,0,8,.1) 30%), linear-gradient(to bottom, #141221 50%, #001 50%) !important;
-    background-size: 18px 18px, 100% 100%, 100% 100%, 100% 100%, 100% 100% !important;
+    background: url(/themes/console/images/support.png) 5px center no-repeat, linear-gradient(to bottom, #080818 50%, #000008 50%) !important;
+    background-size: 18px 18px, 100% 100% !important;
 }
 
 #sitemap h3:nth-of-type(5) {
-    background: url(/themes/console/images/world.png) 5px center no-repeat, repeating-linear-gradient(to right, rgba(0,0,0,.5) 1px, rgba(0,0,0,.5) 2px, rgba(0,0,16,.5) 3px), linear-gradient(to right, rgba(0,0,0,0), rgba(96,0,96,0.1), rgba(0,0,0,0)), linear-gradient(to right, rgba(0,0,24,0.5), rgba(0,0,8,.1) 30%), linear-gradient(to bottom, #141221 50%, #001 50%) !important;
-    background-size: 18px 18px, 100% 100%, 100% 100%, 100% 100%, 100% 100% !important;
+    background: url(/themes/console/images/world.png) 5px center no-repeat,linear-gradient(to bottom, #080818 50%, #000008 50%) !important;
+    background-size: 18px 18px, 100% 100% !important;
 }
 
 .sitemapLink, .sitemapLabel {
@@ -12374,52 +12381,42 @@ a:hover .sitemapLink {
 
 #help_configuration {
     background: #001 url(/themes/console/images/info/optimize.png) 15px center no-repeat;
-    background: url(/themes/console/images/info/optimize.png) 15px center no-repeat, linear-gradient(135deg, #000010, #000009);
 }
 
 #help_configadv {
     background: #001 url(/themes/console/images/info/configure.png) 15px center no-repeat;
-    background: url(/themes/console/images/info/configure.png) 15px center no-repeat, linear-gradient(135deg, #000010, #000009);
 }
 
 #help_ui {
     background: #001 url(/themes/console/images/info/ui.png) 15px center no-repeat;
-    background: url(/themes/console/images/info/ui.png) 15px center no-repeat, linear-gradient(135deg, #000010, #000009);
 }
 
 #help_reseed {
     background: #001 url(/themes/console/images/info/connect.png) 15px center no-repeat;
-    background: url(/themes/console/images/info/connect.png) 15px center no-repeat, linear-gradient(135deg, #000010, #000009);
 }
 
 #help_faq, #help_glossary {
     background: #001 url(/themes/console/images/info/question.png) 15px center no-repeat;
-    background: url(/themes/console/images/info/question.png) 15px center no-repeat, linear-gradient(135deg, #000010, #000009);
 }
 
 #help_troubleshoot {
     background: #001 url(/themes/console/images/wrench_orange.png) 15px center no-repeat;
-    background: url(/themes/console/images/wrench_orange.png) 15px center no-repeat, linear-gradient(135deg, #000010, #000009);
 }
 
 #help_newusers {
     background: #001 url(/themes/console/images/info/notice.png) 15px center no-repeat;
-    background: url(/themes/console/images/info/notice.png) 15px center no-repeat, linear-gradient(135deg, #000010, #000009);
 }
 
 #help_legal {
     background: #001 url(/themes/console/images/info/legal.png) 15px center no-repeat;
-    background: url(/themes/console/images/info/legal.png) 15px center no-repeat, linear-gradient(135deg, #000010, #000009);
 }
 
 #help_changelog {
     background: #001 url(/themes/console/images/info/logs.png) 15px center no-repeat;
-    background: url(/themes/console/images/info/logs.png) 15px center no-repeat, linear-gradient(135deg, #000010, #000009);
 }
 
 #help_webhosting {
     background: #001 url(/themes/console/images/server_32x32.png) 15px center no-repeat;
-    background: url(/themes/console/images/server_32x32.png) 15px center no-repeat, linear-gradient(135deg, #000010, #000009);
 }
 
 #help h2 {
@@ -12428,79 +12425,79 @@ a:hover .sitemapLink {
 
 #configurationhelp h2, #advancedsettings h2, #filterlist h2 {
     padding-left: 38px !important;
-    background: url(/themes/console/images/info/configure.png) 8px center no-repeat, linear-gradient(to bottom, #0a0910, #001) !important;
+    background: url(/themes/console/images/info/configure.png) 8px center no-repeat, linear-gradient(to bottom, #080818 50%, #000008 50%) !important;
     background-size: 24px 24px, 100% 100%, 100% 100%, 100% 100%, 100% 100% !important;
 }
 
 #sidebarhelp h2, #reachabilityhelp h2 {
     padding-left: 38px !important;
-    background: url(/themes/console/images/info/sidebar.png) 8px center no-repeat, linear-gradient(to bottom, #0a0910, #001) !important;
+    background: url(/themes/console/images/info/sidebar.png) 8px center no-repeat, linear-gradient(to bottom, #080818 50%, #000008 50%) !important;
     background-size: 24px 24px, 100% 100%, 100% 100%, 100% 100%, 100% 100% !important;
 }
 
 #reseedhelp h2 {
     padding-left: 38px !important;
-    background: url(/themes/console/images/info/connect.png) 8px center no-repeat, linear-gradient(to bottom, #0a0910, #001) !important;
+    background: url(/themes/console/images/info/connect.png) 8px center no-repeat, linear-gradient(to bottom, #080818 50%, #000008 50%) !important;
     background-size: 24px 24px, 100% 100%, 100% 100%, 100% 100%, 100% 100% !important;
 }
 
 #newuserguide h2 {
     padding-left: 38px !important;
-    background: url(/themes/console/images/info/question.png) 8px center no-repeat, linear-gradient(to bottom, #0a0910, #001) !important;
+    background: url(/themes/console/images/info/question.png) 8px center no-repeat, linear-gradient(to bottom, #080818 50%, #000008 50%) !important;
     background-size: 24px 24px, 100% 100%, 100% 100%, 100% 100%, 100% 100% !important;
 }
 
 #newuserguide h2 {
     padding-left: 38px !important;
-    background: url(/themes/console/images/info/notice.png) 8px center no-repeat, linear-gradient(to bottom, #0a0910, #001) !important;
+    background: url(/themes/console/images/info/notice.png) 8px center no-repeat, linear-gradient(to bottom, #080818 50%, #000008 50%) !important;
     background-size: 24px 24px, 100% 100%, 100% 100%, 100% 100%, 100% 100% !important;
 }
 
 #troubleshoot h2 {
     padding-left: 38px !important;
-    background: url(/themes/console/images/wrench_orange.png) 8px center no-repeat, linear-gradient(to bottom, #0a0910, #001) !important;
+    background: url(/themes/console/images/wrench_orange.png) 8px center no-repeat, linear-gradient(to bottom, #080818 50%, #000008 50%) !important;
     background-size: 24px 24px, 100% 100%, 100% 100%, 100% 100%, 100% 100% !important;
 }
 
 #legal h2 {
     padding-left: 38px !important;
-    background: url(/themes/console/images/info/legal.png) 8px center no-repeat, linear-gradient(to bottom, #0a0910, #001) !important;
+    background: url(/themes/console/images/info/legal.png) 8px center no-repeat, linear-gradient(to bottom, #080818 50%, #000008 50%) !important;
     background-size: 24px 24px, 100% 100%, 100% 100%, 100% 100%, 100% 100% !important;
 }
 
 #changelog h2 {
     padding-left: 38px !important;
-    background: url(/themes/console/images/info/logs.png) 8px center no-repeat, linear-gradient(to bottom, #0a0910, #001) !important;
+    background: url(/themes/console/images/info/logs.png) 8px center no-repeat, linear-gradient(to bottom, #080818 50%, #000008 50%) !important;
     background-size: 24px 24px, 100% 100%, 100% 100%, 100% 100%, 100% 100% !important;
 }
 
 #faq h2, #glossary h2 {
     padding-left: 38px !important;
-    background: url(/themes/console/images/info/question.png) 8px center no-repeat, linear-gradient(to bottom, #0a0910, #001) !important;
+    background: url(/themes/console/images/info/question.png) 8px center no-repeat, linear-gradient(to bottom, #080818 50%, #000008 50%) !important;
     background-size: 24px 24px, 100% 100%, 100% 100%, 100% 100%, 100% 100% !important;
 }
 
 #webhosting h2 {
     padding-left: 38px !important;
-    background: url(/themes/console/images/server_32x32.png) 8px center no-repeat, linear-gradient(to bottom, #0a0910, #001) !important;
+    background: url(/themes/console/images/server_32x32.png) 8px center no-repeat, linear-gradient(to bottom, #080818 50%, #000008 50%) !important;
     background-size: 24px 24px, 100% 100%, 100% 100%, 100% 100%, 100% 100% !important;
 }
 
 #themeoverride h2 {
     padding-left: 38px !important;
-    background: url(/themes/console/images/info/ui.png) 8px center no-repeat, linear-gradient(to bottom, #0a0910, #001) !important;
+    background: url(/themes/console/images/info/ui.png) 8px center no-repeat, linear-gradient(to bottom, #080818 50%, #000008 50%) !important;
     background-size: 24px 24px, 100% 100%, 100% 100%, 100% 100%, 100% 100% !important;
 }
 
 #browserconfig h2 {
     padding-left: 38px !important;
-    background: url(/themes/console/images/info/launch_browser.png) 8px center no-repeat, linear-gradient(to bottom, #0a0910, #001) !important;
+    background: url(/themes/console/images/info/launch_browser.png) 8px center no-repeat, linear-gradient(to bottom, #080818 50%, #000008 50%) !important;
     background-size: 24px 24px, 100% 100%, 100% 100%, 100% 100%, 100% 100% !important;
 }
 
 #tunnman h2 {
     padding-left: 38px !important;
-    background: url(/themes/console/images/info/launch_browser.png) 8px center no-repeat, linear-gradient(to bottom, #0a0910, #001) !important;
+    background: url(/themes/console/images/info/launch_browser.png) 8px center no-repeat, linear-gradient(to bottom, #080818 50%, #000008 50%) !important;
     background-size: 24px 24px, 100% 100%, 100% 100%, 100% 100%, 100% 100% !important;
 }
 
