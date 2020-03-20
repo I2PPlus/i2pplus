@@ -4,6 +4,7 @@ default:
     paths:
       - i2pinstall.exe
       - i2pupdate.zip
+      - i2pupdate200.zip
       - install.jar
       - i2psnark-standalone.zip
       - javadoc.zip
@@ -25,6 +26,7 @@ Java8:
   script:
     - ./installer/resources/makegeoip.sh
     - ant pkg
+    - ant updater200
     - ant i2psnark
     - ant javadoc-zip
 
