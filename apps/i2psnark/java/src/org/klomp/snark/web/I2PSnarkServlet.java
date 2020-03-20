@@ -3845,7 +3845,9 @@ public class I2PSnarkServlet extends BasicServlet {
                 buf.append("</td></tr>\n");
                 List<List<String>> alist = meta.getAnnounceList();
                 if (alist != null && !alist.isEmpty()) {
-                    buf.append("<tr><td>");
+                    buf.append("<tr title=\"")
+                        .append(_t("Only I2P trackers will be used; non-I2P trackers are displayed for informational purposes only"))
+                        .append("\"><td>");
                     toThemeImg(buf, "details");
                     buf.append("</td><td colspan=\"2\"><b>")
                        .append(_t("Trackers")).append(":</b> ");
@@ -3903,7 +3905,9 @@ public class I2PSnarkServlet extends BasicServlet {
                            .replaceAll(theblandb32, "tracker.thebland.i2p")
                            .replaceAll(icu812b32, "tracker.icu812.i2p")
                            .replaceAll(fazankab32, "tracker.fazanka.i2p");
-                        buf.append("<tr><td>");
+                        buf.append("<tr title=\"")
+                           .append(_t("Only I2P trackers will be used; non-I2P trackers are displayed for informational purposes only"))
+                           .append("\"><td>");
                         toThemeImg(buf, "details");
                         buf.append("</td><td colspan=\"2\"><b>")
                            .append(_t("Tracker")).append(":</b> ");
