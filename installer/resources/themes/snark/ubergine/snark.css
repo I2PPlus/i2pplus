@@ -1763,6 +1763,10 @@ to {
     margin: 5px 0 0 !important;
     display: inline-block;
 }
+
+.iframed .snarkDirInfo {
+    margin-bottom: 4px !important;
+}
 }
 
 .iframed .configsection .snarkConfigTitle, .iframed .toggleview {
@@ -5275,9 +5279,9 @@ tr:hover td.snarkTorrentDownloaded, tr:hover td.snarkTorrentRateDown, tr:hover t
 .snarkTorrentOdd:not(.peerinfo) .snarkTorrentDownloaded .percentBarText,
 .snarkTorrentEven:not(.peerinfo) .snarkTorrentDownloaded .percentBarText {
     padding: 4px 3px 2px;
+    min-width: 130px !important;
     top: -16px;
     left: -26px;
-    min-width: 130px !important;
 }
 }
 /* end alternative popup */
