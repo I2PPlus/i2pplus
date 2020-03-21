@@ -94,14 +94,8 @@ div.clearer {
 }
 
 html, .main * {
-    scrollbar-color: rgba(32,32,80,.8) rgba(0,0,0,0);
-    transition: ease scrollbar-color .5s;
+    scrollbar-color: #111138 #001;
 }
-
-/*.main pre:hover, .main textarea:hover, .widescroll:hover {
-    scrollbar-color: rgba(24,24,80,.8) rgba(0,0,0,.9);
-    transition: ease scrollbar-color .2s;
-}*/
 
 .routersummary img[src$="i2plogo.png"], .routersummary h3, .confignav, *::before, *::after, h1, h2, h3, h4, div.app,
 .clearer, .routersummary img, .formaction, label, #themeoptions, #helptranslate, #consolepass {
@@ -11406,7 +11400,7 @@ input[type="file"]:hover {
     border: 1px solid #113;
     border-radius: 2px;
     background: #113;
-    background: linear-gradient(to bottom, #113, #112);
+    background: linear-gradient(to bottom, #113, #001);
 }
 
 .viewprofile img:hover, .viewfullentry img:hover, .familysearch img:hover, .configpeer img:hover {
@@ -13524,6 +13518,46 @@ to {
     padding-right: 8px !important;
     width: 10% !important;
     white-space: nowrap;
+}
+
+#tunnels #tunnelPeerCount tr:not(:last-child) td:first-child {
+    padding: 2px 0 !important;
+    width: 1% !important;
+    min-width: 0 !important;
+    white-space: nowrap;
+    text-align: center;
+    background: linear-gradient(to bottom, #112, #001) !important;
+}
+
+#tunnels #tunnelPeerCount tr:hover td, #tunnels #tunnelPeerCount tr:hover td:first-child {
+    background: #303 !important;
+}
+
+#tunnels #tunnelPeerCount td:first-child span, #tunnels #tunnelPeerCount td:first-child tt,
+#tunnels #tunnelPeerCount td:first-child .configpeer img, #tunnels #tunnelPeerCount td:first-child .routerid img {
+    margin: 1px 3px !important;
+    padding: 0 !important;
+    display: inline-block;
+    min-width: 0 !important;
+    width: auto !important;
+    vertical-align: middle;
+    font-weight: bold !important;
+    border: none !important;
+    box-shadow: none !important;
+    background: none !important;
+}
+
+#tunnels #tunnelPeerCount td:first-child .routerid, #tunnels #tunnelPeerCount td:first-child .flag {
+    padding: 0 !important;
+    margin: 1px !important;
+}
+
+#tunnels #tunnelPeerCount td:first-child tt {
+    margin-left: -2px !important;
+}
+
+#tunnels #tunnelPeerCount td:first-child .tunnel_cap {
+    margin-right: 4px !important;
 }
 
 #tunnels #tunnelPeerCount td:nth-child(2) {

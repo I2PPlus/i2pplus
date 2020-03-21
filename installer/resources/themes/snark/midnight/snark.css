@@ -3,6 +3,11 @@
 
 @import url("/themes/fonts/DroidSans.css");
 
+html, body {
+    min-height: 100%;
+    scrollbar-color: #111138 #001;
+}
+
 body {
     font: 9pt "Droid Sans", "Open Sans", "Noto Sans", Ubuntu, "Segoe UI", "Lucida Grande", "DejaVu Sans", Verdana, Helvetica, sans-serif;
     color: #c9ceff;
@@ -307,6 +312,8 @@ td input[type="image"]::after {
     background: url(images/hat.png) no-repeat scroll right top, linear-gradient(to bottom, #001, #000008);
     background-size: auto 110%;
     background-blend-mode: luminosity;
+    scrollbar-color: #225 #001;
+    scrollbar-width: thin;
 }
 
 .iframed .snarkMessages {
@@ -4608,9 +4615,9 @@ tfoot .snarkTorrentRateUp:not(:empty)::before,tfoot .snarkTorrentUploaded:not(:e
     background: #001;
 }
 
-.iframed #snarkInfo ~ .mainsection {
+/*.iframed #snarkInfo ~ .mainsection {
     margin-top: 5px !important;
-}
+}*/
 
 .iframed #snarkInfo ~ .mainsection#snarkFiles {
     margin-top: 5px !important;

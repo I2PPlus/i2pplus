@@ -1,8 +1,16 @@
 /* Purple override.css for console 'midnight' theme */
 /* Author: dr|z3d */
 
+html, body {
+    scrollbar-color: #304 #101 !important;
+}
+
 html {
     filter: hue-rotate(30deg);
+}
+
+#tman {
+    filter: hue-rotate(0deg);
 }
 
 body, body:not(old) {
