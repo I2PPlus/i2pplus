@@ -1509,10 +1509,10 @@ public class ProfileOrganizer {
      */
     protected int getMinimumFastPeers() {
         int known = _context.netDb().getKnownRouters();
-        int def = Math.min(DEFAULT_MAXIMUM_FAST_PEERS,
+        int def = Math.max(DEFAULT_MAXIMUM_FAST_PEERS,
                           (10 *_context.clientManager().listClients().size()) + DEFAULT_MINIMUM_FAST_PEERS - 2);
         if (known > 2000)
-            return _context.getProperty(PROP_MINIMUM_FAST_PEERS, Math.min((known / 60), def));
+            return _context.getProperty(PROP_MINIMUM_FAST_PEERS, Math.max((known / 60), def));
         else
 //                           (6 *_context.clientManager().listClients().size()) + DEFAULT_MINIMUM_FAST_PEERS - 2);
             return _context.getProperty(PROP_MINIMUM_FAST_PEERS, def);
