@@ -1258,12 +1258,26 @@ _:-ms-lang(x), .snarkTorrentOdd, .snarkTorrentOdd td, .SnarkTorrentEven, .SnarkT
 }
 
 .percentBarOuter {
-    background: #000;
-    background: repeating-linear-gradient(135deg, #001 1px, #001 5px, #002 6px, #002 11px);
-    border: 1px solid #113;
-    box-shadow: none;
-    box-shadow: 0 0 1px 1px rgba(0,0,0,0.8), inset 0 0 0 2px rgba(0,0,0,0.5);
     margin: 3px auto;
+    border: 1px solid #225;
+    box-shadow: 0 0 1px 1px rgba(0,0,0,0.8), inset 0 0 0 1px #000, inset 2px 2px 2px rgba(0,0,0,.9);
+    background: #000;
+    background: repeating-linear-gradient(135deg, #001 1px, #001 5px, #112 6px, #113 11px);
+}
+
+.active .percentBarOuter {
+    animation: progress 5s linear infinite both;
+    backface-visibility: hidden;
+    will-change: transform;
+}
+
+@keyframes progress {
+from {
+    background: repeating-linear-gradient(135deg, #001 1px, #001 5px, #112 6px, #113 11px);
+}
+to {
+    background: repeating-linear-gradient(135deg, #112 1px, #113 5px, #001 6px, #001 11px);
+}
 }
 
 .peerinfo .percentBarOuter {
@@ -1271,27 +1285,25 @@ _:-ms-lang(x), .snarkTorrentOdd, .snarkTorrentOdd td, .SnarkTorrentEven, .SnarkT
 }
 
 .percentBarInner {
-    border: none;
     height: 100%;
-    background: #33a;
-    background: linear-gradient(to bottom,  #33a, #226 50%, #003 50%, #000);
+    border: none;
     border-radius: 2px;
     box-shadow: inset 0 0 0 1px #000;
+    background: #33a;
+    background: linear-gradient(to bottom,  #33a, #226 50%, #003 50%, #000);
     opacity: 0.8;
 }
 
 .snarkTorrentDownloaded .percentBarInner {
-    background: linear-gradient(to bottom, rgba(51, 51, 170, 0.6), rgba(34, 34, 102, 0.7) 50%, rgba(0, 0, 51, 0.8) 50%, rgba(0, 0, 0, 0.9)), linear-gradient(to right, rgba(255, 255, 0, 0.5) 55px, rgba(0, 255, 0, 0.5));
     background: linear-gradient(to right, rgba(0,0,0,0), rgba(255,255,0,0.05) 70px, rgba(0,255,0,0.1)), linear-gradient(to bottom, rgba(100,100,220,0.5), rgba(70,70,120,0.5) 50%, rgba(0,0,50,0.5) 50%, rgba(0,0,0,0.5));
 }
 
-.snarkDirInfo .percentBarInner {
-    background: linear-gradient(to bottom, rgba(51, 51, 170, 0.6), rgba(34, 34, 102, 0.7) 50%, rgba(0, 0, 51, 0.8) 50%, rgba(0, 0, 0, 0.9)), linear-gradient(to right, rgba(255, 255, 0, 0.5) 40px, rgba(0, 255, 0, 0.5));
-    background: linear-gradient(to right, rgba(0,0,0,0), rgba(255,255,0,0.05) 55px, rgba(0,255,0,0.1)), linear-gradient(to bottom, rgba(100,100,220,0.5), rgba(70,70,120,0.5) 50%, rgba(0,0,50,0.5) 50%, rgba(0,0,0,0.5));
+.active:not(.peerinfo) .snarkTorrentDownloaded .percentBarInner {
+    background: linear-gradient(to right, rgba(0,0,0,0), rgba(255,255,0,0.05) 70px, rgba(0,255,0,0.1)), linear-gradient(to bottom, rgba(250,250,248,0.5), rgba(140,140,135,0.5) 50%, rgba(50,50,0,0.5) 50%, rgba(20,20,0,0.5));
 }
 
-.peerinfo .percentBarInner {
-    background: linear-gradient(to bottom, rgba(51, 51, 170, 0.6), rgba(34, 34, 102, 0.7) 50%, rgba(0, 0, 51, 0.8) 50%, rgba(0, 0, 0, 0.9));
+.snarkDirInfo .percentBarInner {
+    background: linear-gradient(to right, rgba(0,0,0,0), rgba(255,255,0,0.05) 55px, rgba(0,255,0,0.1)), linear-gradient(to bottom, rgba(100,100,220,0.5), rgba(70,70,120,0.5) 50%, rgba(0,0,50,0.5) 50%, rgba(0,0,0,0.5));
 }
 
 .snarkDirInfo .percentBarInner[style="width: 0%;"] .percentBarText {
@@ -1306,7 +1318,7 @@ _:-ms-lang(x), .snarkTorrentOdd, .snarkTorrentOdd td, .SnarkTorrentEven, .SnarkT
 }
 
 .snarkDirInfo .percentBarText, .snarkDirInfo .percentBarOuter, .peerinfo .percentBarText, .peerinfo .percentBarOuter {
-    width: 80px;
+    width: 84px;
 }
 
 .percentBarText {
@@ -1346,12 +1358,8 @@ _:-ms-lang(x), .snarkTorrentOdd, .snarkTorrentOdd td, .SnarkTorrentEven, .SnarkT
     background: linear-gradient(to bottom, #113, #001);
 }
 
-tr:hover .percentBarOuter {
-    background: #000;
-}
-
 tr:hover .percentBarInner {
-    background: #119;
+    background: #117 !important;
 }
 
 tr:hover .percentBarComplete {
@@ -3632,7 +3640,6 @@ code, tt {
     min-width: 300px;
     height: 24px !important;
     text-align: center !important;
-    opacity: .8;
 }
 
 .configsection .snarkConfigTitle {
@@ -4255,18 +4262,18 @@ input[type="checkbox"][disabled]:checked, input[type="radio"][disabled]:checked,
     min-width: 140px !important;
     background: #000;
     border-radius: 2px;
-    filter: drop-shadow(0 0 1px #7972d1);
+    filter: drop-shadow(0 0 1px #7972d1) drop-shadow(0 0 1px #000) drop-shadow(0 0 1px #113);
 }
 
 .snarkTorrentOdd:not(.peerinfo) .snarkTorrentDownloaded .percentBarInner,
 .snarkTorrentEven:not(.peerinfo) .snarkTorrentDownloaded .percentBarInner,
 .snarkTorrentOdd:not(.peerinfo) .snarkTorrentDownloaded .percentBarOuter,
 .snarkTorrentEven:not(.peerinfo) .snarkTorrentDownloaded .percentBarOuter {
-    max-height: 14px !important;
+    max-height: 16px !important;
     max-width: 84px !important;
 }
 
-.snarkTorrentDownloaded .percentBarText::after {
+tr:not(.peerinfo) .snarkTorrentDownloaded .percentBarText::after {
     content: "";
     position: absolute;
     top: 90%;

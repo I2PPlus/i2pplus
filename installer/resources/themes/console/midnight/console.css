@@ -166,6 +166,11 @@ textarea {
     min-width: 97%;
     width: calc(100% - 15px);
     text-align: left;
+    scrollbar-width: thin !important;
+}
+
+textarea:focus {
+    scrollbar-width: auto !important;
 }
 
 textarea[cols="70"], textarea[name="levels"] {
@@ -7981,13 +7986,12 @@ textarea#advancedsettings {
     overflow-x: hidden;
     white-space: pre-wrap;
     word-break: break-all;
-    border: 0 none transparent;
+    border: none !important;
     border-radius: 0;
     box-shadow: inset 0 0 0 1px #000;
 }
 
 textarea#advancedsettings:focus {
-    border: none !important;
     box-shadow: inset 0 0 0 1px #202 !important;
 }
 
