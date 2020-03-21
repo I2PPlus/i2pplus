@@ -1980,7 +1980,6 @@ public class I2PSnarkServlet extends BasicServlet {
                                "<td class=\"snarkTorrentStatus\"><b>" + txt +
                                "</b></td>\n<td class=\"snarkTorrentPeerCount\">" +
                                "<a href=\"" +
-//                               uri + getQueryString(req, b64, null, null) + '#' + b64Short + "\"><span class=\"right\">" + // drop #anchor as it interferes with iframeresizer
                                uri + getQueryString(req, b64, null, null) + "\"><span class=\"right\">" +
                                // Hide "peer/peers" text to reduce column-resize UI glitch and clutter (status icon has full text)
                                curPeers + "</span>" + thinsp(noThinsp) + "<span class=\"left\">" + knownPeers + "</span></a>";
@@ -1989,11 +1988,21 @@ public class I2PSnarkServlet extends BasicServlet {
                     } else {
                         snarkStatus = "inactive seeding complete";
                     }
+                } else if (curPeers > 0) {
+                    statusString = toThemeImg(img, "", tooltip) + "</td>\n" +
+                               "<td class=\"snarkTorrentStatus\"><b>" + txt +
+                               "</b></td>\n<td class=\"snarkTorrentPeerCount\"><a href=\"" + uri + "\" title=\"" + _t("Hide Peers") + "\">" +
+                               "<span class=\"right\">" + curPeers + "</span>" + thinsp(noThinsp) + "<span class=\"left\">" + knownPeers + "</span></a>";
+                    if (upBps > 0) {
+                        snarkStatus = "active seeding complete";
+                    } else {
+                        snarkStatus = "inactive seeding complete";
+                    }
                 } else {
                     statusString = toThemeImg(img, "", tooltip) + "</td>\n" +
                                "<td class=\"snarkTorrentStatus\"><b>" + txt +
-                               "</b></td>\n<td class=\"snarkTorrentPeerCount\"><span class=\"right\">" +
-                               curPeers + "</span>" + thinsp(noThinsp) + "<span class=\"left\">" + knownPeers + "</span>";
+                               "</b></td>\n<td class=\"snarkTorrentPeerCount\"><span class=\"right\">" + curPeers +
+                               "</span>" + thinsp(noThinsp) + "<span class=\"left\">" + knownPeers + "</span>";
                     if (upBps > 0) {
                         snarkStatus = "active seeding complete";
                     } else {
@@ -2017,10 +2026,10 @@ public class I2PSnarkServlet extends BasicServlet {
                                curPeers + "</span>" + thinsp(noThinsp) + "<span class=\"left\">" + knownPeers + "</span></a>";
                                snarkStatus = "active downloading";
             } else if (isRunning && curPeers > 0 && downBps > 0) {
-                statusString = toThemeImg("downloading", "", _t("OK") + ", " + ngettext("Downloading from {0} peer", "Downloading from {0} peers", curPeers)) + "</td>\n" +
-                               "<td class=\"snarkTorrentStatus\"><b>" + _t("OK") +
-                               "</b></td>\n<td class=\"snarkTorrentPeerCount\"><span class=\"right\">" +
-                               curPeers + "</span>" + thinsp(noThinsp) + "<span class=\"left\">" + knownPeers + "</span>";
+                statusString = toThemeImg("downloading", "", _t("OK") + ", " + ngettext("Downloading from {0} peer", "Downloading from {0} peers", curPeers)) +
+                               "</td>\n<td class=\"snarkTorrentStatus\"><b>" + _t("OK") + "</b></td>\n<td class=\"snarkTorrentPeerCount\"><a href=\"" +
+                               uri + "\" title=\"" + _t("Hide Peers") + "\"><span class=\"right\">" + curPeers + "</span>" + thinsp(noThinsp) +
+                               "<span class=\"left\">" + knownPeers + "</span></a>";
                                snarkStatus = "active downloading";
             } else if (isRunning && curPeers > 0 && !showPeers) {
                 statusString = toThemeImg("stalled", "", _t("Stalled") + " (" + ngettext("Connected to {0} peer", "Connected to {0} peers", curPeers)) + "</td>\n" +
@@ -2034,8 +2043,8 @@ public class I2PSnarkServlet extends BasicServlet {
                 statusString = toThemeImg("stalled", "", _t("Stalled") +
                                " (" + _t("Connected to {0} of {1} peers in swarm", curPeers, knownPeers) + ")") + "</td>\n" +
                                "<td class=\"snarkTorrentStatus\"><b>" + _t("Stalled") +
-                               "</b></td>\n<td class=\"snarkTorrentPeerCount\"><span class=\"right\">" +
-                               curPeers + "</span>" + thinsp(noThinsp) + "<span class=\"left\">" + knownPeers + "</span>";
+                               "</b></td>\n<td class=\"snarkTorrentPeerCount\"><a href=\"" + uri + "\" title=\"" + _t("Hide Peers") +
+                               "\"><span class=\"right\">" + curPeers + "</span>" + thinsp(noThinsp) + "<span class=\"left\">" + knownPeers + "</span></a>";
                                snarkStatus = "inactive downloading";
             } else if (isRunning && knownPeers > 0) {
                 statusString = toThemeImg("nopeers", "", _t("No Peers") +
