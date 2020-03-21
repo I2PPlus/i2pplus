@@ -53,9 +53,9 @@ body#proxy_error {
 
 /*@supports (background-blend-mode) {
 body:not(old) {
-    background: repeating-linear-gradient(45deg, #113 16px, #171538 16px, #005 32px),
+    background: repeating-linear-gradient(45deg, #113 16px, #1e1c4a 16px, #005 32px),
     repeating-linear-gradient(135deg, #003 2px, #005 3px, #005 9px),
-    repeating-linear-gradient(45deg, #113 16px, #171538 16px, #005 32px),
+    repeating-linear-gradient(45deg, #113 16px, #1e1c4a 16px, #005 32px),
     url(/themes/console/images/buttons/clean_hover.png) no-repeat,
     url(/themes/console/images/buttons/configure_hover.png) no-repeat,
     url(/themes/console/images/buttons/delete_hover.png) no-repeat,
@@ -121,7 +121,7 @@ input {
     border-bottom-color: #14144f;
     border-right-color: #14144f;
     background: #000;
-    color: #171538;
+    color: #1e1c4a;
     margin: 5px;
     font: bold 9pt "Droid Sans", "Open Sans", "Noto Sans", Ubuntu, "Segoe UI", "Bitstream Vera Sans", "DejaVu Sans", Verdana, "Lucida Grande", Helvetica, sans-serif;
     padding: 3px 2px;
@@ -151,7 +151,7 @@ input[type=text], input[type=password] {
     margin: 5px 10px;
     padding: 4px 2px;
     font: bold 9pt "Droid Sans", "Open Sans", "Noto Sans", Ubuntu, "Segoe UI", "Bitstream Vera Sans", "DejaVu Sans", Verdana, "Lucida Grande", Helvetica, sans-serif;
-    border: 1px solid #171538 !important;
+    border: 1px solid #1e1c4a !important;
     text-decoration: none;
     box-shadow: inset 1px 1px 1px 0 #000;
     cursor: text;
@@ -232,8 +232,8 @@ input:disabled {
 }
 
 input[type="text"]:disabled, input[readonly], input[readonly]:focus {
-    color: #171538 !important;
-    border: 1px solid #171538 !important;
+    color: #1e1c4a !important;
+    border: 1px solid #1e1c4a !important;
     box-shadow: none;
     background: linear-gradient(to bottom, #000, #000019);
     filter: none;
@@ -1166,7 +1166,7 @@ pre {
     text-align: center;
     font-size: 9pt;
     color: #c9ceff;
-    border: 1px solid #171538;
+    border: 1px solid #1e1c4a;
     box-shadow: inset 0 0 0 1px #44175f;
     background: #000;
     background: repeating-linear-gradient(to bottom, #000, #002 2px);
@@ -1211,11 +1211,11 @@ div.logo hr {
     font-size: 10pt;
     text-shadow: 0 1px 1px #000;
     box-shadow: inset 0 0 0 1px #44175f;
-    border: 5px solid #171538;
+    border: 5px solid #1e1c4a;
     border-image: repeating-linear-gradient(135deg, #003 0px, #003 20px, #550 20px, #550 40px, #003 40px) 5 repeat repeat;
     border-image-width: 5px;
     border-image-outset: 1px;
-    box-shadow: inset 0 0 0 1px #44175f, inset 0 0 3px 3px #000, 0 0 0 2px #171538;;
+    box-shadow: inset 0 0 0 1px #44175f, inset 0 0 3px 3px #000, 0 0 0 2px #1e1c4a;;
     background: #000 url(/themes/console/images/itoopie_sm.png) 20px center no-repeat;
     background: url(/themes/console/images/itoopie_sm.png) 20px center no-repeat, repeating-linear-gradient(to bottom, #000, #002 2px);
     background-position: 20px calc(50% + 16px), center center;
@@ -1402,7 +1402,7 @@ div.logo hr {
     text-align: center;
     font-size: 8pt;
     color: #c9ceff;
-    border: 1px solid #171538;
+    border: 1px solid #1e1c4a;
     background: #000010;
 }
 
@@ -1466,10 +1466,10 @@ div.logo hr {
     position: relative;
     z-index: 20;
     height: 2px;
-    color: #171538;
-    border-bottom: 1px solid #171538;
+    color: #1e1c4a;
+    border-bottom: 1px solid #1e1c4a;
     box-shadow: inset 0 1px 1px 1px #000;
-    background: #171538;
+    background: #1e1c4a;
 }
 
 .routersummary h3 {
@@ -1766,7 +1766,7 @@ div.logo hr {
     line-height: 110%;
     font-size: 110%;
     font-weight: bold;
-    border: 1px solid #171538;
+    border: 1px solid #1e1c4a;
     border-radius: 2px;
     box-shadow: inset 0 0 0 1px #000;
     background: #001;
@@ -1791,7 +1791,7 @@ div.logo hr {
 }
 
 #sb_warning {
-    border-bottom: 1px solid #171538;
+    border-bottom: 1px solid #1e1c4a;
     margin-left: -10px !important;
     margin-right: -10px !important;
 }
@@ -1881,7 +1881,7 @@ p:empty + .sb_notice {
 }
 
 #sb_services a, #sb_services a:hover, #sb_services a:active {
-    border-bottom: 1px solid #171538 !important;
+    border-bottom: 1px solid #1e1c4a !important;
     outline: none !important;
     position: relative;
     z-index: 30;
@@ -2081,7 +2081,7 @@ a:active #sb_bandwidthgraph, a:active #sb_graphstats {
     padding: 0 1px;
     height: 40px;
     vertical-align: top;
-    box-shadow: inset 0 0 0 1px #171538, inset 0 0 2px 1px #338, inset 0 0 0 4px #000;
+    box-shadow: inset 0 0 0 1px #1e1c4a, inset 0 0 2px 1px #338, inset 0 0 0 4px #000;
     background: repeating-linear-gradient(to right, rgba(0,0,0,0) 10px, rgba(120,120,255,.3) 11px, rgba(0,0,0,0) 11px, rgba(0,0,0,0) 20px), repeating-linear-gradient(to top, rgba(0,0,0,0) 1px, rgba(120,120,255,.3) 2px, rgba(0,0,0,0) 2px, rgba(0,0,0,0) 10px) !important;
 }
 
@@ -2142,7 +2142,7 @@ a:active #sb_bandwidthgraph, a:active #sb_graphstats {
     background: #000;
     background: repeating-linear-gradient(135deg, #001 1px, #001 5px, #003 6px, #003 11px);
     background: repeating-linear-gradient(to right, #000 1px, #000 2px, #003 2px, #003 4px);
-    border: 1px solid #171538;
+    border: 1px solid #1e1c4a;
     opacity: 1;
     box-shadow: 0 0 1px 1px rgba(0,0,0,0.8);
     margin: -3px 0 -6px -6px;
@@ -2198,7 +2198,7 @@ a:active #sb_bandwidthgraph, a:active #sb_graphstats {
     background: #000;
     margin: -6px -4px -2px;
     padding: 2px 0 4px;
-    border-bottom: 1px solid #171538;
+    border-bottom: 1px solid #1e1c4a;
     color: #c9ceff;
 }
 
@@ -2294,7 +2294,7 @@ to {
 
 .sb_netstatus.hidden, .sb_netstatus.vmcomm {
     color: #999;
-    border: 1px solid #171538;
+    border: 1px solid #1e1c4a;
     box-shadow: 0 0 0 1px #555, inset 0 0 0 1px #000, inset 0 0 1px 1px rgba(255,255,255,.7) !important;
     background: #222;
     background: radial-gradient(circle, #333, #111);
@@ -2380,7 +2380,7 @@ background-position: 0;
     vertical-align: middle;
     color: #dd8;
     text-shadow: 0 1px 1px #000;
-    box-shadow: 0 0 0 1px #337, inset 0 0 0 1px #000, inset 0 0 2px 1px #171538;
+    box-shadow: 0 0 0 1px #337, inset 0 0 0 1px #000, inset 0 0 2px 1px #1e1c4a;
     background: #001;
     box-sizing: border-box;
 }
@@ -2467,7 +2467,7 @@ img[src="/themes/console/images/i2plogo.png"]:focus, a:active img[src="/themes/c
     font-size: 110%;
     text-align: justify;
     word-wrap: break-word;
-    border: 1px solid #171538;
+    border: 1px solid #1e1c4a;
     border-radius: 0 0 2px 2px;
     box-shadow: inset 0 0 0 1px #320951;
     box-shadow: inset 0 0 0 1px #000, inset 0 0 0 2px #320951, inset 0 0 4px 2px #005;
@@ -2530,8 +2530,8 @@ div.sorry hr {
     text-align: left;
     font-size: 9pt;
     color: #c9ceff;
-    border: 1px solid #171538;
-    box-shadow: inset 0 0 0 1px #000, inset 0 0 2px 1px #171538;
+    border: 1px solid #1e1c4a;
+    box-shadow: inset 0 0 0 1px #000, inset 0 0 2px 1px #1e1c4a;
     background: #000014 !important;
     background-size: auto 200px !important;
 }
@@ -2543,14 +2543,14 @@ div.sorry hr {
     text-align: right;
     color: #7670c2;
     font-size: 8pt;
-    border: 1px solid #171538;
+    border: 1px solid #1e1c4a;
     box-shadow: 0 1px 5px #000;
     background: #000 url(images/earth.jpg) no-repeat scroll bottom right;
     background-size: auto 200px;
 }
 
 .main#news .newscontent {
-    border: 1px solid #171538;
+    border: 1px solid #1e1c4a;
     margin: -11px 0 10px;
     padding: 1px 12px 6px;
     border-radius: 0 0 2px 2px;
@@ -2562,7 +2562,7 @@ div.sorry hr {
 }
 
 .main#news .newsentry h3 {
-    border: 1px solid #171538;
+    border: 1px solid #1e1c4a;
     border-radius: 2px 2px 0 0;
 }
 
@@ -2589,7 +2589,7 @@ div.sorry hr {
 .news h4 {
     border-bottom: 1px;
     border-bottom-style: dotted;
-    border-bottom-color: #171538;
+    border-bottom-color: #1e1c4a;
     padding: 0 0 0 0;
     margin: 5px 0 10px 0;
     font-size: 10pt;
@@ -2792,7 +2792,7 @@ div.confignav {
     line-height: 130% !important;
     text-align: center;
     font-weight: bold !important;
-    border: 1px solid #171538;
+    border: 1px solid #1e1c4a;
     box-shadow: inset 0 0 0 1px #000;
     background: #010010 url(images/titles.png) center center repeat-x !important;
     background: linear-gradient(to bottom, #0a0910, #001) !important;
@@ -2801,7 +2801,7 @@ div.confignav {
 .tab, .tab2 {
     box-sizing: border-box;
     display: inline-block;
-    border: 1px solid #171538;
+    border: 1px solid #1e1c4a;
     margin: 0 -2px -1px -2px !important;
     padding: 2px 0;
     min-width: 60px !important;
@@ -2914,7 +2914,7 @@ h3 + p, h3 + table {
     vertical-align: middle;
     letter-spacing: normal;
     text-transform: capitalize;
-    border-left: 1px solid #171538;
+    border-left: 1px solid #1e1c4a;
 }
 
 #config_service .h3navlinks a {
@@ -2992,7 +2992,7 @@ div.messages {
     font-weight: bold;
     font-size: 9.5pt;
     color: #c9ceff !important;
-    border: 1px solid #171538;
+    border: 1px solid #1e1c4a;
     box-shadow: inset 0 0 0 1px #000, inset 0 0 2px 1px #808 !important;
     background: #000;
     background: url(/themes/console/images/info/infohelp.png) no-repeat 15px center, #000;
@@ -3029,7 +3029,7 @@ div.widepanel h3 {
     letter-spacing: 0.08em;
     word-spacing: 0.1em;
     border-radius: 0;
-    border: 1px solid #171538;
+    border: 1px solid #1e1c4a;
 }
 
 /* graphs */
@@ -3079,8 +3079,8 @@ to {
     max-width: 97%;
     max-width: calc(100% - 20px);
     vertical-align: top;
-    box-shadow: inset 0 0 0 1px #000, inset 0 0 2px 1px #171538;
-    border: 1px solid #171538;
+    box-shadow: inset 0 0 0 1px #000, inset 0 0 2px 1px #1e1c4a;
+    border: 1px solid #1e1c4a;
     background: rgba(0,0,0,.3);
 }
 
@@ -3116,7 +3116,7 @@ to {
     text-align: center;
     text-transform: capitalize;
     margin-top: 10px;
-    border-top: 1px solid #171538;
+    border-top: 1px solid #1e1c4a;
     padding: 10px 10px 15px;
 }
 
@@ -3126,7 +3126,7 @@ to {
     text-align: center;
     background: #001;
     background: rgba(0,0,16,0.5);
-    border-top: 1px solid #171538;
+    border-top: 1px solid #1e1c4a;
 }
 
 #graphopts a {
@@ -3152,7 +3152,7 @@ h3#graphinfo {
 }
 
 form[action="graphs"], form[action="/updategraphs"] {
-    border: 1px solid #171538;
+    border: 1px solid #1e1c4a;
     padding: 10px 10px 0 !important;
     background: #000;
     margin-top: -11px;
@@ -3238,7 +3238,7 @@ h3#graphdisplay a {
 table {
     border-collapse: collapse;
     width: 100%;
-    border: 1px solid #171538;
+    border: 1px solid #1e1c4a;
     padding: 1px;
     font-size: 9pt;
     background: #040033;
@@ -3247,9 +3247,9 @@ table {
 
 table hr {
     padding: 0 0;
-    color: #171538;
-    background: #171538;
-    border: 0 solid #171538;
+    color: #1e1c4a;
+    background: #1e1c4a;
+    border: 0 solid #1e1c4a;
     margin: 0 0;
     height: 1px;
     display: none;
@@ -3262,8 +3262,8 @@ th {
     font-size: 9pt;
     background: #000 url(images/titles.png) center center repeat-x;
     background: linear-gradient(to bottom, #0a0910, #001);
-    border-top: 1px solid #171538;
-    border-bottom: 1px solid #171538 !important;
+    border-top: 1px solid #1e1c4a;
+    border-bottom: 1px solid #1e1c4a !important;
     line-height: 110%;
 }
 
@@ -3296,8 +3296,8 @@ td {
     padding: 4px 6px;
     color: #c9ceff;
     vertical-align: middle;
-    border-top: 1px solid #171538;
-    border-right: 1px solid #171538;
+    border-top: 1px solid #1e1c4a;
+    border-right: 1px solid #1e1c4a;
 }
 
 div[id^="config_"] td {
@@ -3464,7 +3464,7 @@ h1 {
     letter-spacing: 0.15em;
     text-shadow: 0 0 2px #010011;
     white-space: normal;
-    border: 1px solid #171538;
+    border: 1px solid #1e1c4a;
     line-height: 120%;
     min-width: 610px;
     box-shadow: 0 1px 5px #000;
@@ -3500,7 +3500,7 @@ h2, h2.welcome {
     text-shadow: 0 0 2px #010011;
     letter-spacing: 0.05em;
     padding: 10px;
-    border: 1px solid #171538;
+    border: 1px solid #1e1c4a;
     border-radius: 2px;
     vertical-align: middle;
     margin: 15px 0 12px 0 !important;
@@ -3526,8 +3526,8 @@ h2 a[name]:hover, h2 a[name]:active {
 }
 
 h3, h3.welcome, div.news h3 {
-    border: 1px solid #171538;
-    border-left: 5px solid #171538;
+    border: 1px solid #1e1c4a;
+    border-left: 5px solid #1e1c4a;
     padding: 7px 10px;
     margin: 10px 0 10px 0;
     border-radius: 0 2px 2px 0;
@@ -3545,7 +3545,7 @@ div.news h3 {
 h4 {
     border-bottom: 1px;
     border-bottom-style: solid;
-    border-bottom-color: #171538;
+    border-bottom-color: #1e1c4a;
     padding: 0 0 10px 0;
     margin: 5px 0 10px 0;
     font-size: 11pt;
@@ -3574,7 +3574,7 @@ h2, h3, h4, .confignav {
     padding-left: 23px !important;
     font-size: 11pt !important;
     border: none !important;
-    border-bottom: 1px solid #171538 !important;
+    border-bottom: 1px solid #1e1c4a !important;
     background: url(/themes/console/images/info/newspaper.png) left 1px center no-repeat !important;
     background-size: 16px 16px !important;
 }
@@ -3683,10 +3683,10 @@ div[lang] li {
 /* end welcome */
 
 hr {
-    color: #171538;
-    background: #171538;
+    color: #1e1c4a;
+    background: #1e1c4a;
     height: 1px;
-    border: 0 solid #171538;
+    border: 0 solid #1e1c4a;
     margin: 20px 0 10px;
 }
 
@@ -3709,7 +3709,7 @@ fieldset {
     font-size: 9pt;
     color: #c9ceff;
     text-align: center;
-    border: 1px solid #171538 !important;
+    border: 1px solid #1e1c4a !important;
     margin: -3px 0 5px 0;
     padding: 7px;
     background: #000;
@@ -3795,14 +3795,14 @@ h2#jobrunners {
 }
 
 #jobrunners ~ ol {
-    display: block;
-    margin-bottom: 5px !important;
     margin-top: -11px !important;
-    border: 1px solid #171538;
+    margin-bottom: 5px !important;
+    padding: 0;
     width: 97%;
     width: calc(100% - 8px);
+    display: block;
+    border: 1px solid #1e1c4a;
     background: #010008;
-    padding: 0;
 }
 
 #jobrunners ~ ol > li:last-child {
@@ -3810,13 +3810,13 @@ h2#jobrunners {
 }
 
 h3[id*="jobs"] {
-    clear: both;
     margin-top: 25px !important;
+    clear: both;
 }
 
 table#schedjobs {
-    width: 100% !important;
     margin: -6px 0 0 !important;
+    width: 100% !important;
 }
 
 #jobstats {
@@ -3824,15 +3824,15 @@ table#schedjobs {
 }
 
 #jobstats th, #jobstats td {
-    text-align: right;
     padding-right: 8px !important;
+    text-align: right;
 }
 
 #schedjobs th:first-child, #schedjobs td:first-child, #jobstats th:first-child, #jobstats td:first-child {
-    text-align: left;
-    padding-left: 10px;
-    font-weight: bold;
     margin-bottom: 15px;
+    padding-left: 10px;
+    text-align: left;
+    font-weight: bold;
 }
 
 #schedjobs tr, #schedjobs tr:hover {
@@ -3861,15 +3861,16 @@ h3#finishedjobs + ol li, h3#scheduledjobs + ol li, h3#activejobs + ol li, h3#rea
     padding: 8px 3px 8px 8px;
     width: calc(100% - 31px);
     list-style: none !important;
-    box-shadow: 0 0 0 1px #005, inset 0 0 0 1px #000, inset 0 0 2px 1px #003 !important;
-    box-shadow: inset 0 0 0 1px #000, inset 0 0 2px 1px #292949 !important;
+    font-size: 95%;
+    border: 1px solid #1e1c4a;
+    box-shadow: inset 0 0 0 1px #000, inset 0 0 2px 1px #225 !important;
 }
 
 #activejobs + ol li, #scheduledjobs + ol li, #readyjobs + ol li, #finishedjobs + ol li, #schedjobs li {
+    padding-left: 24px !important;
     background-image: url(/themes/console/images/info/task.png) !important;
     background-repeat: no-repeat;
     background-position: 5px center;
-    padding-left: 24px !important;
 }
 
 #activejobs + ol li {
@@ -3879,32 +3880,6 @@ h3#finishedjobs + ol li, h3#scheduledjobs + ol li, h3#activejobs + ol li, h3#rea
 #finishedjobs + ol li {
     background-image: url(/themes/console/images/buttons/yes.png) !important;
 }
-
-/*h3#activejobs + ol li:before, h3#scheduledjobs + ol li:before, h3#readyjobs + ol li:before, h3#finishedjobs + ol li:before {
-    margin-right: 5px;
-    content: '\2023\00A0 ';
-    font-weight: bold;
-    line-height: 50%;
-    vertical-align: middle;
-    color: #393;
-}
-
-#activejobs + ol, #finishedjobs + ol {
-    padding-bottom: 5px !important;
-}
-
-h3#finishedjobs + ol li:before {
-    color: #3D3;
-    content: '\2714\00A0';
-}
-
-h3#readyjobs + ol li:before {
-    color: #dd3;
-}
-
-h3#scheduledjobs + ol li:before {
-    color: #773;
-}*/
 
 /* end /jobs */
 
@@ -3967,8 +3942,8 @@ form[action="events"] {
 .tablefooter tr, .tablefooter td {
     background: #000 url(images/header.png) repeat-x center center !important;
     background: linear-gradient(to bottom, #010014, #010010 50%, #010010 100%) !important;
-    border-top: 1px solid #171538;
-    border-bottom: 1px solid #171538 !important;
+    border-top: 1px solid #1e1c4a;
+    border-bottom: 1px solid #1e1c4a !important;
     line-height: 110%;
     padding: 10px;
 }
@@ -3987,7 +3962,7 @@ h3[id$="con"] { /* peers h3 + tables */
     font-size: 10pt;
     word-spacing: 0.1em;
     letter-spacing: 0.08em;
-    border: 1px solid #171538;
+    border: 1px solid #1e1c4a;
 }
 
 h3[id="udpcon"] {
@@ -3999,7 +3974,7 @@ h3[id="udpcon"] {
 }
 
 #ntcpconnections td, #udpconnections td, #tunnels td, #profiles td {
-    box-shadow: inset 0 0 0 1px #000, inset 0 0 1px 1px #171538;
+    box-shadow: inset 0 0 0 1px #000, inset 0 0 1px 1px #1e1c4a;
 }
 
 #ntcpconnections tr:hover td, #udpconnections tr:hover td, #tunnels tr:hover td, #profiles tr:hover td {
@@ -4047,7 +4022,7 @@ h3[id="udpcon"] {
 }
 
 #udpconnections tr.tablefooter:hover td {
-    border-top: 1px solid #171538;
+    border-top: 1px solid #1e1c4a;
 }
 
 #udpconnections tr.tablefooter td:first-child {
@@ -4084,7 +4059,7 @@ h3[id="udpcon"] {
 .sortup, .sortdown, .sortupactive, .sortdownactive {
     padding: 1px 0;
     border: 1px solid #117;
-    border: 1px solid #171538;
+    border: 1px solid #1e1c4a;
     border-radius: 1px;
     margin: 4px 1px 0 !important;
     vertical-align: middle;
@@ -4162,7 +4137,7 @@ h3[id="udpcon"] {
 }
 
 pre#transports {
-    border: 1px solid #171538;
+    border: 1px solid #1e1c4a;
     padding: 15px 7px 5px 15px;
     margin: 0;
     background: #000;
@@ -4215,7 +4190,7 @@ a[name="chelp"]:hover, a[name="help"]:hover, a[name="chelp"]:active, a[name="hel
 }
 
 .formaction#homeapps, .formaction#homesites, .formaction#tunnelconfigsave, .formaction#homesearch {
-    border: 1px solid #171538;
+    border: 1px solid #1e1c4a;
     background: #000;
     margin-top: -2px;
 }
@@ -4233,7 +4208,7 @@ a[name="chelp"]:hover, a[name="help"]:hover, a[name="chelp"]:active, a[name="hel
 }
 
 tr#addnew {
-    border-top: 1px solid #171538;
+    border-top: 1px solid #1e1c4a;
 }
 
 /* /configui lang selection boxes + theme selection */
@@ -4260,7 +4235,7 @@ tr#addnew {
     white-space: nowrap;
     text-align: center;
     box-shadow: inset 0 0 0 1px #000;
-    border: 1px solid #171538;
+    border: 1px solid #1e1c4a;
     background: linear-gradient(to bottom, #020020, #000);
 }
 
@@ -4338,7 +4313,7 @@ tr#addnew {
 
 #themeoptions {
     clear: both;
-    border-top: 1px solid #171538;
+    border-top: 1px solid #1e1c4a;
     margin: 0 -7px 5px;
     position: relative;
     top: 8px;
@@ -4361,8 +4336,8 @@ p#helptranslate {
     position: relative;
     top: 8px;
     text-align: left !important;
-    border-top: 1px solid #171538;
-    border-bottom: 1px solid #171538;
+    border-top: 1px solid #1e1c4a;
+    border-bottom: 1px solid #1e1c4a;
     background: url(/themes/console/images/info/notice.png) left 14px center no-repeat, #000;
     background-size: 28px 28px;
 }
@@ -4375,7 +4350,7 @@ p#helptranslate {
     margin-left: -4px;
     margin-right: -4px;
     padding: 4px 2px;
-    border-top: 1px solid #171538 !important;
+    border-top: 1px solid #1e1c4a !important;
     background: #010010 url(images/titles.png) center center repeat-x;
     background: linear-gradient(to bottom, #121225 50%, #00000d 50%);
     color: #7670c2;
@@ -4387,7 +4362,7 @@ p#helptranslate {
 
 h3#themeheading, h3#langheading, h3#passwordheading {
     border-radius: 0;
-    border: 1px solid #171538;
+    border: 1px solid #1e1c4a;
     padding: 8px 10px;
     font-size: 10.5pt;
     word-spacing: 0.1em;
@@ -4401,14 +4376,14 @@ div#themesettings {
     margin: -1px 0;
     padding: 8px 7px 0;
     clear: both;
-    border: 1px solid #171538;
+    border: 1px solid #1e1c4a;
 }
 
 td#themeselect {
     margin: -1px 0;
     padding: 8px 7px 0;
     clear: both;
-    border: 1px solid #171538;
+    border: 1px solid #1e1c4a;
 }
 
 #themeselect hr {
@@ -4421,7 +4396,7 @@ td#themeselect {
     width: 120px;
     float: left;
     text-align: center;
-    border: 1px solid #171538;
+    border: 1px solid #1e1c4a;
     background: linear-gradient(to bottom, #020020, #000);
 }
 
@@ -4548,7 +4523,7 @@ td#themeselect {
     white-space: nowrap;
     width: 124px;
     margin: 10px -4px 0 !important;
-    border-top: 1px solid #171538;
+    border-top: 1px solid #1e1c4a;
     border-radius: 0 0 2px 2px;
     text-transform: capitalize;
     background: linear-gradient(to bottom, #121225 50%, #00000d 50%);
@@ -4570,7 +4545,7 @@ h3#langheading {
 }
 
 div#langsettings {
-    border: 1px solid #171538;
+    border: 1px solid #1e1c4a;
     padding: 8px 7px 12px;
     margin-top: -1px;
     margin-bottom: -12px;
@@ -4583,7 +4558,7 @@ div#langsettings {
 
 .formaction#langui {
     margin: 7px -8px -15px;
-    border: 1px solid #171538;
+    border: 1px solid #1e1c4a;
     background: #000;
 }
 
@@ -4612,7 +4587,7 @@ table#consolepass td {
 }
 
 table#consolepass td {
-    border-bottom: 1px solid #171538;
+    border-bottom: 1px solid #1e1c4a;
     padding: 5px 10px;
 }
 
@@ -4640,7 +4615,7 @@ table#consolepass input[type="password"] {
 .formaction#consolepass {
     margin-bottom: -2px !important;
     margin-top: -2px;
-    border: 1px solid #171538;
+    border: 1px solid #1e1c4a;
     background: #000;
 }
 
@@ -4669,7 +4644,7 @@ table#consolepass input[type="password"] {
 
 form[action="/createreseed"] > h3 {
     border-radius: 0;
-    border: 1px solid #171538;
+    border: 1px solid #1e1c4a;
     padding: 10px;
     font-size: 10.5pt;
     word-spacing: 0.1em;
@@ -4739,7 +4714,7 @@ table#reseedconfig textarea {
 /* /configservice */
 
 .formaction#shutdown, .formaction#restart, .formaction#systray, .formaction#runonstart, .formaction#dumpthreads, .formaction#browserstart {
-    border: 1px solid #171538;
+    border: 1px solid #1e1c4a;
     background: #000;
     margin-top: -11px;
     margin-bottom: 8px;
@@ -4791,7 +4766,7 @@ table#reseedconfig textarea {
     list-style: none !important;
     text-shadow: 0 1px 1px #000;
     border: 1px solid #1f1c4a;
-    box-shadow: inset 0 0 0 1px #000, inset 0 0 1px 1px #171538;
+    box-shadow: inset 0 0 0 1px #000, inset 0 0 1px 1px #1e1c4a;
     background: linear-gradient(to bottom, #002, #001);
     break-inside: avoid;
     page-break-inside: avoid;
@@ -4809,7 +4784,7 @@ table#reseedconfig textarea {
     top: -1px;
     right: -1px;
     border: 1px solid #1f1c4a;
-    box-shadow: inset 0 0 0 1px #000, inset 0 0 1px 1px #171538;
+    box-shadow: inset 0 0 0 1px #000, inset 0 0 1px 1px #1e1c4a;
     background: linear-gradient(to bottom, #002, #001);
     filter: none;
     vertical-align: middle;
@@ -4837,7 +4812,7 @@ p#defaultswork {
 
 p#upnpconfig, p#ipchange, p#ipv6config, p#tcpconfig, p#confignotes, p#defaultswork {
     padding: 10px;
-    border: 1px solid #171538;
+    border: 1px solid #1e1c4a;
     margin-bottom: -13px;
     margin-top: -12px;
 }
@@ -4853,7 +4828,7 @@ p#confignotes {
 }
 
 p#ipconfig, p#ipv4config, p#udpconfig, p#externaltcp {
-    border: 1px solid #171538;
+    border: 1px solid #1e1c4a;
     border-bottom: none;
     padding: 10px;
     background: #010010;
@@ -4910,7 +4885,7 @@ div.eventspanel {
 }
 
 form[action="events"] {
-    border: 1px solid #171538;
+    border: 1px solid #1e1c4a;
     margin-top: -11px;
     padding: 10px 20px 10px;
     margin-bottom: 20px;
@@ -4947,7 +4922,7 @@ table#addkeyring td:first-child {
 }
 
 table#addkeyring tr:last-child {
-    border-top: 1px solid #171538;
+    border-top: 1px solid #1e1c4a;
     background: linear-gradient(to bottom, #010014, #010010 50%);
 }
 
@@ -4963,7 +4938,7 @@ table#addkeyring tr:last-child td {
 
 p#keyringhelp, p#webappconfig, p#availableplugins, p#pluginconfigtext, p#clientdefaultshelp, p#bwshare, p#editclients, p#upnpstatus, p#gatherstats {
     background: #000 url(/themes/console/images/info/infohelp.png) 12px center no-repeat !important;
-    border: 1px solid #171538;
+    border: 1px solid #1e1c4a;
     padding: 20px 15px 20px 50px !important;
 }
 
@@ -5062,14 +5037,14 @@ h3#pconfig {
 }
 
 input[type="hidden"] + p {
-    border: 1px solid #171538;
+    border: 1px solid #1e1c4a;
     padding: 10px;
     margin-bottom: -21px;
     background: #000;
 }
 
 input[type="hidden"] + p + p {
-    border: 1px solid #171538;
+    border: 1px solid #1e1c4a;
     padding: 10px;
     margin-top: 20px;
     margin-bottom: -21px;
@@ -5079,17 +5054,17 @@ input[type="hidden"] + p + p {
 /* /stats */
 
 form#statnav {
-    border: 1px solid #171538 !important;
+    border: 1px solid #1e1c4a !important;
     padding: 10px 10px 10px 15px;
 }
 
 h3.stats {
-    border: 1px solid #171538;
+    border: 1px solid #1e1c4a;
     border-radius: 0;
 }
 
 .statlist {
-    border: 1px solid #171538;
+    border: 1px solid #1e1c4a;
     margin-bottom: -21px !important;
     margin-top: -11px !important;
     padding: 10px 0 5px;
@@ -5155,7 +5130,7 @@ h3.stats {
 }
 
 .main#stats form {
-    border: 1px solid #171538;
+    border: 1px solid #1e1c4a;
     padding: 10px;
     margin: -15px 0 10px;
 }
@@ -5367,7 +5342,7 @@ table#sidebarconf {
 
 #sidebarconf tr:last-child td {
     background: #000;
-    border-top: 1px solid #171538;
+    border-top: 1px solid #1e1c4a;
 }
 
 #sidebarconf select {
@@ -5403,14 +5378,14 @@ h3#shutdownrouter + p, h3#restartrouter + p, h3#servicedebug + p, h3#browseronst
     background: #010008 url(/themes/console/images/info/infohelp.png) 12px center no-repeat !important;
     padding: 10px 15px 10px 50px;
     text-align: left;
-    border: 1px solid #171538;
+    border: 1px solid #1e1c4a;
     border-bottom: none;
     margin: 5px 0 -20px !important;
 }
 
 h3#servicedebug + p + p {
     padding: 10px;
-    border: 1px solid #171538;
+    border: 1px solid #1e1c4a;
     border-bottom: none;
     margin-bottom: -21px;
     background: #010010;
@@ -5456,7 +5431,7 @@ h3#servicedebug + p + p {
 }
 
 .formaction#clientsconfig, .formaction#webappconfigactions, .formaction#pluginconfigactions, .formaction#sidebardefaults {
-    border: 1px solid #171538;
+    border: 1px solid #1e1c4a;
     background: #000;
     margin-bottom: 4px;
 }
@@ -5536,14 +5511,14 @@ table#externali2cp {
 
 #legal, #sidebarhelp, #volunteer, #reachabilityhelp, #configurationhelp, #faq, #tunnman, #browserconfig,
 #reseedhelp, #troubleshoot, #newuserguide, #filterlist, #webhosting, #themeoverride, #glossary {
-    border: 1px solid #171538;
+    border: 1px solid #1e1c4a;
     padding: 0 20px;
     margin: 10px 0;
     background: #000;
 }
 
 div#volunteer {
-    border: 1px solid #171538;
+    border: 1px solid #1e1c4a;
     padding: 0 20px;
     margin: -5px 0 10px !important;
     background: #000 url(images/scarface.jpg) bottom right no-repeat !important;
@@ -5575,7 +5550,7 @@ div#volunteer {
     letter-spacing: 0.08em;
     word-spacing: 0.1em;
     border-radius: 0;
-    border: 1px solid #171538;
+    border: 1px solid #1e1c4a;
 }
 
 #changelog h2, #advancedsettings h2 {
@@ -5599,8 +5574,8 @@ div#volunteer {
     max-height: 600px;
     overflow-y: scroll;
     width: calc(100% - 32px);
-    border-left: 1px solid #171538;
-    border-right: 1px solid #171538;
+    border-left: 1px solid #1e1c4a;
+    border-right: 1px solid #1e1c4a;
     background: #000;
 }
 
@@ -5630,7 +5605,7 @@ div#volunteer {
 p#fullhistory {
     text-align: right;
     margin: -13px 0 9px;
-    border: 1px solid #171538;
+    border: 1px solid #1e1c4a;
     padding: 5px 10px;
     background: #000;
     position: relative;
@@ -5673,7 +5648,7 @@ ul#upnphelp li:last-child, #legal ul li:last-child {
     padding: 5px 0 15px;
     columns: 2 auto;
     column-gap: 35px;
-    column-rule: 1px solid #171538;
+    column-rule: 1px solid #1e1c4a;
 }
 
 #terms p {
@@ -5811,8 +5786,8 @@ ul#upnphelp li:last-child, #legal ul li:last-child {
 }
 
 #netdboverview td {
-    border-left: 1px solid #171538;
-    border-right: 1px solid #171538;
+    border-left: 1px solid #1e1c4a;
+    border-right: 1px solid #1e1c4a;
 }
 
 #netdboverview td table, #netdboverview td table td {
@@ -5948,7 +5923,7 @@ table[cellspacing="30"] > tbody > tr > th[colspan="3"] { /* netdb header */
     text-align: left !important;
     background: #000;
     padding: 10px;
-    border: 1px solid #171538;
+    border: 1px solid #1e1c4a;
 }
 
 .subheading b {
@@ -5997,7 +5972,7 @@ table[cellspacing="30"] > tbody > tr > th[colspan="3"] { /* netdb header */
 
 .netdb_leases {
     columns: auto 420px !important;
-    column-rule: 1px solid #171538;
+    column-rule: 1px solid #1e1c4a;
     column-gap: 1em;
 }
 
@@ -6086,7 +6061,7 @@ table[cellspacing="30"] > tbody > tr > th[colspan="3"] { /* netdb header */
 /* logs */
 
 a[name="criticallogs"] + p + h3 + p + ul {
-    border: 1px solid #171538;
+    border: 1px solid #1e1c4a;
     margin-bottom: 15px;
 }
 
@@ -6154,7 +6129,7 @@ a[name="criticallogs"] + p + h3 + p + ul {
 #criticallogs td , #routerlogs td, #eventlogs td, #wrapperlogs td {
     font-weight: normal !important;
     padding: 5px 10px;
-    border-top: 1px solid #171538;
+    border-top: 1px solid #1e1c4a;
 }
 
 #criticallogs td:empty {
@@ -6420,7 +6395,7 @@ table#profile_defs td, table#thresholds td {
 
 #profilelist .separator, #profilelist .separator:hover { /* profile class separator */
     padding: 0;
-    border: 1px solid #171538;
+    border: 1px solid #1e1c4a;
 }
 
 #thresholds th, #thresholds td {
@@ -6537,7 +6512,7 @@ table#viewprofile {
 
 #banlist {
     margin-bottom: 10px;
-    border: 1px solid #171538;
+    border: 1px solid #1e1c4a;
 }
 
 #banlist li {
@@ -6550,8 +6525,8 @@ table#viewprofile {
 
 #banlist li hr {
     margin: 2px 0 2px -1px;
-    background: #171538;
-    background: linear-gradient(to right, #171538 75%, rgba(0,0,0,0));
+    background: #1e1c4a;
+    background: linear-gradient(to right, #1e1c4a 75%, rgba(0,0,0,0));
     opacity: .75;
 }
 
@@ -6621,7 +6596,7 @@ table#jardump {
 #jardump th {
     border-right: none;
     border-left: none;
-    border-bottom-color: #171538 !important;
+    border-bottom-color: #1e1c4a !important;
 }
 
 #jardump th, #jardump td {
@@ -6639,7 +6614,7 @@ table#jardump {
 
 #jardump .subheading {
     padding: 6px 5px !important;
-    border-color: #171538 !important;
+    border-color: #1e1c4a !important;
 }
 
 #jardump .subheading code {
@@ -6674,7 +6649,7 @@ table#jardump {
 }
 
 #jardump tr:hover td {
-    border: 1px solid #171538;
+    border: 1px solid #1e1c4a;
     border-left: 1px solid transparent;
     border-right: 1px solid transparent;
 }
@@ -6791,7 +6766,7 @@ table#jardump {
 
 .main#certs h3 {
     margin-bottom: -16px !important;
-    border: 1px solid #171538;
+    border: 1px solid #1e1c4a;
     border-radius: 0;
     padding: 7px 10px;
 }
@@ -6799,7 +6774,7 @@ table#jardump {
 .main#certs h4 {
     padding: 5px 10px;
     margin: 15px 0 0;
-    border: 1px solid #171538;
+    border: 1px solid #1e1c4a;
     letter-spacing: 0.05em;
     font-size: 10pt;
     background: linear-gradient(to right, #000, #002);
@@ -6816,7 +6791,7 @@ table#jardump {
 .main#certs p:not(.infohelp) {
     margin-top: -1px;
     padding: 10px;
-    border: 1px solid #171538;
+    border: 1px solid #1e1c4a;
     background: #000;
 }
 
@@ -7015,7 +6990,7 @@ table#jardump {
 
 .debug_container {
     margin-top: -11px;
-    border: 1px solid #171538;
+    border: 1px solid #1e1c4a;
     padding: 10px 15px;
     background: #000008;
 }
@@ -7221,10 +7196,10 @@ table#jardump {
 
 .footnote hr {
     margin: 10px 0 5px 0 !important;
-    color: #171538;
-    background: #171538;
+    color: #1e1c4a;
+    background: #1e1c4a;
     height: 1px;
-    border: 0 solid #171538;
+    border: 0 solid #1e1c4a;
 }
 
 .topness {
@@ -7254,7 +7229,7 @@ h4.app, h4.app2 {
     letter-spacing: 0.08em;
     word-spacing: 0.1em;
     letter-spacing: 2px;
-    border: 1px solid #171538;
+    border: 1px solid #1e1c4a;
     background: url(/themes/console/images/eepsite.png) 10px center no-repeat, linear-gradient(to bottom, #080818 50%, #000008 50%) !important;
     background-size: 16px 16px, 100% 100%, 100% 100% !important;
     background-blend-mode: luminosity;
@@ -7297,7 +7272,7 @@ div.app {
     min-width: 70px;
     float: left;
     text-align: center !important;
-    border: 1px solid #171538;
+    border: 1px solid #1e1c4a;
     opacity: 0.8;
     box-shadow: inset 0 0 0 1px #000;
     background: #000;
@@ -7466,7 +7441,7 @@ div.app:active img {
     text-align: center;
     text-transform: lowercase;
     border: none;
-    border-top: 1px solid #171538;
+    border-top: 1px solid #1e1c4a;
     border-radius: 0 0 2px 2px;
     box-shadow: inset 0 0 0 1px #000;
     background: #001 url(images/titles.png) center center;
@@ -7521,7 +7496,7 @@ table.search {
 .search td {
     padding: 4px;
     text-align: center;
-    border-top: 1px solid #171538;
+    border-top: 1px solid #1e1c4a;
 }
 
 .search td:nth-child(2) {
@@ -7603,7 +7578,7 @@ body.iframed {
 /* global overrides */
 
 h3[id*="job"] {
-    border: 1px solid #171538;
+    border: 1px solid #1e1c4a;
     padding: 8px 10px;
     margin: 12px 0 10px 0;
     border-radius: 0;
@@ -7778,12 +7753,12 @@ a[href^="viewprofile"]::after {
     padding: 20px 15px 20px 50px !important;
     text-align: left;
     font-weight: bold;
-    border: 1px solid #171538;
+    border: 1px solid #1e1c4a;
     background: #000 url(/themes/console/images/info/infohelp.png) 12px center no-repeat !important;
 }
 
 #sybilnav, #sybils_summary {
-    border: 1px solid #171538;
+    border: 1px solid #1e1c4a;
     padding: 10px;
     margin-bottom: 10px;
 }
@@ -7808,7 +7783,7 @@ a[href^="viewprofile"]::after {
     margin-bottom: 5px;
     min-width: 110px;
     white-space: nowrap;
-    border: 1px solid #171538;
+    border: 1px solid #1e1c4a;
     border-radius: 2px;
     background: linear-gradient(to right, #000, #002 80%);
     box-shadow: inset 0 0 0 1px #000;
@@ -7896,7 +7871,7 @@ p.sybil_info, p.family, p.threatpoints, p.hashdist, p#sybil_totals, p.notfound {
     padding: 5px 5px 5px 30px;
     text-align: left;
     font-weight: bold;
-    border: 1px solid #171538;
+    border: 1px solid #1e1c4a;
     box-shadow: inset 0 0 0 1px #211;
     background: url(/themes/console/images/buttons/show.png) 8px center no-repeat, #002;
     background: url(/themes/console/images/buttons/show.png) 8px center no-repeat, linear-gradient(to right, #000, #001 80%, #002);
@@ -7935,7 +7910,7 @@ p.sybil_info + a[name] + .sybil_routerinfo, p.hashdist + a[name] + .sybil_router
 .threatpoints + ul {
     margin: -4px 0 10px;
     padding: 5px 5px 0;
-    border: 1px solid #171538;
+    border: 1px solid #1e1c4a;
 }
 
 .threatpoints + ul li {
@@ -7969,7 +7944,7 @@ p.sybil_info + a[name] + .sybil_routerinfo, p.hashdist + a[name] + .sybil_router
 }
 
 .configtable tr:last-child {
-    border-top: 1px solid #171538;
+    border-top: 1px solid #1e1c4a;
 }
 
 #netconfig th, #externali2cp th, #plugininstall th, .configtable th, th.th_title {
@@ -8020,8 +7995,8 @@ textarea#advancedsettings:focus {
     background: #000 url(/themes/console/images/info/infohelp.png) 12px center no-repeat !important;
     padding: 20px 15px 20px 50px !important;
     text-align: justify;
-    border-bottom: 1px solid #171538;
-    border-top: 1px solid #171538;
+    border-bottom: 1px solid #1e1c4a;
+    border-top: 1px solid #1e1c4a;
     white-space: normal !important;
     font-weight: normal !important;
 }
@@ -8038,7 +8013,7 @@ p.infowarn, td.infowarn, p.infohelp, td.infohelp {
 p.infowarn, td.infowarn, #sybilanalysis {
     background: #000 url(/themes/console/images/info/infowarn.png) 12px center no-repeat !important;
     padding: 20px 15px 20px 50px !important;
-    border: 1px solid #171538;
+    border: 1px solid #1e1c4a;
 }
 
 .logtable, #enviro {
@@ -8046,7 +8021,7 @@ p.infowarn, td.infowarn, #sybilanalysis {
 }
 
 p.infohelp, p#debugmode, p.sybilinfo, #sybilanalysis {
-    border: 1px solid #171538;
+    border: 1px solid #1e1c4a;
 }
 
 #sybilanalysis {
@@ -8073,7 +8048,7 @@ p#debugmode, p.sybilinfo {
 
 td.optionsave {
     text-align: right;
-    border-top: 1px solid #171538;
+    border-top: 1px solid #1e1c4a;
     padding: 7px 5px !important;
     background: #000;
 }
@@ -8086,7 +8061,7 @@ h3.h3table, h3.tabletitle, h3#i2pclientconfig, h3#advancedclientconfig, h3#webap
 h3#pluginfromfile, h3#updateplugins, h3#pluginmanage, h3#bannedpeers, h3.ptitle, h3#transports, h3#upnpstatus, h3.sybils, #config_keyring h3 {
     margin-bottom: 0 !important;
     border-radius: 0;
-    border: 1px solid #171538;
+    border: 1px solid #1e1c4a;
     text-transform: uppercase;
     letter-spacing: 0.08em;
     padding: 7px 10px;
@@ -8122,11 +8097,11 @@ h3#upnpstatus {
 }
 
 h3#upnp {
-    border: 1px solid #171538;
+    border: 1px solid #1e1c4a;
 }
 
 #upnpscan {
-    border: 1px solid #171538;
+    border: 1px solid #1e1c4a;
     margin: -11px 0 10px;
     padding: 5px 15px;
     background: #000;
@@ -8167,7 +8142,7 @@ table#advconf {
 }
 
 p#javaclienthelp {
-    border: 1px solid #171538;
+    border: 1px solid #1e1c4a;
     background: url(/themes/console/images/info/infohelp.png) 12px center no-repeat !important;
     padding: 10px 10px 10px 50px !important;
 }
@@ -8211,7 +8186,7 @@ input#hideme {
 }
 
 #pluginupdater {
-    border: 1px solid #171538;
+    border: 1px solid #1e1c4a;
     padding: 15px 5px 15px 50px;
     margin-top: -11px;
     margin-bottom: 10px !important;
@@ -8231,7 +8206,7 @@ h4.embeddedtitle#updateplugins {
     padding: 5px 10px;
     font-size: 9pt;
     background: linear-gradient(to bottom, #121225 50%, #00000d 50%);
-    border: 1px solid #171538;
+    border: 1px solid #1e1c4a;
     text-align: left;
     text-transform: uppercase;
     font-size: 10pt;
@@ -8277,7 +8252,7 @@ h4.embeddedtitle#updateplugins {
 }
 
 #bannedips table tr:last-child {
-    border-bottom: 1px solid #171538;
+    border-bottom: 1px solid #1e1c4a;
 }
 
 #permabanned th, #banneduntilrestart th {
@@ -8290,7 +8265,7 @@ h4.embeddedtitle#updateplugins {
 }
 
 #permabanned td:first-child {
-    border-left: 1px solid #171538;
+    border-left: 1px solid #1e1c4a;
     text-align: right;
     padding-right: 10px;
     width: 49%;
@@ -8307,15 +8282,15 @@ h4.embeddedtitle#updateplugins {
 }
 
 #banneduntilrestart td {
-    border-right: 1px solid #171538;
+    border-right: 1px solid #1e1c4a;
     text-align: center !important;
 }
 
 #ipv4, #ipv6, #permabanned tr:nth-child(2) {
     background: #000 url(images/titles.png) center center repeat-x;
     background: linear-gradient(to bottom, #080818 50%, #000 50%);
-    border-top: 1px solid #171538 !important;
-    border-bottom: 1px solid #171538 !important;
+    border-top: 1px solid #1e1c4a !important;
+    border-bottom: 1px solid #1e1c4a !important;
 }
 
 /* end /configpeer banlist */
@@ -8354,7 +8329,7 @@ table#configstats {
 }
 
 #configstats td:last-child {
-    border-right: 1px solid #171538;
+    border-right: 1px solid #1e1c4a;
 }
 
 #configstats td b {
@@ -8401,7 +8376,7 @@ table#configstats {
 p#enablefullstats {
     margin-top: 5px;
     padding: 5px 10px;
-    border: 1px solid #171538;
+    border: 1px solid #1e1c4a;
 }
 
 #enablefullstats .optbox {
@@ -8873,7 +8848,7 @@ img + tt {
 
 #peers td.direction i {
     display: inline-block;
-    border-top: 1px solid #171538;
+    border-top: 1px solid #1e1c4a;
     border-radius: 2px;
     width: 100%;
     margin: 3px -3px -1px;
@@ -9026,7 +9001,7 @@ b.netdb_transport {
 /* sybils */
 
 .leaseset th:last-child, .leaseset td:last-child, .sybil_routerinfo th:last-child, .sybil_routerinfo td:last-child {
-    border-right: 1px solid #171538 !important;
+    border-right: 1px solid #1e1c4a !important;
 }
 
 .sybil_routerinfo table td:last-child {
@@ -9035,7 +9010,7 @@ b.netdb_transport {
 
 .sybilinfo_params {
     padding: 0;
-    border-bottom: 1px solid #171538;
+    border-bottom: 1px solid #1e1c4a;
 }
 
 .sybilinfo_container, .threatpoints + ul {
@@ -9093,7 +9068,7 @@ b.netdb_transport {
 
 .sybil_addresses {
     padding: 0;
-    border-bottom: 1px solid #171538;
+    border-bottom: 1px solid #1e1c4a;
 }
 
 .sybil_addresses table, .sybil_addresses td {
@@ -9171,7 +9146,7 @@ b.netdb_transport {
 }
 
 #floodfills td:last-child {
-    border-right: 1px solid #171538;
+    border-right: 1px solid #1e1c4a;
 }
 
 #plugininstall input[type="text"] {
@@ -9260,7 +9235,7 @@ table#i2pupdates td:first-child {
 #help #changelog pre:not(old) {
     columns: 540px auto;
     column-gap: 40px;
-    column-rule: 1px dotted #171538;
+    column-rule: 1px dotted #1e1c4a;
     margin-left: 0;
     padding-left: 10px;
     width: calc(100% - 22px) !important;
@@ -9718,9 +9693,9 @@ div[id^="config_"] td:not(.infowarn):not(.infohelp) {
     padding-bottom: 8px !important;
 }
 
-#advconf td {
-    padding-top: 0;
-    padding-bottom: 0;
+div#config_advanced #advconf td.tabletextarea {
+    padding-top: 0 !important;
+    padding-bottom: 0 !important;
 }
 
 #bandwidthconfig .bw_out, #bandwidthconfig .bw_in, #bandwidthconfig .bw_share {
@@ -10040,7 +10015,7 @@ b.suboption {
     padding: 5px 12px 6px 10px;
     display: inline-block;
     text-shadow: 0 1px 1px #000;
-    border: 1px solid #171538;
+    border: 1px solid #1e1c4a;
     border-bottom: none;
     box-shadow: inset 0 0 0 1px #000;
     background: #002;
@@ -10094,7 +10069,7 @@ b.suboption {
 
 .optionlist, .optionsingle, #reseedssl {
     padding: 1px 2px;
-    border: 1px solid #171538 !important;
+    border: 1px solid #1e1c4a !important;
     column-gap: 1px;
 }
 
@@ -10124,7 +10099,7 @@ b.suboption {
 
 #config_network .optionlist:hover, #config_i2cp .optionlist:hover, #reseedssl:hover,
 #manualreseed .optionsingle:hover, .optiontextarea:hover, #reseed_urlselection:hover {
-    border: 1px solid #171538;
+    border: 1px solid #1e1c4a;
 }
 
 #updatehelper .optionlist:hover, #updateProxyHostPort.optionlist:hover {
@@ -10169,7 +10144,7 @@ b.suboption {
 
 #themeui.formaction {
     margin: 0 -7px 0;
-    border-top: 1px solid #171538;
+    border-top: 1px solid #1e1c4a;
     box-shadow: inset 0 0 0 1px #000, inset 0 0 0 2px transparent, inset 0 0 2px 1px #191939, inset 0 0 5px 3px #002 !important;
     background: linear-gradient(to bottom, #001, #030306) !important;
 }
@@ -10195,7 +10170,7 @@ b.suboption {
 
 #config_reseed td.optionsave, #netconfig td.optionsave  {
     padding: 12px 8px !important;
-    border: 1px solid #171538 !important;
+    border: 1px solid #1e1c4a !important;
 }
 
 #config_reseed .optionsave input[type="submit"] {
@@ -10334,7 +10309,7 @@ h3#shutdownrouter {
 }
 
 #i2pupdates .optionsave {
-    border-bottom: 1px solid #171538;
+    border-bottom: 1px solid #1e1c4a;
 }
 
 #i2pupdates textarea {
@@ -10457,7 +10432,7 @@ h3#shutdownrouter {
 }
 
 #manualreseed th:last-child, #manualreseed td:last-child {
-    border-right: 1px solid #171538;
+    border-right: 1px solid #1e1c4a;
 }
 }
 
@@ -10556,7 +10531,7 @@ h3#shutdownrouter {
 }
 
 #manualreseed tr:last-child td, #manualreseed .infohelp {
-    border-bottom: 1px solid #171538;
+    border-bottom: 1px solid #1e1c4a;
 }
 
 @supports not (-moz-appearance: none) {
@@ -10652,7 +10627,7 @@ h3#shutdownrouter {
 
 @supports not (-moz-appearance: none) {
 #manualreseed th:last-child, #manualreseed td:last-child {
-    border-right: 1px solid #171538;
+    border-right: 1px solid #1e1c4a;
 }
 }
 
@@ -10853,7 +10828,7 @@ tr:nth-child(4) .net_bwrate::before {
     white-space: nowrap;
     text-align: center;
     font-style: italic;
-    border-top: 1px solid #171538;
+    border-top: 1px solid #1e1c4a;
     background: #001;
 }
 
@@ -11599,7 +11574,7 @@ th .version {
 #floodfills .percentBarOuter {
     text-align: left;
     background: #000;
-    border: 1px solid #171538;
+    border: 1px solid #1e1c4a;
     opacity: .9;
 }
 
@@ -11714,7 +11689,7 @@ input[type="radio"], input[type="radio"]:checked, input[type="radio"][disabled],
     outline: none;
     vertical-align: middle !important;
     box-sizing: border-box;
-    border: 1px solid #171538 !important;
+    border: 1px solid #1e1c4a !important;
     box-shadow: inset 0 0 0 1px #000, inset 3px 3px 3px 1px #000;
     background: #001;
     background: linear-gradient(to bottom, #030306, #112);
@@ -11884,7 +11859,7 @@ input[type="checkbox"][disabled]:checked, input[type="radio"][disabled]:checked,
     margin: -26px -1px -1px 0;
     padding: 5px;
     float: right;
-    border: 1px solid #171538;
+    border: 1px solid #1e1c4a;
     background: #000;
 }
 
@@ -12123,7 +12098,7 @@ to {
     display: inline-block;
     width: 140px;
     text-align: center;
-    border: 1px solid #171538;
+    border: 1px solid #1e1c4a;
     background: #000;
 }
 
@@ -12135,7 +12110,7 @@ to {
     padding: 4px 0;
     display: inline-block;
     border: none;
-    border-top: 1px solid #171538;
+    border-top: 1px solid #1e1c4a;
 }
 
 .sitemapLink img {
@@ -12177,7 +12152,7 @@ to {
     padding-left: 28px;
     letter-spacing: 0.12em;
     font-size: 10.5pt;
-    border: 1px solid #171538;
+    border: 1px solid #1e1c4a;
     background: url(/themes/console/images/eepsite.png) 5px center no-repeat, linear-gradient(to bottom, #080818 50%, #000008 50%) !important;
     background-size: 18px 18px, 100% 100% !important;
 }
@@ -12218,7 +12193,7 @@ to {
     display: inline-block;
     width: 180px !important;
     text-align: center;
-    border: 1px solid #171538;
+    border: 1px solid #1e1c4a;
     background: #000;
     will-change: transform;
 }
@@ -12299,7 +12274,7 @@ a:hover .sitemapLink {
     font-size: 90%;
     text-shadow: 0 1px 1px #000;
     border: none;
-    border-top: 1px solid #171538;
+    border-top: 1px solid #1e1c4a;
     box-shadow: inset 0 0 0 1px #000;
     background: linear-gradient(to right, rgba(0,0,16,0.5), rgba(0,0,0,0) 30%, rgba(16,0,16,0.1)), linear-gradient(to bottom, #141221, #001);
 }
@@ -12354,7 +12329,7 @@ a:hover .sitemapLink {
     padding: 20px 10px 20px 60px !important;
     width: calc(100% - 70px);
     list-style: none;
-    box-shadow: 0 0 0 1px #225, inset 0 0 0 1px #000, inset 0 0 0 2px #171538;
+    box-shadow: 0 0 0 1px #225, inset 0 0 0 1px #000, inset 0 0 0 2px #1e1c4a;
     background-blend-mode: luminosity;
     break-inside: avoid;
     page-break-inside: avoid;
@@ -12591,8 +12566,8 @@ a:hover .sitemapLink {
 #wizard p {
     margin: -12px 0 -2px;
     padding: 20px 20px 30px;
-    border-left: 1px solid #171538;
-    border-right: 1px solid #171538;
+    border-left: 1px solid #1e1c4a;
+    border-right: 1px solid #1e1c4a;
 }
 
 /* end setup wizard */
@@ -13236,8 +13211,8 @@ h1[class], h1 {
     overflow: hidden;
     vertical-align: middle;
     text-align: center;
-    border: 1px solid #171538;
-    box-shadow: inset 0 0 0 1px #000, inset 0 0 2px 1px #171538;
+    border: 1px solid #1e1c4a;
+    box-shadow: inset 0 0 0 1px #000, inset 0 0 2px 1px #1e1c4a;
     max-width: calc(100% - 18px);
     animation: ease grid-fade 2s forwards;
 }
@@ -13562,24 +13537,24 @@ to {
 
 #tunnelPeerCount tr:not(:last-child) td {
     padding: 3px !important;
-    border: 1px solid #171538;
+    border: 1px solid #1e1c4a;
 }
 
 #tunnelPeerCount tr:nth-last-child(2) td {
-    border-bottom: 1px solid #171538;
+    border-bottom: 1px solid #1e1c4a;
 }
 
 #tunnelPeerCount tr:last-child td {
-    border-top: 1px solid #171538;
+    border-top: 1px solid #1e1c4a;
     background: #000;
 }
 
 #tunnelPeerCount td:first-child {
-    border-left: 1px solid #171538 !important;
+    border-left: 1px solid #1e1c4a !important;
 }
 
 #tunnelPeerCount td:last-child {
-    border-right: 1px solid #171538 !important;
+    border-right: 1px solid #1e1c4a !important;
 }
 
 #tunnelPeerCount td:first-child span {
@@ -13615,7 +13590,7 @@ to {
 
 #tunnelPeerCount .routerid {
     background: linear-gradient(to bottom, #113, #000);
-    border-radius: 0 0 0 1px #171538;
+    border-radius: 0 0 0 1px #1e1c4a;
 }
 
 #tunnels .percentBarOuter, #tunnels .PercentBarInner, #tunnels .percentBarText {
