@@ -189,7 +189,6 @@ input[type=text]:focus, input[type=password]:focus, textarea:focus {
     color: #c9ceff !important;
     background: #000;
     border: 1px solid #6466a5 !important;
-    box-shadow: 0 0 0 1px rgba(101, 39, 135, 0.5);
     box-shadow: 0 0 0 1px rgba(101, 39, 135, 0.5), 0 0 2px 2px #202;
     transition: filter ease 0.3s;
 }
@@ -299,7 +298,6 @@ select:hover, select:focus, select:active {
     color: #652787;
     text-shadow: 0 1px 1px #000;
     border: 1px solid #652787 !important;
-
     background: url(images/dropdown_hover.png) center right 4px no-repeat, linear-gradient(to bottom, #202 50%, #000 50%) !important;
     background-size: 14px auto, 100% 100%, 100% 100% !important;
 }
@@ -919,7 +917,6 @@ button.control, button.control:hover, button.control:focus {
     padding: 12px !important;
     font-size: 0 !important;
     text-indent: -99999px !important;
-    border-radius: 2px;
     background-size: 16px 16px, 100% 100% !important;
 }
 
@@ -4750,7 +4747,7 @@ table#reseedconfig textarea {
 
 /* /configpeer */
 
-#config_peers td, #refreshsidebar td, #sidebarconf td, #netdblookup td, #config_logging td, #tunnel_defs td {
+#config_peers td, #refreshsidebar td, #sidebarconf td, #netdblookup td, #config_logging td, #tunnel_defs td, #bandwidthconfig td {
     border-right: none;
     box-shadow: none;
 }
@@ -5319,7 +5316,6 @@ table#sidebarconf {
     margin: 2px;
     padding: 4px 3px !important;
     min-width: 0;
-    border-radius: 2px;
     background: #000;
     background: 8px 5px no-repeat, linear-gradient(to bottom, #191a24 50%, #000 50%) !important;
 }
@@ -7556,7 +7552,6 @@ input.search:focus {
 }
 
 .search button {
-    border-radius: 2px !important;
     padding-left: 28px !important;
 }
 
@@ -10858,7 +10853,7 @@ tr:nth-child(4) .net_bwrate::before {
     white-space: nowrap;
     text-align: center;
     font-style: italic;
-    border-top: 1px solid #003;
+    border-top: 1px solid #171538;
     background: #001;
 }
 
