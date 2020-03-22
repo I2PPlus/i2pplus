@@ -30,10 +30,14 @@
 <a class="profiledump" href="/dumpprofile?peer=<%=peerB64%>" target="_blank" title="<%=intl._t("View profile in text format")%>" style="float: right;">
 <img src="/themes/console/images/buttons/profiledump.png"></a>&nbsp;&nbsp;
 <!-- TODO: conditional load for identicon -->
-<img class="identicon" src="/imagegen/id?s=32&amp;c=<%=peerB64%>" "height="28" width="28" style="float: right;"></h3>
+<img class="identicon" src="/imagegen/id?s=41&amp;c=<%=peerB64%>" style="float: right;"></h3>
 <table id="viewprofile">
 <tr><td><pre><jsp:getProperty name="stathelper" property="profile" /></pre>
+<%
+    if (peerB64 != null || peerB64.length() > 0) {
+%>
 <span><a href="#view_profile"><%=intl._t("Return to Top")%></a></span>
+<%  } %>
 </td></tr>
 </table>
 <%
