@@ -1453,13 +1453,15 @@ div.logo hr {
     height: 2px;
     color: #26235c;
     border-bottom: 1px solid #26235c;
-    box-shadow: inset 0 1px 1px 1px #000;
+    box-shadow: inset 0 1px 0 2px #000;
     background: #26235c;
 }
 
 .routersummary h3 {
-    margin: -7px -10px -10px;
-    padding: 4px 0 !important;
+    margin: -7px -10px -11px;
+    padding: 4px 0 5px !important;
+    position: relative;
+    z-index: 999;
     font-size: 9.5pt;
     letter-spacing: 0.04em;
     text-transform: uppercase;
@@ -1471,14 +1473,21 @@ div.logo hr {
                 linear-gradient(to bottom, #0a0a1a 50%, #040414 50%) !important;
 }
 
-@supports not (-moz-appearance: none) {
+@media screen and (max-width: 1500px) {
 .routersummary h3 {
-    padding: 4px 0 3px !important;
+    margin-bottom: -10px;
 }
 }
 
+/*@supports not (-moz-appearance: none) {
+.routersummary h3 {
+    padding: 4px 0 3px !important;
+}
+}*/
+
 .routersummary h3:hover {
     box-shadow: inset 0 0 0 1px #101;
+    box-shadow: inset 0 0 0 1px #000, inset 0 0 1px 1px #a5a;
     background: linear-gradient(to bottom, #001020 50%, #000 50%) !important;
     background: radial-gradient(at center bottom, rgba(96, 32, 96, .6) 0, rgba(0, 0, 0, 0) 80%),
                 linear-gradient(to right, rgba(64,0,64,.03), rgba(96,0,96,.1), rgba(64,0,64,.03)),
@@ -1490,7 +1499,7 @@ div.logo hr {
 }
 
 .routersummary h3:active {
-    box-shadow: inset 3px 3px 3px 1px #000;
+    box-shadow: inset 0 0 0 1px #000, inset 0 0 1px 1px #737, inset 4px 4px 4px #000;
     background: radial-gradient(at center bottom, rgba(192, 72, 192, .3) 0, rgba(0, 0, 0, 0) 45%),
                 linear-gradient(to right, rgba(64,0,64,0.1), rgba(64,0,64,0.2), rgba(64,0,64,0.1)),
                 linear-gradient(to bottom, #1d1a2d, #000) !important;
@@ -4710,7 +4719,8 @@ table#reseedconfig textarea {
 
 /* /configpeer */
 
-#config_peers td, #refreshsidebar td, #sidebarconf td, #netdblookup td, #config_logging td, #tunnel_defs td, #bandwidthconfig td {
+#config_peers td, #refreshsidebar td, #sidebarconf td, #netdblookup td, #config_logging td, #tunnel_defs td, #bandwidthconfig td,
+#oldhome td {
     border-right: none;
     box-shadow: none;
 }
@@ -5455,6 +5465,12 @@ table#externali2cp {
 
 #plugininstall2 td {
     padding: 5px;
+}
+
+@media screen and (min-width: 1840px) {
+#plugininstall2 td {
+    padding: 8px;
+}
 }
 
 #pluginconfig table td:first-child {
@@ -7931,6 +7947,10 @@ p.sybil_info + a[name] + .sybil_routerinfo, p.hashdist + a[name] + .sybil_router
     margin-bottom: -2px !important;
 }
 
+#joinfamily {
+    margin-top: -4px;
+}
+
 .configtable tr:last-child {
     border-top: 1px solid #26235c;
 }
@@ -9395,7 +9415,7 @@ h3#themeheading, h3#langheading, h3#passwordheading {
 }
 
 h3#i2pclientconfig, h3#pconfig, h3#pluginfromurl, h3#pluginfromfile, #clientconf.infohelp, h3#pluginmanage, h3#webappconfig {
-    margin: 6px 0 -15px !important;
+    margin: -4px 0 -15px !important;
 }
 
 #clientconf.infohelp {
@@ -10141,7 +10161,7 @@ b.suboption {
 }
 
 .optionlist label, .optionlist .nowrap, #reseedconfig tr:nth-child(3) td label {
-    background: linear-gradient(to bottom, #112, #030306) !important;
+    background: linear-gradient(to bottom, #181828, #080818) !important;
     box-shadow: inset 0 0 0 1px #000, inset 0 0 2px 1px #191939 !important;
     opacity: 0.9;
 }
@@ -10166,17 +10186,17 @@ b.suboption {
 
 .optionlist label:hover, .optionlist .nowrap:hover, #reseedconfig tr:nth-child(3) td label:hover, #netconfig .optionlist label:hover,
 #externali2cp .optionlist .nowrap:hover, #externali2cp .optionlist label:hover, #reseedssl:hover, #i2pupdates .optionlist .nowrap:hover, #reseedproxysslhostport.optionlist .nowrap:hover {
-    background: linear-gradient(to bottom, #112, #000 75%) !important;
-    box-shadow: inset 0 0 0 1px #000, inset 0 0 3px 1px #113, inset 0 0 1px 2px #000 !important;
-    opacity: 1;
+/*    background: linear-gradient(to bottom, #112, #000 75%) !important;
+    box-shadow: inset 0 0 0 1px #000, inset 0 0 3px 1px #113, inset 0 0 1px 2px #000 !important;*/
+/*    opacity: 1;*/
     color: #e6f5fd;
 }
 
-#reseedproxytype, #reseedproxysslhostport.optionlist, #reseedproxytype:hover, #reseedproxysslhostport.optionlist:hover {
+/*#reseedproxytype, #reseedproxysslhostport.optionlist, #reseedproxytype:hover, #reseedproxysslhostport.optionlist:hover {
     background: none !important;
     border: none !important;
     box-shadow: none !important;
-}
+}*/
 
 /* end multi-column responsive globals */
 
@@ -10409,6 +10429,10 @@ h3#shutdownrouter {
     display: inline-block;
 }
 
+#reseedconfig tr:nth-child(n+2) td label, #reseedconfig tr:nth-child(n+2) td .nowrap {
+    background: linear-gradient(to bottom, #181828, #080818) !important;
+}
+
 #reseedconfig .optbox[type="checkbox"] {
     vertical-align: sub !important;
 }
@@ -10493,10 +10517,10 @@ h3#shutdownrouter {
     columns: 500px 2 !important;
 }
 
-#reseedproxysslhostport.optionlist .nowrap, #reseedproxysslhostport.optionlist:hover .nowrap {
+/*#reseedproxysslhostport.optionlist .nowrap, #reseedproxysslhostport.optionlist:hover .nowrap {
     box-shadow: none !important;
     background: #001 !important;
-}
+}*/
 
 #reseedproxytype .optbox {
     margin-left: 10px !important;
@@ -10567,36 +10591,21 @@ h3#shutdownrouter {
 
 #config_reseed #reseedurl {
     background: #001 url(/themes/console/images/info/url.png) 14px center no-repeat !important;
-    background:url(/themes/console/images/info/url.png) 14px center no-repeat, linear-gradient(to bottom, #001, #030306) !important;
+    background: url(/themes/console/images/info/url.png) 14px center no-repeat, linear-gradient(to bottom, #181828, #080818) !important;
     background-size: 28px 28px, 100% 100% !important;
-}
-
-#config_reseed #reseedurl:hover {
-    background: url(/themes/console/images/info/url.png) 14px center no-repeat !important;
-    background-size: 28px 28px !important;
 }
 
 #config_reseed  #reseedzip {
     background: #001 url(/themes/console/images/info/from_file.png) 14px center no-repeat !important;
-    background: url(/themes/console/images/info/from_file.png) 14px center no-repeat, linear-gradient(to bottom, #001, #030306) !important;
+    background: url(/themes/console/images/info/from_file.png) 14px center no-repeat, linear-gradient(to bottom, #181828, #080818) !important;
     background-size: 28px 28px, 100% 100% !important;
-}
-
-#config_reseed #reseedzip:hover {
-    background: url(/themes/console/images/info/from_file.png) 14px center no-repeat !important;
-    background-size: 28px 28px !important;
 }
 
 #config_reseed #reseedcreatefile {
     background: #001 url(/themes/console/images/info/box.png) 14px center no-repeat !important;
-    background: url(/themes/console/images/info/box.png) 14px center no-repeat, linear-gradient(to bottom, #001, #030306) !important;
+    background: url(/themes/console/images/info/box.png) 14px center no-repeat, linear-gradient(to bottom, #181828, #080818) !important;
     background-size: 28px 28px, 100% 100% !important;
     text-align: justify;
-}
-
-#config_reseed #reseedcreatefile:hover {
-    background: url(/themes/console/images/info/box.png) 14px center no-repeat !important;
-    background-size: 28px 28px !important;
 }
 
 #reseedcreatefile p {
@@ -10899,6 +10908,10 @@ tr:nth-child(4) .net_bwrate::before {
 }
 
 #joinfamily table, #joinfamily tr:nth-child(n+3), #joinfamily tr:nth-child(n+3) td {
+/*    background: #000 !important;*/
+}
+
+#joinfamily tr:nth-child(n+3) {
     background: #000 !important;
 }
 
@@ -10915,6 +10928,7 @@ tr:nth-child(4) .net_bwrate::before {
 }
 
 #installPluginFile, #installPluginUrl {
+    background: linear-gradient(to bottom, #181828, #080818);
     box-shadow: inset 0 0 0 1px #000, inset 0 0 2px 1px #191939 !important;
 }
 
@@ -10932,7 +10946,7 @@ tr:nth-child(4) .net_bwrate::before {
 
 #installPluginUrl, #installPluginFile, #joinfamily tr:nth-child(n+3) table tr, #joinfamily tr:nth-child(n+3) table td,
 #newfamily tr:nth-child(n+3) table tr, #newfamily tr:nth-child(n+3) table td {
-    background: #000 !important;
+/*    background: #000 !important;*/
 }
 
 #installPluginUrl td:first-child {
@@ -10953,13 +10967,13 @@ tr:nth-child(4) .net_bwrate::before {
 
 input[type="file"]:hover {
     cursor: pointer;
-    background: linear-gradient(to right, rgba(0,0,0,0), #002);
+    background: linear-gradient(to right, rgba(0,0,0,0), #414);
     border-radius: 0 15px 15px 0;
 }
 
 #joinfamily td, #newfamily td {
     padding: 5px;
-    background-color: #000 !important;
+/*    background-color: #000 !important;*/
 }
 
 #joinfamily .optionsingle td {
@@ -10974,6 +10988,7 @@ input[type="file"]:hover {
     padding: 5px 5px 0 45px;
     box-shadow: inset 0 0 0 1px #000, inset 0 0 2px 1px #191939 !important;
     background: #000 url(/themes/console/images/info/label.png) 10px center no-repeat !important;
+    background: url(/themes/console/images/info/label.png) 10px center no-repeat, linear-gradient(to bottom, #181828, #080818) !important;
     background-size: 28px 28px, 100% 100%, 100% 100% !important;
 }
 
@@ -10981,6 +10996,7 @@ input[type="file"]:hover {
     padding: 5px 5px 0 45px;
     box-shadow: inset 0 0 0 1px #000, inset 0 0 2px 1px #191939 !important;
     background: #000 url(/themes/console/images/info/key.png) 10px center no-repeat !important;
+    background: url(/themes/console/images/info/key.png) 10px center no-repeat, linear-gradient(to bottom, #181828, #080818) !important;
     background-size: 28px 28px, 100% 100%, 100% 100% !important;
 }
 
@@ -12389,6 +12405,14 @@ a:hover .sitemapLink {
     font-size: 12pt !important;
 }
 
+#help h2:first-of-type {
+    margin-top: -4px !important;
+}
+
+#help #advancedsettings h2:first-of-type, #help #changelog h2:first-of-type {
+    margin-top: -3px !important;
+}
+
 #configurationhelp h2, #advancedsettings h2, #filterlist h2 {
     padding-left: 38px !important;
     background: url(/themes/console/images/info/configure.png) 8px center no-repeat, linear-gradient(to bottom, #080818 50%, #000008 50%) !important;
@@ -13409,7 +13433,11 @@ to {
 }
 
 #config_stats .tabletitle {
-    margin: 15px 0 -1px !important;
+    margin: 10px 0 -1px !important;
+}
+
+#config_stats .tabletitle:first-of-type {
+    margin-top: -4px !important;
 }
 
 #config_stats #graphchoice {
