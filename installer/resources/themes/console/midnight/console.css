@@ -1485,7 +1485,10 @@ div.logo hr {
     text-transform: uppercase;
     border: 0;
     border-radius: 0;
-    background: radial-gradient(at center bottom, rgba(128, 0, 128, .2) 0, rgba(0, 0, 0, 0) 70%), linear-gradient(to right, rgba(0,0,0,0), rgba(96,0,96,0.1), rgba(0,0,0,0)), linear-gradient(to right, rgba(0,0,16,0.5), rgba(0,0,0,0) 30%), linear-gradient(to bottom, #0a0910 50%, #001 50%) !important;
+    background: radial-gradient(at center bottom, rgba(128, 0, 128, .15), rgba(64, 0, 64, .08) 30%, rgba(0, 0, 0, 0) 90%),
+                linear-gradient(to right, rgba(0,0,0,0), rgba(96,0,96,0.1), rgba(0,0,0,0)),
+                linear-gradient(to right, rgba(0,0,16,.1), rgba(0,0,0,0), rgba(0,0,16,.1)),
+                linear-gradient(to bottom, #112 50%, #001 50%) !important;
 }
 
 @supports not (-moz-appearance: none) {
