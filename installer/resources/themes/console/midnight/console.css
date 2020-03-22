@@ -25,18 +25,18 @@ body {
 
 /* preload button mouseovers */
 body:not(old) {
-    background: repeating-linear-gradient(to bottom, rgba(0,0,24,.75) 3px, rgba(0,0,0,.9) 5px, rgba(0,0,0,.7) 6px),
-    url(images/tile.png),
-    url(/themes/console/images/buttons/clean_hover.png) no-repeat,
-    url(/themes/console/images/buttons/configure_hover.png) no-repeat,
-    url(/themes/console/images/buttons/delete_hover.png) no-repeat,
-    url(/themes/console/images/buttons/restart_hover.png) no-repeat,
-    url(/themes/console/images/buttons/restore_hover.png) no-repeat,
-    url(/themes/console/images/buttons/search_hover.png) no-repeat,
-    url(/themes/console/images/buttons/shutdown_hover.png) no-repeat,
-    url(/themes/console/images/buttons/update_hover.png) no-repeat,
-    url(images/dropdown_hover.png),
-    url(images/newtab.png), #000;
+    background: repeating-linear-gradient(to bottom, rgba(0,0,32,.5) 3px, rgba(0,0,0,.5) 5px, rgba(0,0,0,.3) 6px),
+                url(images/tile.png),
+                url(/themes/console/images/buttons/clean_hover.png) no-repeat,
+                url(/themes/console/images/buttons/configure_hover.png) no-repeat,
+                url(/themes/console/images/buttons/delete_hover.png) no-repeat,
+                url(/themes/console/images/buttons/restart_hover.png) no-repeat,
+                url(/themes/console/images/buttons/restore_hover.png) no-repeat,
+                url(/themes/console/images/buttons/search_hover.png) no-repeat,
+                url(/themes/console/images/buttons/shutdown_hover.png) no-repeat,
+                url(/themes/console/images/buttons/update_hover.png) no-repeat,
+                url(images/dropdown_hover.png),
+                url(images/newtab.png), #001;
     background-size: 100% 100%, 171px 148px, 0 0, 0 0, 0 0, 0 0, 0 0, 0 0, 0 0, 0 0, 0 0, 0 0;
     will-change: transform;
 }
@@ -50,26 +50,6 @@ body:not(old) {
 body#proxy_error {
     background: linear-gradient(to bottom, #001, #000);
 }
-
-/*@supports (background-blend-mode) {
-body:not(old) {
-    background: repeating-linear-gradient(45deg, #113 16px, #26235c 16px, #005 32px),
-    repeating-linear-gradient(135deg, #003 2px, #005 3px, #005 9px),
-    repeating-linear-gradient(45deg, #113 16px, #26235c 16px, #005 32px),
-    url(/themes/console/images/buttons/clean_hover.png) no-repeat,
-    url(/themes/console/images/buttons/configure_hover.png) no-repeat,
-    url(/themes/console/images/buttons/delete_hover.png) no-repeat,
-    url(/themes/console/images/buttons/restart_hover.png) no-repeat,
-    url(/themes/console/images/buttons/restore_hover.png) no-repeat,
-    url(/themes/console/images/buttons/search_hover.png) no-repeat,
-    url(/themes/console/images/buttons/shutdown_hover.png) no-repeat,
-    url(/themes/console/images/buttons/update_hover.png) no-repeat,
-    url(images/dropdown_hover.png),
-    url(images/newtab.png) #001;
-    background-size: 100% 100%, 100% 100%, 100% 100%, 0 0, 0 0, 0 0, 0 0, 0 0, 0 0, 0 0, 0 0, 0 0, 0 0;
-    background-blend-mode: overlay, multiply, normal;
-}
-}*/
 
 small {
     font-size: 9pt;
@@ -94,7 +74,7 @@ div.clearer {
 }
 
 html, .main * {
-    scrollbar-color: #111138 #001;
+    scrollbar-color: #225 #001;
 }
 
 .routersummary img[src$="i2plogo.png"], .routersummary h3, .confignav, *::before, *::after, h1, h2, h3, h4, div.app,
