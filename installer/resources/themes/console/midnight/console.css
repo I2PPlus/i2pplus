@@ -166,7 +166,7 @@ input[type=text], input[type=password], textarea {
     color: #7670c2 !important;
     background: linear-gradient(to bottom, #000, #000019);
     box-shadow: inset 0 0 3px 3px #000, 0 0 0 1px #000;
-    border: 1px solid #1f1c4a !important;
+    border: 1px solid #363181 !important;
     padding: 5px;
 }
 
@@ -241,7 +241,7 @@ select {
     font: bold 9pt "Droid Sans", "Open Sans", "Noto Sans", Ubuntu, "Segoe UI", "Bitstream Vera Sans", "DejaVu Sans", Verdana, "Lucida Grande", Helvetica, sans-serif;
     color: #6c66bc;
     text-align: center;
-    border: 1px solid #1f1c4a;
+    border: 1px solid #363181;
     cursor: pointer;
     box-shadow: inset 0 0 0 1px #000, 0 0 0 1px #000;
     background: #000 url(images/dropdown.png) center right 1px no-repeat !important;
@@ -289,7 +289,7 @@ select:hover, select:focus, select:active {
 
 select[disabled], select[disabled]:hover, select[disabled]:focus, select[disabled]:active {
     color: #6c66bc !important;
-    border: 1px solid #1f1c4a !important;
+    border: 1px solid #363181 !important;
     box-shadow: inset 0 0 0 1px #000, 0 0 0 1px #000 !important;
     background: #000 !important;
     background: linear-gradient(to bottom, #11101c 50%, #000010 50%) !important;
@@ -323,7 +323,7 @@ button, button:visited, input[type="submit"], input[type="reset"] {
     text-align: center;
     text-shadow: 0 1px 1px #000;
     vertical-align: middle;
-    border: 1px solid #1f1c4a;
+    border: 1px solid #363181;
     background: #000;
     background: linear-gradient(to bottom, #191a24 50%, #001 50%) !important;
 }
@@ -1462,8 +1462,9 @@ div.logo hr {
     padding: 4px 0 5px !important;
     position: relative;
     z-index: 999;
+    line-height: 1;
     font-size: 9.5pt;
-    letter-spacing: 0.04em;
+    letter-spacing: 0.06em;
     text-transform: uppercase;
     border: 0;
     border-radius: 0;
@@ -1473,9 +1474,20 @@ div.logo hr {
                 linear-gradient(to bottom, #0a0a1a 50%, #040414 50%) !important;
 }
 
+.routersummary h3::before {
+    content: "";
+    display: inline-block;
+    height: 22px;
+    vertical-align: middle;
+}
+
 @media screen and (max-width: 1500px) {
 .routersummary h3 {
     margin-bottom: -10px;
+}
+
+.routersummary h3::before {
+    height: 14px;
 }
 }
 
@@ -4763,7 +4775,7 @@ table#reseedconfig textarea {
     line-height: 150%;
     list-style: none !important;
     text-shadow: 0 1px 1px #000;
-    border: 1px solid #1f1c4a;
+    border: 1px solid #363181;
     box-shadow: inset 0 0 0 1px #000, inset 0 0 1px 1px #26235c;
     background: linear-gradient(to bottom, #002, #001);
     break-inside: avoid;
@@ -4781,7 +4793,7 @@ table#reseedconfig textarea {
     position: absolute;
     top: -1px;
     right: -1px;
-    border: 1px solid #1f1c4a;
+    border: 1px solid #363181;
     box-shadow: inset 0 0 0 1px #000, inset 0 0 1px 1px #26235c;
     background: linear-gradient(to bottom, #002, #001);
     filter: none;
@@ -11692,7 +11704,7 @@ input[type="radio"], input[type="radio"]:checked, input[type="radio"][disabled],
     outline: none;
     vertical-align: middle !important;
     box-sizing: border-box;
-    border: 1px solid #26235c !important;
+    border: 1px solid #363181 !important;
     box-shadow: inset 0 0 0 1px #000, inset 3px 3px 3px 1px #000;
     background: #001;
     background: linear-gradient(to bottom, #030306, #112);
@@ -12687,7 +12699,7 @@ ul.statlist:last-of-type {
     display: inline-block;
     background: #000010;
     box-shadow: inset 0 0 0 1px #000, inset 0 0 2px 1px #005;
-    border: 1px solid #1f1c4a;
+    border: 1px solid #363181;
 }
 
 .statlist li br, .statlist li li br {
@@ -12704,7 +12716,7 @@ ul.statlist:last-of-type {
     padding-bottom: 6px;
     display: block;
     width: calc(100% - 12px);
-    border-bottom: 1px solid #1f1c4a;
+    border-bottom: 1px solid #363181;
     opacity: 0.8;
 }
 
