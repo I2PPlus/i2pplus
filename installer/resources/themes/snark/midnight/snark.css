@@ -2963,7 +2963,7 @@ td#bwHelp a {
 }
 
 .iframed .snarkCommentInfo {
-    margin-top: -2px !important;
+    margin-top: 10px !important;
 }
 
 .snarkComments {
@@ -4630,12 +4630,17 @@ tfoot .snarkTorrentRateUp:not(:empty)::before,tfoot .snarkTorrentUploaded:not(:e
     background: #001;
 }
 
-/*.iframed #snarkInfo ~ .mainsection {
-    margin-top: 5px !important;
-}*/
+.iframed #snarkInfo ~ .mainsection, .iframed .snarkTorrentInfo td:last-child {
+    border-left: none !important;
+    border-right: none !important;
+}
 
 .iframed #snarkInfo ~ .mainsection#snarkFiles {
     margin-top: 5px !important;
+}
+
+.iframed #snarkCommentSection {
+    margin-bottom: -8px;
 }
 
 #snarkInfo ~ .mainsection table, .iframed #snarkInfo ~ .mainsection table {
