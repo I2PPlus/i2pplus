@@ -18,38 +18,6 @@
 <%@include file="formhandler.jsi" %>
 <jsp:useBean class="net.i2p.router.web.helpers.HomeHelper" id="homehelper" scope="request" />
 <jsp:setProperty name="homehelper" property="contextId" value="<%=i2pcontextId%>" />
-<h3 class="tabletitle"><%=intl._t("Homepage Options")%></h3>
-<form action="" method="POST">
-<input type="hidden" name="nonce" value="<%=pageNonce%>" >
-<input type="hidden" name="group" value="0">
-<table id="oldhome" class="configtable">
-<tr>
-<td>
-<label class="nowrap disabled" title="routerconsole.oldHomePage=true to enable">
-<input type="checkbox" class="optbox" name="oldHome" disabled="disabled" <jsp:getProperty name="homehelper" property="configHome" /> >
-<%=intl._t("Use {0} as homepage", "/sitemap")%>
-</label>
-<!-- TODO activate -->
-<!--
-<label class="nowrap disabled" title="routerconsole.homeExtLinksToNewTab=true to enable">
-<input type="checkbox" class="optbox" name="newTabs" disabled="disabled">
-<%=intl._t("Open external links on {0} in new tabs", "/home")%>
-</label>
--->
-<!-- TODO activate -->
-<!--
-<label class="nowrap disabled" title="routerconsole.showSearch=true to enable">
-<input type="checkbox" class="optbox" name="searchbox" disabled="disabled">
-<%=intl._t("Enable searchbox on {0}", "/home")%>
-</label>
--->
-</td>
-<td class="optionsave">
-<input type="submit" name="action" class="accept" value="<%=intl._t("Save")%>" >
-</td>
-</tr>
-</table>
-</form>
 <% //if (homehelper.shouldShowSearch()) { %>
 <h3 class="tabletitle"><%=intl._t("Search Engines")%></h3>
 <form action="" method="POST">
