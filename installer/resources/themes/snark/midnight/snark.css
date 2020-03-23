@@ -1043,15 +1043,15 @@ td.snarkTorrentAction input[type="image"] {
     border-bottom: 1px solid #26235c !important;
 }
 
-.SnarkDirInfo img:not(.thumb) {
+.SnarkDirInfo td img:not(.thumb) {
     max-width: 16px;
     max-height: 16px;
 }
 
 .snarkDirInfo thead img {
+    margin: 0 !important;
     max-width: none;
     max-height: none;
-    margin: 0 !important;
 }
 
 .ParentDir {
@@ -1064,10 +1064,10 @@ td.snarkTorrentAction input[type="image"] {
 }
 
 .ParentDir a {
-    font-weight: bold !important;
     margin-left: -4px;
-    display: inline-block;
     width: 100%;
+    display: inline-block;
+    font-weight: bold !important;
 }
 
 .parentDir img {

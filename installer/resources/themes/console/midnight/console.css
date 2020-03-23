@@ -2974,6 +2974,10 @@ h3 + p, h3 + table {
     display: none;
 }
 
+#tunnels .infohelp {
+    margin-bottom: 10px !important;
+}
+
 #criticallogs tr:first-child {
     display: none;
 }
@@ -4002,7 +4006,7 @@ h3[id="udpcon"] {
 }
 
 #udpconnections {
-    margin-bottom: 8px;
+    margin-bottom: 10px;
     overflow-x: auto !important;
 }
 
@@ -4987,6 +4991,10 @@ h3#pconfig {
     margin-top: -4px;
 }
 
+#peers .infohelp {
+    margin-bottom: 1px !important;
+}
+
 #pluginconfig {
     margin-top: -14px !important;
 }
@@ -5192,8 +5200,8 @@ h3.tabletitle + .statusnotes, table.tunneldisplay {
     margin-top: -6px;
 }
 
-.statusnotes:last-child {
-    margin-bottom: 10px;
+.statusnotes:last-of-type {
+    margin-bottom: 10px !important;
 }
 
 form > table {
@@ -5449,7 +5457,7 @@ h3#servicedebug + p + p {
 
 .formaction#webappconfigactions, .formaction#pluginconfigactions, .formaction#clientsconfig {
     margin-top: -2px;
-    margin-bottom: -2px;
+    margin-bottom: -3px;
 }
 
 table#externali2cp {
@@ -5478,6 +5486,7 @@ table#externali2cp {
 
 #plugininstall2 {
     margin-top: -15px;
+    margin-bottom: 15px !important;
 }
 
 #plugininstall2 td {
@@ -6406,7 +6415,7 @@ table#profile_defs td, table#thresholds td {
     width: 1%;
     white-space: nowrap;
     text-align: right;
-    border-right: 1px inset #120f35 !important;
+/*    border-right: 1px inset #120f35 !important;*/
 }
 
 #profile_defs td:last-child {
@@ -6455,12 +6464,8 @@ table#profile_defs td, table#thresholds td {
     background: linear-gradient(to bottom, #113, #112);
 }
 
-#capabilities_key td:first-child, #capabilities_key td:nth-child(3) {
-    border-right: 1px inset #120f35 !important;
-}
-
-#capabilities_key td:nth-child(3) {
-    border-left: 1px inset #120f35 !important;
+#capabilities_key td:last-child {
+    border-right: none !important;
 }
 
 #capabilities_key td[colspan="5"] {
@@ -11665,8 +11670,12 @@ th .version {
     text-align: center;
 }
 
-#profile_defs table, #profile_defs tr:first-child td {
+#profile_defs table {
     border: none;
+}
+
+#profile_defs tr:first-child td {
+    border-top: none;
 }
 
 #profile_defs td:nth-child(2)::first-letter {
@@ -11904,7 +11913,6 @@ input[type="checkbox"][disabled]:checked, input[type="radio"][disabled]:checked,
 
 #floodfills td {
     padding: 3px;
-    border-right: 1px inset #120f35;
 }
 
 #floodfills td {
@@ -13691,11 +13699,12 @@ to {
     vertical-align: text-bottom !important;
 }
 
-#tunnels img[src$="bound.png"], #peers img[src$="bound.png"] {
+#tunnels img[src$="bound.png"], #peers img[src$="bound.png"], #tunnelconfig img[src$="bound.png"] {
     opacity: 0;
+    background: none;
 }
 
-.inbound, .outbound  {
+.inbound, .outbound {
     display: inline-block;
     width: 16px;
     height: 16px;
@@ -13704,8 +13713,24 @@ to {
     background-size: 16px 16px !important;
 }
 
-.outbound  {
+.outbound {
     background: url(images/out.png) center center no-repeat;
+}
+
+#tunnelconfig th {
+    background: #000;
+}
+
+#tunnelconfig th:nth-child(n+2) {
+    padding-left: 18px !important;
+    background: #000 url(images/in.png);
+    background-repeat: no-repeat !important;
+    background-position: 20px center !important;
+    background-size: 14px 14px !important;
+}
+
+#tunnelconfig th:last-child {
+    background: #000 url(images/out.png);
 }
 
 .inbound.small, .outbound.small {
