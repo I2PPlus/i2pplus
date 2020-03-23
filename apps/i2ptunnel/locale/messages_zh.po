@@ -1333,13 +1333,13 @@ msgstr "封禁持续"
 msgid ""
 "Maximum number of post requests permitted for a unique client for the "
 "configured timespan"
-msgstr ""
+msgstr "在配置的时间范围内，客户端允许的最大发送请求POST请求数"
 
 #: ../jsp/WEB-INF/classes/net/i2p/i2ptunnel/jsp/edit_jsp.java:1931
 msgid ""
 "If a client exceeds the maximum number of post requests per allocated "
 "period, enforce a ban for this number of minutes"
-msgstr ""
+msgstr "如果客户超出了每个分配时间段内的最大POST请求数，则强制禁止该操作的分钟数"
 
 #: ../jsp/WEB-INF/classes/net/i2p/i2ptunnel/jsp/edit_jsp.java:1935
 #: ../jsp/WEB-INF/classes/net/i2p/i2ptunnel/jsp/edit_jsp.java:1947
@@ -1350,13 +1350,13 @@ msgstr "分钟"
 
 #: ../jsp/WEB-INF/classes/net/i2p/i2ptunnel/jsp/edit_jsp.java:1939
 msgid "Total number of post requests permitted for the configured timespan"
-msgstr ""
+msgstr "在配置的时间范围内允许的发布POST请求总数"
 
 #: ../jsp/WEB-INF/classes/net/i2p/i2ptunnel/jsp/edit_jsp.java:1943
 msgid ""
 "If the maximum number of post requests per allocated period is exceeded, "
 "enforce a global access ban for this number of minutes"
-msgstr ""
+msgstr "如果超出了每个分配周期的最大POST请求数，则在此分钟数内强制执行全局访问禁令"
 
 #: ../jsp/WEB-INF/classes/net/i2p/i2ptunnel/jsp/edit_jsp.java:1949
 msgid "POST limit period"
@@ -1366,19 +1366,19 @@ msgstr "POST 限制时长"
 msgid ""
 "Timespan for the maximum number of post requests to be reached before a ban "
 "is triggered"
-msgstr ""
+msgstr "触发禁止前要达到的最大POST请求数的时间"
 
 #: ../jsp/WEB-INF/classes/net/i2p/i2ptunnel/jsp/edit_jsp.java:1968
 msgid "Number of tunnels to keep open to maintain availability of service"
-msgstr ""
+msgstr "开放以保持服务可用性的隧道数量"
 
 #: ../jsp/WEB-INF/classes/net/i2p/i2ptunnel/jsp/edit_jsp.java:1974
 msgid "Period of inactivity before tunnel number is reduced"
-msgstr ""
+msgstr "减少隧道数量之前的不活动时间"
 
 #: ../jsp/WEB-INF/classes/net/i2p/i2ptunnel/jsp/edit_jsp.java:2073
 msgid "Recommended for blinded and encrypted destinations"
-msgstr ""
+msgstr "推荐用于匿名和加密的目的地"
 
 #: ../jsp/WEB-INF/classes/net/i2p/i2ptunnel/jsp/edit_jsp.java:2109
 msgid "Alternate private key file"
@@ -1390,22 +1390,22 @@ msgstr "备用本地目的地"
 
 #: ../jsp/WEB-INF/classes/net/i2p/i2ptunnel/jsp/edit_jsp.java:2122
 msgid "Read Only: Alternate Local Destination"
-msgstr ""
+msgstr "只读：备用本地目的地"
 
 #: ../jsp/WEB-INF/classes/net/i2p/i2ptunnel/jsp/edit_jsp.java:2202
 msgid "Tunnels not initialized yet; please retry in a few moments."
-msgstr ""
+msgstr "隧道尚未初始化； 请稍后重试。"
 
 #: ../jsp/WEB-INF/classes/net/i2p/i2ptunnel/jsp/index_jsp.java:162
 msgid "These are the local services provided by your router."
-msgstr ""
+msgstr "这些是路由器提供的本地服务。"
 
 #: ../jsp/WEB-INF/classes/net/i2p/i2ptunnel/jsp/index_jsp.java:164
 msgid ""
 "By default, most of your client services (email, HTTP proxy, IRC) will share"
 " the same set of tunnels and be listed as \"Shared Clients\" and \"Shared "
 "Clients(DSA)\"."
-msgstr ""
+msgstr "默认情况下，大多数客户端服务（电子邮件，HTTP代理，IRC）将共享同一组隧道，并列为“共享客户端”和“共享客户端（DSA）”。"
 
 #: ../jsp/WEB-INF/classes/net/i2p/i2ptunnel/jsp/index_jsp.java:176
 #: ../jsp/WEB-INF/classes/net/i2p/i2ptunnel/jsp/ssl_jsp.java:640
@@ -1602,7 +1602,7 @@ msgstr "注册助手"
 msgid ""
 "This service uses encrypted leasesets. Registration is not recommended. "
 "Registration authentication is disabled."
-msgstr ""
+msgstr "该服务使用加密的租约集。 不建议注册。 注册身份验证已禁用。"
 
 #: ../jsp/WEB-INF/classes/net/i2p/i2ptunnel/jsp/register_jsp.java:248
 msgid ""
@@ -1650,12 +1650,12 @@ msgstr "目标签名密钥不可用。开始隧道。"
 #: ../jsp/WEB-INF/classes/net/i2p/i2ptunnel/jsp/register_jsp.java:302
 msgid ""
 "Destination signing key is offline. Use CLI tools on the offline machine."
-msgstr ""
+msgstr "目标签名密钥处于脱机状态。 在离线计算机上使用CLI工具。"
 
 #: ../jsp/WEB-INF/classes/net/i2p/i2ptunnel/jsp/register_jsp.java:312
 #, java-format
 msgid "Authentication for adding host {0}"
-msgstr ""
+msgstr "为添加的主机 {0} 验证身份"
 
 #: ../jsp/WEB-INF/classes/net/i2p/i2ptunnel/jsp/register_jsp.java:314
 #: ../jsp/WEB-INF/classes/net/i2p/i2ptunnel/jsp/register_jsp.java:329
@@ -1666,7 +1666,7 @@ msgstr ""
 #: ../jsp/WEB-INF/classes/net/i2p/i2ptunnel/jsp/register_jsp.java:504
 #: ../jsp/WEB-INF/classes/net/i2p/i2ptunnel/jsp/register_jsp.java:543
 msgid "Copy and paste this to the registration site"
-msgstr ""
+msgstr "复制并粘贴到注册站点"
 
 #: ../jsp/WEB-INF/classes/net/i2p/i2ptunnel/jsp/register_jsp.java:319
 msgid "Advanced authentication strings"
@@ -1675,7 +1675,7 @@ msgstr "高级认证字符串"
 #: ../jsp/WEB-INF/classes/net/i2p/i2ptunnel/jsp/register_jsp.java:327
 #, java-format
 msgid "Authentication for removing host {0}"
-msgstr ""
+msgstr "为移除的主机 {0} 验证身份"
 
 #: ../jsp/WEB-INF/classes/net/i2p/i2ptunnel/jsp/register_jsp.java:358
 msgid "Authentication for changing name"
@@ -1694,7 +1694,7 @@ msgstr "此隧道必须使用新的主机名称配置。"
 #: ../jsp/WEB-INF/classes/net/i2p/i2ptunnel/jsp/register_jsp.java:380
 #: ../jsp/WEB-INF/classes/net/i2p/i2ptunnel/jsp/register_jsp.java:413
 msgid "Enter old hostname below."
-msgstr ""
+msgstr "输入旧的主机名"
 
 #: ../jsp/WEB-INF/classes/net/i2p/i2ptunnel/jsp/register_jsp.java:391
 msgid "Authentication for adding alias"
@@ -1770,7 +1770,7 @@ msgstr "请看上方的必填项目。"
 
 #: ../jsp/WEB-INF/classes/net/i2p/i2ptunnel/jsp/register_jsp.java:595
 msgid "Old hostname"
-msgstr ""
+msgstr "旧的主机名"
 
 #: ../jsp/WEB-INF/classes/net/i2p/i2ptunnel/jsp/register_jsp.java:599
 msgid "Private Key File for old Destination"
@@ -1778,7 +1778,7 @@ msgstr "旧目标的私钥文件"
 
 #: ../jsp/WEB-INF/classes/net/i2p/i2ptunnel/jsp/register_jsp.java:603
 msgid "Generate Authentication"
-msgstr ""
+msgstr "生成验证"
 
 #: ../jsp/WEB-INF/classes/net/i2p/i2ptunnel/jsp/register_jsp.java:606
 msgid "Generate"
@@ -1786,7 +1786,7 @@ msgstr "生成"
 
 #: ../jsp/WEB-INF/classes/net/i2p/i2ptunnel/jsp/ssl_jsp.java:176
 msgid "SSL Helper"
-msgstr ""
+msgstr "SSL 助手"
 
 #: ../jsp/WEB-INF/classes/net/i2p/i2ptunnel/jsp/ssl_jsp.java:691
 msgid "Base32"
@@ -1794,11 +1794,11 @@ msgstr "Base32"
 
 #: ../jsp/WEB-INF/classes/net/i2p/i2ptunnel/jsp/ssl_jsp.java:699
 msgid "Alt Base32"
-msgstr ""
+msgstr "备用Base32"
 
 #: ../jsp/WEB-INF/classes/net/i2p/i2ptunnel/jsp/ssl_jsp.java:708
 msgid "Incoming I2P Port Routing"
-msgstr ""
+msgstr "入站I2P路由"
 
 #: ../jsp/WEB-INF/classes/net/i2p/i2ptunnel/jsp/ssl_jsp.java:710
 msgid "I2P Port"
@@ -1806,12 +1806,12 @@ msgstr "I2P端口"
 
 #: ../jsp/WEB-INF/classes/net/i2p/i2ptunnel/jsp/ssl_jsp.java:712
 msgid "Virtual Host"
-msgstr ""
+msgstr "虚拟主机"
 
 #: ../jsp/WEB-INF/classes/net/i2p/i2ptunnel/jsp/ssl_jsp.java:714
 #: ../jsp/WEB-INF/classes/net/i2p/i2ptunnel/jsp/ssl_jsp.java:792
 msgid "SSL"
-msgstr ""
+msgstr "SSL"
 
 #: ../jsp/WEB-INF/classes/net/i2p/i2ptunnel/jsp/ssl_jsp.java:716
 #: ../jsp/WEB-INF/classes/net/i2p/i2ptunnel/jsp/ssl_jsp.java:786
@@ -1824,7 +1824,7 @@ msgstr "默认"
 
 #: ../jsp/WEB-INF/classes/net/i2p/i2ptunnel/jsp/ssl_jsp.java:784
 msgid "Jetty Server"
-msgstr ""
+msgstr "Jetty服务器"
 
 #: ../jsp/WEB-INF/classes/net/i2p/i2ptunnel/jsp/ssl_jsp.java:788
 msgid "Configuration Files"
@@ -2080,7 +2080,7 @@ msgstr "请输入该客户端隧道应连接的 I2P 服务目标。"
 msgid ""
 "This could be the full Base64 destination key, or an I2P URL from your "
 "address book."
-msgstr ""
+msgstr "这可以是完整的Base64目标密钥，也可以是地址簿中的I2P URL。"
 
 #: ../jsp/WEB-INF/classes/net/i2p/i2ptunnel/jsp/wizard_jsp.java:437
 msgid "Enter a b64 or .i2p address here"
