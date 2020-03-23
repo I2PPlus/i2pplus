@@ -12,7 +12,7 @@ body, body:not(old), textarea {
 }
 
 body {
-    margin: 3px 0 0;
+    margin: 2px 0 0;
     padding: 0;
     text-align: center;
     background: #001;
@@ -25,7 +25,10 @@ body {
 
 /* preload button mouseovers */
 body:not(old) {
-    background: repeating-linear-gradient(to bottom, rgba(0,0,32,.5) 3px, rgba(0,0,0,.5) 5px, rgba(0,0,0,.3) 6px),
+    background: linear-gradient(to bottom, #001, #001 4px, rgba(0,0,0,0) 4px),
+                linear-gradient(to left, #001, #001 4px, rgba(0,0,0,0) 4px),
+                linear-gradient(to right, #001, #001 4px, rgba(0,0,0,0) 4px),
+                repeating-linear-gradient(to bottom, rgba(0,0,32,.5) 3px, rgba(0,0,0,.5) 5px, rgba(0,0,0,.3) 6px),
                 url(images/tile.png),
                 url(/themes/console/images/buttons/clean_hover.png) no-repeat,
                 url(/themes/console/images/buttons/configure_hover.png) no-repeat,
@@ -37,7 +40,7 @@ body:not(old) {
                 url(/themes/console/images/buttons/update_hover.png) no-repeat,
                 url(images/dropdown_hover.png),
                 url(images/newtab.png), #001;
-    background-size: 100% 100%, 171px 148px, 0 0, 0 0, 0 0, 0 0, 0 0, 0 0, 0 0, 0 0, 0 0, 0 0;
+    background-size: 100% 100%, 100% 100%, 100% 100%, 100% 100%, 171px 148px, 0 0, 0 0, 0 0, 0 0, 0 0, 0 0, 0 0, 0 0, 0 0, 0 0;
     will-change: transform;
 }
 
@@ -2275,44 +2278,48 @@ to {
 
 .sb_netstatus.firewalled {
     color: #944;
-    box-shadow: 0 0 0 1px #200, inset 0 0 0 1px #000, inset 0 0 2px 1px #611 !important;
+    border: 1px solid #311;
+    box-shadow: 0 0 0 1px #003, inset 0 0 0 1px #000, inset 0 0 2px 1px #611 !important;
     background: #200010;
     background: radial-gradient(circle, #200010, #000);
 }
 
 .sb_netstatus.error {
     color: #d00;
-    box-shadow: 0 0 0 1px #800, inset 0 0 0 1px #000, inset 0 0 1px 1px rgba(255,0,0,.5) !important;
+    border: 1px solid #a00;
+    box-shadow: 0 0 0 1px #003, inset 0 0 0 1px #000, inset 0 0 2px 1px #d00 !important;
     background: #300;
     background: radial-gradient(circle, #300000, #100000);
 }
 
 .sb_netstatus.warn, .sb_netstatus.clockskew {
     color: #911;
-    box-shadow: 0 0 0 1px #200, inset 0 0 0 1px #000, inset 0 0 1px 1px rgba(255,0,0,.5) !important;
+    border: 1px solid #400;
+    box-shadow: 0 0 0 1px #003, inset 0 0 0 1px #000, inset 0 0 2px 1px #700 !important;
     background: #100;
     background: radial-gradient(circle, #200000, #080000);
 }
 
 .sb_netstatus.testing {
     color: #991;
-    box-shadow: 0 0 0 1px #551, inset 0 0 0 1px #000, inset 0 0 1px 1px rgba(200,220,32,.5) !important;
-    background: #220;
-    background: linear-gradient(to right, #440, #110, #440);
+    border: 1px solid #771;
+    box-shadow: 0 0 0 1px #003, inset 0 0 0 1px #000, inset 0 0 2px 1px #551 !important;
+    background: #110;
+    background: linear-gradient(to right, #220, #000, #220);
 }
 
 .sb_netstatus.hidden, .sb_netstatus.vmcomm {
     color: #999;
     border: 1px solid #26235c;
-    box-shadow: 0 0 0 1px #555, inset 0 0 0 1px #000, inset 0 0 1px 1px rgba(255,255,255,.7) !important;
+    box-shadow: 0 0 0 1px #222, inset 0 0 0 1px #000, inset 0 0 2px 1px #333 !important;
     background: #222;
     background: radial-gradient(circle, #333, #111);
 }
 
 .sb_netstatus.running {
     color: #191;
-    border: 1px solid rgba(0,48,0,.5);
-    box-shadow: 0 0 0 1px #131, inset 0 0 0 1px #000, inset 0 0 1px 1px rgba(16,255,16,.5) !important;
+    border: 1px solid rgba(16,96,16,.7);
+    box-shadow: 0 0 0 1px #003, inset 0 0 0 1px #000, inset 0 0 2px 1px #131 !important;
     background: #000300;
     background: radial-gradient(circle, #001600, #000300);
 }
@@ -3493,10 +3500,11 @@ h1, h2, h3 {
 }
 
 span.newtab {
-    text-align: right;
-    font-size: 8pt;
+    margin-top: 2px;
     float: right;
     letter-spacing: 0;
+    text-align: right;
+    font-size: 8pt;
 }
 
 .newtab:hover {
@@ -10263,6 +10271,10 @@ b.suboption {
 #externali2cp .optionlist label::before, #externali2cp .optionlist .nowrap::before, #netconfig label::before,
 #reseedconfig .nowrap::before, #manualreseed .nowrap::before, #graphs .nowrap::before{
     min-height: 50px !important;
+}
+
+span.newtab {
+    margin-top: 5px;
 }
 }
 
