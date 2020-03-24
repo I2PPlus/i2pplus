@@ -13355,12 +13355,7 @@ to {
     margin-left: 3px;
 }
 
-#tunnels .tunnel_id {
-    display: none;
-}
-
 #tunnels th, #tunnels td {
-    min-width: 0 !important;
     padding-left: 2px;
     padding-right: 2px;
 }
