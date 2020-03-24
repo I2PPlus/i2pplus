@@ -44,14 +44,11 @@ public class GraphHelper extends FormHandler {
     private static final String PROP_EVENTS = "routerconsole.graphEvents";
     private static final String PROP_LEGEND = "routerconsole.graphHideLegend";
     private static final String PROP_HIDPI = "routerconsole.graphHiDpi";
-//    private static final int DEFAULT_REFRESH = 5*60;
     private static final int DEFAULT_REFRESH = 1*60;
     private static final int DEFAULT_PERIODS = 60;
     private static final boolean DEFAULT_LEGEND = false;
     private static final boolean DEFAULT_HIDPI = false;
-//    private static final int MIN_X = 200;
     private static final int MIN_X = 160;
-//    private static final int MIN_Y = 60;
     private static final int MIN_Y = 40;
     private static final int MIN_C = 20;
     private static final int MAX_C = SummaryListener.MAX_ROWS;
@@ -545,8 +542,11 @@ public class GraphHelper extends FormHandler {
             changes.put(PROP_EVENTS, Boolean.toString(_showEvents));
             changes.put(PROP_LEGEND, Boolean.toString(_graphHideLegend));
             changes.put(SummaryListener.PROP_PERSISTENT, Boolean.toString(_persistent));
+            boolean warn = _persistent != _context.getBooleanPropertyDefaultTrue(SummaryListener.PROP_PERSISTENT);
             _context.router().saveConfig(changes, null);
             addFormNotice(_t("Graph settings saved") + ".");
+            if (warn)
+                addFormError(_t("Restart required to take effect"));
         } else {
             addFormNotice(_t("Graph settings unchanged") + ".");
         }
