@@ -26,10 +26,6 @@ import net.i2p.stat.RateAverages;
 import net.i2p.stat.RateStat;
 import net.i2p.util.Log;
 
-import java.util.Random;
-import net.i2p.router.RouterContext;
-
-
 /**
  *  A group of tunnels for the router or a particular client, in a single direction.
  *  Public only for TunnelRenderer in router console.
@@ -44,17 +40,13 @@ public class TunnelPool {
     private final TunnelPoolManager _manager;
     protected volatile boolean _alive;
     private long _lifetimeProcessed;
-    private TunnelInfo _lastSelected;
-    private long _lastSelectionPeriod;
+    private int _lastSelectedIdx;
     private final int _expireSkew;
     private long _started;
     private long _lastRateUpdate;
     private long _lastLifetimeProcessed;
     private final String _rateName;
     private final long _firstInstalled;
-
-    // Round Robin
-    private int _lastSelectedIdx;
 
     private static final int TUNNEL_LIFETIME = 10*60*1000;
     /** if less than one success in this many, reduce quantity (exploratory only) */
@@ -149,8 +141,6 @@ public class TunnelPool {
         if (_log.shouldLog(Log.WARN))
             _log.warn(toString() + ": Shutdown called");
         _alive = false;
-        _lastSelectionPeriod = 0;
-        _lastSelected = null;
         _context.statManager().removeRateStat(_rateName);
         synchronized (_inProgress) {
             _inProgress.clear();
@@ -177,22 +167,6 @@ public class TunnelPool {
             _settings.readFromProperties(TunnelPoolSettings.PREFIX_OUTBOUND_EXPLORATORY, props);
     }
 
-    /**
-     * when selecting tunnels, stick with the same one for a brief
-     * period to allow batching if we can.
-     */
-    private long curPeriod() {
-        long period = _context.clock().now();
-        long ms = period % 1000;
-        Random random = _context.random();
-//        if (ms > 500)
-//            period = period - ms + 500;
-        period = period - ms + (random.nextInt(200) + 50 / (random.nextInt(4) + 1) * 7 + 100 + random.nextInt(150));
-//        else
-//            period = period - ms;
-        return period;
-    }
-
     private long getLifetime() { return System.currentTimeMillis() - _started; }
 
     /**
@@ -207,36 +181,24 @@ public class TunnelPool {
     private TunnelInfo selectTunnel(boolean allowRecurseOnFail) {
         boolean avoidZeroHop = !_settings.getAllowZeroHop();
 
-        long period = curPeriod();
         synchronized (_tunnels) {
-            if (_lastSelectionPeriod == period) {
-                if ( (_lastSelected != null) &&
-                     (_lastSelected.getExpiration() > period) &&
-                     (_tunnels.contains(_lastSelected)) )
-                    return _lastSelected;
-            }
-            _lastSelectionPeriod = period;
-            _lastSelected = null;
-
             if (_tunnels.isEmpty()) {
                 if (_log.shouldLog(Log.WARN))
                     _log.warn(toString() + ": No tunnels available");
             } else {
-//                Collections.shuffle(_tunnels, _context.random());
-//                Collections.rotate(_tunnels, 1);
 
                 // if there are nonzero hop tunnels and the zero hop tunnels are fallbacks,
                 // avoid the zero hop tunnels
                 TunnelInfo backloggedTunnel = null;
                 if (avoidZeroHop) {
                     for (int i = 0; i < _tunnels.size(); i++) {
-//                        TunnelInfo info = _tunnels.get(i);
                         _lastSelectedIdx++;
-                        TunnelInfo info = _tunnels.get((int)( _lastSelectedIdx % _tunnels.size()));
+                        if (_lastSelectedIdx >= _tunnels.size())
+                            _lastSelectedIdx = 0;
+                        TunnelInfo info = _tunnels.get(_lastSelectedIdx);
                         if ( (info.getLength() > 1) && (info.getExpiration() > _context.clock().now()) ) {
                             // avoid outbound tunnels where the 1st hop is backlogged
                             if (_settings.isInbound() || !_context.commSystem().isBacklogged(info.getPeer(1))) {
-                                _lastSelected = info;
                                 return info;
                             } else {
                                 backloggedTunnel = info;
@@ -259,7 +221,6 @@ public class TunnelPool {
                         if (_settings.isInbound() || info.getLength() <= 1 ||
                             !_context.commSystem().isBacklogged(info.getPeer(1))) {
                             //_log.debug("Selecting tunnel: " + info + " - " + _tunnels);
-                            _lastSelected = info;
                             return info;
                         } else {
                             backloggedTunnel = info;
@@ -538,10 +499,6 @@ public class TunnelPool {
             if (_settings.isInbound() && !_settings.isExploratory())
                 ls = locked_buildNewLeaseSet();
             remaining = _tunnels.size();
-            if (_lastSelected == info) {
-                _lastSelected = null;
-                _lastSelectionPeriod = 0;
-            }
         }
 
         _manager.getExecutor().repoll();
@@ -606,10 +563,6 @@ public class TunnelPool {
                 return;
             if (_settings.isInbound() && !_settings.isExploratory())
                 ls = locked_buildNewLeaseSet();
-            if (_lastSelected == cfg) {
-                _lastSelected = null;
-                _lastSelectionPeriod = 0;
-            }
         }
 
         _manager.tunnelFailed();
