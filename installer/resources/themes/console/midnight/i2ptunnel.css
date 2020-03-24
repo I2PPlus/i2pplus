@@ -298,6 +298,10 @@ h2, h3 {
     margin: 0;
 }
 
+/*.iframed #clientTunnels {
+    margin-bottom: 11px;
+}*/
+
 th {
     background: #000;
     background: linear-gradient(to bottom, #080818 50%, #000008 50%) !important;
@@ -667,6 +671,10 @@ select {
     background-size: 14px auto, 100% 100% !important;
     filter: none;
     cursor: pointer;
+}
+
+select:disabled {
+    text-align: left;
 }
 
 select:hover, select:focus, select:active {
