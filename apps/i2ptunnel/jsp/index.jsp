@@ -16,7 +16,7 @@
     <script type="text/javascript" src="/js/iframeResizer/iframeResizer.contentWindow.js?<%=net.i2p.CoreVersion.VERSION%>"></script>
     <script type="text/javascript" src="/js/toggleTunnelInfo.js?<%=net.i2p.CoreVersion.VERSION%>"></script>
 <%     if (indexBean.allowCSS()) { %>
-
+    <style type="text/css">body {opacity: 0;}</style>
     <link rel="icon" href="<%=indexBean.getTheme()%>images/favicon.ico" />
     <link href="<%=indexBean.getTheme()%>i2ptunnel.css?<%=net.i2p.CoreVersion.VERSION%>" rel="stylesheet" type="text/css" /> 
     <link href="<%=indexBean.getTheme()%>override.css?<%=net.i2p.CoreVersion.VERSION%>" rel="stylesheet" type="text/css" /> 
@@ -376,6 +376,6 @@
 </script>
 </div>
 <span data-iframe-height></span>
-<script nonce="<%=cspNonce%>" type="text/javascript">progressx.hide();</script>
+<style type="text/css">body {opacity: 1 !important;}</style>
 </body>
 </html>

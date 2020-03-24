@@ -862,8 +862,8 @@ public abstract class I2PTunnelClientBase extends I2PTunnelTask implements Runna
             if (sockMgr != null) {
                 mySockets.retainAll(sockMgr.listSockets());
                 if ((!forced) && (!mySockets.isEmpty())) {
-                    l.log("Not closing, there are still active connections!");
-                    _log.debug("Can't close: there are still active connections!");
+                    l.log("Not closing tunnel, there are still active connections!");
+                    _log.debug("Can't close tunnel: there are still active connections!");
                     for (I2PSocket s : mySockets) {
                         l.log("  -> " + s.toString());
                     }

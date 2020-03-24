@@ -30,6 +30,7 @@
 <link href="/themes/console/images/favicon.ico" type="image/x-icon" rel="shortcut icon" />
 <script type="text/javascript" src="/js/iframeResizer/iframeResizer.contentWindow.js?<%=net.i2p.CoreVersion.VERSION%>"></script>
 <%     if (editBean.allowCSS()) { %>
+<style type="text/css"> body {opacity: 0;}</style>
 <link rel="icon" href="<%=editBean.getTheme()%>images/favicon.ico" />
 <link href="<%=editBean.getTheme()%>i2ptunnel.css?<%=net.i2p.CoreVersion.VERSION%>" rel="stylesheet" type="text/css" />
 <link href="<%=editBean.getTheme()%>override.css?<%=net.i2p.CoreVersion.VERSION%>" rel="stylesheet" type="text/css" />
@@ -853,5 +854,6 @@
   }  // isInitialized()
 %>
 <span data-iframe-height></span>
+<style type="text/css">body {opacity: 1 !important;}</style>
 </body>
 </html>
