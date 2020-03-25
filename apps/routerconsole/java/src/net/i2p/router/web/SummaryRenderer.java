@@ -274,9 +274,6 @@ class SummaryRenderer {
                 DEFAULT_TITLE_FONT_NAME = "Dialog";
             }
 
-
-/** "Droid Sans Mono", "Noto Mono", "DejaVu Sans Mono", "Lucida Console", monospace; **/
-
             if  (fontlist.contains("Droid Sans Mono")) {
                 DEFAULT_FONT_NAME = "Droid Sans Mono";
                 DEFAULT_LEGEND_FONT_NAME = "Droid Sans Mono";
