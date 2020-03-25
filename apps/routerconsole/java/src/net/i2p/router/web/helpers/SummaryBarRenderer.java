@@ -1086,18 +1086,18 @@ class SummaryBarRenderer {
                buf.append("<tr title=\"")
                   .append(_t("Tunnels we are participating in, directly contributing bandwidth to the network"))
                   .append("\">" +
-                          "<td align=\"left\"><b>")
+                          "<td align=\"left\"><a href=\"/tunnelsparticipating\"><b>")
                   .append(_t("Participating"))
-                  .append("</b></td><td align=\"right\">")
+                  .append("</b></a></td><td align=\"right\">")
                   .append(partTunnels)
                   .append("</td></tr>\n");
            }
            buf.append("<tr title=\"")
               .append(_t("Total number of tunnels in use"))
               .append("\">" +
-                      "<td align=\"left\"><b>")
+                      "<td align=\"left\"><a href=\"/tunnelpeercount\"><b>")
               .append(_t("Total"))
-              .append("</b></td><td align=\"right\">")
+              .append("</b></a></td><td align=\"right\">")
               .append(_helper.getInboundTunnels() + _helper.getOutboundTunnels() +
                       _helper.getInboundClientTunnels() + _helper.getOutboundClientTunnels() +
                       partTunnels)
