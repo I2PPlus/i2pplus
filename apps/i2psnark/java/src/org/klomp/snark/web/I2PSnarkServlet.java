@@ -365,6 +365,7 @@ public class I2PSnarkServlet extends BasicServlet {
             out.write("<body class=\"lang_" + lang + "\">\n");
         else
             out.write("<body onload=\"initAjax()\" class=\"lang_" + lang + "\">\n");
+        out.write("<style type=\"text/css\">body{opacity: 0;}</style>\n");
         out.write("<center>\n");
         List<Tracker> sortedTrackers = null;
         if (isConfigure) {
@@ -3482,7 +3483,8 @@ public class I2PSnarkServlet extends BasicServlet {
     private static final String HEADER_D = "snark_big.css?" + CoreVersion.VERSION + "\" rel=\"stylesheet\" type=\"text/css\" >";
     private static final String HEADER_Z = "override.css\" rel=\"stylesheet\" type=\"text/css\" >";
     private static final String TABLE_HEADER = "<table border=\"0\" class=\"snarkTorrents\" width=\"100%\" >\n" + "<thead>\n";
-    private static final String FOOTER = "</div>\n<span id=\"endOfPage\" data-iframe-height></span>\n</center>\n</body>\n</html>";
+    private static final String FOOTER = "</div>\n<span id=\"endOfPage\" data-iframe-height></span>\n</center>\n" +
+                                         "<style type=\"text/css\">body{opacity: 1 !important;}</style>\n</body>\n</html>";
 
 
     /**
@@ -4072,7 +4074,8 @@ public class I2PSnarkServlet extends BasicServlet {
             }
             if (includeForm)
                 buf.append("</form>\n");
-            buf.append("</div>\n<span id=\"endOfPage\" data-iframe-height></span>\n</center>\n</body>\n</html>");
+            buf.append("</div>\n<span id=\"endOfPage\" data-iframe-height></span>\n</center>\n" +
+                       "<style type=\"text/css\">body{opacity: 1 !important;}</style>\n</body>\n</html>");
             return buf.toString();
         }
 
@@ -4419,7 +4422,8 @@ public class I2PSnarkServlet extends BasicServlet {
             buf.append("<script src=\"").append(_contextPath).append(WARBASE + "js/lightbox.js\" type=\"text/javascript\"></script>")
                .append("<script>var lightbox = new Lightbox();lightbox.load();</script>");
         }
-        buf.append("</div>\n<span id=\"endOfPage\" data-iframe-height></span>\n</center>\n</body>\n</html>\n");
+        buf.append("</div>\n<span id=\"endOfPage\" data-iframe-height></span>\n</center>\n" +
+                   "<style type=\"text/css\">body{opacity: 1 !important;}</style>\n</body>\n</html>\n");
         return buf.toString();
     }
 
