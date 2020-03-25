@@ -1553,7 +1553,7 @@ public class ProfileOrganizer {
     protected int getMinimumHighCapacityPeers() {
         int known = _context.netDb().getKnownRouters();
         if (known > 2000)
-            return _context.getProperty(PROP_MINIMUM_HIGH_CAPACITY_PEERS, Math.max(known / 40, getMinimumFastPeers() * 2));
+            return _context.getProperty(PROP_MINIMUM_HIGH_CAPACITY_PEERS, Math.max(known / 40, countFastPeers() * 2));
         else
             return _context.getProperty(PROP_MINIMUM_HIGH_CAPACITY_PEERS, DEFAULT_MINIMUM_HIGH_CAPACITY_PEERS);
     }

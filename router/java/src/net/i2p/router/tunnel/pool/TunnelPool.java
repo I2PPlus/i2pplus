@@ -212,8 +212,7 @@ public class TunnelPool {
                         return backloggedTunnel;
                     }
                 }
-                // ok, either we are ok using zero hop tunnels, or only fallback tunnels remain.  pick 'em
-                // randomly
+                // ok, either we are ok using zero hop tunnels, or only fallback tunnels remain.  pick 'em randomly
                 for (int i = 0; i < _tunnels.size(); i++) {
                     TunnelInfo info = _tunnels.get(i);
                     if (info.getExpiration() > _context.clock().now()) {
