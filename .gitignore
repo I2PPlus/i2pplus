@@ -18,6 +18,7 @@ web-out.xml
 *.out
 *.bak
 *.orig
+git.rev
 
 # Temporary/build dirs
 build/

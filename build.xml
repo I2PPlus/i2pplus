@@ -448,7 +448,7 @@
         <copy file="apps/jrobin/java/build/jrobin.jar" todir="build/" />
     </target>
 
-    <target name="buildProperties" depends="getMtnRev, getReleaseNumber, getBuildNumber, setBuildTimestamp, disableManifestClasspath" >
+    <target name="buildProperties" depends="getMtnRev, getGitRev, getReleaseNumber, getBuildNumber, setBuildTimestamp, disableManifestClasspath" >
         <!-- default if not set above -->
         <property name="workspace.version" value="unknown" />
         <!-- default if not set by setBuildTimestamp -->
@@ -456,7 +456,8 @@
         <!-- default if not set by disableManifestClasspath -->
         <property name="manifest.classpath.name" value="Class-Path" />
         <property name="full.version" value="${release.number}-${i2p.build.number}${build.extra}" />
-        <echo message="Building version ${full.version} (mtn rev ${workspace.version})" />
+<!--        <echo message="Building version ${full.version} (mtn rev ${workspace.version})" /> -->
+        <echo message="Building version ${full.version} (git rev ${git.shortHash})" />
     </target>
 
     <target name="setBuildTimestamp" unless="${build.reproducible}" >
@@ -565,6 +566,23 @@
     </target>
 
     <!-- end monotone targets -->
+
+    <!-- git targets -->
+
+    <target name="checkForGit" >
+        <available property="git.available" file=".git" type="dir" />
+    </target>
+
+    <target name="getGitRev" depends="checkForGit" if="git.available" >
+        <exec executable="git" outputproperty="git.shortHash" errorproperty="git.error1" failifexecutionfails="false" >
+            <arg value="rev-parse" />
+            <arg value="--short=8" />
+            <arg value="HEAD" />
+        </exec>
+        <echo file="git.rev">${git.shortHash}</echo>
+    </target>
+
+    <!-- end git targets -->
 
     <!-- launch4j targets -->
 
