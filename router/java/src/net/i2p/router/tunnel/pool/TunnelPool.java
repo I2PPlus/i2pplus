@@ -50,11 +50,11 @@ public class TunnelPool {
 
     private static final int TUNNEL_LIFETIME = 10*60*1000;
     /** if less than one success in this many, reduce quantity (exploratory only) */
-    private static final int BUILD_TRIES_QUANTITY_OVERRIDE = 12;
+//    private static final int BUILD_TRIES_QUANTITY_OVERRIDE = 12;
+    private static final int BUILD_TRIES_QUANTITY_OVERRIDE = 8;
     /** if less than one success in this many, reduce length (exploratory only) */
     private static final int BUILD_TRIES_LENGTH_OVERRIDE_1 = 8;
-//    private static final int BUILD_TRIES_LENGTH_OVERRIDE_2 = 12;
-    private static final int BUILD_TRIES_LENGTH_OVERRIDE_2 = 16;
+    private static final int BUILD_TRIES_LENGTH_OVERRIDE_2 = 12;
 //    private static final long STARTUP_TIME = 30*60*1000;
     private static final long STARTUP_TIME = 40*60*1000;
 
