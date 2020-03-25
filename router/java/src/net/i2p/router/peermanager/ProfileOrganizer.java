@@ -78,7 +78,6 @@ public class ProfileOrganizer {
      */
     public static final String PROP_MINIMUM_FAST_PEERS = "profileOrganizer.minFastPeers";
 //    public static final int DEFAULT_MINIMUM_FAST_PEERS = 8;
-//    public static final int DEFAULT_MINIMUM_FAST_PEERS = 100;
     public static final int DEFAULT_MINIMUM_FAST_PEERS = 50;
     /** this is misnamed, it is really the max minimum number. */
 //    private static final int DEFAULT_MAXIMUM_FAST_PEERS = 40;
@@ -96,9 +95,9 @@ public class ProfileOrganizer {
      */
     public static final String PROP_MINIMUM_HIGH_CAPACITY_PEERS = "profileOrganizer.minHighCapacityPeers";
 //    public static final int DEFAULT_MINIMUM_HIGH_CAPACITY_PEERS = 25;
-    public static final int DEFAULT_MINIMUM_HIGH_CAPACITY_PEERS = 75;
+    public static final int DEFAULT_MINIMUM_HIGH_CAPACITY_PEERS = 100;
 //    private static final int ABSOLUTE_MAX_HIGHCAP_PEERS = 150;
-    private static final int ABSOLUTE_MAX_HIGHCAP_PEERS = 300;
+    private static final int ABSOLUTE_MAX_HIGHCAP_PEERS = 400;
 
     /** synchronized against this lock when updating the tier that peers are located in (and when fetching them from a peer) */
     private final ReentrantReadWriteLock _reorganizeLock = new ReentrantReadWriteLock(false);
@@ -212,9 +211,7 @@ public class ProfileOrganizer {
 
         Hash peer = profile.getPeer();
         if (peer.equals(_us)) {
-//            if (_log.shouldWarn())
             if (_log.shouldLog(Log.DEBUG))
-//                _log.warn("Who added our profile?", new Exception("I did"));
                 _log.debug("Added our own profile to Profile Manager");
             return null;
         }
@@ -849,7 +846,7 @@ public class ProfileOrganizer {
         long placeTime = 0;
         int profileCount = 0;
         int expiredCount = 0;
-        
+
         // null for main()
         Router r = _context.router();
         long uptime = (r != null) ? r.getUptime() : 0L;
@@ -977,7 +974,7 @@ public class ProfileOrganizer {
             for (PeerProfile cur : _strictCapacityOrder) {
                 if ( (!_fastPeers.containsKey(cur.getPeer())) && (!cur.getIsFailing()) ) {
                     if (!isSelectable(cur.getPeer())) {
-                        // skip peers we dont have in the netDb
+                        // skip peers we don't have in the netDb
                         // if (_log.shouldLog(Log.INFO))
                         //     _log.info("skip unknown peer from fast promotion: " + cur.getPeer().toBase64());
                         continue;
@@ -1075,7 +1072,7 @@ public class ProfileOrganizer {
             }
         }
 
-        // we dont have enough, lets unfail our best ones remaining
+        // we don't have enough, let's unfail our best ones remaining
         int needToUnfail = MIN_NOT_FAILING_ACTIVE - notFailingActive;
         if (needToUnfail > 0) {
             int unfailed = 0;
@@ -1118,7 +1115,7 @@ public class ProfileOrganizer {
             if (profile.getIsFailing() || (!profile.getIsActive()))
                 continue;
 
-            // dont bother trying to make sense of things below the baseline
+            // don't bother trying to make sense of things below the baseline
             // otoh, keep them in the threshold calculation, so we can adapt
             ////if (profile.getCapacityValue() <= CapacityCalculator.GROWTH_FACTOR)
             ////    continue;
@@ -1556,7 +1553,7 @@ public class ProfileOrganizer {
     protected int getMinimumHighCapacityPeers() {
         int known = _context.netDb().getKnownRouters();
         if (known > 2000)
-            return _context.getProperty(PROP_MINIMUM_HIGH_CAPACITY_PEERS, Math.max(known / 40, getMinimumFastPeers() * 3 / 2));
+            return _context.getProperty(PROP_MINIMUM_HIGH_CAPACITY_PEERS, Math.max(known / 40, getMinimumFastPeers() * 2));
         else
             return _context.getProperty(PROP_MINIMUM_HIGH_CAPACITY_PEERS, DEFAULT_MINIMUM_HIGH_CAPACITY_PEERS);
     }
