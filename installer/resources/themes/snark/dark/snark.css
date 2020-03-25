@@ -138,28 +138,15 @@ _:-ms-lang(x), .snarknavbar {
     position: relative;
     line-height: 120%;
     letter-spacing: 0.1em;
-    color: rgba(51, 255, 51, .6);
     color: #3f3;
     font-size: 9.5pt;
     font-weight: bold;
     text-transform: uppercase;
     text-shadow: 0 0 1px #000;
-    border: 1px solid #252;
     border: 1px solid #4a4;
     border-radius: 0;
-    box-shadow: inset 0 0 0 1px #000, inset 0 0 0 2px #020;
+    box-shadow: inset 0 0 0 1px #000, inset 0 0 1px 1px #0f0;
     opacity: .45;
-    position: relative;
-    mix-blend-mode: difference;
-}
-
-.snarkNav:link {
-    -webkit-text-stroke-color: rgba(48,255,48,.1) !important;
-    -webkit-text-stroke-width: 5px;
-}
-
-.snarkNav:hover, .snarkNav:focus, .snarkNav:active {
-    -webkit-text-stroke-width: 0;
 }
 
 .snarkNav:link, .snarkNav:hover, .snarkNav:focus {
@@ -176,7 +163,6 @@ _:-ms-lang(x), .snarknavbar {
     box-shadow: inset 0 0 0 1px #000, inset 0 0 2px 1px #f60 !important;
     box-shadow: inset 0 0 0 1px #000, inset 0 0 0 2px rgba(255,96,0,.2) !important;
     opacity: 1;
-    background-blend-mode: normal, normal;
 }
 
 .nav_main:link {
