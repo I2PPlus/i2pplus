@@ -1194,7 +1194,7 @@ public class ProfileOrganizer {
             // our average is doing well, but not enough peers
             if (_log.shouldLog(Log.INFO))
                 _log.info("Our average capacity (" + meanCapacity + ") is good" +
-                          " but we don't have enough peers " + numExceedingMean);
+                          " but we don't have enough peers (" + numExceedingMean + " required)");
             _thresholdCapacityValue = Math.max(thresholdAtMinHighCap, thresholdAtLowest);
         }
 
