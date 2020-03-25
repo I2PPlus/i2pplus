@@ -10113,7 +10113,6 @@ b.suboption {
 
 .optionlist:hover, .optionsingle:hover, .optiontextarea:hover {
     border: 1px solid #373462;
-    transition: ease box-shadow 0.5s, ease background 0.2s 0.01s;
 }
 
 .optionlist label, .optionlist .nowrap {
@@ -10140,40 +10139,32 @@ b.suboption {
     border: 1px solid #26235c;
 }
 
-#updatehelper .optionlist:hover, #updateProxyHostPort.optionlist:hover {
-    transition: ease box-shadow 0.5s, ease background 0.2s 0.01s, ease border 0.2s 0.01s;
-}
-
 #i2pupdates .optionsingle, #homesites.formaction, #homeapps.formaction, #oldhome tr:last-child, #bandwidthconfig .optionsave,
 #clientsconfig.formaction, #addkeyring tr:last-child td, #loggingoptions tr:last-child td, #webappconfigactions.formaction, #configstats .optionsave {
     background: linear-gradient(to bottom, #001, #030306) !important;
     box-shadow: inset 0 0 0 1px #000, inset 0 0 0 2px transparent, inset 0 0 2px 1px #191939, inset 0 0 5px 3px #002 !important;
-    transition: ease box-shadow 0.5s;
 }
 
 #config_reseed .optionsingle.optiontextarea, #reseedssl, #config_reseed td.optionsave,
 #manualreseed #reseedurl, #manualreseed  #reseedcreatefile, #manualreseed #reseedzip {
     box-shadow: inset 0 0 0 1px #000, inset 0 0 2px 1px #191939 !important;
-    transition: ease box-shadow 0.5s;
 }
 
 #manualreseed #reseedurl, #manualreseed #reseedcreatefile, #manualreseed #reseedzip {
     background: linear-gradient(to bottom, #001, #030306) !important;
-    transition: ease box-shadow 0.5s;
 }
 
 #config_reseed td.optionsave, #config_reseed #reseedconfig td.optionsave, #bandwidthconfig .optionsave, #i2pupdates .optionsave, #externali2cp .optionsave, #config_advanced .optionsave, #config_ui .formaction, #graphing.formaction, #pluginconfigactions,
 #tunnelconfigsave, #sidebardefaults, #refreshsidebar tr, #addkeyring tr:last-child td, #clientsconfig, #homeapps, #homesites, #loggingoptions .optionsave {
-    background: linear-gradient(to bottom, #001, #030306) !important;
-    box-shadow: inset 0 0 0 1px #000, inset 0 0 0 2px transparent, inset 0 0 2px 1px #191939, inset 0 0 5px 3px #002 !important;
-    opacity: 1 !important;
     padding: 12px 8px !important;
-    transition: ease box-shadow 0.5s;
+    box-shadow: inset 0 0 0 1px #000, inset 0 0 0 2px transparent, inset 0 0 2px 1px #191939, inset 0 0 5px 3px #002 !important;
+    background: linear-gradient(to bottom, #001, #030306) !important;
+    opacity: 1 !important;
 }
 
 #refreshsidebar .optionsave {
-    background: none;
     padding: 12px 8px 12px 0 !important;
+    background: none;
 }
 
 #graphing.formaction {
@@ -10192,7 +10183,7 @@ b.suboption {
 }
 
 .optionlist label, .optionlist .nowrap, #reseedconfig tr:nth-child(3) td label {
-    background: linear-gradient(to bottom, #181828, #080818) !important;
+    background: linear-gradient(to bottom, #112, #040414) !important;
     box-shadow: inset 0 0 0 1px #000, inset 0 0 2px 1px #191939 !important;
     opacity: 0.9;
 }
@@ -10217,17 +10208,12 @@ b.suboption {
 
 .optionlist label:hover, .optionlist .nowrap:hover, #reseedconfig tr:nth-child(3) td label:hover, #netconfig .optionlist label:hover,
 #externali2cp .optionlist .nowrap:hover, #externali2cp .optionlist label:hover, #reseedssl:hover, #i2pupdates .optionlist .nowrap:hover, #reseedproxysslhostport.optionlist .nowrap:hover {
-/*    background: linear-gradient(to bottom, #112, #000 75%) !important;
-    box-shadow: inset 0 0 0 1px #000, inset 0 0 3px 1px #113, inset 0 0 1px 2px #000 !important;*/
-/*    opacity: 1;*/
     color: #e6f5fd;
 }
 
-/*#reseedproxytype, #reseedproxysslhostport.optionlist, #reseedproxytype:hover, #reseedproxysslhostport.optionlist:hover {
-    background: none !important;
-    border: none !important;
-    box-shadow: none !important;
-}*/
+#reseedconfig .optionsingle.optiontextarea {
+    background: linear-gradient(to bottom, #112, #040414) !important;
+}
 
 /* end multi-column responsive globals */
 
@@ -10257,7 +10243,7 @@ b.suboption {
     width: calc(100% - 10px);
     display: inline-block;
     line-height: 100% !important;
-    background: linear-gradient(to bottom, #181828, #080818) !important;
+    background: linear-gradient(to bottom, #112, #040414) !important;
 }
 
 #updateProxyHostPort {
@@ -10466,7 +10452,7 @@ h3#shutdownrouter {
 }
 
 #reseedconfig tr:nth-child(n+2) td label, #reseedconfig tr:nth-child(n+2) td .nowrap {
-    background: linear-gradient(to bottom, #181828, #080818) !important;
+    background: linear-gradient(to bottom, #112, #040414) !important;
 }
 
 #reseedconfig .optbox[type="checkbox"] {
@@ -10627,19 +10613,19 @@ h3#shutdownrouter {
 
 #config_reseed #reseedurl {
     background: #001 url(/themes/console/images/info/url.png) 14px center no-repeat !important;
-    background: url(/themes/console/images/info/url.png) 14px center no-repeat, linear-gradient(to bottom, #181828, #080818) !important;
+    background: url(/themes/console/images/info/url.png) 14px center no-repeat, linear-gradient(to bottom, #112, #040414) !important;
     background-size: 28px 28px, 100% 100% !important;
 }
 
 #config_reseed  #reseedzip {
     background: #001 url(/themes/console/images/info/from_file.png) 14px center no-repeat !important;
-    background: url(/themes/console/images/info/from_file.png) 14px center no-repeat, linear-gradient(to bottom, #181828, #080818) !important;
+    background: url(/themes/console/images/info/from_file.png) 14px center no-repeat, linear-gradient(to bottom, #112, #040414) !important;
     background-size: 28px 28px, 100% 100% !important;
 }
 
 #config_reseed #reseedcreatefile {
     background: #001 url(/themes/console/images/info/box.png) 14px center no-repeat !important;
-    background: url(/themes/console/images/info/box.png) 14px center no-repeat, linear-gradient(to bottom, #181828, #080818) !important;
+    background: url(/themes/console/images/info/box.png) 14px center no-repeat, linear-gradient(to bottom, #112, #040414) !important;
     background-size: 28px 28px, 100% 100% !important;
     text-align: justify;
 }
@@ -10964,7 +10950,7 @@ tr:nth-child(4) .net_bwrate::before {
 }
 
 #installPluginFile, #installPluginUrl {
-    background: linear-gradient(to bottom, #181828, #080818);
+    background: linear-gradient(to bottom, #112, #040414);
     box-shadow: inset 0 0 0 1px #000, inset 0 0 2px 1px #191939 !important;
 }
 
@@ -11024,7 +11010,7 @@ input[type="file"]:hover {
     padding: 5px 5px 0 45px;
     box-shadow: inset 0 0 0 1px #000, inset 0 0 2px 1px #191939 !important;
     background: #000 url(/themes/console/images/info/label.png) 10px center no-repeat !important;
-    background: url(/themes/console/images/info/label.png) 10px center no-repeat, linear-gradient(to bottom, #181828, #080818) !important;
+    background: url(/themes/console/images/info/label.png) 10px center no-repeat, linear-gradient(to bottom, #112, #040414) !important;
     background-size: 28px 28px, 100% 100%, 100% 100% !important;
 }
 
@@ -11032,7 +11018,7 @@ input[type="file"]:hover {
     padding: 5px 5px 0 45px;
     box-shadow: inset 0 0 0 1px #000, inset 0 0 2px 1px #191939 !important;
     background: #000 url(/themes/console/images/info/key.png) 10px center no-repeat !important;
-    background: url(/themes/console/images/info/key.png) 10px center no-repeat, linear-gradient(to bottom, #181828, #080818) !important;
+    background: url(/themes/console/images/info/key.png) 10px center no-repeat, linear-gradient(to bottom, #112, #040414) !important;
     background-size: 28px 28px, 100% 100%, 100% 100% !important;
 }
 
@@ -13765,7 +13751,7 @@ to {
     filter: opacity(0);
 }
 100% {
-    margin-top: -600px;
+    margin-top: -300px;
 }
 }
 
@@ -13774,6 +13760,7 @@ to {
 }
 
 h1 {
+    position: relative;
     z-index: 999;
 }
 
