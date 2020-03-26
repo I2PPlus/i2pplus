@@ -177,8 +177,7 @@ div.topbuttons {
     border-bottom: 0 solid;
     border-radius: 2px 2px 0 0;
     border-bottom: 1px solid #26235c;
-    background: #000010 url(images/hatter_med.png) left bottom no-repeat;
-    background-size: 144px 100px, 100% 100% !important;
+    background: #000010;
 }
 
 .iframed .topbuttons {
@@ -1391,12 +1390,10 @@ input.prev:hover, input[name="next"]:hover, input.prev[disabled]:hover, input[na
 }
 
 input[type="submit"][disabled], input[type="submit"][disabled]:hover, input[type="submit"][disabled]:focus, input[type="submit"][disabled]:active {
+    padding: 5px 15px !important;
     opacity: 0.5;
     box-shadow: none;
     cursor: default;
-    border: 1px solid #3e3f8f !important;
-    border-bottom-color: #14144f !important;
-    border-right-color: #14144f !important;
 }
 
 /* end pagenav */
@@ -1430,9 +1427,9 @@ input[type=submit]:active, input.cancel:active {
     font-size: 10pt !important;
 }
 
-.iframed .topbuttons input[type="submit"], .iframed .topbuttons input[type="reset"] {
+/*.iframed .topbuttons input[type="submit"], .iframed .topbuttons input[type="reset"] {
     margin: 3px 5px !important;
-}
+}*/
 
 .iframed .pagenav input {
     font-size: 0 !important;
@@ -1448,9 +1445,9 @@ body, td, textarea, div, p.mailbody, input, input[type="submit"], input[type="re
     font-size: 9pt;
 }
 
-.topbuttons input[type="submit"], .topbuttons input[type="reset"] {
+/*.topbuttons input[type="submit"], .topbuttons input[type="reset"] {
     margin: 3px 5px !important;
-}
+}*/
 
 .pagenav input {
     font-size: 0 !important;
@@ -1596,7 +1593,7 @@ input[type="checkbox"][disabled]:checked, input[type="radio"][disabled]:checked,
 /* end timedate */
 
 #info {
-    margin: 7px 0 2px !important;
+    margin: 7px 0 2px 4px !important;
     padding: 3px 10px;
     display: inline-block;
     font-weight: bold;
@@ -1665,7 +1662,8 @@ select:hover, select:focus, select:active {
 }
 
 .topbuttons .folders {
-    margin-bottom: 5px;
+    margin-top: -6px;
+    margin-bottom: 2px;
 }
 
 #pagenavbottom .folders {
@@ -1694,4 +1692,127 @@ select:hover, select:focus, select:active {
 
 #toggle.showpass {
     background: url(/themes/console/images/buttons/show.png) center center no-repeat;
+}
+
+/* notifications */
+
+.notifications {
+    margin: 0 -20px;
+    padding: 5px 10px 2px;
+    position: fixed;
+    top: -1px;
+    left: 0;
+    right: 0;
+    z-index: 9999;
+    text-align: center;
+    text-shadow: 0 1px 1px #000;
+    border: 1px solid #26235c;
+    background: url(/themes/snark/light/images/delete.png) right 24px top 4px no-repeat #113;
+    background-size: 14px 14px !important;
+    opacity: 0.9;
+    background-blend-mode: luminosity;
+    cursor: crosshair;
+/*    animation: 2s hide-up 10s ease-out forwards;*/
+}
+
+.iframed .notifications {
+    margin: 6px 3% 0;
+    padding: 10px 10px 5px;
+    top: -6px;
+    background: url(/themes/snark/light/images/delete.png) right 6px top 5px no-repeat #113;
+    background-size: 14px 14px !important;
+/*    border: none;*/
+}
+
+@keyframes hide-up {
+from {
+    margin-top: 0
+}
+
+to {
+    margin-top: -300px;
+}
+}
+
+.notifications:hover {
+    background-image: url(/themes/snark/light/images/delete_hover.png);
+    background-blend-mode: normal;
+}
+
+.notifications p.info, .notifications p.info b {
+    line-height: 160%;
+    font-size: 10pt !important;
+    color: #fff;
+    text-shadow: none !important;
+}
+
+.notifications p {
+    letter-spacing: 0.07em;
+    word-spacing: 0.2em;
+    font-weight: bold;
+    animation: fade-in 1s linear;
+}
+
+@keyframes fade-in {
+from {
+    filter: opacity(0)
+}
+
+to {
+    filter: opacity(1)
+}
+}
+
+.notifications p.info, .notifications p.error {
+    margin: 0 !important;
+    text-align: center;
+    border: none;
+    background: none;
+}
+
+p.error {
+    font-size: 10pt !important;
+}
+
+td p.error {
+    padding: 10px;
+}
+
+#mailbox td:last-child {
+    border-right: none;
+}
+
+.iframed #mailbox {
+    width: calc(100% + 2px);
+}
+
+.topbuttons input, .topbuttons select, .folders input, .folders select {
+    margin-left: 2px !important;
+    margin-right: 2px !important;
+}
+
+/* end notifications */
+
+div.topbuttons, .iframed div.topbuttons {
+    border-bottom: none !important;
+}
+
+#viewmail, #messagenav {
+    margin-top: -8px;
+    margin-bottom: -8px;
+    border: none !important;
+}
+
+#viewmail .folders {
+    margin-top: 2px;
+    margin-bottom: 4px;
+}
+
+.pagenavcontrols td:first-child, .pagenavcontrols td:last-child {
+    width: 45%;
+}
+
+.pagenavcontrols input, .pagenavcontrols input:disabled,
+.pagenavcontrols input:hover:disabled, .pagenavcontrols input:focus:disabled {
+    padding: 5px !important;
 }
