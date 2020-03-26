@@ -1816,3 +1816,18 @@ div.topbuttons, .iframed div.topbuttons {
 .pagenavcontrols input:hover:disabled, .pagenavcontrols input:focus:disabled {
     padding: 5px !important;
 }
+
+.debugHeader td {
+    color: #eee;
+    border-top: 1px solid #030;
+    border-bottom: 1px solid #030;
+    background: #020;
+}
+
+.debugHeader pre {
+    margin: 10px 20px;
+}
+
+#mailhead, .iframed #mailhead {
+    margin: -9px 0;
+}

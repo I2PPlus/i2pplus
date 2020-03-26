@@ -3965,13 +3965,17 @@ form[action="events"] {
     text-align: center;
 }
 
-.tablefooter tr, .tablefooter td {
+.tablefooter, .tablefooter td {
     padding: 10px;
     line-height: 110%;
     border-top: 1px solid #26235c;
     border-bottom: 1px solid #26235c !important;
     border-right: none;
-    box-shadow: none;
+    box-shadow: none !important;
+    background: none;
+}
+
+.tablefooter, .tablefooter:hover td {
     background: #000 url(images/header.png) repeat-x center center !important;
     background: linear-gradient(to bottom, #010014, #010010 50%, #010010 100%) !important;
 }
@@ -4792,7 +4796,7 @@ table#reseedconfig textarea {
     line-height: 150%;
     list-style: none !important;
     text-shadow: 0 1px 1px #000;
-    border: 1px solid #363181;
+    border: 1px solid #26235c;
     box-shadow: inset 0 0 0 1px #000, inset 0 0 1px 1px #26235c;
     background: linear-gradient(to bottom, #002, #001);
     break-inside: avoid;
@@ -4810,7 +4814,7 @@ table#reseedconfig textarea {
     position: absolute;
     top: -1px;
     right: -1px;
-    border: 1px solid #363181;
+    border: 1px solid #26235c;
     box-shadow: inset 0 0 0 1px #000, inset 0 0 1px 1px #26235c;
     background: linear-gradient(to bottom, #002, #001);
     filter: none;
@@ -4819,7 +4823,7 @@ table#reseedconfig textarea {
 
 #banlist li a[href^="configpeer"]:hover, #banlist li a[href^="configpeer"]:focus {
     box-shadow: inset 0 0 0 1px #000;
-    background: linear-gradient(to bottom, #202 50%, #000 50%);
+    background: linear-gradient(to bottom, #313 50%, #000 50%);
 }
 
 #banlist li a[href^="configpeer"]:active {
@@ -13537,7 +13541,7 @@ to {
     background: linear-gradient(to bottom, #112, #001) !important;
 }
 
-#tunnels #tunnelPeerCount tr:hover td, #tunnels #tunnelPeerCount tr:hover td:first-child {
+#tunnels #tunnelPeerCount tr:not(.tablefooter):hover td, #tunnels #tunnelPeerCount tr:not(.tablefooter):hover td:first-child {
     background: #303 !important;
 }
 
@@ -13556,8 +13560,8 @@ to {
 }
 
 #tunnels #tunnelPeerCount td:first-child .routerid, #tunnels #tunnelPeerCount td:first-child .flag {
-    padding: 0 !important;
     margin: 1px !important;
+    padding: 0 !important;
 }
 
 #tunnels #tunnelPeerCount td:first-child tt {
@@ -13656,10 +13660,6 @@ to {
 @media screen and (max-width: 1200px) {
 #tunnels #peercount img {
     margin: -2px -4px;
-}
-
-#tunnelPeerCount {
-    margin-bottom: 4px;
 }
 
 #tunnels .percentBarOuter, #tunnels .percentBarText {
@@ -13804,6 +13804,6 @@ h3#bannedpeers {
 }
 }
 
-#bannedpeercount {
+#config_peers #bannedpeercount {
     margin-bottom: -1px !important;
 }
