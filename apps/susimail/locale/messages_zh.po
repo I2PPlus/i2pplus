@@ -9,6 +9,7 @@
 # walking <waling@mail.i2p>, 2013
 # walking <walking@i2pmail.org>, 2011
 # YFdyh000 <yfdyh000@gmail.com>, 2015
+# fzh2003 <fzh2003@i2pmail.org>,2020
 msgid ""
 msgstr ""
 "Project-Id-Version: I2P\n"
@@ -157,14 +158,14 @@ msgstr "用户已登出。"
 
 #: src/src/i2p/susi/webmail/WebMail.java:1035
 msgid "Draft saved."
-msgstr ""
+msgstr "草稿已保存"
 
 #: src/src/i2p/susi/webmail/WebMail.java:1045
 #: src/src/i2p/susi/webmail/WebMail.java:1286
 #: src/src/i2p/susi/webmail/WebMail.java:2721
 #: src/src/i2p/susi/webmail/WebMail.java:2902
 msgid "Unable to save mail."
-msgstr ""
+msgstr "不能保存邮件"
 
 #: src/src/i2p/susi/webmail/WebMail.java:1175
 #, java-format
@@ -249,7 +250,7 @@ msgstr "登录"
 #: src/src/i2p/susi/webmail/WebMail.java:2420
 #: src/src/i2p/susi/webmail/WebMail.java:3124
 msgid "Loading emails, please wait..."
-msgstr ""
+msgstr "加载邮件中，请稍候……"
 
 #: src/src/i2p/susi/webmail/WebMail.java:2302
 #, java-format
@@ -282,11 +283,11 @@ msgstr "电子邮箱"
 #, java-format
 msgid "{0} new message"
 msgid_plural "{0} new messages"
-msgstr[0] ""
+msgstr[0] "{0} 封新邮件"
 
 #: src/src/i2p/susi/webmail/WebMail.java:2409
 msgid "No new messages"
-msgstr ""
+msgstr "没有新邮件"
 
 #: src/src/i2p/susi/webmail/WebMail.java:2422
 msgid "Checking for new emails on server"
@@ -320,12 +321,12 @@ msgstr "没有找到收件人。"
 #: src/src/i2p/susi/webmail/smtp/SMTPClient.java:302
 #, java-format
 msgid "Email is too large, max is {0}"
-msgstr ""
+msgstr "邮件太大，最大尺寸为{0}"
 
 #: src/src/i2p/susi/webmail/WebMail.java:2834
 #: src/src/i2p/susi/webmail/WebMail.java:2915
 msgid "Sending mail."
-msgstr ""
+msgstr "发送中"
 
 #: src/src/i2p/susi/webmail/WebMail.java:2839
 #: src/src/i2p/susi/webmail/smtp/SMTPClient.java:254
@@ -344,7 +345,7 @@ msgstr "发送"
 
 #: src/src/i2p/susi/webmail/WebMail.java:2966
 msgid "Save as Draft"
-msgstr ""
+msgstr "保存为草稿"
 
 #: src/src/i2p/susi/webmail/WebMail.java:2967
 #: src/src/i2p/susi/webmail/WebMail.java:3258
@@ -393,7 +394,7 @@ msgstr "删除所选的附件"
 
 #: src/src/i2p/susi/webmail/WebMail.java:3093
 msgid "Email Login"
-msgstr ""
+msgstr "邮件登录"
 
 #. current postman hq length limits 16/12, new postman version 32/32
 #: src/src/i2p/susi/webmail/WebMail.java:3095
@@ -503,7 +504,7 @@ msgstr "文件夹"
 #. TODO css to center it
 #: src/src/i2p/susi/webmail/WebMail.java:3290
 msgid "Change to Folder"
-msgstr ""
+msgstr "更改到文件夹"
 
 #: src/src/i2p/susi/webmail/WebMail.java:3296
 msgid "First"
@@ -561,7 +562,7 @@ msgstr "删除"
 #. can't move from drafts
 #: src/src/i2p/susi/webmail/WebMail.java:3401
 msgid "Move to Folder"
-msgstr ""
+msgstr "移动到文件夹"
 
 #: src/src/i2p/susi/webmail/WebMail.java:3421
 msgid "Back to Folder"
@@ -595,11 +596,11 @@ msgstr "服务器没有响应"
 
 #: src/src/i2p/susi/webmail/pop3/POP3MailBox.java:747
 msgid "Mail server login failed, wrong username or password."
-msgstr ""
+msgstr "邮件服务器登陆失败：错误的用户名或密码"
 
 #: src/src/i2p/susi/webmail/pop3/POP3MailBox.java:749
 msgid "Logout and then login again with the correct username and password."
-msgstr ""
+msgstr "注销并用正确的用户名和密码登录"
 
 #: src/src/i2p/susi/webmail/pop3/POP3MailBox.java:1238
 #: src/src/i2p/susi/webmail/pop3/POP3MailBox.java:1240

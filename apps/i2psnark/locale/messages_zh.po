@@ -10,6 +10,7 @@
 # walking <waling@mail.i2p>, 2013
 # wwj402 <wwj402@gmail.com>, 2013
 # YFdyh000 <yfdyh000@gmail.com>, 2014-2016
+# fzh2003 <fzh2003@i2pmail.org>, 2020
 msgid ""
 msgstr ""
 "Project-Id-Version: I2P\n"
@@ -744,11 +745,11 @@ msgstr "目标"
 
 #: ../java/src/org/klomp/snark/web/I2PSnarkServlet.java:767
 msgid "Our destination (identity) for this session"
-msgstr ""
+msgstr "这个会话中我们的目标（身份）"
 
 #: ../java/src/org/klomp/snark/web/I2PSnarkServlet.java:792
 msgid "Dht Debug"
-msgstr ""
+msgstr "DHT调试"
 
 #: ../java/src/org/klomp/snark/web/I2PSnarkServlet.java:908
 msgid "First"
@@ -1300,11 +1301,11 @@ msgstr "主题"
 
 #: ../java/src/org/klomp/snark/web/I2PSnarkServlet.java:2432
 msgid "To change themes manually, disable universal theming"
-msgstr ""
+msgstr "要手动更换主题，请禁用通用主题"
 
 #: ../java/src/org/klomp/snark/web/I2PSnarkServlet.java:2436
 msgid "Universal theming is enabled."
-msgstr ""
+msgstr "通用主题已禁用"
 
 #: ../java/src/org/klomp/snark/web/I2PSnarkServlet.java:2438
 #: ../java/src/org/klomp/snark/web/I2PSnarkServlet.java:2538
@@ -1318,7 +1319,7 @@ msgstr "刷新时间"
 
 #: ../java/src/org/klomp/snark/web/I2PSnarkServlet.java:2458
 msgid "How frequently torrent status is updated on the main page"
-msgstr ""
+msgstr "主页上种子状况的刷新频率"
 
 #: ../java/src/org/klomp/snark/web/I2PSnarkServlet.java:2471
 msgid "Never"
@@ -1342,7 +1343,7 @@ msgstr "页面容量"
 
 #: ../java/src/org/klomp/snark/web/I2PSnarkServlet.java:2491
 msgid "Maximum number of torrents to display per page"
-msgstr ""
+msgstr "每页显示的最多种子数"
 
 #: ../java/src/org/klomp/snark/web/I2PSnarkServlet.java:2493
 msgid "torrents"
@@ -1354,7 +1355,7 @@ msgstr "限制总上传种子数为"
 
 #: ../java/src/org/klomp/snark/web/I2PSnarkServlet.java:2521
 msgid "Maximum number of peers for uploading"
-msgstr ""
+msgstr "最大上传用户数"
 
 #: ../java/src/org/klomp/snark/web/I2PSnarkServlet.java:2523
 msgid "peers"
@@ -1366,7 +1367,7 @@ msgstr "上传带宽限制"
 
 #: ../java/src/org/klomp/snark/web/I2PSnarkServlet.java:2531
 msgid "Maximum bandwidth allocated for uploading"
-msgstr ""
+msgstr "最大上传带宽"
 
 #: ../java/src/org/klomp/snark/web/I2PSnarkServlet.java:2533
 msgid "Half available bandwidth recommended."
@@ -1384,7 +1385,7 @@ msgstr "同时使用OpenTracker"
 msgid ""
 "Announce torrents to open trackers as well as trackers listed in the torrent"
 " file"
-msgstr ""
+msgstr "在向种子内的Tracker发布的同时向OpenTracker发布"
 
 #: ../java/src/org/klomp/snark/web/I2PSnarkServlet.java:2550
 msgid "Enable DHT"
@@ -1392,31 +1393,31 @@ msgstr "启用 DHT"
 
 #: ../java/src/org/klomp/snark/web/I2PSnarkServlet.java:2554
 msgid "Use DHT to find additional peers"
-msgstr ""
+msgstr "用DHT来寻找额外的用户"
 
 #: ../java/src/org/klomp/snark/web/I2PSnarkServlet.java:2558
 msgid "Enable Ratings"
-msgstr ""
+msgstr "启用评分"
 
 #: ../java/src/org/klomp/snark/web/I2PSnarkServlet.java:2562
 msgid "Show ratings on torrent pages"
-msgstr ""
+msgstr "在种子页面显示评分"
 
 #: ../java/src/org/klomp/snark/web/I2PSnarkServlet.java:2566
 msgid "Enable Comments"
-msgstr ""
+msgstr "启用评论"
 
 #: ../java/src/org/klomp/snark/web/I2PSnarkServlet.java:2570
 msgid "Show comments on torrent pages"
-msgstr ""
+msgstr "在种子页面显示评论"
 
 #: ../java/src/org/klomp/snark/web/I2PSnarkServlet.java:2572
 msgid "Comment Author"
-msgstr ""
+msgstr "评论者"
 
 #: ../java/src/org/klomp/snark/web/I2PSnarkServlet.java:2575
 msgid "Set the author name for your comments and ratings"
-msgstr ""
+msgstr "为你的评论与评分显示作者名"
 
 #: ../java/src/org/klomp/snark/web/I2PSnarkServlet.java:2591
 msgid "Inbound Settings"
@@ -1444,7 +1445,7 @@ msgstr "保存设置"
 
 #: ../java/src/org/klomp/snark/web/I2PSnarkServlet.java:2650
 msgid "Select trackers for removal from I2PSnark's known list"
-msgstr ""
+msgstr "选择你要从I2PSnark的已知名单中移除的Tracker"
 
 #: ../java/src/org/klomp/snark/web/I2PSnarkServlet.java:2653
 #: ../java/src/org/klomp/snark/web/I2PSnarkServlet.java:3420
@@ -1461,7 +1462,7 @@ msgstr "发布 URL"
 
 #: ../java/src/org/klomp/snark/web/I2PSnarkServlet.java:2675
 msgid "Mark tracker for deletion"
-msgstr ""
+msgstr "标记删除Tracker"
 
 #: ../java/src/org/klomp/snark/web/I2PSnarkServlet.java:2707
 msgid "Add"
@@ -1568,28 +1569,28 @@ msgstr "强制重新检查"
 
 #: ../java/src/org/klomp/snark/web/I2PSnarkServlet.java:3291
 msgid "Stop the torrent in order to check file integrity"
-msgstr ""
+msgstr "为检查文件完整性停止种子"
 
 #: ../java/src/org/klomp/snark/web/I2PSnarkServlet.java:3295
 msgid "Check integrity of the downloaded files"
-msgstr ""
+msgstr "检查文件完整性"
 
 #: ../java/src/org/klomp/snark/web/I2PSnarkServlet.java:3304
 msgid "Download files in order"
-msgstr ""
+msgstr "按顺序下载文件"
 
 #: ../java/src/org/klomp/snark/web/I2PSnarkServlet.java:3305
 msgid "Download pieces in order"
-msgstr ""
+msgstr "按顺序下载片段"
 
 #: ../java/src/org/klomp/snark/web/I2PSnarkServlet.java:3312
 #: ../java/src/org/klomp/snark/web/I2PSnarkServlet.java:3869
 msgid "Save Preference"
-msgstr ""
+msgstr "保存偏好设置"
 
 #: ../java/src/org/klomp/snark/web/I2PSnarkServlet.java:3322
 msgid "Resource Not found"
-msgstr ""
+msgstr "找不到资源"
 
 #: ../java/src/org/klomp/snark/web/I2PSnarkServlet.java:3323
 #: ../java/src/org/klomp/snark/web/I2PSnarkServlet.java:3334
@@ -1599,11 +1600,11 @@ msgstr "资源"
 #: ../java/src/org/klomp/snark/web/I2PSnarkServlet.java:3324
 #: ../java/src/org/klomp/snark/web/I2PSnarkServlet.java:3335
 msgid "Base"
-msgstr ""
+msgstr "基础"
 
 #: ../java/src/org/klomp/snark/web/I2PSnarkServlet.java:3333
 msgid "Resource Does Not Exist"
-msgstr ""
+msgstr "资源不存在"
 
 #: ../java/src/org/klomp/snark/web/I2PSnarkServlet.java:3400
 msgid "Directory"
@@ -1611,11 +1612,11 @@ msgstr "文件夹"
 
 #: ../java/src/org/klomp/snark/web/I2PSnarkServlet.java:3446
 msgid "Download Status"
-msgstr ""
+msgstr "下载状态"
 
 #: ../java/src/org/klomp/snark/web/I2PSnarkServlet.java:3458
 msgid "Download Priority"
-msgstr ""
+msgstr "下载优先级"
 
 #: ../java/src/org/klomp/snark/web/I2PSnarkServlet.java:3470
 msgid "Up to higher level directory"
@@ -1623,7 +1624,7 @@ msgstr "上一层文件夹"
 
 #: ../java/src/org/klomp/snark/web/I2PSnarkServlet.java:3481
 msgid "Audio Playlist"
-msgstr ""
+msgstr "音频播放列表"
 
 #: ../java/src/org/klomp/snark/web/I2PSnarkServlet.java:3513
 msgid "Torrent not found?"
@@ -1639,7 +1640,7 @@ msgstr "预览"
 
 #: ../java/src/org/klomp/snark/web/I2PSnarkServlet.java:3610
 msgid "Download file at high priority"
-msgstr ""
+msgstr "以高优先级下载文件"
 
 #: ../java/src/org/klomp/snark/web/I2PSnarkServlet.java:3615
 msgid "High"
@@ -1647,7 +1648,7 @@ msgstr "高"
 
 #: ../java/src/org/klomp/snark/web/I2PSnarkServlet.java:3618
 msgid "Download file at normal priority"
-msgstr ""
+msgstr "以普通优先级下载文件"
 
 #: ../java/src/org/klomp/snark/web/I2PSnarkServlet.java:3623
 msgid "Normal"
@@ -1655,7 +1656,7 @@ msgstr "普通"
 
 #: ../java/src/org/klomp/snark/web/I2PSnarkServlet.java:3625
 msgid "Do not download this file"
-msgstr ""
+msgstr "不要下载这个文件"
 
 #: ../java/src/org/klomp/snark/web/I2PSnarkServlet.java:3630
 msgid "Skip"
@@ -1679,37 +1680,37 @@ msgstr "保存优先级"
 
 #: ../java/src/org/klomp/snark/web/I2PSnarkServlet.java:3842
 msgid "Ratings and Comments"
-msgstr ""
+msgstr "评分与评论"
 
 #: ../java/src/org/klomp/snark/web/I2PSnarkServlet.java:3845
 msgid "Author name required to rate or comment"
-msgstr ""
+msgstr "你需要键入作者名来评分或评论"
 
 #: ../java/src/org/klomp/snark/web/I2PSnarkServlet.java:3851
 msgid "Your author name for published comments and ratings"
-msgstr ""
+msgstr "你发表评论或评分的作者名"
 
 #: ../java/src/org/klomp/snark/web/I2PSnarkServlet.java:3865
 msgid "Enable viewing and posting comments for this torrent"
-msgstr ""
+msgstr "为这个种子启用评分功能"
 
 #: ../java/src/org/klomp/snark/web/I2PSnarkServlet.java:3888
 #, java-format
 msgid "1 star"
 msgid_plural "{0} stars"
-msgstr[0] ""
+msgstr[0] "1 星"
 
 #: ../java/src/org/klomp/snark/web/I2PSnarkServlet.java:3890
 msgid "No rating"
-msgstr ""
+msgstr "没有评分"
 
 #: ../java/src/org/klomp/snark/web/I2PSnarkServlet.java:3905
 msgid "Rate and Comment"
-msgstr ""
+msgstr "评分和评价"
 
 #: ../java/src/org/klomp/snark/web/I2PSnarkServlet.java:3907
 msgid "Rate Torrent"
-msgstr ""
+msgstr "为种子评分"
 
 #: ../java/src/org/klomp/snark/web/I2PSnarkServlet.java:3909
 msgid "Add Comment"
@@ -1717,16 +1718,16 @@ msgstr "添加评论"
 
 #: ../java/src/org/klomp/snark/web/I2PSnarkServlet.java:3921
 msgid "My Rating"
-msgstr ""
+msgstr "我的评分"
 
 #: ../java/src/org/klomp/snark/web/I2PSnarkServlet.java:3934
 #: ../java/src/org/klomp/snark/web/I2PSnarkServlet.java:3938
 msgid "Average Rating"
-msgstr ""
+msgstr "平均评分"
 
 #: ../java/src/org/klomp/snark/web/I2PSnarkServlet.java:3939
 msgid "No community ratings currently available"
-msgstr ""
+msgstr "没有可用的社区评分"
 
 #: ../java/src/org/klomp/snark/web/I2PSnarkServlet.java:3987
 msgid "Mark for deletion"
