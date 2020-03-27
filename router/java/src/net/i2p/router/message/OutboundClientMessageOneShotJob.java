@@ -38,6 +38,7 @@ import net.i2p.router.ReplyJob;
 import net.i2p.router.Router;
 import net.i2p.router.RouterContext;
 import net.i2p.router.TunnelInfo;
+import net.i2p.router.crypto.ratchet.ReplyCallback;
 import net.i2p.util.Log;
 
 /**
