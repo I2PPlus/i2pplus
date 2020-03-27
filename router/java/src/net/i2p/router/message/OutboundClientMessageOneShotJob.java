@@ -679,7 +679,8 @@ public class OutboundClientMessageOneShotJob extends JobImpl {
         SendSuccessJob onReply = null;
         SendTimeoutJob onFail = null;
         ReplySelector selector = null;
-        if (wantACK) {
+
+        if (wantACK && _encryptionKey.getType() == EncType.ELGAMAL_2048) {
             TagSetHandle tsh = null;
             if (!tags.isEmpty()) {
                     SessionKeyManager skm = getContext().clientManager().getClientSessionKeyManager(_from.calculateHash());
