@@ -1698,7 +1698,7 @@ msgstr "为这个种子启用评分功能"
 #, java-format
 msgid "1 star"
 msgid_plural "{0} stars"
-msgstr[0] "1 星"
+msgstr[0] "{0} 星"
 
 #: ../java/src/org/klomp/snark/web/I2PSnarkServlet.java:3890
 msgid "No rating"
