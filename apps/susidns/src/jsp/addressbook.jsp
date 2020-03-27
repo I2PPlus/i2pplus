@@ -254,7 +254,7 @@ ${book.loadBookMessages}
 <h3><%=intl._t("Add new destination")%></h3>
 <table>
 <tr><td><b><%=intl._t("Hostname")%></b></td><td><input type="text" name="hostname" value="${book.hostname}" size="30"required placeholder="e.g. newdomain.i2p"></td></tr>
-<tr><td><b><%=intl._t("B64 or B32")%></b></td><td><input type="text" name="hostname" value="${book.destination}" size="50" required placeholder="Full destination or b32 address"></td></tr>
+<tr><td><b><%=intl._t("B64 or B32")%></b></td><td><input type="text" name="destination" value="${book.destination}" size="50" required placeholder="Full destination or b32 address"></td></tr>
 </table>
 <p class="buttons">
 <input class="cancel" type="reset" value="<%=intl._t("Cancel")%>" >
