@@ -656,12 +656,18 @@ public class OutboundClientMessageOneShotJob extends JobImpl {
 
         // Per-message flag > 0 overrides per-session option
         int tagsToSend = SendMessageOptions.getTagsToSend(sendFlags);
+        ReplyCallback callback;
+        if (wantACK && _encryptionKey.getType() == EncType.ECIES_X25519) {
+            callback = new ECIESReplyCallback(replyLeaseSet);
+        } else {
+            callback = null;
+        }
         GarlicMessage msg = OutboundClientMessageJobHelper.createGarlicMessage(getContext(), token,
                                                                                _overallExpiration, _encryptionKey,
                                                                                clove, _from.calculateHash(),
                                                                                _to, _inTunnel, tagsToSend,
                                                                                tagsRequired, sessKey, tags,
-                                                                               wantACK, replyLeaseSet);
+                                                                               wantACK, replyLeaseSet, callback);
         if (msg == null) {
             // set to null if there are no tunnels to ack the reply back through
             // (should we always fail for this? or should we send it anyway, even if
@@ -676,9 +682,9 @@ public class OutboundClientMessageOneShotJob extends JobImpl {
         //if (_log.shouldLog(Log.DEBUG))
         //    _log.debug("[Job " + getJobId() + "] send() - token expected " + token + " to " + _toString);
 
-        SendSuccessJob onReply = null;
-        SendTimeoutJob onFail = null;
-        ReplySelector selector = null;
+        SendSuccessJob onReply;
+        SendTimeoutJob onFail;
+        ReplySelector selector;
 
         if (wantACK && _encryptionKey.getType() == EncType.ELGAMAL_2048) {
             TagSetHandle tsh = null;
@@ -687,10 +693,14 @@ public class OutboundClientMessageOneShotJob extends JobImpl {
                     if (skm != null)
                         tsh = skm.tagsDelivered(_encryptionKey, sessKey, tags);
             }
-            onFail = new SendTimeoutJob(getContext(), sessKey, tsh);
-            onReply = new SendSuccessJob(getContext(), sessKey, tsh, replyLeaseSet, onFail);
+            onFail = new SendTimeoutJob(sessKey, tsh);
+            onReply = new SendSuccessJob(sessKey, tsh, replyLeaseSet, onFail);
             long expiration = Math.max(_overallExpiration, _start + REPLY_TIMEOUT_MS_MIN);
             selector = new ReplySelector(token, expiration);
+        } else {
+            onReply = null;
+            onFail = null;
+            selector = null;
         }
 
         if (_log.shouldLog(Log.DEBUG))
@@ -699,7 +709,7 @@ public class OutboundClientMessageOneShotJob extends JobImpl {
                            + _lease.getTunnelId() + "] on Gateway ["
                            + _lease.getGateway().toBase64().substring(0,6) + "]");
 
-        DispatchJob dispatchJob = new DispatchJob(getContext(), msg, selector, onReply, onFail);
+        DispatchJob dispatchJob = new DispatchJob(msg, selector, onReply, onFail);
         //if (false) // dispatch may take 100+ms, so toss it in its own job
         //    getContext().jobQueue().addJob(dispatchJob);
         //else
@@ -724,9 +734,9 @@ public class OutboundClientMessageOneShotJob extends JobImpl {
          *  @param success non-null if sel non-null
          *  @param timeout non-null if sel non-null
          */
-        public DispatchJob(RouterContext ctx, GarlicMessage msg, ReplySelector sel,
+        public DispatchJob(GarlicMessage msg, ReplySelector sel,
                            SendSuccessJob success, SendTimeoutJob timeout) {
-            super(ctx);
+            super(OutboundClientMessageOneShotJob.this.getContext());
             _msg = msg;
             _selector = sel;
             _replyFound = success;
@@ -1016,11 +1026,11 @@ public class OutboundClientMessageOneShotJob extends JobImpl {
          * @param key may be null
          * @param tags may be null
          * @param ls the delivered leaseset or null
-         * @param timeout will be cancelled when this is run
+         * @param timeout will be cancelled when this is run, may be null
          */
-        public SendSuccessJob(RouterContext enclosingContext, SessionKey key,
+        public SendSuccessJob(SessionKey key,
                               TagSetHandle tags, LeaseSet ls, SendTimeoutJob timeout) {
-            super(enclosingContext);
+            super(OutboundClientMessageOneShotJob.this.getContext());
             _key = key;
             _tags = tags;
             _deliveredLS = ls;
@@ -1066,7 +1076,8 @@ public class OutboundClientMessageOneShotJob extends JobImpl {
                         skm.tagsAcked(_encryptionKey, _key, _tags);
                 }
             }
-            getContext().jobQueue().removeJob(_replyTimeout);
+            if (_replyTimeout != null)
+                getContext().jobQueue().removeJob(_replyTimeout);
 
             long sendTime = getContext().clock().now() - _start;
             if (old == Result.FAIL) {
@@ -1114,6 +1125,26 @@ public class OutboundClientMessageOneShotJob extends JobImpl {
     }
 
     /**
+     * For ECIES only.
+     *
+     * @since 0.9.46
+     */
+    private class ECIESReplyCallback extends SendSuccessJob implements ReplyCallback {
+        public ECIESReplyCallback(LeaseSet ls) {
+            super(null, null, ls, null);
+        }
+
+        public long getExpiration() {
+            // same as SendTimeoutJob
+            return Math.max(_overallExpiration, _start + REPLY_TIMEOUT_MS_MIN);
+        }
+
+        public void onReply() {
+            runJob();
+        }
+    }
+
+    /**
      * Fired after the basic timeout for sending through the given tunnel has been reached.
      * We'll accept successes later, but won't expect them
      *
@@ -1129,8 +1160,8 @@ public class OutboundClientMessageOneShotJob extends JobImpl {
          * @param key may be null
          * @param tags may be null
          */
-        public SendTimeoutJob(RouterContext enclosingContext, SessionKey key, TagSetHandle tags) {
-            super(enclosingContext);
+        public SendTimeoutJob(SessionKey key, TagSetHandle tags) {
+            super(OutboundClientMessageOneShotJob.this.getContext());
             _key = key;
             _tags = tags;
         }
