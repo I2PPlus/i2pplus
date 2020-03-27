@@ -848,10 +848,6 @@ input.delete {
     color: transparent;
 }
 
-div.notifications + div#dologin {
-    margin-top: 0;
-}
-
 h3#config {
     border: 1px solid #26235c;
     padding: 5px;
@@ -1712,7 +1708,7 @@ select:hover, select:focus, select:active {
     opacity: 0.9;
     background-blend-mode: luminosity;
     cursor: crosshair;
-/*    animation: 2s hide-up 10s ease-out forwards;*/
+    animation: 2s hide-up 10s ease-out forwards;
 }
 
 .iframed .notifications {
@@ -1721,7 +1717,6 @@ select:hover, select:focus, select:active {
     top: -6px;
     background: url(/themes/snark/light/images/delete.png) right 6px top 5px no-repeat #113;
     background-size: 14px 14px !important;
-/*    border: none;*/
 }
 
 @keyframes hide-up {
