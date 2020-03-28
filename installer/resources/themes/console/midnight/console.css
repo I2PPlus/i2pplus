@@ -1771,15 +1771,20 @@ div.logo hr {
 }
 
 .sb_notice {
-    margin: -3px -6px -6px;
-    padding: 5px;
+    margin: -4px -7px -7px;
+    padding: 7px 5px;
     line-height: 110%;
-    font-size: 110%;
     font-weight: bold;
     border: 1px solid #26235c;
-    border-radius: 2px;
-    box-shadow: inset 0 0 0 1px #000;
+    box-shadow: inset 0 0 0 1px #000, inset 0 0 1px 1px #a3a !important;
     background: #001;
+    background: repeating-linear-gradient(to right, #001, #001 10px, #003 10px, #003 20px);
+}
+
+@media screen and (min-width: 1500px) {
+.sb_notice {
+    margin-bottom: -8px;
+}
 }
 
 .sb_notice + .sb_notice {
