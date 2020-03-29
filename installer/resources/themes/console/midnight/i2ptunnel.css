@@ -1142,8 +1142,8 @@ th {
 }
 
 #clientHost, .host {
-    width: 200px;
-    min-width: 210px;
+    width: 130px;
+    min-width: 130px;
 }
 }
 
