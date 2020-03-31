@@ -148,16 +148,23 @@ class FloodfillVerifyStoreJob extends JobImpl {
             _facade.verifyFinished(_key);
             return;
         }
+        boolean supportsElGamal = true;
+        boolean supportsRatchet = false;
         if (DatabaseLookupMessage.supportsEncryptedReplies(peer)) {
             // register the session with the right SKM
             MessageWrapper.OneTimeSession sess;
             if (isInboundExploratory) {
-                sess = MessageWrapper.generateSession(getContext());
+                sess = MessageWrapper.generateSession(getContext(), VERIFY_TIMEOUT);
             } else {
                 LeaseSetKeys lsk = getContext().keyManager().getKeys(_client);
-                if (lsk == null || lsk.isSupported(EncType.ELGAMAL_2048)) {
+                supportsRatchet = lsk != null &&
+                                  lsk.isSupported(EncType.ECIES_X25519) &&
+                                  DatabaseLookupMessage.supportsRatchetReplies(peer);
+                supportsElGamal = lsk != null &&
+                                  lsk.isSupported(EncType.ELGAMAL_2048);
+                if (supportsElGamal || supportsRatchet) {
                     // garlic encrypt
-                    sess = MessageWrapper.generateSession(getContext(), _client);
+                    sess = MessageWrapper.generateSession(getContext(), _client, VERIFY_TIMEOUT, !supportsRatchet);
                     if (sess == null) {
                          if (_log.shouldLog(Log.WARN))
                              _log.warn("No SKM to reply to");
@@ -165,7 +172,7 @@ class FloodfillVerifyStoreJob extends JobImpl {
                         return;
                     }
                 } else {
-                    // We don't yet have any way to request/get a ECIES-tagged reply,
+                    // We don't have a compatible way to get a reply,
                     // skip it for now.
                      if (_log.shouldWarn())
                          _log.warn("Skipping store verify for ECIES client " + _client.toBase32());
@@ -173,23 +180,41 @@ class FloodfillVerifyStoreJob extends JobImpl {
                     return;
                 }
             }
-            if (_log.shouldLog(Log.INFO))
-                _log.info("[Job " + getJobId() + "] Requesting encrypted reply from [" + _target.toBase64().substring(0,6) + "]\n* Session key: " + sess.key + "\n* Tag: " + sess.tag);
-            lookup.setReplySession(sess.key, sess.tag);
+            if (sess.tag != null) {
+                if (_log.shouldInfo())
+                _log.info("[Job " + getJobId() + "] Requesting AES reply from [" + peer.toBase64().substring(0,6) + "]\n* Session key: " + sess.key + "\n* Tag: " + sess.tag);
+                lookup.setReplySession(sess.key, sess.tag);
+            } else {
+                if (_log.shouldInfo())
+                _log.info("[Job " + getJobId() + "] Requesting AEAD reply from [" + peer.toBase64().substring(0,6) + "]\n* Session key: " + sess.key + "\n* Tag: " + sess.tag);
+                lookup.setReplySession(sess.key, sess.rtag);
+            }
         }
         Hash fromKey;
-        if (_isRouterInfo)
-            fromKey = null;
-        else
-            fromKey = _client;
-        _wrappedMessage = MessageWrapper.wrap(getContext(), lookup, fromKey, peer);
-        if (_wrappedMessage == null) {
-             if (_log.shouldLog(Log.WARN))
-                _log.warn("Fail Garlic encrypting");
-            _facade.verifyFinished(_key);
-            return;
+        I2NPMessage sent;
+        if (supportsElGamal) {
+            if (_isRouterInfo)
+                fromKey = null;
+            else
+                fromKey = _client;
+            _wrappedMessage = MessageWrapper.wrap(getContext(), lookup, fromKey, peer);
+            if (_wrappedMessage == null) {
+                 if (_log.shouldLog(Log.WARN))
+                    _log.warn("Fail Garlic encrypting");
+                _facade.verifyFinished(_key);
+                return;
+            }
+            sent = _wrappedMessage.getMessage();
+        } else {
+            // force full ElG for ECIES fromkey
+            sent = MessageWrapper.wrap(getContext(), lookup, peer);
+            if (sent == null) {
+                 if (_log.shouldLog(Log.WARN))
+                    _log.warn("Fail Garlic encrypting");
+                _facade.verifyFinished(_key);
+                return;
+            }
         }
-        I2NPMessage sent = _wrappedMessage.getMessage();
 
         if (_log.shouldLog(Log.INFO))
             _log.info("[" + getJobId() + "] Starting verify" +
