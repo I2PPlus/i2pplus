@@ -281,6 +281,7 @@ th.mailListSubject {
 #mailbox td {
     padding: 4px 8px;
     border-right: 1px solid #26235c;
+    border-right: 1px solid rgba(38, 35, 92,.7);
 }
 
 .bottombuttons td, .pagenav td {
@@ -390,11 +391,11 @@ td {
 }
 
 .list0 {
-    background-color: #080811;
+    background-color: #080818;
 }
 
 .list1 {
-    background-color: #010011;
+    background-color: #010010;
 }
 
 /* mailbox display finessing */
@@ -404,6 +405,8 @@ td {
     color: #7670c2;
     border-top: 1px solid #26235c;
     border-bottom: 1px solid #26235c;
+    border-top: 1px solid rgba(38, 35, 92,.7);
+    border-bottom: 1px solid rgba(38, 35, 92,.7);
 }
 
 .list0:hover td, .list1:hover td {
