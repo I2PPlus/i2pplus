@@ -4063,8 +4063,8 @@ h3[id="udpcon"] {
 }
 
 #udpconnections td:first-child, #ntcpconnections td:first-child {
-    width: 1%;
     padding: 4px;
+    width: 1%;
     white-space: nowrap;
 }
 
@@ -4091,8 +4091,8 @@ h3[id="udpcon"] {
 }
 
 #ntcpconnections td[class="cells"]:last-child {
-    font-weight: bold !important;
     width: 100px;
+    font-weight: bold !important;
 }
 
 #ntcpconnections {
@@ -4112,16 +4112,16 @@ h3[id="udpcon"] {
 }
 
 .sortup, .sortdown, .sortupactive, .sortdownactive {
+    margin: 4px 1px 0 !important;
     padding: 1px 0;
+    width: 16px;
+    height: 12px;
+    display: inline-block;
+    vertical-align: middle;
+    text-align: center;
     border: 1px solid #117;
     border: 1px solid #26235c;
     border-radius: 1px;
-    margin: 4px 1px 0 !important;
-    vertical-align: middle;
-    text-align: center;
-    display: inline-block;
-    width: 16px;
-    height: 12px;
     background-size: 10px auto, 100% 100% !important;
 }
 
@@ -4142,8 +4142,8 @@ h3[id="udpcon"] {
 }
 
 .sortupactive, .sortdownactive {
-    opacity: 1;
     box-shadow: inset 2px 2px 1px #000;
+    opacity: 1;
 }
 
 .sortup {
@@ -4151,18 +4151,18 @@ h3[id="udpcon"] {
 }
 
 .sortup:hover {
-    background: url(images/sort_up.png) center center no-repeat, linear-gradient(to bottom, #000, #004);
     border: 1px solid #652787;
+    background: url(images/sort_up.png) center center no-repeat, linear-gradient(to bottom, #000, #004);
     opacity: 1;
 }
 
 .sortup a:focus, .sortdown a:focus {
-    background: rgba(237, 207, 255, 0.2);
-    border-radius: 1px;
     margin-top: -1px;
     height: 14px;
     width: 16px;
     display: inline-block;
+    border-radius: 1px;
+    background: rgba(237, 207, 255, 0.2);
 }
 
 .sortupactive {
@@ -4174,29 +4174,29 @@ h3[id="udpcon"] {
 }
 
 .sortdown:hover {
-    background: url(images/sort_down.png) center center no-repeat, linear-gradient(to bottom, #000, #004);
     border: 1px solid #652787;
+    background: url(images/sort_down.png) center center no-repeat, linear-gradient(to bottom, #000, #004);
     opacity: 1;
 }
 
 .sortdownactive {
-    background: url(images/sort_down.png) center center no-repeat, #005;
     border: 1px solid #005;
+    background: url(images/sort_down.png) center center no-repeat, #005;
 }
 
 /* end peer sort */
 
 .backlogged {
-    font-size: 14pt;
     line-height: 0;
+    vertical-align: middle;
 }
 
 pre#transports {
-    border: 1px solid #26235c;
-    padding: 15px 7px 5px 15px;
     margin: 0;
-    background: #000;
+    padding: 15px 7px 5px 15px;
     width: calc(100% - 24px);
+    border: 1px solid #26235c;
+    background: #000;
 }
 
 a[name="chelp"]:hover, a[name="help"]:hover, a[name="chelp"]:active, a[name="help"]:active { /* hide /help anchorpoints */
@@ -4206,12 +4206,12 @@ a[name="chelp"]:hover, a[name="help"]:hover, a[name="chelp"]:active, a[name="hel
 }
 
 .homelinkedit th:nth-child(3), .homelinkedit th:last-child {
-    font-size: 9pt;
+    padding-left: 5px;
+    word-spacing: 0 !important;
+    letter-spacing: 0 !important;
     text-align: left !important;
     text-transform: none !important;
-    letter-spacing: 0 !important;
-    word-spacing: 0 !important;
-    padding-left: 5px;
+    font-size: 9pt;
 }
 
 .homelinkedit tr:last-child td:first-child {
@@ -4245,9 +4245,9 @@ a[name="chelp"]:hover, a[name="help"]:hover, a[name="chelp"]:active, a[name="hel
 }
 
 .formaction#homeapps, .formaction#homesites, .formaction#tunnelconfigsave, .formaction#homesearch {
+    margin-top: -2px;
     border: 1px solid #26235c;
     background: #000;
-    margin-top: -2px;
 }
 
 .formaction#homesearch {
@@ -4295,22 +4295,22 @@ tr#addnew {
 }
 
 .themechoice:hover {
-    background: #000;
     border: 1px solid #652787;
+    background: #000;
 }
 
 .themechoice:hover .themelabel {
-    background: #000 !important;
-    background: linear-gradient(to bottom, #1e0b28 50%, #0a030d 50%) !important;
     color: #652787;
     border-top: 1px solid #652787 !important;
+    background: #000 !important;
+    background: linear-gradient(to bottom, #1e0b28 50%, #0a030d 50%) !important;
 }
 
 .themechoice:active .themelabel, .langselect:active .ui_lang {
     color: #c9ceff !important;
     border-top: 1px solid #652787 !important;
-    background: #652787 !important;
     box-shadow: inset 0 0 0 1px #000, inset 3px 3px 2px #1e0b28 !important;
+    background: #652787 !important;
 }
 
 .themechoice:hover img {
@@ -4332,9 +4332,9 @@ tr#addnew {
     margin-left: -33px;
     min-width: 120px !important;
     min-height: 80px !important;
-    opacity: 0;
-    z-index: 999;
     position: absolute !important;
+    z-index: 999;
+    opacity: 0;
 }
 
 .themechoice .optbox + img {
@@ -4346,9 +4346,9 @@ tr#addnew {
 }
 
 .themechoice .optbox:checked + img ~ .themelabel {
-    background: #040033 !important;
-    color: #c9ceff;
     font-weight: bold;
+    color: #c9ceff;
+    background: #040033 !important;
 }
 
 .themechoice .optbox:checked + img {
@@ -4367,12 +4367,12 @@ tr#addnew {
 }
 
 #themeoptions {
-    clear: both;
-    border-top: 1px solid #26235c;
     margin: 0 -7px 5px;
+    padding: 5px 8px 8px 3px;
     position: relative;
     top: 8px;
-    padding: 5px 8px 8px 3px;
+    clear: both;
+    border-top: 1px solid #26235c;
 }
 
 #themeoptions br {
@@ -4380,9 +4380,9 @@ tr#addnew {
 }
 
 #themeoptions label {
-    white-space: nowrap;
     margin: 1px 10px 1px 0 !important;
     display: inline-block;
+    white-space: nowrap;
 }
 
 p#helptranslate {
@@ -4405,24 +4405,24 @@ p#helptranslate {
     margin-left: -4px;
     margin-right: -4px;
     padding: 4px 2px;
-    border-top: 1px solid #26235c !important;
-    background: #010010 url(images/titles.png) center center repeat-x;
-    background: linear-gradient(to bottom, #121225 50%, #00000d 50%);
-    color: #7670c2;
+    white-space: nowrap;
     overflow: hidden;
     text-overflow: ellipsis;
-    white-space: nowrap;
+    color: #7670c2;
+    border-top: 1px solid #26235c !important;
     box-shadow: inset 0 0 0 1px #000;
+    background: #010010 url(images/titles.png) center center repeat-x;
+    background: linear-gradient(to bottom, #121225 50%, #00000d 50%);
 }
 
 h3#themeheading, h3#langheading, h3#passwordheading {
-    border-radius: 0;
-    border: 1px solid #26235c;
+    margin-bottom: 0;
     padding: 8px 10px;
-    font-size: 10.5pt;
     word-spacing: 0.1em;
     letter-spacing: 0.08em;
-    margin-bottom: 0;
+    font-size: 10.5pt;
+    border: 1px solid #26235c;
+    border-radius: 0;
     background: #000;
     background: linear-gradient(to right, #000000, #010010 70%, #010013 90%);
 }
@@ -4458,29 +4458,29 @@ td#themeselect {
 #config_ui .langselect .optbox {
     margin: -5px 0 -30px -2px;
     position: relative !important;
+    z-index: 999;
     min-height: 60px !important;
     min-width: 125px !important;
     vertical-align: text-bottom;
     text-align: center;
     outline: 1px dotted !important;
     opacity: 0;
-    z-index: 999;
 }
 
 .langselect img {
-    width: 40px;
-    height: 40px;
     margin-bottom: 0;
     margin-left: -72px;
     margin-top: 7px !important;
+    width: 40px;
+    height: 40px;
     position: absolute;
 }
 
 .langselect input[name="lang"]:checked + img {
-    width: 19px;
-    height: 13px;
     margin-top: 6px !important;
     margin-left: -73px;
+    width: 19px;
+    height: 13px;
 }
 
 .langselect input[name="lang"]:hover + img {
@@ -4526,24 +4526,24 @@ td#themeselect {
 /* large flags */
 
 .langselect img {
-    width: 40px;
-    height: 40px;
-    border: none !important;
     margin-top: -6px !important;
     margin-left: -82px;
+    width: 40px;
+    height: 40px;
     position: absolute;
+    border: none !important;
     box-shadow: none;
     opacity: 0.75;
     filter: drop-shadow(0 0 1px #000);
 }
 
 .langselect input[name="lang"]:checked + img, .langselect input[name="lang"]:checked + #config_ui img[src="/flags.jsp?c=a1"] {
+    margin-top: -2px !important;
+    margin-left: -78px;
+    margin-bottom: 0;
     width: 32px !important;
     height: 32px !important;
     border: none !important;
-    margin-left: -78px;
-    margin-top: -2px !important;
-    margin-bottom: 0;
     box-shadow: none !important;
     opacity: 1;
 }
@@ -4587,12 +4587,9 @@ td#themeselect {
 }
 
 p#helptranslate {
-    clear: both;
     padding: 6px 10px 10px;
+    clear: both;
     text-align: right;
-}
-
-h3#themeheading {
 }
 
 h3#langheading {
@@ -4641,8 +4638,8 @@ table#consolepass td {
 }
 
 table#consolepass td {
-    border-bottom: 1px solid #26235c;
     padding: 5px 10px;
+    border-bottom: 1px solid #26235c;
 }
 
 table#consolepass input {
@@ -4673,9 +4670,9 @@ table#consolepass input[type="password"] {
 }
 
 #consolepass input[name="name"], #externali2cp input[name="user"] {
+    padding: 5px 5px 5px 26px !important;
     background: #000 url(/themes/console/images/buttons/user.png) 5px center no-repeat;
     background: url(/themes/console/images/buttons/user.png) 5px center no-repeat, linear-gradient(to bottom, #000, #000019);
-    padding: 5px 5px 5px 26px !important;
     background-size: 16px 16px, 100% 100% !important;
 }
 
@@ -4684,9 +4681,9 @@ table#consolepass input[type="password"] {
 }
 
 #consolepass input[name="nofilter_pw"], #externali2cp input[name="nofilter_pw"] {
+    padding: 5px 5px 5px 22px !important;
     background: #000 url(/themes/console/images/buttons/password.png) 3px center no-repeat;
     background: url(/themes/console/images/buttons/password.png) 3px center no-repeat, linear-gradient(to bottom, #000, #000019);
-    padding: 5px 5px 5px 22px !important;
     background-size: 16px 16px, 100% 100% !important;
 }
 #consolepass input[name="nofilter_pw"]:focus, #externali2cp input[name="nofilter_pw"]:focus {
@@ -4696,14 +4693,14 @@ table#consolepass input[type="password"] {
 /* end /configui mods */
 
 form[action="/createreseed"] > h3 {
-    border-radius: 0;
-    border: 1px solid #26235c;
+    margin-bottom: -13px;
     padding: 10px;
-    font-size: 10.5pt;
     word-spacing: 0.1em;
     letter-spacing: 0.08em;
+    font-size: 10.5pt;
+    border: 1px solid #26235c;
+    border-radius: 0;
     background: linear-gradient(to right, #000000, #010010 70%, #010013 90%);
-    margin-bottom: -13px;
 }
 
 table#configclient {
@@ -4717,8 +4714,8 @@ table#configclient {
 }
 
 #exportfamily tr:nth-child(2) td:first-child {
-    background: #000 url(/themes/console/images/info/export_key.png) 12px center no-repeat;
     padding: 15px 15px 15px 50px;
+    background: #000 url(/themes/console/images/info/export_key.png) 12px center no-repeat;
     background-size: 28px 28px;
 }
 
@@ -4727,8 +4724,8 @@ table#configclient {
 }
 
 #leavefamily tr:last-child td:first-child {
-    background: #000 url(/themes/console/images/info/leave_family.png) 12px center no-repeat;
     padding: 15px 15px 15px 50px;
+    background: #000 url(/themes/console/images/info/leave_family.png) 12px center no-repeat;
     background-size: 28px 28px;
 }
 
@@ -4767,10 +4764,10 @@ table#reseedconfig textarea {
 /* /configservice */
 
 .formaction#shutdown, .formaction#restart, .formaction#systray, .formaction#runonstart, .formaction#dumpthreads, .formaction#browserstart {
-    border: 1px solid #26235c;
-    background: #000;
     margin-top: -11px;
     margin-bottom: 8px;
+    border: 1px solid #26235c;
+    background: #000;
 }
 
 /* /configpeer */
@@ -4865,10 +4862,10 @@ p#defaultswork {
 }
 
 p#upnpconfig, p#ipchange, p#ipv6config, p#tcpconfig, p#confignotes, p#defaultswork {
+    margin-top: -12px;
+    margin-bottom: -13px;
     padding: 10px;
     border: 1px solid #26235c;
-    margin-bottom: -13px;
-    margin-top: -12px;
 }
 
 p#defaultswork {
@@ -4882,9 +4879,9 @@ p#confignotes {
 }
 
 p#ipconfig, p#ipv4config, p#udpconfig, p#externaltcp {
+    padding: 10px;
     border: 1px solid #26235c;
     border-bottom: none;
-    padding: 10px;
     background: #010010;
 }
 
@@ -13098,11 +13095,14 @@ h1[class], h1 {
 }
 
 #clock {
-    margin: -7px -10px -9px;
-    padding: 8px 0 6px;
+    margin: -6px -9px -10px;
+    padding: 8px 0 5px;
+    position: relative;
+    z-index: 10;
     font-size: 18pt;
     font-weight: bold;
     letter-spacing: 0.1em;
+    box-shadow: inset 0 0 0 1px #000, inset 0 0 1px 1px #339;
     opacity: .8;
 }
 
