@@ -144,7 +144,7 @@ class TestJob extends JobImpl {
         }
         _id = __id.getAndIncrement();
         if (_log.shouldLog(Log.DEBUG))
-            _log.debug("Sending garlic test [" + id + "] of " + _outTunnel + " / " + _replyTunnel);
+            _log.debug("Sending garlic test [" + _id + "] of " + _outTunnel + " / " + _replyTunnel);
         ctx.tunnelDispatcher().dispatchOutbound(msg, _outTunnel.getSendTunnelId(0),
                                                          _replyTunnel.getReceiveTunnelId(0),
                                                          _replyTunnel.getPeer(0));
@@ -169,7 +169,7 @@ class TestJob extends JobImpl {
             _otherTunnel.testJobSuccessful(ms);
 
         if (_log.shouldLog(Log.DEBUG))
-            _log.debug("Tunnel test [" + id + "] succeeded in " + ms + "ms " + _cfg);
+            _log.debug("Tunnel test [" + _id + "] succeeded in " + ms + "ms " + _cfg);
         scheduleRetest();
     }
 
@@ -192,7 +192,7 @@ class TestJob extends JobImpl {
         else
             getContext().statManager().addRateData("tunnel.testFailedTime", timeToFail, timeToFail);
         if (_log.shouldLog(Log.WARN))
-            _log.warn("Tunnel test [" + id + "] failed in " + timeToFail + "ms " + _cfg);
+            _log.warn("Tunnel test [" + _id + "] failed in " + timeToFail + "ms " + _cfg);
         boolean keepGoing = _cfg.tunnelFailed();
         // blame the expl. tunnel too
         if (_otherTunnel.getLength() > 1)
@@ -322,8 +322,8 @@ class TestJob extends JobImpl {
     private class OnTestTimeout extends JobImpl {
         private final long _started;
 
-        public OnTestTimeout() { 
-            super(TestJob.this.getContext()); 
+        public OnTestTimeout() {
+            super(TestJob.this.getContext());
             _started = getContext().clock().now();
         }
 
@@ -331,7 +331,7 @@ class TestJob extends JobImpl {
 
         public void runJob() {
             if (_log.shouldLog(Log.WARN))
-                _log.warn("Tunnel test [" + id + "] timed out -> Found? " + _found);
+                _log.warn("Tunnel test [" + _id + "] timed out -> Found? " + _found);
             if (!_found) {
                 // don't clog up the SKM with old one-tag tagsets
                 if (_cfg.isInbound() && !_pool.getSettings().isExploratory()) {

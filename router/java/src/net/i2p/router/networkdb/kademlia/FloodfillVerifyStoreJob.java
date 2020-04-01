@@ -186,7 +186,7 @@ class FloodfillVerifyStoreJob extends JobImpl {
                 lookup.setReplySession(sess.key, sess.tag);
             } else {
                 if (_log.shouldInfo())
-                _log.info("[Job " + getJobId() + "] Requesting AEAD reply from [" + peer.toBase64().substring(0,6) + "]\n* Session key: " + sess.key + "\n* Tag: " + sess.tag);
+                _log.info("[Job " + getJobId() + "] Requesting AEAD reply from [" + peer.toBase64().substring(0,6) + "]\n* Session key: " + sess.key + "\n* Tag: " + sess.rtag);
                 lookup.setReplySession(sess.key, sess.rtag);
             }
         }
