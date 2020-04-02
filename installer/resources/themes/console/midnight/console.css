@@ -7428,12 +7428,12 @@ div.appgroup {
 }
 
 div.app img {
+    margin: -3px 0 1px;
+    padding: 9px 50px 35px;
     height: 32px;
     width: auto;
     max-height: 32px;
     max-width: 32px;
-    padding: 9px 50px 35px;
-    margin-bottom: 1px;
     mix-blend-mode: luminosity;
 }
 
@@ -7467,10 +7467,10 @@ div.app:active img {
 }
 
 .app table {
-    background: none;
-    border: 0;
     margin: auto;
     width: auto;
+    border: none !important;
+    background: none;
 }
 
 .app tr {
@@ -7480,14 +7480,14 @@ div.app:active img {
 }
 
 .app td {
-    background: none;
-    border: 0;
     margin: 0;
     padding: 3px 0 0;
+    border: none !important;
+    background: none;
 }
 
 .applabel {
-    margin: 2px 0 0;
+    margin: -4px 0 0;
     padding: 5px 2px 6px;
     width: 150px;
     overflow: hidden;
@@ -7504,7 +7504,7 @@ div.app:active img {
     box-shadow: inset 0 0 0 1px #000;
     background: #001 url(images/titles.png) center center;
     background: linear-gradient(to bottom, #121225 50%, #00000d 50%);
-    background: linear-gradient(to right, rgba(0,0,16,0.5), rgba(0,0,0,0) 30%, rgba(16,0,16,0.1)), linear-gradient(to bottom, #141221, #001);
+    background: linear-gradient(to bottom, #141221, #001);
 }
 
 .applabel:hover {
