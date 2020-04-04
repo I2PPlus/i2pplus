@@ -3202,7 +3202,7 @@ h3#graphdisplay a {
 }
 
 #graphs form table {
-    border: none;
+    border: none !important;
     margin: 0;
 }
 
@@ -3218,14 +3218,14 @@ h3#graphdisplay a {
 }
 
 #graphs tr:first-child td {
-    border-top: none;
+    border: none !important;
 }
 
 #graphs td:first-child {
-    text-align: right;
+    padding: 13px 3px 13px 5px;
     width: 85px;
     white-space: nowrap;
-    padding: 13px 3px 13px 5px;
+    text-align: right;
 }
 
 #graphs td:nth-child(2) {
@@ -3234,13 +3234,13 @@ h3#graphdisplay a {
 }
 
 #graphs td.infohelp {
+    padding: 5px 5px 5px 40px !important;
+    text-align: left;
     border: 1px inset #120f35;
     border-right: none;
     border-left: none;
-    background-size: 20px 20px !important;
-    padding: 5px 5px 5px 40px !important;
     background-color: #010008 !important;
-    text-align: left;
+    background-size: 20px 20px !important;
 }
 
 #graphs form input, #graphs form select {
@@ -3263,35 +3263,35 @@ h3#graphdisplay a {
 /* end graphs */
 
 table {
-    border-collapse: collapse;
-    width: 100%;
-    border: 1px solid #26235c;
-    padding: 1px;
-    font-size: 9pt;
-    background: #040033;
     margin: 1px 0;
+    padding: 1px;
+    width: 100%;
+    font-size: 9pt;
+    border-collapse: collapse;
+    border: 1px solid #26235c;
+    background: #040033;
 }
 
 table hr {
-    padding: 0 0;
-    color: #26235c;
-    background: #26235c;
-    border: 0 solid #26235c;
     margin: 0 0;
+    padding: 0 0;
     height: 1px;
     display: none;
+    color: #26235c;
+    border: 0 solid #26235c;
+    background: #26235c;
 }
 
 th {
     padding: 6px 2px;
-    color: #c9ceff;
+    line-height: 110%;
     text-align: center;
     font-size: 9pt;
+    color: #c9ceff;
     background: #000 url(images/titles.png) center center repeat-x;
     background: linear-gradient(to bottom, #0a0910, #001);
     border-top: 1px solid #26235c;
     border-bottom: 1px solid #26235c !important;
-    line-height: 110%;
 }
 
 tr {
@@ -10146,18 +10146,6 @@ b.suboption {
     -webkit-column-break-inside: avoid;
 }
 
-#graphs .optionlist, #graphs .optionlist:hover {
-    border: none !important;
-    box-shadow: none !important;
-    padding: 0 !important;
-    margin: -4px -3px !important;
-}
-
-#graphs .optionlist label {
-    box-shadow: none !important;
-    background: none !important;
-}
-
 #config_network .optionlist:hover, #config_i2cp .optionlist:hover, #reseedssl:hover,
 #manualreseed .optionsingle:hover, .optiontextarea:hover, #reseed_urlselection:hover {
     border: 1px solid #26235c;
@@ -10189,10 +10177,6 @@ b.suboption {
 #refreshsidebar .optionsave {
     padding: 12px 8px 12px 0 !important;
     background: none;
-}
-
-#graphing.formaction {
-    margin-top: -8px !important;
 }
 
 #themeui.formaction {
@@ -10237,6 +10221,22 @@ b.suboption {
 
 #reseedconfig .optionsingle.optiontextarea {
     background: linear-gradient(to bottom, #112, #040414) !important;
+}
+
+#graphs .optionlist, #graphs .optionlist:hover {
+    border: none !important;
+    box-shadow: none !important;
+    padding: 0 !important;
+    margin: -4px -3px !important;
+}
+
+#graphs .optionlist label {
+    box-shadow: none !important;
+    background: none !important;
+}
+
+#graphing.formaction {
+    margin-top: -8px !important;
 }
 
 /* end multi-column responsive globals */
