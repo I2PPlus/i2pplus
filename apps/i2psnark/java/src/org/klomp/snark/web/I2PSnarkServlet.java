@@ -4836,7 +4836,7 @@ public class I2PSnarkServlet extends BasicServlet {
         else if (mime.startsWith("audio/") || mime.equals("application/ogg"))
             icon = "audio";
         else if (mime.startsWith("video/"))
-            icon = "film";
+            icon = "video";
         else if (mime.equals("application/zip")) {
             if (plc.endsWith(".su3") || plc.endsWith(".su2") || plc.endsWith(".sud"))
                 icon = "i2p";
