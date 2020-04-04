@@ -5173,8 +5173,8 @@ tr:hover td.snarkTorrentDownloaded, tr:hover td.snarkTorrentRateDown, tr:hover t
 .snarkTorrentEven:not(.peerinfo) .snarkTorrentDownloaded .percentBarInner,
 .snarkTorrentOdd:not(.peerinfo) .snarkTorrentDownloaded .percentBarOuter,
 .snarkTorrentEven:not(.peerinfo) .snarkTorrentDownloaded .percentBarOuter {
-    max-height: 14px !important;
-    max-width: 84px !important;
+    max-height: 16px !important;
+    max-width: 80px !important;
 }
 
 .snarkTorrentOdd:not(.peerinfo) .snarkTorrentDownloaded .percentBarText::after,
