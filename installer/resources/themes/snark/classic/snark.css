@@ -1719,28 +1719,6 @@ input[type=image]:focus, th a:focus, a:focus img {
     filter: drop-shadow(0 0 1px #f60);
 }
 
-/*
-img[src$="status.png"] {
-    filter: invert(100%) hue-rotate(180deg);
-}
-
-img[src$="status.png"]:hover, img[src$="status.png"]:focus, img[src$="status.png"]:active {
-    filter: invert(100%) hue-rotate(180deg) drop-shadow(0 0 2px #f60) !important;
-}
-*/
-
-img[src$="magnet.png"] {
-    transform: rotate(-90deg);
-}
-
-img[src$="folder.png"] {
-    transform: scaleX(-1);
-}
-
-.toggleview img[src$="folder.png"] {
-    transform: none;
-}
-
 input[type=text], input.r {
     min-width: 100px;
 }
@@ -1752,9 +1730,9 @@ input[type=radio] {
 }
 
 input[type="checkbox"], input[type="radio"] {
-    vertical-align: middle;
     min-width: 16px;
     min-height: 16px;
+    vertical-align: middle;
     background: none;
 }
 
@@ -1762,12 +1740,12 @@ label {
     cursor: pointer;
 }
 
-.optbox:hover, .optbox:focus, input[type="checkbox"]:hover, input[type="checkbox"]:focus {
-    box-shadow: inset 0 0 1px 2px #89f;
-    filter: drop-shadow(0 0 3px #89f);
+input[type="checkbox"]:hover, input[type="checkbox"]:focus {
     border: 0;
+    box-shadow: inset 0 0 1px 2px #89f;
     outline: none;
     cursor: pointer;
+    filter: drop-shadow(0 0 3px #89f);
 }
 
 input.default {
@@ -2414,26 +2392,23 @@ input#toggle_createtorrent:checked + label + hr + table {
 
 /* torrent priorities */
 
-.priorityHigh {
-    background: url(/i2psnark/.resources/icons/clock_red.png) left 28px center no-repeat;
+.priorityHigh, .priorityNormal, .prioritySkip {
+    width: 52px;
     display: inline-block;
-    width: 48px;
     color: transparent;
+    background-size: 18px 18px !important;
+}
+
+.priorityHigh {
+    background: url(/i2psnark/.resources/icons/clock_red.png) left 32px center no-repeat;
 }
 
 .priorityNormal {
-    display: inline-block;
-    width: 48px;
-    color: transparent;
-    background: url(/i2psnark/.resources/icons/clock.png) left 28px  center no-repeat;
+    background: url(/i2psnark/.resources/icons/clock.png) left 32px  center no-repeat;
 }
 
 .prioritySkip {
-    display: inline-block;
-    width: 48px;
-    color: transparent;
-    background: url(/i2psnark/.resources/icons/block.png) left 28px center no-repeat;
-    background-size: 18px 18px;
+    background: url(/i2psnark/.resources/icons/block.png) left 32px center no-repeat;
 }
 
 /* end priorities */

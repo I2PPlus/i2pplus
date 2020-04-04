@@ -2111,7 +2111,7 @@ public class I2PSnarkServlet extends BasicServlet {
         else if (isValid)
             icon = toIcon(meta.getName());
         else if (snark instanceof FetchAndAdd)
-            icon = "basket_put";
+            icon = "download";
         else
             icon = "magnet";
         if (isValid) {
@@ -4198,7 +4198,7 @@ public class I2PSnarkServlet extends BasicServlet {
             if (sortParam != null && !"0".equals(sortParam) && !"1".equals(sortParam))
                 buf.append("&amp;sort=").append(sortParam);
             buf.append("\">");
-            buf.append(toImg("music"));
+            buf.append(toImg("audio"));
             buf.append(' ').append(_t("Audio Playlist")).append("</a>");
         }
         buf.append("</td></tr>\n");
@@ -4354,7 +4354,7 @@ public class I2PSnarkServlet extends BasicServlet {
                 if ((!complete) && (!item.isDirectory())) {
                     if (!inOrder) {
                     buf.append("<label class=\"priorityHigh\" title=\"").append(_t("Download file at high priority")).append("\">" +
-                               "\n<input type=\"radio\" onclick=\"priorityclicked();\" class=\"prihigh\" value=\"5\" name=\"pri.").append(fileIndex).append("\" ");
+                               "\n<input type=\"radio\" onclick=\"priorityclicked();\" class=\"prihigh optbox\" value=\"5\" name=\"pri.").append(fileIndex).append("\" ");
                     if (priority > 0)
                         buf.append("checked=\"checked\"");
                     buf.append('>')
@@ -4362,14 +4362,14 @@ public class I2PSnarkServlet extends BasicServlet {
                     }
 
                     buf.append("<label class=\"priorityNormal\" title=\"").append(_t("Download file at normal priority")).append("\">" +
-                               "\n<input type=\"radio\" onclick=\"priorityclicked();\" class=\"prinorm\" value=\"0\" name=\"pri.").append(fileIndex).append("\" ");
+                               "\n<input type=\"radio\" onclick=\"priorityclicked();\" class=\"prinorm optbox\" value=\"0\" name=\"pri.").append(fileIndex).append("\" ");
                     if (priority == 0 || (inOrder && priority >= 0))
                         buf.append("checked=\"checked\"");
                     buf.append('>')
                        .append(_t("Normal")).append("</label>");
 
                     buf.append("<label class=\"prioritySkip\" title=\"").append(_t("Do not download this file")).append("\">" +
-                               "\n<input type=\"radio\" onclick=\"priorityclicked();\" class=\"priskip\" value=\"-9\" name=\"pri.").append(fileIndex).append("\" ");
+                               "\n<input type=\"radio\" onclick=\"priorityclicked();\" class=\"priskip optbox\" value=\"-9\" name=\"pri.").append(fileIndex).append("\" ");
                     if (priority < 0)
                         buf.append("checked=\"checked\"");
                     buf.append('>')
@@ -4817,7 +4817,7 @@ public class I2PSnarkServlet extends BasicServlet {
         else if (mime.equals("text/plain") ||
                  mime.equals("text/x-sfv") ||
                  mime.equals("application/rtf"))
-            icon = "page";
+            icon = "text";
         else if  (mime.equals("application/epub+zip") ||
                  mime.equals("application/x-mobipocket-ebook") ||
                  plc.endsWith(".fb2") ||
@@ -4830,16 +4830,16 @@ public class I2PSnarkServlet extends BasicServlet {
         else if (plc.endsWith(".xpi2p"))
             icon = "plugin";
         else if (mime.equals("application/pdf"))
-            icon = "page_white_acrobat";
+            icon = "pdf";
         else if (mime.startsWith("image/"))
             icon = "photo";
         else if (mime.startsWith("audio/") || mime.equals("application/ogg"))
-            icon = "music";
+            icon = "audio";
         else if (mime.startsWith("video/"))
             icon = "film";
         else if (mime.equals("application/zip")) {
             if (plc.endsWith(".su3") || plc.endsWith(".su2") || plc.endsWith(".sud"))
-                icon = "itoopie_xxsm";
+                icon = "i2p";
             else
                 icon = "compress";
         } else if (mime.equals("application/x-gtar") || mime.equals("application/x-xz") ||
@@ -4855,7 +4855,7 @@ public class I2PSnarkServlet extends BasicServlet {
         else if (mime.equals("application/x-bittorrent"))
             icon = "magnet";
         else
-            icon = "page_white";
+            icon = "unknown";
         return icon;
     }
 

@@ -954,7 +954,7 @@ td.snarkTorrentAction input[type="image"] {
 
 .snarkTorrents .infohash, .snarkTorrentInfo .infohash {
     display: inline-block;
-    max-width: 80px;
+    max-width: 120px;
     white-space: nowrap;
     vertical-align: middle;
     overflow: hidden;
@@ -974,15 +974,21 @@ td.snarkTorrentAction input[type="image"] {
 }
 
 .snarkTorrentInfo .infohash::before {
-    margin-right: 3px;
+    margin-right: 4px;
     content: "";
     display: inline-block;
     width: 16px;
     height: 16px;
     vertical-align: text-top;
     background: url(/i2psnark/.resources/icons/magnet.png) center center no-repeat;
-    background-size: 14px auto;
-    transform: rotate(-90deg);
+    background-size: 18px auto;
+    filter: drop-shadow(0 1px 1px rgba(32,32,0,.6)) opacity(.8);
+}
+
+@media screen and (max-width: 950px) {
+.snarkTorrentInfo .infohash::before {
+    height: 12px;
+}
 }
 
 .infohash::-moz-selection, .snarkAddInfo code::-moz-selection {
@@ -1920,9 +1926,9 @@ a:hover img, a:focus img {
     mix-blend-mode: normal;
 }
 
-img[src$="magnet.png"] {
+/*img[src$="magnet.png"] {
     transform: rotate(-90deg);
-}
+}*/
 
 .snarkTorrentInfo a img[src$="magnet.png"] {
     margin-top: -1px !important;

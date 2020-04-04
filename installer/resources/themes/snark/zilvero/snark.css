@@ -1915,14 +1915,6 @@ select {
 	background: #eee;
 }
 
-img[src$="magnet.png"] {
-	transform: rotate(-90deg);
-}
-
-img[src$="folder.png"] {
-	transform: scaleX(-1);
-}
-
 .infohash {
 	padding: 0 3px;
 	width: 100px;
@@ -2210,12 +2202,13 @@ tr:not(.peerinfo) .snarkTorrentUploaded:empty::after {
 .priorityHigh, .priorityNormal, .prioritySkip {
 	padding: 0;
 	display: inline-block;
-	width: 50px;
+	width: 52px;
 	font-size: 0;
 	text-align: left;
 	vertical-align: middle;
 	color: transparent;
 	overflow: hidden;
+	background-size: 18px 18px !important;
 }
 
 .priorityHigh {
@@ -2227,8 +2220,7 @@ tr:not(.peerinfo) .snarkTorrentUploaded:empty::after {
 }
 
 .prioritySkip {
-	background: url(/i2psnark/.resources/icons/block.png) left 25px center no-repeat;
-	background-size: 18px 18px;
+	background: url(/i2psnark/.resources/icons/block.png) left 26px center no-repeat;
 }
 
 .priority {

@@ -996,7 +996,7 @@ _:-ms-lang(x), .snarkTorrents tbody tr:hover, .snarkDirInfo tbody tr:hover {
     height: 16px;
     vertical-align: middle;
     background: url(/i2psnark/.resources/icons/magnet.png) center center no-repeat;
-    transform: rotate(-90deg);
+    background-size: 16px 16px;
     mix-blend-mode: luminosity;
 }
 
@@ -1892,10 +1892,6 @@ a:hover img, a:focus img {
     mix-blend-mode: normal;
 }
 
-img[src$="magnet.png"] {
-    transform: rotate(-90deg);
-}
-
 img[src$="details.png"] {
     mix-blend-mode: luminosity;
 }
@@ -2451,25 +2447,25 @@ input#toggle_debug:checked + label + #dhtDebugInner {
 .priorityHigh, .priorityNormal, .prioritySkip {
     padding: 0;
     display: inline-block;
-    width: 50px;
+    width: 52px;
     font-size: 0;
     text-align: left;
     vertical-align: middle;
     color: transparent;
     overflow: hidden;
+    background-size: 18px 18px !important;
 }
 
 .priorityHigh {
-    background: url(/i2psnark/.resources/icons/clock_red.png) left 24px center no-repeat;
+    background: url(/i2psnark/.resources/icons/clock_red.png) left 26px center no-repeat;
 }
 
 .priorityNormal {
-    background: url(/i2psnark/.resources/icons/clock.png) left 24px center no-repeat;
+    background: url(/i2psnark/.resources/icons/clock.png) left 26px center no-repeat;
 }
 
 .prioritySkip {
-    background: url(/i2psnark/.resources/icons/block.png) left 24px center no-repeat;
-    background-size: 18px 18px;
+    background: url(/i2psnark/.resources/icons/block.png) left 26px center no-repeat;
 }
 
 /* configs */

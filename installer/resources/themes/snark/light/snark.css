@@ -1537,7 +1537,6 @@ input:checked + .toggleview:active > img {
     vertical-align: text-top;
     background: url(/i2psnark/.resources/icons/magnet.png) center center no-repeat;
     background-size: 14px auto;
-    transform: rotate(-90deg);
 }
 
 @media screen and (max-width: 1024px) {
@@ -1909,13 +1908,13 @@ img:hover {
     line-height: 100%;
 }
 
-img[src$="magnet.png"] {
+/*img[src$="magnet.png"] {
     transform: rotate(-90deg);
 }
 
 img[src$="folder.png"] {
     transform: scaleX(-1);
-}
+}*/
 
 @supports not (-moz-appearance: none) {
 img[src$="magnet.png"] {
@@ -2663,14 +2662,15 @@ hr.debug:last-child {
 }
 
 .priorityHigh, .priorityNormal, .prioritySkip {
-    display: inline-block;
-    width: 44px;
-    color: transparent;
-    vertical-align: middle;
     margin: 3px;
+    width: 44px;
+    display: inline-block;
     overflow: hidden;
-    font-size: 0;
+    vertical-align: middle;
     text-align: left;
+    font-size: 0;
+    color: transparent;
+    background-size: 18px 18px !important;
 }
 
 .priorityHigh {
@@ -2683,7 +2683,6 @@ hr.debug:last-child {
 
 .prioritySkip {
     background: url(/i2psnark/.resources/icons/block.png) left 24px center no-repeat;
-    background-size: 18px 18px;
 }
 
 /* end priorities */

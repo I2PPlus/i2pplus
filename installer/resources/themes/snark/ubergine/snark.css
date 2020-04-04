@@ -71,13 +71,13 @@ input[type="image"], th img, a img {
 }
 
 .page {
-    background: #323 url(images/tile2.png);
-    background: repeating-linear-gradient(to bottom, #1f081f 1px, #2b172f 1px, #1f081f 3px);
     margin: 5px 0 0 0;
     padding: 10px 10px 0;
-    border-radius: 4px;
     border: 1px solid #101;
+    border-radius: 4px;
     box-shadow: inset 0 0 3px 0 #101, 0 0 2px 2px rgba(16,0,16,0.4);
+    background: #323 url(images/tile2.png);
+    background: repeating-linear-gradient(to bottom, #1f081f 1px, #2b172f 1px, #1f081f 3px);
     will-change: transform;
 }
 
@@ -1263,11 +1263,11 @@ _:-ms-lang(x), .snarkDirInfo img, .snarkTorrents img {
     text-shadow: 0 1px 1px #000 !important;
 }
 
-@media screen and (max-width: 900px) {
+/*@media screen and (max-width: 900px) {
 .snarkDirInfo td a {
     max-width: 460px;
 }
-}
+}*/
 
 .SnarkDirInfo thead th {
     padding-top: 2px !important;
@@ -1306,6 +1306,7 @@ tr:hover .ParentDir a:active {
 
 .snarkDirInfo tr:nth-last-child(1) td {
     border-bottom: 1px solid #101 !important;
+    border-bottom: none !important;
 }
 
 .snarkFileicon:hover + .snarkFileName a {
@@ -2372,7 +2373,7 @@ img:hover {
     line-height: 100%;
 }
 
-img[src$="magnet.png"] {
+/*img[src$="magnet.png"] {
     transform: rotate(-90deg);
 }
 
@@ -2382,7 +2383,7 @@ img[src$="folder.png"] {
 
 .toggleview:not(:active) img[src$="folder.png"] {
     transform: none;
-}
+}*/
 
 @keyframes slide-in {
 0% {
@@ -2455,7 +2456,7 @@ img[src$="folder.png"] {
 .section, .mainsection {
     padding: 10px;
     word-wrap: break-word;
-    overflow: auto;
+    overflow: hidden;
     color: #001;
 }
 
@@ -2517,6 +2518,9 @@ select, input, input.r, input[name="nofilter_dataDir"], textarea[name="i2cpOpts"
 
 .iframed .mainsection#snarkCommentSection {
     margin-bottom: 6px !important;
+}
+#snarkCommentSection > input:not(:checked) + .toggleview {
+    margin-bottom: -1px !important;
 }
 }
 
@@ -3038,10 +3042,12 @@ input#toggle_debug:checked + label + #dhtDebugInner {
 
 .priorityHigh {
     background: url(/i2psnark/.resources/icons/clock_red.png) left 26px center no-repeat;
+    background-size: 18px 18px;
 }
 
 .priorityNormal {
     background: url(/i2psnark/.resources/icons/clock.png) left 26px center no-repeat;
+    background-size: 18px 18px;
 }
 
 .prioritySkip {
@@ -5930,6 +5936,7 @@ td.snarkTorrentPeerCount:empty::after {
 
 .snarkFilename a {
     display: inline-block;
+    word-break: break-all;
 }
 
 .snarkFilename .targetfile, .snarkFilename .tags {
