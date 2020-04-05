@@ -3742,7 +3742,7 @@ public class I2PSnarkServlet extends BasicServlet {
 
                 long dat = meta.getCreationDate();
                 // needs locale configured for automatic translation
-                SimpleDateFormat fmt = new SimpleDateFormat("HH:mm, EEEE dd MMMM yyyy");
+                SimpleDateFormat fmt = new SimpleDateFormat("HH:mm, EEE dd MMMM yyyy");
                 fmt.setTimeZone(SystemVersion.getSystemTimeZone(_context));
                 long[] dates = _manager.getSavedAddedAndCompleted(snark);
                 if (dat > 0 && cby == null)
