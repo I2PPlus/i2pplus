@@ -3804,6 +3804,56 @@ th {
 }
 }
 
+@media screen and (max-width: 1200px) {
+.lang_de .knowntracker a, .lang_de .trackerhome, .lang_de .trackerannounce, .lang_de .trackerconfig input[type="text"],
+.lang_ru .knowntracker a, .lang_ru .trackerhome, .lang_ru .trackerannounce, .lang_ru .trackerconfig input[type="text"] {
+    max-width: 180px !important;
+    min-width: 0 !important;
+    width: 180px !important;
+}
+
+.lang_de .trackerconfig input.trackername, .lang_ru .trackerconfig input.trackername {
+    max-width: 120px !important;
+    min-width: 0 !important;
+    width: 120px !important;
+}
+}
+
+@media screen and (min-width: 1200px) {
+.trackerconfig th:last-child, .trackerconfig td:last-child {
+    padding-left: 50px !important;
+}
+
+.trackerhome, .trackerannounce, .knowntracker a {
+    width: 300px !important;
+    max-width: 300px !important;
+}
+
+.trackerconfig input.trackername {
+    max-width: 180px !important;
+    width: 180px !important;
+}
+
+input[type=text], input.r, select {
+    min-width: 132px;
+}
+
+td.snarkTorrentDetails img, .snarkDirInfo td:first-child img:not(.thumb) {
+    width: 18px !important;
+    height: 18px !important;
+}
+
+.snarkTorrentDetails img[src$="rateme.png"] {
+    margin-top: -3px !important;
+    width: 10px !important;
+    height: 10px !important;
+}
+
+.snarkTorrentAction input[type="image"] {
+    padding: 5px !important;
+}
+}
+
 @media screen and (min-width: 1500px) {
 th, td, .choked, .unchoked {
     letter-spacing: 0 !important;
@@ -4917,41 +4967,6 @@ input[name="nofilter_commentsName"] {
     width: 260px !important;
 }
 
-@media screen and (max-width: 1200px) {
-.lang_de .knowntracker a, .lang_de .trackerhome, .lang_de .trackerannounce, .lang_de .trackerconfig input[type="text"],
-.lang_ru .knowntracker a, .lang_ru .trackerhome, .lang_ru .trackerannounce, .lang_ru .trackerconfig input[type="text"] {
-    max-width: 180px !important;
-    min-width: 0 !important;
-    width: 180px !important;
-}
-
-.lang_de .trackerconfig input.trackername, .lang_ru .trackerconfig input.trackername {
-    max-width: 120px !important;
-    min-width: 0 !important;
-    width: 120px !important;
-}
-}
-
-@media screen and (min-width: 1200px) {
-.trackerconfig th:last-child, .trackerconfig td:last-child {
-    padding-left: 50px !important;
-}
-
-.trackerhome, .trackerannounce, .knowntracker a {
-    width: 300px !important;
-    max-width: 300px !important;
-}
-
-.trackerconfig input.trackername {
-    max-width: 180px !important;
-    width: 180px !important;
-}
-
-input[type=text], input.r, select {
-    min-width: 132px;
-}
-}
-
 @media screen and (min-width: 1500px) {
 .snarkTorrentDownloaded, .snarkTorrentUploaded, .snarkTorrentRateDown, .snarkTorrentRateUp {
     min-width: 76px;
@@ -5027,6 +5042,11 @@ input[type=text], input.r, select {
 #addtracker td, .trackerconfig tr:nth-last-child(2) td {
     border-bottom: none;
 }
+
+#addtracker input[type="radio"] {
+    margin: 0;
+}
+
 /* end trackerconfig */
 
 /* tooltip */

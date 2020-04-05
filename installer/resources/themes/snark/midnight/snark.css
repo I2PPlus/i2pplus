@@ -369,7 +369,7 @@ td input[type="image"]::after {
 
 #closelog img, #expand img, #shrink img {
     margin: -3px -4px 4px 5px;
-    padding: 3px;
+    padding: 5px;
     opacity: 0.8;
     background: #001;
     border: 1px solid #26235c;
@@ -1613,7 +1613,7 @@ hr {
 }
 
 a:link, .snarkTorrentPeerCount a:visited, .snarkMessages .infohash, .trackerName a:visited,
-.snarkTorrents a:visited, .info_tracker a:visited {
+.snarkTorrents a:visited, .info_tracker a:visited, .snarkMessages a:visited {
     color: #7972d1;
     font-weight: bold;
     text-decoration: none;
@@ -1625,7 +1625,8 @@ a:visited {
     color: #473ec1;
 }
 
-a:hover, a:focus, .trackerName a:visited:hover, .trackerName a:visited:focus, .snarkTorrents a:visited:hover, .snarkTorrents a:visited:focus {
+a:hover, a:focus, .trackerName a:visited:hover, .trackerName a:visited:focus,
+.snarkTorrents a:visited:hover, .snarkTorrents a:visited:focus, .snarkMessages a:visited:hover {
     color: #bf2295;
 }
 
@@ -4050,6 +4051,7 @@ input[name="nofilter_commentsName"] {
 @media screen and (min-width: 1200px) {
 #closelog img, #expand img, #shrink img {
     padding: 5px;
+    width: 13px;
 }
 
 .trackerconfig th:last-child, .trackerconfig td:last-child {
