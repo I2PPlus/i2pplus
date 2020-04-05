@@ -1878,7 +1878,6 @@ img {
     vertical-align: middle;
     opacity: 1.0;
     line-height: 100%;
-    filter: drop-shadow(0 0 1px rgba(117, 114, 106, 0.6));
 }
 
 img:hover {
@@ -4030,6 +4029,18 @@ input[name="nofilter_commentsName"], input[name="i2cpOpts"], input[name="nofilte
 .trackerhome, .trackerannounce, .knowntracker a {
     width: 400px !important;
     max-width: 400px !important;
+}
+
+td.snarkTorrentDetails img, .snarkDirInfo td:first-child img:not(.thumb) {
+    width: 20px !important;
+    height: 20px !important;
+}
+
+.snarkTorrentDetails img[src$="rateme.png"] {
+    margin-top: -5px !important;
+    margin-right: -3px !important;
+    width: 12px !important;
+    height: 12px !important;
 }
 }
 

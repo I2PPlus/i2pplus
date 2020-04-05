@@ -2188,6 +2188,18 @@ tr:not(.peerinfo) .snarkTorrentUploaded:empty::after {
 .snarkTorrentETA:not(:empty), .snarkTorrentRateUp:not(:empty), .snarkTorrentRateDown:not(:empty), .snarkTorrentUploaded:not(:empty) {
 	min-width: 50px;
 }
+
+td.snarkTorrentDetails img, .snarkDirInfo td:first-child img:not(.thumb) {
+	width: 20px !important;
+	height: 20px !important;
+}
+
+.snarkTorrentDetails img[src$="rateme.png"] {
+	margin-top: -6px !important;
+	margin-right: -2px !important;
+	width: 12px !important;
+	height: 12px !important;
+}
 }
 
 .priority input[type="radio"] {
@@ -2303,7 +2315,6 @@ tr:not(.peerinfo) .snarkTorrentUploaded:empty::after {
 	padding: 0 !important;
 	height: 9px !important;
 	width: auto !important;
-	filter: drop-shadow(0 0 1px rgba(32,32,32,.6));
 }
 
 /* end comment indicator */

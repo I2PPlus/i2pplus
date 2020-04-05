@@ -3617,6 +3617,23 @@ input[name="nofilter_commentsName"], input[name="i2cpOpts"], input[name="nofilte
     width: 400px !important;
     max-width: 400px !important;
 }
+
+td.snarkTorrentDetails img, .snarkDirInfo td:first-child img:not(.thumb) {
+    width: 20px !important;
+    max-width: 20px !important;
+    height: 20px !important;
+    max-height: 20px !important;
+}
+
+.snarkTorrentDetails img[src$="rateme.png"] {
+    margin-top: -3px !important;
+    width: 12px !important;
+    height: 12px !important;
+}
+
+.percentBarComplete {
+    padding-top: 3px;
+}
 }
 
 /* end tracker config */

@@ -1049,7 +1049,7 @@ td.snarkTorrentAction input[type="image"] {
     border-bottom: 1px solid #26235c !important;
 }
 
-.SnarkDirInfo td img:not(.thumb) {
+.snarkDirInfo td img:not(.thumb) {
     max-width: 16px;
     max-height: 16px;
 }
@@ -1684,7 +1684,7 @@ a.control, a.controld, a.control:hover, a.controld:hover, a.control:focus, a.con
 }
 
 a.control img, a.controld img {
-    margin: -4px 4px 0 0 !important;
+/*    margin: -4px 4px 0 0 !important;*/
     padding: 0;
     display: inline-block;
     max-height: 16px !important;
@@ -2875,26 +2875,26 @@ td#bwHelp a {
 
 .priorityHigh, .priorityNormal, .prioritySkip {
     padding: 0;
+    width: 54px;
     display: inline-block;
-    width: 50px;
-    font-size: 0;
-    text-align: left;
     vertical-align: middle;
-    color: transparent;
     overflow: hidden;
+    text-align: left;
+    font-size: 0;
+    color: transparent;
+    background-size: 18px 18px !important;
 }
 
 .priorityHigh {
-    background: url(/i2psnark/.resources/icons/clock_red.png) left 24px center no-repeat;
+    background: url(/i2psnark/.resources/icons/clock_red.png) left 28px center no-repeat;
 }
 
 .priorityNormal {
-    background: url(/i2psnark/.resources/icons/clock.png) left 24px  center no-repeat;
+    background: url(/i2psnark/.resources/icons/clock.png) left 28px  center no-repeat;
 }
 
 .prioritySkip {
-    background: url(/i2psnark/.resources/icons/block.png) left 24px center no-repeat;
-    background-size: 18px 18px;
+    background: url(/i2psnark/.resources/icons/block.png) left 28px center no-repeat;
 }
 
 #setPriority a.control img {
@@ -2906,7 +2906,6 @@ td#bwHelp a {
 .knownTracker input[type="radio"], .knownTracker input[type="radio"]:hover {
     opacity: 0.3;
     cursor: default;
-/*    filter: invert(100%) sepia(100%) hue-rotate(200deg) saturate(200%) !important;*/
 }
 
 .knownTracker input[type="radio"]:checked, .knownTracker input[type="radio"]:checked:hover {
@@ -2914,10 +2913,10 @@ td#bwHelp a {
 }
 
 #filecheck {
-    display: inline-block;
     margin: 5px 0;
-    background: url(images/progressbar.gif) left center no-repeat;
     padding-left: 22px;
+    display: inline-block;
+    background: url(images/progressbar.gif) left center no-repeat;
 }
 
 #filecheck a {
@@ -2928,8 +2927,8 @@ td#bwHelp a {
 
 .snarkCommentInfo, .snarkComments, #mediaContainer {
     margin: 10px 0 0 !important;
-    background: #000;
     border: 1px solid #26235c;
+    background: #000;
     filter: drop-shadow(0px 0 1px rgba(16, 8, 16, 0.7));
 }
 
@@ -4072,6 +4071,24 @@ input[name="nofilter_commentsName"] {
 .trackerhome, .trackerannounce, .knowntracker a {
     width: 400px !important;
     max-width: 400px !important;
+}
+
+td.snarkTorrentDetails img, .snarkDirInfo td:first-child img:not(.thumb) {
+    width: 20px !important;
+    max-width: 20px !important;
+    height: 20px !important;
+    max-height: 20px !important;
+}
+
+.snarkTorrentDetails img[src$="rateme.png"] {
+    margin-top: -3px !important;
+    margin-right: -3px !important;
+    width: 12px !important;
+    height: 12px !important;
+}
+
+.percentBarComplete {
+    padding-top: 3px;
 }
 }
 

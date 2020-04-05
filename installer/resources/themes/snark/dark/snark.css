@@ -5112,6 +5112,22 @@ tfoot .snarkTorrentRateUp:not(:empty)::before,tfoot .snarkTorrentUploaded:not(:e
 .iframed .page #snarkInfo ~ .mainsection {
     margin: -11px 0 10px !important;
 }
+
+td.snarkTorrentDetails img, .snarkDirInfo td:first-child img:not(.thumb) {
+    width: 20px !important;
+    height: 20px !important;
+}
+
+.snarkTorrentDetails img[src$="rateme.png"] {
+    margin-top: -3px !important;
+    margin-right: -3px !important;
+    width: 12px !important;
+    height: 12px !important;
+}
+
+.percentBarComplete {
+    padding-top: 3px;
+}
 }
 
 .iframed #snarkInfo + #snarkFiles {
