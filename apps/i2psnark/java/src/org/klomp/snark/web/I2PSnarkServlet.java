@@ -403,14 +403,14 @@ public class I2PSnarkServlet extends BasicServlet {
                         continue;
                     if (_manager.util().isKnownOpenTracker(t.announceURL))
                         continue;
-                    out.write(" \n<a href=\"" + t.baseURL + "\" class=\"snarkNav nav_tracker\" target=\"_blank\">" + t.name + "</a>");
+                    out.write("\n<a href=\"" + t.baseURL + "\" class=\"snarkNav nav_tracker\" target=\"_blank\">" + t.name + "</a>");
                 }
 //                out.write("\n<a href=\"http://torrentfinder.i2p/\" class=\"snarkNav nav_search\" target=\"_blank\">");
 //                out.write(_t("Finder"));
 //                out.write("</a>");
             }
         }
-        out.write("</div>\n");
+        out.write("\n</div>\n");
         String newURL = req.getParameter("newURL");
         if (newURL != null && newURL.trim().length() > 0 && req.getMethod().equals("GET"))
             _manager.addMessage(_t("Click \"Add torrent\" button to fetch torrent"));
