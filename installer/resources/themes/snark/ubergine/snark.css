@@ -5878,7 +5878,6 @@ tfoot .snarkTorrentRateUp:not(:empty)::before,tfoot .snarkTorrentUploaded:not(:e
     vertical-align: text-top;
     background: url(/i2psnark/.resources/icons/magnet.png) center center no-repeat;
     background-size: 14px auto;
-    transform: rotate(-90deg);
 }
 
 @media screen and (max-width: 900px) {
