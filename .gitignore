@@ -19,6 +19,7 @@ web-out.xml
 *.bak
 *.orig
 git.rev
+override.properties
 
 # Temporary/build dirs
 build/
