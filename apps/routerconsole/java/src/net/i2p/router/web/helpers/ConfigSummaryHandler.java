@@ -41,16 +41,13 @@ public class ConfigSummaryHandler extends FormHandler {
                     toAdd.put(CSSHelper.PROP_DISABLE_REFRESH, "true");
                     toAdd.put(CSSHelper.PROP_REFRESH, CSSHelper.DEFAULT_REFRESH);
                     _context.router().saveConfig(toAdd, null);
-                    addFormNotice(_t("Refresh disabled"));
+                    addFormNotice(_t("Refresh disabled").replace("Refresh", "Sidebar refresh"));
                 } else {
                     toAdd.put(CSSHelper.PROP_DISABLE_REFRESH, "false");
                     toAdd.put(CSSHelper.PROP_REFRESH, Integer.toString(refreshInterval));
                     _context.router().saveConfig(toAdd, null);
-                    addFormNotice(_t("Refresh interval changed"));
-                } else if (refreshInterval <= 0) {
-                    addFormNotice(_t("Sidebar refresh disabled"));
-                } else
-                    addFormError(_t("must be a number"));
+                    addFormNotice(_t("Refresh interval changed").replace("Refresh", "Sidebar refresh"));
+                }
             } catch (java.lang.NumberFormatException e) {
                 addFormError(_t("Refresh interval must be a number"));
                 return;
@@ -62,11 +59,11 @@ public class ConfigSummaryHandler extends FormHandler {
             _context.router().saveConfig(SummaryHelper.PROP_SUMMARYBAR + "default", isAdvanced() ? SummaryHelper.DEFAULT_FULL_ADVANCED : SummaryHelper.DEFAULT_FULL);
             }
             addFormNotice(_t("Full summary bar default restored.") + " " +
-                          _t("Summary bar will refresh shortly."));
+                          _t("Summary bar will refresh shortly.").replace("Summary bar", "Sidebar"));
         } else if (_action.equals(_t("Restore minimal default"))) {
             _context.router().saveConfig(SummaryHelper.PROP_SUMMARYBAR + "default", isAdvanced() ? SummaryHelper.DEFAULT_MINIMAL_ADVANCED : SummaryHelper.DEFAULT_MINIMAL);
             addFormNotice(_t("Minimal summary bar default restored.") + " " +
-                          _t("Summary bar will refresh shortly."));
+                          _t("Summary bar will refresh shortly.").replace("Summary bar", "Sidebar"));
         } else if (adding || deleting || saving || moving) {
             Map<Integer, String> sections = new TreeMap<Integer, String>();
             for (Object o : _settings.keySet()) {
