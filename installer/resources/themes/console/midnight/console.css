@@ -8999,6 +8999,10 @@ b.netdb_transport {
     margin-right: 5px;
 }
 
+#netdb td {
+    border-right: none;
+}
+
 #netdb code {
     font-weight: normal !important;
 }
