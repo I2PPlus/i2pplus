@@ -29,7 +29,14 @@
 <td>
 <input type="hidden" name="nonce" value="<%=pageNonce%>" >
 <input type="hidden" name="group" value="0">
-<input type="text" name="refreshInterval" maxlength="4" pattern="[0-9]{1,4}" required value="<jsp:getProperty name="intl" property="refresh" />" >
+<%
+    String rval;
+    if (intl.getDisableRefresh())
+        rval = "0";
+    else
+        rval = intl.getRefresh();
+%>
+<input type="text" name="refreshInterval" maxlength="4" pattern="[0-9]{1,4}" required value="<%=rval%>">
 <%=intl._t("seconds")%>
 </td>
 <td class="optionsave">
