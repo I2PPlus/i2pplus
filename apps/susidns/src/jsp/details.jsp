@@ -41,6 +41,7 @@
 <script src="/js/textareaResize.js" type="text/javascript"></script>
 </head>
 <body id="dtls">
+<style type="text/css">body{opacity: 0;}</style>
 <div class="page">
 <div id="navi">
 <a id="overview" href="index"><%=intl._t("Overview")%></a>&nbsp;
@@ -205,6 +206,6 @@
 </div>
 </div><%-- page --%>
 <span data-iframe-height></span>
-
+<style type="text/css">body{opacity: 1 !important;}</style>
 </body>
 </html>

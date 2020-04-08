@@ -72,6 +72,7 @@
 </script>
 </head>
 <body id="bk">
+<style type="text/css">body{opacity: 0;}</style>
 <div class="page">
 <div id="navi" class="${book.getBook()}">
 <a id="overview" href="index"><%=intl._t("Overview")%></a>&nbsp;
@@ -295,5 +296,6 @@ ${book.loadBookMessages}
 </div>
 </div>
 <span data-iframe-height></span>
+<style type="text/css">body{opacity: 1 !important;}</style>
 </body>
 </html>

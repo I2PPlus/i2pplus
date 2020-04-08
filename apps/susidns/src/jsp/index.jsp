@@ -52,6 +52,7 @@
 <script type="text/javascript" src="/js/iframeResizer/iframeResizer.contentWindow.js?<%=net.i2p.CoreVersion.VERSION%>"></script>
 </head>
 <body id="ovrvw">
+<style type="text/css">body{opacity: 0;}</style>
 <div class="page">
 <div id="navi">
 <a class="selected" id="overview" href="index"><%=intl._t("Overview")%></a>&nbsp;
@@ -116,5 +117,6 @@ document.getElementById("svg").appendChild(xhr.responseXML.documentElement);
 </div>
 </div>
 <span data-iframe-height></span>
+<style type="text/css">body{opacity: 1 !important;}</style>
 </body>
 </html>
