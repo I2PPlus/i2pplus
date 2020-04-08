@@ -36,6 +36,7 @@
 <link rel="preload" href="summarynoframe.jsi" as="document">
 <link rel="preload" href="xhr1.jsp" as="document">
 <link rel="preload" href="xhr1.jsi" as="document">
+<link rel="preload" href="/js/ajax.js?<%=net.i2p.CoreVersion.VERSION%>" as="script">
 <link rel="preload" href="<%=intl.getTheme(request.getHeader("User-Agent"))%>console.css?<%=net.i2p.CoreVersion.VERSION%>" as="style">
 <link rel="icon" href="<%=intl.getTheme(request.getHeader("User-Agent"))%>images/favicon.ico">
 <script nonce="<%=cspNonce%>" type="text/javascript">if (top.location != location) {top.location.href = location.href;}</script>
