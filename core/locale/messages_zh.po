@@ -100,7 +100,7 @@ msgstr[0] "{0} 年"
 #: ../java/src/net/i2p/data/DataHelper.java:1403
 #: ../java/src/net/i2p/data/DataHelper.java:1450
 msgid "n/a"
-msgstr "n/a"
+msgstr "不适用"
 
 #: ../java/src/net/i2p/data/DataHelper.java:1432
 #, java-format
@@ -118,7 +118,7 @@ msgstr[0] "{0,number,###} 微秒"
 #, java-format
 msgid "{0} similar message omitted"
 msgid_plural "{0} similar messages omitted"
-msgstr[0] ""
+msgstr[0] "{0}个相似的消息被删除"
 
 #: ../java/src/net/i2p/router/web/helpers/ConfigLoggingHelper.java:70
 #: ../java/src/net/i2p/router/web/helpers/LogsHelper.java:153

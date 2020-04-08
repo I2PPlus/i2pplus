@@ -60,7 +60,7 @@ msgstr "垃圾箱"
 #. MailDir-like
 #: src/src/i2p/susi/webmail/WebMail.java:217
 msgid "Bulk Mail"
-msgstr ""
+msgstr "垃圾邮件"
 
 #. untranslated, translate on use
 #: src/src/i2p/susi/webmail/WebMail.java:221
@@ -291,12 +291,12 @@ msgstr "没有新邮件"
 
 #: src/src/i2p/susi/webmail/WebMail.java:2422
 msgid "Checking for new emails on server"
-msgstr ""
+msgstr "检查服务器上的新邮件"
 
 #: src/src/i2p/susi/webmail/WebMail.java:2424
 #: src/src/i2p/susi/webmail/WebMail.java:3126
 msgid "Refresh the page for updates"
-msgstr ""
+msgstr "刷新页面来更新"
 
 #: src/src/i2p/susi/webmail/WebMail.java:2629
 #: src/src/i2p/susi/webmail/WebMail.java:3226

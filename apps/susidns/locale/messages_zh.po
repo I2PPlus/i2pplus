@@ -12,6 +12,7 @@
 # walking <waling@mail.i2p>, 2013
 # walking <walking@i2pmail.org>, 2011
 # YFdyh000 <yfdyh000@gmail.com>, 2014-2015,2017
+# fzh2003 <fzh2003@i2pmail.org>,2020
 msgid ""
 msgstr ""
 "Project-Id-Version: I2P\n"
