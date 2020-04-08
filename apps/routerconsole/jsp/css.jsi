@@ -31,6 +31,12 @@
 <jsp:setProperty name="intl" property="contextId" value="<%=i2pcontextId%>" />
 <link rel="preload" href="/themes/fonts/DroidSans.ttf" as="font">
 <link rel="preload" href="/themes/fonts/DroidSans-Bold.ttf" as="font">
+<link rel="preload" href="<%=intl.getTheme(request.getHeader("User-Agent"))%>images/i2plogo.png" as="image">
+<link rel="preload" href="summaryajax.jsi" as="document">
+<link rel="preload" href="summarynoframe.jsi" as="document">
+<link rel="preload" href="xhr1.jsp" as="document">
+<link rel="preload" href="xhr1.jsi" as="document">
+<link rel="preload" href="<%=intl.getTheme(request.getHeader("User-Agent"))%>console.css?<%=net.i2p.CoreVersion.VERSION%>" as="style">
 <link rel="icon" href="<%=intl.getTheme(request.getHeader("User-Agent"))%>images/favicon.ico">
 <script nonce="<%=cspNonce%>" type="text/javascript">if (top.location != location) {top.location.href = location.href;}</script>
 <script src="/js/progressx.js?<%=net.i2p.CoreVersion.VERSION%>" type="text/javascript"></script>
