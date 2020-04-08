@@ -5,7 +5,7 @@
     font-weight: normal;
     font-weight: 400;
     font-style: normal;
-    font-display: swap;
+    font-display: block;
     src: local("Droid Sans Regular"), local("DroidSans"), url("/themes/fonts/DroidSans.ttf") format("truetype");
 }
 
@@ -14,7 +14,7 @@
     font-weight: bold;
     font-weight: 700;
     font-style: normal;
-    font-display: swap;
+    font-display: block;
     src: url("/themes/fonts/DroidSans-Bold.ttf") format("truetype"), local("Droid Sans Bold"), local("DroidSans-Bold");
 }
 
