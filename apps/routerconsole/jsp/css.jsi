@@ -29,8 +29,8 @@
 <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
 <jsp:useBean class="net.i2p.router.web.CSSHelper" id="intl" scope="request" />
 <jsp:setProperty name="intl" property="contextId" value="<%=i2pcontextId%>" />
-<link rel="preload" href="/themes/fonts/DroidSans.ttf" as="font">
 <link rel="preload" href="/themes/fonts/DroidSans-Bold.ttf" as="font">
+<link rel="preload" href="/themes/fonts/DroidSans.ttf" as="font">
 <link rel="preload" href="<%=intl.getTheme(request.getHeader("User-Agent"))%>images/i2plogo.png" as="image">
 <link rel="preload" href="summaryajax.jsi" as="document">
 <link rel="preload" href="summarynoframe.jsi" as="document">

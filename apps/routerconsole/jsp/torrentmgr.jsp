@@ -4,6 +4,7 @@
 <!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
 <html>
 <head>
+<link rel="preload" href="/js/iframeResizer/iframeResizer.contentWindow.js?<%=net.i2p.CoreVersion.VERSION%>" as="script">
 <link rel="preload" href="/i2psnark/configure" as="document">
 <%@include file="css.jsi" %>
 <%@include file="csp-unsafe.jsi" %>
