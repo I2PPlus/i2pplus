@@ -125,7 +125,6 @@ body.iframed {
     text-shadow: 0 1px 1px #000;
     border: 1px solid #252;
     box-shadow: inset 0 0 0 1px #000, inset 0 0 2px 1px #040;
-    background-blend-mode: luminosity;
 }
 
 #navi a:hover, #navi a:focus  {
@@ -133,66 +132,77 @@ body.iframed {
     color: #f60 !important;
     box-shadow: inset 0 0 0 1px #000, inset 0 0 2px 1px #f60, inset 0 0 0 3px #000;
     background: #000;
-    background-blend-mode: normal;
 }
 
 #navi a:active {
     box-shadow: inset 3px 3px 3px #000;
     box-shadow: inset 0 0 0 1px #000, inset 3px 3px 3px #000;
     color: #ee9 !important;
-    background-blend-mode: luminosity;
+    text-shadow: none !important;
 }
 
 #navi a.abook {
-    background: #000 url(/themes/susidns/images/abook.png) 6px center no-repeat;
-    background: url(/themes/susidns/images/abook.png) 6px center no-repeat, linear-gradient(to bottom, #002900, #000400);
+    background: #000 url(/themes/susidns/dark/images/abook.png) 6px center no-repeat;
+    background: url(/themes/susidns/dark/images/abook.png) 6px center no-repeat, linear-gradient(to bottom, #002900, #000400);
+    background-size: 14px 14px, 100% 100%;
 }
 
 #navi a.abook:hover, #navi a.abook:focus {
-    background: #000 url(/themes/susidns/images/abook.png) 6px center no-repeat !important;
+    background: #000 url(/themes/susidns/dark/images/abook_hover.png) 6px center no-repeat !important;
+    background-size: 14px 14px !important;
 }
 
 #navi a.abook:active {
-    background: #f60 url(/themes/susidns/images/abook.png) 6px center no-repeat !important;
+    background: #f60 url(/themes/susidns/dark/images/abook_active.png) 6px center no-repeat !important;
+    background-size: 14px 14px !important;
 }
 
 #navi a#subs {
-    background: #000 url(/themes/susidns/images/subs.png) 6px center no-repeat;
-    background: url(/themes/susidns/images/subs.png) 6px center no-repeat, linear-gradient(to bottom, #002900, #000400);
+    background: #000 url(/themes/susidns/dark/images/subs.png) 6px center no-repeat;
+    background: url(/themes/susidns/dark/images/subs.png) 6px center no-repeat, linear-gradient(to bottom, #002900, #000400);
+    background-size: 14px 14px, 100% 100%;
 }
 
 #navi a#subs:hover, #navi a#subs:focus {
-    background: #000 url(/themes/susidns/images/subs.png) 6px center no-repeat !important;
+    background: #000 url(/themes/susidns/dark/images/subs_hover.png) 6px center no-repeat !important;
+    background-size: 14px 14px !important;
 }
 
 #navi a#subs:active {
-    background: #f60 url(/themes/susidns/images/subs.png) 6px center no-repeat !important;
+    background: #f60 url(/themes/susidns/dark/images/subs_active.png) 6px center no-repeat !important;
+    background-size: 14px 14px !important;
 }
 
 #navi a#config {
-    background: #000 url(/themes/console/images/buttons/configure.png) 6px center no-repeat;
-    background: url(/themes/console/images/buttons/configure.png) 6px center no-repeat, linear-gradient(to bottom, #002900, #000400);
+    background: #000 url(/themes/susidns/dark/images/configure.png) 6px center no-repeat;
+    background: url(/themes/susidns/dark/images/configure.png) 6px center no-repeat, linear-gradient(to bottom, #002900, #000400);
+    background-size: 14px 14px, 100% 100%;
 }
 
 #navi a#config:hover, #navi a#config:focus {
-    background: #000 url(/themes/console/images/buttons/configure.png) 6px center no-repeat !important;
+    background: #000 url(/themes/susidns/dark/images/configure_hover.png) 6px center no-repeat !important;
+    background-size: 14px 14px !important;
 }
 
 #navi a#config:active {
-    background: #f60 url(/themes/console/images/buttons/configure.png) 6px center no-repeat !important;
+    background: #f60 url(/themes/susidns/dark/images/configure_active.png) 6px center no-repeat !important;
+    background-size: 14px 14px !important;
 }
 
 #navi a#overview {
-    background: #000 url(/themes/susidns/images/overview.png) 6px center no-repeat;
-    background: url(/themes/susidns/images/overview.png) 6px center no-repeat, linear-gradient(to bottom, #002900, #000400);
+    background: #000 url(/themes/susidns/dark/images/overview.png) 6px center no-repeat;
+    background: url(/themes/susidns/dark/images/overview.png) 6px center no-repeat, linear-gradient(to bottom, #002900, #000400);
+    background-size: 14px 14px, 100% 100%;
 }
 
 #navi a#overview:hover, #navi a#overview:focus {
-    background: #000 url(/themes/susidns/images/overview.png) 6px center no-repeat !important;
+    background: #000 url(/themes/susidns/dark/images/overview_hover.png) 6px center no-repeat !important;
+    background-size: 14px 14px !important;
 }
 
 #navi a#overview:active {
-    background: #f60 url(/themes/susidns/images/overview.png) 6px center no-repeat !important;
+    background: #f60 url(/themes/susidns/dark/images/overview_active.png) 6px center no-repeat !important;
+    background-size: 14px 14px !important;
 }
 
 /* end topnav */
@@ -1462,10 +1472,10 @@ textarea {
 #navi a#subs, #navi a#subs:hover, #navi a#subs:focus, #navi a#subs:active,
 #navi a#config, #navi a#config:hover, #navi a#config:focus, #navi a#config:active
  {
-    padding: 6px 9px 6px 26px !important;
+    padding: 6px 10px 6px 29px !important;
     letter-spacing: 0.1em;
     font-size: 10pt !important;
-    background-position: 7px center !important;
+    background-position: 10px center !important;
 }
 
 h3 {
