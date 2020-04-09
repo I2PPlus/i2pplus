@@ -4824,7 +4824,15 @@ public class I2PSnarkServlet extends BasicServlet {
                  plc.endsWith(".azw3") ||
                  plc.endsWith(".azw4"))
             icon = "ebook";
-        else if (mime.equals("application/java-archive") ||
+        else if (mime.equals("application/x-jar") || mime.equals("application/x-java-archive") ||
+               mime.equals("application/java-archive") || plc.endsWith(".jar") || plc.endsWith(".exe")) {
+            if (plc.startsWith("i2pinstall"))
+                icon = "i2p";
+            else if (plc.endsWith(".exe"))
+                icon = "application";
+            else
+                icon = "package";
+        } else if (mime.equals("application/java-archive") ||
                  plc.endsWith(".deb"))
             icon = "package";
         else if (plc.endsWith(".xpi2p"))
@@ -4838,7 +4846,7 @@ public class I2PSnarkServlet extends BasicServlet {
         else if (mime.startsWith("video/"))
             icon = "video";
         else if (mime.equals("application/zip")) {
-            if (plc.endsWith(".su3") || plc.endsWith(".su2") || plc.endsWith(".sud"))
+            if (plc.endsWith(".su3") || plc.endsWith(".su2"))
                 icon = "i2p";
             else
                 icon = "compress";
