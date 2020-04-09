@@ -4826,7 +4826,9 @@ public class I2PSnarkServlet extends BasicServlet {
             icon = "ebook";
         else if (mime.equals("application/x-jar") || mime.equals("application/x-java-archive") ||
                mime.equals("application/java-archive") || plc.endsWith(".jar") || plc.endsWith(".exe")) {
-            if (plc.startsWith("i2pinstall"))
+            if (plc.contains("i2pinstall") && plc.contains("+"))
+                icon = "plus";
+            else if (plc.contains("i2pinstall"))
                 icon = "i2p";
             else if (plc.endsWith(".exe"))
                 icon = "application";
