@@ -1525,7 +1525,7 @@ public class Router implements RouterClock.ClockShiftListener {
      * disable dynamic key functionality for the moment, as it may be harmful and doesn't
      * add meaningful anonymity
      */
-    private static final boolean ALLOW_DYNAMIC_KEYS = false;
+    private static final boolean ALLOW_DYNAMIC_KEYS = true;
 
     /**
      *  Cancel the JVM runtime hook before calling this.
