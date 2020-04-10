@@ -1385,6 +1385,9 @@
             <fileset dir="installer/resources/eepsite/" excludes="**/.placeholder" />
             <fileset dir="installer/resources/eepsite/docroot/.resources/" />
         </copy>
+        <copy todir="pkg-temp/eepsite-jetty9.3" >
+            <fileset dir="installer/resources/eepsite-jetty9.3" />
+        </copy>
         <copy file="installer/resources/themes/console/images/favicon.ico" tofile="pkg-temp/eepsite/docroot/favicon.ico" />
     </target>
 
@@ -1844,6 +1847,9 @@
         </copy>
         <copy todir="pkg-temp/eepsite/docroot" >
             <fileset dir="installer/resources/eepsite/docroot" includes=".resources/*" />
+        </copy>
+        <copy todir="pkg-temp/eepsite-jetty9.3" >
+            <fileset dir="installer/resources/eepsite-jetty9.3" />
         </copy>
     </target>
 
