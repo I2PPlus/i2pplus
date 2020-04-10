@@ -399,12 +399,26 @@ _:-ms-lang(x), .tunnelProperties {
 }
 
 .tunnelName a {
-    background: url(/themes/console/images/buttons/configure.png) left center no-repeat;
     padding: 3px 3px 3px 20px !important;
+    font-weight: bold;
+    background: url(/themes/console/images/buttons/configure.png) left center no-repeat;
+    background: url(/themes/susidns/midnight/images/configure.png) left center no-repeat;
+    background-size: 14px 14px !important;
 }
 
+@media screen and (max-width: 1200px) {
 .tunnelName a {
-    font-weight: bold;
+    background-size: 12px 12px !important;
+    background-position: 4px center;
+}
+}
+
+.tunnelName a:hover, .tunnelName a:focus {
+    background: url(images/configure_hover.png) left center no-repeat;
+}
+
+.tunnelName a:active {
+    background: url(images/configure_active.png) left center no-repeat;
 }
 
 .tunnelType {
