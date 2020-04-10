@@ -8852,7 +8852,19 @@ img + tt {
     -webkit-column-break-inside: avoid;
 }
 
-.cells.ipv6 {
+#peers .cells {
+    box-shadow: none;
+}
+
+#peers table:last-child {
+    margin-bottom: 10px;
+}
+
+#peers .widescroll + h3 {
+    margin-top: 1px !important;
+}
+
+/*.cells.ipv6 {
     width: 1% !important;
     max-width: 24px;
 }
@@ -8894,15 +8906,15 @@ img + tt {
 .cells.tx, .cells.rx, .cells.duptx, .cells.duprx {
     width: 1%;
     min-width: 48px;
-}
+}*/
 
 .cells.mtu {
     white-space: nowrap;
 }
 
-.cells.spacer {
+/*.cells.spacer {
     width: 35%;
-}
+}*/
 
 #peers .spacer {
     display: none
