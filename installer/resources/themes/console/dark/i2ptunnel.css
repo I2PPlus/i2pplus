@@ -66,14 +66,14 @@ a {
     font-weight: bold;
 }
 
-a:link {
+a:link, a:visited {
     color: #494;
     outline: none;
 }
 
-a:visited {
+/*a:visited {
     color: #7b7;
-}
+}*/
 
 a:hover, a:focus {
     color: #f60;
@@ -420,16 +420,26 @@ td.infohelp {
 }
 
 .tunnelName a {
-    background: url(/themes/console/images/buttons/configure.png) left center no-repeat;
-    padding: 3px 3px 3px 20px !important;
-}
-
-.tunnelName a:hover {
-    filter: drop-shadow(0 0 1px #730);
-}
-
-.tunnelName a {
+    padding: 3px 3px 3px 22px !important;
     font-weight: bold;
+    background: url(/themes/susidns/dark/images/configure.png) 4px 40% no-repeat;
+    background-size: 14px 14px !important;
+}
+
+.tunnelName a:hover, .tunnelName a:focus {
+    background: url(/themes/susidns/dark/images/configure_hover.png) 4px 40% no-repeat;
+}
+
+.tunnelName a:active {
+    color: #f60 !important;
+    opacity: .65;
+}
+
+@media screen and (max-width: 1200px) {
+.tunnelName a {
+    background-position: 5px center !important;
+    background-size: 13px 13px !important;
+}
 }
 
 .tunnelType {
