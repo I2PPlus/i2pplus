@@ -841,6 +841,10 @@ td.snarkTorrentAction input[type="image"] {
     transform: none !important;
 }
 
+.active td.snarkTorrentAction {
+    background: linear-gradient(to left, rgba(0,0,0,0) 1px, #f3f 2px, rgba(0,0,0,0) 2px);
+}
+
 .peerinfo td:nth-child(4) {
     font-weight: bold;
 }
