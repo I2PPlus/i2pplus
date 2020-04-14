@@ -118,49 +118,50 @@ public final class ElGamalAESEngine {
             if (shouldDebug)
                 _log.debug("Decrypting existing session " + "(" + data.length + " bytes)" +
                            "\n* Tag: " + st.toString() +
-                           "\n* Key: " + key.toBase64() /* + Base64.encode(data, 0, 64) */ );
+                           "\n* Key: " + key.toBase64());
 
             decrypted = decryptExistingSession(data, key, targetPrivateKey, foundTags, usedKey, foundKey);
-                if (decrypted != null) {
-                    _context.statManager().updateFrequency("crypto.elGamalAES.decryptExistingSession");
-                    StringBuilder buf = new StringBuilder();
-                    if (!foundTags.isEmpty()) {
-                        for (SessionTag t : foundTags) {
-                            buf.append("[").append(t.toString().substring(0,6)).append("]"); buf.append(" ");
-                        }
-                        if (!foundTags.isEmpty() && shouldDebug)
-                            _log.debug("ElGamal/AES decrypt success with [" + st.toString().substring(0,6) + "]\n* Found Tags: " + buf.toString());
-                        wasExisting = true;
+            if (decrypted != null) {
+                _context.statManager().updateFrequency("crypto.elGamalAES.decryptExistingSession");
+                StringBuilder buf = new StringBuilder();
+                if (!foundTags.isEmpty()) {
+                    for (SessionTag t : foundTags) {
+                        buf.append("[").append(t.toString().substring(0,6)).append("]"); buf.append(" ");
                     }
-                } else {
-                    _context.statManager().updateFrequency("crypto.elGamalAES.decryptFailed");
-                    if (_log.shouldLog(Log.WARN)) {
-                        _log.warn("ElGamal decrypt fail: Known Tag [" + st.toString().substring(0,6) + "], failed decrypt");
-                    }
+                    if (!foundTags.isEmpty() && shouldDebug)
+                        _log.debug("ElGamal/AES decrypt success with [" + st.toString().substring(0,6) + "]\n* Found Tags: " + buf.toString());
+                    wasExisting = true;
                 }
             } else {
-                if (shouldDebug) _log.debug("Key NOT known for Tag [" + st.toString().substring(0,6) + "]");
-                decrypted = decryptNewSession(data, targetPrivateKey, foundTags, usedKey, foundKey);
-                if (decrypted != null) {
-                    _context.statManager().updateFrequency("crypto.elGamalAES.decryptNewSession");
-                    if (!foundTags.isEmpty()) {
-                        StringBuilder buf = new StringBuilder();
-                        for (SessionTag t : foundTags) {
-                            buf.append("[").append(t.toString().substring(0,6)).append("]"); buf.append(" ");
-                        }
-                        if (!foundTags.isEmpty() && shouldDebug)
-                            _log.debug("ElGamal decrypt success!\n* Found Tags: " + buf.toString());
-                    }
-                } else {
-                    _context.statManager().updateFrequency("crypto.elGamalAES.decryptFailed");
-                    if (_log.shouldLog(Log.WARN))
-                        _log.warn("ElGamal decrypt fail: Unknown Tag " + st.toString());
+                _context.statManager().updateFrequency("crypto.elGamalAES.decryptFailed");
+                if (_log.shouldLog(Log.WARN)) {
+                    _log.warn("ElGamal decrypt fail: Known Tag [" + st.toString().substring(0,6) + "], failed decrypt");
                 }
             }
+        } else if (data.length >= ELG_ENCRYPTED_LENGTH) {
+            decrypted = decryptNewSession(data, targetPrivateKey, foundTags, usedKey, foundKey);
+            if (decrypted != null) {
+                _context.statManager().updateFrequency("crypto.elGamalAES.decryptNewSession");
+                if (!foundTags.isEmpty()) {
+                    StringBuilder buf = new StringBuilder();
+                    for (SessionTag t : foundTags) {
+                        buf.append("[").append(t.toString().substring(0,6)).append("]"); buf.append(" ");
+                    }
+                    if (!foundTags.isEmpty() && shouldDebug)
+                        _log.debug("ElGamal decrypt success!\n* Found Tags: " + buf.toString());
+                }
+            } else {
+                _context.statManager().updateFrequency("crypto.elGamalAES.decryptFailed");
+                if (_log.shouldLog(Log.WARN))
+                    _log.warn("ElGamal decrypt fail: Unknown Tag " + st.toString());
+            }
+        } else {
+            return null;
+        }
 
-            //if ((key == null) && (decrypted == null)) {
-                //_log.debug("Unable to decrypt the data starting with tag [" + st + "] - did the tag expire recently?", new Exception("Decrypt failure"));
-            //}
+        //if ((key == null) && (decrypted == null)) {
+            //_log.debug("Unable to decrypt the data starting with tag [" + st + "] - did the tag expire recently?", new Exception("Decrypt failure"));
+        //}
 
             if (!foundTags.isEmpty()) {
                 if (foundKey.getData() != null) {
@@ -183,6 +184,96 @@ public final class ElGamalAESEngine {
                     keyManager.tagsReceived(usedKey, foundTags);
                 }
             }
+        }
+        return decrypted;
+    }
+
+    /**
+     * Tags only. For MuxedEngine use only.
+     *
+     * @return decrypted data or null on failure
+     * @since 0.9.46
+     */
+    public byte[] decryptFast(byte data[], PrivateKey targetPrivateKey,
+                              SessionKeyManager keyManager) throws DataFormatException {
+        if (data == null)
+            return null;
+        if (data.length < MIN_ENCRYPTED_SIZE)
+            return null;
+        byte tag[] = new byte[32];
+        System.arraycopy(data, 0, tag, 0, 32);
+        SessionTag st = new SessionTag(tag);
+        SessionKey key = keyManager.consumeTag(st);
+        if (key == null)
+            return null;
+        SessionKey foundKey = new SessionKey();
+        SessionKey usedKey = new SessionKey();
+        Set<SessionTag> foundTags = new HashSet<SessionTag>();
+        final boolean shouldDebug = _log.shouldDebug();
+        if (shouldDebug)
+            _log.debug("Decrypting existing session with tag: " + st.toString() + ": key: " + key.toBase64() + ": " + data.length + " bytes");
+        byte[] decrypted = decryptExistingSession(data, key, targetPrivateKey, foundTags, usedKey, foundKey);
+        if (decrypted != null) {
+            _context.statManager().updateFrequency("crypto.elGamalAES.decryptExistingSession");
+            if (!foundTags.isEmpty() && shouldDebug)
+                _log.debug("ElG/AES decrypt success with " + st + ": found tags: " + foundTags);
+            if (!foundTags.isEmpty()) {
+                if (foundKey.getData() != null) {
+                    if (shouldDebug) 
+                        _log.debug("Found key: " + foundKey.toBase64() + " tags: " + foundTags + " in existing session");
+                    keyManager.tagsReceived(foundKey, foundTags);
+                } else if (usedKey.getData() != null) {
+                    if (shouldDebug) 
+                        _log.debug("Used key: " + usedKey.toBase64() + " tags: " + foundTags + " in existing session");
+                    keyManager.tagsReceived(usedKey, foundTags);
+                }
+            }
+        } else {
+            _context.statManager().updateFrequency("crypto.elGamalAES.decryptFailed");
+            if (_log.shouldLog(Log.WARN)) {
+                _log.warn("ElG decrypt fail: known tag [" + st + "], failed decrypt");
+            }
+        }
+        return decrypted;
+    }
+
+    /**
+     * Full ElG only. For MuxedEngine use only.
+     *
+     * @return decrypted data or null on failure
+     * @since 0.9.46
+     */
+    public byte[] decryptSlow(byte data[], PrivateKey targetPrivateKey,
+                              SessionKeyManager keyManager) throws DataFormatException {
+        if (data == null)
+            return null;
+        if (data.length < ELG_ENCRYPTED_LENGTH)
+            return null;
+        SessionKey foundKey = new SessionKey();
+        SessionKey usedKey = new SessionKey();
+        Set<SessionTag> foundTags = new HashSet<SessionTag>();
+        byte[] decrypted = decryptNewSession(data, targetPrivateKey, foundTags, usedKey, foundKey);
+        final boolean shouldDebug = _log.shouldDebug();
+        if (decrypted != null) {
+            _context.statManager().updateFrequency("crypto.elGamalAES.decryptNewSession");
+        } else {
+            _context.statManager().updateFrequency("crypto.elGamalAES.decryptFailed");
+            if (_log.shouldLog(Log.WARN))
+                _log.warn("ElG decrypt fail as new session");
+        }
+        if (!foundTags.isEmpty()) {
+            if (shouldDebug)
+                _log.debug("ElG decrypt success: found tags: " + foundTags);
+            if (foundKey.getData() != null) {
+                if (shouldDebug) 
+                    _log.debug("Found key: " + foundKey.toBase64() + " tags: " + foundTags + " in new session");
+                keyManager.tagsReceived(foundKey, foundTags);
+            } else if (usedKey.getData() != null) {
+                if (shouldDebug) 
+                    _log.debug("Used key: " + usedKey.toBase64() + " tags: " + foundTags + " in new session");
+                keyManager.tagsReceived(usedKey, foundTags);
+            }
+        }
         return decrypted;
     }
 
@@ -206,13 +297,6 @@ public final class ElGamalAESEngine {
      */
     private byte[] decryptNewSession(byte data[], PrivateKey targetPrivateKey, Set<SessionTag> foundTags, SessionKey usedKey,
                                     SessionKey foundKey) throws DataFormatException {
-        if (data == null) {
-            //if (_log.shouldLog(Log.WARN)) _log.warn("Data is null, unable to decrypt new session");
-            return null;
-        } else if (data.length < ELG_ENCRYPTED_LENGTH) {
-            //if (_log.shouldLog(Log.WARN)) _log.warn("Data length is too small (" + data.length + ")");
-            return null;
-        }
         byte elgEncr[] = new byte[ELG_ENCRYPTED_LENGTH];
         if (data.length > ELG_ENCRYPTED_LENGTH) {
             System.arraycopy(data, 0, elgEncr, 0, ELG_ENCRYPTED_LENGTH);
@@ -449,8 +533,8 @@ public final class ElGamalAESEngine {
                 throw new IllegalArgumentException("Bad public key type " + type);
         }
         if (currentTag == null) {
-            if (_log.shouldLog(Log.INFO))
-                _log.info("Current tag is null, encrypting as new session");
+            if (_log.shouldDebug())
+                _log.debug("Current tag is null - encrypting as new session");
             _context.statManager().updateFrequency("crypto.elGamalAES.encryptNewSession");
             return encryptNewSession(data, target, key, tagsForDelivery, newKey, paddedSize);
         }
@@ -563,12 +647,12 @@ public final class ElGamalAESEngine {
 
         //_log.debug("Pre IV for encryptNewSession: " + DataHelper.toString(preIV, 32));
         //_log.debug("SessionKey for encryptNewSession: " + DataHelper.toString(key.getData(), 32));
-        long before = _context.clock().now();
+        //long before = _context.clock().now();
         byte elgEncr[] = _context.elGamalEngine().encrypt(elgSrcData, target);
-        if (_log.shouldLog(Log.INFO)) {
-            long after = _context.clock().now();
-            _log.info("elgEngine.encrypt of the session key took " + (after - before) + "ms");
-        }
+        //if (_log.shouldDebug()) {
+        //    long after = _context.clock().now();
+        //    _log.debug("elgEngine.encrypt of the session key took " + (after - before) + "ms");
+        //}
         if (elgEncr.length < ELG_ENCRYPTED_LENGTH) {
             // ??? ElGamalEngine.encrypt() always returns 514 bytes
             byte elg[] = new byte[ELG_ENCRYPTED_LENGTH];
