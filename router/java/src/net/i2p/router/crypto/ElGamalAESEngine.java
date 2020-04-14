@@ -163,17 +163,17 @@ public final class ElGamalAESEngine {
             //_log.debug("Unable to decrypt the data starting with tag [" + st + "] - did the tag expire recently?", new Exception("Decrypt failure"));
         //}
 
-            if (!foundTags.isEmpty()) {
-                if (foundKey.getData() != null) {
-                    StringBuilder buf = new StringBuilder();
-                    for (SessionTag t : foundTags) {
-                        buf.append("[").append(t.toString().substring(0,6)).append("]"); buf.append(" ");
-                    }
-                    if (shouldDebug)
+        if (!foundTags.isEmpty()) {
+            if (foundKey.getData() != null) {
+                StringBuilder buf = new StringBuilder();
+                for (SessionTag t : foundTags) {
+                    buf.append("[").append(t.toString().substring(0,6)).append("]"); buf.append(" ");
+                }
+                if (shouldDebug)
                     _log.debug("Found key: " + foundKey.toBase64().substring(0,6) + " wasExisting? " + wasExisting +
                                "\n* Tags: " + buf.toString());
                     keyManager.tagsReceived(foundKey, foundTags);
-                } else if (usedKey.getData() != null) {
+            } else if (usedKey.getData() != null) {
                     StringBuilder buf = new StringBuilder();
                     for (SessionTag t : foundTags) {
                         buf.append("[").append(t.toString().substring(0,6)).append("]"); buf.append(" ");
@@ -182,7 +182,6 @@ public final class ElGamalAESEngine {
                         _log.debug("Used key [" + usedKey.toBase64().substring(0,6) + "] wasExisting? " + wasExisting +
                                    "\n* Tags: " + buf.toString());
                     keyManager.tagsReceived(usedKey, foundTags);
-                }
             }
         }
         return decrypted;
@@ -219,11 +218,11 @@ public final class ElGamalAESEngine {
                 _log.debug("ElG/AES decrypt success with " + st + ": found tags: " + foundTags);
             if (!foundTags.isEmpty()) {
                 if (foundKey.getData() != null) {
-                    if (shouldDebug) 
+                    if (shouldDebug)
                         _log.debug("Found key: " + foundKey.toBase64() + " tags: " + foundTags + " in existing session");
                     keyManager.tagsReceived(foundKey, foundTags);
                 } else if (usedKey.getData() != null) {
-                    if (shouldDebug) 
+                    if (shouldDebug)
                         _log.debug("Used key: " + usedKey.toBase64() + " tags: " + foundTags + " in existing session");
                     keyManager.tagsReceived(usedKey, foundTags);
                 }
@@ -265,11 +264,11 @@ public final class ElGamalAESEngine {
             if (shouldDebug)
                 _log.debug("ElG decrypt success: found tags: " + foundTags);
             if (foundKey.getData() != null) {
-                if (shouldDebug) 
+                if (shouldDebug)
                     _log.debug("Found key: " + foundKey.toBase64() + " tags: " + foundTags + " in new session");
                 keyManager.tagsReceived(foundKey, foundTags);
             } else if (usedKey.getData() != null) {
-                if (shouldDebug) 
+                if (shouldDebug)
                     _log.debug("Used key: " + usedKey.toBase64() + " tags: " + foundTags + " in new session");
                 keyManager.tagsReceived(usedKey, foundTags);
             }
