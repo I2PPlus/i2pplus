@@ -6,6 +6,8 @@ import java.io.PrintWriter;
 import java.io.Serializable;
 import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
+import java.net.URI;
+import java.net.URISyntaxException;
 import java.text.DecimalFormat;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
@@ -312,13 +314,15 @@ public class I2PSnarkServlet extends BasicServlet {
         else
             out.write(_contextName);
         out.write(" - ");
-        if (isConfigure)
+        if (isConfigure) {
             out.write(_t("Configuration"));
-        else
-            out.write(_t("Anonymous BitTorrent Client"));
-        String peerParam = req.getParameter("p");
-        if ("2".equals(peerParam))
-            out.write(" | Debug Mode");
+        } else {
+            String peerParam = req.getParameter("p");
+            if ("2".equals(peerParam))
+                out.write(_t("Debug Mode"));
+            else
+                out.write(_t("Anonymous BitTorrent Client"));
+        }
         out.write("</title>\n");
 
         // we want it to go to the base URI so we don't refresh with some funky action= value
@@ -2369,12 +2373,15 @@ public class I2PSnarkServlet extends BasicServlet {
                 else
                     client = _t("Unknown") + " (" + ch + ')';
                 out.write(client + "</span></span>");
-                if (showDebug) {
-                    out.write(" &#10140; <i>" + _t("inactive") + "&nbsp;" + (peer.getInactiveTime() / 1000) + "s</i>");
-                } else {
-                    out.write("<span class=\"inactivity\" style=\"width: " + (peer.getInactiveTime() / 2000) +
-                              "px;\" title=\"" + _t("Inactive") + ": " +
-                              (peer.getInactiveTime() / 1000) + ' ' + _t("seconds") + "\"></span>");
+                long t = peer.getInactiveTime();
+                if (t >= 5000) {
+                    if (showDebug) {
+                        out.write(" &#10140; <i>" + _t("inactive") + "&nbsp;" + (t / 1000) + "s</i>");
+                    } else {
+                        out.write("<span class=\"inactivity\" style=\"width: " + (t / 2000) +
+                                  "px;\" title=\"" + _t("Inactive") + ": " +
+                                  (t / 1000) + ' ' + _t("seconds") + "\"></span>");
+                    }
                 }
                 out.write("</td>\n");
                 out.write("<td class=\"snarkTorrentETA\">");
