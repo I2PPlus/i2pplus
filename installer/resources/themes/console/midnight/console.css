@@ -13760,10 +13760,6 @@ to {
     background-size: 14px 14px !important;
 }
 
-#tunnelconfig th:last-child {
-    background: #000 url(images/out.png);
-}
-
 .inbound.small, .outbound.small {
     background-size: 12px 12px !important;
     background-position: center center !important;
