@@ -39,7 +39,6 @@
 <%@page pageEncoding="UTF-8"%>
 <%@ page contentType="text/html" %>
 <%@page trimDirectiveWhitespaces="true"%>
-<%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
 <jsp:useBean id="version" class="i2p.susi.dns.VersionBean" scope="application"/>
 <jsp:useBean id="cfg" class="i2p.susi.dns.ConfigBean" scope="session"/>
 <jsp:useBean id="base" class="i2p.susi.dns.BaseBean" scope="session" />
