@@ -674,7 +674,6 @@ select {
     min-width: 120px;
     overflow: hidden;
     text-overflow: ellipsis;
-    text-align: center;
     font: 8.5pt "Droid Sans", "Open Sans", "Noto Sans", Ubuntu, "Segoe UI", "Lucida Grande", Verdana, Helvetica, sans-serif;
     font-weight: bold;
     color: #6c66bc;
@@ -687,12 +686,7 @@ select {
     cursor: pointer;
 }
 
-select:disabled {
-    text-align: left;
-}
-
 select:hover, select:focus, select:active {
-    text-align: left;
     color: #652787;
     text-shadow: 0 1px 1px #000;
     border: 1px solid #652787 !important;
@@ -701,7 +695,7 @@ select:hover, select:focus, select:active {
     background-size: 14px auto, 100% 100%, 100% 100% !important;
 }
 
-select option { /* dropdown menu reverts to normal font-weight */
+select option {
     font-weight: normal;
 }
 
@@ -721,7 +715,6 @@ input, select, button {
 button, input[type="submit"], input[type="reset"], a.control {
     font-family: "Droid Sans", "Open Sans", "Noto Sans", Ubuntu, "Segoe UI", "Lucida Grande", Verdana, Helvetica, sans-serif;
     font-weight: bold;
-/*    border-radius: 2px !important;*/
 }
 
 .buttons, .newTunnel {
