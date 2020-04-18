@@ -1477,7 +1477,7 @@ background-position: 200%
 
 .snarkDirInfo .thumb, audio, video {
     padding: 1px;
-    border: 1px solid #000;
+    border: 1px solid #101;
     box-shadow: inset 0 0 0 1px #414;
     background: #000;
     box-sizing: border-box;
@@ -1496,8 +1496,6 @@ audio, video {
 }
 
 .snarkDirInfo .thumb:hover, .snarkDirInfo .thumb:focus, .snarkDirInfo a:hover .thumb, .snarkDirInfo a:focus .thumb, audio:hover, video:hover, audio:focus, video:focus {
-    padding: 2px !important;
-    border: 1px solid #000 !important;
     box-shadow: inset 0 0 0 1px #f60 !important;
 }
 
