@@ -956,7 +956,7 @@ td:first-child {
 .snarkTrackerDetails a:hover img, .snarkTrackerDetails a:focus img,
 .snarkTorrentDetails a:hover img[src^="/i2psnark/.resources/icons/"], .snarkTorrentDetails a:focus img[src^="/i2psnark/.resources/icons/"],
 .snarkDirInfo td:not(.parentdir):first-child a:hover img, .snarkDirInfo td:not(.parentdir):first-child a:focus img {
-    border: 1px solid #f60 !important;
+    border: 1px solid #f60;
     background: #515;
     background: linear-gradient(to bottom, #717 50%, #414 50%);
     filter: none !important;
@@ -1463,7 +1463,7 @@ background-position: 200%
     text-align: center !important;
 }
 
-#snarkInfo .thumb, audio, video {
+.snarkDirInfo .thumb, audio, video {
     padding: 1px;
     border: 1px solid #000;
     box-shadow: inset 0 0 0 1px #414;
@@ -1471,11 +1471,11 @@ background-position: 200%
     box-sizing: border-box;
 }
 
-#snarkInfo .thumb {
-    padding: 2px;
+.snarkDirInfo .thumb {
+    padding: 2px !important;
     max-height: 40px;
     display: inline-block;
-    box-shadow: inset 0 0 0 1px #fff;
+    box-shadow: inset 0 0 0 1px #414 !important;
     image-rendering: auto;
 }
 
@@ -1483,7 +1483,8 @@ audio, video {
     width: 240px;
 }
 
-#snarkInfo .thumb:hover, #snarkInfo .thumb:focus, #snarkInfo a:hover .thumb, #snarkInfo a:focus .thumb, audio:hover, video:hover, audio:focus, video:focus {
+.snarkDirInfo .thumb:hover, .snarkDirInfo .thumb:focus, .snarkDirInfo a:hover .thumb, .snarkDirInfo a:focus .thumb, audio:hover, video:hover, audio:focus, video:focus {
+    padding: 2px !important;
     border: 1px solid #000 !important;
     box-shadow: inset 0 0 0 1px #f60 !important;
 }

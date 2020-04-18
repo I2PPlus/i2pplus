@@ -1778,7 +1778,6 @@ div.logo hr {
     border: 1px solid #26235c;
     box-shadow: inset 0 0 0 1px #000, inset 0 0 1px 1px #a3a !important;
     background: #001;
-    background: repeating-linear-gradient(to right, #001, #001 10px, #003 10px, #003 20px);
 }
 
 @media screen and (min-width: 1500px) {
