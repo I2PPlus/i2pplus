@@ -20,6 +20,9 @@
 2020-04-10 zzz
  * Jetty: Add GzipHandler for eepsites on Jetty 9.3/9.4 (ticket #2599)
 
+2020-04-09 dr|z3d
+ * Router: Enable activation of router.dynamicKeys config
+
 2020-04-08 zzz
  * i2psnark: Give peers preference to get first pieces (ticket #2473)
  * NetDB: Remove class M from auto-floodfill
@@ -39,6 +42,9 @@
    - Simplify OB Session
    - Performance improvements and cleanups
    - Debug page fixes
+
+2020-04-04 dr|z3d
+ * I2PSnark: Replace filetype icons with hidpi versions
 
 2020-04-03 zzz
  * PrivateKeyFile: Add support for addsubdomain authentication strings
@@ -78,8 +84,21 @@
 2020-03-17 zzz
  * i2psnark: Hide non-i2p trackers on details page
 
+2020-03-16
+ * I2PSnark: Condense displayed information on torrent info page
+
 2020-03-15 zzz
  * Ratchet: Stub out ack and ack request blocks
+
+2020-03-14 dr|z3d
+ * Graphs: Update rrd4j to 3.60 snapshot
+
+2020-03-05 dr|z3d
+ * Router: When known peers is >2000, make max fast/high cap peers a
+   percentage of known peers (10% for high cap, 5% for fast peers)
+
+2020-03-04 dr|z3d
+ * Console: Migrate participating tunnels from /tunnels to /tunnelsparticipating
 
 2020-03-01 zzz
  * Console:
