@@ -2044,6 +2044,14 @@ input[type="text"], input.r, input[name="nofilter_dataDir"] {
     transition: ease box-shadow 0.05s, ease color 0.05s;
 }
 
+input[type="text"]:disabled {
+    color: rgba(192,160,192,.5) !important;
+    box-shadow: inset 1px 1px 2px 1px #101 !important;
+    background: url(images/graytile.png) #212 !important;
+    background-size: 96px 96px;
+    cursor: not-allowed;
+}
+
 textarea[name="i2cpOpts"] {
     overflow: hidden;
 }
@@ -2059,6 +2067,10 @@ input[type=text]:active, input[type=text]:focus, input.r:focus, input[name="nofi
     background: #d60;
     background: linear-gradient(to bottom, #d60, #c50);
     transition: ease box-shadow 0.05s;
+}
+
+input[type="text"]:disabled:hover, input[type="text"]:disabled:focus, input[type="text"]:disabled:active {
+
 }
 
 input[type=radio] {
