@@ -546,6 +546,18 @@ public class SnarkManager implements CompleteListener, ClientApp {
         }
     }
 
+
+    /**
+     *  @since 0.9.46 (I2P+)
+     */
+    public int getMaxFilesPerTorrent() {
+        try {
+       return Integer.parseInt(_config.getProperty(PROP_MAX_FILES_PER_TORRENT));
+        } catch (NumberFormatException nfe) {
+            return MAX_FILES_PER_TORRENT;
+        }
+    }
+
     /**
      *  For GUI
      *  @since 0.9.6
@@ -1514,8 +1526,8 @@ public class SnarkManager implements CompleteListener, ClientApp {
     }
 
     /** hardcoded for sanity.  perhaps this should be customizable, for people who increase their ulimit, etc. */
-//    public static final int MAX_FILES_PER_TORRENT = 2000;
-    public static final int MAX_FILES_PER_TORRENT = 10000;
+    public static final int MAX_FILES_PER_TORRENT = 2000;
+    public static final String PROP_MAX_FILES_PER_TORRENT = "i2psnark.maxFilesPerTorrent";
 
     /**
      *  Set of canonical .torrent filenames that we are dealing with.
@@ -2470,7 +2482,8 @@ public class SnarkManager implements CompleteListener, ClientApp {
      */
     private String validateTorrent(MetaInfo info) {
         List<List<String>> files = info.getFiles();
-        if ( (files != null) && (files.size() > MAX_FILES_PER_TORRENT) ) {
+        int maxFiles = getMaxFilesPerTorrent();
+        if ( (files != null) && (files.size() > (maxFiles)) ) {
             return _t("Too many files in \"{0}\" ({1})!", info.getName(), files.size());
         } else if ( (files == null) && (info.getName().endsWith(".torrent")) ) {
             return _t("Torrent file \"{0}\" cannot end in \".torrent\"!", info.getName());
