@@ -3181,7 +3181,7 @@ public class I2PSnarkServlet extends BasicServlet {
         out.write("<span class=\"configOption\"><label for=\"maxFiles\"><b>");
         out.write(_t("Max files per torrent"));
         out.write("</b> <input type=\"text\" name=\"maxFiles\" size=\"5\" maxlength=\"5\" pattern=\"[0-9]{1,5}\" class=\"r numeric\"" + " title=\"");
-        out.write(_t("Maximum number of files permitted per torrent - note that some trackers will set their own limits, and your OS may limit the number of open files, preventing torrents with many files (and subsequent torrents) from loading"));
+        out.write(_t("Maximum number of files permitted per torrent - note that trackers may set their own limits, and your OS may limit the number of open files, preventing torrents with many files (and subsequent torrents) from loading"));
         out.write("\" value=\"" + _manager.getMaxFilesPerTorrent() + "\" spellcheck=\"false\" disabled></label></span><br>\n");
         out.write("</div></td></tr>\n");
 

@@ -1,3 +1,7 @@
+2020-04-19 dr|z3d
+ * I2PSnark: Add configuration option for max files per torrent
+   (i2psnark.maxFilesPerTorrent=n) and display value in config section
+
 2020-04-17 zzz
  * Crypto: Disable speculative AES tagset usage
  * Streaming: Slow start fix
