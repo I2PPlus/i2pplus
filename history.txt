@@ -1,3 +1,10 @@
+2020-04-19 zzz
+ * Ratchet: Adaptive order of muxed decrypt based on previous traffic
+ * Streaming: Single retransmit timer per connection (ticket #2715)
+
+2020-04-18 zzz
+ * i2psnark: Connect out to other seeds to fetch comments (ticket #2288)
+
 2020-04-19 dr|z3d
  * I2PSnark: Add configuration option for max files per torrent
    (i2psnark.maxFilesPerTorrent=n) and display value in config section
