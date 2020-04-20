@@ -2969,9 +2969,31 @@ h3 + p, h3 + table {
 }
 
 .main#tunnels h3 a[href^="/configtunnels#"]::after, .main#tunnels h3 a[href$="i2ptunnelmgr"]::after, #criticallogs + h3.tabletitle a::after {
-    content: url(/themes/console/images/buttons/configure.png);
-    float: right;
     padding: 0;
+    width: 16px;
+    height: 16px;
+    float: right;
+    background: url(/themes/susidns/midnight/images/configure.png) center center no-repeat;
+    background-size: 16px 16px !important;
+    content: "";
+}
+
+.main#tunnels h3 a[href^="/configtunnels#"]:hover::after, .main#tunnels h3 a[href$="i2ptunnelmgr"]:hover::after, #criticallogs + h3.tabletitle a:hover::after,
+.main#tunnels h3 a[href^="/configtunnels#"]:focus::after, .main#tunnels h3 a[href$="i2ptunnelmgr"]:focus::after, #criticallogs + h3.tabletitle a:focus::after {
+    background: url(images/configure_hover.png) center center no-repeat;
+}
+
+.main#tunnels h3 a[href^="/configtunnels#"]:active::after, .main#tunnels h3 a[href$="i2ptunnelmgr"]:active::after, #criticallogs + h3.tabletitle a:active::after {
+    background: url(images/configure_active.png) center center no-repeat;
+}
+
+
+@media screen and (max-width: 1500px) {
+.main#tunnels h3 a[href^="/configtunnels#"]::after, .main#tunnels h3 a[href$="i2ptunnelmgr"]::after, #criticallogs + h3.tabletitle a::after {
+    width: 14px;
+    height: 14px;
+    background-size: 14px 14px !important;
+}
 }
 
 .main#tunnels h3 + h3 {
@@ -3004,12 +3026,21 @@ h3#iptransport a:not(old), h3#advancedconfig a:not(old), #reseedsetup a:not(old)
 }
 
 h3#iptransport a::after, h3#advancedconfig a::after, #reseedsetup a::after {
-    content: url(images/help.png);
     padding: 0;
-    margin: 0;
-    vertical-align: text-top;
-    cursor: help;
-    filter: drop-shadow(0 0 1px #555);
+    width: 16px;
+    height: 16px;
+    float: right;
+    background: url(/themes/susidns/midnight/images/overview.png) center center no-repeat;
+    background-size: 16px 16px !important;
+    content: "";
+}
+
+@media screen and (max-width: 1500px) {
+h3#iptransport a::after, h3#advancedconfig a::after, #reseedsetup a::after {
+    width: 14px;
+    height: 14px;
+    background-size: 14px 14px !important;
+}
 }
 
 div.messages {
