@@ -69,6 +69,14 @@ th img, td img, #closelog, #expand, #shrink {
     font-size: 0 !important;
 }
 
+td.snarkTrackerDetails img {
+    opacity: .75;
+}
+
+td.snarkTrackerDetails a:hover img, td.snarkTrackerDetails a:focus img {
+    opacity: 1;
+}
+
 th.snarkGraphicStatus::before, td.snarkGraphicStatus img::before, #closelog img::after, #expand img::after, #shrink img::after,
 .snarkTorrents input[type="image"]::after, .snarkTorrents input[type="image"]::after,
 td.snarkTrackerDetails img::before, td.snarkTorrentDetails img::before {
@@ -1962,9 +1970,9 @@ a:hover img, a:focus img {
     vertical-align: middle;
 }
 
-img[src$="details.png"] {
+/*img[src$="details.png"] {
     mix-blend-mode: luminosity;
-}
+}*/
 
 .snarkFileStatus img {
     mix-blend-mode: luminosity;
@@ -4098,6 +4106,14 @@ input[name="nofilter_commentsName"] {
 .trackerhome, .trackerannounce, .knowntracker a {
     width: 400px !important;
     max-width: 400px !important;
+}
+
+td.snarkTrackerDetails img {
+    margin: 0 3px !important;
+    padding: 3px !important;
+    width: 18px !important;
+    height: 18px !important;
+    max-height: 18px !important;
 }
 
 td.snarkTorrentDetails img, .snarkDirInfo td:first-child img:not(.thumb) {
