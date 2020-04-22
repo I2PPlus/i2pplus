@@ -4839,23 +4839,19 @@ h3.dead span {
 }
 
 #tunnels h3 img, #tunnels h3 a:first-child {
-    border-left: 1px solid #252;
-    padding: 11px 8px;
     margin: -8px 0 -8px 0;
+    padding: 11px 8px;
+    border-left: 1px solid #252;
 }
 
 #tunnels h3 img:first-of-type {
-    border-right: 1px solid #252;
     margin-left: -1px;
-}
-
-#tunnels h3 img:hover, #tunnels h3 a:first-child:hover {
-    filter: sepia(100%) hue-rotate(70deg) drop-shadow(0 0 1px #f60) !important;
+    border-right: 1px solid #252;
 }
 
 #tunnels h3 a:first-child {
-    border-left: none;
     padding: 8px 4px 14px 8px;
+    border-left: none;
 }
 
 #tunnels img {
@@ -4910,14 +4906,18 @@ h3.dead span {
 
 .main#tunnels h3 a[href^="/configtunnels#"]::after, .main#tunnels h3 a[href$="/i2ptunnelmgr"]::after,
  #criticallogs + h3.tabletitle a::after {
-    content: url(/themes/console/images/buttons/configure.png);
+    width: 16px;
+    height: 16px;
     float: right;
-    padding: 0;
+    background: url(/themes/susidns/dark/images/configure.png) center center no-repeat;
+    background-size: 16px 16px !important;
+    content: "";
 }
 
-.main#tunnels h3 a[href^="/configtunnels#"]:hover, .main#tunnels h3 a[href$="/i2ptunnelmgr"]:hover, h3.tabletitle a:hover::after,
-.main#tunnels h3 a[href^="/configtunnels#"]:focus, .main#tunnels h3 a[href$="/i2ptunnelmgr"]:focus, h3.tabletitle a:focus::after {
-    filter: drop-shadow(0 0 1px #f60);
+.main#tunnels h3 a[href^="/configtunnels#"]:hover::after, .main#tunnels h3 a[href^="/configtunnels#"]:focus::after,
+.main#tunnels h3 a[href$="/i2ptunnelmgr"]:hover::after, .main#tunnels h3 a[href$="/i2ptunnelmgr"]:focus::after,
+ #criticallogs + h3.tabletitle a:hover::after, #criticallogs + h3.tabletitle a:focus::after {
+    background: url(/themes/susidns/dark/images/configure_hover.png) center center no-repeat;
 }
 
 /* end /tunnels */
@@ -7228,16 +7228,20 @@ h3#iptransport a:not(old), h3#advancedconfig a:not(old), #reseedsetup a:not(old)
 }
 
 h3#iptransport a::after, h3#advancedconfig a::after, #reseedsetup a::after {
-    margin: 0;
+    margin: 0 2px 0 0;
     padding: 0;
-    content: url(images/help.png);
-    display: inline-block;
-    vertical-align: middle;
-    cursor: help;
+    width: 16px;
+    height: 16px;
+    float: right;
+    background: url(/themes/susidns/dark/images/overview.png) center center no-repeat;
+    background-size: 16px 16px !important;
+    content: "";
 }
 
-h3#iptransport a:hover, h3#advancedconfig a:hover {
-    filter: drop-shadow(0 0 1px #f60);
+h3#iptransport a:hover::after, h3#iptransport a:focus::after,
+h3#advancedconfig a:hover::after, h3#advancedconfig a:focus::after,
+#reseedsetup a:hover::after, #reseedsetup a:focus::after {
+    background: url(/themes/susidns/dark/images/overview_hover.png) center center no-repeat;
 }
 
 #logs h3 a {
@@ -11064,8 +11068,7 @@ input[type="checkbox"]:hover, input[type="radio"]:hover, input[type="checkbox"]:
     width: 19px !important;
     height: 19px !important;
     border: 1px solid #5a5 !important;
-    box-shadow: 0 0 2px #f60 !important;
-    filter: drop-shadow(0 0 1px #f60) !important;
+    box-shadow: 0 0 1px #f60, 0 0 2px #f60 !important;
 }
 
 input[type="checkbox"][disabled], input[type="radio"][disabled], input[type="checkbox"][disabled]:hover, input[type="radio"][disabled]:hover,
@@ -13749,9 +13752,7 @@ h3 + table {
 }
 
 .stattograph:hover {
-    border: 1px solid #f60;
-    background: #000;
-    background: linear-gradient(to bottom, #000, #020);
+    box-shadow: inset 0 0 0 1px rgba(255,96,0,.2);
 }
 
 .stattograph .optbox {
@@ -13788,18 +13789,19 @@ h3 + table {
 
 #configstats label::after {
     padding: 4px 8px;
-    content: attr(data-tooltip);
-    display: none;
     position: absolute;
     top: -26px;
     left: 0;
     z-index: 10;
+    display: none;
     white-space: nowrap;
-    font-size: 100%;
-    color: #111;
+    font-size: 110%;
+    color: #eeb;
+    border: 1px solid #030;
     border-radius: 1px;
-    box-shadow: 0 0 0 1px #131;
-    background: #ffd;
+    box-shadow: 0 0 1px 1px #000;
+    background: #000;
+    content: attr(data-tooltip);
 }
 
 #configstats label:hover::after {
