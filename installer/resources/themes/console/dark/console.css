@@ -13912,7 +13912,7 @@ h3 + table {
     border-right: 1px solid #242 !important;
 }
 
-#tunnelPeerCount td:first-child span {
+/*#tunnelPeerCount td:first-child span {
     margin: 3px 2px 2px;
     vertical-align: middle;
 }
@@ -13927,7 +13927,7 @@ h3 + table {
 
 #tunnelPeerCount .version {
     padding-bottom: 0;
-}
+}*/
 
 #tunnelPeerCount .configpeer {
     margin: 0 0 0 3px !important;
@@ -14029,4 +14029,21 @@ h3 + table {
 
 #peerdefs li {
     line-height: 1.6 !important;
+}
+
+#tunnels #tunnelPeerCount td:first-child {
+    padding-right: 5px !important;
+    width: 1%;
+    white-space: nowrap;
+    background: linear-gradient(to bottom, #041804, #000);
+}
+
+#tunnels #tunnelPeerCount tr.tablefooter td:first-child {
+    background: #000 !important;
+}
+
+#tunnelPeerCount td:first-child span, #tunnelPeerCount td:first-child b {
+    min-width: 0 !important;
+    background: none !important;
+    box-shadow: none !important;
 }
