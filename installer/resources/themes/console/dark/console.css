@@ -13848,6 +13848,31 @@ h3 + table {
     border: none !important;
 }
 
+#tunnels #participating img, #tunnels #peercount img {
+    width: 0;
+    height: 0;
+}
+
+#tunnels #participating a::after, #tunnels #peercount a::after {
+    padding: 10px 6px 6px;
+    content: "";
+    display: inline-block;
+    width: 16px;
+    height: 16px;
+    vertical-align: middle;
+    background: url(images/refresh.png) center center no-repeat;
+    background-size: 16px 16px !important;
+}
+
+#tunnels #participating a:hover::after, #tunnels #participating a:focus::after,
+#tunnels #peercount a:hover::after, #tunnels #peercount a:focus::after {
+    background: url(images/refresh_hover.png) center center no-repeat;
+}
+
+#tunnels #participating a:active::after, #tunnels #peercount a:active::after {
+    opacity: .7;
+}
+
 #tunnelPeerCount {
     margin-bottom: 9px;
 }
