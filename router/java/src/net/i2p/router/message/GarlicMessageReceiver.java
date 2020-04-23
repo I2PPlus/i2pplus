@@ -77,7 +77,7 @@ public class GarlicMessageReceiver {
                 }
             } else {
                 if (_log.shouldLog(Log.WARN))
-                    _log.warn("Not attempting to decrypt garlic routed message to disconnected client");
+                    _log.warn("Not decrypting " + message + " for disconnected client \n* Destination: " + _clientDestination.toBase32());
                 return;
             }
         } else {
@@ -98,13 +98,9 @@ public class GarlicMessageReceiver {
             }
         } else {
             if (_log.shouldLog(Log.WARN)) {
-                String d = (_clientDestination != null) ? _clientDestination.toBase32() : "router";
-                _log.warn("CloveMessageParser failed to decrypt [MsgID " + message.getUniqueId() + "] " +
-                          "(" + message.getData().length + " bytes) with " + decryptionKey.getType() + " key \n* " +
-                          "Destination: " + d);
-//                          new Exception("Decrypt garlic failed"));
-                if (_log.shouldLog(Log.INFO))
-                    _log.info("", new Exception("Decrypt garlic failed"));
+                String d = (_clientDestination != null) ? _clientDestination.toBase32() : "the router";
+                String keys = (decryptionKey2 != null) ? "both ElGamal and ECIES keys" : decryptionKey.getType().toString();
+                _log.warn("Failed to decrypt " + message + " for " + d + " with " + keys);
             }
             _context.statManager().addRateData("crypto.garlic.decryptFail", 1);
             _context.messageHistory().messageProcessingError(message.getUniqueId(),
