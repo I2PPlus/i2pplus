@@ -597,6 +597,11 @@ td.snarkTorrentPeerCount:empty {
     padding: 1px !important;
 }
 
+.snarkTorrentDetails img:not([src$="rateme.png"]) {
+    min-width: 18px;
+    min-height: 18px;
+}
+
 .snarkTrackerDetails img {
     max-width: 16px;
     max-height: 16px;
@@ -1130,7 +1135,7 @@ tr:not(.peerinfo) .snarkTorrentUploaded:empty::after {
 }
 
 .snarkTorrents img {
-    padding: 4px 3px !important;
+    padding: 4px !important;
 }
 
 .snarkTorrents th img {
@@ -4522,10 +4527,16 @@ tr:hover td.snarkTorrentRateDown, tr:hover td.snarkTorrentAction {
 }
 
 td.snarkGraphicStatus img {
-    display: inline-block;
-    max-height: 20px;
     margin-top: -2px;
     margin-bottom: -2px;
+    max-height: 20px;
+    display: inline-block;
+}
+
+@media screen and (max-width: 1200px) {
+td.snarkGraphicStatus img {
+    padding-left: 2px !important;
+}
 }
 
 /* mitigate header/column resize on refresh when multiple snark tabs open */
