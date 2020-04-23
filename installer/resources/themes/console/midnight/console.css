@@ -2968,7 +2968,8 @@ h3 + p, h3 + table {
     font-size: 0;
 }
 
-.main#tunnels h3 a[href^="/configtunnels#"]::after, .main#tunnels h3 a[href$="i2ptunnelmgr"]::after, #criticallogs + h3.tabletitle a::after {
+.main#tunnels h3 a[href^="/configtunnels#"]::after, .main#tunnels h3 a[href$="i2ptunnelmgr"]::after, #criticallogs + h3.tabletitle a::after,
+h4.app a::after, h4.app2 a::after {
     padding: 0;
     width: 16px;
     height: 16px;
@@ -2979,14 +2980,19 @@ h3 + p, h3 + table {
 }
 
 .main#tunnels h3 a[href^="/configtunnels#"]:hover::after, .main#tunnels h3 a[href$="i2ptunnelmgr"]:hover::after, #criticallogs + h3.tabletitle a:hover::after,
-.main#tunnels h3 a[href^="/configtunnels#"]:focus::after, .main#tunnels h3 a[href$="i2ptunnelmgr"]:focus::after, #criticallogs + h3.tabletitle a:focus::after {
+.main#tunnels h3 a[href^="/configtunnels#"]:focus::after, .main#tunnels h3 a[href$="i2ptunnelmgr"]:focus::after, #criticallogs + h3.tabletitle a:focus::after,
+h4.app a:hover::after, h4.app a:focus::after, h4.app2 a:hover::after, h4.app2 a:focus::after {
     background: url(images/configure_hover.png) center center no-repeat;
 }
 
-.main#tunnels h3 a[href^="/configtunnels#"]:active::after, .main#tunnels h3 a[href$="i2ptunnelmgr"]:active::after, #criticallogs + h3.tabletitle a:active::after {
+.main#tunnels h3 a[href^="/configtunnels#"]:active::after, .main#tunnels h3 a[href$="i2ptunnelmgr"]:active::after, #criticallogs + h3.tabletitle a:active::after,
+h4.app a:active::after, h4.app2 a:active::after  {
     background: url(images/configure_active.png) center center no-repeat;
 }
 
+h4.app img, h4.app2 img {
+    display: none;
+}
 
 @media screen and (max-width: 1500px) {
 .main#tunnels h3 a[href^="/configtunnels#"]::after, .main#tunnels h3 a[href$="i2ptunnelmgr"]::after, #criticallogs + h3.tabletitle a::after {
@@ -5390,10 +5396,10 @@ table#sidebarconf {
 }
 
 #sidebarconf th:nth-child(1), .homelinkedit th:first-child, #consolepass th:first-child {
-    text-align: center;
-    background: url(/themes/console/images/buttons/delete.png) center center no-repeat, linear-gradient(to bottom, #141221, #000008 75%) !important;
-    text-indent: -99999px;
     width: 5%;
+    text-align: center;
+    text-indent: -99999px;
+    background: url(/themes/console/images/buttons/delete.png) center center no-repeat !important;
 }
 
 #sidebarconf th:nth-child(2) {
@@ -5405,12 +5411,9 @@ table#sidebarconf {
 }
 
 #sidebarconf td:nth-child(3), #sidebarconf td:nth-child(4) {
-    width: 60px;
     padding: 0;
+    width: 60px;
     white-space:nowrap;
-}
-
-#sidebarconf td:nth-child(3) {
 }
 
 #sidebarconf td:nth-child(4) {
@@ -5418,8 +5421,8 @@ table#sidebarconf {
 }
 
 #sidebarconf tr:last-child td {
-    background: #000;
     border-top: 1px solid #26235c;
+    background: #000;
 }
 
 #sidebarconf select {
@@ -5428,8 +5431,8 @@ table#sidebarconf {
 }
 
 #sidebarconf tr:last-child td:last-child {
-    text-align: left;
     padding-left: 0;
+    text-align: left;
 }
 
 .formaction#sidebardefaults {
@@ -5452,21 +5455,21 @@ h3#restartrouter, h3#servicedebug, h3#browseronstart, h3#rononstartup, h3#systra
 /* info paragraphs */
 
 h3#shutdownrouter + p, h3#restartrouter + p, h3#servicedebug + p, h3#browseronstart + p, h3#runonstartup + p, h3#systray + p {
-    background: #010008 url(/themes/console/images/info/infohelp.png) 12px center no-repeat !important;
+    margin: 5px 0 -20px !important;
     padding: 10px 15px 10px 50px;
     text-align: left;
     border: 1px solid #26235c;
     border-bottom: none;
-    margin: 5px 0 -20px !important;
+    background: #010008 url(/themes/console/images/info/infohelp.png) 12px center no-repeat !important;
 }
 
 h3#servicedebug + p + p {
+    margin-bottom: -21px;
+    margin-top: 20px;
     padding: 10px;
     border: 1px solid #26235c;
     border-bottom: none;
-    margin-bottom: -21px;
     background: #010010;
-    margin-top: 20px;
 }
 
 /* configclients */
@@ -5490,8 +5493,8 @@ h3#servicedebug + p + p {
 }
 
 #clientconfig th:first-child {
-    text-align: right;
     padding-right: 5px;
+    text-align: right;
 }
 
 #clientconfig th:nth-child(3) {
@@ -5508,9 +5511,9 @@ h3#servicedebug + p + p {
 }
 
 .formaction#clientsconfig, .formaction#webappconfigactions, .formaction#pluginconfigactions, .formaction#sidebardefaults {
+    margin-bottom: 4px;
     border: 1px solid #26235c;
     background: #000;
-    margin-bottom: 4px;
 }
 
 .formaction#webappconfigactions, .formaction#pluginconfigactions, .formaction#clientsconfig {
@@ -5558,9 +5561,9 @@ table#externali2cp {
 }
 
 #pluginconfig table td:first-child {
+    padding-left: 15px;
     width: 1%;
     white-space: nowrap;
-    padding-left: 15px;
 }
 
 #pluginconfig td:first-child label {
@@ -5599,16 +5602,16 @@ table#externali2cp {
 
 #legal, #sidebarhelp, #volunteer, #reachabilityhelp, #configurationhelp, #faq, #tunnman, #browserconfig,
 #reseedhelp, #troubleshoot, #newuserguide, #filterlist, #webhosting, #themeoverride, #glossary {
-    border: 1px solid #26235c;
-    padding: 0 20px;
     margin: 10px 0;
+    padding: 0 20px;
+    border: 1px solid #26235c;
     background: #000;
 }
 
 div#volunteer {
-    border: 1px solid #26235c;
-    padding: 0 20px;
     margin: -5px 0 10px !important;
+    padding: 0 20px;
+    border: 1px solid #26235c;
     background: #000 url(images/scarface.jpg) bottom right no-repeat !important;
     background-size: auto 60% !important;
 }
@@ -5632,24 +5635,24 @@ div#volunteer {
 #sidebarhelp h3, #faq h3, #reseedhelp h3 {
     margin: 0 -21px 10px !important;
     padding: 8px 10px;
+    word-spacing: 0.1em;
+    letter-spacing: 0.08em;
+    text-align: left;
     text-transform: uppercase;
     font-size: 10.5pt;
-    text-align: left;
-    letter-spacing: 0.08em;
-    word-spacing: 0.1em;
-    border-radius: 0;
     border: 1px solid #26235c;
+    border-radius: 0;
 }
 
 #changelog h2, #advancedsettings h2 {
+    margin: 0 0 -11px !important;
     padding: 10px;
+    word-spacing: 0.1em;
+    letter-spacing: 0.08em;
+    text-align: left;
     text-transform: uppercase;
     font-size: 11pt;
-    text-align: left;
-    letter-spacing: 0.08em;
-    word-spacing: 0.1em;
     border-radius: 0;
-    margin: 0 0 -11px !important;
 }
 
 #changelog:hover pre, #wrapperlogs:hover pre {
@@ -5681,8 +5684,8 @@ div#volunteer {
 }
 
 #configinfo th {
-    text-align: left;
     padding: 8px 10px;
+    text-align: left;
     font-family: "Droid Sans Mono", "Noto Mono", "DejaVu Sans Mono", "Lucida Console", monospace;
     color: #393;
     background: #002;
@@ -5690,28 +5693,28 @@ div#volunteer {
 }
 
 #configinfo td {
-    text-align: justify;
     padding: 7px 10px;
+    text-align: justify;
 }
 
 p#fullhistory {
-    text-align: right;
     margin: -13px 0 9px;
-    border: 1px solid #26235c;
     padding: 5px 10px;
-    background: #000;
     position: relative;
     z-index: 999;
+    text-align: right;
+    border: 1px solid #26235c;
+    background: #000;
 }
 
 #fullhistory::before {
-    content: "";
-    display: inline-block;
-    vertical-align: middle;
     width: 19px;
     height: 20px;
+    display: inline-block;
+    vertical-align: middle;
     background: url(/themes/console/images/buttons/fullview.png) left 45% no-repeat;
     background-size: 16px auto;
+    content: "";
 }
 
 ul#upnphelp li:last-child, #legal ul li:last-child {
@@ -5719,16 +5722,16 @@ ul#upnphelp li:last-child, #legal ul li:last-child {
 }
 
 #help td.infohelp, #help td.infowarn {
-    background-size: 24px 24px !important;
     padding-left: 46px !important;
+    background-size: 24px 24px !important;
 }
 
 #help #configinfo .infowarn {
+    padding: 7px 10px 7px 40px !important;
     border: none;
     border-bottom: 1px inset #010008;
     box-shadow: none;
     background-size: 20px 20px !important;
-    padding: 7px 10px 7px 40px !important;
 }
 
 #help li {
@@ -5762,13 +5765,13 @@ ul#upnphelp li:last-child, #legal ul li:last-child {
 
 #faq h3 {
     padding: 8px 10px 8px 35px !important;
+    word-spacing: 0;
+    letter-spacing: 0;
+    text-transform: none;
+    font-size: 10.5pt !important;
     background: #001 url(/themes/console/images/info/question.png) 10px 55% no-repeat !important;
     background-size: 18px 18px !important;
     background-blend-mode: luminosity, normal;
-    text-transform: none;
-    font-size: 10.5pt !important;
-    letter-spacing: 0;
-    word-spacing: 0;
 }
 
 #faq p.infohelp {
@@ -5815,16 +5818,16 @@ ul#upnphelp li:last-child, #legal ul li:last-child {
 }
 
 #portfaq th {
-    text-align: left;
     padding: 8px 5px !important;
+    text-align: left;
 }
 
 #portfaq th[colspan="3"] {
+    padding-left: 10px !important;
+    word-spacing: 0.1em;
+    letter-spacing: 0.08em;
     text-align: left;
     font-size: 10.5pt !important;
-    letter-spacing: 0.08em;
-    word-spacing: 0.1em;
-    padding-left: 10px !important;
 }
 
 #portfaq td[colspan="3"] {
@@ -5840,8 +5843,8 @@ ul#upnphelp li:last-child, #legal ul li:last-child {
 }
 
 #portfaq td:last-child, #portfaq td[colspan="3"] {
-    text-align: justify;
     padding-right: 10px;
+    text-align: justify;
 }
 
 /* end mini faq */
@@ -5868,8 +5871,8 @@ ul#upnphelp li:last-child, #legal ul li:last-child {
 }
 
 #netdboverview table th {
-    background: linear-gradient(to bottom, #080818, #000008) !important;
     box-shadow: none !important;
+    background: linear-gradient(to bottom, #080818, #000008) !important;
 }
 
 #netdboverview td {
@@ -5929,19 +5932,19 @@ ul#upnphelp li:last-child, #legal ul li:last-child {
 }
 
 #netdbversions th, #netdbtransports th, #netdbcountrylist th, #netdbtiers th {
-    border-top: none;
     padding: 6px 5px;
     line-height: 150%;
+    border-top: none;
 }
 
 #netdbtiers, #netdbtiers th {
-    border-top: none !important;
     padding: 5px;
+    border-top: none !important;
 }
 
 #netdboverview table th:first-child, #netdboverview table td:first-child {
-    text-align: left;
     padding-left: 8px;
+    text-align: left;
 }
 
 #netdboverview table td:last-child {
@@ -5964,10 +5967,10 @@ ul#upnphelp li:last-child, #legal ul li:last-child {
 
 table[cellspacing="30"] > tbody > tr > th[colspan="3"] { /* netdb header */
     padding: 10px;
+    word-spacing: 0.1em;
+    letter-spacing: 0.08em;
     text-transform: uppercase;
     font-size: 11pt;
-    letter-spacing: 0.08em;
-    word-spacing: 0.1em;
 }
 
 #netdbtransports th:first-child, #netdbcountrylist th:first-child {
@@ -5987,11 +5990,11 @@ table[cellspacing="30"] > tbody > tr > th[colspan="3"] { /* netdb header */
 }
 
 #netdblookup th {
+    padding: 10px;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
     text-align: left;
     font-size: 11pt;
-    letter-spacing: 0.08em;
-    padding: 10px;
-    text-transform: uppercase;
 }
 
 #netdblookup td:nth-child(odd) {
@@ -6012,10 +6015,10 @@ table[cellspacing="30"] > tbody > tr > th[colspan="3"] { /* netdb header */
 }
 
 .subheading {
-    text-align: left !important;
-    background: #000;
     padding: 10px;
+    text-align: left !important;
     border: 1px solid #26235c;
+    background: #000;
 }
 
 .subheading b {
@@ -6039,8 +6042,8 @@ table[cellspacing="30"] > tbody > tr > th[colspan="3"] { /* netdb header */
 }
 
 .sybil_distance th {
-    text-align: left;
     padding: 5px;
+    text-align: left;
 }
 
 .sybil_distance th:last-child, .sybil_distance td:last-child {
@@ -6048,8 +6051,8 @@ table[cellspacing="30"] > tbody > tr > th[colspan="3"] { /* netdb header */
 }
 
 .sybil_distance tr:nth-child(n+2):hover {
-    background: #002;
     font-weight: bold;
+    background: #002;
 }
 
 .sybil_distance:last-child {
@@ -6069,19 +6072,19 @@ table[cellspacing="30"] > tbody > tr > th[colspan="3"] { /* netdb header */
 }
 
 .netdb_leases li {
-    list-style: none;
-    display: inline-block;
-    padding: 1px 5px 1px 0 !important;
     margin: 1px 0;
+    padding: 1px 5px 1px 0 !important;
     min-width: 400px;
+    display: inline-block;
+    list-style: none;
 }
 
 .netdb_leases li b:first-child {
-    display: inline-block;
-    min-width: 58px !important;
-    text-align: right;
     margin: 0 !important;
     padding: 0 !important;
+    min-width: 58px !important;
+    display: inline-block;
+    text-align: right;
 }
 
 .netdb_gateway {
@@ -6095,13 +6098,13 @@ table[cellspacing="30"] > tbody > tr > th[colspan="3"] { /* netdb header */
 }
 
 .netdb_tunnel {
-    display: inline-block;
-    background: #003;
-    padding: 2px 4px;
     margin-left: 4px;
     margin-right: -4px;
+    padding: 2px 4px;
+    display: inline-block;
     border: 1px solid #002;
     border-radius: 2px;
+    background: #003;
 }
 
 .netdb_leases li, .netdb_leases li > * {
@@ -6153,8 +6156,8 @@ table[cellspacing="30"] > tbody > tr > th[colspan="3"] { /* netdb header */
 /* logs */
 
 a[name="criticallogs"] + p + h3 + p + ul {
-    border: 1px solid #26235c;
     margin-bottom: 15px;
+    border: 1px solid #26235c;
 }
 
 #enviro, #criticallogs, #routerlogs, #eventlogs, #wrapperlogs {
@@ -6172,8 +6175,8 @@ a[name="criticallogs"] + p + h3 + p + ul {
 }
 
 #bugreports td {
-    background: url(/themes/console/images/info/infohelp.png) 12px center no-repeat !important;
     padding: 15px 10px 15px 50px;
+    background: url(/themes/console/images/info/infohelp.png) 12px center no-repeat !important;
 }
 
 #logs #enviro:hover {
@@ -6185,10 +6188,10 @@ a[name="criticallogs"] + p + h3 + p + ul {
 }
 
 #logs #enviro:hover td {
-    background: #001;
+    color: #dd0;
     border-top: 1px inset transparent;
     border-bottom: 1px inset transparent;
-    color: #dd0;
+    background: #001;
 }
 
 #logs #enviro:hover #cputype {
@@ -6196,8 +6199,8 @@ a[name="criticallogs"] + p + h3 + p + ul {
 }
 
 #enviro td {
-    font-weight: normal !important;
     padding: 8px 10px;
+    font-weight: normal !important;
 }
 
 #logs #enviro td:first-child {
@@ -6219,8 +6222,8 @@ a[name="criticallogs"] + p + h3 + p + ul {
 }
 
 #criticallogs td , #routerlogs td, #eventlogs td, #wrapperlogs td {
-    font-weight: normal !important;
     padding: 5px 10px;
+    font-weight: normal !important;
     border-top: 1px solid #26235c;
 }
 
@@ -6250,10 +6253,10 @@ table[id$="logs"] ul {
 
 #wrapperlogs pre {
     margin-bottom: 0 !important;
-    white-space: pre-wrap !important;
-    word-wrap: break-word;
     width: 100%;
     max-height: 600px;
+    white-space: pre-wrap !important;
+    word-wrap: break-word;
 }
 
 .main#logs li {
@@ -6262,8 +6265,8 @@ table[id$="logs"] ul {
 }
 
 .logtable ul li:not(old) {
-    list-style: none !important;
     margin-left: 15px;
+    list-style: none !important;
 }
 
 /* Override error log colors */
@@ -6318,40 +6321,32 @@ font[color="#000099"] { /* info */
     width: 100%;
 }
 
-/*#logs li::after {
-    content: "";
-    display: block;
-    border-top: 1px dotted #003;
-    width: 100%;
-    margin: 5px 0 -3px;
-}*/
-
 #logs li:last-child::after {
-    border: none;
     margin: 0;
+    border: none;
 }
 
 #logs font[color^="#"]::before {
-    content: "";
-    display: inline-block;
+    margin-left: 0;
+    margin-right: 5px;
     width: 6px;
     height: 6px;
-    background: #fff;
-    border-radius: 50%;
-    margin-right: 5px;
-    margin-left: 0;
+    display: inline-block;
     vertical-align: calc(1px);
+    border-radius: 50%;
+    background: #fff;
+    content: "";
 }
 
 .log_debug, .log_info, .log_warn, .log_error, .log_crit, .log_omitted {
     padding: 1px 2px;
     min-width: 36px;
     max-width: 36px;
-    white-space: nowrap;
-    overflow: hidden;
-    text-overflow: ellipsis;
     display: inline-block;
+    overflow: hidden;
     line-height: 90%;
+    white-space: nowrap;
+    text-overflow: ellipsis;
     text-align: center;
     color: #000;
     border-radius: 2px;
@@ -6359,9 +6354,9 @@ font[color="#000099"] { /* info */
 
 @media screen and (min-width: 1500px) {
 .log_debug, .log_info, .log_warn, .log_error, .log_crit, .log_omitted {
+    margin-bottom: -3px;
     min-width: 40px;
     max-width: 40px;
-    margin-bottom: -3px;
 }
 }
 
