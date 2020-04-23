@@ -394,7 +394,6 @@
 
         </tr>
 <%
-            if (editBean.isAdvanced()) {
                 boolean has0 = editBean.hasEncType(curTunnel, 0);
                 boolean has4 = editBean.hasEncType(curTunnel, 4);
 %>
@@ -419,9 +418,6 @@
                 </span>
             </td>
         </tr>
-<%
-           } // isAdvanced
-%>
         <tr>
             <th colspan="2">
                 <%=intl._t("Tunnel Options")%>

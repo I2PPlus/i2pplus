@@ -285,7 +285,6 @@
         </tr>
 <%          } /* !streamrserver */ %>
 <%
-            if (editBean.isAdvanced()) {
                 boolean has0 = editBean.hasEncType(curTunnel, 0);
                 boolean has4 = editBean.hasEncType(curTunnel, 4);
 %>
@@ -310,9 +309,6 @@
                 </span>
             </td>
         </tr>
-<%
-            } // isAdvanced
-%>
         <tr>
             <th>
                 <%=intl._t("Inbound")%>&nbsp;<%=intl._t("Tunnel Options")%>
