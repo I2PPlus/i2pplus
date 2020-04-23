@@ -114,6 +114,7 @@ body, input, select, .snarkCommentInfo textarea, textarea[name="i2cpOpts"] {
     z-index: 999;
     text-align: center;
     border: 1px solid #252;
+    will-change: transform;
 }
 
 .iframed .snarknavbar {
