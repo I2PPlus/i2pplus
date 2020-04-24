@@ -178,13 +178,16 @@ td input[type="image"]::after {
 .snarknavbar {
     margin: 0 0 -6px;
     padding: 12px 0;
+    position: sticky;
+    top: -1px;
+    z-index: 999;
+    word-spacing: 1px;
+    letter-spacing: 0.15em;
     text-align: center;
     border: 1px solid #26235c;
     border-radius: 2px 2px 0 0;
     background: linear-gradient(to bottom, #05050e 50%, #000 50%);
-    position: sticky;
-    top: -1px;
-    z-index: 999;
+    will-change: transform;
 }
 
 .iframed .snarknavbar {
@@ -196,13 +199,13 @@ td input[type="image"]::after {
 }
 
 .snarkNav:link, .snarkNav:visited {
-    margin: 0 -1px 0 -3px !important;
+    margin: 0 -2px;
     padding: 4px 9px 4px 26px !important;
+    position: relative;
     font-size: 9pt;
     font-weight: bold;
     color: #89f;
     text-decoration: none !important;
-    letter-spacing: 0.15em;
     text-transform: uppercase !important;
     text-shadow: 0 0 1px #000;
     border: 1px solid #26225C;
@@ -214,13 +217,17 @@ td input[type="image"]::after {
     will-change: transform;
 }
 
+.snarkNav:link::before, .snarkNav:link::after {
+    width: 1px;
+    height: 1px;
+    display: inline-block;
+    vertical-align: middle;
+    content: "";
+}
+
 .snarkNav:link:first-child {
     padding-left: 26px !important;
     border-radius: 2px 0 0 2px;
-}
-
-.snarkNav:link:last-child {
-    margin-left: 3px;
 }
 
 .nav_main:link {
@@ -260,7 +267,6 @@ td input[type="image"]::after {
 }
 
 .snarkNav:hover, .snarkNav:focus, .snarkNav:active {
-    position: relative;
     z-index: 999;
     text-decoration: none !important;
     color: #fff;
@@ -290,7 +296,6 @@ td input[type="image"]::after {
 }
 
 .snarkNav:last-child {
-    margin-top: -5px !important;
     border-radius: 0 2px 2px 0 !important;
 }
 
@@ -298,6 +303,17 @@ td input[type="image"]::after {
 .nav_search:link:hover, .nav_search:link:focus, .nav_forum:link:hover, .nav_forum:link:focus,
 .nav_main:link:hover, .nav_main:link:focus {
     background-size: 16px 16px, 100% 100%, 100% 100% !important;
+}
+
+@supports (justify-content: center) {
+    .snarknavbar {
+        display: flex;
+        justify-content: center;
+    }
+    .snarkNav:link {
+        margin-left: -1px !important;
+        margin-right: -1px !important;
+    }
 }
 
 /* end topnav */

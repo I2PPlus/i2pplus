@@ -145,7 +145,6 @@ _:-ms-lang(x), .snarknavbar {
     opacity: .45;
 }
 
-
 @supports (justify-content: center) {
 .snarknavbar {
     display: flex;

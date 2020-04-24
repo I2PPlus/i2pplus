@@ -148,6 +148,17 @@ _:-ms-lang(x), .snarknavbar {
     filter: none;
 }
 
+@supports (justify-content: center) {
+.snarknavbar {
+    display: flex;
+    justify-content: center;
+}
+.snarkNav:link, .snarkNav:visited {
+    margin-left: 0 !important;
+    margin-right: 0 !important;
+}
+}
+
 .snarkNav:link, .snarkNav:visited {
     margin: -1px -4px 0 0;
     padding: 4px 12px 4px 29px !important;
