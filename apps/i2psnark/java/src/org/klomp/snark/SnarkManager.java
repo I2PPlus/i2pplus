@@ -1761,8 +1761,9 @@ public class SnarkManager implements CompleteListener, ClientApp {
                     disableTorrentFile(filename);
                     return false;
                 } catch (OutOfMemoryError oom) {
-                    addMessage(_t("ERROR - Out of memory, cannot create torrent from {0}", sfile.getName()) + ": " + oom.getLocalizedMessage());
-                    return false;
+                    String s = _t("ERROR - Out of memory, cannot create torrent from {0}", sfile.getName()) + ": " + oom.getLocalizedMessage();
+                    addMessage(s);
+                    throw new Snark.RouterException(s, oom);
                 } finally {
                     if (fis != null) try { fis.close(); } catch (IOException ioe) {}
                 }
@@ -2840,6 +2841,10 @@ public class SnarkManager implements CompleteListener, ClientApp {
                         disableTorrentFile(name);
                         rv = false;
                     }
+                } catch (Snark.RouterException e) {
+                    addMessage(_t("Error: Could not add the torrent {0}", name) + ": " + e);
+                    _log.error("Unable to add the torrent " + name, e);
+                    return false;
                 } catch (RuntimeException e) {
                     addMessage(_t("Error: Could not add the torrent {0}", name) + ": " + e);
                     _log.error("Unable to add torrent: " + name, e);
