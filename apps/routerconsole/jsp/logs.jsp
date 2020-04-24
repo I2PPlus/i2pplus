@@ -27,7 +27,7 @@
 </td></tr>
 </tbody>
 </table>
-<h3 class="tabletitle" id="version"><%=intl._t("I2P Version and Running Environment")%>&ensp;<a href="/events?from=604800000"><!-- 1 week --><%=intl._t("View event log")%></a></h3>
+<h3 class="tabletitle" id="version"><%=intl._t("I2P Version and Running Environment")%>&ensp;<a href="/events?from=604800"><!-- 1 week --><%=intl._t("View event log")%></a></h3>
 <jsp:useBean class="net.i2p.router.web.helpers.LogsHelper" id="logsHelper" scope="request" />
 <jsp:setProperty name="logsHelper" property="contextId" value="<%=i2pcontextId%>" />
 <table id="enviro">
