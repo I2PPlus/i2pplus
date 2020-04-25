@@ -148,7 +148,7 @@
 </span>
 </a>
 
-<a href="/events?from=604800000">
+<a href="/events?from=604800">
 <span class="sitemapLink" title="<%=intl._t("View historical log of router events")%>">
 <img src="/themes/console/images/info/logs.png">
 <span class="sitemapLabel"><%=intl._t("Event Log")%></span>
