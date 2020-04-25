@@ -3707,13 +3707,17 @@ public class I2PSnarkServlet extends BasicServlet {
             buf.append("<b>")
                .append(_t("Pieces"))
                .append(":</b> ")
-               .append(pieces);
+               .append(pieces)
+               .append(" @ ")
+               .append(formatSize(snark.getPieceLength(0)).replace("iB", ""));
+/**
             buf.append("</span>&nbsp;<span>");
             toThemeImg(buf, "size");
             buf.append("<b>")
                .append(_t("Piece size"))
                .append(":</b> ")
                .append(formatSize(snark.getPieceLength(0)));
+**/
             // up ratio
             buf.append("</span>&nbsp;<span>");
             toThemeImg(buf, "head_tx");
