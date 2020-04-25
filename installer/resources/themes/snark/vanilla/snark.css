@@ -295,6 +295,21 @@ _:-ms-lang(x), .snarkNav:link, .snarkNav:visited {
     transition: ease box-shadow 0.1s;
 }
 
+@supports (justify-content: center) {
+.snarknavbar {
+    display: flex;
+    justify-content: center;
+}
+.snarkNav:link, .snarkNav:visited {
+    margin-left: 0 !important;
+    margin-right: 0 !important;
+    border-right: none;
+}
+.snarkNav:last-child {
+    border-right: 1px solid #2f1b0c;
+}
+}
+
 /* end topnav */
 
 /* screenlog */
@@ -344,17 +359,13 @@ _:-ms-lang(x), .snarkNav:link, .snarkNav:visited {
     background-size: 9px 9px;
 }
 
-.snarkMessages a:link:not(#closeLog):not(#expand):not(#shrink), .snarkMessages .infohash {
+.snarkMessages a:link:not(#closeLog):not(#expand):not(#shrink), .snarkMessages .infohash, .snarkMessages a:visited {
     mix-blend-mode: exclusion;
     color: #f60 !important;
 }
 
 .snarkMessages a:link:hover:not(#closeLog):not(#expand):not(#shrink) {
     mix-blend-mode: normal;
-}
-
-.snarkMessages a:visited {
-    color: #d30;
 }
 
 .snarkMessages a:hover, .snarkMessages a:visited:hover {
@@ -701,22 +712,17 @@ tr:not(.peerinfo) .snarkTorrentUploaded:empty::after {
     border-radius: 2px;
     background: linear-gradient(to bottom, #fff7ef 51%, #cfc1b5 52%, #cfc1b5);
     cursor: pointer;
-    mix-blend-mode: normal;
-    filter: drop-shadow(0 0 1px rgba(127, 108, 95, 0.6));
 }
 
 .snarkTorrentAction input[type="image"]:hover, .snarkTorrents th:last-child input[type="image"]:hover,
 .snarkTorrentAction input[type="image"]:focus, .snarkTorrents th:last-child input[type="image"]:focus  {
     background: linear-gradient(to bottom, #ffeadf 51%, #cfb6a8 52%);
-    border: 1px solid #930 !important;
-    box-shadow: inset 0 0 0 1px #fff;
-    filter: drop-shadow(0 0 1px #f30);
+    box-shadow: inset 0 0 0 1px rgba(223,0,103,.4);
+    transition: ease box-shadow .15s;
 }
 
 .snarkTorrentAction input[type="image"]:active, .snarkTorrents th:last-child input[type="image"]:active {
-    box-shadow: inset 0 0 0 1px #efe6e0, inset 3px 3px 3px #4d453e;
-    mix-blend-mode: multiply;
-    filter: sepia(100%) hue-rotate(340deg);
+    box-shadow: inset 0 0 0 1px #efe6e0, inset 3px 3px 3px 0 rgba(0,0,0,.6);
 }
 
 .snarkTorrents thead th a img, .snarkTorrents thead th input[type="image"] {
@@ -1779,19 +1785,6 @@ input.stoptorrent {
 
 input.stoptorrent:hover, input.stoptorrent:focus {
     background: url(images/btn_stop.png) no-repeat 5px center, linear-gradient(to bottom, #fff7ef 51%, #cfc1b5 52%);
-}
-
-input[name^="action_"] {
-    border-radius: 3px;
-    filter: sepia(100%) hue-rotate(340deg);
-    max-width: 40px;
-    margin-left: 1px;
-}
-
-input[name^="action_"]:hover, input[name^="action_"]:focus {
-    filter: sepia(100%) hue-rotate(340deg) saturate(120%) drop-shadow(0 0 1px #f60);
-    opacity: 1;
-    box-shadow: 0 0 1px 0 #f60;
 }
 
 select {
@@ -3322,6 +3315,7 @@ thead a img, thead img {
 
 .snarkTorrentAction input[type="image"], .snarkTorrents th:last-child input[type="image"] {
     margin: 2px 1px !important;
+    padding: 5px !important;
     max-height: 12px;
     height: 12px;
 }
