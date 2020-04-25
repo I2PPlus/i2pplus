@@ -136,7 +136,7 @@ NTCP (NIO-based TCP) and NTCP2 are TCP-based network transports which use Java's
 </p>
 
 <p><b>Orchid (plugin)</b><br>
-A java implementation of a Tor client, available as an I2P plugin. Can be used as the default <i>outproxy</i> if configured in the relevant SOCKS or HTTP client tunnel in the <i>Tunnel Manager</i>. Available from <a href="http://stats.i2p/i2p/plugins">http://stats.i2p/i2p/plugins</a>. Source code is available on <a href="https://github.com/i2p/i2p.plugins.orchid" class="sitelink external" target="_blank">github</a>.
+A java implementation of a Tor client, available as an I2P plugin. Can be used as the default <i>outproxy</i> if configured in the relevant SOCKS or HTTP client tunnel in the <i>Tunnel Manager</i>. Available from <a href="http://stats.i2p/i2p/plugins" class="sitelink">http://stats.i2p/i2p/plugins</a>. Source code is available on <a href="https://github.com/i2p/i2p.plugins.orchid" class="sitelink external" target="_blank">github</a>.
 </p>
 
 <p><b>Outproxy</b><br>
@@ -192,7 +192,7 @@ A router in a tunnel not designated as a gateway or endpoint.
 </p>
 
 <p><b>ZzzOT (plugin)</b><br>
-A Java I2P plugin implementation of a BitTorrent <a href="https://en.wikipedia.org/wiki/Opentracker" class="sitelink external" target="_blank">Open Tracker</a>. Available from <a href="http://stats.i2p/i2p/plugins">http://stats.i2p/i2p/plugins</a>. Source code is available on <a href="https://github.com/i2p/i2p.plugins.zzzot" class="sitelink external" target="_blank">github</a>.
+A Java I2P plugin implementation of a BitTorrent <a href="https://en.wikipedia.org/wiki/Opentracker" class="sitelink external" target="_blank">Open Tracker</a>. Available from <a href="http://stats.i2p/i2p/plugins" class="sitelink">http://stats.i2p/i2p/plugins</a>. Source code is available on <a href="https://github.com/i2p/i2p.plugins.zzzot" class="sitelink external" target="_blank">github</a>.
 </p>
 
 </div>
