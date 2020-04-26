@@ -1169,6 +1169,12 @@ _:-ms-lang(x), .snarkTorrents tbody tr:hover, .snarkDirInfo tbody tr:hover {
     background: linear-gradient(to bottom, #313 50%, #101 50%);
 }
 
+@media screen and (min-width: 1500px) {
+.torrentlink, .magnetlink {
+    margin: -2px 3px -2px 4px !important;
+}
+}
+
 .torrentlink {
     margin-right: 0;
 }
@@ -1186,9 +1192,10 @@ _:-ms-lang(x), .snarkTorrents tbody tr:hover, .snarkDirInfo tbody tr:hover {
 }
 
 .snarkTorrentInfo th, .snarkTorrentInfo td {
-    text-align: left !important;
     padding: 8px 5px !important;
     vertical-align: middle !important;
+    text-align: left !important;
+    font-weight: inherit;
 }
 
 .snarkTorrentInfo tr:nth-child(odd) {
@@ -1203,8 +1210,12 @@ _:-ms-lang(x), .snarkTorrents tbody tr:hover, .snarkDirInfo tbody tr:hover {
     margin-right: 3px;
 }
 
-#snarkTorrentInfo th:first-child img, #torrentinfostats img, #trackers img {
+.snarkTorrentInfo th:first-child img, #torrentinfostats img, #trackers img {
     margin: 0 5px !important;
+}
+
+#torrentInfoStats img[src$="head_tx.png"], #torrentInfoStats img[src$="head_rx.png"] {
+    margin-right: 3px !important;
 }
 
 .iframed #torrentInfoControl td, #setPriority th {

@@ -905,6 +905,7 @@ td.snarkTorrentAction input[type="image"] {
     padding: 6px 8px 6px 4px !important;
     line-height: 1.8;
     text-align: left !important;
+    font-weight: inherit;
 }
 
 .snarkTorrentInfo tr:last-child td {
@@ -4769,8 +4770,9 @@ td.snarkTorrentStatus b, .lang_en td.snarkTorrentStatus b {
 }
 
 #metainfo {
-    padding: 4px 8px;
-    border: 1px solid #445;
+    padding: 5px 10px 4px 4px;
+    border: 1px solid #334;
+    box-shadow: inset 0 0 0 1px #001, 0 0 2px 2px rgba(0,0,0,.7);
     background: #181828;
 }
 
