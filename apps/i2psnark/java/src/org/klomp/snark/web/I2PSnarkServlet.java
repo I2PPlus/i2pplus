@@ -3668,7 +3668,9 @@ public class I2PSnarkServlet extends BasicServlet {
             MetaInfo meta = snark.getMetaInfo();
             buf.append("<div class=\"mainsection\" id=\"snarkInfo\">");
             buf.append("<table class=\"snarkTorrentInfo\">\n");
-            buf.append("<tr><th></th><th><b>")
+            buf.append("<tr><th colspan=\"2\">");
+            toThemeImg(buf, "torrent");
+            buf.append("<b>")
                .append(_t("Torrent"))
                .append(":</b> ");
             if (snark.getStorage() != null) {
@@ -3681,11 +3683,59 @@ public class I2PSnarkServlet extends BasicServlet {
                .append(_t("Info hash")).append("\">")
                .append(hex.toUpperCase(Locale.US))
                .append("</span>");
-            buf.append("</th></tr>\n");
-            buf.append("<tr id=\"torrentInfoStats\"><td>");
+
+            String announce = null;
+            // FIXME: if b64 appears in link, convert to b32 or domain name (if known)
+            String postmanb64 = "lnQ6yoBTxQuQU8EQ1FlF395ITIQF-HGJxUeFvzETLFnoczNjQvKDbtSB7aHhn853zjVXrJBgwlB9sO57KakBDaJ50lUZgVPhjlI19TgJ-CxyHhHSCeKx5JzURdEW-ucdONMynr-b2zwhsx8VQCJwCEkARvt21YkOyQDaB9IdV8aTAmP~PUJQxRwceaTMn96FcVenwdXqleE16fI8CVFOV18jbJKrhTOYpTtcZKV4l1wNYBDwKgwPx5c0kcrRzFyw5~bjuAKO~GJ5dR7BQsL7AwBoQUS4k1lwoYrG1kOIBeDD3XF8BWb6K3GOOoyjc1umYKpur3G~FxBuqtHAsDRICkEbKUqJ9mPYQlTSujhNxiRIW-oLwMtvayCFci99oX8MvazPS7~97x0Gsm-onEK1Td9nBdmq30OqDxpRtXBimbzkLbR1IKObbg9HvrKs3L-kSyGwTUmHG9rSQSoZEvFMA-S0EXO~o4g21q1oikmxPMhkeVwQ22VHB0-LZJfmLr4SAAAA";
+            String otdgb32 = "w7tpbzncbcocrqtwwm3nezhnnsw4ozadvi2hmvzdhrqzfxfum7wa.b32.i2p";
+            String theblandb32 = "s5ikrdyjwbcgxmqetxb3nyheizftms7euacuub2hic7defkh3xhq.b32.i2p";
+            String odiftb32 = "bikpeyxci4zuyy36eau5ycw665dplun4yxamn7vmsastejdqtfoq.b32.i2p";
+            String cryptb32 = "ri5a27ioqd4vkik72fawbcryglkmwyy4726uu5j3eg6zqh2jswfq.b32.i2p";
+            String lodikonb32 = "q2a7tqlyddbyhxhtuia4bmtqpohpp266wsnrkm6cgoahdqrjo3ra.b32.i2p";
+            String freedomb32 = "nfrjvknwcw47itotkzmk6mdlxmxfxsxhbhlr5ozhlsuavcogv4hq.b32.i2p";
+            String icu812b32 = "h77hk3pr622mx5c6qmybvbtrdo5la7pxo6my4kzr47x2mlpnvm2a.b32.i2p";
+            String fazankab32 = "3czgwbtato5yja67krtadzhc6szu3n7rqbxmu7dwhuyaighcsb3q.b32.i2p";
+            if (meta != null) {
+                announce = meta.getAnnounce();
+                if (announce == null)
+                    announce = snark.getTrackerURL();
+                if (announce != null) {
+                    announce = DataHelper.stripHTML(announce)
+                       .replace(postmanb64, "tracker2.postman")
+                       .replaceAll(cryptb32, "tracker.crypthost.i2p")
+                       .replaceAll(freedomb32, "torrfreedom.i2p")
+                       .replaceAll(lodikonb32, "tracker.lodikon.i2p")
+                       .replaceAll(otdgb32, "opentracker.dg2.i2p")
+                       .replaceAll(odiftb32, "opendiftracker.i2p")
+                       .replaceAll(theblandb32, "tracker.thebland.i2p")
+                       .replaceAll(icu812b32, "tracker.icu812.i2p")
+                       .replaceAll(fazankab32, "tracker.fazanka.i2p");
+                }
+
+            if (meta != null || !meta.isPrivate()) {
+                buf.append("<a class=\"magnetlink\" href=\"")
+                   .append(MagnetURI.MAGNET_FULL).append(hex);
+                if (announce != null)
+                    buf.append("&amp;tr=").append(announce);
+                buf.append("\" title=\"")
+                   .append(MagnetURI.MAGNET_FULL).append(hex);
+                if (announce != null)
+                    buf.append("&amp;tr=").append(announce);
+                buf.append("\">")
+                   .append(toImg("magnet", ""))
+                   .append("</a>");
+                }
+
+            buf.append("<a class=\"torrentlink\" href=\"").append(_contextPath).append('/')
+               .append(baseName).append("\" title=\"").append(DataHelper.escapeHTML(baseName)
+               .replace("%20", " ").replace("%27", "\'").replace("%5B", "[").replace("%5D", "]"))
+               .append("\">")
+               .append(toImg("torrent", ""))
+               .append("</a>")
+               .append("</th></tr>\n");
+            buf.append("<tr id=\"torrentInfoStats\">");
+            buf.append("<td colspan=\"3\"><span class=\"nowrap\">");
             toThemeImg(buf, "file");
-            buf.append("</td><td colspan=\"2\"><span>");
-//            toThemeImg(buf, "size");
             buf.append("<b>")
                .append(_t("Size"))
                .append(":</b> ")
@@ -3693,7 +3743,7 @@ public class I2PSnarkServlet extends BasicServlet {
             if (meta != null) {
                 List<List<String>> files = meta.getFiles();
                 int fileCount = files != null ? files.size() : 1;
-                buf.append("</span>&nbsp;<span>");
+                buf.append("</span>&nbsp;<span class=\"nowrap\">");
                 toThemeImg(buf, "file");
                 buf.append("<b>")
                    .append(_t("Files"))
@@ -3702,7 +3752,7 @@ public class I2PSnarkServlet extends BasicServlet {
             }
             int pieces = snark.getPieces();
             double completion = (pieces - snark.getNeeded()) / (double) pieces;
-            buf.append("</span>&nbsp;<span>");
+            buf.append("</span>&nbsp;<span class=\"nowrap\">");
             toThemeImg(buf, "file");
             buf.append("<b>")
                .append(_t("Pieces"))
@@ -3719,7 +3769,7 @@ public class I2PSnarkServlet extends BasicServlet {
                .append(formatSize(snark.getPieceLength(0)));
 **/
             // up ratio
-            buf.append("</span>&nbsp;<span>");
+            buf.append("</span>&nbsp;<span class=\"nowrap\">");
             toThemeImg(buf, "head_tx");
             buf.append("<b>")
                .append(_t("Upload ratio"))
@@ -3733,7 +3783,7 @@ public class I2PSnarkServlet extends BasicServlet {
                 buf.append('0');
             }
 
-            buf.append("</span>&nbsp;<span id=\"completion\">");
+            buf.append("</span>&nbsp;<span id=\"completion\" class=\"nowrap\">");
             toThemeImg(buf, "head_rx");
             buf.append("<b>");
             if (completion < 1.0)
@@ -3791,7 +3841,7 @@ public class I2PSnarkServlet extends BasicServlet {
                    needed = snark.getRemainingLength();
                 }
                 if (needed > 0) {
-                   buf.append("&nbsp;<span>");
+                   buf.append("&nbsp;<span class=\"nowrap\">");
                    toThemeImg(buf, "head_rx");
                    buf.append("<b>")
                       .append(_t("Remaining"))
@@ -3801,7 +3851,7 @@ public class I2PSnarkServlet extends BasicServlet {
                 }
                 long skipped = snark.getSkippedLength();
                 if (skipped > 0) {
-                    buf.append("&nbsp;<span>");
+                    buf.append("&nbsp;<span class=\"nowrap\">");
                     toThemeImg(buf, "head_rx");
                     buf.append("<b>").append(_t("Skipped")).append(":</b> ").append(formatSize(skipped)).append("</span");
                 }
@@ -3812,20 +3862,23 @@ public class I2PSnarkServlet extends BasicServlet {
                     dat = storage.getActivity();
                     if (dat > 0) {
                         String date = fmt.format(new Date(dat));
-                        buf.append("&nbsp;<span>");
+                        buf.append("&nbsp;<span class=\"nowrap\">");
                         toThemeImg(buf, "torrent");
                         buf.append("<b>").append(_t("Last activity")).append(":</b> ").append(date).append("</span>");
                     }
                 }
             }
 
-            buf.append("</td></tr>\n<tr><td>");
+            buf.append("</td></tr>\n");
+/**
+            buf.append("<tr><td>");
             toThemeImg(buf, "torrent");
             buf.append("</td><td colspan=\"2\"><b>").append(_t("Torrent file")).append(":</b> <a href=\"").append(_contextPath).append('/')
                 .append(baseName).append("\">").append(DataHelper.escapeHTML(baseName)
                 .replace("%20", " ").replace("%27", "\'").replace("%5B", "[").replace("%5D", "]"))
                 .append("</a>");
-
+**/
+/**
             String announce = null;
             // FIXME: if b64 appears in link, convert to b32 or domain name (if known)
             String postmanb64 = "lnQ6yoBTxQuQU8EQ1FlF395ITIQF-HGJxUeFvzETLFnoczNjQvKDbtSB7aHhn853zjVXrJBgwlB9sO57KakBDaJ50lUZgVPhjlI19TgJ-CxyHhHSCeKx5JzURdEW-ucdONMynr-b2zwhsx8VQCJwCEkARvt21YkOyQDaB9IdV8aTAmP~PUJQxRwceaTMn96FcVenwdXqleE16fI8CVFOV18jbJKrhTOYpTtcZKV4l1wNYBDwKgwPx5c0kcrRzFyw5~bjuAKO~GJ5dR7BQsL7AwBoQUS4k1lwoYrG1kOIBeDD3XF8BWb6K3GOOoyjc1umYKpur3G~FxBuqtHAsDRICkEbKUqJ9mPYQlTSujhNxiRIW-oLwMtvayCFci99oX8MvazPS7~97x0Gsm-onEK1Td9nBdmq30OqDxpRtXBimbzkLbR1IKObbg9HvrKs3L-kSyGwTUmHG9rSQSoZEvFMA-S0EXO~o4g21q1oikmxPMhkeVwQ22VHB0-LZJfmLr4SAAAA";
@@ -3853,6 +3906,8 @@ public class I2PSnarkServlet extends BasicServlet {
                        .replaceAll(icu812b32, "tracker.icu812.i2p")
                        .replaceAll(fazankab32, "tracker.fazanka.i2p");
                 }
+**/
+/**
                 if (meta != null || !meta.isPrivate()) {
                     buf.append("&nbsp;&nbsp;<a href=\"")
                        .append(MagnetURI.MAGNET_FULL).append(hex);
@@ -3867,13 +3922,14 @@ public class I2PSnarkServlet extends BasicServlet {
                        .append("</a>");
                 }
                 buf.append("</td></tr>\n");
+**/
                 List<List<String>> alist = meta.getAnnounceList();
                 if (alist != null && !alist.isEmpty()) {
-                    buf.append("<tr title=\"")
+                    buf.append("<tr id=\"trackers\" title=\"")
                         .append(_t("Only I2P trackers will be used; non-I2P trackers are displayed for informational purposes only"))
-                        .append("\"><td>");
-                    toThemeImg(buf, "details");
-                    buf.append("</td><td colspan=\"2\"><b>")
+                        .append("\"><td colspan=\"3\">");
+                    toThemeImg(buf, "torrent");
+                    buf.append("<b>")
                        .append(_t("Trackers")).append(":</b> ");
 
                     for (List<String> alist2 : alist) {
@@ -3929,11 +3985,11 @@ public class I2PSnarkServlet extends BasicServlet {
                            .replaceAll(theblandb32, "tracker.thebland.i2p")
                            .replaceAll(icu812b32, "tracker.icu812.i2p")
                            .replaceAll(fazankab32, "tracker.fazanka.i2p");
-                        buf.append("<tr title=\"")
+                        buf.append("<tr id=\"trackers\" title=\"")
                            .append(_t("Only I2P trackers will be used; non-I2P trackers are displayed for informational purposes only"))
-                           .append("\"><td>");
-                        toThemeImg(buf, "details");
-                        buf.append("</td><td colspan=\"2\"><b>")
+                           .append("\"><td colspan=\"3\">");
+                        toThemeImg(buf, "torrent");
+                        buf.append("<b>")
                            .append(_t("Tracker")).append(":</b> ");
                         buf.append("<span class=\"info_tracker primary\">");
                         buf.append(getShortTrackerLink(announce, snark.getInfoHash()));
@@ -3949,9 +4005,8 @@ public class I2PSnarkServlet extends BasicServlet {
                 if (com != null && com.length() > 0) {
                     if (com.length() > 4000)
                         com = com.substring(0, 4000) + "&hellip;";
-                    buf.append("<tr><td>");
-                    toThemeImg(buf, "comment");
-                    buf.append("</td><td colspan=\"2\" id=\"metacomment\"><div class=\"commentWrapper\">")
+                    buf.append("<tr><td id=\"metacomment\" colspan=\"3\">");
+                    buf.append("<div class=\"commentWrapper\">")
                        .append(DataHelper.stripHTML(com))
                        .append("</div></td></tr>\n");
                 }

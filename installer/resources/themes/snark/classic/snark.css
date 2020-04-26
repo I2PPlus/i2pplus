@@ -664,9 +664,19 @@ tt, .bucket, #bucketSet code {
 
 /* torrent info */
 
-.snarkTorrentInfo img {
+#torrentInfoStats img[src$="head_tx.png"], #torrentInfoStats img[src$="head_rx.png"] {
+    margin: 0 2px !important;
+}
+
+.snarkTorrentInfo th:first-child img, #torrentInfoStats img, #trackers img {
+    margin: -1px 4px 0 5px !important;
     max-height: 16px !important;
-    margin: 1px 0 1px 2px !important;
+    display: inline-block;
+    vertical-align: middle;
+}
+
+#torrentInfoStats img[src$="head_tx.png"], #torrentInfoStats img[src$="head_rx.png"] {
+    margin-right: 2px !important;
 }
 
 .snarkTorrentInfo th {
@@ -675,14 +685,10 @@ tt, .bucket, #bucketSet code {
     border-top: none;
 }
 
-.snarkTorrentInfo th:first-child {
-    background: url(images/torrent.png) no-repeat center center, linear-gradient(to bottom, #fff, #eef);
-    background-size: 14px auto;
-}
-
-.snarkTorrentInfo th, .snarkTorrentInfo td {
+.snarkTorrentInfo th, .snarkTorrentInfo td, .snarkTorrentInfo td:first-child {
     padding: 8px 4px !important;
-    line-height: 160%;
+    line-height: 1.6;
+    vertical-align: middle !important;
 }
 
 .snarkTorrentInfo th:last-child {
@@ -694,19 +700,6 @@ tt, .bucket, #bucketSet code {
 
 .snarkTorrentInfo td {
     text-align: left !important;
-    vertical-align: middle !important;
-}
-
-.snarkTorrentInfo td:first-child {
-    width: 20px !important;
-}
-
-/*.snarkTorrentInfo tr:nth-child(n+3) td:first-child {
-    border-right: 1px solid #89f;
-}*/
-
-.snarkTorrentInfo b {
-    margin-right: 3px !important;
 }
 
 .snarkTorrentInfo input[type="submit"] {
@@ -2441,25 +2434,6 @@ td#bwHelp a {
 
 /* end configs */
 
-#torrentInfoStats td {
-    text-align: left !important;
-}
-
-#torrentInfoStats img {
-    margin: 1px 1px 2px 3px !important;
-}
-
-#torrentInfoStats b {
-    margin-left: 2px;
-}
-
-#torrentInfoStats span {
-    white-space: nowrap;
-    display: inline-block;
-    margin-right: 7px;
-    vertical-align: middle;
-}
-
 #filecheck {
     display: inline-block;
     margin: 5px 0;
@@ -4134,7 +4108,7 @@ input[type="checkbox"][disabled]:checked, input[type="radio"][disabled]:checked,
 }
 
 .snarkTorrentInfo .infohash {
-    margin: 0 0 0 10px;
+    margin: 0 6px 0 10px;
     padding: 0 4px;
     border-radius: 1px;
     background: #f8f8ff;
