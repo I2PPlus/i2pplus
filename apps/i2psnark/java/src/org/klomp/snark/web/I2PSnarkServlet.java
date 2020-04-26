@@ -3717,10 +3717,16 @@ public class I2PSnarkServlet extends BasicServlet {
                    .append(MagnetURI.MAGNET_FULL).append(hex);
                 if (announce != null)
                     buf.append("&amp;tr=").append(announce);
+                if (baseName != null)
+                    buf.append("&amp;dn=").append(DataHelper.escapeHTML(baseName).replace(".torrent", "")
+                       .replace("%20", " ").replace("%27", "\'").replace("%5B", "[").replace("%5D", "]"));
                 buf.append("\" title=\"")
                    .append(MagnetURI.MAGNET_FULL).append(hex);
                 if (announce != null)
                     buf.append("&amp;tr=").append(announce);
+                if (baseName != null)
+                    buf.append("&amp;dn=").append(DataHelper.escapeHTML(baseName).replace(".torrent", "")
+                       .replace("%20", " ").replace("%27", "\'").replace("%5B", "[").replace("%5D", "]"));
                 buf.append("\">")
                    .append(toImg("magnet", ""))
                    .append("</a>");
@@ -3760,14 +3766,7 @@ public class I2PSnarkServlet extends BasicServlet {
                .append(pieces)
                .append(" @ ")
                .append(formatSize(snark.getPieceLength(0)).replace("iB", ""));
-/**
-            buf.append("</span>&nbsp;<span>");
-            toThemeImg(buf, "size");
-            buf.append("<b>")
-               .append(_t("Piece size"))
-               .append(":</b> ")
-               .append(formatSize(snark.getPieceLength(0)));
-**/
+
             // up ratio
             buf.append("</span>&nbsp;<span class=\"nowrap\">");
             toThemeImg(buf, "head_tx");
@@ -3868,90 +3867,20 @@ public class I2PSnarkServlet extends BasicServlet {
                     }
                 }
             }
-
             buf.append("</td></tr>\n");
-/**
-            buf.append("<tr><td>");
-            toThemeImg(buf, "torrent");
-            buf.append("</td><td colspan=\"2\"><b>").append(_t("Torrent file")).append(":</b> <a href=\"").append(_contextPath).append('/')
-                .append(baseName).append("\">").append(DataHelper.escapeHTML(baseName)
-                .replace("%20", " ").replace("%27", "\'").replace("%5B", "[").replace("%5D", "]"))
-                .append("</a>");
-**/
-/**
-            String announce = null;
-            // FIXME: if b64 appears in link, convert to b32 or domain name (if known)
-            String postmanb64 = "lnQ6yoBTxQuQU8EQ1FlF395ITIQF-HGJxUeFvzETLFnoczNjQvKDbtSB7aHhn853zjVXrJBgwlB9sO57KakBDaJ50lUZgVPhjlI19TgJ-CxyHhHSCeKx5JzURdEW-ucdONMynr-b2zwhsx8VQCJwCEkARvt21YkOyQDaB9IdV8aTAmP~PUJQxRwceaTMn96FcVenwdXqleE16fI8CVFOV18jbJKrhTOYpTtcZKV4l1wNYBDwKgwPx5c0kcrRzFyw5~bjuAKO~GJ5dR7BQsL7AwBoQUS4k1lwoYrG1kOIBeDD3XF8BWb6K3GOOoyjc1umYKpur3G~FxBuqtHAsDRICkEbKUqJ9mPYQlTSujhNxiRIW-oLwMtvayCFci99oX8MvazPS7~97x0Gsm-onEK1Td9nBdmq30OqDxpRtXBimbzkLbR1IKObbg9HvrKs3L-kSyGwTUmHG9rSQSoZEvFMA-S0EXO~o4g21q1oikmxPMhkeVwQ22VHB0-LZJfmLr4SAAAA";
-            String otdgb32 = "w7tpbzncbcocrqtwwm3nezhnnsw4ozadvi2hmvzdhrqzfxfum7wa.b32.i2p";
-            String theblandb32 = "s5ikrdyjwbcgxmqetxb3nyheizftms7euacuub2hic7defkh3xhq.b32.i2p";
-            String odiftb32 = "bikpeyxci4zuyy36eau5ycw665dplun4yxamn7vmsastejdqtfoq.b32.i2p";
-            String cryptb32 = "ri5a27ioqd4vkik72fawbcryglkmwyy4726uu5j3eg6zqh2jswfq.b32.i2p";
-            String lodikonb32 = "q2a7tqlyddbyhxhtuia4bmtqpohpp266wsnrkm6cgoahdqrjo3ra.b32.i2p";
-            String freedomb32 = "nfrjvknwcw47itotkzmk6mdlxmxfxsxhbhlr5ozhlsuavcogv4hq.b32.i2p";
-            String icu812b32 = "h77hk3pr622mx5c6qmybvbtrdo5la7pxo6my4kzr47x2mlpnvm2a.b32.i2p";
-            String fazankab32 = "3czgwbtato5yja67krtadzhc6szu3n7rqbxmu7dwhuyaighcsb3q.b32.i2p";
-            if (meta != null) {
-                announce = meta.getAnnounce();
-                if (announce == null)
-                    announce = snark.getTrackerURL();
-                if (announce != null) {
-                    announce = DataHelper.stripHTML(announce)
-                       .replace(postmanb64, "tracker2.postman")
-                       .replaceAll(cryptb32, "tracker.crypthost.i2p")
-                       .replaceAll(freedomb32, "torrfreedom.i2p")
-                       .replaceAll(lodikonb32, "tracker.lodikon.i2p")
-                       .replaceAll(otdgb32, "opentracker.dg2.i2p")
-                       .replaceAll(odiftb32, "opendiftracker.i2p")
-                       .replaceAll(theblandb32, "tracker.thebland.i2p")
-                       .replaceAll(icu812b32, "tracker.icu812.i2p")
-                       .replaceAll(fazankab32, "tracker.fazanka.i2p");
-                }
-**/
-/**
-                if (meta != null || !meta.isPrivate()) {
-                    buf.append("&nbsp;&nbsp;<a href=\"")
-                       .append(MagnetURI.MAGNET_FULL).append(hex);
-                    if (announce != null)
-                        buf.append("&amp;tr=").append(announce);
-                    buf.append("\" title=\"")
-                       .append(MagnetURI.MAGNET_FULL).append(hex);
-                    if (announce != null)
-                        buf.append("&amp;tr=").append(announce);
-                    buf.append("\">")
-                       .append(toImg("magnet", ""))
-                       .append("</a>");
-                }
-                buf.append("</td></tr>\n");
-**/
-                List<List<String>> alist = meta.getAnnounceList();
-                if (alist != null && !alist.isEmpty()) {
-                    buf.append("<tr id=\"trackers\" title=\"")
-                        .append(_t("Only I2P trackers will be used; non-I2P trackers are displayed for informational purposes only"))
-                        .append("\"><td colspan=\"3\">");
-                    toThemeImg(buf, "torrent");
-                    buf.append("<b>")
-                       .append(_t("Trackers")).append(":</b> ");
 
-                    for (List<String> alist2 : alist) {
-                        if (alist2.isEmpty()) {
-                            buf.append("<span class=\"info_tracker primary\">");
-                            boolean more = false;
-                            for (String s : alist2) {
-                                if (more)
-                                    buf.append("<span class=\"info_tracker\">");
-                                else
-                                    more = true;
-                                buf.append(getShortTrackerLink(DataHelper.stripHTML(s)
-                                   .replaceAll(cryptb32, "tracker.crypthost.i2p")
-                                   .replaceAll(freedomb32, "torrfreedom.i2p")
-                                   .replaceAll(lodikonb32, "tracker.lodikon.i2p")
-                                   .replaceAll(otdgb32, "opentracker.dg2.i2p")
-                                   .replaceAll(odiftb32, "opendiftracker.i2p")
-                                   .replaceAll(theblandb32, "tracker.thebland.i2p"), snark.getInfoHash()));
-                                buf.append("</span> ");
-                            }
-                        }
-                        buf.append("<span class=\"info_tracker\">");
+            List<List<String>> alist = meta.getAnnounceList();
+            if (alist != null && !alist.isEmpty()) {
+                buf.append("<tr id=\"trackers\" title=\"")
+                   .append(_t("Only I2P trackers will be used; non-I2P trackers are displayed for informational purposes only"))
+                   .append("\"><td colspan=\"3\">");
+                toThemeImg(buf, "torrent");
+                buf.append("<b>")
+                   .append(_t("Trackers")).append(":</b> ");
+
+                for (List<String> alist2 : alist) {
+                    if (alist2.isEmpty()) {
+                        buf.append("<span class=\"info_tracker primary\">");
                         boolean more = false;
                         for (String s : alist2) {
                             if (more)
@@ -3968,6 +3897,23 @@ public class I2PSnarkServlet extends BasicServlet {
                             buf.append("</span> ");
                         }
                     }
+                    buf.append("<span class=\"info_tracker\">");
+                    boolean more = false;
+                    for (String s : alist2) {
+                        if (more)
+                            buf.append("<span class=\"info_tracker\">");
+                        else
+                            more = true;
+                        buf.append(getShortTrackerLink(DataHelper.stripHTML(s)
+                           .replaceAll(cryptb32, "tracker.crypthost.i2p")
+                           .replaceAll(freedomb32, "torrfreedom.i2p")
+                           .replaceAll(lodikonb32, "tracker.lodikon.i2p")
+                           .replaceAll(otdgb32, "opentracker.dg2.i2p")
+                           .replaceAll(odiftb32, "opendiftracker.i2p")
+                           .replaceAll(theblandb32, "tracker.thebland.i2p"), snark.getInfoHash()));
+                        buf.append("</span> ");
+                    }
+                }
                     buf.append("</td></tr>\n");
                 } else {
                     if (meta != null) {
