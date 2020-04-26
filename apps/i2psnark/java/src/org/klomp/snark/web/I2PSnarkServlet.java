@@ -3712,175 +3712,192 @@ public class I2PSnarkServlet extends BasicServlet {
                        .replaceAll(fazankab32, "tracker.fazanka.i2p");
                 }
 
-            if (meta != null || !meta.isPrivate()) {
-                buf.append("<a class=\"magnetlink\" href=\"")
-                   .append(MagnetURI.MAGNET_FULL).append(hex);
-                if (announce != null)
-                    buf.append("&amp;tr=").append(announce);
-                if (baseName != null)
-                    buf.append("&amp;dn=").append(DataHelper.escapeHTML(baseName).replace(".torrent", "")
-                       .replace("%20", " ").replace("%27", "\'").replace("%5B", "[").replace("%5D", "]"));
-                buf.append("\" title=\"")
-                   .append(MagnetURI.MAGNET_FULL).append(hex);
-                if (announce != null)
-                    buf.append("&amp;tr=").append(announce);
-                if (baseName != null)
-                    buf.append("&amp;dn=").append(DataHelper.escapeHTML(baseName).replace(".torrent", "")
-                       .replace("%20", " ").replace("%27", "\'").replace("%5B", "[").replace("%5D", "]"));
-                buf.append("\">")
-                   .append(toImg("magnet", ""))
-                   .append("</a>");
+                if (meta != null || !meta.isPrivate()) {
+                    buf.append("<a class=\"magnetlink\" href=\"")
+                       .append(MagnetURI.MAGNET_FULL).append(hex);
+                    if (announce != null)
+                        buf.append("&amp;tr=").append(announce);
+                    if (baseName != null)
+                        buf.append("&amp;dn=").append(DataHelper.escapeHTML(baseName).replace(".torrent", "")
+                           .replace("%20", " ").replace("%27", "\'").replace("%5B", "[").replace("%5D", "]"));
+                    buf.append("\" title=\"")
+                       .append(MagnetURI.MAGNET_FULL).append(hex);
+                    if (announce != null)
+                        buf.append("&amp;tr=").append(announce);
+                    if (baseName != null)
+                        buf.append("&amp;dn=").append(DataHelper.escapeHTML(baseName).replace(".torrent", "")
+                           .replace("%20", " ").replace("%27", "\'").replace("%5B", "[").replace("%5D", "]"));
+                    buf.append("\">")
+                       .append(toImg("magnet", ""))
+                       .append("</a>");
                 }
 
-            buf.append("<a class=\"torrentlink\" href=\"").append(_contextPath).append('/')
-               .append(baseName).append("\" title=\"").append(DataHelper.escapeHTML(baseName)
-               .replace("%20", " ").replace("%27", "\'").replace("%5B", "[").replace("%5D", "]"))
-               .append("\">")
-               .append(toImg("torrent", ""))
-               .append("</a>")
-               .append("</th></tr>\n");
-            buf.append("<tr id=\"torrentInfoStats\">");
-            buf.append("<td colspan=\"3\"><span class=\"nowrap\">");
-            toThemeImg(buf, "file");
-            buf.append("<b>")
-               .append(_t("Size"))
-               .append(":</b> ")
-               .append(formatSize(snark.getTotalLength()));
-            if (meta != null) {
-                List<List<String>> files = meta.getFiles();
-                int fileCount = files != null ? files.size() : 1;
+                buf.append("<a class=\"torrentlink\" href=\"").append(_contextPath).append('/')
+                   .append(baseName).append("\" title=\"").append(DataHelper.escapeHTML(baseName)
+                   .replace("%20", " ").replace("%27", "\'").replace("%5B", "[").replace("%5D", "]"))
+                   .append("\">")
+                   .append(toImg("torrent", ""))
+                   .append("</a>")
+                   .append("</th></tr>\n");
+                buf.append("<tr id=\"torrentInfoStats\">");
+                buf.append("<td colspan=\"3\"><span class=\"nowrap\">");
+                toThemeImg(buf, "file");
+                buf.append("<b>")
+                   .append(_t("Size"))
+                   .append(":</b> ")
+                   .append(formatSize(snark.getTotalLength()));
+                if (meta != null) {
+                    List<List<String>> files = meta.getFiles();
+                    int fileCount = files != null ? files.size() : 1;
+                    buf.append("</span>&nbsp;<span class=\"nowrap\">");
+                    toThemeImg(buf, "file");
+                    buf.append("<b>")
+                       .append(_t("Files"))
+                       .append(":</b> ")
+                       .append(fileCount);
+                }
+                int pieces = snark.getPieces();
+                double completion = (pieces - snark.getNeeded()) / (double) pieces;
                 buf.append("</span>&nbsp;<span class=\"nowrap\">");
                 toThemeImg(buf, "file");
                 buf.append("<b>")
-                   .append(_t("Files"))
+                   .append(_t("Pieces"))
                    .append(":</b> ")
-                   .append(fileCount);
-            }
-            int pieces = snark.getPieces();
-            double completion = (pieces - snark.getNeeded()) / (double) pieces;
-            buf.append("</span>&nbsp;<span class=\"nowrap\">");
-            toThemeImg(buf, "file");
-            buf.append("<b>")
-               .append(_t("Pieces"))
-               .append(":</b> ")
-               .append(pieces)
-               .append(" @ ")
-               .append(formatSize(snark.getPieceLength(0)).replace("iB", ""));
+                   .append(pieces)
+                   .append(" @ ")
+                   .append(formatSize(snark.getPieceLength(0)).replace("iB", ""));
 
-            // up ratio
-            buf.append("</span>&nbsp;<span class=\"nowrap\">");
-            toThemeImg(buf, "head_tx");
-            buf.append("<b>")
-               .append(_t("Upload ratio"))
-               .append(":</b> ");
-            long uploaded = snark.getUploaded();
-            if (uploaded > 0) {
-                double ratio = uploaded / ((double) snark.getTotalLength());
-                buf.append((new DecimalFormat("0.00")).format(ratio));
-                buf.append("&#8239;x");
-            } else {
-                buf.append('0');
-            }
-
-            buf.append("</span>&nbsp;<span id=\"completion\" class=\"nowrap\">");
-            toThemeImg(buf, "head_rx");
-            buf.append("<b>");
-            if (completion < 1.0)
-                buf.append(_t("Completion")).append(":</b> ").append((new DecimalFormat("0.0%")).format(completion).replace("0.0%","0%"));
-            else
-                buf.append(_t("Complete")).append("</b>");
-
-            if (meta != null) {
-                String cby = meta.getCreatedBy();
-                if (cby != null && cby.length() > 0) {
-                    buf.append("<span id=\"metainfo\" hidden>");
-                    if (cby.length() > 128)
-                        cby = cby.substring(0, 128);
-                    toThemeImg(buf, "author");
-                    buf.append("<b>")
-                       .append(_t("Created by")).append(":</b> ")
-                       .append(DataHelper.stripHTML(cby));
+                // up ratio
+                buf.append("</span>&nbsp;<span class=\"nowrap\">");
+                toThemeImg(buf, "head_tx");
+                buf.append("<b>")
+                   .append(_t("Upload ratio"))
+                   .append(":</b> ");
+                long uploaded = snark.getUploaded();
+                if (uploaded > 0) {
+                    double ratio = uploaded / ((double) snark.getTotalLength());
+                    buf.append((new DecimalFormat("0.00")).format(ratio));
+                    buf.append("&#8239;x");
+                } else {
+                    buf.append('0');
                 }
 
-                long dat = meta.getCreationDate();
-                // needs locale configured for automatic translation
-                SimpleDateFormat fmt = new SimpleDateFormat("HH:mm, EEE dd MMMM yyyy");
-                fmt.setTimeZone(SystemVersion.getSystemTimeZone(_context));
-                long[] dates = _manager.getSavedAddedAndCompleted(snark);
-                if (dat > 0 && cby == null)
-                    buf.append("<span id=\"metainfo\" hidden>");
-                else if (dat > 0 && cby != null)
-                    buf.append("<br>");
-                if (dat > 0) {
-                    String date = fmt.format(new Date(dat));
-                    toThemeImg(buf, "create");
-                    buf.append("<b>").append(_t("Created")).append(":</b> ").append(date);
-                }
-                if (dat <= 0 && dates[0] > 0)
-                    buf.append("<span id=\"metainfo\" hidden>");
-                if (dates[0] > 0) {
-                    String date = fmt.format(new Date(dates[0]));
-                    if (dat > 0)
+                buf.append("</span>&nbsp;<span id=\"completion\" class=\"nowrap\">");
+                toThemeImg(buf, "head_rx");
+                buf.append("<b>");
+                if (completion < 1.0)
+                    buf.append(_t("Completion")).append(":</b> ").append((new DecimalFormat("0.0%")).format(completion).replace("0.0%","0%"));
+                else
+                    buf.append(_t("Complete")).append("</b>");
+
+                if (meta != null) {
+                    String cby = meta.getCreatedBy();
+                    if (cby != null && cby.length() > 0) {
+                        buf.append("<span id=\"metainfo\" hidden>");
+                        if (cby.length() > 128)
+                            cby = cby.substring(0, 128);
+                        toThemeImg(buf, "author");
+                        buf.append("<b>")
+                           .append(_t("Created by")).append(":</b> ")
+                           .append(DataHelper.stripHTML(cby));
+                    }
+
+                    long dat = meta.getCreationDate();
+                    // needs locale configured for automatic translation
+                    SimpleDateFormat fmt = new SimpleDateFormat("HH:mm, EEE dd MMMM yyyy");
+                    fmt.setTimeZone(SystemVersion.getSystemTimeZone(_context));
+                    long[] dates = _manager.getSavedAddedAndCompleted(snark);
+                    if (dat > 0 && cby == null)
+                        buf.append("<span id=\"metainfo\" hidden>");
+                    else if (dat > 0 && cby != null)
                         buf.append("<br>");
-                    toThemeImg(buf, "add");
-                    buf.append("<b>").append(_t("Added")).append(":</b> ").append(date);
-                }
-                if (dates[1] > 0) {
-                    String date = fmt.format(new Date(dates[1]));
-                    buf.append("<br>").append(toImg("tick")).append("<b>").append(_t("Completed")).append(":</b> ").append(date);
-                }
-                if (dat > 0 || dates[0] > 0)
-                    buf.append("</span>");
-                buf.append("</span>"); // close #completion
-
-                // not including skipped files, but -1 when not running
-                long needed = snark.getNeededLength();
-                if (needed < 0) {
-                   // including skipped files, valid when not running
-                   needed = snark.getRemainingLength();
-                }
-                if (needed > 0) {
-                   buf.append("&nbsp;<span class=\"nowrap\">");
-                   toThemeImg(buf, "head_rx");
-                   buf.append("<b>")
-                      .append(_t("Remaining"))
-                      .append(":</b> ")
-                      .append(formatSize(needed))
-                      .append("</span>");
-                }
-                long skipped = snark.getSkippedLength();
-                if (skipped > 0) {
-                    buf.append("&nbsp;<span class=\"nowrap\">");
-                    toThemeImg(buf, "head_rx");
-                    buf.append("<b>").append(_t("Skipped")).append(":</b> ").append(formatSize(skipped)).append("</span");
-                }
-
-                // needs locale configured for automatic translation
-                fmt.setTimeZone(SystemVersion.getSystemTimeZone(_context));
-                if (storage != null) {
-                    dat = storage.getActivity();
                     if (dat > 0) {
                         String date = fmt.format(new Date(dat));
+                        toThemeImg(buf, "create");
+                        buf.append("<b>").append(_t("Created")).append(":</b> ").append(date);
+                    }
+                    if (dat <= 0 && dates[0] > 0)
+                        buf.append("<span id=\"metainfo\" hidden>");
+                    if (dates[0] > 0) {
+                        String date = fmt.format(new Date(dates[0]));
+                        if (dat > 0)
+                            buf.append("<br>");
+                        toThemeImg(buf, "add");
+                        buf.append("<b>").append(_t("Added")).append(":</b> ").append(date);
+                    }
+                    if (dates[1] > 0) {
+                        String date = fmt.format(new Date(dates[1]));
+                        buf.append("<br>").append(toImg("tick")).append("<b>").append(_t("Completed")).append(":</b> ").append(date);
+                    }
+                    if (dat > 0 || dates[0] > 0)
+                        buf.append("</span>");
+                    buf.append("</span>"); // close #completion
+
+                    // not including skipped files, but -1 when not running
+                    long needed = snark.getNeededLength();
+                    if (needed < 0) {
+                       // including skipped files, valid when not running
+                       needed = snark.getRemainingLength();
+                    }
+                    if (needed > 0) {
+                       buf.append("&nbsp;<span class=\"nowrap\">");
+                       toThemeImg(buf, "head_rx");
+                       buf.append("<b>")
+                          .append(_t("Remaining"))
+                          .append(":</b> ")
+                          .append(formatSize(needed))
+                          .append("</span>");
+                    }
+                    long skipped = snark.getSkippedLength();
+                    if (skipped > 0) {
                         buf.append("&nbsp;<span class=\"nowrap\">");
-                        toThemeImg(buf, "torrent");
-                        buf.append("<b>").append(_t("Last activity")).append(":</b> ").append(date).append("</span>");
+                        toThemeImg(buf, "head_rx");
+                        buf.append("<b>").append(_t("Skipped")).append(":</b> ").append(formatSize(skipped)).append("</span");
+                    }
+
+                    // needs locale configured for automatic translation
+                    fmt.setTimeZone(SystemVersion.getSystemTimeZone(_context));
+                    if (storage != null) {
+                        dat = storage.getActivity();
+                        if (dat > 0) {
+                            String date = fmt.format(new Date(dat));
+                            buf.append("&nbsp;<span class=\"nowrap\">");
+                            toThemeImg(buf, "torrent");
+                            buf.append("<b>").append(_t("Last activity")).append(":</b> ").append(date).append("</span>");
+                        }
                     }
                 }
-            }
-            buf.append("</td></tr>\n");
+                buf.append("</td></tr>\n");
 
-            List<List<String>> alist = meta.getAnnounceList();
-            if (alist != null && !alist.isEmpty()) {
-                buf.append("<tr id=\"trackers\" title=\"")
-                   .append(_t("Only I2P trackers will be used; non-I2P trackers are displayed for informational purposes only"))
-                   .append("\"><td colspan=\"3\">");
-                toThemeImg(buf, "torrent");
-                buf.append("<b>")
-                   .append(_t("Trackers")).append(":</b> ");
+                List<List<String>> alist = meta.getAnnounceList();
+                if (alist != null && !alist.isEmpty()) {
+                    buf.append("<tr id=\"trackers\" title=\"")
+                       .append(_t("Only I2P trackers will be used; non-I2P trackers are displayed for informational purposes only"))
+                       .append("\"><td colspan=\"3\">");
+                    toThemeImg(buf, "torrent");
+                    buf.append("<b>")
+                       .append(_t("Trackers")).append(":</b> ");
 
-                for (List<String> alist2 : alist) {
-                    if (alist2.isEmpty()) {
-                        buf.append("<span class=\"info_tracker primary\">");
+                    for (List<String> alist2 : alist) {
+                        if (alist2.isEmpty()) {
+                            buf.append("<span class=\"info_tracker primary\">");
+                            boolean more = false;
+                            for (String s : alist2) {
+                                if (more)
+                                    buf.append("<span class=\"info_tracker\">");
+                                else
+                                    more = true;
+                                buf.append(getShortTrackerLink(DataHelper.stripHTML(s)
+                                   .replaceAll(cryptb32, "tracker.crypthost.i2p")
+                                   .replaceAll(freedomb32, "torrfreedom.i2p")
+                                   .replaceAll(lodikonb32, "tracker.lodikon.i2p")
+                                   .replaceAll(otdgb32, "opentracker.dg2.i2p")
+                                   .replaceAll(odiftb32, "opendiftracker.i2p")
+                                   .replaceAll(theblandb32, "tracker.thebland.i2p"), snark.getInfoHash()));
+                                buf.append("</span> ");
+                            }
+                        }
+                        buf.append("<span class=\"info_tracker\">");
                         boolean more = false;
                         for (String s : alist2) {
                             if (more)
@@ -3897,23 +3914,6 @@ public class I2PSnarkServlet extends BasicServlet {
                             buf.append("</span> ");
                         }
                     }
-                    buf.append("<span class=\"info_tracker\">");
-                    boolean more = false;
-                    for (String s : alist2) {
-                        if (more)
-                            buf.append("<span class=\"info_tracker\">");
-                        else
-                            more = true;
-                        buf.append(getShortTrackerLink(DataHelper.stripHTML(s)
-                           .replaceAll(cryptb32, "tracker.crypthost.i2p")
-                           .replaceAll(freedomb32, "torrfreedom.i2p")
-                           .replaceAll(lodikonb32, "tracker.lodikon.i2p")
-                           .replaceAll(otdgb32, "opentracker.dg2.i2p")
-                           .replaceAll(odiftb32, "opendiftracker.i2p")
-                           .replaceAll(theblandb32, "tracker.thebland.i2p"), snark.getInfoHash()));
-                        buf.append("</span> ");
-                    }
-                }
                     buf.append("</td></tr>\n");
                 } else {
                     if (meta != null) {
