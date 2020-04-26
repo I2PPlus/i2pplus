@@ -885,30 +885,27 @@ tr.active .snarkTorrentStatus {
 
 .snarkTorrentInfo .infohash {
     margin: 0 2px;
-    padding: 6px 3px 6px 7px !important;
+    padding: 6px 3px 6px 24px !important;
     display: inline-block;
     line-height: 1;
+    background: url(images/hash.png) 7px center no-repeat, linear-gradient(to bottom, #030, #010) !important;
+    background-size: 14px 14px, 100% 100% !important;
+}
+
+.snarkTorrentInfo .infohash::-moz-selection {
+    background: #cc0 !important;
+    color: #000 !important;
 }
 
 @media screen and (max-width: 1500px) {
 .snarkTorrentInfo .infohash {
     padding: 5px 3px 8px 7px !important;
+    background: linear-gradient(to bottom, #030, #010) !important;
 }
 .torrentlink, .magnetlink {
     padding: 7px 5px 3px 3px !important;
 }
 }
-
-/*.snarkTorrentInfo .infohash::before {
-    margin: 0 3px 0 2px;
-    content: "";
-    display: inline-block;
-    width: 16px;
-    height: 16px;
-    vertical-align: text-top;
-    background: url(/i2psnark/.resources/icons/magnet.png) center center no-repeat;
-    background-size: 14px auto;
-}*/
 
 .snarkDirInfo th img {
     margin: 0 !important;
@@ -5047,9 +5044,7 @@ tfoot .snarkTorrentRateUp:not(:empty)::before,tfoot .snarkTorrentUploaded:not(:e
 
 #metacomment div {
     padding: 4px 4px 4px 0;
-    max-height: 80px;
     overflow-y: auto;
-/*    white-space: pre-wrap;*/
 }
 
 .iframed .configsection, .iframed #trackers, .iframed .mainsection#snarkInfo {

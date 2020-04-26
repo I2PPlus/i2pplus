@@ -5891,8 +5891,6 @@ tfoot .snarkTorrentRateUp:not(:empty)::before,tfoot .snarkTorrentUploaded:not(:e
 
 #metacomment div {
     padding: 4px 8px;
-    max-height: 80px;
-    overflow-y: auto;
 }
 
 .infohash {
@@ -5935,26 +5933,23 @@ tfoot .snarkTorrentRateUp:not(:empty)::before,tfoot .snarkTorrentUploaded:not(:e
 
 .snarkTorrentInfo .infohash {
     margin: 0 5px !important;
-    padding: 1px 4px 1px;
+    padding: 4px 4px 4px 5px;
     max-width: 120px;
     box-shadow: 0 0 0 1px #202, 0 0 2px 2px rgba(16,0,16,0.8), inset 0 0 0 1px #dd0;
     background: linear-gradient(to bottom, #dd0 50%, #cc0 50%);
 }
 
-.snarkTorrentInfo .infohash::before {
-    margin-right: 3px;
-    content: "";
-    display: inline-block;
-    width: 16px;
-    height: 16px;
-    vertical-align: text-top;
-    background: url(/i2psnark/.resources/icons/magnet.png) center center no-repeat;
-    background-size: 14px auto;
+@media screen and (min-width: 1500px) {
+.snarkTorrentInfo .infohash {
+    padding: 4px 4px 4px 20px;
+    background: url(images/hash.png) 4px center no-repeat, linear-gradient(to bottom, #dd0 50%, #cc0 50%);
+    background-size: 14px 14px, 100% 100% !important;
+}
 }
 
 @media screen and (max-width: 900px) {
 .snarkTorrentInfo .infohash {
-    padding: 3px 3px 2px !important;
+    padding: 3px 0 2px 5px !important;
     max-width: 90px;
     font-size: 8.5pt !important;
 }
@@ -6136,9 +6131,10 @@ body:not(.iframed) .mainsection .snarkComments {
 
 #metacomment .commentWrapper {
     margin: 5px;
-    padding: 9px 15px;
+    padding: 9px 15px 9px 34px;
     color: #ccc;
     text-shadow: 0 1px 1px #000;
     box-shadow: inset 0 0 0 1px #313, inset 0 0 0 1px #737, 0 0 1px 0 rgba(0,0,0,0.3);
-    background: #202;
+    background: #202 url(images/button_forum_hover.png) 10px center no-repeat;
+    background-size: auto 18px;
 }
