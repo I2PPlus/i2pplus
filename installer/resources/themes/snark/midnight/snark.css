@@ -989,7 +989,7 @@ th .magnetlink img, th .torrentlink img {
 
 .snarkTorrentInfo .infohash {
     margin: 0 6px 0 10px;
-    padding: 2px 2px 2px 4px;
+    padding: 4px 2px 4px 4px;
     display: inline-block;
     line-height: 120%;
     vertical-align: middle;
@@ -998,21 +998,11 @@ th .magnetlink img, th .torrentlink img {
     background: #bb0;
 }
 
-.snarkTorrentInfo .infohash::before {
-    margin-right: 4px;
-    width: 18px;
-    height: 18px;
-    display: inline-block;
-    vertical-align: text-top;
-    background: url(/i2psnark/.resources/icons/magnet.png) left center no-repeat;
-    background-size: 18px auto;
-    content: "";
-    filter: drop-shadow(0 1px 1px rgba(32,32,0,.6)) opacity(.8);
-}
-
-@media screen and (max-width: 950px) {
-.snarkTorrentInfo .infohash::before {
-    height: 12px;
+@media screen and (min-width: 1500px) {
+.snarkTorrentInfo .infohash {
+    padding: 4px 4px 4px 20px;
+    background: #bb0 url(../ubergine/images/hash.png) 4px center no-repeat;
+    background-size: 14px 14px !important;
 }
 }
 
