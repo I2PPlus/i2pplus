@@ -1125,6 +1125,18 @@ thead img.disable, img.disable:hover {
     font-weight: bold !important;
 }
 
+.snarkTorrentName a {
+    margin-bottom: -1px !important;
+    padding: 5px 0 !important;
+}
+
+@media screen and (max-width: 1500px) {
+.snarkTorrentName a {
+    margin: -3px 0 -2px !important;
+    padding: 4px 0 6px !important;
+}
+}
+
 .snarkTorrentName a:hover, .snarkFileName a:hover, .snarkTorrentName:hover a, .snarkDirInfo:hover a {
     box-shadow: none !important;
     background: none !important;
