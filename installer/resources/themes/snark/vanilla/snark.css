@@ -1012,7 +1012,7 @@ _:-ms-lang(x), .snarkTorrents tbody tr:hover, .snarkDirInfo tbody tr:hover {
 }
 
 .snarkTorrentInfo .infohash {
-    margin: 0 0 0 10px;
+    margin: 0 1px 0 10px;
     padding: 3px 1px 2px 6px;
     border-radius: 1px;
     background: #fff5ef;
@@ -1736,7 +1736,7 @@ a.controld img, a.controld:hover img, a.controld:focus img, a.controld:active im
 
 input.accept, input.disabled[name="savepri"] {
     background: url(images/accept.png) no-repeat 5px center, linear-gradient(to bottom, #eeecea 50%, #ded9d5 50%);
-    padding: 5px 5px 5px 21px !important;
+    padding: 5px 6px 5px 21px !important;
 }
 
 input.accept:hover, input.accept:focus {
@@ -1745,7 +1745,7 @@ input.accept:hover, input.accept:focus {
 
 input.add {
     background: url(images/add.png) no-repeat 5px center, linear-gradient(to bottom, #eeecea 50%, #ded9d5 50%);
-    padding: 5px 5px 5px 21px !important;
+    padding: 5px 6px 5px 21px !important;
 }
 
 input.add:hover, input.add:focus {
@@ -1754,7 +1754,7 @@ input.add:hover, input.add:focus {
 
 input.cancel {
     background: url(images/cancel.png) no-repeat 5px center, linear-gradient(to bottom, #eeecea 50%, #ded9d5 50%);
-    padding: 5px 5px 5px 21px !important;
+    padding: 5px 6px 5px 21px !important;
 }
 
 input.cancel:hover, input.cancel:focus {
@@ -1763,7 +1763,7 @@ input.cancel:hover, input.cancel:focus {
 
 input.create {
     background: url(images/create.png) no-repeat 5px center, linear-gradient(to bottom, #eeecea 50%, #ded9d5 50%);
-    padding: 5px 5px 5px 21px !important;
+    padding: 5px 6px 5px 21px !important;
 }
 
 input.create:hover, input.create:focus {
@@ -1772,7 +1772,7 @@ input.create:hover, input.create:focus {
 
 input.delete {
     background: url(images/nuke.png) no-repeat 5px center, linear-gradient(to bottom, #eeecea 50%, #ded9d5 50%);
-    padding: 5px 5px 5px 21px !important;
+    padding: 5px 6px 5px 21px !important;
 }
 
 input.delete:hover, input.delete:focus {
@@ -1781,7 +1781,7 @@ input.delete:hover, input.delete:focus {
 
 input.reload {
     background: url(images/restore.png) no-repeat 5px center, linear-gradient(to bottom, #eeecea 50%, #ded9d5 50%);
-    padding: 5px 5px 5px 21px !important;
+    padding: 5px 6px 5px 21px !important;
 }
 
 input.reload:hover, input.reload:focus {
@@ -1790,7 +1790,7 @@ input.reload:hover, input.reload:focus {
 
 input.reload[name="recheck"], input.disabled[name="recheck"] {
     background: url(images/recheck.png) no-repeat 5px center, linear-gradient(to bottom, #eeecea 50%, #ded9d5 50%);
-    padding: 5px 5px 5px 21px !important;
+    padding: 5px 6px 5px 21px !important;
     margin: 6px 2px;
 }
 
@@ -1800,7 +1800,7 @@ input.reload[name="recheck"]:hover, input.reload[name="recheck"]:focus {
 
 input.starttorrent {
     background: url(images/next.png) no-repeat 5px center, linear-gradient(to bottom, #eeecea 50%, #ded9d5 50%);
-    padding: 5px 5px 5px 18px !important;
+    padding: 5px 6px 5px 18px !important;
     margin: 6px;
 }
 
@@ -1810,7 +1810,7 @@ input.starttorrent:hover, input.starttorrent:focus {
 
 input.stoptorrent {
     background: url(images/btn_stop.png) no-repeat 5px center, linear-gradient(to bottom, #eeecea 50%, #ded9d5 50%);
-    padding: 5px 5px 5px 21px !important;
+    padding: 5px 6px 5px 21px !important;
     margin: 4px 5px;
 }
 
@@ -4615,9 +4615,6 @@ tfoot .snarkTorrentRateUp:not(:empty)::before,tfoot .snarkTorrentUploaded:not(:e
 
 #metacomment div {
     padding: 4px 4px 4px 0;
-    max-height: 80px;
-    overflow-y: auto;
-/*    white-space: pre-wrap;*/
 }
 
 .iframed .configsection, .iframed #trackers, .iframed .mainsection#snarkInfo {
@@ -4803,7 +4800,7 @@ input[type="checkbox"][disabled]:checked, input[type="radio"][disabled]:checked,
 
 #metacomment .commentWrapper {
     margin: 7px 6px 6px;
-    padding: 9px 10px 10px;
+    padding: 7px 11px 8px;
     box-shadow: 0 0 0 1px #fff inset, 0 0 1px 0 rgba(77, 69, 62, 0.7);
     background: #fff6df;
 }
