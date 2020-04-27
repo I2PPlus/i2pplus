@@ -4412,6 +4412,57 @@ hr.debug:nth-child(n+7) {
     vertical-align: text-bottom;
 }
 
+.torrentlink {
+    margin-right: -1px;
+}
+
+.magnetlink img, .torrentlink img, .magnetlink img:hover, .torrentlink img:hover {
+    margin: 0 !important;
+    padding: 0 !important;
+    display: inline-block;
+    vertical-align: middle;
+    filter: none !important;
+}
+
+.snarkTorrentInfo .infohash {
+    margin-right: 3px;
+}
+
+.magnetlink, .torrentlink {
+    margin: 0 1px;
+    padding: 3px !important;
+}
+
+@media screen and (min-width: 1500px) {
+.snarkTorrentInfo .infohash {
+    padding: 1px 0 1px 22px;
+    max-width: 140px;
+    background: #f8f8ff url(../light/images/hash.png) 6px center no-repeat;
+    background-size: 14px 14px !important;
+}
+
+.magnetlink, .torrentlink {
+    margin: 0 2px;
+    vertical-align: middle;
+    border: 1px solid #ccf;
+    border-radius: 1px;
+    background: linear-gradient(to bottom, #fff 50%, rgba(255, 255, 255, 0.6) 50%, rgba(240, 240, 255, 0.4)) #e7e7ff;
+}
+
+.magnetlink:hover, .magnetlink:focus, .torrentlink:hover, .torrentlink:focus {
+    border: 1px solid #f60;
+    background: linear-gradient(to bottom, #fcfaf7 50%, #ffe8bf 50%, #efd9b3);
+}
+
+.magnetlink:active, .torrentlink:active {
+    box-shadow: inset 2px 2px 3px #7f3000;
+}
+}
+
+.torrentlink {
+    margin-right: -3px;
+}
+
 tfoot .snarkTorrentRateDown:not(:empty)::before, tfoot .snarkTorrentDownloaded:not(:empty)::before,
 tfoot .snarkTorrentRateUp:not(:empty)::before,tfoot .snarkTorrentUploaded:not(:empty)::before {
     margin-top: -3px;
@@ -4434,10 +4485,8 @@ tfoot .snarkTorrentRateUp:not(:empty)::before,tfoot .snarkTorrentUploaded:not(:e
 }
 
 .snarkCommentInfo th input[type="submit"] {
-/*    font-size: 0 !important;*/
-/*    padding: 10px 12px !important;*/
-    float: none !important;
     display: inline-block;
+    float: none !important;
     vertical-align: middle;
 }
 
@@ -4447,8 +4496,8 @@ tfoot .snarkTorrentRateUp:not(:empty)::before,tfoot .snarkTorrentUploaded:not(:e
 }
 
 #commentstoggle {
-   display: inline-block;
-   margin-left: 10px;
+    margin-left: 10px;
+    display: inline-block;
     vertical-align: middle;
 }
 
@@ -4473,7 +4522,6 @@ th #nameRequired, th .commentAuthorName {
     padding: 0 4px;
     max-height: 80px;
     overflow-y: auto;
-/*    white-space: pre-wrap;*/
 }
 
 .iframed .configsection, .iframed #trackers, .iframed .mainsection#snarkInfo {
