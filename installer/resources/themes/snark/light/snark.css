@@ -1500,8 +1500,8 @@ input:checked + .toggleview:active > img {
 }
 
 .snarkTorrentInfo .infohash {
-    margin: 0 0 0 10px;
-    padding: 2px 4px 1px;
+    margin: 0 3px 0 10px;
+    padding: 4px 0 4px 4px	;
     max-width: 140px !important;
     line-height: 1;
     border-radius: 1px;
@@ -1509,27 +1509,18 @@ input:checked + .toggleview:active > img {
     box-shadow: 0 0 0 1px #ccf;
 }
 
-.snarkTorrentInfo .infohash::before {
-    margin: -1px 3px 0 0;
-    content: "";
-    display: inline-block;
-    width: 16px;
-    height: 16px;
-    vertical-align: text-top;
-    background: url(/i2psnark/.resources/icons/magnet.png) center center no-repeat;
-    background-size: 14px auto;
-}
-
 @media screen and (max-width: 1024px) {
 .snarkTorrentInfo .infohash {
     max-width: 120px !important;
     font-size: 8.5pt !important;
 }
+}
 
-.snarkTorrentInfo .infohash::before {
-    width: 14px;
-    height: 14px;
-    background-size: 12px auto !important;
+@media screen and (min-width: 1500px) {
+.snarkTorrentInfo .infohash {
+    padding: 4px 4px 5px 20px;
+    background: #f8f8ff url(images/hash.png) 4px center no-repeat;
+    background-size: 14px 14px !important;
 }
 }
 
@@ -1542,6 +1533,34 @@ input:checked + .toggleview:active > img {
 
 .snarkMessages .infohash:hover {
     color: #070;
+}
+
+.magnetlink, .torrentlink {
+    margin: 0 2px;
+    padding: 3px;
+    vertical-align: middle;
+    border: 1px solid #ccf;
+    border-radius: 1px;
+    background: linear-gradient(to bottom, #fff 50%, rgba(255, 255, 255, 0.6) 50%, rgba(240, 240, 255, 0.4)) #e7e7ff;
+}
+
+.magnetlink:hover, .magnetlink:focus, .torrentlink:hover, .torrentlink:focus {
+    border: 1px solid #f60;
+    background: linear-gradient(to bottom, #fcfaf7 50%, #ffe8bf 50%, #efd9b3);
+}
+
+.magnetlink:active, .torrentlink:active {
+    box-shadow: inset 2px 2px 3px #7f3000;
+}
+
+.torrentlink {
+    margin-right: -1px;
+}
+
+.magnetlink img, .torrentlink img, .magnetlink img:hover, .torrentlink img:hover {
+    margin: 0;
+    padding: 0;
+    filter: none !important;
 }
 
 .magnetLabel {
