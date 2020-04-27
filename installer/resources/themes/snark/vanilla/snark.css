@@ -1013,26 +1013,19 @@ _:-ms-lang(x), .snarkTorrents tbody tr:hover, .snarkDirInfo tbody tr:hover {
 
 .snarkTorrentInfo .infohash {
     margin: 0 0 0 10px;
-    padding: 1px 4px;
+    padding: 3px 1px 2px 6px;
     border-radius: 1px;
     background: #fff5ef;
     box-shadow: 0 0 0 1px #cfc6c0;
 }
 
-.snarkTorrentInfo th .infohash::before {
-    margin: 0 3px 1px 0;
-    content: "";
-    display: inline-block;
-    width: 16px;
-    height: 16px;
-    vertical-align: middle;
-    background: url(/i2psnark/.resources/icons/magnet.png) center center no-repeat;
-    background-size: 16px 16px;
-    mix-blend-mode: luminosity;
+@media screen and (min-width: 1500px) {
+.snarkTorrentInfo .infohash {
+    padding: 2px 0 2px 22px !important;
+    max-width: 140px;
+    background: #fff5ef url(../light/images/hash.png) 6px center no-repeat;
+    background-size: 14px 14px !important;
 }
-
-.snarkTorrentInfo th .infohash:hover::before {
-    mix-blend-mode: normal;
 }
 
 .infohash::-moz-selection {
