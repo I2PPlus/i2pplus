@@ -19,7 +19,7 @@ web-out.xml
 *.bak
 *.orig
 git.rev
-override.properties
+#override.properties
 
 # Temporary/build dirs
 build/
@@ -45,7 +45,7 @@ launchers/project/target
 .pc/
 
 # Build property overrides
-/override.properties
+#/override.properties
 
 # Reporting
 *.fba
