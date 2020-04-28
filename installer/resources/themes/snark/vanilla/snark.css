@@ -919,7 +919,7 @@ img[src$="details.png"] {
 }
 
 .snarkTorrentInfo th:first-child img, #trackers td img, #torrentInfoStats img {
-    margin: 1px 3px 1px 6px !important;
+    margin: -1px 3px 1px 6px !important;
     image-rendering: -webkit-optimize-contrast;
     mix-blend-mode: luminosity;
 }
