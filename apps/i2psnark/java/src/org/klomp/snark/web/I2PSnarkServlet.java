@@ -3771,7 +3771,7 @@ public class I2PSnarkServlet extends BasicServlet {
                 buf.append("</span>&nbsp;<span class=\"nowrap\">");
                 toThemeImg(buf, "head_tx");
                 buf.append("<b>")
-                   .append(_t("Upload ratio"))
+                   .append(_t("Upload ratio").replace("Upload", "Share"))
                    .append(":</b> ");
                 long uploaded = snark.getUploaded();
                 if (uploaded > 0) {
@@ -3786,7 +3786,8 @@ public class I2PSnarkServlet extends BasicServlet {
                 toThemeImg(buf, "head_rx");
                 buf.append("<b>");
                 if (completion < 1.0)
-                    buf.append(_t("Completion")).append(":</b> ").append((new DecimalFormat("0.0%")).format(completion).replace("0.0%","0%"));
+                    buf.append(_t("Completion")).append(":</b> ").append((new DecimalFormat("0.0%"))
+                       .format(completion).replace("0.0%","0%")).append("</b>");
                 else
                     buf.append(_t("Complete")).append("</b>");
 

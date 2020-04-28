@@ -574,7 +574,7 @@ public class SnarkManager implements CompleteListener, ClientApp {
         if (!_context.isRouterContext())
             return 0;
         try {
-       return Integer.parseInt(_config.getProperty(PROP_STARTUP_DELAY));
+            return Integer.parseInt(_config.getProperty(PROP_STARTUP_DELAY));
         } catch (NumberFormatException nfe) {
             return DEFAULT_STARTUP_DELAY;
         }
@@ -2591,7 +2591,9 @@ public class SnarkManager implements CompleteListener, ClientApp {
         public void run() {
             // don't bother delaying if auto start is false
             long delay = (60L * 1000) * getStartupDelayMinutes();
-            if (delay > 0 && shouldAutoStart()) {
+            if (delay == 0)
+                delay = 30000;
+            if (delay > 30000 && shouldAutoStart()) {
                 int id = _messages.addMessageNoEscape(_t("Adding torrents in {0}" + ".", DataHelper.formatDuration2(delay)));
                 try { Thread.sleep(delay); } catch (InterruptedException ie) {}
                 // Remove that first message
