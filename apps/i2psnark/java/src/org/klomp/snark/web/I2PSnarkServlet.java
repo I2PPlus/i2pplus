@@ -586,7 +586,9 @@ public class I2PSnarkServlet extends BasicServlet {
         String currentSort = req.getParameter("sort");
         boolean showSort = total > 1;
         out.write("<tr>\n<th class=\"snarkGraphicStatus\">");
-        String sort = ("-2".equals(currentSort)) ? "2" : "-2";
+//        String sort = ("-2".equals(currentSort)) ? "2" : "-2";
+        // show incomplete torrents at top on first click
+        String sort = ("2".equals(currentSort)) ? "-2" : "2";
         if (showSort) {
             out.write("<a href=\"" + _contextPath + '/' + getQueryString(req, null, null, sort));
             out.write("\">");
