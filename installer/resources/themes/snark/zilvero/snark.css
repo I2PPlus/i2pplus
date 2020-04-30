@@ -1601,6 +1601,17 @@ td.snarkTorrentAction input[type="image"] {
 	margin: 0 4px 0 6px;
 }
 
+@media screen and (min-width: 1500px) {
+.snarkTorrentInfo th:first-child img, #torrentinfostats img, #trackers img {
+	margin: -3px 5px 0 !important;
+	max-height: 18px !important;
+}
+
+#torrentInfoStats .nowrap {
+	margin-right: 6px;
+}
+}
+
 #torrentInfoStats img[src$="head_tx.png"], #torrentInfoStats img[src$="head_rx.png"] {
 	margin-right: 3px !important;
 }

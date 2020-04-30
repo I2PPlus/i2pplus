@@ -679,6 +679,20 @@ tt, .bucket, #bucketSet code {
     margin-right: 2px !important;
 }
 
+@media screen and (min-width: 1500px) {
+.snarkTorrentInfo th:first-child img, #torrentinfostats img, #trackers img {
+    margin: -3px 4px 0 !important;
+    max-height: 18px !important;
+}
+
+#torrentInfoStats .nowrap {
+    margin-right: 6px;
+}
+#torrentInfoStats img[src$="head_tx.png"], #torrentInfoStats img[src$="head_rx.png"] {
+    margin: -3px 3px 0 4px !important;
+}
+}
+
 .snarkTorrentInfo th {
     padding: 4px !important;
     text-align: left;

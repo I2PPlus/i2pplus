@@ -4612,9 +4612,6 @@ tfoot .snarkTorrentRateUp:not(:empty)::before,tfoot .snarkTorrentUploaded:not(:e
 
 #metacomment div {
     padding: 4px 8px;
-    max-height: 80px;
-    overflow-y: auto;
-/*    white-space: pre-wrap;*/
 }
 
 .iframed .configsection, .iframed #trackers, .iframed .mainsection#snarkInfo {
@@ -4793,14 +4790,10 @@ td.snarkTorrentStatus b, .lang_en td.snarkTorrentStatus b {
 
 #metacomment .commentWrapper {
     margin: 6px;
-    padding: 9px 10px 10px 32px;
+    padding: 10px 10px 10px 34px;
     border-color: #003;
     border-radius: 0;
     box-shadow: inset 0 0 0 1px #000, 0 0 1px 0 rgba(0,0,0,0.3);
     background: #000024 url(images/button_forum.png) 10px center no-repeat;
     background-size: 16px auto;
-}
-
-#metacomment .commentWrapper:not(:hover) {
-    scrollbar-width: thin;
 }
