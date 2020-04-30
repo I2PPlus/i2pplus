@@ -85,7 +85,7 @@ public final class ECIESAEADEngine {
         _muxedEngine = new MuxedEngine(ctx);
         _hkdf = new HKDF(ctx);
         _edhThread = new Elg2KeyFactory(ctx);
-
+        
         _context.statManager().createFrequencyStat("crypto.eciesAEAD.encryptNewSession",
                                                    "how frequently we encrypt to a new ECIES/AEAD+SessionTag session?",
                                                    "Encryption", new long[] { 60*60*1000l});
@@ -352,15 +352,16 @@ public final class ECIESAEADEngine {
             _log.debug("State before decrypt new session: " + state);
 
         // Elg2
-        byte[] tmp = new byte[KEYLEN];
-        System.arraycopy(data, 0, tmp, 0, KEYLEN);
-        PublicKey pk = Elligator2.decode(tmp);
+        byte[] xx = new byte[KEYLEN];
+        System.arraycopy(data, 0, xx, 0, KEYLEN);
+        // decode corrupts last byte, save for restore below
+        byte xx31 = xx[KEYLEN - 1];
+        PublicKey pk = Elligator2.decode(xx);
         if (pk == null) {
             // very unlikely
             if (_log.shouldDebug())
                 _log.debug("Elg2 decode fail NS");
-//            data[KEYLEN - 1] = xx31;
-            data[KEYLEN - 1] = 31;
+            data[KEYLEN - 1] = xx31;
             return null;
         }
         // rewrite in place, must restore below on failure
@@ -378,7 +379,8 @@ public final class ECIESAEADEngine {
                     _log.debug("State at failure: " + state);
             }
             // restore original data for subsequent ElG attempt
-            System.arraycopy(tmp, 0, data, 0, KEYLEN);
+            System.arraycopy(xx, 0, data, 0, KEYLEN - 1);
+            data[KEYLEN - 1] = xx31;
             return null;
         }
         // bloom filter here based on ephemeral key
@@ -480,13 +482,14 @@ public final class ECIESAEADEngine {
         // part 1 - handshake
         byte[] yy = new byte[KEYLEN];
         System.arraycopy(data, TAGLEN, yy, 0, KEYLEN);
+        // decode corrupts last byte, save for restore below
+        byte yy31 = yy[KEYLEN - 1];
         PublicKey k = Elligator2.decode(yy);
         if (k == null) {
             // very unlikely
             if (_log.shouldDebug())
                 _log.debug("Elg2 decode fail NSR");
-//            data[TAGLEN + KEYLEN - 1] = yy31;
-            data[TAGLEN + KEYLEN - 1] = 31;
+            data[TAGLEN + KEYLEN - 1] = yy31;
             return null;
         }
         if (_log.shouldDebug())
@@ -506,7 +509,8 @@ public final class ECIESAEADEngine {
             }
             // restore original data for subsequent ElG attempt
             // unlikely since we already matched the tag
-            System.arraycopy(yy, 0, data, TAGLEN, KEYLEN);
+            System.arraycopy(yy, 0, data, TAGLEN, KEYLEN - 1);
+            data[TAGLEN + KEYLEN - 1] = yy31;
             return null;
         }
         if (_log.shouldDebug())
@@ -681,7 +685,7 @@ public final class ECIESAEADEngine {
      * No new session key
      * This is the one called from GarlicMessageBuilder and is the primary entry point.
      *
-     * @param target public key to which the data should be encrypted.
+     * @param target public key to which the data should be encrypted. 
      * @param priv local private key to encrypt with, from the leaseset
      * @param callback may be null, if non-null an ack will be requested (except NS/NSR)
      * @return encrypted data or null on failure
@@ -983,7 +987,7 @@ public final class ECIESAEADEngine {
         public PLCallback() {
             this(null, null);
         }
-
+ 
         /**
          * ES
          * @param keyManager only for ES, otherwise null
