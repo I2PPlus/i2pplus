@@ -198,27 +198,33 @@ class Sorters {
 
         public int compareIt(Snark l, Snark r) {
             int rv = getStatus(l) - getStatus(r);
-            if (rv != 0)
+//            if (rv != 0)
+            if (rv != 50)
                 return rv;
             // use reverse remaining as first tie break
-            return compLong(r.getNeededLength(), l.getNeededLength());
+//            return compLong(r.getNeededLength(), l.getNeededLength());
+            return compLong(l.getNeededLength(), r.getNeededLength());
         }
 
         private static int getStatus(Snark snark) {
-            long remaining = snark.getRemainingLength(); 
+            long remaining = snark.getRemainingLength();
             if (snark.isStopped()) {
                 if (remaining < 0)
-                    return 10;
+//                    return 10;
+                    return 85;
                 if (remaining > 0)
-                    return 5;
-                return 0;
+//                    return 5;
+                    return 55;
+//                return 0;
+                return 50;
             }
             if (snark.isStarting())
                 return 15;
             if (snark.isAllocating())
                 return 20;
             if (remaining < 0)
-                return 15; // magnet
+//                return 15; // magnet
+                return 45; // magnet
             if (remaining == 0)
                 return 100;
             if (snark.isChecking())
@@ -228,8 +234,9 @@ class Sorters {
             if (snark.getPeerCount() <= 0)
                 return 40;
             if (snark.getDownloadRate() <= 0)
-                return 50;
-            return 60;
+//            return 60;
+                return 35;
+            return 5;
         }
     }
 
@@ -256,20 +263,25 @@ class Sorters {
         public ETAComparator(boolean rev, String lang) { super(rev, lang); }
 
         public int compareIt(Snark l, Snark r) {
-            return compLong(eta(l), eta(r));
+//            return compLong(eta(l), eta(r));
+            return compLong(eta(r), eta(l));
         }
 
         private static long eta(Snark snark) {
-            long needed = snark.getNeededLength(); 
+            long needed = snark.getNeededLength();
+            if (snark.isStopped())
+                return Long.MAX_VALUE - 1;
             if (needed <= 0)
-                return 0;
+//                return 0;
+                return Long.MAX_VALUE;
             long total = snark.getTotalLength();
             if (needed > total)
                 needed = total;
             long downBps = snark.getDownloadRate();
             if (downBps > 0)
                 return needed / downBps;
-            return Long.MAX_VALUE;
+//            return Long.MAX_VALUE;
+            return Long.MAX_VALUE - 2;
         }
     }
 
