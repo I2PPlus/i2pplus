@@ -294,7 +294,17 @@
                 <%=intl._t("Encryption types")%>
             </th>
         </tr>
+<%
+        if (!editBean.canChangeEncType(curTunnel)) {
+%>
+        <tr title="<%=intl._t("To change encryption type, stop the tunnel first")%>">
+<%
+        } else {
+%>
         <tr>
+<%
+        }
+%>
             <td colspan="2">
                 <span class="multiOption">
                     <label><input value="0" type="radio" id="ElGamal-2048" name="encType" <%=(has0 ? " checked=\"checked\"" : edisabled)%> class="tickbox" />
