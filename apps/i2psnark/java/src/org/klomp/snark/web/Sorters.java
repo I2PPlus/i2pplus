@@ -225,6 +225,8 @@ class Sorters {
             if (remaining < 0)
 //                return 15; // magnet
                 return 45; // magnet
+            if (remaining == 0 && snark.getPeerCount() > 0)
+                return 99; // seeding torrents with peers
             if (remaining == 0)
                 return 100;
             if (snark.isChecking())
