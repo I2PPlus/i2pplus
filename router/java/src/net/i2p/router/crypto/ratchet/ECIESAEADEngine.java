@@ -85,7 +85,7 @@ public final class ECIESAEADEngine {
         _muxedEngine = new MuxedEngine(ctx);
         _hkdf = new HKDF(ctx);
         _edhThread = new Elg2KeyFactory(ctx);
-        
+
         _context.statManager().createFrequencyStat("crypto.eciesAEAD.encryptNewSession",
                                                    "how frequently we encrypt to a new ECIES/AEAD+SessionTag session?",
                                                    "Encryption", new long[] { 60*60*1000l});
@@ -359,7 +359,8 @@ public final class ECIESAEADEngine {
             // very unlikely
             if (_log.shouldDebug())
                 _log.debug("Elg2 decode fail NS");
-            data[KEYLEN - 1] = xx31;
+//            data[KEYLEN - 1] = xx31;
+            data[KEYLEN - 1] = 31;
             return null;
         }
         // rewrite in place, must restore below on failure
@@ -484,7 +485,8 @@ public final class ECIESAEADEngine {
             // very unlikely
             if (_log.shouldDebug())
                 _log.debug("Elg2 decode fail NSR");
-            data[TAGLEN + KEYLEN - 1] = yy31;
+//            data[TAGLEN + KEYLEN - 1] = yy31;
+            data[TAGLEN + KEYLEN - 1] = 31;
             return null;
         }
         if (_log.shouldDebug())
@@ -679,7 +681,7 @@ public final class ECIESAEADEngine {
      * No new session key
      * This is the one called from GarlicMessageBuilder and is the primary entry point.
      *
-     * @param target public key to which the data should be encrypted. 
+     * @param target public key to which the data should be encrypted.
      * @param priv local private key to encrypt with, from the leaseset
      * @param callback may be null, if non-null an ack will be requested (except NS/NSR)
      * @return encrypted data or null on failure
@@ -981,7 +983,7 @@ public final class ECIESAEADEngine {
         public PLCallback() {
             this(null, null);
         }
- 
+
         /**
          * ES
          * @param keyManager only for ES, otherwise null
