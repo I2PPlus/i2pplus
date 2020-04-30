@@ -274,6 +274,10 @@ class Sorters {
             if (needed <= 0)
 //                return 0;
                 return Long.MAX_VALUE;
+            if (needed > 0 && snark.getPeerCount() <= 0 && snark.getDownloadRate() <= 0)
+                return Long.MAX_VALUE - 2;
+            else if (needed > 0 && snark.getPeerCount() > 0 && snark.getDownloadRate() <= 0)
+                return Long.MAX_VALUE - 3;
             long total = snark.getTotalLength();
             if (needed > total)
                 needed = total;
@@ -281,7 +285,7 @@ class Sorters {
             if (downBps > 0)
                 return needed / downBps;
 //            return Long.MAX_VALUE;
-            return Long.MAX_VALUE - 2;
+            return Long.MAX_VALUE - 4;
         }
     }
 
