@@ -211,12 +211,12 @@ class Sorters {
             if (snark.isStopped()) {
                 if (remaining < 0)
 //                    return 10;
-                    return 85;
+                    return 50;
                 if (remaining > 0)
 //                    return 5;
                     return 55;
 //                return 0;
-                return 50;
+                return 55;
             }
             if (snark.isStarting())
                 return 15;
@@ -269,8 +269,11 @@ class Sorters {
 
         private static long eta(Snark snark) {
             long needed = snark.getNeededLength();
+            long remaining = snark.getRemainingLength();
             if (snark.isStopped())
                 return Long.MAX_VALUE - 1;
+            if (remaining < 0) // magnet
+                return Long.MAX_VALUE - 5;
             if (needed <= 0)
 //                return 0;
                 return Long.MAX_VALUE;
@@ -278,6 +281,8 @@ class Sorters {
                 return Long.MAX_VALUE - 2;
             else if (needed > 0 && snark.getPeerCount() > 0 && snark.getDownloadRate() <= 0)
                 return Long.MAX_VALUE - 3;
+            if (remaining < 0) // magnet
+                return Long.MAX_VALUE - 4;
             long total = snark.getTotalLength();
             if (needed > total)
                 needed = total;
@@ -285,7 +290,7 @@ class Sorters {
             if (downBps > 0)
                 return needed / downBps;
 //            return Long.MAX_VALUE;
-            return Long.MAX_VALUE - 4;
+            return Long.MAX_VALUE - 6;
         }
     }
 
