@@ -212,7 +212,7 @@ class Sorters {
                     return 50;
                 if (remaining > 0)
                     return 55;
-                return 55;
+                return 60;
             }
             if (snark.isStarting())
                 return 15;
@@ -268,9 +268,9 @@ class Sorters {
             long remaining = snark.getRemainingLength();
             if (snark.isStopped()) {
                 if (remaining < 0) // magnet
-                    return Long.MAX_VALUE - 1;
+                    return Long.MAX_VALUE - 2;
                 else
-                    return Long.MAX_VALUE;
+                    return Long.MAX_VALUE -1;
             }
             if (remaining < 0) // magnet
                 return Long.MAX_VALUE - 2;
