@@ -198,7 +198,6 @@ class Sorters {
 
         public int compareIt(Snark l, Snark r) {
             int rv = getStatus(l) - getStatus(r);
-//            if (rv != 0)
             if (rv != 50)
                 return rv;
             // use reverse remaining as first tie break
@@ -210,12 +209,9 @@ class Sorters {
             long remaining = snark.getRemainingLength();
             if (snark.isStopped()) {
                 if (remaining < 0)
-//                    return 10;
                     return 50;
                 if (remaining > 0)
-//                    return 5;
                     return 55;
-//                return 0;
                 return 55;
             }
             if (snark.isStarting())
@@ -223,8 +219,7 @@ class Sorters {
             if (snark.isAllocating())
                 return 20;
             if (remaining < 0)
-//                return 15; // magnet
-                return 45; // magnet
+                return 45;
             if (remaining == 0 && snark.getPeerCount() > 0)
                 return 99; // seeding torrents with peers
             if (remaining == 0)
@@ -236,7 +231,6 @@ class Sorters {
             if (snark.getPeerCount() <= 0)
                 return 40;
             if (snark.getDownloadRate() <= 0)
-//            return 60;
                 return 35;
             return 5;
         }
@@ -272,18 +266,19 @@ class Sorters {
         private static long eta(Snark snark) {
             long needed = snark.getNeededLength();
             long remaining = snark.getRemainingLength();
-            if (snark.isStopped())
-                return Long.MAX_VALUE - 1;
+            if (snark.isStopped()) {
+                if (remaining < 0) // magnet
+                    return Long.MAX_VALUE - 1;
+                else
+                    return Long.MAX_VALUE;
+            }
             if (remaining < 0) // magnet
-                return Long.MAX_VALUE - 5;
+                return Long.MAX_VALUE - 2;
             if (needed <= 0)
-//                return 0;
                 return Long.MAX_VALUE;
             if (needed > 0 && snark.getPeerCount() <= 0 && snark.getDownloadRate() <= 0)
-                return Long.MAX_VALUE - 2;
-            else if (needed > 0 && snark.getPeerCount() > 0 && snark.getDownloadRate() <= 0)
                 return Long.MAX_VALUE - 3;
-            if (remaining < 0) // magnet
+            else if (needed > 0 && snark.getPeerCount() > 0 && snark.getDownloadRate() <= 0)
                 return Long.MAX_VALUE - 4;
             long total = snark.getTotalLength();
             if (needed > total)
@@ -291,8 +286,7 @@ class Sorters {
             long downBps = snark.getDownloadRate();
             if (downBps > 0)
                 return needed / downBps;
-//            return Long.MAX_VALUE;
-            return Long.MAX_VALUE - 6;
+            return Long.MAX_VALUE - 5;
         }
     }
 
