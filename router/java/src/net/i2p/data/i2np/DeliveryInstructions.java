@@ -441,29 +441,32 @@ public class DeliveryInstructions extends DataStructureImpl {
     @Override
     public String toString() {
         StringBuilder buf = new StringBuilder(128);
-        buf.append("\n\tDelivery Instructions: ");
+        buf.append("\n* Delivery Instructions: ");
         buf.append("\n* Delivery mode: ");
         switch (getDeliveryMode()) {
             case DELIVERY_MODE_LOCAL:
-                buf.append("local");
+                buf.append("Local");
                 break;
             case DELIVERY_MODE_DESTINATION:
-                buf.append("destination");
+                buf.append("Destination");
                 break;
             case DELIVERY_MODE_ROUTER:
-                buf.append("router");
+                buf.append("Router");
                 break;
             case DELIVERY_MODE_TUNNEL:
-                buf.append("tunnel");
+                buf.append("Tunnel");
                 break;
         }
-        buf.append("\n* Delay requested: ").append(getDelayRequested());
-        buf.append("\n* Delay seconds: ").append(getDelaySeconds());
-        buf.append("\n* Destination: ").append(getDestination());
+        if (_delayRequested)
+            buf.append("\n* Delay seconds: ").append(getDelaySeconds());
+        if (_destinationHash != null)
+            buf.append("\n* Destination: ").append(getDestination());
         //buf.append("\n* Encrypted: ").append(getEncrypted());
-        buf.append("\n* Encryption key: ").append(getEncryptionKey());
-        buf.append("\n* Router: ").append(getRouter());
-        buf.append("\n* TunnelId: ").append(getTunnelId());
+        //buf.append("\n* Encryption key: ").append(getEncryptionKey());
+        if (_routerHash != null)
+            buf.append("\n* Router: ").append(getRouter());
+        if (_tunnelId != null)
+            buf.append("\n* TunnelId: ").append(getTunnelId());
         return buf.toString();
     }
 
