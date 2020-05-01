@@ -209,10 +209,13 @@ class Sorters {
             long remaining = snark.getRemainingLength();
             if (snark.isStopped()) {
                 if (remaining < 0)
-                    return 50;
-                if (remaining > 0)
                     return 55;
-                return 60;
+                if (remaining > 0)
+                    return 50;
+                if (remaining == 0)
+                    return 98;
+                else
+                    return 60;
             }
             if (snark.isStarting())
                 return 15;
@@ -226,8 +229,8 @@ class Sorters {
                 return 100;
             if (snark.isChecking())
                 return 95;
-            if (snark.getNeededLength() <= 0)
-                return 90;
+/*            if (snark.getNeededLength() <= 0)
+                return 90;*/
             if (snark.getPeerCount() <= 0)
                 return 40;
             if (snark.getDownloadRate() <= 0)
@@ -269,24 +272,26 @@ class Sorters {
             if (snark.isStopped()) {
                 if (remaining < 0) // magnet
                     return Long.MAX_VALUE - 2;
+                else if (remaining > 0)
+                    return Long.MAX_VALUE -3;
                 else
                     return Long.MAX_VALUE -1;
             }
             if (remaining < 0) // magnet
-                return Long.MAX_VALUE - 2;
+                return Long.MAX_VALUE - 4;
             if (needed <= 0)
                 return Long.MAX_VALUE;
             if (needed > 0 && snark.getPeerCount() <= 0 && snark.getDownloadRate() <= 0)
-                return Long.MAX_VALUE - 3;
+                return Long.MAX_VALUE - 5;
             else if (needed > 0 && snark.getPeerCount() > 0 && snark.getDownloadRate() <= 0)
-                return Long.MAX_VALUE - 4;
+                return Long.MAX_VALUE - 6;
             long total = snark.getTotalLength();
             if (needed > total)
                 needed = total;
             long downBps = snark.getDownloadRate();
             if (downBps > 0)
                 return needed / downBps;
-            return Long.MAX_VALUE - 5;
+            return Long.MAX_VALUE - 7;
         }
     }
 
