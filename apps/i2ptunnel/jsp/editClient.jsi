@@ -264,6 +264,19 @@
 %>
         <tr>
             <td class="buttons" colspan="2">
+
+<%
+            if (indexBean.getTunnelStatus(curTunnel) != indexBean.NOT_RUNNING) {
+%>
+                <a style="display: none" class="control stop" title="Stop this Tunnel" href="list?tunnel=<%=curTunnel%>&amp;nonce=<%=net.i2p.i2ptunnel.web.IndexBean.getNextNonce()%>&amp;action=stop&amp;tunnel=<%=curTunnel%>"><%=intl._t("Stop")%></a>
+<%
+            } else {
+%>
+                <a style="display: none" class="control start" title="<%=intl._t("Start this Tunnel")%>" href="list?tunnel=<%=curTunnel%>&amp;nonce=<%=net.i2p.i2ptunnel.web.IndexBean.getNextNonce()%>&amp;action=start&amp;tunnel=<%=curTunnel%>"><%=intl._t("Start")%></a>
+<%
+            }
+%>
+
                     <input type="hidden" value="true" name="removeConfirm" />
                     <button id="controlCancel" class="control" type="submit" name="action" value=""><%=intl._t("Cancel")%></button>
                     <button id="controlDelete" <%=(editBean.allowJS() ? "onclick=\"if (!confirm('Are you sure you want to delete?')) { return false; }\" " : "")%>class="control" type="submit" name="action" value="Delete this tunnel" title="<%=intl._t("Delete this Tunnel (cannot be undone)")%>"><%=intl._t("Delete")%></button>
@@ -679,10 +692,23 @@
         </tr>
         <tr>
             <td class="buttons" colspan="2">
-                    <input type="hidden" value="true" name="removeConfirm" />
-                    <button id="controlCancel" class="control" type="submit" name="action" value=""><%=intl._t("Cancel")%></button>
-                    <button id="controlDelete" <%=(editBean.allowJS() ? "onclick=\"if (!confirm('Are you sure you want to delete this tunnel? (Cannot be undone)')) { return false; }\" " : "")%>class="control" type="submit" name="action" value="Delete this tunnel" title="<%=intl._t("Delete this Tunnel (cannot be undone)")%>"><%=intl._t("Delete")%></button>
-                    <button id="controlSave" class="control" type="submit" name="action" value="Save changes"><%=intl._t("Save")%></button>
+
+<%
+            if (indexBean.getTunnelStatus(curTunnel) != indexBean.NOT_RUNNING) {
+%>
+                <a style="display: none" class="control stop" title="Stop this Tunnel" href="list?tunnel=<%=curTunnel%>&amp;nonce=<%=net.i2p.i2ptunnel.web.IndexBean.getNextNonce()%>&amp;action=stop&amp;tunnel=<%=curTunnel%>"><%=intl._t("Stop")%></a>
+<%
+            } else {
+%>
+                <a style="display: none" class="control start" title="<%=intl._t("Start this Tunnel")%>" href="list?tunnel=<%=curTunnel%>&amp;nonce=<%=net.i2p.i2ptunnel.web.IndexBean.getNextNonce()%>&amp;action=start&amp;tunnel=<%=curTunnel%>"><%=intl._t("Start")%></a>
+<%
+            }
+%>
+
+                <input type="hidden" value="true" name="removeConfirm" />
+                <button id="controlCancel" class="control" type="submit" name="action" value=""><%=intl._t("Cancel")%></button>
+                <button id="controlDelete" <%=(editBean.allowJS() ? "onclick=\"if (!confirm('Are you sure you want to delete this tunnel? (Cannot be undone)')) { return false; }\" " : "")%>class="control" type="submit" name="action" value="Delete this tunnel" title="<%=intl._t("Delete this Tunnel (cannot be undone)")%>"><%=intl._t("Delete")%></button>
+                <button id="controlSave" class="control" type="submit" name="action" value="Save changes"><%=intl._t("Save")%></button>
             </td>
         </tr>
     </table>
