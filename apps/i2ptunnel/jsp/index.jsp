@@ -169,13 +169,15 @@
                         name = indexBean.getTunnelName(curServer);
                         out.write("<b>");
                         out.write(intl._t("Destination"));
-                        out.write(":</b></span> ");
+                        out.write(":</b></span> <span class=\"selectAll\">");
                         out.write(indexBean.getDestHashBase32(curServer));
+                        out.write("</span>");
                    } else {
                        out.write("<b>");
                        out.write(intl._t("Hostname"));
-                       out.write(":</b></span> ");
+                       out.write(":</b></span> <span class=\"selectAll\">");
                        out.write(name);
+                       out.write("</span>");
                    }
 %>
         </td>
@@ -187,7 +189,7 @@
     <tr class="tunnelInfo" style="display: none;">
         <td class="tunnelDestination" colspan="6">
             <span class="tunnelDestinationLabel"><b><%=intl._t("Encrypted")%>:</b></span>
-            <%=encName%>
+            <span class="selectAll"><%=encName%></span>
         </td>
     </tr>
 <%

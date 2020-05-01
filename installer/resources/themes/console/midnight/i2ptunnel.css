@@ -50,6 +50,22 @@ body.iframed {
     color: white;
 }
 
+h2, h3, th, .buttons, .newTunnel, .control, label, .infohelp, .infowarn, .nowrap, b, #throttler td {
+    -moz-user-select: none;
+    -webkit-user-select: none;
+    user-select: none;
+}
+
+.selectAll {
+    -moz-user-select: all;
+    -webkit-user-select: all;
+    user-select: all;
+}
+
+.selectAll:hover {
+    background: #003;
+}
+
 h2, h3, th, .buttons {
     -moz-user-select: none;
     -webkit-user-select: none;

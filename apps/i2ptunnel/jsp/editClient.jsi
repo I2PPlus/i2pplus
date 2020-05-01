@@ -256,7 +256,7 @@
                 <input type="text" class="freetext" size="30" id="localDest" title="<%=intl._t("Read Only: Local Destination (if known)")%>"  value="<%=destb64%>" onclick="this.select();" />
             </td>
             <td>
-                <%=editBean.getDestHashBase32(curTunnel)%>
+                <span class="selectAll"><%=editBean.getDestHashBase32(curTunnel)%></span>
             </td>
         </tr>
 <%

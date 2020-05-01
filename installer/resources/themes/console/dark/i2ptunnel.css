@@ -36,6 +36,22 @@ body.iframed {
     color: white;
 }
 
+h2, h3, th, .buttons, .newTunnel, .control, label, .infohelp, .infowarn, .nowrap, b, #throttler td {
+    -moz-user-select: none;
+    -webkit-user-select: none;
+    user-select: none;
+}
+
+.selectAll {
+    -moz-user-select: all;
+    -webkit-user-select: all;
+    user-select: all;
+}
+
+.selectAll:hover {
+    background: #020;
+}
+
 * {
     outline: none;
 }
@@ -377,6 +393,10 @@ td.infohelp {
     border-bottom: 1px inset #010 !important;
 }
 
+#serverTunnels th:nth-child(n+2), #clientTunnels th:nth-child(n+2), .tunnelProperties td:nth-child(n+2) {
+    text-align: center;
+}
+
 .tunnelProperties:hover, .tunnelProperties:hover + tr td, .tunnelProperties:hover + tr + tr td {
     background: #002000 !important;
     box-shadow: none !important;
@@ -402,9 +422,10 @@ td.infohelp {
     text-align: right;
 }
 
-.tunnelName, .tunnelDescription {
-    width: 25%;
+.tunnelName {
+    width: 15%;
     min-width: 150px;
+    white-space: nowrap;
 }
 
 .tunnelName a {
