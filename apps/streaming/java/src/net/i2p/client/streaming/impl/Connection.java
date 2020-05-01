@@ -585,7 +585,7 @@ class Connection {
             _bwEstimator.addSample(acked.size());
             if (anyLeft) {
                 // RFC 6298 section 5.3
-                int rto = getOptions().getRTO();
+                int rto = _options.getRTO();
                 _retransmitEvent.pushBackRTO(rto);
                 
                 if (_log.shouldLog(Log.DEBUG))
@@ -1126,7 +1126,7 @@ class Connection {
             // ...
             // We don't do any of that, but we set the window size to 1, and let the retransmission
             // of packets do the "attempted recovery".
-            getOptions().setWindowSize(1);
+            _options.setWindowSize(1);
         }
     }
 
@@ -1429,9 +1429,9 @@ class Connection {
         buf.append(" rcvd: ").append(1 + _inputStream.getHighestBlockId() - missing);
         buf.append(" ackThru ").append(_highestAckedThrough);
         buf.append(" ssThresh ").append(_ssthresh); 
-        buf.append(" minRTT ").append(getOptions().getMinRTT()); 
-        buf.append(" maxWin ").append(getOptions().getMaxWindowSize());
-        buf.append(" MTU ").append(getOptions().getMaxMessageSize());
+        buf.append(" minRTT ").append(_options.getMinRTT()); 
+        buf.append(" maxWin ").append(_options.getMaxWindowSize());
+        buf.append(" MTU ").append(_options.getMaxMessageSize());
         
         buf.append("]");
         return buf.toString();
@@ -1488,7 +1488,7 @@ class Connection {
 
             // 1. Double RTO and backoff (RFC 6298 section 5.5 & 5.6)
             final long now = _context.clock().now();
-            pushBackRTO(getOptions().doubleRTO());
+            pushBackRTO(_options.doubleRTO());
 
             // 2. cut ssthresh to bandwidth estimate, window to 1
             List<PacketLocal> toResend = null;
@@ -1503,9 +1503,9 @@ class Connection {
                 if (oldest.getNumSends() == 1) {
                     if (_log.shouldLog(Log.DEBUG))
                         _log.debug(Connection.this + " cutting ssthresh and window");
-                    _ssthresh = Math.max( (int)(_bwEstimator.getBandwidthEstimate() * getOptions().getMinRTT()), 2 );
+                    _ssthresh = Math.max( (int)(_bwEstimator.getBandwidthEstimate() * _options.getMinRTT()), 2 );
                     _ssthresh = Math.min(ConnectionPacketHandler.MAX_SLOW_START_WINDOW, _ssthresh);
-                    getOptions().setWindowSize(1);
+                    _options.setWindowSize(1);
                 } else if (_log.shouldLog(Log.DEBUG))
                     _log.debug(Connection.this + " not cutting ssthresh and window");
 
@@ -1517,7 +1517,7 @@ class Connection {
             boolean sentAny = false;
             for (PacketLocal packet : toResend) {
                 final int nResends = packet.getNumSends();
-                if (packet.getNumSends() > getOptions().getMaxResends()) {
+                if (packet.getNumSends() > _options.getMaxResends()) {
                     if (_log.shouldLog(Log.DEBUG))
                         _log.debug(Connection.this + " packet " + packet + " resent too many times, closing");
                     packet.cancelled();
@@ -1557,15 +1557,15 @@ class Connection {
                     }
 
                     // this seems unnecessary to send the MSS again:
-                    //_packet.setOptionalMaxSize(getOptions().getMaxMessageSize());
+                    //_packet.setOptionalMaxSize(_options.getMaxMessageSize());
                     // bugfix release 0.7.8, we weren't dividing by 1000
-                    packet.setResendDelay(getOptions().getResendDelay() / 1000);
+                    packet.setResendDelay(_options.getResendDelay() / 1000);
                     if (packet.getReceiveStreamId() <= 0)
                         packet.setReceiveStreamId(_receiveStreamId.get());
                     if (packet.getSendStreamId() <= 0)
                         packet.setSendStreamId(_sendStreamId.get());
 
-                    packet.setTimeout(getOptions().getRTO());
+                    packet.setTimeout(_options.getRTO());
                     
 
                     if (_outboundQueue.enqueue(packet)) {
@@ -1682,19 +1682,19 @@ class Connection {
                 }
 
                 // this seems unnecessary to send the MSS again:
-                //_packet.setOptionalMaxSize(getOptions().getMaxMessageSize());
+                //_packet.setOptionalMaxSize(_options.getMaxMessageSize());
                 // bugfix release 0.7.8, we weren't dividing by 1000
-                _packet.setResendDelay(getOptions().getResendDelay() / 1000);
+                _packet.setResendDelay(_options.getResendDelay() / 1000);
                 if (_packet.getReceiveStreamId() <= 0)
                     _packet.setReceiveStreamId(_receiveStreamId.get());
                 if (_packet.getSendStreamId() <= 0)
                     _packet.setSendStreamId(_sendStreamId.get());
 
-                int newWindowSize = getOptions().getWindowSize();
+                int newWindowSize = _options.getWindowSize();
 
                 if (_isChoked) {
                     congestionOccurred();
-                    getOptions().setWindowSize(1);
+                    _options.setWindowSize(1);
                 } else if (_ackSinceCongestion.get()) {
                     // only shrink the window once per window
                     if (_packet.getSequenceNum() > _lastCongestionHighestUnacked) {
@@ -1705,18 +1705,18 @@ class Connection {
                         // See RFC 6298 section 5 item 5.5
                         // This prevents being stuck at a window size of 1, retransmitting every packet,
                         // never updating the RTT or RTO.
-                        getOptions().doubleRTO();
+                        _options.doubleRTO();
 
                         if (_packet.getNumSends() == 1) {
-                            _ssthresh = Math.max( (int)(_bwEstimator.getBandwidthEstimate() * getOptions().getMinRTT()), 2 );
+                            _ssthresh = Math.max( (int)(_bwEstimator.getBandwidthEstimate() * _options.getMinRTT()), 2 );
                             _ssthresh = Math.min(ConnectionPacketHandler.MAX_SLOW_START_WINDOW, _ssthresh);
-                            int wsize = getOptions().getWindowSize();
-                            getOptions().setWindowSize(Math.min(_ssthresh, wsize));
+                            int wsize = _options.getWindowSize();
+                            _options.setWindowSize(Math.min(_ssthresh, wsize));
                         }
 
                         if (_log.shouldLog(Log.INFO))
                             _log.info("Network congestion: Resending packet [" + _packet.getSequenceNum() + "]"
-                                      + "\n* New Window Size: " + newWindowSize + "/" + getOptions().getWindowSize()
+                                      + "\n* New Window Size: " + newWindowSize + "/" + _options.getWindowSize()
                                       + " for " + Connection.this.toString());
 
                         windowAdjusted();
