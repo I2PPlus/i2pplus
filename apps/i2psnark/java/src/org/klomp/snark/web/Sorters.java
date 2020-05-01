@@ -198,6 +198,7 @@ class Sorters {
 
         public int compareIt(Snark l, Snark r) {
             int rv = getStatus(l) - getStatus(r);
+//            if (rv != 0)
             if (rv != 50)
                 return rv;
             // use reverse remaining as first tie break
