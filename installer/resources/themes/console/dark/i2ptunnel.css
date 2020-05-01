@@ -6,13 +6,7 @@
 html {
     min-height: 100%;
     scrollbar-color: rgba(8,48,8,0.8) #000800;
-    scrollbar-width: thin;
-}
-
-html:hover {
     scrollbar-color: rgba(16,72,16,0.8) #000800;
-    scrollbar-width: auto;
-    transition: ease scrollbar-color .2s;
 }
 
 body {
@@ -231,7 +225,7 @@ h2, h3 {
     letter-spacing: 0.08em;
     word-spacing: 0.1em;
     text-shadow: 0 1px 1px #000;
-    box-shadow: inset 0 0 0 1px #000;
+    box-shadow: inset 0 0 0 1px #000, inset 0 0 1px 1px #030;
     background: linear-gradient(to bottom, #1a261a 50%, #000 50%) !important;
     background: linear-gradient(to bottom, rgba(0,0,0,0) 50%, #000 50%), repeating-linear-gradient(to right, rgba(0,0,0,.5) 1px, rgba(0,0,0,.5) 2px, rgba(0,16,0,.5) 3px), linear-gradient(to bottom, #004000, #000 75%), url(/themes/console/dark/images/camotile2.png) top left !important;
 }
@@ -241,30 +235,26 @@ h2, h3 {
 #messages h2 {
     margin-top: 12px;
     background: url(/themes/console/images/info/logs.png) left 8px center no-repeat, linear-gradient(to bottom, #1a261a 50%, #000 50%) !important;
-    background: url(/themes/console/images/info/logs.png) left 8px center no-repeat, repeating-linear-gradient(to right, rgba(0,0,0,.4) 1px, rgba(0,0,0,.4) 2px, rgba(0,32,0,.6) 3px), linear-gradient(to bottom, #1a261a, #223022 7%, #212f21 9%, #172317 21%, #091109 49%, #050d05 50%, #020602 51%, #010301 53%, #000000 56%), url(/themes/console/dark/images/camotile2.png) top left !important;
-    background-size: 20px auto, 100% 100%, 100% 100%, 175px 175px !important;
-    background-blend-mode: normal, normal, exclusion, normal;
+    background: url(/themes/console/images/info/logs.png) left 8px center no-repeat, repeating-linear-gradient(to right, rgba(0,0,0,.4) 1px, rgba(0,0,0,.4) 2px, rgba(0,32,0,.6) 3px), linear-gradient(to bottom, #001800, #000 75%) !important;
+    background-size: 20px auto, 100% 100%, 100% 100% !important;
 }
 
 #globalTunnelControl h2 {
     background: url(/themes/console/images/info/control.png) left 8px center no-repeat, linear-gradient(to bottom, #1a261a 50%, #000 50%) !important;
-    background: url(/themes/console/images/info/control.png) left 8px center no-repeat, repeating-linear-gradient(to right, rgba(0,0,0,.4) 1px, rgba(0,0,0,.4) 2px, rgba(0,32,0,.6) 3px), linear-gradient(to bottom, #1a261a, #223022 7%, #212f21 9%, #172317 21%, #091109 49%, #050d05 50%, #020602 51%, #010301 53%, #000000 56%), url(/themes/console/dark/images/camotile2.png) top left !important;
-    background-size: 20px auto, 100% 100%, 100% 100%, 175px 175px !important;
-    background-blend-mode: normal, normal, exclusion, normal;
+    background: url(/themes/console/images/info/control.png) left 8px center no-repeat, repeating-linear-gradient(to right, rgba(0,0,0,.4) 1px, rgba(0,0,0,.4) 2px, rgba(0,32,0,.6) 3px), linear-gradient(to bottom, #001800, #000 75%) !important;
+    background-size: 20px auto, 100% 100%, 100% 100% !important;
 }
 
 #servers h2 {
     background: url(/themes/console/images/info/server.png) left 8px center no-repeat, linear-gradient(to bottom, #1a261a 50%, #000 50%) !important;
-    background: url(/themes/console/images/info/server.png) left 8px center no-repeat, repeating-linear-gradient(to right, rgba(0,0,0,.4) 1px, rgba(0,0,0,.4) 2px, rgba(0,32,0,.6) 3px), linear-gradient(to bottom, #1a261a, #223022 7%, #212f21 9%, #172317 21%, #091109 49%, #050d05 50%, #020602 51%, #010301 53%, #000000 56%), url(/themes/console/dark/images/camotile2.png) top left !important;
-    background-size: 20px auto, 100% 100%, 100% 100%, 175px 175px !important;
-    background-blend-mode: normal, normal, exclusion, normal;
+    background: url(/themes/console/images/info/server.png) left 8px center no-repeat, repeating-linear-gradient(to right, rgba(0,0,0,.4) 1px, rgba(0,0,0,.4) 2px, rgba(0,32,0,.6) 3px), linear-gradient(to bottom, #001800, #000 75%) !important;
+    background-size: 20px auto, 100% 100%, 100% 100% !important;
 }
 
 #clients h2 {
     background: url(/themes/console/images/info/client.png) left 8px center no-repeat, linear-gradient(to bottom, #1a261a 50%, #000 50%) !important;
-    background: url(/themes/console/images/info/client.png) left 8px center no-repeat, repeating-linear-gradient(to right, rgba(0,0,0,.4) 1px, rgba(0,0,0,.4) 2px, rgba(0,32,0,.6) 3px), linear-gradient(to bottom, #1a261a, #223022 7%, #212f21 9%, #172317 21%, #091109 49%, #050d05 50%, #020602 51%, #010301 53%, #000000 56%), url(/themes/console/dark/images/camotile2.png) top left !important;
-    background-size: 20px auto, 100% 100%, 100% 100%, 175px 175px !important;
-    background-blend-mode: normal, normal, exclusion, normal;
+    background: url(/themes/console/images/info/client.png) left 8px center no-repeat, repeating-linear-gradient(to right, rgba(0,0,0,.4) 1px, rgba(0,0,0,.4) 2px, rgba(0,32,0,.6) 3px), linear-gradient(to bottom, #001800, #000 75%) !important;
+    background-size: 20px auto, 100% 100%, 100% 100% !important;
 }
 
 #clients h2:not(.iframed) {
@@ -273,15 +263,15 @@ h2, h3 {
 
 #tunnelEditPage h2, #tunnelEditPage h3, #registration h2, #registration h3 {
     background: url(/themes/console/images/info/configure.png) left 8px center no-repeat, linear-gradient(to bottom, #1a261a 50%, #000 50%) !important;
-    background: url(/themes/console/images/info/configure.png) left 8px center no-repeat, repeating-linear-gradient(to right, rgba(0,0,0,.4) 1px, rgba(0,0,0,.4) 2px, rgba(0,32,0,.6) 3px), linear-gradient(to bottom, #1a261a, #223022 7%, #212f21 9%, #172317 21%, #091109 49%, #050d05 50%, #020602 51%, #010301 53%, #000000 56%), url(/themes/console/dark/images/camotile2.png) top left !important;
-    background-size: 20px auto, 100% 100%, 100% 100%, 175px 175px !important;
+    background: url(/themes/console/images/info/configure.png) left 8px center no-repeat, repeating-linear-gradient(to right, rgba(0,0,0,.4) 1px, rgba(0,0,0,.4) 2px, rgba(0,32,0,.6) 3px), linear-gradient(to bottom, #001800, #000 75%) !important;
+    background-size: 20px auto, 100% 100%, 100% 100% !important;
     background-blend-mode: normal, normal, exclusion, normal;
 }
 
 #wizardPanel h2, #ssl h2 {
     background: url(/themes/console/images/info/wizard.png) left 8px center no-repeat, linear-gradient(to bottom, #1a261a 50%, #000 50%) !important;
-    background: url(/themes/console/images/info/wizard.png) left 8px center no-repeat, repeating-linear-gradient(to right, rgba(0,0,0,.4) 1px, rgba(0,0,0,.4) 2px, rgba(0,32,0,.6) 3px), linear-gradient(to bottom, #1a261a, #223022 7%, #212f21 9%, #172317 21%, #091109 49%, #050d05 50%, #020602 51%, #010301 53%, #000000 56%), url(/themes/console/dark/images/camotile2.png) top left !important;
-    background-size: 20px auto, 100% 100%, 100% 100%, 175px 175px !important;
+    background: url(/themes/console/images/info/wizard.png) left 8px center no-repeat, repeating-linear-gradient(to right, rgba(0,0,0,.4) 1px, rgba(0,0,0,.4) 2px, rgba(0,32,0,.6) 3px), linear-gradient(to bottom, #001800, #000 75%) !important;
+    background-size: 20px auto, 100% 100%, 100% 100% !important;
     background-blend-mode: normal, normal, exclusion, normal;
 }
 
@@ -318,22 +308,20 @@ h3 {
 }
 
 th {
-    background: #000;
-    background: linear-gradient(to bottom, #1a261a 0%, #223022 7%, #212f21 9%, #172317 21%, #091109 49%, #050d05 50%, #020602 51%, #010301 53%, #000000 56%, #000000 100%);
-    background: linear-gradient(to bottom, rgba(0,0,0,0) 50%, #000 50%), repeating-linear-gradient(to right, rgba(0,0,0,.5) 1px, rgba(0,0,0,.5) 2px, rgba(0,16,0,.5) 3px), linear-gradient(to bottom, #002000, #000 75%);
-    padding: 7px 5px;
-    border-top: 1px solid #242;
-    border-bottom: 1px solid #242;
-    font-size: 9pt;
-    color: #ee9;
+    padding: 7px 10px;
+    word-spacing: 0.1em;
+    letter-spacing: 0.08em;
     text-align: left;
     text-transform: uppercase;
-    letter-spacing: 0.08em;
-    word-spacing: 0.1em;
+    font-size: 9pt;
+    color: #ee9;
+    border-top: 1px solid #242;
+    border-bottom: 1px solid #242;
+    background: #000;
+    background: linear-gradient(to bottom, #001400, #000 75%);
 }
 
 th {
-    padding-left: 10px;
 }
 
 #tunnelListPage th {
@@ -727,6 +715,11 @@ a.control, input.control {
 
 a.control {
     display: inline-block;
+}
+
+.control.start, .control.stop {
+    display: none !important;
+    float: left;
 }
 
 select {
@@ -1504,7 +1497,7 @@ input[type="checkbox"][disabled]:checked, input[type="radio"][disabled]:checked,
 }
 
 tr {
-    box-shadow: inset 0 0 0 1px #000, inset 0 -1px 0 1px #000, inset -1px 0 0 1px #000, inset 0 0 2px 1px #020, inset 0 -1px 2px 1px #020, inset -1px 0 2px 1px #020;
+    box-shadow: inset 0 0 0 1px #000, inset 0 -1px 0 1px #000, inset -1px 0 0 1px #000, inset 0 0 1px 1px #030, inset 0 -1px 1px 1px #030, inset -1px 0 1px 1px #030;
 }
 
 tr.configerror {
@@ -1525,7 +1518,7 @@ tr.configerror {
     background-size: 20px auto;
 }
 
-.buttons, .newTunnel, h2, h3 {
+.buttons, .newTunnel {
     box-shadow: inset 0 0 0 1px #000, inset 0 0 2px 1px #030 !important;
 }
 
