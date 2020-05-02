@@ -198,7 +198,6 @@ class Sorters {
 
         public int compareIt(Snark l, Snark r) {
             int rv = getStatus(l) - getStatus(r);
-//            if (rv != 0)
             if (rv != 50)
                 return rv;
             // use reverse remaining as first tie break
@@ -212,7 +211,8 @@ class Sorters {
                     return 50;
                 if (remaining > 0)
                     return 46;
-                return 60;
+                else
+                    return 60;
             }
             if (snark.isStarting())
                 return 15;
@@ -232,7 +232,8 @@ class Sorters {
                 return 40;
             if (snark.getDownloadRate() <= 0)
                 return 35;
-            return 5;
+            else
+                return 5;
         }
     }
 
@@ -259,31 +260,35 @@ class Sorters {
         public ETAComparator(boolean rev, String lang) { super(rev, lang); }
 
         public int compareIt(Snark l, Snark r) {
-            return compLong(eta(r), eta(l));
+            return compLong(eta(l), eta(r));
         }
 
         private static long eta(Snark snark) {
             long needed = snark.getNeededLength();
             long remaining = snark.getRemainingLength();
-            if (snark.isStopped() && remaining == 0)
-                return Long.MAX_VALUE - 2;
-            if (snark.isStopped() && remaining < 0) // magnet
-                return Long.MAX_VALUE - 7;
-            if (snark.isStopped())
-                return Long.MAX_VALUE - 3;
-            if (remaining < 0) // magnet
-                return Long.MAX_VALUE - 8;
-            if (needed > 0 && snark.getPeerCount() <= 0 && snark.getDownloadRate() <= 0)
-                return Long.MAX_VALUE - 9;
-            else if (needed > 0 && snark.getPeerCount() > 0 && snark.getDownloadRate() <= 0)
-                return Long.MAX_VALUE - 10;
-            long total = snark.getTotalLength();
-            if (needed > total)
-                needed = total;
-            long downBps = snark.getDownloadRate();
-            if (downBps > 0)
-                return needed / downBps;
-            return Long.MAX_VALUE - 1;
+            if (snark.isStopped()) {
+                if (remaining == 0)
+                    return Long.MAX_VALUE - 2;
+                if (remaining < 0) // magnet
+                    return Long.MAX_VALUE - 7;
+                else
+                    return Long.MAX_VALUE - 3;
+            } else {
+                if (remaining < 0) // magnet
+                    return Long.MAX_VALUE - 8;
+                if (needed > 0 && snark.getPeerCount() <= 0 && snark.getDownloadRate() <= 0)
+                    return Long.MAX_VALUE - 9;
+                else if (needed > 0 && snark.getPeerCount() > 0 && snark.getDownloadRate() <= 0)
+                    return Long.MAX_VALUE - 10;
+                long total = snark.getTotalLength();
+                if (needed > total)
+                   needed = total;
+                long downBps = snark.getDownloadRate();
+                if (downBps > 0)
+                    return needed / downBps;
+                else
+                    return Long.MAX_VALUE - 1;
+            }
         }
     }
 

@@ -668,7 +668,8 @@ public class I2PSnarkServlet extends BasicServlet {
             }
             if (isDownloading) {
                 if (showSort) {
-                    sort = ("-4".equals(currentSort)) ? "4" : "-4";
+                    // show lower ETA values at top
+                    sort = ("4".equals(currentSort)) ? "-4" : "4";
                     out.write("<a href=\"" + _contextPath + '/' + getQueryString(req, null, null, sort));
                     out.write("\">");
                 }
