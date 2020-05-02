@@ -937,7 +937,6 @@ div.refresh {
 
 #sb_bandwidthgraph:hover {
     border-color: #d40;
-/*    cursor: url(/themes/console/images/cursor_zoom.png), pointer;*/
     cursor: zoom-in;
 }
 
