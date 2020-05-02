@@ -1450,6 +1450,14 @@ input[type="radio"]:not(:checked)::before {
     will-change: transform;
 }
 
+.optionsDisabled {
+    cursor: not-allowed;
+}
+
+.optionsDisabled .optbox, .optionsDisabled label {
+    pointer-events: none !important;
+}
+
 /* end custom radios/checkboxes */
 
 /* chrome/blink overrides */

@@ -1510,6 +1510,14 @@ input[type="checkbox"][disabled]:checked, input[type="radio"][disabled]:checked,
 }
 }
 
+.optionsDisabled {
+    cursor: not-allowed;
+}
+
+.optionsDisabled .optbox, .optionsDisabled label {
+    pointer-events: none !important;
+}
+
 /* end custom radios/checkboxes */
 
 #keyringManager {

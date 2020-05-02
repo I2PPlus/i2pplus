@@ -297,7 +297,7 @@
 <%
         if (!editBean.canChangeEncType(curTunnel)) {
 %>
-        <tr title="<%=intl._t("To change encryption type, stop the tunnel first")%>">
+        <tr class="optionsDisabled" title="<%=intl._t("To change encryption type, stop the tunnel first")%>">
 <%
         } else {
 %>
