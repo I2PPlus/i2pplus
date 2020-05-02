@@ -200,8 +200,9 @@ class Sorters {
             int rv = getStatus(l) - getStatus(r);
             if (rv != 0)
                 return rv;
-            // use reverse peercount as first tie break
-            return compLong(l.getPeerCount(), r.getPeerCount());
+            else
+                // first tie break sorts by peer count
+                return compLong(r.getPeerCount(), l.getPeerCount());
         }
 
         private static int getStatus(Snark snark) {
