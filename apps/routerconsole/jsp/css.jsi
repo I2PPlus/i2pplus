@@ -17,7 +17,6 @@
    // the response prior to including this file, so it should be
    // near the top
    String i2pcontextId = request.getParameter("i2p.contextId");
-   String cspNonce = Integer.toHexString(net.i2p.util.RandomSource.getInstance().nextInt());
    try {
        if (i2pcontextId != null) {
            session.setAttribute("i2p.contextId", i2pcontextId);
@@ -28,24 +27,23 @@
 %>
 <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
 <jsp:useBean class="net.i2p.router.web.CSSHelper" id="intl" scope="request" />
-<link rel="preload" href="/themes/fonts/DroidSans-Bold.ttf" as="font">
-<link rel="preload" href="/themes/fonts/DroidSans.ttf" as="font">
-<link rel="preload" href="<%=intl.getTheme(request.getHeader("User-Agent"))%>images/i2plogo.png" as="image">
+<jsp:setProperty name="intl" property="contextId" value="<%=i2pcontextId%>" />
+<%
+   // used several times below
+   String UA = request.getHeader("User-Agent");
+   String themePath = intl.getTheme(UA);
+   String cspNonce = Integer.toHexString(net.i2p.util.RandomSource.getInstance().nextInt());
+%>
+<link rel="preload" href="<%=themePath%>images/i2plogo.png" as="image">
 <link rel="preload" href="summaryajax.jsi" as="document">
 <link rel="preload" href="summarynoframe.jsi" as="document">
 <link rel="preload" href="xhr1.jsp" as="document">
 <link rel="preload" href="xhr1.jsi" as="document">
 <link rel="preload" href="/js/ajax.js?<%=net.i2p.CoreVersion.VERSION%>" as="script">
-<link rel="preload" href="<%=intl.getTheme(request.getHeader("User-Agent"))%>console.css?<%=net.i2p.CoreVersion.VERSION%>" as="style">
-<jsp:setProperty name="intl" property="contextId" value="<%=i2pcontextId%>" />
-<%
-
-   // used several times below
-   String theUserAgent = request.getHeader("User-Agent");
-   String theThemePath = intl.getTheme(theUserAgent);
-
-%>
-<link rel="icon" href="<%=theThemePath%>images/favicon.ico">
+<link rel="preload" href="/themes/fonts/DroidSans-Bold.ttf" as="font">
+<link rel="preload" href="/themes/fonts/DroidSans.ttf" as="font">
+<link rel="preload" href="<%=themePath%>console.css?<%=net.i2p.CoreVersion.VERSION%>" as="style">
+<link rel="icon" href="<%=themePath%>images/favicon.ico">
 <script nonce="<%=cspNonce%>" type="text/javascript">if (top.location != location) {top.location.href = location.href;}</script>
 <script src="/js/progressx.js?<%=net.i2p.CoreVersion.VERSION%>" type="text/javascript"></script>
 <noscript><style type="text/css">.script {display: none;}</style></noscript>
@@ -72,24 +70,24 @@
        intl.setNews(request.getParameter("news"));
    }
 %>
-<link href="<%=theThemePath%>console.css?<%=net.i2p.CoreVersion.VERSION%>" rel="stylesheet" type="text/css">
+<link href="<%=themePath%>console.css?<%=net.i2p.CoreVersion.VERSION%>" rel="stylesheet" type="text/css">
 <%
    if (intl.getLang().equals("zh")) {
        // make the fonts bigger for chinese
 %>
-<link href="<%=theThemePath%>console_big.css?<%=net.i2p.CoreVersion.VERSION%>" rel="stylesheet" type="text/css">
+<link href="<%=themePath%>console_big.css?<%=net.i2p.CoreVersion.VERSION%>" rel="stylesheet" type="text/css">
 <%
    } else if (intl.getLang().equals("ar")) {
        // Use RTL theme for Arabic
 %>
-<link href="<%=theThemePath%>console_ar.css?<%=net.i2p.CoreVersion.VERSION%>" rel="stylesheet" type="text/css">
+<link href="<%=themePath%>console_ar.css?<%=net.i2p.CoreVersion.VERSION%>" rel="stylesheet" type="text/css">
 <%
    }
-   if (!intl.allowIFrame(theUserAgent)) {
+   if (!intl.allowIFrame(UA)) {
 %>
 <meta name="viewport" content="width=device-width; initial-scale=1.0; maximum-scale=1.0; user-scalable=0;" />
-<link href="<%=theThemePath%>mobile.css?<%=net.i2p.CoreVersion.VERSION%>" rel="stylesheet" type="text/css">
+<link href="<%=themePath%>mobile.css?<%=net.i2p.CoreVersion.VERSION%>" rel="stylesheet" type="text/css">
 <%
    }
 %>
-<link href="<%=theThemePath%>override.css?<%=net.i2p.CoreVersion.VERSION%>" rel="stylesheet" type="text/css">
+<link href="<%=themePath%>override.css?<%=net.i2p.CoreVersion.VERSION%>" rel="stylesheet" type="text/css">
