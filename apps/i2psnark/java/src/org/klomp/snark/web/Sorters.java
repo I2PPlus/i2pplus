@@ -277,9 +277,9 @@ class Sorters {
             int peers = snark.getTrackerSeenPeers();
             if (snark.isStopped()) {
                 if (remaining == 0)
-                    return Long.MAX_VALUE - 10;
-                if (remaining < 0) // magnet
                     return Long.MAX_VALUE - 9;
+                if (remaining < 0) // magnet
+                    return Long.MAX_VALUE - 10;
                 else
                     return Long.MAX_VALUE - 11;
             } else {
