@@ -82,7 +82,7 @@ public class I2PSnarkUtil {
     private static final int EEPGET_CONNECT_TIMEOUT = 120*1000;
 //    private static final int EEPGET_CONNECT_TIMEOUT_SHORT = 5*1000;
     private static final int EEPGET_CONNECT_TIMEOUT_SHORT = 15*1000;
-    public static final int DEFAULT_STARTUP_DELAY = 3;
+    public static final int DEFAULT_STARTUP_DELAY = 0;
     public static final boolean DEFAULT_COLLAPSE_PANELS = true;
     public static final boolean DEFAULT_SHOW_STATUSFILTER = false;
     public static final boolean DEFAULT_ENABLE_LIGHTBOX = true;
@@ -274,8 +274,8 @@ public class I2PSnarkUtil {
                 opts.setProperty("inbound.nickname", _baseName.replace("i2psnark", "I2PSnark"));
             if (opts.getProperty("outbound.nickname") == null)
                 opts.setProperty("outbound.nickname", _baseName.replace("i2psnark", "I2PSnark"));
-            if (opts.getProperty("outbound.priority") == null)
-                opts.setProperty("outbound.priority", "-10");
+//            if (opts.getProperty("outbound.priority") == null)
+//                opts.setProperty("outbound.priority", "-10");
             // Don't do this for now, it is set in I2PSocketEepGet for announces,
             // we don't need fast handshake for peer connections.
             //if (opts.getProperty("i2p.streaming.connectDelay") == null)
@@ -298,13 +298,13 @@ public class I2PSnarkUtil {
             //    opts.setProperty("i2p.streaming.readTimeout", "120000");
             if (opts.getProperty("i2p.streaming.maxConnsPerMinute") == null)
 //                opts.setProperty("i2p.streaming.maxConnsPerMinute", "2"); // per peer max incoming connections
-                opts.setProperty("i2p.streaming.maxConnsPerMinute", "4");
+                opts.setProperty("i2p.streaming.maxConnsPerMinute", "8");
             if (opts.getProperty("i2p.streaming.maxTotalConnsPerMinute") == null)
 //                opts.setProperty("i2p.streaming.maxTotalConnsPerMinute", "8");
-                opts.setProperty("i2p.streaming.maxTotalConnsPerMinute", "16"); // total incoming connections
+                opts.setProperty("i2p.streaming.maxTotalConnsPerMinute", "256"); // total incoming connections
             if (opts.getProperty("i2p.streaming.maxConnsPerHour") == null)
 //                opts.setProperty("i2p.streaming.maxConnsPerHour", "20");
-                opts.setProperty("i2p.streaming.maxConnsPerHour", "60");
+                opts.setProperty("i2p.streaming.maxConnsPerHour", "480");
             if (opts.getProperty("i2p.streaming.enforceProtocol") == null)
                 opts.setProperty("i2p.streaming.enforceProtocol", "true");
             if (opts.getProperty("i2p.streaming.disableRejectLogging") == null)
@@ -424,7 +424,7 @@ public class I2PSnarkUtil {
     public File get(String url, boolean rewrite) { return get(url, rewrite, 0); }
 
     /**
-     * @param retries if &lt; 0, set timeout to a few seconds
+     * @param retries if > 0, set timeout to a few seconds
      */
     public File get(String url, int retries) { return get(url, true, retries); }
 
