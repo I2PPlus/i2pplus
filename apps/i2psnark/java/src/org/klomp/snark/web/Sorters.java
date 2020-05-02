@@ -198,10 +198,10 @@ class Sorters {
 
         public int compareIt(Snark l, Snark r) {
             int rv = getStatus(l) - getStatus(r);
-            if (rv != 50)
+            if (rv != 0)
                 return rv;
-            // use reverse remaining as first tie break
-            return compLong(l.getNeededLength(), r.getNeededLength());
+            // use reverse peercount as first tie break
+            return compLong(l.getPeerCount(), r.getPeerCount());
         }
 
         private static int getStatus(Snark snark) {
@@ -276,10 +276,12 @@ class Sorters {
             } else {
                 if (remaining < 0) // magnet
                     return Long.MAX_VALUE - 8;
-                if (needed > 0 && snark.getPeerCount() <= 0 && snark.getDownloadRate() <= 0)
-                    return Long.MAX_VALUE - 9;
-                else if (needed > 0 && snark.getPeerCount() > 0 && snark.getDownloadRate() <= 0)
-                    return Long.MAX_VALUE - 10;
+                if (needed > 0 && snark.getDownloadRate() <= 0) {
+                    if (snark.getPeerCount() <= 0)
+                        return Long.MAX_VALUE - 9;
+                    else
+                        return Long.MAX_VALUE - 10;
+                }
                 long total = snark.getTotalLength();
                 if (needed > total)
                    needed = total;
