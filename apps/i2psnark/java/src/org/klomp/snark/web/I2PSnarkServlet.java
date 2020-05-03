@@ -584,19 +584,29 @@ public class I2PSnarkServlet extends BasicServlet {
         out.write(TABLE_HEADER);
 
         String currentSort = req.getParameter("sort");
+        boolean isAscending = false;
+        String sortOrder = isAscending ? _t("ascending") : _t("descending");
         boolean showSort = total > 1;
         out.write("<tr>\n<th class=\"snarkGraphicStatus\">");
-//        String sort = ("-2".equals(currentSort)) ? "2" : "-2";
         // show incomplete torrents at top on first click
-        String sort = ("2".equals(currentSort)) ? "-2" : "2";
+//        String sort = ("2".equals(currentSort)) ? "-2" : "2";
+        String sort = "";
         if (showSort) {
+            if (currentSort == null || "-2".equals(currentSort)) {
+                sort = "2";
+            } else if ("2".equals(currentSort)) {
+                sort = "-2";
+                isAscending = true;
+            } else {
+                sort = "";
+            }
             out.write("<a href=\"" + _contextPath + '/' + getQueryString(req, null, null, sort));
             out.write("\">");
         }
         String tx = _t("Status");
         out.write(toThemeImg("status", tx,
-                             showSort ? _t("Sort by {0}", tx)
-                                      : tx));
+                             showSort ? _t("Sort by {0}" + " ({1})", tx,
+                             (isAscending ? _t("ascending") : _t("descending"))) : tx));
         if (showSort)
             out.write("</a>");
         out.write("</th>\n<th class=\"snarkTorrentStatus\">");
@@ -637,6 +647,7 @@ public class I2PSnarkServlet extends BasicServlet {
             } else if ("-1".equals(currentSort)) {
                 sort = "12";
                 isTypeSort = true;
+                isAscending = true;
             } else if ("12".equals(currentSort)) {
                 sort = "-12";
                 isTypeSort = true;
@@ -649,8 +660,8 @@ public class I2PSnarkServlet extends BasicServlet {
         tx = _t("Torrent");
         if (!snarks.isEmpty()) {
             out.write(toThemeImg("torrent", tx,
-                                 showSort ? _t("Sort by {0}", (isTypeSort ? _t("File type") : tx))
-                                      : tx));
+                                 showSort ? _t("Sort by {0}" + " ({1})", (isTypeSort ? _t("File type") : _t("Torrent name")),
+                                 (isAscending ? _t("ascending") : _t("descending"))) : tx));
             if (showSort)
                 out.write("</a>");
         }
@@ -669,15 +680,23 @@ public class I2PSnarkServlet extends BasicServlet {
             if (isDownloading) {
                 if (showSort) {
                     // show lower ETA values at top
-                    sort = ("4".equals(currentSort)) ? "-4" : "4";
+//                    sort = ("4".equals(currentSort)) ? "-4" : "4";
+                    if (currentSort == null || "-4".equals(currentSort)) {
+                        sort = "4";
+                    } else if ("4".equals(currentSort)) {
+                        sort = "-4";
+                        isAscending = true;
+                    } else {
+                        sort = "4";
+                    }
                     out.write("<a href=\"" + _contextPath + '/' + getQueryString(req, null, null, sort));
                     out.write("\">");
                 }
             // Translators: Please keep short or translate as " "
             tx = _t("ETA");
             out.write(toThemeImg("eta", tx,
-                                 showSort ? _t("Sort by {0}", _t("Estimated time remaining"))
-                                          : _t("Estimated time remaining")));
+                                 showSort ? _t("Sort by {0}" + " ({1})", _t("Estimated time remaining"),
+                                 (isAscending ? _t("ascending") : _t("descending"))) : _t("Estimated time remaining")));
                 if (showSort)
                     out.write("</a>");
             }
@@ -685,27 +704,29 @@ public class I2PSnarkServlet extends BasicServlet {
         out.write("</th>\n<th class=\"snarkTorrentDownloaded\" align=\"right\">");
         // cycle through sort by size or downloaded
         boolean isDlSort = false;
+        isAscending = false;
         if (!snarks.isEmpty()) {
             if (showSort) {
                 if ("-5".equals(currentSort)) {
                     sort = "5";
+                    isAscending = true;
                 } else if ("5".equals(currentSort)) {
-                sort = "-6";
-                isDlSort = true;
+                    sort = "-6";
+                    isDlSort = true;
                 } else if ("-6".equals(currentSort)) {
-                sort = "6";
-                isDlSort = true;
+                    sort = "6";
+                    isDlSort = true;
+                    isAscending = true;
                 } else {
-                sort = "-5";
+                    sort = "-5";
                 }
                 out.write("<a href=\"" + _contextPath + '/' + getQueryString(req, null, null, sort));
                 out.write("\">");
             }
         // Translators: Please keep short or translate as " "
             tx = _t("RX");
-            out.write(toThemeImg("head_rx", tx,
-                                 showSort ? _t("Sort by {0}", (isDlSort ? _t("Downloaded") : _t("Size")))
-                                      : _t("Downloaded")));
+            out.write(toThemeImg("head_rx", tx, showSort ? _t("Sort by {0}" + " ({1})", (isDlSort ? _t("Downloaded") : _t("Size")),
+                                 (isAscending ? _t("ascending") : _t("descending"))) : _t("Downloaded")));
             if (showSort)
                 out.write("</a>");
         }
@@ -723,15 +744,22 @@ public class I2PSnarkServlet extends BasicServlet {
             }
         if (isDownloading) {
             if (showSort) {
-                sort = ("-8".equals(currentSort)) ? "8" : "-8";
+//                sort = ("-8".equals(currentSort)) ? "8" : "-8";
+                    if (currentSort == null || "8".equals(currentSort)) {
+                        sort = "-8";
+                    } else if ("-8".equals(currentSort)) {
+                        sort = "8";
+                        isAscending = true;
+                    } else {
+                        sort = "-8";
+                    }
                 out.write("<a href=\"" + _contextPath + '/' + getQueryString(req, null, null, sort));
                 out.write("\">");
             }
             // Translators: Please keep short or translate as " "
             tx = _t("RX Rate");
-            out.write(toThemeImg("head_rxspeed", tx,
-                                 showSort ? _t("Sort by {0}", _t("Down Rate"))
-                                          : _t("Down Rate")));
+            out.write(toThemeImg("head_rxspeed", tx, showSort ? _t("Sort by {0}" + " ({1})", _t("Down Rate"),
+                                (isAscending ? _t("ascending") : _t("descending"))) : _t("Down Rate")));
             if (showSort)
                 out.write("</a>");
         }
@@ -754,18 +782,20 @@ public class I2PSnarkServlet extends BasicServlet {
                 if (showSort) {
                     if ("-7".equals(currentSort)) {
                         sort = "7";
+                        isAscending = true;
                     } else if ("7".equals(currentSort)) {
                         sort = "-11";
                         nextRatSort = true;
-                    } else if ("11".equals(currentSort)) {
-                        sort = "-11";
+                    } else if ("-11".equals(currentSort)) {
+                        sort = "11";
                         nextRatSort = true;
                         isRatSort = true;
-                    } else if ("-11".equals(currentSort)) {
-                        sort = "7";
+                        isAscending = true;
+                    } else if ("11".equals(currentSort)) {
+                        sort = "-7";
                         isRatSort = true;
                     } else {
-                        sort = "7";
+                        sort = "-7";
                     }
                     out.write("<a href=\"" + _contextPath + '/' + getQueryString(req, null, null, sort));
                     out.write("\">");
@@ -773,8 +803,8 @@ public class I2PSnarkServlet extends BasicServlet {
                 // Translators: Please keep short or translate as " "
                 tx = _t("TX");
                 out.write(toThemeImg("head_tx", tx,
-                                     showSort ? _t("Sort by {0}", (nextRatSort ? _t("Upload ratio") : _t("Uploaded")))
-                                              : _t("Uploaded")));
+                                     showSort ? _t("Sort by {0}" + " ({1})", (nextRatSort ? _t("Upload ratio") : _t("Uploaded")),
+                                     (isAscending ? _t("ascending") : _t("descending"))) : _t("Uploaded")));
                 if (showSort)
                     out.write("</a>");
 //                }
@@ -794,15 +824,22 @@ public class I2PSnarkServlet extends BasicServlet {
             }
         if (isUploading) {
             if (showSort) {
-                sort = ("-9".equals(currentSort)) ? "9" : "-9";
+//                sort = ("-9".equals(currentSort)) ? "9" : "-9";
+                    if (currentSort == null || "9".equals(currentSort)) {
+                        sort = "-9";
+                    } else if ("-9".equals(currentSort)) {
+                        sort = "9";
+                        isAscending = true;
+                    } else {
+                        sort = "-9";
+                    }
                 out.write("<a href=\"" + _contextPath + '/' + getQueryString(req, null, null, sort));
                 out.write("\">");
             }
             // Translators: Please keep short or translate as " "
             tx = _t("TX Rate");
-            out.write(toThemeImg("head_txspeed", tx,
-                             showSort ? _t("Sort by {0}", _t("Up Rate"))
-                                      : _t("Up Rate")));
+            out.write(toThemeImg("head_txspeed", tx, showSort ? _t("Sort by {0}" + " ({1})", _t("Up Rate"),
+                                (isAscending ? _t("ascending") : _t("descending"))) : _t("Up Rate")));
         if (showSort)
             out.write("</a>");
         }
