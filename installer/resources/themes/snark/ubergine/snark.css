@@ -6169,7 +6169,6 @@ body:not(.iframed) .mainsection .snarkComments {
     border-width: 4px;
     border-style: solid;
     border-color: transparent transparent #878 transparent;
-    opacity: .7;
 }
 
 .descending {
@@ -6193,8 +6192,8 @@ body:not(.iframed) .mainsection .snarkComments {
 
 @supports (animation: ease all .1s) {
 .ascending, .descending {
-    opacity: 0;
-    animation: ease fade-in .2s forwards;
+    filter: opacity(0);
+    animation: ease fade-in .2s .6s forwards;
 }
 }
 
