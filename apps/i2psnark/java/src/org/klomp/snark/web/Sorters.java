@@ -200,18 +200,18 @@ class Sorters {
             int rv = getStatus(l) - getStatus(r);
             if (rv != 0)
                 return rv;
-            else if (getStatus(l) == 100 && getStatus(r) == 100)
-                // first tie break sorts by peer count
+            else if ((getStatus(l) == 100 && getStatus(r) == 100) || (getStatus(l) == 40 && getStatus(r) == 40))
+                // first tie break sorts by swarm size
                 return compLong(r.getTrackerSeenPeers(), l.getTrackerSeenPeers());
             else
-                // first tie break sorts by peer count
+                // first tie break sorts by active peer count
                 return compLong(r.getPeerCount(), l.getPeerCount());
         }
 
         private static int getStatus(Snark snark) {
             long remaining = snark.getRemainingLength();
             if (snark.isStopped()) {
-                if (remaining < 0)
+                if (remaining < 0) // magnet
                     return 50;
                 if (remaining > 0)
                     return 46;
@@ -234,7 +234,7 @@ class Sorters {
                 return 95;
             if (snark.getNeededLength() <= 0)
                 return 90;
-            if (snark.getPeerCount() <= 0)
+            if (snark.getPeerCount() <= 0) // no active peers
                 return 40;
             if (snark.getDownloadRate() <= 0)
                 return 35;
