@@ -3598,7 +3598,7 @@ code, tt {
 /* end responsive layout */
 
 /* torrent sort indicator */
-
+/*
 .snarkTorrents th a[href*="sort="]:hover::after {
     margin-left: 2px;
     position: absolute;
@@ -3616,7 +3616,7 @@ code, tt {
     color: #b3b;
     content: "\23F7";
 }
-
+*/
 /* end torrent sort indicator */
 
 .info_tracker {
@@ -4797,3 +4797,53 @@ td.snarkTorrentStatus b, .lang_en td.snarkTorrentStatus b {
     background: #000024 url(images/button_forum.png) 10px center no-repeat;
     background-size: 16px auto;
 }
+
+/* table sort indicators */
+
+.sortIcon {
+    position: relative;
+}
+
+.sortIcon:hover .ascending, .sortIcon:hover .descending {
+    transform: rotate(180deg);
+    transition: linear transform .1s;
+}
+
+.ascending, .descending {
+    position: absolute;
+    top: -2px !important;
+    right: -8px !important;
+    display: inline-block;
+    border-width: 4px;
+    border-style: solid;
+    border-color: transparent transparent #aaa transparent;
+    opacity: .7;
+}
+
+.descending {
+    top: 2px !important;
+    border-color: #aaa transparent transparent transparent;
+}
+
+.sortIcon:hover .ascending {
+    top: 2px !important;
+    border-color: transparent transparent #b3b transparent;
+}
+
+.sortIcon:hover .descending {
+    top: -2px !important;
+    border-color: #b3b transparent transparent transparent;
+}
+
+#snarkTorrentSort .ascending, th#snarkTorrentSort .descending {
+    right: -11px !important;
+}
+
+@supports (animation: ease all .1s) {
+.ascending, .descending {
+    filter: opacity(0);
+    animation: ease fade-in .2s .6s forwards;
+}
+}
+
+/* end table sort indicators */

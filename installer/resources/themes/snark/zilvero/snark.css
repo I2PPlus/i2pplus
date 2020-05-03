@@ -2395,3 +2395,63 @@ td.snarkTorrentDetails img, .snarkDirInfo td:first-child img:not(.thumb) {
 	box-shadow: 0 0 0 1px #ccc, inset 0 0 0 1px #f2f2f2;
 	background: #ddd;
 }
+
+/* table sort indicators */
+
+.sortIcon {
+	position: relative;
+	display: inline-block;
+}
+
+.sortIcon:hover .ascending, .sortIcon:hover .descending {
+	transform: rotate(180deg);
+	transition: linear transform .1s;
+}
+
+.ascending, .descending {
+	position: absolute;
+	top: -2px !important;
+	right: -8px !important;
+	display: inline-block;
+	border-width: 4px;
+	border-style: solid;
+	border-color: transparent transparent #999 transparent;
+}
+
+.descending {
+	top: 2px !important;
+	border-color: #999 transparent transparent transparent;
+}
+
+.sortIcon:hover .ascending {
+	top: 2px !important;
+	border-color: transparent transparent #d30 transparent;
+}
+
+.sortIcon:hover .descending {
+	top: -2px !important;
+	border-color: #d30 transparent transparent transparent;
+}
+
+#snarkTorrentSort .ascending, th#snarkTorrentSort .descending {
+	right: -11px !important;
+}
+
+@keyframes fade-in {
+0% {
+    filter: opacity(0);
+}
+
+100% {
+    filter: opacity(1);
+}
+}
+
+@supports (animation: ease all .1s) {
+.ascending, .descending {
+	filter: opacity(0);
+	animation: ease fade-in .2s .6s forwards;
+}
+}
+
+/* end table sort indicators */

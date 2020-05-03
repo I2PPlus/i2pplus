@@ -584,31 +584,28 @@ public class I2PSnarkServlet extends BasicServlet {
         out.write(TABLE_HEADER);
 
         String currentSort = req.getParameter("sort");
-        boolean isAscending = false;
-        String sortOrder = isAscending ? _t("ascending") : _t("descending");
         boolean showSort = total > 1;
         out.write("<tr>\n<th class=\"snarkGraphicStatus\">");
         // show incomplete torrents at top on first click
 //        String sort = ("2".equals(currentSort)) ? "-2" : "2";
-        String sort = "";
+        String sort = "-2";
         if (showSort) {
+            out.write("<span class=\"sortIcon\">");
             if (currentSort == null || "-2".equals(currentSort)) {
                 sort = "2";
-            } else if ("2".equals(currentSort)) {
+                if ( "-2".equals(currentSort))
+                    out.write("<span class=\"descending\"></span>");
+            } else if ("2".equals(currentSort) || "-12".equals(currentSort)) {
                 sort = "-2";
-                isAscending = true;
-            } else {
-                sort = "";
+                out.write("<span class=\"ascending\"></span>");
             }
             out.write("<a href=\"" + _contextPath + '/' + getQueryString(req, null, null, sort));
             out.write("\">");
         }
         String tx = _t("Status");
-        out.write(toThemeImg("status", tx,
-                             showSort ? _t("Sort by {0}" + " ({1})", tx,
-                             (isAscending ? _t("ascending") : _t("descending"))) : tx));
+        out.write(toThemeImg("status", tx, showSort ? _t("Sort by {0}", tx) : tx));
         if (showSort)
-            out.write("</a>");
+            out.write("</a></span>");
         out.write("</th>\n<th class=\"snarkTorrentStatus\">");
         out.write("</th>\n<th class=\"snarkTorrentPeerCount\">");
         if (_manager.util().connected() && !snarks.isEmpty()) {
@@ -642,15 +639,19 @@ public class I2PSnarkServlet extends BasicServlet {
         // cycle through sort by name or type
         boolean isTypeSort = false;
         if (showSort) {
+            out.write("<span class=\"sortIcon\">");
             if (currentSort == null || "0".equals(currentSort) || "1".equals(currentSort)) {
                 sort = "-1";
+                if ("1".equals(currentSort) || currentSort == null)
+                    out.write("<span class=\"ascending\"></span>");
             } else if ("-1".equals(currentSort)) {
                 sort = "12";
                 isTypeSort = true;
-                isAscending = true;
+                out.write("<span class=\"descending\"></span>");
             } else if ("12".equals(currentSort)) {
                 sort = "-12";
                 isTypeSort = true;
+                out.write("<span class=\"ascending\"></span>");
             } else {
                 sort = "";
             }
@@ -660,12 +661,10 @@ public class I2PSnarkServlet extends BasicServlet {
         tx = _t("Torrent");
         if (!snarks.isEmpty()) {
             out.write(toThemeImg("torrent", tx,
-                                 showSort ? _t("Sort by {0}" + " ({1})", (isTypeSort ? _t("File type") : _t("Torrent name")),
-                                 (isAscending ? _t("ascending") : _t("descending"))) : tx));
+                                 showSort ? _t("Sort by {0}", (isTypeSort ? _t("File type") : _t("Torrent name"))) : tx));
             if (showSort)
-                out.write("</a>");
+                out.write("</a></span>");
         }
-//        out.write("</th>\n</th><th class=\"snarkTorrentName\"></th>\n<th class=\"snarkCommentDetails\">\n<th class=\"snarkTorrentETA\" align=\"right\">");
         out.write("</th>\n<th class=\"snarkTorrentName\"></th>\n<th class=\"snarkTorrentETA\" align=\"right\">");
         // FIXME: only show icon when actively downloading, not uploading
         if (_manager.util().connected() && !snarks.isEmpty()) {
@@ -681,54 +680,57 @@ public class I2PSnarkServlet extends BasicServlet {
                 if (showSort) {
                     // show lower ETA values at top
 //                    sort = ("4".equals(currentSort)) ? "-4" : "4";
+                    out.write("<span class=\"sortIcon\">");
                     if (currentSort == null || "-4".equals(currentSort)) {
                         sort = "4";
+                        if ("-4".equals(currentSort))
+                            out.write("<span class=\"descending\"></span>");
                     } else if ("4".equals(currentSort)) {
                         sort = "-4";
-                        isAscending = true;
-                    } else {
-                        sort = "4";
+                        out.write("<span class=\"ascending\"></span>");
                     }
                     out.write("<a href=\"" + _contextPath + '/' + getQueryString(req, null, null, sort));
                     out.write("\">");
                 }
             // Translators: Please keep short or translate as " "
             tx = _t("ETA");
-            out.write(toThemeImg("eta", tx,
-                                 showSort ? _t("Sort by {0}" + " ({1})", _t("Estimated time remaining"),
-                                 (isAscending ? _t("ascending") : _t("descending"))) : _t("Estimated time remaining")));
+            out.write(toThemeImg("eta", tx, showSort ? _t("Sort by {0}", _t("Estimated time remaining")) : _t("Estimated time remaining")));
                 if (showSort)
-                    out.write("</a>");
+                    out.write("</a></span>");
             }
          }
         out.write("</th>\n<th class=\"snarkTorrentDownloaded\" align=\"right\">");
         // cycle through sort by size or downloaded
         boolean isDlSort = false;
-        isAscending = false;
         if (!snarks.isEmpty()) {
             if (showSort) {
+                out.write("<span class=\"sortIcon\">");
                 if ("-5".equals(currentSort)) {
                     sort = "5";
-                    isAscending = true;
+                    out.write("<span class=\"descending\"></span>");
                 } else if ("5".equals(currentSort)) {
                     sort = "-6";
                     isDlSort = true;
+                    out.write("<span class=\"ascending\"></span>");
                 } else if ("-6".equals(currentSort)) {
                     sort = "6";
                     isDlSort = true;
-                    isAscending = true;
+                    out.write("<span class=\"descending\"></span>");
+                } else if ("6".equals(currentSort)) {
+                    sort = "-5";
+                    isDlSort = true;
+                    out.write("<span class=\"ascending\"></span>");
                 } else {
                     sort = "-5";
                 }
                 out.write("<a href=\"" + _contextPath + '/' + getQueryString(req, null, null, sort));
                 out.write("\">");
             }
-        // Translators: Please keep short or translate as " "
+            // Translators: Please keep short or translate as " "
             tx = _t("RX");
-            out.write(toThemeImg("head_rx", tx, showSort ? _t("Sort by {0}" + " ({1})", (isDlSort ? _t("Downloaded") : _t("Size")),
-                                 (isAscending ? _t("ascending") : _t("descending"))) : _t("Downloaded")));
+            out.write(toThemeImg("head_rx", tx, showSort ? _t("Sort by {0}", (isDlSort ? _t("Downloaded") : _t("Size"))) : _t("Downloaded")));
             if (showSort)
-                out.write("</a>");
+                out.write("</a></span>");
         }
         out.write("</th>\n");
         out.write("<th class=\"snarkTorrentRateDown\" align=\"right\">");
@@ -745,11 +747,13 @@ public class I2PSnarkServlet extends BasicServlet {
         if (isDownloading) {
             if (showSort) {
 //                sort = ("-8".equals(currentSort)) ? "8" : "-8";
+                    out.write("<span class=\"sortIcon\">");
                     if (currentSort == null || "8".equals(currentSort)) {
                         sort = "-8";
+                        out.write("<span class=\"descending\"></span>");
                     } else if ("-8".equals(currentSort)) {
                         sort = "8";
-                        isAscending = true;
+                        out.write("<span class=\"asscending\"></span>");
                     } else {
                         sort = "-8";
                     }
@@ -758,10 +762,9 @@ public class I2PSnarkServlet extends BasicServlet {
             }
             // Translators: Please keep short or translate as " "
             tx = _t("RX Rate");
-            out.write(toThemeImg("head_rxspeed", tx, showSort ? _t("Sort by {0}" + " ({1})", _t("Down Rate"),
-                                (isAscending ? _t("ascending") : _t("descending"))) : _t("Down Rate")));
+            out.write(toThemeImg("head_rxspeed", tx, showSort ? _t("Sort by {0}", _t("Down Rate")) : _t("Down Rate")));
             if (showSort)
-                out.write("</a>");
+                out.write("</a></span>");
         }
      }
         out.write("<th class=\"snarkTorrentUploaded\" align=\"right\">");
@@ -780,20 +783,23 @@ public class I2PSnarkServlet extends BasicServlet {
                 // cycle through sort by uploaded or ratio
                 boolean nextRatSort = false;
                 if (showSort) {
+                    out.write("<span class=\"sortIcon\">");
                     if ("-7".equals(currentSort)) {
                         sort = "7";
-                        isAscending = true;
+                        out.write("<span class=\"descending\"></span>");
                     } else if ("7".equals(currentSort)) {
                         sort = "-11";
                         nextRatSort = true;
+                        out.write("<span class=\"ascending\"></span>");
                     } else if ("-11".equals(currentSort)) {
                         sort = "11";
                         nextRatSort = true;
                         isRatSort = true;
-                        isAscending = true;
+                        out.write("<span class=\"descending\"></span>");
                     } else if ("11".equals(currentSort)) {
                         sort = "-7";
                         isRatSort = true;
+                        out.write("<span class=\"ascending\"></span>");
                     } else {
                         sort = "-7";
                     }
@@ -802,11 +808,9 @@ public class I2PSnarkServlet extends BasicServlet {
                 }
                 // Translators: Please keep short or translate as " "
                 tx = _t("TX");
-                out.write(toThemeImg("head_tx", tx,
-                                     showSort ? _t("Sort by {0}" + " ({1})", (nextRatSort ? _t("Upload ratio") : _t("Uploaded")),
-                                     (isAscending ? _t("ascending") : _t("descending"))) : _t("Uploaded")));
+                out.write(toThemeImg("head_tx", tx, showSort ? _t("Sort by {0}", (nextRatSort ? _t("Upload ratio") : _t("Uploaded"))) : _t("Uploaded")));
                 if (showSort)
-                    out.write("</a>");
+                    out.write("</a></span>");
 //                }
 //            }
             out.write("</th>\n");
@@ -825,11 +829,14 @@ public class I2PSnarkServlet extends BasicServlet {
         if (isUploading) {
             if (showSort) {
 //                sort = ("-9".equals(currentSort)) ? "9" : "-9";
+                    out.write("<span class=\"sortIcon\">");
                     if (currentSort == null || "9".equals(currentSort)) {
                         sort = "-9";
+                        if ("9".equals(currentSort))
+                            out.write("<span class=\"ascending\"></span>");
                     } else if ("-9".equals(currentSort)) {
                         sort = "9";
-                        isAscending = true;
+                        out.write("<span class=\"descending\"></span>");
                     } else {
                         sort = "-9";
                     }
@@ -838,10 +845,9 @@ public class I2PSnarkServlet extends BasicServlet {
             }
             // Translators: Please keep short or translate as " "
             tx = _t("TX Rate");
-            out.write(toThemeImg("head_txspeed", tx, showSort ? _t("Sort by {0}" + " ({1})", _t("Up Rate"),
-                                (isAscending ? _t("ascending") : _t("descending"))) : _t("Up Rate")));
+            out.write(toThemeImg("head_txspeed", tx, showSort ? _t("Sort by {0}", _t("Up Rate")) : _t("Up Rate")));
         if (showSort)
-            out.write("</a>");
+            out.write("</a></span>");
         }
      }
         out.write("</th>\n");
@@ -2260,8 +2266,15 @@ public class I2PSnarkServlet extends BasicServlet {
             if (showRatios) {
                 if (total > 0) {
                     double ratio = uploaded / ((double) total);
-                    out.write((new DecimalFormat("0.000")).format(ratio));
-                    out.write("&nbsp;x");
+//                    out.write((new DecimalFormat("0.000")).format(ratio));
+                    if (ratio >= 0.1 || ratio == 0)
+                        out.write((new DecimalFormat("0")).format(ratio * 100));
+                    else if (ratio <= 0.01)
+                        out.write((new DecimalFormat("0.00")).format(ratio * 100));
+                    else
+                        out.write((new DecimalFormat("0.0")).format(ratio * 100));
+//                    out.write("&nbsp;x");
+                    out.write("&nbsp;%");
                 }
             } else if (uploaded > 0) {
                 out.write("<span class=\"right\">");
@@ -3816,7 +3829,10 @@ public class I2PSnarkServlet extends BasicServlet {
                 long uploaded = snark.getUploaded();
                 if (uploaded > 0) {
                     double ratio = uploaded / ((double) snark.getTotalLength());
-                    buf.append((new DecimalFormat("0.00")).format(ratio));
+                    if (ratio < 0.1)
+                        buf.append((new DecimalFormat("0.000")).format(ratio));
+                    else
+                        buf.append((new DecimalFormat("0.00")).format(ratio));
                     buf.append("&#8239;x");
                 } else {
                     buf.append('0');

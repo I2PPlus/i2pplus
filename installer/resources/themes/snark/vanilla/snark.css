@@ -4826,3 +4826,52 @@ input[type="checkbox"][disabled]:checked, input[type="radio"][disabled]:checked,
     box-shadow: 0 0 0 1px #fff inset, 0 0 1px 0 rgba(77, 69, 62, 0.7);
     background: #fff6df;
 }
+
+/* table sort indicators */
+
+.sortIcon {
+    position: relative;
+}
+
+.sortIcon:hover .ascending, .sortIcon:hover .descending {
+    transform: rotate(180deg);
+    transition: linear transform .1s;
+}
+
+.ascending, .descending {
+    position: absolute;
+    top: -2px !important;
+    right: -8px !important;
+    display: inline-block;
+    border-width: 4px;
+    border-style: solid;
+    border-color: transparent transparent #4d453e transparent;
+}
+
+.descending {
+    top: 2px !important;
+    border-color: #4d453e transparent transparent transparent;
+}
+
+.sortIcon:hover .ascending {
+    top: 2px !important;
+    border-color: transparent transparent #d90 transparent;
+}
+
+.sortIcon:hover .descending {
+    top: -2px !important;
+    border-color: #d90 transparent transparent transparent;
+}
+
+#snarkTorrentSort .ascending, th#snarkTorrentSort .descending {
+    right: -11px !important;
+}
+
+@supports (animation: ease all .1s) {
+.ascending, .descending {
+    filter: opacity(0);
+    animation: ease fade-in .2s .6s forwards;
+}
+}
+
+/* end table sort indicators */
