@@ -595,9 +595,11 @@ public class I2PSnarkServlet extends BasicServlet {
                 sort = "2";
                 if ( "-2".equals(currentSort))
                     out.write("<span class=\"ascending\"></span>");
-            } else if ("2".equals(currentSort) || "-12".equals(currentSort)) {
+            } else if ("2".equals(currentSort)) {
                 sort = "-2";
                 out.write("<span class=\"descending\"></span>");
+            } else {
+                sort = "2";
             }
             out.write("<a href=\"" + _contextPath + '/' + getQueryString(req, null, null, sort));
             out.write("\">");
