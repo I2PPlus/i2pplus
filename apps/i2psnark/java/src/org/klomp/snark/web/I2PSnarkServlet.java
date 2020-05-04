@@ -223,12 +223,7 @@ public class I2PSnarkServlet extends BasicServlet {
         if ("/.ajax/xhr1.html".equals(path)) {
             setHTMLHeaders(resp);
             PrintWriter out = resp.getWriter();
-            //if (_log.shouldLog(Log.DEBUG))
-            //    _manager.addMessage((_context.clock().now() / 1000) + " xhr1 p=" + req.getParameter("p"));
-            // load (cached) theme here so we minimize a redraw/flicker on refresh
-            out.write(DOCTYPE + HEADER_A + _themePath + HEADER_B);
-            // remember state of debug panel
-//            out.write("<script type=\"text/javascript\" src=\"" + _contextPath + WARBASE + "js/checkboxSave.js\"></script>");
+            out.write("<!DOCTYPE HTML>\n");
             writeMessages(out, false, peerString);
             boolean canWrite;
             synchronized(this) {
