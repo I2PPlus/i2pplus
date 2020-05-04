@@ -200,16 +200,23 @@ class Sorters {
             int rv = getStatus(l) - getStatus(r);
             if (rv != 0)
                 return rv;
-            else if ((getStatus(l) == 100 && getStatus(r) == 100) || (getStatus(l) == 40 && getStatus(r) == 40))
-                // first tie break sorts by swarm size
+            else if ((getStatus(l) == 100 && getStatus(r) == 100)||
+                     (getStatus(l) == 99 && getStatus(r) == 99) ||
+                     (getStatus(l) == 40 && getStatus(r) == 40) ||
+                     (getStatus(l) == 10 && getStatus(r) == 10))
+
+                // first tie break by swarm size
                 return compLong(r.getTrackerSeenPeers(), l.getTrackerSeenPeers());
             else
-                // first tie break sorts by active peer count
+                // tie break by active peer count
                 return compLong(r.getPeerCount(), l.getPeerCount());
         }
 
         private static int getStatus(Snark snark) {
             long remaining = snark.getRemainingLength();
+            int activePeers = snark.getPeerCount();
+            int peers = snark.getTrackerSeenPeers();
+            long downBps = snark.getDownloadRate();
             if (snark.isStopped()) {
                 if (remaining < 0) // magnet
                     return 50;
@@ -217,30 +224,35 @@ class Sorters {
                     return 46;
                 else
                     return 60;
-            }
-            if (snark.isStarting())
-                return 15;
-            if (snark.isAllocating())
-                return 20;
-            if (remaining < 0)
-                return 45; // magnet
-            if (remaining == 0) {
-                if (snark.getPeerCount() > 0)
-                    return 99; // seeding torrents with peers
+            } else {
+                if (snark.isStarting())
+                    return 15;
+                if (snark.isAllocating())
+                    return 20;
+                if (remaining < 0)
+                    return 45; // magnet
+                if (remaining == 0) { //seeding
+                    if (activePeers > 0)
+                        return 98; // active
+                    else if (peers > 0) // inactive with swarm members
+                        return 99;
+                    else
+                        return 100;
+                }
+                if (snark.isChecking())
+                    return 95;
+                if (snark.getNeededLength() <= 0)
+                    return 90;
+                if (peers <= 0) // no peers in swarm
+                    return 35;
+                if (activePeers <= 0) // no active peers
+                    return 10;
+                if (downBps <= 0) // stalled
+                    return 7;
                 else
-                    return 100;
-            }
-            if (snark.isChecking())
-                return 95;
-            if (snark.getNeededLength() <= 0)
-                return 90;
-            if (snark.getPeerCount() <= 0) // no active peers
-                return 40;
-            if (snark.getDownloadRate() <= 0)
-                return 35;
-            else
-                return 5;
-        }
+                    return 5;
+             }
+         }
     }
 
     private static class PeersComparator extends Sort {

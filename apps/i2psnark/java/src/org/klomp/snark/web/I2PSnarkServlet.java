@@ -588,16 +588,16 @@ public class I2PSnarkServlet extends BasicServlet {
         out.write("<tr>\n<th class=\"snarkGraphicStatus\">");
         // show incomplete torrents at top on first click
 //        String sort = ("2".equals(currentSort)) ? "-2" : "2";
-        String sort = "-2";
+        String sort = "2";
         if (showSort) {
             out.write("<span class=\"sortIcon\">");
             if (currentSort == null || "-2".equals(currentSort)) {
                 sort = "2";
                 if ( "-2".equals(currentSort))
-                    out.write("<span class=\"descending\"></span>");
+                    out.write("<span class=\"ascending\"></span>");
             } else if ("2".equals(currentSort) || "-12".equals(currentSort)) {
                 sort = "-2";
-                out.write("<span class=\"ascending\"></span>");
+                out.write("<span class=\"descending\"></span>");
             }
             out.write("<a href=\"" + _contextPath + '/' + getQueryString(req, null, null, sort));
             out.write("\">");
