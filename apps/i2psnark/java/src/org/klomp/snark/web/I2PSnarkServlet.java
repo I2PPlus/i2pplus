@@ -588,7 +588,7 @@ public class I2PSnarkServlet extends BasicServlet {
         out.write("<tr>\n<th class=\"snarkGraphicStatus\">");
         // show incomplete torrents at top on first click
 //        String sort = ("2".equals(currentSort)) ? "-2" : "2";
-        String sort = "2";
+        String sort = "-2";
         if (showSort) {
             out.write("<span class=\"sortIcon\">");
             if (currentSort == null || "-2".equals(currentSort)) {
