@@ -233,7 +233,7 @@ class Sorters {
                     return 45; // magnet
                 if (remaining == 0) { //seeding
                     if (activePeers > 0)
-                        return 99; // active
+                        return 65; // active
                     else if (peers > 0) // inactive with swarm members
                         return 98;
                     else
