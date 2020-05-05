@@ -2989,10 +2989,12 @@ h4.app a:hover::after, h4.app a:focus::after, h4.app2 a:hover::after, h4.app2 a:
 .main#tunnels h3 a[href^="/configtunnels#"]:active::after, .main#tunnels h3 a[href$="i2ptunnelmgr"]:active::after, #criticallogs + h3.tabletitle a:active::after,
 h4.app a:active::after, h4.app2 a:active::after  {
     background: url(images/configure_active.png) center center no-repeat;
+    transform: rotate(90deg);
+    transition: linear transform .2s;
 }
 
-#logs h3.tabletitle a.configure::after {
-    margin-right: 8px;
+#logs h3.tabletitle a.delete::after {
+    margin-left: 8px;
 }
 
 #logs h3.tabletitle a.delete::after {
@@ -3005,6 +3007,7 @@ h4.app a:active::after, h4.app2 a:active::after  {
 
 #logs h3.tabletitle a.delete:active::after {
     background: url(images/delete_active.png) center center no-repeat;
+    transform: scale(.7);
 }
 
 h4.app img, h4.app2 img {

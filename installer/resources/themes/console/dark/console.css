@@ -4899,7 +4899,7 @@ h3.dead span {
     float: right;
 }
 
-.main#tunnels h3 a:not(old), #criticallogs + h3.tabletitle a:not(old) {
+.main#tunnels h3 a:not(old), #logs a.configure:not(old), #logs a.delete:not(old) {
     font-size: 0;
 }
 
@@ -4908,7 +4908,7 @@ h4.app img, h4.app2 img {
 }
 
 .main#tunnels h3 a[href^="/configtunnels#"]::after, .main#tunnels h3 a[href$="/i2ptunnelmgr"]::after,
- #criticallogs + h3.tabletitle a::after, h4.app a::after, h4.app2 a::after {
+#logs a.configure::after, #logs a.delete::after, h4.app a::after, h4.app2 a::after {
     width: 16px;
     height: 16px;
     float: right;
@@ -4919,18 +4919,42 @@ h4.app img, h4.app2 img {
 
 .main#tunnels h3 a[href^="/configtunnels#"]:hover::after, .main#tunnels h3 a[href^="/configtunnels#"]:focus::after,
 .main#tunnels h3 a[href$="/i2ptunnelmgr"]:hover::after, .main#tunnels h3 a[href$="/i2ptunnelmgr"]:focus::after,
- #criticallogs + h3.tabletitle a:hover::after, #criticallogs + h3.tabletitle a:focus::after,
+ #logs a.configure:hover::after, #logs a.configure:focus::after,
  h4.app a:hover::after, h4.app a:focus::after, h4.app2 a:hover::after, h4.app2 a:focus::after {
     background: url(/themes/susidns/dark/images/configure_hover.png) center center no-repeat;
 }
 
-#logs h3.tabletitle a.delete::after {
-    margin-right: 8px;
+.main#tunnels h3 a[href^="/configtunnels#"]:active::after, .main#tunnels h3 a[href$="/i2ptunnelmgr"]:active::after,
+ #logs a.configure:active::after,  h4.app a:active::after, h4.app2 a:active::after {
+    transform: rotate(90deg);
+    transition: linear transform .2s;
+}
+
+#logs h3 a:first-of-type::after {
+    margin-right: -3px;
+}
+
+#logs a.delete {
+    margin-left: 8px;
+}
+
+#logs a.delete::after {
     background: url(images/delete.png) center center no-repeat;
 }
 
-#logs h3.tabletitle a.delete:hover::after {
+#logs a.delete:hover::after {
     background: url(images/delete_hover.png) center center no-repeat;
+}
+
+#logs a.configure:active::after {
+    opacity: .7;
+    transform: rotate(90deg);
+    transition: linear transform .2s;
+}
+
+#logs a.delete:active::after {
+    opacity: .7;
+    transform: scale(.7);
 }
 
 h4.app a::after {
