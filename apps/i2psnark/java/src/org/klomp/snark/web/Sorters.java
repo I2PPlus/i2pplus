@@ -201,7 +201,7 @@ class Sorters {
             if (rv != 0)
                 return rv;
             else if ((getStatus(l) == 100 && getStatus(r) == 100)||
-                     (getStatus(l) == 99 && getStatus(r) == 99) ||
+                     (getStatus(l) == 98 && getStatus(r) == 98) ||
                      (getStatus(l) == 40 && getStatus(r) == 40) ||
                      (getStatus(l) == 10 && getStatus(r) == 10))
 
@@ -233,9 +233,9 @@ class Sorters {
                     return 45; // magnet
                 if (remaining == 0) { //seeding
                     if (activePeers > 0)
-                        return 98; // active
+                        return 99; // active
                     else if (peers > 0) // inactive with swarm members
-                        return 99;
+                        return 98;
                     else
                         return 100;
                 }
