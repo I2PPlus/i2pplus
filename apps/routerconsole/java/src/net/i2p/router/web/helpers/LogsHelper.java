@@ -22,6 +22,7 @@ import net.i2p.router.web.RouterConsoleRunner;
 import net.i2p.util.Translate;
 import net.i2p.util.UIMessages;
 
+import java.util.Collections;
 import java.util.regex.*;
 
 public class LogsHelper extends HelperBase {
@@ -338,7 +339,7 @@ public class LogsHelper extends HelperBase {
      * @return -1 on failure, or number of lines in the file. Does not throw IOException.
      * @since 0.9.11 modded from FileUtil.readTextFile()
      */
-    private static long readTextFile(File f, int maxNumLines, long skipLines, StringBuilder buf) {
+    private static long readTextFile(File f, boolean utf8, int maxNumLines, long skipLines, StringBuilder buf) {
         if (!f.exists())
             return -1;
         BufferedReader in = null;
