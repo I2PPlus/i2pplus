@@ -2969,7 +2969,7 @@ h3 + p, h3 + table {
 }
 
 .main#tunnels h3 a[href^="/configtunnels#"]::after, .main#tunnels h3 a[href$="i2ptunnelmgr"]::after,
-#logs h3.tabletitle a.configure::after, #logs h3.tabletitle a.delete::after, h4.app a::after, h4.app2 a::after {
+#logs a.configure::after, #logs a.delete::after, h4.app a::after, h4.app2 a::after {
     padding: 0;
     width: 16px;
     height: 16px;
@@ -2981,33 +2981,34 @@ h3 + p, h3 + table {
 
 .main#tunnels h3 a[href^="/configtunnels#"]:hover::after, .main#tunnels h3 a[href$="i2ptunnelmgr"]:hover::after,
 .main#tunnels h3 a[href^="/configtunnels#"]:focus::after, .main#tunnels h3 a[href$="i2ptunnelmgr"]:focus::after,
-#logs h3.tabletitle a.configure:hover::after, #logs h3.tabletitle a.configure:focus::after,
+#logs a.configure:hover::after, #logs a.configure:focus::after,
 h4.app a:hover::after, h4.app a:focus::after, h4.app2 a:hover::after, h4.app2 a:focus::after {
     background: url(images/configure_hover.png) center center no-repeat;
 }
 
-.main#tunnels h3 a[href^="/configtunnels#"]:active::after, .main#tunnels h3 a[href$="i2ptunnelmgr"]:active::after, #criticallogs + h3.tabletitle a:active::after,
+.main#tunnels h3 a[href^="/configtunnels#"]:active::after, .main#tunnels h3 a[href$="i2ptunnelmgr"]:active::after, #logs a.configure:active::after,
 h4.app a:active::after, h4.app2 a:active::after  {
     background: url(images/configure_active.png) center center no-repeat;
     transform: rotate(90deg);
     transition: linear transform .2s;
 }
 
-#logs h3.tabletitle a.delete::after {
+#logs a.delete::after {
     margin-left: 8px;
+    background-size: 14px 14px !important;
 }
 
-#logs h3.tabletitle a.delete::after {
+#logs a.delete::after {
     background: url(images/delete.png) center center no-repeat;
 }
 
-#logs h3.tabletitle a.delete:hover::after, #logs h3.tabletitle a.delete:focus::after {
+#logs a.delete:hover::after, #logs a.delete:focus::after {
     background: url(images/delete_hover.png) center center no-repeat;
 }
 
-#logs h3.tabletitle a.delete:active::after {
+#logs a.delete:active::after {
     background: url(images/delete_active.png) center center no-repeat;
-    transform: scale(.7);
+    transform: scale(.85);
 }
 
 h4.app img, h4.app2 img {
@@ -3015,9 +3016,12 @@ h4.app img, h4.app2 img {
 }
 
 @media screen and (max-width: 1500px) {
-.main#tunnels h3 a[href^="/configtunnels#"]::after, .main#tunnels h3 a[href$="i2ptunnelmgr"]::after, #criticallogs + h3.tabletitle a::after {
+.main#tunnels h3 a[href^="/configtunnels#"]::after, .main#tunnels h3 a[href$="i2ptunnelmgr"]::after, #logs a.configure::after, #logs a.delete::after {
     width: 14px;
     height: 14px;
+    background-size: 12px 12px !important;
+}
+#logs a.configure::after {
     background-size: 14px 14px !important;
 }
 }
