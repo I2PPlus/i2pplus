@@ -435,11 +435,11 @@
                 </span>
                 <span class="multiOption">
                     <label><input value="4" type="radio" id="ECIES-X25519" name="encType" <%=(has4 ? " checked=\"checked\"" : edisabled)%> class="optbox" />
-                    ECIES-X25519 (<%=intl._t("Experts only!")%>)</label>
+                    ECIES-X25519</label>
                 </span>
                 <span class="multiOption">
                     <label><input value="4,0" type="radio" id="ElG_ECIES" name="encType" <%=((has0 && has4) ? " checked=\"checked\"" : edisabled)%> class="optbox" />
-                    <%=intl._t("Both encryption types")%> (<%=intl._t("Experts only!")%>)</label>
+                    <%=intl._t("Both encryption types")%></label>
                 </span>
             </td>
         </tr>
