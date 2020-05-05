@@ -2964,12 +2964,12 @@ h3 + p, h3 + table {
     margin-top: 10px;
 }
 
-.main#tunnels h3 a:not(old), #criticallogs + h3.tabletitle a:not(old) {
-    font-size: 0;
+.main#tunnels h3 a:not(old), #logs a.delete:not(old), #logs a.configure:not(old) {
+    font-size: 0 !important;
 }
 
-.main#tunnels h3 a[href^="/configtunnels#"]::after, .main#tunnels h3 a[href$="i2ptunnelmgr"]::after, #criticallogs + h3.tabletitle a::after,
-h4.app a::after, h4.app2 a::after {
+.main#tunnels h3 a[href^="/configtunnels#"]::after, .main#tunnels h3 a[href$="i2ptunnelmgr"]::after,
+#logs h3.tabletitle a.configure::after, #logs h3.tabletitle a.delete::after, h4.app a::after, h4.app2 a::after {
     padding: 0;
     width: 16px;
     height: 16px;
@@ -2979,8 +2979,9 @@ h4.app a::after, h4.app2 a::after {
     content: "";
 }
 
-.main#tunnels h3 a[href^="/configtunnels#"]:hover::after, .main#tunnels h3 a[href$="i2ptunnelmgr"]:hover::after, #criticallogs + h3.tabletitle a:hover::after,
-.main#tunnels h3 a[href^="/configtunnels#"]:focus::after, .main#tunnels h3 a[href$="i2ptunnelmgr"]:focus::after, #criticallogs + h3.tabletitle a:focus::after,
+.main#tunnels h3 a[href^="/configtunnels#"]:hover::after, .main#tunnels h3 a[href$="i2ptunnelmgr"]:hover::after,
+.main#tunnels h3 a[href^="/configtunnels#"]:focus::after, .main#tunnels h3 a[href$="i2ptunnelmgr"]:focus::after,
+#logs h3.tabletitle a.configure:hover::after, #logs h3.tabletitle a.configure:focus::after,
 h4.app a:hover::after, h4.app a:focus::after, h4.app2 a:hover::after, h4.app2 a:focus::after {
     background: url(images/configure_hover.png) center center no-repeat;
 }
@@ -2988,6 +2989,22 @@ h4.app a:hover::after, h4.app a:focus::after, h4.app2 a:hover::after, h4.app2 a:
 .main#tunnels h3 a[href^="/configtunnels#"]:active::after, .main#tunnels h3 a[href$="i2ptunnelmgr"]:active::after, #criticallogs + h3.tabletitle a:active::after,
 h4.app a:active::after, h4.app2 a:active::after  {
     background: url(images/configure_active.png) center center no-repeat;
+}
+
+#logs h3.tabletitle a.configure::after {
+    margin-right: 8px;
+}
+
+#logs h3.tabletitle a.delete::after {
+    background: url(images/delete.png) center center no-repeat;
+}
+
+#logs h3.tabletitle a.delete:hover::after, #logs h3.tabletitle a.delete:focus::after {
+    background: url(images/delete_hover.png) center center no-repeat;
+}
+
+#logs h3.tabletitle a.delete:active::after {
+    background: url(images/delete_active.png) center center no-repeat;
 }
 
 h4.app img, h4.app2 img {
@@ -3022,9 +3039,9 @@ h4.app img, h4.app2 img {
     padding-bottom: 8px !important;
 }
 
-img[src$="inbound.png"], img[src$="outbound.png"] {
+/*img[src$="inbound.png"], img[src$="outbound.png"] {
     filter: hue-rotate(-47deg);
-}
+}*/
 
 h3#iptransport a:not(old), h3#advancedconfig a:not(old), #reseedsetup a:not(old) {
     font-size: 0;
@@ -13871,4 +13888,30 @@ h3#bannedpeers {
 
 #config_peers #bannedpeercount {
     margin-bottom: -1px !important;
+}
+
+#tunnels #participating img, #tunnels #peercount img {
+    width: 0;
+    height: 0;
+}
+
+#tunnels #participating a::after, #tunnels #peercount a::after {
+    content: "";
+    display: inline-block;
+    width: 16px;
+    height: 16px;
+    vertical-align: middle;
+    background: url(images/refresh.png) center center no-repeat;
+    background-size: 16px 16px !important;
+}
+
+#tunnels #participating a:hover::after, #tunnels #participating a:focus::after,
+#tunnels #peercount a:hover::after, #tunnels #peercount a:focus::after {
+    background: url(images/refresh_hover.png) center center no-repeat;
+}
+
+#tunnels #participating a:active::after, #tunnels #peercount a:active::after {
+    background: url(images/refresh_active.png) center center no-repeat;
+    transform: rotate(90deg);
+    transition: linear transform .2s;
 }

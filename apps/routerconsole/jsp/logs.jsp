@@ -55,7 +55,30 @@
 <tr><td><b>JSTL:</b></td><td><jsp:getProperty name="logsHelper" property="jstlVersion" />&ensp;<span class="nowrap"><b>Encoding:</b>&ensp;<%=System.getProperty("file.encoding")%></span>&ensp;<span class="nowrap"><b>Charset:</b>&ensp;<%=java.nio.charset.Charset.defaultCharset().name()%></span></td></tr>
 </tbody>
 </table>
-<h3 class="tabletitle"><%=intl._t("Critical Logs")%></h3>
+<h3 class="tabletitle"><%=intl._t("Critical Logs")%>
+<%
+    String consoleNonce = net.i2p.router.web.CSSHelper.getNonce();
+    String ct1 = request.getParameter("clear");
+    String ct2 = request.getParameter("crit");
+    String ct3 = request.getParameter("svc");
+    String ct4 = request.getParameter("svct");
+    String ct5 = request.getParameter("svcf");
+    String ctn = request.getParameter("consoleNonce");
+    if ((ct1 != null || ct2 != null || (ct3 != null && ct4 != null && ct5 != null)) && ctn != null) {
+        int ict1 = -1, ict2 = -1;
+        long ict3 = -1, ict4 = -1;
+        try { ict1 = Integer.parseInt(ct1); } catch (NumberFormatException nfe) {}
+        try { ict2 = Integer.parseInt(ct2); } catch (NumberFormatException nfe) {}
+        try { ict3 = Long.parseLong(ct3); } catch (NumberFormatException nfe) {}
+        try { ict4 = Long.parseLong(ct4); } catch (NumberFormatException nfe) {}
+        logsHelper.clearThrough(ict1, ict2, ict3, ict4, ct5, ctn);
+    }
+    int last = logsHelper.getLastCriticalMessageNumber();
+    if (last >= 0) {
+%>
+&nbsp;<a class="delete" title="<%=intl._t("Clear logs")%>" href="logs?crit=<%=last%>&amp;consoleNonce=<%=consoleNonce%>">[<%=intl._t("Clear logs")%>]</a>
+<%  } %>
+</h3>
 <table id="criticallogs" class="logtable">
 <tbody>
 <tr><td>
@@ -63,7 +86,15 @@
 </td></tr>
 </tbody>
 </table>
-<h3 class="tabletitle"><%=intl._t("Router Logs")%>&ensp;<a title="<%=intl._t("Configure router logging options")%>" href="configlogging">[<%=intl._t("Configure")%>]</a></h3>
+<h3 class="tabletitle"><%=intl._t("Router Logs")%>
+<%
+    last = logsHelper.getLastMessageNumber();
+    if (last >= 0) {
+%>
+&nbsp;<a class="delete" title="<%=intl._t("Clear logs")%>" href="logs?clear=<%=last%>&amp;consoleNonce=<%=consoleNonce%>">[<%=intl._t("Clear logs")%>]</a>
+<%  } %>
+&nbsp;<a class="configure" title="<%=intl._t("Configure router logging options")%>" href="configlogging">[<%=intl._t("Configure")%>]</a>
+</h3>
 <table id="routerlogs" class="logtable">
 <tbody>
 <tr><td>
@@ -71,11 +102,25 @@
 </td></tr>
 </tbody>
 </table>
-<h3 class="tabletitle" id="servicelogs"><%=intl._t("Service (Wrapper) Logs")%></h3>
+<h3 class="tabletitle" id="servicelogs"><%=intl._t("Service (Wrapper) Logs")%>
+<%
+    StringBuilder buf = new StringBuilder(24*1024);
+    // timestamp, last line number, escaped filename
+    Object[] vals = logsHelper.getServiceLogs(buf);
+    String lts = vals[0].toString();
+    long llast = ((Long) vals[1]).longValue();
+    String filename = vals[2].toString();
+    if (llast >= 0) {
+%>
+&nbsp;<a class="delete" title="<%=intl._t("Clear logs")%>" href="logs?svc=<%=llast%>&amp;svct=<%=lts%>&amp;svcf=<%=filename%>&amp;consoleNonce=<%=consoleNonce%>">[<%=intl._t("Clear logs")%>]</a>
+<%  } %>
+</h3>
 <table id="wrapperlogs" class="logtable">
 <tbody>
 <tr><td>
- <jsp:getProperty name="logsHelper" property="serviceLogs" />
+<%
+    out.append(buf);
+%>
 </td></tr>
 </tbody>
 </table>

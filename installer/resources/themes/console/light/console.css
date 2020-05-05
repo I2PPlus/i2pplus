@@ -10,6 +10,7 @@ html, body {
 
 html {
     margin: 0 !important;
+/*    scrollbar-color: #88c #a4a4cb;*/
 }
 
 body {
@@ -20,6 +21,10 @@ body {
     line-height: 130%;
     background: #a4a4cb url(images/tile2.png) fixed;
     background-size: 32px 32px;
+}
+
+.main {
+    scrollbar-color: rgba(180,180,255,.7) rgba(255,255,255,.5);
 }
 
 /* preload button mouseovers */
@@ -2326,20 +2331,35 @@ h3#exploratory {
     margin-top: 15px;
 }
 
-#tunnels h3 a:not(old), #criticallogs + h3.tabletitle a:not(old) {
-    font-size: 0;
+#tunnels h3 a:not(old), #logs a.delete:not(old), #logs a.configure:not(old) {
+    font-size: 0 !important;
 }
 
-#tunnels h3 a[href^="/configtunnels#"]::after, #tunnels h3 a[href$="i2ptunnelmgr"]::after, #criticallogs + h3.tabletitle a::after {
+#logs a.configure, #logs a.delete, #logs a.configure:hover, #logs a.delete:hover, #logs a.configure:focus, #logs a.delete:focus,
+#logs a.active:hover, #logs a.active:hover {
+    border-left: none !important;
+    box-shadow: none !important;
+    background: none !important;
+}
+
+#tunnels h3 a[href^="/configtunnels#"]::after, #tunnels h3 a[href$="i2ptunnelmgr"]::after,
+#logs a.delete::after, #logs a.configure::after {
     margin-bottom: -1px;
     padding: 0;
     float: right;
     content: url(/themes/console/images/buttons/configure.png);
+    width: 16px;
+    height: 16px;
+    display: inline-block;
     filter: drop-shadow(0 0 1px #97a2ce);
 }
 
-#tunnels h3 a[href^="/configtunnels#"]:hover, #criticallogs + h3.tabletitle a:hover {
+#tunnels h3 a[href^="/configtunnels#"]:hover, #logs h3.tabletitle a.delete:hover::after, #logs h3.tabletitle a.configure:hover::after {
     filter: drop-shadow(0 0 1px #f60);
+}
+
+#logs a.delete::after {
+    content: url(/themes/console/images/buttons/delete.png);
 }
 
 h3#passwordheading {

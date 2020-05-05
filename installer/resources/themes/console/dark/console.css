@@ -4924,6 +4924,15 @@ h4.app img, h4.app2 img {
     background: url(/themes/susidns/dark/images/configure_hover.png) center center no-repeat;
 }
 
+#logs h3.tabletitle a.delete::after {
+    margin-right: 8px;
+    background: url(images/delete.png) center center no-repeat;
+}
+
+#logs h3.tabletitle a.delete:hover::after {
+    background: url(images/delete_hover.png) center center no-repeat;
+}
+
 h4.app a::after {
     margin-top: -1px;
 }

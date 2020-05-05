@@ -4286,6 +4286,11 @@ h3#servicedebug a, h3#graphinfo a, h3#browseronstart a {
     padding: 1px;
 }
 
+#logs h3 a.delete::after {
+    margin-left: 6px;
+    content: url(/themes/console/images/buttons/delete.png);
+}
+
 #version a::after {
     content: none !important;
 }
