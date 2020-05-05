@@ -225,6 +225,8 @@ class Sorters {
                 else
                     return 60;
             } else {
+                if (downBps > 0)
+                    return 3;
                 if (snark.isStarting())
                     return 15;
                 if (snark.isAllocating())
@@ -241,7 +243,7 @@ class Sorters {
                 }
                 if (snark.isChecking())
                     return 95;
-                if (snark.getNeededLength() <= 0)
+                if (snark.getNeededLength() <= 0)https://news.google.com/topstories?hl=en-US&gl=US&ceid=US:en
                     return 90;
                 if (peers <= 0) // no peers in swarm
                     return 35;
