@@ -11291,3 +11291,30 @@ to {
 #peerdefs li {
     line-height: 1.6 !important;
 }
+
+#logs .tabletitle, #jobs h3, #tunnels h3[id] {
+    position: relative;
+    overflow: hidden;
+}
+
+#logs #enviro ~ .tabletitle::after, #jobs h3::after, #tunnels h3[id]::after {
+    content: "";
+    display: inline-block;
+    width: 0;
+    height: 1px;
+    background: linear-gradient(to right, #d30, #f60);
+    position: absolute;
+    bottom: 0;
+    left: 0;
+    animation: ease-out reloader 1s forwards;
+    opacity: .7;
+}
+
+@keyframes reloader {
+0, 100% {
+    width: 0;
+}
+80%, 99% {
+    width: 120%;
+}
+}
