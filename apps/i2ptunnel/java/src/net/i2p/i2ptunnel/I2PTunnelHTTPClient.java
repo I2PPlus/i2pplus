@@ -1439,11 +1439,11 @@ public class I2PTunnelHTTPClient extends I2PTunnelHTTPClientBase implements Runn
         String header = getErrorPage("ahelper-new", ERR_AHELPER_NEW);
         out.write(header);
         out.write("<table id=\"proxyNewHost\">\n<tr><td align=\"right\">" + _t("Host") +
-                "</td><td>" + destination + "</td></tr>\n");
+                  "</td><td>" + destination + "</td></tr>\n");
         try {
             String b32 = Base32.encode(SHA256Generator.getInstance().calculateHash(Base64.decode(ahelperKey)).getData());
             out.write("<tr><td align=\"right\">" + _t("Base32") + "</td>" +
-                    "<td><a href=\"http://" + b32 + ".b32.i2p/\">" + b32 + ".b32.i2p</a></td></tr>");
+                      "<td><a href=\"http://" + b32 + ".b32.i2p/\">" + b32 + ".b32.i2p</a></td></tr>");
         } catch(Exception e) {
         }
         out.write("<tr><td align=\"right\">" + _t("Destination") + "</td><td>" +
@@ -1502,10 +1502,7 @@ public class I2PTunnelHTTPClient extends I2PTunnelHTTPClientBase implements Runn
         Writer out = new BufferedWriter(new OutputStreamWriter(outs, "UTF-8"));
         String header = getErrorPage("b32-auth", ERR_DESTINATION_UNKNOWN);
         out.write(header);
-        out.write("<table id=\"proxyNewHost\">\n" +
-                  "<tr><td align=\"right\">" + _t("Base32") + "</td>" +
-                  "<td>" + destination + "</td></tr>" +
-                  "\n</table>\n" + "<hr>");
+        out.write("<p>" + _t("Base32") + ": <a href=\"" + destination + "\">" + destination + "</a></p>\n" + "<hr>\n");
         String msg;
         if (code == LookupResult.RESULT_SECRET_REQUIRED)
             msg = _t("Base32 address requires lookup password");
@@ -1526,33 +1523,25 @@ public class I2PTunnelHTTPClient extends I2PTunnelHTTPClientBase implements Runn
 
         if (code == LookupResult.RESULT_KEY_REQUIRED || code == LookupResult.RESULT_SECRET_AND_KEY_REQUIRED) {
             String label = _t("Generate");
-            out.write("<h4>" + _t("Encryption key") + "</h4>\n<p>" +
+            out.write("<h4>" + _t("Encryption key") + "</h4>\n" +
                       "<p>" + _t("You must either enter a PSK encryption key provided by the server operator, or generate a DH encryption key and send that to the server operator.") +
-                      ' ' + _t("Ask the server operator for help.") +
-                      "</p>\n" +
-
-                      "<p><b>PSK:</b> " + _t("Enter PSK encryption key") +
-                      ": ]</p>\n" +
+                      ' ' + _t("Ask the server operator for help.") + "</p>\n" +
+                      "<p><b>PSK:</b> " + _t("Enter PSK encryption key") + ":</p>\n" +
                       "<input type=\"text\" size=\"55\" name=\"privkey\" value=\"\">\n" +
-                      "<p><b>DH:</b> " + _t("Generate new DH encryption key") +
-                      ": <div class=\"formaction_xx\">" +
-                      "<button type=\"submit\" class=\"accept\" name=\"action\" value=\"newdh\">" + label +
-                      "</button></div>\n");
+                      "<p><b>DH:</b> " + _t("Generate new DH encryption key") + ":</p>\n" +
+                      "<div class=\"formaction_xx\">" + "<button type=\"submit\" class=\"accept\" name=\"action\" value=\"newdh\">" + label + "</button>\n</div>\n");
                       //"<p>" + _t("Generate new PSK encryption key") +
                       //"<button type=\"submit\" class=\"accept\" name=\"action\" value=\"newpsk\">" + label + "</button>\n");
         }
         if (code == LookupResult.RESULT_SECRET_REQUIRED || code == LookupResult.RESULT_SECRET_AND_KEY_REQUIRED) {
-            out.write("<h4>" + _t("Lookup password") + "</h4>\n<p>" +
-                      "<p>" + _t("You must enter the password provided by the server operator.") +
-                      "</p>\n" +
+            out.write("<h4>" + _t("Lookup password") + "</h4>\n" +
+                      "<p>" + _t("You must enter the password provided by the server operator.") + "</p>\n" +
                       "<input type=\"text\" size=\"55\" name=\"secret\" value=\"\">\n");
         }
 
         // FIXME wasn't escaped
         String label = _t("Save & continue").replace("&", "&amp;");
-        out.write("<p><div class=\"formaction\"><button type=\"submit\" class=\"accept\" name=\"action\" value=\"save\">" +
-                  label + "</button></div>\n" +
-                  "</form>\n</div>\n");
+        out.write("<div class=\"formaction\">\n" + "<button type=\"submit\" class=\"accept\" name=\"action\" value=\"save\">" + label + "</button>\n" + "</div>\n</form>\n</div>\n");
         writeFooter(out);
     }
 
