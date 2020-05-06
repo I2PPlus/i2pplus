@@ -23,5 +23,5 @@ Proxy-Connection: close
 <div class="warning" id="warning">
 <h3>_("Warning: Authorization Required")</h3>
 <p>
-<p><b>_("Could not find the following destination:")</b>
+<p><b>_("Could not connect to the following destination:")</b>
 </p>
