@@ -43,11 +43,11 @@ public class GraphHelper extends FormHandler {
     private static final String PROP_PERIODS = "routerconsole.graphPeriods";
     private static final String PROP_EVENTS = "routerconsole.graphEvents";
     private static final String PROP_LEGEND = "routerconsole.graphHideLegend";
-    private static final String PROP_HIDPI = "routerconsole.graphHiDpi";
+    private static final String PROP_GRAPH_HIDPI = "routerconsole.graphHiDpi";
     private static final int DEFAULT_REFRESH = 1*60;
     private static final int DEFAULT_PERIODS = 60;
     private static final boolean DEFAULT_LEGEND = false;
-    private static final boolean DEFAULT_HIDPI = false;
+    private static final boolean DEFAULT_GRAPH_HIDPI = false;
     private static final int MIN_X = 160;
     private static final int MIN_Y = 40;
     private static final int MIN_C = 20;
@@ -82,7 +82,7 @@ public class GraphHelper extends FormHandler {
     }
 
     public boolean getGraphHiDpi() {
-        return _context.getBooleanProperty(PROP_HIDPI);
+        return _context.getBooleanProperty(PROP_GRAPH_HIDPI);
     }
 
     public void setPeriodCount(String str) {
@@ -169,7 +169,7 @@ public class GraphHelper extends FormHandler {
                 else if (title.equals("bw.recvRate")) hasRx = true;
             }
             boolean hideLegend = _context.getProperty(PROP_LEGEND, DEFAULT_LEGEND);
-            boolean hiDPI = _context.getProperty(PROP_HIDPI, DEFAULT_HIDPI);
+            boolean hiDPI = _context.getProperty(PROP_GRAPH_HIDPI, DEFAULT_GRAPH_HIDPI);
 
             if (hasTx && hasRx && !_showEvents) {
                 // remove individual tx/rx graphs if displaying combined
@@ -306,7 +306,7 @@ public class GraphHelper extends FormHandler {
                 _out.write(' ' + _t("ending {0} ago", DataHelper.formatDuration2(_end * period)));
 
             boolean hideLegend = _context.getProperty(PROP_LEGEND, DEFAULT_LEGEND);
-            boolean hiDPI = _context.getProperty(PROP_HIDPI, DEFAULT_HIDPI);
+            boolean hiDPI = _context.getProperty(PROP_GRAPH_HIDPI, DEFAULT_GRAPH_HIDPI);
             _out.write("&nbsp;<a href=\"/graphs\">" + _t("Return to main graphs page") + "</a></h3>\n"
                        + "<div class=\"graphspanel\">\n");
             if (hiDPI)
