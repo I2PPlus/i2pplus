@@ -44,6 +44,8 @@ import org.eclipse.jetty.servlet.ErrorPageErrorHandler;
 
 import org.eclipse.jetty.security.LoginService;
 
+import java.lang.Class;
+
 /**
  *  Extends DefaultServlet to set locale for the displayed time of directory listings,
  *  to prevent leaking of the locale.
@@ -236,7 +238,8 @@ public class I2PDefaultServlet extends DefaultServlet
             }
 
             if (!(ls[i].startsWith(".") || ls[i].equals("jetty-dir.css") || ls[i].equals("favicon.ico") ||
-                  ls[i].endsWith("~") || ls[i].endsWith(".bak") || ls[i].endsWith(".old"))) {
+                  ls[i].equals("favicon.png") || ls[i].endsWith("~") || ls[i].endsWith("_") || ls[i].endsWith(".bak") ||
+                  ls[i].endsWith(".backup") || ls[i].endsWith(".orig") || ls[i].endsWith(".old"))) {
                 buf.append("<tr><td class=\"name\"><a href=\"");
                 String path = URIUtil.addPaths(encodedBase,URIUtil.encodePath(ls[i]));
 
