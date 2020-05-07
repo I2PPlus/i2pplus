@@ -100,7 +100,7 @@ public class GarlicMessageReceiver {
             if (_log.shouldLog(Log.WARN)) {
                 String d = (_clientDestination != null) ? _clientDestination.toBase32() : "the router";
                 String keys = (decryptionKey2 != null) ? "both ElGamal and ECIES keys" : decryptionKey.getType().toString();
-                _log.warn("Failed to decrypt " + message + " for " + d + " with " + keys);
+                _log.warn("Failed to decrypt " + message + " with " + keys + "\n* Destination: " + d);
             }
             _context.statManager().addRateData("crypto.garlic.decryptFail", 1);
             _context.messageHistory().messageProcessingError(message.getUniqueId(),
