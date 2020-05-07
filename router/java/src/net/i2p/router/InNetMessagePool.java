@@ -146,6 +146,9 @@ public class InNetMessagePool implements Service {
      *         (was queue length, long ago)
      */
     public int add(I2NPMessage messageBody, RouterIdentity fromRouter, Hash fromRouterHash) {
+        final MessageHistory history = _context.messageHistory();
+        final boolean doHistory = history.getDoLog();
+
         long exp = messageBody.getMessageExpiration();
 
         if (_log.shouldDebug())
@@ -179,12 +182,13 @@ public class InNetMessagePool implements Service {
             _context.statManager().addRateData("inNetPool.dropped", 1);
             // FIXME not necessarily a duplicate, could be expired too long ago / too far in future
             _context.statManager().addRateData("inNetPool.duplicate", 1);
-            _context.messageHistory().droppedOtherMessage(messageBody, (fromRouter != null ? fromRouter.calculateHash() : fromRouterHash));
-            _context.messageHistory().messageProcessingError(messageBody.getUniqueId(), messageBody.getClass().getSimpleName(), "Duplicate/expired");
+            if (doHistory) {
+                history.droppedOtherMessage(messageBody, (fromRouter != null ? fromRouter.calculateHash() : fromRouterHash));
+                history.messageProcessingError(messageBody.getUniqueId(), 
+                                                                messageBody.getClass().getSimpleName(), 
+                                                                "Duplicate/expired");
+            }
             return -1;
-        } else {
-            if (_log.shouldLog(Log.DEBUG))
-                _log.debug("Received [MsgID [" + messageBody.getUniqueId() + "] is NOT a duplicate nor expired \n* Expires: " + new Date(exp));
         }
 
         boolean jobFound = false;
@@ -214,12 +218,11 @@ public class InNetMessagePool implements Service {
                                                 fromRouterHash);
                     if (job != null) {
                         _context.jobQueue().addJob(job);
-                        jobFound = true;
                     } else {
                         // ok, we may not have *found* a job, per se, but we could have, the
                         // job may have just executed inline
-                        jobFound = true;
                     }
+                    jobFound = true;
                 }
             }
             break;
@@ -232,7 +235,8 @@ public class InNetMessagePool implements Service {
                 // not handled as a reply
                 if (!jobFound) {
                     // was not handled via HandlerJobBuilder
-                    _context.messageHistory().droppedOtherMessage(messageBody, (fromRouter != null ? fromRouter.calculateHash() : fromRouterHash));
+                    if (doHistory)
+                        history.droppedOtherMessage(messageBody, (fromRouter != null ? fromRouter.calculateHash() : fromRouterHash));
 
                     switch (type) {
                       case DeliveryStatusMessage.MESSAGE_TYPE:
@@ -248,9 +252,12 @@ public class InNetMessagePool implements Service {
                         break;
 
                       case DatabaseSearchReplyMessage.MESSAGE_TYPE:
-                        if (_log.shouldLog(Log.INFO))
-                            _log.info("Dropping slow NetDb Lookup response " + messageBody);
-                        _context.statManager().addRateData("inNetPool.droppedDbLookupResponseMessage", 1);
+                        // This is normal.
+                        // The three netdb selectors,
+                        // FloodOnlyLookupSelector, IterativeLookupSelector, and SearchMessageSelector
+                        // never return true from isMatch() for a DSRM.
+                        // IterativeLookupSelector.isMatch() queues a new IterativeLookupJob
+                        // to fetch the responses.
                         break;
 
                       case DatabaseLookupMessage.MESSAGE_TYPE:
@@ -268,19 +275,23 @@ public class InNetMessagePool implements Service {
                         break;
                     }  // switch
                 } else {
-                    String mtype = messageBody.getClass().getName();
-                    _context.messageHistory().receiveMessage(mtype, messageBody.getUniqueId(),
-                                                             messageBody.getMessageExpiration(),
-                                                             fromRouterHash, true);
+                    if (doHistory) {
+                        String mtype = messageBody.getClass().getName();
+                        history.receiveMessage(mtype, messageBody.getUniqueId(), 
+                                                             messageBody.getMessageExpiration(), 
+                                                             fromRouterHash, true);	
+                    }
                     return 0; // no queue
                 }
             }
         }
 
-        String mtype = messageBody.getClass().getName();
-        _context.messageHistory().receiveMessage(mtype, messageBody.getUniqueId(),
-                                                 messageBody.getMessageExpiration(),
-                                                 fromRouterHash, true);
+        if (doHistory) {
+            String mtype = messageBody.getClass().getName();
+            history.receiveMessage(mtype, messageBody.getUniqueId(), 
+                                                 messageBody.getMessageExpiration(), 
+                                                 fromRouterHash, true);	
+        }
         return 0; // no queue
     }
 

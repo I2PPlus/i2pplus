@@ -39,11 +39,6 @@ class StoreMessageSelector implements MessageSelector {
     public long getExpiration() { return _expiration; }
 
     public boolean isMatch(I2NPMessage message) {
-//        if (_log.shouldDebug())
-//            _log.debug("[Job " + _storeJobId + "] isMatch -> " + message.getClass().getName().replace("net.i2p.data.i2np.", "").replace("Message", "Msg").replace("Database", "Db") +
-//                       "\n* Requested: DeliveryStatusMsg from [" + _peer.toBase64().substring(0,6) + "]");
-//            _log.debug("[Job " + _storeJobId + "] isMatch -> " + message.getClass().getSimpleName() +
-//                       "\n* Requested: DeliveryStatusMsg from [" + _peer.toBase64().substring(0,6) + "]");
         if (message.getType() == DeliveryStatusMessage.MESSAGE_TYPE) {
             DeliveryStatusMessage msg = (DeliveryStatusMessage)message;
             if (msg.getMessageId() == _waitingForId) {
@@ -51,17 +46,9 @@ class StoreMessageSelector implements MessageSelector {
                     _log.info("[Job " + _storeJobId + "] Found match for the key we're waiting for [MsgID " + _waitingForId  + "]");
                 _found = true;
                 return true;
-            } else {
-//                if (_log.shouldDebug())
-//                    _log.debug("[Job " + _storeJobId + "] Received DeliveryStatusMsg [MsgID " + msg.getMessageId() +
-//                               "] but waiting for [MsgID " + _waitingForId + "]");
-                return false;
             }
-        } else {
-                //if (_log.shouldDebug())
-                //_log.debug("[Job " + _storeJobId + "] Not a DeliveryStatusMsg");
-            return false;
         }
+        return false;
     }
 
     @Override

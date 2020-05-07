@@ -65,10 +65,6 @@ class SearchMessageSelector implements MessageSelector {
     public long getExpiration() { return _exp; }
 
     public boolean isMatch(I2NPMessage message) {
-        if (_log.shouldLog(Log.DEBUG))
-            _log.debug("[ID " + _id + "] isMatch -> " + message.getClass().getName().replace("net.i2p.data.i2np.", "").replace("Message", "Msg").replace("Database", "Db") +
-                       "\n* Requested: DbStore or DbSearchReply from [" + _peer.toBase64().substring(0,6) + "] for [" +
-                       _state.getTarget().toBase64().substring(0,6) + "]");
         int type = message.getType();
         if (type == DatabaseStoreMessage.MESSAGE_TYPE) {
             DatabaseStoreMessage msg = (DatabaseStoreMessage)message;
@@ -79,10 +75,6 @@ class SearchMessageSelector implements MessageSelector {
                                "but DBStore doesn't include that info");
                 _found = true;
                 return true;
-            } else {
-                if (_log.shouldLog(Log.DEBUG))
-                    _log.debug("[ID " + _id + "] Received DbStore of a key we're not looking for");
-                return false;
             }
         } else if (type == DatabaseSearchReplyMessage.MESSAGE_TYPE) {
             DatabaseSearchReplyMessage msg = (DatabaseSearchReplyMessage)message;
@@ -92,20 +84,9 @@ class SearchMessageSelector implements MessageSelector {
                         _log.debug("[ID " + _id + "] Received DbSearchReply from queried peer for a key we're looking for");
                     _found = true;
                     return true;
-                } else {
-                    if (_log.shouldLog(Log.DEBUG))
-                        _log.debug("[ID " + _id + "] Received DbSearchReply from queried peer, but NOT for the key we're looking for");
-                    return false;
                 }
-            } else {
-                if (_log.shouldLog(Log.DEBUG))
-                    _log.debug("[ID " + _id + "] DbSearchReply from unqueried peer [" +
-                               msg.getFromHash().toBase64().substring(0,6) + "] not [" + _state.getTarget().toBase64().substring(0,6) + "]");
-                return false;
             }
-        } else {
-            //_log.debug("Not a DbStore or DbSearchReply");
-            return false;
         }
+        return false;
     }
 }
