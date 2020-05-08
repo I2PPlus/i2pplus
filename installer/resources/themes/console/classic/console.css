@@ -5066,7 +5066,6 @@ body.iframed {
     text-overflow: ellipsis;
     text-align: center;
     border: 1px solid #aaafce;
-    border-radius: 2px;
     box-shadow: 0 0 1px #fff;
     background: #fff;
     background: linear-gradient(to bottom, #fff, #ddf);
@@ -5087,14 +5086,14 @@ body.iframed {
 }
 
 .themechoice .optbox {
-    height: 80px !important;
-    width: 110px !important;
-    padding: 2px;
-    opacity: 0; /* hide the radio icon so we can use thumbnail img instead */
     margin-top: 4px;
     margin-left: -32px;
+    padding: 2px;
+    height: 80px !important;
+    width: 110px !important;
     position: absolute !important;
     z-index: 999;
+    opacity: 0; /* hide the radio icon so we can use thumbnail img instead */
 }
 
 .themechoice .optbox + img {
@@ -5140,20 +5139,20 @@ body.iframed {
 }
 
 .themechoice:active .optbox:checked + img ~ .themelabel {
-    background: linear-gradient(to right, #eef, #fff, #eef) !important;
+    font-weight: bold;
     color: #f60 !important;
     box-shadow: none !important;
-    font-weight: bold;
+    background: linear-gradient(to right, #eef, #fff, #eef) !important;
 }
 
 #themeoptions {
+    margin: 0 -5px -3px;
+    padding: 5px 10px 5px 5px;
+    position: relative;
+    top: 4px;
     clear: both;
     border-top: 1px solid #aaafce;
     background: rgba(230, 230, 255, 0.5);
-    margin: 0 -5px -3px;
-    position: relative;
-    top: 4px;
-    padding: 5px 10px 5px 5px;
 }
 
 #themeoptions br {
@@ -5223,7 +5222,6 @@ p#helptranslate {
     float: left;
     text-align: center;
     border: 1px solid #aaafce;
-    border-radius: 2px;
     box-shadow: 0 0 1px #fff;
     background: #fff;
     background: linear-gradient(to bottom, #fff, #ddf);
@@ -11315,12 +11313,11 @@ to {
 }
 }
 
-
 th, td {
     position: relative;
 }
 
 #netdblookup th, #netdblookup td, #refreshsidebar td, #pluginconfig table td, #config_advanced td, #bandwidthconfig td, #i2pupdates td, #help th, #help td,
-#externali2cp td, #config_keyring td, #config_logging td, #config_network td, #config_peers td, .formaction, #sidebarconf tr:last-child td {
+#externali2cp td, #config_keyring td, #config_logging td, #config_network td, #config_peers td, .formaction, #sidebarconf tr:last-child td, #config_ui td {
     position: static;
 }
