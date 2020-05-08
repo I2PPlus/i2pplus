@@ -37,7 +37,7 @@ table {
 }
 
 table.book {
-    border: 1px solid #89f;
+    border: 1px solid #aaafce;
     margin: 10px 0 !important;
     border-collapse: collapse;
 }
@@ -67,8 +67,8 @@ table.book tr:hover textarea {
 }
 
 table.book tr:hover {
-    border-top: 1px solid #89f;
-    border-bottom: 1px solid #89f;
+    border-top: 1px solid #aaafce;
+    border-bottom: 1px solid #aaafce;
 }
 
 table.book td:last-child {
@@ -145,7 +145,7 @@ input:focus::placeholder {
 }
 
 #navi {
-    border: 1px solid #89f;
+    border: 1px solid #aaafce;
     background: linear-gradient(to bottom, #fff 50%, #eff2ff 50%);
     margin: -1px -11px 0;
     padding: 0;
@@ -199,7 +199,7 @@ input:focus::placeholder {
 }
 
 div.page {
-    border: 1px solid #89f;
+    border: 1px solid #aaafce;
     background: #fff !important;
     margin: 0;
     padding: 0 10px;
@@ -215,7 +215,7 @@ div.page {
 }
 
 div.help {
-    border: 1px solid #89f;
+    border: 1px solid #aaafce;
     margin: 0 0 10px;
     background: #eef;
 }
@@ -255,7 +255,7 @@ h3 {
     color: #2c354f;
     font-size: 11pt;
     font-weight: bold;
-    border: 1px solid #89f;
+    border: 1px solid #aaafce;
     margin: -1px -11px 10px;
     padding: 5px 10px;
     background: #fff;
@@ -270,18 +270,18 @@ h3 {
 h4 {
     margin: -11px -11px 10px;
     padding: 3px 10px;
-    border: 1px solid #89f;
+    border: 1px solid #aaafce;
     background: linear-gradient(to right, #fff, #eef);
 }
 
 a {
-    color: #33a;
+    color: #6b6b94;
     text-decoration: none;
     font-weight: bold;
 }
 
 a:visited {
-    color: #448;
+    color: #575779;
 }
 
 a:hover, a:focus {
@@ -298,7 +298,7 @@ th {
     padding:5px 10px;
     font-size:10pt;
     background: linear-gradient(to bottom, #fff 50%, #eff2ff 50%);
-    border-bottom: 1px solid #89f;
+    border-bottom: 1px solid #aaafce;
 }
 
 td {
@@ -330,8 +330,8 @@ tr.list0:hover, tr.list1:hover {
 
 p.messages {
     background: #ffe;
-    border: 1px solid #89f;
-    border: 1px solid #89f;
+    border: 1px solid #aaafce;
+    border: 1px solid #aaafce;
     padding: 15px 15px 15px 45px;
     margin: -6px -11px 5px;
     background: #ffe url(/themes/console/images/info/infohelp.png) 8px center no-repeat;
@@ -378,7 +378,7 @@ p.footer {
 }
 
 div#filter {
-    border: 1px solid #89f;
+    border: 1px solid #aaafce;
     padding: 0 10px;
     margin: 0 -11px;
     word-spacing: 0.2em;
@@ -406,11 +406,11 @@ div#filter {
     margin: 2px 0;
     padding: 0 6px;
     font-size: 10pt;
-    color: #448;
+    color: #575779;
     border-radius: 2px;
     text-transform: capitalize;
     box-shadow: inset 0 0 0 1px #fff;
-    border: 1px solid #99f;
+    border: 1px solid #aaafce;
     min-width: 16px;
     background: #fff;
     background: linear-gradient(to bottom, #fff, #eef);
@@ -446,7 +446,7 @@ div#filter {
     display: inline-block;
     margin-top: -1px;
     padding: 5px;
-    border: 1px solid #89f;
+    border: 1px solid #aaafce;
     border-radius: 0 0 2px 2px;
     box-shadow: inset 0 0 0 1px #fff;
     font-size: 11pt;
@@ -486,7 +486,7 @@ div#filter {
     margin: -1px 0 -13px;
     white-space: nowrap;
     padding: 5px 5px 4px	;
-    border: 1px solid #89f;
+    border: 1px solid #aaafce;
     background: #fff;
 }
 
@@ -540,7 +540,7 @@ div#filter {
 }
 
 #visualid td[colspan="2"] {
-    border-top: 1px solid #89f;
+    border-top: 1px solid #aaafce;
     padding: 15px 0;
 }
 
@@ -596,7 +596,7 @@ _:-ms-lang(x), img.illustrate {
 #content + #buttons, #config + #buttons {
     margin: -21px -11px 0;
     padding: 10px;
-    border: 1px solid #89f;
+    border: 1px solid #aaafce;
 }
 
 #config + #buttons {
@@ -610,7 +610,7 @@ _:-ms-lang(x), img.illustrate {
 }
 
 p.buttons {
-    border: 1px solid #89f;
+    border: 1px solid #aaafce;
     padding: 10px;
     margin: 0 -11px -13px;
     background: #fff;
@@ -631,7 +631,7 @@ input[type="text"], input[type="password"], textarea {
     vertical-align: middle;
     font: 9pt/130% "Droid Sans", "Open Sans", "Noto Sans", Ubuntu, "Bitstream Vera Sans", "Lucida Grande", "DejaVu Sans", "Segoe UI", Verdana, Helvetica, sans-serif;
     color: #222;
-    border: 1px solid #99f;
+    border: 1px solid #aaafce;
     border-radius: 2px;
     box-shadow: inset 1px 1px 1px #ddd;
     background: #fff;
@@ -677,7 +677,7 @@ td.destinations textarea, td.destinations textarea:focus {
     padding: 5px 8px !important;
     color: #333 !important;
     border-radius: 2px;
-    border: 1px solid #99f;
+    border: 1px solid #aaafce;
     box-shadow: inset 0 0 0 1px #fff, 0 0 1px 0 #ddd;
     background: #eee;
     background: linear-gradient(to bottom, #fff, #eef);
@@ -690,7 +690,7 @@ input.update {
 .fakebutton:hover, input[type="submit"]:hover, input[type="reset"]:hover,
 .fakebutton:focus, input[type="submit"]:focus, input[type="reset"]:focus {
     color: #222;
-    border: 1px solid #89f;
+    border: 1px solid #aaafce;
     background: #fff;
     background: linear-gradient(to bottom, #ddd, #fff);
     filter: drop-shadow(0 0 1px #89f);
@@ -735,7 +735,7 @@ div#config, form[action="subscriptions"] div#content {
 textarea[name="config"], textarea[name="content"] {
     padding: 2px 5px;
     height: 200px !important;
-    border: 1px solid #89f;
+    border: 1px solid #aaafce;
     box-shadow: none;
 }
 
@@ -753,13 +753,13 @@ textarea[name="config"], textarea[name="content"] {
 
 #navi a, #navi a:visited {
     border: 1px solid #6b78bf;
-    border: 1px solid #89f;
+    border: 1px solid #aaafce;
     border-radius: 2px;
     margin: 3px 0 !important;
     box-shadow: 0 0 1px 0 #ddd, inset 0 0 0 1px #fff;
     display: inline-block;
     outline: none;
-    color: #448 !important;
+    color: #575779;
 }
 
 #navi a:hover, #navi a:focus {
@@ -820,7 +820,7 @@ textarea[name="config"], textarea[name="content"] {
 
 #book + #buttons {
     margin: -12px 10px 23px;
-    border: 1px solid #89f;
+    border: 1px solid #aaafce;
     border-top: none;
     border-bottom: none;
 }
@@ -958,7 +958,7 @@ p.book {
     vertical-align: middle;
     margin: 3px 10px 3px 1px;
     padding: 1px;
-    border: 1px solid #89f;
+    border: 1px solid #aaafce;
     border-radius: 2px;
     background: #fff;
 }
@@ -1164,7 +1164,7 @@ input[type="radio"], input[type="radio"]:checked, input[type="radio"][disabled],
     height: 19px !important;
     vertical-align: middle !important;
     box-sizing: border-box;
-    border: 1px solid #99f !important;
+    border: 1px solid #aaafce;
     background: #f8f8ff;
     -moz-appearance: none;
     -webkit-appearance: inherit;

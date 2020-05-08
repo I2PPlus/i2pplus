@@ -12,8 +12,8 @@ body {
     margin: 3px;
     padding: 0;
     text-align: left;
-    background: #bbf url(images/bg.png) center center scroll;
-    background-size: 120px 120px;
+    background: #eef url(images/bg0.png) center center scroll;
+    background-size: 90px 90px;
     color: #2c354f;
     font: 9pt/130% "Droid Sans", "Open Sans", "Noto Sans", Ubuntu, "Segoe UI", "Lucida Grande", "DejaVu Sans", Verdana, Helvetica, sans-serif;
 }
@@ -376,7 +376,7 @@ img[src="/themes/console/images/i2plogo.png"] {
     background: url(/themes/console/images/info/errortriangle.png) 20px 40% no-repeat, linear-gradient(to bottom, #fff, #ffe);
     margin: -1px 0 0 211px;
     min-width: 475px;
-    border: 1px solid #89f;
+    border: 1px solid #aaafce;
     box-shadow: inset 0 0 0 1px #ff9;
     text-align: justify;
     word-wrap: break-word;
@@ -446,7 +446,7 @@ img[src="/themes/console/images/i2plogo.png"] {
     margin: 0 0 5px;
     padding: 9px 1px 7px 1px;
     text-align: center !important;
-    border: 1px solid #89f;
+    border: 1px solid #aaafce;
     word-wrap: break-word;
     font-size: 9pt;
     line-height: 125%;
@@ -550,7 +550,7 @@ img[src="/themes/console/images/i2plogo.png"] {
     color: #89f;
     background: #89f;
     height: 0;
-    border-bottom: 1px solid #89f;
+    border-bottom: 1px solid #aaafce;
     margin: 8px -1px 7px -1px;
 }
 
@@ -586,19 +586,17 @@ img[src="/themes/console/images/i2plogo.png"] {
 }
 
 .routersummary h4 {
-    border: 0;
-    border-bottom: 0 !important;
-    font-size: 8.5pt;
-/*    letter-spacing: 0.05em;*/
     margin: -7px -1px -7px -1px !important;
     padding: 8px 2px;
-    text-transform: capitalize;
-    text-decoration: none !important;
-    color: #1f7096;
     line-height: 108%;
+    text-transform: capitalize;
+    font-size: 8.5pt;
+    color: #1f7096;
+    border: none !important;
+    box-shadow: inset 0 0 2px 1px #f2f7fa;
+    text-decoration: none !important;
     background: #fff url(images/bg2.png);
     background: linear-gradient(to right, #eff2ff 0%, #fff 50%, #eff2ff);
-    box-shadow: inset 0 0 2px 1px #f2f7fa;
 }
 
 .routersummary h3 a {
@@ -685,7 +683,7 @@ img[src="/themes/console/images/i2plogo.png"] {
     margin: 3px 0 2px !important;
     color: transparent;
     background: transparent;
-    border-bottom: 1px dashed #89f;
+    border-bottom: 1px dashed #ced1e3;
 }
 
 #sb_localid {
@@ -705,19 +703,19 @@ img[src="/themes/console/images/i2plogo.png"] {
 }
 
 #sb_internals a, #sb_services a, #sb_advanced a, #sb_help a {
-    display: inline-block;
     padding: 1 2px;
     max-width: 194px;
-    white-space: nowrap;
+    display: inline-block;
     overflow: hidden;
     text-overflow: ellipsis;
+    white-space: nowrap;
     vertical-align: middle !important;
 }
 
 #sb_localtunnels {
     margin: -6px -2px -7px 0 !important;
-    text-align: center !important;
     width: 196px;
+    text-align: center !important;
     box-sizing: border-box;
 }
 
@@ -725,13 +723,13 @@ img[src="/themes/console/images/i2plogo.png"] {
     padding: 1px !important;
 }
 
-#sb_localtunnels tr:nth-child(odd) td {
+/*#sb_localtunnels tr:nth-child(odd) td {
     background: rgba(220,220,255,0.5);
 }
 
 #sb_localtunnels tr:nth-child(even) td {
     background: rgba(230,230,255,0.5);
-}
+}*/
 
 #sb_localtunnels tr:hover td {
     background: #ffe !important;
@@ -752,6 +750,14 @@ img[src="/themes/console/images/i2plogo.png"] {
     padding-right: 0;
     width: 12px !important;
     text-align: left;
+}
+
+#sb_tunnels a {
+    padding-left: 0 !important;
+}
+
+#sb_tunnels a:not(:hover):not(:focus) {
+    color: #2c354f !important;
 }
 
 @media screen and (min-width: 1600px) {
@@ -799,7 +805,7 @@ img[src="/themes/console/images/i2plogo.png"] {
 }
 
 #sb_warning {
-    border-bottom: 1px solid #89f !important;
+    border-bottom: 1px solid #aaafce;;
 }
 
 #sb_warning + hr {
@@ -812,7 +818,7 @@ img[src="/themes/console/images/i2plogo.png"] {
     line-height: 110%;
     font-size: 8.5pt;
     font-weight: bold;
-    border: 1px solid #89f;
+    border: 1px solid #aaafce;
     border-radius: 2px;
     box-shadow: 0 0 1px #bbb, inset 0 0 0 1px #fbb;
     background: #fff;
@@ -942,8 +948,7 @@ div.refresh {
     display: inline-block;
     vertical-align: text-bottom;
     text-shadow: 0 1px 1px #fff;
-    border: 1px solid #88f;
-    border-radius: 2px;
+    border: 1px solid #aaafce;
     box-shadow: inset 0 0 0 1px #fff, 0 0 1px rgba(96,96,96,0.5);
 }
 
@@ -1054,15 +1059,12 @@ div.refresh {
 /* mini sidebar graph */
 
 #sb_bandwidthgraph {
-    width: 202px !important;
-    margin: 0;
     margin: -20px 0 0 0;
+    padding: 0;
+    width: 202px !important;
     border-collapse: separate;
     border-spacing: 0;
-    padding: 0;
-    border: 1px solid #89f;
-    border-radius: 2px;
-    box-shadow: 0 0 1px #77f;
+    border: 1px solid #aaafce;
     will-change: transform;
 }
 
@@ -1087,7 +1089,7 @@ a:active #sb_bandwidthgraph {
     padding: 2px 8px;
     display: inline-block;
     font-weight: bold;
-    border: 1px solid #89f;
+    border: 1px solid #aaafce;
     border-top: none;
     border-radius: 0 0 3px 3px;
     box-shadow: inset 0 0 0 1px #fff;
@@ -1130,7 +1132,7 @@ a:active #sb_bandwidthgraph {
     width: 196px;
     margin: -4px 0 -5px 3px;
     text-align: center;
-    border: 1px solid #99f;
+    border: 1px solid #aaafce;
     box-shadow: 0 0 1px rgba(200,200,200,0.8);
     background: #eef;
     background: repeating-linear-gradient(to right, rgba(180, 180, 255,0.7) 1px, rgba(180, 180, 255, 0.7) 2px, rgba(221, 221, 255, 0.7) 2px, rgba(221, 221, 255, 0.7) 4px);
@@ -1178,18 +1180,18 @@ a:active #sb_bandwidthgraph {
 }
 
 .sb_updatestatus {
-    display: block;
-    border: 1px solid #99f;
-    border-top: none;
-    color: #2c354f;
-    border-radius: 0 0 3px 3px;
-    box-sizing: border-box;
-    background: #ccf;
-    background: linear-gradient(to right, #eef, #eff2ff 30%, #eff2ff 60%, #eef);
-    box-shadow: inset 0 0 0 1px #fff;
     margin: -8px 2px 5px !important;
     padding: 3px 0 4px;
+    display: block;
     font-style: italic;
+    color: #2c354f;
+    border: 1px solid #aaafce;
+    border-top: none;
+    border-radius: 0 0 3px 3px;
+    box-shadow: inset 0 0 0 1px #fff;
+    background: #ccf;
+    background: linear-gradient(to right, #eef, #eff2ff 30%, #eff2ff 60%, #eef);
+    box-sizing: border-box;
 }
 
 .sb_info .percentBarOuter {
@@ -1423,15 +1425,15 @@ p + .twocol {
 
 /* end welcome */
 
-a:link {
-    color: #33a;
+a:link, .routerconsole a:visited, #sb_localtunnels a:visited {
+    color: #6b6b94 !important;
     text-decoration: none;
     font-weight: bold;
     word-wrap: break-word;
 }
 
 a:visited, #graphopts a, #graphopts a:visited, .tab a, .tab a:visited {
-    color: #448 !important;
+    color: #575779;
     text-decoration: none;
     font-weight: bold;
 }
@@ -1479,7 +1481,7 @@ select {
     vertical-align: middle;
     min-width: 120px;
     border-radius: 2px;
-    border: 1px solid #89f;
+    border: 1px solid #aaafce;
     box-shadow: inset 0 0 0 1px #fff;
     padding: 4px 16px 4px 4px;
     text-overflow: ellipsis;
@@ -1513,7 +1515,7 @@ select:focus {
 }
 
 select[disabled], select[disabled]:hover, select[disabled]:focus, select[disabled]:active {
-    border: 1px solid #89f !important;
+    border: 1px solid #aaafce;;
     box-shadow: inset 0 0 0 1px #fff !important;
     background: #eee !important;
     background: linear-gradient(to bottom, #fff, #eef) !important;
@@ -1601,7 +1603,7 @@ input[type="text"], input[type="password"] {
     margin: 3px 5px 3px 5px;
     vertical-align: middle;
     min-width: 120px;
-    border: 1px solid #99f;
+    border: 1px solid #aaafce;
     box-shadow: inset 1px 1px 1px #ddd;
     border-radius: 2px;
     padding: 4px;
@@ -1700,7 +1702,7 @@ button::-moz-focus-inner, input::-moz-focus-inner {
 /* graphical buttons */
 
 input[type="submit"], input[type="reset"], button {
-    border: 1px solid #99f;
+    border: 1px solid #aaafce;
     box-shadow: inset 0 0 0 1px #fff, 0 0 1px #ddd;
     background: #eee;
     background: linear-gradient(to bottom, #fff, #eef);
@@ -1730,7 +1732,7 @@ button:active a {
 button:hover, input[type="submit"]:hover, input[type="reset"]:hover, button:focus, input[type="submit"]:focus, input[type="reset"]:focus {
     background: #ddd;
     background: linear-gradient(to bottom, #ddd, #fff);
-    border: 1px solid #89f;
+    border: 1px solid #aaafce;
     color: #222;
     box-shadow: inset 0 0 0 1px #fff, 0 0 1px #89f;
 }
@@ -2165,7 +2167,7 @@ button::-moz-focus-inner, input[type="submit"]::-moz-focus-inner, input[type="re
 .routersummary .reload:hover, .routersummary .reload:focus {
     background: #ddd url(/themes/console/images/buttons/restart_hover.png) center center no-repeat !important;
     background: url(/themes/console/images/buttons/shutdown_hover.png) 37% center no-repeat, url(/themes/console/images/buttons/restart_hover.png) 63% center no-repeat, linear-gradient(to bottom, #ddd 0%, #fff 100%) !important;
-    border: 1px solid #89f;
+    border: 1px solid #aaafce;
 }
 
 .routersummary .reload:active, .routersummary .stop:active, .routersummary .download:active {
@@ -2180,7 +2182,7 @@ button::-moz-focus-inner, input[type="submit"]::-moz-focus-inner, input[type="re
 
 .routersummary .stop:hover, .routersummary .stop:focus {
     background: url(/themes/console/images/buttons/shutdown_hover.png) center center no-repeat, linear-gradient(to bottom, #ddd, #fff);
-    border: 1px solid #89f;
+    border: 1px solid #aaafce;
 }
 
 /* Show text on context specific buttons (eg deferred shutdown) */
@@ -2251,16 +2253,15 @@ button::-moz-focus-inner, input[type="submit"]::-moz-focus-inner, input[type="re
 .main {
     margin: 0 0 4px 211px;
     padding: 15px 15px 10px 15px;
-    border: 1px solid #89f;
+    border: 1px solid #aaafce;
     border-top: 0;
     text-align: left;
     color: #2c354f;
     min-width: 540px;
     background: #eef;
     background: #eef url(/themes/snark/ubergine/images/hat.png) no-repeat scroll right bottom !important;
-    background: url(/themes/snark/ubergine/images/hat.png) no-repeat scroll right bottom, url(images/bg0.png) repeat scroll top left !important;
-    background: url(/themes/snark/ubergine/images/hat.png) no-repeat scroll right -3px bottom -5px, linear-gradient(to bottom, rgba(255,255,255,0.8), rgba(255,255,255,0.1)) top -1px center, url(images/bg0.png) top -3px center !important;
-    background-size: auto 180px, 100% 100%, 120px 120px !important;
+    background: url(/themes/snark/ubergine/images/hat.png) no-repeat scroll right -3px bottom -5px, url(images/bg2.png) repeat scroll top left #fff !important;
+    background-size: auto 180px, 90px 90px !important;
     box-shadow: inset 0 0 0 1px #e8e8f5;
 }
 
@@ -2394,9 +2395,9 @@ div.news {
     background: #f9f9ea url(images/bg1.png);
     background: linear-gradient(to bottom, rgba(255,255,255,0.6), rgba(255,255,255,0.5)), url(images/bg1.png) #efefe0;
     background-size: 100% 100%, 120px 120px;
-    border: 1px solid #89f;
-    border-bottom: 1px solid #89f;
-    border-right: 1px solid #89f;
+    border: 1px solid #aaafce;
+    border-bottom: 1px solid #aaafce;
+    border-right: 1px solid #aaafce;
     text-align: right;
     color: #331e0c;
     min-width: 540px;
@@ -2545,7 +2546,7 @@ div.news hr:last-child {
 .confignav {
     padding: 5px 7px 6px;
     margin: -16px -16px 5px -16px;
-    border: 1px solid #89f;
+    border: 1px solid #aaafce;
     font-size: 9pt;
     text-align: center;
     font-weight: bold;
@@ -2560,7 +2561,7 @@ div.news hr:last-child {
 .tab, .tab2 {
     box-sizing: border-box;
     display: inline-block;
-    border: 1px solid #89f;
+    border: 1px solid #aaafce;
     margin: 0 -2px -1px -2px !important;
     padding: 1px 0;
     background: #fff;
@@ -2605,7 +2606,7 @@ div.news hr:last-child {
     text-shadow: 0 1px 1px #225;
     box-shadow: inset 3px 3px 2px #337;
     background: #89f;
-    background: linear-gradient(to bottom, #89f 50%, #78f 50%);
+    background: linear-gradient(to bottom, #5d66a2 50%, #4a5282 50%);
     vertical-align: top;
 }
 
@@ -2622,7 +2623,7 @@ div.configure hr {
 
 div.configure table {
     font-size: 9pt;
-    border: 1px solid #89f;
+    border: 1px solid #aaafce;
 }
 
 table.configtable, #permabanned, #loggingoptions, #configstats, ul#banlist {
@@ -2672,13 +2673,13 @@ table.configtable, #permabanned, #loggingoptions, #configstats, ul#banlist {
 }
 
 #configstats td:last-child { /* epiphany fix */
-    border-right: 1px solid #89f !important;
+    border-right: 1px solid #aaafce;;
 }
 
 .configtable td, #joinfamily td {
     padding: 5px 10px;
-    border-top: 1px solid #89f;
-    border-bottom: 1px solid #89f;
+    border-top: 1px solid #aaafce;
+    border-bottom: 1px solid #aaafce;
 }
 
 .configtable.homelinkedit td, .configtable.homelinkedit tr,
@@ -2785,7 +2786,7 @@ table.configtable, #permabanned, #loggingoptions, #configstats, ul#banlist {
 }
 
 #manualreseed th:last-child, #manualreseed td:last-child {
-    border-right: 1px solid #89f;
+    border-right: 1px solid #aaafce;
 }
 }
 
@@ -2822,23 +2823,18 @@ table.configtable, #permabanned, #loggingoptions, #configstats, ul#banlist {
 */
 
 #profilelist td[colspan="9"], #profilelist tr td[colspan="9"]:hover {
-    background: #77f;
+    background: #ced1e3;
     padding: 1px 0;
-    border-top: 1px inset #fff !important;
-    border-bottom: 1px inset #fff !important;
 }
 
 #profilelist td[colspan="9"] hr {
     display: none;
 }
 
-#profilelist tr:hover td, #floodfills tr:hover td,  #ntcpconnections tr:hover td, #udpconnections tr:hover td,
-.homelinkedit tr:hover td, #portmapper tr:hover td {
-    background: #ffe;
-    background: linear-gradient(to bottom, #fff, #ffe);
+#profilelist tr:hover, #floodfills tr:hover,  #ntcpconnections tr:hover, #udpconnections tr:hover,
+.homelinkedit tr:hover, #portmapper tr:hover {
+    background: #ffd;
     color: #104e99;
-    border-top: 1px solid #89f;
-    border-bottom: 1px solid #89f;
 }
 
 #thresholds tr:last-child:hover td {
@@ -2870,7 +2866,7 @@ tr.tablefooter:hover td, tr:hover .infohelp {
 }
 
 #upnpscan {
-    border: 1px solid #89f;
+    border: 1px solid #aaafce;
     margin: -11px 0 5px;
     padding: 0 10px 5px;
     background: #fff;
@@ -2915,7 +2911,7 @@ tr.tablefooter:hover td, tr:hover .infohelp {
 
 .sortup:hover {
     background: url(images/sort_up.png) center center no-repeat, linear-gradient(to bottom, #ddd, #fff);
-    border: 1px solid #89f;
+    border: 1px solid #aaafce;
     opacity: 1;
 }
 
@@ -2937,7 +2933,7 @@ tr.tablefooter:hover td, tr:hover .infohelp {
 
 .sortdown:hover {
     background: url(images/sort_down.png) center center no-repeat, linear-gradient(to bottom, #ddd, #fff);
-    border: 1px solid #89f;
+    border: 1px solid #aaafce;
     opacity: 1;
 }
 
@@ -3052,7 +3048,7 @@ tr:hover th {
 #banlist {
     margin: 15px 0 5px;
     padding: 5px 10px 5px 5px;
-    border: 1px solid #89f;
+    border: 1px solid #aaafce;
     background: #eff1ff;
     columns: auto 328px;
     column-gap: 10px;
@@ -3084,7 +3080,7 @@ ul#banlist + h3.tabletitle {
     display: table;
     line-height: 150%;
     list-style: none !important;
-    box-shadow: 0 0 0 1px #bbf, 0 0 1px 1px #ddd;
+    box-shadow: 0 0 0 1px #ced1e3, 0 0 1px 1px #ddd;
     background: #f9f9ff;
     break-inside: avoid;
     page-break-inside: avoid;
@@ -3105,8 +3101,8 @@ ul#banlist + h3.tabletitle {
     top: 0;
     right: 0;
     line-height: 0;
-    border-left: 1px solid #bbf;
-    border-bottom: 1px solid #bbf;
+    border-left: 1px solid #ced1e3;
+    border-bottom: 1px solid #ced1e3;
     filter: none;
 }
 
@@ -3158,7 +3154,7 @@ ul#banlist + h3.tabletitle {
 }
 
 #bannedips table tr:last-child {
-    border-bottom: 1px solid #89f;
+    border-bottom: 1px solid #aaafce;
 }
 
 #permabanned, #banneduntilrestart {
@@ -3167,7 +3163,7 @@ ul#banlist + h3.tabletitle {
 }
 
 #permabanned td:first-child {
-    border-left: 1px solid #89f;
+    border-left: 1px solid #aaafce;
     text-align: right;
     padding-right: 10px;
     width: 49%;
@@ -3184,15 +3180,15 @@ ul#banlist + h3.tabletitle {
 }
 
 #banneduntilrestart td {
-    border-right: 1px solid #89f;
+    border-right: 1px solid #aaafce;
     text-align: center !important;
 }
 
 #ipv4, #ipv6, #permabanned tr:nth-child(2) {
     background: url(images/tinytitle.png) center center repeat-x;
     background: linear-gradient(to bottom, #fff 50%, #eff2ff 50%);
-    border-top: 1px solid #89f !important;
-    border-bottom: 1px solid #89f !important;
+    border-top: 1px solid #aaafce;;
+    border-bottom: 1px solid #aaafce;;
 }
 
 /* end /configpeer banlist */
@@ -3216,7 +3212,7 @@ a[href^="configpeer?peer"]:hover {
 }
 
 pre#transports {
-    border: 1px solid #89f;
+    border: 1px solid #aaafce;
     padding: 15px 15px 0;
     margin: -11px 0 0;
     width: 95%;
@@ -3324,8 +3320,8 @@ pre#transports {
     padding: 0 2px 4px 22px !important;
     width: 100% !important;
     width: calc(100% - 24px) !important;
-    border-top: 1px solid #ddf;
-    border-bottom: 1px solid #ddf;
+    border-top: 1px solid #ced1e3;
+    border-bottom: 1px solid #ced1e3;
     background: transparent;
     opacity: .85;
 }
@@ -3337,8 +3333,8 @@ pre#transports {
 #routerlogs li:hover, #criticallogs li:hover {
     position: relative;
     z-index: 10;
-    border-top: 1px solid #99f;
-    border-bottom: 1px solid #99f;
+    border-top: 1px solid #aaafce;
+    border-bottom: 1px solid #aaafce;
     background: #ffd;
     opacity: 1;
     transition: ease all .15s;
@@ -3378,7 +3374,7 @@ pre#transports {
 }
 
 .logtable tr:first-child {
-    border-bottom: 1px solid #89f;
+    border-bottom: 1px solid #aaafce;
     padding: 5px 10px;
 }
 
@@ -3521,8 +3517,8 @@ div.configure h2:first-child {
 #sidebarconf tr, .homelinkedit tr, #clientconfig tr, #webappconfig tr,  #configstats tr, #tunnelconfig tr, #profiles tr,
 #floodfills tr, #netdboverview tr, .netdbentry tr, #leasesetdebug tr, #leasesetsummary tr, .leaseset tr, #tunnel_defs tr,
 .sybil_routerinfo tr, #enviro tr, #routerinformation tr, #schedjobs tr, #jobstats tr, #eventlog tr, .tunneldisplay tr,
-#udpconnections tr, #ntcpconnections tr {
-    border-top: 1px inset #cfd6ff;
+#udpconnections tr, #ntcpconnections tr, #tunnelPeerCount tr {
+    border-top: 1px solid #ced1e3;
 }
 
 #config_stats tr:not(.tablefooter) td:first-child::after {
@@ -3533,18 +3529,17 @@ div.configure h2:first-child {
 }
 
  tr.tablefooter {
-    border-top: 1px solid #89f !important;
-    border-bottom: 1px solid #89f !important;
+    border-top: 1px solid #aaafce;;
+    border-bottom: 1px solid #aaafce;;
 }
 
-#sidebarconf tr:hover td, #eventlog tr:hover td, .tunneldisplay tr:hover td, #jobstats tr:hover, #schedjobs tr:hover, #jardump tr:hover td {
-    background: #ffd;
-    background: linear-gradient(to bottom, #fff, #ffe);
+#sidebarconf tr:hover, #eventlog tr:hover, .tunneldisplay tr:hover, #jobstats tr:hover, #schedjobs tr:hover, #jardump tr:hover {
     color: #104e99;
+    background: #ffd;
 }
 
 #sidebarconf tr:last-child td, #sidebarconf tr:last-child:hover td {
-    border-top: 1px solid #89f;
+    border-top: 1px solid #aaafce;
     background: #eff1ff;
 }
 
@@ -3581,7 +3576,7 @@ div.configure h2:first-child {
 .messages {
     padding: 15px 10px;
     background: #fff;
-    border: 1px solid #89f;
+    border: 1px solid #aaafce;
     border-right: 0;
     margin: -6px -15px 10px -16px;
     text-align: center;
@@ -3655,18 +3650,17 @@ h1, .main, .sorry, div.news {
 }
 
 h1 {
+    margin: 0 0 0 211px;
+    padding: 18px 20px 16px;
+    min-width: 530px;
+    line-height: 93%;
+    word-spacing: 0.1em;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
     font-size: 18pt;
     text-align: left;
-    border: 1px solid #89f;
-    padding: 18px 20px 16px;
-    margin: 0 0 0 211px;
-    line-height: 93%;
-    text-transform: uppercase;
-    letter-spacing: 0.08em;
-    word-spacing: 0.1em;
-    background: #fff url(images/titlebg.png) center right no-repeat !important;
-    background: linear-gradient(to right, #fff 20%, rgba(255,255,255, 0.5) 70%), linear-gradient(to bottom, #e5f0f7 0%, #e5f0f7 50%, #b9c2f9 50%, #b9c2f9 100%) !important;
-    min-width: 530px;
+    border: 1px solid #aaafce;
+    background: #fff;
 }
 
 span.newtab {
@@ -3683,7 +3677,7 @@ span.newtab {
 h2 {
     font-size: 14pt;
     padding: 10px;
-    border: 1px solid #89f;
+    border: 1px solid #aaafce;
     letter-spacing: 0.04em;
     text-transform: uppercase;
     background: #fff;
@@ -3692,7 +3686,7 @@ h2 {
 h3, h4#updateplugins {
     font-size: 11pt;
     padding: 6px 10px;
-    border: 1px solid #89f;
+    border: 1px solid #aaafce;
     margin-bottom: 10px;
     background: #fff;
 }
@@ -3767,7 +3761,7 @@ h3#iptransport a:hover {
 }
 
 h4 {
-    border: 1px solid #89f;
+    border: 1px solid #aaafce;
     background: #fff;
     background: linear-gradient(to right, #fff, #eff2ff);
     padding: 3px 5px;
@@ -3852,7 +3846,7 @@ h4#updateplugins {
 
 table {
     border-collapse: collapse;
-    border: 1px solid #89f;
+    border: 1px solid #aaafce;
     margin: 0 0 5px 0;
     font-size: 9pt;
     background: #eff2ff;
@@ -3877,8 +3871,8 @@ th {
     background: linear-gradient(to bottom, #fff, #eff2ff);
     padding: 5px;
     text-align: center;
-    border-bottom: 1px solid #89f;
-    border-top: 1px solid #89f;
+    border-bottom: 1px solid #aaafce;
+    border-top: 1px solid #aaafce;
     font-size: 9pt;
 }
 
@@ -3902,7 +3896,7 @@ td {
 
 td.optionsave {
     text-align: right;
-    border-top: 1px solid #89f;
+    border-top: 1px solid #aaafce;
     background: #fff;
     padding: 8px 5px;
 }
@@ -3913,7 +3907,7 @@ td.optionsave[colspan="2"] {
 
 td.infohelp, p.infohelp, td.infowarn, p.infowarn, p#upnpstatus, p#gatherstats, p#debugmode, p.sybilinfo, p#pluginconfigtext {
     padding: 15px 15px 15px 55px !important;
-    border: 1px solid #89f;
+    border: 1px solid #aaafce;
     background: #fff url(/themes/console/images/info/infohelp.png) 15px center no-repeat;
     white-space: normal !important;
     text-align: justify;
@@ -4005,7 +3999,7 @@ h4.app, h4.app2 {
     margin: 0 0 7px;
     font-size: 11pt;
     padding: 7px 10px 6px;
-    border: 1px solid #89f;
+    border: 1px solid #aaafce;
     border-left: none;
     border-right: none;
     box-shadow: inset 0 0 0 1px #fff;
@@ -4060,7 +4054,7 @@ div.app {
     text-align: center !important;
     border: none;
     margin: 3px ;
-    border: 1px solid #89f;
+    border: 1px solid #aaafce;
     border-radius: 2px;
     background: #fff;
     background: linear-gradient(to bottom, #fff, #ddf);
@@ -4096,7 +4090,7 @@ div.app:hover a {
     line-height: 110%;
     text-transform: lowercase;
     font-size: 8pt;
-    border-top: 1px solid #89f;
+    border-top: 1px solid #aaafce;
     overflow: hidden;
     text-overflow: ellipsis;
     white-space: nowrap;
@@ -4180,7 +4174,7 @@ table.search {
     margin-left: auto;
     margin-right: auto;
     width: auto;
-    border: 1px solid #89f !important;
+    border: 1px solid #aaafce;;
     border-collapse: separate;
     border-radius: 0 0 2px 2px;
 }
@@ -4310,11 +4304,8 @@ h3 + .statusnotes {
     font-style: italic;
     font-size: 9pt;
     text-align: center;
-    border: 1px solid #89f !important;
-    border-top: 0;
-    box-shadow: inset 0 0 0 1px #fff;
+    border: 1px solid #aaafce;
     background: #fff;
-    background: linear-gradient(to right, #eff2ff, #fff, #eff2ff);
 }
 
 .statusnotes + .statusnotes {
@@ -4377,16 +4368,16 @@ h2#jobrunners {
     -moz-column-count: 2;
     -moz-column-width: 400px;
     -moz-column-gap: 100px;
-    -moz-column-rule: 1px dotted #89f;
+    -moz-column-rule: 1px dotted #ced1e3;
     -webkit-column-count: 2;
     -webkit-column-width: 400px;
     -webkit-column-gap: 100px;
     column-count: 2;
     column-width: 400px;
     column-gap: 100px;
-    column-rule: 1px dotted #89f;
+    column-rule: 1px dotted #ced1e3;
     background: #eff1ff;
-    border: 1px solid #89f;
+    border: 1px solid #aaafce;
     padding: 15px 50px;
 }
 
@@ -4403,7 +4394,7 @@ h2#jobrunners {
     page-break-inside: avoid;
     -webkit-column-break-inside: avoid;
     display: inline-block;
-    border-bottom: 1px dotted #89f;
+    border-bottom: 1px dotted #ced1e3;
     min-width: 400px;
     margin-left: -15px;
     margin-bottom: 5px;
@@ -4537,7 +4528,7 @@ h3#totaljobstats {
 */
 
 .homelinkedit tr:last-child {
-    border-top: 1px solid #89f;
+    border-top: 1px solid #aaafce;
 }
 
 #addnew td:first-child {
@@ -4583,7 +4574,7 @@ p img:first-child {
 }
 
 p.infohelp, p.infohelp + p, p#enablefullstats {
-    border: 1px solid #89f;
+    border: 1px solid #aaafce;
 }
 
 p.infohelp + p.infowarn {
@@ -4596,7 +4587,7 @@ p#keyringhelp {
 }
 
 p#pluginconfigtext {
-    border: 1px solid #89f;
+    border: 1px solid #aaafce;
     padding: 10px;
     margin: -11px 0 -1px;
 }
@@ -4612,7 +4603,7 @@ p#pluginconfigtext {
 
 .configtable tr:last-child, #addkeyring tr:last-child, #loggingoptions tr:last-child {
     background: #fff;
-    border-top: 1px solid #89f;
+    border-top: 1px solid #aaafce;
 }
 
 #addkeyring tr:last-child td {
@@ -4643,7 +4634,7 @@ p#enablefullstats {
 
 .configtable tr:last-child, #addkeyring tr:last-child, #loggingoptions tr:last-child {
     background: #fff;
-    border-top: 1px solid #89f;
+    border-top: 1px solid #aaafce;
 }
 
 .formaction form, td form {
@@ -4653,14 +4644,14 @@ p#enablefullstats {
 .formaction#shutdown, .formaction#restart, .formaction#systray, .formaction#runonstart,
 .formaction#dumpthreads, .formaction#browserstart, .formaction#sidebardefaults,
 .formaction#tunnelconfigsave, .formaction#updateplugins, .formaction#consolepass {
-    border: 1px solid #89f;
+    border: 1px solid #aaafce;
     margin-top: -13px;
     margin-bottom: -5px;
 }
 
 .formaction#clientsconfig, .formaction#webappconfigactions, .formaction#pluginupdater, .formaction#sidebardefaults,
 .formaction#tunnelconfigsave, .formaction#consolepass {
-    border: 1px solid #89f;
+    border: 1px solid #aaafce;
     margin-top: -6px;
 }
 
@@ -4674,7 +4665,7 @@ p#enablefullstats {
 }
 
 .formaction#pluginconfigactions {
-    border: 1px solid #89f;
+    border: 1px solid #aaafce;
     margin-top: -1px;
     margin-bottom: -9px;
 }
@@ -4699,7 +4690,7 @@ p#enablefullstats {
 .formaction[id*="home"] {
     margin-top: -6px;
     padding: 5px;
-    border: 1px solid #89f;
+    border: 1px solid #aaafce;
 }
 
 .formaction#homeapps {
@@ -4714,7 +4705,7 @@ p#enablefullstats {
 
 .formaction#themeui {
     margin: 8px -5px 0;
-    border-top: 1px solid #89f;
+    border-top: 1px solid #aaafce;
 }
 
 .formaction#langui {
@@ -4726,20 +4717,28 @@ p#enablefullstats {
 }
 
 .tablefooter {
-    border: 1px solid #89f;
+    border: 1px solid #aaafce;
 }
 
-.tablefooter tr, .tablefooter td {
-    background: #fff !important;
-    font-size: 9pt;
-    line-height: 150%;
+.tablefooter, .tablefooter td {
+    padding: 8px 5px;
+    position: static;
     white-space: nowrap;
-    padding: 8px 5px !important;
+    line-height: 150%;
+    font-size: 9pt;
+    background: #fff;
 }
 
-#config_stats .tablefooter td {
-    line-height: normal;
-    padding: 2px 5px;
+.tablefooter td:first-child {
+    border-left: 1px solid #aaafce;
+}
+
+.tablefooter td:last-child {
+    border-right: 1px solid #aaafce;
+}
+
+#config_stats .tablefooter td, #enablefull td {
+    padding: 10px 5px;
 }
 
 #netconfig tr, #externali2cp tr {
@@ -4769,7 +4768,7 @@ p#enablefullstats {
 }
 
 #pluginconfig tr {
-    border-bottom: 1px solid #89f;
+    border-bottom: 1px solid #aaafce;
 }
 
 #pluginconfig td:first-child {
@@ -4820,7 +4819,7 @@ h3#graphdisplay {
 
 .graphspanel a img {
     background: #fff;
-    border: 1px solid #89f;
+    border: 1px solid #aaafce;
     opacity: 0.9;
     vertical-align: top;
 }
@@ -4860,7 +4859,7 @@ h3#graphdisplay {
 }
 
 form[action="graphs"] {
-    border: 1px solid #89f;
+    border: 1px solid #aaafce;
     padding: 5px 10px;
     margin: -11px 0 5px;
     background: #eef;
@@ -4960,7 +4959,7 @@ form[action="graphs"] input[type="text"] {
 
 #graphopts {
     text-align: center;
-    border: 1px solid #89f;
+    border: 1px solid #aaafce;
     background: rgba(255,255,255,0.8);
     margin: 25px -1px -11px;
     padding: 10px 10px 9px;
@@ -4978,7 +4977,7 @@ h3#graphinfo {
     background: #fff;
     margin: -1px -5px 0;
     padding: 10px;
-    border: 1px solid #89f;
+    border: 1px solid #aaafce;
     display: none;
 }
 
@@ -5077,7 +5076,7 @@ body.iframed {
     overflow: hidden;
     text-overflow: ellipsis;
     text-align: center;
-    border: 1px solid #89f;
+    border: 1px solid #aaafce;
     border-radius: 2px;
     box-shadow: 0 0 1px #fff;
     background: #fff;
@@ -5160,7 +5159,7 @@ body.iframed {
 
 #themeoptions {
     clear: both;
-    border-top: 1px solid #89f;
+    border-top: 1px solid #aaafce;
     background: rgba(230, 230, 255, 0.5);
     margin: 0 -5px -3px;
     position: relative;
@@ -5183,8 +5182,8 @@ p#helptranslate {
     top: 4px;
     padding: 15px 10px 15px 50px !important;
     text-align: left !important;
-    border-top: 1px solid #89f;
-    border-bottom: 1px solid #89f;
+    border-top: 1px solid #aaafce;
+    border-bottom: 1px solid #aaafce;
     background: url(/themes/console/images/info/notice.png) left 14px center no-repeat, #fff;
     background-size: 28px 28px;
 }
@@ -5195,7 +5194,7 @@ p#helptranslate {
 }
 
 .themelabel {
-    border-top: 1px solid #89f !important;
+    border-top: 1px solid #aaafce;;
     margin: -25px -4px 0;
     padding: 3px 2px;
     background: #eef url(images/tinytitle.png) center center;
@@ -5207,14 +5206,14 @@ p#helptranslate {
 
 #themesettings {
     clear: both;
-    border: 1px solid #89f;
+    border: 1px solid #aaafce;
     padding: 4px 5px 0;
     margin: -1px 0;
     background: #eff1ff;
 }
 
 #langsettings {
-    border: 1px solid #89f;
+    border: 1px solid #aaafce;
     padding: 4px 5px 0;
     background: #eff1ff;
 }
@@ -5234,7 +5233,7 @@ p#helptranslate {
     width: 115px;
     float: left;
     text-align: center;
-    border: 1px solid #89f;
+    border: 1px solid #aaafce;
     border-radius: 2px;
     box-shadow: 0 0 1px #fff;
     background: #fff;
@@ -5260,7 +5259,7 @@ p#helptranslate {
 }
 
 .langselect img[src^="/flags"] {
-    border: 1px solid #89f;
+    border: 1px solid #aaafce;
     margin-bottom: 42px;
     margin-left: -72px;
     opacity: 1;
@@ -5333,7 +5332,7 @@ p#helptranslate {
     text-overflow: ellipsis;
     white-space: nowrap;
     margin: -32px -4px 0;
-    border-top: 1px solid #89f;
+    border-top: 1px solid #aaafce;
     border-radius: 0 0 2px 2px;
     text-transform: capitalize;
     font-size: 9pt;
@@ -5434,7 +5433,7 @@ p#helptranslate {
 
 #consolepass td#pw_adduser {
     padding: 5px 10px;
-    border-top: 1px solid #89f;
+    border-top: 1px solid #aaafce;
 }
 
 td#pw_adduser input {
@@ -5591,7 +5590,7 @@ a.viewfullentry:hover {
     width: 200px;
     white-space: nowrap;
     text-align: right;
-    border-right: 1px inset #cfd6ff;
+    border-right: 1px solid #ced1e3;
 }
 
 #leasesetdebug td:nth-child(even) {
@@ -5640,7 +5639,7 @@ a.viewfullentry:hover {
 }
 
 #noleasesets, #notinitialized, .netdbnotfound {
-    border: 1px solid #89f;
+    border: 1px solid #aaafce;
     padding: 20px;
     font-weight: bold;
     background: #eff1ff;
@@ -5677,7 +5676,7 @@ a.viewfullentry:hover {
     width: 24px;
     height: 24px;
     margin: -1px;
-    border-left: 1px solid #89f;
+    border-left: 1px solid #aaafce;
 }
 
 .main#netdb code, .main#netdb tt {
@@ -5687,7 +5686,7 @@ a.viewfullentry:hover {
 }
 
 #sybilnav, #sybils_summary {
-    border: 1px solid #89f;
+    border: 1px solid #aaafce;
     padding: 10px;
     margin-bottom: 10px;
     background: #fff;
@@ -5752,7 +5751,7 @@ a.viewfullentry:hover {
 }
 
 p.sybil_info, p.family, p.threatpoints, p.hashdist, p.notfound, p#sybil_totals {
-    border: 1px solid #89f;
+    border: 1px solid #aaafce;
     padding: 5px 5px 5px 30px;
     margin: 3px 0;
     font-weight: bold;
@@ -5778,12 +5777,12 @@ p.sybil_info + a[name] + table.sybil_routerinfo, p.hashdist + a[name] + table.sy
 }
 
 #netdb .threatpoints + a[name] + ul {
-    border: 1px solid #89f;
+    border: 1px solid #aaafce;
     padding: 5px 5px 0;
 }
 
 #netdb .threatpoints + ul {
-    border: 1px solid #89f;
+    border: 1px solid #aaafce;
     padding: 6px 15px;
     margin: -4px 0 10px !important;
     background: #eff1ff;
@@ -5849,7 +5848,7 @@ p:empty { /* empty paragraph nuke */
     text-align: left !important;
     background: #fff;
     padding: 10px;
-    border: 1px solid #89f;
+    border: 1px solid #aaafce;
 }
 
 .subheading b {
@@ -5935,17 +5934,17 @@ img.unknownflag {
 /* /stats */
 
 form#statnav {
-    border: 1px solid #89f !important;
+    border: 1px solid #aaafce;;
     padding: 10px 10px 10px 15px;
 }
 
 h3.stats {
-    border: 1px solid #89f;
+    border: 1px solid #aaafce;
     border-radius: 0;
 }
 
 .statlist {
-    border: 1px solid #89f;
+    border: 1px solid #aaafce;
     padding: 0 10px 0 0;
     margin-left: 0 !important;
     margin-bottom: -27px !important;
@@ -6010,13 +6009,13 @@ h3.stats {
 
 .main#stats a[href^="graph?"]::before {
     content: "\279F\00A0";
-    color: #33a;
+    color: #6b6b94;
     font-size: 14pt;
     margin-left: 4px;
 }
 
 .main#stats a[href^="graph?"]:hover::before {
-    color: #33a;
+    color: #6b6b94;
 }
 
 .main#stats a[href$="showEvents=true"]::before {
@@ -6075,7 +6074,7 @@ h3.stats {
 }
 
 .main#stats form {
-    border: 1px solid #89f;
+    border: 1px solid #aaafce;
     padding: 10px;
     margin: -13px 0 -11px;
 }
@@ -6089,7 +6088,7 @@ h3.stats {
 
 #netdboverview {
     margin: 15px 0 5px;
-    border: 1px solid #89f !important;
+    border: 1px solid #aaafce;;
 }
 
 #netdboverview th {
@@ -6113,17 +6112,17 @@ h3.stats {
 }
 
 #netdbversions {
-/*    border-right: 1px solid #89f;*/
-    border-bottom: 1px solid #89f;
+/*    border-right: 1px solid #aaafce;*/
+    border-bottom: 1px solid #aaafce;
 }
 
 #netdbtransports, #netdbversions, #netdbtiers {
-    border-bottom: 1px solid #89f;
+    border-bottom: 1px solid #aaafce;
 }
 
 #netdbcountrylist, #netdbtransports, #netdbtiers {
-    border-left: 1px solid #89f;
-    border-bottom: 1px solid #89f;
+    border-left: 1px solid #aaafce;
+    border-bottom: 1px solid #aaafce;
 }
 
 #netdbversions td, #netdbtransports td, #netdbcountrylist td, #netdbtiers td {
@@ -6163,7 +6162,7 @@ h3.stats {
 
 #volunteer, #sidebarhelp, #configurationhelp, #reachabilityhelp, #legal, #changelog, #browserconfig, #tunnman,
 #faq, #reseedhelp, #troubleshoot, #newuserguide, #filterlist, #webhosting, #themeoverride, #glossary {
-    border: 1px solid #89f;
+    border: 1px solid #aaafce;
     padding: 10px 15px 5px;
     margin-bottom: 20px;
     margin-top: 15px !important;
@@ -6295,7 +6294,7 @@ p#fullhistory {
     margin: -5px -1px -6px !important;
     background: #fff;
     background: linear-gradient(to right, #eff2ff 50%, #fff);
-    border: 1px solid #89f;
+    border: 1px solid #aaafce;
     padding: 7px 10px 4px 5px !important;
 }
 
@@ -6386,7 +6385,7 @@ p#fullhistory {
     padding: 5px 0 15px;
     columns: 2 auto;
     column-gap: 35px;
-    column-rule: 1px solid #89f;
+    column-rule: 1px solid #aaafce;
 }
 
 #terms p {
@@ -6444,7 +6443,7 @@ p#fullhistory {
 .eventspanel form {
     margin-top: -11px;
     padding: 10px 10px 10px 50px;
-    border: 1px solid #89f;
+    border: 1px solid #aaafce;
     background: #fff url(/themes/console/images/info/logs.png) 12px center no-repeat;
     background-size: 28px 28px;
 }
@@ -6465,7 +6464,7 @@ p#fullhistory {
 #proof p {
     margin: 0;
     padding: 20px 10px 10px;
-    border: 1px solid #89f;
+    border: 1px solid #aaafce;
     box-shadow: inset 0 0 0 1px #fff, 0 0 1px #ccc;
     background: url(/themes/console/images/info/rosette.png) right 8px top 8px no-repeat #eeeffb;
     background: url(/themes/console/images/info/rosette.png) right 8px top 8px no-repeat rgba(220,225,252,0.3);
@@ -6491,7 +6490,7 @@ p#fullhistory {
     margin: 0 0 5px;
     padding: 10px 20px;
     line-height: 200%;
-    border: 1px solid #89f;
+    border: 1px solid #aaafce;
     box-shadow: inset 0 0 0 1px #fff, 0 0 1px #ccc;
     background: #eeeffb;
     background: rgba(220,225,252,0.3);
@@ -6546,7 +6545,7 @@ p#fullhistory {
 #certs p:not(.infohelp) {
     margin: 3px 0;
     padding: 10px 5px;
-    border: 1px solid #89f;
+    border: 1px solid #aaafce;
     background: #fff;
 }
 
@@ -6562,7 +6561,7 @@ p#fullhistory {
 #certs textarea {
     margin: -6px 0 10px 0;
     width: 100%;
-    border: 1px solid #89f;
+    border: 1px solid #aaafce;
     border-radius: 0;
 }
 
@@ -6599,7 +6598,7 @@ p#fullhistory {
 
 #help #configinfo td.infowarn {
     padding: 10px 10px 10px 38px !important;
-    border: 1px solid #89f;
+    border: 1px solid #aaafce;
     background: #fffff5 url(/themes/console/images/info/infowarn.png) 10px center no-repeat !important;
     background-size: 20px 20px !important;
 }
@@ -6635,7 +6634,7 @@ p.sybilinfo {
 }
 
 p.infowarn, #sybilanalysis {
-    border: 1px solid #89f;
+    border: 1px solid #aaafce;
     padding: 15px 15px 15px 50px;
     background: #fff url(/themes/console/images/info/infowarn.png) 10px center no-repeat;
     line-height: 130%;
@@ -6888,7 +6887,7 @@ p#enablefullstats, p#gatherstats {
 .embedlink {
     padding-left: 5px;
     float: right;
-    border-left: 1px solid #89f;
+    border-left: 1px solid #aaafce;
 }
 
 /* end logs */
@@ -7266,7 +7265,7 @@ th code {
 /* sybils */
 
 .leaseset th:last-child, .leaseset td:last-child, .sybil_routerinfo th:last-child, .sybil_routerinfo td:last-child {
-    border-right: 1px solid #89f !important;
+    border-right: 1px solid #aaafce;;
 }
 
 .sybil_routerinfo table td:last-child {
@@ -7275,7 +7274,7 @@ th code {
 
 .sybilinfo_params {
     padding: 0;
-    border-bottom: 1px solid #89f;
+    border-bottom: 1px solid #aaafce;
 }
 
 .sybilinfo_container {
@@ -7327,7 +7326,7 @@ th code {
 
 .sybil_addresses {
     padding: 0;
-    border-bottom: 1px solid #89f;
+    border-bottom: 1px solid #aaafce;
 }
 
 .sybil_addresses table, .sybil_addresses td {
@@ -7395,7 +7394,7 @@ th code {
 }
 
 #debug tr {
-    border-bottom: 1px solid #89f;
+    border-bottom: 1px solid #aaafce;
 }
 
 #debug td {
@@ -7425,7 +7424,7 @@ th code {
 
 .debug_container {
     background: #eef;
-    border: 1px solid #89f;
+    border: 1px solid #aaafce;
     padding: 10px 15px;
     margin-top: -16px;
 }
@@ -7671,7 +7670,7 @@ h2#debug_portmapper {
 }
 
 .subheading.pluginfiles {
-    border-top: 1px solid #89f !important;
+    border-top: 1px solid #aaafce;;
 }
 
 #jardump td {
@@ -8594,7 +8593,7 @@ to {
 }
 
 .optionlist:hover, .optionsingle:hover, .optiontextarea:hover {
-    border: 1px solid #99f;
+    border: 1px solid #aaafce;
     box-shadow: inset 0 0 0 1px #a79;
     transition: ease box-shadow 0.5s, ease background 0.2s 0.01s;
     background: #ffd !important;
@@ -9053,7 +9052,7 @@ b.suboption {
 }
 
 #config_reseed .optionsingle:hover {
-    border: 1px solid #99f;
+    border: 1px solid #aaafce;
     box-shadow: inset 0 0 0 1px #a79;
     transition: ease box-shadow 0.5s;
 }
@@ -9167,7 +9166,7 @@ b.suboption {
 
 #config_network .optionlist:hover, #config_i2cp .optionlist:hover, #reseedssl:hover,
 #manualreseed .optionsingle:hover, .optiontextarea:hover, #reseed_urlselection:hover {
-    border: 1px solid #99f;
+    border: 1px solid #aaafce;
     box-shadow: inset 0 0 0 1px #a79 !important;
     transition: ease box-shadow 0.5s;
 }
@@ -9272,7 +9271,7 @@ b.suboption {
 }
 
 #i2pupdates .optionsave {
-    border-bottom: 1px solid #89f;
+    border-bottom: 1px solid #aaafce;
 }
 
 @supports not (-moz-appearance: none) {
@@ -9283,7 +9282,7 @@ b.suboption {
 
 #manualreseed td {
     padding: 5px;
-    border-bottom: 1px solid #89f;
+    border-bottom: 1px solid #aaafce;
 }
 
 /* reseed help ordered list */
@@ -9490,9 +9489,21 @@ input[type="file"]:hover {
     text-align: center !important;
 }
 
-#ntcpconnections tr:nth-last-child(n+2) td, #udpconnections tr:nth-last-child(n+2) td, #profilelist td, #profile_defs td, #floodfills td {
-    border-right: 1px inset #89f;
-    border-right: 1px inset rgba(154,170,255,0.3);
+#ntcpconnections tr:nth-last-child(n+2) td, #udpconnections tr:nth-last-child(n+2) td, #profilelist td, #profile_defs td, #floodfills td,
+#tunnelPeerCount td {
+    border-right: 1px solid #ced1e3;
+}
+
+#ntcpconnections tr:nth-last-child(n+2) td::after, #udpconnections tr:nth-last-child(n+2) td::after,
+#profilelist td::after, #profile_defs td::after, #floodfills td::after {
+    content: "";
+    position: absolute;
+    top: -1px;
+    right: -1px;
+    height: 1px;
+    width: 1px;
+    display: inline-block;
+    background: #aaafce;
 }
 
 #ntcpconnections td:nth-child(n+6) span,
@@ -9906,7 +9917,7 @@ a.keysearch {
 
 .identicon {
     margin: -1px -1px -1px 8px;
-    border-left: 1px solid #89f;
+    border-left: 1px solid #aaafce;
 }
 
 #view_profile h3 {
@@ -9917,7 +9928,7 @@ a.keysearch {
 @media screen and (max-width: 1000px) {
 #view_profile h3 {
     border: none;
-    border-bottom: 1px solid #89f;
+    border-bottom: 1px solid #aaafce;
 }
 }
 
@@ -9928,7 +9939,7 @@ a.keysearch {
     width: auto;
     position: absolute;
     right: 54px;
-    border-right: 1px solid #89f;
+    border-right: 1px solid #aaafce;
 }
 
 #view_profile span {
@@ -9993,7 +10004,7 @@ input[type="radio"], input[type="radio"]:checked, input[type="radio"][disabled],
     height: 19px !important;
     vertical-align: middle !important;
     box-sizing: border-box;
-    border: 1px solid #99f !important;
+    border: 1px solid #aaafce;
     background: #f8f8ff;
     -moz-appearance: none;
     -webkit-appearance: inherit;
@@ -10183,7 +10194,7 @@ div.app.js:hover::before {
     display: inline-block;
     width: 140px;
     text-align: center;
-    border: 1px solid #bbf;
+    border: 1px solid #aaafce;
     box-shadow: inset 0 0 0 1px #fff, inset 0 0 2px 1px #efefff;
     background: #f8f8ff;
 }
@@ -10197,7 +10208,7 @@ div.app.js:hover::before {
     display: inline-block;
     font-size: 9pt;
     border: none;
-    border-top: 1px solid #bbf;
+    border-top: 1px solid #aaafce;
 }
 
 @media screen and (max-width: 1500px) {
@@ -10544,7 +10555,7 @@ div.app.js:hover::before {
 }
 
 #stats .tab:not(.tab2) {
-    color: #448;
+    color: #575779;
 }
 
 #stats .tab2, #stats .tab2:hover {
@@ -10644,64 +10655,64 @@ p#gatherstats {
 /* h1 icons */
 
 h1 {
-    background: url(images/netwrk.png) 10px center no-repeat, linear-gradient(to right, #fff 20%, rgba(255,255,255, 0.5) 70%), linear-gradient(to bottom, #e5f0f7 0%, #e5f0f7 50%, #b9c2f9 50%, #b9c2f9 100%) !important;
+    background: #fff url(images/netwrk.png) 10px center no-repeat !important;
 }
 
 h1.home {
-    background: url(images/home.png) 10px center no-repeat, linear-gradient(to right, #fff 20%, rgba(255,255,255, 0.5) 70%), linear-gradient(to bottom, #e5f0f7 0%, #e5f0f7 50%, #b9c2f9 50%, #b9c2f9 100%) !important;
+    background: #fff url(images/home.png) 10px center no-repeat !important;
 }
 
 h1.perf {
-    background: url(images/perf.png) 10px center no-repeat, linear-gradient(to right, #fff 20%, rgba(255,255,255, 0.5) 70%), linear-gradient(to bottom, #e5f0f7 0%, #e5f0f7 50%, #b9c2f9 50%, #b9c2f9 100%) !important;
+    background: #fff url(images/perf.png) 10px center no-repeat !important;
 }
 
 h1.nfo {
-    background: url(images/info.png) 10px center no-repeat, linear-gradient(to right, #fff 20%, rgba(255,255,255, 0.5) 70%), linear-gradient(to bottom, #e5f0f7 0%, #e5f0f7 50%, #b9c2f9 50%, #b9c2f9 100%) !important;
+    background: #fff url(images/info.png) 10px center no-repeat !important;
 }
 
 h1.hlp {
-    background: url(images/header_help.png) 10px center no-repeat, linear-gradient(to right, #fff 20%, rgba(255,255,255, 0.5) 70%), linear-gradient(to bottom, #e5f0f7 0%, #e5f0f7 50%, #b9c2f9 50%, #b9c2f9 100%) !important;
+    background: #fff url(images/header_help.png) 10px center no-repeat !important;
 }
 
 h1.addbook {
-    background: url(images/addbook.png) 10px center no-repeat, linear-gradient(to right, #fff 20%, rgba(255,255,255, 0.5) 70%), linear-gradient(to bottom, #e5f0f7 0%, #e5f0f7 50%, #b9c2f9 50%, #b9c2f9 100%) !important;
+    background: #fff url(images/addbook.png) 10px center no-repeat !important;
 }
 
 h1.snark {
-    background: url(images/app_snark.png) 10px center no-repeat, linear-gradient(to right, #fff 20%, rgba(255,255,255, 0.5) 70%), linear-gradient(to bottom, #e5f0f7 0%, #e5f0f7 50%, #b9c2f9 50%, #b9c2f9 100%) !important;
+    background: #fff url(images/app_snark.png) 10px center no-repeat !important;
 }
 
 h1.mail {
-    background: url(images/app_mail.png) 10px center no-repeat, linear-gradient(to right, #fff 20%, rgba(255,255,255, 0.5) 70%), linear-gradient(to bottom, #e5f0f7 0%, #e5f0f7 50%, #b9c2f9 50%, #b9c2f9 100%) !important;
+    background: #fff url(images/app_mail.png) 10px center no-repeat !important;
 }
 
 h1.conf {
-    background: url(images/cog.png) 10px center no-repeat, linear-gradient(to right, #fff 20%, rgba(255,255,255, 0.5) 70%), linear-gradient(to bottom, #e5f0f7 0%, #e5f0f7 50%, #b9c2f9 50%, #b9c2f9 100%) !important;
+    background: #fff url(images/cog.png) 10px center no-repeat !important;
 }
 
 h1.adv {
-    background: url(images/info.png) 10px center no-repeat, linear-gradient(to right, #fff 20%, rgba(255,255,255, 0.5) 70%), linear-gradient(to bottom, #e5f0f7 0%, #e5f0f7 50%, #b9c2f9 50%, #b9c2f9 100%) !important;
+    background: #fff url(images/info.png) 10px center no-repeat !important;
 }
 
 h1.err {
-    background: url(images/error.png) 10px center no-repeat, linear-gradient(to right, #fff 20%, rgba(255,255,255, 0.5) 70%), linear-gradient(to bottom, #e5f0f7 0%, #e5f0f7 50%, #b9c2f9 50%, #b9c2f9 100%) !important;
+    background: #fff url(images/error.png) 10px center no-repeat !important;
 }
 
 h1.sched {
-    background: url(images/tasks.png) 10px center no-repeat, linear-gradient(to right, #fff 20%, rgba(255,255,255, 0.5) 70%), linear-gradient(to bottom, #e5f0f7 0%, #e5f0f7 50%, #b9c2f9 50%, #b9c2f9 100%) !important;
+    background: #fff url(images/tasks.png) 10px center no-repeat !important;
 }
 
 h1.log {
-    background: url(images/logs.png) 10px center no-repeat, linear-gradient(to right, #fff 20%, rgba(255,255,255, 0.5) 70%), linear-gradient(to bottom, #e5f0f7 0%, #e5f0f7 50%, #b9c2f9 50%, #b9c2f9 100%) !important;
+    background: #fff url(images/logs.png) 10px center no-repeat !important;
 }
 
 h1.webapp {
-    background: url(images/webapp.png) 10px center no-repeat, linear-gradient(to right, #fff 20%, rgba(255,255,255, 0.5) 70%), linear-gradient(to bottom, #e5f0f7 0%, #e5f0f7 50%, #b9c2f9 50%, #b9c2f9 100%) !important;
+    background: #fff url(images/webapp.png) 10px center no-repeat !important;
 }
 
 h1[class], h1 {
     padding-left: 56px;
-    background-size: 38px auto, 100% 100%, 100% 100% !important;
+    background-size: 38px auto !important;
 }
 
 h1::first-letter {
@@ -10711,7 +10722,7 @@ h1::first-letter {
 @media screen and (max-width: 1500px) {
 h1[class], h1 {
     padding-left: 50px;
-    background-size: 32px auto, 100% 100%, 100% 100%, 164px 164px !important;
+    background-size: 32px auto !important;
 }
 }
 
@@ -10782,8 +10793,7 @@ h1[class], h1 {
     font-weight: bold;
     letter-spacing: 0.1em;
     color: #41465f;
-    border: 1px solid #88f;
-    border-radius: 2px;
+    border: 1px solid #aaafce;
     box-shadow: inset 0 0 0 1px #fff, 0 0 1px rgba(96,96,96,0.5);
     background: linear-gradient(to right, #eef0ff, #fff, #eef0ff);
 }
@@ -10847,7 +10857,7 @@ h3#webappconfig {
 }
 
 #sybilTask tr:last-child {
-    border-top: 1px solid #89f;
+    border-top: 1px solid #aaafce;
 }
 
 #sybilTask td {
@@ -10961,7 +10971,7 @@ h3#webappconfig {
     overflow: hidden;
     vertical-align: middle;
     text-align: center;
-    border: 1px solid #89f;
+    border: 1px solid #aaafce;
     box-shadow: 0 0 1px 0 #abf;
     max-width: calc(100% - 18px);
     animation: ease grid-fade 1s forwards;
@@ -11110,17 +11120,17 @@ to {
 
 #configstats label::after {
     padding: 4px 8px;
-    content: attr(data-tooltip);
-    display: none;
     position: absolute;
     top: -26px;
     left: 0;
-    background: #ffe;
-    white-space: nowrap;
     z-index: 10;
-    border-radius: 1px;
+    display: none;
+    white-space: nowrap;
     font-size: 100%;
+    border-radius: 1px;
     box-shadow: 0 0 0 1px #999, 0 0 2px 2px #ddd, inset 0 0 0 1px #fff;
+    background: #ffe;
+    content: attr(data-tooltip);
 }
 
 #configstats label:hover::after {
@@ -11213,8 +11223,8 @@ to {
     vertical-align: middle;
 }
 
-#tunnelPeerCount tr:not(:last-child):hover td {
-    background: #ffe !important;
+#tunnelPeerCount tr:not(:last-child):hover {
+    background: #ffd;
 }
 
 #tunnels .percentBarOuter, #tunnels .percentbarInner, #tunnels .percentBarText {
@@ -11317,4 +11327,14 @@ to {
 80%, 99% {
     width: 120%;
 }
+}
+
+
+th, td {
+    position: relative;
+}
+
+#netdblookup th, #netdblookup td, #refreshsidebar td, #pluginconfig table td, #config_advanced td, #bandwidthconfig td, #i2pupdates td,
+#externali2cp td, #config_keyring td, #config_logging td, #config_network td, #config_peers td, .formaction, #sidebarconf tr:last-child td {
+    position: static;
 }

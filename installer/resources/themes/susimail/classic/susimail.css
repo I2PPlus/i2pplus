@@ -35,7 +35,7 @@ div.header {
     padding: 30px 10px;
     margin: 0 -10px;
     background: #fff !important;
-    border-bottom: 1px solid #89f;
+    border-bottom: 1px solid #aaafce;
     background: #fff url(/themes/susimail/images/susimail.png) center center no-repeat !important;
     background-size: auto 80% !important;
     display: none;
@@ -50,7 +50,7 @@ h3#config {
     margin: -11px auto 10px;
     padding: 5px 10px;
     width: 300px;
-    border: 1px solid #89f;
+    border: 1px solid #aaafce;
     color: #35415f;
     background: url(/themes/console/classic/images/titlebg.png) right center no-repeat;
     background: linear-gradient(to bottom, #fff 0%, #fff 50%, #eff2ff 50%, #eff2ff 100%);
@@ -94,7 +94,7 @@ p.text {
 p.error, p.info {
     color: #900;
     padding: 15px 15px 15px 45px;
-    border: 1px solid #89f;
+    border: 1px solid #aaafce;
     background: #ffe url(/themes/console/images/info/errortriangle.png) 8px center no-repeat;
     background-size: 28px auto;
     text-align: left;
@@ -115,8 +115,8 @@ tr.mailbody p.error {
 
 tr.mailbody:nth-child(n+3) {
     background: #fff;
-    border-top: 1px solid #89f;
-    border-bottom: 1px solid #89f;
+    border-top: 1px solid #aaafce;
+    border-bottom: 1px solid #aaafce;
 }
 
 p.info {
@@ -130,7 +130,7 @@ span.coloured {
 }
 
 div.footer {
-    border-top: 1px solid #89f;
+    border-top: 1px solid #aaafce;
     margin: 0 -10px -10px;
     background: #fff;
     background: rgba(255,255,255,0.5);
@@ -185,7 +185,7 @@ div.attached {
 }
 
 td#addattach {
-    border-bottom: 1px solid #89f;
+    border-bottom: 1px solid #aaafce;
 }
 
 td#attachedfile {
@@ -197,7 +197,7 @@ td#attachedfile {
 }
 
 a:link {
-    color: #33a;
+    color: #6b6b94;
     text-decoration: none;
     font-weight: bold;
     word-wrap: break-word;
@@ -208,7 +208,7 @@ a:link {
 }
 
 a:visited {
-    color: #448;
+    color: #575779;
     text-decoration: none;
     font-weight: bold;
 }
@@ -263,8 +263,8 @@ tr.list0:hover, tr.list1:hover {
     background: #fff;
     background: linear-gradient(to bottom, #fff 0%, #ffe 100%) !important;
     cursor: pointer;
-    border-top: 1px solid #89f !important;
-    border-bottom: 1px solid #89f !important;
+    border-top: 1px solid #aaafce;;
+    border-bottom: 1px solid #aaafce;;
 }
 
 tr.list0:hover td, tr.list1:hover td {
@@ -290,7 +290,7 @@ table.noborder {
 }
 
 table#mailbox {
-    border: 1px solid #89f;
+    border: 1px solid #aaafce;
     background: #eef;
 }
 
@@ -304,7 +304,7 @@ table#mailbox {
 }
 
 div#prefsave {
-    border-bottom: 1px solid #89f;
+    border-bottom: 1px solid #aaafce;
 }
 }
 
@@ -318,7 +318,7 @@ _:-ms-lang(x), table#mailbox {
 
 #mailbox th {
     padding: 6px;
-    border-bottom: 1px solid #89f;
+    border-bottom: 1px solid #aaafce;
     background: url(/themes/console/classic/images/titlebg.png) right center no-repeat;
     background: linear-gradient(to bottom, #fff 0%, #fff 50%, #eff2ff 50%, #eff2ff 100%) !important;
     font-size: 70%;
@@ -394,7 +394,7 @@ td.mailListDelete, td.mailListFlagged, td.mailListAttachment {
 }
 
 #mailbox tr.bottombuttons td {
-    border-top: 1px solid #89f;
+    border-top: 1px solid #aaafce;
     background: #fff;
     padding-top: 3px;
     padding-bottom: 3px;
@@ -452,7 +452,7 @@ pre {
     color: #0c153d;
     margin: 0;
     padding: 0 10px 10px;
-    border: 1px solid #89f;
+    border: 1px solid #aaafce;
     font-size: 9pt !important;
     line-height: 160% !important;
     box-shadow: 0 0 0 1px #eee;
@@ -489,19 +489,19 @@ form {
 
 #viewmail {
     margin: -9px -10px;
-    border-top: 1px solid #89f;
+    border-top: 1px solid #aaafce;
     background: #eef;
 }
 
 .iframed #viewmail {
     margin: 1px 0 -10px;
     padding: 0;
-    border: 1px solid #89f;
+    border: 1px solid #aaafce;
 }
 
 table#message_full {
     margin-bottom: -23px;
-    border-top: 1px solid #89f;
+    border-top: 1px solid #aaafce;
 }
 
 .iframed #message_full {
@@ -509,7 +509,7 @@ table#message_full {
 }
 
 #message_full tr:last-child {
-    border-bottom: 1px solid #89f;
+    border-bottom: 1px solid #aaafce;
 }
 
 input[type="checkbox"], input[type="radio"] {
@@ -535,7 +535,7 @@ textarea {
 }
 
 input[type="text"], input[type="password"], textarea {
-    border: 1px solid #99f;
+    border: 1px solid #aaafce;
     box-shadow: inset 1px 1px 1px #ddd;
     padding: 4px 5px !important;
     border-radius: 2px;
@@ -570,7 +570,7 @@ button, input[type="submit"], input[type="reset"], #settings {
     display: inline-block;
     line-height: 130%;
     color: #333;
-    border: 1px solid #99f;
+    border: 1px solid #aaafce;
     border-radius: 2px;
     box-shadow: inset 0 0 0 1px #fff, 0 0 1px 0 #ddd;
     background-size: 14px 14px, 100% 100% !important;
@@ -588,7 +588,7 @@ button:hover, input[type="submit"]:hover, input[type="reset"]:hover,
 button:focus, input[type="submit"]:focus, input[type="reset"]:focus,
 #settings:hover, #settings:focus {
     color: #222;
-    border: 1px solid #89f;
+    border: 1px solid #aaafce;
     background: #fff;
     background: linear-gradient(to bottom, #ddd 0%, #fff 100%);
     filter: drop-shadow(0 0 1px #89f);
@@ -972,7 +972,7 @@ div#composemail {
 }
 
 #message_full tr:first-child {
-    border-bottom: 1px solid #89f;
+    border-bottom: 1px solid #aaafce;
 }
 
 #mailhead tr {
@@ -990,7 +990,7 @@ div#composemail {
 /* login panel */
 
 #dologin {
-    border: 1px solid #89f;
+    border: 1px solid #aaafce;
     padding: 10px 0 0;
     width: 500px;
     margin: 55px auto 40px;
@@ -1062,7 +1062,7 @@ div#composemail {
     padding: 10px 15px;
     background: #fff;
     background: linear-gradient(to right, #fff 30%, #eff2ff);
-    border-bottom: 1px solid #89f;
+    border-bottom: 1px solid #aaafce;
     color: #35415f;
     font-size: 14pt;
     text-align: left;
@@ -1073,7 +1073,7 @@ div#composemail {
 
 #dologin hr {
     display: block !important;
-    background: #89f;
+    background: #aaafce;
     box-shadow: 0 0 0 1px rgba(255,255,255,0.5);
 }
 
@@ -1090,15 +1090,16 @@ div#composemail {
 }
 
 #dologin tr:last-child a {
-    display: inline-block;
     margin: 6px -2px 6px;
     padding: 3px 10px;
+    display: inline-block;
+    font-size: 90%;
     border: 1px solid rgba(255,255,255,0);
     border: 1px solid rgba(119, 120, 159, 0.3);
     border-radius: 25px;
+    box-shadow: 0 0 1px rgba(255,255,255,0);
     background: #efefff;
     background: linear-gradient(to right, #f2f2ff, #f6f6ff, #f2f2ff);
-    box-shadow: 0 0 1px rgba(255,255,255,0);
     transition: ease all 0.1s;
 }
 
@@ -1159,7 +1160,7 @@ hr {
 }
 
 div#pagenav {
-    border-top: 1px solid #89f;
+    border-top: 1px solid #aaafce;
     padding: 10px 5px 0;
     font-size: 9.5pt;
     border-radius: 0 0 4px 4px;
@@ -1171,19 +1172,19 @@ div#pagenav {
     padding: 6px 0 0;
     background: #fff !important;
     background: linear-gradient(to bottom, #fff 0%, #eef 100%) !important;
-    border: 1px solid #89f;
+    border: 1px solid #aaafce;
     border-bottom: none;
 }
 
 .topbuttons#pagesize {
     padding: 6px 0 4px;
-    border-bottom: 1px solid #89f;
+    border-bottom: 1px solid #aaafce;
 }
 
 .iframed .topbuttons, .iframed p.error, .iframed p.info {
     margin: -1px -11px;
     padding: 20px 42px 20px;
-    border: 1px solid #89f;
+    border: 1px solid #aaafce;
     border-left: none;
     border-right: none;
 }
@@ -1220,7 +1221,7 @@ div#pagenav {
 table#pagenav {
     margin: 7px auto -3px;
     width: 100%;
-    border-top: 1px solid #89f;
+    border-top: 1px solid #aaafce;
 }
 
 .bottombuttons br {
@@ -1230,7 +1231,7 @@ table#pagenav {
 div#prefsave {
     margin: 10px -10px -24px;
     padding: 6px 0 5px;
-    border-top: 1px solid #89f;
+    border-top: 1px solid #aaafce;
     background: #fff;
 }
 
@@ -1365,8 +1366,8 @@ img.sort {
 }
 
 .topbuttons .pagenavcontrols {
-    border-top: 1px solid #89f;
-    border-bottom: 1px solid #89f;
+    border-top: 1px solid #aaafce;
+    border-bottom: 1px solid #aaafce;
 }
 
 .iframed .topbuttons .pagenavcontrols {
@@ -1449,7 +1450,7 @@ input[type="radio"], input[type="radio"]:checked, input[type="radio"][disabled],
     height: 19px !important;
     vertical-align: middle !important;
     box-sizing: border-box;
-    border: 1px solid #99f !important;
+    border: 1px solid #aaafce;
     background: #f8f8ff;
     -moz-appearance: none;
     -webkit-appearance: inherit;
@@ -1587,7 +1588,7 @@ input[type="checkbox"][disabled]:checked, input[type="radio"][disabled]:checked,
 /* end confirm delete */
 
 .debugHeader:nth-child(n+3) td {
-    border-top: 1px solid #89f;
+    border-top: 1px solid #aaafce;
 }
 
 .debugHeader pre {
@@ -1613,7 +1614,7 @@ select {
     margin: 3px;
     vertical-align: middle;
     border-radius: 2px;
-    border: 1px solid #99f;
+    border: 1px solid #aaafce;
     box-shadow: inset 0 0 0 1px #fff;
     padding: 4px 16px 4px 4px;
     text-overflow: ellipsis;

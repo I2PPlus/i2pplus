@@ -95,7 +95,7 @@ hr {
     width: 150px;
     font: 9pt "Droid Sans Mono", "Noto Mono", "Lucida Console", "DejaVu Sans Mono", monospace;
     color: #333;
-    border: 1px solid #99f;
+    border: 1px solid #aaafce;
     border-radius: 2px;
     box-shadow: inset 1px 1px 1px #ddd;
     background: #fff;
@@ -133,7 +133,7 @@ hr {
     font-style: normal;
     font-weight: normal;
     color: #333;
-    border: 1px solid #99f;
+    border: 1px solid #aaafce;
     border-radius: 2px;
     background: #eee;
     background: linear-gradient(to bottom, #fff, #eef);
@@ -143,7 +143,7 @@ hr {
 .control:hover, .control:focus, button:hover, button:focus {
     text-decoration: none;
     color: #111 !important;
-    border: 1px solid #89f !important;
+    border: 1px solid #aaafce;;
     background: #ddd;
     background: linear-gradient(to bottom, #ddd 0%, #fff 100%);
     box-shadow: inset 0 0 0 1px #fff !important;
@@ -151,7 +151,7 @@ hr {
 
 .control:active, button:active {
     box-shadow: inset 0 0 0 1px #fff, inset 3px 3px 3px 1px #555 !important;
-    border: 1px solid #99f !important;
+    border: 1px solid #aaafce;
     color: #333 !important;
 }
 
@@ -227,7 +227,7 @@ select {
     color: #333;
     margin: 4px !important;
     font-family: "Droid Sans", "Open Sans", "Noto Sans", Ubuntu, "Segoe UI", "Lucida Grande", "DejaVu Sans", Verdana, Helvetica, sans-serif;
-    border: 1px solid #99f;
+    border: 1px solid #aaafce;
     padding: 4px 16px 4px 4px;
     min-width: 140px;
     font-size: 9pt;
@@ -281,7 +281,7 @@ select[disabled], select[disabled]:hover, select[disabled]:focus, select[disable
 }
 
 a:link {
-    color: #33a;
+    color: #6b6b94;
     text-decoration: none;
     font-weight: bold;
     word-wrap: break-word;
@@ -289,7 +289,7 @@ a:link {
 }
 
 a:visited {
-    color: #448;
+    color: #575779;
     text-decoration: none;
 }
 
@@ -308,7 +308,7 @@ input[type="hidden"], input.default {
 
 h2, h3 {
     padding: 8px 10px 6px 30px;
-    border: 1px solid #89f;
+    border: 1px solid #aaafce;
     background: #fff url(/themes/console/classic/images/tinytitle.png) repeat right center;
     background: linear-gradient(to bottom, #fff 0%, #fff 50%, #eff2ff 50%, #eff2ff 100%);
     font-size: 11pt;
@@ -370,7 +370,7 @@ h2, h3 {
 .panel table {
     width: 100%;
     border-collapse: collapse;
-    border: 1px solid #89f;
+    border: 1px solid #aaafce;
     margin: 0;
     background: #fff url(images/bg2.png);
     background: linear-gradient(to bottom, rgba(255,255,255,0.8), rgba(255,255,255,0.5)), url(images/bg2.png);
@@ -381,8 +381,8 @@ th {
     background: linear-gradient(to bottom, #fff, #eff2ff) !important;
     padding: 7px 5px;
     text-align: left;
-    border-top: 1px solid #89f;
-    border-bottom: 1px solid #89f;
+    border-top: 1px solid #aaafce;
+    border-bottom: 1px solid #aaafce;
     font-size: 10pt;
     color: #2c354f;
 }
@@ -398,7 +398,7 @@ td {
 }
 
 th:last-child, td:last-child {
-    border-right: 1px solid #89f; /* fixes chrome rendering bug */
+    border-right: 1px solid #aaafce; /* fixes chrome rendering bug */
 }
 
 #throttler th:last-child, #throttler td:last-child,
@@ -423,7 +423,7 @@ td.infohelp {
 
 .tunnelProperties {
     background: #fcfcff !important;
-    border-top: 1px solid #89f;
+    border-top: 1px solid #aaafce;
 }
 
 .tunnelProperties:hover {
@@ -433,7 +433,7 @@ td.infohelp {
 
 .newTunnel {
     text-align: right;
-    border-top: 1px solid #89f !important;
+    border-top: 1px solid #aaafce;;
     padding: 7px !important;
     background: #fff;
 }
@@ -585,7 +585,7 @@ textarea {
     font-family: "Droid Sans Mono", "Noto Mono", "Lucida Console", "DejaVu Sans Mono", monospace;
     color: #333;
     background: #fff;
-    border: 1px solid #99f;
+    border: 1px solid #aaafce;
     border-radius: 2px;
     resize: none;
     box-shadow: inset 1px 1px 1px #ddd;
@@ -632,7 +632,7 @@ a.control {
     padding: 7px 5px;
     background: #fff;
     background: linear-gradient(to bottom, #fff, #eff1ff);
-    border-top: 1px solid #89f;
+    border-top: 1px solid #aaafce;
 }
 
 button.control, input[type="submit"], input[type="reset"] {
@@ -644,7 +644,7 @@ button.control, input[type="submit"], input[type="reset"] {
 }
 
 .tunnelConfig tr:last-child td {
-    border-top: 1px solid #89f;
+    border-top: 1px solid #aaafce;
 }
 
 .tunnelDescriptionLabel, .tunnelDestinationLabel {
@@ -1036,7 +1036,7 @@ td.tunnelDestination, td.tunnelDescription {
 }
 
 .tunnelProperties td:last-child {
-    border-right: 1px solid #89f;
+    border-right: 1px solid #aaafce;
 }
 
 div[class^="status"] {
@@ -1150,7 +1150,7 @@ input[name="nofilter_blindedPassword"] {
     -moz-user-select: all;
     -webkit-user-select: all;
     user-select: all;
-    border: 1px solid #99f;
+    border: 1px solid #aaafce;
     background: #fff;
     border-radius: 2px;
     box-shadow: inset 1px 1px 1px #ddd;
@@ -1239,7 +1239,7 @@ input[type="radio"], input[type="radio"]:checked, input[type="radio"][disabled],
     height: 19px !important;
     vertical-align: middle !important;
     box-sizing: border-box;
-    border: 1px solid #99f !important;
+    border: 1px solid #aaafce;
     background: #f8f8ff;
     -moz-appearance: none;
     -webkit-appearance: inherit;
