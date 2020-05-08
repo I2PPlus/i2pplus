@@ -456,8 +456,7 @@
         <!-- default if not set by disableManifestClasspath -->
         <property name="manifest.classpath.name" value="Class-Path" />
         <property name="full.version" value="${release.number}-${i2p.build.number}${build.extra}" />
-<!--        <echo message="Building version ${full.version} (mtn rev ${workspace.version})" /> -->
-        <echo message="Building version ${full.version} (git rev ${git.shortHash})" />
+        <echo message="Building version ${full.version} (revision ${workspace.version})" />
     </target>
 
     <target name="setBuildTimestamp" unless="${build.reproducible}" >
@@ -506,12 +505,12 @@
         </exec>
     </target>
 
-    <target name="trimMtnRev" depends="getMtnRev">
-        <exec executable="cut" inputstring="${workspace.version}" outputproperty="MtnShortHash" errorproperty="cut.error1" failifexecutionfails="true" >
+    <target name="trimRev" depends="getMtnRev, getGitRev">
+        <exec executable="cut" inputstring="${workspace.version}" outputproperty="shortHash" errorproperty="cut.error1" failifexecutionfails="true" >
             <arg value="-c" />
             <arg value="1-8" />
         </exec>
-        <echo message="Short version is: ${MtnShortHash}" />
+        <echo message="Short version is: ${shortHash}" />
     </target>
 
     <target name="checkIfBumped">
@@ -574,12 +573,10 @@
     </target>
 
     <target name="getGitRev" depends="checkForGit" if="git.available" >
-        <exec executable="git" outputproperty="git.shortHash" errorproperty="git.error1" failifexecutionfails="false" >
+        <exec executable="git" outputproperty="workspace.version" errorproperty="git.error1" failifexecutionfails="false" >
             <arg value="rev-parse" />
-            <arg value="--short=8" />
             <arg value="HEAD" />
         </exec>
-        <echo file="git.rev">${git.shortHash}</echo>
     </target>
 
     <!-- end git targets -->
@@ -2617,13 +2614,13 @@
         </copy>
     </target>
 
-    <target name="getExtendedVersion" depends="buildProperties, trimMtnRev">
-        <property name="MtnShortHash" value="unknown" />
-        <condition property="Extended.Version" value="${full.version}-${MtnShortHash}">
+    <target name="getExtendedVersion" depends="buildProperties, trimRev">
+        <property name="shortHash" value="unknown" />
+        <condition property="Extended.Version" value="${full.version}-${shortHash}">
             <not>
                 <or>
-                    <equals arg1="${MtnShortHash}" arg2="" />
-                    <equals arg1="${MtnShortHash}" arg2="unknown" />
+                    <equals arg1="${shortHash}" arg2="" />
+                    <equals arg1="${shortHash}" arg2="unknown" />
                 </or>
             </not>
         </condition>
