@@ -444,7 +444,7 @@ img[src="/themes/console/images/i2plogo.png"] {
     font-size: 9pt;
     color: inherit;
     border: 1px solid #aaafce;
-    background: #f2f2ff;
+    background: #f2f3ff;
 }
 
 /* siderbar logo */
@@ -559,7 +559,7 @@ img[src="/themes/console/images/i2plogo.png"] {
     letter-spacing: 0.05em;
     margin: -7px -1px -8px -1px;
     padding: 4px 0 3px;
-    background: #fff url(images/tinytitle.png) center center repeat;
+    background: #f2f3ff url(images/tinytitle.png) center center repeat;
     background: linear-gradient(to bottom, #fff 50%, #eff2ff 50%) !important;
     text-transform: uppercase;
 }
@@ -590,7 +590,7 @@ img[src="/themes/console/images/i2plogo.png"] {
     border: none !important;
     box-shadow: inset 0 0 2px 1px #f2f7fa;
     text-decoration: none !important;
-    background: #fff url(images/bg2.png);
+    background: #f2f3ff url(images/bg2.png);
     background: linear-gradient(to right, #eff2ff 0%, #fff 50%, #eff2ff);
 }
 
@@ -1500,7 +1500,7 @@ select:hover, select:active {
 }
 
 select:focus {
-    background: #fff url(images/dropdown_hover.png) right center no-repeat !important;
+    background: #f2f3ff url(images/dropdown_hover.png) right center no-repeat !important;
     background: url(images/dropdown_hover.png) right center no-repeat, linear-gradient(to bottom, #ddd 0%, #fff 100%) !important;
     box-shadow: 0 0 0 1px #fff, 0 0 0 2px #f60;
 }
@@ -2246,7 +2246,7 @@ button::-moz-focus-inner, input[type="submit"]::-moz-focus-inner, input[type="re
     text-align: left;
     color: #41444d;
     min-width: 540px;
-    background: #f2f2ff;
+    background: #f2f3ff;
 }
 
 .main#news h3 {
@@ -2296,7 +2296,7 @@ button::-moz-focus-inner, input[type="submit"]::-moz-focus-inner, input[type="re
     border: 1px solid #bbc;
     border-radius: 2px;
     box-shadow: inset 1px 1px 1px #ddd;
-    background: #f2f2ff;
+    background: #f2f3ff;
 }
 
 .main textarea:focus {
@@ -2546,6 +2546,7 @@ div.news hr:last-child {
     margin: 0 -2px -1px !important;
     padding: 1px 0;
     min-width: 60px !important;
+    position: relative;
     display: inline-block;
     border: 1px solid #aaafce;
     background: #fff;
@@ -2571,8 +2572,9 @@ div.news hr:last-child {
 }
 
 .tab:hover {
+    z-index: 12;
+    box-shadow: inset 0 0 0 1px #fff, inset 0 0 1px 2px #f60;
     background: #fff;
-    box-shadow: inset 0 0 0 1px #f90;
 }
 
 .tab:active {
@@ -2585,11 +2587,13 @@ div.news hr:last-child {
 }
 
 .tab2 {
+    margin: 0 -3px -1px !important;
     padding: 6px 14px;
+    z-index: 10;
     vertical-align: top;
     color: #fff;
     text-shadow: 0 1px 1px #225;
-    box-shadow: inset 0 0 0 1px #f1f2ff, inset 3px 3px 2px #337;
+    box-shadow: inset 3px 3px 3px #225;
     background: #89f;
     background: linear-gradient(to bottom, #5d66a2 50%, #4a5282 50%);
 }
@@ -3517,6 +3521,10 @@ div.configure h2:first-child {
     border-bottom: 1px solid #aaafce;
 }
 
+.tablefooter td {
+    border-top: 1px solid #aaafce;
+}
+
 #sidebarconf tr:hover, #eventlog tr:hover, .tunneldisplay tr:hover, #jobstats tr:hover, #schedjobs tr:hover, #jardump tr:hover {
     color: #104e99;
     background: #ffd;
@@ -3815,7 +3823,7 @@ h2 {
 }
 
 h2, h3, h4#updateplugins {
-    background: #fff url(images/titlebg.png) right center no-repeat;
+    background: #f2f3ff url(images/titlebg.png) right center no-repeat;
     background: linear-gradient(to bottom, #fff 50%, #eff2ff 50%);
     box-shadow: inset 0 0 0 1px #fff;
 }
@@ -4040,7 +4048,7 @@ div.app {
     text-align: center !important;
     border: none;
     border: 1px solid #aaafce;
-    background: #fff;
+    background: #f2f3ff;
 }
 
 #sitemap div.app {
@@ -4062,8 +4070,7 @@ div.app:hover a {
 }
 
 .applabel {
-    background: url(images/tinytitle.png) center center repeat-x;
-    background: linear-gradient(to bottom, #fff 50%, #eff2ff 50%);
+    background: #f2f3ff;
     font-size: 9pt;
     margin: 0;
     padding: 4px 2px;
@@ -7701,8 +7708,6 @@ h2#debug_portmapper {
 }
 
 #jardump tr:hover td:first-child {
-    background: url(/themes/console/images/info/box.png) 5px center no-repeat, linear-gradient(to bottom, #fff, #ffe);
-    background: url(/themes/console/images/info/box.png) 5px center no-repeat #ffe;
     background-size: 16px 16px;
 }
 
@@ -10167,12 +10172,11 @@ div.app.js:hover::before {
 }
 
 .sitemapLink, .sitemapLabel {
-    display: inline-block;
     width: 140px;
+    display: inline-block;
     text-align: center;
     border: 1px solid #aaafce;
-    box-shadow: inset 0 0 0 1px #fff, inset 0 0 2px 1px #efefff;
-    background: #f8f8ff;
+    background: #f2f3ff;
 }
 
 .sitemapLink {
@@ -10214,8 +10218,8 @@ div.app.js:hover::before {
 #sitemap div.app {
     margin: 1px 3px 8px;
     width: 140px !important;
-    border-color: #bbf;
-    background: #f8f8ff;
+    border-color: #aaafce;
+    background: #f2f3ff;
 }
 
 #sitemap div.app img {
@@ -10225,9 +10229,8 @@ div.app.js:hover::before {
 
 #sitemap .applabel {
     width: 136px !important;
-    border-color: #bbf;
-    box-shadow: inset 0 0 0 1px #fff, inset 0 0 2px 1px #efefff;
-    background: #f8f8ff;
+    border-color: #aaafce;
+    background: #f2f3ff;
 }
 
 #sitemap div.app:hover, #sitemap div.app:hover .applabel,
@@ -10631,59 +10634,59 @@ p#gatherstats {
 /* h1 icons */
 
 h1 {
-    background: #fff url(images/netwrk.png) 10px center no-repeat !important;
+    background: #f2f3ff url(images/netwrk.png) 10px center no-repeat !important;
 }
 
 h1.home {
-    background: #fff url(images/home.png) 10px center no-repeat !important;
+    background: #f2f3ff url(images/home.png) 10px center no-repeat !important;
 }
 
 h1.perf {
-    background: #fff url(images/perf.png) 10px center no-repeat !important;
+    background: #f2f3ff url(images/perf.png) 10px center no-repeat !important;
 }
 
 h1.nfo {
-    background: #fff url(images/info.png) 10px center no-repeat !important;
+    background: #f2f3ff url(images/info.png) 10px center no-repeat !important;
 }
 
 h1.hlp {
-    background: #fff url(images/header_help.png) 10px center no-repeat !important;
+    background: #f2f3ff url(images/header_help.png) 10px center no-repeat !important;
 }
 
 h1.addbook {
-    background: #fff url(images/addbook.png) 10px center no-repeat !important;
+    background: #f2f3ff url(images/addbook.png) 10px center no-repeat !important;
 }
 
 h1.snark {
-    background: #fff url(images/app_snark.png) 10px center no-repeat !important;
+    background: #f2f3ff url(images/app_snark.png) 10px center no-repeat !important;
 }
 
 h1.mail {
-    background: #fff url(images/app_mail.png) 10px center no-repeat !important;
+    background: #f2f3ff url(images/app_mail.png) 10px center no-repeat !important;
 }
 
 h1.conf {
-    background: #fff url(images/cog.png) 10px center no-repeat !important;
+    background: #f2f3ff url(images/cog.png) 10px center no-repeat !important;
 }
 
 h1.adv {
-    background: #fff url(images/info.png) 10px center no-repeat !important;
+    background: #f2f3ff url(images/info.png) 10px center no-repeat !important;
 }
 
 h1.err {
-    background: #fff url(images/error.png) 10px center no-repeat !important;
+    background: #f2f3ff url(images/error.png) 10px center no-repeat !important;
 }
 
 h1.sched {
-    background: #fff url(images/tasks.png) 10px center no-repeat !important;
+    background: #f2f3ff url(images/tasks.png) 10px center no-repeat !important;
 }
 
 h1.log {
-    background: #fff url(images/logs.png) 10px center no-repeat !important;
+    background: #f2f3ff url(images/logs.png) 10px center no-repeat !important;
 }
 
 h1.webapp {
-    background: #fff url(images/webapp.png) 10px center no-repeat !important;
+    background: #f2f3ff url(images/webapp.png) 10px center no-repeat !important;
 }
 
 h1[class], h1 {
@@ -11062,14 +11065,13 @@ to {
     margin: 2px 0;
     padding: 2px 4px;
     width: 300px;
-    display: inline-block;
-    box-sizing: border-box;
-    background: linear-gradient(to bottom, #fff, #eef);
-    text-align: left;
-    border-radius: 1px;
-    font-size: 90%;
     position: relative;
-    box-shadow: 0 0 0 1px #ddf;
+    display: inline-block;
+    text-align: left;
+    font-size: 90%;
+    box-shadow: 0 0 0 1px #ced1e3;
+    background: linear-gradient(to bottom, #fff, #eef);
+    box-sizing: border-box;
 }
 
 .stattograph:hover {
@@ -11295,7 +11297,7 @@ to {
     display: inline-block;
     width: 0;
     height: 1px;
-    background: linear-gradient(to right, #d30, #f60);
+    background: linear-gradient(to right, #171, #9f9);
     position: absolute;
     bottom: 0;
     left: 0;
@@ -11317,6 +11319,7 @@ th, td {
 }
 
 #netdblookup th, #netdblookup td, #refreshsidebar td, #pluginconfig table td, #config_advanced td, #bandwidthconfig td, #i2pupdates td, #help th, #help td, #config_plugins td,
-#externali2cp td, #config_keyring td, #config_logging td, #config_network td, #config_peers td, .formaction, #sidebarconf tr:last-child td, #config_ui td, #config_reseed td {
+#externali2cp td, #config_keyring td, #config_logging td, #config_network td, #config_peers td, .formaction, #sidebarconf tr:last-child td, #config_ui td, #config_reseed td,
+#config_family td, #logs td {
     position: static;
 }
