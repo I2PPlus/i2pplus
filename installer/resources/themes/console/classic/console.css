@@ -14,7 +14,7 @@ body {
     text-align: left;
     background: #eef url(images/bg0.png) center center scroll;
     background-size: 90px 90px;
-    color: #2c354f;
+    color: #41444d;
     font: 9pt/130% "Droid Sans", "Open Sans", "Noto Sans", Ubuntu, "Segoe UI", "Lucida Grande", "DejaVu Sans", Verdana, Helvetica, sans-serif;
 }
 
@@ -371,25 +371,22 @@ img[src="/themes/console/images/i2plogo.png"] {
 }
 
 .sorry {
-    padding: 20px 20px 20px 75px;
-    background: #fff url(/themes/console/images/info/errortriangle.png) 20px 40% no-repeat;
-    background: url(/themes/console/images/info/errortriangle.png) 20px 40% no-repeat, linear-gradient(to bottom, #fff, #ffe);
     margin: -1px 0 0 211px;
+    padding: 20px 20px 20px 75px;
     min-width: 475px;
-    border: 1px solid #aaafce;
-    box-shadow: inset 0 0 0 1px #ff9;
-    text-align: justify;
     word-wrap: break-word;
+    text-align: justify;
     font-weight: bold;
-    color: #351d02;
+    border: 1px solid #aaafce;
+    box-shadow: inset 0 0 0 1px #fff, inset 0 0 1px 1px #900;
+    background: #f2f2ff url(/themes/console/images/info/errortriangle.png) 20px 40% no-repeat;
 }
 
 .sorry hr {
-    color: #89f;
-    background: #8c4d16;
-    height: 1px;
-    border: 0 solid #89f;
     margin: 10px 0;
+    height: 1px;
+    background: #aaafce;
+    opacity: .5;
 }
 
 .sorry p {
@@ -403,12 +400,12 @@ img[src="/themes/console/images/i2plogo.png"] {
     padding: 0 15px 5px;
     box-shadow: inset 0 0 0 1px #f99;
     font-weight: normal;
-    color: #2c354f;
+    color: #41444d;
 }
 
 #warning2 h3 {
     margin: -1px -16px 15px;
-    color: #2c354f;
+    color: #41444d;
     box-shadow: inset 0 0 0 1px #f99;
     padding: 8px 10px;
 }
@@ -438,18 +435,16 @@ img[src="/themes/console/images/i2plogo.png"] {
 }
 
 .routersummary {
-    background: #eef url(images/bg0.png);
-    background: linear-gradient(to bottom, rgba(255,255,255,0.8), rgba(255,255,255,0.2)), url(images/bg0.png);
-    background-size: 100% 100%, 120px 120px;
-    width: 204px;
-    color: inherit;
     margin: 0 0 5px;
     padding: 9px 1px 7px 1px;
-    text-align: center !important;
-    border: 1px solid #aaafce;
-    word-wrap: break-word;
-    font-size: 9pt;
+    width: 204px;
     line-height: 125%;
+    word-wrap: break-word;
+    text-align: center !important;
+    font-size: 9pt;
+    color: inherit;
+    border: 1px solid #aaafce;
+    background: #f2f2ff;
 }
 
 /* siderbar logo */
@@ -668,7 +663,7 @@ img[src="/themes/console/images/i2plogo.png"] {
 }
 
 #sb_peers a b, #sb_peersadvanced a b {
-    color: #2c354f;
+    color: #41444d;
 }
 
 #sb_peers a:hover b, #sb_peersadvanced a:hover b {
@@ -757,7 +752,7 @@ img[src="/themes/console/images/i2plogo.png"] {
 }
 
 #sb_tunnels a:not(:hover):not(:focus) {
-    color: #2c354f !important;
+    color: #41444d !important;
 }
 
 @media screen and (min-width: 1600px) {
@@ -1158,7 +1153,7 @@ a:active #sb_bandwidthgraph {
     white-space: nowrap;
     text-align: center !important;
     font-weight: bold !important;
-    color: #2c354f;
+    color: #41444d;
     text-shadow: 0 1px 1px rgba(255,255,255,0.8);
     float: left;
     width: 100%;
@@ -1184,7 +1179,7 @@ a:active #sb_bandwidthgraph {
     padding: 3px 0 4px;
     display: block;
     font-style: italic;
-    color: #2c354f;
+    color: #41444d;
     border: 1px solid #aaafce;
     border-top: none;
     border-radius: 0 0 3px 3px;
@@ -1586,12 +1581,12 @@ label:hover {
 
 label[for="0"] {
     cursor: default;
-    color: #2c354f;
+    color: #41444d;
 }
 
 .main#config_clients label[for="0"] {
     cursor: default;
-    color: #2c354f;
+    color: #41444d;
 }
 
 input[type="file"] {
@@ -2256,13 +2251,9 @@ button::-moz-focus-inner, input[type="submit"]::-moz-focus-inner, input[type="re
     border: 1px solid #aaafce;
     border-top: 0;
     text-align: left;
-    color: #2c354f;
+    color: #41444d;
     min-width: 540px;
-    background: #eef;
-    background: #eef url(/themes/snark/ubergine/images/hat.png) no-repeat scroll right bottom !important;
-    background: url(/themes/snark/ubergine/images/hat.png) no-repeat scroll right -3px bottom -5px, url(images/bg2.png) repeat scroll top left #fff !important;
-    background-size: auto 180px, 90px 90px !important;
-    box-shadow: inset 0 0 0 1px #e8e8f5;
+    background: #f2f2ff;
 }
 
 .main#news h3 {
@@ -2665,7 +2656,7 @@ table.configtable, #permabanned, #loggingoptions, #configstats, ul#banlist {
 
 #configstats td:first-child:empty + td > label, #configstats td:first-child:empty + td > label:hover { /* remove pointer from inert labels */
     cursor: default;
-    color: #2c354f;
+    color: #41444d;
 }
 
 #configstats td:first-child {
@@ -2842,7 +2833,7 @@ table.configtable, #permabanned, #loggingoptions, #configstats, ul#banlist {
 }
 
 tr.tablefooter:hover td, tr:hover .infohelp {
-    color: #2c354f;
+    color: #41444d;
 }
 
 /* peers - sort icons */
@@ -2949,7 +2940,7 @@ tr.tablefooter:hover td, tr:hover .infohelp {
 }
 
 tr:hover th {
-    color: #2c354f;
+    color: #41444d;
 }
 
 #thresholds, #profile_defs {
@@ -3659,6 +3650,7 @@ h1 {
     text-transform: uppercase;
     font-size: 18pt;
     text-align: left;
+    color: #2c354f;
     border: 1px solid #aaafce;
     background: #fff;
 }
@@ -4048,17 +4040,14 @@ div.ag2 {
 }
 
 div.app {
-    float: left;
+    margin: 3px ;
     padding: 0;
     width: 140px;
+    float: left;
     text-align: center !important;
     border: none;
-    margin: 3px ;
     border: 1px solid #aaafce;
-    border-radius: 2px;
     background: #fff;
-    background: linear-gradient(to bottom, #fff, #ddf);
-    box-shadow: 0 0 1px #fff;
 }
 
 #sitemap div.app {
@@ -4300,7 +4289,7 @@ h3 + .statusnotes {
 .statusnotes {
     margin: -6px 0 7px 0;
     padding: 8px 0;
-    color: #2c354f;
+    color: #41444d;
     font-style: italic;
     font-size: 9pt;
     text-align: center;
@@ -4536,7 +4525,7 @@ h3#totaljobstats {
 }
 
 tr#addnew:hover {
-    color: #2c354f !important;
+    color: #41444d !important;
 }
 
 #loggingoptions input[type="text"] {
@@ -5914,7 +5903,7 @@ p:empty { /* empty paragraph nuke */
 .main li .netdb_expiry {
     font-weight: normal;
     text-transform: lowercase;
-    color: #2c354f !important;
+    color: #41444d !important;
     font-style: italic;
 }
 
@@ -5967,7 +5956,7 @@ h3.stats {
 }
 
 .statlist li b, .statlist b a:hover, h3.stats a:hover {
-    color: #2c354f !important;
+    color: #41444d !important;
 }
 
 .statlist li::before {
@@ -5976,7 +5965,7 @@ h3.stats {
     font-size: 14pt;
     line-height: 60%;
     vertical-align: baseline;
-    color: #2c354f;
+    color: #41444d;
 }
 
 .statlist li {
@@ -6926,10 +6915,9 @@ tt a, .cells tt {
 }
 
 #tunnels .routerid, .tunnel_local {
-    display: inline-block;
     min-width: 64px;
+    display: inline-block;
     box-shadow: inset 0 0 0 1px #aad, inset 0 0 0 2px #fff;
-    border-radius: 2px;
     background: #ddf;
     background: linear-gradient(to bottom, #fff, #ddf);
 }
@@ -6937,7 +6925,6 @@ tt a, .cells tt {
 .tunnel_peer .routerid {
     padding: 1px 1px 1px 5px;
     text-align: center;
-    border-radius: 2px;
 }
 
 .tunnel_local {
@@ -9667,12 +9654,11 @@ th.queue {
 .tunnel_cap, .tier, #capabilities_key b, #netdbtiers td a {
     margin: 1px 2px;
     padding: 1px 2px;
-    display:inline-block;
     min-width: 14px;
+    display:inline-block;
     text-align: center !important;
     text-shadow: 0 1px 1px #fff;
-    border: 1px solid #99a;
-    border-radius: 2px;
+    border: 1px solid #aaafce;
     background: #99b;
     background: linear-gradient(to bottom, #fff, #ddf);
 }
@@ -10949,7 +10935,7 @@ h3#webappconfig {
     overflow: hidden;
     text-overflow: ellipsis;
     font-size: 85% !important;
-    color: #2c354f;
+    color: #41444d;
     -moz-user-select: all;
     -webkit-user-select: all;
     user-select: all;
@@ -11334,7 +11320,7 @@ th, td {
     position: relative;
 }
 
-#netdblookup th, #netdblookup td, #refreshsidebar td, #pluginconfig table td, #config_advanced td, #bandwidthconfig td, #i2pupdates td,
+#netdblookup th, #netdblookup td, #refreshsidebar td, #pluginconfig table td, #config_advanced td, #bandwidthconfig td, #i2pupdates td, #help th, #help td,
 #externali2cp td, #config_keyring td, #config_logging td, #config_network td, #config_peers td, .formaction, #sidebarconf tr:last-child td {
     position: static;
 }

@@ -241,30 +241,23 @@ td {
 }
 
 tr.list0 {
-    background: #dde1ff;
-    background: rgba(220,220,255,0.5);
+    background: #f1f0ff;
 }
 
 tr.list1 {
-    background: #eff1ff;
-    background: rgba(240,240,255,0.5);
+    background: #fff;
 }
 
 tr.list0, tr.list1 {
-    border-top: 1px inset #ccf !important;
-    border-bottom: 1px inset #ccf !important;
-}
-
-_:-ms-lang(x), tr.list0, tr.list1 {
-    border-bottom: 1px solid #ccf !important;
+    border-top: 1px solid #ced1e3 !important;
+    border-bottom: 1px solid #ced1e3 !important;
 }
 
 tr.list0:hover, tr.list1:hover {
-    background: #fff;
-    background: linear-gradient(to bottom, #fff 0%, #ffe 100%) !important;
+    border-top: 1px solid #ced1e3;;
+    border-bottom: 1px solid #ced1e3;;
+    background: #ffd;
     cursor: pointer;
-    border-top: 1px solid #aaafce;;
-    border-bottom: 1px solid #aaafce;;
 }
 
 tr.list0:hover td, tr.list1:hover td {
@@ -1035,7 +1028,7 @@ div#composemail {
 #dologin td {
     padding: 3px;
     font-weight: bold !important;
-    color: #2c354f;
+    color: #41444d;
 }
 
 #dologin td:first-child {
@@ -1241,6 +1234,14 @@ tr.bottombuttons table#pagenav {
     border-bottom: 1px solid #555;
 }
 
+#pagenavbottom td {
+    border-top: 1px solid #aaafce;
+}
+
+#pagenavbottom td table td {
+    border-top: none;
+}
+
 table#pagenav td {
     padding: 6px 3px 4px;
     white-space: nowrap;
@@ -1255,13 +1256,13 @@ table#pagenav td:first-child {
 }
 
 table#pagenav td:last-child {
-    text-align: left;
     width: 49%;
+    text-align: left;
 }
 
 #pagenav input:disabled {
     display: inline;
-    opacity: 0.3;
+    opacity: .3;
 }
 
 .bottombuttons input:disabled {

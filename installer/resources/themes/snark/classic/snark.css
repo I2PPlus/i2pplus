@@ -1148,12 +1148,12 @@ tr:hover .percentBarText {
 
 tr:nth-child(odd) + .peerinfo:nth-child(even) {
     border-bottom: 1px solid #ced1e3;
-    background: #f2f2ff;
+    background: #f0f1ff;
 }
 
 tr:nth-child(even) + .peerinfo:nth-child(odd) {
     border-bottom: 1px solid #ced1e3;
-    background: #e8e8ff;
+    background: #fff;
 }
 
 .snarkTorrentOdd td, .snarkTorrentEven td {

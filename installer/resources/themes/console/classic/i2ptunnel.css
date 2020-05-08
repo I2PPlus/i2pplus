@@ -8,7 +8,7 @@ body {
     padding: 0;
     text-align: center;
     font-family: "Droid Sans", "Open Sans", "Noto Sans", Ubuntu, "Segoe UI", "Lucida Grande", "DejaVu Sans", Verdana, Helvetica, sans-serif;
-    color: #2c354f;
+    color: #41444d;
     font-size: 9pt;
     background: #a4a4cb url(images/bg.png);
     image-rendering: -webkit-optimize-contrast;
@@ -268,7 +268,7 @@ select::-ms-expand {
 select[disabled], select[disabled]:hover, select[disabled]:focus, select[disabled]:active {
     margin: 0;
     padding: 0;
-    color: #2c354f;
+    color: #41444d;
     border: none;
     box-shadow: none;
     background: none !important;
@@ -316,7 +316,7 @@ h2, h3 {
     letter-spacing: 0.08em;
     word-spacing: 0.1em;
     margin: 10px 0 -1px;
-    color: #2c354f;
+    color: #41444d;
     box-shadow: inset 0 0 0 1px #fff;
     position: relative;
 }
@@ -384,7 +384,7 @@ th {
     border-top: 1px solid #aaafce;
     border-bottom: 1px solid #aaafce;
     font-size: 10pt;
-    color: #2c354f;
+    color: #41444d;
 }
 
 tr {
@@ -427,7 +427,7 @@ td.infohelp {
 }
 
 .tunnelProperties:hover {
-    background: #ffe !important;
+    background: #ffd !important;
     transition: ease background 0.3s;
 }
 
@@ -1162,13 +1162,13 @@ input[name="nofilter_blindedPassword"] {
     margin: 0.5px 5px;
     padding: 2px 4px;
     box-shadow: 0 0 0 1px #fff, 0 0 0 2px #f60;
-    background: #ffe;
+    background: #ffd;
     outline: none;
 }
 
 .displayText:empty, .displayText:empty:hover, .displayText:empty:focus {
-    background: #ddd;
     box-shadow: inset 2px 2px 1px #ccc;
+    background: #ddd;
 }
 
 .displayText:empty::before {
@@ -1371,7 +1371,7 @@ input::placeholder {
 }
 
 .username::placeholder, .password::placeholder {
-    color: #2c354f;
+    color: #41444d;
     font-size: 100%;
     font-style: italic;
     text-transform: lowercase;
