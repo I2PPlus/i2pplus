@@ -93,7 +93,7 @@ i {
     width: 200px;
     margin: 0 0 0 20px;
     padding: 10px 5px 8px;
-    text-align: center;;
+    text-align: center;
     border: 5px solid #ddf;
     background: #eff1ff;
 }
@@ -800,7 +800,7 @@ img[src="/themes/console/images/i2plogo.png"] {
 }
 
 #sb_warning {
-    border-bottom: 1px solid #aaafce;;
+    border-bottom: 1px solid #aaafce;
 }
 
 #sb_warning + hr {
@@ -881,7 +881,7 @@ p:empty + .sb_notice {
     border: none;
     padding: 5px 3px;
     border-collapse: collapse;
-    border-bottom: 1px solid #ddf !important;
+    border-bottom: 1px solid #aaafce !important;
     line-height: 100%;
 }
 
@@ -1128,9 +1128,9 @@ a:active #sb_bandwidthgraph {
     margin: -4px 0 -5px 3px;
     text-align: center;
     border: 1px solid #aaafce;
-    box-shadow: 0 0 1px rgba(200,200,200,0.8);
+    box-shadow: 0 0 1px rgba(200,200,200,0.8), inset 0 0 0 1px #fff;
     background: #eef;
-    background: repeating-linear-gradient(to right, rgba(180, 180, 255,0.7) 1px, rgba(180, 180, 255, 0.7) 2px, rgba(221, 221, 255, 0.7) 2px, rgba(221, 221, 255, 0.7) 4px);
+    background: repeating-linear-gradient(to right, rgba(210, 210, 255, .7) 1px, rgba(210, 210, 255, .7) 2px, rgba(230, 230, 255, .7) 2px, rgba(230, 230, 255, .7) 4px);
 }
 
 @media screen and (min-width: 1500px) {
@@ -1420,7 +1420,7 @@ p + .twocol {
 
 /* end welcome */
 
-a:link, .routerconsole a:visited, #sb_localtunnels a:visited {
+a:link, .routerconsole a:visited, #sb_localtunnels a:visited, #graphopts a:visited {
     color: #6b6b94 !important;
     text-decoration: none;
     font-weight: bold;
@@ -1510,7 +1510,7 @@ select:focus {
 }
 
 select[disabled], select[disabled]:hover, select[disabled]:focus, select[disabled]:active {
-    border: 1px solid #aaafce;;
+    border: 1px solid #aaafce;
     box-shadow: inset 0 0 0 1px #fff !important;
     background: #eee !important;
     background: linear-gradient(to bottom, #fff, #eef) !important;
@@ -1596,32 +1596,31 @@ input[type="file"] {
 
 input[type="text"], input[type="password"] {
     margin: 3px 5px 3px 5px;
-    vertical-align: middle;
-    min-width: 120px;
-    border: 1px solid #aaafce;
-    box-shadow: inset 1px 1px 1px #ddd;
-    border-radius: 2px;
     padding: 4px;
+    min-width: 120px;
+    vertical-align: middle;
     color: #333;
+    border: 1px solid #aaafce;
+    border-radius: 2px;
+    box-shadow: inset 1px 1px 1px #ddd;
     background-color: #fefefe;
 }
 
 input[type="text"]:focus, input[type="password"]:focus {
-    box-shadow: inset 0 0 0 1px #89f, 0 0 1px rgba(136, 153, 255, 0.4);
-    box-shadow: 0 0 0 1px #fff, 0 0 0 2px #f60;;
     color: #000;
+    box-shadow: inset 0 0 0 1px rgba(255,96,0,.5);
 }
 
 input[type="text"][readonly], input[type="text"][readonly]:focus {
-    background: #efefef;
-    box-shadow: inset 1px 1px 1px #ddd;
     color: #333;
+    box-shadow: inset 1px 1px 1px #ddd;
+    background: #efefef;
 }
 
 button, input, select {
-    background-color: #eee;
     font: 9pt/130% "Droid Sans", "Open Sans", "Noto Sans", Ubuntu, "Segoe UI", "Lucida Grande", "DejaVu Sans", Verdana, Helvetica, sans-serif;
     color: #333;
+    background-color: #eee;
 }
 
 button:hover, input[type="submit"]:hover, input[type="reset"]:hover {
@@ -1634,17 +1633,17 @@ button:active, input[type="submit"]:active, input[type="reset"]:active {
 }
 
 input.search[type="text"] {
-    background: #fff url(/themes/console/images/buttons/search.png) no-repeat 2px center;
     padding: 3px 3px 3px 24px;
     min-height: 22px;
-    border: 1px solid #bbc;
     color: #333 !important;
+    border: 1px solid #bbc;
+    background: #fff url(/themes/console/images/buttons/search.png) no-repeat 2px center;
 }
 
 input[name="refreshInterval"] {
-    text-align: right;
-    min-width: 80px;
     width: 80px;
+    min-width: 80px;
+    text-align: right;
 }
 
 input[type="submit"], input[type="reset"], button, .optbox {
@@ -1654,10 +1653,10 @@ input[type="submit"], input[type="reset"], button, .optbox {
 /* accessibility tweak - colors rather than focus rings where possible */
 
 .optbox:hover, .optbox:focus, input[type="checkbox"]:hover, input[type="checkbox"]:focus {
-    filter: drop-shadow(0 0 2px #89f);
-    box-shadow: 0 0 0 1px #89f;
     border: 0;
+    box-shadow: 0 0 0 1px #89f;
     outline: none;
+    filter: drop-shadow(0 0 2px #89f);
 }
 
 .optbox:disabled:hover, input:disabled:hover {
@@ -1677,12 +1676,6 @@ button::-moz-focus-inner, input::-moz-focus-inner {
     margin: 4px !important;
     display: inline-block !important;
 }
-
-/*
-#netconfig .optbox:last-child, #netconfig .optbox[value="only"], #netconfig .optbox[name="disableUDP"], #netconfig .optbox[value="disabled"] {
-    margin-bottom: 6px !important;
-}
-*/
 
 #netconfig input[type="text"] + br + .optbox, #netconfig .optbox[name="ntcpAutoPort"] {
     margin-top: 3px !important;
@@ -2550,13 +2543,13 @@ div.news hr:last-child {
 }
 
 .tab, .tab2 {
-    box-sizing: border-box;
+    margin: 0 -2px -1px !important;
+    padding: 1px 0;
+    min-width: 60px !important;
     display: inline-block;
     border: 1px solid #aaafce;
-    margin: 0 -2px -1px -2px !important;
-    padding: 1px 0;
     background: #fff;
-    min-width: 60px !important;
+    box-sizing: border-box;
 }
 
 #peers .tab, #peers .tab2 {
@@ -2593,12 +2586,12 @@ div.news hr:last-child {
 
 .tab2 {
     padding: 6px 14px;
+    vertical-align: top;
     color: #fff;
     text-shadow: 0 1px 1px #225;
-    box-shadow: inset 3px 3px 2px #337;
+    box-shadow: inset 0 0 0 1px #f1f2ff, inset 3px 3px 2px #337;
     background: #89f;
     background: linear-gradient(to bottom, #5d66a2 50%, #4a5282 50%);
-    vertical-align: top;
 }
 
 /* end topnav */
@@ -2664,7 +2657,7 @@ table.configtable, #permabanned, #loggingoptions, #configstats, ul#banlist {
 }
 
 #configstats td:last-child { /* epiphany fix */
-    border-right: 1px solid #aaafce;;
+    border-right: 1px solid #aaafce;
 }
 
 .configtable td, #joinfamily td {
@@ -2877,7 +2870,7 @@ tr.tablefooter:hover td, tr:hover .infohelp {
 }
 
 .sortup, .sortdown {
-    box-shadow: inset 0 0 0 1px #fff, 0 0 1px #ddd;;
+    box-shadow: inset 0 0 0 1px #fff, 0 0 1px #ddd;
     opacity: 0.7;
 }
 
@@ -3178,8 +3171,8 @@ ul#banlist + h3.tabletitle {
 #ipv4, #ipv6, #permabanned tr:nth-child(2) {
     background: url(images/tinytitle.png) center center repeat-x;
     background: linear-gradient(to bottom, #fff 50%, #eff2ff 50%);
-    border-top: 1px solid #aaafce;;
-    border-bottom: 1px solid #aaafce;;
+    border-top: 1px solid #aaafce;
+    border-bottom: 1px solid #aaafce;
 }
 
 /* end /configpeer banlist */
@@ -3254,11 +3247,11 @@ pre#transports {
 #pluginconfig td:first-child label {
     margin-left: 6px;
     padding: 2px 5px 2px 20px;
-    display: inline-block;
     min-width: 100px;
+    display: inline-block;
     text-align: left;
     border-radius: 2px 15px 15px 2px;
-    box-shadow: 0 0 0 1px #ddf;
+    box-shadow: 0 0 0 1px #aaafce;
     background: #e2e2ff url(/themes/console/images/plugin.png) 3px center no-repeat;
     background: url(/themes/console/images/plugin.png) 3px center no-repeat, linear-gradient(to bottom, #f8f8ff, #e2e2ff);
     background-size: 14px 14px, 100% 100%;
@@ -3520,8 +3513,8 @@ div.configure h2:first-child {
 }
 
  tr.tablefooter {
-    border-top: 1px solid #aaafce;;
-    border-bottom: 1px solid #aaafce;;
+    border-top: 1px solid #aaafce;
+    border-bottom: 1px solid #aaafce;
 }
 
 #sidebarconf tr:hover, #eventlog tr:hover, .tunneldisplay tr:hover, #jobstats tr:hover, #schedjobs tr:hover, #jardump tr:hover {
@@ -4163,7 +4156,7 @@ table.search {
     margin-left: auto;
     margin-right: auto;
     width: auto;
-    border: 1px solid #aaafce;;
+    border: 1px solid #aaafce;
     border-collapse: separate;
     border-radius: 0 0 2px 2px;
 }
@@ -4231,11 +4224,11 @@ textarea {
 }
 
 hr {
-    color: #89f;
-    background: #89f;
-    height: 2px;
-    border: 0 solid #89f;
     margin: 3px 0;
+    height: 2px;
+    color: #aaafce;
+    border: none;
+    background: #aaafce;
 }
 
 p.infohelp + hr, p.infohelp + p + hr, #tunnelconfig + hr { /*configservice */
@@ -4782,10 +4775,10 @@ p#enablefullstats {
 /* graphs */
 
 .graphspanel {
-    padding: 15px 5px 1px;
     margin: -16px -16px -11px -16px;
-    text-align: center !important;
+    padding: 15px 5px 1px;
     overflow: hidden;
+    text-align: center !important;
 }
 
 #graphs .graphspanel {
@@ -4799,23 +4792,22 @@ h3#graphdisplay {
 .graphspanel img {
     margin: 5px 4px;
     padding: 1px;
-    background: #fff;
-    border: 1px solid #9af;
-    box-shadow: 0 0 1px 0 #abf;
     max-width: 95%;
     max-width: calc(100% - 50px);
+    border: 1px solid #ced1e3;
+    background: #fff;
 }
 
 .graphspanel a img {
-    background: #fff;
-    border: 1px solid #aaafce;
-    opacity: 0.9;
     vertical-align: top;
+    border: 1px solid #ced1e3;
+    background: #fff;
+    opacity: .9;
 }
 
 .graphspanel a img:hover {
-    border: 1px solid #f60;
     text-align: center !important;
+    border: 1px solid #f60;
     background: #ccf;
     opacity: 1;
     cursor: zoom-in;
@@ -4947,13 +4939,13 @@ form[action="graphs"] input[type="text"] {
 }
 
 #graphopts {
-    text-align: center;
-    border: 1px solid #aaafce;
-    background: rgba(255,255,255,0.8);
     margin: 25px -1px -11px;
     padding: 10px 10px 9px;
-    text-transform: capitalize;
+    text-align: center;
     color: transparent;
+    text-transform: capitalize;
+    border: 1px solid #aaafce;
+    background: rgba(255,255,255,0.8);
 }
 
 h3#graphinfo {
@@ -4971,15 +4963,16 @@ h3#graphinfo {
 }
 
 #graphopts a {
-    display: inline-block;
-    border: 1px solid #8b8edf;
-    padding: 1px 10px;
-    border-radius: 15px;
-    background: #f8f8ff;
-    background: rgba(248,248,255,0.3);
     margin: 3px -2px;
+    padding: 1px 10px;
+    display: inline-block;
+    font-size: 90%;
+    border: 1px solid #aaafce;
+    border-radius: 15px;
     box-shadow: 0 0 0 1px #ddf;
     box-shadow: 0 0 0 1px rgba(220,220,255,0.6);
+    background: #f8f8ff;
+    background: rgba(248,248,255,0.3);
 }
 
 #graphopts a:empty {
@@ -4988,9 +4981,9 @@ h3#graphinfo {
 
 #graphopts a:hover, #graphopts a:focus {
     border: 1px solid #7778bf;
+    box-shadow: 0 0 0 1px rgba(220,220,255,0.6), inset 0 0 0 1px #d8d4ff;
     background: #e2e2ff;
     background: linear-gradient(to bottom, #fff 50%, #d8d4ff 50%);
-    box-shadow: 0 0 0 1px rgba(220,220,255,0.6), inset 0 0 0 1px #d8d4ff;
 }
 
 #graphopts a:active {
@@ -5182,7 +5175,7 @@ p#helptranslate {
 }
 
 .themelabel {
-    border-top: 1px solid #aaafce;;
+    border-top: 1px solid #aaafce;
     margin: -25px -4px 0;
     padding: 3px 2px;
     background: #eef url(images/tinytitle.png) center center;
@@ -5921,7 +5914,7 @@ img.unknownflag {
 /* /stats */
 
 form#statnav {
-    border: 1px solid #aaafce;;
+    border: 1px solid #aaafce;
     padding: 10px 10px 10px 15px;
 }
 
@@ -6075,7 +6068,7 @@ h3.stats {
 
 #netdboverview {
     margin: 15px 0 5px;
-    border: 1px solid #aaafce;;
+    border: 1px solid #aaafce;
 }
 
 #netdboverview th {
@@ -7250,7 +7243,7 @@ th code {
 /* sybils */
 
 .leaseset th:last-child, .leaseset td:last-child, .sybil_routerinfo th:last-child, .sybil_routerinfo td:last-child {
-    border-right: 1px solid #aaafce;;
+    border-right: 1px solid #aaafce;
 }
 
 .sybil_routerinfo table td:last-child {
@@ -7608,8 +7601,8 @@ h2#debug_portmapper {
     text-align: left;
 }
 
-#jardump tr td {
-    border-top: 1px solid #cfd6ff !important;
+#jardump tr td, #config_logging tr {
+    border-top: 1px solid #ced1e3 !important;
 }
 
 #jardump td {
@@ -7655,11 +7648,11 @@ h2#debug_portmapper {
 }
 
 .subheading.pluginfiles {
-    border-top: 1px solid #aaafce;;
+    border-top: 1px solid #ced1e3;
 }
 
 #jardump td {
-    border-left: 1px inset #cfd6ff !important;
+    border-left: 1px solid #ced1e3 !important;
     vertical-align: middle;
     text-align: center;
 }
@@ -7692,7 +7685,7 @@ h2#debug_portmapper {
 
 #jardump hr {
     margin: 2px 0 !important;
-    background: #cfd6ff;
+    background: #ced1e3;
 }
 
 .unsignedmod:empty {
@@ -8556,12 +8549,11 @@ to {
 
 .optionlist, .optionsingle, #reseedssl {
     padding: 1px 2px;
-    border: 1px solid #aaf !important;
+    border: 1px solid #ced1e3 !important;
     box-shadow: inset 0 0 0 2px #fff;
+    background: #fff !important;
     column-gap: 1px;
     transition: ease box-shadow 0.2s;
-    background: #fff !important;
-    filter: drop-shadow(0 0 1px #ddf);
 }
 
 #graphs .optionlist {
@@ -8622,7 +8614,7 @@ b.suboption {
     display: inline-block;
     text-shadow: 0 1px 1px #fff;
     border-radius: 3px 3px 0 0;
-    border: 1px solid #aaf;
+    border: 1px solid #ced1e3;
     border-bottom: none;
     box-shadow: inset 0 0 0 1px #fff;
     background: #fdfdff;
@@ -10948,18 +10940,18 @@ h3#webappconfig {
 .graphContainer {
     margin: 4px 3px !important;
     padding: 2px 1px 0 !important;
+    min-width: 120px;
+    max-width: calc(100% - 18px);
+    min-height: 60px;
     position: relative;
     display: inline-block;
-    min-width: 120px;
-    min-height: 60px;
     overflow: hidden;
     vertical-align: middle;
     text-align: center;
     border: 1px solid #aaafce;
-    box-shadow: 0 0 1px 0 #abf;
-    max-width: calc(100% - 18px);
-    animation: ease grid-fade 1s forwards;
+    box-shadow: 0 0 1px 1px #e8e8f8;
     background: #f6f6ff;
+    animation: ease grid-fade 1s forwards;
 }
 
 .graphContainer#hidpi {
@@ -10974,7 +10966,14 @@ h3#webappconfig {
 
 .graphContainer:hover {
     border: 1px solid #f60;
-    box-shadow: inset 0 0 0 1px #fff, inset 0 0 1px 1px #f60;
+}
+
+.graphContainer:active {
+    box-shadow: inset 2px 2px 2px rgba(0,0,0,.3);
+}
+
+.graphContainer:active img {
+    transform: scale(.99);
 }
 
 #graphs .statimage, #graphs .statimage:hover, #graphs a:hover .statimage, #graph_single .statimage, #graph_single .statimage:hover {
@@ -11317,7 +11316,7 @@ th, td {
     position: relative;
 }
 
-#netdblookup th, #netdblookup td, #refreshsidebar td, #pluginconfig table td, #config_advanced td, #bandwidthconfig td, #i2pupdates td, #help th, #help td,
-#externali2cp td, #config_keyring td, #config_logging td, #config_network td, #config_peers td, .formaction, #sidebarconf tr:last-child td, #config_ui td {
+#netdblookup th, #netdblookup td, #refreshsidebar td, #pluginconfig table td, #config_advanced td, #bandwidthconfig td, #i2pupdates td, #help th, #help td, #config_plugins td,
+#externali2cp td, #config_keyring td, #config_logging td, #config_network td, #config_peers td, .formaction, #sidebarconf tr:last-child td, #config_ui td, #config_reseed td {
     position: static;
 }
