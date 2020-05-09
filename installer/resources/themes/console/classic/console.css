@@ -950,16 +950,19 @@ div.refresh {
 }
 
 .routersummary .firewalled {
-    background: rgba(255,220,255,0.3);
+    box-shadow: inset 0 0 0 1px #fff, inset 0 0 0 2px rgba(96,96,255,.2);
+    background: rgba(255,220,255,.3);
     background: repeating-linear-gradient(135deg, rgba(220,255,220,0.3) 2px, rgba(255,255,220,0.3) 3px, rgba(220,255,220,0.3) 5px);
 }
 
 .routersummary .error {
-    background: rgba(255,110,110,0.1);
+    color: #900;
     box-shadow: inset 0 0 0 1px rgba(255,0,0,0.3), 0 0 1px rgba(96,96,96,0.5);
+    background: rgba(255,110,110,0.1);
 }
 
 .routersummary .warn, .routersummary .clockskew {
+    color: #990;
     background: rgba(255,255,200,0.4);
     box-shadow: inset 0 0 0 1px #ff0, 0 0 1px rgba(96,96,96,0.5);
 }
@@ -973,6 +976,8 @@ div.refresh {
 }
 
 .routersummary .running {
+    color: #393;
+    box-shadow: inset 0 0 0 1px #fff, inset 0 0 0 2px rgba(96,255,96,.2);
     background: rgba(220,255,220,0.2);
 }
 
@@ -1422,15 +1427,16 @@ p + .twocol {
 
 /* end welcome */
 
-a:link, .routerconsole a:visited:not(:hover):not(:active), #sb_localtunnels a:visited:not(:hover):not(:active), #sb_internals a:visited:not(:hover):not(:active), #sb_advanced a:visited:not(:hover):not(:active),
-#sb_services a:visited:not(:hover):not(:active), #graphopts a:visited:not(:hover):not(:active), #sitemapContainer a:visited:not(:hover):not(:active), .applabel a:visited:not(:hover):not(:active), .tab a:visited:not(:hover):not(:active) {
+a:link, .routerconsole a:visited:not(:hover):not(:active), #sb_localtunnels a:visited:not(:hover):not(:active), #sb_internals a:visited:not(:hover):not(:active),
+#sb_advanced a:visited:not(:hover):not(:active), #sb_services a:visited:not(:hover):not(:active), #graphopts a:visited:not(:hover):not(:active), #sitemapContainer a:visited:not(:hover):not(:active),
+.applabel a:visited:not(:hover):not(:active), .tab a:visited:not(:hover):not(:active) {
     color: #6b6b94 !important;
     text-decoration: none;
     font-weight: bold;
     word-wrap: break-word;
 }
 
-a:visited, #graphopts a, #graphopts a:visited, .tab a, .tab a:visited {
+a:visited, #graphopts a, #graphopts a:visited, .tab a, .tab a:visited, .routerconsole h3 a:link {
     color: #575779;
     text-decoration: none;
     font-weight: bold;
@@ -3664,6 +3670,7 @@ h1 {
     color: #2c354f;
     border: 1px solid #aaafce;
     background: #fff;
+    background-blend-mode: luminosity;
 }
 
 span.newtab {
