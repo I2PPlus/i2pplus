@@ -2819,7 +2819,12 @@ table.configtable, #permabanned, #loggingoptions, #configstats, ul#banlist {
 
 #profilelist td[colspan="9"], #profilelist tr td[colspan="9"]:hover {
     background: #ced1e3;
-    padding: 1px 0;
+    padding: 1px !important;
+}
+
+#profilelist td[colspan="9"]::after {
+    content: none !important;
+    display: none !important;
 }
 
 #profilelist td[colspan="9"] hr {
@@ -6994,6 +6999,10 @@ tt a, .cells tt {
     width: 1%;
 }
 
+#tunnel_defs tr:first-child td {
+    border-top: 1px solid #aaafce;
+}
+
 @media screen and (max-width: 1100px) {
 .tunnel_id {
     width: auto !important;
@@ -7144,7 +7153,7 @@ tt a, .cells tt {
 
 .left {
     margin: 0 1px;
-    width: 40%
+    width: 40%;
     display: inline-block;
     text-align: left;
 }
@@ -7170,8 +7179,12 @@ tt a, .cells tt {
     text-align: center;
 }
 
-#ntcpconnections td:nth-last-child(2), #udpconnections td:last-child {
+#ntcpconnections td:nth-last-child(2), #udpconnections td:last-child, #profiles td:last-child {
     border-right: 1px solid #aaafce !important;
+}
+
+#profiles table td:last-child {
+    border: none !important;
 }
 
 /* end peers */
@@ -8004,7 +8017,7 @@ p#enablefullstats input[type="checkbox"] {
 
 .main#profiles, .main#peers, .main#tunnels, .main#jobs, .main#netdb {
     padding: 5px;
-    min-width: 560px;
+    min-width: 590px;
 }
 
 .main#profiles .confignav, .main#netdb .confignav {
@@ -11305,12 +11318,13 @@ to {
     width: 16px;
     height: 16px;
     vertical-align: middle;
-    background: url(images/in.png) center center no-repeat;
+    background: url(../light/images/in.png) center center no-repeat !important;
     background-size: 16px 16px !important;
 }
 
 .outbound  {
-    background: url(images/out.png) center center no-repeat;
+    background: url(../light/images/out.png) center center no-repeat !important;
+    background-size: 16px 16px !important;
 }
 
 .inbound.small, .outbound.small {
@@ -11365,7 +11379,7 @@ th, td {
 
 #netdblookup th, #netdblookup td, #refreshsidebar td, #pluginconfig table td, #config_advanced td, #bandwidthconfig td, #i2pupdates td, #help th, #help td, #config_plugins td,
 #externali2cp td, #config_keyring td, #config_logging td, #config_network td, #config_peers td, .formaction, #sidebarconf tr:last-child td, #config_ui td, #config_reseed td,
-#config_family td, #logs td, #peers th, #peers td {
+#config_family td, #logs td, #peers th, #peers td, #profiles th, #profiles td {
     position: static;
 }
 
@@ -11382,5 +11396,60 @@ div.app, .sitemapLink, .sitemapLabel {
     max-height: 24px !important;
     max-width: 24px !important;
     display: inline-block;
+}
+}
+
+@media screen and (max-width: 1200px) {
+#floodfills th:nth-child(8), #floodfills td:nth-child(8),
+#floodfills th:nth-child(9), #floodfills td:nth-child(9),
+#floodfills th:nth-child(13), #floodfills td:nth-child(13),
+#floodfills th:nth-child(14), #floodfills td:nth-child(14),
+#floodfills th:nth-child(15), #floodfills td:nth-child(15) {
+    display: none;
+}
+
+#floodfills td {
+    font-size: 90%;
+}
+
+#peers .duptx, #peers .duprx, #peers .skew {
+    display: none;
+}
+}
+
+@media screen and (max-width: 1400px) {
+#peers #ntcpconnections th:nth-last-child(2), #peers #ntcpconnections th:nth-last-child(3) {
+    font-size: 0 !important;
+}
+
+#peers #ntcpconnections th:nth-last-child(2)::after, #peers #ntcpconnections th:nth-last-child(3)::after {
+    content: "";
+    display: inline-block;
+    width: 16px;
+    height: 16px;
+    background: url(/themes/console/images/info/network_status/network_clockskew.png) center center no-repeat;
+}
+
+#peers #ntcpconnections th:nth-last-child(3)::after {
+    background: url(/themes/console/images/info/queued.png) center center no-repeat;
+}
+
+#peers #ntcpconnections th:nth-last-child(4) {
+    max-width: 22px;
+    overflow: hidden;
+    padding-left: 0;
+    padding-right: 0;
+}
+
+#peers .ipv6, #peers .rto, #peers .mtu, #peers .sst, #peers .cwnd, #peers .rtt {
+    display: none;
+}
+
+.cells.peer, .cells.direction {
+    min-width: 0 !important;
+}
+
+.cells.idle, .cells.inout {
+    min-width: 90px !important;
 }
 }
