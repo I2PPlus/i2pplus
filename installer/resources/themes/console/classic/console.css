@@ -1422,8 +1422,8 @@ p + .twocol {
 
 /* end welcome */
 
-a:link, .routerconsole a:visited, #sb_localtunnels a:visited, #sb_internals a:visited, #sb_advanced a:visited,
-#sb_services a:visited, #graphopts a:visited, #sitemapContainer a:visited, .applabel a:visited {
+a:link, .routerconsole a:visited:not(:hover):not(:active), #sb_localtunnels a:visited:not(:hover):not(:active), #sb_internals a:visited:not(:hover):not(:active), #sb_advanced a:visited:not(:hover):not(:active),
+#sb_services a:visited:not(:hover):not(:active), #graphopts a:visited:not(:hover):not(:active), #sitemapContainer a:visited:not(:hover):not(:active), .applabel a:visited:not(:hover):not(:active), .tab a:visited:not(:hover):not(:active) {
     color: #6b6b94 !important;
     text-decoration: none;
     font-weight: bold;
