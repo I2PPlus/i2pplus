@@ -3670,7 +3670,7 @@ h1 {
     color: #2c354f;
     border: 1px solid #aaafce;
     background: #fff;
-    background-blend-mode: luminosity;
+    background-blend-mode: luminosity !important;
 }
 
 span.newtab {
@@ -3945,7 +3945,6 @@ td.infowarn, p.infowarn {
     margin-top: 15px !important;
 }
 
-/* p#profiles_overview, h3#shutdownrouter, h3#themeheading { */
 p#profiles_overview, h3#themeheading {
     margin-top: 15px !important;
 }
@@ -3996,7 +3995,7 @@ tr:nth-child(even), #pluginconfig table tr:nth-child(even) td {
 }
 
 tr:nth-child(odd), #pluginconfig table tr:nth-child(odd) td, .main#profiles ul#banlist {
-    background: #f1f3ff;
+    background: #eeefff;
 }
 
 .configtable th {

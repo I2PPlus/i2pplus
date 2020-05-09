@@ -281,17 +281,13 @@ select[disabled], select[disabled]:hover, select[disabled]:focus, select[disable
     background: url(/themes/console/images/buttons/cryptokey.png) 8px center no-repeat;
 }
 
-a:link {
+a:link, a:visited {
     word-wrap: break-word;
     text-decoration: none;
     font-weight: bold;
     color: #6b6b94;
-    outline: none;
-}
-
-a:visited {
-    text-decoration: none;
     color: #575779;
+    outline: none;
 }
 
 a:hover, a:focus {
@@ -763,13 +759,11 @@ td.blankColumn {
 }
 
 #throttler tr:nth-child(odd), #wizardTunnelTypes tr:nth-child(odd), #wizardSummary tr:nth-child(odd) {
-    background: #eff2ff;
-    background: rgba(240,240,255,0.5);
+    background: #fff;
 }
 
 #throttler tr:nth-child(even), #wizardTunnelTypes tr:nth-child(even), #wizardSummary tr:nth-child(even) {
-    background: #e7e7ff;
-    background: rgba(220,220,255,0.5);
+    background: #eeefff;
 }
 
 #throttler input[type="text"] {
