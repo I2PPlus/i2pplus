@@ -4,17 +4,19 @@
 @import url("/themes/fonts/DroidSans.css");
 
 body {
-    margin: 0;
+    margin: 2.5% 2%;
     padding: 0;
     text-align: center;
     font-family: "Droid Sans", "Open Sans", "Noto Sans", Ubuntu, "Segoe UI", "Lucida Grande", "DejaVu Sans", Verdana, Helvetica, sans-serif;
-    color: #41444d;
     font-size: 9pt;
-    background: #a4a4cb url(images/bg.png);
+    color: #41444d;
+    background: #eef url(images/bg0.png) center center scroll;
+    background-size: 90px 90px;
     image-rendering: -webkit-optimize-contrast;
 }
 
 body.iframed {
+    margin: 0;
     background: transparent url(/themes/console/images/transparent.gif) !important;
 }
 
@@ -160,18 +162,18 @@ hr {
 }
 
 .panel {
-    width: calc(100% - 14px);
+    padding: 0 10px 10px;
     margin: 8px auto;
+    width: calc(100% - 14px);
     min-width: 640px;
     max-width: 1800px;
     overflow: hidden;
     text-align: left !important;
+    border: 1px solid #aaafce;
     border-radius: 2px;
-    padding: 0 10px 10px;
     box-shadow: inset 0 0 1px #999;
     background: #fff;
     background: linear-gradient(to right, #fff 0%, rgba(247, 248, 255, 0.5), #fff), linear-gradient(to bottom, #eff1ff, #fff, #eff1ff);
-    border: 1px solid #447;
 }
 
 .iframed .panel {

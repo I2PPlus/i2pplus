@@ -12,16 +12,16 @@ body {
     margin: 3px;
     padding: 0;
     text-align: left;
+    font: 9pt/130% Droid Sans, Open Sans, Noto Sans, Ubuntu, Segoe UI, Lucida Grande, DejaVu Sans, Verdana, Helvetica, sans-serif;
+    color: #41444d;
     background: #eef url(images/bg0.png) center center scroll;
     background-size: 90px 90px;
-    color: #41444d;
-    font: 9pt/130% "Droid Sans", "Open Sans", "Noto Sans", Ubuntu, "Segoe UI", "Lucida Grande", "DejaVu Sans", Verdana, Helvetica, sans-serif;
 }
 
 /* preload button mouseovers */
 body:not(old) {
-    background: url(images/bg.png) scroll,
-    url(/themes/console/images/buttons/clean_hover.png) no-repeat,co
+    background: url(images/bg0.png) scroll,
+    url(/themes/console/images/buttons/clean_hover.png) no-repeat,
     url(/themes/console/images/buttons/configure_hover.png) no-repeat,
     url(/themes/console/images/buttons/delete_hover.png) no-repeat,
     url(/themes/console/images/buttons/restart_hover.png) no-repeat,
@@ -29,13 +29,13 @@ body:not(old) {
     url(/themes/console/images/buttons/search_hover.png) no-repeat,
     url(/themes/console/images/buttons/shutdown_hover.png) no-repeat,
     url(/themes/console/images/buttons/update_hover.png) no-repeat,
-    url(images/dropdown_hover.png), #bbf;
-    background-size: 120px 120px, 0 0, 0 0, 0 0, 0 0, 0 0, 0 0, 0 0, 0 0, 0 0;
+    url(images/dropdown_hover.png) #eef;
+    background-size: 90px 90px, 0 0, 0 0, 0 0, 0 0, 0 0, 0 0, 0 0, 0 0, 0 0;
 }
 
 @supports (text-justify: auto) { /* Firefox 55+ */
 body {
-    background-attachment: fixed;
+    background-attachment: fixed !important;
 }
 }
 
@@ -1633,11 +1633,10 @@ button:active, input[type="submit"]:active, input[type="reset"]:active {
 }
 
 input.search[type="text"] {
-    padding: 3px 3px 3px 24px;
-    min-height: 22px;
+    padding: 5px 5px 5px 28px;
     color: #333 !important;
-    border: 1px solid #bbc;
-    background: #fff url(/themes/console/images/buttons/search.png) no-repeat 2px center;
+    border: 1px solid #aaafce;
+    background: #fff url(/themes/console/images/buttons/search.png) no-repeat 5px center;
 }
 
 input[name="refreshInterval"] {
@@ -2253,7 +2252,7 @@ button::-moz-focus-inner, input[type="submit"]::-moz-focus-inner, input[type="re
     padding: 3px 0;
     font-size: 10pt;
     border: none;
-    border-bottom: 1px solid #bfc9ff;
+    border-bottom: 1px solid #ced1e3;
     background: none;
 }
 
@@ -2293,7 +2292,7 @@ button::-moz-focus-inner, input[type="submit"]::-moz-focus-inner, input[type="re
     min-height: 96px;
     resize: none;
     color: #333;
-    border: 1px solid #bbc;
+    border: 1px solid #aaafce;
     border-radius: 2px;
     box-shadow: inset 1px 1px 1px #ddd;
     background: #f2f3ff;
@@ -2535,6 +2534,9 @@ div.news hr:last-child {
     text-align: center;
     font-weight: bold;
     background: linear-gradient(to bottom, #fff, #eff2ff);
+    display: flex;
+    justify-content: center;
+    flex-wrap: wrap;
 }
 
 #peers .confignav {
@@ -2587,8 +2589,7 @@ div.news hr:last-child {
 }
 
 .tab2 {
-    margin: 0 -3px -1px !important;
-    padding: 6px 14px;
+    padding: 6px 15px;
     z-index: 10;
     vertical-align: top;
     color: #fff;
@@ -3238,7 +3239,7 @@ pre#transports {
 #pluginconfig table {
     margin: 3px;
     width: calc(100% - 5px);
-}#
+}
 
 #pluginconfig tr td {
     background: #fff;
@@ -7006,14 +7007,14 @@ tt a, .cells tt {
     padding: 2px 4px;
     float: right;
     line-height: 105%;
+    letter-spacing: 0.1em;
     font-family: "Droid Sans Mono", "Andale Mono", "DejaVu Sans Mono", "Lucida Console", monospace;
     font-size: 80%;
-    letter-spacing: 0.1em;
     color: #070;
-    opacity: 0.8;
-    box-shadow: 0 0 0 1px #bbf, inset 0 0 0 1px #fff;
     border-radius: 2px;
+    box-shadow: 0 0 0 1px #bbf, inset 0 0 0 1px #fff;
     background: linear-gradient(to bottom, #fff, #ddf);
+    opacity: .8;
 }
 
 #tunnels h3 a img {
@@ -7090,10 +7091,10 @@ tt a, .cells tt {
 }
 
 .left {
-    text-align: left;
     margin: 0 1px;
-    display: inline-block;
     width: 40%
+    display: inline-block;
+    text-align: left;
 }
 
 .peeripv6:empty {
@@ -7105,22 +7106,16 @@ tt a, .cells tt {
     width: auto;
 }
 
-/*
-#udpconnections td:nth-child(n+13), #udpconnections .tablefooter td:nth-child(n+10) {
-    padding-right: 1% !important;
-}
-*/
-
 #peerdefs {
-    line-height: 140%;
     padding: 5px;
+    line-height: 140%;
 }
 
 .peer_arrow {
-    display: inline-block;
-    width: 18px;
-    text-align: center;
     margin-right: 3px;
+    width: 18px;
+    display: inline-block;
+    text-align: center;
 }
 
 /* end peers */
@@ -7171,10 +7166,10 @@ th code {
 }
 
 .netdbentry th:first-child::after {
-    content: "";
-    display: inline-block;
     min-height: 20px;
+    display: inline-block;
     vertical-align: middle;
+    content: "";
 }
 
 .netdbentry th:last-child > *, .sybil_routerinfo th:nth-child(2) > * {
@@ -7192,9 +7187,9 @@ th code {
 
 .netdb_name {
     vertical-align: text-bottom;
-    color: #335;
     text-transform: capitalize;
     font-weight: bold;
+    color: #335;
 }
 
 .netdb_info {
@@ -7216,8 +7211,8 @@ th code {
 }
 
 .sybil_routerinfo td:first-child, .netdbentry td:first-child {
-    text-align: right !important;
     padding-right: 0;
+    text-align: right !important;
 }
 
 .sybil_routerinfo td[colspan="3"] {
@@ -7225,10 +7220,10 @@ th code {
 }
 
 .sybil_container {
+    margin: 10px 0;
     -moz-columns: 680px 2;
     -webkit-columns: 680px 2;
     columns: 680px 2;
-    margin: 10px 0;
 }
 
 .sybil_container p {
@@ -11151,8 +11146,8 @@ to {
 #tunnels #tunnelPeerCount .cells {
     white-space: nowrap;
     width: auto !important;
-    max-width: none !important;
-    min-width: none !important;
+    max-width: 0 !important;
+    min-width: 0 !important;
 }
 
 #tunnels #tunnelPeerCount .cells.bar, #tunnels #tunnelPeerCount th.bar,
@@ -11322,4 +11317,20 @@ th, td {
 #externali2cp td, #config_keyring td, #config_logging td, #config_network td, #config_peers td, .formaction, #sidebarconf tr:last-child td, #config_ui td, #config_reseed td,
 #config_family td, #logs td {
     position: static;
+}
+
+@media screen and (max-width: 1200px) {
+div.app, .sitemapLink, .sitemapLabel {
+    width: 120px;
+}
+
+.applabel {
+    width: 116px;
+}
+
+.appimg img, .sitemapLink img {
+    max-height: 24px !important;
+    max-width: 24px !important;
+    display: inline-block;
+}
 }
