@@ -1430,19 +1430,26 @@ p + .twocol {
 
 /* end welcome */
 
-a:link, .routersummary a:visited:not(:hover):not(:active), #sb_localtunnels a:visited:not(:hover):not(:active), #sb_internals a:visited:not(:hover):not(:active),
-#sb_advanced a:visited:not(:hover):not(:active), #sb_services a:visited:not(:hover):not(:active), #graphopts a:visited:not(:hover):not(:active), #sitemapContainer a:visited:not(:hover):not(:active),
-.applabel a:visited:not(:hover):not(:active), .tab a:visited:not(:hover):not(:active) {
+a:link {
+    word-wrap: break-word;
+    text-decoration: none;
+    font-weight: bold;
+}
+
+.main a:link, .applabel a:visited:not(:hover):not(:active), .tab a:visited:not(:hover):not(:active),
+#graphopts a:visited:not(:hover):not(:active), #sitemapContainer a:visited:not(:hover):not(:active) {
     color: #575779 !important;
+}
+
+.main a:visited, #graphopts a, #graphopts a:visited, .tab a, .tab a:visited {
+    color: #6b6b94;
+}
+
+.routersummary a:link, .routersummary a:visited, .logo a:link, .logo a:visited , #warning a:link{
+    color: #575779;
     text-decoration: none;
     font-weight: bold;
     word-wrap: break-word;
-}
-
-a:visited, #graphopts a, #graphopts a:visited, .tab a, .tab a:visited, .routersummary h3 a:link {
-    color: #6b6b94 !important;
-    text-decoration: none;
-    font-weight: bold;
 }
 
 a:hover, a:visited:hover, a:focus, a:visited:focus {

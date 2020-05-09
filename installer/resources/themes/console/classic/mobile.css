@@ -1,21 +1,23 @@
 /* Console Theme "Classic" - Mobile Override */
 
 body {
-    margin: 2px 1px !important;
+    margin: 0 1px 3px !important;
 }
 
 .routersummaryouter {
-    float: none;
     margin: 0 !important;
-    position: relative;
-    width: auto;
+    width: auto !important;
+    position: absolute;
+    top: 1px;
+    right: 1px;
+    float: none;
 }
 
 .routersummary {
-    float: none;
+    margin: 0 auto -6px;
     width: auto;
     max-width: 600px;
-    margin: 0 auto -6px;
+    float: none;
 }
 
 #xhr {
@@ -145,9 +147,24 @@ div.main {
     line-height: 180%;
 }
 
+.percentBarOuter {
+    margin: -3px auto -4px !important;
+    width: calc(100% - 8px) !important;
+}
+
+#sb_bandwidthgraph {
+    margin: -20px 0 0 !important;
+    width: calc(100% + 6px) !important;
+}
+
+#sb_graphcontainer {
+    background-size: calc(100% - 8px) 40px !important;
+    background-position: 4px -8px !important;
+}
+
 @media screen and (min-width: 1500px) {
 h1 {
-    margin: 9px 0 -1px !important;
+    margin: 1px 0 -1px !important;
 }
 
 div.news {
