@@ -219,11 +219,11 @@ i {
     margin: 2px -18px 10px -18px;
     padding: 10px 10px 8px 36px;
     font-size: 12pt;
-    letter-spacing: 0.08em;
+    letter-spacing: .08em;
     text-transform: uppercase;
     border: none;
     border-bottom: 1px solid #fb7;
-    word-spacing: 0.1em;
+    word-spacing: .1em;
     background: #ffe url(/themes/console/images/errortriangle.png) 8px center no-repeat !important;
     background-size: auto 60% !important;
 }
@@ -397,7 +397,7 @@ img[src="/themes/console/images/i2plogo.png"] {
 
 #warning2 {
     min-width: 540px;
-    background: linear-gradient(to bottom, rgba(255, 255, 255, 0.8), rgba(255, 255, 255, 0.2)) repeat scroll 0 0 / 100% 100%, rgba(0, 0, 0, 0) url(images/bg0.png) repeat scroll 0 0 / 120px 120px;
+    background: linear-gradient(to bottom, rgba(255, 255, 255, .8), rgba(255, 255, 255, .2)) repeat scroll 0 0 / 100% 100%, rgba(0, 0, 0, 0) url(images/bg0.png) repeat scroll 0 0 / 120px 120px;
     margin-top: -15px;
     padding: 0 15px 5px;
     box-shadow: inset 0 0 0 1px #f99;
@@ -478,7 +478,7 @@ img[src="/themes/console/images/i2plogo.png"] {
 }
 
 .routersummary a img:first-child {
-    opacity: 0.8;
+    opacity: .8;
     border: none;
     image-rendering: -webkit-optimize-contrast;
 }
@@ -502,6 +502,9 @@ img[src="/themes/console/images/i2plogo.png"] {
 .routersummary a {
     padding: 2px;
     vertical-align: middle;
+    -moz-user-select: none;
+    -webkit-user-select: none;
+    user-select: none;
 }
 
 .routersummary h4 a {
@@ -558,7 +561,7 @@ img[src="/themes/console/images/i2plogo.png"] {
 .routersummary h3 {
     border: none;
     font-size: 9.5pt;
-    letter-spacing: 0.05em;
+    letter-spacing: .05em;
     margin: -7px -1px -8px -1px;
     padding: 4px 0 3px;
     background: #f2f3ff url(images/tinytitle.png) center center repeat;
@@ -730,7 +733,7 @@ img[src="/themes/console/images/i2plogo.png"] {
 
 #sb_localtunnels tr:hover td {
     background: #ffe !important;
-    transition: ease background 0.3s;
+    transition: ease background .3s;
 }
 
 #sb_localtunnels a {
@@ -901,15 +904,15 @@ p:empty + .sb_notice {
     background-size: 12px auto !important;
     background-blend-mode: luminosity;
     vertical-align: middle !important;
-    transition: ease background 0.2s;
-    word-spacing: 0.1em;
+    transition: ease background .2s;
+    word-spacing: .1em;
 }
 
 .sb_newsheadings tr:hover td {
     background: url(images/link.png) 4px 4px no-repeat #ffd !important;
     background-size: 12px auto !important;
     background-blend-mode: normal;
-    transition: ease background 0.2s;
+    transition: ease background .2s;
 }
 
 .sb_newsheadings td a {
@@ -1012,7 +1015,7 @@ div.refresh {
 
 .routersummary .firewalled::before {
     content: url(/themes/console/images/info/network_status/network_firewalled.png);
-    opacity: 0.8;
+    opacity: .8;
 }
 
 .routersummary .vmcomm::before {
@@ -1037,7 +1040,7 @@ div.refresh {
 }
 
 .tunnelBuildStatus.accepting::before {
-    opacity: 0.5;
+    opacity: .5;
 }
 
 .tunnelBuildStatus.active::before {
@@ -1098,12 +1101,12 @@ a:active #sb_bandwidthgraph {
     background: #ddf;
     background: linear-gradient(to right, #ddf, #efefff, #ddf);
     opacity: 0;
-    transition: ease opacity 0.3s;
+    transition: ease opacity .3s;
 }
 
 #sb_graphcontainer:hover #sb_graphstats {
     opacity: 1;
-    transition: ease opacity 0.3s;
+    transition: ease opacity .3s;
 }
 
 #sb_graphcontainer {
@@ -1152,7 +1155,7 @@ a:active #sb_bandwidthgraph {
     height: 14px;
     max-width: 100%;
     background: #bbf;
-    background: linear-gradient(to right, rgba(0,255,0,0.1) 65px, rgba(255,255,0,0.1) 110px, rgba(255,128,0,0.1) 175px, rgba(255,0,0,0.1)), linear-gradient(to bottom, rgba(255, 255, 255,0.6) 0%, rgba(238, 238, 255, 0.6) 50%, rgba(180, 180, 255, 0.7) 50%, rgba(140, 140, 255, 0.7) 100%);
+    background: linear-gradient(to right, rgba(0,255,0,0.1) 65px, rgba(255,255,0,0.1) 110px, rgba(255,128,0,0.1) 175px, rgba(255,0,0,0.1)), linear-gradient(to bottom, rgba(255, 255, 255,0.6) 0%, rgba(238, 238, 255, .6) 50%, rgba(180, 180, 255, .7) 50%, rgba(140, 140, 255, .7) 100%);
     box-shadow: inset 0 0 0 1px #ddf;
 }
 
@@ -1167,12 +1170,12 @@ a:active #sb_bandwidthgraph {
     height: 14px;
     padding: 0;
     opacity: 0;
-    transition: ease opacity 0.2s;
+    transition: ease opacity .2s;
 }
 
 .percentBarOuter:hover .percentBarText {
     opacity: 1;
-    transition: ease opacity 0.2s;
+    transition: ease opacity .2s;
 }
 
 /* updates download bar */
@@ -1198,16 +1201,16 @@ a:active #sb_bandwidthgraph {
 
 .sb_info .percentBarOuter {
     margin: 3px -4px -5px 2px;
-    background: repeating-linear-gradient(135deg, rgba(238, 238, 255,0.7) 1px, rgba(238, 238, 255, 0.7) 5px, rgba(221, 221, 255, 0.7) 6px, rgba(221, 221, 255, 0.7) 11px);
+    background: repeating-linear-gradient(135deg, rgba(238, 238, 255,0.7) 1px, rgba(238, 238, 255, .7) 5px, rgba(221, 221, 255, .7) 6px, rgba(221, 221, 255, .7) 11px);
 }
 
 @keyframes downloadbar {
 from {
-    background: repeating-linear-gradient(135deg, rgba(221, 221, 255, 0.7) 1px, rgba(221, 221, 255, 0.7) 6px, rgba(238, 238, 255,0.7) 7px, rgba(238, 238, 255,0.7) 11px);
+    background: repeating-linear-gradient(135deg, rgba(221, 221, 255, .7) 1px, rgba(221, 221, 255, .7) 6px, rgba(238, 238, 255,0.7) 7px, rgba(238, 238, 255,0.7) 11px);
 }
 
 to {
-    background: repeating-linear-gradient(135deg, rgba(238, 238, 255,0.7) 1px, rgba(238, 238, 255, 0.7) 5px, rgba(221, 221, 255, 0.7) 6px, rgba(221, 221, 255, 0.7) 11px);
+    background: repeating-linear-gradient(135deg, rgba(238, 238, 255,0.7) 1px, rgba(238, 238, 255, .7) 5px, rgba(221, 221, 255, .7) 6px, rgba(221, 221, 255, .7) 11px);
 }
 }
 
@@ -1217,7 +1220,7 @@ to {
 
 .sb_info .percentBarInner {
     height: 16px;
-    background: linear-gradient(to bottom, rgba(255, 255, 255,0.6) 0%, rgba(238, 238, 255, 0.6) 50%, rgba(180, 180, 255, 0.7) 50%, rgba(140, 140, 255, 0.7) 100%);
+    background: linear-gradient(to bottom, rgba(255, 255, 255,0.6) 0%, rgba(238, 238, 255, .6) 50%, rgba(180, 180, 255, .7) 50%, rgba(140, 140, 255, .7) 100%);
 
 }
 
@@ -1307,7 +1310,7 @@ div[lang="pt"] li br {
 .langbox img {
     padding: 0 !important;
     margin: 0 1px -1px;
-    opacity: 0.9;
+    opacity: .9;
     border: 1px solid #bbf;
     transform: none !important;
 }
@@ -1372,7 +1375,7 @@ div[lang="ar"] .links li::before {
 .links b {
     font-size: 10pt;
     line-height: 150%;
-    letter-spacing: 0.02em;
+    letter-spacing: .02em;
 }
 
 .twocol {
@@ -1430,14 +1433,14 @@ p + .twocol {
 a:link, .routersummary a:visited:not(:hover):not(:active), #sb_localtunnels a:visited:not(:hover):not(:active), #sb_internals a:visited:not(:hover):not(:active),
 #sb_advanced a:visited:not(:hover):not(:active), #sb_services a:visited:not(:hover):not(:active), #graphopts a:visited:not(:hover):not(:active), #sitemapContainer a:visited:not(:hover):not(:active),
 .applabel a:visited:not(:hover):not(:active), .tab a:visited:not(:hover):not(:active) {
-    color: #6b6b94 !important;
+    color: #575779 !important;
     text-decoration: none;
     font-weight: bold;
     word-wrap: break-word;
 }
 
 a:visited, #graphopts a, #graphopts a:visited, .tab a, .tab a:visited, .routersummary h3 a:link {
-    color: #575779;
+    color: #6b6b94 !important;
     text-decoration: none;
     font-weight: bold;
 }
@@ -1526,7 +1529,7 @@ select[disabled], select[disabled]:hover, select[disabled]:focus, select[disable
     background: linear-gradient(to bottom, #fff, #eef) !important;
     color: #333 !important;
     cursor: default;
-    opacity: 0.7;
+    opacity: .7;
 }
 
 select::-ms-expand {
@@ -2311,7 +2314,7 @@ button::-moz-focus-inner, input[type="submit"]::-moz-focus-inner, input[type="re
 .main textarea:focus {
     color: #000;
     box-shadow: inset 0 0 0 1px #89f;
-    box-shadow: inset 0 0 0 1px #89f, 0 0 1px rgba(136, 153, 255, 0.4);
+    box-shadow: inset 0 0 0 1px #89f, 0 0 1px rgba(136, 153, 255, .4);
     background: #fff;
 }
 
@@ -2414,12 +2417,12 @@ div.news h3 {
     border-bottom: 1px dotted !important;
     box-shadow: none;
     font-size: 10pt !important;
-    letter-spacing: 0.05em;
+    letter-spacing: .05em;
     text-transform: capitalize !important;
     text-shadow: none !important;
     padding: 5px 0 3px 10px;
     margin: 10px 10px -7px !important;
-    letter-spacing: 0.1em;
+    letter-spacing: .1em;
 }
 
 .newsentry:first-child {
@@ -2427,7 +2430,7 @@ div.news h3 {
 }
 
 .newsentry h3 {
-    letter-spacing: 0.1em;
+    letter-spacing: .1em;
     box-shadow: none;
     background: url(/themes/console/images/info/newspaper.png) left center no-repeat !important;
     background-size: 16px 16px !important;
@@ -2435,7 +2438,7 @@ div.news h3 {
 }
 
 .newsentry h3 a {
-    letter-spacing: 0.08em !important;
+    letter-spacing: .08em !important;
     font-size: 10pt !important;
 }
 
@@ -2461,17 +2464,13 @@ div.news a:hover, div.news a:focus, div.news a:visited:hover, div.news a:visited
     color: #f60 !important;
 }
 
-div.news a:visited {
-    color: #5f4312 !important;
-}
-
 div.news hr {
-    color: #cc7;
-    background: #775628;
-    height: 1px;
-    border-bottom: 1px solid #fff9ef;
     margin: 10px 0 1px !important;
-    opacity: 0.7;
+    height: 1px;
+    color: #cc7;
+    border-bottom: 1px solid #fff9ef;
+    background: #775628;
+    opacity: .7;
 }
 
 @supports not (-moz-appearance: none) {
@@ -2495,7 +2494,7 @@ div.news hr:last-child {
     background-size: 10px 10px;
     font-size: 8.5pt;
     padding: 2px 4px 0 14px;
-    opacity: 0.8;
+    opacity: .8;
     text-transform: none;
 }
 
@@ -2648,8 +2647,8 @@ table.configtable, #permabanned, #loggingoptions, #configstats, ul#banlist {
     padding: 6px 10px;
     font-size: 10pt;
     text-transform: uppercase;
-    letter-spacing: 0.08em;
-    word-spacing: 0.1em;
+    letter-spacing: .08em;
+    word-spacing: .1em;
 }
 
 #configstats th a {
@@ -2813,7 +2812,7 @@ table.configtable, #permabanned, #loggingoptions, #configstats, ul#banlist {
 
 /*
 #profilelist td:nth-child(3) {
-    letter-spacing: 0.2em;
+    letter-spacing: .2em;
 }
 */
 
@@ -2887,7 +2886,7 @@ tr.tablefooter:hover td, tr:hover .infohelp {
 
 .sortup, .sortdown {
     box-shadow: inset 0 0 0 1px #fff, 0 0 1px #ddd;
-    opacity: 0.7;
+    opacity: .7;
 }
 
 .sortup img, .sortdown img, .sortupactive img, .sortdownactive img {
@@ -3663,8 +3662,8 @@ h1 {
     padding: 18px 20px 16px;
     min-width: 530px;
     line-height: 93%;
-    word-spacing: 0.1em;
-    letter-spacing: 0.08em;
+    word-spacing: .1em;
+    letter-spacing: .08em;
     text-transform: uppercase;
     font-size: 18pt;
     text-align: left;
@@ -3689,7 +3688,7 @@ h2 {
     font-size: 14pt;
     padding: 10px;
     border: 1px solid #aaafce;
-    letter-spacing: 0.04em;
+    letter-spacing: .04em;
     text-transform: uppercase;
     background: #fff;
 }
@@ -3836,8 +3835,8 @@ p:empty {
 }
 
 h2 {
-    letter-spacing: 0.08em;
-    word-spacing: 0.1em;
+    letter-spacing: .08em;
+    word-spacing: .1em;
 }
 
 h2, h3, h4#updateplugins {
@@ -4014,8 +4013,8 @@ h4.app, h4.app2 {
     border-left: none;
     border-right: none;
     box-shadow: inset 0 0 0 1px #fff;
-    letter-spacing: 0.08em;
-    word-spacing: 0.1em;
+    letter-spacing: .08em;
+    word-spacing: .1em;
     background: #fff;
     text-transform: uppercase;
     background: url(images/tinytitle.png) center center repeat-x;
@@ -4043,7 +4042,7 @@ h4.app2 {
 
 h4.app img, h4.app2 img {
     margin-top: 1px;
-    opacity: 0.5;
+    opacity: .5;
 }
 
 #chooselang img {
@@ -4147,7 +4146,7 @@ div.app:hover a, .applabel a:focus {
 }
 
 div.app:hover img, .appimg a:focus {
-    filter: drop-shadow(0 0 1px rgba(255, 102, 0, 0.6)) saturate(150%);
+    filter: drop-shadow(0 0 1px rgba(255, 102, 0, .6)) saturate(150%);
     outline: none;
 }
 
@@ -5170,7 +5169,7 @@ body.iframed {
     top: 4px;
     clear: both;
     border-top: 1px solid #aaafce;
-    background: rgba(230, 230, 255, 0.5);
+    background: rgba(230, 230, 255, .5);
 }
 
 #themeoptions br {
@@ -5361,7 +5360,7 @@ p#helptranslate {
     height: 40px;
     border: none !important;
     box-shadow: none;
-    opacity: 0.9 !important;
+    opacity: .9 !important;
     transform: none !important;
     filter: drop-shadow(0 0 1px #77d);
 }
@@ -5393,7 +5392,7 @@ p#helptranslate {
 
 @keyframes glow {
 0% {
-    filter: drop-shadow(0 0 1px rgba(256, 100, 0, 0.1));
+    filter: drop-shadow(0 0 1px rgba(256, 100, 0, .1));
 }
 
 20% {
@@ -5409,7 +5408,7 @@ p#helptranslate {
 }
 
 100% {
-    filter: drop-shadow(0 0 1px rgba(256, 100, 0, 0.1));
+    filter: drop-shadow(0 0 1px rgba(256, 100, 0, .1));
 }
 }
 
@@ -5905,7 +5904,7 @@ p:empty { /* empty paragraph nuke */
 }
 
 .netdb_leases .tunnel_peer tt, .netdb_leases .tunnel_peer tt a {
-    letter-spacing: 0.1em;
+    letter-spacing: .1em;
 }
 
 .netdb_leases .tunnel_id {
@@ -5929,7 +5928,7 @@ p:empty { /* empty paragraph nuke */
 }
 
 img.unknownflag {
-    opacity: 0.8;
+    opacity: .8;
 }
 
 /* end leasesets */
@@ -6404,8 +6403,8 @@ p#fullhistory {
 #portfaq th[colspan="3"] {
     text-align: left;
     font-size: 10.5pt !important;
-    letter-spacing: 0.08em;
-    word-spacing: 0.1em;
+    letter-spacing: .08em;
+    word-spacing: .1em;
 }
 
 #portfaq td:nth-child(2) {
@@ -6948,7 +6947,7 @@ p#enablefullstats, p#gatherstats {
 }
 
 tt a, .cells tt {
-    letter-spacing: 0.1em;
+    letter-spacing: .1em;
 }
 
 .tunnel_id {
@@ -7064,7 +7063,7 @@ tt a, .cells tt {
     padding: 2px 4px;
     float: right;
     line-height: 105%;
-    letter-spacing: 0.1em;
+    letter-spacing: .1em;
     font-family: "Droid Sans Mono", "Andale Mono", "DejaVu Sans Mono", "Lucida Console", monospace;
     font-size: 80%;
     color: #070;
@@ -7738,7 +7737,7 @@ h2#debug_portmapper {
 
 #jardump td:first-child {
     border-left: none;
-    transition: ease padding 0.05s;
+    transition: ease padding .05s;
 }
 
 #jardump td:last-child {
@@ -8608,7 +8607,7 @@ _:-ms-lang(x), .tunnels_client th:first-child::after {
     box-shadow: inset 0 0 0 2px #fff;
     background: #fff !important;
     column-gap: 1px;
-    transition: ease box-shadow 0.2s;
+    transition: ease box-shadow .2s;
 }
 
 #graphs .optionlist {
@@ -8627,13 +8626,13 @@ _:-ms-lang(x), .tunnels_client th:first-child::after {
 .optionlist:hover, .optionsingle:hover, .optiontextarea:hover {
     border: 1px solid #aaafce;
     box-shadow: inset 0 0 0 1px #a79;
-    transition: ease box-shadow 0.5s, ease background 0.2s 0.01s;
+    transition: ease box-shadow .5s, ease background .2s .01s;
     background: #ffd !important;
 }
 
 #reseedconfig .optiontextarea:hover {
     box-shadow: inset 0 0 0 1px #a79 !important;
-    transition: ease box-shadow 0.5s, ease background 0.2s 0.01s;
+    transition: ease box-shadow .5s, ease background .2s .01s;
 }
 
 .optionlist label, .optionlist .nowrap {
@@ -8646,7 +8645,7 @@ _:-ms-lang(x), .tunnels_client th:first-child::after {
 #updatehelper .optionlist:hover, #updateProxyHostPort.optionlist:hover {
     vertical-align: middle;
     background: #fff !important;
-    transition: ease box-shadow 0.2s;
+    transition: ease box-shadow .2s;
     box-shadow: inset 0 0 0 1px #a79, inset 0 0 0 2px #fff !important;
 }
 
@@ -8895,7 +8894,7 @@ b.suboption {
 }
 
 #netconfig input[type="text"] {
-    transition: ease width 0.1s;
+    transition: ease width .1s;
     will-change: transform;
 }
 
@@ -8903,7 +8902,7 @@ b.suboption {
 #netconfig .optbox:not(:checked) + input[type="text"][name="udpHost1"]:not(:focus) {
     width: 140px !important;
     min-width: 140px !important;
-    transition: ease width 0.1s;
+    transition: ease width .1s;
 }
 
 /* end /confignet */
@@ -9086,7 +9085,7 @@ b.suboption {
 #config_reseed .optionsingle:hover {
     border: 1px solid #aaafce;
     box-shadow: inset 0 0 0 1px #a79;
-    transition: ease box-shadow 0.5s;
+    transition: ease box-shadow .5s;
 }
 
 #config_reseed .optionsingle.optiontextarea textarea {
@@ -9200,7 +9199,7 @@ b.suboption {
 #manualreseed .optionsingle:hover, .optiontextarea:hover, #reseed_urlselection:hover {
     border: 1px solid #aaafce;
     box-shadow: inset 0 0 0 1px #a79 !important;
-    transition: ease box-shadow 0.5s;
+    transition: ease box-shadow .5s;
 }
 
 #manualreseed {
@@ -10044,7 +10043,7 @@ input[type="radio"], input[type="radio"]:checked, input[type="radio"][disabled],
 
 input[type="checkbox"], input[type="checkbox"]:checked, input[type="checkbox"][disabled], input[type="checkbox"][disabled]:checked {
     border-radius: 2px;
-    box-shadow: inset 1px 1px 1px rgba(204, 204, 204, 0.6);
+    box-shadow: inset 1px 1px 1px rgba(204, 204, 204, .6);
 }
 
 input[type="radio"], input[type="radio"]:checked, input[type="radio"][disabled], input[type="radio"][disabled]:checked {
@@ -10054,12 +10053,12 @@ input[type="radio"], input[type="radio"]:checked, input[type="radio"][disabled],
 input[type="checkbox"]:checked::before, input[type="radio"]:checked::before,
 input[type="checkbox"]:not(:checked)::before, input[type="radio"]:not(:checked)::before {
     position: absolute;
-    transition: linear all 0.05s;
+    transition: linear all .05s;
     transform: scale(1);
 }
 
 .optbox:not(:checked) {
-    box-shadow: inset 2px 2px 1px rgba(204, 204, 240, 0.6);
+    box-shadow: inset 2px 2px 1px rgba(204, 204, 240, .6);
 }
 
 input[type="checkbox"]:checked::before {
@@ -10106,7 +10105,7 @@ input[type="checkbox"][disabled], input[type="radio"][disabled], input[type="che
 input[type="checkbox"][disabled]:checked, input[type="radio"][disabled]:checked, input[type="checkbox"][disabled]:checked:hover, input[type="radio"][disabled]:checked:hover {
     filter: none !important;
     box-shadow: none !important;
-    opacity: 0.5;
+    opacity: .5;
 }
 }
 
@@ -10825,11 +10824,14 @@ h1[class], h1 {
     padding: 8px 0 6px;
     font-size: 18pt;
     font-weight: bold;
-    letter-spacing: 0.1em;
-    color: #41465f;
+    letter-spacing: .1em;
+    color: #535979;
     border: 1px solid #aaafce;
     box-shadow: inset 0 0 0 1px #fff, 0 0 1px rgba(96,96,96,0.5);
     background: linear-gradient(to right, #eef0ff, #fff, #eef0ff);
+    -moz-user-select: none;
+    -webkit-user-select: none;
+    user-select: none;
 }
 
 #clock::after {
@@ -10867,7 +10869,7 @@ h1[class], h1 {
 #sybilTask th {
     padding-left: 8px;
     text-transform: uppercase;
-    letter-spacing: 0.1em;
+    letter-spacing: .1em;
     font-size: 11pt !important;
     text-align: left;
 }
@@ -11218,6 +11220,25 @@ to {
     white-space: nowrap;
 }
 
+#tunnels #tunnelPeerCount td:first-child {
+    width: 1% !important;
+    min-width: 178px;
+    white-space: nowrap;
+    background: linear-gradient(to bottom, #fff, #dfe1ec);
+    box-sizing: border-box;
+}
+
+#tunnels #tunnelPeerCount td:first-child span {
+    background: none !important;
+    border: none !important;
+    box-shadow: none !important;
+}
+
+#tunnels #tunnelPeerCount td:first-child > * {
+    vertical-align: middle;
+    line-height: 1.2;
+}
+
 #tunnels #tunnelPeerCount td:nth-child(2) {
     white-space: normal;
     word-break: break-all;
@@ -11356,12 +11377,12 @@ to {
     display: inline-block;
     width: 0;
     height: 1px;
-    background: linear-gradient(to right, #bbc, #99f);
+    background: linear-gradient(to right, #930, #f60);
     position: absolute;
     bottom: 0;
     left: 0;
     animation: ease-out reloader 1s forwards;
-    opacity: .7;
+    opacity: .6;
 }
 
 @keyframes reloader {
