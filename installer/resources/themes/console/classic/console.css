@@ -6013,7 +6013,7 @@ h3.stats {
 .statlist li li:last-child {
     padding-bottom: 5px;
     padding-left: 5px;
-    border-bottom: 1px solid rgba(136, 153, 255, 0.3);
+    border-bottom: 1px solid #ced1e3;
 }
 
 .statlist li li.noevents {
@@ -6021,8 +6021,8 @@ h3.stats {
 }
 
 .statlist li:last-child {
-    padding-bottom: 15px;
     margin-top: 2px;
+    padding-bottom: 15px;
 }
 
 .statlist li:first-child {
@@ -6030,10 +6030,10 @@ h3.stats {
 }
 
 .statlist li li:last-child::before {
-    content: "\27A1\00A0";
     margin-left: 2px;
     vertical-align: text-top;
     vertical-align: calc(20% - 3px);
+    content: "\27A1\00A0";
 }
 
 .statlist a[href*="graph"] {
@@ -6087,7 +6087,30 @@ h3.stats {
 #netdboverview td {
     padding: 5px 5px 0;
     padding: 0 !important;
+    border-left: 1px solid #aaafce;
+    border-right: 1px solid #aaafce;
     background: rgba(255,255,255,0.4) !important;
+}
+
+#netdboverview table td:not(:first-child):not(:last-child) {
+    border-left: 1px solid #ced1e3;
+    border-right: 1px solid #ced1e3;
+}
+
+#netdboverview table tr:hover {
+    background: #ffd !important;
+}
+
+#netdboverview table th::before, #netdboverview table td::before {
+    height: 24px;
+    display: inline-block;
+    vertical-align: middle;
+    content: "";
+}
+
+#netdboverview span, #netdboverview a {
+    margin-top: 0 !important;
+    margin-bottom: 0 !important;
 }
 
 #netdbtransports th:first-child, #netdbcountrylist th:first-child, #netdbtiers th:first-child {
@@ -6108,9 +6131,22 @@ h3.stats {
     border-bottom: 1px solid #aaafce;
 }
 
-#netdbcountrylist, #netdbtransports, #netdbtiers {
-    border-left: 1px solid #aaafce;
+#netdbversions, #netdbcountrylist, #netdbtransports, #netdbtiers {
+    border-left: none !important;
+    border-right: none !important;
     border-bottom: 1px solid #aaafce;
+}
+
+#netdbcountrylist td:first-child, #netdbtransports td:first-child, #netdbtiers td:first-child, #netdbversions td:first-child {
+    border-left: none !important;
+}
+
+#netdbcountrylist td:last-child, #netdbtransports td:last-child, #netdbtiers td:last-child, #netdbversions td:last-child {
+    border-right: none !important;
+}
+
+#netdbtransports {
+    position: relative;
 }
 
 #netdbversions td, #netdbtransports td, #netdbcountrylist td, #netdbtiers td {
@@ -10537,7 +10573,7 @@ div.app.js:hover::before {
     text-shadow: 0 1px 1px #225;
     box-shadow: inset 3px 3px 2px #337;
     background: #89f;
-    background: linear-gradient(to bottom, #89f 50%, #78f 50%);
+    background: linear-gradient(to bottom, #5d66a2 50%, #4a5282 50%);
 }
 
 #stats .tab2:hover {
