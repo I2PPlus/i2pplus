@@ -84,8 +84,6 @@ public class IndexBean {
     /** From CSSHelper */
     private static final String PROP_DISABLE_OLD = "routerconsole.disableOldThemes";
     private static final boolean DEFAULT_DISABLE_OLD = false;
-    public static final String PROP_CSS_DISABLED = "routerconsole.css.disabled";
-    public static final String PROP_JS_DISABLED = "routerconsole.javascript.disabled";
     private static final String PROP_PW_ENABLE = "routerconsole.auth.enable";
 
     public IndexBean() {
@@ -353,14 +351,6 @@ public class IndexBean {
                 theme = "light";
         }
         return "/themes/console/" + theme + "/";
-    }
-
-    public boolean allowCSS() {
-        return !_context.getBooleanProperty(PROP_CSS_DISABLED);
-    }
-
-    public boolean allowJS() {
-        return !_context.getBooleanProperty(PROP_JS_DISABLED);
     }
 
     public int getTunnelCount() {
