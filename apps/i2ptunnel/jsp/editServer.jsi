@@ -220,7 +220,7 @@
             <td class="buttons" colspan="2">
                     <input type="hidden" value="true" name="removeConfirm" />
                     <button id="controlCancel" class="control" type="submit" name="action" value=""><%=intl._t("Cancel")%></button>
-                    <button id="controlDelete" <%=(editBean.allowJS() ? "onclick=\"if (!confirm('Are you sure you want to delete?')) { return false; }\" " : "")%> class="control" type="submit" name="action" value="Delete this tunnel" title="<%=intl._t("Delete this Tunnel (cannot be undone)")%>"><%=intl._t("Delete")%></button>
+<button id="controlDelete" onclick="if (!confirm('Are you sure you want to delete?')) { return false; }" class="control" type="submit" name="action" value="Delete this tunnel" title="<%=intl._t("Delete this tunnel (cannot be undone)")%>"><%=intl._t("Delete")%></button>
                     <button id="controlSave" class="control" type="submit" name="action" value="Save changes"><%=intl._t("Save")%></button>
             </td>
         </tr>
@@ -1003,7 +1003,7 @@
             <td class="buttons" colspan="2">
                     <input type="hidden" value="true" name="removeConfirm" />
                     <button id="controlCancel" class="control" type="submit" name="action" value=""><%=intl._t("Cancel")%></button>
-                    <button id="controlDelete" <%=(editBean.allowJS() ? "onclick=\"if (!confirm('Are you sure you want to delete this tunnel? (Cannot be undone)')) { return false; }\" " : "")%>class="control" type="submit" name="action" value="Delete this tunnel" title="<%=intl._t("Delete this Tunnel (cannot be undone)")%>"><%=intl._t("Delete")%></button>
+                    <button id="controlDelete" onclick="if (!confirm('Are you sure you want to delete?')) { return false; }" class="control" type="submit" name="action" value="Delete this tunnel" title="<%=intl._t("Delete this tunnel (cannot be undone)")%>"><%=intl._t("Delete")%></button>
                     <button id="controlSave" class="control" type="submit" name="action" value="Save changes"><%=intl._t("Save")%></button>
             </td>
         </tr>
