@@ -1445,24 +1445,19 @@ a:link {
     color: #6b6b94;
 }
 
-.routersummary a:link, .routersummary a:visited, .logo a:link, .logo a:visited , #warning a:link{
+.routersummary a:link, .routersummary a:visited, .logo a:link {
     color: #575779;
-    text-decoration: none;
-    font-weight: bold;
-    word-wrap: break-word;
 }
 
 a:hover, a:visited:hover, a:focus, a:visited:focus {
     color: #f60 !important;
     text-decoration: none;
-    font-weight: bold;
     outline: none;
 }
 
 a:active, a:visited:active {
     color: #f93 !important;
     text-decoration: none;
-    font-weight: bold;
 }
 
 a.script {
