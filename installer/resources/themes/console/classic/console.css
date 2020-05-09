@@ -5,7 +5,7 @@
 @import url("/themes/fonts/DroidSans.css");
 
 html, body {
-    height: 100%;
+    min-height: 100%;
 }
 
 body {
@@ -64,9 +64,9 @@ body {
 }
 
 div.clearer {
-    clear: left;
     height: 0;
     line-height: 0;
+    clear: left;
 }
 
 img {
@@ -88,13 +88,13 @@ i {
 /* Sidepanel for proxy errors */
 
 .logo {
-    float: left;
-    position: relative;
-    width: 200px;
     margin: 0 0 0 20px;
     padding: 10px 5px 8px;
+    width: 200px;
+    float: left;
+    position: relative;
     text-align: center;
-    border: 5px solid #ddf;
+    border: 5px solid #bbf;
     background: #eff1ff;
 }
 
@@ -108,29 +108,31 @@ i {
 }
 
 .logo hr {
-    color: #ddf;
-    background: #ddf;
-    height: 5px;
-    border: 0 solid #ddf;
     margin: 8px -5px 8px;
+    height: 5px;
+    color: #bbf;
+    border: 0 solid #bbf;
+    background: #bbf;
 }
 
 .logo a {
-    display: inline-block;
     padding: 4px 0;
     width: 100%;
+    display: inline-block;
 }
 
-.logo a:active {
+.logo a:nth-child(n+2):active {
     color: #f60;
+    border-radius: 4px;
     box-shadow: inset 0 0 0 1px #fff, inset 3px 3px 3px #999 !important;
 }
 
 .logo a:hover {
     color: #900;
-    background: rgba(220,220,255,0.5);
-    box-shadow: inset 0 0 0 1px #fff;
-    border-radius: 3px;
+}
+
+.logo a:hover img {
+    filter: drop-shadow(0 0 1px #f60);
 }
 
 /* HTTP Proxy warning Main box */
@@ -1420,7 +1422,8 @@ p + .twocol {
 
 /* end welcome */
 
-a:link, .routerconsole a:visited, #sb_localtunnels a:visited, #graphopts a:visited {
+a:link, .routerconsole a:visited, #sb_localtunnels a:visited, #sb_internals a:visited, #sb_advanced a:visited,
+#sb_services a:visited, #graphopts a:visited, #sitemapContainer a:visited, .applabel a:visited {
     color: #6b6b94 !important;
     text-decoration: none;
     font-weight: bold;
@@ -1467,21 +1470,21 @@ tt, code, .bucket {
 /* buttons & inputs */
 
 select {
+    margin: 3px 5px;
+    padding: 5px 16px 5px 5px;
+    min-width: 120px;
+    vertical-align: middle;
+    text-overflow: ellipsis;
+    color: #333;
+    border: 1px solid #aaafce;
+    border-radius: 2px;
+    box-shadow: inset 0 0 0 1px #fff;
+    background: url(images/dropdown.png) right center no-repeat #eee;
+    background: url(images/dropdown.png) right center no-repeat, linear-gradient(to bottom, #fff, #eef);
+    cursor: pointer;
     -moz-appearance: none;
     -webkit-appearance: none;
     appearance: none;
-    background: url(images/dropdown.png) right center no-repeat #eee;
-    background: url(images/dropdown.png) right center no-repeat, linear-gradient(to bottom, #fff, #eef);
-    margin: 3px 5px;
-    vertical-align: middle;
-    min-width: 120px;
-    border-radius: 2px;
-    border: 1px solid #aaafce;
-    box-shadow: inset 0 0 0 1px #fff;
-    padding: 4px 16px 4px 4px;
-    text-overflow: ellipsis;
-    color: #333;
-    cursor: pointer;
 }
 
 @supports not (-moz-appearance: none) {
@@ -1497,12 +1500,13 @@ select option {
 select:hover, select:active {
     background: #ddd url(images/dropdown_hover.png) right center no-repeat !important;
     background: url(images/dropdown_hover.png) right center no-repeat, linear-gradient(to bottom, #ddd 0%, #fff 100%) !important;
+    outline: none;
 }
 
 select:focus {
     background: #f2f3ff url(images/dropdown_hover.png) right center no-repeat !important;
     background: url(images/dropdown_hover.png) right center no-repeat, linear-gradient(to bottom, #ddd 0%, #fff 100%) !important;
-    box-shadow: 0 0 0 1px #fff, 0 0 0 2px #f60;
+    outline: none;
 }
 
 select:focus {
@@ -3049,6 +3053,7 @@ tr:hover th {
 
 @media screen and (max-width: 1200px) {
 #profiles #banlist {
+    margin-top: -6px !important;
     margin-bottom: 0 !important;
 }
 }
@@ -3607,6 +3612,10 @@ div.configure h2:first-child {
 
 #graphs .messages, #events #messages {
     margin-top: -16px;
+}
+
+#events form > * {
+    vertical-align: middle;
 }
 
 #events #messages {
@@ -11328,7 +11337,7 @@ to {
     display: inline-block;
     width: 0;
     height: 1px;
-    background: linear-gradient(to right, #171, #9f9);
+    background: linear-gradient(to right, #bbc, #99f);
     position: absolute;
     bottom: 0;
     left: 0;

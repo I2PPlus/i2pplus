@@ -395,7 +395,7 @@ tr {
 td {
     padding: 5px;
     vertical-align: middle;
-    border-top: 1px inset #cfd1ff;
+    border-top: 1px solid #ced1e3;
 }
 
 th:last-child, td:last-child {
