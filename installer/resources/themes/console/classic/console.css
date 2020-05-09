@@ -1427,7 +1427,7 @@ p + .twocol {
 
 /* end welcome */
 
-a:link, .routerconsole a:visited:not(:hover):not(:active), #sb_localtunnels a:visited:not(:hover):not(:active), #sb_internals a:visited:not(:hover):not(:active),
+a:link, .routersummary a:visited:not(:hover):not(:active), #sb_localtunnels a:visited:not(:hover):not(:active), #sb_internals a:visited:not(:hover):not(:active),
 #sb_advanced a:visited:not(:hover):not(:active), #sb_services a:visited:not(:hover):not(:active), #graphopts a:visited:not(:hover):not(:active), #sitemapContainer a:visited:not(:hover):not(:active),
 .applabel a:visited:not(:hover):not(:active), .tab a:visited:not(:hover):not(:active) {
     color: #6b6b94 !important;
@@ -1436,7 +1436,7 @@ a:link, .routerconsole a:visited:not(:hover):not(:active), #sb_localtunnels a:vi
     word-wrap: break-word;
 }
 
-a:visited, #graphopts a, #graphopts a:visited, .tab a, .tab a:visited, .routerconsole h3 a:link {
+a:visited, #graphopts a, #graphopts a:visited, .tab a, .tab a:visited, .routersummary h3 a:link {
     color: #575779;
     text-decoration: none;
     font-weight: bold;
@@ -2351,10 +2351,6 @@ div.welcome {
 
 .main.embedded {
     padding: 0;
-}
-
-#help {
-    background: linear-gradient(to bottom, rgba(255,255,255,0.8), rgba(255,255,255,0.1)), url(images/bg0.png) !important;
 }
 
 .welcome h2 {
@@ -4124,7 +4120,7 @@ div.app:hover a {
     box-shadow: inset 0 0 0 1px #fff !important;
 }
 
-.app:active .applabel a {
+.app:active .applabel a, .app:active .applabel a:visited {
     color: #fff !important;
 }
 
@@ -7089,6 +7085,10 @@ tt a, .cells tt {
     margin-top: 9px;
 }
 
+#ntcpconnections th, #udpconnections th {
+    font-size: 9pt !important;
+}
+
 #ntcpconnections th:nth-child(6), #ntcpconnections th:nth-child(7), #ntcpconnections th:nth-child(8), #ntcpconnections th:nth-child(9), #ntcpconnections th:nth-child(10),
 #ntcpconnections td:nth-child(6), #ntcpconnections td:nth-child(7), #ntcpconnections td:nth-child(8), #ntcpconnections td:nth-child(9), #ntcpconnections td:nth-child(10),
 #udpconnections td:nth-child(6), #udpconnections td:nth-child(7), #udpconnections td:nth-child(9), #udpconnections td:nth-child(10), #udpconnections td:nth-child(11),
@@ -7168,6 +7168,10 @@ tt a, .cells tt {
     width: 18px;
     display: inline-block;
     text-align: center;
+}
+
+#ntcpconnections td:nth-last-child(2), #udpconnections td:last-child {
+    border-right: 1px solid #aaafce !important;
 }
 
 /* end peers */
@@ -8528,20 +8532,6 @@ _:-ms-lang(x), .tunnels_client th:first-child::after {
 
 /* graphs */
 
-.statimage {
-    animation: fadein 1s ease-in; /* prevent white background flicker on refresh */
-}
-
-@keyframes fadein {
-from {
-    background: #f7f7ff;
-}
-
-to {
-    background: #fff;
-}
-}
-
 #graphs td:first-child {
     font-weight: normal;
     text-align: left;
@@ -9542,10 +9532,6 @@ input[type="file"]:hover {
     text-align: right;
 }
 
-#ntcpconnections td:nth-last-child(2), #ntcpconnections td:nth-last-child(3) {
-    width: 20%;
-}
-
 #peerdefs td {
     padding: 4px;
 }
@@ -9579,18 +9565,6 @@ input[type="file"]:hover {
     -webkit-column-break-inside: avoid;
 }
 
-.cells.ipv6 {
-    width: 1% !important;
-    max-width: 24px;
-}
-
-.cells.direction {
-    width: 1%;
-    min-width: 60px !important;
-    max-width: 60px !important;
-    white-space: nowrap;
-}
-
 .smallhead th, #ntcpconnections th {
     font-size: 8pt
 }
@@ -9601,12 +9575,28 @@ th.queue {
 }
 }
 
+#ntcpconnections td:nth-last-child(2), #ntcpconnections td:nth-last-child(3) {
+    width: 20%;
+}
+
 .cells.peer {
     width: 1%;
     max-width: 70px !important;
     min-width: 70px !important;
     padding: 5px 2px;
     text-align: center;
+}
+
+.cells.ipv6 {
+    width: 1% !important;
+    max-width: 24px;
+}
+
+.cells.direction {
+    width: 1%;
+    min-width: 60px !important;
+    max-width: 60px !important;
+    white-space: nowrap;
 }
 
 .cells.idle, .cells.inout {
@@ -9633,16 +9623,16 @@ th.queue {
     min-width: 48px;
 }
 
+.cells.spacer {
+    width: 35%;
+}
+
 .cells.mtu {
     white-space: nowrap;
 }
 
 #peers tr:nth-last-child(n+2) td.rtt, #peers tr:nth-last-child(n+2) td.skew {
     text-align: right !important;
-}
-
-.cells.spacer {
-    width: 35%;
 }
 
 #peers td.direction i {
@@ -9762,7 +9752,6 @@ th.queue {
 
 #profiles .routerid, #peers .routerid {
     padding: 2px 3px 2px 4px;
-    border-radius: 2px;
 }
 
 #profilelist th, #profilelist td {
@@ -10256,6 +10245,12 @@ div.app.js:hover::before {
 
 .sitemapLink:active img {
     transform: scale(0.8);
+}
+
+.sitemapLink:active .sitemapLabel {
+    color: #fff;
+    box-shadow: inset 0 0 0 1px #fff;
+    background: #f60 !important;
 }
 
 #sitemap .appgroup {
@@ -11288,6 +11283,9 @@ to {
     width: 70px !important;
     margin: 0 2px;
 }
+#ntcpconnections th, #udpconnections th {
+    font-size: 8pt !important;
+}
 }
 
 #tunnels .left, #tunnels .right {
@@ -11367,7 +11365,7 @@ th, td {
 
 #netdblookup th, #netdblookup td, #refreshsidebar td, #pluginconfig table td, #config_advanced td, #bandwidthconfig td, #i2pupdates td, #help th, #help td, #config_plugins td,
 #externali2cp td, #config_keyring td, #config_logging td, #config_network td, #config_peers td, .formaction, #sidebarconf tr:last-child td, #config_ui td, #config_reseed td,
-#config_family td, #logs td {
+#config_family td, #logs td, #peers th, #peers td {
     position: static;
 }
 
