@@ -443,7 +443,7 @@ public abstract class TunnelPeerSelector extends ConnectChecker {
     private static char[] getExcludeCaps(RouterContext ctx) {
         String excludeCaps = ctx.getProperty("router.excludePeerCaps",
 //                                             String.valueOf(Router.CAPABILITY_BW12));
-                                             String.valueOf(Router.CAPABILITY_BW12) + String.valueOf(Router.CAPABILITY_BW32));
+                                             String.valueOf(Router.CAPABILITY_BW12) + String.valueOf(Router.CAPABILITY_BW32) + "U");
         if (excludeCaps != null) {
             char excl[] = excludeCaps.toCharArray();
             return excl;
