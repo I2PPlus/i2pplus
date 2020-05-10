@@ -74,13 +74,13 @@ public class LogManager implements Flushable {
     public final static String DEFAULT_DATEFORMAT = "yyyy/MM/dd HH:mm:ss";
     public final static String DEFAULT_FILENAME = "logs/log-@.txt";
 //    public final static String DEFAULT_FILESIZE = "10m";
-    public final static String DEFAULT_FILESIZE = "1m";
+    public final static String DEFAULT_FILESIZE = "5m";
     public final static boolean DEFAULT_DISPLAYONSCREEN = true;
     // number of entries to display for router logs?? doesn't appear to work or is being overriden elsewhere
     //public final static int DEFAULT_CONSOLEBUFFERSIZE = 20;
     public final static int DEFAULT_CONSOLEBUFFERSIZE = 25;
 //    public final static String DEFAULT_ROTATIONLIMIT = "2";
-    public final static String DEFAULT_ROTATIONLIMIT = "5";
+    public final static String DEFAULT_ROTATIONLIMIT = "3";
     public final static String DEFAULT_DEFAULTLEVEL = Log.STR_ERROR;
     public final static String DEFAULT_ONSCREENLEVEL = Log.STR_CRIT;
 
