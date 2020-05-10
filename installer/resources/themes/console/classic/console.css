@@ -3271,159 +3271,6 @@ pre#transports {
     background-blend-mode: luminosity;
 }
 
-#logs #enviro {
-    -moz-user-select: all;
-    -webkit-user-select: all;
-    user-select: all;
-    cursor: text;
-}
-
-#logs #enviro:hover tr, #logs #enviro:hover td {
-    background: #ffe;
-    border-top: 1px inset transparent;
-    border-bottom: 1px inset transparent;
-}
-
-#enviro td, #eventlogs td {
-    padding: 5px 10px;
-}
-
-#logs #enviro td:first-child {
-    text-align: right;
-    width: 1%;
-    white-space: nowrap;
-    padding-right: 0;
-}
-
-#enviro td:last-child b {
-    margin-left: 8px;
-    margin-right: 5px;
-}
-
-#logs #enviro:hover #cputype {
-    background: none;
-}
-
-#routerlogs ul, #criticallogs ul {
-    margin-left: -5px !important;
-    margin-bottom: -3px !important;
-    padding-left: 0 !important;
-    padding-right: 0 !important;
-    width: calc(100% + 10px);
-    margin-right: -20px !important;
-}
-
-#routerlogs li, #criticallogs li {
-    padding: 0 2px 4px 22px !important;
-    width: 100% !important;
-    width: calc(100% - 24px) !important;
-    border-top: 1px solid #ced1e3;
-    border-bottom: 1px solid #ced1e3;
-    background: transparent;
-    opacity: .85;
-}
-
-#routerlogs li:nth-child(n+2), #criticallogs li:nth-child(n+2) {
-    margin-top: -1px;
-}
-
-#routerlogs li:hover, #criticallogs li:hover {
-    position: relative;
-    z-index: 10;
-    border-top: 1px solid #aaafce;
-    border-bottom: 1px solid #aaafce;
-    background: #ffd;
-    opacity: 1;
-    transition: ease all .15s;
-}
-
-#routerlogs li:first-child, #criticallogs li:first-child,
-#routerlogs li:first-child:hover, #criticallogs li:first-child:hover {
-    border-top: none;
-}
-
-#routerlogs li:first-child, #criticallogs li:first-child {
-    padding-top: 0;
-    margin-top : 1px;
-}
-
-#routerlogs li:last-child, #criticallogs li:last-child {
-    border-bottom: none;
-    padding-bottom: 7px !important;
-}
-
-#wrapperlogs pre {
-    white-space: pre-wrap;
-    word-break: break-all;
-    margin: 0;
-    width: 100%;
-    padding: 0;
-    max-height: 600px;
-    overflow: auto;
-}
-
-#wrapperlogs tr:last-child td {
-    padding: 0 0 0 2px;
-}
-
-#criticallogs tr:first-child {
-    display: none;
-}
-
-.logtable tr:first-child {
-    border-bottom: 1px solid #aaafce;
-    padding: 5px 10px;
-}
-
-.logtable p {
-    margin: 0;
-    padding: 0;
-}
-
-.logtable ul {
-    margin-bottom: 0 !important;
-}
-
-#logs li {
-    vertical-align: middle;
-}
-
-#logs li span {
-    margin: 0 -2px;
-    min-width: 50px;
-    display: inline-block;
-    line-height: 110%;
-    text-align: center;
-    vertical-align: middle;
-    border-radius: 2px;
-    opacity: .7;
-}
-
-font[color="#cc0000"] span {
-    color: #fff;
-    background: #c00;
-}
-
-font[color="#ff3300"] span {
-    color: #fff;
-    background: #f30;
-}
-
-font[color="#bf00df"] span {
-    color: #fff;
-    background: #bf00df;
-}
-
-font[color="#000099"] span {
-    color: #fff;
-    background: #009;
-}
-
-font[color="#006600"] span {
-    color: #fff;
-    background: #060;
-}
-
 #i2pupdates input[type="text"], #i2pupdates select {
     min-width: 200px;
     margin-left: 10px;
@@ -6856,6 +6703,123 @@ p#enablefullstats, p#gatherstats {
 
 /* logs */
 
+#logs #enviro {
+    -moz-user-select: all;
+    -webkit-user-select: all;
+    user-select: all;
+    cursor: text;
+}
+
+#logs #enviro:hover tr, #logs #enviro:hover td {
+    background: #ffe;
+    border-top: 1px inset transparent;
+    border-bottom: 1px inset transparent;
+}
+
+#enviro td, #eventlogs td {
+    padding: 5px 10px;
+}
+
+#logs #enviro td:first-child {
+    text-align: right;
+    width: 1%;
+    white-space: nowrap;
+    padding-right: 0;
+}
+
+#enviro td:last-child b {
+    margin-left: 8px;
+    margin-right: 5px;
+}
+
+#logs #enviro:hover #cputype {
+    background: none;
+}
+
+#routerlogs ul, #criticallogs ul {
+    margin-left: -5px !important;
+    margin-bottom: -3px !important;
+    padding-left: 0 !important;
+    padding-right: 0 !important;
+    width: calc(100% + 10px);
+    margin-right: -20px !important;
+}
+
+#routerlogs li, #criticallogs li {
+    padding: 0 2px 4px 22px !important;
+    width: 100% !important;
+    width: calc(100% - 24px) !important;
+    border-top: 1px solid #ced1e3;
+    border-bottom: 1px solid #ced1e3;
+    background: transparent;
+    opacity: .85;
+}
+
+#routerlogs li:nth-child(n+2), #criticallogs li:nth-child(n+2) {
+    margin-top: -1px;
+}
+
+#routerlogs li:hover, #criticallogs li:hover {
+    position: relative;
+    z-index: 10;
+    border-top: 1px solid #aaafce;
+    border-bottom: 1px solid #aaafce;
+    background: #ffd;
+    opacity: 1;
+    transition: ease all .15s;
+}
+
+#routerlogs li:first-child, #criticallogs li:first-child,
+#routerlogs li:first-child:hover, #criticallogs li:first-child:hover {
+    border-top: none;
+}
+
+#routerlogs li:first-child, #criticallogs li:first-child {
+    padding-top: 0;
+    margin-top : 1px;
+}
+
+#routerlogs li:last-child, #criticallogs li:last-child {
+    border-bottom: none;
+    padding-bottom: 7px !important;
+}
+
+#wrapperlogs pre {
+    white-space: pre-wrap;
+    word-break: break-all;
+    margin: 0;
+    width: 100%;
+    padding: 0;
+    max-height: 600px;
+    overflow: auto;
+}
+
+#wrapperlogs tr:last-child td {
+    padding: 0 0 0 2px;
+}
+
+#criticallogs tr:first-child {
+    display: none;
+}
+
+.logtable tr:first-child {
+    border-bottom: 1px solid #aaafce;
+    padding: 5px 10px;
+}
+
+.logtable p {
+    margin: 0;
+    padding: 0;
+}
+
+.logtable ul {
+    margin-bottom: 0 !important;
+}
+
+#logs li {
+    vertical-align: middle;
+}
+
 #logs li, #servicelogs li {
     font: 8.5pt "Droid Sans Mono", "Noto Mono", "Lucida Console", "DejaVu Sans Mono", monospace;
 }
@@ -6904,20 +6868,68 @@ p#enablefullstats, p#gatherstats {
     background: #cc0000;
 }
 
+#logs li font[color="#006600"] {
+    color: #444;
+}
+
 #logs li font[color="#006600"]::before {
-    background: #006600;
+    background: #444;
 }
 
 #logs li font[color="#ff3300"]::before {
     background: #ff3300;
 }
 
+#logs li font[color="#bf00df"] {
+    color: #717;
+}
+
 #logs li font[color="#bf00df"]::before {
-    background: #bf00df;
+    background: #717;
+}
+
+#logs li font[color="#000099"] {
+    color: #339;
 }
 
 #logs li font[color="#000099"]::before {
-    background: #000099;
+    background: #339;
+}
+
+#logs li span {
+    margin: 0 -2px;
+    min-width: 50px;
+    display: inline-block;
+    line-height: 110%;
+    text-align: center;
+    vertical-align: middle;
+    border-radius: 2px;
+    opacity: .7;
+}
+
+font[color="#cc0000"] span {
+    color: #fff;
+    background: #c00;
+}
+
+font[color="#ff3300"] span {
+    color: #fff;
+    background: #f30;
+}
+
+font[color="#bf00df"] span {
+    color: #fff;
+    background: #717;
+}
+
+font[color="#000099"] span {
+    color: #fff;
+    background: #339;
+}
+
+font[color="#006600"] span {
+    color: #fff;
+    background: #444;
 }
 
 .embedlink {
@@ -10156,7 +10168,6 @@ div.app:hover .appimg .extlink::after {
     width: 21px;
     height: 18px;
     border: 1px solid #f50;
-    border-radius: 0 2px 0 2px;
     opacity: .75;
     background: url(images/newtab.png) 4.5px center no-repeat;
     background-size: 12.5px 10px;
