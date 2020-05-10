@@ -1436,16 +1436,11 @@ a:link {
     font-weight: bold;
 }
 
-.main a:link, .applabel a:visited:not(:hover):not(:active), .tab a:visited:not(:hover):not(:active),
-#graphopts a:visited:not(:hover):not(:active), #sitemapContainer a:visited:not(:hover):not(:active) {
-    color: #575779 !important;
-}
-
-.main a:visited, #graphopts a, #graphopts a:visited, .tab a, .tab a:visited {
+a:visited[target="_blank"] {
     color: #6b6b94;
 }
 
-.routersummary a:link, .routersummary a:visited, .logo a:link {
+a:link, a:visited, #sitemapcontainer a:visited, div.app a:visited {
     color: #575779;
 }
 
@@ -4079,7 +4074,7 @@ div.app:hover {
     cursor: pointer;
 }
 
-div.app:hover a {
+div.app:hover a, .app:hover .applabel a {
     color: #f60 !important;
 }
 
