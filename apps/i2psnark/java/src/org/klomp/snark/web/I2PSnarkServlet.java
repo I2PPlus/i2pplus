@@ -4563,6 +4563,26 @@ public class I2PSnarkServlet extends BasicServlet {
     }
 
     /**
+     * Basic checks only, not as comprehensive as what TrackerClient does.
+     * Just to hide non-i2p trackers from the details page.
+     * @since 0.9.46
+     */
+    private static boolean isI2PTracker(String url) {
+        try {
+            URI uri = new URI(url);
+            String method = uri.getScheme();
+            if (!"http".equals(method) && !"https".equals(method))
+                return false;
+            String host = uri.getHost();
+            if (host == null || !host.endsWith(".i2p"))
+                return false;
+        } catch (URISyntaxException use) {
+            return false;
+        }
+        return true;
+    }
+
+    /**
      * @param mime non-null
      * @since 0.9.44
      */
