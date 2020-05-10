@@ -2768,8 +2768,13 @@ public class I2PSnarkServlet extends BasicServlet {
         // *not* enctype="multipart/form-data", so that the input type=file sends the filename, not the file
         out.write("<form action=\"_post\" method=\"POST\">\n");
         writeHiddenInputs(out, req, "Add");
-        out.write("<div class=\"addtorrentsection\">");
-        out.write("<input class=\"toggle_input\" id=\"toggle_addtorrent\" type=\"checkbox\"><label class=\"toggleview\" for=\"toggle_addtorrent\">");
+        out.write("<div class=\"addtorrentsection\">" +
+                  "<input class=\"toggle_input\" id=\"toggle_addtorrent\" type=\"checkbox\"");
+        if (newURL.length() > 0)
+            out.write(" checked=\"checked\">");  // force toggle open
+        else
+            out.write('>');
+        out.write("<label class=\"toggleview\" for=\"toggle_addtorrent\">");
         out.write(toThemeImg("add"));
         out.write(' ');
         out.write(_t("Add Torrent"));
