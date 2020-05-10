@@ -273,8 +273,8 @@ public class HandleDatabaseLookupMessageJob extends JobImpl {
 
     protected void sendClosest(Hash key, Set<Hash> routerHashes, Hash toPeer, TunnelId replyTunnel) {
         if (_log.shouldLog(Log.DEBUG))
-            _log.debug("Sending closest routers to key " + key + ": # peers = "
-                       + routerHashes.size() + " tunnel " + replyTunnel);
+            _log.debug("Sending " +  routerHashes.size() + " of our closest routers to [" + key.toBase64().substring(0,6) + "]"
+                       + " -> [Tunnel " + replyTunnel + "]");
         DatabaseSearchReplyMessage msg = new DatabaseSearchReplyMessage(getContext());
         msg.setFromHash(getContext().routerHash());
         msg.setSearchKey(key);
@@ -293,7 +293,7 @@ public class HandleDatabaseLookupMessageJob extends JobImpl {
             sendThroughTunnel(message, toPeer, replyTunnel);
         } else {
             if (_log.shouldLog(Log.DEBUG))
-                _log.debug("Sending reply directly to " + toPeer);
+                _log.debug("Sending reply directly to [" + toPeer.toBase64().substring(0,6) + "]");
             Job send = new SendMessageDirectJob(getContext(), message, toPeer, REPLY_TIMEOUT, MESSAGE_PRIORITY);
             send.runJob();
             //getContext().netDb().lookupRouterInfo(toPeer, send, null, REPLY_TIMEOUT);
@@ -318,16 +318,16 @@ public class HandleDatabaseLookupMessageJob extends JobImpl {
                     SessionTag tag = _message.getReplyTag();
                     if (tag != null) {
                         if (_log.shouldLog(Log.INFO))
-                            _log.info("Sending AES reply to " + toPeer + ' ' + replyKey + ' ' + tag);
+                            _log.info("Sending AES reply to [" + toPeer.toBase64().substring(0,6) + "] \n* Key: " + replyKey + " \n* Session Tag: " + tag);
                         message = MessageWrapper.wrap(getContext(), message, replyKey, tag);
                     } else {
                         RatchetSessionTag rtag = _message.getRatchetReplyTag();
                         if (_log.shouldLog(Log.INFO))
-                            _log.info("Sending AEAD reply to " + toPeer + ' ' + replyKey + ' ' + rtag);
+                            _log.info("Sending AEAD reply to [" + toPeer.toBase64().substring(0,6) + "] \n* Key: " + replyKey + " \n* Session Tag (ratchet): " + rtag);
                         message = MessageWrapper.wrap(getContext(), message, replyKey, rtag);
                     }
                     if (message == null) {
-                        _log.error("DLM reply encryption error");
+                        _log.error("DbLookupMessage reply -> encryption error");
                         return;
                     }
                     _replyKeyConsumed = true;
