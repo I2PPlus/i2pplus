@@ -165,7 +165,7 @@ td input[type="image"]::after {
     text-transform: uppercase !important;
     border: 1px solid #aaafce;
     box-shadow: inset 0 0 0 1px #fff, 0 0 1px rgba(200,200,200,0.5);
-    opacity: 0.85;
+    opacity: .85;
 }
 
 .snarkNav:link:last-child {
@@ -226,7 +226,7 @@ td input[type="image"]::after {
     color: #fff !important;
     text-shadow: none;
     box-shadow: inset 4px 4px 3px #824b1b, 0 0 0 0 rgba(0,0,0,0) !important;
-    transition: linear box-shadow 0.05s;
+    transition: linear box-shadow .05s;
 }
 
 .nav_main:active {
@@ -262,7 +262,7 @@ td input[type="image"]::after {
     text-align: left;
     border-bottom: 1px solid #aaafce;
     background: url(images/hat.png) right -4px bottom -10px no-repeat #ddf;
-    background: url(images/hat.png) right -4px bottom -10px no-repeat, linear-gradient(to bottom, rgba(239, 243, 255, 0.7), rgba(233, 239, 255, 0.7));
+    background: url(images/hat.png) right -4px bottom -10px no-repeat, linear-gradient(to bottom, rgba(239, 243, 255, .7), rgba(233, 239, 255, .7));
     background-size: auto 80px, 100% 100%;
     box-shadow: inset 0 0 0 1px #f2f2ff;
 }
@@ -289,19 +289,22 @@ td input[type="image"]::after {
 
 .snarkMessages li {
     margin-left: -15px;
-    font: bold 8.5pt "Droid Sans Mono", "Noto Sans Mono", "Lucida Console", "DejaVu Sans Mono", monospace;
+    margin-right: 50px;
+    line-height: 1.2;
+    font-weight: bold;
     color: #4b4b76;
+    opacity: .8;
 }
 
 .snarkMessages li::before {
-    content: "";
-    display: inline-block;
-    background: url(images/bullet.png) 1px bottom no-repeat;
+    margin: 1px 1px 0 0;
     width: 14px;
     height: 11px;
-    margin: 1px 1px 0 0;
+    display: inline-block;
+    background: url(images/bullet.png) 1px bottom no-repeat;
     background-size: 9px 9px;
-    opacity: 0.7;
+    content: "";
+    opacity: .7;
 }
 
 .snarkMessages a:link,
@@ -329,7 +332,7 @@ td input[type="image"]::after {
     width: 12px;
     padding: 3px;
     background: #fff;
-    opacity: 0.7 !important;
+    opacity: .7 !important;
 }
 
 #closeLog img:hover, #closeLog img:focus, #expand img:hover, #expand img:focus, #shrink img:hover, #shrink img:focus {
@@ -651,7 +654,7 @@ tt, .bucket, #bucketSet code {
     border-radius: 2px;
     margin: 3px;
     padding: 2px 3px;
-    letter-spacing: 0.1em;
+    letter-spacing: .1em;
     display: inline-block;
 }
 
@@ -1032,7 +1035,7 @@ td:first-child {
 .snarkTorrentNoneLoaded i {
     display: inline-block;
     padding: 10px;
-    opacity: 0.85;
+    opacity: .85;
 }
 
 .snarkTorrentNoneLoaded i::before {
@@ -1041,7 +1044,7 @@ td:first-child {
     vertical-align: top;
     margin: 1px 4px 0 0 !important;
     transform: scale(0.95);
-    opacity: 0.85;
+    opacity: .85;
 }
 
 .snarkTorrentStatus {
@@ -1100,17 +1103,12 @@ tr:not(.peerinfo) .snarkTorrentUploaded:empty::after {
     vertical-align: middle;
 }
 
-.snarkTorrents tr:hover, .snarkDirInfo tr:hover, #trackerselect tr:nth-child(n+2):hover td {
-    background: #ffe !important;
-    background: linear-gradient(to bottom, #fff, #ffe) !important;
-}
-
-.peerinfo:hover, .peerinfo:hover td {
-    background: linear-gradient(to bottom, #fff, #ffe) !important;
+.snarkTorrents tr:hover td, .snarkDirInfo tr:hover, #trackerselect tr:nth-child(n+2):hover td, .peerinfo:hover, .peerinfo:hover td {
+    background: #ffd !important;
 }
 
 .peerinfo:hover td:first-child {
-    background: url(images/peer.png) center center no-repeat, linear-gradient(to bottom, #fff, #ffe) !important;
+    background: #ffd url(images/peer.png) center center no-repeat !important;
 }
 
 tr:hover .percentBarText {
@@ -1220,7 +1218,7 @@ tr:nth-child(even) + .peerinfo:nth-child(odd) {
     background: #bbf;
     background: linear-gradient(to bottom, #fff, #eef 50%, #bbf 50%, #99f);
     background: linear-gradient(to right, rgba(255,255,0,0.1) 60px, rgba(0,255,0,0.1)), linear-gradient(to bottom, #fff, #eef 50%, #bbf 50%, #99f);
-    opacity: 0.8;
+    opacity: .8;
 }
 
 .peerinfo .percentBarInner {
@@ -1250,13 +1248,13 @@ tr:nth-child(even) + .peerinfo:nth-child(odd) {
     color: #005;
     text-shadow: 0 0 1px rgba(255,255,255,0.5);
     opacity: 0;
-    transition: ease opacity 0.1s;
+    transition: ease opacity .1s;
     line-height: 14px;
 }
 
 .percentBarText:hover, .percentBarText:focus {
-    opacity: 0.75;
-    transition: ease opacity 0.1s;
+    opacity: .75;
+    transition: ease opacity .1s;
 }
 
 .snarkTorrents .percentBarComplete {
@@ -1321,7 +1319,7 @@ tr:nth-child(even) + .peerinfo:nth-child(odd) {
 }
 
 .thumb:hover {
-    transition: ease all 0.1s;
+    transition: ease all .1s;
 }
 
 .thumb:active {
@@ -1334,7 +1332,7 @@ tr:nth-child(even) + .peerinfo:nth-child(odd) {
     border: 1px solid #f60 !important;
     box-shadow: none !important;
     background: #fff !important;
-    transition: ease all 0.2s 0.1s;
+    transition: ease all .2s .1s;
     filter: none !important;
 }
 
@@ -1423,7 +1421,7 @@ input.toggle_input:focus + .toggleview img {
     background: #fff !important;
     background: linear-gradient(to bottom, #fff 50%, #eff2ff 50%) !important;
     box-shadow: inset 0 0 0 1px #fff, inset 0 0 0 0 #fff, 0 1px 1px #ddf;
-    transition: ease box-shadow 0.05s;
+    transition: ease box-shadow .05s;
 }
 
 .configsectionpanel .snarkConfigTitle, .configsectionpanel .snarkConfigTitle:hover, .configsectionpanel .snarkConfigTitle:active {
@@ -1471,7 +1469,7 @@ _:-ms-lang(x), .snarkConfigTitle, .toggleview, .configsectionpanel .snarkConfigT
 .snarkConfigTitle a:hover, .snarkConfigTitle a:focus, .toggleview:hover, .toggleview:focus {
     color: #f60 !important;
     text-shadow: none;
-    transition: ease box-shadow 0.05s;
+    transition: ease box-shadow .05s;
 }
 
 .snarkConfigTitle a:active, input:active + .toggleview {
@@ -1597,7 +1595,7 @@ input[type="submit"], input[type="reset"], a.control {
     background: #fff;
     background: linear-gradient(to bottom, #fff, #eef);
     box-shadow: inset 0 0 0 1px #fff;
-    filter: drop-shadow(0 0 1px rgba(221, 221, 221, 0.8));
+    filter: drop-shadow(0 0 1px rgba(221, 221, 221, .8));
     cursor: pointer !important;
 }
 
@@ -1689,7 +1687,7 @@ input[type="text"], input[type="password"], input.r, input[name="nofilter_dataDi
 input[type="text"]:focus, input[type="password"]:focus, input.r:focus, input[name="nofilter_dataDir"]:focus, textarea[name="i2cpOpts"]:focus {
     color: #000 !important;
     box-shadow: inset 0 0 0 1px #89f;
-    box-shadow: inset 0 0 0 1px #89f, 0 0 1px rgba(136, 153, 255, 0.4);
+    box-shadow: inset 0 0 0 1px #89f, 0 0 1px rgba(136, 153, 255, .4);
     box-shadow: 0 0 0 1px #fff, 0 0 0 2px #f60;
 }
 
@@ -1814,7 +1812,7 @@ select {
 
 select[disabled], select[disabled]:hover {
     background: url(images/dropdown.png) right center no-repeat, linear-gradient(to bottom, #fff, #eef) !important;
-    opacity: 0.7;
+    opacity: .7;
     cursor: not-allowed;
 }
 
@@ -1904,11 +1902,11 @@ img:hover {
 }
 
 .pagenavcontrols img.disable, .pagenavcontrols img.disable:hover {
-    opacity: 0.3;
+    opacity: .3;
 }
 
 .pagenavcontrols a img {
-    opacity: 0.7;
+    opacity: .7;
 }
 
 .pagenavcontrols:hover a img {
@@ -1929,7 +1927,7 @@ img:hover {
     display: inline-block;
     vertical-align: middle;
     color: #559 !important;
-    letter-spacing: 0.2em;
+    letter-spacing: .2em;
     border-radius: 1px;
     box-shadow: inset 0 0 0 1px #010;
     box-shadow: 0 0 0 1px #aaf;
@@ -2051,13 +2049,13 @@ img:hover {
 }
 
 .knownTracker input[type="radio"] {
-    opacity: 0.3;
+    opacity: .3;
     cursor: default;
     filter: none;
 }
 
 .knownTracker input[type="radio"]:checked, .knownTracker input[type="radio"]:checked:hover {
-    opacity: 0.5;
+    opacity: .5;
 }
 
 .snarkNewTorrent td {
@@ -2193,18 +2191,18 @@ img:hover {
 }
 
 .addtorrentsection table, .newtorrentsection table:not(#trackerselect) {
-    animation: slide-in 0.1s ease-out, fade-in 0.5s linear;
+    animation: slide-in .1s ease-out, fade-in .5s linear;
     position: relative;
     will-change: transform;
 }
 
 .iframed .addtorrentsection table, .iframed .newtorrentsection table:not(#trackerselect) {
-    animation: fade-in 0.2s ease-out;
+    animation: fade-in .2s ease-out;
     will-change: transform;
 }
 
 .snarkAddInfo code {
-    animation: fade-in 0.5s ease-out;
+    animation: fade-in .5s ease-out;
 }
 
 .mainsection, .newtorrentsection, .addtorrentsection, .configsection, .configsectionpanel {
@@ -2363,11 +2361,11 @@ input#toggle_createtorrent:checked + label + hr + table {
 
 .toggleview img:active, .toggleview:active img, .snarkConfigTitle a:active img {
     transform: rotate(90deg);
-    transition: linear transform 0.05s;
+    transition: linear transform .05s;
 }
 
 .snarkConfigTitle a:active img {
-    transition: linear transform 0.1s;
+    transition: linear transform .1s;
 }
 
 .peerinfo td:first-child {
@@ -2508,12 +2506,12 @@ td#bwHelp a {
 }
 
 .snarkCommentInfo tr:nth-child(even), .snarkComments tr:nth-child(odd) {
-    background: rgba(240, 240, 255, 0.5) #fff;
+    background: rgba(240, 240, 255, .5) #fff;
 }
 
 .snarkCommentInfo tr:nth-child(odd), .snarkComments tr:nth-child(even) {
     border-top: 1px solid #bbf;
-    background: rgba(220, 220, 255, 0.5);
+    background: rgba(220, 220, 255, .5);
 }
 
 .snarkCommentInfo th {
@@ -2544,7 +2542,7 @@ td#bwHelp a {
     min-height: 64px;
     height: 64px;
     resize: vertical;
-    opacity: 0.8;
+    opacity: .8;
 }
 
 .snarkCommentInfo textarea:focus {
@@ -3258,7 +3256,7 @@ th a img {
     border-radius: 15px 5px 5px 15px;
     box-shadow: 0 0 0 1px #bbf;
     box-shadow: 0 0 0 1px rgba(200,200,255,0.7);
-    opacity: 0.9;
+    opacity: .9;
     background: #dfdfff;
     background: linear-gradient(to bottom, #fff, #ddf);
 }
@@ -3324,7 +3322,7 @@ th a img {
     color: #fff;
     text-shadow: 0 1px 1px #337;
     opacity: 1;
-    transition: ease opacity 0.3s;
+    transition: ease opacity .3s;
 }
 
 #bwHoverHelp {
@@ -3379,13 +3377,13 @@ th a img {
     margin: -5px 0 5px;
     padding: 7px 6px 6px;
     box-shadow: inset 0 0 0 1px #fff;
-    transition: ease-in-out 0.5s box-shadow;
+    transition: ease-in-out .5s box-shadow;
     will-change: transform;
 }
 
 .optionlist:hover {
     box-shadow: inset 0 0 0 1px #fb0;
-    transition: ease-in-out 0.5s box-shadow;
+    transition: ease-in-out .5s box-shadow;
 }
 
 .configOption {
@@ -3898,7 +3896,7 @@ th.snarkTorrentPeerCount img {
 }
 
 .percentBarText:hover, .percentBarText:focus {
-    transition: ease opacity 0.01s;
+    transition: ease opacity .01s;
 }
 
 .snarkTorrentDownloaded .percentBarText, .snarkTorrentDownloaded .percentBarOuter {
@@ -3969,7 +3967,7 @@ th.snarkTorrentPeerCount img {
     border-radius: 2px;
     background: #eef;
     background: linear-gradient(to bottom, #eef, #ddf);
-    opacity: 0.85;
+    opacity: .85;
     line-height: 100%;
 }
 
@@ -4018,7 +4016,7 @@ input[type="radio"], input[type="radio"]:checked, input[type="radio"][disabled],
 
 input[type="checkbox"], input[type="checkbox"]:checked, input[type="checkbox"][disabled], input[type="checkbox"][disabled]:checked {
     border-radius: 2px;
-    box-shadow: inset 1px 1px 1px rgba(204, 204, 204, 0.6);
+    box-shadow: inset 1px 1px 1px rgba(204, 204, 204, .6);
 }
 
 input[type="radio"], input[type="radio"]:checked, input[type="radio"][disabled], input[type="radio"][disabled]:checked {
@@ -4028,12 +4026,12 @@ input[type="radio"], input[type="radio"]:checked, input[type="radio"][disabled],
 input[type="checkbox"]:checked::before, input[type="radio"]:checked::before,
 input[type="checkbox"]:not(:checked)::before, input[type="radio"]:not(:checked)::before {
     position: absolute;
-    transition: linear all 0.05s;
+    transition: linear all .05s;
     transform: scale(1);
 }
 
 .optbox:not(:checked) {
-    box-shadow: inset 2px 2px 1px rgba(204, 204, 240, 0.6);
+    box-shadow: inset 2px 2px 1px rgba(204, 204, 240, .6);
 }
 
 input[type="checkbox"]:checked::before {
@@ -4078,7 +4076,7 @@ input[type="checkbox"][disabled], input[type="radio"][disabled], input[type="che
 input[type="checkbox"][disabled]:checked, input[type="radio"][disabled]:checked, input[type="checkbox"][disabled]:checked:hover, input[type="radio"][disabled]:checked:hover {
     filter: none !important;
     box-shadow: none !important;
-    opacity: 0.5;
+    opacity: .5;
 }
 }
 
@@ -4450,7 +4448,7 @@ hr.debug:nth-child(n+7) {
     vertical-align: middle;
     border: 1px solid #ccf;
     border-radius: 1px;
-    background: linear-gradient(to bottom, #fff 50%, rgba(255, 255, 255, 0.6) 50%, rgba(240, 240, 255, 0.4)) #e7e7ff;
+    background: linear-gradient(to bottom, #fff 50%, rgba(255, 255, 255, .6) 50%, rgba(240, 240, 255, .4)) #e7e7ff;
 }
 
 .magnetlink:hover, .magnetlink:focus, .torrentlink:hover, .torrentlink:focus {
