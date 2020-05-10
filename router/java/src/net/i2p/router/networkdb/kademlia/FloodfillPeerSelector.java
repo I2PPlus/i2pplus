@@ -196,7 +196,8 @@ class FloodfillPeerSelector extends PeerSelector {
     // TODO we need better tracking of floodfill first-heard-about times
     // before we can do this. Old profiles get deleted.
     //private static final long HEARD_AGE = 48*60*60*1000L;
-    private static final long HEARD_AGE = 36*60*60*1000L;
+    //private static final long HEARD_AGE = 60*60*1000L;
+    private static final long HEARD_AGE = 3*60*60*1000L;
     private static final long INSTALL_AGE = HEARD_AGE + (60*60*1000L);
 
     /**
