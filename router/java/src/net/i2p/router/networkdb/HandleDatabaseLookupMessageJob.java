@@ -66,21 +66,21 @@ public class HandleDatabaseLookupMessageJob extends JobImpl {
 
     public void runJob() {
         if (_log.shouldLog(Log.DEBUG))
-            _log.debug("Handling database lookup message for " + _message.getSearchKey());
+            _log.debug("Handling database lookup message for [" + _message.getSearchKey().toBase64().substring(0,6) + "]");
 
         Hash fromKey = _message.getFrom();
 
         if (_log.shouldLog(Log.DEBUG)) {
             if (_message.getReplyTunnel() != null)
-                _log.debug("dbLookup received with replies going to " + fromKey
-                          + " (tunnel " + _message.getReplyTunnel() + ")");
+                _log.debug("DbLookup received with replies going to [" + fromKey.toBase64().substring(0,6) +
+                           "] -> [Tunnel " + _message.getReplyTunnel() + "]");
         }
 
         // If we are hidden we should not get queries, log and return
         if (getContext().router().isHidden()) {
             if (_log.shouldLog(Log.WARN)) {
-                _log.warn("Uninvited dbLookup received with replies going to " + fromKey
-                           + " (tunnel " + _message.getReplyTunnel() + ")");
+                _log.warn("Uninvited dbLookup received with replies going to " + fromKey.toBase64().substring(0,6) +
+                          "] -> [Tunnel " + _message.getReplyTunnel() + "]");
             }
             return;
         }
