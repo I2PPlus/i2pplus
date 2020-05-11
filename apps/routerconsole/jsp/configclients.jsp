@@ -4,13 +4,17 @@
 <html>
 <head>
 <%@include file="css.jsi" %>
-<%@include file="csp-unsafe.jsi" %>
 <%=intl.title("config clients")%>
 <style type='text/css'> button span.hide {display:none;} input.default {width: 1px; height: 1px; visibility: hidden;}</style>
 <%@include file="summaryajax.jsi" %>
+<script nonce="<%=cspNonce%>" type="text/javascript">
+  var deleteMessage = "<%=intl._t("Are you sure you want to delete {0}?")%>";
+</script>
+<script src="/js/configclients.js?<%=net.i2p.CoreVersion.VERSION%>" type="text/javascript"></script>
 </head>
 <body>
 <script nonce="<%=cspNonce%>" type="text/javascript">progressx.show();</script>
+
 <%@include file="summary.jsi" %>
 <jsp:useBean class="net.i2p.router.web.helpers.ConfigClientsHelper" id="clientshelper" scope="request" />
 <jsp:setProperty name="clientshelper" property="contextId" value="<%=i2pcontextId%>" />
