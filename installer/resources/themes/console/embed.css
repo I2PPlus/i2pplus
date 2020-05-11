@@ -92,12 +92,11 @@ pre {
 }
 
 .rawtext.light pre, .rawtext.classic pre {
+    padding: 0 10px 5px !important;
     border-left: 14px solid #eef;
     border-bottom: 16px solid #eef;
     border-right: 14px solid #eef;
     border-top: 16px solid #eef;
-    padding: 0 10px 5px !important;
-    box-shadow: inset 0 0 0 1px #77b, inset 0 0 2px 3px #e2e2ff, inset 0 0 0 3px #55a;
 }
 
 .rawtext.dark pre {

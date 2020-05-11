@@ -3834,13 +3834,13 @@ td.tabletextarea {
     color: #000;
 }
 
-tr:nth-child(even), #pluginconfig table tr:nth-child(even) td {
+tr:nth-child(even), #pluginconfig table tr:nth-child(even) td, #profile_defs tr:nth-child(odd) {
     background: #fff;
-    background: rgba(255,255,255,0.5);
 }
 
-tr:nth-child(odd), #pluginconfig table tr:nth-child(odd) td, .main#profiles ul#banlist {
-    background: #eeefff;
+tr:nth-child(odd), #pluginconfig table tr:nth-child(odd) td, .main#profiles ul#banlist,
+#profile_defs table tr:nth-child(odd), #profile_defs table tr:nth-child(even) {
+    background: #f0f1ff;
 }
 
 .configtable th {

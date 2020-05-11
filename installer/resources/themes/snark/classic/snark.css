@@ -752,12 +752,12 @@ tt, .bucket, #bucketSet code {
 
 .snarkTorrentInfo tr:nth-child(even) {
     color: #0c153d;
-    background: #e8e8ff;
+    background: #eef;
 }
 
 .snarkTorrentInfo tr:nth-child(odd) {
     color: #0c153d;
-    background: #f2f2ff;
+    background: #fff;
 }
 
 .snarkTorrentInfo tr:last-child td {
@@ -1119,21 +1119,20 @@ tr:hover .percentBarText {
     background: #eef;
 }
 
-.snarkTorrentEven:nth-child(even) {
-    background: #eef;
-    background: rgba(240,240,255,0.5);
+/*.snarkTorrentEven:nth-child(even) {
+    background: #fff;
 }
 
 .snarkTorrentEven:nth-child(odd) {
-    background: #e8e8ff;
-}
+    background: #eef;
+}*/
 
 .snarkTorrentOdd, .SnarkTorrentEven {
     border-bottom: 1px solid #ced1e3;
 }
 
 .snarkTorrentOdd {
-    background: #f2f2ff;
+    background: #e7e8ff;
 }
 
 .snarkTorrentInfo tr:nth-child(even) {
@@ -1146,7 +1145,7 @@ tr:hover .percentBarText {
 
 tr:nth-child(odd) + .peerinfo:nth-child(even) {
     border-bottom: 1px solid #ced1e3;
-    background: #f0f1ff;
+    background: #eef;
 }
 
 tr:nth-child(even) + .peerinfo:nth-child(odd) {
@@ -1159,7 +1158,7 @@ tr:nth-child(even) + .peerinfo:nth-child(odd) {
 }
 
 .SnarkTorrentOdd tr:nth-child(odd) {
-    background: #f2f2ff;
+    background: #eef;
 }
 
 .snarkFileName {
@@ -1963,26 +1962,23 @@ img:hover {
 }
 
 #trackerselect {
+    margin: 2px 5px 0 5px;
     width: 100% !important;
     width: calc(100% - 150px) !important;
-    margin: 2px 5px 0 5px;
     border-collapse: separate;
     border: 1px solid #aaafce;
     border-radius: 2px;
     box-shadow: 0 0 1px #ccf;
-    background: rgba(255,255,255,0.1);
 }
 
 #trackerselect tr:nth-child(even) {
-    border-bottom: 1px solid #ccf;
-    background: #ddf !important;
-    background: rgba(220,220,255,0.5) !important;
+    border-bottom: 1px solid #ced1e3;
+    background: #eef !important;
 }
 
 #trackerselect tr:nth-child(odd) {
-    border-bottom: 1px solid #ccf;
-    background: #eef;
-    background: rgba(240,240,255,0.5) !important;
+    border-bottom: 1px solid #ced1e3;
+    background: #fff;
 }
 
 #trackerselect tr:last-child {
@@ -1991,7 +1987,7 @@ img:hover {
 
 #trackerselect tr:first-child {
     font-weight: bold;
-    border-bottom: 1px #89f;
+    border-bottom: 1px #aaafce;
 }
 
 #trackerselect tr:first-child td {
@@ -2039,8 +2035,7 @@ img:hover {
 }
 
 .trackerconfig tr:nth-child(odd), .snarkConfig tr:nth-child(odd) {
-    background: #ddf;
-    background: rgba(220,220,255,0.5);
+    background: #e7e8ff;
 }
 
 .trackerconfig tr:last-child {
@@ -3560,7 +3555,7 @@ input[name="nofilter_commentsName"], input[name="i2cpOpts"], input[name="nofilte
 
 #addtracker td {
     border-top: 1px solid #aaafce;
-    background: linear-gradient(to bottom, #f8f8ff, #ddf);
+    background: linear-gradient(to bottom, #f8f8ff, #e7e8ff);
 }
 
 .trackerconfig input.delete, .trackerconfig input.reload {
