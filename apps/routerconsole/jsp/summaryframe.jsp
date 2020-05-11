@@ -56,7 +56,7 @@
 %>
 </head>
 <body style="margin: 0;">
-<div class="routersummary";>
+<div class="routersummary">
 <jsp:useBean class="net.i2p.router.web.NewsHelper" id="newshelper" scope="request" />
 <jsp:setProperty name="newshelper" property="contextId" value="<%=i2pcontextId%>" />
 <%
