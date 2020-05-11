@@ -333,11 +333,9 @@ public class I2PSnarkServlet extends BasicServlet {
                           "<script src=\"" + jsPfx + "/js/ajax.js\" type=\"text/javascript\"></script>\n" +
                           "<script type=\"text/javascript\">\n"  +
                           "var failMessage = \"<div class=\\\"routerdown\\\"><b>" + downMsg + "<\\/b><\\/div>\";\n" +
-                          "function requestAjax1() { ajax(\"" + _contextPath + "/.ajax/xhr1.html" +
-                          peerString.replace("&amp;", "&") +  // don't html escape in js
-                          "\", \"mainsection\", " + (delay*1000) + "); }\n" +
-                          "function initAjax() { setTimeout(requestAjax1, " + (delay*1000) +"); }\n"  +
-                          "</script>\n");
+                          "var ajaxDelay = " + (delay * 1000) + ";\n" +
+                          "</script>\n" +
+                          "<script src=\".resources/js/initajax.js\" type=\"text/javascript\"></script>\n");
             }
         }
         // custom dialog boxes for javascript alerts
@@ -359,14 +357,9 @@ public class I2PSnarkServlet extends BasicServlet {
         }
         // dynamic iframe resizer
         out.write("<script type=\"text/javascript\" src=\"/js/iframeResizer/iframeResizer.contentWindow.js\" id=\"iframeResizer\"></script>\n");
-        out.write("</head>\n");
-
-        if (isConfigure || delay <= 0)
-            out.write("<body class=\"lang_" + lang + "\">\n");
-        else
-            out.write("<body onload=\"initAjax()\" class=\"lang_" + lang + "\">\n");
-        out.write("<style type=\"text/css\">body{opacity: 0;}</style>\n");
-        out.write("<center>\n");
+        out.write("</head>\n" +
+                  "<body>" +
+                  "<center>");
         List<Tracker> sortedTrackers = null;
         if (isConfigure) {
             out.write("<div class=\"snarknavbar\" id=\"top\">\n<a href=\"" + _contextPath + "/\" title=\"");
@@ -3748,10 +3741,8 @@ public class I2PSnarkServlet extends BasicServlet {
         if (showPriority)
             buf.append("<script src=\"").append(_contextPath).append(WARBASE + "js/folder.js\" type=\"text/javascript\"></script>\n");
         buf.append("<script type=\"text/javascript\" src=\"/js/iframeResizer/iframeResizer.contentWindow.js\"></script>\n");
-        buf.append("</head>\n<body class=\"lang_" + lang + "\"");
-        if (showPriority)
-            buf.append(" onload=\"setupbuttons()\"");
-        buf.append(">\n<center>\n<div class=\"snarknavbar\" id=\"top\">\n<a href=\"").append(_contextPath).append("/\" title=\"Torrents\"" +
+        buf.append("</head>\n<body class=\"lang_" + lang + "\"" +
+                   "<center><div class=\"snarknavbar\"><a href=\"").append(_contextPath).append("/\" title=\"Torrents\"" +
                    " class=\"snarkNav nav_main\">");
         if (_contextName.equals(DEFAULT_NAME))
             buf.append(_t("I2PSnark"));
