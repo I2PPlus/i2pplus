@@ -33,7 +33,10 @@
 <script nonce="<%=cspNonce%>" type="text/javascript">
   function setupFrame() {
       f = document.getElementById("susimailframe");
-      injectClass(f);
+      f.addEventListener("load", function() {
+          injectClass(f);
+//          resizeFrame(f);
+      }, true);
   }
 </script>
 <script type="text/javascript" src="/js/iframeResizer/iframeResizer.js?<%=net.i2p.CoreVersion.VERSION%>"></script>
@@ -46,7 +49,7 @@
 <div class="main" id="webmail">
 <style>iframe {width: 1px; min-width: 100%;}</style>
 <noscript><style type="text/css">iframe {display: none}</style><p class="infohelp" style="margin: 10px;">Javascript is required to view <a href="/susimail/" target="_blank">the webmail client</a> in embedded mode.</p></noscript>
-<iframe src="/susimail/" width="100%" frameborder="0" border="0" scrolling="no" name="susimailframe" id="susimailframe" onload="setupFrame()" allowtransparency="true">
+<iframe src="/susimail/" width="100%" frameborder="0" border="0" scrolling="no" name="susimailframe" id="susimailframe" allowtransparency="true">
 <%=intl._t("Your browser does not support iFrames.")%>
 &nbsp;<a href="/susimail/"><%=intl._t("Click here to continue.")%></a>
 </iframe>

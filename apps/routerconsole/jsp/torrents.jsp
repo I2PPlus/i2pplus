@@ -32,8 +32,10 @@
 <script nonce="<%=cspNonce%>" type="text/javascript">
 function setupFrame() {
       f = document.getElementById("i2psnarkframe");
-      injectClass(f);
-      iframeResizer(f);
+      f.addEventListener("load", function() {
+          injectClass(f);
+//          resizeFrame(f);
+      }, true);
 }
 </script>
 <script type="text/javascript" src="/js/iframedClassInject.js?<%=net.i2p.CoreVersion.VERSION%>"></script>
@@ -47,7 +49,7 @@ function setupFrame() {
 <div class="main" id="torrents">
 <style>iframe {width: 1px; min-width: 100%;}</style>
 <noscript><style type="text/css">iframe {display: none}</style><p class="infohelp" style="margin: 10px;">Javascript is required to view <a href="/i2psnark" target="_blank">I2PSnark</a> in embedded mode.</p></noscript>
-<iframe src="/i2psnark/" frameborder="0" border="0" width="100%" scrolling="no" name="i2psnarkframe" id="i2psnarkframe" allowtransparency="true" allow="fullscreen" onload="setupFrame()" allowfullscreen="true" webkitallowfullscreen="true" mozallowfullscreen="true">
+<iframe src="/i2psnark/" frameborder="0" border="0" width="100%" scrolling="no" name="i2psnarkframe" id="i2psnarkframe" allowtransparency="true" allow="fullscreen" allowfullscreen="true" webkitallowfullscreen="true" mozallowfullscreen="true">
 <%=intl._t("Your browser does not support iFrames.")%>
 &nbsp;<a href="/i2psnark/"><%=intl._t("Click here to continue.")%></a>
 </iframe>

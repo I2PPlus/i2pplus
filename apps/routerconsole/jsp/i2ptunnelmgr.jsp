@@ -35,7 +35,11 @@
 <script nonce="<%=cspNonce%>" type="text/javascript">
   function setupFrame() {
       f = document.getElementById("i2ptunnelframe");
-      injectClass(f);
+      f.addEventListener("load", function() {
+          injectClass(f);
+//          injectClassSpecific(f);
+//          resizeFrame(f);
+      }, true);
   }
 </script>
 </head>
@@ -46,7 +50,7 @@
 <div class="main" id="tunnelmgr">
 <style>iframe {width: 1px;min-width: 100%;}</style>
 <noscript><style type="text/css">iframe {display: none}</style><p class="infohelp" style="margin: 10px;">Javascript is required to view <a href="/i2ptunnel/" target="_blank">the Tunnel Manager</a> in embedded mode.</p></noscript>
-<iframe src="/i2ptunnel/" frameborder="0" border="0" width="100%" scrolling="no" name="i2ptunnelframe" id="i2ptunnelframe" onload="setupFrame()" allowtransparency="true">
+<iframe src="/i2ptunnel/" frameborder="0" border="0" width="100%" scrolling="no" name="i2ptunnelframe" id="i2ptunnelframe" allowtransparency="true">
 <%=intl._t("Your browser does not support iFrames.")%>
 &nbsp;<a href="/i2ptunnel/"><%=intl._t("Click here to continue.")%></a>
 </iframe>
