@@ -1436,7 +1436,7 @@ a:link {
     font-weight: bold;
 }
 
-a:visited[target="_blank"] {
+.main a:visited[target="_blank"] {
     color: #6b6b94;
 }
 
@@ -1656,6 +1656,7 @@ input[name="refreshInterval"] {
 }
 
 input[type="submit"], input[type="reset"], button, .optbox {
+    outline: none;
     cursor: pointer;
 }
 
@@ -2708,7 +2709,7 @@ table.configtable, #permabanned, #loggingoptions, #configstats, ul#banlist {
 }
 
 #peerdefs tr {
-    border-top: 1px inset #cfd6ff;
+    border-top: 1px solid #ced1e3;;
 }
 
 #bandwidthconfig td:first-child {
@@ -4263,13 +4264,13 @@ h3#finishedjobs + ol li, h3#scheduledjobs + ol li, h3#activejobs + ol li, h3#rea
 }
 
 h3#activejobs + ol li:before, h3#scheduledjobs + ol li:before, h3#readyjobs + ol li:before, h3#finishedjobs + ol li:before {
-    content: '\2023\00A0\00A0';
     margin-left: -20px;
-    font-size: 15pt;
-    font-weight: bold;
+    margin-right: 8px;
     line-height: 50%;
-    vertical-align: sub;
+    vertical-align: middle;
+    font-weight: bold;
     color: #393;
+    content: '\2023\00A0\00A0';
 }
 
 h3#finishedjobs + ol li:before {
@@ -6408,7 +6409,7 @@ p#fullhistory {
 #routerinfo td {
     padding: 8px 4px;
     width: 25%;
-    border-bottom: 1px inset #cfd6ff !important;
+    border-bottom: 1px solid #ced1e3 !important;
 }
 
 #routerinfo td:first-child, #routerinfo td:nth-child(3) {
@@ -6418,7 +6419,7 @@ p#fullhistory {
 
 #routerinfo td:nth-child(2):not([colspan]) {
     white-space: nowrap;
-    border-right: 1px inset #cfd6ff;
+    border-right: 1px solid #ced1e3;
 }
 
 #certs .infohelp {
@@ -8114,7 +8115,7 @@ h3#totaljobstats {
 
 table[id*="connections"] td, #floodfills td,  #profilelist td, #jobstats td, .main#tunnels td {
     padding: 3px;
-    border-right: 1px inset #cfd6ff;
+    border-right: 1px solid #ced1e3;
 }
 
 .main#netdb #netdboverview, #netdblookup {
@@ -9035,7 +9036,7 @@ b.suboption {
 
 /* configreseed */
 
-#config_reseed .reload {
+#config_reseed .reload, #config_reseed .download {
     float: left;
 }
 
@@ -9443,7 +9444,7 @@ input[type="file"]:hover {
 @media screen and (min-width: 1200px) {
 #jobstats td:first-child, #jobstats tr:hover td:first-child {
     padding: 6px 0 6px 26px;
-    background-image: url(/themes/console/images/info/done.png);
+    background-image: url(/themes/console/images/buttons/yes.png);
     background-position: 5px center;
     background-repeat: no-repeat;
 }
