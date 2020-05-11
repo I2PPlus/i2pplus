@@ -4,6 +4,7 @@
 <%@page trimDirectiveWhitespaces="true"%>
 <%@page contentType="text/html" import="net.i2p.i2ptunnel.web.EditBean"%>
 <%
+String cspNonce = Integer.toHexString(net.i2p.util.RandomSource.getInstance().nextInt());
 boolean __isClient = false;
 boolean __invalid = false;
 int curTunnel = -1;
@@ -37,6 +38,10 @@ if (tun != null) {
     <link href="<%=editBean.getTheme()%>override.css?<%=net.i2p.CoreVersion.VERSION%>" rel="stylesheet" type="text/css" />
     <style type='text/css'>input.default{width: 1px; height: 1px; visibility: hidden;}</style>
     <script src="/js/resetScroll.js?<%=net.i2p.CoreVersion.VERSION%>" type="text/javascript"></script>
+    <script nonce="<%=cspNonce%>" type="text/javascript">
+      var deleteMessage = "<%=intl._t("Are you sure you want to delete?")%>";
+    </script>
+    <script src="js/delete.js?<%=net.i2p.CoreVersion.VERSION%>" type="text/javascript"></script>
 </head>
 <body id="tunnelEditPage">
 <%
