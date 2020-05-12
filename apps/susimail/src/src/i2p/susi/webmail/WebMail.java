@@ -385,7 +385,7 @@ public class WebMail extends HttpServlet
 
 	/**
 	 * returns html string of a form button with name and label
-	 * 
+	 *
 	 * @param name
 	 * @param label
 	 * @return html string
@@ -393,15 +393,18 @@ public class WebMail extends HttpServlet
 	private static String button( String name, String label )
 	{
 		StringBuilder buf = new StringBuilder(128);
-		buf.append("<input type=\"submit\" class=\"").append(name).append("\" name=\"")
+		buf.append("<input type=\"submit\" name=\"")
 		   .append(name).append("\" value=\"").append(label).append('"');
+		buf.append(" class=\"").append(name);
 		if (name.equals(SEND) || name.equals(CANCEL) || name.equals(DELETE_ATTACHMENT) ||
 		    name.equals(NEW_UPLOAD) || name.equals(SAVE_AS_DRAFT) ||  // compose page
 		    name.equals(SETPAGESIZE) || name.equals(SAVE))  // config page
-			buf.append(" onclick=\"beforePopup=false;\"");
+			buf.append(" beforePopup\"");
 		// scroll to top of non-embedded page if delete clicked to ensure confirmation dialog is visible
-		if (name.equals(DELETE))
+		else if (name.equals(DELETE))
 			buf.append(" onclick=\"smoothScroll(document.getElementById(\'mailbox\'))\"");
+		else
+			buf.append('"');
 		// These are icons only now, via the CSS, so add a tooltip
 		if (name.equals(FIRSTPAGE) || name.equals(PREVPAGE) || name.equals(NEXTPAGE) || name.equals(LASTPAGE) ||
 		    name.equals(PREV) || name.equals(LIST) || name.equals(NEXT))
@@ -2366,7 +2369,8 @@ public class WebMail extends HttpServlet
 				// setup noscript style so we can hide js buttons when js is disabled
 				out.println("<noscript><style type=\"text/css\">.script {display: none !important;}</style></noscript>");
 				out.println("<script type=\"text/javascript\" src=\"/js/iframeResizer/iframeResizer.contentWindow.js?" + CoreVersion.VERSION + "\"></script>");
-				out.println("</head>\n<body" + (state == State.LIST ? " onload=\"deleteboxclicked()\">\n" : ">\n"));
+				out.println("<script src=\"/susimail/js/notifications.js?" + CoreVersion.VERSION + "\" type=\"text/javascript\"></script>");
+				out.println("</head>\n<body>\n");
 				String nonce = state == State.AUTH ? LOGIN_NONCE :
 				                                                   Long.toString(ctx.random().nextLong());
 				sessionObject.addNonce(nonce);
@@ -2430,7 +2434,7 @@ public class WebMail extends HttpServlet
 					}
 				}
 				if (showRefresh || sessionObject.error.length() > 0 || sessionObject.info.length() > 0) {
-					out.println("<div class=\"notifications\" onclick=\"this.remove()\">");
+					out.println("<div class=\"notifications\">");
 					if (sessionObject.error.length() > 0)
 						out.println("<p class=\"error\">" + quoteHTML(sessionObject.error).replace("\n", "<br>") + "</p>");
 					if (sessionObject.info.length() > 0 || showRefresh) {
@@ -3394,8 +3398,8 @@ public class WebMail extends HttpServlet
 				.replace("&#8239;GiB", " <span class=\"listSizeUnit\">G")
 				.replace("&#8239;B", " <span class=\"listSizeUnit\">B") : "<span class=\"unknown\" title=\"" + _t("Message body not downloaded") + "\">???"));
 			out.println("</span></span></td>\n" +
-							"<td class=\"mailListDelete\"><input type=\"checkbox\" class=\"optbox\" name=\"check" + b64UIDL + "\" value=\"1\"" +
-							" onclick=\"deleteboxclicked();\" " + ( idChecked ? "checked" : "" ) + ">" + "</td>\n" +
+							"<td class=\"mailListDelete\"><input type=\"checkbox\" class=\"optbox delete1\" name=\"check" + b64UIDL + "\" value=\"1\"" +
+							" " + ( idChecked ? "checked" : "" ) + ">" + "</td>\n" +
 							"</tr>\n");
 			bg = 1 - bg;
 			i++;
@@ -3413,6 +3417,7 @@ public class WebMail extends HttpServlet
 			showPageButtons(out, folderName, page, folder.getPages(), false);
 		}
 		if (i > 0) {
+			// TODO do this in js
 			if(sessionObject.reallyDelete) {
 				if (i > 25)
 					out.print("<tr class=\"bottombuttons floating\" ");
