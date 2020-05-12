@@ -352,27 +352,25 @@ public class Router implements RouterClock.ClockShiftListener {
                 // So wait at least 60s to be sure.
                 if (isOnlyRouterRunning()) {
                     if (i > 0)
-                        System.err.println("INFO: No, there wasn't another router already running. Proceeding with startup.");
+                        System.err.println("INFO: No, there wasn't another router already running... proceeding with startup...");
                     break;
                 }
                 if (i < 13) {
                     if (i == 0)
-                        System.err.println("WARN: There may be another router already running. Waiting a while to be sure...");
+                        System.err.println("WARN: There may be another router already running... waiting a while to be sure...");
                     // yes this is ugly to sleep in the constructor.
                     try { Thread.sleep(5000); } catch (InterruptedException ie) {}
                 } else {
                     _eventLog.addEvent(EventLog.ABORTED, "Another router running");
                     System.err.println("ERROR: There appears to be another router already running!");
-                    System.err.println("       Please make sure to shut down old instances before starting up");
-                    System.err.println("       a new one.  If you are positive that no other instance is running,");
-                    System.err.println("       please delete the file " + getPingFile().getAbsolutePath());
+                    System.err.println("       Make sure old instances are shut down before starting up a new one.");
+                    System.err.println("       If no other instance is running, delete: " + getPingFile().getAbsolutePath());
                     //System.exit(-1);
                     // throw exception instead, for embedded
                     throw new IllegalStateException(
                                        "ERROR: There appears to be another router already running!" +
-                                       " Please make sure to shut down old instances before starting up" +
-                                       " a new one.  If you are positive that no other instance is running," +
-                                       " please delete the file " + getPingFile().getAbsolutePath());
+                                       " Make sure old instances are shut down before starting up a new one." +
+                                       " If no other instance is running, delete: " + getPingFile().getAbsolutePath());
                 }
             }
         }
@@ -1914,7 +1912,7 @@ public class Router implements RouterClock.ClockShiftListener {
         if (f.exists()) {
             long lastWritten = f.lastModified();
             if (System.currentTimeMillis()-lastWritten > LIVELINESS_DELAY) {
-                System.err.println("WARN: Old router was not shut down gracefully, deleting " + f);
+                System.err.println("WARN: Old router was not shut down gracefully; deleting " + f);
                 f.delete();
             } else {
                 return false;
@@ -1947,7 +1945,7 @@ public class Router implements RouterClock.ClockShiftListener {
             try {
                 double d = Double.parseDouble(pct);
                 if (d > 1)
-                    return d/100d; // *cough* sometimes its 80 instead of .8 (!stab jrandom)
+                    return d/100d; // *cough* sometimes it's 80 instead of .8 (!stab jrandom)
                 else
                     return d;
             } catch (NumberFormatException nfe) {
