@@ -266,6 +266,13 @@ public class EditBean extends IndexBean {
         return getTunnelStatus(tunnel) == GeneralHelper.NOT_RUNNING;
     }
 
+    /** @since 0.9.46 */
+    public boolean canChangePort(int tunnel) {
+        if (tunnel < 0)
+            return true;
+        return getTunnelStatus(tunnel) == GeneralHelper.NOT_RUNNING;
+    }
+
     /**
      *  @param encType code
      *  @since 0.9.44
