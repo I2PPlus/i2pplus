@@ -78,14 +78,6 @@ i {
     padding-right: 1px;
 }
 
-.main {
-    will-change: transform;
-}
-
-.main#dns, .main#webmail, .main#torrents, .main#tunnelmgr {
-    will-change: unset !important;
-}
-
 /* Sidepanel for proxy errors */
 
 .logo {
@@ -448,6 +440,7 @@ img[src="/themes/console/images/i2plogo.png"] {
     color: inherit;
     border: 1px solid #aaafce;
     background: #f2f3ff;
+    background: #fff;
 }
 
 /* siderbar logo */
@@ -1441,7 +1434,7 @@ a:link {
     color: #6b6b94;
 }
 
-a:link, a:visited, #sitemapcontainer a:visited, div.app a:visited {
+a:link, a:visited, #sitemapcontainer a:visited, #home .extlink:visited, .main .applabel a:visited {
     color: #575779;
 }
 
@@ -1610,7 +1603,7 @@ input[type="text"], input[type="password"] {
     padding: 4px;
     min-width: 120px;
     vertical-align: middle;
-    color: #333;
+    color: #5e626e;
     border: 1px solid #aaafce;
     border-radius: 2px;
     box-shadow: inset 1px 1px 1px #ddd;
@@ -1618,18 +1611,18 @@ input[type="text"], input[type="password"] {
 }
 
 input[type="text"]:focus, input[type="password"]:focus {
-    color: #000;
+    color: #41444d;
     box-shadow: inset 0 0 0 1px rgba(255,96,0,.5);
 }
 
-input[type="text"][readonly], input[type="text"][readonly]:focus {
-    color: #333;
+input[type="text"][readonly], input[type="text"][readonly]:focus, input[type="text"][disabled] {
+    color: #757a8a;
     box-shadow: inset 1px 1px 1px #ddd;
-    background: #efefef;
+    background: #eff0ff;
 }
 
 button, input, select {
-    font: 9pt/130% "Droid Sans", "Open Sans", "Noto Sans", Ubuntu, "Segoe UI", "Lucida Grande", "DejaVu Sans", Verdana, Helvetica, sans-serif;
+    font: 9pt/130% Droid Sans, Open Sans, Noto Sans, Ubuntu, Segoe UI, Lucida Grande, DejaVu Sans, Verdana, Helvetica, sans-serif;
     color: #333;
     background-color: #eee;
 }
@@ -2258,6 +2251,11 @@ button::-moz-focus-inner, input[type="submit"]::-moz-focus-inner, input[type="re
     color: #41444d;
     min-width: 540px;
     background: #f2f3ff;
+    will-change: transform;
+}
+
+.main#dns, .main#webmail, .main#torrents, .main#tunnelmgr {
+    will-change: unset !important;
 }
 
 .main#news h3 {
@@ -2303,7 +2301,7 @@ button::-moz-focus-inner, input[type="submit"]::-moz-focus-inner, input[type="re
     width: calc(100% - 5px);
     min-height: 96px;
     resize: none;
-    color: #333;
+    color: #5e626e;
     border: 1px solid #aaafce;
     border-radius: 2px;
     box-shadow: inset 1px 1px 1px #ddd;
@@ -2311,7 +2309,7 @@ button::-moz-focus-inner, input[type="submit"]::-moz-focus-inner, input[type="re
 }
 
 .main textarea:focus {
-    color: #000;
+    color: #41444d;
     box-shadow: inset 0 0 0 1px #89f;
     box-shadow: inset 0 0 0 1px #89f, 0 0 1px rgba(136, 153, 255, .4);
     background: #fff;
@@ -2579,7 +2577,7 @@ div.news hr:last-child {
 
 .tab:hover {
     z-index: 12;
-    box-shadow: inset 0 0 0 1px #fff, inset 0 0 1px 2px #f60;
+    box-shadow: inset 0 0 0 1px #fff, inset 0 0 1px 1px #f60;
     background: #fff;
 }
 
@@ -3515,9 +3513,86 @@ h1 {
     text-align: left;
     color: #2c354f;
     border: 1px solid #aaafce;
-    background: #fff;
-    background-blend-mode: luminosity !important;
+    background-color: #fff;
 }
+
+/* h1 icons */
+
+h1 {
+    background-image: url(images/netwrk.png);
+}
+
+h1.home {
+    background-image: url(images/home.png);
+}
+
+h1.perf {
+    background-image: url(images/perf.png);
+}
+
+h1.nfo {
+    background-image: url(images/info.png);
+}
+
+h1.hlp {
+    background-image: url(images/header_help.png);
+}
+
+h1.addbook {
+    background-image: url(images/addbook.png);
+}
+
+h1.snark {
+    background-image: url(images/app_snark.png);
+}
+
+h1.mail {
+    background-image: url(images/app_mail.png);
+}
+
+h1.conf {
+    background-image: url(images/cog.png);
+}
+
+h1.adv {
+    background-image: url(images/info.png);
+}
+
+h1.err {
+    background-image: url(images/error.png);
+}
+
+h1.sched {
+    background-image: url(images/tasks.png);
+}
+
+h1.log {
+    background-image: url(images/logs.png);
+}
+
+h1.webapp {
+    background-image: url(images/webapp.png);
+}
+
+h1[class], h1 {
+    padding-left: 56px;
+    background-size: 38px auto !important;
+    background-position: 10px center !important;
+    background-repeat: no-repeat !important;
+}
+
+h1::first-letter {
+    font-size: 107%;
+}
+
+@media screen and (max-width: 1500px) {
+h1[class], h1 {
+    padding-left: 50px;
+    background-size: 32px auto !important;
+}
+}
+
+/* end h1 icons */
 
 span.newtab {
     text-align: right;
@@ -3823,7 +3898,6 @@ td.tabletextarea {
     white-space: pre-wrap;
     word-break: break-all;
     font-size: 9pt;
-    color: #222;
     border: none !important;
     box-shadow: 0 0 0 0 !important;
 }
@@ -3831,7 +3905,6 @@ td.tabletextarea {
 .tabletextarea textarea:focus {
     border-radius: 0 !important;
     box-shadow: inset 0 0 0 1px #89f !important;
-    color: #000;
 }
 
 tr:nth-child(even), #pluginconfig table tr:nth-child(even) td, #profile_defs tr:nth-child(odd) {
@@ -4388,8 +4461,13 @@ tr#addnew:hover {
     color: #41444d !important;
 }
 
-#loggingoptions input[type="text"] {
-    width: 160px;
+#loggingoptions tr:nth-last-child(n+3) input[type="text"], #loggingoptions tr:nth-last-child(n+3) select {
+    width: 180px;
+}
+
+#loggingoptions select[name="newloglevel"] {
+    margin-right: 0;
+    width: 166px;
 }
 
 #loggingoptions td:first-child {
@@ -5528,7 +5606,7 @@ a.viewfullentry:hover {
 
 .main#netdb code, .main#netdb tt {
     color: #03183f;
-    font-family: "Droid Sans", "Open Sans", "Noto Sans", Ubuntu, "Segoe UI", "Lucida Grande", "DejaVu Sans", Verdana, Helvetica, sans-serif;
+    font-family: Droid Sans, Open Sans, Noto Sans, Ubuntu, Segoe UI, Lucida Grande, DejaVu Sans, Verdana, Helvetica, sans-serif;
     font-weight: normal;
 }
 
@@ -10715,82 +10793,6 @@ p#gatherstats {
 
 /* end /tunnels */
 
-/* h1 icons */
-
-h1 {
-    background: #f2f3ff url(images/netwrk.png) 10px center no-repeat !important;
-}
-
-h1.home {
-    background: #f2f3ff url(images/home.png) 10px center no-repeat !important;
-}
-
-h1.perf {
-    background: #f2f3ff url(images/perf.png) 10px center no-repeat !important;
-}
-
-h1.nfo {
-    background: #f2f3ff url(images/info.png) 10px center no-repeat !important;
-}
-
-h1.hlp {
-    background: #f2f3ff url(images/header_help.png) 10px center no-repeat !important;
-}
-
-h1.addbook {
-    background: #f2f3ff url(images/addbook.png) 10px center no-repeat !important;
-}
-
-h1.snark {
-    background: #f2f3ff url(images/app_snark.png) 10px center no-repeat !important;
-}
-
-h1.mail {
-    background: #f2f3ff url(images/app_mail.png) 10px center no-repeat !important;
-}
-
-h1.conf {
-    background: #f2f3ff url(images/cog.png) 10px center no-repeat !important;
-}
-
-h1.adv {
-    background: #f2f3ff url(images/info.png) 10px center no-repeat !important;
-}
-
-h1.err {
-    background: #f2f3ff url(images/error.png) 10px center no-repeat !important;
-}
-
-h1.sched {
-    background: #f2f3ff url(images/tasks.png) 10px center no-repeat !important;
-}
-
-h1.log {
-    background: #f2f3ff url(images/logs.png) 10px center no-repeat !important;
-}
-
-h1.webapp {
-    background: #f2f3ff url(images/webapp.png) 10px center no-repeat !important;
-}
-
-h1[class], h1 {
-    padding-left: 56px;
-    background-size: 38px auto !important;
-}
-
-h1::first-letter {
-    font-size: 107%;
-}
-
-@media screen and (max-width: 1500px) {
-h1[class], h1 {
-    padding-left: 50px;
-    background-size: 32px auto !important;
-}
-}
-
-/* end h1 icons */
-
 .tunnelBuildStatus.rejecting {
     color: #933;
 }
@@ -11578,3 +11580,6 @@ div.app, .sitemapLink, .sitemapLabel {
 
 /* end /events */
 
+#sb_internals, #sb_services, #sb_advanced {
+    margin-top: -5px !important;
+}
