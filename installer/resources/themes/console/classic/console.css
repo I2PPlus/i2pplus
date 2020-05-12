@@ -14,7 +14,7 @@ body {
     text-align: left;
     font: 9pt/130% Droid Sans, Open Sans, Noto Sans, Ubuntu, Segoe UI, Lucida Grande, DejaVu Sans, Verdana, Helvetica, sans-serif;
     color: #41444d;
-    background: #eef url(images/bg0.png) center center scroll;
+    background: #e2e2f3 url(images/bg0.png) center center scroll;
     background-size: 90px 90px;
 }
 
@@ -29,7 +29,7 @@ body:not(old) {
     url(/themes/console/images/buttons/search_hover.png) no-repeat,
     url(/themes/console/images/buttons/shutdown_hover.png) no-repeat,
     url(/themes/console/images/buttons/update_hover.png) no-repeat,
-    url(images/dropdown_hover.png) #eef;
+    url(images/dropdown_hover.png) #e2e2f3;
     background-size: 90px 90px, 0 0, 0 0, 0 0, 0 0, 0 0, 0 0, 0 0, 0 0, 0 0;
 }
 
@@ -51,7 +51,8 @@ body {
     color: white;
 }
 
-.routersummary img[src$="i2plogo.png"], .routersummary h3, .confignav, *::before, *::after, div.app, .themechoice, .langselect, .langbox,
+.routersummary img[src$="i2plogo.png"], .routersummary h3, .routersummary h3 a, #sb_internnals, #sb_advanced, #sb_services,
+.confignav, *::before, *::after, div.app, .themechoice, .langselect, .langbox,
 .newsAuthor, #newsDisplay, #netdbcountrylist img, .viewfullentry, .sybil_routerinfo th img, .graphspanel, h1 {
     -ms-user-select: none;
     -moz-user-select: none;
@@ -11482,3 +11483,69 @@ div.app, .sitemapLink, .sitemapLabel {
     min-width: 90px !important;
 }
 }
+
+/* /events */
+
+#events td {
+    line-height: 1.4;
+}
+
+#events td:first-child span {
+    margin: 1px 0 0 -2px;
+    display: inline-block;
+    vertical-align: top;
+    font-size: 80%;
+    text-transform: lowercase;
+}
+
+#eventlog th, #eventlog td {
+    padding-left: 8px;
+    padding-right: 8px;
+}
+
+#eventlog td {
+    background: none;
+}
+
+#eventlog td:last-child::first-letter {
+    text-transform: uppercase;
+}
+
+/* error */
+#events .crashed, #events .outofmem, #events .critical, #events .installf {
+    background: rgba(255,0,0,.1) !important;
+}
+
+/* warning */
+#events .watchdog, #events .reseed, #events .clockshi, #events .aborteds, #events .reachabi, #events .rekeyed, #events .changedp, #events .changeip, #events .network {
+    background: rgba(255,0,255,.05) !important;
+}
+
+/* info */
+#events .softrest, #events .updated, #events .enabledf, #events .disabled, #events .installe, .becamefl {
+    background: rgba(255,255,0,.07) !important;
+}
+
+/* notice */
+#events .started, #events .stopped {
+    background: rgba(0,255,0,.05) !important;
+}
+
+#events tr:hover td {
+    position: static;
+    border-top: 1px solid #393;
+    border-bottom: 1px solid #393;
+    background: rgba(0,0,0,.02);
+}
+
+#events tr:hover td:first-child {
+    border-left: 1px solid #393;
+    background: linear-gradient(to right, #393 2px, rgba(0,0,0,.02) 2px);
+}
+
+#events tr:hover td:last-child {
+    border-right: 1px solid #393;
+    background: linear-gradient(to left, #393 2px, rgba(0,0,0,.02) 2px);
+}
+
+/* end /events */
