@@ -53,6 +53,11 @@ function setupFrame() {
 <%=intl._t("Your browser does not support iFrames.")%>
 &nbsp;<a href="/i2psnark/"><%=intl._t("Click here to continue.")%></a>
 </iframe>
+<script nonce="<%=cspNonce%>" type="text/javascript">
+document.addEventListener('DOMContentLoaded', function(event) {
+var iframes = iFrameResize({log: false, interval: 0, heightCalculationMethod: 'taggedElement', warningTimeout: 0}, '#i2psnarkframe')
+});
+</script>
 </div>
 <script nonce="<%=cspNonce%>" type="text/javascript">progressx.hide();</script>
 </body>

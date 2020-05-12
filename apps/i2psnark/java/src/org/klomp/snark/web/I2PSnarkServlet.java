@@ -362,7 +362,7 @@ public class I2PSnarkServlet extends BasicServlet {
             out.write(HEADER_A + _themePath + HEADER_C + "\n");
         }
         // dynamic iframe resizer
-        out.write("<script type=\"text/javascript\" src=\"/js/iframeResizer/iframeResizer.contentWindow.js\" id=\"iframeResizer\"></script>\n");
+        out.write("<script type=\"text/javascript\" src=\"/js/iframeResizer/iframeResizer.contentWindow.js?" + CoreVersion.VERSION + "\" id=\"iframeResizer\"></script>\n");
         out.write("</head>\n" +
                   "<body>" +
                   "<center>");
@@ -463,8 +463,8 @@ public class I2PSnarkServlet extends BasicServlet {
         // add 'private' header to avoid being cached in anything other than browser
         resp.setHeader("Cache-Control", "max-age=86400, no-cache, private, must-revalidate");
 //        resp.setHeader("Content-Security-Policy", "default-src 'self'; style-src 'self' 'unsafe-inline'; script-src 'self' 'unsafe-inline';");
-//        resp.setHeader("Content-Security-Policy", "default-src 'self'; style-src 'self' 'unsafe-inline'; script-src 'self' 'unsafe-inline'; form-action 'self'; frame-ancestors 'self'; object-src 'none'");
-        resp.setHeader("Content-Security-Policy", "default-src 'self'; style-src 'self' 'unsafe-inline'; script-src 'self' 'unsafe-inline' 'nonce-" + cspNonce + "'; form-action 'self'; frame-ancestors 'self'; object-src 'none'; media-src '" + (allowMedia ? "self" : "none") + "'");
+        resp.setHeader("Content-Security-Policy", "default-src 'self'; style-src 'self' 'unsafe-inline'; script-src 'self' 'unsafe-inline'; form-action 'self'; frame-ancestors 'self'; object-src 'none'");
+//        resp.setHeader("Content-Security-Policy", "default-src 'self'; style-src 'self' 'unsafe-inline'; script-src 'self' 'unsafe-inline' 'nonce-" + cspNonce + "'; form-action 'self'; frame-ancestors 'self'; object-src 'none'; media-src '" + (allowMedia ? "self" : "none") + "'");
         // This header is broken, only takes a date. Not needed with 'max-age'.
         //resp.setDateHeader("Expires", 86400);
         resp.setHeader("Pragma", "no-cache");
@@ -479,7 +479,7 @@ public class I2PSnarkServlet extends BasicServlet {
     private void writeMessages(PrintWriter out, boolean isConfigure, String peerString) throws IOException {
         List<UIMessages.Message> msgs = _manager.getMessages();
         if (!msgs.isEmpty()) {
-            out.write("<script src=\"" + _contextPath + WARBASE + "js/toggleLog.js\" type=\"text/javascript\"></script>");
+            out.write("<script src=\"" + _contextPath + WARBASE + "js/toggleLog.js?" + CoreVersion.VERSION + "\" type=\"text/javascript\"></script>");
             out.write("\n<div class=\"snarkMessages\" id=\"screenlog\" tabindex=\"0\">\n" +
                       "<a id=\"closeLog\" href=\"" + _contextPath + '/');
             if (isConfigure)
@@ -1140,7 +1140,7 @@ public class I2PSnarkServlet extends BasicServlet {
         // load torrentDisplay script here to ensure table has loaded into dom
         boolean showStatusFilter = _manager.util().showStatusFilter();
         if (_contextName.equals(DEFAULT_NAME) && showStatusFilter) {
-            out.write("<script src=\"" + _contextPath + WARBASE + "js/torrentDisplay.js\" type=\"text/javascript\"></script>\n");
+            out.write("<script src=\"" + _contextPath + WARBASE + "js/torrentDisplay.js?" + CoreVersion.VERSION + "\" type=\"text/javascript\"></script>\n");
         }
         return start == 0;
     }
@@ -3737,7 +3737,7 @@ public class I2PSnarkServlet extends BasicServlet {
            .append("<link rel=\"shortcut icon\" href=\"" + _themePath + "favicon.ico\">\n");
         if (showPriority)
             buf.append("<script src=\"").append(_contextPath).append(WARBASE + "js/folder.js?" + CoreVersion.VERSION + "\" type=\"text/javascript\"></script>\n");
-        buf.append("<script type=\"text/javascript\" src=\"/js/iframeResizer/iframeResizer.contentWindow.js\"></script>\n");
+        buf.append("<script type=\"text/javascript\" src=\"/js/iframeResizer/iframeResizer.contentWindow.js?" + CoreVersion.VERSION + "\"></script>\n");
         buf.append("</head>\n<body class=\"lang_" + lang + "\"" +
                    "<center><div class=\"snarknavbar\"><a href=\"").append(_contextPath).append("/\" title=\"Torrents\"" +
                    " class=\"snarkNav nav_main\">");
@@ -4542,8 +4542,8 @@ public class I2PSnarkServlet extends BasicServlet {
         boolean enableLightbox = _manager.util().enableLightbox();
         if (enableLightbox) {
             buf.append("<link type=\"text/css\" rel=\"stylesheet\" href=\"").append(_contextPath).append(WARBASE + "lightbox.css\">");
-            buf.append("<script src=\"").append(_contextPath).append(WARBASE + "js/lightbox.js\" type=\"text/javascript\"></script>")
-               .append("<script>var lightbox = new Lightbox();lightbox.load();</script>");
+            buf.append("<script src=\"").append(_contextPath).append(WARBASE + "js/lightbox.js?" + CoreVersion.VERSION + "\" type=\"text/javascript\"></script>")
+               .append("<script nonce=\"<%=cspNonce%>\">var lightbox = new Lightbox();lightbox.load();</script>");
         }
         buf.append("</div>\n<span id=\"endOfPage\" data-iframe-height></span>\n</center>\n" +
                    "<style type=\"text/css\">body{opacity: 1 !important;}</style>\n</body>\n</html>\n");

@@ -9,3 +9,7 @@ function injectClass(f) {
 function iframeResizer(f) {
     iFrameResize({log: false, interval: 0, heightCalculationMethod: 'taggedElement', warningTimeout: 0}, f);
 }
+
+document.addEventListener("DOMContentLoaded", function() {
+    setupFrame();
+}, true);
