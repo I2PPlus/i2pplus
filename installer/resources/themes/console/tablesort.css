@@ -3,26 +3,19 @@ th[role=columnheader]:not([data-sort-method="none"]) {
 }
 
 th[role=columnheader]:not([data-sort-method="none"])::after {
-   margin: 4px 0 -2px 5px;
    position: absolute;
-   content: "";
+   top: 35%;
+   right: 4px;
    border-width: 4px 4px 0;
    border-style: solid;
    border-color: #404040 transparent;
    visibility: hidden;
    opacity: 0;
+   content: "";
    -ms-user-select: none;
    -webkit-user-select: none;
    -moz-user-select: none;
    user-select: none;
-}
-
-#netdbcountrylist th:last-child {
-    position: relative;
-}
-
-#netdbcountrylist th:last-child[role=columnheader]:not([data-sort-method="none"])::after {
-    left: 10px;
 }
 
 th[aria-sort=ascending]:not([data-sort-method="none"])::after {
