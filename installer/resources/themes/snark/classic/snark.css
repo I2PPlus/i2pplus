@@ -1585,7 +1585,7 @@ input::-moz-focus-inner {
 input[type="submit"], input[type="reset"], a.control {
     font-size: 9pt;
     font-weight: normal !important;
-    color: #333;
+    color: #5e626e;
     min-width: 90px !important;
     padding: 5px 8px !important;
     text-align: center;
@@ -1596,10 +1596,11 @@ input[type="submit"], input[type="reset"], a.control {
     box-shadow: inset 0 0 0 1px #fff;
     filter: drop-shadow(0 0 1px rgba(221, 221, 221, .8));
     cursor: pointer !important;
+    outline: none;
 }
 
 input[type="submit"]:hover, input[type="reset"]:hover, input[type="submit"]:focus, input[type="reset"]:focus, a.control:hover, a.control:focus {
-    color: #111;
+    color: #41444d;
     background: #fff;
     background: linear-gradient(to bottom, #ddd, #fff);
     border: 1px solid #aaafce;
@@ -1610,7 +1611,6 @@ input[type="submit"]:focus, input[type="reset"]:focus, a.control:focus {
 }
 
 input[type="submit"]:active, input[type="reset"]:active, a.control:active {
-    color: #333;
     background: #ddd;
     border: 1px solid #999;
     box-shadow: inset 0 0 0 1px #fff;
