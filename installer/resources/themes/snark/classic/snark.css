@@ -1676,7 +1676,7 @@ input[type="text"], input[type="password"], input.r, input[name="nofilter_dataDi
     padding: 5px !important;
     cursor: text;
     vertical-align: middle;
-    color: #333;
+    color: #5e626e;
     border: 1px solid #aaafce;
     border-radius: 2px;
     box-shadow: inset 1px 1px 1px #ddd;
@@ -1684,10 +1684,9 @@ input[type="text"], input[type="password"], input.r, input[name="nofilter_dataDi
 }
 
 input[type="text"]:focus, input[type="password"]:focus, input.r:focus, input[name="nofilter_dataDir"]:focus, textarea[name="i2cpOpts"]:focus {
-    color: #000 !important;
-    box-shadow: inset 0 0 0 1px #89f;
-    box-shadow: inset 0 0 0 1px #89f, 0 0 1px rgba(136, 153, 255, .4);
-    box-shadow: 0 0 0 1px #fff, 0 0 0 2px #f60;
+    color: #41444d !important;
+    box-shadow: inset 0 0 0 1px rgba(255,96,0,.5);
+    outline: none;
 }
 
 textarea[name="i2cpOpts"], input[name="nofilter_dataDir"] {
@@ -1767,18 +1766,21 @@ input[name="nofilter_commentsName"] {
 
 select {
     font: 9pt "Droid Sans", "Open Sans", "Noto Sans", Ubuntu, "Segoe UI", Verdana, "Bitstream Vera Sans", "DejaVu Sans", "Lucida Grande", Helvetica, sans-serif;
-    margin: 2px 4px 2px 0;
+    padding: 5px 20px 5px 5px;
     padding: 4px 16px 4px 2px;
     cursor: pointer;
     vertical-align: middle;
     text-overflow: ellipsis;
-    color: #333;
+    color: #5e626e;
     border: 1px solid #aaafce;
     border-radius: 2px;
-    background: url(images/dropdown.png) right center no-repeat, linear-gradient(to bottom, #fff, #eef);
+    background: url(images/dropdown.png) right 8px center no-repeat #eee;
+    background: url(images/dropdown.png) right 8px center no-repeat, linear-gradient(to bottom, #fff, #eef);
+    background-size: 10px auto, 100% 100% !important;
     -moz-appearance: none;
     -webkit-appearance: none;
     box-shadow: inset 0 0 0 1px #fff;
+    outline: none;
 }
 
 select option {
@@ -1788,13 +1790,16 @@ select option {
 }
 
 select:hover, select:active {
-    background: url(images/dropdown_hover.png) right center no-repeat, linear-gradient(to bottom, #ddd, #fff) !important;
+    color: #41444d;
+    background: #ddd url(images/dropdown_hover.png) right center no-repeat !important;
+    background: url(images/dropdown_hover.png) right 8px center no-repeat, linear-gradient(to bottom, #ddd 0%, #fff 100%) !important;
+    background-size: 10px auto, 100% 100% !important;
 }
 
 select:focus {
-    color: #000;
-    box-shadow: 0 0 0 1px #fff, 0 0 0 2px #f60;
-    background: url(images/dropdown_hover.png) right center no-repeat, linear-gradient(to bottom, #ddd, #fff) !important;
+    background: #f2f3ff url(images/dropdown_hover.png) right center no-repeat !important;
+    background: url(images/dropdown_hover.png) right 8px center no-repeat, linear-gradient(to bottom, #ddd 0%, #fff 100%) !important;
+    background-size: 10px auto, 100% 100% !important;
 }
 
 @supports not (-moz-appearance: none) {
