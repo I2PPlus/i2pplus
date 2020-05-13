@@ -20,6 +20,9 @@ body.iframed {
     background: transparent url(/themes/console/images/transparent.gif) !important;
 }
 
+* {
+    outline: none;
+}
 div {
     -moz-box-sizing: border-box;
     -webkit-box-sizing: border-box;
@@ -96,7 +99,7 @@ hr {
     padding: 4px;
     width: 150px;
     font: 9pt "Droid Sans Mono", "Noto Mono", "Lucida Console", "DejaVu Sans Mono", monospace;
-    color: #333;
+    color: #5e626e;
     border: 1px solid #aaafce;
     border-radius: 2px;
     box-shadow: inset 1px 1px 1px #ddd;
@@ -104,12 +107,12 @@ hr {
 }
 
 .freetext:focus {
-    color: #111;
-    box-shadow: 0 0 0 1px #fff, 0 0 0 2px #f60;
+    color: #41444d;
+    box-shadow: inset 0 0 0 1px rgba(255,96,0,.5);
 }
 
 .freetext[readonly], .freetext[readonly]:focus {
-    color: #555;
+    color: #757a8a;
     border: 1px solid #99b !important;
     box-shadow: inset 2px 2px 1px #ccccd6;
     background: #eeeef6;
@@ -134,7 +137,7 @@ hr {
     text-decoration: none;
     font-style: normal;
     font-weight: normal;
-    color: #333;
+    color: #5e626e;
     border: 1px solid #aaafce;
     border-radius: 2px;
     background: #eee;
@@ -144,7 +147,7 @@ hr {
 
 .control:hover, .control:focus, button:hover, button:focus {
     text-decoration: none;
-    color: #111 !important;
+    color: #41444d !important;
     border: 1px solid #aaafce;
     box-shadow: inset 0 0 0 1px #fff !important;
     background: #ddd;
@@ -152,7 +155,6 @@ hr {
 }
 
 .control:active, button:active {
-    color: #333 !important;
     border: 1px solid #aaafce;
     box-shadow: inset 0 0 0 1px #fff, inset 3px 3px 3px 1px #555 !important;
 }
@@ -221,18 +223,19 @@ hr {
 
 select {
     margin: 4px !important;
-    padding: 4px 16px 4px 4px;
+    padding: 4px 20px 4px 5px;
     min-width: 140px;
     overflow: hidden;
     text-overflow: ellipsis;
     font-family: Droid Sans, Open Sans, Noto Sans, Ubuntu, Segoe UI, Lucida Grande, DejaVu Sans, Verdana, Helvetica, sans-serif;
     font-size: 9pt;
-    color: #333;
+    color: #5e626e;
     border: 1px solid #aaafce;
     border-radius: 2px;
     box-shadow: 0 0 0 1px #fff inset, 0 0 1px 0 #ccc;
-    background: url(images/dropdown.png) right center no-repeat #fff;
-    background: url(images/dropdown.png) right center no-repeat, linear-gradient(to bottom, #fff, #eef);
+    background: url(images/dropdown.png) right 8px center no-repeat #eee;
+    background: url(images/dropdown.png) right 8px center no-repeat, linear-gradient(to bottom, #fff, #eef);
+    background-size: 10px auto, 100% 100%;
     cursor: pointer;
     -moz-appearance: none;
     -webkit-appearance: none;
@@ -246,16 +249,19 @@ select {
 }
 
 select:hover {
-    color: #111;
+    color: #41444d;
 }
 
 select:hover, select:active {
-    background: url(images/dropdown_hover.png) right center no-repeat, linear-gradient(to bottom, #ddd 0%, #fff 100%) !important;
+    background: url(images/dropdown_hover.png) right 8px center no-repeat, linear-gradient(to bottom, #ddd 0%, #fff 100%) !important;
+    background-size: 10px auto, 100% 100% !important;
+    outline: none !important;
 }
 
 select:focus {
-    box-shadow: 0 0 0 1px #fff, 0 0 0 2px #f60;
-    background: url(images/dropdown_hover.png) right center no-repeat, linear-gradient(to bottom, #ddd 0%, #fff 100%) !important;
+    background: url(images/dropdown_hover.png) right 8px center no-repeat, linear-gradient(to bottom, #ddd 0%, #fff 100%) !important;
+    background-size: 10px auto, 100% 100% !important;
+    outline: none !important;
 }
 
 select option {
@@ -269,7 +275,7 @@ select::-ms-expand {
 select[disabled], select[disabled]:hover, select[disabled]:focus, select[disabled]:active {
     margin: 0;
     padding: 0;
-    color: #41444d;
+    color: #757a8a;
     border: none;
     box-shadow: none;
     background: none !important;
@@ -585,7 +591,7 @@ button, input[type="submit"], input[type="reset"], a.control {
 
 textarea {
     font-family: "Droid Sans Mono", "Noto Mono", "Lucida Console", "DejaVu Sans Mono", monospace;
-    color: #333;
+    color: #5e626e;
     border: 1px solid #aaafce;
     border-radius: 2px;
     box-shadow: inset 1px 1px 1px #ddd;
@@ -596,7 +602,7 @@ textarea {
 textarea:focus {
     box-shadow: inset 0 0 0 1px #89f;
     box-shadow: inset 0 0 0 1px #89f, 0 0 1px rgba(136, 153, 255, 0.4);
-    color: #111;
+    color: #41444d;
 }
 
 textarea#statusMessages {
@@ -625,7 +631,7 @@ a.control {
     margin: 2px 4px !important;
     padding: 4px 8px !important;
     min-width: 80px !important;
-    color: #333 !important;
+    color: #5e626e !important;
     box-sizing: border-box;
 }
 

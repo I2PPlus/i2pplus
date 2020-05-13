@@ -51,6 +51,10 @@ body {
     color: white;
 }
 
+* {
+    outline: none;
+}
+
 .routersummary img[src$="i2plogo.png"], .routersummary h3, .routersummary h3 a, #sb_internnals, #sb_advanced, #sb_services,
 .confignav, *::before, *::after, div.app, .themechoice, .langselect, .langbox,
 .newsAuthor, #newsDisplay, #netdbcountrylist img, .viewfullentry, .sybil_routerinfo th img, .graphspanel, h1 {
@@ -1471,7 +1475,7 @@ tt, code, .bucket {
 
 select {
     margin: 3px 5px;
-    padding: 5px 16px 5px 5px;
+    padding: 5px 20px 5px 5px;
     min-width: 120px;
     vertical-align: middle;
     text-overflow: ellipsis;
@@ -1479,8 +1483,9 @@ select {
     border: 1px solid #aaafce;
     border-radius: 2px;
     box-shadow: inset 0 0 0 1px #fff;
-    background: url(images/dropdown.png) right center no-repeat #eee;
-    background: url(images/dropdown.png) right center no-repeat, linear-gradient(to bottom, #fff, #eef);
+    background: url(images/dropdown.png) right 8px center no-repeat #eee;
+    background: url(images/dropdown.png) right 8px center no-repeat, linear-gradient(to bottom, #fff, #eef);
+    background-size: 10px auto, 100% 100% !important;
     cursor: pointer;
     -moz-appearance: none;
     -webkit-appearance: none;
@@ -1489,7 +1494,7 @@ select {
 
 @supports not (-moz-appearance: none) {
 select {
-    padding: 5px 16px 5px 8px !important;
+    padding: 5px 20px 5px 8px !important;
 }
 }
 
@@ -1498,19 +1503,18 @@ select option {
 }
 
 select:hover, select:active {
+    color: #41444d;
     background: #ddd url(images/dropdown_hover.png) right center no-repeat !important;
-    background: url(images/dropdown_hover.png) right center no-repeat, linear-gradient(to bottom, #ddd 0%, #fff 100%) !important;
+    background: url(images/dropdown_hover.png) right 8px center no-repeat, linear-gradient(to bottom, #ddd 0%, #fff 100%) !important;
+    background-size: 10px auto, 100% 100% !important;
     outline: none;
 }
 
 select:focus {
     background: #f2f3ff url(images/dropdown_hover.png) right center no-repeat !important;
-    background: url(images/dropdown_hover.png) right center no-repeat, linear-gradient(to bottom, #ddd 0%, #fff 100%) !important;
+    background: url(images/dropdown_hover.png) right 8px center no-repeat, linear-gradient(to bottom, #ddd 0%, #fff 100%) !important;
+    background-size: 10px auto, 100% 100% !important;
     outline: none;
-}
-
-select:focus {
-    color: #000;
 }
 
 select[disabled], select[disabled]:hover, select[disabled]:focus, select[disabled]:active {
@@ -1518,7 +1522,7 @@ select[disabled], select[disabled]:hover, select[disabled]:focus, select[disable
     box-shadow: inset 0 0 0 1px #fff !important;
     background: #eee !important;
     background: linear-gradient(to bottom, #fff, #eef) !important;
-    color: #333 !important;
+    color: #757a8a !important;
     cursor: default;
     opacity: .7;
 }
@@ -1623,11 +1627,12 @@ input[type="text"][readonly], input[type="text"][readonly]:focus, input[type="te
 
 button, input, select {
     font: 9pt/130% Droid Sans, Open Sans, Noto Sans, Ubuntu, Segoe UI, Lucida Grande, DejaVu Sans, Verdana, Helvetica, sans-serif;
-    color: #333;
+    color: #5e626e;
     background-color: #eee;
 }
 
 button:hover, input[type="submit"]:hover, input[type="reset"]:hover {
+    color: #41444d;
     background-color: #ddd;
     background: linear-gradient(to bottom, #ddd, #fff);
 }
@@ -1694,23 +1699,23 @@ button::-moz-focus-inner, input::-moz-focus-inner {
 /* graphical buttons */
 
 input[type="submit"], input[type="reset"], button {
+    margin: 3px 8px 3px 0;
+    padding: 4px 5px;
+    text-decoration: none;
+    font: 9pt Droid Sans, Ubuntu, Noto Sans, Segoe UI, Lucida Grande, Verdana, Helvetica, sans-serif;
+    color: #5e626e;
     border: 1px solid #aaafce;
+    border-radius: 2px;
     box-shadow: inset 0 0 0 1px #fff, 0 0 1px #ddd;
     background: #eee;
     background: linear-gradient(to bottom, #fff, #eef);
-    color: #333;
-    margin: 3px 8px 3px 0;
-    font: 9pt "Droid Sans", Ubuntu, "Noto Sans", "Segoe UI", "Lucida Grande", Verdana, Helvetica, sans-serif;
-    padding: 4px 5px;
-    text-decoration: none;
-    border-radius: 2px;
-    opacity: 1;
     background-size: 14px auto, 100% 100% !important;
+    opacity: 1;
 }
 
 button a, button a:visited {
-    color: #333 !important;
     font-weight: normal !important;
+    color: #333 !important;
 }
 
 button:hover a {
@@ -1725,7 +1730,7 @@ button:hover, input[type="submit"]:hover, input[type="reset"]:hover, button:focu
     background: #ddd;
     background: linear-gradient(to bottom, #ddd, #fff);
     border: 1px solid #aaafce;
-    color: #222;
+    color: #41444d;
     box-shadow: inset 0 0 0 1px #fff, 0 0 1px #89f;
 }
 
@@ -1740,7 +1745,7 @@ button:active, input[type="submit"]:active, input[type="reset"]:active {
 input.accept, button.accept {
     background: #eee url(/themes/console/images/buttons/yes.png) no-repeat 7px center;
     background: url(/themes/console/images/buttons/yes.png) no-repeat 7px center, linear-gradient(to bottom, #fff, #eef);
-    padding: 5px 7px 5px 23px;
+    padding: 5px 8px 5px 23px;
 }
 
 input.accept:hover, button.accept:hover,
@@ -1752,7 +1757,7 @@ input.accept:focus, button.accept:focus {
 input.accept[value^="Unban"], button.accept[value^="Unban"] {
     background: #eee url(/themes/console/images/buttons/unban.png) no-repeat 7px center;
     background: url(/themes/console/images/buttons/unban.png) no-repeat 7px center, linear-gradient(to bottom, #fff, #eef);
-    padding: 5px 7px 5px 23px;
+    padding: 5px 8px 5px 23px;
 }
 
 input.accept[value^="Unban"]:hover, button.accept[value^="Unban"]:hover,
@@ -1764,7 +1769,7 @@ input.accept[value^="Unban"]:focus, button.accept[value^="Unban"]:focus {
 input.accept[value^="Create"], button.accept[value^="Create"] {
     background: #eee url(/themes/console/images/buttons/create.png) no-repeat 7px center;
     background: url(/themes/console/images/buttons/create.png) no-repeat 7px center, linear-gradient(to bottom, #fff, #eef);
-    padding: 5px 7px 5px 23px;
+    padding: 5px 8px 5px 23px;
 }
 
 input.accept[value^="Create"]:hover, button.accept[value^="Create"]:hover,
@@ -1776,7 +1781,7 @@ input.accept[value^="Create"]:focus, button.accept[value^="Create"]:focus {
 input.accept[value^="Filter"], button.accept[value^="Filter"] {
     background: #eee url(/themes/console/images/buttons/filter.png) no-repeat 7px center;
     background: url(/themes/console/images/buttons/filter.png) no-repeat 7px center, linear-gradient(to bottom, #fff, #eef);
-    padding: 5px 7px 5px 23px;
+    padding: 5px 8px 5px 23px;
 }
 
 input.accept[value^="Filter"]:hover, button.accept[value^="Filter"]:hover,
@@ -1788,7 +1793,7 @@ input.accept[value^="Filter"]:focus, button.accept[value^="Filter"]:focus {
 input.add, button.add {
     background: #eee url(/themes/console/images/buttons/add.png) no-repeat 7px center;
     background: url(/themes/console/images/buttons/add.png) no-repeat 7px center, linear-gradient(to bottom, #fff, #eef);
-    padding: 5px 7px 5px 23px;
+    padding: 5px 8px 5px 23px;
 }
 
 input.add:hover, button.add:hover,
@@ -1800,7 +1805,7 @@ input.add:focus, button.add:focus {
 input.add[value^="Adjust"], button.add[value^="Adjust"] {
     background: #eee url(/themes/console/images/buttons/edit2.png) no-repeat 7px center;
     background: url(/themes/console/images/buttons/edit2.png) no-repeat 7px center, linear-gradient(to bottom, #fff, #eef);
-    padding: 5px 7px 5px 23px;
+    padding: 5px 8px 5px 23px;
 }
 
 input.add[value^="Adjust"]:hover, button.add[value^="Adjust"]:hover,
@@ -1812,7 +1817,7 @@ input.add[value^="Adjust"]:focus, button.add[value^="Adjust"]:focus {
 input.cancel, button.cancel {
     background: #eee url(/themes/console/images/buttons/no.png) no-repeat 7px center;
     background: url(/themes/console/images/buttons/no.png) no-repeat 7px center, linear-gradient(to bottom, #fff, #eef);
-    padding: 5px 7px 5px 23px;
+    padding: 5px 8px 5px 23px;
 }
 
 input.cancel:hover, button.cancel:hover,
@@ -1826,7 +1831,7 @@ input.check[value^="View"], button.check[value^="View"],
 input.showconsole {
     background: #eee url(/themes/console/images/buttons/show.png) no-repeat 7px center;
     background: url(/themes/console/images/buttons/show.png) no-repeat 7px center, linear-gradient(to bottom, #fff, #eef);
-    padding: 5px 7px 5px 23px;
+    padding: 5px 8px 5px 23px;
 }
 
 input.accept[value^="Show"]:hover, button.accept[value^="Show"]:hover,
@@ -1843,7 +1848,7 @@ input.delete[value^="Do not view"], button.delete[value^="Do not view"],
 input.hideconsole {
     background: #eee url(/themes/console/images/buttons/hide.png) no-repeat 7px center;
     background: url(/themes/console/images/buttons/hide.png) no-repeat 7px center, linear-gradient(to bottom, #fff, #eef);
-    padding: 5px 7px 5px 23px;
+    padding: 5px 8px 5px 23px;
 }
 
 input.cancel[value^="Hide"]:hover, button.cancel[value^="Hide"]:hover,
@@ -1858,7 +1863,7 @@ input.hideconsole:hover, input.hideconsole:focus {
 input.check, button.check {
     background: #eee url(/themes/console/images/buttons/yes.png) no-repeat 7px center;
     background: url(/themes/console/images/buttons/yes.png) no-repeat 7px center, linear-gradient(to bottom, #fff, #eef);
-    padding: 5px 7px 5px 23px;
+    padding: 5px 8px 5px 23px;
 }
 
 input.check:hover, button.check:hover,
@@ -1870,7 +1875,7 @@ input.check:focus, button.check:focus {
 input.check[value$="updates"], button.check[value$="updates"] {
     background: #eee url(/themes/console/images/buttons/update.png) no-repeat 7px center;
     background: url(/themes/console/images/buttons/update.png) no-repeat 7px center, linear-gradient(to bottom, #fff, #eef);
-    padding: 5px 7px 5px 23px;
+    padding: 5px 8px 5px 23px;
 }
 
 input.check[value$="updates"]:hover, button.check[value$="updates"]:hover,
@@ -1882,7 +1887,7 @@ input.check[value$="updates"]:focus, button.check[value$="updates"]:focus {
 input.delete, button.delete {
     background: #eee url(/themes/console/images/buttons/delete.png) no-repeat 7px center;
     background: url(/themes/console/images/buttons/delete.png) no-repeat 7px center, linear-gradient(to bottom, #fff, #eef);
-    padding: 5px 7px 5px 23px;
+    padding: 5px 8px 5px 23px;
 }
 
 input.delete:hover, button.delete:hover,
@@ -1894,7 +1899,7 @@ input.delete:focus, button.delete:focus {
 input.delete[value^="Ban"], button.delete[value^="Ban"] {
     background: #eee url(/themes/console/images/buttons/ban.png) no-repeat 7px center;
     background: url(/themes/console/images/buttons/ban.png) no-repeat 7px center, linear-gradient(to bottom, #fff, #eef);
-    padding: 5px 7px 5px 23px;
+    padding: 5px 8px 5px 23px;
 }
 
 input.delete[value^="Ban"]:hover, button.delete[value^="Ban"]:hover,
@@ -1906,7 +1911,7 @@ input.delete[value^="Ban"]:focus, button.delete[value^="Ban"]:focus {
 input.download, button.download {
     background: #eee url(/themes/console/images/buttons/download.png) no-repeat 7px center;
     background: url(/themes/console/images/buttons/download.png) no-repeat 7px center, linear-gradient(to bottom, #fff, #eef);
-    padding: 5px 7px 5px 23px;
+    padding: 5px 8px 5px 23px;
 }
 
 input.download:hover, button.download:hover,
@@ -1918,7 +1923,7 @@ input.download:focus, button.download:focus {
 input.download[value^="Join"], button.download[value^="Join"] {
     background: #eee url(/themes/console/images/buttons/users.png) no-repeat 7px center;
     background: url(/themes/console/images/buttons/users.png) no-repeat 7px center, linear-gradient(to bottom, #fff, #eef);
-    padding: 5px 7px 5px 23px;
+    padding: 5px 8px 5px 23px;
 }
 
 input.download[value^="Join"]:hover, button.download[value^="Join"]:hover,
@@ -1931,7 +1936,7 @@ input.download[value$="from File"], button.download[value$="from File"],
 input.download[value$="from file"], button.download[value$="from file"] {
     background: #eee url(/themes/console/images/buttons/from-file.png) no-repeat 7px center;
     background: url(/themes/console/images/buttons/from-file.png) no-repeat 7px center, linear-gradient(to bottom, #fff, #eef);
-    padding: 5px 7px 5px 23px;
+    padding: 5px 8px 5px 23px;
 }
 
 input.download[value$="from File"]:hover, button.download[value$="from File"]:hover,
@@ -1945,7 +1950,7 @@ input.download[value$="from file"]:focus, button.download[value$="from file"]:fo
 input.download[value^="Dump"], button.download[value^="Dump"] {
     background: #eee url(/themes/console/images/buttons/dump-threads.png) no-repeat 7px center;
     background: url(/themes/console/images/buttons/dump-threads.png) no-repeat 7px center, linear-gradient(to bottom, #fff, #eef);
-    padding: 5px 7px 5px 23px;
+    padding: 5px 8px 5px 23px;
 }
 
 input.download[value^="Dump"]:hover, button.download[value^="Dump"]:hover,
@@ -1957,7 +1962,7 @@ input.download[value^="Dump"]:focus, button.download[value^="Dump"]:focus {
 input.go, button.go, input[value="GO"], button#run {
     background: #eee url(/themes/console/images/buttons/go.png) no-repeat 7px center;
     background: url(/themes/console/images/buttons/go.png) no-repeat 7px center, linear-gradient(to bottom, #fff, #eef);
-    padding: 5px 7px 5px 23px;
+    padding: 5px 8px 5px 23px;
 }
 
 input.go:hover, button.go:hover, input[value="GO"]:hover,
@@ -1969,7 +1974,7 @@ input.go:focus, button.go:focus, input[value="GO"]:focus {
 input.go[value^="Create"], button.go[value^="Create"] {
     background: #eee url(/themes/console/images/buttons/create-file.png) no-repeat 7px center;
     background: url(/themes/console/images/buttons/create-file.png) no-repeat 7px center, linear-gradient(to bottom, #fff, #eef);
-    padding: 5px 7px 5px 23px;
+    padding: 5px 8px 5px 23px;
 }
 
 input.go[value^="Create"]:hover, button.go[value^="Create"]:hover,
@@ -1981,7 +1986,7 @@ input.go[value^="Create"]:focus, button.go[value^="Create"]:focus {
 input.back {
     background: #eee url(/themes/console/images/buttons/back.png) no-repeat 7px center;
     background: url(/themes/console/images/buttons/back.png) no-repeat 7px center, linear-gradient(to bottom, #fff, #eef);
-    padding: 5px 7px 5px 23px;
+    padding: 5px 8px 5px 23px;
 }
 
 input.back:hover,
@@ -1993,7 +1998,7 @@ input.back:focus {
 input.reload, button.reload {
     background: #eee url(/themes/console/images/buttons/restore.png) no-repeat 7px center;
     background: url(/themes/console/images/buttons/restore.png) no-repeat 7px center, linear-gradient(to bottom, #fff, #eef);
-    padding: 5px 7px 5px 23px;
+    padding: 5px 8px 5px 23px;
 }
 
 input.reload:hover, button.reload:hover,
@@ -2005,7 +2010,7 @@ input.reload:focus, button.reload:focus {
 input.reload[value$="restart"], button.reload[value$="restart"] {
     background: #eee url(/themes/console/images/buttons/restart.png) no-repeat 7px center;
     background: url(/themes/console/images/buttons/restart.png) no-repeat 7px center, linear-gradient(to bottom, #fff, #eef);
-    padding: 5px 7px 5px 23px;
+    padding: 5px 8px 5px 23px;
 }
 
 input.reload[value$="restart"]:hover, button.reload[value$="restart"]:hover,
@@ -2017,7 +2022,7 @@ input.reload[value$="restart"]:focus, button.reload[value$="restart"]:focus {
 input.reload[value^="Update"], button.reload[value^="Update"] {
     background: #eee url(/themes/console/images/buttons/update.png) no-repeat 7px center;
     background: url(/themes/console/images/buttons/update.png) no-repeat 7px center, linear-gradient(to bottom, #fff, #eef);
-    padding: 5px 7px 5px 23px;
+    padding: 5px 8px 5px 23px;
 }
 
 input.reload[value^="Update"]:hover, button.reload[value^="Update"]:hover,
@@ -2029,7 +2034,7 @@ input.reload[value^="Update"]:focus, button.reload[value^="Update"]:focus {
 input.reload[value="Force GC"], button.reload[value="Force GC"] {
     background: #eee url(/themes/console/images/buttons/clean.png) no-repeat 7px center;
     background: url(/themes/console/images/buttons/clean.png) no-repeat 7px center, linear-gradient(to bottom, #fff, #eef);
-    padding: 5px 7px 5px 23px;
+    padding: 5px 8px 5px 23px;
 }
 
 input.reload[value="Force GC"]:hover, button.reload[value="Force GC"]:hover,
@@ -2041,7 +2046,7 @@ input.reload[value="Force GC"]:focus, button.reload[value="Force GC"]:focus {
 input.stop, button.stop {
     background: #eee url(/themes/console/images/buttons/shutdown.png) no-repeat 7px 6px;
     background: url(/themes/console/images/buttons/shutdown.png) no-repeat 7px 6px, linear-gradient(to bottom, #fff, #eef);
-    padding: 5px 7px 5px 23px;
+    padding: 5px 8px 5px 23px;
 }
 
 input.stop:hover, button.stop:hover,
@@ -2311,8 +2316,8 @@ button::-moz-focus-inner, input[type="submit"]::-moz-focus-inner, input[type="re
 .main textarea:focus {
     color: #41444d;
     box-shadow: inset 0 0 0 1px #89f;
-    box-shadow: inset 0 0 0 1px #89f, 0 0 1px rgba(136, 153, 255, .4);
     background: #fff;
+    outline: none;
 }
 
 .main h2 {
@@ -3826,10 +3831,10 @@ td {
 }
 
 td.optionsave {
+    padding: 8px 5px !important;
     text-align: right;
     border-top: 1px solid #aaafce;
     background: #fff;
-    padding: 8px 5px;
 }
 
 td.optionsave[colspan="2"] {
@@ -3888,7 +3893,7 @@ td.tabletextarea {
     padding: 0 !important;
 }
 
-.tabletextarea textarea {
+.main .tabletextarea textarea {
     margin: 0 !important;
     padding: 5px;
     width: 100% !important;
@@ -3899,10 +3904,11 @@ td.tabletextarea {
     word-break: break-all;
     font-size: 9pt;
     border: none !important;
-    box-shadow: 0 0 0 0 !important;
+    border-radius: 0 !important;
+    box-shadow: none !important;
 }
 
-.tabletextarea textarea:focus {
+.main .tabletextarea textarea:focus {
     border-radius: 0 !important;
     box-shadow: inset 0 0 0 1px #89f !important;
 }
@@ -11582,4 +11588,16 @@ div.app, .sitemapLink, .sitemapLabel {
 
 #sb_internals, #sb_services, #sb_advanced {
     margin-top: -5px !important;
+}
+
+.tabletitle + table tr:first-child td {
+    border-top: 1px solid #aaafce;
+}
+
+#config_tunnels select {
+    min-width: 180px;
+}
+
+#config_tunnels input[type="text"] {
+    width: calc(100% - 6px);
 }
