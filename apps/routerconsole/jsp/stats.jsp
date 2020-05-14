@@ -5,7 +5,6 @@
 <html>
 <head>
 <%@include file="css.jsi" %>
-<%@include file="csp-unsafe.jsi" %>
 <%=intl.title("statistics")%>
 <%@include file="summaryajax.jsi" %>
 </head>
@@ -18,7 +17,7 @@
 <jsp:setProperty name="oldhelper" property="full" value="<%=request.getParameter(\"f\")%>" />
 <h1 class="perf"><%=intl._t("Router Statistics")%></h1>
 <div class="main" id="stats">
- <jsp:getProperty name="oldhelper" property="stats" />
+<jsp:getProperty name="oldhelper" property="stats" />
 </div>
 <script nonce="<%=cspNonce%>" type="text/javascript">progressx.hide();</script>
 </body>

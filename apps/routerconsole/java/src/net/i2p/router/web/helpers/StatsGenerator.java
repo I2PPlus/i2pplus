@@ -42,8 +42,8 @@ public class StatsGenerator {
             String group = entry.getKey();
             Set<String> stats = entry.getValue();
             buf.append("<label class=\"togglestat tab");
-            if (group.equals(_t("Router")))
-                buf.append(" tab2");
+//            if (group.equals(_t("Router")))
+//                buf.append(" tab2");
             buf.append("\" id=\"");
             buf.append(group);
             buf.append("\" for=\"toggle_");
@@ -95,7 +95,7 @@ public class StatsGenerator {
         buf.append("</form>");
 **/
 
-        buf.append("<script type=\"text/javascript\" src=\"/js/clearSelected.js\"></script>");
+//        buf.append("<script type=\"text/javascript\" src=\"/js/clearSelected.js\"></script>");
 
         out.write(buf.toString());
         buf.setLength(0);
@@ -107,7 +107,8 @@ public class StatsGenerator {
                .append("\"");
             if (group.equals(_t("Router")))
                 buf.append(" checked");
-            buf.append(" onclick='clearSelected();document.getElementById(\"").append(group).append("\").classList.add(\"tab2\")'>\n");
+//            buf.append(" onclick='clearSelected();document.getElementById(\"").append(group).append("\").classList.add(\"tab2\")'>\n");
+            buf.append(" hidden>\n");
             buf.append("<h3>").append(group).append("</h3>\n");
             buf.append("<ul class=\"statlist\">");
             out.write(buf.toString());
