@@ -280,6 +280,7 @@ class Sorters {
         public ETAComparator(boolean rev, String lang) { super(rev, lang); }
 
         public int compareIt(Snark l, Snark r) {
+            // TODO For completed torrents, sort by date of completion
             return compLong(eta(l), eta(r));
         }
 
