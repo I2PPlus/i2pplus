@@ -2255,7 +2255,6 @@ button::-moz-focus-inner, input[type="submit"]::-moz-focus-inner, input[type="re
     min-width: 540px;
     background: #f2f3ff;
     background: #fff;
-    will-change: transform;
 }
 
 .main#dns, .main#webmail, .main#torrents, .main#tunnelmgr {
@@ -11599,4 +11598,115 @@ div.app, .sitemapLink, .sitemapLabel {
 
 #config_tunnels input[type="text"] {
     width: calc(100% - 6px);
+}
+
+@supports (columns: 2 500px) {
+@media screen and (min-width: 1400px) {
+
+.statlist li.statsName:first-child {
+    margin-top: 0;
+}
+
+.joblog ul {
+    margin-left: -40px;
+}
+
+#stats ul.statlist {
+    margin-top: 10px !important;
+    padding-bottom: 0 !important;
+    width: 100% !important;
+    border: none;
+    background: none;
+}
+
+.statsName {
+    background: #ddf;
+    width: calc(100% - 22px);
+    min-width: 540px;
+    margin: 0 6px 10px 0 !important;
+    padding: 10px 10px 0 10px !important;
+    display: inline-block;
+    background: #e8e8ff;
+    background: rgba(248,248,255,.6);
+    box-shadow: inset 0 0 0 1px #fff, inset 0 0 2px 1px #ddf, 0 0 1px #ddf;
+    border: 1px solid #aaafce;
+}
+
+.statsViewGraphs {
+    margin: 4px 0;
+    padding: 1px 8px 2px;
+    width: calc(100% - 46px);
+    display: inline-block;
+    border-top: 1px solid #ced1e3;
+    border-bottom: 1px solid #ced1e3;
+}
+
+a.graphstat {
+    font-size: 90%;
+    margin-right: 2px;
+}
+
+.statlist li::before, .statlist li li::before, .statlist li li:last-child::before, a.graphstat::before {
+    content: none;
+    display: none;
+}
+
+.statlist li br, .statlist li li br {
+    display: inline-block !important;
+}
+
+.statlist li b {
+    font-size: 110% !important;
+}
+
+.statlist li i {
+    margin-left: 6px;
+    opacity: 0.8;
+}
+
+.statlist li li {
+    margin-right: -10px;
+}
+
+.statlist li li b {
+    font-size: 100% !important;
+}
+
+.statlist li li:not(.noevents):last-child {
+    margin-bottom: -20px;
+}
+
+.statlist li li:last-child {
+    border-bottom: none;
+}
+
+.statsName b, .statsLongName {
+    width: 100%;
+    display: inline-block;
+    text-align: left;
+}
+
+.statsLongName {
+    margin-bottom: 8px;
+}
+
+.statsName b, .statsName i {
+    display: inline-block;
+}
+
+.statsName::before {
+    content: none !important;
+}
+
+ul.statlist {
+    padding-top: 10px;
+    columns: auto 540px;
+    column-gap: 10px;
+    text-align: center;
+}
+
+.statlist .bullet {
+    display: none;
+}
+}
 }
