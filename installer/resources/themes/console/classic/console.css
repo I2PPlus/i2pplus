@@ -3730,7 +3730,7 @@ h3#advancedclientconfig, h3#ffconf, h3#advancedconfig {
 }
 
 h3#pluginmanage {
-    margin-bottom: -30px !important;
+    margin-bottom: -1px !important;
 }
 
 .configure > h3#pluginmanage {
@@ -8484,10 +8484,6 @@ h3#i2pclientconfig, h3.ptitle {
 
 h3#systray, h3#servicedebug, h3#browseronstart {
     margin-bottom: -15px !important;
-}
-
-h3#pluginmanage {
-    margin-bottom: -32px !important;
 }
 
 h4#updateplugins {

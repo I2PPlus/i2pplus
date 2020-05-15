@@ -8178,10 +8178,6 @@ h3#pluginfromfile, h3#updateplugins, h3#pluginmanage, h3#bannedpeers, h3.ptitle,
     padding: 7px 10px;
 }
 
-h3#pluginmanage {
-    margin-bottom: -13px !important;
-}
-
 .sybils#samefamily {
     margin-bottom: 10px !important;
 }
@@ -9534,7 +9530,7 @@ h3#themeheading, h3#langheading, h3#passwordheading {
     font-size: 12pt !important;
 }
 
-h3#i2pclientconfig, h3#pconfig, h3#pluginfromurl, h3#pluginfromfile, #clientconf.infohelp, h3#pluginmanage, h3#webappconfig {
+h3#i2pclientconfig, h3#pconfig, h3#pluginfromurl, h3#pluginfromfile, #clientconf.infohelp, h3#webappconfig {
     margin: -4px 0 -15px !important;
 }
 

@@ -2378,11 +2378,11 @@ h3#langheading, h3#themeheading, h3#pluginmanage, h3#pconfig, h3#webappconfig, h
     filter: none;
 }
 
-h3#advancedclientconfig, p#webappconfigtext, p#pluginconfigtext, p#clientconf.infowarn, p#profiles_overview {
+h3#advancedclientconfig, p#webappconfigtext, p#pluginconfigtext, p#clientconf.infowarn, p#profiles_overview, h3#pluginmanage {
     margin-bottom: -2px;
 }
 
-h3#pconfig, h3#webappconfig, h3#i2pclientconfig, h3#pluginmanage, p#clientconf.infohelp, #config_stats h3 {
+h3#pconfig, h3#webappconfig, h3#i2pclientconfig, p#clientconf.infohelp, #config_stats h3 {
     margin-bottom: -13px;
 }
 
@@ -11476,7 +11476,7 @@ div.app {
     font-size: 8pt !important;
 }
 
-h3#pconfig, h3#webappconfig, h3#i2pclientconfig, h3#pluginmanage, p#clientconf.infohelp, #config_stats h3 {
+h3#pconfig, h3#webappconfig, h3#i2pclientconfig, p#clientconf.infohelp, #config_stats h3 {
     margin-bottom: -15px;
 }
 
