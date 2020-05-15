@@ -5,7 +5,6 @@
 <html>
 <head>
 <%@include file="css.jsi" %>
-<%@include file="csp-unsafe.jsi" %>
 <%=intl.title("graphs")%>
  <jsp:useBean class="net.i2p.router.web.helpers.GraphHelper" id="graphHelper" scope="request" />
  <jsp:setProperty name="graphHelper" property="contextId" value="<%=i2pcontextId%>" />
@@ -22,7 +21,8 @@
 %>
 <%@include file="summaryajax.jsi" %>
 </head>
-<body onload="initCss();" id="perfgraphs">
+<!--<body onload="initCss();" id="perfgraphs">-->
+<body id="perfgraphs">
 <script nonce="<%=cspNonce%>" type="text/javascript">progressx.show();</script>
 <%@include file="summary.jsi" %>
 <h1 class="perf"><%=intl._t("Performance Graphs")%></h1>
@@ -75,6 +75,10 @@
     }
     xhr.send();
   }, <% out.print(graphHelper.getRefreshValue() * 1000); %>);
+
+  document.addEventListener("DOMContentLoaded", function() {
+    initCss();
+  }, true);
 <%  } %>
 </script>
 <script nonce="<%=cspNonce%>" type="text/javascript">progressx.hide();</script>
