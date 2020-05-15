@@ -184,7 +184,7 @@ class Connection {
     int getSSThresh() {
         return _ssthresh;
     }
-    
+
     public long getNextOutboundPacketNum() {
         return _lastSendId.incrementAndGet();
     }
@@ -587,7 +587,7 @@ class Connection {
                 // RFC 6298 section 5.3
                 int rto = _options.getRTO();
                 _retransmitEvent.pushBackRTO(rto);
-                
+
                 if (_log.shouldLog(Log.DEBUG))
                     _log.debug("[" + Connection.this + "] Not all packets ACKed, pushing timer out " + rto);
             } else {
@@ -1425,15 +1425,13 @@ class Connection {
         }
         if (getCloseReceivedOn() > 0)
             buf.append("\n* Close received: ").append(DataHelper.formatDuration(_context.clock().now() - getCloseReceivedOn())).append(" ago");
-        buf.append(" sent: ").append(1 + _lastSendId.get());
-        buf.append(" rcvd: ").append(1 + _inputStream.getHighestBlockId() - missing);
-        buf.append(" ackThru ").append(_highestAckedThrough);
-        buf.append(" ssThresh ").append(_ssthresh); 
-        buf.append(" minRTT ").append(_options.getMinRTT()); 
-        buf.append(" maxWin ").append(_options.getMaxWindowSize());
-        buf.append(" MTU ").append(_options.getMaxMessageSize());
-        
-        buf.append("]");
+        buf.append("\n* Sent: ").append(1 + _lastSendId.get());
+        buf.append("; Rcvd: ").append(1 + _inputStream.getHighestBlockId() - missing);
+        buf.append("; ACKThru ").append(_highestAckedThrough);
+        buf.append("; SSThresh ").append(_ssthresh);
+        buf.append("; MinRTT ").append(_options.getMinRTT());
+        buf.append("; MaxWin ").append(_options.getMaxWindowSize());
+        buf.append("; MTU ").append(_options.getMaxMessageSize());
         return buf.toString();
     }
 
@@ -1467,7 +1465,8 @@ class Connection {
 
         public synchronized void pushBackRTO(int rto) {
             if (!_scheduled) {
-                _log.log(Log.ERROR, Connection.this + " timer was not scheduled", new Exception());
+                if (_log.shouldWarn())
+                    _log.warn(Connection.this + " timer was not scheduled", new Exception());
             }
             reschedule(rto, false);
         }
@@ -1537,7 +1536,7 @@ class Connection {
                     disconnect(false);
                     return;
                 } else {
-                    
+
                     if (_isChoking) {
                         if (_log.shouldLog(Log.DEBUG))
                             _log.debug(Connection.this + " packet is choking " + packet);
@@ -1566,15 +1565,15 @@ class Connection {
                         packet.setSendStreamId(_sendStreamId.get());
 
                     packet.setTimeout(_options.getRTO());
-                    
+
 
                     if (_outboundQueue.enqueue(packet)) {
-                        if (_log.shouldLog(Log.INFO)) 
+                        if (_log.shouldLog(Log.INFO))
                             _log.info(Connection.this + " resent packet " + packet);
                         if (nResends == 1)
                             _activeResends.incrementAndGet();
                         sentAny = true;
-                    } else if (_log.shouldLog(Log.DEBUG)) 
+                    } else if (_log.shouldLog(Log.DEBUG))
                        _log.debug(Connection.this + " could not resend packet " + packet);
                 }
             }
@@ -1620,7 +1619,7 @@ class Connection {
     ResendPacketEvent newResendPacketEvent(PacketLocal packet) {
         return new ResendPacketEvent(packet);
     }
-    
+
     /**
      * This is not normally scheduled. It's now used only for fastRetransmit(),
      * where it's scheduled with a delay of zero to put it on the timer queue.
