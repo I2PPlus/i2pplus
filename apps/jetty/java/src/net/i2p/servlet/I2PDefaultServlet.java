@@ -192,6 +192,7 @@ public class I2PDefaultServlet extends DefaultServlet
 
         String decodedBase = URIUtil.decodePath(base);
         String title = "Directory: " + deTag(decodedBase);
+        String pwd = "Directory: <a href=\"" + deTag(decodedBase) + "\">" + deTag(decodedBase) + "</a>";
 
         StringBuilder buf=new StringBuilder(4096);
         buf.append("<!DOCTYPE HTML>\n<html>\n<head>\n<title>");
@@ -201,7 +202,7 @@ public class I2PDefaultServlet extends DefaultServlet
         buf.append("<style type=\"text/css\">\n" +
                    "#dirlist {margin: 2.5%; padding: 0; font-family: Open Sans, Ubuntu, SegoeUI, sans-serif; font-size: 11pt; color: #333; border: 1px solid #ddd; background: #999}\n" +
                    "table {border-collapse: collapse}\n" +
-                   "b, th {font-weight: 700; font-size: 90%;}\n" +
+                   "b, th {font-weight: 700; font-size: 90%}\n" +
                    "tr:nth-child(odd) {background: #eee}\n" +
                    "tr:nth-child(even) {background: #ddd}\n" +
                    "tr:hover {background: #ffd}\n" +
@@ -209,13 +210,14 @@ public class I2PDefaultServlet extends DefaultServlet
                    "#dirlist th {border-bottom: 1px solid #ddd; background: #fff}\n" +
                    "#dirlist td:nth-child(n+2) {font-size: 90%}\n" +
                    "h1 {margin: -1px -1px 0; padding: 5px 8px; font-size: 14pt; background: #f2f2f2; border: 1px solid #ddd}\n" +
-                   "#dirlist a {width: 100%; display: inline-block; text-decoration: none; outline: none; font-weight: 600; color: #b33}\n" +
+                   "#dirlist a {text-decoration: none; outline: none; color: #b33}\n" +
+                   "#dirlist td a {width: 100%; display: inline-block; font-weight: 600}" +
                    "#dirlist a:visited {color: #700}\n" +
                    "#dirlist a:hover, #dirlist a:focus {color: #d30}\n" +
                    "</style>\n");
         buf.append("<link href=\"/.resources/jetty-dir.css\" rel=\"stylesheet\" type=\"text/css\"/>\n");
         buf.append("</head>\n<body id=\"dirlist\">\n<h1>");
-        buf.append(title);
+        buf.append(pwd);
         buf.append("</h1>\n<table border=0 width=100% cellspacing=10 class=\"listing\">\n");
         buf.append("<thead>\n<tr><th align=left class=\"name\"><b>Name</b></th>" +
                    "<th align=right nowrap class=\"lastmodified\"><b>Last modified (UTC)</b></th>" +
