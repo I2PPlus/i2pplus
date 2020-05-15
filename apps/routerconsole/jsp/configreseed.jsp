@@ -215,9 +215,20 @@
 <form action="" method="POST" enctype="multipart/form-data" accept-charset="UTF-8">
 <input type="hidden" name="nonce" value="<%=pageNonce%>" >
 <table>
-<tr>
+<tr id="file">
 <td>
+<%
+   String file = request.getParameter("file");
+   if (file != null && file.length() > 0) {
+%>
+<input type="text" size="60" name="file" value="<%=file%>">
+<%
+   } else {
+%>
 <input name="file" type="file" accept=".zip,.su3" value="" required />
+<%
+   }
+%>
 </td>
 <td>
 <input type="submit" name="action" class="download" value="<%=intl._t("Reseed from file")%>" />
@@ -227,7 +238,7 @@
 </form>
 </td>
 </tr>
-<tr>
+<tr id="create">
 <td>
 <b class="suboption"><%=intl._t("Create Reseed File")%></b>
 <div class="optionsingle" id="reseedcreatefile">

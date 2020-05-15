@@ -32,7 +32,7 @@
 <a href="configclients" title="<%=intl._t("Client Configuration")%>">Clients</a>&nbsp;
 <a href="configwebapps" title="<%=intl._t("WebApp Configuration")%>">WebApps</a>
 </span>
-</h3><p>
+</h3>
 <form action="configplugins" method="POST">
 <table id="plugininstall" class="configtable">
 <tr>
@@ -48,10 +48,14 @@
        if (clientshelper.isPluginInstallEnabled()) {
 %>
 <table>
-<tr>
+<tr id="url">
 <td>
 <input type="hidden" name="nonce" value="<%=pageNonce%>" >
-<input type="text" size="60" name="pluginURL" required x-moz-errormessage="<%=intl._t("Please supply a valid plugin URL")%>" title="<%=intl._t("To install a plugin, enter the download URL:")%>" >
+<%
+   String url = request.getParameter("pluginURL");
+   String value = url != null ? "value=\"" + url + '"' : "";
+%>
+<input type="text" size="60" name="pluginURL" required title="<%=intl._t("To install a plugin, enter the download URL:")%>" >
 </td>
 <td align="right">
 <input type="submit" name="action" class="default hideme" value="<%=intl._t("Install Plugin")%>" />
@@ -72,13 +76,24 @@
 <b class="suboption"><%=intl._t("Select xpi2p or su3 file")%></b><br>
 <div class="optionsingle" id="installPluginFile">
 <table>
-<tr>
+<tr id="file">
 <td>
 <input type="hidden" name="nonce" value="<%=pageNonce%>" >
+<%
+   String file = request.getParameter("pluginFile");
+   if (file != null && file.length() > 0) {
+%>
+<input type="text" size="60" name="pluginFile" value="<%=file%>">
+<%
+   } else {
+%>
 <input type="file" name="pluginFile" accept=".xpi2p,.su3" >
+<%
+   }
+%>
 </td>
 <td align="right">
-<input type="submit" name="action" class="download" required x-moz-errormessage="<%=intl._t("Please supply a valid plugin file")%>" value="<%=intl._t("Install Plugin from File")%>" />
+<input type="submit" name="action" class="download" title="<%=intl._t("Please supply a valid plugin file")%>" value="<%=intl._t("Install Plugin from File")%>" />
 </td>
 </tr>
 </table>
