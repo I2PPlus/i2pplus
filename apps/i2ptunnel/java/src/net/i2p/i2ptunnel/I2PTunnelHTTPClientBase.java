@@ -920,9 +920,10 @@ public abstract class I2PTunnelHTTPClientBase extends I2PTunnelClientBase implem
         if (outs == null)
             return;
         Writer out = new BufferedWriter(new OutputStreamWriter(outs, "UTF-8"));
-        out.write(errMessage);
         if (targetRequest != null) {
             String uri = DataHelper.escapeHTML(targetRequest);
+            errMessage = errMessage.replace("<a href=\"\">", "<a href=\"" + uri + "\">");
+            out.write(errMessage);
             out.write("<a href=\"");
             out.write(uri);
             out.write("\">");
@@ -987,6 +988,8 @@ public abstract class I2PTunnelHTTPClientBase extends I2PTunnelClientBase implem
                     out.write("</div>\n");
                 }
             }
+        } else {
+            out.write(errMessage);
         }
         out.write("</div>\n");
         writeFooter(out);
