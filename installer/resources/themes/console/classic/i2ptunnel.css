@@ -861,7 +861,7 @@ input[type="file"] {
 }
 
 #notReady {
-    margin: 30px auto;
+    margin: 35px auto 30px;
     padding: 30px;
     width: 400px;
     text-align: center;
@@ -869,9 +869,8 @@ input[type="file"] {
     font-weight: bold;
     border: 1px solid #900;
     border-radius: 2px;
-    box-shadow: inset 0 0 0 1px #fff;
+    box-shadow: inset 0 0 0 1px #fff, 0 0 1px 1px #bbb;
     background: #ffd;
-    filter: drop-shadow(0 0 1px #333);
 }
 
 /* wizard specifics */

@@ -1060,16 +1060,16 @@ input.tunnelName, input.tunnelDescription, #userAgents {
 }
 
 #notReady {
-    border: 1px solid #900;
+    margin: 35px auto 30px;
     padding: 30px;
-    background: #020;
-    margin: 30px auto;
     width: 400px;
     text-align: center;
-    border-radius: 2px;
-    box-shadow: inset 0 0 0 1px #000;
     font-size: 11pt;
     font-weight: bold;
+    border: 1px solid #900;
+    border-radius: 2px;
+    box-shadow: inset 0 0 0 1px #000;
+    background: #020;
 }
 
 /* wizard specifics */
@@ -1225,10 +1225,6 @@ _:-ms-lang(x), .tunnelDescription {
 _:-ms-lang(x), .tunnelProperties {
     border-bottom: 1px solid #010 !important;
 }
-
-/*.tunnelDescription {
-    padding-top: 1px !important;
-}*/
 
 .tunnelDestination b, .tunnelDescription b {
     color: #bb7;
