@@ -382,6 +382,13 @@ public class IndexBean {
         return TunnelController.isClient(type);
     }
 
+    /**
+     *  @since 0.9.46 moved from subclass
+     */
+    public boolean isSharedClient(int tunnel) {
+        return _helper.isSharedClient(tunnel);
+    }
+
     public String getTunnelName(int tunnel) {
         String name = _helper.getTunnelName(tunnel);
         if (name != null && name.length() > 0)

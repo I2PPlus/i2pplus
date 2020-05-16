@@ -193,14 +193,23 @@
     </tr>
 <%
             } // encName
+            String serverDesc = indexBean.getTunnelDescription(curServer);
+            if (serverDesc != null && serverDesc.length() > 0) {
 %>
     <tr class="tunnelInfo" style="display: none;">
         <td class="tunnelDescription" colspan="6">
             <span class="tunnelDestinationLabel"><b><%=intl._t("Description")%>:</b></span>
-            <%=indexBean.getTunnelDescription(curServer)%>
+            <%=serverDesc%>
         </td>
     </tr>
 <%
+            } else { // description != null
+%>
+    <tr class="tunnelInfo" style="display: none;">
+        <td class="tunnelDescription" colspan="6"></td>
+    </tr>
+<%
+            }
         } // for loop
 %>
     <tr>
@@ -233,13 +242,22 @@
     </tr>
 <%
         for (int curClient = 0; curClient < indexBean.getTunnelCount(); curClient++) {
+            boolean isShared = indexBean.isSharedClient(curClient);
             if (!indexBean.isClient(curClient)) continue;
 %>
     <tr class="tunnelProperties">
         <td class="tunnelName">
             <a href="edit?tunnel=<%=curClient%>" title="<%=intl._t("Edit Tunnel Settings for")%>&nbsp;<%=indexBean.getTunnelName(curClient)%>"><%=indexBean.getTunnelName(curClient)%></a>
         </td>
-        <td class="tunnelType"><%=indexBean.getTunnelType(curClient)%></td>
+        <td class="tunnelType"><%=indexBean.getTunnelType(curClient)%>
+<%
+            if (isShared) {
+%>
+            &nbsp;<span class="shared" title="Tunnel is configured as a Shared Client">*</span>
+<%
+            } // isShared
+%>
+        </td>
         <td class="tunnelInterface">
 <%
                /* should only happen for streamr client */
@@ -321,14 +339,24 @@
                } %>
         </td>
     </tr>
-<% /* TODO SSL outproxy for httpclient if plugin not present */ %>
+<% /* TODO SSL outproxy for httpclient if plugin not present */
+               String clientDesc = indexBean.getTunnelDescription(curClient);
+               if (clientDesc != null && clientDesc.length() > 0) {
+%>
     <tr class="tunnelInfo" style="display: none;">
         <td class="tunnelDescription" colspan="6">
             <span class="tunnelDescriptionLabel"><b><%=intl._t("Description")%>:</b></span>
-            <%=indexBean.getTunnelDescription(curClient)%>
+            <%=clientDesc%>
         </td>
     </tr>
 <%
+               } else { // if clientDesc != null
+%>
+    <tr class="tunnelInfo" style="display: none;">
+        <td class="tunnelDescription" colspan="6"></td>
+    </tr>
+<%
+               }
         }
 %>
     <tr>

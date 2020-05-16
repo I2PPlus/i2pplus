@@ -1238,6 +1238,10 @@ td.tunnelDestination, td.tunnelDescription {
     background: linear-gradient(to right, #000 50%, #010) !important;
 }
 
+.tunnelInfo + .tunnelInfo .tunnelDescription:empty {
+    padding-top: 0 !important;
+}
+
 /* end more space */
 
 /* responsive layout */

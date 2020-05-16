@@ -1135,6 +1135,10 @@ textarea[name="accessList"], #hostField, #localDestination, .authentication {
     padding-top: 3px !important;
 }
 
+.tunnelInfo + .tunnelInfo .tunnelDescription:empty {
+    padding-top: 0 !important;
+}
+
 .tunnelDestination b, .tunnelDescription b {
     color: #a8accf;
 }

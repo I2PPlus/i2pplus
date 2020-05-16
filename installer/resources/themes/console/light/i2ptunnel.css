@@ -1098,6 +1098,10 @@ td.tunnelDescription, .tunnelInfo + .tunnelInfo .tunnelDestination {
     border-top: none !important;
 }
 
+.tunnelInfo + .tunnelInfo .tunnelDescription:empty {
+    padding-top: 0 !important;
+}
+
 .tunnelDestination b, .tunnelDescription b {
     color: #41465f;
 }

@@ -1016,6 +1016,10 @@ td.tunnelDescription, .tunnelInfo + .tunnelInfo .tunnelDestination {
     padding-top: 1px !important;
 }
 
+.tunnelInfo + .tunnelInfo .tunnelDescription:empty {
+    padding-top: 0 !important;
+}
+
 td.tunnelDestination, td.tunnelDescription {
     background: linear-gradient(to right, #fcfcff 50%, #eff2ff);
 }
