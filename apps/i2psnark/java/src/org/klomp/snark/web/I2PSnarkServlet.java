@@ -331,7 +331,7 @@ public class I2PSnarkServlet extends BasicServlet {
                 String downMsg = _context.isRouterContext() ? _t("Router is down") : _t("I2PSnark has stopped");
                 // fallback to metarefresh when javascript is disabled
                 out.write("<noscript><meta http-equiv=\"refresh\" content=\"" + delay + ";" + _contextPath + "/" + peerString + "\"></noscript>\n" +
-                          "<script src=\"" + jsPfx + "/js/ajax.js?" + CoreVersion.VERSION + "\" type=\"text/javascript\"></script>\n" +
+                          "<script  nonce=\"" + cspNonce + "\" src=\"" + jsPfx + "/js/ajax.js?" + CoreVersion.VERSION + "\" type=\"text/javascript\"></script>\n" +
                           "<script nonce=\"" + cspNonce + "\" type=\"text/javascript\">\n"  +
                           "var failMessage = \"<div class=\\\"routerdown\\\"><b>" + downMsg + "<\\/b><\\/div>\";\n" +
                           "var ajaxDelay = " + (delay * 1000) + ";\n" +
@@ -462,9 +462,7 @@ public class I2PSnarkServlet extends BasicServlet {
         // "no-store, max-age=0" forces all our images to be reloaded on ajax refresh
         // add 'private' header to avoid being cached in anything other than browser
         resp.setHeader("Cache-Control", "max-age=86400, no-cache, private, must-revalidate");
-//        resp.setHeader("Content-Security-Policy", "default-src 'self'; style-src 'self' 'unsafe-inline'; script-src 'self' 'unsafe-inline';");
-        resp.setHeader("Content-Security-Policy", "default-src 'self'; style-src 'self' 'unsafe-inline'; script-src 'self' 'unsafe-inline'; form-action 'self'; frame-ancestors 'self'; object-src 'none'");
-//        resp.setHeader("Content-Security-Policy", "default-src 'self'; style-src 'self' 'unsafe-inline'; script-src 'self' 'unsafe-inline' 'nonce-" + cspNonce + "'; form-action 'self'; frame-ancestors 'self'; object-src 'none'; media-src '" + (allowMedia ? "self" : "none") + "'");
+        resp.setHeader("Content-Security-Policy", "default-src 'self'; style-src 'self' 'unsafe-inline'; script-src 'self' 'unsafe-inline' 'nonce-" + cspNonce + "'; form-action 'self'; frame-ancestors 'self'; object-src 'none'; media-src '" + (allowMedia ? "self" : "none") + "'");
         // This header is broken, only takes a date. Not needed with 'max-age'.
         //resp.setDateHeader("Expires", 86400);
         resp.setHeader("Pragma", "no-cache");
@@ -479,7 +477,6 @@ public class I2PSnarkServlet extends BasicServlet {
     private void writeMessages(PrintWriter out, boolean isConfigure, String peerString) throws IOException {
         List<UIMessages.Message> msgs = _manager.getMessages();
         if (!msgs.isEmpty()) {
-            out.write("<script src=\"" + _contextPath + WARBASE + "js/toggleLog.js?" + CoreVersion.VERSION + "\" type=\"text/javascript\"></script>");
             out.write("\n<div class=\"snarkMessages\" id=\"screenlog\" tabindex=\"0\">\n" +
                       "<a id=\"closeLog\" href=\"" + _contextPath + '/');
             if (isConfigure)
@@ -493,15 +490,16 @@ public class I2PSnarkServlet extends BasicServlet {
             String tx = _t("clear messages");
             out.write(toThemeImg("delete", tx, tx));
             out.write("</a>\n");
-            out.write("<a class=\"script\" id=\"expand\" href=\"#\" onclick=\"clean();expand();\">");
+            out.write("<a class=\"script\" id=\"expand\" href=\"#\">");
             String x = _t("Expand");
             out.write(toThemeImg("expand", x, x));
             out.write("</a>\n");
-            out.write("<a class=\"script\" id=\"shrink\" href=\"#\" onclick=\"clean();shrink();\">");
+            out.write("<a class=\"script\" id=\"shrink\" href=\"#\">");
             String s = _t("Shrink");
             out.write(toThemeImg("shrink", s, s));
             out.write("</a>\n");
             out.write("<ul>\n");
+            out.write("<script src=\"" + _contextPath + WARBASE + "js/toggleLog.js?" + CoreVersion.VERSION + "\" type=\"text/javascript\"></script>\n");
             // FIXME only show once
             out.write("<noscript>\n<li class=\"noscriptWarning\">" +
                      _t("Warning! Javascript is disabled in your browser. If {0} is enabled, you will lose any input in the add/create torrent sections when a refresh occurs.", "<a href=\"configure\">" + _t("page refresh") + "</a>"));
@@ -536,17 +534,15 @@ public class I2PSnarkServlet extends BasicServlet {
                 // then we can persist the filter and show all matches, not just those on page, and paginate as required
                 // ensure we hide our torrent filter bar (if enabled) and js is disabled
                 out.write("\n<noscript><style type=\"text/css\">.script {display: none;}</style></noscript>\n");
-                if (!snarks.isEmpty()) {
+                if (!snarks.isEmpty() && _manager.util().connected()) {
                     out.write("<div id=\"torrentDisplay\" class=\"script\">\n" +
-                              "<input type=\"radio\" name=\"torrentDisplay\" id=\"all\" checked=\"checked\" onclick=\"showAll();\"><label for=\"all\">Show All</label>");
-                    if (_manager.util().connected()) {
-                        out.write("<input type=\"radio\" name=\"torrentDisplay\" id=\"active\" onclick=\"showActive();\"><label for=\"active\">Active</label>" +
-                                  "<input type=\"radio\" name=\"torrentDisplay\" id=\"inactive\" onclick=\"showInactive();\"><label for=\"inactive\">Inactive</label>" +
-                                  "<input type=\"radio\" name=\"torrentDisplay\" id=\"downloading\" onclick=\"showDownloading();\"><label for=\"downloading\">Downloading</label>" +
-                                  "<input type=\"radio\" name=\"torrentDisplay\" id=\"seeding\" onclick=\"showSeeding();\"><label for=\"seeding\">Seeding</label>");
-                    }
-                    out.write("<input type=\"radio\" name=\"torrentDisplay\" id=\"complete\" onclick=\"showComplete();\"><label for=\"complete\">Complete</label>" +
-                              "<input type=\"radio\" name=\"torrentDisplay\" id=\"incomplete\" onclick=\"showIncomplete();\"><label for=\"incomplete\">Incomplete</label>" +
+                              "<input type=\"radio\" name=\"torrentDisplay\" id=\"all\"><label for=\"all\">Show All</label>");
+                    out.write("<input type=\"radio\" name=\"torrentDisplay\" id=\"active\"><label for=\"active\">Active</label>" +
+                              "<input type=\"radio\" name=\"torrentDisplay\" id=\"inactive\"><label for=\"inactive\">Inactive</label>" +
+                              "<input type=\"radio\" name=\"torrentDisplay\" id=\"downloading\"><label for=\"downloading\">Downloading</label>" +
+                              "<input type=\"radio\" name=\"torrentDisplay\" id=\"seeding\"><label for=\"seeding\">Seeding</label>");
+                    out.write("<input type=\"radio\" name=\"torrentDisplay\" id=\"complete\"><label for=\"complete\">Complete</label>" +
+                              "<input type=\"radio\" name=\"torrentDisplay\" id=\"incomplete\"><label for=\"incomplete\">Incomplete</label>" +
                               "</div>\n");
                 }
             }
@@ -1140,7 +1136,8 @@ public class I2PSnarkServlet extends BasicServlet {
         // load torrentDisplay script here to ensure table has loaded into dom
         boolean showStatusFilter = _manager.util().showStatusFilter();
         if (_contextName.equals(DEFAULT_NAME) && showStatusFilter) {
-            out.write("<script src=\"" + _contextPath + WARBASE + "js/torrentDisplay.js?" + CoreVersion.VERSION + "\" type=\"text/javascript\"></script>\n");
+            out.write("<script src=\"" + _contextPath + WARBASE + "js/torrentDisplay.js?" + CoreVersion.VERSION + "\" type=\"text/javascript\" defer></script>\n");
+//            out.write("<script src=\"/themes/torrentDisplay.js?" + CoreVersion.VERSION + "\" type=\"text/javascript\" defer></script>\n");
         }
         return start == 0;
     }
@@ -2043,7 +2040,7 @@ public class I2PSnarkServlet extends BasicServlet {
                                "<td class=\"snarkTorrentStatus\"><b>" + _t("Net Error") +
                                "</b></td>\n<td class=\"snarkTorrentPeerCount\"><span class=\"right\">" +
                                curPeers + "</span>" + thinsp(noThinsp) + "<span class=\"left\">" + knownPeers + "</span>";
-                               snarkStatus = "inactive";
+                               snarkStatus = "inactive downloading incomplete";
             //} else {
             //    if (err.length() > MAX_DISPLAYED_ERROR_LENGTH)
             //        err = DataHelper.escapeHTML(err.substring(0, MAX_DISPLAYED_ERROR_LENGTH)) + "&hellip;";
@@ -2132,13 +2129,13 @@ public class I2PSnarkServlet extends BasicServlet {
 //                               uri + getQueryString(req, b64, null, null) + '#' + b64Short + "\"><span class=\"right\">" +
                                uri + getQueryString(req, b64, null, null) + "\"><span class=\"right\">" +
                                curPeers + "</span>" + thinsp(noThinsp) + "<span class=\"left\">" + knownPeers + "</span></a>";
-                               snarkStatus = "active downloading";
+                               snarkStatus = "active downloading incomplete";
             } else if (isRunning && curPeers > 0 && downBps > 0) {
                 statusString = toThemeImg("downloading", "", _t("OK") + ", " + ngettext("Downloading from {0} peer", "Downloading from {0} peers", curPeers)) +
                                "</td>\n<td class=\"snarkTorrentStatus\"><b>" + _t("OK") + "</b></td>\n<td class=\"snarkTorrentPeerCount\"><a href=\"" +
                                uri + "\" title=\"" + _t("Hide Peers") + "\"><span class=\"right\">" + curPeers + "</span>" + thinsp(noThinsp) +
                                "<span class=\"left\">" + knownPeers + "</span></a>";
-                               snarkStatus = "active downloading";
+                               snarkStatus = "active downloading incomplete";
             } else if (isRunning && curPeers > 0 && !showPeers) {
                 statusString = toThemeImg("stalled", "", _t("Stalled") + " (" + ngettext("Connected to {0} peer", "Connected to {0} peers", curPeers)) + "</td>\n" +
                                "<td class=\"snarkTorrentStatus\"><b>" + _t("Stalled") +
@@ -2146,26 +2143,26 @@ public class I2PSnarkServlet extends BasicServlet {
 //                               uri + getQueryString(req, b64, null, null) + '#' + b64Short + "\"><span class=\"right\">" +
                                uri + getQueryString(req, b64, null, null) + "\"><span class=\"right\">" +
                                curPeers + "</span>" + thinsp(noThinsp) + "<span class=\"left\">" + knownPeers + "</span></a>";
-                               snarkStatus = "inactive downloading";
+                               snarkStatus = "inactive downloading incomplete";
             } else if (isRunning && curPeers > 0) {
                 statusString = toThemeImg("stalled", "", _t("Stalled") +
                                " (" + _t("Connected to {0} of {1} peers in swarm", curPeers, knownPeers) + ")") + "</td>\n" +
                                "<td class=\"snarkTorrentStatus\"><b>" + _t("Stalled") +
                                "</b></td>\n<td class=\"snarkTorrentPeerCount\"><a href=\"" + uri + "\" title=\"" + _t("Hide Peers") +
                                "\"><span class=\"right\">" + curPeers + "</span>" + thinsp(noThinsp) + "<span class=\"left\">" + knownPeers + "</span></a>";
-                               snarkStatus = "inactive downloading";
+                               snarkStatus = "inactive downloading incomplete";
             } else if (isRunning && knownPeers > 0) {
                 statusString = toThemeImg("nopeers", "", _t("No Peers") +
                                " (" + _t("Connected to {0} of {1} peers in swarm", curPeers, knownPeers) + ")") + "</td>\n" +
                                "<td class=\"snarkTorrentStatus\"><b>" + _t("No Peers") +
                                "</b></td>\n<td class=\"snarkTorrentPeerCount\"><span class=\"right\">0</span>" +
                                thinsp(noThinsp) + "<span class=\"left\">" + knownPeers + "</span>";
-                               snarkStatus = "inactive downloading";
+                               snarkStatus = "inactive downloading incomplete";
             } else if (isRunning) {
                 statusString = toThemeImg("nopeers", "", _t("No Peers")) + "</td>\n" +
                                "<td class=\"snarkTorrentStatus\"><b class=\"alwaysShow\">" + _t("No Peers") +
                                "</b></td>\n<td class=\"snarkTorrentPeerCount\">";
-                               snarkStatus = "inactive downloading";
+                               snarkStatus = "inactive downloading incomplete";
             } else {
                 statusString = toThemeImg("stopped", "", _t("Stopped")) + "</td>\n" +
                                "<td class=\"snarkTorrentStatus\"><b class=\"alwaysShow\">" + _t("Stopped") +

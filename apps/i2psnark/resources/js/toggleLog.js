@@ -1,29 +1,50 @@
-function clean() {
-  var expandLog = document.getElementById("expandLog");
-  if (expandLog) {
-      expandLog.remove();
+const mainsection = document.getElementById("mainsection");
+
+function init() {
+
+  function clean() {
+    var expandLog = document.getElementById("expandLog");
+    if (expandLog) {
+        expandLog.remove();
+    }
+    var shrinkLog = document.getElementById("shrinkLog");
+    if (shrinkLog) {
+        shrinkLog.remove();
+    }
   }
-  var shrinkLog = document.getElementById("shrinkLog");
-  if (shrinkLog) {
-      shrinkLog.remove();
+
+  if (mainsection) {
+
+    function expand() {
+      clean();
+      var x = document.createElement("link");
+      x.type="text/css";
+      x.rel="stylesheet";
+      x.href=".resources/expand.css";
+      x.setAttribute("id", "expandLog");
+      document.head.appendChild(x);
+    }
+
+    function shrink() {
+      clean();
+      var s = document.createElement("link");
+      s.type="text/css";
+      s.rel="stylesheet";
+      s.href=".resources/shrink.css";
+      s.setAttribute("id", "shrinkLog");
+      document.head.appendChild(s);
+    }
+
   }
+
+  const ex = document.getElementById("expand");
+  const sh = document.getElementById("shrink");
+
+  sh.addEventListener("click", shrink, false);
+  ex.addEventListener("click", expand, false);
+
 }
 
-function expand() {
-  var x = document.createElement("link");
-  x.type="text/css";
-  x.rel="stylesheet";
-  x.href=".resources/expand.css";
-  x.setAttribute("id", "expandLog");
-  document.head.appendChild(x);
-}
-
-function shrink() {
-  var s = document.createElement("link");
-  s.type="text/css";
-  s.rel="stylesheet";
-  s.href=".resources/shrink.css";
-  s.setAttribute("id", "shrinkLog");
-  document.head.appendChild(s);
-}
-
+mainsection.addEventListener("mouseover", function() {
+  init();
+}, false);

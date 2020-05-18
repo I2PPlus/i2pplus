@@ -1,0 +1,12 @@
+.snarkTorrentOdd, .snarkTorrentEven {
+    display: none;
+}
+
+.seeding, .peerinfo, .debuginfo {
+    display: table-row;
+}
+
+label[for="seeding"]::after {
+    margin-left: 1px;
+    content: "*";
+}

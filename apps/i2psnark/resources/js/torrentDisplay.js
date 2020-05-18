@@ -1,130 +1,121 @@
 // setup torrent display buttons so we can show/hide snarks based on status
 
-var allOdd = document.getElementsByClassName("snarkTorrentOdd");
-var allEven = document.getElementsByClassName("snarkTorrentEven");
-var active = document.getElementsByClassName("active");
-var inactive = document.getElementsByClassName("inactive");
-var downloading = document.getElementsByClassName("downloading");
-var seeding = document.getElementsByClassName("seeding");
-var complete = document.getElementsByClassName("complete");
-var incomplete = document.getElementsByClassName("incomplete");
-var peerinfo = document.getElementsByClassName("peerinfo");
-var debuginfo = document.getElementsByClassName("debuginfo");
-var i = 0;
+function initFilterBar() {
 
-function showAll() {
-  for (i = 0; i < allOdd.length; i++) {
-    allOdd[i].style.display = "table-row";
+  var btnAll = document.getElementById("all");
+  var btnActive = document.getElementById("active");
+  var btnInactive = document.getElementById("inactive");
+  var btnDownloading = document.getElementById("downloading");
+  var btnSeeding = document.getElementById("seeding");
+  var btnComplete = document.getElementById("complete");
+  var btnIncomplete = document.getElementById("incomplete");
+
+  var filtered = false;
+
+  function clean() {
+    var filter = document.getElementById("filter");
+    if (filter) {
+        filter.remove();
+    }
   }
-  for (i = 0; i < allEven.length; i++) {
-    allEven[i].style.display = "table-row";
+
+  function showAll() {
+    clean();
+    var css = document.createElement("link");
+    css.type="text/css";
+    css.rel="stylesheet";
+    css.href=".resources/filters/all.css";
+    css.setAttribute("id", "filter");
+    document.head.appendChild(css);
+    btnAll.checked = true;
   }
+
+  function showActive() {
+    clean();
+    var css = document.createElement("link");
+    css.type="text/css";
+    css.rel="stylesheet";
+    css.href=".resources/filters/active.css";
+    css.setAttribute("id", "filter");
+    document.head.appendChild(css);
+    btnActive.checked = true;
+    filtered = true;
+  }
+
+  function showInactive() {
+    clean();
+    var css = document.createElement("link");
+    css.type="text/css";
+    css.rel="stylesheet";
+    css.href=".resources/filters/inactive.css";
+    css.setAttribute("id", "filter");
+    document.head.appendChild(css);
+    btnInactive.checked = true;
+    filtered = true;
+  }
+
+  function showDownloading() {
+    clean();
+    var css = document.createElement("link");
+    css.type="text/css";
+    css.rel="stylesheet";
+    css.href=".resources/filters/downloading.css";
+    css.setAttribute("id", "filter");
+    document.head.appendChild(css);
+    btnDownloading.checked = true;
+    filtered = true;
+  }
+
+  function showSeeding() {
+    clean();
+    var css = document.createElement("link");
+    css.type="text/css";
+    css.rel="stylesheet";
+    css.href=".resources/filters/seeding.css";
+    css.setAttribute("id", "filter");
+    document.head.appendChild(css);
+    btnSeeding.checked = true;
+    filtered = true;
+  }
+
+  function showComplete() {
+    clean();
+    var css = document.createElement("link");
+    css.type="text/css";
+    css.rel="stylesheet";
+    css.href=".resources/filters/complete.css";
+    css.setAttribute("id", "filter");
+    document.head.appendChild(css);
+    btnComplete.checked = true;
+    filtered = true;
+  }
+
+  function showIncomplete() {
+    clean();
+    var css = document.createElement("link");
+    css.type="text/css";
+    css.rel="stylesheet";
+    css.href=".resources/filters/incomplete.css";
+    css.setAttribute("id", "filter");
+    document.head.appendChild(css);
+    btnIncomplete.checked = true;
+    filtered = true;
+  }
+
+  btnAll.addEventListener("click", showAll, false);
+  btnActive.addEventListener("click", showActive, false);
+  btnInactive.addEventListener("click", showInactive, false);
+  btnDownloading.addEventListener("click", showDownloading, false);
+  btnSeeding.addEventListener("click", showSeeding, false);
+  btnComplete.addEventListener("click", showComplete, false);
+  btnIncomplete.addEventListener("click", showIncomplete, false);
+
 }
 
-function showActive() {
-  for (i = 0; i < allOdd.length; i++) {
-    allOdd[i].style.display = "none";
-  }
-  for (i = 0; i < allEven.length; i++) {
-    allEven[i].style.display = "none";
-  }
-  for (i = 0; i < active.length; i++) {
-    active[i].style.display = "table-row";
-  }
-  for (i = 0; i < peerinfo.length; i++) {
-    peerinfo[i].style.display = "table-row";
-  }
-  for (i = 0; i < debuginfo.length; i++) {
-    debuginfo[i].style.display = "table-row";
-  }
-}
-
-function showInactive() {
-  for (i = 0; i < allOdd.length; i++) {
-    allOdd[i].style.display = "none";
-  }
-  for (i = 0; i < allEven.length; i++) {
-    allEven[i].style.display = "none";
-  }
-  for (i = 0; i < inactive.length; i++) {
-    inactive[i].style.display = "table-row";
-  }
-}
-
-function showDownloading() {
-  for (i = 0; i < allOdd.length; i++) {
-    allOdd[i].style.display = "none";
-  }
-  for (i = 0; i < allEven.length; i++) {
-    allEven[i].style.display = "none";
-  }
-  for (i = 0; i < downloading.length; i++) {
-    downloading[i].style.display = "table-row";
-  }
-  for (i = 0; i < peerinfo.length; i++) {
-    peerinfo[i].style.display = "table-row";
-  }
-  for (i = 0; i < debuginfo.length; i++) {
-    debuginfo[i].style.display = "table-row";
-  }
-}
-
-function showSeeding() {
-  for (i = 0; i < allOdd.length; i++) {
-    allOdd[i].style.display = "none";
-  }
-  for (i = 0; i < allEven.length; i++) {
-    allEven[i].style.display = "none";
-  }
-  for (i = 0; i < seeding.length; i++) {
-    seeding[i].style.display = "table-row";
-  }
-  for (i = 0; i < peerinfo.length; i++) {
-    peerinfo[i].style.display = "table-row";
-  }
-  for (i = 0; i < debuginfo.length; i++) {
-    debuginfo[i].style.display = "table-row";
-  }
-}
-
-function showComplete() {
-  for (i = 0; i < allOdd.length; i++) {
-    allOdd[i].style.display = "none";
-  }
-  for (i = 0; i < allEven.length; i++) {
-    allEven[i].style.display = "none";
-  }
-  for (i = 0; i < seeding.length; i++) {
-    seeding[i].style.display = "table-row";
-  }
-  for (i = 0; i < complete.length; i++) {
-    complete[i].style.display = "table-row";
-  }
-  for (i = 0; i < peerinfo.length; i++) {
-    peerinfo[i].style.display = "table-row";
-  }
-  for (i = 0; i < debuginfo.length; i++) {
-    debuginfo[i].style.display = "table-row";
-  }
-}
-
-function showIncomplete() {
-  for (i = 0; i < allOdd.length; i++) {
-    allOdd[i].style.display = "none";
-  }
-  for (i = 0; i < allEven.length; i++) {
-    allEven[i].style.display = "none";
-  }
-  for (i = 0; i < incomplete.length; i++) {
-    incomplete[i].style.display = "table-row";
-  }
-  for (i = 0; i < downloading.length; i++) {
-    downloading[i].style.display = "table-row";
-  }
-  for (i = 0; i < peerinfo.length; i++) {
-    peerinfo[i].style.display = "table-row";
-  }
-  for (i = 0; i < debuginfo.length; i++) {
-    debuginfo[i].style.display = "table-row";
-  }
+var main = document.getElementById("mainsection");
+var bar = document.getElementById("torrentDisplay");
+if (bar) {
+  main.addEventListener("mouseover", function() {
+    initFilterBar();
+  }, false);
 }

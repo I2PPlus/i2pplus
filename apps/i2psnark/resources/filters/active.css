@@ -1,0 +1,12 @@
+.snarkTorrentOdd, .snarkTorrentEven {
+    display: none;
+}
+
+.active, .peerinfo, .debuginfo {
+    display: table-row;
+}
+
+label[for="active"]::after {
+    margin-left: 1px;
+    content: "*";
+}

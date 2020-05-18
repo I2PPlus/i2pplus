@@ -1,0 +1,12 @@
+.snarkTorrentOdd, .snarkTorrentEven {
+    display: none;
+}
+
+.downloading, .peerinfo, .debuginfo {
+    display: table-row;
+}
+
+label[for="downloading"]::after {
+    margin-left: 1px;
+    content: "*";
+}
