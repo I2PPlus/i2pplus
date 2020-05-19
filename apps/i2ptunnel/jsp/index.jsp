@@ -1,5 +1,5 @@
 <%@include file="headers.jsi"%>
-<%@include file="headers-unsafe.jsi"%>
+<% //@include file="headers-unsafe.jsi"%>
 <%@page pageEncoding="UTF-8"%>
 <%@page trimDirectiveWhitespaces="true"%>
 <%@page contentType="text/html" import="net.i2p.i2ptunnel.web.IndexBean"%>
@@ -15,7 +15,6 @@
     <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
     <link href="/themes/console/images/favicon.ico" type="image/x-icon" rel="shortcut icon" />
     <script type="text/javascript" src="/js/iframeResizer/iframeResizer.contentWindow.js?<%=net.i2p.CoreVersion.VERSION%>"></script>
-    <script type="text/javascript" src="/js/toggleTunnelInfo.js?<%=net.i2p.CoreVersion.VERSION%>"></script>
     <style type="text/css">body {opacity: 0;}</style>
     <link rel="icon" href="<%=indexBean.getTheme()%>images/favicon.ico" />
     <link href="<%=indexBean.getTheme()%>i2ptunnel.css?<%=net.i2p.CoreVersion.VERSION%>" rel="stylesheet" type="text/css" /> 
@@ -60,8 +59,7 @@
   if (isInitialized) {
 %>
 <div class="panel" id="globalTunnelControl">
-    <noscript><style type=\"text/css\">.script {display: none;} .tunnelInfo {display: table-row !important;}</style></noscript>
-    <h2><%=intl._t("Global Tunnel Control")%>&nbsp;<button id="toggleInfo" class="script" style="float: right" onclick="toggleInfo();"><img src="/themes/console/dark/images/sort_down.png" title="Show Tunnel Info"/></button></h2>
+    <h2><%=intl._t("Global Tunnel Control")%>&nbsp;<button id="toggleInfo" class="script" style="float: right"><img src="/themes/console/dark/images/sort_down.png" title="Show Tunnel Info"/></button></h2>
     <table>
         <tr>
             <td class="buttons">
@@ -378,18 +376,15 @@
     </tr>
 </table>
 </div>
+<script type="text/javascript" src="/js/toggleTunnelInfo.js?<%=net.i2p.CoreVersion.VERSION%>"></script>
+<noscript><style type="text/css">.script {display: none} .tunnelInfo {display: table-row !important}</style></noscript>
 <%
 
   }  // isInitialized()
 
-%>
-<%
-
   if (!indexBean.isInitialized()) {
-     %><div id="notReady"><%=intl._t("Tunnels not initialized yet; please retry in a few moments.").replace("yet;", "yet&hellip;<br>")%></div><%
-  }  // !isInitialized()
-
 %>
+<div id="notReady"><%=intl._t("Tunnels not initialized yet; please retry in a few moments.").replace("yet;", "yet&hellip;<br>")%></div>
 <script nonce="<%=cspNonce%>" type="text/javascript">
   setInterval(function() {
     var xhr = new XMLHttpRequest();
@@ -401,8 +396,11 @@
       }
     }
     xhr.send();
-  }, 45000);
+  }, 10000);
 </script>
+<%
+  }  // !isInitialized()
+%>
 </div>
 <span data-iframe-height></span>
 <style type="text/css">body {opacity: 1 !important;}</style>
