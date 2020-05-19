@@ -6,7 +6,81 @@
     display: table-row;
 }
 
-label[for="downloading"]::after {
-    margin-left: 1px;
-    content: "*";
+.ubergine .snarkTorrentOdd, .ubergine .snarkTorrentEven {
+    background: #270027 !important;
+}
+
+.ubergine .snarkTorrentOdd td, .ubergine .snarkTorrentEven td {
+    border-bottom: 1px solid #180818 !important;
+}
+
+.ubergine #torrentDisplay input#downloading + label {
+    color: #fb0 !important;
+    text-shadow: 0 1px 1px #000 !important;
+    box-shadow: inset 0 0 0 1px #000, inset 2px 2px 2px 2px #3f1900 !important;
+    background: linear-gradient(to bottom, #f30, #f60) !important;
+}
+
+.vanilla .snarkTorrentOdd, .vanilla .snarkTorrentEven {
+    background: #dfd6d1 !important;
+}
+
+.vanilla #torrentDisplay input#downloading + label {
+    box-shadow: inset 0 0 0 1px #efe6e0, inset 2px 2px 3px 1px #59513b, 0 0 0 1px rgba(77, 69, 62, 0.1) !important;
+}
+
+.zilvero .snarkTorrentOdd, .zilvero .snarkTorrentEven {
+    background: #f0f0f0 !important;
+}
+
+.zilvero #torrentDisplay input#downloading + label {
+    color: #444 !important;
+    box-shadow: inset 0 0 0 1px #fff, inset 2px 2px 2px #999 !important;
+}
+
+.midnight .snarkTorrentOdd, .midnight .snarkTorrentEven {
+    background: #040408 !important;
+}
+
+.midnight #torrentDisplay input#downloading + label {
+    color: #349 !important;
+    text-shadow: 0 1px 1px #000 !important;
+    box-shadow: inset 0 0 0 1px #000, inset 3px 3px 3px #000 !important;
+    background: #113 !important;
+}
+
+.light .snarkTorrentOdd, .light .snarkTorrentEven {
+    background: #f0f0ff;
+}
+
+.light #torrentDisplay input#downloading + label {
+    color: #88a !important;
+    text-shadow: 0 1px 1px  #fff !important;
+    box-shadow: inset 0 0 0 1px #fff, inset 2px 2px 2px #99b !important;
+    background: linear-gradient(to bottom, #f2f2ff, #f6f6ff) !important;
+}
+
+.dark .snarkTorrentOdd, .dark .snarkTorrentEven {
+    background: #001000 !important;
+}
+
+.dark #torrentDisplay input#downloading + label {
+    color: #b30 !important;
+    text-shadow: 0 0 1px #510, 0 1px 2px #000 !important;
+    box-shadow: inset 0 0 0 1px #000, inset 2px 2px 2px 1px #100 !important;
+    background: linear-gradient(to bottom, #510, #610) !important;
+}
+
+.classic .snarkTorrentOdd, .classic .snarkTorrentEven {
+    background: #e7e8ff !important;
+}
+
+.classic #torrentDisplay input#downloading + label {
+    color: #66a !important;
+    box-shadow: inset 0 0 0 1px #fff, inset 2px 2px 2px #779 !important;
+    background: linear-gradient(to bottom, #eff2ff, #fff) !important;
+}
+
+#torrentDisplay input#downloading + label {
+    cursor: default !important;
 }

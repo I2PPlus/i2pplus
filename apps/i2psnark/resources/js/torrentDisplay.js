@@ -10,14 +10,39 @@ function initFilterBar() {
   var btnComplete = document.getElementById("complete");
   var btnIncomplete = document.getElementById("incomplete");
 
-  var filtered = false;
+  var allOdd = document.querySelectorAll(".snarkTorrentOdd");
+  var allEven = document.querySelectorAll(".snarkTorrentEven");
+  var active = document.querySelectorAll(".active");
+  var inactive = document.querySelectorAll(".inactive");
+  var downloading = document.querySelectorAll(".downloading");
+  var seeding = document.querySelectorAll(".seeding");
+  var complete = document.querySelectorAll(".complete");
+  var incomplete = document.querySelectorAll(".incomplete");
+  var peerinfo = document.querySelectorAll(".peerinfo");
+  var debuginfo = document.querySelectorAll(".debuginfo");
+
+  var filtered = document.querySelectorAll(".filtered");
 
   function clean() {
     var filter = document.getElementById("filter");
     if (filter) {
         filter.remove();
     }
+    allOdd.forEach((element) => {
+      element.classList.remove("filtered");
+    });
+    allEven.forEach((element) => {
+      element.classList.remove("filtered");
+    });
   }
+
+/*  function noResults() {
+    var torrents = document.getElementsByClassName("snarkTorrents")[0].getElementsByTagName("tbody")[0];
+    var row = torrents.insertRow(torrents.rows.length);
+    var cell = row.insertCell(0);
+    cell.colSpan = 12;
+    cell.innerHTML= "No results";
+  }*/
 
   function showAll() {
     clean();
@@ -39,7 +64,9 @@ function initFilterBar() {
     css.setAttribute("id", "filter");
     document.head.appendChild(css);
     btnActive.checked = true;
-    filtered = true;
+    active.forEach((element) => {
+      element.classList.add("filtered");
+    });
   }
 
   function showInactive() {
@@ -51,7 +78,9 @@ function initFilterBar() {
     css.setAttribute("id", "filter");
     document.head.appendChild(css);
     btnInactive.checked = true;
-    filtered = true;
+    inactive.forEach((element) => {
+      element.classList.add("filtered");
+    });
   }
 
   function showDownloading() {
@@ -63,7 +92,9 @@ function initFilterBar() {
     css.setAttribute("id", "filter");
     document.head.appendChild(css);
     btnDownloading.checked = true;
-    filtered = true;
+    downloading.forEach((element) => {
+      element.classList.add("filtered");
+    });
   }
 
   function showSeeding() {
@@ -75,7 +106,9 @@ function initFilterBar() {
     css.setAttribute("id", "filter");
     document.head.appendChild(css);
     btnSeeding.checked = true;
-    filtered = true;
+    seeding.forEach((element) => {
+      element.classList.add("filtered");
+    });
   }
 
   function showComplete() {
@@ -87,7 +120,9 @@ function initFilterBar() {
     css.setAttribute("id", "filter");
     document.head.appendChild(css);
     btnComplete.checked = true;
-    filtered = true;
+    complete.forEach((element) => {
+      element.classList.add("filtered");
+    });
   }
 
   function showIncomplete() {
@@ -99,7 +134,9 @@ function initFilterBar() {
     css.setAttribute("id", "filter");
     document.head.appendChild(css);
     btnIncomplete.checked = true;
-    filtered = true;
+    incomplete.forEach((element) => {
+      element.classList.add("filtered");
+    });
   }
 
   btnAll.addEventListener("click", showAll, false);
