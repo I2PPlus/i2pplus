@@ -630,7 +630,11 @@ td input[type="image"]::after {
 /* end header/column resize mitigation */
 
 .snarkTorrents td {
-    border-top: 1px solid #202 !important;
+    border-top: 1px solid #101 !important;
+}
+
+.snarkTorrentOdd.filtered:hover td, .snarkTorrentEven.filtered:hover td {
+    border-bottom: 1px solid #414 !important;
 }
 
 .snarkTorrents thead th  {
@@ -996,10 +1000,12 @@ td:first-child {
 
 .snarkTorrentOdd {
     background: #351933;
+    background: linear-gradient(to bottom, #351933, #3c2046);
 }
 
 .snarkTorrentEven {
     background: #270027;
+    background: linear-gradient(to bottom, #270027, #200020);
 }
 
 .peerinfo:nth-child(odd) {
@@ -5264,14 +5270,14 @@ tr:hover td.snarkTorrentDownloaded, tr:hover td.snarkTorrentRateDown, tr:hover t
 }
 
 td.snarkGraphicStatus img {
-    display: inline-block;
-    max-height: 20px;
     margin-top: -2px;
     margin-bottom: -2px;
+    max-height: 20px;
+    display: inline-block;
 }
 
 #torrentDisplay {
-    margin: -2px 0 0;
+    margin: -2px 1px 1px;
     padding: 3px 0;
     display: block;
     position: relative;
@@ -5297,8 +5303,8 @@ td.snarkGraphicStatus img {
 #torrentDisplay label {
     margin: 0;
     padding: 4px 8px;
-    display: inline-block;
     min-width: 80px;
+    display: inline-block;
     font-weight: bold;
     color: #848;
     text-shadow: 0 0 1px #000;

@@ -7,7 +7,7 @@
 }
 
 .ubergine .snarkTorrentOdd, .ubergine .snarkTorrentEven {
-    background: #270027 !important;
+    background: linear-gradient(to bottom, #270027, #200020) !important;
 }
 
 .ubergine .snarkTorrentOdd td, .ubergine .snarkTorrentEven td {
