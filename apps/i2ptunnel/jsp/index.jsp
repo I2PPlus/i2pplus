@@ -11,20 +11,19 @@
 <jsp:useBean class="net.i2p.i2ptunnel.ui.Messages" id="intl" scope="request" />
 <html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en" lang="en" id="tman">
 <head>
-   <title><%=intl._t("Tunnel Manager")%></title>
-    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
-    <link href="/themes/console/images/favicon.ico" type="image/x-icon" rel="shortcut icon" />
-    <script type="text/javascript" src="/js/iframeResizer/iframeResizer.contentWindow.js?<%=net.i2p.CoreVersion.VERSION%>"></script>
-    <style type="text/css">body {opacity: 0;}</style>
-    <link rel="icon" href="<%=indexBean.getTheme()%>images/favicon.ico" />
-    <link href="<%=indexBean.getTheme()%>i2ptunnel.css?<%=net.i2p.CoreVersion.VERSION%>" rel="stylesheet" type="text/css" /> 
-    <link href="<%=indexBean.getTheme()%>override.css?<%=net.i2p.CoreVersion.VERSION%>" rel="stylesheet" type="text/css" /> 
+<title><%=intl._t("Tunnel Manager")%></title>
+<meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
+<link href="/themes/console/images/favicon.ico" type="image/x-icon" rel="shortcut icon" />
+<script type="text/javascript" src="/js/iframeResizer/iframeResizer.contentWindow.js?<%=net.i2p.CoreVersion.VERSION%>"></script>
+<style type="text/css">body {opacity: 0;}</style>
+<link rel="icon" href="<%=indexBean.getTheme()%>images/favicon.ico" />
+<link href="<%=indexBean.getTheme()%>i2ptunnel.css?<%=net.i2p.CoreVersion.VERSION%>" rel="stylesheet" type="text/css" /> 
+<link href="<%=indexBean.getTheme()%>override.css?<%=net.i2p.CoreVersion.VERSION%>" rel="stylesheet" type="text/css" /> 
 </head>
 <body id="tunnelListPage">
 <div id="xhr_refresh">
 <%
   boolean isInitialized = indexBean.isInitialized();
-  String cspNonce = Integer.toHexString(net.i2p.util.RandomSource.getInstance().nextInt());
   String nextNonce = isInitialized ? net.i2p.i2ptunnel.web.IndexBean.getNextNonce() : null;
 
   // not synced, oh well

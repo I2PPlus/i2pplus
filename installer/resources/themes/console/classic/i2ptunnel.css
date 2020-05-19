@@ -242,12 +242,6 @@ select {
     appearance: none;
 }
 
-@media screen and (max-width: 1200px) {
-#reachableBy {
-    min-width: 0;
-}
-}
-
 select:hover {
     color: #41444d;
 }
@@ -1211,6 +1205,15 @@ input[name="nofilter_blindedPassword"] {
 .displayText, .displayText:empty:hover, .displayText:empty:focus {
     width: 260px;
     font-size: 8pt;
+}
+}
+
+@media screen and (max-width: 1200px) {
+#reachableBy {
+    min-width: 0;
+}
+th {
+    font-size: 9pt;
 }
 }
 
