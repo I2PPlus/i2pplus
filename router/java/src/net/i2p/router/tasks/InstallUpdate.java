@@ -51,7 +51,7 @@ public class InstallUpdate {
                 // carry on
                 return;
             }
-            System.out.println("INFO: Update file exists: " + Router.UPDATE_FILE + " - installing");
+            System.out.println("INFO: Update file exists: " + Router.UPDATE_FILE + " - installing...");
             // verify the whole thing first
             // we could remember this fails, and not bother restarting, but who cares...
             boolean ok = FileUtil.verifyZip(updateFile);
@@ -75,7 +75,7 @@ public class InstallUpdate {
                 if (ok) {
                     // We do this here so we may delete old jars before we restart
                     deleteListedFiles(context);
-                    System.out.println("INFO: Update installed");
+                    System.out.println("INFO: Update installed successfully!");
                 } else {
                     System.out.println("ERROR: Update failed!");
                 }
@@ -99,7 +99,7 @@ public class InstallUpdate {
                 }
                 // exit whether ok or not
                 if (context.hasWrapper())
-                    System.out.println("INFO: Restarting after update");
+                    System.out.println("INFO: Restarting after update...");
                 else
                     System.out.println("WARNING: Exiting after update, restart I2P");
             } catch (Throwable t) {
