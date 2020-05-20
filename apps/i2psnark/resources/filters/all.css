@@ -6,6 +6,14 @@
     display: table-row;
 }
 
+#torrentDisplay input#all {
+    pointer-events: none;
+}
+
+#torrentDisplay input:not(#all) {
+    pointer-events: auto;
+}
+
 .ubergine #torrentDisplay input#all + label {
     color: #fb0 !important;
     text-shadow: 0 1px 1px #000 !important;

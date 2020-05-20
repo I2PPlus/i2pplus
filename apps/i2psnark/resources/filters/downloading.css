@@ -6,6 +6,14 @@
     display: table-row;
 }
 
+#torrentDisplay input#downloading {
+    pointer-events: none;
+}
+
+#torrentDisplay input:not(#downloading) {
+    pointer-events: auto;
+}
+
 .ubergine .snarkTorrentOdd, .ubergine .snarkTorrentEven, .ubergine .peerinfo {
     background: linear-gradient(to bottom, #270027, #200020) !important;
 }
