@@ -1134,8 +1134,8 @@ public class I2PSnarkServlet extends BasicServlet {
         // load torrentDisplay script here to ensure table has loaded into dom
         boolean showStatusFilter = _manager.util().showStatusFilter();
         if (_contextName.equals(DEFAULT_NAME) && showStatusFilter) {
-//            out.write("<script src=\"" + _contextPath + WARBASE + "js/torrentDisplay.js?" + CoreVersion.VERSION + "\" type=\"text/javascript\" defer></script>\n");
-            out.write("<script src=\"/themes/torrentDisplay.js?" + CoreVersion.VERSION + "\" type=\"text/javascript\" defer></script>\n"); // debugging
+            out.write("<script src=\"" + _contextPath + WARBASE + "js/torrentDisplay.js?" + CoreVersion.VERSION + "\" type=\"text/javascript\" defer></script>\n");
+//            out.write("<script src=\"/themes/torrentDisplay.js?" + CoreVersion.VERSION + "\" type=\"text/javascript\" defer></script>\n"); // debugging
         }
         return start == 0;
     }
