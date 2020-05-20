@@ -12,18 +12,19 @@ function initFilterBar() {
 
   var allOdd = document.querySelectorAll(".snarkTorrentOdd");
   var allEven = document.querySelectorAll(".snarkTorrentEven");
-  var active = document.querySelectorAll(".active");
-  var inactive = document.querySelectorAll(".inactive");
-  var downloading = document.querySelectorAll(".downloading");
-  var seeding = document.querySelectorAll(".seeding");
-  var complete = document.querySelectorAll(".complete");
-  var incomplete = document.querySelectorAll(".incomplete");
+  var active = document.querySelectorAll(".active:not(.peerinfo)");
+  var inactive = document.querySelectorAll(".inactive:not(.peerinfo)");
+  var downloading = document.querySelectorAll(".downloading:not(.peerinfo)");
+  var seeding = document.querySelectorAll(".seeding:not(.peerinfo)");
+  var complete = document.querySelectorAll(".complete:not(.peerinfo)");
+  var incomplete = document.querySelectorAll(".incomplete:not(.peerinfo)");
   var peerinfo = document.querySelectorAll(".peerinfo");
   var debuginfo = document.querySelectorAll(".debuginfo");
 
   var filtered = document.querySelectorAll(".filtered");
 
   function clean() {
+    countFiltered();
     var filter = document.getElementById("filter");
     if (filter) {
         filter.remove();
@@ -36,13 +37,46 @@ function initFilterBar() {
     });
   }
 
-/*  function noResults() {
+  function countFiltered() {
+    var filtered = document.querySelectorAll(".filtered");
+      showResults();
+  }
+
+  function showResults() {
     var torrents = document.getElementsByClassName("snarkTorrents")[0].getElementsByTagName("tbody")[0];
-    var row = torrents.insertRow(torrents.rows.length);
+    var noResults = document.querySelectorAll(".noResults");
+    var noResultsSize = noResults.length;
+    var snarkTable = document.getElementById("snarkTorrents");
+    var filtered = document.querySelectorAll(".filtered");
+    if (noResultsSize > 0) {
+      noResults.forEach((elem) => {
+        elem.remove();
+      });
+    }
+    var row = torrents.insertRow(-1);
+    row.classList.add("noResults");
+    row.id = "filterResults";
     var cell = row.insertCell(0);
     cell.colSpan = 12;
-    cell.innerHTML= "No results";
-  }*/
+    var on = "all";
+    var peers = peerinfo.length;
+    if (btnActive.checked)
+      on = "active";
+    else if (btnInactive.checked)
+      on = "inactive";
+    else if (btnDownloading.checked)
+      on = "downloading";
+    else if (btnSeeding.checked)
+      on = "seeding";
+    else if (btnComplete.checked)
+      on = "completed";
+    else if (btnIncomplete.checked)
+      on = "incomplete";
+    if (filtered.length == 1)
+        cell.innerHTML= "Displaying " + (filtered.length) + " " + on + " torrent";
+    else
+        cell.innerHTML= "Displaying " + (filtered.length) + " " + on + " torrents";
+  }
 
   function showAll() {
     clean();
@@ -67,6 +101,7 @@ function initFilterBar() {
     active.forEach((element) => {
       element.classList.add("filtered");
     });
+//    countFiltered();
   }
 
   function showInactive() {

@@ -1229,6 +1229,14 @@ _:-ms-lang(x), .snarkTorrentOdd, .SnarkTorrentEven {
     background: #001000;
 }
 
+#filterResults td {
+    padding: 10px 8px !important;
+    text-align: center;
+    font-weight: bold;
+    font-style: italic;
+    background: linear-gradient(to bottom, #002000, #001000);
+}
+
 .snarkFileName {
     padding: 4px 5px !important;
     text-align: left !important;

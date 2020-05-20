@@ -1134,8 +1134,8 @@ public class I2PSnarkServlet extends BasicServlet {
         // load torrentDisplay script here to ensure table has loaded into dom
         boolean showStatusFilter = _manager.util().showStatusFilter();
         if (_contextName.equals(DEFAULT_NAME) && showStatusFilter) {
-            out.write("<script src=\"" + _contextPath + WARBASE + "js/torrentDisplay.js?" + CoreVersion.VERSION + "\" type=\"text/javascript\" defer></script>\n");
-//            out.write("<script src=\"/themes/torrentDisplay.js?" + CoreVersion.VERSION + "\" type=\"text/javascript\" defer></script>\n"); // debugging
+//            out.write("<script src=\"" + _contextPath + WARBASE + "js/torrentDisplay.js?" + CoreVersion.VERSION + "\" type=\"text/javascript\" defer></script>\n");
+            out.write("<script src=\"/themes/torrentDisplay.js?" + CoreVersion.VERSION + "\" type=\"text/javascript\" defer></script>\n"); // debugging
         }
         return start == 0;
     }
@@ -3591,7 +3591,7 @@ public class I2PSnarkServlet extends BasicServlet {
     private static final String HEADER_C = "nocollapse.css?" + CoreVersion.VERSION + "\" rel=\"stylesheet\" type=\"text/css\" >";
     private static final String HEADER_D = "snark_big.css?" + CoreVersion.VERSION + "\" rel=\"stylesheet\" type=\"text/css\" >";
     private static final String HEADER_Z = "override.css\" rel=\"stylesheet\" type=\"text/css\" >";
-    private static final String TABLE_HEADER = "<table border=\"0\" class=\"snarkTorrents\" width=\"100%\" >\n" + "<thead>\n";
+    private static final String TABLE_HEADER = "<table border=\"0\" class=\"snarkTorrents\" id=\"snarkTorrents\" width=\"100%\" >\n" + "<thead>\n";
     private static final String FOOTER = "</div>\n<span id=\"endOfPage\" data-iframe-height></span>\n</center>\n" +
                                          "<style type=\"text/css\">body{opacity: 1 !important;}</style>\n</body>\n</html>";
 

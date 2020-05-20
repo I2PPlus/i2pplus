@@ -1161,6 +1161,17 @@ tr:nth-child(even) + .peerinfo:nth-child(odd) {
     background: #eef;
 }
 
+#filterResults td {
+    padding: 10px 8px !important;
+    text-align: center;
+    font-weight: bold;
+    font-style: italic;
+    border-top: 1px solid #aaafce !important;
+    border-bottom: 1px solid #aaafce !important;
+    box-shadow: inset 0 0 0 1px #fff;
+    background: linear-gradient(to bottom, #fff, #ebebff);
+}
+
 .snarkFileName {
     padding: 4px 0 !important;
     text-align: left !important;

@@ -6,7 +6,7 @@
     display: table-row;
 }
 
-.ubergine .snarkTorrentOdd, .ubergine .snarkTorrentEven {
+.ubergine .snarkTorrentOdd, .ubergine .snarkTorrentEven, .ubergine .peerinfo {
     background: linear-gradient(to bottom, #270027, #200020) !important;
 }
 
@@ -21,7 +21,7 @@
     background: linear-gradient(to bottom, #f30, #f60) !important;
 }
 
-.vanilla .snarkTorrentOdd, .vanilla .snarkTorrentEven {
+.vanilla .snarkTorrentOdd, .vanilla .snarkTorrentEven, .vanilla .peerinfo {
     background: #dfd6d1 !important;
 }
 
@@ -29,7 +29,7 @@
     box-shadow: inset 0 0 0 1px #efe6e0, inset 2px 2px 3px 1px #59513b, 0 0 0 1px rgba(77, 69, 62, 0.1) !important;
 }
 
-.zilvero .snarkTorrentOdd, .zilvero .snarkTorrentEven {
+.zilvero .snarkTorrentOdd, .zilvero .snarkTorrentEven, .zilvero .peerinfo {
     background: #f0f0f0 !important;
 }
 
@@ -38,8 +38,8 @@
     box-shadow: inset 0 0 0 1px #fff, inset 2px 2px 2px #999 !important;
 }
 
-.midnight .snarkTorrentOdd, .midnight .snarkTorrentEven {
-    background: #040408 !important;
+.midnight .snarkTorrentOdd, .midnight .snarkTorrentEven, .midnight .peerinfo {
+    background: linear-gradient(to bottom, #040408, #030306) !important;
 }
 
 .midnight #torrentDisplay input#active + label {
@@ -49,8 +49,8 @@
     background: #113 !important;
 }
 
-.light .snarkTorrentOdd, .light .snarkTorrentEven {
-    background: #f0f0ff;
+.light .snarkTorrentOdd, .light .snarkTorrentEven, .light .peerinfo {
+    background: linear-gradient(to bottom, #f0f0ff, #e0e0ff) !important;
 }
 
 .light #torrentDisplay input#active + label {
@@ -60,8 +60,8 @@
     background: linear-gradient(to bottom, #f2f2ff, #f6f6ff) !important;
 }
 
-.dark .snarkTorrentOdd, .dark .snarkTorrentEven {
-    background: #001000 !important;
+.dark .snarkTorrentOdd, .dark .snarkTorrentEven, .dark .peerinfo {
+    background: linear-gradient(to bottom, #002000, #001000) !important;
 }
 
 .dark #torrentDisplay input#active + label {
@@ -71,7 +71,7 @@
     background: linear-gradient(to bottom, #510, #610) !important;
 }
 
-.classic .snarkTorrentOdd, .classic .snarkTorrentEven {
+.classic .snarkTorrentOdd, .classic .snarkTorrentEven, .classic .peerinfo {
     background: #e7e8ff !important;
 }
 
