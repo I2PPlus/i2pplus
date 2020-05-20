@@ -133,6 +133,7 @@ public class HomeHelper extends HelperBase {
         _x("inr Domain Registry") + S + _x("I2P Domain Name Registration") + S + "http://inr.i2p/" + S + I + "info/registrar.png" + S +
         "isitup.i2p" + S + _x("List of active eepsites and uptime monitor") + S + "http://isitup.i2p/" + S + I + "info/health.png" + S +
         _x("no Domain Registry") + S + _x("I2P Domain Name Registration") + S + "http://no.i2p/" + S + I + "info/registrar.png" + S +
+        "notbob.i2p" + S + _x("List of active eepsites and uptime monitor") + S + "http://notbob.i2p/" + S + I + "notbob.png" + S +
         _x("zzz Domain Registry") + S + _x("I2P Domain Name Registration") + S + "http://stats.i2p/i2p/addkey.html" + S + I + "info/registrar.png" + S +
 
 // forums + social
