@@ -263,7 +263,7 @@
 %>
 <tr><th><%=intl._t("Local destination")%></th><th><%=intl._t("Local Base32")%></th></tr>
 <tr>
-<td><input type="text" class="freetext" size="30" id="localDest" title="<%=intl._t("Read Only: Local Destination (if known)")%>" value="<%=destb64%>" readonly=\"readonly\" onclick="this.select();"/></td>
+<td><input type="text" class="freetext readonly" size="30" id="localDest" title="<%=intl._t("Read Only: Local Destination (if known)")%>" value="<%=destb64%>" readonly=\"readonly\" /></td>
 <td><span class="selectAll"><%=editBean.getDestHashBase32(curTunnel)%></span></td>
 </tr>
 <%

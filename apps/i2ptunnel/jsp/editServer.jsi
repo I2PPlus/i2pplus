@@ -208,7 +208,7 @@
         </tr>
         <tr>
             <td>
-                <input type="text" size="30" id="localDest" readonly="readonly" title="<%=intl._t("Read Only: Local Destination (if known)")%>" value="<%=editBean.getDestinationBase64(curTunnel)%>" wrap="off" class="freetext" onclick="this.select();" />
+                <input type="text" size="30" id="localDest" readonly="readonly" title="<%=intl._t("Read Only: Local Destination (if known)")%>" value="<%=editBean.getDestinationBase64(curTunnel)%>" wrap="off" class="freetext readonly" />
             </td>
             <td>
 <%
@@ -792,7 +792,7 @@
         } // showSharedKey
 %>
             <td>
-                <input type="<%=showSharedKey ? "text" : "hidden"%>" size="44" id="leasesetKey" name="encryptKey" title="<%=intl._t("Encryption key required to access this service")%>" readonly="readonly" value="<%=editBean.getEncryptKey(curTunnel)%>" class="freetext" onclick="this.select();" />
+                <input type="<%=showSharedKey ? "text" : "hidden"%>" size="44" id="leasesetKey" name="encryptKey" title="<%=intl._t("Encryption key required to access this service")%>" readonly="readonly" value="<%=editBean.getEncryptKey(curTunnel)%>" class="freetext readonly" />
             </td>
             <td>
                 <button class="control" type="submit" name="action" value="Generate" title="<%=intl._t("Generate new encryption key")%>"><%=intl._t("Generate")%></button> (<%=intl._t("Tunnel must be stopped first")%>)
@@ -850,7 +850,7 @@
                             <input type="text" value="<%=cname%>" size="44" name="nofilter_clientName" class="freetext clientName" />
                         </td>
                         <td>
-                            <input type="text" value="<%=ckey%>" size="44" name="clientKey" readonly="readonly" class="freetext clientKey" onclick="this.select();" />
+                            <input type="text" value="<%=ckey%>" size="44" name="clientKey readonly" readonly="readonly" class="freetext clientKey readonly" />
                         </td>
                          <td>
                             <input value="<%=i%>" type="checkbox" name="revokeClient" class="optbox" />
