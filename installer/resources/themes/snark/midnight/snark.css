@@ -3501,6 +3501,7 @@ code, tt {
 
 .iframed .snarkMessages {
     margin-top: -6px;
+    margin-bottom: -1px;
 }
 
 .snarkMessages + form {
