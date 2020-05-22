@@ -73,6 +73,7 @@ function initFilterBar() {
       else
         cell.innerHTML= "Displaying " + (filtered.length) + " " + on + " torrents";
     } else {
+      btnAll.checked = "true";
       var row = document.getElementById(filterResults);
       if (row)
         cleanResults();

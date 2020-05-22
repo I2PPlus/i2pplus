@@ -802,7 +802,6 @@ _:-ms-lang(x), .snarkTorrentOdd td, .snarkTorrentEven td, .snarkTorrentInfo td, 
     text-align: center;
     font-weight: bold;
     font-style: italic;
-    border-bottom: none !important;
     box-shadow: inset 0 0 0 1px #f5f2f0, inset 0 0 0 2px #fb0;
 }
 

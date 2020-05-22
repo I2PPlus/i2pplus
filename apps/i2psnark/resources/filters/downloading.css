@@ -58,7 +58,7 @@
 }
 
 .light .snarkTorrentOdd, .light .snarkTorrentEven, .light .peerinfo {
-    background: linear-gradient(to bottom, #f0f0ff, #e0e0ff) !important;
+    background: linear-gradient(to bottom, #fff, #eaeaff) !important;
 }
 
 .light #torrentDisplay input#downloading + label {

@@ -952,6 +952,10 @@ td {
     background: linear-gradient(to left, #f64384, #f64384 3px, transparent 3px);
 }
 
+.filtered {
+    border-top: 1px solid #ccccf0 !important;
+}
+
 #filterResults td {
     padding: 10px 8px !important;
     text-align: center;

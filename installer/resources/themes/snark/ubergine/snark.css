@@ -646,8 +646,8 @@ td input[type="image"]::after {
     text-align: center;
     font-weight: bold;
     font-style: italic;
-    border-top: 1px solid #414 !important;
-    border-bottom: none !important;
+    border-top: none !important;
+    border-bottom: 1px solid #414 !important;
     box-shadow: inset 0 0 0 1px #101;
     background: linear-gradient(to bottom, #303, #202);
 }

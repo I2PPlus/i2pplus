@@ -1234,6 +1234,7 @@ _:-ms-lang(x), .snarkTorrentOdd, .SnarkTorrentEven {
     text-align: center;
     font-weight: bold;
     font-style: italic;
+    border-bottom: 1px solid #252;
     background: linear-gradient(to bottom, #002000, #001000);
 }
 
