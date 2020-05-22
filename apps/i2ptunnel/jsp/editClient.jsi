@@ -6,8 +6,6 @@
     String tastopFirst = " title=\"" + aStopFirst + "\" ";
     String tbstopFirst = " title=\"" + bStopFirst + "\" ";
     String phdisabled = canChangePort ? "" : tbstopFirst;
-%>
-<%
     String tunnelTypeName;
     String tunnelType;
     if (curTunnel >= 0) {
@@ -415,9 +413,9 @@
           }
 %>
 <td colspan="2">
-<span class="multiOption"><label><input value="0" type="radio" id="ElGamal-2048" name="encType" <%=(has0 ? " checked=\"checked\"" : edisabled)%> class="optbox" />ElGamal-2048</label></span>
-<span class="multiOption"><label><input value="4" type="radio" id="ECIES-X25519" name="encType" <%=(has4 ? " checked=\"checked\"" : edisabled)%> class="optbox" />ECIES-X25519</label></span>
-<span class="multiOption"><label><input value="4,0" type="radio" id="ElG_ECIES" name="encType" <%=((has0 && has4) ? " checked=\"checked\"" : edisabled)%> class="optbox" /><%=intl._t("Both encryption types")%></label></span>
+<span class="multiOption"><label><input value="0" type="radio" id="ElGamal-2048" name="encType" <%=(has0 ? " checked=\"checked\"" : edisabled)%> class="optbox" />&nbsp;ElGamal-2048</label></span>
+<span class="multiOption"><label><input value="4" type="radio" id="ECIES-X25519" name="encType" <%=(has4 ? " checked=\"checked\"" : edisabled)%> class="optbox" />&nbsp;ECIES-X25519</label></span>
+<span class="multiOption"><label><input value="4,0" type="radio" id="ElG_ECIES" name="encType" <%=((has0 && has4) ? " checked=\"checked\"" : edisabled)%> class="optbox" />&nbsp;<%=intl._t("Both encryption types")%></label></span>
 </td>
 </tr>
 <tr><th colspan="2"><%=intl._t("Tunnel Options")%></th></tr>
@@ -533,12 +531,14 @@ minutes</span>
 <input type="text" name="closeTime" size="4" maxlength="4" title="<%=intl._t("Close Tunnel Idle Time")%>" value="<%=editBean.getCloseTime(curTunnel)%>" class="freetext period" />
 minutes</span>
 <span class="nowrap"><b><%=intl._t("New Keys on Reopen")%>:</b>
-<span class="multiOption"><label title="<%=intl._t("Change tunnel identity (destination) when tunnels reopen")%>">
+<span class="multiOption">
+<label title="<%=intl._t("Change tunnel identity (destination) when tunnels reopen")%>">
 <input value="1" type="radio" name="newDest" <%=(editBean.getNewDest(curTunnel) ? " checked=\"checked\"" : "")%> class="optbox" />
 <%=intl._t("Enable")%>
 </label>
 </span>
-<span class="multiOption"><label title="<%=intl._t("Retain tunnel identity (destination) when tunnels reopen")%>">
+<span class="multiOption">
+<label title="<%=intl._t("Retain tunnel identity (destination) when tunnels reopen")%>">
 <input value="0" type="radio" name="newDest" <%=(editBean.getNewDest(curTunnel) || editBean.getPersistentClientKey(curTunnel) ? "" : " checked=\"checked\"")%> class="optbox" />
 <%=intl._t("Disable")%>
 </label>
