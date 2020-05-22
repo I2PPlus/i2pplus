@@ -473,19 +473,18 @@
             }
 %>
 <div class="panel" id="messages">
-    <h2><%=intl._t("Status Messages")%></h2>
-    <table id="statusMessagesTable">
-        <tr>
-            <td id="tunnelMessages">
-        <textarea id="statusMessages" rows="4" cols="60" readonly="readonly"><%=msgs%></textarea>
-            </td>
-        </tr>
-    </table>
+<h2><%=intl._t("Status Messages")%></h2>
+<table id="statusMessagesTable">
+<tr>
+<td id="tunnelMessages">
+<textarea id="statusMessages" rows="4" cols="60" readonly="readonly"><%=msgs%></textarea>
+</td>
+</tr>
+</table>
 </div>
 <%
         } // action != null
 %>
-
 <div class="panel" id="ssl">
 <h2><%=intl._t("SSL Wizard")%> (<%=editBean.getTunnelName(curTunnel)%>)</h2>
 <form method="post" action="ssl" accept-charset="UTF-8">
@@ -522,7 +521,7 @@
 <%
     if (altb32 != null && altb32.length() > 0) {
 %>
-        <tr><td><b><%=intl._t("Alt Base32")%>:</b> <%=altb32%></td></tr>
+<tr><td><b><%=intl._t("Alt Base32")%>:</b> <%=altb32%></td></tr>
 <%
     }  // altb32
     final String CHECK = "&nbsp;&nbsp;&#x2714;";
@@ -848,6 +847,19 @@
   } else {
 %>
 <div id="notReady"><%=intl._t("Tunnels not initialized yet; please retry in a few moments.").replace("yet;", "yet&hellip;<br>")%></div>
+<script nonce="<%=cspNonce%>" type="text/javascript">
+  setInterval(function() {
+    var xhr = new XMLHttpRequest();
+    xhr.open('GET', '/i2ptunnel/?' + new Date().getTime(), true);
+    xhr.responseType = "text";
+    xhr.onreadystatechange = function () {
+      if (xhr.readyState==4 && xhr.status==200) {
+        document.getElementById("xhr_refresh").innerHTML=xhr.responseText;
+      }
+    }
+    xhr.send();
+  }, 10000);
+</script>
 <%
   }  // isInitialized()
 %>

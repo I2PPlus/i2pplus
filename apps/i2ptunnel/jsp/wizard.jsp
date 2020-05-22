@@ -44,467 +44,529 @@
 %>
 <html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en" lang="en" id="tman">
 <head>
-    <title><%=intl._t("I2P Tunnel Manager - Tunnel Creation Wizard")%></title>
-    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
-    <link href="/themes/console/images/favicon.ico" type="image/x-icon" rel="shortcut icon" />
-    <style type="text/css"> body {opacity: 0;}</style>
-    <link rel="icon" href="<%=editBean.getTheme()%>images/favicon.ico" />
-    <script type="text/javascript" src="/js/iframeResizer/iframeResizer.contentWindow.js?<%=net.i2p.CoreVersion.VERSION%>"></script>
-    <link href="<%=editBean.getTheme()%>i2ptunnel.css?<%=net.i2p.CoreVersion.VERSION%>" rel="stylesheet" type="text/css" />
-    <link href="<%=editBean.getTheme()%>override.css?<%=net.i2p.CoreVersion.VERSION%>" rel="stylesheet" type="text/css" />
+<title><%=intl._t("I2P Tunnel Manager - Tunnel Creation Wizard")%></title>
+<meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
+<style type="text/css"> body {opacity: 0;}</style>
+<link type="image/x-icon" rel="shortcut icon" href="<%=editBean.getTheme()%>images/favicon.ico" />
+<script type="text/javascript" src="/js/iframeResizer/iframeResizer.contentWindow.js?<%=net.i2p.CoreVersion.VERSION%>"></script>
+<link href="<%=editBean.getTheme()%>i2ptunnel.css?<%=net.i2p.CoreVersion.VERSION%>" rel="stylesheet" type="text/css" />
+<link href="<%=editBean.getTheme()%>override.css?<%=net.i2p.CoreVersion.VERSION%>" rel="stylesheet" type="text/css" />
 </head>
 <body id="tunnelWizardPage">
-
-    <form method="post" action="<%=(curPage == 7 ? "list" : "wizard") %>">
-
-        <div id="wizardPanel" class="panel">
-
-                <%
+<form method="post" action="<%=(curPage == 7 ? "list" : "wizard") %>">
+<div id="wizardPanel" class="panel">
+<%
                 if (curPage == 1) {
-                  %><h2><%=intl._t("Server or client tunnel?")%></h2><%
+%>
+<h2><%=intl._t("Server or client tunnel?")%>
+</h2>
+<%
                 } else if (curPage == 2) {
-                  %><h2><%=intl._t("Tunnel type")%>&nbsp;&nbsp;<span style="float: right;">
-                    <%
+%>
+<h2><%=intl._t("Tunnel type")%>&nbsp;&nbsp;<span style="float: right;">
+<%
                     if (tunnelIsClient) {
-                    %>
-                        <%=intl._t("Client")%><%
+%>
+<%=intl._t("Client")%>
+<%
                     } else {
-                    %>
-                        <%=intl._t("Server")%><%
+%>
+<%=intl._t("Server")%>
+<%
                     }
-                    %>
-                  </span></h2><%
+%>
+</span></h2>
+<%
                 } else if (curPage == 3) {
-                  %><h2><%=intl._t("Tunnel name and description")%>&nbsp;&nbsp;<span style="float: right;">
-                    <%
+%>
+<h2><%=intl._t("Tunnel name and description")%>&nbsp;&nbsp;<span style="float: right;">
+<%
                     if (tunnelIsClient) {
-                    %>
-                        <%=intl._t("Client")%><%
+%>
+<%=intl._t("Client")%>
+<%
                     } else {
-                    %>
-                        <%=intl._t("Server")%><%
+%>
+<%=intl._t("Server")%>
+<%
                     }
-                    %>
-                  </span></h2><%
+%>
+</span></h2>
+<%
                 } else if (curPage == 4 && tunnelIsClient) {
-                  %><h2><%=intl._t("Tunnel destination")%>&nbsp;&nbsp;<span style="float: right;"><%=intl._t("Client")%></span>
-                  </h2><%
+%>
+<h2><%=intl._t("Tunnel destination")%>&nbsp;&nbsp;<span style="float: right;"><%=intl._t("Client")%></span></h2>
+<%
                 } else if (curPage == 5) {
-                  %><h2><%=intl._t("Binding address and port")%>&nbsp;&nbsp;<span style="float: right;">
-                    <%
+%>
+<h2><%=intl._t("Binding address and port")%>&nbsp;&nbsp;<span style="float: right;">
+<%
                     if (tunnelIsClient) {
-                    %>
-                        <%=intl._t("Client")%><%
+%>
+<%=intl._t("Client")%>
+<%
                     } else {
-                    %>
-                        <%=intl._t("Server")%><%
+%>
+<%=intl._t("Server")%>
+<%
                     }
-                    %>
-                  </span></h2><%
+%>
+</span></h2>
+<%
                 } else if (curPage == 6) {
-                  %><h2><%=intl._t("Tunnel auto-start")%>&nbsp;&nbsp;<span style="float: right;">
-                    <%
+%>
+<h2><%=intl._t("Tunnel auto-start")%>&nbsp;&nbsp;<span style="float: right;">
+<%
                     if (tunnelIsClient) {
-                    %>
-                        <%=intl._t("Client")%><%
+%>
+<%=intl._t("Client")%>
+<%
                     } else {
-                    %>
-                        <%=intl._t("Server")%><%
+%>
+<%=intl._t("Server")%>
+<%
                     }
-                    %>
-                  </span></h2><%
+%>
+</span></h2>
+<%
                 } else if (curPage == 7) {
-                  %><h2><%=intl._t("Wizard completed")%></h2><%
-                } %>
-                <input type="hidden" name="page" value="<%=curPage%>" />
-                <input type="hidden" name="tunnel" value="null" />
-                <input type="hidden" name="nonce" value="<%=net.i2p.i2ptunnel.web.IndexBean.getNextNonce()%>" />
+%>
+<h2><%=intl._t("Wizard completed")%>
+</h2>
+<%
+                }
+%>
+<input type="hidden" name="page" value="<%=curPage%>" />
+<input type="hidden" name="tunnel" value="null" />
+<input type="hidden" name="nonce" value="<%=net.i2p.i2ptunnel.web.IndexBean.getNextNonce()%>" />
 
 
 <table>
-            <% /* Page 1 - Whether to make a client or server tunnel */
+<% /* Page 1 - Whether to make a client or server tunnel */
 
             if (curPage == 1) {
-            %>
-    <tr>
-        <td>
-            <p>
-                <%=intl._t("This wizard will take you through the various options available for creating tunnels in I2P.")%>
-            </p>
-            <p>
-                <%=intl._t("The first thing to decide is whether you want to create a server or a client tunnel.")%>
-                <%=intl._t("If you need to connect to a remote service, such as an IRC server inside I2P or a code repository, then you will require a CLIENT tunnel.")%>
-                <%=intl._t("On the other hand, if you wish to host a service for others to connect to you'll need to create a SERVER tunnel.")%>
-            </p>
-        </td>
-    </tr>
-    <tr>
-        <td class="options">
-            <span class="multiOption" id="isServer">
-                <label><input value="false" type="radio" id="baseType" name="isClient" class="optbox" />
-                &nbsp;<%=intl._t("Server Tunnel")%></label>
-            </span>
-            <span class="multiOption" id="isClient">
-                <label><input value="true" type="radio" id="baseType" name="isClient" class="optbox" checked="checked" />
-                &nbsp;<%=intl._t("Client Tunnel")%></label>
-            </span>
-        </td>
-    </tr>
-
-            <%
+%>
+<tr>
+<td>
+<p>
+<%=intl._t("This wizard will take you through the various options available for creating tunnels in I2P.")%>
+</p>
+<p>
+<%=intl._t("The first thing to decide is whether you want to create a server or a client tunnel.")%>
+<%=intl._t("If you need to connect to a remote service, such as an IRC server inside I2P or a code repository, then you will require a CLIENT tunnel.")%>
+<%=intl._t("On the other hand, if you wish to host a service for others to connect to you'll need to create a SERVER tunnel.")%>
+</p>
+</td>
+</tr>
+<tr>
+<td class="options">
+<span class="multiOption" id="isServer">
+<label><input value="false" type="radio" id="baseType" name="isClient" class="optbox" />&nbsp;<%=intl._t("Server Tunnel")%></label>
+</span>
+<span class="multiOption" id="isClient"><label><input value="true" type="radio" id="baseType" name="isClient" class="optbox" checked="checked" />&nbsp;<%=intl._t("Client Tunnel")%></label>
+</span>
+</td>
+</tr>
+<%
             } else {
-            %><input type="hidden" name="isClient" value="<%=tunnelIsClient%>" /><%
+%>
+<input type="hidden" name="isClient" value="<%=tunnelIsClient%>" />
+<%
             } /* curPage 1 */
 
                /* End page 1 */ %>
 
-            <% /* Page 2 - Tunnel type */
+<% /* Page 2 - Tunnel type */
 
             if (curPage == 2) {
-            %>
-    <tr>
-        <td>
-            <p>
-                <%=intl._t("There are several types of tunnels to choose from:")%>
-            </p>
-        </td>
-    </tr>
-    <tr>
-        <td id="wizardTable">
-            <table id="wizardTunnelTypes">
-            <%
+%>
+<tr><td><p><%=intl._t("There are several types of tunnels to choose from:")%></p></td></tr>
+<tr>
+<td id="wizardTable">
+<table id="wizardTunnelTypes">
+<%
                 if (tunnelIsClient) {
-                %>
-                <tr><td><%=intl._t("Standard")%></td><td>
-                    <%=intl._t("Basic tunnel for connecting to a single service inside I2P.")%>
-                    <%=intl._t("Try this if none of the tunnel types below fit your requirements, or you don't know what type of tunnel you need.")%>
-                </td></tr>
-                <tr><td>HTTP/HTTPS</td><td>
-                    <%=intl._t("Tunnel that acts as an HTTP proxy for reaching eepsites inside I2P.")%>
-                    <%=intl._t("Set your browser to use this tunnel as an http proxy, or set your \"http_proxy\" environment variable for command-line applications in GNU/Linux.")%>
-                    <%=intl._t("Websites outside I2P can also be reached if an HTTP proxy within I2P is known.")%>
-                </td></tr>
-                <tr><td>IRC</td><td>
-                    <%=intl._t("Customised client tunnel specific for IRC connections.")%>
-                    <%=intl._t("With this tunnel type, your IRC client will be able to connect to an IRC network inside I2P.")%>
-                    <%=intl._t("Each IRC network in I2P that you wish to connect to will require its own tunnel. (See Also, SOCKS IRC)")%>
-                </td></tr>
-                <tr><td>SOCKS 4/4a/5</td><td>
-                    <%=intl._t("A tunnel that implements the SOCKS protocol.")%>
-                    <%=intl._t("This enables both TCP and UDP connections to be made through a SOCKS outproxy within I2P.")%>
-                </td></tr>
-                <tr><td>SOCKS IRC</td><td>
-                    <%=intl._t("A client tunnel implementing the SOCKS protocol, which is customised for connecting to IRC networks.")%>
-                    <%=intl._t("With this tunnel type, IRC networks in I2P can be reached by typing the I2P address into your IRC client, and configuring the IRC client to use this SOCKS tunnel.")%>
-                    <%=intl._t("This means that only one I2P tunnel is required rather than a separate tunnel per IRC network.")%>
-                    <%=intl._t("IRC networks outside I2P can also be reached if a SOCKS outproxy within I2P is known, though it depends on whether or not the outproxy has been blocked by the IRC network.")%>
-                </td></tr><%
+%>
+<tr>
+<td><%=intl._t("Standard")%></td>
+<td>
+<%=intl._t("Basic tunnel for connecting to a single service inside I2P.")%>
+<%=intl._t("Try this if none of the tunnel types below fit your requirements, or you don't know what type of tunnel you need.")%></td>
+</tr>
+<tr>
+<td>HTTP/HTTPS</td>
+<td><%=intl._t("Tunnel that acts as an HTTP proxy for reaching eepsites inside I2P.")%>
+<%=intl._t("Set your browser to use this tunnel as an http proxy, or set your \"http_proxy\" environment variable for command-line applications in GNU/Linux.")%>
+<%=intl._t("Websites outside I2P can also be reached if an HTTP proxy within I2P is known.")%>
+</td>
+</tr>
+<tr>
+<td>IRC</td>
+<td>
+<%=intl._t("Customised client tunnel specific for IRC connections.")%>
+<%=intl._t("With this tunnel type, your IRC client will be able to connect to an IRC network inside I2P.")%>
+<%=intl._t("Each IRC network in I2P that you wish to connect to will require its own tunnel. (See Also, SOCKS IRC)")%>
+</td>
+</tr>
+<tr>
+<td>SOCKS 4/4a/5</td>
+<td>
+<%=intl._t("A tunnel that implements the SOCKS protocol.")%>
+<%=intl._t("This enables both TCP and UDP connections to be made through a SOCKS outproxy within I2P.")%>
+</td>
+</tr>
+<tr>
+<td>SOCKS IRC</td>
+<td>
+<%=intl._t("A client tunnel implementing the SOCKS protocol, which is customised for connecting to IRC networks.")%>
+<%=intl._t("With this tunnel type, IRC networks in I2P can be reached by typing the I2P address into your IRC client, and configuring the IRC client to use this SOCKS tunnel.")%>
+<%=intl._t("This means that only one I2P tunnel is required rather than a separate tunnel per IRC network.")%>
+<%=intl._t("IRC networks outside I2P can also be reached if a SOCKS outproxy within I2P is known, though it depends on whether or not the outproxy has been blocked by the IRC network.")%>
+</td>
+</tr>
+<%
                 } else {
-                %>
-                <tr><td><%=intl._t("Standard")%></td><td>
-                    <%=intl._t("A basic server tunnel for hosting a generic service inside I2P.")%>
-                    <%=intl._t("Try this if none of the tunnel types below fit your requirements, or you don't know what type of tunnel you need.")%>
-                </td></tr>
-                <tr><td>HTTP</td><td>
-                    <%=intl._t("A server tunnel that is customised for HTTP connections.")%>
-                    <%=intl._t("Use this tunnel type if you want to host an eepsite.")%>
-                </td></tr>
-                <tr><td>IRC</td><td>
-                    <%=intl._t("A customised server tunnel for hosting IRC networks inside I2P.")%>
-                    <%=intl._t("Usually, a separate tunnel needs to be created for each IRC server that is to be accessible inside I2P.")%>
-                </td></tr><%
+%>
+<tr>
+<td><%=intl._t("Standard")%></td>
+<td>
+<%=intl._t("A basic server tunnel for hosting a generic service inside I2P.")%>
+<%=intl._t("Try this if none of the tunnel types below fit your requirements, or you don't know what type of tunnel you need.")%>
+</td>
+</tr>
+<tr>
+<td>HTTP</td>
+<td>
+<%=intl._t("A server tunnel that is customised for HTTP connections.")%>
+<%=intl._t("Use this tunnel type if you want to host an eepsite.")%>
+</td>
+</tr>
+<tr>
+<td>IRC</td>
+<td>
+<%=intl._t("A customised server tunnel for hosting IRC networks inside I2P.")%>
+<%=intl._t("Usually, a separate tunnel needs to be created for each IRC server that is to be accessible inside I2P.")%>
+</td>
+</tr>
+<%
                 }
-                %>
+%>
 
-                <tr>
-                    <td>
-                        <%=intl._t("Select tunnel type")%>:
-                    </td>
-                    <td>
-                <%
+<tr>
+<td><%=intl._t("Select tunnel type")%>:</td>
+<td>
+<%
                 if (tunnelIsClient) {
-                %><select name="type">
-                    <option value="client"><%=intl._t("Standard")%></option>
-                    <option value="httpclient">HTTP/HTTPS</option>
-                    <option value="ircclient">IRC</option>
-                    <option value="sockstunnel">SOCKS 4/4a/5</option>
-                    <option value="socksirctunnel">SOCKS IRC</option>
-                </select><%
+%>
+<select name="type">
+<option value="client"><%=intl._t("Standard")%></option>
+<option value="httpclient">HTTP/HTTPS</option>
+<option value="ircclient">IRC</option>
+<option value="sockstunnel">SOCKS 4/4a/5</option>
+<option value="socksirctunnel">SOCKS IRC</option>
+</select>
+<%
                 } else {
-                %><select name="type">
-                    <option value="server"><%=intl._t("Standard")%></option>
-                    <option value="httpserver">HTTP</option>
-                    <option value="ircserver">IRC</option>
-                </select><%
+%>
+<select name="type">
+<option value="server"><%=intl._t("Standard")%></option>
+<option value="httpserver">HTTP</option>
+<option value="ircserver">IRC</option>
+</select>
+<%
                 } /* tunnelIsClient */ %>
-                    </td>
-                </tr>
-            </table>
-        </td>
-    </tr>
-            <%
+</td>
+</tr>
+</table>
+</td>
+</tr>
+<%
             } else {
-            %><input type="hidden" name="type" value="<%=tunnelType%>" /><%
+%>
+<input type="hidden" name="type" value="<%=tunnelType%>" />
+<%
             } /* curPage 2 */
 
                /* End page 2 */ %>
 
-            <% /* Page 3 - Name and description */
+<% /* Page 3 - Name and description */
 
             if (curPage == 3) {
-            %>
-    <tr>
-        <td>
-            <p>
-                <%=intl._t("Choose a name and description for your tunnel.")%>
-                <%=intl._t("These can be anything you want - they are just for ease of identifying the tunnel in the routerconsole.")%>
-            </p>
-        </td>
-    </tr>
-    <tr>
-        <td>
-            <span class="tag"><%=intl._t("Name")%>:</span>
-                <input type="text" size="30" maxlength="50" name="name" id="name" placeholder="New Tunnel" title="<%=intl._t("Name of tunnel to be displayed on Tunnel Manager home page and the router console sidebar")%>" value="<%=(!"null".equals(request.getParameter("name")) ? net.i2p.data.DataHelper.stripHTML(request.getParameter("name")) : "" ) %>" class="freetext" />
-        </td>
-    </tr>
-    <tr>
-        <td>
-            <span class="tag"><%=intl._t("Description")%>:</span>
-                <input type="text" size="60" maxlength="80" name="nofilter_description"  id="description" title="<%=intl._t("Description of tunnel to be displayed on Tunnel Manager home page")%>" value="<%=(!"null".equals(request.getParameter("nofilter_description")) ? net.i2p.data.DataHelper.stripHTML(request.getParameter("nofilter_description")) : "" ) %>" class="freetext" />
-        </td>
-    </tr>
-            <%
+%>
+<tr>
+<td>
+<p>
+<%=intl._t("Choose a name and description for your tunnel.")%>
+<%=intl._t("These can be anything you want - they are just for ease of identifying the tunnel in the routerconsole.")%>
+</p>
+</td>
+</tr>
+<tr>
+<td>
+<span class="tag"><%=intl._t("Name")%>:</span>
+<input type="text" size="30" maxlength="50" name="name" id="name" placeholder="New Tunnel" title="<%=intl._t("Name of tunnel to be displayed on Tunnel Manager home page and the router console sidebar")%>" value="<%=(!"null".equals(request.getParameter("name")) ? net.i2p.data.DataHelper.stripHTML(request.getParameter("name")) : "" ) %>" class="freetext" />
+</td>
+</tr>
+<tr>
+<td>
+<span class="tag"><%=intl._t("Description")%>:</span>
+<input type="text" size="60" maxlength="80" name="nofilter_description"  id="description" title="<%=intl._t("Description of tunnel to be displayed on Tunnel Manager home page")%>" value="<%=(!"null".equals(request.getParameter("nofilter_description")) ? net.i2p.data.DataHelper.stripHTML(request.getParameter("nofilter_description")) : "" ) %>" class="freetext" />
+</td>
+</tr>
+<%
             } else {
-            %><input type="hidden" name="name" value="<%=net.i2p.data.DataHelper.stripHTML(request.getParameter("name"))%>" />
-            <input type="hidden" name="nofilter_description" value="<%=net.i2p.data.DataHelper.stripHTML(request.getParameter("nofilter_description"))%>" /><%
+%>
+<input type="hidden" name="name" value="<%=net.i2p.data.DataHelper.stripHTML(request.getParameter("name"))%>" />
+<input type="hidden" name="nofilter_description" value="<%=net.i2p.data.DataHelper.stripHTML(request.getParameter("nofilter_description"))%>" />
+<%
             } /* curPage 3 */
-
                /* End page 3 */ %>
-
-            <% /* Page 4 - Target destination or proxy list */
-
+<% /* Page 4 - Target destination or proxy list */
             if (tunnelIsClient) {
-              if ("httpclient".equals(tunnelType) || "connectclient".equals(tunnelType) || "sockstunnel".equals(tunnelType) || "socksirctunnel".equals(tunnelType)) {
-                if (curPage == 4) {
-          %>
-    <tr>
-        <td>
-            <p>
-                <%=intl._t("If you know of any outproxies for this type of tunnel (either HTTP or SOCKS), fill them in below.")%>
-                <%=intl._t("Separate multiple proxies with commas.")%>
-            </p>
-        </td>
-    </tr>
-    <tr>
-        <td>
-            <span class="tag"><%=intl._t("Outproxies")%>:</span>
-                <input type="text" size="30" id="proxyList" name="proxyList" title="<%=intl._t("List of I2P outproxy destinations, separated with commas (e.g. proxy1.i2p,proxy2.i2p)")%>" value="<%=(!"null".equals(request.getParameter("proxyList")) ? net.i2p.data.DataHelper.stripHTML(request.getParameter("proxyList")) : "" ) %>" class="freetext" />
-        </td>
-    </tr>
-            <%
-                } else {
-            %><input type="hidden" name="proxyList" value="<%=net.i2p.data.DataHelper.stripHTML(request.getParameter("proxyList"))%>" /><%
+                if ("httpclient".equals(tunnelType) || "connectclient".equals(tunnelType) || "sockstunnel".equals(tunnelType) || "socksirctunnel".equals(tunnelType)) {
+                    if (curPage == 4) {
+%>
+<tr>
+<td>
+<p>
+<%=intl._t("If you know of any outproxies for this type of tunnel (either HTTP or SOCKS), fill them in below.")%>
+<%=intl._t("Separate multiple proxies with commas.")%>
+</p>
+</td>
+</tr>
+<tr>
+<td>
+<span class="tag"><%=intl._t("Outproxies")%>:</span>
+<input type="text" size="30" id="proxyList" name="proxyList" title="<%=intl._t("List of I2P outproxy destinations, separated with commas (e.g. proxy1.i2p,proxy2.i2p)")%>" value="<%=(!"null".equals(request.getParameter("proxyList")) ? net.i2p.data.DataHelper.stripHTML(request.getParameter("proxyList")) : "" ) %>" class="freetext" />
+</td>
+</tr>
+<%
+                    } else {
+%>
+<input type="hidden" name="proxyList" value="<%=net.i2p.data.DataHelper.stripHTML(request.getParameter("proxyList"))%>" />
+<%
                 } /* curPage 4 */
-              } else if ("client".equals(tunnelType) || "ircclient".equals(tunnelType)) {
+            } else if ("client".equals(tunnelType) || "ircclient".equals(tunnelType)) {
                 if (curPage == 4) {
-            %>
-    <tr>
-        <td>
-            <p>
-                <%=intl._t("Type in the I2P destination of the service that this client tunnel should connect to.")%>
-                <%=intl._t("This could be the full Base64 destination key, or an I2P URL from your address book.")%>
-            </p>
-        </td>
-    </tr>
-    <tr>
-        <td>
-            <span class="tag"><%=intl._t("Tunnel Destination")%>:</span>
-                <input type="text" size="30" id="targetDestination" name="targetDestination" title="<%=intl._t("Enter a b64 or .i2p address here")%>" value="<%=(!"null".equals(request.getParameter("targetDestination")) ? net.i2p.data.DataHelper.stripHTML(request.getParameter("targetDestination")) : "" ) %>" class="freetext" />
-            &nbsp;(<%=intl._t("name, name:port, or destination")%>
-                     )
-        </td>
-    </tr>
-            <%
+%>
+<tr>
+<td>
+<p>
+<%=intl._t("Type in the I2P destination of the service that this client tunnel should connect to.")%>
+<%=intl._t("This could be the full Base64 destination key, or an I2P URL from your address book.")%>
+</p>
+</td>
+</tr>
+<tr>
+<td>
+<span class="tag"><%=intl._t("Tunnel Destination")%>:</span>
+<input type="text" size="30" id="targetDestination" name="targetDestination" title="<%=intl._t("Enter a b64 or .i2p address here")%>" value="<%=(!"null".equals(request.getParameter("targetDestination")) ? net.i2p.data.DataHelper.stripHTML(request.getParameter("targetDestination")) : "" ) %>" class="freetext" />
+&nbsp;(<%=intl._t("name, name:port, or destination")%>)
+</td>
+</tr>
+<%
                 } else {
-            %><input type="hidden" name="targetDestination" value="<%=net.i2p.data.DataHelper.stripHTML(request.getParameter("targetDestination"))%>" /><%
+%>
+<input type="hidden" name="targetDestination" value="<%=net.i2p.data.DataHelper.stripHTML(request.getParameter("targetDestination"))%>" />
+<%
                 } /* curPage 4 */
-              }
-            } /* tunnelIsClient */
-
+            }
+        } /* tunnelIsClient */
                /* End page 4 */ %>
 
-            <% /* Page 5 - Binding ports and addresses*/
-
-            if (!tunnelIsClient) {
-              if (curPage == 5) {
-            %>
-    <tr>
-        <td>
-            <p>
-                <%=intl._t("This is the IP that your service is running on, this is usually on the same machine so 127.0.0.1 is autofilled.")%>
-                <% //TODO For some reason streamrclient also uses this. %>
-            </p>
-        </td>
-    </tr>
-    <tr>
-        <td>
-            <span class="tag"><%=intl._t("Host")%>:</span>
-                <input type="text" size="20" id="targetHost" name="targetHost" title="<%=intl._t("Hostname or IP address of the target server")%>" placeholder="127.0.0.1" value="<%=(!"null".equals(request.getParameter("targetHost")) ? net.i2p.data.DataHelper.stripHTML(request.getParameter("targetHost")) : "127.0.0.1" ) %>" class="freetext" />
-        </td>
-    </tr>
-            <%
-              } else {
-            %><input type="hidden" name="targetHost" value="<%=net.i2p.data.DataHelper.stripHTML(request.getParameter("targetHost"))%>" /><%
-              } /* curPage 5 */
-            } /* streamrclient or !streamrserver */ %>
-            <%
-            if (!tunnelIsClient) {
-              if (curPage == 5) {
-            %>
-    <tr>
-        <td>
-            <p>
-                <%=intl._t("This is the port that the service is accepting connections on.")%>
-            </p>
-        </td>
-    </tr>
-    <tr>
-        <td>
-            <span class="tag"><%=intl._t("Port")%>:</span>
-                <input type="text" size="6" maxlength="5" id="targetPort" name="targetPort" title="<%=intl._t("Specify the port the server is running on")%>" value="<%=(!"null".equals(request.getParameter("targetPort")) ? net.i2p.data.DataHelper.stripHTML(request.getParameter("targetPort")) : "" ) %>" class="freetext" />
-        </td>
-    </tr>
-            <%
-              } else {
-            %><input type="hidden" name="targetPort" value="<%=net.i2p.data.DataHelper.stripHTML(request.getParameter("targetPort"))%>" /><%
-              } /* curPage 5 */
-            } /* !tunnelIsClient */ %>
-            <%
-            if (tunnelIsClient) {
-              if (curPage == 5) {
-            %>
-    <tr>
-        <td>
-            <p>
-                <%=intl._t("This is the port that the client tunnel will be accessed from locally.")%>
-            </p>
-        </td>
-    </tr>
-    <tr>
-        <td>
-            <span class="tag"><%=intl._t("Port")%>:</span>
-                <input type="text" size="6" maxlength="5" id="port" name="port" title="<%=intl._t("Specify the local port this service should be accessible from")%>" value="<%=(!"null".equals(request.getParameter("port")) ? net.i2p.data.DataHelper.stripHTML(request.getParameter("port")) : "" ) %>" class="freetext" />
-        </td>
-    </tr>
-            <%
-              } else {
-            %><input type="hidden" name="port" value="<%=net.i2p.data.DataHelper.stripHTML(request.getParameter("port"))%>" /><%
-              } /* curPage 5 */
-            } /* tunnelIsClient or httpbidirserver */ %>
-            <%
-            if (tunnelIsClient) {
-              if (curPage == 5) {
-            %>
-    <tr>
-        <td>
-            <p>
-                <%=intl._t("How do you want this tunnel to be accessed? By just this machine, your entire subnet, or external internet?")%>
-                <%=intl._t("You will most likely want to just allow 127.0.0.1")%><%
-                //TODO Note that it is relevant to most Client tunnels, and httpbidirserver and streamrserver tunnels.
-                //TODO So the wording may need to change slightly for the client vs. server tunnels. %>
-            </p>
-        </td>
-    </tr>
-    <tr>
-        <td>
-            <span class="tag"><%=intl._t("Reachable by")%>:</span>
-                <select id="reachableBy" name="reachableBy" title="<%=intl._t("Listening interface (IP address) for client access (normally 127.0.0.1)")%>" class="selectbox">
-              <%
-                    String clientInterface = request.getParameter("reachableBy");
-                    if ("null".equals(clientInterface)) {
-                      clientInterface = "127.0.0.1";
+<% /* Page 5 - Binding ports and addresses*/
+        if (!tunnelIsClient) {
+            if (curPage == 5) {
+%>
+<tr>
+<td>
+<p>
+<%=intl._t("This is the IP that your service is running on, this is usually on the same machine so 127.0.0.1 is autofilled.")%>
+<% //TODO For some reason streamrclient also uses this. %>
+</p>
+</td>
+</tr>
+<tr>
+<td>
+<span class="tag"><%=intl._t("Host")%>:</span>
+<input type="text" size="20" id="targetHost" name="targetHost" title="<%=intl._t("Hostname or IP address of the target server")%>" placeholder="127.0.0.1" value="<%=(!"null".equals(request.getParameter("targetHost")) ? net.i2p.data.DataHelper.stripHTML(request.getParameter("targetHost")) : "127.0.0.1" ) %>" class="freetext" />
+</td>
+</tr>
+<%
+            } else {
+%>
+<input type="hidden" name="targetHost" value="<%=net.i2p.data.DataHelper.stripHTML(request.getParameter("targetHost"))%>" />
+<%
+            } /* curPage 5 */
+        } /* streamrclient or !streamrserver */ %>
+<%
+        if (!tunnelIsClient) {
+            if (curPage == 5) {
+%>
+<tr>
+<td>
+<p>
+<%=intl._t("This is the port that the service is accepting connections on.")%>
+</p>
+</td>
+</tr>
+<tr>
+<td>
+<span class="tag"><%=intl._t("Port")%>:</span>
+<input type="text" size="6" maxlength="5" id="targetPort" name="targetPort" title="<%=intl._t("Specify the port the server is running on")%>" value="<%=(!"null".equals(request.getParameter("targetPort")) ? net.i2p.data.DataHelper.stripHTML(request.getParameter("targetPort")) : "" ) %>" class="freetext" />
+</td>
+</tr>
+<%
+            } else {
+%>
+<input type="hidden" name="targetPort" value="<%=net.i2p.data.DataHelper.stripHTML(request.getParameter("targetPort"))%>" />
+<%
+            } /* curPage 5 */
+        } /* !tunnelIsClient */ %>
+<%
+        if (tunnelIsClient) {
+            if (curPage == 5) {
+%>
+<tr>
+<td>
+<p>
+<%=intl._t("This is the port that the client tunnel will be accessed from locally.")%>
+</p>
+</td>
+</tr>
+<tr>
+<td>
+<span class="tag"><%=intl._t("Port")%>:</span>
+<input type="text" size="6" maxlength="5" id="port" name="port" title="<%=intl._t("Specify the local port this service should be accessible from")%>" value="<%=(!"null".equals(request.getParameter("port")) ? net.i2p.data.DataHelper.stripHTML(request.getParameter("port")) : "" ) %>" class="freetext" />
+</td>
+</tr>
+<%
+            } else {
+%>
+<input type="hidden" name="port" value="<%=net.i2p.data.DataHelper.stripHTML(request.getParameter("port"))%>" />
+<%
+            } /* curPage 5 */
+        } /* tunnelIsClient or httpbidirserver */ %>
+<%
+        if (tunnelIsClient) {
+            if (curPage == 5) {
+%>
+<tr>
+<td>
+<p>
+<%=intl._t("How do you want this tunnel to be accessed? By just this machine, your entire subnet, or external internet?")%>
+<%=intl._t("You will most likely want to just allow 127.0.0.1")%>
+<%
+            //TODO Note that it is relevant to most Client tunnels, and httpbidirserver and streamrserver tunnels.
+            //TODO So the wording may need to change slightly for the client vs. server tunnels.
+%>
+</p>
+</td>
+</tr>
+<tr>
+<td>
+<span class="tag"><%=intl._t("Reachable by")%>:</span>
+<select id="reachableBy" name="reachableBy" title="<%=intl._t("Listening interface (IP address) for client access (normally 127.0.0.1)")%>" class="selectbox">
+<%
+            String clientInterface = request.getParameter("reachableBy");
+                if ("null".equals(clientInterface)) {
+                    clientInterface = "127.0.0.1";
+                }
+                for (String ifc : editBean.interfaceSet()) {
+                    out.write("<option value=\"");
+                    out.write(ifc);
+                    out.write('\"');
+                    if (ifc.equals(clientInterface))
+                        out.write(" selected=\"selected\"");
+                    out.write('>');
+                    out.write(ifc);
+                    out.write("</option>\n");
                     }
-                    for (String ifc : editBean.interfaceSet()) {
-                        out.write("<option value=\"");
-                        out.write(ifc);
-                        out.write('\"');
-                        if (ifc.equals(clientInterface))
-                            out.write(" selected=\"selected\"");
-                        out.write('>');
-                        out.write(ifc);
-                        out.write("</option>\n");
-                    }
-              %>
-                </select>
-        </td>
-    </tr>
-               <%
-              } else {
-            %><input type="hidden" name="reachableBy" value="<%=net.i2p.data.DataHelper.stripHTML(request.getParameter("reachableBy"))%>" /><%
-              } /* curPage 5 */
+%>
+</select>
+</td>
+</tr>
+<%
+                } else {
+%>
+<input type="hidden" name="reachableBy" value="<%=net.i2p.data.DataHelper.stripHTML(request.getParameter("reachableBy"))%>" />
+<%
+                } /* curPage 5 */
             } /* (tunnelIsClient && !streamrclient) ||  httpbidirserver || streamrserver */
+             /* End page 5 */
+%>
 
-               /* End page 5 */ %>
-
-            <% /* Page 6 - Automatic start */
+<% /* Page 6 - Automatic start */
 
             if (curPage == 6) {
-            %>
-    <tr>
-        <td>
-            <p>
-                <%=intl._t("The I2P router can automatically start this tunnel for you when the router is started.")%>
-                <%=intl._t("This can be useful for frequently-used tunnels (especially server tunnels), but for tunnels that are only used occassionally it would mean that the I2P router is creating and maintaining unnecessary tunnels.")%>
-            </p>
-        </td>
-    </tr>
-    <tr>
-        <td class="options">
-                <label title="<%=intl._t("Enable this option to ensure this service is available when the router starts")%>"><input value="1" type="checkbox" id="startOnLoad" name="startOnLoad" <%=("1".equals(request.getParameter("startOnLoad")) ? " checked=\"checked\"" : "")%> class="optbox" />
-            &nbsp;<%=intl._t("Automatically start tunnel when router starts")%></label>
-        </td>
-    </tr>
-            <%
+%>
+<tr>
+<td>
+<p>
+<%=intl._t("The I2P router can automatically start this tunnel for you when the router is started.")%>
+<%=intl._t("This can be useful for frequently-used tunnels (especially server tunnels), but for tunnels that are only used occassionally it would mean that the I2P router is creating and maintaining unnecessary tunnels.")%>
+</p>
+</td>
+</tr>
+<tr>
+<td class="options">
+<label title="<%=intl._t("Enable this option to ensure this service is available when the router starts")%>"><input value="1" type="checkbox" id="startOnLoad" name="startOnLoad" <%=("1".equals(request.getParameter("startOnLoad")) ? " checked=\"checked\"" : "")%> class="optbox" />
+            &nbsp;<%=intl._t("Automatically start tunnel when router starts")%>
+</label>
+</td>
+</tr>
+<%
             } else {
-              if ("1".equals(request.getParameter("startOnLoad"))) {
-            %><input type="hidden" name="startOnLoad" value="<%=net.i2p.data.DataHelper.stripHTML(request.getParameter("startOnLoad"))%>" /><%
-              }
+                if ("1".equals(request.getParameter("startOnLoad"))) {
+%>
+<input type="hidden" name="startOnLoad" value="<%=net.i2p.data.DataHelper.stripHTML(request.getParameter("startOnLoad"))%>" />
+<%
+                }
             } /* curPage 6 */
+               /* End page 6 */
+%>
 
-               /* End page 6 */ %>
-
-            <% /* Page 7 - Wizard complete */
+<% /* Page 7 - Wizard complete */
 
             if (curPage == 7) {
-            %>
-    <tr>
-        <td>
-            <p>
-                <%=intl._t("The wizard has now collected enough information to create your tunnel.")%>
-                <%=intl._t("Upon clicking the Save button below, the wizard will set up the tunnel, and take you back to the main I2PTunnel page.")%>
-                <%
+%>
+<tr>
+<td>
+<p>
+<%=intl._t("The wizard has now collected enough information to create your tunnel.")%>
+<%=intl._t("Upon clicking the Save button below, the wizard will set up the tunnel, and take you back to the main I2PTunnel page.")%>
+<%
                 if ("1".equals(request.getParameter("startOnLoad"))) {
-                %><%=intl._t("Because you chose to automatically start the tunnel when the router starts, you don't have to do anything further.")%>
-                <%=intl._t("The router will start the tunnel once it has been set up.")%><%
+%>
+<%=intl._t("Because you chose to automatically start the tunnel when the router starts, you don't have to do anything further.")%>
+<%=intl._t("The router will start the tunnel once it has been set up.")%>
+<%
                 } else {
-                %><%=intl._t("Because you chose not to automatically start the tunnel, you will have to manually start it.")%>
-                <%=intl._t("You can do this by clicking the Start button on the main page which corresponds to the new tunnel.")%><%
-                } %>
-            </p>
-            <p>
-                <%=intl._t("Below is a summary of the options you chose:")%>
-            </p>
-        </td>
-    </tr>
-    <tr>
-        <td id="wizardTable">
-            <table id="wizardSummary">
-                <tr><td><%=intl._t("Server or client tunnel?")%></td><td>
-                    <%=(tunnelIsClient ? "Client" : "Server")%>
-                </td></tr>
-                <tr><td><%=intl._t("Tunnel type")%></td><td><%
+%>
+<%=intl._t("Because you chose not to automatically start the tunnel, you will have to manually start it.")%>
+<%=intl._t("You can do this by clicking the Start button on the main page which corresponds to the new tunnel.")%>
+<%
+                }
+%>
+</p>
+<p>
+<%=intl._t("Below is a summary of the options you chose:")%>
+</p>
+</td>
+</tr>
+<tr>
+<td id="wizardTable">
+<table id="wizardSummary">
+<tr><td><%=intl._t("Server or client tunnel?")%>
+</td><td>
+<%=(tunnelIsClient ? "Client" : "Server")%>
+</td></tr>
+<tr><td><%=intl._t("Tunnel type")%>
+</td><td>
+<%
                 if ("client".equals(tunnelType) || "server".equals(tunnelType)) { %>
-                    <%=intl._t("Standard")%><%
+<%=intl._t("Standard")%>
+<%
                 } else if ("httpclient".equals(tunnelType) || "httpserver".equals(tunnelType)) { %>
                     HTTP<%
                 } else if ("ircclient".equals(tunnelType) || "ircserver".equals(tunnelType)) { %>
@@ -513,89 +575,122 @@
                     SOCKS 4/4a/5<%
                 } else if ("socksirctunnel".equals(tunnelType)) { %>
                     SOCKS IRC<%
-                } %>
-                </td></tr>
-                <tr><td><%=intl._t("Tunnel name")%></td>
-                <td><%=net.i2p.data.DataHelper.stripHTML(request.getParameter("name"))%></td></tr>
-                <tr><td><%=intl._t("Tunnel description")%></td>
-                <td><%=net.i2p.data.DataHelper.stripHTML(request.getParameter("nofilter_description"))%></td></tr>
-                <%
+                }
+%>
+</td></tr>
+<tr><td><%=intl._t("Tunnel name")%></td><td><%=net.i2p.data.DataHelper.stripHTML(request.getParameter("name"))%></td></tr>
+<tr><td><%=intl._t("Tunnel description")%></td><td><%=net.i2p.data.DataHelper.stripHTML(request.getParameter("nofilter_description"))%></td></tr>
+<%
                 if (tunnelIsClient) { %>
-                <tr><td><%=intl._t("Tunnel destination")%></td><td><%
-                  if ("httpclient".equals(tunnelType) || "connectclient".equals(tunnelType) || "sockstunnel".equals(tunnelType) || "socksirctunnel".equals(tunnelType)) { %>
-                    <%=net.i2p.data.DataHelper.stripHTML(request.getParameter("proxyList"))%><%
-                  } else if ("client".equals(tunnelType) || "ircclient".equals(tunnelType)) { %>
-                    <%=net.i2p.data.DataHelper.stripHTML(request.getParameter("targetDestination"))%><%
-                  } %>
-                </td></tr><%
-                } %>
-                <%
-                if (!tunnelIsClient) { %>
-                    <tr><td><%=intl._t("Binding address")%></td><td>
-                    <%=net.i2p.data.DataHelper.stripHTML(request.getParameter("targetHost"))%></td></tr><%
+<tr>
+<td><%=intl._t("Tunnel destination")%></td>
+<td>
+<%
+                    if ("httpclient".equals(tunnelType) || "connectclient".equals(tunnelType) || "sockstunnel".equals(tunnelType) || "socksirctunnel".equals(tunnelType)) { %>
+<%=net.i2p.data.DataHelper.stripHTML(request.getParameter("proxyList"))%>
+<%
+                    } else if ("client".equals(tunnelType) || "ircclient".equals(tunnelType)) { %>
+<%=net.i2p.data.DataHelper.stripHTML(request.getParameter("targetDestination"))%>
+<%
+                    }
+%>
+</td></tr>
+<%
+                }
+                if (!tunnelIsClient) {
+%>
+<tr><td><%=intl._t("Binding address")%></td><td><%=net.i2p.data.DataHelper.stripHTML(request.getParameter("targetHost"))%></td></tr>
+<%
                 }
                 if (!tunnelIsClient) { %>
-                    <tr><td><%=intl._t("Tunnel port")%></td><td><%=net.i2p.data.DataHelper.stripHTML(request.getParameter("targetPort"))%></td></tr><%
+<tr><td><%=intl._t("Tunnel port")%></td><td><%=net.i2p.data.DataHelper.stripHTML(request.getParameter("targetPort"))%></td></tr>
+<%
                 }
                 if (tunnelIsClient) { %>
-                    <tr><td><%=intl._t("Port")%></td><td><%=net.i2p.data.DataHelper.stripHTML(request.getParameter("port"))%></td></tr><%
+<tr><td><%=intl._t("Port")%></td><td><%=net.i2p.data.DataHelper.stripHTML(request.getParameter("port"))%></td></tr>
+<%
                 }
                 if (tunnelIsClient) { %>
-                    <tr><td><%=intl._t("Reachable by")%></td><td><%=net.i2p.data.DataHelper.stripHTML(request.getParameter("reachableBy"))%></td></tr><%
-                } %>
-                <tr><td><%=intl._t("Tunnel auto-start")%></td><td><%
-                if ("1".equals(request.getParameter("startOnLoad"))) { %>
-                    Yes<%
-                } else { %>
-                    No<%
-                } %>
-                </td></tr>
-            </table>
-        </td>
-    </tr>
-    <tr>
-        <td class="infohelp">
-            <p>
-                <%=intl._t("Alongside these basic settings, there are a number of advanced options for tunnel configuration.")%>
-                <%=intl._t("The wizard will set reasonably sensible default values for these, but you can view and/or edit these by clicking on the tunnel's name in the main I2PTunnel page.")%>
-            </p>
-
-            <input type="hidden" name="tunnelDepth" value="3" />
-            <input type="hidden" name="tunnelVariance" value="0" />
-            <input type="hidden" name="tunnelQuantity" value="2" />
-            <input type="hidden" name="tunnelBackupQuantity" value="0" />
-            <input type="hidden" name="clientHost" value="internal" />
-            <input type="hidden" name="clientport" value="internal" />
-            <input type="hidden" name="reduceCount" value="1" />
-            <input type="hidden" name="reduceTime" value="20" /><%
-
+<tr><td><%=intl._t("Reachable by")%></td><td><%=net.i2p.data.DataHelper.stripHTML(request.getParameter("reachableBy"))%></td></tr>
+<%
+                }
+%>
+<tr>
+<td><%=intl._t("Tunnel auto-start")%></td>
+<td>
+<%
+                if ("1".equals(request.getParameter("startOnLoad"))) {
+%>
+Yes
+<%
+                } else {
+%>
+No
+<%
+                }
+%>
+</td>
+</tr>
+</table>
+</td>
+</tr>
+<tr>
+<td class="infohelp">
+<p>
+<%=intl._t("Alongside these basic settings, there are a number of advanced options for tunnel configuration.")%>
+<%=intl._t("The wizard will set reasonably sensible default values for these, but you can view and/or edit these by clicking on the tunnel's name in the main I2PTunnel page.")%>
+</p>
+<input type="hidden" name="tunnelDepth" value="3" />
+<input type="hidden" name="tunnelVariance" value="0" />
+<input type="hidden" name="tunnelQuantity" value="2" />
+<input type="hidden" name="tunnelBackupQuantity" value="0" />
+<input type="hidden" name="clientHost" value="internal" />
+<input type="hidden" name="clientport" value="internal" />
+<input type="hidden" name="reduceCount" value="1" />
+<input type="hidden" name="reduceTime" value="20" />
+<%
               if (tunnelIsClient) { /* Client-only defaults */
-            %><input type="hidden" name="newDest" value="0" />
-            <input type="hidden" name="closeTime" value="30" /><%
+%>
+<input type="hidden" name="newDest" value="0" />
+<input type="hidden" name="closeTime" value="30" />
+<%
               } else { /* Server-only defaults */
-            %><input type="hidden" name="privKeyFile" value="<%=editBean.getPrivateKeyFile(-1)%>" />
-        </td>
-    </tr>
-            <%
+%>
+<input type="hidden" name="privKeyFile" value="<%=editBean.getPrivateKeyFile(-1)%>" />
+</td>
+</tr>
+<%
               } /* tunnelIsClient */
-            } /* curPage 7 */
-
-               /* End page 7 */ %>
-    <tr>
-        <td class="buttons">
-            <a class="control" title="<%=intl._t("Cancel the wizard and return to Tunnel Manager home page")%>" href="list"><%=intl._t("Cancel")%></a>
-            <% if (curPage != 1 && curPage != 7) { %>
-                <button id="controlPrevious" class="control" type="submit" name="action" value="Previous page" title="<%=intl._t("Return to previous page")%>"><%=intl._t("Previous")%></button>
-            <% } %>
-            <% if (curPage == 7) { %>
-                <button id="controlSave" class="control" type="submit" name="action" value="Save changes" title="<%=intl._t("Save tunnel configuration")%>"><%=intl._t("Save Tunnel")%></button>
-            <% } else if (curPage == 6) { %>
-                <button id="controlFinish" class="control" type="submit" name="action" value="Next page" title="<%=intl._t("Finish Wizard and review tunnel settings")%>"><%=intl._t("Finish")%></button>
-            <% } else { %>
-                <button id="controlNext" class="control" type="submit" name="action" value="Next page" title="<%=intl._t("Advance to next page")%>"><%=intl._t("Next")%></button>
-            <% } %>
-        </td>
-    </tr>
+          } /* curPage 7 */
+          /* End page 7 */
+%>
+<tr>
+<td class="buttons">
+<a class="control" title="<%=intl._t("Cancel the wizard and return to Tunnel Manager home page")%>" href="list"><%=intl._t("Cancel")%></a>
+<%
+          if (curPage != 1 && curPage != 7) {
+%>
+<button id="controlPrevious" class="control" type="submit" name="action" value="Previous page" title="<%=intl._t("Return to previous page")%>"><%=intl._t("Previous")%></button>
+<%
+          }
+%>
+<%
+          if (curPage == 7) {
+%>
+<button id="controlSave" class="control" type="submit" name="action" value="Save changes" title="<%=intl._t("Save tunnel configuration")%>"><%=intl._t("Save Tunnel")%></button>
+<%
+          } else if (curPage == 6) {
+%>
+<button id="controlFinish" class="control" type="submit" name="action" value="Next page" title="<%=intl._t("Finish Wizard and review tunnel settings")%>"><%=intl._t("Finish")%></button>
+<%
+          } else {
+%>
+<button id="controlNext" class="control" type="submit" name="action" value="Next page" title="<%=intl._t("Advance to next page")%>"><%=intl._t("Next")%></button>
+<%
+          }
+%>
+</td>
+</tr>
 </table>
 </div>
 </form>
