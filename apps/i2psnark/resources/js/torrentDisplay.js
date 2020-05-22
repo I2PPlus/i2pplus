@@ -48,7 +48,7 @@ function initFilterBar() {
     var filtered = document.querySelectorAll(".filtered");
     var results = document.querySelectorAll(".results");
     cleanResults();
-    var row = torrents.insertRow(-1);
+    var row = torrents.insertRow(0);
     row.classList.add("results");
     row.id = "filterResults";
     var cell = row.insertCell(0);
@@ -73,7 +73,6 @@ function initFilterBar() {
       else
         cell.innerHTML= "Displaying " + (filtered.length) + " " + on + " torrents";
     } else {
-      btnAll.checked = "true";
       var row = document.getElementById(filterResults);
       if (row)
         cleanResults();
