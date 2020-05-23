@@ -482,15 +482,16 @@ td.snarkTorrentPeerCount:empty {
 
 .percentBarOuter {
 	border: 1px solid #777;
-	background: #605d4e;
+	background: #aaa;
 }
 
 .percentBarInner {
+	height: 16px !important;
+	border-right: 1px solid #777;
 	box-shadow: inset 0 0 0 1px #fff;
 	box-shadow: inset 0 0 0 1px rgba(255,255,255,0.5);
 	background: #fd0;
 	background: #BFB8B3;
-	height: 16px !important;
 }
 
 /* alternative download bar popup bar text just for our downloads in .snarkTorrents */
@@ -564,11 +565,11 @@ tr:hover .snarkFileStatus .percentBarText {
 	border: 1px solid #777;
 	box-shadow: inset 0 0 0 1px #fff;
 	box-shadow: inset 0 0 0 1px rgba(255,255,255,0.5);
-	background: #ccc;
+	background: #aaa;
 }
 
 .active.seeding .percentBarComplete {
-	background: linear-gradient(to right, rgba(0,0,0,0) 49%, #999, rgba(0,0,0,0) 51%) #ccc;
+	background: linear-gradient(to right, rgba(0,0,0,0) 49%, #999, rgba(0,0,0,0) 51%) #aaa;
 	background-size: 200% 200%, 100% 100%;
 	animation: progress 5s linear infinite reverse;
 }

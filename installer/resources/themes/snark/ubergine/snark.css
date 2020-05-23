@@ -1015,12 +1015,12 @@ td:first-child {
 
 .snarkTorrentOdd {
     background: #351933;
-    background: linear-gradient(to bottom, #351933, #3c2046);
+    background: linear-gradient(to bottom, #2f182f, #1f101f);
 }
 
 .snarkTorrentEven {
     background: #270027;
-    background: linear-gradient(to bottom, #270027, #200020);
+    background: linear-gradient(to bottom, #330033, #200020);
 }
 
 .peerinfo:nth-child(odd) {
@@ -1411,6 +1411,7 @@ tr:hover .percentBarOuter, tr:hover .peerinfo .percentBarOuter {
 .percentBarInner {
     height: 100%;
     border: none;
+    border-right: 1px solid #414;
     box-shadow: inset 0 0 0 1px #000;
     background: #515;
     background: linear-gradient(to bottom, rgba(136, 17, 136, 0.7) 0%, rgba(85, 17, 85, 0.7) 50%, rgba(51, 17, 51, 0.7) 50%, rgba(0, 0, 0, 0.9) 100%);
