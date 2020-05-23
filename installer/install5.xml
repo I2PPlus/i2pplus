@@ -19,24 +19,8 @@
 -->
         <javaversion>1.8</javaversion>
         <!-- adding this element will make the installer attempt to launch itself with administrator permissions,
-             but see http://www.nabble.com/Classpath-security-issues-on-Vista-td22456230.html
-             which says it isn't sufficient:
-
-        Just to let you know that I managed to identify and resolve the problem (in
-        case anyone else has it).  The default installation directory for Vista is
-        under "Program Files" which is a "special" directory which can only be
-        written to (create sub-directories) by administrators.  However, stupid
-        Vista downgrades an administrator to a normal user when the program is run
-        via the application shortcut menu.  As you suggested, I added a script which
-        runs ICACLS which resolved the problem, i.e.
-
-        icacls %1 /grant Users:F /T > priv.log
-
-        The command needs to be run as a Process rather than as an executable tag in
-        order to pass $INSTALL_PATH as a parameter.
          -->
         <run-privileged condition="izpack.windowsinstall.vista|izpack.windowsinstall.7"/>
-        <!--<pack-compression-format>xz</pack-compression-format>-->
     </info>
     <guiprefs width="680" height="440" resizable="yes">
 <!--
@@ -58,6 +42,7 @@
 <!--        <modifier key="headingPanelCounterPos" value="inNavigationPanel"/> -->
         <modifier key="labelGap" value="5"/>
     </guiprefs>
+
     <locale>
         <langpack iso3="eng">
             <str id="installer.reversetitle" txt="I2P+ Installation Wizard"/>
@@ -342,7 +327,8 @@
             -->
                 </args>
             </executable>
-            <!-- workaround for vista permission problems - see comments above -->
+
+            <!-- change owner to %username% so updates will work -->
             <executable targetfile="$INSTALL_PATH/fixperms.bat" type="bin" stage="postinstall" keep="true" failure="warn"
                 condition="!izpack.windowsinstall.xp+!izpack.windowsinstall.2003" >
                 <os family="windows" />
@@ -361,6 +347,7 @@
                     <arg value="$INSTALL_PATH\fixperms.bat" />
                 </args>
             </executable>
+
             <!--
             <executable targetfile="$INSTALL_PATH/utility.jar"
                 type="jar"
