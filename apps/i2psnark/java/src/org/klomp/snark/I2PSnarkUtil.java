@@ -82,7 +82,7 @@ public class I2PSnarkUtil {
     private static final int EEPGET_CONNECT_TIMEOUT = 120*1000;
 //    private static final int EEPGET_CONNECT_TIMEOUT_SHORT = 5*1000;
     private static final int EEPGET_CONNECT_TIMEOUT_SHORT = 15*1000;
-    public static final int DEFAULT_STARTUP_DELAY = 1;
+    public static final int DEFAULT_STARTUP_DELAY = 3;
     public static final boolean DEFAULT_COLLAPSE_PANELS = true;
     public static final boolean DEFAULT_SHOW_STATUSFILTER = false;
     public static final boolean DEFAULT_ENABLE_LIGHTBOX = true;

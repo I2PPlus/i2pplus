@@ -169,11 +169,11 @@ public class SnarkManager implements CompleteListener, ClientApp {
     /** @since 0.9.31 */
     private static final String PROP_COMMENTS_NAME = "i2psnark.commentsName";
 
-    public static final int MIN_UP_BW = 10;
+//    public static final int MIN_UP_BW = 10;
+    public static final int MIN_UP_BW = 30;
 //    public static final int DEFAULT_MAX_UP_BW = 25;
     public static final int DEFAULT_MAX_UP_BW = 50;
-//    public static final int DEFAULT_STARTUP_DELAY = 3;
-    public static final int DEFAULT_STARTUP_DELAY = 1;
+    public static final int DEFAULT_STARTUP_DELAY = 3;
     public static final int DEFAULT_REFRESH_DELAY_SECS = 15;
     private static final int DEFAULT_PAGE_SIZE = 50;
 //    public static final int DEFAULT_TUNNEL_QUANTITY = 3;
