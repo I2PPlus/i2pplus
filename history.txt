@@ -1,3 +1,12 @@
+2020-05-25 dr|z3d
+ * I2PTunnel:
+   - Relax default throttling limits on server tunnels
+   - Enable both encryption types for all default tunnels (new installs only)
+   - Add purikoshi.i2p as alternative to false.i2p outproxy (new installs only)
+
+2020-05-22 dr|z3d
+ * I2PTunnel: Add javascript handler to select all text in readonly inputs
+
 2020-05-21 zzz
  * Streaming: Fix timer race (ticket #2739)
 
@@ -5,6 +14,14 @@
  * i2ptunnel: Disable gzip for streamr server
  * i2ptunnel, SusiDNS: Replace onblur with CSP-safe js
  * Tunnels: Reduce the IBGW and client OBGW batch time
+
+2020-05-20 dr|z3d
+ * I2PSnark: Display filtered torrent count and type in table
+   when torrent filter bar is active
+
+2020-05-19 dr|z3d
+ * I2PTunnel: Make tunnel info toggle CSP compliant
+ * I2PSnark: Male toggleLog and torrentDisplay CSP compliant
 
 2020-05-19 zzz
  * Util: Speed up zero compression
@@ -22,6 +39,11 @@
    - Handle devices that support permanent leases only
    - Prevent using public IP on Android
 
+2020-05-15 dr|z3d
+ * Jetty: Use global jetty-dir.css if in docroot/.resources/ or
+   use enhanced inline style otherwise
+ * Console: Remove inline js from /graphs and /stats
+
 2020-05-15 zzz
  * i2ptunnel: Remove javascript from proxy error pages
 
@@ -33,6 +55,9 @@
    - Fix option text on /confignet (ticket #2738)
    - Changes to support handlers on /configplugins and /configreseed
    - HTML fixes on /configplugins
+
+2020-05-12 dr|z3d
+ * Console/Webapps: Complete classic theme overhaul
 
 2020-05-12 zzz
  * Console: Hide sensitive properties on /configadvanced
@@ -47,11 +72,12 @@
  * Console: Fix delete confirmation dialog on /configplugins
  * Console, i2psnark, i2ptunnel: Refactor js, stricter CSP
 
+2020-05-10 dr|z3d
+ * Router: Add unreachable peers to peerExcludeCaps defaults
+ * Profiles: Remove floodfill peer profiles after 3 hours of inactivity
+
 2020-05-10 zzz
  * i2psnark: Support file paths in add form (ticket #2100)
-
-2020-05-10 idk
- * SusiDNS: Fix trac #2419
 
 2020-05-08 zzz
  * Build: Use git revisions when available
@@ -79,6 +105,12 @@
  * i2ptunnel: Copy over all relevant options to other shared clients
    when saving, not just tunnel quantity and length (ticket #1545)
 
+2020-05-03 dr|z3d
+ * I2PSnark:
+   - Improve sorting algorithms and display active sort indicator
+   - Don't deprioritize outbound traffic
+
+
 2020-05-02 zzz
  * eepsite: Fix RTL issues on Arabic help page (ticket #2731)
  * i2ptunnel: Disable I2CP gzip for HTTP server tunnels
@@ -95,6 +127,9 @@
 2020-04-29 zzz
  * Ratchet: Increase callback timeout
  * Router: Replace old data structure classes
+
+2020-04-28 dr|z3d
+ * I2PSnark: Delay autostart for 30s if set to 0
 
 2020-04-27 zzz
  * Crypto: Reduce max ElG tagset expiration at receiver
@@ -123,16 +158,20 @@
 2020-04-21 zzz
  * Router: Fix logging NPE (thx zlatinb)
 
+2020-04-19 dr|z3d
+ * I2PSnark: Add configuration option for max files per torrent
+   (i2psnark.maxFilesPerTorrent=n) and display value in config section
+
 2020-04-19 zzz
  * Ratchet: Adaptive order of muxed decrypt based on previous traffic
  * Streaming: Single retransmit timer per connection (ticket #2715)
 
+2020-04-19 dr|z3d
+ * I2PSnark: Add config setting to configure max files per torrent:
+   i2psnark.maxFilesPerTorrent=n & display readonly field on configure page
+
 2020-04-18 zzz
  * i2psnark: Connect out to other seeds to fetch comments (ticket #2288)
-
-2020-04-19 dr|z3d
- * I2PSnark: Add configuration option for max files per torrent
-   (i2psnark.maxFilesPerTorrent=n) and display value in config section
 
 2020-04-17 zzz
  * Crypto: Disable speculative AES tagset usage
@@ -157,6 +196,7 @@
  * Jetty: Add GzipHandler for eepsites on Jetty 9.3/9.4 (ticket #2599)
 
 2020-04-09 dr|z3d
+ * I2PSnark: Custom file icons for I2P/I2P+ updates
  * Router: Enable activation of router.dynamicKeys config
 
 2020-04-08 zzz
