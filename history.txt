@@ -17,7 +17,7 @@
 
 2020-05-20 dr|z3d
  * I2PSnark: Display filtered torrent count and type in table
-   when torrent filter bar is active
+   when torrent filter bar is active and persist filtered results
 
 2020-05-19 dr|z3d
  * I2PTunnel: Make tunnel info toggle CSP compliant
