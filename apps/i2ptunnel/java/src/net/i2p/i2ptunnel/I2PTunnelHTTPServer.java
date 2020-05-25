@@ -55,11 +55,15 @@ public class I2PTunnelHTTPServer extends I2PTunnelServer {
     public static final String OPT_REJECT_REFERER = "rejectReferer";
     public static final String OPT_REJECT_USER_AGENTS = "rejectUserAgents";
     public static final String OPT_USER_AGENTS = "userAgentRejectList";
-    public static final int DEFAULT_POST_WINDOW = 5*60;
-    public static final int DEFAULT_POST_BAN_TIME = 20*60;
-    public static final int DEFAULT_POST_TOTAL_BAN_TIME = 10*60;
-    public static final int DEFAULT_POST_MAX = 6;
-    public static final int DEFAULT_POST_TOTAL_MAX = 20;
+//    public static final int DEFAULT_POST_WINDOW = 5*60;
+    public static final int DEFAULT_POST_WINDOW = 3*60;
+//    public static final int DEFAULT_POST_BAN_TIME = 20*60;
+    public static final int DEFAULT_POST_BAN_TIME = 5*60;
+//    public static final int DEFAULT_POST_TOTAL_BAN_TIME = 10*60;
+    public static final int DEFAULT_POST_TOTAL_BAN_TIME = 3*60;
+    public static final int DEFAULT_POST_MAX = 10;
+//    public static final int DEFAULT_POST_TOTAL_MAX = 20;
+    public static final int DEFAULT_POST_TOTAL_MAX = 30;
 
     /** what Host: should we seem to be to the webserver? */
     private String _spoofHost;
@@ -97,7 +101,7 @@ public class I2PTunnelHTTPServer extends I2PTunnelServer {
     // could be POSTing a massive file
     private static final int SERVER_READ_TIMEOUT_GET = 5*60*1000;
     private static final int SERVER_READ_TIMEOUT_POST = 4*60*60*1000;
-    
+
     private long _startedOn = 0L;
     private ConnThrottler _postThrottler;
 
