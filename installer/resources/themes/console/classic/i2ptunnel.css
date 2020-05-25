@@ -113,9 +113,8 @@ hr {
 
 .freetext[readonly], .freetext[readonly]:focus {
     color: #757a8a;
-    border: 1px solid #99b !important;
-    box-shadow: inset 2px 2px 1px #ccccd6;
-    background: #eeeef6;
+    box-shadow: inset 1px 1px 1px #ddd;
+    background: #eff0ff;
 }
 
 #clientHost {
@@ -141,8 +140,8 @@ hr {
     border: 1px solid #aaafce;
     border-radius: 2px;
     background: #eee;
-    background: linear-gradient(to bottom, #fff, #eef);
-    box-shadow: inset 0 0 0 1px #fff, 0 0 1px 0 #ccc;
+    background: linear-gradient(to bottom, #fff, #f4f5ff);
+    box-shadow: inset 0 0 0 1px #fff, 0 0 1px #ddd;
 }
 
 .control:hover, .control:focus, button:hover, button:focus {
@@ -175,7 +174,7 @@ hr {
     border-radius: 2px;
     box-shadow: inset 0 0 1px #999;
     background: #fff;
-    background: linear-gradient(to right, #fff 0%, rgba(247, 248, 255, 0.5), #fff), linear-gradient(to bottom, #eff1ff, #fff, #eff1ff);
+    background: linear-gradient(to right, #fff 0%, rgba(247, 248, 255, .5), #fff), linear-gradient(to bottom, #eff1ff, #fff, #eff1ff);
 }
 
 .iframed .panel {
@@ -232,9 +231,9 @@ select {
     color: #5e626e;
     border: 1px solid #aaafce;
     border-radius: 2px;
-    box-shadow: 0 0 0 1px #fff inset, 0 0 1px 0 #ccc;
-    background: url(images/dropdown.png) right 8px center no-repeat #eee;
-    background: url(images/dropdown.png) right 8px center no-repeat, linear-gradient(to bottom, #fff, #eef);
+    box-shadow: 0 0 0 1px #fff inset, 0 0 1px 0 #ddd;
+    background: url(images/dropdown.png) right 8px center no-repeat #fff;
+    background: url(images/dropdown.png) right 8px center no-repeat, linear-gradient(to bottom, #fff, #f4f5ff);
     background-size: 10px auto, 100% 100%;
     cursor: pointer;
     -moz-appearance: none;
@@ -307,15 +306,15 @@ h2, h3 {
     margin: 10px 0 -1px;
     padding: 8px 10px 6px 30px;
     position: relative;
-    word-spacing: 0.1em;
-    letter-spacing: 0.08em;
+    word-spacing: .1em;
+    letter-spacing: .08em;
     text-transform: uppercase;
     font-size: 11pt;
     color: #41444d;
     border: 1px solid #aaafce;
     box-shadow: inset 0 0 0 1px #fff;
     background: #fff url(/themes/console/classic/images/tinytitle.png) repeat right center;
-    background: linear-gradient(to bottom, #fff 0%, #fff 50%, #eff2ff 50%, #eff2ff 100%);
+    background: linear-gradient(to bottom, #fff 50%, #fafbff 50%);
 }
 
 .iframed h2, .iframed h3 {
@@ -325,32 +324,32 @@ h2, h3 {
 /* title images */
 
 #messages h2 {
-    background: url(/themes/console/images/info/logs.png) 5px center no-repeat, linear-gradient(to bottom, #fff 0%, #fff 50%, #eff2ff 50%, #eff2ff 100%) #fff !important;
+    background: url(/themes/console/images/info/logs.png) 5px center no-repeat, linear-gradient(to bottom, #fff 50%, #fafbff 50%) !important;
     background-size: 20px auto, 100% 100%, 100% 100% !important;
 }
 
 #globalTunnelControl h2 {
-    background: url(/themes/console/images/info/control.png) 5px center no-repeat, linear-gradient(to bottom, #fff 0%, #fff 50%, #eff2ff 50%, #eff2ff 100%) #fff !important;
+    background: url(/themes/console/images/info/control.png) 5px center no-repeat, linear-gradient(to bottom, #fff 50%, #fafbff 50%) !important;
     background-size: 20px auto, 100% 100%, 100% 100% !important;
 }
 
 #servers h2 {
-    background: url(/themes/console/images/info/server.png) 5px center no-repeat, linear-gradient(to bottom, #fff 0%, #fff 50%, #eff2ff 50%, #eff2ff 100%) #fff !important;
+    background: url(/themes/console/images/info/server.png) 5px center no-repeat, linear-gradient(to bottom, #fff 50%, #fafbff 50%) !important;
     background-size: 20px auto, 100% 100%, 100% 100% !important;
 }
 
 #clients h2 {
-    background: url(/themes/console/images/info/client.png) 5px center no-repeat, linear-gradient(to bottom, #fff 0%, #fff 50%, #eff2ff 50%, #eff2ff 100%) #fff !important;
+    background: url(/themes/console/images/info/client.png) 5px center no-repeat, linear-gradient(to bottom, #fff 50%, #fafbff 50%) !important;
     background-size: 20px auto, 100% 100%, 100% 100% !important;
 }
 
 #tunnelEditPage h2, #tunnelEditPage h3, #registration h2, #registration h3 {
-    background: url(/themes/console/images/info/configure.png) 5px center no-repeat, linear-gradient(to bottom, #fff 0%, #fff 50%, #eff2ff 50%, #eff2ff 100%) #fff !important;
+    background: url(/themes/console/images/info/configure.png) 5px center no-repeat, linear-gradient(to bottom, #fff 50%, #fafbff 50%) !important;
     background-size: 20px auto, 100% 100%, 100% 100% !important;
 }
 
 #wizardPanel h2, #ssl h2 {
-    background: url(/themes/console/images/info/wizard.png) left 6px center no-repeat, linear-gradient(to bottom, #fff 0%, #fff 50%, #eff2ff 50%, #eff2ff 100%) #fff !important;
+    background: url(/themes/console/images/info/wizard.png) left 6px center no-repeat, linear-gradient(to bottom, #fff 50%, #fafbff 50%) !important;
     background-size: 20px auto, 100% 100%, 100% 100% !important;
 }
 
@@ -370,7 +369,7 @@ h2, h3 {
     border-collapse: collapse;
     border: 1px solid #aaafce;
     background: #fff url(images/bg2.png);
-    background: linear-gradient(to bottom, rgba(255,255,255,0.8), rgba(255,255,255,0.5)), url(images/bg2.png);
+    background: linear-gradient(to bottom, rgba(255,255,255,.8), rgba(255,255,255,.5)), url(images/bg2.png);
 }
 
 th {
@@ -381,11 +380,11 @@ th {
     border-top: 1px solid #aaafce;
     border-bottom: 1px solid #aaafce;
     background: #fff url(/themes/console/classic/images/tinytitle.png) repeat-x center center;
-    background: linear-gradient(to bottom, #fff, #eff2ff) !important;
+    background: linear-gradient(to bottom, #fff, #fafbff);
 }
 
 tr {
-    background: rgba(239, 241, 255, 0.5);
+    background: #fafbff;
 }
 
 td {
@@ -430,7 +429,7 @@ td.infohelp {
 
 .tunnelProperties:hover {
     background: #ffd !important;
-    transition: ease background 0.3s;
+    transition: ease background .3s;
 }
 
 .newTunnel {
@@ -538,7 +537,7 @@ input[type="radio"][disabled]:hover, input[type="radio"][disabled]:focus {
 }
 
 .editDisabled input[type="radio"]:not(:checked) {
-    opacity: 0.4;
+    opacity: .4;
 }
 
 .optbox[name="sigType"][disabled]:not(:checked), .optbox[name="sigType"][disabled]:not(:checked) + span {
@@ -595,7 +594,7 @@ textarea {
 
 textarea:focus {
     box-shadow: inset 0 0 0 1px #89f;
-    box-shadow: inset 0 0 0 1px #89f, 0 0 1px rgba(136, 153, 255, 0.4);
+    box-shadow: inset 0 0 0 1px #89f, 0 0 1px rgba(136, 153, 255, .4);
     color: #41444d;
 }
 
@@ -634,7 +633,7 @@ a.control {
     text-align: right;
     border-top: 1px solid #aaafce;
     background: #fff;
-    background: linear-gradient(to bottom, #fff, #eff1ff);
+    background: linear-gradient(to bottom, #fff, #fafbff);
 }
 
 button.control, input[type="submit"], input[type="reset"] {
@@ -763,7 +762,7 @@ td.blankColumn {
 }
 
 #throttler tr:nth-child(even), #wizardTunnelTypes tr:nth-child(even), #wizardSummary tr:nth-child(even) {
-    background: #eeefff;
+    background: #fafbff;
 }
 
 #throttler input[type="text"] {
@@ -892,7 +891,7 @@ input[type="file"] {
 }
 
 #wizardTunnelTypes td:last-child {
-    padding: 5px 10px 5px 5px;
+    padding: 10px 15px 10px 10px;
     text-align: justify;
     border: none;
 }
@@ -910,12 +909,12 @@ input[type="file"] {
     border-right: none !important;
 }
 
-#wizardTable td {
-    border-top: 1px solid #cfd1ff !important;
+#wizardTable td, #wizardPanel table td {
+    border-top: 1px solid #ced1e3 !important;
 }
 
 #wizardTunnelTypes tr:last-child {
-    background: #fff;
+    background: linear-gradient(to bottom, #fff, #fafbff);
 }
 
 #wizardPanel #name, #wizardPanel #description {
@@ -1159,7 +1158,7 @@ input[name="nofilter_blindedPassword"] {
 }
 
 .displayText:hover, .displayText:focus {
-    margin: 0.5px 5px;
+    margin: .5px 5px;
     padding: 2px 4px;
     overflow: auto;
     text-overflow: clip;
@@ -1260,7 +1259,7 @@ input[type="radio"], input[type="radio"]:checked, input[type="radio"][disabled],
 
 input[type="checkbox"], input[type="checkbox"]:checked, input[type="checkbox"][disabled], input[type="checkbox"][disabled]:checked {
     border-radius: 2px;
-    box-shadow: inset 1px 1px 1px rgba(204, 204, 204, 0.6);
+    box-shadow: inset 1px 1px 1px rgba(204, 204, 204, .6);
 }
 
 input[type="radio"], input[type="radio"]:checked, input[type="radio"][disabled], input[type="radio"][disabled]:checked {
@@ -1271,11 +1270,11 @@ input[type="checkbox"]:checked::before, input[type="radio"]:checked::before,
 input[type="checkbox"]:not(:checked)::before, input[type="radio"]:not(:checked)::before {
     position: absolute;
     transform: scale(1);
-    transition: linear all 0.05s;
+    transition: linear all .05s;
 }
 
 .optbox:not(:checked) {
-    box-shadow: inset 2px 2px 1px rgba(204, 204, 240, 0.6);
+    box-shadow: inset 2px 2px 1px rgba(204, 204, 240, .6);
 }
 
 input[type="checkbox"]:checked::before {

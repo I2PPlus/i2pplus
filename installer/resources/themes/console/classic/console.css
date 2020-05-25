@@ -4557,6 +4557,7 @@ p#enablefullstats {
     margin: 0;
     padding: 8px 5px;
     background: #fff;
+    background: linear-gradient(to bottom, #fff, #fafbff);
 }
 
 .formaction, td.optionsave {
