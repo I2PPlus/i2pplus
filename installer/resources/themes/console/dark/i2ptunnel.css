@@ -5,8 +5,8 @@
 
 html {
     min-height: 100%;
-    scrollbar-color: rgba(8,48,8,0.8) #000800;
-    scrollbar-color: rgba(16,72,16,0.8) #000800;
+    scrollbar-color: rgba(8,48,8,.8) #000800;
+    scrollbar-color: rgba(16,72,16,.8) #000800;
 }
 
 body {
@@ -57,12 +57,12 @@ h2, h3, th, .buttons, .newTunnel, .control, label, .infohelp, .infowarn, .nowrap
 }
 
 * {
-    scrollbar-color: rgba(16,48,16,0.4) rgba(0,0,0,0);
+    scrollbar-color: rgba(16,48,16,.4) rgba(0,0,0,0);
     transition: ease scrollbar-color .5s;
 }
 
 *:hover {
-    scrollbar-color: rgba(24,80,24,0.8) rgba(0,0,0,.9);
+    scrollbar-color: rgba(24,80,24,.8) rgba(0,0,0,.9);
     transition: ease scrollbar-color .2s;
 }
 
@@ -238,8 +238,8 @@ h2, h3 {
     font-size: 11pt;
     color: #ee9;
     text-transform: uppercase;
-    letter-spacing: 0.08em;
-    word-spacing: 0.1em;
+    letter-spacing: .08em;
+    word-spacing: .1em;
     text-shadow: 0 1px 1px #000;
     box-shadow: inset 0 0 0 1px #000, inset 0 0 1px 1px #030;
     background: linear-gradient(to bottom, #1a261a 50%, #000 50%) !important;
@@ -325,8 +325,8 @@ h3 {
 
 th {
     padding: 7px 10px;
-    word-spacing: 0.1em;
-    letter-spacing: 0.08em;
+    word-spacing: .1em;
+    letter-spacing: .08em;
     text-align: left;
     text-transform: uppercase;
     font-size: 9pt;
@@ -382,7 +382,7 @@ td.infohelp {
 }
 
 #clientTunnels tr, #serverTunnels tr, .tunnelConfig tr {
-    background: rgba(0,4,0,0.4);
+    background: rgba(0,4,0,.4);
 }
 
 .tunnelProperties {
@@ -503,7 +503,7 @@ textarea:focus {
     color: #ee9;
     background: #000 !important;
     filter: drop-shadow(0 0 1px #880);
-    transition: ease filter 0.3s 0s;
+    transition: ease filter .3s 0s;
     box-shadow: inset 0 0 1px #880;
     outline: none;
 }
@@ -555,7 +555,7 @@ _:-ms-lang(x), textarea#statusMessages, textarea#statusMessages:active, textarea
     color: #885;
     cursor: default;
     border: 1px solid #252 !important;
-    opacity: 0.8;
+    opacity: .8;
 }
 
 input[type="hidden"], input.default {
@@ -621,7 +621,7 @@ input[type="radio"][disabled]:hover, input[type="radio"][disabled]:focus {
 }
 
 .editDisabled input[type="radio"]:not(:checked) {
-    opacity: 0.4;
+    opacity: .4;
 }
 
 .editDisabled .optbox:checked + span {
@@ -664,7 +664,7 @@ input[type="text"]:focus, input[type="password"]:focus {
     color: #ee9;
     background: #000;
     filter: drop-shadow(0 0 1px #880);
-    transition: ease filter 0.3s 0s;
+    transition: ease filter .3s 0s;
 }
 
 input[readonly="readonly"]:focus {
@@ -723,7 +723,7 @@ a.control, input.control {
     text-decoration: none;
     color: #f60 !important;
     border: 1px solid #f60 !important;
-    box-shadow: inset 0 0 0 1px #000, inset 0 0 2px 1px rgba(255,86,0,0.8), inset 0 0 0 3px #000 !important;
+    box-shadow: inset 0 0 0 1px #000, inset 0 0 2px 1px rgba(255,86,0,.8), inset 0 0 0 3px #000 !important;
     background: #000 !important;
 }
 
@@ -786,7 +786,7 @@ select:focus, select:hover {
 }
 
 select:hover {
-    box-shadow: inset 0 0 0 1px #000, inset 0 0 2px 1px rgba(255,86,0,0.8), inset 0 0 0 3px #000;
+    box-shadow: inset 0 0 0 1px #000, inset 0 0 2px 1px rgba(255,86,0,.8), inset 0 0 0 3px #000;
 }
 
 select:hover, select:focus, select:active {
@@ -958,11 +958,11 @@ td.blankColumn {
 }
 
 #throttler tr:nth-child(odd) {
-    background: rgba(0,16,0,0.7);
+    background: rgba(0,16,0,.7);
 }
 
 #throttler tr:nth-child(even) {
-    background: rgba(0,8,0,0.7);
+    background: rgba(0,8,0,.7);
 }
 
 #throttler input[type="text"] {
@@ -971,7 +971,7 @@ td.blankColumn {
 
 table {
     background: #000 url(images/camotile2.png);
-    background: linear-gradient(to bottom, rgba(0,0,0,0.5),rgba(0,0,0,0.7)), url(images/camotile2.png);
+    background: linear-gradient(to bottom, rgba(0,0,0,.5),rgba(0,0,0,.7)), url(images/camotile2.png);
 }
 
 #tunnelMessages {
@@ -1329,7 +1329,7 @@ input[type="text"] + label {
 .displayText:hover, .displayText:focus {
     overflow: auto;
     text-overflow: clip;
-    margin: 0.5px 5px;
+    margin: .5px 5px;
     padding: 3px;
     box-shadow: 0 0 1px #494;
     background: #000;
@@ -1341,7 +1341,7 @@ input[type="text"] + label {
     background: #000;
     box-shadow: inset 0 0 0 1px #000;
     color: #885;
-    opacity: 0.8;
+    opacity: .8;
 }
 
 .displayText:empty::before {
@@ -1444,7 +1444,7 @@ input[type="radio"], input[type="radio"]:checked, input[type="radio"][disabled],
 input[type="checkbox"]:checked::before, input[type="radio"]:checked::before,
 input[type="checkbox"]:not(:checked)::before, input[type="radio"]:not(:checked)::before {
     position: absolute;
-    transition: linear all 0.05s;
+    transition: linear all .05s;
     transform: scale(1);
 }
 
@@ -1504,7 +1504,7 @@ input[type="checkbox"][disabled], input[type="radio"][disabled], input[type="che
 input[type="checkbox"][disabled]:checked, input[type="radio"][disabled]:checked, input[type="checkbox"][disabled]:checked:hover, input[type="radio"][disabled]:checked:hover {
     border: 1px solid #494 !important;
     box-shadow: none !important;
-    opacity: 0.5 !important;
+    opacity: .5 !important;
     background: #000;
     filter: none !important;
 }
@@ -1643,9 +1643,9 @@ select[disabled], select[disabled]:hover, select[disabled]:focus, select[disable
     cursor: default;
 }
 
-.editDisabled {
-    padding-left: 10px !important;
-    background: url(/themes/console/images/buttons/cryptokey.png) 8px center no-repeat;
+#sigType[disabled] {
+    padding-left: 14px !important;
+    background: url(/themes/console/images/buttons/cryptokey.png) left center no-repeat !important;
 }
 
 input[readonly] {

@@ -275,9 +275,9 @@ select[disabled], select[disabled]:hover, select[disabled]:focus, select[disable
     cursor: default;
 }
 
-.editDisabled {
-    padding-left: 20px;
-    background: url(/themes/console/images/buttons/cryptokey.png) 8px center no-repeat;
+#sigType[disabled] {
+    padding-left: 14px !important;
+    background: url(/themes/console/images/buttons/cryptokey.png) left center no-repeat !important;
 }
 
 a:link, a:visited {
