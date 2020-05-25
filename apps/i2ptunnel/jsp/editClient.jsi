@@ -1,11 +1,14 @@
 <%
+
+    boolean isShared = editBean.isSharedClient(curTunnel);
     String aStopFirst = intl._t("Tunnel and all other shared client tunnels must be stopped to change this configuration");
     String bStopFirst = intl._t("Tunnel must be stopped to change this configuration");
-    String stopFirst = editBean.isSharedClient(curTunnel) ? aStopFirst : bStopFirst;
+    String stopFirst = isShared ? aStopFirst : bStopFirst;
     boolean canChangePort = editBean.canChangePort(curTunnel);
     String tastopFirst = " title=\"" + aStopFirst + "\" ";
     String tbstopFirst = " title=\"" + bStopFirst + "\" ";
-    String phdisabled = canChangePort ? "" : tbstopFirst;
+    // we don't actually disable the fields for a new tunnel, but we provide a warning
+    String phdisabled = (canChangePort && isShared) ? "" : (isShared ? tbstopFirst : tastopFirst);
     String tunnelTypeName;
     String tunnelType;
     if (curTunnel >= 0) {
@@ -77,12 +80,24 @@
 <td>
 <%
     if (!"streamrclient".equals(tunnelType)) {
+        // we don't actually disable the field for a new tunnel, but we provide a warning
+        String shtitle = (canChangePort && isShared) ?
+                         intl._t("Traffic from all clients with this feature enabled will be routed over the same set of tunnels. This will make profiling the tunnels by an adversary more difficult, but will link the clients together.") :
+                         (isShared ? bStopFirst : aStopFirst);
+        String shdisabled = canChangePort ? "" : " disabled=\"disabled\" ";
 %>
-<label title="<%=intl._t("Traffic from all clients with this feature enabled will be routed over the same set of tunnels. This will make profiling the tunnels by an adversary more difficult, but will link the clients together.")%>&nbsp;<%=intl._t("(Change requires restart of client proxy tunnel)")%>">
-<input value="true" type="checkbox" name="shared"<%=(editBean.isSharedClient(curTunnel) ? " checked=\"checked\"" : "")%> class="optbox" />
+<label title="<%=shtitle%>">
+<input value="true" type="checkbox" name="shared" <%=(isShared ? " checked=\"checked\"" : "")%> class="optbox" <%=shdisabled%>/>
 <%=intl._t("Share tunnels with other configured clients")%>
 </label>
 <%
+        if (isShared && !canChangePort) {
+            // disabled checkbox won't come back in the form, stuff it in here
+            // https://stackoverflow.com/questions/155291/can-html-checkboxes-be-set-to-readonly
+%>
+<input value="true" type="hidden" name="shared"/>
+<%
+        }
     } /* !streamrclient */
 %>
 </td>
@@ -249,9 +264,13 @@
 %>
 <td class="infohelp">
 <%=intl._t("Please specify the full b64 destination.")%>
-<%        } else { %>
+<%
+          } else {
+%>
 <td>
-<%        } /* tunnel types */ %>
+<%
+          } /* tunnel types */
+%>
 </td>
 </tr>
 <%
@@ -346,27 +365,17 @@
 <%
           } // !streamrclient
           int currentSigType = editBean.getSigType(curTunnel, tunnelType);
-          String disabled = editBean.canChangeSigType(curTunnel) ? "" : " disabled=\"disabled\" ";
-          if (!editBean.canChangeSigType(curTunnel)) {
+          boolean canChangeSigType = editBean.canChangeSigType(curTunnel);
+          String tstopFirst = " title=\"" + stopFirst + "\" ";
+          String shdisabled = canChangeSigType ? "" : tstopFirst;
+          String disabled = canChangeSigType ? "" : " disabled=\"disabled\" ";
 %>
-<td title="<%=intl._t("Configuration of signature type is only possible when the tunnel is first created. To change, you must create a new tunnel.")%>" class="editDisabled">
+<td <%=shdisabled%>>
+<select id="sigType" name="sigType" class="selectbox" <%=shdisabled%> <%=disabled%>>
 <%
-          } else {
-%>
-<td>
-<%        }
-          if (editBean.canChangeSigType(curTunnel)) {
-%>
-<select id="sigType" name="sigType" class="selectbox">
-<%
-          } else {
-%>
-<select id="sigType" name="sigType" class="selectbox" disabled>
-<%
-          }
           if (editBean.isSigTypeAvailable(7)) {
 %>
-<option title="<%=intl._t("This is the default, recommended option")%>" value="7" <%=(currentSigType==7 ? " selected=\"selected\"" : disabled)%> >Ed25519-SHA-512</option>
+<option title="<%=intl._t("This is the default, recommended option")%>" value="7" <%=(currentSigType==7 ? " selected=\"selected\"" : disabled)%>>Ed25519-SHA-512</option>
 <%
           }
           if (editBean.isSigTypeAvailable(3)) {
@@ -398,13 +407,15 @@
 <%
                 boolean has0 = editBean.hasEncType(curTunnel, 0);
                 boolean has4 = editBean.hasEncType(curTunnel, 4);
-                String edisabled = editBean.canChangeEncType(curTunnel) ? "" : " disabled=\"disabled\" ";
+                boolean canChangeEncType = editBean.canChangeEncType(curTunnel);
+                String ehdisabled = canChangeEncType ? "" : tstopFirst;
+                String edisabled = canChangeEncType ? "" : " disabled=\"disabled\" ";
 %>
 <tr><th colspan="2"><%=intl._t("Encryption types")%></th></tr>
 <%
-          if (!editBean.canChangeEncType(curTunnel)) {
+          if (!canChangeEncType) {
 %>
-<tr class="optionsDisabled" title="<%=intl._t("To change encryption type, stop the tunnel first")%>">
+<tr class="optionsDisabled" <%=ehdisabled%>>
 <%
           } else {
 %>
