@@ -3,6 +3,8 @@
    - Relax default throttling limits on server tunnels
    - Enable both encryption types for all default tunnels (new installs only)
    - Add purikoshi.i2p as alternative to false.i2p outproxy (new installs only)
+ * I2PSnark: Add configuration information to advanced settings help in console
+   for i2psnark.maxFilesPerTorrent
 
 2020-05-22 dr|z3d
  * I2PTunnel: Add javascript handler to select all text in readonly inputs
@@ -157,10 +159,6 @@
 
 2020-04-21 zzz
  * Router: Fix logging NPE (thx zlatinb)
-
-2020-04-19 dr|z3d
- * I2PSnark: Add configuration option for max files per torrent
-   (i2psnark.maxFilesPerTorrent=n) and display value in config section
 
 2020-04-19 zzz
  * Ratchet: Adaptive order of muxed decrypt based on previous traffic
