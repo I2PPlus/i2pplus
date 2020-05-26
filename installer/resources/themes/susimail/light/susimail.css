@@ -161,7 +161,7 @@ div.footer {
     border: 1px solid #7e7fb9;
     box-shadow: inset 0 0 0 1px #fff;
     background: #eef;
-    background: linear-gradient(to right, rgba(232,232,255,0.3) 15%, rgba(255,255,255,0.8) 50%, rgba(232,232,255,0.3) 85%), repeating-linear-gradient(to bottom, #fff 1px, #ddf 2px, #fff 3px);
+    background: linear-gradient(to right, rgba(232,232,255,.3) 15%, rgba(255,255,255,.8) 50%, rgba(232,232,255,.3) 85%), repeating-linear-gradient(to bottom, #fff 1px, #ddf 2px, #fff 3px);
 }
 
 p.footer {
@@ -289,7 +289,7 @@ form {
 .header + form {
     border: 1px solid #7e7fb9;
     border-radius: 2px 2px 0 0;
-    box-shadow: 0 0 1px 1px rgba(220,220,255,0.3);
+    box-shadow: 0 0 1px 1px rgba(220,220,255,.3);
     background: #f4f4ff;
     background: linear-gradient(to bottom, #f8f8ff, #f2f2ff);
 }
@@ -318,7 +318,7 @@ form {
 
 #message_full tr:first-child {
     background: #efefff;
-    background: rgba(220,220,255,0.2);
+    background: rgba(220,220,255,.2);
 }
 
 #message_full tr:first-child td {
@@ -413,10 +413,10 @@ input[type="submit"], input[type="reset"], #settings {
 
 input[type="submit"]:hover, input[type="reset"]:hover, input[type="submit"]:focus, input[type="reset"]:focus,
 #settings:hover, #settings:focus {
-    filter: drop-shadow(0 0 1px rgba(204, 204, 204, 0.8));
+    filter: drop-shadow(0 0 1px rgba(204, 204, 204, .8));
     border: 1px solid #f60;
     color: #222 !important;
-    transition: ease border 0.7s;
+    transition: ease border .7s;
 }
 
 input[type="submit"]:active, input[type="reset"]:active,
@@ -428,7 +428,7 @@ input[type="submit"]:active, input[type="reset"]:active,
 }
 
 input[disabled], input[disabled]:hover, input[disabled]:focus {
-    opacity: 0.4;
+    opacity: .4;
     cursor: default;
     border: 1px solid #9ea8d1;
 }
@@ -772,7 +772,7 @@ input.nextpage:hover, input.next:hover, input[name="nextpage"]:hover {
 #pagenavbottom td {
     text-align: center !important;
     padding: 2px;
-    background: linear-gradient(to bottom, #fafaff 50%, rgba(220,220,255,0.3)), repeating-linear-gradient(135deg, rgba(255,255,255,0.5) 2px, rgba(221, 221, 255, 0.3) 3px, #fff 5px), #fff !important;
+    background: linear-gradient(to bottom, #fafaff 50%, rgba(220,220,255,.3)), repeating-linear-gradient(135deg, rgba(255,255,255,.5) 2px, rgba(221, 221, 255, .3) 3px, #fff 5px), #fff !important;
 }
 
 #pagenavbottom table {
@@ -912,7 +912,7 @@ tr.bottombuttons .pagenav {
 a.sort {
     vertical-align: middle;
     display: inline-block;
-    opacity: 0.9;
+    opacity: .9;
 }
 
 img.sort {
@@ -921,7 +921,7 @@ img.sort {
     background: linear-gradient(to bottom, #fff, #efefff);
     margin: 0;
     vertical-align: middle;
-    filter: drop-shadow(0 0 1px rgba(204, 204, 204, 0.6));
+    filter: drop-shadow(0 0 1px rgba(204, 204, 204, .6));
     width: 14px;
     height: 14px;
 }
@@ -938,7 +938,7 @@ img.sort:active {
 
 .sort.selected, .sort.selected:active {
     box-shadow: inset 1px 1px 1px #bbb;
-    opacity: 0.8;
+    opacity: .8;
     mix-blend-mode: luminosity !important;
 }
 
@@ -954,7 +954,7 @@ input[type="file"] {
 input[type="text"], input[type="password"], textarea {
     padding: 5px !important;
     background: #fbfbff;
-    box-shadow: inset 1px 1px 1px rgba(204, 204, 204, 0.6);
+    box-shadow: inset 1px 1px 1px rgba(204, 204, 204, .6);
     border: 1px solid #9ea8d1;
     border-radius: 2px;
     color: #33333f;
@@ -989,7 +989,7 @@ hr {
     width: 100%;
     margin: 5px;
     text-align: center;
-    opacity: 0.5;
+    opacity: .5;
 }
 
 /* login */
@@ -1002,7 +1002,7 @@ hr {
     border-radius: 2px;
     box-shadow: inset 0 0 0 1px #fff, inset 0 0 2px 1px #eef, 0 0 1px rgba(100, 100, 200, .5);
     background: #fafaff;
-    background: linear-gradient(to bottom, #fafaff, rgba(232,232,255,0.5)), linear-gradient(to bottom, rgba(255,255,255,0.7) 5%, rgba(220,220,255,0.9)), linear-gradient(to right, #fff, #efefff, #fff);
+    background: linear-gradient(to bottom, #fafaff, rgba(232,232,255,.5)), linear-gradient(to bottom, rgba(255,255,255,.7) 5%, rgba(220,220,255,.9)), linear-gradient(to right, #fff, #efefff, #fff);
     background-size: 100% 100%, auto 2px, 100%, 100%;
 }
 
@@ -1036,8 +1036,8 @@ hr {
     border-bottom: 1px solid #77789f;
     color: #4c526f;
     text-transform: uppercase;
-    letter-spacing: 0.1em;
-    word-spacing: 0.1em;
+    letter-spacing: .1em;
+    word-spacing: .1em;
     font-size: 14pt;
     text-align: left;
     padding: 12px 10px 12px 15px;
@@ -1096,31 +1096,31 @@ hr {
     padding: 3px 10px;
     color: #327bbf;
     border: 1px solid rgba(255,255,255,0);
-    border: 1px solid rgba(119, 120, 159, 0.3);
+    border: 1px solid rgba(119, 120, 159, .3);
     border-radius: 25px;
     box-shadow: 0 0 1px rgba(255,255,255,0);
     background: #efefff;
-    background: linear-gradient(to right, rgba(252,252,255,0.3), #f6f6ff, rgba(252,252,255,0.3));
-    transition: ease all 0.1s;
+    background: linear-gradient(to right, rgba(252,252,255,.3), #f6f6ff, rgba(252,252,255,.3));
+    transition: ease all .1s;
 }
 
 #dologin tr:last-child a:hover {
     border: 1px solid #77789f;
-    border: 1px solid rgba(119, 120, 159, 0.5);
+    border: 1px solid rgba(119, 120, 159, .5);
     background: #f2f2ff;
     box-shadow: 0 0 1px #ccf;
     background: linear-gradient(to bottom, #fafaff 50%, #e8e8ff 50%) #f2f2ff;
-    transition: ease all 0.1s;
+    transition: ease all .1s;
 }
 
 #dologin tr:last-child a:active {
-    border: 1px solid rgba(119, 120, 159, 0.3);
+    border: 1px solid rgba(119, 120, 159, .3);
     box-shadow: inset 3px 3px 3px #779;
-    color: rgba(65, 70, 95, 0.8) !important;
+    color: rgba(65, 70, 95, .8) !important;
     color: #99a5df !important;
     background: #e2e2ff;
     background: linear-gradient(to bottom, #eaeaff 50%, #d9d9ff 50%);
-    transition: ease all 0.1s;
+    transition: ease all .1s;
 }
 
 #dologin tr:last-child td {
@@ -1151,13 +1151,13 @@ h3#config {
     text-align: center;
     text-transform: uppercase;
     font-size: 11pt;
-    letter-spacing: 0.08em;
-    word-spacing: 0.1em;
+    letter-spacing: .08em;
+    word-spacing: .1em;
     border-bottom: 1px solid #7e7fb9;
     box-shadow: inset 0 0 0 1px #fff;
     text-shadow: 0 1px 1px #fff;
     background: #fafaff;
-    background: linear-gradient(to right, rgba(240,240,255,0.1), rgba(252,252,252,0.5), rgba(240,240,255,0.1)), linear-gradient(to bottom, #fafaff 50%, #f2f2ff 50%);
+    background: linear-gradient(to right, rgba(240,240,255,.1), rgba(252,252,252,.5), rgba(240,240,255,.1)), linear-gradient(to bottom, #fafaff 50%, #f2f2ff 50%);
 }
 
 #prefsave {
@@ -1189,7 +1189,7 @@ h3#config {
     font-weight: normal;
     border: 1px solid #bbd;
     border-radius: 2px;
-    box-shadow: 0 0 1px 0 rgba(220,220,255,0.3);
+    box-shadow: 0 0 1px 0 rgba(220,220,255,.3);
     background: #f6f6ff;
     background: linear-gradient(to bottom, #fff, #efefff);
 }
@@ -1220,7 +1220,7 @@ h3#config {
     font-size: 9pt;
     font-weight: bold;
     border: 1px solid #7e7fb9;
-    box-shadow: inset 0 0 1px 1px rgba(230,230,255,0.7) !important;
+    box-shadow: inset 0 0 1px 1px rgba(230,230,255,.7) !important;
     box-shadow: inset 0 0 0 1px #fff !important;
     background: #f2f2ff;
     background: linear-gradient(to bottom, #fcfcff 51%, #fafaff 51%, #f6f6ff 100%) !important;
@@ -1297,7 +1297,7 @@ _:-ms-lang(x), tr.bottombuttons, .topbuttons {
 }
 
 tr.bottombuttons:last-child {
-    background: linear-gradient(to bottom, #fafaff 50%, rgba(220,220,255,0.3)), repeating-linear-gradient(135deg, rgba(255,255,255,0.5) 2px, rgba(221, 221, 255, 0.3) 3px, #fff 5px), #fff !important;
+    background: linear-gradient(to bottom, #fafaff 50%, rgba(220,220,255,.3)), repeating-linear-gradient(135deg, rgba(255,255,255,.5) 2px, rgba(221, 221, 255, .3) 3px, #fff 5px), #fff !important;
 }
 
 tr.bottombuttons:empty {
@@ -1321,11 +1321,11 @@ tr.bottombuttons:empty {
     z-index: 9999;
     text-align: center;
     text-shadow: 0 1px 1px #000;
-    opacity: 0.9;
+    opacity: .9;
     border-top: 1px solid #fff;
     border-bottom: 2px solid #001;
-    box-shadow: 0 1px 1px rgba(120,120,200,0.3);
-    box-shadow: 0 2px 2px rgba(100,100,200,0.5);
+    box-shadow: 0 1px 1px rgba(120,120,200,.3);
+    box-shadow: 0 2px 2px rgba(100,100,200,.5);
     background: url(/themes/snark/light/images/delete.png) right 24px top 4px no-repeat #113;
     background-size: 14px 14px !important;
     background-blend-mode: luminosity;
@@ -1340,7 +1340,7 @@ tr.bottombuttons:empty {
     background-size: 14px 14px !important;
     border-radius: 0 0  4px 4px;
     border: none;
-    box-shadow: 0 1px 2px rgba(100,100,200,0.5);
+    box-shadow: 0 1px 2px rgba(100,100,200,.5);
 }
 
 @keyframes hide-up {
@@ -1366,8 +1366,8 @@ to {
 
 .notifications p {
     filter: drop-shadow(0 0 2px #000);
-    letter-spacing: 0.07em;
-    word-spacing: 0.2em;
+    letter-spacing: .07em;
+    word-spacing: .2em;
     font-weight: bold;
     animation: fade-in 1s linear;
 }
@@ -1497,7 +1497,7 @@ td p.error {
     text-align: left;
 /*    border-top: 1px solid #7e7fb9;*/
     box-shadow: inset 0 0 0 1px #fff;
-    background: url(/themes/susimail/images/attach.png) 10px center no-repeat, rgba(220,220,255,0.2);
+    background: url(/themes/susimail/images/attach.png) 10px center no-repeat, rgba(220,220,255,.2);
 }
 
 .attached img {
@@ -1682,12 +1682,12 @@ td[onclick] {
 
 tr.list0 {
     background: #eef;
-    background: repeating-linear-gradient(45deg, rgba(255,255,255,0.5) 2px, rgba(221, 221, 255, 0.3) 3px, #fff 5px), #fff;
+    background: repeating-linear-gradient(45deg, rgba(255,255,255,.5) 2px, rgba(221, 221, 255, .3) 3px, #fff 5px), #fff;
 }
 
 tr.list1 {
     background: #f7f8ff;
-    background: repeating-linear-gradient(135deg, rgba(255,255,255,0.5) 2px, rgba(240, 240, 255, 0.3) 3px, #fff 5px), #fff;
+    background: repeating-linear-gradient(135deg, rgba(255,255,255,.5) 2px, rgba(240, 240, 255, .3) 3px, #fff 5px), #fff;
 }
 
 tr.list0:hover, tr.list1:hover {
@@ -1696,7 +1696,7 @@ tr.list0:hover, tr.list1:hover {
 }
 
 tr.list0:hover td, tr.list1:hover td {
-    background-color: rgba(240,240,200,0.4) !important;
+    background-color: rgba(240,240,200,.4) !important;
 }
 
 _:-ms-lang(x), tr.list0:hover, tr.list1:hover {
@@ -1705,7 +1705,7 @@ _:-ms-lang(x), tr.list0:hover, tr.list1:hover {
 
 .list0 td, .list1 td {
     box-shadow: inset 0 0 0 1px #fff;
-    background: rgba(240,240,255,0.4);
+    background: rgba(240,240,255,.4);
 }
 
 .list0:hover td, .list1:hover td {
@@ -1776,7 +1776,7 @@ _:-ms-lang(x), tr.list0:hover, tr.list1:hover {
 
 #mailbox tr td {
     border-top: 1px solid #ccccf0;
-    border-top: 1px solid rgba(220,220,255,0.8);
+    border-top: 1px solid rgba(220,220,255,.8);
 }
 
 #mailbox tr:nth-child(3) td {
@@ -1819,7 +1819,7 @@ tr:hover td.mailListSubject a {
     width: calc(100% - 2px);
     border-radius: 2px 15px 15px 2px;
     background: #ffc;
-    background: linear-gradient(to right, rgba(255,255,255,0), rgba(255,255,208,0.9) 20%);
+    background: linear-gradient(to right, rgba(255,255,255,0), rgba(255,255,208,.9) 20%);
 }
 
 @supports not (-moz-appearance: none) {
@@ -1857,7 +1857,7 @@ tr:active td.mailListSubject a {
 }
 
 td.mailListFlagged img {
-    opacity: 0.7;
+    opacity: .7;
     transform: scale(-1,1) skew(10deg);
 }
 
@@ -1907,14 +1907,14 @@ th.mailListDate {
     border: 1px solid #bbc;
     border-radius: 2px;
     box-shadow: inset 0 0 0 1px #fff;
-    opacity: 0.8;
+    opacity: .8;
     background: #f6f6ff;
     background: linear-gradient(to bottom, #fff, #eef);
 }
 
 tr:hover .listDate {
     border: 1px solid #adadeb;
-    opacity: 0.9;
+    opacity: .9;
 }
 
 .listDate span {
@@ -1927,7 +1927,7 @@ tr:hover .listDate {
 
 .listTime {
     min-width: 40px;
-    opacity: 0.85;
+    opacity: .85;
 }
 
 .mailListSize {
@@ -1945,7 +1945,7 @@ td.mailListSize {
     display: inline-block;
     width: 100%;
     text-align: center;
-    letter-spacing: 0.1em;
+    letter-spacing: .1em;
     padding: 2px 0;
 }
 
@@ -2013,7 +2013,7 @@ td.mailListDelete, td.mailListFlagged, td.mailListSender, td.mailListAttachment,
 }
 
 td.mailListDelete {
-    background: rgba(250,240,250,0.5);
+    background: rgba(250,240,250,.5);
 }
 
 .list0 > *, .list1 > * {
@@ -2053,8 +2053,8 @@ td.mailListDelete {
     top: 250px;
     left: 0;
     right: 0;
-    box-shadow: inset 0 0 1px 1px #dda, 0 0 0 1px #fff, 0 0 2px 3px rgba(0,0,0,.4), 0 0 1000px 1000px rgba(8,0,0,0.5);
-    animation: fade-in linear 0.5s;
+    box-shadow: inset 0 0 1px 1px #dda, 0 0 0 1px #fff, 0 0 2px 3px rgba(0,0,0,.4), 0 0 1000px 1000px rgba(8,0,0,.5);
+    animation: fade-in linear .5s;
 }
 
 .iframed #nukemail.floating {
@@ -2069,7 +2069,7 @@ td.mailListDelete {
     width: 100%;
     height: 100%;
     background: #000;
-    opacity: 0.5;
+    opacity: .5;
     position: absolute;
     z-index: 2000;
     top: 0;
@@ -2130,12 +2130,12 @@ background-position: 0;
 @keyframes loading {
 0% {
     text-shadow: 0 0 1px #001, 0 0 5px #003;
-    background: linear-gradient(to bottom, rgba(255,255,255,0.2) 50%, rgba(100,100,128,0.3) 50%), repeating-linear-gradient(45deg, #77a 1px, #77a 20px, #449 20px, #449 40px);
+    background: linear-gradient(to bottom, rgba(255,255,255,.2) 50%, rgba(100,100,128,.3) 50%), repeating-linear-gradient(45deg, #77a 1px, #77a 20px, #449 20px, #449 40px);
 }
 
 100% {
     text-shadow: 0 0 1px #001, 0 0 5px #505;
-    background: linear-gradient(to bottom, rgba(255,255,255,0.2) 50%, rgba(100,100,128,0.3) 50%), repeating-linear-gradient(45deg, #449 1px, #449 20px, #77a 20px, #77a 40px);
+    background: linear-gradient(to bottom, rgba(255,255,255,.2) 50%, rgba(100,100,128,.3) 50%), repeating-linear-gradient(45deg, #449 1px, #449 20px, #77a 20px, #77a 40px);
 }
 }
 
@@ -2216,7 +2216,7 @@ select::-ms-expand {
     border: 1px solid #7e7fb9;
     box-shadow: inset 0 0 0 1px #fff;
     border-radius: 0 0 0 3px;
-    background: linear-gradient(to bottom, rgba(255,255,255,0.7) 50%, rgba(240,240,255,0.4) 50%), repeating-linear-gradient(to bottom, #eef 1px, #eef 2px, #fff 3px);
+    background: linear-gradient(to bottom, rgba(255,255,255,.7) 50%, rgba(240,240,255,.4) 50%), repeating-linear-gradient(to bottom, #eef 1px, #eef 2px, #fff 3px);
 }
 
 input.switchto, input.moveto {
@@ -2276,7 +2276,7 @@ td.mailListDate {
     font-weight: bold;
     border: none !important;
     border-bottom: 1px solid #ddd !important;
-    opacity: 0.85;
+    opacity: .85;
     box-shadow: none !important;
     background: none !important;
 }
@@ -2375,15 +2375,21 @@ tr.mailbody td {
 }
 
 .debugHeader:nth-child(n+3) td {
-    border-top: 1px solid #7e7fb9;
+    border-top: 1px solid #273;
+}
+
+.debugHeader {
+    background: #496;
 }
 
 .debugHeader pre {
     margin: 4px 10px;
+    line-height: 1.3;
     white-space: pre-wrap;
-    line-height: 130%;
     font-size: 9.5pt;
-    opacity: 0.9;
+    font-weight: 600;
+    color: #fff;
+    opacity: .9;
 }
 
 @media screen and (max-width: 1500px) {

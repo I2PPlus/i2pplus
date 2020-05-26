@@ -2363,9 +2363,6 @@ public class WebMail extends HttpServlet
 				} else if (state == State.LOADING) {
 					// TODO JS?
 			                out.println("<meta http-equiv=\"refresh\" content=\"5;url=" + myself + "\">");
-					// TODO we don't need the form below
-				} else if (state == State.SHOW) {
-					out.println("<script src=\"/susimail/js/toggleHeaders.js?" + CoreVersion.VERSION + "\" type=\"text/javascript\"></script>");
 				}
 				// setup noscript style so we can hide js buttons when js is disabled
 				out.println("<noscript><style type=\"text/css\">.script {display: none !important;}</style></noscript>");
@@ -2376,6 +2373,7 @@ public class WebMail extends HttpServlet
 				                                                   Long.toString(ctx.random().nextLong());
 				sessionObject.addNonce(nonce);
 				out.println(
+					// TODO we don't need the form below
 					"<div class=\"page\">\n<span class=\"header\"></span>\n" +
 					"<form method=\"POST\" enctype=\"multipart/form-data\" action=\"" + myself + "\" accept-charset=\"UTF-8\">\n" +
 					"<input type=\"hidden\" name=\"" + SUSI_NONCE + "\" value=\"" + nonce + "\">\n" +
@@ -2464,10 +2462,12 @@ public class WebMail extends HttpServlet
 				else if( state == State.LIST )
 					showFolder( out, sessionObject, mc, request );
 
-				else if( state == State.SHOW )
+				else if( state == State.SHOW ) {
 					showMessage(out, sessionObject, mc, showUIDL, buttonPressed(request, DELETE));
+					out.println("<script src=\"/susimail/js/toggleHeaders.js?" + CoreVersion.VERSION + "\" type=\"text/javascript\"></script>");
+//					out.println("<script src=\"/themes/toggleHeaders.js?" + CoreVersion.VERSION + "\" type=\"text/javascript\"></script>"); // debug
 
-				else if( state == State.NEW )
+				} else if( state == State.NEW )
 					showCompose( out, sessionObject, request );
 
 				else if( state == State.CONFIG )
@@ -3642,8 +3642,8 @@ public class WebMail extends HttpServlet
 			out.print("<tr>\n" +
 					  "<td align=\"right\">" + _t("Subject") + ":</td>\n" +
 					  "<td align=\"left\">" + subj + "<span id=\"toggleHeaders\" class=\"script\" style=\"float: right;\">" +
-					  "<a href=\"#\" class=\"script\" id=\"expand\" onclick=\"toggleHeaders()\">Show Headers</a> " +
-					  "<a href=\"#\" class=\"script\" id=\"collapse\" onclick=\"toggleHeaders()\" style=\"display: none;\">Hide Headers</a></span></td>\n" +
+					  "<a href=\"#\" class=\"script\" id=\"expand\">Show Headers</a> " +
+					  "<a href=\"#\" class=\"script\" id=\"collapse\" style=\"display: none;\">Hide Headers</a></span></td>\n" +
 					  "</tr>\n" +
 					  "<tr>\n" +
 					  "<td colspan=\"2\" align=\"center\" class=\"spacer\"><hr></td>\n" +
