@@ -2566,7 +2566,7 @@ input#toggle_debug:checked + label + #dhtDebugInner {
 #configs input:disabled, #configs input:disabled:hover, #configs input:disabled:focus {
     box-shadow: none;
     cursor: not-allowed;
-    filter: sepia(50%) invert(80%) hue-rotate(150deg) !important;
+    opacity: .7;
 }
 
 td#bwHelp {
