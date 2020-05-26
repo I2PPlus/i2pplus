@@ -846,7 +846,7 @@
 <%
   } else {
 %>
-<div id="notReady"><%=intl._t("Tunnels not initialized yet; please retry in a few moments.").replace("yet;", "yet&hellip;<br>")%></div>
+<div id="notReady"><%=intl._t("Initializing tunnel manager{0}{1} Please wait{0}", "&hellip;", "<br>")%><noscript><%=intl._t("Tunnels not initialized yet; please retry in a few moments.").replace("yet;", "yet&hellip;<br>")%></noscript></div>
 <script nonce="<%=cspNonce%>" type="text/javascript">
   setInterval(function() {
     var xhr = new XMLHttpRequest();

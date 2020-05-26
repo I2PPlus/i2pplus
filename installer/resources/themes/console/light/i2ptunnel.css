@@ -959,7 +959,7 @@ input.tunnelName, input.tunnelDescriptionText, #userAgents, .freetext.tunnelDesc
 }
 
 #notReady, #notFound {
-    margin: 35px auto 30px;
+    margin: 45px auto 0;
     padding: 30px;
     width: 400px;
     text-align: center;
