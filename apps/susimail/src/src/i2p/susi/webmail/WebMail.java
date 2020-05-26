@@ -2365,7 +2365,7 @@ public class WebMail extends HttpServlet
 				}
 				// setup noscript style so we can hide js buttons when js is disabled
 				out.println("<noscript><style type=\"text/css\">.script {display: none !important;}</style></noscript>");
-				out.println("<script type=\"text/javascript\" src=\"/js/iframeResizer/iframeResizer.contentWindow.js\"></script>");
+				out.println("<script type=\"text/javascript\" src=\"/js/iframeResizer/iframeResizer.contentWindow.js?" + CoreVersion.VERSION + "\"></script>");
 				out.println("</head>\n<body" + (state == State.LIST ? " onload=\"deleteboxclicked()\">\n" : ">\n"));
 				String nonce = state == State.AUTH ? LOGIN_NONCE :
 				                                                   Long.toString(ctx.random().nextLong());
