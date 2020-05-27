@@ -333,8 +333,8 @@
         </pack>
 
         <!-- to disable by default, add preselected="no" -->
-        <pack name="Windows Service" required="no" preselected="no">
-<!--            <description>Automatically start I2P+ in the background</description>-->
+        <pack name="Windows Service" required="yes" preselected="yes">
+            <!-- <description>Automatically start I2P+ in the background</description> -->
             <description>Install Windows service and automatically start I2P+ when system starts</description>
             <os family="windows" />
             <executable targetfile="$INSTALL_PATH/set_config_dir_for_nt_service.bat" stage="postinstall" failure="warn" keep="true" />
