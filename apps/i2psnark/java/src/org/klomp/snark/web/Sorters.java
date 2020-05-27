@@ -243,7 +243,7 @@ class Sorters {
                 }
                 if (snark.isChecking())
                     return 95;
-                if (snark.getNeededLength() <= 0)https://news.google.com/topstories?hl=en-US&gl=US&ceid=US:en
+                if (snark.getNeededLength() <= 0)
                     return 90;
                 if (peers <= 0) // no peers in swarm
                     return 35;
