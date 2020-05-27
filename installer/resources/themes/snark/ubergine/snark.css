@@ -1015,12 +1015,17 @@ td:first-child {
 
 .snarkTorrentOdd {
     background: #351933;
-    background: linear-gradient(to bottom, #2f182f, #1f101f);
+    background: linear-gradient(to bottom, #482048, #313);
 }
 
 .snarkTorrentEven {
     background: #270027;
-    background: linear-gradient(to bottom, #330033, #200020);
+    background: linear-gradient(to bottom, #2f1f2f, #1a0a1a);
+}
+
+.snarkTorrentEven td, .snarkTorrentOdd td {
+    border-top: 1px solid #424;
+    border-bottom: 1px solid #424;
 }
 
 .peerinfo:nth-child(odd) {
