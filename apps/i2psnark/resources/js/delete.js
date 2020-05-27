@@ -1,4 +1,4 @@
-function init()
+function initDelete()
 {
 	var buttons = document.getElementsByClassName("delete1");
 	for(index = 0; index < buttons.length; index++)
@@ -34,6 +34,9 @@ function addClickHandler2(elem)
 	});
 }
 
-document.addEventListener("DOMContentLoaded", function() {
-    init();
-}, true);
+var main = document.getElementById("mainsection");
+if (main) {
+  main.addEventListener("mouseover", function() {
+    initDelete();
+  }, false);
+}
