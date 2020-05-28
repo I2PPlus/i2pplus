@@ -1015,7 +1015,7 @@ td:first-child {
 
 .snarkTorrentOdd, .snarkTorrentEven {
     background: #270027;
-    background: linear-gradient(to bottom, #302030, #1f0f1f);
+    background: linear-gradient(to bottom, #301030, #1f001f);
 }
 
 .snarkDirInfo .snarkTorrentOdd {
@@ -1514,19 +1514,14 @@ tr:hover .percentBarComplete {
 }
 
 .active.seeding .percentBarComplete {
-    position: relative;
-    background: linear-gradient(to right, rgba(0,0,0,0) 49%, rgba(80,0,80,1), rgba(0,0,0,0) 51%), linear-gradient(to bottom, rgba(51,17,51,.9), rgba(17,0,17,.9));
-    background-size: 200% 200%, 100% 100%;
-    animation: progress 5s linear infinite reverse;
+    color: #86b;
+    box-shadow: inset 0 0 0 1px rgba(18,0,16,.85), inset 0 1px 2px rgba(136,96,128,.7), inset 0 -1px 3px rgba(0,0,0,.75);
+    background: radial-gradient(at center bottom, rgba(96, 32, 64, .5) 10%, rgba(16, 0, 16, .1) 80%, rgba(0, 0, 0, 0) 70%), linear-gradient(to bottom, rgba(64,17,51,.9), rgba(17,0,17,.9));
 }
 
-@keyframes progress {
-from {
-background-position: 0;
-}
-to {
-background-position: 200%
-}
+.active.seeding:hover .percentBarComplete {
+    color: #97c;
+    box-shadow: inset 0 0 0 1px rgba(16,0,16,.85), inset 0 1px 2px rgba(192,96,192,.9), inset 0 -1px 3px rgba(0,0,0,.75);
 }
 
 /* end download bars */
