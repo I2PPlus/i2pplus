@@ -175,7 +175,7 @@ public class RrdGraph implements RrdGraphConstants {
 
     private void drawOverlay() throws IOException {
         if (gdef.overlayImage != null) {
-             worker.loadImage(gdef.overlayImage, 0, 0, im.xgif, im.ygif);
+            worker.loadImage(gdef.overlayImage, 0, 0, im.xgif, im.ygif);
         }
     }
 

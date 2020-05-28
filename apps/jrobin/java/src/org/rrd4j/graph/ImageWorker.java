@@ -26,6 +26,7 @@ import javax.imageio.stream.ImageOutputStream;
 class ImageWorker {
     private static final String DUMMY_TEXT = "Dummy";
     private static final int IMG_BUFFER_CAPACITY = 10000; // bytes
+
     private BufferedImage img;
     private Graphics2D g2d;
     private int imgWidth, imgHeight;

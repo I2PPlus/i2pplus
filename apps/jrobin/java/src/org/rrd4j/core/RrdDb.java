@@ -114,7 +114,6 @@ public class RrdDb implements RrdUpdater<RrdDb>, Closeable {
          * @throws IOException              in case of I/O error.
          * @throws IllegalArgumentException if the builder settings were incomplete
          */
-        @SuppressWarnings("deprecation")
         public void doimport() throws IOException {
             if (rrdDef != null || (importer == null && externalPath == null)) {
                 throw new IllegalArgumentException("Not an importing configuration");
