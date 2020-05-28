@@ -1013,19 +1013,22 @@ td:first-child {
     transform: scale(0.9) !important;
 }
 
-.snarkTorrentOdd {
-    background: #351933;
-    background: linear-gradient(to bottom, #482048, #313);
+.snarkTorrentOdd, .snarkTorrentEven {
+    background: #270027;
+    background: linear-gradient(to bottom, #302030, #1f0f1f);
 }
 
-.snarkTorrentEven {
+.snarkDirInfo .snarkTorrentOdd {
+    background: #351933;
+}
+
+.snarkDirInfo .snarkTorrentEven {
     background: #270027;
-    background: linear-gradient(to bottom, #2f1f2f, #1a0a1a);
 }
 
 .snarkTorrentEven td, .snarkTorrentOdd td {
-    border-top: 1px solid #424;
-    border-bottom: 1px solid #424;
+    border-top: none;
+    border-bottom: none;
 }
 
 .peerinfo:nth-child(odd) {
