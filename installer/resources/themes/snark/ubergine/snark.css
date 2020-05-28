@@ -1398,14 +1398,10 @@ tr:hover .ParentDir a:active {
     border: 1px solid #414;
     border-bottom: 1px solid #212;
     border-right: 1px solid #212;
-    box-shadow: 0 0 1px 1px rgba(0,0,0,0.5);
-    background: #000;
-    background: repeating-linear-gradient(135deg, #000 1px, #000 6px, #101 6px, #101 11px);
+    box-shadow: 0 0 0 1px rgba(0,0,0,.7), inset 0 0 0 1px #080008, inset 3px 3px 3px rgba(0,0,0,.6);
+    background: #101;
+    background: repeating-linear-gradient(to right, rgba(0,0,0,0), rgba(0,0,0,0) 7px, rgba(64,0,64,.6) 7px, rgba(64,0,64,.6) 8px, rgba(0,0,0,0) 8px) #101;
     opacity: .7;
-}
-
-.peerinfo .percentBarOuter {
-    background: repeating-linear-gradient(45deg, #000 1px, #000 6px, #0f0a08 6px, #0f0a08 11px);
 }
 
 tr:hover .percentBarOuter, tr:hover .peerinfo .percentBarOuter {
@@ -1419,10 +1415,14 @@ tr:hover .percentBarOuter, tr:hover .peerinfo .percentBarOuter {
 .percentBarInner {
     height: 100%;
     border: none;
-    border-right: 1px solid #414;
-    box-shadow: inset 0 0 0 1px #000;
+    border-right: 1px solid rgba(64,16,64,.8);
+    box-shadow: inset 0 0 0 1px #101;
     background: #515;
-    background: linear-gradient(to bottom, rgba(136, 17, 136, 0.7) 0%, rgba(85, 17, 85, 0.7) 50%, rgba(51, 17, 51, 0.7) 50%, rgba(0, 0, 0, 0.9) 100%);
+    background: linear-gradient(to bottom, #414, #313 50%, #101 50%, #000);
+}
+
+.active .percentBarInner {
+    background: repeating-linear-gradient(135deg, rgba(0,0,0,0) 1px, rgba(0,0,0,0) 6px, rgba(48,0,48,.3) 6px, rgba(48,0,48,.3) 11px), linear-gradient(to bottom, rgba(102, 17, 102,.65), rgba(85, 17, 85,.65) 50%, rgba(17, 0, 17,.65) 50%, rgba(0, 0, 0,.75));
 }
 
 tr:hover .percentBarInner, tr:hover .peerinfo .percentBarInner {
@@ -1430,6 +1430,17 @@ tr:hover .percentBarInner, tr:hover .peerinfo .percentBarInner {
     background: #606 !important;
     background: linear-gradient(to bottom, #404, #303) !important;
     opacity: 1;
+}
+
+.active .percentBarOuter {
+    box-shadow: 0 0 0 1px rgba(0,0,0,.7), inset 0 0 0 1px rgba(16,0,16,.75), inset 3px 3px 3px rgba(0,0,0,.6);
+    background: repeating-linear-gradient(to right, rgba(0,0,0,0), rgba(0,0,0,0) 7px, rgba(0,0,0,.2) 7px, rgba(0,0,0,.2) 8px, rgba(0,0,0,0) 8px), linear-gradient(to left, rgba(0, 255, 0, .3), rgba(255, 255, 0, .2), rgba(255, 0, 0, .2));
+    opacity: 1;
+}
+
+.active.peerinfo .percentBarOuter {
+    box-shadow: 0 0 0 1px rgba(0,0,0,.5), inset 0 0 0 1px rgba(16,0,16,.5), inset 3px 3px 3px rgba(0,0,0,.6);
+    background: repeating-linear-gradient(to right, rgba(0,0,0,0), rgba(0,0,0,0) 7px, rgba(0,0,0,.2) 7px, rgba(0,0,0,.2) 8px, rgba(0,0,0,0) 8px), linear-gradient(to right, #202,#303,#404);
 }
 
 .peerinfo .percentBarText {
@@ -5253,12 +5264,9 @@ tr:hover td.snarkTorrentDownloaded, tr:hover td.snarkTorrentRateDown, tr:hover t
     filter: drop-shadow(0 0 1px #737);
 }
 
-.snarkTorrentOdd:not(.peerinfo) .snarkTorrentDownloaded .percentBarInner,
-.snarkTorrentEven:not(.peerinfo) .snarkTorrentDownloaded .percentBarInner,
-.snarkTorrentOdd:not(.peerinfo) .snarkTorrentDownloaded .percentBarOuter,
-.snarkTorrentEven:not(.peerinfo) .snarkTorrentDownloaded .percentBarOuter {
-    max-height: 16px !important;
+.percentBarInner, .percentBarOuter {
     max-width: 80px !important;
+    height: 14px !important;
 }
 
 .snarkTorrentOdd:not(.peerinfo) .snarkTorrentDownloaded .percentBarText::after,
@@ -5620,36 +5628,6 @@ th.snarkTorrentPeerCount img {
 
 .lang_en .active.downloading .snarkTorrentStatus {
     text-align: center !important;
-}
-
-@keyframes downloadbar {
-0% {
-    background: repeating-linear-gradient(135deg, #000 1px, #000 6px, #202 6px, #202 11px);
-}
-
-100% {
-    background: repeating-linear-gradient(135deg, #202 1px, #202 6px, #000 6px, #000 11px);
-}
-}
-
-@keyframes uploadbar {
-0% {
-    background: repeating-linear-gradient(45deg, #000 1px, #000 6px, #202 6px, #202 11px);
-}
-
-100% {
-    background: repeating-linear-gradient(45deg, #202 1px, #202 6px, #000 6px, #000 11px);
-}
-}
-
-.downloading.active .percentBarOuter, .peerinfo.active .percentBarOuter {
-    animation: downloadbar 3s ease-in-out infinite forwards reverse;
-    opacity: 1;
-    will-change: transform;
-}
-
-.peerinfo.active .percentBarOuter {
-    animation: uploadbar 3s ease-in-out infinite forwards reverse;
 }
 
 .toggleview, .configsection .snarkConfigTitle {
