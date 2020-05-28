@@ -1031,14 +1031,9 @@ td:first-child {
     border-bottom: none;
 }
 
-.peerinfo:nth-child(odd) {
+.peerinfo:nth-child(even), .peerinfo:nth-child(odd) {
     background: #313;
-    background: linear-gradient(to right, #313 5px, #202 5px, #313);
-}
-
-.peerinfo:nth-child(even) {
-    background: #414;
-    background: linear-gradient(to right, #414 5px, #202 5px, #414);
+    background: linear-gradient(to right, #313 5px, #140414 5px);
 }
 
 @supports not (-moz-appearance: none) { /* prevents webkit from grad-filling every td */
@@ -1051,15 +1046,7 @@ td:first-child {
 }
 }
 
-.peerinfo td {
-    border-bottom: 1px solid #502050 !important;
-    border-bottom: 1px solid rgba(85,34,85,.6) !important;
-    border-top: 1px solid #160616 !important;
-    border-top: 1px solid rgba(20,6,20,.6) !important;
-}
-
 tr[id] + .peerinfo td {
-    border-top: 1px solid rgba(85,34,85,.4) !important;
     padding-top: 4px !important;
 }
 
@@ -5219,17 +5206,6 @@ input[name="nofilter_commentsName"] {
 .snarkTorrentETA, .snarkTorrentRateUp, .snarkTorrentUploaded, .snarkTorrentRateDown {
     padding-right: 8px !important;
     padding-left: 8px !important;
-}
-
-td.snarkTorrentDetails, td.snarkTorrentName, td.snarkTorrentETA, td.snarkTorrentDownloaded,
-td.snarkTorrentRateDown, td.snarkTorrentAction {
-    background: rgba(16,0,16,.1);
-}
-
-tr:hover td.snarkTrackerDetails, tr:hover td.snarkTorrentDetails, tr:hover td.snarkTorrentName, tr:hover td.snarkTorrentETA,
-tr:hover td.snarkTorrentDownloaded, tr:hover td.snarkTorrentRateDown, tr:hover td.snarkTorrentAction {
-    background: none;
-}
 }
 
 .priorityIndicator {
