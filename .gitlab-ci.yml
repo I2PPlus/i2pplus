@@ -26,7 +26,7 @@ Java8:
   script:
     - ./installer/resources/makegeoip.sh
     - ant pkg
-    - ant updater200
+    - ant updater200WithJettyAndGeoIP
     - ant i2psnark
     - ant javadoc-zip
 
