@@ -1388,7 +1388,6 @@ tr:hover .ParentDir a:active {
     box-shadow: 0 0 0 1px rgba(0,0,0,.7), inset 0 0 0 1px #080008, inset 3px 3px 3px rgba(0,0,0,.6);
     background: #101;
     background: repeating-linear-gradient(to right, rgba(0,0,0,0), rgba(0,0,0,0) 7px, rgba(64,0,64,.6) 7px, rgba(64,0,64,.6) 8px, rgba(0,0,0,0) 8px) #101;
-    opacity: .7;
 }
 
 tr:hover .percentBarOuter, tr:hover .peerinfo .percentBarOuter {
