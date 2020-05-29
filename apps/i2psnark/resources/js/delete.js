@@ -18,9 +18,6 @@ function initDelete()
 	});
 }
 
-var main = document.getElementById("mainsection");
-if (main) {
-  main.addEventListener("mouseover", function() {
-    initDelete();
-  }, false);
-}
+document.addEventListener("DOMContentLoaded", function() {
+	initDelete();
+}, true);
