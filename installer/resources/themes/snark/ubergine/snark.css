@@ -1413,10 +1413,15 @@ tr:hover .percentBarOuter, tr:hover .peerinfo .percentBarOuter {
 }
 
 tr:hover .percentBarInner, tr:hover .peerinfo .percentBarInner {
+    border-right: 1px solid #808;
     box-shadow: none;
     background: #606 !important;
     background: linear-gradient(to bottom, #404, #303) !important;
     opacity: 1;
+}
+
+tr.active:hover .percentBarInner, tr.active:hover .peerinfo .percentBarInner {
+    background: repeating-linear-gradient(135deg, rgba(0,0,0,.5) 1px, rgba(0,0,0,.5) 6px, rgba(48,0,48,.5) 6px, rgba(48,0,48,.5) 11px), linear-gradient(to bottom, #404, #303) !important;
 }
 
 .active .percentBarOuter {
