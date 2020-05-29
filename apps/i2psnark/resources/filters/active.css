@@ -14,14 +14,6 @@
     pointer-events: auto;
 }
 
-.ubergine .snarkTorrentOdd, .ubergine .snarkTorrentEven, .ubergine .peerinfo {
-    background: linear-gradient(to bottom, #270027, #200020) !important;
-}
-
-.ubergine .snarkTorrentOdd td, .ubergine .snarkTorrentEven td {
-    border-bottom: 1px solid #180818 !important;
-}
-
 .ubergine #torrentDisplay input#active + label {
     color: #fb0 !important;
     text-shadow: 0 1px 1px #000 !important;
