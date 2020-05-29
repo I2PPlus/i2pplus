@@ -5224,6 +5224,7 @@ input[name="nofilter_commentsName"] {
     margin: 0 8px 0 0 !important;
     line-height: 120% !important;
 }
+}
 
 /* alternative download bar popup bar text just for our downloads in .snarkTorrents */
 
@@ -5234,6 +5235,7 @@ input[name="nofilter_commentsName"] {
     position: relative;
     top: -18px;
     left: -32px;
+    z-index: 10;
     min-width: 140px !important;
     background: #000;
     border-radius: 2px;
