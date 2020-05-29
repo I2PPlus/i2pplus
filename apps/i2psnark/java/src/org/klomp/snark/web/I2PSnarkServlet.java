@@ -2124,7 +2124,6 @@ public class I2PSnarkServlet extends BasicServlet {
                                " (" + _t("Downloading from {0} of {1} peers in swarm", curPeers, knownPeers) + ")") + "</td>\n" +
                                "<td class=\"snarkTorrentStatus\"><b>" + _t("OK") +
                                "</b></td><td class=\"snarkTorrentPeerCount\"><a href=\"" +
-//                               uri + getQueryString(req, b64, null, null) + '#' + b64Short + "\"><span class=\"right\">" +
                                uri + getQueryString(req, b64, null, null) + "\"><span class=\"right\">" +
                                curPeers + "</span>" + thinsp(noThinsp) + "<span class=\"left\">" + knownPeers + "</span></a>";
                                snarkStatus = "active downloading incomplete";
@@ -2138,7 +2137,6 @@ public class I2PSnarkServlet extends BasicServlet {
                 statusString = toThemeImg("stalled", "", _t("Stalled") + " (" + ngettext("Connected to {0} peer", "Connected to {0} peers", curPeers)) + "</td>\n" +
                                "<td class=\"snarkTorrentStatus\"><b>" + _t("Stalled") +
                                "</b></td>\n<td class=\"snarkTorrentPeerCount\"><a href=\"" +
-//                               uri + getQueryString(req, b64, null, null) + '#' + b64Short + "\"><span class=\"right\">" +
                                uri + getQueryString(req, b64, null, null) + "\"><span class=\"right\">" +
                                curPeers + "</span>" + thinsp(noThinsp) + "<span class=\"left\">" + knownPeers + "</span></a>";
                                snarkStatus = "inactive downloading incomplete";
@@ -2170,7 +2168,6 @@ public class I2PSnarkServlet extends BasicServlet {
         }
 
         String rowStatus = (rowClass + ' ' + snarkStatus);
-//        out.write("<tr class=\"" + rowStatus + "\" id=\"" + b64Short + "\">" + // do we need an id for every row?
         out.write("<tr class=\"" + rowStatus + "\">\n" +
                   "<td class=\"snarkGraphicStatus\" align=\"center\">");
         out.write(statusString);
@@ -2223,35 +2220,8 @@ public class I2PSnarkServlet extends BasicServlet {
             out.write(toImg(icon));
         }
 
-/**
-        // Comment icon column
-//        out.write("</td>\n<td class=\"snarkCommentDetails\">");
-        if (isValid) {
-            CommentSet comments = snark.getComments();
-            if (comments != null && !comments.isEmpty()) {
-                StringBuilder buf = new StringBuilder(128);
-//                buf.append("<a href=\"").append(encodedBaseName).append("/")
-//                   .append("/#snarkCommentSection\" title=\"").append(_t("Comments")) // anchor links cause iframeResizer to fail
-//                   .append("\" title=\"").append(_t("Comments")).append("\">");
-// TODO Comment Count indicator
-//                   .append("\"><span class=\"commentCount\">").append(comments).append("</span>");
-                buf.append("<span class=\"snarkCommented\" title=\"").append(_t("Torrent has comments")).append("\">");
-                toThemeImg(buf, "rateme", "", "");
-                buf.append("</span></span>");
-                out.write(buf.toString());
-            }
-        }
-**/
-
         // Torrent name column
         out.write("</td>\n<td class=\"snarkTorrentName\">");
-        // No need for javascript here.. css now handles this
-        //if (isMultiFile) {
-            // link on the whole td
-        //    out.write(" onclick=\"document.location='" + encodedBaseName + "/';\">");
-        //} else {
-        //    out.write('>');
-        //}
         if (remaining == 0 || isMultiFile) {
             StringBuilder buf = new StringBuilder(128);
             buf.append("<a href=\"").append(encodedBaseName);
@@ -2299,10 +2269,10 @@ public class I2PSnarkServlet extends BasicServlet {
             out.write(_t("Completed") + ": " + date + "\">");
             out.write(formatSize(total).replaceAll("iB","")); // 3GB
             out.write("</div>");
-        }
+            }
         out.write("</td>\n");
         out.write("<td align=\"right\" class=\"snarkTorrentRateDown\">");
-//        if (isRunning && needed > 0 && (downBps > 0 || curPeers > 0)) // we may only be uploading to peers, so hide when downrate >= 0
+//        if (isRunning && needed > 0 && (downBps > 0 || curPeers > 0)) // we may only be uploading to peers, so hide when downrate <= 0
         if (isRunning && needed > 0 && downBps > 0 && curPeers > 0) {
             out.write("<span class=\"right\">");
             out.write(formatSize(downBps).replaceAll("iB", "")
