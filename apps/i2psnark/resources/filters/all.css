@@ -1,7 +1,4 @@
-.snarkTorrentOdd, .snarkTorrentEven {
-    display: table-row;
-}
-
+.snarkTorrentOdd, .snarkTorrentEven,
 .incomplete, .peerinfo, .debuginfo {
     display: table-row;
 }

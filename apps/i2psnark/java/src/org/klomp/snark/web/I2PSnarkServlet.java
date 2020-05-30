@@ -535,13 +535,14 @@ public class I2PSnarkServlet extends BasicServlet {
                     // ensure we hide torrent filter bar (if enabled) and js is disabled
                     out.write("<noscript><style type=\"text/css\">.script {display: none;}</style></noscript>\n");
                     out.write("<div id=\"torrentDisplay\" class=\"script\">\n" +
-                              "<input type=\"radio\" name=\"torrentDisplay\" id=\"all\" hidden><label for=\"all\">Show All</label>\n" +
-                              "<input type=\"radio\" name=\"torrentDisplay\" id=\"active\" hidden><label for=\"active\">Active</label>\n" +
-                              "<input type=\"radio\" name=\"torrentDisplay\" id=\"inactive\" hidden><label for=\"inactive\">Inactive</label>\n" +
-                              "<input type=\"radio\" name=\"torrentDisplay\" id=\"downloading\" hidden><label for=\"downloading\">Downloading</label>\n" +
-                              "<input type=\"radio\" name=\"torrentDisplay\" id=\"seeding\" hidden><label for=\"seeding\">Seeding</label>\n" +
-                              "<input type=\"radio\" name=\"torrentDisplay\" id=\"complete\" hidden><label for=\"complete\">Complete</label>\n" +
-                              "<input type=\"radio\" name=\"torrentDisplay\" id=\"incomplete\" hidden><label for=\"incomplete\">Incomplete</label>\n" +
+                              "<input type=\"radio\" name=\"torrentDisplay\" id=\"all\" hidden><label for=\"all\">Show All</label>" +
+                              "<input type=\"radio\" name=\"torrentDisplay\" id=\"active\" hidden><label for=\"active\">Active</label>" +
+                              "<input type=\"radio\" name=\"torrentDisplay\" id=\"inactive\" hidden><label for=\"inactive\">Inactive</label>" +
+                              "<input type=\"radio\" name=\"torrentDisplay\" id=\"downloading\" hidden><label for=\"downloading\">Downloading</label>" +
+                              "<input type=\"radio\" name=\"torrentDisplay\" id=\"seeding\" hidden><label for=\"seeding\">Seeding</label>" +
+                              "<input type=\"radio\" name=\"torrentDisplay\" id=\"complete\" hidden><label for=\"complete\">Complete</label>" +
+                              "<input type=\"radio\" name=\"torrentDisplay\" id=\"incomplete\" hidden><label for=\"incomplete\">Incomplete</label>" +
+                              "<input type=\"radio\" name=\"torrentDisplay\" id=\"stopped\" hidden><label for=\"stopped\">Stopped</label>" +
                               "</div>\n");
                 }
             }
@@ -2116,7 +2117,7 @@ public class I2PSnarkServlet extends BasicServlet {
                 statusString = toThemeImg("complete", "", _t("Complete")) + "</td>\n" +
                                "<td class=\"snarkTorrentStatus\"><b class=\"alwaysShow\">" +
                                _t("Complete") + "</b></td><td class=\"snarkTorrentPeerCount\">";
-                               snarkStatus = "inactive complete";
+                               snarkStatus = "inactive complete stopped";
             }
         } else {
             if (isRunning && curPeers > 0 && downBps > 0 && !showPeers) {
@@ -2163,7 +2164,7 @@ public class I2PSnarkServlet extends BasicServlet {
                 statusString = toThemeImg("stopped", "", _t("Stopped")) + "</td>\n" +
                                "<td class=\"snarkTorrentStatus\"><b class=\"alwaysShow\">" + _t("Stopped") +
                                "</b></td>\n<td class=\"snarkTorrentPeerCount\">";
-                               snarkStatus = "inactive incomplete";
+                               snarkStatus = "inactive incomplete stopped";
             }
         }
 

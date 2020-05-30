@@ -1,8 +1,8 @@
-.snarkTorrentOdd, .snarkTorrentEven {
+.snarkTorrentOdd, .snarkTorrentEven, .peerinfo, .debuginfo {
     display: none;
 }
 
-.downloading, .peerinfo, .debuginfo {
+.downloading {
     display: table-row;
 }
 

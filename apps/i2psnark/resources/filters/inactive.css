@@ -1,8 +1,8 @@
-.snarkTorrentOdd, .snarkTorrentEven {
+.snarkTorrentOdd, .snarkTorrentEven, .peerinfo, .debuginfo {
     display: none;
 }
 
-.inactive, .peerinfo, .debuginfo {
+.inactive {
     display: table-row;
 }
 

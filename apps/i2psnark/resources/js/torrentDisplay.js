@@ -9,15 +9,17 @@ function initFilterBar() {
   var btnSeeding = document.getElementById("seeding");
   var btnComplete = document.getElementById("complete");
   var btnIncomplete = document.getElementById("incomplete");
+  var btnStopped = document.getElementById("stopped");
 
   var allOdd = document.querySelectorAll(".snarkTorrentOdd");
   var allEven = document.querySelectorAll(".snarkTorrentEven");
   var active = document.querySelectorAll(".active:not(.peerinfo)");
   var inactive = document.querySelectorAll(".inactive:not(.peerinfo)");
-  var downloading = document.querySelectorAll(".downloading:not(.peerinfo)");
-  var seeding = document.querySelectorAll(".seeding:not(.peerinfo)");
-  var complete = document.querySelectorAll(".complete:not(.peerinfo)");
-  var incomplete = document.querySelectorAll(".incomplete:not(.peerinfo)");
+  var downloading = document.querySelectorAll(".downloading");
+  var seeding = document.querySelectorAll(".seeding");
+  var complete = document.querySelectorAll(".complete");
+  var incomplete = document.querySelectorAll(".incomplete");
+  var stopped = document.querySelectorAll(".stopped");
   var peerinfo = document.querySelectorAll(".peerinfo");
   var debuginfo = document.querySelectorAll(".debuginfo");
 
@@ -67,6 +69,8 @@ function initFilterBar() {
       on = "completed";
     else if (btnIncomplete.checked)
       on = "incomplete";
+    else if (btnStopped.checked)
+      on = "stopped";
     if (!btnAll.checked) {
       if (filtered.length == 1)
         cell.innerHTML= "Displaying " + (filtered.length) + " " + on + " torrent";
@@ -185,6 +189,20 @@ function initFilterBar() {
     });
   }
 
+  function showStopped() {
+    clean();
+    var css = document.createElement("link");
+    css.type="text/css";
+    css.rel="stylesheet";
+    css.href=".resources/filters/stopped.css";
+    css.setAttribute("id", "filter");
+    document.head.appendChild(css);
+    btnStopped.checked = true;
+    stopped.forEach((element) => {
+      element.classList.add("filtered");
+    });
+  }
+
   btnAll.addEventListener("click", showAll, false);
   btnActive.addEventListener("click", showActive, false);
   btnInactive.addEventListener("click", showInactive, false);
@@ -192,6 +210,7 @@ function initFilterBar() {
   btnSeeding.addEventListener("click", showSeeding, false);
   btnComplete.addEventListener("click", showComplete, false);
   btnIncomplete.addEventListener("click", showIncomplete, false);
+  btnStopped.addEventListener("click", showStopped, false);
 
 }
 
