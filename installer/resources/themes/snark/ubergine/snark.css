@@ -5408,18 +5408,15 @@ td.snarkTorrentDetails img, .snarkDirInfo td:first-child img:not(.thumb) {
 
 @media screen and (max-width: 1100px) {
 #torrentDisplay {
-    margin-top: 2px;
+    margin-top: 1px;
     margin-bottom: 1px;
     padding: 0;
     display: flex;
-}
-
-.iframed #torrentDisplay {
-    margin-top: -3px;
+    border-bottom: none;
 }
 
 #torrentDisplay label {
-    flex-grow: 1;
+    flex-grow: 1.1;
 }
 
 #torrentDisplay label:first-child {
@@ -5429,6 +5426,9 @@ td.snarkTorrentDetails img, .snarkDirInfo td:first-child img:not(.thumb) {
 #torrentDisplay label:last-child {
     border-radius: 0 4px 0 0;
 }
+
+.iframed #torrentDisplay label:first-child, .iframed #torrentDisplay label:last-child {
+    border-radius: 0;
 }
 
 td.snarkTorrentPeerCount {
