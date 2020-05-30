@@ -2551,7 +2551,8 @@ public class I2PSnarkServlet extends BasicServlet {
                 if (showDebug)
                     out.write("<tr class=\"debuginfo " + rowClass + "\"><td class=\"snarkGraphicStatus\"></td>" +
                               "<td colspan=\"12\">" + peer.getSocket()
-                              .replaceAll("Connection", "<b>Connection:</b>").replaceAll(";", " &bullet;").replaceAll("\\* ", "") +
+                              .replaceAll("Connection", "<b>Connection</b>").replaceAll(";", " &bullet;").replaceAll("\\* ", "")
+                              .replaceAll("from", "<span class=\"from\">⇦</span>").replaceAll("to", "<span class=\"to\">⇨</span>") +
                               "</td></tr>");
             }
         }
