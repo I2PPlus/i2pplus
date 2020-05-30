@@ -326,7 +326,8 @@ public class DNSOverHTTPS implements EepGet.StatusListener {
                                 continue;
                             }
                         }
-                        if (!hostAnswer.equals(name)) {
+                        // Cloudflare no longer adds the '.'
+                        if (!(hostAnswer.equals(name) || host.equals(name))) {
                             log("name mismatch: " + name);
                             continue;
                         }
