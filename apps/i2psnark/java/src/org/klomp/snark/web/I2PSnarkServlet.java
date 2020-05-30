@@ -542,7 +542,7 @@ public class I2PSnarkServlet extends BasicServlet {
                               "<input type=\"radio\" name=\"torrentDisplay\" id=\"seeding\" hidden><label for=\"seeding\">Seeding</label>" +
                               "<input type=\"radio\" name=\"torrentDisplay\" id=\"complete\" hidden><label for=\"complete\">Complete</label>" +
                               "<input type=\"radio\" name=\"torrentDisplay\" id=\"incomplete\" hidden><label for=\"incomplete\">Incomplete</label>" +
-                              "<input type=\"radio\" name=\"torrentDisplay\" id=\"stopped\" hidden><label for=\"stopped\">Stopped</label>" +
+                              "<input type=\"radio\" name=\"torrentDisplay\" id=\"stopped\" hidden><label for=\"stopped\">Stopped</label>\n" +
                               "</div>\n");
                 }
             }
