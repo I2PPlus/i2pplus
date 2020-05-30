@@ -718,6 +718,7 @@ th.snarkTorrentStatus {
 
 .snarkTorrentPeerCount {
     width: 1% !important;
+    min-width: 40px;
     white-space: nowrap;
     font-weight: bold;
 }
@@ -3563,6 +3564,13 @@ _:-ms-lang(x), input[type="radio"], input[type="checkbox"] {
 .routerdown {
     margin: 5px;
 }
+#torrentlist {
+    margin-top: -1px !important;
+}
+
+.iframed #torrentlist {
+    margin-top: -4px !important;
+}
 
 .snarkDirInfo {
     margin-top: 6px !important;
@@ -3668,6 +3676,10 @@ td.snarkTorrentStatus, td.snarkTorrentStatus a {
 
 .snarkNav.nav_main:link, .snarkNav:last-child[href="/i2psnark/"] {
     padding-left: 24px !important;
+}
+
+.iframed #pagenavtop {
+    margin-top: 3px !important;
 }
 
 .snarkTorrentName a:not(old) {
@@ -3813,12 +3825,8 @@ _:-ms-lang(x), .snarknavbar {
     padding: 13px 5px 15px !important;
 }
 
-.pagenavcontrols {
-    transform: translateX(65px) !important;
-}
-
-.iframed .pagenavcontrols {
-    transform: translateX(50px) !important;
+.iframed #pagenavtop {
+    margin-top: 2px !important;
 }
 
 th {
@@ -3840,14 +3848,14 @@ th {
 }
 
 .debugConnection {
-    background: #003000;
+    margin: 2px 4px;
+    padding: 1px 3px;
+    display: inline-block;
+    font-weight: bold;
     color: #fff;
     border-radius: 2px;
-    padding: 1px 3px;
-    font-weight: bold;
-    margin: 2px 4px;
-    display: inline-block;
     box-shadow: 0 0 0 1px #101;
+    background: #003000;
 }
 
 #totals {
@@ -3966,22 +3974,9 @@ code {
     background-size: 10px 10px;
 }
 
-#screenlog + form {
+#torrentlist {
     margin-top: -2px !important;
 }
-
-.iframed #screenlog + form {
-    margin-top: -1px !important;
-}
-
-.pagenavcontrols {
-    transform: translateX(79px) !important;
-}
-
-.iframed .pagenavcontrols {
-    transform: translateX(69px) !important;
-}
-
 .configsectionpanel .snarkConfigTitle, .configsectionpanel .snarkConfigTitle:hover {
     padding: 6px 5px 5px;
     min-width: 600px !important;
@@ -5254,7 +5249,7 @@ input[name="nofilter_commentsName"] {
 /* end alternative popup */
 
 #torrentlist {
-    margin: -4px 1px 2px;
+    margin: -2px 1px 2px;
     padding: 0 1px;
     display: block;
     box-shadow: 0 0 0 1px rgba(0, 0, 0, .5), 0 0 1px 1px rgba(0, 0, 0, .25);
@@ -5266,10 +5261,6 @@ input[name="nofilter_commentsName"] {
 .iframed #torrentlist {
     padding: 0;
     border-radius: 0;
-}
-
-#torrentDisplay + form > input + .snarkTorrents {
-    border-radius: 0 0 4px 4px;
 }
 
 .iframed #torrentlist #torrentDisplay > input ~ .snarkTorrents,
@@ -5419,18 +5410,6 @@ td.snarkTorrentDetails img, .snarkDirInfo td:first-child img:not(.thumb) {
 #torrentDisplay label {
     flex-grow: 1.1;
 }
-}
-
-#torrentDisplay label:first-child {
-    border-radius: 4px 0 0 0;
-}
-
-#torrentDisplay label:last-child {
-    border-radius: 0 4px 0 0;
-}
-
-.iframed #torrentDisplay label:first-child, .iframed #torrentDisplay label:last-child {
-    border-radius: 0;
 }
 
 td.snarkTorrentPeerCount {
