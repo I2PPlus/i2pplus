@@ -381,6 +381,10 @@ img[src="/themes/console/images/i2plogo.png"] {
     background: #f2f2ff url(/themes/console/images/info/errortriangle.png) 20px 40% no-repeat;
 }
 
+#error500 .sorry {
+    box-shadow: inset 0 0 0 1px #f99;
+}
+
 .sorry hr {
     margin: 10px 0;
     height: 1px;
@@ -8524,6 +8528,10 @@ div.news {
 
 .sorry {
     margin-left: 251px !important;
+}
+
+#error500 .sorry {
+    margin-left: 252px !important;
 }
 
 .joblog h3 {
