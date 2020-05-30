@@ -525,26 +525,26 @@ public class I2PSnarkServlet extends BasicServlet {
         List<Snark> snarks = getSortedSnarks(req);
         boolean isForm = _manager.util().connected() || !snarks.isEmpty();
         if (isForm) {
+            out.write("<form id=\"torrentlist\" action=\"_post\" method=\"POST\">\n");
             boolean showStatusFilter = _manager.util().showStatusFilter();
             if (showStatusFilter) {
                 // selective display of torrents based on status
                 // this should probably be done via a query string, but for now prototyping in js
-                // then we can persist the filter and show all matches, not just those on page, and paginate as required
-                // ensure we hide our torrent filter bar (if enabled) and js is disabled
-                out.write("\n<noscript><style type=\"text/css\">.script {display: none;}</style></noscript>\n");
+                // then we can show all matches, not just those on page, and paginate as required
                 if (!snarks.isEmpty() && _manager.util().connected()) {
+                    // ensure we hide torrent filter bar (if enabled) and js is disabled
+                    out.write("<noscript><style type=\"text/css\">.script {display: none;}</style></noscript>\n");
                     out.write("<div id=\"torrentDisplay\" class=\"script\">\n" +
-                              "<input type=\"radio\" name=\"torrentDisplay\" id=\"all\"><label for=\"all\">Show All</label>");
-                    out.write("<input type=\"radio\" name=\"torrentDisplay\" id=\"active\"><label for=\"active\">Active</label>" +
-                              "<input type=\"radio\" name=\"torrentDisplay\" id=\"inactive\"><label for=\"inactive\">Inactive</label>" +
-                              "<input type=\"radio\" name=\"torrentDisplay\" id=\"downloading\"><label for=\"downloading\">Downloading</label>" +
-                              "<input type=\"radio\" name=\"torrentDisplay\" id=\"seeding\"><label for=\"seeding\">Seeding</label>");
-                    out.write("<input type=\"radio\" name=\"torrentDisplay\" id=\"complete\"><label for=\"complete\">Complete</label>" +
-                              "<input type=\"radio\" name=\"torrentDisplay\" id=\"incomplete\"><label for=\"incomplete\">Incomplete</label>" +
+                              "<input type=\"radio\" name=\"torrentDisplay\" id=\"all\" hidden><label for=\"all\">Show All</label>\n" +
+                              "<input type=\"radio\" name=\"torrentDisplay\" id=\"active\" hidden><label for=\"active\">Active</label>\n" +
+                              "<input type=\"radio\" name=\"torrentDisplay\" id=\"inactive\" hidden><label for=\"inactive\">Inactive</label>\n" +
+                              "<input type=\"radio\" name=\"torrentDisplay\" id=\"downloading\" hidden><label for=\"downloading\">Downloading</label>\n" +
+                              "<input type=\"radio\" name=\"torrentDisplay\" id=\"seeding\" hidden><label for=\"seeding\">Seeding</label>\n" +
+                              "<input type=\"radio\" name=\"torrentDisplay\" id=\"complete\" hidden><label for=\"complete\">Complete</label>\n" +
+                              "<input type=\"radio\" name=\"torrentDisplay\" id=\"incomplete\" hidden><label for=\"incomplete\">Incomplete</label>\n" +
                               "</div>\n");
                 }
             }
-            out.write("<form action=\"_post\" method=\"POST\">\n");
             writeHiddenInputs(out, req, null);
         }
 
