@@ -1,4 +1,4 @@
-.snarkTorrentOdd, .snarkTorrentEven, .debuginfo {
+.snarkTorrentOdd, .snarkTorrentEven,  .peerinfo, .debuginfo {
     display: none;
 }
 
