@@ -1,5 +1,4 @@
-.snarkTorrentOdd, .snarkTorrentEven,
-.incomplete, .peerinfo, .debuginfo {
+.snarkTorrentOdd, .snarkTorrentEven, .peerinfo, .debuginfo {
     display: table-row;
 }
 
@@ -15,7 +14,7 @@
     color: #979 !important;
     text-shadow: 0 1px 1px #000 !important;
     box-shadow: inset 0 0 0 1px #000, inset 2px 2px 2px 2px #101 !important;
-    background: radial-gradient(at center bottom, rgba(255, 32, 160, .25), rgba(128, 64, 128, .15) 80%, rgba(0, 0, 0, 0)), linear-gradient(to bottom, #180818, #280828) !important;
+    background: radial-gradient(at center bottom, rgba(255, 32, 160, .25), rgba(128, 64, 128, .15) 50%, rgba(0, 0, 0, 0)), linear-gradient(to bottom, #180818, #280828) !important;
 }
 
 .vanilla #torrentDisplay input#all + label {
