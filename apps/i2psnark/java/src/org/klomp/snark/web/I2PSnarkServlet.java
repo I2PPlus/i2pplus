@@ -459,11 +459,12 @@ public class I2PSnarkServlet extends BasicServlet {
         resp.setContentType("text/html; charset=UTF-8");
         // "no-store, max-age=0" forces all our images to be reloaded on ajax refresh
         // add 'private' header to avoid being cached in anything other than browser
-        resp.setHeader("Cache-Control", "max-age=86400, no-cache, private, must-revalidate");
+//        resp.setHeader("Cache-Control", "max-age=86400, no-cache, private, must-revalidate");
+        resp.setHeader("Cache-Control", "max-age=86400, private");
         resp.setHeader("Content-Security-Policy", "default-src 'self'; style-src 'self' 'unsafe-inline'; script-src 'self' 'unsafe-inline' 'nonce-" + cspNonce + "'; form-action 'self'; frame-ancestors 'self'; object-src 'none'; media-src '" + (allowMedia ? "self" : "none") + "'");
         // This header is broken, only takes a date. Not needed with 'max-age'.
         //resp.setDateHeader("Expires", 86400);
-        resp.setHeader("Pragma", "no-cache");
+//        resp.setHeader("Pragma", "no-cache");
         resp.setHeader("X-Frame-Options", "SAMEORIGIN");
         resp.setHeader("X-XSS-Protection", "1; mode=block");
         resp.setHeader("X-Content-Type-Options", "nosniff");
