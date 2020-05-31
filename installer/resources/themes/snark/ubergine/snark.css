@@ -5069,6 +5069,9 @@ input[name="nofilter_commentsName"] {
 
 td.snarkTorrentStatus {
     text-align: left !important;
+}
+
+td.snarkTorrentStatus > * {
     filter: drop-shadow(0 0 1px #000);
 }
 
@@ -5140,7 +5143,7 @@ td.snarkTorrentStatus b::before {
     border-color: transparent #aaa transparent transparent;
 }
 
-.stopped.incomplete .snarkTorrentStatus b, .inactive.error .snarkTorrentStatus b {
+.stopped.incomplete .snarkTorrentStatus b, .inactive.eroror .snarkTorrentStatus b {
     background: #900 !important;
 }
 
