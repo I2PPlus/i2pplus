@@ -2040,7 +2040,7 @@ public class I2PSnarkServlet extends BasicServlet {
                                "<td class=\"snarkTorrentStatus\"><b>" + _t("Net Error") +
                                "</b></td>\n<td class=\"snarkTorrentPeerCount\"><span class=\"right\">" +
                                curPeers + "</span>" + thinsp(noThinsp) + "<span class=\"left\">" + knownPeers + "</span>";
-                               snarkStatus = "inactive downloading incomplete";
+                               snarkStatus = "inactive downloading incomplete neterror";
             //} else {
             //    if (err.length() > MAX_DISPLAYED_ERROR_LENGTH)
             //        err = DataHelper.escapeHTML(err.substring(0, MAX_DISPLAYED_ERROR_LENGTH)) + "&hellip;";
@@ -2155,12 +2155,12 @@ public class I2PSnarkServlet extends BasicServlet {
                                "<td class=\"snarkTorrentStatus\"><b>" + _t("No Peers") +
                                "</b></td>\n<td class=\"snarkTorrentPeerCount\"><span class=\"right\">0</span>" +
                                thinsp(noThinsp) + "<span class=\"left\">" + knownPeers + "</span>";
-                               snarkStatus = "inactive downloading incomplete";
+                               snarkStatus = "inactive downloading incomplete nopeers";
             } else if (isRunning) {
                 statusString = toThemeImg("nopeers", "", _t("No Peers")) + "</td>\n" +
                                "<td class=\"snarkTorrentStatus\"><b class=\"alwaysShow\">" + _t("No Peers") +
                                "</b></td>\n<td class=\"snarkTorrentPeerCount\">";
-                               snarkStatus = "inactive downloading incomplete";
+                               snarkStatus = "inactive downloading incomplete nopeers";
             } else {
                 statusString = toThemeImg("stopped", "", _t("Stopped")) + "</td>\n" +
                                "<td class=\"snarkTorrentStatus\"><b class=\"alwaysShow\">" + _t("Stopped") +
