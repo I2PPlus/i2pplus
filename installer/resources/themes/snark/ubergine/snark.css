@@ -1439,8 +1439,6 @@ tr.active:hover .percentBarInner, tr.active:hover .peerinfo .percentBarInner {
     box-shadow: 0 0 0 1px rgba(0,0,0,.7), inset 0 0 0 1px rgba(16,0,16,.75), inset 3px 3px 3px rgba(0,0,0,.6);
     background: repeating-linear-gradient(to right, rgba(0,0,0,0), rgba(0,0,0,0) 7px, rgba(0,0,0,.2) 7px, rgba(0,0,0,.2) 8px, rgba(0,0,0,0) 8px), linear-gradient(to left, rgba(0, 255, 0, .3), rgba(255, 255, 0, .3), rgba(255, 0, 0, .3));
     opacity: 1;
-    position: relative;
-    overflow: hidden;
 }
 
 .active.peerinfo .percentBarOuter {
@@ -1448,7 +1446,14 @@ tr.active:hover .percentBarInner, tr.active:hover .peerinfo .percentBarInner {
     background: repeating-linear-gradient(to right, rgba(0,0,0,0), rgba(0,0,0,0) 7px, rgba(0,0,0,.2) 7px, rgba(0,0,0,.2) 8px, rgba(0,0,0,0) 8px), linear-gradient(to right, #202,#303,#404);
 }
 
-.active:not(.peerinfo) .percentBarOuter::after {
+/* animation for active downloading torrents.. consumes cpu */
+/*
+.active:not(.peerinfo):not(:hover) .percentBarOuter {
+    position: relative;
+    overflow: hidden;
+}
+
+.active:not(.peerinfo):not(:hover) .percentBarOuter::after {
     content: "";
     display: inline-block;
     width: 0;
@@ -1458,7 +1463,7 @@ tr.active:hover .percentBarInner, tr.active:hover .peerinfo .percentBarInner {
     vertical-align: middle;
     top: 2px;
     left: -100%;
-/*    animation: ease-out active 1.25s forwards;*/
+    animation: ease-out active 1.25s forwards;
     will-change: transform;
     filter: blur(1px) drop-shadow(0 0 1px #d50) drop-shadow(0 0 1px #920) drop-shadow(0 0 1px #400);
     mix-blend-mode: color-dodge;
@@ -1481,6 +1486,7 @@ tr.active:hover .percentBarInner, tr.active:hover .peerinfo .percentBarInner {
         background: none;
     }
 }
+*/
 
 .peerinfo .percentBarText {
     color: #c19e91;
@@ -5134,12 +5140,12 @@ td.snarkTorrentStatus b::before {
     border-color: transparent #aaa transparent transparent;
 }
 
-.stopped.incomplete .snarkTorrentStatus b, .error .snarkTorrentStatus b {
-    background: #900;
+.stopped.incomplete .snarkTorrentStatus b, .inactive.error .snarkTorrentStatus b {
+    background: #900 !important;
 }
 
-.stopped.incomplete .snarkTorrentStatus b::before, .error .snarkTorrentStatus b::before {
-    border-color: transparent #900 transparent transparent;
+.stopped.incomplete .snarkTorrentStatus b::before, .inactive.error .snarkTorrentStatus b::before {
+    border-color: transparent #900 transparent transparent !important;
 }
 
 .snarkTorrentDownloaded, .snarkTorrentUploaded, .snarkTorrentRateDown, .snarkTorrentRateUp {
