@@ -363,7 +363,7 @@ public class I2PSnarkServlet extends BasicServlet {
         }
         // dynamic iframe resizer
         out.write("<script type=\"text/javascript\" src=\"/js/iframeResizer/iframeResizer.contentWindow.js?" + CoreVersion.VERSION + "\" id=\"iframeResizer\"></script>\n");
-        out.write("</head>\n" + "<body class=\"" + _manager.getTheme() + "\">\n" + "<center>");
+        out.write("</head>\n" + "<body class=\"" + _manager.getTheme() + " lang_" + lang + "\">\n" + "<center>");
         List<Tracker> sortedTrackers = null;
         if (isConfigure) {
             out.write("<div class=\"snarknavbar\" id=\"top\">\n<a href=\"" + _contextPath + "/\" title=\"");

@@ -5061,18 +5061,24 @@ input[name="nofilter_commentsName"] {
     min-width: 38px;
 }
 
-.snarkTorrentStatus {
+td.snarkTorrentStatus {
+    text-align: left !important;
     filter: drop-shadow(0 0 1px #000);
 }
 
 td.snarkTorrentStatus b {
-    padding: 3px 2px;
+    padding: 3px 5px;
     min-width: 80px;
     display: inline-block;
-    background: #535;
+    text-align: center;
     position: relative;
     font-size: 95%;
     border-radius: 2px;
+    background: #535;
+}
+
+.lang_fr td.snarkTorrentStatus b {
+    min-width: 130px;
 }
 
 td.snarkTorrentStatus b::before {
