@@ -5057,6 +5057,85 @@ input[name="nofilter_commentsName"] {
 }
 
 @media screen and (min-width: 1500px) {
+.snarkGraphicStatus {
+    min-width: 38px;
+}
+
+.snarkTorrentStatus {
+    filter: drop-shadow(0 0 1px #000);
+}
+
+td.snarkTorrentStatus b {
+    padding: 3px 2px;
+    min-width: 80px;
+    display: inline-block;
+    background: #535;
+    position: relative;
+    font-size: 95%;
+    border-radius: 2px;
+}
+
+td.snarkTorrentStatus b::before {
+    width: 0;
+    height: 0;
+    position: absolute;
+    top: calc(50% - 5px);
+    left: -10px;
+    border-width: 5px;
+    border-style: solid;
+    border-color: transparent #535 transparent transparent;
+    content: "";
+}
+
+.active.seeding.complete .snarkTorrentStatus b {
+    background: #937;
+}
+
+.active.seeding.complete .snarkTorrentStatus b::before {
+    border-color: transparent #937 transparent transparent;
+}
+
+.active.downloading .snarkTorrentStatus b {
+    background: #252;
+}
+
+.active.downloading .snarkTorrentStatus b::before {
+    border-color: transparent #252 transparent transparent;
+}
+
+.inactive.downloading .snarkTorrentStatus b {
+    background: #bb0;
+    color: #101;
+}
+
+.inactive.downloading .snarkTorrentStatus b::before {
+    border-color: transparent #bb0 transparent transparent;
+}
+
+.stopped.complete .snarkTorrentStatus b {
+    background: #28f;
+}
+
+.stopped.complete .snarkTorrentStatus b::before {
+    border-color: transparent #28f transparent transparent;
+}
+
+.nopeers.incomplete .snarkTorrentStatus b {
+    background: #aaa;
+}
+
+.nopeers.incomplete .snarkTorrentStatus b::before {
+    border-color: transparent #aaa transparent transparent;
+}
+
+.stopped.incomplete .snarkTorrentStatus b, .error .snarkTorrentStatus b {
+    background: #900;
+}
+
+.stopped.incomplete .snarkTorrentStatus b::before, .error .snarkTorrentStatus b::before {
+    border-color: transparent #900 transparent transparent;
+}
+
 .snarkTorrentDownloaded, .snarkTorrentUploaded, .snarkTorrentRateDown, .snarkTorrentRateUp {
     min-width: 76px;
 }
