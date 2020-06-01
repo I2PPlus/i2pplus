@@ -5063,9 +5063,9 @@ input[name="nofilter_commentsName"] {
 }
 
 @media screen and (min-width: 1500px) {
-.snarkGraphicStatus {
+/*.snarkGraphicStatus {
     min-width: 38px;
-}
+}*/
 
 td.snarkTorrentStatus {
     text-align: left !important;
@@ -5076,12 +5076,14 @@ td.snarkTorrentStatus > * {
 }
 
 td.snarkTorrentStatus b {
-    padding: 3px 5px;
+    padding: 3px 5px 5px;
     min-width: 80px;
     display: inline-block;
     text-align: center;
     position: relative;
+    line-height: 1;
     font-size: 95%;
+    text-shadow: 0 1px 1px #101;
     border-radius: 2px;
     background: #535;
 }
@@ -5104,6 +5106,7 @@ td.snarkTorrentStatus b::before {
 
 .active.seeding.complete .snarkTorrentStatus b {
     background: #937;
+    background: repeating-linear-gradient(135deg, #937, #937 8px, #826 9px, #826 17px);
 }
 
 .active.seeding.complete .snarkTorrentStatus b::before {
@@ -5112,6 +5115,7 @@ td.snarkTorrentStatus b::before {
 
 .active.downloading .snarkTorrentStatus b {
     background: #252;
+    background: repeating-linear-gradient(135deg, #252, #252 8px, #141 9px, #141 17px);
 }
 
 .active.downloading .snarkTorrentStatus b::before {
@@ -5119,8 +5123,9 @@ td.snarkTorrentStatus b::before {
 }
 
 .inactive.downloading .snarkTorrentStatus b {
-    background: #bb0;
     color: #101;
+    text-shadow: 0 1px 1px #dd0;
+    background: #bb0;
 }
 
 .inactive.downloading .snarkTorrentStatus b::before {
@@ -5136,6 +5141,7 @@ td.snarkTorrentStatus b::before {
 }
 
 .nopeers.incomplete .snarkTorrentStatus b {
+    text-shadow: 0 1px 1px #bbb;
     background: #aaa;
 }
 
