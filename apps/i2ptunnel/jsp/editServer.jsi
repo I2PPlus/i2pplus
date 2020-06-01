@@ -587,7 +587,7 @@
 </label>
 </td>
 <td>
-<label title="<%=intl._t("Only enable if you are hosting this service on multiple routers")%>"><input value="1" type="checkbox" name="multihome"<%=(editBean.getMultihome(curTunnel) ? " checked=\"checked\"" : "")%> class="optbox" />
+<label title="<%=intl._t("Only enable if you are hosting this service on multiple routers")%>"><input value="<%=(editBean.getMultihome(curTunnel) ? 1 : 0)%>" type="checkbox" name="multihome"<%=(editBean.getMultihome(curTunnel) ? " checked=\"checked\"" : "")%> class="optbox" />
 <%=intl._t("Optimize for Multihoming")%>
 </label>
 </td>
