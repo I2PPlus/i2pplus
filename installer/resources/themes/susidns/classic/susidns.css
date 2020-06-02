@@ -52,8 +52,8 @@ table.book td {
 }
 
 table.book th {
-    text-align: left;
     padding-left: 5px;
+    text-align: left;
 }
 
 .book th:last-child {
@@ -65,10 +65,10 @@ table.book tr:hover textarea {
 }
 
 table.book td:last-child {
+    padding: 0 5px;
     width: 36px;
     white-space: no-wrap;
     text-align: center;
-    padding: 0 5px;
 }
 
 table.book td:first-child {
@@ -77,30 +77,19 @@ table.book td:first-child {
 }
 
 table.book td:nth-child(2) {
+    padding-left: 10px;
     width: 30px;
     white-space: nowrap;
-    padding-left: 10px;
 }
 
 .book td:nth-child(3) {
-    text-align: center;
-    width: 20px;
     padding: 2px 20px 2px 0 !important;
+    width: 20px;
+    text-align: center;
 }
 
 .book td:nth-child(3) a:not(old) {
     font-size: 0 !important;
-}
-
-.book td:nth-child(3) .addrhlpr a::after {
-    content: url(/themes/console/images/buttons/fullview.png);
-    text-align: center;
-    padding: 0 10px !important;
-    filter: drop-shadow(0 0 1px #555);
-}
-
-.book td:nth-child(4) .addrhlpr:hover {
-    filter: drop-shadow(0 0 1px #f60);
 }
 
 td.destinations {
@@ -151,7 +140,7 @@ input:focus::placeholder {
     position: static;
 }
 
-.iframed #navi, .iframed h3, .iframed h4, .iframed #help, .iframed p.buttons, .iframed #filter {
+.iframed #navi, .iframed h3, .iframed h4, .iframed #help, .iframed p.buttons {
     border-left: none !important;
     border-right: none !important;
 }
@@ -287,24 +276,24 @@ a:active {
 }
 
 th {
-    padding:5px 10px;
+    padding: 5px 10px;
     line-height: 12pt;
-    font-size:10pt;
+    font-size: 10pt;
     border-bottom: 1px solid #aaafce;
     border-top: 1px solid #aaafce;
     background: linear-gradient(to bottom, #fff 50%, #eff2ff 50%);
 }
 
 td {
-    padding:5px 10px;
+    padding: 5px 10px;
     vertical-align: center;
     font-size: 9pt;
 }
 
 li {
-    margin-left:15px;
-    margin-right:15px;
-    font-size:9pt;
+    margin-left: 15px;
+    margin-right: 15px;
+    font-size: 9pt;
 }
 
 tr.list1 {
@@ -371,7 +360,7 @@ p.footer {
 div#filter {
     border: 1px solid #aaafce;
     padding: 0 10px;
-    margin: 0 -11px;
+    margin: 11px 0 0 !important;
     word-spacing: 0.2em;
     background: #fff;
     text-align: center;
@@ -392,7 +381,7 @@ div#filter {
     text-align: center;
 }
 
-#filter a, #filter a:visited {
+#filter a, #filter a:visited, #activefilter {
     display: inline-block;
     margin: 2px 0;
     padding: 0 6px;
@@ -431,7 +420,7 @@ div#filter {
     font-size: 12pt;
 }
 
-#filter span {
+/*#filter span {
     margin-top: -1px;
     padding: 5px;
     min-width: 300px !important;
@@ -442,7 +431,7 @@ div#filter {
     border-radius: 0 0 2px 2px;
     box-shadow: inset 0 0 0 1px #fff;
     background: linear-gradient(to bottom, #fff 50%, #eff2ff 50%);
-}
+}*/
 
 #filter span > * {
     vertical-align: middle;
@@ -766,7 +755,7 @@ textarea[name="config"], textarea[name="content"] {
 
 #navi a.abook {
     background: #fff url(/themes/susidns/images/abook.png) 5px center no-repeat;
-    background: url(/themes/susidns/images/abook.png) 5px center no-repeat, linear-gradient(to bottom, #fff 0%, #fff 50%, #eef 50%, #ddf 100%);
+    background: url(/themes/susidns/images/abook.png) 5px center no-repeat, linear-gradient(to bottom, #fff, #eef);
     padding: 3px 5px 3px 24px;
 }
 
@@ -776,7 +765,7 @@ textarea[name="config"], textarea[name="content"] {
 
 #navi a#subs {
     background: #fff url(/themes/susidns/images/subs.png) 5px center no-repeat;
-    background: url(/themes/susidns/images/subs.png) 5px center no-repeat, linear-gradient(to bottom, #fff 0%, #fff 50%, #eef 50%, #ddf 100%);
+    background: url(/themes/susidns/images/subs.png) 5px center no-repeat, linear-gradient(to bottom, #fff, #eef);
     padding: 3px 5px 3px 24px;
 }
 
@@ -786,7 +775,7 @@ textarea[name="config"], textarea[name="content"] {
 
 #navi a#config {
     background: #fff url(/themes/console/images/buttons/configure.png) 5px center no-repeat;
-    background: url(/themes/console/images/buttons/configure.png) 5px center no-repeat, linear-gradient(to bottom, #fff 0%, #fff 50%, #eef 50%, #ddf 100%);
+    background: url(/themes/console/images/buttons/configure.png) 5px center no-repeat, linear-gradient(to bottom, #fff, #eef);
     padding: 3px 5px 3px 24px;
 }
 
@@ -796,7 +785,7 @@ textarea[name="config"], textarea[name="content"] {
 
 #navi a#overview {
     background: #fff url(/themes/susidns/images/overview.png) 5px center no-repeat;
-    background: url(/themes/susidns/images/overview.png) 5px center no-repeat, linear-gradient(to bottom, #fff 0%, #fff 50%, #eef 50%, #ddf 100%);
+    background: url(/themes/susidns/images/overview.png) 5px center no-repeat, linear-gradient(to bottom, #fff, #eef);
     padding: 3px 5px 3px 24px;
 }
 
@@ -965,6 +954,10 @@ p.book {
 
 /* hostname list */
 
+#host_list th {
+    font-size: 9pt;
+}
+
 #host_list th:first-child,
 #host_list td:first-child {
     width: 150px;
@@ -997,10 +990,30 @@ p.book {
     font-size: 0 !important;
 }
 
-#host_list td:nth-child(2) a::after {
+#host_list td:nth-child(2) a::after, #host_list td:nth-child(3) a::after, #host_list td:nth-child(4) a::after {
+    opacity: .8;
+}
+
+#host_list td:nth-child(2) a:hover::after, #host_list td:nth-child(2) a:focus::after,
+#host_list td:nth-child(3) a:hover::after, #host_list td:nth-child(3) a:focus::after,
+#host_list td:nth-child(4) a:hover::after, #host_list td:nth-child(4) a:focus::after {
+    opacity: 1;
+}
+
+/*#host_list td:nth-child(2) a::after {
     content: url(/themes/console/images/buttons/link.png);
     text-align: center;
     filter: drop-shadow(0 0 1px #555);
+    cursor: pointer;
+}*/
+
+#host_list td:nth-child(2) a::after {
+    content: "";
+    width: 14px;
+    height: 14px;
+    background: #338;
+    text-align: center;
+    display: inline-block;
     cursor: pointer;
 }
 
@@ -1008,10 +1021,22 @@ p.book {
     font-size: 0 !important;
 }
 
-#host_list td:nth-child(3) a::after {
+/*#host_list td:nth-child(3) a::after {
     content: url(/themes/console/images/buttons/helper.png);
     cursor: pointer;
     filter: drop-shadow(0 0 1px #555);
+}
+*/
+
+#host_list td:nth-child(3) a::after {
+    content: "";
+    width: 12px;
+    height: 12px;
+    background: #818;
+    text-align: center;
+    display: inline-block;
+    cursor: pointer;
+    transform: rotate(45deg);
 }
 
 #host_list th:nth-child(4), #host_list td:nth-child(4) {
@@ -1022,17 +1047,23 @@ p.book {
     font-size: 0 !important;
 }
 
-#host_list td:nth-child(4) .addrhlpr a::after {
+/*#host_list td:nth-child(4) .addrhlpr a::after {
     content: url(/themes/console/images/buttons/fullview.png);
     text-align: center;
     padding: 0 10px !important;
     filter: drop-shadow(0 0 1px #555);
     cursor: pointer;
-}
+}*/
 
-#host_list td:nth-child(2) a:hover, #host_list td:nth-child(3) a:hover, #host_list td:nth-child(4) a:hover,
-#host_list td:nth-child(2) a:focus, #host_list td:nth-child(3) a:focus, #host_list td:nth-child(4) a:focus {
-    filter: drop-shadow(0 0 1px #f60);
+#host_list td:nth-child(4) .addrhlpr a::after {
+    content: "";
+    width: 14px;
+    height: 14px;
+    background: #393;
+    text-align: center;
+    display: inline-block;
+    cursor: pointer;
+    border-radius: 50%;
 }
 
 #host_list .destaddress {
@@ -1097,6 +1128,10 @@ td.destinations {
     padding: 0 6px !important;
     line-height: 150%;
 }
+
+#host_list th {
+    font-size: 8.5pt;
+}
 }
 
 @media screen and (min-width: 1400px) {
@@ -1120,15 +1155,15 @@ h3 {
     margin-top: -40px !important;
 }
 
-#filter span, #filter a {
+#filter span, #filter a, #activefilter {
     font-size: 10pt !important;
     min-width: 16px !important;
 }
 
-#filter span {
+/*#filter span {
     font-size: 11pt !important;
     min-width: 400px !important;
-}
+}*/
 
 .illustrate {
     margin-top: 15px;
@@ -1244,3 +1279,88 @@ input[type="checkbox"][disabled]:checked, input[type="radio"][disabled]:checked,
     float: right;
 }
 
+#showing, #paginate {
+    display: inline-block;
+}
+
+#paginate, #filtered, #results {
+    margin-right: 4px;
+    display: inline-block;
+    float: right;
+    word-spacing: 0;
+    letter-spacing: 0;
+    text-transform: none;
+}
+
+#export {
+    margin: 0 !important;
+}
+
+#messages + form[action="export"] {
+    display: inline-block;
+}
+
+#importexport form, form[action="export"] {
+    display: inline-block;
+}
+
+#addressbook.headline h3 {
+    padding-right: 54px;
+}
+
+#addressbook.headline {
+    position: relative;
+}
+
+#addressbook input#exporthosts {
+    margin-bottom: -2px;
+    padding: 0 !important;
+    width: 28px;
+    height: 28px;
+    min-width: 0;
+    display: inline-block;
+    position: absolute;
+    right: 0;
+    top: calc(50% - 15px);
+    font-size: 0 !important;
+    background: url(/themes/console/images/info/arrow_down.png) center center no-repeat, linear-gradient(to bottom, #fff, #eef);
+    background-size: 16px 16px;
+}
+
+form[action="export"]::after {
+    margin-bottom: -2px;
+    width: 44px;
+    height: 20px;
+    display: inline-block;
+    content: "";
+}
+
+div#export {
+    padding-top: 10px;
+    padding-left: 2px;
+    width: 32px;
+    display: inline-block;
+    position: absolute;
+    right: -5px;
+    top: calc(50% - 10px);
+    top: 0;
+    overflow: hidden;
+    border-left: 1px solid #aaafce;
+}
+
+#activefilter, .selected {
+    font-weight: bold;
+    color: #999;
+    box-shadow: inset 0 0 0 1px #fff, inset 2px 2px 2px #aaa !important;
+}
+
+.active {
+    color: #393;
+    text-decoration: underline;
+}
+
+#paginate {
+    margin-top: -18px;
+    width: 100%;
+    text-align: center;
+}
