@@ -1774,13 +1774,34 @@ div#export {
 #activefilter {
     box-shadow: 0 0 0 1px #030, 0 0 2px 1px rgba(0,0,0,.8), inset 0 0 0 1px #000, inset 3px 3px 3px rgba(0,0,0,.9) !important;
 }
+
 .active {
-    color: #393;
-    text-decoration: underline;
+    color: #ff6;
 }
 
 #paginate {
     margin-top: -16px;
     width: 100%;
     text-align: center;
+}
+
+@media screen and (max-width: 1200px) {
+form[action="export"]::after {
+    height: 24px;
+}
+
+div#export {
+    padding-left: 4px !important;
+    right: -9px;
+    width: 42px;
+}
+
+#addressbook input#exporthosts {
+    margin-bottom: -6px !important;
+}
+
+#paginate {
+    margin-top: -18px;
+    font-size: 10pt;
+}
 }

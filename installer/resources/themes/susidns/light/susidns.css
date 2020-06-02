@@ -222,14 +222,13 @@ h3, h4, th, #filter span {
 }
 
 h3 {
-    font-size: 11pt !important;
+    font-size: 11pt;
     box-shadow: inset 0 0 0 1px #fff;
 }
 
 .headline h3 {
-    font-size: 11.5pt !important;
+    font-size: 11.5pt;
     background: url(/themes/susidns/images/addressbook.png) 6px center no-repeat #fcfcff;
-    background: url(/themes/susidns/images/addressbook.png) 6px center no-repeat, linear-gradient(to bottom, #fcfcff 50%, rgba(255,255,255,0.6) 50%, rgba(240,240,255,0.4)), linear-gradient(135deg, #fcfcff 5%, rgba(231, 231, 255, 0.8) 15%);
     background-size: 22px 22px, 100% 100%, 100% 100%;
 }
 
@@ -247,19 +246,19 @@ h3 {
 
 .headline#subscriptions h3, .headline#configure h3, .headline#addressbook h3, .headline h3 {
     margin: -8px -5px -5px;
-    padding: 9px 5px 8px 32px;
+    padding: 9px 5px 6px 32px;
 }
 
-.headline h3 span {
+/*.headline h3 span {
     margin: -10px 5px;
     float: right;
     letter-spacing: 0;
     font-size: 80%;
     text-transform: none;
     border-left: 1px solid #7e7fb9;
-}
+}*/
 
-.headline h3 span a {
+/*.headline h3 span a {
     padding: 12px 8px 10px 32px;
     display: inline-block;
     background: url(/themes/console/images/buttons/fullview.png) 14px center no-repeat;
@@ -270,7 +269,7 @@ h3 {
 .headline h3 span a {
     padding-bottom: 9px;
 }
-}
+}*/
 
 span.location {
     font-size: 9pt;
@@ -1793,3 +1792,101 @@ _:-ms-lang(x), * {
 }
 
 /* end chrome overrides */
+
+#showing, #paginate {
+    display: inline-block;
+}
+
+#paginate, #filtered, #results {
+    margin-right: 4px;
+    display: inline-block;
+    float: right;
+    word-spacing: 0;
+    letter-spacing: 0;
+    text-transform: none;
+}
+
+#export {
+    margin: 0 !important;
+}
+
+#messages + form[action="export"] {
+    display: inline-block;
+}
+
+#importexport form, form[action="export"] {
+    display: inline-block;
+}
+
+#addressbook.headline h3 {
+    padding-right: 54px;
+}
+
+#addressbook.headline {
+    position: relative;
+}
+
+#addressbook input#exporthosts {
+    margin-top: 3px;
+    padding: 0 !important;
+    width: 28px;
+    height: 28px;
+    min-width: 0;
+    display: inline-block;
+    position: absolute;
+    right: 0;
+    top: calc(50% - 17px);
+    font-size: 0 !important;
+    background: url(/themes/console/images/info/arrow_down.png) center center no-repeat, linear-gradient(to bottom, #fff, #eef);
+    background-size: 16px 16px;
+}
+
+form[action="export"]::after {
+    height: 25px;
+    display: inline-block;
+    content: "";
+}
+
+div#export {
+    margin-bottom: -6px;
+    padding: 6px 4px 8px 3px;
+    width: 31px;
+    display: inline-block;
+    position: absolute;
+    right: 0;
+    top: calc(50% - 10px);
+    top: 0;
+    overflow: hidden;
+    border-left: 1px solid #aaafce;
+}
+
+#activefilter, .selected {
+    font-weight: bold;
+    color: #999;
+    box-shadow: inset 0 0 0 1px #fff, inset 2px 2px 2px #aaa !important;
+}
+
+.active {
+    color: #393;
+    text-decoration: underline;
+}
+
+#paginate {
+    margin-top: -16px;
+    width: 100% !important;
+    text-align: center !important;
+    border: none !important;
+    font-size: 10pt !important;
+}
+
+#next, #prev {
+    border: none !important;
+    float: none !important;
+    margin: none !important;
+}
+
+#showing {
+    float: none !important;
+    border: none !important;
+    font-size: inherit !important;
+}
