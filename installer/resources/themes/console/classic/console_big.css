@@ -652,14 +652,6 @@ h1 {
     padding: 3px 2px 4px !important;
 }
 
-.langselect img[src^="/flags"] {
-    margin-left: -92px !important;
-}
-
-.langselect input[name="lang"]:checked + img {
-    margin-left: -93px !important;
-}
-
 .newsheadings {
     margin-left: -2px !important;
     margin-right: 0 !important;

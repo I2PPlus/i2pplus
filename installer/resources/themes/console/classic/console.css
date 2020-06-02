@@ -3000,6 +3000,10 @@ tr:hover th {
     border: none !important;
 }
 
+#capabilities_key table tr:first-child td {
+    border-top: none;
+}
+
 #capabilities_key table td {
     padding: 3px 5px !important;
 }
@@ -11715,4 +11719,12 @@ ul.statlist {
     display: none;
 }
 }
+}
+
+th[role="columnheader"] {
+    position: relative !important;
+}
+
+#floodfills th {
+    font-size: 90% !important;
 }
