@@ -24,7 +24,7 @@
 <html>
 <head>
 <link rel="preload" href="/js/iframeResizer/iframeResizer.contentWindow.js?<%=net.i2p.CoreVersion.VERSION%>" as="script">
-<link rel="preload" href="/susidns/addressbook?book=router&amp;filter=none" as="document">
+<link rel="preload" href="/susidns/addressbook?book=router&amp;filter=none" as="fetch" crossorigin>
 <%@include file="css.jsi" %>
 <%@include file="csp-unsafe.jsi" %>
 <%=intl.title("addressbook")%>

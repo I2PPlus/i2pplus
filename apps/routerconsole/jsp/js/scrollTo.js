@@ -40,6 +40,24 @@ function initScrollers() {
     div.scrollTop = 0;
   }
 
+  function initScrollToNav() {
+    var inputs = document.getElementsByClassName("scrollToNav");
+    for (index = 0; index < inputs.length; index++) {
+      var input = inputs[index];
+      addScrollHander(input);
+    }
+  }
+
+  function addScrollHander(elem) {
+    elem.addEventListener("click", function() {
+      scrollToNav(elem);
+    });
+  }
+
+  function scrollToNav(element) {
+    smoothScroll();
+  }
+
 }
 
 document.addEventListener("DOMContentLoaded", function() {

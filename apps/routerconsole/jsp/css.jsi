@@ -35,14 +35,11 @@
    String cspNonce = Integer.toHexString(net.i2p.util.RandomSource.getInstance().nextInt());
 %>
 <link rel="preload" href="<%=themePath%>images/i2plogo.png" as="image">
-<link rel="preload" href="summaryajax.jsi" as="document">
-<link rel="preload" href="summarynoframe.jsi" as="document">
-<link rel="preload" href="xhr1.jsp" as="document">
-<link rel="preload" href="xhr1.jsi" as="document">
-<link rel="preload" href="/js/ajax.js?<%=net.i2p.CoreVersion.VERSION%>" as="script">
-<link rel="preload" href="/themes/fonts/DroidSans-Bold.ttf" as="font">
-<link rel="preload" href="/themes/fonts/DroidSans.ttf" as="font">
 <link rel="preload" href="<%=themePath%>console.css?<%=net.i2p.CoreVersion.VERSION%>" as="style">
+<link rel="preload" href="/themes/fonts/DroidSans-Bold.ttf" as="font" crossorigin>
+<link rel="preload" href="/themes/fonts/DroidSans.ttf" as="font" crossorigin>
+<link rel="preload" href="xhr1.jsp" as="fetch" crossorigin>
+<link rel="preload" href="/js/ajax.js?<%=net.i2p.CoreVersion.VERSION%>" as="script">
 <link rel="icon" href="<%=themePath%>images/favicon.ico">
 <script nonce="<%=cspNonce%>" type="text/javascript">if (top.location != location) {top.location.href = location.href;}</script>
 <script src="/js/progressx.js?<%=net.i2p.CoreVersion.VERSION%>" type="text/javascript"></script>
