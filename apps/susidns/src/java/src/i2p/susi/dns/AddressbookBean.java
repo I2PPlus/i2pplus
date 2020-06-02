@@ -1,26 +1,26 @@
 /*
- * Created on Sep 02, 2005
- *
- *  This file is part of susidns project, see http://susi.i2p/
- *
- *  Copyright (C) 2005 <susi23@mail.i2p>
- *
- *  This program is free software; you can redistribute it and/or modify
- *  it under the terms of the GNU General Public License as published by
- *  the Free Software Foundation; either version 2 of the License, or
- *  (at your option) any later version.
- *
- *  This program is distributed in the hope that it will be useful,
- *  but WITHOUT ANY WARRANTY; without even the implied warranty of
- *  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
- *  GNU General Public License for more details.
- *
- *  You should have received a copy of the GNU General Public License
- *  along with this program; if not, write to the Free Software
- *  Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
- *
- * $Revision: 1.2 $
- */
+* Created on Sep 02, 2005
+*
+*  This file is part of susidns project, see http://susi.i2p/
+*
+*  Copyright (C) 2005 <susi23@mail.i2p>
+*
+*  This program is free software; you can redistribute it and/or modify
+*  it under the terms of the GNU General Public License as published by
+*  the Free Software Foundation; either version 2 of the License, or
+*  (at your option) any later version.
+*
+*  This program is distributed in the hope that it will be useful,
+*  but WITHOUT ANY WARRANTY; without even the implied warranty of
+*  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+*  GNU General Public License for more details.
+*
+*  You should have received a copy of the GNU General Public License
+*  along with this program; if not, write to the Free Software
+*  Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
+*
+* $Revision: 1.2 $
+*/
 
 package i2p.susi.dns;
 
@@ -50,7 +50,7 @@ public class AddressbookBean extends BaseBean
 	private int trClass;
 	protected final LinkedList<String> deletionMarks;
 	protected static final Comparator<AddressBean> sorter;
-	private static final int DISPLAY_SIZE = 50;
+	private static final int DISPLAY_SIZE = 100;
 
 	static {
 		sorter = new AddressByNameSorter();
@@ -114,8 +114,8 @@ public class AddressbookBean extends BaseBean
 	}
 
 	/**
-	 * This always returns a valid book, non-null.
-	 */
+	* This always returns a valid book, non-null.
+	*/
 	public String getBook()
 	{
 		if( book == null || ( !book.equalsIgnoreCase( "master" ) &&
@@ -181,57 +181,67 @@ public class AddressbookBean extends BaseBean
 	}
 
 	/**
-	 *  Format a message about filtered addressbook size, and the number of displayed entries
-	 *  addressbook.jsp catches the case where the whole book is empty.
-	 */
+	*  Format a message about filtered addressbook size, and the number of displayed entries
+	*  addressbook.jsp catches the case where the whole book is empty.
+	*/
 	protected String generateLoadMessage() {
 		String message;
 		String filterArg = "";
 		int resultCount = resultSize();
 		if( filter != null && filter.length() > 0 ) {
-			if( search != null && search.length() > 0 )
-				message = ngettext("One result for search within filtered list.",
-				                   "{0} results for search within filtered list.",
-				                   resultCount);
-			else
+			if( search != null && search.length() > 0 ) {
+				message = ngettext("Search for <span class=\"active\">" + search + "</span> with filter <span class=\"active\">" + filter + "</span> returned 1 result",
+										"Search for <span class=\"active\">" + search + "</span> with filter <span class=\"active\">" + filter + "</span> returned {0} results",
+										resultCount);
+				message = "<span id=\"results\">" + message + "</span>";
+			} else {
 				message = ngettext("Filtered list contains 1 entry.",
-				                   "Filtered list contains {0} entries.",
-				                   resultCount);
+										"Filtered list contains {0} entries.",
+										resultCount).replace(".", "");
+			}
 			filterArg = "&amp;filter=" + filter;
 		} else if( search != null && search.length() > 0 ) {
-			message = ngettext("One result for search.",
-			                   "{0} results for search.",
-			                   resultCount);
+			message = ngettext("One result for: " + "<span class=\"active\">" + search + "</span>",
+									"{0} results for: " + "<span class=\"active\">" + search + "</span>",
+									resultCount);
+			message = "<span id=\"results\">" + message + "</span>";
 		} else {
-			if (resultCount <= 0)
+			if (resultCount <= 0) {
 				// covered in jsp
-				//message = _t("This addressbook is empty.");
+//				message = _t("This addressbook is empty.");
+//				message = "<span id=\"results\">" + message + "</span>";
 				message = "";
-			else
-				message = ngettext("Address book contains 1 entry.",
-				                   "Address book contains {0} entries.",
-				                   resultCount);
+			} else {
+				message = ngettext("1 entry", "{0} entries", resultCount);
+				message = " (" + message + ")";
+			}
 		}
 		if (resultCount <= 0) {
 			// nothing to display
 		} else if (getBeginInt() == 0 && getEndInt() == resultCount - 1) {
 			// nothing to display
+			message += "</span>";
 		} else {
+			message += "</span><span id=\"paginate\">";
 			if (getBeginInt() > 0) {
 				int newBegin = Math.max(0, getBeginInt() - DISPLAY_SIZE);
 				int newEnd = Math.max(0, getBeginInt() - 1);
-		       		message += " <a href=\"addressbook?book=" + getBook() + filterArg +
-				           "&amp;begin=" + newBegin + "&amp;end=" + newEnd + "\">" + (newBegin+1) +
-				           '-' + (newEnd+1) + "</a> | ";
-	       		}
-			message += ' ' + _t("Showing {0} of {1}", "" + (getBeginInt()+1) + '-' + (getEndInt()+1), Integer.valueOf(resultCount));
-			if (getEndInt() < resultCount - 1) {
-				int newBegin = Math.min(resultCount - 1, getEndInt() + 1);
-				int newEnd = Math.min(resultCount, getEndInt() + DISPLAY_SIZE);
-		       		message += " | <a href=\"addressbook?book=" + getBook() + filterArg +
-				           "&amp;begin=" + newBegin + "&amp;end=" + newEnd + "\">" + (newBegin+1) +
-				           '-' + (newEnd+1) + "</a>";
+						message += " <span id=\"prev\"><a href=\"addressbook?book=" + getBook() + filterArg +
+							"&amp;begin=" + newBegin + "&amp;end=" + newEnd + "\">" + (newBegin+1) +
+//							'-' + (newEnd+1) + "</a> | ";
+							" - "  + (newEnd+1) + "</a></span>";
+				}
+//				message += ' ' + _t("Showing {0} of {1}", "" + (getBeginInt()+1) + '-' + (getEndInt()+1), Integer.valueOf(resultCount));
+				if (getEndInt() < resultCount - 1) {
+					int newBegin = Math.min(resultCount - 1, getEndInt() + 1);
+					int newEnd = Math.min(resultCount, getEndInt() + DISPLAY_SIZE);
+					if (getBeginInt() > 0)
+						message += " | ";
+					message += "<span id=\"next\"><a href=\"addressbook?book=" + getBook() + filterArg +
+								  "&amp;begin=" + newBegin + "&amp;end=" + newEnd + "\">" + (newBegin+1) +
+								  '-' + (newEnd+1) + "</a></span>";
 			}
+			message += "</span>";
 		}
 		return message;
 	}
@@ -243,8 +253,8 @@ public class AddressbookBean extends BaseBean
 		String message = "";
 
 		if( action != null ) {
-                        if (_context.getBooleanProperty(PROP_PW_ENABLE) ||
-			    (serial != null && serial.equals(lastSerial))) {
+								if (_context.getBooleanProperty(PROP_PW_ENABLE) ||
+				(serial != null && serial.equals(lastSerial))) {
 				boolean changed = false;
 				if (action.equals(_t("Add")) || action.equals(_t("Replace"))) {
 					if( addressbook != null && hostname != null && destination != null ) {
@@ -252,7 +262,7 @@ public class AddressbookBean extends BaseBean
 							// throws IAE with translated message
 							String host = AddressBean.toASCII(hostname);
 							String displayHost = host.equals(hostname) ? hostname :
-							                                             hostname + " (" + host + ')';
+																						hostname + " (" + host + ')';
 
 							String oldDest = (String) addressbook.get(host);
 							if (destination.equals(oldDest)) {
@@ -270,7 +280,7 @@ public class AddressbookBean extends BaseBean
 										wasB32 = true;
 										Destination dest;
 										if (destination.startsWith("http://") ||
-										    destination.startsWith("https://")) {
+											destination.startsWith("https://")) {
 											// do them a favor, pull b32 out of pasted URL
 											try {
 												URI uri = new URI(destination);
@@ -370,8 +380,8 @@ public class AddressbookBean extends BaseBean
 			}
 			else {
 				message = _t("Invalid form submission, probably because you used the \"back\" or \"reload\" button on your browser. Please resubmit.")
-                         + "<br>" +
-                         _t("If the problem persists, verify that you have cookies enabled in your browser.");
+								+ "<br>" +
+								_t("If the problem persists, verify that you have cookies enabled in your browser.");
 			}
 		}
 
@@ -423,23 +433,23 @@ public class AddressbookBean extends BaseBean
 ****/
 
 	/**
-	 * Because the following from addressbook.jsp fails parsing in the new EL:
-	 * javax.el.ELException: Failed to parse the expression
-	 * Can't figure out why, so just replace it with book.validBook:
-	 * &lt;c:if test="${book.master || book.router || book.published || book.private}"&gt;
-	 *
-	 * This always returns true anyway, because getBook() always
-	 * returns a valid book.
-	 *
-	 * @return true
-	 * @since 0.9.28
-	 */
+	* Because the following from addressbook.jsp fails parsing in the new EL:
+	* javax.el.ELException: Failed to parse the expression
+	* Can't figure out why, so just replace it with book.validBook:
+	* &lt;c:if test="${book.master || book.router || book.published || book.private}"&gt;
+	*
+	* This always returns true anyway, because getBook() always
+	* returns a valid book.
+	*
+	* @return true
+	* @since 0.9.28
+	*/
 	public boolean isValidBook() {
 		String s = getBook().toLowerCase(Locale.US);
 		return s.equals("router") ||
-		       s.equals("master") ||
-		       s.equals("published") ||
-		       s.equals("private");
+				s.equals("master") ||
+				s.equals("published") ||
+				s.equals("private");
 	}
 
 	public void setFilter(String filter) {
@@ -477,9 +487,9 @@ public class AddressbookBean extends BaseBean
 	}
 
 	/**
-	 *  @return beginning index into results
-	 *  @since 0.8.7
-	 */
+	*  @return beginning index into results
+	*  @since 0.8.7
+	*/
 	public String getResultBegin() {
 		return isPrefiltered() ? "0" : Integer.toString(getBeginInt());
 	}
@@ -499,9 +509,9 @@ public class AddressbookBean extends BaseBean
 	}
 
 	/**
-	 *  @return ending index into results
-	 *  @since 0.8.7
-	 */
+	*  @return ending index into results
+	*  @since 0.8.7
+	*/
 	public String getResultEnd() {
 		return Integer.toString(isPrefiltered() ? resultSize() - 1 : getEndInt());
 	}
@@ -513,26 +523,26 @@ public class AddressbookBean extends BaseBean
 	}
 
 	/**
-	 *  Does the entries map contain only the lookup result,
-	 *  or must we index into it?
-	 *  @since 0.8.7
-	 */
+	*  Does the entries map contain only the lookup result,
+	*  or must we index into it?
+	*  @since 0.8.7
+	*/
 	protected boolean isPrefiltered() {
 		return false;
 	}
 
 	/**
-	 *  @return the size of the lookup result
-	 *  @since 0.8.7
-	 */
+	*  @return the size of the lookup result
+	*  @since 0.8.7
+	*/
 	protected int resultSize() {
 		return entries.length;
 	}
 
 	/**
-	 *  @return the total size of the address book
-	 *  @since 0.8.7
-	 */
+	*  @return the total size of the address book
+	*  @since 0.8.7
+	*/
 	protected int totalSize() {
 		return entries.length;
 	}

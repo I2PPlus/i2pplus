@@ -55,13 +55,13 @@
 <style type="text/css">body{opacity: 0;}</style>
 <div class="page">
 <div id="navi">
-<a class="selected" id="overview" href="index"><%=intl._t("Overview")%></a>&nbsp;
-<a class="abook" href="addressbook?book=private&amp;filter=none"><%=intl._t("Private")%></a>&nbsp;
-<a class="abook" href="addressbook?book=master&amp;filter=none"><%=intl._t("Master")%></a>&nbsp;
-<a class="abook" href="addressbook?book=router&amp;filter=none"><%=intl._t("Router")%></a>&nbsp;
-<a class="abook" href="addressbook?book=published&amp;filter=none"><%=intl._t("Published")%></a>&nbsp;
+<a class="abook router" href="addressbook?book=router&amp;filter=none"><%=intl._t("Router")%></a>&nbsp;
+<a class="abook master" href="addressbook?book=master&amp;filter=none"><%=intl._t("Master")%></a>&nbsp;
+<a class="abook private" href="addressbook?book=private&amp;filter=none"><%=intl._t("Private")%></a>&nbsp;
+<a class="abook published" href="addressbook?book=published&amp;filter=none"><%=intl._t("Published")%></a>&nbsp;
 <a id="subs" href="subscriptions"><%=intl._t("Subscriptions")%></a>&nbsp;
-<a id="config" href="config"><%=intl._t("Configuration")%></a>
+<a id="config" href="config"><%=intl._t("Configuration")%></a>&nbsp;
+<a id="overview" class="selected" href="index"><%=intl._t("Overview")%></a>
 </div>
 <hr>
 <div id="content">

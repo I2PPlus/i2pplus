@@ -38,18 +38,21 @@
 <link rel="stylesheet" type="text/css" href="<%=book.getTheme()%>override.css?<%=net.i2p.CoreVersion.VERSION%>">
 <script type="text/javascript" src="/js/iframeResizer/iframeResizer.contentWindow.js?<%=net.i2p.CoreVersion.VERSION%>"></script>
 <script src="/js/textareaResize.js" type="text/javascript"></script>
+<%
+    String query = request.getQueryString();
+%>
 </head>
 <body id="dtls">
 <style type="text/css">body{opacity: 0;}</style>
 <div class="page">
 <div id="navi">
-<a id="overview" href="index"><%=intl._t("Overview")%></a>&nbsp;
-<a class="abook" href="addressbook?book=private&amp;filter=none"><%=intl._t("Private")%></a>&nbsp;
-<a class="abook" href="addressbook?book=master&amp;filter=none"><%=intl._t("Master")%></a>&nbsp;
-<a class="abook" href="addressbook?book=router&amp;filter=none"><%=intl._t("Router")%></a>&nbsp;
-<a class="abook" href="addressbook?book=published&amp;filter=none"><%=intl._t("Published")%></a>&nbsp;
+<a class="abook router<%=(query.contains("book=router") ? " selected" : "")%>" href="addressbook?book=router&amp;filter=none"><%=intl._t("Router")%></a>&nbsp;
+<a class="abook master<%=(query.contains("book=master") ? " selected" : "")%>" href="addressbook?book=master&amp;filter=none"><%=intl._t("Master")%></a>&nbsp;
+<a class="abook private<%=(query.contains("book=private") ? " selected" : "")%>" href="addressbook?book=private&amp;filter=none"><%=intl._t("Private")%></a>&nbsp;
+<a class="abook published<%=(query.contains("book=published") ? " selected" : "")%>" href="addressbook?book=published&amp;filter=none"><%=intl._t("Published")%></a>&nbsp;
 <a id="subs" href="subscriptions"><%=intl._t("Subscriptions")%></a>&nbsp;
-<a id="config" href="config"><%=intl._t("Configuration")%></a>
+<a id="config" href="config"><%=intl._t("Configuration")%></a>&nbsp;
+<a id="overview" href="index"><%=intl._t("Overview")%></a>
 </div>
 <hr>
 <div class="headline">
@@ -60,7 +63,9 @@
 <%
     String detail = request.getParameter("h");
     if (detail == null) {
-        %><p>No host specified</p><%
+%>
+<p>No host specified</p>
+<%
     } else {
         // process save notes form
         book.saveNotes();
@@ -77,13 +82,17 @@
                 String b32 = addr.getB32();
 %>
 <jsp:setProperty name="book" property="trClass"	value="0" />
-<% if (showNotes) { %>
+<%
+    if (showNotes) {
+%>
 <form method="POST" action="details">
 <input type="hidden" name="book" value="${book.book}">
 <input type="hidden" name="serial" value="<%=nonce%>">
 <input type="hidden" name="h" value="<%=detail%>">
 <input type="hidden" name="destination" value="<%=addr.getDestination()%>">
-<% }  // showNotes  %>
+<%
+    }  // showNotes
+%>
 <table class="book" id="host_details" cellspacing="0" cellpadding="5">
 <tr class="list${book.trClass}">
 <td><%=intl._t("Hostname")%></td>
@@ -168,7 +177,7 @@
 <input type="hidden" name="book" value="${book.book}">
 <input type="hidden" name="serial" value="<%=nonce%>">
 <input type="hidden" name="begin" value="0">
-<input type="hidden" name="end" value="49">
+<input type="hidden" name="end" value="99">
 <input type="hidden" name="checked" value="<%=detail%>">
 <input type="hidden" name="destination" value="<%=addr.getDestination()%>">
 <input class="delete" type="submit" name="action" value="<%=intl._t("Delete Entry")%>" >

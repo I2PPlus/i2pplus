@@ -221,7 +221,11 @@ public class NamingServiceBean extends AddressbookBean
 			warn(e);
 		}
 		if( message.length() > 0 )
-			message = "<p id=\"filtered\">" + message + "</p>";
+			if (filter != null && filter.length() > 0)
+				message = "<span id=\"filtered\">" + message; // span closed in AddressbookBean
+			else
+				message = "<span id=\"showing\">" + message;
+			message = "&nbsp;" + message + "&nbsp;";
 		return message;
 	}
 

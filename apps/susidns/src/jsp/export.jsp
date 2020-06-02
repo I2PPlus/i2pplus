@@ -1,7 +1,7 @@
 <%
 /*
  *  This file is part of susidns project, see http://susi.i2p/
- *  
+ *
  *  Copyright (C) 2005 <susi23@mail.i2p>
  *
  *  This program is free software; you can redistribute it and/or modify
@@ -17,7 +17,7 @@
  *  You should have received a copy of the GNU General Public License
  *  along with this program; if not, write to the Free Software
  *  Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
- *  
+ *
  */
 
     // http://www.crazysquirrel.com/computing/general/form-encoding.jspx
@@ -25,6 +25,7 @@
         request.setCharacterEncoding("UTF-8");
     response.setHeader("X-Content-Type-Options", "nosniff");
     response.setHeader("Accept-Ranges", "none");
+    response.setHeader("Content-Disposition", "attachment; filename=\'exported_hosts.txt\'");
 %>
 <%@page pageEncoding="UTF-8"%>
 <%@page trimDirectiveWhitespaces="true"%>
