@@ -31,15 +31,25 @@
     font-size: 10pt !important;
 }
 
-.snarkAddInfo code, #pagenav, #trackerselect tr:first-child td {
+.snarkAddInfo code, #pagenav, #trackerselect tr:first-child td, .clientid {
     font-size: 9.5pt !important;
     font-weight: normal !important;
 }
 
+.clientid {
+    font-size: 8pt !important;
+}
+
 input[type], select, select option, td, td a, .snarkMessages li, .snarkMessages li a, textarea, input.r, input[name="nofilter_dataDir"],
 .configsectionpanel, .configsectionpanel td, .snarkNewTorrent, .snarkNewTorrent td, .snarkAddInfo,
-#configs td, .trackerconfig td, td.snarkTorrentStatus {
+#configs td, .trackerconfig td {
     font-size: 10.5pt !important;
+}
+
+td.snarkTorrentStatus b {
+    line-height: 1 !important;
+    font-size: 9.5pt !important;
+    font-style: normal !important;
 }
 
 th.snarkTorrentDownloaded, th.snarkTorrentUploaded, th.snarkTorrentRateDown, th.snarkTorrentRateUp,
@@ -111,7 +121,15 @@ a.control, input[type="submit"], input.accept, th {
 }
 
 .snarkTorrents tt {
-    font-size: 9.5pt !important;
+    letter-spacing: 0.2em !important;
+    font-weight: bold !important;
+}
+
+.snarkTorrents td tt {
+    padding: 0 3px !important;
+    min-width: 38px;
+    text-align: center;
+    font-size: 8.5pt !important;
 }
 
 #configs td {

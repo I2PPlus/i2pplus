@@ -5077,7 +5077,7 @@ td.snarkTorrentStatus > * {
 
 td.snarkTorrentStatus b {
     padding: 3px 5px 5px;
-    min-width: 80px;
+    min-width: 99px;
     display: inline-block;
     text-align: center;
     position: relative;
@@ -5088,7 +5088,7 @@ td.snarkTorrentStatus b {
     background: #535;
 }
 
-.lang_fr td.snarkTorrentStatus b {
+.lang_fr td.snarkTorrentStatus b, .lang_hu td.snarkTorrentStatus b, .lang_tr td.snarkTorrentStatus b {
     min-width: 130px;
 }
 
