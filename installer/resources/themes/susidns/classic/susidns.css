@@ -651,6 +651,10 @@ td.destinations textarea, td.destinations textarea:focus {
     background: none;
 }
 
+#subsLog textarea {
+    font: normal 8pt "Noto Mono", "Droid Sans Mono", "Andale Mono", "DejaVu Sans Mono", "Lucida Console", monospace;
+}
+
 .fakebutton, input[type="submit"], input[type="reset"] {
     margin: 2px 0 2px 4px;
     padding: 5px 8px !important;
@@ -1017,6 +1021,12 @@ p.book {
     cursor: pointer;
 }
 
+/*#host_list td:nth-child(2) a::after {
+    width: 18px;
+    height: 18px;
+    background: url(/themes/susidns/images/link.svg) center center no-repeat;
+}*/
+
 #host_list td:nth-child(3) a:not(old) {
     font-size: 0 !important;
 }
@@ -1147,7 +1157,7 @@ h4, #navi a {
     font-size: 11pt;
 }
 
-h3 {
+h3, h3 a {
     font-size: 12pt !important;
 }
 
@@ -1362,5 +1372,53 @@ div#export {
 #paginate {
     margin-top: -18px;
     width: 100%;
-    text-align: center;
+    text-align: right;
+}
+
+input[disabled] {
+    opacity: .6;
+    pointer-events: none;
+}
+
+#navi {
+    display: flex;
+    flex-flow: wrap;
+    justify-content: center;
+}
+
+#navi a {
+    margin: -4px -3px !important;
+    padding: 5px 12px 4px !important;
+    background: linear-gradient(to bottom, #fff 50%, #effafb 50%) !important;
+    text-transform: uppercase;
+    letter-spacing: 0.08em;
+    flex-grow: 1;
+    border-radius: 0;
+    position: relative;
+    z-index: 1;
+}
+
+#navi a:first-child {
+    border-left: none;
+}
+
+#navi a:last-child {
+    border-right: none;
+}
+
+#navi a.selected {
+    z-index: 10;
+}
+
+#navi a.selected {
+    box-shadow: inset 0 0 0 1px #fff, inset 3px 3px 3px #aaabcc !important;
+    background: linear-gradient(to bottom, #fafbff 50%, #e8e9ff 50%) !important;
+}
+
+#navi a:hover, #navi a:focus {
+    border-color: #aaafce;
+}
+
+#navi a:active {
+    box-shadow: inset 0 0 0 1px #fff, inset 3px 3px 3px #aaa;
 }
