@@ -996,6 +996,7 @@ p.book {
 
 #host_list td:nth-child(2) a::after, #host_list td:nth-child(3) a::after, #host_list td:nth-child(4) a::after {
     opacity: .8;
+    vertical-align: middle;
 }
 
 #host_list td:nth-child(2) a:hover::after, #host_list td:nth-child(2) a:focus::after,
@@ -1315,7 +1316,7 @@ input[type="checkbox"][disabled]:checked, input[type="radio"][disabled]:checked,
 }
 
 #addressbook.headline h3 {
-    padding-right: 54px;
+    padding-right: 46px;
 }
 
 #addressbook.headline {
@@ -1369,12 +1370,6 @@ div#export {
     text-decoration: underline;
 }
 
-#paginate {
-    margin-top: -18px;
-    width: 100%;
-    text-align: right;
-}
-
 input[disabled] {
     opacity: .6;
     pointer-events: none;
@@ -1421,4 +1416,89 @@ input[disabled] {
 
 #navi a:active {
     box-shadow: inset 0 0 0 1px #fff, inset 3px 3px 3px #aaa;
+}
+
+#paginate {
+    position: relative;
+    overflow: hidden;
+    font-size: 0;
+    text-align: center;
+    border: 1px solid #aaafce;
+    border-radius: 4px;
+    background: linear-gradient(to bottom, #fff 50%, #dde0f0 50%);
+}
+
+#prev a, #next a, #current {
+    box-shadow: inset 0 0 0 1px #fff !important;
+}
+
+#current {
+    padding: 0 10px;
+    display: inline-block;
+    vertical-align: middle;
+    text-align: center;
+    font-size: 11.5pt !important;
+    color: #525660;
+    border-left: 1px solid #aaafce;
+    border-right: 1px solid #aaafce;
+}
+
+#prev a, #prev.inactive {
+    border-radius: 4px 0 0 4px;
+}
+
+#next a, #next.inactive {
+    border-radius: 0 4px 4px 0;
+}
+
+#prev, #next {
+    margin-top: -1px;
+    position: relative;
+    display: inline-block;
+    line-height: 0;
+    vertical-align: middle;
+}
+
+#prev.inactive, #next.inactive {
+    padding: 10px;
+    border: none;
+}
+
+#prev a, #next a {
+    margin: 0;
+    padding: 10px;
+    font-size: 0 !important;
+}
+
+#prev::after, #next::after {
+    height: 0;
+    width: 0;
+    position: absolute;
+    top: calc(50% - 5px);
+    right: calc(50% - 3px);
+    border-width: 6px;
+    border-style: solid;
+    border-color: transparent #575779 transparent transparent;
+    content: "";
+    pointer-events: none;
+}
+
+#prev.inactive::after, #next.inactive::after {
+    opacity: .6;
+}
+
+#next::after {
+    left: calc(50% - 3px);
+    right: 0;
+    border-color: transparent transparent transparent #575779;
+}
+
+@media screen and (max-width: 1200px) {
+.iframed #prev a, .iframed #next a {
+    padding: 11px 10px !important;
+}
+
+.iframed #prev::after, .iframed #next::after {
+    top: calc(50% - 4px);
+}
 }
