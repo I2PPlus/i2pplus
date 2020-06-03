@@ -38,7 +38,6 @@
 <link rel="preload" href="<%=themePath%>console.css?<%=net.i2p.CoreVersion.VERSION%>" as="style">
 <link rel="preload" href="/themes/fonts/DroidSans-Bold.ttf" as="font" crossorigin>
 <link rel="preload" href="/themes/fonts/DroidSans.ttf" as="font" crossorigin>
-<link rel="preload" href="xhr1.jsp" as="fetch" crossorigin>
 <link rel="preload" href="/js/ajax.js?<%=net.i2p.CoreVersion.VERSION%>" as="script">
 <link rel="icon" href="<%=themePath%>images/favicon.ico">
 <script nonce="<%=cspNonce%>" type="text/javascript">if (top.location != location) {top.location.href = location.href;}</script>
