@@ -208,8 +208,6 @@ public class AddressbookBean extends BaseBean
 		} else {
 			if (resultCount <= 0) {
 				// covered in jsp
-//				message = _t("This addressbook is empty.");
-//				message = "<span id=\"results\">" + message + "</span>";
 				message = "";
 			} else {
 				message = ngettext("1 entry", "{0} entries", resultCount);
@@ -219,7 +217,6 @@ public class AddressbookBean extends BaseBean
 		if (resultCount <= 0) {
 			// nothing to display
 		} else if (getBeginInt() == 0 && getEndInt() == resultCount - 1) {
-			// nothing to display
 			message += "</span>";
 		} else {
 			message += "</span><span id=\"paginate\">";
@@ -228,20 +225,26 @@ public class AddressbookBean extends BaseBean
 				int newEnd = Math.max(0, getBeginInt() - 1);
 						message += " <span id=\"prev\"><a href=\"addressbook?book=" + getBook() + filterArg +
 							"&amp;begin=" + newBegin + "&amp;end=" + newEnd + "\">" + (newBegin+1) +
-//							'-' + (newEnd+1) + "</a> | ";
-							" - "  + (newEnd+1) + "</a></span>";
+							" - "  + (newEnd+1) + "</a></span> | ";
+				} else {
+					message += " <span id=\"prev\" class=\"inactive\"></span> | ";
 				}
-//				message += ' ' + _t("Showing {0} of {1}", "" + (getBeginInt()+1) + '-' + (getEndInt()+1), Integer.valueOf(resultCount));
+//				message += " <span id=\"current\">" + _t("Showing {0} of {1}", "" + (getBeginInt()+1) + '-' + (getEndInt()+1), Integer.valueOf(resultCount)) + "</span>";
+				message += " <span id=\"current\">" + (getBeginInt()+1) + " - " + (getEndInt()+1) + "</span>";
 				if (getEndInt() < resultCount - 1) {
+					if (getBeginInt() <= 0)
+						message += " | ";
 					int newBegin = Math.min(resultCount - 1, getEndInt() + 1);
 					int newEnd = Math.min(resultCount, getEndInt() + DISPLAY_SIZE);
 					if (getBeginInt() > 0)
 						message += " | ";
 					message += "<span id=\"next\"><a href=\"addressbook?book=" + getBook() + filterArg +
 								  "&amp;begin=" + newBegin + "&amp;end=" + newEnd + "\">" + (newBegin+1) +
-								  '-' + (newEnd+1) + "</a></span>";
+								  " - " + (newEnd+1) + "</a></span>";
+			} else {
+				message += "<span id=\"next\" class=\"inactive\"></span>";
 			}
-			message += "</span>";
+			message += "</span>"; // close #showing span in NamingServiceBean
 		}
 		return message;
 	}
