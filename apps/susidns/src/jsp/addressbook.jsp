@@ -82,7 +82,7 @@
 <a class="abook published<%=(here.contains("published") ? " selected" : "")%>" href="addressbook?book=published&amp;filter=none"><%=intl._t("Published")%></a>&nbsp;
 <a id="subs" href="subscriptions"><%=intl._t("Subscriptions")%></a>&nbsp;
 <a id="config" href="config"><%=intl._t("Configuration")%></a>&nbsp;
-<a id="overview" href="index"><%=intl._t("Overview")%></a>
+<a id="overview" href="index"><%=intl._t("Help")%></a>
 </div>
 <hr>
 <div class="headline" id="addressbook">
@@ -92,6 +92,13 @@ ${book.loadBookMessages}
 <span class="results"> (<%=intl._t("No entries")%>)</span>
 </c:if>
 </h3>
+<c:if test="${book.isEmpty}">
+<div id="export">
+<form action="export">
+<input type="submit" class="export" id="exporthosts" disabled="disabled" />
+</form>
+</div>
+</c:if>
 <c:if test="${book.notEmpty}">
 <%
     if (book.getEntries().length > 0) { /* Don't show if no results. Can't figure out how to do this with c:if */
@@ -111,7 +118,6 @@ ${book.loadBookMessages}
 <%
     } /* book.getEntries().length() > 0 */
 %>
-
 <!--
 <h4><%=intl._t("Storage")%>: <span class="storage">${book.displayName}</span></h4>
 -->

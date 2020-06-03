@@ -62,7 +62,7 @@
 <a class="abook published" href="addressbook?book=published&amp;filter=none"><%=intl._t("Published")%></a>&nbsp;
 <a id="subs" class="selected" href="subscriptions"><%=intl._t("Subscriptions")%></a>&nbsp;
 <a id="config" href="config"><%=intl._t("Configuration")%></a>&nbsp;
-<a id="overview" href="index"><%=intl._t("Overview")%></a>
+<a id="overview" href="index"><%=intl._t("Help")%></a>
 </div>
 <hr>
 <div class="headline" id="subscriptions">

@@ -341,7 +341,7 @@ class AddressBook implements Iterable<Map.Entry<String, HostTxtEntry>> {
                     this.modified = true;
                     if (log != null) {
                         log.append("New domain " + otherKey
-                            + " added to addressbook. [" + other.location + "]");
+                            + " added to addressbook [" + other.location + "]");
                     }
                 }
             }
