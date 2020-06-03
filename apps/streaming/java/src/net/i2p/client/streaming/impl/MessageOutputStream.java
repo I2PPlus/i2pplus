@@ -199,7 +199,8 @@ class MessageOutputStream extends OutputStream {
         if (_log.shouldDebug()) {
             long elapsed = _context.clock().now() - begin;
             if (elapsed > 10*1000)
-            _log.debug("Took " + elapsed + "ms to write to the stream?", new Exception("foo"));
+                _log.debug("Took " + elapsed + "ms to write to the stream?", new Exception("foo"));
+        }
         throwAnyError();
         //updateBps(len);
     }
