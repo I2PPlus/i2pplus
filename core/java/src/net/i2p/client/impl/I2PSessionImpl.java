@@ -517,15 +517,7 @@ public abstract class I2PSessionImpl implements I2PSession, I2CPMessageReader.I2
                 continue;
             }
             String val = options.getProperty(key);
-            // Long strings MUST be removed, even in router context,
-            // as the session config properties must be serialized to be signed.
-            // fixme, bytes could still be over 255 (unlikely)
-            if (key.length() > 255 || val.length() > 255) {
-                if (_log.shouldLog(Log.WARN))
-                    _log.warn("Not passing on [" + key + "] to session config: key or value too long (max = 255)\n* " + val);
-            } else {
-                rv.setProperty(key, val);
-            }
+            rv.setProperty(key, val);
         }
         return rv;
     }
