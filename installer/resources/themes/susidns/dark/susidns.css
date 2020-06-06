@@ -217,26 +217,12 @@ hr {
     display: none;
 }
 
-div#filter {
-    margin-top: -25px;
-    padding: 0 5px 15px;
+#filter {
+    margin-top: -1px;
+    padding: 15px 5px;
     border: 1px solid #242;
     text-align: center;
     background: #001000;
-}
-
-div#filter + div#search {
-    margin: -1px 0 -29px !important;
-    border: 1px solid #242;
-}
-
-div#filter + div#search > form {
-    margin: 0;
-    padding: 0;
-}
-
-#filter p + p {
-    display: none;
 }
 
 #filter span a {
@@ -246,9 +232,10 @@ div#filter + div#search > form {
 }
 
 #search {
-    padding: 0 10px;
-    margin-top: 5px !important;
+    margin-top: -25px !important;
     margin-bottom: -14px !important;
+    padding: 0 10px;
+    border: 1px solid #242;
 }
 
 #booksearch {
@@ -1406,15 +1393,11 @@ _:-ms-lang(x), * {
 
 @media screen and (max-width: 1200px) {
 #filter {
-    padding: 0 5px;
-}
-
-#filter p {
-    margin-left: 0;
-    margin-right: 0;
+    padding: 9px 4px 8px;
 }
 
 #filter a {
+    margin: 3px 1px;
     padding: 0 4px;
 }
 }
@@ -1751,7 +1734,7 @@ form[action="export"]::after {
     content: "";
 }
 
-div#export {
+#export {
     padding-top: 8px;
     padding-left: 2px;
     width: 38px;
@@ -1778,29 +1761,120 @@ div#export {
     color: #ff6;
 }
 
+#prev, #next, #current {
+    font-size: 11pt;
+    text-shadow: none;
+}
+
+#showing {
+    margin-left: 6px;
+}
+
 #paginate {
-    margin-top: -16px;
-    width: 100%;
+    margin: -4px 2px 0 0;
+    position: relative;
+    overflow: hidden;
+    font-size: 0;
     text-align: center;
+    border: 1px solid #252;
+    background: linear-gradient(to bottom, #020 50%, #000 50%);
+}
+
+#prev a, #next a, #current {
+    box-shadow: inset 0 0 0 1px #000 !important;
+}
+
+#current {
+    padding: 3px 10px;
+    display: inline-block;
+    vertical-align: middle;
+    text-align: center;
+    font-size: 11pt !important;
+    color: #ee9;
+    border-left: 1px solid #252;
+    border-right: 1px solid #252;
+}
+
+#prev, #next {
+    margin-top: -1px;
+    position: relative;
+    display: inline-block;
+    line-height: 0;
+    vertical-align: middle;
+}
+
+#prev.inactive, #next.inactive {
+    padding: 10px;
+    border: none;
+}
+
+#prev a, #next a {
+    margin: 0;
+    padding: 10px;
+    font-size: 0 !important;
+}
+
+#prev::after, #next::after {
+    height: 0;
+    width: 0;
+    position: absolute;
+    top: calc(50% - 5px);
+    right: calc(50% - 3px);
+    border-width: 6px;
+    border-style: solid;
+    border-color: transparent #252 transparent transparent;
+    content: "";
+    pointer-events: none;
+}
+
+#prev.inactive::after, #next.inactive::after {
+    opacity: .6;
+}
+
+#next::after {
+    left: calc(50% - 3px);
+    right: 0;
+    border-color: transparent transparent transparent #252;
 }
 
 @media screen and (max-width: 1200px) {
-form[action="export"]::after {
-    height: 24px;
+#export {
+    padding-top: 13px;
+    padding-left: 7px;
+    right: -10px;
 }
 
-div#export {
-    padding-left: 4px !important;
-    right: -9px;
-    width: 42px;
+form[action="export"]::after {
+    height: 19px;
 }
 
 #addressbook input#exporthosts {
-    margin-bottom: -6px !important;
+    margin-top: 4px !important;
 }
 
 #paginate {
-    margin-top: -18px;
+    margin-top: -3px;
+}
+
+#prev, #next, #current {
+    font-size: 10pt;
+}
+
+.iframed #prev a, .iframed #next a {
+    padding: 11px 10px !important;
+}
+
+.iframed #prev::after, .iframed #next::after {
+    top: calc(50% - 5px);
+}
+
+#prev.inactive::after, #next.inactive::after {
+    top: calc(50% - 6px);
+}
+
+#current {
+    padding: 2px 10px;
+    display: inline-block;
     font-size: 10pt;
 }
 }

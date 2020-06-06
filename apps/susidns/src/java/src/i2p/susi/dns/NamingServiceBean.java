@@ -225,7 +225,6 @@ public class NamingServiceBean extends AddressbookBean
 				message = "<span id=\"filtered\">" + message; // span closed in AddressbookBean
 			else
 				message = "<span id=\"showing\">" + message;
-			message = "&nbsp;" + message + "&nbsp;";
 		return message;
 	}
 

@@ -193,7 +193,7 @@ public class AddressbookBean extends BaseBean
 				message = ngettext("Search for <span class=\"active\">" + search + "</span> with filter <span class=\"active\">" + filter + "</span> returned 1 result",
 										"Search for <span class=\"active\">" + search + "</span> with filter <span class=\"active\">" + filter + "</span> returned {0} results",
 										resultCount);
-				message = "<span id=\"results\">" + message + "</span>";
+				message = "</span><span id=\"results\">" + message + "</span>";
 			} else {
 				message = ngettext("Filtered list contains 1 entry.",
 										"Filtered list contains {0} entries.",
@@ -204,7 +204,7 @@ public class AddressbookBean extends BaseBean
 			message = ngettext("One result for: " + "<span class=\"active\">" + search + "</span>",
 									"{0} results for: " + "<span class=\"active\">" + search + "</span>",
 									resultCount);
-			message = "<span id=\"results\">" + message + "</span>";
+			message = "</span><span id=\"results\">" + message + "</span>";
 		} else {
 			if (resultCount <= 0) {
 				// covered in jsp

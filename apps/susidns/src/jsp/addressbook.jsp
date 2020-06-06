@@ -28,7 +28,7 @@
         request.setCharacterEncoding("UTF-8");
 
     response.setHeader("X-Frame-Options", "SAMEORIGIN");
-    response.setHeader("Content-Security-Policy", "default-src 'self'; style-src 'self' 'unsafe-inline'; script-src 'self' 'unsafe-inline'; form-action 'self'; frame-ancestors 'self'; object-src 'none'; media-src 'none'");
+    response.setHeader("Content-Security-Policy", "default-src 'self'; style-src 'self' 'unsafe-inline'; script-src 'self'; form-action 'self'; frame-ancestors 'self'; object-src 'none'; media-src 'none'");
     response.setHeader("X-XSS-Protection", "1; mode=block");
     response.setHeader("X-Content-Type-Options", "nosniff");
     response.setHeader("Referrer-Policy", "no-referrer");
@@ -63,10 +63,10 @@
 <script type="text/javascript" src="/js/iframeResizer/iframeResizer.contentWindow.js?<%=net.i2p.CoreVersion.VERSION%>"></script>
 <script src="/js/resetScroll.js?<%=net.i2p.CoreVersion.VERSION%>" type="text/javascript"></script>
 <script src="/js/scrollTo.js?<%=net.i2p.CoreVersion.VERSION%>" type="text/javascript"></script>
+<script src="/js/closeMessage.js?<%=net.i2p.CoreVersion.VERSION%>" type="text/javascript"></script>
 <%
     String cspNonce = Integer.toHexString(net.i2p.util.RandomSource.getInstance().nextInt());
-    // have to only do this once per page
-    String susiNonce = book.getSerial();
+    String susiNonce = book.getSerial(); // have to only do this once per page
     String query = request.getQueryString();
     RequestWrapper bookRequest = new RequestWrapper(request);
     String here = bookRequest.getParameter("book");
@@ -86,17 +86,13 @@
 </div>
 <hr>
 <div class="headline" id="addressbook">
-<h3><%=intl._t("Book")%>: <%=intl._t(book.getBook())%>
-${book.loadBookMessages}
-<c:if test="${book.isEmpty}">
-<span class="results"> (<%=intl._t("No entries")%>)</span>
-</c:if>
-</h3>
+<h3><%=intl._t("Book")%>: <%=intl._t(book.getBook())%>${book.loadBookMessages}<c:if test="${book.isEmpty}">&nbsp;<span class="results">(<%=intl._t("No entries")%>)</span></c:if></h3>
 <c:if test="${book.isEmpty}">
 <div id="export">
 <form action="export">
 <input type="submit" class="export" id="exporthosts" disabled="disabled" />
 </form>
+</div>
 </div>
 </c:if>
 <c:if test="${book.notEmpty}">
@@ -112,17 +108,31 @@ ${book.loadBookMessages}
 <c:if test="${book.hasFilter}">
 <input type="hidden" name="filter" value="${book.filter}">
 </c:if>
+<%
+    if (book.isHasFilter() || book.getSearch() != null) {
+%>
 <input type="submit" class="export" id="exporthosts" value="<%=intl._t("Export in hosts.txt format")%>" name="export" title="<%=intl._t("Export results in hosts.txt format")%>" />
+<%
+    } else {
+%>
+<input type="submit" class="export" id="exporthosts" value="<%=intl._t("Export in hosts.txt format")%>" name="export" title="<%=intl._t("Export book in hosts.txt format")%>" />
+<%
+    }
+%>
 </form>
 </div>
 <%
-    } /* book.getEntries().length() > 0 */
+    } else { /* book.getEntries().length() > 0 */
 %>
-<!--
-<h4><%=intl._t("Storage")%>: <span class="storage">${book.displayName}</span></h4>
--->
+<div id="export">
+<form action="export">
+<input type="submit" class="export" id="exporthosts" disabled="disabled" />
+</form>
 </div>
-<script src="/js/closeMessage.js?<%=net.i2p.CoreVersion.VERSION%>" type="text/javascript"></script>
+<%
+    }
+%>
+</div>
 <div id="messages">${book.messages}
 <%
    if (importMessages != null) {
@@ -132,257 +142,12 @@ ${book.loadBookMessages}
    }
 %>
 </div>
-
-<div id="filter">
-<!--
-<c:if test="${book.hasFilter}">
-<span><%=intl._t("Current filter")%>: <b>${book.filter}</b>
-<a href="addressbook?book=${book.book}&filter=none&amp;begin=0&amp;end=99"><%=intl._t("clear filter")%></a></span>
-</c:if>
-<c:if test="${!book.hasFilter}">
-<span><%=intl._t("Filter")%></span>
-</c:if>
--->
-<p>
-<%
-    if (!query.contains("filter=a")) {
-%>
-<a href="addressbook?book=${book.book}&filter=a&amp;begin=0&amp;end=99">a</a>
-<%
-    } else {
-%>
-<span id="activefilter">A</span>
-<%  }
-    if (!query.contains("filter=b")) {
-%>
-<a href="addressbook?book=${book.book}&filter=b&amp;begin=0&amp;end=99">b</a>
-<%
-    } else {
-%>
-<span id="activefilter">B</span>
-<%  }
-    if (!query.contains("filter=c")) {
-%>
-<a href="addressbook?book=${book.book}&filter=c&amp;begin=0&amp;end=99">c</a>
-<%
-    } else {
-%>
-<span id="activefilter">C</span>
-<%  }
-    if (!query.contains("filter=d")) {
-%>
-<a href="addressbook?book=${book.book}&filter=d&amp;begin=0&amp;end=99">d</a>
-<%
-    } else {
-%>
-<span id="activefilter">D</span>
-<%  }
-    if (!query.contains("filter=e")) {
-%>
-<a href="addressbook?book=${book.book}&filter=e&amp;begin=0&amp;end=99">e</a>
-<%
-    } else {
-%>
-<span id="activefilter">E</span>
-<%  }
-    if (!query.contains("filter=F")) {
-%>
-<a href="addressbook?book=${book.book}&filter=f&amp;begin=0&amp;end=99">f</a>
-<%
-    } else {
-%>
-<span id="activefilter">F</span>
-<%  }
-    if (!query.contains("filter=g")) {
-%>
-<a href="addressbook?book=${book.book}&filter=g&amp;begin=0&amp;end=99">g</a>
-<%
-    } else {
-%>
-<span id="activefilter">G</span>
-<%  }
-    if (!query.contains("filter=h")) {
-%>
-<a href="addressbook?book=${book.book}&filter=h&amp;begin=0&amp;end=99">h</a>
-<%
-    } else {
-%>
-<span id="activefilter">H</span>
-<%  }
-    if (!query.contains("filter=i")) {
-%>
-<a href="addressbook?book=${book.book}&filter=i&amp;begin=0&amp;end=99">i</a>
-<%
-    } else {
-%>
-<span id="activefilter">I</span>
-<%  }
-    if (!query.contains("filter=j")) {
-%>
-<a href="addressbook?book=${book.book}&filter=j&amp;begin=0&amp;end=99">j</a>
-<%
-    } else {
-%>
-<span id="activefilter">J</span>
-<%  }
-    if (!query.contains("filter=k")) {
-%>
-<a href="addressbook?book=${book.book}&filter=k&amp;begin=0&amp;end=99">k</a>
-<%
-    } else {
-%>
-<span id="activefilter">K</span>
-<%  }
-    if (!query.contains("filter=L")) {
-%>
-<a href="addressbook?book=${book.book}&filter=l&amp;begin=0&amp;end=99">l</a>
-<%
-    } else {
-%>
-<span id="activefilter">L</span>
-<%  }
-    if (!query.contains("filter=m")) {
-%>
-<a href="addressbook?book=${book.book}&filter=m&amp;begin=0&amp;end=99">m</a>
-<%
-    } else {
-%>
-<span id="activefilter">M</span>
-<%  }
-    if (!query.contains("filter=n&amp;")) {
-%>
-<a href="addressbook?book=${book.book}&filter=n&amp;begin=0&amp;end=99">n</a>
-<%
-    } else {
-%>
-<span id="activefilter">N</span>
-<%  }
-    if (!query.contains("filter=o")) {
-%>
-<a href="addressbook?book=${book.book}&filter=o&amp;begin=0&amp;end=99">o</a>
-<%
-    } else {
-%>
-<span id="activefilter">O</span>
-<%  }
-    if (!query.contains("filter=p")) {
-%>
-<a href="addressbook?book=${book.book}&filter=p&amp;begin=0&amp;end=99">p</a>
-<%
-    } else {
-%>
-<span id="activefilter">P</span>
-<%  }
-    if (!query.contains("filter=q")) {
-%>
-<a href="addressbook?book=${book.book}&filter=q&amp;begin=0&amp;end=99">q</a>
-<%
-    } else {
-%>
-<span id="activefilter">Q</span>
-<%  }
-    if (!query.contains("filter=r")) {
-%>
-<a href="addressbook?book=${book.book}&filter=r&amp;begin=0&amp;end=99">r</a>
-<%
-    } else {
-%>
-<span id="activefilter">R</span>
-<%  }
-    if (!query.contains("filter=s")) {
-%>
-<a href="addressbook?book=${book.book}&filter=s&amp;begin=0&amp;end=99">s</a>
-<%
-    } else {
-%>
-<span id="activefilter">S</span>
-<%  }
-    if (!query.contains("filter=t")) {
-%>
-<a href="addressbook?book=${book.book}&filter=t&amp;begin=0&amp;end=99">t</a>
-<%
-    } else {
-%>
-<span id="activefilter">T</span>
-<%  }
-    if (!query.contains("filter=u")) {
-%>
-<a href="addressbook?book=${book.book}&filter=u&amp;begin=0&amp;end=99">u</a>
-<%
-    } else {
-%>
-<span id="activefilter">U</span>
-<%  }
-    if (!query.contains("filter=v")) {
-%>
-<a href="addressbook?book=${book.book}&filter=v&amp;begin=0&amp;end=99">v</a>
-<%
-    } else {
-%>
-<span id="activefilter">V</span>
-<%  }
-    if (!query.contains("filter=w")) {
-%>
-<a href="addressbook?book=${book.book}&filter=w&amp;begin=0&amp;end=99">w</a>
-<%
-    } else {
-%>
-<span id="activefilter">W</span>
-<%  }
-    if (!query.contains("filter=x&")) {
-%>
-<a href="addressbook?book=${book.book}&filter=x&amp;begin=0&amp;end=99">x</a>
-<%
-    } else {
-%>
-<span id="activefilter">X</span>
-<%  }
-    if (!query.contains("filter=y")) {
-%>
-<a href="addressbook?book=${book.book}&filter=y&amp;begin=0&amp;end=99">y</a>
-<%
-    } else {
-%>
-<span id="activefilter">Y</span>
-<%  }
-    if (!query.contains("filter=z")) {
-%>
-<a href="addressbook?book=${book.book}&filter=z&amp;begin=0&amp;end=99">z</a>
-<%
-    } else {
-%>
-<span id="activefilter">Z</span>
-<%  }
-    if (!query.contains("filter=0-9")) {
-%>
-<a href="addressbook?book=${book.book}&filter=0-9&amp;begin=0&amp;end=99">0-9</a>
-<%
-    } else {
-%>
-<span id="activefilter">0-9</span>
-<%  }
-    if (!query.contains("filter=xn--&")) {
-%>
-<a href="addressbook?book=${book.book}&filter=xn--&amp;begin=0&amp;end=99"><%=intl._t("other")%></a>
-<%
-    } else {
-%>
-<span id="activefilter">Other</span>
-<%  }
-    if (!query.contains("filter=none")) {
-%>
-<a href="addressbook?book=${book.book}&filter=none&amp;begin=0&amp;end=99"><%=intl._t("clear filter")%></a>
-<%
-    }
-%>
-</p>
-</div>
-
 <div id="search">
 <form method="GET" action="addressbook?book=${book.book}">
 <input type="hidden" name="book" value="${book.book}">
 <input type="hidden" name="begin" value="0">
 <input type="hidden" name="end" value="99">
+<input type="hidden" name="filter" value="${book.filter}">
 <div id="booksearch">
 <%
     if (book.getSearch() == null) {
@@ -399,10 +164,243 @@ ${book.loadBookMessages}
 </div>
 </form>
 </div>
+<div id="filter">
+<%
+    if (!query.contains("filter=a")) {
+%>
+<a href="addressbook?book=${book.book}&amp;filter=a&amp;begin=0&amp;end=99">a</a>
+<%
+    } else {
+%>
+<span id="activefilter">A</span>
+<%  }
+    if (!query.contains("filter=b")) {
+%>
+<a href="addressbook?book=${book.book}&amp;filter=b&amp;begin=0&amp;end=99">b</a>
+<%
+    } else {
+%>
+<span id="activefilter">B</span>
+<%  }
+    if (!query.contains("filter=c")) {
+%>
+<a href="addressbook?book=${book.book}&amp;filter=c&amp;begin=0&amp;end=99">c</a>
+<%
+    } else {
+%>
+<span id="activefilter">C</span>
+<%  }
+    if (!query.contains("filter=d")) {
+%>
+<a href="addressbook?book=${book.book}&amp;filter=d&amp;begin=0&amp;end=99">d</a>
+<%
+    } else {
+%>
+<span id="activefilter">D</span>
+<%  }
+    if (!query.contains("filter=e")) {
+%>
+<a href="addressbook?book=${book.book}&amp;filter=e&amp;begin=0&amp;end=99">e</a>
+<%
+    } else {
+%>
+<span id="activefilter">E</span>
+<%  }
+    if (!query.contains("filter=f")) {
+%>
+<a href="addressbook?book=${book.book}&amp;filter=f&amp;begin=0&amp;end=99">f</a>
+<%
+    } else {
+%>
+<span id="activefilter">F</span>
+<%  }
+    if (!query.contains("filter=g")) {
+%>
+<a href="addressbook?book=${book.book}&amp;filter=g&amp;begin=0&amp;end=99">g</a>
+<%
+    } else {
+%>
+<span id="activefilter">G</span>
+<%  }
+    if (!query.contains("filter=h")) {
+%>
+<a href="addressbook?book=${book.book}&amp;filter=h&amp;begin=0&amp;end=99">h</a>
+<%
+    } else {
+%>
+<span id="activefilter">H</span>
+<%  }
+    if (!query.contains("filter=i")) {
+%>
+<a href="addressbook?book=${book.book}&amp;filter=i&amp;begin=0&amp;end=99">i</a>
+<%
+    } else {
+%>
+<span id="activefilter">I</span>
+<%  }
+    if (!query.contains("filter=j")) {
+%>
+<a href="addressbook?book=${book.book}&amp;filter=j&amp;begin=0&amp;end=99">j</a>
+<%
+    } else {
+%>
+<span id="activefilter">J</span>
+<%  }
+    if (!query.contains("filter=k")) {
+%>
+<a href="addressbook?book=${book.book}&amp;filter=k&amp;begin=0&amp;end=99">k</a>
+<%
+    } else {
+%>
+<span id="activefilter">K</span>
+<%  }
+    if (!query.contains("filter=l")) {
+%>
+<a href="addressbook?book=${book.book}&amp;filter=l&amp;begin=0&amp;end=99">l</a>
+<%
+    } else {
+%>
+<span id="activefilter">L</span>
+<%  }
+    if (!query.contains("filter=m")) {
+%>
+<a href="addressbook?book=${book.book}&amp;filter=m&amp;begin=0&amp;end=99">m</a>
+<%
+    } else {
+%>
+<span id="activefilter">M</span>
+<%  }
+    if (!query.contains("filter=n&")) {
+%>
+<a href="addressbook?book=${book.book}&amp;filter=n&amp;begin=0&amp;end=99">n</a>
+<%
+    } else {
+%>
+<span id="activefilter">N</span>
+<%  }
+    if (!query.contains("filter=o")) {
+%>
+<a href="addressbook?book=${book.book}&amp;filter=o&amp;begin=0&amp;end=99">o</a>
+<%
+    } else {
+%>
+<span id="activefilter">O</span>
+<%  }
+    if (!query.contains("filter=p")) {
+%>
+<a href="addressbook?book=${book.book}&amp;filter=p&amp;begin=0&amp;end=99">p</a>
+<%
+    } else {
+%>
+<span id="activefilter">P</span>
+<%  }
+    if (!query.contains("filter=q")) {
+%>
+<a href="addressbook?book=${book.book}&amp;filter=q&amp;begin=0&amp;end=99">q</a>
+<%
+    } else {
+%>
+<span id="activefilter">Q</span>
+<%  }
+    if (!query.contains("filter=r")) {
+%>
+<a href="addressbook?book=${book.book}&amp;filter=r&amp;begin=0&amp;end=99">r</a>
+<%
+    } else {
+%>
+<span id="activefilter">R</span>
+<%  }
+    if (!query.contains("filter=s")) {
+%>
+<a href="addressbook?book=${book.book}&amp;filter=s&amp;begin=0&amp;end=99">s</a>
+<%
+    } else {
+%>
+<span id="activefilter">S</span>
+<%  }
+    if (!query.contains("filter=t")) {
+%>
+<a href="addressbook?book=${book.book}&amp;filter=t&amp;begin=0&amp;end=99">t</a>
+<%
+    } else {
+%>
+<span id="activefilter">T</span>
+<%  }
+    if (!query.contains("filter=u")) {
+%>
+<a href="addressbook?book=${book.book}&amp;filter=u&amp;begin=0&amp;end=99">u</a>
+<%
+    } else {
+%>
+<span id="activefilter">U</span>
+<%  }
+    if (!query.contains("filter=v")) {
+%>
+<a href="addressbook?book=${book.book}&amp;filter=v&amp;begin=0&amp;end=99">v</a>
+<%
+    } else {
+%>
+<span id="activefilter">V</span>
+<%  }
+    if (!query.contains("filter=w")) {
+%>
+<a href="addressbook?book=${book.book}&amp;filter=w&amp;begin=0&amp;end=99">w</a>
+<%
+    } else {
+%>
+<span id="activefilter">W</span>
+<%  }
+    if (!query.contains("filter=x&")) {
+%>
+<a href="addressbook?book=${book.book}&amp;filter=x&amp;begin=0&amp;end=99">x</a>
+<%
+    } else {
+%>
+<span id="activefilter">X</span>
+<%  }
+    if (!query.contains("filter=y")) {
+%>
+<a href="addressbook?book=${book.book}&amp;filter=y&amp;begin=0&amp;end=99">y</a>
+<%
+    } else {
+%>
+<span id="activefilter">Y</span>
+<%  }
+    if (!query.contains("filter=z")) {
+%>
+<a href="addressbook?book=${book.book}&amp;filter=z&amp;begin=0&amp;end=99">z</a>
+<%
+    } else {
+%>
+<span id="activefilter">Z</span>
+<%  }
+    if (!query.contains("filter=0-9")) {
+%>
+<a href="addressbook?book=${book.book}&amp;filter=0-9&amp;begin=0&amp;end=99">0-9</a>
+<%
+    } else {
+%>
+<span id="activefilter">0-9</span>
+<%  }
+    if (!query.contains("filter=xn--&")) {
+%>
+<a href="addressbook?book=${book.book}&amp;filter=xn--&amp;begin=0&amp;end=99"><%=intl._t("other")%></a>
+<%
+    } else {
+%>
+<span id="activefilter">Other</span>
+<%  }
+    if (!query.contains("filter=none")) {
+%>
+<a href="addressbook?book=${book.book}&amp;filter=none&amp;begin=0&amp;end=99"><%=intl._t("clear filter")%></a>
+<%
+    }
+%>
+</div>
 </c:if>
 
 <c:if test="${book.notEmpty}">
-<form method="GET" action="addressbook?book=${book.book}">
+<form method="GET" action="addressbook?book=${book.book}&amp;filter=${book.filter}">
 <input type="hidden" name="book" value="${book.book}">
 <input type="hidden" name="serial" value="<%=susiNonce%>">
 <input type="hidden" name="begin" value="0">
@@ -422,7 +420,7 @@ ${book.loadBookMessages}
 %>
 <!-- limit iterator, or "Form too large" may result on submit, and is a huge web page if we don't -->
 <c:forEach items="${book.entries}" var="addr" begin="${book.resultBegin}" end="${book.resultEnd}">
-<tr class="list${book.trClass}">
+<tr>
 <td class="names">
 <%
     if (haveImagegen) {

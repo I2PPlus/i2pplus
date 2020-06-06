@@ -10,6 +10,7 @@ body {
     color:#c9ceff;
     margin: 0 10px;
     font-size: 9.5pt;
+    overflow-x: hidden;
 }
 
 body.iframed {
@@ -212,8 +213,8 @@ hr {
 }
 
 div#filter {
-    margin-top: -2px;
-    padding: 0 0 15px;
+    margin: -21px 0 -29px;
+    padding: 12px 0 15px;
     text-align: center;
     border: 1px solid #26235c;
 }
@@ -267,21 +268,24 @@ p#filtered {
 }
 
 #search {
-    padding: 0 10px;
     margin-top: -1px !important;
-    padding-bottom: -20px;
+    padding: 0 10px -20px;
     margin-bottom: 20px;
 }
 
-#filter a:link, #filter a:visited {
-    text-transform: capitalize;
-    background: #000;
-    border: 1px solid #26225d;
-    padding: 2px 5px;
-    text-align: center;
-    color: #26225d;
-    display: inline-block;
+#filter a:link, #filter a:visited, #activefilter {
     margin: 2px 0;
+    padding: 2px 5px;
+    display: inline-block;
+    text-align: center;
+    text-transform: capitalize;
+    color: #26225d;
+    border: 1px solid #26225d;
+    background: #000;
+}
+
+#activefilter {
+    padding: 4px 8px 3px;
 }
 
 #filter a:hover, #filter a:focus  {
@@ -290,12 +294,12 @@ p#filtered {
 }
 
 #filter a:active {
-    background: #652787;
     color: #c9ceff !important;
     box-shadow: inset 0 0 0 1px #000, inset 3px 3px 3px #000;
+    background: #652787;
 }
 
-#filter span {
+/*#filter span {
     display: inherit;
     text-align: center;
     text-transform: uppercase;
@@ -314,7 +318,7 @@ p#filtered {
     box-shadow: inset 0 0 0 1px #000;
     background: url(/themes/console/midnight/images/titles.png) repeat-x scroll center center #000;
     background-image: linear-gradient(to bottom, #010010 0%, #020019 50%, #060051%, #0100100%) !important;
-}
+}*/
 
 #filter span a, #filter span a:hover {
     letter-spacing: normal;
@@ -339,13 +343,11 @@ p#filtered {
     line-height: 80%;
 }
 
-#filter p {
-    text-align: center;
-}
-
 #booksearch {
+    margin: 0;
     padding: 7px 5px;
     text-align: center;
+    border: 1px solid #26235c;
 }
 
 p {
@@ -433,10 +435,11 @@ h3 {
 
 #add h3, #import h3 {
     margin-top: -1px;
-    margin-left: -11px;
-    margin-right: -11px;
-    padding: 8px 10px;
+    margin-left: -11px !important;
+    margin-right: -11px !important;
+    padding: 8px 10px 8px 36px !important;
     font-size: 10pt;
+    background-position: 6px center !important;
 }
 
 #add table, #import table {
@@ -966,16 +969,14 @@ div#add {
 
 .page {
     margin: 10px 0;
-    padding: 0 0 10px;
+    padding: 0;
     font-size: 9pt !important;
     color:#c9ceff;
-/*    border: 1px solid #26235c;*/
     background: #000010;
 }
 
 .iframed .page {
     margin: 1px 0 0;
-    padding: 0;
     overflow: hidden;
     border: none;
 }
@@ -1696,16 +1697,22 @@ form[action="export"]::after {
     content: "";
 }
 
-div#export {
+#export {
     padding-top: 8px;
-    padding-left: 2px;
-    width: 48px;
+    padding-left: 6px;
+    width: 44px;
     display: inline-block;
     position: absolute;
-    right: -5px;
     top: 0;
+    right: -15px;
     overflow: hidden;
     border-left: 1px solid #26235c;
+}
+
+.iframed #export {
+    padding-left: 2px;
+    width: 48px;
+    right: -5px;
 }
 
 #activefilter, .selected {
@@ -1714,18 +1721,31 @@ div#export {
     box-shadow: inset 0 0 0 1px #000, inset 2px 2px 2px rgba(0,0,0,.9) !important;
 }
 
-#activefilter {
+/*#activefilter {
     box-shadow: 0 0 0 1px #030, 0 0 2px 1px rgba(0,0,0,.8), inset 0 0 0 1px #000, inset 3px 3px 3px rgba(0,0,0,.9) !important;
 }
-
+*/
 .active {
     color: #ff6;
 }
 
-#paginate {
-    margin-top: -16px;
-    width: 100%;
-    text-align: center;
+/*#paginate {
+    font-size: 0;
+    background: #f00;
+}*/
+
+#prev, #next, #current {
+    font-size: 11pt;
+    text-shadow: none;
+/*    margin: 0 6px;*/
+}
+
+/*#prev.inactive, #next.inactive {
+    display: none !important;
+}*/
+
+#showing {
+    margin-left: 6px;
 }
 
 @media screen and (max-width: 1200px) {
@@ -1733,18 +1753,107 @@ form[action="export"]::after {
     height: 21px;
 }
 
-div#export {
-    padding-left: 4px !important;
-    right: -5px;
-    width: 46px;
-}
-
 #addressbook input#exporthosts {
     margin-top: 4px !important;
 }
 
+#prev, #next, #current {
+    font-size: 10pt;
+}
+}
+
 #paginate {
-    margin-top: -18px;
+    margin: -3px 2px 0 0;
+    position: relative;
+    overflow: hidden;
+    font-size: 0;
+    text-align: center;
+    border: 1px solid #26225d;
+/*    border-radius: 4px;*/
+    background: linear-gradient(to bottom, #080818 50%, #000 50%);
+}
+
+#prev a, #next a, #current {
+    box-shadow: inset 0 0 0 1px #000 !important;
+}
+
+#current {
+    padding: 3px 10px;
+    display: inline-block;
+    vertical-align: middle;
+    text-align: center;
+    font-size: 11pt !important;
+    color: #c9ceff;
+    border-left: 1px solid #26225d;
+    border-right: 1px solid #26225d;
+}
+
+/*#prev a, #prev.inactive {
+    border-radius: 4px 0 0 4px;
+}
+
+#next a, #next.inactive {
+    border-radius: 0 4px 4px 0;
+}*/
+
+#prev, #next {
+    margin-top: -1px;
+    position: relative;
+    display: inline-block;
+    line-height: 0;
+    vertical-align: middle;
+}
+
+#prev.inactive, #next.inactive {
+    padding: 10px;
+    border: none;
+}
+
+#prev a, #next a {
+    margin: 0;
+    padding: 10px;
+    font-size: 0 !important;
+}
+
+#prev::after, #next::after {
+    height: 0;
+    width: 0;
+    position: absolute;
+    top: calc(50% - 5px);
+    right: calc(50% - 3px);
+    border-width: 6px;
+    border-style: solid;
+    border-color: transparent #89f transparent transparent;
+    content: "";
+    pointer-events: none;
+}
+
+#prev.inactive::after, #next.inactive::after {
+    opacity: .6;
+}
+
+#next::after {
+    left: calc(50% - 3px);
+    right: 0;
+    border-color: transparent transparent transparent #89f;
+}
+
+@media screen and (max-width: 1200px) {
+.iframed #prev a, .iframed #next a {
+    padding: 11px 10px !important;
+}
+
+.iframed #prev::after, .iframed #next::after {
+    top: calc(50% - 5px);
+}
+
+#prev.inactive::after, #next.inactive::after {
+    top: calc(50% - 6px);
+}
+
+#current {
+    padding: 2px 10px;
+    display: inline-block;
     font-size: 10pt;
 }
 }

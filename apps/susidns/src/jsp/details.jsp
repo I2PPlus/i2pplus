@@ -46,20 +46,15 @@
 <style type="text/css">body{opacity: 0;}</style>
 <div class="page">
 <div id="navi">
-<a class="abook router<%=(query.contains("book=router") ? " selected" : "")%>" href="addressbook?book=router&amp;filter=none"><%=intl._t("Router")%></a>&nbsp;
-<a class="abook master<%=(query.contains("book=master") ? " selected" : "")%>" href="addressbook?book=master&amp;filter=none"><%=intl._t("Master")%></a>&nbsp;
-<a class="abook private<%=(query.contains("book=private") ? " selected" : "")%>" href="addressbook?book=private&amp;filter=none"><%=intl._t("Private")%></a>&nbsp;
-<a class="abook published<%=(query.contains("book=published") ? " selected" : "")%>" href="addressbook?book=published&amp;filter=none"><%=intl._t("Published")%></a>&nbsp;
+<a class="abook router<%=(query.contains("book=router") ? " details selected" : "")%>" href="addressbook?book=router&amp;filter=none"><%=intl._t("Router")%></a>&nbsp;
+<a class="abook master<%=(query.contains("book=master") ? " details selected" : "")%>" href="addressbook?book=master&amp;filter=none"><%=intl._t("Master")%></a>&nbsp;
+<a class="abook private<%=(query.contains("book=private") ? " details selected" : "")%>" href="addressbook?book=private&amp;filter=none"><%=intl._t("Private")%></a>&nbsp;
+<a class="abook published<%=(query.contains("book=published") ? " details selected" : "")%>" href="addressbook?book=published&amp;filter=none"><%=intl._t("Published")%></a>&nbsp;
 <a id="subs" href="subscriptions"><%=intl._t("Subscriptions")%></a>&nbsp;
 <a id="config" href="config"><%=intl._t("Configuration")%></a>&nbsp;
 <a id="overview" href="index"><%=intl._t("Help")%></a>
 </div>
 <hr>
-<div class="headline">
-<h3><%=intl._t("Address book")%>: <%=intl._t(book.getBook())%></h3>
-<h4><%=intl._t("Storage")%>: ${book.displayName}</h4>
-</div>
-<div id="book">
 <%
     String detail = request.getParameter("h");
     if (detail == null) {
@@ -82,6 +77,12 @@
                 String b32 = addr.getB32();
 %>
 <jsp:setProperty name="book" property="trClass"	value="0" />
+<div class="headline">
+<h3><%=intl._t("Details")%>: <%=addr.getName()%></h3>
+<!--<h3><%=intl._t("Address book")%>: <%=intl._t(book.getBook())%></h3>-->
+<!--<h4><%=intl._t("Storage")%>: ${book.displayName}</h4>-->
+</div>
+<div id="book">
 <%
     if (showNotes) {
 %>
@@ -94,69 +95,69 @@
     }  // showNotes
 %>
 <table class="book" id="host_details" cellspacing="0" cellpadding="5">
-<tr class="list${book.trClass}">
+<tr>
 <td><%=intl._t("Hostname")%></td>
 <td><a href="http://<%=addr.getName()%>/" target="_blank"><%=addr.getDisplayName()%></a>
-&nbsp;<b><%=intl._t("Address Helper")%></b>&nbsp;<a href="http://<%=addr.getName()%>/?i2paddresshelper=<%=addr.getDestination()%>" target="_blank"><%=intl._t("link")%></a></td>
+&nbsp;<b><%=intl._t("Book")%></b>&nbsp;<%=intl._t(book.getBook())%>&nbsp;<b><%=intl._t("Address Helper")%></b>&nbsp;<a href="http://<%=addr.getName()%>/?i2paddresshelper=<%=addr.getDestination()%>" target="_blank"><%=intl._t("link")%></a></td>
 </tr>
-<tr class="list${book.trClass}">
+<tr>
 <%
     if (addr.isIDN()) {
 %>
 <td><%=intl._t("Encoded Name")%></td>
 <td><a href="http://<%=addr.getName()%>/" target="_blank"><%=addr.getName()%></a></td>
 </tr>
-<tr class="list${book.trClass}">
+<tr>
 <%
     }
 %>
 <td><%=intl._t("Base 32 Address")%></td>
 <td><a href="http://<%=b32%>/" target="_blank"><%=b32%></a></td>
 </tr>
-<tr class="list${book.trClass}">
+<tr>
 <td><%=intl._t("Base 64 Hash")%></td>
 <td><%=addr.getB64()%></td>
 </tr>
 <!--
-<tr class="list${book.trClass}">
+<tr>
 <td><%=intl._t("Address Helper")%></td>
 <td><a href="http://<%=addr.getName()%>/?i2paddresshelper=<%=addr.getDestination()%>" target="_blank"><%=intl._t("link")%></a></td>
 </tr>
 -->
-<tr class="list${book.trClass}">
+<tr>
 <td><%=intl._t("Public Key")%></td>
 <td><%=intl._t("ElGamal 2048 bit")%>&nbsp;<wbr><b><%=intl._t("Signing Key")%></b>&nbsp;<%=addr.getSigType()%>&nbsp;<wbr><b><%=intl._t("Certificate")%></b>&nbsp;<%=addr.getCert()%>
 &nbsp;<wbr><b><%=intl._t("Validated")%></b>&nbsp;<%=addr.isValidated() ? intl._t("yes") : intl._t("no")%></td>
 </tr>
-<tr class="list${book.trClass}">
+<tr>
 <td><%=intl._t("Source")%></td>
 <td><%=addr.getSource()%></td>
 </tr>
-<tr class="list${book.trClass}">
+<tr>
 <td><%=intl._t("Added Date")%></td>
 <td><%=addr.getAdded()%>&nbsp;<b><%=intl._t("Last Modified")%></b>&nbsp;<span id="lastMod"><%=addr.getModded()%></span></td>
 </tr>
 <!--
-<tr class="list${book.trClass}">
+<tr>
 <td><%=intl._t("Signing Key")%></td>
 <td><%=addr.getSigType()%></td>
 </tr>
-<tr class="list${book.trClass}">
+<tr>
 <td><%=intl._t("Certificate")%></td>
 <td><%=addr.getCert()%>&nbsp;<b><%=intl._t("Validated")%></b>&nbsp;<%=addr.isValidated() ? intl._t("yes") : intl._t("no")%></td>
 </tr>
-<tr class="list${book.trClass}">
+<tr>
 <td><%=intl._t("Validated")%></td>
 <td><%=addr.isValidated() ? intl._t("yes") : intl._t("no")%></td>
 </tr>
 <% if (showNotes) { %>
-<tr class="list${book.trClass}">
+<tr>
 <td><%=intl._t("Last Modified")%></td>
 <td><%=addr.getModded()%></td>
 </tr>
 <% }  // showNotes  %>
 -->
-<tr class="list${book.trClass}">
+<tr>
 <td><%=intl._t("Destination")%></td>
 <td class="destinations"><div class="destaddress" tabindex="0"><%=addr.getDestination()%></div></td>
 </tr>
