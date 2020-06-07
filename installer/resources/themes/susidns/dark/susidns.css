@@ -1837,7 +1837,15 @@ form[action="export"]::after {
     border-color: transparent transparent transparent #252;
 }
 
+#filtered {
+    font-size: 10pt;
+}
+
 @media screen and (max-width: 1200px) {
+#filtered {
+    font-size: 9.5pt;
+}
+
 #export {
     padding-top: 13px;
     padding-left: 7px;

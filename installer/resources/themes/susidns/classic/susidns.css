@@ -378,32 +378,26 @@ div#filter {
     text-transform: capitalize;
 }
 
-.iframed div#filter {
-    background: url(/themes/console/classic/images/bg0.png);
-    background: linear-gradient(to bottom, rgba(255, 255, 255, 0.8), rgba(255, 255, 255, 0.8)), url(/themes/console/classic/images/bg0.png);
-    background-size: 120px 120px;
-}
-
 #filter a, #filter a:visited, #activefilter {
-    display: inline-block;
     margin: 2px 0;
     padding: 0 6px;
+    min-width: 16px;
+    display: inline-block;
+    line-height: 180%;
+    text-transform: capitalize;
     font-size: 10pt;
     color: #575779;
-    border-radius: 2px;
-    text-transform: capitalize;
-    box-shadow: inset 0 0 0 1px #fff;
     border: 1px solid #aaafce;
-    min-width: 16px;
+    border-radius: 2px;
+    box-shadow: inset 0 0 0 1px #fff;
     background: #fff;
     background: linear-gradient(to bottom, #fff, #eef);
-    line-height: 180%;
 }
 
 #filter span a {
+    line-height: 140%;
     font-weight: normal;
     color: #333 !important;
-    line-height: 140%;
 }
 
 #filter a:hover, #filter a:focus {
@@ -415,12 +409,6 @@ div#filter {
 
 #filter a:active {
     box-shadow: inset 3px 3px 3px #999;
-}
-
-#filter p b {
-    margin-right: 5px;
-    vertical-align: bottom;
-    font-size: 12pt;
 }
 
 #filter span > * {
@@ -443,11 +431,7 @@ div#filter {
 }
 
 #search {
-    text-align: center !important;
-}
-
-#search form {
-    text-align: center !important;
+    text-align: center;
 }
 
 #booksearch {
@@ -463,15 +447,15 @@ div#filter {
     vertical-align: middle;
 }
 
-.iframed #booksearch {
+.iframed #booksearch, .iframed #filter {
     background: #eff2ff;
     background: linear-gradient(to bottom, #fff 50%, #eff2ff 50%);
 }
 
 #search input[type="text"] {
     width: 200px;
-    background: #fff url(/themes/console/images/buttons/search.png) 5px center no-repeat;
     padding: 5px 5px 5px 25px;
+    background: #fff url(/themes/console/images/buttons/search.png) 5px center no-repeat;
 }
 
 #messages:empty {
@@ -833,20 +817,6 @@ textarea[name="config"], textarea[name="content"] {
     background: #eff2ff url(/themes/susidns/images/drive.png) 13px center no-repeat;
 }
 
-p#filtered {
-    background: #fff url(/themes/console/images/buttons/filter.png) 18px center no-repeat;
-    padding: 0 10px 0 38px !important;
-}
-
-p.book {
-    background: #fff url(/themes/susidns/images/abook.png) 18px center no-repeat;
-    padding: 0 10px 0 38px !important;
-}
-
-.iframed p#filtered, .iframed p.book {
-    background: url(/themes/susidns/images/abook.png) 18px center no-repeat;
-}
-
 /* export hosts */
 
 #export {
@@ -862,13 +832,6 @@ p.book {
 
 #filter {
     margin-top: -2px !important;
-}
-
-p#filtered {
-    padding-right: 200px !important;
-    padding-top: 2px !important;
-    padding: 2px 200px 0 20px !important;
-    background-position: left center !important;
 }
 
 #book p {
@@ -1284,10 +1247,6 @@ input[type="checkbox"][disabled]:checked, input[type="radio"][disabled]:checked,
     display: inline-block;
 }
 
-/*#showing {
-    float: right;
-}
-*/
 #paginate, #filtered, #results {
     margin-right: 4px;
     display: inline-block;
@@ -1295,6 +1254,7 @@ input[type="checkbox"][disabled]:checked, input[type="radio"][disabled]:checked,
     word-spacing: 0;
     letter-spacing: 0;
     text-transform: none;
+    font-size: 10pt;
 }
 
 #export {
@@ -1340,7 +1300,7 @@ form[action="export"]::after {
     content: "";
 }
 
-div#export {
+#export {
     padding-top: 10px;
     padding-left: 2px;
     width: 32px;
@@ -1491,6 +1451,18 @@ input[disabled] {
     border-color: transparent transparent transparent #575779;
 }
 
+#empty {
+    margin-top: -11px;
+}
+
+#add table {
+    margin-top: -9px;
+}
+
+#add tr:first-child td {
+    padding-bottom: 0;
+}
+
 @media screen and (max-width: 1200px) {
 .iframed #prev a, .iframed #next a {
     padding: 11px 10px !important;
@@ -1498,5 +1470,15 @@ input[disabled] {
 
 .iframed #prev::after, .iframed #next::after {
     top: calc(50% - 4px);
+}
+
+.headline h3 {
+    padding-left: 36px;
+    font-size: 10pt;
+    background-size: 20px 20px;
+}
+
+#filtered {
+    font-size: 9.5pt;
 }
 }

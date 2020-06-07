@@ -459,13 +459,9 @@
 </form>
 </c:if>
 <% /* book.notEmpty */ %>
-<!--
 <c:if test="${book.isEmpty}">
-<div id="emptybook">
-<p class="book"><%=intl._t("This address book is empty.")%></p>
-</div>
+<div id="empty"></div>
 </c:if>
--->
 <form method="POST" action="addressbook?book=${book.book}">
 <input type="hidden" name="book" value="${book.book}">
 <input type="hidden" name="serial" value="<%=susiNonce%>">
@@ -504,12 +500,6 @@
 </div>
 </form>
 <% } %>
-
-<div id="footer">
-<hr>
-<p class="footer">susidns v${version.version} &copy; <a href="${version.url}" target="_top">susi</a> 2005</p>
-</div>
-</div>
 <span data-iframe-height></span>
 <style type="text/css">body{opacity: 1 !important;}</style>
 </body>

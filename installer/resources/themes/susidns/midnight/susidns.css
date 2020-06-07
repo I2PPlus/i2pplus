@@ -1734,6 +1734,10 @@ form[action="export"]::after {
     margin-left: 6px;
 }
 
+#filtered {
+    font-size: 10pt;
+}
+
 @media screen and (max-width: 1200px) {
 form[action="export"]::after {
     height: 21px;
@@ -1745,6 +1749,9 @@ form[action="export"]::after {
 
 #prev, #next, #current {
     font-size: 10pt;
+}
+#filtered {
+    font-size: 9.5pt;
 }
 }
 
@@ -1813,6 +1820,10 @@ form[action="export"]::after {
     left: calc(50% - 3px);
     right: 0;
     border-color: transparent transparent transparent #89f;
+}
+
+#empty {
+    margin-top: 9px;
 }
 
 @media screen and (max-width: 1200px) {

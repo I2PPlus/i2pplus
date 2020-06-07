@@ -1913,7 +1913,15 @@ div#export {
     border-color: transparent transparent transparent #575779;
 }
 
+#filtered {
+    font-size: 10pt;
+}
+
 @media screen and (max-width: 1200px) {
+#filtered {
+    font-size: 9.5pt;
+}
+
 .iframed #prev a, .iframed #next a {
     padding: 11px 10px !important;
 }
