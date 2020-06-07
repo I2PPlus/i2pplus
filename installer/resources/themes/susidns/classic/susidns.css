@@ -1478,7 +1478,7 @@ input[disabled] {
     background-size: 20px 20px;
 }
 
-#filtered {
+#filtered, #results {
     font-size: 9.5pt;
 }
 }

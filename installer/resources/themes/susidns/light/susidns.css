@@ -1913,12 +1913,12 @@ div#export {
     border-color: transparent transparent transparent #575779;
 }
 
-#filtered {
+#filtered, #results {
     font-size: 10pt;
 }
 
 @media screen and (max-width: 1200px) {
-#filtered {
+#filtered, #results {
     font-size: 9.5pt;
 }
 

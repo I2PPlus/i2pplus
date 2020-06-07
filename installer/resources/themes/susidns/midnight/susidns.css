@@ -1734,7 +1734,7 @@ form[action="export"]::after {
     margin-left: 6px;
 }
 
-#filtered {
+#filtered, #results {
     font-size: 10pt;
 }
 
@@ -1750,7 +1750,8 @@ form[action="export"]::after {
 #prev, #next, #current {
     font-size: 10pt;
 }
-#filtered {
+
+#filtered, #results {
     font-size: 9.5pt;
 }
 }
