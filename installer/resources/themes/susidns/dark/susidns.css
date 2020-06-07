@@ -1675,7 +1675,7 @@ form[action="addressbook"] > p.buttons, #filter, #search, #visualid tr:last-chil
 }
 
 #host_details.book {
-    margin-top: 26px !important;
+    margin-top: -25px !important;
 }
 
 #showing, #paginate {

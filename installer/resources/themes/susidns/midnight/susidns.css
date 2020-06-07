@@ -418,7 +418,6 @@ h3 {
 }
 
 .headline h3:first-child {
-    font-size: 10.5pt;
     margin-bottom: 24px;
     border-radius: 0;
 }
@@ -803,6 +802,10 @@ div#book, #emptybook {
 .iframed #book table {
     border-top: none !important;
     border-bottom: none !important;
+}
+
+#host_details {
+    margin-top: -25px;
 }
 
 .iframed #book #host_details {
@@ -1827,7 +1830,14 @@ form[action="export"]::after {
     margin-top: 9px;
 }
 
+
 @media screen and (max-width: 1200px) {
+.headline h3, #subscriptions.headline h3, #configure.headline h3 {
+    padding-left: 30px;
+    background-size: 20px 20px, 100% 100% !important;
+    background-position: 6px center !important;
+}
+
 .iframed #prev a, .iframed #next a {
     padding: 11px 10px !important;
 }
