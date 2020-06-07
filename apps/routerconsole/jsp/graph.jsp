@@ -42,11 +42,13 @@
  <jsp:getProperty name="graphHelper" property="singleStat" />
 </div>
 <script nonce="<%=cspNonce%>" type="text/javascript">
+  var main = document.getElementById("perfgraphs");
   var graph = document.getElementById("graphSingle");
   function injectCss() {
-    var graphWidth = graph.naturalWidth;
-    var graphHeight = graph.height;
-    var sheet = window.document.styleSheets[0];
+    main.addEventListener("mouseover", function() {
+      var graphWidth = graph.naturalWidth;
+      var graphHeight = graph.height;
+      var sheet = window.document.styleSheets[0];
 <%
     if (graphHelper.getGraphHiDpi()) {
 %>
@@ -58,7 +60,7 @@
 <%
     }
 %>
-  }
+  });
   function initCss() {
     if (graph != null || graphWidth != graph.naturalWidth || graphHeight != graph.height) {
       injectCss();
@@ -71,7 +73,6 @@
 %>
   setInterval(function() {
     var graphURL = window.location.href + "&" + new Date().getTime();
-    console.log(JSON.parse(JSON.stringify(graphURL)));
     var xhr = new XMLHttpRequest();
     xhr.open('GET', graphURL, true);
     xhr.responseType = "text";

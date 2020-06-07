@@ -5,7 +5,6 @@
 <html id="participatingTunnels">
 <head>
 <%@include file="css.jsi" %>
-<%@include file="csp-unsafe.jsi" %>
 <%=intl.title("participating tunnels")%>
 <%@include file="summaryajax.jsi" %>
 <link href="/themes/console/tablesort.css" rel="stylesheet" type="text/css">
@@ -24,22 +23,6 @@
 <jsp:getProperty name="tunnelParticipatingHelper" property="tunnelsParticipating" />
 <script nonce=" + cspNonce + " type="text/javascript">new Tablesort(document.getElementById("tunnels_part"));</script>
 </div>
-<!--
-<script nonce="<%=cspNonce%>" type="text/javascript">
-  setInterval(function() {
-    var xhr = new XMLHttpRequest();
-    xhr.open('GET', '/tunnelsparticipating?' + new Date().getTime(), true);
-    xhr.responseType = "text";
-    xhr.onreadystatechange = function () {
-      if (xhr.readyState==4 && xhr.status==200) {
-        document.getElementById("routertunnels").innerHTML = xhr.responseText;
-      }
-    }
-    xhr.send();
-    new Tablesort(document.getElementById("tunnels_part"));
-  }, 15000);
-</script>
--->
 <script nonce="<%=cspNonce%>" type="text/javascript">progressx.hide();</script>
 </body>
 </html>

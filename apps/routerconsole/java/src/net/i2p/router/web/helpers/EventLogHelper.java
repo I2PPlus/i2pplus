@@ -222,8 +222,6 @@ public class EventLogHelper extends FormHandler {
             }
             buf.append("</td></tr>\n");
         }
-        String cspNonce = Integer.toHexString(net.i2p.util.RandomSource.getInstance().nextInt());
-        buf.append("<script nonce=\"" + cspNonce + "\" type=\"text/javascript\">new Tablesort(document.getElementById(\"eventlog\"));</script>\n");
         buf.append("</table>\n");
         return buf.toString();
     }

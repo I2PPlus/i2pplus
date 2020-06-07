@@ -21,7 +21,6 @@
 %>
 <%@include file="summaryajax.jsi" %>
 </head>
-<!--<body onload="initCss();" id="perfgraphs">-->
 <body id="perfgraphs">
 <script nonce="<%=cspNonce%>" type="text/javascript">progressx.show();</script>
 <%@include file="summary.jsi" %>
@@ -36,22 +35,25 @@
 </div>
 </div>
 <script nonce="<%=cspNonce%>" type="text/javascript">
+  var main = document.getElementById("perfgraphs");
   var graph = document.getElementsByClassName("statimage")[0];
   function injectCss() {
-    var graphWidth = graph.width;
-    var graphHeight = graph.height;
-    var sheet = window.document.styleSheets[0];
+    main.addEventListener("mouseover", function() {
+      var graphWidth = graph.width;
+      var graphHeight = graph.height;
+      var sheet = window.document.styleSheets[0];
 <%
     if (graphHelper.getGraphHiDpi()) {
 %>
-    sheet.insertRule(".graphContainer#hidpi {width: " + ((graphWidth / 2) + 8) + "px; height: " + ((graphHeight / 2) + 8) + "px;}", sheet.cssRules.length);
+      sheet.insertRule(".graphContainer#hidpi {width: " + ((graphWidth / 2) + 8) + "px; height: " + ((graphHeight / 2) + 8) + "px;}", sheet.cssRules.length);
 <%
     } else {
 %>
-    sheet.insertRule(".graphContainer {width: " + (graphWidth + 4) + "px; height: " + (graphHeight + 4) + "px;}", sheet.cssRules.length);
+      sheet.insertRule(".graphContainer {width: " + (graphWidth + 4) + "px; height: " + (graphHeight + 4) + "px;}", sheet.cssRules.length);
 <%
     }
 %>
+    });
   }
   function initCss() {
     if (graph != null || graphWidth != graph.naturalWidth || graphHeight != graph.naturalHeight) {

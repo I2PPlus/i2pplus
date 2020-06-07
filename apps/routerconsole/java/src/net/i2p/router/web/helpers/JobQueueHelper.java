@@ -168,7 +168,7 @@ public class JobQueueHelper extends HelperBase {
            .append("<h3 id=\"totaljobstats\">")
            .append(_t("Total Job Statistics"))
            .append("</h3>\n");
-        buf.append("<table id=\"jobstats\" data-sortable>\n<tr>\n" +
+        buf.append("<table id=\"jobstats\">\n<tr>\n" +
                    "<th>").append(_t("Job")).append("</th>" +
                    "<th>").append(_t("Runs")).append("</th>" +
                    "<th>").append(_t("Dropped")).append("</th>" +
@@ -237,7 +237,7 @@ public class JobQueueHelper extends HelperBase {
                 avgPendingTime = totPendingTime / totRuns;
         }
 
-        buf.append("<tr class=\"tablefooter\" data-sort-method=\"none\">");
+        buf.append("<tr class=\"tablefooter\">");
         buf.append("<td><b>").append(_t("Summary")).append("</b></td>");
         buf.append("<td align=\"right\">").append(totRuns).append("</td>");
         buf.append("<td align=\"right\">").append(totDropped).append("</td>");

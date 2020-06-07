@@ -841,8 +841,6 @@ class NetDbRenderer {
                 buf.append("</a></td><td align=\"center\">").append(num).append("</td></tr>\n");
             }
             buf.append("</table>\n");
-            String cspNonce = Integer.toHexString(net.i2p.util.RandomSource.getInstance().nextInt());
-            buf.append("<script nonce=\"" + cspNonce + "\" type=\"text/javascript\">new Tablesort(document.getElementById(\"netdbcountrylist\"));</script>\n");
         }
 
         buf.append("</td></tr>\n</table>\n");

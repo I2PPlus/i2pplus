@@ -58,7 +58,7 @@
 <span class="tab"><a href="/embed?url=/router.log&amp;name=Router Log">Router Log</a></span>
 <span class="tab"><a href="/embed?url=/wrapper.log&amp;name=Wrapper Log">Wrapper Log</a></span>
 </div>
-<p class="infohelp">To embed local pages in the console, set the <code>url</code> query parameter and optional <code>name</code> parameter, e.g. <a href="http://127.0.0.1:7657/embed?url=imagegen&amp;name=image generator">http://127.0.0.1:7657/embed?url=imagegen&name=image generator</a>, or use the form below. Only resources served from 127.0.0.1 or the address the console is running on are supported.<!--<br><br>To enable user-customization of the css of embedded pages, the class <code>iframed</code> is injected into the iframed page's &lt;body&gt; tag. For an example of usage, see <a href="/embed?url=/themes/imagegen/imagegen.css&amp;name=Imagegen CSS Theme">the I2P Imagegen CSS file</a>.--></p>
+<p class="infohelp">To embed local pages in the console, set the <code>url</code> query parameter and optional <code>name</code> parameter, e.g. <a href="http://127.0.0.1:7657/embed?url=imagegen&amp;name=image generator">http://127.0.0.1:7657/embed?url=imagegen&name=image generator</a>, or use the form below. Only resources served from 127.0.0.1 or the address the console is running on are supported.</p>
 <div id="embedurl">
 <form action="/embed?url=" method="get">
 <input type="hidden" name="norefresh">
@@ -72,8 +72,8 @@
 %>
 <h1 class="webapp"><%=intl._t(name)%> <span class="newtab"><a href="<%=url%>" target="_blank" title="<%=intl._t("Open in new tab")%>"><img src="<%=intl.getTheme(request.getHeader("User-Agent"))%>images/newtab.png" /></a></span></h1>
 <%
-        if (url.indexOf("imagegen") >= 0 && url.indexOf("css") == -1) {
-            appname = "imagegen";
+            if (url.indexOf("imagegen") >= 0 && url.indexOf("css") == -1) {
+                appname = "imagegen";
 %>
 <div class="main" id="<%=appname%>">
 <script type="text/javascript" src="/js/iframeResizer/iframeResizer.js?<%=net.i2p.CoreVersion.VERSION%>"></script>
@@ -97,21 +97,20 @@ var iframes = iFrameResize({log: false, interval: 0, heightCalculationMethod: is
 </script>
 <%
         } else {
-        if (url.contains("bote"))
-            appname = "bote";
-        else if (url.contains("BwSchedule"))
-            appname = "bwscheduler";
-        else if (url.contains("orchid"))
-            appname = "orchid";
-        else if (url.contains(".log") || url.contains(".css"))
-            appname = "rawtext";
-        else appname = "iframedapp";
+            if (url.contains("bote"))
+                appname = "bote";
+            else if (url.contains("BwSchedule"))
+                appname = "bwscheduler";
+            else if (url.contains("orchid"))
+                appname = "orchid";
+            else if (url.contains(".log") || url.contains(".css"))
+                appname = "rawtext";
+            else appname = "iframedapp";
 %>
 <div class="main embedded" id="<%=appname%>">
 <script type="text/javascript" src="/js/iframedClassInjectTheme.js"></script>
 <script type="text/javascript" src="/js/iframeResizer/iframeResizer.js?<%=net.i2p.CoreVersion.VERSION%>"></script>
 <script nonce="<%=cspNonce%>" type="text/javascript">
-
   function setupFrame() {
       f = document.getElementById("<%=appname%>_frame");
       u = "<%=url%>";
@@ -137,16 +136,6 @@ var iframes = iFrameResize({log: false, interval: 0, heightCalculationMethod: is
       f = document.getElementById("<%=appname%>_frame");
       u = "<%=url%>";
       d = document.getElementById(a + "_frame").contentWindow;
-//      if (u.indexOf(".log") >=0) {
-//          var fHeight = f.scrollHeight;
-//          f.scrollTop = fHeight + 99999;
-//          d.scrollTop = fHeight + 99999;
-//          d.scrollTo({top: fHeight, behavior: "smooth"});
-//          var eop = document.getElementById(a + "_frame").contentWindow.document.getElementById("endOfPage");
-//          var eop = document.getElementById("endOfPage");
-//          setTimeout("eop.scrollIntoView(true);", 1000);
-//          eop.scrollIntoView(true);
-//      }
   }
 </script>
 <style>iframe {width: 1px; min-width: 100%;}</style>
@@ -154,7 +143,7 @@ var iframes = iFrameResize({log: false, interval: 0, heightCalculationMethod: is
 <iframe src="<%=url%>" width="100%" frameborder="0" border="0" scrolling="no" name="<%=appname%>_frame" id="<%=appname%>_frame" onload="setupFrame();scrollToEnd();" allowtransparency="true"></iframe>
 <script nonce="<%=cspNonce%>" type="text/javascript">iFrameResize({log: false, interval: 0, heightCalculationMethod: 'taggedElement', warningTimeout: 0}, '#<%=appname%>_frame');</script>
 <%
-      }
+        }
 %>
 <%
     }
@@ -165,5 +154,6 @@ var iframes = iFrameResize({log: false, interval: 0, heightCalculationMethod: is
 </body>
 </html>
 <%
-    }
+  }
 %>
+

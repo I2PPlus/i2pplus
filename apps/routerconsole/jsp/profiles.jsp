@@ -30,6 +30,12 @@
  <jsp:getProperty name="profilesHelper" property="summary" />
 </div>
 </div>
+<script nonce="<%=cspNonce%>" type="text/javascript">
+  var ff = document.getElementById("floodfills");
+  if (ff) {
+    new Tablesort(ff);
+  }
+</script>
 <script nonce="<%=cspNonce%>" type="text/javascript">progressx.hide();</script>
 </body>
 </html>

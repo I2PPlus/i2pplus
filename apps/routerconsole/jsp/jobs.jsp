@@ -5,14 +5,8 @@
 <html>
 <head>
 <%@include file="css.jsi" %>
-<%@include file="csp-unsafe.jsi" %>
 <%=intl.title("job queue")%>
 <%@include file="summaryajax.jsi" %>
-<!-- tablesort.js https://github.com/tristen/tablesort/ -->
-<script nonce="<%=cspNonce%>" src="/js/tablesort/tablesort.js" type="text/javascript"></script>
-<script nonce="<%=cspNonce%>" src="/js/tablesort/tablesort.number.js" type="text/javascript"></script>
-<link href="/themes/console/tablesort.css" rel="stylesheet" type="text/css">
-<!-- end tablesort.js -->
 </head>
 <body id="routerjobs">
 <script nonce="<%=cspNonce%>" type="text/javascript">progressx.show();</script>
@@ -23,7 +17,6 @@
  <% jobQueueHelper.storeWriter(out); %>
  <jsp:getProperty name="jobQueueHelper" property="jobQueueSummary" />
 </div>
-<script nonce="<%=cspNonce%>" type="javascript">new Tablesort(document.getElementById("jobstats"));</script>
 <script nonce="<%=cspNonce%>" type="text/javascript">
   setInterval(function() {
     var xhr = new XMLHttpRequest();

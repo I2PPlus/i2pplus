@@ -27,7 +27,6 @@
 <link rel="preload" href="/js/iframeResizer/iframeResizer.contentWindow.js?<%=net.i2p.CoreVersion.VERSION%>" as="script">
 <link rel="preload" href="/susimail/" as="fetch" crossorigin>
 <%@include file="css.jsi" %>
-<%@include file="csp-unsafe.jsi" %>
 <%=intl.title("webmail")%>
 <script type="text/javascript" src="/js/iframedClassInject.js?<%=net.i2p.CoreVersion.VERSION%>"></script>
 <script nonce="<%=cspNonce%>" type="text/javascript">

@@ -5,7 +5,6 @@
 <html>
 <head>
 <%@include file="css.jsi" %>
-<%@include file="csp-unsafe.jsi" %>
 <%=intl.title("events")%>
  <jsp:useBean class="net.i2p.router.web.helpers.EventLogHelper" id="eventHelper" scope="request" />
  <jsp:setProperty name="eventHelper" property="contextId" value="<%=i2pcontextId%>" />
@@ -34,6 +33,7 @@
 </div>
 </div>
 </div>
+<script nonce="<%=cspNonce%>" type="text/javascript">new Tablesort(document.getElementById("eventlog"));</script>
 <script nonce="<%=cspNonce%>" type="text/javascript">progressx.hide();</script>
 </body>
 </html>

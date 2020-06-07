@@ -26,7 +26,6 @@
 <link rel="preload" href="/js/iframeResizer/iframeResizer.contentWindow.js?<%=net.i2p.CoreVersion.VERSION%>" as="script">
 <link rel="preload" href="/i2ptunnel/" as="fetch" crossorigin>
 <%@include file="css.jsi" %>
-<%@include file="csp-unsafe.jsi" %>
 <%=intl.title("Tunnel Manager")%>
 
 <script type="text/javascript" src="/js/iframeResizer/iframeResizer.js?<%=net.i2p.CoreVersion.VERSION%>"></script>
@@ -37,8 +36,6 @@
       f = document.getElementById("i2ptunnelframe");
       f.addEventListener("load", function() {
           injectClass(f);
-//          injectClassSpecific(f);
-//          resizeFrame(f);
       }, true);
   }
 </script>
@@ -55,9 +52,9 @@
 &nbsp;<a href="/i2ptunnel/"><%=intl._t("Click here to continue.")%></a>
 </iframe>
 <script nonce="<%=cspNonce%>" type="text/javascript">
-document.addEventListener('DOMContentLoaded', function(event) {
-var iframes = iFrameResize({log: false, interval: 0, heightCalculationMethod: 'taggedElement', warningTimeout: 0}, '#i2ptunnelframe')
-});
+  document.addEventListener('DOMContentLoaded', function(event) {
+    var iframes = iFrameResize({log: false, interval: 0, heightCalculationMethod: 'taggedElement', warningTimeout: 0}, '#i2ptunnelframe')
+  });
 </script>
 </div>
 <script nonce="<%=cspNonce%>" type="text/javascript">progressx.hide();</script>

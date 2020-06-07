@@ -1,5 +1,4 @@
-function initDelete()
-{
+function initDelete() {
 	var main = document.getElementById("mainsection");
 	main.addEventListener("click", function() {
 		if (!event.target.matches('input')) return;

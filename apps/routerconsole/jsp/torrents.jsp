@@ -28,16 +28,14 @@
 <link rel="preload" href="/js/iframeResizer/iframeResizer.contentWindow.js?<%=net.i2p.CoreVersion.VERSION%>" as="script">
 <link rel="preload" href="/i2psnark/?t=<%=now%>" as="fetch" crossorigin>
 <%@include file="css.jsi" %>
-<%@include file="csp-unsafe.jsi" %>
 <%=intl.title("torrents")%>
 <script nonce="<%=cspNonce%>" type="text/javascript">
-function setupFrame() {
-      f = document.getElementById("i2psnarkframe");
-      f.addEventListener("load", function() {
-          injectClass(f);
-//          resizeFrame(f);
-      }, true);
-}
+  function setupFrame() {
+    f = document.getElementById("i2psnarkframe");
+    f.addEventListener("load", function() {
+      injectClass(f);
+    }, true);
+  }
 </script>
 <script type="text/javascript" src="/js/iframedClassInject.js?<%=net.i2p.CoreVersion.VERSION%>"></script>
 <script type="text/javascript" src="/js/iframeResizer/iframeResizer.js?<%=net.i2p.CoreVersion.VERSION%>"></script>

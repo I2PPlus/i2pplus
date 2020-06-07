@@ -5,7 +5,6 @@
 <html>
 <head>
 <%@include file="css.jsi" %>
-<%@include file="csp-unsafe.jsi" %>
 <%=intl.title("network database")%>
 <!-- tablesort.js https://github.com/tristen/tablesort/ -->
 <script nonce="<%=cspNonce%>" src="/js/tablesort/tablesort.js" type="text/javascript"></script>
@@ -49,6 +48,7 @@
 <%@include file="formhandler.jsi" %>
  <jsp:getProperty name="formhandler" property="netDbSummary" />
 </div>
+<script nonce="<%=cspNonce%>" type="text/javascript">new Tablesort(document.getElementById("netdbcountrylist"));</script>
 <script nonce="<%=cspNonce%>" type="text/javascript">progressx.hide();</script>
 </body>
 </html>

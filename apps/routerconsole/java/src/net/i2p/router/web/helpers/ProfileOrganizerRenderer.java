@@ -261,7 +261,6 @@ class ProfileOrganizerRenderer {
             buf.setLength(0);
         }
         buf.append("</table>\n");
-//        buf.append("<script>new Tablesort(document.getElementById(\"profilelist\"));</script>\n");
         buf.append("<div id=\"peer_thresholds\">\n<h3 class=\"tabletitle\">").append(_t("Thresholds")).append("</h3>\n")
            .append("<table id=\"thresholds\">\n")
            .append("<thead><tr><th><b>")
@@ -275,13 +274,10 @@ class ProfileOrganizerRenderer {
         } else {
             buf.append(speed).append(' ' ).append("B");
         }
-//           .append(num(_organizer.getSpeedThreshold()))
         buf.append("ps</th><th><b>")
-//           .append(_t("Capacity")).append(": </b>").append(num(_organizer.getCapacityThreshold()))
            .append(_t("Capacity")).append(": </b>");
        String capThresh = num(Math.round(_organizer.getCapacityThreshold())).replace(".00", "");
        buf.append(capThresh).append(' ').append(_t("tunnels per hour")).append("</th><th><b>")
-//          .append(_t("Integration")).append(": </b>").append(num(_organizer.getIntegrationThreshold()))
            .append(_t("Integration")).append(": </b>").append(capThresh).append(' ');
        if (capThresh.equals("1"))
            buf.append(_t("peer"));
@@ -312,8 +308,6 @@ class ProfileOrganizerRenderer {
        ////
        } else {
 
-        //buf.append("<h2><a name=\"flood\"></a>").append(_t("Floodfill and Integrated Peers"))
-        //   .append(" (").append(integratedPeers.size()).append(")</h2>\n");
         buf.append("<div class=\"widescroll\" id=\"ff\">\n<table id=\"floodfills\" data-sortable>\n");
         buf.append("<thead>\n<tr class=\"smallhead\">");
         buf.append("<th>").append(_t("Peer")).append("</th>");
@@ -337,16 +331,11 @@ class ProfileOrganizerRenderer {
         for (PeerProfile prof : order) {
             Hash peer = prof.getPeer();
             DBHistory dbh = prof.getDBHistory();
-//            if (dbh != null && (((prof.getLastHeardFrom() <= hideBefore && prof.getLastHeardFrom() > 0) ||
-//                                   prof.getLastHeardAbout() <= hideBefore) && ((dbh.getLastLookupSuccessful() <= hideBefore && dbh.getLastLookupSuccessful() > 0) ||
-//                                   (dbh.getLastLookupFailed() <= hideBefore && dbh.getLastLookupFailed() > 0)))) {
-//            if (prof.getLastHeardFrom() <= hideBefore && prof.getLastHeardFrom() > 0) {
             buf.append("<tr><td align=\"center\" nowrap>");
             buf.append(_context.commSystem().renderPeerHTML(peer));
             buf.append("</td>");
             RouterInfo info = _context.netDb().lookupRouterInfoLocally(peer);
             if (info != null) {
-//                buf.append("<td align=\"center\">").append(DataHelper.stripHTML(info.getCapabilities())).append("</td>");
                 // remove superfluous O class from P + X, remove F class (everyone's a ff), add spans
                 String tooltip = "\" title=\"" + _t("Show all routers with this capability in the NetDb") + "\"><span";
                 String caps = DataHelper.stripHTML(info.getCapabilities())
@@ -405,8 +394,6 @@ class ProfileOrganizerRenderer {
 //        }
         }
         buf.append("</table>\n");
-        String cspNonce = Integer.toHexString(net.i2p.util.RandomSource.getInstance().nextInt());
-        buf.append("<script nonce=\"" + cspNonce + "\" type=\"text/javascript\">new Tablesort(document.getElementById(\"floodfills\"));</script>");
         buf.append("</div>\n");
 
       ////
