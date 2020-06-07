@@ -345,7 +345,7 @@ form[action="subscriptions"] #content {
 }
 
 .iframed #import {
-    margin: 0;
+    margin: 0 0 18px;
 }
 
 #add h3, #import h3 {
