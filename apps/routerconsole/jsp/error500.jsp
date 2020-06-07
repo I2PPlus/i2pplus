@@ -79,7 +79,7 @@
 <jsp:getProperty name="logsHelper" property="unavailableCrypto" />
 <b>Wrapper version:</b>&ensp;<%=System.getProperty("wrapper.version", "none")%><br>
 <b>Server version:</b>&ensp;<jsp:getProperty name="logsHelper" property="jettyVersion" /><br>
-<b>Servlet version:</b>&ensp;<%=getServletInfo()%><br>
+<b>Servlet version:</b>&ensp;<%=getServletInfo()%> (<%=getServletConfig().getServletContext().getMajorVersion()%>.<%=getServletConfig().getServletContext().getMinorVersion()%>)<br>
 <b>Platform:</b>&ensp;<%=System.getProperty("os.name")%>&ensp;<%=System.getProperty("os.arch")%>&ensp;<%=System.getProperty("os.version")%><br>
 <b>Processor:</b>&ensp;<%=net.i2p.util.NativeBigInteger.cpuModel()%>&ensp;(<%=net.i2p.util.NativeBigInteger.cpuType()%>)<br>
 <b>JBigI:</b>&ensp;<%=net.i2p.util.NativeBigInteger.loadStatus()%><br>
