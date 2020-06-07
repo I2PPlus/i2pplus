@@ -7579,6 +7579,22 @@ div.app:hover .applabel {
     color: #652787;
 }
 
+@media screen and (max-width: 1200px) {
+.appimg {
+    height: 40px;
+}
+
+div.app img {
+    height: 24px;
+    max-height: 24px;
+    max-width: 24px;
+}
+
+.applabel {
+    width: 130px;
+}
+}
+
 /* homepage search */
 
 div.search {
