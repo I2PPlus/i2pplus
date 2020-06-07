@@ -580,12 +580,12 @@ li {
     line-height: 150%;
 }
 
-tr.list1 {
-    background-color: #000900;
+#host_list tr:nth-child(odd), #host_details tr:nth-child(odd) {
+    background-color: rgba(0,12,0,.5);
 }
 
-tr.list0 {
-    background-color: #001000;
+#host_list tr:nth-child(even), #host_details tr:nth-child(even) {
+    background-color: rgba(0,24,0,.5);
 }
 
 .help {

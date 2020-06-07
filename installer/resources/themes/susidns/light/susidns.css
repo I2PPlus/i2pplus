@@ -535,31 +535,30 @@ li {
     line-height: 140%;
 }
 
-.list1 {
+#host_list tr:nth-child(odd), #host_details tr:nth-child(odd) {
     background-color: #f7f8ff;
-    background: repeating-linear-gradient(45deg, rgba(255,255,255,0.5) 2px, rgba(221, 221, 255, 0.3) 3px, #fff 5px), #fff;
+    background: repeating-linear-gradient(45deg, rgba(255,255,255,0.5) 2px, rgba(192, 192, 255, 0.3) 3px, #fff 5px), #fff;
 }
 
-.list0 {
+#host_list tr:nth-child(even), #host_details tr:nth-child(even) {
     background-color: #eef;
     background: repeating-linear-gradient(135deg, rgba(255,255,255,0.5) 2px, rgba(240, 240, 255, 0.3) 3px, #fff 5px), #fff;
 }
 
-_:-ms-lang(x), tr.list0:hover, tr.list1:hover, .list0 td, .list1 td {
+_:-ms-lang(x), #host_list td, #host_list tr:hover td, #host_details td, #host_details tr:hover td {
     box-shadow: none !important;
 }
 
-.list0 td, .list1 td {
+#host_list td, #host_details td {
     box-shadow: inset 0 0 0 1px #fff;
-    background: rgba(240,240,255,0.4);
 }
 
-.list0:hover td, .list1:hover td {
+#host_list tr:hover td, #host_details tr:hover td {
     color: #33333f;
     box-shadow: inset 0 0 0 1px #ffe;
 }
 
-.list0 td:nth-last-child(n+4), .list1 td:nth-last-child(n+4), #host_details td:first-child {
+#host_list td:nth-last-child(n+4), #host_details td:nth-last-child(n+4), #host_details td:first-child {
     border-right: 1px solid #ddf;
 }
 
