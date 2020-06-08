@@ -1422,3 +1422,37 @@ input::placeholder {
 #clientAuth tr:first-child td {
     border-top: none;
 }
+
+/* server tunnel options */
+
+#tunnelOpts td {
+    padding: 0;
+    width: 25% !important;
+}
+
+#tunnelOpts table {
+    border: none;
+}
+
+#tunnelOpts table td {
+    padding: 5px;
+    border-bottom: 1px solid #ced1e3;
+}
+
+#tunnelOpts table tr:first-child td {
+    border-top: none;
+}
+
+#tunnelOpts table tr:last-child td {
+    border-bottom: none;
+}
+
+#tunnelOpts table td:first-child {
+    border-left: none;
+}
+
+#tunnelOpts table td:last-child {
+    border-right: none;
+}
+
+/* end server tunnel options */
