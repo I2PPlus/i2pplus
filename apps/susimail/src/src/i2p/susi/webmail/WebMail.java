@@ -401,8 +401,8 @@ public class WebMail extends HttpServlet
 		    name.equals(SETPAGESIZE) || name.equals(SAVE))  // config page
 			buf.append(" beforePopup\"");
 		// scroll to top of non-embedded page if delete clicked to ensure confirmation dialog is visible
-		else if (name.equals(DELETE))
-			buf.append(" onclick=\"smoothScroll(document.getElementById(\'mailbox\'))\"");
+//		else if (name.equals(DELETE))
+//			buf.append(" onclick=\"smoothScroll(document.getElementById(\'mailbox\'))\"");
 		else
 			buf.append('"');
 		// These are icons only now, via the CSS, so add a tooltip
