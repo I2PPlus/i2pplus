@@ -256,16 +256,14 @@ public class AddressbookBean extends BaseBean
 		String message = "";
 
 		if( action != null ) {
-								if (_context.getBooleanProperty(PROP_PW_ENABLE) ||
-				(serial != null && serial.equals(lastSerial))) {
+			if (_context.getBooleanProperty(PROP_PW_ENABLE) || (serial != null && serial.equals(lastSerial))) {
 				boolean changed = false;
 				if (action.equals(_t("Add")) || action.equals(_t("Replace"))) {
 					if( addressbook != null && hostname != null && destination != null ) {
 						try {
 							// throws IAE with translated message
 							String host = AddressBean.toASCII(hostname);
-							String displayHost = host.equals(hostname) ? hostname :
-																						hostname + " (" + host + ')';
+							String displayHost = host.equals(hostname) ? hostname : hostname + " (" + host + ')';
 
 							String oldDest = (String) addressbook.get(host);
 							if (destination.equals(oldDest)) {
@@ -282,8 +280,7 @@ public class AddressbookBean extends BaseBean
 									} else if (destination.contains(".b32.i2p")) {
 										wasB32 = true;
 										Destination dest;
-										if (destination.startsWith("http://") ||
-											destination.startsWith("https://")) {
+										if (destination.startsWith("http://") || destination.startsWith("https://")) {
 											// do them a favor, pull b32 out of pasted URL
 											try {
 												URI uri = new URI(destination);
@@ -382,9 +379,9 @@ public class AddressbookBean extends BaseBean
 				}
 			}
 			else {
-				message = _t("Invalid form submission, probably because you used the \"back\" or \"reload\" button on your browser. Please resubmit.")
-								+ "<br>" +
-								_t("If the problem persists, verify that you have cookies enabled in your browser.");
+				message = _t("Invalid form submission, probably because you used the \"back\" or \"reload\" button on your browser. Please resubmit.") +
+								 "<br>" +
+								 _t("If the problem persists, verify that you have cookies enabled in your browser.");
 			}
 		}
 
@@ -449,14 +446,11 @@ public class AddressbookBean extends BaseBean
 	*/
 	public boolean isValidBook() {
 		String s = getBook().toLowerCase(Locale.US);
-		return s.equals("router") ||
-				s.equals("master") ||
-				s.equals("published") ||
-				s.equals("private");
+		return s.equals("router") || s.equals("master") || s.equals("published") || s.equals("private");
 	}
 
 	public void setFilter(String filter) {
-		if( filter != null && ( filter.length() == 0 || filter.equalsIgnoreCase("none"))) {
+		if (filter != null && (filter.length() == 0 || filter.equalsIgnoreCase("none"))) {
 			filter = null;
 			search = null;
 		}
