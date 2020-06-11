@@ -14167,3 +14167,11 @@ h3 + table {
     width: 120%;
 }
 }
+
+.unbold {
+    font-weight: normal;
+}
+
+#accesslistDisabled ~ textarea[name="accessList"] {
+    display: none;
+}

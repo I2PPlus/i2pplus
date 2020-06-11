@@ -794,7 +794,20 @@
         } // !isOffline
 %>
 <tr>
-<th colspan="2"><%=intl._t("Restricted Access List")%></th></tr>
+<th colspan="2"><%=intl._t("Restricted Access List")%>&nbsp;
+<%
+        if (editBean.getAccessMode(curTunnel).equals("0")) {
+%>
+<span class="unbold">(<%=intl._t("Activate whitelist or blacklist to enable editing")%>)</span>
+<%
+        } else {
+%>
+<span class="unbold">(<%=intl._t("Specify client destinations, 1 per line")%>)</span>
+<%
+        }
+%>
+</th></tr>
+<!--
 <tr>
 <td colspan="2">
 <span class="multiOption">
@@ -808,9 +821,19 @@
 </span>
 </td>
 </tr>
-<tr><td colspan="2"><b><%=intl._t("Access List")%></b> (<%=intl._t("Specify client destinations, 1 per line")%>)</td></tr>
+-->
+<!--<tr><td colspan="2"><b><%=intl._t("Access List")%></b>&nbsp;(<%=intl._t("Specify client destinations, 1 per line")%>)</td></tr>-->
 <tr>
 <td colspan="2">
+<span class="multiOption" <%=(editBean.getAccessMode(curTunnel).equals("0") ? " id=\"accesslistDisabled\"" : "")%>>
+<label title="<%=intl._t("Allow all clients to connect to this service")%>"><input value="0" type="radio" name="accessMode"<%=(editBean.getAccessMode(curTunnel).equals("0") ? " checked=\"checked\"" : "")%> class="optbox" />&nbsp;<%=intl._t("Disable")%></label>
+</span>
+<span class="multiOption">
+<label title="<%=intl._t("Prevent listed clients from connecting to this service")%>"><input value="2" type="radio" name="accessMode"<%=(editBean.getAccessMode(curTunnel).equals("2") ? " checked=\"checked\"" : "")%> class="optbox" />&nbsp;<%=intl._t("Blacklist")%></label>
+</span>
+<span class="multiOption">
+<label title="<%=intl._t("Only allow listed clients to connect to this service")%>"><input value="1" type="radio" name="accessMode"<%=(editBean.getAccessMode(curTunnel).equals("1") ? " checked=\"checked\"" : "")%> class="optbox" />&nbsp;<%=intl._t("Whitelist")%></label>
+</span>
 <textarea rows="2" style="height: 8em;" cols="60" name="accessList" title="<%=intl._t("Control access to this service")%>" wrap="off" spellcheck="false"><%=editBean.getAccessList(curTunnel)%></textarea>
 </td>
 </tr>
@@ -824,7 +847,7 @@
 <tr>
 <td id="throttle" colspan="4">
 <table id="throttler">
-<tr><th colspan="5"><%=intl._t("Inbound connection limits (0=unlimited)")%></th></tr>
+<tr><th colspan="5"><%=intl._t("Inbound connection limits")%>&nbsp;<span class="unbold"><%=intl._t("(0 = unlimited)")%></span></th></tr>
 <tr>
 <td></td>
 <td><b><%=intl._t("Per Minute")%></b></td>
@@ -858,7 +881,7 @@
 </td>
 <td class="blankColumn"></td>
 </tr>
-<tr><th colspan="5"><%=intl._t("Max concurrent connections (0=unlimited)")%></th></tr>
+<tr><th colspan="5"><%=intl._t("Max concurrent connections")%>&nbsp;<span class="unbold"><%=intl._t("(0 = unlimited)")%></span></th></tr>
 <tr>
 <td></td>
 <td>
@@ -871,7 +894,7 @@
 <%
         if (("httpserver".equals(tunnelType)) || ("httpbidirserver".equals(tunnelType))) {
 %>
-<tr><th colspan="5"><%=intl._t("POST limits (0=unlimited)")%></th></tr>
+<tr><th colspan="5"><%=intl._t("POST limits")%>&nbsp;<span class="unbold"><%=intl._t("(0 = unlimited)")%></span></th></tr>
 <tr>
 <td></td>
 <td><b><%=intl._t("Per Period")%></b></td>

@@ -1456,3 +1456,11 @@ input::placeholder {
 }
 
 /* end server tunnel options */
+
+.unbold {
+    font-weight: normal;
+}
+
+#accesslistDisabled ~ textarea[name="accessList"] {
+    display: none;
+}

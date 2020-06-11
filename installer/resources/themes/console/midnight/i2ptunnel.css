@@ -1696,3 +1696,11 @@ select[disabled], select[disabled]:hover, select[disabled]:focus, select[disable
 }
 
 /* end server tunnel options */
+
+.unbold {
+    font-weight: normal;
+}
+
+#accesslistDisabled ~ textarea[name="accessList"] {
+    display: none;
+}
