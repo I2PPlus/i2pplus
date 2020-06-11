@@ -21,7 +21,7 @@
 <jsp:setProperty name="tunnelPeerCountHelper" property="contextId" value="<%=i2pcontextId%>" />
 <% tunnelPeerCountHelper.storeWriter(out); %>
 <jsp:getProperty name="tunnelPeerCountHelper" property="tunnelPeerCount" />
-<script nonce=" + cspNonce + " type="text/javascript">new Tablesort(document.getElementById("tunnelPeerCount"));</script>
+<script nonce="<%=cspNonce%>" type="text/javascript">new Tablesort(document.getElementById("tunnelPeerCount"));</script>
 </div>
 <script nonce="<%=cspNonce%>" type="text/javascript">progressx.hide();</script>
 </body>
