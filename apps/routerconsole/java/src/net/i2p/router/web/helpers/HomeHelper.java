@@ -93,12 +93,12 @@ public class HomeHelper extends HelperBase {
 
 // I2P specific
         //"BobTheBuilder" + S + _x("Automated I2P development builds") + S + "http://bobthebuilder.i2p/" + S + I + "info/build.png" + S +
-        _x("I2P Bug Reports") + S + _x("Bug tracker") + S + "http://trac.i2p2.i2p/query?owner=~&amp;status=accepted&amp;status=assigned&amp;status=infoneeded&amp;status=infoneeded_new&amp;status=needs_work&amp;status=new&amp;status=open&amp;status=reopened&amp;status=started&amp;status=testing&amp;keywords=~&amp;group=priority&amp;col=id&amp;col=summary&amp;col=keywords&amp;col=status&amp;col=owner&amp;col=type&amp;col=priority&amp;col=changetime&amp;desc=1&amp;order=changetime" + S + I + "bug.png" + S +
+        _x("I2P Bug Reports") + S + _x("Bug tracker") + S + "http://trac.i2p2.i2p/query?owner=~&amp;status=accepted&amp;status=assigned&amp;status=infoneeded&amp;status=infoneeded_new&amp;status=needs_work&amp;status=new&amp;status=open&amp;status=reopened&amp;status=started&amp;status=testing&amp;keywords=~&amp;group=priority&amp;col=id&amp;col=summary&amp;col=keywords&amp;col=status&amp;col=owner&amp;col=type&amp;col=priority&amp;col=changetime&amp;desc=1&amp;order=changetime" + S + I + "svg/bug.svg" + S +
         _x("I2P FAQ") + S + _x("Frequently Asked Questions") + S + "http://i2p-projekt.i2p/faq" + S + I + "question.png" + S +
         _x("I2P Technical Docs") + S + _x("Technical documentation") + S + "http://i2p-projekt.i2p/how" + S + I + "education.png" + S +
         //_x("I2P Plugins") + S + _x("Add-on directory") + S + "http://i2pwiki.i2p/index.php?title=Plugins" + S + I + "info/plugin_link.png" + S +
-        _x("I2P Plugins") + S + _x("zzz's plugin repository") + S + "http://stats.i2p/i2p/plugins/" + S + I + "info/plugin_link.png" + S +
-        "i2pmetrics.i2p" + S + _x("Historical infrastructure data from the I2P network") + S + "http://i2pmetrics.i2p/" + S + I + "chart_line.png" + S +
+        _x("I2P Plugins") + S + _x("zzz's plugin repository") + S + "http://stats.i2p/i2p/plugins/" + S + I + "svg/plugin.svg" + S +
+        "i2pmetrics.i2p" + S + _x("Historical infrastructure data from the I2P network") + S + "http://i2pmetrics.i2p/" + S + I + "svg/stats.svg" + S +
         _x("Project Website") + S + _x("I2P home page") + S + "http://i2p-projekt.i2p/" + S + I + "info_rhombus.png" + S +
         "stats.i2p" + S + _x("I2P Network Statistics") + S + "http://stats.i2p/cgi-bin/dashboard.cgi" + S + I + "chart_line.png" + S +
         //"I2Pd" + S + _x("Alternative minimal C++ I2P router") + S + "http://i2pdproject.i2p/" + S + I + "eepsite.png" + S +
@@ -106,13 +106,13 @@ public class HomeHelper extends HelperBase {
 
 // software repositories + filesharing
         //"Aktie" + S + _x("I2P-based application with integrated file sharing &amp; distributed forums &amp; private messaging") + S + "http://aktie.i2p/" + S + I + "aktie.png" + S +
-        "dropbox.i2p" + S + _x("Private file storage") + S + "http://dropbox.i2p/" + S + I + "info/fileshare.png" + S +
+        "dropbox.i2p" + S + _x("Private file storage") + S + "http://dropbox.i2p/" + S + I + "svg/cloud.svg" + S +
         "ebooks.i2p" + S + _x("Huge collection of books &amp; magazines &amp; comics") + S + "http://ebooks.i2p/" + S + I + "info/books.png" + S +
-        "echelon.i2p" + S + _x("I2P Applications") + S + "http://echelon.i2p/" + S + I + "box_open.png" + S +
-        "fs.i2p" + S + _x("Secure filesharing service") + S + "http://fs.i2p/" + S + I + "info/fileshare.png" + S +
-        "git.repo.i2p" + S + _x("A public anonymous Git hosting site - supports pulling via Git and HTTP and pushing via SSH") + S + "http://git.repo.i2p/" + S + I + "git-logo.png" + S +
+        "echelon.i2p" + S + _x("I2P Applications") + S + "http://echelon.i2p/" + S + I + "svg/package.svg" + S +
+        "fs.i2p" + S + _x("Secure filesharing service") + S + "http://fs.i2p/" + S + I + "svg/cloud.svg" + S +
+        "git.repo.i2p" + S + _x("A public anonymous Git hosting site - supports pulling via Git and HTTP and pushing via SSH") + S + "http://git.repo.i2p/" + S + I + "svg/git.svg" + S +
         //"i2push.i2p" + S + _x("Online encrypted filesharing service") + S + "http://i2push.i2p/" + S + I + "info/fileshare.png" + S +
-        "skank.i2p" + S + _x("Home of I2P+") + S + "http://skank.i2p/" + S + I + "info/box.png" + S +
+        "skank.i2p" + S + _x("Home of I2P+") + S + "http://skank.i2p/" + S + I + "svg/package.svg" + S +
         "tome.i2p" + S + _x("Collection of books &amp; other reading material") + S + "http://tome.i2p/" + S + I + "info/books.png" + S +
         //"cacapo.i2p" + S + _x("Cacapo's collection of I2P plugins") + S + "http://cacapo.i2p/" + S + I + "info/butterfly.png" + S +
         //"iMule" + S + _x("Anonymous Filesharing Software") + S + "http://www.imule.i2p/" + S + I + "info/box.png" + S +
@@ -123,18 +123,18 @@ public class HomeHelper extends HelperBase {
 // torrent trackers
         _x("Freedom") + S + _x("Bittorrent tracker") + S + "http://torrfreedom.i2p/" + S + I + "magnet.png" + S +
         _x("Fazanka") + S + _x("No login Bittorrent tracker") + S + "http://torrents.fazanka.i2p/" + S + I + "magnet.png" + S +
-        _x("Postman's Tracker") + S + _x("Bittorrent tracker") + S + "http://tracker2.postman.i2p/" + S + I + "magnet.png" + S +
+        _x("Postman's Tracker") + S + _x("Bittorrent tracker") + S + "http://tracker2.postman.i2p/" + S + I + "svg/postman.svg" + S +
         //_x("diftracker") + S + _x("Bittorrent tracker") + S + "http://diftracker.i2p/" + S + I + "magnet.png" + S +
         //_x("Pirate Bay") + S + _x("I2P-hosted proxy for The Pirate Bay BitTorrent tracker") + S + "http://thepiratebay.i2p" + S + I + "pirate.png" + S +
         //"colombo-bt.i2p" + S + _x("The Italian Bittorrent Resource") + S + "http://colombo-bt.i2p/" + S + I + "colomboicon.png" + S +
 
 // domain name registration + uptime trackers
         "Identiguy" + S + _x("List of active eepsites and uptime monitor") + S + "http://identiguy.i2p/" + S + I + "info/health.png" + S +
-        _x("inr Domain Registry") + S + _x("I2P Domain Name Registration") + S + "http://inr.i2p/" + S + I + "info/registrar.png" + S +
+        _x("inr Domain Registry") + S + _x("I2P Domain Name Registration") + S + "http://inr.i2p/" + S + I + "svg/registrar.svg" + S +
         "isitup.i2p" + S + _x("List of active eepsites and uptime monitor") + S + "http://isitup.i2p/" + S + I + "info/health.png" + S +
-        _x("no Domain Registry") + S + _x("I2P Domain Name Registration") + S + "http://no.i2p/" + S + I + "info/registrar.png" + S +
+        _x("no Domain Registry") + S + _x("I2P Domain Name Registration") + S + "http://no.i2p/" + S + I + "svg/registrar.svg" + S +
         "notbob.i2p" + S + _x("List of active eepsites and uptime monitor") + S + "http://notbob.i2p/" + S + I + "notbob.png" + S +
-        _x("zzz Domain Registry") + S + _x("I2P Domain Name Registration") + S + "http://stats.i2p/i2p/addkey.html" + S + I + "info/registrar.png" + S +
+        _x("zzz Domain Registry") + S + _x("I2P Domain Name Registration") + S + "http://stats.i2p/i2p/addkey.html" + S + I + "svg/registrar.svg" + S +
 
 // forums + social
         //"arc2.i2p" + S + _x("Anarchist Research Center") + S + "http://arc2.i2p/en/view/home" + S + I + "group.png" + S +
@@ -147,8 +147,8 @@ public class HomeHelper extends HelperBase {
         //"Ident " + _x("Microblog") + S + _x("Your premier microblogging service on I2P") + S + "http://id3nt.i2p/" + S + I + "ident_icon_blue.png" + S +
         //"jisko.i2p" + S + _x("Simple and fast microblogging website") + S + "http://jisko.i2p/" + S + I + "jisko_console_icon.png" + S +
         //("Syndie") + S + _x("Distributed Forum Platform") + S + "http://syndie-project.i2p/" + S + I + "group.png" + S +
-          "garden.i2p" + S + _x("Gardening forums") + S + "http://garden.i2p/" + S + I + "plant.png" + S +
-          "zeronet.i2p" + S + _x("Zeronet I2P Gateway") + S + "http://zeronet.i2p/" + S + I + "zeronet.png" + S +
+          "garden.i2p" + S + _x("Gardening forums") + S + "http://garden.i2p/" + S + I + "svg/garden.svg" + S +
+          "zeronet.i2p" + S + _x("Zeronet I2P Gateway") + S + "http://zeronet.i2p/" + S + I + "svg/zeronet.svg" + S +
 
 // hosting + other services
         //_x("Open4You") + S + _x("Free eepsite hosting with PHP and MySQL") + S + "http://open4you.i2p/" + S + I + "open4you-logo.png" + S +
@@ -157,7 +157,7 @@ public class HomeHelper extends HelperBase {
 //        "Pasta NoJS" + S + _x("Pastebin service (no javascript required)") + S + "http://pasta-nojs.i2p/" + S + I + "paste_plain.png" + S +
 //        "proxynet.i2p" + S + _x("Fast zero-logging outproxies for I2P") + S + "http://proxynet.i2p/" + S + I + "mask.png" + S +
 //        _x("Squeeze") + S + _x("URL shortening service") + S + "http://sqz.i2p/" + S + I + "info/url.png" + S +
-        _x("Deep Web Radio") + S + _x("Streaming radio service") + S + "http://deepwebradio.i2p/" + S + I + "radio.png" + S +
+        _x("Deep Web Radio") + S + _x("Streaming radio service") + S + "http://deepwebradio.i2p/" + S + I + "svg/radio.svg" + S +
 //           "invidious.i2p" + S + _x("Alternative front-end to Youtube") + S + "http://invidious.i2p/" + S + I + "info/video.png" + S +
            //"bote.i2p" + S + _x("Decentralized secure e-mail") + S + "http://bote.i2p/" + S + I + "info/mail_black.png" + S +
 
@@ -178,7 +178,7 @@ public class HomeHelper extends HelperBase {
 
 // news + blogs
         //"io.i2p" + S + _x("Mainstream news aggregation") + S + "http://io.i2p/" + S + I + "info/newspaper.png" + S +
-        _x("Planet I2P") + S + _x("I2P News") + S + "http://planet.i2p/" + S + I + "world.png" + S +
+        _x("Planet I2P") + S + _x("I2P News") + S + "http://planet.i2p/" + S + I + "svg/planet.svg" + S +
         //_x("The Tin Hat") + S + _x("Privacy guides and tutorials") + S + "http://secure.thetinhat.i2p/" + S + I + "thetinhat.png" + S +
         //_x("lenta news [ru]") + S + _x("Russian News Feed") + S + "http://lenta.i2p/" + S + I + "lenta_main_logo.png" + S +
 
