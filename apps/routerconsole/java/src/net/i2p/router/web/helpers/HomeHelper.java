@@ -75,7 +75,7 @@ public class HomeHelper extends HelperBase {
 
     static final String ADVANCED_SERVICES =
         _x("Addressbook") + S + _x("Manage your I2P hosts file here (I2P domain name resolution)") + S + "/dns" + S + I + "book_addresses.png" + S +
-        _x("Advanced Config") + S + _x("Advanced router configuration") + S + "/configadvanced" + S + I + "info/configure.png" + S +
+        _x("Advanced Config") + S + _x("Advanced router configuration") + S + "/configadvanced" + S + I + "svg/configure.svg" + S +
         _x("Changelog") + S + _x("Recent changes") + S + "/help/changelog" + S + I + "info/changelog.png" + S +
         _x("Graphs") + S + _x("Graph Router Performance") + S + "/graphs" + S + I + "info/statistics.png" + S +
         _x("I2PMail") + S + _x("Anonymous webmail client") + S + "/webmail" + S + I + "svg/mail.svg" + S +
@@ -162,19 +162,19 @@ public class HomeHelper extends HelperBase {
            //"bote.i2p" + S + _x("Decentralized secure e-mail") + S + "http://bote.i2p/" + S + I + "info/mail_black.png" + S +
 
 // search engines
-        "Legwork" + S +_x("I2P Web Search Engine") + S + "http://legwork.i2p/" + S + I + "info/search.png" + S +
-        "Ransack" + S +_x("I2P-based Metasearch Engine") + S + "http://ransack.i2p/" + S + I + "info/search.png" + S +
+        "Legwork" + S +_x("I2P Web Search Engine") + S + "http://legwork.i2p/" + S + I + "svg/search.svg" + S +
+        "Ransack" + S +_x("I2P-based Metasearch Engine") + S + "http://ransack.i2p/" + S + I + "svg/search.svg" + S +
 //        "Seeker" + S + _x("I2P Web Search Engine") + S + "http://seeker.i2p/" + S + I + "seeker.png" + S +
-//        "TorrentFinder" + S + _x("I2P Torrent Search Engine") + S + "http://torrentfinder.i2p/" + S + I + "info/search.png" + S +
+//        "TorrentFinder" + S + _x("I2P Torrent Search Engine") + S + "http://torrentfinder.i2p/" + S + I + "svg/search.svg" + S +
 
 // wikis
         //_x("I2P Wiki") + S + _x("Anonymous wiki - share the knowledge") + S + "http://i2pwiki.i2p/" + S + I + "i2pwiki_logo.png" + S +
         //_x("Psychonaut") + S + _x("Wiki relating to altered states of consciousness") + S + "http://psy.i2p/" + S + I + "psychonaut.png" + S +
-        //"lawiki.i2p" + S + _x("Community Wiki") + S + "http://lawiki.i2p/" + S + I + "billiard_marker.png" + S +
+        //"lawiki.i2p" + S + _x("Community Wiki") + S + "http://lawiki.i2p/" + S + I + "svg/wiki.svg" + S +
         //"hiddengate [ru]" + S + _x("Russian I2P-related wiki") + S + "http://hiddengate.i2p/" + S + I + "hglogo32.png" + S +
-        //_x("Trac Wiki") + S + S + "http://trac.i2p2.i2p/" + S + I + "billiard_marker.png" + S +
-        //_x("Ugha's Wiki") + S + S + "http://ugha.i2p/" + S + I + "billiard_marker.png" + S +
-        "I2P Wiki" + S + _x("I2P-related Wiki") + S + "http://wiki.i2p-projekt.i2p/" + S + I + "billiard_marker.png" + S +
+        //_x("Trac Wiki") + S + S + "http://trac.i2p2.i2p/" + S + I + "svg/wiki.svg" + S +
+        //_x("Ugha's Wiki") + S + S + "http://ugha.i2p/" + S + I + "svg/wiki.svg" + S +
+        "I2P Wiki" + S + _x("I2P-related Wiki") + S + "http://wiki.i2p-projekt.i2p/" + S + I + "svg/wiki.svg" + S +
 
 // news + blogs
         //"io.i2p" + S + _x("Mainstream news aggregation") + S + "http://io.i2p/" + S + I + "info/newspaper.png" + S +
