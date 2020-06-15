@@ -152,9 +152,9 @@ public class HomeHelper extends HelperBase {
 
 // hosting + other services
         //_x("Open4You") + S + _x("Free eepsite hosting with PHP and MySQL") + S + "http://open4you.i2p/" + S + I + "open4you-logo.png" + S +
-        //_x("Pastebin") + S + _x("Encrypted I2P Pastebin") + S + "http://zerobin.i2p/" + S + I + "paste_plain.png" + S +
-        _x("Pastebin") + S + _x("Encrypted I2P Pastebin") + S + "http://paste.r4sas.i2p/" + S + I + "paste_plain.png" + S +
-//        "Pasta NoJS" + S + _x("Pastebin service (no javascript required)") + S + "http://pasta-nojs.i2p/" + S + I + "paste_plain.png" + S +
+        //_x("Pastebin") + S + _x("Encrypted I2P Pastebin") + S + "http://zerobin.i2p/" + S + I + "svg/paste.svg" + S +
+        _x("Pastebin") + S + _x("Encrypted I2P Pastebin") + S + "http://paste.r4sas.i2p/" + S + I + "svg/paste.svg" + S +
+//        "Pasta NoJS" + S + _x("Pastebin service (no javascript required)") + S + "http://pasta-nojs.i2p/" + S + I + "svg/paste.svg" + S +
 //        "proxynet.i2p" + S + _x("Fast zero-logging outproxies for I2P") + S + "http://proxynet.i2p/" + S + I + "mask.png" + S +
 //        _x("Squeeze") + S + _x("URL shortening service") + S + "http://sqz.i2p/" + S + I + "info/url.png" + S +
         _x("Deep Web Radio") + S + _x("Streaming radio service") + S + "http://deepwebradio.i2p/" + S + I + "svg/radio.svg" + S +
