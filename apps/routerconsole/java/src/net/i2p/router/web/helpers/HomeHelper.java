@@ -121,10 +121,10 @@ public class HomeHelper extends HelperBase {
         //_x("MuWire") + S + _x("Easy anonymous file sharing") + S + "http://muwire.i2p/" + S + I + "muwire.png" + S +
 
 // torrent trackers
-        _x("Freedom") + S + _x("Bittorrent tracker") + S + "http://torrfreedom.i2p/" + S + I + "magnet.png" + S +
-        _x("Fazanka") + S + _x("No login Bittorrent tracker") + S + "http://torrents.fazanka.i2p/" + S + I + "magnet.png" + S +
+        _x("Freedom") + S + _x("Bittorrent tracker") + S + "http://torrfreedom.i2p/" + S + I + "svg/magnet.svg" + S +
+        _x("Fazanka") + S + _x("No login Bittorrent tracker") + S + "http://torrents.fazanka.i2p/" + S + I + "svg/magnet.svg" + S +
         _x("Postman's Tracker") + S + _x("Bittorrent tracker") + S + "http://tracker2.postman.i2p/" + S + I + "svg/postman.svg" + S +
-        //_x("diftracker") + S + _x("Bittorrent tracker") + S + "http://diftracker.i2p/" + S + I + "magnet.png" + S +
+        //_x("diftracker") + S + _x("Bittorrent tracker") + S + "http://diftracker.i2p/" + S + I + "svg/magnet.svg" + S +
         //_x("Pirate Bay") + S + _x("I2P-hosted proxy for The Pirate Bay BitTorrent tracker") + S + "http://thepiratebay.i2p" + S + I + "pirate.png" + S +
         //"colombo-bt.i2p" + S + _x("The Italian Bittorrent Resource") + S + "http://colombo-bt.i2p/" + S + I + "colomboicon.png" + S +
 
