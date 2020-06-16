@@ -313,7 +313,7 @@
 
 <a href="/confignet">
 <span class="sitemapLink" title="<%=intl._t("Configure router networking options")%>">
-<img src="/themes/console/images/info/network.png">
+<img src="/themes/console/images/svg/networkconfig.svg">
 <span class="sitemapLabel"><%=intl._t("Network")%></span>
 </span>
 </a>
