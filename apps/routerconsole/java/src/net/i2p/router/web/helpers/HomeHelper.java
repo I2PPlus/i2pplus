@@ -47,7 +47,7 @@ public class HomeHelper extends HelperBase {
         _x("I2PMail") + S + _x("Anonymous webmail client") + S + "/webmail" + S + I + "svg/mail.svg" + S +
         _x("Help") + S + _x("I2P Router Help") + S + "/help" + S + I + "svg/help.svg" + S +
         _x("Manage Plugins") + S + _x("Install and configure I2P plugins") + S + "/configplugins" + S + I + "info/plugin_edit.png" + S +
-        _x("Network Database") + S + _x("Show list of all known I2P routers") + S + "/netdb" + S + I + "info/globe.png" + S +
+        _x("Network Database") + S + _x("Show list of all known I2P routers") + S + "/netdb" + S + I + "svg/globe.svg" + S +
         _x("Router Info") + S + _x("Summary of router properties") + S + "/info" + S + I + "info_rhombus.png" + S +
         _x("Router Logs") + S + _x("Health Report") + S + "/logs" + S + I + "info/logs.png" + S +
         _x("Sitemap") + S + _x("Router Sitemap") + S + "/sitemap" + S + I + "info/sitemap.png" + S +
@@ -65,7 +65,7 @@ public class HomeHelper extends HelperBase {
         _x("I2PMail") + S + _x("Anonymous webmail client") + S + "/webmail" + S + I + "svg/mail.svg" + S +
         _x("Help") + S + _x("I2P Router Help") + S + "/help" + S + I + "svg/help.svg" + S +
         _x("Manage Plugins") + S + _x("Install and configure I2P plugins") + S + "/configplugins" + S + I + "info/plugin_edit.png" + S +
-        _x("Network Database") + S + _x("Show list of all known I2P routers") + S + "/netdb" + S + I + "info/globe.png" + S +
+        _x("Network Database") + S + _x("Show list of all known I2P routers") + S + "/netdb" + S + I + "svg/globe.svg" + S +
         _x("Router Info") + S + _x("Summary of router properties") + S + "/info" + S + I + "info_rhombus.png" + S +
         _x("Router Logs") + S + _x("Health Report") + S + "/logs" + S + I + "info/logs.png" + S +
         _x("Sitemap") + S + _x("Router Sitemap") + S + "/sitemap" + S + I + "info/sitemap.png" + S +
@@ -80,7 +80,7 @@ public class HomeHelper extends HelperBase {
         _x("Graphs") + S + _x("Graph Router Performance") + S + "/graphs" + S + I + "info/statistics.png" + S +
         _x("I2PMail") + S + _x("Anonymous webmail client") + S + "/webmail" + S + I + "svg/mail.svg" + S +
         _x("Manage Plugins") + S + _x("Install and configure I2P plugins") + S + "/configplugins" + S + I + "info/plugin_edit.png" + S +
-        _x("Network Database") + S + _x("Show list of all known I2P routers") + S + "/netdb" + S + I + "info/globe.png" + S +
+        _x("Network Database") + S + _x("Show list of all known I2P routers") + S + "/netdb" + S + I + "svg/globe.svg" + S +
         _x("Router Info") + S + _x("Summary of router properties") + S + "/info" + S + I + "info_rhombus.png" + S +
         _x("Router Logs") + S + _x("Health Report") + S + "/logs" + S + I + "info/logs.png" + S +
         _x("Sitemap") + S + _x("Router Sitemap") + S + "/sitemap" + S + I + "info/sitemap.png" + S +
@@ -113,7 +113,7 @@ public class HomeHelper extends HelperBase {
         "git.repo.i2p" + S + _x("A public anonymous Git hosting site - supports pulling via Git and HTTP and pushing via SSH") + S + "http://git.repo.i2p/" + S + I + "svg/git.svg" + S +
         //"i2push.i2p" + S + _x("Online encrypted filesharing service") + S + "http://i2push.i2p/" + S + I + "info/fileshare.png" + S +
         "skank.i2p" + S + _x("Home of I2P+") + S + "http://skank.i2p/" + S + I + "svg/package.svg" + S +
-        "tome.i2p" + S + _x("Collection of books &amp; other reading material") + S + "http://tome.i2p/" + S + I + "svg/books.svg" + S +
+        //"tome.i2p" + S + _x("Collection of books &amp; other reading material") + S + "http://tome.i2p/" + S + I + "svg/books.svg" + S +
         //"cacapo.i2p" + S + _x("Cacapo's collection of I2P plugins") + S + "http://cacapo.i2p/" + S + I + "info/butterfly.png" + S +
         //"iMule" + S + _x("Anonymous Filesharing Software") + S + "http://www.imule.i2p/" + S + I + "info/box.png" + S +
         //"killyourtv.i2p" + S + _x("Debian and Tahoe-LAFS repositories") + S + "http://killyourtv.i2p/" + S + I + "television_delete.png" + S +
