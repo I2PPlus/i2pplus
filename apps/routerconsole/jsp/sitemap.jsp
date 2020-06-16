@@ -101,7 +101,7 @@
 
 <a href="/i2ptunnelmgr">
 <span class="sitemapLink" title="<%=intl._t("Manage client and server tunnels")%>">
-<img src="/themes/console/images/info/tunnelmanager.png">
+<img src="/themes/console/images/svg/tunnelmanager.svg">
 <span class="sitemapLabel"><%=intl._t("Tunnel Manager")%></span>
 </span>
 </a>
