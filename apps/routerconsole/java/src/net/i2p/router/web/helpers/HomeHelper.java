@@ -42,7 +42,7 @@ public class HomeHelper extends HelperBase {
 
     // No commas allowed in text strings!
     static final String DEFAULT_SERVICES =
-        _x("Addressbook") + S + _x("Manage your I2P hosts file here (I2P domain name resolution)") + S + "/dns" + S + I + "book_addresses.png" + S +
+        _x("Addressbook") + S + _x("Manage your I2P hosts file here (I2P domain name resolution)") + S + "/dns" + S + I + "svg/addressbook.svg" + S +
         _x("Graphs") + S + _x("Graph Router Performance") + S + "/graphs" + S + I + "info/statistics.png" + S +
         _x("I2PMail") + S + _x("Anonymous webmail client") + S + "/webmail" + S + I + "svg/mail.svg" + S +
         _x("Help") + S + _x("I2P Router Help") + S + "/help" + S + I + "svg/help.svg" + S +
@@ -56,7 +56,7 @@ public class HomeHelper extends HelperBase {
         "";
 
     static final String NEWINSTALL_SERVICES =
-        _x("Addressbook") + S + _x("Manage your I2P hosts file here (I2P domain name resolution)") + S + "/dns" + S + I + "book_addresses.png" + S +
+        _x("Addressbook") + S + _x("Manage your I2P hosts file here (I2P domain name resolution)") + S + "/dns" + S + I + "svg/addressbook.svg" + S +
         _x("Configure Bandwidth") + S + _x("I2P Bandwidth Configuration") + S + "/config" + S + I + "info/bandwidth.png" + S +
         // FIXME wasn't escaped
         _x("Configure UI") + S + _x("Select console theme & language & set optional console password").replace("&", "&amp;") + S + "/configui" + S + I + "info/ui.png" + S +
@@ -74,7 +74,7 @@ public class HomeHelper extends HelperBase {
         "";
 
     static final String ADVANCED_SERVICES =
-        _x("Addressbook") + S + _x("Manage your I2P hosts file here (I2P domain name resolution)") + S + "/dns" + S + I + "book_addresses.png" + S +
+        _x("Addressbook") + S + _x("Manage your I2P hosts file here (I2P domain name resolution)") + S + "/dns" + S + I + "svg/addressbook.svg" + S +
         _x("Advanced Config") + S + _x("Advanced router configuration") + S + "/configadvanced" + S + I + "svg/configure.svg" + S +
         _x("Changelog") + S + _x("Recent changes") + S + "/help/changelog" + S + I + "info/changelog.png" + S +
         _x("Graphs") + S + _x("Graph Router Performance") + S + "/graphs" + S + I + "info/statistics.png" + S +

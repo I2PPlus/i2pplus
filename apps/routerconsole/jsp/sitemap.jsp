@@ -71,7 +71,7 @@
 
 <a href="/dns">
 <span class="sitemapLink" title="<%=intl._t("Manage I2P addresses")%>">
-<img src="/themes/console/images/book_addresses.png">
+<img src="/themes/console/images/svg/addressbook.svg">
 <span class="sitemapLabel"><%=intl._t("Addressbook")%></span>
 </span>
 </a>
@@ -94,7 +94,7 @@
 <a href="/torrents">
 <span class="sitemapLink" title="<%=intl._t("Create and download torrents")%>">
 <% } %>
-<img src="/themes/console/images/i2psnark.png">
+<img src="/themes/console/images/svg/snark.svg">
 <span class="sitemapLabel"><%=intl._t("Torrents")%></span>
 </span>
 </a>
@@ -113,14 +113,14 @@
 <a href="/webmail">
 <span class="sitemapLink" title="<%=intl._t("Webmail client")%>">
 <% } %>
-<img src="/themes/console/images/email.png">
+<img src="/themes/console/images/svg/mail.svg">
 <span class="sitemapLabel"><%=intl._t("Webmail")%></span>
 </span>
 </a>
 
 <a href="http://127.0.0.1:7658/" target="_blank">
 <span class="sitemapLink extlink" title="<%=intl._t("Local webserver for hosting content on the I2P network")%>">
-<img src="/themes/console/images/info/server.png">
+<img src="/themes/console/images/svg/server.svg">
 <span class="sitemapLabel"><%=intl._t("Web Server")%></span>
 </span>
 </a>
@@ -143,7 +143,7 @@
 
 <a href="/debug">
 <span class="sitemapLink" title="<%=intl._t("View debugging information")%>">
-<img src="/themes/console/images/info/debug.png">
+<img src="/themes/console/images/svg/bug.svg">
 <span class="sitemapLabel"><%=intl._t("Debugging")%></span>
 </span>
 </a>
@@ -164,14 +164,14 @@
 
 <a href="/help/">
 <span class="sitemapLink" title="<%=intl._t("Router help section")%>">
-<img src="/themes/console/images/support.png">
+<img src="/themes/console/images/svg/help.svg">
 <span class="sitemapLabel"><%=intl._t("Help Section")%></span>
 </span>
 </a>
 
 <a href="/home">
 <span class="sitemapLink" title="<%=intl._t("Router homepage")%>">
-<img src="/themes/console/images/info/home.png">
+<img src="/themes/console/images/svg/home.svg">
 <span class="sitemapLabel"><%=intl._t("Home")%></span>
 </span>
 </a>
@@ -185,7 +185,7 @@
 
 <a href="/jars">
 <span class="sitemapLink" title="<%=intl._t("Review extended info about installed .jar and .war files")%>">
-<img src="/themes/console/images/info/box.png">
+<img src="/themes/console/images/svg/package.svg">
 <span class="sitemapLabel"><%=intl._t("Jars")%></span>
 </span>
 </a>
@@ -206,7 +206,7 @@
 
 <a href="/netdb">
 <span class="sitemapLink" title="<%=intl._t("View information and stats regarding all known peers")%>">
-<img src="/themes/console/images/info/globe.png">
+<img src="/themes/console/images/svg/globe.svg">
 <span class="sitemapLabel"><%=intl._t("NetDb")%></span>
 </span>
 </a>
@@ -255,7 +255,7 @@
 
 <a href="/tunnels">
 <span class="sitemapLink" title="<%=intl._t("View active tunnels")%>">
-<img src="/themes/console/images/info/tunnels.png">
+<img src="/themes/console/images/svg/hardhat.svg">
 <span class="sitemapLabel"><%=intl._t("Tunnels")%></span>
 </span>
 </a>
@@ -264,14 +264,14 @@
 
 <a href="/configadvanced">
 <span class="sitemapLink" title="<%=intl._t("Advanced Router Configuration")%>">
-<img src="/themes/console/images/info/configure.png">
+<img src="/themes/console/images/svg/configure.svg">
 <span class="sitemapLabel"><%=intl._t("Advanced")%></span>
 </span>
 </a>
 
 <a href="/config">
 <span class="sitemapLink" title="<%=intl._t("Configure router bandwidth allocation")%>">
-<img src="/themes/console/images/info/bandwidth.png">
+<img src="/themes/console/images/svg/speedometer.svg">
 <span class="sitemapLabel"><%=intl._t("Bandwidth")%></span>
 </span>
 </a>
@@ -285,7 +285,7 @@
 
 <a href="/confighome">
 <span class="sitemapLink" title="<%=intl._t("Customize homepage")%>">
-<img src="/themes/console/images/info/home.png">
+<img src="/themes/console/images/svg/home.svg">
 <span class="sitemapLabel"><%=intl._t("Homepage")%></span>
 </span>
 </a>
@@ -362,7 +362,7 @@
 
 <a href="/configupdate">
 <span class="sitemapLink" title="<%=intl._t("Configure router updates")%>">
-<img src="/themes/console/images/info/update.png">
+<img src="/themes/console/images/svg/update.svg">
 <span class="sitemapLabel"><%=intl._t("Router Updates")%></span>
 </span>
 </a>
@@ -383,7 +383,7 @@
 
 <a href="/configtunnels">
 <span class="sitemapLink" title="<%=intl._t("Configure tunnel options")%>">
-<img src="/themes/console/images/info/tunnels.png">
+<img src="/themes/console/images/svg/hardhat.svg">
 <span class="sitemapLabel"><%=intl._t("Tunnels")%></span>
 </span>
 </a>
@@ -410,7 +410,7 @@
 
 <a href="/help/advancedsettings">
 <span class="sitemapLink" title="<%=intl._t("Advanced configuration settings")%>">
-<img src="/themes/console/images/info/configure.png">
+<img src="/themes/console/images/svg/configure.svg">
 <span class="sitemapLabel"><%=intl._t("Advanced Settings")%></span>
 </span>
 </a>
@@ -424,14 +424,14 @@
 
 <a href="/help/faq">
 <span class="sitemapLink" title="<%=intl._t("Frequently Asked Questions")%>">
-<img src="/themes/console/images/info/question.png">
+<img src="/themes/console/images/svg/faq.svg">
 <span class="sitemapLabel"><%=intl._t("FAQ")%></span>
 </span>
 </a>
 
 <a href="/help/glossary">
 <span class="sitemapLink" title="<%=intl._t("I2P Terminology")%>">
-<img src="/themes/console/images/info/question.png">
+<img src="/themes/console/images/svg/faq.svg">
 <span class="sitemapLabel"><%=intl._t("Glossary")%></span>
 </span>
 </a>
@@ -480,7 +480,7 @@
 
 <a href="/help/webhosting">
 <span class="sitemapLink" title="<%=intl._t("A guide to reseeding your I2P router")%>">
-<img src="/themes/console/images/server_32x32.png">
+<img src="/themes/console/images/svg/server.svg">
 <span class="sitemapLabel"><%=intl._t("Web Hosting")%></span>
 </span>
 </a>
@@ -491,7 +491,7 @@
     boolean sitemapSites = ctx.getBooleanProperty("routerconsole.sitemapSites");
     if (sitemapSites) {
 %>
-<h3><%=intl._t("Sites of Interest")%><a href="/confighome#configsites" style="float: right" title="Customize"><img src="/themes/console/images/info/configure.png" height="16" width="16" alt="Customize"></a></h3>
+<h3><%=intl._t("Sites of Interest")%><a href="/confighome#configsites" style="float: right" title="Customize"><img src="/themes/console/images/svg/configure.svg" height="16" width="16" alt="Customize"></a></h3>
 <jsp:useBean class="net.i2p.router.web.helpers.HomeHelper" id="homehelper" scope="request" />
 <jsp:setProperty name="homehelper" property="contextId" value="<%=i2pcontextId%>" />
 <jsp:getProperty name="homehelper" property="favorites" />
