@@ -66,7 +66,6 @@
 <script src="/js/closeMessage.js?<%=net.i2p.CoreVersion.VERSION%>" type="text/javascript"></script>
 <%
     String cspNonce = Integer.toHexString(net.i2p.util.RandomSource.getInstance().nextInt());
-    String susiNonce = book.getSerial(); // have to only do this once per page
     String query = request.getQueryString();
     RequestWrapper bookRequest = new RequestWrapper(request);
     String here = bookRequest.getParameter("book");
@@ -398,38 +397,38 @@
 %>
 </div>
 </c:if>
-
+<%
+    String susiNonce = book.getSerial(); // have to only do this once per page
+%>
 <c:if test="${book.notEmpty}">
-<!--
-<form method="POST" action="addressbook?book=${book.book}&amp;filter=${book.filter}">
--->
 <form method="POST" action="addressbook">
 <input type="hidden" name="book" value="${book.book}">
 <input type="hidden" name="serial" value="<%=susiNonce%>">
 <input type="hidden" name="begin" value="0">
 <input type="hidden" name="end" value="99">
+<input type="hidden" name="action" value="<%=intl._t("Delete Selected")%>">
 <div id="book">
 <table class="book" id="host_list" cellspacing="0" cellpadding="5">
 <tr class="head">
-<% if (book.getEntries().length > 0) { /* Don't show if no results. Can't figure out how to do this with c:if */ %>
+<%
+    if (book.getEntries().length > 0) { /* Don't show if no results. Can't figure out how to do this with c:if */
+%>
 <th><%=intl._t("Hostname")%></th><th><%=intl._t("Link (b32)")%></th><th>Helper</th><th>Details</th><th><%=intl._t("Destination")%> (b64)</th>
 <c:if test="${book.validBook}">
 <th title="<%=intl._t("Select hosts for deletion from addressbook")%>"></th>
 </c:if>
 </tr>
-<%
-    boolean haveImagegen = book.haveImagegen();
-%>
 <!-- limit iterator, or "Form too large" may result on submit, and is a huge web page if we don't -->
 <c:forEach items="${book.entries}" var="addr" begin="${book.resultBegin}" end="${book.resultEnd}">
 <tr>
 <td class="names">
 <%
-    if (haveImagegen) {
+        boolean haveImagegen = book.haveImagegen();
+        if (haveImagegen) {
 %>
 <a href="/imagegen/id?s=256&amp;c=${addr.b32}" target="_blank" title="<%=intl._t("View larger version of identicon for this hostname")%>"><img src="/imagegen/id?s=20&amp;c=${addr.b32}"></a>
 <%
-    }  // haveImagegen
+        }  // haveImagegen
 %>
 <a href="http://${addr.name}/" target="_top">${addr.displayName}</a></td>
 <td class="names"><span class="addrhlpr"><a href="http://${addr.b32}/" target="_blank" title="<%=intl._t("Base 32 address")%>">b32</a></span></td>
@@ -441,7 +440,9 @@
 </c:if>
 </tr>
 </c:forEach>
-<% } /* book..getEntries().length() > 0 */ %>
+<%
+    } /* book..getEntries().length() > 0 */
+%>
 </table>
 </div>
 <%
@@ -451,7 +452,7 @@
 <div id="buttons">
 <p class="buttons">
 <input class="cancel" type="reset" value="<%=intl._t("Cancel")%>" >
-<input class="delete scrollToNav" type="submit" name="action" value="<%=intl._t("Delete Selected")%>">
+<input class="delete" type="submit" name="action" value="<%=intl._t("Delete Selected")%>">
 </p>
 </div>
 </c:if>
@@ -460,7 +461,9 @@
 %>
 </form>
 </c:if>
-<% /* book.notEmpty */ %>
+<%
+    /* book.notEmpty */
+%>
 <c:if test="${book.isEmpty}">
 <div id="empty"></div>
 </c:if>
