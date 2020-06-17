@@ -278,7 +278,7 @@
 
 <a href="/configclients">
 <span class="sitemapLink" title="<%=intl._t("Start or stop Router clients")%>">
-<img src="/themes/console/images/info/java_edit.png">
+<img src="/themes/console/images/svg/editclient.svg">
 <span class="sitemapLabel"><%=intl._t("Clients")%></span>
 </span>
 </a>
