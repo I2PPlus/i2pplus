@@ -192,7 +192,7 @@
 
 <a href="/jobs">
 <span class="sitemapLink" title="<%=intl._t("View router workload and stats")%>">
-<img src="/themes/console/images/info/jobs.png">
+<img src="/themes/console/images/svg/jobs.svg">
 <span class="sitemapLabel"><%=intl._t("Router Jobs")%></span>
 </span>
 </a>
