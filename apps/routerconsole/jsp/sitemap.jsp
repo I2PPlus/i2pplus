@@ -369,7 +369,7 @@
 
 <a href="/wizard">
 <span class="sitemapLink" title="<%=intl._t("Configuration wizard for new users")%>">
-<img src="/themes/console/images/info/wizard.png">
+<img src="/themes/console/images/svg/wizard.svg">
 <span class="sitemapLabel"><%=intl._t("Setup Wizard")%></span>
 </span>
 </a>
