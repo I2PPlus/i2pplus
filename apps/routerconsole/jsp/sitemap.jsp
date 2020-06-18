@@ -136,7 +136,7 @@
 
 <a href="/help/changelog">
 <span class="sitemapLink" title="<%=intl._t("Review recent updates to I2P")%>">
-<img src="/themes/console/images/info/changelog.png">
+<img src="/themes/console/images/svg/changelog.svg">
 <span class="sitemapLabel"><%=intl._t("Change Log")%></span>
 </span>
 </a>
