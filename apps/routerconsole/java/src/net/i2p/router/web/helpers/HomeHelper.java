@@ -100,7 +100,7 @@ public class HomeHelper extends HelperBase {
         _x("I2P Plugins") + S + _x("zzz's plugin repository") + S + "http://stats.i2p/i2p/plugins/" + S + I + "svg/plugin.svg" + S +
         "i2pmetrics.i2p" + S + _x("Historical infrastructure data from the I2P network") + S + "http://i2pmetrics.i2p/" + S + I + "svg/stats.svg" + S +
         _x("Project Website") + S + _x("I2P home page") + S + "http://i2p-projekt.i2p/" + S + I + "svg/i2p.svg" + S +
-        "stats.i2p" + S + _x("I2P Network Statistics") + S + "http://stats.i2p/cgi-bin/dashboard.cgi" + S + I + "chart_line.png" + S +
+        "stats.i2p" + S + _x("I2P Network Statistics") + S + "http://stats.i2p/cgi-bin/dashboard.cgi" + S + I + "svg/stats.png" + S +
         //"I2Pd" + S + _x("Alternative minimal C++ I2P router") + S + "http://i2pdproject.i2p/" + S + I + "eepsite.png" + S +
         //_x("Javadocs") + S + _x("Technical documentation") + S + "http://i2p-javadocs.i2p/" + S + I + "education.png" + S +
 
