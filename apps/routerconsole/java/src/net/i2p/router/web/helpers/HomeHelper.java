@@ -50,7 +50,7 @@ public class HomeHelper extends HelperBase {
         _x("Network Database") + S + _x("Show list of all known I2P routers") + S + "/netdb" + S + I + "svg/globe.svg" + S +
         _x("Router Info") + S + _x("Summary of router properties") + S + "/info" + S + I + "info_rhombus.png" + S +
         _x("Router Logs") + S + _x("Health Report") + S + "/logs" + S + I + "info/logs.png" + S +
-        _x("Sitemap") + S + _x("Router Sitemap") + S + "/sitemap" + S + I + "info/sitemap.png" + S +
+        _x("Sitemap") + S + _x("Router Sitemap") + S + "/sitemap" + S + I + "svg/sitemap.svg" + S +
         _x("Torrents") + S + _x("Built-in anonymous BitTorrent Client") + S + "/torrents" + S + I + "svg/snark.svg" + S +
         _x("Web Server") + S + _x("Local web server for hosting your own content on I2P") + S + "http://127.0.0.1:7658/" + S + I + "svg/server.svg" + S +
         "";
@@ -68,7 +68,7 @@ public class HomeHelper extends HelperBase {
         _x("Network Database") + S + _x("Show list of all known I2P routers") + S + "/netdb" + S + I + "svg/globe.svg" + S +
         _x("Router Info") + S + _x("Summary of router properties") + S + "/info" + S + I + "info_rhombus.png" + S +
         _x("Router Logs") + S + _x("Health Report") + S + "/logs" + S + I + "info/logs.png" + S +
-        _x("Sitemap") + S + _x("Router Sitemap") + S + "/sitemap" + S + I + "info/sitemap.png" + S +
+        _x("Sitemap") + S + _x("Router Sitemap") + S + "/sitemap" + S + I + "svg/sitemap.svg" + S +
         _x("Torrents") + S + _x("Built-in anonymous BitTorrent Client") + S + "/torrents" + S + I + "svg/snark.svg" + S +
         _x("Web Server") + S + _x("Local web server for hosting your own content on I2P") + S + "http://127.0.0.1:7658/" + S + I + "svg/server.svg" + S +
         "";
@@ -83,7 +83,7 @@ public class HomeHelper extends HelperBase {
         _x("Network Database") + S + _x("Show list of all known I2P routers") + S + "/netdb" + S + I + "svg/globe.svg" + S +
         _x("Router Info") + S + _x("Summary of router properties") + S + "/info" + S + I + "info_rhombus.png" + S +
         _x("Router Logs") + S + _x("Health Report") + S + "/logs" + S + I + "info/logs.png" + S +
-        _x("Sitemap") + S + _x("Router Sitemap") + S + "/sitemap" + S + I + "info/sitemap.png" + S +
+        _x("Sitemap") + S + _x("Router Sitemap") + S + "/sitemap" + S + I + "svg/sitemap.svg" + S +
         _x("Torrents") + S + _x("Built-in anonymous BitTorrent Client") + S + "/torrents" + S + I + "svg/snark.svg" + S +
         _x("Web Server") + S + _x("Local web server for hosting your own content on I2P") + S + "http://127.0.0.1:7658/" + S + I + "svg/server.svg" + S +
         "";
@@ -131,7 +131,7 @@ public class HomeHelper extends HelperBase {
 // domain name registration + uptime trackers
         "Identiguy" + S + _x("List of active eepsites and uptime monitor") + S + "http://identiguy.i2p/" + S + I + "svg/servermonitor.svg" + S +
         _x("inr Domain Registry") + S + _x("I2P Domain Name Registration") + S + "http://inr.i2p/" + S + I + "svg/registrar.svg" + S +
-        "isitup.i2p" + S + _x("List of active eepsites and uptime monitor") + S + "http://isitup.i2p/" + S + I + "svg/servermonitor.svg" + S +
+        //"isitup.i2p" + S + _x("List of active eepsites and uptime monitor") + S + "http://isitup.i2p/" + S + I + "svg/servermonitor.svg" + S +
         //_x("no Domain Registry") + S + _x("I2P Domain Name Registration") + S + "http://no.i2p/" + S + I + "svg/registrar.svg" + S +
         "notbob.i2p" + S + _x("List of active eepsites and uptime monitor") + S + "http://notbob.i2p/" + S + I + "notbob.png" + S +
         _x("zzz Domain Registry") + S + _x("I2P Domain Name Registration") + S + "http://stats.i2p/i2p/addkey.html" + S + I + "svg/registrar.svg" + S +
@@ -139,7 +139,7 @@ public class HomeHelper extends HelperBase {
 // forums + social
         //"arc2.i2p" + S + _x("Anarchist Research Center") + S + "http://arc2.i2p/en/view/home" + S + I + "group.png" + S +
         //"Cerapadus" + S + _x("Security oriented IRC server") + S + "http://cerapadus.i2p/" + S + I + "cerapadus.png" + S +
-        _x("Dancing Elephants") + S + _x("Rocksolid forums for the darknets") + S + "http://def3.i2p/" + S + I + "def.png" + S +
+        _x("Dancing Elephants") + S + _x("Rocksolid forums for the darknets") + S + "http://def3.i2p/" + S + I + "svg/forum.svg" + S +
         _x("Dev Forum") + S + _x("Development forum") + S + "http://zzz.i2p/" + S + I + "svg/forum.svg" + S +
         _x("I2P Forum") + S + _x("I2P-related community forums") + S + "http://i2pforum.i2p/" + S + I + "svg/forum.svg" + S +
         //"NovaBBS" + S + _x("Eclectic selection of forums") + S + "http://novabbs.i2p/" + S + I + "group.png" + S +
