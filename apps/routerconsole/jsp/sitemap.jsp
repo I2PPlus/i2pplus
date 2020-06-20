@@ -150,7 +150,7 @@
 
 <a href="/events?from=604800">
 <span class="sitemapLink" title="<%=intl._t("View historical log of router events")%>">
-<img src="/themes/console/images/info/logs.png">
+<img src="/themes/console/images/svg/logs.svg">
 <span class="sitemapLabel"><%=intl._t("Event Log")%></span>
 </span>
 </a>
@@ -199,7 +199,7 @@
 
 <a href="/logs">
 <span class="sitemapLink" title="<%=intl._t("View router logs")%>">
-<img src="/themes/console/images/info/logs.png">
+<img src="/themes/console/images/svg/logs.svg">
 <span class="sitemapLabel"><%=intl._t("Router Logs")%></span>
 </span>
 </a>
@@ -306,7 +306,7 @@
 
 <a href="/configlogging">
 <span class="sitemapLink" title="<%=intl._t("Configure router logging options")%>">
-<img src="/themes/console/images/info/logs.png">
+<img src="/themes/console/images/svg/logs.svg">
 <span class="sitemapLabel"><%=intl._t("Logging")%></span>
 </span>
 </a>
