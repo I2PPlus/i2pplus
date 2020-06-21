@@ -129,7 +129,7 @@
 
 <a href="/certs">
 <span class="sitemapLink" title="<%=intl._t("Review active encryption certificates used in console")%>">
-<img src="/themes/console/images/info/certs.png">
+<img src="/themes/console/images/svg/certs.svg">
 <span class="sitemapLabel"><%=intl._t("Certificates")%></span>
 </span>
 </a>
