@@ -327,7 +327,7 @@
 
 <a href="/configplugins">
 <span class="sitemapLink" title="<%=intl._t("Install and manage router plugins")%>">
-<img src="/themes/console/images/info/plugin_edit.png">
+<img src="/themes/console/images/svg/pluginconfig.svg">
 <span class="sitemapLabel"><%=intl._t("Plugins")%></span>
 </span>
 </a>

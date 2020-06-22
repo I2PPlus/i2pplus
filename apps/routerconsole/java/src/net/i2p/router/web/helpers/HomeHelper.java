@@ -46,7 +46,7 @@ public class HomeHelper extends HelperBase {
         _x("Graphs") + S + _x("Graph Router Performance") + S + "/graphs" + S + I + "info/statistics.png" + S +
         _x("I2PMail") + S + _x("Anonymous webmail client") + S + "/webmail" + S + I + "svg/mail.svg" + S +
         _x("Help") + S + _x("I2P Router Help") + S + "/help" + S + I + "svg/help.svg" + S +
-        _x("Manage Plugins") + S + _x("Install and configure I2P plugins") + S + "/configplugins" + S + I + "info/plugin_edit.png" + S +
+        _x("Manage Plugins") + S + _x("Install and configure I2P plugins") + S + "/configplugins" + S + I + "svg/pluginconfig.svg" + S +
         _x("Network Database") + S + _x("Show list of all known I2P routers") + S + "/netdb" + S + I + "svg/globe.svg" + S +
         _x("Router Info") + S + _x("Summary of router properties") + S + "/info" + S + I + "info_rhombus.png" + S +
         _x("Router Logs") + S + _x("Health Report") + S + "/logs" + S + I + "svg/logs.svg" + S +
@@ -64,7 +64,7 @@ public class HomeHelper extends HelperBase {
         _x("Graphs") + S + _x("Graph Router Performance") + S + "/graphs" + S + I + "info/statistics.png" + S +
         _x("I2PMail") + S + _x("Anonymous webmail client") + S + "/webmail" + S + I + "svg/mail.svg" + S +
         _x("Help") + S + _x("I2P Router Help") + S + "/help" + S + I + "svg/help.svg" + S +
-        _x("Manage Plugins") + S + _x("Install and configure I2P plugins") + S + "/configplugins" + S + I + "info/plugin_edit.png" + S +
+        _x("Manage Plugins") + S + _x("Install and configure I2P plugins") + S + "/configplugins" + S + I + "svg/pluginconfig.svg" + S +
         _x("Network Database") + S + _x("Show list of all known I2P routers") + S + "/netdb" + S + I + "svg/globe.svg" + S +
         _x("Router Info") + S + _x("Summary of router properties") + S + "/info" + S + I + "info_rhombus.png" + S +
         _x("Router Logs") + S + _x("Health Report") + S + "/logs" + S + I + "svg/logs.svg" + S +
@@ -79,7 +79,7 @@ public class HomeHelper extends HelperBase {
         _x("Changelog") + S + _x("Recent changes") + S + "/help/changelog" + S + I + "svg/changelog.svg" + S +
         _x("Graphs") + S + _x("Graph Router Performance") + S + "/graphs" + S + I + "info/statistics.png" + S +
         _x("I2PMail") + S + _x("Anonymous webmail client") + S + "/webmail" + S + I + "svg/mail.svg" + S +
-        _x("Manage Plugins") + S + _x("Install and configure I2P plugins") + S + "/configplugins" + S + I + "info/plugin_edit.png" + S +
+        _x("Manage Plugins") + S + _x("Install and configure I2P plugins") + S + "/configplugins" + S + I + "svg/pluginconfig.svg" + S +
         _x("Network Database") + S + _x("Show list of all known I2P routers") + S + "/netdb" + S + I + "svg/globe.svg" + S +
         _x("Router Info") + S + _x("Summary of router properties") + S + "/info" + S + I + "info_rhombus.png" + S +
         _x("Router Logs") + S + _x("Health Report") + S + "/logs" + S + I + "svg/logs.svg" + S +
