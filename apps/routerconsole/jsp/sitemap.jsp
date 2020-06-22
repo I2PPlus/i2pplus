@@ -334,7 +334,7 @@
 
 <a href="/configreseed">
 <span class="sitemapLink" title="<%=intl._t("Router reseeding and configuration")%>">
-<img src="/themes/console/images/info/connect.png">
+<img src="/themes/console/images/svg/reseed.svg">
 <span class="sitemapLabel"><%=intl._t("Reseeding")%></span>
 </span>
 </a>
@@ -452,7 +452,7 @@
 
 <a href="/help/reseed">
 <span class="sitemapLink" title="<%=intl._t("A guide to reseeding your I2P router")%>">
-<img src="/themes/console/images/info/connect.png">
+<img src="/themes/console/images/svg/reseed.svg">
 <span class="sitemapLabel"><%=intl._t("Reseeding")%></span>
 </span>
 </a>
