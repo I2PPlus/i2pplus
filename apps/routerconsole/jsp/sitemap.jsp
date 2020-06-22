@@ -157,7 +157,7 @@
 
 <a href="/graphs">
 <span class="sitemapLink" title="<%=intl._t("View router performance graphs")%>">
-<img src="/themes/console/images/info/statistics.png">
+<img src="/themes/console/images/svg/graphs.svg">
 <span class="sitemapLabel"><%=intl._t("Graphs")%></span>
 </span>
 </a>
@@ -355,7 +355,7 @@
 
 <a href="/configstats">
 <span class="sitemapLink" title="<%=intl._t("Configure stat collection for graphing")%>">
-<img src="/themes/console/images/info/statistics.png">
+<img src="/themes/console/images/svg/graphs.svg">
 <span class="sitemapLabel"><%=intl._t("Router Stats")%></span>
 </span>
 </a>
