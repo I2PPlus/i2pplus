@@ -241,7 +241,7 @@
 
 <a href="/stats">
 <span class="sitemapLink" title="<%=intl._t("Textual router performance statistics")%>">
-<img src="/themes/console/images/info/textstats.png">
+<img src="/themes/console/images/svg/textstats.svg">
 <span class="sitemapLabel"><%=intl._t("Statistics")%></span>
 </span>
 </a>
