@@ -220,14 +220,14 @@
 
 <a href="/peers">
 <span class="sitemapLink" title="<%=intl._t("View active peers")%>">
-<img src="/themes/console/images/group.png">
+<img src="/themes/console/images/svg/peers.svg">
 <span class="sitemapLabel"><%=intl._t("Peers")%></span>
 </span>
 </a>
 
 <a href="/profiles?f=1">
 <span class="sitemapLink" title="<%=intl._t("View peer performance profiles")%>">
-<img src="/themes/console/images/info/profile.png">
+<img src="/themes/console/images/svg/profile.svg">
 <span class="sitemapLabel"><%=intl._t("Profiles")%></span>
 </span>
 </a>
@@ -320,7 +320,7 @@
 
 <a href="/configpeer">
 <span class="sitemapLink" title="<%=intl._t("Manually edit peers and view banned peers and blocklist")%>">
-<img src="/themes/console/images/info/peerconfig.png">
+<img src="/themes/console/images/svg/peerconfig.svg">
 <span class="sitemapLabel"><%=intl._t("Peers")%></span>
 </span>
 </a>
