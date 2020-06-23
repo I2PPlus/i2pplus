@@ -213,7 +213,7 @@
 
 <a href="/netdb?f=4">
 <span class="sitemapLink" title="<%=intl._t("Network database search tool")%>">
-<img src="/themes/console/images/info/search.png">
+<img src="/themes/console/images/svg/searchnetdb.svg">
 <span class="sitemapLabel"><%=intl._t("NetDb Search")%></span>
 </span>
 </a>
