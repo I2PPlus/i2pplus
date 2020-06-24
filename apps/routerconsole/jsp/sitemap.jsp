@@ -248,7 +248,7 @@
 
 <a href="/netdb?f=3">
 <span class="sitemapLink" title="<%=intl._t("Review possible sybils in network database")%>">
-<img src="/themes/console/images/info/sybils.png">
+<img src="/themes/console/images/svg/sybil.svg">
 <span class="sitemapLabel"><%=intl._t("Sybil Analysis")%></span>
 </span>
 </a>
