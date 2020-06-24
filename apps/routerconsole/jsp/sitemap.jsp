@@ -376,7 +376,7 @@
 
 <a href="/configsidebar">
 <span class="sitemapLink" title="<%=intl._t("Customize sidebar")%>">
-<img src="/themes/console/images/info/sidebar.png">
+<img src="/themes/console/images/svg/sidebar.svg">
 <span class="sitemapLabel"><%=intl._t("Sidebar")%></span>
 </span>
 </a>
