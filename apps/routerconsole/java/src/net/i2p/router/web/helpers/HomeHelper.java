@@ -48,7 +48,7 @@ public class HomeHelper extends HelperBase {
         _x("Help") + S + _x("I2P Router Help") + S + "/help" + S + I + "svg/help.svg" + S +
         _x("Manage Plugins") + S + _x("Install and configure I2P plugins") + S + "/configplugins" + S + I + "svg/pluginconfig.svg" + S +
         _x("Network Database") + S + _x("Show list of all known I2P routers") + S + "/netdb" + S + I + "svg/globe.svg" + S +
-        _x("Router Info") + S + _x("Summary of router properties") + S + "/info" + S + I + "info_rhombus.png" + S +
+        _x("Router Info") + S + _x("Summary of router properties") + S + "/info" + S + I + "svg/info.svg" + S +
         _x("Router Logs") + S + _x("Health Report") + S + "/logs" + S + I + "svg/logs.svg" + S +
         _x("Sitemap") + S + _x("Router Sitemap") + S + "/sitemap" + S + I + "svg/sitemap.svg" + S +
         _x("Torrents") + S + _x("Built-in anonymous BitTorrent Client") + S + "/torrents" + S + I + "svg/snark.svg" + S +
@@ -66,7 +66,7 @@ public class HomeHelper extends HelperBase {
         _x("Help") + S + _x("I2P Router Help") + S + "/help" + S + I + "svg/help.svg" + S +
         _x("Manage Plugins") + S + _x("Install and configure I2P plugins") + S + "/configplugins" + S + I + "svg/pluginconfig.svg" + S +
         _x("Network Database") + S + _x("Show list of all known I2P routers") + S + "/netdb" + S + I + "svg/globe.svg" + S +
-        _x("Router Info") + S + _x("Summary of router properties") + S + "/info" + S + I + "info_rhombus.png" + S +
+        _x("Router Info") + S + _x("Summary of router properties") + S + "/info" + S + I + "svg/info.svg" + S +
         _x("Router Logs") + S + _x("Health Report") + S + "/logs" + S + I + "svg/logs.svg" + S +
         _x("Sitemap") + S + _x("Router Sitemap") + S + "/sitemap" + S + I + "svg/sitemap.svg" + S +
         _x("Torrents") + S + _x("Built-in anonymous BitTorrent Client") + S + "/torrents" + S + I + "svg/snark.svg" + S +
@@ -81,7 +81,7 @@ public class HomeHelper extends HelperBase {
         _x("I2PMail") + S + _x("Anonymous webmail client") + S + "/webmail" + S + I + "svg/mail.svg" + S +
         _x("Manage Plugins") + S + _x("Install and configure I2P plugins") + S + "/configplugins" + S + I + "svg/pluginconfig.svg" + S +
         _x("Network Database") + S + _x("Show list of all known I2P routers") + S + "/netdb" + S + I + "svg/globe.svg" + S +
-        _x("Router Info") + S + _x("Summary of router properties") + S + "/info" + S + I + "info_rhombus.png" + S +
+        _x("Router Info") + S + _x("Summary of router properties") + S + "/info" + S + I + "svg/info.svg" + S +
         _x("Router Logs") + S + _x("Health Report") + S + "/logs" + S + I + "svg/logs.svg" + S +
         _x("Sitemap") + S + _x("Router Sitemap") + S + "/sitemap" + S + I + "svg/sitemap.svg" + S +
         _x("Torrents") + S + _x("Built-in anonymous BitTorrent Client") + S + "/torrents" + S + I + "svg/snark.svg" + S +

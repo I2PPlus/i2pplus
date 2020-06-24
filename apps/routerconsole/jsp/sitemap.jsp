@@ -234,7 +234,7 @@
 
 <a href="/info">
 <span class="sitemapLink" title="<%=intl._t("View information about router and running environment")%>">
-<img src="/themes/console/images/info_rhombus.png">
+<img src="/themes/console/images/svg/info.svg">
 <span class="sitemapLabel"><%=intl._t("Router Info")%></span>
 </span>
 </a>
