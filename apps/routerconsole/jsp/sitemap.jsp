@@ -299,7 +299,7 @@
 
 <a href="/configkeyring">
 <span class="sitemapLink" title="<%=intl._t("View or edit router keyring for encrypted destinations")%>">
-<img src="/themes/console/images/info/keys.png">
+<img src="/themes/console/images/svg/keys.svg">
 <span class="sitemapLabel"><%=intl._t("Keyring")%></span>
 </span>
 </a>
