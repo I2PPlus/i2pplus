@@ -390,7 +390,7 @@
 
 <a href="/configui">
 <span class="sitemapLink" title="<%=intl._t("Configure router user interface and optional console password")%>">
-<img src="/themes/console/images/info/ui.png">
+<img src="/themes/console/images/svg/ui.svg">
 <span class="sitemapLabel"><%=intl._t("User Interface")%></span>
 </span>
 </a>
@@ -473,7 +473,7 @@
 
 <a href="/help/ui">
 <span class="sitemapLink" title="<%=intl._t("Information about the sidebar and network status messages")%>">
-<img src="/themes/console/images/info/ui.png">
+<img src="/themes/console/images/svg/ui.svg">
 <span class="sitemapLabel"><%=intl._t("User Interface")%></span>
 </span>
 </a>
