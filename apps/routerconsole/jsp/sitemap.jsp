@@ -397,7 +397,7 @@
 
 <a href="/configwebapps">
 <span class="sitemapLink" title="<%=intl._t("Manage Router webapps")%>">
-<img src="/themes/console/images/info/webapps.png">
+<img src="/themes/console/images/svg/webapps.svg">
 <span class="sitemapLabel"><%=intl._t("Webapps")%></span>
 </span>
 </a>
