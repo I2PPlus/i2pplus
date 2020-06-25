@@ -177,7 +177,7 @@ public class HomeHelper extends HelperBase {
         "I2P Wiki" + S + _x("I2P-related Wiki") + S + "http://wiki.i2p-projekt.i2p/" + S + I + "svg/wiki.svg" + S +
 
 // news + blogs
-        //"io.i2p" + S + _x("Mainstream news aggregation") + S + "http://io.i2p/" + S + I + "info/newspaper.png" + S +
+        //"io.i2p" + S + _x("Mainstream news aggregation") + S + "http://io.i2p/" + S + I + "svg/news.svg" + S +
         _x("Planet I2P") + S + _x("I2P News") + S + "http://planet.i2p/" + S + I + "svg/planet.svg" + S +
         //_x("The Tin Hat") + S + _x("Privacy guides and tutorials") + S + "http://secure.thetinhat.i2p/" + S + I + "thetinhat.png" + S +
         //_x("lenta news [ru]") + S + _x("Russian News Feed") + S + "http://lenta.i2p/" + S + I + "lenta_main_logo.png" + S +

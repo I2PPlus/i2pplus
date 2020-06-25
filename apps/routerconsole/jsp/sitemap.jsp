@@ -178,7 +178,7 @@
 
 <a href="/news">
 <span class="sitemapLink" title="<%=intl._t("View news relating to I2P")%>">
-<img src="/themes/console/images/info/newspaper.png">
+<img src="/themes/console/images/svg/news.svg">
 <span class="sitemapLabel"><%=intl._t("I2P News")%></span>
 </span>
 </a>
