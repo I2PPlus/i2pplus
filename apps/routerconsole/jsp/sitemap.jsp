@@ -348,7 +348,7 @@
 
 <a href="/configservice">
 <span class="sitemapLink" title="<%=intl._t("Manage Router service")%>">
-<img src="/themes/console/images/info/service.png">
+<img src="/themes/console/images/svg/service.svg">
 <span class="sitemapLabel"><%=intl._t("Router Service")%></span>
 </span>
 </a>
