@@ -292,7 +292,7 @@
 
 <a href="/configi2cp">
 <span class="sitemapLink" title="<%=intl._t("Configure I2P Client Control Interface")%>">
-<img src="/themes/console/images/eepsite.png">
+<img src="/themes/console/images/svg/i2cp.svg">
 <span class="sitemapLabel"><%=intl._t("I2CP")%></span>
 </span>
 </a>
@@ -341,7 +341,7 @@
 
 <a href="/configfamily">
 <span class="sitemapLink" title="<%=intl._t("Configure and manage Router family")%>">
-<img src="/themes/console/images/info/family.png">
+<img src="/themes/console/images/svg/family.svg">
 <span class="sitemapLabel"><%=intl._t("Router Family")%></span>
 </span>
 </a>
