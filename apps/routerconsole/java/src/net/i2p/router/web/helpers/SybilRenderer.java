@@ -311,7 +311,7 @@ public class SybilRenderer {
      *  @since 0.9.38
      */
     private void renderBackgroundForm(Writer out, StringBuilder buf, String nonce) throws IOException {
-        long freq = _context.getProperty(Analysis.PROP_FREQUENCY, 0L);
+        long freq = _context.getProperty(Analysis.PROP_FREQUENCY, Analysis.DEFAULT_FREQUENCY);
         buf.append("<form action=\"netdb\" method=\"POST\">\n" +
                    "<input type=\"hidden\" name=\"f\" value=\"3\">\n" +
                    "<input type=\"hidden\" name=\"m\" value=\"15\">\n" +
@@ -336,14 +336,14 @@ public class SybilRenderer {
                 buf.append(_t("Never"));
             buf.append("</option>\n");
         }
-        boolean auto = _context.getBooleanProperty(Analysis.PROP_BLOCK);
+        boolean auto = _context.getProperty(Analysis.PROP_BLOCK, Analysis.DEFAULT_BLOCK);
         boolean nonff = _context.getBooleanProperty(Analysis.PROP_NONFF);
-        String thresh = _context.getProperty(Analysis.PROP_THRESHOLD, "50");
-        long days = _context.getProperty(Analysis.PROP_BLOCKTIME, 7*24*60*60*1000L) / (24*60*60*1000L);
+        String thresh = _context.getProperty(Analysis.PROP_THRESHOLD, Double.toString(Analysis.DEFAULT_BLOCK_THRESHOLD));
+        long days = _context.getProperty(Analysis.PROP_BLOCKTIME, Analysis.DEFAULT_BLOCK_TIME) / (24*60*60*1000L);
         buf.append("</select>\n")
            .append("</span><br>\n<span class=\"nowrap\"><b>")
            .append(_t("Delete scans older than")).append(":</b>\n<select name=\"deleteAge\">\n");
-        long age = _context.getProperty(Analysis.PROP_REMOVETIME, 0L);
+        long age = _context.getProperty(Analysis.PROP_REMOVETIME, Analysis.DEFAULT_REMOVE_TIME);
         for (int i = 0; i <DAYS.length; i++) {
             buf.append("<option value=\"");
             buf.append(DAYS[i]);
