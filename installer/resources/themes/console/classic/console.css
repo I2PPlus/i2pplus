@@ -1011,14 +1011,14 @@ div.refresh {
 }
 
 .routersummary .running::before {
-/*    content: url(/themes/console/images/info/network_status/network_ok.png);*/
-    content: "";
+    content: url(/themes/console/images/info/network_status/network_ok.png);
+/*    content: "";
     background: url(/themes/console/images/svg/green.svg) left center no-repeat;
     background-size: 12px 12px;
     display: inline-block;
     width: 16px;
     height: 16px;
-    vertical-align: middle;
+    vertical-align: middle;*/
 }
 
 .routersummary .firewalled::before {
