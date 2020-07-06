@@ -108,7 +108,7 @@ public class HomeHelper extends HelperBase {
         //"Aktie" + S + _x("I2P-based application with integrated file sharing &amp; distributed forums &amp; private messaging") + S + "http://aktie.i2p/" + S + I + "aktie.png" + S +
         "dropbox.i2p" + S + _x("Private file storage") + S + "http://dropbox.i2p/" + S + I + "svg/cloud.svg" + S +
         "ebooks.i2p" + S + _x("Huge collection of books &amp; magazines &amp; comics") + S + "http://ebooks.i2p/" + S + I + "svg/books.svg" + S +
-        "echelon.i2p" + S + _x("I2P Applications") + S + "http://echelon.i2p/" + S + I + "svg/package.svg" + S +
+        //"echelon.i2p" + S + _x("I2P Applications") + S + "http://echelon.i2p/" + S + I + "svg/package.svg" + S +
         "fs.i2p" + S + _x("Secure filesharing service") + S + "http://fs.i2p/" + S + I + "svg/cloud.svg" + S +
         "git.repo.i2p" + S + _x("A public anonymous Git hosting site - supports pulling via Git and HTTP and pushing via SSH") + S + "http://git.repo.i2p/" + S + I + "svg/git.svg" + S +
         //"i2push.i2p" + S + _x("Online encrypted filesharing service") + S + "http://i2push.i2p/" + S + I + "info/fileshare.png" + S +
