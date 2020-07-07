@@ -4999,6 +4999,15 @@ body.iframed {
 
 /* end iframed console fixes */
 
+#tunnels img[src^="/flags"], #profiles img[src^="/flags"], #peers img[src^="/flags"] {
+    margin-top: 0;
+    margin-bottom: 0;
+    width: 16px;
+    height: 12px;
+    vertical-align: middle;
+    border: 1px solid #ccc;
+}
+
 /* Theme choice & Language selection in /configui */
 
 .themechoice .optbox, .langselect .optbox {
