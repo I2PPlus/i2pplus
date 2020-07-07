@@ -835,7 +835,7 @@ class NetDbRenderer {
             for (String country : countryList) {
                 int num = countries.count(country);
                 buf.append("<tr><td><a href=\"/netdb?c=").append(country).append("\">");
-                buf.append("<img height=\"11\" width=\"16\" alt=\"").append(country.toUpperCase(Locale.US)).append("\"");
+                buf.append("<img style=\"vertical-align:middle\" width=\"20\" height=\"15\" alt=\"").append(country.toUpperCase(Locale.US)).append("\"");
                 buf.append(" src=\"/flags.jsp?c=").append(country).append("\">");
                 buf.append(getTranslatedCountry(country));
                 buf.append("</a></td><td align=\"center\">").append(num).append("</td></tr>\n");
