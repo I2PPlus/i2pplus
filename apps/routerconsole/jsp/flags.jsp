@@ -23,15 +23,18 @@ String c = request.getParameter("c");
 if (c != null &&
     (c.length() == 2 || c.length() == 7) &&
     c.replaceAll("[a-z0-9_]", "").length() == 0) {
-    String flagSet = "flags16x11";
+//    String flagSet = "flags16x11";
+    String flagSet = "flags_svg";
     String s = request.getParameter("s");
+    String ext = ".svg";
     if ("48".equals(s)) {
         flagSet = "flags48x48";
+        ext = ".png";
     }
     String base = net.i2p.I2PAppContext.getGlobalContext().getBaseDir().getAbsolutePath() +
                   java.io.File.separatorChar +
                   "docs" + java.io.File.separatorChar + "icons";
-    String file = flagSet + java.io.File.separatorChar + c + ".png";
+    String file = flagSet + java.io.File.separatorChar + c + ext;
     java.io.File ffile = new java.io.File(base, file);
     if (!ffile.exists()) {
         // fallback to flags dir, which will be symlinked to /usr/share/flags/countries/16x11 for package builds
@@ -55,7 +58,10 @@ if (c != null &&
     long length = ffile.length();
     if (length > 0)
         response.setHeader("Content-Length", Long.toString(length));
-    response.setContentType("image/png");
+    if (ext.equals(".svg"))
+        response.setContentType("image/svg+xml");
+    else
+        response.setContentType("image/png");
     response.setHeader("Accept-Ranges", "none");
     java.io.FileInputStream fin = null;
     java.io.OutputStream cout = response.getOutputStream();

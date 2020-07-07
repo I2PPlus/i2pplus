@@ -1,9 +1,9 @@
 package net.i2p.sam;
 /*
  * free (adj.): unencumbered; not under the control of others
- * Written by human in 2004 and released into the public domain 
- * with no warranty of any kind, either expressed or implied.  
- * It probably won't  make your computer catch on fire, or eat 
+ * Written by human in 2004 and released into the public domain
+ * with no warranty of any kind, either expressed or implied.
+ * It probably won't  make your computer catch on fire, or eat
  * your children, but it might.  Use at your own risk.
  *
  */
@@ -37,7 +37,7 @@ abstract class SAMHandler implements Runnable, Handler {
 
     public final int verMajor;
     public final int verMinor;
-    
+
     /** I2CP options configuring the I2CP connection (port, host, numHops, etc) */
     protected final Properties i2cpProps;
 
@@ -51,7 +51,7 @@ abstract class SAMHandler implements Runnable, Handler {
      * @param verMajor SAM major version to manage
      * @param verMinor SAM minor version to manage
      * @param i2cpProps properties to configure the I2CP connection (host, port, etc)
-     * @throws IOException 
+     * @throws IOException
      */
     protected SAMHandler(SocketChannel s, int verMajor, int verMinor,
                          Properties i2cpProps, SAMBridge parent) throws IOException {
@@ -94,23 +94,23 @@ abstract class SAMHandler implements Runnable, Handler {
      * you're doing.
      *
      * @param data A byte array to be written
-     * @throws IOException 
+     * @throws IOException
      */
     protected final void writeBytes(ByteBuffer data) throws IOException {
         synchronized (socketWLock) {
             writeBytes(data, socket);
         }
     }
-    
+
     /**
      *  Caller must synch
      */
     private static void writeBytes(ByteBuffer data, SocketChannel out) throws IOException {
-        while (data.hasRemaining()) out.write(data);           
+        while (data.hasRemaining()) out.write(data);
         out.socket().getOutputStream().flush();
     }
-    
-    /** 
+
+    /**
      * If you're crazy enough to write to the raw socket, grab the write lock
      * with getWriteLock(), synchronize against it, and write to the getOut()
      *
@@ -130,7 +130,7 @@ abstract class SAMHandler implements Runnable, Handler {
     protected final boolean writeString(String str) {
         synchronized (socketWLock) {
             if (_log.shouldLog(Log.DEBUG))
-                _log.debug("Sending the client: [" + str + "]");
+                _log.debug("Sending the client: " + str);
             return writeString(str, socket);
         }
     }
@@ -149,11 +149,11 @@ abstract class SAMHandler implements Runnable, Handler {
         }
         return true ;
     }
-    
+
     /**
      * Close the socket connected to the SAM client.
      *
-     * @throws IOException 
+     * @throws IOException
      */
     protected final void closeClientSocket() throws IOException {
             socket.close();
@@ -195,7 +195,7 @@ abstract class SAMHandler implements Runnable, Handler {
     public final String toString() {
         return (this.getClass().getSimpleName()
                 + "; SAM version: " + verMajor + "." + verMinor
-                + "; client: "
+                + "; Client: "
                 + this.socket.socket().getInetAddress().toString() + ":"
                 + this.socket.socket().getPort() + ")");
     }
