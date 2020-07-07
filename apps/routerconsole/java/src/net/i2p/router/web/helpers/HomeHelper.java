@@ -111,6 +111,7 @@ public class HomeHelper extends HelperBase {
         //"echelon.i2p" + S + _x("I2P Applications") + S + "http://echelon.i2p/" + S + I + "svg/package.svg" + S +
         "fs.i2p" + S + _x("Secure filesharing service") + S + "http://fs.i2p/" + S + I + "svg/cloud.svg" + S +
         "git.repo.i2p" + S + _x("A public anonymous Git hosting site - supports pulling via Git and HTTP and pushing via SSH") + S + "http://git.repo.i2p/" + S + I + "svg/git.svg" + S +
+        "idk.git.i2p" + S + _x("A public anonymous Git hosting site - supports pulling via Git and HTTP and pushing via SSH") + S + "http://git.idk.i2p/explore/projects" + S + I + "svg/gitlab.svg" + S +
         //"i2push.i2p" + S + _x("Online encrypted filesharing service") + S + "http://i2push.i2p/" + S + I + "info/fileshare.png" + S +
         "skank.i2p" + S + _x("Home of I2P+") + S + "http://skank.i2p/" + S + I + "svg/package.svg" + S +
         //"tome.i2p" + S + _x("Collection of books &amp; other reading material") + S + "http://tome.i2p/" + S + I + "svg/books.svg" + S +
@@ -145,6 +146,7 @@ public class HomeHelper extends HelperBase {
         //"NovaBBS" + S + _x("Eclectic selection of forums") + S + "http://novabbs.i2p/" + S + I + "svg/peers.svg" + S +
 //        _x("Visibility") + S + _x("Microblogging service") + S + "http://visibility.i2p/" + S + I + "info/eye.png" + S +
         //"Ident " + _x("Microblog") + S + _x("Your premier microblogging service on I2P") + S + "http://id3nt.i2p/" + S + I + "ident_icon_blue.png" + S +
+        //"fsoc.i2p " + _x("Microblog") + S + _x("Alternative microblogging service") + S + "http://fsoc.i2p/" + S + I + "ident_icon_blue.png" + S +
         //"jisko.i2p" + S + _x("Simple and fast microblogging website") + S + "http://jisko.i2p/" + S + I + "jisko_console_icon.png" + S +
         //("Syndie") + S + _x("Distributed Forum Platform") + S + "http://syndie-project.i2p/" + S + I + "svg/peers.svg" + S +
           "garden.i2p" + S + _x("Gardening forums") + S + "http://garden.i2p/" + S + I + "svg/garden.svg" + S +
