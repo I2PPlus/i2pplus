@@ -26,6 +26,7 @@ import net.i2p.data.Hash;
 import net.i2p.data.router.RouterAddress;
 import net.i2p.data.router.RouterInfo;
 import net.i2p.router.RouterContext;
+import net.i2p.util.VersionComparator;
 
 /**
  *  Copy a random selection of 'count' router infos from configDir/netDb
@@ -47,6 +48,8 @@ public class ReseedBundler {
     private final static String ROUTERINFO_SUFFIX = ".dat";
     //private static final int MINIMUM = 50;
     private static final int MINIMUM = 200;
+    /** NTCP2 */
+    private static final String MIN_VERSION = "0.9.36";
 
     public ReseedBundler(RouterContext ctx) {
         _context = ctx;
@@ -85,6 +88,8 @@ public class ReseedBundler {
             if (ri.getCapabilities().contains("K"))
                 continue;
             if (ri.getCapabilities().contains("H"))
+                continue;
+            if (VersionComparator.comp(ri.getVersion(), MIN_VERSION) < 0)
                 continue;
             Collection<RouterAddress> addrs = ri.getAddresses();
             if (addrs.isEmpty())
