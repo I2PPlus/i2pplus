@@ -1,6 +1,31 @@
+2020-06-28 zzz
+ * NetDB: Check signature in verify
+
+2020-06-26 dr|z3d
+ * Console: Replace icons on /home and sitemap with svgs
+
+2020-06-22 zzz
+ * Sybil: Enable analysis and blocking by default
+
+2020-06-12 zzz
+ * I2CP: Meta LS2 error code handling
+
+
+2020-06-11 dr|z3d
+ * I2PTunnel: Only show blacklist/whitelist when enabled
+
+2020-06-10 zzz
+ * Util: Support hostname lookups in LookupDest CLI
+
+2020-06-08 dr|z3d
+ * I2PTunnel: More space-efficient layout for tunnel config;
+   migrate hints for tunnel config to tooltips
+
 2020-06-07 zzz
- * i2ptunnel: Fix missing tunnel quantity section for servers
  * Jetty: Update servlet-api
+
+2020-06-06 dr|z3d
+ * SusiDNS: Widgetize page navigation; search before filter
 
 2020-06-06 zzz
  * Data: Fix creation of Encrypted LS2 (ticket #2746)
