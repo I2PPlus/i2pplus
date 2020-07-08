@@ -4999,6 +4999,10 @@ body.iframed {
 
 /* end iframed console fixes */
 
+img[src^="/flags"] {
+    border: 1px solid #d8d8d8;
+}
+
 #tunnels img[src^="/flags"], #profiles img[src^="/flags"], #peers img[src^="/flags"] {
     margin-top: 0;
     margin-bottom: 0;
@@ -5006,6 +5010,12 @@ body.iframed {
     height: 12px;
     vertical-align: middle;
     border: 1px solid #ccc;
+}
+
+#tunnels .flag {
+    margin: -2px 1px;
+    padding: 2px 3px;
+    border-right: 1px solid #aad;
 }
 
 /* Theme choice & Language selection in /configui */
@@ -8140,6 +8150,15 @@ p#enablefullstats input[type="checkbox"] {
 
 /* profiles, peers, tunnels, job queue, netdb - whitespace reduction */
 
+#tunnels .flag {
+    margin: -2px 0;
+    padding: 1px 2px 2px 0;
+}
+
+#tunnels .flag img {
+    margin: -1px 0 0 -1px !important;
+}
+
 .main#profiles, .main#peers, .main#tunnels, .main#jobs, .main#netdb {
     padding: 5px;
     min-width: 590px;
@@ -8372,7 +8391,9 @@ button, input, select, textarea, .netdbentry th, .configtable th, .statlist a[na
 }
 
 .cells tt, #profilelist tt {
-    margin-left: 3px !important;
+    padding-right: 3px;
+    margin-left: -1px !important;
+    margin-right: 0 !important;
 }
 
 tt a, .cells tt, #profilelist tt {
