@@ -1655,6 +1655,8 @@
           <fileset dir="installer/resources/" includes="icons/flags16x11/*" />
           <!-- flags48x48 added in 0.9.32 -->
           <fileset dir="installer/resources/" includes="icons/flags48x48/*" />
+          <!-- flags_svg added in I2P+ 0.9.47 -->
+          <fileset dir="installer/resources/" includes="icons/flags_svg/*" />
         </copy>
     </target>
 
