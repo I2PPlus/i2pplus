@@ -48,6 +48,10 @@ if (c != null &&
         // iflast is -1 if not present; round down file time
         if (iflast >= ((lastmod / 1000) * 1000)) {
             response.setStatus(304);
+            if (ext.equals(".svg"))
+                response.setContentType("image/svg+xml");
+            else
+                response.setContentType("image/png");
             return;
         }
         response.setDateHeader("Last-Modified", lastmod);
