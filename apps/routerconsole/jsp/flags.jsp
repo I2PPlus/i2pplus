@@ -38,7 +38,8 @@ if (c != null &&
     java.io.File ffile = new java.io.File(base, file);
     if (!ffile.exists()) {
         // fallback to flags dir, which will be symlinked to /usr/share/flags/countries/16x11 for package builds
-        file = "flags" + java.io.File.separatorChar + c + ".png";
+        ext = ".png";
+        file = "flags" + java.io.File.separatorChar + c + ext;
         ffile = new java.io.File(base, file);
     }
     long lastmod = ffile.lastModified();
@@ -77,7 +78,7 @@ if (c != null &&
             response.sendError(403, ioe.toString());
         }  else {
             // not an error, happens when the browser closes the stream
-            net.i2p.I2PAppContext.getGlobalContext().logManager().getLog(getClass()).warn("Error serving flags/" + c + ".png", ioe);
+            net.i2p.I2PAppContext.getGlobalContext().logManager().getLog(getClass()).warn("Error serving flags/" + c + ext, ioe);
             // Jetty doesn't log this
             throw ioe;
         }
