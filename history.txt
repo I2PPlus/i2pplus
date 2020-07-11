@@ -1,6 +1,33 @@
+2020-07-07 dr|z3d
+ * Console: Add svg support for flags
+
+2020-06-28 zzz
+ * NetDB: Check signature in verify
+
+2020-06-26 dr|z3d
+ * Console: Replace icons on /home and sitemap with svgs
+
+2020-06-22 zzz
+ * Sybil: Enable analysis and blocking by default
+
+2020-06-12 zzz
+ * I2CP: Meta LS2 error code handling
+
+2020-06-11 dr|z3d
+ * I2PTunnel: Only show blacklist/whitelist when enabled
+
+2020-06-10 zzz
+ * Util: Support hostname lookups in LookupDest CLI
+
+2020-06-08 dr|z3d
+ * I2PTunnel: More space-efficient layout for tunnel config;
+   migrate hints for tunnel config to tooltips
+
 2020-06-07 zzz
- * i2ptunnel: Fix missing tunnel quantity section for servers
  * Jetty: Update servlet-api
+
+2020-06-06 dr|z3d
+ * SusiDNS: Widgetize page navigation; search before filter
 
 2020-06-06 zzz
  * Data: Fix creation of Encrypted LS2 (ticket #2746)
@@ -152,7 +179,6 @@
  * I2PSnark:
    - Improve sorting algorithms and display active sort indicator
    - Don't deprioritize outbound traffic
-
 
 2020-05-02 zzz
  * eepsite: Fix RTL issues on Arabic help page (ticket #2731)
@@ -7681,7 +7707,6 @@ i2psnark: Fix ConnectionAcceptor not restarting after tunnel
  * Transports: Consolidate translation methods in TransportImpl;
    ngettext fix for "peers" string
 
-
 2013-07-19 zzz
  * PRNG:
    - Don't delay the refiller if we need more (don't limit max output)
@@ -12524,7 +12549,6 @@ i2psnark: Fix ConnectionAcceptor not restarting after tunnel
     * Fix .fr eepsite index css
     * Javdoc tweaks
 
-
 2010-01-09 zzz
     * Include new eepsite indexes in pkg
 
@@ -12536,7 +12560,7 @@ i2psnark: Fix ConnectionAcceptor not restarting after tunnel
 
 2010-01-02 sponge
     * Fix NB 6.8 goofyness... 'till ant 1.7.1 or > is needed, stay with NB
-	6.5, as the newer ones place a check for 1.7.1. We require 1.7.0
+      6.5, as the newer ones place a check for 1.7.1. We require 1.7.0
 
 2010-01-02 sponge
     * Fix build.xml target for justBOB

@@ -105,7 +105,7 @@ document.getElementById("svg").appendChild(xhr.responseXML.documentElement);
 <%  } else if (theme.contains("dark")) { %>
 <style>.illustrate {border: 1px solid #111 !important; box-shadow: none !important; background: #fff !important; background: rgba(255,255,255,0.3) !important; filter: invert(1) sepia(100%) hue-rotate(30deg);}</style>
 <%  } %>
-<object type="image/svg+xml" data="images/how.svg">
+<object type="image/svg+xml" data="images/how.svg?<%=net.i2p.CoreVersion.VERSION%>">
 <img src="/themes/susidns/images/how.png" border="0" alt="How the address book works" title="How the address book works" />
 </object>
 </noscript>
