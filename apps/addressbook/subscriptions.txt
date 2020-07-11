@@ -1,9 +1,0 @@
-# Subscription list for addressbook
-#
-# Each entry is an absolute url to a file in hosts.txt format.
-# Since the list is checked in order, url's should be listed in order of trust.
-#
-http://stats.i2p/cgi-bin/newhosts.txt
-http://no.i2p/export/alive-hosts.txt
-http://inr.i2p/export/alive-hosts.txt
-http://identiguy.i2p/hosts.txt
