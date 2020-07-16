@@ -155,7 +155,7 @@ public class InfoHelper extends HelperBase {
         if (getUdpIP() != null && getUdpPort() != null) {
             buf.append("<tr><td><b>" + _t("IP Address") + ":</b></td><td>" + getUdpIP());
             if (lastCountry() != null)
-                buf.append(" &ensp;<img src=\"/flags.jsp?c=" + lastCountry() + "\">");
+                buf.append(" &ensp;<img width=20 height=15 src=\"/flags.jsp?c=" + lastCountry() + "\">");
             buf.append(" &ensp;<b>" + _t("UDP Port") + ":</b> " + getUdpPort() + " &ensp;<b>" + _t("Status") + ":</b> " + _t(_context.commSystem().getStatus().toStatusString()));
             buf.append(" &ensp;<b>" + _t("Floodfill Role") + ":</b> ");
             if (_context.netDb().floodfillEnabled())
