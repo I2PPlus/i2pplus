@@ -345,13 +345,13 @@ class HandleFloodfillDatabaseStoreMessageJob extends JobImpl {
                         }
                         if (_log.shouldWarn()) {
                             if (isEstab)
-                                _log.warn("Switched to alt connected peer " + toPeer + " in LS with " + count + " leases");
+                                _log.warn("Switched to alternative connected peer [" + toPeer.toBase64().substring(0,6) + "] in LeaseSet with " + count + " leases");
                             else
-                                _log.warn("Alt connected peer not found in LS with " + count + " leases");
+                                _log.warn("Alternative connected peer not found in LeaseSet with " + count + " leases");
                         }
                     } else {
                         if (_log.shouldWarn())
-                            _log.warn("Reply gw not found in LS with " + count + " leases");
+                            _log.warn("Reply gateway not found in LeaseSet with " + count + " leases");
                     }
                 }
             }
