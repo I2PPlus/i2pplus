@@ -274,9 +274,11 @@ class HandleFloodfillDatabaseStoreMessageJob extends JobImpl {
             msg2 = new DatabaseStoreMessage(getContext());
             RouterInfo me = getContext().router().getRouterInfo();
             msg2.setEntry(me);
-            if (_log.shouldWarn())
-                _log.warn("Received a DbStoreMessage with Reply token, but we're not a Floodfill\n* From: " + _from +
-                          "\n* From Hash: " + _fromHash + "\n* Message: " + _message, new Exception());
+            if (_fromHash != null && _from != null) {
+                if (_log.shouldWarn())
+                    _log.warn("Received a DbStoreMessage with Reply token, but we're not a Floodfill\n* From: " + _from +
+                              "\n* From Hash: " + _fromHash + "\n* Message: " + _message, new Exception());
+            }
         }
         Hash toPeer = _message.getReplyGateway();
         boolean toUs = getContext().routerHash().equals(toPeer);
