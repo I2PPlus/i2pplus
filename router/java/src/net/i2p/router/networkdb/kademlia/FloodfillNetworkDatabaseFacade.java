@@ -265,8 +265,8 @@ public class FloodfillNetworkDatabaseFacade extends KademliaNetworkDatabaseFacad
             }
             if (i > 0) {
                 max += i;
-                if (_log.shouldInfo())
-                _log.info("Flooding the entry for [" + key.toBase64().substring(0,6) + "] to " + i + " more, just before midnight");
+                if (_log.shouldDebug())
+                    _log.debug("Flooding the entry for [" + key.toBase64().substring(0,6) + "] to " + i + " more, just before midnight");
             }
         }
         int flooded = 0;
@@ -289,14 +289,14 @@ public class FloodfillNetworkDatabaseFacade extends KademliaNetworkDatabaseFacad
             m.setOnSendJob(floodGood);
             _context.commSystem().processMessage(m);
             flooded++;
-            if (_log.shouldLog(Log.INFO))
-                _log.info("Flooding the entry for [" + key.toBase64().substring(0,6) + "] to [" + peer.toBase64().substring(0,6)+ "]");
+            if (_log.shouldDebug())
+                _log.debug("Flooding the entry for [" + key.toBase64().substring(0,6) + "] to [" + peer.toBase64().substring(0,6)+ "]");
             if (flooded >= MAX_TO_FLOOD)
                 break;
         }
 
         if (_log.shouldLog(Log.INFO))
-            _log.info("Flooded the data to " + flooded + " of " + peers.size() + " peers");
+            _log.info("Flooded the entry for [" + key.toBase64().substring(0,6) + "] to " + flooded + " of " + peers.size() + " peers");
     }
 
     /**
