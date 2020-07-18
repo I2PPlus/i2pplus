@@ -5000,22 +5000,62 @@ body.iframed {
 /* end iframed console fixes */
 
 img[src^="/flags"] {
+    width: 16px;
+    height: 12px;
+    vertical-align: middle;
     border: 1px solid #d8d8d8;
 }
 
-#tunnels img[src^="/flags"], #profiles img[src^="/flags"], #peers img[src^="/flags"] {
+#netdbcountrylist img[src^="/flags"], .netdb_header img[src^="/flags"] {
+    width: 24px;
+    height: 18px;
+}
+
+#tunnels img[src^="/flags"], #profiles img[src^="/flags"], #peers img[src^="/flags"], #netdb img[src^="/flags"] {
     margin-top: 0;
     margin-bottom: 0;
-    width: 16px;
-    height: 12px;
     vertical-align: middle;
     border: 1px solid #ccc;
 }
 
-#tunnels .flag {
+.routerid .flag {
     margin: -2px 1px;
     padding: 2px 3px;
     border-right: 1px solid #aad;
+}
+
+#netdb .netdb_leases li {
+    display: inline-block;
+}
+
+#netdb .netdb_leases li::before {
+    content: "";
+    display: inline-block;
+    min-height: 24px;
+    vertical-align: middle;
+}
+
+#netdb .netdb_leases li > * {
+    vertical-align: middle;
+}
+
+#netdb .netdb_leases li:nth-child(odd) {
+    border: none;
+    background: #e9e9ff;
+}
+
+#netdb .netdb_leases li:nth-child(odd) {
+    border: none;
+    background: #f0f0ff;
+}
+
+#netdb .netdb_leases .routerid {
+    vertical-align: middle;
+    overflow: hidden;
+}
+
+#netdb .netdb_leases img[src^="/flags"] {
+    margin: -1px 0 0 -5px !important;
 }
 
 /* Theme choice & Language selection in /configui */
@@ -5869,7 +5909,7 @@ p:empty { /* empty paragraph nuke */
 }
 
 .netdb_leases .tunnel_peer tt {
-    margin: 0 3px;
+    margin: 0 3px 0 0;
 }
 
 .main li .netdb_expiry {

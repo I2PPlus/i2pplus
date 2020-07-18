@@ -53,14 +53,14 @@ public class FloodfillNetworkDatabaseFacade extends KademliaNetworkDatabaseFacad
      *  4 as of 0.9.2; 3 as of 0.9.9
      */
 //    public static final int MAX_TO_FLOOD = 3;
-    public static final int MAX_TO_FLOOD = 8;
+    public static final int MAX_TO_FLOOD = 32;
 
     private static final int FLOOD_PRIORITY = OutNetMessage.PRIORITY_NETDB_FLOOD;
     private static final int FLOOD_TIMEOUT = 30*1000;
     private static final long NEXT_RKEY_RI_ADVANCE_TIME = 45*60*1000;
     private static final long NEXT_RKEY_LS_ADVANCE_TIME = 10*60*1000;
 //    private static final int NEXT_FLOOD_QTY = 2;
-    private static final int NEXT_FLOOD_QTY = 5;
+    private static final int NEXT_FLOOD_QTY = 16;
 
     public FloodfillNetworkDatabaseFacade(RouterContext context) {
         super(context);
@@ -265,8 +265,8 @@ public class FloodfillNetworkDatabaseFacade extends KademliaNetworkDatabaseFacad
             }
             if (i > 0) {
                 max += i;
-                if (_log.shouldInfo())
-                _log.info("Flooding the entry for [" + key.toBase64().substring(0,6) + "] to " + i + " more, just before midnight");
+                if (_log.shouldDebug())
+                    _log.debug("Flooding the entry for [" + key.toBase64().substring(0,6) + "] to " + i + " more, just before midnight");
             }
         }
         int flooded = 0;
@@ -289,14 +289,14 @@ public class FloodfillNetworkDatabaseFacade extends KademliaNetworkDatabaseFacad
             m.setOnSendJob(floodGood);
             _context.commSystem().processMessage(m);
             flooded++;
-            if (_log.shouldLog(Log.INFO))
-                _log.info("Flooding the entry for [" + key.toBase64().substring(0,6) + "] to [" + peer.toBase64().substring(0,6)+ "]");
+            if (_log.shouldDebug())
+                _log.debug("Flooding the entry for [" + key.toBase64().substring(0,6) + "] to [" + peer.toBase64().substring(0,6)+ "]");
             if (flooded >= MAX_TO_FLOOD)
                 break;
         }
 
         if (_log.shouldLog(Log.INFO))
-            _log.info("Flooded the data to " + flooded + " of " + peers.size() + " peers");
+            _log.info("Flooded the entry for [" + key.toBase64().substring(0,6) + "] to " + flooded + " of " + peers.size() + " peers");
     }
 
     /**
