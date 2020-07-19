@@ -1,3 +1,13 @@
+2020-07-19 zzz
+ * i2psnark: Increase max pipeline, negotiate actual value
+
+2020-07-11 zzz
+ * NTCP: Atomics for NTCP final state (ticket #2701)
+ * OCMOSJ: Don't lookup an expiring LS2 if unpublished
+
+2020-07-07 zzz
+ * Reseed: Enforce minimum version in generated bundle
+
 2020-07-07 dr|z3d
  * Console: Add svg support for flags
 

@@ -69,11 +69,12 @@ class PeerState implements DataLoader
   private Request lastRequest = null;
 
   // FIXME if piece size < PARTSIZE, pipeline could be bigger
-//  private final static int MAX_PIPELINE = 5;               // this is for outbound requests
-  private final static int MAX_PIPELINE = 7;               // this is for outbound requests
-//  private final static int MAX_PIPELINE_BYTES = 128*1024;  // this is for inbound requests
-  private final static int MAX_PIPELINE_BYTES = 4096*1024;  // this is for inbound requests
+  /** @since 0.9.47 */
+  public static final int MIN_PIPELINE = 5;               // this is for outbound requests
+  /** @since public since 0.9.47 */
+  public static final int MAX_PIPELINE = 8;               // this is for outbound requests
   public final static int PARTSIZE = 16*1024; // outbound request
+  private final static int MAX_PIPELINE_BYTES = (MAX_PIPELINE + 2) * PARTSIZE;  // this is for inbound requests
   private final static int MAX_PARTSIZE = 64*1024; // Don't let anybody request more than this
   private static final Integer PIECE_ALL = Integer.valueOf(-1);
 
@@ -261,8 +262,8 @@ class PeerState implements DataLoader
                 if (bev != null) {
                     try {
                         if (bev.getMap().get(ExtensionHandler.TYPE_COMMENT) != null) {
-                            if (_log.shouldLog(Log.WARN))
-                                _log.warn("Allowing seed that connects to seeds for comments: [" + peer + "]");
+                            if (_log.shouldLog(Log.INFO))
+                                _log.info("Seed [" + peer + "] connected to check for new comments");
                             setInteresting(interest);
                             return;
                         }
@@ -880,7 +881,7 @@ class PeerState implements DataLoader
     boolean more_pieces = true;
     while (more_pieces)
       {
-        more_pieces = outstandingRequests.size() < MAX_PIPELINE;
+        more_pieces = outstandingRequests.size() < peer.getMaxPipeline();
         // We want something and we don't have outstanding requests?
         if (more_pieces && lastRequest == null) {
           // we have nothing in the queue right now
