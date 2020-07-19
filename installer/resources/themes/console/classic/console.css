@@ -5024,6 +5024,14 @@ img[src^="/flags"] {
     border-right: 1px solid #aad;
 }
 
+#peers .routerid .flag, #profiles .routerid .flag {
+    margin: -2px 1px -2px -4px;
+}
+
+#profiles .routerid .flag {
+    margin-left: -3px;
+}
+
 #netdb .netdb_leases li {
     display: inline-block;
 }
@@ -9780,10 +9788,10 @@ th.queue {
 }
 
 .cells.peer {
-    width: 1%;
-    max-width: 70px !important;
-    min-width: 70px !important;
     padding: 5px 2px;
+    width: 1%;
+    max-width: 75px !important;
+    min-width: 75px !important;
     text-align: center;
 }
 
