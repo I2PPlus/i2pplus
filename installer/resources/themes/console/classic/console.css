@@ -4223,14 +4223,14 @@ h3#servicedebug a, h3#graphinfo a, h3#browseronstart a {
 }
 
 .main#tunnels h3 a[href^="/configtunnels#"]::after, .main#tunnels h3 a[href$="i2ptunnelmgr"]::after, #logs h3 a::after {
-    content: "";
-    display: inline-block;
+    padding: 1px;
     width: 16px;
     height: 16px;
+    float: right;
+    display: inline-block;
     background: url(/themes/console/images/svg/configure.svg) center center no-repeat;
     background-size: 16px 16px;
-    float: right;
-    padding: 1px;
+    content: "";
 }
 
 #logs h3 a.delete::after {
