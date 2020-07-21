@@ -2532,7 +2532,6 @@ div.news hr:last-child {
 
 .messages #newsStatus, .messages #newsDisplay {
     float: none;
-    color: #005;
 }
 
 .messages #newsDisplay {
@@ -3439,23 +3438,22 @@ div.configure h2:first-child {
 }
 
 .messages {
+    margin: -6px -15px 10px -16px;
     padding: 15px 10px;
-    background: #fff;
+    text-align: center;
+    font-weight: bold;
+    font-size: 9pt;
     border: 1px solid #aaafce;
     border-right: 0;
-    margin: -6px -15px 10px -16px;
-    text-align: center;
-    font-size: 9pt;
-    font-weight: bold;
-    color: #474;
+    background: #fff;
 }
 
 #config_update .messages {
-    background: url(/themes/console/images/svg/news.svg) 10px center no-repeat #fff;
-    background-size: 28px 28px;
     padding-left: 48px;
     text-align: left;
     font-weight: normal;
+    background: url(/themes/console/images/svg/news.svg) 10px center no-repeat #fff;
+    background-size: 28px 28px;
 }
 
 #messages {
@@ -3689,12 +3687,24 @@ h3#iptransport a:not(old), h3#advancedconfig a:not(old), #reseedsetup a:not(old)
 }
 
 h3#iptransport a::after, h3#advancedconfig a::after, #reseedsetup a::after {
-    content: url(images/help.png);
-    padding: 0;
-    margin: 0;
-    vertical-align: bottom;
-    height: 16px !important;
+    margin: -6px -10px -3px 0;
+    padding: 7px 0 1px 10px;
     display: inline-block;
+    vertical-align: bottom;
+    height: 22px !important;
+    width: 22px;
+    border-left: 1px solid #aaafce;
+    background: url(/themes/console/images/svg/helplink.svg) center center no-repeat;
+    background-size: 22px 22px;
+    content: "";
+}
+
+@media screen and (max-width: 1200px) {
+h3#iptransport a::after, h3#advancedconfig a::after, #reseedsetup a::after {
+    height: 20px !important;
+    width: 20px;
+    background-size: 20px 20px;
+}
 }
 
 h3#iptransport a:hover {
@@ -4331,7 +4341,6 @@ h2#jobrunners {
     break-inside: avoid;
     page-break-inside: avoid;
     -webkit-column-break-inside: avoid;
-    display: inline-block;
     border-bottom: 1px dotted #ced1e3;
     min-width: 400px;
     margin-left: -15px;
@@ -11536,7 +11545,7 @@ to {
 
 .small img {
     margin: 0 !important;
-    padding 0 !important;
+    padding: 0 !important;
 }
 
 .direction .small {
