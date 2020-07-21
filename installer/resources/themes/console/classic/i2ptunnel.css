@@ -405,8 +405,8 @@ th:last-child, td:last-child {
 td.infohelp {
     padding: 10px 10px 10px 38px !important;
     text-align: justify;
-    background: url(/themes/console/images/info/infohelp.png) 10px center no-repeat;
-    background-size: 20px 20px;
+    background: url(/themes/console/images/svg/infohelp.svg) 10px center no-repeat;
+    background-size: 22px 22px;
 }
 
 .tunnelConfig td {
