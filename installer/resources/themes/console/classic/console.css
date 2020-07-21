@@ -2532,7 +2532,6 @@ div.news hr:last-child {
 
 .messages #newsStatus, .messages #newsDisplay {
     float: none;
-    color: #005;
 }
 
 .messages #newsDisplay {
@@ -3439,23 +3438,22 @@ div.configure h2:first-child {
 }
 
 .messages {
+    margin: -6px -15px 10px -16px;
     padding: 15px 10px;
-    background: #fff;
+    text-align: center;
+    font-weight: bold;
+    font-size: 9pt;
     border: 1px solid #aaafce;
     border-right: 0;
-    margin: -6px -15px 10px -16px;
-    text-align: center;
-    font-size: 9pt;
-    font-weight: bold;
-    color: #474;
+    background: #fff;
 }
 
 #config_update .messages {
-    background: url(/themes/console/images/svg/news.svg) 10px center no-repeat #fff;
-    background-size: 28px 28px;
     padding-left: 48px;
     text-align: left;
     font-weight: normal;
+    background: url(/themes/console/images/svg/news.svg) 10px center no-repeat #fff;
+    background-size: 28px 28px;
 }
 
 #messages {
@@ -3689,12 +3687,24 @@ h3#iptransport a:not(old), h3#advancedconfig a:not(old), #reseedsetup a:not(old)
 }
 
 h3#iptransport a::after, h3#advancedconfig a::after, #reseedsetup a::after {
-    content: url(images/help.png);
-    padding: 0;
-    margin: 0;
-    vertical-align: bottom;
-    height: 16px !important;
+    margin: -6px -10px -3px 0;
+    padding: 7px 0 1px 10px;
     display: inline-block;
+    vertical-align: bottom;
+    height: 22px !important;
+    width: 22px;
+    border-left: 1px solid #aaafce;
+    background: url(/themes/console/images/svg/helplink.svg) center center no-repeat;
+    background-size: 22px 22px;
+    content: "";
+}
+
+@media screen and (max-width: 1200px) {
+h3#iptransport a::after, h3#advancedconfig a::after, #reseedsetup a::after {
+    height: 20px !important;
+    width: 20px;
+    background-size: 20px 20px;
+}
 }
 
 h3#iptransport a:hover {
@@ -4213,14 +4223,19 @@ h3#servicedebug a, h3#graphinfo a, h3#browseronstart a {
 }
 
 .main#tunnels h3 a[href^="/configtunnels#"]::after, .main#tunnels h3 a[href$="i2ptunnelmgr"]::after, #logs h3 a::after {
-    content: url(/themes/console/images/buttons/configure.png);
+    content: "";
+    display: inline-block;
+    width: 16px;
+    height: 16px;
+    background: url(/themes/console/images/svg/configure.svg) center center no-repeat;
+    background-size: 16px 16px;
     float: right;
     padding: 1px;
 }
 
 #logs h3 a.delete::after {
     margin-left: 6px;
-    content: url(/themes/console/images/buttons/delete.png);
+    background: url(/themes/console/images/buttons/delete.png) center center no-repeat;
 }
 
 #version a::after {
@@ -4331,7 +4346,6 @@ h2#jobrunners {
     break-inside: avoid;
     page-break-inside: avoid;
     -webkit-column-break-inside: avoid;
-    display: inline-block;
     border-bottom: 1px dotted #ced1e3;
     min-width: 400px;
     margin-left: -15px;
@@ -5022,6 +5036,14 @@ img[src^="/flags"] {
     margin: -2px 1px;
     padding: 2px 3px;
     border-right: 1px solid #aad;
+}
+
+#peers .routerid .flag, #profiles .routerid .flag {
+    margin: -2px 1px -2px -4px;
+}
+
+#profiles .routerid .flag {
+    margin-left: -3px;
 }
 
 #netdb .netdb_leases li {
@@ -9780,10 +9802,10 @@ th.queue {
 }
 
 .cells.peer {
-    width: 1%;
-    max-width: 70px !important;
-    min-width: 70px !important;
     padding: 5px 2px;
+    width: 1%;
+    max-width: 75px !important;
+    min-width: 75px !important;
     text-align: center;
 }
 
@@ -11528,7 +11550,7 @@ to {
 
 .small img {
     margin: 0 !important;
-    padding 0 !important;
+    padding: 0 !important;
 }
 
 .direction .small {

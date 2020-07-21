@@ -31,10 +31,10 @@ public class SearchHelper extends HelperBase {
         //"epsilon.i2p"              + S +     "http://epsilon.i2p/search.jsp?q=%s" + SOURCE +  S +
         "ebooks.i2p"               + S +     "http://ebooks.i2p/index.php?page=9&query=%s" + SOURCE + S +
         "i2pforum.i2p"             + S +     "http://i2pforum.i2p/search.php?keywords=%s" + SOURCE + S +
-        "isitup.i2p"               + S +     "http://isitup.i2p/api/check?sitename=%s" + SOURCE + S +
+        //"isitup.i2p"               + S +     "http://isitup.i2p/api/check?sitename=%s" + SOURCE + S +
         "legwork.i2p"              + S +     "http://legwork.i2p/yacysearch.html?query=%s" + "&maximumRecords=1000" + SOURCE + S +
         "ransack.i2p"              + S +     "http://ransack.i2p/?q=%s" + SOURCE + S +
-        "tome.i2p"                 + S +     "http://tome.i2p/search.php?q=%s" + SOURCE + S +
+        //"tome.i2p"                 + S +     "http://tome.i2p/search.php?q=%s" + SOURCE + S +
         "trac.i2p2.i2p"            + S +     "https://trac.i2p2.i2p/search?q=%s" + SOURCE + S +
         "tracker2.postman.i2p"     + S +     "http://tracker2.postman.i2p/?search=%s" + SOURCE + S +
         "wiki.i2p-projekt.i2p"     + S +     "http://wiki.i2p-projekt.i2p/wiki/index.php?search=%s" + SOURCE + S +
