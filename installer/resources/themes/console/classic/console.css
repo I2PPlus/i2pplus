@@ -4223,14 +4223,19 @@ h3#servicedebug a, h3#graphinfo a, h3#browseronstart a {
 }
 
 .main#tunnels h3 a[href^="/configtunnels#"]::after, .main#tunnels h3 a[href$="i2ptunnelmgr"]::after, #logs h3 a::after {
-    content: url(/themes/console/images/buttons/configure.png);
+    content: "";
+    display: inline-block;
+    width: 16px;
+    height: 16px;
+    background: url(/themes/console/images/svg/configure.svg) center center no-repeat;
+    background-size: 16px 16px;
     float: right;
     padding: 1px;
 }
 
 #logs h3 a.delete::after {
     margin-left: 6px;
-    content: url(/themes/console/images/buttons/delete.png);
+    background: url(/themes/console/images/buttons/delete.png) center center no-repeat;
 }
 
 #version a::after {
