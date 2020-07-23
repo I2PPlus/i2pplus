@@ -176,49 +176,48 @@ class TrackerInfo
         peers.add(new Peer(peerID, my_id, infohash, metainfo));
       }
 
-    return peers;
+      return peers;
   }
 
-  public Set<Peer> getPeers()
-  {
-    return peers;
+  public Set<Peer> getPeers() {
+      return peers;
   }
 
-  public int getPeerCount()
-  {
-    int pc = peers == null ? 0 : peers.size();
-    return Math.max(pc, complete + incomplete - 1);
+  public int getPeerCount() {
+      int pc = peers == null ? 0 : peers.size();
+      return Math.max(pc, complete + incomplete - 1);
   }
 
   /** @since 0.9.9 */
-  public int getSeedCount()
-  {
-    return complete;
+  public int getSeedCount() {
+      return complete;
   }
 
   /**
    *  Not HTML escaped.
    */
-  public String getFailureReason()
-  {
-    return failure_reason;
+  public String getFailureReason() {
+      return failure_reason;
   }
 
   /** in seconds */
-  public int getInterval()
-  {
-    return interval;
+  public int getInterval() {
+      return interval;
   }
 
-    @Override
-  public String toString()
-  {
-    if (failure_reason != null)
-      return "TrackerInfo [FAILED: " + failure_reason + "]";
-    else
-      return "\n* TrackerInfo: Interval: " + interval/60 + " min"
-        + (complete > 0 ? (", Seeding: " + complete) : "" )
-        + (incomplete > 0 ? (", Downloading: " + incomplete) : "" )
-        + "\n* Peers: " + peers;
+  @Override
+  public String toString() {
+      if (failure_reason != null) {
+          return "TrackerInfo [FAILED: " + failure_reason + "]";
+      } else if (getPeers().size() > 0) {
+          return "\n* TrackerInfo: Interval: " + interval/60 + " min" +
+          (complete > 0 ? (", Seeding: " + complete) : "" ) +
+          (incomplete > 0 ? (", Downloading: " + incomplete) : "" ) +
+          "\n* Peers: " + peers;
+      } else {
+          return "\n* TrackerInfo: Interval: " + interval/60 + " min" +
+          (complete > 0 ? (", Seeding: " + complete) : "" ) +
+          (incomplete > 0 ? (", Downloading: " + incomplete) : "" );
+      }
   }
 }
