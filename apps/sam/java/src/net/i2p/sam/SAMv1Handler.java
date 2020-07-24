@@ -85,7 +85,7 @@ class SAMv1Handler extends SAMHandler implements SAMRawReceiver, SAMDatagramRece
         super(s, verMajor, verMinor, i2cpProps, parent);
         _id = __id.incrementAndGet();
         if (_log.shouldLog(Log.DEBUG))
-            _log.debug("SAM version 1 handler instantiated");
+            _log.debug("SAMv1 Handler instantiated");
 
         if ( ! verifVersion() ) {
             throw new SAMException("BUG! Wrong protocol version!");
@@ -106,7 +106,7 @@ class SAMv1Handler extends SAMHandler implements SAMRawReceiver, SAMDatagramRece
 
         this.thread.setName("SAMv1Handler " + _id);
         if (_log.shouldLog(Log.DEBUG))
-            _log.debug("SAM handling started");
+            _log.debug("SAMv1 Handler started");
 
         try {
             boolean gotFirstLine = false;
@@ -138,8 +138,8 @@ class SAMv1Handler extends SAMHandler implements SAMRawReceiver, SAMDatagramRece
                 }
                 msg = buf.toString();
 
-                if (_log.shouldLog(Log.DEBUG)) {
-                    _log.debug("New message received: [" + msg + ']');
+                if (_log.shouldLog(Log.INFO)) {
+                    _log.info("New message received: [" + msg + ']');
                 }
                 props = SAMUtils.parseParams(msg);
                 domain = (String) props.remove(SAMUtils.COMMAND);
@@ -193,7 +193,7 @@ class SAMv1Handler extends SAMHandler implements SAMRawReceiver, SAMDatagramRece
             _log.error("Unexpected exception for message [" + msg + "]", e);
         } finally {
             if (_log.shouldLog(Log.DEBUG))
-                _log.debug("Stopping handler");
+                _log.debug("Stopping SAMv1 Handler");
             try {
                 closeClientSocket();
             } catch (IOException e) {
