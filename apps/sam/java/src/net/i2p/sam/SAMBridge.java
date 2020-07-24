@@ -650,7 +650,7 @@ public class SAMBridge implements Runnable, ClientApp {
 
         int remaining = args.length - startOpts;
         if (remaining > 0) {
-       		parseOptions(args, startOpts, opts);
+            parseOptions(args, startOpts, opts);
         }
         return new Options(host, port, isSSL, opts, keyfile, file);
     }
@@ -725,8 +725,8 @@ public class SAMBridge implements Runnable, ClientApp {
                     private final SAMBridge parent;
 
                     HelloHandler(SocketChannel s, SAMBridge parent) {
-                		this.s = s ;
-                		this.parent = parent ;
+                        this.s = s ;
+                        this.parent = parent ;
                     }
 
                     public void run() {

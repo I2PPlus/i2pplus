@@ -86,7 +86,7 @@ class SAMv3Handler extends SAMv1Handler
         super(s, verMajor, verMinor, i2cpProps, parent);
         sendPorts = (verMajor == 3 && verMinor >= 2) || verMajor > 3;
         if (_log.shouldLog(Log.DEBUG))
-            _log.debug("SAMv3 Handler instantiated");
+            _log.debug("SAMv3Handler instantiated");
     }
 
     @Override
@@ -162,7 +162,7 @@ class SAMv3Handler extends SAMv1Handler
 
         this.thread.setName("SAMv3Handler " + _id);
         if (_log.shouldLog(Log.DEBUG))
-            _log.debug("SAMv3 Handler started");
+            _log.debug("SAMv3Handler started");
 
         try {
             Socket socket = getClientSocket().socket();
@@ -171,7 +171,7 @@ class SAMv3Handler extends SAMv1Handler
             while (true) {
                 if (shouldStop()) {
                     if (_log.shouldLog(Log.DEBUG))
-                        _log.debug("Stop request found");
+                        _log.debug("Stop request received for SAMv3Handler");
                     break;
                 }
                 String line;
@@ -248,7 +248,7 @@ class SAMv3Handler extends SAMv1Handler
                 gotFirstLine = true;
                 opcode = (String) props.remove(SAMUtils.OPCODE);
                 if (_log.shouldLog(Log.DEBUG)) {
-                    _log.debug("Parsing (domain: \"" + domain + "\"; opcode: \"" + opcode + "\")");
+                    _log.debug("SAMv3Handler parsing -> Domain: " + domain + " Opcode: " + opcode);
                 }
 
                 // these may not have a second token
@@ -301,24 +301,24 @@ class SAMv3Handler extends SAMv1Handler
             } // while
         } catch (IOException e) {
             if (_log.shouldLog(Log.DEBUG))
-                _log.debug("Caught IOException in handler", e);
+                _log.debug("Caught IOException in handler" + "\n* Error: " + e.getMessage());
             writeString(SESSION_ERROR, e.getMessage());
         } catch (SAMException e) {
-            _log.error("Unexpected exception for message [" + msg + ']', e);
+            _log.error("Unexpected exception for message [" + msg + ']' + "\n* Error: " + e.getMessage());
              writeString(SESSION_ERROR, e.getMessage());
         } catch (RuntimeException e) {
-            _log.error("Unexpected exception for message [" + msg + ']', e);
+            _log.error("Unexpected exception for message [" + msg + ']' + "\n* Error: " + e.getMessage());
             writeString(SESSION_ERROR, e.getMessage());
         } finally {
             if (_log.shouldLog(Log.DEBUG))
-                _log.debug("Stopping SAMv3 Handler");
+                _log.debug("Stopping SAMv3Handler");
 
             if (!this.stolenSocket) {
                 try {
                     closeClientSocket();
                 } catch (IOException e) {
                     if (_log.shouldWarn())
-                        _log.warn("Error closing socket", e);
+                        _log.warn("Error closing socket" + "\n* Error: " + e.getMessage());
                 }
             }
             if (streamForwardingSocket) {
@@ -327,10 +327,10 @@ class SAMv3Handler extends SAMv1Handler
                         ((SAMv3StreamSession)streamSession).stopForwardingIncoming();
                     } catch (SAMException e) {
                         if (_log.shouldWarn())
-                            _log.warn("Error while stopping forwarding connections", e);
+                            _log.warn("Error while stopping forwarding connections" + "\n* Error: " + e.getMessage());
                     } catch (InterruptedIOException e) {
                       if (_log.shouldWarn())
-                          _log.warn("Interrupted while stopping forwarding connections", e);
+                          _log.warn("Interrupted while stopping forwarding connections" + "\n* Error: " + e.getMessage());
                     }
                 }
             }
@@ -527,16 +527,16 @@ class SAMv3Handler extends SAMv1Handler
                 return writeString(SESSION_ERROR, "Unrecognized opcode");
             }
         } catch (DataFormatException e) {
-            _log.error("Invalid SAM destination specified", e);
+            _log.error("Invalid SAM destination specified" + "\n* Error: " + e.getMessage());
             return writeString("SESSION STATUS RESULT=INVALID_KEY", e.getMessage());
         } catch (I2PSessionException e) {
-            _log.error("Failed to start SAM session", e);
+            _log.error("Failed to start SAM session" + "\n* Error: " + e.getMessage());
             return writeString(SESSION_ERROR, e.getMessage());
         } catch (SAMException e) {
-            _log.error("Failed to start SAM session", e);
+            _log.error("Failed to start SAM session" + "\n* Error: " + e.getMessage());
             return writeString(SESSION_ERROR, e.getMessage());
         } catch (IOException e) {
-            _log.error("Failed to start SAM session", e);
+            _log.error("Failed to start SAM session" + "\n* Error: " + e.getMessage());
             return writeString(SESSION_ERROR, e.getMessage());
         } finally {
             // unregister the session if it has not been created
@@ -645,19 +645,19 @@ class SAMv3Handler extends SAMv1Handler
                 notifyStreamResult ( verbose, "INVALID_KEY", e.getMessage());
             } catch (ConnectException e) {
                 if (_log.shouldLog(Log.DEBUG))
-                    _log.debug("STREAM CONNECT failed", e);
+                    _log.debug("STREAM CONNECT failed" + "\n* Error: " + e.getMessage());
                 notifyStreamResult ( verbose, "CONNECTION_REFUSED", e.getMessage());
             } catch (NoRouteToHostException e) {
             if (_log.shouldLog(Log.DEBUG))
-                _log.debug("STREAM CONNECT failed", e);
+                _log.debug("STREAM CONNECT failed" + "\n* Error: " + e.getMessage());
             notifyStreamResult ( verbose, "CANT_REACH_PEER", e.getMessage());
             } catch (InterruptedIOException e) {
             if (_log.shouldLog(Log.DEBUG))
-                _log.debug("STREAM CONNECT failed", e);
+                _log.debug("STREAM CONNECT failed" + "\n* Error: " + e.getMessage());
             notifyStreamResult ( verbose, "TIMEOUT", e.getMessage());
             } catch (I2PException e) {
                 if (_log.shouldLog(Log.DEBUG))
-                    _log.debug("STREAM CONNECT failed", e);
+                    _log.debug("STREAM CONNECT failed" + "\n* Error: " + e.getMessage());
                 notifyStreamResult ( verbose, "I2P_ERROR", e.getMessage() );
             }
         } catch (IOException e) {}
@@ -676,7 +676,7 @@ class SAMv3Handler extends SAMv1Handler
                 return true ;
             } catch (SAMException e) {
             if (_log.shouldLog(Log.DEBUG))
-                _log.debug("Forwarding STREAM connections failed", e);
+                _log.debug("Forwarding STREAM connections failed" + "\n* Error: " + e.getMessage());
             notifyStreamResult ( true, "I2P_ERROR", "Forwarding failed : " + e.getMessage() );
             }
         } catch (IOException e) {}
@@ -694,15 +694,15 @@ class SAMv3Handler extends SAMv1Handler
                 return true ;
             } catch (InterruptedIOException e) {
                 if (_log.shouldLog(Log.DEBUG))
-                    _log.debug("STREAM ACCEPT failed", e);
+                    _log.debug("STREAM ACCEPT failed" + "\n* Error: " + e.getMessage());
                     notifyStreamResult( verbose, "TIMEOUT", e.getMessage() );
             } catch (I2PException e) {
                 if (_log.shouldLog(Log.DEBUG))
-                    _log.debug("STREAM ACCEPT failed", e);
+                    _log.debug("STREAM ACCEPT failed" + "\n* Error: " + e.getMessage());
                     notifyStreamResult ( verbose, "I2P_ERROR", e.getMessage() );
             } catch (SAMException e) {
                 if (_log.shouldLog(Log.DEBUG))
-                    _log.debug("STREAM ACCEPT failed", e);
+                    _log.debug("STREAM ACCEPT failed" + "\n* Error: " + e.getMessage());
                 notifyStreamResult ( verbose, "ALREADY_ACCEPTING", e.getMessage());
             }
         } catch (IOException e) {}
