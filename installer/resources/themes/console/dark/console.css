@@ -9933,7 +9933,7 @@ th.options, #externali2cp th {
 }
 
 #wrapperlogs pre {
-    height: 500px;
+    max-height: 500px;
 }
 
 /* graphs */
