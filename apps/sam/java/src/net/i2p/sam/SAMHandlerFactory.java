@@ -1,9 +1,9 @@
 package net.i2p.sam;
 /*
  * free (adj.): unencumbered; not under the control of others
- * Written by human in 2004 and released into the public domain 
- * with no warranty of any kind, either expressed or implied.  
- * It probably won't  make your computer catch on fire, or eat 
+ * Written by human in 2004 and released into the public domain
+ * with no warranty of any kind, either expressed or implied.
+ * It probably won't  make your computer catch on fire, or eat
  * your children, but it might.  Use at your own risk.
  *
  */
@@ -51,14 +51,14 @@ class SAMHandlerFactory {
             sock.setSoTimeout(0);
             line = buf.toString();
         } catch (SocketTimeoutException e) {
-            throw new SAMException("Timeout waiting for HELLO VERSION", e);
+            throw new SAMException("Timeout waiting for HELLO VERSION" + "\n* Error: " + e.getMessage());
         } catch (IOException e) {
-            throw new SAMException("Error reading from socket", e);
+            throw new SAMException("Error reading from socket" + "\n* Error: " + e.getMessage());
         } catch (RuntimeException e) {
-            throw new SAMException("Unexpected error", e);
+            throw new SAMException("Unexpected error" + "\n* Error: " + e.getMessage());
         }
-        if (log.shouldDebug())
-            log.debug("New message received: [" + line + ']');
+        if (log.shouldInfo())
+            log.info("New message received: [" + line + ']');
 
         // Message format: HELLO VERSION [MIN=v1] [MAX=v2]
         Properties props = SAMUtils.parseParams(line);
@@ -112,7 +112,7 @@ class SAMHandlerFactory {
 
         // Let's answer positively
         if (!SAMHandler.writeString("HELLO REPLY RESULT=OK VERSION=" + ver + "\n", s))
-            throw new SAMException("Error writing to socket");       
+            throw new SAMException("Error writing to socket");
 
         // ...and instantiate the right SAM handler
         int verMajor = getMajor(ver);
@@ -135,7 +135,7 @@ class SAMHandlerFactory {
                 throw new SAMException("BUG! (in handler instantiation)");
             }
         } catch (IOException e) {
-            log.error("Error creating the handler for version "+verMajor, e);
+            log.error("Error creating the handler for version " + verMajor + "\n* Error: " + e.getMessage());
             throw new SAMException("IOException caught during SAM handler instantiation");
         }
         return handler;

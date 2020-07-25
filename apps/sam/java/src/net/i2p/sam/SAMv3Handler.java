@@ -242,13 +242,13 @@ class SAMv3Handler extends SAMv1Handler
                 domain = (String) props.remove(SAMUtils.COMMAND);
                 if (domain == null) {
                     if (_log.shouldLog(Log.DEBUG))
-                        _log.debug("Ignoring newline");
+                        _log.debug("Ignoring newline in SAMv3 command");
                     continue;
                 }
                 gotFirstLine = true;
                 opcode = (String) props.remove(SAMUtils.OPCODE);
                 if (_log.shouldLog(Log.DEBUG)) {
-                    _log.debug("SAMv3Handler parsing -> Domain: " + domain + " Opcode: " + opcode);
+                    _log.debug("SAMv3Handler parsing [" + domain + " -> " + opcode + "]");
                 }
 
                 // these may not have a second token

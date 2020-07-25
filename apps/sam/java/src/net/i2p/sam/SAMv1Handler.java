@@ -85,7 +85,7 @@ class SAMv1Handler extends SAMHandler implements SAMRawReceiver, SAMDatagramRece
         super(s, verMajor, verMinor, i2cpProps, parent);
         _id = __id.incrementAndGet();
         if (_log.shouldLog(Log.DEBUG))
-            _log.debug("SAMv1 Handler instantiated");
+            _log.debug("SAMv1Handler instantiated");
 
         if ( ! verifVersion() ) {
             throw new SAMException("BUG! Wrong protocol version!");
@@ -106,14 +106,14 @@ class SAMv1Handler extends SAMHandler implements SAMRawReceiver, SAMDatagramRece
 
         this.thread.setName("SAMv1Handler " + _id);
         if (_log.shouldLog(Log.DEBUG))
-            _log.debug("SAMv1 Handler started");
+            _log.debug("SAMv1Handler started");
 
         try {
             boolean gotFirstLine = false;
             while (true) {
                 if (shouldStop()) {
                     if (_log.shouldLog(Log.DEBUG))
-                        _log.debug("Stop request received for SAMv1 Handler");
+                        _log.debug("Stop request received for SAMv1Handler");
                     break;
                 }
 
@@ -145,7 +145,7 @@ class SAMv1Handler extends SAMHandler implements SAMRawReceiver, SAMDatagramRece
                 domain = (String) props.remove(SAMUtils.COMMAND);
                 if (domain == null) {
                     if (_log.shouldLog(Log.DEBUG))
-                        _log.debug("Ignoring newline");
+                        _log.debug("Ignoring newline in SAMv1 command");
                     continue;
                 }
                 opcode = (String) props.remove(SAMUtils.OPCODE);
@@ -155,7 +155,7 @@ class SAMv1Handler extends SAMHandler implements SAMRawReceiver, SAMDatagramRece
                     break;
                 }
                 if (_log.shouldLog(Log.DEBUG)) {
-                    _log.debug("SAMv1 Handler parsing -> Domain: " + domain + " Opcode: " + opcode);
+                    _log.debug("SAMv1Handler parsing [" + domain + " -> " + opcode + "]");
                 }
                 gotFirstLine = true;
                 if (domain.equals("STREAM")) {
@@ -191,7 +191,7 @@ class SAMv1Handler extends SAMHandler implements SAMRawReceiver, SAMDatagramRece
             _log.error("Unexpected exception for message [" + msg + "]" + "\n* Error: " + e.getMessage());
         } finally {
             if (_log.shouldLog(Log.DEBUG))
-                _log.debug("Stopping SAMv1 Handler");
+                _log.debug("Stopping SAMv1Handler");
             try {
                 closeClientSocket();
             } catch (IOException e) {
