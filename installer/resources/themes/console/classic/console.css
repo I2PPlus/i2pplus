@@ -11292,6 +11292,7 @@ to {
 #bandwidthTestRunning {
     margin: 10px 0;
     padding: 10px;
+    width: calc(100% - 22px);
     text-align: center;
     font-style: italic;
     font-weight: bold;
