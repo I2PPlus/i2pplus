@@ -64,6 +64,7 @@ import net.i2p.util.RandomSource;
 public class LeaseSet extends DatabaseEntry {
     protected Destination _destination;
     protected PublicKey _encryptionKey;
+    // The revocation key for LS1, null for LS2 except blinded key for encrypted LS2
     protected SigningPublicKey _signingKey;
     // Keep leases in the order received, or else signature verification will fail!
     protected final List<Lease> _leases;
@@ -162,13 +163,14 @@ public class LeaseSet extends DatabaseEntry {
     /**
      *  The revocation key.
      *  Undeprecated as of 0.9.38, used for the blinded key in EncryptedLeaseSet.
+     *  @return the revocation key for LS1, null for LS2 except blinded key for encrypted LS2
      */
     public SigningPublicKey getSigningKey() {
         return _signingKey;
     }
 
     /**
-     *  The revocation key. Unused.
+     *  The revocation key. Unused except for encrypted LS2.
      *  Must be the same type as the Destination's SigningPublicKey.
      *  @throws IllegalArgumentException if different type
      */
@@ -264,35 +266,33 @@ public class LeaseSet extends DatabaseEntry {
 
     /**
      * Verify that the signature matches the lease set's destination's signing public key.
-     * OR the included revocation key.
+     * As of 0.9.47, revocation is not checked.
      *
      * @return true only if the signature matches
      */
     @Override
     public boolean verifySignature() {
-        if (super.verifySignature())
-            return true;
+        return super.verifySignature();
 
         // Revocation unused (see above)
-        boolean signedByRevoker = DSAEngine.getInstance().verifySignature(_signature, getBytes(), _signingKey);
-        return signedByRevoker;
+        //boolean signedByRevoker = DSAEngine.getInstance().verifySignature(_signature, getBytes(), _signingKey);
+        //return signedByRevoker;
     }
 
     /**
      * Verify that the signature matches the lease set's destination's signing public key.
-     * OR the specified revocation key.
+     * As of 0.9.47, revocation is not checked.
      *
      * @deprecated revocation unused
      * @return true only if the signature matches
      */
     @Deprecated
     public boolean verifySignature(SigningPublicKey signingKey) {
-        if (super.verifySignature())
-            return true;
+        return super.verifySignature();
 
         // Revocation unused (see above)
-        boolean signedByRevoker = DSAEngine.getInstance().verifySignature(_signature, getBytes(), signingKey);
-        return signedByRevoker;
+        //boolean signedByRevoker = DSAEngine.getInstance().verifySignature(_signature, getBytes(), signingKey);
+        //return signedByRevoker;
     }
 
     /**
@@ -430,8 +430,9 @@ public class LeaseSet extends DatabaseEntry {
         if (_signature != null)
             buf.append("\n* Signature: ").append(_signature);
         buf.append("\n* Leases: ").append(getLeaseCount());
-        for (int i = 0; i < getLeaseCount(); i++)
+        for (int i = 0; i < getLeaseCount(); i++) {
             buf.append(getLease(i));
+        }
         return buf.toString();
     }
 
