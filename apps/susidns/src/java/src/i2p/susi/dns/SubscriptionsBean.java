@@ -50,7 +50,7 @@ public class SubscriptionsBean extends BaseBean
 	// private static final String DEFAULT_SUB = "http://i2p-projekt.i2p/hosts.txt";
 	private static final String DEFAULT_SUB = "http://stats.i2p/cgi-bin/newhosts.txt" + "\n" +
 											  "http://inr.i2p/export/alive-hosts.txt" + "\n" +
-											  "http://no.i2p/export/alive-hosts.txt" + "\n" +
+											  "http://skank.i2p/hosts.txt" + "\n" +
 											  "http://identiguy.i2p/hosts.txt";
 
 	public String getFileName()

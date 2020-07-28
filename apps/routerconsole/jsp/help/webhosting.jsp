@@ -67,7 +67,7 @@
 
 <h3>Registering an I2P Domain</h3>
 
-<p>You may wish to register your website with an I2P Domain registrar such as <a href="http://stats.i2p/i2p/addkey.html" target="_blank" class="sitelink">stats.i2p</a> or <a href="http://no.i2p/" target="_blank" class="sitelink">no.i2p</a>. Some registration sites require the full B64 destination address, which you should copy in full from the <i>Local destination</i> section on the <a href="http://127.0.0.1:7657/i2ptunnel/edit?tunnel=3">Tunnel Manager Configuration page</a>.</p>
+<p>You may wish to register your website with an I2P Domain registrar such as <a href="http://stats.i2p/i2p/addkey.html" target="_blank" class="sitelink">stats.i2p</a> or <a href="http://inr.i2p/" target="_blank" class="sitelink">inr.i2p</a>. Some registration sites require the full B64 destination address, which you should copy in full from the <i>Local destination</i> section on the <a href="http://127.0.0.1:7657/i2ptunnel/edit?tunnel=3">Tunnel Manager Configuration page</a>.</p>
 
 <p>If a <i>Registration Authentication</i> string is requested, you can find it on the <a href="http://127.0.0.1:7657/i2ptunnel/register?tunnel=3">Registration Authentication page</a> linked from the <a href="http://127.0.0.1:7657/i2ptunnel/edit?tunnel=3">Tunnel Manager Configuration page</a>.</p>
 
@@ -75,7 +75,7 @@
 
 <p>Alternatively, you can copy the <i>address helper link</i> for your domain, indicated either on the addressbook list page, or on the details page for your domain e.g. <a href="http://127.0.0.1:7657/susidns/details?h=i2p-projekt.i2p&book=router" target="_blank">details for i2p-projekt.i2p</a>, and paste the link where it's required to share it with others.</p>
 
-<p>Services such as <a href="http://identiguy.i2p/" target="_blank" class="sitelink">Identiguy's eepsite status list</a> and <a href="http://no.i2p/browse/" target="_blank" class="sitelink">no.i2p's active host list</a> may direct visitors to your site. To actively promote your site on the network, there are various options you could try, for example:</p>
+<p>Services such as <a href="http://identiguy.i2p/" target="_blank" class="sitelink">Identiguy's eepsite status list</a> and <a href="http://notbob.i2p/" target="_blank" class="sitelink">notbob's site uptime monitor</a> may direct visitors to your site. To actively promote your site on the network, there are various options you could try, for example:</p>
 
 <ul>
 <li>Post an announcement on one of the I2P forums e.g. <a href="http://i2pforum.i2p/" target="_blank" class="sitelink">I2P forum</a> or <a href="http://def3.i2p" target="_blank" class="sitelink">Dancing Elephants</a></li>

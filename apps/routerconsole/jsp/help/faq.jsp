@@ -48,7 +48,6 @@
 
 <ul>
 <li><code>http://stats.i2p/cgi-bin/newhosts.txt</code></li>
-<li><code>http://no.i2p/export/alive-hosts.txt</code></li>
 <li><code>http://inr.i2p/export/alive-hosts.txt</code></li>
 <li><code>http://identiguy.i2p/hosts.txt</code></li>
 <li><code>http://skank.i2p/hosts.txt</code></li>
