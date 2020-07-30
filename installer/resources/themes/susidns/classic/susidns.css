@@ -61,7 +61,14 @@ table.book td {
 
 table.book th {
     padding: 6px 5px 4px !important;
+}
+
+#host_list th.names, #host_list th.destinations {
     text-align: left;
+}
+
+#host_list th.names {
+    padding-left: 39px !important;
 }
 
 .book th:last-child {
@@ -1203,6 +1210,14 @@ input[type="checkbox"][disabled]:checked, input[type="radio"][disabled]:checked,
 #hostNotes .accept {
     margin-top: 4px;
     float: right;
+}
+
+#hostNotes textarea + .accept {
+    display: none;
+}
+
+#hostNotes textarea:focus + .accept {
+    display: inline-block;
 }
 
 #paginate {
