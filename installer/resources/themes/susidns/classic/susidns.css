@@ -60,12 +60,12 @@ table.book td {
 }
 
 table.book th {
-    padding-left: 5px;
+    padding: 6px 5px 4px !important;
     text-align: left;
 }
 
 .book th:last-child {
-    background: url(/themes/console/images/buttons/delete.png) center center no-repeat, linear-gradient(to bottom, #fff 50%, #eff2ff 50%);
+    background: url(/themes/console/images/buttons/delete.png) center calc(50% + 2px) no-repeat, linear-gradient(to bottom, #fff 50%, #eff2ff 50%);
 }
 
 table.book tr:hover textarea {
@@ -316,28 +316,12 @@ li {
     background: #ffd;
 }
 
-p.messages {
-    margin: -6px -11px 5px;
-    padding: 15px 15px 15px 45px;
-    line-height: 125%;
-    border: 1px solid #aaafce;
-    border: 1px solid #aaafce;
-    box-shadow: inset 0 0 0 1px #ff9;
-    background: #ffe;
-    background: #ffe url(/themes/console/images/info/infohelp.png) 8px center no-repeat;
-}
-
-.iframed p.messages {
-    border-left: none;
-    border-right: none;
-}
-
 p.help {
-    padding: 15px 15px 15px 45px;
     margin: 0;
-    background: #ffe url(/themes/console/images/info/infohelp.png) 8px center no-repeat;
+    padding: 15px 15px 15px 45px;
     line-height: 120%;
-    background-size: 28px 28px;
+    background: #ffe url(/themes/console/images/svg/infohelp.svg) 8px center no-repeat;
+    background-size: 32px 32px;
 }
 
 .iframed p.help {
@@ -506,7 +490,6 @@ img[src*="imagegen"] {
     height: 256px;
     border: 1px solid #ddd;
     border-radius: 4px;
-    filter: drop-shadow(0 0 3px #ccc);
 }
 
 img[src="/imagegen/id?s=256&c="], img[src="/imagegen/id?s=20&c="] {
@@ -889,7 +872,7 @@ p.book {
 /* end host details */
 
 .names img {
-    margin: 3px 10px 3px 1px;
+    margin: 1px 10px 1px -2px;
     padding: 1px;
     width: 20px;
     height: 20px;
@@ -935,10 +918,9 @@ p.book {
     font-weight: bold;
 }
 
-#host_list .b32link, #host_list .helper {
-    width: 35px;
-    width: 8%;
+#host_list td.b32link, #host_list td.helper {
     padding: 0 5px !important;
+    width: 8%;
     white-space: nowrap;
     text-align: center;
 }
@@ -1008,12 +990,13 @@ p.book {
 }
 
 #host_list .destaddress {
-    overflow: auto !important;
+    margin: 0 8px;
+    padding: 3px !important;
     white-space: nowrap;
+    overflow: auto !important;
     font-family: "Droid Sans Mono", "Noto Mono", "Lucida Console", "DejaVu Sans Mono", monospace !important;
     font-weight: normal;
     color: #555;
-    padding: 3px !important;
     -webkit-user-select: all;
     -moz-user-select: all;
     user-select: all;
@@ -1025,11 +1008,10 @@ p.book {
 }
 
 #host_list .destaddress:not(old):focus {
+    margin-right: 0;
     padding-top: 0;
     padding-bottom: 0;
-    overflow: auto !important;
     text-overflow: clip;
-    margin: 1px 0 -1px;
 }
 
 /* end hostname list */
@@ -1038,10 +1020,13 @@ p.book {
     background: #ffe;
 }
 
-td.destinations {
-    max-width: 50px !important;
+td.b32link, td.helper, td.destinations {
     border-left: 1px solid #ced1e3;
     border-right: 1px solid #ced1e3;
+}
+
+td.destinations {
+    max-width: 50px !important;
 }
 
 /* responsive layout */
@@ -1315,7 +1300,7 @@ input[disabled] {
 #navi a {
     margin: -4px -3px !important;
     padding: 5px 12px 4px !important;
-    background: linear-gradient(to bottom, #fff 50%, #effafb 50%) !important;
+    background: linear-gradient(to bottom, #fff 50%, #eaebff 50%) !important;
     text-transform: uppercase;
     letter-spacing: 0.08em;
     flex-grow: 1;
@@ -1457,5 +1442,59 @@ input[disabled] {
 
 #filtered, #results {
     font-size: 9.5pt;
+}
+}
+
+div#messages {
+    margin: 0 3%;
+    padding: 5px 20px;
+    top: 0;
+    left: 0;
+    right: 0;
+    position: fixed;
+    z-index: 999;
+    line-height: 150%;
+    text-align: center;
+    border-radius: 0 0 4px 4px;
+    box-shadow: 0 1px 2px rgba(100,100,200,0.7);
+    background: #113 url(/themes/snark/light/images/delete.png) right 8px top 5px no-repeat !important;
+    background-size: 16px 16px !important;
+    cursor: crosshair;
+    animation: 2s hide-up 10s ease-out forwards;
+}
+
+div#messages:hover {
+    background: #113 url(/themes/snark/light/images/delete_hover.png) right 8px top 5px no-repeat !important;
+    background-size: 16px 16px !important;
+}
+
+.iframed div#messages {
+    border: none;
+}
+
+div#messages:empty {
+    display: none;
+}
+
+#messages p {
+    font-size: 9pt;
+    letter-spacing: 2px;
+    color: #ff9;
+    text-shadow: 0 1px 1px #000;
+}
+
+p.messages {
+    color: #fff;
+    text-align: center;
+    font-weight: bold;
+}
+
+@keyframes hide-up {
+from {
+    margin-top: 0
+}
+
+to {
+    margin-top: -300px;
 }
 }
