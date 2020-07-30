@@ -189,6 +189,7 @@ input:focus::placeholder {
 #sbs h3 a {
     margin-right: 5px;
     float: right;
+    font-size: 80%;
 }
 
 #ovrvw #content {
@@ -337,7 +338,8 @@ p.help {
 }
 
 p.book, #messages + p {
-    background: url(/themes/susidns/images/addressbook.png) center left no-repeat;
+    background: url(/themes/console/images/svg/addressbook.svg) center left no-repeat;
+    background-size: 32px 32px;
     padding: 10px 10px 10px 38px;
 }
 
@@ -504,16 +506,15 @@ img[src="/imagegen/id?s=256&c="], img[src="/imagegen/id?s=20&c="] {
 }
 
 .illustrate {
-    margin: 10px auto 20px;
+    margin: 15px auto 20px;
     padding: 10px;
     max-width: 700px;
     height: auto;
-    border: 1px solid #56b;
+    border: 1px solid #aaafce;
     border-radius: 4px;
     font-size: 10pt;
     text-align: center;
-    opacity: 0.9;
-    box-shadow: inset 0 0 1px #ccf, 0 0 1px #77a;
+    box-shadow: inset 0 0 1px #ccf;
     background: #f8f8ff;
     background: linear-gradient(rgba(250,250,255,0.5), rgba(246,246,255,0.5)), url(/themes/console/classic/images/bg2.png);
     background-size: 100% 100%, 120px 120px;
@@ -521,10 +522,22 @@ img[src="/imagegen/id?s=256&c="], img[src="/imagegen/id?s=20&c="] {
 }
 
 .illustrate:hover {
-    opacity: 1;
     border: 1px solid #337;
     background: #fff;
     transition: ease all 0.2s;
+}
+
+.illustrate text:not(:hover) {
+    fill: #41444d;
+}
+
+.illustrate .a, .illustrate .subs {
+    stroke: #41444d;
+    stroke-width: 1px;
+}
+
+.illustrate .a {
+    filter: none;
 }
 
 _:-ms-lang(x), img.illustrate {
@@ -783,13 +796,14 @@ textarea[name="config"], textarea[name="content"] {
 /* page titles */
 
 .headline h3 {
-    padding: 10px 5px 10px 40px;
-    background: url(/themes/susidns/images/addressbook.png) 10px center no-repeat;
-    background: url(/themes/susidns/images/addressbook.png) 10px center no-repeat, linear-gradient(to bottom, #fff 50%, #eff2ff 50%);
-    font-size: 12pt;
-    text-transform: uppercase;
-    letter-spacing: 0.08em;
+    padding: 10px 5px 10px 36px;
     word-spacing: 0.1em;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+    font-size: 12pt;
+    background: url(/themes/console/images/svg/addressbook.svg) 10px center no-repeat;
+    background: url(/themes/console/images/svg/addressbook.svg) 10px center no-repeat, linear-gradient(to bottom, #fff 50%, #eff2ff 50%);
+    background-size: 22px 22px;
 }
 
 .headline#subscriptions h3 {
@@ -798,8 +812,9 @@ textarea[name="config"], textarea[name="content"] {
 }
 
 .headline#configure h3 {
-    background: url(/themes/susidns/images/configure_24.png) 10px center no-repeat;
-    background: url(/themes/susidns/images/configure_24.png) 10px center no-repeat, linear-gradient(to bottom, #fff 50%, #eff2ff 50%);
+    background: url(/themes/console/images/svg/configure.svg) 10px center no-repeat;
+    background: url(/themes/console/images/svg/configure.svg) 10px center no-repeat, linear-gradient(to bottom, #fff 50%, #eff2ff 50%);
+    background-size: 22px 22px;
 }
 
 .headline h4 {
@@ -1093,13 +1108,8 @@ h3, h3 a {
     min-width: 16px !important;
 }
 
-/*#filter span {
-    font-size: 11pt !important;
-    min-width: 400px !important;
-}*/
-
 .illustrate {
-    margin-top: 15px;
+    margin-top: 25px;
 }
 }
 
