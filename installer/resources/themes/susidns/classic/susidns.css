@@ -894,13 +894,15 @@ p.book {
     width: 20px;
     height: 20px;
     vertical-align: middle;
+}
+
+.names img[src^="/imagegen"] {
     border: 1px solid #aaafce;
     border-radius: 2px;
     background: #fff;
 }
 
 .names img:hover, .names a:focus img {
-    box-shadow: 0 0 0 1px #f60;
     filter: drop-shadow(0 0 1px #f60) !important;
 }
 
@@ -933,9 +935,7 @@ p.book {
     font-weight: bold;
 }
 
-#host_list th:nth-child(2), #host_list td:nth-child(2),
-#host_list th:nth-child(3), #host_list td:nth-child(3),
-#host_list th:nth-child(4), #host_list td:nth-child(4) {
+#host_list .b32link, #host_list .helper {
     width: 35px;
     width: 8%;
     padding: 0 5px !important;
@@ -1003,31 +1003,8 @@ p.book {
     transform: rotate(45deg);
 }
 
-#host_list th:nth-child(4), #host_list td:nth-child(4) {
-    padding-right: 30px !important;
-}
-
-#host_list td:nth-child(4) a:not(old) {
+#host_list td.b32 a:not(old), #host_list td.helper a:not(old) {
     font-size: 0 !important;
-}
-
-/*#host_list td:nth-child(4) .addrhlpr a::after {
-    content: url(/themes/console/images/buttons/fullview.png);
-    text-align: center;
-    padding: 0 10px !important;
-    filter: drop-shadow(0 0 1px #555);
-    cursor: pointer;
-}*/
-
-#host_list td:nth-child(4) .addrhlpr a::after {
-    content: "";
-    width: 14px;
-    height: 14px;
-    background: #393;
-    text-align: center;
-    display: inline-block;
-    cursor: pointer;
-    border-radius: 50%;
 }
 
 #host_list .destaddress {

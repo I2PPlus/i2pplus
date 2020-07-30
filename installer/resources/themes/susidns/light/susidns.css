@@ -923,9 +923,7 @@ tr:hover .destaddress {
     font-weight: bold;
 }
 
-#host_list th:nth-child(2), #host_list td:nth-child(2),
-#host_list th:nth-child(3), #host_list td:nth-child(3),
-#host_list th:nth-child(4), #host_list td:nth-child(4) {
+#host_list .b32link, #host_list .helper {
     width: 35px;
     width: 8%;
     padding: 0 5px !important;
@@ -933,49 +931,27 @@ tr:hover .destaddress {
     text-align: center;
 }
 
-#host_list td:nth-child(2) a:not(old) {
+#host_list td.b32link a:not(old), #host_list td.helper a:not(old) {
     font-size: 0 !important;
 }
 
-#host_list td:nth-child(2) a::after {
+#host_list td.b32link a::after {
     content: url(/themes/console/images/buttons/link.png);
     text-align: center;
     filter: drop-shadow(0 0 1px #555);
     cursor: pointer;
 }
 
-#host_list td:nth-child(3) a:not(old) {
-    font-size: 0 !important;
-}
-
-#host_list td:nth-child(3) a::after {
+#host_list td.helper a::after {
     content: url(/themes/console/images/buttons/helper.png);
     filter: drop-shadow(0 0 1px #555);
     cursor: pointer;
 }
 
-/*
-#host_list th:nth-child(4), #host_list td:nth-child(4) {
-    padding-right: 30px !important;
-}
-*/
-
-#host_list td:nth-child(4) a:not(old) {
-    font-size: 0 !important;
-}
-
-#host_list td:nth-child(4) .addrhlpr a::after {
-    content: url(/themes/console/images/buttons/fullview.png);
-    text-align: center;
-    padding: 0 10px !important;
-    filter: drop-shadow(0 0 1px #555);
-    cursor: pointer;
-}
-
-#host_list td:nth-child(2) a:hover, #host_list td:nth-child(3) a:hover, #host_list td:nth-child(4) a:hover,
+/*#host_list td:nth-child(2) a:hover, #host_list td:nth-child(3) a:hover, #host_list td:nth-child(4) a:hover,
 #host_list td:nth-child(2) a:focus, #host_list td:nth-child(3) a:focus, #host_list td:nth-child(4) a:focus {
     filter: drop-shadow(0 0 1px #f60);
-}
+}*/
 
 #host_list .destaddress:focus {
     background: #ffd;
@@ -1227,7 +1203,7 @@ img[src="/imagegen/id?s=256&c="], img[src="/imagegen/id?s=20&c="] {
 
 /* end host list identicons */
 
-.names a[href^="http"], .names a[href^="details"], .helper a {
+.names a[href^="http"], .helper a {
     display: inline-block;
     width: 100%;
 }
@@ -1249,8 +1225,6 @@ img[src="/imagegen/id?s=256&c="], img[src="/imagegen/id?s=20&c="] {
 div#book, #emptybook {
     margin: -12px 0 -1px;
     padding: 0 0 60px;
-/*    border: 1px solid #7e7fb9;
-    box-shadow: inset 0 0 0 1px #fff;*/
     background: #efefff;
     background: repeating-linear-gradient(135deg, rgba(255,255,255,0.5) 2px, rgba(220, 220, 255, 0.5) 3px, #fff 4px) #fafaff;
 }
@@ -1692,9 +1666,7 @@ input.export {
     margin-top: 8px;
 }
 
-#host_list th:nth-child(2), #host_list td:nth-child(2),
-#host_list th:nth-child(3), #host_list td:nth-child(3),
-#host_list th:nth-child(4), #host_list td:nth-child(4) {
+#host_list .b32link, #host_list .helper {
     padding: 0 20px;
     width: 6%;
 }
