@@ -3501,9 +3501,10 @@ div.error {
 }
 
 div.notice {
-    padding: 10px 10px 10px 0 !important;
     margin: 0;
-    background: url(/themes/console/images/info/infohelp.png) 15px center no-repeat;
+    padding: 10px 10px 10px 0 !important;
+    background: url(/themes/console/images/svg/infohelp.svg) 15px center no-repeat;
+    background-size: 28px 28px;
 }
 
 .notice ul, .notice li {
@@ -3869,7 +3870,6 @@ td.optionsave[colspan="2"] {
 td.infohelp, p.infohelp, td.infowarn, p.infowarn, p#upnpstatus, p#gatherstats, p#debugmode, p.sybilinfo, p#pluginconfigtext {
     padding: 15px 15px 15px 55px !important;
     border: 1px solid #aaafce;
-    background: #fff url(/themes/console/images/info/infohelp.png) 15px center no-repeat;
     background: #fff url(/themes/console/images/svg/infohelp.svg) 15px center no-repeat;
     background-size: 28px 28px !important;
     white-space: normal !important;
@@ -3881,7 +3881,6 @@ td.infohelp, p.infohelp, td.infowarn, p.infowarn, p#upnpstatus, p#gatherstats, p
 }
 
 td.infowarn, p.infowarn {
-    background: #fff url(/themes/console/images/info/infowarn.png) 15px center no-repeat !important;
     background: #fff url(/themes/console/images/svg/infowarn.svg) 15px center no-repeat !important;
     background-size: 28px 28px !important;
 }
@@ -4889,12 +4888,11 @@ form[action="graphs"] input[type="text"] {
 }
 
 #graphs td.infohelp {
-    border: none;
-    border-right: none;
-    background-size: 20px 20px !important;
     padding: 5px 5px 5px 40px !important;
-    background: url(/themes/console/images/info/infohelp.png) 15px center no-repeat #f1f3ff;
     text-align: left;
+    border: none;
+    background: url(/themes/console/images/svg/infohelp.svg) 15px center no-repeat #f1f3ff;
+    background-size: 20px 20px !important;
 }
 
 #graphs form input, #graphs form select {
