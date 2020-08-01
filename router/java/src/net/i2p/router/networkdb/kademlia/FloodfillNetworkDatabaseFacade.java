@@ -74,7 +74,7 @@ public class FloodfillNetworkDatabaseFacade extends KademliaNetworkDatabaseFacad
         _context.statManager().createRateStat("netDb.failedAttemptedPeers", "Number of peers we sent a search to that failed", "NetworkDatabase", rate);
         _context.statManager().createRateStat("netDb.successPeers", "Number of peers we sent a search to that succeeded", "NetworkDatabase", rate);
         _context.statManager().createRateStat("netDb.failedPeers", "Number of peers failing to respond to a NetDb lookup", "NetworkDatabase", rate);
-        _context.statManager().createRateStat("netDb.searchCount", "Total number of searches sent", "NetworkDatabase", new long[] { 10*60*1000l, rate);
+        _context.statManager().createRateStat("netDb.searchCount", "Total number of searches sent", "NetworkDatabase", rate);
         _context.statManager().createRateStat("netDb.failedRetries", "Number of additional queries for a failed Iterative search", "NetworkDatabase", rate);
         _context.statManager().createRateStat("netDb.successRetries", "Number of additional queries for a successful Iterative search", "NetworkDatabase", rate);
         _context.statManager().createRateStat("netDb.searchMessageCount", "Total number of messages for all searches sent", "NetworkDatabase", rate);
