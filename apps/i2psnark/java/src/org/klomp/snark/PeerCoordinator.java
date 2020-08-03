@@ -185,7 +185,7 @@ class PeerCoordinator implements PeerListener
     // Randomize the first start time so multiple tasks are spread out,
     // this will help the behavior with global limits
     timer = new CheckEvent(_util.getContext(), new PeerCheckerTask(_util, this));
-    timer.schedule((CHECK_PERIOD / 2) + _random.nextInt((int) CHECK_PERIOD));
+    timer.schedule((CHECK_PERIOD * 8 / 2) + _random.nextInt((int) CHECK_PERIOD * 8));
 
     // we don't store the last-requested time, so just delay a random amount
     _commentsLastRequested.set(util.getContext().clock().now() - (COMMENT_REQ_INTERVAL - _random.nextLong(COMMENT_REQ_DELAY)));
