@@ -588,8 +588,8 @@ public class I2PSnarkUtil {
                         if (b != null) {
                             //Hash h = new Hash(b);
                             Hash h = Hash.create(b);
-                            if (_log.shouldLog(Log.INFO))
-                                _log.info("Using existing session for lookup of [" + ip + "]");
+                            if (_log.shouldLog(Log.DEBUG))
+                                _log.debug("Using existing session for lookup of [" + ip + "]");
                             try {
                                 return sess.lookupDest(h, 15*1000);
                             } catch (I2PSessionException ise) {

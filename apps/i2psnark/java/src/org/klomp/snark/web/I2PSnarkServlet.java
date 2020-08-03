@@ -2108,7 +2108,7 @@ public class I2PSnarkServlet extends BasicServlet {
                                "<td class=\"snarkTorrentStatus\"><b>" + txt +
                                "</b></td>\n<td class=\"snarkTorrentPeerCount\"><span class=\"right\">" + curPeers +
                                "</span>" + thinsp(noThinsp) + "<span class=\"left\">" + knownPeers + "</span>";
-                    if (upBps > 0) {
+                    if (upBps > 0 || curPeers > 0) {
                         snarkStatus = "active seeding complete";
                     } else {
                         snarkStatus = "inactive seeding complete";
@@ -2402,7 +2402,7 @@ public class I2PSnarkServlet extends BasicServlet {
                 Collections.sort(peers, new PeerComparator());
             for (Peer peer : peers) {
                 long t = peer.getInactiveTime();
-                if ((peer.getUploadRate() > 0 || peer.getDownloadRate() > 0) || t < 60 * 1000) {
+                if ((peer.getUploadRate() > 0 || peer.getDownloadRate() > 0) && t < 60 * 1000) {
                     snarkStatus = "active";
                     } else
                     snarkStatus = "inactive";
