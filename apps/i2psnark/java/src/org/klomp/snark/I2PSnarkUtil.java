@@ -298,17 +298,17 @@ public class I2PSnarkUtil {
             //    opts.setProperty("i2p.streaming.readTimeout", "120000");
             if (opts.getProperty("i2p.streaming.maxConnsPerMinute") == null)
 //                opts.setProperty("i2p.streaming.maxConnsPerMinute", "2"); // per peer max incoming connections
-                opts.setProperty("i2p.streaming.maxConnsPerMinute", "8");
+                opts.setProperty("i2p.streaming.maxConnsPerMinute", "24");
             if (opts.getProperty("i2p.streaming.maxTotalConnsPerMinute") == null)
 //                opts.setProperty("i2p.streaming.maxTotalConnsPerMinute", "8");
-                opts.setProperty("i2p.streaming.maxTotalConnsPerMinute", "256"); // total incoming connections
+                opts.setProperty("i2p.streaming.maxTotalConnsPerMinute", "1024"); // total incoming connections
             if (opts.getProperty("i2p.streaming.maxConnsPerHour") == null)
 //                opts.setProperty("i2p.streaming.maxConnsPerHour", "20");
                 opts.setProperty("i2p.streaming.maxConnsPerHour", "480");
             if (opts.getProperty("i2p.streaming.enforceProtocol") == null)
                 opts.setProperty("i2p.streaming.enforceProtocol", "true");
             if (opts.getProperty("i2p.streaming.disableRejectLogging") == null)
-                opts.setProperty("i2p.streaming.disableRejectLogging", "true");
+                opts.setProperty("i2p.streaming.disableRejectLogging", "false");
             if (opts.getProperty("i2p.streaming.answerPings") == null)
                 opts.setProperty("i2p.streaming.answerPings", "false");
             if (opts.getProperty(I2PClient.PROP_SIGTYPE) == null)

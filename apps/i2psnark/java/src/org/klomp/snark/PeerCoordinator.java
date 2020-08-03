@@ -72,7 +72,8 @@ class PeerCoordinator implements PeerListener
   private final Snark snark;
 
   // package local for access by CheckDownLoadersTask
-  final static long CHECK_PERIOD = 40*1000; // 40 seconds
+//  final static long CHECK_PERIOD = 40*1000; // 40 seconds
+  final static long CHECK_PERIOD = 5*1000; // 5 seconds
 //  final static int MAX_UPLOADERS = 8;
   final static int MAX_UPLOADERS = 16;
 //  public static final long MAX_INACTIVE = 8*60*1000;
