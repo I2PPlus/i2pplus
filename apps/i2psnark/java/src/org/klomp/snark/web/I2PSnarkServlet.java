@@ -2401,7 +2401,7 @@ public class I2PSnarkServlet extends BasicServlet {
             if (!showDebug)
                 Collections.sort(peers, new PeerComparator());
             for (Peer peer : peers) {
-                if (upBps > 0 || downBps > 0) {
+                if (peer.getUploadRate() > 0 || peer.getDownloadRate() > 0) {
                     snarkStatus = "active";
                     } else
                     snarkStatus = "inactive";
