@@ -597,20 +597,20 @@ public class I2PSnarkUtil {
                         }
                     }
                 }
-                if (_log.shouldLog(Log.INFO))
-                    _log.info("Using naming service for lookup of [" + ip + "]");
+                if (_log.shouldLog(Log.DEBUG))
+                    _log.debug("Using naming service for lookup of [" + ip + "]");
                 return _context.namingService().lookup(ip);
             }
-            if (_log.shouldLog(Log.INFO))
-                _log.info("Creating Destination for [" + ip + "]");
+            if (_log.shouldLog(Log.DEBUG))
+                _log.debug("Creating Destination for [" + ip + "]");
             try {
                 return new Destination(ip.substring(0, ip.length()-4)); // sans .i2p
             } catch (DataFormatException dfe) {
                 return null;
             }
         } else {
-            if (_log.shouldLog(Log.INFO))
-                _log.info("Creating Destination for [" + ip + "]");
+            if (_log.shouldLog(Log.DEBUG))
+                _log.debug("Creating Destination for [" + ip + "]");
             try {
                 return new Destination(ip);
             } catch (DataFormatException dfe) {
