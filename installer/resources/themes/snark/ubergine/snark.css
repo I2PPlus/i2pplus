@@ -5513,6 +5513,10 @@ td.snarkGraphicStatus img {
     margin-top: 1px;
 }
 
+th.snarkTorrentStatus:empty {
+    min-width: 124px !important;
+}
+
 th.snarkGraphicStatus {
     padding-left: 4px;
 }
