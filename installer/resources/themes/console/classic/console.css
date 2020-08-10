@@ -6224,7 +6224,8 @@ h3.stats {
 
 #netdbcountrylist img {
     margin-right: 5px;
-    text-align: right;
+    font-size: 80%;
+    text-align: center;
 }
 
 .sybil_distance th {
@@ -8454,6 +8455,10 @@ body, .main, .main td, .news p, #news p, .tab, .tab2, .main li b, .joblog li, .t
 button, input, select, textarea, .netdbentry th, .configtable th, .statlist a[name],
 .statlist b, .statlist li b, .statlist a[name]:hover, div.messages, th {
     font-size: 10pt !important;
+}
+
+body {
+    overflow-x: hidden;
 }
 
 .applabel a, #updateAvailable, code, tt, pre, #logs li, #routerlogs li, #servicelogs li {

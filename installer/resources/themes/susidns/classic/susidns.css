@@ -1007,6 +1007,10 @@ p.book {
     transform: rotate(45deg);
 }
 
+#host_list td:nth-child(3) a[href$="AAAA"]::after {
+  box-shadow: inset 0 0 0 1px #000, inset 0 0 0 2px #f00;
+}
+
 #host_list td.b32 a:not(old), #host_list td.helper a:not(old) {
     font-size: 0 !important;
 }
