@@ -584,7 +584,7 @@ h4.sb_info + hr + form {
     border-spacing: 0;
     border: 1px solid #89f;
     border-radius: 2px;
-    box-shadow: 0 0 1px #ccf;
+    box-shadow: 0 0 1px #e0e0eb;
     transition: ease border .7s;
 }
 
@@ -737,7 +737,7 @@ a:active #sb_bandwidthgraph {
     border-top: none;
     border-radius: 0 0 3px 3px;
     box-shadow: inset 0 0 0 1px #fff;
-    background: #ccf;
+    background: #e0e0eb;
     background: linear-gradient(to right, #ddf, #efefff 30%, #efefff 60%, #ddf);
     filter: drop-shadow(0 0 1px rgba(220,220,255,.7));
 }
@@ -2540,7 +2540,7 @@ p#tunnelconfig {
 }
 
 .graphspanel a img {
-    box-shadow: inset 0 0 0 1px #fff, 0 0 1px #ccf;
+    box-shadow: inset 0 0 0 1px #fff, 0 0 1px #e0e0eb;
     filter: none !important;
     white-space: nowrap;
 }
@@ -3309,8 +3309,8 @@ td {
     padding: 3px 5px;
     color: #33333f;
     vertical-align: middle;
-    border-top: 1px inset #ccf;
-    border-bottom: 1px inset #ccf;
+    border-top: 1px inset #e0e0eb;
+    border-bottom: 1px inset #e0e0eb;
 }
 
 #floodfillconfig tr:nth-child(2) td {
@@ -4024,7 +4024,7 @@ h3#browseronstart + p.infohelp {
     background: url(/themes/console/images/info/connect.png) 12px center no-repeat, linear-gradient(135deg, #fafaff, #f8f8ff);
     background-size: 28px 28px, 100% 100%;
     border-radius: 2px;
-    box-shadow: 0 0 1px #ccf;
+    box-shadow: 0 0 1px #e0e0eb;
 }
 
 p#enablefullstats, p#gatherstats {
@@ -6773,7 +6773,7 @@ p:empty { /* empty paragraph nuke */
     text-align: center;
     color: #41465f;
     border: 1px solid #8d8daa;
-    box-shadow: 0 0 1px #ccf;
+    box-shadow: 0 0 1px #e0e0eb;
     border-radius: 2px;
     background: #f2f2ff;
     background: linear-gradient(to right, #f2f2ff, #f8f8ff, #f2f2ff);
@@ -6897,6 +6897,8 @@ p:empty { /* empty paragraph nuke */
 #netdbcountrylist img {
     margin-right: 5px;
     text-align: right;
+    border: 1px solid #d0d0db;
+    border-radius: 3px;
 }
 
 @supports (scroll-behavior: auto) {
@@ -9159,7 +9161,7 @@ select[name="newlogclass"] {
     background: linear-gradient(135deg, #fafaff, rgba(240,240,255,.5));
     border: 1px solid #99b;
     border-radius: 2px;
-    box-shadow: inset 0 0 0 1px #fff, 0 0 1px #ccf;
+    box-shadow: inset 0 0 0 1px #fff, 0 0 1px #e0e0eb;
 }
 
 #routerinfo code {
@@ -9211,7 +9213,7 @@ select[name="newlogclass"] {
     padding: 0;
     margin: 10px -5px 0;
     border: none;
-    box-shadow: 0 0 1px #ccf !important;
+    box-shadow: 0 0 1px #e0e0eb !important;
     filter: none;
 }
 
@@ -9238,7 +9240,7 @@ select[name="newlogclass"] {
 
 #routerinfo td:nth-child(2):not([colspan]) {
     white-space: nowrap;
-    border-right: 1px inset #ccf;
+    border-right: 1px inset #e0e0eb;
 }
 
 .homelinkedit th, .homelinkedit td {
@@ -10980,7 +10982,7 @@ input[type="radio"]:not(:checked), input[type="checkbox"]:not(:checked) {
     box-sizing: border-box;
     -moz-appearance: none;
     -webkit-appearance: none;
-    filter: drop-shadow(0 0 1px #ccf) !important;
+    filter: drop-shadow(0 0 1px #e0e0eb) !important;
     will-change: transform;
 }
 
@@ -11712,12 +11714,11 @@ th.options .optbox {
 
 /* end chrome overrides */
 
-/*@supports (scroll-behavior: auto) and (text-justify: auto) and (-moz-appearance: none) {*/
 .main#tunnels .cells, #tunnel_defs td, .cells, #profilelist td, #profile_defs td, #floodfills td, #debug td, #jardump td, #jobstats td,
 #eventlog td, #webappconfig td, #tunnelconfig td, #sidebarconf td, #configstats td, #loggingoptions td, #addkeyring td, .homelinkedit td,
 #clientconfig td, .netdbentry td, #netdblookup td, #peerdefs td, #help td:not(.infohelp):not(.infowarn), #pluginconfig td, #thresholds td, #leasesetdebug td, #enviro td, #routerinformation td {
     box-shadow: inset 0 0 0 1px #fff !important;
-    border-left: 1px solid #e0e0eb !important;
+    border-left: 1px solid #e0e0eb;
     background: rgba(240,240,255,.4);
 }
 
@@ -11729,8 +11730,23 @@ th.options .optbox {
     box-shadow: inset 0 0 0 1px #ffe !important;
     transition: ease all .05s;
 }
-/*}
-*/
+
+.main tr, .main td:first-child, #netdboverview td:last-child table {
+    border-left: 1px solid #8d8daa !important;
+}
+
+.main tr, .main td:last-child, #netdboverview td:first-child table {
+    border-right: 1px solid #8d8daa !important;
+}
+
+#netdboverview table tr, #netdboverview table td:first-child, .sybil_addresses tr, .sybil_addresses td:first-child {
+    border-left: none !important;
+}
+
+#netdboverview table tr, #netdboverview table td:last-child, .sybil_addresses tr, .sybil_addresses td:last-child {
+    border-right: none !important;
+}
+
 /* /events */
 
 #events h3 {
@@ -12738,7 +12754,7 @@ i {
 }
 
 .encDests tr:last-child td {
-    border-top: #ccf !important;
+    border-top: #e0e0eb !important;
 }
 
 .encDests th:first-child, .encDests td:first-child,
