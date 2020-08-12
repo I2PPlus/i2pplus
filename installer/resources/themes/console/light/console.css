@@ -11739,11 +11739,11 @@ th.options .optbox {
     border-right: 1px solid #8d8daa !important;
 }
 
-.main #netdboverview table tr, .main #netdboverview table td:first-child, .sybil_addresses tr, .sybil_addresses td:first-child {
+.main #netdboverview table tr, .main #netdboverview table td:first-child, .sybil_addresses tr, .sybil_addresses td:first-child, .main #bugreports td:first-child {
     border-left: none !important;
 }
 
-.main #netdboverview table tr, .main #netdboverview table td:last-child, .sybil_addresses tr, .sybil_addresses td:last-child {
+.main #netdboverview table tr, .main #netdboverview table td:last-child, .sybil_addresses tr, .sybil_addresses td:last-child, .main #bugreports td:last-child {
     border-right: none !important;
 }
 
