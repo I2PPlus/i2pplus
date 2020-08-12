@@ -208,7 +208,7 @@ public class I2Ping extends I2PTunnelClientBase {
             "Options:\n" +
             "     -c (require 5 consecutive pings to report success)\n" +
             "     -m maxSimultaneousPings (default 10)\n" +
-            "     -n numberOfPings (default 3)\n" +
+            "     -n numberOfPings (default 10)\n" +
             "     -t timeout (ms, default 30000)\n" +
             "     -f fromPort\n" +
             "     -p toPort";
