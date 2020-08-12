@@ -478,7 +478,7 @@ input[type="hidden"], input.default {
 
 h2, h3 {
     padding: 9px 10px 7px 30px;
-    border: 1px solid #7778bf;
+    border: 1px solid #8d8daa;
     border-radius: 2px 2px 0 0;
     background: #fcfcff;
     background: linear-gradient(to bottom, #fcfcff 50%, rgba(255,255,255,.6) 50%, rgba(240,240,255,.4)), linear-gradient(135deg, #fcfcff 5%, rgba(231, 231, 255, .8) 15%) #fff !important;
@@ -548,7 +548,7 @@ h2.error {
 .panel table {
     width: 100%;
     border-collapse: collapse;
-    border: 1px solid #7778bf;
+    border: 1px solid #8d8daa;
     margin: 0;
     background: repeating-linear-gradient(135deg, rgba(255,255,255,.5) 2px, rgba(240, 240, 255, .3) 3px, #fff 5px) #fff;
 }
@@ -564,8 +564,8 @@ th {
     background: linear-gradient(to bottom, #fcfcff 51%, #fafaff 51%, #f6f6ff 100%) !important;
     padding: 6px 5px;
     text-align: left;
-    border-top: 1px solid #7778bf;
-    border-bottom: 1px solid #7778bf;
+    border-top: 1px solid #8d8daa;
+    border-bottom: 1px solid #8d8daa;
     font-size: 9.5pt;
     color: #41465f;
 }
@@ -595,7 +595,7 @@ a:hover, a:focus, a:active, button:hover, button:focus, button:active, select:ho
 }
 
 td {
-    border-top: 1px inset #cfd1ff;
+    border-top: 1px solid #e0e0eb;
     vertical-align: middle;
     padding: 5px;
 }
@@ -611,17 +611,17 @@ td {
 td.infohelp {
     padding: 10px 10px 10px 34px !important;
     box-shadow: inset 0 0 0 1px #fff, inset 0 0 1px 1px #ddf;
-    border: 1px solid #7778bf;
+    border: 1px solid #8d8daa;
     background: url(/themes/console/images/info/infohelp.png) 8px center no-repeat;
     background-size: 20px 20px;
 }
 
-.tunnelConfig th:first-child, .tunnelConfig td:first-child {
-    border-left: 1px solid #7778bf;
+.tunnelconfig tr, .tunnelConfig th:first-child, .tunnelConfig td:first-child {
+    border-left: 1px solid #8d8daa !important;
 }
 
-.tunnelConfig th:last-child, .tunnelConfig td:last-child {
-    border-right: 1px solid #7778bf;
+.tunnelconfig tr, .tunnelConfig th:last-child, .tunnelConfig td:last-child {
+    border-right: 1px solid #8d8daa !important;
 }
 
 .tunnelConfig td {
@@ -640,7 +640,7 @@ td.infohelp {
 }
 
 .tunnelProperties td {
-    border-top: 1px inset #cfd1ff !important;
+    border-top: 1px solid #e0e0eb !important;
 }
 
 .tunnelProperties:hover td {
@@ -657,7 +657,7 @@ td.infohelp {
 
 .newTunnel {
     text-align: right;
-    border-top: 2px solid #7778bf !important;
+    border-top: 2px solid #8d8daa !important;
     padding: 7px !important;
     background: #fff;
 }
@@ -729,7 +729,7 @@ th.tunnelControl {
     background: #fff;
     background: linear-gradient(to bottom, #fafaff, #eef);
     background: linear-gradient(to bottom, #fafaff 50%, rgba(220,220,255,.3)), repeating-linear-gradient(135deg, rgba(255,255,255,.5) 2px, rgba(221, 221, 255, .3) 3px, #fff 4px) !important;
-    border-top: 1px solid #7778bf !important;
+    border-top: 1px solid #8d8daa !important;
     box-shadow: inset 0 0 0 1px #fff;
 }
 
@@ -1106,6 +1106,7 @@ td.tunnelDescription, .tunnelInfo + .tunnelInfo .tunnelDestination {
 }
 
 td.tunnelDestination, td.tunnelDescription {
+    border-bottom: 1px solid #8d8daa;
     background: linear-gradient(to right, #fafaff, rgba(255,255,255,.1) 50%, #eef);
 }
 
@@ -1490,22 +1491,22 @@ tr {
 
 /* end chrome overrides */
 
-@supports (scroll-behavior: auto) {
+/*@supports (scroll-behavior: auto) {
 .tunnelConfig td:not(.infohelp), #registration table:first-of-type tr:nth-child(n+2) td, #registration tr:nth-child(n+15) td,
 #wizardPanel td:not(.infohelp), .tunnelProperties td, #ssl td:not(.infohelp) {
     box-shadow: inset 0 0 0 1px #fff !important;
-    border-left: 1px inset #ddf !important;
+    border-left: 1px solid #e0e0eb !important;
     background: rgba(240,240,255,.4);
 }
 
 .tunnelProperties td {
-    border-bottom:  1px inset #cfd1ff !important;
+    border-bottom:  1px solid #e0e0eb !important;
 }
 
 .tunnelProperties:hover td {
     box-shadow: inset 0 0 0 1px #ffe !important;
 }
-}
+}*/
 
 #tunnelListPage th:nth-child(n+2), .tunnelProperties td:nth-child(n+2) {
     text-align: center;
@@ -1715,19 +1716,19 @@ select[disabled], select[disabled]:hover, select[disabled]:focus, select[disable
 }
 
 #tunnelOpts table tr:first-child td {
-    border-top: none;
+    border-top: none !important;
 }
 
 #tunnelOpts table tr:last-child td {
-    border-bottom: none;
+    border-bottom: none !important;
 }
 
 #tunnelOpts table td:first-child {
-    border-left: none;
+    border-left: none !important;
 }
 
 #tunnelOpts table td:last-child {
-    border-right: none;
+    border-right: none !important;
 }
 
 /* end server tunnel options */
