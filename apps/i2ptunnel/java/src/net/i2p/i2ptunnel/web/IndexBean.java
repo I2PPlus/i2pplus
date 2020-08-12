@@ -419,9 +419,9 @@ public class IndexBean {
             if (iport == 0)
                 return "<font color=\"red\">" + _t("Invalid port") + ' ' + port + "</font>";
             if (iport < 1024)
-                return "<font color=\"red\">" +
+                return "<font color=\"red\" title=\"" +
                        _t("Warning - ports less than 1024 are not recommended") +
-                       ": " + port + "</font>";
+                       "\">" + port + "</font>";
             // dup check, O(n**2)
             List<TunnelController> controllers = _group.getControllers();
             String ifc = tun.getListenOnInterface();
