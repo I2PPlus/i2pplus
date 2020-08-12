@@ -208,7 +208,7 @@ public class I2Ping extends I2PTunnelClientBase {
             "ping <opts> -h (pings all hosts in hosts.txt in current directory)\n" +
             "ping <opts> -l <destlistfile> (pings a list of hosts in a file)\n" +
             "Options:\n" +
-            "     -c (require 5 consecutive pings to report success)\n" +10
+            "     -c (require 5 consecutive pings to report success)\n" +
             "     -m maxSimultaneousPings (default 16)\n" +
             "     -n numberOfPings (default 10)\n" +
             "     -t timeout (ms, default 10000)\n" +
