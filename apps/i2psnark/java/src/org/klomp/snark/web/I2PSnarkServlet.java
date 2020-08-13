@@ -226,6 +226,9 @@ public class I2PSnarkServlet extends BasicServlet {
             setHTMLHeaders(resp, cspNonce, false);
             PrintWriter out = resp.getWriter();
             out.write("<!DOCTYPE HTML>\n");
+            // selected theme inserted here
+            out.write(HEADER_A + _themePath + HEADER_B + "\n");
+            out.write(HEADER_A + _themePath + HEADER_Z + "\n"); // optional override.css for version-persistent user edits
             writeMessages(out, false, peerString);
             boolean canWrite;
             synchronized(this) {
@@ -365,7 +368,12 @@ public class I2PSnarkServlet extends BasicServlet {
         out.write("<script type=\"text/javascript\" src=\"/js/iframeResizer/iframeResizer.contentWindow.js?" + CoreVersion.VERSION + "\" id=\"iframeResizer\"></script>\n");
         out.write("</head>\n" + "<body class=\"" + _manager.getTheme() + " lang_" + lang + "\">\n" + "<center>");
         List<Tracker> sortedTrackers = null;
+/*
+        long now = System.currentTimeMillis();
+        String time = String.valueOf(now);
+*/
         if (isConfigure) {
+            // out.write("<div class=\"snarknavbar\" id=\"top\">\n<a href=\"" + _contextPath + "/?t=" + time + "\" title=\"");
             out.write("<div class=\"snarknavbar\" id=\"top\">\n<a href=\"" + _contextPath + "/\" title=\"");
             out.write(_t("Torrents"));
             out.write("\" class=\"snarkNav nav_main\">");
@@ -389,9 +397,11 @@ public class I2PSnarkServlet extends BasicServlet {
                 out.write("<a href=\"http://i2pforum.i2p/viewforum.php/?f=12\" class=\"snarkNav nav_forum\" target=\"_blank\">");
                 out.write(_t("Forum"));
                 out.write("</a>\n");
+/*
                 out.write("<a href=\"http://anodex.i2p/\" class=\"snarkNav nav_tracker\" target=\"_blank\">");
                 out.write("Anodex");
                 out.write("</a>\n");
+*/
                 out.write("<a href=\"http://torrents.fazanka.i2p/\" class=\"snarkNav nav_tracker\" target=\"_blank\">");
                 out.write("Fazanka");
                 out.write("</a>");
@@ -460,7 +470,7 @@ public class I2PSnarkServlet extends BasicServlet {
         // "no-store, max-age=0" forces all our images to be reloaded on ajax refresh
         // add 'private' header to avoid being cached in anything other than browser
 //        resp.setHeader("Cache-Control", "max-age=86400, no-cache, private, must-revalidate");
-        resp.setHeader("Cache-Control", "max-age=86400, private");
+        resp.setHeader("Cache-Control", "max-age=86400, private, must-revalidate");
         resp.setHeader("Content-Security-Policy", "default-src 'self'; style-src 'self' 'unsafe-inline'; script-src 'self' 'unsafe-inline' 'nonce-" + cspNonce + "'; form-action 'self'; frame-ancestors 'self'; object-src 'none'; media-src '" + (allowMedia ? "self" : "none") + "'");
         // This header is broken, only takes a date. Not needed with 'max-age'.
         //resp.setDateHeader("Expires", 86400);
@@ -1196,6 +1206,11 @@ public class I2PSnarkServlet extends BasicServlet {
      *  @since 0.9.16
      */
     private static String getQueryString(HttpServletRequest req, String p, String st, String so) {
+/*
+        long now = System.currentTimeMillis();
+        String time = String.valueOf(now);
+*/
+        String url = req.getRequestURL().toString();
         StringBuilder buf = new StringBuilder(64);
         if (p == null) {
             p = req.getParameter("p");
@@ -1228,6 +1243,12 @@ public class I2PSnarkServlet extends BasicServlet {
                 buf.append("&amp;st=");
             buf.append(st);
         }
+/*
+        if ((p == null || !p.equals("")) && (so == null || so.equals("")) && (st == null || st.equals("")) || url.contains("/configure"))
+            buf.append("?time=").append(time);
+        else
+            buf.append("&amp;time=").append(time);
+*/
         return buf.toString();
     }
 
