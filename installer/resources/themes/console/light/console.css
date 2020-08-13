@@ -6901,17 +6901,24 @@ p:empty { /* empty paragraph nuke */
     border-radius: 3px;
 }
 
+@media screen and (min-width: 1500px) {
+#netdbcountrylist img {
+    width: 24px;
+    height: auto;
+}
+}
+
 @supports (scroll-behavior: auto) {
 #netdboverview table td {
+    padding: 5px 10px;
     box-shadow: inset 0 0 0 1px #fff !important;
     background: rgba(240,240,255,.4);
-    padding: 5px 10px;
 }
 
 #netdboverview #netdbversions td:first-child, #netdboverview #netdbtransports td:first-child, #netdboverview #netdbcountrylist td:first-child,
 #netdbtiers td:first-child {
-    border-right: 1px solid #e0e0eb !important;
     white-space: nowrap;
+    border-right: 1px solid #e0e0eb !important;
 }
 }
 
