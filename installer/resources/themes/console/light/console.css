@@ -2853,13 +2853,13 @@ td.infohelp, #help tr:hover td.infohelp, #eventlog tr:hover .infohelp, td.infowa
 }
 
 td.infohelp, #help tr:hover td.infohelp, #eventlog tr:hover .infohelp {
-    background: #fff url(/themes/console/images/info/infohelp.png) 12px center no-repeat;
-    background: url(/themes/console/images/info/infohelp.png) 12px center no-repeat, linear-gradient(135deg, #fafaff, #f8f8ff);
+    background: #fff url(/themes/console/images/svg/infohelp.svg) 12px center no-repeat;
+    background: url(/themes/console/images/svg/infohelp.svg) 12px center no-repeat, linear-gradient(135deg, #fafaff, #f8f8ff);
 }
 
 td.infowarn, #help tr:hover td.infowarn {
-    background: #fff url(/themes/console/images/info/infowarn.png) 12px center no-repeat;
-    background: url(/themes/console/images/info/infowarn.png) 12px center no-repeat, linear-gradient(135deg, #fafaff, #f8f8ff);
+    background: #fff url(/themes/console/images/svg/infowarn.svg) 12px center no-repeat;
+    background: url(/themes/console/images/svg/infowarn.svg) 12px center no-repeat, linear-gradient(135deg, #fafaff, #f8f8ff);
 }
 
 #manualpeercontrol tr:nth-child(3) td.infohelp {
@@ -3794,8 +3794,8 @@ p.infohelp, p.sybilinfo, p#debugmode, p#upnpstatus, p#pluginconfigtext, p#gather
     padding: 15px 15px 15px 50px;
     line-height: 130%;
     border: 1px solid #8d8daa;
-    background: #fff url(/themes/console/images/info/infohelp.png) 12px center no-repeat;
-    background: url(/themes/console/images/info/infohelp.png) 12px center no-repeat, linear-gradient(135deg, #fafaff, #f8f8ff);
+    background: #fff url(/themes/console/images/svg/infohelp.svg) 12px center no-repeat;
+    background: url(/themes/console/images/svg/infohelp.svg) 12px center no-repeat, linear-gradient(135deg, #fafaff, #f8f8ff);
 }
 
 .infohelp#pagenav {
@@ -3889,8 +3889,8 @@ p.infowarn {
     border: 1px solid #8d8daa;
     padding: 15px 15px 15px 50px;
     line-height: 130%;
-    background: #fff url(/themes/console/images/info/infowarn.png) 12px center no-repeat;
-    background: url(/themes/console/images/info/infowarn.png) 12px center no-repeat, linear-gradient(135deg, #fafaff, #f8f8ff);
+    background: #fff url(/themes/console/images/svg/infowarn.svg) 12px center no-repeat;
+    background: url(/themes/console/images/svg/infowarn.svg) 12px center no-repeat, linear-gradient(135deg, #fafaff, #f8f8ff);
 }
 
 #addkeyring td.infohelp {
@@ -11739,11 +11739,28 @@ th.options .optbox {
     border-right: 1px solid #8d8daa !important;
 }
 
-.main #netdboverview table tr, .main #netdboverview table td:first-child, .sybil_addresses tr, .sybil_addresses td:first-child, .main #bugreports td:first-child {
+.main #netdboverview table tr, .main #netdboverview table td:first-child,
+.sybil_addresses tr, .sybil_addresses td:first-child, .main #bugreports td:first-child {
     border-left: none !important;
 }
 
-.main #netdboverview table tr, .main #netdboverview table td:last-child, .sybil_addresses tr, .sybil_addresses td:last-child, .main #bugreports td:last-child {
+.main #netdboverview table tr, .main #netdboverview table td:last-child,
+.sybil_addresses tr, .sybil_addresses td:last-child, .main #bugreports td:last-child,
+.main #file, .main #file td {
+    border-right: none !important;
+}
+
+.main #bannedips td {
+    border-right: 1px solid #8d8daa;
+}
+
+.main #installPluginFile tr, .main #installPluginFile td:first-child, .main #installPluginFile td:last-child,
+.main #installPluginUrl tr, .main #installPluginUrl td:first-child, .main #installPluginUrl td:last-child,
+.main #joinFamily tr, .main #joinFamily td:first-child, .main #joinFamily td:last-child,
+.main #newFamily tr, .main #newFamily td:first-child, .main #newFamily td:last-child,
+.main #bannedips #banneduntilrestart tr, .main #bannedips #banneduntilrestart td, .main #bannedips #banneduntilrestart td:first-child, .main #bannedips #banneduntilrestart td:last-child,
+.main #bannedips #permabanned tr, .main #bannedips #permabanned td, .main #bannedips #permabanned td:first-child, .main #bannedips #permabanned td:last-child {
+    border-left: none !important;
     border-right: none !important;
 }
 
