@@ -655,7 +655,7 @@ public abstract class KademliaNetworkDatabaseFacade extends NetworkDatabaseFacad
             return;
         search(key, null, null, 20*1000, true, fromLocalDest);
     }
-    
+
     /**
      *  Unconditionally lookup using the client's tunnels.
      *
@@ -1266,7 +1266,7 @@ public abstract class KademliaNetworkDatabaseFacade extends NetworkDatabaseFacad
             }
         }
         String v = routerInfo.getVersion();
-        String minRouterVersion = "0.9.29";
+        String minRouterVersion = "0.9.20";
         String minVersionAllowed = _context.getProperty("router.minVersionAllowed");
         if (minVersionAllowed != null) {
             if (VersionComparator.comp(v, minVersionAllowed) < 0) {
