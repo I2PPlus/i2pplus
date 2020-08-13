@@ -37,11 +37,13 @@ public class I2Ping extends I2PTunnelClientBase {
     //private static final int PING_COUNT = 3;
     private static final int PING_COUNT = 10;
     private static final int CPING_COUNT = 5;
-    private static final int PING_TIMEOUT = 30*1000;
+//    private static final int PING_TIMEOUT = 30*1000;
+    private static final int PING_TIMEOUT = 10*1000;
 
     private static final long PING_DISTANCE = 1000;
 
-    private int MAX_SIMUL_PINGS = 10; // not really final...
+//    private int MAX_SIMUL_PINGS = 10; // not really final...
+    private int MAX_SIMUL_PINGS = 16; // not really final...
 
 
     private volatile boolean finished;
@@ -207,9 +209,9 @@ public class I2Ping extends I2PTunnelClientBase {
             "ping <opts> -l <destlistfile> (pings a list of hosts in a file)\n" +
             "Options:\n" +
             "     -c (require 5 consecutive pings to report success)\n" +
-            "     -m maxSimultaneousPings (default 10)\n" +
-            "     -n numberOfPings (default 3)\n" +
-            "     -t timeout (ms, default 30000)\n" +
+            "     -m maxSimultaneousPings (default 16)\n" +
+            "     -n numberOfPings (default 10)\n" +
+            "     -t timeout (ms, default 10000)\n" +
             "     -f fromPort\n" +
             "     -p toPort";
     }

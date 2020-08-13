@@ -324,12 +324,12 @@ class PeerState implements DataLoader
     if (out.queuedBytes() + length > MAX_PIPELINE_BYTES)
       {
         if (peer.supportsFast()) {
-            if (_log.shouldLog(Log.DEBUG))
-                _log.debug("Rejecting request over pipeline limit from [" + peer + "]");
+            if (_log.shouldLog(Log.INFO))
+                _log.info("Rejecting request over pipeline limit from [" + peer + "]");
             out.sendReject(piece, begin, length);
         } else {
-            if (_log.shouldLog(Log.DEBUG))
-                _log.debug("Discarding request over pipeline limit from [" + peer + "]");
+            if (_log.shouldLog(Log.INFO))
+                _log.info("Discarding request over pipeline limit from [" + peer + "]");
         }
         return;
       }
@@ -427,8 +427,8 @@ class PeerState implements DataLoader
           }
         else
           {
-            if (_log.shouldLog(Log.DEBUG))
-              _log.debug("Received BAD piece [" + req.getPiece() + "] from [" + peer + "]");
+            if (_log.shouldLog(Log.INFO))
+              _log.info("Received BAD piece [" + req.getPiece() + "] from [" + peer + "]");
             synchronized(this) {
                 // so we don't ask again
                 if (bitfield != null)
@@ -607,8 +607,8 @@ class PeerState implements DataLoader
       if (metainfo != null && metainfo.isPrivate() &&
           (id == ExtensionHandler.ID_METADATA || id == ExtensionHandler.ID_PEX)) {
           // shouldn't get this since we didn't advertise it but they could send it anyway
-          if (_log.shouldLog(Log.DEBUG))
-              _log.debug("Private torrent, ignoring extension message " + id);
+          if (_log.shouldLog(Log.INFO))
+              _log.info("Private torrent -> Ignoring extension message " + id);
           return;
       }
       ExtensionHandler.handleMessage(peer, listener, id, bs);

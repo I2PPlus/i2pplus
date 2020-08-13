@@ -1279,7 +1279,6 @@ public final class KeyStoreUtil {
      *          KeyStoreUtil keygen file.ks alias keypw (create keypair in keystore)
      *          KeyStoreUtil keygen2 file.ks alias keypw (create keypair using I2PProvider)
      */
-/****
     public static void main(String[] args) {
         try {
             if (args.length > 0 && "import".equals(args[0])) {
@@ -1296,6 +1295,10 @@ public final class KeyStoreUtil {
             }
             if (args.length > 0 && "keygen2".equals(args[0])) {
                 testKeygen2(args);
+                return;
+            }
+            if (args.length > 0 && "list".equals(args[0])) {
+                listKeys(args);
                 return;
             }
             File ksf = (args.length > 0) ? new File(args[0]) : null;
@@ -1338,6 +1341,10 @@ public final class KeyStoreUtil {
 
 
     private static void testExport(String[] args) throws Exception {
+        if (args.length != 4) {
+            System.err.println("Usage: KeyStoreUtil export keystore.ks keyalias keypassword");
+            System.exit(1);
+        }
         File ksf = new File(args[1]);
         String alias = args[2];
         String pw = args[3];
@@ -1385,5 +1392,40 @@ public final class KeyStoreUtil {
         net.i2p.data.Signature sig = SigUtil.fromJavaSig(bsig, type);
         System.out.println("Signature test: " + sig);
     }
-****/
+
+    private static void listKeys(String[] args) {
+        if (args.length != 2) {
+            System.err.println("Usage: KeyStoreUtil list keystore.ks");
+            System.exit(1);
+        }
+        File ksf = new File(args[1]);
+        if (ksf.exists()) {
+            InputStream fis = null;
+            try {
+                KeyStore ks = KeyStore.getInstance(KeyStore.getDefaultType());
+                fis = new FileInputStream(ksf);
+                ks.load(fis, DEFAULT_KEYSTORE_PASSWORD.toCharArray());
+                System.out.println("Certificates:");
+                for(Enumeration<String> e = ks.aliases(); e.hasMoreElements();) {
+                    String alias = e.nextElement();
+                    if (ks.isCertificateEntry(alias))
+                        System.out.println(alias);
+                }
+                System.out.println("\nPrivate keys:");
+                for(Enumeration<String> e = ks.aliases(); e.hasMoreElements();) {
+                    String alias = e.nextElement();
+                    if (ks.isKeyEntry(alias))
+                        System.out.println(alias);
+                }
+            } catch (IOException ioe) {
+                error("Unable to get certificates in key store " + ksf, ioe);
+            } catch (GeneralSecurityException gse) {
+                error("Unable to get certificates in key store " + ksf, gse);
+            } finally {
+                try { if (fis != null) fis.close(); } catch (IOException foo) {}
+            }
+        } else {
+            System.err.println("Keystore file not found: " + ksf);
+        }
+    }
 }

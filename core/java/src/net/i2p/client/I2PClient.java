@@ -2,9 +2,9 @@ package net.i2p.client;
 
 /*
  * free (adj.): unencumbered; not under the control of others
- * Written by jrandom in 2003 and released into the public domain 
- * with no warranty of any kind, either expressed or implied.  
- * It probably won't  make your computer catch on fire, or eat 
+ * Written by jrandom in 2003 and released into the public domain
+ * with no warranty of any kind, either expressed or implied.
+ * It probably won't  make your computer catch on fire, or eat
  * your children, but it might.  Use at your own risk.
  *
  */
@@ -44,7 +44,8 @@ public interface I2PClient {
     /** @since 0.9.12 */
     public static final String PROP_SIGTYPE = "i2cp.destination.sigType";
     /** @since 0.9.12 */
-    public static final SigType DEFAULT_SIGTYPE = SigType.DSA_SHA1;
+//    public static final SigType DEFAULT_SIGTYPE = SigType.DSA_SHA1;
+    public static final SigType DEFAULT_SIGTYPE = SigType.EdDSA_SHA512_Ed25519;
 
     /**
      * For router-&gt;client payloads.
@@ -101,7 +102,7 @@ public interface I2PClient {
      *
      * Caller must close stream.
      *
-     * @param destKeyStream create a new destination and write out the object to the given stream, 
+     * @param destKeyStream create a new destination and write out the object to the given stream,
      *			    formatted as Destination, PrivateKey, and SigningPrivateKey
      *                      format is specified in {@link net.i2p.data.PrivateKeyFile PrivateKeyFile}
      * @return new destination
@@ -122,7 +123,7 @@ public interface I2PClient {
      */
     public Destination createDestination(OutputStream destKeyStream, SigType type) throws I2PException, IOException;
 
-    /** Create a new destination with the given certificate and store it, along with the private 
+    /** Create a new destination with the given certificate and store it, along with the private
      * encryption and signing keys at the specified location
      *
      * Caller must close stream.

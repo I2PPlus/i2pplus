@@ -1450,7 +1450,10 @@ public class Snark
     }
     int limit = _util.getMaxUploaders();
     if (_log.shouldLog(Log.DEBUG))
-        _log.debug("Currently uploading to: " + totalUploaders + "peers (Limit: " + limit + ")");
+        if (totalUploaders > 1)
+            _log.debug("Currently uploading to: " + totalUploaders + " peers (Limit: " + limit + ")");
+        else
+            _log.debug("Currently uploading to: " + totalUploaders + " peer (Limit: " + limit + ")");
     return totalUploaders > limit;
   }
 
@@ -1466,8 +1469,8 @@ public class Snark
         total += c.getCurrentUploadRate();
     }
     long limit = 1024l * _util.getMaxUpBW();
-    if (_log.shouldLog(Log.INFO))
-        _log.info("Current total bandwidth up: " + total/1024 + "KB/s (Limit: " + limit/1024 + "KB/s)");
+    if (_log.shouldLog(Log.DEBUG))
+        _log.debug("Current total bandwidth up: " + total/1024 + "KB/s (Limit: " + limit/1024 + "KB/s)");
     return total > limit;
   }
 

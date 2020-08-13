@@ -72,7 +72,8 @@ class PeerCoordinator implements PeerListener
   private final Snark snark;
 
   // package local for access by CheckDownLoadersTask
-  final static long CHECK_PERIOD = 40*1000; // 40 seconds
+//  final static long CHECK_PERIOD = 40*1000; // 40 seconds
+  final static long CHECK_PERIOD = 5*1000; // 5 seconds
 //  final static int MAX_UPLOADERS = 8;
   final static int MAX_UPLOADERS = 16;
 //  public static final long MAX_INACTIVE = 8*60*1000;
@@ -155,7 +156,7 @@ class PeerCoordinator implements PeerListener
   private static final long COMMENT_REQ_INTERVAL = 12*60*60*1000L;
   private static final long COMMENT_REQ_DELAY = 60*60*1000L;
   private static final int MAX_COMMENT_NOT_REQ = 10;
-  
+
   /**
    *  @param metainfo null if in magnet mode
    *  @param storage null if in magnet mode
@@ -184,12 +185,12 @@ class PeerCoordinator implements PeerListener
     // Randomize the first start time so multiple tasks are spread out,
     // this will help the behavior with global limits
     timer = new CheckEvent(_util.getContext(), new PeerCheckerTask(_util, this));
-    timer.schedule((CHECK_PERIOD / 2) + _random.nextInt((int) CHECK_PERIOD));
+    timer.schedule((CHECK_PERIOD * 8 / 2) + _random.nextInt((int) CHECK_PERIOD * 8));
 
     // we don't store the last-requested time, so just delay a random amount
     _commentsLastRequested.set(util.getContext().clock().now() - (COMMENT_REQ_INTERVAL - _random.nextLong(COMMENT_REQ_DELAY)));
   }
-  
+
   /**
    *  Run the PeerCheckerTask via the SimpleTimer2 executors
    *  @since 0.8.2
@@ -644,7 +645,7 @@ class PeerCoordinator implements PeerListener
         else
             bitfield = null;
         if (!peer.isIncoming() && wantedBytes == 0 && _log.shouldInfo())
-            _log.info("Outbound connection as seed to get comments for " + snark.getBaseName() + " to " + peer);
+            _log.info("Checking for new comments for: " + snark.getBaseName() + " from [" + peer + "]");
         // if we aren't a seed but we don't want any more
         final boolean partialComplete = wantedBytes == 0 && bitfield != null && !bitfield.complete();
         Runnable r = new Runnable()

@@ -123,7 +123,7 @@
 <tr><td>This setting determines whether a router acting as a floodfill will explore the NetDb to learn about new peers. [Default is false]</td></tr>
 
 <tr><th>router.minVersionAllowed={n} <span class="plus">I2P+</span></th></tr>
-<tr><td>This setting allows you to exclude older routers from your NetDb. Routers older than the default or the value you set will be deleted from the NetDb and banned for the duration of the router session. By default, routers older than 0.9.29 are excluded. [Restart required]</td></tr>
+<tr><td>This setting allows you to exclude older routers from your NetDb. Routers older than the default or the value you set will be deleted from the NetDb and banned for the duration of the router session. By default, routers older than 0.9.20 are excluded. Note: starting with I2P+ version 0.9.46+, only routers running very recent versions are used for building local tunnels. [Restart required]</td></tr>
 
 <tr><th>router.refreshRouterDelay={n} <span class="plus">I2P+</span></th></tr>
 <tr><td>This setting (in milliseconds) allows you to manually configure the delay between router refresh updates run by the Refresh Routers Job. By default the pause between refreshes is determined by the size of the NetDb, and introduces some randomness in the timing to mitigate traffic analysis. For values lower than 2000 milliseconds, increasing the value of <code>router.refreshTimeout</code> is recommended. Note that setting this value below 2000 milliseconds will increase your network traffic and may introduce job lag, and is not recommended for sustained use.</td></tr>

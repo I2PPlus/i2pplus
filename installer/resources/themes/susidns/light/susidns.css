@@ -53,7 +53,7 @@ b, td.search {
     background: url(/themes/susidns/images/logo.png) center center no-repeat, linear-gradient(to bottom, #fff, #eef);
     height: 55px;
     background-size: auto 50px, 100% 100%;
-    border: 1px solid #7e7fb9;
+    border: 1px solid #8d8daa;
     box-shadow: inset 0 0 0 1px #fff;
 }
 
@@ -118,7 +118,7 @@ code, tt, .destaddress {
     text-align: center;
     font-weight: bold;
     font-size: 9pt;
-    border: 1px solid #7e7fb9;
+    border: 1px solid #8d8daa;
     border-radius: 2px 2px 0 0;
     box-shadow: inset 0 0 0 1px #fff;
     background: linear-gradient(to bottom, #fcfcff 51%, #fafaff 51%, #f6f6ff 100%);
@@ -137,7 +137,7 @@ code, tt, .destaddress {
     display: inline-block;
     line-height: 120%;
     color: #3b6bbf;
-    border: 1px solid #7e7fb9;
+    border: 1px solid #8d8daa;
     border-radius: 2px;
     text-transform: capitalize;
     box-shadow: inset 0 0 0 1px #fff;
@@ -205,7 +205,7 @@ code, tt, .destaddress {
 }
 
 .headline {
-    border: 1px solid #7e7fb9;
+    border: 1px solid #8d8daa;
     margin: -1px 0 -2px;
     padding: 8px 5px;
     background: #fff;
@@ -262,7 +262,7 @@ span.location {
 }
 
 .headline h4 {
-    border-top: 1px solid #7e7fb9;
+    border-top: 1px solid #8d8daa;
     margin: 5px -6px 0;
     padding: 8px 10px 0 33px;
     background: url(/themes/susidns/images/drive.png) 9px 7px no-repeat;
@@ -284,7 +284,7 @@ span.location {
 }
 
 #content {
-    border: 1px solid #7e7fb9;
+    border: 1px solid #8d8daa;
     padding: 0 15px;
     margin: -1px 0 0;
     background: #fafaff;
@@ -302,13 +302,13 @@ form[action="subscriptions"] #content {
 }
 
 #content + #buttons {
-    border: 1px solid #7e7fb9;
+    border: 1px solid #8d8daa;
     margin: -1px 0 10px;
     background: linear-gradient(to bottom, #fafaff 50%, rgba(220,220,255,0.3)), repeating-linear-gradient(135deg, rgba(255,255,255,0.5) 2px, rgba(221, 221, 255, 0.3) 3px, #fff 5px), #fff !important;
 }
 
 #content h3 {
-    border: 1px solid #7e7fb9;
+    border: 1px solid #8d8daa;
     padding: 5px 8px 5px 34px;
     border-radius: 2px;
     background: url(/themes/console/images/info/question.png) 8px center no-repeat, linear-gradient(to bottom, #fcfcff 50%, rgba(255,255,255,0.6) 50%, rgba(240,240,255,0.4)), linear-gradient(135deg, #fcfcff 5%, rgba(231, 231, 255, 0.8) 15%) !important;
@@ -332,7 +332,7 @@ form[action="subscriptions"] #content {
 #add, div#import {
     margin-top: 4px;
     padding: 0 15px;
-    border: 1px solid #7e7fb9;
+    border: 1px solid #8d8daa;
     background: #fafaff;
 }
 
@@ -351,7 +351,7 @@ form[action="subscriptions"] #content {
 #add h3, #import h3 {
     margin: 0 -15px;
     padding: 5px 10px;
-    border-bottom: 1px solid #7e7fb9;
+    border-bottom: 1px solid #8d8daa;
 }
 
 #add table, #import table {
@@ -383,7 +383,7 @@ input:focus::placeholder {
 }
 
 div#add p.buttons, div#import p.buttons {
-    border: 1px solid #7e7fb9;
+    border: 1px solid #8d8daa;
     margin: 0 -16px -6px;
     background: linear-gradient(to bottom, #fff 50%, rgba(220,220,255,0.3)), repeating-linear-gradient(135deg, rgba(255,255,255,0.5) 2px, rgba(221, 221, 255, 0.3) 3px, #fff 5px), #fff !important;
 }
@@ -394,7 +394,7 @@ div#add p.buttons, div#import p.buttons {
 }
 
 div.help {
-    border: 1px solid #7e7fb9;
+    border: 1px solid #8d8daa;
     padding: 0 15px;
     background: #eef;
     background: linear-gradient(135deg, #fafaff, #f8f8ff);
@@ -415,7 +415,7 @@ div.help {
 div.help h3, #add h3, #import h3 {
     margin: -1px -16px 0 !important;
     padding: 5px 10px;
-    border: 1px solid #7e7fb9;
+    border: 1px solid #8d8daa;
     background: #fcfcff;
     background: linear-gradient(to bottom, #fcfcff 50%, rgba(255,255,255,0.6) 50%, rgba(240,240,255,0.4)), linear-gradient(135deg, #fcfcff 5%, rgba(231, 231, 255, 0.8) 15%);
 }
@@ -599,7 +599,7 @@ to {
 }
 
 #footer {
-    border: 1px solid #7e7fb9;
+    border: 1px solid #8d8daa;
     background: #eef;
     background: linear-gradient(to right, #eef, #fafaff, #eef);
     margin: -1px 0 -5px;
@@ -658,7 +658,7 @@ _:-ms-lang(x), img.illustrate {
     margin: -4px 0;
     padding: 10px 0;
     font-size: 9pt !important;
-    border: 1px solid #7e7fb9;
+    border: 1px solid #8d8daa;
     border: none;
     border-radius: 2px;
     min-width: 700px;
@@ -720,14 +720,14 @@ textarea {
 }
 
 .iframed #content textarea {
-    border: 1px solid #7e7fb9;
+    border: 1px solid #8d8daa;
     margin: 0;
 }
 
 textarea[name="config"], textarea[name="content"], textarea[name="log"] {
     border-radius: 0;
     box-shadow: none;
-    border: 1px solid #7e7fb9;
+    border: 1px solid #8d8daa;
     background: #fafaff;
     width: 100% !important;
     padding: 3px 6px !important;
@@ -757,13 +757,13 @@ textarea[name="destination"] {
 }
 
 #config + #buttons {
-    border: 1px solid #7e7fb9;
+    border: 1px solid #8d8daa;
     margin: -2px 0 10px;
     background: linear-gradient(to bottom, #fafaff 50%, rgba(220,220,255,0.3)), repeating-linear-gradient(135deg, rgba(255,255,255,0.5) 2px, rgba(221, 221, 255, 0.3) 3px, #fff 5px), #fff !important;
 }
 
 #filter, #search {
-    border: 1px solid #7e7fb9;
+    border: 1px solid #8d8daa;
     padding: 5px 15px;
     margin-bottom: -1px;
     background: #fafaff;
@@ -794,7 +794,7 @@ textarea[name="destination"] {
     min-width: 10px;
     margin: 2px 1px;
     padding: 4px 8px;
-    border: 1px solid #7e7fb9;
+    border: 1px solid #8d8daa;
     border-radius: 2px;
     color: #3b6bbf;
     text-align: center;
@@ -826,7 +826,7 @@ p#filtered {
 #messages + p, .headline + p {
     margin: 1px 0 -1px;
     padding: 10px;
-    border: 1px solid #7e7fb9;
+    border: 1px solid #8d8daa;
 }
 
 form {
@@ -882,7 +882,7 @@ tr:hover .destaddress {
 
 #bookmessages {
     width: 100%;
-    border: 1px solid #7e7fb9;
+    border: 1px solid #8d8daa;
 }
 
 #bookmessages td:last-child {
@@ -902,7 +902,7 @@ tr:hover .destaddress {
 }
 
 #host_list, #host_details {
-    border: 1px solid #7e7fb9;
+    border: 1px solid #8d8daa;
 }
 
 #host_list th:first-child,
@@ -923,9 +923,7 @@ tr:hover .destaddress {
     font-weight: bold;
 }
 
-#host_list th:nth-child(2), #host_list td:nth-child(2),
-#host_list th:nth-child(3), #host_list td:nth-child(3),
-#host_list th:nth-child(4), #host_list td:nth-child(4) {
+#host_list .b32link, #host_list .helper {
     width: 35px;
     width: 8%;
     padding: 0 5px !important;
@@ -933,49 +931,27 @@ tr:hover .destaddress {
     text-align: center;
 }
 
-#host_list td:nth-child(2) a:not(old) {
+#host_list td.b32link a:not(old), #host_list td.helper a:not(old) {
     font-size: 0 !important;
 }
 
-#host_list td:nth-child(2) a::after {
+#host_list td.b32link a::after {
     content: url(/themes/console/images/buttons/link.png);
     text-align: center;
     filter: drop-shadow(0 0 1px #555);
     cursor: pointer;
 }
 
-#host_list td:nth-child(3) a:not(old) {
-    font-size: 0 !important;
-}
-
-#host_list td:nth-child(3) a::after {
+#host_list td.helper a::after {
     content: url(/themes/console/images/buttons/helper.png);
     filter: drop-shadow(0 0 1px #555);
     cursor: pointer;
 }
 
-/*
-#host_list th:nth-child(4), #host_list td:nth-child(4) {
-    padding-right: 30px !important;
-}
-*/
-
-#host_list td:nth-child(4) a:not(old) {
-    font-size: 0 !important;
-}
-
-#host_list td:nth-child(4) .addrhlpr a::after {
-    content: url(/themes/console/images/buttons/fullview.png);
-    text-align: center;
-    padding: 0 10px !important;
-    filter: drop-shadow(0 0 1px #555);
-    cursor: pointer;
-}
-
-#host_list td:nth-child(2) a:hover, #host_list td:nth-child(3) a:hover, #host_list td:nth-child(4) a:hover,
+/*#host_list td:nth-child(2) a:hover, #host_list td:nth-child(3) a:hover, #host_list td:nth-child(4) a:hover,
 #host_list td:nth-child(2) a:focus, #host_list td:nth-child(3) a:focus, #host_list td:nth-child(4) a:focus {
     filter: drop-shadow(0 0 1px #f60);
-}
+}*/
 
 #host_list .destaddress:focus {
     background: #ffd;
@@ -1136,7 +1112,7 @@ td.destinations textarea {
 /* identicon + qr image */
 
 #visualid {
-    border: 1px solid #7e7fb9 !important;
+    border: 1px solid #8d8daa !important;
     margin-top: -1px;
     border-radius: 2px;
     background: #fafaff;
@@ -1149,7 +1125,7 @@ td.destinations textarea {
 }
 
 #visualid h3 {
-    border-bottom: 1px solid #7e7fb9;
+    border-bottom: 1px solid #8d8daa;
     padding: 8px 10px 6px;
     margin-top: 0;
     background: linear-gradient(to bottom, #fcfcff 50%, #eef 50%);
@@ -1184,7 +1160,7 @@ td.destinations textarea {
 #visualid td[colspan="2"] {
     text-align: right;
     padding: 17px 5px;
-    border-top: 1px solid #7e7fb9;
+    border-top: 1px solid #8d8daa;
     background: #fff;
     background: linear-gradient(to bottom, #fafaff 50%, rgba(220,220,255,0.3)), repeating-linear-gradient(135deg, rgba(255,255,255,0.5) 2px, rgba(221, 221, 255, 0.3) 3px, #fff 5px) #fafaff !important;
 }
@@ -1192,7 +1168,7 @@ td.destinations textarea {
 img[src^="/imagegen"] {
     height: 256px;
     width: 256px;
-    border: 1px solid #7e7fb9;
+    border: 1px solid #8d8daa;
     padding: 3px;
     border-radius: 2px;
     background: #fff;
@@ -1227,13 +1203,13 @@ img[src="/imagegen/id?s=256&c="], img[src="/imagegen/id?s=20&c="] {
 
 /* end host list identicons */
 
-.names a[href^="http"], .names a[href^="details"], .helper a {
+.names a[href^="http"], .helper a {
     display: inline-block;
     width: 100%;
 }
 
 .book th {
-    border-bottom: 1px solid #7e7fb9;
+    border-bottom: 1px solid #8d8daa;
 }
 
 .book textarea {
@@ -1249,8 +1225,6 @@ img[src="/imagegen/id?s=256&c="], img[src="/imagegen/id?s=20&c="] {
 div#book, #emptybook {
     margin: -12px 0 -1px;
     padding: 0 0 60px;
-/*    border: 1px solid #7e7fb9;
-    box-shadow: inset 0 0 0 1px #fff;*/
     background: #efefff;
     background: repeating-linear-gradient(135deg, rgba(255,255,255,0.5) 2px, rgba(220, 220, 255, 0.5) 3px, #fff 4px) #fafaff;
 }
@@ -1286,7 +1260,7 @@ table + p.buttons {
 }
 
 #book + #buttons {
-    border: 1px solid #7e7fb9;
+    border: 1px solid #8d8daa;
     margin: -61px 0 8px;
 }
 
@@ -1296,7 +1270,7 @@ table + p.buttons {
 
 #dtls form + #buttons {
     margin-top: -2px;
-    border: 1px solid #7e7fb9;
+    border: 1px solid #8d8daa;
 }
 
 form[action="export"] {
@@ -1692,9 +1666,7 @@ input.export {
     margin-top: 8px;
 }
 
-#host_list th:nth-child(2), #host_list td:nth-child(2),
-#host_list th:nth-child(3), #host_list td:nth-child(3),
-#host_list th:nth-child(4), #host_list td:nth-child(4) {
+#host_list .b32link, #host_list .helper {
     padding: 0 20px;
     width: 6%;
 }
@@ -1809,7 +1781,7 @@ div#export {
     top: calc(50% - 10px);
     top: 0;
     overflow: hidden;
-    border-left: 1px solid #7e7fb9;
+    border-left: 1px solid #8d8daa;
 }
 
 #activefilter, .selected {
@@ -1829,7 +1801,7 @@ div#export {
     overflow: hidden;
     font-size: 0;
     text-align: center;
-    border: 1px solid #7e7fb9;
+    border: 1px solid #8d8daa;
     border-radius: 2px;
     background: linear-gradient(to bottom, #fff 50%, #eef 50%);
 }
@@ -1842,8 +1814,8 @@ div#export {
     text-align: center;
     font-size: 11.5pt !important;
     color: #525660;
-    border-left: 1px solid #7e7fb9;
-    border-right: 1px solid #7e7fb9;
+    border-left: 1px solid #8d8daa;
+    border-right: 1px solid #8d8daa;
 }
 
 #prev a, #prev.inactive {

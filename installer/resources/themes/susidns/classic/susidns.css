@@ -60,12 +60,19 @@ table.book td {
 }
 
 table.book th {
-    padding-left: 5px;
+    padding: 6px 5px 4px !important;
+}
+
+#host_list th.names, #host_list th.destinations {
     text-align: left;
 }
 
+#host_list th.names {
+    padding-left: 39px !important;
+}
+
 .book th:last-child {
-    background: url(/themes/console/images/buttons/delete.png) center center no-repeat, linear-gradient(to bottom, #fff 50%, #eff2ff 50%);
+    background: url(/themes/console/images/buttons/delete.png) center calc(50% + 2px) no-repeat, linear-gradient(to bottom, #fff 50%, #eff2ff 50%);
 }
 
 table.book tr:hover textarea {
@@ -182,6 +189,7 @@ input:focus::placeholder {
 #sbs h3 a {
     margin-right: 5px;
     float: right;
+    font-size: 80%;
 }
 
 #ovrvw #content {
@@ -316,28 +324,12 @@ li {
     background: #ffd;
 }
 
-p.messages {
-    margin: -6px -11px 5px;
-    padding: 15px 15px 15px 45px;
-    line-height: 125%;
-    border: 1px solid #aaafce;
-    border: 1px solid #aaafce;
-    box-shadow: inset 0 0 0 1px #ff9;
-    background: #ffe;
-    background: #ffe url(/themes/console/images/info/infohelp.png) 8px center no-repeat;
-}
-
-.iframed p.messages {
-    border-left: none;
-    border-right: none;
-}
-
 p.help {
-    padding: 15px 15px 15px 45px;
     margin: 0;
-    background: #ffe url(/themes/console/images/info/infohelp.png) 8px center no-repeat;
+    padding: 15px 15px 15px 45px;
     line-height: 120%;
-    background-size: 28px 28px;
+    background: #ffe url(/themes/console/images/svg/infohelp.svg) 8px center no-repeat;
+    background-size: 32px 32px;
 }
 
 .iframed p.help {
@@ -346,7 +338,8 @@ p.help {
 }
 
 p.book, #messages + p {
-    background: url(/themes/susidns/images/addressbook.png) center left no-repeat;
+    background: url(/themes/console/images/svg/addressbook.svg) center left no-repeat;
+    background-size: 32px 32px;
     padding: 10px 10px 10px 38px;
 }
 
@@ -506,7 +499,6 @@ img[src*="imagegen"] {
     height: 256px;
     border: 1px solid #ddd;
     border-radius: 4px;
-    filter: drop-shadow(0 0 3px #ccc);
 }
 
 img[src="/imagegen/id?s=256&c="], img[src="/imagegen/id?s=20&c="] {
@@ -514,16 +506,15 @@ img[src="/imagegen/id?s=256&c="], img[src="/imagegen/id?s=20&c="] {
 }
 
 .illustrate {
-    margin: 10px auto 20px;
+    margin: 15px auto 20px;
     padding: 10px;
     max-width: 700px;
     height: auto;
-    border: 1px solid #56b;
+    border: 1px solid #aaafce;
     border-radius: 4px;
     font-size: 10pt;
     text-align: center;
-    opacity: 0.9;
-    box-shadow: inset 0 0 1px #ccf, 0 0 1px #77a;
+    box-shadow: inset 0 0 1px #ccf;
     background: #f8f8ff;
     background: linear-gradient(rgba(250,250,255,0.5), rgba(246,246,255,0.5)), url(/themes/console/classic/images/bg2.png);
     background-size: 100% 100%, 120px 120px;
@@ -531,10 +522,22 @@ img[src="/imagegen/id?s=256&c="], img[src="/imagegen/id?s=20&c="] {
 }
 
 .illustrate:hover {
-    opacity: 1;
     border: 1px solid #337;
     background: #fff;
     transition: ease all 0.2s;
+}
+
+.illustrate text:not(:hover) {
+    fill: #41444d;
+}
+
+.illustrate .a, .illustrate .subs {
+    stroke: #41444d;
+    stroke-width: 1px;
+}
+
+.illustrate .a {
+    filter: none;
 }
 
 _:-ms-lang(x), img.illustrate {
@@ -793,13 +796,14 @@ textarea[name="config"], textarea[name="content"] {
 /* page titles */
 
 .headline h3 {
-    padding: 10px 5px 10px 40px;
-    background: url(/themes/susidns/images/addressbook.png) 10px center no-repeat;
-    background: url(/themes/susidns/images/addressbook.png) 10px center no-repeat, linear-gradient(to bottom, #fff 50%, #eff2ff 50%);
-    font-size: 12pt;
-    text-transform: uppercase;
-    letter-spacing: 0.08em;
+    padding: 10px 5px 10px 36px;
     word-spacing: 0.1em;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+    font-size: 12pt;
+    background: url(/themes/console/images/svg/addressbook.svg) 10px center no-repeat;
+    background: url(/themes/console/images/svg/addressbook.svg) 10px center no-repeat, linear-gradient(to bottom, #fff 50%, #eff2ff 50%);
+    background-size: 22px 22px;
 }
 
 .headline#subscriptions h3 {
@@ -808,8 +812,9 @@ textarea[name="config"], textarea[name="content"] {
 }
 
 .headline#configure h3 {
-    background: url(/themes/susidns/images/configure_24.png) 10px center no-repeat;
-    background: url(/themes/susidns/images/configure_24.png) 10px center no-repeat, linear-gradient(to bottom, #fff 50%, #eff2ff 50%);
+    background: url(/themes/console/images/svg/configure.svg) 10px center no-repeat;
+    background: url(/themes/console/images/svg/configure.svg) 10px center no-repeat, linear-gradient(to bottom, #fff 50%, #eff2ff 50%);
+    background-size: 22px 22px;
 }
 
 .headline h4 {
@@ -889,18 +894,20 @@ p.book {
 /* end host details */
 
 .names img {
-    margin: 3px 10px 3px 1px;
+    margin: 1px 10px 1px -2px;
     padding: 1px;
     width: 20px;
     height: 20px;
     vertical-align: middle;
+}
+
+.names img[src^="/imagegen"] {
     border: 1px solid #aaafce;
     border-radius: 2px;
     background: #fff;
 }
 
 .names img:hover, .names a:focus img {
-    box-shadow: 0 0 0 1px #f60;
     filter: drop-shadow(0 0 1px #f60) !important;
 }
 
@@ -933,12 +940,9 @@ p.book {
     font-weight: bold;
 }
 
-#host_list th:nth-child(2), #host_list td:nth-child(2),
-#host_list th:nth-child(3), #host_list td:nth-child(3),
-#host_list th:nth-child(4), #host_list td:nth-child(4) {
-    width: 35px;
-    width: 8%;
+#host_list td.b32link, #host_list td.helper {
     padding: 0 5px !important;
+    width: 8%;
     white-space: nowrap;
     text-align: center;
 }
@@ -1003,40 +1007,22 @@ p.book {
     transform: rotate(45deg);
 }
 
-#host_list th:nth-child(4), #host_list td:nth-child(4) {
-    padding-right: 30px !important;
+#host_list td:nth-child(3) a[href$="AAAA"]::after {
+  box-shadow: inset 0 0 0 1px #000, inset 0 0 0 2px #f00;
 }
 
-#host_list td:nth-child(4) a:not(old) {
+#host_list td.b32 a:not(old), #host_list td.helper a:not(old) {
     font-size: 0 !important;
 }
 
-/*#host_list td:nth-child(4) .addrhlpr a::after {
-    content: url(/themes/console/images/buttons/fullview.png);
-    text-align: center;
-    padding: 0 10px !important;
-    filter: drop-shadow(0 0 1px #555);
-    cursor: pointer;
-}*/
-
-#host_list td:nth-child(4) .addrhlpr a::after {
-    content: "";
-    width: 14px;
-    height: 14px;
-    background: #393;
-    text-align: center;
-    display: inline-block;
-    cursor: pointer;
-    border-radius: 50%;
-}
-
 #host_list .destaddress {
-    overflow: auto !important;
+    margin: 0 8px;
+    padding: 3px !important;
     white-space: nowrap;
+    overflow: auto !important;
     font-family: "Droid Sans Mono", "Noto Mono", "Lucida Console", "DejaVu Sans Mono", monospace !important;
     font-weight: normal;
     color: #555;
-    padding: 3px !important;
     -webkit-user-select: all;
     -moz-user-select: all;
     user-select: all;
@@ -1048,11 +1034,10 @@ p.book {
 }
 
 #host_list .destaddress:not(old):focus {
+    margin-right: 0;
     padding-top: 0;
     padding-bottom: 0;
-    overflow: auto !important;
     text-overflow: clip;
-    margin: 1px 0 -1px;
 }
 
 /* end hostname list */
@@ -1061,10 +1046,13 @@ p.book {
     background: #ffe;
 }
 
-td.destinations {
-    max-width: 50px !important;
+td.b32link, td.helper, td.destinations {
     border-left: 1px solid #ced1e3;
     border-right: 1px solid #ced1e3;
+}
+
+td.destinations {
+    max-width: 50px !important;
 }
 
 /* responsive layout */
@@ -1124,13 +1112,8 @@ h3, h3 a {
     min-width: 16px !important;
 }
 
-/*#filter span {
-    font-size: 11pt !important;
-    min-width: 400px !important;
-}*/
-
 .illustrate {
-    margin-top: 15px;
+    margin-top: 25px;
 }
 }
 
@@ -1243,6 +1226,14 @@ input[type="checkbox"][disabled]:checked, input[type="radio"][disabled]:checked,
     float: right;
 }
 
+#hostNotes textarea + .accept {
+    display: none;
+}
+
+#hostNotes textarea:focus + .accept {
+    display: inline-block;
+}
+
 #paginate {
     display: inline-block;
 }
@@ -1338,7 +1329,7 @@ input[disabled] {
 #navi a {
     margin: -4px -3px !important;
     padding: 5px 12px 4px !important;
-    background: linear-gradient(to bottom, #fff 50%, #effafb 50%) !important;
+    background: linear-gradient(to bottom, #fff 50%, #eaebff 50%) !important;
     text-transform: uppercase;
     letter-spacing: 0.08em;
     flex-grow: 1;
@@ -1480,5 +1471,59 @@ input[disabled] {
 
 #filtered, #results {
     font-size: 9.5pt;
+}
+}
+
+div#messages {
+    margin: 0 3%;
+    padding: 5px 20px;
+    top: 0;
+    left: 0;
+    right: 0;
+    position: fixed;
+    z-index: 999;
+    line-height: 150%;
+    text-align: center;
+    border-radius: 0 0 4px 4px;
+    box-shadow: 0 1px 2px rgba(100,100,200,0.7);
+    background: #113 url(/themes/snark/light/images/delete.png) right 8px top 5px no-repeat !important;
+    background-size: 16px 16px !important;
+    cursor: crosshair;
+    animation: 2s hide-up 10s ease-out forwards;
+}
+
+div#messages:hover {
+    background: #113 url(/themes/snark/light/images/delete_hover.png) right 8px top 5px no-repeat !important;
+    background-size: 16px 16px !important;
+}
+
+.iframed div#messages {
+    border: none;
+}
+
+div#messages:empty {
+    display: none;
+}
+
+#messages p {
+    font-size: 9pt;
+    letter-spacing: 2px;
+    color: #ff9;
+    text-shadow: 0 1px 1px #000;
+}
+
+p.messages {
+    color: #fff;
+    text-align: center;
+    font-weight: bold;
+}
+
+@keyframes hide-up {
+from {
+    margin-top: 0
+}
+
+to {
+    margin-top: -300px;
 }
 }

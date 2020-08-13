@@ -129,8 +129,8 @@ abstract class SAMHandler implements Runnable, Handler {
      */
     protected final boolean writeString(String str) {
         synchronized (socketWLock) {
-            if (_log.shouldLog(Log.DEBUG))
-                _log.debug("Sending the client: " + str);
+            if (_log.shouldLog(Log.INFO))
+                _log.info("Sending client: [" + str + "]");
             return writeString(str, socket);
         }
     }
@@ -139,9 +139,8 @@ abstract class SAMHandler implements Runnable, Handler {
      * Unsynchronized, use with caution
      * @return success
      */
-    public static boolean writeString(String str, SocketChannel out)
-    {
-    	try {
+    public static boolean writeString(String str, SocketChannel out) {
+        try {
             writeBytes(ByteBuffer.wrap(DataHelper.getUTF8(str)), out);
         } catch (IOException e) {
             //_log.debug("Caught IOException", e);
@@ -194,10 +193,10 @@ abstract class SAMHandler implements Runnable, Handler {
     @Override
     public final String toString() {
         return (this.getClass().getSimpleName()
-                + "; SAM version: " + verMajor + "." + verMinor
-                + "; Client: "
+                + " [Version " + verMajor + "." + verMinor
+                + " - Client: "
                 + this.socket.socket().getInetAddress().toString() + ":"
-                + this.socket.socket().getPort() + ")");
+                + this.socket.socket().getPort() + "]");
     }
 
     /**

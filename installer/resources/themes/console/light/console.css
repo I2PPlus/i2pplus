@@ -199,7 +199,7 @@ pre {
     clear: left;/* fixes a bug in Opera */
     border-radius: 2px;
     background: #fafaff;
-    box-shadow: inset 0 0 0 1px #ccccf0;
+    box-shadow: inset 0 0 0 1px rgba(185,185,198,.65);
     filter: drop-shadow(0 0 1px #97a2ce);
 }
 
@@ -288,7 +288,7 @@ pre {
     color: #adadeb;
     background: #adadeb;
     height: 1px;
-    border-bottom: 1px solid #adadeb;
+    border-bottom: 1px solid #afafcf;
     margin: 8px -7px 8px -7px;
     box-shadow: inset 0 1px 1px 1px #fff;
 }
@@ -307,7 +307,7 @@ pre {
     letter-spacing: .04em;
     text-transform: uppercase;
     font-size: 9.5pt;
-    border: 1px solid #adadeb;
+    border: 1px solid #afafcf;
     border-left: none;
     border-right: none;
     border-radius: 0;
@@ -584,7 +584,7 @@ h4.sb_info + hr + form {
     border-spacing: 0;
     border: 1px solid #89f;
     border-radius: 2px;
-    box-shadow: 0 0 1px #ccf;
+    box-shadow: 0 0 1px #e0e0eb;
     transition: ease border .7s;
 }
 
@@ -650,7 +650,7 @@ a:active #sb_bandwidthgraph {
     width: 196px;
     margin: -4px -5px -5px -3px;
     text-align: center;
-    border: 1px solid #adadeb;
+    border: 1px solid #afafcf;
     box-shadow: 0 0 1px rgba(200,200,200,.8), inset 0 0 0 1px rgba(255,255,255,.6), inset 0 0 0 2px rgba(200,200,255,.6);
     background: #eef;
     background: linear-gradient(to right, rgba(0,255,0,.05) 50%, rgba(255,255,0,.05) 75%, rgba(255,128,0,.05) 90%, rgba(255,0,0,.1)), repeating-linear-gradient(to right, rgba(180, 180, 255,.7) 1px, rgba(180, 180, 255, .7) 2px, rgba(221, 221, 255, .7) 2px, rgba(221, 221, 255, .7) 4px);
@@ -733,11 +733,11 @@ a:active #sb_bandwidthgraph {
     padding: 4px 0 3px;
     display: block;
     font-style: italic;
-    border: 1px solid #adadeb;
+    border: 1px solid #afafcf;
     border-top: none;
     border-radius: 0 0 3px 3px;
     box-shadow: inset 0 0 0 1px #fff;
-    background: #ccf;
+    background: #e0e0eb;
     background: linear-gradient(to right, #ddf, #efefff 30%, #efefff 60%, #ddf);
     filter: drop-shadow(0 0 1px rgba(220,220,255,.7));
 }
@@ -783,7 +783,7 @@ to {
 /* end status bars */
 
 #sb_warning {
-    border-bottom: 1px solid #adadeb;
+    border-bottom: 1px solid #afafcf;
 /*    box-shadow: inset 0 0 0 1px #000, inset 0 0 2px 1px #f00;*/
 }
 
@@ -1193,7 +1193,7 @@ to {
     color: #222;
     border: 1px solid #447;
     border-radius: 2px;
-    box-shadow: inset 0 0 0 1px #ccccf0;
+    box-shadow: inset 0 0 0 1px rgba(185,185,198,.65);
     background: #f8f8ff;
 }
 
@@ -1650,7 +1650,7 @@ to {
     color: #33333f;
     border: 1px solid #447;
     border-radius: 0 0 2px 2px;
-    box-shadow: inset 0 0 0 1px #ccccf0;
+    box-shadow: inset 0 0 0 1px rgba(185,185,198,.65);
     filter: drop-shadow(0 1px 1px #97a2ce);
 }
 
@@ -1663,7 +1663,7 @@ to {
 }
 
 .main#console {
-    box-shadow: inset 0 0 0 1px #ccccf0 !important;
+    box-shadow: inset 0 0 0 1px rgba(185,185,198,.65) !important;
 }
 
 .main#proof, .main#oldconsole, #warning2 {
@@ -1693,7 +1693,7 @@ to {
     text-align: right !important;
     font-size: 8pt;
     line-height: 140%;
-    box-shadow: inset 0 0 0 1px #ccccf0;
+    box-shadow: inset 0 0 0 1px rgba(185,185,198,.65);
     min-width: 546px;
     filter: drop-shadow(0 1px 1px #97a2ce);
 }
@@ -1765,7 +1765,7 @@ to {
 }
 
 .embedded.bote {
-/*    box-shadow: inset 0 0 0 1px #ccccf0;*/
+/*    box-shadow: inset 0 0 0 1px rgba(185,185,198,.65);*/
 }
 
 .main.embedded.bote iframe {
@@ -1790,7 +1790,7 @@ to {
     color: #7e7fb9;
     background: #7e7fb9;
     height: 1px;
-    border: 0 solid #7e7fb9;
+    border: 0 solid #8d8daa;
     margin: 10px 0;
 }
 
@@ -1867,7 +1867,7 @@ td.tabletextarea {
 .newscontent {
     margin: 0 0 14px;
     padding: 10px 15px;
-    border: 1px solid #7e7fb9;
+    border: 1px solid #8d8daa;
     border-radius: 0 0 2px 2px;
     box-shadow: inset 0 0 0 1px #fff;
     background: #eef !important;
@@ -1929,7 +1929,7 @@ div.newscontent p {
 #fullhistory a:hover, #fullhistory a:focus, #fullhistory a:visited:hover, #fullhistory a:visited:focus,
 #routerinformation tr:nth-child(n+2) a:hover, #routerinformation tr:nth-child(n+2) a:focus {
     color: #4f8fff;
-    border: 1px solid #7e7fb9;
+    border: 1px solid #8d8daa;
     background: #e2e2ff;
     background: linear-gradient(to bottom, #f8f8ff 50%, #e2e2ff 50%);
     box-shadow: 0 0 0 1px rgba(220,220,255,.6), inset 0 0 0 1px #efefff;
@@ -1943,7 +1943,7 @@ div.newscontent p {
 #routerinformation tr:nth-child(n+2) a:active {
     box-shadow: inset 3px 3px 3px rgba(41,61,95,.8);
     color: #559 !important;
-    border: 1px solid #7e7fb9;
+    border: 1px solid #8d8daa;
 }
 
 #routerinformation tr:nth-child(n+2) a {
@@ -2019,7 +2019,7 @@ div.news h3, #news h3 {
     background: url(images/news.png) 8px center no-repeat, linear-gradient(to bottom, #fff 50%, rgba(255,255,255,.6) 50%, rgba(240,240,255,.4)), linear-gradient(to right, #fafaff 5%, rgba(231, 231, 255, .8)) 15% !important;
     text-align: left;
     padding: 6px 10px 5px 30px;
-    border: 1px solid #7e7fb9;
+    border: 1px solid #8d8daa;
     border-radius: 2px 2px 0 0;
     font-size: 10pt !important;
     letter-spacing: .08em;
@@ -2070,10 +2070,10 @@ h1, .confignav {
     font-size: 9pt;
     font-weight: bold;
     color: #33333f;
-    border: 1px solid #7e7fb9;
+    border: 1px solid #8d8daa;
     border-left: none;
     border-right: none;
-    box-shadow: inset 0 0 0 1px #ccccf0;
+    box-shadow: inset 0 0 0 1px rgba(185,185,198,.65);
     background: linear-gradient(to bottom, #fbfbff 50%, rgba(248,248,255,.6) 50%), repeating-linear-gradient(135deg, rgba(255,255,255,.5) 2px, rgba(221,221,255,.3) 3px, #fff 4px) #fafaff !important;
     backface-visibility: hidden;
     will-change: transform;
@@ -2085,7 +2085,7 @@ h1, .confignav {
     display: inline-block;
     min-width: 60px !important;
     box-sizing: border-box;
-    border: 1px solid #7e7fb9;
+    border: 1px solid #8d8daa;
     background: #fff;
     filter: drop-shadow(0 0 1px rgba(220,220,255,.7));
 }
@@ -2161,7 +2161,7 @@ h1, .confignav {
 .configure h3, .graphspanel h3 {
     margin: 15px 0;
     text-align: left;
-    border: 1px solid #7e7fb9;
+    border: 1px solid #8d8daa;
     border-left-width: 5px;
     border-radius: 0 2px 2px 0;
 }
@@ -2218,7 +2218,7 @@ h3 a.script, th a.script {
     margin: -6px -5px;
     border-radius: 15px 0 0 15px;
     border-radius: 0;
-    border: 1px solid #7e7fb9;
+    border: 1px solid #8d8daa;
     border-right: none;
     border-top: none;
     border-bottom: none;
@@ -2235,7 +2235,7 @@ h3 a.script, th a.script {
 
 #tunnels h3 a {
     margin: -7px -5px -7px 0 !important;
-    border-bottom: 1px solid #7e7fb9;
+    border-bottom: 1px solid #8d8daa;
 }
 
 #tunnels h3 a:nth-child(n+2) {
@@ -2301,7 +2301,7 @@ h3#iptransport a::after, h3#advancedconfig a::after, h3#reseedsetup a::after {
 }
 
 h3#transports, h3#upnp {
-    border: 1px solid #7e7fb9;
+    border: 1px solid #8d8daa;
 }
 
 pre#transports {
@@ -2310,7 +2310,7 @@ pre#transports {
     display: inline-block;
     width: calc(100% - 12px);
     font-size: 9pt;
-    border: 1px solid #7e7fb9;
+    border: 1px solid #8d8daa;
     box-shadow: inset 0 0 0 1px #fff, inset 0 0 2px 1px #ddf;
     background: #fafaff;
 }
@@ -2322,7 +2322,7 @@ pre#transports b {
 #upnpscan {
     margin: -16px 0 5px;
     padding: 5px 10px;
-    border: 1px solid #7e7fb9;
+    border: 1px solid #8d8daa;
     background: #fafaff;
     background: repeating-linear-gradient(135deg, rgba(255, 255, 255, .5) 2px, rgba(240, 240, 255, .3) 3px, #fff 5px);
 }
@@ -2364,7 +2364,7 @@ h3#exploratory {
 
 h3#passwordheading {
     margin-bottom: -2px;
-    border: 1px solid #7e7fb9;
+    border: 1px solid #8d8daa;
     border-radius: 0;
     filter: none;
 }
@@ -2372,7 +2372,7 @@ h3#passwordheading {
 h3#langheading, h3#themeheading, h3#pluginmanage, h3#pconfig, h3#webappconfig, h3#advancedclientconfig, h3#i2pclientconfig, #config_stats h3, #config_keyring h3 {
     position: relative;
     z-index: 100;
-    border: 1px solid #7e7fb9;
+    border: 1px solid #8d8daa;
     border-radius: 0;
     box-shadow: inset 0 0 0 1px #fff;
     filter: none;
@@ -2391,7 +2391,7 @@ p#clientconf.infohelp + .wideload {
 }
 
 p#enablefullstats {
-    border: 1px solid #7e7fb9;
+    border: 1px solid #8d8daa;
     padding: 10px;
     margin-bottom: 13px;
 }
@@ -2434,7 +2434,7 @@ p#enablefullstats {
 }
 
 #configstats td:last-child {
-    border-right: 1px solid #7e7fb9;
+    border-right: 1px solid #8d8daa;
     padding: 0 10px 4px;
 }
 
@@ -2533,14 +2533,14 @@ p#tunnelconfig {
     margin: 6px 5px;
     vertical-align: top !important;
     text-align: center !important;
-    border: 1px solid #7e7fb9;
+    border: 1px solid #8d8daa;
     box-shadow: 0 0 1px #ccc;
     max-width: 98%;
     background: #fff;
 }
 
 .graphspanel a img {
-    box-shadow: inset 0 0 0 1px #fff, 0 0 1px #ccf;
+    box-shadow: inset 0 0 0 1px #fff, 0 0 1px #e0e0eb;
     filter: none !important;
     white-space: nowrap;
 }
@@ -2612,7 +2612,7 @@ h3#graphdisplay {
 }
 
 .main#graphs form {
-    border: 1px solid #7e7fb9;
+    border: 1px solid #8d8daa;
     padding: 10px;
     margin: -16px 0 5px;
 }
@@ -2721,7 +2721,7 @@ to {
     font-weight: bold;
     line-height: 130%;
     box-shadow: inset 0 0 0 1px #fff;
-    border: 1px solid #7e7fb9;
+    border: 1px solid #8d8daa;
     border-radius: 2px;
     background: #eef;
     background: url(/themes/snark/ubergine/images/hat.png) bottom right no-repeat, linear-gradient(to right, #fafaff, #eef);
@@ -2797,7 +2797,7 @@ to {
 table {
     border-collapse: collapse;
     width: 100%;
-    border: 1px solid #7e7fb9;
+    border: 1px solid #8d8daa;
     margin: 1px 0 5px;
     font-size: 9pt;
     background: #fafaff;
@@ -2816,7 +2816,7 @@ td.optionsave {
     text-align: right;
     padding: 5px !important;
     background: #fafaff;
-    border-top: 1px solid #7e7fb9 !important;
+    border-top: 1px solid #8d8daa !important;
 }
 
 td.optionsave, .formaction, form[action="configpeer"] tr:last-child td, table#addkeyring tr:last-child td {
@@ -2838,7 +2838,7 @@ td.optionsave, .formaction, form[action="configpeer"] tr:last-child td, table#ad
 }
 
 .configtable tr:last-child td {
-    border-top: 1px solid #7e7fb9 !important;
+    border-top: 1px solid #8d8daa !important;
 }
 
 .infowarn, .infohelp {
@@ -2848,18 +2848,18 @@ td.optionsave, .formaction, form[action="configpeer"] tr:last-child td, table#ad
 td.infohelp, #help tr:hover td.infohelp, #eventlog tr:hover .infohelp, td.infowarn, #help tr:hover td.infowarn {
     padding: 15px 15px 15px 50px !important;
     text-align: justify;
-    border-top: 1px solid #7e7fb9 !important;
-    border-bottom: 1px solid #7e7fb9 !important;
+    border-top: 1px solid #8d8daa !important;
+    border-bottom: 1px solid #8d8daa !important;
 }
 
 td.infohelp, #help tr:hover td.infohelp, #eventlog tr:hover .infohelp {
-    background: #fff url(/themes/console/images/info/infohelp.png) 12px center no-repeat;
-    background: url(/themes/console/images/info/infohelp.png) 12px center no-repeat, linear-gradient(135deg, #fafaff, #f8f8ff);
+    background: #fff url(/themes/console/images/svg/infohelp.svg) 12px center no-repeat;
+    background: url(/themes/console/images/svg/infohelp.svg) 12px center no-repeat, linear-gradient(135deg, #fafaff, #f8f8ff);
 }
 
 td.infowarn, #help tr:hover td.infowarn {
-    background: #fff url(/themes/console/images/info/infowarn.png) 12px center no-repeat;
-    background: url(/themes/console/images/info/infowarn.png) 12px center no-repeat, linear-gradient(135deg, #fafaff, #f8f8ff);
+    background: #fff url(/themes/console/images/svg/infowarn.svg) 12px center no-repeat;
+    background: url(/themes/console/images/svg/infowarn.svg) 12px center no-repeat, linear-gradient(135deg, #fafaff, #f8f8ff);
 }
 
 #manualpeercontrol tr:nth-child(3) td.infohelp {
@@ -2921,7 +2921,7 @@ table#wrapperlogs {
     float: right;
     display: inline-block;
     vertical-align: middle;
-    border-left: 1px solid #7e7fb9;
+    border-left: 1px solid #8d8daa;
     box-shadow: inset 0 0 0 1px #fff;
 }
 
@@ -3235,7 +3235,7 @@ table[id$="logs"] td:empty {
 }
 
 table[id$="logs"] tr:first-child {
-    border-bottom: 1px solid #7e7fb9;
+    border-bottom: 1px solid #8d8daa;
 }
 
 table[id$="logs"] ul li:last-child {
@@ -3252,7 +3252,7 @@ table hr {
     padding: 0;
     color: #adadeb;
     background: #adadeb;
-    border: 0 solid #adadeb;
+    border: 0 solid #afafcf;
     margin: 0;
     height: 1px;
     display: none;
@@ -3264,8 +3264,8 @@ th {
     text-align: left;
     font-size: 9pt;
     line-height: 110%;
-    border-bottom: 1px solid #7e7fb9 !important;
-    border-top: 1px solid #7e7fb9 !important;
+    border-bottom: 1px solid #8d8daa !important;
+    border-top: 1px solid #8d8daa !important;
     vertical-align: middle;
     background: #f6f6ff !important;
     background: linear-gradient(to bottom, #fcfcff 51%, #fafaff 51%, #f6f6ff 100%) !important;
@@ -3309,8 +3309,8 @@ td {
     padding: 3px 5px;
     color: #33333f;
     vertical-align: middle;
-    border-top: 1px inset #ccf;
-    border-bottom: 1px inset #ccf;
+    border-top: 1px inset #e0e0eb;
+    border-bottom: 1px inset #e0e0eb;
 }
 
 #floodfillconfig tr:nth-child(2) td {
@@ -3351,7 +3351,7 @@ td {
 h4.app, h4.app2 {
     margin: 0 auto 3px;
     padding: 7px 10px 6px 32px;
-    border: 1px solid #7e7fb9;
+    border: 1px solid #8d8daa;
     font-size: 11pt;
     text-transform: uppercase;
     letter-spacing: .08em;
@@ -3384,7 +3384,7 @@ h4.app img, h4.app2 img, #sitemap h3 img {
     opacity: 0.8;
     filter: none !important;
     transition: ease all 1s;
-    border-left: 1px solid #7e7fb9;
+    border-left: 1px solid #8d8daa;
 }
 
 #chooselang img {
@@ -3427,7 +3427,7 @@ div.app {
     float: left;
     min-width: 140px;
     text-align: center !important;
-    border: 1px solid #7e7fb9;
+    border: 1px solid #8d8daa;
     border: 1px solid #999adf;
     box-shadow: inset 0 0 0 1px #fff, inset 0 0 2px 1px #eef, 0 0 1px #ddf;
     background: #f8f8ff;
@@ -3554,7 +3554,7 @@ div.app img {
     font-size: 8pt;
     margin: 0;
     padding: 4px 6px;
-    border-top: 1px solid #7e7fb9;
+    border-top: 1px solid #8d8daa;
     border-top: 1px solid #999adf;
     box-shadow: inset 0 0 0 1px #fff, inset 0 0 2px 1px #eef;
     text-align: center;
@@ -3591,7 +3591,7 @@ table.search {
     border-radius: 0 0 2px 2px;
     border: 1px solid #595a8f;
     border-top: 1px solid #447;
-    box-shadow: 0 1px 1px 1px rgba(220, 220, 255, .3), inset 0 0 0 1px #ccccf0, inset 0 0 2px 1px #fff;
+    box-shadow: 0 1px 1px 1px rgba(220, 220, 255, .3), inset 0 0 0 1px rgba(185,185,198,.65), inset 0 0 2px 1px #fff;
     background: #fafaff !important;
     background: linear-gradient(to bottom, #fafaff 50%, rgba(255,255,255,.6) 50%, rgba(240,240,255,.4)), repeating-linear-gradient(135deg, rgba(255,255,255,.5) 2px, rgba(240, 240, 255, .3) 3px, #fff 4px) !important;
 }
@@ -3793,9 +3793,9 @@ p {
 p.infohelp, p.sybilinfo, p#debugmode, p#upnpstatus, p#pluginconfigtext, p#gatherstats {
     padding: 15px 15px 15px 50px;
     line-height: 130%;
-    border: 1px solid #7e7fb9;
-    background: #fff url(/themes/console/images/info/infohelp.png) 12px center no-repeat;
-    background: url(/themes/console/images/info/infohelp.png) 12px center no-repeat, linear-gradient(135deg, #fafaff, #f8f8ff);
+    border: 1px solid #8d8daa;
+    background: #fff url(/themes/console/images/svg/infohelp.svg) 12px center no-repeat;
+    background: url(/themes/console/images/svg/infohelp.svg) 12px center no-repeat, linear-gradient(135deg, #fafaff, #f8f8ff);
 }
 
 .infohelp#pagenav {
@@ -3886,11 +3886,11 @@ p.sybilinfo.experimental {
 }
 
 p.infowarn {
-    border: 1px solid #7e7fb9;
+    border: 1px solid #8d8daa;
     padding: 15px 15px 15px 50px;
     line-height: 130%;
-    background: #fff url(/themes/console/images/info/infowarn.png) 12px center no-repeat;
-    background: url(/themes/console/images/info/infowarn.png) 12px center no-repeat, linear-gradient(135deg, #fafaff, #f8f8ff);
+    background: #fff url(/themes/console/images/svg/infowarn.svg) 12px center no-repeat;
+    background: url(/themes/console/images/svg/infowarn.svg) 12px center no-repeat, linear-gradient(135deg, #fafaff, #f8f8ff);
 }
 
 #addkeyring td.infohelp {
@@ -4024,7 +4024,7 @@ h3#browseronstart + p.infohelp {
     background: url(/themes/console/images/info/connect.png) 12px center no-repeat, linear-gradient(135deg, #fafaff, #f8f8ff);
     background-size: 28px 28px, 100% 100%;
     border-radius: 2px;
-    box-shadow: 0 0 1px #ccf;
+    box-shadow: 0 0 1px #e0e0eb;
 }
 
 p#enablefullstats, p#gatherstats {
@@ -4077,14 +4077,14 @@ p#enablefullstats, p#gatherstats {
 }
 
 p#gatherstats + form, ul.statlist {
-    border: 1px solid #7e7fb9;
+    border: 1px solid #8d8daa;
     padding: 10px;
     background: #fafaff;
     background: linear-gradient(135deg, #fafaff, #f8f8ff);
 }
 
 ul.statlist {
-    border: 1px solid #7e7fb9;
+    border: 1px solid #8d8daa;
     padding: 0 10px 10px;
     display: inline-block;
     width: calc(100% - 22px);
@@ -4298,7 +4298,7 @@ h1 {
     letter-spacing: .12em; /* this value is not a happy accident; corresponds to relative spacing proportions for all heading fonts. */
     text-transform: uppercase;
     text-shadow: 0 1px 1px #fff,0 -1px 1px #e2e2ff, 0 2px 1px #ddf;
-    box-shadow: inset 0 0 0 1px #ccccf0;
+    box-shadow: inset 0 0 0 1px rgba(185,185,198,.65);
     white-space: normal;
     background: #fcfcff;
     background: url(images/netwrk.png) 8px center no-repeat, linear-gradient(135deg, #fcfcff, rgba(252,252,255,0) 600px), linear-gradient(to bottom, #fcfcff 50%, rgba(248,248,255,.6) 50%), repeating-linear-gradient(135deg, rgba(255,255,255,.5) 2px, rgba(221, 221, 255, .3) 3px, #fff 4px) #fafaff !important;
@@ -4399,7 +4399,7 @@ h2 {
     letter-spacing: .08em;
     word-spacing: .1em;
     padding: 10px;
-    border: 1px solid #7e7fb9;
+    border: 1px solid #8d8daa;
     border-radius: 2px;
     margin: 15px 0 !important;
     box-shadow: inset 0 0 0 1px #fff, 0 0 1px rgba(220,220,220,0.3);
@@ -4439,8 +4439,8 @@ h2 img {
 }
 
 h3, #routerinformation h2 {
-    border: 1px solid #7e7fb9;
-    border-left: 5px solid #7e7fb9;
+    border: 1px solid #8d8daa;
+    border-left: 5px solid #8d8daa;
     padding: 7px 5px 6px 7px;
     margin: 12px 0 15px 0;
     border-radius: 0 2px 2px 0;
@@ -4458,7 +4458,7 @@ h3, #routerinformation h2 {
 
 h3.tabletitle, h3.ptitle, #config_advanced h3.tabletitle, h3#bannedpeers, #routerinformation h2 {
     border-radius: 0;
-    border: 1px solid #7e7fb9;
+    border: 1px solid #8d8daa;
     margin-bottom: -2px;
     box-shadow: inset 0 0 0 1px #fff;
     text-align: left;
@@ -4491,18 +4491,18 @@ h2, h3 {
 }
 
 #permabanned tr:nth-child(2) td, #ipv4 td, #ipv6 td {
-    border-bottom: 1px solid #7e7fb9;
+    border-bottom: 1px solid #8d8daa;
     background: #fff !important;
     background: linear-gradient(to bottom, #fff 50%, rgba(238, 238, 255, .2) 50%, #eef 100%) #fff !important;
 }
 
 #ipv6 td {
-    border-top: 1px solid #7e7fb9;
+    border-top: 1px solid #8d8daa;
 }
 
 #bannedips table {
     border: none;
-    border-bottom: 1px solid #7e7fb9;
+    border-bottom: 1px solid #8d8daa;
     margin: -1px 0 !important;
 }
 
@@ -4519,7 +4519,7 @@ h2, h3 {
 }
 
 #permabanned td:first-child {
-    border-left: 1px solid #7e7fb9;
+    border-left: 1px solid #8d8daa;
     text-align: right;
     padding-right: 10px;
     width: 49%;
@@ -4536,7 +4536,7 @@ h2, h3 {
 }
 
 #banneduntilrestart td {
-    border-right: 1px solid #7e7fb9;
+    border-right: 1px solid #8d8daa;
     text-align: right !important;
 }
 
@@ -4564,7 +4564,7 @@ h4 {
     font-size: 10pt;
     text-transform: uppercase;
     color: #41465f;
-    border: 1px solid #7e7fb9;
+    border: 1px solid #8d8daa;
     border-radius: 2px;
     box-shadow: inset 0 0 0 1px #fff;
     background: #eef;
@@ -4585,7 +4585,7 @@ h4 {
 }
 
 #certs h3 + p, #certs h4 + p:not(.infohelp) {
-    border: 1px solid #7e7fb9;
+    border: 1px solid #8d8daa;
     padding: 15px;
 }
 
@@ -4621,7 +4621,7 @@ h4 {
 
 #certs h4 + textarea {
     margin: -11px 0 !important;
-    border: 1px solid #7e7fb9;
+    border: 1px solid #8d8daa;
     box-shadow: none;
 }
 
@@ -4712,7 +4712,7 @@ div[lang="de"] .links li {
 .langbox img {
     margin: -1px 0 0;
     padding: 0 !important;
-    border: 1px solid #adadeb;
+    border: 1px solid #afafcf;
     border-radius: 1px;
     opacity: .9;
     filter: none;
@@ -5528,7 +5528,7 @@ textarea:focus {
     text-align: center;
     font-style: normal;
     font-size: 9pt;
-    border: 1px solid #7e7fb9 !important;
+    border: 1px solid #8d8daa !important;
     border-top: 0 !important;
     box-shadow: inset 0 0 0 1px #fff;
     background: #eef;
@@ -5537,7 +5537,7 @@ textarea:focus {
 
 .statusnotes + .statusnotes {
     margin-top: -6px;
-    border-top: 1px solid #7e7fb9 !important;
+    border-top: 1px solid #8d8daa !important;
 }
 
 h3 + .statusnotes {
@@ -5591,7 +5591,7 @@ h3 + .statusnotes {
     break-inside: avoid;
     page-break-inside: avoid;
     -webkit-break-inside: avoid;
-    border: 1px solid #7e7fb9;
+    border: 1px solid #8d8daa;
     padding: 6px 0;
     margin-top: 1px;
     background: #efefff;
@@ -5855,9 +5855,9 @@ td.spacer, th.spacer {
 }
 
 .cells {
-    border-left: 1px inset #ddf;
-    border-top: 1px inset #ddf !important;
-    border-bottom: 1px inset #ddf !important;
+    border-left: 1px solid #e0e0eb;
+    border-top: 1px solid #e0e0eb !important;
+    border-bottom: 1px solid #e0e0eb !important;
     padding-top: 4px;
     padding-bottom: 4px;
 }
@@ -5868,8 +5868,8 @@ td.spacer, th.spacer {
 
 .tablefooter tr, .tablefooter td {
     background: #f8f8ff;
-    border-top: 1px solid #7e7fb9;
-    border-bottom: 1px solid #7e7fb9 !important;
+    border-top: 1px solid #8d8daa;
+    border-bottom: 1px solid #8d8daa !important;
     padding: 8px 2px;
     font-size: 9pt;
     line-height: 110%;
@@ -5877,7 +5877,7 @@ td.spacer, th.spacer {
 
 .formaction {
     text-align: right;
-    border: 1px solid #7e7fb9;
+    border: 1px solid #8d8daa;
     margin-top: -15px;
     padding: 5px;
     background: #fafaff;
@@ -5953,7 +5953,7 @@ body.iframed {
 
 #themeui.formaction, #langui.formaction {
     border: none;
-    border-top: 1px solid #7e7fb9;
+    border-top: 1px solid #8d8daa;
     background: none;
     margin: 5px -5px 0;
 }
@@ -5995,7 +5995,7 @@ body.iframed {
     text-overflow: ellipsis;
     white-space: nowrap;
     text-align: center;
-    border: 1px solid #7e7fb9;
+    border: 1px solid #8d8daa;
     border: 1px solid #999adf;
     box-shadow: inset 0 0 0 1px #fff;
     background: #f8f8ff;
@@ -6066,7 +6066,7 @@ body.iframed {
     position: relative;
     top: 4px;
     clear: both;
-    border-top: 1px solid #7e7fb9;
+    border-top: 1px solid #8d8daa;
     background: repeating-linear-gradient(45deg, rgba(252,252,255,.5) 2px, rgba(221, 221, 255, .3) 3px, #fafaff 5px), #fafaff;
 }
 
@@ -6085,7 +6085,7 @@ p#helptranslate {
     position: relative;
     top: 4px;
     text-align: left !important;
-    border-top: 1px solid #7e7fb9;
+    border-top: 1px solid #8d8daa;
     background: url(/themes/console/images/info/notice.png) left 14px center no-repeat, #fff;
     background: url(/themes/console/images/info/notice.png) left 14px center no-repeat, linear-gradient(135deg, #fafaff, #f8f8ff);
     background-size: 28px 28px;
@@ -6103,7 +6103,7 @@ div.themelabel {
     overflow: hidden;
     text-overflow: ellipsis;
     font-size: 9pt;
-    border-top: 1px solid #7e7fb9 !important;
+    border-top: 1px solid #8d8daa !important;
     border-top: 1px solid #999adf !important;
     background: #f8f8ff;
     box-shadow: inset 0 0 0 1px #fff;
@@ -6142,7 +6142,7 @@ div.themelabel {
 #themesettings, #langsettings {
     margin: -16px 0 0;
     padding: 4px 5px 0;
-    border: 1px solid #7e7fb9;
+    border: 1px solid #8d8daa;
     background: #fafaff;
     background: repeating-linear-gradient(135deg, rgba(255,255,255,.5) 2px, rgba(248,248,255,.3) 3px, #fafaff 4px);
 }
@@ -6303,7 +6303,7 @@ div.ui_lang {
     text-overflow: ellipsis;
     font-size: 9pt;
     text-transform: capitalize;
-    border-top: 1px solid #7e7fb9;
+    border-top: 1px solid #8d8daa;
     border-top: 1px solid #999adf;
     border-radius: 0 0 2px 2px;
     box-shadow: inset 0 0 0 1px #fff;
@@ -6332,7 +6332,7 @@ table#consolepass input {
 
 table#consolepass td#pw_adduser {
     padding: 5px 10px;
-    border-top: 1px solid #7e7fb9;
+    border-top: 1px solid #8d8daa;
 }
 
 td#pw_adduser input {
@@ -6374,7 +6374,7 @@ table#consolepass input[name="name"] {
 
 table#addkeyring tr:last-child td {
     padding: 5px;
-    border-top: 1px solid #7e7fb9;
+    border-top: 1px solid #8d8daa;
 }
 
 #refreshsidebar tr:first-child td {
@@ -6723,7 +6723,7 @@ h3#udpcon {
 }
 
 #tunnel_defs td:nth-child(3) {
-    border-right: 1px inset #ddf;
+    border-right: 1px solid #e0e0eb;
 }
 
 #tunnel_defs td:first-child, #tunnel_defs td:last-child {
@@ -6756,7 +6756,7 @@ p:empty { /* empty paragraph nuke */
     text-align: left !important;
     background: #fafaff;
     padding: 10px;
-    border: 1px solid #7e7fb9;
+    border: 1px solid #8d8daa;
 }
 
 .subheading b {
@@ -6772,8 +6772,8 @@ p:empty { /* empty paragraph nuke */
     font-weight: bold;
     text-align: center;
     color: #41465f;
-    border: 1px solid #7e7fb9;
-    box-shadow: 0 0 1px #ccf;
+    border: 1px solid #8d8daa;
+    box-shadow: 0 0 1px #e0e0eb;
     border-radius: 2px;
     background: #f2f2ff;
     background: linear-gradient(to right, #f2f2ff, #f8f8ff, #f2f2ff);
@@ -6824,7 +6824,7 @@ p:empty { /* empty paragraph nuke */
 #netdboverview table {
     margin: -1px 0;
     border: none;
-    border-bottom: 1px solid #7e7fb9;
+    border-bottom: 1px solid #8d8daa;
 }
 
 #netdboverview table th {
@@ -6897,24 +6897,33 @@ p:empty { /* empty paragraph nuke */
 #netdbcountrylist img {
     margin-right: 5px;
     text-align: right;
+    border: 1px solid #d0d0db;
+    border-radius: 3px;
+}
+
+@media screen and (min-width: 1500px) {
+#netdbcountrylist img {
+    width: 24px;
+    height: auto;
+}
 }
 
 @supports (scroll-behavior: auto) {
 #netdboverview table td {
+    padding: 5px 10px;
     box-shadow: inset 0 0 0 1px #fff !important;
     background: rgba(240,240,255,.4);
-    padding: 5px 10px;
 }
 
 #netdboverview #netdbversions td:first-child, #netdboverview #netdbtransports td:first-child, #netdboverview #netdbcountrylist td:first-child,
 #netdbtiers td:first-child {
-    border-right: 1px inset #ddf !important;
     white-space: nowrap;
+    border-right: 1px solid #e0e0eb !important;
 }
 }
 
 #netdbtiers td:first-child {
-    border-left: 1px solid #7e7fb9;
+    border-left: 1px solid #8d8daa;
 }
 
 @supports not (-moz-appearance: none) {
@@ -6923,7 +6932,7 @@ p:empty { /* empty paragraph nuke */
 }
 
 #netdbtiers th:first-child {
-    border-left: 1px solid #7e7fb9;
+    border-left: 1px solid #8d8daa;
 }
 }
 
@@ -7333,7 +7342,7 @@ b.netdb_transport {
 #leasesetdebug td:nth-child(odd) {
     width: 200px;
     text-align: right;
-    border-right: 1px inset #cfd1ff;
+    border-right: 1px solid #e0e0eb;
 }
 
 #leasesetdebug td:nth-child(even) {
@@ -7509,7 +7518,7 @@ img.unknownflag {
 /* sybils */
 
 #sybilnav, #sybils_summary {
-    border: 1px solid #7e7fb9;
+    border: 1px solid #8d8daa;
     margin-bottom: 10px;
     background: repeating-linear-gradient(135deg, rgba(248,238,255,.5) 2px, rgba(240, 240, 255, .3) 3px, #fafaff 5px), #fafaff;
     box-shadow: inset 0 0 0 1px #fff;
@@ -7589,7 +7598,7 @@ h3.sybils {
 
 #netdb .sybilinfo_container:empty + hr, #netdb .sybilinfo_container + hr {
     height: 0 !important;
-    border-bottom: 1px solid #7e7fb9 !important;
+    border-bottom: 1px solid #8d8daa !important;
     opacity: 1 !important;
     margin: 0 !important;
 }
@@ -7625,11 +7634,11 @@ h3.sybils {
 }
 
 #netdb .sybil_routerinfo tr:first-child, #netdb .sybil_routerinfo th {
-    border-bottom: 1px solid #7e7fb9 !important;
+    border-bottom: 1px solid #8d8daa !important;
 }
 
 #netdb .sybil_routerinfo tr:nth-child(2), #netdb .sybil_routerinfo tr:nth-child(2) td {
-    border-top: 1px solid #7e7fb9 !important;
+    border-top: 1px solid #8d8daa !important;
 }
 
 .sybil_routerinfo th {
@@ -7706,7 +7715,7 @@ h3.sybils {
 p.sybil_info, p.family, p.threatpoints, p.hashdist, p#sybil_totals, p.notfound {
     margin: 3px 0;
     padding: 7px 5px 7px 30px;
-    border: 1px solid #7e7fb9;
+    border: 1px solid #8d8daa;
     box-shadow: inset 0 0 0 1px #fff;
     font-weight: bold;
     color: #41465f;
@@ -7745,7 +7754,7 @@ p.sybil_info + a[name] + table.sybil_routerinfo, p.hashdist + a[name] + table.sy
     padding: 0 10px;
     width: calc(100% - 22px);
     display: inline-block;
-    border: 1px solid #7e7fb9;
+    border: 1px solid #8d8daa;
     box-shadow: inset 0 0 0 1px #fff;
     background: #eef;
     background: repeating-linear-gradient(45deg, rgba(255,255,255,.5) 2px, rgba(221, 221, 255, .3) 3px, #fafaff 5px), #fafaff;
@@ -7762,13 +7771,13 @@ p.sybil_info + a[name] + table.sybil_routerinfo, p.hashdist + a[name] + table.sy
 
 @supports not (-moz-appearance: none) {
 .leaseset th:last-child, .leaseset td:last-child, .sybil_routerinfo th:last-child {
-    border-right: 1px solid #7e7fb9 !important;
+    border-right: 1px solid #8d8daa !important;
 }
 }
 
 .sybilinfo_params {
     padding: 0;
-    border: 1px solid #7e7fb9;
+    border: 1px solid #8d8daa;
 }
 
 .sybilinfo_familyname {
@@ -7782,7 +7791,7 @@ p.sybil_info + a[name] + table.sybil_routerinfo, p.hashdist + a[name] + table.sy
 
 #netdb .sybil_addresses {
     padding: 0;
-    border-bottom: 1px solid #7e7fb9;
+    border-bottom: 1px solid #8d8daa;
     line-height: 120%;
 }
 
@@ -7793,8 +7802,8 @@ p.sybil_info + a[name] + table.sybil_routerinfo, p.hashdist + a[name] + table.sy
 .sybil_addresses table {
     width: 100%;
     margin: 0;
-    border-top: 1px solid #7e7fb9 !important;
-    border-bottom: 1px solid #7e7fb9 !important;
+    border-top: 1px solid #8d8daa !important;
+    border-bottom: 1px solid #8d8daa !important;
 }
 
 .sybil_addresses td:first-child {
@@ -7863,7 +7872,7 @@ p.sybil_info + a[name] + table.sybil_routerinfo, p.hashdist + a[name] + table.sy
 .identicon {
     margin: -1px 0 -1px 2px !important;
     padding: 0 !important;
-    border-left: 1px solid #7e7fb9;
+    border-left: 1px solid #8d8daa;
     width: 28px;
     height: 28px;
     image-rendering: -webkit-optimize-contrast;
@@ -8107,7 +8116,7 @@ p.sybil_info + a[name] + table.sybil_routerinfo, p.hashdist + a[name] + table.sy
 #banlist {
     padding: 2px 5px 3px 0;
     display: block;
-    border: 1px solid #7e7fb9;
+    border: 1px solid #8d8daa;
     border-radius: 2px;
     background: #fafaff;
     text-align: center;
@@ -8132,7 +8141,7 @@ p.sybil_info + a[name] + table.sybil_routerinfo, p.hashdist + a[name] + table.sy
     line-height: 120%;
     list-style: none;
     font-size: 95%;
-    border: 1px solid #7e7fb9;
+    border: 1px solid #8d8daa;
     border-radius: 2px;
     box-shadow: inset 0 0 0 1px #fff, inset 0 0 1px 1px #ddf;
     background: #eef;
@@ -8166,8 +8175,8 @@ p.sybil_info + a[name] + table.sybil_routerinfo, p.hashdist + a[name] + table.sy
     top: 0;
     right: 0;
     line-height: 0;
-    border-left: 1px solid #7e7fb9;
-    border-bottom: 1px solid #7e7fb9;
+    border-left: 1px solid #8d8daa;
+    border-bottom: 1px solid #8d8daa;
     border-radius: 0 0 0 2px;
     box-shadow: inset 0 0 0 1px #fff, inset 0 0 1px 1px #ddf;
     background: #fff;
@@ -8483,7 +8492,7 @@ table#schedjobs {
 }
 
 #floodfills th {
-    border-right: 1px solid #7e7fb9;
+    border-right: 1px solid #8d8daa;
     box-shadow: inset 0 0 0 1px #fff, inset 0 0 1px 1px #ddf;
 }
 
@@ -8808,7 +8817,7 @@ table#schedjobs {
     right: 0;
     display: inline-block;
     font-size: 90%;
-    border: 1px solid #7e7fb9;
+    border: 1px solid #8d8daa;
     border-radius: 4px 0 0 0;
     box-shadow: inset 0 0 0 1px #fff;
     background: #eef;
@@ -8850,7 +8859,7 @@ select[name="newlogclass"] {
 
 #volunteer, #sidebarhelp, #configurationhelp, #reachabilityhelp, #advancedsettings, #themeoverride, #tunnman,
 #legal, #changelog, #faq, #reseedhelp, #troubleshoot, #newuserguide, #filterlist, #webhosting, #browserconfig, #glossary {
-    border: 1px solid #7e7fb9;
+    border: 1px solid #8d8daa;
     border-radius: 2px;
     margin-bottom: 10px;
     padding: 0 10px 5px;
@@ -9092,7 +9101,7 @@ select[name="newlogclass"] {
     text-align: right;
     margin: 0 0 0 -10px;
     padding: 7px 5px;
-    border-top: 1px solid #7e7fb9;
+    border-top: 1px solid #8d8daa;
     background: linear-gradient(to right, #efefff 65%, #fafaff);
 }
 
@@ -9124,7 +9133,7 @@ select[name="newlogclass"] {
     padding: 5px 0 0;
     columns: 2 auto;
     column-gap: 35px;
-    column-rule: 1px solid #7e7fb9;
+    column-rule: 1px solid #8d8daa;
 }
 
 #terms p {
@@ -9146,7 +9155,7 @@ select[name="newlogclass"] {
 
 #wrapperlogs pre {
     background-size: 100% 100%, auto 120px, 100% 100% !important;
-    height: 500px;
+    max-height: 500px;
     box-shadow: inset 0 0 0 1px #ddf, inset 0 0 0 2px #fff;
     background: url(/themes/snark/ubergine/images/hat.png) no-repeat right -3px bottom -3px / auto 120px #f3f3ff !important;
 }
@@ -9159,7 +9168,7 @@ select[name="newlogclass"] {
     background: linear-gradient(135deg, #fafaff, rgba(240,240,255,.5));
     border: 1px solid #99b;
     border-radius: 2px;
-    box-shadow: inset 0 0 0 1px #fff, 0 0 1px #ccf;
+    box-shadow: inset 0 0 0 1px #fff, 0 0 1px #e0e0eb;
 }
 
 #routerinfo code {
@@ -9211,7 +9220,7 @@ select[name="newlogclass"] {
     padding: 0;
     margin: 10px -5px 0;
     border: none;
-    box-shadow: 0 0 1px #ccf !important;
+    box-shadow: 0 0 1px #e0e0eb !important;
     filter: none;
 }
 
@@ -9238,7 +9247,7 @@ select[name="newlogclass"] {
 
 #routerinfo td:nth-child(2):not([colspan]) {
     white-space: nowrap;
-    border-right: 1px inset #ccf;
+    border-right: 1px inset #e0e0eb;
 }
 
 .homelinkedit th, .homelinkedit td {
@@ -9365,7 +9374,7 @@ select[name="newlogclass"] {
 h4#updateplugins {
     background: #fcfcff !important;
     background: linear-gradient(to bottom, #fff 50%, rgba(238, 238, 255, .2) 50%, #eef 100%) #fff !important;
-    border: 1px solid #7e7fb9;
+    border: 1px solid #8d8daa;
     padding: 5px;
     font-size: 10pt;
     margin: -15px 0 14px;
@@ -9397,7 +9406,7 @@ h3#displayevents {
 form[action="events"] {
     margin: -16px 0 -2px;
     padding: 10px 10px 10px 50px;
-    border: 1px solid #7e7fb9;
+    border: 1px solid #8d8daa;
     box-shadow: inset 0 0 0 1px #fff;
     background: #f2f2ff url(/themes/console/images/info/logs.png) 12px center no-repeat;
     background-size: 28px 28px;
@@ -9499,7 +9508,7 @@ a[href^="configpeer?peer"]:hover {
     padding: 10px 15px;
     margin-top: -16px;
     background: linear-gradient(to bottom, #fafaff, rgba(250,250,255,.3)), repeating-linear-gradient(135deg, rgba(255,255,255,.5) 2px, rgba(221, 221, 255, .3) 3px, #fff 4px) #efefff !important;
-    border: 1px solid #7e7fb9;
+    border: 1px solid #8d8daa;
     box-shadow: inset 0 0 0 1px #fff;
     filter: drop-shadow(0 0 1px rgba(220,220,255,.7));;
 }
@@ -9569,7 +9578,7 @@ a[href^="configpeer?peer"]:hover {
     white-space: nowrap !important;
     color: #152;
     font-size: 90%;
-    box-shadow: 0 0 0 1px #ccccf0, inset 0 0 0 1px #fff;
+    box-shadow: 0 0 0 1px rgba(185,185,198,.65), inset 0 0 0 1px #fff;
     border-radius: 2px;
     background: #f8f8ff;
     -moz-user-select: all;
@@ -9764,7 +9773,7 @@ a[href^="configpeer?peer"]:hover {
 
 @supports not (-moz-appearance: none) {
 #jardump table {
-    border: 1px solid #7e7fb9 !important;
+    border: 1px solid #8d8daa !important;
     border-bottom: none !important;
     border-top: none !important;
 }
@@ -9800,7 +9809,7 @@ a[href^="configpeer?peer"]:hover {
 }
 
 #jardump td {
-    border-right: 1px inset #ddf;
+    border-right: 1px solid #e0e0eb;
     text-align: center;
 }
 
@@ -9928,7 +9937,7 @@ a[href^="configpeer?peer"]:hover {
 }
 
 #jardump td {
-    border-right: 1px inset #ddf;
+    border-right: 1px solid #e0e0eb;
     text-align: center;
 }
 
@@ -9970,7 +9979,7 @@ a[href^="configpeer?peer"]:hover {
 
 @supports not (-moz-appearance: none) {
 #jardump table {
-    border: 1px solid #7e7fb9 !important;
+    border: 1px solid #8d8daa !important;
     border-bottom: none !important;
     border-top: none !important;
     width: calc(100% - 1px) !important;
@@ -10013,7 +10022,7 @@ a[href^="configpeer?peer"]:hover {
 .optionlist, .optionsingle, #reseedssl {
     padding: 1px 2px;
     column-gap: 2px;
-    border: 1px solid #7e7fb9 !important;
+    border: 1px solid #8d8daa !important;
     box-shadow: inset 0 0 0 2px #fff;
     background: #fff !important;
     transition: ease box-shadow .1s;
@@ -10026,7 +10035,7 @@ a[href^="configpeer?peer"]:hover {
 }
 
 .optionlist:hover, .optionsingle:hover, .optiontextarea:hover {
-    border: 1px solid #adadeb;
+    border: 1px solid #afafcf;
     box-shadow: inset 0 0 0 1px #a79;
     background: #ffd !important;
     transition: ease box-shadow .1s, ease background .05s .01s;
@@ -10069,7 +10078,7 @@ b.suboption {
     display: inline-block;
     text-shadow: 0 1px 1px #fff;
     border-radius: 3px 3px 0 0;
-    border: 1px solid #7e7fb9;
+    border: 1px solid #8d8daa;
     border-bottom: none;
     box-shadow: inset 0 0 0 1px #fff;
     background: #fdfdff;
@@ -10186,7 +10195,7 @@ b.suboption {
 .net_bw {
     margin: 3px;
     padding: 5px 8px;
-    box-shadow: 0 0 0 1px #ccccf0, inset 0 0 0 1px #fff, 0 0 2px #adadeb;
+    box-shadow: 0 0 0 1px rgba(185,185,198,.65), inset 0 0 0 1px #fff, 0 0 2px #adadeb;
     background: #d0d0ff;
     background: linear-gradient(to bottom, #fff, #ccccf0);
 }
@@ -10458,7 +10467,7 @@ b.suboption {
 }
 
 #i2pupdates .optionsave {
-    border-bottom: 1px solid #7e7fb9;
+    border-bottom: 1px solid #8d8daa;
 }
 
 #i2pupdates textarea {
@@ -10587,7 +10596,7 @@ b.suboption {
 }
 
 #manualreseed th:last-child, #manualreseed td:last-child {
-    border-right: 1px solid #7e7fb9;
+    border-right: 1px solid #8d8daa;
 }
 }
 
@@ -10603,7 +10612,7 @@ b.suboption {
 }
 
 #config_reseed .optionsingle:hover {
-    border: 1px solid #adadeb;
+    border: 1px solid #afafcf;
     box-shadow: inset 0 0 0 1px #a79;
     transition: ease box-shadow .5s;
 }
@@ -10716,7 +10725,7 @@ b.suboption {
 
 #config_network .optionlist:hover, #config_i2cp .optionlist:hover, #reseedssl:hover,
 #manualreseed .optionsingle:hover, .optiontextarea:hover, #reseed_urlselection:hover {
-    border: 1px solid #adadeb;
+    border: 1px solid #afafcf;
     box-shadow: inset 0 0 0 1px #a79 !important;
     transition: ease box-shadow .5s;
 }
@@ -10882,7 +10891,7 @@ form[action="configplugins"] input.reload {
 }
 
 #pluginconfig table {
-    border: 1px solid #7e7fb9;
+    border: 1px solid #8d8daa;
 }
 
 @media screen and (min-width: 1500px) {
@@ -10980,7 +10989,7 @@ input[type="radio"]:not(:checked), input[type="checkbox"]:not(:checked) {
     box-sizing: border-box;
     -moz-appearance: none;
     -webkit-appearance: none;
-    filter: drop-shadow(0 0 1px #ccf) !important;
+    filter: drop-shadow(0 0 1px #e0e0eb) !important;
     will-change: transform;
 }
 
@@ -11712,12 +11721,11 @@ th.options .optbox {
 
 /* end chrome overrides */
 
-/*@supports (scroll-behavior: auto) and (text-justify: auto) and (-moz-appearance: none) {*/
 .main#tunnels .cells, #tunnel_defs td, .cells, #profilelist td, #profile_defs td, #floodfills td, #debug td, #jardump td, #jobstats td,
 #eventlog td, #webappconfig td, #tunnelconfig td, #sidebarconf td, #configstats td, #loggingoptions td, #addkeyring td, .homelinkedit td,
 #clientconfig td, .netdbentry td, #netdblookup td, #peerdefs td, #help td:not(.infohelp):not(.infowarn), #pluginconfig td, #thresholds td, #leasesetdebug td, #enviro td, #routerinformation td {
     box-shadow: inset 0 0 0 1px #fff !important;
-    border-left: 1px inset #ddf !important;
+    border-left: 1px solid #e0e0eb;
     background: rgba(240,240,255,.4);
 }
 
@@ -11729,8 +11737,40 @@ th.options .optbox {
     box-shadow: inset 0 0 0 1px #ffe !important;
     transition: ease all .05s;
 }
-/*}
-*/
+
+.main:not(#home) tr, .main:not(#home) td:first-child, #netdboverview td:last-child table {
+    border-left: 1px solid #8d8daa !important;
+}
+
+.main:not(#home) tr, .main:not(#home) td:last-child, #netdboverview td:first-child table {
+    border-right: 1px solid #8d8daa !important;
+}
+
+.main #netdboverview table tr, .main #netdboverview table td:first-child,
+.sybil_addresses tr, .sybil_addresses td:first-child, .main #bugreports td:first-child {
+    border-left: none !important;
+}
+
+.main #netdboverview table tr, .main #netdboverview table td:last-child,
+.sybil_addresses tr, .sybil_addresses td:last-child, .main #bugreports td:last-child,
+.main #file, .main #file td {
+    border-right: none !important;
+}
+
+.main #bannedips td {
+    border-right: 1px solid #8d8daa;
+}
+
+.main #installPluginFile tr, .main #installPluginFile td:first-child, .main #installPluginFile td:last-child,
+.main #installPluginUrl tr, .main #installPluginUrl td:first-child, .main #installPluginUrl td:last-child,
+.main #joinFamily tr, .main #joinFamily td:first-child, .main #joinFamily td:last-child,
+.main #newFamily tr, .main #newFamily td:first-child, .main #newFamily td:last-child,
+.main #bannedips #banneduntilrestart tr, .main #bannedips #banneduntilrestart td, .main #bannedips #banneduntilrestart td:first-child, .main #bannedips #banneduntilrestart td:last-child,
+.main #bannedips #permabanned tr, .main #bannedips #permabanned td, .main #bannedips #permabanned td:first-child, .main #bannedips #permabanned td:last-child {
+    border-left: none !important;
+    border-right: none !important;
+}
+
 /* /events */
 
 #events h3 {
@@ -12073,7 +12113,7 @@ h1.webapp {
     padding: 20px 10px 20px 60px !important;
     width: calc(100% - 70px);
     list-style: none;
-    box-shadow: 0 0 0 1px #ccccf0, inset 0 0 0 1px #fff, inset 0 0 0 2px #ddf;
+    box-shadow: 0 0 0 1px rgba(185,185,198,.65), inset 0 0 0 1px #fff, inset 0 0 0 2px #ddf;
     background-blend-mode: luminosity;
     break-inside: avoid;
     page-break-inside: avoid;
@@ -12082,7 +12122,7 @@ h1.webapp {
 }
 
 #helptoc li:hover {
-    box-shadow: 0 0 0 1px #ccccf0, inset 0 0 0 1px #fff, inset 0 0 0 2px rgba(146,48,0,.7);
+    box-shadow: 0 0 0 1px rgba(185,185,198,.65), inset 0 0 0 1px #fff, inset 0 0 0 2px rgba(146,48,0,.7);
     background-blend-mode: normal;
     transition: ease box-shadow .3s;
 }
@@ -12231,7 +12271,7 @@ h1.webapp {
 #sybilanalysis {
     margin: 14px 0 6px !important;
     padding: 10px 10px 8px 50px !important;
-    border: 1px solid #7e7fb9;
+    border: 1px solid #8d8daa;
     background: #fff url(/themes/console/images/info/sybils.png) 12px center no-repeat;
     background: url(/themes/console/images/info/sybils.png) 12px center no-repeat, linear-gradient(135deg, #fafaff, #f8f8ff);
 }
@@ -12738,7 +12778,7 @@ i {
 }
 
 .encDests tr:last-child td {
-    border-top: #ccf !important;
+    border-top: #e0e0eb !important;
 }
 
 .encDests th:first-child, .encDests td:first-child,
@@ -12793,7 +12833,7 @@ i {
     overflow: hidden;
     vertical-align: middle;
     text-align: center;
-    border: 1px solid #7e7fb9;
+    border: 1px solid #8d8daa;
     box-shadow: inset 0 0 0 1px #fff, 0 0 1px 1px #ddf;
     animation: ease grid-fade 1s forwards;
     background: #f6f6ff;

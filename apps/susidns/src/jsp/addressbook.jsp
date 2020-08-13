@@ -413,9 +413,9 @@
 <%
     if (book.getEntries().length > 0) { /* Don't show if no results. Can't figure out how to do this with c:if */
 %>
-<th><%=intl._t("Hostname")%></th><th><%=intl._t("Link (b32)")%></th><th>Helper</th><th>Details</th><th><%=intl._t("Destination")%> (b64)</th>
+<th class="names"><%=intl._t("Hostname")%></th><th class="b32link"><%=intl._t("Link (b32)")%></th><th class="helper">Helper</th><th class="destinations"><%=intl._t("Destination")%> (b64)</th>
 <c:if test="${book.validBook}">
-<th title="<%=intl._t("Select hosts for deletion from addressbook")%>"></th>
+<th class="checkbox" title="<%=intl._t("Select hosts for deletion from addressbook")%>"></th>
 </c:if>
 </tr>
 <!-- limit iterator, or "Form too large" may result on submit, and is a huge web page if we don't -->
@@ -426,14 +426,17 @@
         boolean haveImagegen = book.haveImagegen();
         if (haveImagegen) {
 %>
-<a href="/imagegen/id?s=256&amp;c=${addr.b32}" target="_blank" title="<%=intl._t("View larger version of identicon for this hostname")%>"><img src="/imagegen/id?s=20&amp;c=${addr.b32}"></a>
+<a href="details?h=${addr.name}&amp;book=${book.book}" title="<%=intl._t("More information on this entry")%>"><img src="/imagegen/id?s=20&amp;c=${addr.b32}"></a>
 <%
-        }  // haveImagegen
+        }  else { // haveImagegen
+%>
+<a href="details?h=${addr.name}&amp;book=${book.book}" title="<%=intl._t("More information on this entry")%>"><img width=20 height=20 src="/themes/console/images/svg/info.svg"></a>
+<%
+        }
 %>
 <a href="http://${addr.name}/" target="_top">${addr.displayName}</a></td>
-<td class="names"><span class="addrhlpr"><a href="http://${addr.b32}/" target="_blank" title="<%=intl._t("Base 32 address")%>">b32</a></span></td>
+<td class="b32link"><span class="addrhlpr"><a href="http://${addr.b32}/" target="_blank" title="<%=intl._t("Base 32 address")%>">b32</a></span></td>
 <td class="helper"><a href="http://${addr.name}/?i2paddresshelper=${addr.destination}" target="_blank" title="<%=intl._t("Helper link to share host address with option to add to addressbook")%>">link</a></td>
-<td class="names"><span class="addrhlpr"><a href="details?h=${addr.name}&amp;book=${book.book}" title="<%=intl._t("More information on this entry")%>"><%=intl._t("details")%></a></span></td>
 <td class="destinations"><div class="destaddress resetScrollLeft" name="dest_${addr.name}" width="200px" tabindex="0">${addr.destination}</div></td>
 <c:if test="${book.validBook}">
 <td class="checkbox"><input type="checkbox" class="optbox" name="checked" value="${addr.name}" title="<%=intl._t("Mark for deletion")%>"></td>

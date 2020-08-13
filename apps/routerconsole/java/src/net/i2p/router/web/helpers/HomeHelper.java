@@ -111,7 +111,7 @@ public class HomeHelper extends HelperBase {
         //"echelon.i2p" + S + _x("I2P Applications") + S + "http://echelon.i2p/" + S + I + "svg/package.svg" + S +
         "fs.i2p" + S + _x("Secure filesharing service") + S + "http://fs.i2p/" + S + I + "svg/cloud.svg" + S +
         "git.repo.i2p" + S + _x("A public anonymous Git hosting site - supports pulling via Git and HTTP and pushing via SSH") + S + "http://git.repo.i2p/" + S + I + "svg/git.svg" + S +
-        "idk.git.i2p" + S + _x("A public anonymous Git hosting site - supports pulling via Git and HTTP and pushing via SSH") + S + "http://git.idk.i2p/explore/projects" + S + I + "svg/gitlab.svg" + S +
+        "git.idk.i2p" + S + _x("A public anonymous Git hosting site - supports pulling via Git and HTTP and pushing via SSH") + S + "http://git.idk.i2p/explore/projects" + S + I + "svg/gitlab.svg" + S +
         //"i2push.i2p" + S + _x("Online encrypted filesharing service") + S + "http://i2push.i2p/" + S + I + "info/fileshare.png" + S +
         "sharefile.i2p" + S + _x("Secure filesharing service") + S + "http://sharefile.i2p/" + S + I + "svg/cloud.svg" + S +
         "skank.i2p" + S + _x("Home of I2P+") + S + "http://skank.i2p/" + S + I + "svg/package.svg" + S +
@@ -150,8 +150,8 @@ public class HomeHelper extends HelperBase {
         //"fsoc.i2p " + _x("Microblog") + S + _x("Alternative microblogging service") + S + "http://fsoc.i2p/" + S + I + "ident_icon_blue.png" + S +
         //"jisko.i2p" + S + _x("Simple and fast microblogging website") + S + "http://jisko.i2p/" + S + I + "jisko_console_icon.png" + S +
         //("Syndie") + S + _x("Distributed Forum Platform") + S + "http://syndie-project.i2p/" + S + I + "svg/peers.svg" + S +
-          "garden.i2p" + S + _x("Gardening forums") + S + "http://garden.i2p/" + S + I + "svg/garden.svg" + S +
-          "zeronet.i2p" + S + _x("Zeronet I2P Gateway") + S + "http://zeronet.i2p/" + S + I + "svg/zeronet.svg" + S +
+        //"garden.i2p" + S + _x("Gardening forums") + S + "http://garden.i2p/" + S + I + "svg/garden.svg" + S +
+        "zeronet.i2p" + S + _x("Zeronet I2P Gateway") + S + "http://zeronet.i2p/" + S + I + "svg/zeronet.svg" + S +
 
 // hosting + other services
         //_x("Open4You") + S + _x("Free eepsite hosting with PHP and MySQL") + S + "http://open4you.i2p/" + S + I + "open4you-logo.png" + S +

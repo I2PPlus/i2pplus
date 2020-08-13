@@ -844,8 +844,12 @@ div#book, #emptybook {
     background: #001;
 }
 
-.book th:first-child, .book td:first-child {
-    padding: 0 10px !important;
+.book th {
+    padding-top: 6px;
+    padding-bottom: 6px;
+}
+
+.book td.names {
     width: 200px;
     white-space: nowrap;
 }
@@ -1349,9 +1353,7 @@ p.book {
     font-weight: bold;
 }
 
-#host_list th:nth-child(2), #host_list td:nth-child(2),
-#host_list th:nth-child(3), #host_list td:nth-child(3),
-#host_list th:nth-child(4), #host_list td:nth-child(4) {
+#host_list .b32link, #host_list .helper {
     width: 35px;
     width: 8%;
     padding: 0 5px !important;
@@ -1359,44 +1361,24 @@ p.book {
     text-align: center;
 }
 
-#host_list td:nth-child(2) a:not(old) {
+#host_list td.b32link a:not(old), #host_list td.helper a:not(old) {
     font-size: 0 !important;
 }
 
-#host_list td:nth-child(2) a::after {
+#host_list td.b32link a::after {
     content: url(/themes/console/images/buttons/link.png);
     text-align: center;
     filter: drop-shadow(0 0 1px #555);
     cursor: pointer;
 }
 
-#host_list td:nth-child(3) a:not(old) {
-    font-size: 0 !important;
-}
-
-#host_list td:nth-child(3) a::after {
+#host_list td.helper a::after {
     content: url(/themes/console/images/buttons/helper.png);
     cursor: pointer;
 }
 
-#host_list th:nth-child(4), #host_list td:nth-child(4) {
-    padding-right: 30px !important;
-}
-
-#host_list td:nth-child(4) a:not(old) {
-    font-size: 0 !important;
-}
-
-#host_list td:nth-child(4) .addrhlpr a::after {
-    content: url(/themes/console/images/buttons/fullview.png);
-    text-align: center;
-    padding: 0 10px !important;
-    filter: drop-shadow(0 0 1px #555);
-    cursor: pointer;
-}
-
-#host_list td:nth-child(2) a:hover, #host_list td:nth-child(3) a:hover, #host_list td:nth-child(4) a:hover,
-#host_list td:nth-child(2) a:focus, #host_list td:nth-child(3) a:focus, #host_list td:nth-child(4) a:focus {
+#host_list td.b32link a:hover, #host_list td.helper a:hover,
+#host_list td.b32link a:focus, #host_list td.helper a:focus {
     filter: drop-shadow(0 0 2px #652787);
 }
 

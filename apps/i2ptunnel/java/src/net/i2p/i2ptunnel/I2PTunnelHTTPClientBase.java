@@ -940,8 +940,11 @@ public abstract class I2PTunnelHTTPClientBase extends I2PTunnelClientBase implem
             }
             if (jumpServers != null && jumpServers.length() > 0) {
                 boolean first = true;
-                if(uri.startsWith("http://")) {
+                if (uri.startsWith("http://")) {
                     uri = uri.substring(7);
+                }
+                if (uri.endsWith("/")) {
+                    uri = uri.substring(0, uri.length() - 1);
                 }
                 StringTokenizer tok = new StringTokenizer(jumpServers, ", ");
                 while(tok.hasMoreTokens()) {

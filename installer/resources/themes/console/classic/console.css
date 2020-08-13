@@ -901,7 +901,7 @@ p:empty + .sb_notice {
     padding-left: 20px;
     padding-right: 8px;
     text-align: left;
-    background: url(images/link.png) 4px 4px no-repeat !important;
+    background: url(images/star2.svg) 4px 4px no-repeat !important;
     background-size: 12px auto !important;
     background-blend-mode: luminosity;
     vertical-align: middle !important;
@@ -910,7 +910,7 @@ p:empty + .sb_notice {
 }
 
 .sb_newsheadings tr:hover td {
-    background: url(images/link.png) 4px 4px no-repeat #ffd !important;
+    background: url(images/star2.svg) 4px 4px no-repeat #ffd !important;
     background-size: 12px auto !important;
     background-blend-mode: normal;
     transition: ease background .2s;
@@ -1304,21 +1304,23 @@ div[lang="pt"] li br {
 }
 
 .langbox {
-    margin: 3.5px 2px 0;
-    color: #001;
-    font-size: 7pt;
-    width: 380px;
-    text-align: right;
+    margin: 0;
+    padding: 7px 6px 7px 4px;
+    width: 30px;
     float: right;
-    padding: 1px;
     overflow: hidden;
+    text-align: right;
+    font-size: 7pt;
+    color: #001;
+    border-left: 1px solid #aaafce;
 }
 
 .langbox img {
-    padding: 0 !important;
     margin: 0 1px -1px;
+    padding: 3px !important;
+    width: 20px;
+    height: 20px;
     opacity: .9;
-    border: 1px solid #bbf;
     transform: none !important;
 }
 
@@ -1348,26 +1350,26 @@ div[lang="pt"] li br {
 }
 
 .links li:not(old) {
+    padding: 5px 10px 0 !important;
     list-style: url(/themes/console/images/transparent.gif) !important;
     list-style-position: outside;
-    padding: 5px 10px 0 !important;
 }
 
 .links li::before {
-    content: "";
-    display: inline-block;
+    margin-left: -20px;
+    margin-right: 4px;
     width: 16px;
     height: 18px;
-    background: url(images/link.png) left top 4px no-repeat !important;
-    background-size: 14px 14px !important;
-    margin-right: 4px;
-    margin-left: -20px;
+    display: inline-block;
+    background: url(images/star.svg) left top 4px no-repeat !important;
+    background-size: 12px 12px !important;
+    content: "";
 }
 
 div[lang="ar"] .links li::before {
-    background-position: right top 4px !important;
     margin-right: -20px;
     margin-left: 4px;
+    background-position: right top 4px !important;
 }
 
 .links li:first-child {
@@ -1386,14 +1388,10 @@ div[lang="ar"] .links li::before {
 }
 
 .twocol {
-    -moz-columns: 2 400px;
-    -webkit-columns: 2 400px;
-    columns: 2 400px;
-    -moz-column-gap: 40px !important;
-    -webkit-column-gap: 40px !important;
-    column-gap: 40px !important;
-    display: block;
     margin: 10px 0 !important;
+    display: block;
+    columns: 2 400px;
+    column-gap: 40px !important;
 }
 
 p + .twocol {
@@ -2259,11 +2257,11 @@ button::-moz-focus-inner, input[type="submit"]::-moz-focus-inner, input[type="re
 .main {
     margin: 0 0 4px 211px;
     padding: 15px 15px 10px 15px;
-    border: 1px solid #aaafce;
-    border-top: 0;
+    min-width: 580px;
     text-align: left;
     color: #41444d;
-    min-width: 540px;
+    border: 1px solid #aaafce;
+    border-top: 0;
     background: #fff;
 }
 
@@ -2394,17 +2392,17 @@ div.wideload p {
 
 div.news {
     margin: -1px 0 0 211px;
-    background: #f9f9ea url(images/bg1.png);
-    background: linear-gradient(to bottom, rgba(255,255,255,.6), rgba(255,255,255,.5)), url(images/bg1.png) #efefe0;
-    background-size: 100% 100%, 120px 120px;
+    padding: 3px 10px 3px 10px;
+    min-width: 586px;
+    text-align: right;
+    font-size: 8pt;
+    color: #331e0c;
     border: 1px solid #aaafce;
     border-bottom: 1px solid #aaafce;
     border-right: 1px solid #aaafce;
-    text-align: right;
-    color: #331e0c;
-    min-width: 540px;
-    padding: 3px 10px 3px 10px;
-    font-size: 8pt;
+    background: #f9f9ea url(images/bg1.png);
+    background: linear-gradient(to bottom, rgba(255,255,255,.6), rgba(255,255,255,.5)), url(images/bg1.png) #efefe0;
+    background-size: 100% 100%, 120px 120px;
 }
 
 /* convert the list entry to our title */
@@ -3503,9 +3501,10 @@ div.error {
 }
 
 div.notice {
-    padding: 10px 10px 10px 0 !important;
     margin: 0;
-    background: url(/themes/console/images/info/infohelp.png) 15px center no-repeat;
+    padding: 10px 10px 10px 0 !important;
+    background: url(/themes/console/images/svg/infohelp.svg) 15px center no-repeat;
+    background-size: 28px 28px;
 }
 
 .notice ul, .notice li {
@@ -3686,7 +3685,13 @@ h3#iptransport a:not(old), h3#advancedconfig a:not(old), #reseedsetup a:not(old)
     font-size: 0
 }
 
-h3#iptransport a::after, h3#advancedconfig a::after, #reseedsetup a::after {
+#browseronstart .h3navlinks img:not(old), #servicedebug .h3navlinks img:not(old) {
+    width: 0;
+    height: 0;
+}
+
+h3#iptransport a::after, h3#advancedconfig a::after, #reseedsetup a::after,
+#browseronstart .h3navlinks a::after, #servicedebug .h3navlinks a::after {
     margin: -6px -10px -3px 0;
     padding: 7px 0 1px 10px;
     display: inline-block;
@@ -3699,8 +3704,14 @@ h3#iptransport a::after, h3#advancedconfig a::after, #reseedsetup a::after {
     content: "";
 }
 
+#servicedebug .h3navlinks a::after {
+    background: url(/themes/console/images/svg/jobs.svg) center center no-repeat;
+    background-size: 22px 22px;
+}
+
 @media screen and (max-width: 1200px) {
-h3#iptransport a::after, h3#advancedconfig a::after, #reseedsetup a::after {
+h3#iptransport a::after, h3#advancedconfig a::after, #reseedsetup a::after,
+#browseronstart .h3navlinks a::after, #servicedebug .h3navlinks a::after {
     height: 20px !important;
     width: 20px;
     background-size: 20px 20px;
@@ -3859,7 +3870,6 @@ td.optionsave[colspan="2"] {
 td.infohelp, p.infohelp, td.infowarn, p.infowarn, p#upnpstatus, p#gatherstats, p#debugmode, p.sybilinfo, p#pluginconfigtext {
     padding: 15px 15px 15px 55px !important;
     border: 1px solid #aaafce;
-    background: #fff url(/themes/console/images/info/infohelp.png) 15px center no-repeat;
     background: #fff url(/themes/console/images/svg/infohelp.svg) 15px center no-repeat;
     background-size: 28px 28px !important;
     white-space: normal !important;
@@ -3871,7 +3881,6 @@ td.infohelp, p.infohelp, td.infowarn, p.infowarn, p#upnpstatus, p#gatherstats, p
 }
 
 td.infowarn, p.infowarn {
-    background: #fff url(/themes/console/images/info/infowarn.png) 15px center no-repeat !important;
     background: #fff url(/themes/console/images/svg/infowarn.svg) 15px center no-repeat !important;
     background-size: 28px 28px !important;
 }
@@ -4223,14 +4232,14 @@ h3#servicedebug a, h3#graphinfo a, h3#browseronstart a {
 }
 
 .main#tunnels h3 a[href^="/configtunnels#"]::after, .main#tunnels h3 a[href$="i2ptunnelmgr"]::after, #logs h3 a::after {
-    content: "";
-    display: inline-block;
+    padding: 1px;
     width: 16px;
     height: 16px;
+    float: right;
+    display: inline-block;
     background: url(/themes/console/images/svg/configure.svg) center center no-repeat;
     background-size: 16px 16px;
-    float: right;
-    padding: 1px;
+    content: "";
 }
 
 #logs h3 a.delete::after {
@@ -4879,12 +4888,11 @@ form[action="graphs"] input[type="text"] {
 }
 
 #graphs td.infohelp {
-    border: none;
-    border-right: none;
-    background-size: 20px 20px !important;
     padding: 5px 5px 5px 40px !important;
-    background: url(/themes/console/images/info/infohelp.png) 15px center no-repeat #f1f3ff;
     text-align: left;
+    border: none;
+    background: url(/themes/console/images/svg/infohelp.svg) 15px center no-repeat #f1f3ff;
+    background-size: 20px 20px !important;
 }
 
 #graphs form input, #graphs form select {
@@ -5036,6 +5044,15 @@ img[src^="/flags"] {
     margin: -2px 1px;
     padding: 2px 3px;
     border-right: 1px solid #aad;
+}
+
+#banlist .flag {
+    padding: 0;
+    border: none;
+}
+
+#banlist img[src^="/flags.jsp"] {
+    margin-top: -2px;
 }
 
 #peers .routerid .flag, #profiles .routerid .flag {
@@ -6207,7 +6224,8 @@ h3.stats {
 
 #netdbcountrylist img {
     margin-right: 5px;
-    text-align: right;
+    font-size: 80%;
+    text-align: center;
 }
 
 .sybil_distance th {
@@ -8383,7 +8401,7 @@ table.sybil_routerinfo:last-child {
 }
 
 .langbox {
-    margin-top: 3px !important;
+    padding: 6px 3px 6px 1px;
 }
 
 #sb_localtunnels td:first-child {
@@ -8437,6 +8455,10 @@ body, .main, .main td, .news p, #news p, .tab, .tab2, .main li b, .joblog li, .t
 button, input, select, textarea, .netdbentry th, .configtable th, .statlist a[name],
 .statlist b, .statlist li b, .statlist a[name]:hover, div.messages, th {
     font-size: 10pt !important;
+}
+
+body {
+    overflow-x: hidden;
 }
 
 .applabel a, #updateAvailable, code, tt, pre, #logs li, #routerlogs li, #servicelogs li {
@@ -10422,7 +10444,7 @@ div.app.js:hover::before {
 }
 
 #sitemapcontainer h3 {
-	margin-bottom: 10px;
+    margin-bottom: 10px;
 }
 
 #sitemapcontainer h3:nth-child(n+2) {
@@ -11271,6 +11293,7 @@ to {
 #bandwidthTestRunning {
     margin: 10px 0;
     padding: 10px;
+    width: calc(100% - 22px);
     text-align: center;
     font-style: italic;
     font-weight: bold;
@@ -11869,4 +11892,12 @@ th[role="columnheader"] {
 
 #floodfills th {
     font-size: 90% !important;
+}
+
+div.app img, .sitemaplink img {
+    filter: grayscale(.6);
+}
+
+div.app:hover img, .sitemaplink:hover img {
+    filter: none;
 }

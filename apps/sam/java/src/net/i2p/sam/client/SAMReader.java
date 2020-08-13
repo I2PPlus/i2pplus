@@ -24,13 +24,13 @@ public class SAMReader {
     private volatile boolean _live;
     private Thread _thread;
     private static final AtomicInteger _count = new AtomicInteger();
-    
+
     public SAMReader(I2PAppContext context, InputStream samIn, SAMClientEventListener listener) {
         _log = context.logManager().getLog(SAMReader.class);
         _inRaw = samIn;
         _listener = listener;
     }
-    
+
     public synchronized void startReading() {
         if (_live)
             throw new IllegalStateException();
@@ -48,7 +48,7 @@ public class SAMReader {
             try { _inRaw.close(); } catch (IOException ioe) {}
         }
     }
-    
+
     /**
      * Async event notification interface for SAM clients
      *
@@ -58,23 +58,23 @@ public class SAMReader {
         public static final String SESSION_STATUS_DUPLICATE_DEST = "DUPLICATE_DEST";
         public static final String SESSION_STATUS_I2P_ERROR = "I2P_ERROR";
         public static final String SESSION_STATUS_INVALID_KEY = "INVALID_KEY";
-        
+
         public static final String STREAM_STATUS_OK = "OK";
         public static final String STREAM_STATUS_CANT_REACH_PEER = "CANT_REACH_PEER";
         public static final String STREAM_STATUS_I2P_ERROR = "I2P_ERROR";
         public static final String STREAM_STATUS_INVALID_KEY = "INVALID_KEY";
         public static final String STREAM_STATUS_TIMEOUT = "TIMEOUT";
-        
+
         public static final String STREAM_CLOSED_OK = "OK";
         public static final String STREAM_CLOSED_CANT_REACH_PEER = "CANT_REACH_PEER";
         public static final String STREAM_CLOSED_I2P_ERROR = "I2P_ERROR";
         public static final String STREAM_CLOSED_PEER_NOT_FOUND = "PEER_NOT_FOUND";
         public static final String STREAM_CLOSED_TIMEOUT = "CLOSED";
-        
+
         public static final String NAMING_REPLY_OK = "OK";
         public static final String NAMING_REPLY_INVALID_KEY = "INVALID_KEY";
         public static final String NAMING_REPLY_KEY_NOT_FOUND = "KEY_NOT_FOUND";
-        
+
         public void helloReplyReceived(boolean ok, String version);
         public void sessionStatusReceived(String result, String destination, String message);
         public void streamStatusReceived(String result, String id, String message);
@@ -87,16 +87,16 @@ public class SAMReader {
         public void rawReceived(byte[] data, int offset, int length, int fromPort, int toPort, int protocol);
         public void pingReceived(String data);
         public void pongReceived(String data);
-        
+
         public void unknownMessageReceived(String major, String minor, Properties params);
     }
-    
+
     private class Runner implements Runnable {
         public void run() {
             Properties params = new Properties();
             ByteArrayOutputStream baos = new ByteArrayOutputStream(80);
             while (_live) {
-                
+
                 try {
                     int c = -1;
                     while ((c = _inRaw.read()) != -1) {
@@ -106,30 +106,30 @@ public class SAMReader {
                         baos.write(c);
                     }
                     if (c == -1) {
-                        _log.info("EOF reading from the SAM bridge");
+                        _log.info("EOF reading from the SAM Bridge");
                         break;
                     }
                 } catch (IOException ioe) {
                     _log.error("Error reading from SAM", ioe);
                     break;
                 }
-                
+
                 String line = DataHelper.getUTF8(baos.toByteArray());
                 baos.reset();
-                
+
                 if (_log.shouldDebug())
-                    _log.debug("Line read from the bridge: " + line);
-                
+                    _log.debug("Line read from the SAM Bridge: " + line);
+
                 StringTokenizer tok = new StringTokenizer(line);
-                
+
                 if (tok.countTokens() <= 0) {
                     _log.error("Invalid SAM line: [" + line + "]");
                     break;
                 }
-                
+
                 String major = tok.nextToken();
                 String minor = tok.hasMoreTokens() ? tok.nextToken() : "";
-                
+
                 params.clear();
                 while (tok.hasMoreTokens()) {
                     String pair = tok.nextToken();
@@ -148,7 +148,7 @@ public class SAMReader {
                         params.setProperty(name, val);
                     }
                 }
-                
+
                 processEvent(major, minor, params);
             }
             _live = false;
@@ -156,7 +156,7 @@ public class SAMReader {
                 _log.warn("SAMReader exiting");
         }
     }
-    
+
     /**
      * Big ugly method parsing everything.  If I cared, I'd factor this out into
      * a dozen tiny methods.
@@ -217,7 +217,7 @@ public class SAMReader {
                 if (id != null) {
                     try {
                         int sizeVal = Integer.parseInt(size);
-                        
+
                         byte data[] = new byte[sizeVal];
                         int read = DataHelper.read(_inRaw, data);
                         if (read != sizeVal) {

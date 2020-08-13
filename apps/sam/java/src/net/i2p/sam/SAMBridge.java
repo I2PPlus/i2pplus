@@ -1,9 +1,9 @@
 package net.i2p.sam;
 /*
  * free (adj.): unencumbered; not under the control of others
- * Written by human in 2004 and released into the public domain 
- * with no warranty of any kind, either expressed or implied.  
- * It probably won't  make your computer catch on fire, or eat 
+ * Written by human in 2004 and released into the public domain
+ * with no warranty of any kind, either expressed or implied.
+ * It probably won't  make your computer catch on fire, or eat
  * your children, but it might.  Use at your own risk.
  *
  */
@@ -64,13 +64,13 @@ public class SAMBridge implements Runnable, ClientApp {
     private final Object _v3DGServerLock = new Object();
     private SAMv3DatagramServer _v3DGServer;
 
-    /** 
-     * filename in which the name to private key mapping should 
-     * be stored (and loaded from) 
+    /**
+     * filename in which the name to private key mapping should
+     * be stored (and loaded from)
      */
     private final String persistFilename;
-    /** 
-     * app designated destination name to the base64 of the I2P formatted 
+    /**
+     * app designated destination name to the base64 of the I2P formatted
      * destination keys (Destination+PrivateKey+SigningPrivateKey)
      */
     private final Map<String,String> nameToPrivKeys;
@@ -82,7 +82,7 @@ public class SAMBridge implements Runnable, ClientApp {
     private volatile ClientAppState _state = UNINITIALIZED;
 
     private static final int SAM_LISTENPORT = 7656;
-    
+
     public static final String DEFAULT_SAM_KEYFILE = "sam.keys";
     static final String DEFAULT_SAM_CONFIGFILE = "sam.config";
     private static final String PROP_SAM_KEYFILE = "sam.keyfile";
@@ -94,7 +94,7 @@ public class SAMBridge implements Runnable, ClientApp {
     public static final String PROP_PW_SUFFIX = ".shash";
     protected static final String DEFAULT_TCP_HOST = "127.0.0.1";
     protected static final String DEFAULT_TCP_PORT = "7656";
-    
+
     public static final String PROP_DATAGRAM_HOST = "sam.udp.host";
     public static final String PROP_DATAGRAM_PORT = "sam.udp.port";
     protected static final String DEFAULT_DATAGRAM_HOST = "127.0.0.1";
@@ -129,7 +129,7 @@ public class SAMBridge implements Runnable, ClientApp {
         _state = INITIALIZED;
     }
 
-    
+
     /**
      * Build a new SAM bridge.
      * NOT recommended for external use.
@@ -165,7 +165,7 @@ public class SAMBridge implements Runnable, ClientApp {
             openSocket();
         } catch (IOException e) {
             if (_log.shouldLog(Log.ERROR))
-                _log.error("Error starting SAM bridge on "
+                _log.error("Error starting SAM Bridge on "
                            + (listenHost == null ? "0.0.0.0" : listenHost)
                            + ":" + listenPort, e);
             throw new RuntimeException(e);
@@ -192,12 +192,12 @@ public class SAMBridge implements Runnable, ClientApp {
             if (_listenHost != null && !_listenHost.equals("0.0.0.0")) {
                 serverSocket.socket().bind(new InetSocketAddress(_listenHost, _listenPort));
                 if (_log.shouldLog(Log.DEBUG))
-                    _log.debug("SAM bridge listening on "
+                    _log.debug("SAM Bridge listening on "
                                + _listenHost + ":" + _listenPort);
             } else {
                 serverSocket.socket().bind(new InetSocketAddress(_listenPort));
                 if (_log.shouldLog(Log.DEBUG))
-                    _log.debug("SAM bridge listening on 0.0.0.0:" + _listenPort);
+                    _log.debug("SAM Bridge listening on 0.0.0.0:" + _listenPort);
             }
         }
     }
@@ -225,10 +225,10 @@ public class SAMBridge implements Runnable, ClientApp {
         }
     }
 ****/
-    
+
     /**
      * Retrieve the I2P private keystream for the given name, formatted
-     * as a base64 string (Destination+PrivateKey+SessionPrivateKey, as I2CP 
+     * as a base64 string (Destination+PrivateKey+SessionPrivateKey, as I2CP
      * stores it).
      *
      * @param name Name of the destination
@@ -254,7 +254,7 @@ public class SAMBridge implements Runnable, ClientApp {
         }
         storeKeys();
     }
-    
+
     /**
      * Load up the keys from the persistFilename.
      */
@@ -284,7 +284,7 @@ public class SAMBridge implements Runnable, ClientApp {
             }
         }
     }
-    
+
     /**
      * Store the current keys to disk in the location specified on creation.
      */
@@ -305,26 +305,26 @@ public class SAMBridge implements Runnable, ClientApp {
             }
         }
     }
-    
+
     /**
      * Handlers must call on startup
      * @since 0.9.20
      */
     public void register(Handler handler) {
-        if (_log.shouldInfo())
-            _log.info("Register " + handler);
+        if (_log.shouldDebug())
+            _log.debug("Registered " + handler);
         synchronized (_handlers) {
             _handlers.add(handler);
         }
     }
-    
+
     /**
      * Handlers must call on stop
      * @since 0.9.20
      */
     public void unregister(Handler handler) {
-        if (_log.shouldInfo())
-            _log.info("Unregister " + handler);
+        if (_log.shouldDebug())
+            _log.debug("Unregistered " + handler);
         synchronized (_handlers) {
             _handlers.remove(handler);
         }
@@ -344,8 +344,8 @@ public class SAMBridge implements Runnable, ClientApp {
         }
         if (handlers != null) {
             for (Handler handler : handlers) {
-                if (_log.shouldInfo())
-                    _log.info("Stopping " + handler);
+                if (_log.shouldDebug())
+                    _log.debug("Stopping " + handler);
                 handler.stopHandling();
             }
         }
@@ -378,7 +378,7 @@ public class SAMBridge implements Runnable, ClientApp {
                 _v3DGServer.start();
             } else {
                 if (_v3DGServer.getPort() != port || !_v3DGServer.getHost().equals(host))
-                    throw new IOException("Already have V3 DatagramServer with host=" + host + " port=" + port);
+                    throw new IOException("Already have SAMv3 DatagramServer with host: " + host + ":" + port);
             }
             return _v3DGServer;
         }
@@ -402,7 +402,7 @@ public class SAMBridge implements Runnable, ClientApp {
             openSocket();
         } catch (IOException e) {
             if (_log.shouldLog(Log.ERROR))
-                _log.error("Error starting SAM bridge on "
+                _log.error("Error starting SAM Bridge on "
                            + (_listenHost == null ? "0.0.0.0" : _listenHost)
                            + ":" + _listenPort, e);
             changeState(START_FAILED, e);
@@ -477,8 +477,8 @@ public class SAMBridge implements Runnable, ClientApp {
      *  <pre>SAMBridge [ keyfile [listenHost ] listenPort [ name=val ]* ]</pre>
      * or:
      *  <pre>SAMBridge [ name=val ]* </pre>
-     *  
-     * name=val options are passed to the I2CP code to build a session, 
+     *
+     * name=val options are passed to the I2CP code to build a session,
      * allowing the bridge to specify an alternate I2CP host and port, tunnel
      * depth, etc.
      * @param args [ keyfile [ listenHost ] listenPort [ name=val ]* ]
@@ -517,7 +517,7 @@ public class SAMBridge implements Runnable, ClientApp {
         t.start();
         _runner = t;
     }
-    
+
     /**
      *  @since 0.9.6
      */
@@ -534,14 +534,14 @@ public class SAMBridge implements Runnable, ClientApp {
             this.configFile = configFile;
         }
     }
-    
+
     /**
      * Usage:
      *  <pre>SAMBridge [ keyfile [listenHost ] listenPort [ name=val ]* ]</pre>
      * or:
      *  <pre>SAMBridge [ name=val ]* </pre>
-     *  
-     * name=val options are passed to the I2CP code to build a session, 
+     *
+     * name=val options are passed to the I2CP code to build a session,
      * allowing the bridge to specify an alternate I2CP host and port, tunnel
      * depth, etc.
      * @param args [ keyfile [ listenHost ] listenPort [ name=val ]* ]
@@ -650,7 +650,7 @@ public class SAMBridge implements Runnable, ClientApp {
 
         int remaining = args.length - startOpts;
         if (remaining > 0) {
-       		parseOptions(args, startOpts, opts);
+            parseOptions(args, startOpts, opts);
         }
         return new Options(host, port, isSSL, opts, keyfile, file);
     }
@@ -677,7 +677,7 @@ public class SAMBridge implements Runnable, ClientApp {
                 throw new HelpRequestedException();
         }
     }
-    
+
     private static void usage() {
         System.err.println("Usage: SAMBridge [-s] [-c sam.config] [keyfile [listenHost] listenPortNum[ name=val]*]\n" +
                            "or:\n" +
@@ -703,7 +703,7 @@ public class SAMBridge implements Runnable, ClientApp {
                            "The option loglevel=[DEBUG|WARN|ERROR|CRIT] can be used\n" +
                            "for tuning the log verbosity.");
     }
-    
+
     public void run() {
         if (serverSocket == null) return;
         changeState(RUNNING);
@@ -724,9 +724,9 @@ public class SAMBridge implements Runnable, ClientApp {
                     private final SocketChannel s;
                     private final SAMBridge parent;
 
-                    HelloHandler(SocketChannel s, SAMBridge parent) { 
-                		this.s = s ;
-                		this.parent = parent ;
+                    HelloHandler(SocketChannel s, SAMBridge parent) {
+                        this.s = s ;
+                        this.parent = parent ;
                     }
 
                     public void run() {

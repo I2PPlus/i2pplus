@@ -6582,11 +6582,14 @@ div.app img {
     padding: 10px 52px 38px;
     margin: -4px 0 1px;
 /*    filter: sepia(100%) hue-rotate(70deg); enable for green-tinted app icons */
-    filter: drop-shadow(0 0 2px #040) saturate(0.7);
 }
 
-div.app:hover.app img, a:focus .app img {
-    filter: drop-shadow(0 0 1px #f60) saturate(200%);
+div.app img, .sitemapLink img {
+    filter: sepia(100%) hue-rotate(70deg) grayscale(.3);
+}
+
+div.app:hover img, .sitemapLink:hover img, a:focus .app img, a:focus .sitemaplink img {
+    filter: drop-shadow(0 0 1px #f60);
     opacity: 1;
     transition: filter ease 0.3s;
 }
@@ -9930,7 +9933,7 @@ th.options, #externali2cp th {
 }
 
 #wrapperlogs pre {
-    height: 500px;
+    max-height: 500px;
 }
 
 /* graphs */

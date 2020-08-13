@@ -158,7 +158,7 @@ div.header, .iframed .header {
 div.footer {
     margin: -6px -1px -3px;
     border-top: none;
-    border: 1px solid #7e7fb9;
+    border: 1px solid #8d8daa;
     box-shadow: inset 0 0 0 1px #fff;
     background: #eef;
     background: linear-gradient(to right, rgba(232,232,255,.3) 15%, rgba(255,255,255,.8) 50%, rgba(232,232,255,.3) 85%), repeating-linear-gradient(to bottom, #fff 1px, #ddf 2px, #fff 3px);
@@ -251,7 +251,7 @@ pre {
     text-align: center;
     font-size: 8.5pt !important;
     color: #33333f;
-    box-shadow: inset 0 0 0 1px #ccccf0;
+    box-shadow: inset 0 0 0 1px rgba(185,185,198,.65);
     border: 1px solid #447;
     border-radius: 2px 2px 0 0;
     background-color: #fcfcff;
@@ -287,7 +287,7 @@ form {
 }
 
 .header + form {
-    border: 1px solid #7e7fb9;
+    border: 1px solid #8d8daa;
     border-radius: 2px 2px 0 0;
     box-shadow: 0 0 1px 1px rgba(220,220,255,.3);
     background: #f4f4ff;
@@ -322,7 +322,7 @@ form {
 }
 
 #message_full tr:first-child td {
-    border-bottom: 1px solid #7e7fb9;
+    border-bottom: 1px solid #8d8daa;
     background: none !important;
 }
 
@@ -763,7 +763,7 @@ input.nextpage:hover, input.next:hover, input[name="nextpage"]:hover {
 }
 
 #pagenavbottom, #mailbox #pagenavbottom td {
-    border-top: 1px solid #7e7fb9;
+    border-top: 1px solid #8d8daa;
     box-shadow: none !important;
     position: relative;
     z-index: 100;
@@ -1153,7 +1153,7 @@ h3#config {
     font-size: 11pt;
     letter-spacing: .08em;
     word-spacing: .1em;
-    border-bottom: 1px solid #7e7fb9;
+    border-bottom: 1px solid #8d8daa;
     box-shadow: inset 0 0 0 1px #fff;
     text-shadow: 0 1px 1px #fff;
     background: #fafaff;
@@ -1164,7 +1164,7 @@ h3#config {
     margin-top: 4px;
     padding-top: 10px;
     padding-bottom: 10px;
-    border-top: 1px solid #7e7fb9;
+    border-top: 1px solid #8d8daa;
     background: #f6f6ff;
     box-shadow: inset 0 0 0 1px #fff;
 }
@@ -1219,7 +1219,7 @@ h3#config {
     text-align: center;
     font-size: 9pt;
     font-weight: bold;
-    border: 1px solid #7e7fb9;
+    border: 1px solid #8d8daa;
     box-shadow: inset 0 0 1px 1px rgba(230,230,255,.7) !important;
     box-shadow: inset 0 0 0 1px #fff !important;
     background: #f2f2ff;
@@ -1495,7 +1495,7 @@ td p.error {
     padding: 15px 35px 15px 35px;
     overflow: auto !important;
     text-align: left;
-/*    border-top: 1px solid #7e7fb9;*/
+/*    border-top: 1px solid #8d8daa;*/
     box-shadow: inset 0 0 0 1px #fff;
     background: url(/themes/susimail/images/attach.png) 10px center no-repeat, rgba(220,220,255,.2);
 }
@@ -1748,7 +1748,7 @@ _:-ms-lang(x), tr.list0:hover, tr.list1:hover {
     padding: 6px 5px;
     white-space: nowrap;
     color: #54586f;
-    border-bottom: 1px solid #7e7fb9;
+    border-bottom: 1px solid #8d8daa;
     background: #f6f6ff;
     background: linear-gradient(to bottom, #fcfcff 51%, #fafaff 51%, #f6f6ff 100%);
 }
@@ -1835,7 +1835,7 @@ tr:active td.mailListSubject a {
 
 #mailbox .bottombuttons td {
     padding: 4px 4px 5px;
-    border-top: 1px solid #7e7fb9;
+    border-top: 1px solid #8d8daa;
 }
 
 .iframed #mailbox .bottombuttons td {
@@ -1913,7 +1913,7 @@ th.mailListDate {
 }
 
 tr:hover .listDate {
-    border: 1px solid #adadeb;
+    border: 1px solid #afafcf;
     opacity: .9;
 }
 
@@ -1961,7 +1961,7 @@ td.mailListSize {
 }
 
 tr:hover .listSize {
-    border: 1px solid #adadeb;
+    border: 1px solid #afafcf;
     color: #33333f;
 }
 
@@ -2213,7 +2213,7 @@ select::-ms-expand {
     top: -1px;
     right: -1px;
     padding: 4px 6px 4px 4px;
-    border: 1px solid #7e7fb9;
+    border: 1px solid #8d8daa;
     box-shadow: inset 0 0 0 1px #fff;
     border-radius: 0 0 0 3px;
     background: linear-gradient(to bottom, rgba(255,255,255,.7) 50%, rgba(240,240,255,.4) 50%), repeating-linear-gradient(to bottom, #eef 1px, #eef 2px, #fff 3px);
@@ -2371,7 +2371,7 @@ td {
 /* end responsive layout */
 
 tr.mailbody td {
-    border-top: 1px solid #7e7fb9 !important;
+    border-top: 1px solid #8d8daa !important;
 }
 
 .debugHeader:nth-child(n+3) td {

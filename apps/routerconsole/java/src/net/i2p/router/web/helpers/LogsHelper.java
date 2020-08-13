@@ -300,6 +300,9 @@ public class LogsHelper extends HelperBase {
                 msg = msg.substring(0, msg.length() - NL.length());
             // replace \n so that exception stack traces will format correctly and will paste nicely into pastebin
             msg = msg.replace("\n", "<br>&nbsp;&nbsp;&nbsp;&nbsp;\n");
+            if (msg.contains("Sending client")) {
+                msg = msg.replace("<br>&nbsp;&nbsp;&nbsp;&nbsp;\n", ""); // SAM client
+            }
             buf.append("<li>");
             if (colorize) {
                 // TODO this would be a lot easier if LogConsoleBuffer stored LogRecords instead of formatted strings
