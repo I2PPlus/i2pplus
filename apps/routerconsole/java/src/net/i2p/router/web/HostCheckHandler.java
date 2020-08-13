@@ -46,14 +46,15 @@ public class HostCheckHandler extends GzipHandler
         // set this super small so we clobber almost everything
         // this has the side effect of faster page loads with less progressive rendering
         // include js so we hit the lightbox snark script -> 26/6K
-        setMinGzipSize(128);
+        setMinGzipSize(512);
         if (_context.getBooleanPropertyDefaultTrue(PROP_GZIP)) {
-            setCompressionLevel(9);
+//            setCompressionLevel(9);
+            setCompressionLevel(6);
             addIncludedMimeTypes(
-                                 "application/javascript", "application/x-javascript",
-                                 "application/xhtml+xml", "application/xml", "application/pdf",
+                                 "application/javascript", "application/x-javascript", "text/javascript",
+                                 "application/xhtml+xml", "application/xml", "application/pdf", "text/xml",
                                  "image/svg+xml", "application/x-font-ttf", "application/x-font-truetype",
-                                 "text/css", "text/html", "text/plain"
+                                 "font/ttf", "font/otf", "text/css", "text/html", "text/plain"
                                 );
         } else {
             // poorly documented, but we must put something in,
