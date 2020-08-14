@@ -109,7 +109,8 @@ public class I2PTunnelHTTPClient extends I2PTunnelHTTPClientBase implements Runn
             "Proxy-Connection: close\r\n"+
             "\r\n" +
             "<html><body><H1>I2P ERROR: REQUEST DENIED</H1>" +
-            "You attempted to connect to a non-I2P website or location.<BR>";
+            "The requested address appears to be invalid.<BR>";
+//            "You attempted to connect to a non-I2P website or location.<BR>";
 
     /*****
     private final static byte[] ERR_TIMEOUT =

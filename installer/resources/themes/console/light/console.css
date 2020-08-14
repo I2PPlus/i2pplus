@@ -1270,6 +1270,10 @@ to {
     padding-top: 5px;
 }
 
+#denied {
+    padding: 30px 0;
+}
+
 .warning h3 {
     margin: -29px -29px 25px -24px !important;
     padding: 10px 10px 8px;
@@ -12911,8 +12915,14 @@ to {
     line-height: 1;
 }
 
+.routerid .flag img {
+    width: 16px;
+    height: 12px;
+    border: 1px solid #ccd;
+}
+
 #peers .routerid .flag, #profiles .routerid .flag, #tunnelPeerCount .routerid .flag {
-    margin: -1px 0 -1px -2px;
+    margin: -1px 0 -1px -2px !important;
     padding: 1px 4px 3px 3px;
     display: inline-block;
     border-right: 1px solid #bbd;
