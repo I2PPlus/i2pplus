@@ -48,8 +48,7 @@ public class HostCheckHandler extends GzipHandler
         // include js so we hit the lightbox snark script -> 26/6K
         setMinGzipSize(512);
         if (_context.getBooleanPropertyDefaultTrue(PROP_GZIP)) {
-//            setCompressionLevel(9);
-            setCompressionLevel(6);
+            setCompressionLevel(9);
             addIncludedMimeTypes(
                                  "application/javascript", "application/x-javascript", "text/javascript",
                                  "application/xhtml+xml", "application/xml", "application/pdf", "text/xml",
