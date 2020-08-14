@@ -83,6 +83,8 @@ public class EepGet {
     protected boolean _encodingChunked;
     protected boolean _notModified;
     protected String _contentType;
+    protected String _server;
+    protected String _status;
     protected boolean _transferFailed;
     protected boolean _aborted;
     protected int _fetchHeaderTimeout;
@@ -803,6 +805,8 @@ public class EepGet {
                     _etag = _etagOrig;
                     _lastModified = _lastModifiedOrig;
                     _contentType = null;
+                    _server = null;
+                    _status = null;
                     _encodingChunked = false;
                     // TODO auth?
                     // minSize/maxSize/maxRetries discarded
@@ -812,6 +816,8 @@ public class EepGet {
                     _responseCode = get.getStatusCode();
                     _responseText = get.getStatusText();
                     _contentType = get.getContentType();
+                    _server = get.getServer();
+                    _status = get.getStatus();
                     _etag = get.getETag();
                     _lastModified = get.getLastModified();
                     _notModified = get.getNotModified();
@@ -864,6 +870,7 @@ public class EepGet {
             _etag = _etagOrig;
             _lastModified = _lastModifiedOrig;
             _contentType = null;
+//            _server = null; // do we need to reset this?
             _encodingChunked = false;
 
             sendRequest(timeout);
@@ -1015,7 +1022,7 @@ public class EepGet {
         boolean redirect = false;
 
         if (_log.shouldLog(Log.DEBUG))
-            _log.debug("rc: " + _responseCode + " for " + _actualURL);
+            _log.debug(_actualURL + " -> Status: " + _status);
         boolean rcOk = false;
         // https://en.wikipedia.org/wiki/List_of_HTTP_status_codes
         switch (_responseCode) {
@@ -1039,7 +1046,7 @@ public class EepGet {
                     }
                     _out = _outputStream;
                 } else {
-		    _out = new FileOutputStream(_outputFile, false);
+                   _out = new FileOutputStream(_outputFile, false);
                 }
                 _alreadyTransferred = 0;
                 rcOk = true;
@@ -1176,6 +1183,7 @@ public class EepGet {
         // clear out the arguments, as we use the same variables for return values
         _etag = null;
         _lastModified = null;
+//        _server = null; // do we need to reset this?
 
         buf.setLength(0);
         byte lookahead[] = new byte[3];
@@ -1309,6 +1317,10 @@ public class EepGet {
             }
         } else if (key.equals("etag")) {
             _etag = val;
+        } else if (key.equals("server")) {
+            _server = val;
+        } else if (key.equals("status")) {
+            _status = val;
         } else if (key.equals("last-modified")) {
             _lastModified = val;
         } else if (key.equals("transfer-encoding")) {
@@ -1320,9 +1332,9 @@ public class EepGet {
             if ((!_actualURL.endsWith(".gz")) && (!_actualURL.endsWith(".tgz")))
                 _isGzippedResponse = val.toLowerCase(Locale.US).contains("gzip");
         } else if (key.equals("content-type")) {
-            _contentType=val;
+            _contentType = val;
         } else if (key.equals("location")) {
-            _redirectLocation=val;
+            _redirectLocation = val;
         } else if (key.equals("proxy-authenticate") && _responseCode == 407 && _authState != null && _shouldProxy) {
             _authState.setAuthChallenge(val);
         } else {
@@ -1482,6 +1494,16 @@ public class EepGet {
                 buf.append(hdr).append("\r\n");
             }
         }
+        if (_server != null) {
+            buf.append("Server: ");
+            buf.append(_server);
+            buf.append("\r\n");
+        }
+        if (_status != null) {
+            buf.append("Status: ");
+            buf.append(_status);
+            buf.append("\r\n");
+        }
         if ((_etag != null) && (_alreadyTransferred <= 0) && !etagOverridden) {
             buf.append("If-None-Match: ");
             buf.append(_etag);
@@ -1550,6 +1572,10 @@ public class EepGet {
         return _contentType;
     }
 
+    public String getServer() {
+        return _server;
+    }
+
     /**
      *  The server response (200, etc).
      *  @return -1 if invalid, or if the proxy never responded,
@@ -1580,6 +1606,14 @@ public class EepGet {
      */
     public String getStatusText() {
         return _responseText;
+    }
+
+    public String getStatus() {
+        StringBuilder buf = new StringBuilder(64);
+        buf.append(_responseCode);
+        buf.append(' ');
+        buf.append(_responseText);
+        return buf.toString();
     }
 
     /**

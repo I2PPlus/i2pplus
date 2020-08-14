@@ -824,7 +824,7 @@ public class DataHelper {
         }
         return rv;
     }
-    
+
     /**
      * Big endian.
      * Same as toLong(target, offset, 8, value) but allows negative value
@@ -838,7 +838,7 @@ public class DataHelper {
             value >>= 8;
         }
     }
-    
+
     /** Read in a date from the stream as specified by the I2P data structure spec.
      * A date is an 8 byte unsigned integer in network byte order specifying the number of
      * milliseconds since midnight on January 1, 1970 in the GMT timezone. If the number is
@@ -1747,12 +1747,14 @@ public class DataHelper {
      *  Appx. 15% slower, 1.5% smaller than MEDIUM_COMPRESSION
      *  @since 0.9.47
      */
-    public static final int HIGH_COMPRESSION = 5;
+//    public static final int HIGH_COMPRESSION = 5;
+    public static final int HIGH_COMPRESSION = 8;
     /**
      *  New default as of 0.9.47
      *  @since 0.9.47
      */
-    public static final int MEDIUM_COMPRESSION = 3;
+//    public static final int MEDIUM_COMPRESSION = 3;
+    public static final int MEDIUM_COMPRESSION = 5;
     public static final int NO_COMPRESSION = Deflater.NO_COMPRESSION;
 
     /**

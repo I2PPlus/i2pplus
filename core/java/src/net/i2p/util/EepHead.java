@@ -44,7 +44,7 @@ public class EepHead extends EepGet {
         // public EepGet(I2PAppContext ctx, boolean shouldProxy, String proxyHost, int proxyPort, int numRetries, long minSize, long maxSize, String outputFile, OutputStream outputStream, String url, boolean allowCaching, String etag, String postData) {
         super(ctx, true, proxyHost, proxyPort, numRetries, -1, -1, null, _dummyStream, url, true, null, null);
     }
-   
+
     /**
      * EepHead [-p 127.0.0.1:4444] [-n #retries] url
      *
@@ -52,7 +52,7 @@ public class EepHead extends EepGet {
      * EepGet doesn't have a method to store and return all the headers, so just print
      * out the ones we have methods for.
      * Turn on logging to use it for a decent test.
-     */ 
+     */
     public static void main(String args[]) {
         String proxyHost = "127.0.0.1";
         int proxyPort = 4444;
@@ -119,7 +119,7 @@ public class EepHead extends EepGet {
             System.exit(1);
         }
         String url = args[g.getOptind()];
-        
+
         EepHead get = new EepHead(I2PAppContext.getGlobalContext(), proxyHost, proxyPort, numRetries, url);
         if (username != null) {
             if (password == null) {
@@ -139,10 +139,19 @@ public class EepHead extends EepGet {
             get.addAuthorization(username, password);
         }
         if (get.fetch(45*1000, -1, inactivityTimeout)) {
-            String x = get.getContentType();
+            System.err.println("URL: " + url);
+            String x = get.getServer();
+            if (x != null)
+                System.err.println("Server: " + x);
+            else
+                System.err.println("Server: unknown");
+            x = get.getStatus().toString();
+            if (x != null)
+                System.err.println("Status: " + x);
+            x = get.getContentType();
             if (x != null)
                 System.err.println("Content-Type: " + x);
-            System.err.println("Content-Length: " + get.getContentLength());
+            System.err.println("Content-Length: " + get.getContentLength() + " bytes");
             x = get.getLastModified();
             if (x != null)
                 System.err.println("Last-Modified: " + x);
@@ -150,11 +159,11 @@ public class EepHead extends EepGet {
             if (x != null)
                 System.err.println("Etag: " + x);
         } else {
-            System.err.println("Failed " + url);
+            System.err.println("No response from: " + url);
             System.exit(1);
         }
     }
-    
+
     private static void usage() {
         System.err.println("EepHead [-p 127.0.0.1[:4444]] [-c]\n" +
                            "        [-n #retries] (default 0)\n" +
@@ -162,7 +171,7 @@ public class EepHead extends EepGet {
                            "        [-u username] [-x password] url\n" +
                            "        (use -c or -p :0 for no proxy)");
     }
-    
+
     /** return true if the URL was completely retrieved */
     @Override
     protected void doFetch(SocketTimeout timeout) throws IOException {
@@ -170,19 +179,19 @@ public class EepHead extends EepGet {
         readHeaders();
         if (_aborted)
             throw new IOException("Timed out reading the HTTP headers");
-        
+
         timeout.resetTimer();
         if (_fetchInactivityTimeout > 0)
             timeout.setInactivityTimeout(_fetchInactivityTimeout);
         else
             timeout.setInactivityTimeout(60*1000);
-        
+
         // Should we even follow redirects for HEAD?
         if (_redirectLocation != null) {
             try {
                 if (_redirectLocation.startsWith("http://")) {
                     _actualURL = _redirectLocation;
-                } else { 
+                } else {
                     // the Location: field has been required to be an absolute URI at least since
                     // RFC 1945 (HTTP/1.0 1996), so it isn't clear what the point of this is.
                     // This oddly adds a ":" even if no port, but that seems to work.
@@ -235,25 +244,25 @@ public class EepHead extends EepGet {
             doFetch(timeout);
             return;
         }
-        
+
         if (_log.shouldLog(Log.DEBUG))
             _log.debug("Headers read completely");
-            
+
         if (_out != null)
             _out.close();
         _out = null;
-        
+
         if (_aborted)
             throw new IOException("Timed out reading the HTTP data");
-        
+
         timeout.cancel();
-        
+
         if (_transferFailed) {
             // 404, etc - transferFailed is called after all attempts fail, by fetch() above
-            for (int i = 0; i < _listeners.size(); i++) 
+            for (int i = 0; i < _listeners.size(); i++)
                 _listeners.get(i).attemptFailed(_url, 0, 0, _currentAttempt, _numRetries, new Exception("Attempt failed"));
         } else {
-            for (int i = 0; i < _listeners.size(); i++) 
+            for (int i = 0; i < _listeners.size(); i++)
                 _listeners.get(i).transferComplete(
                         0, 0, 0, _url, "dummy", false);
         }
