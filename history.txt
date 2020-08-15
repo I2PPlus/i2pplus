@@ -1,3 +1,6 @@
+2020-08-14 zzz
+ * Profiles: Create profiles in the nonblocking path
+
 2020-08-01 zzz
  * Debian: Support libjson-simple-java 3 for bullseye
  * I2NP: Locking for message ID
