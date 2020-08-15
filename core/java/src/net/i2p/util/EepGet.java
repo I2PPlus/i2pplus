@@ -1625,29 +1625,74 @@ public class EepGet {
         return _contentType;
     }
 
+    /**
+     *  Show the Server field
+     *
+     *  @since I2P+ 0.9.47
+     */
+
     public String getServer() {
         return _server;
     }
 
+    /**
+     *  Show the Content-Language field
+     *
+     *  @since I2P+ 0.9.47
+     */
+
     public String getContentLanguage() {
-        return _contentLanguage;
+        if (_contentLanguage != null && _contentLanguage.equals("und"))
+            return "";
+        else
+            return _contentLanguage;
     }
+
+    /**
+     *  Show the Transfer-Encoding field
+     *
+     *  @since I2P+ 0.9.47
+     */
 
     public String getTransferEncoding() {
         return _transferEncoding;
     }
 
+    /**
+     *  Show the Content-Encoding field
+     *
+     *  @since I2P+ 0.9.47
+     */
+
     public String getContentEncoding() {
         return _contentEncoding;
     }
+
+    /**
+     *  Show the Cache-Control field
+     *
+     *  @since I2P+ 0.9.47
+     */
 
     public String getCacheControl() {
         return _cacheControl;
     }
 
+    /**
+     *  Show the Expires field
+     *
+     *  @since I2P+ 0.9.47
+     */
+
     public String getExpiryDate() {
         return _expiryDate;
     }
+
+    /**
+     *  Show the Set-Cookie field
+     *
+     *  @since I2P+ 0.9.47
+     */
 
     public String getCookie() {
         return _cookie;
@@ -1697,8 +1742,10 @@ public class EepGet {
     public String getStatus() {
         StringBuilder buf = new StringBuilder(64);
         buf.append(_responseCode);
-        buf.append(' ');
-        buf.append(_responseText);
+        if (_responseText != null) {
+            buf.append(' ');
+            buf.append(_responseText);
+        }
         return buf.toString();
     }
 

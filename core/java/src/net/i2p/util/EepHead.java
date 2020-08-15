@@ -56,9 +56,10 @@ public class EepHead extends EepGet {
     public static void main(String args[]) {
         String proxyHost = "127.0.0.1";
         int proxyPort = 4444;
-        int numRetries = 0;
+//        int numRetries = ;
+        int numRetries = 3;
 //        int inactivityTimeout = 60*1000;
-        int inactivityTimeout = 10*1000;
+        int inactivityTimeout = 15*1000;
         String username = null;
         String password = null;
         boolean error = false;
@@ -140,7 +141,7 @@ public class EepHead extends EepGet {
             get.addAuthorization(username, password);
         }
 //        if (get.fetch(45*1000, -1, inactivityTimeout)) {
-        if (get.fetch(10*1000, -1, inactivityTimeout)) {
+        if (get.fetch(15*1000, -1, inactivityTimeout)) {
             System.out.println("URL: " + url);
             String x = get.getServer();
             String cc = get.getCacheControl();
@@ -167,7 +168,7 @@ public class EepHead extends EepGet {
                 System.out.println("Content-Encoding: " + x);
 **/
             x = get.getContentLanguage();
-            if (x != null)
+            if (x != null && !x.equals(""))
                 System.out.println("Content-Language: " + x);
             x = get.getLastModified();
             if (x != null)
@@ -191,8 +192,8 @@ public class EepHead extends EepGet {
 
     private static void usage() {
         System.out.println("EepHead [-p 127.0.0.1[:4444]] [-c]\n" +
-                           "        [-n #retries] (default 0)\n" +
-                           "        [-t timeout]  (default 60 sec)\n" +
+                           "        [-n #retries] (default 3)\n" +
+                           "        [-t timeout (seconds)]  (default 15s)\n" +
                            "        [-u username] [-x password] url\n" +
                            "        (use -c or -p :0 for no proxy)");
     }
