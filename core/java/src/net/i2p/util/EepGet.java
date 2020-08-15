@@ -91,7 +91,11 @@ public class EepGet {
     protected String _cacheControl;
     protected String _expiryDate;
     protected String _cookie;
-    protected String _xframeoptions;
+    protected String _xframeOptions;
+    protected String _csp;
+    protected String _xssProtection;
+    protected String _xContentTypeOptions;
+    protected String _xPoweredBy;
     protected boolean _transferFailed;
     protected boolean _aborted;
     protected int _fetchHeaderTimeout;
@@ -821,7 +825,11 @@ public class EepGet {
                     _cacheControl = null;
                     _expiryDate = null;
                     _cookie = null;
-                    _xframeoptions = null;
+                    _xframeOptions = null;
+                    _csp = null;
+                    _xssProtection = null;
+                    _xContentTypeOptions = null;
+                    _xPoweredBy = null;
                     // TODO auth?
                     // minSize/maxSize/maxRetries discarded
                     _transferFailed = !get.fetch(_fetchHeaderTimeout, -1, _fetchInactivityTimeout);
@@ -841,7 +849,11 @@ public class EepGet {
                     _lastModified = get.getLastModified();
                     _notModified = get.getNotModified();
                     _cookie = get.getCookie();
-                    _xframeoptions = get.getXframeOptions();
+                    _xframeOptions = get.getXframeOptions();
+                    _csp = get.getCSP();
+                    _xssProtection = get.getXSSProtection();
+                    _xContentTypeOptions = get.getXContentTypeOptions();
+                    _xPoweredBy = get.getXPoweredBy();
                     return;
                 } else {
                     // the Location: field has been required to be an absolute URI at least since
@@ -1367,13 +1379,22 @@ public class EepGet {
         } else if (key.equals("set-cookie")) {
             _cookie = val;
         } else if (key.equals("x-frame-options")) {
-            _xframeoptions = val;
+            _xframeOptions = val;
+        } else if (key.equals("x-content-type-options")) {
+            _xContentTypeOptions = val;
+        } else if (key.equals("content-security-policy")) {
+            _csp = val;
+        } else if (key.equals("x-xss-protection")) {
+            _xssProtection = val;
+        } else if (key.equals("x-powered-by")) {
+            _xssProtection = val;
         } else if (key.equals("proxy-authenticate") && _responseCode == 407 && _authState != null && _shouldProxy) {
             _authState.setAuthChallenge(val);
         } else {
             // ignore the rest
         }
     }
+
 
     private static void increment(byte[] lookahead, int cur) {
         lookahead[0] = lookahead[1];
@@ -1698,8 +1719,54 @@ public class EepGet {
         return _cookie;
     }
 
+    /**
+     *  Show the X-frame-Options field
+     *
+     *  @since I2P+ 0.9.47
+     */
+
     public String getXframeOptions() {
-        return _xframeoptions;
+        return _xframeOptions;
+    }
+
+    /**
+     *  Show the Content-Security-Policy field
+     *
+     *  @since I2P+ 0.9.47
+     */
+
+    public String getCSP() {
+        return _csp;
+    }
+
+    /**
+     *  Show the X-XSS-Protection field
+     *
+     *  @since I2P+ 0.9.47
+     */
+
+    public String getXSSProtection() {
+        return _xssProtection;
+    }
+
+    /**
+     *  Show the X-Content-Type-Options field
+     *
+     *  @since I2P+ 0.9.47
+     */
+
+    public String getXContentTypeOptions() {
+        return _xContentTypeOptions;
+    }
+
+    /**
+     *  Show the X-Powered-By field
+     *
+     *  @since I2P+ 0.9.47
+     */
+
+    public String getXPoweredBy() {
+        return _xPoweredBy;
     }
 
     /**

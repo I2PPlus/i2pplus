@@ -56,8 +56,8 @@ public class EepHead extends EepGet {
     public static void main(String args[]) {
         String proxyHost = "127.0.0.1";
         int proxyPort = 4444;
-//        int numRetries = ;
-        int numRetries = 3;
+//        int numRetries = 0;
+        int numRetries = 1;
 //        int inactivityTimeout = 60*1000;
         int inactivityTimeout = 15*1000;
         String username = null;
@@ -152,6 +152,9 @@ public class EepHead extends EepGet {
             } else {
                 System.out.println("Server: unknown");
             }
+            x = get.getXPoweredBy();
+            if (x != null)
+                System.out.println("X-Powered-By: " + x);
             x = get.getStatus().toString();
             if (x != null)
                 System.out.println("Status: " + x);
@@ -184,6 +187,18 @@ public class EepHead extends EepGet {
             x = get.getCookie();
             if (x != null)
                 System.out.println("Set-Cookie: " + x);
+            x = get.getXContentTypeOptions();
+            if (x != null)
+                System.out.println("X-Content-Type-Options: " + x);
+            x = get.getXframeOptions();
+            if (x != null)
+                System.out.println("X-FrameOptions: " + x);
+            x = get.getCSP();
+            if (x != null)
+                System.out.println("Content-Security-Policy: " + x);
+            x = get.getXSSProtection();
+            if (x != null)
+                System.out.println("X-XSS-Protection: " + x);
         } else {
             System.out.println("No response from: " + url);
             System.exit(1);
@@ -192,7 +207,7 @@ public class EepHead extends EepGet {
 
     private static void usage() {
         System.out.println("EepHead [-p 127.0.0.1[:4444]] [-c]\n" +
-                           "        [-n #retries] (default 3)\n" +
+                           "        [-n #retries] (default 1)\n" +
                            "        [-t timeout (seconds)]  (default 15s)\n" +
                            "        [-u username] [-x password] url\n" +
                            "        (use -c or -p :0 for no proxy)");
