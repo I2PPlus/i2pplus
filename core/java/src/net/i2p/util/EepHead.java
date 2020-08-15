@@ -139,33 +139,33 @@ public class EepHead extends EepGet {
             get.addAuthorization(username, password);
         }
         if (get.fetch(45*1000, -1, inactivityTimeout)) {
-            System.err.println("URL: " + url);
+            System.out.println("URL: " + url);
             String x = get.getServer();
             if (x != null)
-                System.err.println("Server: " + x);
+                System.out.println("Server: " + x);
             else
-                System.err.println("Server: unknown");
+                System.out.println("Server: unknown");
             x = get.getStatus().toString();
             if (x != null)
-                System.err.println("Status: " + x);
+                System.out.println("Status: " + x);
             x = get.getContentType();
             if (x != null)
-                System.err.println("Content-Type: " + x);
-            System.err.println("Content-Length: " + get.getContentLength() + " bytes");
+                System.out.println("Content-Type: " + x);
+            System.out.println("Content-Length: " + get.getContentLength() + " bytes");
             x = get.getLastModified();
             if (x != null)
-                System.err.println("Last-Modified: " + x);
+                System.out.println("Last-Modified: " + x);
             x = get.getETag();
             if (x != null)
-                System.err.println("Etag: " + x);
+                System.out.println("Etag: " + x);
         } else {
-            System.err.println("No response from: " + url);
+            System.out.println("No response from: " + url);
             System.exit(1);
         }
     }
 
     private static void usage() {
-        System.err.println("EepHead [-p 127.0.0.1[:4444]] [-c]\n" +
+        System.out.println("EepHead [-p 127.0.0.1[:4444]] [-c]\n" +
                            "        [-n #retries] (default 0)\n" +
                            "        [-t timeout]  (default 60 sec)\n" +
                            "        [-u username] [-x password] url\n" +
