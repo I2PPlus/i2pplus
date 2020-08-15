@@ -57,7 +57,8 @@ public class EepHead extends EepGet {
         String proxyHost = "127.0.0.1";
         int proxyPort = 4444;
         int numRetries = 0;
-        int inactivityTimeout = 60*1000;
+//        int inactivityTimeout = 60*1000;
+        int inactivityTimeout = 10*1000;
         String username = null;
         String password = null;
         boolean error = false;
@@ -138,13 +139,18 @@ public class EepHead extends EepGet {
             }
             get.addAuthorization(username, password);
         }
-        if (get.fetch(45*1000, -1, inactivityTimeout)) {
+//        if (get.fetch(45*1000, -1, inactivityTimeout)) {
+        if (get.fetch(10*1000, -1, inactivityTimeout)) {
             System.out.println("URL: " + url);
             String x = get.getServer();
-            if (x != null)
+            String cc = get.getCacheControl();
+            if (x != null) {
                 System.out.println("Server: " + x);
-            else
+            } else if (cc != null && cc.equals("max-age=3600,public")) {
+                System.out.println("Server: Jetty (?)");
+            } else {
                 System.out.println("Server: unknown");
+            }
             x = get.getStatus().toString();
             if (x != null)
                 System.out.println("Status: " + x);
@@ -152,12 +158,31 @@ public class EepHead extends EepGet {
             if (x != null)
                 System.out.println("Content-Type: " + x);
             System.out.println("Content-Length: " + get.getContentLength() + " bytes");
+/**
+            x = get.getTransferEncoding();
+            if (x != null)
+                System.out.println("Transfer-Encoding: " + x);
+            x = get.getContentEncoding();
+            if (x != null)
+                System.out.println("Content-Encoding: " + x);
+**/
+            x = get.getContentLanguage();
+            if (x != null)
+                System.out.println("Content-Language: " + x);
             x = get.getLastModified();
             if (x != null)
                 System.out.println("Last-Modified: " + x);
             x = get.getETag();
             if (x != null)
                 System.out.println("Etag: " + x);
+            if (cc != null)
+                System.out.println("Cache-Control: " + cc);
+            x = get.getExpiryDate();
+            if (x != null)
+                System.out.println("Expires: " + x);
+            x = get.getCookie();
+            if (x != null)
+                System.out.println("Set-Cookie: " + x);
         } else {
             System.out.println("No response from: " + url);
             System.exit(1);
