@@ -85,6 +85,17 @@ public class EepGet {
     protected String _contentType;
     protected String _server;
     protected String _status;
+    protected String _transferEncoding;
+    protected String _contentEncoding;
+    protected String _contentLanguage;
+    protected String _cacheControl;
+    protected String _expiryDate;
+    protected String _cookie;
+    protected String _xframeOptions;
+    protected String _csp;
+    protected String _xssProtection;
+    protected String _xContentTypeOptions;
+    protected String _xPoweredBy;
     protected boolean _transferFailed;
     protected boolean _aborted;
     protected int _fetchHeaderTimeout;
@@ -805,9 +816,20 @@ public class EepGet {
                     _etag = _etagOrig;
                     _lastModified = _lastModifiedOrig;
                     _contentType = null;
+                    _contentLanguage = null;
                     _server = null;
                     _status = null;
                     _encodingChunked = false;
+                    _contentEncoding = null;
+                    _transferEncoding = null;
+                    _cacheControl = null;
+                    _expiryDate = null;
+                    _cookie = null;
+                    _xframeOptions = null;
+                    _csp = null;
+                    _xssProtection = null;
+                    _xContentTypeOptions = null;
+                    _xPoweredBy = null;
                     // TODO auth?
                     // minSize/maxSize/maxRetries discarded
                     _transferFailed = !get.fetch(_fetchHeaderTimeout, -1, _fetchInactivityTimeout);
@@ -818,9 +840,20 @@ public class EepGet {
                     _contentType = get.getContentType();
                     _server = get.getServer();
                     _status = get.getStatus();
+                    _transferEncoding = get.getTransferEncoding();
+                    _contentEncoding = get.getContentEncoding();
+                    _contentLanguage = get.getContentLanguage();
+                    _cacheControl = get.getCacheControl();
+                    _expiryDate = get.getExpiryDate();
                     _etag = get.getETag();
                     _lastModified = get.getLastModified();
                     _notModified = get.getNotModified();
+                    _cookie = get.getCookie();
+                    _xframeOptions = get.getXframeOptions();
+                    _csp = get.getCSP();
+                    _xssProtection = get.getXSSProtection();
+                    _xContentTypeOptions = get.getXContentTypeOptions();
+                    _xPoweredBy = get.getXPoweredBy();
                     return;
                 } else {
                     // the Location: field has been required to be an absolute URI at least since
@@ -1323,9 +1356,17 @@ public class EepGet {
             _status = val;
         } else if (key.equals("last-modified")) {
             _lastModified = val;
+        } else if (key.equals("cache-control")) {
+            _cacheControl = val;
+        } else if (key.equals("expires")) {
+            _expiryDate = val;
+        } else if (key.equals("content-language")) {
+            _contentLanguage = val;
         } else if (key.equals("transfer-encoding")) {
+            _transferEncoding = val;
             _encodingChunked = val.toLowerCase(Locale.US).contains("chunked");
         } else if (key.equals("content-encoding")) {
+            _contentEncoding = val;
             // This is kindof a hack, but if we are downloading a gzip file
             // we don't want to transparently gunzip it and save it as a .gz file.
             // A query string will also mess this up
@@ -1335,12 +1376,25 @@ public class EepGet {
             _contentType = val;
         } else if (key.equals("location")) {
             _redirectLocation = val;
+        } else if (key.equals("set-cookie")) {
+            _cookie = val;
+        } else if (key.equals("x-frame-options")) {
+            _xframeOptions = val;
+        } else if (key.equals("x-content-type-options")) {
+            _xContentTypeOptions = val;
+        } else if (key.equals("content-security-policy")) {
+            _csp = val;
+        } else if (key.equals("x-xss-protection")) {
+            _xssProtection = val;
+        } else if (key.equals("x-powered-by")) {
+            _xssProtection = val;
         } else if (key.equals("proxy-authenticate") && _responseCode == 407 && _authState != null && _shouldProxy) {
             _authState.setAuthChallenge(val);
         } else {
             // ignore the rest
         }
     }
+
 
     private static void increment(byte[] lookahead, int cur) {
         lookahead[0] = lookahead[1];
@@ -1504,6 +1558,26 @@ public class EepGet {
             buf.append(_status);
             buf.append("\r\n");
         }
+        if (_cacheControl != null) {
+            buf.append("Cache-Control: ");
+            buf.append(_cacheControl);
+            buf.append("\r\n");
+        }
+        if (_expiryDate != null) {
+            buf.append("Expires: ");
+            buf.append(_expiryDate);
+            buf.append("\r\n");
+        }
+        if (_transferEncoding != null) {
+            buf.append("Transfer-Encoding: ");
+            buf.append(_transferEncoding);
+            buf.append("\r\n");
+        }
+        if (_contentEncoding != null) {
+            buf.append("Content-Encoding: ");
+            buf.append(_contentEncoding);
+            buf.append("\r\n");
+        }
         if ((_etag != null) && (_alreadyTransferred <= 0) && !etagOverridden) {
             buf.append("If-None-Match: ");
             buf.append(_etag);
@@ -1572,8 +1646,127 @@ public class EepGet {
         return _contentType;
     }
 
+    /**
+     *  Show the Server field
+     *
+     *  @since I2P+ 0.9.47
+     */
+
     public String getServer() {
         return _server;
+    }
+
+    /**
+     *  Show the Content-Language field
+     *
+     *  @since I2P+ 0.9.47
+     */
+
+    public String getContentLanguage() {
+        if (_contentLanguage != null && _contentLanguage.equals("und"))
+            return "";
+        else
+            return _contentLanguage;
+    }
+
+    /**
+     *  Show the Transfer-Encoding field
+     *
+     *  @since I2P+ 0.9.47
+     */
+
+    public String getTransferEncoding() {
+        return _transferEncoding;
+    }
+
+    /**
+     *  Show the Content-Encoding field
+     *
+     *  @since I2P+ 0.9.47
+     */
+
+    public String getContentEncoding() {
+        return _contentEncoding;
+    }
+
+    /**
+     *  Show the Cache-Control field
+     *
+     *  @since I2P+ 0.9.47
+     */
+
+    public String getCacheControl() {
+        return _cacheControl;
+    }
+
+    /**
+     *  Show the Expires field
+     *
+     *  @since I2P+ 0.9.47
+     */
+
+    public String getExpiryDate() {
+        return _expiryDate;
+    }
+
+    /**
+     *  Show the Set-Cookie field
+     *
+     *  @since I2P+ 0.9.47
+     */
+
+    public String getCookie() {
+        return _cookie;
+    }
+
+    /**
+     *  Show the X-frame-Options field
+     *
+     *  @since I2P+ 0.9.47
+     */
+
+    public String getXframeOptions() {
+        return _xframeOptions;
+    }
+
+    /**
+     *  Show the Content-Security-Policy field
+     *
+     *  @since I2P+ 0.9.47
+     */
+
+    public String getCSP() {
+        return _csp;
+    }
+
+    /**
+     *  Show the X-XSS-Protection field
+     *
+     *  @since I2P+ 0.9.47
+     */
+
+    public String getXSSProtection() {
+        return _xssProtection;
+    }
+
+    /**
+     *  Show the X-Content-Type-Options field
+     *
+     *  @since I2P+ 0.9.47
+     */
+
+    public String getXContentTypeOptions() {
+        return _xContentTypeOptions;
+    }
+
+    /**
+     *  Show the X-Powered-By field
+     *
+     *  @since I2P+ 0.9.47
+     */
+
+    public String getXPoweredBy() {
+        return _xPoweredBy;
     }
 
     /**
@@ -1602,17 +1795,24 @@ public class EepGet {
      *  be the last status code received.
      *  Note that fetch() may return false even if this returns "OK".
      *
-      *  @since 0.9.9
+     *  @since 0.9.9
      */
     public String getStatusText() {
         return _responseText;
     }
 
+    /**
+     *  Show a combined server status message e.g. "200 OK"
+     *
+     *  @since I2P+ 0.9.47
+     */
     public String getStatus() {
         StringBuilder buf = new StringBuilder(64);
         buf.append(_responseCode);
-        buf.append(' ');
-        buf.append(_responseText);
+        if (_responseText != null) {
+            buf.append(' ');
+            buf.append(_responseText);
+        }
         return buf.toString();
     }
 
