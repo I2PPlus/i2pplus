@@ -11725,9 +11725,10 @@ th.options .optbox {
 
 /* end chrome overrides */
 
-.main#tunnels .cells, #tunnel_defs td, .cells, #profilelist td, #profile_defs td, #floodfills td, #debug td, #jardump td, #jobstats td,
+.main#tunnels .cells, #tunnel_defs td:nth-child(n+3), .cells, #profilelist td, #profile_defs td, #floodfills td, #debug td, #jardump td, #jobstats td,
 #eventlog td, #webappconfig td, #tunnelconfig td, #sidebarconf td, #configstats td, #loggingoptions td, #addkeyring td, .homelinkedit td,
-#clientconfig td, .netdbentry td, #netdblookup td, #peerdefs td, #help td:not(.infohelp):not(.infowarn), #pluginconfig td, #thresholds td, #leasesetdebug td, #enviro td, #routerinformation td {
+#clientconfig td, .netdbentry td, #netdblookup td, #peerdefs td, #help td:not(.infohelp):not(.infowarn), #pluginconfig td,
+#thresholds td, #leasesetdebug td, #enviro td, #routerinformation td {
     box-shadow: inset 0 0 0 1px #fff !important;
     border-left: 1px solid #e0e0eb;
     background: rgba(240,240,255,.4);
@@ -11742,7 +11743,7 @@ th.options .optbox {
     transition: ease all .05s;
 }
 
-.main:not(#home) tr, .main:not(#home) td:first-child, #netdboverview td:last-child table {
+.main:not(#home) tr, .main:not(#home) td:first-child, #netdboverview td:last-child table, .main #tunneldefs td.cells:nth-child(2) {
     border-left: 1px solid #8d8daa !important;
 }
 
