@@ -162,14 +162,12 @@ public class EepHead extends EepGet {
             if (x != null)
                 System.out.println("Content-Type: " + x);
             System.out.println("Content-Length: " + get.getContentLength() + " bytes");
-/**
             x = get.getTransferEncoding();
             if (x != null)
                 System.out.println("Transfer-Encoding: " + x);
             x = get.getContentEncoding();
             if (x != null)
                 System.out.println("Content-Encoding: " + x);
-**/
             x = get.getContentLanguage();
             if (x != null && !x.equals(""))
                 System.out.println("Content-Language: " + x);
@@ -181,6 +179,9 @@ public class EepHead extends EepGet {
                 System.out.println("Etag: " + x);
             if (cc != null)
                 System.out.println("Cache-Control: " + cc);
+            x = get.getVary();
+            if (x != null)
+                System.out.println("Vary: " + x);
             x = get.getExpiryDate();
             if (x != null)
                 System.out.println("Expires: " + x);

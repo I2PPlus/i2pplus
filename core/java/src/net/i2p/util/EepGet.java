@@ -89,6 +89,7 @@ public class EepGet {
     protected String _contentEncoding;
     protected String _contentLanguage;
     protected String _cacheControl;
+    protected String _vary;
     protected String _expiryDate;
     protected String _cookie;
     protected String _xframeOptions;
@@ -823,6 +824,7 @@ public class EepGet {
                     _contentEncoding = null;
                     _transferEncoding = null;
                     _cacheControl = null;
+                    _vary = null;
                     _expiryDate = null;
                     _cookie = null;
                     _xframeOptions = null;
@@ -844,6 +846,7 @@ public class EepGet {
                     _contentEncoding = get.getContentEncoding();
                     _contentLanguage = get.getContentLanguage();
                     _cacheControl = get.getCacheControl();
+                    _vary = get.getVary();
                     _expiryDate = get.getExpiryDate();
                     _etag = get.getETag();
                     _lastModified = get.getLastModified();
@@ -1358,6 +1361,8 @@ public class EepGet {
             _lastModified = val;
         } else if (key.equals("cache-control")) {
             _cacheControl = val;
+        } else if (key.equals("vary")) {
+            _vary = val;
         } else if (key.equals("expires")) {
             _expiryDate = val;
         } else if (key.equals("content-language")) {
@@ -1563,6 +1568,11 @@ public class EepGet {
             buf.append(_cacheControl);
             buf.append("\r\n");
         }
+        if (_vary != null) {
+            buf.append("Vary: ");
+            buf.append(_vary);
+            buf.append("\r\n");
+        }
         if (_expiryDate != null) {
             buf.append("Expires: ");
             buf.append(_expiryDate);
@@ -1717,6 +1727,16 @@ public class EepGet {
 
     public String getCookie() {
         return _cookie;
+    }
+
+    /**
+     *  Show the Vary field
+     *
+     *  @since I2P+ 0.9.47
+     */
+
+    public String getVary() {
+        return _vary;
     }
 
     /**

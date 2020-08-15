@@ -27,19 +27,19 @@ public class SearchHelper extends HelperBase {
 
     static final String ENGINES_DEFAULT =
     // TODO: add a checkbox or dropdown to UI to choose default engine
-        //"eepsites.i2p"             + S +     "http://eepsites.i2p/Content/Search/SearchResults.aspx?inpQuery=%s" + SOURCE + S +
-        //"epsilon.i2p"              + S +     "http://epsilon.i2p/search.jsp?q=%s" + SOURCE +  S +
         "ebooks.i2p"               + S +     "http://ebooks.i2p/index.php?page=9&query=%s" + SOURCE + S +
         "i2pforum.i2p"             + S +     "http://i2pforum.i2p/search.php?keywords=%s" + SOURCE + S +
-        //"isitup.i2p"               + S +     "http://isitup.i2p/api/check?sitename=%s" + SOURCE + S +
+        "isitup.i2p"               + S +     "http://isitup.i2p/api/check?sitename=%s" + SOURCE + S +
         "legwork.i2p"              + S +     "http://legwork.i2p/yacysearch.html?query=%s" + "&maximumRecords=1000" + SOURCE + S +
         "ransack.i2p"              + S +     "http://ransack.i2p/?q=%s" + SOURCE + S +
-        //"tome.i2p"                 + S +     "http://tome.i2p/search.php?q=%s" + SOURCE + S +
         "trac.i2p2.i2p"            + S +     "https://trac.i2p2.i2p/search?q=%s" + SOURCE + S +
         "tracker2.postman.i2p"     + S +     "http://tracker2.postman.i2p/?search=%s" + SOURCE + S +
         "wiki.i2p-projekt.i2p"     + S +     "http://wiki.i2p-projekt.i2p/wiki/index.php?search=%s" + SOURCE + S +
         "yacy.idk.i2p"             + S +     "http://yacy.idk.i2p/yacysearch.html?query=%s" + "&maximumRecords=1000" + SOURCE + S +
         "zzz.i2p"                  + S +     "http://zzz.i2p/search?type=posts&query=%s" + SOURCE + //S +
+        //"eepsites.i2p"             + S +     "http://eepsites.i2p/Content/Search/SearchResults.aspx?inpQuery=%s" + SOURCE + S +
+        //"tome.i2p"                 + S +     "http://tome.i2p/search.php?q=%s" + SOURCE + S +
+        //"epsilon.i2p"              + S +     "http://epsilon.i2p/search.jsp?q=%s" + SOURCE +  S +
         //"seeker.i2p"               + S +     "http://seeker.i2p/index.php?query=%s" + SOURCE + S +
         //"searchthis.i2p"           + S +     "http://searchthis.i2p/cgi-bin/search.cgi?q=%s" + SOURCE + S +
         //"simple-search.i2p"        + S +     "http://simple-search.i2p/search.sh?search=%s" + SOURCE + S +

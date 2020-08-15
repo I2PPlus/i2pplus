@@ -58,10 +58,10 @@ public class I2PTunnelHTTPServer extends I2PTunnelServer {
 //    public static final int DEFAULT_POST_WINDOW = 5*60;
     public static final int DEFAULT_POST_WINDOW = 3*60;
 //    public static final int DEFAULT_POST_BAN_TIME = 20*60;
-    public static final int DEFAULT_POST_BAN_TIME = 5*60;
+    public static final int DEFAULT_POST_BAN_TIME = 3*60;
 //    public static final int DEFAULT_POST_TOTAL_BAN_TIME = 10*60;
     public static final int DEFAULT_POST_TOTAL_BAN_TIME = 3*60;
-    public static final int DEFAULT_POST_MAX = 10;
+    public static final int DEFAULT_POST_MAX = 16;
 //    public static final int DEFAULT_POST_TOTAL_MAX = 20;
     public static final int DEFAULT_POST_TOTAL_MAX = 30;
 
@@ -360,7 +360,7 @@ public class I2PTunnelHTTPServer extends I2PTunnelServer {
                 }
                 if (_log.shouldLog(Log.WARN))
 //                    _log.warn("[HTTPServer] Error in the HTTP request (bad request) \n* From: " + peerB32, eofe);
-                    _log.warn("[HTTPServer] Error in the HTTP request (EOF exception) \n* From: " + peerB32);
+                    _log.warn("[HTTPServer] Error in the HTTP request (EOF exception) \n* Client: " + peerB32);
                 return;
             } catch (LineTooLongException ltle) {
                 try {
@@ -371,7 +371,7 @@ public class I2PTunnelHTTPServer extends I2PTunnelServer {
                 }
                 if (_log.shouldLog(Log.WARN))
 //                    _log.warn("[HTTPServer] Error in the HTTP request (headers too large) \n* From: " + peerB32, ltle);
-                    _log.warn("[HTTPServer] Error in the HTTP request (headers too large) \n* From: " + peerB32);
+                    _log.warn("[HTTPServer] Error in the HTTP request (headers too large) \n* Client: " + peerB32);
                 return;
             } catch (RequestTooLongException rtle) {
                 try {
@@ -382,7 +382,7 @@ public class I2PTunnelHTTPServer extends I2PTunnelServer {
                 }
                 if (_log.shouldLog(Log.WARN))
 //                    _log.warn("[HTTPServer] Error in the HTTP request (URI too long) \n* From: " + peerB32, rtle);
-                    _log.warn("[HTTPServer] Error in the HTTP request (URI too long) \n* From: " + peerB32);
+                    _log.warn("[HTTPServer] Error in the HTTP request (URI too long) \n* Client: " + peerB32);
                 return;
             } catch (BadRequestException bre) {
                 try {
@@ -392,7 +392,7 @@ public class I2PTunnelHTTPServer extends I2PTunnelServer {
                      try { socket.close(); } catch (IOException ioe) {}
                 }
                 if (_log.shouldLog(Log.WARN))
-                    _log.warn("[HTTPServer] Error in the HTTP request (bad request) \n* From: " + peerB32, bre);
+                    _log.warn("[HTTPServer] Error in the HTTP request (bad request) \n* Client: " + peerB32, bre);
                 return;
             }
             long afterHeaders = getTunnel().getContext().clock().now();
@@ -441,7 +441,7 @@ public class I2PTunnelHTTPServer extends I2PTunnelServer {
                         referer = referer.substring(9);
                         if (referer.startsWith("http://") || referer.startsWith("https://")) {
                             if (_log.shouldLog(Log.WARN))
-                                _log.warn("[HTTPServer] Refusing access (bad referer) \n* From: " + peerB32 +
+                                _log.warn("[HTTPServer] Refusing access (bad referer) \n* Client: " + peerB32 +
                                           "\n* Referer: " + referer);
                             try {
                                 socket.getOutputStream().write(ERR_INPROXY.getBytes("UTF-8"));
@@ -468,7 +468,7 @@ public class I2PTunnelHTTPServer extends I2PTunnelServer {
                                     continue;
                                 if (ag.length() > 0 && ua.contains(ag)) {
                                     if (_log.shouldLog(Log.WARN))
-                                        _log.warn("[HTTPServer] Refusing access (bad user agent) \n* From: " + peerB32 +
+                                        _log.warn("[HTTPServer] Refusing access (bad user agent) \n* Client: " + peerB32 +
                                                   "\n* User-Agent: " + ua);
                                     try {
                                         socket.getOutputStream().write(ERR_INPROXY.getBytes("UTF-8"));
@@ -490,7 +490,7 @@ public class I2PTunnelHTTPServer extends I2PTunnelServer {
                             String ag = agents[i].trim();
                             if (ag.equals("none")) {
                                 if (_log.shouldLog(Log.WARN))
-                                    _log.warn("[HTTPServer] Refusing access (blank user agent) \n* From: " + peerB32);
+                                    _log.warn("[HTTPServer] Refusing access (blank user agent) \n* Client: " + peerB32);
                                 try {
                                     socket.getOutputStream().write(ERR_INPROXY.getBytes("UTF-8"));
                                 } catch (IOException ioe) {}
@@ -631,7 +631,7 @@ public class I2PTunnelHTTPServer extends I2PTunnelServer {
             } catch (IOException ioe) {}
             if (_log.shouldLog(Log.WARN))
 //                _log.warn("[HTTPServer] Error in the HTTP request \n* From: " + peerB32, ex);
-                _log.warn("[HTTPServer] Error in the HTTP request \n* From: " + peerB32 + "\n* " + ex.getMessage());
+                _log.warn("[HTTPServer] Error in the HTTP request \n* Client: " + peerB32 + "\n* " + ex.getMessage());
         } catch (OutOfMemoryError oom) {
             // Often actually a file handle limit problem so we can safely send a response
             // java.lang.OutOfMemoryError: unable to create new native thread
@@ -876,7 +876,11 @@ public class I2PTunnelHTTPServer extends I2PTunnelServer {
                    (_contentEncoding == null) &&
                    (_contentType == null ||
                     ((!_contentType.startsWith("audio/")) &&
-                     (!_contentType.startsWith("image/")) &&
+                     (!_contentType.equals("image/gif")) &&
+                     (!_contentType.equals("image/jpeg")) &&
+                     (!_contentType.equals("image/png")) &&
+                     (!_contentType.equals("image/tiff")) &&
+                     (!_contentType.equals("image/webp")) &&
                      (!_contentType.startsWith("video/")) &&
                      (!_contentType.equals("application/compress")) &&
                      (!_contentType.equals("application/bzip2")) &&
