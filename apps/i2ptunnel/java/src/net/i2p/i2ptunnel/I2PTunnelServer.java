@@ -52,6 +52,7 @@ import net.i2p.util.Log;
 import net.i2p.i2ptunnel.access.FilterFactory;
 import net.i2p.i2ptunnel.access.InvalidDefinitionException;
 
+
 public class I2PTunnelServer extends I2PTunnelTask implements Runnable {
 
     protected final Log _log;
@@ -87,7 +88,8 @@ public class I2PTunnelServer extends I2PTunnelTask implements Runnable {
     /** min number of threads */
     private static final int MIN_HANDLERS = 0;
     /** how long to wait before dropping an idle thread */
-    private static final long HANDLER_KEEPALIVE_MS = 30*1000;
+//    private static final long HANDLER_KEEPALIVE_MS = 30*1000;
+    private static final long HANDLER_KEEPALIVE_MS = 15*1000;
 
     protected I2PTunnelTask task;
     protected boolean bidir;
@@ -284,10 +286,10 @@ public class I2PTunnelServer extends I2PTunnelTask implements Runnable {
             privData = new FileInputStream(altFile);
             return sMgr.addSubsession(privData, props);
         } catch (IOException ioe) {
-            _log.error("Failed to add subssession", ioe);
+            _log.error("Failed to add sub-session", ioe);
             return null;
         } catch (I2PSessionException ise) {
-            _log.error("Failed to add subssession", ise);
+            _log.error("Failed to add sub-session", ise);
             return null;
         } finally {
             if (privData != null) try { privData.close(); } catch (IOException ioe) {}
@@ -326,10 +328,10 @@ public class I2PTunnelServer extends I2PTunnelTask implements Runnable {
                         try {
                             sub.connect();
                             if (_log.shouldInfo())
-                                _log.info("Connected subsession " + sub);
+                                _log.info("Connected sub-session " + sub);
                         } catch (I2PSessionException ise) {
                             // not fatal?
-                            String msg = "Unable to connect subsession " + sub;
+                            String msg = "Unable to connect sub-session " + sub;
                             this.l.log(msg);
                             _log.error(msg, ise);
                         }
