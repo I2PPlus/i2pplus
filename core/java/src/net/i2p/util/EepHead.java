@@ -147,8 +147,10 @@ public class EepHead extends EepGet {
             String cc = get.getCacheControl();
             if (x != null) {
                 System.out.println("Server: " + x);
-            } else if (cc != null && cc.equals("max-age=3600,public")) {
+            } else if (cc != null && (cc.equals("max-age=3600,public") || cc.equals("no-cache, private, max-age=2628000"))) {
                 System.out.println("Server: Jetty (?)");
+            } else if (cc != null && cc.equals("bytes")) {
+                System.out.println("Server: nginx (?)");
             } else {
                 System.out.println("Server: unknown");
             }
@@ -177,8 +179,11 @@ public class EepHead extends EepGet {
             x = get.getETag();
             if (x != null)
                 System.out.println("Etag: " + x);
-            if (cc != null)
+            if (cc != null && !cc.equals("bytes")) // prevent nginx from showing invalid cache-control response
                 System.out.println("Cache-Control: " + cc);
+            x = get.getAcceptRanges();
+            if (x != null)
+                System.out.println("Accept-Ranges: " + x);
             x = get.getVary();
             if (x != null)
                 System.out.println("Vary: " + x);
@@ -188,6 +193,9 @@ public class EepHead extends EepGet {
             x = get.getCookie();
             if (x != null)
                 System.out.println("Set-Cookie: " + x);
+            x = get.getReferrerPolicy();
+            if (x != null)
+                System.out.println("Referrer-Policy: " + x);
             x = get.getXContentTypeOptions();
             if (x != null)
                 System.out.println("X-Content-Type-Options: " + x);

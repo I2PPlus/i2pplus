@@ -89,9 +89,11 @@ public class EepGet {
     protected String _contentEncoding;
     protected String _contentLanguage;
     protected String _cacheControl;
+    protected String _acceptRanges;
     protected String _vary;
     protected String _expiryDate;
     protected String _cookie;
+    protected String _referrerPolicy;
     protected String _xframeOptions;
     protected String _csp;
     protected String _xssProtection;
@@ -824,9 +826,11 @@ public class EepGet {
                     _contentEncoding = null;
                     _transferEncoding = null;
                     _cacheControl = null;
+                    _acceptRanges = null;
                     _vary = null;
                     _expiryDate = null;
                     _cookie = null;
+                    _referrerPolicy = null;
                     _xframeOptions = null;
                     _csp = null;
                     _xssProtection = null;
@@ -846,12 +850,14 @@ public class EepGet {
                     _contentEncoding = get.getContentEncoding();
                     _contentLanguage = get.getContentLanguage();
                     _cacheControl = get.getCacheControl();
+                    _acceptRanges = get.getAcceptRanges();
                     _vary = get.getVary();
                     _expiryDate = get.getExpiryDate();
                     _etag = get.getETag();
                     _lastModified = get.getLastModified();
                     _notModified = get.getNotModified();
                     _cookie = get.getCookie();
+                    _referrerPolicy = get.getReferrerPolicy();
                     _xframeOptions = get.getXframeOptions();
                     _csp = get.getCSP();
                     _xssProtection = get.getXSSProtection();
@@ -1361,6 +1367,8 @@ public class EepGet {
             _lastModified = val;
         } else if (key.equals("cache-control")) {
             _cacheControl = val;
+        } else if (key.equals("accept-ranges")) {
+            _cacheControl = val;
         } else if (key.equals("vary")) {
             _vary = val;
         } else if (key.equals("expires")) {
@@ -1383,6 +1391,8 @@ public class EepGet {
             _redirectLocation = val;
         } else if (key.equals("set-cookie")) {
             _cookie = val;
+        } else if (key.equals("referrer-policy")) {
+            _referrerPolicy = val;
         } else if (key.equals("x-frame-options")) {
             _xframeOptions = val;
         } else if (key.equals("x-content-type-options")) {
@@ -1568,6 +1578,11 @@ public class EepGet {
             buf.append(_cacheControl);
             buf.append("\r\n");
         }
+        if (_acceptRanges != null) {
+            buf.append("Accept-Ranges: ");
+            buf.append(_acceptRanges);
+            buf.append("\r\n");
+        }
         if (_vary != null) {
             buf.append("Vary: ");
             buf.append(_vary);
@@ -1586,6 +1601,16 @@ public class EepGet {
         if (_contentEncoding != null) {
             buf.append("Content-Encoding: ");
             buf.append(_contentEncoding);
+            buf.append("\r\n");
+        }
+        if (_cookie != null) {
+            buf.append("Set-Cookie: ");
+            buf.append(_cookie);
+            buf.append("\r\n");
+        }
+        if (_referrerPolicy != null) {
+            buf.append("Referrer-Policy: ");
+            buf.append(_referrerPolicy);
             buf.append("\r\n");
         }
         if ((_etag != null) && (_alreadyTransferred <= 0) && !etagOverridden) {
@@ -1710,6 +1735,16 @@ public class EepGet {
     }
 
     /**
+     *  Show the Accept-Ranges field
+     *
+     *  @since I2P+ 0.9.47
+     */
+
+    public String getAcceptRanges() {
+        return _acceptRanges;
+    }
+
+    /**
      *  Show the Expires field
      *
      *  @since I2P+ 0.9.47
@@ -1727,6 +1762,16 @@ public class EepGet {
 
     public String getCookie() {
         return _cookie;
+    }
+
+    /**
+     *  Show the Referrer-Policy field
+     *
+     *  @since I2P+ 0.9.47
+     */
+
+    public String getReferrerPolicy() {
+        return _referrerPolicy;
     }
 
     /**

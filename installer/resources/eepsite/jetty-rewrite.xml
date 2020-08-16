@@ -33,7 +33,7 @@
           <New class="org.eclipse.jetty.rewrite.handler.HeaderPatternRule">
             <Set name="pattern">/favicon.ico</Set>
             <Set name="name">Cache-Control</Set>
-            <Set name="value">Max-Age=3600,public</Set>
+            <Set name="value">no-cache, private, max-age=2628000</Set>
             <Set name="terminating">true</Set>
           </New>
         </Arg>

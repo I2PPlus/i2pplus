@@ -1,4 +1,4 @@
-<?xml version="1.0" encoding="UTF-8" ?> 
+<?xml version="1.0" encoding="UTF-8" ?>
 <!DOCTYPE Configure PUBLIC "-//Jetty//Configure//EN" "http://www.eclipse.org/jetty/configure.dtd">
 
 <!--
@@ -13,7 +13,7 @@ to serve static html files and images.
   <Set name="resourceBase">./docroot/</Set>
   <Call name="setInitParameter">
     <Arg>org.eclipse.jetty.servlet.Default.cacheControl</Arg>
-    <Arg>max-age=3600,public</Arg>
+    <Arg>no-cache, private, max-age=2628000</Arg>
   </Call>
   <Call name="addServlet">
     <Arg>org.eclipse.jetty.servlet.DefaultServlet</Arg>

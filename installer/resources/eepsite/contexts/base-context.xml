@@ -13,7 +13,7 @@ to serve static html files and images.
   <Set name="resourceBase">./eepsite/docroot/</Set>
   <Call name="setInitParameter">
     <Arg>org.eclipse.jetty.servlet.Default.cacheControl</Arg>
-    <Arg>max-age=3600,public</Arg>
+    <Arg>no-cache, private, max-age=2628000</Arg>
   </Call>
   <!-- change to false to disallow directory listings -->
   <Call name="setInitParameter">
@@ -22,7 +22,7 @@ to serve static html files and images.
   </Call>
   <Call name="setInitParameter">
     <Arg>org.eclipse.jetty.servlet.Default.stylesheet</Arg>
-    <Arg>./eepsite/resources/jetty-dir.css</Arg>
+    <Arg>./eepsite/.resources/jetty-dir.css</Arg>
   </Call>
   <Call name="setMimeTypes">
     <Arg>
