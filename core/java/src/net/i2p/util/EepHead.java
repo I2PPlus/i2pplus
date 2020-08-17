@@ -147,10 +147,13 @@ public class EepHead extends EepGet {
             String ar = get.getAcceptRanges();
             String lm = get.getLastModified();
             String et = get.getEtag();
+            String cl = String.valueOf(get.getContentLength());
             if (x != null) {
                 System.out.println("Server: " + x);
             } else if (cc != null && (cc.equals("max-age=3600,public") || cc.equals("no-cache, private, max-age=2628000"))) {
                 System.out.println("Server: Jetty (?)");
+            } else if (cc == null && cl.equals("217") && lm != null && ar.equals("bytes") && et == null) {
+                System.out.println("Server: Jetty (ZZZOT)");
             } else if ((ar != null && ar.equals("bytes")) && lm != null && et != null) {
                 System.out.println("Server: nginx (?)");
             } else {
@@ -165,7 +168,7 @@ public class EepHead extends EepGet {
             x = get.getContentType();
             if (x != null)
                 System.out.println("Content-Type: " + x);
-            System.out.println("Content-Length: " + get.getContentLength() + " bytes");
+            System.out.println("Content-Length: " + cl + " bytes");
             x = get.getTransferEncoding();
             if (x != null)
                 System.out.println("Transfer-Encoding: " + x);
@@ -207,7 +210,7 @@ public class EepHead extends EepGet {
             x = get.getXSSProtection();
             if (x != null)
                 System.out.println("X-XSS-Protection: " + x);
-            System.out.println("Response time: " + "ms");
+//            System.out.println("Response time: " + "ms"); // TODO response time from request start -> request end
         } else {
             System.out.println("No response from: " + url);
             System.exit(1);
