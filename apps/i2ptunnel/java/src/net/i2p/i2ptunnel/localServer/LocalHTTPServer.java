@@ -73,7 +73,7 @@ public abstract class LocalHTTPServer {
     private final static String OK =
          "HTTP/1.1 200 OK\r\n" +
          "Content-Type: text/plain\r\n" +
-         "Cache-Control: max-age=86400\r\n" +
+         "Cache-Control: no-cache, private, max-age=86400\r\n" +
          "Connection: close\r\n"+
          "Proxy-Connection: close\r\n"+
          "\r\n"+
@@ -83,7 +83,7 @@ public abstract class LocalHTTPServer {
          "HTTP/1.1 200 OK\r\n" +
          "Content-Type: text/html; charset=UTF-8\r\n" +
          "Referrer-Policy: no-referrer\r\n"+
-         "Cache-Control: no-cache\r\n" +
+         "Cache-Control: no-cache, private\r\n" +
          "Connection: close\r\n"+
          "Proxy-Connection: close\r\n"+
          "\r\n";
@@ -149,7 +149,7 @@ public abstract class LocalHTTPServer {
                 out.write("HTTP/1.1 200 OK\r\nContent-Type: ".getBytes("UTF-8"));
                 out.write(type.getBytes("UTF-8"));
                 out.write("\r\nAccess-Control-Allow-Origin: *".getBytes("UTF-8"));
-                out.write("\r\nCache-Control: max-age=86400\r\nConnection: close\r\nProxy-Connection: close\r\n\r\n".getBytes("UTF-8"));
+                out.write("\r\nCache-Control: no-cache, private, max-age=2628000\r\nConnection: close\r\nProxy-Connection: close\r\n\r\n".getBytes("UTF-8"));
                 FileUtil.readFile(filename, themesDir.getAbsolutePath(), out);
                 return;
             }

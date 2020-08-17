@@ -24,7 +24,7 @@
         <Call name="setInitParameter">
           <!-- minimum in Java is 1300 -->
           <Arg>minGzipSize</Arg>
-          <Arg>512</Arg>
+          <Arg>640</Arg>
         </Call>
         <Call name="setInitParameter">
           <!-- In Java we have a blacklist. This covers the most common cases. -->

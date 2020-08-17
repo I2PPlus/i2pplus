@@ -141,7 +141,7 @@ class AddressBook implements Iterable<Map.Entry<String, HostTxtEntry>> {
                     proxyHost, proxyPort, 10, -1l, MAX_SUB_SIZE, tmp.getAbsolutePath(), null,
                     subscription.getLocation(), true, subscription.getEtag(), subscription.getLastModified(), null);
             if (get.fetch()) {
-                subscription.setEtag(get.getETag());
+                subscription.setEtag(get.getEtag());
                 subscription.setLastModified(get.getLastModified());
                 subscription.setLastFetched(I2PAppContext.getGlobalContext().clock().now());
                 subf = tmp;

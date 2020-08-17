@@ -58,8 +58,7 @@ public class EepHead extends EepGet {
         int proxyPort = 4444;
 //        int numRetries = 0;
         int numRetries = 1;
-//        int inactivityTimeout = 60*1000;
-        int inactivityTimeout = 15*1000;
+        int inactivityTimeout = 10*1000;
         String username = null;
         String password = null;
         boolean error = false;
@@ -140,16 +139,22 @@ public class EepHead extends EepGet {
             }
             get.addAuthorization(username, password);
         }
-//        if (get.fetch(45*1000, -1, inactivityTimeout)) {
-        if (get.fetch(15*1000, -1, inactivityTimeout)) {
+
+        if (get.fetch(10*1000, -1, inactivityTimeout)) {
             System.out.println("URL: " + url);
             String x = get.getServer();
             String cc = get.getCacheControl();
+            String ar = get.getAcceptRanges();
+            String lm = get.getLastModified();
+            String et = get.getEtag();
+            String cl = String.valueOf(get.getContentLength());
             if (x != null) {
                 System.out.println("Server: " + x);
             } else if (cc != null && (cc.equals("max-age=3600,public") || cc.equals("no-cache, private, max-age=2628000"))) {
                 System.out.println("Server: Jetty (?)");
-            } else if (cc != null && cc.equals("bytes")) {
+            } else if (cc == null && cl.equals("217") && lm != null && ar.equals("bytes") && et == null) {
+                System.out.println("Server: Jetty (ZZZOT)");
+            } else if ((ar != null && ar.equals("bytes")) && lm != null && et != null) {
                 System.out.println("Server: nginx (?)");
             } else {
                 System.out.println("Server: unknown");
@@ -163,7 +168,7 @@ public class EepHead extends EepGet {
             x = get.getContentType();
             if (x != null)
                 System.out.println("Content-Type: " + x);
-            System.out.println("Content-Length: " + get.getContentLength() + " bytes");
+            System.out.println("Content-Length: " + cl + " bytes");
             x = get.getTransferEncoding();
             if (x != null)
                 System.out.println("Transfer-Encoding: " + x);
@@ -173,17 +178,14 @@ public class EepHead extends EepGet {
             x = get.getContentLanguage();
             if (x != null && !x.equals(""))
                 System.out.println("Content-Language: " + x);
-            x = get.getLastModified();
-            if (x != null)
-                System.out.println("Last-Modified: " + x);
-            x = get.getETag();
-            if (x != null)
-                System.out.println("Etag: " + x);
-            if (cc != null && !cc.equals("bytes")) // prevent nginx from showing invalid cache-control response
+            if (lm != null)
+                System.out.println("Last-Modified: " + lm);
+            if (et != null)
+                System.out.println("Etag: " + et);
+            if (cc != null)
                 System.out.println("Cache-Control: " + cc);
-            x = get.getAcceptRanges();
-            if (x != null)
-                System.out.println("Accept-Ranges: " + x);
+            if (ar != null)
+                System.out.println("Accept-Ranges: " + ar);
             x = get.getVary();
             if (x != null)
                 System.out.println("Vary: " + x);
@@ -208,6 +210,7 @@ public class EepHead extends EepGet {
             x = get.getXSSProtection();
             if (x != null)
                 System.out.println("X-XSS-Protection: " + x);
+//            System.out.println("Response time: " + "ms"); // TODO response time from request start -> request end
         } else {
             System.out.println("No response from: " + url);
             System.exit(1);
@@ -217,7 +220,7 @@ public class EepHead extends EepGet {
     private static void usage() {
         System.out.println("EepHead [-p 127.0.0.1[:4444]] [-c]\n" +
                            "        [-n #retries] (default 1)\n" +
-                           "        [-t timeout (seconds)]  (default 15s)\n" +
+                           "        [-t timeout (seconds)]  (default 10s)\n" +
                            "        [-u username] [-x password] url\n" +
                            "        (use -c or -p :0 for no proxy)");
     }
@@ -234,8 +237,7 @@ public class EepHead extends EepGet {
         if (_fetchInactivityTimeout > 0)
             timeout.setInactivityTimeout(_fetchInactivityTimeout);
         else
-            timeout.setInactivityTimeout(60*1000);
-
+            timeout.setInactivityTimeout(10*1000);
         // Should we even follow redirects for HEAD?
         if (_redirectLocation != null) {
             try {
@@ -336,7 +338,7 @@ public class EepHead extends EepGet {
         String path = url.getRawPath();
         String query = url.getRawQuery();
         if (_log.shouldLog(Log.DEBUG))
-            _log.debug("Requesting " + _actualURL);
+            _log.debug("Requesting headers for:" + _actualURL);
         // RFC 2616 sec 5.1.2 - full URL if proxied, absolute path only if not proxied
         String urlToSend;
         if (_shouldProxy) {

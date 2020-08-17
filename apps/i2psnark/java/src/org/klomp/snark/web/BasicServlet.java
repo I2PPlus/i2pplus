@@ -417,7 +417,7 @@ class BasicServlet extends HttpServlet
 
         long ct = content.getCacheTime();
         if (ct>=0)
-            response.setHeader("Cache-Control", "public, max-age=" + ct);
+            response.setHeader("Cache-Control", "no-cache, private, max-age=" + ct);
     }
 
     /* ------------------------------------------------------------ */

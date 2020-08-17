@@ -39,7 +39,7 @@
 <ul class="links">
 <li><a href="http://i2pforum.i2p/" target="_blank">Foro de soporte de I2P</a></li>
 <li><a href="http://zzz.i2p/" target="_blank">Foro de los desarrolladores de I2P</a></li>
-<li><a href="http://i2pwiki.i2p/" target="_blank">I2PWiki</a></li>
+<li><a href="http://wiki.i2p-projekt.i2p/" target="_blank">I2P Wiki</a></li>
 <li>The FAQ on <a href="http://i2p-projekt.i2p/en/faq" target="_blank">i2p-projekt.i2p</a> o <a href="https://geti2p.net/en/faq" target="_blank">geti2p.net</a></li>
 </ul>
 <p>También puedes probar en la <a href="irc://127.0.0.1:6668/i2p">red IRC de I2P</a>.</p>

@@ -68,8 +68,10 @@ if (lastmod > 0) {
     }
     response.setDateHeader("Last-Modified", lastmod);
     // cache for a day
-    response.setDateHeader("Expires", net.i2p.I2PAppContext.getGlobalContext().clock().now() + 86400000l);
-    response.setHeader("Cache-Control", "public, max-age=86400");
+//    response.setDateHeader("Expires", net.i2p.I2PAppContext.getGlobalContext().clock().now() + 86400000l);
+    // cache for a month
+    response.setDateHeader("Expires", net.i2p.I2PAppContext.getGlobalContext().clock().now() + 2628000000l);
+    response.setHeader("Cache-Control", "no-cache, private, max-age=2628000");
 }
 long length = file.length();
 if (length > 0)

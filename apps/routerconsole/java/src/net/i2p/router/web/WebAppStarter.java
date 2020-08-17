@@ -65,7 +65,7 @@ public class WebAppStarter {
         //_log = ContextHelper.getContext(null).logManager().getLog(WebAppStarter.class); ;
         // see DefaultServlet javadocs
         String pfx = "org.eclipse.jetty.servlet.Default.";
-        INIT_PARAMS.put(pfx + "cacheControl", "max-age=86400");
+        INIT_PARAMS.put(pfx + "cacheControl", "no-cache, private, max-age=2628000");
         INIT_PARAMS.put(pfx + "dirAllowed", "false");
 
         boolean found = false;
@@ -97,7 +97,7 @@ public class WebAppStarter {
     public static void startWebApp(RouterContext ctx, ContextHandlerCollection server,
                             String appName, String warPath) throws Exception {
          File tmpdir = new SecureDirectory(ctx.getTempDir(), "jetty-work-" + appName + ctx.random().nextInt());
-         WebAppContext wac = addWebApp(ctx, server, appName, warPath, tmpdir);      
+         WebAppContext wac = addWebApp(ctx, server, appName, warPath, tmpdir);
          //_log.debug("Loading war from: " + warPath);
          LocaleWebAppHandler.setInitParams(wac, INIT_PARAMS);
          // default false, set to true so we get good logging,
@@ -269,7 +269,7 @@ public class WebAppStarter {
             return false;
         return wac.isStarted();
     }
-    
+
     /**
      *  @since 0.9.41
      */
@@ -279,7 +279,7 @@ public class WebAppStarter {
             return false;
         return wac.isStarted();
     }
-    
+
     /**
      *  Warning, this will NOT work during shutdown, because
      *  the console is already unregistered.
@@ -292,7 +292,7 @@ public class WebAppStarter {
             return null;
         return getWebApp(server, appName);
     }
-    
+
     /**
      *  @since 0.9.41
      */
@@ -302,7 +302,7 @@ public class WebAppStarter {
             return null;
         return getWebApp(server, appName);
     }
-    
+
     /**
      *  @since 0.9.41
      */

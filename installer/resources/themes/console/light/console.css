@@ -7980,11 +7980,24 @@ p.sybil_info + a[name] + table.sybil_routerinfo, p.hashdist + a[name] + table.sy
     margin-left: -5px !important;
 }
 
+.netdb_header img[src^="/flags"], th img[src^="/flags"] {
+    margin-left: 2px !important;
+    width: 23px !important;
+    height: auto !important;
+}
+
 .netdb_header img[src="/flags.jsp?c=a0"] {
-    margin-bottom: -4px !important;
+    margin-top: 2px !important;
+    margin-bottom: -6px !important;
     margin-right: 0 !important;
     display: inline-block;
     opacity: .8;
+}
+
+.sybil_routerinfo .netdb_header img[src^="/flags"] {
+    margin-bottom: -3px !important;
+    margin-left: 0 !important;
+    border: 1px solid #dde;
 }
 
 .version, #netdbtiers a {
@@ -11751,13 +11764,13 @@ th.options .optbox {
     border-right: 1px solid #8d8daa !important;
 }
 
-.main #netdboverview table tr, .main #netdboverview table td:first-child,
-.sybil_addresses tr, .sybil_addresses td:first-child, .main #bugreports td:first-child {
+.main #netdboverview table tr, .main #netdboverview table td:first-child, .main#netdb .sybil_addresses table td:first-child,
+.main#netdb .sybil_addresses tr, .main#netdb .sybil_addresses td:first-child, .main #bugreports td:first-child {
     border-left: none !important;
 }
 
-.main #netdboverview table tr, .main #netdboverview table td:last-child,
-.sybil_addresses tr, .sybil_addresses td:last-child, .main #bugreports td:last-child,
+.main #netdboverview table tr, .main #netdboverview table td:last-child, .main#netdb .sybil_addresses table td:last-child,
+.main#netdb .sybil_addresses tr, .main#netdb .sybil_addresses td:last-child, .main #bugreports td:last-child,
 .main #file, .main #file td {
     border-right: none !important;
 }
@@ -11770,8 +11783,10 @@ th.options .optbox {
 .main #installPluginUrl tr, .main #installPluginUrl td:first-child, .main #installPluginUrl td:last-child,
 .main #joinFamily tr, .main #joinFamily td:first-child, .main #joinFamily td:last-child,
 .main #newFamily tr, .main #newFamily td:first-child, .main #newFamily td:last-child,
-.main #bannedips #banneduntilrestart tr, .main #bannedips #banneduntilrestart td, .main #bannedips #banneduntilrestart td:first-child, .main #bannedips #banneduntilrestart td:last-child,
-.main #bannedips #permabanned tr, .main #bannedips #permabanned td, .main #bannedips #permabanned td:first-child, .main #bannedips #permabanned td:last-child {
+.main #bannedips #banneduntilrestart tr, .main #bannedips #banneduntilrestart td,
+.main #bannedips #banneduntilrestart td:first-child, .main #bannedips #banneduntilrestart td:last-child,
+.main #bannedips #permabanned tr, .main #bannedips #permabanned td, .main #bannedips #permabanned td:first-child,
+.main #bannedips #permabanned td:last-child, .main .sybil_addresses table, .main .sybil_addresses table td {
     border-left: none !important;
     border-right: none !important;
 }
