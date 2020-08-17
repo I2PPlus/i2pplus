@@ -820,11 +820,11 @@ td#throttle, #clientAuthConfig {
 }
 
 #throttler th:first-child, #throttler td:first-child, #clientAuth th:first-child, #clientAuth td:first-child {
-    border-left: none;
+    border-left: none !important;
 }
 
 #throttler th:last-child, #throttler td:last-child, #clientAuth th:last-child, #clientAuth td:last-child {
-    border-right: none;
+    border-right: none !important;
 }
 
 #throttler th {

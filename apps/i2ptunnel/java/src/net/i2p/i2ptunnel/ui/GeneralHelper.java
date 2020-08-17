@@ -761,7 +761,7 @@ public class GeneralHelper {
              Boolean.parseBoolean(tun.getSharedClient()))) {
             dflt = "4,0";
         } else {
-            dflt = "0";
+            dflt = "4,0";
         }
         String senc = getProperty(tunnel, "i2cp.leaseSetEncType", dflt);
         String[] senca = DataHelper.split(senc, ",");
