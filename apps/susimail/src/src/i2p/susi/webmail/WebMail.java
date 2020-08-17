@@ -2539,7 +2539,7 @@ public class WebMail extends HttpServlet
 			}
 			String name2 = FilenameUtil.sanitizeFilename(name);
 			String name3 = FilenameUtil.encodeFilenameRFC5987(name);
-			response.setHeader("Cache-Control", "public, max-age=604800");
+			response.setHeader("Cache-Control", "no-cache, private, max-age=604800");
 			if (isRaw) {
 				try {
 					response.addHeader("Content-Disposition", "inline; filename=\"" + name2 + "\"; " +
@@ -2606,7 +2606,7 @@ public class WebMail extends HttpServlet
 			long sz = mail.getSize();
 			if (sz > 0 && sz <= Integer.MAX_VALUE)
 				response.setContentLength((int) sz);
-			response.setHeader("Cache-Control", "public, max-age=604800");
+			response.setHeader("Cache-Control", "no-cache, private, max-age=604800");
 			response.addHeader("Content-Disposition", "attachment; filename=\"" + name2 + "\"; " +
 			                   "filename*=" + name3);
 			in = content.getInputStream();

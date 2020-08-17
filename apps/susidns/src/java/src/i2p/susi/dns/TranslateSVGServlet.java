@@ -64,8 +64,8 @@ public class TranslateSVGServlet extends HttpServlet {
         resp.setCharacterEncoding("UTF-8");
         resp.setHeader("X-Content-Type-Options", "nosniff");
         resp.setHeader("Accept-Ranges", "none");
-        resp.setDateHeader("Expires", _context.clock().now() + 86400000L);
-        resp.setHeader("Cache-Control", "public, max-age=86400");
+        resp.setDateHeader("Expires", _context.clock().now() + 2628000000L);
+        resp.setHeader("Cache-Control", "no-cache, private, max-age=2628000");
         resp.setHeader("Pragma", "no-cache");
         resp.setContentType("image/svg+xml");
         resp.setHeader("ETag", etag);

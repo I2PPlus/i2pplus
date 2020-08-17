@@ -17,7 +17,7 @@ import net.i2p.I2PAppContext;
 import net.i2p.data.Base64;
 import net.i2p.router.web.NavHelper;
 import net.i2p.util.FileUtil;
- 
+
 
 /**
  * Serve plugin icons, at /Plugins/pluginicon?plugin=foo
@@ -26,9 +26,9 @@ import net.i2p.util.FileUtil;
  * @since 0.9.25
  */
 public class CodedIconRendererServlet extends HttpServlet {
- 
+
     private static final long serialVersionUID = 16851750L;
-    
+
     private static final String base = I2PAppContext.getGlobalContext().getBaseDir().getAbsolutePath();
     private static final String file = "docs" + File.separatorChar + "themes" + File.separatorChar + "console" +  File.separatorChar + "images" + File.separatorChar + "plugin.png";
 
@@ -38,16 +38,16 @@ public class CodedIconRendererServlet extends HttpServlet {
          byte[] data;
          String name = srq.getParameter("plugin");
          data  = NavHelper.getBinary(name);
-         
+
          //set as many headers as are common to any outcome
-         
+
          srs.setContentType("image/png");
          srs.setHeader("X-Content-Type-Options", "nosniff");
          srs.setHeader("Accept-Ranges", "none");
-         srs.setDateHeader("Expires", I2PAppContext.getGlobalContext().clock().now() + 86400000l);
-         srs.setHeader("Cache-Control", "public, max-age=86400");
+         srs.setDateHeader("Expires", I2PAppContext.getGlobalContext().clock().now() + 2628000000l);
+         srs.setHeader("Cache-Control", "no-cache, private, max-age=2628000");
          OutputStream os = srs.getOutputStream();
-         
+
          //Binary data is present
          if(data != null){
              srs.setHeader("Content-Length", Integer.toString(data.length));
@@ -79,9 +79,9 @@ public class CodedIconRendererServlet extends HttpServlet {
                          srs.sendError(304, "Not Modified");
                      } else {
                          srs.setDateHeader("Last-Modified", lastmod);
-                         FileUtil.readFile(file, base, os); 
+                         FileUtil.readFile(file, base, os);
                      }
-                     
+
                  }
              } catch(IOException e) {
                  if (!srs.isCommitted()) {
@@ -91,7 +91,7 @@ public class CodedIconRendererServlet extends HttpServlet {
                      throw e;
                  }
              }
-             
+
          }
      }
 }
