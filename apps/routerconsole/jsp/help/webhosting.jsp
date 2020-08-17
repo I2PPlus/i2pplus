@@ -79,7 +79,7 @@
 
 <ul>
 <li>Post an announcement on one of the I2P forums e.g. <a href="http://i2pforum.i2p/" target="_blank" class="sitelink">I2P forum</a> or <a href="http://def3.i2p" target="_blank" class="sitelink">Dancing Elephants</a></li>
-<li>Publish it on the <a href="http://i2pwiki.i2p/index.php?title=Eepsite/Services" target="_blank" class="sitelink">I2PWiki Eepsite Index</a></li>
+<li>Publish it on the <a href="http://wiki.i2p-projekt.i2p/wiki/index.php/Eepsite/Services" target="_blank" class="sitelink">I2P Wiki Eepsite Index</a></li>
 <li>Tell people about it on I2P's IRC network</li>
 </ul>
 

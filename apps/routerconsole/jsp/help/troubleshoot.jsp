@@ -73,8 +73,8 @@ If you'd like to report a bug, please file a ticket on <a href="http://trac.i2p2
 <p>Further assistance is available here:</p>
 <ul class="links" id="furtherassistance">
 <li><a href="http://i2pforum.i2p/" target="_blank">I2P Support Forum</a></li>
-<li><a href="http://zzz.i2p/" target="_blank">I2P Developers Forum</a></li>
-<li><a href="http://i2pwiki.i2p/" target="_blank">I2PWiki</a></li>
+<li><a href="http://zzz.i2p/" target="_blank">I2P Developers' Forum</a></li>
+<li><a href="http://wiki.i2p-projekt.i2p/wiki/index.php/Eepsite/Services" target="_blank">I2P Wiki</a></li>
 <li>The FAQ on <a href="http://i2p-projekt.i2p/en/faq" target="_blank">i2p-projekt.i2p</a> or <a href="https://geti2p.net/en/faq" target="_blank">geti2p.net</a></li>
 </ul>
 <p>You may also try <a href="irc://127.0.0.1:6668/i2p" class="chatlink">I2P's IRC network</a>.</p>
