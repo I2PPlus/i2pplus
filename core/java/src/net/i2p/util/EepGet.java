@@ -853,7 +853,7 @@ public class EepGet {
                     _acceptRanges = get.getAcceptRanges();
                     _vary = get.getVary();
                     _expiryDate = get.getExpiryDate();
-                    _etag = get.getETag();
+                    _etag = get.getEtag();
                     _lastModified = get.getLastModified();
                     _notModified = get.getNotModified();
                     _cookie = get.getCookie();
@@ -1368,7 +1368,7 @@ public class EepGet {
         } else if (key.equals("cache-control")) {
             _cacheControl = val;
         } else if (key.equals("accept-ranges")) {
-            _cacheControl = val;
+            _acceptRanges = val;
         } else if (key.equals("vary")) {
             _vary = val;
         } else if (key.equals("expires")) {
@@ -1402,7 +1402,7 @@ public class EepGet {
         } else if (key.equals("x-xss-protection")) {
             _xssProtection = val;
         } else if (key.equals("x-powered-by")) {
-            _xssProtection = val;
+            _xPoweredBy = val;
         } else if (key.equals("proxy-authenticate") && _responseCode == 407 && _authState != null && _shouldProxy) {
             _authState.setAuthChallenge(val);
         } else {
@@ -1655,7 +1655,7 @@ public class EepGet {
      *  After fetch, the received value from the server, or null if none.
      *  Before fetch, and after some errors, may be the value passed in the constructor.
      */
-    public String getETag() {
+    public String getEtag() {
         return _etag;
     }
 

@@ -151,7 +151,7 @@ public class PartialEepGet extends EepGet {
         get.addStatusListener(get.new CLIStatusListener(1024, 40));
         if (get.fetch(45*1000, -1, 60*1000)) {
             System.err.println("Last-Modified: " + get.getLastModified());
-            System.err.println("Etag: " + get.getETag());
+            System.err.println("Etag: " + get.getEtag());
         } else {
             System.err.println("Failed " + url);
             System.exit(1);
