@@ -143,8 +143,12 @@ public abstract class LocalHTTPServer {
                     type = "image/x-icon";
                 else if (filename.endsWith(".png"))
                     type = "image/png";
+                else if (filename.endsWith(".gif"))
+                    type = "image/gif";
                 else if (filename.endsWith(".jpg"))
                     type = "image/jpeg";
+                else if (filename.endsWith(".svg"))
+                    type = "image/svg+xml";
                 else type = "text/html";
                 out.write("HTTP/1.1 200 OK\r\nContent-Type: ".getBytes("UTF-8"));
                 out.write(type.getBytes("UTF-8"));
