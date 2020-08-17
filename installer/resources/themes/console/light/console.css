@@ -11756,21 +11756,25 @@ th.options .optbox {
     transition: ease all .05s;
 }
 
-.main:not(#home) tr, .main:not(#home) td:first-child, #netdboverview td:last-child table, .main #tunneldefs td.cells:nth-child(2) {
+.main:not(#home):not(#graphs) tr, .main:not(#home):not(#graphs) td:first-child, #netdboverview td:last-child table, .main #tunneldefs td.cells:nth-child(2) {
     border-left: 1px solid #8d8daa !important;
 }
 
-.main:not(#home) tr, .main:not(#home) td:last-child, #netdboverview td:first-child table {
+.main:not(#home):not(#graphs) tr, .main:not(#home):not(#graphs) td:last-child, #netdboverview td:first-child table {
     border-right: 1px solid #8d8daa !important;
 }
 
 .main #netdboverview table tr, .main #netdboverview table td:first-child, .main#netdb .sybil_addresses table td:first-child,
-.main#netdb .sybil_addresses tr, .main#netdb .sybil_addresses td:first-child, .main #bugreports td:first-child {
+.main#netdb .sybil_addresses tr, .main#netdb .sybil_addresses td:first-child, .main #bugreports td:first-child,
+.main#netdb #netdbversions tr, .main#netdb #netdbversions td:first-child, .main#netdb #netdbtiers tr, .main#netdb #netdbtiers td:first-child,
+.main#netdb #netdbtransports tr, .main#netdb #netdbtransports td:first-child, .main#netdb #netdbcountrylist tr, .main#netdb #netdbcountrylist td:first-child {
     border-left: none !important;
 }
 
 .main #netdboverview table tr, .main #netdboverview table td:last-child, .main#netdb .sybil_addresses table td:last-child,
 .main#netdb .sybil_addresses tr, .main#netdb .sybil_addresses td:last-child, .main #bugreports td:last-child,
+.main#netdb #netdbversions tr, .main#netdb #netdbversions td:last-child, .main#netdb #netdbtiers tr, .main#netdb #netdbtiers td:last-child,
+.main#netdb #netdbtransports tr, .main#netdb #netdbtransports td:last-child, .main#netdb #netdbcountrylist tr, .main#netdb #netdbcountrylist td:last-child,
 .main #file, .main #file td {
     border-right: none !important;
 }
@@ -11784,6 +11788,7 @@ th.options .optbox {
 .main #joinFamily tr, .main #joinFamily td:first-child, .main #joinFamily td:last-child,
 .main #newFamily tr, .main #newFamily td:first-child, .main #newFamily td:last-child,
 .main #bannedips #banneduntilrestart tr, .main #bannedips #banneduntilrestart td,
+.main#graphs #graphdisplay ~ td:first-child, .main#graphs #graphdisplay ~ td:last-child,
 .main #bannedips #banneduntilrestart td:first-child, .main #bannedips #banneduntilrestart td:last-child,
 .main #bannedips #permabanned tr, .main #bannedips #permabanned td, .main #bannedips #permabanned td:first-child,
 .main #bannedips #permabanned td:last-child, .main .sybil_addresses table, .main .sybil_addresses table td {
