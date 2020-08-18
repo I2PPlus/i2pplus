@@ -2755,7 +2755,7 @@ fieldset {
 }
 
 select {
-    padding: 6px 20px 6px 4px !important;
+    padding: 6px 24px 6px 4px !important;
     margin: 5px 10px;
     min-width: 110px;
     overflow: hidden;
@@ -2764,8 +2764,9 @@ select {
     font: 9.5pt "Droid Sans", "Open Sans", "Noto Sans", Ubuntu, "Segoe UI", "Bitstream Vera Sans", "DejaVu Sans", Verdana, "Lucida Grande", Helvetica, sans-serif;
     font-weight: bold;
     border-radius: 2px;
-    background: #000 url(images/dropdown.png) right center no-repeat !important;
-    background: url(images/dropdown.png) right 2px center no-repeat, linear-gradient(to bottom, #001000, #000 5%, #000 95%, #001000) !important;
+    background: #000 url(images/dropdown.svg) right 10px center no-repeat !important;
+    background: url(images/dropdown.svg) right 10px center no-repeat, linear-gradient(to bottom, #001000, #000 5%, #000 95%, #001000) !important;
+    background-size: 10px auto, 100% 100% !important;
     -moz-appearance: none;
     -webkit-appearance: none;
     appearance: none;
@@ -2778,19 +2779,19 @@ select {
 
 @media screen and (min-width: 1500px) {
 select {
-    padding: 8px 20px 8px 8px !important;
+    padding: 8px 24px 8px 8px !important;
 }
 }
 
 @media screen and (min-width: 1500px) {
 .search select {
-    padding: 7px 20px 7px 8px !important;
+    padding: 7px 24px 7px 8px !important;
 }
 }
 
 @supports not (-moz-appearance: none) {
 select {
-    padding: 7px 20px 7px 9px !important;
+    padding: 7px 24px 7px 9px !important;
 }
 }
 
@@ -2812,7 +2813,8 @@ select:focus, select:hover {
 }
 
 select:hover, select:focus, select:active {
-    background: #000 url(images/dropdown_hover.png) right 2px center no-repeat !important;
+    background: #000 url(images/dropdown_hover.svg) right 10px center no-repeat !important;
+    background-size: 10px auto, 100% 100% !important;
 }
 
 select::-ms-expand {
@@ -7614,10 +7616,6 @@ div#clientsconfig {
 
 #tunnelconfig th {
     padding: 6px 10px;
-}
-
-#tunnelconfig th img {
-    margin-bottom: -2px;
 }
 
 #tunnelconfig td:nth-child(n+2) {

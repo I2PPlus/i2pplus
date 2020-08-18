@@ -1848,27 +1848,30 @@ input.disabled, input.disabled:hover, input.disabled:active, a.controld {
 
 select {
     margin: 2px 4px 2px 0;
-    padding: 5px 16px 5px 3px !important;
+    padding: 5px 24px 5px 3px !important;
     color: #41465f;
     font: bold 9pt "Droid Sans", "Open Sans", "Noto Sans", Ubuntu, "Segoe UI", "Bitstream Vera Sans", Verdana, "Lucida Grande", Helvetica, sans-serif;
     border: 1px solid #97a2ce;
     border-radius: 2px;
     box-shadow: inset 0 0 0 1px #fff;
-    background: url(images/dropdown.png) right center no-repeat #f8f8ff !important;
-    background: url(images/dropdown.png) right center no-repeat, linear-gradient(to bottom, #fff 50%, #f6f6ff 50%) !important;
+    background: url(images/dropdown.svg) right 8px center no-repeat #f8f8ff !important;
+    background: url(images/dropdown.svg) right 8px center no-repeat, linear-gradient(to bottom, #fff 50%, #f6f6ff 50%) !important;
+    background-size: 10px auto, 100% 100% !important;
     -moz-appearance: none;
     -webkit-appearance: none;
+    appearance: none;
 }
 
 @supports not (-moz-appearance: none) {
 select {
-    padding: 6px 16px 6px 6px !important;
+    padding: 6px 24px 6px 6px !important;
 }
 }
 
 select:hover, select:focus {
     color: #33333f !important;
-    background: #fff url(images/dropdown.png) right center no-repeat !important;
+    background: #fff url(images/dropdown_hover.svg) right 8px center no-repeat !important;
+    background-size: 10px auto !important;
     box-shadow: none;
 }
 
@@ -1878,7 +1881,8 @@ select:active, select option {
 
 select[disabled], select[disabled]:hover {
     margin-left: 0 !important;
-    background: #f8f8ff url(images/dropdown.png) right center no-repeat !important;
+    background: #f8f8ff url(images/dropdown.svg) right 8px center no-repeat !important;
+    background-size: 10px auto !important;
     opacity: 0.7;
     cursor: not-allowed;
 }
