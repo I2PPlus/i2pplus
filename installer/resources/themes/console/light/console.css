@@ -41,7 +41,7 @@ body:not(old) {
     url(/themes/console/images/buttons/shutdown_hover.png) no-repeat,
     url(/themes/console/images/buttons/update_hover.png) no-repeat,
     url(/themes/console/images/info/notice.png) no-repeat,
-    url(images/dropdown_hover.png),
+    url(/themes/console/classic/images/dropdown_hover.png),
     url(images/home.png),
     url(images/header_help.png),
     url(images/cog.png),
@@ -5417,21 +5417,21 @@ label.disabled, label.disabled:hover, label.disabled:active {
 }
 
 select, select[disabled]:hover, select[disabled]:focus  {
+    margin: 5px;
+    padding: 4px 24px 4px 4px !important;
+    min-width: 120px;
+    text-align: left !important;
+    font-size: 9pt;
+    color: #41465f;
+    border: 1px solid #97a2ce;
+    border-radius: 2px;
+    box-shadow: inset 0 0 0 1px #fff;
+    background: url(images/dropdown.svg) right 8px center no-repeat #fff;
+    background: url(images/dropdown.svg) right 8px center no-repeat, linear-gradient(to bottom, #fff, #efefff);
+    background-size: 10px auto, 100% 100% !important;
     -moz-appearance: none;
     -webkit-appearance: none;
     appearance: none;
-    background: url(images/dropdown.png) right center no-repeat #fff;
-    background: url(images/dropdown.png) right center no-repeat, linear-gradient(to bottom, #fff, #efefff);
-    background-blend-mode: hard-light, normal;
-    padding: 4px 16px 4px 4px !important;
-    color: #41465f;
-    margin: 5px;
-    border: 1px solid #97a2ce;
-    min-width: 120px;
-    font-size: 9pt;
-    border-radius: 2px;
-    text-align: left !important;
-    box-shadow: inset 0 0 0 1px #fff;
     filter: drop-shadow(0 0 1px rgba(220,220,255,.7));
 }
 
@@ -5455,12 +5455,14 @@ select, input[type="text"] {
 
 select:hover, select:active {
     color: #19191f;
-    background: url(images/dropdown_hover.png) right center no-repeat, linear-gradient(to bottom, #eee, #fff) !important;
+    background: url(images/dropdown_hover.svg) right 8px center no-repeat, linear-gradient(to bottom, #eee, #fff) !important;
+    background-size: 10px auto, 100% 100% !important;
 }
 
 select:focus {
     color: #19191f;
-    background: url(images/dropdown_hover.png) right center no-repeat, linear-gradient(to bottom, #eee, #fff) !important;
+    background: url(images/dropdown_hover.svg) right 8px center no-repeat, linear-gradient(to bottom, #eee, #fff) !important;
+    background-size: 10px auto, 100% 100% !important;
     box-shadow: 0 0 1px #89f;
 }
 
@@ -11743,8 +11745,20 @@ th.options .optbox {
 #clientconfig td, .netdbentry td, #netdblookup td, #peerdefs td, #help td:not(.infohelp):not(.infowarn), #pluginconfig td,
 #thresholds td, #leasesetdebug td, #enviro td, #routerinformation td {
     box-shadow: inset 0 0 0 1px #fff !important;
-    border-left: 1px solid #e0e0eb;
     background: rgba(240,240,255,.4);
+}
+
+
+.main#tunnels .cells, #tunnel_defs td:nth-child(n+3), .cells, #profilelist td:not(:first-child),
+#profile_defs td:not(:first-child), #floodfills td:not(:first-child), #debug td:not(:first-child),
+#jardump td:not(:first-child), #jobstats td:not(:first-child), #eventlog td:not(:first-child),
+#webappconfig td:not(:first-child), #tunnelconfig td:not(:first-child), #sidebarconf td:not(:first-child),
+#configstats td:not(:first-child), #loggingoptions td:not(:first-child), #addkeyring td:not(:first-child),
+.homelinkedit td:not(:first-child), #clientconfig td:not(:first-child), .netdbentry td:not(:first-child),
+#netdblookup td:not(:first-child), #peerdefs td:not(:first-child), #help td:not(.infohelp):not(.infowarn),
+#pluginconfig td:not(:first-child), #thresholds td:not(:first-child), #leasesetdebug td:not(:first-child),
+#enviro td:not(:first-child), #routerinformation td:not(:first-child) {
+    border-left: 1px solid #e0e0eb;
 }
 
 .main#tunnels tr:hover .cells, #tunnel_defs tr:hover td, tr:hover .cells, #profilelist tr:hover td, #profile_defs tr:hover td, #floodfills tr:hover td,
@@ -11756,39 +11770,8 @@ th.options .optbox {
     transition: ease all .05s;
 }
 
-.main:not(#home) tr, .main:not(#home) td:first-child, #netdboverview td:last-child table, .main #tunneldefs td.cells:nth-child(2) {
+#help td:first-child, #tunnels td:first-child {
     border-left: 1px solid #8d8daa !important;
-}
-
-.main:not(#home) tr, .main:not(#home) td:last-child, #netdboverview td:first-child table {
-    border-right: 1px solid #8d8daa !important;
-}
-
-.main #netdboverview table tr, .main #netdboverview table td:first-child, .main#netdb .sybil_addresses table td:first-child,
-.main#netdb .sybil_addresses tr, .main#netdb .sybil_addresses td:first-child, .main #bugreports td:first-child {
-    border-left: none !important;
-}
-
-.main #netdboverview table tr, .main #netdboverview table td:last-child, .main#netdb .sybil_addresses table td:last-child,
-.main#netdb .sybil_addresses tr, .main#netdb .sybil_addresses td:last-child, .main #bugreports td:last-child,
-.main #file, .main #file td {
-    border-right: none !important;
-}
-
-.main #bannedips td {
-    border-right: 1px solid #8d8daa;
-}
-
-.main #installPluginFile tr, .main #installPluginFile td:first-child, .main #installPluginFile td:last-child,
-.main #installPluginUrl tr, .main #installPluginUrl td:first-child, .main #installPluginUrl td:last-child,
-.main #joinFamily tr, .main #joinFamily td:first-child, .main #joinFamily td:last-child,
-.main #newFamily tr, .main #newFamily td:first-child, .main #newFamily td:last-child,
-.main #bannedips #banneduntilrestart tr, .main #bannedips #banneduntilrestart td,
-.main #bannedips #banneduntilrestart td:first-child, .main #bannedips #banneduntilrestart td:last-child,
-.main #bannedips #permabanned tr, .main #bannedips #permabanned td, .main #bannedips #permabanned td:first-child,
-.main #bannedips #permabanned td:last-child, .main .sybil_addresses table, .main .sybil_addresses table td {
-    border-left: none !important;
-    border-right: none !important;
 }
 
 .main .tunneldisplay tr:last-child td, .main #tunnelpeercount tr:nth-last-child(2) td,
