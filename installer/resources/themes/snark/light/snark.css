@@ -6,378 +6,378 @@
 @import url("/themes/fonts/DroidSans.css");
 
 body {
-    color: #31334f;
-    font: 9pt "Droid Sans", "Open Sans", "Noto Sans", Ubuntu, "Segoe UI", "Bitstream Vera Sans", Verdana, "Lucida Grande", Helvetica, sans-serif;
-    background: #a4a4cb url(/themes/console/light/images/tile2.png) center top;
-    background-size: 32px 32px;
-    margin: 3px;
+  color: #31334f;
+  font: 9pt "Droid Sans", "Open Sans", "Noto Sans", Ubuntu, "Segoe UI", "Bitstream Vera Sans", Verdana, "Lucida Grande", Helvetica, sans-serif;
+  background: #a4a4cb url(/themes/console/light/images/tile2.png) center top;
+  background-size: 32px 32px;
+  margin: 3px;
 }
 
 /* preload top navigation mouseovers */
 body::before {
-    content: "";
-    display: inline-block;
-    background: url(images/tile2.png) scroll,
-    url(images/button_snark_hover.png) no-repeat,
-    url(images/button_snark_active.png) no-repeat,
-    url(images/button_tracker_hover.png) no-repeat,
-    url(images/button_tracker_active.png) no-repeat,
-    url(images/button_forum_hover.png) no-repeat,
-    url(images/button_forum_active.png) no-repeat,
-    url(images/button_search_hover.png) no-repeat,
-    url(images/button_search_active.png) no-repeat, #a4a4cb;
-    background-size: 32px 32px, 0 0, 0 0, 0 0, 0 0, 0 0, 0 0, 0 0, 0 0;
+  content: "";
+  display: inline-block;
+  background: url(images/tile2.png) scroll,
+  url(images/button_snark_hover.png) no-repeat,
+  url(images/button_snark_active.png) no-repeat,
+  url(images/button_tracker_hover.png) no-repeat,
+  url(images/button_tracker_active.png) no-repeat,
+  url(images/button_forum_hover.png) no-repeat,
+  url(images/button_forum_active.png) no-repeat,
+  url(images/button_search_hover.png) no-repeat,
+  url(images/button_search_active.png) no-repeat, #a4a4cb;
+  background-size: 32px 32px, 0 0, 0 0, 0 0, 0 0, 0 0, 0 0, 0 0, 0 0;
 }
 
 body.iframed {
-    background: transparent !important;
-    margin: 6px 1px 0 !important;
+  background: transparent !important;
+  margin: 6px 1px 0 !important;
 }
 
 body.iframed::before {
-    content: "";
-    background: url(images/button_snark_hover.png) no-repeat,
-    url(images/button_snark_active.png) no-repeat,
-    url(images/button_tracker_hover.png) no-repeat,
-    url(images/button_tracker_active.png) no-repeat,
-    url(images/button_forum_hover.png) no-repeat,
-    url(images/button_forum_active.png) no-repeat,
-    url(images/button_search_hover.png) no-repeat,
-    url(images/button_search_active.png) no-repeat !important;
+  content: "";
+  background: url(images/button_snark_hover.png) no-repeat,
+  url(images/button_snark_active.png) no-repeat,
+  url(images/button_tracker_hover.png) no-repeat,
+  url(images/button_tracker_active.png) no-repeat,
+  url(images/button_forum_hover.png) no-repeat,
+  url(images/button_forum_active.png) no-repeat,
+  url(images/button_search_hover.png) no-repeat,
+  url(images/button_search_active.png) no-repeat !important;
 }
 
 /* accelerate rendering */
 .snarkNav, .snarkTorrentName a, .snarkTorrents:hover .percentBarText, .toggleview, .configsectionpanel .snarkConfigTitle, .addtorrentsection, .neworrentsection {
-    will-change: transform;
+  will-change: transform;
 }
 
 /* mitigate header/column resize on refresh when multiple snark tabs open */
 
 th img, td img, #closelog, #expand, #shrink, input[type="image"], .pagenavcontrols img {
-    font-size: 0 !important;
-    line-height: 0 !important;
-    overflow: hidden;
+  font-size: 0 !important;
+  line-height: 0 !important;
+  overflow: hidden;
 }
 
 .snarkTorrents th img::before, th.snarkGraphicStatus::before, td.snarkGraphicStatus img::before,
 #closelog img::after, #closelog img::after, #expand img::after, #shrink img::after,
 .snarkTorrents input[type="image"]::after, .snarkTorrents input[type="image"]::after,
 td.snarkTrackerDetails img::before, td.snarkTorrentDetails img::before {
-    content: "";
-    display: inline-block;
-    vertical-align: middle !important;
+  content: "";
+  display: inline-block;
+  vertical-align: middle !important;
 }
 
 th.snarkGraphicStatus::before {
-    min-height: 28px;
+  min-height: 28px;
 }
 
 .snarkTorrents th img::before {
-    min-width: 28px;
+  min-width: 28px;
 }
 
 .snarkTorrentAction input[type="image"], .snarkTorrents img {
-    display: inline-block;
-    vertical-align: middle;
+  display: inline-block;
+  vertical-align: middle;
 }
 
 th.snarkGraphicStatus img::before {
-    width: 24px !important;
+  width: 24px !important;
 }
 
 td.snarkGraphicStatus img::before {
-    width: 23px !important;
+  width: 23px !important;
 }
 
 th.snarkTorrentPeerCount {
-    text-align: left !important;
+  text-align: left !important;
 }
 
 th.snarkTorrentPeerCount img {
-    margin-left: 6px;
+  margin-left: 6px;
 }
 
 td.snarkTorrentPeerCount {
-    padding-right: 8px !important;
-    width: 1%;
-    white-space: nowrap;
-    text-align: left;
-    font-weight: bold;
-    color: #41465f;
+  padding-right: 8px !important;
+  width: 1%;
+  white-space: nowrap;
+  text-align: left;
+  font-weight: bold;
+  color: #41465f;
 }
 
 .snarkTorrentPeerCount .left, .snarkTorrentPeerCount .right {
-    display: inline-block;
-    min-width: 12px;
+  display: inline-block;
+  min-width: 12px;
 }
 
 .snarkTorrentPeerCount .left {
-    text-align: left;
-    padding-left: 2px;
+  text-align: left;
+  padding-left: 2px;
 }
 
 .snarkTorrentPeerCount .right {
-    padding-right: 2px;
-    text-align: right;
+  padding-right: 2px;
+  text-align: right;
 }
 
 td.snarkTrackerDetails img::before, td.snarkTorrentDetails img::before {
-    width: 16px;
+  width: 16px;
 }
 
 th input[type="image"]::after {
-    width: 24px;
-    height: 12px;
+  width: 24px;
+  height: 12px;
 }
 
 td input[type="image"]::after {
-    width: 12px;
-    height: 12px;
-    vertical-align: top;
+  width: 12px;
+  height: 12px;
+  vertical-align: top;
 }
 
 #closelog img::after, #expand img::after, #shrink img::after {
-    height: 11px;
+  height: 11px;
 }
 
 /* end header/column resize mitigation */
 
 b {
-    color: #41465f;
+  color: #41465f;
 }
 
 * {
-    outline: none !important;
+  outline: none !important;
 }
 
 ::selection {
-    background: #27377f !important;
-    color: white;
-    text-shadow: none;
+  background: #27377f !important;
+  color: white;
+  text-shadow: none;
 }
 
 ::-moz-selection {
-    background: #27377f !important;
-    color: white;
-    text-shadow: none;
+  background: #27377f !important;
+  color: white;
+  text-shadow: none;
 }
 
 .toggleview, .snarkConfigTitle, .snarknavbar, img, input[type="image"], label, th img, .newtorrentsection,
 #closeLog, #expand, #shrink, #pagenavbottom, #configs {
-    -ms-user-select: none;
-    -moz-user-select: none;
-    -webkit-user-select: none;
-    user-select: none;
+  -ms-user-select: none;
+  -moz-user-select: none;
+  -webkit-user-select: none;
+  user-select: none;
 }
 
 a:focus img, input[type="image"]:focus {
-    filter: drop-shadow(0 0 1px #f60) !important;
+  filter: drop-shadow(0 0 1px #f60) !important;
 }
 
 button::-moz-focus-inner, input::-moz-focus-inner {
-    outline: none;
-    border: none;
+  outline: none;
+  border: none;
 }
 
 .page {
-    margin: 5px 0 0 0;
-    padding: 0;
-    min-width: 900px !important;
-    line-height: 160% !important;
-    text-align: center;
-    font-size: 9pt !important;
-    border: 1px solid #8d8daa;
-    border-radius: 2px;
-    background: #fff;
-    background: repeating-linear-gradient(to right, #f2f2ff 1px, #f2f2ff 2px, #dfe0ff 3px, #f2f2ff 4px);
+  margin: 5px 0 0 0;
+  padding: 0;
+  min-width: 900px !important;
+  line-height: 160% !important;
+  text-align: center;
+  font-size: 9pt !important;
+  border: 1px solid #8d8daa;
+  border-radius: 2px;
+  background: #fff;
+  background: repeating-linear-gradient(to right, #f2f2ff 1px, #f2f2ff 2px, #dfe0ff 3px, #f2f2ff 4px);
 }
 
 .iframed .page {
-    border-radius: 0;
-    border-left: none;
-    border-right: none;
+  border-radius: 0;
+  border-left: none;
+  border-right: none;
 }
 
 .snarkGraphicStatus img, th img {
-    image-rendering: -webkit-optimize-contrast;
+  image-rendering: -webkit-optimize-contrast;
 }
 
 /* top navigation */
 
 .snarknavbar {
-    margin: 0 auto -6px !important;
-    padding: 8px 10px 7px;
-    position: sticky;
-    top: -1px;
-    z-index: 2001;
-    width: auto;
-    width: calc(100% - 22px);
-    min-width: 880px;
-    text-align: center;
-    border: 1px solid #8d8daa;
-    border-radius: 2px 2px 0 0;
-    box-shadow: inset 0 0 0 1px #fff;
-    background: linear-gradient(to bottom, #fafaff 51%, #f6f6ff 51%);
+  margin: 0 auto -6px !important;
+  padding: 8px 10px 7px;
+  position: sticky;
+  top: -1px;
+  z-index: 2001;
+  width: auto;
+  width: calc(100% - 22px);
+  min-width: 880px;
+  text-align: center;
+  border: 1px solid #8d8daa;
+  border-radius: 2px 2px 0 0;
+  box-shadow: inset 0 0 0 1px #fff;
+  background: linear-gradient(to bottom, #fafaff 51%, #f6f6ff 51%);
  }
 
 .iframed .snarknavbar {
-    margin: -5px -1px -6px !important;
-    padding-top: 6px;
-    padding-bottom: 6px;
-    position: static;
-    border-radius: 0;
-    border: none;
-    border-bottom: 1px solid #8d8daa;
-    box-shadow: none !important;
-    background: linear-gradient(to bottom, #fcfcff 51%, #fafaff 51%, #f6f6ff 100%);
+  margin: -5px -1px -6px !important;
+  padding-top: 6px;
+  padding-bottom: 6px;
+  position: static;
+  border-radius: 0;
+  border: none;
+  border-bottom: 1px solid #8d8daa;
+  box-shadow: none !important;
+  background: linear-gradient(to bottom, #fcfcff 51%, #fafaff 51%, #f6f6ff 100%);
 }
 
 @media screen and (min-width: 1500px) {
 .iframed .snarknavbar {
-    padding-top: 7px !important;
-    padding-bottom: 8px !important;
+  padding-top: 7px !important;
+  padding-bottom: 8px !important;
 }
 }
 
 .snarkNav:link, .snarkNav:visited {
-    margin-right: -5px !important;
-    padding: 2px 10px 2px 24px !important;
-    display: inline-block;
-    position: relative;
-    outline: none;
-    line-height: 140%;
-    letter-spacing: .08em;
-    text-decoration: none !important;
-    text-transform: uppercase !important;
-    font-size: 9pt;
-    font-weight: bold;
-    color: #559;
-    border: 1px solid #8d8daa;
-    border-radius: 0;
-    box-shadow: inset 0 0 0 1px #fff;
-    filter: drop-shadow(0 0 1px rgba(220,220,255,.7));
-    transition: ease-in box-shadow 0.1s;
+  margin-right: -5px !important;
+  padding: 2px 10px 2px 24px !important;
+  display: inline-block;
+  position: relative;
+  outline: none;
+  line-height: 140%;
+  letter-spacing: .08em;
+  text-decoration: none !important;
+  text-transform: uppercase !important;
+  font-size: 9pt;
+  font-weight: bold;
+  color: #559;
+  border: 1px solid #8d8daa;
+  border-radius: 0;
+  box-shadow: inset 0 0 0 1px #fff;
+  filter: drop-shadow(0 0 1px rgba(220,220,255,.7));
+  transition: ease-in box-shadow 0.1s;
 }
 
 .snarkNav:link::before {
-    content: "";
-    display: inline-block;
-    height: 2px;
-    margin-bottom: -1px;
-    width: 100%;
-    vertical-align: top;
+  content: "";
+  display: inline-block;
+  height: 2px;
+  margin-bottom: -1px;
+  width: 100%;
+  vertical-align: top;
 }
 
 @supports not (-moz-appearance: none) {
 .snarkNav:link, .snarkNav:visited {
-    padding-top: 3px !important;
-    padding-bottom: 3px !important;
-    image-rendering: -webkit-optimize-contrast;
+  padding-top: 3px !important;
+  padding-bottom: 3px !important;
+  image-rendering: -webkit-optimize-contrast;
 }
 }
 
 .snarkNav:link, .snarkNav:hover, .snarkNav:focus, .snarkNav:active {
-    background-size: 15px auto, 100% 100% !important;
-    background-position: 8px center;
-    transition: ease-out box-shadow 0.1s;
+  background-size: 15px auto, 100% 100% !important;
+  background-position: 8px center;
+  transition: ease-out box-shadow 0.1s;
 }
 
 .snarkNav:hover, .snarkNav:focus {
-    z-index: 999;
-    text-shadow: none;
-    transition: ease border 0.1s;
+  z-index: 999;
+  text-shadow: none;
+  transition: ease border 0.1s;
 }
 
 .snarkNav:last-child {
-    border-radius: 0 2px 2px 0;
+  border-radius: 0 2px 2px 0;
 }
 
 .snarkNav[href="/i2psnark/"]:last-of-type {
-    border-radius: 2px !important;
+  border-radius: 2px !important;
 }
 
 .nav_main {
-    border-radius: 2px 0 0 2px !important;
-    background: #fff url(images/button_snark.png) 8px center no-repeat;
-    background: url(images/button_snark.png) 8px center no-repeat, linear-gradient(to bottom, #fff 50%, #eef 51%, #eef 100%);
+  border-radius: 2px 0 0 2px !important;
+  background: #fff url(images/button_snark.png) 8px center no-repeat;
+  background: url(images/button_snark.png) 8px center no-repeat, linear-gradient(to bottom, #fff 50%, #eef 51%, #eef 100%);
 }
 
 .iframed .nav_main {
-    background: url(images/button_snark.png) 8px center no-repeat, linear-gradient(to bottom, #fff 50%, rgba(255, 255, 255, 0.6) 50%, rgba(240, 240, 255, 0.4)) #e7e7ff;
+  background: url(images/button_snark.png) 8px center no-repeat, linear-gradient(to bottom, #fff 50%, rgba(255, 255, 255, 0.6) 50%, rgba(240, 240, 255, 0.4)) #e7e7ff;
 }
 
 .nav_forum {
-    background: #fff url(images/button_forum.png) 8px center no-repeat;
-    background: url(images/button_forum.png) 8px center no-repeat, linear-gradient(to bottom, #fff 50%, #eef 51%, #eef 100%);
+  background: #fff url(images/button_forum.png) 8px center no-repeat;
+  background: url(images/button_forum.png) 8px center no-repeat, linear-gradient(to bottom, #fff 50%, #eef 51%, #eef 100%);
 }
 
 .iframed .nav_forum {
-    background: url(images/button_forum.png) 8px center no-repeat, linear-gradient(to bottom, #fff 50%, rgba(255, 255, 255, 0.6) 50%, rgba(240, 240, 255, 0.4)) #e7e7ff;
+  background: url(images/button_forum.png) 8px center no-repeat, linear-gradient(to bottom, #fff 50%, rgba(255, 255, 255, 0.6) 50%, rgba(240, 240, 255, 0.4)) #e7e7ff;
 }
 
 .nav_tracker {
-    background: #fff url(images/button_tracker.png) 8px center no-repeat;
-    background: url(images/button_tracker.png) 8px center no-repeat, linear-gradient(to bottom, #fff 50%, #eef 51%, #eef 100%);
+  background: #fff url(images/button_tracker.png) 8px center no-repeat;
+  background: url(images/button_tracker.png) 8px center no-repeat, linear-gradient(to bottom, #fff 50%, #eef 51%, #eef 100%);
 }
 
 .iframed .nav_tracker {
-    background: url(images/button_tracker.png) 8px center no-repeat, linear-gradient(to bottom, #fff 50%, rgba(255, 255, 255, 0.6) 50%, rgba(240, 240, 255, 0.4)) #e7e7ff;
+  background: url(images/button_tracker.png) 8px center no-repeat, linear-gradient(to bottom, #fff 50%, rgba(255, 255, 255, 0.6) 50%, rgba(240, 240, 255, 0.4)) #e7e7ff;
 }
 
 .nav_search {
-    background: #fff url(images/button_search.png) 8px center no-repeat;
-    background: url(images/button_search.png) 8px center no-repeat, linear-gradient(to bottom, #fff 50%, #eef 51%, #eef 100%);
+  background: #fff url(images/button_search.png) 8px center no-repeat;
+  background: url(images/button_search.png) 8px center no-repeat, linear-gradient(to bottom, #fff 50%, #eef 51%, #eef 100%);
 }
 
 .iframed .nav_search {
-    background: url(images/button_search.png) 8px center no-repeat, linear-gradient(to bottom, #fff 50%, rgba(255, 255, 255, 0.6) 50%, rgba(240, 240, 255, 0.4)) #e7e7ff;
+  background: url(images/button_search.png) 8px center no-repeat, linear-gradient(to bottom, #fff 50%, rgba(255, 255, 255, 0.6) 50%, rgba(240, 240, 255, 0.4)) #e7e7ff;
 }
 
 .snarkNav:hover, .snarkNav:focus {
-    color: #f60;
-    border: 1px solid #f60;
+  color: #f60;
+  border: 1px solid #f60;
 }
 
 .nav_main:hover, .nav_main:focus {
-    background: #eef url(images/button_snark_hover.png) 8px center no-repeat;
-    background: url(images/button_snark_hover.png) 8px center no-repeat, linear-gradient(to bottom, #fcfaf7 50%, #ffe8bf 50%, #efd9b3 100%);
+  background: #eef url(images/button_snark_hover.png) 8px center no-repeat;
+  background: url(images/button_snark_hover.png) 8px center no-repeat, linear-gradient(to bottom, #fcfaf7 50%, #ffe8bf 50%, #efd9b3 100%);
 }
 
 .nav_forum:hover, .nav_forum:focus {
-    background: #eef url(images/button_forum_hover.png) 8px center no-repeat;
-    background: url(images/button_forum_hover.png) 8px center no-repeat, linear-gradient(to bottom, #fcfaf7 50%, #ffe8bf 50%, #efd9b3 100%);
+  background: #eef url(images/button_forum_hover.png) 8px center no-repeat;
+  background: url(images/button_forum_hover.png) 8px center no-repeat, linear-gradient(to bottom, #fcfaf7 50%, #ffe8bf 50%, #efd9b3 100%);
 }
 
 .nav_tracker:hover, .nav_tracker:focus {
-    background: #eef url(images/button_tracker_hover.png) 8px center no-repeat;
-    background: url(images/button_tracker_hover.png) 8px center no-repeat, linear-gradient(to bottom, #fcfaf7 50%, #ffe8bf 50%, #efd9b3 100%);
+  background: #eef url(images/button_tracker_hover.png) 8px center no-repeat;
+  background: url(images/button_tracker_hover.png) 8px center no-repeat, linear-gradient(to bottom, #fcfaf7 50%, #ffe8bf 50%, #efd9b3 100%);
 }
 
 .nav_search:hover, .nav_search:focus {
-    background: #eef url(images/button_search_hover.png) 8px center no-repeat;
-    background: url(images/button_search_hover.png) 8px center no-repeat, linear-gradient(to bottom, #fcfaf7 50%, #ffe8bf 50%, #efd9b3 100%);
+  background: #eef url(images/button_search_hover.png) 8px center no-repeat;
+  background: url(images/button_search_hover.png) 8px center no-repeat, linear-gradient(to bottom, #fcfaf7 50%, #ffe8bf 50%, #efd9b3 100%);
 }
 
 .snarkNav:active {
-    color: #fff !important;
-    box-shadow: inset 2px 2px 3px #7f3000 !important;
-    transition: ease box-shadow 0.1s;
+  color: #fff !important;
+  box-shadow: inset 2px 2px 3px #7f3000 !important;
+  transition: ease box-shadow 0.1s;
 }
 
 .nav_main:active {
-    background: #f60 url(images/button_snark_active.png) 8px center no-repeat;
+  background: #f60 url(images/button_snark_active.png) 8px center no-repeat;
 }
 
 .nav_forum:active {
-    background: #f60 url(images/button_forum_active.png) 8px center no-repeat;
+  background: #f60 url(images/button_forum_active.png) 8px center no-repeat;
 }
 
 .nav_tracker:active {
-    background: #f60 url(images/button_tracker_active.png) 8px center no-repeat;
+  background: #f60 url(images/button_tracker_active.png) 8px center no-repeat;
 }
 
 .nav_search:active {
-    background: #f60 url(images/button_search_active.png) 8px center no-repeat;
+  background: #f60 url(images/button_search_active.png) 8px center no-repeat;
 }
 
 /* end top nav */
@@ -385,1209 +385,1209 @@ button::-moz-focus-inner, input::-moz-focus-inner {
 /* screenlog */
 
 .snarkMessages {
-    margin: -2px 0 0;
-    padding: 3px 5px 3px 5px;
-    min-width: 810px;
-    height: 56px;
-    width: auto;
-    font-family: "Droid Sans", "Droid Sans Mono", "Noto Mono", "Lucida Console", "DejaVu Sans Mono", monospace;
-    font-size: 8.5pt;
-    text-align: left;
-    overflow: hidden;
-    color: #339;
-    color: rgba(51, 51, 153, 0.8);
-    border-top: 1px solid #8d8daa;
-    border-bottom: 1px solid #8d8daa;
-    border-spacing: 0;
-    box-shadow: inset 0 0 1px #fff;
-    background: #eef url(images/kitty.png) no-repeat scroll right bottom;
-    background: url(images/kitty.png) no-repeat right center, linear-gradient(to bottom, #fff, #eef);
-    background-size: auto 100%, 100% 100%;
-    background-blend-mode: multiply;
+  margin: -2px 0 0;
+  padding: 3px 5px 3px 5px;
+  min-width: 810px;
+  height: 56px;
+  width: auto;
+  font-family: "Droid Sans", "Droid Sans Mono", "Noto Mono", "Lucida Console", "DejaVu Sans Mono", monospace;
+  font-size: 8.5pt;
+  text-align: left;
+  overflow: hidden;
+  color: #339;
+  color: rgba(51, 51, 153, 0.8);
+  border-top: 1px solid #8d8daa;
+  border-bottom: 1px solid #8d8daa;
+  border-spacing: 0;
+  box-shadow: inset 0 0 1px #fff;
+  background: #eef url(images/kitty.png) no-repeat scroll right bottom;
+  background: url(images/kitty.png) no-repeat right center, linear-gradient(to bottom, #fff, #eef);
+  background-size: auto 100%, 100% 100%;
+  background-blend-mode: multiply;
 }
 
 .iframed .snarkMessages {
-    margin-top: -12px !important;
+  margin-top: -12px !important;
 }
 
 .snarkMessages:hover, .snarkMessages:focus {
-    overflow-y: auto;
+  overflow-y: auto;
 }
 
 .snarkMessages:focus {
-    box-shadow: inset 0 0 0 1px #f90;
+  box-shadow: inset 0 0 0 1px #f90;
 }
 
 .snarkMessages a:link, .snarkMessages a:visited {
-    color: #3b77bf !important;
-    font-size: 8.5pt;
+  color: #3b77bf !important;
+  font-size: 8.5pt;
 }
 
 .snarkMessages a:hover {
-    color: #f60 !important;
+  color: #f60 !important;
 }
 
 .snarkMessages ul {
-    margin: -1px 0 0;
-    padding: 0 0 0 14px;
-    list-style: none;
+  margin: -1px 0 0;
+  padding: 0 0 0 14px;
+  list-style: none;
 }
 
 .snarkMessages li {
-    margin-left: -18px;
-    margin-right: -5px;
-    padding: 0 20px 2px 5px;
-    display: block;
-    word-break: break-all;
-    font-weight: bold;
-    mix-blend-mode: multiply;
-    background: rgba(255, 255, 255, 0.25);
-    letter-spacing: 0;
-    word-spacing: 0;
+  margin-left: -18px;
+  margin-right: -5px;
+  padding: 0 20px 2px 5px;
+  display: block;
+  word-break: break-all;
+  font-weight: bold;
+  mix-blend-mode: multiply;
+  background: rgba(255, 255, 255, 0.25);
+  letter-spacing: 0;
+  word-spacing: 0;
 }
 
 .snarkMessages li, .snarkMessages li a {
-    line-height: 110% !important;
-    font-size: 8.5pt !important;
+  line-height: 110% !important;
+  font-size: 8.5pt !important;
 }
 
 .snarkMessages li::before {
-    margin: -1px 0 1px;
-    content: '';
-    display: inline-block;
-    width: 14px;
-    height: 10px;
-    background: url(images/bullet.png) left bottom no-repeat;
-    background-size: 9px 9px;
-    vertical-align: middle;
+  margin: -1px 0 1px;
+  content: '';
+  display: inline-block;
+  width: 14px;
+  height: 10px;
+  background: url(images/bullet.png) left bottom no-repeat;
+  background-size: 9px 9px;
+  vertical-align: middle;
 }
 
 #closelog, #expand, #shrink {
-    position: sticky !important;
-    top: 0;
-    float: right;
+  position: sticky !important;
+  top: 0;
+  float: right;
 }
 
 #shrink {
-    display: none;
+  display: none;
 }
 
 #closeLog img, #expand img, #shrink img {
-    margin: 0;
-    padding: 3px;
-    width: 12px;
-    opacity: .8;
-    border: 1px solid #77b;
-    background: rgba(255,255,255,0.8);
-    background: linear-gradient(to bottom, rgba(255,255,255,0.8) 50%, rgba(220,220,255,0.8) 50%);
+  margin: 0;
+  padding: 3px;
+  width: 12px;
+  opacity: .8;
+  border: 1px solid #77b;
+  background: rgba(255,255,255,0.8);
+  background: linear-gradient(to bottom, rgba(255,255,255,0.8) 50%, rgba(220,220,255,0.8) 50%);
 }
 
 #expand img, #shrink img {
-    margin-right: -1px !important;
+  margin-right: -1px !important;
 }
 
 #closeLog img:hover, #expand img:hover, #shrink img:hover {
-    border: 1px solid #77b;
-    opacity: 1;
-    background: #fff;
+  border: 1px solid #77b;
+  opacity: 1;
+  background: #fff;
 }
 
 #closeLog, #expand, #shrink {
-    z-index: 999;
-    padding: 0;
-    margin: 0;
+  z-index: 999;
+  padding: 0;
+  margin: 0;
 }
 
 #closeLog {
-    margin-right: -2px;
+  margin-right: -2px;
 }
 
 .logshim {
-    margin-top: 11px !important;
+  margin-top: 11px !important;
 }
 
 /* end screenlog */
 
 a:link, a:visited {
-    color: #3b6bbf;
-    color: rgba(59, 107, 191, .85);
-    text-decoration: none;
-    font-weight: bold;
-    word-wrap: break-word;
-    font-size: 9pt;
+  color: #3b6bbf;
+  color: rgba(59, 107, 191, .85);
+  text-decoration: none;
+  font-weight: bold;
+  word-wrap: break-word;
+  font-size: 9pt;
 }
 
 /*a:visited {
-    color: #2c4e8f;
-    color: rgba(44, 78, 143, 0.9);
-    text-decoration: none;
+  color: #2c4e8f;
+  color: rgba(44, 78, 143, 0.9);
+  text-decoration: none;
 }*/
 
 a:hover, a:focus, .trackerName a:visited:hover, .trackerName a:visited:focus {
-    color: #f60;
+  color: #f60;
 }
 
 a:active {
-    color: #f30;
+  color: #f30;
 }
 
 table {
-    margin: 0 0 10px 0;
-    border: 0;
-    padding: 0;
-    border-spacing: 0;
-    border-collapse: collapse;
-    color: #323;
-    width: 100%;
-    opacity: 1 !important;
+  margin: 0 0 10px 0;
+  border: 0;
+  padding: 0;
+  border-spacing: 0;
+  border-collapse: collapse;
+  color: #323;
+  width: 100%;
+  opacity: 1 !important;
 }
 
 thead, tfoot {
-    background: #fff;
+  background: #fff;
 }
 
 thead {
-    border-bottom: 1px solid #101;
+  border-bottom: 1px solid #101;
 }
 
 th {
-    padding: 3px 2px;
-    font-size: 9pt;
-    border-top: 1px solid #8d8daa;
-    border-bottom: 1px solid #8d8daa;
-    background: #f2f2ff;
-    background: linear-gradient(to bottom, #fafaff 50%, #eef 51%, #eef 100%);
-    background: linear-gradient(to bottom, #fcfcff 51%, #fafaff 51%, #f6f6ff 100%);
-    color: #41465f;
+  padding: 3px 2px;
+  font-size: 9pt;
+  border-top: 1px solid #8d8daa;
+  border-bottom: 1px solid #8d8daa;
+  background: #f2f2ff;
+  background: linear-gradient(to bottom, #fafaff 50%, #eef 51%, #eef 100%);
+  background: linear-gradient(to bottom, #fcfcff 51%, #fafaff 51%, #f6f6ff 100%);
+  color: #41465f;
 }
 
 th:first-child {
-    text-align: left !important;
-    padding-left: 2px;
+  text-align: left !important;
+  padding-left: 2px;
 }
 
 tfoot td:first-child {
-    text-align: left !important;
-    padding-left: 0;
+  text-align: left !important;
+  padding-left: 0;
 }
 
 tfoot th {
-    padding-bottom: 4px !important;
+  padding-bottom: 4px !important;
 }
 
 .headerstatus, .headerpriority {
-    text-align: center;
+  text-align: center;
 }
 
 .ParentDir {
-    background: #f8f8ff;
-    font-size: 8pt;
-    border: none;
-    text-align: left !important;
-    padding: 4px 0;
+  background: #f8f8ff;
+  font-size: 8pt;
+  border: none;
+  text-align: left !important;
+  padding: 4px 0;
 }
 
 .ParentDir a {
-    display: inline-block;
-    width: 100%;
+  display: inline-block;
+  width: 100%;
 }
 
 .priority {
-    vertical-align: middle;
-    width: 1%;
-    white-space: nowrap;
+  vertical-align: middle;
+  width: 1%;
+  white-space: nowrap;
 }
 
 /* main torrents listing */
 
 .snarkTorrents thead th {
-    padding-top: 2px;
-    padding-bottom: 2px;
+  padding-top: 2px;
+  padding-bottom: 2px;
 }
 
 th a img:hover {
-    filter: drop-shadow(0 0 1px #f60) !important;
+  filter: drop-shadow(0 0 1px #f60) !important;
 }
 
 .snarkTorrents {
-    margin: -1px 0;
-    background: #fff;
+  margin: -1px 0;
+  background: #fff;
 }
 
 th.snarkTorrentStatus {
-    text-align: left;
+  text-align: left;
 }
 
 .snarkTorrents thead th:nth-child(6) {
-    text-align: center !important;
+  text-align: center !important;
 }
 
 .snarkTorrents th:empty, .snarkTorrents td:empty {
-    padding: 0 !important;
-    width: 0 !important;
-    min-width: 0 !important;
-    max-width: 0 !important;
-    font-size: 0 !important;
-    overflow: hidden !important;
+  padding: 0 !important;
+  width: 0 !important;
+  min-width: 0 !important;
+  max-width: 0 !important;
+  font-size: 0 !important;
+  overflow: hidden !important;
 }
 
 .snarkTorrents tfoot tr:first-child th {
-    padding: 5px 0 5px 4px;
-    background: #fff;
-    background: linear-gradient(to bottom, #fafaff 50%, rgb(240, 240, 255)) #fafaff;
-    vertical-align: middle;
-    font-weight: bold;
-    font-style: normal !important;
-    color: #41465f !important;
+  padding: 5px 0 5px 4px;
+  background: #fff;
+  background: linear-gradient(to bottom, #fafaff 50%, rgb(240, 240, 255)) #fafaff;
+  vertical-align: middle;
+  font-weight: bold;
+  font-style: normal !important;
+  color: #41465f !important;
 }
 
 @media screen and (max-width: 1000px) {
 .snarkTorrents tfoot tr:first-child th {
-    padding: 3px 0 3px 2px !important;
+  padding: 3px 0 3px 2px !important;
 }
 }
 
 .snarkTorrents td {
-    line-height: 110%;
+  line-height: 110%;
 }
 
 .snarkTorrents td[colspan="4"], .snarkTorrents td[colspan="10"] {
-    text-align: left !important;
-    padding-left: 0;
+  text-align: left !important;
+  padding-left: 0;
 }
 
 .snarkTorrents td[colspan="10"] {
-    white-space: normal !important;
+  white-space: normal !important;
 }
 
 .snarkGraphicStatus, .snarkTorrentStatus {
-    white-space: nowrap;
-    width: 1%;
+  white-space: nowrap;
+  width: 1%;
 }
 
 .snarkGraphicStatus {
-    max-width: 32px !important;
-    text-align: center !important;
+  max-width: 32px !important;
+  text-align: center !important;
 }
 
 .snarkTorrentStatus {
-    padding-right: 5px;
-    padding-left: 0;
+  padding-right: 5px;
+  padding-left: 0;
 }
 
 th.snarkGraphicStatus, th.snarkTorrentStatus {
-    text-align: center !important;
+  text-align: center !important;
 }
 
 .snarkTorrentStatus b {
-    margin-right: 3px;
+  margin-right: 3px;
 }
 
 .snarkTorrentStatus b, .snarkTorrentPeerCount {
-    opacity: .9;
+  opacity: .9;
 }
 
 .snarkTorrents a {
-    opacity: .95;
+  opacity: .95;
 }
 
 .snarkTorrentStatus a:visited {
-    color: #559;
+  color: #559;
 }
 
 .snarkTorrentStatus a:hover {
-    color: #f60;
+  color: #f60;
 }
 
 .snarkTrackerDetails, .snarkTorrentDetails {
-    width: 1% !important;
-    white-space: nowrap;
-    text-align: center !important;
-    font-weight: bold;
-    padding-left: 0 !important;
-    padding-right: 0 !important;
+  width: 1% !important;
+  white-space: nowrap;
+  text-align: center !important;
+  font-weight: bold;
+  padding-left: 0 !important;
+  padding-right: 0 !important;
 }
 
 .snarkTrackerDetails img, .snarkTorrentDetails img, .snarkCommentDetails img, .snarkDirInfo tr:first-child td:first-child img {
-    margin: 0;
-    padding: 3px !important;
-    max-width: 16px;
-    max-height: 16px;
-    border: 1px solid transparent !important;
-    filter: none !important;
+  margin: 0;
+  padding: 3px !important;
+  max-width: 16px;
+  max-height: 16px;
+  border: 1px solid transparent !important;
+  filter: none !important;
 }
 
 .snarkTrackerDetails a:hover img, .snarkTrackerDetails a:focus img,
 .snarkTorrentDetails a:hover img[src^="/i2psnark/.resources/icons/"], .snarkTorrentDetails a:focus img[src^="/i2psnark/.resources/icons/"],
 .snarkDirInfo tr:first-child td:first-child a:hover img, .snarkDirInfo tr:first-child td:first-child a:focus img {
-    border: 1px solid #f60 !important;
-    border-radius: 2px;
-    background: #ddf;
-    background: linear-gradient(to bottom, #fff 50%, #ddf 50%);
-    filter: none !important;
-    mix-blend-mode: normal;
+  border: 1px solid #f60 !important;
+  border-radius: 2px;
+  background: #ddf;
+  background: linear-gradient(to bottom, #fff 50%, #ddf 50%);
+  filter: none !important;
+  mix-blend-mode: normal;
 }
 
 .snarkTrackerDetails a:active img, .snarkTorrentDetails a:active img, .snarkDirInfo td:first-child a:active img {
-    box-shadow: inset 2px 2px 2px #adadeb;
-    transform: scale(0.9);
+  box-shadow: inset 2px 2px 2px #adadeb;
+  transform: scale(0.9);
 }
 
 .snarkTorrentName {
-    padding: 0 0 0 3px;
+  padding: 0 0 0 3px;
 }
 
 .snarkTorrentName a, .snarkFileName a {
-    display: inline-block;
-    width: 100%;
-/*    word-break: break-all;*/
-    padding: 3px 0;
+  display: inline-block;
+  width: 100%;
+/*  word-break: break-all;*/
+  padding: 3px 0;
 }
 
 .snarkTorrentName a:hover, .snarkFileName a:hover {
-    border-radius: 0 15px 15px 0;
-    background: linear-gradient(to right, rgba(120,120,0,0), rgba(200,200,0,0.15) 40%);
+  border-radius: 0 15px 15px 0;
+  background: linear-gradient(to right, rgba(120,120,0,0), rgba(200,200,0,0.15) 40%);
 }
 
 .snarkTorrentName a:active, .snarkFileName a:active {
-    box-shadow: inset 3px 3px 3px 3px rgba(120,120,0,0.2);
+  box-shadow: inset 3px 3px 3px 3px rgba(120,120,0,0.2);
 }
 
 .snarkTorrentETA, .snarkTorrentDownloaded, .snarkTorrentUploaded, .snarkTorrentRateDown, .snarkTorrentRateUp {
-    padding: 2px 5px;
-    width: 1%;
-    min-width: 40px;
-    white-space: nowrap;
+  padding: 2px 5px;
+  width: 1%;
+  min-width: 40px;
+  white-space: nowrap;
 }
 
 .snarkTorrentAction {
-    padding: 2px 1px;
-    width: 1%;
-    white-space: nowrap;
-    text-align: center;
+  padding: 2px 1px;
+  width: 1%;
+  white-space: nowrap;
+  text-align: center;
 }
 
 .snarkTorrentAction img {
-    margin: 0 2px !important;
-    opacity: 1;
+  margin: 0 2px !important;
+  opacity: 1;
 }
 
 .snarkTorrentAction img:hover {
-    box-shadow: 0 0 1px 1px #f90;
-    opacity: 1;
+  box-shadow: 0 0 1px 1px #f90;
+  opacity: 1;
 }
 
 .snarkTorrentAction input[type="image"], .snarkTorrents th:last-child input[type="image"] {
-    margin: 2px;
-    padding: 3px !important;
-    height: 11px;
-    opacity: 0.9;
-    border: 1px solid #97a2ce;
-    border-radius: 2px;
-    box-shadow: inset 0 0 0 1px #fff;
-    background: #339;
-    background: linear-gradient(to bottom, #fff 50%, #ddf 50%);
-    filter: drop-shadow(0 0 1px rgba(220,220,255,.7));
+  margin: 2px;
+  padding: 3px !important;
+  height: 11px;
+  opacity: 0.9;
+  border: 1px solid #97a2ce;
+  border-radius: 2px;
+  box-shadow: inset 0 0 0 1px #fff;
+  background: #339;
+  background: linear-gradient(to bottom, #fff 50%, #ddf 50%);
+  filter: drop-shadow(0 0 1px rgba(220,220,255,.7));
 }
 
 .snarkTorrentAction input[type="image"]:hover, .snarkTorrentAction input[type="image"]:focus,
 .snarkTorrents th:last-child input[type="image"]:hover, .snarkTorrents th:last-child input[type="image"]:focus {
-    opacity: 1;
-    border: 1px solid #f60;
-    background: linear-gradient(to bottom, #fff 50%, #eef 50%);
+  opacity: 1;
+  border: 1px solid #f60;
+  background: linear-gradient(to bottom, #fff 50%, #eef 50%);
 }
 
 .snarkTorrentAction input[type="image"]:active, .snarkTorrents th:last-child input[type="image"]:active {
-    box-shadow: inset 0 0 0 1px #fff, inset 2px 2px 3px #557;
+  box-shadow: inset 0 0 0 1px #fff, inset 2px 2px 3px #557;
 }
 
 .snarkTorrentNoneLoaded, .snarkTorrentNoneLoaded:hover {
-    background: #fff !important;
-    background: linear-gradient(to right, #eef, #fff, #eef) !important;
-    box-shadow: inset 0 0 1px #fff;
-    border-bottom: 1px solid #8d8daa !important;
-    font-weight: bold;
-    text-align: center !important;
-    color: #272e3f !important;
-    font-size: 9pt;
+  background: #fff !important;
+  background: linear-gradient(to right, #eef, #fff, #eef) !important;
+  box-shadow: inset 0 0 1px #fff;
+  border-bottom: 1px solid #8d8daa !important;
+  font-weight: bold;
+  text-align: center !important;
+  color: #272e3f !important;
+  font-size: 9pt;
 }
 
 .snarkTorrentNoneLoaded i {
-    display: inline-block;
-    padding: 10px;
+  display: inline-block;
+  padding: 10px;
 }
 
 .snarkTorrentRateUp, .snarkTorrentRateDown, .snarkTorrentDownloaded, .snarkTorrentUploaded {
-    padding: 0 3px;
+  padding: 0 3px;
 }
 
 tfoot .snarkTorrentRateUp, tfoot .snarkTorrentRateDown, td.snarkTorrentRateUp, td.snarkTorrentRateDown,
 tfoot .snarkTorrentUploaded, td.snarkTorrentUploaded {
-    text-align: right !important;
+  text-align: right !important;
 }
 
 .snarkTorrentRateUp:empty, .snarkTorrentRateDown:empty, .snarkTorrentAction:empty {
-    width: 0;
-    padding: 0;
+  width: 0;
+  padding: 0;
 }
 
 .snarkTorrentUploaded, .snarkTorrentRateUp {
-    font-style: italic !important;
+  font-style: italic !important;
 }
 
 .snarkTorrentDownloaded {
-    text-align: center;
-    white-space: nowrap;
+  text-align: center;
+  white-space: nowrap;
 }
 
 td.snarkTorrentUploaded {
-    text-align: right !important;
+  text-align: right !important;
 }
 
 .snarkTorrentUploaded:empty {
-    text-align: center !important;
+  text-align: center !important;
 }
 
 @media screen and (min-width: 800px) {
 tr:not(.peerinfo) .snarkTorrentUploaded:empty::after {
-    content: "‒";
-    display: inline;
-    font-size: 9pt;
+  content: "‒";
+  display: inline;
+  font-size: 9pt;
 }
 }
 
 .choked, .unchoked {
-    font-style: italic;
+  font-style: italic;
 }
 
 .choked {
-    color: #a00 !important;
+  color: #a00 !important;
 }
 
 .unchoked {
-    color: #070 !important;
+  color: #070 !important;
 }
 
 .snarkTorrents tt {
-    border-radius: 2px;
-    padding: 2px 3px;
-    margin: 0 3px;
-    display: inline-block;
-    letter-spacing: 0.1em;
-    font-size: 8.5pt !important;
-    text-shadow: 0 1px 1px #fff;
+  border-radius: 2px;
+  padding: 2px 3px;
+  margin: 0 3px;
+  display: inline-block;
+  letter-spacing: 0.1em;
+  font-size: 8.5pt !important;
+  text-shadow: 0 1px 1px #fff;
 }
 
 #totals {
-    display: inline-block;
-    margin: 2px 0 2px 5px;
-    font-weight: bold !important;
-    white-space: nowrap;
+  display: inline-block;
+  margin: 2px 0 2px 5px;
+  font-weight: bold !important;
+  white-space: nowrap;
 }
 
 #totals span, #ourDest {
-    white-space: nowrap;
+  white-space: nowrap;
 }
 
 .routerdown {
-    margin: 0 10px;
-    padding: 20px;
-    font-size: 140%;
-    color: #001;
-    border: 1px solid #89f;
-    border-radius: 3px;
-    box-shadow: inset 0 0 0 1px #fff;
-    background: #ddf;
-    background: linear-gradient(to right, #eef, #fff, #eef);
+  margin: 0 10px;
+  padding: 20px;
+  font-size: 140%;
+  color: #001;
+  border: 1px solid #89f;
+  border-radius: 3px;
+  box-shadow: inset 0 0 0 1px #fff;
+  background: #ddf;
+  background: linear-gradient(to right, #eef, #fff, #eef);
 }
 
 .iframed .routerdown {
-    margin-bottom: 11px !important;
+  margin-bottom: 11px !important;
 }
 
 /* end main torrents listing */
 
 td {
-    padding: 3px 4px;
-    color: #31334f;
-    opacity: 1;
-    font-size: 9pt;
+  padding: 3px 4px;
+  color: #31334f;
+  opacity: 1;
+  font-size: 9pt;
 }
 
 .mainsection td {
-    color: #31334f;
-    color: #41465f;
+  color: #31334f;
+  color: #41465f;
 }
 
 .snarkTorrentEven, .snarkTorrentInfo tr:nth-child(even),
 .snarkCommentInfo tr:nth-child(even), .snarkComments tr:nth-child(odd) {
-    background: repeating-linear-gradient(135deg, rgba(252,252,255,0.8) 2px, rgba(240, 240, 255, 0.8) 3px, #fafaff 4px) #fafaff;
-    background: #f8f8ff;
+  background: repeating-linear-gradient(135deg, rgba(252,252,255,0.8) 2px, rgba(240, 240, 255, 0.8) 3px, #fafaff 4px) #fafaff;
+  background: #f8f8ff;
 }
 
 .snarkTorrentOdd, .snarkTorrentInfo tr:nth-child(odd),
 .snarkCommentInfo tr:nth-child(odd), .snarkComments tr:nth-child(even) {
-    background: repeating-linear-gradient(45deg, rgba(240,240,255,0.8) 2px, rgba(196, 196, 255, 0.3) 3px, #f6f6ff 4px) #f6f6ff;
-    background: #f0f0ff;
+  background: repeating-linear-gradient(45deg, rgba(240,240,255,0.8) 2px, rgba(196, 196, 255, 0.3) 3px, #f6f6ff 4px) #f6f6ff;
+  background: #f0f0ff;
 }
 
 .snarkTorrentOdd, .snarkTorrentEven, .snarkCommentInfo tr, .snarkComments tr {
-    border-top: 1px solid #ccccf0 !important;
-    border-top: 1px solid rgba(200,200,255,0.6) !important;
+  border-top: 1px solid #ccccf0 !important;
+  border-top: 1px solid rgba(200,200,255,0.6) !important;
 }
 
 .downloading.active td:last-child {
-    background: linear-gradient(to left, #3c3, #3c3 3px, transparent 3px);
+  background: linear-gradient(to left, #3c3, #3c3 3px, transparent 3px);
 }
 
 .downloading.active:hover td:last-child {
-    background: linear-gradient(to left, #3c3, #3c3 3px, transparent 3px);
+  background: linear-gradient(to left, #3c3, #3c3 3px, transparent 3px);
 }
 
 .seeding.active td:last-child {
-    background: linear-gradient(to left, #f64384, #f64384 3px, transparent 3px);
+  background: linear-gradient(to left, #f64384, #f64384 3px, transparent 3px);
 }
 
 .seeding.active:hover td:last-child {
-    background: linear-gradient(to left, #f64384, #f64384 3px, transparent 3px);
+  background: linear-gradient(to left, #f64384, #f64384 3px, transparent 3px);
 }
 
 .filtered {
-    border-top: 1px solid #ccccf0 !important;
+  border-top: 1px solid #ccccf0 !important;
 }
 
 #filterResults td {
-    padding: 10px 8px !important;
-    text-align: center;
-    font-weight: bold;
-    font-style: italic;
-    border-top: 1px solid #8d8daa !important;
-    border-bottom: 1px solid #8d8daa !important;
-    box-shadow: inset 0 0 0 1px #fff;
-    background: linear-gradient(to bottom, #fff, #ebebff);
+  padding: 10px 8px !important;
+  text-align: center;
+  font-weight: bold;
+  font-style: italic;
+  border-top: 1px solid #8d8daa !important;
+  border-bottom: 1px solid #8d8daa !important;
+  box-shadow: inset 0 0 0 1px #fff;
+  background: linear-gradient(to bottom, #fff, #ebebff);
 }
 
 /* Firefox 55+ */
 
 /*@supports (text-justify: auto) {*/
 .snarkTorrents tr, .snarkTorrentInfo tr, .snarkDirInfo tr {
-    box-shadow: inset 0 0 0 1px #fff;
+  box-shadow: inset 0 0 0 1px #fff;
 }
 /*}
 */
 
 .snarkTorrents tr:hover, .snarkDirInfo tr:hover {
-    background: #ffd;
-    box-shadow: none !important;
-    color: #292b2f !important;
+  background: #ffd;
+  box-shadow: none !important;
+  color: #292b2f !important;
 }
 
 .snarkTorrents tr:hover td:nth-child(2) b {
-    color: #363b4f !important;
+  color: #363b4f !important;
 }
 
 .percentBarOuter:hover .percentBarText, .percentBarOuter:active .percentBarText {
-    opacity: 1;
+  opacity: 1;
 }
 
 .peerinfo:hover td:first-child {
-    background: url(images/peer.png) center center no-repeat  #ffd !important;
+  background: url(images/peer.png) center center no-repeat  #ffd !important;
 }
 
 .snarkTorrentEven + .snarkTorrentEven td:nth-child(2), .snarkTorrentOdd td + .snarkTorrentOdd td:nth-child(2) {
-    padding: 4px 0;
-    text-align: left;
+  padding: 4px 0;
+  text-align: left;
 }
 
 tr + .peerinfo:nth-child(even) {
-    border-top: 1px solid #ccccf0;
-    background: #e0e0ef;
-    background: repeating-linear-gradient(45deg, rgba(255,255,255,0.5) 2px, rgba(201, 201, 255, 0.3) 3px, #fff 4px);
+  border-top: 1px solid #ccccf0;
+  background: #e0e0ef;
+  background: repeating-linear-gradient(45deg, rgba(255,255,255,0.5) 2px, rgba(201, 201, 255, 0.3) 3px, #fff 4px);
 }
 
 tr + .peerinfo:nth-child(odd) {
-    border-top: 1px solid #ccccf0;
-    background: #d1d1ef;
-    background: repeating-linear-gradient(135deg, rgba(255,255,255,0.5) 2px, rgba(220, 220, 255, 0.3) 3px, #fff 4px);
+  border-top: 1px solid #ccccf0;
+  background: #d1d1ef;
+  background: repeating-linear-gradient(135deg, rgba(255,255,255,0.5) 2px, rgba(220, 220, 255, 0.3) 3px, #fff 4px);
 }
 
 .snarkFileName {
-    padding: 4px 0 !important;
-    text-align: left !important;
+  padding: 4px 0 !important;
+  text-align: left !important;
 }
 
 .snarkFileSize {
-    padding: 4px 10px;
-    width: 1%;
-    white-space: nowrap;
-    text-align: right;
-    font-weight: normal;
+  padding: 4px 10px;
+  width: 1%;
+  white-space: nowrap;
+  text-align: right;
+  font-weight: normal;
 }
 
 th.snarkFileSize {
-    text-align: center;
+  text-align: center;
 }
 
 .snarkFileStatus {
-    padding: 2px 10px;
-    width: 1%;
-    white-space: nowrap;
-    font-style: italic;
-    text-align: center;
+  padding: 2px 10px;
+  width: 1%;
+  white-space: nowrap;
+  font-style: italic;
+  text-align: center;
 }
 
 /*td.snarkFileStatus {
-    background: rgba(255,255,255,0.6) !important;
+  background: rgba(255,255,255,0.6) !important;
 }*/
 
 /* download bars */
 
 .snarkTorrentDownloaded {
-    width: 1% !important;
-    text-align: center !important;
+  width: 1% !important;
+  text-align: center !important;
 }
 
 .priorityIndicator {
-    margin-right: 3px;
-    display: inline-block;
-    display: none;
+  margin-right: 3px;
+  display: inline-block;
+  display: none;
 }
 
 .snarkDirInfo .snarkFileStatus img {
-    margin: 0 3px;
+  margin: 0 3px;
 }
 
 .snarkFileStatus img[src*="clock"] {
-    margin-top: 2px;
+  margin-top: 2px;
 }
 
 .percentBarOuter {
-    background: #eef;
-    background: repeating-linear-gradient(135deg, rgba(238, 238, 255,0.7) 1px, rgba(238, 238, 255, 0.7) 5px, rgba(221, 221, 255, 0.7) 6px, rgba(221, 221, 255, 0.7) 11px);
-    border: 1px solid #aaf;
-    border-radius: 2px;
-    box-shadow: 0 0 1px rgba(200,200,200,0.8), inset 0 0 0 1px #fff;
-    margin: 0 auto;
+  background: #eef;
+  background: repeating-linear-gradient(135deg, rgba(238, 238, 255,0.7) 1px, rgba(238, 238, 255, 0.7) 5px, rgba(221, 221, 255, 0.7) 6px, rgba(221, 221, 255, 0.7) 11px);
+  border: 1px solid #aaf;
+  border-radius: 2px;
+  box-shadow: 0 0 1px rgba(200,200,200,0.8), inset 0 0 0 1px #fff;
+  margin: 0 auto;
 }
 
 .percentBarInner {
-    border: none;
-    border-radius: 1px;
-    height: 100%;
-    border-right: 1px solid #aaf;
-    box-shadow: inset 0 0 0 1px #f2f2ff;
-    box-shadow: inset 0 0 0 1px rgba(255,255,255,0.7);
-    background: #ccccf0;
-    background: linear-gradient(to right, rgba(255,255,0,0.2) 50px, rgba(0,255,0,0.2)), linear-gradient(to bottom, rgba(255, 255, 255,0.7) 0%, rgba(238, 238, 255, 0.7) 50%, rgba(200, 200, 255, 0.7) 50%, rgba(160, 160, 255, 0.7) 100%);
+  border: none;
+  border-radius: 1px;
+  height: 100%;
+  border-right: 1px solid #aaf;
+  box-shadow: inset 0 0 0 1px #f2f2ff;
+  box-shadow: inset 0 0 0 1px rgba(255,255,255,0.7);
+  background: #ccccf0;
+  background: linear-gradient(to right, rgba(255,255,0,0.2) 50px, rgba(0,255,0,0.2)), linear-gradient(to bottom, rgba(255, 255, 255,0.7) 0%, rgba(238, 238, 255, 0.7) 50%, rgba(200, 200, 255, 0.7) 50%, rgba(160, 160, 255, 0.7) 100%);
 }
 
 .peerinfo .percentBarInner {
-    background: linear-gradient(to bottom, rgba(255, 255, 255,0.6) 0%, rgba(238, 238, 255, 0.6) 50%, rgba(200, 200, 255, 0.7) 50%, rgba(160, 160, 255, 0.7) 100%);
+  background: linear-gradient(to bottom, rgba(255, 255, 255,0.6) 0%, rgba(238, 238, 255, 0.6) 50%, rgba(200, 200, 255, 0.7) 50%, rgba(160, 160, 255, 0.7) 100%);
 }
 
 .snarkDirInfo .percentBarOuter {
-    display: inline-block;
+  display: inline-block;
 }
 
 .snarkDirInfo .percentBarInner {
-    background: linear-gradient(to right, rgba(255,255,0,0.1) 40px, rgba(0,255,0,0.1)), linear-gradient(to bottom, rgba(255, 255, 255,0.6) 0%, rgba(238, 238, 255, 0.6) 50%, rgba(200, 200, 255, 0.7) 50%, rgba(160, 160, 255, 0.7) 100%);
+  background: linear-gradient(to right, rgba(255,255,0,0.1) 40px, rgba(0,255,0,0.1)), linear-gradient(to bottom, rgba(255, 255, 255,0.6) 0%, rgba(238, 238, 255, 0.6) 50%, rgba(200, 200, 255, 0.7) 50%, rgba(160, 160, 255, 0.7) 100%);
 }
 
 .percentBarComplete {
-    margin-bottom: -1px;
-    padding: 2px 0;
-    display: inline-block;
-    max-width: 84px;
-    width: 84px;
-    line-height: 120%;
-    color: #556 !important;
-    text-align: center;
-    font-weight: bold;
-    border-radius: 15px;
-    box-shadow: inset 0 0 0 1px rgba(185,185,198,.65);
-    background: #dfdfff;
-    background: linear-gradient(to bottom, #f8f8ff, #ddf);
+  margin-bottom: -1px;
+  padding: 2px 0;
+  display: inline-block;
+  max-width: 84px;
+  width: 84px;
+  line-height: 120%;
+  color: #556 !important;
+  text-align: center;
+  font-weight: bold;
+  border-radius: 15px;
+  box-shadow: inset 0 0 0 1px rgba(185,185,198,.65);
+  background: #dfdfff;
+  background: linear-gradient(to bottom, #f8f8ff, #ddf);
 }
 
 @supports not (-moz-appearance: none) {
 .percentBarComplete {
-    padding-top: 3px !important;
-    padding-bottom: 1px !important;
+  padding-top: 3px !important;
+  padding-bottom: 1px !important;
 }
 }
 
 @media screen and (min-width: 1500px) {
 .percentBarComplete {
-    padding: 2px 0 1px
+  padding: 2px 0 1px
 }
 }
 
 tr:hover .percentBarComplete {
-    color: #44444f !important;
-    background: linear-gradient(to bottom, #fff, #c9c9ff);
-    box-shadow: inset 0 0 0 1px #a2a2ff, inset 0 0 2px 1px #fff;
+  color: #44444f !important;
+  background: linear-gradient(to bottom, #fff, #c9c9ff);
+  box-shadow: inset 0 0 0 1px #a2a2ff, inset 0 0 2px 1px #fff;
 }
 
 .percentBarText, .percentBarOuter {
-    text-align: center;
-    height: 14px;
-    vertical-align: middle;
+  text-align: center;
+  height: 14px;
+  vertical-align: middle;
 }
 
 .percentBarText {
-    text-align: center;
-    font-weight: bold !important;
-    line-height: 15px;
-    white-space: nowrap;
-    display: block;
-    color: #00528f;
-    text-shadow: 0 1px 1px rgba(255,255,255,0.8);
-    opacity: 0;
-    transition: ease opacity 0.1s;
+  text-align: center;
+  font-weight: bold !important;
+  line-height: 15px;
+  white-space: nowrap;
+  display: block;
+  color: #00528f;
+  text-shadow: 0 1px 1px rgba(255,255,255,0.8);
+  opacity: 0;
+  transition: ease opacity 0.1s;
 }
 
 /* alternative download bar popup bar text just for our downloads in .snarkTorrents */
 
 .snarkTorrentOdd:not(.peerinfo) .snarkTorrentDownloaded .percentBarText,
 .snarkTorrentEven:not(.peerinfo) .snarkTorrentDownloaded .percentBarText {
-    padding: 3px;
-    position: relative;
-    top: -18px;
-    left: -32px;
-    min-width: 140px !important;
-    background: #fff;
-    border-radius: 2px;
-    filter: drop-shadow(0 0 1px #77f);
+  padding: 3px;
+  position: relative;
+  top: -18px;
+  left: -32px;
+  min-width: 140px !important;
+  background: #fff;
+  border-radius: 2px;
+  filter: drop-shadow(0 0 1px #77f);
 }
 
 /*
 .snarkTorrentOdd:not(.peerinfo) .snarkTorrentDownloaded .percentBarText::before,
 .snarkTorrentEven:not(.peerinfo) .snarkTorrentDownloaded .percentBarText::before {
-    margin: 0 1px 0 -2px;
-    content: "";
-    display: inline-block;
-    width: 12px;
-    height: 12px;
-    vertical-align: middle;
-    background: url(images/button_tracker.png) left bottom no-repeat;
-    background-size: 12px 12px;
+  margin: 0 1px 0 -2px;
+  content: "";
+  display: inline-block;
+  width: 12px;
+  height: 12px;
+  vertical-align: middle;
+  background: url(images/button_tracker.png) left bottom no-repeat;
+  background-size: 12px 12px;
 }
 */
 .snarkTorrentOdd:not(.peerinfo) .snarkTorrentDownloaded .percentBarText::after,
 .snarkTorrentEven:not(.peerinfo) .snarkTorrentDownloaded .percentBarText::after {
-    content: "";
-    position: absolute;
-    top: 90%;
-    left: 50%;
-    margin-left: -7px;
-    border-width: 7px;
-    border-style: solid;
-    border-color: #fff transparent transparent transparent;
+  content: "";
+  position: absolute;
+  top: 90%;
+  left: 50%;
+  margin-left: -7px;
+  border-width: 7px;
+  border-style: solid;
+  border-color: #fff transparent transparent transparent;
 }
 
 @media screen and (max-width: 1000px) {
 .snarkTorrentOdd:not(.peerinfo) .snarkTorrentDownloaded .percentBarText,
 .snarkTorrentEven:not(.peerinfo) .snarkTorrentDownloaded .percentBarText {
-    padding: 4px 3px 2px;
-    top: -16px;
-    left: -26px;
-    min-width: 130px !important;
+  padding: 4px 3px 2px;
+  top: -16px;
+  left: -26px;
+  min-width: 130px !important;
 }
 }
 /* end alternative popup */
 
 @supports not (-moz-appearance: none) {
 .percentBarText {
-    line-height: 16px;
+  line-height: 16px;
 }
 
 .iframed .percentBarText, .iframed .percentBarText:hover, .iframed .percentBarText:focus {
-    transition: none;
+  transition: none;
 }
 }
 
 .percentBarText:hover, .percentBarText:focus {
-    transition: ease opacity .01s;
+  transition: ease opacity .01s;
 }
 
 .percentBarOuterComplete .percentBarText {
-    opacity: 1;
+  opacity: 1;
 }
 
 .snarkTorrentDownloaded .percentBarText, .snarkTorrentDownloaded .percentBarOuter {
-    width: 84px !important;
+  width: 84px !important;
 }
 
 .snarkDirInfo .percentBarText, .snarkDirInfo .percentBarOuter, .peerinfo .percentBarText, .peerinfo .percentBarOuter {
-    width: 84px !important;
+  width: 84px !important;
 }
 
 /* end download bars */
 
 .thumb, .thumb:hover {
-    margin: 2px 2px 2px 4px;
-    padding: 0;
-    width: auto !important;
-    max-width: auto !important;
-    max-height: 32px;
-    border: 1px solid transparent;
-    box-shadow: 0 0 0 1px #fff;
-    background: #fff;
+  margin: 2px 2px 2px 4px;
+  padding: 0;
+  width: auto !important;
+  max-width: auto !important;
+  max-height: 32px;
+  border: 1px solid transparent;
+  box-shadow: 0 0 0 1px #fff;
+  background: #fff;
 }
 
 .thumb:hover {
-    box-shadow: 0 0 0 1px #f60, 0 0 0 2px #779;
-    opacity: 1;
+  box-shadow: 0 0 0 1px #f60, 0 0 0 2px #779;
+  opacity: 1;
 }
 
 audio, video {
-    margin: 0 1px;
-    padding: 2px;
-    width: 240px;
-    border: 1px solid #7789bf;
-    box-shadow: inset 0 0 0 2px #fff;
-    background: #000;
+  margin: 0 1px;
+  padding: 2px;
+  width: 240px;
+  border: 1px solid #7789bf;
+  box-shadow: inset 0 0 0 2px #fff;
+  background: #000;
 }
 
 audio:hover, audio:focus, video:hover, video:focus {
-    border: 1px solid #f60;
+  border: 1px solid #f60;
 }
 
 video:fullscreen, video:fullscreen:hover, video:fullscreen:focus {
-    padding: none;
-    border: none;
-    box-shadow: none;
+  padding: none;
+  border: none;
+  box-shadow: none;
 }
 
 video::-webkit-media-controls-timeline {
-    padding: 0 16px 16px;
+  padding: 0 16px 16px;
 }
 
 audio::-webkit-media-controls-enclosure {
-    border-radius: 0;
-    filter: invert(1);
+  border-radius: 0;
+  filter: invert(1);
 }
 
 ::-webkit-media-controls-panel, ::-internal-media-controls-button-panel {
-    position: relative;
-    z-index: 10;
+  position: relative;
+  z-index: 10;
 }
 
 video::-webkit-media-controls-panel {
-    display: none;
+  display: none;
 }
 
 video:hover::-webkit-media-controls-panel, video:focus::-webkit-media-controls-panel {
-    display: flex;
+  display: flex;
 }
 
 .snarkNewTorrent {
-    font-size: 9pt;
+  font-size: 9pt;
 }
 
 .snarkAddInfo {
-    margin-top: 5px;
-    padding: 2px 2px 2px 22px;
-    min-height: 16px;
-    display: inline-block;
-    font-size: 9pt;
-    background: url(images/infocircle.png) left top no-repeat;
-    background-size: 18px auto;
+  margin-top: 5px;
+  padding: 2px 2px 2px 22px;
+  min-height: 16px;
+  display: inline-block;
+  font-size: 9pt;
+  background: url(images/infocircle.png) left top no-repeat;
+  background-size: 18px auto;
 }
 
 .snarkConfigTitle a {
-    font-size: 11pt !important;
-    display: inline-block;
-    width: 100%;
-    margin-top: -1px;
+  font-size: 11pt !important;
+  display: inline-block;
+  width: 100%;
+  margin-top: -1px;
 }
 
 .snarkConfigTitle:hover a, .snarkConfigTitle:focus a {
-    color: #f60 !important;
+  color: #f60 !important;
 }
 
 .toggleview, .configsection .snarkConfigTitle {
-    will-change: transform;
+  will-change: transform;
 }
 
 .snarkConfigTitle, .toggleview, .configsectionpanel .snarkConfigTitle:hover {
-    margin: 0 0 -3px 0 !important;
-    padding: 3px 15px;
-    min-width: 260px;
-    display: inline-block;
-    text-transform: uppercase;
-    font-size: 10pt;
-    font-weight: bold;
-    color: #559 !important;
-    border: 1px solid #8d8daa;
-    border-top: 0;
-    border-radius: 0 0 3px 3px;
-    box-shadow: 0 1px 2px rgba(220,220,255,0.7), inset 0 0 0 1px #fff;
-    background: #f2f2ff !important;
-    background: linear-gradient(to bottom, #fff 50%, #f2f2ff 50%) !important;
+  margin: 0 0 -3px 0 !important;
+  padding: 3px 15px;
+  min-width: 260px;
+  display: inline-block;
+  text-transform: uppercase;
+  font-size: 10pt;
+  font-weight: bold;
+  color: #559 !important;
+  border: 1px solid #8d8daa;
+  border-top: 0;
+  border-radius: 0 0 3px 3px;
+  box-shadow: 0 1px 2px rgba(220,220,255,0.7), inset 0 0 0 1px #fff;
+  background: #f2f2ff !important;
+  background: linear-gradient(to bottom, #fff 50%, #f2f2ff 50%) !important;
 }
 
 .snarkConfigTitle img:hover { /* inert titles */
-    color: #40404f;
+  color: #40404f;
 }
 
 .snarkConfigTitle:hover, .toggleview:hover, .snarkConfigTitle:active, .toggleview:active, input.toggle_input:focus + .toggleview {
-    background: linear-gradient(to bottom, #fcfaf7 50%, #ffe8bf 50%, #efd9b3 100%) !important;
+  background: linear-gradient(to bottom, #fcfaf7 50%, #ffe8bf 50%, #efd9b3 100%) !important;
 }
 
 @supports not (-moz-appearance: none) {
 .snarkConfigTitle, .snarkConfigTitle a, .toggleview,
 .configsectionpanel .snarkConfigTitle, .configsectionpanel .snarkConfigTitle:hover {
-    padding: 4px 15px;
+  padding: 4px 15px;
 }
 
 .snarkConfigTitle a {
-    padding: 0 1px !important;
+  padding: 0 1px !important;
 }
 }
 
 .snarkConfigTitle a:visited {
-    color: #559;
+  color: #559;
 }
 
 .snarkConfigTitle a:hover, .snarkConfigTitle a:focus, .toggleview:hover, input.toggle_input:focus + .toggleview {
-    color: #f60 !important;
-    cursor: pointer;
+  color: #f60 !important;
+  cursor: pointer;
 }
 
 .snarkConfigTitle:active, .toggleview:active {
-    color: #f30 !important;
-    box-shadow: inset 0 0 0 1px #fff, inset 2px 2px 3px #7f756f;
+  color: #f30 !important;
+  box-shadow: inset 0 0 0 1px #fff, inset 2px 2px 3px #7f756f;
 }
 
 .snarkConfigTitle img, .toggleview img {
-    margin: -2px -1px 0 0;
-    vertical-align: middle;
-    will-change: transform;
+  margin: -2px -1px 0 0;
+  vertical-align: middle;
+  will-change: transform;
 }
 
 .addtorrentsection .toggleview img {
-    margin-top: -1px;
+  margin-top: -1px;
 }
 
 .configsectionpanel .snarkConfigTitle img {
-    margin: 1px -1px 2px 0;
+  margin: 1px -1px 2px 0;
 }
 
 .toggleview:hover img, input.toggle_input:focus + .toggleview img,
 .configsection .snarkConfigTitle a:focus img, .configsection .snarkConfigTitle:hover a img {
-    box-shadow: 0 0 1px #f60;
+  box-shadow: 0 0 1px #f60;
 }
 
 .snarkConfigTitle:active a img, .toggleview:active img {
-    transform: rotate(90deg);
-    transition: linear transform .05s;
+  transform: rotate(90deg);
+  transition: linear transform .05s;
 }
 
 input:checked + .toggleview:active > img {
-    transform: rotate(-90deg);
+  transform: rotate(-90deg);
 }
 
 .snarkConfigTitle {
-    color: #446;
+  color: #446;
 }
 
 .configsectionpanel .snarkConfigTitle, .configsectionpanel .snarkConfigTitle:hover {
-    min-width: 400px;
-    letter-spacing: 2px;
-    font-size: 110%;
-    color: #555875 !important;
+  min-width: 400px;
+  letter-spacing: 2px;
+  font-size: 110%;
+  color: #555875 !important;
 }
 
 .configsectionpanel .snarkConfigTitle, .configsectionpanel .snarkConfigTitle:hover,
 .iframed .configsectionpanel .snarkConfigTitle, .iframed .configsectionpanel .snarkConfigTitle:hover {
-    background: linear-gradient(to bottom, #fcfcff 51%, #fafaff 51%, #f6f6ff 100%) !important;
+  background: linear-gradient(to bottom, #fcfcff 51%, #fafaff 51%, #f6f6ff 100%) !important;
 }
 
 .snarkConfig {
-    width: 100%;
-    font-size: 10pt;
+  width: 100%;
+  font-size: 10pt;
 }
 
 .snarkTorrentInfo, .snarkDirInfo {
-    margin: 10px 0 0 0 !important;
-    background: #fff;
-    border-bottom: 1px solid #8d8daa;
+  margin: 10px 0 0 0 !important;
+  background: #fff;
+  border-bottom: 1px solid #8d8daa;
 }
 
 .snarkTorrentInfo tr:nth-last-child(3) a {
-    margin-right: 10px;
-    display: inline-block;
-    white-space: normal;
-    word-break: break-all;
+  margin-right: 10px;
+  display: inline-block;
+  white-space: normal;
+  word-break: break-all;
 }
 
 .snarkDirInfo td:first-child {
-    padding-left: 2px !important;
-    width: 1%;
+  padding-left: 2px !important;
+  width: 1%;
 }
 
 .snarkTorrentInfo th, .snarkTorrentInfo td {
-    padding: 5px 6px !important;
-    line-height: 1.6;
-    vertical-align: middle;
+  padding: 5px 6px !important;
+  line-height: 1.6;
+  vertical-align: middle;
 }
 
 .snarkTorrentInfo th {
-    text-align: left;
-    font-weight: inherit;
+  text-align: left;
+  font-weight: inherit;
 }
 
 .snarkTorrentInfo th:last-child {
-    padding-right: 5px !important;
-    width: 1%;
-    white-space: nowrap;
-    text-align: right;
+  padding-right: 5px !important;
+  width: 1%;
+  white-space: nowrap;
+  text-align: right;
 }
 
 .snarkTorrentInfo td {
-    text-align: left !important;
-    border-top: 1px solid #ccccf0;
-    vertical-align: middle;
+  text-align: left !important;
+  border-top: 1px solid #ccccf0;
+  vertical-align: middle;
 }
 
 .snarkTorrentInfo img {
-    max-height: 16px;
+  max-height: 16px;
 }
 
 .snarkTorrentInfo th:first-child img, #torrentInfoStats img, #trackers img {
-    margin: 2px 4px !important;
+  margin: 2px 4px !important;
 }
 
 @media screen and (min-width: 1500px) {
 .snarkTorrentInfo th:first-child img, #torrentinfostats img, #trackers img {
-    margin: -3px 5px 0 !important;
-    max-height: 18px !important;
+  margin: -3px 5px 0 !important;
+  max-height: 18px !important;
 }
 
 #torrentInfoStats .nowrap {
-    margin-right: 6px;
+  margin-right: 6px;
 }
 }
 
 #torrentInfoStats img[src$="head_tx.png"], #torrentInfoStats img[src$="head_rx.png"] {
-    margin-right: 3px !important;
+  margin-right: 3px !important;
 }
 
 #torrentInfoStats .nowrap {
-    margin-right: 5px;
-    display: inline-block;
-    white-space: nowrap;
+  margin-right: 5px;
+  display: inline-block;
+  white-space: nowrap;
 }
 
 .snarkTorrentInfo td:first-child a {
-    margin: 0 !important;
-    padding: 0 !important;
-    font-size: 0;
+  margin: 0 !important;
+  padding: 0 !important;
+  font-size: 0;
 }
 
 .snarkTorrentInfo tr:last-child td {
-    border-bottom: 1px solid #8d8daa;
-    border-top: 1px solid #8d8daa;
+  border-bottom: 1px solid #8d8daa;
+  border-top: 1px solid #8d8daa;
 }
 
 .infohash {
-    font-family: "Droid Sans Mono", "Lucida Console", "DejaVu Sans Mono", monospace;
-    color: #070;
-    -moz-user-select: all;
-    -webkit-user-select: all;
-    user-select: all;
+  font-family: "Droid Sans Mono", "Lucida Console", "DejaVu Sans Mono", monospace;
+  color: #070;
+  -moz-user-select: all;
+  -webkit-user-select: all;
+  user-select: all;
 }
 
 .infohash::-moz-selection {
-    background: #171 !important;
+  background: #171 !important;
 }
 
 .infohash::selection {
-    background: #171 !important;
-    color: #fff !important;
+  background: #171 !important;
+  color: #fff !important;
 }
 
 .snarkTorrents .infohash {
-    display: inline-block;
-    max-width: 80px;
-    white-space: nowrap;
-    vertical-align: middle;
-    overflow: hidden;
-    text-overflow: ellipsis;
+  display: inline-block;
+  max-width: 80px;
+  white-space: nowrap;
+  vertical-align: middle;
+  overflow: hidden;
+  text-overflow: ellipsis;
 }
 
 .snarkTorrents .infohash, .snarkTorrentInfo .infohash {
-    display: inline-block;
-    max-width: 80px;
-    white-space: nowrap;
-    vertical-align: middle;
-    overflow: hidden;
-    text-overflow: ellipsis;
+  display: inline-block;
+  max-width: 80px;
+  white-space: nowrap;
+  vertical-align: middle;
+  overflow: hidden;
+  text-overflow: ellipsis;
 }
 
 .snarkTorrentInfo .infohash {
-    margin: 0 3px 0 10px;
-    padding: 4px 0 4px 4px	;
-    max-width: 140px !important;
-    line-height: 1;
-    border-radius: 1px;
-    background: #f8f8ff;
-    box-shadow: 0 0 0 1px #ccf;
+  margin: 0 3px 0 10px;
+  padding: 4px 0 4px 4px	;
+  max-width: 140px !important;
+  line-height: 1;
+  border-radius: 1px;
+  background: #f8f8ff;
+  box-shadow: 0 0 0 1px #ccf;
 }
 
 @media screen and (max-width: 1024px) {
 .snarkTorrentInfo .infohash {
-    max-width: 120px !important;
-    font-size: 8.5pt !important;
+  max-width: 120px !important;
+  font-size: 8.5pt !important;
 }
 }
 
 @media screen and (min-width: 1500px) {
 .snarkTorrentInfo .infohash {
-    padding: 4px 4px 5px 20px;
-    background: #f8f8ff url(images/hash.png) 4px center no-repeat;
-    background-size: 14px 14px !important;
+  padding: 4px 4px 5px 20px;
+  background: #f8f8ff url(images/hash.png) 4px center no-repeat;
+  background-size: 14px 14px !important;
 }
 }
 
 .snarkMessages .infohash {
-    font-size: 90%;
-    color: #3b6bbf;
-    color: rgba(59, 107, 191, .85);
-    font-weight: bold !important;
+  font-size: 90%;
+  color: #3b6bbf;
+  color: rgba(59, 107, 191, .85);
+  font-weight: bold !important;
 }
 
 .snarkMessages .infohash:hover {
-    color: #070;
+  color: #070;
 }
 
 .magnetlink, .torrentlink {
-    margin: 0 2px;
-    padding: 3px;
-    vertical-align: middle;
-    border: 1px solid #ccf;
-    border-radius: 1px;
-    background: linear-gradient(to bottom, #fff 50%, rgba(255, 255, 255, 0.6) 50%, rgba(240, 240, 255, 0.4)) #e7e7ff;
+  margin: 0 2px;
+  padding: 3px;
+  vertical-align: middle;
+  border: 1px solid #ccf;
+  border-radius: 1px;
+  background: linear-gradient(to bottom, #fff 50%, rgba(255, 255, 255, 0.6) 50%, rgba(240, 240, 255, 0.4)) #e7e7ff;
 }
 
 .magnetlink:hover, .magnetlink:focus, .torrentlink:hover, .torrentlink:focus {
-    border: 1px solid #f60;
-    background: linear-gradient(to bottom, #fcfaf7 50%, #ffe8bf 50%, #efd9b3);
+  border: 1px solid #f60;
+  background: linear-gradient(to bottom, #fcfaf7 50%, #ffe8bf 50%, #efd9b3);
 }
 
 .magnetlink:active, .torrentlink:active {
-    box-shadow: inset 2px 2px 3px #7f3000;
+  box-shadow: inset 2px 2px 3px #7f3000;
 }
 
 .torrentlink {
-    margin-right: -1px;
+  margin-right: -1px;
 }
 
 .magnetlink img, .torrentlink img, .magnetlink img:hover, .torrentlink img:hover {
-    margin: 0;
-    padding: 0;
-    filter: none !important;
+  margin: 0;
+  padding: 0;
+  filter: none !important;
 }
 
 .magnetLabel {
@@ -1597,1008 +1597,1008 @@ input:checked + .toggleview:active > img {
 }
 
 .snarkDirInfo thead img {
-    margin: 0 !important;
-    padding: 0 2px !important;
+  margin: 0 !important;
+  padding: 0 2px !important;
 }
 
 form {
-    margin-bottom: 0;
+  margin-bottom: 0;
 }
 
 p {
-    line-height: 150%;
+  line-height: 150%;
 }
 
 hr {
-    color: #339;
-    background: #ccccf0;
-    background: rgba(110,100,200,0.5);
-    height: 1px;
-    border: 0 solid #339;
-    width: 0;
-    margin: 5px 0 7px 0;
-    text-align: center;
+  color: #339;
+  background: #ccccf0;
+  background: rgba(110,100,200,0.5);
+  height: 1px;
+  border: 0 solid #339;
+  width: 0;
+  margin: 5px 0 7px 0;
+  text-align: center;
 }
 
 .headerpriority br {
-    display: none;
+  display: none;
 }
 
 input[name="savepri"] {
-    float: right;
+  float: right;
 }
 
 #configs input[type="submit"], .trackerconfig input[type="submit"], input[name="savepri"] {
-    text-transform: capitalize;
+  text-transform: capitalize;
 }
 
 input {
-    font-family: "Droid Sans", "Open Sans", "Noto Sans", Ubuntu, "Segoe UI", "Bitstream Vera Sans", Verdana, "Lucida Grande", Helvetica, sans-serif;
-    text-align: left;
-    padding: 4px !important;
-    border-radius: 2px;
-    border: 1px solid #97a2ce;
-    background: #fff;
-    color: #33333f;
-    margin: 2px 4px 2px 0;
-    box-shadow: inset 0 0 1px #fff, 0 0 1px #999;
+  font-family: "Droid Sans", "Open Sans", "Noto Sans", Ubuntu, "Segoe UI", "Bitstream Vera Sans", Verdana, "Lucida Grande", Helvetica, sans-serif;
+  text-align: left;
+  padding: 4px !important;
+  border-radius: 2px;
+  border: 1px solid #97a2ce;
+  background: #fff;
+  color: #33333f;
+  margin: 2px 4px 2px 0;
+  box-shadow: inset 0 0 1px #fff, 0 0 1px #999;
 }
 
 input.r {
-    text-align: right;
-    background: #fff;
-    border: 1px solid #97a2ce;
-    color: #33333f;
+  text-align: right;
+  background: #fff;
+  border: 1px solid #97a2ce;
+  color: #33333f;
 }
 
 input[type=submit], a.control, input.disabled {
-    margin: 6px 3px 6px 6px !important;
-    padding: 5px 8px !important;
-    min-width: 90px;
-    text-align: center;
-    font: bold 9pt "Droid Sans", "Open Sans", "Noto Sans", Ubuntu, "Segoe UI", "Bitstream Vera Sans", Verdana, "Lucida Grande", Helvetica, sans-serif;
-    color: #227;
-    text-shadow: 0 1px 1px #fff;
-    border: 1px solid #97a2ce;
-    border-radius: 2px;
-    box-shadow: inset 0 0 0 1px #fff, 0 0 1px #ddd;
-    background: #fff;
-    background: linear-gradient(to bottom, #fff 50%, #f2f2ff 50%);
-    filter: drop-shadow(0 0 1px rgba(220,220,255,.7));
+  margin: 6px 3px 6px 6px !important;
+  padding: 5px 8px !important;
+  min-width: 90px;
+  text-align: center;
+  font: bold 9pt "Droid Sans", "Open Sans", "Noto Sans", Ubuntu, "Segoe UI", "Bitstream Vera Sans", Verdana, "Lucida Grande", Helvetica, sans-serif;
+  color: #227;
+  text-shadow: 0 1px 1px #fff;
+  border: 1px solid #97a2ce;
+  border-radius: 2px;
+  box-shadow: inset 0 0 0 1px #fff, 0 0 1px #ddd;
+  background: #fff;
+  background: linear-gradient(to bottom, #fff 50%, #f2f2ff 50%);
+  filter: drop-shadow(0 0 1px rgba(220,220,255,.7));
 }
 
 input[type=submit]:hover, input[type=submit]:focus, a.control:hover, a.control:focus {
-    color: #f60;
-    text-shadow: none;
-    border: 1px solid #559;
-    box-shadow: inset 0 0 0 1px #fff;
-    background: #eef;
-    background: linear-gradient(#fff 50%, #ffe8bf 50%, #efd9b3 100%);
+  color: #f60;
+  text-shadow: none;
+  border: 1px solid #559;
+  box-shadow: inset 0 0 0 1px #fff;
+  background: #eef;
+  background: linear-gradient(#fff 50%, #ffe8bf 50%, #efd9b3 100%);
 }
 
 input[type=submit]:active, a.control:active {
-    color: #fff !important;
-    box-shadow: inset 3px 3px 4px #333;
-    box-shadow: inset 0 0 0 1px #fff, inset 3px 3px 4px #333;
-    background: #f60 !important;
+  color: #fff !important;
+  box-shadow: inset 3px 3px 4px #333;
+  box-shadow: inset 0 0 0 1px #fff, inset 3px 3px 4px #333;
+  background: #f60 !important;
 }
 
 a.control, a.controld {
-    margin: 6px 3px 6px 3px !important;
-    padding: 5px 8px 4px 5px !important;
-    display: inline-block;
-    min-width: 0 !important;
-    white-space: nowrap;
-    font-weight: bold;
-    border-radius: 2px;
+  margin: 6px 3px 6px 3px !important;
+  padding: 5px 8px 4px 5px !important;
+  display: inline-block;
+  min-width: 0 !important;
+  white-space: nowrap;
+  font-weight: bold;
+  border-radius: 2px;
 }
 
 a.controld {
-    color: #459;
-    font-weight: normal;
-    display: none;
+  color: #459;
+  font-weight: normal;
+  display: none;
 }
 
 a.control img, a.control:hover img, a.control:focus img, a.control:active img {
-    filter: none !important;
+  filter: none !important;
 }
 
 /* sync iframe buttons with main console theme */
 
 .iframed input[type="submit"], .iframed a.control {
-    color: #41465f;
-    font-weight: normal;
-    border: 1px solid #97a2ce;
-    background: linear-gradient(to bottom, #fff, #efefff);
-    transition: ease border 0.7s;
+  color: #41465f;
+  font-weight: normal;
+  border: 1px solid #97a2ce;
+  background: linear-gradient(to bottom, #fff, #efefff);
+  transition: ease border 0.7s;
 }
 
 .iframed input[type="submit"]:hover, .iframed input[type="submit"]:focus, .iframed a.control:hover, .iframed a.control:focus {
-    color: #19191f;
-    border: 1px solid #f60;
-    background: linear-gradient(to bottom, #eee, #fff);
-    transition: ease border 0.7s;
+  color: #19191f;
+  border: 1px solid #f60;
+  background: linear-gradient(to bottom, #eee, #fff);
+  transition: ease border 0.7s;
 }
 
 .iframed input[type="submit"]:active, .iframed a.control:active {
-    color: #4c526f !important;
-    box-shadow: inset 0 0 0 1px #fff, inset 2px 2px 2px #555 !important;
-    background: linear-gradient(to bottom, #eee, #fff) !important;
-    background-blend-mode: luminosity;
+  color: #4c526f !important;
+  box-shadow: inset 0 0 0 1px #fff, inset 2px 2px 2px #555 !important;
+  background: linear-gradient(to bottom, #eee, #fff) !important;
+  background-blend-mode: luminosity;
 }
 
 .iframed a.control:active img {
-    mix-blend-mode: luminosity;
+  mix-blend-mode: luminosity;
 }
 
 /* end iframed button sync */
 
 input[type=image], thead img {
-    padding: 0 !important;
-    border-radius: 0;
-    border: none;
-    margin: 0 2px;
-    opacity: 1;
-    max-height: 22px;
-    filter: hue-rotate(45deg);
+  padding: 0 !important;
+  border-radius: 0;
+  border: none;
+  margin: 0 2px;
+  opacity: 1;
+  max-height: 22px;
+  filter: hue-rotate(45deg);
 }
 
 thead img {
-    filter: hue-rotate(45deg) contrast(120%) drop-shadow(0 0 1px rgba(220,220,255,.7));
+  filter: hue-rotate(45deg) contrast(120%) drop-shadow(0 0 1px rgba(220,220,255,.7));
 }
 
 .iframed thead img {
-    max-height: 20px;
+  max-height: 20px;
 }
 
 thead a:hover img, thead a img:hover {
-    filter: hue-rotate(60deg) drop-shadow(0 0 1px #f60);
+  filter: hue-rotate(60deg) drop-shadow(0 0 1px #f60);
 }
 
 thead a:active img {
-    transform: scale(0.9);
-    filter: hue-rotate(45deg) drop-shadow(0 0 1px #f30) !important;
+  transform: scale(0.9);
+  filter: hue-rotate(45deg) drop-shadow(0 0 1px #f30) !important;
 }
 
 .addtorrentsection input[type="text"], .newtorrentsection input[type="text"] {
-    width: 80%;
+  width: 80%;
 }
 
 .addtorrentsection tr:first-child td > *, .newtorrentsection tr:first-child td > * {
-    vertical-align: middle;
+  vertical-align: middle;
 }
 
 thead img.disable, img.disable:hover {
-    opacity: 0.4;
+  opacity: 0.4;
 }
 
 input[type="text"] {
-    font-weight: bold;
+  font-weight: bold;
 }
 
 input[type="text"]:focus, input.r:focus, textarea:focus, input[name="nofilter_dataDir"]:focus {
-    color: #19191f;
-    border: 1px solid #676c7f;
-    box-shadow: 0 0 1px #89f;
-    background: #fff;
+  color: #19191f;
+  border: 1px solid #676c7f;
+  box-shadow: 0 0 1px #89f;
+  background: #fff;
 }
 
 input[type="text"], input.r, input[name="nofilter_dataDir"], textarea, select {
-    padding: 5px 4px !important;
-    min-width: 120px;
-    font-size: 9pt;
-    color: #47475f;
-    box-shadow: inset 1px 1px 1px rgba(204, 204, 204, 0.6);
-    background: #fbfbff;
-    filter: drop-shadow(0 0 1px rgba(220,220,255,.7));
+  padding: 5px 4px !important;
+  min-width: 120px;
+  font-size: 9pt;
+  color: #47475f;
+  box-shadow: inset 1px 1px 1px rgba(204, 204, 204, 0.6);
+  background: #fbfbff;
+  filter: drop-shadow(0 0 1px rgba(220,220,255,.7));
 }
 
 #configureAuthor input {
-    width: 250px;
+  width: 250px;
 }
 
 .optbox {
-    border: none !important;
-    width: 16px;
-    height: 16px;
-    box-shadow: none;
-    background: none;
-    filter: sepia(100%) hue-rotate(185deg) drop-shadow(0 0 1px rgba(220,220,255,.7));
+  border: none !important;
+  width: 16px;
+  height: 16px;
+  box-shadow: none;
+  background: none;
+  filter: sepia(100%) hue-rotate(185deg) drop-shadow(0 0 1px rgba(220,220,255,.7));
 }
 
 .optbox:hover, .optbox:focus {
-    filter: sepia(100%) hue-rotate(185deg) drop-shadow(0 0 3px #89f);
-    outline: none;
+  filter: sepia(100%) hue-rotate(185deg) drop-shadow(0 0 3px #89f);
+  outline: none;
 }
 
 .optbox[disabled]:hover, .optbox[disabled]:hover,
 .optbox[disabled]:focus, .optbox[disabled]:focus {
-    filter: none;
-    box-shadow: none;
+  filter: none;
+  box-shadow: none;
 }
 
 .knownTracker input[type="radio"], .knownTracker input[type="radio"]:hover, .knownTracker input[type="radio"]:focus {
-    opacity: 0.3 !important;
+  opacity: 0.3 !important;
 }
 
 .knownTracker input[type="radio"]:checked, .knownTracker input[type="radio"]:checked:hover {
-    opacity: 0.5 !important;
+  opacity: 0.5 !important;
 }
 
 label {
-    cursor: pointer;
+  cursor: pointer;
 }
 
 input.default {
-    width: 1px;
-    height: 1px;
-    visibility: hidden;
-    display: none;
+  width: 1px;
+  height: 1px;
+  visibility: hidden;
+  display: none;
 }
 
 input.disabled, input.disabled:hover, input.disabled:active, a.controld {
-    background: #fff !important;
-    color: #459 !important;
-    font-weight: normal;
-    opacity: 0.6;
-    cursor: not-allowed;
-    display: none;
-    box-shadow: none !important;
+  background: #fff !important;
+  color: #459 !important;
+  font-weight: normal;
+  opacity: 0.6;
+  cursor: not-allowed;
+  display: none;
+  box-shadow: none !important;
 }
 
 select {
-    margin: 2px 4px 2px 0;
-    padding: 5px 24px 5px 3px !important;
-    color: #41465f;
-    font: bold 9pt "Droid Sans", "Open Sans", "Noto Sans", Ubuntu, "Segoe UI", "Bitstream Vera Sans", Verdana, "Lucida Grande", Helvetica, sans-serif;
-    border: 1px solid #97a2ce;
-    border-radius: 2px;
-    box-shadow: inset 0 0 0 1px #fff;
-    background: url(images/dropdown.svg) right 8px center no-repeat #f8f8ff !important;
-    background: url(images/dropdown.svg) right 8px center no-repeat, linear-gradient(to bottom, #fff 50%, #f6f6ff 50%) !important;
-    background-size: 10px auto, 100% 100% !important;
-    -moz-appearance: none;
-    -webkit-appearance: none;
-    appearance: none;
+  margin: 2px 4px 2px 0;
+  padding: 5px 24px 5px 3px !important;
+  color: #41465f;
+  font: bold 9pt "Droid Sans", "Open Sans", "Noto Sans", Ubuntu, "Segoe UI", "Bitstream Vera Sans", Verdana, "Lucida Grande", Helvetica, sans-serif;
+  border: 1px solid #97a2ce;
+  border-radius: 2px;
+  box-shadow: inset 0 0 0 1px #fff;
+  background: url(images/dropdown.svg) right 8px center no-repeat #f8f8ff !important;
+  background: url(images/dropdown.svg) right 8px center no-repeat, linear-gradient(to bottom, #fff 50%, #f6f6ff 50%) !important;
+  background-size: 10px auto, 100% 100% !important;
+  -moz-appearance: none;
+  -webkit-appearance: none;
+  appearance: none;
 }
 
 @supports not (-moz-appearance: none) {
 select {
-    padding: 6px 24px 6px 6px !important;
+  padding: 6px 24px 6px 6px !important;
 }
 }
 
 select:hover, select:focus {
-    color: #33333f !important;
-    background: #fff url(images/dropdown_hover.svg) right 8px center no-repeat !important;
-    background-size: 10px auto !important;
-    box-shadow: none;
+  color: #33333f !important;
+  background: #fff url(images/dropdown_hover.svg) right 8px center no-repeat !important;
+  background-size: 10px auto !important;
+  box-shadow: none;
 }
 
 select:active, select option {
-    background: #fff;
+  background: #fff;
 }
 
 select[disabled], select[disabled]:hover {
-    margin-left: 0 !important;
-    background: #f8f8ff url(images/dropdown.svg) right 8px center no-repeat !important;
-    background-size: 10px auto !important;
-    opacity: 0.7;
-    cursor: not-allowed;
+  margin-left: 0 !important;
+  background: #f8f8ff url(images/dropdown.svg) right 8px center no-repeat !important;
+  background-size: 10px auto !important;
+  opacity: 0.7;
+  cursor: not-allowed;
 }
 
 select::-ms-expand {
-    display: none;
+  display: none;
 }
 
 textarea {
-    background: #f8f8ff;
-    color: #33333f;
-    font-weight: bold;
-    padding: 2px 4px;
-    border-radius: 2px;
-    border: 1px solid #8d8daa;
-    font-size: 8pt;
+  background: #f8f8ff;
+  color: #33333f;
+  font-weight: bold;
+  padding: 2px 4px;
+  border-radius: 2px;
+  border: 1px solid #8d8daa;
+  font-size: 8pt;
 }
 
 select:hover, input[type="checkbox"], input[type="radio"], input[type="submit"] {
-    cursor: pointer;
+  cursor: pointer;
 }
 
 .optbox[disabled], .optbox[disabled]:hover, .optbox[name^="ttype"], .optbox[name^="ttype"]:hover, .optbox[name^="ttype"]:checked  {
-    cursor: default;
-    opacity: 0.6 !important;
-    filter: none !important;
+  cursor: default;
+  opacity: 0.6 !important;
+  filter: none !important;
 }
 
 img {
-    border: none;
-    margin: 0 3px 0;
-    vertical-align: middle;
-    opacity: 1.0;
-    line-height: 100%;
+  border: none;
+  margin: 0 3px 0;
+  vertical-align: middle;
+  opacity: 1.0;
+  line-height: 100%;
 }
 
 img:hover {
-    border: none;
-    opacity: 1;
-    line-height: 100%;
+  border: none;
+  opacity: 1;
+  line-height: 100%;
 }
 
 /*img[src$="magnet.png"] {
-    transform: rotate(-90deg);
+  transform: rotate(-90deg);
 }
 
 img[src$="folder.png"] {
-    transform: scaleX(-1);
+  transform: scaleX(-1);
 }*/
 
 @supports not (-moz-appearance: none) {
 img[src$="magnet.png"] {
-    margin-top: -2px;
-    margin-bottom: -2px;
-    display: inline-block;
-    vertical-align: middle;
+  margin-top: -2px;
+  margin-bottom: -2px;
+  display: inline-block;
+  vertical-align: middle;
 }
 
 .snarkTorrentName > * {
-    line-height: 140%;
+  line-height: 140%;
 }
 }
 
 img[src$="details.png"] {
-    opacity: .7;
+  opacity: .7;
 }
 
 .snarkTrackerDetails img[src$="details.png"]:hover {
-    opacity: 1;
+  opacity: 1;
 }
 
 .snarkGraphicStatus img {
-    padding-top: 3px !important;
-    padding-bottom: 3px !important;
+  padding-top: 3px !important;
+  padding-bottom: 3px !important;
 }
 
 .magnetLabel {
-    display: inline-block;
+  display: inline-block;
 }
 
 .newtorrentsection td:first-child, .addtorrentsection td:first-child, .configsectionpanel td:first-child {
-    width: auto !important;
-    text-align: right;
+  width: auto !important;
+  text-align: right;
 }
 
 .configsectionpanel td:first-child {
-    padding-right: 5px;
+  padding-right: 5px;
 }
 
 @keyframes slide-in {
 0% {
-    transform: translateY(-40px);
+  transform: translateY(-40px);
 }
 
 100% {
-    transform: translateY(0);
+  transform: translateY(0);
 }
 }
 
 @keyframes fade-in {
 0% {
-    filter: opacity(0);
+  filter: opacity(0);
 }
 
 100% {
-    filter: opacity(1);
+  filter: opacity(1);
 }
 }
 
 .addtorrentsection table, .newtorrentsection table:not(#trackerselect) {
-    position: relative;
-    animation: slide-in 0.2s ease-out, fade-in 0.3s ease-out;
-    will-change: transform;
+  position: relative;
+  animation: slide-in 0.2s ease-out, fade-in 0.3s ease-out;
+  will-change: transform;
 }
 
 .iframed .addtorrentsection table, .iframed .newtorrentsection table:not(#trackerselect) {
-    position: static;
-    animation: fade-in 0.1s ease-out;
-    animation: none;
+  position: static;
+  animation: fade-in 0.1s ease-out;
+  animation: none;
 }
 
 .section, .mainsection .section, .mainsection {
-    margin: 0;
-    padding: 0;
-    word-wrap: break-word;
-    text-align: center;
-    background: linear-gradient(to bottom, #fafaff, #f8f8ff, #fafaff);
-    opacity: 1 !important;
+  margin: 0;
+  padding: 0;
+  word-wrap: break-word;
+  text-align: center;
+  background: linear-gradient(to bottom, #fafaff, #f8f8ff, #fafaff);
+  opacity: 1 !important;
 }
 
 .page > .mainsection {
-    margin-top: 10px;
+  margin-top: 10px;
 }
 
 #snarkInfo ~ .mainsection {
-    border-bottom: 1px solid #8d8daa;
+  border-bottom: 1px solid #8d8daa;
 }
 
 .iframed #snarkInfo ~ .mainsection {
-    margin-top: 10px;
-    border-top: 1px solid #8d8daa;
+  margin-top: 10px;
+  border-top: 1px solid #8d8daa;
 }
 
 #snarkInfo ~ .mainsection table:last-child, .iframed #snarkInfo ~ .mainsection:last-child {
-    border-bottom: none !important;
+  border-bottom: none !important;
 }
 
 .iframed #snarkInfo ~ .mainsection:last-child {
-    margin-bottom: -6px !important;
+  margin-bottom: -6px !important;
 }
 
 .newtorrentsection, .addtorrentsection, .configsection, .configsectionpanel {
-    padding: 0 10px;
-    border: 1px solid #8d8daa;
-    box-shadow: inset 0 0 0 1px #fff;
-    text-align: center;
-    background: linear-gradient(to bottom, #fafaff, #f2f2ff) !important;
+  padding: 0 10px;
+  border: 1px solid #8d8daa;
+  box-shadow: inset 0 0 0 1px #fff;
+  text-align: center;
+  background: linear-gradient(to bottom, #fafaff, #f2f2ff) !important;
 }
 
 .newtorrentsection {
-    margin: 0 0 10px 0;
-    background: #fff;
+  margin: 0 0 10px 0;
+  background: #fff;
 }
 
 .iframed .newtorrentsection {
-    background: linear-gradient(to bottom, #fafaff, #f8f8ff, #fafaff);
+  background: linear-gradient(to bottom, #fafaff, #f8f8ff, #fafaff);
 }
 
 .addtorrentsection {
-    margin: 10px 0;
-    background: #fff;
-    background: linear-gradient(to bottom, #fafaff, #e0e0ef);
+  margin: 10px 0;
+  background: #fff;
+  background: linear-gradient(to bottom, #fafaff, #e0e0ef);
 }
 
 .configsectionpanel {
-    background: linear-gradient(to bottom, #f8f8ff, #f2f2ff) !important;
+  background: linear-gradient(to bottom, #f8f8ff, #f2f2ff) !important;
 }
 
 .iframed .addtorrentsection {
-    margin-top: -1px;
-    background: linear-gradient(to bottom, #fafaff, #f8f8ff, #fafaff);
+  margin-top: -1px;
+  background: linear-gradient(to bottom, #fafaff, #f8f8ff, #fafaff);
 }
 
 .configsection {
-    margin: 0;
-    padding-bottom: 13px;
-    background: #fff;
+  margin: 0;
+  padding-bottom: 13px;
+  background: #fff;
 }
 
 .iframed .configsection, .iframed .configsectionpanel, .iframed form:last-child .configsectionpanel {
-    background: linear-gradient(to bottom, #fafaff, #f8f8ff, #fafaff);
+  background: linear-gradient(to bottom, #fafaff, #f8f8ff, #fafaff);
 }
 
 .iframed .configsectionpanel, .iframed form:last-child .configsectionpanel {
-    background: linear-gradient(to bottom, #fafaff, #f8f8ff, #fafaff);
+  background: linear-gradient(to bottom, #fafaff, #f8f8ff, #fafaff);
 }
 
 .iframed .configsectionpanel#trackers {
-    margin-top: -1px !important;
+  margin-top: -1px !important;
 }
 
 .iframed .configsection, .iframed #trackers, .iframed .mainsection#snarkInfo {
-    margin-bottom: 0 !important;
+  margin-bottom: 0 !important;
 }
 
 .iframed .trackerconfig {
-    margin-bottom: 0 !important;
+  margin-bottom: 0 !important;
 }
 
 .iframed .trackerconfig tr:nth-last-child(2) td {
-    padding-bottom: 6px !important;
+  padding-bottom: 6px !important;
 }
 
 .iframed .configsection, .iframed .snarkCommentInfo, .iframed #trackers {
-    border-bottom: none !important;
+  border-bottom: none !important;
 }
 
 .configsectionpanel {
-    margin: -12px 0 0;
-    box-shadow: inset 0 0 0 1px #fff, inset 0 0 2px 1px #ddf;
-    background: #fff;
-    background: linear-gradient(to bottom, #fafaff, #e0e0ef);
-    background: linear-gradient(to top, rgba(224, 224, 255, 0.5), #f4f4ff 5%, #f4f4ff 95%, rgba(224, 224, 255, 0.5));
-    background-size: 100% 100%;
+  margin: -12px 0 0;
+  box-shadow: inset 0 0 0 1px #fff, inset 0 0 2px 1px #ddf;
+  background: #fff;
+  background: linear-gradient(to bottom, #fafaff, #e0e0ef);
+  background: linear-gradient(to top, rgba(224, 224, 255, 0.5), #f4f4ff 5%, #f4f4ff 95%, rgba(224, 224, 255, 0.5));
+  background-size: 100% 100%;
 }
 
 form:last-child .configsectionpanel {
-    margin-top: 10px;
-    background: linear-gradient(to top, rgba(224, 224, 255, 0.5), #f4f4ff 10%, #f4f4ff 90%, rgba(224, 224, 255, 0.5));
-    background-size: 100% 100%;
+  margin-top: 10px;
+  background: linear-gradient(to top, rgba(224, 224, 255, 0.5), #f4f4ff 10%, #f4f4ff 90%, rgba(224, 224, 255, 0.5));
+  background-size: 100% 100%;
 }
 
 .configsectionpanel table {
-    border-collapse: separate;
+  border-collapse: separate;
 }
 
 .configsectionpanel tr:nth-last-child(2) td {
-    text-align: right !important;
-    border-top: 1px solid #fff;
-    padding: 5px 0 0 0;
+  text-align: right !important;
+  border-top: 1px solid #fff;
+  padding: 5px 0 0 0;
 }
 
 .configsectionpanel tr:last-child {
-    display: none;
+  display: none;
 }
 
 .spacer td {
-    border-bottom: 1px solid #8d8daa;
+  border-bottom: 1px solid #8d8daa;
 }
 
 .newtorrentsection, .addtorrentsection, .configsection, .configsectionpanel {
-    margin-bottom: -1px;
-    border-left: none;
-    border-right: none;
+  margin-bottom: -1px;
+  border-left: none;
+  border-right: none;
 }
 
 .newtorrentsection table, .addtorrentsection table {
-    margin-top: -5px;
+  margin-top: -5px;
 }
 
 .newtorrentsection td:first-child, .addtorrentsection td:first-child {
-    min-width: 140px;
-    font-weight: bold;
-    color: #41465f;
+  min-width: 140px;
+  font-weight: bold;
+  color: #41465f;
 }
 
 /* new torrent -> tracker select */
 
 #trackerselect {
-    width: 80% !important;
-    margin: 2px 0 0;
-    padding: 3px;
-    background: #f8f8ff;
-    background: linear-gradient(to bottom, #fafaff, #f2f2ff);
-    border-collapse: separate;
-    border-spacing: 5px;
-    border: 1px solid #8d8daa;
-    border-radius: 2px;
-    box-shadow: inset 0 0 0 1px #fff, 0 0 1px #ccf;
+  width: 80% !important;
+  margin: 2px 0 0;
+  padding: 3px;
+  background: #f8f8ff;
+  background: linear-gradient(to bottom, #fafaff, #f2f2ff);
+  border-collapse: separate;
+  border-spacing: 5px;
+  border: 1px solid #8d8daa;
+  border-radius: 2px;
+  box-shadow: inset 0 0 0 1px #fff, 0 0 1px #ccf;
 }
 
 .iframed #trackerselect {
-    background: #fdfdff;
-    border-collapse: collapse;
+  background: #fdfdff;
+  border-collapse: collapse;
 }
 
 #trackerselect tr:first-child td {
-    border: 1px solid #9fa5ff !important;
-    border-radius: 2px;
-    background: linear-gradient(to right, #eef, #fafaff 30%, #fafaff 70%, #eef) #fafaff;
-    box-shadow: inset 0 0 0 1px #fff, 0 0 1px #ccc;
-    white-space: nowrap;
-    overflow: hidden;
-    text-overflow: ellipsis;
-    font-weight: bold;
-    text-align: center;
-    color: #41465f;
+  border: 1px solid #9fa5ff !important;
+  border-radius: 2px;
+  background: linear-gradient(to right, #eef, #fafaff 30%, #fafaff 70%, #eef) #fafaff;
+  box-shadow: inset 0 0 0 1px #fff, 0 0 1px #ccc;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  font-weight: bold;
+  text-align: center;
+  color: #41465f;
 }
 
 .iframed #trackerselect tr:first-child td {
-    border: 1px solid #8d8daa !important;
-    border-radius: 0 !important;
-    box-shadow: inset 0 0 0 1px #fff;
+  border: 1px solid #8d8daa !important;
+  border-radius: 0 !important;
+  box-shadow: inset 0 0 0 1px #fff;
 }
 
 #trackerselect tr:nth-child(2n+3) {
-    background: #efefff;
+  background: #efefff;
 }
 
 #trackerselect tr:nth-child(2n+3):hover {
-    background: none;
+  background: none;
 }
 
 #trackerselect td {
-    padding: 2px;
-    text-align: center;
+  padding: 2px;
+  text-align: center;
 }
 
 #trackerselect td:first-child {
-    white-space: nowrap;
+  white-space: nowrap;
 }
 
 #trackerselect td:last-child {
-    overflow: hidden;
-    text-overflow: ellipsis;
+  overflow: hidden;
+  text-overflow: ellipsis;
 }
 
 #trackerselect td:first-child, #trackerselect td:last-child {
-    font-weight: normal;
-    width: 30% !important;
+  font-weight: normal;
+  width: 30% !important;
 }
 
 #trackerselect tr:nth-child(n+2):hover td {
-    background: #ffd;
-    color: #19191f !important;
-    border-radius: 6px !important;
+  background: #ffd;
+  color: #19191f !important;
+  border-radius: 6px !important;
 }
 
 .iframed #trackerselect tr:nth-child(n+2) {
-    background: #ddf;
+  background: #ddf;
 }
 
 .iframed #trackerselect tr:nth-child(2n+3) {
-    background: #eef;
+  background: #eef;
 }
 
 .iframed #trackerselect tr:nth-child(n+2) td {
-    padding-top: 5px;
-    padding-bottom: 5px;
-    border-left: 1px solid transparent !important;
-    border-right: 1px solid transparent !important;
-    background: inherit;
+  padding-top: 5px;
+  padding-bottom: 5px;
+  border-left: 1px solid transparent !important;
+  border-right: 1px solid transparent !important;
+  background: inherit;
 }
 
 .iframed #trackerselect tr:nth-child(n+2) td:first-child {
-    border-left: 1px solid #8d8daa !important;
+  border-left: 1px solid #8d8daa !important;
 }
 
 .iframed #trackerselect tr:nth-child(n+2) td:last-child {
-    border-right: 1px solid #8d8daa !important;
+  border-right: 1px solid #8d8daa !important;
 }
 
 .iframed #trackerselect tr:nth-child(n+2):hover {
-    background: #ffd;
+  background: #ffd;
 }
 
 #trackerselect tr:last-child:hover td:nth-child(n+3) {
-    background: transparent;
+  background: transparent;
 }
 
 /* end new torrent -> tracker select */
 
 .configsection a {
-    color: #55a;
-    font-weight: bold;
+  color: #55a;
+  font-weight: bold;
 }
 
 code, tt {
-    font-size: 8.5pt;
-    color: #070;
-    font-weight: bold;
-    font-family: "Droid Sans Mono", "Lucida Console", "DejaVu Sans Mono", monospace;
+  font-size: 8.5pt;
+  color: #070;
+  font-weight: bold;
+  font-family: "Droid Sans Mono", "Lucida Console", "DejaVu Sans Mono", monospace;
 }
 
 .trackerconfig {
-    text-align: left !important;
-    width: 100%;
-    border-collapse: separate;
-    border-spacing: 0;
+  text-align: left !important;
+  width: 100%;
+  border-collapse: separate;
+  border-spacing: 0;
 }
 
 .trackerconfig tr:first-child {
-    filter: drop-shadow(0 0 1px rgba(220,220,255,.7));
+  filter: drop-shadow(0 0 1px rgba(220,220,255,.7));
 }
 
 .trackerconfig th:first-child {
-    border-radius: 2px 0 0 2px;
-    border-left: 1px solid #339;
-    background: url(/themes/snark/ubergine/images/nuke.png) center right 8px no-repeat, linear-gradient(to bottom, #fcfcff 51%, #fafaff 51%, #f6f6ff 100%);
+  border-radius: 2px 0 0 2px;
+  border-left: 1px solid #339;
+  background: url(/themes/snark/ubergine/images/nuke.png) center right 8px no-repeat, linear-gradient(to bottom, #fcfcff 51%, #fafaff 51%, #f6f6ff 100%);
 }
 
 .trackerconfig th:last-child {
-    border-radius: 0 2px 2px 0;
-    border-right: 1px solid #339;
+  border-radius: 0 2px 2px 0;
+  border-right: 1px solid #339;
 }
 
 .trackerconfig th:nth-child(n+4), .trackerconfig th:nth-child(n+5), .trackerconfig td:nth-child(n+4), .trackerconfig td:nth-child(n+5) {
-    text-align: center !important;
+  text-align: center !important;
 }
 
 .trackerconfig th, .trackerconfig td, .trackerconfig th:last-child, .trackerconfig td:last-child {
-    text-align: left !important;
+  text-align: left !important;
 }
 
 .trackerconfig th:nth-child(4), .trackerconfig th:nth-child(5), .trackerconfig th:nth-child(6) {
-    min-width: 64px;
+  min-width: 64px;
 }
 
 .trackerconfig td:first-child {
-    text-align: right !important;
+  text-align: right !important;
 }
 
 input.trackername {
-    width: 100px;
+  width: 100px;
 }
 
 input.trackerhome {
-    width: 200px;
+  width: 200px;
 }
 
 input.trackerannounce {
-    width: 230px;
+  width: 230px;
 }
 
 /* toggle create/add panel view */
 
 input.toggle_input { /* hide checkbox and use label as faux panel heading */
-    position: absolute;
-    opacity: 0;
-    z-index: -1;
-    height: 0 !important;
-    width: 0 !important;
+  position: absolute;
+  opacity: 0;
+  z-index: -1;
+  height: 0 !important;
+  width: 0 !important;
 }
 
 input:not(checked) + label + hr + table, input:not(checked) + label + hr + table + table {
-    display: none;
+  display: none;
 }
 
 input:checked + label + hr + table, input:checked + label + hr + table + table {
-    display: table;
+  display: table;
 }
 
 .peerinfo + .snarkTorrentOdd td, .peerinfo + .snarkTorrentEven td {
-    border-top: 1px solid #ccccf0 !important;
+  border-top: 1px solid #ccccf0 !important;
 }
 
 .peerinfo td:first-child {
-    background: url(images/peer.png) center center no-repeat;
-    padding-right: 10px !important;
+  background: url(images/peer.png) center center no-repeat;
+  padding-right: 10px !important;
 }
 
 .peerinfo td, .debuginfo td {
-    padding: 5px 4px !important;
-    word-spacing: 0em !important;
+  padding: 5px 4px !important;
+  word-spacing: 0em !important;
 }
 
 .peerinfo td[colspan="4"] {
-    padding-left: 0 !important;
+  padding-left: 0 !important;
 }
 
 .peerinfo .snarkTorrentDownloaded {
-    text-align: center !important;
+  text-align: center !important;
 }
 
 /* debug */
 
 #debugMode {
-    font-size: 0 !important;
-    background: url(images/debug.png) center center no-repeat;
-    padding: 8px;
-    opacity: 0;
+  font-size: 0 !important;
+  background: url(images/debug.png) center center no-repeat;
+  padding: 8px;
+  opacity: 0;
 }
 
 #debugMode:hover {
-    opacity: 1;
+  opacity: 1;
 }
 
 .debuginfo td {
-    font-size: 8pt !important;
-    line-height: 120%;
+  font-size: 8pt !important;
+  line-height: 120%;
 }
 
 .debuginfo td:first-child {
-    background: url(images/debuginfo.png) center center no-repeat;
-    background-size: 14px 14px;
-    background-blend-mode: luminosity;
+  background: url(images/debuginfo.png) center center no-repeat;
+  background-size: 14px 14px;
+  background-blend-mode: luminosity;
 }
 
 .debuginfo b {
-    text-transform: capitalize;
-    font-family: "Droid Sans", "Open Sans", "Noto Sans", Ubuntu, "Segoe UI", "Bitstream Vera Sans", Verdana, "Lucida Grande", Helvetica, sans-serif;
+  text-transform: capitalize;
+  font-family: "Droid Sans", "Open Sans", "Noto Sans", Ubuntu, "Segoe UI", "Bitstream Vera Sans", Verdana, "Lucida Grande", Helvetica, sans-serif;
 }
 
 @media screen and (min-width: 1400px) {
 .debuginfo td:nth-child(2) {
-    word-spacing: 0.5em !important;
+  word-spacing: 0.5em !important;
 }
 
 .debuginfo b {
-    margin-right: 5px;
-    min-width: 80px;
-    display: inline-block;
-    text-align: right;
+  margin-right: 5px;
+  min-width: 80px;
+  display: inline-block;
+  text-align: right;
 }
 }
 
 .debugConnection {
-    font-family: "Droid Sans Mono", "Noto Mono", "Lucida Console", "DejaVu Sans Mono", monospace;
-    font-weight: bold !important;
-    color: #030;
-    font-weight: bold;
-    margin-right: 5px;
+  font-family: "Droid Sans Mono", "Noto Mono", "Lucida Console", "DejaVu Sans Mono", monospace;
+  font-weight: bold !important;
+  color: #030;
+  font-weight: bold;
+  margin-right: 5px;
 }
 
 .from, .to {
-    font-family: sans-serif;
-    font-size: 12pt;
-    font-weight: bold;
-    vertical-align: middle;
-    line-height: 50%;
+  font-family: sans-serif;
+  font-size: 12pt;
+  font-weight: bold;
+  vertical-align: middle;
+  line-height: 50%;
 }
 
 .debugConnStat {
-    color: #030;
-    margin-right: 4px;
-    white-space: nowrap;
-    font-family: "Droid Sans Mono", "Noto Mono", "Lucida Console", "DejaVu Sans Mono", monospace;
-    font-weight: bold !important;
-    word-spacing: -0.1em;
+  color: #030;
+  margin-right: 4px;
+  white-space: nowrap;
+  font-family: "Droid Sans Mono", "Noto Mono", "Lucida Console", "DejaVu Sans Mono", monospace;
+  font-weight: bold !important;
+  word-spacing: -0.1em;
 }
 
 .debugConnStat b {
-    color: #272e3f;
-    margin-right: 0;
-    font-family: "Droid Sans", "Open Sans", "Noto Sans", Ubuntu, "Segoe UI", "Bitstream Vera Sans", Verdana, "Lucida Grande", Helvetica, sans-serif;
+  color: #272e3f;
+  margin-right: 0;
+  font-family: "Droid Sans", "Open Sans", "Noto Sans", Ubuntu, "Segoe UI", "Bitstream Vera Sans", Verdana, "Lucida Grande", Helvetica, sans-serif;
 }
 
 .dhtDebug th, .dhtDebug:hover {
-    font-weight: normal;
-    padding: 0 10px 10px !important;
-    background: #efefff;
-    background: repeating-linear-gradient(45deg, rgba(255,255,255,0.5) 2px, rgba(230, 230, 255, 0.3) 3px, #fff 5px) #fff !important;
-    word-break: break-all;
+  font-weight: normal;
+  padding: 0 10px 10px !important;
+  background: #efefff;
+  background: repeating-linear-gradient(45deg, rgba(255,255,255,0.5) 2px, rgba(230, 230, 255, 0.3) 3px, #fff 5px) #fff !important;
+  word-break: break-all;
 }
 
 /* debug panel */
 
 #dhtdebugPanel {
-    background: linear-gradient(to top, rgba(224, 224, 255, 0.5), #fafaff), repeating-linear-gradient(135deg, rgba(255, 255, 255, 0.5) 2px, rgb(221, 221, 255) 3px, #fff 5px);
-    box-shadow: inset 0 0 0 1px #efefff;
-    border: 1px solid #8d8daa;
-    border-top: none;
-    text-align: center;
-    padding-bottom: 13px;
+  background: linear-gradient(to top, rgba(224, 224, 255, 0.5), #fafaff), repeating-linear-gradient(135deg, rgba(255, 255, 255, 0.5) 2px, rgb(221, 221, 255) 3px, #fff 5px);
+  box-shadow: inset 0 0 0 1px #efefff;
+  border: 1px solid #8d8daa;
+  border-top: none;
+  text-align: center;
+  padding-bottom: 13px;
 }
 
 #dhtDebugInner {
-    text-align: center;
-    padding: 5px;
-    background: #efefff;
-    box-shadow: inset 0 0 0 1px #fff, 0 0 1px 0 rgba(160,160,160,0.5);
-    margin: -31px 0 -12px;
+  text-align: center;
+  padding: 5px;
+  background: #efefff;
+  box-shadow: inset 0 0 0 1px #fff, 0 0 1px 0 rgba(160,160,160,0.5);
+  margin: -31px 0 -12px;
 }
 
 /*.dhtDebug th b:first-of-type, .dhtDebug th b:first-of-type + br + hr.debug {
-    display: none;
+  display: none;
 }
 */
 input#toggle_debug:not(checked) + label {
-    padding-bottom: 2px;
+  padding-bottom: 2px;
 }
 
 input#toggle_debug:not(checked) + label > img::before {
-    display: none;
+  display: none;
 }
 
 input#toggle_debug:not(checked) + label + #dhtDebugInner {
-    display: block;
+  display: block;
 }
 
 input#toggle_debug:checked + label + #dhtDebugInner {
-    display: none;
+  display: none;
 }
 
 .iframed input#toggle_debug:not(checked) + label + #dhtDebugInner {
-    display: block;
+  display: block;
 }
 
 .iframed input#toggle_debug:checked + label + #dhtDebugInner {
-    display: none;
+  display: none;
 }
 
 #debugDHT, #debugStats, .bucketCount, #bucketSet {
-    font-size: 110%;
+  font-size: 110%;
 }
 
 #debugStats {
-    margin-top: 10px;
+  margin-top: 10px;
 }
 
 #debugDHT {
-    margin: 1px 0 10px;
+  margin: 1px 0 10px;
 }
 
 #bucketSet {
-    margin: 15px 0 -5px;
+  margin: 15px 0 -5px;
 }
 
 #bucketSet code {
-    color: #050;
-    font-size: 9pt;
-    -moz-user-select: all;
-    -webkit-user-select: all;
-    user-select: all;
+  color: #050;
+  font-size: 9pt;
+  -moz-user-select: all;
+  -webkit-user-select: all;
+  user-select: all;
 }
 
 #bucketSet code::-moz-selection {
-    background: #050 !important;
+  background: #050 !important;
 }
 
 #bucketSet code::selection {
-    background: #050 !important;
+  background: #050 !important;
 }
 
 .bucketsContainer, .bucketCount {
-    margin: 0 15%;
-    text-align: center;
-    border: 1px solid #8d8daa;
-    box-shadow: inset 0 0 0 1px #fff;
+  margin: 0 15%;
+  text-align: center;
+  border: 1px solid #8d8daa;
+  box-shadow: inset 0 0 0 1px #fff;
 }
 
 .bucketsContainer {
-    margin: -1px 15% -20px;
-    padding: 5px;
-    background: #f2f2ff;
+  margin: -1px 15% -20px;
+  padding: 5px;
+  background: #f2f2ff;
 }
 
 .bucketCount {
-    padding: 3px 0;
-    background: linear-gradient(to right, rgba(255,255,255,0), rgba(250,250,255,.7), rgba(255,255,255,0)), linear-gradient(to bottom, #f2f2ff 50%, #ddf 50%);
+  padding: 3px 0;
+  background: linear-gradient(to right, rgba(255,255,255,0), rgba(250,250,255,.7), rgba(255,255,255,0)), linear-gradient(to bottom, #f2f2ff 50%, #ddf 50%);
 }
 
 .bucket {
-    margin: 3px 2px;
-    padding: 1px 4px;
-    max-width: 120px;
-    display: inline-block;
-    overflow: hidden;
-    text-overflow: ellipsis;
-    white-space: nowrap !important;
-    font-family: "Droid Sans Mono", "Noto Mono", "Lucida Console", "DejaVu Sans Mono", monospace;
-    color: #274;
-    box-shadow: 0 0 0 1px rgba(185,185,198,.65), inset 0 0 0 1px #fff;
-    border-radius: 2px;
-    background: #f8f8ff;
-    -moz-user-select: all;
-    -webkit-user-select: all;
-    user-select: all;
+  margin: 3px 2px;
+  padding: 1px 4px;
+  max-width: 120px;
+  display: inline-block;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap !important;
+  font-family: "Droid Sans Mono", "Noto Mono", "Lucida Console", "DejaVu Sans Mono", monospace;
+  color: #274;
+  box-shadow: 0 0 0 1px rgba(185,185,198,.65), inset 0 0 0 1px #fff;
+  border-radius: 2px;
+  background: #f8f8ff;
+  -moz-user-select: all;
+  -webkit-user-select: all;
+  user-select: all;
 }
 
 .bucket::-moz-selection {
-    color: #fff;
-    background: #050 !important;
+  color: #fff;
+  background: #050 !important;
 }
 
 .bucket::selection {
-    color: #fff;
-    background: #050 !important;
+  color: #fff;
+  background: #050 !important;
 }
 
 .bucket:empty {
-    display: none;
+  display: none;
 }
 
 /* end debug panel */
 
 hr.debug {
-    width: 100%;
-    margin: 3px 0 -5px;
-    height: 1px;
-    border-bottom: 1px solid #fff;
+  width: 100%;
+  margin: 3px 0 -5px;
+  height: 1px;
+  border-bottom: 1px solid #fff;
 }
 
 @supports not (-moz-appearance: none) {
 hr.debug {
-    height: 1px;
+  height: 1px;
 }
 }
 
 /*hr.debug:first-of-type {
-    background: transparent;
-    margin-top: -5px;
-    margin-bottom: -5px;
-    height: 1px;
-    border: none;
+  background: transparent;
+  margin-top: -5px;
+  margin-bottom: -5px;
+  height: 1px;
+  border: none;
 }
 
 hr.debug:nth-child(n+7) {
-    margin-top: -10px;
+  margin-top: -10px;
 }
 
 hr.debug:last-child {
-    background: transparent;
-    border: none;
-    height: 0;
-    margin-bottom: -8px;
+  background: transparent;
+  border: none;
+  height: 0;
+  margin-bottom: -8px;
 }*/
 
 /* end debug */
@@ -2606,51 +2606,51 @@ hr.debug:last-child {
 /* Resource Errors */
 
 .resourceError {
-    border: 1px solid #89f;
-    border-bottom: 2px solid #89f;
-    margin-bottom: 0;
+  border: 1px solid #89f;
+  border-bottom: 2px solid #89f;
+  margin-bottom: 0;
 }
 
 .resourceError th {
-    background: url(/themes/console/images/info/errortriangle.png) left 10px center no-repeat, linear-gradient(to bottom, #fff, #eef);
-    background-size: 24px auto, 100% 100%;
-    padding: 10px 10px 10px 40px;
-    font-size: 10pt !important;
-    border: none;
-    border-bottom: 1px solid #8d8daa;
+  background: url(/themes/console/images/info/errortriangle.png) left 10px center no-repeat, linear-gradient(to bottom, #fff, #eef);
+  background-size: 24px auto, 100% 100%;
+  padding: 10px 10px 10px 40px;
+  font-size: 10pt !important;
+  border: none;
+  border-bottom: 1px solid #8d8daa;
 }
 
 .resourceError td {
-    padding: 10px;
-    border: none;
+  padding: 10px;
+  border: none;
 }
 
 .resourceError td:first-child {
-    width: 30%;
-    white-space: nowrap;
-    text-align: right;
+  width: 30%;
+  white-space: nowrap;
+  text-align: right;
 }
 
 .resourceError tr:nth-child(odd) {
-    background: #ddf;
+  background: #ddf;
 }
 
 .resourceError tr:nth-child(even) {
-    background: #eef;
+  background: #eef;
 }
 
 #DoesNotExist {
-    margin-top: 10px;
-    border: none;
+  margin-top: 10px;
+  border: none;
 }
 
 #DoesNotExist th {
-    border-top: 1px solid #8d8daa;
+  border-top: 1px solid #8d8daa;
 }
 
 #NotFound {
-    border: none;
-    border-top: 1px solid #8d8daa;
+  border: none;
+  border-top: 1px solid #8d8daa;
 }
 
 /* end Resource Errors */
@@ -2658,48 +2658,48 @@ hr.debug:last-child {
 /* Downloading Priorities */
 
 .snarkDirInfo input[type="radio"], .snarkDirInfo input[type="radio"]:checked {
-    margin: 4px;
-    padding: 0;
-    min-height: 16px;
-    min-width: 16px;
-    vertical-align: middle;
+  margin: 4px;
+  padding: 0;
+  min-height: 16px;
+  min-width: 16px;
+  vertical-align: middle;
 }
 
 .priority {
-    text-align: center;
-    width: 1%;
-    white-space: nowrap;
+  text-align: center;
+  width: 1%;
+  white-space: nowrap;
 }
 
 .priority::after {
-    content: "";
-    display: inline-block;
-    min-height: 28px;
-    vertical-align: middle;
+  content: "";
+  display: inline-block;
+  min-height: 28px;
+  vertical-align: middle;
 }
 
 .priorityHigh, .priorityNormal, .prioritySkip {
-    margin: 3px;
-    width: 44px;
-    display: inline-block;
-    overflow: hidden;
-    vertical-align: middle;
-    text-align: left;
-    font-size: 0;
-    color: transparent;
-    background-size: 18px 18px !important;
+  margin: 3px;
+  width: 44px;
+  display: inline-block;
+  overflow: hidden;
+  vertical-align: middle;
+  text-align: left;
+  font-size: 0;
+  color: transparent;
+  background-size: 18px 18px !important;
 }
 
 .priorityHigh {
-    background: url(/i2psnark/.resources/icons/clock_red.png) left 24px center no-repeat;
+  background: url(/i2psnark/.resources/icons/clock_red.png) left 24px center no-repeat;
 }
 
 .priorityNormal {
-    background: url(/i2psnark/.resources/icons/clock.png) left 24px center no-repeat;
+  background: url(/i2psnark/.resources/icons/clock.png) left 24px center no-repeat;
 }
 
 .prioritySkip {
-    background: url(/i2psnark/.resources/icons/block.png) left 24px center no-repeat;
+  background: url(/i2psnark/.resources/icons/block.png) left 24px center no-repeat;
 }
 
 /* end priorities */
@@ -2707,322 +2707,322 @@ hr.debug:last-child {
 /* configs */
 
 #configs td:nth-child(2) {
-    white-space: nowrap;
+  white-space: nowrap;
 }
 
 #configs td:first-child {
-    min-width: 220px !important;
-    width: 30% !important;
-    font-weight: bold;
-    color: #41465f;
+  min-width: 220px !important;
+  width: 30% !important;
+  font-weight: bold;
+  color: #41465f;
 }
 
 #bwHelp {
-    background: url(images/infocircle.png) left 10px center no-repeat;
-    background-size: 14px auto;
-    padding-left: 28px !important;
-    width: 90%;
-    line-height: 100%;
+  background: url(images/infocircle.png) left 10px center no-repeat;
+  background-size: 14px auto;
+  padding-left: 28px !important;
+  width: 90%;
+  line-height: 100%;
 }
 
 #configs a {
-    display: inline-block;
-    white-space: nowrap;
-    margin-left: 4px;
-    font-weight: bold;
+  display: inline-block;
+  white-space: nowrap;
+  margin-left: 4px;
+  font-weight: bold;
 }
 
 /* end configs */
 
 #filecheck {
-    margin: 0 5px -18px;
-    display: inline-block;
-    vertical-align: middle;
-    text-align: left;
+  margin: 0 5px -18px;
+  display: inline-block;
+  vertical-align: middle;
+  text-align: left;
 }
 
 #filecheck a {
-    margin: 0 8px !important;
+  margin: 0 8px !important;
 }
 
 #torrentInfoControl td, #setPriority th {
-    text-align: right !important;
-    padding: 5px !important;
-    background: linear-gradient(to bottom, #fff, #eef) !important;
+  text-align: right !important;
+  padding: 5px !important;
+  background: linear-gradient(to bottom, #fff, #eef) !important;
 }
 
 #torrentInfoControl td {
-    text-align: left !important;
-    padding-right: 6px !important;
-    white-space: normal;
+  text-align: left !important;
+  padding-right: 6px !important;
+  white-space: normal;
 }
 
 #torrentOrderControl {
-    float: right;
+  float: right;
 }
 
 #enableInOrder {
-    margin-left: 0 !important;
-    margin-right: 12px !important;
+  margin-left: 0 !important;
+  margin-right: 12px !important;
 }
 
 #setPriority th {
-    border-bottom: 1px solid #8d8daa;
+  border-bottom: 1px solid #8d8daa;
 }
 
 /* Comments Section */
 
 .snarkCommentInfo, .snarkComments, #mediaContainer {
-    margin: 10px 0 0 !important;
-    border: 1px solid #8d8daa;
-    border-left: none;
-    border-right: none;
+  margin: 10px 0 0 !important;
+  border: 1px solid #8d8daa;
+  border-left: none;
+  border-right: none;
 }
 
 .iframed .snarkComments {
-    border-bottom: none;
+  border-bottom: none;
 }
 
 .snarkComments {
-    margin-top: -1px !important;
-    border-top: none !important;
+  margin-top: -1px !important;
+  border-top: none !important;
 }
 
 .snarkCommentInfo th, .snarkComments th {
-    padding: 8px 5px;
+  padding: 8px 5px;
 }
 
 .snarkCommentInfo th {
-    padding: 5px;
-    padding-left: 30px;
-    background: url(images/comment.png) 8px center no-repeat, linear-gradient(to bottom, #fff 50%, rgb(240, 240, 255));
+  padding: 5px;
+  padding-left: 30px;
+  background: url(images/comment.png) 8px center no-repeat, linear-gradient(to bottom, #fff 50%, rgb(240, 240, 255));
 }
 
 #mediaContainer {
-    background: #f0f0ff;
+  background: #f0f0ff;
 }
 
 #mediaContainer th {
-    padding: 8px 5px 8px 30px;
-    background: url(/i2psnark/.resources/icons/film.png) 8px center no-repeat, linear-gradient(to bottom, #fff 50%, rgb(240, 240, 255));
+  padding: 8px 5px 8px 30px;
+  background: url(/i2psnark/.resources/icons/film.png) 8px center no-repeat, linear-gradient(to bottom, #fff 50%, rgb(240, 240, 255));
 }
 
 #mediaContainer th.audio {
-    background: url(/i2psnark/.resources/icons/music.png) 8px center no-repeat, linear-gradient(to bottom, #fff 50%, rgb(240, 240, 255));
+  background: url(/i2psnark/.resources/icons/music.png) 8px center no-repeat, linear-gradient(to bottom, #fff 50%, rgb(240, 240, 255));
 }
 
 #mediaContainer td {
-    padding: 20px 15px;
-    text-align: center;
+  padding: 20px 15px;
+  text-align: center;
 }
 
 .newTab {
-    margin: 3px 4px -2px;
-    float: right;
+  margin: 3px 4px -2px;
+  float: right;
 }
 
 @media screen and (max-width: 1000px) {
 .newTab {
-    margin: 1px 4px 0;
+  margin: 1px 4px 0;
 }
 }
 
 #mediaContainer video {
-    width: auto;
-    max-width: calc(100% - 10px);
+  width: auto;
+  max-width: calc(100% - 10px);
 }
 
 .snarkCommentInfo td, .snarkComments td {
-    padding: 5px;
+  padding: 5px;
 }
 
 .snarkCommentInfo td:first-child, .snarkComments td:first-child {
-    text-align: right;
+  text-align: right;
 }
 
 .snarkCommentInfo td:first-child {
-    font-weight: bold;
-    color: #41465f;
-    white-space: nowrap;
+  font-weight: bold;
+  color: #41465f;
+  white-space: nowrap;
 }
 
 .snarkCommentInfo td:first-child::after, .snarkComments td:first-child::after {
-    content: "";
-    display: inline-block;
-    min-height: 32px;
-    vertical-align: middle;
+  content: "";
+  display: inline-block;
+  min-height: 32px;
+  vertical-align: middle;
 }
 
 .snarkCommentInfo input.accept {
-    float: right;
-    margin-right: 5px !important;
+  float: right;
+  margin-right: 5px !important;
 }
 
 .snarkCommentInfo textarea {
-    font-family: "Droid Sans", "Open Sans", "Noto Sans", Ubuntu, "Segoe UI", "Bitstream Vera Sans", Verdana, "Lucida Grande", Helvetica, sans-serif !important;
-    font-weight: normal;
-    font-size: 10pt;
-    width: 100%;
-    min-height: 64px;
-    height: 64px;
-    resize: vertical;
+  font-family: "Droid Sans", "Open Sans", "Noto Sans", Ubuntu, "Segoe UI", "Bitstream Vera Sans", Verdana, "Lucida Grande", Helvetica, sans-serif !important;
+  font-weight: normal;
+  font-size: 10pt;
+  width: 100%;
+  min-height: 64px;
+  height: 64px;
+  resize: vertical;
 }
 
 .commentRating, .commentAuthor {
-    width: 1%;
+  width: 1%;
 }
 
 #nameRequired {
-    float: right;
-    margin-right: 5px;
+  float: right;
+  margin-right: 5px;
 }
 
 .commentRating {
-    padding-right: 10px !important;
+  padding-right: 10px !important;
 }
 
 .commentRating img {
-    margin: 0;
-    padding: 0;
-    width: 16px;
-    height: 16px;
-    filter: drop-shadow(0 0 1px rgba(128,0,0,0.3)) !important;
+  margin: 0;
+  padding: 0;
+  width: 16px;
+  height: 16px;
+  filter: drop-shadow(0 0 1px rgba(128,0,0,0.3)) !important;
 }
 
 .commentDate {
-    width: 100px;
-    background: url(images/clock.png) left center no-repeat;
-    padding-left: 20px !important;
+  width: 100px;
+  background: url(images/clock.png) left center no-repeat;
+  padding-left: 20px !important;
 }
 
 .snarkCommentInfo td:first-child, .snarkComments td:first-child {
-    width: 140px !important;
-    min-width: 140px !important;
-    padding-right: 2px;
+  width: 140px !important;
+  min-width: 140px !important;
+  padding-right: 2px;
 }
 
 .snarkComments td {
-    white-space: nowrap;
+  white-space: nowrap;
 }
 
 @media screen and (max-width: 1000px) {
 .snarkCommentInfo td:first-child, .snarkComments td:first-child {
-    width: 120px !important;
-    min-width: 120px !important;
+  width: 120px !important;
+  min-width: 120px !important;
 }
 
 .commentDate {
-    white-space: normal !important;
+  white-space: normal !important;
 }
 }
 
 .commentAuthorName {
-    padding: 8px 5px 7px 20px;
-    background: url(images/author.png) left center no-repeat;
+  padding: 8px 5px 7px 20px;
+  background: url(images/author.png) left center no-repeat;
 }
 
 td.commentAuthor {
-    padding-left: 6px;
+  padding-left: 6px;
 }
 
 td.commentAuthor .commentAuthorName {
-    padding: 0 5px 0 24px;
-    width: 120px;
-    white-space: nowrap;
-    overflow: hidden;
-    text-overflow: ellipsis;
-    text-align: left;
-    box-shadow: 0 0 0 1px #bbd;
-    background: url(images/author.png) 4px center no-repeat, linear-gradient(to bottom, #fff, #ddf);
+  padding: 0 5px 0 24px;
+  width: 120px;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  text-align: left;
+  box-shadow: 0 0 0 1px #bbd;
+  background: url(images/author.png) 4px center no-repeat, linear-gradient(to bottom, #fff, #ddf);
 }
 
 @media screen and (max-width: 1000px) {
 td.commentAuthor .commentAuthorName {
-    width: 100px;
+  width: 100px;
 }
 }
 
 .commentText {
-    white-space: normal !important;
-    text-align: justify;
-    width: 90%;
+  white-space: normal !important;
+  text-align: justify;
+  width: 90%;
 }
 
 .commentText:empty + .commentDelete {
-    background: none;
+  background: none;
 }
 
 .commentWrapper {
-    margin: 2px 0;
-    padding: 8px 10px 8px 26px;
-    text-align: left;
-    border: 1px solid #ccccf0;
-    border-radius: 3px;
-    box-shadow: inset 0 0 0 1px #fff, 0 0 1px 0 rgba(0,0,0,0.3);
-    background: url(images/comment.png) 6px center no-repeat #eef;
-    background-blend-mode: luminosity;
+  margin: 2px 0;
+  padding: 8px 10px 8px 26px;
+  text-align: left;
+  border: 1px solid #ccccf0;
+  border-radius: 3px;
+  box-shadow: inset 0 0 0 1px #fff, 0 0 1px 0 rgba(0,0,0,0.3);
+  background: url(images/comment.png) 6px center no-repeat #eef;
+  background-blend-mode: luminosity;
 }
 
 #commentsConfig .optbox {
-    vertical-align: middle !important;
+  vertical-align: middle !important;
 }
 
 .snarkComments select {
-    margin-right: 0 !important;
+  margin-right: 0 !important;
 }
 
 #commentDeleteAction {
-    border-top: 1px solid #ccccf0;
-    background: linear-gradient(to bottom, #fff, #eef);
+  border-top: 1px solid #ccccf0;
+  background: linear-gradient(to bottom, #fff, #eef);
 }
 
 #commentDeleteAction td {
-    padding-right: 6px;
+  padding-right: 6px;
 }
 
 .commentAction, .commentDelete {
-    width: 1%;
-    white-space: nowrap;
-    padding-left: 0 !important;
+  width: 1%;
+  white-space: nowrap;
+  padding-left: 0 !important;
 }
 
 .addCommentText, .commentText {
-    padding-right: 0;
+  padding-right: 0;
 }
 
 .commentDelete {
-    text-align: left;
-    padding: 2px 8px 2px 20px !important;
-    background: url(../ubergine/images/nuke.png) left center no-repeat;
+  text-align: left;
+  padding: 2px 8px 2px 20px !important;
+  background: url(../ubergine/images/nuke.png) left center no-repeat;
 }
 
 #newRating td:first-child {
-    text-align: center;
+  text-align: center;
 }
 
 #newRating select {
-    width: 99%;
-    margin-left: 2px;
-    text-overflow: ellipsis;
+  width: 99%;
+  margin-left: 2px;
+  text-overflow: ellipsis;
 }
 
 #myRating td:empty {
-    padding: 0 !important;
-    border-top: none !important;
-    border-bottom: none !important;
+  padding: 0 !important;
+  border-top: none !important;
+  border-bottom: none !important;
 }
 
 #myRating td:empty::after { /* hides My Ratings row when Ratings disabled  */
-    min-height: 0 !important;
+  min-height: 0 !important;
 }
 
 .commentRating img {
-    margin: 0 0 4px;
-    padding: 0;
-    font-size: 14pt;
-    color: #FF7200;
-    text-shadow: 0 0 1px #900;
-    filter: none;
+  margin: 0 0 4px;
+  padding: 0;
+  font-size: 14pt;
+  color: #FF7200;
+  text-shadow: 0 0 1px #900;
+  filter: none;
 }
 
 /* end Comments section */
@@ -3031,121 +3031,121 @@ td.commentAuthor .commentAuthorName {
 /* @media screen and (-webkit-min-device-pixel-ratio: 0) and (min-resolution:.001dpcm) {*/
 @supports (background-blend-mode: luminosity) { /* exclude ms browsers */
 input[type="checkbox"], input[type="checkbox"]:checked, input[type="checkbox"][disabled], input[type="checkbox"][disabled]:checked {
-    width: 19px !important;
-    height: 19px !important;
-    border-radius: 2px;
+  width: 19px !important;
+  height: 19px !important;
+  border-radius: 2px;
 }
 
 input[type="radio"], input[type="radio"]:checked, input[type="radio"][disabled], input[type="radio"][disabled]:checked {
-    width: 19px !important;
-    height: 19px !important;
-    border-radius: 50%;
+  width: 19px !important;
+  height: 19px !important;
+  border-radius: 50%;
 }
 
 input[type="checkbox"]:checked::before {
-    content: "";
-    position: absolute;
-    top: 3px;
-    left: 3px;
-    width: 11px;
-    height: 11px;
-    line-height: 80%;
-    border-radius: 1px;
-    background: #41465f;
-    transform: scale(1);
-    transition: linear all .05s;
+  content: "";
+  position: absolute;
+  top: 3px;
+  left: 3px;
+  width: 11px;
+  height: 11px;
+  line-height: 80%;
+  border-radius: 1px;
+  background: #41465f;
+  transform: scale(1);
+  transition: linear all .05s;
 }
 
 input[type="radio"]:checked::before {
-    content: "";
-    position: absolute;
-    border-radius: 50%;
-    left: 25%;
-    top: 25%;
-    width: 9px;
-    height: 9px;
-    background: #41465f;
-    transform: scale(1);
-    transition: linear all .05s;
+  content: "";
+  position: absolute;
+  border-radius: 50%;
+  left: 25%;
+  top: 25%;
+  width: 9px;
+  height: 9px;
+  background: #41465f;
+  transform: scale(1);
+  transition: linear all .05s;
 }
 
 input[type="radio"]:not(:checked), input[type="checkbox"]:not(:checked) {
-    box-shadow: inset 0 0 0 2px #f8f8ff, inset 3px 3px 3px #aad;
+  box-shadow: inset 0 0 0 2px #f8f8ff, inset 3px 3px 3px #aad;
 }
 
 .optbox {
-    margin: 2px 0 !important;
-    position: relative;
-    vertical-align: middle !important;
-    border: 1px solid #7a7d8f !important;
-    background: #f8f8ff !important;
-    box-sizing: border-box;
-    -moz-appearance: none;
-    -webkit-appearance: none;
-    filter: drop-shadow(0 0 1px #ccf) !important;
-    will-change: transform;
+  margin: 2px 0 !important;
+  position: relative;
+  vertical-align: middle !important;
+  border: 1px solid #7a7d8f !important;
+  background: #f8f8ff !important;
+  box-sizing: border-box;
+  -moz-appearance: none;
+  -webkit-appearance: none;
+  filter: drop-shadow(0 0 1px #ccf) !important;
+  will-change: transform;
 }
 
 .knowntracker .optbox[type="radio"] {
-    margin: 2px 10px !important;
+  margin: 2px 10px !important;
 }
 
 #trackerselect .optbox[type="radio"] {
-    margin: 2px 20px !important;
+  margin: 2px 20px !important;
 }
 
 .iframed .knowntracker td:nth-child(5) input.optbox[type="radio"]:checked::before {
-    left: 24%; /* fix weird positional bug */
+  left: 24%; /* fix weird positional bug */
 }
 
 .optbox:checked {
-    box-shadow: inset 0 0 0 1px #cce;
-    background: linear-gradient(to bottom, #fff, #f0f0ff) !important;
+  box-shadow: inset 0 0 0 1px #cce;
+  background: linear-gradient(to bottom, #fff, #f0f0ff) !important;
 }
 
 #netconfig .optbox {
-    vertical-align: middle !important;
+  vertical-align: middle !important;
 }
 
 .optbox:hover, .optbox:focus, .optbox:active,
 .optbox:checked:hover, .optbox:checked:focus, .optbox:checked:active {
-    width: 19px !important;
-    height: 19px !important;
-    min-width: 19px !important;
-    min-height: 19px !important;
-    border: 1px solid #41465f !important;
-    box-shadow: 0 0 2px #f60 !important;
-    filter: drop-shadow(0 0 3px #89f) !important;
+  width: 19px !important;
+  height: 19px !important;
+  min-width: 19px !important;
+  min-height: 19px !important;
+  border: 1px solid #41465f !important;
+  box-shadow: 0 0 2px #f60 !important;
+  filter: drop-shadow(0 0 3px #89f) !important;
 }
 
 .optbox:checked::before {
-    transition: linear all .05s;
+  transition: linear all .05s;
 }
 
 .optbox:not(:checked)::before {
-    position: absolute;
-    top: 25%;
-    left: 25%;
-    content: "";
-    transition: linear all .05s;
-    color: transparent;
-    background: transparent;
-    transform: scale(0);
-    will-change: transform;
+  position: absolute;
+  top: 25%;
+  left: 25%;
+  content: "";
+  transition: linear all .05s;
+  color: transparent;
+  background: transparent;
+  transform: scale(0);
+  will-change: transform;
 }
 
 input[type="radio"]:not(:checked)::before {
-    border-radius: 50%;
+  border-radius: 50%;
 }
 
 .priority input[type="radio"] {
-    transform: scale(0.8);
+  transform: scale(0.8);
 }
 
 input.toggle_input, input.toggle_input:checked { /* hide checkbox and use label as faux panel heading */
-    position: absolute;
-    height: 0 !important;
-    width: 0 !important;
+  position: absolute;
+  height: 0 !important;
+  width: 0 !important;
 }
 }
 
@@ -3153,7 +3153,7 @@ input.toggle_input, input.toggle_input:checked { /* hide checkbox and use label 
 
 /* MS Edge 14+ rendering bug fix */
 _:-ms-lang(x), *, *:hover, *:focus, input, input:hover, input:focus, a:hover, a:focus {
-    filter: none !important;
+  filter: none !important;
 }
 
 /*responsive layout */
@@ -3162,107 +3162,107 @@ _:-ms-lang(x), *, *:hover, *:focus, input, input:hover, input:focus, a:hover, a:
 
 @media screen and (max-width: 800px) {
 .page {
-    min-width: 600px !important;
+  min-width: 600px !important;
 }
 
 .snarknavbar, .snarkMessages {
-    min-width: 580px !important;
+  min-width: 580px !important;
 }
 
 .snarkMessages li, .snarkMessages li a {
-    font-weight: bold !important;
+  font-weight: bold !important;
 }
 
 .pagenavcontrols, .iframed .pagenavcontrols {
-    padding: 3px 5px !important;
+  padding: 3px 5px !important;
 }
 
 .snarkTorrentStatus, .snarkTorrentUploaded, .snarkTorrentRateUp,
 .snarkTorrents tfoot th:nth-child(3), .snarkTorrents tfoot th:nth-child(5) {
-    max-width: 0 !important;
-    overflow: hidden;
-    white-space: nowrap;
-    font-size: 0 !important;
-    padding: 0 !important;
+  max-width: 0 !important;
+  overflow: hidden;
+  white-space: nowrap;
+  font-size: 0 !important;
+  padding: 0 !important;
 }
 
 .snarkTorrents th.snarkTorrentUploaded img, .snarkTorrents th.snarkTorrentRateUp img {
-    display: none;
+  display: none;
 }
 
 .snarkGraphicStatus img, .snarkTrackerDetails img, .snarkTorrentDetails img {
-    max-height: 18px !important;
-    width: auto;
+  max-height: 18px !important;
+  width: auto;
 }
 
 .snarkGraphicStatus, .snarkTorrentStatus {
-    width: 0;
+  width: 0;
 }
 
 .snarkTorrentETA, .snarkTorrentUploaded, .snarkTorrentRateDown, .snarkTorrentRateUp {
-    min-width: 0;
+  min-width: 0;
 }
 
 .snarkTorrents thead img {
-    max-height: 18px !important;
-    width: auto;
+  max-height: 18px !important;
+  width: auto;
 }
 
 .snarkGraphicStatus {
-    max-width: 24px !important;
+  max-width: 24px !important;
 }
 
 /*.snarkTorrentAction {
-    width: auto !important;
+  width: auto !important;
 }*/
 
 #totals {
-    margin-left: 2px;
+  margin-left: 2px;
 }
 
 .canhide {
-    display: none;
+  display: none;
 }
 
 .addtorrentsection input[type="text"], .newtorrentsection input[type="text"] {
-    width: 70%;
+  width: 70%;
 }
 
 .trackerconfig input[type="text"] {
-    min-width: 50px !important;
-    max-width: 140px !important;
+  min-width: 50px !important;
+  max-width: 140px !important;
 }
 
 .newtorrentsection td:first-child, .addtorrentsection td:first-child {
-    min-width: 80px;
+  min-width: 80px;
 }
 
 .newtorrentsection a, .trackerconfig a {
-    max-width: 200px;
-    display: inline-block;
-    overflow: hidden;
-    text-overflow: ellipsis;
-    white-space: nowrap;
+  max-width: 200px;
+  display: inline-block;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
 }
 
 #configs td:first-child {
-    min-width: 140px !important;
+  min-width: 140px !important;
 }
 
 .trackerconfig a {
-    max-width: 140px !important;
+  max-width: 140px !important;
 }
 
 .peerinfo, .debuginfo {
-    display: none;
+  display: none;
 }
 
 code, .snarkTorrents tt {
-    font-size: 8pt !important;
+  font-size: 8pt !important;
 }
 
 .configsection .snarkConfigTitle a img {
-    margin-left: 27px !important;
+  margin-left: 27px !important;
 }
 }
 
@@ -3270,525 +3270,525 @@ code, .snarkTorrents tt {
 
 @media screen and (max-width: 1000px) {
 body, td, .snarkMessages li, .snarkMessages a, button, input, select, .snarkAddInfo, code, tt, th, a, a:link, .snarkAddInfo, .snarkFileStatus {
-    font-size: 8pt !important;
+  font-size: 8pt !important;
 }
 
 .snarkNav:link, .snarkNav:visited {
-    font-size: 9pt !important;
+  font-size: 9pt !important;
 }
 
 .snarkNav::before {
-    display: none !important;
+  display: none !important;
 }
 
 .nav_main, .nav_forum, .nav_search {
-    white-space: nowrap;
-    text-indent: -9999px;
-    color: transparent !important;
-    background-position: 10px center !important;
+  white-space: nowrap;
+  text-indent: -9999px;
+  color: transparent !important;
+  background-position: 10px center !important;
 }
 
 .iframed .pagenavcontrols {
-    padding: 4px 5px;
+  padding: 4px 5px;
 }
 
 .snarkTorrents td:first-child img {
-    max-height: 16px;
+  max-height: 16px;
 }
 
 .snarkTorrentName, .snarkTorrentName a {
-    font-weight: bold;
+  font-weight: bold;
 }
 
 .snarkGraphicStatus {
-    max-width: 28px !important;
-    width: 1%;
+  max-width: 28px !important;
+  width: 1%;
 }
 
 .snarkTorrentStatus {
-    width: 0;
-    padding: 0;
+  width: 0;
+  padding: 0;
 }
 
 th.snarkTorrentStatus {
-    text-align: right !important;
+  text-align: right !important;
 }
 
 .snarkTorrentStatus, .snarkTorrentStatus a {
-    white-space: nowrap;
-    font-weight: bold;
+  white-space: nowrap;
+  font-weight: bold;
 }
 
 .snarkTorrentStatus b, .snarkTorrentStatus .showAlways {
-    display: none !important;
+  display: none !important;
 }
 
 .percentBarOuter, .percentBarText {
-    line-height: 12px !important;
-    height: 12px !important;
+  line-height: 12px !important;
+  height: 12px !important;
 }
 
 b.alwaysShow {
-    display: inline;
+  display: inline;
 }
 }
 
 @supports not (-moz-appearance: none) {
 @media screen and (max-width: 1000px) {
 .snarkConfigTitle a, .toggleview, .configsectionpanel .snarkConfigTitle {
-    font-size: 12pt !important;
+  font-size: 12pt !important;
 }
 }
 }
 
 @media screen and (max-width: 1200px) {
 .dirInfoComplete {
-    display: none;
+  display: none;
 }
 
 .nav_main {
-    padding-left: 26px !important;
+  padding-left: 26px !important;
 }
 
 .snarkMessages li {
-    opacity: 1 !important;
+  opacity: 1 !important;
 }
 }
 
 @media screen and (min-width: 1000px) {
 .iframed .snarkMessages li {
-    font-weight: bold !important;
+  font-weight: bold !important;
 }
 
 .snarkNav:link, .snarkNav:visited {
-    font-size: 10pt;
+  font-size: 10pt;
 }
 
 .iframed .pagenavcontrols {
-    padding: 4px 5px;
+  padding: 4px 5px;
 }
 }
 
 @media screen and (min-width: 1200px) {
 .snarkNav:link, .snarkNav:visited {
-    font-size: 11pt !important;
-    letter-spacing: 0.1em !important;
+  font-size: 11pt !important;
+  letter-spacing: 0.1em !important;
 }
 
 .nav_main:link, .nav_main:visited, .nav_main:hover, .nav_main:focus, .nav_main:active {
-    padding-left: 27px !important;
-    background-size: 17px auto, 100% 100% !important;
+  padding-left: 27px !important;
+  background-size: 17px auto, 100% 100% !important;
 }
 
 .snarkMessages li::before {
-    background-size: 10px 10px;
+  background-size: 10px 10px;
 }
 
 .percentDownloaded {
-    pointer-events: none; /* hide tooltip */
+  pointer-events: none; /* hide tooltip */
 }
 
 .snarkTorrentAction {
-    padding-right: 3px !important;
+  padding-right: 3px !important;
 }
 
 .snarkTorrentAction input[type="image"] {
-    height: 12px !important;
+  height: 12px !important;
 }
 
 #configs tr:nth-last-child(n+4) td {
-    padding-top: 3px;
-    padding-bottom: 3px;
+  padding-top: 3px;
+  padding-bottom: 3px;
 }
 
 .snarkTorrentName {
-    padding-left: 4px;
+  padding-left: 4px;
 }
 
 .snarkTorrentRateUp:not(:empty), .snarkTorrents tfoot th.snarkTorrentRateUp:not(:empty), .peerinfo .snarkTorrentRateUp:not(:empty) {
-    padding-right: 10px !important;
+  padding-right: 10px !important;
 }
 }
 
 @media screen and (min-width: 1400px) {
 .snarkTorrentAction input[type="image"] {
-    height: 12px !important;
+  height: 12px !important;
 }
 }
 
 @media screen and (min-width: 1500px) {
 body, .snarkAddInfo, .snarkCommentInfo textarea {
-    font-size: 10pt !important;
+  font-size: 10pt !important;
 }
 
 code, tt {
-    font-size: 9pt !important;
+  font-size: 9pt !important;
 }
 
 .snarkMessages li::before {
-    width: 15px;
-    height: 11px;
-    background-size: 10px 10px;
+  width: 15px;
+  height: 11px;
+  background-size: 10px 10px;
 }
 
 .snarkMessages li, .snarkMessages li a {
-    line-height: 130%;
-    font-size: 9.5pt !important;
+  line-height: 130%;
+  font-size: 9.5pt !important;
 }
 
 .snarkNav:link, .snarkNav:visited {
-    font-size: 11pt !important;
+  font-size: 11pt !important;
 }
 
 .snarkNav:link, .snarkNav:hover, .snarkNav:focus {
-    background-size: 16px auto, 100% 100% !important;
+  background-size: 16px auto, 100% 100% !important;
 }
 
 /*.pagenavcontrols:not(:empty) {
-    margin: -2px 0 !important;
+  margin: -2px 0 !important;
 }*/
 
 .configsectionpanel .snarkConfigTitle:hover {
-    font-size: 12pt !important;
-    padding: 3px 15px !important;
+  font-size: 12pt !important;
+  padding: 3px 15px !important;
 }
 
 .snarkConfigTitle, .snarkConfigTitle a, .toggleview {
-    font-size: 12pt !important;
+  font-size: 12pt !important;
 }
 
 .toggleview img, .configsection .snarkConfigTitle img {
-    margin: 2px 0 !important;
+  margin: 2px 0 !important;
 }
 
 input[type="submit"] {
-    min-width: 100px;
+  min-width: 100px;
 }
 
 .snarkMessages {
-    height: 60px;
+  height: 60px;
 }
 
 .snarkConfigTitle, .toggleview, .configsectionpanel .snarkConfigTitle, .configsectionpanel .snarkConfigTitle:hover {
-    font-size: 11pt !important;
-    padding: 4px 1px 3px !important;
-    min-width: 400px;
+  font-size: 11pt !important;
+  padding: 4px 1px 3px !important;
+  min-width: 400px;
 }
 
 .snarkTorrentStatus b {
-    padding-right: 3px;
+  padding-right: 3px;
 }
 
 .snarkTorrentDownloaded, .snarkTorrertUploaded, .snarkTorrentRateDown, .snarkTorrentStatus, .peerinfo td:nth-child(2), .debuginfo td:nth-child(2) {
-    white-space: nowrap;
+  white-space: nowrap;
 }
 
 .snarkTorrentAction input[type="image"], .snarkTorrents th:last-child input[type="image"] {
-    padding: 4px !important;
+  padding: 4px !important;
 }
 
 #dhtDebugInner {
-    margin-top: -29px !important;
+  margin-top: -29px !important;
 }
 
 .debuginfo td {
-    font-size: 10pt !important;
-    word-spacing: 0;
-    padding-top: 4px !important;
-    padding-bottom: 4px !important;
+  font-size: 10pt !important;
+  word-spacing: 0;
+  padding-top: 4px !important;
+  padding-bottom: 4px !important;
 }
 }
 
 @supports not (-moz-appearance: none) {
 @media screen and (min-width: 1500px) {
 .toggleview, .configsectionpanel .snarkConfigTitle, .configsectionpanel .snarkConfigTitle:hover {
-    font-size: 11pt !important;
-    padding: 4px 1px 4px !important;
+  font-size: 11pt !important;
+  padding: 4px 1px 4px !important;
 }
 }
 }
 
 @media screen and (min-width: 1600px) {
 .snarkTorrents tt {
-    font-size: 9pt !important;
+  font-size: 9pt !important;
 }
 
 a, a:link, th, td, button, input, select, textarea {
-    font-size: 10pt !important;
+  font-size: 10pt !important;
 }
 
 .pagenavcontrols {
-    padding: 5px 5px 4px;
+  padding: 5px 5px 4px;
 }
 
 .snarkTorrentAction input[type="image"] {
-    height: 13px !important;
+  height: 13px !important;
 }
 }
 
 /* end responsive layout */
 
 .snarkTorrentInfo b {
-    margin-right: 3px;
+  margin-right: 3px;
 }
 
 .info_tracker {
-    margin: 2px 1px;
-    padding: 2px 6px 2px 18px;
-    max-width: 150px;
-    display: inline-block;
-    white-space: nowrap;
-    vertical-align: middle;
-    overflow: hidden;
-    text-overflow: ellipsis;
-    line-height: 1.2;
-    color: #ccccf0;
-    box-shadow: 0 0 0 1px #ccf;
-    border-radius: 3px;
-    background: #fff url(images/button_tracker.png) 3px center no-repeat;
-    background-size: 14px auto;
+  margin: 2px 1px;
+  padding: 2px 6px 2px 18px;
+  max-width: 150px;
+  display: inline-block;
+  white-space: nowrap;
+  vertical-align: middle;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  line-height: 1.2;
+  color: #ccccf0;
+  box-shadow: 0 0 0 1px #ccf;
+  border-radius: 3px;
+  background: #fff url(images/button_tracker.png) 3px center no-repeat;
+  background-size: 14px auto;
 }
 
 .info_tracker a {
-    max-width: 130px;
-    display: inline-block;
-    white-space: nowrap !important;
-    vertical-align: middle;
-    overflow: hidden;
-    text-overflow: ellipsis;
+  max-width: 130px;
+  display: inline-block;
+  white-space: nowrap !important;
+  vertical-align: middle;
+  overflow: hidden;
+  text-overflow: ellipsis;
 }
 
 .info_tracker a[href*=".b32.i2p"] {
-    max-width: 70px;
+  max-width: 70px;
 }
 
 .info_tracker:hover, .info_tracker:hover a {
-    color: #f60;
+  color: #f60;
 }
 
 .info_tracker:hover {
-    background: url(images/button_tracker_hover.png) 3px center no-repeat, linear-gradient(to bottom, #fff 50%, #ddf 50%) !important;
-    background-size: 14px auto, 100% 100% !important;
+  background: url(images/button_tracker_hover.png) 3px center no-repeat, linear-gradient(to bottom, #fff 50%, #ddf 50%) !important;
+  background-size: 14px auto, 100% 100% !important;
 }
 
 .info_tracker:active, .info_tracker:active a {
-    color: #fff;
+  color: #fff;
 }
 
 .info_tracker:active {
-    color: #fff !important;
-    box-shadow: 0 0 0 1px #f60, inset 3px 3px 3px #420;
-    background: #f60 url(images/button_tracker_active.png) left 3px center no-repeat !important;
-    background-size: 14px auto !important;
+  color: #fff !important;
+  box-shadow: 0 0 0 1px #f60, inset 3px 3px 3px #420;
+  background: #f60 url(images/button_tracker_active.png) left 3px center no-repeat !important;
+  background-size: 14px auto !important;
 }
 
 /* configs overhaul */
 
 #configs td {
-    text-align: left;
-    font-weight: normal !important;
-    vertical-align: middle !important;
-    padding-top: 4px;
-    padding-bottom: 4px;
-    min-width: 0 !important;
-    width: 50% !important;
+  text-align: left;
+  font-weight: normal !important;
+  vertical-align: middle !important;
+  padding-top: 4px;
+  padding-bottom: 4px;
+  min-width: 0 !important;
+  width: 50% !important;
 }
 
 #configs td b, #torrentOrderControl b {
-    margin-right: 8px;
-    padding: 5px 10px 6px;
-    display: inline-block;
-    min-width: 160px !important;
-    color: #5a5a6f;
-    text-align: right;
-    border-radius: 15px 5px 5px 15px;
-    box-shadow: inset 0 0 0 1px #ddf;
-    background: #dfdfff;
-    background: linear-gradient(to bottom, #fff, #e2e2ff);
+  margin-right: 8px;
+  padding: 5px 10px 6px;
+  display: inline-block;
+  min-width: 160px !important;
+  color: #5a5a6f;
+  text-align: right;
+  border-radius: 15px 5px 5px 15px;
+  box-shadow: inset 0 0 0 1px #ddf;
+  background: #dfdfff;
+  background: linear-gradient(to bottom, #fff, #e2e2ff);
 }
 
 #torrentOrderControl b {
-    line-height:100%;
+  line-height:100%;
 }
 
 #configs td label:hover b, #torrentOrderControl b:hover {
-    color: #40404f;
+  color: #40404f;
 }
 
 #configs input, #configs select {
-    margin-top: 0 !important;
-    margin-bottom: 0 !important;
-    vertical-align: middle;
+  margin-top: 0 !important;
+  margin-bottom: 0 !important;
+  vertical-align: middle;
 }
 
 .numeric {
-    max-width: 60px !important;
-    min-width: 60px !important;
+  max-width: 60px !important;
+  min-width: 60px !important;
 }
 
 #configs select[disabled] {
-    margin-left: 4px;
+  margin-left: 4px;
 }
 
 /* tooltip */
 
 #bwHelp {
-    visibility: hidden;
-    background: #aaf url(/themes/console/images/i2psnark.png) 10px center no-repeat;
-    background-size: 28px 28px;
-    text-align: center;
-    padding: 15px 15px 15px 55px;
-    border-radius: 3px;
-    width: 320px;
-    position: absolute;
-    z-index: 999;
-    bottom: 125%;
-    left: 0;
-    margin-left: -170px;
-    display: block;
-    white-space: normal;
-    font-size: 10pt;
-    font-weight: bold;
-    filter: drop-shadow(0 0 1px #11f);
-    opacity: 0;
-    will-change: transform;
+  visibility: hidden;
+  background: #aaf url(/themes/console/images/i2psnark.png) 10px center no-repeat;
+  background-size: 28px 28px;
+  text-align: center;
+  padding: 15px 15px 15px 55px;
+  border-radius: 3px;
+  width: 320px;
+  position: absolute;
+  z-index: 999;
+  bottom: 125%;
+  left: 0;
+  margin-left: -170px;
+  display: block;
+  white-space: normal;
+  font-size: 10pt;
+  font-weight: bold;
+  filter: drop-shadow(0 0 1px #11f);
+  opacity: 0;
+  will-change: transform;
 }
 
 #bwhelp::after {
-    content: "";
-    position: absolute;
-    top: 100%;
-    left: 50%;
-    margin-left: -10px;
-    border-width: 10px;
-    border-style: solid;
-    border-color: #aaf transparent transparent transparent;
+  content: "";
+  position: absolute;
+  top: 100%;
+  left: 50%;
+  margin-left: -10px;
+  border-width: 10px;
+  border-style: solid;
+  border-color: #aaf transparent transparent transparent;
 }
 
 #bwHoverHelp:hover #bwHelp, #bwHoverHelp:active #bwHelp {
-    visibility: visible;
-    color: #fff;
-    text-align: center;
-    opacity: 1;
-    transition: ease opacity .05s;
+  visibility: visible;
+  color: #fff;
+  text-align: center;
+  opacity: 1;
+  transition: ease opacity .05s;
 }
 
 #bwHoverHelp {
-    position: relative;
-    display: inline-block;
+  position: relative;
+  display: inline-block;
 }
 
 #bwHoverHelp img {
-    width: 16px;
-    height: 16px;
+  width: 16px;
+  height: 16px;
 }
 
 #bwHoverHelp:hover + #bwHelp {
-    display: block;
-    position: fixed;
-    float: left;
-    top: 48px;
-    left: 0;
-    z-index: 9999;
-    background: #313;
-    border-bottom: 5px solid #212;
-    border-top: 5px solid #212;
-    box-shadow: 0 1px 3px #101;
-    padding: 20px !important;
-    width: 100%;
-    white-space: nowrap;
-    text-align: center;
-    font-size: 12pt;
+  display: block;
+  position: fixed;
+  float: left;
+  top: 48px;
+  left: 0;
+  z-index: 9999;
+  background: #313;
+  border-bottom: 5px solid #212;
+  border-top: 5px solid #212;
+  box-shadow: 0 1px 3px #101;
+  padding: 20px !important;
+  width: 100%;
+  white-space: nowrap;
+  text-align: center;
+  font-size: 12pt;
 }
 
 /* end tooltip */
 
 #configs td, #configs td:first-child {
-    padding: 0 !important;
-    padding-right: 0 !important;
+  padding: 0 !important;
+  padding-right: 0 !important;
 }
 
 #configs tr:nth-last-child(2) td {
-    padding: 11px 0 0 !important;
+  padding: 11px 0 0 !important;
 }
 
 #configs th {
-    padding: 4px 8px;
-    background: linear-gradient(to bottom, #fcfcff 51%, #fafaff 51%, #f6f6ff 100%);
-    filter: drop-shadow(0 0 1px rgba(220,220,255,.7));
+  padding: 4px 8px;
+  background: linear-gradient(to bottom, #fcfcff 51%, #fafaff 51%, #f6f6ff 100%);
+  filter: drop-shadow(0 0 1px rgba(220,220,255,.7));
 }
 
 #configs th {
-    border-left: 1px solid #8d8daa;
-    border-right: 1px solid #8d8daa;
-    border-radius: 3px !important;
+  border-left: 1px solid #8d8daa;
+  border-right: 1px solid #8d8daa;
+  border-radius: 3px !important;
 }
 
 .optionlist {
-    margin: 3px 0 !important;
-    columns: 400px 3;
-    column-gap: 20px;
-    margin: -5px 0 5px;
-    padding: 7px 6px 6px;
-    transition: ease-in-out 0.5s box-shadow;
-    will-change: transform;
+  margin: 3px 0 !important;
+  columns: 400px 3;
+  column-gap: 20px;
+  margin: -5px 0 5px;
+  padding: 7px 6px 6px;
+  transition: ease-in-out 0.5s box-shadow;
+  will-change: transform;
 }
 
 .configOption {
-    padding: 0 4px;
-    display: inline-block;
-    vertical-align: middle;
-    white-space: nowrap;
-    width: calc(100% - 20px);
+  padding: 0 4px;
+  display: inline-block;
+  vertical-align: middle;
+  white-space: nowrap;
+  width: calc(100% - 20px);
 }
 
 .configOption::after {
-    content: "";
-    display: inline-block;
-    height: 40px;
-    vertical-align: middle;
+  content: "";
+  display: inline-block;
+  height: 40px;
+  vertical-align: middle;
 }
 
 input[name="nofilter_commentsName"], input[name="i2cpOpts"], input[name="nofilter_dataDir"] {
-    width: calc(100% - 180px) !important;
+  width: calc(100% - 180px) !important;
 }
 
 #embed, #fullscreen {
-    margin-top: 2px;
-    float: right;
-    font-size: 85% !important;
+  margin-top: 2px;
+  float: right;
+  font-size: 85% !important;
 }
 
 @media screen and (max-width: 1000px) {
 #embed, #fullscreen {
-    margin-top: 1px;
+  margin-top: 1px;
 }
 }
 
 #fullscreen {
-    display: none !important;
+  display: none !important;
 }
 
 .iframed #embed {
-    display: none;
+  display: none;
 }
 
 .iframed #fullscreen {
-    display: inline-block !important;
+  display: inline-block !important;
 }
 
 #snarkLang {
-    margin-right: 5px;
-    padding: 3px 8px;
-    display: inline-block;
-    vertical-align: middle;
-    line-height: 160%;
-    color: #fff;
-    text-align: center;
-    font-weight: bold;
-    text-shadow: 0 1px 1px #557;
-    border-radius: 4px;
-    background: #aaf;
+  margin-right: 5px;
+  padding: 3px 8px;
+  display: inline-block;
+  vertical-align: middle;
+  line-height: 160%;
+  color: #fff;
+  text-align: center;
+  font-weight: bold;
+  text-shadow: 0 1px 1px #557;
+  border-radius: 4px;
+  background: #aaf;
 }
 
 /* language overrides */
@@ -3805,158 +3805,158 @@ input[name="nofilter_commentsName"], input[name="i2cpOpts"], input[name="nofilte
 .lang_sv .optionlist,
 .lang_tr .optionlist,
 .lang_uk .optionlist {
-    columns: 500px auto;
-    column-gap: 5px;
+  columns: 500px auto;
+  column-gap: 5px;
 }
 
 .lang_de .optionlist,
 .lang_es .optionlist,
 .lang_fr .optionlist,
 .lang_ru .optionlist {
-    columns: 600px auto;
-    column-gap: 5px;
+  columns: 600px auto;
+  column-gap: 5px;
 }
 
 .lang_it #configs td b,
 .lang_sk #configs td b {
-    min-width: 180px !important;
+  min-width: 180px !important;
 }
 
 .lang_nl #configs td b,
 .lang_sv #configs td b,
 .lang_in #configs td b {
-    min-width: 210px !important;
+  min-width: 210px !important;
 }
 
 .lang_hu #configs td b,
 .lang_pl #configs td b,
 .lang_tr #configs td b {
-    min-width: 220px !important;
+  min-width: 220px !important;
 }
 
 .lang_de #configs td b,
 .lang_fr #configs td b,
 .lang_pt #configs td b,
 .lang_ro #configs td b {
-    min-width: 250px !important;
+  min-width: 250px !important;
 }
 
 .lang_uk #configs td b {
-    min-width: 260px !important;
+  min-width: 260px !important;
 }
 
 .lang_es #configs td b {
-    min-width: 280px !important;
+  min-width: 280px !important;
 }
 
 .lang_ru #configs td b,
 .lang_es #configs td b {
-    min-width: 300px !important;
+  min-width: 300px !important;
 }
 
 .lang_it #configs input[name="nofilter_dataDir"], .lang_it input[name="i2cpOpts"], .lang_it input[name="nofilter_commentsName"],
 .lang_sk #configs input[name="nofilter_dataDir"], .lang_sk input[name="i2cpOpts"], .lang_sk input[name="nofilter_commentsName"] {
-    width: calc(100% - 200px) !important;
+  width: calc(100% - 200px) !important;
 }
 
 .lang_in #configs input[name="nofilter_dataDir"], .lang_in input[name="i2cpOpts"], .lang_in input[name="nofilter_commentsName"],
 .lang_nl #configs input[name="nofilter_dataDir"], .lang_nl input[name="i2cpOpts"], .lang_nl input[name="nofilter_commentsName"],
 .lang_sv #configs input[name="nofilter_dataDir"], .lang_sv input[name="i2cpOpts"], .lang_sv input[name="nofilter_commentsName"] {
-    width: calc(100% - 230px) !important;
+  width: calc(100% - 230px) !important;
 }
 
 .lang_hu #configs input[name="nofilter_dataDir"], .lang_hu input[name="i2cpOpts"], .lang_hu input[name="nofilter_commentsName"],
 .lang_pl #configs input[name="nofilter_dataDir"], .lang_pl input[name="i2cpOpts"], .lang_pl input[name="nofilter_commentsName"],
 .lang_tr #configs input[name="nofilter_dataDir"], .lang_tr input[name="i2cpOpts"], .lang_tr input[name="nofilter_commentsName"] {
-    width: calc(100% - 240px) !important;
+  width: calc(100% - 240px) !important;
 }
 
 .lang_de #configs input[name="nofilter_dataDir"], .lang_de input[name="i2cpOpts"], .lang_de input[name="nofilter_commentsName"],
 .lang_fr #configs input[name="nofilter_dataDir"], .lang_fr input[name="i2cpOpts"], .lang_fr input[name="nofilter_commentsName"],
 .lang_pt #configs input[name="nofilter_dataDir"], .lang_pt input[name="i2cpOpts"], .lang_pt input[name="nofilter_commentsName"],
 .lang_ro #configs input[name="nofilter_dataDir"], .lang_ro input[name="i2cpOpts"], .lang_ro input[name="nofilter_commentsName"] {
-    width: calc(100% - 270px) !important;
+  width: calc(100% - 270px) !important;
 }
 
 .lang_uk #configs input[name="nofilter_dataDir"], .lang_uk input[name="i2cpOpts"], .lang_uk input[name="nofilter_commentsName"] {
-    width: calc(100% - 280px) !important;
+  width: calc(100% - 280px) !important;
 }
 
 .lang_es #configs input[name="nofilter_dataDir"], .lang_es input[name="i2cpOpts"], .lang_es input[name="nofilter_commentsName"] {
-    width: calc(100% - 300px) !important;
+  width: calc(100% - 300px) !important;
 }
 
 .lang_ru #configs input[name="nofilter_dataDir"], .lang_ru input[name="i2cpOpts"], .lang_ru input[name="nofilter_commentsName"] {
-    width: calc(100% - 320px) !important;
+  width: calc(100% - 320px) !important;
 }
 
 /* end language overrides */
 
 #configs input.r:focus {
-    text-align: center
+  text-align: center
 }
 
 /* tracker config */
 
 .trackerconfig {
-    margin-bottom: 5px;
+  margin-bottom: 5px;
 }
 
 .trackerconfig .spacer.top {
-    display: none;
+  display: none;
 }
 
 .trackerconfig tr:nth-last-child(3) td, .trackerconfig tr:nth-last-child(5) td {
-    font-size: 0 !important;
-    padding: 0;
+  font-size: 0 !important;
+  padding: 0;
 }
 
 .knowntracker:hover, .knowntracker:hover td {
-    background: #ffb !important;
+  background: #ffb !important;
 }
 
 .knowntracker a {
-    display: inline-block;
-    white-space: nowrap;
-    overflow: hidden;
-    text-overflow: ellipsis;
-    max-width: 220px;
-    width: 220px !important;
+  display: inline-block;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  max-width: 220px;
+  width: 220px !important;
 }
 
 .trackerhome, .trackerannounce {
-    width: 260px !important;
+  width: 260px !important;
 }
 
 #addtracker td {
-    padding-top: 6px;
-    padding-bottom: 6px;
+  padding-top: 6px;
+  padding-bottom: 6px;
 }
 
 .trackerconfig input.delete, .trackerconfig input.reload {
-    float: left;
+  float: left;
 }
 
 @media screen and (min-width: 1200px) {
 .trackerconfig th:nth-child(7), .trackerconfig td:nth-child(7) {
-    padding-left: 50px !important;
+  padding-left: 50px !important;
 }
 
 .trackerhome, .trackerannounce, .knowntracker a {
-    width: 300px !important;
-    max-width: 300px !important;
+  width: 300px !important;
+  max-width: 300px !important;
 }
 
 .trackerconfig input.trackername {
-    max-width: 180px !important;
-    width: 180px !important;
+  max-width: 180px !important;
+  width: 180px !important;
 }
 }
 
 @media screen and (min-width: 1500px) {
 .trackerhome, .trackerannounce, .knowntracker a {
-    width: 400px !important;
-    max-width: 400px !important;
+  width: 400px !important;
+  max-width: 400px !important;
 }
 }
 
@@ -3965,384 +3965,384 @@ input[name="nofilter_commentsName"], input[name="i2cpOpts"], input[name="nofilte
 /* iconized panel tabs */
 
 .toggleview img, .configsection .snarkConfigTitle {
-    will-change: transform;
+  will-change: transform;
 }
 
 .toggleview, .configsection .snarkConfigTitle a {
-    font-size: 0 !important;
+  font-size: 0 !important;
 }
 
 .toggleview, .configsection .snarkConfigTitle {
-    text-align: center;
-    padding: 4px 0 !important;
-    width: 300px;
+  text-align: center;
+  padding: 4px 0 !important;
+  width: 300px;
 }
 
 .toggleview img, .configsection .snarkConfigTitle a img {
-    margin: 0 20px -1px !important;
-    padding: 3px !important;
-    min-width: 16px;
-    min-height: 16px;
-    display: inline-block !important;
-    border: 1px solid #8d8daa;
-    border: 1px solid rgba(140,140,255,.8);
-    border-radius: 50%;
-    box-shadow: inset 0 0 0 2px #fff, 0 0 0 1px #e0e0ff;
-    background: #eef;
-    background: linear-gradient(to bottom, #f8f8ff 50%, #f2f2ff 50%);
+  margin: 0 20px -1px !important;
+  padding: 3px !important;
+  min-width: 16px;
+  min-height: 16px;
+  display: inline-block !important;
+  border: 1px solid #8d8daa;
+  border: 1px solid rgba(140,140,255,.8);
+  border-radius: 50%;
+  box-shadow: inset 0 0 0 2px #fff, 0 0 0 1px #e0e0ff;
+  background: #eef;
+  background: linear-gradient(to bottom, #f8f8ff 50%, #f2f2ff 50%);
 }
 
 .configsection .snarkConfigTitle a img {
-    margin: 0 0 -1px !important;
-    display: inline-block;
-    font-size: 0 !important;
+  margin: 0 0 -1px !important;
+  display: inline-block;
+  font-size: 0 !important;
 }
 
 .toggleview:hover img, .configsection .snarkConfigTitle:hover img {
-    background: #fff;
-    border: 1px solid #f60;
+  background: #fff;
+  border: 1px solid #f60;
 }
 
 /* torrent column delimiters */
 
 @media screen and (min-width: 1000px) {
 .snarkTorrentAction {
-    padding-left: 4px !important;
-    padding-right: 3px !important;
+  padding-left: 4px !important;
+  padding-right: 3px !important;
 }
 
 .snarkTrackerDetails {
-    padding-left: 4px !important;
+  padding-left: 4px !important;
 }
 
 .snarkTorrentName {
-    padding-right: 3px;
+  padding-right: 3px;
 }
 
 .snarkTorrentDownloaded {
-    padding-left: 9px !important;
-    padding-right: 9px !important;
+  padding-left: 9px !important;
+  padding-right: 9px !important;
 }
 
 .snarkTorrentETA, .snarkTorrentRateUp, .snarkTorrentUploaded, .snarkTorrentRateDown,
 .peerinfo .snarkTorrentRateUp, .peerinfo .snarkTorrentUploaded, .peerinfo .snarkTorrentRateDown {
-    padding-right: 8px !important;
-    padding-left: 8px !important;
+  padding-right: 8px !important;
+  padding-left: 8px !important;
 }
 
 .snarkTorrents th:nth-child(n+4) {
-    text-align: center;
+  text-align: center;
 }
 
 /*td.snarkGraphicStatus, td.snarkTorrentStatus, td.snarkTorrentDetails, td.snarkTorrentPeerCount, td.snarkTorrentName,
 td.snarkTorrentDownloaded, td.snarkTorrentAction {
-    background: rgba(255,255,255,0.3);
+  background: rgba(255,255,255,0.3);
 }
 
 tr:hover td.snarkGraphicStatus, tr:hover td.snarkTorrentStatus, tr:hover td.snarkTorrentDetails, tr:hover td.snarkTorrentPeerCount,
 tr:hover td.snarkTorrentName, tr:hover td.snarkTorrentDownloaded, tr:hover td.snarkTorrentUploaded, tr:hover td.snarkTorrentAction {
-    background: none;
+  background: none;
 }*/
 
 .peerinfo:hover td:nth-child(n+2) {
-    background: #ffd !important;
+  background: #ffd !important;
 }
 }
 
 th img {
-    filter: none !important;
-    opacity: 0.85;
+  filter: none !important;
+  opacity: 0.85;
 }
 
 .snarkTorrents th img {
-    max-height: 22px;
+  max-height: 22px;
 }
 
 td.snarkGraphicStatus img {
-    display: inline-block;
-    max-height: 20px;
-    margin-top: -2px;
-    margin-bottom: -2px;
+  display: inline-block;
+  max-height: 20px;
+  margin-top: -2px;
+  margin-bottom: -2px;
 }
 
 td.snarkTrackerDetails img {
-    max-height: 16px;
+  max-height: 16px;
 }
 
 .snarkTorrents tfoot tr:first-child th.snarkTorrentRateUp, .snarkTorrents tfoot tr:first-child th.snarkTorrentUploaded {
-    font-style: italic !important;
+  font-style: italic !important;
 }
 
 /* torrent filter bar */
 
 #torrentDisplay {
-    background: #fff;
-    background: linear-gradient(to bottom, #fff, #eef);
-    border-top: 1px solid #7789bf;
-    border-bottom: 1px solid #7789bf;
-    position: sticky;
-    top: 41px;
-    z-index: 999;
-    margin: -1px 0 -2px;
+  background: #fff;
+  background: linear-gradient(to bottom, #fff, #eef);
+  border-top: 1px solid #7789bf;
+  border-bottom: 1px solid #7789bf;
+  position: sticky;
+  top: 41px;
+  z-index: 999;
+  margin: -1px 0 -2px;
 }
 
 .iframed #torrentDisplay {
-    margin-bottom: 0;
-    position: static;
+  margin-bottom: 0;
+  position: static;
 }
 
 #torrentDisplay label {
-    margin: 0;
-    padding: 2px 8px;
-    display: inline-block;
-    min-width: 80px;
-    background: #fff;
-    background: linear-gradient(to bottom, #fff 50%, #eef 50%);
-    border-left: 1px solid #7789bf;
-    box-shadow: inset 0 0 0 1px #fff;
-    font-weight: bold;
-    color: #559;
+  margin: 0;
+  padding: 2px 8px;
+  display: inline-block;
+  min-width: 80px;
+  background: #fff;
+  background: linear-gradient(to bottom, #fff 50%, #eef 50%);
+  border-left: 1px solid #7789bf;
+  box-shadow: inset 0 0 0 1px #fff;
+  font-weight: bold;
+  color: #559;
 }
 
 #torrentDisplay label:last-child {
-    border-right: 1px solid #7789bf;
+  border-right: 1px solid #7789bf;
 }
 
 #torrentDisplay label:hover {
-    color: #f60 !important;
-    background: linear-gradient(to bottom, #fff 50%, #ffe8bf 50%, #efd9b3 100%) !important;
-    background: #fff linear-gradient(to bottom, #fff 50%, rgba(255, 232, 191, 0.6) 50%, rgba(239, 217, 179, 0.4) 100%) !important;
+  color: #f60 !important;
+  background: linear-gradient(to bottom, #fff 50%, #ffe8bf 50%, #efd9b3 100%) !important;
+  background: #fff linear-gradient(to bottom, #fff 50%, rgba(255, 232, 191, 0.6) 50%, rgba(239, 217, 179, 0.4) 100%) !important;
 }
 
 #torrentDisplay label:active {
-    box-shadow: inset 0 0 0 1px #fff9ef, inset 2px 2px 3px #7f3000;
-    transition: ease box-shadow .05s;
-    background: #f60 !important;
-    color: #fff !important;
+  box-shadow: inset 0 0 0 1px #fff9ef, inset 2px 2px 3px #7f3000;
+  transition: ease box-shadow .05s;
+  background: #f60 !important;
+  color: #fff !important;
 }
 
 #torrentDisplay input {
-    position: absolute;
-    opacity: 0;
-    z-index: -1;
-    height: 0 !important;
-    width: 0 !important;
+  position: absolute;
+  opacity: 0;
+  z-index: -1;
+  height: 0 !important;
+  width: 0 !important;
 }
 
 #torrentDisplay input:checked + label, #torrentDisplay input:checked + label:active {
-    color: #88a !important;
-    text-shadow: 0 1px 1px  #fff;
-    box-shadow: inset 0 0 0 1px #fff, inset 2px 2px 2px #99b !important;
-    background: linear-gradient(to bottom, #f2f2ff, #f6f6ff) !important;
-    cursor: default;
+  color: #88a !important;
+  text-shadow: 0 1px 1px  #fff;
+  box-shadow: inset 0 0 0 1px #fff, inset 2px 2px 2px #99b !important;
+  background: linear-gradient(to bottom, #f2f2ff, #f6f6ff) !important;
+  cursor: default;
 }
 
 @media screen and (max-width: 1000px) {
 #torrentDisplay {
-    display: flex;
-    margin-bottom: 0;
+  display: flex;
+  margin-bottom: 0;
 }
 
 #torrentDisplay label {
-    flex-grow: 1;
-    font-size: 8pt;
-    min-width: 60px;
+  flex-grow: 1;
+  font-size: 8pt;
+  min-width: 60px;
 }
 
 #torrentDisplay label:first-child {
-    border-left: none;
+  border-left: none;
 }
 
 #torrentDisplay label:last-child {
-    border-right: none;
+  border-right: none;
 }
 }
 
 .snarkTorrents tfoot tr:first-child, .snarkTorrents tfoot tr:first-child th,
 .snarkTorrents tfoot tr:first-child:hover, .snarkTorrents tfoot tr:first-child:hover th {
-    border-top: 1px solid #7789bf !important;
-    border-bottom: 1px solid #7789bf !important;
+  border-top: 1px solid #7789bf !important;
+  border-bottom: 1px solid #7789bf !important;
 }
 
 /* fix firefox rendering bug when filter displays no torrents */
 .snarkTorrents tr[style="display: none;"]:last-child {
-    background: #f00 !important;
-    display: table-row !important;
+  background: #f00 !important;
+  display: table-row !important;
 }
 
 .snarkTorrents tr[style="display: none;"]:last-child > * {
-    display: none;
+  display: none;
 }
 /* end fix */
 
 #snarkTorrentSort {
-    max-width: 60px;
-    text-align: left !important;
+  max-width: 60px;
+  text-align: left !important;
 }
 
 #snarkTorrentSort img {
-    margin-left: 31px;
+  margin-left: 31px;
 }
 
 @keyframes downloadbar {
 0% {
-    background: repeating-linear-gradient(135deg, rgba(238, 238, 255,0.7) 1px, rgba(238, 238, 255, 0.7) 5px, rgba(221, 221, 255, 0.7) 6px, rgba(221, 221, 255, 0.7) 11px);
+  background: repeating-linear-gradient(135deg, rgba(238, 238, 255,0.7) 1px, rgba(238, 238, 255, 0.7) 5px, rgba(221, 221, 255, 0.7) 6px, rgba(221, 221, 255, 0.7) 11px);
 }
 
 100% {
-    background: repeating-linear-gradient(135deg, rgba(221, 221, 255, 0.7) 1px, rgba(221, 221, 255, 0.7) 6px, rgba(238, 238, 255,0.7) 7px, rgba(238, 238, 255,0.7) 11px);
+  background: repeating-linear-gradient(135deg, rgba(221, 221, 255, 0.7) 1px, rgba(221, 221, 255, 0.7) 6px, rgba(238, 238, 255,0.7) 7px, rgba(238, 238, 255,0.7) 11px);
 }
 }
 
 .downloading.active .percentBarOuter, .peerinfo.active .percentBarOuter {
-    animation: downloadbar 2s linear infinite forwards reverse;
-    opacity: 1;
+  animation: downloadbar 2s linear infinite forwards reverse;
+  opacity: 1;
 }
 
 .snarkTorrents tr.active:hover td,
 .snarkTorrents tr.downloading.active:hover td,
 .snarkTorrents tr.active:hover td.snarkTorrentETA, .snarkTorrents tr.active:hover td.snarkTorrentUploaded {
-    background-color: transparent !important;
+  background-color: transparent !important;
 }
 
 .snarktTorrentPeerCount, .snarkTorrentPeers, .snarkTorrents td:nth-child(3), .peerdata, .peerinfo td:nth-child(2),
 .debuginfo td:nth-child(2) {
-    white-space: nowrap;
-    padding-left: 0 !important;
+  white-space: nowrap;
+  padding-left: 0 !important;
 }
 
 td.snarkTorrentStatus {
-    text-align: left;
-    padding-right: 0;
+  text-align: left;
+  padding-right: 0;
 }
 
 .active td.snarkTorrentStatus {
-    font-style: italic;
+  font-style: italic;
 }
 
 .downloading.active td.snarkTorrentStatus {
-    text-align: center;
+  text-align: center;
 }
 
 td.snarkTrackerDetails {
-    padding-left: 6px;
-    padding-right: 6px;
+  padding-left: 6px;
+  padding-right: 6px;
 }
 
 /* pagenav */
 
 .pagenavcontrols {
-    padding: 0;
-    font-size: 9pt;
-    font-weight: bold;
-    color: #272e3f;
+  padding: 0;
+  font-size: 9pt;
+  font-weight: bold;
+  color: #272e3f;
 }
 
 .pagenavcontrols, .pagenavcontrols::before, #pagecount {
-    display: inline-block;
-    vertical-align: middle;
+  display: inline-block;
+  vertical-align: middle;
 }
 
 .pagenavcontrols {
-    margin-top: -2px;
-    padding: 7px 5px 3px;
-    position: absolute;
-    left: 0;
-    right: 0;
-    z-index: 500;
-    line-height: 120%;
+  margin-top: -2px;
+  padding: 7px 5px 3px;
+  position: absolute;
+  left: 0;
+  right: 0;
+  z-index: 500;
+  line-height: 120%;
 }
 
 @media screen and (max-width: 1000px) {
 .pagenavcontrols {
-    margin: 0;
-    padding: 2px !important;
-    position: static;
+  margin: 0;
+  padding: 2px !important;
+  position: static;
 }
 }
 
 /*#torrentDisplay + form > input + #pagenavtop {
-    margin-top: -2px;
+  margin-top: -2px;
 }*/
 
 @supports not (-moz-appearance: none) {
 .iframed #pagenavtop {
-    margin: -1px 0 -33px;
+  margin: -1px 0 -33px;
 }
 }
 
 .pagenavcontrols::before {
-    content: "";
-    height: 26px;
+  content: "";
+  height: 26px;
 }
 
 .pagenavcontrols img, .pagenavcontrols img:hover, #pagenavbottom a:focus img {
-    border: 1px solid #89f;
-    border-radius: 2px;
-    padding: 3px !important;
-    opacity: 0.8;
-    filter: drop-shadow(0 0 1px #bbb);
-    width: 12px;
-    background: linear-gradient(to bottom, #fff 50%, #ddf 50%);
+  border: 1px solid #89f;
+  border-radius: 2px;
+  padding: 3px !important;
+  opacity: 0.8;
+  filter: drop-shadow(0 0 1px #bbb);
+  width: 12px;
+  background: linear-gradient(to bottom, #fff 50%, #ddf 50%);
 }
 
 .pagenavcontrols img:hover, #pagenavbottom a:focus img {
-    background: linear-gradient(to bottom, #fff 50%, #eef 50%);
-    opacity: 1;
-    filter: drop-shadow(0 0 1px #f60);
+  background: linear-gradient(to bottom, #fff 50%, #eef 50%);
+  opacity: 1;
+  filter: drop-shadow(0 0 1px #f60);
 }
 
 .pagenavcontrols a:active img {
-    box-shadow: inset 3px 3px 3px #558;
-    box-shadow: inset 0 0 0 1px #ddf, inset 3px 3px 3px #558;
-    filter: none !important;
-    transform: none !important;
+  box-shadow: inset 3px 3px 3px #558;
+  box-shadow: inset 0 0 0 1px #ddf, inset 3px 3px 3px #558;
+  filter: none !important;
+  transform: none !important;
 }
 
 .pagenavcontrols img.disable, .pagenavcontrols img.disable:hover, .pagenavcontrols a:active img.disable {
-    opacity: 0.2;
-    background: none;
-    filter: none;
+  opacity: 0.2;
+  background: none;
+  filter: none;
 }
 
 .pagenavcontrols img {
-    margin: 0 3px !important;
+  margin: 0 3px !important;
 }
 
 #pagecount {
-    padding: 2px 15px;
-    margin: 0 5px;
-    text-align: center !important;
-    background: #dcdcff;
-    background: linear-gradient(to bottom, #f2f2ff 50%, #e2e2ff 50%);
-    border-radius: 2px;
-    letter-spacing: 0.2em;
-    box-shadow: inset 0 0 0 1px #fff;
-    border: 1px solid #ccf;
-    cursor: default;
-    -ms-user-select: none;
-    -moz-user-select: none;
-    -webkit-user-select: none;
-    user-select: none;
+  padding: 2px 15px;
+  margin: 0 5px;
+  text-align: center !important;
+  background: #dcdcff;
+  background: linear-gradient(to bottom, #f2f2ff 50%, #e2e2ff 50%);
+  border-radius: 2px;
+  letter-spacing: 0.2em;
+  box-shadow: inset 0 0 0 1px #fff;
+  border: 1px solid #ccf;
+  cursor: default;
+  -ms-user-select: none;
+  -moz-user-select: none;
+  -webkit-user-select: none;
+  user-select: none;
 }
 
 #pagenavbottom, #pagenavbottom td {
-    text-align: center;
-    padding: 0 !important;
-    vertical-align: middle;
-    border-top: 1px solid #7789bf !important;
-    background: #eef;
-    background: linear-gradient(to bottom, #fafaff 50%, rgb(240, 240, 255)) #fafaff;
+  text-align: center;
+  padding: 0 !important;
+  vertical-align: middle;
+  border-top: 1px solid #7789bf !important;
+  background: #eef;
+  background: linear-gradient(to bottom, #fafaff 50%, rgb(240, 240, 255)) #fafaff;
 }
 
 #pagenavbottom .pagenavcontrols {
-    margin: 1px 0 0;
-    padding: 2px 0 2px;
-    position: static;
+  margin: 1px 0 0;
+  padding: 2px 0 2px;
+  position: static;
 }
 
 #pagenavbottom > * {
-    vertical-align: middle;
+  vertical-align: middle;
 }
 
 /* end pagenav */
@@ -4350,431 +4350,431 @@ td.snarkTrackerDetails {
 /* peerid + client */
 
 .peerclient {
-    padding: 1px;
-    border-radius: 2px;
-    background: #dbdbff;
+  padding: 1px;
+  border-radius: 2px;
+  background: #dbdbff;
 }
 
 .peerclient, .peerinfo tt, .clientid {
-    display: inline-block;
-    vertical-align: middle;
-    line-height: 120% !important;
-    text-shadow: none;
+  display: inline-block;
+  vertical-align: middle;
+  line-height: 120% !important;
+  text-shadow: none;
 }
 
 .peerinfo tt {
-    margin: 0;
-    border-radius: 2px 0 0 2px;
-    padding: 0 5px;
-    background: none;
-    color: #282;
+  margin: 0;
+  border-radius: 2px 0 0 2px;
+  padding: 0 5px;
+  background: none;
+  color: #282;
 }
 
 .clientid {
-    margin-left: -3px;
-    padding: 2px 4px;
-    max-width: 50px;
-    min-width: 50px;
-    display: inline-block;
-    border-radius: 0 1px 1px 0;
-    display: inline-block;
-    white-space: nowrap;
-    overflow: hidden;
-    text-overflow: ellipsis;
-    font-size: 90%;
-    text-align: center;
-    background: #eef;
-    background: linear-gradient(to bottom, #eef, #ddf);
+  margin-left: -3px;
+  padding: 2px 4px;
+  max-width: 50px;
+  min-width: 50px;
+  display: inline-block;
+  border-radius: 0 1px 1px 0;
+  display: inline-block;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  font-size: 90%;
+  text-align: center;
+  background: #eef;
+  background: linear-gradient(to bottom, #eef, #ddf);
 }
 
 .clientversion {
-    display: none;
+  display: none;
 }
 
 .peerinfo td > * {
-    vertical-align: middle;
+  vertical-align: middle;
 }
 
 .peerdata {
-    padding-left: 0;
+  padding-left: 0;
 }
 
 #ourDest {
-    margin: -1px 0 -1px 3px;
-    padding: 0 0 0 4px;
-    display: inline-block;
-    border: 1px solid #89f;
-    border-radius: 2px;
-    box-shadow: inset 0 0 0 1px #fff;
-    background: #eef;
-    background: linear-gradient(to bottom, #eef, #ddf);
-    opacity: 0.85;
-    line-height: 140%;
+  margin: -1px 0 -1px 3px;
+  padding: 0 0 0 4px;
+  display: inline-block;
+  border: 1px solid #89f;
+  border-radius: 2px;
+  box-shadow: inset 0 0 0 1px #fff;
+  background: #eef;
+  background: linear-gradient(to bottom, #eef, #ddf);
+  opacity: 0.85;
+  line-height: 140%;
 }
 
 @media screen and (min-width: 1500px) {
 #ourDest {
-    margin: -1px 0 0 3px;
+  margin: -1px 0 0 3px;
 }
 
 td.snarkTorrentDetails img, .snarkDirInfo td:first-child img:not(.thumb) {
-    width: 20px !important;
-    max-width: 20px !important;
-    height: 20px !important;
-    max-height: 20px !important;
+  width: 20px !important;
+  max-width: 20px !important;
+  height: 20px !important;
+  max-height: 20px !important;
 }
 
 .snarkTorrentDetails img[src$="rateme.png"] {
-    margin-top: -3px !important;
-    margin-right: -2px !important;
-    width: 12px !important;
-    height: 12px !important;
+  margin-top: -3px !important;
+  margin-right: -2px !important;
+  width: 12px !important;
+  height: 12px !important;
 }
 }
 
 #ourDest tt {
-    margin: 1px 1px 1px 4px !important;
-    padding: 0 4px 0 6px;
-    display: inline-block;
-    background: #dbdbff;
-    border-radius: 0 1px 1px 0;
+  margin: 1px 1px 1px 4px !important;
+  padding: 0 4px 0 6px;
+  display: inline-block;
+  background: #dbdbff;
+  border-radius: 0 1px 1px 0;
 }
 
 .peerinfo td > * {
-    vertical-align: middle;
+  vertical-align: middle;
 }
 
 /* end peer + client */
 
 #lowersection > .configsection {
-    margin-top: 10px;
+  margin-top: 10px;
 }
 
 #lowersection > .newtorrentsection + .configsection {
-    margin-top: 0;
+  margin-top: 0;
 }
 
 .inactivity {
-    margin-left: 12px;
-    min-width: 5px;
-    max-width: 400px;
-    height: 6px;
-    display: inline-block;
-    border-radius: 3px;
-    box-shadow: inset 0 0 0 1px rgba(255,255,255,0.4);
-    background: #99b;
-    background: repeating-linear-gradient(to right, rgba(0,0,0,0), rgba(0,0,0,0) 15px, rgba(255,255,255,.5) 15px, rgba(255,255,255,.5) 16px, rgba(0,0,0,0) 16px), linear-gradient(to bottom, rgba(255,255,255,0.3) 50%, rgba(0,0,0,0.3) 50%), linear-gradient(to right, #bb0 60px, #900 120px);
+  margin-left: 12px;
+  min-width: 5px;
+  max-width: 400px;
+  height: 6px;
+  display: inline-block;
+  border-radius: 3px;
+  box-shadow: inset 0 0 0 1px rgba(255,255,255,0.4);
+  background: #99b;
+  background: repeating-linear-gradient(to right, rgba(0,0,0,0), rgba(0,0,0,0) 15px, rgba(255,255,255,.5) 15px, rgba(255,255,255,.5) 16px, rgba(0,0,0,0) 16px), linear-gradient(to bottom, rgba(255,255,255,0.3) 50%, rgba(0,0,0,0.3) 50%), linear-gradient(to right, #bb0 60px, #900 120px);
 }
 
 .inactivity[style="width: 0px;"], .inactivity[style="width: 1px;"], .inactivity[style="width: 2px;"],
 .inactivity[style="width: 3px;"], .inactivity[style="width: 4px;"], .inactivity[style="width: 5px;"] {
-    display: none;
+  display: none;
 }
 
 .choked, .idle {
-    font-size: 0;
-    width: 48px;
-    display: inline-block;
-    vertical-align: middle;
-    text-align: center !important;
-    line-height: 0;
+  font-size: 0;
+  width: 48px;
+  display: inline-block;
+  vertical-align: middle;
+  text-align: center !important;
+  line-height: 0;
 }
 
 .idle::after, .choked::after {
-    content: "";
-    display: inline-block;
-    width: 8px;
-    height: 8px;
-    border-radius: 50%;
-    background: #373;
+  content: "";
+  display: inline-block;
+  width: 8px;
+  height: 8px;
+  border-radius: 50%;
+  background: #373;
 }
 
 .choked::after {
-    background: #900;
+  background: #900;
 }
 
 .peerSeed {
-    content: "";
-    display: inline-block;
-    height: 16px;
-    width: 20px;
-    font-size: 0;
-    background: url(images/peerseed.png) center center no-repeat;
-    background-size: 14px auto;
+  content: "";
+  display: inline-block;
+  height: 16px;
+  width: 20px;
+  font-size: 0;
+  background: url(images/peerseed.png) center center no-repeat;
+  background-size: 14px auto;
 }
 
 tfoot .snarkTorrentRateDown:not(:empty)::before, tfoot .snarkTorrentDownloaded:not(:empty)::before,
 tfoot .snarkTorrentRateUp:not(:empty)::before, tfoot .snarkTorrentUploaded:not(:empty)::before {
-    margin-right: 1px;
-    display: inline-block;
-    vertical-align: text-top;
-    font-size: 80%;
-    font-style: normal;
-    text-shadow: 0 0 1px #fff;
+  margin-right: 1px;
+  display: inline-block;
+  vertical-align: text-top;
+  font-size: 80%;
+  font-style: normal;
+  text-shadow: 0 0 1px #fff;
 }
 
 tfoot .snarkTorrentRateDown:not(:empty)::before, tfoot .snarkTorrentDownloaded:not(:empty)::before {
-    margin-right: -3px;
-    display: inline-block;
-    height: 4px;
-    content: url(images/dropdown.png);
-    vertical-align: middle;
-    opacity: 0.7;
-    transform: translateY(-7px) scaleY(0.6);
+  margin-right: -3px;
+  display: inline-block;
+  height: 4px;
+  content: url(images/dropdown.png);
+  vertical-align: middle;
+  opacity: 0.7;
+  transform: translateY(-7px) scaleY(0.6);
 }
 
 tfoot .snarkTorrentRateUp:not(:empty)::before,tfoot .snarkTorrentUploaded:not(:empty)::before {
-    margin-right: -4px;
-    display: inline-block;
-    height: 4px;
-    content: url(images/dropdown.png);
-    vertical-align: middle;
-    opacity: 0.7;
-    transform: scaleY(0.6) rotate(180deg) translateY(-1px);
+  margin-right: -4px;
+  display: inline-block;
+  height: 4px;
+  content: url(images/dropdown.png);
+  vertical-align: middle;
+  opacity: 0.7;
+  transform: scaleY(0.6) rotate(180deg) translateY(-1px);
 }
 
 .snarkTorrentUploaded .left {
-    min-width: 12px;
+  min-width: 12px;
 }
 
 .snarkTorrentRateDown .left, .snarkTorrentRateUp .left, .snarkTorrentUploaded .left,
 .snarkTorrentRateDown .right, .snarkTorrentRateUp .right, .snarkTorrentUploaded .right {
-    min-width: 22px;
-    display: inline-block;
-    text-align: left;
+  min-width: 22px;
+  display: inline-block;
+  text-align: left;
 }
 
 .snarkTorrentRateDown .right, .snarkTorrentRateUp .right, .snarkTorrentUploaded .right {
-    min-width: 40px;
-    text-align: right;
+  min-width: 40px;
+  text-align: right;
 }
 
 .snarkTorrentUploaded .left {
-    min-width: 12px;
+  min-width: 12px;
 }
 
 .choked .left, .choked .right {
-    display: none;
+  display: none;
 }
 
 .snarkTorrentRateDown, .snarkTorrentRateUp, .snarkTorrentUploaded {
-    text-align: center !important;
+  text-align: center !important;
 }
 
 .snarkCommentInfo th {
-    padding: 0 8px 0 34px;
+  padding: 0 8px 0 34px;
 }
 
 .snarkCommentInfo th > * {
-    vertical-align: middle;
-    display: inline-block;
+  vertical-align: middle;
+  display: inline-block;
 }
 
 .snarkCommentInfo th input[type="submit"] {
-    float: none !important;
-    display: inline-block;
-    vertical-align: middle;
+  float: none !important;
+  display: inline-block;
+  vertical-align: middle;
 }
 
 .snarkCommentInfo th input[type="checkbox"] {
-    margin-left: 4px;
-    margin-right: 4px;
+  margin-left: 4px;
+  margin-right: 4px;
 }
 
 #commentstoggle {
    display: inline-block;
    margin-left: 10px;
-    vertical-align: middle;
+  vertical-align: middle;
 }
 
 #commentstoggle input {
-    margin-left: 4px !important;
-    margin-right: 0 !important;
-    display: inline-block;
+  margin-left: 4px !important;
+  margin-right: 0 !important;
+  display: inline-block;
 }
 
 #nameRequired, .commentAuthorName {
-    display: inline-block;
-    vertical-align: middle;
-    line-height: 24px;
+  display: inline-block;
+  vertical-align: middle;
+  line-height: 24px;
 }
 
 #metacomment {
-    padding: 0 !important;
-    line-height: 140%;
-    text-align: justify !important;
+  padding: 0 !important;
+  line-height: 140%;
+  text-align: justify !important;
 }
 
 #metacomment div {
-    padding: 4px 8px;
-    max-height: 80px;
-    overflow-y: auto;
-/*    white-space: pre-wrap;*/
+  padding: 4px 8px;
+  max-height: 80px;
+  overflow-y: auto;
+/*  white-space: pre-wrap;*/
 }
 
 /* comment indicator */
 
 .snarkFileType {
-    position: relative;
-    vertical-align: middle;
+  position: relative;
+  vertical-align: middle;
 }
 
 .snarkCommented {
-    position: absolute;
-    display: inline-block;
-    z-index: 20;
-    top: -3px;
-    right: 1px;
-    line-height: 0;
-    font-size: 0;
+  position: absolute;
+  display: inline-block;
+  z-index: 20;
+  top: -3px;
+  right: 1px;
+  line-height: 0;
+  font-size: 0;
 }
 
 .snarkCommented img {
-    padding: 0 !important;
-    height: 9px !important;
-    width: auto !important;
-    border: none !important;
-    filter: drop-shadow(0 0 1px #555) drop-shadow(0 0 2px rgba(128,128,0,0.3));
-    image-rendering: -webkit-optimize-contrast;
+  padding: 0 !important;
+  height: 9px !important;
+  width: auto !important;
+  border: none !important;
+  filter: drop-shadow(0 0 1px #555) drop-shadow(0 0 2px rgba(128,128,0,0.3));
+  image-rendering: -webkit-optimize-contrast;
 }
 
 /* end comment indicator */
 
 #configs a[href^="/config"] {
-    font-size: 0 !important;
+  font-size: 0 !important;
 }
 
 #configs a[href^="/config"]::after {
-    margin: -6px 0 2px -3px;
-    padding: 2px;
-    content: "";
-    display: inline-block;
-    width: 16px;
-    height: 16px;
-    vertical-align: middle;
-    border: 1px solid transparent;
-    border-radius: 2px;
-    background: url(images/config.png) center center no-repeat;
+  margin: -6px 0 2px -3px;
+  padding: 2px;
+  content: "";
+  display: inline-block;
+  width: 16px;
+  height: 16px;
+  vertical-align: middle;
+  border: 1px solid transparent;
+  border-radius: 2px;
+  background: url(images/config.png) center center no-repeat;
 }
 
 #configs a[href^="/config"]:hover::after, #configs a[href^="/config"]:focus::after {
-    border: 1px solid #f60 !important;
-    background: #ddf url(images/config.png) center center no-repeat;
-    background: url(images/config.png) center center no-repeat, linear-gradient(to bottom, #fff 50%, #ddf 50%);
+  border: 1px solid #f60 !important;
+  background: #ddf url(images/config.png) center center no-repeat;
+  background: url(images/config.png) center center no-repeat, linear-gradient(to bottom, #fff 50%, #ddf 50%);
 }
 
 #configs a[href^="/config"]:active::after {
-    box-shadow: inset 2px 2px 2px #adadeb !important;
-    transform: scale(0.9) !important;
-    transition: none !important;
+  box-shadow: inset 2px 2px 2px #adadeb !important;
+  transform: scale(0.9) !important;
+  transition: none !important;
 }
 
 .toggleview img, .snarkConfigTitle a img {
-    transform: none !important;
-    border-radius: 3px !important;
+  transform: none !important;
+  border-radius: 3px !important;
 }
 
 #snarkFiles input + .toggleview, #snarkCommentSection input + .toggleview  {
-    margin-bottom: -3px !important;
+  margin-bottom: -3px !important;
 }
 
 #snarkInfo ~ .mainsection .snarkDirInfo, #snarkInfo ~ .mainsection .snarkCommentInfo {
-    margin-top: 0 !important;
+  margin-top: 0 !important;
 }
 
 .snarkFilename .targetfile, .snarkFilename:hover .tags, .snarkFileName a:empty {
-    display: none !important;
+  display: none !important;
 }
 
 .snarkFilename:hover .targetfile {
-    display: inline-block !important;
+  display: inline-block !important;
 }
 
 /*input:not(:checked) + .toggleview img, .configsection .snarkConfigTitle  a img {
-    mix-blend-mode: luminosity;
+  mix-blend-mode: luminosity;
 }
 
 input:not(:checked) + .toggleview:hover img {
-    mix-blend-mode: normal;
+  mix-blend-mode: normal;
 }*/
 
 .iframed #snarkCommentSection {
-    padding-bottom: 5px;
+  padding-bottom: 5px;
 }
 
 #completion {
-    position: relative;
+  position: relative;
 }
 
 #metainfo {
-    padding: 2px 8px 2px 4px;
-    background: #f2f2ff;
-    border: 1px solid #99a;
-    box-shadow: inset 0 0 0 1px #fff;
+  padding: 2px 8px 2px 4px;
+  background: #f2f2ff;
+  border: 1px solid #99a;
+  box-shadow: inset 0 0 0 1px #fff;
 }
 
 #completion:not(:hover) #metainfo {
-    display: none;
+  display: none;
 }
 
 #completion:hover #metainfo {
-    position: absolute;
-    top: 24px;
-    left: -120px;
-    display: inline-block !important;
+  position: absolute;
+  top: 24px;
+  left: -120px;
+  display: inline-block !important;
 }
 
 #metacomment .commentWrapper {
-    margin: 6px;
-    padding: 9px 10px 10px;
-    box-shadow: inset 0 0 0 1px #fff, 0 0 1px 0 rgba(0,0,0,0.3);
-    background: #eef;
+  margin: 6px;
+  padding: 9px 10px 10px;
+  box-shadow: inset 0 0 0 1px #fff, 0 0 1px 0 rgba(0,0,0,0.3);
+  background: #eef;
 }
 
 /* table sort indicators */
 
 .sortIcon {
-    position: relative;
+  position: relative;
 }
 
 .sortIcon:hover .ascending, .sortIcon:hover .descending {
-    transform: rotate(180deg);
-    transition: linear transform .1s;
+  transform: rotate(180deg);
+  transition: linear transform .1s;
 }
 
 .ascending, .descending {
-    position: absolute;
-    top: -2px !important;
-    right: -8px !important;
-    display: inline-block;
-    border-width: 4px;
-    border-style: solid;
-    border-color: transparent transparent #aaf transparent;
+  position: absolute;
+  top: -2px !important;
+  right: -8px !important;
+  display: inline-block;
+  border-width: 4px;
+  border-style: solid;
+  border-color: transparent transparent #aaf transparent;
 }
 
 .descending {
-    top: 2px !important;
-    border-color: #aaf transparent transparent transparent;
+  top: 2px !important;
+  border-color: #aaf transparent transparent transparent;
 }
 
 .sortIcon:hover .ascending {
-    top: 2px !important;
-    border-color: transparent transparent #f60 transparent;
+  top: 2px !important;
+  border-color: transparent transparent #f60 transparent;
 }
 
 .sortIcon:hover .descending {
-    top: -2px !important;
-    border-color: #f60 transparent transparent transparent;
+  top: -2px !important;
+  border-color: #f60 transparent transparent transparent;
 }
 
 #snarkTorrentSort .ascending, th#snarkTorrentSort .descending {
-    right: -11px !important;
+  right: -11px !important;
 }
 
 @supports (animation: ease all .1s) {
 .ascending, .descending {
-    filter: opacity(0);
-    animation: ease fade-in .2s .6s forwards;
+  filter: opacity(0);
+  animation: ease fade-in .2s .6s forwards;
 }
 }
 

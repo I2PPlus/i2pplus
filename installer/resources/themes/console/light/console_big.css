@@ -3,83 +3,83 @@
 /* Author: dr|z3d */
 
 h1, h2, h3, h4 {
-    font-weight: normal !important;
-    text-shadow: none;
-    word-spacing: 0.1em;
+  font-weight: normal !important;
+  text-shadow: none;
+  word-spacing: 0.1em;
 }
 
 h3 {
-    font-size: 12pt;
+  font-size: 12pt;
 }
 
 b, a, input, button, input[type="submit"], input[type="reset"], i, th, thead, tfoot, .mediumtags, .themelabel {
-    font-weight: normal !important;
-    font-style: normal !important;
+  font-weight: normal !important;
+  font-style: normal !important;
 }
 
 b {
-    color: #112;
+  color: #112;
 }
 
 button, input[type="submit"], input[type="reset"] {
-    padding: 3px 5px 3px 22px !important;
-    display: inline-block;
-    line-height: 140% !important;
-    letter-spacing: 0.15em;
-    font-size: 10.5pt !important;
+  padding: 3px 5px 3px 22px !important;
+  display: inline-block;
+  line-height: 140% !important;
+  letter-spacing: 0.15em;
+  font-size: 10.5pt !important;
 }
 
 button.reload[value="restart"], button.stop[value="shutdown"] {
-    padding-top: 3px !important;
-    padding-bottom: 3px !important;
+  padding-top: 3px !important;
+  padding-bottom: 3px !important;
 }
 
 button.control {
-    padding: 12px 11px !important;
+  padding: 12px 11px !important;
 }
 
 #clock {
-    font-size: 16pt !important;
+  font-size: 16pt !important;
 }
 
 #sidebarconf button {
-    padding: 3px !important;
+  padding: 3px !important;
 }
 
 .routersummary table {
-    font-size: 8.5pt;
+  font-size: 8.5pt;
 }
 
 .routersummary a {
-    font-size: 10pt !important;
+  font-size: 10pt !important;
 }
 
 .routersummary h3, .routersummary h4, .routersummary p, .routersummary h3 a, .routersummary a {
-    text-shadow: none !important;
+  text-shadow: none !important;
 }
 
 .routersummary h3 a {
-    font-size: 11pt !important;
+  font-size: 11pt !important;
 }
 
 .routersummary h4, .routersummary h4 a {
-    font-size: 10.5pt !important;
+  font-size: 10.5pt !important;
 }
 
 .routersummary b {
-    font-size: 9.5pt;
-    font-weight: normal !important;
+  font-size: 9.5pt;
+  font-weight: normal !important;
 }
 
 .routersummary a {
-    word-spacing: 0.1em !important;
-    font-size: 10pt;
-    line-height: 130%;
+  word-spacing: 0.1em !important;
+  font-size: 10pt;
+  line-height: 130%;
 }
 
 .sb_newsheadings td, .sb_newsheadings tr:hover td {
-    padding-left: 22px !important;
-    background-position: 4px center !important;
+  padding-left: 22px !important;
+  background-position: 4px center !important;
 }
 
 #sb_general td::after, #sb_shortgeneral td::after, #sb_advancedgeneral td::after,
@@ -88,175 +88,175 @@ button.control {
 }
 
 .sb_netstatus a {
-    vertical-align: middle !important;
+  vertical-align: middle !important;
 }
 
 div.news, .newscontent p {
-    font-size: 10pt !important;
+  font-size: 10pt !important;
 }
 
 #newsStatus, #newsDisplay {
-    font-size: 10.5pt !important;
-    letter-spacing: 0.05em;
+  font-size: 10.5pt !important;
+  letter-spacing: 0.05em;
 }
 
 h4.app, h4.app2 {
-    font-size: 13pt;
+  font-size: 13pt;
 }
 
 div.app {
-    min-height: 82px;
+  min-height: 82px;
 }
 
 .applabel {
-    height: 22px !important;
-    line-height: 140% !important;
+  height: 22px !important;
+  line-height: 140% !important;
 }
 
 .applabel a {
-    padding: 2px 2px 0;
-    display: inline-block;
-    vertical-align: middle;
-    font-size: 11pt !important;
+  padding: 2px 2px 0;
+  display: inline-block;
+  vertical-align: middle;
+  font-size: 11pt !important;
 }
 
 input, input:visited, button {
-    font-size: 10pt !important;
+  font-size: 10pt !important;
 }
 
 .smallhead {
-    font-size: 8.5pt
+  font-size: 8.5pt
 }
 
 th {
-    font-size: 10pt;
+  font-size: 10pt;
 }
 
 .tunneldisplay th {
-    font-size: 10.5pt !important;
+  font-size: 10.5pt !important;
 }
 
 td, .mediumtags {
-    font-size: 10pt !important;
-    font-weight: normal !important;
+  font-size: 10pt !important;
+  font-weight: normal !important;
 }
 
 .statusnotes {
-    font-size: 10.5pt !important;
-    letter-spacing: 0.2em !important;
-    text-shadow: none !important;
+  font-size: 10.5pt !important;
+  letter-spacing: 0.2em !important;
+  text-shadow: none !important;
 }
 
 .tablefooter tr, .tablefooter td {
-    font-size: 10pt !important;
+  font-size: 10pt !important;
 }
 
 div.tunnels a {
-    font-size: 9.5pt !important;
-    word-spacing: 0 !important;
-    letter-spacing: 0 !important;
+  font-size: 9.5pt !important;
+  word-spacing: 0 !important;
+  letter-spacing: 0 !important;
 }
 
 code, tt, div {
-    font-size: 10pt !important;
+  font-size: 10pt !important;
 }
 
 .messages, .messages li, .infohelp, .infowarn  {
-    font-weight: normal !important;
-    font-size: 11pt !important;
+  font-weight: normal !important;
+  font-size: 11pt !important;
 }
 
 .tab, .tab2 {
-    font-size: 11pt;
-    font-weight: normal;
+  font-size: 11pt;
+  font-weight: normal;
 }
 
 .ui_lang {
-    font-size: 9pt !important;
+  font-size: 9pt !important;
 }
 
 #externali2cp td label + br {
-    display: none;
+  display: none;
 }
 
 #externali2cp td label {
-    margin-right: 8px;
-    white-space: nowrap;
+  margin-right: 8px;
+  white-space: nowrap;
 }
 
 #config_service p.infohelp, #config_clients p.infohelp, #config_clients p.infowarn, #config_clients p#pluginconfig, #config_tunnels p.infohelp,
 p#enablefullstats {
-    margin-top: 12px;
+  margin-top: 12px;
 }
 
 #config_family p.infohelp {
-    margin-bottom: 12px;
+  margin-bottom: 12px;
 }
 
 #jardump td, #jardump td tt {
-    font-size: 8.5pt !important;
+  font-size: 8.5pt !important;
 }
 
 #console p, #console li, #console b {
-    font-size: 10.5pt !important;
-    word-spacing: 0;
-    letter-spacing: 0.15em;
-    line-height: 160%;
+  font-size: 10.5pt !important;
+  word-spacing: 0;
+  letter-spacing: 0.15em;
+  line-height: 160%;
 }
 
 #console code, #console a {
-    word-spacing: normal;
-    letter-spacing: normal;
-    font-size: 10.5pt !important;
+  word-spacing: normal;
+  letter-spacing: normal;
+  font-size: 10.5pt !important;
 }
 
 #console p a, #console li a {
-    padding: 1px 4px;
-    display: inline-block;
-    background: rgba(220,220,255,0.5);
-    border-radius: 2px;
+  padding: 1px 4px;
+  display: inline-block;
+  background: rgba(220,220,255,0.5);
+  border-radius: 2px;
 }
 
 #console li {
-    margin-left: 20px;
-    margin-top: 10px;
-    margin-bottom: 10px;
-    text-align: justify;
-    list-style: none;
+  margin-left: 20px;
+  margin-top: 10px;
+  margin-bottom: 10px;
+  text-align: justify;
+  list-style: none;
 }
 
 #console .links li {
-    margin-left: 35px;
+  margin-left: 35px;
 }
 
 #console .twocol {
-    margin-bottom: -5px !important;
+  margin-bottom: -5px !important;
 }
 
 #console .twocol li {
-    text-align: left;
+  text-align: left;
 }
 
 #console a:hover code {
-    color: #f60 !important;
+  color: #f60 !important;
 }
 
 .tunnel_cap b, b.tunnel_cap {
-    color: #fff !important;
-    font-weight: bold !important;
+  color: #fff !important;
+  font-weight: bold !important;
 }
 
 .cells tt, #profilelist tt, tt a {
-    font-weight: bold !important;
+  font-weight: bold !important;
 }
 
 .formaction {
-    margin-top: -16px;
+  margin-top: -16px;
 }
 
 .netdb_name {
-    font-weight: normal;
-    color: #112;
+  font-weight: normal;
+  color: #112;
 }
 
 .sybilinfo_params {
@@ -265,20 +265,20 @@ p#enablefullstats {
 
 @media screen and (min-width: 1500px) {
 .langbox {
-    line-height: 115% !important;
-    width: 500px;
+  line-height: 115% !important;
+  width: 500px;
 }
 
 #console p, #console li, #console code, #console a {
-    font-size: 11pt !important;
+  font-size: 11pt !important;
 }
 
 .ui_lang {
-    font-size: 10pt !important;
+  font-size: 10pt !important;
 }
 
 .themelabel {
-    font-size: 11pt !important;
+  font-size: 11pt !important;
 }
 }
 

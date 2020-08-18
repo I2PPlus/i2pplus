@@ -1,64 +1,64 @@
 /* Console Theme "Dark" - Mobile Override */
 
 body {
-    padding: 0 5px;
-    margin: 5px 0 !important;
+  padding: 0 5px;
+  margin: 5px 0 !important;
 }
 
 div#xhr {
-    width: 617px;
-    margin: 0 auto;
+  width: 617px;
+  margin: 0 auto;
 }
 
 div.routersummaryouter {
-    position: relative;
-    float: none !important;
-    width: auto;
-    margin: 0 0 5px;
+  position: relative;
+  float: none !important;
+  width: auto;
+  margin: 0 0 5px;
 }
 
 div.routersummary {
-    float: none;
-    width: 600px;
-    margin: 0 auto;
+  float: none;
+  width: 600px;
+  margin: 0 auto;
 }
 
 div[style="height: 36px;"] {
-    height: auto !important;
+  height: auto !important;
 }
 
 div[style="height: 36px;"] + a, a[href="/summaryframe"] {
-    display: inline-block;
-    margin: 7px 0 0 !important;
-    padding: 4px 15px !important;
-    border-radius: 15px;
-    border: 1px solid #494;
+  display: inline-block;
+  margin: 7px 0 0 !important;
+  padding: 4px 15px !important;
+  border-radius: 15px;
+  border: 1px solid #494;
 }
 
 a[href="/summaryframe"] {
-    margin: 3px 0 2px !important;
+  margin: 3px 0 2px !important;
 }
 
 div.routersummary img[src$="i2plogo.png"] {
-    width: 357px;
-    margin-top: 6px;
+  width: 357px;
+  margin-top: 6px;
 }
 
 .percentBarouter {
-    width: calc(100% - 7px);
+  width: calc(100% - 7px);
 }
 
 #sb_memoryBar .percentBarInner {
-    background: linear-gradient(to right, #0000001a, #80800033), linear-gradient(to bottom, #1c943a99 0%, #092f1099 50%, #0d270799 50%, #091b0599 50%, #09150399 100%);
+  background: linear-gradient(to right, #0000001a, #80800033), linear-gradient(to bottom, #1c943a99 0%, #092f1099 50%, #0d270799 50%, #091b0599 50%, #09150399 100%);
 }
 
 @media screen and (min-width: 1500px) {
 div.routersummary {
-    width: 600px !important;
+  width: 600px !important;
 }
 
 .routersummary table[id^="sb_"] {
-    width: 600px !important;
+  width: 600px !important;
 }
 }
 
@@ -67,109 +67,109 @@ div.routersummary {
 .routersummary h4,
 .routersummary h4 a,
 .routersummary button {
-    font-size: 10pt !important;
+  font-size: 10pt !important;
 }
 
 .routersummary h3 a {
-    font-size: 11pt !important;
-    padding: 3px 1px;
+  font-size: 11pt !important;
+  padding: 3px 1px;
 }
 
 div.routersummary table,
 .routersummary table[id^='sb_'] {
-    min-width: 100% !important;
-    min-width: calc(100% - 1px) !important;
-    margin-bottom: -7px !important;
+  min-width: 100% !important;
+  min-width: calc(100% - 1px) !important;
+  margin-bottom: -7px !important;
 }
 
 #sb_general, #sb_shortgeneral, #sb_bandwidth, #sb_peers, #sb_tunnels, #sb_queue {
-    margin-bottom: -8px !important;
+  margin-bottom: -8px !important;
 }
 
 #sb_localtunnels {
-    margin-top: -5px !important;
+  margin-top: -5px !important;
 }
 
 .routersummary table {
-    border-collapse: collapse;
+  border-collapse: collapse;
 }
 
 .routersummary tr:nth-child(odd) td {
-    padding: 3px;
-    background: #020;
-    background: rgba(0,34,0,.5);
+  padding: 3px;
+  background: #020;
+  background: rgba(0,34,0,.5);
 }
 
 .routersummary tr:nth-child(even) td {
-    padding: 3px;
-    background: #000;
-    background: rgba(0,0,0,.3);
+  padding: 3px;
+  background: #000;
+  background: rgba(0,0,0,.3);
 }
 
 .routersummary tr td {
-    border-top: 1px inset transparent !important;
-    border-bottom: 1px inset transparent !important;
+  border-top: 1px inset transparent !important;
+  border-bottom: 1px inset transparent !important;
 }
 
 .routersummary tr:hover td {
-    border-top: 1px solid #030 !important;
-    border-bottom: 1px solid #030 !important;
+  border-top: 1px solid #030 !important;
+  border-bottom: 1px solid #030 !important;
 }
 
 .routersummary tr:hover td {
-    background: #020;
+  background: #020;
 }
 
 .routersummary h3,
 .routersummary h4,
 .routersummary hr {
-    margin-right: 7px !important;
-    margin-left: -10px !important;
+  margin-right: 7px !important;
+  margin-left: -10px !important;
 }
 
 div.routersummary h4 {
-    margin: -6px 7px -8px -10px !important;
+  margin: -6px 7px -8px -10px !important;
 }
 
 div.routersummary form {
-    margin: -2px 5px -4px -11px !important;
+  margin: -2px 5px -4px -11px !important;
 }
 
 .routersummary button[type="submit"], .routersummary button[type="cancel"] {
-    margin: 5px 10px !important;
-    padding: 8px 5px !important;
-    min-width: 120px !important;
+  margin: 5px 10px !important;
+  padding: 8px 5px !important;
+  min-width: 120px !important;
 }
 
 h1 {
-    min-width: 590px;
-    margin: 0 !important;
+  min-width: 590px;
+  margin: 0 !important;
 }
 
 div.news {
-    min-width: 590px;
-    margin: -1px 0 0;
+  min-width: 590px;
+  margin: -1px 0 0;
 }
 
 div.main {
-    min-width: 590px;
-    margin: -1px 0 5px;
+  min-width: 590px;
+  margin: -1px 0 5px;
 }
 
 .sorry {
-    margin: -1px 0 0 !important;
+  margin: -1px 0 0 !important;
 }
 
 @media screen and (min-width: 1500px) {
 div.news {
-    margin: -1px 0 0 !important;
+  margin: -1px 0 0 !important;
 }
 
 div.main {
-    margin: -1px 0 5px !important;
+  margin: -1px 0 5px !important;
 }
 
 .sorry {
-    margin: -1px 0 0 !important;
+  margin: -1px 0 0 !important;
 }
 }

@@ -1,44 +1,44 @@
 /* Susimail Mobile Theme Override "Light" */
 
 body {
-    margin: 0;
+  margin: 0;
 }
 
 .page {
-    min-width: 560px;
-    padding: 5px 5px 0 !important;
-    border-radius: 0;
+  min-width: 560px;
+  padding: 5px 5px 0 !important;
+  border-radius: 0;
 }
 
 form {
-    margin-bottom: 5px;
+  margin-bottom: 5px;
 }
 
 #dologin {
-    width: 500px !important;
+  width: 500px !important;
 }
 
 .header, .footer {
-    display: none;
+  display: none;
 }
 
 @media screen and (max-width: 900px) {
 .mailListDate {
-    white-space: normal;
-    line-height: 100%;
+  white-space: normal;
+  line-height: 100%;
 }
 
 .listDate {
-    padding-bottom: 2px;
-    text-align: center;
-    font-weight: bold;
-    color: #41465f;
-    border-bottom: 1px solid #ddd;
-    opacity: 0.85;
+  padding-bottom: 2px;
+  text-align: center;
+  font-weight: bold;
+  color: #41465f;
+  border-bottom: 1px solid #ddd;
+  opacity: 0.85;
 }
 
 .listTime {
-    text-align: center;
-    font-size: 95%;
+  text-align: center;
+  font-size: 95%;
 }
 }

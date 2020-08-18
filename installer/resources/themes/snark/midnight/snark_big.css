@@ -1,179 +1,179 @@
 @media screen and (min-width: 0) and (max-width: 4000px) {
 * {
-    font-weight: normal !important;
-    font-family: "Noto Sans", "Droid Sans", "Roboto Sans", Ubuntu, "Segoe UI", "Lucida Grande", Helvetica, Arial, Verdana, sans-serif !important;
-    line-height: 120% !important;
+  font-weight: normal !important;
+  font-family: "Noto Sans", "Droid Sans", "Roboto Sans", Ubuntu, "Segoe UI", "Lucida Grande", Helvetica, Arial, Verdana, sans-serif !important;
+  line-height: 120% !important;
 }
 
 .iframed .snarknavbar {
-    padding-bottom: 14px !important;
+  padding-bottom: 14px !important;
 }
 
 .snarkNav {
-    font-weight: bold !important;
+  font-weight: bold !important;
 }
 
 .snarkNav:link {
-    padding-top: 3px !important;
+  padding-top: 3px !important;
 }
 
 .snarkMessages li::before {
-    margin-right: 2px;
-    background-size: 11px 11px;
+  margin-right: 2px;
+  background-size: 11px 11px;
 }
 
 .snarkAddInfo, .snarkAddInfo code {
-    font-size: 10pt !important;
+  font-size: 10pt !important;
 }
 
 #pagenav {
-    font-size: 9.5pt !important;
+  font-size: 9.5pt !important;
 }
 
 input[type], select, #configs select, select option, #configs select option, td, td a,
 .snarkMessages li, .snarkMessages li a, textarea, input.r, input[name="nofilter_dataDir"],
 .configsectionpanel, .configsectionpanel td, #configs td, .trackerconfig td, td.snarkTorrentStatus {
-    font-size: 10.5pt !important;
+  font-size: 10.5pt !important;
 }
 
 th.snarkTorrentDownloaded, th.snarkTorrentUploaded, th.snarkTorrentRateDown, th.snarkTorrentRateUp,
 td.snarkTorrentDownloaded, td.snarkTorrentUploaded, td.snarkTorrentRateDown, td.snarkTorrentRateUp, .snarkTorrentName a:link {
-    font-size: 10pt !important;
+  font-size: 10pt !important;
 }
 
 th.snarkTorrentDownloaded, th.snarkTorrentUploaded, th.snarkTorrentRateDown, th.snarkTorrentRateUp {
-    font-weight: bold !important;
+  font-weight: bold !important;
 }
 
 .snarkNewTorrent #trackerselect tr:first-child td, .snarkNewTorrent td {
-    font-size: 10pt !important;
+  font-size: 10pt !important;
 }
 
 #trackerselect td:first-child, #trackerselect td:last-child {
-    width: 20% !important;
+  width: 20% !important;
 }
 
 #trackerselect td:nth-child(2), #trackerselect td:nth-child(3) {
-    width: 15% !important;
+  width: 15% !important;
 }
 
 input[type], a.control {
-    line-height: 130% !important;
+  line-height: 130% !important;
 }
 
 input[type="text"] {
-    line-height: 130% !important;
+  line-height: 130% !important;
 }
 
 select, #configs select {
-    padding-top: 3px !important;
-    padding-bottom: 3px !important;
-    line-height: 120% !important;
-    font-size: 10.5pt !important;
+  padding-top: 3px !important;
+  padding-bottom: 3px !important;
+  line-height: 120% !important;
+  font-size: 10.5pt !important;
 }
 
 a.control, input[type="submit"], input.accept {
-    padding-top: 3px !important;
-    padding-bottom: 5px !important;
-    text-transform: uppercase !important;
-    letter-spacing: 0.05em;
-    display: inline-block !important;
+  padding-top: 3px !important;
+  padding-bottom: 5px !important;
+  text-transform: uppercase !important;
+  letter-spacing: 0.05em;
+  display: inline-block !important;
 }
 
 select, a.control, input[type="submit"], input.accept, th, #trackerselect tr:first-child td {
-    font-weight: normal !important;
-    font-size: 12pt !important;
+  font-weight: normal !important;
+  font-size: 12pt !important;
 }
 
 .configsectionpanel .snarkConfigTitle, .configsectionpanel .snarkConfigTitle:hover, .configsectionpanel .snarkConfigTitle:active {
-    padding-top: 8px;
-    font-size: 14pt !important;
-    text-transform: uppercase !important;
-    font-variant: normal !important;
+  padding-top: 8px;
+  font-size: 14pt !important;
+  text-transform: uppercase !important;
+  font-variant: normal !important;
 }
 
 .configsectionpanel .snarkConfigTitle img {
-    margin-top: -2px !important;
-    display: inline-block;
-    height: 24px;
-    width: 24px;
-    mix-blend-mode: hard-light;
+  margin-top: -2px !important;
+  display: inline-block;
+  height: 24px;
+  width: 24px;
+  mix-blend-mode: hard-light;
 }
 
 .snarkTorrentInfo th, .snarkDirInfo th, #totals, .snarkCommentInfo th, #configs th {
-    font-size: 11pt !important;
+  font-size: 11pt !important;
 }
 
 .snarkTorrentName a, .snarkDirInfo .snarkFileName a {
-    font-weight: normal !important;
-    padding-top: 2px;
-    padding-bottom: 2px;
+  font-weight: normal !important;
+  padding-top: 2px;
+  padding-bottom: 2px;
 }
 
 .percentbartext {
-    font-size: 8.5pt !important;
+  font-size: 8.5pt !important;
 }
 
 .snarkDirInfo .percentbartext {
-    line-height: 12px !important;
+  line-height: 12px !important;
 }
 
 .snarkTorrents tt {
-    font-size: 9.5pt !important;
+  font-size: 9.5pt !important;
 }
 
 #configs td {
-    line-height: 200% !important;
-    padding-top: 4px !important;
-    padding-bottom: 4px !important;
+  line-height: 200% !important;
+  padding-top: 4px !important;
+  padding-bottom: 4px !important;
 }
 
 #embed, #fullscreen {
-    margin: -37px -4px -6px !important;
-    padding: 0 9px 0 10px !important;
-    font-size: 10pt !important;
+  margin: -37px -4px -6px !important;
+  padding: 0 9px 0 10px !important;
+  font-size: 10pt !important;
 }
 
 #embed::after {
-    height: 14px !important;
+  height: 14px !important;
 }
 
 .knowntracker a {
-    max-width: 220px;
-    overflow: hidden;
-    text-overflow: ellipsis;
-    display: inline-block;
-    white-space: nowrap;
+  max-width: 220px;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  display: inline-block;
+  white-space: nowrap;
 }
 
 .optionlist {
-    columns: 500px auto;
-    column-gap: 5px;
+  columns: 500px auto;
+  column-gap: 5px;
 }
 
 .configOption::after {
-    content: "";
-    display: inline-block;
-    height: 40px;
-    vertical-align: middle;
+  content: "";
+  display: inline-block;
+  height: 40px;
+  vertical-align: middle;
 }
 
 #configs td b {
-    letter-spacing: 0.08em !important;
-    min-width: 180px !important;
+  letter-spacing: 0.08em !important;
+  min-width: 180px !important;
 }
 
 #configs input[name="nofilter_dataDir"], input[name="i2cpOpts"], input[name="nofilter_commentsName"] {
-    width: calc(100% - 200px) !important;
+  width: calc(100% - 200px) !important;
 }
 }
 
 @media screen and (max-width: 1400px) {
 .iframed .snarkTorrents td.snarkTorrentName a {
-    max-width: 400px !important;
-    display: inline-block; !important;
-    white-space: nowrap !important;
-    overflow: hidden !important;
-    text-overflow: ellipsis !important;
+  max-width: 400px !important;
+  display: inline-block; !important;
+  white-space: nowrap !important;
+  overflow: hidden !important;
+  text-overflow: ellipsis !important;
 }
 }

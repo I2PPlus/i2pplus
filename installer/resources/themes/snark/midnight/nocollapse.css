@@ -3,37 +3,37 @@
 
 input#toggle_addtorrent:not(checked) + label + hr + table, input#toggle_createtorrent:not(checked) + label + hr + table,
 input#toggle_addtorrent:checked + label + hr + table, input#toggle_createtorrent:checked + label + hr + table {
-    display: table !important;
+  display: table !important;
 }
 
 label.toggleview, label.toggleview:hover, label.toggleview:active, .toggle_input:focus + label.toggleview {
-    border: 1px solid #302b74 !important;
-    background: #003 !important;
-    background: linear-gradient(to bottom, #191729 25%, #000) !important;
-    background: linear-gradient(to right, rgba(0,0,16,0.1), rgba(64,0,64,0.1), rgba(0,0,16,0.1)), linear-gradient(to bottom, #1d1a2d, #000) !important;
-    box-shadow: inset 0 0 0 1px #000 !important;
-    text-shadow: 0 0 1px #000 !important;
-    cursor: default !important;
+  border: 1px solid #302b74 !important;
+  background: #003 !important;
+  background: linear-gradient(to bottom, #191729 25%, #000) !important;
+  background: linear-gradient(to right, rgba(0,0,16,0.1), rgba(64,0,64,0.1), rgba(0,0,16,0.1)), linear-gradient(to bottom, #1d1a2d, #000) !important;
+  box-shadow: inset 0 0 0 1px #000 !important;
+  text-shadow: 0 0 1px #000 !important;
+  cursor: default !important;
 }
 
 .mainsection input:checked + label + hr + table, .mainsection input:not(checked) + label + hr + table {
-    margin-top: -14px !important;
+  margin-top: -14px !important;
 }
 
 .mainsection input:checked + .toggleview, .mainsection input:not(checked) + .toggleview {
-    display: none;
+  display: none;
 }
 
 .mainsection table {
-    display: table !important;
+  display: table !important;
 }
 
 .toggleview img, .toggleview img:hover, .toggleview img:focus, .toggleview img:active,
 .toggleview:hover img, .toggleview:focus img, .toggleview:active img {
-    border: 2px solid #000 !important;
-    background: #000;
-    background: linear-gradient(to bottom, #003, #000 50%, #3f3f4a 50%, #31313a) !important;
-    box-shadow: 0 0 2px 1px #462458 !important;
-    transform: none !important;
-    filter: drop-shadow(0 0 1px #000) !important;
+  border: 2px solid #000 !important;
+  background: #000;
+  background: linear-gradient(to bottom, #003, #000 50%, #3f3f4a 50%, #31313a) !important;
+  box-shadow: 0 0 2px 1px #462458 !important;
+  transform: none !important;
+  filter: drop-shadow(0 0 1px #000) !important;
 }
