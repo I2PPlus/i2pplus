@@ -493,18 +493,11 @@ td.checkbox {
 }
 
 input[type="checkbox"], input[type="radio"] {
-/*  filter: invert(100%) sepia(100%) hue-rotate(70deg) saturate(200%); /* colorize radios and checkboxes */
   min-width: 16px;
   min-height: 16px;
   background: none;
   cursor: pointer;
 }
-
-/*
-input[type="checkbox"]:hover, input[type="radio"]:hover, input[type="checkbox"]:focus, input[type="radio"]:focus {
-  filter: invert(100%) sepia(100%) hue-rotate(70deg) saturate(200%) drop-shadow(0 0 3px #f60);
-}
-*/
 
 .iframed #visualid {
   margin-top: 16px;
@@ -1814,6 +1807,14 @@ form[action="export"]::after {
   left: calc(50% - 3px);
   right: 0;
   border-color: transparent transparent transparent #252;
+}
+
+#prev:not(.inactive):hover::after, #prev:not(.inactive) a:focus::after {
+  border-color: transparent #f60 transparent transparent;
+}
+
+#next:not(.inactive):hover::after, #next:not(.inactive) a:focus::after {
+  border-color: transparent transparent transparent #f60;
 }
 
 #filtered, #results {
