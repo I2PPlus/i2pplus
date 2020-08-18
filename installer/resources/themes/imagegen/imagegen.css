@@ -4,642 +4,642 @@
 @import url("/themes/fonts/DroidSans.css");
 
 body {
-    background: #ddddef url(/themes/console/classic/images/bg0.png);
-    background: linear-gradient(to bottom, rgba(255,255,255,0.4), rgba(255,255,255,0.2)), url(/themes/console/classic/images/bg0.png) #ddddef;
-    background-size: 100% 100%, 120px 120px;
-    font: 10pt/130% "Droid Sans", "Open Sans", "Noto Sans", Ubuntu, "Bitstream Vera Sans", "DejaVu Sans", "Segoe UI", Verdana, "Lucida Grande", Helvetica, sans-serif;
-    margin: 18px 20px 10px;
-    color: #333337;
-    min-width: 660px;
+  background: #ddddef url(/themes/console/classic/images/bg0.png);
+  background: linear-gradient(to bottom, rgba(255,255,255,0.4), rgba(255,255,255,0.2)), url(/themes/console/classic/images/bg0.png) #ddddef;
+  background-size: 100% 100%, 120px 120px;
+  font: 10pt/130% "Droid Sans", "Open Sans", "Noto Sans", Ubuntu, "Bitstream Vera Sans", "DejaVu Sans", "Segoe UI", Verdana, "Lucida Grande", Helvetica, sans-serif;
+  margin: 18px 20px 10px;
+  color: #333337;
+  min-width: 660px;
 }
 
 * {
-    outline: none;
+  outline: none;
 }
 
 h1 {
-    font-size: 14pt;
-    border: 1px solid #77789f;
-    border-radius: 2px;
-    background: #fff;
-    padding: 8px 10px;
+  font-size: 14pt;
+  border: 1px solid #77789f;
+  border-radius: 2px;
+  background: #fff;
+  padding: 8px 10px;
 }
 
 h2 {
-    font-size: 11pt;
-    border: 1px solid #77789f;
-    border-radius: 2px;
-    background: #fff;
-    padding: 5px 10px;
+  font-size: 11pt;
+  border: 1px solid #77789f;
+  border-radius: 2px;
+  background: #fff;
+  padding: 5px 10px;
 }
 
 h1, h2 {
-    background: linear-gradient(to bottom, #fff 50%, #eef 50%);
-    margin-bottom: 10px;
-    box-shadow: inset 0 0 0 1px #fff, 0 0 1px #aaa;
-    text-shadow: 1px 1px 1px #fff;
-    text-transform: uppercase;
-    letter-spacing: 0.08em;
-    word-spacing: 0.1em;
+  background: linear-gradient(to bottom, #fff 50%, #eef 50%);
+  margin-bottom: 10px;
+  box-shadow: inset 0 0 0 1px #fff, 0 0 1px #aaa;
+  text-shadow: 1px 1px 1px #fff;
+  text-transform: uppercase;
+  letter-spacing: 0.08em;
+  word-spacing: 0.1em;
 }
 
 p {
-    margin: 5px 20px;
-    text-align: justify;
-    line-height: 130%;
+  margin: 5px 20px;
+  text-align: justify;
+  line-height: 130%;
 }
 
 a:link {
-    text-decoration: none;
-    outline: none;
-    color: #33f;
+  text-decoration: none;
+  outline: none;
+  color: #33f;
 }
 
 a:visited {
-    color: #227;
+  color: #227;
 }
 
 a:hover, a:focus {
-    color: #f60;
+  color: #f60;
 }
 
 a:active {
-    color: #f90;
-    text-decoration: underline;
+  color: #f90;
+  text-decoration: underline;
 }
 
 .reference {
-    background: url(/themes/console/classic/images/newtab.png) top 2px right no-repeat;
-    background-size: 12px 10px;
-    padding-right: 14px;
+  background: url(/themes/console/classic/images/newtab.png) top 2px right no-repeat;
+  background-size: 12px 10px;
+  padding-right: 14px;
 }
 
 img {
-    border: 1px solid #77789f;
-    margin: 5px;
-    border-radius: 2px;
-    padding: 1px;
-    background: #fff;
-    box-shadow: inset 0 0 0 1px #fff, 0 0 1px #aaa;
-    animation: fade-in ease 1s;
+  border: 1px solid #77789f;
+  margin: 5px;
+  border-radius: 2px;
+  padding: 1px;
+  background: #fff;
+  box-shadow: inset 0 0 0 1px #fff, 0 0 1px #aaa;
+  animation: fade-in ease 1s;
 }
 
 @keyframes fade-in {
 from {
-    filter: opacity(0);
-    transform: scale(0);
+  filter: opacity(0);
+  transform: scale(0);
 }
 
 to {
-    filter: opacity(1);
-    transform: scale(1);
+  filter: opacity(1);
+  transform: scale(1);
 }
 }
 
 @keyframes fade-in-iframe {
 from {
-    filter: opacity(0);
-    transform: scale(0);
+  filter: opacity(0);
+  transform: scale(0);
 }
 
 to {
-    filter: opacity(1);
-    transform: scale(1.4);
+  filter: opacity(1);
+  transform: scale(1.4);
 }
 }
 
 table {
-    border-collapse: separate;
-    border-spacing: 10px;
-    margin: 0 auto;
+  border-collapse: separate;
+  border-spacing: 10px;
+  margin: 0 auto;
 }
 
 th {
-    background: #fff;
-    border: 1px solid #77789f;
-    border-radius: 2px;
-    text-align: center;
-    font-weight: normal;
-    height: 16px;
-    box-shadow: inset 0 0 0 1px #fff, 0 0 1px #aaa;
+  background: #fff;
+  border: 1px solid #77789f;
+  border-radius: 2px;
+  text-align: center;
+  font-weight: normal;
+  height: 16px;
+  box-shadow: inset 0 0 0 1px #fff, 0 0 1px #aaa;
 }
 
 th.title {
-    font-size: 11pt;
-    font-weight: bold;
-    white-space: nowrap;
-    padding: 5px;
-    background: linear-gradient(to right, #efefff, #fff 10%, #fff 90%, #efefff);
+  font-size: 11pt;
+  font-weight: bold;
+  white-space: nowrap;
+  padding: 5px;
+  background: linear-gradient(to right, #efefff, #fff 10%, #fff 90%, #efefff);
 }
 
 td {
-    text-align: center;
-    padding: 0 5px;
-    vertical-align: top;
+  text-align: center;
+  padding: 0 5px;
+  vertical-align: top;
 }
 
 hr {
-    height: 1px;
-    background: #7e7fb9;
-    border: none;
-    border-bottom: 1px solid #fff;
-    margin-top: 10px;
+  height: 1px;
+  background: #7e7fb9;
+  border: none;
+  border-bottom: 1px solid #fff;
+  margin-top: 10px;
 }
 
 iframe {
-    margin: 44px 0 40px;
-    width: 138px;
-    height: 190px;
-    overflow: hidden;
-    border: none;
-    border-radius: 1px;
-    box-shadow: 0 0 0 1px #77789f, 0 0 1px 1px #aaa;
-    background: #fff;
-    transform: scale(1.4);
-    animation: fade-in-iframe ease 1s;
+  margin: 44px 0 40px;
+  width: 138px;
+  height: 190px;
+  overflow: hidden;
+  border: none;
+  border-radius: 1px;
+  box-shadow: 0 0 0 1px #77789f, 0 0 1px 1px #aaa;
+  background: #fff;
+  transform: scale(1.4);
+  animation: fade-in-iframe ease 1s;
 }
 
 @supports not (-moz-appearance: none) {
 hr {
-    height: 1px;
+  height: 1px;
 }
 }
 
 #qr, #randomart, #identicon {
-    text-align: center;
-    padding: 5px 0;
+  text-align: center;
+  padding: 5px 0;
 }
 
 #randomart td {
-    min-width: 240px;
-    text-align: center;
+  min-width: 240px;
+  text-align: center;
 }
 
 #nav {
-    text-align: right;
+  text-align: right;
 }
 
 form {
-    margin: 15px auto 0;
-    padding-top: 0;
-    border-top: 1px solid #77789f;
-    min-width: 640px;
+  margin: 15px auto 0;
+  padding-top: 0;
+  border-top: 1px solid #77789f;
+  min-width: 640px;
 }
 
 form > * {
-    vertical-align: middle;
+  vertical-align: middle;
 }
 
 .formtitle {
-    border: 1px solid #8d8daa;
-    text-transform: uppercase;
-    font-size: 11pt;
-    font-weight: bold;
-    letter-spacing: 0.2em;
-    word-spacing: 0.1em;
-    margin: -1px auto 10px;
-    padding: 4px 5px;
-    width: 400px;
-    background: #fff;
-    background: linear-gradient(to right, #efefff, #fff 10%, #fff 90%, #efefff);
-    box-shadow: inset 0 0 0 1px #fff, 0 0 1px #aaa;
-    border-radius: 0 0 2px 2px;
-    text-rendering: optimizeLegibility;
+  border: 1px solid #8d8daa;
+  text-transform: uppercase;
+  font-size: 11pt;
+  font-weight: bold;
+  letter-spacing: 0.2em;
+  word-spacing: 0.1em;
+  margin: -1px auto 10px;
+  padding: 4px 5px;
+  width: 400px;
+  background: #fff;
+  background: linear-gradient(to right, #efefff, #fff 10%, #fff 90%, #efefff);
+  box-shadow: inset 0 0 0 1px #fff, 0 0 1px #aaa;
+  border-radius: 0 0 2px 2px;
+  text-rendering: optimizeLegibility;
 }
 
 input, button, select {
-    font: 10pt/130% "Droid Sans", "Open Sans", "Noto Sans", Ubuntu, "Bitstream Vera Sans", "Lucida Grande", "DejaVu Sans", "Segoe UI", Verdana, Helvetica, sans-serif;
-    margin: 5px 3px;
+  font: 10pt/130% "Droid Sans", "Open Sans", "Noto Sans", Ubuntu, "Bitstream Vera Sans", "Lucida Grande", "DejaVu Sans", "Segoe UI", Verdana, Helvetica, sans-serif;
+  margin: 5px 3px;
 }
 
 button, select {
-    box-shadow: inset 0 0 0 1px #fff, 0 0 1px #aaa;
-    cursor: pointer;
+  box-shadow: inset 0 0 0 1px #fff, 0 0 1px #aaa;
+  cursor: pointer;
 }
 
 button::-moz-focus-inner {
-    border: none;
-    outline:none;
+  border: none;
+  outline:none;
 }
 
 button {
-    border: 1px solid #99b;
-    padding: 4.5px 8px;
-    border-radius: 2px;
-    background: #fff;
-    background: linear-gradient(to bottom, #fff, #f2f2ff);
-    box-shadow: inset 0 0 0 1px #fff;
-    color: #333;
-    display: inline-block;
+  border: 1px solid #99b;
+  padding: 4.5px 8px;
+  border-radius: 2px;
+  background: #fff;
+  background: linear-gradient(to bottom, #fff, #f2f2ff);
+  box-shadow: inset 0 0 0 1px #fff;
+  color: #333;
+  display: inline-block;
 }
 
 button > * {
-    vertical-align: middle;
+  vertical-align: middle;
 }
 
 button:hover, button:focus {
-    background: linear-gradient(to bottom, #ddd, #fff);
-    border: 1px solid #89f;
-    color: #111;
-    filter: drop-shadow(0 0 1px #89f);
+  background: linear-gradient(to bottom, #ddd, #fff);
+  border: 1px solid #89f;
+  color: #111;
+  filter: drop-shadow(0 0 1px #89f);
 }
 
 button:active {
-    box-shadow: inset 3px 3px 3px #555;
-    box-shadow: inset 0 0 0 1px #fff, inset 3px 3px 3px #555;
-    border: 1px solid #999;
-    color: #333;
+  box-shadow: inset 3px 3px 3px #555;
+  box-shadow: inset 0 0 0 1px #fff, inset 3px 3px 3px #555;
+  border: 1px solid #999;
+  color: #333;
 }
 
 input[type="text"] {
-    padding: 4px 5px;
-    border-radius: 2px;
-    border: 1px solid #99b;
-    background: #fff;
-    box-shadow: inset 1px 1px 2px #ccc;
-    color: #333;
+  padding: 4px 5px;
+  border-radius: 2px;
+  border: 1px solid #99b;
+  background: #fff;
+  box-shadow: inset 1px 1px 2px #ccc;
+  color: #333;
 }
 
 input[type="text"]:focus {
-    box-shadow: none;
-    border: 1px solid #999;
-    color: #111;
-    filter: drop-shadow(0 0 1px #89f);
+  box-shadow: none;
+  border: 1px solid #999;
+  color: #111;
+  filter: drop-shadow(0 0 1px #89f);
 }
 
 input[type="text"]::placeholder {
-    font-style: italic;
+  font-style: italic;
 }
 
 input[type="text"]:focus::placeholder {
-    opacity: 0;
+  opacity: 0;
 }
 
 select {
-    padding: 4px 24px 4px 4px;
-    vertical-align: middle;
-    text-overflow: ellipsis;
-    color: #333;
-    border: 1px solid #99b;
-    border-radius: 2px;
-    box-shadow: 0 0 0 1px #fff inset, 0 0 1px 0 #ddd;
-    background: url(/themes/console/classic/images/dropdown.png) right 8px center no-repeat #fff;
-    background: url(/themes/console/classic/images/dropdown.png) right 8px center no-repeat, linear-gradient(to bottom, #fff, #f2f2ff);
-    background-size: 10px auto, 100% 100%;
-    -moz-appearance: none;
-    -webit-appearance: none;
-    appearance: none;
+  padding: 4px 24px 4px 4px;
+  vertical-align: middle;
+  text-overflow: ellipsis;
+  color: #333;
+  border: 1px solid #99b;
+  border-radius: 2px;
+  box-shadow: 0 0 0 1px #fff inset, 0 0 1px 0 #ddd;
+  background: url(/themes/console/classic/images/dropdown.png) right 8px center no-repeat #fff;
+  background: url(/themes/console/classic/images/dropdown.png) right 8px center no-repeat, linear-gradient(to bottom, #fff, #f2f2ff);
+  background-size: 10px auto, 100% 100%;
+  -moz-appearance: none;
+  -webit-appearance: none;
+  appearance: none;
 }
 
 select option {
-    background: #fff;
+  background: #fff;
 }
 
 select:focus, select:active {
-    color: #111;
-    border: 1px solid #89f;
-    background-size: 10px auto, 100% 100% !important;
-    outline: none;
+  color: #111;
+  border: 1px solid #89f;
+  background-size: 10px auto, 100% 100% !important;
+  outline: none;
 }
 
 select:hover, select:active {
-    background: url(/themes/console/classic/images/dropdown_hover.png) right 8px center no-repeat, linear-gradient(to bottom, #ddd 0%, #fff 100%) !important;
-    background-size: 10px auto, 100% 100% !important;
+  background: url(/themes/console/classic/images/dropdown_hover.png) right 8px center no-repeat, linear-gradient(to bottom, #ddd 0%, #fff 100%) !important;
+  background-size: 10px auto, 100% 100% !important;
 }
 
 select:focus {
-    box-shadow: 0 0 0 1px #89f;
-    background: url(/themes/console/classic/images/dropdown_hover.png) right 8px center no-repeat, linear-gradient(to bottom, #ddd 0%, #fff 100%) !important;
-    background-size: 10px auto, 100% 100% !important;
+  box-shadow: 0 0 0 1px #89f;
+  background: url(/themes/console/classic/images/dropdown_hover.png) right 8px center no-repeat, linear-gradient(to bottom, #ddd 0%, #fff 100%) !important;
+  background-size: 10px auto, 100% 100% !important;
 }
 
 select::-ms-expand {
-    display: none;
+  display: none;
 }
 
 /* embedded mode */
 
 .iframed hr:last-of-type, .iframed #nav {
-    display: none;
+  display: none;
 }
 
 /* light + classic */
 
 body.iframed.light, body.iframed.classic  {
-    color: #33333f;
-    background: transparent;
+  color: #33333f;
+  background: transparent;
 }
 
 .iframed.classic h1, .iframed.classic h2, .iframed.classic h3, .iframed.classic .formtitle, .iframed.classic .title,
 .iframed.light h1, .iframed.light h2, .iframed.light h3, .iframed.classic .formtitle, .iframed.classic .title {
-    color: #54586f;
+  color: #54586f;
 }
 
 .iframed h1 {
-    display: none;
+  display: none;
 }
 
 /* dark */
 
 body.iframed.dark  {
-    color: #ee9;
-    background: transparent;
+  color: #ee9;
+  background: transparent;
 }
 
 .iframed.dark h1, .iframed.dark h2, .iframed.dark h3, .iframed.dark .formtitle, .iframed.dark .title, .iframed.dark th {
-    color: #ee9;
-    text-shadow: 0 0 2px #010;
-    border: 1px solid #252;
-    box-shadow: inset 0 0 0 1px #000;
-    background: linear-gradient(to bottom, rgba(0,0,0,0) 50%, #000 50%), repeating-linear-gradient(to right, rgba(0,0,0,0.5) 1px, rgba(0,0,0,0.5) 2px, rgba(0,16,0,0.5) 3px), linear-gradient(to bottom, #005000, #000 75%) !important;
+  color: #ee9;
+  text-shadow: 0 0 2px #010;
+  border: 1px solid #252;
+  box-shadow: inset 0 0 0 1px #000;
+  background: linear-gradient(to bottom, rgba(0,0,0,0) 50%, #000 50%), repeating-linear-gradient(to right, rgba(0,0,0,0.5) 1px, rgba(0,0,0,0.5) 2px, rgba(0,16,0,0.5) 3px), linear-gradient(to bottom, #005000, #000 75%) !important;
 }
 
 .iframed.dark iframe, .iframed.midnight iframe {
-    margin-left: 70px !important;
-    padding: 10px 0 10px;
-    width: 200px;
-    height: 204px;
-    overflow: hidden !important;
-    border-radius: 3px;
-    background: #020 !important;
-    clip-path: inset(5px 55px 27px 4px);
+  margin-left: 70px !important;
+  padding: 10px 0 10px;
+  width: 200px;
+  height: 204px;
+  overflow: hidden !important;
+  border-radius: 3px;
+  background: #020 !important;
+  clip-path: inset(5px 55px 27px 4px);
 }
 
 .iframed.midnight iframe {
-    background: #004 !important;
+  background: #004 !important;
 }
 
 .iframed.dark #randomart td:last-child, .iframed.midnight #randomart td:last-child {
-    min-width: 250px;
-    text-align: left;
+  min-width: 250px;
+  text-align: left;
 }
 
 .iframed.dark input[type="text"] {
-    background: #000;
-    background: linear-gradient(to bottom, #000 0%, #010 100%);
-    color: #ee9;
-    margin: 5px 10px;
-    padding: 5px;
-    font: bold 9pt "Droid Sans", "Open Sans", "Noto Sans", Ubuntu, "Segoe UI", "Bitstream Vera Sans", "DejaVu Sans", Verdana, "Lucida Grande", Helvetica, sans-serif;
-    border: 1px solid #252 !important;
-    text-decoration: none;
-    border-radius: 2px;
-    box-shadow: inset 0 0 3px 3px #000;
-    cursor: text;
+  background: #000;
+  background: linear-gradient(to bottom, #000 0%, #010 100%);
+  color: #ee9;
+  margin: 5px 10px;
+  padding: 5px;
+  font: bold 9pt "Droid Sans", "Open Sans", "Noto Sans", Ubuntu, "Segoe UI", "Bitstream Vera Sans", "DejaVu Sans", Verdana, "Lucida Grande", Helvetica, sans-serif;
+  border: 1px solid #252 !important;
+  text-decoration: none;
+  border-radius: 2px;
+  box-shadow: inset 0 0 3px 3px #000;
+  cursor: text;
 }
 
 .iframed.dark select {
-    -moz-appearance: none;
-    -webkit-appearance: none;
-    appearance: none;
-    background: #000 url(/themes/console/dark/images/dropdown.png) right center no-repeat !important;
-    background: url(/themes/console/dark/images/dropdown.png) right center no-repeat, linear-gradient(to bottom, #020 0%, #000 20%, #000 80%, #010 100%) !important;
-    color: #494;
-    margin: 5px 10px;
-    border: 1px outset #191;
-    border-radius: 2px;
-    min-width: 110px;
-    font: 9pt "Droid Sans", "Open Sans", "Noto Sans", Ubuntu, "Segoe UI", "Bitstream Vera Sans", "DejaVu Sans", Verdana, "Lucida Grande", Helvetica, sans-serif;
-    font-weight: bold;
-    padding: 4px 18px 4px 4px !important;
-    cursor: pointer;
-    overflow: hidden;
-    text-overflow: ellipsis;
-    box-shadow: inset 0 0 0 1px #000;
+  -moz-appearance: none;
+  -webkit-appearance: none;
+  appearance: none;
+  background: #000 url(/themes/console/dark/images/dropdown.png) right center no-repeat !important;
+  background: url(/themes/console/dark/images/dropdown.png) right center no-repeat, linear-gradient(to bottom, #020 0%, #000 20%, #000 80%, #010 100%) !important;
+  color: #494;
+  margin: 5px 10px;
+  border: 1px outset #191;
+  border-radius: 2px;
+  min-width: 110px;
+  font: 9pt "Droid Sans", "Open Sans", "Noto Sans", Ubuntu, "Segoe UI", "Bitstream Vera Sans", "DejaVu Sans", Verdana, "Lucida Grande", Helvetica, sans-serif;
+  font-weight: bold;
+  padding: 4px 18px 4px 4px !important;
+  cursor: pointer;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  box-shadow: inset 0 0 0 1px #000;
 }
 
 .iframed.dark select option {
-    font-size: 9.5pt !important;
-    box-shadow: inset 0 0 20px 20px #000;
-    color: #000 !important;
-    background: #000 !important;
+  font-size: 9.5pt !important;
+  box-shadow: inset 0 0 20px 20px #000;
+  color: #000 !important;
+  background: #000 !important;
 }
 
 .iframed.dark select option:hover, .iframed.dark select option:checked {
-    box-shadow: inset 0 0 20px 20px #f60;
-    background: #000 !important;
+  box-shadow: inset 0 0 20px 20px #f60;
+  background: #000 !important;
 }
 
 .iframed.dark select:focus, .iframed.dark select:hover {
-    color: #f60;
-    border: 1px solid #f60;
+  color: #f60;
+  border: 1px solid #f60;
 }
 
 .iframed.dark select:hover {
-    box-shadow: inset 0 0 0 1px #000, inset 0 0 2px 1px rgba(255,86,0,0.8), inset 0 0 0 3px #000;
+  box-shadow: inset 0 0 0 1px #000, inset 0 0 2px 1px rgba(255,86,0,0.8), inset 0 0 0 3px #000;
 }
 
 .iframed.dark select:hover, .iframed.dark select:focus, .iframed.dark select:active {
-    background: #000 url(/themes/console/dark/images/dropdown_hover.png) right center no-repeat !important;
+  background: #000 url(/themes/console/dark/images/dropdown_hover.png) right center no-repeat !important;
 }
 
 .iframed.dark select::-ms-expand {
-    display: none;
+  display: none;
 }
 
 .iframed.dark button {
-    margin: 5px;
-    padding: 5px 8px;
-    min-width: 110px;
-    line-height: 120%;
-    font: bold 9pt "Droid Sans", "Open Sans", "Noto Sans", Ubuntu, "Segoe UI", "Bitstream Vera Sans", "DejaVu Sans", Verdana, "Lucida Grande", Helvetica, sans-serif;
-    color: #494;
-    text-decoration: none;
-    border: 1px solid #8b8;
-    border-bottom: 1px solid #171;
-    border-right: 1px solid #171;
-    box-shadow: inset 0 0 0 1px #000;
-    border-radius: 2px;
-    background: #000;
-    background: linear-gradient(to bottom, #020 0%, #000 20%, #000 80%, #010 100%);
-    filter: drop-shadow(0 0 1px #131);
+  margin: 5px;
+  padding: 5px 8px;
+  min-width: 110px;
+  line-height: 120%;
+  font: bold 9pt "Droid Sans", "Open Sans", "Noto Sans", Ubuntu, "Segoe UI", "Bitstream Vera Sans", "DejaVu Sans", Verdana, "Lucida Grande", Helvetica, sans-serif;
+  color: #494;
+  text-decoration: none;
+  border: 1px solid #8b8;
+  border-bottom: 1px solid #171;
+  border-right: 1px solid #171;
+  box-shadow: inset 0 0 0 1px #000;
+  border-radius: 2px;
+  background: #000;
+  background: linear-gradient(to bottom, #020 0%, #000 20%, #000 80%, #010 100%);
+  filter: drop-shadow(0 0 1px #131);
 }
 
 .iframed.dark button:hover, .iframed.dark button:focus {
-    cursor: pointer;
-    color: #f60 !important;
-    border: 1px solid #f60 !important;
-    background: #000;
+  cursor: pointer;
+  color: #f60 !important;
+  border: 1px solid #f60 !important;
+  background: #000;
 }
 
 .iframed.dark button:hover, .iframed.dark button:focus {
-    box-shadow: inset 0 0 0 1px #000, inset 0 0 2px 1px rgba(255,86,0,0.8), inset 0 0 0 3px #000 !important;
+  box-shadow: inset 0 0 0 1px #000, inset 0 0 2px 1px rgba(255,86,0,0.8), inset 0 0 0 3px #000 !important;
 }
 
 .iframed.dark button:active {
-    color: #ee9 !important;
-    box-shadow: inset 0 0 0 1px #000, inset 3px 3px 3px #000 !important;
-    border: 1px solid #f60 !important;
-    background: #f60 !important;
+  color: #ee9 !important;
+  box-shadow: inset 0 0 0 1px #000, inset 3px 3px 3px #000 !important;
+  border: 1px solid #f60 !important;
+  background: #f60 !important;
 }
 
 .iframed.dark form {
-    border-top: 1px solid #252;
+  border-top: 1px solid #252;
 }
 
 .iframed.dark a:link {
-    color: #494;
-    text-decoration: none;
-    font-weight: bold;
-    word-wrap: break-word;
+  color: #494;
+  text-decoration: none;
+  font-weight: bold;
+  word-wrap: break-word;
 }
 
 .iframed.dark a:visited {
-    color: #7b7;
-    text-decoration: none;
-    font-weight: bold;
-    word-wrap: break-word;
+  color: #7b7;
+  text-decoration: none;
+  font-weight: bold;
+  word-wrap: break-word;
 }
 
 .iframed.dark a:hover, .iframed.dark a:focus {
-    color: #f60 !important;
-    text-decoration: none;
-    font-weight: bold;
-    word-wrap: break-word;
-    outline: none;
+  color: #f60 !important;
+  text-decoration: none;
+  font-weight: bold;
+  word-wrap: break-word;
+  outline: none;
 }
 
 .iframed.dark a:active {
-    color: #f90 !important;
+  color: #f90 !important;
 }
 
 .iframed.dark form {
-    border-top: 1px solid #252;
+  border-top: 1px solid #252;
 }
 
 .iframed.dark table img, .iframed.midnight table img {
-    filter: invert(1);
-    border-color: #737;
+  filter: invert(1);
+  border-color: #737;
 }
 
 /* midnight */
 
 .iframed.midnight table img {
-    border-color: #953;
+  border-color: #953;
 }
 
 body.iframed.midnight {
-    color: #c9ceff;
-    background: transparent;
+  color: #c9ceff;
+  background: transparent;
 }
 
 .iframed.midnight h1, .iframed.midnight h2, .iframed.midnight h3, .iframed.midnight .formtitle, .iframed.midnight .title, .iframed.midnight th {
-    text-shadow: 0 0 2px #000;
-    border: 1px solid #26225d;
-    box-shadow: inset 0 0 0 1px #000;
-    background: linear-gradient(to bottom, #191729 50%, #001 50%) !important;
+  text-shadow: 0 0 2px #000;
+  border: 1px solid #26225d;
+  box-shadow: inset 0 0 0 1px #000;
+  background: linear-gradient(to bottom, #191729 50%, #001 50%) !important;
 }
 
 .iframed.midnight form {
-    border-top: 1px solid #26225d;
+  border-top: 1px solid #26225d;
 }
 
 .iframed.midnight p:first-of-type {
-    margin: -10px 0 20px;
+  margin: -10px 0 20px;
 }
 
 .iframed.midnight button {
-    cursor: pointer;
-    font: bold 9pt "Droid Sans", "Open Sans", "Noto Sans", Ubuntu, "Segoe UI", "Bitstream Vera Sans", "DejaVu Sans", Verdana, "Lucida Grande", Helvetica, sans-serif;
-    color: #6c66bc;
-    border: 1px solid #26225c;
-    box-shadow: inset 0 0 0 1px #000;
-    background: 8px 5px no-repeat, linear-gradient(to bottom, #11101c 50%, #000010 50%);
+  cursor: pointer;
+  font: bold 9pt "Droid Sans", "Open Sans", "Noto Sans", Ubuntu, "Segoe UI", "Bitstream Vera Sans", "DejaVu Sans", Verdana, "Lucida Grande", Helvetica, sans-serif;
+  color: #6c66bc;
+  border: 1px solid #26225c;
+  box-shadow: inset 0 0 0 1px #000;
+  background: 8px 5px no-repeat, linear-gradient(to bottom, #11101c 50%, #000010 50%);
 }
 
 .iframed.midnight button:hover, .iframed.midnight button:focus {
-    background: #000;
-    color: #83529f;
-    border: 1px solid #652787;
-    cursor: pointer;
-    filter: none;
+  background: #000;
+  color: #83529f;
+  border: 1px solid #652787;
+  cursor: pointer;
+  filter: none;
 }
 
 .iframed.midnight button:active {
-    background: #000;
-    color: #c9ceff;
-    border: 1px solid #652787;
-    box-shadow: inset 0 0 0 1px #000;
+  background: #000;
+  color: #c9ceff;
+  border: 1px solid #652787;
+  box-shadow: inset 0 0 0 1px #000;
 }
 
 .iframed.midnight input[type=text] {
-    background: #000;
-    color: #c9ceff;
-    margin: 5px 10px;
-    padding: 4px 2px;
-    font: bold 9pt "Droid Sans", "Open Sans", "Noto Sans", Ubuntu, "Segoe UI", "Bitstream Vera Sans", "DejaVu Sans", Verdana, "Lucida Grande", Helvetica, sans-serif;
-    border: 1px solid #26225d !important;
-    text-decoration: none;
-    box-shadow: inset 1px 1px 1px 0 #000;
-    cursor: text;
+  background: #000;
+  color: #c9ceff;
+  margin: 5px 10px;
+  padding: 4px 2px;
+  font: bold 9pt "Droid Sans", "Open Sans", "Noto Sans", Ubuntu, "Segoe UI", "Bitstream Vera Sans", "DejaVu Sans", Verdana, "Lucida Grande", Helvetica, sans-serif;
+  border: 1px solid #26225d !important;
+  text-decoration: none;
+  box-shadow: inset 1px 1px 1px 0 #000;
+  cursor: text;
 }
 
 .iframed.midnight select {
-    margin: 5px 10px;
-    padding: 4px 20px 4px 4px !important;
-    min-width: 110px;
-    -moz-appearance: none;
-    -webkit-appearance: none;
-    appearance: none;
-    overflow: hidden;
-    text-overflow: ellipsis;
-    font: bold 9pt "Droid Sans", "Open Sans", "Noto Sans", Ubuntu, "Segoe UI", "Bitstream Vera Sans", "DejaVu Sans", Verdana, "Lucida Grande", Helvetica, sans-serif;
-    color: #6c66bc;
-    text-align: center;
-    border: 1px solid #27235f;
-    cursor: pointer;
-    box-shadow: inset 0 0 0 1px #000, 0 0 0 1px #000;
-    background: #000 url(/themes/console/midnight/images/dropdown.png) center right 1px no-repeat !important;
-    background: url(/themes/console/midnight/images/dropdown.png) center right 4px no-repeat, linear-gradient(to bottom, #11101c 50%, #000010 50%) !important;
-    background-size: 14px auto, 100% 100% !important;
-    filter: none !important;
+  margin: 5px 10px;
+  padding: 4px 20px 4px 4px !important;
+  min-width: 110px;
+  -moz-appearance: none;
+  -webkit-appearance: none;
+  appearance: none;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  font: bold 9pt "Droid Sans", "Open Sans", "Noto Sans", Ubuntu, "Segoe UI", "Bitstream Vera Sans", "DejaVu Sans", Verdana, "Lucida Grande", Helvetica, sans-serif;
+  color: #6c66bc;
+  text-align: center;
+  border: 1px solid #27235f;
+  cursor: pointer;
+  box-shadow: inset 0 0 0 1px #000, 0 0 0 1px #000;
+  background: #000 url(/themes/console/midnight/images/dropdown.png) center right 1px no-repeat !important;
+  background: url(/themes/console/midnight/images/dropdown.png) center right 4px no-repeat, linear-gradient(to bottom, #11101c 50%, #000010 50%) !important;
+  background-size: 14px auto, 100% 100% !important;
+  filter: none !important;
 }
 
 @supports not (-moz-appearance: none) {
 .iframed.midnight select {
-    padding: 5px 20px 5px 6px !important;
+  padding: 5px 20px 5px 6px !important;
 }
 }
 
 .iframed.midnight select option {
-    font-weight: normal;
-    font-size: 9.5pt !important;
-    color: #000;
-    box-shadow: inset 0 0 20px 20px #000;
+  font-weight: normal;
+  font-size: 9.5pt !important;
+  color: #000;
+  box-shadow: inset 0 0 20px 20px #000;
 }
 
 .iframed.midnight select option:hover, .iframed.midnight select option:focus, .iframed.midnight select option:checked {
-    box-shadow: inset 0 0 20px 20px #652787;
+  box-shadow: inset 0 0 20px 20px #652787;
 }
 
 .iframed.midnight img[src="dropdown.png"] {
-    filter: invert(100%) sepia(100%) hue-rotate(200deg) saturate(200%);
+  filter: invert(100%) sepia(100%) hue-rotate(200deg) saturate(200%);
 }
 
 .iframed.midnight select:hover, .iframed.midnight select:focus, .iframed.midnight select:active {
-    color: #652787;
-    text-shadow: 0 1px 1px #000;
-    border: 1px solid #652787 !important;
-    box-shadow: inset 0 0 0 1px #000 !important;
-    background: url(/themes/console/midnight/images/dropdown_hover.png) center right 4px no-repeat, linear-gradient(to bottom, #202 50%, #000 50%) !important;
-    background-size: 14px auto, 100% 100%, 100% 100% !important;
+  color: #652787;
+  text-shadow: 0 1px 1px #000;
+  border: 1px solid #652787 !important;
+  box-shadow: inset 0 0 0 1px #000 !important;
+  background: url(/themes/console/midnight/images/dropdown_hover.png) center right 4px no-repeat, linear-gradient(to bottom, #202 50%, #000 50%) !important;
+  background-size: 14px auto, 100% 100%, 100% 100% !important;
 }
 
 .iframed.midnight a:link {
-    color: #7972d1;
-    text-decoration: none;
-    font-weight: bold;
-    word-wrap: break-word;
+  color: #7972d1;
+  text-decoration: none;
+  font-weight: bold;
+  word-wrap: break-word;
 }
 
 .iframed.midnight a:visited {
-    color: #4e47bf;
+  color: #4e47bf;
 }
 
 .iframed.midnight a:hover, .iframed.midnight a:focus {
-    color: #bf2295;
+  color: #bf2295;
 }
 
 .iframed.midnight a:active {
-    color: #851768 !important;
+  color: #851768 !important;
 }

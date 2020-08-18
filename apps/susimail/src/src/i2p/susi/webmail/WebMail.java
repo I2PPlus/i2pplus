@@ -3714,8 +3714,8 @@ public class WebMail extends HttpServlet
 		}
 		out.print("\n</textarea>\n");
 		out.print("<div id=\"prefsave\" align=\"center\">");
-		out.print(button(SAVE, _t("Save Configuration")));
 		out.print(button(CANCEL, _t("Cancel")));
+		out.print(button(SAVE, _t("Save Configuration")));
 		if (folder != null)
 			out.print(spacer + button(LOGOUT, _t("Logout") ));
 		out.print("</div>\n");

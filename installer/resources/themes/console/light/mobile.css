@@ -1,260 +1,260 @@
 /* Console Theme "Light" - Mobile Override */
 
 .routersummaryouter {
-    float: none;
-    margin: 0 !important;
-    position: relative;
-    width: auto;
+  float: none;
+  margin: 0 !important;
+  position: relative;
+  width: auto;
 }
 
 .routersummary {
-    float: none;
-    width: auto;
-    max-width: 600px;
-    min-width: 200px;
-    margin: 0 auto -6px;
-    padding-left: 0;
-    padding-right: 0;
+  float: none;
+  width: auto;
+  max-width: 600px;
+  min-width: 200px;
+  margin: 0 auto -6px;
+  padding-left: 0;
+  padding-right: 0;
 }
 
 @media screen and (min-width: 1500px) {
 .routersummary {
-    width: 600px !important;
+  width: 600px !important;
 }
 
 .routersummary table[id^="sb_"] {
-    width: 600px !important;
+  width: 600px !important;
 }
 }
 
 div[style="height: 36px;"] + a, a[href="/summaryframe"] {
-    display: inline-block;
-    margin: 10px 0 -2px;
-    padding: 2px 10px;
-    border-radius: 15px;
-    border: 1px solid #7778bf;
-    background: #fafaff;
+  display: inline-block;
+  margin: 10px 0 -2px;
+  padding: 2px 10px;
+  border-radius: 15px;
+  border: 1px solid #7778bf;
+  background: #fafaff;
 }
 
 a[href="/summaryframe"] {
-    margin: 5px 0 2px;
+  margin: 5px 0 2px;
 }
 
 #xhr {
-    margin-top: 9px !important;
+  margin-top: 9px !important;
 }
 
 .routersummary h3, .routersummary h4, .routersummary hr {
-    margin-left: 1px;
-    margin-right: 1px;
+  margin-left: 1px;
+  margin-right: 1px;
 }
 
 .routersummary h3 {
-    padding-top: 5px;
-    padding-bottom: 5px;
+  padding-top: 5px;
+  padding-bottom: 5px;
 }
 
 .routersummary h3, .routersummary h3 a {
-    font-size: 11pt !important;
+  font-size: 11pt !important;
 }
 
 .routersummary hr:first-child {
-    margin-bottom: 8px;
+  margin-bottom: 8px;
 }
 
 .routersummary td, .routersummary h4, .routersummary a {
-    font-size: 9pt !important;
+  font-size: 9pt !important;
 }
 
 .routersummary table, table[id^="sb_"], #sb_services, #sb_internals, #sb_advanced, #sb_help {
-    width: 100% !important;
-    margin: -9px 0 -7px !important;
-    border-radius: 4px;
-    border-collapse: separate;
-    border-spacing: 0;
+  width: 100% !important;
+  margin: -9px 0 -7px !important;
+  border-radius: 4px;
+  border-collapse: separate;
+  border-spacing: 0;
 }
 
 #sb_internals, #sb_advanced, #sb_help {
-    margin-top: -11px !important;
+  margin-top: -11px !important;
 }
 
 #sb_internals td, #sb_advanced td, #sb_help td {
-    padding: 3px 4px !important;
+  padding: 3px 4px !important;
 }
 
 #sb_internals a, #sb_advanced a, #sb_help a {
-    margin: 3px 3px 4px;
-    padding: 3px 10px !important;
-    border-radius: 2px;
-    background: #ddf;
-    box-shadow: 0 0 1px #99f;
+  margin: 3px 3px 4px;
+  padding: 3px 10px !important;
+  border-radius: 2px;
+  background: #ddf;
+  box-shadow: 0 0 1px #99f;
 }
 
 #sb_services a:link, #sb_services a:visited {
-    margin-top: 4px;
-    margin-bottom: 4px;
-    background-color: #ddf !important;
+  margin-top: 4px;
+  margin-bottom: 4px;
+  background-color: #ddf !important;
 }
 
 #sb_internals a:active, #sb_advanced a:active, #sb_help a:active {
-    box-shadow: inset 2px 2px 2px #aaa;
+  box-shadow: inset 2px 2px 2px #aaa;
 }
 
 table[id^="sb_"] td, #sb_localtunnels td {
-    padding: 2px 6px 0 !important;
+  padding: 2px 6px 0 !important;
 }
 
 table[id^="sb_"] tr:nth-child(even) td {
-    background: #eef;
-    background: rgba(238, 238, 255, 0.4);
+  background: #eef;
+  background: rgba(238, 238, 255, 0.4);
 }
 
 table[id^="sb_"] tr:nth-child(odd) td {
-    background: #ddf;
-    background: rgba(221, 221, 255, 0.4);
+  background: #ddf;
+  background: rgba(221, 221, 255, 0.4);
 }
 
 #sb_services {
-    text-align: center;
-    border-collapse: separate !important;
-    margin: -12px 0 -8px !important;
+  text-align: center;
+  border-collapse: separate !important;
+  margin: -12px 0 -8px !important;
 }
 
 #sb_services td {
-    border-radius: 4px;
+  border-radius: 4px;
 }
 
 #sb_services a {
-    display: inline-block;
-    width: 24% !important;
-    min-width: 100px;
-    white-space: nowrap;
-    border: none !important;
-    border-radius: 4px;
-    padding: 4px 10px 4px 30px !important;
-    background-position: 8px center !important;
-    margin: 0 3px;
-    background-color: transparent !important;
+  display: inline-block;
+  width: 24% !important;
+  min-width: 100px;
+  white-space: nowrap;
+  border: none !important;
+  border-radius: 4px;
+  padding: 4px 10px 4px 30px !important;
+  background-position: 8px center !important;
+  margin: 0 3px;
+  background-color: transparent !important;
 }
 
 #sb_graphcontainer, #sb_graphcontainer + script + hr {
-    display: none;
+  display: none;
 }
 
 .routersummary button[type="submit"], .routersummary button[type="cancel"] {
-    margin: 3px 5px 0 !important;
-    padding: 8px 5px !important;
-    min-width: 42% !important;
+  margin: 3px 5px 0 !important;
+  padding: 8px 5px !important;
+  min-width: 42% !important;
 }
 
 .percentBarOuter {
-    width: auto;
-    margin: -4px 4px -4px 4px;
+  width: auto;
+  margin: -4px 4px -4px 4px;
 }
 
 #sb_memoryBar {
-    margin-bottom: -5px !important;
+  margin-bottom: -5px !important;
 }
 
 #sb_memoryBar .percentBarInner {
-    background: linear-gradient(to bottom, rgba(255, 255, 255,0.6), rgba(238, 238, 255, 0.6) 50%, rgba(180, 180, 255, 0.7) 50%, rgba(140, 140, 255, 0.7));
+  background: linear-gradient(to bottom, rgba(255, 255, 255,0.6), rgba(238, 238, 255, 0.6) 50%, rgba(180, 180, 255, 0.7) 50%, rgba(140, 140, 255, 0.7));
 }
 
 h1 {
-    margin: 14px 0 -11px;
-    min-width: 0;
+  margin: 14px 0 -11px;
+  min-width: 0;
 }
 
 .news, .news#news {
-    margin: 10px 0 -11px;
-    min-width: 0;
+  margin: 10px 0 -11px;
+  min-width: 0;
 }
 
 .main {
-    margin: 10px 0 0;
-    min-width: 0;
+  margin: 10px 0 0;
+  min-width: 0;
 }
 
 .newsentry + hr + #newsStatus, .newsentry + hr + #newsStatus + #newsDisplay {
-    margin-top: -3px !important;
-    margin-bottom: -2px !important;
+  margin-top: -3px !important;
+  margin-bottom: -2px !important;
 }
 
 .sorry {
-    margin-left: 0 !important;
+  margin-left: 0 !important;
 }
 
 @media screen and (min-width: 640px) {
 #sb_general td, #sb_shortgeneral td, #sb_advancedgeneral td, #sb_bandwidth td,
 #sb_peers td, #sb_peersadvanced td, #sb_tunnels td, #sb_queue td, #sb_localtunnels td a {
-    padding-top: 5px !important;
-    padding-bottom: 5px !important;
-    font-size: 11pt !important;
+  padding-top: 5px !important;
+  padding-bottom: 5px !important;
+  font-size: 11pt !important;
 }
 
 .tunnelBuildStatus, .sb_netstatus, .sb_notice, .percentBarText {
-    font-size: 11pt !important;
+  font-size: 11pt !important;
 }
 
 #sb_services td, #sb_internals td, #sb_advanced td {
-    display: grid;
-    grid-template-columns: 1fr 1fr 1fr;
-    grid-auto-columns: minmax(120px, auto);
+  display: grid;
+  grid-template-columns: 1fr 1fr 1fr;
+  grid-auto-columns: minmax(120px, auto);
 }
 
 #sb_services td {
-    margin-left: -4px;
-    margin-right: -4px;
+  margin-left: -4px;
+  margin-right: -4px;
 }
 
 #sb_internals td, #sb_advanced td {
-    margin-bottom: -2px;
+  margin-bottom: -2px;
 }
 
 #sb_localtunnels a {
-    max-width: 400px;
+  max-width: 400px;
 }
 
 #sb_services a, #sb_internals a, #sb_advanced a {
-    margin: 4px;
-    padding-top: 4px !important;
-    padding-bottom: 4px !important;
-    width: auto !important;
-    min-width: 120px;
-    border-radius: 4px !important;
-    box-shadow: 0 0 1px #99f;
+  margin: 4px;
+  padding-top: 4px !important;
+  padding-bottom: 4px !important;
+  width: auto !important;
+  min-width: 120px;
+  border-radius: 4px !important;
+  box-shadow: 0 0 1px #99f;
 }
 
 #sb_services a:hover, #sb_internals a:hover, #sb_advanced a:hover {
-    box-shadow: inset 0 0 0 1px #f60;
-    background-color: #ffd !important;
+  box-shadow: inset 0 0 0 1px #f60;
+  background-color: #ffd !important;
 }
 
 #sb_services a:active, #sb_internals a:active, #sb_advanced a:active {
-    box-shadow: inset 0 0 0 1px #d30, inset 3px 3px 3px #999;
+  box-shadow: inset 0 0 0 1px #d30, inset 3px 3px 3px #999;
 }
 }
 
 @media screen and (min-width: 1500px) {
 
 h1 {
-    margin: 14px 0 -1px !important;
+  margin: 14px 0 -1px !important;
 }
 
 div.news {
-    margin: 0 0 -11px !important;
+  margin: 0 0 -11px !important;
 }
 
 div.main {
-    margin: 10px 0 0 !important;
-    min-width: 0;
+  margin: 10px 0 0 !important;
+  min-width: 0;
 }
 
 .sorry {
-    margin-left: 0 !important;
+  margin-left: 0 !important;
 }
 }
 
 .confignav {
-    padding-bottom: 10px !important;
+  padding-bottom: 10px !important;
 }

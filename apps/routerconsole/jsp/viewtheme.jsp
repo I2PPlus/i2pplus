@@ -22,6 +22,8 @@ if (uri.endsWith(".css")) {
   response.setContentType("image/x-icon");
 } else if (uri.endsWith(".svg")) {
   response.setContentType("image/svg+xml");
+} else if (uri.endsWith(".ttf")) {
+  response.setContentType("application/x-font-ttf");
 } else if (uri.endsWith(".html")) {
   // /javadoc/
   response.setContentType("text/html");
@@ -71,7 +73,12 @@ if (lastmod > 0) {
 //    response.setDateHeader("Expires", net.i2p.I2PAppContext.getGlobalContext().clock().now() + 86400000l);
     // cache for a month
     response.setDateHeader("Expires", net.i2p.I2PAppContext.getGlobalContext().clock().now() + 2628000000l);
-    response.setHeader("Cache-Control", "no-cache, private, max-age=2628000");
+    if (uri.contains(".png") || uri.contains(".jpg") || uri.contains(".svg") || uri.contains(".ico") ||
+        uri.contains(".ttf") || uri.contains(".css")) {
+        response.setHeader("Cache-Control", "no-cache, private, max-age=2628000, stale-while-revalidate=86400");
+    } else {
+        response.setHeader("Cache-Control", "no-cache, private, max-age=2628000");
+    }
 }
 long length = file.length();
 if (length > 0)

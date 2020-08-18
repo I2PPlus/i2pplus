@@ -3,615 +3,615 @@
 @import url("/themes/fonts/DroidSans.css");
 
 body, pre, table, p, .plate div, h1, h2, h3, h4, th, td {
-    font-family: "Droid Sans", "Open Sans", "Noto Sans", Ubuntu, "Segoe UI", "Lucida Grande", Verdana, Helvetica, sans-serif !important;
+  font-family: "Droid Sans", "Open Sans", "Noto Sans", Ubuntu, "Segoe UI", "Lucida Grande", Verdana, Helvetica, sans-serif !important;
 }
 
 body, pre, table, p, .plate div {
-    font-size: 9pt;
+  font-size: 9pt;
 }
 
 pre {
-    white-space: pre-wrap;
-    font-family: "Droid Sans Mono", "DejaVu Sans Mono", "Noto Mono", "Lucida Console", monospace !important;
+  white-space: pre-wrap;
+  font-family: "Droid Sans Mono", "DejaVu Sans Mono", "Noto Mono", "Lucida Console", monospace !important;
 }
 
 .rawtext {
-/*    overflow-y: auto !important;*/
+/*  overflow-y: auto !important;*/
 }
 
 .rawtext pre, #rawtext_frame {
-    font-family: "Droid Sans Mono", "DejaVu Sans Mono", "Noto Mono", "Lucida Console", monospace !important;
-    font-size: 9.5pt !important;
-    padding: 20px 30px 30px !important;
-    word-break: break-all;
+  font-family: "Droid Sans Mono", "DejaVu Sans Mono", "Noto Mono", "Lucida Console", monospace !important;
+  font-size: 9.5pt !important;
+  padding: 20px 30px 30px !important;
+  word-break: break-all;
 }
 
 /* light */
 
 .light select {
-    -moz-appearance: none;
-    -webkit-appearance: none;
-    appearance: none;
-    background: url(/themes/console/light/images/dropdown.png) right center no-repeat #fff;
-    background: url(/themes/console/light/images/dropdown.png) right center no-repeat, linear-gradient(to bottom, #fff, #efefff);
-    background-blend-mode: hard-light, normal;
-    padding: 4px 16px 4px 4px !important;
-    color: #41465f;
-    margin: 5px;
-    border: 1px solid #999daf;
-    min-width: 60px;
-    font-size: 9pt;
-    border-radius: 2px;
-    text-align: left !important;
-    box-shadow: inset 0 0 0 1px #fff;
-    filter: drop-shadow(0 0 1px #ccf);
+  -moz-appearance: none;
+  -webkit-appearance: none;
+  appearance: none;
+  background: url(/themes/console/light/images/dropdown.png) right center no-repeat #fff;
+  background: url(/themes/console/light/images/dropdown.png) right center no-repeat, linear-gradient(to bottom, #fff, #efefff);
+  background-blend-mode: hard-light, normal;
+  padding: 4px 16px 4px 4px !important;
+  color: #41465f;
+  margin: 5px;
+  border: 1px solid #999daf;
+  min-width: 60px;
+  font-size: 9pt;
+  border-radius: 2px;
+  text-align: left !important;
+  box-shadow: inset 0 0 0 1px #fff;
+  filter: drop-shadow(0 0 1px #ccf);
 }
 
 .light button, .light input[type="submit"], .light input[type="reset"] {
-    margin: 3px;
-    padding: 4px 8px;
-    font-size: 9pt;
-    color: #41465f;
-    text-decoration: none;
-    border: 1px solid #999daf;
-    border-radius: 2px;
-    box-shadow: inset 0 0 0 1px #fff, inset 0 0 0 1px #fff;
-    background: #eee;
-    background: linear-gradient(to bottom, #fff, #efefff);
-    background-size: 14px auto, 100% 100% !important;
-    opacity: 1;
-    filter: drop-shadow(0 0 1px #ccf);
-    min-width: 80px;
+  margin: 3px;
+  padding: 4px 8px;
+  font-size: 9pt;
+  color: #41465f;
+  text-decoration: none;
+  border: 1px solid #999daf;
+  border-radius: 2px;
+  box-shadow: inset 0 0 0 1px #fff, inset 0 0 0 1px #fff;
+  background: #eee;
+  background: linear-gradient(to bottom, #fff, #efefff);
+  background-size: 14px auto, 100% 100% !important;
+  opacity: 1;
+  filter: drop-shadow(0 0 1px #ccf);
+  min-width: 80px;
 }
 
 .light button:hover, .light input[type="submit"]:hover, .light input[type="reset"]:hover, button:focus, .light input[type="submit"]:focus, .light input[type="reset"]:focus {
-    color: #19191f;
-    border: 1px solid #f60;
-    background: linear-gradient(to bottom, #eee, #fff);
-    filter: saturate(100%) drop-shadow(0 0 1px rgba(204, 204, 204, .8));
-    transition: ease border .7s;
+  color: #19191f;
+  border: 1px solid #f60;
+  background: linear-gradient(to bottom, #eee, #fff);
+  filter: saturate(100%) drop-shadow(0 0 1px rgba(204, 204, 204, .8));
+  transition: ease border .7s;
 }
 
 .light button:active, .light input[type="submit"]:active, .light input[type="reset"]:active {
-    color: #4c526f;
-    box-shadow: inset 0 0 0 1px #fff, inset 2px 2px 2px #555;
-    background-blend-mode: luminosity;
-    transition: ease box-shadow .05s;
+  color: #4c526f;
+  box-shadow: inset 0 0 0 1px #fff, inset 2px 2px 2px #555;
+  background-blend-mode: luminosity;
+  transition: ease box-shadow .05s;
 }
 
 .light body, .light th, .light td, .classic body, .classic th, .classic td {
-    color: #33333f;
+  color: #33333f;
 }
 
 .light pre, .classic pre {
-    margin: -10px -8px;
-    padding: 20px;
-    line-height: 20px;
-    color: #333339 !important;
-    background: repeating-linear-gradient(to bottom, #7878ff33, #d2d2ff66 1px, #d2d2ff66 19px, #7878ff33 19px, #f0f0ff66 20px, #f0f0ff66 40px);
+  margin: -10px -8px;
+  padding: 20px;
+  line-height: 20px;
+  color: #333339 !important;
+  background: repeating-linear-gradient(to bottom, #7878ff33, #d2d2ff66 1px, #d2d2ff66 19px, #7878ff33 19px, #f0f0ff66 20px, #f0f0ff66 40px);
 }
 
 .rawtext.light pre, .rawtext.classic pre {
-    padding: 0 10px 5px !important;
-    border-left: 14px solid #eef;
-    border-bottom: 16px solid #eef;
-    border-right: 14px solid #eef;
-    border-top: 16px solid #eef;
+  padding: 0 10px 5px !important;
+  border-left: 14px solid #eef;
+  border-bottom: 16px solid #eef;
+  border-right: 14px solid #eef;
+  border-top: 16px solid #eef;
 }
 
 .rawtext.dark pre {
-    margin: -20px 0;
-    padding: 40px 20px !important;
-    line-height: 20px;
-    background: repeating-linear-gradient(to bottom, #010, #010 20px, #001800 20px, #001800 40px);
-    width: calc(100% - 44px);
-    text-shadow: 0 1px 1px #000;
-    border-left: 5px solid #030;
-    color: #bb7;
+  margin: -20px 0;
+  padding: 40px 20px !important;
+  line-height: 20px;
+  background: repeating-linear-gradient(to bottom, #010, #010 20px, #001800 20px, #001800 40px);
+  width: calc(100% - 44px);
+  text-shadow: 0 1px 1px #000;
+  border-left: 5px solid #030;
+  color: #bb7;
 }
 
 .rawtext.midnight pre {
-    margin: -20px 0;
-    padding: 0 20px 30px !important;
+  margin: -20px 0;
+  padding: 0 20px 30px !important;
 }
 
 .light h3 + pre {
-    margin: 0;
+  margin: 0;
 }
 
 .light table {
-    width: 100%;
+  width: 100%;
  }
 
 .light th {
-    text-align: left;
+  text-align: left;
 }
 
 /* midnight + dark */
 
 .midnight, .dark, .light, .classic {
-    margin: 0;
-    padding: 0;
-    height: 100%;
-    overflow: hidden;
+  margin: 0;
+  padding: 0;
+  height: 100%;
+  overflow: hidden;
 }
 
 .midnight, .dark, .midnight, .dark {
-    color: #777;
-    font-size: 10pt;
-    background: #000;
+  color: #777;
+  font-size: 10pt;
+  background: #000;
 }
 
 .midnight, .midnight h1, .midnight h2, .midnight h3, .midnight div, .midnight p {
-    color: #c9ceff !important;
+  color: #c9ceff !important;
 }
 
 /* midnight */
 
 .midnight pre {
-    margin: -10px -8px;
-    padding: 20px;
-    line-height: 20px;
-    white-space: pre-wrap;
-    color: #c9ceff !important;
-    background: repeating-linear-gradient(to bottom, #000, #001 1px, #001 19px, #000 19px, #002 20px, #002 40px);
+  margin: -10px -8px;
+  padding: 20px;
+  line-height: 20px;
+  white-space: pre-wrap;
+  color: #c9ceff !important;
+  background: repeating-linear-gradient(to bottom, #000, #001 1px, #001 19px, #000 19px, #002 20px, #002 40px);
 }
 
 /* bwscheduler */
 
 html.bwscheduler, body.bwscheduler {
-    background: none !important;
+  background: none !important;
 }
 
 .bwscheduler .plate {
-    border-radius: 0 !important;
-    width: calc(100% - 40px) !important;
-    max-width: 100% !important;
-/*    max-height: 100% !important;
-    height: 100% !important;*/
-    margin: 0 auto !important;
-    padding: 20px 0 !important;
-    text-align: center !important;
-    background: #111 !important;
-    background: linear-gradient(to bottom, #111, #000);
-    background: none !important;
-    text-align: center;
-    vertical-align: top;
+  border-radius: 0 !important;
+  width: calc(100% - 40px) !important;
+  max-width: 100% !important;
+/*  max-height: 100% !important;
+  height: 100% !important;*/
+  margin: 0 auto !important;
+  padding: 20px 0 !important;
+  text-align: center !important;
+  background: #111 !important;
+  background: linear-gradient(to bottom, #111, #000);
+  background: none !important;
+  text-align: center;
+  vertical-align: top;
 }
 
 .plate h1 {
-    margin: 0 0 10px !important;
-    padding: 10px 0 !important;
-    width: 100%;
-    border-bottom: 1px solid #333;
-    color: transparent;
+  margin: 0 0 10px !important;
+  padding: 10px 0 !important;
+  width: 100%;
+  border-bottom: 1px solid #333;
+  color: transparent;
 }
 
 .plate h1 p {
-    margin: 0 !important;
-    padding: 0 !important;
-    display: none;
+  margin: 0 !important;
+  padding: 0 !important;
+  display: none;
 }
 
 .plate a {
-    text-decoration: none;
-    color: #622;
+  text-decoration: none;
+  color: #622;
 }
 
 .plate div:not(.round-button):not(.weekday_container):not(.conatiner_header):not(.outer):not(.inner):not(.bwaction) {
-    float: none !important;
-    max-width: 35% !important;
-    display: inline-block !important;
-    vertical-align: top !important;
+  float: none !important;
+  max-width: 35% !important;
+  display: inline-block !important;
+  vertical-align: top !important;
 }
 
 .plate div:not(.round-button):not(.weekday_container):not(.conatiner_header):not(.outer):not(.inner):not(.bwaction) {
-/*    padding: 10px !important;
-    margin: 10px !important;*/
-    border-radius: 0 !important;
-    border-width: 1px !important;
-    background: linear-gradient(to bottom, #222, #111);
+/*  padding: 10px !important;
+  margin: 10px !important;*/
+  border-radius: 0 !important;
+  border-width: 1px !important;
+  background: linear-gradient(to bottom, #222, #111);
 }
 
 .plate .round-button + div, .plate h1 {
-    display: none !important;
-    width: 0 !important;
-    min-width: 0 !important;
-    margin: 0 !important;
-    padding: 0 !important;
+  display: none !important;
+  width: 0 !important;
+  min-width: 0 !important;
+  margin: 0 !important;
+  padding: 0 !important;
 }
 
 .weekday_container, .conatiner_header, .outer {
-    text-align: center;
-    background: #111 !important;
-    min-height: 0 !important;
+  text-align: center;
+  background: #111 !important;
+  min-height: 0 !important;
 }
 
 .weekday_container {
-    background: none !important;
-    border: 1px solid #222 !important;
-    background: #080808 !important;
-    float: none !important;
-    display: inline-block !important;
-    height: auto !important;
-    min-height: 200px !important;
-    vertical-align: top !important;
-    box-shadow: 0 0 1px 1px rgba(0,0,0,0.4);
-    min-width: 120px !important;
-    margin: 6px !important;
+  background: none !important;
+  border: 1px solid #222 !important;
+  background: #080808 !important;
+  float: none !important;
+  display: inline-block !important;
+  height: auto !important;
+  min-height: 200px !important;
+  vertical-align: top !important;
+  box-shadow: 0 0 1px 1px rgba(0,0,0,0.4);
+  min-width: 120px !important;
+  margin: 6px !important;
 }
 
 .plate::after {
-    content: "";
-    display: block;
-    width: 100%;
-    height: 1px;
-    background: #222;
-    margin-top: 20px;
-    box-shadow: 0 1px 0 1px rgba(0,0,0,0.1);
+  content: "";
+  display: block;
+  width: 100%;
+  height: 1px;
+  background: #222;
+  margin-top: 20px;
+  box-shadow: 0 1px 0 1px rgba(0,0,0,0.1);
 }
 
 .conatiner_header {
-    height: auto !important;
-    padding: 4px 0;
-    vertical-align: middle;
-    background: linear-gradient(to bottom, #222 50%, #111 50%) !important;
+  height: auto !important;
+  padding: 4px 0;
+  vertical-align: middle;
+  background: linear-gradient(to bottom, #222 50%, #111 50%) !important;
 }
 
 .conatiner_header b {
-    letter-spacing: 0.08em !important;
+  letter-spacing: 0.08em !important;
 }
 
 .outer {
-    border: 1px solid transparent !important;
-    border-top: 1px solid #222 !important;
+  border: 1px solid transparent !important;
+  border-top: 1px solid #222 !important;
 }
 
 .bwaction {
-    background: #111 !important;
-    position: relative;
-    z-index: 999;
-    border: none !important;
-    border-bottom: 1px solid #222 !important;
-    padding: 4px 0 !important;
-    font-size: 90% !important;
+  background: #111 !important;
+  position: relative;
+  z-index: 999;
+  border: none !important;
+  border-bottom: 1px solid #222 !important;
+  padding: 4px 0 !important;
+  font-size: 90% !important;
 }
 
 .bwaction a {
-    float: right;
-    margin-right: 4px;
+  float: right;
+  margin-right: 4px;
 }
 
 .plate div[style*="border-color: white"] {
-    border: 1px solid #222 !important;
-    color: #777;
-    box-shadow: inset 0 0 0 1px #000, 0 0 1px 1px rgba(0,0,0,0.4);
-    vertical-align: middle !important;
-    line-height: 200% !important;
+  border: 1px solid #222 !important;
+  color: #777;
+  box-shadow: inset 0 0 0 1px #000, 0 0 1px 1px rgba(0,0,0,0.4);
+  vertical-align: middle !important;
+  line-height: 200% !important;
 }
 
 .plate div[style*="border-color: white"] form {
-    vertical-align: middle !important;
+  vertical-align: middle !important;
 }
 
 .plate div[style*="border-color: white"] form:first-of-type {
-    padding-top: 15px !important;
+  padding-top: 15px !important;
 }
 
 /* light/classic */
 
 .bwscheduler.light .round-button {
-    background: #779 !important;
-    border-color: #7778bf !important;
-    box-shadow: none !important;
-    mix-blend-mode: luminosity !important;
+  background: #779 !important;
+  border-color: #7778bf !important;
+  box-shadow: none !important;
+  mix-blend-mode: luminosity !important;
 }
 
 .bwscheduler.light .plate {
-    color: #33333f !important;
+  color: #33333f !important;
 }
 
 .bwscheduler.light .weekday_container,
 .bwscheduler.light .conatiner_header, .bwscheduler.light .outer {
-    background: #ddf !important;
-    color: #33333f !important;
+  background: #ddf !important;
+  color: #33333f !important;
 }
 
 .bwscheduler.light .weekday_container, .bwscheduler.light .conatiner_header, .bwscheduler.light .outer {
-    background: #ddf !important;
+  background: #ddf !important;
 }
 
 .bwscheduler.light .weekday_container {
-    border: 1px solid #8d8daa !important;
-    box-shadow: inset 0 0 0 1px #fff, 0 0 1px 1px rgba(220,220,255,0.4);
-    background: #e0e0ff !important;
-    background: linear-gradient(to bottom, #e8e8ff, #d8d8ff) !important;
+  border: 1px solid #8d8daa !important;
+  box-shadow: inset 0 0 0 1px #fff, 0 0 1px 1px rgba(220,220,255,0.4);
+  background: #e0e0ff !important;
+  background: linear-gradient(to bottom, #e8e8ff, #d8d8ff) !important;
 }
 
 .bwscheduler.light .conatiner_header {
-    color: #54586f !important;
-    text-shadow: 0 1px 1px #fff,0 -1px 1px #e2e2ff, 0 2px 1px #ddf;
-    background: #e7e7ff linear-gradient(to bottom, #fff 50%, rgba(255,255,255,.6) 50%, rgba(240,240,255,.4)) !important;
+  color: #54586f !important;
+  text-shadow: 0 1px 1px #fff,0 -1px 1px #e2e2ff, 0 2px 1px #ddf;
+  background: #e7e7ff linear-gradient(to bottom, #fff 50%, rgba(255,255,255,.6) 50%, rgba(240,240,255,.4)) !important;
 }
 
 .bwscheduler.light .outer {
-    border-top-color: #7778bf !important;
+  border-top-color: #7778bf !important;
 }
 
 .bwscheduler.light .bwaction, .bwscheduler.light .outer {
-    background: #eef !important;
+  background: #eef !important;
 }
 
 .bwscheduler.light .bwaction {
-    border-bottom-color: #7778bf !important;
+  border-bottom-color: #7778bf !important;
 }
 
 .bwscheduler.light .plate div[style*="border-color: white"] {
-    border: 1px solid #8d8daa !important;
-    box-shadow: inset 0 0 0 1px #fff, 0 0 1px 1px rgba(220,220,255,0.4);
-    background: #f2f2ff !important;
-    background: linear-gradient(to bottom, #f2f2ff, #e8e8ff) !important;
-    color: #26262f !important;
-    padding: 10px 10px 8px !important;
+  border: 1px solid #8d8daa !important;
+  box-shadow: inset 0 0 0 1px #fff, 0 0 1px 1px rgba(220,220,255,0.4);
+  background: #f2f2ff !important;
+  background: linear-gradient(to bottom, #f2f2ff, #e8e8ff) !important;
+  color: #26262f !important;
+  padding: 10px 10px 8px !important;
 }
 
 .bwscheduler.light .plate::after {
-    background: #7778bf !important;
-    box-shadow: none !important;
+  background: #7778bf !important;
+  box-shadow: none !important;
 }
 
 .bwscheduler.light .plate div[style*="border-color: white"] ul, .bwscheduler.light .plate div[style*="border-color: white"] li {
-    list-style-type: none;
-    display: inline-block;
-    margin: 0;
-    padding: 0;
+  list-style-type: none;
+  display: inline-block;
+  margin: 0;
+  padding: 0;
 }
 
 .bwscheduler.light .plate div[style*="border-color: white"] ul {
-    padding: 0 10px;
-    margin-top: -5px !important;
+  padding: 0 10px;
+  margin-top: -5px !important;
 }
 
 .bwscheduler.light .plate div[style*="border-color: white"] li:first-child::after {
-    content: "\00A0\00A0\2022\00A0";
+  content: "\00A0\00A0\2022\00A0";
 }
 
 .bwscheduler.light .plate div[style*="border-color: white"] p {
-    padding: 0 10px;
-    margin: 0;
+  padding: 0 10px;
+  margin: 0;
 }
 
 .bwscheduler .light .plate div[style*="border-color: white"] form {
-    margin: 0;
-    padding: 0 !important;
+  margin: 0;
+  padding: 0 !important;
 }
 
 .bwscheduler .light button, .bwscheduler .light input[type="submit"] {
-    margin-top: 6px;
-    margin-bottom: 6px;
+  margin-top: 6px;
+  margin-bottom: 6px;
 }
 
 .bwscheduler .bwaction {
-    font-size: 100% !important;
+  font-size: 100% !important;
 }
 
 .light .bwscheduler .bwaction {
-    color: #373;
+  color: #373;
 }
 
 .bwscheduler .bwaction a {
-    font-size: 0;
+  font-size: 0;
 }
 
 .bwscheduler .bwaction a::after {
-    content: url(/themes/console/images/buttons/delete.png);
-    display: inline-block;
-    height: 16px;
-    width: 16px;
-    vertical-align: middle;
+  content: url(/themes/console/images/buttons/delete.png);
+  display: inline-block;
+  height: 16px;
+  width: 16px;
+  vertical-align: middle;
 }
 
 /* midnight */
 
 .bwscheduler.midnight .weekday_container, .bwscheduler.midnight .plate div[style*="border-color: white"] {
-    border-color: #26225d !important;
+  border-color: #26225d !important;
 }
 
 .bwscheduler.midnight .bwaction {
-    border-bottom-color: #26225d !important;
+  border-bottom-color: #26225d !important;
 }
 
 .bwscheduler.midnight .outer {
-    border-top-color: #26225d !important;
+  border-top-color: #26225d !important;
 }
 
 .bwscheduler.midnight .conatiner_header {
-    color: #c9ceff !important;
-    background: linear-gradient(to bottom, #191729 50%, #001 50%) !important;
+  color: #c9ceff !important;
+  background: linear-gradient(to bottom, #191729 50%, #001 50%) !important;
 }
 
 .bwscheduler.midnight .plate::after {
-    background: #26225d !important;
+  background: #26225d !important;
  }
 
 /* imagegen */
 
 #imagegen h1 {
-    display: none !important;
+  display: none !important;
 }
 
 /* orchid */
 
 .orchid body {
-    margin: 0 !important;
-    font-weight: bold;
-    line-height: 150%;
+  margin: 0 !important;
+  font-weight: bold;
+  line-height: 150%;
 }
 
 .orchid pre {
-    margin: -10px 0 5px !important;
-    padding: 20px 10px 10px !important;
-    border: 1px solid #8d8daa	;
-    border-radius: 0 0 4px 4px;
+  margin: -10px 0 5px !important;
+  padding: 20px 10px 10px !important;
+  border: 1px solid #8d8daa	;
+  border-radius: 0 0 4px 4px;
 }
 
 .orchid div {
-    padding: 12px 20px 18px !important;
-    vertical-align: top;
-    margin-top: -10px;
+  padding: 12px 20px 18px !important;
+  vertical-align: top;
+  margin-top: -10px;
 }
 
 .orchid h3 {
-    padding: 6px 8px;
-    padding-left: 32px;
-    border: 1px solid #8d8daa;
-    background: url(/themes/console/images/plugin.png) 8px center no-repeat, linear-gradient(to bottom, #fff 50%, #eef 50%), linear-gradient(to right, #fafaff 5%, rgba(231, 231, 255, .8) 25%) !important;
-    background-size: 20px 20px, 100% 100%, 100% 100% !important;
-    text-transform: uppercase;
-    letter-spacing: 0.08em;
-    word-spacing: 0.08em;
-    border-radius: 4px;
-    font-size: 11.5pt;
-    color: #54586f;
-    position: relative;
-    z-index: 999;
-    box-shadow: inset 0 0 0 1px #fff;
+  padding: 6px 8px;
+  padding-left: 32px;
+  border: 1px solid #8d8daa;
+  background: url(/themes/console/images/plugin.png) 8px center no-repeat, linear-gradient(to bottom, #fff 50%, #eef 50%), linear-gradient(to right, #fafaff 5%, rgba(231, 231, 255, .8) 25%) !important;
+  background-size: 20px 20px, 100% 100%, 100% 100% !important;
+  text-transform: uppercase;
+  letter-spacing: 0.08em;
+  word-spacing: 0.08em;
+  border-radius: 4px;
+  font-size: 11.5pt;
+  color: #54586f;
+  position: relative;
+  z-index: 999;
+  box-shadow: inset 0 0 0 1px #fff;
 }
 
 .orchid h3:nth-child(n+2) {
-    margin-bottom: -1px;
-    border-radius: 4px 4px 0 0;
-    background: url(/themes/console/images/info/globe.png) 8px center no-repeat, linear-gradient(to bottom, #fff 50%, #eef 50%), linear-gradient(to right, #fafaff 5%, rgba(231, 231, 255, .8) 25%) !important;
-    background-size: 20px 20px, 100% 100%, 100% 100% !important;
+  margin-bottom: -1px;
+  border-radius: 4px 4px 0 0;
+  background: url(/themes/console/images/info/globe.png) 8px center no-repeat, linear-gradient(to bottom, #fff 50%, #eef 50%), linear-gradient(to right, #fafaff 5%, rgba(231, 231, 255, .8) 25%) !important;
+  background-size: 20px 20px, 100% 100%, 100% 100% !important;
 }
 
 .orchid h3:nth-child(n+4) {
-    background: url(/themes/console/images/info/configure.png) 8px center no-repeat, linear-gradient(to bottom, #fff 50%, #eef 50%), linear-gradient(to right, #fafaff 5%, rgba(231, 231, 255, .8) 25%) !important;
-    background-size: 20px 20px, 100% 100%, 100% 100% !important;
-    padding-left: 32px;
+  background: url(/themes/console/images/info/configure.png) 8px center no-repeat, linear-gradient(to bottom, #fff 50%, #eef 50%), linear-gradient(to right, #fafaff 5%, rgba(231, 231, 255, .8) 25%) !important;
+  background-size: 20px 20px, 100% 100%, 100% 100% !important;
+  padding-left: 32px;
 }
 
 .orchid h3:nth-child(n+4), .orchid table {
-    display: none; /* hide configuration table */
+  display: none; /* hide configuration table */
 }
 
 .orchid table {
-    border: 1px solid #8d8daa;
-    margin-bottom: 5px !important;
-    border-spacing: 0;
-    border-radius: 0 0 4px 4px;
+  border: 1px solid #8d8daa;
+  margin-bottom: 5px !important;
+  border-spacing: 0;
+  border-radius: 0 0 4px 4px;
 }
 
 .orchid th {
-    padding: 5px 8px;
-    font-size: 120%:
+  padding: 5px 8px;
+  font-size: 120%:
 }
 
 .orchid td {
-    padding: 3px 10px;
+  padding: 3px 10px;
 }
 
 .orchid tr:nth-child(odd) {
-    background: #ddf;
+  background: #ddf;
 }
 
 .orchid tr:nth-child(even) {
-    background: #eef;
+  background: #eef;
 }
 
 .orchid tr:first-child, .orchid tr:first-child td {
-    background: #fff;
-    text-transform: uppercase;
-    font-size: 120%;
-    display: none;
+  background: #fff;
+  text-transform: uppercase;
+  font-size: 120%;
+  display: none;
 }
 
 .orchid td:first-child, .orchid th:first-child {
-    width: 50%;
-    white-space: nowrap;
-    font-weight: bold;
+  width: 50%;
+  white-space: nowrap;
+  font-weight: bold;
 }
 
 .orchid td:last-child {
-    font-style: italic;
+  font-style: italic;
 }
 
 /*.orchid.light tr:nth-child(2) td {
-    border-top: 1px solid #99f;
+  border-top: 1px solid #99f;
 }*/
 
 .orchid tr:nth-child(n+2):hover {
-    background: #ffd;
+  background: #ffd;
 }
 
 /* orchid dark */
 
 html.orchid.dark, body.orchid.dark, .orchid.dark div, html.orchid.midnight, body.orchid.midnight, .orchid.midnight div {
-    background: transparent !important;
+  background: transparent !important;
 }
 
 body.orchid.dark, .orchid.dark h3, .orchid.dark pre, .orchid.dark th, .orchid.dark td {
-    color: #ee9 !important;
-    line-height: 150%;
+  color: #ee9 !important;
+  line-height: 150%;
 }
 
 .orchid.dark h3, .orchid.dark h3:nth-child(n+1), .orchid.dark table, .orchid.dark pre {
-    border-color: #252 !important;
-    background: #010;
+  border-color: #252 !important;
+  background: #010;
 }
 
 .orchid.dark h3:first-of-type, .orchid.midnight h3:first-of-type {
-    margin-top: 5px;
+  margin-top: 5px;
 }
 
 .orchid.dark h3 {
-    background: url(/themes/console/images/plugin.png) 8px center no-repeat, linear-gradient(to bottom, rgba(0,0,0,0) 50%, #000 50%), repeating-linear-gradient(to right, rgba(0,0,0,0.5) 1px, rgba(0,0,0,0.5) 2px, rgba(0,16,0,0.5) 3px), linear-gradient(to bottom, #005000, #000 75%) !important;
-    background-size: 20px 20px, 100% 100% !important;
-    box-shadow: inset 0 0 0 1px #000;
+  background: url(/themes/console/images/plugin.png) 8px center no-repeat, linear-gradient(to bottom, rgba(0,0,0,0) 50%, #000 50%), repeating-linear-gradient(to right, rgba(0,0,0,0.5) 1px, rgba(0,0,0,0.5) 2px, rgba(0,16,0,0.5) 3px), linear-gradient(to bottom, #005000, #000 75%) !important;
+  background-size: 20px 20px, 100% 100% !important;
+  box-shadow: inset 0 0 0 1px #000;
 }
 
 .orchid.dark h3:nth-child(n+2) {
-    margin-bottom: -1px;
-    border-radius: 4px 4px 0 0;
-    background: url(/themes/console/images/info/globe.png) 8px center no-repeat, linear-gradient(to bottom, rgba(0,0,0,0) 50%, #000 50%), repeating-linear-gradient(to right, rgba(0,0,0,0.5) 1px, rgba(0,0,0,0.5) 2px, rgba(0,16,0,0.5) 3px), linear-gradient(to bottom, #005000, #000 75%) !important;
-    background-size: 20px 20px, 100% 100% !important;
+  margin-bottom: -1px;
+  border-radius: 4px 4px 0 0;
+  background: url(/themes/console/images/info/globe.png) 8px center no-repeat, linear-gradient(to bottom, rgba(0,0,0,0) 50%, #000 50%), repeating-linear-gradient(to right, rgba(0,0,0,0.5) 1px, rgba(0,0,0,0.5) 2px, rgba(0,16,0,0.5) 3px), linear-gradient(to bottom, #005000, #000 75%) !important;
+  background-size: 20px 20px, 100% 100% !important;
 }
 
 .orchid.dark h3:nth-child(n+4) {
-    background: url(/themes/console/images/info/configure.png) 8px center no-repeat, linear-gradient(to bottom, rgba(0,0,0,0) 50%, #000 50%), repeating-linear-gradient(to right, rgba(0,0,0,0.5) 1px, rgba(0,0,0,0.5) 2px, rgba(0,16,0,0.5) 3px), linear-gradient(to bottom, #005000, #000 75%) !important;
-    background-size: 20px 20px, 100% 100% !important;
-    padding-left: 32px;
+  background: url(/themes/console/images/info/configure.png) 8px center no-repeat, linear-gradient(to bottom, rgba(0,0,0,0) 50%, #000 50%), repeating-linear-gradient(to right, rgba(0,0,0,0.5) 1px, rgba(0,0,0,0.5) 2px, rgba(0,16,0,0.5) 3px), linear-gradient(to bottom, #005000, #000 75%) !important;
+  background-size: 20px 20px, 100% 100% !important;
+  padding-left: 32px;
 }
 
 /*  orchid midnight */
 
 .orchid.midnight h3, .orchid.midnight h3:nth-child(n+1), .orchid.midnight table, .orchid.midnight pre {
-    border-color: #26225d;
+  border-color: #26225d;
 }
 
 .orchid.midnight h3 {
-    background: url(/themes/console/images/plugin.png) 8px center no-repeat, linear-gradient(to right, #00001080, #0000 30%, #1000101a), linear-gradient(to bottom, #191729 50%, #001 50%) !important;
-    background-size: 20px 20px, 100% 100%, 100% 100% !important;
-    box-shadow: inset 0 0 0 1px #000;
+  background: url(/themes/console/images/plugin.png) 8px center no-repeat, linear-gradient(to right, #00001080, #0000 30%, #1000101a), linear-gradient(to bottom, #191729 50%, #001 50%) !important;
+  background-size: 20px 20px, 100% 100%, 100% 100% !important;
+  box-shadow: inset 0 0 0 1px #000;
 }
 
 .orchid.midnight h3:nth-child(n+2) {
-    margin-bottom: -1px;
-    border-radius: 4px 4px 0 0;
-    background: url(/themes/console/images/info/globe.png) 8px center no-repeat, linear-gradient(to right, #00001080, #0000 30%, #1000101a), linear-gradient(to bottom, #191729 50%, #001 50%) !important;
-    background-size: 20px 20px, 100% 100%, 100% 100% !important;
+  margin-bottom: -1px;
+  border-radius: 4px 4px 0 0;
+  background: url(/themes/console/images/info/globe.png) 8px center no-repeat, linear-gradient(to right, #00001080, #0000 30%, #1000101a), linear-gradient(to bottom, #191729 50%, #001 50%) !important;
+  background-size: 20px 20px, 100% 100%, 100% 100% !important;
 }
 
 .orchid.midnight h3:nth-child(n+4) {
-    background: url(/themes/console/images/info/configure.png) 8px center no-repeat, linear-gradient(to right, #00001080, #0000 30%, #1000101a), linear-gradient(to bottom, #191729 50%, #001 50%) !important;
-    background-size: 20px 20px, 100% 100%, 100% 100% !important;
-    padding-left: 32px;
+  background: url(/themes/console/images/info/configure.png) 8px center no-repeat, linear-gradient(to right, #00001080, #0000 30%, #1000101a), linear-gradient(to bottom, #191729 50%, #001 50%) !important;
+  background-size: 20px 20px, 100% 100%, 100% 100% !important;
+  padding-left: 32px;
 }
 
 /* bote */
 
 .bote #endOfPage {
-    display: block;
-    float: right;
-    width: 100%;
+  display: block;
+  float: right;
+  width: 100%;
 }

@@ -6,186 +6,186 @@
 /* sidepanel */
 
 .routersummary {
-    font: 9.5pt/125%;
+  font: 9.5pt/125%;
 }
 
 .routersummary h3 {
-    padding: 2px 4px !important;
+  padding: 2px 4px !important;
 }
 
 .routersummary h3, .routersummary h3 a {
-    font-size: 11.5pt !important;
+  font-size: 11.5pt !important;
 }
 
 .routersummary h4, .routersummary h4 a {
-    font-size: 10.5pt !important;
-    letter-spacing: 0;
+  font-size: 10.5pt !important;
+  letter-spacing: 0;
 }
 
 .routersummary table, #sb_localtunnels {
-    margin: -5px 0 -5px 1px;
-    width: 200px !important;
-    font-size: 9pt;
+  margin: -5px 0 -5px 1px;
+  width: 200px !important;
+  font-size: 9pt;
 }
 
 .routersummary table a:link, .routersummary table a:visited {
-    font-size: 11pt !important;
+  font-size: 11pt !important;
 }
 
 #sb_internals a, #sb_services a, #sb_advanced a {
-    font-size: 11pt !important;
+  font-size: 11pt !important;
 }
 
 .sb_newsheadings a {
-    margin-top: 0;
+  margin-top: 0;
 }
 
 #sb_notice, #sb_notice a {
-    font-size: 10pt !important;
+  font-size: 10pt !important;
 }
 
 /* end sidepanel */
 
 button.search {
-    white-space: nowrap;
-    font-size: 11pt !important;
+  white-space: nowrap;
+  font-size: 11pt !important;
 }
 
 #newsDisplay, #newsDisplay a, #newsStatus {
-    font-size: 11pt !important;
+  font-size: 11pt !important;
 }
 
 .langbox {
-    margin-top: 4px !important;
-    margin-right: 5px !important;
-    width: 460px;
+  margin-top: 4px !important;
+  margin-right: 5px !important;
+  width: 460px;
 }
 
 .applabel, .themechoice, .langselect {
-    width: 152px !important;
+  width: 152px !important;
 }
 
 .ui_lang, .themechoice {
-    width: 156px !important;
-    line-height: 140% !important;
+  width: 156px !important;
+  line-height: 140% !important;
 }
 
 .appimg {
-    height: 50px !important;
+  height: 50px !important;
 }
 
 .app img {
-    padding: 12px 60px 40px !important;
+  padding: 12px 60px 40px !important;
 }
 
 .applabel a, .applabel a:hover {
-    padding: 4px 2px;
+  padding: 4px 2px;
 }
 
 .applabel a, .applabel a:hover, .themelabel, .app td {
-    font-size: 11pt !important;
+  font-size: 11pt !important;
 }
 
 #news #newsDisplay a, #graphopts a, #routerinfo a {
-    padding: 0 10px 1px !important;
+  padding: 0 10px 1px !important;
 }
 
 /* configui */
 
 .ui_lang {
-    font-size: 10pt;
+  font-size: 10pt;
 }
 
 .themechoice .optbox {
-    min-width: 156px !important;
-    margin-left: -50px !important;
+  min-width: 156px !important;
+  margin-left: -50px !important;
 }
 
 .langselect .optbox {
-    min-width: 156px !important;
+  min-width: 156px !important;
 }
 
 .langselect img {
-    margin-left: -98px !important;
+  margin-left: -98px !important;
 }
 
 .langselect input[name="lang"]:checked + img {
-    margin-left: -95px !important;
+  margin-left: -95px !important;
 }
 
 @media screen and (-webkit-min-device-pixel-ratio:0) and (min-resolution:.001dpcm) {
 .langselect img {
-    margin-left: -20px !important;
-    margin-top: -31px !important;
+  margin-left: -20px !important;
+  margin-top: -31px !important;
 }
 
 .langselect input[name="lang"]:checked + img {
-    margin-left: -16px !important;
-    margin-top: -26px !important;
+  margin-left: -16px !important;
+  margin-top: -26px !important;
 }
 }
 
 /* end configui */
 
 label, select, select option, #configstats th b, .infohelp, .infowarn {
-    font-size: 11pt !important;
+  font-size: 11pt !important;
 }
 
 .messages li, code {
-    font-weight: normal !important;
-    font-size: 11pt;
+  font-weight: normal !important;
+  font-size: 11pt;
 }
 
 .confignav, .sorry {
-    font-size: 12pt;
+  font-size: 12pt;
 }
 
 .tab, .tab2 {
-    margin-right: -4px !important;
+  margin-right: -4px !important;
 }
 
 /* welcome */
 
 div[lang="zh"], div[lang="zh"] a, ul li, div[lang="zh"] p {
-    letter-spacing: 0.1em !important;
-    word-spacing: 0.1em !important;
-    line-height: 160% !important;
+  letter-spacing: 0.1em !important;
+  word-spacing: 0.1em !important;
+  line-height: 160% !important;
 }
 
 div[lang="zh"], div[lang="zh"] a, div[lang="zh"] p, div[lang="zh"] li  {
-    font-size: 10pt !important;
+  font-size: 10pt !important;
 }
 
 div[lang="zh"] p {
-    margin-left: 15px;
-    margin-right: 15px;
+  margin-left: 15px;
+  margin-right: 15px;
 }
 
 div[lang="zh"] li {
-    margin-top: 5px;
-    margin-bottom: 5px;
+  margin-top: 5px;
+  margin-bottom: 5px;
 }
 
 div[lang="zh"] li:last-child {
-    margin-bottom: -10px !important;
+  margin-bottom: -10px !important;
 }
 
 ul.links li {
-    text-align: justify;
+  text-align: justify;
 }
 
 .twocol {
-    margin-top: 15px !important;
-    margin-bottom: -15px !important;
+  margin-top: 15px !important;
+  margin-bottom: -15px !important;
 }
 
 #externali2cp td label + br {
-    display: none;
+  display: none;
 }
 
 #externali2cp td label {
-    margin-right: 8px;
-    white-space: nowrap;
+  margin-right: 8px;
+  white-space: nowrap;
 }
 
 /* end welcome */
@@ -194,87 +194,87 @@ ul.links li {
 
 @media screen and (min-width: 0) {
 a, b, .routersummary h3 a, .routersummary h4 {
-    font-weight: normal !important;
-    font-size: 100%;
+  font-weight: normal !important;
+  font-size: 100%;
 }
 
 body, p, #news p {
-    font: 11pt "Noto Sans", Verdana, "Bitstream Vera Sans", Helvetica, Sans, sans-serif !important;
-    font-size-adjust: 0.6;
+  font: 11pt "Noto Sans", Verdana, "Bitstream Vera Sans", Helvetica, Sans, sans-serif !important;
+  font-size-adjust: 0.6;
 }
 
 .logo a:link {
-    font-size: 11pt !important;
+  font-size: 11pt !important;
 }
 
 h1 {
-    font-weight: normal;
+  font-weight: normal;
 }
 
 h2, h2 a[name], h3, h4.app, h4.app2 {
-    font-size: 14pt !important;
-    font-weight: normal !important;
-    letter-spacing: 0.1em !important;
+  font-size: 14pt !important;
+  font-weight: normal !important;
+  letter-spacing: 0.1em !important;
 }
 
 h2, h2 a[name] {
-    font-size: 16pt !important;
+  font-size: 16pt !important;
 }
 
 div.main, div.main p, div.news p {
-    line-height: 140%;
+  line-height: 140%;
 }
 
 div.joblog li i {
-    font-weight: normaL;
+  font-weight: normaL;
 }
 
 b, div.joblog b {
-    font-size: 110%;
+  font-size: 110%;
 }
 
 p, div[id^="config_"] th, #consolepass tr:first-child td {
-    font-size: 11pt !important;
+  font-size: 11pt !important;
 }
 
 input[type="submit"], input[type="reset"], input[type="submit"]:hover, input[type="reset"]:hover, input[type="submit"]:active, input[type="reset"]:active,
 input[type="submit"]:focus, input[type="reset"]:focus, input.reload[value="Force garbage collection"], input.reload[value="Force garbage collection"]:hover {
-    padding-top: 2px !important;
-    display: inline-block;
-    font-size: 12pt !important;
-    font-weight: normal !important;
-    line-height: 140% !important;
-    letter-spacing: 0.05em;
-    background-position: 8px 6px, center center !important;
+  padding-top: 2px !important;
+  display: inline-block;
+  font-size: 12pt !important;
+  font-weight: normal !important;
+  line-height: 140% !important;
+  letter-spacing: 0.05em;
+  background-position: 8px 6px, center center !important;
 }
 
 input[type="submit"]:active, input[type="reset"]:active, input.reload[value="Force garbage collection"]:active {
-    padding-top: 3px !important;
-    padding-bottom: 1px !important;
-    background-position: 8px 7px, center center !important;
+  padding-top: 3px !important;
+  padding-bottom: 1px !important;
+  background-position: 8px 7px, center center !important;
 }
 
 #sb_graphcontainer {
-    margin: -8px 0 -3px !important;
-    background-position: left -72px top -10px !important;
-    box-shadow: inset 0 8px 0 2px #fff;
+  margin: -8px 0 -3px !important;
+  background-position: left -72px top -10px !important;
+  box-shadow: inset 0 8px 0 2px #fff;
 }
 
 .routersummary hr {
-    position: relative;
-    z-index: 999;
+  position: relative;
+  z-index: 999;
 }
 
 p tt {
-    font-size: 10pt;
+  font-size: 10pt;
 }
 
 h3#pluginmanage {
-    margin-bottom: -15px !important;
+  margin-bottom: -15px !important;
 }
 
 h3#pconfig {
-    margin-bottom: -16px !important;
+  margin-bottom: -16px !important;
 }
 }
 
@@ -282,116 +282,116 @@ h3#pconfig {
 
 @media screen and (min-width: 800px) {
 label, select, select option, #configstats th b, p.infohelp, p.infowarn, td.infohelp, td.infowarn {
-    font-size: 11pt !important;
-    font-weight: normal !important;
+  font-size: 11pt !important;
+  font-weight: normal !important;
 }
 
 input[type="text"], input[type="password"], textarea {
-    font-size: 11pt !important;
+  font-size: 11pt !important;
 }
 
 .logo a:link {
-    font-size: 11pt !important;
+  font-size: 11pt !important;
 }
 }
 
 @media screen and (min-width: 1500px) {
 .routersummary, .routersummary .xhr {
-    font: 9.5pt/125%;
-    width: 210px !important;
+  font: 9.5pt/125%;
+  width: 210px !important;
 }
 
 .routersummary div[style="height: 36px;"] {
-    height: 40px !important;
+  height: 40px !important;
 }
 
 .routersummary div[style="height: 36px;"] img {
-    width: 212px;
-    margin-top: -2px !important;
-    margin-left: -4px !important;
+  width: 212px;
+  margin-top: -2px !important;
+  margin-left: -4px !important;
 }
 
 #sb_graphcontainer {
-    margin-top: -7px !important;
-    margin-bottom: -5px !important;
-    background-size: 300px 78px !important;
-    background-position: left -68px top -10px !important;
+  margin-top: -7px !important;
+  margin-bottom: -5px !important;
+  background-size: 300px 78px !important;
+  background-position: left -68px top -10px !important;
 }
 
 .routersummary table, #sb_localtunnels, .routersummary table[id^="sb_"], #sb_localtunnels {
-    width: 226px !important;
+  width: 226px !important;
 }
 
 #sb_services {
-    width: 230px !important;
+  width: 230px !important;
 }
 
 .percentBarOuter {
-    width: 220px;
+  width: 220px;
 }
 
 .routersummary .stop, .routersummary .reload {
-    min-width: 106px !important;
+  min-width: 106px !important;
 }
 
 h1 {
-    font-size: 20pt;
-    padding: 14px 15px 16px;
+  font-size: 20pt;
+  padding: 14px 15px 16px;
 }
 
 span.newtab {
-    margin-top: 4px;
+  margin-top: 4px;
 }
 
 .main, h1, .news, .sorry {
-    margin-left: 238px !important;
+  margin-left: 238px !important;
 }
 
 .newsentry h3 > * {
-    font-size: 11pt;
+  font-size: 11pt;
 }
 
 .newsAuthor {
-    font-size: 10pt !important;
-    font-weight: bold !important;
-    background-position: 2px center;
+  font-size: 10pt !important;
+  font-weight: bold !important;
+  background-position: 2px center;
 }
 
 div.app a:link, div.app a:hover, div.app a:active {
-    font-size: 11pt !important;
+  font-size: 11pt !important;
 }
 
 .langbox {
-    margin-top: 5px !important;
-    line-height: 16px;
+  margin-top: 5px !important;
+  line-height: 16px;
 }
 
 .langselect .optbox {
-    margin-bottom: -32px !important;
+  margin-bottom: -32px !important;
 }
 
 .langselect input[name="lang"]:checked + img {
-    margin-left: -95px !important;
+  margin-left: -95px !important;
 }
 
 .logo a:link {
-    font-size: 12pt !important;
+  font-size: 12pt !important;
 }
 
  div[lang="zh"] a {
-    font-size: 10.5pt !important;
+  font-size: 10.5pt !important;
 }
 }
 
 @media screen and @supports (display: -webkit-box) and (min-width: 1500px) {
 .langselect img {
-    margin-left: -20px !important;
-    margin-top: -31px !important;
+  margin-left: -20px !important;
+  margin-top: -31px !important;
 }
 
 .langselect input[name="lang"]:checked + img {
-    margin-left: -15px !important;
-    margin-top: -27px !important;
+  margin-left: -15px !important;
+  margin-top: -27px !important;
 }
 
 input[type="submit"], input[type="reset"], input[type="submit"]:hover, input[type="reset"]:hover, input[type="submit"]:active, input[type="reset"]:active,
@@ -399,37 +399,37 @@ input[type="submit"]:focus, input[type="reset"]:focus, input.reload[value="Force
 .main input[type="submit"], .main input[type="reset"], .main input[type="submit"]:hover,
 .main input[type="reset"]:hover, .main input[type="submit"]:focus, .main input[type="reset"]:focus,
 .main input[type="submit"]:active, .main input[type="reset"]:active {
-    padding-top: 3px !important;
-    padding-bottom: 3px !important;
-    background-position: 8px center !important;
+  padding-top: 3px !important;
+  padding-bottom: 3px !important;
+  background-position: 8px center !important;
 }
 }
 
 
 @media screen and (min-width: 1840px) {
 #sb_graphcontainer {
-    margin-bottom: -3px !important;
+  margin-bottom: -3px !important;
 }
 
 div.app {
-    min-width: 164px;
-    margin: 3px 4px 5px;
+  min-width: 164px;
+  margin: 3px 4px 5px;
 }
 
 .applabel {
-    width: 160px !important;
+  width: 160px !important;
 }
 
 .applabel a, .applabel a:hover {
-    max-width: 154px !important;
+  max-width: 154px !important;
 }
 
 .logo a:link {
-    font-size: 12pt !important;
+  font-size: 12pt !important;
 }
 
  div[lang="zh"] a, #console div[lang="zh"] code {
-    font-size: 11.5pt !important;
+  font-size: 11.5pt !important;
 }
 }
 

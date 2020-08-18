@@ -3,542 +3,542 @@
 /* Author: dr|z3d */
 
 body {
-    direction: rtl;
+  direction: rtl;
 }
 
 pre {
-    text-align: right;
+  text-align: right;
 }
 
 #help pre, #logs li, #proof textarea {
-    text-align: left;
-    direction: ltr;
+  text-align: left;
+  direction: ltr;
 }
 
 table {
-    direction: rtl;
-    margin-right: -16px;
+  direction: rtl;
+  margin-right: -16px;
 }
 
 td {
-    text-align: right;
+  text-align: right;
 }
 
 h1, h2 ,h3, h4 {
-    direction: rtl;
-    text-align: right !important;
+  direction: rtl;
+  text-align: right !important;
 }
 
 h2, h3 {
-    background: linear-gradient(to bottom, #fff 50%, rgba(255,255,255,0.6) 50%, rgba(240,240,255,0.4)), linear-gradient(to left, #fff 5%, rgba(231, 231, 255, 0.8) 15%) !important;
+  background: linear-gradient(to bottom, #fff 50%, rgba(255,255,255,0.6) 50%, rgba(240,240,255,0.4)), linear-gradient(to left, #fff 5%, rgba(231, 231, 255, 0.8) 15%) !important;
 }
 
 .welcome h2 {
-    padding-right: 32px;
+  padding-right: 32px;
 }
 
 #debug h2 {
-    background: url(/themes/console/images/info/debug.png) 6px center no-repeat, linear-gradient(to bottom, #fcfcff 50%, rgba(255,255,255,0.6) 50%, rgba(240,240,255,0.4)), linear-gradient(to left, #fcfcff 5%, rgba(231, 231, 255, 0.8) 25%) !important;
-    background-size: 20px 20px, 100% 100%, 100% 100% !important;
+  background: url(/themes/console/images/info/debug.png) 6px center no-repeat, linear-gradient(to bottom, #fcfcff 50%, rgba(255,255,255,0.6) 50%, rgba(240,240,255,0.4)), linear-gradient(to left, #fcfcff 5%, rgba(231, 231, 255, 0.8) 25%) !important;
+  background-size: 20px 20px, 100% 100%, 100% 100% !important;
 }
 
 #portmapper th:last-child, #portmapper td:last-child, #sockets td:last-child {
-    text-align: center !important;
+  text-align: center !important;
 }
 
 .buckets {
-    margin-bottom: -10px !important;
+  margin-bottom: -10px !important;
 }
 
 .routersummaryouter {
-    margin-right: -1px !important;
+  margin-right: -1px !important;
 }
 
 .routersummary {
-    margin-bottom: 4px;
+  margin-bottom: 4px;
 }
 
 .routersummary h4 {
-    text-align: center;
+  text-align: center;
 }
 
 h1 {
-    margin: 0 212px -15px 0;
-    padding: 16px 20px 15px 10px;
-    background: url(images/netwrk.png) 8px center no-repeat, linear-gradient(-135deg, #fcfcff, rgba(252,252,255,0) 600px), linear-gradient(to bottom, #fcfcff 50%, rgba(248,248,255,.6) 50%), repeating-linear-gradient(135deg, rgba(255,255,255,.5) 2px, rgba(221, 221, 255, .3) 3px, #fff 5px) #fafaff !important;
+  margin: 0 212px -15px 0;
+  padding: 16px 20px 15px 10px;
+  background: url(images/netwrk.png) 8px center no-repeat, linear-gradient(-135deg, #fcfcff, rgba(252,252,255,0) 600px), linear-gradient(to bottom, #fcfcff 50%, rgba(248,248,255,.6) 50%), repeating-linear-gradient(135deg, rgba(255,255,255,.5) 2px, rgba(221, 221, 255, .3) 3px, #fff 5px) #fafaff !important;
 }
 
 h1.home {
-    background: url(images/home.png) right 10px center no-repeat, linear-gradient(-135deg, #fcfcff, rgba(252,252,255,0) 600px), linear-gradient(to bottom, #fcfcff 50%, rgba(248,248,255,.6) 50%), repeating-linear-gradient(-135deg, rgba(255,255,255,.5) 2px, rgba(221, 221, 255, .3) 3px, #fff 5px) #fafaff !important;
+  background: url(images/home.png) right 10px center no-repeat, linear-gradient(-135deg, #fcfcff, rgba(252,252,255,0) 600px), linear-gradient(to bottom, #fcfcff 50%, rgba(248,248,255,.6) 50%), repeating-linear-gradient(-135deg, rgba(255,255,255,.5) 2px, rgba(221, 221, 255, .3) 3px, #fff 5px) #fafaff !important;
 }
 
 h1.perf {
-    background: url(images/perf.png) right 10px center no-repeat, linear-gradient(-135deg, #fcfcff, rgba(252,252,255,0) 600px), linear-gradient(to bottom, #fcfcff 50%, rgba(248,248,255,.6) 50%), repeating-linear-gradient(-135deg, rgba(255,255,255,.5) 2px, rgba(221, 221, 255, .3) 3px, #fff 5px) #fafaff !important;
+  background: url(images/perf.png) right 10px center no-repeat, linear-gradient(-135deg, #fcfcff, rgba(252,252,255,0) 600px), linear-gradient(to bottom, #fcfcff 50%, rgba(248,248,255,.6) 50%), repeating-linear-gradient(-135deg, rgba(255,255,255,.5) 2px, rgba(221, 221, 255, .3) 3px, #fff 5px) #fafaff !important;
 }
 
 h1.nfo {
-    background: url(images/info.png) right 10px center no-repeat, linear-gradient(-135deg, #fcfcff, rgba(252,252,255,0) 600px), linear-gradient(to bottom, #fcfcff 50%, rgba(248,248,255,.6) 50%), repeating-linear-gradient(-135deg, rgba(255,255,255,.5) 2px, rgba(221, 221, 255, .3) 3px, #fff 5px) #fafaff !important;
+  background: url(images/info.png) right 10px center no-repeat, linear-gradient(-135deg, #fcfcff, rgba(252,252,255,0) 600px), linear-gradient(to bottom, #fcfcff 50%, rgba(248,248,255,.6) 50%), repeating-linear-gradient(-135deg, rgba(255,255,255,.5) 2px, rgba(221, 221, 255, .3) 3px, #fff 5px) #fafaff !important;
 }
 
 h1.hlp {
-    background: url(images/header_help.png) right 10px center no-repeat, linear-gradient(-135deg, #fcfcff, rgba(252,252,255,0) 600px), linear-gradient(to bottom, #fcfcff 50%, rgba(248,248,255,.6) 50%), repeating-linear-gradient(-135deg, rgba(255,255,255,.5) 2px, rgba(221, 221, 255, .3) 3px, #fff 5px) #fafaff !important;
+  background: url(images/header_help.png) right 10px center no-repeat, linear-gradient(-135deg, #fcfcff, rgba(252,252,255,0) 600px), linear-gradient(to bottom, #fcfcff 50%, rgba(248,248,255,.6) 50%), repeating-linear-gradient(-135deg, rgba(255,255,255,.5) 2px, rgba(221, 221, 255, .3) 3px, #fff 5px) #fafaff !important;
 }
 
 h1.addbook {
-    background: url(images/addbook.png) right 10px center no-repeat, linear-gradient(-135deg, #fcfcff, rgba(252,252,255,0) 600px), linear-gradient(to bottom, #fcfcff 50%, rgba(248,248,255,.6) 50%), repeating-linear-gradient(-135deg, rgba(255,255,255,.5) 2px, rgba(221, 221, 255, .3) 3px, #fff 5px) #fafaff !important;
+  background: url(images/addbook.png) right 10px center no-repeat, linear-gradient(-135deg, #fcfcff, rgba(252,252,255,0) 600px), linear-gradient(to bottom, #fcfcff 50%, rgba(248,248,255,.6) 50%), repeating-linear-gradient(-135deg, rgba(255,255,255,.5) 2px, rgba(221, 221, 255, .3) 3px, #fff 5px) #fafaff !important;
 }
 
 h1.snark {
-    background: url(images/app_snark.png) right 10px center no-repeat, linear-gradient(-135deg, #fcfcff, rgba(252,252,255,0) 600px), linear-gradient(to bottom, #fcfcff 50%, rgba(248,248,255,.6) 50%), repeating-linear-gradient(-135deg, rgba(255,255,255,.5) 2px, rgba(221, 221, 255, .3) 3px, #fff 5px) #fafaff !important;
+  background: url(images/app_snark.png) right 10px center no-repeat, linear-gradient(-135deg, #fcfcff, rgba(252,252,255,0) 600px), linear-gradient(to bottom, #fcfcff 50%, rgba(248,248,255,.6) 50%), repeating-linear-gradient(-135deg, rgba(255,255,255,.5) 2px, rgba(221, 221, 255, .3) 3px, #fff 5px) #fafaff !important;
 }
 
 h1.mail {
-    background: url(images/app_mail.png) 8px center no-repeat, linear-gradient(-135deg, #fcfcff, rgba(252,252,255,0) 600px), linear-gradient(to bottom, #fcfcff 50%, rgba(248,248,255,.6) 50%), repeating-linear-gradient(-135deg, rgba(255,255,255,.5) 2px, rgba(221, 221, 255, .3) 3px, #fff 5px) #fafaff !important;
+  background: url(images/app_mail.png) 8px center no-repeat, linear-gradient(-135deg, #fcfcff, rgba(252,252,255,0) 600px), linear-gradient(to bottom, #fcfcff 50%, rgba(248,248,255,.6) 50%), repeating-linear-gradient(-135deg, rgba(255,255,255,.5) 2px, rgba(221, 221, 255, .3) 3px, #fff 5px) #fafaff !important;
 }
 
 h1.conf {
-    background: url(images/cog.png) right 10px center no-repeat, linear-gradient(-135deg, #fcfcff, rgba(252,252,255,0) 600px), linear-gradient(to bottom, #fcfcff 50%, rgba(248,248,255,.6) 50%), repeating-linear-gradient(-135deg, rgba(255,255,255,.5) 2px, rgba(221, 221, 255, .3) 3px, #fff 5px) #fafaff !important;
+  background: url(images/cog.png) right 10px center no-repeat, linear-gradient(-135deg, #fcfcff, rgba(252,252,255,0) 600px), linear-gradient(to bottom, #fcfcff 50%, rgba(248,248,255,.6) 50%), repeating-linear-gradient(-135deg, rgba(255,255,255,.5) 2px, rgba(221, 221, 255, .3) 3px, #fff 5px) #fafaff !important;
 }
 
 h1.adv {
-    background: url(images/advinfo.png) right 10px center no-repeat, linear-gradient(-135deg, #fcfcff, rgba(252,252,255,0) 600px), linear-gradient(to bottom, #fcfcff 50%, rgba(248,248,255,.6) 50%), repeating-linear-gradient(-135deg, rgba(255,255,255,.5) 2px, rgba(221, 221, 255, .3) 3px, #fff 5px) #fafaff !important;
+  background: url(images/advinfo.png) right 10px center no-repeat, linear-gradient(-135deg, #fcfcff, rgba(252,252,255,0) 600px), linear-gradient(to bottom, #fcfcff 50%, rgba(248,248,255,.6) 50%), repeating-linear-gradient(-135deg, rgba(255,255,255,.5) 2px, rgba(221, 221, 255, .3) 3px, #fff 5px) #fafaff !important;
 }
 
 h1.err {
-    background: url(images/error.png) right 10px center no-repeat, linear-gradient(-135deg, #fcfcff, rgba(252,252,255,0) 600px), linear-gradient(to bottom, #fcfcff 50%, rgba(248,248,255,.6) 50%), repeating-linear-gradient(-135deg, rgba(255,255,255,.5) 2px, rgba(221, 221, 255, .3) 3px, #fff 5px) #fafaff !important;
+  background: url(images/error.png) right 10px center no-repeat, linear-gradient(-135deg, #fcfcff, rgba(252,252,255,0) 600px), linear-gradient(to bottom, #fcfcff 50%, rgba(248,248,255,.6) 50%), repeating-linear-gradient(-135deg, rgba(255,255,255,.5) 2px, rgba(221, 221, 255, .3) 3px, #fff 5px) #fafaff !important;
 }
 
 h1.sched {
-    background: url(images/tasks.png) right 10px center no-repeat, linear-gradient(-135deg, #fcfcff, rgba(252,252,255,0) 600px), linear-gradient(to bottom, #fcfcff 50%, rgba(248,248,255,.6) 50%), repeating-linear-gradient(-135deg, rgba(255,255,255,.5) 2px, rgba(221, 221, 255, .3) 3px, #fff 5px) #fafaff !important;
+  background: url(images/tasks.png) right 10px center no-repeat, linear-gradient(-135deg, #fcfcff, rgba(252,252,255,0) 600px), linear-gradient(to bottom, #fcfcff 50%, rgba(248,248,255,.6) 50%), repeating-linear-gradient(-135deg, rgba(255,255,255,.5) 2px, rgba(221, 221, 255, .3) 3px, #fff 5px) #fafaff !important;
 }
 
 h1.log {
-    background: url(images/logs.png) right 10px center no-repeat, linear-gradient(-135deg, #fcfcff, rgba(252,252,255,0) 600px), linear-gradient(to bottom, #fcfcff 50%, rgba(248,248,255,.6) 50%), repeating-linear-gradient(-135deg, rgba(255,255,255,.5) 2px, rgba(221, 221, 255, .3) 3px, #fff 5px) #fafaff !important;
+  background: url(images/logs.png) right 10px center no-repeat, linear-gradient(-135deg, #fcfcff, rgba(252,252,255,0) 600px), linear-gradient(to bottom, #fcfcff 50%, rgba(248,248,255,.6) 50%), repeating-linear-gradient(-135deg, rgba(255,255,255,.5) 2px, rgba(221, 221, 255, .3) 3px, #fff 5px) #fafaff !important;
 }
 
 h1.webapp {
-    background: url(images/webapp.png) right 10px center no-repeat, linear-gradient(-135deg, #fcfcff, rgba(252,252,255,0) 600px), linear-gradient(to bottom, #fcfcff 50%, rgba(248,248,255,.6) 50%), repeating-linear-gradient(-135deg, rgba(255,255,255,.5) 2px, rgba(221, 221, 255, .3) 3px, #fff 5px) #fafaff !important;
+  background: url(images/webapp.png) right 10px center no-repeat, linear-gradient(-135deg, #fcfcff, rgba(252,252,255,0) 600px), linear-gradient(to bottom, #fcfcff 50%, rgba(248,248,255,.6) 50%), repeating-linear-gradient(-135deg, rgba(255,255,255,.5) 2px, rgba(221, 221, 255, .3) 3px, #fff 5px) #fafaff !important;
 }
 
 h1[class] {
-    padding-right: 48px;
-    background-position: right 10px center !important;
-    background-size: 34px auto, 100% 100%, 100% 100%, 100% 100% !important;
+  padding-right: 48px;
+  background-position: right 10px center !important;
+  background-size: 34px auto, 100% 100%, 100% 100%, 100% 100% !important;
 }
 
 h2 {
-    font-size: 16pt;
+  font-size: 16pt;
 }
 
 h3 {
-    font-size: 13pt;
-    padding-right: 10px;
+  font-size: 13pt;
+  padding-right: 10px;
 }
 
 form {
-    text-align: right;
-    margin: 0 16px 0 -16px;
+  text-align: right;
+  margin: 0 16px 0 -16px;
 }
 
 #stats form {
-    margin: 0;
+  margin: 0;
 }
 
 .routersummary img[src$="i2plogo.png"] {
-    margin-left: 0 !important;
+  margin-left: 0 !important;
 }
 
 table.search td:nth-child(2) {
-    padding: 0 10px 0 0;
+  padding: 0 10px 0 0;
 }
 
 table.search td:nth-child(3) {
-    padding: 0 2px 0 8px;
+  padding: 0 2px 0 8px;
 }
 
 input.search[type="text"], input.search[type="text"]:focus {
-    background-position: right 4px center !important;
-    padding: 5px 24px 5px 5px !important;
+  background-position: right 4px center !important;
+  padding: 5px 24px 5px 5px !important;
 }
 
 button, input[type="submit"], input[type="reset"] {
-    display: inline-block;
-    line-height: 120%;
-    font-size: 10pt;
+  display: inline-block;
+  line-height: 120%;
+  font-size: 10pt;
 }
 
 #config_homepage.main input.delete {
-    float: right;
-    margin-top: 5px !important;
+  float: right;
+  margin-top: 5px !important;
 }
 
 button.search, input[type="submit"], input[type="reset"],
 button.search:hover, input[type="submit"]:hover, input[type="reset"]:hover,
 button.search:focus, input[type="submit"]:focus, input[type="reset"]:focus,
 button.search:active, input[type="submit"]:active, input[type="reset"]:active {
-    background-position: right 6px center !important;
-    padding: 5px 24px 5px 7px !important;
+  background-position: right 6px center !important;
+  padding: 5px 24px 5px 7px !important;
 }
 
 select, select:hover, select:focus, select:active {
-    padding: 4px 4px 4px 16px !important;
-    background-position: left center !important;
-    text-align: right !important;
+  padding: 4px 4px 4px 16px !important;
+  background-position: left center !important;
+  text-align: right !important;
 }
 
 #loggingoptions input[type="text"], #i2pupdates input[type="text"], #addkeyring input[type="text"],
 #reseedconfig input[type="text"], #manualreseed input[type="text"], #plugininstall input[type="text"], .homelinkedit input[type="text"] {
-    direction: ltr;
-    text-align: right;
+  direction: ltr;
+  text-align: right;
 }
 
 .homelinkedit td:nth-child(4) {
-    direction: ltr !important;
+  direction: ltr !important;
 }
 
 input[name="refreshInterval"] {
-    text-align: left;
+  text-align: left;
 }
 
 #loggingoptions td:last-child:not(.optionsave) {
-    text-align: right;
+  text-align: right;
 }
 
 #statsForm, #joinfamily, #newfamily, #permabanned {
-    margin-left: 0;
-    margin-right: 0;
+  margin-left: 0;
+  margin-right: 0;
 }
 
 form[action="configpeer"] {
-    margin-left: -16px;
-    margin-right: 16px;
+  margin-left: -16px;
+  margin-right: 16px;
 }
 
 form[action="configpeer"] > h3.tabletitle {
-    margin-left: 16px;
-    margin-right: -16px;
+  margin-left: 16px;
+  margin-right: -16px;
 }
 
 #config_summarybar table.configtable {
-    margin-right: 0;
+  margin-right: 0;
 }
 
 .routersummary form {
-    text-align: center;
+  text-align: center;
 }
 
 div.wideload {
-    margin-left: -16px;
-    margin-right: 16px;
+  margin-left: -16px;
+  margin-right: 16px;
 }
 
 .routersummary h3 a {
-    font-size: 120% !important;
+  font-size: 120% !important;
 }
 
 .routersummary h3, .routersummary h4 {
-    text-align: center !important;
+  text-align: center !important;
 }
 
 .sb_newsheadings {
-    margin: 5px -8px 0 0 !important;
+  margin: 5px -8px 0 0 !important;
 }
 
 .sb_newsheadings:hover {
-    margin: 5px -5px 0 0 !important;
+  margin: 5px -5px 0 0 !important;
 }
 
 .sb_newsheadings table {
-    margin: -12px 0 -8px -10px;
-    border-collapse: separate;
-    border-spacing: 0;
+  margin: -12px 0 -8px -10px;
+  border-collapse: separate;
+  border-spacing: 0;
 }
 
 .sb_newsheadings table:hover {
-    padding-right: 3px;
+  padding-right: 3px;
 }
 
 .sb_newsheadings tr td, .sb_newsheadings tr:hover td {
-    padding-right: 24px !important;
-    padding-left: 6px !important;
-    background-position: right 6px center !important;
-    background-color: none !important;
+  padding-right: 24px !important;
+  padding-left: 6px !important;
+  background-position: right 6px center !important;
+  background-color: none !important;
 }
 
 #sb_services a {
-    text-align: right !important;
-    padding-right: 28px !important;
-    background-position: right 6px center !important;
+  text-align: right !important;
+  padding-right: 28px !important;
+  background-position: right 6px center !important;
 }
 
 #sb_graphcontainer {
-    background-position: left -60px top -20px !important;
-    transform: scale(-1, +1);
+  background-position: left -60px top -20px !important;
+  transform: scale(-1, +1);
 }
 
 #sb_bandwidthgraph {
-    margin: -5px -5px -5px 0;
+  margin: -5px -5px -5px 0;
 }
 
 
 @supports not (-moz-appearance: none) {
 #sb_bandwidthgraph {
-    margin: -5px -5px -6px 0 !important;
+  margin: -5px -5px -6px 0 !important;
 }
 }
 
 .percentBarOuter {
-    margin: -4px -3px -4px -5px;
-    background: linear-gradient(to left, rgba(0,255,0,0.05) 50%, rgba(255,255,0,0.05) 75%, rgba(255,128,0,0.05) 90%, rgba(255,0,0,0.1)), repeating-linear-gradient(to right, rgba(180, 180, 255,0.7) 1px, rgba(180, 180, 255, 0.7) 2px, rgba(221, 221, 255, 0.7) 2px, rgba(221, 221, 255, 0.7) 4px);
+  margin: -4px -3px -4px -5px;
+  background: linear-gradient(to left, rgba(0,255,0,0.05) 50%, rgba(255,255,0,0.05) 75%, rgba(255,128,0,0.05) 90%, rgba(255,0,0,0.1)), repeating-linear-gradient(to right, rgba(180, 180, 255,0.7) 1px, rgba(180, 180, 255, 0.7) 2px, rgba(221, 221, 255, 0.7) 2px, rgba(221, 221, 255, 0.7) 4px);
 }
 
 .sb_info .percentBarOuter {
-    margin: 3px 2px -19px -4px;
+  margin: 3px 2px -19px -4px;
 }
 
 .sb_updatestatus, .sb_info .percentBarText {
-    font-size: 9pt;
+  font-size: 9pt;
 }
 
 .sb_info .percentBarText {
-    padding-top: 1px;
-    direction: ltr;
+  padding-top: 1px;
+  direction: ltr;
 }
 
 .routersummary td:last-child {
-    text-align: left;
+  text-align: left;
 }
 
 .logo {
-    float:right;
+  float:right;
 }
 
 .messages li, .messages li:first-child, .error li:first-child, .error li {
-    padding: 0 24px 0 0 !important;
-    font-size: 12pt;
+  padding: 0 24px 0 0 !important;
+  font-size: 12pt;
 }
 
 .error li, .notice li {
-    background-position: right center !important;
-    font-size: 12pt;
+  background-position: right center !important;
+  font-size: 12pt;
 }
 
 .warning {
-    text-align: right;
+  text-align: right;
 }
 
 .main {
-    margin: 10px 212px 0 0;
-    padding: 7px 20px 30px 20px;
+  margin: 10px 212px 0 0;
+  padding: 7px 20px 30px 20px;
 }
 
 .sorry {
-    margin: 14px 212px 0 0;
-    padding: 20px 70px 20px 20px !important;
-    background: url(/themes/console/images/info/errortriangle.png) right 15px center no-repeat #fff;
+  margin: 14px 212px 0 0;
+  padding: 20px 70px 20px 20px !important;
+  background: url(/themes/console/images/info/errortriangle.png) right 15px center no-repeat #fff;
 }
 
 .main li {
-    text-align: right;
+  text-align: right;
 }
 
 .main#home {
-    padding-bottom: 10px;
+  padding-bottom: 10px;
 }
 
 div.news {
-    margin: 10px 212px -12px 0 !important;
-    padding: 7px 20px 10px 20px;
-    direction: ltr;
+  margin: 10px 212px -12px 0 !important;
+  padding: 7px 20px 10px 20px;
+  direction: ltr;
 }
 
 .news h3, #newspage h3 {
-    direction: ltr;
+  direction: ltr;
 }
 
 .graphspanel form {
-    text-align: right;
+  text-align: right;
 }
 
 #graphs td.infohelp {
-    text-align: right;
-    padding-right: 40px !important;
+  text-align: right;
+  padding-right: 40px !important;
 }
 
 .langbox {
-    float: left;
-    text-align: left;
-    padding-left: 0;
-    margin-left: 4px;
+  float: left;
+  text-align: left;
+  padding-left: 0;
+  margin-left: 4px;
 }
 
 p#helptranslate {
-    padding-right: 50px !important;
-    text-align: right !important;
-    background-position: right 14px center !important;
-    background-image: url(/themes/console/images/info/infohelp.png);
-    background-size: 28px auto !important;
+  padding-right: 50px !important;
+  text-align: right !important;
+  background-position: right 14px center !important;
+  background-image: url(/themes/console/images/info/infohelp.png);
+  background-size: 28px auto !important;
 }
 
 #loggingoptions p {
-    text-align: right;
+  text-align: right;
 }
 
 .confignav {
-    margin-left: -20px !important;
-    margin-right: -20px !important;
-    margin-top: -5px !important;
-    direction: ltr;
+  margin-left: -20px !important;
+  margin-right: -20px !important;
+  margin-top: -5px !important;
+  direction: ltr;
 }
 
 .formaction {
-    text-align: left;
-    margin: 0 -16px 0 16px;
+  text-align: left;
+  margin: 0 -16px 0 16px;
 }
 
 .formaction#consolepass, .formaction#tunnelconfigsave, .formaction#homeapps, .formaction#homesites, #sidebardefaults, #loggingoptions,
 #reseedconfig, #addkeyring, #netconfig, #advconf, #bandwidthconfig, #externali2cp, #pluginupdater, #newfamily, #webappconfigactions, #configstats {
-    margin-bottom: 15px !important;
+  margin-bottom: 15px !important;
 }
 
 #clientconfig, #webappconfig {
-    margin-right: -32px;
+  margin-right: -32px;
 }
 
 #clientconfig td:nth-child(2), #clientconfig td:nth-child(3) {
-    text-align: center;
+  text-align: center;
 }
 
 #clientconfig th:first-child, #clientconfig td:first-child,
 #webappconfig th:first-child, #webappconfig td:first-child {
-    text-align: left !important;
+  text-align: left !important;
 }
 
 #webappconfig th:nth-child(2), #webappconfig td:nth-child(2),
 #webappconfig th:nth-child(3), #webappconfig td:nth-child(3) {
-    text-align: center;
+  text-align: center;
 }
 
 #webappconfigactions {
-    margin-left: 32px;
-    margin-right: -32px;
+  margin-left: 32px;
+  margin-right: -32px;
 }
 
 div[lang="ar"] p, div[lang="ar"] ul {
-    padding: 0 20px;
-    font-size: 11pt;
+  padding: 0 20px;
+  font-size: 11pt;
 }
 
 div[lang="ar"] .links li {
-    list-style: none;
-    margin-bottom: 15px;
-    padding-right: 5px !important;
+  list-style: none;
+  margin-bottom: 15px;
+  padding-right: 5px !important;
 }
 
 div[lang="ar"] ul li {
-    list-style-image: url("images/link.png") !important;
-    list-style-position: outside;
-    margin-left: 0 !important;
-    padding-left: 0 !important;
-    margin-top: 15px !important;
-    margin-right: 50px !important;
+  list-style-image: url("images/link.png") !important;
+  list-style-position: outside;
+  margin-left: 0 !important;
+  padding-left: 0 !important;
+  margin-top: 15px !important;
+  margin-right: 50px !important;
 }
 
 div[lang="ar"] ul, div[lang="ar"] p {
-    margin: 10px;
+  margin: 10px;
 }
 
 #help li {
-    margin-left: 20px !important;
+  margin-left: 20px !important;
 }
 
 .links li:first-child {
-    margin-top: 15px !important;
+  margin-top: 15px !important;
 }
 
 .main#help .links li:first-child {
-    margin-top: -10px !important;
+  margin-top: -10px !important;
 }
 
 .main#help .links li {
-    margin: 5px 50px 5px 20px;
+  margin: 5px 50px 5px 20px;
 }
 
 #fullhistory {
-    text-align: left;
+  text-align: left;
 }
 
 #fullhistory::before {
-    margin-left: 10px;
+  margin-left: 10px;
 }
 
 .links li code {
-    text-align: right;
+  text-align: right;
 }
 
 code {
-    text-align: right;
+  text-align: right;
 }
 
 th {
-    text-align:right;
+  text-align:right;
 }
 
 .links code, #console code {
-    font-size: 10pt !important;
+  font-size: 10pt !important;
 }
 
 th a.script {
-    float: left;
+  float: left;
 }
 
 div.joblog li {
-    text-align: left;
-    direction: ltr;
+  text-align: left;
+  direction: ltr;
 }
 
 span.newtab {
-    text-align: left;
-    font-size: 8pt;
-    float: left;
-    letter-spacing: 0;
-    margin-left: 10px;
+  text-align: left;
+  font-size: 8pt;
+  float: left;
+  letter-spacing: 0;
+  margin-left: 10px;
 }
 
 #tunnelconfig + hr {
-    background: #fff ;
+  background: #fff ;
 }
 
 #plugininstall, #plugininstall2 {
-    margin: 0 0 0 -16px;
+  margin: 0 0 0 -16px;
 }
 
 #updateplugins {
-    margin: 0;
+  margin: 0;
 }
 
 #pluginconfig th:first-child, #pluginconfig td:first-child {
-    min-width: 100px;
-    white-space: normal;
-    text-align: left !important;
-    padding-right: 5px;
+  min-width: 100px;
+  white-space: normal;
+  text-align: left !important;
+  padding-right: 5px;
 }
 
 #pluginconfig th:nth-child(2), #pluginconfig th:nth-child(3),
 #pluginconfig td:nth-child(2), #pluginconfig td:nth-child(3) {
-    text-align: center;
+  text-align: center;
 }
 
 #pluginconfig table th:nth-child(2), #pluginconfig table td:nth-child(2) {
-    text-align: right;
+  text-align: right;
 }
 
 .main#config_plugins {
-    overflow: hidden;
+  overflow: hidden;
 }
 
 td.optionsave, #peerdefs td:first-child {
-    text-align: left;
+  text-align: left;
 }
 
 p.infohelp, p.infowarn, td.infohelp, td.infowarn,
@@ -559,538 +559,538 @@ p#enablefullstats, p#gatherstats, #config_family .infohelp,
 #plugininstall tr:nth-child(3) td:nth-last-child(2), #manualreseed tr:nth-child(3) td:nth-last-child(2),
 #manualreseed tr:nth-child(5) td:nth-last-child(2), #plugininstall2 tr:nth-child(2) td:nth-last-child(2),
 #config_summarybar .configtable td:not(.optionsave) {
-    background-position: right 12px center !important;
-    padding: 15px 50px 15px 10px !important;
+  background-position: right 12px center !important;
+  padding: 15px 50px 15px 10px !important;
 }
 
 #themesettings, #langsettings {
-    margin-left: 16px !important;
-    margin-right: -16px !important;
-    margin-bottom: 16px;
+  margin-left: 16px !important;
+  margin-right: -16px !important;
+  margin-bottom: 16px;
 }
 
 div.themechoice, div.langselect {
-    float: right;
+  float: right;
 }
 
 .themelabel {
-    padding: 3px !important;
-    font-size: 10pt !important;
-    font-weight: bold;
+  padding: 3px !important;
+  font-size: 10pt !important;
+  font-weight: bold;
 }
 
 .h3navlinks {
-    float: left;
+  float: left;
 }
 
 .homelinkedit tr:last-child td:first-child, p#helptranslate {
-    text-align: left;
+  text-align: left;
 }
 
 #sidebarconf tr:last-child td:last-child {
-    text-align: right;
+  text-align: right;
 }
 
 #sidebarconf th:last-child {
-    text-align: center !important;
+  text-align: center !important;
 }
 
 #sidebarconf th {
-    text-align: right !important;
+  text-align: right !important;
 }
 
 #sidebarconf td:last-child {
-    text-align: right !important;
-    padding-left: 10px !important;
+  text-align: right !important;
+  padding-left: 10px !important;
 }
 
 #sidebarconf td:nth-last-child(2) {
-    text-align: left !important;
+  text-align: left !important;
 }
 
 #manualreseed, #config_keyring .configtable {
-    margin-right: 0 !important;
+  margin-right: 0 !important;
 }
 
 #config_keyring form h3, #config_update form h3, form h3 {
-    margin-right: -16px;
-    margin-left: 16px;
+  margin-right: -16px;
+  margin-left: 16px;
 }
 
 #plugininstall, #plugininstall2 {
-    margin-right: 0 !important;
+  margin-right: 0 !important;
 }
 
 #pluginconfig {
-    margin-right: -32px !important;
+  margin-right: -32px !important;
 }
 
 #tunnelconfig td:nth-child(n+2) {
-    text-align: right;
+  text-align: right;
 }
 
 .formaction#clientsconfig, .formaction#pluginconfig {
-    margin-left: 32px;
-    margin-right: -32px;
-    margin-bottom: 15px;
+  margin-left: 32px;
+  margin-right: -32px;
+  margin-bottom: 15px;
 }
 
 .infohelp#webappconfig, h3#webappconfig, #pluginconfig, h3#pconfig {
-    margin-right: 0;
+  margin-right: 0;
 }
 
 #configstats td:first-child {
-    text-align: center !important;
+  text-align: center !important;
 }
 
 #configstats td:nth-child(2) {
-    padding-right: 10px;
-    direction: ltr;
+  padding-right: 10px;
+  direction: ltr;
 }
 
 #i2pupdates td:first-child, #reseedconfig td:first-child, #configstats tr:last-child td, textarea[name="levels"] {
-    text-align: left !important;
+  text-align: left !important;
 }
 
 textarea#advancedsettings, #i2pupdates textarea, #addkeyring textarea, #reseedconfig textarea, #enviro {
-    direction: ltr;
+  direction: ltr;
 }
 
 .main[id^="config_"] select, .main[id^="config_"] textarea, .main[id^="config_"] .optbox {
-    margin-right: 3px;
+  margin-right: 3px;
 }
 
 #i2pupdates input[type="text"]:not([readonly]), #i2pupdates textarea, .main[id^="config_"] textarea, input[name="newsURL"] {
-    width: calc(100% - 10px);
+  width: calc(100% - 10px);
 }
 
 .homelinkedit th:first-child, .homelinkedit td:first-child {
-    text-align: center;
+  text-align: center;
 }
 
 .homelinkedit th:nth-child(2), .homelinkedit td:nth-child(2) {
-    text-align: left;
-    width: 24px;
+  text-align: left;
+  width: 24px;
 }
 
 #bannedips, #banlist {
-    margin-left: 0 !important;
-    margin-right: 0 !important;
+  margin-left: 0 !important;
+  margin-right: 0 !important;
 }
 
 #bannedips, #bannedips table {
-    direction: ltr !important;
+  direction: ltr !important;
 }
 
 .mediumtags, #enviro td {
-    text-align: left;
+  text-align: left;
 }
 
 h3#advancedconfig a, h3#bwlimiter a, h3.tabletitle a, h3.ptitle a, th a.script, th#upnpconfig a, h3#graphinfo a, h3#graphdisplay a {
-    float: left;
+  float: left;
 }
 
 .main#config_advanced .wideload {
-    margin-left: 0 !important;
-    margin-right: 0 !important;
+  margin-left: 0 !important;
+  margin-right: 0 !important;
 }
 
 #config_service p.infohelp {
-    margin-right: -16px;
-    margin-left: 16px;
+  margin-right: -16px;
+  margin-left: 16px;
 }
 
 #browserstart {
-    margin-bottom: 15px;
+  margin-bottom: 15px;
 }
 
 #config_update.main .messages {
-    text-align: right;
-    padding-right: 50px;
+  text-align: right;
+  padding-right: 50px;
 }
 
 #addkeyring tr:last-child td {
-    text-align: left;
+  text-align: left;
 }
 
 #banlist li {
-    padding: 5px 35px 5px 5px;
-    background-position: right 10px center;
+  padding: 5px 35px 5px 5px;
+  background-position: right 10px center;
 }
 
 .tab, .tab2 {
-    display: inline-block;
-    font-size: 11pt !important;
-    margin-top: -5px;
-    padding-top: 6px !important;
-    padding-bottom: 6px !important;
+  display: inline-block;
+  font-size: 11pt !important;
+  margin-top: -5px;
+  padding-top: 6px !important;
+  padding-bottom: 6px !important;
 }
 
 .tab a {
-    padding: 0 5px;
-    display: inline;
+  padding: 0 5px;
+  display: inline;
 }
 
 table.search {
-    margin-top: -26px;
-    margin-bottom: 15px;
+  margin-top: -26px;
+  margin-bottom: 15px;
 }
 
 .search td {
-    padding-top: 4px !important;
-    padding-bottom: 0 !important;
+  padding-top: 4px !important;
+  padding-bottom: 0 !important;
 }
 
 #eventlog {
-    margin-left: -16px !important;
-    margin-right: 0 !important;
+  margin-left: -16px !important;
+  margin-right: 0 !important;
 }
 
 h4.app {
-    background: url(/themes/console/images/eepsite.png) 10px center no-repeat, linear-gradient(to bottom, #fff 50%, rgba(255,255,255,0.6) 50%, rgba(240,240,255,0.4)), linear-gradient(to left, #fff 5%, rgba(231, 231, 255, 0.8) 15%) right center !important;
-    background-size: 16px 16px, 100% 100%, 100% 100% !important;
-    margin-top: 15px;
+  background: url(/themes/console/images/eepsite.png) 10px center no-repeat, linear-gradient(to bottom, #fff 50%, rgba(255,255,255,0.6) 50%, rgba(240,240,255,0.4)), linear-gradient(to left, #fff 5%, rgba(231, 231, 255, 0.8) 15%) right center !important;
+  background-size: 16px 16px, 100% 100%, 100% 100% !important;
+  margin-top: 15px;
 }
 
 h4.app2 {
-    clear: left;
-    margin-top: 10px !important;
-    background: url(images/globe.png) 10px center no-repeat, linear-gradient(to bottom, #fff 50%, rgba(255,255,255,0.6) 50%, rgba(240,240,255,0.4)), linear-gradient(to left, #fff 5%, rgba(231, 231, 255, 0.8) 15%) right center !important;
-    background-size: 16px 16px, 100% 100%, 100% 100% !important;
+  clear: left;
+  margin-top: 10px !important;
+  background: url(images/globe.png) 10px center no-repeat, linear-gradient(to bottom, #fff 50%, rgba(255,255,255,0.6) 50%, rgba(240,240,255,0.4)), linear-gradient(to left, #fff 5%, rgba(231, 231, 255, 0.8) 15%) right center !important;
+  background-size: 16px 16px, 100% 100%, 100% 100% !important;
 }
 
 h4.app, h4.app2, #news h3, .news h3 {
-    background-position: right 7px center, right center, right center !important;
-    padding: 6px 30px 6px 10px;
-    direction: ltr !important;
+  background-position: right 7px center, right center, right center !important;
+  padding: 6px 30px 6px 10px;
+  direction: ltr !important;
 }
 
 h4.app a, h4.app2 a {
-    float: left !important;
+  float: left !important;
 }
 
 .applabel a {
-    font-size: 11pt;
+  font-size: 11pt;
 }
 
 div.app:hover .appimg .extlink::after {
-    left: -1px !important;
-    right: auto;
-    border-radius: 2px 0 2px 0;
+  left: -1px !important;
+  right: auto;
+  border-radius: 2px 0 2px 0;
 }
 
 div.news h3, #news h3 {
-    background: url(images/news.png) right 8px center no-repeat, linear-gradient(to left, #fff, #eef) !important;
-    background: url(images/news.png) right 8px center no-repeat, linear-gradient(to bottom, #fff 50%, rgba(255,255,255,0.6) 50%, rgba(240,240,255,0.4)), linear-gradient(to left, #fff 5%, rgba(231, 231, 255, 0.8) 15%) right center !important;
-    padding: 5px 30px 5px 10px;
+  background: url(images/news.png) right 8px center no-repeat, linear-gradient(to left, #fff, #eef) !important;
+  background: url(images/news.png) right 8px center no-repeat, linear-gradient(to bottom, #fff 50%, rgba(255,255,255,0.6) 50%, rgba(240,240,255,0.4)), linear-gradient(to left, #fff 5%, rgba(231, 231, 255, 0.8) 15%) right center !important;
+  padding: 5px 30px 5px 10px;
 }
 
 #newsStatus {
-    float: none;
+  float: none;
 }
 
 #newsDisplay {
-    margin-left: 0 !important;
+  margin-left: 0 !important;
 }
 
 #news #newsStatus, #news #newsDisplay {
-    margin-top: 6px;
-    margin-bottom: -2px !important;
+  margin-top: 6px;
+  margin-bottom: -2px !important;
 }
 
 #news #newsStatus {
-    margin: -2px 0 0;
-    font-size: 9pt;
+  margin: -2px 0 0;
+  font-size: 9pt;
 }
 
 .newsAuthor {
-    float: left;
+  float: left;
 }
 
 #netdboverview, #netdboverview td, #netdboverview table {
-    direction: ltr;
+  direction: ltr;
 }
 
 #netdboverview table td {
-    border: 1px solid #7778bf !important;
+  border: 1px solid #7778bf !important;
 }
 
 #sb_internals td, #sb_advanced td {
-    text-align: center;
+  text-align: center;
 }
 
 #sb_localtunnels td {
-    vertical-align: top; !important;
+  vertical-align: top; !important;
 }
 
 #sb_localtunnels td:last-child {
-    text-align: left !important;
-    padding-left: 1px;
+  text-align: left !important;
+  padding-left: 1px;
 }
 
 #leasesetdebug th:last-child, #leasesetsummary th:last-child,
 table.leaseset th:last-child, table.leaseset td:nth-child(2) {
-    text-align: left;
+  text-align: left;
 }
 
 #leasesetdebug th, #leasesetsummary th, table.leaseset th {
-    text-align: right;
+  text-align: right;
 }
 
 .leaseset th:first-child code, .leaseset th:first-child b {
-    float: right !important;
+  float: right !important;
 }
 
 .leaseset th:first-child code {
-    direction: ltr;
-    padding-right: 5px;
+  direction: ltr;
+  padding-right: 5px;
 }
 
 #leasesetdebug td:nth-child(2n+1) {
-    text-align: left;
+  text-align: left;
 }
 
 #leasesetdebug td:nth-child(2n) {
-    text-align: right;
+  text-align: right;
 }
 
 #leasesetdebug, #leasesetsummary, table.leaseset, table.sybil_routerinfo, #netdboverview, .netdbentry {
-    margin-right: 0;
+  margin-right: 0;
 }
 
 p.family, p.sybil_info {
-    direction: ltr;
+  direction: ltr;
 }
 
 .sybil_routerinfo th {
-    padding: 1px 6px 1px 1px !important;
+  padding: 1px 6px 1px 1px !important;
 }
 
 .sybil_routerinfo th:nth-last-child(2), .sybil_routerinfo th:last-child, #netdblookup td:first-child:not(.subheading) {
-    text-align: left !important;
+  text-align: left !important;
 }
 
 td.subheading {
-    text-align: right !important;
+  text-align: right !important;
 }
 
 .sybil_routerinfo th:first-child {
-    text-align: right !important;
+  text-align: right !important;
 }
 
 .sybil_routerinfo td:first-child {
-    text-align: left;
+  text-align: left;
 }
 
 table.leaseset:last-child, .netdbentry:last-child, #profile_defs {
-    margin-bottom: -10px;
+  margin-bottom: -10px;
 }
 
 #leasesetdebug td:first-child, #leasesetsummary td:first-child {
-    text-align: left;
+  text-align: left;
 }
 
 #netdboverview th, #netdblookup th {
-    background-position: right 8px center !important;
-    padding: 8px 32px 8px 5px !important;
-    text-align: right !important;
+  background-position: right 8px center !important;
+  padding: 8px 32px 8px 5px !important;
+  text-align: right !important;
 }
 
 #netdbversions th:first-child, #netdbtransports th:first-child, #netdbcountrylist th:first-child {
-    text-align: left !important;
+  text-align: left !important;
 }
 
 #netdbversions th:last-child, #netdbtransports th:last-child, #netdbcountrylist th:last-child {
-    text-align: right !important;
-    padding-right: 5px !important;
+  text-align: right !important;
+  padding-right: 5px !important;
 }
 
 .netdbentry th:first-child {
-    text-align: right !important;
+  text-align: right !important;
 }
 
 .netdbentry th:last-child {
-    text-align: left;
+  text-align: left;
 }
 
 .netdbentry td:nth-child(2) {
-    direction: ltr;
+  direction: ltr;
 }
 
 .netdbentry th:last-child {
-    border-left: 1px solid #7778bf !important;
+  border-left: 1px solid #7778bf !important;
 }
 
 .netdbentry th a img {
-    margin-left: 6px;
+  margin-left: 6px;
 }
 
 #sybilnav li {
-    background: url(images/eye.png) right 5px center no-repeat, linear-gradient(to right, #eef 30%, #fff);
-    padding: 3px 24px 3px 3px;
+  background: url(images/eye.png) right 5px center no-repeat, linear-gradient(to right, #eef 30%, #fff);
+  padding: 3px 24px 3px 3px;
 }
 
 .threatpoints + ul li {
-    margin-right: 20px;
+  margin-right: 20px;
 }
 
 .leaseset th:last-child, .leaseset td:last-child, .sybil_routerinfo th:last-child, .sybil_routerinfo td:last-child {
-    border-right: none !important;
+  border-right: none !important;
 }
 
 p#profiles_overview, #profiles .widescroll + h3, #thresholds + h3, #profiles #banlist {
-    margin-right: -16px !important;
+  margin-right: -16px !important;
 }
 
 p#profiles_overview, #profiles .widescroll + h3, #thresholds + h3, #profiles #banlist {
-    margin-left: 16px !important;
+  margin-left: 16px !important;
 }
 
 #profiles_overview + .widescroll {
-    margin: 0 -16px 0 16px !important;
+  margin: 0 -16px 0 16px !important;
 }
 
 #profiles .confignav + .widescroll {
-    overflow: visible;
+  overflow: visible;
 }
 
 #profilelist {
-    margin: 0 !important;
+  margin: 0 !important;
 }
 
 #profilelist th:last-child, #profilelist td:last-child, #addkeyring td:first-child {
-    text-align: left;
+  text-align: left;
 }
 
 #profile_defs td:first-child {
-    text-align: left !important;
+  text-align: left !important;
 }
 
 #profile_defs td:last-child, td.infohelp {
-    text-align: right !important;
+  text-align: right !important;
 }
 
 #profilelist td:nth-child(2) {
-    text-align: right;
+  text-align: right;
 }
 
 #thresholds p {
-    padding-right: 10px;
+  padding-right: 10px;
 }
 
 .sybil_routerinfo th img[src^="/flags"], .netdbentry th a img {
-    margin-left: 5px;
+  margin-left: 5px;
 }
 
 .wideload .confignav {
-    margin-left: -3px !important;
-    margin-right: -35px !important;
+  margin-left: -3px !important;
+  margin-right: -35px !important;
 }
 
 #floodfills, .statusnotes:last-child {
-    margin-bottom: -10px !important;
+  margin-bottom: -10px !important;
 }
 
 .main#profiles ul#banlist {
-    margin-bottom: -10px !important;
+  margin-bottom: -10px !important;
 }
 
 #peers table, #tunnels table, #logs table, #debug table {
-    margin-right: 0 !important;
+  margin-right: 0 !important;
 }
 
 #bugreports {
-    padding: 10px 10px 10px 0;
+  padding: 10px 10px 10px 0;
 }
 
 #logs #bugreports td.infohelp {
-    padding: 5px 65px 5px 0 !important;
+  padding: 5px 65px 5px 0 !important;
 }
 
 #logs table td:first-child {
-    padding-right: 15px;
+  padding-right: 15px;
 }
 
 .logtable tr:first-child td {
-    direction: ltr;
-    text-align: right !important;
+  direction: ltr;
+  text-align: right !important;
 }
 
 #wrapperlogs pre {
-    text-align: left;
-    direction: ltr;
-    width: 100%;
-    margin-right: -15px;
+  text-align: left;
+  direction: ltr;
+  width: 100%;
+  margin-right: -15px;
 }
 
 #wrapperlogs {
-    margin-bottom: -10px !important;
+  margin-bottom: -10px !important;
 }
 
 #pluginconfigactions {
-    margin: -6px -32px -6px 32px !important;
+  margin: -6px -32px -6px 32px !important;
 }
 
 #pluginupdater.formaction {
-    margin: -16px 0;
+  margin: -16px 0;
 }
 
 #config_service .formaction {
-    margin-top: -13px;
+  margin-top: -13px;
 }
 
 pre#transports {
-    padding: 10px 10px 0 0;
+  padding: 10px 10px 0 0;
 }
 
 #changelog {
-    margin-bottom: -9px !important;
+  margin-bottom: -9px !important;
 }
 
 #advancedsettings #configinfo {
-    margin: 0 0 5px !important;
+  margin: 0 0 5px !important;
 }
 
 #portfaq {
-    width: auto;
-    margin: 16px 0 5px;
+  width: auto;
+  margin: 16px 0 5px;
 }
 
 #help h3 {
-    border-width: 1px 5px 1px 1px !important;
+  border-width: 1px 5px 1px 1px !important;
 }
 
 #help.main td.infohelp, #help.main td.infowarn {
-    padding-right: 46px !important;
-    padding-left: 15px !important;
+  padding-right: 46px !important;
+  padding-left: 15px !important;
 }
 
 #faq h3 {
-    background: url(/themes/console/images/info/question.png) no-repeat, linear-gradient(to bottom, #fff 50%, rgba(255, 255, 255, 0.6) 50%, rgba(240, 240, 240, 0.4)) repeat scroll 0 0%, rgba(0, 0, 0, 0) linear-gradient(to left, #fff 5%, rgba(231, 231, 255, 0.8) 15%) !important;
-    background-position: right 6px center, right center, right center !important;
-    padding-right: 30px;
-    background-size: 18px 18px, 100% 100%, 100% 100% !important;
+  background: url(/themes/console/images/info/question.png) no-repeat, linear-gradient(to bottom, #fff 50%, rgba(255, 255, 255, 0.6) 50%, rgba(240, 240, 240, 0.4)) repeat scroll 0 0%, rgba(0, 0, 0, 0) linear-gradient(to left, #fff 5%, rgba(231, 231, 255, 0.8) 15%) !important;
+  background-position: right 6px center, right center, right center !important;
+  padding-right: 30px;
+  background-size: 18px 18px, 100% 100%, 100% 100% !important;
 }
 
 #consolepass input[name="nofilter_pw"], #externali2cp input[name="nofilter_pw"], #consolepass input[name="nofilter_pw"]:focus, #externali2cp input[name="nofilter_pw"]:focus,
 #consolepass input[name="name"], #externali2cp input[name="user"], #consolepass input[name="name"]:focus, #externali2cp input[name="user"]:focus {
-    background-position: right 3px center, center center !important;
-    padding: 4px 20px 4px 4px !important;
-    margin: 5px 3px 5px 15px !important;
+  background-position: right 3px center, center center !important;
+  padding: 4px 20px 4px 4px !important;
+  margin: 5px 3px 5px 15px !important;
 }
 
 label {
-    text-align: right !important;
-    display: inline-block;
+  text-align: right !important;
+  display: inline-block;
 }
 
 #graphs input {
-    margin-left: 8px !important;
+  margin-left: 8px !important;
 }
 
 #graphs td:first-child {
-    padding-right: 10px;
-    text-align: left;
+  padding-right: 10px;
+  text-align: left;
 }
 
 #consolepass tr:first-child td, p#clientconf.infohelp, p#webappconfigtext.infohelp, #floodfillconfig .infohelp,
@@ -1101,211 +1101,211 @@ h3#servicedebug + p.infohelp, h3#browseronstart + p.infohelp, #addkeyring td:fir
 p#enablefullstats, p#gatherstats, #oldhome td:first-child, p#pluginconfigtext, #plugininstall .infohelp, #config_family .infohelp,
 #joinfamily tr:nth-child(3) td:first-child, #newfamily tr:last-child td:first-child, #config_summarybar .configtable td:not(.optionsave),
 #bugreports td.infohelp {
-    background-position: right 12px center !important;
-    padding: 15px 50px 15px 15px !important;
+  background-position: right 12px center !important;
+  padding: 15px 50px 15px 15px !important;
 }
 
 .routersummary h4 {
-    font-size: 11pt !important;
+  font-size: 11pt !important;
 }
 
 .routersummary h4 span, .routersummary h4 span a {
-    font-size: 10pt !important;
+  font-size: 10pt !important;
 }
 
 .routersummary td:first-child, .routersummary td:nth-last-child(n+2), .routersummary td a {
-    font-size: 10pt !important;
+  font-size: 10pt !important;
 }
 
 .routersummary h4 span::before {
-    padding: 0 0 0 5px;
+  padding: 0 0 0 5px;
 }
 
 .routersummary .error::before, .routersummary .warn::before, .routersummary .testing::before, .routersummary .hidden::before,
 .routersummary .running::before, .routersummary .firewalled::before, .routersummary .vmcomm::before, .routersummary .clockskew::before {
-    padding-left: 6px !important;
-    padding-right: 0 !important;
+  padding-left: 6px !important;
+  padding-right: 0 !important;
 }
 
 .sb_newsheadings td, .sb_newsheadings tr:hover td {
-    background-position: right center !important;
-    padding-right: 18px !important;
-    padding-left: 8px !important;
-    text-align: right !important;
+  background-position: right center !important;
+  padding-right: 18px !important;
+  padding-left: 8px !important;
+  text-align: right !important;
 }
 
 .sb_newsheadings td a {
-    font-size: 9pt !important;
+  font-size: 9pt !important;
 }
 
 #config_ui.main .themechoice .optbox {
-    margin-left: 0;
-    margin-right: -38px;
+  margin-left: 0;
+  margin-right: -38px;
 }
 
 #config_ui.main .langselect .optbox, #config_ui.main .langselect .optbox:hover, #config_ui.main .langselect .optbox:focus {
-    margin-left: 0;
-    margin-right: -2px;
+  margin-left: 0;
+  margin-right: -2px;
 }
 
 .tunnel_peer {
-    text-align: left;
+  text-align: left;
 }
 
 .tunnel_local {
-    margin-right: 0;
-    margin-left: 4px;
-    text-align: center;
+  margin-right: 0;
+  margin-left: 4px;
+  text-align: center;
 }
 
 .tunnel_id:empty + .tunnel_cap {
-    display: inline-block;
-    margin-left: 0;
-    margin-right: 12px;
+  display: inline-block;
+  margin-left: 0;
+  margin-right: 12px;
 }
 
 #tunnel_defs td:nth-child(3) {
-    border-right: none;
+  border-right: none;
 }
 
 #tunnels .cells {
-    text-align: center !important;
+  text-align: center !important;
 }
 
 b.suboption {
-    padding-left: 20px;
-    padding-right: 5px;
+  padding-left: 20px;
+  padding-right: 5px;
 }
 
 #pluginconfigtext + form {
-    float: left;
-    margin-left: 8px;
+  float: left;
+  margin-left: 8px;
 }
 
 #config_reseed #reseedurl, #installPluginUrl {
-    background: #eaeaff url(/themes/console/images/info/url.png) right 10px center no-repeat !important;
-    background-size: 28px 28px, 100% 100%, 100% 100% !important;
+  background: #eaeaff url(/themes/console/images/info/url.png) right 10px center no-repeat !important;
+  background-size: 28px 28px, 100% 100%, 100% 100% !important;
 }
 
 #config_reseed #reseedurl:hover, #installPluginUrl:hover {
-    background: #ffd url(/themes/console/images/info/url.png) right 10px center no-repeat !important;
-    background-size: 28px 28px !important;
+  background: #ffd url(/themes/console/images/info/url.png) right 10px center no-repeat !important;
+  background-size: 28px 28px !important;
 }
 
 #config_reseed  #reseedzip, #installPluginFile {
-    background: #eaeaff url(/themes/console/images/info/from_file.png) right 10px center no-repeat !important;
-    background-size: 28px 28px, 100% 100%, 100% 100% !important;
+  background: #eaeaff url(/themes/console/images/info/from_file.png) right 10px center no-repeat !important;
+  background-size: 28px 28px, 100% 100%, 100% 100% !important;
 }
 
 #config_reseed #reseedzip:hover, #installPluginFile:hover {
-    background: #ffd url(/themes/console/images/info/from_file.png) right 10px center no-repeat !important;
-    background-size: 28px 28px !important;
+  background: #ffd url(/themes/console/images/info/from_file.png) right 10px center no-repeat !important;
+  background-size: 28px 28px !important;
 }
 
 #config_reseed #reseedcreatefile {
-    background: #eaeaff url(/themes/console/images/info/box.png) right 10px center no-repeat !important;
-    background-size: 28px 28px, 100% 100%, 100% 100% !important;
-    text-align: justify;
+  background: #eaeaff url(/themes/console/images/info/box.png) right 10px center no-repeat !important;
+  background-size: 28px 28px, 100% 100%, 100% 100% !important;
+  text-align: justify;
 }
 
 #config_reseed #reseedcreatefile:hover {
-    background: #ffd url(/themes/console/images/info/box.png) right 10px center no-repeat !important;
-    background-size: 28px 28px !important;
+  background: #ffd url(/themes/console/images/info/box.png) right 10px center no-repeat !important;
+  background-size: 28px 28px !important;
 }
 
 #installPluginUrl, #installPluginFile, #reseedzip, #reseedcreatefile {
-    padding: 5px 55px 0 5px;
+  padding: 5px 55px 0 5px;
 }
 
 input[type="file"]:hover {
-    border-radius: 15px 0 0 15px;
-    background: linear-gradient(to left, rgba(255,255,255,0), #dda);
+  border-radius: 15px 0 0 15px;
+  background: linear-gradient(to left, rgba(255,255,255,0), #dda);
 }
 
 #config_plugins .wideload {
-    margin-bottom: 22px;
+  margin-bottom: 22px;
 }
 
 #manualreseed {
-    margin-bottom: 16px;
+  margin-bottom: 16px;
 }
 
 .optionsingle p {
-    padding: 15px 55px 15px 15px;
+  padding: 15px 55px 15px 15px;
 }
 
 #manualreseed .optionsingle, #newfamily .optionsingle, #joinfamily .optionsingle,
 #manualreseed .optionsingle:hover , #newfamily .optionsingle:hover, #joinfamily .optionsingle:hover {
-    padding: 5px 45px 5px 5px !important;
-    background-position: right 8px center !important;
+  padding: 5px 45px 5px 5px !important;
+  background-position: right 8px center !important;
 }
 
 .optionsingle table {
-    margin-right: 0;
+  margin-right: 0;
 }
 
 #reseedurl input[type="text"], #reseedzip input[type="file"], #reseedcreatefile p {
-    width: calc(100% - 20px);
+  width: calc(100% - 20px);
 }
 
 #bandwidthconfig td:first-child:not(.infohelp) {
-    padding: 0 5px 0 80px;
-    background: url(/themes/console/images/info/arrow_left.png) 30px center no-repeat !important;
+  padding: 0 5px 0 80px;
+  background: url(/themes/console/images/info/arrow_left.png) 30px center no-repeat !important;
 }
 
 #joinfamily tr:nth-child(3) td:first-child,
 #newfamily tr:last-child td:first-child {
-    padding: 5px !important;
+  padding: 5px !important;
 }
 
 #config_reseed .confignav + .infohelp + form {
-    margin-left: -16px !important;
-    margin-right: 16px !important;
+  margin-left: -16px !important;
+  margin-right: 16px !important;
 }
 
 #updateHelper b, #updateProxyHostPort b, #i2pupdates b {
-    text-align: left;
+  text-align: left;
 }
 
 #i2pupdates td:first-child, #reseedconfig td:first-child, #configstats tr:last-child td, textarea[name="levels"] {
-    text-align: right !important;
+  text-align: right !important;
 }
 
 .sub-option label {
-    min-width: 0 !important;
-    width: auto !important;
+  min-width: 0 !important;
+  width: auto !important;
 }
 
 .sub-option .optbox, #config_update .suboption .optbox {
-    margin-right: 0 !important;
-    margin-left: 5px !important;
+  margin-right: 0 !important;
+  margin-left: 5px !important;
 }
 
 #config_update .suboption label[for="newsThroughProxy"] {
-    margin-right: 5px !important;
-    margin-left: 15px !important;
+  margin-right: 5px !important;
+  margin-left: 15px !important;
 }
 
 @media screen and (min-width: 800px) {
 .main#console {
-    overflow: hidden;
+  overflow: hidden;
 }
 }
 
 @media screen and (min-width: 1000px) {
 body {
-    overflow-x: hidden;
+  overflow-x: hidden;
 }
 }
 
 @media screen and (min-width: 1500px) {
 .main, .news, h1, .sorry, #news.news {
-    margin-right: 250px !important;
-    margin-left: 0 !important;
+  margin-right: 250px !important;
+  margin-left: 0 !important;
 }
 
 #config_ui.main .themechoice .optbox {
-    margin-left: 0;
-    margin-right: -49px;
+  margin-left: 0;
+  margin-right: -49px;
 }
 }

@@ -148,12 +148,17 @@ public class EepHead extends EepGet {
             String lm = get.getLastModified();
             String et = get.getEtag();
             String cl = String.valueOf(get.getContentLength());
+            String xf = get.getXframeOptions();
+            String cto = get.getXContentTypeOptions();
+            String st = get.getStatus().toString();
             if (x != null) {
                 System.out.println("Server: " + x);
             } else if (cc != null && (cc.equals("max-age=3600,public") || cc.equals("no-cache, private, max-age=2628000"))) {
                 System.out.println("Server: Jetty (?)");
             } else if (cc == null && cl.equals("217") && lm != null && ar.equals("bytes") && et == null) {
                 System.out.println("Server: Jetty (ZZZOT)");
+            } else if (cc == null && xf.equals("DENY") && cto.equals("nosniff") && st.equals("200")) {
+                System.out.println("Server: Jetty (?) (MuCats)");
             } else if ((ar != null && ar.equals("bytes")) && lm != null && et != null) {
                 System.out.println("Server: nginx (?)");
             } else {
@@ -162,9 +167,8 @@ public class EepHead extends EepGet {
             x = get.getXPoweredBy();
             if (x != null)
                 System.out.println("X-Powered-By: " + x);
-            x = get.getStatus().toString();
-            if (x != null)
-                System.out.println("Status: " + x);
+            if (st != null)
+                System.out.println("Status: " + st);
             x = get.getContentType();
             if (x != null)
                 System.out.println("Content-Type: " + x);
@@ -198,12 +202,10 @@ public class EepHead extends EepGet {
             x = get.getReferrerPolicy();
             if (x != null)
                 System.out.println("Referrer-Policy: " + x);
-            x = get.getXContentTypeOptions();
-            if (x != null)
-                System.out.println("X-Content-Type-Options: " + x);
-            x = get.getXframeOptions();
-            if (x != null)
-                System.out.println("X-FrameOptions: " + x);
+            if (cto != null)
+                System.out.println("X-Content-Type-Options: " + cto);
+            if (xf != null)
+                System.out.println("X-FrameOptions: " + xf);
             x = get.getCSP();
             if (x != null)
                 System.out.println("Content-Security-Policy: " + x);

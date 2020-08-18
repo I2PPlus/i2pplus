@@ -45,7 +45,7 @@ public class CodedIconRendererServlet extends HttpServlet {
          srs.setHeader("X-Content-Type-Options", "nosniff");
          srs.setHeader("Accept-Ranges", "none");
          srs.setDateHeader("Expires", I2PAppContext.getGlobalContext().clock().now() + 2628000000l);
-         srs.setHeader("Cache-Control", "no-cache, private, max-age=2628000");
+         srs.setHeader("Cache-Control", "no-cache, private, max-age=2628000, stale-while-revalidate=86400");
          OutputStream os = srs.getOutputStream();
 
          //Binary data is present
