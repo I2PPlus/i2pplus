@@ -276,7 +276,7 @@ input[type="text"]:focus::placeholder {
 }
 
 select {
-    padding: 4px 16px 4px 4px;
+    padding: 4px 24px 4px 4px;
     vertical-align: middle;
     text-overflow: ellipsis;
     color: #333;

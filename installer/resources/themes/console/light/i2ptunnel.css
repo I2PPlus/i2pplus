@@ -415,11 +415,11 @@ a.control {
 
 select {
     margin: 4px !important;
-    padding: 4px 16px 4px 4px !important;
+    padding: 4px 24px 4px 4px !important;
     min-width: 140px;
     background: #fff;
-    background: url(images/dropdown.png) right center no-repeat, linear-gradient(to bottom, #fff, #efefff);
-    background-blend-mode: hard-light, normal;
+    background: url(images/dropdown.svg) right 8px center no-repeat, linear-gradient(to bottom, #fff, #efefff);
+    background-size: 10px auto, 100% 100% !important;
     color: #33333f;
     font-family: "Droid Sans", "Open Sans", "Noto Sans", "Ubuntu", "Segoe UI", Verdana, Helvetica, sans-serif;
     font-size: 9pt;
@@ -439,7 +439,8 @@ select:hover {
 }
 
 select:hover, select:active, select:focus {
-    background: url(images/dropdown_hover.png) right center no-repeat, linear-gradient(to bottom, #eee, #fff) !important;
+    background: url(images/dropdown_hover.svg) right 8px center no-repeat, linear-gradient(to bottom, #eee, #fff) !important;
+    background-size: 10px auto, 100% 100% !important;
 }
 
 select:focus {
