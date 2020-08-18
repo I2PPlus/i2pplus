@@ -73,8 +73,9 @@ if (lastmod > 0) {
 //    response.setDateHeader("Expires", net.i2p.I2PAppContext.getGlobalContext().clock().now() + 86400000l);
     // cache for a month
     response.setDateHeader("Expires", net.i2p.I2PAppContext.getGlobalContext().clock().now() + 2628000000l);
-    if (uri.endsWith(".png") || uri.endsWith(".jpg") || uri.endsWith(".svg") || uri.endsWith(".ico") ||
-        uri.endsWith(".ttf") || uri.endsWith(".css")) {
+    if (uri.contains(".png") || uri.contains(".jpg") || uri.contains(".svg") || uri.contains(".ico") ||
+        uri.contains(".ttf") || uri.contains(".css") || uri.contains(".js?") || uri.contains("flags.jsp") ||
+        uri.contains("viewstat.jsp")) {
         response.setHeader("Cache-Control", "no-cache, private, max-age=2628000, stale-while-revalidate=86400");
     } else {
         response.setHeader("Cache-Control", "no-cache, private, max-age=2628000");
