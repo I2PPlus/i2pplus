@@ -12,7 +12,7 @@ indent_size = 4
 end_of_line = crlf
 
 [**/*.css]
-indent_size = 4
+indent_size = 2
 
 [{history.txt,LICENSE.txt}]
 indent_size = 3
