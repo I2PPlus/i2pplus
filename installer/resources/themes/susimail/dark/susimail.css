@@ -54,8 +54,9 @@ body.iframed {
     url(/themes/susimail/images/send_hover.png) no-repeat,
     url(/themes/console/images/buttons/configure_hover.png),
     url(/themes/console/images/buttons/delete_hover.png),
-    url(/themes/console/images/buttons/update_hover.png), transparent !important;
-    background-size: 0 0, 0 0, 0 0, 0 0, 0 0, 0 0, 0 0, 0 0, 0 0 !important;
+    url(/themes/console/images/buttons/update_hover.png),
+    url(/themes/console/images/buttons/dropdown_hover.svg), transparent !important;
+    background-size: 0 0, 0 0, 0 0, 0 0, 0 0, 0 0, 0 0, 0 0, 0 0, 0 0 !important;
 }
 
 * {
@@ -825,20 +826,20 @@ input[disabled], input[disabled]:hover, input[disabled]:focus {
 }
 
 select {
-    -moz-appearance: none;
-    -webkit-appearance: none;
-    appearance: none;
-    background-blend-mode: hard-light, normal;
-    padding: 6px 18px 6px 6px !important;
-    color: #494;
+    padding: 6px 24px 6px 6px !important;
+    text-align: left !important;
     font-family: "Droid Sans", "Open Sans", "Noto Sans", Ubuntu, "Bitstream Vera Sans", "Segoe UI", Verdana, "Lucida Grande", Helvetica, sans-serif;
     font-size: 8.5pt;
-    text-align: left !important;
+    color: #494;
     border: 1px solid #000;
     border-radius: 2px;
     box-shadow: inset 0 0 0 1px #151, inset 0 0 2px 1px #040, inset 0 0 0 3px #000, 0 0 0 1px rgba(0,16,0,.2);
-    background: url(/themes/console/dark/images/dropdown.png) right 2px center no-repeat #000;
-    background: url(/themes/console/dark/images/dropdown.png) right 2px center no-repeat, linear-gradient(to bottom, #001000, #000 5%, #000 95%, #001000);
+    background: url(/themes/console/dark/images/dropdown.svg) right 10px center no-repeat #000;
+    background: url(/themes/console/dark/images/dropdown.svg) right 10px center no-repeat, linear-gradient(to bottom, #001000, #000 5%, #000 95%, #001000);
+    background-size: 10px auto, 100% 100% !important;
+    -moz-appearance: none;
+    -webkit-appearance: none;
+    appearance: none;
 }
 
 @supports not (-moz-appearance: none) {
@@ -855,15 +856,11 @@ select option {
     background: #fff;
 }
 
-select:hover, select:active {
+select:hover, select:active, select:focus {
     cursor: pointer;
     color: #f60;
-    background: url(/themes/console/dark/images/dropdown_hover.png) right 2px center no-repeat, linear-gradient(to bottom, #000, #010) !important;
-}
-
-select:focus {
-    color: #f30;
-    background: url(/themes/console/dark/images/dropdown_hover.png) right 2px center no-repeat, linear-gradient(to bottom, #000, #010) !important;
+    background: url(/themes/console/dark/images/dropdown_hover.svg) right 10px center no-repeat, linear-gradient(to bottom, #000, #010) !important;
+    background-size: 10px auto, 100% 100% !important;
 }
 
 select::-moz-focus-inner {

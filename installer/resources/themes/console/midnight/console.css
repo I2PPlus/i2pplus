@@ -13791,7 +13791,7 @@ to {
     vertical-align: text-bottom !important;
 }
 
-#tunnels img[src$="bound.png"], #peers img[src$="bound.png"], #tunnelconfig img[src$="bound.png"] {
+#tunnels img[src$="bound.png"], #peers img[src$="bound.png"], #tunnelconfig img[src$="bound.svg"] {
     opacity: 0;
     background: none;
 }
@@ -13801,12 +13801,15 @@ to {
     width: 16px;
     height: 16px;
     vertical-align: middle;
-    background: url(images/in.png) center center no-repeat;
     background-size: 16px 16px !important;
 }
 
+.inbound {
+    background: url(images/in.png) center center no-repeat;
+}
+
 .outbound {
-    background: url(images/out.png) center center no-repeat;
+    background: url(images/out.png) center center no-repeat !important;
 }
 
 #tunnelconfig th {
@@ -13819,6 +13822,10 @@ to {
     background-repeat: no-repeat !important;
     background-position: 20px center !important;
     background-size: 14px 14px !important;
+}
+
+#tunnelconfig th:last-child {
+    background: #000 url(images/out.png);
 }
 
 .inbound.small, .outbound.small {

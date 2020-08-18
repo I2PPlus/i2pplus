@@ -106,8 +106,8 @@ public class ConfigTunnelsHelper extends HelperBase {
             out.getTotalQuantity() >= WARN_QUANTITY)
             buf.append("<tr><th colspan=\"3\"><font color=\"#900\">" + _t("PERFORMANCE WARNING - Settings include high tunnel quantities.") + "</font></th></tr>");
 
-        buf.append("<tr><th></th><th><img src=\"/themes/console/images/inbound.png\" alt=\"Inbound\" title=\"Inbound Tunnels\">&nbsp;&nbsp;" +
-                _t("Inbound") + "</th><th><img src=\"/themes/console/images/outbound.png\" alt=\"Outbound Tunnels\" title=\"Outbound\">&nbsp;&nbsp;" +
+        buf.append("<tr><th></th><th><img src=\"/themes/console/images/svg/inbound.svg\" height=\"14\" alt=\"Inbound\" title=\"Inbound Tunnels\" style=\"vertical-align:middle\">&nbsp;&nbsp;" +
+                _t("Inbound") + "</th><th><img src=\"/themes/console/images/svg/outbound.svg\" height=\"14\" alt=\"Outbound Tunnels\" title=\"Outbound\" style=\"vertical-align:middle\">&nbsp;&nbsp;" +
                 _t("Outbound") + "</th></tr>\n");
 
         // tunnel depth

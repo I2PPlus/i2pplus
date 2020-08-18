@@ -744,15 +744,16 @@ a.control {
 }
 
 select {
-    padding: 6px 18px 6px 8px !important;
+    padding: 6px 24px 6px 8px !important;
     min-width: 120px;
     font-family: "Droid Sans", "Open Sans", "Noto Sans", Ubuntu, "Segoe UI", "Bitstream Vera Sans", "DejaVu Sans", Verdana, "Lucida Grande", Helvetica, sans-serif;
     font-weight: bold;
     font-size: 8.5pt !important;
     color: #494;
     border-radius: 2px;
-    background: #000 url(images/dropdown.png) right 2px center no-repeat !important;
-    background: #000 url(images/dropdown.png) right 2px center no-repeat, linear-gradient(to bottom, #001000, #000 5%, #000 95%, #001000) !important;
+    background: #000 url(images/dropdown.svg) right 10px center no-repeat !important;
+    background: #000 url(images/dropdown.svg) right 10px center no-repeat, linear-gradient(to bottom, #001000, #000 5%, #000 95%, #001000) !important;
+    background-size: 10px auto, 100% 100% !important;
     cursor: pointer;
     -moz-appearance: none;
     -webkit-appearance: none;
@@ -761,15 +762,9 @@ select {
 
 @media screen and (min-width: 1500px) {
 select {
-    padding: 7px 18px 7px 8px !important;
+    padding: 7px 24px 7px 8px !important;
 }
 }
-
-/*@supports not (-moz-appearance: none) {
-select {
-    padding: 6px 18px 6px 8px !important;
-}
-}*/
 
 select option { /* dropdown menu reverts to normal font-weight */
     font-weight: normal;
@@ -790,7 +785,8 @@ select:hover {
 }
 
 select:hover, select:focus, select:active {
-    background: #000 url(images/dropdown_hover.png) right 2px center no-repeat !important;
+    background: #000 url(images/dropdown_hover.svg) right 10px center no-repeat !important;
+    background-size: 10px auto !important;
 }
 
 select::-ms-expand {

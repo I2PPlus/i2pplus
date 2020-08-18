@@ -41,7 +41,7 @@ body:not(old) {
     url(/themes/console/images/buttons/shutdown_hover.png) no-repeat,
     url(/themes/console/images/buttons/update_hover.png) no-repeat,
     url(/themes/console/images/info/notice.png) no-repeat,
-    url(/themes/console/classic/images/dropdown_hover.png),
+    url(images/dropdown_hover.svg),
     url(images/home.png),
     url(images/header_help.png),
     url(images/cog.png),
