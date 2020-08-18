@@ -113,7 +113,9 @@ a img:hover, a:focus img {
     filter: drop-shadow(0 0 1px #f60);
 }
 
-img[src="/flags.jsp?c=a1"], img[src="/flags.jsp?c=a2"] { /* more visibility for anonymous flags */
+/* more visibility for anonymous flags */
+/*
+img[src="/flags.jsp?c=a1"], img[src="/flags.jsp?c=a2"] {
     border: 1px solid #141;
     width: 13px !important;
     height: 9px !important;
@@ -125,6 +127,22 @@ img[src="/flags.jsp?c=a1"], img[src="/flags.jsp?c=a2"] { /* more visibility for 
 #profiles img[src="/flags.jsp?c=a1"], #profiles img[src="/flags.jsp?c=a1"] {
     height: 10px !important;
     margin-right: 1px;
+}
+*/
+
+#tunnels img[src^="/flags.jsp?"], #profiles img[src^="/flags.jsp?"], #peers img[src^="/flags.jsp?"] {
+    width: 16px !important;
+    height: 12px !important;
+}
+
+#netdb #netdbcountrylist img {
+    margin-right: 10px !important;
+    padding: 0 !important;
+    width: 24px !important;
+    height: 18px !important;
+    border: 1px solid #030;
+    border-radius: 3px;
+    background: #000;
 }
 
 pre {
@@ -13681,10 +13699,6 @@ i {
     line-height: 120%;
 }
 
-.encDests tr:last-child td {
-    border-top: #ccf !important;
-}
-
 .encDests th:first-child, .encDests td:first-child,
 .encDests th:nth-child(3), .encDests td:nth-child(3) {
     width: 10%;
@@ -13693,31 +13707,46 @@ i {
 .encDests th:nth-child(2), .encDests td:nth-child(2),
 .encDests th:nth-child(3), .encDests td:nth-child(3),
 .encDests th:nth-child(4), .encDests td:nth-child(4),
-.encDests th:nth-child(5), .encDests td:nth-child(5) {
-    text-align: center;
+.encDests th:nth-child(5), .encDests td:nth-child(5),
+.encDests td[colspan="8"] {
+    text-align: center !important;
 }
 
 .encDests th:nth-child(2), .encDests td:nth-child(2),
 .encDests th:nth-child(4), .encDests td:nth-child(4),
 .encDests th:nth-child(5), .encDests td:nth-child(5) {
-    width: 25%;
+    width: 22%;
 }
 
 .encDests th:last-child, .encDests td:last-child {
     text-align: center;
 }
 
+.encDests .b32 {
+    float: none !important;
+}
+
 .encDests code {
+    padding: 2px 3px;
+    max-width: 160px;
     display: inline-block;
-    max-width: 200px;
-    white-space: nowrap;
+/*    white-space: nowrap;
     overflow: hidden;
-    text-overflow: ellipsis;
-    font-size: 85% !important;
+    text-overflow: ellipsis;*/
+    white-space: pre-wrap;
+    word-break: break-all;
+    font-size: 70% !important;
     color: #ee9;
+    border: 1px solid #775;
+    border-radius: 3px;
     -moz-user-select: all;
     -webkit-user-select: all;
     user-select: all;
+}
+
+.encDests .created, .encDests .expires {
+    white-space: nowrap;
+    font-style: italic;
 }
 
 @media screen and (max-width: 1000px) {
