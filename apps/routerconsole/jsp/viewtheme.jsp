@@ -69,13 +69,10 @@ if (lastmod > 0) {
         return;
     }
     response.setDateHeader("Last-Modified", lastmod);
-    // cache for a day
-//    response.setDateHeader("Expires", net.i2p.I2PAppContext.getGlobalContext().clock().now() + 86400000l);
-    // cache for a month
-    response.setDateHeader("Expires", net.i2p.I2PAppContext.getGlobalContext().clock().now() + 2628000000l);
-    if (uri.contains(".png") || uri.contains(".jpg") || uri.contains(".svg") || uri.contains(".ico") ||
-        uri.contains(".ttf") || uri.contains(".css")) {
-        response.setHeader("Cache-Control", "no-cache, private, max-age=2628000, stale-while-revalidate=86400");
+    if (uri.contains("override.css")) {
+        response.setHeader("Cache-Control", "no-store");
+    } else if (uri.contains(".png") || uri.contains(".jpg") || uri.contains(".svg") || uri.contains(".ico") || uri.contains(".ttf")) {
+        response.setHeader("Cache-Control", "private, max-age=2628000, stale-while-revalidate=86400");
     } else {
         response.setHeader("Cache-Control", "no-cache, private, max-age=2628000");
     }

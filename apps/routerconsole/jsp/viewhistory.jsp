@@ -9,9 +9,9 @@
 response.setContentType("text/plain");
 response.setHeader("X-Content-Type-Options", "nosniff");
 response.setHeader("Accept-Ranges", "none");
-response.setDateHeader("Expires", 0);
-response.addHeader("Cache-Control", "no-store, max-age=0, no-cache, must-revalidate");
-response.addHeader("Pragma", "no-cache");
+//response.setDateHeader("Expires", 0);
+response.addHeader("Cache-Control", "private, no-cache, max-age=86400");
+//response.addHeader("Pragma", "no-cache");
 java.io.File base = net.i2p.I2PAppContext.getGlobalContext().getBaseDir();
 java.io.File file = new java.io.File(base, "history.txt");
 long length = file.length();

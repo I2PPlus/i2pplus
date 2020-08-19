@@ -16,10 +16,10 @@ try {
         return;
     }
     try {
-        response.setDateHeader("Expires", 0);
+        // response.setDateHeader("Expires", 0);
         response.setHeader("Accept-Ranges", "none");
-        response.addHeader("Cache-Control", "no-store, max-age=0, no-cache, must-revalidate");
-        response.addHeader("Pragma", "no-cache");
+        response.addHeader("Cache-Control", "no-store");
+        // response.addHeader("Pragma", "no-cache");
         String name = "family-" + family + "-secret.crt";
         response.setContentType("application/x-x509-ca-cert; name=\"" + name + '"');
         response.addHeader("Content-Disposition", "attachment; filename=\"" + name + '"');

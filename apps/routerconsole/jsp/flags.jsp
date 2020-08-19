@@ -55,9 +55,9 @@ if (c != null &&
             return;
         }
         response.setDateHeader("Last-Modified", lastmod);
-        // cache for a day
-        response.setDateHeader("Expires", net.i2p.I2PAppContext.getGlobalContext().clock().now() + 2628000000l);
-        response.setHeader("Cache-Control", "no-cache, private, max-age=2628000, stale-while-revalidate=86400");
+        // cache for a month
+        //response.setDateHeader("Expires", net.i2p.I2PAppContext.getGlobalContext().clock().now() + 2628000000l);
+        response.setHeader("Cache-Control", "private, max-age=2628000, stale-while-revalidate=86400");
         response.setHeader("X-Content-Type-Options", "nosniff");
     }
     long length = ffile.length();

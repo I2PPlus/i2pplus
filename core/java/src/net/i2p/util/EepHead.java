@@ -172,7 +172,7 @@ public class EepHead extends EepGet {
             x = get.getContentType();
             if (x != null)
                 System.out.println("Content-Type: " + x);
-            System.out.println("Content-Length: " + cl + " bytes");
+            System.out.println("Content-Length: " + cl);
             x = get.getTransferEncoding();
             if (x != null)
                 System.out.println("Transfer-Encoding: " + x);

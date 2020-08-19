@@ -60,7 +60,13 @@
    // https://developer.mozilla.org/en-US/docs/Web/HTTP/Headers/Referrer-Policy
    // As of Chrome 56, Firefox 50, Opera 43. "same-origin" not widely supported.
    response.setHeader("Referrer-Policy", "no-referrer");
-   response.setHeader("Cache-Control", "no-cache, private, max-age=2628000, stale-while-revalidate=86400");
+   String uri = request.getRequestURI();
+   if (uri.contains("override.css"))
+       response.setHeader("Cache-Control", "no-store");
+   else if (uri.contains(".css") || uri.contains(".png") || uri.contains(".svg") || uri.contains(".jpg") || uri.contains(".ttf"))
+       response.setHeader("Cache-Control", "private, max-age=2628000");
+   else
+       response.setHeader("Cache-Control", "no-cache, private, max-age=2628000, stale-while-revalidate=86400");
    String conNonceParam = request.getParameter("consoleNonce");
    if (net.i2p.router.web.CSSHelper.getNonce().equals(conNonceParam)) {
        intl.setLang(request.getParameter("lang"));
