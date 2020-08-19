@@ -11748,7 +11748,6 @@ th.options .optbox {
   background: rgba(240,240,255,.4);
 }
 
-
 .main#tunnels .cells, #tunnel_defs td:nth-child(n+3), .cells, #profilelist td:not(:first-child),
 #profile_defs td:not(:first-child), #floodfills td:not(:first-child), #debug td:not(:first-child),
 #jardump td:not(:first-child), #jobstats td:not(:first-child), #eventlog td:not(:first-child),
@@ -11757,7 +11756,7 @@ th.options .optbox {
 .homelinkedit td:not(:first-child), #clientconfig td:not(:first-child), .netdbentry td:not(:first-child),
 #netdblookup td:not(:first-child), #peerdefs td:not(:first-child), #help td:not(.infohelp):not(.infowarn),
 #pluginconfig td:not(:first-child), #thresholds td:not(:first-child), #leasesetdebug td:not(:first-child),
-#enviro td:not(:first-child), #routerinformation td:not(:first-child) {
+#enviro td:not(:first-child), #routerinformation td:not(:first-child), #udpconnections td:nth-child(n+2) {
   border-left: 1px solid #e0e0eb;
 }
 
@@ -11770,7 +11769,7 @@ th.options .optbox {
   transition: ease all .05s;
 }
 
-#help td:first-child, #tunnels td:first-child {
+#help td:first-child, #tunnels td:first-child, #peers #ntcpconnections td:first-child {
   border-left: 1px solid #8d8daa !important;
 }
 
