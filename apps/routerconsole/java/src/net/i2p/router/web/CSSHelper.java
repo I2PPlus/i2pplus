@@ -8,6 +8,8 @@ import java.util.concurrent.ConcurrentHashMap;
 import net.i2p.servlet.util.ServletUtil;
 import net.i2p.util.RandomSource;
 
+import org.cybergarage.http.HTTPRequest;
+
 /**
  * Copied and modded from I2PTunnel IndexBean (GPL)
  * @author zzz
@@ -177,9 +179,7 @@ public class CSSHelper extends HelperBase {
                  s = s.replace("i2cp", "I2CP");
          buf.append("<title>")
             .append(StringFormatter.capitalizeWord(_t(s)));
-         buf.append(" - ")
-//            .append(_t("I2P Router Console").replace("I2P", "I2P+"))
-            .append(_t("I2P+"))
+         buf.append(" - I2P+")
             .append("</title>");
          return buf.toString();
     }
