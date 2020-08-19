@@ -13788,8 +13788,8 @@ to {
 }
 
 #tunnels img[src$="bound.png"], #peers img[src$="bound.png"], #tunnelconfig img[src$="bound.svg"] {
-  opacity: 0;
-  background: none;
+  opacity: 0 !important;
+  background: none !important;
 }
 
 .inbound, .outbound {
@@ -13805,7 +13805,7 @@ to {
 }
 
 .outbound {
-  background: url(images/out.png) center center no-repeat !important;
+  background: url(images/out.png) center center no-repeat;
 }
 
 #tunnelconfig th {
