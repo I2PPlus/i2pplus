@@ -1820,7 +1820,6 @@ form[action="export"]::after {
   margin-top: 9px;
 }
 
-
 @media screen and (max-width: 1200px) {
 .headline h3, #subscriptions.headline h3, #configure.headline h3 {
   padding-left: 30px;

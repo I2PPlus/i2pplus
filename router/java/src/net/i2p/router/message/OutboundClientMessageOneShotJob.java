@@ -433,8 +433,8 @@ public class OutboundClientMessageOneShotJob extends JobImpl {
                 if (_log.shouldLog(Log.WARN))
                     _log.warn(getJobId() + ": Only have RAP LS for " + _toString);
                 return MessageStatusMessage.STATUS_SEND_FAILURE_NO_LEASESET;
-            } 
-        } 
+            }
+        }
 
         int lsType = _leaseSet.getType();
         // Can't send to a meta LS.
@@ -1197,7 +1197,7 @@ public class OutboundClientMessageOneShotJob extends JobImpl {
         }
 
         public void onReply() {
-            runJob();
+            super.runJob();
         }
     }
 

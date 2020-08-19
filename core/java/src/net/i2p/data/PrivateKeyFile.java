@@ -82,8 +82,8 @@ public class PrivateKeyFile {
     protected SigningPrivateKey signingPrivKey;
     private long _offlineExpiration;
     private Signature _offlineSignature;
-    private SigningPrivateKey _transientSigningPrivKey; 
-    private SigningPublicKey _transientSigningPubKey; 
+    private SigningPrivateKey _transientSigningPrivKey;
+    private SigningPublicKey _transientSigningPubKey;
 
     /**
      *  Create a new PrivateKeyFile, or modify an existing one, with various
@@ -578,7 +578,7 @@ public class PrivateKeyFile {
      *  Create with the specified signature and encryption types if nonexistent.
      *  Private for now, only for router.keys.dat testing.
      *
-     *  Also reads in the file to get the privKey and signingPrivKey, 
+     *  Also reads in the file to get the privKey and signingPrivKey,
      *  which aren't available from I2PClient.
      *
      *  @since 0.9.42
@@ -967,7 +967,6 @@ public class PrivateKeyFile {
             SigType type = spk.getType();
             if (type == SigType.EdDSA_SHA512_Ed25519 ||
                 type == SigType.RedDSA_SHA512_Ed25519) {
-                I2PAppContext ctx = I2PAppContext.getGlobalContext();
                 s.append("\nBlinded B32: ").append(Blinding.encode(spk));
                 s.append("\n + auth key: ").append(Blinding.encode(spk, false, true));
                 s.append("\n + password: ").append(Blinding.encode(spk, true, false));

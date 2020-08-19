@@ -53,7 +53,7 @@
 <input type="hidden" name="nonce" value="<%=pageNonce%>" >
 <%
    String url = request.getParameter("pluginURL");
-   String value = url != null ? "value=\"" + url + '"' : "";
+   String value = url != null ? "value=\"" + net.i2p.data.DataHelper.escapeHTML(url) + '"' : "";
 %>
 <input type="text" size="60" name="pluginURL" required title="<%=intl._t("To install a plugin, enter the download URL:")%>" >
 </td>
@@ -83,7 +83,7 @@
    String file = request.getParameter("pluginFile");
    if (file != null && file.length() > 0) {
 %>
-<input type="text" size="60" name="pluginFile" value="<%=file%>">
+<input type="text" size="60" name="pluginFile" value="<%=net.i2p.data.DataHelper.escapeHTML(file)%>">
 <%
    } else {
 %>

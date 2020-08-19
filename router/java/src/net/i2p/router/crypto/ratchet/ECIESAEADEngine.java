@@ -96,7 +96,7 @@ public final class ECIESAEADEngine {
         _muxedEngine = new MuxedEngine(ctx);
         _hkdf = new HKDF(ctx);
         _edhThread = new Elg2KeyFactory(ctx);
-        
+
         _context.statManager().createFrequencyStat("crypto.eciesAEAD.encryptNewSession",
                                                    "how frequently we encrypt to a new ECIES/AEAD+SessionTag session?",
                                                    "Encryption", new long[] { 60*60*1000l});
@@ -190,7 +190,6 @@ public final class ECIESAEADEngine {
         RatchetSessionTag st = new RatchetSessionTag(tag);
         SessionKeyAndNonce key = keyManager.consumeTag(st);
         CloveSet decrypted;
-        final boolean shouldDebug = _log.shouldDebug();
         if (key != null) {
             decrypted = xx_decryptFast(tag, st, key, data, targetPrivateKey, keyManager);
             // we do NOT retry as NS
@@ -705,7 +704,7 @@ public final class ECIESAEADEngine {
      * No new session key
      * This is the one called from GarlicMessageBuilder and is the primary entry point.
      *
-     * @param target public key to which the data should be encrypted. 
+     * @param target public key to which the data should be encrypted.
      * @param priv local private key to encrypt with, from the leaseset
      * @param callback may be null, if non-null an ack will be requested (except NS/NSR)
      * @return encrypted data or null on failure
@@ -957,10 +956,11 @@ public final class ECIESAEADEngine {
     /**
      * No ad
      */
+/*
     private final byte[] encryptAEADBlock(byte data[], SessionKey key, long n) {
         return encryptAEADBlock(null, data, key, n);
     }
-
+*/
     /**
      *
      * @param ad may be null
@@ -1008,7 +1008,7 @@ public final class ECIESAEADEngine {
         public PLCallback() {
             this(null, null);
         }
- 
+
         /**
          * ES
          * @param keyManager only for ES, otherwise null
