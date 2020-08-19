@@ -1808,10 +1808,17 @@ form[action="export"]::after {
   border-color: transparent transparent transparent #89f;
 }
 
+#prev:not(.inactive):hover::after, #prev:not(.inactive) a:focus::after {
+  border-color: transparent #bf2295 transparent transparent;
+}
+
+#next:not(.inactive):hover::after, #next:not(.inactive) a:focus::after {
+  border-color: transparent transparent transparent #bf2295;
+}
+
 #empty {
   margin-top: 9px;
 }
-
 
 @media screen and (max-width: 1200px) {
 .headline h3, #subscriptions.headline h3, #configure.headline h3 {

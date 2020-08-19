@@ -198,7 +198,11 @@
 <table>
 <tr>
 <td>
-<input name="url" type="text" size="60" value="" required x-moz-errormessage="<%=intl._t("Please supply a valid reseed URL")%>" />
+<%
+   String url = request.getParameter("url");
+   String value = url != null ? "value=\"" + net.i2p.data.DataHelper.escapeHTML(url) + '"' : "";
+%>
+<input name="url" type="text" size="60" value="" title="<%=intl._t("Please supply a valid reseed URL")%>" />
 </td>
 <td>
 <input type="submit" name="action" class="download" value="<%=intl._t("Reseed from URL")%>" />
@@ -221,7 +225,7 @@
    String file = request.getParameter("file");
    if (file != null && file.length() > 0) {
 %>
-<input type="text" size="60" name="file" value="<%=file%>">
+<input type="text" size="60" name="file" value="<%=net.i2p.data.DataHelper.escapeHTML(file)%>">
 <%
    } else {
 %>

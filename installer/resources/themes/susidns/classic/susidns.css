@@ -1442,6 +1442,14 @@ input[disabled] {
   border-color: transparent transparent transparent #575779;
 }
 
+#prev:not(.inactive):hover::after, #prev:not(.inactive) a:focus::after {
+  border-color: transparent #f60 transparent transparent;
+}
+
+#next:not(.inactive):hover::after, #next:not(.inactive) a:focus::after {
+  border-color: transparent transparent transparent #f60;
+}
+
 #empty {
   margin-top: -11px;
 }

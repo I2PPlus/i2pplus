@@ -1663,7 +1663,6 @@ class Connection {
                 return false;
             }
 
-            long now = _context.clock().now();
                _context.statManager().addRateData("stream.fastRetransmit", _packet.getLifetime(), _packet.getLifetime());
 
                 // revamp various fields, in case we need to ack more, etc

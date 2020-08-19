@@ -604,7 +604,7 @@ a:active #sb_bandwidthgraph {
   vertical-align: top;
   box-shadow: inset 0 0 0 2px #fff, inset 0 0 3px 1px #adadeb;
   background: repeating-linear-gradient(to left, rgba(255,255,255,.0) 13px, rgba(120,120,255,.4) 14px, rgba(255,255,255,.0) 14px, rgba(255,255,255,.0) 26px),
-        repeating-linear-gradient(to top, rgba(255,255,255,.0), rgba(120,120,255,.2), rgba(255,255,255,.0) 1px, rgba(255,255,255,.0) 13px) !important;
+              repeating-linear-gradient(to top, rgba(255,255,255,.0), rgba(120,120,255,.2), rgba(255,255,255,.0) 1px, rgba(255,255,255,.0) 13px) !important;
 
 }
 
@@ -12881,12 +12881,12 @@ i {
 from {
   background: #f6f6ff;
   background: repeating-linear-gradient(to right, rgba(0,0,0,0), #efefef 1px, rgba(0,0,0,0) 1px, rgba(0,0,0,0) 10px),
-        repeating-linear-gradient(to bottom, #efefff, #efefff 1px, #f6f6ff 1px, #f6f6ff 10px);
+              repeating-linear-gradient(to bottom, #efefff, #efefff 1px, #f6f6ff 1px, #f6f6ff 10px);
 }
 to {
   background: #f6f6ff;
   background: repeating-linear-gradient(to right, rgba(0,0,0,0), #f6f6ff 1px, rgba(0,0,0,0) 1px, rgba(0,0,0,0) 10px),
-        repeating-linear-gradient(to bottom, #f6f6ff, #f6f6ff 1px, #f6f6ff 1px, #f6f6ff 10px);
+              repeating-linear-gradient(to bottom, #f6f6ff, #f6f6ff 1px, #f6f6ff 1px, #f6f6ff 10px);
 }
 }
 
@@ -13049,8 +13049,8 @@ to {
 #tunnels #peercount {
   padding-left: 30px !important;
   background: url(/themes/console/images/info/tunnels.png) 8px 6px no-repeat,
-        linear-gradient(to bottom, #fff 50%, rgba(255,255,255,.6) 50%, rgba(240,240,255,.4)),
-        linear-gradient(to right, #fafaff 5%, rgba(231, 231, 255, .8) 25%) !important;
+              linear-gradient(to bottom, #fff 50%, rgba(255,255,255,.6) 50%, rgba(240,240,255,.4)),
+              linear-gradient(to right, #fafaff 5%, rgba(231, 231, 255, .8) 25%) !important;
   background-size: 18px 18px, 100% 100%, 100% 100% !important;
 }
 

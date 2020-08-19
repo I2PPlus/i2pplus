@@ -323,7 +323,6 @@ public class Analysis extends JobImpl implements RouterApp {
         if (_log.shouldWarn())
             _log.warn("Analyzing " + ris.size() + " routers, including non-floodfills? " + includeAll);
 
-        double avgMinDist = getAvgMinDist(ris);
 
         // IP analysis
         calculateIPGroupsFamily(ris, points);

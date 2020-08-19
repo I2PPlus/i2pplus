@@ -38,7 +38,7 @@ body:not(old) {
         url(/themes/console/images/buttons/search_hover.png) no-repeat,
         url(/themes/console/images/buttons/shutdown_hover.png) no-repeat,
         url(/themes/console/images/buttons/update_hover.png) no-repeat,
-        url(images/dropdown_hover.png),
+        url(images/dropdown_hover.svg),
         url(images/newtab.png), #001;
   background-size: 100% 100%, 100% 100%, 100% 100%, 100% 100%, 171px 148px, 0 0, 0 0, 0 0, 0 0, 0 0, 0 0, 0 0, 0 0, 0 0, 0 0;
   will-change: transform;
@@ -234,7 +234,7 @@ input[class="check"] { /* nudge "check for updates" button into alignment on /co
 
 select {
   margin: 5px 10px;
-  padding: 4px 20px 4px 4px !important;
+  padding: 4px 24px 4px 4px !important;
   min-width: 110px;
   -moz-appearance: none;
   -webkit-appearance: none;
@@ -247,9 +247,9 @@ select {
   border: 1px solid #363181;
   cursor: pointer;
   box-shadow: inset 0 0 0 1px #000, 0 0 0 1px #000;
-  background: #000 url(images/dropdown.png) center right 1px no-repeat !important;
-  background: url(images/dropdown.png) center right 4px no-repeat, linear-gradient(to bottom, #11101c 50%, #000010 50%) !important;
-  background-size: 14px auto, 100% 100% !important;
+  background: #000 url(images/dropdown.svg) center right 10px no-repeat !important;
+  background: url(images/dropdown.svg) center right 10px no-repeat, linear-gradient(to bottom, #11101c 50%, #000010 50%) !important;
+  background-size: 10px auto, 100% 100% !important;
   filter: none !important;
 }
 
@@ -278,16 +278,12 @@ select option:hover, select option:focus, select option:checked {
   box-shadow: inset 0 0 20px 20px #652787;
 }
 
-img[src="dropdown.png"] {
-  filter: invert(100%) sepia(100%) hue-rotate(200deg) saturate(200%);
-}
-
 select:hover, select:focus, select:active {
   color: #652787;
   text-shadow: 0 1px 1px #000;
   border: 1px solid #652787 !important;
-  background: url(images/dropdown_hover.png) center right 4px no-repeat, linear-gradient(to bottom, #202 50%, #000 50%) !important;
-  background-size: 14px auto, 100% 100%, 100% 100% !important;
+  background: url(images/dropdown_hover.svg) center right 10px no-repeat, linear-gradient(to bottom, #202 50%, #000 50%) !important;
+  background-size: 10px auto, 100% 100% !important;
 }
 
 select[disabled], select[disabled]:hover, select[disabled]:focus, select[disabled]:active {
@@ -13792,8 +13788,8 @@ to {
 }
 
 #tunnels img[src$="bound.png"], #peers img[src$="bound.png"], #tunnelconfig img[src$="bound.svg"] {
-  opacity: 0;
-  background: none;
+  opacity: 0 !important;
+  background: none !important;
 }
 
 .inbound, .outbound {
@@ -13809,7 +13805,7 @@ to {
 }
 
 .outbound {
-  background: url(images/out.png) center center no-repeat !important;
+  background: url(images/out.png) center center no-repeat;
 }
 
 #tunnelconfig th {

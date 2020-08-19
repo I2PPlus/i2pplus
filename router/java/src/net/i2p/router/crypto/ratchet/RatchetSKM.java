@@ -63,7 +63,7 @@ public class RatchetSKM extends SessionKeyManager implements SessionTagListener 
 
     /**
      * Keep unused inbound session tags around for this long (a few minutes longer than
-     * session tags are used on the outbound side so that no reasonable network lag 
+     * session tags are used on the outbound side so that no reasonable network lag
      * can cause failed decrypts)
      *
      * This is also the max idle time for an outbound session.
@@ -78,8 +78,8 @@ public class RatchetSKM extends SessionKeyManager implements SessionTagListener 
 
 
     /**
-     * The session key manager should only be constructed and accessed through the 
-     * application context.  This constructor should only be used by the 
+     * The session key manager should only be constructed and accessed through the
+     * application context.  This constructor should only be used by the
      * appropriate application context itself.
      *
      */
@@ -425,7 +425,7 @@ public class RatchetSKM extends SessionKeyManager implements SessionTagListener 
     }
 
     /**
-     * Determine how long the available tags will be available for before expiring, in 
+     * Determine how long the available tags will be available for before expiring, in
      * milliseconds
      */
     @Override
@@ -434,7 +434,7 @@ public class RatchetSKM extends SessionKeyManager implements SessionTagListener 
         if (sess == null) { return 0; }
         if (sess.getCurrentKey().equals(key)) {
             long end = sess.getLastExpirationDate();
-            if (end <= 0) 
+            if (end <= 0)
                 return 0;
             else
                 return end - _context.clock().now();
@@ -1157,7 +1157,6 @@ public class RatchetSKM extends SessionKeyManager implements SessionTagListener 
                     _hisIBKey = receivedKey;
 
                     // create new OB TS, delete old one
-                    PublicKey pub = nextKeys.getPublic();
                     PrivateKey priv = nextKeys.getPrivate();
                     PrivateKey sharedSecret = ECIESAEADEngine.doDH(priv, key);
                     byte[] sk = new byte[32];
@@ -1487,7 +1486,7 @@ public class RatchetSKM extends SessionKeyManager implements SessionTagListener 
         }
 
         /**
-         * Get the furthest away tag set expiration date - after which all of the  
+         * Get the furthest away tag set expiration date - after which all of the
          * tags will have expired
          *
          */
