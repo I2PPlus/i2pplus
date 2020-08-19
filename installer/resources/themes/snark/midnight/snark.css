@@ -4193,8 +4193,16 @@ td.snarkTorrentDetails img, .snarkDirInfo td:first-child img:not(.thumb) {
 }
 
 .iframed #torrentDisplay {
+  margin: -1px 0 0;
   position: static !important;
-  margin: -1px 0;
+  border-left: none;
+  border-right: none;
+}
+
+@media screen and (min-width: 1500px) {
+.iframed #torrentDisplay {
+  margin: -10px 0 -1px;
+}
 }
 
 #torrentDisplay input {
