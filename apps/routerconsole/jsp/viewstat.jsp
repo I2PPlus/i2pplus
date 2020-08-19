@@ -59,7 +59,8 @@ if ( !rendered && ((rs != null) || fakeBw) ) {
         response.setContentType("image/png");
         response.setHeader("Content-Disposition", "inline; filename=\"" + stat + ".png\"");
         // very brief 45 sec expire
-        response.setDateHeader("Expires", ctx.clock().now() + (45*1000));
+        // response.setDateHeader("Expires", ctx.clock().now() + (45*1000));
+        response.addHeader("Cache-Control", "private, no-cache, max-age=45");
         response.setHeader("Accept-Ranges", "none");
         // http://jira.codehaus.org/browse/JETTY-1346
         // This doesn't actually appear in the response, but it fixes the problem,

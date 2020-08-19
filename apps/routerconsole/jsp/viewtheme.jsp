@@ -69,8 +69,9 @@ if (lastmod > 0) {
         return;
     }
     response.setDateHeader("Last-Modified", lastmod);
-    if (uri.contains(".png") || uri.contains(".jpg") || uri.contains(".svg") || uri.contains(".ico") ||
-        uri.contains(".ttf")) {
+    if (uri.contains("override.css")) {
+        response.setHeader("Cache-Control", "no-store");
+    } else if (uri.contains(".png") || uri.contains(".jpg") || uri.contains(".svg") || uri.contains(".ico") || uri.contains(".ttf")) {
         response.setHeader("Cache-Control", "private, max-age=2628000, stale-while-revalidate=86400");
     } else {
         response.setHeader("Cache-Control", "no-cache, private, max-age=2628000");

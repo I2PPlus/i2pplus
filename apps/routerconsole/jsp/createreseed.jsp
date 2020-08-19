@@ -20,16 +20,16 @@ try {
         long lastmod = zip.lastModified();
         if (lastmod > 0)
             response.setDateHeader("Last-Modified", lastmod);
-        response.setDateHeader("Expires", 0);
-        response.addHeader("Cache-Control", "no-store, max-age=0, no-cache, must-revalidate");
-        response.addHeader("Pragma", "no-cache");
+        // response.setDateHeader("Expires", 0);
+        response.addHeader("Cache-Control", "no-store");
+        // response.addHeader("Pragma", "no-cache");
         response.setContentType("application/zip; name=\"i2preseed.zip\"");
         response.addHeader("Content-Disposition", "attachment; filename=\"i2preseed.zip\"");
         in = new java.io.FileInputStream(zip);
         java.io.OutputStream cout = response.getOutputStream();
         net.i2p.data.DataHelper.copy(in, cout);
     } finally {
-        if (in != null) 
+        if (in != null)
             try { in.close(); } catch (java.io.IOException ioe) {}
         if (zip != null)
             zip.delete();

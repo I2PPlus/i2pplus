@@ -16,9 +16,9 @@ if (length <= 0 || !f.isFile()) {
     response.setHeader("X-Content-Type-Options", "nosniff");
     response.setHeader("Content-Length", Long.toString(length));
     response.setHeader("Accept-Ranges", "none");
-    response.setDateHeader("Expires", 0);
-    response.addHeader("Cache-Control", "no-store, max-age=0, no-cache, must-revalidate");
-    response.addHeader("Pragma", "no-cache");
+    // response.setDateHeader("Expires", 0);
+    response.addHeader("Cache-Control", "no-store");
+    // response.addHeader("Pragma", "no-cache");
     java.io.InputStream in = null;
     try {
         in = new java.io.FileInputStream(f);
@@ -34,7 +34,7 @@ if (length <= 0 || !f.isFile()) {
             throw ioe;
         }
     } finally {
-        if (in != null) 
+        if (in != null)
             try { in.close(); } catch (java.io.IOException ioe) {}
     }
 }
