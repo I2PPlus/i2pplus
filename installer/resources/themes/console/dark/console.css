@@ -145,6 +145,12 @@ img[src="/flags.jsp?c=a1"], img[src="/flags.jsp?c=a2"] {
   background: #000;
 }
 
+.netdb_header img[src^="/flags"] {
+  width: 24px !important;
+  height: 18px !important;
+  border: 1px solid #030;
+}
+
 pre {
   width: 98%;
   overflow-x: auto;
@@ -11553,7 +11559,7 @@ input[type="checkbox"][disabled]:checked, input[type="radio"][disabled]:checked,
 
 .sybil_routerinfo .netdb_header img[src^="/flags.jsp?c="] {
   margin: 0 5px 0 3px !important;
-  vertical-align: calc(50% + 7px) !important;
+  vertical-align: calc(50% + 2px) !important;
 }
 
 .version, #netdbtiers a {
