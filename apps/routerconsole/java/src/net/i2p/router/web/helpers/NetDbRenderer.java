@@ -975,11 +975,11 @@ class NetDbRenderer {
             String country = _context.commSystem().getCountry(info.getIdentity().getHash());
             if (country != null) {
                 buf.append("<a href=\"/netdb?c=").append(country).append("\">");
-                buf.append("<img height=\"11\" width=\"16\" alt=\"").append(country.toUpperCase(Locale.US)).append('\"');
+                buf.append("<img height=\"12\" width=\"16\" alt=\"").append(country.toUpperCase(Locale.US)).append('\"');
                 buf.append(" title=\"").append(getTranslatedCountry(country)).append('\"');
                 buf.append(" src=\"/flags.jsp?c=").append(country).append("\"> ").append("</a>");
             } else {
-                buf.append("<img height=\"11\" width=\"16\" alt=\"??\"").append(" title=\"unknown\"").append(" src=\"/flags.jsp?c=a0\"></a>");
+                buf.append("<img height=\"12\" width=\"16\" alt=\"??\"").append(" title=\"unknown\"").append(" src=\"/flags.jsp?c=a0\"></a>");
             }
             buf.append("</span>");
         } else {

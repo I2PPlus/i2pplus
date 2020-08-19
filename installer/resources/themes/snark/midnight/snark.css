@@ -4184,7 +4184,7 @@ td.snarkTorrentDetails img, .snarkDirInfo td:first-child img:not(.thumb) {
   padding: 0;
   display: block;
   position: sticky;
-  top: 52px;
+  top: 48px;
   z-index: 500;
   line-height: 1.5;
   border: 1px solid #26235c;
