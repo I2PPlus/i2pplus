@@ -750,7 +750,7 @@ public class Analysis extends JobImpl implements RouterApp {
                         // (POINTS_NEW / 48) for every hour under 48, max POINTS_NEW
                         double point = Math.min(POINTS_NEW, (2 * DAY - age) / (2 * DAY / POINTS_NEW));
                         addPoints(points, h, point,
-                                  "First heard about: " + _t("{0} ago", DataHelper.formatDuration2(age).replace("&nbsp;", "")));
+                                  "First heard about: " + _t("{0} ago", DataHelper.formatDuration2(age).replace("&nbsp;", " ")));
                     }
                 }
                 DBHistory dbh = prof.getDBHistory();
@@ -763,7 +763,7 @@ public class Analysis extends JobImpl implements RouterApp {
                             if (ra.getTotalEventCount() > 0) {
                                 double avg = 100 * ra.getAverage();
                                 if (avg > 40)
-                                    addPoints(points, h, (avg - 40) / 6.0, "Lookup fail rate " + ((int) avg) + '%');
+                                    addPoints(points, h, (avg - 40) / 6.0, "Lookup fail rate: " + ((int) avg) + '%');
                             }
                         }
                     }
