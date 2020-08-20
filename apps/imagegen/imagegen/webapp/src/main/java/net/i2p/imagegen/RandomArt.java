@@ -257,10 +257,9 @@ public class RandomArt {
             else if (html)
                 retval.append("<span class=\"spacer\">");
             retval.append(augmentation_string.charAt(idx));
-//            if (html && idx != 0)
             if (html)
                 retval.append("</span>");
-                }
+        }
         retval.append(BOX_RIGHT);
         retval.append(NL);
 
