@@ -4895,11 +4895,12 @@ td.snarkTorrentPeerCount b::before {
 }
 
 td.snarkTorrentPeerCount b a:not(:hover):not(:focus), td.snarkTorrentPeerCount b a:not(:hover):not(:focus):visited {
-  color: #f07;
+  color: #d0d;
   text-shadow: 0 1px 1px #000;
 }
 
-.inactive.downloading td.snarkTorrentPeerCount b a, .inactive.downloading td.snarkTorrentPeerCount b a:visited {
+.inactive.downloading td.snarkTorrentPeerCount b a:not(:hover):not(:focus), .inactive.downloading td.snarkTorrentPeerCount b a:not(:hover):not(:focus):visited {
+  color: #900;
   text-shadow: 0 1px 1px #990 !important;
 }
 
