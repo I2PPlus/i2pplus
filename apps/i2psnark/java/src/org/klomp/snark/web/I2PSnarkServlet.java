@@ -2098,7 +2098,7 @@ public class I2PSnarkServlet extends BasicServlet {
                 if (curPeers > 0 && !showPeers) {
                     statusString = toThemeImg(img, "", tooltip) + "</td>\n" +
                                "<td class=\"snarkTorrentStatus\"><b>" + txt +
-                               "</b></td>\n<td class=\"snarkTorrentPeerCount\">" +
+                               "</b></td>\n<td class=\"snarkTorrentPeerCount\"><b>" +
                                "<a href=\"" +
                                uri + getQueryString(req, b64, null, null) + "\"><span class=\"right\">" +
                                // Hide "peer/peers" text to reduce column-resize UI glitch and clutter (status icon has full text)
