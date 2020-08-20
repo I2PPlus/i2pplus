@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-<title>I2P Imagegen</title>
+<title>Imagegen - I2P+</title>
 <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
 <link rel="icon" href="/themes/console/classic/images/favicon.ico">
 <link rel="stylesheet" href="/themes/imagegen/imagegen.css" type="text/css">
@@ -42,7 +42,7 @@ This is the webapp that creates identification images. They can be found in the 
 
 <form action="/imagegen/id" method="get" target="_blank">
 <div class="formtitle">Identicon Generator</div>
-<input type="text" name="c" required x-moz-errormessage="You must provide an I2P hostname for the image generation to work!" placeholder="I2P hostname to encode" title="Enter I2P hostname">
+<input type="text" name="c" required placeholder="I2P hostname to encode" title="Enter I2P hostname">
 <select name="s" title="Select image output size">
 <option value="16">16 by 16 pixels</option>
 <option value="22">22 by 22 pixels</option>
@@ -103,17 +103,18 @@ This technique renders an ASCII-Art representation of a digital fingerprint so t
 <th colspan="2" class="title">Random Art for the hostname: <i>i2p-projekt.i2p</i></th>
 </tr>
 <tr>
-<th>HTML Test</th><th>UTF-8 Text Test</th>
+<th>HTML Test [SHA256]</th>
+<!--<th>UTF-8 Text Test</th>-->
 </tr>
 <tr>
-<td><iframe src="ra?c=i2p-projekt.i2p&amp;m=html" width="300" height="300" scrolling="no"><a href="ra?c=i2p-projekt.i2p&amp;m=html">HTML test</a></iframe></td>
-<td><iframe src="ra?c=i2p-projekt.i2p&amp;m=text" width="300" height="300" scrolling="no"><a href="ra?c=i2p-projekt.i2p&amp;m=text">UTF-8 text test</a></iframe></td>
+<td><iframe id="htmlart" name="htmlart" src="ra?c=i2p-projekt.i2p&amp;m=html" width="360" height="360" scrolling="no"><a href="ra?c=i2p-projekt.i2p&amp;m=html">HTML test</a></iframe></td>
+<!--<td><iframe src="ra?c=i2p-projekt.i2p&amp;m=text" width="300" height="300" scrolling="no"><a href="ra?c=i2p-projekt.i2p&amp;m=text">UTF-8 text test</a></iframe></td>-->
 </tr>
 </table>
 
-<form action="/imagegen/ra" method="get" target="_blank">
+<form action="/imagegen/ra" method="get" target="htmlart">
 <div class="formtitle">Random Art Generator</div>
-<input type="text" name="c" required x-moz-errormessage="You must provide an I2P hostname for the image generation to work!" placeholder="I2P hostname to encode" title="Enter I2P hostname (must be in the addressbook)">
+<input type="text" name="c" placeholder="I2P hostname to encode" title="Enter I2P hostname (must be in the addressbook)">
 <input hidden="hidden" name="m" value="html">
 <button>Create Random Art</button>
 </form>
