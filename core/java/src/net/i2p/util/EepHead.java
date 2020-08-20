@@ -155,9 +155,9 @@ public class EepHead extends EepGet {
                 System.out.println("Server: " + x);
             } else if (cc != null && (cc.equals("max-age=3600,public") || cc.equals("no-cache, private, max-age=2628000"))) {
                 System.out.println("Server: Jetty (?)");
-            } else if (cc == null && cl.equals("217") && lm != null && ar.equals("bytes") && et == null) {
+            } else if (cc == null && (cl != null && cl.equals("217")) && lm != null && (ar != null && ar.equals("bytes")) && et == null) {
                 System.out.println("Server: Jetty (ZZZOT)");
-            } else if (cc == null && xf.equals("DENY") && cto.equals("nosniff") && st.equals("200")) {
+            } else if (cc == null && (xf != null && xf.equals("DENY")) && (cto != null && cto.equals("nosniff")) && (st != null && st.equals("200"))) {
                 System.out.println("Server: Jetty (?) (MuCats)");
             } else if ((ar != null && ar.equals("bytes")) && lm != null && et != null) {
                 System.out.println("Server: nginx (?)");
