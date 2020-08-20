@@ -4229,6 +4229,10 @@ td.snarkTorrentPeerCount {
   font-weight: bold;
 }
 
+.nopeers td.snarkTorrentPeerCount {
+  text-align: center;
+}
+
 .snarkTorrentPeerCount .left, .snarkTorrentPeerCount .right {
   display: inline-block;
   min-width: 12px;

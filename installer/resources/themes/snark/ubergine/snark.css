@@ -5578,8 +5578,11 @@ td.snarkTorrentPeerCount {
   padding-left: 0;
   width: 1%;
   white-space: nowrap;
-  text-align: left;
   font-weight: bold;
+}
+
+.nopeers td.snarkTorrentPeerCount {
+  text-align: center;
 }
 
 .snarkTorrentPeerCount .left, .snarkTorrentPeerCount .right {

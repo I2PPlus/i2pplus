@@ -386,7 +386,7 @@ tfoot .snarkTorrentRateUp:not(:empty)::before,tfoot .snarkTorrentUploaded:not(:e
 	display: inline-block;
 }
 
-td.snarkTorrentPeerCount:empty {
+td.snarkTorrentPeerCount:empty, .nopeers td.snarkTorrentPeerCount {
 	text-align: center;
 }
 
