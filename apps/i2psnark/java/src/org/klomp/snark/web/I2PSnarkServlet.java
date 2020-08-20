@@ -2036,7 +2036,7 @@ public class I2PSnarkServlet extends BasicServlet {
         } else if (snark.isAllocating()) {
             statusString = toThemeImg("stalled", "", _t("Allocating")) + "</td>" +
                            "<td class=\"snarkTorrentStatus\"><b>" + _t("Allocating") +
-                           "</b></td><td class=\"snarkTorrentPeerCount\">";
+                           "</b></td><td class=\"snarkTorrentPeerCount\"><b>";
                            snarkStatus = "active";
         } else if (err != null && isRunning && curPeers == 0) {
         //} else if (err != null && curPeers == 0) {
@@ -2053,7 +2053,7 @@ public class I2PSnarkServlet extends BasicServlet {
             //if (isRunning) {
                 statusString = toThemeImg("trackererror", "", err) + "</td>\n" +
                                "<td class=\"snarkTorrentStatus\"><b>" + _t("Net Error") +
-                               "</b></td>\n<td class=\"snarkTorrentPeerCount\"><span class=\"right\">" +
+                               "</b></td>\n<td class=\"snarkTorrentPeerCount\"><b><span class=\"right\">" +
                                curPeers + "</span>" + thinsp(noThinsp) + "<span class=\"left\">" + knownPeers + "</span>";
                                snarkStatus = "inactive downloading incomplete neterror";
             //} else {
@@ -2067,7 +2067,7 @@ public class I2PSnarkServlet extends BasicServlet {
         } else if (snark.isStarting()) {
             statusString = toThemeImg("stalled", "", _t("Starting")) + "</td>\n" +
                            "<td class=\"snarkTorrentStatus\"><b class=\"alwaysShow\">" + _t("Starting") +
-                           "</b></td>\n<td class=\"snarkTorrentPeerCount\">";
+                           "</b></td>\n<td class=\"snarkTorrentPeerCount\"><b>";
                            snarkStatus = "active";
         } else if (remaining == 0 || needed == 0) {  // < 0 means no meta size yet
             // partial complete or seeding
@@ -2098,7 +2098,7 @@ public class I2PSnarkServlet extends BasicServlet {
                 if (curPeers > 0 && !showPeers) {
                     statusString = toThemeImg(img, "", tooltip) + "</td>\n" +
                                "<td class=\"snarkTorrentStatus\"><b>" + txt +
-                               "</b></td>\n<td class=\"snarkTorrentPeerCount\">" +
+                               "</b></td>\n<td class=\"snarkTorrentPeerCount\"><b>" +
                                "<a href=\"" +
                                uri + getQueryString(req, b64, null, null) + "\"><span class=\"right\">" +
                                // Hide "peer/peers" text to reduce column-resize UI glitch and clutter (status icon has full text)
@@ -2111,7 +2111,7 @@ public class I2PSnarkServlet extends BasicServlet {
                 } else if (curPeers > 0) {
                     statusString = toThemeImg(img, "", tooltip) + "</td>\n" +
                                "<td class=\"snarkTorrentStatus\"><b>" + txt +
-                               "</b></td>\n<td class=\"snarkTorrentPeerCount\"><a href=\"" + uri + "\" title=\"" + _t("Hide Peers") + "\">" +
+                               "</b></td>\n<td class=\"snarkTorrentPeerCount\"><b><a href=\"" + uri + "\" title=\"" + _t("Hide Peers") + "\">" +
                                "<span class=\"right\">" + curPeers + "</span>" + thinsp(noThinsp) + "<span class=\"left\">" + knownPeers + "</span></a>";
                     if (upBps > 0) {
                         snarkStatus = "active seeding complete";
@@ -2121,7 +2121,7 @@ public class I2PSnarkServlet extends BasicServlet {
                 } else {
                     statusString = toThemeImg(img, "", tooltip) + "</td>\n" +
                                "<td class=\"snarkTorrentStatus\"><b>" + txt +
-                               "</b></td>\n<td class=\"snarkTorrentPeerCount\"><span class=\"right\">" + curPeers +
+                               "</b></td>\n<td class=\"snarkTorrentPeerCount\"><b><span class=\"right\">" + curPeers +
                                "</span>" + thinsp(noThinsp) + "<span class=\"left\">" + knownPeers + "</span>";
                     if (upBps > 0 || curPeers > 0) {
                         snarkStatus = "active seeding complete";
@@ -2132,7 +2132,7 @@ public class I2PSnarkServlet extends BasicServlet {
             } else {
                 statusString = toThemeImg("complete", "", _t("Complete")) + "</td>\n" +
                                "<td class=\"snarkTorrentStatus\"><b class=\"alwaysShow\">" +
-                               _t("Complete") + "</b></td><td class=\"snarkTorrentPeerCount\">";
+                               _t("Complete") + "</b></td><td class=\"snarkTorrentPeerCount\"><b>‒";
                                snarkStatus = "inactive complete stopped";
             }
         } else {
@@ -2140,20 +2140,20 @@ public class I2PSnarkServlet extends BasicServlet {
                 statusString = toThemeImg("downloading", "", _t("OK") +
                                " (" + _t("Downloading from {0} of {1} peers in swarm", curPeers, knownPeers) + ")") + "</td>\n" +
                                "<td class=\"snarkTorrentStatus\"><b>" + _t("OK") +
-                               "</b></td><td class=\"snarkTorrentPeerCount\"><a href=\"" +
+                               "</b></td><td class=\"snarkTorrentPeerCount\"><b><a href=\"" +
                                uri + getQueryString(req, b64, null, null) + "\"><span class=\"right\">" +
                                curPeers + "</span>" + thinsp(noThinsp) + "<span class=\"left\">" + knownPeers + "</span></a>";
                                snarkStatus = "active downloading incomplete";
             } else if (isRunning && curPeers > 0 && downBps > 0) {
                 statusString = toThemeImg("downloading", "", _t("OK") + ", " + ngettext("Downloading from {0} peer", "Downloading from {0} peers", curPeers)) +
-                               "</td>\n<td class=\"snarkTorrentStatus\"><b>" + _t("OK") + "</b></td>\n<td class=\"snarkTorrentPeerCount\"><a href=\"" +
+                               "</td>\n<td class=\"snarkTorrentStatus\"><b>" + _t("OK") + "</b></td>\n<td class=\"snarkTorrentPeerCount\"><b><a href=\"" +
                                uri + "\" title=\"" + _t("Hide Peers") + "\"><span class=\"right\">" + curPeers + "</span>" + thinsp(noThinsp) +
                                "<span class=\"left\">" + knownPeers + "</span></a>";
                                snarkStatus = "active downloading incomplete";
             } else if (isRunning && curPeers > 0 && !showPeers) {
                 statusString = toThemeImg("stalled", "", _t("Stalled") + " (" + ngettext("Connected to {0} peer", "Connected to {0} peers", curPeers)) + "</td>\n" +
                                "<td class=\"snarkTorrentStatus\"><b>" + _t("Stalled") +
-                               "</b></td>\n<td class=\"snarkTorrentPeerCount\"><a href=\"" +
+                               "</b></td>\n<td class=\"snarkTorrentPeerCount\"><b><a href=\"" +
                                uri + getQueryString(req, b64, null, null) + "\"><span class=\"right\">" +
                                curPeers + "</span>" + thinsp(noThinsp) + "<span class=\"left\">" + knownPeers + "</span></a>";
                                snarkStatus = "inactive downloading incomplete";
@@ -2161,25 +2161,25 @@ public class I2PSnarkServlet extends BasicServlet {
                 statusString = toThemeImg("stalled", "", _t("Stalled") +
                                " (" + _t("Connected to {0} of {1} peers in swarm", curPeers, knownPeers) + ")") + "</td>\n" +
                                "<td class=\"snarkTorrentStatus\"><b>" + _t("Stalled") +
-                               "</b></td>\n<td class=\"snarkTorrentPeerCount\"><a href=\"" + uri + "\" title=\"" + _t("Hide Peers") +
+                               "</b></td>\n<td class=\"snarkTorrentPeerCount\"><b><a href=\"" + uri + "\" title=\"" + _t("Hide Peers") +
                                "\"><span class=\"right\">" + curPeers + "</span>" + thinsp(noThinsp) + "<span class=\"left\">" + knownPeers + "</span></a>";
                                snarkStatus = "inactive downloading incomplete";
             } else if (isRunning && knownPeers > 0) {
                 statusString = toThemeImg("nopeers", "", _t("No Peers") +
                                " (" + _t("Connected to {0} of {1} peers in swarm", curPeers, knownPeers) + ")") + "</td>\n" +
                                "<td class=\"snarkTorrentStatus\"><b>" + _t("No Peers") +
-                               "</b></td>\n<td class=\"snarkTorrentPeerCount\"><span class=\"right\">0</span>" +
+                               "</b></td>\n<td class=\"snarkTorrentPeerCount\"><b><span class=\"right\">0</span>" +
                                thinsp(noThinsp) + "<span class=\"left\">" + knownPeers + "</span>";
                                snarkStatus = "inactive downloading incomplete nopeers";
             } else if (isRunning) {
                 statusString = toThemeImg("nopeers", "", _t("No Peers")) + "</td>\n" +
                                "<td class=\"snarkTorrentStatus\"><b class=\"alwaysShow\">" + _t("No Peers") +
-                               "</b></td>\n<td class=\"snarkTorrentPeerCount\">";
+                               "</b></td>\n<td class=\"snarkTorrentPeerCount\"><b>‒";
                                snarkStatus = "inactive downloading incomplete nopeers";
             } else {
                 statusString = toThemeImg("stopped", "", _t("Stopped")) + "</td>\n" +
                                "<td class=\"snarkTorrentStatus\"><b class=\"alwaysShow\">" + _t("Stopped") +
-                               "</b></td>\n<td class=\"snarkTorrentPeerCount\">";
+                               "</b></td>\n<td class=\"snarkTorrentPeerCount\"><b>‒";
                                snarkStatus = "inactive incomplete stopped";
             }
         }
@@ -2190,7 +2190,7 @@ public class I2PSnarkServlet extends BasicServlet {
         out.write(statusString);
 
         // (i) icon column
-        out.write("</td>\n<td class=\"snarkTrackerDetails\">");
+        out.write("</b></td>\n<td class=\"snarkTrackerDetails\">");
         if (isValid) {
             String announce = meta.getAnnounce();
             if (announce == null)

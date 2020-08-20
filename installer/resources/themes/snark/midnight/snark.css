@@ -4868,3 +4868,90 @@ td.snarkTorrentStatus b, .lang_en td.snarkTorrentStatus b {
 }
 
 /* end table sort indicators */
+
+td.snarkTorrentPeerCount b {
+  padding: 4px 3px;
+  min-width: 80px;
+  display: inline-block;
+  text-align: center;
+  position: relative;
+  line-height: 1;
+  font-size: 95%;
+  text-shadow: 0 1px 1px #101;
+  border-radius: 2px;
+  background: #535;
+}
+
+td.snarkTorrentPeerCount b::before {
+  width: 0;
+  height: 0;
+  position: absolute;
+  top: calc(50% - 5px);
+  left: -10px;
+  border-width: 5px;
+  border-style: solid;
+  border-color: transparent #535 transparent transparent;
+  content: "";
+}
+
+td.snarkTorrentPeerCount b a:not(:hover):not(:focus), td.snarkTorrentPeerCount b a:not(:hover):not(:focus):visited {
+  color: #d0d;
+  text-shadow: 0 1px 1px #000;
+}
+
+.inactive.downloading td.snarkTorrentPeerCount b a:not(:hover):not(:focus), .inactive.downloading td.snarkTorrentPeerCount b a:not(:hover):not(:focus):visited {
+  color: #900;
+  text-shadow: 0 1px 1px #990 !important;
+}
+
+.active.seeding.complete .snarkTorrentPeerCount b {
+  background: #937;
+  background: repeating-linear-gradient(135deg, #937, #937 8px, #826 9px, #826 17px);
+}
+
+.active.seeding.complete .snarkTorrentPeerCount b::before {
+  border-color: transparent #937 transparent transparent;
+}
+
+.active.downloading .snarkTorrentPeerCount b {
+  background: #252;
+  background: repeating-linear-gradient(135deg, #252, #252 8px, #141 9px, #141 17px);
+}
+
+.active.downloading .snarkTorrentPeerCount b::before {
+  border-color: transparent #252 transparent transparent;
+}
+
+.inactive.downloading .snarkTorrentPeerCount b {
+  color: #101;
+  background: #bb0;
+}
+
+.inactive.downloading .snarkTorrentPeerCount b::before {
+  border-color: transparent #bb0 transparent transparent;
+}
+
+.stopped.complete .snarkTorrentPeerCount b {
+  background: #28f;
+}
+
+.stopped.complete .snarkTorrentPeerCount b::before {
+  border-color: transparent #28f transparent transparent;
+}
+
+.nopeers.incomplete .snarkTorrentPeerCount b {
+  text-shadow: 0 1px 1px #bbb;
+  background: #aaa;
+}
+
+.nopeers.incomplete .snarkTorrentPeerCount b::before {
+  border-color: transparent #aaa transparent transparent;
+}
+
+.stopped.incomplete .snarkTorrentPeerCount b, .inactive.eroror .snarkTorrentPeerCount b {
+  background: #900 !important;
+}
+
+.stopped.incomplete .snarkTorrentPeerCount b::before, .inactive.error .snarkTorrentPeerCount b::before {
+  border-color: transparent #900 transparent transparent !important;
+}

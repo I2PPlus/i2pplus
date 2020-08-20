@@ -57,7 +57,12 @@ public class RandomArtServlet extends HttpServlet {
 				StringBuilder buf = new StringBuilder(512);
 				if (html) {
 					response.setContentType("text/html");
-					buf.append("<!DOCTYPE html>\n<html>\n<head>\n<meta http-equiv=\"Content-Type\" content=\"text/html; charset=UTF-8\">\n</head>\n<body>\n");
+					buf.append("<!DOCTYPE html>\n<html>\n<head>\n<meta http-equiv=\"Content-Type\" content=\"text/html; charset=UTF-8\">");
+					buf.append("<style type=\"text/css\">html,body{margin:0;padding:0;min-height:100%;overflow:hidden}");
+					buf.append("#container{width:100%;height:100%;display:table;position:absolute;top:calc(50% - 192px);text-align:center}");
+					buf.append("span{padding:2px;display:inline-block;line-height:24px;vertical-align:middle;text-align:center;");
+					buf.append("font-size:24pt;border:1px solid #ccc;width:24px;height:24px}.spacer{background:#e8e8e8}#title{display:none}");
+					buf.append("</style>\n</head>\n<body>\n");
 				} else {
 					response.setContentType("text/plain");
 					response.setCharacterEncoding("UTF-8");

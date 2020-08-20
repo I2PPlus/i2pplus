@@ -69,9 +69,9 @@ public class RandomArt {
      * Else pictures would be too dense, and drawing the frame would
      * fail, too, because the key type would not fit in anymore.
      */
-    private static final int	FLDBASE		= 8;
-    private static final int	FLDSIZE_Y	= FLDBASE + 1;
-    private static final int	FLDSIZE_X	= FLDBASE * 2 + 1;
+    private static final int	FLDBASE		= 11;
+    private static final int	FLDSIZE_Y	= FLDBASE;
+    private static final int	FLDSIZE_X	= FLDBASE;
     /*
      * Chars to be used after each other every time the worm
      * intersects with itself.  Matter of taste.
@@ -199,7 +199,7 @@ public class RandomArt {
     field[x][y] = (byte) len;
 
     final String size_txt;
-    if (key_size > 0)
+    if (key_size > 0 && !html)
         size_txt = String.format("%4d", key_size);
     else
         size_txt = "";
@@ -216,17 +216,22 @@ public class RandomArt {
             cbase[i] = (byte) ((dgst_raw[i] & 0xff) * 5 / 8);
         }
         base = DataHelper.fromLong(cbase, 0, clen);
-        retval.append("<font color=\"#")
+        retval.append("<div id=\"container\" style=\"color:#")
               .append(getColor(base, 0))
-              .append("\">\n<pre style=\"width: 120px;\">\n");
+              .append("\"><pre>\n");
     }
-    if (prefix_len > 0)
+    if (prefix_len > 0 && !html)
         retval.append(String.format("%s" + BOX_TL + BOX_TOP + BOX_TOP + "[%4s%s ]",
              prefix, key_type, size_txt));
-    else
+    else if (prefix_len > 0)
+        retval.append(String.format("%s" + BOX_TL + BOX_TOP + BOX_TOP + "<span id=\"title\">[%4s%s ]</span>",
+             prefix, key_type, size_txt));
+    else if (!html)
         retval.append(String.format("" + BOX_TL + BOX_TOP + BOX_TOP + "[%4s%s ]", key_type,
              size_txt));
-
+    else
+        retval.append(String.format("" + BOX_TL + BOX_TOP + BOX_TOP + "<span id=\"title\">[%4s%s ]</span>", key_type,
+             size_txt));
     /* output upper border */
     for (int i = 0; i < FLDSIZE_X - Math.max(key_type.length(), 4) - 9; i++)
         retval.append(BOX_TOP);
@@ -252,10 +257,9 @@ public class RandomArt {
             else if (html)
                 retval.append("<span class=\"spacer\">");
             retval.append(augmentation_string.charAt(idx));
-//            if (html && idx != 0)
             if (html)
                 retval.append("</span>");
-                }
+        }
         retval.append(BOX_RIGHT);
         retval.append(NL);
 
@@ -271,7 +275,7 @@ public class RandomArt {
     retval.append(BOX_BR);
     retval.append(NL);
         if (html)
-        retval.append("</pre>\n</font>\n");
+        retval.append("</pre>\n</div>\n");
 
     return retval.toString();
     }
@@ -291,8 +295,11 @@ public class RandomArt {
         try {
             boolean uni = true;
             boolean html = true;
-            if (html)
-                System.out.println("<!DOCTYPE html>\n<html>\n<head>\n<meta http-equiv=\"Content-Type\" content=\"text/html; charset=UTF-8\">\n</head>\n<body>");
+            if (html) {
+                System.out.println("<!DOCTYPE html>\n<html>\n<head>");
+                System.out.println("<meta http-equiv=\"Content-Type\" content=\"text/html; charset=UTF-8\">");
+                System.out.println("</head>\n<body>\n");
+            }
             byte[] b = new byte[16];
             net.i2p.util.RandomSource.getInstance().nextBytes(b);
             String art = gnutls_key_fingerprint_randomart(b, "SHA", 128, null, uni, html);
