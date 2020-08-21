@@ -548,6 +548,10 @@ td.snarkTorrentPeerCount {
   width: 1%;
 }
 
+.nopeers td.snarkTorrentPeerCount {
+  text-align: center;
+}
+
 @media screen and (min-width: 1500px) {
 td.snarkTorrentPeerCount {
   padding-right: 10px !important;

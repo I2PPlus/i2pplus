@@ -3678,10 +3678,6 @@ td.snarkGraphicStatus img {
   width: 60px;
 }
 
-.snarkTorrentStatus b, .snarkTorrentStatus .alwaysShow {
-  display: none;
-}
-
 b.alwaysShow {
   display: inline;
 }
@@ -3802,6 +3798,10 @@ _:-ms-lang(x), .snarkNav:link, .snarkNav:visited {
 
 .snarkMessages {
   margin: -1px 0 10px;
+}
+
+.snarkTorrentStatus b, .snarkTorrentStatus .alwaysShow {
+  display: none;
 }
 
 .snarkTorrentInfo img[src="/themes/snark/ubergine/images/details.png"] {
@@ -4232,7 +4232,7 @@ th.snarkTorrentPeerCount img {
 
 td.snarkTorrentPeerCount a, td.snarkTorrentPeerCount a:hover, td.snarkTorrentPeerCount a:active, .snarkTorrentPeerCount span {
   color: #ddd;
-  text-shadow: none !important;
+/*  text-shadow: none !important;*/
   cursor: text;
 }
 
@@ -5145,7 +5145,7 @@ td.snarkTorrentStatus b::before {
   border-color: transparent #aaa transparent transparent;
 }
 
-.stopped.incomplete .snarkTorrentStatus b, .inactive.eroror .snarkTorrentStatus b {
+.stopped.incomplete .snarkTorrentStatus b, .inactive.error .snarkTorrentStatus b {
   background: #900 !important;
 }
 
@@ -5578,8 +5578,11 @@ td.snarkTorrentPeerCount {
   padding-left: 0;
   width: 1%;
   white-space: nowrap;
-  text-align: left;
   font-weight: bold;
+}
+
+.nopeers td.snarkTorrentPeerCount {
+  text-align: center;
 }
 
 .snarkTorrentPeerCount .left, .snarkTorrentPeerCount .right {
@@ -6334,3 +6337,103 @@ body:not(.iframed) .mainsection .snarkComments {
 }
 
 /* end table sort indicators */
+
+@media screen and (max-width: 1499px) {
+
+td.snarkTorrentPeerCount {
+  padding-right: 3px !important;
+}
+
+td.snarkTorrentPeerCount b {
+  padding: 4px 3px;
+  min-width: 80px;
+  display: inline-block;
+  text-align: center;
+  position: relative;
+  line-height: 1;
+  font-size: 95%;
+  text-shadow: 0 1px 1px #101 !important;
+  border-radius: 2px;
+  background: #535;
+  filter: drop-shadow(0 0 1px #000);
+}
+
+td.snarkTorrentPeerCount b::before {
+  width: 0;
+  height: 0;
+  position: absolute;
+  top: calc(50% - 5px);
+  left: -10px;
+  border-width: 5px;
+  border-style: solid;
+  border-color: transparent #535 transparent transparent;
+  content: "";
+}
+
+.active.seeding.complete .snarkTorrentPeerCount b {
+  background: #937;
+  background: repeating-linear-gradient(135deg, #937, #937 8px, #826 9px, #826 17px);
+}
+
+.active.seeding.complete .snarkTorrentPeerCount b::before {
+  border-color: transparent #937 transparent transparent;
+}
+
+.active.downloading .snarkTorrentPeerCount b {
+  background: #252;
+  background: repeating-linear-gradient(135deg, #252, #252 8px, #141 9px, #141 17px);
+}
+
+.active.downloading .snarkTorrentPeerCount b::before {
+  border-color: transparent #252 transparent transparent;
+}
+
+.inactive.downloading .snarkTorrentPeerCount b {
+  color: #101;
+  background: #bb0;
+}
+
+.inactive.downloading .snarkTorrentPeerCount b::before {
+  border-color: transparent #bb0 transparent transparent;
+}
+
+.stopped.complete .snarkTorrentPeerCount b {
+  background: #28f;
+}
+
+.stopped.complete .snarkTorrentPeerCount b::before {
+  border-color: transparent #28f transparent transparent;
+}
+
+.nopeers.incomplete .snarkTorrentPeerCount b {
+  background: #aaa;
+}
+
+.nopeers.incomplete .snarkTorrentPeerCount b::before {
+  border-color: transparent #aaa transparent transparent;
+}
+
+.stopped.incomplete .snarkTorrentPeerCount b, .inactive.eroror .snarkTorrentPeerCount b {
+  background: #900 !important;
+}
+
+.stopped.incomplete .snarkTorrentPeerCount b::before, .inactive.error .snarkTorrentPeerCount b::before {
+  border-color: transparent #900 transparent transparent !important;
+}
+}
+
+@media screen and (min-width: 900px) and (max-width: 1499px) {
+td.snarkTorrentPeerCount b a:not(:hover):not(:focus), td.snarkTorrentPeerCount b a:not(:hover):not(:focus):visited {
+  color: #d0d;
+  text-shadow: 0 1px 1px #000;
+}
+
+.inactive.downloading td.snarkTorrentPeerCount b a:not(:hover):not(:focus), .inactive.downloading td.snarkTorrentPeerCount b a:not(:hover):not(:focus):visited {
+  color: #900;
+  text-shadow: 0 1px 1px #990 !important;
+}
+
+.inactive.downloading.nopeers td.snarkTorrentPeerCount b {
+  text-shadow: 0 1px 1px #990 !important;
+}
+}
