@@ -792,23 +792,23 @@ input.reload:active, button.reload:active {
 
 input.reload[value$="restart"], button.reload[value$="restart"] {
   padding: 4px 9px 6px 25px !important;
-  background: url(/themes/console/images/buttons/restart.png) 8px 5px no-repeat, linear-gradient(to bottom, #191a24 50%, #000 50%) !important;
-  background: url(/themes/console/images/buttons/restart.png) 8px 5px no-repeat, linear-gradient(to bottom, #11101c 50%, #000010 50%) !important;
-  background-size: 14px 14px, 100% 100% !important;
+  background: url(images/restart.svg) 8px center no-repeat, linear-gradient(to bottom, #11101c 50%, #000010 50%) !important;
+  background-size: 12px 12px, 100% 100% !important;
 }
 
 input.reload[value$="restart"]:hover, button.reload[value$="restart"]:hover,
 input.reload[value$="restart"]:focus, button.reload[value$="restart"]:focus {
-  background: #000 url(/themes/console/images/buttons/restart_hover.png) 8px 5px no-repeat !important;
-  background: url(/themes/console/images/buttons/restart_hover.png) 8px 5px no-repeat, linear-gradient(to bottom, #202 50%, #000 50%) !important;
-  background-size: 14px 14px, 100% 100% !important;
+  background: #000 url(images/restart_hover.svg) 8px center no-repeat !important;
+  background: url(images/restart_hover.svg) 8px center no-repeat, linear-gradient(to bottom, #202 50%, #000 50%) !important;
+  background-blend-mode: normal;
+  background-size: 12px 12px, 100% 100% !important;
 }
 
 input.reload[value$="restart"]:active, button.reload[value$="restart"]:active {
   padding: 5px 9px 5px 25px !important;
-  background: #652787 url(/themes/console/images/buttons/restart_hover.png) 8px 6px no-repeat !important;
-  background: url(/themes/console/images/buttons/restart_hover.png) 8px 6px no-repeat, linear-gradient(to bottom, #401856, #501f6c) !important;
-  background-size: 14px 14px, 100% 100% !important;
+  background: #652787 url(images/restart_hover.svg) 8px 6px no-repeat !important;
+  background: url(images/restart_hover.svg) 8px 6px no-repeat, linear-gradient(to bottom, #401856, #501f6c) !important;
+  background-size: 12px 12px, 100% 100% !important;
 }
 
 input.reload[value^="Update"], button.reload[value^="Update"] {
@@ -855,17 +855,18 @@ input.reload[value="Force garbage collection"]:active, input.reload[value="Force
 
 input.stop, button.stop {
   padding: 4px 9px 6px 25px !important;
-  background: url(/themes/console/images/buttons/shutdown.png) 8px 5px no-repeat, linear-gradient(to bottom, #191a24 50%, #000 50%) !important;
-  background: url(/themes/console/images/buttons/shutdown.png) 8px 5px no-repeat, linear-gradient(to bottom, #11101c 50%, #000010 50%) !important;
-  background-size: 14px 14px, 100% 100% !important;
+  background: url(images/shutdown.svg) 8px center no-repeat, linear-gradient(to bottom, #191a24 50%, #000 50%) !important;
+  background: url(images/shutdown.svg) 8px center no-repeat, linear-gradient(to bottom, #11101c 50%, #000010 50%) !important;
+  background-size: 12px 12px, 100% 100% !important;
 }
 
 input.stop:hover, button.stop:hover,
 input.stop:focus, button.stop:focus {
   padding: 4px 9px 6px 25px !important;
-  background: #000 url(/themes/console/images/buttons/shutdown_hover.png) 8px 5px no-repeat !important;
-  background: url(/themes/console/images/buttons/shutdown_hover.png) 8px 5px no-repeat, linear-gradient(to bottom, #202 50%, #000 50%) !important;
-  background-size: 14px 14px, 100% 100% !important;
+  background: #000 url(images/shutdown_hover.svg) 8px center no-repeat !important;
+  background: url(images/shutdown_hover.svg) 8px center no-repeat, linear-gradient(to bottom, #202 50%, #000 50%) !important;
+  background-size: 12px 12px, 100% 100% !important;
+  background-blend-mode: normal;
 }
 
 input.stop:active, button.stop:active {
@@ -1019,35 +1020,38 @@ button::-moz-focus-inner, input[type="submit"]::-moz-focus-inner, input[type="re
 }
 
 .routersummary .reload, .routersummary .reload[value$="restart"] {
-  background: url(/themes/console/images/buttons/restart.png) center center no-repeat, linear-gradient(to bottom, #191a24 50%, #000 50%) !important;
-  background: url(/themes/console/images/buttons/restart.png) center center no-repeat, linear-gradient(to right, rgba(0,0,0,0), rgba(96,0,96,0.1), rgba(0,0,0,0)), linear-gradient(to bottom, #141221 50%, #001 50%) !important;
+  background: url(images/restart.svg) center center no-repeat, linear-gradient(to right, rgba(0,0,0,0), rgba(96,0,96,0.1), rgba(0,0,0,0)), linear-gradient(to bottom, #141221 50%, #001 50%) !important;
+  background-size: 14px 14px, 100% 100%, 100% 100% !important;
 }
 
 .routersummary .reload:hover, .routersummary .reload:focus, .routersummary .reload[value$="restart"]:hover, .routersummary .reload[value$="restart"]:focus {
   background: #000 url(/themes/console/images/buttons/restart_hover.png) center center no-repeat !important;
-  background: url(/themes/console/images/buttons/shutdown_hover.png) 37% 56% no-repeat, url(/themes/console/images/buttons/restart_hover.png) 63% 55% no-repeat, #000 !important;
-  background: url(/themes/console/images/buttons/shutdown_hover.png) 37% 56% no-repeat, url(/themes/console/images/buttons/restart_hover.png) 63% 55% no-repeat, linear-gradient(to bottom, #202 50%, #000 50%) !important;
+  background: url(images/shutdown_hover.svg) 37% center no-repeat, url(images/restart_hover.svg) 63% center no-repeat, linear-gradient(to bottom, #202 50%, #000 50%) !important;
+  background-size: 14px 14px, 14px 14px, 100% 100% !important;
 }
 
 .routersummary .reload:active, .routersummary .reload[value$="restart"]:active {
-  background: url(/themes/console/images/buttons/shutdown_hover.png) 37% 56% no-repeat, url(/themes/console/images/buttons/restart_hover.png) 63% 55% no-repeat #652787 !important;
-  background: url(/themes/console/images/buttons/shutdown.png) 37% 56% no-repeat, url(/themes/console/images/buttons/restart.png) 63% 55% no-repeat, linear-gradient(to bottom, #401856, #501f6c) !important;
+  background: url(images/shutdown_hover.svg) 37% center no-repeat, url(images/restart_hover.svg) 63% center no-repeat #652787 !important;
+  background: url(images/shutdown.svg) 37% center no-repeat, url(images/restart.svg) 63% center no-repeat, linear-gradient(to bottom, #401856, #501f6c) !important;
+  background-size: 14px 14px, 14px 14px, 100% 100% !important;
 }
 
 .routersummary .stop {
-  background: url(/themes/console/images/buttons/shutdown.png) center 56% no-repeat, linear-gradient(to bottom, #191a24 50%, #000 50%) !important;
-  background: url(/themes/console/images/buttons/shutdown.png) center 56% no-repeat, linear-gradient(to right, rgba(0,0,0,0), rgba(96,0,96,0.1), rgba(0,0,0,0)), linear-gradient(to bottom, #141221 50%, #001 50%) !important;
+  background: url(images/shutdown.svg) center center no-repeat, linear-gradient(to bottom, #191a24 50%, #000 50%) !important;
+  background: url(images/shutdown.svg) center center no-repeat, linear-gradient(to right, rgba(0,0,0,0), rgba(96,0,96,0.1), rgba(0,0,0,0)), linear-gradient(to bottom, #141221 50%, #001 50%) !important;
+  background-size: 14px 14px, 100% 100%, 100% 100% !important;
 }
 
 .routersummary .stop:hover, .routersummary .stop:focus {
-  background: url(/themes/console/images/buttons/shutdown_hover.png) center 56% no-repeat;
-  background: url(/themes/console/images/buttons/shutdown_hover.png) center 56% no-repeat, linear-gradient(to bottom, #202 50%, #000 50%) !important;
-  background-size: 16px 16px, 100% 100% !important;
+  background: url(images/shutdown_hover.svg) center center no-repeat;
+  background: url(images/shutdown_hover.svg) center center no-repeat, linear-gradient(to bottom, #202 50%, #000 50%) !important;
+  background-size: 14px 14px, 100% 100% !important;
 }
 
 .routersummary .stop:active {
-  background: #652787 url(/themes/console/images/buttons/shutdown.png) center 56% no-repeat !important;
-  background: url(/themes/console/images/buttons/shutdown.png) center 56% no-repeat, linear-gradient(to bottom, #401856, #501f6c) !important;
+  background: #652787 url(images/shutdown.svg) center 56% no-repeat !important;
+  background: url(images/shutdown.svg) center center no-repeat, linear-gradient(to bottom, #401856, #501f6c) !important;
+  background-size: 14px 14px, 100% 100% !important;
 }
 
 /* Show text on context specific buttons (eg deferred shutdown) */
