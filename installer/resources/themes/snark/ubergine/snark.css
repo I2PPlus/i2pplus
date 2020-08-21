@@ -5523,6 +5523,7 @@ th.snarkGraphicStatus {
 
 td.snarkGraphicStatus img {
   max-height: 22px !important;
+  width: 25px !important;
 }
 
 td.snarkTrackerDetails img {
@@ -5581,7 +5582,7 @@ td.snarkTorrentPeerCount {
   font-weight: bold;
 }
 
-.nopeers td.snarkTorrentPeerCount {
+.nopeers.zero td.snarkTorrentPeerCount {
   text-align: center;
 }
 

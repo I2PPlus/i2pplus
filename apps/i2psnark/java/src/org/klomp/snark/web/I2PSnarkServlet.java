@@ -2133,7 +2133,7 @@ public class I2PSnarkServlet extends BasicServlet {
                 statusString = toThemeImg("complete", "", _t("Complete")) + "</td>\n" +
                                "<td class=\"snarkTorrentStatus\"><b class=\"alwaysShow\">" +
                                _t("Complete") + "</b></td><td class=\"snarkTorrentPeerCount\"><b>‒";
-                               snarkStatus = "inactive complete stopped";
+                               snarkStatus = "inactive complete stopped zero";
             }
         } else {
             if (isRunning && curPeers > 0 && downBps > 0 && !showPeers) {
@@ -2175,12 +2175,12 @@ public class I2PSnarkServlet extends BasicServlet {
                 statusString = toThemeImg("nopeers", "", _t("No Peers")) + "</td>\n" +
                                "<td class=\"snarkTorrentStatus\"><b class=\"alwaysShow\">" + _t("No Peers") +
                                "</b></td>\n<td class=\"snarkTorrentPeerCount\"><b>‒";
-                               snarkStatus = "inactive downloading incomplete nopeers";
+                               snarkStatus = "inactive downloading incomplete nopeers zero";
             } else {
                 statusString = toThemeImg("stopped", "", _t("Stopped")) + "</td>\n" +
                                "<td class=\"snarkTorrentStatus\"><b class=\"alwaysShow\">" + _t("Stopped") +
                                "</b></td>\n<td class=\"snarkTorrentPeerCount\"><b>‒";
-                               snarkStatus = "inactive incomplete stopped";
+                               snarkStatus = "inactive incomplete stopped zero";
             }
         }
 
