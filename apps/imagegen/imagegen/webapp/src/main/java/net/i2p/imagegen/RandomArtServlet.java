@@ -17,7 +17,7 @@ import net.i2p.util.ConvertToHash;
 /**
  * This servlet generates random art (visual identifier) images.
  *
- * @author modiied from identicon
+ * @author modified from identicon
  * @since 0.9.25
  */
 public class RandomArtServlet extends HttpServlet {
