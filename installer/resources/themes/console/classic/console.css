@@ -2015,21 +2015,23 @@ input.reload:focus, button.reload:focus {
 }
 
 input.reload[value$="restart"], button.reload[value$="restart"] {
-  background: #eee url(/themes/console/images/buttons/restart.png) no-repeat 7px center;
-  background: url(/themes/console/images/buttons/restart.png) no-repeat 7px center, linear-gradient(to bottom, #fff, #f4f5ff);
   padding: 5px 8px 5px 23px;
+  background: #eee url(images/restart.svg) no-repeat 7px center;
+  background: url(images/restart.svg) no-repeat 7px center, linear-gradient(to bottom, #fff, #f4f5ff);
+  background-size: 12px 12px, 100% 100% !important;
 }
 
 input.reload[value$="restart"]:hover, button.reload[value$="restart"]:hover,
 input.reload[value$="restart"]:focus, button.reload[value$="restart"]:focus {
-  background: #fff url(/themes/console/images/buttons/restart_hover.png) no-repeat 7px center;
-  background: url(/themes/console/images/buttons/restart_hover.png) no-repeat 7px center, linear-gradient(to bottom, #ddd, #fff);
+  background: #fff url(images/restart_hover.svg) no-repeat 7px center;
+  background: url(images/restart_hover.svg) no-repeat 7px center, linear-gradient(to bottom, #ddd, #fff);
+  background-size: 12px 12px, 100% 100% !important;
 }
 
 input.reload[value^="Update"], button.reload[value^="Update"] {
+  padding: 5px 8px 5px 23px;
   background: #eee url(/themes/console/images/buttons/update.png) no-repeat 7px center;
   background: url(/themes/console/images/buttons/update.png) no-repeat 7px center, linear-gradient(to bottom, #fff, #f4f5ff);
-  padding: 5px 8px 5px 23px;
 }
 
 input.reload[value^="Update"]:hover, button.reload[value^="Update"]:hover,
@@ -2051,15 +2053,16 @@ input.reload[value="Force GC"]:focus, button.reload[value="Force GC"]:focus {
 }
 
 input.stop, button.stop {
-  background: #eee url(/themes/console/images/buttons/shutdown.png) no-repeat 7px 6px;
-  background: url(/themes/console/images/buttons/shutdown.png) no-repeat 7px 6px, linear-gradient(to bottom, #fff, #f4f5ff);
   padding: 5px 8px 5px 23px;
+  background: #eee url(images/shutdown.svg) no-repeat 7px center;
+  background: url(images/shutdown.svg) no-repeat 7px center, linear-gradient(to bottom, #fff, #f4f5ff);
+  background-size: 12px 12px, 100% 100% !important;
 }
 
 input.stop:hover, button.stop:hover,
 input.stop:focus, button.stop:focus {
-  background: #fff url(/themes/console/images/buttons/shutdown_hover.png) no-repeat 7px 6px;
-  background: url(/themes/console/images/buttons/shutdown_hover.png) no-repeat 7px 6px, linear-gradient(to bottom, #ddd, #fff);
+  background: #fff url(images/shutdown_hover.svg) no-repeat 7px center;
+  background: url(images/shutdown_hover.svg) no-repeat 7px center, linear-gradient(to bottom, #ddd, #fff);
 }
 
 button.search {
@@ -2160,33 +2163,36 @@ button::-moz-focus-inner, input[type="submit"]::-moz-focus-inner, input[type="re
 .routersummary .reload, .routersummary .stop {
   min-width: 92px !important;
   text-indent: -99999px;
-  background-size: 16px 16px, 100% 100% !important;
 }
 
-.routersummary .reload {
-  background: #eee url(/themes/console/images/buttons/restart.png) center center no-repeat !important;
-  background: url(/themes/console/images/buttons/restart.png) center center no-repeat, linear-gradient(to bottom, #fff, #f4f5ff) !important;
+.routersummary button.reload {
+  background: #eee url(images/restart.svg) center center no-repeat !important;
+  background: url(images/restart.svg) center center no-repeat, linear-gradient(to bottom, #fff, #f4f5ff) !important;
+  background-size: 14px 14px, 100% 100% !important;
 }
 
-.routersummary .reload:hover, .routersummary .reload:focus {
-  background: #ddd url(/themes/console/images/buttons/restart_hover.png) center center no-repeat !important;
-  background: url(/themes/console/images/buttons/shutdown_hover.png) 37% center no-repeat, url(/themes/console/images/buttons/restart_hover.png) 63% center no-repeat, linear-gradient(to bottom, #ddd 0%, #fff 100%) !important;
+.routersummary button.reload:hover, .routersummary button.reload:focus {
   border: 1px solid #aaafce;
+  background: #ddd url(images/restart_hover.svg) center center no-repeat !important;
+  background: url(images/shutdown_hover.svg) 37% center no-repeat, url(images/restart_hover.svg) 63% center no-repeat, linear-gradient(to bottom, #ddd 0%, #fff 100%) !important;
+  background-size: 14px 14px, 14px 14px, 100% 100% !important;
 }
 
 .routersummary .reload:active, .routersummary .stop:active, .routersummary .download:active {
-  box-shadow: inset 0 0 0 1px #fff, inset 3px 3px 3px 1px #555;
   border: 1px solid #999 !important;
+  box-shadow: inset 0 0 0 1px #fff, inset 3px 3px 3px 1px #555;
 }
 
 .routersummary .stop {
-  background: #eee url(/themes/console/images/buttons/shutdown.png) center center no-repeat;
-  background: url(/themes/console/images/buttons/shutdown.png) center center no-repeat, linear-gradient(to bottom, #fff, #f4f5ff);
+  background: #eee url(images/shutdown.svg) center center no-repeat;
+  background: url(images/shutdown.svg) center center no-repeat, linear-gradient(to bottom, #fff, #f4f5ff);
+  background-size: 14px 14px, 100% 100% !important;
 }
 
 .routersummary .stop:hover, .routersummary .stop:focus {
-  background: url(/themes/console/images/buttons/shutdown_hover.png) center center no-repeat, linear-gradient(to bottom, #ddd, #fff);
   border: 1px solid #aaafce;
+  background: url(images/shutdown_hover.svg) center center no-repeat, linear-gradient(to bottom, #ddd, #fff);
+  background-size: 14px 14px, 100% 100% !important;
 }
 
 /* Show text on context specific buttons (eg deferred shutdown) */
@@ -2204,27 +2210,27 @@ button::-moz-focus-inner, input[type="submit"]::-moz-focus-inner, input[type="re
 }
 
 .routersummary .reload[value="restartImmediate"] {
-  background: #eee url(/themes/console/images/buttons/restart.png) center left 7px no-repeat !important;
-  background: url(/themes/console/images/buttons/restart.png) center left 7px no-repeat, linear-gradient(to bottom, #fff, #f4f5ff) !important;
-  background-size: 14px auto, 100% 100% !important;
+  background: #eee url(images/restart.svg) 7px center no-repeat !important;
+  background: url(images/restart.svg) 7px center no-repeat, linear-gradient(to bottom, #fff, #f4f5ff) !important;
+  background-size: 14px 14px, 100% 100% !important;
 }
 
 .routersummary .reload[value="restartImmediate"]:hover, .routersummary .reload[value="restartImmediate"]:focus, .routersummary .reload[value="restartImmediate"]:active {
-  background: #eee url(/themes/console/images/buttons/restart_hover.png) center left 7px no-repeat !important;
-  background: url(/themes/console/images/buttons/restart_hover.png) center left 7px no-repeat, linear-gradient(to bottom, #ddd 0%, #fff 100%) !important;
-  background-size: 14px auto, 100% 100% !important;
+  background: #eee url(images/restart_hover.svg) 7px center no-repeat !important;
+  background: url(images/restart_hover.svg) 7px center no-repeat, linear-gradient(to bottom, #ddd 0%, #fff 100%) !important;
+  background-size: 14px 14px, 100% 100% !important;
 }
 
 .routersummary .stop[value="shutdownImmediate"] {
-  background: #eee url(/themes/console/images/buttons/shutdown.png) center left 7px no-repeat !important;
-  background: url(/themes/console/images/buttons/shutdown.png) center left 7px no-repeat, linear-gradient(to bottom, #fff, #f4f5ff) !important;
-  background-size: 14px auto, 100% 100% !important;
+  background: #eee url(images/shutdown.svg) 7px center no-repeat !important;
+  background: url(images/shutdown.svg) 7px center no-repeat, linear-gradient(to bottom, #fff, #f4f5ff) !important;
+  background-size: 14px 14px, 100% 100% !important;
 }
 
 .routersummary .stop[value="shutdownImmediate"]:hover, .routersummary .stop[value="shutdownImmediate"]:focus, .routersummary .stop[value="shutdownImmediate"]:active {
-  background: #eee url(/themes/console/images/buttons/shutdown_hover.png) center left 7px no-repeat !important;
-  background: url(/themes/console/images/buttons/shutdown_hover.png) center left 7px no-repeat, linear-gradient(to bottom, #ddd 0%, #fff 100%) !important;
-  background-size: 14px auto, 100% 100% !important;
+  background: #eee url(images/shutdown_hover.svg) 7px center no-repeat !important;
+  background: url(images/shutdown_hover.svg) 7px center no-repeat, linear-gradient(to bottom, #ddd 0%, #fff 100%) !important;
+  background-size: 14px 14px, 100% 100% !important;
 }
 
 .routersummary .reload[value="Reseed"] {
