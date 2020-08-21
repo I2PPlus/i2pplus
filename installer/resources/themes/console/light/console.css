@@ -5068,12 +5068,17 @@ input.reload:focus, button.reload:focus {
 
 input.reload[value$="restart"], button.reload[value$="restart"] {
   padding: 5px 7px 5px 22px;
-  background: url(/themes/console/images/buttons/restart.png) no-repeat 6px center, linear-gradient(to bottom, #fff, #efefff);
+  background: url(images/restart.svg) no-repeat 6px center, linear-gradient(to bottom, #fff, #efefff);
+  background-size: 12px 12px, 100% 100%;
 }
 
 input.reload[value$="restart"]:hover, button.reload[value$="restart"]:hover,
 input.reload[value$="restart"]:focus, button.reload[value$="restart"]:focus {
-  background: url(/themes/console/images/buttons/restart_hover.png) no-repeat 6px center, linear-gradient(to bottom, #eee, #fff);
+  background: url(images/restart_hover.svg) no-repeat 6px center, linear-gradient(to bottom, #eee, #fff);
+}
+
+.formaction input.reload[value$="restart"] {
+  background-size: 12px 12px, 100% 100% !important;
 }
 
 input.reload[value^="Update"], button.reload[value^="Update"] {
@@ -5101,12 +5106,13 @@ input.reload[value="Force garbage collection"]:focus, button.reload[value="Force
 
 input.stop, button.stop {
   padding: 5px 7px 5px 22px;
-  background: url(/themes/console/images/buttons/shutdown.png) no-repeat 6px center, linear-gradient(to bottom, #fff, #efefff);
+  background: url(images/shutdown.svg) no-repeat 6px center, linear-gradient(to bottom, #fff, #efefff);
+  background-size: 12px 12px, 100% 100% !important;
 }
 
 input.stop:hover, button.stop:hover,
 input.stop:focus, button.stop:focus {
-  background: url(/themes/console/images/buttons/shutdown_hover.png) no-repeat 6px center, linear-gradient(to bottom, #eee, #fff);
+  background: url(images/shutdown_hover.svg) no-repeat 6px center, linear-gradient(to bottom, #eee, #fff);
 }
 
 /* client config buttons aka project "X" */
@@ -5218,12 +5224,13 @@ button.download.control:hover, button.download.control:focus {
 }
 
 .routersummary .reload {
-  background: url(/themes/console/images/buttons/restart.png) center 60% no-repeat, linear-gradient(to bottom, #fff, #efefff) !important;
+  background: url(images/restart.svg) center center no-repeat, linear-gradient(to bottom, #fff, #efefff) !important;
+  background-size: 16px 16px, 100% 100% !important;
 }
 
 .routersummary .reload:hover, .routersummary .reload:focus {
-  background: url(/themes/console/images/buttons/restart_hover.png) center center no-repeat, linear-gradient(to bottom, #eee, #fff) !important;
-  background: url(/themes/console/images/buttons/shutdown_hover.png) 37% 65% no-repeat, url(/themes/console/images/buttons/restart_hover.png) 63% 60% no-repeat,  linear-gradient(to bottom, #eee, #fff) !important;
+  background: url(images/shutdown_hover.svg) 37% center no-repeat, url(images/restart_hover.svg) 63% center no-repeat, linear-gradient(to bottom, #eee, #fff) !important;
+  background-size: 16px 16px, 16px 16px, 100% 100% !important;
   border: 1px solid #f60;
 }
 
@@ -5244,12 +5251,14 @@ button.download.control:hover, button.download.control:focus {
 }
 
 .routersummary .stop {
-  background: url(/themes/console/images/buttons/shutdown.png) center 65% no-repeat, linear-gradient(to bottom, #fff, #efefff);
+  background: url(images/shutdown.svg) center center no-repeat, linear-gradient(to bottom, #fff, #efefff);
+  background-size: 16px 16px, 100% 100% !important;
 }
 
 .routersummary .stop:hover, .routersummary .stop:focus {
-  background: url(/themes/console/images/buttons/shutdown_hover.png) center 65% no-repeat, linear-gradient(to bottom, #eee, #fff);
   border: 1px solid #f60;
+  background: url(images/shutdown_hover.svg) center center no-repeat, linear-gradient(to bottom, #eee, #fff);
+  background-size: 16px 16px, 100% 100% !important;
 }
 
 .routersummary .download {
@@ -5280,6 +5289,7 @@ button.download.control:hover, button.download.control:focus {
 
 .routersummary .reload[value="restartImmediate"] {
   background: url(/themes/console/images/buttons/restart.png) center left 6px no-repeat, linear-gradient(to bottom, #fff, #efefff) !important;
+  background: url(images/restart.svg) center left 6px no-repeat, linear-gradient(to bottom, #fff, #efefff) !important;
   background-size: 14px 14px, 100% 100% !important;
 }
 
