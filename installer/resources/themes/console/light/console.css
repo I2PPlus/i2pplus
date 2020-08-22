@@ -2735,7 +2735,7 @@ to {
 
 .main#config_update .messages {
   padding: 15px 15px 15px 50px;
-  background: url(/themes/console/images/info/newspaper.png) 12px center no-repeat, url(/themes/snark/ubergine/images/hat.png) bottom right no-repeat, linear-gradient(135deg, #fafaff, #f8f8ff);
+  background: url(/themes/console/images/svg/news.svg) 12px center no-repeat, url(/themes/snark/ubergine/images/hat.png) bottom right no-repeat, linear-gradient(135deg, #fafaff, #f8f8ff);
   background-size: 28px 28px, auto 100%, 100% 100% !important;
 }
 
@@ -3870,15 +3870,15 @@ p#profiles_overview {
 
 p#debugmode {
   padding: 15px 15px 15px 50px;
-  background: #fff url(/themes/console/images/info/debug.png) 12px center no-repeat;
-  background: url(/themes/console/images/info/debug.png) 12px center no-repeat, linear-gradient(135deg, #fafaff, #f8f8ff);
+  background: #fff url(/themes/console/images/svg/bug.svg) 12px center no-repeat;
+  background: url(/themes/console/images/svg/bug.svg) 12px center no-repeat, linear-gradient(135deg, #fafaff, #f8f8ff);
   background-size: 28px 28px;
 }
 
 p.sybilinfo, #sybilanalysis {
   padding: 15px 15px 15px 50px;
-  background: #fff url(/themes/console/images/info/sybils.png) 12px center no-repeat;
-  background: url(/themes/console/images/info/sybils.png) 12px center no-repeat, linear-gradient(135deg, #fafaff, #f8f8ff);
+  background: #fff url(/themes/console/images/svg/sybil.svg) 12px center no-repeat;
+  background: url(/themes/console/images/svg/sybil.svg) 12px center no-repeat, linear-gradient(135deg, #fafaff, #f8f8ff);
   background-size: 28px 28px;
   border-radius: 2px;
   filter: drop-shadow(0 0 1px rgba(220,220,255,.7));
@@ -3898,8 +3898,8 @@ p.infowarn {
 }
 
 #addkeyring td.infohelp {
-  background: #fff url(/themes/console/images/info/keys.png) 12px center no-repeat;
-  background: url(/themes/console/images/info/keys.png) 12px center no-repeat, linear-gradient(135deg, #fafaff, #f8f8ff);
+  background: #fff url(/themes/console/images/svg/keys.svg) 12px center no-repeat;
+  background: url(/themes/console/images/svg/keys.svg) 12px center no-repeat, linear-gradient(135deg, #fafaff, #f8f8ff);
   padding: 15px 15px 15px 50px;
   background-size: 28px 28px;
 }
@@ -3925,8 +3925,8 @@ p.infowarn {
 }
 
 #oldhome td:first-child {
-  background: #fff url(/themes/console/images/info/home.png) 12px center no-repeat;
-  background: url(/themes/console/images/info/home.png) 12px center no-repeat, linear-gradient(to bottom, #fafaff 50%, rgba(220,220,255,.3)), repeating-linear-gradient(135deg, rgba(255,255,255,.5) 2px, rgba(221, 221, 255, .3) 3px, #fff 4px), #fff !important;
+  background: #fff url(/themes/console/images/svg/home.svg) 12px center no-repeat;
+  background: url(/themes/console/images/svg/home.svg) 12px center no-repeat, linear-gradient(to bottom, #fafaff 50%, rgba(220,220,255,.3)), repeating-linear-gradient(135deg, rgba(255,255,255,.5) 2px, rgba(221, 221, 255, .3) 3px, #fff 4px), #fff !important;
   padding: 10px 15px 10px 50px;
   background-size: 28px 28px, 100% 100%, 100% 100%;
 }
@@ -3947,24 +3947,24 @@ p.infowarn {
 }
 
 p#clientconf.infohelp, p#webappconfigtext.infohelp {
-  background: #fff url(/themes/console/images/info/java_edit.png) 12px center no-repeat;
-  background: url(/themes/console/images/info/java_edit.png) 12px center no-repeat, linear-gradient(135deg, #fafaff, #f8f8ff);
+  background: #fff url(/themes/console/images/svg/editclient.svg) 12px center no-repeat;
+  background: url(/themes/console/images/svg/editclient.svg) 12px center no-repeat, linear-gradient(135deg, #fafaff, #f8f8ff);
   padding: 15px 15px 15px 50px;
   background-size: 28px 28px, 100% 100%;
 }
 
 p#pluginconfigtext {
-  background: #fff url(/themes/console/images/info/plugin_edit.png) 12px center no-repeat;
-  background: url(/themes/console/images/info/plugin_edit.png) 12px center no-repeat, linear-gradient(135deg, #fafaff, #f8f8ff);
   padding: 15px 15px 15px 50px;
+  background: #fff url(/themes/console/images/svg/pluginconfig.svg) 12px center no-repeat;
+  background: url(/themes/console/images/svg/pluginconfig.svg) 12px center no-repeat, linear-gradient(135deg, #fafaff, #f8f8ff);
   background-size: 28px 28px, 100% 100%;
 }
 
 #plugininstall .infohelp {
-  background: #fff url(/themes/console/images/info/plugin_link.png) 12px center no-repeat;
-  background: url(/themes/console/images/info/plugin_link.png) 12px center no-repeat, linear-gradient(135deg, #fafaff, #f8f8ff);
-  background: url(/themes/console/images/info/plugin_link.png) 12px center no-repeat, linear-gradient(to bottom, #fafaff 50%, rgba(220, 220, 255, .3)), rgba(0, 0, 0, 0) repeating-linear-gradient(135deg, rgba(255, 255, 255, .5) 2px, rgba(221, 221, 255, .3) 3px, #ffffff 5px);
   padding: 15px 15px 15px 50px;
+  background: #fff url(/themes/console/images/svg/plugin.svg) 12px center no-repeat;
+  background: url(/themes/console/images/svg/plugin.svg) 12px center no-repeat, linear-gradient(135deg, #fafaff, #f8f8ff);
+  background: url(/themes/console/images/svg/plugin.svg) 12px center no-repeat, linear-gradient(to bottom, #fafaff 50%, rgba(220, 220, 255, .3)), rgba(0, 0, 0, 0) repeating-linear-gradient(135deg, rgba(255, 255, 255, .5) 2px, rgba(221, 221, 255, .3) 3px, #ffffff 5px);
   background-size: 28px 28px, 100% 100%;
 }
 
@@ -4010,8 +4010,8 @@ h3#systray + p.infohelp {
 
 h3#servicedebug + p.infohelp {
   padding: 15px 15px 15px 50px;
-  background: #fafaff url(/themes/console/images/info/debug.png) 12px center no-repeat;
-  background: url(/themes/console/images/info/debug.png) 12px center no-repeat, linear-gradient(135deg, #fafaff, #f8f8ff);
+  background: #fafaff url(/themes/console/images/svg/bug.svg) 12px center no-repeat;
+  background: url(/themes/console/images/svg/bug.svg) 12px center no-repeat, linear-gradient(135deg, #fafaff, #f8f8ff);
   background-size: 28px 28px, 100% 100%;
 }
 
@@ -4024,8 +4024,8 @@ h3#browseronstart + p.infohelp {
 
 .main#config_reseed p.infohelp {
   padding: 15px 15px 15px 50px;
-  background: #fafaff url(/themes/console/images/info/connect.png) 12px center no-repeat;
-  background: url(/themes/console/images/info/connect.png) 12px center no-repeat, linear-gradient(135deg, #fafaff, #f8f8ff);
+  background: #fafaff url(/themes/console/images/svg/reseed.svg) 12px center no-repeat;
+  background: url(/themes/console/images/svg/reseed.svg) 12px center no-repeat, linear-gradient(135deg, #fafaff, #f8f8ff);
   background-size: 28px 28px, 100% 100%;
   border-radius: 2px;
   box-shadow: 0 0 1px #e0e0eb;
@@ -4033,8 +4033,8 @@ h3#browseronstart + p.infohelp {
 
 p#enablefullstats, p#gatherstats {
   padding: 15px 15px 15px 50px;
-  background: #fafaff url(/themes/console/images/info/statistics.png) 12px center no-repeat;
-  background: url(/themes/console/images/info/statistics.png) 12px center no-repeat, linear-gradient(135deg, #fafaff, #f8f8ff);
+  background: #fafaff url(/themes/console/images/svg/stats.svg) 12px center no-repeat;
+  background: url(/themes/console/images/svg/stats.svg) 12px center no-repeat, linear-gradient(135deg, #fafaff, #f8f8ff);
   background-size: 28px 28px, 100% 100%;
 }
 
@@ -4061,8 +4061,8 @@ p#enablefullstats, p#gatherstats {
 
 #config_ui .infohelp {
   padding: 15px 15px 15px 50px !important;
-  background: #fafaff url(/themes/console/images/info/ui.png) 12px center no-repeat !important;
-  background: url(/themes/console/images/info/ui.png) 12px center no-repeat, linear-gradient(135deg, #fafaff, #f8f8ff) !important;
+  background: #fafaff url(/themes/console/images/svg/ui.svg) 12px center no-repeat !important;
+  background: url(/themes/console/images/svg/ui.svg) 12px center no-repeat, linear-gradient(135deg, #fafaff, #f8f8ff) !important;
   background-size: 28px 28px, 100% 100% !important;
 }
 
@@ -5290,22 +5290,22 @@ button.download.control:hover, button.download.control:focus {
 .routersummary .reload[value="restartImmediate"] {
   background: url(images/restart.svg) center left 6px no-repeat, linear-gradient(to bottom, #fff, #efefff) !important;
   background: url(images/restart.svg) center left 6px no-repeat, linear-gradient(to bottom, #fff, #efefff) !important;
-  background-size: 14px 14px, 100% 100% !important;
+  background-size: 12px 12px, 100% 100% !important;
 }
 
 .routersummary .reload[value="restartImmediate"]:hover, .routersummary .reload[value="restartImmediate"]:focus, .routersummary .reload[value="restartImmediate"]:active {
-  background: url(/themes/console/images/buttons/restart_hover.png) center left 6px no-repeat, linear-gradient(to bottom, #eee, #fff) !important;
-  background-size: 14px 14px, 100% 100% !important;
+  background: url(images/restart_hover.svg) center left 6px no-repeat, linear-gradient(to bottom, #eee, #fff) !important;
+  background-size: 12px 12px, 100% 100% !important;
 }
 
 .routersummary .stop[value="shutdownImmediate"] {
   background: url(images/shutdown.svg) center left 6px no-repeat, linear-gradient(to bottom, #fff, #efefff) !important;
-  background-size: 14px 14px, 100% 100% !important;
+  background-size: 12px 12px, 100% 100% !important;
 }
 
 .routersummary .stop[value="shutdownImmediate"]:hover, .routersummary .stop[value="shutdownImmediate"]:focus, .routersummary .stop[value="shutdownImmediate"]:active {
   background: url(images/shutdown_hover.svg) center left 6px no-repeat, linear-gradient(to bottom, #eee, #fff) !important;
-  background-size: 14px 14px, 100% 100% !important;
+  background-size: 12px 12px, 100% 100% !important;
 }
 
 .routersummary .reload[value="Reseed"] {
@@ -6394,8 +6394,8 @@ table#addkeyring tr:last-child td {
 
 #refreshsidebar tr:first-child td {
   padding-left: 50px;
-  background: url(/themes/console/images/info/interval.png) 12px center no-repeat;
-  background: url(/themes/console/images/info/interval.png) 12px center no-repeat, linear-gradient(to bottom, #fafaff 50%, rgba(220,220,255,.3)), repeating-linear-gradient(135deg, rgba(255,255,255,.5) 2px, rgba(221, 221, 255, .3) 3px, #fff 4px), #fff !important;
+  background: url(/themes/console/images/svg/timer.svg) 12px center no-repeat;
+  background: url(/themes/console/images/svg/timer.svg) 12px center no-repeat, linear-gradient(to bottom, #fafaff 50%, rgba(220,220,255,.3)), repeating-linear-gradient(135deg, rgba(255,255,255,.5) 2px, rgba(221, 221, 255, .3) 3px, #fff 4px), #fff !important;
   background-size: 28px 28px, 100% 100%, 100% 100% !important;
 }
 
@@ -9324,7 +9324,7 @@ select[name="newlogclass"] {
 }
 
 .homelinkedit .noicon {
-  background-image: url(/themes/console/images/info/search.png);
+  background-image: url(/themes/console/images/svg/search.svg);
   background-position: center center;
   background-size: 20px 20px;
   background-repeat: no-repeat;
@@ -9436,7 +9436,7 @@ form[action="events"] {
   padding: 10px 10px 10px 50px;
   border: 1px solid #8d8daa;
   box-shadow: inset 0 0 0 1px #fff;
-  background: #f2f2ff url(/themes/console/images/info/logs.png) 12px center no-repeat;
+  background: #f2f2ff url(/themes/console/images/svg/logs.svg) 12px center no-repeat;
   background-size: 28px 28px;
 }
 
@@ -10149,8 +10149,8 @@ b.suboption {
 /* bandwidth config */
 
 #bandwidthconfig tr:first-child .infohelp {
-  background: #fff url(/themes/console/images/info/bandwidth.png) 12px center no-repeat;
-  background: url(/themes/console/images/info/bandwidth.png) 12px center no-repeat, linear-gradient(135deg, #fafaff, #f8f8ff);
+  background: #fff url(/themes/console/images/svg/speedometer.svg) 12px center no-repeat;
+  background: url(/themes/console/images/svg/speedometer.svg) 12px center no-repeat, linear-gradient(135deg, #fafaff, #f8f8ff);
   padding: 15px 15px 15px 50px;
   background-size: 28px 28px;
 }
@@ -10793,36 +10793,36 @@ b.suboption {
 }
 
 #config_reseed #reseedurl, #installPluginUrl {
-  background: #eaeaff url(/themes/console/images/info/url.png) 10px center no-repeat !important;
-  background: rgba(234,234,255,.7) url(/themes/console/images/info/url.png) 10px center no-repeat !important;
+  background: #eaeaff url(/themes/console/images/svg/link.svg) 10px center no-repeat !important;
+  background: rgba(234,234,255,.7) url(/themes/console/images/svg/link.svg) 10px center no-repeat !important;
   background-size: 28px 28px, 100% 100%, 100% 100% !important;
 }
 
 #config_reseed #reseedurl:hover, #installPluginUrl:hover {
-  background: #ffd url(/themes/console/images/info/url.png) 10px center no-repeat !important;
+  background: #ffd url(/themes/console/images/svg/link.svg) 10px center no-repeat !important;
   background-size: 28px 28px !important;
 }
 
 #config_reseed  #reseedzip, #installPluginFile {
-  background: #eaeaff url(/themes/console/images/info/from_file.png) 10px center no-repeat !important;
-  background: rgba(234,234,255,.7) url(/themes/console/images/info/from_file.png) 10px center no-repeat !important;
+  background: #eaeaff url(/themes/console/images/svg/files.svg) 10px center no-repeat !important;
+  background: rgba(234,234,255,.7) url(/themes/console/images/svg/files.svg) 10px center no-repeat !important;
   background-size: 28px 28px, 100% 100%, 100% 100% !important;
 }
 
 #config_reseed #reseedzip:hover, #installPluginFile:hover {
-  background: #ffd url(/themes/console/images/info/from_file.png) 10px center no-repeat !important;
+  background: #ffd url(/themes/console/images/svg/files.svg) 10px center no-repeat !important;
   background-size: 28px 28px !important;
 }
 
 #config_reseed #reseedcreatefile {
   text-align: justify;
-  background: #eaeaff url(/themes/console/images/info/box.png) 10px center no-repeat !important;
-  background: rgba(234,234,255,.7) url(/themes/console/images/info/box.png) 10px center no-repeat !important;
+  background: #eaeaff url(/themes/console/images/svg/package.svg) 10px center no-repeat !important;
+  background: rgba(234,234,255,.7) url(/themes/console/images/svg/package.svg) 10px center no-repeat !important;
   background-size: 28px 28px, 100% 100%, 100% 100% !important;
 }
 
 #config_reseed #reseedcreatefile:hover {
-  background: #ffd url(/themes/console/images/info/box.png) 10px center no-repeat !important;
+  background: #ffd url(/themes/console/images/svg/package.svg) 10px center no-repeat !important;
   background-size: 28px 28px !important;
 }
 
@@ -10844,8 +10844,8 @@ b.suboption {
 
 #manualreseed tr:last-child td.infohelp {
   padding: 15px 15px 15px 50px;
-  background: #fafaff url(/themes/console/images/info/box.png) 12px center no-repeat;
-  background: url(/themes/console/images/info/box.png) 12px center no-repeat, linear-gradient(to bottom, #fafaff 50%, rgba(220, 220, 255, .3)), rgba(0, 0, 0, 0) repeating-linear-gradient(135deg, rgba(255, 255, 255, .5) 2px, rgba(221, 221, 255, .3) 3px, #fff 5px);
+  background: #fafaff url(/themes/console/images/svg/package.svg) 12px center no-repeat;
+  background: url(/themes/console/images/svg/package.svg) 12px center no-repeat, linear-gradient(to bottom, #fafaff 50%, rgba(220, 220, 255, .3)), rgba(0, 0, 0, 0) repeating-linear-gradient(135deg, rgba(255, 255, 255, .5) 2px, rgba(221, 221, 255, .3) 3px, #fff 5px);
   background-size: 28px 28px, 100% 100%;
 }
 
@@ -13050,7 +13050,7 @@ to {
 }
 
 #enablefullstats {
-  background: url(/themes/console/images/info/statistics.png) 12px center no-repeat, linear-gradient(135deg, #fafaff, #f8f8ff)
+  background: url(/themes/console/images/svg/stats.svg) 12px center no-repeat, linear-gradient(135deg, #fafaff, #f8f8ff)
 }
 
 /* /tunnelpeercount */
