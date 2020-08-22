@@ -1065,36 +1065,36 @@ button::-moz-focus-inner, input[type="submit"]::-moz-focus-inner, input[type="re
 }
 
 .routersummary .reload[value="restartImmediate"] {
-  background: url(/themes/console/images/buttons/restart.png) center left 6px no-repeat, linear-gradient(to bottom, #191a24 50%, #000 50%) !important;
-  background: url(/themes/console/images/buttons/restart.png) center left 6px no-repeat, linear-gradient(to right, rgba(0,0,0,0), rgba(96,0,96,0.1), rgba(0,0,0,0)), linear-gradient(to right, rgba(0,0,16,0.5), rgba(0,0,0,0) 30%), linear-gradient(to bottom, #141221 50%, #001 50%) !important;
-  background-size: 14px auto, 100% 100%, 100% 100%, 100% 100% !important;
+  background: url(images/restart.svg) center left 6px no-repeat, linear-gradient(to bottom, #191a24 50%, #000 50%) !important;
+  background: url(images/restart.svg) center left 6px no-repeat, linear-gradient(to right, rgba(0,0,0,0), rgba(96,0,96,0.1), rgba(0,0,0,0)), linear-gradient(to right, rgba(0,0,16,0.5), rgba(0,0,0,0) 30%), linear-gradient(to bottom, #141221 50%, #001 50%) !important;
+  background-size: 12px auto, 100% 100%, 100% 100%, 100% 100% !important;
 }
 
 .routersummary .reload[value="restartImmediate"]:hover {
-  background: #000 url(/themes/console/images/buttons/restart.png) center left 6px no-repeat !important;
-  background: url(/themes/console/images/buttons/restart_hover.png) center left 6px no-repeat, linear-gradient(to bottom, #202 50%, #000 50%) !important;
-  background-size: 14px auto !important;
+  background: #000 url(images/restart.svg) center left 6px no-repeat !important;
+  background: url(images/restart_hover.svg) center left 6px no-repeat, linear-gradient(to bottom, #202 50%, #000 50%) !important;
+  background-size: 12px auto !important;
 }
 
 .routersummary .reload[value="restartImmediate"]:focus, .routersummary .reload[value="restartImmediate"]:active {
-  background: #652787 url(/themes/console/images/buttons/restart_hover.png) center left 6px no-repeat !important;
-  background-size: 14px auto !important;
+  background: #652787 url(images/restart_hover.svg) center left 6px no-repeat !important;
+  background-size: 12px auto !important;
 }
 
 .routersummary .stop[value="shutdownImmediate"] {
-  background: url(/themes/console/images/buttons/shutdown.png) center left 6px no-repeat, linear-gradient(to bottom, #191a24 50%, #000 50%) !important;
-  background: url(/themes/console/images/buttons/shutdown.png) center left 6px no-repeat, linear-gradient(to right, rgba(0,0,0,0), rgba(96,0,96,0.1), rgba(0,0,0,0)), linear-gradient(to right, rgba(0,0,16,0.5), rgba(0,0,0,0) 30%), linear-gradient(to bottom, #141221 50%, #001 50%) !important;
-  background-size: 14px auto, 100% 100%, 100% 100%, 100% 100% !important;
+  background: url(images/shutdown.svg) center left 6px no-repeat, linear-gradient(to bottom, #191a24 50%, #000 50%) !important;
+  background: url(images/shutdown.svg) center left 6px no-repeat, linear-gradient(to right, rgba(0,0,0,0), rgba(96,0,96,0.1), rgba(0,0,0,0)), linear-gradient(to right, rgba(0,0,16,0.5), rgba(0,0,0,0) 30%), linear-gradient(to bottom, #141221 50%, #001 50%) !important;
+  background-size: 12px auto, 100% 100%, 100% 100%, 100% 100% !important;
 }
 
 .routersummary .stop[value="shutdownImmediate"]:hover {
-  background: #000 url(/themes/console/images/buttons/shutdown_hover.png) center left 6px no-repeat !important;
-  background-size: 14px auto !important;
+  background: #000 url(images/shutdown_hover.svg) center left 6px no-repeat !important;
+  background-size: 12px auto !important;
 }
 
 .routersummary .stop[value="shutdownImmediate"]:focus, .routersummary .stop[value="shutdownImmediate"]:active {
-  background: url(/themes/console/images/buttons/shutdown_hover.png) center left 6px no-repeat;
-  background-size: 14px auto !important;
+  background: url(images/shutdown_hover.png) center left 6px no-repeat;
+  background-size: 12px auto !important;
 }
 
 .routersummary .reload[value="Reseed"] {

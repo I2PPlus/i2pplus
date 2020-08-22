@@ -5290,22 +5290,22 @@ button.download.control:hover, button.download.control:focus {
 .routersummary .reload[value="restartImmediate"] {
   background: url(images/restart.svg) center left 6px no-repeat, linear-gradient(to bottom, #fff, #efefff) !important;
   background: url(images/restart.svg) center left 6px no-repeat, linear-gradient(to bottom, #fff, #efefff) !important;
-  background-size: 14px 14px, 100% 100% !important;
+  background-size: 12px 12px, 100% 100% !important;
 }
 
 .routersummary .reload[value="restartImmediate"]:hover, .routersummary .reload[value="restartImmediate"]:focus, .routersummary .reload[value="restartImmediate"]:active {
-  background: url(/themes/console/images/buttons/restart_hover.png) center left 6px no-repeat, linear-gradient(to bottom, #eee, #fff) !important;
-  background-size: 14px 14px, 100% 100% !important;
+  background: url(images/restart_hover.svg) center left 6px no-repeat, linear-gradient(to bottom, #eee, #fff) !important;
+  background-size: 12px 12px, 100% 100% !important;
 }
 
 .routersummary .stop[value="shutdownImmediate"] {
   background: url(images/shutdown.svg) center left 6px no-repeat, linear-gradient(to bottom, #fff, #efefff) !important;
-  background-size: 14px 14px, 100% 100% !important;
+  background-size: 12px 12px, 100% 100% !important;
 }
 
 .routersummary .stop[value="shutdownImmediate"]:hover, .routersummary .stop[value="shutdownImmediate"]:focus, .routersummary .stop[value="shutdownImmediate"]:active {
   background: url(images/shutdown_hover.svg) center left 6px no-repeat, linear-gradient(to bottom, #eee, #fff) !important;
-  background-size: 14px 14px, 100% 100% !important;
+  background-size: 12px 12px, 100% 100% !important;
 }
 
 .routersummary .reload[value="Reseed"] {

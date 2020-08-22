@@ -2212,49 +2212,49 @@ button::-moz-focus-inner, input[type="submit"]::-moz-focus-inner, input[type="re
 .routersummary .reload[value="restartImmediate"] {
   background: #eee url(images/restart.svg) 7px center no-repeat !important;
   background: url(images/restart.svg) 7px center no-repeat, linear-gradient(to bottom, #fff, #f4f5ff) !important;
-  background-size: 14px 14px, 100% 100% !important;
+  background-size: 12px 12px, 100% 100% !important;
 }
 
 .routersummary .reload[value="restartImmediate"]:hover, .routersummary .reload[value="restartImmediate"]:focus, .routersummary .reload[value="restartImmediate"]:active {
   background: #eee url(images/restart_hover.svg) 7px center no-repeat !important;
   background: url(images/restart_hover.svg) 7px center no-repeat, linear-gradient(to bottom, #ddd 0%, #fff 100%) !important;
-  background-size: 14px 14px, 100% 100% !important;
+  background-size: 12px 12px, 100% 100% !important;
 }
 
 .routersummary .stop[value="shutdownImmediate"] {
   background: #eee url(images/shutdown.svg) 7px center no-repeat !important;
   background: url(images/shutdown.svg) 7px center no-repeat, linear-gradient(to bottom, #fff, #f4f5ff) !important;
-  background-size: 14px 14px, 100% 100% !important;
+  background-size: 12px 12px, 100% 100% !important;
 }
 
 .routersummary .stop[value="shutdownImmediate"]:hover, .routersummary .stop[value="shutdownImmediate"]:focus, .routersummary .stop[value="shutdownImmediate"]:active {
   background: #eee url(images/shutdown_hover.svg) 7px center no-repeat !important;
   background: url(images/shutdown_hover.svg) 7px center no-repeat, linear-gradient(to bottom, #ddd 0%, #fff 100%) !important;
-  background-size: 14px 14px, 100% 100% !important;
+  background-size: 12px 12px, 100% 100% !important;
 }
 
 .routersummary .reload[value="Reseed"] {
   background: #eee url(/themes/console/images/buttons/download.png) center left 7px no-repeat !important;
   background: url(/themes/console/images/buttons/download.png) center left 7px no-repeat, linear-gradient(to bottom, #fff, #f4f5ff) !important;
-  background-size: 14px auto, 100% 100% !important;
+  background-size: 12px auto, 100% 100% !important;
 }
 
 .routersummary .reload[value="Reseed"]:hover, .routersummary .reload[value="Reseed"]:focus, .routersummary .reload[value="Reseed"]:active {
   background: #ddd url(/themes/console/images/buttons/download.png) center left 7px no-repeat !important;
   background: url(/themes/console/images/buttons/download.png) center left 7px no-repeat, linear-gradient(to bottom, #ddd 0%, #fff 100%) !important;
-  background-size: 14px auto, 100% 100% !important;
+  background-size: 12px auto, 100% 100% !important;
 }
 
 .routersummary .download {
   background: #eee url(/themes/console/images/buttons/download.png) 7px center no-repeat;
   background: url(/themes/console/images/buttons/download.png) 7px center no-repeat, linear-gradient(to bottom, #fff, #f4f5ff);
-  background-size: 14px 14px, 100% 100% !important;
+  background-size: 12px 12px, 100% 100% !important;
 }
 
 .routersummary .download:hover, .routersummary .download:focus, .routersummary .download:active {
   background: #ddd url(/themes/console/images/buttons/download.png) 7px center no-repeat;
   background: url(/themes/console/images/buttons/download.png) 7px center no-repeat, linear-gradient(to bottom, #ddd, #fff);
-  background-size: 14px 14px, 100% 100% !important;
+  background-size: 12px 12px, 100% 100% !important;
 }
 
 /* end sidebar buttons */
