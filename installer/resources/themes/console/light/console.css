@@ -910,39 +910,39 @@ to {
 }
 
 #sb_services a[href="/webmail"] {
-  background: #f8f8ff url(images/inbox.png) 3px center no-repeat;
-  background: rgba(248, 248, 255, .8) url(images/inbox.png) 3px center no-repeat;
+  background: #f8f8ff url(/themes/console/images/svg/mail.svg) 3px center no-repeat;
+  background: rgba(248, 248, 255, .8) url(/themes/console/images/svg/mail.svg) 3px center no-repeat;
 }
 
 #sb_services a[href="/webmail"]:hover {
-  background: #ffe url(images/inbox.png) 3px center no-repeat;
+  background: #ffe url(/themes/console/images/svg/mail.svg) 3px center no-repeat;
 }
 
 #sb_services a[href="/torrents"] {
-  background: #f8f8ff url(/themes/console/images/i2psnark.png) 3px center no-repeat;
-  background: rgba(248, 248, 255, .8) url(/themes/console/images/i2psnark.png) 3px center no-repeat;
+  background: #f8f8ff url(/themes/console/images/svg/snark.svg) 3px center no-repeat;
+  background: rgba(248, 248, 255, .8) url(/themes/console/images/svg/snark.svg) 3px center no-repeat;
 }
 
 #sb_services a[href="/torrents"]:hover {
-  background: #ffe url(/themes/console/images/i2psnark.png) 3px center no-repeat;
+  background: #ffe url(/themes/console/images/svg/snark.svg) 3px center no-repeat;
 }
 
 #sb_services a[href="/dns"] {
-  background: #f8f8ff url(/themes/console/images/book_addresses.png) 3px center no-repeat;
-  background: rgba(248, 248, 255, .8) url(/themes/console/images/book_addresses.png) 3px center no-repeat;
+  background: #f8f8ff url(/themes/console/images/svg/addressbook.svg) 3px center no-repeat;
+  background: rgba(248, 248, 255, .8) url(/themes/console/images/svg/addressbook.svg) 3px center no-repeat;
 }
 
 #sb_services a[href="/dns"]:hover {
-  background: #ffe url(/themes/console/images/book_addresses.png) 3px center no-repeat;
+  background: #ffe url(/themes/console/images/svg/addressbook.svg) 3px center no-repeat;
 }
 
 #sb_services a[href="/i2ptunnelmgr"] {
-  background: #f8f8ff url(/themes/console/images/info/tunnelmanager.png) 3px center no-repeat;
-  background: rgba(248, 248, 255, .8) url(/themes/console/images/info/tunnelmanager.png) 3px center no-repeat;
+  background: #f8f8ff url(/themes/console/images/svg/tunnelmanager.svg) 3px center no-repeat;
+  background: rgba(248, 248, 255, .8) url(/themes/console/images/svg/tunnelmanager.svg) 3px center no-repeat;
 }
 
 #sb_services a[href="/i2ptunnelmgr"]:hover {
-  background: #ffe url(/themes/console/images/info/tunnelmanager.png) 3px center no-repeat;
+  background: #ffe url(/themes/console/images/svg/tunnelmanager.svg) 3px center no-repeat;
 }
 
 #sb_services a[href$=":7658/"], #sb_services a[href$=":7668/"] {
@@ -3718,7 +3718,7 @@ button:hover, button:focus, button:active, select:hover, select:focus, select:ac
 }
 
 a:link, #graphopts a:visited, .news #newsdisplay a, .news #newsdisplay a:visited, .graphstat, .graphstat:visited,
-#fullhistory a:visited, #routerinformation tr:nth-child(n+2) a:visited, #sitemap a:visited:not(:hover) {
+#fullhistory a:visited, #routerinformation tr:nth-child(n+2) a:visited, #sitemap a:visited:not(:hover), #sybilnav li a:visited {
   color: #3b6bbf;
   text-decoration: none;
   font-weight: bold;
@@ -7570,12 +7570,18 @@ h3.sybils {
   border-radius: 2px;
   box-shadow: 0 0 0 1px rgba(200,200,255,.8), inset 0 0 0 1px #fff;
   background: #eef url(images/eye.png) 5px center no-repeat;
-  background: url(images/eye.png) 5px center no-repeat, linear-gradient(to bottom, #fff 50%, rgba(255,255,255,.6) 50%, rgba(240,240,240,.4)) #e7e7ff;
+  background: url(images/eye.svg) 5px center no-repeat, linear-gradient(to bottom, #fff 50%, rgba(255,255,255,.6) 50%, rgba(240,240,240,.4)) #e7e7ff;
+  background: url(images/eye.svg) 5px center no-repeat, linear-gradient(to bottom, #fff 50%, rgba(255,255,255,.6) 50%, rgba(240,240,240,.4)) #e7e7ff;
+  background-size: 16px 16px, 100% 100% !important;
 }
 
 #sybilnav li:hover {
   box-shadow: 0 0 0 1px rgba(255,96,0,.5), inset 0 0 0 1px #fff;
-  background: #fff url(images/eye.png) 5px center no-repeat;
+  background: #fff url(images/eye_hover.svg) 5px center no-repeat;
+}
+
+#sybilnav li:active {
+  background: #fff url(images/eye_active.svg) 5px center no-repeat;
 }
 
 #sybilnav li:hover a {
@@ -10442,8 +10448,8 @@ b.suboption {
   width: 16px;
   height: 16px;
   display: inline-block;
-  background: url(/themes/console/images/svg/experimental.svg) right center no-repeat;
   background: url(/themes/console/images/info/experimental.png) right center no-repeat;
+  background: url(/themes/console/images/svg/experimental.svg) right center no-repeat;
   background-size: 16px 16px;
   content: "";
 }
