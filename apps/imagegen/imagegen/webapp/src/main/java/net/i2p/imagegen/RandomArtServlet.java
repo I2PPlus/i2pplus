@@ -58,11 +58,12 @@ public class RandomArtServlet extends HttpServlet {
 				if (html) {
 					response.setContentType("text/html");
 					buf.append("<!DOCTYPE html>\n<html>\n<head>\n<meta http-equiv=\"Content-Type\" content=\"text/html; charset=UTF-8\">\n");
-					buf.append("<style type=\"text/css\">\nhtml,body{margin:0;padding:0;min-height:100%;overflow:hidden}");
-					buf.append("#container{width:100%;height:100%;display:table;position:absolute;top:calc(50% - 192px);text-align:center}");
+					buf.append("<style type=\"text/css\">\nhtml,body{margin:0;padding:0;min-height:100%;overflow:hidden}\n");
+					buf.append("#container{height:100%;display:table;position:absolute;top:calc(50% - 192px);left:calc(50% - 180px);text-align:center}\n");
 					buf.append("span{padding:2px;width:24px;height:24px;display:inline-block;line-height:24px;vertical-align:middle;text-align:center;");
-					buf.append("font-size:24pt;border:1px solid #fff;box-shadow:0 0 0 1px #bbb;background:#fff}.spacer{background:#e8e8e8}");
-					buf.append(".spacer:nth-child(odd){background:#ddd}#title{display:none}pre(background:#eee}\n");
+					buf.append("font-size:24pt;border:1px solid #fff;box-shadow:0 0 0 1px #bbb;background:#fff}\n.spacer{background:#e8e8e8}\n");
+					buf.append(".spacer:nth-child(odd){background:#ddd}\n#title{display:none}\n");
+					buf.append("pre{width:360px;box-shadow:inset 0 0 0 14px #eee,inset 0 0 0 15px #999;background:#eee}\n");
 					buf.append("</style>\n</head>\n<body>\n");
 				} else {
 					response.setContentType("text/plain");

@@ -106,7 +106,7 @@ td.snarkTorrentPeerCount {
   color: #41465f;
 }
 
-.nopeers.zero td.snarkTorrentPeerCount {
+.nopeers.zero td.snarkTorrentPeerCount, .stopped.zero td.snarkTorrentPeerCount {
   text-align: center;
 }
 

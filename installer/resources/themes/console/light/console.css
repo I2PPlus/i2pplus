@@ -1878,7 +1878,7 @@ td.tabletextarea {
   background: linear-gradient(to bottom, rgba(250,250,255,.3), rgba(236,236,255,.6)), repeating-linear-gradient(135deg, rgba(255,255,255,.3) 2px, rgba(240, 240, 255, .3) 3px, rgba(236,236,255,.3) 4px) !important;
 }
 
-div.newscontent p {
+.newscontent p {
   font-size: 9pt;
   text-align: justify !important;
   line-height: 140%;
@@ -2018,7 +2018,7 @@ hr + #newsStatus, hr + #newsStatus + #newsDisplay {
   margin-right: 1px;
 }
 
-div.news h3, #news h3 {
+.news h3, #news h3 {
   background: url(images/news.png) 8px center no-repeat #fcfcff !important;
   background: url(images/news.png) 8px center no-repeat, linear-gradient(to bottom, #fff 50%, rgba(255,255,255,.6) 50%, rgba(240,240,255,.4)), linear-gradient(to right, #fafaff 5%, rgba(231, 231, 255, .8)) 15% !important;
   text-align: left;
@@ -2034,7 +2034,7 @@ div.news h3, #news h3 {
 }
 
 @supports not (-moz-appearance: none) {
-div.news h3, #news h3 {
+.news h3, #news h3 {
   padding: 7px 10px 5px 30px;
 }
 }
@@ -2067,7 +2067,7 @@ h1, .confignav {
   position: relative;
 }
 
-.confignav, #help div.confignav, #tunnels .confignav {
+.confignav, #help .confignav, #tunnels .confignav {
   margin: -1px -15px 5px;
   padding: 8px;
   text-align: center;
@@ -3416,11 +3416,11 @@ h4.app:hover img, h4.app2:hover img, #sitemap h3:hover img, #sitemap h3 img:hove
   transition: ease all 0.3s;
 }
 
-div.ag2 {
+.ag2 {
   margin: 0;
 }
 
-div.search + div.ag2 {
+div.search + .ag2 {
   margin: -15px 0 0;
 }
 
@@ -3515,7 +3515,7 @@ div.app:active img {
   min-height: 52px;
 }
 
-div.appgroup {
+.appgroup {
   margin: 5px 0;
   padding: 0;
   width: auto;
@@ -3595,7 +3595,7 @@ table.search {
   border-radius: 0 0 2px 2px;
   border: 1px solid #595a8f;
   border-top: 1px solid #447;
-  box-shadow: 0 1px 1px 1px rgba(220, 220, 255, .3), inset 0 0 0 1px rgba(185,185,198,.65), inset 0 0 2px 1px #fff;
+  box-shadow: 0 1px 1px 1px rgba(220, 220, 255, .3), inset 0 0 0 1px rgba(185,185,198,.65);
   background: #fafaff !important;
   background: linear-gradient(to bottom, #fafaff 50%, rgba(255,255,255,.6) 50%, rgba(240,240,255,.4)), repeating-linear-gradient(135deg, rgba(255,255,255,.5) 2px, rgba(240, 240, 255, .3) 3px, #fff 4px) !important;
 }
@@ -5288,7 +5288,7 @@ button.download.control:hover, button.download.control:focus {
 }
 
 .routersummary .reload[value="restartImmediate"] {
-  background: url(/themes/console/images/buttons/restart.png) center left 6px no-repeat, linear-gradient(to bottom, #fff, #efefff) !important;
+  background: url(images/restart.svg) center left 6px no-repeat, linear-gradient(to bottom, #fff, #efefff) !important;
   background: url(images/restart.svg) center left 6px no-repeat, linear-gradient(to bottom, #fff, #efefff) !important;
   background-size: 14px 14px, 100% 100% !important;
 }
@@ -5299,12 +5299,12 @@ button.download.control:hover, button.download.control:focus {
 }
 
 .routersummary .stop[value="shutdownImmediate"] {
-  background: url(/themes/console/images/buttons/shutdown.png) center left 6px no-repeat, linear-gradient(to bottom, #fff, #efefff) !important;
+  background: url(images/shutdown.svg) center left 6px no-repeat, linear-gradient(to bottom, #fff, #efefff) !important;
   background-size: 14px 14px, 100% 100% !important;
 }
 
 .routersummary .stop[value="shutdownImmediate"]:hover, .routersummary .stop[value="shutdownImmediate"]:focus, .routersummary .stop[value="shutdownImmediate"]:active {
-  background: url(/themes/console/images/buttons/shutdown_hover.png) center left 6px no-repeat, linear-gradient(to bottom, #eee, #fff) !important;
+  background: url(images/shutdown_hover.svg) center left 6px no-repeat, linear-gradient(to bottom, #eee, #fff) !important;
   background-size: 14px 14px, 100% 100% !important;
 }
 
@@ -5907,7 +5907,7 @@ td.spacer, th.spacer {
   margin-top: -6px;
 }
 
-div.footnote {
+.footnote {
   margin: 0 !important;
   line-height: 120%;
   text-align: right;
@@ -5915,7 +5915,7 @@ div.footnote {
   color: #447;
 }
 
-div.footnote hr {
+.footnote hr {
   margin: 24px 0 5px !important;
   background: #447;
   background: linear-gradient(to right, #77a, #669, #77a);
@@ -6112,15 +6112,14 @@ p#helptranslate {
   vertical-align: sub;
 }
 
-div.themelabel {
+.themelabel {
   margin: -24px -4px 0;
   padding: 3px 2px;
   white-space: nowrap;
   overflow: hidden;
   text-overflow: ellipsis;
   font-size: 9pt;
-  border-top: 1px solid #8d8daa !important;
-  border-top: 1px solid #999adf !important;
+  border-top: 1px solid #999adf;
   background: #f8f8ff;
   box-shadow: inset 0 0 0 1px #fff;
 }
@@ -6264,11 +6263,11 @@ div.themelabel {
   background: linear-gradient(to right, #eef, #fff, #eef) !important;
 }
 
-div.langselect + br {
+.langselect + br {
   display: none !important;
 }
 
-div.langselect br {
+.langselect br {
   display: block;
 }
 
@@ -6309,7 +6308,7 @@ p#helptranslate {
   margin: 0 -5px;
 }
 
-div.ui_lang {
+.ui_lang {
   margin: -32px -4px 0;
   padding: 3px 2px;
   z-index: 2;
@@ -11368,7 +11367,7 @@ body {
 }
 
 @media screen and (min-width: 1500px) {
-body, .main, .main td, .news p, #news p, .newscontent p, .tab, .tab2, .main li b, div.joblog li, .themelabel, .ui_lang, .routersummary button.download,
+body, .main, .main td, .news p, #news p, .newscontent p, .tab, .tab2, .main li b, .joblog li, .themelabel, .ui_lang, .routersummary button.download,
 #peerdefs, #profile_defs, #thresholds, #configinfo, .infohelp, .infowarn, button, input, select, #configinfo th, code, th, .statusnotes,
 #help code, #help tt, #console code, .percentBarText, .routersummary .reload[value="restartImmediate"], .routersummary .cancel {
   font-size: 10pt !important;
@@ -11403,7 +11402,7 @@ body, .main, .main td, .news p, #news p, .newscontent p, .tab, .tab2, .main li b
   column-gap: 50px;
 }
 
-.routersummary td, .routersummary a, .routersummary button, .routersummary h4, .routersummary h4 a, div.news, pre, #help code, #help tt,
+.routersummary td, .routersummary a, .routersummary button, .routersummary h4, .routersummary h4 a, .news, pre, #help code, #help tt,
 #jardump tt, #jardump td, div.news, #logs li, tt, .cells tt, #profilelist tt, .leaseset tt, .links code, #console code,
 tt a, .cells tt, #profilelist tt, .cells tt a, #profilelist tt a, .leaseset td tt {
   font-size: 9pt !important;
@@ -13211,4 +13210,15 @@ to {
 80%, 99% {
   width: 120%;
 }
+}
+
+div.app, .applabel, .sitemapLink, .sitemapLabel, #sitemap div.app,
+.themechoice, .themelabel, .langselect, .ui_lang {
+  border-color: #a7a7be;
+}
+
+div.app:not(:hover) a:not(:hover):not(:focus):not(:active),
+div.app:not(:hover) a:not(:hover):not(:focus):not(:active):visited,
+.sitemaplink:not(:hover):not(:focus):not(:active) {
+  color: #4b689b !important;
 }

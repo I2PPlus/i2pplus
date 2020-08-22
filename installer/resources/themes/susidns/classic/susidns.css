@@ -803,7 +803,7 @@ textarea[name="config"], textarea[name="content"] {
   font-size: 12pt;
   background: url(/themes/console/images/svg/addressbook.svg) 10px center no-repeat;
   background: url(/themes/console/images/svg/addressbook.svg) 10px center no-repeat, linear-gradient(to bottom, #fff 50%, #eff2ff 50%);
-  background-size: 22px 22px;
+  background-size: 22px 22px, 100% 100%;
 }
 
 .headline#subscriptions h3 {
@@ -814,7 +814,7 @@ textarea[name="config"], textarea[name="content"] {
 .headline#configure h3 {
   background: url(/themes/console/images/svg/configure.svg) 10px center no-repeat;
   background: url(/themes/console/images/svg/configure.svg) 10px center no-repeat, linear-gradient(to bottom, #fff 50%, #eff2ff 50%);
-  background-size: 22px 22px;
+  background-size: 22px 22px, 100% 100%;
 }
 
 .headline h4 {
