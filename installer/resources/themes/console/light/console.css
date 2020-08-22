@@ -3885,8 +3885,9 @@ p.sybilinfo, #sybilanalysis {
 }
 
 p.sybilinfo.experimental {
-  background: #fff url(/themes/console/images/info/experimental.png) 12px center no-repeat;
-  background: url(/themes/console/images/info/experimental.png) 12px center no-repeat, linear-gradient(135deg, #fafaff, #f8f8ff);
+  background: #fff url(/themes/console/images/svg/experimental.svg) 12px center no-repeat;
+  background: url(/themes/console/images/svg/experimental.svg) 12px center no-repeat, linear-gradient(135deg, #fafaff, #f8f8ff);
+  background-size: 28px 28px, 100% 100%;
 }
 
 p.infowarn {
@@ -6805,8 +6806,8 @@ p:empty { /* empty paragraph nuke */
   font-size: 11pt !important;
   letter-spacing: .08em;
   word-spacing: .1em;
-  background:  #f6f6ff url(/themes/console/images/info/globe.png) 8px center no-repeat !important;
-  background:  url(/themes/console/images/info/globe.png) 8px center no-repeat, linear-gradient(to bottom, #fcfcff 50%, rgba(255,255,255,.6) 50%, rgba(240,240,255,.4)), linear-gradient(to right, #fcfcff 5%, rgba(231, 231, 255, .8) 25%) !important;
+  background:  #f6f6ff url(/themes/console/images/svg/globe.svg) 8px center no-repeat !important;
+  background:  url(/themes/console/images/svg/globe.svg) 8px center no-repeat, linear-gradient(to bottom, #fcfcff 50%, rgba(255,255,255,.6) 50%, rgba(240,240,255,.4)), linear-gradient(to right, #fcfcff 5%, rgba(231, 231, 255, .8) 25%) !important;
   background-size: 18px 18px, 100% 100%, 100% 100% !important;
   padding: 8px 5px 8px 32px;
 }
@@ -10437,13 +10438,14 @@ b.suboption {
 }
 
 .config_experimental::after {
-  content: "";
+  margin-bottom: -2px;
+  width: 16px;
+  height: 16px;
   display: inline-block;
+  background: url(/themes/console/images/svg/experimental.svg) right center no-repeat;
   background: url(/themes/console/images/info/experimental.png) right center no-repeat;
   background-size: 16px 16px;
-  width: 16px;
-  margin-bottom: -2px;
-  height: 16px;
+  content: "";
 }
 
 /* end /confignet */
@@ -12288,8 +12290,8 @@ h1.webapp {
   margin: 14px 0 6px !important;
   padding: 10px 10px 8px 50px !important;
   border: 1px solid #8d8daa;
-  background: #fff url(/themes/console/images/info/sybils.png) 12px center no-repeat;
-  background: url(/themes/console/images/info/sybils.png) 12px center no-repeat, linear-gradient(135deg, #fafaff, #f8f8ff);
+  background: #fff url(/themes/console/images/svg/sybil.svg) 12px center no-repeat;
+  background: url(/themes/console/images/svg/sybil.svg) 12px center no-repeat, linear-gradient(135deg, #fafaff, #f8f8ff);
 }
 
 #sybilanalysis form {
