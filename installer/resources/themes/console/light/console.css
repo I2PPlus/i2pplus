@@ -7564,24 +7564,25 @@ h3.sybils {
 
 #sybilnav li {
   margin: 4px 0;
-  padding: 5px 3px 5px 24px;
+  padding: 5px 3px 5px 27px;
   line-height: 88%;
   list-style: none;
   border-radius: 2px;
   box-shadow: 0 0 0 1px rgba(200,200,255,.8), inset 0 0 0 1px #fff;
-  background: #eef url(images/eye.png) 5px center no-repeat;
-  background: url(images/eye.svg) 5px center no-repeat, linear-gradient(to bottom, #fff 50%, rgba(255,255,255,.6) 50%, rgba(240,240,240,.4)) #e7e7ff;
-  background: url(images/eye.svg) 5px center no-repeat, linear-gradient(to bottom, #fff 50%, rgba(255,255,255,.6) 50%, rgba(240,240,240,.4)) #e7e7ff;
+  background: #eef url(images/eye.png) 6px center no-repeat;
+  background: url(images/eye.svg) 6px center no-repeat, linear-gradient(to bottom, #fff 50%, rgba(255,255,255,.6) 50%, rgba(240,240,240,.4)) #e7e7ff;
   background-size: 16px 16px, 100% 100% !important;
 }
 
 #sybilnav li:hover {
   box-shadow: 0 0 0 1px rgba(255,96,0,.5), inset 0 0 0 1px #fff;
-  background: #fff url(images/eye_hover.svg) 5px center no-repeat;
+  background: #fff url(images/eye_hover.svg) 6px center no-repeat;
 }
 
 #sybilnav li:active {
-  background: #fff url(images/eye_active.svg) 5px center no-repeat;
+  box-shadow: 0 0 0 1px rgba(255,96,0,.5), inset 0 0 0 1px #fff, inset 3px 3px 3px #ccc;
+  background: #fff url(images/eye_active.svg) 6px center no-repeat;
+
 }
 
 #sybilnav li:hover a {
@@ -7742,15 +7743,29 @@ p.sybil_info, p.family, p.threatpoints, p.hashdist, p#sybil_totals, p.notfound {
   font-weight: bold;
   color: #41465f;
   text-align: left;
-  background: url(images/eye.png) 8px center no-repeat, repeating-linear-gradient(135deg, rgba(255,255,255,.5) 2px, rgba(240, 240, 255, .3) 3px, #fafaff 5px), #fafaff;
+  background: url(images/eye.svg) 8px center no-repeat, repeating-linear-gradient(135deg, rgba(255,255,255,.5) 2px, rgba(240, 240, 255, .3) 3px, #fafaff 5px), #fafaff;
+  background-size: 16px 16px, 100% 100%;
+}
+
+p.sybil_info {
+  margin-bottom: 10px !important;
+}
+
+p.threatpoints {
+  padding-left: 33px;
+  background: url(images/eye_static.svg) 8px center no-repeat, repeating-linear-gradient(135deg, rgba(255,255,255,.5) 2px, rgba(240, 240, 255, .3) 3px, #fafaff 5px), #fafaff;
+  background-size: 20px 20px, 100% 100%;
 }
 
 p.threatpoints.hot {
-  background: url(images/eye.png) 8px center no-repeat, url(/themes/console/images/info/hot.png) right center no-repeat, repeating-linear-gradient(135deg, rgba(255,255,255,.5) 2px, rgba(240, 240, 255, .3) 3px, #fafaff 5px), #fafaff;
+  background: url(images/eye_static.svg) 8px center no-repeat, url(/themes/console/images/info/hot.png) right 4px center no-repeat, repeating-linear-gradient(135deg, rgba(255,255,255,.5) 2px, rgba(240, 240, 255, .3) 3px, #fafaff 5px), #fafaff;
+  background-size: 20px 20px, 24px 24px, 100% 100%;
 }
 
 p#sybil_totals {
   font-weight: normal;
+  background: url(images/eye_static.svg) 8px center no-repeat, repeating-linear-gradient(135deg, rgba(255,255,255,.5) 2px, rgba(240, 240, 255, .3) 3px, #fafaff 5px), #fafaff;
+  background-size: 16px 16px, 100% 100%;
 }
 
 p.family + p.family, p.sybil_info + p.sybil_info {
