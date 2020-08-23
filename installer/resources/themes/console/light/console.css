@@ -4294,25 +4294,25 @@ li.noevents {
 /* end stats page */
 
 h1 {
-  text-align: left;
-  color: #41465f;
-  color: #54586F;
-  padding: 16px 15px 15px 52px;
   margin: 0 0 10px 214px;
-  font-size: 18pt;
+  min-width: 546px;
+  padding: 16px 15px 15px 52px;
+  z-index: 999;
+  white-space: normal;
   line-height: 90%;
   letter-spacing: .12em; /* this value is not a happy accident; corresponds to relative spacing proportions for all heading fonts. */
   text-transform: uppercase;
+  font-size: 18pt;
+  text-align: left;
+  color: #41465f;
+  color: #54586F;
   text-shadow: 0 1px 1px #fff,0 -1px 1px #e2e2ff, 0 2px 1px #ddf;
+  border: 1px solid #447;
+  border-radius: 2px 2px 0 0;
   box-shadow: inset 0 0 0 1px rgba(185,185,198,.65);
-  white-space: normal;
   background: #fcfcff;
   background: url(images/netwrk.png) 8px center no-repeat, linear-gradient(135deg, #fcfcff, rgba(252,252,255,0) 600px), linear-gradient(to bottom, #fcfcff 50%, rgba(248,248,255,.6) 50%), repeating-linear-gradient(135deg, rgba(255,255,255,.5) 2px, rgba(221, 221, 255, .3) 3px, #fff 4px) #fafaff !important;
   background-size: 38px auto, 100% 100%, 100% 100%, 100% 100% !important;
-  border: 1px solid #447;
-  border-radius: 2px 2px 0 0;
-  min-width: 546px;
-  z-index: 999;
 }
 
 h1.home {
@@ -4780,12 +4780,12 @@ input[type="submit"], input[type="reset"], button, .optbox, select {
 }
 
 button.search {
-  background: url(/themes/console/images/buttons/search.png) no-repeat 6px center, linear-gradient(to bottom, #fff, #efefff);
-  padding: 5px 7px 5px 24px;
+  background: url(/themes/console/images/buttons/search.png) no-repeat 8px center, linear-gradient(to bottom, #fff, #efefff);
+  padding: 5px 9px 5px 26px;
 }
 
 button.search:hover, button.search:focus, button.search:active {
-  background: url(/themes/console/images/buttons/search_hover.png) no-repeat 6px center, linear-gradient(to bottom, #eee, #fff) !important;
+  background: url(/themes/console/images/buttons/search_hover.png) no-repeat 8px center, linear-gradient(to bottom, #eee, #fff) !important;
   background-size: 14px 14px, 100% 100% !important;
 }
 
@@ -4804,6 +4804,7 @@ input.search[type="text"]:focus {
 input, input:visited, button, button:visited {
   margin: 3px;
   padding: 4px 5px;
+  line-height: 140%;
   font-size: 9pt;
   color: #41465f;
   text-decoration: none;
@@ -4858,225 +4859,226 @@ button a:active {
 }
 
 input.accept, button.accept {
-  padding: 5px 7px 5px 22px;
-  background: url(/themes/console/images/buttons/yes.png) no-repeat 6px center, linear-gradient(to bottom, #fff, #efefff);
+  padding: 5px 9px 5px 26px;
+  background: url(/themes/console/images/svg/yes.svg) no-repeat 8px center, linear-gradient(to bottom, #fff, #efefff);
 }
 
 input.accept:hover, button.accept:hover, input.accept:focus, button.accept:focus {
-  background: url(/themes/console/images/buttons/yes.png) no-repeat 6px center, linear-gradient(to bottom, #eee, #fff);
+  background: url(/themes/console/images/svg/yes.svg) no-repeat 8px center, linear-gradient(to bottom, #eee, #fff);
 }
 
 input.accept[value^="Unban"], button.accept[value^="Unban"] {
-  padding: 5px 7px 5px 22px;
-  background: url(/themes/console/images/buttons/unban.png) no-repeat 6px center, linear-gradient(to bottom, #fff, #efefff);
+  padding: 5px 9px 5px 24px;
+  background: url(/themes/console/images/buttons/unban.png) no-repeat 8px center, linear-gradient(to bottom, #fff, #efefff);
 }
 
 input.accept[value^="Unban"]:hover, button.accept[value^="Unban"]:hover,
 input.accept[value^="Unban"]:focus, button.accept[value^="Unban"]:focus {
-  background: url(/themes/console/images/buttons/unban.png) no-repeat 6px center, linear-gradient(to bottom, #eee, #fff);
+  background: url(/themes/console/images/buttons/unban.png) no-repeat 8px center, linear-gradient(to bottom, #eee, #fff);
 }
 
 input.accept[value^="Create"], button.accept[value^="Create"] {
-  padding: 5px 7px 5px 22px;
-  background: url(/themes/console/images/buttons/create.png) no-repeat 6px center, linear-gradient(to bottom, #fff, #efefff);
+  padding: 5px 9px 5px 24px;
+  background: url(/themes/console/images/buttons/create.png) no-repeat 8px center, linear-gradient(to bottom, #fff, #efefff);
 }
 
 input.accept[value^="Create"]:hover, button.accept[value^="Create"]:hover,
 input.accept[value^="Create"]:focus, button.accept[value^="Create"]:focus {
-  background: url(/themes/console/images/buttons/create.png) no-repeat 6px center, linear-gradient(to bottom, #eee, #fff);
+  background: url(/themes/console/images/buttons/create.png) no-repeat 8px center, linear-gradient(to bottom, #eee, #fff);
 }
 
 input.accept[value^="Filter"], button.accept[value^="Filter"] {
-  padding: 5px 7px 5px 22px;
-  background: url(/themes/console/images/buttons/filter.png) no-repeat 6px center, linear-gradient(to bottom, #fff, #efefff);
+  padding: 5px 9px 5px 24px;
+  background: url(/themes/console/images/buttons/filter.png) no-repeat 8px center, linear-gradient(to bottom, #fff, #efefff);
 }
 
 input.accept[value^="Filter"]:hover, button.accept[value^="Filter"]:hover,
 input.accept[value^="Filter"]:focus, button.accept[value^="Filter"]:focus {
-  background: url(/themes/console/images/buttons/filter.png) no-repeat 6px center, linear-gradient(to bottom, #eee, #fff);
+  background: url(/themes/console/images/buttons/filter.png) no-repeat 8px center, linear-gradient(to bottom, #eee, #fff);
 }
 
 input.add, button.add {
-  padding: 5px 7px 5px 22px;
-  background: url(/themes/console/images/buttons/add.png) no-repeat 6px center, linear-gradient(to bottom, #fff, #efefff);
+  padding: 5px 7px 5px 25px;
+  background: url(/themes/console/images/svg/add.svg) no-repeat 8px center, linear-gradient(to bottom, #fff, #efefff);
 }
 
 input.add:hover, button.add:hover,
 input.add:focus, button.add:focus {
-  background: url(/themes/console/images/buttons/add.png) no-repeat 6px center, linear-gradient(to bottom, #eee, #fff);
+  background: url(/themes/console/images/svg/add.svg) no-repeat 8px center, linear-gradient(to bottom, #eee, #fff);
 }
 
 input.add[value^="Adjust"], button.add[value^="Adjust"] {
-  padding: 5px 7px 5px 22px;
-  background: url(/themes/console/images/buttons/edit2.png) no-repeat 6px center, linear-gradient(to bottom, #fff, #efefff);
+  padding: 5px 9px 5px 24px;
+  background: url(/themes/console/images/buttons/edit2.png) no-repeat 8px center, linear-gradient(to bottom, #fff, #efefff);
 }
 
 input.add[value^="Adjust"]:hover, button.add[value^="Adjust"]:hover,
 input.add[value^="Adjust"]:focus, button.add[value^="Adjust"]:focus {
-  background: url(/themes/console/images/buttons/edit2.png) no-repeat 6px center, linear-gradient(to bottom, #eee, #fff);
+  background: url(/themes/console/images/buttons/edit2.png) no-repeat 8px center, linear-gradient(to bottom, #eee, #fff);
 }
 
 input.cancel, button.cancel {
-  padding: 5px 7px 5px 22px;
-  background: url(/themes/console/images/buttons/no.png) no-repeat 6px center, linear-gradient(to bottom, #fff, #efefff);
+  padding: 5px 9px 5px 24px;
+  background: url(/themes/console/images/svg/no.svg) no-repeat 8px center, linear-gradient(to bottom, #fff, #efefff);
+  background-size: 12px 12px !important;
 }
 
 input.cancel:hover, button.cancel:hover,
 input.cancel:focus, button.cancel:focus {
-  background: url(/themes/console/images/buttons/no.png) no-repeat 6px center, linear-gradient(to bottom, #eee, #fff);
+  background: url(/themes/console/images/svg/no.svg) no-repeat 8px center, linear-gradient(to bottom, #eee, #fff);
 }
 
 input.showconsole {
-  padding: 5px 7px 5px 22px;
-  background: url(/themes/console/images/buttons/show.png) no-repeat 6px center, linear-gradient(to bottom, #fff, #efefff);
+  padding: 5px 9px 5px 24px;
+  background: url(/themes/console/images/buttons/show.png) no-repeat 8px center, linear-gradient(to bottom, #fff, #efefff);
 }
 
 input.showconsole:hover, input.showconsole:focus {
-  background: url(/themes/console/images/buttons/show.png) no-repeat 6px center, linear-gradient(to bottom, #eee, #fff);
+  background: url(/themes/console/images/buttons/show.png) no-repeat 8px center, linear-gradient(to bottom, #eee, #fff);
 }
 
 input.hideconsole {
-  padding: 5px 7px 5px 22px;
-  background: url(/themes/console/images/buttons/hide.png) no-repeat 6px center, linear-gradient(to bottom, #fff, #efefff);
+  padding: 5px 9px 5px 24px;
+  background: url(/themes/console/images/buttons/hide.png) no-repeat 8px center, linear-gradient(to bottom, #fff, #efefff);
 }
 
 input.hideconsole:hover, input.hideconsole:focus {
-  background: url(/themes/console/images/buttons/hide.png) no-repeat 6px center, linear-gradient(to bottom, #eee, #fff);
+  background: url(/themes/console/images/buttons/hide.png) no-repeat 8px center, linear-gradient(to bottom, #eee, #fff);
 }
 
 input.check, button.check {
-  padding: 5px 7px 5px 22px;
-  background: url(/themes/console/images/buttons/yes.png) no-repeat 6px center, linear-gradient(to bottom, #fff, #efefff);
+  padding: 5px 9px 5px 24px;
+  background: url(/themes/console/images/buttons/yes.png) no-repeat 8px center, linear-gradient(to bottom, #fff, #efefff);
 }
 
 input.check:hover, button.check:hover,
 input.check:focus, button.check:focus {
-  background: url(/themes/console/images/buttons/yes.png) no-repeat 6px center, linear-gradient(to bottom, #eee, #fff);
+  background: url(/themes/console/images/buttons/yes.png) no-repeat 8px center, linear-gradient(to bottom, #eee, #fff);
 }
 
 input.check[value$="updates"], button.check[value$="updates"] {
-  padding: 5px 7px 5px 22px;
-  background: url(/themes/console/images/buttons/update.png) no-repeat 6px center, linear-gradient(to bottom, #fff, #efefff);
+  padding: 5px 9px 5px 24px;
+  background: url(/themes/console/images/buttons/update.png) no-repeat 8px center, linear-gradient(to bottom, #fff, #efefff);
 }
 
 input.check[value$="updates"]:hover, button.check[value$="updates"]:hover,
 input.check[value$="updates"]:focus, button.check[value$="updates"]:focus {
-  background: url(/themes/console/images/buttons/update_hover.png) no-repeat 6px center, linear-gradient(to bottom, #eee, #fff);
+  background: url(/themes/console/images/buttons/update_hover.png) no-repeat 8px center, linear-gradient(to bottom, #eee, #fff);
 }
 
 input.delete, button.delete {
-  padding: 5px 7px 5px 22px;
-  background: url(/themes/console/images/buttons/delete.png) no-repeat 6px center, linear-gradient(to bottom, #fff, #efefff);
+  padding: 5px 9px 5px 24px;
+  background: url(/themes/console/images/buttons/delete.png) no-repeat 8px center, linear-gradient(to bottom, #fff, #efefff);
 }
 
 input.delete:hover, button.delete:hover,
 input.delete:focus, button.delete:focus {
-  background: url(/themes/console/images/buttons/delete_hover.png) no-repeat 6px center, linear-gradient(to bottom, #eee, #fff);
+  background: url(/themes/console/images/buttons/delete_hover.png) no-repeat 8px center, linear-gradient(to bottom, #eee, #fff);
 }
 
 input.delete[value^="Ban"], button.delete[value^="Ban"] {
-  padding: 5px 7px 5px 22px;
-  background: url(/themes/console/images/buttons/ban.png) no-repeat 6px center, linear-gradient(to bottom, #fff, #efefff);
+  padding: 5px 9px 5px 24px;
+  background: url(/themes/console/images/buttons/ban.png) no-repeat 8px center, linear-gradient(to bottom, #fff, #efefff);
 }
 
 input.delete[value^="Ban"]:hover, button.delete[value^="Ban"]:hover,
 input.delete[value^="Ban"]:focus, button.delete[value^="Ban"]:focus {
-  background: url(/themes/console/images/buttons/ban.png) no-repeat 6px center, linear-gradient(to bottom, #eee, #fff);
+  background: url(/themes/console/images/buttons/ban.png) no-repeat 8px center, linear-gradient(to bottom, #eee, #fff);
 }
 
 input.download, button.download {
-  padding: 5px 7px 5px 22px;
-  background: url(/themes/console/images/buttons/download.png) no-repeat 6px center, linear-gradient(to bottom, #fff, #efefff);
+  padding: 5px 9px 5px 24px;
+  background: url(/themes/console/images/buttons/download.png) no-repeat 8px center, linear-gradient(to bottom, #fff, #efefff);
 }
 
 input.download:hover, button.download:hover,
 input.download:focus, button.download:focus {
-  background: url(/themes/console/images/buttons/download.png) no-repeat 6px center, linear-gradient(to bottom, #eee, #fff);
+  background: url(/themes/console/images/buttons/download.png) no-repeat 8px center, linear-gradient(to bottom, #eee, #fff);
 }
 
 input.download[value^="Join"], button.download[value^="Join"] {
-  padding: 5px 7px 5px 22px;
-  background: url(/themes/console/images/buttons/users.png) no-repeat 6px center, linear-gradient(to bottom, #fff, #efefff);
+  padding: 5px 9px 5px 24px;
+  background: url(/themes/console/images/buttons/users.png) no-repeat 8px center, linear-gradient(to bottom, #fff, #efefff);
 }
 
 input.download[value^="Join"]:hover, button.download[value^="Join"]:hover,
 input.download[value^="Join"]:focus, button.download[value^="Join"]:focus {
-  background: url(/themes/console/images/buttons/users.png) no-repeat 6px center, linear-gradient(to bottom, #eee, #fff);
+  background: url(/themes/console/images/buttons/users.png) no-repeat 8px center, linear-gradient(to bottom, #eee, #fff);
 }
 
 input.download[value$="from File"], button.download[value$="from File"],
 input.download[value$="from file"], button.download[value$="from file"],
 #reseedzip .download {
-  padding: 5px 7px 5px 22px;
-  background: url(/themes/console/images/buttons/from-file.png) no-repeat 6px center, linear-gradient(to bottom, #fff, #efefff);
+  padding: 5px 9px 5px 24px;
+  background: url(/themes/console/images/buttons/from-file.png) no-repeat 8px center, linear-gradient(to bottom, #fff, #efefff);
 }
 
 input.download[value$="from File"]:hover, button.download[value$="from File"]:hover,
 input.download[value$="from file"]:hover, button.download[value$="from file"]:hover,
 input.download[value$="from File"]:focus, button.download[value$="from File"]:focus,
 input.download[value$="from file"]:focus, button.download[value$="from file"]:focus {
-  background: url(/themes/console/images/buttons/from-file.png) no-repeat 6px center, linear-gradient(to bottom, #eee, #fff);
+  background: url(/themes/console/images/buttons/from-file.png) no-repeat 8px center, linear-gradient(to bottom, #eee, #fff);
 }
 
 input.download[value^="Dump"], button.download[value^="Dump"] {
-  padding: 5px 7px 5px 22px;
-  background: url(/themes/console/images/buttons/dump-threads.png) no-repeat 6px center, linear-gradient(to bottom, #fff, #efefff);
+  padding: 5px 9px 5px 24px;
+  background: url(/themes/console/images/buttons/dump-threads.png) no-repeat 8px center, linear-gradient(to bottom, #fff, #efefff);
 }
 
 input.download[value^="Dump"]:hover, button.download[value^="Dump"]:hover,
 input.download[value^="Dump"]:focus, button.download[value^="Dump"]:focus {
-  background: url(/themes/console/images/buttons/dump-threads.png) no-repeat 6px center, linear-gradient(to bottom, #eee, #fff);
+  background: url(/themes/console/images/buttons/dump-threads.png) no-repeat 8px center, linear-gradient(to bottom, #eee, #fff);
 }
 
 input.go, button.go, input[value="GO"], #embedurl input[type="submit"], button#run {
-  padding: 5px 7px 5px 22px;
-  background: url(/themes/console/images/buttons/go.png) no-repeat 6px center, linear-gradient(to bottom, #fff, #efefff);
+  padding: 5px 9px 5px 24px;
+  background: url(/themes/console/images/buttons/go.png) no-repeat 8px center, linear-gradient(to bottom, #fff, #efefff);
 }
 
 input.go:hover, button.go:hover, input[value="GO"]:hover, input.go:focus, button.go:focus, input[value="GO"]:focus,
 #embedurl input[type="submit"]:hover, #embedurl input[type="submit"]:focus {
-  background: url(/themes/console/images/buttons/go.png) no-repeat 6px center, linear-gradient(to bottom, #eee, #fff);
+  background: url(/themes/console/images/buttons/go.png) no-repeat 8px center, linear-gradient(to bottom, #eee, #fff);
 }
 
 input.go[value^="Create"], button.go[value^="Create"], #reseedcreatefile .go {
-  padding: 5px 7px 5px 22px;
-  background: url(/themes/console/images/buttons/create-file.png) no-repeat 6px center, linear-gradient(to bottom, #fff, #efefff);
+  padding: 5px 9px 5px 24px;
+  background: url(/themes/console/images/buttons/create-file.png) no-repeat 8px center, linear-gradient(to bottom, #fff, #efefff);
 }
 
 input.go[value^="Create"]:hover, button.go[value^="Create"]:hover,
 input.go[value^="Create"]:focus, button.go[value^="Create"]:focus {
-  background: url(/themes/console/images/buttons/create-file.png) no-repeat 6px center, linear-gradient(to bottom, #eee, #fff);
+  background: url(/themes/console/images/buttons/create-file.png) no-repeat 8px center, linear-gradient(to bottom, #eee, #fff);
 }
 
 input.back {
-  background: url(/themes/console/images/buttons/back.png) no-repeat 6px center, linear-gradient(to bottom, #fff, #efefff);
-  padding: 5px 7px 5px 22px;
+  background: url(/themes/console/images/buttons/back.png) no-repeat 8px center, linear-gradient(to bottom, #fff, #efefff);
+  padding: 5px 9px 5px 24px;
 }
 
 input.back:hover,
 input.back:focus {
-  background: url(/themes/console/images/buttons/back.png) no-repeat 6px center, linear-gradient(to bottom, #eee, #fff);
+  background: url(/themes/console/images/buttons/back.png) no-repeat 8px center, linear-gradient(to bottom, #eee, #fff);
 }
 
 input.reload, button.reload {
-  padding: 5px 7px 5px 22px;
-  background: url(/themes/console/images/buttons/restore.png) no-repeat 6px center, linear-gradient(to bottom, #fff, #efefff);
+  padding: 5px 9px 5px 24px;
+  background: url(/themes/console/images/buttons/restore.png) no-repeat 8px center, linear-gradient(to bottom, #fff, #efefff);
 }
 
 input.reload:hover, button.reload:hover,
 input.reload:focus, button.reload:focus {
-  background: url(/themes/console/images/buttons/restore_hover.png) no-repeat 6px center, linear-gradient(to bottom, #eee, #fff);
+  background: url(/themes/console/images/buttons/restore_hover.png) no-repeat 8px center, linear-gradient(to bottom, #eee, #fff);
 }
 
 input.reload[value$="restart"], button.reload[value$="restart"] {
-  padding: 5px 7px 5px 22px;
-  background: url(images/restart.svg) no-repeat 6px center, linear-gradient(to bottom, #fff, #efefff);
+  padding: 5px 9px 5px 24px;
+  background: url(images/restart.svg) no-repeat 8px center, linear-gradient(to bottom, #fff, #efefff);
   background-size: 12px 12px, 100% 100%;
 }
 
 input.reload[value$="restart"]:hover, button.reload[value$="restart"]:hover,
 input.reload[value$="restart"]:focus, button.reload[value$="restart"]:focus {
-  background: url(images/restart_hover.svg) no-repeat 6px center, linear-gradient(to bottom, #eee, #fff);
+  background: url(images/restart_hover.svg) no-repeat 8px center, linear-gradient(to bottom, #eee, #fff);
 }
 
 .formaction input.reload[value$="restart"] {
@@ -5084,37 +5086,37 @@ input.reload[value$="restart"]:focus, button.reload[value$="restart"]:focus {
 }
 
 input.reload[value^="Update"], button.reload[value^="Update"] {
-  padding: 5px 7px 5px 22px;
-  background: url(/themes/console/images/buttons/update.png) no-repeat 6px center, linear-gradient(to bottom, #fff, #efefff);
+  padding: 5px 9px 5px 24px;
+  background: url(/themes/console/images/buttons/update.png) no-repeat 8px center, linear-gradient(to bottom, #fff, #efefff);
 }
 
 input.reload[value^="Update"]:hover, button.reload[value^="Update"]:hover,
 input.reload[value^="Update"]:focus, button.reload[value^="Update"]:focus {
-  background: url(/themes/console/images/buttons/update_hover.png) no-repeat 6px center, linear-gradient(to bottom, #eee, #fff);
+  background: url(/themes/console/images/buttons/update_hover.png) no-repeat 8px center, linear-gradient(to bottom, #eee, #fff);
 }
 
 input.reload[value="Force GC"], button.reload[value="Force GC"],
 input.reload[value="Force garbage collection"], button.reload[value="Force garbage collection"] {
-  padding: 5px 7px 5px 22px;
-  background: url(/themes/console/images/buttons/clean.png) no-repeat 6px center, linear-gradient(to bottom, #fff, #efefff);
+  padding: 5px 9px 5px 24px;
+  background: url(/themes/console/images/buttons/clean.png) no-repeat 8px center, linear-gradient(to bottom, #fff, #efefff);
 }
 
 input.reload[value="Force GC"]:hover, button.reload[value="Force GC"]:hover,
 input.reload[value="Force GC"]:focus, button.reload[value="Force GC"]:focus,
 input.reload[value="Force garbage collection"]:hover, button.reload[value="Force garbage collection"]:hover,
 input.reload[value="Force garbage collection"]:focus, button.reload[value="Force garbage collection"]:focus {
-  background: url(/themes/console/images/buttons/clean_hover.png) no-repeat 6px center, linear-gradient(to bottom, #eee, #fff);
+  background: url(/themes/console/images/buttons/clean_hover.png) no-repeat 8px center, linear-gradient(to bottom, #eee, #fff);
 }
 
 input.stop, button.stop {
-  padding: 5px 7px 5px 22px;
-  background: url(images/shutdown.svg) no-repeat 6px center, linear-gradient(to bottom, #fff, #efefff);
+  padding: 5px 9px 5px 24px;
+  background: url(images/shutdown.svg) no-repeat 8px center, linear-gradient(to bottom, #fff, #efefff);
   background-size: 12px 12px, 100% 100% !important;
 }
 
 input.stop:hover, button.stop:hover,
 input.stop:focus, button.stop:focus {
-  background: url(images/shutdown_hover.svg) no-repeat 6px center, linear-gradient(to bottom, #eee, #fff);
+  background: url(images/shutdown_hover.svg) no-repeat 8px center, linear-gradient(to bottom, #eee, #fff);
 }
 
 /* client config buttons aka project "X" */
