@@ -173,9 +173,9 @@ public class I2PTunnelHTTPClient extends I2PTunnelHTTPClientBase implements Runn
             "Proxy-Connection: close\r\n"+
             "\r\n" +
             "<html><body><H1>New Host Name with Address Helper</H1>" +
-            "The address helper link you followed is for a new host name that is not in your address book. " +
-            "You may either save the destination for this host name to your address book, or remember it only until your router restarts. " +
-            "If you save it to your address book, you will not see this message again. " +
+            "The address helper link you followed is for a new host name that is not in your addressbook. " +
+            "You may either save the destination for this host name to your addressbook, or remember it only until your router restarts. " +
+            "If you save it to your addressbook, you will not see this message again. " +
             "If you do not wish to visit this host, click the \"back\" button on your browser.";
 
     private final static String ERR_BAD_PROTOCOL =
@@ -764,7 +764,7 @@ public class I2PTunnelHTTPClient extends I2PTunnelHTTPClientBase implements Runn
                                         String header = getErrorPage("ahelper-conflict", ERR_AHELPER_CONFLICT);
                                         out.write(header.getBytes("UTF-8"));
                                         out.write("<p>".getBytes("UTF-8"));
-                                        out.write(_t("To visit the destination in your address book, click <a href=\"{0}\">here</a>. " +
+                                        out.write(_t("To visit the destination in your addressbook, click <a href=\"{0}\">here</a>. " +
                                                      "To visit the conflicting addresshelper destination, click <a href=\"{1}\">here</a>.",
                                                     trustedURL, conflictURL).getBytes("UTF-8"));
                                         out.write("</p>".getBytes("UTF-8"));
@@ -774,7 +774,7 @@ public class I2PTunnelHTTPClient extends I2PTunnelHTTPClientBase implements Runn
                                             String conURL = _context.portMapper().getConsoleURL();
                                             out.write(("\n<table class=\"conflict\"><tr><th align=\"center\">" +
                                                        "<a href=\"" + trustedURL + "\">").getBytes("UTF-8"));
-                                            out.write(_t("Destination for {0} in address book", requestURI.getHost()).getBytes("UTF-8"));
+                                            out.write(_t("Destination for {0} in addressbook", requestURI.getHost()).getBytes("UTF-8"));
                                             out.write(("</a></th>\n<th align=\"center\">" +
                                                        "<a href=\"" + conflictURL + "\">").getBytes("UTF-8"));
                                             out.write(_t("Conflicting address helper destination").getBytes("UTF-8"));
@@ -1454,7 +1454,7 @@ public class I2PTunnelHTTPClient extends I2PTunnelHTTPClientBase implements Runn
                 // FIXME if there is a query remaining it is lost
                 "<form method=\"GET\" action=\"" + targetRequest + "\">\n" +
                 "<h4>" + _t("Continue to {0} without saving", destination) + "</h4>\n<p>" +
-                _t("You can browse to the site without saving it to the address book. The address will be remembered until you restart your I2P router.") +
+                _t("You can browse to the site without saving it to the addressbook. The address will be remembered until you restart your I2P router.") +
                 "</p>\n<div class=\"formaction\"><button type=\"submit\" class=\"go\">" + _t("Continue without saving") + "</button></div>" + "\n</form>\n" +
 
                 "<form method=\"GET\" action=\"http://" + LOCAL_SERVER + "/add\">\n" +
@@ -1463,9 +1463,9 @@ public class I2PTunnelHTTPClient extends I2PTunnelHTTPClientBase implements Runn
                 "<input type=\"hidden\" name=\"nonce\" value=\"" + _proxyNonce + "\">\n" +
 
                 "<h4>" + _t("Save {0} to router address book and continue to website", destination) + "</h4>\n<p>" +
-                _t("This address will be saved to your Router address book where your subscription-based addresses are stored."));
+                _t("This address will be saved to your Router addressbook where your subscription-based addresses are stored."));
         if(_context.namingService().getName().equals("BlockfileNamingService")) {
-            out.write(" " + _t("If you want to keep track of sites you have added manually, add to your Master or Private address book instead."));
+            out.write(" " + _t("If you want to keep track of sites you have added manually, add to your Master or Private addressbook instead."));
         }
         // FIXME wasn't escaped
         String label = _t("Save & continue").replace("&", "&amp;");
@@ -1475,13 +1475,13 @@ public class I2PTunnelHTTPClient extends I2PTunnelHTTPClientBase implements Runn
         if(_context.namingService().getName().equals("BlockfileNamingService")) {
             // only blockfile supports multiple books
 
-            out.write("<h4>" + _t("Save {0} to master address book and continue to website", destination) + "</h4>\n<p>" +
-            _t("This address will be saved to your Master address book. Select this option for addresses you wish to keep separate from the main router address book, but don't mind publishing.") +
+            out.write("<h4>" + _t("Save {0} to master addressbook and continue to website", destination) + "</h4>\n<p>" +
+            _t("This address will be saved to your Master addressbook. Select this option for addresses you wish to keep separate from the main router address book, but don't mind publishing.") +
             "</p>\n<div class=\"formaction\"><button type=\"submit\" class=\"accept\" name=\"master\" value=\"master\">" +
             label + "</button></div>\n");
 
-            out.write("<h4>" + _t("Save {0} to private address book and continue to website", destination) + "</h4>\n<p>" +
-            _t("This address will be saved to your Private address book, ensuring it is never published.") +
+            out.write("<h4>" + _t("Save {0} to private addressbook and continue to website", destination) + "</h4>\n<p>" +
+            _t("This address will be saved to your Private addressbook, ensuring it is never published.") +
             "</p>\n<div class=\"formaction\"><button type=\"submit\" class=\"accept\" name=\"private\" value=\"private\">" +
             label + "</button></div>\n");
 
