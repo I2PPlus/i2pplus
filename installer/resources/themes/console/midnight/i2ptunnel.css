@@ -832,15 +832,15 @@ textarea[name="accessList"] {
 }
 
 .multiOption#isServer {
-  padding-left: 20px;
-  background: url(/themes/console/images/svg/server.svg) left center no-repeat;
-  background-size: 16px 16px;
+  padding-left: 28px;
+  background: url(/themes/console/images/svg/server.svg) 4px center no-repeat;
+  background-size: 22px 22px;
 }
 
 .multiOption#isClient {
-  padding-left: 21px;
-  background: url(/themes/console/images/svg/client.svg) left center no-repeat;
-  background-size: 16px 16px;
+  padding-left: 28px;
+  background: url(/themes/console/images/svg/client.svg) 4px center no-repeat;
+  background-size: 22px 22px;
 }
 
 td#throttle, #clientAuthConfig {

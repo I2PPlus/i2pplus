@@ -947,12 +947,12 @@ to {
 }
 
 #sb_services a[href$=":7658/"], #sb_services a[href$=":7668/"] {
-  background: #f8f8ff url(images/server.png) 3px center no-repeat;
-  background: rgba(248, 248, 255, .8) url(images/server.png) 3px center no-repeat;
+  background: #f8f8ff url(/themes/console/images/svg/webserver.svg) 3px center no-repeat;
+  background: rgba(248, 248, 255, .8) url(/themes/console/images/svg/webserver.svg) 3px center no-repeat;
 }
 
 #sb_services a[href$=":7658/"]:hover, #sb_services a[href$=":7668/"]:hover {
-  background: #ffe url(images/server.png) 3px center no-repeat;
+  background: #ffe url(/themes/console/images/svg/webserver.svg) 3px center no-repeat;
 }
 
 #sb_services a[href="/orchid/"], #sb_services a[href*="/orchid/"] {
