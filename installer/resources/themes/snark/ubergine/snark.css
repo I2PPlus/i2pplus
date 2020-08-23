@@ -6427,6 +6427,7 @@ td.snarkTorrentPeerCount b::before {
 td.snarkTorrentPeerCount b a:not(:hover):not(:focus), td.snarkTorrentPeerCount b a:not(:hover):not(:focus):visited {
   color: #d0d;
   text-shadow: 0 1px 1px #000;
+  text-shadow: 0 0 1px #000, 0 0 1px #fff, 0 1px 1px #404, 0 0 1px #000 !important;
 }
 
 .inactive.downloading td.snarkTorrentPeerCount b a:not(:hover):not(:focus), .inactive.downloading td.snarkTorrentPeerCount b a:not(:hover):not(:focus):visited {

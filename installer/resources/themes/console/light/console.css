@@ -456,13 +456,14 @@ h4.sb_info + hr + form {
 }
 
 #sb_localtunnels td:first-child {
-  background-image: url(/themes/console/images/client.png) !important;
+  background-image: url(/themes/console/images/svg/client.svg) !important;
   background-position: center 1px !important;
   background-repeat: no-repeat !important;
+  background-size: 16px 16px !important;
 }
 
 #sb_localtunnels td.tunnelServer {
-  background-image: url(/themes/console/images/server.png) !important;
+  background-image: url(/themes/console/images/svg/server.svg) !important;
 }
 
 #sb_localtunnels td:last-child {

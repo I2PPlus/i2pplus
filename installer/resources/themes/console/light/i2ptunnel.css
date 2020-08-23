@@ -802,13 +802,15 @@ td[colspan="2"] > select#profile {
 }
 
 .multiOption#isServer {
-  background: url(/themes/console/images/server.png) left center no-repeat;
   padding-left: 16px;
+  background: url(/themes/console/images/svg/server.svg) left center no-repeat;
+  background-size: 16px 16px;
 }
 
 .multiOption#isClient {
-  background: url(/themes/console/images/client.png) left center no-repeat;
   padding-left: 16px;
+  background: url(/themes/console/images/svg/client.svg) left center no-repeat;
+  background-size: 16px 16px;
 }
 
 td#throttle, #clientAuthConfig {

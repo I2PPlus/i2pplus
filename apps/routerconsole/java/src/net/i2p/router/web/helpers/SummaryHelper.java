@@ -696,16 +696,16 @@ public class SummaryHelper extends HelperBase {
                 buf.append("<tr><td ");
                 if (server)
                     buf.append("class=\"tunnelServer\" ");
-                buf.append("align=\"right\"><img src=\"/themes/console/images/");
+                buf.append("align=\"right\"><img src=\"/themes/console/images/svg/");
                 if (server) {
-                    buf.append("server.png\" alt=\"Server\" title=\"").append(_t("Server"));
+                    buf.append("server.svg\" alt=\"Server\" title=\"").append(_t("Server"));
                     if (!isAdvanced()) {
                         buf.append(" (").append(_t("service may be available to peers")).append(")");
                      }
-                    buf.append("\" width=\"16\" height=\"16\">");
+                     buf.append("\" width=\"16\" height=\"16\">");
                 }
                 else {
-                    buf.append("client.png\" alt=\"Client\" title=\"").append(_t("Client"));
+                    buf.append("client.svg\" alt=\"Client\" title=\"").append(_t("Client"));
                     if (!isAdvanced()) {
                         buf.append(" (").append(_t("service is only available locally")).append(")");
                     }
