@@ -120,7 +120,7 @@
 
 <a href="http://127.0.0.1:7658/" target="_blank">
 <span class="sitemapLink extlink" title="<%=intl._t("Local webserver for hosting content on the I2P network")%>">
-<img src="/themes/console/images/svg/server.svg">
+<img src="/themes/console/images/svg/webserver.svg">
 <span class="sitemapLabel"><%=intl._t("Web Server")%></span>
 </span>
 </a>
@@ -480,7 +480,7 @@
 
 <a href="/help/webhosting">
 <span class="sitemapLink" title="<%=intl._t("A guide to reseeding your I2P router")%>">
-<img src="/themes/console/images/svg/server.svg">
+<img src="/themes/console/images/svg/webserver.svg">
 <span class="sitemapLabel"><%=intl._t("Web Hosting")%></span>
 </span>
 </a>

@@ -660,9 +660,10 @@ pre {
 }
 
 #sb_localtunnels td:first-child {
-  background-image: url(/themes/console/images/client.png) !important;
+  background-image: url(/themes/console/images/svg/client.svg) !important;
   background-position: center center !important;
   background-repeat: no-repeat !important;
+  background-size: 16px 16px;
 }
 
 #sb_localtunnels tr:last-child td:first-child {
@@ -670,7 +671,8 @@ pre {
 }
 
 #sb_localtunnels td.tunnelServer {
-  background-image: url(/themes/console/images/server.png) !important;
+  background-image: url(/themes/console/images/svg/server.svg) !important;
+  background-size: 16px 16px;
 }
 
 #sb_localtunnels td:last-child {
@@ -7154,6 +7156,13 @@ p.sybil_info, p.family, p.threatpoints, p.hashdist, p#sybil_totals, p.notfound {
   box-shadow: inset 0 0 0 1px #300;
 }
 
+p.sybil_info, p#sybil_totals {
+  margin-bottom: 10px;
+  padding-left: 35px;
+  background-image: url(images/eye_threat.svg);
+  background-size: 20px 20px, 100% 100%;
+}
+
 p.threatpoints {
   background: url(images/eye_threat.svg) 8px center no-repeat, linear-gradient(to right, #000 0%, #000800 80%, #001000 100%);
   background-size: 20px 20px, 100% 100%;
@@ -13365,9 +13374,18 @@ th[aria-sort] {
 }
 
 #sybilnav ul li#configurePeriodic::before {
-  background: url(/themes/console/images/buttons/configure.png);
+  background: url(/themes/susidns/dark/images/configure.png);
+  background-size: 14px 14px !important;
 }
 
+#sybilnav ul li#configurePeriodic:hover::before {
+  background: url(/themes/susidns/dark/images/configure_hover.png);
+  background-size: 14px 14px !important;
+}
+
+#sybilnav ul li#configurePeriodic:active::before {
+  filter: sepia(1) hue-rotate(-45deg) saturate(1.4) brightness(1.6);
+}
 /*
 #sybilnav ul li#reviewStored::before {
   background: url(/themes/console/images/buttons/fullview.png);

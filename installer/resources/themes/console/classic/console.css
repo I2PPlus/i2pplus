@@ -763,11 +763,12 @@ img[src="/themes/console/images/i2plogo.png"] {
 
 @media screen and (min-width: 1600px) {
 #sb_localtunnels td:first-child {
-  width: 16px !important;
+  width: 20px !important;
 }
 }
 
 #sb_localtunnels td:nth-child(2) {
+  padding-left: 0;
   min-width: 156px;
 }
 
@@ -778,13 +779,14 @@ img[src="/themes/console/images/i2plogo.png"] {
 }
 
 #sb_localtunnels td:first-child, #sb_localtunnels tr:hover td:first-child {
-  background-image: url(/themes/console/images/client.png) !important;
+  background-image: url(/themes/console/images/svg/client.svg) !important;
   background-position: center center !important;
   background-repeat: no-repeat !important;
+  background-size: 16px 16px !important;
 }
 
 #sb_localtunnels td.tunnelServer, #sb_localtunnels tr:hover td.tunnelServer  {
-  background-image: url(/themes/console/images/server.png) !important;
+  background-image: url(/themes/console/images/svg/server.svg) !important;
 }
 
 #sb_localtunnels td:last-child, #sb_localtunnels tr:hover td:last-child {

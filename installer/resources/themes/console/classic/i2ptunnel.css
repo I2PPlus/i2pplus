@@ -715,12 +715,14 @@ td[colspan="2"] select#profile {
 
 .multiOption#isServer {
   padding-left: 18px;
-  background: url(/themes/console/images/server.png) left center no-repeat;
+  background: url(/themes/console/images/svg/server.svg) left center no-repeat;
+  background-size: 16px 16px;
 }
 
 .multiOption#isClient {
   padding-left: 19px;
-  background: url(/themes/console/images/client.png) left center no-repeat;
+  background: url(/themes/console/images/svg/client.svg) left center no-repeat;
+  background-size: 16px 16px;
 }
 
 #wizardPanel input[type="checkbox"], #wizardPanel input[type="radio"] {

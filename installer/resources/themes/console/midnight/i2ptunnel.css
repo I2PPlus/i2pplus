@@ -832,13 +832,15 @@ textarea[name="accessList"] {
 }
 
 .multiOption#isServer {
-  background: url(/themes/console/images/server.png) left center no-repeat;
   padding-left: 20px;
+  background: url(/themes/console/images/svg/server.svg) left center no-repeat;
+  background-size: 16px 16px;
 }
 
 .multiOption#isClient {
-  background: url(/themes/console/images/client.png) left center no-repeat;
   padding-left: 21px;
+  background: url(/themes/console/images/svg/client.svg) left center no-repeat;
+  background-size: 16px 16px;
 }
 
 td#throttle, #clientAuthConfig {
@@ -858,9 +860,9 @@ td#throttle, #clientAuthConfig {
 }
 
 #throttler td:first-child {
-  text-align: right;
   width: 20%;
   white-space: nowrap;
+  text-align: right;
 }
 
 #throttler tr:first-child th {
