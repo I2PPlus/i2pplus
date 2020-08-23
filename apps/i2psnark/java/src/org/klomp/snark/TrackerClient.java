@@ -48,6 +48,7 @@ import net.i2p.util.SimpleTimer2;
 import org.klomp.snark.bencode.InvalidBEncodingException;
 import org.klomp.snark.dht.DHT;
 
+
 /**
  * Informs metainfo tracker of events and gets new peers for peer
  * coordinator.
@@ -320,7 +321,7 @@ public class TrackerClient implements Runnable {
             if (trackers.size() > 2) {
                 // shuffle everything but the primary
                 TCTracker pri = trackers.remove(0);
-                Collections.shuffle(trackers, _util.getContext().random());
+//                Collections.shuffle(trackers, _util.getContext().random());
                 trackers.add(0, pri);
             }
         }
@@ -997,4 +998,5 @@ public class TrackerClient implements Runnable {
           seenPeers = 0;
       }
   }
+
 }

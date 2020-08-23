@@ -1067,7 +1067,14 @@ tr[id] + .peerinfo td {
 }
 
 .peerinfo td:first-child {
-  background: url(images/peer.png) center right 8px no-repeat;
+  background: url(images/peer.svg) right 8px center no-repeat;
+  background-size: 18px 18px;
+}
+
+@media screen and (max-width: 1100px) {
+.peerinfo td:first-child {
+  background-position: right 3px center;
+}
 }
 
 .peerinfo td, .debuginfo td {
