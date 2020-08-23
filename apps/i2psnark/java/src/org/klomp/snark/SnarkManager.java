@@ -196,6 +196,7 @@ public class SnarkManager implements CompleteListener, ClientApp {
        ,"Freedom", "http://torrfreedom.i2p/announce.php=http://torrfreedom.i2p/"
        ,"PsiOpenTracker", "http://tracker.psi.i2p/a=http://tracker.psi.i2p/stats"
        ,"Fazanka", "http://tracker.fazanka.i2p/a=http://torrents.fazanka.i2p/"
+       ,"Lodikon", "http://tracker.lodikon.i2p/announce=http://tracker.lodikon.i2p/"
        ,"PTT", "http://5m3pd32zx43xk3uz6hvrdksj6tlg7abnjsc3j5kkd2yzctet4nmq.b32.i2p/announce=http://ptt.i2p/index_eng.html"
        //The following is ECDSA_SHA256_P256
        ,"TheBland", "http://tracker.thebland.i2p/a=http://tracker.thebland.i2p/tracker/"
@@ -203,7 +204,6 @@ public class SnarkManager implements CompleteListener, ClientApp {
 //       ,"DifTracker", "http://diftracker.i2p/announce.php=http://diftracker.i2p/"
 //       ,"PsiTracker", "http://psi.i2p/tracker/a=http://psi.i2p/tracker/"
 //       ,"Crypthost", "http://tracker.crypthost.i2p/announce=http://tracker.crypthost.i2p/tracker/"
-//       ,"Lodikon", "http://tracker.lodikon.i2p/announce=http://tracker.lodikon.i2p/"
 //       ,"OpenDifTracker", "http://opendiftracker.i2p/announce.php=http://opendiftracker.i2p/"
 //       ,"ICU812", "http://tracker.icu812.i2p/a=http://tracker.icu812.i2p/torrents/"
     };
@@ -215,6 +215,7 @@ public class SnarkManager implements CompleteListener, ClientApp {
 //    private static final String DEFAULT_OPENTRACKERS = DEFAULT_BACKUP_TRACKER +
     private static final String DEFAULT_OPENTRACKERS =
         "http://opentracker.dg2.i2p/a," +
+        "http://tracker.lodikon.i2p/announce," +
         "http://tracker.psi.i2p/a," +
         "http://tracker.fazanka.i2p/a," +
         "http://5m3pd32zx43xk3uz6hvrdksj6tlg7abnjsc3j5kkd2yzctet4nmq.b32.i2p/announce," +
@@ -224,7 +225,6 @@ public class SnarkManager implements CompleteListener, ClientApp {
 //        "http://opendiftracker.i2p/announce.php," +
 //        "http://tracker.crypthost.i2p/announce," +
 //        "http://tracker.icu812.i2p/a," +
-//        "http://tracker.lodikon.i2p/announce," +
 
     public static final Set<String> DEFAULT_TRACKER_ANNOUNCES;
 
@@ -232,11 +232,11 @@ public class SnarkManager implements CompleteListener, ClientApp {
     static final Set<String> KNOWN_OPENTRACKERS = new HashSet<String>(Arrays.asList(new String[] {
         "opentracker.dg2.i2p", "w7tpbzncbcocrqtwwm3nezhnnsw4ozadvi2hmvzdhrqzfxfum7wa.b32.i2p",
         "tracker.fazanka.i2p", "3czgwbtato5yja67krtadzhc6szu3n7rqbxmu7dwhuyaighcsb3q.b32.i2p",
+        "tracker.lodikon.i2p", "q2a7tqlyddbyhxhtuia4bmtqpohpp266wsnrkm6cgoahdqrjo3ra.b32.i2p",
         "tracker.psi.i2p", "vmow3h54yljn7zvzbqepdddt5fmygijujycod2q6yznpy2rrzuwa.b32.i2p",
         "tracker.thebland.i2p", "s5ikrdyjwbcgxmqetxb3nyheizftms7euacuub2hic7defkh3xhq.b32.i2p",
         "ptt.i2p", "5m3pd32zx43xk3uz6hvrdksj6tlg7abnjsc3j5kkd2yzctet4nmq.b32.i2p",
 //        "Chihaya", "uajd4nctepxpac4c4bdyrdw7qvja2a5u3x25otfhkptcjgd53ioq.b32.i2p",
-//        "tracker.lodikon.i2p", "q2a7tqlyddbyhxhtuia4bmtqpohpp266wsnrkm6cgoahdqrjo3ra.b32.i2p",
 //        "opendiftracker.i2p", "bikpeyxci4zuyy36eau5ycw665dplun4yxamn7vmsastejdqtfoq.b32.i2p",
 //        "psi.i2p", "avviiexdngd32ccoy4kuckvc3mkf53ycvzbz6vz75vzhv4tbpk5a.b32.i2p",
 //        "tracker.crypthost.i2p", "ri5a27ioqd4vkik72fawbcryglkmwyy4726uu5j3eg6zqh2jswfq.b32.i2p",
