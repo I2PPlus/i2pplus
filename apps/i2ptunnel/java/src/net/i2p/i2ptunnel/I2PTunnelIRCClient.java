@@ -115,7 +115,7 @@ public class I2PTunnelIRCClient extends I2PTunnelClientBase {
                                   ", perhaps it is not up, will retry when connecting.");
                         else
                             l.log("[IRC Client] Warning - Could not resolve " + name +
-                                  ", you must add it to your address book for it to work.");
+                                  ", you must add it to your addressbook for it to work.");
                     }
                 } catch (IllegalArgumentException iae) {
                      l.log("[IRC Client] Bad destination " + destination + " - " + iae);

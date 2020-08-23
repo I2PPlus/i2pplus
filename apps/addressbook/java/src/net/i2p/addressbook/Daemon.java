@@ -271,7 +271,7 @@ class Daemon {
                                             if (log != null) {
                                                 if (success)
                                                     log.append("Additional address for " + key +
-                                                               " added to address book. [" + addressbook.getLocation() + "]");
+                                                               " added to addressbook [" + addressbook.getLocation() + "]");
                                                 else
                                                     log.append("Failed to add additional address for " + key +
                                                                " [" + addressbook.getLocation() + "]");
@@ -282,7 +282,7 @@ class Daemon {
                                                 // FIXME this fails, no support in SFNS
                                                 success = publishedNS.addDestination(key, dest, props);
                                                 if (log != null && !success)
-                                                    log.append("Add to published address book " + publishedNS.getName() + " failed for " + key);
+                                                    log.append("Add to published addressbook " + publishedNS.getName() + " failed for " + key);
                                             }
                                             nnew++;
                                             continue;
@@ -452,7 +452,7 @@ class Daemon {
                                             if (publishedNS != null) {
                                                 success = publishedNS.remove(poldname, dest);
                                                 if (log != null && !success)
-                                                    log.append("Remove from published address book " + publishedNS.getName() + " failed for " + poldname);
+                                                    log.append("Remove from published addressbook " + publishedNS.getName() + " failed for " + poldname);
                                             }
                                         } else {
                                             // mismatch, disallow
@@ -500,7 +500,7 @@ class Daemon {
                                 else
                                     success = publishedNS.putIfAbsent(key, dest, props);
                                 if (log != null && !success) {
-                                    log.append("Save to published address book " + publishedNS.getName() + " failed for new key " + key);
+                                    log.append("Save to published addressbook " + publishedNS.getName() + " failed for new key " + key);
                                 }
                             }
                             if (knownNames != null) {
@@ -540,7 +540,7 @@ class Daemon {
                                             if (publishedNS != null) {
                                                 success = publishedNS.remove(poldname, pod);
                                                 if (log != null && !success)
-                                                    log.append("Remove from published address book " + publishedNS.getName() + " failed for " + poldname);
+                                                    log.append("Remove from published addressbook " + publishedNS.getName() + " failed for " + poldname);
                                             }
                                         } else if (pod2 != null) {
                                             // mismatch, disallow
@@ -582,7 +582,7 @@ class Daemon {
                                                 if (publishedNS != null) {
                                                     success = publishedNS.remove(poldname, pod);
                                                     if (log != null && !success)
-                                                        log.append("Remove from published address book " + publishedNS.getName() + " failed for " + poldname);
+                                                        log.append("Remove from published addressbook " + publishedNS.getName() + " failed for " + poldname);
                                                 }
                                             } else if (pod2 != null) {
                                                 // mismatch, disallow
@@ -615,7 +615,7 @@ class Daemon {
                                                 if (publishedNS != null) {
                                                     success = publishedNS.remove(rev, pod);
                                                     if (log != null && !success)
-                                                        log.append("Remove from published address book " + publishedNS.getName() + " failed for " + rev);
+                                                        log.append("Remove from published addressbook " + publishedNS.getName() + " failed for " + rev);
                                                 }
                                             }
                                         }
@@ -650,7 +650,7 @@ class Daemon {
                         if (oldDest != null && !oldDest.toBase64().equals(entry.getValue())) {
                             log.append("Conflict for " + key + ". From: "
                                        + addressbook.getLocation()
-                                       + ". Destination in remote address book is "
+                                       + ". Destination in remote addressbook is "
                                        + entry.getValue());
                             conflict++;
                         } else {

@@ -45,8 +45,8 @@ public class I2PTunnelClient extends I2PTunnelClientBase {
      * @throws IllegalArgumentException if the I2PTunnel does not contain
      *                                  valid config to contact the router
      */
-    public I2PTunnelClient(int localPort, String destinations, Logging l, 
-                           boolean ownDest, EventDispatcher notifyThis, 
+    public I2PTunnelClient(int localPort, String destinations, Logging l,
+                           boolean ownDest, EventDispatcher notifyThis,
                            I2PTunnel tunnel, String pkf) throws IllegalArgumentException {
         super(localPort, ownDest, l, notifyThis,
               "Standard client on " + tunnel.listenHost + ':' + localPort,
@@ -97,7 +97,7 @@ public class I2PTunnelClient extends I2PTunnelClientBase {
                                   ", perhaps it is not up, will retry when connecting.");
                         else
                             l.log("Warning - Could not resolve " + name +
-                                  ", you must add it to your address book for it to work.");
+                                  ", you must add it to your addressbook for it to work.");
                     } else {
                         dests.add(addr.getAddress());
                     }
@@ -139,7 +139,7 @@ public class I2PTunnelClient extends I2PTunnelClientBase {
      *  @return in ms
      */
     public long getReadTimeout() { return readTimeout; }
-    
+
     protected void clientConnectionRun(Socket s) {
         I2PSocket i2ps = null;
         try {
@@ -174,7 +174,7 @@ public class I2PTunnelClient extends I2PTunnelClientBase {
             }
         }
     }
-    
+
     private final I2PSocketAddress pickDestination() {
         synchronized(_addrs) {
             int size = _addrs.size();

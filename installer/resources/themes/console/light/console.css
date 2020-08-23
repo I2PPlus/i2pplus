@@ -3451,8 +3451,8 @@ div.app:hover a:link, div.app:hover a:visited {
 
 div.app:hover img.app, .app:hover img {
   opacity: 1;
-  filter: drop-shadow(0 0 2px #f60);
-  transition: ease filter .3s;
+  filter: drop-shadow(0 0 1px #f60);
+  transition: ease filter .2s;
 }
 
 div.app:hover .applabel, .sitemapLink:hover .sitemapLabel {
@@ -6296,7 +6296,7 @@ p#helptranslate {
 
 .langselect input:hover + img {
   border: none !important;
-  filter: drop-shadow(0 0 2px #f60);
+  filter: drop-shadow(0 0 1px #f60);
 }
 
 .langselect input[name="lang"]:checked + img + .ui_lang {

@@ -1,5 +1,29 @@
+2020-08-21 dr|z3d
+ * Imagegen: improve presentation of random art, don't show b/w text
+   version, and load user-generated art in iframe
+
+2020-08-20 dr|z3d
+ * Console/webapps: Modify cache-control policies to mitigate against
+   reloading of static files (images, fonts etc)
+
+2020-08-17 dr|z3d
+ * Eephead: Display more server header fields, reduce default timeout,
+   set default retry to 1 (was 0), don't output console error
+
+2020-08-16 dr|z3d
+ * I2PTunnel: Add notbob.i2p to default http client tunnel jump links;
+   remove no.i2p jump link
+ * SusiDNS: Add notbob.i2p to default subscriptions (new installs only)
+
 2020-08-14 zzz
  * Profiles: Create profiles in the nonblocking path
+
+2020-08-03 dr|z3d
+ * I2PSnark:
+   - Only show peers active peers when Active filter enabled
+     (hide choked/interested)
+   - Reduce period for bandwidth/ETA calculation to enable realtime
+     display of upload/download/ETA information
 
 2020-08-01 zzz
  * Debian: Support libjson-simple-java 3 for bullseye
@@ -11,8 +35,14 @@
    - More efficient use of random data
    - Add KeyStore and SHA256 to CLI
 
+2020-07-30 dr|z3d
+ * SusiDNS: Use identicon images in books as "more info" links
+
 2020-07-28 zzz
  * Data: Don't check LS1 revocation signature
+
+2020-07-24 dr|z3d
+ * Router: Change I2PClient default sigtype from DSA_SHA1 to Ed25519
 
 2020-07-22 zzz
  * i2ptunnel:
@@ -28,17 +58,17 @@
  * NTCP: Atomics for NTCP final state (ticket #2701)
  * OCMOSJ: Don't lookup an expiring LS2 if unpublished
 
-2020-07-07 zzz
- * Reseed: Enforce minimum version in generated bundle
-
 2020-07-07 dr|z3d
  * Console: Add svg support for flags
+
+2020-07-07 zzz
+ * Reseed: Enforce minimum version in generated bundle
 
 2020-06-28 zzz
  * NetDB: Check signature in verify
 
 2020-06-26 dr|z3d
- * Console: Replace icons on /home and sitemap with svgs
+ * Console: Replace icons on /home and /sitemap with svgs
 
 2020-06-22 zzz
  * Sybil: Enable analysis and blocking by default
@@ -47,7 +77,7 @@
  * I2CP: Meta LS2 error code handling
 
 2020-06-11 dr|z3d
- * I2PTunnel: Only show blacklist/whitelist when enabled
+ * I2PTunnel: Only show blacklist/whitelist textarea when enabled
 
 2020-06-10 zzz
  * Util: Support hostname lookups in LookupDest CLI
