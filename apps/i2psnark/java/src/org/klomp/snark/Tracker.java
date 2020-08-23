@@ -1,6 +1,6 @@
 /*
- * Released into the public domain 
- * with no warranty of any kind, either expressed or implied.  
+ * Released into the public domain
+ * with no warranty of any kind, either expressed or implied.
  */
 package org.klomp.snark;
 
@@ -23,6 +23,6 @@ public class Tracker {
         this.name = name;
         this.announceURL = announceURL;
         this.baseURL = baseURL;
-        this.supportsDetails = name.contains("tracker2.postman.i2p");
+        this.supportsDetails = name.contains("tracker2.postman.i2p") || name.contains("torrfreedom.i2p");
     }
 }

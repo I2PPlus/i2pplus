@@ -2662,7 +2662,7 @@ public class I2PSnarkServlet extends BasicServlet {
      *  @since 0.8.4
      */
     private String getTrackerLinkUrl(String announce, byte[] infohash) {
-        // temporarily hardcoded for postman and torrfreedom, requires bytemonsoon patch for lookup by info_hash
+        // temporarily hardcoded for postman and torrfreedom, requires bytemonsoon patch or flyte for lookup by info_hash
         if (announce != null && (announce.startsWith("http://tracker2.postman.i2p/") || announce.startsWith("http://lnQ6yoBT") ||
               announce.startsWith("http://ahsplxkbhemefwvvml7qovzl5a2b5xo5i7lyai7ntdunvcyfdtna.b32.i2p/") ||
               announce.startsWith("http://torrfreedom.i2p/") || announce.startsWith("http://ZgNqT5tv") ||
