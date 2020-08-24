@@ -1250,9 +1250,17 @@ _:-ms-lang(x), .snarkTorrents tbody tr:hover, .snarkDirInfo tbody tr:hover {
 }
 
 @media screen and (min-width: 1500px) {
-.snarkTorrentInfo th:first-child img, #torrentinfostats img, #trackers img {
+.snarkTorrentInfo th:first-child img, #torrentinfostats img,  {
   margin: -3px 5px 0 !important;
   max-height: 18px !important;
+}
+
+#trackers {
+  padding-bottom: 6px !important;
+}
+
+.configsectionpanel .snarkConfigTitle img, #trackers .snarkConfigTitle img {
+  margin: -2px -2px 0 0 !important;
 }
 
 #torrentInfoStats .nowrap {
@@ -2302,23 +2310,27 @@ input[type="submit"]:focus, input[type="reset"]:focus, a.control:focus {
 }
 
 input.accept, input.accept:active {
-  background: #989 url(images/accept.png);
-  background: url(images/accept.png), linear-gradient(to bottom, #989, #878);
+  padding: 4px 6px 4px 23px !important;
+  background: #989 url(images/confirm.svg);
+  background: url(images/confirm.svg), linear-gradient(to bottom, #989, #878);
+  background-size: 13px 13px, 100% 100% !important;
 }
 
 input.accept:hover, input.accept:focus {
-  background: #767 url(images/accept.png);
-  background: url(images/accept.png), linear-gradient(to bottom, #767, #989);
+  background: #767 url(images/confirm.svg);
+  background: url(images/confirm.svg), linear-gradient(to bottom, #767, #989);
 }
 
 input.add, input.add:active {
-  background: #989 url(images/add.png);
-  background: url(images/add.png), linear-gradient(to bottom, #989, #878);
+  padding: 4px 6px 4px 23px !important;
+  background: #989 url(images/add.svg);
+  background: url(images/add.svg), linear-gradient(to bottom, #989, #878);
+  background-size: 13px 13px, 100% 100% !important;
 }
 
 input.add:hover, input.add:focus {
-  background: #767 url(images/add.png);
-  background: url(images/add.png), linear-gradient(to bottom, #767, #989);
+  background: #767 url(images/add.svg);
+  background: url(images/add.svg), linear-gradient(to bottom, #767, #989);
 }
 
 input.cancel, input.cancel:active {
@@ -2332,33 +2344,38 @@ input.cancel:hover, input.cancel:focus {
 }
 
 input.create, input.create:active {
-  background: #989 url(images/create.png);
-  background: url(images/create.png), linear-gradient(to bottom, #989, #878);
+  background: #989 url(images/create.svg);
+  background: url(images/create.svg), linear-gradient(to bottom, #989, #878);
+  background-size: 16px 16px, 100% 100% !important;
+  background-position: 6px calc(50% - 2px), center center !important;
 }
 
 input.create:hover, input.create:focus {
-  background: #767 url(images/create.png);
-  background: url(images/create.png), linear-gradient(to bottom, #767, #989);
+  background: #767 url(images/create.svg);
+  background: url(images/create.svg), linear-gradient(to bottom, #767, #989);
 }
 
 input.delete, input.delete:active {
-  background: #989 url(images/nuke.png);
-  background: url(images/nuke.png), linear-gradient(to bottom, #989, #878);
+  background: #989 url(images/nuke.svg);
+  background: url(images/nuke.svg), linear-gradient(to bottom, #989, #878);
+  background-size: 13px 13px, 100% 100% !important;
 }
 
 input.delete:hover, input.delete:focus {
-  background: #767 url(images/nuke.png);
-  background: url(images/nuke.png), linear-gradient(to bottom, #767, #989);
+  background: #767 url(images/nuke.svg);
+  background: url(images/nuke.svg), linear-gradient(to bottom, #767, #989);
 }
 
 input.reload, input.reload:active {
-  background: #989 url(images/restore.png);
-  background: url(images/restore.png), linear-gradient(to bottom, #989, #878);
+  padding: 4px 6px 4px 23px !important;
+  background: #989 url(images/restore.svg);
+  background: url(images/restore.svg), linear-gradient(to bottom, #989, #878);
+  background-size: 10px 10px, 100% 100%;
 }
 
 input.reload:hover, input.reload:focus {
-  background: #767 url(images/restore.png);
-  background: url(images/restore.png), linear-gradient(to bottom, #767, #989);
+  background: #767 url(images/restore.svg);
+  background: url(images/restore.svg), linear-gradient(to bottom, #767, #989);
 }
 
 input.reload[name="recheck"], input.reload[name="recheck"]:active, input.disabled[name="recheck"] {
