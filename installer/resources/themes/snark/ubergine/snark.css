@@ -1737,25 +1737,28 @@ a:active, a:visited:active {
   padding: 2px;
   content: "";
   display: inline-block;
-  width: 16px;
-  height: 16px;
+  width: 24px;
+  height: 24px;
   vertical-align: middle;
   border: 1px solid transparent;
   border-radius: 2px;
-  background: url(images/config.png) center center no-repeat;
+  background: url(images/configure.svg) center center no-repeat;
+  background-size: 20px 20px;
 }
 
 #configs a[href^="/config"]:hover::after {
   border: 1px solid #f60 !important;
-  background: #515 url(images/config.png) center center no-repeat;
-  background: url(images/config.png) center center no-repeat, linear-gradient(to bottom, #717 50%, #414 50%);
+  background: #515 url(images/configure_hover.svg) center center no-repeat;
+  background: url(images/configure_hover.svg) center center no-repeat, linear-gradient(to bottom, #717 50%, #414 50%);
+  background-size: 20px 20px, 100% 100%;
 }
 
 #configs a[href^="/config"]:active::after {
   border: 1px solid #212 !important;
   box-shadow: inset 3px 3px 2px 1px #202;
-  background: #414 url(images/config.png) center center no-repeat;
-  mix-blend-mode: overlay;
+  background: #414 url(images/configure_hover.svg) center center no-repeat;
+  background-size: 20px 20px;
+  mix-blend-mode: multiply;
   transform: scale(0.9) !important;
   transition: none !important;
 }
@@ -5267,7 +5270,7 @@ td.snarkTorrentStatus b::before {
   content: "";
   position: absolute;
   top: 100%;
-  left: 50%;
+  left: calc(50% + 9px);
   margin-left: -10px;
   border-width: 10px;
   border-style: solid;
@@ -5292,8 +5295,24 @@ td.snarkTorrentStatus b::before {
 }
 
 #bwHoverHelp img {
-  width: 16px;
-  height: 16px;
+  width: 0;
+  height: 0;
+}
+
+#bwHoverHelp::before {
+  margin: 0 -4px 0 8px;
+  width: 24px;
+  height: 24px;
+  display: inline-block;
+  vertical-align: middle;
+  background: url(images/infohelp.svg) center center no-repeat;
+  background-size: 24px 24px;
+  content: "";
+  opacity: .7;
+}
+
+#bwHoverHelp:hover::before {
+  opacity: 1;
 }
 
 #bwHoverHelp:hover + #bwHelp {
