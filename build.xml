@@ -1694,7 +1694,8 @@
     <target name="updaterWithJettyRepack" depends="prepjupdate, preplicenses, repack200, zipit" />
     <target name="updaterWithJettyAndJbigiRepack" depends="prepjupdate, prepjbigiupdate, preplicenses, repack200, zipit" />
     <target name="updaterWithJettyAndGeoIPRepack" depends="prepjupdate, prepgeoupdate, preplicenses, repack200, zipit" />
-    <target name="updaterWithJettyAndGeoIP" depends="prepjupdate, prepgeoupdate, preplicenses, zipit" />
+<!--    <target name="updaterWithJettyAndGeoIP" depends="prepjupdate, prepgeoupdate, preplicenses, zipit" />-->
+    <target name="updaterWithJettyAndGeoIP" depends="prepjupdate, prepgeoupdate, zipit" />
     <target name="updaterWithJettyFixes" depends="prepjupdatefixes, preplicenses, zipit" />
     <target name="updaterWithJettyFixesAndJbigi" depends="prepjupdatefixes, prepjbigiupdate, preplicenses, zipit" />
     <target name="updaterWithJettyFixesAndGeoIP" depends="prepjupdatefixes, prepgeoupdate, preplicenses, zipit" />
