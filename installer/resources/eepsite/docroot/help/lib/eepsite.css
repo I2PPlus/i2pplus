@@ -1,10 +1,14 @@
+html {
+  scrollbar-color: #383434 #181717;
+}
+
 body {
   margin: 3% 8%;
   text-align: justify;
   font-size: 10pt;
   color: #ffffe0;
   background: #111;
-  background: repeating-linear-gradient(to bottom, #111 2px, #333 4px);
+  background: repeating-linear-gradient(to bottom, #111 2px, #333 4px) #222;
   background-attachment: fixed;
 }
 

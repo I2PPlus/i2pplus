@@ -5,13 +5,17 @@
 <link rel="shortcut icon" type="image/svg" href="lib/server.svg">
 <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
 <style type="text/css">
+html {
+  scrollbar-color: #383434 #181717;
+}
+
 body {
   margin: 3% 8%;
   text-align: justify;
   font-size: 10pt;
   color: #ffffe0;
   background: #111;
-  background: repeating-linear-gradient(to bottom, #111 2px, #333 4px);
+  background: repeating-linear-gradient(to bottom, #111 2px, #333 4px) #222;
   background-attachment: fixed;
 }
 
@@ -459,7 +463,6 @@ th {
 
 <p class="notify warn"><b>Note:</b> On some Apache installations, the <a href="https://httpd.apache.org/docs/2.4/mod/mod_status.html" target="blank" class="sitelink external">mod_status</a> and <a href="https://httpd.apache.org/docs/2.4/mod/mod_info.html" target="blank" class="sitelink external">mod_info</a> modules are enabled by default. It is important to disable these, or otherwise protect access to the urls, to avoid compromising the anonymity and security of your server.</p>
 
-</div>
 </div>
 </body>
 </html>
