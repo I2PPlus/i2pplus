@@ -1413,7 +1413,7 @@
         <mkdir dir="pkg-temp/eepsite" />
         <copy todir="pkg-temp/eepsite/" >
             <fileset dir="installer/resources/eepsite/" excludes="**/.placeholder" />
-            <fileset dir="installer/resources/eepsite/docroot/.resources/" />
+            <fileset dir="installer/resources/eepsite/docroot/.resources/" includes="*.html *.css" />
         </copy>
         <copy todir="pkg-temp/eepsite-jetty9.3" >
             <fileset dir="installer/resources/eepsite-jetty9.3" />
@@ -1881,7 +1881,7 @@
             <fileset dir="installer/resources/eepsite" includes="*.xml contexts/* etc/*" />
         </copy>
         <copy todir="pkg-temp/eepsite/docroot" >
-            <fileset dir="installer/resources/eepsite/docroot" includes=".resources/*" />
+            <fileset dir="installer/resources/eepsite/docroot" includes="*.html *.ico .resources/* help/*" />
         </copy>
         <copy todir="pkg-temp/eepsite-jetty9.3" >
             <fileset dir="installer/resources/eepsite-jetty9.3" />
