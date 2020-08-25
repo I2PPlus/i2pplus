@@ -2,9 +2,10 @@
 <project basedir="." default="all" name="i2p"
     xmlns:artifact="antlib:org.apache.maven.artifact.ant">
 
-    <!-- Include property files so that values can be easily overridden.
+    <!--
+         Include property files so that values can be easily overridden.
          Users should create an override.properties file to make changes.
-     -->
+    -->
     <property file="override.properties"/>
     <property file="build.properties"/>
     <!--  When changing, also change javadoc URL in build.properties, and checksum in apps/jetty/build.xml -->
@@ -293,10 +294,11 @@
 
     <target name="builddepSmall" depends="buildrouter, buildSystray, buildDesktopGui, buildRouterConsole, buildStreaming, buildI2PTunnel, buildAddressbook" />
 
-    <!-- start of buildX, one for each sub-build.xml.
+    <!--
+         start of buildX, one for each sub-build.xml.
          Do not put ant tasks in the sub-build.xmls anymore,
          so the build will go faster.
-      -->
+    -->
 
     <target name="-setepoch">
         <exec executable="date" outputproperty="epoch" errorproperty="dc.error" failifexecutionfails="true" >
@@ -666,12 +668,12 @@
                  classpath="${basedir}/installer/lib/launch4j/launch4j.jar:${basedir}/installer/lib/launch4j/lib/xstream.jar" />
      </target>
 
-    <!-- end launch4j targets -->
+     <!-- end launch4j targets -->
 
      <!--
           the files are now copied to the build directory
           in the build* targets
-      -->
+     -->
      <target name="jar" depends="jarSmall" />
      <target name="jarSmall" depends="builddepSmall" />
 
@@ -956,8 +958,10 @@
                 <pathelement location="core/java/build/gnu-getopt.jar" />
                 <pathelement location="core/java/build/json-simple.jar" />
             </classpath>
-            <!-- These variables are stored in build.properties.
-                  End-users can override by creating the file override.properties -->
+            <!--
+                  These variables are stored in build.properties.
+                  End-users can override by creating the file override.properties
+            -->
             <link offline="true" href="${javasedocs.url}" packagelistLoc="installer/resources/package-lists/java/" />
             <link offline="true" href="${javaeedocs.url}" packagelistLoc="installer/resources/package-lists/javaee/" />
             <link offline="true" href="${jettydocs.url}" packagelistLoc="installer/resources/package-lists/jetty/" />
@@ -1170,12 +1174,11 @@
         <delete dir="launchers/output" quiet="true" />
         <delete dir="launchers/project/project" quiet="true" />
         <delete dir="launchers/project/target" quiet="true" />
-	<!--
-		NOTE! We need to turn off the default excludes for these
-		patterns to work.
-		These are the defaultexcludes in Ant as seen on
-		http://ant.apache.org/manual/CoreTasks/defaultexcludes.html
-		     **/*~
+        <!--
+             NOTE! We need to turn off the default excludes for these patterns to work.
+             These are the defaultexcludes in Ant as seen on
+             http://ant.apache.org/manual/CoreTasks/defaultexcludes.html
+                     **/*~
                      **/#*#
                      **/.#*
                      **/%*%
@@ -1189,27 +1192,23 @@
                      **/.svn
                      **/.svn/**
                      **/.DS_Store
-		The only recourse is to remove the offending ones.
-		We do this here, as we only need one change, and then put it
-		back after we are done with it.
-	-->
-	<defaultexcludes remove="**/*~"/>
+             The only recourse is to remove the offending ones.
+             We do this here, as we only need one change, and then put it
+             back after we are done with it.
+        -->
+        <defaultexcludes remove="**/*~"/>
 
         <delete>
             <fileset dir="." includes="**/*.class **/*.java~ **/*.txt~ **/*.xml~ **/*.sh~ **/*.SlackBuild~ **/*.*~" />
-	    <!--
-	    	Less common, but they pollute my workspace here, so we
-            	might as well nuke these as well. Are there any others?
-
-            	!!??? Why don't we just nuke "**/*~" ???!!
-
-            	++Sponge
+            <!--
+                 Less common, but they pollute my workspace here, so we
+                 might as well nuke these as well. Are there any others?
+                 !!??? Why don't we just nuke "**/*~" ???!!
+                 ++Sponge
             -->
         </delete>
-	<!--
-		Now we put the defaults back
-	-->
-	<defaultexcludes default="true"/>
+    <!-- Now we put the defaults back -->
+    <defaultexcludes default="true"/>
     </target>
 
     <target name="webappDistclean">
@@ -1237,11 +1236,12 @@
         <copy todir="pkg-temp/lib/wrapper/solaris/">
             <fileset dir="installer/lib/wrapper/solaris/" excludes="*.txt" />
         </copy>
-     <!-- Force using the new wrapper.jar.
-          The new jar with the old windows binaries will output a warning on windows.
-          We do not generate release files from this target.
-          See preppkg-windows-only target below.
-      -->
+        <!--
+             Force using the new wrapper.jar.
+             The new jar with the old windows binaries will output a warning on windows.
+             We do not generate release files from this target.
+             See preppkg-windows-only target below.
+        -->
         <copy overwrite="true" file="installer/lib/wrapper/all/wrapper.jar" todir="pkg-temp/lib" />
     </target>
 
@@ -1320,8 +1320,8 @@
     <target name="preppkg-osx" depends="preppkg-unix">
         <!--<copy file="installer/resources/I2P Router Console.webloc" todir="pkg-temp/" />-->
         <copy todir="pkg-temp/Start I2P Router.app">
-	    <fileset dir="installer/resources/Start I2P Router.app" />
-	</copy>
+        <fileset dir="installer/resources/Start I2P Router.app" />
+    </copy>
         <copy todir="pkg-temp/lib/wrapper/macosx/">
             <fileset dir="installer/lib/wrapper/macosx/" excludes="*.txt" />
         </copy>
@@ -1358,12 +1358,13 @@
 
     <target name="preppkg-windows-only" depends="preppkg-windows, jbigi-windows-only">
         <copy file="build/jbigi.jar" todir="pkg-temp/lib" />
-     <!-- Win binaries are down-rev from the others, so use the old jar.
-          This will not overwrite, so preppkg (for all OSes) will get the new jar with
-          the old binaries, which will probably work but will output a warning.
-          The windows-only installer will get the correct jar.
+        <!--
+             Win binaries are down-rev from the others, so use the old jar.
+             This will not overwrite, so preppkg (for all OSes) will get the new jar with
+             the old binaries, which will probably work but will output a warning.
+             The windows-only installer will get the correct jar.
         <copy file="installer/lib/wrapper/all/wrapper.jar" todir="pkg-temp/lib" />
-      -->
+        -->
         <copy overwrite="true" file="installer/lib/wrapper/win-all/wrapper.jar" todir="pkg-temp/lib" />
     </target>
 
@@ -1510,13 +1511,15 @@
               The license in launch4j/ is a BSD license for launch4j
               The license in launch4j/head is a MIT license for the code that is actually wrapped around the jars
               So we include the MIT one in our binary package
-         -->
+        -->
         <copy file="installer/lib/launch4j/head/LICENSE.txt" tofile="pkg-temp/licenses/LICENSE-Launch4j.txt" />
         <!--  Not sure if these are used or should be included -->
+        <!--
         <copy file="installer/lib/launch4j/lib/foxtrot.LICENSE.txt" tofile="pkg-temp/licenses/LICENSE-Foxtrot.txt" />
         <copy file="installer/lib/launch4j/lib/JGoodies.Forms.LICENSE.txt" tofile="pkg-temp/licenses/LICENSE-JGoodies-Forms.txt" />
         <copy file="installer/lib/launch4j/lib/JGoodies.Looks.LICENSE.txt" tofile="pkg-temp/licenses/LICENSE-JGoodies-Looks.txt" />
         <copy file="installer/lib/launch4j/lib/XStream.LICENSE.txt" tofile="pkg-temp/licenses/LICENSE-XStream.txt" />
+        -->
     </target>
 
     <target name="prepthemeupdates">
@@ -1528,14 +1531,14 @@
     </target>
 
     <target name="minifycss">
-<!--
+        <!--
         <mkdir dir="pkg-temp/docs/themes_uncompressed/" />
         <copy todir="pkg-temp/docs/themes_uncompressed" >
             <fileset dir="installer/resources/themes/">
             <include name="**/*.css" />
             </fileset>
         </copy>
--->
+        -->
         <copy todir="pkg-temp/docs/themes/minified/" >
             <fileset dir="installer/resources/themes/">
             <include name="**/*.*" />
@@ -1650,7 +1653,7 @@
                which will be checked first by flags.jsp.
                The flags/ dir is the original set from famfamfam,
                which may be symlinked in package installs.
-           -->
+          -->
           <fileset dir="installer/resources/" includes="icons/flags16x11/*" />
           <!-- flags48x48 added in 0.9.32 -->
           <fileset dir="installer/resources/" includes="icons/flags48x48/*" />
@@ -1694,7 +1697,9 @@
     <target name="updaterWithJettyRepack" depends="prepjupdate, preplicenses, repack200, zipit" />
     <target name="updaterWithJettyAndJbigiRepack" depends="prepjupdate, prepjbigiupdate, preplicenses, repack200, zipit" />
     <target name="updaterWithJettyAndGeoIPRepack" depends="prepjupdate, prepgeoupdate, preplicenses, repack200, zipit" />
-<!--    <target name="updaterWithJettyAndGeoIP" depends="prepjupdate, prepgeoupdate, preplicenses, zipit" />-->
+    <!--
+         <target name="updaterWithJettyAndGeoIP" depends="prepjupdate, prepgeoupdate, preplicenses, zipit" />
+    -->
     <target name="updaterWithJettyAndGeoIP" depends="prepjupdate, prepgeoupdate, zipit" />
     <target name="updaterWithJettyFixes" depends="prepjupdatefixes, preplicenses, zipit" />
     <target name="updaterWithJettyFixesAndJbigi" depends="prepjupdatefixes, prepjbigiupdate, preplicenses, zipit" />
@@ -1719,12 +1724,12 @@
              As of release 0.8.8, the router will enforce a zipfile comment equal to the
              version number in the sud/su2 header, since the version in the header is NOT
              covered by the signature.
-         -->
+        -->
         <zip destfile="i2pupdate.zip" basedir="pkg-temp" whenempty="fail" comment="${release.number}" />
-       <!-- just a test, makes almost no difference
+        <!-- just a test, makes almost no difference
         <tar destfile="i2pupdate.tgz" basedir="pkg-temp" compression="gzip" />
         <tar destfile="i2pupdate.tbz" basedir="pkg-temp" compression="bzip2" />
-       -->
+        -->
     </target>
 
     <target name="zipit200" depends="getReleaseNumber" >
@@ -1733,9 +1738,10 @@
 
     <target name="pack200">
         <!-- pack200 will only pack to a .pack file, and only from a .jar file, so we put another .jar on the end -->
-        <!-- can't pack an empty jar or one without classes, it will fail to unpack on Java 5;
-          -  see http://bugs.sun.com/view_bug.do?bug_id=6712743
-          -->
+        <!--
+             can't pack an empty jar or one without classes, it will fail to unpack on Java 5;
+             - see http://bugs.sun.com/view_bug.do?bug_id=6712743
+        -->
         <!-- *nix here -->
         <exec executable="sh" osfamily="unix" failonerror="true">
             <arg value="-c" />
@@ -1786,17 +1792,17 @@
         <copy file="build/i2psnark.jar" todir="pkg-temp/lib" />
         <!-- include systray changes in 0.7.5 -->
         <copy file="build/systray.jar" todir="pkg-temp/lib/" />
-       <!-- removed from updater in 0.9, added back in 0.9.26 -->
+        <!-- removed from updater in 0.9, added back in 0.9.26 -->
         <copy file="build/desktopgui.jar" todir="pkg-temp/lib/" />
         <copy file="build/susimail.war" todir="pkg-temp/webapps/" />
         <copy file="build/susidns.war" todir="pkg-temp/webapps/" />
         <copy file="build/imagegen.war" todir="pkg-temp/webapps/" />
         <copy file="build/jsonrpc.war" todir="pkg-temp/webapps/" />
         <!-- as of 0.7.12; last changed in 0.9; removed from update in 0.9.26 -->
-      <!--
+        <!--
         <copy file="apps/susidns/src/lib/jstl.jar" todir="pkg-temp/lib/" />
         <copy file="apps/susidns/src/lib/standard.jar" todir="pkg-temp/lib/" />
-       -->
+        -->
         <copy file="build/i2psnark.war" todir="pkg-temp/webapps/" />
         <copy file="installer/resources/deletelist.txt" todir="pkg-temp/" />
         <copy file="installer/resources/blocklist.txt" todir="pkg-temp/" />
@@ -1832,9 +1838,9 @@
         <!-- decapitalized the file in 0.7.8 -->
         <copy file="installer/resources/countries.txt" todir="pkg-temp/geoip/" />
         <copy file="installer/resources/continents.txt" todir="pkg-temp/geoip/" />
-      <!--
+        <!--
         <copy file="installer/resources/public-suffix-list.txt" todir="pkg-temp/geoip/" />
-       -->
+        -->
     </target>
 
     <target name="prepupdateRouter" depends="buildrouter, deletepkg-temp">
@@ -1851,25 +1857,26 @@
     <target name="prepgeoupdate" depends="prepgeoupdate-unlesspkg" >
         <copy file="installer/resources/countries.txt" todir="pkg-temp/geoip/" />
         <copy file="installer/resources/continents.txt" todir="pkg-temp/geoip/" />
-      <!--
+        <!--
         <copy file="installer/resources/public-suffix-list.txt" todir="pkg-temp/geoip/" />
-       -->
+        -->
     </target>
 
     <!-- GeoIP files, set withGeoIPDatabase=true in override.properties to prevent -->
     <!-- As of 0.9.26, the files are not included in Debian/Ubuntu builds. -->
     <target name="prepgeoupdate-unlesspkg" unless="${with-geoip-database}" >
         <mkdir dir="pkg-temp/geoip" />
-      <!--
+        <!--
         <copy file="installer/resources/geoip.txt" todir="pkg-temp/geoip/" />
         <copy file="installer/resources/geoipv6.dat.gz" todir="pkg-temp/geoip/" />
-       -->
+        -->
         <gunzip src="installer/resources/GeoLite2-Country.mmdb.gz" dest="pkg-temp/geoip/GeoLite2-Country.mmdb" />
     </target>
 
-    <!-- All jetty jars required for update.
-         TODO do we need to bother updating jasper?
-      -->
+    <!--
+        All jetty jars required for update.
+        TODO do we need to bother updating jasper?
+    -->
     <target name="prepjupdate" depends="prepupdate, buildWEB">
         <copy todir="pkg-temp/lib" >
             <fileset dir="build" includes="commons*.jar jasper*.jar javax*.jar jetty*.jar jsp*.jar org.mortbay.*.jar" />
@@ -1963,7 +1970,7 @@
     <!-- This makes i2pinstall.exe from install.jar using the bundled launch4j.
          Warning: launch4j-created files CANNOT be Windows-signed.
          They will be corrupted.
-      -->
+    -->
     <target name="installerexe" depends="launch4j" unless="noExe">
         <echo message="See the file &quot;build.properties&quot; if this step fails." />
         <!-- now the installer exe -->
@@ -1973,7 +1980,7 @@
 
     <!-- This makes i2pinstall.exe from install.jar using IzPack5's izpack2exe.py (not bundled)
          izpack2exe-created files CAN be Windows-signed.
-      -->
+    -->
     <target name="installer5exe" unless="noExe">
         <!-- You must have the optional IzPack utils installed for this -->
         <!-- izpack doesn't come with +x permission when installed -->
@@ -1995,13 +2002,13 @@
              (but not our icon, sadly)
 
              More info: https://izpack.atlassian.net/wiki/spaces/IZPACK/pages/491541/IzPack+Utilities
-         -->
+        -->
 
         <exec executable="${izpack5.home}/utils/wrappers/izpack2exe/izpack2exe.py" failonerror="true">
             <arg value="--file=${basedir}/install.jar" />
-<!--
+            <!--
             <arg value="-\-with-7z=${izpack5.home}/utils/wrappers/izpack2exe/7za" />
--->
+            -->
             <arg value="--with-7z=/usr/bin/7zr" />
             <arg value="--no-upx" />
             <arg value="--output=${basedir}/i2pinstall.exe" />
@@ -2123,10 +2130,10 @@
         <copy file="core/java/build/i2ptest.jar" todir="build" />
         <copy file="router/java/build/routertest.jar" todir="build" />
         <!-- broken -->
-      <!--
+        <!--
         <ant dir="apps/ministreaming/java/" target="junit.compileTest" />
         <ant dir="apps/streaming/java/" target="junit.compileTest" />
-       -->
+        -->
     </target>
     <target name="prepTest" depends="prepupdate, buildTest">
         <!-- overwrite i2p.jar and router.jar with the test versions -->
@@ -2191,7 +2198,7 @@
     <target name="jenkins.cobertura.report" depends="cobertura.report">
         <!--
              The jenkins cobertura plugin couldn't find the source files.
-         -->
+        -->
         <replaceregexp byline="true" file="reports/core/cobertura/coverage.xml"
             match='filename="net' replace='filename="core/java/src/net'/>
         <replaceregexp byline="true" file="reports/core/cobertura/coverage.xml"
@@ -2233,10 +2240,12 @@
         <ant dir="core/java/" target="bench.jar" />
     </target>
 
-    <!-- <target name="syndie" >
+    <!--
+    <target name="syndie" >
         <ant dir="apps/syndie/java/" target="standalone" />
         <copy file="apps/syndie/java/syndie-standalone.zip" todir="." />
-    </target> -->
+    </target>
+    -->
 
     <!-- standalone i2psnark zip -->
     <target name="i2psnark" depends="buildStreaming, buildJetty, buildSystray" >
@@ -2316,8 +2325,12 @@
             <arg value="build/utility.jar"/>
         </exec>
         <echo message="Findbugs output written to findbugs.html" />
-<!--        <echo message="Findbugs output stored in i2p.fba" /> -->
-<!--        <echo message="Now run: findbugs i2p.fba" /> -->
+        <!--
+        <echo message="Findbugs output stored in i2p.fba" />
+        -->
+        <!--
+        <echo message="Now run: findbugs i2p.fba" />
+        -->
     </target>
 
     <!-- this is the same dependency as pkg, but with updater200 in the middle,
@@ -2342,7 +2355,9 @@
         <!-- now build and verify the packed su3 from the packed zip -->
         <!-- TODO if i2pupdate200.zip is present zip it instead -->
         <su3sign infile="i2pupdate.zip" sigtype="ROUTER" outfile="i2pupdate.su3" su3.ver="${release.number}" />
-<!--        <su3sign infile="i2pupdate200.zip" sigtype="ROUTER" outfile="i2pupdate.su3" su3.ver="${release.number}" /> -->
+        <!--
+        <su3sign infile="i2pupdate200.zip" sigtype="ROUTER" outfile="i2pupdate.su3" su3.ver="${release.number}" />
+        -->
         <!-- this will use the monotonerc file in the current workspace -->
         <echo message="Checking out fresh copy into ../i2p-${release.number} for tarballing:" />
         <delete dir="../i2p-${release.number}" />
@@ -2371,9 +2386,9 @@
         </fail>
 
         <!-- the gpgsign macro sets the permission of signed files and the sigs themselves to 444 -->
-       <!--
+        <!--
         <gpgsign file="i2pinstall_${release.number}_windows.exe" />
-       -->
+        -->
         <gpgsign file="i2pinstall_${release.number}.jar" />
         <gpgsign file="i2psource_${release.number}.tar.bz2" />
         <gpgsign file="i2pupdate_${release.number}.zip" />
@@ -2386,16 +2401,16 @@
         <echo message="File sizes:" />
         <exec executable="ls" failonerror="true">
             <arg value="-l" />
-           <!--
+            <!--
             <arg value="i2pinstall_${release.number}_windows.exe" />
-           -->
+            -->
             <arg value="i2pinstall_${release.number}.jar" />
             <arg value="i2psource_${release.number}.tar.bz2" />
             <arg value="i2pupdate_${release.number}.zip" />
             <arg value="i2pupdate.su3" />
-           <!--
+            <!--
             <arg value="i2pinstall_${release.number}_windows.exe.sig" />
-           -->
+            -->
             <arg value="i2pinstall_${release.number}.jar.sig" />
             <arg value="i2psource_${release.number}.tar.bz2.sig" />
             <arg value="i2pupdate_${release.number}.zip.sig" />
@@ -2616,9 +2631,7 @@
         </ant>
     </target>
 
-    <!--
-      - See installer/resources/maven-dev-release.sh
-      -->
+    <!-- See installer/resources/maven-dev-release.sh -->
     <target name="mavenLocal" depends="mavenLocal.deps">
         <delete dir="./pkg-mavencentral" />
         <mkdir dir="./pkg-mavencentral" />
@@ -2629,7 +2642,6 @@
         <copy file="build/streaming.jar" tofile="pkg-mavencentral/streaming-${release.number}.jar" />
         <copy file="apps/jetty/build/servlet-i2p-${release.number}.jar" todir="pkg-mavencentral/" />
     </target>
-
 
     <target name="debian" depends="debian-clean, debchange, debian-binary" />
     <target name="precise" depends="copy-precise, debian" />
@@ -2797,9 +2809,9 @@
             <!-- libjson-simple-java -->
             <fileset dir="../i2p-${Extended.Version}/core/java/src/org/json" />
             <!-- libhttpclient-java and libhttpcore-java -->
-          <!--
+            <!--
             <fileset dir="../i2p-${Extended.Version}/core/java/src/org/apache/http" />
-           -->
+            -->
             <!-- geoip-database -->
             <file name="../i2p-${Extended.Version}/installer/resources/geoip.txt" />
             <file name="../i2p-${Extended.Version}/installer/resources/geoipv6.dat.gz" />
@@ -2829,10 +2841,11 @@
         </tar>
     </target>
 
-    <!-- same as debian-release-tarball but with bundled jetty
-      -  We add a 'p' to the release name and tarball since the source package is different;
-      -  Launchpad does not allow different source packages with the same name.
-      -->
+    <!--
+        same as debian-release-tarball but with bundled jetty
+        -  We add a 'p' to the release name and tarball since the source package is different;
+        -  Launchpad does not allow different source packages with the same name.
+    -->
     <target name="precise-release-tarball" depends="getExtendedVersion, failIfNoVCS">
         <property name="debian.tarball.name" value="i2p_${release.number}p.orig.tar.bz2" />
         <echo message="Checking out fresh copy into ../i2p-${Extended.Version} for tarballing:" />
@@ -2879,22 +2892,22 @@
             <!-- libgetopt-java -->
             <fileset dir="../i2p-${Extended.Version}/core/java/src/gnu/getopt" />
             <!-- libhttpclient-java and libhttpcore-java -->
-          <!--
+            <!--
             <fileset dir="../i2p-${Extended.Version}/core/java/src/org/apache/http" />
-           -->
+            -->
             <!-- geoip-database -->
             <file name="../i2p-${Extended.Version}/installer/resources/geoip.txt" />
             <file name="../i2p-${Extended.Version}/installer/resources/geoipv6.dat.gz" />
             <file name="../i2p-${Extended.Version}/installer/resources/GeoLite2-Country.mmdb.gz" />
             <!-- libjetty9-java -->
-          <!--
+            <!--
             <fileset dir="../i2p-${Extended.Version}/apps/jetty/jetty-distribution-${jetty.ver}" />
             <fileset dir="../i2p-${Extended.Version}/apps/jetty/apache-tomcat-${tomcat.ver}" />
-           -->
+            -->
             <!-- libjstl1.1-java or glassfish-javaee -->
-          <!--
+            <!--
             <file name="../i2p-${Extended.Version}/apps/susidns/src/lib/jstl.jar" />
-           -->
+            -->
             <!-- libjakarta-taglibs-standard-java or glassfish-javaee -->
             <file name="../i2p-${Extended.Version}/apps/susidns/src/lib/standard.jar" />
             <!-- famfamfam-flag-png is in trusty but not precise, so leave them in the source package for both -->
@@ -2915,11 +2928,12 @@
     </target>
 
     <!-- xenial/yakkety only -->
-    <!-- same as debian-release-tarball but with bundled jstl.jar
-         (there's no libtaglibs-standard-* packages)
-      -  We add a 'x' to the release name and tarball since the source package is different;
-      -  Launchpad does not allow different source packages with the same name.
-      -->
+    <!--
+        same as debian-release-tarball but with bundled jstl.jar
+        (there's no libtaglibs-standard-* packages)
+        -  We add a 'x' to the release name and tarball since the source package is different;
+        -  Launchpad does not allow different source packages with the same name.
+    -->
     <target name="xenial-release-tarball" depends="getExtendedVersion, failIfNoVCS">
         <property name="debian.tarball.name" value="i2p_${release.number}x.orig.tar.bz2" />
         <echo message="Checking out fresh copy into ../i2p-${Extended.Version} for tarballing:" />
@@ -2963,18 +2977,18 @@
             <file name="../i2p-${Extended.Version}/settings.gradle" />
             <fileset dir="../i2p-${Extended.Version}/core/java/src/gnu/gettext" />
             <fileset dir="../i2p-${Extended.Version}/core/java/src/gnu/getopt" />
-          <!--
+            <!--
             <fileset dir="../i2p-${Extended.Version}/core/java/src/org/json" />
             <fileset dir="../i2p-${Extended.Version}/core/java/src/org/apache/http" />
-           -->
+            -->
             <file name="../i2p-${Extended.Version}/installer/resources/geoip.txt" />
             <file name="../i2p-${Extended.Version}/installer/resources/geoipv6.dat.gz" />
             <file name="../i2p-${Extended.Version}/installer/resources/GeoLite2-Country.mmdb.gz" />
             <fileset dir="../i2p-${Extended.Version}/apps/jetty/jetty-distribution-${jetty.ver}" />
             <fileset dir="../i2p-${Extended.Version}/apps/jetty/apache-tomcat-${tomcat.ver}" />
-          <!--
+            <!--
             <file name="../i2p-${Extended.Version}/apps/susidns/src/lib/jstl.jar" />
-           -->
+            -->
             <file name="../i2p-${Extended.Version}/apps/susidns/src/lib/standard.jar" />
             <fileset dir="../i2p-${Extended.Version}/installer/resources/icons/flags" />
             <!-- anything added above, add in debian-tarball also -->
@@ -3039,9 +3053,9 @@
             <fileset dir="../i2p-${Extended.Version}/core/java/src/gnu/gettext" />
             <fileset dir="../i2p-${Extended.Version}/core/java/src/gnu/getopt" />
             <fileset dir="../i2p-${Extended.Version}/core/java/src/org/json" />
-          <!--
+            <!--
             <fileset dir="../i2p-${Extended.Version}/core/java/src/org/apache/http" />
-           -->
+            -->
             <file name="../i2p-${Extended.Version}/installer/resources/geoip.txt" />
             <file name="../i2p-${Extended.Version}/installer/resources/geoipv6.dat.gz" />
             <file name="../i2p-${Extended.Version}/installer/resources/GeoLite2-Country.mmdb.gz" />
@@ -3084,93 +3098,96 @@
         <exec dir="debian" executable="./makerepo.sh" failonerror="true"/>
     </target>
 
-<!-- the following are appened to help build barebone portable version,
-     none of the above is modified for this purpose -->
-	<target name = "pkg-portable-clean">
-		<delete dir="build/" />
-		<delete dir="pkg-temp/" />
-		<delete>
-			<fileset dir="." includes="portable-**.zip**" />
-		</delete>
-	</target>
-<!-- build a portable archive -->
+    <!--
+        the following are appened to help build barebone portable version,
+        none of the above is modified for this purpose
+    -->
+    <target name = "pkg-portable-clean">
+        <delete dir="build/" />
+        <delete dir="pkg-temp/" />
+        <delete>
+            <fileset dir="." includes="portable-**.zip**" />
+        </delete>
+    </target>
+    <!-- build a portable archive -->
 
-<!-- *0* Since we simply pack all files in folder "build/" into our archieve,
-		we need to make sure its small, with NO redundent jars or wars.
-		thus cleaning is required before each build-->
-	<target name="buildSmallOnly" depends="pkg-portable-clean,buildSmall"/>
+    <!--
+        *0* Since we simply pack all files in folder "build/" into our archive,
+         we need to make sure its small, with NO redundent jars or wars.
+         thus cleaning is required before each build
+    -->
+    <target name="buildSmallOnly" depends="pkg-portable-clean,buildSmall"/>
 
-<!-- *1* preparing the jars by OS dependent de-bloating -->
-	<target name="preppkg-portable-win32-jbigi" depends="buildSmallOnly, jbigi-windows-only" />
+    <!-- *1* preparing the jars by OS dependent de-bloating -->
+    <target name="preppkg-portable-win32-jbigi" depends="buildSmallOnly, jbigi-windows-only" />
 
-	<target name="preppkg-portable-linux-jbigi"  depends="buildSmallOnly, jbigi-linux-only" />
+    <target name="preppkg-portable-linux-jbigi"  depends="buildSmallOnly, jbigi-linux-only" />
 
-<!-- *2* os independent procedure  -->
-	<target name="preppkg-portable-basic" >
-		<mkdir dir="pkg-temp" />
-			<!-- non OS dependent configurations only, don't add *nux/win stuff here -->
-			<copy todir="pkg-temp">
-				<fileset dir="installer/resources/portable/configs/" />
-			</copy>
-			<copy file="installer/resources/blocklist.txt" todir="pkg-temp/" />
-			<copy file="installer/resources/hosts.txt" todir="pkg-temp/" />
-			<copy file="installer/resources/readme.license.txt" todir="pkg-temp/" />
-		<mkdir dir="pkg-temp/addressbook" />
-			<copy file="apps/addressbook/subscriptions.txt" todir="pkg-temp/addressbook/" />
-			<copy file="apps/addressbook/myhosts.txt"  todir="pkg-temp/addressbook/" />
-			<!-- config.txt is in installer/resources/portable -->
-		<mkdir dir="pkg-temp/docs" />
-			<copy file="installer/resources/initialNews/initialNews.xml" tofile="pkg-temp/docs/news.xml" overwrite="true" />
-			<copy file="installer/resources/readme/readme.html" tofile="pkg-temp/docs/readme.html" />
-			<copy file="installer/resources/startconsole.html" todir="pkg-temp/docs/" />
-			<copy file="installer/resources/start.ico" todir="pkg-temp/docs/" />
-			<copy file="installer/resources/console.ico" todir="pkg-temp/docs/" />
-			<!-- HTTP Header files, english only,
-				if you need a different lang do it in a seperate target -->
-			<copy todir="pkg-temp/docs/" >
-				<fileset dir="installer/resources/proxy/"  includes="**-header.ht" />
-			</copy>
-			<!-- Theme light only -->
-			<copy todir="pkg-temp/docs/themes/console/light/" overwrite="true" >
-				<fileset dir="installer/resources/themes/console/light/" includes="**.css" />
-			</copy>
-			<copy file="installer/resources/themes/console/light/console_big.css" todir="portable/docs/themes/console/light/" />
-			<copy todir="pkg-temp/docs/themes/console/images/" >
-				<fileset dir="installer/resources/themes/console/images/" />
-			</copy>
-			<!-- FLAGs for language icon (not for ip)-->
-			<copy todir="pkg-temp/docs/icons" >
-				<fileset dir="installer/resources/icons" />
-			</copy>
-		<mkdir dir="pkg-temp/webapps" />
-			<copy todir="pkg-temp/webapps/">
-				<fileset dir="build/" includes="**.war" />
-			</copy>
-		<mkdir dir="pkg-temp/lib" />
-			<copy todir ="pkg-temp/lib/" >
-				<fileset dir="build/" includes="**.jar" />
-			</copy>
-			<!-- 3rd party jars from apps/  -->
-				<!-- jrobin - without jobin , you lose graphs and get a lot of error entries in logs -->
-			<copy file="build/jrobin.jar" tofile="pkg-temp/lib/jrobin.jar" />
-	</target>
-<!-- *3* os dependent procedure/commands -->
-	<target name = "preppkg-portable-win32" depends="preppkg-portable-win32-jbigi,preppkg-portable-basic">
-			<!--wrapper - don't even think about it! i2p consumes apparently more mem without it on win32-->
-		<copy file="installer/lib/wrapper/win32/wrapper.dll" todir="pkg-temp/lib" />
-		<copy file="installer/lib/wrapper/all/wrapper.jar" todir="pkg-temp/lib" />
-		<copy file="installer/lib/wrapper/win32/I2Psvc.exe" tofile="pkg-temp/i2psvc.ex_" />
-			<!--  copy the unpack/start batchfiles -->
-		<copy todir="pkg-temp">
-			<fileset dir="installer/resources/portable/win32/" />
-		</copy>
-	</target>
-<!-- *4* command for windows package -->
-	<target name = "pkg-portable-win32"	depends="preppkg-portable-win32, pack200" >
-		<!-- i need the portable\ folder in .zip so basedir is set to . -->
-		<move file="pkg-temp" tofile="portable"/>
-		<zip destfile="portable-win32.zip" basedir="." level="9" includes="portable\**" />
-		<checksum file="portable-win32.zip" forceOverwrite="yes"/>
-		<move file="portable" tofile="pkg-temp"/>
-	</target>
+    <!-- *2* os independent procedure  -->
+    <target name="preppkg-portable-basic" >
+        <mkdir dir="pkg-temp" />
+            <!-- non OS dependent configurations only, don't add *nux/win stuff here -->
+            <copy todir="pkg-temp">
+                <fileset dir="installer/resources/portable/configs/" />
+            </copy>
+            <copy file="installer/resources/blocklist.txt" todir="pkg-temp/" />
+            <copy file="installer/resources/hosts.txt" todir="pkg-temp/" />
+            <copy file="installer/resources/readme.license.txt" todir="pkg-temp/" />
+        <mkdir dir="pkg-temp/addressbook" />
+            <copy file="apps/addressbook/subscriptions.txt" todir="pkg-temp/addressbook/" />
+            <copy file="apps/addressbook/myhosts.txt"  todir="pkg-temp/addressbook/" />
+            <!-- config.txt is in installer/resources/portable -->
+        <mkdir dir="pkg-temp/docs" />
+            <copy file="installer/resources/initialNews/initialNews.xml" tofile="pkg-temp/docs/news.xml" overwrite="true" />
+            <copy file="installer/resources/readme/readme.html" tofile="pkg-temp/docs/readme.html" />
+            <copy file="installer/resources/startconsole.html" todir="pkg-temp/docs/" />
+            <copy file="installer/resources/start.ico" todir="pkg-temp/docs/" />
+            <copy file="installer/resources/console.ico" todir="pkg-temp/docs/" />
+            <!-- HTTP Header files, english only, if you need a different lang do it in a seperate target -->
+            <copy todir="pkg-temp/docs/" >
+                <fileset dir="installer/resources/proxy/"  includes="**-header.ht" />
+            </copy>
+            <!-- Theme light only -->
+            <copy todir="pkg-temp/docs/themes/console/light/" overwrite="true" >
+                <fileset dir="installer/resources/themes/console/light/" includes="**.css" />
+            </copy>
+            <copy file="installer/resources/themes/console/light/console_big.css" todir="portable/docs/themes/console/light/" />
+            <copy todir="pkg-temp/docs/themes/console/images/" >
+                <fileset dir="installer/resources/themes/console/images/" />
+            </copy>
+            <!-- FLAGs for language icon (not for ip)-->
+            <copy todir="pkg-temp/docs/icons" >
+                <fileset dir="installer/resources/icons" />
+            </copy>
+        <mkdir dir="pkg-temp/webapps" />
+            <copy todir="pkg-temp/webapps/">
+                <fileset dir="build/" includes="**.war" />
+            </copy>
+        <mkdir dir="pkg-temp/lib" />
+            <copy todir ="pkg-temp/lib/" >
+                <fileset dir="build/" includes="**.jar" />
+            </copy>
+            <!-- 3rd party jars from apps/  -->
+            <!-- jrobin - without jobin , you lose graphs and get a lot of error entries in logs -->
+            <copy file="build/jrobin.jar" tofile="pkg-temp/lib/jrobin.jar" />
+    </target>
+    <!-- *3* os dependent procedure/commands -->
+    <target name = "preppkg-portable-win32" depends="preppkg-portable-win32-jbigi,preppkg-portable-basic">
+            <!--wrapper - don't even think about it! i2p consumes apparently more mem without it on win32-->
+        <copy file="installer/lib/wrapper/win32/wrapper.dll" todir="pkg-temp/lib" />
+        <copy file="installer/lib/wrapper/all/wrapper.jar" todir="pkg-temp/lib" />
+        <copy file="installer/lib/wrapper/win32/I2Psvc.exe" tofile="pkg-temp/i2psvc.ex_" />
+        <!--  copy the unpack/start batchfiles -->
+        <copy todir="pkg-temp">
+            <fileset dir="installer/resources/portable/win32/" />
+        </copy>
+    </target>
+    <!-- *4* command for windows package -->
+    <target name = "pkg-portable-win32"	depends="preppkg-portable-win32, pack200" >
+        <!-- i need the portable\ folder in .zip so basedir is set to . -->
+        <move file="pkg-temp" tofile="portable"/>
+        <zip destfile="portable-win32.zip" basedir="." level="9" includes="portable\**" />
+        <checksum file="portable-win32.zip" forceOverwrite="yes"/>
+        <move file="portable" tofile="pkg-temp"/>
+    </target>
 </project>
