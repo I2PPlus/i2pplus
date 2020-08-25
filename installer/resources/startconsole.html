@@ -10,15 +10,16 @@ html {background: #001}
 body {position: relative; background: #000; color: #eef; font-family: open sans, sans-serif}
 table {margin: auto; height: 100%; width: 100%; position: absolute}
 td {vertical-align: middle}
-div {margin: 11% auto; padding: 50px; height: 100%; width: 40%; min-width: 600px; position: relative; line-height: 180%; box-sizing: border-box; border: 1px solid #232334; box-shadow: inset 0 0 0 2px #000; background: #232334; background: linear-gradient(to bottom, rgba(0,0,0,.4), rgba(0,0,0,.6)), repeating-linear-gradient(to bottom, #232334 2px, #121223 4px); will-change: transform}
+div {margin: 11% auto; padding: 50px; height: 100%; width: 40%; min-width: 600px; position: relative; line-height: 180%; box-sizing: border-box; border: 1px solid #232334; box-shadow: inset 0 0 0 2px #000, inset 0 0 0 3px rgba(48,48,80,.5), inset 0 0 4px 4px rgba(0,0,16,.6); background: #232334; background: linear-gradient(to bottom, rgba(0,0,32,.4), rgba(0,0,16,.6)), repeating-linear-gradient(to bottom, #232334 2px, #121223 4px); will-change: transform}
 a {text-decoration: none; color: #9494ff}
 hr {margin: 20px 0 8px; height: 1px; width: 90%; border: none; display: inline-block; background: linear-gradient(to right, rgba(0,0,0,0), #343445, rgba(0,0,0,0))}
 code {padding: 0 5px; background: #454556; color: #f2f2ff; border-radius: 2px}
 p {font-weight: 600}
 h3 {font-size: 16pt}
 #logo {display: inline-block; mix-blend-mode: exclusion}
-#logo img {width: 80px; height: 80px; animation: ease spin 20s reverse infinite}
-@keyframes spin {0% {tranform: rotate(0); filter: hue-rotate(0)} 50% {transform: rotate(7200deg); filter: hue-rotate(360deg)}}
+#logo img {width: 80px; height: 80px; animation: linear spin 9s 1s forwards infinite, zoomout ease-in-out 1s 9s alternate infinite}
+@keyframes spin {0% {tranform: rotate(0); filter: hue-rotate(0)} 100% {transform: rotate(7200deg); filter: hue-rotate(3600deg)}}
+@keyframes zoomout {0% {width: 80px; height: 80px; padding: 0} 100% {width: 40px; height: 40px; padding: 20px}}
 </style>
 </head>
 <body>
