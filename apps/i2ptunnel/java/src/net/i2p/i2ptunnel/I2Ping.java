@@ -225,7 +225,7 @@ public class I2Ping extends I2PTunnelClientBase {
             return false;
         }
         //l.log("Closing pinger " + toString());
-        l.log("Closing pinger " + "&hellip;");
+        l.log("Closing pinger...");
         l.log("Pinger closed.");
         return true;
     }
