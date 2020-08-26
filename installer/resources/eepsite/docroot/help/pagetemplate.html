@@ -1,20 +1,73 @@
+<!DOCTYPE HTML>
 <html>
+
 <head>
 <title>MY OWN EEPSITE</title>
-<link rel="shortcut icon" href="favicon.ico" />
-<link rel="stylesheet" type="text/css" href="lib/eepsite.css" />
+<link rel="shortcut icon" href="favicon.ico">
+<link rel="stylesheet" type="text/css" href="lib/eepsite.css">
+<style type="text/css">
+h3 {position: relative}
+
+.date {
+  position: absolute;
+  top: calc(50% - 9px);
+  right: 10px;
+  display: inline-block;
+  letter-spacing: 0;
+  font-size: 80%;
+  font-weight: 600;
+  font-style: italic;
+  font-variant: normal;
+  text-transform: none;
+}
+
+.twocol {
+  margin-top: -15px;
+  columns: 2 auto;
+  column-gap: 15px;
+}
+
+.twocol p {
+  display: inline-block;
+  break-inside: avoid;
+}
+
+@media screen and (max-width: 1200px) {
+  .date {
+    top: calc(50% - 8px);
+  }
+}
+</style>
 </head>
+
 <body>
+
 <div class="main">
 <div id="navbar"><a href="#">Link 1</a><a href="#">Link 2</a><a href="#" target="_blank">Link 3</a><a href="/help">Help</a></div>
 <h1>MY EEPSITE</h1>
-<h2>Words and pictures and stuff</h2>
-<p>Your cool stuff here...</p>
-<div class="notify">
-Bring more attention to something of interest here!
+<h3>Sed cursus lacus non erat congue facilisis&nbsp;&nbsp;<span class="date">Date, tags go here</h3>
+
+<p>Sed ut perspiciatis unde omnis iste natus error sit voluptatem accusantium doloremque laudantium, totam rem aperiam, eaque ipsa quae ab illo inventore veritatis et quasi architecto beatae vitae dicta sunt explicabo. Nemo enim ipsam voluptatem quia voluptas sit aspernatur aut odit aut fugit, sed quia consequuntur magni dolores eos qui ratione voluptatem sequi nesciunt.</p>
+
+<p>Neque porro quisquam est, qui dolorem ipsum quia dolor sit amet, consectetur, adipisci velit, sed quia non numquam eius modi tempora incidunt ut labore et dolore magnam aliquam quaerat voluptatem. Ut enim ad minima veniam, quis nostrum exercitationem ullam corporis suscipit laboriosam, nisi ut aliquid ex ea commodi consequatur? Quis autem vel eum iure reprehenderit qui in ea voluptate velit esse quam nihil molestiae consequatur, vel illum qui dolorem eum fugiat quo voluptas nulla pariatur?</p>
+
+<h3>Cras ullamcorper est nec augue bibendum posuere&nbsp;&nbsp;<span class="date">Date, tags go here</h3>
+
+<div class="twocol">
+<p>Cras ullamcorper est nec augue bibendum posuere. Mauris ac iaculis lectus. Sed augue tellus, ultricies dignissim arcu non, iaculis bibendum nunc. Phasellus at tellus molestie, consectetur tortor in, mollis augue. Nunc volutpat non lorem vel consectetur. Nunc sit amet nulla ac nisl lacinia semper non id ligula. Maecenas suscipit ultrices volutpat. Vivamus volutpat ante vel felis hendrerit, ac feugiat massa vestibulum. Curabitur sed mauris vel dui hendrerit efficitur. Maecenas tempus ac massa at fringilla.</p>
+
+<p>Sed cursus lacus non erat congue facilisis. Aenean fringilla lacinia velit. Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed sed condimentum erat. Pellentesque sit amet lorem id sem dignissim semper id sit amet erat. Fusce euismod lectus eget sapien dictum, sit amet tempor nunc ornare. In faucibus lectus ut aliquam commodo.</p>
 </div>
-<hr><div class="footnote">
-Document last edited: November 2009.</div>
+
+<hr>
+
+<div class="notify idea">
+Sed cursus lacus non erat congue facilisis. Aenean fringilla lacinia velit. Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed sed condimentum erat. Pellentesque sit amet lorem id sem dignissim semper id sit amet erat.
 </div>
+
+<div class="footnote">
+Document last edited: August 2020</div>
+</div>
+
 </body>
 </html>
