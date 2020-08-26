@@ -66,6 +66,8 @@ public class I2PTunnelIRCClient extends I2PTunnelClientBase {
         Properties opts = tunnel.getClientOptions();
         opts.setProperty("i2p.streaming.connectDelay", "200");
         opts.remove("i2p.streaming.maxWindowSize");
+        if (opts.getProperty("i2cp.leaseSetEncType") == null)
+            opts.setProperty("i2cp.leaseSetEncType", "4,0");
 
         _addrs = new ArrayList<I2PSocketAddress>(4);
         buildAddresses(destinations);
