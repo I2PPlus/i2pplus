@@ -1,120 +1,126 @@
-<!DOCTYPE html>
+<!DOCTYPE HTML>
 <html lang="nl">
- <head>
-  <title>I2P Anonieme Webserver | Welkom op je eepsite</title>
-  <link rel="shortcut icon" href="favicon.ico" />
-    <link rel="stylesheet" type="text/css" href="lib/eepsite.css" />
-    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
- </head>
- <body>
+<head>
+<title>I2P Anonieme Webserver | Welkom op je eepsite</title>
+<link rel="shortcut icon" href="favicon.ico" />
+<link rel="stylesheet" type="text/css" href="lib/eepsite.css" />
+<meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+</head>
+<body>
 <div class="main">
 <div class="langbar">
-<!-- Some of these languages listed here are yet to be translated -->
 <a href="index.html"><img src="lib/us.png" title="English" alt="English"></a>
+<a href="index_ar.html"><img src="lib/lang_ar.png" title="عربية" alt="عربية"></a>
+<a href="index_az.html"><img src="lib/az.png" title="Azerbaijani" alt="Azerbaijani"></a>
 <a href="index_zh.html"><img src="lib/cn.png" title="中文" alt="中文"></a>
 <a href="index_de.html"><img src="lib/de.png" title="Deutsch" alt="Deutsch"></a>
 <a href="index_es.html"><img src="lib/es.png" title="Español" alt="Español"></a>
 <a href="index_fr.html"><img src="lib/fr.png" title="Français" alt="Français"></a>
-<a href="index_na.html"><img src="lib/ir.png" title="فارسی" alt="فارسی"></a>
-<a href="index_na.html"><img src="lib/jp.png" title="日本語" alt="日本語"></a>
+<a href="index_hu.html"><img src="lib/hu.png" title="Magyar" alt="Magyar"></a>
+<a href="index_in.html"><img src="lib/id.png" title="bahasa Indonesia" alt="bahasa Indonesia"></a>
+<a href="index_it.html"><img src="lib/it.png" title="Italian" alt="Italian"></a>
 <a href="index_nl.html"><img src="lib/nl.png" title="Nederlands" alt="Nederlands"></a>
+<a href="index_pl.html"><img src="lib/pl.png" title="Polish" alt="Polish"></a>
+<a href="index_pt.html"><img src="lib/pt.png" title="Português" alt="Português"></a>
+<a href="index_ro.html"><img src="lib/ro.png" title="Română" alt="Română"></a>
 <a href="index_ru.html"><img src="lib/ru.png" title="Русский" alt="Русский"></a>
 <a href="index_sv.html"><img src="lib/se.png" title="Svenska" alt="Svenska"></a>
+<a href="index_pl.html"><img src="lib/tr.png" title="Turkish" alt="Turkish"></a>
 </div>
- <h1>I2P Anonieme Webserver</h1>
- <h2>Korte Handleiding voor Anoniem Webhosten op I2P</h2>
+<h1>I2P Anonieme Webserver</h1>
+<h2>Korte Handleiding voor Anoniem Webhosten op I2P</h2>
 
- <p>Dit is je eepsite, je eigen anonieme I2P webserver - pas de bestanden onder <code>~/.i2p/eepsite/docroot/</code> (Linux),
- <code>%LOCALAPPDATA%\I2P\eepsite\docroot\</code> (Windows),
- of <code>/Users/(user)/Library/Application Support/i2p</code> (Mac), simpelweg aan 
- en ze zijn bereikbaar door anderen zodra je onderstaande instructies hebt opgevolgd.
- In I2P worden eepsites aangeduid met een 'destination', dit is een erg lange Base64 string.
- (De 'destination' is vergelijkbaar met een IP adres en wordt getoond op de eepsite's I2PTunnel 
- <a href="http://127.0.0.1:7657/i2ptunnel/edit.jsp?tunnel=3">configuratie pagina</a>).
- Onderstaande instructies laten zien hoe je een naam zoals "mijnsite.i2p" kunt laten verwijzen naar je destination en
- hoe je je eepsite moet starten.</p>
- <p>Je kan je eepsite lokaal benaderen via 
- <a href="http://127.0.0.1:7658/">http://127.0.0.1:7658/</a>.
+<p>Dit is je eepsite, je eigen anonieme I2P webserver - pas de bestanden onder <code>~/.i2p/eepsite/docroot/</code> (Linux),
+<code>%LOCALAPPDATA%\I2P\eepsite\docroot\</code> (Windows),
+of <code>/Users/(user)/Library/Application Support/i2p</code> (Mac), simpelweg aan
+en ze zijn bereikbaar door anderen zodra je onderstaande instructies hebt opgevolgd.
+In I2P worden eepsites aangeduid met een 'destination', dit is een erg lange Base64 string.
+(De 'destination' is vergelijkbaar met een IP adres en wordt getoond op de eepsite's I2PTunnel
+<a href="http://127.0.0.1:7657/i2ptunnel/edit.jsp?tunnel=3">configuratie pagina</a>).
+Onderstaande instructies laten zien hoe je een naam zoals "mijnsite.i2p" kunt laten verwijzen naar je destination en
+hoe je je eepsite moet starten.</p>
+<p>Je kan je eepsite lokaal benaderen via
+<a href="http://127.0.0.1:7658/">http://127.0.0.1:7658/</a>.
 </p>
 
- <h2>Hoe je eepsite op te zetten en aan te kondigen</h2>
- <p>Je eepsite is standaard gestopt. 
- Nadat je tunnel voor je eepsite start, zullen anderen je site nog niet kunnen vinden
- want het heeft nog geen naam en ze hebben je erg lange Base64 destination nog niet.
- Je zou deze lange destination aan iedereen kunnen vertellen, maar gelukkig heeft
- i2p een adresboek en verschillende eenvoudige manieren om anderen over je eepsite te
- vertellen. Hier zijn de gedetailleerde instructies.</p>
- <ul>
- <li>Kies een naam voor je eepsite (<i>mijnsite</i>.i2p). Gebruik alleen kleine letters.
-     Kijk eerst 
-     <a href="http://127.0.0.1:7657/susidns/addressbook.jsp?book=router&amp;filter=none">hier</a>,
-     in het adresboek van je router of in het bestand <code>i2p/hosts.txt</code> of de naam nog beschikbaar is.
-     Voer de nieuwe naam voor je eepsite in op de 
-     <a href="http://127.0.0.1:7657/i2ptunnel/edit.jsp?tunnel=3">eepsite i2ptunnel configuratie pagina</a>
-     onder "Website naam". Dit vervangt de standaard "mysite.i2p".
-     Klik ook op de "Auto Start" box, hiermee zal je eepsite elke keer starten samen met je router.
-     Vergeet niet om op "Opslaan" te klikken.</li>
- <li>Klik op de start knop voor je eepsite op de
-     <a href="http://127.0.0.1:7657/i2ptunnel/index.jsp">hoofd i2ptunnel configuratie pagina</a>.
-     Je zult nu "eepsite" zien onder "Lokale Destinations" aan de linker kant van je 
-     <a href="http://127.0.0.1:7657/index.jsp">I2P Router Console</a>.
-     Je eepsite draait nu.</li>
- <li>Selecteer de gehele "Lokale destination" tekst op de 
-     <a href="http://127.0.0.1:7657/i2ptunnel/edit.jsp?tunnel=3">eepsite i2ptunnel configuratie pagina</a>.
-     en kopieer het op het klipbord.
-     Zorg ervoor dat je het helemaal hebt - het is meer dan 500 karakters lang.
-     <li>Voer de naam in en plak je destination in je
-     <a href="http://127.0.0.1:7657/susidns/addressbook.jsp?book=master">hoofd adresboek</a>.
-     Klik "Toevoegen" om de destination aan je adresboek toe te voegen.</li>
-     <li>In je browser, voel je eepsite naam in (<i>mijnsite</i>.i2p) en je komt hier hopelijk weer terug.</li></ul>
- <p>Voordat je de rest van de wereld over je nieuwe eepsite vertelt, zorg eerst voor wat content.
- Ga naar <code>~/.i2p/eepsite/docroot/</code> (Linux),
- <code>%LOCALAPPDATA%\I2P\eepsite\docroot\</code> (Windows),
- of <code>/Users/(user)/Library/Application Support/i2p</code> (Mac), en vervang de index.html verwijs pagina met je eigen content. Virtual folders werken, dus kan je bestanden vanuit een subdirectory hosten zonder dat je een pagina met links naar deze files moet maken. Mocht je een template nodig hebben voor een basis site, weer vrij om <a href="pagetemplate.html">deze pagina</a> en <a href="lib/">deze content</a> te gebruiken en aan te passen!</p>
+<h2>Hoe je eepsite op te zetten en aan te kondigen</h2>
+<p>Je eepsite is standaard gestopt.
+Nadat je tunnel voor je eepsite start, zullen anderen je site nog niet kunnen vinden
+want het heeft nog geen naam en ze hebben je erg lange Base64 destination nog niet.
+Je zou deze lange destination aan iedereen kunnen vertellen, maar gelukkig heeft
+i2p een adresboek en verschillende eenvoudige manieren om anderen over je eepsite te
+vertellen. Hier zijn de gedetailleerde instructies.</p>
+<ul>
+<li>Kies een naam voor je eepsite (<i>mijnsite</i>.i2p). Gebruik alleen kleine letters.
+Kijk eerst
+<a href="http://127.0.0.1:7657/susidns/addressbook.jsp?book=router&amp;filter=none">hier</a>,
+in het adresboek van je router of in het bestand <code>i2p/hosts.txt</code> of de naam nog beschikbaar is.
+Voer de nieuwe naam voor je eepsite in op de
+<a href="http://127.0.0.1:7657/i2ptunnel/edit.jsp?tunnel=3">eepsite i2ptunnel configuratie pagina</a>
+onder "Website naam". Dit vervangt de standaard "mysite.i2p".
+Klik ook op de "Auto Start" box, hiermee zal je eepsite elke keer starten samen met je router.
+Vergeet niet om op "Opslaan" te klikken.</li>
+<li>Klik op de start knop voor je eepsite op de
+<a href="http://127.0.0.1:7657/i2ptunnel/index.jsp">hoofd i2ptunnel configuratie pagina</a>.
+Je zult nu "eepsite" zien onder "Lokale Destinations" aan de linker kant van je
+<a href="http://127.0.0.1:7657/index.jsp">I2P Router Console</a>.
+Je eepsite draait nu.</li>
+<li>Selecteer de gehele "Lokale destination" tekst op de
+<a href="http://127.0.0.1:7657/i2ptunnel/edit.jsp?tunnel=3">eepsite i2ptunnel configuratie pagina</a>.
+en kopieer het op het klipbord.
+Zorg ervoor dat je het helemaal hebt - het is meer dan 500 karakters lang.
+<li>Voer de naam in en plak je destination in je
+<a href="http://127.0.0.1:7657/susidns/addressbook.jsp?book=master">hoofd adresboek</a>.
+Klik "Toevoegen" om de destination aan je adresboek toe te voegen.</li>
+<li>In je browser, voel je eepsite naam in (<i>mijnsite</i>.i2p) en je komt hier hopelijk weer terug.</li></ul>
+<p>Voordat je de rest van de wereld over je nieuwe eepsite vertelt, zorg eerst voor wat content.
+Ga naar <code>~/.i2p/eepsite/docroot/</code> (Linux),
+<code>%LOCALAPPDATA%\I2P\eepsite\docroot\</code> (Windows),
+of <code>/Users/(user)/Library/Application Support/i2p</code> (Mac), en vervang de index.html verwijs pagina met je eigen content. Virtual folders werken, dus kan je bestanden vanuit een subdirectory hosten zonder dat je een pagina met links naar deze files moet maken. Mocht je een template nodig hebben voor een basis site, weer vrij om <a href="pagetemplate.html">deze pagina</a> en <a href="lib/">deze content</a> te gebruiken en aan te passen!</p>
 <h2>Registreer je eigen .I2P Domein</h2>
-  <p>Nu is het tijd om je eepsite toe te voegen aan een I2P adresboek gehost door een site
-     zoals <a href="http://stats.i2p/">stats.i2p</a>.
-     Om dat te doen, voer je eepsite naam en destination in op de web interface van een of meer van deze sites.
-     Hier is het <a href="http://stats.i2p/i2p/addkey.html">invoer formulier op stats.i2p</a>.
-     De key is de "Lokale destination" sleutel op de 
-     <a href="http://127.0.0.1:7657/i2ptunnel/edit.jsp?tunnel=3">eepsite i2ptunnel configuratie pagina</a>.
-     Zorg ervoor dat je het geheel plakt, de destination.
-     Lees de voorwaarden en klik op de "Submit" button.
-     Het kan een aantal uren duren (afhankelijk van de voorwaarden van de gebruikte site en de subscription update instellingen van andere routers) waarna anderen je eepsite kunnen vinden door het invoeren van <i>mijnsite</i>.i2p in hun browser.
+<p>Nu is het tijd om je eepsite toe te voegen aan een I2P adresboek gehost door een site
+zoals <a href="http://stats.i2p/">stats.i2p</a>.
+Om dat te doen, voer je eepsite naam en destination in op de web interface van een of meer van deze sites.
+Hier is het <a href="http://stats.i2p/i2p/addkey.html">invoer formulier op stats.i2p</a>.
+De key is de "Lokale destination" sleutel op de
+<a href="http://127.0.0.1:7657/i2ptunnel/edit.jsp?tunnel=3">eepsite i2ptunnel configuratie pagina</a>.
+Zorg ervoor dat je het geheel plakt, de destination.
+Lees de voorwaarden en klik op de "Submit" button.
+Het kan een aantal uren duren (afhankelijk van de voorwaarden van de gebruikte site en de subscription update instellingen van andere routers) waarna anderen je eepsite kunnen vinden door het invoeren van <i>mijnsite</i>.i2p in hun browser.
 </p><h2>Adresboek Subscriptions Toevoegen</h2>
- <p>Over adresboek updates gesproken, dit zou een goed moment zijn om wat adresboek subscriptions toe te voegen aan je eigen
- <a href="http://127.0.0.1:7657/susidns/subscriptions.jsp">subscription pagina</a>. Ga naar je subscriptions configuratie pagina en voeg een aantal van deze URLs toe om automatisch op de hoogte te blijven van nieuwe hosts:</p><ul>
+<p>Over adresboek updates gesproken, dit zou een goed moment zijn om wat adresboek subscriptions toe te voegen aan je eigen
+<a href="http://127.0.0.1:7657/susidns/subscriptions.jsp">subscription pagina</a>. Ga naar je subscriptions configuratie pagina en voeg een aantal van deze URLs toe om automatisch op de hoogte te blijven van nieuwe hosts:</p><ul>
 	 <li><a href="http://tino.i2p/hosts.txt">http://tino.i2p/hosts.txt</a></li>
 	 <li><a href="http://stats.i2p/cgi-bin/newhosts.txt">http://stats.i2p/cgi-bin/newhosts.txt</a></li>
-     <li><a href="http://i2host.i2p/cgi-bin/i2hostetag">http://i2host.i2p/cgi-bin/i2hostetag</a></ul>
- <p>Mocht je haast hebben en niet een aantal uren kunnen wachten, dan kan je gebruik maken van een "jump" adres helper redirection service.
-     Dit dit werkt al een paar minuten nadat je de destination aan het adresboek van dezelfde site hebt toegevoegd.
-     Test het eerst zelf door het invoeren van 
-     <code>http://stats.i2p/cgi-bin/jump.cgi?a=<i>mijnsite</i>.i2p</code> of
-     <code>http://i2host.i2p/cgi-bin/i2hostjump?<i>mijnsite</i>.i2p</code>
-     in je browser.
-     Zodra dit werkt kan je anderen hierover vertellen.</p>
- <p>Sommigen kijken op eepsite lijsten zoals
-     <a href="http://inproxy.tino.i2p/status.php">inproxy.tino.i2p/status.php</a> of <a href="http://perv.i2p">perv.i2p</a> voor nieuwe eepsites, dus kan je zo een aantal bezoekers krijgen.
-     Maar er zijn genoeg andere manieren om je eepsite te promoten. Hier zijn er een aantal:</p>
-     <ul>
-     <li>Plaats een bericht op het <a href="http://forum.i2p/viewforum.php?f=16">Eepsite announce forum</a>
-     op <a href="http://forum.i2p/">forum.i2p</a>.</li>
-     <li>Vertel mensen op het #i2p of #i2p-chat kanaal op IRC over je site.</li>
-     <li>Plaats een bericht op <a href="http://syndie.i2p2.de/">het nieuwe Syndie</a>.</li>
-     <li>Plaatst het op de <a href="http://ugha.i2p/EepsiteIndex">Ugha's Eepsite Index Wiki</a></li>
-     </ul>
+<li><a href="http://i2host.i2p/cgi-bin/i2hostetag">http://i2host.i2p/cgi-bin/i2hostetag</a></ul>
+<p>Mocht je haast hebben en niet een aantal uren kunnen wachten, dan kan je gebruik maken van een "jump" adres helper redirection service.
+Dit dit werkt al een paar minuten nadat je de destination aan het adresboek van dezelfde site hebt toegevoegd.
+Test het eerst zelf door het invoeren van
+<code>http://stats.i2p/cgi-bin/jump.cgi?a=<i>mijnsite</i>.i2p</code> of
+<code>http://i2host.i2p/cgi-bin/i2hostjump?<i>mijnsite</i>.i2p</code>
+in je browser.
+Zodra dit werkt kan je anderen hierover vertellen.</p>
+<p>Sommigen kijken op eepsite lijsten zoals
+<a href="http://inproxy.tino.i2p/status.php">inproxy.tino.i2p/status.php</a> of <a href="http://perv.i2p">perv.i2p</a> voor nieuwe eepsites, dus kan je zo een aantal bezoekers krijgen.
+Maar er zijn genoeg andere manieren om je eepsite te promoten. Hier zijn er een aantal:</p>
+<ul>
+<li>Plaats een bericht op het <a href="http://forum.i2p/viewforum.php?f=16">Eepsite announce forum</a>
+op <a href="http://forum.i2p/">forum.i2p</a>.</li>
+<li>Vertel mensen op het #i2p of #i2p-chat kanaal op IRC over je site.</li>
+<li>Plaats een bericht op <a href="http://syndie.i2p2.de/">het nieuwe Syndie</a>.</li>
+<li>Plaatst het op de <a href="http://ugha.i2p/EepsiteIndex">Ugha's Eepsite Index Wiki</a></li>
+</ul>
 <h2>Verdere assistentie</h2>
- <p>In dien je nog vragen hebt, de volgende plaatsen bieden support:</p>
+<p>In dien je nog vragen hebt, de volgende plaatsen bieden support:</p>
 <ul>
 <li>Ons IRC support kanaal: <ul><li><a href="irc://irc.freenode.net/i2p">#i2p op Freenode</a></li>
 	<li>Anoniem via onze eigen <a href="irc://127.0.0.1:6668/i2p">I2P IRC tunnel</a>.</li></ul>
-     <li>De <a href="http://forum.i2p/viewforum.php?f=10">technical problems</a> afdeling op
-     <a href="http://forum.i2p/">forum.i2p</a>.</li></ul>
- <div class="notify">
+<li>De <a href="http://forum.i2p/viewforum.php?f=10">technical problems</a> afdeling op
+<a href="http://forum.i2p/">forum.i2p</a>.</li></ul>
+<div class="notify idea">
 <b>Noot:</b> Deze pagina, de website en console moeten allemaal vertaald worden in JOUW eigen taal, mocht dit nog niet gedaan zijn. Help de groei van dit project door <a href="http://www.i2p2.i2p/getinvolved.html">bij te dragen</a> aan de vertaling. Neem contact op met het project via het hierboven genoemde IRC kanaal. Alvast bedankt!</div>
-<hr><div class="footnote">	
+<hr><div class="footnote">
 Document laatst gewijzigd: November 2010.</div>
 </div>
- </body>
+</body>
 </html>
