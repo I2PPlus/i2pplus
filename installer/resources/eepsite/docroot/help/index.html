@@ -10,9 +10,9 @@ html {
 }
 
 body {
-  margin: 3% 8%;
+  margin: 18px 20px;
   text-align: justify;
-  font-size: 10pt;
+  font-size: 10.5pt;
   color: #ffffe0;
   background: #111;
   background: repeating-linear-gradient(to bottom, #111 2px, #333 4px) #222;
@@ -253,7 +253,7 @@ hr {
 }
 
 code {
-  font-size: 10pt;
+  font-size: 9.5pt;
   font-weight: bold;
   color: #5f5;
   text-shadow: 1px 1px 1px #000;
@@ -337,9 +337,20 @@ th {
 
 /* responsive layout */
 
-@media screen and (min-width: 1200px) {
+@media screen and (min-width: 1000px) {
   body {
-    margin: 3% 10%;
+    margin: 36px 40px;
+    font-size: 11pt;
+  }
+
+  code {
+    font-size: 10.5pt;
+  }
+}
+
+@media screen and (min-width: 1280px) {
+  body {
+    margin: 3% 15%;
     font-size: 12pt;
   }
 
