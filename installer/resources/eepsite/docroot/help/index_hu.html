@@ -164,7 +164,7 @@ We recommend using the default server unless you feel comfortable doing server a
 Please ensure your web server is secure prior to placing it online.
 There are plenty of guides online, for example if you search for "nginx security hardening guide" you will find a number of guides that have good recommendations.</p>
 
-<p>There is one important issue with the Apache web server.
+<p class="notify warn">There is one important issue with the Apache web server.
 The <code>mod_status</code> and <code>mod_info</code> Apache modules are enabled by default on some operating systems.
 These modules expose internal data which can lead to serious compromise of anonymity when used on an anonymous network.
 Removing the lines in the configuration file where these modules are loaded is the easiest way to prevent these issues.</p>
