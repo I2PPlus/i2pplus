@@ -412,7 +412,7 @@ th {
 
 <h2>Introduction to Webserving on I2P</h2>
 
-<p>By default, I2P is supplied with a webserver to host your own anonymized website (traditionally referred to as an <i>eepsite</i>). Both the site and the <a href="http://127.0.0.1:7657" target="blank">Router Console</a> are running on a streamlined version of <a href="https://en.wikipedia.org/wiki/Jetty_(web_server)" target="_blank" class="sitelink external">Jetty</a>, customized for I2P.</p>
+<p>By default, I2P is supplied with a webserver to host your own anonymized website (traditionally referred to as an <i>eepsite</i>). Both this site and the <a href="http://127.0.0.1:7657" target="blank">Router Console</a> are running on a streamlined version of <a href="https://en.wikipedia.org/wiki/Jetty_(web_server)" target="_blank" class="sitelink external">Jetty</a>, customized for I2P.</p>
 
 <div class="wrapper">
 <table id="rootdir">
@@ -436,7 +436,7 @@ Package / repository installation ➜ <code>/var/lib/i2p/i2p-config/eepsite/docr
 
 <p>To disable directory listings, find the entry for <code>org.eclipse.jetty.servlet.Default.dirAllowed</code> in the <code>base-context.xml</code> file, located in the <code>eepsite/contexts</code> folder (just above docroot folder), and change 'true' to 'false' immediately underneath. To apply the change immediately, stop and restart the <i>I2P Webserver</i> client on the <a href="http://127.0.0.1:7657/configclients">Client Configuration page</a>. You can also drop an empty <code>index.html</code> file in any exposed directory to suppress directory listings for that location.</p>
 
-<p>To enable custom 404 and 403 error pages, create <code>404.html</code> and <code>403.html</code> files and copy them to <code>docroot/.resources/</code> or modify the existing files to suits your needs.
+<p>To enable custom 404 and 403 error pages, create <code>404.html</code> and <code>403.html</code> files and copy them to <code>docroot/.resources/</code> or modify the existing files to suits your needs.</p>
 
 <h3>Setting up &amp; announcing your website</h3>
 
@@ -458,9 +458,9 @@ Package / repository installation ➜ <code>/var/lib/i2p/i2p-config/eepsite/docr
 
 <p>You may wish to register your website with an I2P Domain registrar such as <a href="http://stats.i2p/i2p/addkey.html" target="_blank" class="sitelink">stats.i2p</a>, <a href="http://identiguy.i2p/cgi-bin/submit" target="_blank" class="sitelink">identiguy.i2p</a> or <a href="http://inr.i2p/postkey/" target="_blank" class="sitelink">inr.i2p</a>. Some registration sites require the full B64 destination address, which you should copy in full from the <i>Local destination</i> section on the <a href="http://127.0.0.1:7657/i2ptunnel/edit?tunnel=3">Tunnel Manager Configuration page</a>.</p>
 
-<p>If a <i>Registration Authentication</i> string is requested, you can find it on the <a href="http://127.0.0.1:7657/i2ptunnel/register?tunnel=3">Registration Authentication page</a> linked from the <a href="http://127.0.0.1:7657/i2ptunnel/edit?tunnel=3">Tunnel Manager Configuration page</a>.</p>
+<p>If a <i>Registration Authentication</i> string is requested, you can find it (for the default webserver tunnel) on the <a href="http://127.0.0.1:7657/i2ptunnel/register?tunnel=3">Registration Authentication page</a> linked from the <a href="http://127.0.0.1:7657/i2ptunnel/edit?tunnel=3">Tunnel Manager Configuration page</a>.</p>
 
-<p>If you are in a hurry and can't wait a few hours, you can tell people to use a "jump" address helper redirection service. This will usually work within a few minutes of you hostname registration when using the jump service on the same site, or after a few hours if using a 3rd party jump service. Once you have confirmed it is working, you can tell others to use it.</p>
+<p>If you are in a hurry and can't wait a few hours, you can tell people to use a "jump" address helper redirection service. This will usually work within a few minutes of your hostname registration when using the jump service from the same site, or after a few hours if using a 3rd party jump service. Once you have confirmed it is working, you can tell others to use it.</p>
 
 <p>Active jump services include:</p>
 <ul>
