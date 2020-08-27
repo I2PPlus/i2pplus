@@ -4,6 +4,7 @@ html {
 
 body {
   margin: 18px 20px;
+  min-width: 800px;
   text-align: justify;
   font-size: 10.5pt;
   color: #ffffe0;
@@ -23,7 +24,7 @@ body, h1, h2, h3, h4, p, ul, ol, li, dl, dt, dd, td, th, address, blockquote {
 }
 
 h1 {
-  margin: 60px 0 0;
+  margin: 40px 0 0;
   padding: 6px 0 6px 50px;
   white-space: nowrap;
   letter-spacing: .05em;
@@ -35,12 +36,12 @@ h1 {
 }
 
 h2, h3, h4 {
-  text-transform: capitalize;
+  text-transform: uppercase;
   text-shadow: 0 1px 1px #111;
-  box-shadow: inset 0 0 0 1px #222, 0 0 1px 1px rgba(16,8,8,.3);
+  box-shadow: inset 0 0 0 1px #111, 0 0 1px 1px rgba(16,8,8,.3);
   border: 1px solid #555353;
   background: #444040;
-  background: linear-gradient(to bottom, #333030, #222020);
+  background: linear-gradient(to bottom, #444040, #333030 50%, #222020 50%, #111010);
 }
 
 h2 {
@@ -49,10 +50,6 @@ h2 {
   letter-spacing: .09em;
   font-size: 12pt;
   border-radius: 2px;
-}
-
-h2, h3 {
-  font-variant: small-caps;
 }
 
 h3, h4 {
@@ -73,37 +70,27 @@ a.footref {
 a:link {
   text-decoration: none;
   font-weight: 600;
-  color: #ffc266;
+  color: #ec7;
   outline: none;
 }
 
-a:visited {
+a:visited, a:visited:not(:hover):not(:focus):not(:active) {
   text-decoration: none;
-  color: #ffd699;
+  color: #b96;
 }
 
 a:active {
   text-decoration: none;
-  color: #f90;
+  color: #edc;
 }
 
 a:hover, a:focus {
   text-decoration: none;
-  color: #fb0;
+  color: #f80;
 }
 
 a:focus {
   text-decoration: underline;
-}
-
-a.nonexistent {
-  text-decoration: underline;
-  color: #ffffe0;
-}
-
-a.nonexistent:visited {
-  text-decoration: none;
-  color: #ffffe0;
 }
 
 .sitelink {
@@ -116,6 +103,10 @@ a.nonexistent:visited {
 .external {
   background: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 380.45 380.45'%3E%3Cg fill='%231ea6c6'%3E%3Cpath d='M102.62 211.975l.06.23c1.9 7.94 3.42 19.8 1.63 35.2-1.9 16.48 5.5 32.66 19.1 42.15l18.56 12.95s-6.37 48.72 11.3 74.36v.01C65.9 359.665 0 282.645 0 190.225c0-53.8 22.35-102.4 58.27-137-14.15 28.48-28.54 72.45-8.3 109.27 9.27 16.85 23.9 27.78 40.15 34.8 6.23 2.68 10.9 8.1 12.5 14.68z'/%3E%3Cpath d='M190.23.005c41.46 0 79.82 13.26 111.07 35.8 0 0-16.37 25.1-15.7 50.17.15 6 4.84 10.9 10.8 11.52a13.51 13.51 0 0 0 1.27.07c4.55 0 8.75-2.58 10.8-6.73 4.38-8.78 15.9-19.42 45.02 1.77v-.01a180.37 180.37 0 0 1 6.14 11.07s-10.16 2.28-23.77.6c-3.78-.47-7.6.45-10.7 2.67-2.15 1.55-4.62 3.78-7.36 6.53-13.9 13.96-16.2 43-16.2 43-.27 6.06 0 12.76.97 20.16 2.17 16.44 17.24 28.04 33.65 25.64l.72-.1c11.84-1.84 22.65 7.1 23.33 19.05.6 10.8 2.9 23.02 8.98 33.34h.01c-26.37 73.4-96.6 125.9-179.07 125.9-12.64 0-25-1.23-36.94-3.58v-.01s5.35-5 19.4-19.6l29.58-31.37c8.54-9.38 17.06-19.07 24.47-28.12 13.17-16.1 9-40.13-8.76-50.92-16.6-10.07-36.14-23.07-48.73-35.16-6.33-6.07-15.04-8.98-23.76-8.04-11.2 1.2-27.07 3.65-42.8 8.55 2.7-26.8-43.7-50.7-31.7-71.7 6.5-11.4 17.42-11.6 26.05-9.4 6.87 1.74 14.08-.76 18.54-6.27 10.56-13.03 33.63-25.24 50.5-32.96 11.05-5.05 14.62-18.98 7.36-28.7-22.27-29.9-53.82-49.6-53.82-49.6 21.84-8.74 45.67-13.55 70.63-13.55zm7.75 61.5l23-30s-10-9-46-12c-7.2-.6 20 19 23 42z'/%3E%3C/g%3E%3Cg fill='%23f7cf52'%3E%3Cpath d='M353.5 92.585v.01c-29.1-21.2-40.64-10.55-45.02-1.77-2.06 4.15-6.26 6.73-10.8 6.73a13.51 13.51 0 0 1-1.27-.07c-5.97-.63-10.66-5.53-10.8-11.52-.66-25.06 15.7-50.17 15.7-50.17a190.79 190.79 0 0 1 52.2 56.8zm26.95 97.64c0 22.57-3.93 44.23-11.15 64.32h-.01c-6.07-10.32-8.37-22.55-8.98-33.34-.68-11.96-11.5-20.9-23.33-19.05l-.72.1c-16.4 2.4-31.48-9.2-33.65-25.64-.97-7.4-1.24-14.1-.97-20.16 0 0 2.3-29.04 16.2-43 2.74-2.75 5.2-4.98 7.36-6.53 3.1-2.22 6.9-3.14 10.7-2.67 13.6 1.68 23.77-.6 23.77-.6 13.3 25.97 20.8 55.4 20.8 86.57zM220.98 31.495l-23 30c-3-23-30.2-42.6-23-42 36 3 46 12 46 12zm-47.56 31.65c7.26 9.73 3.7 23.66-7.36 28.7-16.86 7.72-39.93 19.93-50.5 32.96-4.46 5.5-11.67 8-18.54 6.27-8.63-2.2-19.55-1.98-26.05 9.4-12 21 34.4 44.92 31.7 71.7l-.06-.23c-1.6-6.58-6.26-12-12.5-14.68-16.25-7.02-30.88-17.95-40.15-34.8-20.25-36.82-5.86-80.8 8.3-109.27 17.54-16.9 38.33-30.47 61.33-39.67 0 0 31.55 19.7 53.82 49.6z'/%3E%3Cpath d='M217.97 246.855c17.77 10.8 21.93 34.83 8.76 50.92-7.4 9.05-15.93 18.74-24.47 28.12l-29.58 31.37-19.4 19.6c-17.68-25.64-11.3-74.36-11.3-74.36l-18.56-12.95c-13.6-9.5-21.02-25.67-19.1-42.15 1.8-15.4.28-27.25-1.63-35.2 15.73-4.9 31.6-7.34 42.8-8.55 8.72-.94 17.43 1.97 23.76 8.04 12.6 12.1 32.14 25.1 48.73 35.16z'/%3E%3C/g%3E%3Cpath d='M190.23.005a191.68 191.68 0 0 1 17.2.77C110.48 9.515 34.5 90.995 34.5 190.225c0 99.25 76 180.74 173 189.45a193.02 193.02 0 0 1-17.26.77C85.17 380.445 0 295.285 0 190.225S85.17.005 190.23.005z' fill='gray' opacity='.3'/%3E%3C/svg%3E") left center no-repeat;
   background-size: 12px 12px;
+}
+
+i {
+  font-weight: 600;
 }
 
 li, dt {
@@ -168,12 +159,16 @@ hr {
   display: block;
   text-align: right;
   font-size: 8.5pt;
-  border: 1px solid #555353;
+  border: 4px solid #555353;
+  border-top-width: 1px;
+  border-right-width: 1px;
   border-radius: 0 2px 0 0;
-  box-shadow: inset 0 0 0 1px #111;
+  border-radius: 0;
+  box-shadow: inset 0 0 0 1px #000;
   background: #444040;
-  filter: opacity(0);
-  animation: ease fade-in .3s 2s forwards;
+/*  filter: opacity(0);
+  transform: scale(0);
+  animation: ease zoom-in .2s 2s forwards, ease fade-in .3s 2s forwards;*/
 }
 
 .langbar a {
@@ -185,9 +180,9 @@ hr {
   padding: 3px 5px 0;
   opacity: .7;
   border: 0;
-  transform: scale(0);
+/*  transform: scale(0);
   filter: opacity(0);
-  animation: ease fade-in .3s 3s forwards, zoom-in .3s 3s forwards;
+  animation: ease fade-in .3s 3s forwards, zoom-in .3s 3s forwards;*/
 }
 
 .langbar img:hover, .langbar a:focus img {
@@ -203,7 +198,8 @@ hr {
   min-width: 570px;
   border: 1px solid #555353;
   border-radius: 2px;
-  box-shadow: inset 0 0 0 1px #111, 0 0 0 1px #000, 0 0 3px 5px rgba(0,0,0,.2);
+  border-radius: 0;
+  box-shadow: inset 0 0 0 1px #000, 0 0 0 3px #555050, 0 0 0 4px #111010, 0 0 5px 5px rgba(16,8,8,.2);
   background: #333030;
 }
 
@@ -251,11 +247,19 @@ hr {
 }
 
 code {
+  margin: 0 2px;
+  padding: 0 4px;
+  white-space: nowrap;
   font-family: Droid Sans Mono, Noto Mono, Lucida Console, DejaVu Sans Mono, monospace;
   font-size: 9.5pt;
   font-weight: bold;
-  color: #5f5;
+  color: #ccb;
   text-shadow: 1px 1px 1px #000;
+  border-radius: 3px;
+  box-shadow: 0 0 0 1px rgba(16,8,8,.6);
+  background: #322;
+  background: linear-gradient(to bottom, #433, #322);
+  background: linear-gradient(to bottom, rgba(64,48,48,.7), rgba(48,32,32,.7));
 }
 
 .wrapper {
@@ -293,9 +297,17 @@ th {
 }
 
 #rootdir td:first-child {
+  width: 1%;
   text-align: right;
   font-weight: 600;
   border-right: 1px solid #222020;
+}
+
+#rootdir img {
+  padding: 8px;
+  height: 48px;
+  width: 48px;
+  font-size: 80%;
 }
 
 @keyframes fade-in {
@@ -311,21 +323,22 @@ th {
 /* template specific */
 
 #navbar {
-  border: 1px solid #555353;
-  border-left: none;
-  border-right: none;
-  margin: -6px -22px 20px;
-  border-radius: 2px 2px 0 0;
+  margin: -3px -24px 20px;
   text-align: center;
+  border-bottom: 2px solid #555353;
+  background: linear-gradient(to bottom, #333030, #222020);
 }
 
 #navbar a {
-  border: 1px solid #555353;
-  border-right: none;
-  display: inline-block;
-  padding: 8px 10px;
   margin: -1px 0;
+  padding: 8px 10px;
+  display: inline-block;
   text-decoration: none;
+  border: 1px solid #555353;
+  border-top: none;
+  border-right: none;
+  background: #343030;
+  background: linear-gradient(to bottom, #333030 50%, #222020 50%);
   outline: none;
 }
 
@@ -334,14 +347,47 @@ th {
 }
 
 #navbar a:hover, #navbar a:focus {
-  background: #b40;
-  box-shadow: inset 0 0 0 1px #222;
+  background: #383434;
 }
 
 #navbar a:active {
   background: #920;
-  box-shadow: inset 3px 3px 3px #000;
+  box-shadow: inset 4px 3px 3px rgba(0,0,0,.6);
   color: #f90;
+}
+
+h3 {
+  position: relative;
+}
+
+.date {
+  position: absolute;
+  top: calc(50% - 9px);
+  right: 10px;
+  display: inline-block;
+  letter-spacing: 0;
+  font-size: 80%;
+  font-weight: 600;
+  font-style: italic;
+  font-variant: normal;
+  text-transform: none;
+}
+
+.twocol {
+  margin-top: -15px;
+  columns: 2 auto;
+  column-gap: 15px;
+}
+
+.twocol p {
+  display: inline-block;
+  break-inside: avoid;
+}
+
+@media screen and (max-width: 1200px) {
+  .date {
+    top: calc(50% - 8px);
+  }
 }
 
 /* responsive layout */
