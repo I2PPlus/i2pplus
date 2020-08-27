@@ -31,7 +31,7 @@ body, h1, h2, h3, h4, p, ul, ol, li, dl, dt, dd, td, th, address, blockquote {
 }
 
 h1 {
-  margin: 40px 0 0;
+  margin: 40px -10px 0;
   padding: 6px 0 6px 50px;
   white-space: nowrap;
   letter-spacing: .05em;
@@ -43,6 +43,8 @@ h1 {
 }
 
 h2, h3, h4 {
+  margin-left: -10px;
+  margin-right: -10px;
   text-transform: uppercase;
   text-shadow: 0 1px 1px #111;
   box-shadow: inset 0 0 0 1px #111, 0 0 1px 1px rgba(16,8,8,.3);
@@ -131,14 +133,19 @@ p, ul {
 }
 
 pre {
-  margin-left: 8.7%;
   white-space: pre;
-  font-family: monospace;
 }
 
 ul {
-  margin: 10px 0 20px;
+  padding-top: 10px;
+  padding-bottom: 10px;
+  margin: 10px 10px 20px;
   list-style-type: square;
+  border: 1px solid #222020;
+  border-radius: 3px;
+  box-shadow: inset 0 0 0 1px #777070, 0 0 1px 1px rgba(16,8,8,.1);
+  background: #454040;
+  background: rgba(68,64,64,.6);
 }
 
 #guides li {
@@ -221,7 +228,7 @@ hr {
 }
 
 .main {
-  padding: 5px 25px 10px 25px;
+  padding: 5px 30px 10px 30px;
   min-width: 570px;
   border: 1px solid #555353;
   border-radius: 2px;
@@ -269,8 +276,13 @@ hr {
   display: none;
 }
 
-.notify + h3 {
+.notify + h3, ul + h3 {
   margin-top: 30px;
+}
+
+pre, code {
+  font-family: Droid Sans Mono, Noto Mono, Lucida Console, DejaVu Sans Mono, monospace;
+  font-size: 9.5pt;
 }
 
 code {
@@ -278,7 +290,6 @@ code {
   padding: 0 4px;
   white-space: nowrap;
   font-family: Droid Sans Mono, Noto Mono, Lucida Console, DejaVu Sans Mono, monospace;
-  font-size: 9.5pt;
   font-weight: bold;
   color: #ccb;
   text-shadow: 1px 1px 1px #000;
@@ -355,7 +366,7 @@ th {
     font-size: 11pt;
   }
 
-  code {
+  pre, code {
     font-size: 10.5pt;
   }
 }
@@ -366,7 +377,7 @@ th {
     font-size: 12pt;
   }
 
-  code {
+  pre, code {
     font-size: 11.5pt;
   }
 
@@ -430,7 +441,7 @@ th {
 <a href="index_ro.html"><img src="lib/ro.png" title="Română" alt="Română"></a>
 <a href="index_ru.html"><img src="lib/ru.png" title="Русский" alt="Русский"></a>
 <a href="index_sv.html"><img src="lib/se.png" title="Svenska" alt="Svenska"></a>
-<a href="index_pl.html"><img src="lib/tr.png" title="Turkish" alt="Turkish"></a>
+<a href="index_tr.html"><img src="lib/tr.png" title="Turkish" alt="Turkish"></a>
 </div>
 
 <h1>I2P Anonymous Webserver</h1>
