@@ -283,7 +283,7 @@ code {
 
 .wrapper {
   margin: 25px auto;
-  width: calc(100% - 20px);
+  width: calc(100% - 28px);
   text-align: center;
   box-shadow: 0 0 0 2px #111010, 0 0 0 4px #222020;
 }
