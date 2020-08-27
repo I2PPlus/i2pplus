@@ -327,42 +327,6 @@ th {
   100% {transform: scale(1)}
 }
 
-/* template specific */
-
-#navbar {
-  border: 1px solid #555353;
-  border-left: none;
-  border-right: none;
-  margin: -6px -22px 20px;
-  border-radius: 2px 2px 0 0;
-  text-align: center;
-}
-
-#navbar a {
-  border: 1px solid #555353;
-  border-right: none;
-  display: inline-block;
-  padding: 8px 10px;
-  margin: -1px 0;
-  text-decoration: none;
-  outline: none;
-}
-
-#navbar a:last-child {
-  border-right: 1px solid #555353;
-}
-
-#navbar a:hover, #navbar a:focus {
-  background: #b40;
-  box-shadow: inset 0 0 0 1px #222;
-}
-
-#navbar a:active {
-  background: #920;
-  box-shadow: inset 3px 3px 3px #000;
-  color: #f90;
-}
-
 /* responsive layout */
 
 @media screen and (min-width: 1000px) {
@@ -496,7 +460,13 @@ Package / repository installation ➜ <code>/var/lib/i2p/i2p-config/eepsite/docr
 
 <p>If a <i>Registration Authentication</i> string is requested, you can find it on the <a href="http://127.0.0.1:7657/i2ptunnel/register?tunnel=3">Registration Authentication page</a> linked from the <a href="http://127.0.0.1:7657/i2ptunnel/edit?tunnel=3">Tunnel Manager Configuration page</a>.</p>
 
-<p>If you are in a hurry and can't wait a few hours, you can tell people to use a "jump" address helper redirection service. This will usually work within a few minutes of your registering your hostname on the same site. Test it yourself first by entering <code>http://stats.i2p/cgi-bin/jump.cgi?a=<i>something</i>.i2p</code> into your browser. Once it is working, you can tell others to use it.</p>
+<p>If you are in a hurry and can't wait a few hours, you can tell people to use a "jump" address helper redirection service. This will usually work within a few minutes of your registering your hostname when using the jump service on the same site, or after a few hours if using a 3rd party jump service. Once you have confirmed it is working, you can tell others to use it.</p>
+
+<p>Active jump services include:</p>
+<ul>
+<li><code>http://stats.i2p/cgi-bin/jump.cgi?a=<i>something</i>.i2p</code></li>
+<li><code>http://notbob.i2p/cgi-bin/defcon.cgi?jump=<i>something</i>.i2p</code></li>
+</ul>
 
 <p>Alternatively, you can copy the <i>address helper link</i> for your domain, indicated either on the addressbook list page, or on the details page for your domain e.g. <a href="http://127.0.0.1:7657/susidns/details?h=i2p-projekt.i2p&book=router" target="_blank">details for i2p-projekt.i2p</a>, and paste the link where it's required to share it with others.</p>
 
