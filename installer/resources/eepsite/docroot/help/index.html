@@ -162,6 +162,7 @@ hr {
   margin: -6px -26px 0 0;
   padding: 5px 10px 5px 5px;
   width: auto;
+  position: relative;
   float: right;
   display: block;
   text-align: right;
@@ -171,11 +172,32 @@ hr {
   border-right-width: 1px;
   border-radius: 0 2px 0 0;
   border-radius: 0;
-  box-shadow: inset 0 0 0 1px #000;
+  box-shadow: inset 0 0 0 1px #000, -1px .5px 0 .5px #000;
   background: #444040;
+  background: linear-gradient(to bottom, #444040, #333030);
   filter: opacity(0);
   transform: scale(0);
   animation: ease zoom-in .2s 2s forwards, ease fade-in .3s 2s forwards;
+}
+
+.langbar::before, .langbar::after {
+  content: "";
+  display: inline-block;
+  position: absolute;
+  height: 2px;
+  width: 4px;
+  background: #555353;
+}
+
+.langbar::before {
+  top: -2px;
+  left: -5px;
+}
+
+.langbar::after {
+  width: 3px;
+  bottom: -5px;
+  right: -3px;
 }
 
 .langbar a {
@@ -265,7 +287,6 @@ code {
   border-radius: 3px;
   box-shadow: 0 0 0 1px rgba(16,8,8,.6);
   background: #322;
-  background: linear-gradient(to bottom, #433, #322);
   background: linear-gradient(to bottom, rgba(64,48,48,.7), rgba(48,32,32,.7));
 }
 
@@ -274,6 +295,7 @@ code {
   width: calc(100% - 20px);
   text-align: center;
   box-shadow: 0 0 0 2px #111010, 0 0 0 4px #222020;
+  box-shadow: inset 0 0 0 1px #000, 0 0 0 3px #555050, 0 0 0 4px #111010, 0 0 5px 5px rgba(16,8,8,.1);
 }
 
 table {
@@ -342,7 +364,7 @@ th {
 
 @media screen and (min-width: 1280px) {
   body {
-    margin: 3% 15%;
+    margin: 3% 8%;
     font-size: 12pt;
   }
 
@@ -380,6 +402,11 @@ th {
 
   .notify {
     margin-top: 30px;
+  }
+}
+@media screen and (min-width: 1600px) {
+  body {
+    margin: 3% 15%;
   }
 }
 </style>
@@ -470,7 +497,7 @@ Package / repository installation ➜ <code>/var/lib/i2p/i2p-config/eepsite/docr
 
 <p>Alternatively, you can copy the <i>address helper link</i> for your domain, indicated either on the addressbook list page, or on the details page for your domain e.g. <a href="http://127.0.0.1:7657/susidns/details?h=i2p-projekt.i2p&book=router" target="_blank">details for i2p-projekt.i2p</a>, and paste the link where it's required to share it with others.</p>
 
-<p>Services such as <a href="http://identiguy.i2p/" target="_blank" class="sitelink">Identiguy's eepsite status list</a> and <a href="http://notbob.i2p/" target="_blank" class="sitelink">notbob's site uptime monitor</a> may direct visitors to your site. To actively promote your site on the network, there are various options you could try, for example:</p>
+<p>Services such as <a href="http://identiguy.i2p/" target="_blank" class="sitelink">Identiguy's eepsite status list</a> and <a href="http://notbob.i2p/" target="_blank" class="sitelink">notbob's site uptime monitor</a> may direct visitors to your site. To actively promote your site, there are various options you could try, for example:</p>
 
 <ul>
 <li>Post an announcement on one of the I2P forums e.g. <a href="http://i2pforum.i2p/" target="_blank" class="sitelink">I2P forum</a> or <a href="http://def3.i2p" target="_blank" class="sitelink">Dancing Elephants</a></li>

@@ -171,6 +171,26 @@ hr {
   animation: ease zoom-in .2s 2s forwards, ease fade-in .3s 2s forwards;*/
 }
 
+.langbar::before, .langbar::after {
+  content: "";
+  display: inline-block;
+  position: absolute;
+  height: 2px;
+  width: 4px;
+  background: #555353;
+}
+
+.langbar::before {
+  top: -2px;
+  left: -5px;
+}
+
+.langbar::after {
+  width: 3px;
+  bottom: -5px;
+  right: -3px;
+}
+
 .langbar a {
   font-size: 8.5pt;
   outline: none;
@@ -325,7 +345,7 @@ th {
 #navbar {
   margin: -3px -24px 20px;
   text-align: center;
-  border-bottom: 2px solid #555353;
+  border-bottom: 1px solid #555353;
   background: linear-gradient(to bottom, #333030, #222020);
 }
 
@@ -405,7 +425,7 @@ h3 {
 
 @media screen and (min-width: 1280px) {
   body {
-    margin: 3% 15%;
+    margin: 3% 8%;
     font-size: 12pt;
   }
 
@@ -443,5 +463,11 @@ h3 {
 
   .notify {
     margin-top: 30px;
+  }
+}
+
+@media screen and (min-width: 1600px) {
+  body {
+    margin: 3% 15%;
   }
 }
