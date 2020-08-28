@@ -1062,48 +1062,55 @@ to {
   box-shadow: inset 0 0 0 1px rgba(0,255,0,.5), 0 0 1px rgba(96,96,96,.5);
 }
 
-.routersummary .error::before, .routersummary .warn::before, .routersummary .testing::before, .routersummary .hidden::before,
-.routersummary .running::before, .routersummary .firewalled::before, .routersummary .vmcomm::before, .routersummary .clockskew::before {
-  margin-bottom: -1px;
-  padding-right: 1px;
-  vertical-align: text-bottom;
+.sb_netstatus::before {
+  margin: 0 4px 0 -4px;
+  height: 16px;
+  width: 16px;
+  vertical-align: middle;
   display: inline-block;
-  filter: drop-shadow(0 0 1px rgba(96,96,96,.5));
-  transform: scale(.9);
+  content: "";
 }
 
-.routersummary .error::before {
-  content: url(/themes/console/images/info/network_status/network_error.png);
+.sb_netstatus::before {
+  background-size: 16px 16px !important;
 }
 
-.routersummary .warn::before {
-  content: url(/themes/console/images/info/network_status/network_warning.png);
+@supports not (-moz-appearance: none) {
+.tunnelBuildStatus, .tunnelBuildStatus::before {
+   vertical-align: middle !important;
+}
 }
 
-.routersummary .testing::before {
-  content: url(/themes/console/images/info/network_status/network_testing.png);
+.sb_netstatus.error::before {
+  background: url(/themes/console/images/info/network_status/network_error.svg) center center no-repeat;
 }
 
-.routersummary .hidden::before {
-  content: url(/themes/console/images/info/network_status/network_hidden.png);
+.sb_netstatus.warn::before {
+  background: url(/themes/console/images/info/network_status/network_warning.svg) center center no-repeat;
 }
 
-.routersummary .running::before {
-  content: url(/themes/console/images/info/network_status/network_ok.png);
+.sb_netstatus.testing::before {
+  background: url(/themes/console/images/info/network_status/network_starting.svg) center center no-repeat;
 }
 
-.routersummary .firewalled::before {
-  content: url(/themes/console/images/info/network_status/network_firewalled.png);
-  padding-right: 3px;
-  opacity: .8;
+.sb_netstatus.hidden::before {
+  background: url(/themes/console/images/info/network_status/network_hidden.svg) center center no-repeat;
 }
 
-.routersummary .vmcomm::before {
-  content: url(/themes/console/images/info/network_status/network_vm.png);
+.sb_netstatus.running::before {
+  background: url(/themes/console/images/info/network_status/network_ok.svg) center center no-repeat;
 }
 
-.routersummary .clockskew::before {
-  content: url(/themes/console/images/info/network_status/network_clockskew.png);
+.sb_netstatus.firewalled::before {
+  background: url(/themes/console/images/info/network_status/network_firewalled.svg) center center no-repeat;
+}
+
+.sb_netstatus.vmcomm::before {
+  background: url(/themes/console/images/info/network_status/network_vm.svg) center center no-repeat;
+}
+
+.sb_netstatus.clockskew::before {
+  background: url(/themes/console/images/info/network_status/network_clockskew.svg) center center no-repeat;
 }
 
 /* end network status */

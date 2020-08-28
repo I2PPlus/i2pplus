@@ -987,53 +987,55 @@ div.refresh {
   background: rgba(220,255,220,.2);
 }
 
-.routersummary .error::before, .routersummary .warn::before, .routersummary .testing::before, .routersummary .hidden::before,
-.routersummary .running::before, .routersummary .firewalled::before, .routersummary .vmcomm::before, .routersummary .clockskew::before {
-  padding-right: 1px;
-  vertical-align: text-bottom;
-  display: inline-block;
-  filter: drop-shadow(0 0 1px rgba(96,96,96,.5));
-  transform: scale(0.9);
-}
-
-.routersummary .error::before, .routersummary .clockskew::before {
-  content: url(/themes/console/images/info/network_status/network_error.png);
-}
-
-.routersummary .warn::before {
-  content: url(/themes/console/images/info/network_status/network_warning.png);
-}
-
-.routersummary .testing::before {
-  content: url(/themes/console/images/info/network_status/network_testing.png);
-}
-
-.routersummary .hidden::before {
-  content: url(/themes/console/images/info/network_status/network_hidden.png);
-}
-
-.routersummary .running::before {
-  content: url(/themes/console/images/info/network_status/network_ok.png);
-/*  content: "";
-  background: url(/themes/console/images/svg/green.svg) left center no-repeat;
-  background-size: 12px 12px;
-  display: inline-block;
-  width: 16px;
+.sb_netstatus::before {
+  margin: 0 4px 0 -4px;
   height: 16px;
-  vertical-align: middle;*/
+  width: 16px;
+  vertical-align: middle;
+  display: inline-block;
+  content: "";
 }
 
-.routersummary .firewalled::before {
-  content: url(/themes/console/images/info/network_status/network_firewalled.png);
-  opacity: .8;
+.sb_netstatus::before {
+  background-size: 16px 16px !important;
 }
 
-.routersummary .vmcomm::before {
-  content: url(/themes/console/images/info/network_status/network_vm.png);
+@supports not (-moz-appearance: none) {
+.tunnelBuildStatus, .tunnelBuildStatus::before {
+   vertical-align: middle !important;
+}
 }
 
-.routersummary .clockskew::before {
-  content: url(/themes/console/images/info/network_status/network_clockskew.png);
+.sb_netstatus.error::before {
+  background: url(/themes/console/images/info/network_status/network_error.svg) center center no-repeat;
+}
+
+.sb_netstatus.warn::before {
+  background: url(/themes/console/images/info/network_status/network_warning.svg) center center no-repeat;
+}
+
+.sb_netstatus.testing::before {
+  background: url(/themes/console/images/info/network_status/network_starting.svg) center center no-repeat;
+}
+
+.sb_netstatus.hidden::before {
+  background: url(/themes/console/images/info/network_status/network_hidden.svg) center center no-repeat;
+}
+
+.sb_netstatus.running::before {
+  background: url(/themes/console/images/info/network_status/network_ok.svg) center center no-repeat;
+}
+
+.sb_netstatus.firewalled::before {
+  background: url(/themes/console/images/info/network_status/network_firewalled.svg) center center no-repeat;
+}
+
+.sb_netstatus.vmcomm::before {
+  background: url(/themes/console/images/info/network_status/network_vm.svg) center center no-repeat;
+}
+
+.sb_netstatus.clockskew::before {
+  background: url(/themes/console/images/info/network_status/network_clockskew.svg) center center no-repeat;
 }
 
 /* end network status */

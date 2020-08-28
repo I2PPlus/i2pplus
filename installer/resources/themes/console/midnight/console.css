@@ -2328,44 +2328,55 @@ to {
   background: radial-gradient(circle, #001600, #000300);
 }
 
-.sb_netstatus::before {
-  padding: 0 2px 0 0;
-  vertical-align: text-bottom;
+.sb_netstatus::before, .tunnelBuildStatus::before {
+  margin: 0 4px 0 -4px;
+  height: 16px;
+  width: 16px;
+  vertical-align: middle;
   display: inline-block;
+  content: "";
 }
 
-.sb_netstatus.error::before, .sb_netstatus.clockskew::before {
-  content: url(/themes/console/images/info/network_status/network_error.png);
+.sb_netstatus::before {
+  background-size: 16px 16px !important;
+}
+
+@supports not (-moz-appearance: none) {
+.tunnelBuildStatus, .tunnelBuildStatus::before {
+   vertical-align: middle !important;
+}
+}
+
+.sb_netstatus.error::before {
+  background: url(/themes/console/images/info/network_status/network_error.svg) center center no-repeat;
 }
 
 .sb_netstatus.warn::before {
-  content: url(/themes/console/images/info/network_status/network_warning.png);
+  background: url(/themes/console/images/info/network_status/network_warning.svg) center center no-repeat;
 }
 
 .sb_netstatus.testing::before {
-  content: url(/themes/console/images/info/network_status/network_testing.png);
+  background: url(/themes/console/images/info/network_status/network_starting.svg) center center no-repeat;
 }
 
 .sb_netstatus.hidden::before {
-  content: url(/themes/console/images/info/network_status/network_hidden.png);
-  padding: 0 3px;
+  background: url(/themes/console/images/info/network_status/network_hidden.svg) center center no-repeat;
 }
 
 .sb_netstatus.running::before {
-  content: url(/themes/console/images/info/network_status/network_ok.png);
+  background: url(/themes/console/images/info/network_status/network_ok.svg) center center no-repeat;
 }
 
 .sb_netstatus.firewalled::before {
-  content: url(/themes/console/images/info/network_status/network_firewalled.png);
-  opacity: 0.6;
+  background: url(/themes/console/images/info/network_status/network_firewalled.svg) center center no-repeat;
 }
 
 .sb_netstatus.vmcomm::before {
-  content: url(/themes/console/images/info/network_status/network_vm.png);
+  background: url(/themes/console/images/info/network_status/network_vm.svg) center center no-repeat;
 }
 
 .sb_netstatus.clockskew::before {
-  content: url(/themes/console/images/info/network_status/network_clockskew.png);
+  background: url(/themes/console/images/info/network_status/network_clockskew.svg) center center no-repeat;
 }
 
 /* end network status */
@@ -2433,9 +2444,7 @@ background-position: 0;
 }
 
 .tunnelBuildStatus.rejecting::before {
-  box-shadow: inset 0 0 0 2px #933;
   background: #933;
-  background: linear-gradient(135deg, #fff 40%, #933 40%, #933 60%, #fff 60%);
 }
 
 .tunnelBuildStatus.hidden {
