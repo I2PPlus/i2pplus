@@ -136,9 +136,9 @@ ul {
   list-style-type: square;
   border: 1px solid #222020;
   border-radius: 3px;
-  box-shadow: inset 0 0 0 1px #777070, 0 0 1px 1px rgba(16,8,8,.1);
+  box-shadow: inset 0 0 0 1px #777070, inset 0 0 0 2px rgba(16,8,8,.7), 0 0 1px 1px rgba(16,8,8,.1);
   background: #454040;
-  background: rgba(68,64,64,.6);
+  background: linear-gradient(135deg, rgba(64,60,60,.6) 60%, rgba(68,64,64,.6));
 }
 
 ul ul {
@@ -166,7 +166,7 @@ hr {
 }
 
 .langbar {
-  margin: -6px -26px 0 0;
+  margin: -6px -31px 0 0;
   padding: 5px 10px 5px 5px;
   width: auto;
   position: relative;
@@ -198,12 +198,7 @@ hr {
   top: -2px;
   left: -5px;
 }
-ul ul {
-  border: none;
-  box-shadow: none;
-  background: none;
-  padding: 0;
-}
+
 .langbar::after {
   width: 3px;
   bottom: -5px;
@@ -366,7 +361,7 @@ th {
 /* template specific */
 
 #navbar {
-  margin: -3px -24px 20px;
+  margin: -3px -29px 20px;
   text-align: center;
   border-bottom: 1px solid #555353;
   background: linear-gradient(to bottom, #333030, #222020);
@@ -481,7 +476,11 @@ h3 {
   }
 
   #navbar {
-    margin: -6px -51px 20px;
+    margin: -4px -49px 20px;
+  }
+
+  #navbar a {
+    margin: 0 0 -1px;
   }
 
   .notify {
