@@ -366,7 +366,7 @@ th {
 /* template specific */
 
 #navbar {
-  margin: -3px -24px 20px;
+  margin: -3px -29px 20px;
   text-align: center;
   border-bottom: 1px solid #555353;
   background: linear-gradient(to bottom, #333030, #222020);
@@ -481,7 +481,11 @@ h3 {
   }
 
   #navbar {
-    margin: -6px -51px 20px;
+    margin: -4px -49px 20px;
+  }
+
+  #navbar a {
+    margin: 0 0 -1px;
   }
 
   .notify {
