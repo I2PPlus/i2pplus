@@ -2382,17 +2382,7 @@ background-position: 0;
 }
 }
 
-.tunnelBuildStatus::before {
-  content: url(/themes/console/images/info/network_status/accepting.png);
-  margin-left: -3px;
-  margin-top: -1px;
-  display: inherit;
-  vertical-align: text-top;
-  display: inline-block;
-  height: 14px;
-}
-
-.tunnelBuildStatus, #bandwidthTestRunning {
+/*.tunnelBuildStatus, */#bandwidthTestRunning {
   margin: -4px 0;
   padding: 7px 3px !important;
   width: 100%;
@@ -2405,72 +2395,64 @@ background-position: 0;
   box-sizing: border-box;
 }
 
+/* tunnel build status */
+
 .tunnelBuildStatus {
-  color: #c9ceff;
+  color: #393;
 }
 
-.tunnelBuildStatus.accepting, .tunnelBuildStatus.active, #bandwidthTestRunning {
-  color: #393;
-  border: 1px solid rgba(16,96,16,.7);
-  box-shadow: 0 0 0 1px #003, inset 0 0 0 1px #000, inset 0 0 2px 1px #131;
+.tunnelBuildStatus::before {
+  margin: 3px 5px 0 0;
+  width: 9px;
+  height: 9px;
+  display: inline-block;
+  border-radius: 50%;
+  content: "";
 }
 
 .tunnelBuildStatus.accepting::before {
-  opacity: 0.5;
+  box-shadow: inset 0 0 0 2px #5b5;
+  background: #fff;
 }
 
 .tunnelBuildStatus.active::before {
-  opacity: 1;
+  background: #5c5;
+  animation: linear participating 1s 2s alternate infinite;
 }
 
-.tunnelBuildStatus.active, #bandwidthTestRunning {
-  color: #3b3;
-  background: repeating-linear-gradient(to right, rgba(0,0,0,.5), rgba(0,0,0,.5) 10px, rgba(0,32,0,.7) 10px, rgba(0,32,0,.7) 20px) #001;
-  background-size: 400% 400%;
-  animation: progress 120s linear infinite both;
+.tunnelBuildStatus.starting {
+  color: #aa0;
 }
 
 .tunnelBuildStatus.starting::before {
-  content: url(/themes/console/images/info/network_status/starting.png);
-}
-
-.tunnelBuildStatus.starting, .sb_netstatus.testing {
-  color: #990;
-  border: 1px solid rgba(96,96,16,.7);
-  box-shadow: 0 0 0 1px #003, inset 0 0 0 1px #000, inset 0 0 2px 1px #990 !important;
-  background: repeating-linear-gradient(135deg, rgba(0,0,0,.5), rgba(0,0,0,.5) 10px, rgba(48,48,0,.9) 10px, rgba(48,48,0,.9) 20px);
-  background-size: 400% 400%;
-  animation: progress 120s linear infinite both;
-}
-
-.tunnelBuildStatus.rejecting::before {
-  content: url(/themes/console/images/info/network_status/rejecting.png);
+  background: #bb0;
 }
 
 .tunnelBuildStatus.rejecting {
-  color: #900;
-  border: 1px solid rgba(96,16,16,.7);
-  box-shadow: 0 0 0 1px #003, inset 0 0 0 1px #000, inset 0 0 2px 1px #700;
-  background: repeating-linear-gradient(135deg, rgba(0,0,0,.5), rgba(0,0,0,.5) 10px, rgba(32,0,0,.9) 10px, rgba(32,0,0,.9) 20px);
-  background-size: 400% 400%;
-  animation: progress 120s linear infinite both;
+  color: #933;
 }
 
-.tunnelBuildStatus.rejecting.disabled {
-  animation: none;
+.tunnelBuildStatus.rejecting::before {
+  box-shadow: inset 0 0 0 2px #933;
+  background: #933;
+  background: linear-gradient(135deg, #fff 40%, #933 40%, #933 60%, #fff 60%);
 }
 
 .tunnelBuildStatus.hidden {
   color: #999;
-  border: 1px solid rgba(64,64,64,.7);
-  box-shadow: 0 0 0 1px #003, inset 0 0 0 1px #000, inset 0 0 2px 1px #555;
 }
 
 .tunnelBuildStatus.hidden::before {
-  content: url(/themes/console/images/info/network_status/rejecting_hidden.png);
+  background: #999;
+}
+
+@keyframes participating {
+  0,49%,51%,100% {background: #5c5}
+  50% {background: #373}
 }
 
 /* end tunnel build status */
+
 /* end sidebar */
 
 /* console error messages */
