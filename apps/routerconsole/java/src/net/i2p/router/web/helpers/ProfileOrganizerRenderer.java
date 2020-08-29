@@ -284,12 +284,12 @@ class ProfileOrganizerRenderer {
        else
            buf.append(_t("peers"));
        buf.append("</th></tr></thead>\n<tbody>\n<tr><td>")
-           .append(ngettext("{0} fast peer", "{0} fast peers", fast))
-       buf.append("</td><td>")
+          .append(ngettext("{0} fast peer", "{0} fast peers", fast))
+          .append("</td><td>")
           .append(ngettext("{0} high capacity peer", "{0} high capacity peers", reliable))
-       buf.append("</td><td>")
+          .append("</td><td>")
           .append(ngettext("{0} integrated peer", "{0} integrated peers", integrated))
-       buf.append("</td></tr>\n</tbody>\n</table>\n</div>\n"); // thresholds
+          .append("</td></tr>\n</tbody>\n</table>\n</div>\n"); // thresholds
        buf.append("</div>\n");
 
        ////
