@@ -594,6 +594,10 @@
 </tr>
 <%
     } // httpserver
+
+    String stopFirst = intl._t("Tunnel must be stopped to change this configuration");
+    String tstopFirst = " title=\"" + stopFirst + "\" ";
+
     // TODO, encrypted + offline is unimplemented
     if (!editBean.getIsOfflineKeys(curTunnel)) {
 %>
@@ -602,8 +606,6 @@
         int curSigType = editBean.getSigType(curTunnel, tunnelType);
         boolean allowBlinding = (curSigType == 7 || curSigType == 11);
         String curEncryptMode = editBean.getEncryptMode(curTunnel);
-        String stopFirst = intl._t("Tunnel must be stopped to change this configuration");
-        String tstopFirst = " title=\"" + stopFirst + "\" ";
         String ehdisabled = canChangeEncType ? "" : tstopFirst;
         String cdisabled = canChangeEncType ? "" : " disabled=\"disabled\" ";
         String bdisabled = (allowBlinding && canChangeEncType) ? "" : " disabled=\"disabled\" ";
@@ -947,11 +949,14 @@
         /* alternate dest, only if current dest is set and is DSA_SHA1 */
         int currentSigType = editBean.getSigType(curTunnel, tunnelType);
         if (currentSigType == 0 && !"".equals(b64) && !"streamrserver".equals(tunnelType)) {
+            String attitle = canChangeEncType ? "" : tstopFirst;
+            String atitle = canChangeEncType ? intl._t("Path to Private Key File") : stopFirst;
+            String adisabled = canChangeEncType ? "" : " readonly=\"readonly\" ";
 %>
 <tr><th colspan="2"><%=intl._t("Alternate private key file")%> (Ed25519-SHA-512)</th></tr>
 <tr>
-<td colspan="2">
-<input type="text" class="freetext filemanager" size="30" id="altPrivKeyFile" name="altPrivKeyFile" title="<%=intl._t("Path to Private Key File")%>" value="<%=editBean.getAltPrivateKeyFile(curTunnel)%>" />
+<td colspan="2" <%=attitle%> >
+<input type="text" class="freetext filemanager" size="30" id="altPrivKeyFile" name="altPrivKeyFile" title="<%=atitle%>" <%=adisabled%> value="<%=editBean.getAltPrivateKeyFile(curTunnel)%>" />
 </td>
 </tr>
 <%
