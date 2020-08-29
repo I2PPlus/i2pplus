@@ -178,7 +178,7 @@ public class StatsGenerator {
         buf.append("<li><b>").append(_t("Lifetime average frequency")).append(":</b> <span class=\"statvalue\">");
         buf.append(DataHelper.formatDuration2(freq.getFrequency()));
         buf.append("</span> (");
-        buf.append(ngettext("1 event", "{0} events", (int) freq.getEventCount()));
+        buf.append(ngettext("{0} event", "{0} events", (int) freq.getEventCount()));
         buf.append(")</li></ul><br>\n");
     }
 

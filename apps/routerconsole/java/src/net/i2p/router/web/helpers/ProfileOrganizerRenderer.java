@@ -83,11 +83,11 @@ class ProfileOrganizerRenderer {
       if (mode < 2) {
 
         buf.append("<p id=\"profiles_overview\" class=\"infohelp\">");
-        buf.append(ngettext("Showing 1 recent profile.", "Showing {0} recent profiles.", order.size()).replace(".", " (active in the last 15 minutes).")).append('\n');
+        buf.append(ngettext("Showing {0} recent profile.", "Showing {0} recent profiles.", order.size()).replace(".", " (active in the last 15 minutes).")).append('\n');
         if (older > 0)
-            buf.append(ngettext("Hiding 1 older profile.", "Hiding {0} older profiles.", older)).append('\n');
+            buf.append(ngettext("Hiding {0} older profile.", "Hiding {0} older profiles.", older)).append('\n');
         if (standard > 0)
-            buf.append("<a href=\"/profiles\">").append(ngettext("Hiding 1 standard profile.", "Hiding {0} standard profiles.", standard)).append("</a>\n");
+            buf.append("<a href=\"/profiles\">").append(ngettext("Hiding {0} standard profile.", "Hiding {0} standard profiles.", standard)).append("</a>\n");
         buf.append(_t("Note that the profiler relies on sustained client tunnel usage to accurately profile peers.")).append("</p>");
 
         buf.append("<div class=\"widescroll\" id=\"peerprofiles\">\n<table id=\"profilelist\">\n");
@@ -284,23 +284,12 @@ class ProfileOrganizerRenderer {
        else
            buf.append(_t("peers"));
        buf.append("</th></tr></thead>\n<tbody>\n<tr><td>")
-           .append(fast).append(' ').append(_t("fast")).append(' ');
-       if (fast == 1)
-           buf.append(_t("peer"));
-       else
-           buf.append(_t("peers"));
-       buf.append("</td><td>")
-           .append(reliable).append(' ').append(_t("high capacity")).append(' ');
-       if (reliable == 1)
-           buf.append(_t("peer"));
-       else
-           buf.append(_t("peers"));
-       buf.append("</td><td>").append(integrated).append(' ').append(_t("well integrated")).append(' ');
-       if (integrated == 1)
-           buf.append(_t("peer"));
-       else
-           buf.append(_t("peers"));
-       buf.append("</td></tr>\n</tbody>\n</table>\n</div>\n"); // thresholds
+          .append(ngettext("{0} fast peer", "{0} fast peers", fast))
+          .append("</td><td>")
+          .append(ngettext("{0} high capacity peer", "{0} high capacity peers", reliable))
+          .append("</td><td>")
+          .append(ngettext("{0} integrated peer", "{0} integrated peers", integrated))
+          .append("</td></tr>\n</tbody>\n</table>\n</div>\n"); // thresholds
        buf.append("</div>\n");
 
        ////
