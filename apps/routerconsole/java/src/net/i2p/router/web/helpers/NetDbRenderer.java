@@ -8,6 +8,7 @@ package net.i2p.router.web.helpers;
  *
  */
 
+import java.io.File;
 import java.io.IOException;
 import java.io.Serializable;
 import java.io.Writer;
@@ -42,6 +43,8 @@ import net.i2p.router.TunnelPoolSettings;
 import net.i2p.router.util.HashDistance;   // debug
 import net.i2p.router.networkdb.kademlia.FloodfillNetworkDatabaseFacade;
 import static net.i2p.router.sybil.Util.biLog2;
+import net.i2p.router.transport.GeoIP;
+import net.i2p.router.web.HelperBase;
 import net.i2p.router.web.Messages;
 import net.i2p.router.web.WebAppStarter;
 import net.i2p.util.Log;
@@ -1013,7 +1016,11 @@ class NetDbRenderer {
            .append("\">").append("<a class=\"keysearch\" href=\"/netdb?type=")
            .append(info.getIdentity().getSigningPublicKey().getType().toString())
            .append("\">").append(info.getIdentity().getSigningPublicKey().getType().toString())
-           .append("</a></span></td></tr>\n<tr>")
+           .append("</a></span>")
+.          .append("&nbsp;<span class=\"signingkey encryption\"><b>").append(_t("Encryption Key"))
+           .append(":</b> ")
+           .append(info.getIdentity().getPublicKey().getType());
+           .append("</span></td></tr>\n<tr>")
            .append("<td><b>" + _t("Addresses") + ":</b></td>")
            .append("<td colspan=\"2\" class=\"netdb_addresses\">");
 //        if (!isUs) {
