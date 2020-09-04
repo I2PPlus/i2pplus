@@ -29,6 +29,6 @@
  <jsp:setProperty name="newshelper" property="page" value="<%=fpath.getAbsolutePath()%>" />
  <jsp:setProperty name="newshelper" property="maxLines" value="300" />
 <!DOCTYPE HTML>
-<html><body>
+<html><body id="sb">
 <%@include file="xhr1.jsi" %>
 </body></html>

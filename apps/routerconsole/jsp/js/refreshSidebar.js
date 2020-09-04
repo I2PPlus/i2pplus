@@ -1,8 +1,9 @@
 function refreshSidebar() {
-  var fails = 0;
   var xhr = new XMLHttpRequest();
-  var query = location.search;
   var uri = location.pathname.substring(1);
+  var xhrContainer = document.getElementById("xhr");
+  var sb = document.getElementById("sb");
+  var down = document.getElementById("down");
   xhr.open('GET', '/xhr1.jsp?requestURI=' + uri + '&t=' + new Date().getTime(), true);
   xhr.responseType = "document";
   xhr.overrideMimeType('text/html');
@@ -12,6 +13,12 @@ function refreshSidebar() {
   xhr.onreadystatechange = function() {
     if (xhr.readyState == 4) {
       if (xhr.status == 200) {
+
+        if (xhrContainer && down) {
+          var sbResponse = xhr.responseXML.getElementById("sb");
+          xhrContainer.innerHTML = sbResponse.innerHTML;
+        }
+
         var services = document.getElementById("sb_services");
         var general = document.getElementById("sb_general");
         var shortgeneral = document.getElementById("sb_shortgeneral");
@@ -139,22 +146,22 @@ function refreshSidebar() {
             localtunnelsParent.replaceChild(localtunnelsResponse, localtunnels);
         }
 
-        var failMessage = "<b><span class=\"sb_netstatus\" id=\"down\">Router is down<\/span><\/b>";
-        if (control && controlResponse) {
-          var controlParent = control.parentNode;
-          if (!Object.is(control.innerHTML, controlResponse.innerHTML))
-            controlParent.replaceChild(controlResponse, control);
-          if (controlResponse && shutdownstatus)
-            shutdownstatus.remove();
-        } else if (shutdownStatus && !shutdownstatusResponse) {
-            shutdownstatus.innerHTML = failMessage;
-        }
-      } else if (fails == 0) {
-        fails++;
       } else {
-        // var xhrbox = document.getElementById("xhr");
-        var netstatus = document.getElementById("sb_status");
-        netstatus.innerHTML = failMessage;
+        function fail() {
+          var sidebar = document.getElementById("sidebar");
+          var digits = sidebar.getElementsByClassName("digits");
+          var i;
+          for (i = 0; i < digits.length; i++) {
+            digits[i].innerHTML = "---&nbsp;";
+          }
+        }
+        fail();
+
+        setTimeout(function() {
+          var failMessage = "<hr><b><span id=\"down\">Router is down<\/span><\/b>";
+          xhrContainer.innerHTML = failMessage;
+        }, 3000);
+
       }
     }
   }

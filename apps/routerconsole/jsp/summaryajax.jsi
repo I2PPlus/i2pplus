@@ -3,7 +3,6 @@
 %>
 
 <script nonce="<%=cspNonce%>" type="module">
-//  var failMessage = "<b><span class=\"sb_netstatus\" id=\"down\"><%=intl._t("Router is down")%></span><\/b>";
   import {refreshSidebar} from "/js/refreshSidebar.js";
   setInterval(function() {refreshSidebar();}, <%=intl.getRefresh()%> * 1000);
 </script>
