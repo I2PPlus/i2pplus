@@ -2166,22 +2166,26 @@ tr:not(.peerinfo) .snarkTorrentUploaded:empty::after {
 }
 
 .peerclient, .peerclient tt, .clientid {
-	line-height: 140% !important;
+	line-height: 160% !important;
 	vertical-align: middle;
 }
 
 .peerclient {
 	padding-right: 0;
+	width: 111px;
 }
 
 .clientid {
-	width: 80px;
-	white-space: nowrap;
+	margin: 1px 0 1px -2px;
+	padding: 0 3px;
+	width: 68px;
 	display: inline-block;
+	white-space: nowrap;
 	overflow: hidden;
 	text-overflow: ellipsis;
+	vertical-align: middle;
 	text-align: center;
-	background: #f8f8f8;
+	background: #ddd;
 }
 
 .peerdata > * {
