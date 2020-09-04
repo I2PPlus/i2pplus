@@ -7,7 +7,6 @@
 <%@include file="css.jsi" %>
 <%=intl.title("router information")%>
 <script src="/js/ajax.js" type="text/javascript"></script>
-<%@include file="summaryajax.jsi" %>
 </head>
 <body>
 <script nonce="<%=cspNonce%>" type="text/javascript">progressx.show();</script>
@@ -48,7 +47,9 @@
 <h3 class="tabletitle"><%=intl._t("Router Information")%></h3>
 <jsp:getProperty name="infohelper" property="console" />
 </div>
+<%@include file="summaryajax.jsi" %>
 <script nonce="<%=cspNonce%>" type="text/javascript">progressx.hide();</script>
+<%@include file="summaryajax.jsi" %>
 <script nonce="<%=cspNonce%>" type="text/javascript">progressx.hide();</script>
 </body>
 </html>

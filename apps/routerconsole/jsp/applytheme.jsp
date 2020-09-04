@@ -8,7 +8,6 @@
 <%=intl.title("config UI")%>
 <style type="text/css">input.default {width: 1px; height: 1px; visibility: hidden;}</style>
 <script src="/js/ajax.js" type="text/javascript"></script>
-<%@include file="summaryajax.jsi" %>
 <meta http-equiv="Refresh" content= "0;URL=/configui">
 </head>
 <body>
@@ -29,6 +28,7 @@
  <input type="hidden" name="action" value="blah" >
 </div>
 </div>
+<%@include file="summaryajax.jsi" %>
 <script nonce="<%=cspNonce%>" type="text/javascript">progressx.hide();</script>
 </body>
 </html>

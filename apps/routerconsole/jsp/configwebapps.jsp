@@ -6,7 +6,6 @@
 <%@include file="css.jsi" %>
 <%=intl.title("config webapps")%>
 <style type='text/css'>button span.hide {display:none;} input.default {width: 1px; height: 1px; visibility: hidden;}</style>
-<%@include file="summaryajax.jsi" %>
 </head>
 <body>
 <script nonce="<%=cspNonce%>" type="text/javascript">progressx.show();</script>
@@ -45,6 +44,7 @@
 </form>
 </div>
 </div>
+<%@include file="summaryajax.jsi" %>
 <script nonce="<%=cspNonce%>" type="text/javascript">progressx.hide();</script>
 </body>
 </html>

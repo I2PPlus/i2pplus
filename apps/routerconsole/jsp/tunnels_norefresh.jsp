@@ -6,7 +6,6 @@
 <head>
 <%@include file="css.jsi" %>
 <%=intl.title("tunnel summary")%>
-<%@include file="summaryajax.jsi" %>
 </head>
 <body id="routertunnels">
 <script nonce="<%=cspNonce%>" type="text/javascript">progressx.show();</script>
@@ -33,6 +32,7 @@
   }, 15000);
 </script>
 -->
+<%@include file="summaryajax.jsi" %>
 <script nonce="<%=cspNonce%>" type="text/javascript">progressx.hide();</script>
 </body>
 </html>

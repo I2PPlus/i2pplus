@@ -19,16 +19,16 @@
         out.print(graphHelper.getRefreshMeta());
     }
 %>
-<%@include file="summaryajax.jsi" %>
 </head>
 <body id="perfgraphs">
+<%@include file="summaryajax.jsi" %>
 <script nonce="<%=cspNonce%>" type="text/javascript">progressx.show();</script>
 <%@include file="summary.jsi" %>
 <h1 class="perf"><%=intl._t("Performance Graphs")%></h1>
 <div class="main" id="graphs">
 <div class="widepanel">
 <jsp:getProperty name="graphHelper" property="allMessages" />
-<div class="graphspanel">
+<div class="graphspanel" id="allgraphs">
 <jsp:getProperty name="graphHelper" property="images" />
 </div>
 <jsp:getProperty name="graphHelper" property="form" />
@@ -62,27 +62,34 @@
       location.reload(true);
     }
   }
+  initCss();
 <%
     if (graphHelper.getRefreshValue() > 0) {
 %>
   setInterval(function() {
+    progressx.show();
+    var graphs = document.getElementById("allgraphs");
     var xhr = new XMLHttpRequest();
     xhr.open('GET', '/graphs?' + new Date().getTime(), true);
-    xhr.responseType = "text";
+    xhr.responseType = "document";
     xhr.onreadystatechange = function () {
-      initCss();
       if (xhr.readyState==4 && xhr.status==200) {
-        document.getElementById("perfgraphs").innerHTML = xhr.responseText;
+        var graphsResponse = xhr.responseXML.getElementById("allgraphs");
+        var graphsParent = graphs.parentNode;
+        graphsParent.replaceChild(graphsResponse, graphs);
       }
     }
+    progressx.hide();
+    initCss();
     xhr.send();
   }, <% out.print(graphHelper.getRefreshValue() * 1000); %>);
 
-  document.addEventListener("DOMContentLoaded", function() {
-    initCss();
-  }, true);
+//  document.addEventListener("DOMContentLoaded", function() {
+//    initCss();
+//  }, true);
 <%  } %>
 </script>
+<%@include file="summaryajax.jsi" %>
 <script nonce="<%=cspNonce%>" type="text/javascript">progressx.hide();</script>
 </body>
 </html>

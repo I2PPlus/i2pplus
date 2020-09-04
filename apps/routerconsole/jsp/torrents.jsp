@@ -39,7 +39,6 @@
 </script>
 <script type="text/javascript" src="/js/iframedClassInject.js?<%=net.i2p.CoreVersion.VERSION%>"></script>
 <script type="text/javascript" src="/js/iframeResizer/iframeResizer.js?<%=net.i2p.CoreVersion.VERSION%>"></script>
-<%@include file="summaryajax.jsi" %>
 <style type="text/css">iframe {opacity: 0 !important}</style>
 </head>
 <body>
@@ -60,6 +59,7 @@ var iframes = iFrameResize({log: false, interval: 0, heightCalculationMethod: 't
 </script>
 </div>
 <style type="text/css">iframe {opacity: 1 !important}</style>
+<%@include file="summaryajax.jsi" %>
 <script nonce="<%=cspNonce%>" type="text/javascript">progressx.hide();</script>
 </body>
 </html>

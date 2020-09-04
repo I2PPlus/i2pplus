@@ -12,7 +12,6 @@
 <title>Console du routeur I2P - Aide</title>
 <%@include file="css.jsi" %>
 <script src="/js/ajax.js" type="text/javascript"></script>
-<%@include file="summaryajax.jsi" %>
 </head>
 <body>
 <script nonce="<%=cspNonce%>" type="text/javascript">progressx.show();</script>
@@ -164,6 +163,7 @@ D'autres détails sont disponibles ici:
 
 </div>
 
+<%@include file="summaryajax.jsi" %>
 <script nonce="<%=cspNonce%>" type="text/javascript">progressx.hide();</script>
 </body>
 </html>

@@ -29,7 +29,6 @@
 <%@include file="css.jsi" %>
 <%=intl.title("Page Not Found")%>
 <script nonce="<%=cspNonce%>" type="text/javascript">if (window.location !== window.top.location) {window.top.location = window.location;}</script>
-<%@include file="summaryajax.jsi" %>
 </head>
 <body>
 <script nonce="<%=cspNonce%>" type="text/javascript">progressx.show();</script>
@@ -40,6 +39,7 @@
 <hr>
 <%=intl._t("Error 404")%>: <%=ERROR_URI%>&nbsp;<%=intl._t("not found")%>.
 </div>
+<%@include file="summaryajax.jsi" %>
 <script nonce="<%=cspNonce%>" type="text/javascript">progressx.hide();</script>
 </body>
 </html>

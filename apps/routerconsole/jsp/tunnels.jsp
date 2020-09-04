@@ -6,7 +6,6 @@
 <head>
 <%@include file="css.jsi" %>
 <%=intl.title("local tunnels")%>
-<%@include file="summaryajax.jsi" %>
 </head>
 <body id="routertunnels">
 <script nonce="<%=cspNonce%>" type="text/javascript">progressx.show();</script>
@@ -21,17 +20,25 @@
 </div>
 <script nonce="<%=cspNonce%>" type="text/javascript">
   setInterval(function() {
+    progressx.show();
+    progressx.progress(0.5);
     var xhr = new XMLHttpRequest();
     xhr.open('GET', '/tunnels?' + new Date().getTime(), true);
-    xhr.responseType = "text";
+    xhr.responseType = "document";
     xhr.onreadystatechange = function () {
       if (xhr.readyState==4 && xhr.status==200) {
-        document.getElementById("routertunnels").innerHTML = xhr.responseText;
+        var tunnels = document.getElementById("tunnels");
+        var tunnelsResponse = xhr.responseXML.getElementById("tunnels");
+        var tunnelsParent = tunnels.parentNode;
+          if (!Object.is(tunnels.innerHTML, tunnelsResponse.innerHTML))
+            tunnelsParent.replaceChild(tunnelsResponse, tunnels);
       }
     }
+    progressx.hide();
     xhr.send();
   }, 15000);
 </script>
+<%@include file="summaryajax.jsi" %>
 <script nonce="<%=cspNonce%>" type="text/javascript">progressx.hide();</script>
 </body>
 </html>

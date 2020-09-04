@@ -42,7 +42,6 @@
 <%@include file="css_embed.jsi" %>
 <%@include file="csp-unsafe.jsi" %>
 <%=intl.title(name)%>
-<%@include file="summaryajax.jsi" %>
 </head>
 <body>
 <script nonce="<%=cspNonce%>" type="text/javascript">progressx.show();</script>
@@ -150,6 +149,7 @@ var iframes = iFrameResize({log: false, interval: 0, heightCalculationMethod: is
 %>
 </div>
 <span id="endOfPage"></span>
+<%@include file="summaryajax.jsi" %>
 <script nonce="<%=cspNonce%>" type="text/javascript">progressx.hide();</script>
 </body>
 </html>

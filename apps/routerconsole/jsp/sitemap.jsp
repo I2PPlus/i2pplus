@@ -6,13 +6,13 @@
 <head>
 <title>Sitemap - I2P+</title>
 <%@include file="css.jsi" %>
-<%@include file="summaryajax.jsi" %>
 </head>
 <%
     net.i2p.I2PAppContext ctx = net.i2p.I2PAppContext.getGlobalContext();
     String lang = ctx.getProperty("routerconsole.lang");
 %>
 <body class="<%=lang%>">
+<%@include file="summaryajax.jsi" %>
 <script nonce="<%=cspNonce%>" type="text/javascript">progressx.show();</script>
 <%@include file="summary.jsi" %>
 
@@ -501,6 +501,7 @@
 
 </div>
 </div>
+<%@include file="summaryajax.jsi" %>
 <script nonce="<%=cspNonce%>" type="text/javascript">progressx.hide();</script>
 </body>
 </html>

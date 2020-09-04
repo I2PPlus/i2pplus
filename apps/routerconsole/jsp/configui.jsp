@@ -7,7 +7,6 @@
 <%@include file="css.jsi" %>
 <%=intl.title("config UI")%>
 <style type="text/css">input.default {width: 1px; height: 1px; visibility: hidden;}</style>
-<%@include file="summaryajax.jsi" %>
 </head>
 <body>
 <script nonce="<%=cspNonce%>" type="text/javascript">progressx.show();</script>
@@ -79,6 +78,7 @@
 </div>
 </form>
 </div>
+<%@include file="summaryajax.jsi" %>
 <script nonce="<%=cspNonce%>" type="text/javascript">progressx.hide();</script>
 </body>
 </html>

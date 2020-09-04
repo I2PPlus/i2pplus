@@ -32,7 +32,7 @@
             out.print("<noscript>\n<iframe src=\"/summaryframe.jsp" + newDelay + "\" height=\"1500\" width=\"200\" scrolling=\"auto\" frameborder=\"0\" title=\"sidepanel\">\n</noscript>\n");
     }
 %>
-<div class="routersummary">
+<div class="routersummary" id="sidebar">
 <%
     if (allowIFrame) {
         // Display the whole summary bar

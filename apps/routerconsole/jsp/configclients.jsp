@@ -6,7 +6,6 @@
 <%@include file="css.jsi" %>
 <%=intl.title("config clients")%>
 <style type='text/css'> button span.hide {display:none;} input.default {width: 1px; height: 1px; visibility: hidden;}</style>
-<%@include file="summaryajax.jsi" %>
 <script nonce="<%=cspNonce%>" type="text/javascript">
   var deleteMessage = "<%=intl._t("Are you sure you want to delete {0}?")%>";
 </script>
@@ -56,6 +55,7 @@
 </div>
 </div>
 </div>
+<%@include file="summaryajax.jsi" %>
 <script nonce="<%=cspNonce%>" type="text/javascript">progressx.hide();</script>
 </body>
 </html>

@@ -6,9 +6,9 @@
 <head>
 <%@include file="css.jsi" %>
 <%=intl.title("job queue")%>
-<%@include file="summaryajax.jsi" %>
 </head>
 <body id="routerjobs">
+<%@include file="summaryajax.jsi" %>
 <script nonce="<%=cspNonce%>" type="text/javascript">progressx.show();</script>
 <%@include file="summary.jsi" %><h1 class="sched"><%=intl._t("Job Queue")%></h1>
 <div class="main" id="jobs">
@@ -19,17 +19,25 @@
 </div>
 <script nonce="<%=cspNonce%>" type="text/javascript">
   setInterval(function() {
+    progressx.show();
+    progressx.progress(0.5);
     var xhr = new XMLHttpRequest();
     xhr.open('GET', '/jobs?' + new Date().getTime(), true);
-    xhr.responseType = "text";
+    xhr.responseType = "document";
     xhr.onreadystatechange = function () {
       if (xhr.readyState==4 && xhr.status==200) {
-        document.getElementById("routerjobs").innerHTML = xhr.responseText;
+        var jobs = document.getElementById("jobs");
+        var jobsResponse = xhr.responseXML.getElementById("jobs");
+        var jobsParent = jobs.parentNode;
+          if (!Object.is(jobs.innerHTML, jobsResponse.innerHTML))
+            jobsParent.replaceChild(jobsResponse, jobs);
       }
     }
+    progressx.hide();
     xhr.send();
   }, 15000);
 </script>
+<%@include file="summaryajax.jsi" %>
 <script nonce="<%=cspNonce%>" type="text/javascript">progressx.hide();</script>
 </body>
 </html>

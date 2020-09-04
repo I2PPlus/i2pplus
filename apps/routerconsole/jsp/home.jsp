@@ -6,9 +6,9 @@
 <head>
 <%@include file="css.jsi" %>
 <%=intl.title("home")%>
-<%@include file="summaryajax.jsi" %>
-</head>
+<head>
 <body id="homepage">
+<%@include file="summaryajax.jsi" %>
 <script nonce="<%=cspNonce%>" type="text/javascript">progressx.show();</script>
 <%
     String consoleNonce = net.i2p.router.web.CSSHelper.getNonce();
@@ -23,7 +23,7 @@
  <jsp:useBean class="net.i2p.router.web.ConfigUpdateHelper" id="updatehelper" scope="request" />
  <jsp:setProperty name="updatehelper" property="contextId" value="<%=i2pcontextId%>" />
 <div class="routersummaryouter" style="width: 200px; float: left; margin-right: 20px;">
-<div class="routersummary">
+<div class="routersummary" id="sidebar">
 <div style="height: 36px;">
 <a href="/sitemap"><img width="200" src="<%=intl.getTheme(request.getHeader("User-Agent"))%>images/i2plogo.png" alt="<%=intl._t("I2P Router Console").replace("I2P", "I2P+")%>" title="<%=intl._t("I2P Router Console").replace("I2P", "I2P+")%>"></a>
 </div>
@@ -94,6 +94,7 @@
 </div>
 </div>
 </div>
+<%@include file="summaryajax.jsi" %>
 <script nonce="<%=cspNonce%>" type="text/javascript">progressx.hide();</script>
 </body>
 </html>

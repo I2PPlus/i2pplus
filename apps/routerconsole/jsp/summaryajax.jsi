@@ -1,11 +1,12 @@
 <%
     if (!intl.getDisableRefresh()) {
-%><script src="/js/ajax.js?<%=net.i2p.CoreVersion.VERSION%>" type="text/javascript"></script>
-<script nonce="<%=cspNonce%>" type="text/javascript">
-  var failMessage = "<hr><b><%=intl._t("Router is down")%><\/b>";
-  function requestAjax1() { ajax("/xhr1.jsp?requestURI=<%=request.getRequestURI()%>", "xhr", <%=intl.getRefresh()%>000); }
-  function initAjax() { setTimeout(requestAjax1, <%=intl.getRefresh()%>000);  }
-  initAjax();
-</script><%
+%>
+
+<script nonce="<%=cspNonce%>" type="module">
+//  var failMessage = "<b><span class=\"sb_netstatus\" id=\"down\"><%=intl._t("Router is down")%></span><\/b>";
+  import {refreshSidebar} from "/js/refreshSidebar.js";
+  setInterval(function() {refreshSidebar();}, <%=intl.getRefresh()%> * 1000);
+</script>
+<%
     }
 %>

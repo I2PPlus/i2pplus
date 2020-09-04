@@ -12,7 +12,6 @@
 <title>I2P مساعدة لوحة التحكم</title>
 <%@include file="css.jsi" %>
 <script src="/js/ajax.js" type="text/javascript"></script>
-<%@include file="summaryajax.jsi" %>
 </head>
 <body>
 <script nonce="<%=cspNonce%>" type="text/javascript">progressx.show();</script>
@@ -155,6 +154,8 @@ the <a href="configadvanced.jsp">صفحة الاعدادات المتقدمة</a
  <p id="fullhistory"><a href="/history.txt">View the full change log</a></p>
 </div>
 
-</div><script nonce="<%=cspNonce%>" type="text/javascript">progressx.hide();</script>
+</div><%@include file="summaryajax.jsi" %>
+<script nonce="<%=cspNonce%>" type="text/javascript">progressx.hide();</script>
+<%@include file="summaryajax.jsi" %>
 <script nonce="<%=cspNonce%>" type="text/javascript">progressx.hide();</script>
 </body></html>

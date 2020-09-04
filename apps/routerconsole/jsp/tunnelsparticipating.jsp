@@ -6,12 +6,12 @@
 <head>
 <%@include file="css.jsi" %>
 <%=intl.title("participating tunnels")%>
-<%@include file="summaryajax.jsi" %>
 <link href="/themes/console/tablesort.css" rel="stylesheet" type="text/css">
 <script nonce="<%=cspNonce%>" src="/js/tablesort/tablesort.js" type="text/javascript"></script>
 <script nonce="<%=cspNonce%>" src="/js/tablesort/tablesort.number.js" type="text/javascript"></script>
 </head>
 <body id="routertunnels">
+<%@include file="summaryajax.jsi" %>
 <script nonce="<%=cspNonce%>" type="text/javascript">progressx.show();</script>
 <%@include file="summary.jsi" %>
 <h1 class="netwrk"><%=intl._t("Participating Tunnels")%></h1>
@@ -23,6 +23,7 @@
 <jsp:getProperty name="tunnelParticipatingHelper" property="tunnelsParticipating" />
 <script nonce=" + cspNonce + " type="text/javascript">new Tablesort(document.getElementById("tunnels_part"));</script>
 </div>
+<%@include file="summaryajax.jsi" %>
 <script nonce="<%=cspNonce%>" type="text/javascript">progressx.hide();</script>
 </body>
 </html>

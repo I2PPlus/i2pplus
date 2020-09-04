@@ -19,9 +19,9 @@
         out.print(graphHelper.getRefreshMeta());
     }
 %>
-<%@include file="summaryajax.jsi" %>
 </head>
-<body onload="initCss();" id="perfgraphs">
+<body id="perfgraphs">
+<%@include file="summaryajax.jsi" %>
 <script nonce="<%=cspNonce%>" type="text/javascript">progressx.show();</script>
 <%@include file="summary.jsi" %>
 <%
@@ -43,11 +43,12 @@
 </div>
 <script nonce="<%=cspNonce%>" type="text/javascript">
   var main = document.getElementById("perfgraphs");
-  var graph = document.getElementById("graphSingle");
+  var graph = document.getElementById("single");
+  var graphImage = document.getElementById("graphSingle");
   function injectCss() {
     main.addEventListener("mouseover", function() {
-      var graphWidth = graph.naturalWidth;
-      var graphHeight = graph.height;
+      var graphWidth = graphImage.naturalWidth;
+      var graphHeight = graphImage.height;
       var sheet = window.document.styleSheets[0];
 <%
     if (graphHelper.getGraphHiDpi()) {
@@ -60,32 +61,41 @@
 <%
     }
 %>
-  });
+    });
+  }
   function initCss() {
-    if (graph != null || graphWidth != graph.naturalWidth || graphHeight != graph.height) {
+    if (graphImage != null || graphWidth != graphImage.naturalWidth || graphHeight != graphImage.height) {
       injectCss();
     } else {
       location.reload(true);
     }
   }
+  initCss();
 <%
     if (graphHelper.getRefreshValue() > 0) {
 %>
+if (graph) {
   setInterval(function() {
+    progressx.show();
     var graphURL = window.location.href + "&" + new Date().getTime();
     var xhr = new XMLHttpRequest();
     xhr.open('GET', graphURL, true);
-    xhr.responseType = "text";
+    xhr.responseType = "document";
     xhr.onreadystatechange = function () {
-      initCss();
       if (xhr.readyState==4 && xhr.status==200) {
-        document.getElementById("perfgraphs").innerHTML = xhr.responseText;
+        var graphResponse = xhr.responseXML.getElementById("single");
+        var graphParent = graph.parentNode;
+        graphParent.replaceChild(graphResponse, graph);
       }
     }
+    progressx.hide();
+    initCss();
     xhr.send();
   }, <% out.print(graphHelper.getRefreshValue() * 1000); %>);
+}
 <%  } %>
 </script>
+<%@include file="summaryajax.jsi" %>
 <script nonce="<%=cspNonce%>" type="text/javascript">progressx.hide();</script>
 </body>
 </html>

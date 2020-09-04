@@ -5,8 +5,8 @@
 <head>
 <%@include file="css.jsi" %>
 <%=intl.title("config peers")%>
-<%@include file="summaryajax.jsi" %>
 </head>
+<%@include file="summaryajax.jsi" %>
 <script nonce="<%=cspNonce%>" type="text/javascript">progressx.show();</script>
 <%@include file="summary.jsi" %>
 <h1 class="conf"><%=intl._t("Peer Manager")%></h1>
@@ -70,6 +70,7 @@
  <h3 class="tabletitle"><%=intl._t("Banned IPs")%></h3>
  <jsp:getProperty name="peerhelper" property="blocklistSummary" />
  </div>
+<%@include file="summaryajax.jsi" %>
 <script nonce="<%=cspNonce%>" type="text/javascript">progressx.hide();</script>
 </body>
 </html>

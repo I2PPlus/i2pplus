@@ -12,7 +12,6 @@
 <title>Ayuda - I2P+</title>
 <%@include file="css.jsi" %>
 <script src="/js/ajax.js" type="text/javascript"></script>
-<%@include file="summaryajax.jsi" %>
 </head>
 <body>
 <script nonce="<%=cspNonce%>" type="text/javascript">progressx.show();</script>
@@ -464,6 +463,7 @@ Si deseas reportar un bug, por favor, crea un ticket en <a href="http://trac.i2p
 </div>
 
 </div>
+<%@include file="summaryajax.jsi" %>
 <script nonce="<%=cspNonce%>" type="text/javascript">progressx.hide();</script>
 </body>
 </html>

@@ -8,7 +8,6 @@
 <head>
 <%@include file="css.jsi" %>
 <%=intl.title("WebApp Not Found")%>
-<%@include file="summaryajax.jsi" %>
 </head>
 <body>
 <script nonce="<%=cspNonce%>" type="text/javascript">progressx.show();</script>
@@ -18,6 +17,7 @@
 <%=intl._t("The requested web application is not running.")%>
 <%=intl._t("Please visit the {0}config clients page{1} to start it.", "<a href=\"/configwebapps.jsp#webapp\" target=\"_top\">", "</a>")%>
 </div>
+<%@include file="summaryajax.jsi" %>
 <script nonce="<%=cspNonce%>" type="text/javascript">progressx.hide();</script>
 </body>
 </html>
