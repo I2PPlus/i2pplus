@@ -81,6 +81,8 @@ public class I2PSnarkServlet extends BasicServlet {
     private static final char HELLIP = '\u2026';
     private static final String PROP_ADVANCED = "routerconsole.advanced";
 
+    String cspNonce = Integer.toHexString(_context.random().nextInt());
+
     public I2PSnarkServlet() {
         super();
     }
@@ -220,21 +222,19 @@ public class I2PSnarkServlet extends BasicServlet {
         String pOverride = _manager.util().connected() ? null : "";
         String peerString = getQueryString(req, pOverride, null, null);
 
-        String cspNonce = Integer.toHexString(_context.random().nextInt());
         // AJAX for mainsection
         if ("/.ajax/xhr1.html".equals(path)) {
-            setHTMLHeaders(resp, cspNonce, false);
+            setXHRHeaders(resp, cspNonce, false);
             PrintWriter out = resp.getWriter();
-            out.write("<!DOCTYPE HTML>\n");
-            // selected theme inserted here
-            out.write(HEADER_A + _themePath + HEADER_B + "\n");
-            out.write(HEADER_A + _themePath + HEADER_Z + "\n"); // optional override.css for version-persistent user edits
+            out.write("<!DOCTYPE HTML>\n<html>\n<head>\n");
+            out.write("</head>\n<body>\n");
             writeMessages(out, false, peerString);
             boolean canWrite;
             synchronized(this) {
                 canWrite = _resourceBase.canWrite();
             }
             writeTorrents(out, req, canWrite);
+            out.write("</body>\n</html>\n");
             return;
         }
 
@@ -334,7 +334,7 @@ public class I2PSnarkServlet extends BasicServlet {
                 String downMsg = _context.isRouterContext() ? _t("Router is down") : _t("I2PSnark has stopped");
                 // fallback to metarefresh when javascript is disabled
                 out.write("<noscript><meta http-equiv=\"refresh\" content=\"" + delay + ";" + _contextPath + "/" + peerString + "\"></noscript>\n" +
-                          "<script  nonce=\"" + cspNonce + "\" src=\"" + jsPfx + "/js/ajax.js?" + CoreVersion.VERSION + "\" type=\"text/javascript\"></script>\n" +
+                          "<script nonce=\"" + cspNonce + "\" src=\"" + jsPfx + "/js/ajax.js?" + CoreVersion.VERSION + "\" type=\"text/javascript\"></script>\n" +
                           "<script nonce=\"" + cspNonce + "\" type=\"text/javascript\">\n"  +
                           "var failMessage = \"<div class=\\\"routerdown\\\"><b>" + downMsg + "<\\/b><\\/div>\";\n" +
                           "var ajaxDelay = " + (delay * 1000) + ";\n" +
@@ -365,7 +365,7 @@ public class I2PSnarkServlet extends BasicServlet {
             out.write(HEADER_A + _themePath + HEADER_C + "\n");
         }
         // dynamic iframe resizer
-        out.write("<script type=\"text/javascript\" src=\"/js/iframeResizer/iframeResizer.contentWindow.js?" + CoreVersion.VERSION + "\" id=\"iframeResizer\"></script>\n");
+        out.write("<script type=\"text/javascript\" src=\"/js/iframeResizer/iframeResizer.contentWindow.js?" + CoreVersion.VERSION + "\" id=\"iframeResizer\" async></script>\n");
         out.write("</head>\n" + "<body class=\"" + _manager.getTheme() + " lang_" + lang + "\">\n" + "<center>");
         List<Tracker> sortedTrackers = null;
 /*
@@ -467,7 +467,20 @@ public class I2PSnarkServlet extends BasicServlet {
     private static void setHTMLHeaders(HttpServletResponse resp, String cspNonce, boolean allowMedia) {
         resp.setCharacterEncoding("UTF-8");
         resp.setContentType("text/html; charset=UTF-8");
-        resp.setHeader("Cache-Control", "no-cache, private, max-age=2628000, stale-while-revalidate=86400");
+        resp.setHeader("Cache-Control", "no-cache, private, max-age=2628000");
+        resp.setHeader("Content-Security-Policy", "default-src 'self'; style-src 'self' 'unsafe-inline'; script-src 'self' 'unsafe-inline' 'nonce-" + cspNonce + "'; form-action 'self'; frame-ancestors 'self'; object-src 'none'; media-src '" + (allowMedia ? "self" : "none") + "'");
+        resp.setHeader("X-Frame-Options", "SAMEORIGIN");
+        resp.setHeader("X-XSS-Protection", "1; mode=block");
+        resp.setHeader("X-Content-Type-Options", "nosniff");
+        resp.setHeader("Referrer-Policy", "no-referrer");
+        resp.setHeader("Accept-Ranges", "none");
+        resp.setHeader("Feature-Policy", "fullscreen 'self'");
+    }
+
+    private static void setXHRHeaders(HttpServletResponse resp, String cspNonce, boolean allowMedia) {
+        resp.setCharacterEncoding("UTF-8");
+        resp.setContentType("text/html; charset=UTF-8");
+        resp.setHeader("Cache-Control", "private, max-age=2628000");
         resp.setHeader("Content-Security-Policy", "default-src 'self'; style-src 'self' 'unsafe-inline'; script-src 'self' 'unsafe-inline' 'nonce-" + cspNonce + "'; form-action 'self'; frame-ancestors 'self'; object-src 'none'; media-src '" + (allowMedia ? "self" : "none") + "'");
         resp.setHeader("X-Frame-Options", "SAMEORIGIN");
         resp.setHeader("X-XSS-Protection", "1; mode=block");
@@ -3689,8 +3702,7 @@ public class I2PSnarkServlet extends BasicServlet {
 
         boolean showStopStart = snark != null;
         Storage storage = snark != null ? snark.getStorage() : null;
-        boolean showPriority = storage != null && !storage.complete() &&
-                               r.isDirectory();
+        boolean showPriority = storage != null && !storage.complete() && r.isDirectory();
 
         StringBuilder buf=new StringBuilder(4096);
         buf.append(DOCTYPE).append("<html>\n<head>\n<title>");
@@ -3720,7 +3732,7 @@ public class I2PSnarkServlet extends BasicServlet {
            .append("<link rel=\"shortcut icon\" href=\"" + _themePath + "favicon.ico\">\n");
         if (showPriority)
             buf.append("<script src=\"").append(_contextPath).append(WARBASE + "js/folder.js?" + CoreVersion.VERSION + "\" type=\"text/javascript\"></script>\n");
-        buf.append("<script type=\"text/javascript\" src=\"/js/iframeResizer/iframeResizer.contentWindow.js?" + CoreVersion.VERSION + "\"></script>\n");
+        buf.append("<script type=\"text/javascript\" src=\"/js/iframeResizer/iframeResizer.contentWindow.js?" + CoreVersion.VERSION + "\" async></script>\n");
         buf.append("</head>\n<body class=\"lang_" + lang + "\">\n" +
                    "<center>\n<div class=\"snarknavbar\"><a href=\"").append(_contextPath).append("/\" title=\"Torrents\"" +
                    " class=\"snarkNav nav_main\">");
@@ -3753,7 +3765,7 @@ public class I2PSnarkServlet extends BasicServlet {
             String baseName = encodePath((new File(fullPath)).getName());
             MetaInfo meta = snark.getMetaInfo();
             buf.append("<div class=\"mainsection\" id=\"snarkInfo\">");
-            buf.append("<table class=\"snarkTorrentInfo\">\n");
+            buf.append("<table class=\"snarkTorrentInfo\" id=\"snarkTorrentInfo\">\n");
             buf.append("<tr><th colspan=\"2\">");
             toThemeImg(buf, "torrent");
             buf.append("<b>")
@@ -3876,7 +3888,7 @@ public class I2PSnarkServlet extends BasicServlet {
                 buf.append("<b>");
                 if (completion < 1.0)
                     buf.append(_t("Completion")).append(":</b> ").append((new DecimalFormat("0.0%"))
-                       .format(completion).replace("0.0%","0%")).append("</b>");
+                       .format(completion).replace("0.0%","0%"));
                 else
                     buf.append(_t("Complete")).append("</b>");
 
@@ -4208,7 +4220,7 @@ public class I2PSnarkServlet extends BasicServlet {
         buf.append("<div class=\"mainsection\" id=\"snarkFiles\">");
         buf.append("<input class=\"toggle_input\" id=\"toggle_files\" type=\"checkbox\"");
         // don't collapse file view if not in torrent root
-        if (!er || !ec || fileList.size() <= 10)
+        if (!er || !ec || fileList.size() <= 10 || sortParam != null)
             buf.append(" checked");
         buf.append(">");
         buf.append("<label class=\"toggleview\" for=\"toggle_files\">");
@@ -4216,7 +4228,7 @@ public class I2PSnarkServlet extends BasicServlet {
         buf.append(' ');
         buf.append(_t("Files"));
         buf.append("</label><hr>\n");
-        buf.append("<table class=\"snarkDirInfo\"><thead>\n" +
+        buf.append("<table class=\"snarkDirInfo\">\n<thead>\n" +
                    "<tr>\n" +
                    "<th colspan=2>");
         String tx = _t("Directory");
@@ -4263,7 +4275,7 @@ public class I2PSnarkServlet extends BasicServlet {
         boolean showRemainingSort = showSort && showPriority;
         if (showRemainingSort) {
             sort = ("10".equals(sortParam)) ? "-10" : "10";
-            buf.append("<a href=\"").append(base)
+            buf.append("<a id=\"sortRemaining\" href=\"").append(base)
                .append(getQueryString(sort)).append("\">");
         }
         tx = _t("Download Status");
@@ -4284,8 +4296,7 @@ public class I2PSnarkServlet extends BasicServlet {
             if (showSort)
                 buf.append("</a>");
         }
-        buf.append("</th>\n</tr>\n</thead>\n" +
-//                   "<tr><td colspan=\"" + (showPriority ? '5' : '4') + "\" class=\"ParentDir\"><a href=\"");
+        buf.append("</th>\n</tr>\n</thead>\n<tbody id=\"snarkDirInfo\">" +
                    "<tr><td colspan=\"" + (showPriority ? '3' : '2') + "\" class=\"ParentDir\"><a href=\"");
         URIUtil.encodePath(buf, addPaths(decodedBase,"../"));
         buf.append("\">");
@@ -4297,7 +4308,6 @@ public class I2PSnarkServlet extends BasicServlet {
         buf.append("<td colspan=\"2\" class=\"ParentDir playlist\">");
         // playlist button
         if (hasCompleteAudio(fileList, storage, remainingArray)) {
-/*            buf.append("<tr><td colspan=\"" + (showPriority ? '5' : '4') + "\" class=\"ParentDir\">" + */
             buf.append("<a href=\"").append(base).append("?playlist");
             if (sortParam != null && !"0".equals(sortParam) && !"1".equals(sortParam))
                 buf.append("&amp;sort=").append(sortParam);
@@ -4307,18 +4317,17 @@ public class I2PSnarkServlet extends BasicServlet {
         }
         buf.append("</td></tr>\n");
 
-        //DateFormat dfmt=DateFormat.getDateTimeInstance(DateFormat.MEDIUM,
-        //                                               DateFormat.MEDIUM);
+        //DateFormat dfmt=DateFormat.getDateTimeInstance(DateFormat.MEDIUM, DateFormat.MEDIUM);
         boolean showSaveButton = false;
         boolean rowEven = true;
         boolean inOrder = storage != null && storage.getInOrder();
         for (Sorters.FileAndIndex fai : fileList)
         {
-            //String encoded = encodePath(ls[i].getName());
+            // String encoded = encodePath(ls[i].getName());
             // bugfix for I2P - Backport from Jetty 6 (zero file lengths and last-modified times)
             // http://jira.codehaus.org/browse/JETTY-361?page=com.atlassian.jira.plugin.system.issuetabpanels%3Achangehistory-tabpanel#issue-tabs
             // See resource.diff attachment
-            //Resource item = addPath(encoded);
+            // Resource item = addPath(encoded);
             File item = fai.file;
 
             String rowClass = (rowEven ? "snarkTorrentEven" : "snarkTorrentOdd");
@@ -4333,12 +4342,11 @@ public class I2PSnarkServlet extends BasicServlet {
             int priority = 0;
             if (fai.isDirectory) {
                 complete = true;
-                //status = toImg("tick") + ' ' + _t("Directory");
             } else {
                 if (storage == null) {
                     // Assume complete, perhaps he removed a completed torrent but kept a bookmark
                     complete = true;
-                    status = toImg("warn", "iconStatus", _t("Not found"), _t("Torrent not found?"));
+                    status = toImg("warn", "iconStatus", _t("Not found"), _t("Torrent not found?").replace("?", ""));
                 } else {
 
                             long remaining = fai.remaining;
@@ -4409,8 +4417,6 @@ public class I2PSnarkServlet extends BasicServlet {
                     buf.append("<img alt=\"\" border=\"0\" class=\"thumb\" src=\"")
                        .append(ppath).append("\" data-lightbox data-lightbox-caption=\"")
                        .append(item.getName()).append("\" data-lightbox-group=\"allInDir\"></a>");
-//                    buf.append("<img alt=\"\" border=\"0\" class=\"thumb\" src=\"")
-//                       .append(ppath).append("\"></a>");
                 } else {
                     buf.append(toImg(icon, _t("Open"))).append("</a>");
                 }
@@ -4487,7 +4493,7 @@ public class I2PSnarkServlet extends BasicServlet {
             buf.append("</tr>\n");
         }
         if (showSaveButton) {
-            buf.append("<thead><tr id=\"setPriority\"><th colspan=\"5\">" +
+            buf.append("</tbody>\n<thead><tr id=\"setPriority\"><th colspan=\"5\">" +
                        "<span class=\"script\">");
             if (!inOrder) {
                 buf.append("<a class=\"control\" id=\"setallhigh\" href=\"#\">")
@@ -4507,7 +4513,7 @@ public class I2PSnarkServlet extends BasicServlet {
 
         CommentSet comments = snark.getComments();
         if (er || ec) {
-            buf.append("<div class=\"mainsection\" id=\"snarkCommentSection\">");
+            buf.append("<div class=\"mainsection\" id=\"snarkCommentSection\">\n");
                 buf.append("<input class=\"toggle_input\" id=\"toggle_comments\" type=\"checkbox\"");
                 if (comments != null && !comments.isEmpty())
                     buf.append(" checked");
@@ -4521,13 +4527,15 @@ public class I2PSnarkServlet extends BasicServlet {
             buf.append("</div>\n");
         }
         if (includeForm)
-            buf.append("</form>");
+            buf.append("</form>\n");
         boolean enableLightbox = _manager.util().enableLightbox();
-        if (enableLightbox) {
-            buf.append("<link type=\"text/css\" rel=\"stylesheet\" href=\"").append(_contextPath).append(WARBASE + "lightbox.css\">");
-            buf.append("<script src=\"").append(_contextPath).append(WARBASE + "js/lightbox.js?" + CoreVersion.VERSION + "\" type=\"text/javascript\"></script>")
-               .append("<script nonce=\"<%=cspNonce%>\">var lightbox = new Lightbox();lightbox.load();</script>");
+        if (!showRemainingSort && enableLightbox) {
+            buf.append("<link type=\"text/css\" rel=\"stylesheet\" href=\"").append(_contextPath).append(WARBASE + "lightbox.css\">\n");
+            buf.append("<script src=\"").append(_contextPath).append(WARBASE + "js/lightbox.js?" + CoreVersion.VERSION + "\" type=\"text/javascript\"></script>\n")
+               .append("<script nonce=\"" + cspNonce + "\" type=\"text/javascript\">\nvar lightbox = new Lightbox();lightbox.load();\n</script>\n");
         }
+        buf.append("</div>\n<script src=\"").append(_contextPath).append(WARBASE + "js/refreshDetails.js?" + CoreVersion.VERSION + "\" type=\"text/javascript\"></script>\n");
+//        buf.append("<script src=\"/themes/refreshDetails.js?" + CoreVersion.VERSION + "\" type=\"text/javascript\"></script>\n"); // debugging
         buf.append("</div>\n<span id=\"endOfPage\" data-iframe-height></span>\n</center>\n" +
                    "<style type=\"text/css\">body{opacity: 1 !important;}</style>\n</body>\n</html>\n");
         return buf.toString();
@@ -4823,9 +4831,7 @@ public class I2PSnarkServlet extends BasicServlet {
                         int rcnt = comments.getRatingCount();
                         if (rcnt > 0) {
                             double avg = comments.getAverageRating();
-//                            buf.append(_t("Average Rating")).append(":</td><td colspan=\"2\">").append(avg);  // todo format
                             buf.append(_t("Average Rating")).append(":</td><td colspan=\"2\">").append((new DecimalFormat("0.0")).format(avg));
-                            //buf.append(' ').append(_t("Total Ratings")).append(": ").append(rcnt);
                         } else {
                             buf.append(_t("Average Rating")).append(":</td><td colspan=\"2\">");
                             buf.append(_t("No community ratings currently available"));

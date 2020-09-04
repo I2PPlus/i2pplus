@@ -1,3 +1,5 @@
+function setPriorities() {
+
 const setupbuttons=()=>{
 	let sp = document.forms[0].savepri;
 	if ( sp ) updatesetallbuttons(), sp.disabled = true, sp.className = 'disabled';
@@ -6,21 +8,21 @@ const setupbuttons=()=>{
 	for(index = 0; index < buttons.length; index++)
 	{
 		var button = buttons[index];
-                if (!button.disabled)
+			if (!button.disabled)
 			addClickHandler(button);
 	}
 	buttons = document.getElementsByClassName("prinorm");
 	for(index = 0; index < buttons.length; index++)
 	{
 		var button = buttons[index];
-                if (!button.disabled)
+			if (!button.disabled)
 	 		addClickHandler(button);
 	}
 	buttons = document.getElementsByClassName("priskip");
 	for(index = 0; index < buttons.length; index++)
 	{
 		var button = buttons[index];
-                if (!button.disabled)
+			if (!button.disabled)
 			addClickHandler(button);
 	}
 	var button = document.getElementById('setallhigh');
@@ -28,21 +30,21 @@ const setupbuttons=()=>{
 		button.addEventListener("click", function() {
 			setallhigh();
 			event.preventDefault();
-	        });
+			});
 	}
 	button = document.getElementById('setallnorm');
 	if (!button.disabled) {
 		button.addEventListener("click", function() {
 			setallnorm();
 			event.preventDefault();
-	        });
+			});
 	}
 	button = document.getElementById('setallskip');
 	if (!button.disabled) {
 		button.addEventListener("click", function() {
 			setallskip();
 			event.preventDefault();
-	        });
+			});
 	}
 }
 
@@ -105,13 +107,13 @@ const setallskip=()=>{
 	form.savepri.className = 'accept';
 }
 
-function addClickHandler(elem)
-{
+function addClickHandler(elem) {
 	elem.addEventListener("click", function() {
 		priorityclicked();
-        });
+	});
 }
 
-document.addEventListener("DOMContentLoaded", function() {
-    setupbuttons();
+}
+document.addEventListener('mouseover', function() {
+	setPriorities();
 }, true);
