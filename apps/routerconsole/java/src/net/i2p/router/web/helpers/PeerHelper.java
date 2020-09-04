@@ -327,12 +327,12 @@ public class PeerHelper extends HelperBase {
         }
 
         StringBuilder buf = new StringBuilder(512);
-        buf.append("<h3 id=\"ntcpcon\">").append(_t("NTCP connections")).append(":&nbsp; ").append(peers.size());
+        buf.append("<div id=\"ntcp\">\n<h3 id=\"ntcpcon\">").append(_t("NTCP connections")).append(":&nbsp; ").append(peers.size());
         buf.append(" / ").append(nt.getMaxConnections());
         //buf.append(". ").append(_t("Timeout")).append(": ").append(DataHelper.formatDuration2(_pumper.getIdleTimeout()));
         buf.append("&nbsp;<span class=\"reachability\">").append(_t("Status")).append(": ")
            .append(nt.getReachabilityStatus().toLocalizedStatusString(_context)).append("</span></h3>\n")
-           .append("<div class=\"widescroll\"><table id=\"ntcpconnections\">\n");
+           .append("<div class=\"widescroll\">\n<table id=\"ntcpconnections\">\n");
         if (peers.size() != 0) {
             buf.append("<tr><th class=\"peer\">").append(_t("Peer")).append("</th>" +
                        "<th class=\"direction\" title=\"").append(_t("Direction/Introduction")).append("\">").append(_t("Dir")).append("</th>" +
@@ -448,7 +448,7 @@ public class PeerHelper extends HelperBase {
             buf.append("<td class=\"spacer\">&nbsp;</td></tr>\n");
         }
 
-        buf.append("</table></div>\n");
+        buf.append("</table>\n</div></div>\n");
         out.write(buf.toString());
         buf.setLength(0);
     }
@@ -510,7 +510,7 @@ public class PeerHelper extends HelperBase {
         int numRTTPeers = 0;
 
         StringBuilder buf = new StringBuilder(512);
-        buf.append("<h3 id=\"udpcon\">").append(_t("UDP connections")).append(":&nbsp; ").append(peers.size())
+        buf.append("<div id=\"udp\">\n<h3 id=\"udpcon\">").append(_t("UDP connections")).append(":&nbsp; ").append(peers.size())
            .append(" / ").append(ut.getMaxConnections());
         //buf.append(". ").append(_t("Timeout")).append(": ").append(DataHelper.formatDuration2(_expireTimeout));
         final boolean isAdvanced = isAdvanced();
@@ -519,7 +519,7 @@ public class PeerHelper extends HelperBase {
                .append(ut.getReachabilityStatus().toLocalizedStatusString(_context)).append("</span>");
         }
         buf.append("</h3>\n");
-        buf.append("<div class=\"widescroll\"><table id=\"udpconnections\" ");
+        buf.append("<div class=\"widescroll\">\n<table id=\"udpconnections\" ");
         if (isAdvanced()) {
             buf.append("class=\"advancedview\"");
         }
@@ -829,7 +829,7 @@ public class PeerHelper extends HelperBase {
         }
 ****/
      }  // numPeers > 0
-        buf.append("</table></div>\n");
+        buf.append("</table>\n</div>\n</div>\n");
 
       /*****
         long bytesTransmitted = _context.bandwidthLimiter().getTotalAllocatedOutboundBytes();

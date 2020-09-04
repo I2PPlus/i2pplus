@@ -724,7 +724,7 @@ class SummaryBarRenderer {
         if (_helper == null) return "";
         StringBuilder buf = new StringBuilder(512);
         SummaryHelper.NetworkStateMessage reachability = _helper.getReachability();
-        buf.append("<h4><span class=\"sb_netstatus ");
+        buf.append("<h4 id=\"sb_status\"><span class=\"sb_netstatus ");
         switch (reachability.getState()) {
             case VMCOMM:
                 buf.append("vmcomm");
@@ -781,7 +781,7 @@ class SummaryBarRenderer {
         String updateStatus = _helper.getUpdateStatus();
         if ("".equals(updateStatus)) return "";
         StringBuilder buf = new StringBuilder(512);
-        buf.append("<h3><a href=\"/configupdate\" target=\"_top\" title=\"")
+        buf.append("<h3 id=\"sb_updatestatus\"><a href=\"/configupdate\" target=\"_top\" title=\"")
            .append(_t("Configure I2P Updates"))
            .append("\">")
            .append(_t("Update Status"))
@@ -985,7 +985,7 @@ class SummaryBarRenderer {
                    "<table id=\"sb_bandwidth\">\n" +
 
                    "<tr><td align=\"left\"><b>")
-           .append(DataHelper.formatDuration2(3 * 1000))   // lie and say 3 sec since 1 sec would appear as 1000 ms
+           .append(DataHelper.formatDuration2(3 * 1000))  // lie and say 3 sec since 1 sec would appear as 1000 ms
            .append("</b></td><td align=\"right\">")
            .append(_helper.getSecondKBps())
            .append("Bps</td></tr>\n");
@@ -1024,7 +1024,15 @@ class SummaryBarRenderer {
         if (StatSummarizer.isDisabled(_context))
             return "";
         StringBuilder buf = new StringBuilder(512);
-        buf.append("<div id=\"sb_graphcontainer\"");
+//        buf.append("<div id=\"sb_graphcontainer\"");
+        buf.append("<div id=\"sb_graphcontainer\" title=\"")
+           .append(_t("Our inbound &amp; outbound traffic for the last 20 minutes"))
+           .append("\">\n<span id=\"sb_graphstats\">")
+           .append(_helper.getSecondKBps())
+           .append("Bps</span>\n<a href=\"/graphs\">\n<canvas id=\"minigraph\"></canvas>\n</a>\n");
+        buf.append("<script src=\"/js/refreshGraph.js?").append(CoreVersion.VERSION)
+           .append("\" type=\"text/javascript\" id=\"refreshGraph\" async></script>\n</div>\n");
+/*
         // 15 sec js refresh
         // only do this if the summary bar refresh is slower, otherwise it looks terrible
         String r = _context.getProperty(CSSHelper.PROP_REFRESH, CSSHelper.DEFAULT_REFRESH);
@@ -1043,6 +1051,7 @@ class SummaryBarRenderer {
                .append("\"><td><span id=\"sb_graphstats\">")
                .append(_helper.getSecondKBps())
                .append("Bps</span></td></tr>\n</table></a>\n</div>\n");
+*/
         return buf.toString();
     }
 
@@ -1181,7 +1190,7 @@ class SummaryBarRenderer {
     public String renderTunnelStatusHTML() {
         if (_helper == null) return "";
         StringBuilder buf = new StringBuilder(50);
-        buf.append("<h4><span class=\"tunnelBuildStatus");
+        buf.append("<h4 id=\"sb_tunnelstatus\"><span class=\"tunnelBuildStatus");
         if (_t(_helper.getTunnelStatus()).contains(("Starting up")))
             buf.append(" starting\" title=\"").append(_t("No participating tunnels requests are accepted for the first 10 minutes while router stabilizes"));
         if (_t(_helper.getTunnelStatus()).contains(("Shutting down")))

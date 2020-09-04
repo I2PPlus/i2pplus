@@ -741,7 +741,7 @@ public class SummaryHelper extends HelperBase {
             }
             buf.append("</table>");
         } else {
-            buf.append("<center><i>").append(_t("none")).append("</i></center>\n");
+            buf.append("<table id=\"sb_localtunnels\"><tr><td><center><i>").append(_t("none")).append("</i></center></td></tr></table>\n");
         }
         return buf.toString();
     }
@@ -1080,13 +1080,13 @@ public class SummaryHelper extends HelperBase {
         String status = checker.getStatus();
         if (status.length() > 0) {
             // Show status message even if not running, timer in ReseedChecker should remove after 20 minutes
-            buf.append("<div class=\"sb_notice\"><i>").append(status).append("</i></div>");
+            buf.append("<div class=\"sb_notice\" id=\"sb_notice\"><i>").append(status).append("</i></div>");
         }
         if (!checker.inProgress()) {
             // If a new reseed isn't running, and the last reseed had errors, show error message
             String reseedErrorMessage = checker.getError();
             if (reseedErrorMessage.length() > 0) {
-                buf.append("<div class=\"sb_notice\"><i>").append(reseedErrorMessage).append("</i></div>");
+                buf.append("<div class=\"sb_notice\" id=\"sb_notice\"><i>").append(reseedErrorMessage).append("</i></div>");
             }
             // If showing the reseed link is allowed
             if (allowReseed()) {
