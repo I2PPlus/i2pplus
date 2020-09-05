@@ -40,8 +40,10 @@ function init() {
   const ex = document.getElementById("expand");
   const sh = document.getElementById("shrink");
 
-  sh.addEventListener("click", shrink, false);
-  ex.addEventListener("click", expand, false);
+  if (sh)
+    sh.addEventListener("click", shrink, false);
+  if (ex)
+    ex.addEventListener("click", expand, false);
 
 }
 
