@@ -1,9 +1,9 @@
-// refresh the sidebar mini graph every 3 seconds
+// refresh the sidebar mini graph every 5 seconds
 
 function refreshGraph() {
   var minigraph = document.getElementById("minigraph");
   var routerdown = document.getElementById("down");
-  if (minigraph && !routerdown) {
+  if (minigraph) {
     const ctx = minigraph.getContext("2d");
     const image = new Image(245, 50);
     image.onload = renderGraph;
@@ -34,7 +34,7 @@ function refreshGraph() {
     }
   }
   req.send();
-  setTimeout(refreshGraph, 3000);
+  setTimeout(refreshGraph, 5000);
 }
 
 refreshGraph();

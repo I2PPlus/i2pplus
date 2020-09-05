@@ -69,12 +69,12 @@ function refreshSidebar() {
         if (general) {
           var generalParent = general.parentNode;
           if (!Object.is(general.innerHTML, generalResponse.innerHTML))
-            generalParent.replaceChild(generalResponse, advgeneral);
+            generalParent.replaceChild(generalResponse, general);
         }
         if (shortgeneral) {
           var shortgeneralParent = shortgeneral.parentNode;
           if (!Object.is(shortgeneral.innerHTML, shortgeneralResponse.innerHTML))
-            shortgeneralParent.replaceChild(shortgeneralResponse, advgeneral);
+            shortgeneralParent.replaceChild(shortgeneralResponse, shortgeneral);
         }
         if (advgeneral) {
           var advgeneralParent = advgeneral.parentNode;
@@ -147,16 +147,12 @@ function refreshSidebar() {
         }
 
       } else {
-        function fail() {
-          var sidebar = document.getElementById("sidebar");
-          var digits = sidebar.getElementsByClassName("digits");
-          var i;
-          for (i = 0; i < digits.length; i++) {
-            digits[i].innerHTML = "---&nbsp;";
-          }
+        var sidebar = document.getElementById("sidebar");
+        var digits = sidebar.getElementsByClassName("digits");
+        var i;
+        for (i = 0; i < digits.length; i++) {
+          digits[i].innerHTML = "---&nbsp;";
         }
-        fail();
-
         setTimeout(function() {
           var failMessage = "<hr><b><span id=\"down\">Router is down<\/span><\/b>";
           xhrContainer.innerHTML = failMessage;

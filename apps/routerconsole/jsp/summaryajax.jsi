@@ -4,7 +4,9 @@
 
 <script nonce="<%=cspNonce%>" type="module">
   import {refreshSidebar} from "/js/refreshSidebar.js";
-  setInterval(function() {refreshSidebar();}, <%=intl.getRefresh()%> * 1000);
+  setInterval(function () {
+    refreshSidebar();
+  }, <%=intl.getRefresh()%> * 1000);
 </script>
 <%
     }
