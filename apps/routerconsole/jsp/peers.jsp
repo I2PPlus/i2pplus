@@ -27,7 +27,7 @@
 <script nonce="<%=cspNonce%>" type="text/javascript">
   setInterval(function() {
     progressx.show();
-    var uri = var uri = (window.location.pathname + window.location.search).substring(1);
+    var uri = (window.location.pathname + window.location.search).substring(1);
     var xhr = new XMLHttpRequest();
     if (uri.includes("?transport"))
       xhr.open('GET', uri + '&t=' + new Date().getTime(), true);
