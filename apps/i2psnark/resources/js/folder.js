@@ -1,5 +1,9 @@
 function setPriorities() {
 
+var allNorm = document.getElementById("setallnorm");
+var allHigh = document.getElementById("setallhigh");
+var allSkip = document.getElementById("setallskip");
+
 const setupbuttons=()=>{
 	let sp = document.forms[0].savepri;
 	if ( sp ) updatesetallbuttons(), sp.disabled = true, sp.className = 'disabled';
@@ -25,21 +29,21 @@ const setupbuttons=()=>{
 			if (!button.disabled)
 			addClickHandler(button);
 	}
-	var button = document.getElementById('setallhigh');
+	var button = allHigh;
 	if (!button.disabled) {
 		button.addEventListener("click", function() {
 			setallhigh();
 			event.preventDefault();
 			});
 	}
-	button = document.getElementById('setallnorm');
+	button = allNorm;
 	if (!button.disabled) {
 		button.addEventListener("click", function() {
 			setallnorm();
 			event.preventDefault();
 			});
 	}
-	button = document.getElementById('setallskip');
+	button = allSkip;
 	if (!button.disabled) {
 		button.addEventListener("click", function() {
 			setallskip();
@@ -63,9 +67,9 @@ const updatesetallbuttons=()=>{
 			else notSkip = false;
 		}
 	}
-	document.getElementById('setallnorm').className = notNorm ? 'controld' : 'control';
-	document.getElementById('setallhigh').className = notHigh ? 'controld' : 'control';
-	document.getElementById('setallskip').className = notSkip ? 'controld' : 'control';
+	allNorm.className = notNorm ? 'controld' : 'control';
+	allHigh.className = notHigh ? 'controld' : 'control';
+	allSkip.className = notSkip ? 'controld' : 'control';
 }
 
 const setallnorm=()=>{
@@ -74,9 +78,9 @@ const setallnorm=()=>{
 		ele = elems[i++];
 		if (ele.type == 'radio' && ele.className === 'prinorm') ele.checked = true;
 	}
-	document.getElementById('setallnorm').className = 'controld';
-	document.getElementById('setallhigh').className = 'control';
-	document.getElementById('setallskip').className = 'control';
+	allNorm.className = 'controld';
+	allHigh.className = 'control';
+	allSkip.className = 'control';
 	form.savepri.disabled = false;
 	form.savepri.className = 'accept';
 }
@@ -87,9 +91,9 @@ const setallhigh=()=>{
 		ele = elems[i++];
 		if (ele.type == 'radio' && ele.className === 'prihigh') ele.checked = true;
 	}
-	document.getElementById('setallnorm').className = 'control';
-	document.getElementById('setallhigh').className = 'controld';
-	document.getElementById('setallskip').className = 'control';
+	allNorm.className = 'control';
+	allHigh.className = 'controld';
+	allSkip.className = 'control';
 	form.savepri.disabled = false;
 	form.savepri.className = 'accept';
 }
@@ -100,9 +104,9 @@ const setallskip=()=>{
 		ele = elems[i++];
 		if (ele.type == 'radio' && ele.className === 'priskip') ele.checked = true;
 	}
-	document.getElementById('setallnorm').className = 'control';
-	document.getElementById('setallhigh').className = 'control';
-	document.getElementById('setallskip').className = 'controld';
+	allNorm.className = 'control';
+	allHigh.className = 'control';
+	allSkip.className = 'controld';
 	form.savepri.disabled = false;
 	form.savepri.className = 'accept';
 }
@@ -114,6 +118,9 @@ function addClickHandler(elem) {
 }
 
 }
-document.addEventListener('mouseover', function() {
-	setPriorities();
-}, true);
+
+if (document.readyState === "4") {
+	document.addEventListener('DOMContentLoaded', function() {
+		setPriorities();
+	}, false);
+}

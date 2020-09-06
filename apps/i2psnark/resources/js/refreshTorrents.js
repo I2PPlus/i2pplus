@@ -4,6 +4,7 @@ function refreshTorrents() {
   var torrents = document.getElementById("snarkTorrents");
   if (torrents)
     var torrentsParent = torrents.parentNode;
+  var tfilter = document.getElementById("torrentDisplay");
   var thead = document.getElementById("snarkHead");
   var noload = document.getElementById("noload");
   var down = document.getElementById("down");
@@ -30,6 +31,8 @@ function refreshTorrents() {
           var torrentsResponse = xhrsnark.responseXML.getElementById("snarkTorrents");
           var theadResponse = xhrsnark.responseXML.getElementById("snarkHead");
         }
+        if (tfilter)
+          var tfilterResponse = xhrsnark.responseXML.getElementById("torrentDisplay");
         var screenlog = document.getElementById("screenlog");
         var tfoot = document.getElementById("snarkFoot");
         var even = document.getElementsByClassName("snarkTorrentEven");
@@ -96,7 +99,6 @@ function refreshTorrents() {
             }
           }
         }
-
 
         if (peerinfo) {
           var peerinfoResponse = xhrsnark.responseXML.getElementsByClassName("peerinfo");
