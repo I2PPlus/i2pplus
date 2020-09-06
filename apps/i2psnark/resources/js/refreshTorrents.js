@@ -4,7 +4,6 @@ function refreshTorrents() {
   var torrents = document.getElementById("snarkTorrents");
   if (torrents)
     var torrentsParent = torrents.parentNode;
-  var tfilter = document.getElementById("torrentDisplay");
   var thead = document.getElementById("snarkHead");
   var noload = document.getElementById("noload");
   var down = document.getElementById("down");
@@ -31,8 +30,6 @@ function refreshTorrents() {
           var torrentsResponse = xhrsnark.responseXML.getElementById("snarkTorrents");
           var theadResponse = xhrsnark.responseXML.getElementById("snarkHead");
         }
-        if (tfilter)
-          var tfilterResponse = xhrsnark.responseXML.getElementById("torrentDisplay");
         var screenlog = document.getElementById("screenlog");
         var tfoot = document.getElementById("snarkFoot");
         var even = document.getElementsByClassName("snarkTorrentEven");
@@ -43,7 +40,6 @@ function refreshTorrents() {
         if (torrentsResponse && (noload || !thead)) {
               if (!Object.is(torrents.innerHTML, torrentsResponse.innerHTML))
                 torrentsParent.replaceChild(torrentsResponse, torrents);
-//                torrents.outerHTML = torrentsResponse.outerHTML;
         }
 
         if (screenlog) {
