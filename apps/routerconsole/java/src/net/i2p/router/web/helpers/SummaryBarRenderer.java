@@ -83,6 +83,7 @@ class SummaryBarRenderer {
         _helper = helper;
     }
 
+
     /**
      *  Note - ensure all links in here are absolute, as the summary bar may be displayed
      *         on lower-level directory errors.
@@ -141,7 +142,8 @@ class SummaryBarRenderer {
                 buf.append(renderTunnelStatusHTML());
             else if ("Destinations".equals(section))
                 buf.append(renderDestinationsHTML());
-            else if ("NewsHeadings".equals(section) && !requestURI.contains("news"))
+//            else if ("NewsHeadings".equals(section) && !requestURI.contains("news"))
+            else if ("NewsHeadings".equals(section) && requestURI.contains("home")) // only render on homepage
                 buf.append(renderNewsHeadingsHTML());
             else if ("Clock".equals(section))
                 buf.append(renderClockHTML());
@@ -700,17 +702,23 @@ class SummaryBarRenderer {
            .append("</b></td>" +
                    "<td class=\"digits\" align=\"right\">")
            .append(DataHelper.formatDuration2(_context.clock().getOffset()))
-           .append("</td></tr>\n" +
+           .append("</td></tr>\n");
 
-                   "<tr title=\"")
-           .append(_t("How much RAM I2P is using / total RAM available to I2P (excludes RAM allocated to the JVM)"))
-           .append("\">" +
-                   "<td align=\"left\"><b>")
-           .append(_t("Memory"))
-           .append("</b></td>" +
-                   "<td class=\"digits\" align=\"right\">")
-           .append(_helper.getMemory().replace("iB", ""))
-           .append("</td></tr>\n</table>\n");
+           String requestURI = _helper.getRequestURI();
+           String page = requestURI.replace("/", "").replace(".jsp", "");
+           List<String> sections = _helper.getSummaryBarSections(page);
+           if (!sections.contains("MemoryBar")) {
+               buf.append("<tr title=\"")
+                 .append(_t("How much RAM I2P is using / total RAM available to I2P (excludes RAM allocated to the JVM)"))
+                 .append("\">" +
+                         "<td align=\"left\"><b>")
+                 .append(_t("Memory"))
+                 .append("</b></td>" +
+                         "<td class=\"digits\" align=\"right\">")
+                 .append(_helper.getMemory().replace("iB", ""))
+                 .append("</td></tr>\n");
+           }
+           buf.append("</table>\n");
         return buf.toString();
     }
 
@@ -852,18 +860,19 @@ class SummaryBarRenderer {
            .append(_t("Unreachable"))
            .append("</b></a></td><td class=\"digits\" align=\"right\">")
            .append(_helper.getUnreachablePeers())
-           .append("</td></tr>\n" +
+           .append("</td></tr>\n");
+       if (_helper.getBanlistedPeers() > 1) {
+           buf.append("<tr title=\"")
+               .append(_t("The number of banned peers"))
+               .append("\">" +
+                       "<td align=\"left\"><a href=\"/profiles?f=3\"><b>")
+               .append(_t("Banned"))
+               .append("</b></a></td><td class=\"digits\" align=\"right\">")
+               .append(_helper.getBanlistedPeers())
+               .append("</td></tr>\n");
+       }
 
-                   "<tr title=\"")
-           .append(_t("The number of banned peers"))
-           .append("\">" +
-                   "<td align=\"left\"><a href=\"/profiles?f=3\"><b>")
-           .append(_t("Banned"))
-           .append("</b></a></td><td class=\"digits\" align=\"right\">")
-           .append(_helper.getBanlistedPeers())
-           .append("</td></tr>\n" +
-
-                   "<tr title=\"")
+        buf.append("<tr title=\"")
            .append(_t("The total number of peers in our network database"))
            .append("\">" +
                    "<td align=\"left\"><a href=\"/netdb\"><b>")
@@ -985,14 +994,14 @@ class SummaryBarRenderer {
                    "<table id=\"sb_bandwidth\">\n" +
 
                    "<tr><td align=\"left\"><b>")
-           .append(DataHelper.formatDuration2(3 * 1000).replace("3&nbsp;sec", "Current"))  // lie and say 3 sec since 1 sec would appear as 1000 ms
+           .append(DataHelper.formatDuration2(3 * 1000).replace("3&nbsp;sec", _t("Current")))  // lie and say 3 sec since 1 sec would appear as 1000 ms
            .append("</b></td><td class=\"digits\" align=\"right\">")
            .append(_helper.getSecondKBps())
            .append("Bps</td></tr>\n");
 
         if (_context.router().getUptime() > 6*60*1000) {
             buf.append("<tr><td align=\"left\"><b>")
-           .append(DataHelper.formatDuration2(5 * 60 * 1000))   // 5 min
+           .append(DataHelper.formatDuration2(5 * 60 * 1000).replace("5&nbsp;min", _t("5 Min Average")))   // 5 min
            .append("</b></td><td class=\"digits\" align=\"right\">")
            .append(_helper.getFiveMinuteKBps())
            .append("Bps</td></tr>\n");
@@ -1000,7 +1009,7 @@ class SummaryBarRenderer {
 
         if (_context.router().getUptime() > 2*60*1000) {
             buf.append("<tr><td align=\"left\"><b>")
-           .append(_t("Total").replace("Total", "Average"))
+           .append(_t("Total").replace("Total", _t("Lifetime")))
            .append("</b></td><td class=\"digits\" align=\"right\">")
            .append(_helper.getLifetimeKBps())
            .append("Bps</td></tr>\n");
@@ -1029,7 +1038,7 @@ class SummaryBarRenderer {
            .append(_t("Our inbound &amp; outbound traffic for the last 20 minutes"))
            .append("\">\n<span id=\"sb_graphstats\">")
            .append(_helper.getSecondKBps())
-           .append("Bps</span>\n<a href=\"/graphs\">\n<canvas id=\"minigraph\"></canvas>\n</a>\n");
+           .append("Bps</span>\n<a href=\"/graphs\">\n<canvas id=\"minigraph\" width=\"245\" height=\50\"></canvas>\n</a>\n");
         buf.append("<script src=\"/js/refreshGraph.js?").append(CoreVersion.VERSION)
            .append("\" type=\"text/javascript\" id=\"refreshGraph\" async></script>\n</div>\n");
 /*
@@ -1063,19 +1072,20 @@ class SummaryBarRenderer {
            .append("\">")
            .append(_t("Tunnels"))
            .append("</a></h3>\n<hr class=\"b\">\n" +
-                   "<table id=\"sb_tunnels\">\n" +
+                   "<table id=\"sb_tunnels\">\n");
+        if (_helper.getInboundClientTunnels() > 0 || _helper.getOutboundClientTunnels() > 0) {
+            buf.append("<tr title=\"")
+               .append(_t("Tunnels we are using to provide or access services on the network")).append(" (").append(_t("inbound / outbound")).append(")")
+               .append("\">" +
+                       "<td align=\"left\"><b>")
+               .append(_t("Client"))
+               .append("</b></td><td class=\"digits\" align=\"right\">")
+//               .append(_helper.getInboundClientTunnels() + _helper.getOutboundClientTunnels())
+               .append(_helper.getInboundClientTunnels()).append(" / ").append(_helper.getOutboundClientTunnels())
+               .append("</td></tr>\n");
+        }
 
-                   "<tr title=\"")
-           .append(_t("Tunnels we are using to provide or access services on the network")).append(" (").append(_t("inbound / outbound")).append(")")
-           .append("\">" +
-                   "<td align=\"left\"><b>")
-           .append(_t("Client"))
-           .append("</b></td><td class=\"digits\" align=\"right\">")
-//           .append(_helper.getInboundClientTunnels() + _helper.getOutboundClientTunnels())
-           .append(_helper.getInboundClientTunnels()).append(" / ").append(_helper.getOutboundClientTunnels())
-           .append("</td></tr>\n" +
-
-                   "<tr title=\"")
+        buf.append("<tr title=\"")
            .append(_t("Used for building and testing tunnels, and communicating with floodfill peers")).append(" (").append(_t("inbound / outbound")).append(")")
            .append("\">" +
                    "<td align=\"left\"><b>")
@@ -1088,10 +1098,11 @@ class SummaryBarRenderer {
            String maxTunnels = _context.getProperty("router.maxParticipatingTunnels");
            RouterInfo ri = _context.router().getRouterInfo();
            int partTunnels = _helper.getParticipatingTunnels();
-           if (partTunnels >= 2)
-               partTunnels = partTunnels - 1; // fix duplicate display
+//           if (partTunnels >= 2)
+//               partTunnels = partTunnels - 1; // fix duplicate display
            if ((maxTunnels == null || partTunnels > 0
-               || Integer.valueOf(maxTunnels) > 0) && !_context.router().isHidden() && ri != null && !ri.getBandwidthTier().equals("K")) {
+               || Integer.valueOf(maxTunnels) > 0) && !_context.router().isHidden() && ri != null && !ri.getBandwidthTier().equals("K")
+               && partTunnels > 0) {
                buf.append("<tr title=\"")
                   .append(_t("Tunnels we are participating in, directly contributing bandwidth to the network"))
                   .append("\">" +
@@ -1112,7 +1123,8 @@ class SummaryBarRenderer {
                       partTunnels)
               .append("</td></tr>\n");
 
-           if ((maxTunnels == null || Integer.valueOf(maxTunnels) > 0) && !_context.router().isHidden() && ri != null && !ri.getBandwidthTier().equals("K")) {
+           if ((maxTunnels == null || Integer.valueOf(maxTunnels) > 0) && !_context.router().isHidden() && ri != null &&
+                !ri.getBandwidthTier().equals("K") && !_helper.getShareRatio().toString().equals("0")) {
                buf.append("<tr title=\"")
                   .append(_t("The ratio of tunnel hops we provide to tunnel hops we use - a value greater than 1.00 indicates a positive contribution to the network"))
                   .append("\">" +

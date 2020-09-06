@@ -844,7 +844,7 @@ public class SummaryHelper extends HelperBase {
             return "0";
         double sr = _context.tunnelManager().getShareRatio();
         DecimalFormat fmt = new DecimalFormat("##0.00");
-        return fmt.format(sr);
+        return fmt.format(sr).replace("0.00", "0");
     }
 
     /**
