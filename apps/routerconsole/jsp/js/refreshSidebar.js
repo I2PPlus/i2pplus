@@ -1,9 +1,16 @@
 function refreshSidebar() {
+
   var xhr = new XMLHttpRequest();
   var uri = location.pathname.substring(1);
   var xhrContainer = document.getElementById("xhr");
+
   var sb = document.getElementById("sb");
   var down = document.getElementById("down");
+  var services = document.getElementById("sb_services");
+  var advanced = document.getElementById("sb_advanced");
+  var internals = document.getElementById("sb_internals");
+  var localtunnels = document.getElementById("sb_localtunnels");
+
   xhr.open('GET', '/xhr1.jsp?requestURI=' + uri + '&t=' + new Date().getTime(), true);
   xhr.responseType = "document";
   xhr.overrideMimeType('text/html');
@@ -19,7 +26,6 @@ function refreshSidebar() {
           xhrContainer.innerHTML = sbResponse.innerHTML;
         }
 
-        var services = document.getElementById("sb_services");
         var general = document.getElementById("sb_general");
         var shortgeneral = document.getElementById("sb_shortgeneral");
         var advgeneral = document.getElementById("sb_advancedgeneral");
@@ -33,7 +39,6 @@ function refreshSidebar() {
         var tunnels = document.getElementById("sb_tunnels");
         var queue = document.getElementById("sb_queue");
         var tunnelstatus = document.getElementById("sb_tunnelstatus");
-        var localtunnels = document.getElementById("sb_localtunnels");
         var control = document.getElementById("sb_routerControl");
         var shutdownstatus = document.getElementById("sb_shutdownStatus");
         var graphstats = document.getElementById("sb_graphstats");
@@ -153,10 +158,26 @@ function refreshSidebar() {
         for (i = 0; i < digits.length; i++) {
           digits[i].innerHTML = "---&nbsp;";
         }
+
+        if (services) {
+          services.nextElementSibling.remove();
+          services.remove();
+        }
+        if (advanced) {
+          advanced.nextElementSibling.remove();
+          advanced.remove();
+        }
+        if (internals) {
+          internals.nextElementSibling.remove();
+          internals.remove();
+        }
+        if (localtunnels)
+          localtunnels.remove();
+
         setTimeout(function() {
           var failMessage = "<hr><b><span id=\"down\">Router is down<\/span><\/b>";
           xhrContainer.innerHTML = failMessage;
-        }, 3000);
+        }, 5000);
 
       }
     }
