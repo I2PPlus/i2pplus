@@ -416,8 +416,12 @@ class BasicServlet extends HttpServlet
         }
 
         long ct = content.getCacheTime();
-        if (ct>=0)
-            response.setHeader("Cache-Control", "no-cache, private, max-age=" + ct + ", stale-while-revalidate=86400");
+        if (ct >= 0) {
+            if (ctype.contains("javascript") || ctype.contains("text/") || ctype.contains("image/"))
+                response.setHeader("Cache-Control", "private, max-age=" + ct * 30);
+            else
+                response.setHeader("Cache-Control", "no-cache, private, max-age=" + ct);
+        }
     }
 
     /* ------------------------------------------------------------ */
