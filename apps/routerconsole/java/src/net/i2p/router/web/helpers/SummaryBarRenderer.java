@@ -1033,14 +1033,23 @@ class SummaryBarRenderer {
         if (StatSummarizer.isDisabled(_context))
             return "";
         StringBuilder buf = new StringBuilder(512);
-//        buf.append("<div id=\"sb_graphcontainer\"");
         buf.append("<div id=\"sb_graphcontainer\" title=\"")
            .append(_t("Our inbound &amp; outbound traffic for the last 20 minutes"))
            .append("\">\n<span id=\"sb_graphstats\">")
            .append(_helper.getSecondKBps())
-           .append("Bps</span>\n<a href=\"/graphs\">\n<canvas id=\"minigraph\" width=\"245\" height=\50\"></canvas>\n</a>\n");
-        buf.append("<script src=\"/js/refreshGraph.js?").append(CoreVersion.VERSION)
-           .append("\" type=\"text/javascript\" id=\"refreshGraph\" async></script>\n</div>\n");
+           .append("Bps</span>\n")
+           .append("<a href=\"/graphs\">\n<canvas id=\"minigraph\" class=\"script\" width=\"245\" height=\50\">")
+           .append("<div id=\"minigraph\" style=\"background-image: url(/viewstat.jsp?stat=bw.combined")
+           .append("&amp;periodCount=20&amp;width=250&amp;height=50&amp;hideLegend=true&amp;hideGrid=true&amp;")
+           .append("hideTitle=true&amp;time=").append(_context.clock().now() / 1000).append("\"></div>")
+           .append("</canvas>\n</a>\n")
+           .append("<noscript><div id=\"minigraph\" style=\"background-image: url(/viewstat.jsp?stat=bw.combined")
+           .append("&amp;periodCount=20&amp;width=250&amp;height=50&amp;hideLegend=true&amp;hideGrid=true&amp;")
+           .append("hideTitle=true&amp;time=").append(_context.clock().now() / 1000).append("\"></div></noscript>")
+           .append("<script src=\"/js/refreshGraph.js?")
+           .append(CoreVersion.VERSION)
+           .append("\" type=\"module\" id=\"refreshGraph\"></script>\n")
+           .append("</div>\n");
 /*
         // 15 sec js refresh
         // only do this if the summary bar refresh is slower, otherwise it looks terrible

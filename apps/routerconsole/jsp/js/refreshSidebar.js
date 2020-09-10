@@ -1,4 +1,4 @@
-function refreshSidebar() {
+function refreshSidebar(timestamp) {
 
   var xhr = new XMLHttpRequest();
   var uri = location.pathname.substring(1);
@@ -145,6 +145,11 @@ function refreshSidebar() {
           if (!Object.is(tunnelstatus.innerHTML, tunnelstatusResponse.innerHTML))
             tunnelstatusParent.replaceChild(tunnelstatusResponse, tunnelstatus);
         }
+        if (shutdownstatus) {
+          var shutdownstatusParent = shutdownstatus.parentNode;
+          if (!Object.is(shutdownstatus.innerHTML, shutdownstatusResponse.innerHTML))
+            shutdownstatusParent.replaceChild(shutdownstatusResponse, shutdownstatus);
+        }
         if (localtunnels) {
           var localtunnelsParent = localtunnels.parentNode;
           if (!Object.is(localtunnels.innerHTML, localtunnelsResponse.innerHTML))
@@ -177,7 +182,7 @@ function refreshSidebar() {
         setTimeout(function() {
           var failMessage = "<hr><b><span id=\"down\">Router is down<\/span><\/b>";
           xhrContainer.innerHTML = failMessage;
-        }, 5000);
+        }, 3000);
 
       }
     }
