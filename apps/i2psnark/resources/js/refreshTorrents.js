@@ -1,123 +1,82 @@
-function refreshTorrents() {
-  var xhrsnark = new XMLHttpRequest();
+function refreshTorrents(timestamp) {
+
   var mainsection = document.getElementById("mainsection");
+  var snarkInfo = document.getElementById("snarkInfo");
   var torrents = document.getElementById("snarkTorrents");
-  if (torrents)
-    var torrentsParent = torrents.parentNode;
   var thead = document.getElementById("snarkHead");
+  var tfoot = document.getElementById("snarkFoot");
   var noload = document.getElementById("noload");
   var down = document.getElementById("down");
-  var url = ".ajax/xhr1.html";
-  var query = location.search;
+  var files = document.getElementById("toggle_files");
+
+  var query = window.location.search;
+
+  if (torrents || noload)
+    var url = ".ajax/xhr1.html";
+  else
+    var url = location.href;
   if (query)
     url += query;
+
+  var xhrsnark = new XMLHttpRequest();
+
   xhrsnark.open('GET', url);
   xhrsnark.setRequestHeader("If-Modified-Since", "Sat, 1 Jan 2000 00:00:00 GMT");
   xhrsnark.responseType = "document";
-  xhrsnark.onreadystatechange = function () {
+  xhrsnark.onreadystatechange = function() {
 
     if (xhrsnark.readyState == 4) {
       if (xhrsnark.status == 200) {
 
-        if (mainsection && down) {
-          var mainsectionResponse = xhrsnark.responseXML.getElementById("mainsection");
-          if (mainsectionResponse) {
-            mainsection.innerHTML = mainsectionResponse.innerHTML;
-          }
-        }
-
-        if (!down) {
-          var torrentsResponse = xhrsnark.responseXML.getElementById("snarkTorrents");
-          var theadResponse = xhrsnark.responseXML.getElementById("snarkHead");
-        }
-        var screenlog = document.getElementById("screenlog");
-        var tfoot = document.getElementById("snarkFoot");
-        var even = document.getElementsByClassName("snarkTorrentEven");
-        var odd = document.getElementsByClassName("snarkTorrentOdd");
+        var info = document.getElementById("torrentInfoStats");
+        var control = document.getElementById("torrentInfoControl");
+        var files = document.getElementById("snarkDirInfo");
+        var remaining = document.getElementById("sortRemaining");
+        var complete = document.getElementsByClassName("completed");
+        var incomplete = document.getElementsByClassName("incomplete");
         var peerinfo = document.getElementsByClassName("peerinfo");
         var debuginfo = document.getElementsByClassName("debuginfo");
+        if (torrents)
+          var torrentsResponse = xhrsnark.responseXML.getElementById("snarkTorrents");
 
-        if (torrentsResponse && (noload || !thead)) {
-              if (!Object.is(torrents.innerHTML, torrentsResponse.innerHTML))
-                torrentsParent.replaceChild(torrentsResponse, torrents);
+        if (!down && !noload) {
+          refreshHeaderAndFooter();
+        } else if (down || noload) {
+          refreshAll();
         }
 
-        if (screenlog) {
-          var screenlogResponse = xhrsnark.responseXML.getElementById("screenlog");
-          if (screenlogResponse) {
-            var screenlogParent = screenlog.parentNode;
-            if (!Object.is(screenlog.innerHTML, screenlogResponse.innerHTML))
-              screenlogParent.replaceChild(screenlogResponse, screenlog);
+        if (info) {
+          var infoResponse = xhrsnark.responseXML.getElementById("torrentInfoStats");
+          if (infoResponse) {
+            var infoParent = info.parentNode;
+            if (!Object.is(info.innerHTML, infoResponse.innerHTML))
+              infoParent.replaceChild(infoResponse, info);
           }
         }
 
-        if (thead) {
-          if (thead && theadResponse) {
-            var theadParent = thead.parentNode;
-            if (!Object.is(thead.innerHTML, theadResponse.innerHTML))
-              theadParent.replaceChild(theadResponse, thead);
-          } else if (!thead) {
-            torrentsParent.replaceChild(torrentsResponse.outerHTML, torrents.outerHTML);
+        if (control) {
+          var controlResponse = xhrsnark.responseXML.getElementById("torrentcontrolStats");
+          if (controlResponse) {
+            var controlParent = control.parentNode;
+            if (!Object.is(control.innerHTML, controlResponse.innerHTML))
+              controlParent.replaceChild(controlResponse, control);
           }
         }
 
-        if (tfoot) {
-          var tfootResponse = xhrsnark.responseXML.getElementById("snarkFoot");
-          if (tfootResponse) {
-            var tfootParent = tfoot.parentNode;
-            if (!Object.is(tfoot.innerHTML, tfootResponse.innerHTML))
-              tfootParent.replaceChild(tfootResponse, tfoot);
-          }
+        if ((files && files.checked) || torrents) {
+          updateVolatile();
         }
 
-        if (even) {
-          var evenResponse = xhrsnark.responseXML.getElementsByClassName("snarkTorrentEven");
-          if (evenResponse) {
+        if (complete) {
+          function updateCompleted() {
+            var completeResponse = xhrsnark.responseXML.getElementsByClassName("completed");
             var i;
-            for (i = 0; i < even.length; i++) {
-              if (!Object.is(even[i].innerHTML, evenResponse[i].innerHTML))
-                even[i].outerHTML = evenResponse[i].outerHTML;
-              else if (even.length != evenResponse.length)
-                torrentsParent.replaceChild(torrentsResponse, torrents);
+            for (i = 0; i < complete.length; i++) {
+              if (!Object.is(complete[i].innerHTML, completeResponse[i].innerHTML))
+                complete[i].innerHTML = completeResponse[i].innerHTML;
             }
           }
-        }
-
-        if (odd) {
-          var oddResponse = xhrsnark.responseXML.getElementsByClassName("snarkTorrentOdd");
-          if (oddResponse) {
-            var i;
-            for (i = 0; i < odd.length; i++) {
-              if (!Object.is(odd[i].innerHTML, oddResponse[i].innerHTML))
-                odd[i].outerHTML = oddResponse[i].outerHTML;
-              else if (odd.length != oddResponse.length)
-                torrentsParent.replaceChild(torrentsResponse, torrents);
-            }
-          }
-        }
-
-        if (peerinfo) {
-          var peerinfoResponse = xhrsnark.responseXML.getElementsByClassName("peerinfo");
-          if (peerinfoResponse) {
-            var i;
-            for (i = 0; i < peerinfo.length; i++) {
-              if (!Object.is(peerinfo[i].innerHTML, peerinfoResponse[i].innerHTML))
-                peerinfo[i].outerHTML = peerinfoResponse[i].outerHTML;
-              else if (peerinfo.length != peerinfoResponse.length)
-                torrentsParent.replaceChild(torrentsResponse, torrents);
-            }
-          }
-        }
-
-        if (debuginfo) {
-          var debuginfoResponse = xhrsnark.responseXML.getElementsByClassName("debuginfo");
-          if (debuginfoResponse) {
-            var i;
-            for (i = 0; i < debuginfo.length; i++) {
-              if (!Object.is(debuginfo[i].innerHTML, debuginfoResponse[i].innerHTML))
-                debuginfo[i].innerHTML = debuginfoResponse[i].innerHTML;
-            }
-          }
+          updateCompleted();
         }
 
         var results = document.getElementById("filterResults");
@@ -125,11 +84,59 @@ function refreshTorrents() {
           results.remove();
         }
 
-      } else {
-            var failMessage = "<div class=\"routerdown\" id=\"down\"><b><span>Router is down<\/span><\/b><\/div>";
-            mainsection.innerHTML = failMessage;
-      }
+        if (document.getElementById("setPriority")) { // hide non-functional buttons until we fix folder.js script
+          var allHigh = document.getElementById("setallhigh");
+          var allNorm = document.getElementById("setallnorm");
+          var allSkip = document.getElementById("setallskip");
+          if (allHigh)
+            allHigh.remove();
+          if (allNorm)
+            allNorm.remove();
+          if (allSkip)
+            allSkip.remove();
+        }
 
+        function updateVolatile() {
+          var updating = document.getElementsByClassName("volatile");
+          var updatingResponse = xhrsnark.responseXML.getElementsByClassName("volatile");
+          var i;
+          for (i = 0; i < updating.length; i++) {
+            if (typeof updating[i] != "undefined" && typeof updatingResponse[i] != "undefined") {
+              updating[i].outerHTML = updatingResponse[i].outerHTML;
+              if (updating.length != updatingResponse.length)
+                refreshAll();
+            }
+          }
+        }
+
+        function refreshHeaderAndFooter() {
+          if (thead) {
+            var theadParent = thead.parentNode;
+            var theadResponse = xhrsnark.responseXML.getElementById("snarkHead");
+            if (thead && typeof theadResponse != null && !Object.is(thead.innerHTML, theadResponse.innerHTML))
+              thead.innerHTML = theadResponse.innerHTML;
+          }
+          if (tfoot) {
+            var tfootParent = tfoot.parentNode;
+            var tfootResponse = xhrsnark.responseXML.getElementById("snarkFoot").getElementsByTagName("tr")[0];
+            if (typeof tfootResponse != null && !Object.is(tfoot.innerHTML, tfootResponse.innerHTML))
+              tfoot.innerHTML = tfootResponse.innerHTML;
+          }
+        }
+
+        function refreshAll() {
+          var mainsectionResponse = xhrsnark.responseXML.getElementById("mainsection");
+          if (typeof mainsectionResponse != null && !Object.is(mainsection.innerHTML, mainsectionResponse.innerHTML))
+            mainsection.innerHTML = mainsectionResponse.innerHTML;
+        }
+
+      } else {
+        var failMessage = "<div class=\"routerdown\" id=\"down\"><b><span>Router is down<\/span><\/b><\/div>";
+        if (mainsection)
+          mainsection.innerHTML = failMessage;
+        else
+          snarkInfo.innerHTML = failMessage;
+      }
     }
   }
   xhrsnark.send();

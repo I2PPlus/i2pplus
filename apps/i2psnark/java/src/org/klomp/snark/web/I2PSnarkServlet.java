@@ -227,14 +227,14 @@ public class I2PSnarkServlet extends BasicServlet {
             setXHRHeaders(resp, cspNonce, false);
             PrintWriter out = resp.getWriter();
             out.write("<!DOCTYPE HTML>\n<html>\n<head>\n");
-            out.write("</head>\n<body>\n");
+            out.write("</head>\n<body id=\"snarkxhr\"><div id=\"mainsection\">\n");
             writeMessages(out, false, peerString);
             boolean canWrite;
             synchronized(this) {
                 canWrite = _resourceBase.canWrite();
             }
             writeTorrents(out, req, canWrite);
-            out.write("</body>\n</html>\n");
+            out.write("</div></body>\n</html>\n");
             return;
         }
 
@@ -303,7 +303,6 @@ public class I2PSnarkServlet extends BasicServlet {
 
         boolean noCollapse = noCollapsePanels(req);
         boolean collapsePanels = _manager.util().collapsePanels();
-
         setHTMLHeaders(resp, cspNonce, false);
         PrintWriter out = resp.getWriter();
         out.write(DOCTYPE + "<html>\n" +
@@ -334,12 +333,15 @@ public class I2PSnarkServlet extends BasicServlet {
                 String downMsg = _context.isRouterContext() ? _t("Router is down") : _t("I2PSnark has stopped");
                 // fallback to metarefresh when javascript is disabled
                 out.write("<noscript><meta http-equiv=\"refresh\" content=\"" + delay + ";" + _contextPath + "/" + peerString + "\"></noscript>\n" +
-                          "<script nonce=\"" + cspNonce + "\" src=\"" + jsPfx + "/js/ajax.js?" + CoreVersion.VERSION + "\" type=\"text/javascript\"></script>\n" +
-                          "<script nonce=\"" + cspNonce + "\" type=\"text/javascript\">\n"  +
-                          "var failMessage = \"<div class=\\\"routerdown\\\"><b>" + downMsg + "<\\/b><\\/div>\";\n" +
+                          "<script nonce=\"" + cspNonce + "\" type=\"module\">\n" +
+                          "import {refreshTorrents} from \""  + _contextPath + WARBASE + "js/refreshTorrents.js?" + CoreVersion.VERSION + "\";\n" +
+//                          "import {refreshTorrents} from \"/themes/refreshTorrents.js?" + CoreVersion.VERSION + "\";\n" + // debugging
+//                          "var failMessage = \"<div class=\\\"routerdown\\\"><b>" + downMsg + "<\\/b><\\/div>\";\n" +
                           "var ajaxDelay = " + (delay * 1000) + ";\n" +
-                          "</script>\n" +
-                          "<script src=\".resources/js/initajax.js?" + CoreVersion.VERSION + "\" type=\"text/javascript\"></script>\n");
+                          "setInterval(function() {\n" +
+                          "requestAnimationFrame(refreshTorrents);\n" +
+                          "}, ajaxDelay);\n" +
+                          "</script>\n");
             }
             out.write("<script nonce=\"" + cspNonce + "\" type=\"text/javascript\">\n"  +
                       "var deleteMessage1 = \"" + _t("Are you sure you want to delete the file \\''{0}\\'' (downloaded data will not be deleted) ?") + "\";\n" +
@@ -364,16 +366,13 @@ public class I2PSnarkServlet extends BasicServlet {
         if (noCollapse || !collapsePanels) {
             out.write(HEADER_A + _themePath + HEADER_C + "\n");
         }
-        // dynamic iframe resizer
-        out.write("<script type=\"text/javascript\" src=\"/js/iframeResizer/iframeResizer.contentWindow.js?" + CoreVersion.VERSION + "\" id=\"iframeResizer\" async></script>\n");
-        out.write("</head>\n" + "<body class=\"" + _manager.getTheme() + " lang_" + lang + "\">\n" + "<center>");
+        out.write("</head>\n" + "<body id=\"snarkxhr\" class=\"" + _manager.getTheme() + " lang_" + lang + "\">\n" + "<center>\n");
         List<Tracker> sortedTrackers = null;
 /*
         long now = System.currentTimeMillis();
         String time = String.valueOf(now);
 */
         if (isConfigure) {
-            // out.write("<div class=\"snarknavbar\" id=\"top\">\n<a href=\"" + _contextPath + "/?t=" + time + "\" title=\"");
             out.write("<div class=\"snarknavbar\" id=\"top\">\n<a href=\"" + _contextPath + "/\" title=\"");
             out.write(_t("Torrents"));
             out.write("\" class=\"snarkNav nav_main\">");
@@ -472,7 +471,7 @@ public class I2PSnarkServlet extends BasicServlet {
         resp.setHeader("X-Frame-Options", "SAMEORIGIN");
         resp.setHeader("X-XSS-Protection", "1; mode=block");
         resp.setHeader("X-Content-Type-Options", "nosniff");
-        resp.setHeader("Referrer-Policy", "no-referrer");
+        resp.setHeader("Referrer-Policy", "same-origin");
         resp.setHeader("Accept-Ranges", "none");
         resp.setHeader("Feature-Policy", "fullscreen 'self'");
     }
@@ -485,7 +484,7 @@ public class I2PSnarkServlet extends BasicServlet {
         resp.setHeader("X-Frame-Options", "SAMEORIGIN");
         resp.setHeader("X-XSS-Protection", "1; mode=block");
         resp.setHeader("X-Content-Type-Options", "nosniff");
-        resp.setHeader("Referrer-Policy", "no-referrer");
+        resp.setHeader("Referrer-Policy", "same-origin");
         resp.setHeader("Accept-Ranges", "none");
         resp.setHeader("Feature-Policy", "fullscreen 'self'");
     }
@@ -493,7 +492,10 @@ public class I2PSnarkServlet extends BasicServlet {
     private void writeMessages(PrintWriter out, boolean isConfigure, String peerString) throws IOException {
         List<UIMessages.Message> msgs = _manager.getMessages();
         if (!msgs.isEmpty()) {
-            out.write("\n<div class=\"snarkMessages\" id=\"screenlog\" tabindex=\"0\">\n" +
+            out.write("<div class=\"snarkMessages\" id=\"screenlog\"");
+            if (!_manager.util().connected())
+                out.write(" class=\"init\"");
+             out.write(" tabindex=\"0\">\n" +
                       "<a id=\"closeLog\" href=\"" + _contextPath + '/');
             if (isConfigure)
                 out.write("configure");
@@ -910,8 +912,7 @@ public class I2PSnarkServlet extends BasicServlet {
         } else {
             out.write("");
         }
-        out.write("</th>\n</tr>\n" +
-                  "</thead>\n");
+        out.write("</th>\n</tr>\n</thead>\n<tbody id=\"snarkTbody\">\n");
         String uri = _contextPath + '/';
         boolean showDebug = "2".equals(peerParam);
 
@@ -923,8 +924,7 @@ public class I2PSnarkServlet extends BasicServlet {
         }
 
         if (total == 0) {
-            out.write("<tr class=\"snarkTorrentNoneLoaded\">" +
-                      "<td colspan=\"12\"><i>");
+            out.write("<tr id=\"noload\" class=\"snarkTorrentNoneLoaded\"><td colspan=\"12\"><i>");
             synchronized(this) {
                 File dd = _resourceBase;
                 if (!dd.exists() && !dd.mkdirs()) {
@@ -939,7 +939,11 @@ public class I2PSnarkServlet extends BasicServlet {
                     out.write(_t("No torrents loaded."));
                 }
             }
-            out.write("</i></td></tr>\n");
+            out.write("</i></td></tr>\n</tbody>\n");
+            out.write("<tfoot id=\"snarkFoot");
+            if (_manager.util().isConnecting() || !_manager.util().connected())
+                out.write("\" class=\"initializing");
+            out.write("\">\n<tr>\n<th id=\"snarkTorrentTotals\" align=\"left\" colspan=\"12\"></th></tr></tfoot>");
         } else /** if (snarks.size() > 1) */ {
 
         // Add a pagenav to bottom of table if we have 50+ torrents per page
@@ -947,10 +951,9 @@ public class I2PSnarkServlet extends BasicServlet {
         if (total > 0 && (start > 0 || total > pageSize) && pageSize >= 50) {
             out.write("<tr id=\"pagenavbottom\"><td colspan=\"12\"><div class=\"pagenavcontrols\">");
             writePageNav(out, req, start, pageSize, total, noThinsp);
-            out.write("</div></td></tr>");
-            }
-        out.write("<tfoot>\n<tr>\n" +
-                  "<th id=\"snarkTorrentTotals\" align=\"left\" colspan=\"6\">");
+            out.write("</div></td></tr>\n</tbody>\n");
+        }
+        out.write("<tfoot id=\"snarkFoot\">\n<tr>\n<th id=\"snarkTorrentTotals\" align=\"left\" colspan=\"6\">");
         out.write("<span id=\"totals\"><span class=\"canhide\">");
         out.write(_t("Totals"));
         out.write(":&nbsp;</span>");
@@ -1084,7 +1087,7 @@ public class I2PSnarkServlet extends BasicServlet {
             // TODO javascript handler to remember checkbox status for debug panel visibility (otherwise resets with ajax/meta refresh)
             if (dht != null) {
                 if (showDebug) {
-                    out.write("</tr>\n<tr class=\"dhtDebug\">\n");
+                    out.write("</tr>\n<tr class=\"dhtDebug volatile\">\n");
                     out.write("<th colspan=\"12\">\n" +
                               "<div id=\"dhtDebugPanel\">\n" +
                               "<input class=\"toggle_input\" id=\"toggle_debug\" type=\"checkbox\"><label class=\"toggleview\" for=\"toggle_debug\">");
@@ -1153,7 +1156,7 @@ public class I2PSnarkServlet extends BasicServlet {
         // load torrentDisplay script here to ensure table has loaded into dom
         boolean showStatusFilter = _manager.util().showStatusFilter();
         if (_contextName.equals(DEFAULT_NAME) && showStatusFilter) {
-            out.write("<script src=\"" + _contextPath + WARBASE + "js/torrentDisplay.js?" + CoreVersion.VERSION + "\" type=\"text/javascript\" defer></script>\n");
+            out.write("<script src=\"" + _contextPath + WARBASE + "js/torrentDisplay.js?" + CoreVersion.VERSION + "\" type=\"text/javascript\" async></script>\n");
 //            out.write("<script src=\"/themes/torrentDisplay.js?" + CoreVersion.VERSION + "\" type=\"text/javascript\" defer></script>\n"); // debugging
         }
         return start == 0;
@@ -2198,7 +2201,7 @@ public class I2PSnarkServlet extends BasicServlet {
         }
 
         String rowStatus = (rowClass + ' ' + snarkStatus);
-        out.write("<tr class=\"" + rowStatus + "\">\n" +
+        out.write("<tr class=\"" + rowStatus + " volatile\">\n" +
                   "<td class=\"snarkGraphicStatus\" align=\"center\">");
         out.write(statusString);
 
@@ -2432,11 +2435,16 @@ public class I2PSnarkServlet extends BasicServlet {
                 long t = peer.getInactiveTime();
                 if ((peer.getUploadRate() > 0 || peer.getDownloadRate() > 0) && t < 60 * 1000) {
                     snarkStatus = "active";
-                    } else
+                    if (peer.getUploadRate() > 0 && !peer.isInteresting() && !peer.isChoking())
+                        snarkStatus += " TX";
+                    if (peer.getDownloadRate() > 0 && !peer.isInterested() && !peer.isChoked())
+                        snarkStatus += " RX";
+                } else {
                     snarkStatus = "inactive";
+                }
                 if (!peer.isConnected())
                     continue;
-                out.write("<tr class=\"peerinfo " + snarkStatus + "\">\n<td class=\"snarkGraphicStatus\" title=\"");
+                out.write("<tr class=\"peerinfo " + snarkStatus + " volatile\">\n<td class=\"snarkGraphicStatus\" title=\"");
                 out.write(_t("Peer attached to swarm"));
                 out.write("\"></td><td class=\"peerdata\" colspan=\"5\">");
                 PeerID pid = peer.getPeerID();
@@ -2576,13 +2584,13 @@ public class I2PSnarkServlet extends BasicServlet {
                 }
                 out.write("</td>\n");
                 out.write("<td class=\"snarkTorrentAction\">");
-                out.write("</td></tr>\n");
+                out.write("</td>\n</tr>\n");
                 if (showDebug)
-                    out.write("<tr class=\"debuginfo " + rowClass + "\"><td class=\"snarkGraphicStatus\"></td>" +
+                    out.write("<tr class=\"debuginfo volatile " + rowClass + "\">\n<td class=\"snarkGraphicStatus\"></td>" +
                               "<td colspan=\"12\">" + peer.getSocket()
                               .replaceAll("Connection", "<b>Connection</b>").replaceAll(";", " &bullet;").replaceAll("\\* ", "")
                               .replaceAll("from", "<span class=\"from\">⇦</span>").replaceAll("to", "<span class=\"to\">⇨</span>") +
-                              "</td></tr>");
+                              "</td>\n</tr>");
             }
         }
     }
@@ -3592,9 +3600,11 @@ public class I2PSnarkServlet extends BasicServlet {
     private static final String HEADER_C = "nocollapse.css?" + CoreVersion.VERSION + "\" rel=\"stylesheet\" type=\"text/css\" >";
     private static final String HEADER_D = "snark_big.css?" + CoreVersion.VERSION + "\" rel=\"stylesheet\" type=\"text/css\" >";
     private static final String HEADER_Z = "override.css\" rel=\"stylesheet\" type=\"text/css\" >";
-    private static final String TABLE_HEADER = "<table border=\"0\" class=\"snarkTorrents\" id=\"snarkTorrents\" width=\"100%\" >\n" + "<thead>\n";
-    private static final String FOOTER = "</div>\n<span id=\"endOfPage\" data-iframe-height></span>\n</center>\n" +
-                                         "<style type=\"text/css\">body{opacity: 1 !important;}</style>\n</body>\n</html>";
+    private static final String TABLE_HEADER = "<table border=\"0\" class=\"snarkTorrents\" id=\"snarkTorrents\" width=\"100%\" >\n" + "<thead id=\"snarkHead\">\n";
+    private static final String FOOTER = "</div>\n</center>\n<span id=\"endOfPage\" data-iframe-height></span>\n" +
+                                         "<script type=\"text/javascript\" src=\"/js/iframeResizer/iframeResizer.contentWindow.js?" +
+                                         CoreVersion.VERSION + "\" id=\"iframeResizer\"></script>\n" +
+                                         "<style type=\"text/css\">body{opacity: 1 !important}</style>\n</body>\n</html>";
 
 
     /**
@@ -3716,8 +3726,6 @@ public class I2PSnarkServlet extends BasicServlet {
         buf.append("</title>\n").append(HEADER_A).append(_themePath).append(HEADER_B).append("\n");
         // uncollapse panels
         boolean collapsePanels = _manager.util().collapsePanels();
-//        boolean noCollapse = noCollapsePanels(req);
-//        if (noCollapse || !collapsePanels) {
         if (!collapsePanels) {
             buf.append(HEADER_A + _themePath + HEADER_C);
         }
@@ -3731,8 +3739,8 @@ public class I2PSnarkServlet extends BasicServlet {
         buf.append("<noscript><style type=\"text/css\">.script {display: none;}</style></noscript>\n")
            .append("<link rel=\"shortcut icon\" href=\"" + _themePath + "favicon.ico\">\n");
         if (showPriority)
-            buf.append("<script src=\"").append(_contextPath).append(WARBASE + "js/folder.js?" + CoreVersion.VERSION + "\" type=\"text/javascript\"></script>\n");
-        buf.append("<script type=\"text/javascript\" src=\"/js/iframeResizer/iframeResizer.contentWindow.js?" + CoreVersion.VERSION + "\" async></script>\n");
+            buf.append("<script src=\"").append(_contextPath).append(WARBASE + "js/folder.js?" + CoreVersion.VERSION + "\" type=\"text/javascript\" async></script>\n");
+//            buf.append("<script src=\"/themes/folder.js?" + CoreVersion.VERSION + "\" type=\"text/javascript\"></script>\n"); // debugging
         buf.append("</head>\n<body class=\"lang_" + lang + "\">\n" +
                    "<center>\n<div class=\"snarknavbar\"><a href=\"").append(_contextPath).append("/\" title=\"Torrents\"" +
                    " class=\"snarkNav nav_main\">");
@@ -3743,7 +3751,7 @@ public class I2PSnarkServlet extends BasicServlet {
         buf.append("</a>\n</div>\n");
 
         if (parent)  // always true
-            buf.append("<div class=\"page\">\n");
+            buf.append("<div class=\"page\" id=\"dirlist\">\n");
         // for stop/start/check
         final boolean er = isTopLevel && snark != null && _manager.util().ratingsEnabled();
         final boolean ec = isTopLevel && snark != null && _manager.util().commentsEnabled(); // global setting
@@ -4159,18 +4167,21 @@ public class I2PSnarkServlet extends BasicServlet {
                            .append("</a>").append("</th></tr>\n<tr><td>");
                         buf.append("<audio controls>");
                     } else {
-                        buf.append("<th class=\"video\">").append(_t("Video file: ")).append(DataHelper.escapeHTML(torrentName));
+                        buf.append("<th id=\"videoTitle\" class=\"video\">").append(_t("Video file: ")).append(DataHelper.escapeHTML(torrentName));
                         buf.append("<a href=\"").append(path).append("\" title=\"Open in new tab\" target=\"_blank\">")
                            .append(newTab)
                            .append("</a>").append("</th></tr>\n<tr><td>");
-                        buf.append("<video controls>");
+                        buf.append("<video id=\"embedVideo\" controls>");
                     }
                     // strip trailing slash
                     buf.append("<source src=\"").append(path).append("\" type=\"").append(mime).append("\">");
-                    if (isAudio)
+                    if (isAudio) {
                         buf.append("</audio>");
-                    else
+                    } else {
                         buf.append("</video>");
+                        buf.append("<script src=\"").append(_contextPath).append(WARBASE + "js/getVideoDimensions.js?" + CoreVersion.VERSION +
+                                   "\" type=\"text/javascript\"></script>\n");
+                    }
                     buf.append("</td></tr>\n</table>\n</div>\n");
                 }
             }
@@ -4190,8 +4201,7 @@ public class I2PSnarkServlet extends BasicServlet {
             }
             if (includeForm)
                 buf.append("</form>\n");
-            buf.append("</div>\n<span id=\"endOfPage\" data-iframe-height></span>\n</center>\n" +
-                       "<style type=\"text/css\">body{opacity: 1 !important;}</style>\n</body>\n</html>");
+                buf.append(FOOTER);
             return buf.toString();
         }
 
@@ -4220,7 +4230,8 @@ public class I2PSnarkServlet extends BasicServlet {
         buf.append("<div class=\"mainsection\" id=\"snarkFiles\">");
         buf.append("<input class=\"toggle_input\" id=\"toggle_files\" type=\"checkbox\"");
         // don't collapse file view if not in torrent root
-        if (!er || !ec || fileList.size() <= 10 || sortParam != null)
+        String up = "";
+        if (!isTopLevel || fileList.size() <= 10 || sortParam != null || getQueryString(up) != null)
             buf.append(" checked");
         buf.append(">");
         buf.append("<label class=\"toggleview\" for=\"toggle_files\">");
@@ -4262,7 +4273,7 @@ public class I2PSnarkServlet extends BasicServlet {
         }
         buf.append("</th>\n<th class=\"snarkFileSize\">");
         if (showSort) {
-            sort = ("5".equals(sortParam)) ? "-5" : "5";
+            sort = ("-5".equals(sortParam)) ? "5" : "-5";
             buf.append("<a href=\"").append(base)
                .append(getQueryString(sort)).append("\">");
         }
@@ -4284,7 +4295,7 @@ public class I2PSnarkServlet extends BasicServlet {
         if (showRemainingSort)
             buf.append("</a>");
         if (showPriority) {
-            buf.append("</th>\n<th class=\"priority\">");
+            buf.append("</th>\n<th class=\"priority volatile\">");
             if (showSort) {
                 sort = ("13".equals(sortParam)) ? "-13" : "13";
                 buf.append("<a href=\"").append(base)
@@ -4296,26 +4307,33 @@ public class I2PSnarkServlet extends BasicServlet {
             if (showSort)
                 buf.append("</a>");
         }
-        buf.append("</th>\n</tr>\n</thead>\n<tbody id=\"snarkDirInfo\">" +
-                   "<tr><td colspan=\"" + (showPriority ? '3' : '2') + "\" class=\"ParentDir\"><a href=\"");
-        URIUtil.encodePath(buf, addPaths(decodedBase,"../"));
-        buf.append("\">");
-        toThemeImg(buf, "up");
-        buf.append(' ')
-           .append(_t("Up to higher level directory"))
-           .append("</a></td>");
+        buf.append("</th>\n</tr>\n</thead>\n<tbody id=\"snarkDirInfo\">");
+        if (!isTopLevel || hasCompleteAudio(fileList, storage, remainingArray)) { // don't show row if top level or no playlist
+            buf.append("<tr><td colspan=\"" + (showPriority ? '3' : '2') + "\" class=\"ParentDir\">");
+            if (!isTopLevel) { // don't show parent dir link if top level
+                up = "up";
+                buf.append("<a href=\"");
+                URIUtil.encodePath(buf, addPaths(decodedBase,"../"));
+                buf.append("/").append(getQueryString(up));
+                buf.append("\">");
+                toThemeImg(buf, "up");
+                buf.append(' ')
+                   .append(_t("Up to higher level directory"))
+                   .append("</a>");
+            }
 
-        buf.append("<td colspan=\"2\" class=\"ParentDir playlist\">");
-        // playlist button
-        if (hasCompleteAudio(fileList, storage, remainingArray)) {
-            buf.append("<a href=\"").append(base).append("?playlist");
-            if (sortParam != null && !"0".equals(sortParam) && !"1".equals(sortParam))
-                buf.append("&amp;sort=").append(sortParam);
-            buf.append("\">");
-            buf.append(toImg("audio"));
-            buf.append(' ').append(_t("Audio Playlist")).append("</a>");
+            buf.append("</td><td colspan=\"2\" class=\"ParentDir playlist\">");
+            // playlist button
+            if (hasCompleteAudio(fileList, storage, remainingArray)) {
+                buf.append("<a href=\"").append(base).append("?playlist");
+                if (sortParam != null && !"0".equals(sortParam) && !"1".equals(sortParam))
+                    buf.append("&amp;sort=").append(sortParam);
+                buf.append("\">");
+                buf.append(toImg("audio"));
+                buf.append(' ').append(_t("Audio Playlist")).append("</a>");
+            }
+            buf.append("</td></tr>\n");
         }
-        buf.append("</td></tr>\n");
 
         //DateFormat dfmt=DateFormat.getDateTimeInstance(DateFormat.MEDIUM, DateFormat.MEDIUM);
         boolean showSaveButton = false;
@@ -4329,10 +4347,6 @@ public class I2PSnarkServlet extends BasicServlet {
             // See resource.diff attachment
             // Resource item = addPath(encoded);
             File item = fai.file;
-
-            String rowClass = (rowEven ? "snarkTorrentEven" : "snarkTorrentOdd");
-            rowEven = !rowEven;
-            buf.append("<tr class=\"").append(rowClass).append("\">");
 
             // Get completeness and status string
             boolean complete = false;
@@ -4375,6 +4389,11 @@ public class I2PSnarkServlet extends BasicServlet {
                 }
             }
 
+            String rowClass = (rowEven ? "snarkTorrentEven" : "snarkTorrentOdd");
+            String completed = (complete ? "completed" : "incomplete");
+            rowEven = !rowEven;
+            buf.append("<tr class=\"").append(rowClass).append(' ').append(completed).append("\">");
+
             String path = addPaths(decodedBase, item.getName());
             if (item.isDirectory() && !path.endsWith("/"))
                 path=addPaths(path,"/");
@@ -4386,8 +4405,11 @@ public class I2PSnarkServlet extends BasicServlet {
 
             boolean isAudio = isAudio(mime);
             boolean isVideo = !isAudio && isVideo(mime);
-            buf.append("<td class=\"snarkFileIcon\">");
+            int videoCount = 0;
+            buf.append("<td class=\"snarkFileIcon volatile\">");
             String preview = null;
+            if (isVideo && complete)
+              videoCount++;
             if (complete ||
                 (isAudio && fai.preview > 100*1024) ||
                 (isVideo && fai.preview > 5*1024*1024 && fai.preview / (double) fai.length >= 0.01d)) {
@@ -4424,10 +4446,14 @@ public class I2PSnarkServlet extends BasicServlet {
                     buf.append("</audio>");
                 else if (isVideo)
                     buf.append("</video>");
+                if (videoCount == 1) {
+                    buf.append("<script src=\"").append(_contextPath).append(WARBASE + "js/getVideoDimensions.js?" + CoreVersion.VERSION +
+                               "\" type=\"text/javascript\"></script>\n");
+                }
             } else {
                 buf.append(toImg(icon));
             }
-            buf.append("</td><td class=\"snarkFileName\">");
+            buf.append("</td><td class=\"snarkFileName volatile\">");
             if (complete) {
                 buf.append("<a href=\"").append(path);
                 buf.append("\"");
@@ -4457,12 +4483,12 @@ public class I2PSnarkServlet extends BasicServlet {
             buf.append("</td><td align=right class=\"snarkFileSize\">");
             if (!item.isDirectory())
                 buf.append(formatSize(length));
-            buf.append("</td><td class=\"snarkFileStatus\">");
+            buf.append("</td><td class=\"snarkFileStatus volatile\">");
             //buf.append(dfmt.format(new Date(item.lastModified())));
             buf.append(status);
             buf.append("</td>");
             if (showPriority) {
-                buf.append("<td class=\"priority\">");
+                buf.append("<td class=\"priority volatile\">");
                 if ((!complete) && (!item.isDirectory())) {
                     if (!inOrder) {
                     buf.append("<label class=\"priorityHigh\" title=\"").append(_t("Download file at high priority")).append("\">" +
@@ -4534,10 +4560,7 @@ public class I2PSnarkServlet extends BasicServlet {
             buf.append("<script src=\"").append(_contextPath).append(WARBASE + "js/lightbox.js?" + CoreVersion.VERSION + "\" type=\"text/javascript\"></script>\n")
                .append("<script nonce=\"" + cspNonce + "\" type=\"text/javascript\">\nvar lightbox = new Lightbox();lightbox.load();\n</script>\n");
         }
-        buf.append("</div>\n<script src=\"").append(_contextPath).append(WARBASE + "js/refreshDetails.js?" + CoreVersion.VERSION + "\" type=\"text/javascript\"></script>\n");
-//        buf.append("<script src=\"/themes/refreshDetails.js?" + CoreVersion.VERSION + "\" type=\"text/javascript\"></script>\n"); // debugging
-        buf.append("</div>\n<span id=\"endOfPage\" data-iframe-height></span>\n</center>\n" +
-                   "<style type=\"text/css\">body{opacity: 1 !important;}</style>\n</body>\n</html>\n");
+        buf.append(FOOTER);
         return buf.toString();
     }
 

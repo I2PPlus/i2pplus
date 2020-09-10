@@ -1788,7 +1788,8 @@ public class SnarkManager implements CompleteListener, ClientApp {
         String link = linkify(torrent);
         if (!dontAutoStart && shouldAutoStart() && running) {
             if (!_util.connected()) {
-                addMessage(_t("Connecting to I2P").replace("I2P", "I2P+") + "...");
+//                addMessage(_t("Connecting to I2P").replace("I2P", "I2P+") + "...");
+                addMessage(_t("Connecting to I2P").replace("Connecting to I2P", "Initializing") + "...");
                 boolean ok = _util.connect();
                 if (!ok) {
                     addMessage(_t("Error connecting to I2P - check your I2CP settings!").replace("I2P", "I2P+"));

@@ -120,7 +120,7 @@ function addClickHandler(elem) {
 }
 
 if (document.readyState === "4") {
-	document.addEventListener('DOMContentLoaded', function() {
+	document.addEventListener('mouseover', function() {
 		setPriorities();
 	}, false);
 }
