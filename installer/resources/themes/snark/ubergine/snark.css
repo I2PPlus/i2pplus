@@ -1941,6 +1941,8 @@ th.priority br, .snarkTorrents thead th br {
 .configsection .snarkConfigTitle img, .toggleview img {
   margin: 1px 0 0 !important;
   padding: 3px;
+  width: 16px;
+  height: auto;
   border: 2px solid #080008;
   border-radius: 50%;
   box-shadow: none !important;
@@ -5823,9 +5825,9 @@ th.snarkTorrentPeerCount img {
   text-align: center !important;
 }
 
-.toggleview, .configsection .snarkConfigTitle {
+/*.toggleview, .configsection .snarkConfigTitle {
   animation: fade-in .2s linear;
-}
+}*/
 
 .snarkTorrents tfoot tr:first-child th.snarkTorrentRateUp, .snarkTorrents tfoot tr:first-child th.snarkTorrentUploaded {
   color: #bbb !important;
