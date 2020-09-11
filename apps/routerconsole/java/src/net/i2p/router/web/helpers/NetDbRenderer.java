@@ -1064,9 +1064,10 @@ class NetDbRenderer {
            .append(info.getIdentity().getSigningPublicKey().getType().toString())
            .append("\">").append(info.getIdentity().getSigningPublicKey().getType().toString())
            .append("</a></span>")
-.          .append("&nbsp;<span class=\"signingkey encryption\"><b>").append(_t("Encryption Key"))
+           .append("&nbsp;<span class=\"signingkey encryption\"><b>")
+           .append(_t("Encryption Key"))
            .append(":</b> ")
-           .append(info.getIdentity().getPublicKey().getType());
+           .append(info.getIdentity().getPublicKey().getType())
            .append("</span></td></tr>\n<tr>")
            .append("<td><b>" + _t("Addresses") + ":</b></td>")
            .append("<td colspan=\"2\" class=\"netdb_addresses\">");

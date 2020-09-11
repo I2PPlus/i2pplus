@@ -21,8 +21,7 @@
   window.requestAnimationFrame(function updateSidebar(timestamp) {
     setInterval(refreshSidebar, <%=intl.getRefresh()%> * 1000);
   })
-  updateGraph();
-  updateSidebar();
+  refreshGraph();
 </script>
 
 <%
