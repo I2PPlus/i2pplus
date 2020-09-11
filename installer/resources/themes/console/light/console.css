@@ -857,7 +857,7 @@ p:empty + .sb_notice {
 
 .routersummary #xhr hr + b {
   margin: -1px 0;
-  padding: 8px 5px;
+  padding: 5px;
   width: calc(100% - 12px);
   display: inline-block;
   font-size: 0 !important;
@@ -869,15 +869,15 @@ p:empty + .sb_notice {
 }
 
 .routersummary #xhr hr + b::after {
-  width: 28px;
-  height: 28px;
+  width: 26px;
+  height: 26px;
   vertical-align: middle;
   display: inline-block;
   background: url(/themes/console/images/svg/update.svg) center center no-repeat;
-  background-size: 28px 28px;
+  background-size: 26px 26px;
   content: "";
   transform: rotate(0);
-  filter: hue-rotate(90deg);
+  filter: hue-rotate(100deg);
   mix-blend-mode: exclusion;
   animation: linear spin 3s forwards infinite, ease-in-out colorphase 1s alternate infinite;
 }
@@ -887,8 +887,8 @@ p:empty + .sb_notice {
 }
 
 @keyframes colorphase {
-  from {filter: hue-rotate(90deg)}
-  to {filter: hue-rotate(120deg)}
+  from {filter: hue-rotate(100deg)}
+  to {filter: hue-rotate(130deg)}
 }
 
 @keyframes routerdown {

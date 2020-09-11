@@ -13981,7 +13981,7 @@ h3#bannedpeers {
   padding: 0 1px;
   height: 44px;
   box-shadow: inset 0 0 0 1px #26235c, inset 0 0 0 2px #000, inset 0 0 3px 1px #004;
-  background: repeating-linear-gradient(to right, rgba(0,0,0,0) 14px, rgba(16,16,128,.7) 15px, rgba(0,0,0,0) 15px, rgba(0,0,0,0) 30px), repeating-linear-gradient(to top, rgba(0,0,0,0), rgba(16,16,128,.6), rgba(0,0,0,0) 1px, rgba(0,0,0,0) 14px) !important;
+  background: repeating-linear-gradient(to right, rgba(0,0,0,0) 14px, rgba(112,107,199,.7) 15px, rgba(0,0,0,0) 15px, rgba(0,0,0,0) 30px), repeating-linear-gradient(to top, rgba(0,0,0,0), rgba(112,107,199,.3), rgba(0,0,0,0) 1px, rgba(0,0,0,0) 14px) !important;
   overflow: hidden;
   position: relative;
   z-index: 10;

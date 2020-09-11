@@ -5786,6 +5786,12 @@ table[id$="logs"] ul {
   vertical-align: calc(1px);
   color: #777;
   border-radius: 50%;
+  filter: saturate(1);
+  animation: linear ping .1s;
+}
+
+@keyframes ping {
+  from {filter: saturate(2)}
 }
 
 .log_debug, .log_info, .log_warn, .log_error, .log_crit, .log_omitted {
