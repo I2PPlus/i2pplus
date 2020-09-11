@@ -741,7 +741,7 @@ public class SummaryHelper extends HelperBase {
             }
             buf.append("</table>");
         } else {
-            buf.append("<table id=\"sb_localtunnels\"><tr><td><center><i>").append(_t("none")).append("</i></center></td></tr></table>\n");
+            buf.append("<table id=\"sb_localtunnels\">\n<tr><td colspan=\"3\"><center><i>").append(_t("none")).append("</i></center></td></tr>\n</table>\n");
         }
         return buf.toString();
     }
