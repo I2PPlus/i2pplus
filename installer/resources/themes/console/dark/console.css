@@ -12059,7 +12059,7 @@ input[type="text"]:focus::placeholder {
 
 .routersummary #xhr hr + b {
   margin: 3px 0 2px -1px;
-  padding: 8px 5px;
+  padding: 6px 5px;
   width: calc(100% - 8px);
   display: inline-block;
   font-size: 0;
@@ -12073,12 +12073,12 @@ input[type="text"]:focus::placeholder {
 }
 
 .routersummary #xhr hr + b::after {
-  width: 20px;
-  height: 20px;
+  width: 26px;
+  height: 26px;
   vertical-align: middle;
   display: inline-block;
   background: url(/themes/console/images/svg/update.svg) center center no-repeat;
-  background-size: 20px 20px;
+  background-size: 26px 26px;
   content: "";
   transform: rotate(0);
   animation: linear spin 3s forwards infinite;
