@@ -6516,31 +6516,40 @@ td.snarkTorrentPeerCount b a:not(:hover):not(:focus), td.snarkTorrentPeerCount b
 }
 }
 
-#snarkTorrents, .snarkTorrentOdd, .snarkTorrentEven, .peerinfo, #snarkFoot, .volatile .percentBarOuter, .active .percentBarOuter {
+#snarkTorrents, .snarkDirInfo, .snarkTorrentOdd, .snarkTorrentEven, .peerinfo, #snarkFoot, .volatile .percentBarOuter, .active .percentBarOuter {
   position: relative;
 }
 
-#snarkTorrents::before, #screenLog::before, #dirlist .volatile .percentBarOuter::before, .active:not(.TX) .percentBarOuter::before,
+#snarkTorrents::before, #screenLog::before, .snarkDirInfo::before, #dirlist .volatile .percentBarOuter::before, .active:not(.TX) .percentBarOuter::before,
 .peerinfo.TX .percentBarOuter::after {
   content: "";
   display: block;
   width: 0;
   height: 1px;
   background: rgba(255,96,0,.4);
+  background: #930;
   position: absolute;
   top: -2px;
   left: 0;
-  animation: ease-in bar .3s reverse;
+  animation: ease-in bar .5s reverse;
   will-change: transform;
   z-index: 1000;
+}
+
+@keyframes downloading {
+  from {border-left: 1px solid #101;}
+}
+
+.active.downloading .percentBarInner {
+  animation: ease downloading .2s forwards;
 }
 
 .active.downloading .percentBarOuter::before, .peerinfo.RX .percentBarOuter::before,
 #dirlist .volatile .percentBarOuter::before {
   top: 0;
   left: 1px;
-  background: rgba(255,96,0,.6);
-  animation: ease-in bar .2s reverse;
+  background: #d40;
+  animation: ease-in bar .2s forwards;
 }
 
 .peerinfo.TX .percentBarOuter::after {
@@ -6548,9 +6557,10 @@ td.snarkTorrentPeerCount b a:not(:hover):not(:focus), td.snarkTorrentPeerCount b
   left: auto;
   bottom: 0;
   right: 1px;
-  background: rgba(116,255,116,.3);
+  background: #242;
   animation: ease-in bar .2s reverse;
 }
+
 
 .active .snarkTorrentAction {
   background: linear-gradient(to left, rgba(255,255,0,.3), rgba(255,255,0,.3) 1px, rgba(255,255,0,0) 1px);
@@ -6558,14 +6568,6 @@ td.snarkTorrentPeerCount b a:not(:hover):not(:focus), td.snarkTorrentPeerCount b
 
 @keyframes bar {
   from {width: 100%}
-}
-
-@keyframes bar2 {
-  from {width: calc(100% - 4px)}
-}
-
-@keyframes bar3 {
-  from {width: 0}
 }
 
 @keyframes active {
