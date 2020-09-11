@@ -219,7 +219,7 @@ function initFilterBar() {
 
 var bar = document.getElementById("torrentDisplay");
 if (bar) {
-  bar.addEventListener("mouseover", function() {
+  document.addEventListener("mouseover", function() {
     initFilterBar();
   }, false);
 }

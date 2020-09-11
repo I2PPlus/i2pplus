@@ -7,7 +7,8 @@ function refreshTorrents(timestamp) {
   var tfoot = document.getElementById("snarkFoot");
   var noload = document.getElementById("noload");
   var down = document.getElementById("down");
-  var files = document.getElementById("toggle_files");
+  var togglefiles = document.getElementById("toggle_files");
+  var filterbar = document.getElementById("torrentDisplay");
 
   var query = window.location.search;
 
@@ -38,11 +39,13 @@ function refreshTorrents(timestamp) {
         var debuginfo = document.getElementsByClassName("debuginfo");
         if (torrents)
           var torrentsResponse = xhrsnark.responseXML.getElementById("snarkTorrents");
+        if (filterbar)
+          var filterbarResponse = xhrsnark.responseXML.getElementById("torrentDisplay");
 
         if (!down && !noload) {
           refreshHeaderAndFooter();
-        } else if (down || noload) {
-          refreshAll();
+        } else if (down || noload || (!filterbar && typeof filterbarResponse != "undefined")) {
+          window.requestAnimationFrame(refreshAll);
         }
 
         if (info) {
@@ -63,8 +66,8 @@ function refreshTorrents(timestamp) {
           }
         }
 
-        if ((files && files.checked) || torrents) {
-          updateVolatile();
+        if (files || torrents) {
+            window.requestAnimationFrame(updateVolatile);
         }
 
         if (complete) {
@@ -72,7 +75,7 @@ function refreshTorrents(timestamp) {
             var completeResponse = xhrsnark.responseXML.getElementsByClassName("completed");
             var i;
             for (i = 0; i < complete.length; i++) {
-              if (!Object.is(complete[i].innerHTML, completeResponse[i].innerHTML))
+              if (typeof completeResponse != "undefined" && !Object.is(complete[i].innerHTML, completeResponse[i].innerHTML))
                 complete[i].innerHTML = completeResponse[i].innerHTML;
             }
           }
@@ -96,15 +99,22 @@ function refreshTorrents(timestamp) {
             allSkip.remove();
         }
 
-        function updateVolatile() {
+        function updateVolatile(timestamp) {
           var updating = document.getElementsByClassName("volatile");
           var updatingResponse = xhrsnark.responseXML.getElementsByClassName("volatile");
           var i;
           for (i = 0; i < updating.length; i++) {
             if (typeof updating[i] != "undefined" && typeof updatingResponse[i] != "undefined") {
-              updating[i].outerHTML = updatingResponse[i].outerHTML;
-              if (updating.length != updatingResponse.length)
-                refreshAll();
+              if (!Object.is(updating[i].innerHTML, updatingResponse[i].innerHTML)) {
+                if (updating.length === updatingResponse.length) {
+                  if (torrents)
+                    updating[i].outerHTML = updatingResponse[i].outerHTML;
+                  else
+                    updating[i].innerHTML = updatingResponse[i].innerHTML;
+                } else {
+                  window.requestAnimationFrame(refreshAll);
+                }
+              }
             }
           }
         }
@@ -113,21 +123,27 @@ function refreshTorrents(timestamp) {
           if (thead) {
             var theadParent = thead.parentNode;
             var theadResponse = xhrsnark.responseXML.getElementById("snarkHead");
-            if (thead && typeof theadResponse != null && !Object.is(thead.innerHTML, theadResponse.innerHTML))
+            if (thead && typeof theadResponse != "undefined" && !Object.is(thead.innerHTML, theadResponse.innerHTML))
               thead.innerHTML = theadResponse.innerHTML;
           }
           if (tfoot) {
             var tfootParent = tfoot.parentNode;
             var tfootResponse = xhrsnark.responseXML.getElementById("snarkFoot").getElementsByTagName("tr")[0];
-            if (typeof tfootResponse != null && !Object.is(tfoot.innerHTML, tfootResponse.innerHTML))
+            if (typeof tfootResponse != "undefined" && !Object.is(tfoot.innerHTML, tfootResponse.innerHTML))
               tfoot.innerHTML = tfootResponse.innerHTML;
           }
         }
 
-        function refreshAll() {
+        function refreshAll(timeStamp) {
           var mainsectionResponse = xhrsnark.responseXML.getElementById("mainsection");
-          if (typeof mainsectionResponse != null && !Object.is(mainsection.innerHTML, mainsectionResponse.innerHTML))
+          if (typeof mainsectionResponse != "undefined" && !Object.is(mainsection.innerHTML, mainsectionResponse.innerHTML))
             mainsection.innerHTML = mainsectionResponse.innerHTML;
+          else if (files) {
+            var dirlist = document.getElementById("dirlist");
+            var dirlistResponse = xhrsnark.responseXML.getElementById("dirlist");
+            if (typeof dirlistResponse != "undefined" && !Object.is(dirlist.innerHTML, dirlistResponse.innerHTML))
+              dirlist.innerHTML = dirlistResponse.innerHTML;
+          }
         }
 
       } else {

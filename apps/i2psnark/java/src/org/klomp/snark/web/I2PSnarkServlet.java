@@ -332,22 +332,22 @@ public class I2PSnarkServlet extends BasicServlet {
             if (delay > 0) {
                 String downMsg = _context.isRouterContext() ? _t("Router is down") : _t("I2PSnark has stopped");
                 // fallback to metarefresh when javascript is disabled
-                out.write("<noscript><meta http-equiv=\"refresh\" content=\"" + delay + ";" + _contextPath + "/" + peerString + "\"></noscript>\n" +
-                          "<script nonce=\"" + cspNonce + "\" type=\"module\">\n" +
-                          "import {refreshTorrents} from \""  + _contextPath + WARBASE + "js/refreshTorrents.js?" + CoreVersion.VERSION + "\";\n" +
-//                          "import {refreshTorrents} from \"/themes/refreshTorrents.js?" + CoreVersion.VERSION + "\";\n" + // debugging
-//                          "var failMessage = \"<div class=\\\"routerdown\\\"><b>" + downMsg + "<\\/b><\\/div>\";\n" +
-                          "var ajaxDelay = " + (delay * 1000) + ";\n" +
-                          "setInterval(function() {\n" +
-                          "requestAnimationFrame(refreshTorrents);\n" +
-                          "}, ajaxDelay);\n" +
-                          "</script>\n");
+                out.write("<noscript><meta http-equiv=\"refresh\" content=\"" + delay + ";" + _contextPath + "/" + peerString + "\"></noscript>\n");
             }
             out.write("<script nonce=\"" + cspNonce + "\" type=\"text/javascript\">\n"  +
                       "var deleteMessage1 = \"" + _t("Are you sure you want to delete the file \\''{0}\\'' (downloaded data will not be deleted) ?") + "\";\n" +
                       "var deleteMessage2 = \"" + _t("Are you sure you want to delete the torrent \\''{0}\\'' and all downloaded data?") + "\";\n" +
                       "</script>\n" +
                       "<script src=\".resources/js/delete.js?" + CoreVersion.VERSION + "\" type=\"text/javascript\"></script>\n");
+            if (delay > 0) {
+                out.write("<script nonce=\"" + cspNonce + "\" type=\"module\">\n" +
+                          "import {refreshTorrents} from \""  + _contextPath + WARBASE + "js/refreshTorrents.js?" + CoreVersion.VERSION + "\";\n" +
+                          "var ajaxDelay = " + (delay * 1000) + ";\n" +
+                          "setInterval(function() {\n" +
+                          "requestAnimationFrame(refreshTorrents);\n" +
+                          "}, ajaxDelay);\n" +
+                          "</script>\n");
+            }
         }
         // custom dialog boxes for javascript alerts
 //        out.write("<script src=\"" + jsPfx + "/js/custom-alert.js\" type=\"text/javascript\"></script>\n");
@@ -555,14 +555,14 @@ public class I2PSnarkServlet extends BasicServlet {
                     // ensure we hide torrent filter bar (if enabled) and js is disabled
                     out.write("<noscript><style type=\"text/css\">.script {display: none;}</style></noscript>\n");
                     out.write("<div id=\"torrentDisplay\" class=\"script\">\n" +
-                              "<input type=\"radio\" name=\"torrentDisplay\" id=\"all\" hidden><label for=\"all\">Show All</label>" +
-                              "<input type=\"radio\" name=\"torrentDisplay\" id=\"active\" hidden><label for=\"active\">Active</label>" +
-                              "<input type=\"radio\" name=\"torrentDisplay\" id=\"inactive\" hidden><label for=\"inactive\">Inactive</label>" +
-                              "<input type=\"radio\" name=\"torrentDisplay\" id=\"downloading\" hidden><label for=\"downloading\">Downloading</label>" +
-                              "<input type=\"radio\" name=\"torrentDisplay\" id=\"seeding\" hidden><label for=\"seeding\">Seeding</label>" +
-                              "<input type=\"radio\" name=\"torrentDisplay\" id=\"complete\" hidden><label for=\"complete\">Complete</label>" +
-                              "<input type=\"radio\" name=\"torrentDisplay\" id=\"incomplete\" hidden><label for=\"incomplete\">Incomplete</label>" +
-                              "<input type=\"radio\" name=\"torrentDisplay\" id=\"stopped\" hidden><label for=\"stopped\">Stopped</label>\n" +
+                              "<input type=\"radio\" name=\"torrentDisplay\" id=\"all\" hidden><label for=\"all\" class=\"filterbutton\">Show All</label>" +
+                              "<input type=\"radio\" name=\"torrentDisplay\" id=\"active\"hidden><label for=\"active\" class=\"filterbutton\">Active</label>" +
+                              "<input type=\"radio\" name=\"torrentDisplay\" id=\"inactive\" hidden><label for=\"inactive\" class=\"filterbutton\">Inactive</label>" +
+                              "<input type=\"radio\" name=\"torrentDisplay\" id=\"downloading\" hidden><label for=\"downloading\" class=\"filterbutton\">Downloading</label>" +
+                              "<input type=\"radio\" name=\"torrentDisplay\" id=\"seeding\" hidden><label for=\"seeding\" class=\"filterbutton\">Seeding</label>" +
+                              "<input type=\"radio\" name=\"torrentDisplay\" id=\"complete\" hidden><label for=\"complete\" class=\"filterbutton\">Complete</label>" +
+                              "<input type=\"radio\" name=\"torrentDisplay\" id=\"incomplete\" hidden><label for=\"incomplete\" class=\"filterbutton\">Incomplete</label>" +
+                              "<input type=\"radio\" name=\"torrentDisplay\" id=\"stopped\" hidden><label for=\"stopped\" class=\"filterbutton\">Stopped</label>\n" +
                               "</div>\n");
                 }
             }
@@ -1157,7 +1157,7 @@ public class I2PSnarkServlet extends BasicServlet {
         boolean showStatusFilter = _manager.util().showStatusFilter();
         if (_contextName.equals(DEFAULT_NAME) && showStatusFilter) {
             out.write("<script src=\"" + _contextPath + WARBASE + "js/torrentDisplay.js?" + CoreVersion.VERSION + "\" type=\"text/javascript\" async></script>\n");
-//            out.write("<script src=\"/themes/torrentDisplay.js?" + CoreVersion.VERSION + "\" type=\"text/javascript\" defer></script>\n"); // debugging
+            //out.write("<script src=\"/themes/torrentDisplay.js?" + CoreVersion.VERSION + "\" type=\"text/javascript\" async></script>\n"); // debugging
         }
         return start == 0;
     }
@@ -3606,7 +3606,6 @@ public class I2PSnarkServlet extends BasicServlet {
                                          CoreVersion.VERSION + "\" id=\"iframeResizer\"></script>\n" +
                                          "<style type=\"text/css\">body{opacity: 1 !important}</style>\n</body>\n</html>";
 
-
     /**
      * Modded heavily from the Jetty version in Resource.java,
      * pass Resource as 1st param
@@ -3736,11 +3735,11 @@ public class I2PSnarkServlet extends BasicServlet {
         }
         buf.append("\n").append(HEADER_A + _themePath + HEADER_Z); // optional override.css for version-persistent user edits
         // hide javascript-dependent buttons when js is unavailable
-        buf.append("<noscript><style type=\"text/css\">.script {display: none;}</style></noscript>\n")
+        buf.append("<noscript><style type=\"text/css\">.script{display:none}</style></noscript>\n")
            .append("<link rel=\"shortcut icon\" href=\"" + _themePath + "favicon.ico\">\n");
-        if (showPriority)
-            buf.append("<script src=\"").append(_contextPath).append(WARBASE + "js/folder.js?" + CoreVersion.VERSION + "\" type=\"text/javascript\" async></script>\n");
-//            buf.append("<script src=\"/themes/folder.js?" + CoreVersion.VERSION + "\" type=\"text/javascript\"></script>\n"); // debugging
+        //if (showPriority)
+            //buf.append("<script src=\"").append(_contextPath).append(WARBASE + "js/setPriority.js?" + CoreVersion.VERSION + "\" type=\"text/javascript\" async></script>\n");
+            //buf.append("<script src=\"/themes/setPriority.js?" + CoreVersion.VERSION + "\" type=\"text/javascript\"></script>\n"); // debugging
         buf.append("</head>\n<body class=\"lang_" + lang + "\">\n" +
                    "<center>\n<div class=\"snarknavbar\"><a href=\"").append(_contextPath).append("/\" title=\"Torrents\"" +
                    " class=\"snarkNav nav_main\">");
@@ -3793,6 +3792,8 @@ public class I2PSnarkServlet extends BasicServlet {
             String announce = null;
             // FIXME: if b64 appears in link, convert to b32 or domain name (if known)
             String postmanb64 = "lnQ6yoBTxQuQU8EQ1FlF395ITIQF-HGJxUeFvzETLFnoczNjQvKDbtSB7aHhn853zjVXrJBgwlB9sO57KakBDaJ50lUZgVPhjlI19TgJ-CxyHhHSCeKx5JzURdEW-ucdONMynr-b2zwhsx8VQCJwCEkARvt21YkOyQDaB9IdV8aTAmP~PUJQxRwceaTMn96FcVenwdXqleE16fI8CVFOV18jbJKrhTOYpTtcZKV4l1wNYBDwKgwPx5c0kcrRzFyw5~bjuAKO~GJ5dR7BQsL7AwBoQUS4k1lwoYrG1kOIBeDD3XF8BWb6K3GOOoyjc1umYKpur3G~FxBuqtHAsDRICkEbKUqJ9mPYQlTSujhNxiRIW-oLwMtvayCFci99oX8MvazPS7~97x0Gsm-onEK1Td9nBdmq30OqDxpRtXBimbzkLbR1IKObbg9HvrKs3L-kSyGwTUmHG9rSQSoZEvFMA-S0EXO~o4g21q1oikmxPMhkeVwQ22VHB0-LZJfmLr4SAAAA";
+            String postmanb64_new= "lnQ6yoBTxQuQU8EQ1FlF395ITIQF-HGJxUeFvzETLFnoczNjQvKDbtSB7aHhn853zjVXrJBgwlB9sO57KakBDaJ50lUZgVPhjlI19TgJ-CxyHhHSCeKx5JzURdEW-ucdONMynr-b2zwhsx8VQCJwCEkARvt21YkOyQDaB9IdV8aTAmP~PUJQxRwceaTMn96FcVenwdXqleE16fI8CVFOV18jbJKrhTOYpTtcZKV4l1wNYBDwKgwPx5c0kcrRzFyw5~bjuAKO~GJ5dR7BQsL7AwBoQUS4k1lwoYrG1kOIBeDD3XF8BWb6K3GOOoyjc1umYKpur3G~FxBuqtHAsDRICrsRuil8qK~whOvj8uNTv~ohZnTZHxTLgi~sDyo98BwJ-4Y4NMSuF4GLzcgLypcR1D1WY2tDqMKRYFVyLE~MTPVjRRgXfcKolykQ666~Go~A~~CNV4qc~zlO6F4bsUhVZDU7WJ7mxCAwqaMiJsL-NgIkb~SMHNxIzaE~oy0agHJMBQAEAAcAAA==";
+            String postmanb32_new = "6a4kxkg5wp33p25qqhgwl6sj4yh4xuf5b3p3qldwgclebchm3eea.b32.i2p";
             String otdgb32 = "w7tpbzncbcocrqtwwm3nezhnnsw4ozadvi2hmvzdhrqzfxfum7wa.b32.i2p";
             String theblandb32 = "s5ikrdyjwbcgxmqetxb3nyheizftms7euacuub2hic7defkh3xhq.b32.i2p";
             String odiftb32 = "bikpeyxci4zuyy36eau5ycw665dplun4yxamn7vmsastejdqtfoq.b32.i2p";
@@ -3807,7 +3808,9 @@ public class I2PSnarkServlet extends BasicServlet {
                     announce = snark.getTrackerURL();
                 if (announce != null) {
                     announce = DataHelper.stripHTML(announce)
-                       .replace(postmanb64, "tracker2.postman")
+                       .replace(postmanb64, "tracker2.postman.i2p")
+                       .replace(postmanb64_new, "tracker2.postman.i2p")
+                       .replace(postmanb32_new, "tracker2.postman.i2p")
                        .replaceAll(cryptb32, "tracker.crypthost.i2p")
                        .replaceAll(freedomb32, "torrfreedom.i2p")
                        .replaceAll(lodikonb32, "tracker.lodikon.i2p")
@@ -4179,7 +4182,7 @@ public class I2PSnarkServlet extends BasicServlet {
                         buf.append("</audio>");
                     } else {
                         buf.append("</video>");
-                        buf.append("<script src=\"").append(_contextPath).append(WARBASE + "js/getVideoDimensions.js?" + CoreVersion.VERSION +
+                        buf.append("<script src=\"").append(_contextPath).append(WARBASE + "js/getMetadata.js?" + CoreVersion.VERSION +
                                    "\" type=\"text/javascript\"></script>\n");
                     }
                     buf.append("</td></tr>\n</table>\n</div>\n");
@@ -4446,8 +4449,8 @@ public class I2PSnarkServlet extends BasicServlet {
                     buf.append("</audio>");
                 else if (isVideo)
                     buf.append("</video>");
-                if (videoCount == 1) {
-                    buf.append("<script src=\"").append(_contextPath).append(WARBASE + "js/getVideoDimensions.js?" + CoreVersion.VERSION +
+                if (videoCount >= 1) {
+                    buf.append("<script src=\"").append(_contextPath).append(WARBASE + "js/getMetadata.js?" + CoreVersion.VERSION +
                                "\" type=\"text/javascript\"></script>\n");
                 }
             } else {
@@ -4559,6 +4562,17 @@ public class I2PSnarkServlet extends BasicServlet {
             buf.append("<link type=\"text/css\" rel=\"stylesheet\" href=\"").append(_contextPath).append(WARBASE + "lightbox.css\">\n");
             buf.append("<script src=\"").append(_contextPath).append(WARBASE + "js/lightbox.js?" + CoreVersion.VERSION + "\" type=\"text/javascript\"></script>\n")
                .append("<script nonce=\"" + cspNonce + "\" type=\"text/javascript\">\nvar lightbox = new Lightbox();lightbox.load();\n</script>\n");
+        }
+        int delay = _manager.getRefreshDelaySeconds();
+        if (delay > 0) {
+            buf.append("<script nonce=\"" + cspNonce + "\" type=\"module\">\n" +
+//                       "import {refreshTorrents} from \"/themes/refreshTorrents.js?" + CoreVersion.VERSION + CoreVersion.VERSION + "\";\n" + // debugging
+                       "import {refreshTorrents} from \""  + _contextPath + WARBASE + "js/refreshTorrents.js?" + CoreVersion.VERSION + "\";\n" +
+                       "var ajaxDelay = " + (delay * 1000) + ";\n" +
+                       "setInterval(function() {\n" +
+                       "requestAnimationFrame(refreshTorrents);\n" +
+                       "}, ajaxDelay);\n" +
+                       "</script>\n");
         }
         buf.append(FOOTER);
         return buf.toString();
