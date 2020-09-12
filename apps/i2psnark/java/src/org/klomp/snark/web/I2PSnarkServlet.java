@@ -962,7 +962,8 @@ public class I2PSnarkServlet extends BasicServlet {
         out.write(DataHelper.formatSize2(stats[5]) + "B");
         if (_manager.util().connected() && total > 0 && stats[4] > 0) {
             out.write(" &bullet; ");
-            out.write(ngettext("1 connected peer", "{0} connected peers", (int) stats[4]));
+            out.write(ngettext("1 connected peer", "{0} connected peers", (int) stats[4])
+                      .replace("connected peers", "peer connections"));
         }
 
         DHT dht = _manager.util().getDHT();
