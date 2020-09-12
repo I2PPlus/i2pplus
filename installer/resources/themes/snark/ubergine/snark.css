@@ -6425,16 +6425,36 @@ td.snarkTorrentPeerCount {
 
 td.snarkTorrentPeerCount b {
   padding: 4px 3px;
-  min-width: 80px;
+  min-width: 89px;
   display: inline-block;
-  text-align: center;
   position: relative;
   line-height: 1;
+  text-align: center;
   font-size: 95%;
-  text-shadow: 0 1px 1px #101 !important;
+  text-shadow: 0 1px 1px #000 !important;
   border-radius: 2px;
   background: #535;
   filter: drop-shadow(0 0 1px #000);
+}
+
+td.snarkTorrentPeerCount b .left, td.snarkTorrentPeerCount b .right {
+  margin: 0 1px;
+  padding: 1px 3px;
+  min-width: 22px;
+  display: inline-block;
+  text-align: center;
+  border-radius: 1px;
+  box-shadow: 0 0 0 1px rgba(16,0,16,.5), inset 2px 2px 2px rgba(0,0,0,.3);
+  background: linear-gradient(to bottom, rgba(32,0,32,.3), rgba(16,0,16,.3));
+}
+
+td.snarkTorrentPeerCount b a:hover .left, td.snarkTorrentPeerCount b a:hover .right {
+  box-shadow: rgba(255,96,0,.5), inset 2px 2px 2px rgba(0,0,0,.3);
+  background: linear-gradient(to bottom, rgba(220,80,0,.3), rgba(255,96,0,.3));
+}
+
+td.snarkTorrentPeerCount b .right {
+  margin-left: -7px;
 }
 
 td.snarkTorrentPeerCount b::before {
@@ -6449,8 +6469,42 @@ td.snarkTorrentPeerCount b::before {
   content: "";
 }
 
+td.snarkTorrentPeerCount b a {
+  color: #fff !important;
+}
+
+td.snarkTorrentPeerCount b a:hover, td.snarkTorrentPeerCount b a:focus {
+  color: #f60 !important;
+}
+
+td.snarkTorrentPeerCount b a::after {
+  width: 0;
+  height: 0;
+  position: absolute;
+  right: 5px;
+  bottom: calc(50% - 2px);
+  border-color: transparent transparent #fff transparent;
+  border-style: solid;
+  border-width: 3px;
+  content: "";
+}
+
+td.snarkTorrentPeerCount b a[href*="?p="]::after {
+  top: calc(50% - 2px);
+  border-color: #fff transparent transparent transparent;
+}
+
+td.snarkTorrentPeerCount b a:hover::after, td.snarkTorrentPeerCount b a:focus::after {
+  border-color: transparent transparent #f60 transparent;
+}
+
+td.snarkTorrentPeerCount b a[href*="?p="]:hover::after, td.snarkTorrentPeerCount b a[href*="?p="]:focus::after {
+  border-color: #f60 transparent transparent transparent;
+}
+
+
 .active.seeding.complete .snarkTorrentPeerCount b {
-  background: #937;
+  background: #fff;
   background: repeating-linear-gradient(135deg, #937, #937 8px, #826 9px, #826 17px);
 }
 
