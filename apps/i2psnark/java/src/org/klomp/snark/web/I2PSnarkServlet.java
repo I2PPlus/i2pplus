@@ -3737,7 +3737,7 @@ public class I2PSnarkServlet extends BasicServlet {
         // hide javascript-dependent buttons when js is unavailable
         buf.append("<noscript><style type=\"text/css\">.script{display:none}</style></noscript>\n")
            .append("<link rel=\"shortcut icon\" href=\"" + _themePath + "favicon.ico\">\n");
-        //if (showPriority)
+        //if (showPriority) // TODO fixup with ajax refresh
             //buf.append("<script src=\"").append(_contextPath).append(WARBASE + "js/setPriority.js?" + CoreVersion.VERSION + "\" type=\"text/javascript\" async></script>\n");
             //buf.append("<script src=\"/themes/setPriority.js?" + CoreVersion.VERSION + "\" type=\"text/javascript\"></script>\n"); // debugging
         buf.append("</head>\n<body class=\"lang_" + lang + "\">\n" +
@@ -4522,7 +4522,9 @@ public class I2PSnarkServlet extends BasicServlet {
             buf.append("</tr>\n");
         }
         if (showSaveButton) {
-            buf.append("</tbody>\n<thead><tr id=\"setPriority\"><th colspan=\"5\">" +
+            buf.append("</tbody>\n<thead><tr id=\"setPriority\"><th colspan=\"5\">");
+
+/* TODO: fixup so works with ajax refresh
                        "<span class=\"script\">");
             if (!inOrder) {
                 buf.append("<a class=\"control\" id=\"setallhigh\" href=\"#\">")
@@ -4531,8 +4533,10 @@ public class I2PSnarkServlet extends BasicServlet {
             buf.append("<a class=\"control\" id=\"setallnorm\" href=\"#\">")
                .append(toImg("clock")).append(_t("Set all normal")).append("</a>\n" +
                        "<a class=\"control\" id=\"setallskip\" href=\"#\">")
-               .append(toImg("block")).append(_t("Skip all")).append("</a></span>\n" +
-                       "<input type=\"submit\" class=\"accept\" value=\"").append(_t("Save priorities"))
+               .append(toImg("block")).append(_t("Skip all")).append("</a></span>\n");
+*/
+
+           buf.append("<input type=\"submit\" class=\"accept\" value=\"").append(_t("Save priorities"))
                .append("\" name=\"savepri\" >\n" +
                        "</th></tr></thead>\n");
         }
