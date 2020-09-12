@@ -67,7 +67,7 @@ if (__invalid) {
 <%
     } else {
 %>
-<div id="notReady"><%=intl._t("Initializing tunnel manager{0}{1} Please wait{0}", "&hellip;", "<br>")%><noscript><%=intl._t("Tunnels not initialized yet; please retry in a few moments.").replace("yet;", "yet&hellip;<br>")%></noscript></div>
+<div id="notReady"><%=intl._t("Initializing Tunnel Manager{0}", "&hellip;")%><noscript><%=intl._t("Tunnels not initialized yet; please retry in a few moments.").replace("yet;", "yet&hellip;<br>")%></noscript></div>
 <script nonce="<%=cspNonce%>" type="text/javascript">
   setInterval(function() {
     var xhr = new XMLHttpRequest();
@@ -75,11 +75,11 @@ if (__invalid) {
     xhr.responseType = "text";
     xhr.onreadystatechange = function () {
       if (xhr.readyState==4 && xhr.status==200) {
-        document.getElementById("xhr_refresh").innerHTML=xhr.responseText;
+        document.getElementById("page").innerHTML=xhr.responseText;
       }
     }
     xhr.send();
-  }, 10000);
+  }, 5000);
 </script>
 <%
     }  // isInitialized()

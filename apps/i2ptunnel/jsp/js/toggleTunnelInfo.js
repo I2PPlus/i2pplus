@@ -1,6 +1,5 @@
-const toggle = document.getElementById("toggleInfo");
-
-function toggleInfo() {
+function initToggleInfo() {
+  var toggle = document.getElementById("toggleInfo");
   var i;
   var x = document.getElementsByClassName("tunnelInfo");
   for (i = 0; i < x.length; i++) {
@@ -14,8 +13,4 @@ function toggleInfo() {
   }
 }
 
-document.addEventListener("DOMContentLoaded", function() {
-  toggle.addEventListener("click", function() {
-    toggleInfo();
-  }, false);
-}, false);
+export {initToggleInfo};

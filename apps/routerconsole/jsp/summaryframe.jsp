@@ -56,7 +56,7 @@
 %>
 </head>
 <body style="margin: 0;">
-<div class="routersummary">
+<div class="routersummary" id="sidebar">
 <jsp:useBean class="net.i2p.router.web.NewsHelper" id="newshelper" scope="request" />
 <jsp:setProperty name="newshelper" property="contextId" value="<%=i2pcontextId%>" />
 <%
@@ -90,6 +90,7 @@
     }
 %>
 </div>
+<%@include file="summaryajax.jsi" %>
 <script nonce="<%=cspNonce%>" type="text/javascript">progressx.hide();</script>
 </body>
 </html>

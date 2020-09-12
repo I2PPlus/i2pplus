@@ -6,7 +6,6 @@
 <head>
 <%@include file="css.jsi" %>
 <%=intl.title("Certificates")%>
-<%@include file="summaryajax.jsi" %>
 </head>
 <body>
 <script nonce="<%=cspNonce%>" type="text/javascript">progressx.show();</script>
@@ -18,6 +17,7 @@
 <jsp:getProperty name="certhelper" property="summary" />
 <span id="end"></span>
 </div>
+<%@include file="summaryajax.jsi" %>
 <script nonce="<%=cspNonce%>" type="text/javascript">progressx.hide();</script>
 </body>
 </html>

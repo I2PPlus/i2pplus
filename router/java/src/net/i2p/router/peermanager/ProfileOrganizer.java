@@ -181,7 +181,7 @@ public class ProfileOrganizer {
 //            if (_log.shouldWarn())
 //                _log.warn("Who wanted our profile?", new Exception("I did"));
             if (_log.shouldLog(Log.DEBUG))
-                _log.debug("Retrieved our own profile for Profile Manager");
+                _log.debug("Retrieved our own profile for the Profile Manager");
             return null;
         }
         getReadLock();
@@ -200,7 +200,7 @@ public class ProfileOrganizer {
 //            if (_log.shouldWarn())
 //                _log.warn("Who wanted our profile?", new Exception("I did"));
             if (_log.shouldLog(Log.DEBUG))
-                _log.debug("Retrieved our own profile for Profile Manager");
+                _log.debug("Retrieved our own profile for the Profile Manager");
             return null;
         }
         if (tryReadLock()) {
@@ -219,8 +219,9 @@ public class ProfileOrganizer {
      */
     PeerProfile getOrCreateProfileNonblocking(Hash peer) {
         if (peer.equals(_us)) {
-            if (_log.shouldWarn())
-                _log.warn("Who wanted our own profile?", new Exception("I did"));
+            if (_log.shouldDebug())
+//                _log.warn("Who wanted our own profile?", new Exception("I did"));
+                _log.debug("Retrieved our own profile for the Profile Manager");
             return null;
         }
         if (!tryReadLock())
@@ -252,7 +253,7 @@ public class ProfileOrganizer {
         } finally { releaseWriteLock(); }
         return rv;
     }
-    
+
     /**
      * Add the new profile, returning the old value (or null if no profile existed)
      *

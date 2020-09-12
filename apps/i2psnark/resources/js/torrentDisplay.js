@@ -22,6 +22,9 @@ function initFilterBar() {
   var stopped = document.querySelectorAll(".stopped");
   var peerinfo = document.querySelectorAll(".peerinfo");
   var debuginfo = document.querySelectorAll(".debuginfo");
+  var tfoot = document.getElementById("snarkFoot");
+  if (tfoot)
+    var tfootInner = tfoot.getElementsByClassName("tr")[0];
 
   var filtered = document.querySelectorAll(".filtered");
 
@@ -45,12 +48,11 @@ function initFilterBar() {
   }
 
   function showResults() {
-    var torrents = document.getElementsByClassName("snarkTorrents")[0].getElementsByTagName("tbody")[0];
-    var snarkTable = document.getElementById("snarkTorrents");
+    var tbody = document.getElementById("snarkTbody");
     var filtered = document.querySelectorAll(".filtered");
     var results = document.querySelectorAll(".results");
     cleanResults();
-    var row = torrents.insertRow(0);
+    var row = tbody.insertRow(0);
     row.classList.add("results");
     row.id = "filterResults";
     var cell = row.insertCell(0);
@@ -72,15 +74,15 @@ function initFilterBar() {
     else if (btnStopped.checked)
       on = "stopped";
     if (!btnAll.checked) {
-      if (filtered.length == 1)
-        cell.innerHTML= "Displaying " + (filtered.length) + " " + on + " torrent";
-      else
-        cell.innerHTML= "Displaying " + (filtered.length) + " " + on + " torrents";
+        if (filtered.length == 1)
+          cell.innerHTML= "Displaying " + (filtered.length) + " " + on + " torrent";
+        else
+          cell.innerHTML= "Displaying " + (filtered.length) + " " + on + " torrents";
     } else {
-      var row = document.getElementById(filterResults);
-      if (row)
+      var filterResults = document.getElementById("filterResults");
+      if (filterResults)
         cleanResults();
-        filterResults.style.display = "none";
+      filterResults.style.display = "none";
     }
   }
 
@@ -89,7 +91,8 @@ function initFilterBar() {
     var resultsSize = results.length;
     if (resultsSize > 0) {
       results.forEach((elem) => {
-        elem.remove();
+        if (elem != tfootInner)
+          elem.remove();
       });
     }
   }
@@ -97,9 +100,9 @@ function initFilterBar() {
   function showAll() {
     clean();
     var css = document.createElement("link");
-    css.type="text/css";
-    css.rel="stylesheet";
-    css.href=".resources/filters/all.css";
+    css.type = "text/css";
+    css.rel = "stylesheet";
+    css.href = ".resources/filters/all.css";
     css.setAttribute("id", "filter");
     document.head.appendChild(css);
     btnAll.checked = true;
@@ -108,9 +111,9 @@ function initFilterBar() {
   function showActive() {
     clean();
     var css = document.createElement("link");
-    css.type="text/css";
-    css.rel="stylesheet";
-    css.href=".resources/filters/active.css";
+    css.type = "text/css";
+    css.rel = "stylesheet";
+    css.href = ".resources/filters/active.css";
     css.setAttribute("id", "filter");
     document.head.appendChild(css);
     btnActive.checked = true;
@@ -122,9 +125,9 @@ function initFilterBar() {
   function showInactive() {
     clean();
     var css = document.createElement("link");
-    css.type="text/css";
-    css.rel="stylesheet";
-    css.href=".resources/filters/inactive.css";
+    css.type = "text/css";
+    css.rel = "stylesheet";
+    css.href = ".resources/filters/inactive.css";
     css.setAttribute("id", "filter");
     document.head.appendChild(css);
     btnInactive.checked = true;
@@ -136,9 +139,9 @@ function initFilterBar() {
   function showDownloading() {
     clean();
     var css = document.createElement("link");
-    css.type="text/css";
-    css.rel="stylesheet";
-    css.href=".resources/filters/downloading.css";
+    css.type = "text/css";
+    css.rel = "stylesheet";
+    css.href = ".resources/filters/downloading.css";
     css.setAttribute("id", "filter");
     document.head.appendChild(css);
     btnDownloading.checked = true;
@@ -150,9 +153,9 @@ function initFilterBar() {
   function showSeeding() {
     clean();
     var css = document.createElement("link");
-    css.type="text/css";
-    css.rel="stylesheet";
-    css.href=".resources/filters/seeding.css";
+    css.type = "text/css";
+    css.rel = "stylesheet";
+    css.href = ".resources/filters/seeding.css";
     css.setAttribute("id", "filter");
     document.head.appendChild(css);
     btnSeeding.checked = true;
@@ -164,9 +167,9 @@ function initFilterBar() {
   function showComplete() {
     clean();
     var css = document.createElement("link");
-    css.type="text/css";
-    css.rel="stylesheet";
-    css.href=".resources/filters/complete.css";
+    css.type = "text/css";
+    css.rel = "stylesheet";
+    css.href = ".resources/filters/complete.css";
     css.setAttribute("id", "filter");
     document.head.appendChild(css);
     btnComplete.checked = true;
@@ -178,9 +181,9 @@ function initFilterBar() {
   function showIncomplete() {
     clean();
     var css = document.createElement("link");
-    css.type="text/css";
-    css.rel="stylesheet";
-    css.href=".resources/filters/incomplete.css";
+    css.type = "text/css";
+    css.rel = "stylesheet";
+    css.href = ".resources/filters/incomplete.css";
     css.setAttribute("id", "filter");
     document.head.appendChild(css);
     btnIncomplete.checked = true;
@@ -192,9 +195,9 @@ function initFilterBar() {
   function showStopped() {
     clean();
     var css = document.createElement("link");
-    css.type="text/css";
-    css.rel="stylesheet";
-    css.href=".resources/filters/stopped.css";
+    css.type ="text/css";
+    css.rel ="stylesheet";
+    css.href =".resources/filters/stopped.css";
     css.setAttribute("id", "filter");
     document.head.appendChild(css);
     btnStopped.checked = true;
@@ -214,10 +217,9 @@ function initFilterBar() {
 
 }
 
-var main = document.getElementById("mainsection");
 var bar = document.getElementById("torrentDisplay");
 if (bar) {
-  main.addEventListener("mouseover", function() {
+  document.addEventListener("mouseover", function() {
     initFilterBar();
   }, false);
 }

@@ -937,4 +937,3 @@ function Lightbox() {
     }
   };
 }
-

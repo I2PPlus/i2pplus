@@ -39,8 +39,9 @@ body:not(old) {
               url(/themes/console/images/buttons/shutdown_hover.png) no-repeat,
               url(/themes/console/images/buttons/update_hover.png) no-repeat,
               url(images/dropdown_hover.svg),
+              url(/themes/console/images/svg/update.svg),
               url(images/newtab.png), #001;
-  background-size: 100% 100%, 100% 100%, 100% 100%, 100% 100%, 171px 148px, 0 0, 0 0, 0 0, 0 0, 0 0, 0 0, 0 0, 0 0, 0 0, 0 0;
+  background-size: 100% 100%, 100% 100%, 100% 100%, 100% 100%, 171px 148px, 0 0, 0 0, 0 0, 0 0, 0 0, 0 0, 0 0, 0 0, 0 0, 0 0, 0 0;
   will-change: transform;
 }
 
@@ -2085,20 +2086,11 @@ p:empty + .sb_notice {
 
 #sb_bandwidthgraph:hover {
   border: 1px solid #83529f;
-/*  cursor: url(/themes/console/images/cursor_zoom.png), pointer;*/
   cursor: zoom-in;
 }
 
 a:active #sb_bandwidthgraph, a:active #sb_graphstats {
   border-color: #fc1c66;
-}
-
-#sb_bandwidthgraph td {
-  padding: 0 1px;
-  height: 40px;
-  vertical-align: top;
-  box-shadow: 0 0 0 1px #26235c, inset 0 0 1px 1px #338, inset 0 0 0 3px #000;
-  background: repeating-linear-gradient(to right, rgba(0,0,0,0) 18px, rgba(120,120,255,.25) 19px, rgba(0,0,0,0) 19px, rgba(0,0,0,0) 36px), repeating-linear-gradient(to top, rgba(0,0,0,0), rgba(120,120,255,.15), rgba(0,0,0,0) 1px, rgba(0,0,0,0) 13px) !important;
 }
 
 #sb_graphstats {
@@ -2115,32 +2107,6 @@ a:active #sb_bandwidthgraph, a:active #sb_graphstats {
 #sb_graphcontainer:hover #sb_graphstats {
   opacity: 1;
   transition: ease opacity 0.3s;
-}
-
-#sb_graphcontainer {
-  margin: -7px -1px -5px -4px !important;
-  height: 41px;
-  display: inline-block;
-  background-color: #000;
-  background-position: left -1px top 4px !important;
-  background-size: 194px 36px !important;
-  background-repeat: no-repeat !important;
-  will-change: transform;
-}
-
-@media screen and (min-width: 1500px) {
-#sb_graphcontainer {
-  margin-bottom: -6px !important;
-  background-size: 240px 36px !important;
-  background-position: left -4px top 4px !important;
-  background-repeat: no-repeat !important;
-}
-
-#sb_bandwidthgraph {
-  width: 100%;
-  margin: -15px 0 -2px -4px !important;
-  opacity: 1;
-}
 }
 
 /* end mini sidebar graph */
@@ -2413,10 +2379,11 @@ background-position: 0;
 }
 
 .tunnelBuildStatus::before {
-  margin: 3px 5px 0 0;
+  margin: -2px 5px 0 0;
   width: 9px;
   height: 9px;
   display: inline-block;
+  vertical-align: middle;
   border-radius: 50%;
   content: "";
 }
@@ -12118,7 +12085,7 @@ html, body {
   padding: 8px 5px;
   width: calc(100% - 8px);
   display: inline-block;
-  font-size: 9pt;
+  font-size: 0 !important;
   color: #a00;
   text-shadow: 0 1px 1px #000;
   box-shadow: 0 0 1px 0 #003, inset 0 0 0 1px #000, inset 0 0 1px 3px #113, inset 0 0 0 4px #000;
@@ -12134,6 +12101,23 @@ from {
 to {
   background: repeating-linear-gradient(135deg, #001, #001 10px, #113 10px, #113 20px);
 }
+}
+
+.routersummary #xhr hr + b::after {
+  width: 20px;
+  height: 20px;
+  vertical-align: middle;
+  display: inline-block;
+  background: url(/themes/console/images/svg/update.svg) center center no-repeat;
+  background-size: 20px 20px;
+  content: "";
+  transform: rotate(0);
+  animation: linear spin 3s forwards infinite;
+  mix-blend-mode: luminosity;
+}
+
+@keyframes spin {
+  from {transform: rotate(-360deg)}
 }
 
 /* end sidebar routerdown */
@@ -13982,4 +13966,81 @@ h3#bannedpeers {
 80%, 99% {
   width: 120%;
 }
+}
+
+/* minigraph */
+
+#minigraph {
+  margin: -18px -1px 0 0;
+  height: 40px;
+  width: 194px !important;
+}
+
+#sb_graphcontainer {
+  margin: -4px -7px -7px !important;
+  padding: 0 1px;
+  height: 44px;
+  box-shadow: inset 0 0 0 1px #26235c, inset 0 0 0 2px #000, inset 0 0 3px 1px #004;
+  background: repeating-linear-gradient(to right, rgba(0,0,0,0) 14px, rgba(112,107,199,.7) 15px, rgba(0,0,0,0) 15px, rgba(0,0,0,0) 30px), repeating-linear-gradient(to top, rgba(0,0,0,0), rgba(112,107,199,.3), rgba(0,0,0,0) 1px, rgba(0,0,0,0) 14px) !important;
+  overflow: hidden;
+  position: relative;
+  z-index: 10;
+}
+
+@media screen and (min-width: 1500px) {
+  #sb_graphcontainer {
+    margin: -4px -7px -8px !important;
+  }
+
+  #minigraph {
+    margin: -20px -1px 0 0;
+    height: 40px;
+    width: 230px !important;
+  }
+}
+
+#sb_graphcontainer::before {
+  position: absolute;
+  top: 2px;
+  left: -1px;
+  width: 100%;
+  height: 40px;
+  content: "";
+  display: inline-block;
+  background: linear-gradient(to bottom, rgba(0,0,0,0), rgba(0,0,0,0), rgba(0,0,0,0.3));
+  pointer-events: none;
+  will-change: transform;
+}
+
+#sb_graphstats {
+  position: relative;
+  z-index: 1000;
+}
+
+.routersummary table {
+  position: relative;
+}
+
+.routersummary table:not(#sb_localtunnels):not(#sb_services)::before {
+  width: 0;
+  height: 1px;
+  position: absolute;
+  top: -2px;
+  left: -1px;
+  display: block;
+  background: linear-gradient(to left, #717, #404);
+  content: "";
+  animation: ease-in bar .2s reverse;
+  will-change: transform;
+  z-index: 99999;
+}
+
+@keyframes bar {
+  from {width: calc(100% + 2px)}
+}
+
+#sb_localtunnels td[colspan="3"] {
+  line-height: 20px;
+  font-size: 0 !important;
+  background: repeating-linear-gradient(135deg, #001 1px, #001 5px, #003 6px, #003 11px) !important;
 }

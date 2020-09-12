@@ -6,8 +6,7 @@
 <head>
 <%@include file="css.jsi" %>
 <%=intl.title("Jar File Dump")%>
-<%@include file="summaryajax.jsi" %>
-</head>
+<head>
 <body>
 <script nonce="<%=cspNonce%>" type="text/javascript">progressx.show();</script>
 <%@include file="summary.jsi" %><h1 class="conf adv">Jar File Dump</h1>
@@ -16,6 +15,7 @@
 <jsp:setProperty name="dumpHelper" property="contextId" value="<%=i2pcontextId%>" />
 <jsp:getProperty name="dumpHelper" property="fileSummary" />
 </div>
+<%@include file="summaryajax.jsi" %>
 <script nonce="<%=cspNonce%>" type="text/javascript">progressx.hide();</script>
 </body>
 </html>

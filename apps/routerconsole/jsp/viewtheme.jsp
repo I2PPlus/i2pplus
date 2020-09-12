@@ -71,8 +71,9 @@ if (lastmod > 0) {
     response.setDateHeader("Last-Modified", lastmod);
     if (uri.contains("override.css")) {
         response.setHeader("Cache-Control", "no-store");
-    } else if (uri.contains(".png") || uri.contains(".jpg") || uri.contains(".svg") || uri.contains(".ico") || uri.contains(".ttf")) {
-        response.setHeader("Cache-Control", "private, max-age=2628000, stale-while-revalidate=86400");
+    } else if (uri.contains(".png") || uri.contains(".jpg") || uri.contains(".svg") || uri.contains(".ico") || uri.contains(".ttf") ||
+               uri.contains("viewstat") || uri.contains("flags.jsp")) {
+        response.setHeader("Cache-Control", "private, max-age=2628000");
     } else {
         response.setHeader("Cache-Control", "no-cache, private, max-age=2628000");
     }

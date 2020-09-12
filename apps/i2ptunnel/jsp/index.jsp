@@ -21,7 +21,7 @@
 <link href="<%=indexBean.getTheme()%>override.css?<%=net.i2p.CoreVersion.VERSION%>" rel="stylesheet" type="text/css" /> 
 </head>
 <body id="tunnelListPage">
-<div id="xhr_refresh">
+<div id="page">
 <%
   boolean isInitialized = indexBean.isInitialized();
   String nextNonce = isInitialized ? net.i2p.i2ptunnel.web.IndexBean.getNextNonce() : null;
@@ -35,13 +35,13 @@
 <h2><%=intl._t("Status Messages")%></h2>
 <table id="statusMessagesTable">
 <tr>
-<td id="tunnelMessages">
+<td id="tunnelMessages" class="volatile">
 <textarea id="statusMessages" rows="4" cols="60" readonly="readonly">
 <%=msgs%></textarea>
 </td>
 </tr>
 <tr>
-<td class="buttons">
+<td class="buttons volatile">
 <a class="control" href="list"><%=intl._t("Refresh")%></a>
 <%
       if (isInitialized) {
@@ -115,7 +115,7 @@
             }
 %>
 </td>
-<td class="tunnelPreview">
+<td class="tunnelPreview volatile">
 <%
             if (("httpserver".equals(indexBean.getInternalType(curServer)) || ("httpbidirserver".equals(indexBean.getInternalType(curServer)))) && indexBean.getTunnelStatus(curServer) == IndexBean.RUNNING) {
 %>
@@ -132,14 +132,14 @@
             }
 %>
 </td>
-<td class="tunnelStatus">
+<td class="tunnelStatus volatile">
 <%
             switch (indexBean.getTunnelStatus(curServer)) {
                 case IndexBean.STARTING:
 %>
 <div class="statusStarting text" title="<%=intl._t("Starting...")%>"><%=intl._t("Starting...")%></div>
 </td>
-<td class="tunnelControl">
+<td class="tunnelControl volatile">
 <a class="control" title="<%=intl._t("Stop this Tunnel")%>" href="list?nonce=<%=nextNonce%>&amp;action=stop&amp;tunnel=<%=curServer%>"><%=intl._t("Stop")%></a>
 <%
                 break;
@@ -283,14 +283,14 @@
                    out.write(" SSL");
 %>
 </td>
-<td class="tunnelStatus">
+<td class="tunnelStatus volatile">
 <%
                switch (indexBean.getTunnelStatus(curClient)) {
                    case IndexBean.STARTING:
 %>
 <div class="statusStarting text" title="<%=intl._t("Starting...")%>"><%=intl._t("Starting...")%></div>
 </td>
-<td class="tunnelControl">
+<td class="tunnelControl volatile">
 <a class="control" title="<%=intl._t("Stop this Tunnel")%>" href="list?nonce=<%=nextNonce%>&amp;action=stop&amp;tunnel=<%=curClient%>"><%=intl._t("Stop")%></a>
 <%
                    break;
@@ -298,7 +298,7 @@
 %>
 <div class="statusStandby text" title="<%=intl._t("Standby")%>"><%=intl._t("Standby")%></div>
 </td>
-<td class="tunnelControl">
+<td class="tunnelControl volatile">
 <a class="control" title="Stop this Tunnel" href="list?nonce=<%=nextNonce%>&amp;action=stop&amp;tunnel=<%=curClient%>"><%=intl._t("Stop")%></a>
 <%
                    break;
@@ -306,7 +306,7 @@
 %>
 <div class="statusRunning text" title="<%=intl._t("Running")%>"><%=intl._t("Running")%></div>
 </td>
-<td class="tunnelControl">
+<td class="tunnelControl volatile">
 <a class="control" title="Stop this Tunnel" href="list?nonce=<%=nextNonce%>&amp;action=stop&amp;tunnel=<%=curClient%>"><%=intl._t("Stop")%></a>
 <%
                    break;
@@ -314,7 +314,7 @@
 %>
 <div class="statusNotRunning text" title="<%=intl._t("Stopped")%>"><%=intl._t("Stopped")%></div>
 </td>
-<td class="tunnelControl">
+<td class="tunnelControl volatile">
 <a class="control" title="<%=intl._t("Start this Tunnel")%>" href="list?nonce=<%=nextNonce%>&amp;action=start&amp;tunnel=<%=curClient%>"><%=intl._t("Start")%></a>
 <%
                    break;
@@ -394,7 +394,7 @@
 </tr>
 </table>
 </div>
-<script type="text/javascript" src="/js/toggleTunnelInfo.js?<%=net.i2p.CoreVersion.VERSION%>"></script>
+<!--<script type="text/javascript" src="js/toggleTunnelInfo.js?<%=net.i2p.CoreVersion.VERSION%>"></script>-->
 <noscript><style type="text/css">.script {display: none} .tunnelInfo {display: table-row !important}</style></noscript>
 <%
 
@@ -402,23 +402,11 @@
 
   if (!indexBean.isInitialized()) {
 %>
-<div id="notReady"><%=intl._t("Initializing tunnel manager{0}{1} Please wait{0}", "&hellip;", "<br>")%><noscript><%=intl._t("Tunnels not initialized yet; please retry in a few moments.").replace("yet;", "yet&hellip;<br>")%></noscript></div>
-<script nonce="<%=cspNonce%>" type="text/javascript">
-  setInterval(function() {
-    var xhr = new XMLHttpRequest();
-    xhr.open('GET', '/i2ptunnel/?' + new Date().getTime(), true);
-    xhr.responseType = "text";
-    xhr.onreadystatechange = function () {
-      if (xhr.readyState==4 && xhr.status==200) {
-        document.getElementById("xhr_refresh").innerHTML=xhr.responseText;
-      }
-    }
-    xhr.send();
-  }, 10000);
-</script>
+<div id="notReady"><%=intl._t("Initializing Tunnel Manager{0}", "&hellip;")%><noscript><%=intl._t("Tunnels not initialized yet; please retry in a few moments.").replace("yet;", "yet&hellip;<br>")%></noscript></div>
 <%
   }  // !isInitialized()
 %>
+<script src="js/refreshIndex.js?<%=net.i2p.CoreVersion.VERSION%>" type="module"></script>
 </div>
 <span data-iframe-height></span>
 <style type="text/css">body {opacity: 1 !important;}</style>

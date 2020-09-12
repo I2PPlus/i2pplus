@@ -8,6 +8,7 @@ package net.i2p.router.web.helpers;
  *
  */
 
+import java.io.File;
 import java.io.IOException;
 import java.io.Serializable;
 import java.io.Writer;
@@ -27,6 +28,7 @@ import java.util.TreeSet;
 
 import net.i2p.crypto.EncType;
 import net.i2p.crypto.SigType;
+import net.i2p.data.Base64;
 import net.i2p.data.DatabaseEntry;
 import net.i2p.data.DataHelper;
 import net.i2p.data.Destination;
@@ -37,11 +39,14 @@ import net.i2p.data.LeaseSet2;
 import net.i2p.data.PublicKey;
 import net.i2p.data.router.RouterAddress;
 import net.i2p.data.router.RouterInfo;
+import net.i2p.router.JobImpl;
 import net.i2p.router.RouterContext;
 import net.i2p.router.TunnelPoolSettings;
 import net.i2p.router.util.HashDistance;   // debug
 import net.i2p.router.networkdb.kademlia.FloodfillNetworkDatabaseFacade;
 import static net.i2p.router.sybil.Util.biLog2;
+import net.i2p.router.transport.GeoIP;
+import net.i2p.router.web.HelperBase;
 import net.i2p.router.web.Messages;
 import net.i2p.router.web.WebAppStarter;
 import net.i2p.util.Log;
@@ -112,6 +117,38 @@ class NetDbRenderer {
                .append(_t("Never reveal your router identity to anyone, as it is uniquely linked to your IP address in the network database."))
                .append("</b></p>\n");
             renderRouterInfo(buf, _context.router().getRouterInfo(), true, true);
+        } else if (routerPrefix != null && routerPrefix.length() >= 44) {
+            // easy way, full hash
+            byte[] h = Base64.decode(routerPrefix);
+            if (h != null && h.length == Hash.HASH_LENGTH) {
+                Hash hash = new Hash(h);
+                RouterInfo ri = _context.netDb().lookupRouterInfoLocally(hash);
+                if (ri == null) {
+                    // remote lookup
+                    LookupWaiter lw = new LookupWaiter();
+                    _context.netDb().lookupRouterInfo(hash, lw, lw, 8*1000);
+                    // just wait right here in the middle of the rendering, sure
+                    synchronized(lw) {
+                        try { lw.wait(9*1000); } catch (InterruptedException ie) {}
+                    }
+                    ri = _context.netDb().lookupRouterInfoLocally(hash);
+                }
+                if (ri != null) {
+                   renderRouterInfo(buf, ri, false, true);
+                } else {
+                    buf.append("<div class=\"netdbnotfound\">");
+                    buf.append(_t("Router")).append(' ');
+                    if (routerPrefix != null)
+                        buf.append(routerPrefix);
+                    buf.append(' ').append(_t("not found in network database"));
+                    buf.append("</div>");
+                }
+            } else {
+                buf.append("<div class=\"netdbnotfound\">");
+                buf.append("Bad Base64 router hash").append(' ');
+                buf.append(DataHelper.escapeHTML(routerPrefix));
+                buf.append("</div>");
+            }
         } else {
             StringBuilder ubuf = new StringBuilder();
             if (routerPrefix != null)
@@ -366,6 +403,19 @@ class NetDbRenderer {
         out.flush();
         if (sybil != null)
             SybilRenderer.renderSybilHTML(out, _context, sybils, sybil);
+    }
+
+    /**
+     *  @since 0.9.48
+     */
+    private class LookupWaiter extends JobImpl {
+        public LookupWaiter() { super(_context); }
+        public void runJob() {
+            synchronized(this) {
+                notifyAll();
+            }
+        }
+        public String getName() { return "Console netdb lookup"; }
     }
 
     /**
@@ -1013,7 +1063,12 @@ class NetDbRenderer {
            .append("\">").append("<a class=\"keysearch\" href=\"/netdb?type=")
            .append(info.getIdentity().getSigningPublicKey().getType().toString())
            .append("\">").append(info.getIdentity().getSigningPublicKey().getType().toString())
-           .append("</a></span></td></tr>\n<tr>")
+           .append("</a></span>")
+           .append("&nbsp;<span class=\"signingkey encryption\"><b>")
+           .append(_t("Encryption Key"))
+           .append(":</b> ")
+           .append(info.getIdentity().getPublicKey().getType())
+           .append("</span></td></tr>\n<tr>")
            .append("<td><b>" + _t("Addresses") + ":</b></td>")
            .append("<td colspan=\"2\" class=\"netdb_addresses\">");
 //        if (!isUs) {

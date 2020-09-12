@@ -5,14 +5,12 @@
 <html>
 <head>
 <%@include file="css.jsi" %>
-<%@include file="csp-unsafe.jsi" %>
 <%=intl.title("peer profiles")%>
 <!-- tablesort.js https://github.com/tristen/tablesort/ -->
 <script nonce="<%=cspNonce%>" src="/js/tablesort/tablesort.js" type="text/javascript"></script>
 <script nonce="<%=cspNonce%>" src="/js/tablesort/tablesort.number.js" type="text/javascript"></script>
 <link href="/themes/console/tablesort.css" rel="stylesheet" type="text/css">
 <!-- end tablesort.js -->
-<%@include file="summaryajax.jsi" %>
 </head>
 <body>
 <script nonce="<%=cspNonce%>" type="text/javascript">progressx.show();</script>
@@ -36,6 +34,52 @@
     new Tablesort(ff);
   }
 </script>
+<script nonce="<%=cspNonce%>" type="text/javascript">
+document.addEventListener("DOMContentLoaded", function() {
+  setInterval(function() {
+    progressx.show();
+    var xhr = new XMLHttpRequest();
+    xhr.responseType = "document";
+    var uri = (window.location.pathname + window.location.search).substring(1);
+    if (!uri.includes("f=2") && !uri.includes("f=3")) {
+      if (uri.includes("?"))
+        xhr.open('GET', uri + '&t=' + new Date().getTime(), true);
+      else
+        xhr.open('GET', uri + '?t=' + new Date().getTime(), true);
+      xhr.onreadystatechange = function () {
+        if (xhr.readyState==4 && xhr.status==200) {
+          var info = document.getElementById("profiles_overview");
+          var profiles = document.getElementById("peerprofiles");
+          var thresholds = document.getElementById("peer_thresholds");
+          if (info) {
+            var infoResponse = xhr.responseXML.getElementById("profiles_overview");
+            var infoParent = info.parentNode;
+            if (!Object.is(info.innerHTML, infoResponse.innerHTML))
+              infoParent.replaceChild(infoResponse, info);
+          }
+          if (profiles) {
+            var profilesResponse = xhr.responseXML.getElementById("peerprofiles");
+            var profilesParent = profiles.parentNode;
+            if (!Object.is(profiles.innerHTML, profilesResponse.innerHTML))
+              profilesParent.replaceChild(profilesResponse, profiles);
+          }
+          if (thresholds) {
+            var thresholdsResponse = xhr.responseXML.getElementById("peer_thresholds");
+            var thresholdsParent = thresholds.parentNode;
+            if (thresholdsResponse) {
+              if (!Object.is(thresholds.innerHTML, thresholdsResponse.innerHTML))
+                thresholdsParent.replaceChild(thresholdsResponse, thresholds);
+            }
+          }
+        }
+      }
+    }
+    progressx.hide();
+    xhr.send();
+  }, 15000);
+}, true);
+</script>
+<%@include file="summaryajax.jsi" %>
 <script nonce="<%=cspNonce%>" type="text/javascript">progressx.hide();</script>
 </body>
 </html>

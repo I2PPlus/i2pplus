@@ -31,7 +31,7 @@
 </head>
 <body id="error500">
 <div class="routersummaryouter">
-<div class="routersummary">
+<div class="routersummary" id="sidebar">
 <a href="/" title="<%=intl._t("Router Console")%>">
 <img src="<%=intl.getTheme(request.getHeader("User-Agent"))%>images/i2plogo.png" alt="<%=intl._t("I2P Router Console").replace("I2P", "I2P+")%>" border="0"></a>
 <hr>
@@ -87,7 +87,6 @@
 <b>Charset:</b>&ensp;<%=java.nio.charset.Charset.defaultCharset().name()%></p>
 <p><%=intl._t("Note that system information, log timestamps, and log messages may provide clues to your location; please review everything you include in a bug report.")%></p>
 </div>
-<script nonce="<%=cspNonce%>" type="text/javascript">progressx.hide();</script>
 <script nonce="<%=cspNonce%>" type="text/javascript">progressx.hide();</script>
 </body>
 </html>

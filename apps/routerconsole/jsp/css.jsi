@@ -36,9 +36,9 @@
 %>
 <link rel="preload" href="<%=themePath%>images/i2plogo.png" as="image">
 <link rel="preload" href="<%=themePath%>console.css?<%=net.i2p.CoreVersion.VERSION%>" as="style">
-<link rel="preload" href="/themes/fonts/DroidSans-Bold.ttf" as="font" crossorigin>
+<!--<link rel="preload" href="/themes/fonts/DroidSans-Bold.ttf" as="font" crossorigin>
 <link rel="preload" href="/themes/fonts/DroidSans.ttf" as="font" crossorigin>
-<link rel="preload" href="/js/ajax.js?<%=net.i2p.CoreVersion.VERSION%>" as="script">
+<link rel="preload" href="/js/ajax.js?<%=net.i2p.CoreVersion.VERSION%>" as="script">-->
 <link rel="icon" href="<%=themePath%>images/favicon.ico">
 <script nonce="<%=cspNonce%>" type="text/javascript">if (top.location != location) {top.location.href = location.href;}</script>
 <script src="/js/progressx.js?<%=net.i2p.CoreVersion.VERSION%>" type="text/javascript"></script>
@@ -63,8 +63,9 @@
    String uri = request.getRequestURI();
    if (uri.contains("override.css"))
        response.setHeader("Cache-Control", "no-store");
-   else if (uri.contains(".png") || uri.contains(".svg") || uri.contains(".jpg") || uri.contains(".ttf"))
-       response.setHeader("Cache-Control", "private, max-age=2628000, stale-while-revalidate=86400");
+   else if (uri.contains(".png") || uri.contains(".svg") || uri.contains(".jpg") || uri.contains(".ttf") ||
+            uri.contains("viewstat") || uri.contains("flags.jsp") || uri.contains(".js"))
+       response.setHeader("Cache-Control", "private, max-age=2628000");
    else
        response.setHeader("Cache-Control", "no-cache, private, max-age=2628000");
    String conNonceParam = request.getParameter("consoleNonce");

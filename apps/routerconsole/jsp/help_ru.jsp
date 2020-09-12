@@ -12,7 +12,6 @@
 <title>Консоль маршрутизатора I2P - справка</title>
 <%@include file="css.jsi" %>
 <script src="/js/ajax.js" type="text/javascript"></script>
-<%@include file="summaryajax.jsi" %>
 </head>
 <body>
 <script nonce="<%=cspNonce%>" type="text/javascript">progressx.show();</script>
@@ -159,6 +158,7 @@
 </div>
 
 </div>
+<%@include file="summaryajax.jsi" %>
 <script nonce="<%=cspNonce%>" type="text/javascript">progressx.hide();</script>
 </body>
 </html>

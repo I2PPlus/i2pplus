@@ -52,8 +52,9 @@ body:not(old) {
   url(images/tasks.png),
   url(images/info.png),
   url(images/logs.png),
+  url(/themes/console/images/svg/update.svg),
   url(images/newtab.png), #a4a4cb;
-  background-size: 32px 32px, 0 0, 0 0, 0 0, 0 0, 0 0, 0 0, 0 0, 0 0, 0 0, 0 0, 0 0, 0 0, 0 0, 0 0, 0 0, 0 0, 0 0, 0 0, 0 0, 0 0, 0 0, 0 0;
+  background-size: 32px 32px, 0 0, 0 0, 0 0, 0 0, 0 0, 0 0, 0 0, 0 0, 0 0, 0 0, 0 0, 0 0, 0 0, 0 0, 0 0, 0 0, 0 0, 0 0, 0 0, 0 0, 0 0, 0 0, 0 0;
 }
 
 @supports (text-justify: auto) and (-moz-appearance: none) { /* Firefox 55+ */
@@ -599,50 +600,56 @@ a:active #sb_bandwidthgraph {
   border: 1px solid #f30;
 }
 
-#sb_bandwidthgraph td {
-  padding: 0 1px;
-  height: 40px;
-  vertical-align: top;
-  box-shadow: inset 0 0 0 2px #fff, inset 0 0 3px 1px #adadeb;
-  background: repeating-linear-gradient(to left, rgba(255,255,255,.0) 13px, rgba(120,120,255,.4) 14px, rgba(255,255,255,.0) 14px, rgba(255,255,255,.0) 26px),
-              repeating-linear-gradient(to top, rgba(255,255,255,.0), rgba(120,120,255,.2), rgba(255,255,255,.0) 1px, rgba(255,255,255,.0) 13px) !important;
-
-}
-
 #sb_graphstats {
   padding: 2px 8px;
   display: inline-block;
+  position: relative;
+  z-index: 10000;
   font-weight: bold;
-  border: 1px solid #89f;
+  border: 1px solid #afafcf;
   border-top: none;
-  border-radius: 0 0 3px 3px;
-  box-shadow: inset 0 0 0 1px #fff, 0 0 1px #fff;
-  background: #ddf;
-  background: linear-gradient(to right, #ddf, #efefff, #ddf);
+  background: #fff;
   opacity: 0;
-  transition: ease opacity .3s;
+  mix-blend-mode: hard-light;
+  transition: ease opacity .1s .2s;
 }
 
 #sb_graphcontainer:hover #sb_graphstats {
   opacity: 1;
-  transition: ease opacity .3s;
+  transition: ease opacity .1s;
+}
+
+#minigraph {
+  margin-top: -18px;
+  padding: 0 1px;
+  width: 198px;
+  height: 40px;
+  display: inline-block;
 }
 
 #sb_graphcontainer {
-  margin-left: -8px;
-  margin-bottom: -7px;
+  margin: -5px -5px -6px;
+  height: 44px;
   display: inline-block;
-  background-position: left 4px top -1px !important;
-  background-size: 200px 34px !important;
-  background-repeat: no-repeat !important;
+  overflow: hidden;
+  box-shadow: inset 0 0 0 2px #fff, inset 0 0 1px 1px #adadeb;
+  border: 1px solid #afafcf;
+  border-radius: 2px;
+  box-shadow: 0 0 1px #e0e0eb, inset 0 0 0 1px #fff;
+  background: linear-gradient(to bottom, rgba(255,255,255,.3), rgba(0,0,16,.1)),
+              repeating-linear-gradient(to left, rgba(255,255,255,.0) 18px, rgba(120,120,255,.4) 18px, rgba(255,255,255,.0) 19px, rgba(255,255,255,.0) 36px),
+              repeating-linear-gradient(to top, rgba(0,0,0,0), rgba(0,0,0,0) 14px, rgba(120,120,255,.4) 14px, rgba(0,0,0,0) 15px) !important;
   mix-blend-mode: multiply;
 }
 
 @media screen and (min-width: 1500px) {
-#sb_graphcontainer {
-  background-size: 234px 34px !important;
+#minigraph {
+  margin-top: -19px;
+  width: 234px;
+  height: 40px;
 }
 }
+
 /* end mini sidebar graph */
 
 /* status bars for memory usage and router/plugin updates */
@@ -850,15 +857,38 @@ p:empty + .sb_notice {
 
 .routersummary #xhr hr + b {
   margin: -1px 0;
-  padding: 8px 5px;
+  padding: 5px;
   width: calc(100% - 12px);
   display: inline-block;
-  font-size: 9pt;
+  font-size: 0 !important;
   color: #700;
   box-shadow: 0 0 1px 0 #ddd, inset 0 0 0 1px #800, inset 0 0 1px 3px #eeeee2, inset 0 0 0 4px #ccccc2;
   background: #fffff2;
   background: repeating-linear-gradient(135deg, #fffff2, #fffff2 10px, #ddddd2 10px, #ddddd2 20px);
-  animation: routerdown linear 1s forwards infinite;
+/*  animation: routerdown linear 1s forwards infinite;*/
+}
+
+.routersummary #xhr hr + b::after {
+  width: 26px;
+  height: 26px;
+  vertical-align: middle;
+  display: inline-block;
+  background: url(/themes/console/images/svg/update.svg) center center no-repeat;
+  background-size: 26px 26px;
+  content: "";
+  transform: rotate(0);
+  filter: hue-rotate(100deg);
+  mix-blend-mode: exclusion;
+  animation: linear spin 3s forwards infinite, ease-in-out colorphase 1s alternate infinite;
+}
+
+@keyframes spin {
+  from {transform: rotate(-360deg)}
+}
+
+@keyframes colorphase {
+  from {filter: hue-rotate(100deg)}
+  to {filter: hue-rotate(130deg)}
 }
 
 @keyframes routerdown {
@@ -13279,4 +13309,32 @@ div.app:not(:hover) a:not(:hover):not(:focus):not(:active),
 div.app:not(:hover) a:not(:hover):not(:focus):not(:active):visited,
 .sitemaplink:not(:hover):not(:focus):not(:active) {
   color: #4b689b !important;
+}
+
+.routersummary table {
+  position: relative;
+}
+
+.routersummary table:not(#sb_localtunnels):not(#sb_services)::before {
+  width: 0;
+  height: 1px;
+  position: absolute;
+  top: -2px;
+  left: -1px;
+  display: block;
+  background: #f90;
+  content: "";
+  animation: ease-in bar .2s reverse;
+  will-change: transform;
+
+}
+
+@keyframes bar {
+  from {width: calc(100% + 2px)}
+}
+
+#sb_localtunnels td[colspan="3"] {
+  line-height: 20px;
+  font-size: 0 !important;
+  background: repeating-linear-gradient(135deg, #fffff2, #fffff2 10px, #ddddd2 10px, #ddddd2 20px) !important;
 }

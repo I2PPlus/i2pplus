@@ -308,7 +308,7 @@ public class GraphHelper extends FormHandler {
             boolean hideLegend = _context.getProperty(PROP_LEGEND, DEFAULT_LEGEND);
             boolean hiDPI = _context.getProperty(PROP_GRAPH_HIDPI, DEFAULT_GRAPH_HIDPI);
             _out.write("&nbsp;<a href=\"/graphs\">" + _t("Return to main graphs page") + "</a></h3>\n"
-                       + "<div class=\"graphspanel\">\n");
+                       + "<div class=\"graphspanel\" id=\"single\">\n");
             if (hiDPI)
                 _out.write("<span class=\"graphContainer\" id=\"hidpi\">");
             else

@@ -1057,7 +1057,7 @@ input.tunnelName, input.tunnelDescription, #userAgents {
   background: #000 url(/themes/console/images/buttons/password.png) 3px center no-repeat !important;
 }
 
-#notReady {
+#notReady, #down {
   margin: 35px auto 30px;
   padding: 30px;
   width: 400px;

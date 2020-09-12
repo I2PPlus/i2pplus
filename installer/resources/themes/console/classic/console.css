@@ -1129,6 +1129,8 @@ a:active #sb_bandwidthgraph {
 
 #sb_graphstats {
   padding: 2px 8px;
+  position: relative;
+  z-index: 10;
   display: inline-block;
   font-weight: bold;
   border: 1px solid #aaafce;
@@ -1763,37 +1765,37 @@ button:active a {
 }
 
 button:hover, input[type="submit"]:hover, input[type="reset"]:hover, button:focus, input[type="submit"]:focus, input[type="reset"]:focus {
+  color: #41444d;
+  border: 1px solid #aaafce;
+  box-shadow: inset 0 0 0 1px #fff, 0 0 1px #89f;
   background: #ddd;
   background: linear-gradient(to bottom, #ddd, #fff);
-  border: 1px solid #aaafce;
-  color: #41444d;
-  box-shadow: inset 0 0 0 1px #fff, 0 0 1px #89f;
 }
 
 button:active, input[type="submit"]:active, input[type="reset"]:active {
+  color: #555;
   border: 1px solid #999;
   box-shadow: inset 0 0 0 1px #fff, inset 3px 3px 3px 1px #555;
   background-color: #ddd;
   background-blend-mode: luminosity;
-  color: #555;
 }
 
 input.accept, button.accept {
-  background: #eee url(/themes/console/images/buttons/yes.png) no-repeat 7px center;
-  background: url(/themes/console/images/buttons/yes.png) no-repeat 7px center, linear-gradient(to bottom, #fff, #f4f5ff);
   padding: 5px 8px 5px 23px;
+  background: #eee url(/themes/console/images/buttons/yes.svg) no-repeat 7px center;
+  background: url(/themes/console/images/buttons/yes.svg) no-repeat 7px center, linear-gradient(to bottom, #fff, #f4f5ff);
 }
 
 input.accept:hover, button.accept:hover,
 input.accept:focus, button.accept:focus {
-  background: #fff url(/themes/console/images/buttons/yes.png) no-repeat 7px center;
-  background: url(/themes/console/images/buttons/yes.png) no-repeat 7px center, linear-gradient(to bottom, #ddd, #fff);
+  background: #fff url(/themes/console/images/buttons/yes.svg) no-repeat 7px center;
+  background: url(/themes/console/images/buttons/yes.svg) no-repeat 7px center, linear-gradient(to bottom, #ddd, #fff);
 }
 
 input.accept[value^="Unban"], button.accept[value^="Unban"] {
+  padding: 5px 8px 5px 23px;
   background: #eee url(/themes/console/images/buttons/unban.png) no-repeat 7px center;
   background: url(/themes/console/images/buttons/unban.png) no-repeat 7px center, linear-gradient(to bottom, #fff, #f4f5ff);
-  padding: 5px 8px 5px 23px;
 }
 
 input.accept[value^="Unban"]:hover, button.accept[value^="Unban"]:hover,
@@ -1803,9 +1805,9 @@ input.accept[value^="Unban"]:focus, button.accept[value^="Unban"]:focus {
 }
 
 input.accept[value^="Create"], button.accept[value^="Create"] {
+  padding: 5px 8px 5px 23px;
   background: #eee url(/themes/console/images/buttons/create.png) no-repeat 7px center;
   background: url(/themes/console/images/buttons/create.png) no-repeat 7px center, linear-gradient(to bottom, #fff, #f4f5ff);
-  padding: 5px 8px 5px 23px;
 }
 
 input.accept[value^="Create"]:hover, button.accept[value^="Create"]:hover,
@@ -1815,9 +1817,9 @@ input.accept[value^="Create"]:focus, button.accept[value^="Create"]:focus {
 }
 
 input.accept[value^="Filter"], button.accept[value^="Filter"] {
+  padding: 5px 8px 5px 23px;
   background: #eee url(/themes/console/images/buttons/filter.png) no-repeat 7px center;
   background: url(/themes/console/images/buttons/filter.png) no-repeat 7px center, linear-gradient(to bottom, #fff, #f4f5ff);
-  padding: 5px 8px 5px 23px;
 }
 
 input.accept[value^="Filter"]:hover, button.accept[value^="Filter"]:hover,
@@ -1827,9 +1829,9 @@ input.accept[value^="Filter"]:focus, button.accept[value^="Filter"]:focus {
 }
 
 input.add, button.add {
+  padding: 5px 8px 5px 23px;
   background: #eee url(/themes/console/images/buttons/add.png) no-repeat 7px center;
   background: url(/themes/console/images/buttons/add.png) no-repeat 7px center, linear-gradient(to bottom, #fff, #f4f5ff);
-  padding: 5px 8px 5px 23px;
 }
 
 input.add:hover, button.add:hover,
@@ -1839,9 +1841,9 @@ input.add:focus, button.add:focus {
 }
 
 input.add[value^="Adjust"], button.add[value^="Adjust"] {
+  padding: 5px 8px 5px 23px;
   background: #eee url(/themes/console/images/buttons/edit2.png) no-repeat 7px center;
   background: url(/themes/console/images/buttons/edit2.png) no-repeat 7px center, linear-gradient(to bottom, #fff, #f4f5ff);
-  padding: 5px 8px 5px 23px;
 }
 
 input.add[value^="Adjust"]:hover, button.add[value^="Adjust"]:hover,
@@ -1851,23 +1853,23 @@ input.add[value^="Adjust"]:focus, button.add[value^="Adjust"]:focus {
 }
 
 input.cancel, button.cancel {
-  background: #eee url(/themes/console/images/buttons/no.png) no-repeat 7px center;
-  background: url(/themes/console/images/buttons/no.png) no-repeat 7px center, linear-gradient(to bottom, #fff, #f4f5ff);
   padding: 5px 8px 5px 23px;
+  background: #eee url(/themes/console/images/buttons/no.svg) no-repeat 7px center;
+  background: url(/themes/console/images/buttons/no.svg) no-repeat 7px center, linear-gradient(to bottom, #fff, #f4f5ff);
 }
 
 input.cancel:hover, button.cancel:hover,
 input.cancel:focus, button.cancel:focus {
-  background: #fff url(/themes/console/images/buttons/no.png) no-repeat 7px center;
-  background: url(/themes/console/images/buttons/no.png) no-repeat 7px center, linear-gradient(to bottom, #ddd, #fff);
+  background: #fff url(/themes/console/images/buttons/no.svg) no-repeat 7px center;
+  background: url(/themes/console/images/buttons/no.svg) no-repeat 7px center, linear-gradient(to bottom, #ddd, #fff);
 }
 
 input.accept[value^="Show"], button.accept[value^="Show"],
 input.check[value^="View"], button.check[value^="View"],
 input.showconsole {
+  padding: 5px 8px 5px 23px;
   background: #eee url(/themes/console/images/buttons/show.png) no-repeat 7px center;
   background: url(/themes/console/images/buttons/show.png) no-repeat 7px center, linear-gradient(to bottom, #fff, #f4f5ff);
-  padding: 5px 8px 5px 23px;
 }
 
 input.accept[value^="Show"]:hover, button.accept[value^="Show"]:hover,
@@ -1882,9 +1884,9 @@ input.showconsole:hover, input.showconsole:focus {
 input.cancel[value^="Hide"], button.cancel[value^="Hide"],
 input.delete[value^="Do not view"], button.delete[value^="Do not view"],
 input.hideconsole {
+  padding: 5px 8px 5px 23px;
   background: #eee url(/themes/console/images/buttons/hide.png) no-repeat 7px center;
   background: url(/themes/console/images/buttons/hide.png) no-repeat 7px center, linear-gradient(to bottom, #fff, #f4f5ff);
-  padding: 5px 8px 5px 23px;
 }
 
 input.cancel[value^="Hide"]:hover, button.cancel[value^="Hide"]:hover,
@@ -1897,21 +1899,21 @@ input.hideconsole:hover, input.hideconsole:focus {
 }
 
 input.check, button.check {
-  background: #eee url(/themes/console/images/buttons/yes.png) no-repeat 7px center;
-  background: url(/themes/console/images/buttons/yes.png) no-repeat 7px center, linear-gradient(to bottom, #fff, #f4f5ff);
   padding: 5px 8px 5px 23px;
+  background: #eee url(/themes/console/images/buttons/yes.svg) no-repeat 7px center;
+  background: url(/themes/console/images/buttons/yes.svg) no-repeat 7px center, linear-gradient(to bottom, #fff, #f4f5ff);
 }
 
 input.check:hover, button.check:hover,
 input.check:focus, button.check:focus {
-  background: #fff url(/themes/console/images/buttons/yes.png) no-repeat 7px center;
-  background: url(/themes/console/images/buttons/yes.png) no-repeat 7px center, linear-gradient(to bottom, #ddd, #fff);
+  background: #fff url(/themes/console/images/buttons/yes.svg) no-repeat 7px center;
+  background: url(/themes/console/images/buttons/yes.svg) no-repeat 7px center, linear-gradient(to bottom, #ddd, #fff);
 }
 
 input.check[value$="updates"], button.check[value$="updates"] {
+  padding: 5px 8px 5px 23px;
   background: #eee url(/themes/console/images/buttons/update.png) no-repeat 7px center;
   background: url(/themes/console/images/buttons/update.png) no-repeat 7px center, linear-gradient(to bottom, #fff, #f4f5ff);
-  padding: 5px 8px 5px 23px;
 }
 
 input.check[value$="updates"]:hover, button.check[value$="updates"]:hover,
@@ -1921,9 +1923,9 @@ input.check[value$="updates"]:focus, button.check[value$="updates"]:focus {
 }
 
 input.delete, button.delete {
+  padding: 5px 8px 5px 23px;
   background: #eee url(/themes/console/images/buttons/delete.png) no-repeat 7px center;
   background: url(/themes/console/images/buttons/delete.png) no-repeat 7px center, linear-gradient(to bottom, #fff, #f4f5ff);
-  padding: 5px 8px 5px 23px;
 }
 
 input.delete:hover, button.delete:hover,
@@ -1933,9 +1935,9 @@ input.delete:focus, button.delete:focus {
 }
 
 input.delete[value^="Ban"], button.delete[value^="Ban"] {
+  padding: 5px 8px 5px 23px;
   background: #eee url(/themes/console/images/buttons/ban.png) no-repeat 7px center;
   background: url(/themes/console/images/buttons/ban.png) no-repeat 7px center, linear-gradient(to bottom, #fff, #f4f5ff);
-  padding: 5px 8px 5px 23px;
 }
 
 input.delete[value^="Ban"]:hover, button.delete[value^="Ban"]:hover,
@@ -1945,9 +1947,9 @@ input.delete[value^="Ban"]:focus, button.delete[value^="Ban"]:focus {
 }
 
 input.download, button.download {
+  padding: 5px 8px 5px 23px;
   background: #eee url(/themes/console/images/buttons/download.png) no-repeat 7px center;
   background: url(/themes/console/images/buttons/download.png) no-repeat 7px center, linear-gradient(to bottom, #fff, #f4f5ff);
-  padding: 5px 8px 5px 23px;
 }
 
 input.download:hover, button.download:hover,
@@ -1957,9 +1959,9 @@ input.download:focus, button.download:focus {
 }
 
 input.download[value^="Join"], button.download[value^="Join"] {
+  padding: 5px 8px 5px 23px;
   background: #eee url(/themes/console/images/buttons/users.png) no-repeat 7px center;
   background: url(/themes/console/images/buttons/users.png) no-repeat 7px center, linear-gradient(to bottom, #fff, #f4f5ff);
-  padding: 5px 8px 5px 23px;
 }
 
 input.download[value^="Join"]:hover, button.download[value^="Join"]:hover,
@@ -1970,9 +1972,9 @@ input.download[value^="Join"]:focus, button.download[value^="Join"]:focus {
 
 input.download[value$="from File"], button.download[value$="from File"],
 input.download[value$="from file"], button.download[value$="from file"] {
+  padding: 5px 8px 5px 23px;
   background: #eee url(/themes/console/images/buttons/from-file.png) no-repeat 7px center;
   background: url(/themes/console/images/buttons/from-file.png) no-repeat 7px center, linear-gradient(to bottom, #fff, #f4f5ff);
-  padding: 5px 8px 5px 23px;
 }
 
 input.download[value$="from File"]:hover, button.download[value$="from File"]:hover,
@@ -1984,9 +1986,9 @@ input.download[value$="from file"]:focus, button.download[value$="from file"]:fo
 }
 
 input.download[value^="Dump"], button.download[value^="Dump"] {
+  padding: 5px 8px 5px 23px;
   background: #eee url(/themes/console/images/buttons/dump-threads.png) no-repeat 7px center;
   background: url(/themes/console/images/buttons/dump-threads.png) no-repeat 7px center, linear-gradient(to bottom, #fff, #f4f5ff);
-  padding: 5px 8px 5px 23px;
 }
 
 input.download[value^="Dump"]:hover, button.download[value^="Dump"]:hover,
@@ -1996,9 +1998,9 @@ input.download[value^="Dump"]:focus, button.download[value^="Dump"]:focus {
 }
 
 input.go, button.go, input[value="GO"], button#run {
+  padding: 5px 8px 5px 23px;
   background: #eee url(/themes/console/images/buttons/go.png) no-repeat 7px center;
   background: url(/themes/console/images/buttons/go.png) no-repeat 7px center, linear-gradient(to bottom, #fff, #f4f5ff);
-  padding: 5px 8px 5px 23px;
 }
 
 input.go:hover, button.go:hover, input[value="GO"]:hover,
@@ -2008,9 +2010,9 @@ input.go:focus, button.go:focus, input[value="GO"]:focus {
 }
 
 input.go[value^="Create"], button.go[value^="Create"] {
+  padding: 5px 8px 5px 23px;
   background: #eee url(/themes/console/images/buttons/create-file.png) no-repeat 7px center;
   background: url(/themes/console/images/buttons/create-file.png) no-repeat 7px center, linear-gradient(to bottom, #fff, #f4f5ff);
-  padding: 5px 8px 5px 23px;
 }
 
 input.go[value^="Create"]:hover, button.go[value^="Create"]:hover,
@@ -2020,9 +2022,9 @@ input.go[value^="Create"]:focus, button.go[value^="Create"]:focus {
 }
 
 input.back {
+  padding: 5px 8px 5px 23px;
   background: #eee url(/themes/console/images/buttons/back.png) no-repeat 7px center;
   background: url(/themes/console/images/buttons/back.png) no-repeat 7px center, linear-gradient(to bottom, #fff, #f4f5ff);
-  padding: 5px 8px 5px 23px;
 }
 
 input.back:hover,
@@ -2032,9 +2034,9 @@ input.back:focus {
 }
 
 input.reload, button.reload {
+  padding: 5px 8px 5px 23px;
   background: #eee url(/themes/console/images/buttons/restore.png) no-repeat 7px center;
   background: url(/themes/console/images/buttons/restore.png) no-repeat 7px center, linear-gradient(to bottom, #fff, #f4f5ff);
-  padding: 5px 8px 5px 23px;
 }
 
 input.reload:hover, button.reload:hover,
@@ -2095,9 +2097,9 @@ input.stop:focus, button.stop:focus {
 }
 
 button.search {
+  padding: 5px 7px 5px 25px;
   background: #eee url(/themes/console/images/buttons/search.png) no-repeat 7px 6px;
   background: url(/themes/console/images/buttons/search.png) no-repeat 7px 6px, linear-gradient(to bottom, #fff, #f4f5ff);
-  padding: 5px 7px 5px 25px;
 }
 
 button.search:hover,
@@ -2109,10 +2111,10 @@ button.search:focus {
 /* client config buttons aka project "X" */
 
 button.control {
-  font-size: 0 !important;
-  text-indent: -99999px !important;
-  background-size: 16px 16px, 100% 100% !important;
   padding: 12px !important;
+  text-indent: -99999px !important;
+  font-size: 0 !important;
+  background-size: 16px 16px, 100% 100% !important;
 }
 
 button.accept.control {
@@ -3685,7 +3687,7 @@ h3#udpcon, h3#ntcpcon {
 }
 
 @media screen and (min-width: 1200px) {
-#peers .confignav + #udpcon, #peers .confignav + #ntcpcon {
+#peers .confignav + #udp, #peers .confignav + #ntcp {
   margin-top: 15px !important;
 }
 }
@@ -4409,7 +4411,7 @@ h3#finishedjobs + ol li, h3#scheduledjobs + ol li, h3#activejobs + ol li, h3#rea
   width: 100%;
 }
 
-h3#activejobs + ol li:before, h3#scheduledjobs + ol li:before, h3#readyjobs + ol li:before, h3#finishedjobs + ol li:before {
+h3#activejobs + ol li::before, h3#scheduledjobs + ol li::before, h3#readyjobs + ol li::before, h3#finishedjobs + ol li::before {
   margin-left: -20px;
   margin-right: 8px;
   line-height: 50%;
@@ -4419,16 +4421,22 @@ h3#activejobs + ol li:before, h3#scheduledjobs + ol li:before, h3#readyjobs + ol
   content: '\2023\00A0\00A0';
 }
 
-h3#finishedjobs + ol li:before {
+h3#finishedjobs + ol li::before {
   color: #5a5;
-  content: '\2714\00A0';
+/*  content: '\2714\00A0';*/
+  content: "";
+  display: inline-block;
+  width: 12px;
+  height: 12px;
+  background: url(/themes/console/images/buttons/yes.svg) center center no-repeat;
+  background-size: 12px 12px;
 }
 
-h3#readyjobs + ol li:before {
+h3#readyjobs + ol li::before {
   color: #dd3;
 }
 
-h3#scheduledjobs + ol li:before {
+h3#scheduledjobs + ol li::before {
   color: #970;
 }
 
@@ -7294,7 +7302,7 @@ tt a, .cells tt {
 }
 }
 
-.b32 {
+span.b32 {
   margin-right: 5px;
   padding: 2px 4px;
   float: right;
@@ -9702,8 +9710,9 @@ input[type="file"]:hover {
 @media screen and (min-width: 1200px) {
 #jobstats td:first-child, #jobstats tr:hover td:first-child {
   padding: 6px 0 6px 26px;
-  background-image: url(/themes/console/images/buttons/yes.png);
-  background-position: 5px center;
+  background-image: url(/themes/console/images/buttons/yes.svg);
+  background-size: 12px 12px;
+  background-position: 8px center;
   background-repeat: no-repeat;
 }
 }
@@ -11166,13 +11175,17 @@ h3#webappconfig {
   width: 25%;
 }
 
+.encDests .created, .encDests .expires {
+  white-space: nowrap;
+}
+
 .encDests th:last-child, .encDests td:last-child {
   text-align: center;
 }
 
 .encDests code {
   display: inline-block;
-  max-width: 200px;
+  max-width: 120px;
   white-space: nowrap;
   overflow: hidden;
   text-overflow: ellipsis;
@@ -11275,11 +11288,11 @@ to {
 }
 
 #wizardpage .yes {
-  background: url(/themes/console/images/buttons/yes.png) center center no-repeat;
+  background: url(/themes/console/images/buttons/yes.svg) center center no-repeat;
 }
 
 #wizardpage .no {
-  background: url(/themes/console/images/buttons/no.png) center center no-repeat;
+  background: url(/themes/console/images/buttons/no.svg) center center no-repeat;
 }
 
 #wizard #langsettings {
@@ -11935,4 +11948,138 @@ div.app img, .sitemaplink img {
 
 div.app:hover img, .sitemaplink:hover img {
   filter: none;
+}
+
+#minigraph {
+  margin-top: -22px;
+  height: 40px;
+  width: 250px;
+}
+
+@media screen and (max-width: 1200px) {
+#minigraph {
+  margin-left: -50px !important;
+}
+}
+
+#sb_graphcontainer {
+  margin: -5px 1px -6px 1px !important;
+  border: 1px solid #aaafce;
+  box-shadow: inset 0 0 0 1px #fff;
+  background: repeating-linear-gradient(to right, rgba(0, 0, 0, 0) 15px, rgba(120, 120, 255, .5) 16px, rgba(0, 0, 0, 0) 16px, rgba(0, 0, 0, 0) 30px), repeating-linear-gradient(to top, rgba(0, 0, 0, 0) 11px, rgba(120, 120, 255, .5) 12px, rgba(255, 255, 255, 0) 12px, rgba(255, 255, 255, 0) 24px) !important;
+  overflow: hidden;
+}
+
+@media screen and (max-width: 1200px) {
+#sb_graphcontainer {
+  background: repeating-linear-gradient(to right, rgba(0, 0, 0, 0) 12px, rgba(120, 120, 255, .5) 13px, rgba(0, 0, 0, 0) 13px, rgba(0, 0, 0, 0) 28px), repeating-linear-gradient(to top, rgba(0, 0, 0, 0) 11px, rgba(120, 120, 255, .5) 12px, rgba(255, 255, 255, 0) 12px, rgba(255, 255, 255, 0) 24px) !important;
+}
+}
+
+@keyframes update {
+from {filter: opacity(.6); color: #900;}
+}
+
+@keyframes logupdate {
+from {background-color: rgba(80,255,80,.3)}
+}
+
+/*@keyframes update {
+from {color: #070}
+}*/
+
+/*@keyframes expand {
+from {transform: scaleX(0); transform-origin: 0 -50px;}
+}*/
+
+.routersummary td:last-child, .routersummary td, .routersummary td a, .routersummary td b {
+/*animation: ease update 1s;*/
+}
+
+/*
+.routersummary #xhr table, .routersummary #xhr div, .routersummary #xhr hr,
+.routersummary #xhr h3, .routersummary #xhr h4:not(#sb_status), .routersummary #xhr form {
+  display: none;
+}
+
+.routersummary #sb_status::before {
+  content: "";
+  margin: -2px -1px 8px -2px;
+  display: inline-block;
+  width: calc(100% + 4px);
+  height: 1px;
+  background: #aaafce;
+}
+
+.routersummary #sb_status::after {
+  content: "";
+  display: inline-block;
+  height: 1px;
+  width: 100%;
+}
+*/
+
+.percentBarInner {
+/*  animation: ease expand 1s;*/
+}
+
+#routerlogs li {
+  animation: ease logupdate 1s;
+}
+
+.routersummary table {
+  position: relative;
+}
+
+.routersummary table:not(#sb_localtunnels):not(#sb_services)::before {
+  width: 0;
+  height: 2px;
+  position: absolute;
+  top: -4px;
+  left: -1px;
+  display: block;
+  background: #bfb;
+  content: "";
+  animation: ease-in bar .2s reverse;
+  will-change: transform;
+
+}
+
+@keyframes bar {
+  from {width: calc(100% + 2px)}
+}
+
+@keyframes fade {
+  from {opacity: 1}
+  to {opacity: 0}
+}
+
+@keyframes disappear {
+  from {visibility: visible}
+  to {visibility: hidden}
+}
+
+#down {
+  margin: 2px 0;
+  width: calc(100% - 16px);
+  display: inline-block;
+  line-height: 32px;
+  color: #770;
+  box-shadow: inset 0 0 0 1px #800, inset 0 0 1px 3px #eeeee2, inset 0 0 0 4px #ccccc2;
+  background: #fffff2;
+  background: repeating-linear-gradient(135deg, #fffff2, #fffff2 10px, #ddddd2 10px, #ddddd2 20px);
+  background-size: 140% 100%;
+  animation: down linear 3s reverse infinite;
+}
+
+@keyframes down {
+from {
+  background-position: 100% 100%;
+}
+}
+
+#sb_localtunnels td[colspan="3"] {
+  line-height: 20px;
+  font-size: 0 !important;
+  background: repeating-linear-gradient(135deg, #fffff2, #fffff2 10px, #ddddd2 10px, #ddddd2 20px) !important;
 }

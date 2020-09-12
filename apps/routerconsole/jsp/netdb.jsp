@@ -11,7 +11,6 @@
 <script nonce="<%=cspNonce%>" src="/js/tablesort/tablesort.number.js" type="text/javascript"></script>
 <link href="/themes/console/tablesort.css" rel="stylesheet" type="text/css">
 <!-- end tablesort.js -->
-<%@include file="summaryajax.jsi" %>
 </head>
 <body>
 <script nonce="<%=cspNonce%>" type="text/javascript">progressx.show();</script>
@@ -49,6 +48,7 @@
  <jsp:getProperty name="formhandler" property="netDbSummary" />
 </div>
 <script nonce="<%=cspNonce%>" type="text/javascript">new Tablesort(document.getElementById("netdbcountrylist"));</script>
+<%@include file="summaryajax.jsi" %>
 <script nonce="<%=cspNonce%>" type="text/javascript">progressx.hide();</script>
 </body>
 </html>

@@ -38,9 +38,9 @@
   }
 </script>
 <script type="text/javascript" src="/js/iframeResizer/iframeResizer.js?<%=net.i2p.CoreVersion.VERSION%>"></script>
-<%@include file="summaryajax.jsi" %>
 </head>
 <body class="embed">
+<%@include file="summaryajax.jsi" %>
 <script nonce="<%=cspNonce%>" type="text/javascript">progressx.show();</script>
 <%@include file="summary.jsi" %>
 <h1 class="mail"><%=intl._t("Webmail")%> <span class="newtab"><a href="/susimail/" target="_blank" title="<%=intl._t("Open in new tab")%>"><img src="<%=intl.getTheme(request.getHeader("User-Agent"))%>images/newtab.png" /></a></span></h1>
@@ -57,6 +57,7 @@ var iframes = iFrameResize({log: false, interval: 0, heightCalculationMethod: 't
 });
 </script>
 </div>
+<%@include file="summaryajax.jsi" %>
 <script nonce="<%=cspNonce%>" type="text/javascript">progressx.hide();</script>
 </body>
 </html>

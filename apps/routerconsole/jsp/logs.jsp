@@ -7,7 +7,6 @@
 <%@include file="css.jsi" %>
 <%=intl.title("logs")%>
 <!--<script src="/js/scrollTo.js?<%=net.i2p.CoreVersion.VERSION%>" type="text/javascript"></script>-->
-<%@include file="summaryajax.jsi" %>
 </head>
 <body id="i2plogs">
 <script nonce="<%=cspNonce%>" type="text/javascript">progressx.show();</script>
@@ -131,16 +130,33 @@
     progressx.progress(0.5);
     var xhr = new XMLHttpRequest();
     xhr.open('GET', '/logs?' + new Date().getTime(), true);
-    xhr.responseType = "text";
+    xhr.responseType = "document";
     xhr.onreadystatechange = function () {
       if (xhr.readyState==4 && xhr.status==200) {
-        document.getElementById("i2plogs").innerHTML = xhr.responseText;
+        var criticallogs = document.getElementById("criticallogs");
+        var routerlogs = document.getElementById("routerlogs");
+        var servicelogs = document.getElementById("servicelogs");
+        var routerlogsResponse = xhr.responseXML.getElementById("routerlogs");
+        var criticallogsResponse = xhr.responseXML.getElementById("criticallogs");
+        var criticallogsParent = criticallogs.parentNode;
+        var routerlogsParent = routerlogs.parentNode;
+        var servicelogsParent = servicelogs.parentNode;
+        if (!Object.is(criticallogs.innerHTML, criticallogsResponse.innerHTML))
+          criticallogsParent.replaceChild(criticallogsResponse, criticallogs);
+        if (!Object.is(routerlogs.innerHTML, routerlogsResponse.innerHTML))
+          routerlogsParent.replaceChild(routerlogsResponse, routerlogs);
+        if (servicelogs) {
+          var servicelogsResponse = xhr.responseXML.getElementById("servicelogs");
+          if (!Object.is(servicelogs.innerHTML, servicelogsResponse.innerHTML))
+            servicelogsParent.replaceChild(servicelogsResponse, servicelogs);
+        }
       }
     }
-    xhr.send();
     progressx.hide();
+    xhr.send();
   }, 30000);
 </script>
+<%@include file="summaryajax.jsi" %>
 <script nonce="<%=cspNonce%>" type="text/javascript">progressx.hide();</script>
 </body>
 </html>

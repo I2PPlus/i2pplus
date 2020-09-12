@@ -6,7 +6,6 @@
 <head>
 <title>Help and Support - I2P+</title>
 <%@include file="css.jsi" %>
-<%@include file="summaryajax.jsi" %>
 </head>
 <body>
 <script nonce="<%=cspNonce%>" type="text/javascript">progressx.show();</script>
@@ -47,6 +46,7 @@
 </div>
 
 </div>
+<%@include file="summaryajax.jsi" %>
 <script nonce="<%=cspNonce%>" type="text/javascript">progressx.hide();</script>
 </body>
 </html>

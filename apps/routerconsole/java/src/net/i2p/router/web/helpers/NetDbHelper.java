@@ -372,7 +372,7 @@ public class NetDbHelper extends FormHandler {
     private void renderLookupForm() throws IOException {
         _out.write("<form action=\"/netdb\" method=\"POST\">\n" +
                    "<input type=\"hidden\" name=\"nonce\" value=\"" + _newNonce + "\" >\n" +
-                   "<div id=\"lookupCondensed\">" +
+                   "<div id=\"lookupCondensed\" hidden>" +
                    "<select name=\"netdbLookup\">" +
                    "<option value=\"caps\" selected=\"selected\">Capabilities</option>" +
                    "<option value=\"cost\">Cost</option>" +

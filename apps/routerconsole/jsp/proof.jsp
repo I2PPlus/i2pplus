@@ -6,7 +6,6 @@
 <head>
 <%@include file="css.jsi" %>
 <%=intl.title("Proof")%>
-<%@include file="summaryajax.jsi" %>
 </head>
 <body>
 <script nonce="<%=cspNonce%>" type="text/javascript">progressx.show();</script>
@@ -17,6 +16,7 @@
 <textarea cols="70" rows="15" wrap="off" readonly="readonly" spellcheck="false"><jsp:getProperty name="proofHelper" property="proof" /></textarea>
 </p>
 </div>
+<%@include file="summaryajax.jsi" %>
 <script nonce="<%=cspNonce%>" type="text/javascript">progressx.hide();</script>
 </body>
 </html>

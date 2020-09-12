@@ -6,7 +6,6 @@
 <head>
 <%@include file="css.jsi" %>
 <%=intl.title("peer connections")%>
-<%@include file="summaryajax.jsi" %>
 </head>
 <body>
 <script nonce="<%=cspNonce%>" type="text/javascript">progressx.show();</script>
@@ -25,6 +24,39 @@
  <jsp:setProperty name="peerHelper" property="transport" value="<%=request.getParameter(\"transport\")%>" />
  <jsp:getProperty name="peerHelper" property="peerSummary" />
 </div>
+<script nonce="<%=cspNonce%>" type="text/javascript">
+  setInterval(function() {
+    progressx.show();
+    var uri = (window.location.pathname + window.location.search).substring(1);
+    var xhr = new XMLHttpRequest();
+    if (uri.includes("?transport"))
+      xhr.open('GET', uri + '&t=' + new Date().getTime(), true);
+    else
+      xhr.open('GET', '/peers?' + new Date().getTime(), true);
+    xhr.responseType = "document";
+    xhr.onreadystatechange = function () {
+      if (xhr.readyState==4 && xhr.status==200) {
+        var udp = document.getElementById("udp");
+        var ntcp = document.getElementById("ntcp");
+        if (udp) {
+          var udpResponse = xhr.responseXML.getElementById("udp");
+          var udpParent = udp.parentNode;
+          if (!Object.is(udp.innerHTML, udpResponse.innerHTML))
+            udpParent.replaceChild(udpResponse, udp);
+        }
+        if (ntcp) {
+          var ntcpResponse = xhr.responseXML.getElementById("ntcp");
+          var ntcpParent = ntcp.parentNode;
+          if (!Object.is(ntcp.innerHTML, ntcpResponse.innerHTML))
+            ntcpParent.replaceChild(ntcpResponse, ntcp);
+        }
+      }
+    }
+    progressx.hide();
+    xhr.send();
+  }, 15000);
+</script>
+<%@include file="summaryajax.jsi" %>
 <script nonce="<%=cspNonce%>" type="text/javascript">progressx.hide();</script>
 </body>
 </html>

@@ -84,7 +84,7 @@
     }
 %>
 <div class="routersummaryouter" style="width: 200px; float: left; margin-right: 20px;">
-<div class="routersummary">
+<div class="routersummary" id="sidebar">
 <div style="height: 36px;">
 <!--<a href="/" target="_top">-->
 <img src="<%=intl.getTheme(request.getHeader("User-Agent"))%>images/i2plogo.png" alt="<%=intl._t("I2P Router Console").replace("I2P", "I2P+")%>" title="<%=intl._t("I2P Router Console").replace("I2P", "I2P+")%>" width="200">

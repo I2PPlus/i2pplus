@@ -6,7 +6,6 @@
 <head>
 <%@include file="css.jsi" %>
 <%=intl.title("statistics")%>
-<%@include file="summaryajax.jsi" %>
 </head>
 <body>
 <script nonce="<%=cspNonce%>" type="text/javascript">progressx.show();</script>
@@ -19,6 +18,7 @@
 <div class="main" id="stats">
 <jsp:getProperty name="oldhelper" property="stats" />
 </div>
+<%@include file="summaryajax.jsi" %>
 <script nonce="<%=cspNonce%>" type="text/javascript">progressx.hide();</script>
 </body>
 </html>

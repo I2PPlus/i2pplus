@@ -874,7 +874,12 @@ td.snarkTorrentAction input[type="image"] {
 }
 
 .active td.snarkTorrentAction {
-  background: linear-gradient(to left, rgba(0,0,0,0) 1px, #f3f 2px, rgba(0,0,0,0) 2px);
+  background: linear-gradient(to left, rgba(0,0,0,0) 1px, #b3b 2px, rgba(0,0,0,0) 2px);
+  animation: ease active 2s forwards;
+}
+
+@keyframes active {
+  from {background: linear-gradient(to left, rgba(0,0,0,0) 1px, #f5f 2px, rgba(0,0,0,0) 2px)}
 }
 
 .peerinfo td:nth-child(4) {

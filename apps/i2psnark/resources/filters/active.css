@@ -2,7 +2,7 @@
     display: none;
 }
 
-.active {
+.active, #snarkFoot tr {
     display: table-row;
 }
 

@@ -17,7 +17,8 @@ body {
   color: #ee9;
   font: 8.5pt/130% "Droid Sans", "Open Sans", "Noto Sans", Ubuntu, "Segoe UI", "Bitstream Vera Sans", "DejaVu Sans", Verdana, "Lucida Grande", Helvetica, sans-serif;
   background: #010 url(images/camotile2.png) top left scroll;
-  background: repeating-linear-gradient(to bottom, rgba(0,0,0,.9) 1px, rgba(0,8,0,.5) 2px, rgba(0,8,0,.5) 3px), url(images/camotile2.png) top left scroll #000800;
+  background: url(/themes/console/images/svg/update.svg) center center no-repeat, repeating-linear-gradient(to bottom, rgba(0,0,0,.9) 1px, rgba(0,8,0,.5) 2px, rgba(0,8,0,.5) 3px), url(images/camotile2.png) top left scroll #000800;
+  background-size: 0 0, 100% 100%, auto;
   will-change: transform;
 }
 
@@ -686,6 +687,11 @@ pre {
   background-image: url(/themes/console/images/local_up.png) !important;
 }
 
+#sb_localtunnels td[colspan="3"] {
+  line-height: 20px;
+  font-size: 0 !important;
+}
+
 #sb_internals td, #sb_services td, #sb_advanced td, #sb_help td { /* color ellipsis */
   color: #595 !important;
 }
@@ -1001,12 +1007,11 @@ a:active #sb_bandwidthgraph td {
   transition: ease opacity 0.2s;
 }
 
-#sb_graphcontainer {
+/*#sb_graphcontainer {
   margin-bottom: -7px !important;
   margin-left: -6px;
   margin-right: -8px;
   position: relative;
-  background: #000 url(/viewstat.jsp?stat=bw.combined&periodCount=20&width=250&height=50&hideLegend=true&hideGrid=true&hideTitle=true);
   background-size: 212px 38px !important;
   background-position: left -7px top 0 !important;
   background-repeat: no-repeat !important;
@@ -1019,20 +1024,7 @@ a:active #sb_bandwidthgraph td {
   background-position: left -6px top 0 !important;
 }
 }
-
-/*#sb_graphcontainer::before {
-  position: absolute;
-  top: 2px;
-  left: -1px;
-  width: 100%;
-  height: 38px;
-  content: "";
-  display: inline-block;
-  background: linear-gradient(to bottom, rgba(255,255,255,.05), rgba(0,0,0,0)), linear-gradient(to bottom, rgba(0,0,0,0), rgba(0,0,0,0), rgba(0,0,0,0.3));
-  pointer-events: none;
-  will-change: transform;
-}*/
-
+*/
 /* end mini sidebar graph */
 
 /* status bar */
@@ -5794,6 +5786,12 @@ table[id$="logs"] ul {
   vertical-align: calc(1px);
   color: #777;
   border-radius: 50%;
+  filter: saturate(1);
+  animation: linear ping .1s;
+}
+
+@keyframes ping {
+  from {filter: saturate(2)}
 }
 
 .log_debug, .log_info, .log_warn, .log_error, .log_crit, .log_omitted {
@@ -8136,12 +8134,12 @@ h4#sb_shutdownstatus span {
   box-shadow: inset 0 0 0 1px #000, inset 0 0 2px 1px #730;
 }
 
-.routersummary .testing, .tunnelBuildStatus.starting {
+.routersummary .testing, .tunnelBuildStatus.starting, #sb_localtunnels td[colspan="3"] {
   box-shadow: inset 0 0 0 1px #000, inset 0 0 2px 1px #bb0, inset 0 0 0 3px #000;
   color: #aa3;
-  background: repeating-linear-gradient(135deg, rgba(0,0,0,.5), rgba(0,0,0,.5) 10px, rgba(32,32,0,.5) 10px, rgba(32,32,0,.5) 20px);
+  background: repeating-linear-gradient(135deg, rgba(0,0,0,.5), rgba(0,0,0,.5) 10px, rgba(32,32,0,.5) 10px, rgba(32,32,0,.5) 20px) !important;
   background-size: 400% 400%;
-  animation: progress 60s linear infinite both;
+/*  animation: linear progress 60s 3s forwards;*/
 }
 
 .routersummary .hidden, .routersummary .vmcomm, .tunnelBuildStatus.hidden {
@@ -8158,7 +8156,7 @@ h4#sb_shutdownstatus span {
 /*.tunnelBuildStatus.active, */#bandwidthTestRunning {
   background: repeating-linear-gradient(to right, rgba(0,0,0,.3), rgba(0,0,0,.3) 10px, rgba(0,32,0,.3) 10px, rgba(0,32,0,.3) 20px) #010;
   background-size: 400% 400%;
-  animation: progress 120s linear infinite both;
+  animation: progress 120s 3s linear infinite both;
 }
 
 @keyframes progress {
@@ -8245,7 +8243,7 @@ background-position: 0;
 
 .tunnelBuildStatus.active::before {
   background: #5c5;
-  animation: linear participating 1s 2s alternate infinite;
+  animation: linear participating 1s 2s alternate;
 }
 
 .tunnelBuildStatus.starting {
@@ -12061,25 +12059,37 @@ input[type="text"]:focus::placeholder {
 
 .routersummary #xhr hr + b {
   margin: 3px 0 2px -1px;
-  padding: 8px 5px;
+  padding: 6px 5px;
   width: calc(100% - 8px);
   display: inline-block;
-  font-size: 9pt;
+  font-size: 0;
   color: #a00;
   text-shadow: 0 1px 1px #000;
   box-shadow: 0 0 1px 0 #030, inset 0 0 0 1px #000, inset 0 0 1px 3px #131, inset 0 0 0 4px #000;
   background: repeating-linear-gradient(135deg, #131, #131 10px, #000 10px, #000 20px);
-  animation: routerdown linear 1s both infinite;
+  background-position: right center;
+  background-size: 125% 125%;
+  animation: routerdown linear 3s forwards infinite;
+}
+
+.routersummary #xhr hr + b::after {
+  width: 26px;
+  height: 26px;
+  vertical-align: middle;
+  display: inline-block;
+  background: url(/themes/console/images/svg/update.svg) center center no-repeat;
+  background-size: 26px 26px;
+  content: "";
+  transform: rotate(0);
+  animation: linear spin 3s forwards infinite;
+}
+
+@keyframes spin {
+  from {transform: rotate(-360deg)}
 }
 
 @keyframes routerdown {
-from {
-  background: repeating-linear-gradient(135deg, #131, #131 10px, #000 10px, #000 20px);
-}
-
-to {
-  background: repeating-linear-gradient(135deg, #000, #000 10px, #131 10px, #131 20px);
-}
+  from {background-position: left center}
 }
 
 /* end sidebar routerdown */
@@ -14264,4 +14274,68 @@ h3 + table {
 
 #accesslistDisabled ~ textarea[name="accessList"] {
   display: none;
+}
+
+#minigraph {
+  margin-top: -18px;
+  height: 40px;
+  width: 204px;
+  opacity: .9;
+}
+
+@media screen and (min-width: 1500px) {
+  #minigraph {
+    margin-top: -21px;
+    width: 250px;
+  }
+}
+
+#sb_graphcontainer {
+  margin: -5px -7px -7px !important;
+  padding: 0 1px;
+  height: 44px;
+  box-shadow: inset 0 0 0 1px #131, inset 0 0 0 2px #000, inset 0 0 3px 1px #040;
+  background: repeating-linear-gradient(to right, rgba(0,0,0,0) 14px, rgba(64,160,64,.3) 15px, rgba(0,0,0,0) 15px, rgba(0,0,0,0) 30px), repeating-linear-gradient(to top, rgba(0,0,0,0), rgba(48,152,48,.2), rgba(0,0,0,0) 1px, rgba(0,0,0,0) 14px) !important;
+  overflow: hidden;
+  position: relative;
+  z-index: 10;
+}
+
+#sb_graphcontainer::before {
+  position: absolute;
+  top: 2px;
+  left: -1px;
+  width: 100%;
+  height: 40px;
+  content: "";
+  display: inline-block;
+  background: linear-gradient(to bottom, rgba(0,0,0,0), rgba(0,0,0,0), rgba(0,0,0,0.3));
+  pointer-events: none;
+  will-change: transform;
+}
+
+#sb_graphstats {
+  position: relative;
+  z-index: 1000;
+}
+
+.routersummary table {
+  position: relative;
+}
+
+.routersummary table:not(#sb_localtunnels):not(#sb_services)::before {
+  width: 0;
+  height: 1px;
+  position: absolute;
+  top: -4px;
+  left: -1px;
+  display: block;
+  background: #730;
+  content: "";
+  animation: ease-in bar .2s reverse;
+  will-change: transform;
+}
+
+@keyframes bar {
+  from {width: calc(100%)}
 }

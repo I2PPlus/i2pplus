@@ -283,9 +283,9 @@ class SummaryRenderer {
             } else if (fontlist.contains("DejaVu Sans Mono")) {
                 DEFAULT_FONT_NAME = "DejaVu Sans Mono";
                 DEFAULT_LEGEND_FONT_NAME = "DejaVu Sans Mono";
-            } else if (fontlist.contains("Consolas")) {
-                DEFAULT_FONT_NAME = "Consolas";
-                DEFAULT_LEGEND_FONT_NAME = "Consolas";
+//            } else if (fontlist.contains("Consolas")) {
+//                DEFAULT_FONT_NAME = "Consolas";
+//                DEFAULT_LEGEND_FONT_NAME = "Consolas";
             } else if (fontlist.contains("Lucida Console")) {
                 DEFAULT_FONT_NAME = "Lucida Console";
                 DEFAULT_LEGEND_FONT_NAME = "Lucida Console";
@@ -464,13 +464,13 @@ class SummaryRenderer {
                     if (periodCount >= 720 || (periodCount >= 480 && width <= 800))
                         linewidth = 2;
                     // sidebar graph
-                    else if (periodCount == 20 && width == 250 && height == 50 && hideTitle && hideLegend && hideGrid)
+                    else if (width == 250 && height == 50 && hideTitle && hideLegend && hideGrid)
                         linewidth = 3;
                 } else {
                     if (periodCount >= 720 || (periodCount >= 480 && width <= 400))
                         linewidth = 1;
                     // sidebar graph
-                    else if (periodCount == 20 && width == 250 && height == 50 && hideTitle && hideLegend && hideGrid)
+                    else if (width == 250 && height == 50 && hideTitle && hideLegend && hideGrid)
                         linewidth = 3;
                 }
                 if (theme.equals("midnight"))
@@ -558,7 +558,7 @@ class SummaryRenderer {
                     def.setAltYMrtg(false);
             }
             // render onlyGraph if we're on the sidebar
-            if (periodCount == 20 && width == 250 && height == 50 && hideTitle && hideLegend && hideGrid) {
+            if (width == 250 && height == 50 && hideTitle && hideLegend && hideGrid) {
                 def.setOnlyGraph(true);
 //                if (theme.equals("classic") || theme.equals("light"))
                     def.setColor(RrdGraphDef.COLOR_CANVAS, TRANSPARENT);

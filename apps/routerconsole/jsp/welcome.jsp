@@ -301,6 +301,6 @@
 %>
 </td></tr></table></div>
 </form>
-</div><script nonce="<%=cspNonce%>" type="text/javascript">progressx.hide();</script>
+</div>
 <script nonce="<%=cspNonce%>" type="text/javascript">progressx.hide();</script>
 </body></html>

@@ -156,6 +156,5 @@
 </div>
 </div>
 <script nonce="<%=cspNonce%>" type="text/javascript">progressx.hide();</script>
-<script nonce="<%=cspNonce%>" type="text/javascript">progressx.hide();</script>
 </body>
 </html>

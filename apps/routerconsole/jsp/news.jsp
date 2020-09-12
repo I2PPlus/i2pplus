@@ -5,7 +5,6 @@
 <head>
 <%@include file="css.jsi" %>
 <%=intl.title("News")%>
-<%@include file="summaryajax.jsi" %>
 </head>
 <body>
 <script nonce="<%=cspNonce%>" type="text/javascript">progressx.show();</script>
@@ -19,6 +18,7 @@
 <jsp:getProperty name="feedHelper" property="entries" />
 </div>
 </div>
+<%@include file="summaryajax.jsi" %>
 <script nonce="<%=cspNonce%>" type="text/javascript">progressx.hide();</script>
 </body>
 </html>
