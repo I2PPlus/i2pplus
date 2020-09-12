@@ -967,7 +967,7 @@ input.tunnelName, input.tunnelDescriptionText, #userAgents, .tunnelDescription, 
   min-width: 280px;
 }
 
-#notReady {
+#notReady, #down {
   margin: 35px auto 30px;
   padding: 30px;
   width: 400px;

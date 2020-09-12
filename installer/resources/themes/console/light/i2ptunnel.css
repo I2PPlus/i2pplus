@@ -961,7 +961,7 @@ input.tunnelName, input.tunnelDescriptionText, #userAgents, .freetext.tunnelDesc
   background: url(/themes/console/images/buttons/fileman.png) 5px center no-repeat #fff;
 }
 
-#notReady, #notFound {
+#notReady, #notFound, #down {
   margin: 45px auto 0;
   padding: 30px;
   width: 400px;
