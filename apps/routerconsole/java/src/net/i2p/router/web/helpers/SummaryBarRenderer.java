@@ -1039,7 +1039,7 @@ class SummaryBarRenderer {
            .append(_helper.getSecondKBps())
            .append("Bps</span>\n")
            .append("<a href=\"/graphs\">\n<canvas id=\"minigraph\" class=\"script\" width=\"245\" height=\50\">")
-           .append("<div id=\"minigraph\" style=\"background-image: url(/viewstat.jsp?stat=bw.combined")
+           .append("<div id=\"minigraph\" class=\"script\" style=\"background-image: url(/viewstat.jsp?stat=bw.combined")
            .append("&amp;periodCount=20&amp;width=250&amp;height=50&amp;hideLegend=true&amp;hideGrid=true&amp;")
            .append("hideTitle=true&amp;time=").append(_context.clock().now() / 1000).append("\"></div>")
            .append("</canvas>\n</a>\n")
