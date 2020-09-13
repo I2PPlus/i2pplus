@@ -1,5 +1,7 @@
 // setup torrent display buttons so we can show/hide snarks based on status
 
+var bar = document.getElementById("torrentDisplay");
+
 function initFilterBar() {
 
   var btnAll = document.getElementById("all");
@@ -206,19 +208,20 @@ function initFilterBar() {
     });
   }
 
-  btnAll.addEventListener("click", showAll, false);
-  btnActive.addEventListener("click", showActive, false);
-  btnInactive.addEventListener("click", showInactive, false);
-  btnDownloading.addEventListener("click", showDownloading, false);
-  btnSeeding.addEventListener("click", showSeeding, false);
-  btnComplete.addEventListener("click", showComplete, false);
-  btnIncomplete.addEventListener("click", showIncomplete, false);
-  btnStopped.addEventListener("click", showStopped, false);
+  if (bar) {
+    btnAll.addEventListener("click", showAll, false);
+    btnActive.addEventListener("click", showActive, false);
+    btnInactive.addEventListener("click", showInactive, false);
+    btnDownloading.addEventListener("click", showDownloading, false);
+    btnSeeding.addEventListener("click", showSeeding, false);
+    btnComplete.addEventListener("click", showComplete, false);
+    btnIncomplete.addEventListener("click", showIncomplete, false);
+    btnStopped.addEventListener("click", showStopped, false);
+  }
 
 }
 
-var bar = document.getElementById("torrentDisplay");
-if (bar) {
+if (typeof bar != "undefined") {
   document.addEventListener("mouseover", function() {
     initFilterBar();
   }, false);
