@@ -2770,7 +2770,8 @@ from {transform: rotate(360deg)}
 .trackerconfig th:first-child {
   border-left: 1px solid #101;
   border-radius: 2px 0 0 2px;
-  background: url(images/nuke.png) center center no-repeat !important;
+  background: url(images/nuke.svg) center center no-repeat !important;
+  background-size: 16px 16px !important;
 }
 
 _:-ms-lang(x), .trackerconfig th {
@@ -2781,7 +2782,8 @@ _:-ms-lang(x), .trackerconfig th {
 
 _:-ms-lang(x), .trackerconfig th:first-child {
   border-right: 1px solid #313 !important;
-  background: url(images/nuke.png) center right 6px no-repeat #313;
+  background: url(images/nuke.svg) center right 6px no-repeat #313;
+  background-size: 16px 16px !important;
 }
 
 _:-ms-lang(x), .trackerconfig th:nth-child(7) {
@@ -3561,7 +3563,8 @@ td .commentAuthorName {
 .commentDelete {
   text-align: center;
   padding: 5px 8px 5px 22px !important;
-  background: url(images/nuke.png) 2px center no-repeat;
+  background: url(images/nuke.svg) 2px center no-repeat;
+  background-size: 14px 14px !important;
 }
 
 .commentDelete .optbox {
@@ -6572,12 +6575,13 @@ td.snarkTorrentPeerCount b a:not(:hover):not(:focus), td.snarkTorrentPeerCount b
 }
 }
 
-#snarkTorrents, .snarkDirInfo, .snarkTorrentOdd, .snarkTorrentEven, .peerinfo, #snarkFoot, .volatile .percentBarOuter, .active .percentBarOuter {
+#snarkTorrents, .snarkDirInfo, .snarkTorrentOdd, .snarkTorrentEven, .peerinfo, #snarkFoot,
+.volatile .percentBarOuter, .active .percentBarOuter, #videoTitle {
   position: relative;
 }
 
 #snarkTorrents::before, #screenLog::before, .snarkDirInfo::before, #dirlist .volatile .percentBarOuter::before, .active:not(.TX) .percentBarOuter::before,
-.peerinfo.TX .percentBarOuter::after {
+.peerinfo.TX .percentBarOuter::after, .snarkDirInfo::before, #videoTitle::before {
   content: "";
   display: block;
   width: 0;
@@ -6592,8 +6596,17 @@ td.snarkTorrentPeerCount b a:not(:hover):not(:focus), td.snarkTorrentPeerCount b
   z-index: 1000;
 }
 
+.snarkDirInfo::before {
+  top: 1px;
+}
+
+#videoTitle::before {
+  top: auto;
+  bottom: -3px;
+}
+
 @keyframes downloading {
-  from {border-left: 1px solid #101;}
+  from {border-left: 1px solid #101}
 }
 
 .active.downloading .percentBarInner {
@@ -6616,7 +6629,6 @@ td.snarkTorrentPeerCount b a:not(:hover):not(:focus), td.snarkTorrentPeerCount b
   background: #242;
   animation: ease-in bar .2s reverse;
 }
-
 
 .active .snarkTorrentAction {
   background: linear-gradient(to left, rgba(255,255,0,.3), rgba(255,255,0,.3) 1px, rgba(255,255,0,0) 1px);
