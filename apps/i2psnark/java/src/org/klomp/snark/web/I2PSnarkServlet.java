@@ -4410,7 +4410,10 @@ public class I2PSnarkServlet extends BasicServlet {
             boolean isAudio = isAudio(mime);
             boolean isVideo = !isAudio && isVideo(mime);
             int videoCount = 0;
-            buf.append("<td class=\"snarkFileIcon volatile\">");
+            buf.append("<td class=\"snarkFileIcon");
+            if (!complete)
+                buf.append(" volatile");
+            buf.append("\">");
             String preview = null;
             if (isVideo && complete)
               videoCount++;
@@ -4450,14 +4453,18 @@ public class I2PSnarkServlet extends BasicServlet {
                     buf.append("</audio>");
                 else if (isVideo)
                     buf.append("</video>");
-                if (videoCount >= 1) {
+                if (videoCount == 1) {
                     buf.append("<script src=\"").append(_contextPath).append(WARBASE + "js/getMetadata.js?" + CoreVersion.VERSION +
+                    //buf.append("<script src=\"/themes/getMetadata.js?" + CoreVersion.VERSION + // debugging
                                "\" type=\"text/javascript\"></script>\n");
                 }
             } else {
                 buf.append(toImg(icon));
             }
-            buf.append("</td><td class=\"snarkFileName volatile\">");
+            buf.append("</td><td class=\"snarkFileName");
+            if (!complete)
+                buf.append(" volatile");
+            buf.append("\">");
             if (complete) {
                 buf.append("<a href=\"").append(path);
                 buf.append("\"");

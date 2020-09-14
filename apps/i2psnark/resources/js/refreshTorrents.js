@@ -44,7 +44,7 @@ function refreshTorrents(timestamp) {
 
         if (!down && !noload) {
           refreshHeaderAndFooter();
-        } else if (down || noload || (!filterbar && typeof filterbarResponse != "undefined")) {
+        } else if (down || noload || (torrents && (!filterbar && typeof filterbarResponse != "undefined"))) {
           window.requestAnimationFrame(refreshAll);
         }
 
@@ -135,13 +135,15 @@ function refreshTorrents(timestamp) {
         }
 
         function refreshAll(timeStamp) {
-          var mainsectionResponse = xhrsnark.responseXML.getElementById("mainsection");
-          if (typeof mainsectionResponse != "undefined" && !Object.is(mainsection.innerHTML, mainsectionResponse.innerHTML))
-            mainsection.innerHTML = mainsectionResponse.innerHTML;
-          else if (files) {
+          if (mainsection) {
+            var mainsectionResponse = xhrsnark.responseXML.getElementById("mainsection");
+            if (typeof mainsectionResponse != "undefined" && !Object.is(mainsection.innerHTML, mainsectionResponse.innerHTML))
+              mainsection.innerHTML = mainsectionResponse.innerHTML;
+          } else if (files) {
             var dirlist = document.getElementById("dirlist");
+            var notfound = document.getElementById("NotFound");
             var dirlistResponse = xhrsnark.responseXML.getElementById("dirlist");
-            if (typeof dirlistResponse != "undefined" && !Object.is(dirlist.innerHTML, dirlistResponse.innerHTML))
+            if (typeof dirlistResponse != "undefined" && !Object.is(dirlist.innerHTML, dirlistResponse.innerHTML) && !notfound)
               dirlist.innerHTML = dirlistResponse.innerHTML;
           }
         }
