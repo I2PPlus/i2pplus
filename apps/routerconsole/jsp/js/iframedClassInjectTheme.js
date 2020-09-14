@@ -3,11 +3,13 @@
 function injectClass(f) {
   f.className += ' iframed ';
   var doc = 'contentDocument' in f? f.contentDocument : f.contentWindow.document;
-  if (t != null && a != null) {
-    doc.documentElement.className += ' ' + t + ' ' + a;
-    doc.body.className += ' iframed ' + t + ' ' + a;
-  } else {
-    doc.body.className += ' iframed';
+  if (!doc.body.classList.contains("iframed")) {
+    if (t != null && a != null) {
+      doc.documentElement.className += ' ' + t + ' ' + a;
+      doc.body.className += ' iframed ' + t + ' ' + a;
+    } else {
+      doc.body.className += ' iframed';
+    }
   }
 }
 
