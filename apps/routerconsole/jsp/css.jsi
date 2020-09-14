@@ -36,7 +36,6 @@
    String cspNonce = Integer.toHexString(net.i2p.util.RandomSource.getInstance().nextInt());
 %>
 <link rel="preload" href="<%=themePath%>images/i2plogo.png" as="image">
-<link rel="preload" href="<%=themePath%>console.css?<%=net.i2p.CoreVersion.VERSION%>" as="style">
 <link rel="icon" href="<%=themePath%>images/favicon.ico">
 <script nonce="<%=cspNonce%>" type="text/javascript">if (top.location != location) {top.location.href = location.href;}</script>
 <script src="/js/progressx.js?<%=net.i2p.CoreVersion.VERSION%>" type="text/javascript"></script>
@@ -60,7 +59,7 @@
    response.setHeader("Referrer-Policy", "no-referrer");
    String uri = request.getRequestURI();
    if (uri.contains("override.css"))
-       response.setHeader("Cache-Control", "no-store");
+       response.setHeader("Cache-Control", "no-cache, private, max-age=84600, must-revalidate");
    else if (uri.contains(".png") || uri.contains(".svg") || uri.contains(".jpg") || uri.contains(".ttf") ||
             uri.contains("viewstat") || uri.contains("flags.jsp") || uri.contains(".js"))
        response.setHeader("Cache-Control", "private, max-age=2628000");

@@ -221,7 +221,7 @@ function initFilterBar() {
 
 }
 
-if (typeof bar != "undefined") {
+if (typeof bar !== "undefined" || bar) {
   document.addEventListener("mouseover", function() {
     initFilterBar();
   }, false);
