@@ -627,6 +627,12 @@ a:active #sb_bandwidthgraph {
   display: inline-block;
 }
 
+/*div#minigraph:not(.script) {
+  margin: -18px 1px 0;
+  background-position: left 2px bottom 27px;
+  background-size: 234px 40px !important;
+}*/
+
 #sb_graphcontainer {
   margin: -5px -5px -6px;
   height: 44px;

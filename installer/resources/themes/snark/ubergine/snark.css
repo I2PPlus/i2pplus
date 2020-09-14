@@ -140,7 +140,7 @@ _:-ms-lang(x), .snarknavbar {
 
 .iframed .snarknavbar {
   margin-top: 0 !important;
-  margin-bottom: -6px !important;
+  margin-bottom: -5px !important;
   padding-bottom: 12px;
   position: static !important;
   width: auto !important;
@@ -1462,48 +1462,6 @@ tr.active:hover .percentBarInner, tr.active:hover .peerinfo .percentBarInner {
   box-shadow: 0 0 0 1px rgba(0,0,0,.5), inset 0 0 0 1px rgba(16,0,16,.5), inset 3px 3px 3px rgba(0,0,0,.6);
   background: repeating-linear-gradient(to right, rgba(0,0,0,0), rgba(0,0,0,0) 7px, rgba(0,0,0,.2) 7px, rgba(0,0,0,.2) 8px, rgba(0,0,0,0) 8px), linear-gradient(to right, #202,#303,#404);
 }
-
-/* animation for active downloading torrents.. consumes cpu */
-/*
-.active:not(.peerinfo):not(:hover) .percentBarOuter {
-  position: relative;
-  overflow: hidden;
-}
-
-.active:not(.peerinfo):not(:hover) .percentBarOuter::after {
-  content: "";
-  display: inline-block;
-  width: 0;
-  height: calc(100% - 4px);
-  background: none;
-  position: absolute;
-  vertical-align: middle;
-  top: 2px;
-  left: -100%;
-  animation: ease-out active 1.25s forwards;
-  will-change: transform;
-  filter: blur(1px) drop-shadow(0 0 1px #d50) drop-shadow(0 0 1px #920) drop-shadow(0 0 1px #400);
-  mix-blend-mode: color-dodge;
-}
-
-@keyframes active {
-  0 {
-    width: 0;
-    left: -100%;
-    background: none;
-  }
-  50% {
-    width: calc(200% - 10px);
-    left: 0;
-    background: linear-gradient(to right, rgba(0,0,0,0) 49%, rgba(255,255,0,.4) 50%, rgba(0,0,0,0) 51%);
-  }
-  100% {
-    width: calc(200% - 10px);
-    left: 0;
-    background: none;
-  }
-}
-*/
 
 .peerinfo .percentBarText {
   color: #c19e91;
@@ -4250,7 +4208,7 @@ select, input, input.r, input[name="nofilter_dataDir"], textarea[name="i2cpOpts"
 }
 
 .iframed .snarknavbar {
-  margin-bottom: -7px !important;
+  margin-bottom: -6px !important;
   padding: 9px 4px 9px 0;
 }
 
@@ -6603,14 +6561,6 @@ td.snarkTorrentPeerCount b a:not(:hover):not(:focus), td.snarkTorrentPeerCount b
 #videoTitle::before {
   top: auto;
   bottom: -3px;
-}
-
-@keyframes downloading {
-  from {border-left: 1px solid #101}
-}
-
-.active.downloading .percentBarInner {
-  animation: ease downloading .2s forwards;
 }
 
 .active.downloading .percentBarOuter::before, .peerinfo.RX .percentBarOuter::before,
