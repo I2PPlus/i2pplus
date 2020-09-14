@@ -176,12 +176,7 @@ function refreshSidebar(timestamp) {
             function renderGraph() {
               minigraph.width = 245;
               minigraph.height = 50;
-              var minicanvas = document.createElement("canvas");
-              var offscreen = new OffscreenCanvas(0, 0, 245, 50);
-              offscreen.width = minigraph.width;
-              offscreen.height = minigraph.height;
-              //ctx.drawImage(this, 0, 0, 245, 50);
-              ctx.drawImage(offscreen, 0, 0, 245, 50);
+              ctx.drawImage(this, 0, 0, 245, 50);
             }
           }
         }
