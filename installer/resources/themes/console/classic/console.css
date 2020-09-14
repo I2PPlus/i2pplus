@@ -11954,6 +11954,8 @@ div.app:hover img, .sitemaplink:hover img {
   margin-top: -22px;
   height: 40px;
   width: 250px;
+  position: relative;
+  z-index: 0;
 }
 
 @media screen and (max-width: 1200px) {

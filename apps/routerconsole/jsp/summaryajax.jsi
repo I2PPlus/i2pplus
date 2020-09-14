@@ -4,26 +4,15 @@
 
 <script nonce="<%=cspNonce%>" type="module">
   import {refreshSidebar} from "/js/refreshSidebar.js";
-  import {refreshGraph} from "/js/refreshGraph.js";
   var refresh = parseInt(<%=intl.getRefresh()%>, 10);
-  if (refresh < 4 && refresh > 0)
-    refresh *= 2;
-  else if (refresh < 3 && refresh > 0)
-    refresh *= 3;
-  else if (refresh < 2 && refresh > 0)
-    refresh = 5;
   if (refresh > 0) {
-    window.requestAnimationFrame(refreshGraph);
-    window.requestAnimationFrame(function updateGraph(timestamp) {
-      setInterval(refreshGraph, refresh * 1000);
-    })
+    window.requestAnimationFrame(refreshSidebar);
+    setTimeout(function updateSidebar() {
+      window.requestAnimationFrame(refreshSidebar);
+      setTimeout(updateSidebar, <%=intl.getRefresh()%> * 1000);
+    }, <%=intl.getRefresh()%> * 1000);
   }
-  window.requestAnimationFrame(function updateSidebar(timestamp) {
-    setInterval(refreshSidebar, <%=intl.getRefresh()%> * 1000);
-  })
-  refreshGraph();
 </script>
-
 <%
     }
 %>

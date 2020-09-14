@@ -6,7 +6,6 @@
 <%@include file="css.jsi" %>
 <%=intl.title("config plugins")%>
 <style type="text/css">input.default{width: 1px; height: 1px; visibility: hidden;}</style>
-<%@include file="summaryajax.jsi" %>
 <script nonce="<%=cspNonce%>" type="text/javascript">
   var deleteMessage = "<%=intl._t("Are you sure you want to delete {0}?")%>";
 </script>

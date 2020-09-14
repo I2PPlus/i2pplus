@@ -8,7 +8,6 @@
 <%=intl.title("job queue")%>
 </head>
 <body id="routerjobs">
-<%@include file="summaryajax.jsi" %>
 <script nonce="<%=cspNonce%>" type="text/javascript">progressx.show();</script>
 <%@include file="summary.jsi" %><h1 class="sched"><%=intl._t("Job Queue")%></h1>
 <div class="main" id="jobs">

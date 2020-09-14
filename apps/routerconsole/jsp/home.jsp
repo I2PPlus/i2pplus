@@ -8,7 +8,6 @@
 <%=intl.title("home")%>
 <head>
 <body id="homepage">
-<%@include file="summaryajax.jsi" %>
 <script nonce="<%=cspNonce%>" type="text/javascript">progressx.show();</script>
 <%
     String consoleNonce = net.i2p.router.web.CSSHelper.getNonce();

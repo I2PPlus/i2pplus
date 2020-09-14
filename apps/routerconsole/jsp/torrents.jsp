@@ -25,20 +25,12 @@
 <!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
 <html>
 <head>
+<!--
 <link rel="preload" href="/js/iframeResizer/iframeResizer.contentWindow.js?<%=net.i2p.CoreVersion.VERSION%>" as="script">
 <link rel="preload" href="/i2psnark/?t=<%=now%>" as="fetch" crossorigin>
+-->
 <%@include file="css.jsi" %>
 <%=intl.title("torrents")%>
-<script nonce="<%=cspNonce%>" type="text/javascript">
-  function setupFrame() {
-    f = document.getElementById("i2psnarkframe");
-    f.addEventListener("load", function() {
-      injectClass(f);
-    }, true);
-  }
-</script>
-<script type="text/javascript" src="/js/iframedClassInject.js?<%=net.i2p.CoreVersion.VERSION%>"></script>
-<script type="text/javascript" src="/js/iframeResizer/iframeResizer.js?<%=net.i2p.CoreVersion.VERSION%>"></script>
 <style type="text/css">iframe {opacity: 0 !important}</style>
 </head>
 <body>
@@ -52,15 +44,23 @@
 <%=intl._t("Your browser does not support iFrames.")%>
 &nbsp;<a href="/i2psnark/"><%=intl._t("Click here to continue.")%></a>
 </iframe>
-<script nonce="<%=cspNonce%>" type="text/javascript">
-document.addEventListener('DOMContentLoaded', function(event) {
-var iframes = iFrameResize({log: false, interval: 0, heightCalculationMethod: 'taggedElement', warningTimeout: 0}, '#i2psnarkframe')
-});
-</script>
 </div>
 <style type="text/css">iframe {opacity: 1 !important}</style>
-<%@include file="summaryajax.jsi" %>
+<script type="text/javascript" src="/js/iframeResizer/iframeResizer.js?<%=net.i2p.CoreVersion.VERSION%>"></script>
+<script type="text/javascript" src="/js/iframedClassInject.js?<%=net.i2p.CoreVersion.VERSION%>"></script>
+<script nonce="<%=cspNonce%>" type="text/javascript">
+  document.addEventListener('DOMContentLoaded', function(event) {
+    var iframes = iFrameResize({log: false, interval: 0, heightCalculationMethod: 'taggedElement', warningTimeout: 0}, '#i2psnarkframe')
+  });
+  function setupFrame() {
+    f = document.getElementById("i2psnarkframe");
+    f.addEventListener("load", function() {
+      injectClass(f);
+    }, true);
+  }
+</script>
 <script nonce="<%=cspNonce%>" type="text/javascript">progressx.hide();</script>
+<%@include file="summaryajax.jsi" %>
 </body>
 </html>
 <%

@@ -28,7 +28,6 @@
  <input type="hidden" name="action" value="blah" >
 </div>
 </div>
-<%@include file="summaryajax.jsi" %>
 <script nonce="<%=cspNonce%>" type="text/javascript">progressx.hide();</script>
 </body>
 </html>

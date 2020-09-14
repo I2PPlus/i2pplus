@@ -1032,24 +1032,39 @@ class SummaryBarRenderer {
         if (_helper == null) return "";
         if (StatSummarizer.isDisabled(_context))
             return "";
+        String r = _context.getProperty(CSSHelper.PROP_REFRESH, CSSHelper.DEFAULT_REFRESH);
+        int refreshPeriod = 3;
+        try {
+          refreshPeriod = Integer.parseInt(r);
+        } catch (NumberFormatException nfe) {}
         StringBuilder buf = new StringBuilder(512);
         buf.append("<div id=\"sb_graphcontainer\" title=\"")
            .append(_t("Our inbound &amp; outbound traffic for the last 20 minutes"))
            .append("\">\n<span id=\"sb_graphstats\">")
            .append(_helper.getSecondKBps())
            .append("Bps</span>\n")
-           .append("<a href=\"/graphs\">\n<canvas id=\"minigraph\" class=\"script\" width=\"245\" height=\50\">")
-           .append("<div id=\"minigraph\" class=\"script\" style=\"background-image: url(/viewstat.jsp?stat=bw.combined")
-           .append("&amp;periodCount=20&amp;width=250&amp;height=50&amp;hideLegend=true&amp;hideGrid=true&amp;")
-           .append("hideTitle=true&amp;time=").append(_context.clock().now() / 1000).append("\"></div>")
-           .append("</canvas>\n</a>\n")
-           .append("<noscript><div id=\"minigraph\" style=\"background-image: url(/viewstat.jsp?stat=bw.combined")
-           .append("&amp;periodCount=20&amp;width=250&amp;height=50&amp;hideLegend=true&amp;hideGrid=true&amp;")
-           .append("hideTitle=true&amp;time=").append(_context.clock().now() / 1000).append("\"></div></noscript>")
-           .append("<script src=\"/js/refreshGraph.js?")
-           .append(CoreVersion.VERSION)
-           .append("\" type=\"module\" id=\"refreshGraph\"></script>\n")
-           .append("</div>\n");
+           .append("<a href=\"/graphs\">\n");
+        if (refreshPeriod > 0) {
+            buf.append("<canvas id=\"minigraph\" class=\"script\" width=\"245\" height=\"50\">\n")
+               .append("<div id=\"minigraph\" class=\"script\" style=\"background-image: url(/viewstat.jsp?stat=bw.combined")
+               .append("&amp;periodCount=20&amp;width=250&amp;height=50&amp;hideLegend=true&amp;hideGrid=true&amp;")
+               .append("hideTitle=true&amp;time=").append(_context.clock().now() / 1000).append("\"></div>")
+               .append("</canvas>\n")
+               .append("<noscript><div id=\"minigraph\" style=\"background-image: url(/viewstat.jsp?stat=bw.combined")
+               .append("&amp;periodCount=20&amp;width=250&amp;height=50&amp;hideLegend=true&amp;hideGrid=true&amp;")
+               .append("hideTitle=true&amp;time=").append(_context.clock().now() / 1000).append("\"></div></noscript>")
+               .append("<script src=\"/js/refreshGraph.js?")
+               .append(CoreVersion.VERSION)
+               .append("\" type=\"module\" id=\"refreshGraph\"></script>\n");
+        } else {
+           buf.append("<div id=\"minigraph\" style=\"background-image: url(/viewstat.jsp?stat=bw.combined")
+              .append("&amp;periodCount=20&amp;width=250&amp;height=50&amp;hideLegend=true&amp;hideGrid=true&amp;")
+              .append("hideTitle=true&amp;time=").append(_context.clock().now() / 1000).append("\" title=\"")
+              .append(_t("Our inbound &amp; outbound traffic for the last 20 minutes"))
+              .append("\"></div>\n");
+
+        }
+        buf.append("</a>\n</div>\n");
 /*
         // 15 sec js refresh
         // only do this if the summary bar refresh is slower, otherwise it looks terrible
