@@ -1059,7 +1059,10 @@ class SummaryBarRenderer {
         } else {
            buf.append("<div id=\"minigraph\" style=\"background-image: url(/viewstat.jsp?stat=bw.combined")
               .append("&amp;periodCount=20&amp;width=250&amp;height=50&amp;hideLegend=true&amp;hideGrid=true&amp;")
-              .append("hideTitle=true&amp;time=").append(_context.clock().now() / 1000).append("\"></div>\n");
+              .append("hideTitle=true&amp;time=").append(_context.clock().now() / 1000).append("\" title=\"")
+              .append(_t("Our inbound &amp; outbound traffic for the last 20 minutes"))
+              .append("\"></div>\n");
+
         }
         buf.append("</a>\n</div>\n");
 /*
