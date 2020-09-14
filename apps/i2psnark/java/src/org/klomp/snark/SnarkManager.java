@@ -176,7 +176,6 @@ public class SnarkManager implements CompleteListener, ClientApp {
     public static final int DEFAULT_STARTUP_DELAY = 3;
     public static final int DEFAULT_REFRESH_DELAY_SECS = 15;
     private static final int DEFAULT_PAGE_SIZE = 50;
-//    public static final int DEFAULT_TUNNEL_QUANTITY = 3;
     public static final int DEFAULT_TUNNEL_QUANTITY = 16;
     public static final String CONFIG_DIR_SUFFIX = ".d";
     private static final String SUBDIR_PREFIX = "s";
@@ -321,7 +320,8 @@ public class SnarkManager implements CompleteListener, ClientApp {
         // Not required, Jetty has a shutdown hook
         //_context.addShutdownTask(new SnarkManagerShutdown());
         _idleChecker = new IdleChecker(this, _peerCoordinatorSet);
-        _idleChecker.schedule(5*60*1000);
+//        _idleChecker.schedule(5*60*1000);
+        _idleChecker.schedule(3*60*1000);
         if (!_context.isRouterContext()) {
             String lang = _config.getProperty(PROP_LANG);
             if (lang != null) {
@@ -540,7 +540,7 @@ public class SnarkManager implements CompleteListener, ClientApp {
      */
     public int getRefreshDelaySeconds() {
         try {
-       return Integer.parseInt(_config.getProperty(PROP_REFRESH_DELAY));
+            return Integer.parseInt(_config.getProperty(PROP_REFRESH_DELAY));
         } catch (NumberFormatException nfe) {
             return DEFAULT_REFRESH_DELAY_SECS;
         }
@@ -552,7 +552,7 @@ public class SnarkManager implements CompleteListener, ClientApp {
      */
     public int getMaxFilesPerTorrent() {
         try {
-       return Integer.parseInt(_config.getProperty(PROP_MAX_FILES_PER_TORRENT));
+            return Integer.parseInt(_config.getProperty(PROP_MAX_FILES_PER_TORRENT));
         } catch (NumberFormatException nfe) {
             return MAX_FILES_PER_TORRENT;
         }
@@ -1789,7 +1789,7 @@ public class SnarkManager implements CompleteListener, ClientApp {
         if (!dontAutoStart && shouldAutoStart() && running) {
             if (!_util.connected()) {
 //                addMessage(_t("Connecting to I2P").replace("I2P", "I2P+") + "...");
-                addMessage(_t("Connecting to I2P").replace("Connecting to I2P", "Initializing") + "...");
+                addMessage(_t("Connecting to I2P").replace("Connecting to I2P", "Initializing I2PSnark and opening tunnels") + "...");
                 boolean ok = _util.connect();
                 if (!ok) {
                     addMessage(_t("Error connecting to I2P - check your I2CP settings!").replace("I2P", "I2P+"));
