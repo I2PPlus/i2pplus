@@ -17,10 +17,10 @@ function injectClass(f) {
 // and we can use it as anchor to scroll to bottom of page for logs
 
 function endOfPage() {
-    var end = document.createElement("span");
-    end.setAttribute("id", "endOfPage");
-    end.setAttribute("data-iframe-height", "");
-    frames[a + "_frame"].document.body.appendChild(end);
+  var end = document.createElement("span");
+  end.setAttribute("id", "endOfPage");
+  end.setAttribute("data-iframe-height", "");
+  frames[a + "_frame"].document.body.appendChild(end);
 }
 
 // refresh embedded logs every 30 seconds
