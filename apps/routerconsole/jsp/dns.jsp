@@ -34,7 +34,7 @@
 <%@include file="summary.jsi" %>
 <h1 class="addbook"><%=intl._t("Addressbook")%> <span class="newtab"><a href="/susidns/addressbook?book=router&amp;filter=none" target="_blank" title="<%=intl._t("Open in new tab")%>"><img src="<%=intl.getTheme(request.getHeader("User-Agent"))%>images/newtab.png" /></a></span></h1>
 <div class="main" id="dns">
-<style>iframe {width: 1px; min-width: 100%;}</style>
+<style>iframe{width:1px;min-width:100%;opacity:0}</style>
 <noscript><style type="text/css">iframe {display: none}</style><p class="infohelp" style="margin: 10px;">Javascript is required to view <a href="/susidns/addressbook?book=router&amp;filter=none" target="_blank">the Addressbook</a> in embedded mode.</p></noscript>
 <iframe src="/susidns/addressbook?book=router&amp;filter=none" width="100%" scrolling="no" frameborder="0" border="0" name="susidnsframe" id="susidnsframe" allowtransparency="true">
 <%=intl._t("Your browser does not support iFrames.")%>
@@ -55,6 +55,7 @@
   progressx.hide();
 </script>
 </div>
+<style type="text/css">iframe{opacity:1}</style>
 <%@include file="summaryajax.jsi" %>
 </body>
 </html>

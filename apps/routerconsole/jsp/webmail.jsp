@@ -24,18 +24,15 @@
 <!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
 <html>
 <head>
-<link rel="preload" href="/js/iframeResizer/iframeResizer.contentWindow.js?<%=net.i2p.CoreVersion.VERSION%>" as="script">
-<link rel="preload" href="/susimail/" as="fetch" crossorigin>
 <%@include file="css.jsi" %>
 <%=intl.title("webmail")%>
 </head>
 <body class="embed">
-<%@include file="summaryajax.jsi" %>
 <script nonce="<%=cspNonce%>" type="text/javascript">progressx.show();</script>
 <%@include file="summary.jsi" %>
 <h1 class="mail"><%=intl._t("Webmail")%> <span class="newtab"><a href="/susimail/" target="_blank" title="<%=intl._t("Open in new tab")%>"><img src="<%=intl.getTheme(request.getHeader("User-Agent"))%>images/newtab.png" /></a></span></h1>
 <div class="main" id="webmail">
-<style>iframe {width: 1px; min-width: 100%;}</style>
+<style>iframe{width:1px;min-width:100%;opacity:0}</style>
 <noscript><style type="text/css">iframe {display: none}</style><p class="infohelp" style="margin: 10px;">Javascript is required to view <a href="/susimail/" target="_blank">the webmail client</a> in embedded mode.</p></noscript>
 <iframe src="/susimail/" width="100%" frameborder="0" border="0" scrolling="no" name="susimailframe" id="susimailframe" allowtransparency="true">
 <%=intl._t("Your browser does not support iFrames.")%>
@@ -56,6 +53,7 @@
   progressx.hide();
 </script>
 </div>
+<style type="text/css">iframe{opacity:1}</style>
 <%@include file="summaryajax.jsi" %>
 </body>
 </html>
