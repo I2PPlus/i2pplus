@@ -3,7 +3,7 @@
 %>
 
 <script nonce="<%=cspNonce%>" type="module">
-  import {refreshSidebar} from "/themes/refreshSidebar.js";
+  import {refreshSidebar} from "/js/refreshSidebar.js";
   var refresh = parseInt(<%=intl.getRefresh()%>, 10);
   if (refresh > 0) {
     window.requestAnimationFrame(refreshSidebar);
