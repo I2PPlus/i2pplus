@@ -82,13 +82,9 @@
     initCss();
     xhr.send();
   }, <% out.print(graphHelper.getRefreshValue() * 1000); %>);
-
-//  document.addEventListener("DOMContentLoaded", function() {
-//    initCss();
-//  }, true);
 <%  } %>
+  progressx.hide();
 </script>
 <%@include file="summaryajax.jsi" %>
-<script nonce="<%=cspNonce%>" type="text/javascript">progressx.hide();</script>
 </body>
 </html>
