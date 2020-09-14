@@ -66,6 +66,5 @@
 </div>
 <%@include file="summaryajax.jsi" %>
 <script nonce="<%=cspNonce%>" type="text/javascript">progressx.hide();</script>
-<%@include file="summaryajax.jsi" %>
 </body>
 </html>

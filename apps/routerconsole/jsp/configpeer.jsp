@@ -6,7 +6,6 @@
 <%@include file="css.jsi" %>
 <%=intl.title("config peers")%>
 </head>
-<%@include file="summaryajax.jsi" %>
 <script nonce="<%=cspNonce%>" type="text/javascript">progressx.show();</script>
 <%@include file="summary.jsi" %>
 <h1 class="conf"><%=intl._t("Peer Manager")%></h1>

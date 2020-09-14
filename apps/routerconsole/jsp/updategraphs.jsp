@@ -18,7 +18,6 @@
 <meta http-equiv="Refresh" content= "0;URL=/graphs">
 </head>
 <body id="updategraphs">
-<%@include file="summaryajax.jsi" %>
 <script nonce="<%=cspNonce%>" type="text/javascript">progressx.show();</script>
 <%@include file="summary.jsi" %>
 <h1 class="perf"><%=intl._t("Performance Graphs")%></h1>
@@ -27,7 +26,6 @@
 <jsp:getProperty name="graphHelper" property="allMessages" />
 </div>
 </div>
-<%@include file="summaryajax.jsi" %>
 <script nonce="<%=cspNonce%>" type="text/javascript">progressx.hide();</script>
 </body>
 </html>

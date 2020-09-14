@@ -29,7 +29,6 @@
 <%=intl.title("Tunnel Manager")%>
 
 <script type="text/javascript" src="/js/iframeResizer/iframeResizer.js?<%=net.i2p.CoreVersion.VERSION%>"></script>
-<%@include file="summaryajax.jsi" %>
 <script type="text/javascript" src="/js/iframedClassInject.js?<%=net.i2p.CoreVersion.VERSION%>"></script>
 <script nonce="<%=cspNonce%>" type="text/javascript">
   function setupFrame() {

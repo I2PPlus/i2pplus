@@ -21,7 +21,6 @@
 %>
 </head>
 <body id="perfgraphs">
-<%@include file="summaryajax.jsi" %>
 <script nonce="<%=cspNonce%>" type="text/javascript">progressx.show();</script>
 <%@include file="summary.jsi" %>
 <h1 class="perf"><%=intl._t("Performance Graphs")%></h1>

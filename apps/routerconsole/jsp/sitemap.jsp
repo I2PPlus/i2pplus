@@ -12,7 +12,6 @@
     String lang = ctx.getProperty("routerconsole.lang");
 %>
 <body class="<%=lang%>">
-<%@include file="summaryajax.jsi" %>
 <script nonce="<%=cspNonce%>" type="text/javascript">progressx.show();</script>
 <%@include file="summary.jsi" %>
 
