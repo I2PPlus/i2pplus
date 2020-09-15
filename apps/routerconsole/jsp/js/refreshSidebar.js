@@ -182,32 +182,48 @@ function refreshSidebar(timestamp) {
         }
 
       } else {
-        var sidebar = document.getElementById("sidebar");
-        var digits = sidebar.getElementsByClassName("digits");
-        var i;
-        for (i = 0; i < digits.length; i++) {
-          digits[i].innerHTML = "---&nbsp;";
+
+        function noAjax() {
+          var sidebar = document.getElementById("sidebar");
+          var digits = sidebar.getElementsByClassName("digits");
+          var i;
+          for (i = 0; i < digits.length; i++) {
+            digits[i].innerHTML = "---&nbsp;";
+          }
+
+          if (services) {
+            services.nextElementSibling.remove();
+            services.remove();
+          }
+          if (advanced) {
+            advanced.nextElementSibling.remove();
+            advanced.remove();
+          }
+          if (internals) {
+            internals.nextElementSibling.remove();
+            internals.remove();
+          }
+          if (localtunnels)
+            localtunnels.remove();
         }
 
-        if (services) {
-          services.nextElementSibling.remove();
-          services.remove();
-        }
-        if (advanced) {
-          advanced.nextElementSibling.remove();
-          advanced.remove();
-        }
-        if (internals) {
-          internals.nextElementSibling.remove();
-          internals.remove();
-        }
-        if (localtunnels)
-          localtunnels.remove();
-
-        setTimeout(function() {
+        function routerDown() {
           var failMessage = "<hr><b><span id=\"down\">Router is down<\/span><\/b>";
           xhrContainer.innerHTML = failMessage;
-        }, 3000);
+        }
+
+        async function phase1() {
+          setTimeout(noAjax, 4000);
+          return;
+        }
+
+        async function phase2() {
+          await phase1();
+          setTimeout(routerDown, 5000);
+        }
+
+        phase1();
+        setTimeout(phase2, 5000);
 
       }
     }
