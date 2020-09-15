@@ -157,7 +157,7 @@ function refreshTorrents(timestamp) {
             snarkInfo.innerHTML = failMessage;
         }
 
-        setTimeout(noAjax, 4000);
+        setTimeout(noAjax, 5000);
 
       }
     }
