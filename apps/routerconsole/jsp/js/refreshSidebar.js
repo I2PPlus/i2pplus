@@ -81,9 +81,9 @@ function refreshSidebar(timestamp) {
             advancedParent.replaceChild(advancedResponse, advanced);
         }
         if (internals) {
-          var internalsParent = advanced.parentNode;
+          var internalsParent = internals.parentNode;
           if (!Object.is(internals.innerHTML, internalsResponse.innerHTML))
-            internalsParent.replaceChild(internalsResponse, advanced);
+            internalsParent.replaceChild(internalsResponse, internals);
         }
         if (general) {
           var generalParent = general.parentNode;
@@ -156,7 +156,10 @@ function refreshSidebar(timestamp) {
         if (tunnelstatus) {
           var tunnelstatusParent = tunnelstatus.parentNode;
           if (!Object.is(tunnelstatus.innerHTML, tunnelstatusResponse.innerHTML))
-            tunnelstatusParent.replaceChild(tunnelstatusResponse, tunnelstatus);
+            if (tunnelstatusParent != null)
+              tunnelstatusParent.replaceChild(tunnelstatusResponse, tunnelstatus);
+            else
+              tunnelstatus.innerHTML = tunnelstatusResponse.innerHTML;
         }
         if (shutdownstatus) {
           var shutdownstatusParent = shutdownstatus.parentNode;
@@ -222,7 +225,8 @@ function refreshSidebar(timestamp) {
             advanced.remove();
           }
           if (internals) {
-            internals.nextElementSibling.remove();
+            if (internals.nextElementSibling !== "undefined" && internals.nextElementSibling != null)
+              internals.nextElementSibling.remove();
             internals.remove();
           }
           if (graph) {
