@@ -2,9 +2,9 @@ package net.i2p.data;
 
 /*
  * free (adj.): unencumbered; not under the control of others
- * Written by jrandom in 2003 and released into the public domain 
- * with no warranty of any kind, either expressed or implied.  
- * It probably won't make your computer catch on fire, or eat 
+ * Written by jrandom in 2003 and released into the public domain
+ * with no warranty of any kind, either expressed or implied.
+ * It probably won't make your computer catch on fire, or eat
  * your children, but it might.  Use at your own risk.
  *
  */
@@ -25,7 +25,7 @@ import net.i2p.util.Log;
  * @author jrandom
  */
 public abstract class DataStructureImpl implements DataStructure, Serializable {
-    
+
     public String toBase64() {
         byte data[] = toByteArray();
         if (data == null)
@@ -37,7 +37,7 @@ public abstract class DataStructureImpl implements DataStructure, Serializable {
     public void fromBase64(String data) throws DataFormatException {
         if (data == null) throw new DataFormatException("Null data passed in");
         byte bytes[] = Base64.decode(data);
-        if (bytes == null) throw new DataFormatException("Bad Base64 \"" + data + '"');
+        if (bytes == null) throw new DataFormatException("Invalid Base64: " + data);
         fromByteArray(bytes);
     }
 
