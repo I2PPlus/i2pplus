@@ -203,7 +203,7 @@ class BasicServlet extends HttpServlet
     {
         // always starts with a '/'
         String servletpath = request.getServletPath();
-        String pathInfo=request.getPathInfo();
+        String pathInfo = request.getPathInfo();
         // ??? right??
         String pathInContext = addPaths(servletpath, pathInfo);
         long limit = 0;

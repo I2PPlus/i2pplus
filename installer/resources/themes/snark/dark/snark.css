@@ -268,7 +268,7 @@ _:-ms-lang(x), .snarknavbar {
 
 /* screenlog */
 
-.snarkMessages {
+.snarkMessages, #screenlog.collapsed {
   margin: 0;
   padding: 3px 5px;
   width: auto;
@@ -282,11 +282,22 @@ _:-ms-lang(x), .snarknavbar {
   box-shadow: inset 0 0 0 1px #000;
   box-shadow: inset 0 0 0 1px #000, inset 0 0 2px 1px #030;
   border-bottom: 1px solid #252;
-  background: #000 url(images/hat.png) no-repeat scroll right bottom;
-  background: url(images/hat.png) no-repeat scroll right bottom, linear-gradient(to bottom, #000a00, #000);
-  background-size: auto 95%, 100% 100%;
-  background-blend-mode: screen;
+  background: url(images/hat.png) no-repeat scroll right bottom,
+              url("/viewstat.jsp?stat=[I2PSnark] InBps&showEvents=false&period=60000&periodCount=1440&end=0&width=2000&height=160&hideLegend=true&hideTitle=true&hideGrid=true") no-repeat,
+              #000;
+  background: url(images/hat.png) no-repeat scroll right bottom,
+              repeating-linear-gradient(to bottom, rgba(0,0,0,.7) 2px, rgba(0,16,0,.6) 4px),
+              url("/viewstat.jsp?stat=[I2PSnark] InBps&showEvents=false&period=60000&periodCount=1440&end=0&width=2000&height=160&hideLegend=true&hideTitle=true&hideGrid=true") no-repeat,
+              linear-gradient(to bottom, #000a00, #000);
+  background-size: auto 95%, 100% 100%, calc(100% + 80px) calc(100% + 20px), 100% 100% !important;
+  background-position: right bottom, center center, left -60px bottom -12px, center center !important;
+  background-blend-mode: screen, normal, difference, normal;
   scrollbar-color: rgba(16,72,16,0.8) #000800;
+}
+
+#screenlog.xpanded {
+  background-size: 80px auto, 100% 100%, calc(100% + 80px) calc(100% + 58px), 100% 100% !important;
+  background-position: right bottom, center center, left -60px bottom -48px, center top !important;
 }
 
 .snarkMessages:hover, .snarkMessages:focus {
@@ -326,6 +337,7 @@ _:-ms-lang(x), .snarkMessages {
 
 .snarkMessages li, .snarkMessages li a {
   line-height: 128%;
+  text-shadow: 0 0 1px #000, 0 0 2px #000, 0 0 3px #000;
 }
 
 .snarkMessages li {
