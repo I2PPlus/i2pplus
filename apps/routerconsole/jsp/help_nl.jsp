@@ -165,6 +165,6 @@ gedeelde bandbreedte en lokaal gegenereerd verkeer. Voor I2P is het niet nodig d
 </div>
 
 <%@include file="summaryajax.jsi" %>
-<script nonce="<%=cspNonce%>" type="text/javascript">progressx.hide();</script>
+<script nonce="<%=cspNonce%>" type="text/javascript">window.addEventListener("pageshow", progressx.hide());</script>
 </body>
 </html>

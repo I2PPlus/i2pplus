@@ -75,6 +75,6 @@
 <p><%=intl._t("Note: Most of the options in the Tunnel Manager have tooltips; be sure to check those before you change settings you don't fully understand! For example, it is <i>not</i> recommended to enable DCC for your IRC client tunnel as this will severely compromise your anonymity.")%></p>
 </div>
 </div>
-<script nonce="<%=cspNonce%>" type="text/javascript">progressx.hide();</script>
+<script nonce="<%=cspNonce%>" type="text/javascript">window.addEventListener("pageshow", progressx.hide());</script>
 </body>
 </html>

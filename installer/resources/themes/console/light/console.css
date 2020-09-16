@@ -642,7 +642,7 @@ a:active #sb_bandwidthgraph {
   border: 1px solid #afafcf;
   border-radius: 2px;
   box-shadow: 0 0 1px #e0e0eb, inset 0 0 0 1px #fff;
-  background: linear-gradient(to bottom, rgba(255,255,255,.3), rgba(0,0,16,.1)),
+  background: linear-gradient(to bottom, rgba(255,255,255,.3), rgba(32,32,64,.1)),
               repeating-linear-gradient(to left, rgba(255,255,255,.0) 18px, rgba(120,120,255,.4) 18px, rgba(255,255,255,.0) 19px, rgba(255,255,255,.0) 36px),
               repeating-linear-gradient(to top, rgba(0,0,0,0), rgba(0,0,0,0) 14px, rgba(120,120,255,.4) 14px, rgba(0,0,0,0) 15px) !important;
   mix-blend-mode: multiply;
@@ -650,9 +650,9 @@ a:active #sb_bandwidthgraph {
 
 @media screen and (min-width: 1500px) {
 #minigraph {
-  margin-top: -19px;
+  margin-top: -22px;
   width: 234px;
-  height: 40px;
+  height: 43px;
 }
 }
 
@@ -862,23 +862,17 @@ p:empty + .sb_notice {
 /* sidebar ajax router down */
 
 #down {
-  margin: -7px -6px -5px;
+  margin: -4px -6px -5px;
   width: 100%;
   display: inline-block;
-  line-height: 32px;
+  line-height: 40px;
   font-size: 0;
   color: #770;
-  box-shadow: inset 0 0 0 1px #800, inset 0 0 1px 3px #eeeee2, inset 0 0 0 4px #ccccc2;
+  box-shadow: inset 0 0 0 1px #800, inset 0 0 4px 2px #ffe, inset 0 0 5px 0 #ffd;
   background: #fffff2;
   background: repeating-linear-gradient(135deg, #fffff2, #fffff2 10px, #ddddd2 10px, #ddddd2 20px);
   background-size: 300% 300%;
   animation: down linear 10s reverse infinite;
-}
-
-@media screen and (max-width: 1500px) {
-  #down {
-    margin-bottom: -6px;
-  }
 }
 
 #down::after {
@@ -887,7 +881,7 @@ p:empty + .sb_notice {
   vertical-align: middle;
   display: inline-block;
   background: url(/themes/console/images/svg/update.svg) center center no-repeat;
-  background-size: 22px 22px;
+  background-size: 26px 26px;
   content: "";
   transform: rotate(0);
   filter: sepia(1);

@@ -87,7 +87,7 @@ if (graph) {
         graphParent.replaceChild(graphResponse, graph);
       }
     }
-    progressx.hide();
+    window.addEventListener("pageshow", progressx.hide());
     initCss();
     xhr.send();
   }, <% out.print(graphHelper.getRefreshValue() * 1000); %>);
@@ -95,6 +95,6 @@ if (graph) {
 <%  } %>
 </script>
 <%@include file="summaryajax.jsi" %>
-<script nonce="<%=cspNonce%>" type="text/javascript">progressx.hide();</script>
+<script nonce="<%=cspNonce%>" type="text/javascript">window.addEventListener("pageshow", progressx.hide());</script>
 </body>
 </html>

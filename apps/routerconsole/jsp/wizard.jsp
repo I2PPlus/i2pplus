@@ -394,12 +394,12 @@ I2P+ requires a web browser configured to use the resident HTTP proxy in order t
       }
     }
     xhr.send();
-    progressx.hide();
+    window.addEventListener("pageshow", progressx.hide());
   }, 75000);
+  window.addEventListener("pageshow", progressx.hide());
 </script>
 <%
     }
 %>
-<script nonce="<%=cspNonce%>" type="text/javascript">progressx.hide();</script>
 </body>
 </html>

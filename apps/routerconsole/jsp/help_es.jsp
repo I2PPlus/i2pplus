@@ -464,6 +464,6 @@ Si deseas reportar un bug, por favor, crea un ticket en <a href="http://trac.i2p
 
 </div>
 <%@include file="summaryajax.jsi" %>
-<script nonce="<%=cspNonce%>" type="text/javascript">progressx.hide();</script>
+<script nonce="<%=cspNonce%>" type="text/javascript">window.addEventListener("pageshow", progressx.hide());</script>
 </body>
 </html>
