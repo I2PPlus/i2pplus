@@ -12088,7 +12088,7 @@ html, body {
   font-size: 0 !important;
   color: #a00;
   text-shadow: 0 1px 1px #000;
-  box-shadow: 0 0 1px 0 #003, inset 0 0 0 1px #000, inset 0 0 1px 3px #113, inset 0 0 0 4px #000;
+  box-shadow: 0 0 1px 0 #003, inset 0 0 0 1px #000, inset 0 0 1px 3px #113, inset 0 0 0 4px #000, inset 0 0 7px 3px #100;
   background: repeating-linear-gradient(135deg, #113, #113 10px, #001 10px, #001 20px);
   background-position: right center;
   background-size: 125% 125%;
