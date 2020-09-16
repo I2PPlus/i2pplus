@@ -1052,10 +1052,7 @@ class SummaryBarRenderer {
                .append("</canvas>\n")
                .append("<noscript><div id=\"minigraph\" style=\"background-image: url(/viewstat.jsp?stat=bw.combined")
                .append("&amp;periodCount=20&amp;width=250&amp;height=50&amp;hideLegend=true&amp;hideGrid=true&amp;")
-               .append("hideTitle=true&amp;time=").append(_context.clock().now() / 1000).append("\"></div></noscript>")
-               .append("<script src=\"/js/refreshGraph.js?")
-               .append(CoreVersion.VERSION)
-               .append("\" type=\"module\" id=\"refreshGraph\"></script>\n");
+               .append("hideTitle=true&amp;time=").append(_context.clock().now() / 1000).append("\"></div></noscript>");
         } else {
            buf.append("<div id=\"minigraph\" style=\"background-image: url(/viewstat.jsp?stat=bw.combined")
               .append("&amp;periodCount=20&amp;width=250&amp;height=50&amp;hideLegend=true&amp;hideGrid=true&amp;")
@@ -1065,26 +1062,6 @@ class SummaryBarRenderer {
 
         }
         buf.append("</a>\n</div>\n");
-/*
-        // 15 sec js refresh
-        // only do this if the summary bar refresh is slower, otherwise it looks terrible
-        String r = _context.getProperty(CSSHelper.PROP_REFRESH, CSSHelper.DEFAULT_REFRESH);
-        int refr = 3;
-        try {
-            refr = Integer.parseInt(r);
-        } catch (NumberFormatException nfe) {}
-        if (refr >= 25) {
-            buf.append("><script src=\"/js/refreshGraph.js?").append(CoreVersion.VERSION).append("\" type=\"text/javascript\" id=\"refreshGraph\" async></script>");
-        } else {
-            buf.append(" style=\"background-image: url(/viewstat.jsp?stat=bw.combined&amp;periodCount=20&amp;width=250&amp;height=50&amp;hideLegend=true&amp;hideGrid=true&amp;hideTitle=true&amp;time=").append(_context.clock().now() / 1000).append("\">");
-        }
-        buf.append("<a href=\"/graphs\"><table id=\"sb_bandwidthgraph\">" +
-                       "<tr title=\"")
-               .append(_t("Our inbound &amp; outbound traffic for the last 20 minutes"))
-               .append("\"><td><span id=\"sb_graphstats\">")
-               .append(_helper.getSecondKBps())
-               .append("Bps</span></td></tr>\n</table></a>\n</div>\n");
-*/
         return buf.toString();
     }
 

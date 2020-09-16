@@ -12080,36 +12080,32 @@ html, body {
 
 /* sidebar ajax router down */
 
-.routersummary #xhr hr + b {
-  margin: 3px 0 2px -1px;
+#down {
+  margin: -6px 0 -7px -3px;
   padding: 8px 5px;
-  width: calc(100% - 8px);
+  width: calc(100% - 4px);
   display: inline-block;
   font-size: 0 !important;
   color: #a00;
   text-shadow: 0 1px 1px #000;
-  box-shadow: 0 0 1px 0 #003, inset 0 0 0 1px #000, inset 0 0 1px 3px #113, inset 0 0 0 4px #000;
+  box-shadow: 0 0 1px 0 #003, inset 0 0 0 1px #000, inset 0 0 1px 3px #113, inset 0 0 0 4px #000, inset 0 0 7px 3px #100;
   background: repeating-linear-gradient(135deg, #113, #113 10px, #001 10px, #001 20px);
-  animation: routerdown linear 1s forwards infinite;
+  background-position: right center;
+  background-size: 125% 125%;
+  animation: routerdown linear 3s forwards infinite;
 }
 
 @keyframes routerdown {
-from {
-  background: repeating-linear-gradient(135deg, #113, #113 10px, #001 10px, #001 20px);
+  from {background-position: left center}
 }
 
-to {
-  background: repeating-linear-gradient(135deg, #001, #001 10px, #113 10px, #113 20px);
-}
-}
-
-.routersummary #xhr hr + b::after {
-  width: 20px;
-  height: 20px;
+#down::after {
+  width: 24px;
+  height: 24px;
   vertical-align: middle;
   display: inline-block;
   background: url(/themes/console/images/svg/update.svg) center center no-repeat;
-  background-size: 20px 20px;
+  background-size: 24px 24px;
   content: "";
   transform: rotate(0);
   animation: linear spin 3s forwards infinite;

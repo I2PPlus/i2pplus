@@ -148,11 +148,17 @@ function refreshTorrents(timestamp) {
         }
 
       } else {
-        var failMessage = "<div class=\"routerdown\" id=\"down\"><b><span>Router is down<\/span><\/b><\/div>";
-        if (mainsection)
-          mainsection.innerHTML = failMessage;
-        else
-          snarkInfo.innerHTML = failMessage;
+
+        function noAjax() {
+          var failMessage = "<div class=\"routerdown\" id=\"down\"><b><span>Router is down<\/span><\/b><\/div>";
+          if (mainsection)
+            mainsection.innerHTML = failMessage;
+          else
+            snarkInfo.innerHTML = failMessage;
+        }
+
+        setTimeout(noAjax, 5000);
+
       }
     }
   }

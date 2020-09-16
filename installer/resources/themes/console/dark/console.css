@@ -114,23 +114,6 @@ a img:hover, a:focus img {
   filter: drop-shadow(0 0 1px #f60);
 }
 
-/* more visibility for anonymous flags */
-/*
-img[src="/flags.jsp?c=a1"], img[src="/flags.jsp?c=a2"] {
-  border: 1px solid #141;
-  width: 13px !important;
-  height: 9px !important;
-  padding-right: 0;
-  margin-left: 1px;
-  margin-right: 1px;
-}
-
-#profiles img[src="/flags.jsp?c=a1"], #profiles img[src="/flags.jsp?c=a1"] {
-  height: 10px !important;
-  margin-right: 1px;
-}
-*/
-
 #tunnels img[src^="/flags.jsp?"], #profiles img[src^="/flags.jsp?"], #peers img[src^="/flags.jsp?"] {
   width: 16px !important;
   height: 12px !important;
@@ -280,6 +263,7 @@ pre {
 
 .warning p {
   margin: 0 0 10px;
+  font-size: 110%;
 }
 
 .warning h3 + p {
@@ -409,6 +393,11 @@ pre {
 .warning p + .formaction {
   margin: 0 0 20px;
   padding: 0;
+}
+
+#denied {
+  padding: 30px 0;
+  font-weight: bold;
 }
 
 /* end proxy errors */
@@ -12057,22 +12046,22 @@ input[type="text"]:focus::placeholder {
 
 /* sidebar ajax router down */
 
-.routersummary #xhr hr + b {
-  margin: 3px 0 2px -1px;
+#down {
+  margin: -6px 0;
   padding: 6px 5px;
   width: calc(100% - 8px);
   display: inline-block;
   font-size: 0;
   color: #a00;
   text-shadow: 0 1px 1px #000;
-  box-shadow: 0 0 1px 0 #030, inset 0 0 0 1px #000, inset 0 0 1px 3px #131, inset 0 0 0 4px #000;
-  background: repeating-linear-gradient(135deg, #131, #131 10px, #000 10px, #000 20px);
+  box-shadow: 0 0 1px 0 #030, inset 0 0 0 1px #000, inset 0 0 1px 3px #131, inset 0 0 0 4px #000, inset 0 0 7px 3px #010;
+  background: repeating-linear-gradient(135deg, #131, #131 10px, #300 11px, #000 12px, #000 19px, #300 19px, #000 20px);
   background-position: right center;
   background-size: 125% 125%;
   animation: routerdown linear 3s forwards infinite;
 }
 
-.routersummary #xhr hr + b::after {
+#down::after {
   width: 26px;
   height: 26px;
   vertical-align: middle;
@@ -14332,7 +14321,7 @@ h3 + table {
   display: block;
   background: #730;
   content: "";
-  animation: ease-in bar .2s reverse;
+  animation: ease-in bar .15s reverse;
   will-change: transform;
 }
 

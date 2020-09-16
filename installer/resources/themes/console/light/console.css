@@ -861,40 +861,47 @@ p:empty + .sb_notice {
 
 /* sidebar ajax router down */
 
-.routersummary #xhr hr + b {
-  margin: -1px 0;
-  padding: 5px;
-  width: calc(100% - 12px);
+#down {
+  margin: -7px -6px -5px;
+  width: 100%;
   display: inline-block;
-  font-size: 0 !important;
-  color: #700;
-  box-shadow: 0 0 1px 0 #ddd, inset 0 0 0 1px #800, inset 0 0 1px 3px #eeeee2, inset 0 0 0 4px #ccccc2;
+  line-height: 32px;
+  font-size: 0;
+  color: #770;
+  box-shadow: inset 0 0 0 1px #800, inset 0 0 1px 3px #eeeee2, inset 0 0 0 4px #ccccc2;
   background: #fffff2;
   background: repeating-linear-gradient(135deg, #fffff2, #fffff2 10px, #ddddd2 10px, #ddddd2 20px);
-/*  animation: routerdown linear 1s forwards infinite;*/
+  background-size: 300% 300%;
+  animation: down linear 10s reverse infinite;
 }
 
-.routersummary #xhr hr + b::after {
+@media screen and (max-width: 1500px) {
+  #down {
+    margin-bottom: -6px;
+  }
+}
+
+#down::after {
   width: 26px;
   height: 26px;
   vertical-align: middle;
   display: inline-block;
   background: url(/themes/console/images/svg/update.svg) center center no-repeat;
-  background-size: 26px 26px;
+  background-size: 22px 22px;
   content: "";
   transform: rotate(0);
-  filter: hue-rotate(100deg);
-  mix-blend-mode: exclusion;
-  animation: linear spin 3s forwards infinite, ease-in-out colorphase 1s alternate infinite;
+  filter: sepia(1);
+  animation: linear spin 3s forwards infinite;
+}
+
+@keyframes down {
+from {
+  background-position: center center, 100% 100%;
+}
 }
 
 @keyframes spin {
   from {transform: rotate(-360deg)}
-}
-
-@keyframes colorphase {
-  from {filter: hue-rotate(100deg)}
-  to {filter: hue-rotate(130deg)}
 }
 
 @keyframes routerdown {

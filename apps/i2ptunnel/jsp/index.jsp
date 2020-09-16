@@ -1,5 +1,4 @@
 <%@include file="headers.jsi"%>
-<% //@include file="headers-unsafe.jsi"%>
 <%@page pageEncoding="UTF-8"%>
 <%@page trimDirectiveWhitespaces="true"%>
 <%@page contentType="text/html" import="net.i2p.i2ptunnel.web.IndexBean"%>
@@ -14,13 +13,12 @@
 <title><%=intl._t("Tunnel Manager")%></title>
 <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
 <link href="/themes/console/images/favicon.ico" type="image/x-icon" rel="shortcut icon" />
-<script type="text/javascript" src="/js/iframeResizer/iframeResizer.contentWindow.js?<%=net.i2p.CoreVersion.VERSION%>"></script>
-<style type="text/css">body {opacity: 0;}</style>
 <link rel="icon" href="<%=indexBean.getTheme()%>images/favicon.ico" />
 <link href="<%=indexBean.getTheme()%>i2ptunnel.css?<%=net.i2p.CoreVersion.VERSION%>" rel="stylesheet" type="text/css" /> 
 <link href="<%=indexBean.getTheme()%>override.css?<%=net.i2p.CoreVersion.VERSION%>" rel="stylesheet" type="text/css" /> 
 </head>
 <body id="tunnelListPage">
+<style type="text/css">body{opacity:0}</style>
 <div id="page">
 <%
   boolean isInitialized = indexBean.isInitialized();
@@ -394,7 +392,6 @@
 </tr>
 </table>
 </div>
-<!--<script type="text/javascript" src="js/toggleTunnelInfo.js?<%=net.i2p.CoreVersion.VERSION%>"></script>-->
 <noscript><style type="text/css">.script {display: none} .tunnelInfo {display: table-row !important}</style></noscript>
 <%
 
@@ -406,9 +403,10 @@
 <%
   }  // !isInitialized()
 %>
+<script type="text/javascript" src="/js/iframeResizer/iframeResizer.contentWindow.js?<%=net.i2p.CoreVersion.VERSION%>"></script>
 <script src="js/refreshIndex.js?<%=net.i2p.CoreVersion.VERSION%>" type="module"></script>
 </div>
 <span data-iframe-height></span>
-<style type="text/css">body {opacity: 1 !important;}</style>
+<style type="text/css">body{opacity:1}</style>
 </body>
 </html>
