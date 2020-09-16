@@ -101,6 +101,6 @@
 
 </div>
 </div>
-<script nonce="<%=cspNonce%>" type="text/javascript">progressx.hide();</script>
+<script nonce="<%=cspNonce%>" type="text/javascript">window.addEventListener("pageshow", progressx.hide());</script>
 </body>
 </html>

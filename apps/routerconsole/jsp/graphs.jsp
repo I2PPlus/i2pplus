@@ -78,12 +78,12 @@
         graphsParent.replaceChild(graphsResponse, graphs);
       }
     }
-    progressx.hide();
+    window.addEventListener("pageshow", progressx.hide());
     initCss();
     xhr.send();
   }, <% out.print(graphHelper.getRefreshValue() * 1000); %>);
 <%  } %>
-  progressx.hide();
+  window.addEventListener("pageshow", progressx.hide());
 </script>
 <%@include file="summaryajax.jsi" %>
 </body>

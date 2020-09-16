@@ -28,6 +28,6 @@
 <li id="help_webhosting"><a href="webhosting"><b>Webhosting on I2P</b></a><br>An introduction to hosting websites on the I2P network</li>
 </ul>
 </div>
-<script nonce="<%=cspNonce%>" type="text/javascript">progressx.hide();</script>
+<script nonce="<%=cspNonce%>" type="text/javascript">window.addEventListener("pageshow", progressx.hide());</script>
 </body>
 </html>

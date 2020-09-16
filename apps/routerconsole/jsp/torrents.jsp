@@ -52,7 +52,7 @@
       injectClass(f);
     }, true);
   }
-  progressx.hide();
+  window.addEventListener("pageshow", progressx.hide());
 </script>
 <style type="text/css">iframe{opacity:1}</style>
 <%@include file="summaryajax.jsi" %>

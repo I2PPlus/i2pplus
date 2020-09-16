@@ -38,6 +38,6 @@
 <p id="fullhistory"><a href="/history.txt" target="_blank">View the full change log</a></p>
 </div>
 </div>
-<script nonce="<%=cspNonce%>" type="text/javascript">progressx.hide();</script>
+<script nonce="<%=cspNonce%>" type="text/javascript">window.addEventListener("pageshow", progressx.hide());</script>
 </body>
 </html>
