@@ -4,12 +4,15 @@ function refreshSidebar(timestamp) {
   var uri = location.pathname.substring(1);
   var xhrContainer = document.getElementById("xhr");
 
-  var sb = document.getElementById("sb");
   var down = document.getElementById("down");
   var services = document.getElementById("sb_services");
   var advanced = document.getElementById("sb_advanced");
   var internals = document.getElementById("sb_internals");
   var localtunnels = document.getElementById("sb_localtunnels");
+  var netstatus = document.getElementById("sb_status");
+  var tunnelstatus = document.getElementById("sb_tunnelstatus");
+  var shutdownstatus = document.getElementById("sb_shutdownStatus");
+  var graph = document.getElementById("sb_graphcontainer");
 
   xhr.open('GET', '/xhr1.jsp?requestURI=' + uri + '&t=' + new Date().getTime(), true);
   xhr.responseType = "document";
@@ -21,7 +24,7 @@ function refreshSidebar(timestamp) {
     if (xhr.readyState == 4) {
       if (xhr.status == 200) {
 
-        if (xhrContainer && down) {
+        if (down) {
           var sbResponse = xhr.responseXML.getElementById("sb");
           xhrContainer.innerHTML = sbResponse.innerHTML;
         }
@@ -29,7 +32,6 @@ function refreshSidebar(timestamp) {
         var general = document.getElementById("sb_general");
         var shortgeneral = document.getElementById("sb_shortgeneral");
         var advgeneral = document.getElementById("sb_advancedgeneral");
-        var netstatus = document.getElementById("sb_status");
         var updatestatus = document.getElementById("sb_updatestatus");
         var peers = document.getElementById("sb_peers");
         var advpeers = document.getElementById("sb_peersadvanced");
@@ -38,14 +40,15 @@ function refreshSidebar(timestamp) {
         var clock = document.getElementById("clock");
         var tunnels = document.getElementById("sb_tunnels");
         var queue = document.getElementById("sb_queue");
-        var tunnelstatus = document.getElementById("sb_tunnelstatus");
         var control = document.getElementById("sb_routerControl");
-        var shutdownstatus = document.getElementById("sb_shutdownStatus");
         var graphstats = document.getElementById("sb_graphstats");
         var minigraph = document.getElementById("minigraph");
         var notify = document.getElementById("sb_notice");
+        var inputs = document.getElementsByTagName("button");
 
         var servicesResponse = xhr.responseXML.getElementById("sb_services");
+        var advancedResponse = xhr.responseXML.getElementById("sb_advanced");
+        var internalsResponse = xhr.responseXML.getElementById("sb_internals");
         var generalResponse = xhr.responseXML.getElementById("sb_general");
         var shortgeneralResponse = xhr.responseXML.getElementById("sb_shortgeneral");
         var advgeneralResponse = xhr.responseXML.getElementById("sb_advancedgeneral");
@@ -66,10 +69,21 @@ function refreshSidebar(timestamp) {
         var minigraphResponse = xhr.responseXML.getElementById("minigraph");
         var notifyResponse = xhr.responseXML.getElementById("sb_notice");
 
+
         if (services) {
           var servicesParent = services.parentNode;
           if (!Object.is(services.innerHTML, servicesResponse.innerHTML))
             servicesParent.replaceChild(servicesResponse, services);
+        }
+        if (advanced) {
+          var advancedParent = advanced.parentNode;
+          if (!Object.is(advanced.innerHTML, advancedResponse.innerHTML))
+            advancedParent.replaceChild(advancedResponse, advanced);
+        }
+        if (internals) {
+          var internalsParent = advanced.parentNode;
+          if (!Object.is(internals.innerHTML, internalsResponse.innerHTML))
+            internalsParent.replaceChild(internalsResponse, advanced);
         }
         if (general) {
           var generalParent = general.parentNode;
@@ -87,9 +101,8 @@ function refreshSidebar(timestamp) {
             advgeneralParent.replaceChild(advgeneralResponse, advgeneral);
         }
         if (netstatus) {
-          var netstatusParent = netstatus.parentNode;
           if (!Object.is(netstatus.innerHTML, netstatusResponse.innerHTML))
-            netstatusParent.replaceChild(netstatusResponse, netstatus);
+            netstatus.innerHTML = netstatusResponse.innerHTML;
         }
         if (updatestatus) {
           var updatestatusParent = updatestatus.parentNode;
@@ -117,8 +130,8 @@ function refreshSidebar(timestamp) {
             bandwidthParent.replaceChild(bandwidthResponse, bandwidth);
         }
         if (minigraph && minigraphResponse) {
-            var graphstatsParent = graphstats.parentNode;
-              graphstatsParent.replaceChild(graphstatsResponse, graphstats);
+          var graphstatsParent = graphstats.parentNode;
+          graphstatsParent.replaceChild(graphstatsResponse, graphstats);
         }
         if (ram) {
           var ramParent = ram.parentNode;
@@ -149,13 +162,19 @@ function refreshSidebar(timestamp) {
           var shutdownstatusParent = shutdownstatus.parentNode;
           if (!Object.is(shutdownstatus.innerHTML, shutdownstatusResponse.innerHTML))
             shutdownstatusParent.replaceChild(shutdownstatusResponse, shutdownstatus);
+          else if (typeof shutdownstatusResponse === "undefined")
+            shutdownstatus.remove();
         }
         if (localtunnels) {
-          var localtunnelsParent = localtunnels.parentNode;
           if (!Object.is(localtunnels.innerHTML, localtunnelsResponse.innerHTML))
-            localtunnelsParent.replaceChild(localtunnelsResponse, localtunnels);
+            localtunnels.innerHTML = localtunnelsResponse.innerHTML;
         }
-
+        if (control) {
+          var controlParent = control.parentNode;
+          var controlResponse = xhr.responseXML.getElementById("sb_routerControl");
+          if (!Object.is(control.innerHTML, controlResponse.innerHTML))
+            controlParent.replaceChild(controlResponse, control);
+        }
         if (minigraph) {
           window.requestAnimationFrame(refreshGraph);
           var minigraphResponse = xhr.responseXML.getElementById("minigraph");
@@ -183,7 +202,7 @@ function refreshSidebar(timestamp) {
 
       } else {
 
-        function noAjax() {
+        function isDown() {
           var sidebar = document.getElementById("sidebar");
           var digits = sidebar.getElementsByClassName("digits");
           var i;
@@ -191,8 +210,11 @@ function refreshSidebar(timestamp) {
             digits[i].innerHTML = "---&nbsp;";
           }
 
+          netstatus.innerHTML = "<span id=\"down\">Router is down<\/span>";
+
           if (services) {
-            services.nextElementSibling.remove();
+            if (services.nextElementSibling !== "undefined" && services.nextElementSibling != null)
+              services.nextElementSibling.remove();
             services.remove();
           }
           if (advanced) {
@@ -203,27 +225,26 @@ function refreshSidebar(timestamp) {
             internals.nextElementSibling.remove();
             internals.remove();
           }
+          if (graph) {
+            if (typeof graph.nextElementSibling !== "undefined" || graph.nextElementSibling !== null)
+              graph.nextElementSibling.remove();
+            graph.remove();
+          }
+          if (tunnelstatus) {
+            if (typeof tunnelstatus.nextElementSibling !== "undefined" || tunnelstatus.nextElementSibling !== null)
+              tunnelstatus.nextElementSibling.remove();
+            tunnelstatus.remove();
+          }
+          if (shutdownstatus) {
+            if (typeof shutdownstatus.nextElementSibling !== "undefined" || shutdownstatus.nextElementSibling !== null)
+              shutdownstatus.nextElementSibling.remove();
+            shutdownstatus.remove();
+          }
           if (localtunnels)
-            localtunnels.remove();
+            localtunnels.innerHTML = "<tr><td colspan=\"3\">&nbsp;<\/td><\/tr>";
         }
 
-        function routerDown() {
-          var failMessage = "<hr><b><span id=\"down\">Router is down<\/span><\/b>";
-          xhrContainer.innerHTML = failMessage;
-        }
-
-        async function phase1() {
-          setTimeout(noAjax, 4000);
-          return;
-        }
-
-        async function phase2() {
-          await phase1();
-          setTimeout(routerDown, 5000);
-        }
-
-        phase1();
-        setTimeout(phase2, 5000);
+        setTimeout(isDown, 4000);
 
       }
     }

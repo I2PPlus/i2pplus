@@ -12046,22 +12046,22 @@ input[type="text"]:focus::placeholder {
 
 /* sidebar ajax router down */
 
-.routersummary #xhr hr + b {
-  margin: 3px 0 2px -1px;
+#down {
+  margin: -6px 0;
   padding: 6px 5px;
   width: calc(100% - 8px);
   display: inline-block;
   font-size: 0;
   color: #a00;
   text-shadow: 0 1px 1px #000;
-  box-shadow: 0 0 1px 0 #030, inset 0 0 0 1px #000, inset 0 0 1px 3px #131, inset 0 0 0 4px #000;
-  background: repeating-linear-gradient(135deg, #131, #131 10px, #000 10px, #000 20px);
+  box-shadow: 0 0 1px 0 #030, inset 0 0 0 1px #000, inset 0 0 1px 3px #131, inset 0 0 0 4px #000, inset 0 0 7px 3px #010;
+  background: repeating-linear-gradient(135deg, #131, #131 10px, #300 11px, #000 12px, #000 19px, #300 19px, #000 20px);
   background-position: right center;
   background-size: 125% 125%;
   animation: routerdown linear 3s forwards infinite;
 }
 
-.routersummary #xhr hr + b::after {
+#down::after {
   width: 26px;
   height: 26px;
   vertical-align: middle;
