@@ -39,17 +39,19 @@
 &nbsp;<a href="/susimail/"><%=intl._t("Click here to continue.")%></a>
 </iframe>
 <script type="text/javascript" src="/js/iframedClassInject.js?<%=net.i2p.CoreVersion.VERSION%>"></script>
-<script type="text/javascript" src="/js/iframeResizer/iframeResizer.js?<%=net.i2p.CoreVersion.VERSION%>"></script>
 <script nonce="<%=cspNonce%>" type="text/javascript">
-  document.addEventListener('DOMContentLoaded', function(event) {
-    var iframes = iFrameResize({log: false, interval: 0, heightCalculationMethod: 'taggedElement', warningTimeout: 0}, '#susimailframe')
-  });
   function setupFrame() {
     f = document.getElementById("susimailframe");
     f.addEventListener("load", function() {
       injectClass(f);
     }, true);
   }
+</script>
+<script type="text/javascript" src="/js/iframeResizer/iframeResizer.js?<%=net.i2p.CoreVersion.VERSION%>"></script>
+<script nonce="<%=cspNonce%>" type="text/javascript">
+  document.addEventListener('DOMContentLoaded', function(event) {
+    var iframes = iFrameResize({log: false, interval: 0, heightCalculationMethod: 'taggedElement', warningTimeout: 0}, '#susimailframe')
+  });
   window.addEventListener("pageshow", progressx.hide());
 </script>
 </div>

@@ -392,7 +392,7 @@ public class I2PSnarkServlet extends BasicServlet {
             out.write("</a>\n");
             sortedTrackers = _manager.getSortedTrackers();
 //            if (_context.isRouterContext() && _manager.hasModifiedTrackers()) {
-            if (_context.isRouterContext()) {
+//            if (_context.isRouterContext()) {
                 out.write("<a href=\"http://i2pforum.i2p/viewforum.php/?f=12\" class=\"snarkNav nav_forum\" target=\"_blank\">");
                 out.write(_t("Forum"));
                 out.write("</a>\n");
@@ -414,7 +414,7 @@ public class I2PSnarkServlet extends BasicServlet {
 //                out.write("\n<a href=\"http://torrentfinder.i2p/\" class=\"snarkNav nav_search\" target=\"_blank\">");
 //                out.write(_t("Finder"));
 //                out.write("</a>");
-            }
+//            }
         }
         out.write("\n</div>\n");
         String newURL = req.getParameter("newURL");
@@ -544,9 +544,12 @@ public class I2PSnarkServlet extends BasicServlet {
 
         List<Snark> snarks = getSortedSnarks(req);
         boolean isForm = _manager.util().connected() || !snarks.isEmpty();
+        boolean showStatusFilter = _manager.util().showStatusFilter();
         if (isForm) {
-            out.write("<form id=\"torrentlist\" action=\"_post\" method=\"POST\">\n");
-            boolean showStatusFilter = _manager.util().showStatusFilter();
+            if (showStatusFilter && !snarks.isEmpty() && _manager.util().connected())
+              out.write("<form id=\"torrentlist\" class=\"filterbarActive\" action=\"_post\" method=\"POST\">\n");
+            else
+              out.write("<form id=\"torrentlist\" action=\"_post\" method=\"POST\">\n");
             if (showStatusFilter) {
                 // selective display of torrents based on status
                 // this should probably be done via a query string, but for now prototyping in js
@@ -1155,7 +1158,6 @@ public class I2PSnarkServlet extends BasicServlet {
 */
 
         // load torrentDisplay script here to ensure table has loaded into dom
-        boolean showStatusFilter = _manager.util().showStatusFilter();
         if (_contextName.equals(DEFAULT_NAME) && showStatusFilter) {
             out.write("<script src=\"" + _contextPath + WARBASE + "js/torrentDisplay.js?" + CoreVersion.VERSION + "\" type=\"text/javascript\" async></script>\n");
             //out.write("<script src=\"/themes/torrentDisplay.js?" + CoreVersion.VERSION + "\" type=\"text/javascript\" async></script>\n"); // debugging
@@ -3467,6 +3469,10 @@ public class I2PSnarkServlet extends BasicServlet {
      *  @since 0.8.4
      */
     private void addMagnet(String url, File dataDir) {
+        if (url.startsWith(MagnetURI.MAGNET_FULL_V2)) {
+            _manager.addMessage("Version 2 magnet links are not supported");
+            return;
+        }
         try {
             MagnetURI magnet = new MagnetURI(_manager.util(), url);
             String name = magnet.getName();

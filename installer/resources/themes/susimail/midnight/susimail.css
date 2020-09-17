@@ -747,12 +747,19 @@ input.delete {
   background: #000010;
   background: url(images/hatter_med.png) right bottom no-repeat, repeating-linear-gradient(to bottom, rgba(0,0,0,0.9), rgba(0,0,32,0.5) 2px, rgba(0,0,0,0.5) 3px), linear-gradient(to bottom, #000016, #000006);
   background-size: 27% auto, 100% 100%, 100% 100%;
+  filter: opacity(0);
+  animation: linear fade-in .15s .6s forwards;
 }
 
 @media screen and (max-width: 1200px) {
 #dologin {
   width: 500px;
 }
+}
+
+@keyframes fade-in {
+  0,80% {filter: opacity(0)}
+  100% {filter: opacity(1)}
 }
 
 #dologin h1 {

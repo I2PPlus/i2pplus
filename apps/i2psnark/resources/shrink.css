@@ -1,20 +1,20 @@
-.snarkMessages {
-    height: 56px !important;
-    min-height: 56px !important;
-    background-position: right center !important;
+.snarkMessages.collapsed {
+  height: 56px !important;
+  min-height: 56px !important;
+  background-position: right center !important;
 }
 
 #shrink {
-    display: none !important;
+  display: none !important;
 }
 
 #expand {
-    display: inline-block !important;
+  display: inline-block !important;
 }
 
 @media screen and (min-width: 1500px) {
-.snarkMessages {
+  .snarkMessages.collapsed {
     height: 60px !important;
     min-height: 60px !important;
-}
+  }
 }

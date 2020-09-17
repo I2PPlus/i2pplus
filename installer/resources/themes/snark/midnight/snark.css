@@ -321,20 +321,24 @@ td input[type="image"]::after {
 /* screenlog */
 
 .snarkMessages {
-  font: normal 8.5pt "Droid Sans Mono", "Noto Mono", "DejaVu Sans Mono", "Lucida Console", monospace;
-  overflow: hidden;
-  width: auto;
-  height: 56px;
   margin: 0;
   padding: 2px 5px;
-  border-spacing: 0;
+  width: auto;
+  height: 56px;
+  overflow: hidden;
   text-align: left;
+  font: normal 8.5pt "Droid Sans Mono", "Noto Mono", "DejaVu Sans Mono", "Lucida Console", monospace;
   color: #778;
+  border-spacing: 0;
   border-bottom: 1px solid #26235c;
-  background: #000 url(images/hat.png) no-repeat scroll right top;
-  background: url(images/hat.png) no-repeat scroll right top, linear-gradient(to bottom, #001, #000008);
-  background-size: auto 110%;
-  background-blend-mode: luminosity;
+  background: url(images/hat.png) no-repeat scroll right top,
+              url("/viewstat.jsp?stat=[I2PSnark] InBps&showEvents=false&period=60000&periodCount=1440&end=0&width=2000&height=160&hideLegend=true&hideTitle=true&hideGrid=true") no-repeat,
+              #000;
+  background: url(images/hat.png) no-repeat scroll right top,
+              url("/viewstat.jsp?stat=[I2PSnark] InBps&showEvents=false&period=60000&periodCount=1440&end=0&width=2000&height=160&hideLegend=true&hideTitle=true&hideGrid=true") no-repeat,
+              linear-gradient(to bottom, #001, #000008);
+  background-size: auto 110%, calc(100% + 80px) calc(100% + 20px), 100% 100%;
+  background-blend-mode: normal, luminosity, normal;
   scrollbar-color: #225 #001;
   scrollbar-width: thin;
 }

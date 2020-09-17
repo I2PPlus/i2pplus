@@ -334,7 +334,7 @@ _:-ms-lang(x), .snarkNav:link, .snarkNav:visited {
 /* screenlogger */
 
 .snarkMessages {
-  margin: 1px 0 11px 0;
+  margin: 1px 0 11px;
   padding: 2px 5px 3px;
   height: 56px;
   position: relative;
@@ -348,10 +348,15 @@ _:-ms-lang(x), .snarkNav:link, .snarkNav:visited {
   border-radius: 4px;
   border: 1px solid #101;
   background: #2a192a url(images/hat.png) no-repeat scroll right center;
-  background: url(images/hat.png) no-repeat scroll right center, linear-gradient(to bottom, rgba(255,200,255,.1), rgba(255,240,255,.05), rgba(0,0,0,.1)), linear-gradient(to bottom, #2a192a, #202);
-  background-size: 80px auto, 100% 100%, 100% 100%;
-  background-position: right -4px bottom -10px, center center, center top !important;
+  background: url(images/hat.png) no-repeat scroll right center,
+              url("/viewstat.jsp?stat=[I2PSnark] InBps&showEvents=false&period=60000&periodCount=1440&end=0&width=2000&height=160&hideLegend=true&hideTitle=true&hideGrid=true") no-repeat,
+              linear-gradient(to bottom, rgba(255,200,255,.1), rgba(255,240,255,.05), rgba(0,0,0,.1)),
+              linear-gradient(to bottom, #2a192a, #202);
+  background-size: 80px auto, calc(100% + 80px) calc(100% + 20px), 100% 100%, 100% 100% !important;
+  background-position: right -4px bottom -10px, left -60px bottom -12px, center center, center top !important;
   box-shadow: inset 0 0 0 1px rgba(180,152,180,.3), inset 0 0 3px 1px rgba(16, 0, 16, .6), 0 0 1px 1px rgba(16, 8, 16, .3);
+  box-shadow: inset 0 0 0 1px #545, inset 0 0 3px 1px rgba(16, 0, 16, .6), 0 0 1px 1px rgba(16, 8, 16, .3);
+  background-blend-mode: normal, luminosity, normal, normal;
   outline: none;
   scrollbar-width: thin;
 }
@@ -5430,10 +5435,13 @@ td.snarkTorrentStatus b::before {
   margin: -2px 1px 2px;
   padding: 0 1px;
   display: block;
-  box-shadow: 0 0 0 1px rgba(0, 0, 0, .5), 0 0 1px 1px rgba(0, 0, 0, .25);
+  background: #202;
+}
+
+#torrentlist.filterbarActive {
   border: 1px solid rgba(119, 102, 119, .65);
   border-radius: 4px;
-  background: #202;
+  box-shadow: 0 0 0 1px rgba(0, 0, 0, .5), 0 0 1px 1px rgba(0, 0, 0, .25);
 }
 
 .iframed #torrentlist {

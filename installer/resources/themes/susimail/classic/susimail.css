@@ -1037,10 +1037,17 @@ div#composemail {
   background: #fefefe;
   background: linear-gradient(to bottom, rgba(240,240,255,0.4), rgba(220,220,255,0.5)) #fefefe;
   box-shadow: inset 0 0 0 1px #fff, 0 0 1px #999;
+  filter: opacity(0);
+  animation: linear fade-in .15s .5s forwards;
 }
 
 .iframed #dologin {
   margin: 38px auto 15px !important;
+}
+
+@keyframes fade-in {
+  0,80% {filter: opacity(0)}
+  100% {filter: opacity(1)}
 }
 
 #dologin input[type="text"] {

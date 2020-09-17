@@ -1,8 +1,13 @@
 const mainsection = document.getElementById("mainsection");
+const screenlog = document.getElementById("screenlog");
 
-function init() {
+function initToggle() {
 
   function clean() {
+    if (screenlog.classList.contains("xpanded"))
+      screenlog.classList.remove("xpanded");
+    if (screenlog.classList.contains("collapsed"))
+      screenlog.classList.remove("collapsed");
     var expandLog = document.getElementById("expandLog");
     if (expandLog) {
         expandLog.remove();
@@ -23,6 +28,7 @@ function init() {
       x.href=".resources/expand.css";
       x.setAttribute("id", "expandLog");
       document.head.appendChild(x);
+      screenlog.classList.add("xpanded");
     }
 
     function shrink() {
@@ -33,6 +39,7 @@ function init() {
       s.href=".resources/shrink.css";
       s.setAttribute("id", "shrinkLog");
       document.head.appendChild(s);
+      screenlog.classList.add("collapsed");
     }
 
   }
@@ -47,6 +54,6 @@ function init() {
 
 }
 
-mainsection.addEventListener("mouseover", function() {
-  init();
+screenlog.addEventListener("mouseover", function() {
+  initToggle();
 }, false);
