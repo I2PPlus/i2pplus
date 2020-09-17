@@ -3,6 +3,7 @@ function initGraphRefresh() {
   var now = new Date().getTime();
   var screenlog = document.getElementById("screenlog");
   var graphcss = document.getElementById("graphcss");
+  var noload = document.getElementById("noload");
   if (screenlog) {
     var graph = "'/viewstat.jsp?stat=[I2PSnark] InBps&showEvents=false&period=60000&periodCount=1440&end=0&width=2000&height=160&hideLegend=true&hideTitle=true&hideGrid=true&t=" + now + "'";
     if (graphcss)
@@ -93,4 +94,7 @@ function initGraphRefresh() {
 
 }
 
-setInterval(initGraphRefresh, 30 * 60 * 1000);
+if (noload)
+  setInterval(initGraphRefresh, 4 * 60 * 1000);
+else
+  setInterval(initGraphRefresh, 30 * 60 * 1000);
