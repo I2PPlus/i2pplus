@@ -3723,15 +3723,15 @@ public class WebMail extends HttpServlet
             FileFilter fileFilter = new FileFilter() { public boolean accept(File file) { return file.isDirectory(); } };
             File[] dirnames = dir.listFiles(fileFilter);
             if (dirnames != null) {
-        List<String> th = new ArrayList<String>(dirnames.length);
-        boolean skipOld = ctx.getProperty(PROP_DISABLE_OLD, DEFAULT_DISABLE_OLD);
-        for (int i = 0; i < dirnames.length; i++) {
-            String name = dirnames[i].getName();
-            if (skipOld && (name.equals("midnight") || name.equals("classic")))
-                continue;
-            th.add(name);
-        }
-        themes = th.toArray(new String[th.size()]);
+                List<String> th = new ArrayList<String>(dirnames.length);
+                boolean skipOld = ctx.getProperty(PROP_DISABLE_OLD, DEFAULT_DISABLE_OLD);
+                for (int i = 0; i < dirnames.length; i++) {
+                    String name = dirnames[i].getName();
+                    if (skipOld && (name.equals("midnight") || name.equals("classic")))
+                        continue;
+                    th.add(name);
+                }
+                themes = th.toArray(new String[th.size()]);
             } else {
                 themes = new String[0];
             }
