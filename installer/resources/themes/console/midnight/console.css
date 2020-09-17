@@ -14026,7 +14026,7 @@ h3#bannedpeers {
   display: block;
   background: linear-gradient(to left, #717, #404);
   content: "";
-  animation: ease-in bar .2s reverse;
+  animation: ease-in bar .15s reverse;
   will-change: transform;
   z-index: 99999;
 }
