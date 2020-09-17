@@ -283,9 +283,6 @@ class SummaryRenderer {
             } else if (fontlist.contains("DejaVu Sans Mono")) {
                 DEFAULT_FONT_NAME = "DejaVu Sans Mono";
                 DEFAULT_LEGEND_FONT_NAME = "DejaVu Sans Mono";
-//            } else if (fontlist.contains("Consolas")) {
-//                DEFAULT_FONT_NAME = "Consolas";
-//                DEFAULT_LEGEND_FONT_NAME = "Consolas";
             } else if (fontlist.contains("Lucida Console")) {
                 DEFAULT_FONT_NAME = "Lucida Console";
                 DEFAULT_LEGEND_FONT_NAME = "Lucida Console";
@@ -557,8 +554,9 @@ class SummaryRenderer {
                 if (width < 280 || height < 200)
                     def.setAltYMrtg(false);
             }
-            // render onlyGraph if we're on the sidebar
-            if (width == 250 && height == 50 && hideTitle && hideLegend && hideGrid) {
+            // render unembellished graph if we're on the sidebar or snark
+            if ((width == 250 && height == 50 && hideTitle && hideLegend && hideGrid) ||
+                (width == 2000 && height == 160 && hideTitle && hideLegend && hideGrid)) {
                 def.setOnlyGraph(true);
 //                if (theme.equals("classic") || theme.equals("light"))
                     def.setColor(RrdGraphDef.COLOR_CANVAS, TRANSPARENT);
