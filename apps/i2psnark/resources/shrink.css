@@ -1,7 +1,8 @@
 .snarkMessages.collapsed {
   height: 56px !important;
   min-height: 56px !important;
-  background-position: right center !important;
+  background-size: 80px auto, calc(100% - 80px) calc(100% - 4px), 100% 100%, 100% 100% !important;
+  background-position: right -4px bottom -10px, left bottom 2px, center center, center top !important;
 }
 
 #shrink {

@@ -78,6 +78,7 @@ class SummaryRenderer {
     private static final Color AREA_COLOR = new Color(100, 160, 200, 200);
     private static final Color AREA_COLOR_DARK = new Color(0, 72, 8, 220);
     private static final Color AREA_COLOR_MIDNIGHT = new Color(0, 72, 160, 200);
+    private static final Color AREA_COLOR_NEUTRAL = new Color(128, 128, 128, 128);
     private static final Color LINE_COLOR = new Color(0, 30, 110, 255);
     private static final Color LINE_COLOR_DARK = new Color(100, 200, 160);
     private static final Color LINE_COLOR_MIDNIGHT = new Color(128, 180, 212);
@@ -174,8 +175,13 @@ class SummaryRenderer {
         try {
             RrdGraphDef def = new RrdGraphDef();
             boolean hiDPI = _context.getBooleanProperty("routerconsole.graphHiDpi");
+            if ((width == 250 && height == 50 && hideTitle && hideLegend && hideGrid) ||
+                (width == 2000 && height == 160 && hideTitle && hideLegend && hideGrid)) {
+                def.setColor(ElementsNames.xaxis, TRANSPARENT);
+                def.setColor(ElementsNames.yaxis, TRANSPARENT);
+                def.setColor(ElementsNames.frame, TRANSPARENT);
             // Override defaults (dark themes)
-            if (theme.equals("midnight")) {
+            } else if (theme.equals("midnight")) {
                 def.setColor(ElementsNames.font,    FONT_COLOR_MIDNIGHT);
                 def.setColor(ElementsNames.xaxis,   AXIS_COLOR_MIDNIGHT);
                 def.setColor(ElementsNames.yaxis,   AXIS_COLOR_MIDNIGHT);
@@ -419,7 +425,9 @@ class SummaryRenderer {
             //    def.vrule(started / 1000, RESTART_BAR_COLOR, _t("Restart"), 4.0f);
 
             def.datasource(plotName, path, plotName, SummaryListener.CF, _listener.getBackendFactory());
-            if (theme.equals("dark")) {
+            if (width == 2000 && height == 160 && hideTitle && hideLegend && hideGrid) {
+                def.area(plotName, AREA_COLOR_NEUTRAL);
+            } else if (theme.equals("dark")) {
                 if (descr.length() > 0) {
                     def.area(plotName, AREA_COLOR_DARK, descr + "\\l");
                 } else {
@@ -558,9 +566,9 @@ class SummaryRenderer {
             if ((width == 250 && height == 50 && hideTitle && hideLegend && hideGrid) ||
                 (width == 2000 && height == 160 && hideTitle && hideLegend && hideGrid)) {
                 def.setOnlyGraph(true);
-//                if (theme.equals("classic") || theme.equals("light"))
-                    def.setColor(RrdGraphDef.COLOR_CANVAS, TRANSPARENT);
-                    def.setColor(RrdGraphDef.COLOR_BACK, TRANSPARENT);
+                //if (theme.equals("classic") || theme.equals("light"))
+                def.setColor(RrdGraphDef.COLOR_CANVAS, TRANSPARENT);
+                def.setColor(RrdGraphDef.COLOR_BACK, TRANSPARENT);
             }
             RrdGraph graph;
             try {

@@ -331,16 +331,18 @@ td input[type="image"]::after {
   color: #778;
   border-spacing: 0;
   border-bottom: 1px solid #26235c;
-  background: url(images/hat.png) no-repeat scroll right top,
-              url("/viewstat.jsp?stat=[I2PSnark] InBps&showEvents=false&period=60000&periodCount=1440&end=0&width=2000&height=160&hideLegend=true&hideTitle=true&hideGrid=true") no-repeat,
-              #000;
-  background: url(images/hat.png) no-repeat scroll right top,
-              url("/viewstat.jsp?stat=[I2PSnark] InBps&showEvents=false&period=60000&periodCount=1440&end=0&width=2000&height=160&hideLegend=true&hideTitle=true&hideGrid=true") no-repeat,
-              linear-gradient(to bottom, #001, #000008);
-  background-size: auto 110%, calc(100% + 80px) calc(100% + 20px), 100% 100%;
-  background-blend-mode: normal, luminosity, normal;
   scrollbar-color: #225 #001;
   scrollbar-width: thin;
+}
+
+#screenlog, #screenlog.expanded, #screenlog.collapsed {
+  background: url(images/hat.png) no-repeat scroll right top,
+              repeating-linear-gradient(to bottom, rgba(0,0,16,.7) 2px, rgba(0,0,48,.5) 4px),
+              url("/viewstat.jsp?stat=[I2PSnark] InBps&showEvents=false&period=60000&periodCount=1440&end=0&width=2000&height=160&hideLegend=true&hideTitle=true&hideGrid=true") no-repeat,
+              linear-gradient(to bottom, #001, #000008);
+  background-size: 80px auto, 100% 100%, calc(100% - 80px) calc(100% - 8px), 100% 100% !important;
+  background-position: right -4px bottom -10px, center center, left bottom, center top !important;
+  background-blend-mode: normal, overlay, normal, normal;
 }
 
 .iframed .snarkMessages {
