@@ -43,7 +43,7 @@ function initGraphRefresh() {
     else if (document.body.classList.contains("light"))
       s.innerHTML = "" +
         ".light #screenlog, .light #screenlog.expanded, .light #screenlog.collapsed {" +
-        "  background: url(images/kitty.png) no-repeat right center," +
+        "  background: url(/themes/snark/images/kitty.png) no-repeat right center," +
         "              repeating-linear-gradient(to bottom, rgba(255,255,255,.5) 2px, rgba(220,220,255,.5) 4px)," +
         "              url(" + graph + ") no-repeat," +
         "              linear-gradient(to bottom, #fff, #eef);" +
@@ -67,7 +67,7 @@ function initGraphRefresh() {
     else if (document.body.classList.contains("ubergine"))
       s.innerHTML = "" +
         ".ubergine .snarkMessages, .ubergine #screenlog.collapsed, .ubergine #screenlog.xpanded {" +
-        "  background: url('/themes/snark/ubergine/images/hat.png') no-repeat scroll right center," +
+        "  background: url(/themes/snark/ubergine/images/hat.png) no-repeat scroll right center," +
         "              repeating-linear-gradient(to bottom, rgba(16,0,16,.5) 2px, rgba(48,16,48,.6) 4px)," +
         "              url(" + graph + ") no-repeat," +
         "              linear-gradient(to bottom, rgba(255,200,255,.1), rgba(255,240,255,.05), rgba(0,0,0,.1))," +
@@ -81,7 +81,7 @@ function initGraphRefresh() {
       s.innerHTML= "" +
         ".vanilla .snarkMessages, .vanilla #screenlog.collapsed, .vanilla #screenlog.xpanded {" +
         "  background: repeating-linear-gradient(to bottom, rgba(77, 69, 62, .4) 2px, rgba(111, 96, 90, .3) 4px)," +
-        "              url(images/whippy.png) no-repeat scroll right center," +
+        "              url(/themes/snark/images/whippy.png) no-repeat scroll right center," +
         "              url(" + graph + ") no-repeat," +
         "              linear-gradient(to bottom, #5f554d, #3f3833);" +
         "  background-size: 100% 100%, 60px auto, calc(100% - 80px) 100%, 100% 100% !important;" +
