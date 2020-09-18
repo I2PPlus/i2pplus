@@ -94,6 +94,8 @@ function initGraphRefresh() {
 
 }
 
+initGraphRefresh();
+
 if (noload)
   setInterval(initGraphRefresh, 4 * 60 * 1000);
 else
