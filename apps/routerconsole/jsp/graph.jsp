@@ -45,7 +45,7 @@
   var graph = document.getElementById("single");
   var graphImage = document.getElementById("graphSingle");
   function injectCss() {
-    main.addEventListener("mouseover", function() {
+    graph.addEventListener("load", function() {
       var graphWidth = graphImage.naturalWidth;
       var graphHeight = graphImage.height;
       var sheet = window.document.styleSheets[0];
@@ -64,7 +64,7 @@
   }
   function initCss() {
     if (graphImage != null || graphWidth != graphImage.naturalWidth || graphHeight != graphImage.height) {
-      injectCss();
+      graph.addEventListener("load", injectCss());
     } else {
       location.reload(true);
     }
@@ -88,7 +88,7 @@ if (graph) {
       }
     }
     window.addEventListener("pageshow", progressx.hide());
-    initCss();
+    graph.addEventListener("load", injectCss());
     xhr.send();
   }, <% out.print(graphHelper.getRefreshValue() * 1000); %>);
 }

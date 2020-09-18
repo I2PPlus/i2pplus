@@ -37,7 +37,7 @@
   var main = document.getElementById("perfgraphs");
   var graph = document.getElementsByClassName("statimage")[0];
   function injectCss() {
-    main.addEventListener("mouseover", function() {
+    graph.addEventListener("load", function() {
       var graphWidth = graph.width;
       var graphHeight = graph.height;
       var sheet = window.document.styleSheets[0];
@@ -56,34 +56,38 @@
   }
   function initCss() {
     if (graph != null || graphWidth != graph.naturalWidth || graphHeight != graph.naturalHeight) {
-      injectCss();
+      graph.addEventListener("load", injectCss());
     } else {
       location.reload(true);
     }
   }
-  initCss();
+  graph.addEventListener("load", initCss());
 <%
     if (graphHelper.getRefreshValue() > 0) {
 %>
-  setInterval(function() {
+  function updateGraphs(timestamp) {
     progressx.show();
     var graphs = document.getElementById("allgraphs");
-    var xhr = new XMLHttpRequest();
-    xhr.open('GET', '/graphs?' + new Date().getTime(), true);
-    xhr.responseType = "document";
-    xhr.onreadystatechange = function () {
-      if (xhr.readyState==4 && xhr.status==200) {
-        var graphsResponse = xhr.responseXML.getElementById("allgraphs");
+    var xhrgraphs = new XMLHttpRequest();
+    xhrgraphs.open('GET', '/graphs?' + new Date().getTime(), true);
+    xhrgraphs.responseType = "document";
+    xhrgraphs.onreadystatechange = function () {
+      if (xhrgraphs.readyState==4 && xhrgraphs.status==200) {
+        var graphsResponse = xhrgraphs.responseXML.getElementById("allgraphs");
         var graphsParent = graphs.parentNode;
         graphsParent.replaceChild(graphsResponse, graphs);
       }
     }
     window.addEventListener("pageshow", progressx.hide());
-    initCss();
-    xhr.send();
+    graph.addEventListener("load", initCss());
+    xhrgraphs.send();
+  }
+  setTimeout(function refresh() {
+     window.requestAnimationFrame(updateGraphs);
+    setTimeout(refresh, <% out.print(graphHelper.getRefreshValue() * 1000); %>);
   }, <% out.print(graphHelper.getRefreshValue() * 1000); %>);
 <%  } %>
-  window.addEventListener("pageshow", progressx.hide());
+  progressx.hide();
 </script>
 <%@include file="summaryajax.jsi" %>
 </body>
