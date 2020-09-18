@@ -44,30 +44,43 @@
   var main = document.getElementById("perfgraphs");
   var graph = document.getElementById("single");
   var graphImage = document.getElementById("graphSingle");
+  var graphWidth = graphImage.naturalWidth;
+  var graphHeight = graphImage.height;
+
   function injectCss() {
-    graph.addEventListener("load", function() {
-      var graphWidth = graphImage.naturalWidth;
-      var graphHeight = graphImage.height;
-      var sheet = window.document.styleSheets[0];
+    window.addEventListener("load", function() {
+      if (graphImage.width != graphWidth && graphcss)
+        graphcss.parentNode.removeChild("graphcss");
+      if (typeof graphcss == "undefined") {
+        var s = document.createElement("style");
+        s.type="text/css";
+        s.setAttribute("id", "graphcss");
 <%
     if (graphHelper.getGraphHiDpi()) {
 %>
-    sheet.insertRule(".graphContainer#hidpi {width: " + ((graphWidth / 2) + 8) + "px; height: " + ((graphHeight / 2) + 8) + "px;}", sheet.cssRules.length);
+        var w = graphWidth / 2 + 8;
+        var h = graphHeight / 2 + 8;
+        s.innerHTML = ".graphContainer#hidpi {width: " + w + "px; height: " + h + "px;}";
 <%
     } else {
 %>
-    sheet.insertRule(".graphContainer {width: " + (graphWidth + 4) + "px; height: " + (graphHeight + 4) + "px;}", sheet.cssRules.length);
+        var w = graphWidth + 4;
+        var h = graphHeight + 4;
+        s.innerHTML= ".graphContainer {width: " + w + "px; height: " + h + "px;}";
 <%
     }
 %>
+        document.head.appendChild(s);
+      }
     });
   }
   function initCss() {
-    if (graphImage != null || graphWidth != graphImage.naturalWidth || graphHeight != graphImage.height) {
-      graph.addEventListener("load", injectCss());
-    } else {
-      location.reload(true);
-    }
+      injectCss();
+      if (timer) {
+        clearInterval(timer);
+      } else {
+        var timer = function() {setInterval(injectCss, 500)};
+      }
   }
   initCss();
 <%
@@ -76,19 +89,18 @@
 if (graph) {
   setInterval(function() {
     progressx.show();
-    var graphURL = window.location.href + "&" + new Date().getTime();
+    var graphURL = window.location.href + "&t=" + new Date().getTime();
     var xhrgraph = new XMLHttpRequest();
     xhrgraph.open('GET', graphURL, true);
     xhrgraph.responseType = "document";
     xhrgraph.onreadystatechange = function () {
       if (xhrgraph.readyState==4 && xhrgraph.status==200) {
         var graphResponse = xhrgraph.responseXML.getElementById("single");
-        var graphParent = graph.parentNode;
-        graphParent.replaceChild(graphResponse, graph);
+        graph.innerHTML = graphResponse.innerHTML;
+        graphImage.addEventListener("load", initCss());
       }
     }
     window.addEventListener("pageshow", progressx.hide());
-    graph.addEventListener("load", injectCss());
     xhrgraph.send();
   }, <% out.print(graphHelper.getRefreshValue() * 1000); %>);
 }

@@ -69,7 +69,7 @@
     progressx.show();
     var graphs = document.getElementById("allgraphs");
     var xhrgraphs = new XMLHttpRequest();
-    xhrgraphs.open('GET', '/graphs?' + new Date().getTime(), true);
+    xhrgraphs.open('GET', '/graphs?t=' + new Date().getTime(), true);
     xhrgraphs.responseType = "document";
     xhrgraphs.onreadystatechange = function () {
       if (xhrgraphs.readyState==4 && xhrgraphs.status==200) {

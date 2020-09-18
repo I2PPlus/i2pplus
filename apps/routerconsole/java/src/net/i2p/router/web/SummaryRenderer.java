@@ -63,11 +63,12 @@ class SummaryRenderer {
     private static final Color SHADEB_COLOR = new Color(246, 246, 255);
     private static final Color SHADEB_COLOR_DARK = new Color(0, 0, 0);
     private static final Color GRID_COLOR = new Color(100, 100, 100, 75);
-    private static final Color GRID_COLOR_DARK = new Color(244, 244, 190, 72);
+    private static final Color GRID_COLOR_DARK = new Color(244, 244, 190, 50);
+    private static final Color GRID_COLOR_DARK2 = new Color(244, 244, 190, 30);
     private static final Color GRID_COLOR_MIDNIGHT = new Color(201, 206, 255, 50);
     private static final Color GRID_COLOR_HIDDEN = new Color(0, 0, 0, 0);
     private static final Color MGRID_COLOR = new Color(255, 91, 91, 110);
-    private static final Color MGRID_COLOR_DARK = new Color(200, 200, 0, 110);
+    private static final Color MGRID_COLOR_DARK = new Color(200, 200, 0, 50);
     private static final Color MGRID_COLOR_MIDNIGHT = new Color(240, 32, 192, 110);
     private static final Color MGRID_COLOR_DARK_HIDPI = new Color(255, 91, 91, 160);
     private static final Color FONT_COLOR = new Color(51, 51, 63);
@@ -211,7 +212,7 @@ class SummaryRenderer {
                 def.setColor(ElementsNames.shadea, TRANSPARENT);
                 def.setColor(ElementsNames.shadeb, TRANSPARENT);
                 if (theme.equals("dark")) {
-                  def.setColor(ElementsNames.grid,   GRID_COLOR_DARK);
+                  def.setColor(ElementsNames.grid,   GRID_COLOR_DARK2);
                   def.setColor(ElementsNames.mgrid,  MGRID_COLOR_DARK);
                 } else if (theme.equals("midnight")) {
                     def.setColor(ElementsNames.grid, GRID_COLOR_MIDNIGHT);
