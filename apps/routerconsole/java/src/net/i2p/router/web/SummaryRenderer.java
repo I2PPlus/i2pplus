@@ -87,7 +87,8 @@ class SummaryRenderer {
     private static final Color LINE_COLOR_MIDNIGHT = new Color(128, 180, 212);
     private static final Color ARROW_COLOR_DARK = new Color(0, 0, 0, 0);
     private static final Color RESTART_BAR_COLOR = new Color(223, 13, 13, 255);
-    private static final Color RESTART_BAR_COLOR_DARK = new Color(160, 160, 0, 220);
+    //private static final Color RESTART_BAR_COLOR_DARK = new Color(160, 160, 0, 220);
+    private static final Color RESTART_BAR_COLOR_DARK = new Color(220, 16, 48, 220);
 /**
     private static final Color DEFAULT_XAXIS_COLOR = new Color(0 , 0, 0);
     private static final Color DEFAULT_YAXIS_COLOR = new Color(0 , 0, 0);
@@ -522,10 +523,10 @@ class SummaryRenderer {
                             // RTL languages
                             if (Messages.isRTL(lang)) {
                                 legend = _t("Restart") + ' ' + sdf.format(new Date(started)) + " - " + event.getValue() + "\\l";
-                                def.vrule(started / 1000, RESTART_BAR_COLOR_DARK, legend, 2.0f);
+                                def.vrule(started / 1000, RESTART_BAR_COLOR_DARK, legend, 1.0f);
                             } else {
                                 legend = _t("Restart") + ' ' + sdf.format(new Date(started)) + " [" + event.getValue() + "]\\l";
-                                def.vrule(started / 1000, RESTART_BAR_COLOR_DARK, legend, 2.0f);
+                                def.vrule(started / 1000, RESTART_BAR_COLOR_DARK, legend, 1.0f);
                             }
                         } else {
                             // RTL languages
@@ -541,6 +542,7 @@ class SummaryRenderer {
                 }
                 def.comment(sdf.format(new Date(start)) + " — " + sdf.format(new Date(end)) + " UTC\\r");
             }
+
             if (!showCredit) {
                 def.setShowSignature(false);
             } else if (hideLegend) {

@@ -77,19 +77,19 @@ if (graph) {
   setInterval(function() {
     progressx.show();
     var graphURL = window.location.href + "&" + new Date().getTime();
-    var xhr = new XMLHttpRequest();
-    xhr.open('GET', graphURL, true);
-    xhr.responseType = "document";
-    xhr.onreadystatechange = function () {
-      if (xhr.readyState==4 && xhr.status==200) {
-        var graphResponse = xhr.responseXML.getElementById("single");
+    var xhrgraph = new XMLHttpRequest();
+    xhrgraph.open('GET', graphURL, true);
+    xhrgraph.responseType = "document";
+    xhrgraph.onreadystatechange = function () {
+      if (xhrgraph.readyState==4 && xhrgraph.status==200) {
+        var graphResponse = xhrgraph.responseXML.getElementById("single");
         var graphParent = graph.parentNode;
         graphParent.replaceChild(graphResponse, graph);
       }
     }
     window.addEventListener("pageshow", progressx.hide());
     graph.addEventListener("load", injectCss());
-    xhr.send();
+    xhrgraph.send();
   }, <% out.print(graphHelper.getRefreshValue() * 1000); %>);
 }
 <%  } %>
