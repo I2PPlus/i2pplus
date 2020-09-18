@@ -968,16 +968,37 @@ input.tunnelName, input.tunnelDescriptionText, #userAgents, .tunnelDescription, 
 }
 
 #notReady, #down {
-  margin: 35px auto 30px;
+  margin: 55px auto 50px;
   padding: 30px;
   width: 400px;
   text-align: center;
   font-weight: bold;
   font-size: 11pt;
-  border: 1px solid #900;
-  border-radius: 2px;
-  box-shadow: inset 0 0 0 1px #000;
+  border: 1px solid #005;
+  box-shadow: inset 0 0 0 1px #000, inset 0 0 4px 4px rgba(0,0,0,.4), 0 0 0 1px #000, 0 0 0 2px #001, 0 0 0 6px #002, 0 0 0 8px #003;
   background: #002;
+  background: repeating-linear-gradient(to bottom, #002 2px, #001 4px);
+}
+
+#down {
+  font-size: 0;
+  border: 1px solid #414;
+}
+
+#down::after {
+  width: 32px;
+  height: 32px;
+  display: inline-block;
+  vertical-align: middle;
+  background: url(/themes/console/images/svg/update.svg) center center no-repeat;
+  background-size: 32px 32px;
+  content: "";
+  mix-blend-mode: luminosity;
+  animation: linear spin 5s forwards infinite;
+}
+
+@keyframes spin {
+  from {transform: rotate(-360deg)}
 }
 
 /* wizard specifics */
