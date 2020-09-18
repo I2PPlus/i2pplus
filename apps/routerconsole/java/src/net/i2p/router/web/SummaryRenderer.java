@@ -224,7 +224,7 @@ class SummaryRenderer {
                 def.setColor(ElementsNames.frame,  FRAME_COLOR);
             }
 
-            if (width < 400 || height < 200) {
+            if (width < 400 || height < 200 || periodCount < 120) {
                 def.setColor(ElementsNames.grid, GRID_COLOR_HIDDEN);
                 if (theme.equals("midnight") || theme.equals("dark"))
                   def.setColor(ElementsNames.mgrid, GRID_COLOR_DARK);
