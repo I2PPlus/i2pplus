@@ -6566,8 +6566,8 @@ td.snarkTorrentPeerCount b a:not(:hover):not(:focus), td.snarkTorrentPeerCount b
   z-index: 1000;
 }
 
-.snarkDirInfo::before {
-  top: 1px;
+.snarkDirInfo::before, #snarkTorrents::before {
+  top: 0;
 }
 
 #videoTitle::before {
