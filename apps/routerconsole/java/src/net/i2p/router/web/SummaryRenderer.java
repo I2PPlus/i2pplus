@@ -63,10 +63,11 @@ class SummaryRenderer {
     private static final Color SHADEB_COLOR = new Color(246, 246, 255);
     private static final Color SHADEB_COLOR_DARK = new Color(0, 0, 0);
     private static final Color GRID_COLOR = new Color(100, 100, 100, 75);
-    private static final Color GRID_COLOR_DARK = new Color(140, 140, 140, 60);
+    private static final Color GRID_COLOR_DARK = new Color(244, 244, 190, 72);
+    private static final Color GRID_COLOR_MIDNIGHT = new Color(201, 206, 255, 60);
     private static final Color GRID_COLOR_HIDDEN = new Color(0, 0, 0, 0);
     private static final Color MGRID_COLOR = new Color(255, 91, 91, 110);
-    private static final Color MGRID_COLOR_DARK = new Color(255, 91, 91, 110);
+    private static final Color MGRID_COLOR_DARK = new Color(200, 200, 0, 110);
     private static final Color MGRID_COLOR_DARK_HIDPI = new Color(255, 91, 91, 160);
     private static final Color FONT_COLOR = new Color(51, 51, 63);
     private static final Color FONT_COLOR_DARK = new Color(244, 244, 190);
@@ -208,10 +209,7 @@ class SummaryRenderer {
                 def.setColor(ElementsNames.shadea, TRANSPARENT);
                 def.setColor(ElementsNames.shadeb, TRANSPARENT);
                 def.setColor(ElementsNames.grid,   GRID_COLOR_DARK);
-                if (hiDPI)
-                    def.setColor(ElementsNames.mgrid,  MGRID_COLOR_DARK_HIDPI);
-                else
-                    def.setColor(ElementsNames.mgrid,  MGRID_COLOR_DARK);
+                def.setColor(ElementsNames.mgrid,  MGRID_COLOR_DARK);
                 def.setColor(ElementsNames.frame,  FRAME_COLOR_DARK);
                 def.setColor(ElementsNames.arrow,  ARROW_COLOR_DARK);
             } else {
@@ -226,7 +224,9 @@ class SummaryRenderer {
 
             if (width < 400 || height < 200 || periodCount < 120) {
                 def.setColor(ElementsNames.grid, GRID_COLOR_HIDDEN);
-                if (theme.equals("midnight") || theme.equals("dark"))
+                if (theme.equals("midnight"))
+                  def.setColor(ElementsNames.mgrid, GRID_COLOR_MIDNIGHT);
+                else if (theme.equals("dark"))
                   def.setColor(ElementsNames.mgrid, GRID_COLOR_DARK);
                 else
                   def.setColor(ElementsNames.mgrid, GRID_COLOR);
@@ -390,7 +390,8 @@ class SummaryRenderer {
                 name = name.replace("OutBps", "Outbound B/s");
             // heuristic to set K=1024
             //if ((name.startsWith("bw.") || name.indexOf("Size") >= 0 || name.indexOf("Bps") >= 0 || name.indexOf("memory") >= 0)
-            if ((name.indexOf("Size") >= 0 || name.indexOf("memory") >= 0)
+
+            if ((name.indexOf("Size") >= 0 || name.indexOf("memory") >= 0) || name.contains("B/s") || name.contains("Bandwidth")
                 && !showEvents)
                 def.setBase(1024);
             if (titleOverride != null) {
