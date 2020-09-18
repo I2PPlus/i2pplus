@@ -3924,7 +3924,7 @@ td.infowarn, p.infowarn {
 
 #refreshsidebar td:not(.optionsave) {
   padding: 15px 15px 15px 50px !important;
-  background: #fff url(/themes/console/images/info/interval.png) 12px center no-repeat !important;
+  background: #fff url(/themes/console/images/svg/timer.svg) 12px center no-repeat !important;
   background-size: 28px 28px !important;
 }
 
@@ -12042,7 +12042,7 @@ from {transform: scaleX(0); transform-origin: 0 -50px;}
   display: block;
   background: #bfb;
   content: "";
-  animation: ease-in bar .2s reverse;
+  animation: ease-in bar .15s reverse;
   will-change: transform;
 }
 

@@ -356,6 +356,9 @@ public class I2PSnarkServlet extends BasicServlet {
         // selected theme inserted here
         out.write(HEADER_A + _themePath + HEADER_B + "\n");
         out.write(HEADER_A + _themePath + HEADER_Z + "\n"); // optional override.css for version-persistent user edits
+        if (delay > 0 && _context.isRouterContext())
+            out.write("<script type=\"text/javascript\" src=\"" + _contextPath + WARBASE + "js/graphRefresh.js?" + CoreVersion.VERSION + "\"></script>\n");
+            //out.write("<script type=\"text/javascript\" src=\"/themes/graphRefresh.js?" + CoreVersion.VERSION + "\"></script>\n"); // debugging
 
         // larger fonts for cjk translations
         String lang = (Translate.getLanguage(_manager.util().getContext()));

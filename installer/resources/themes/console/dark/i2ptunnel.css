@@ -1058,16 +1058,35 @@ input.tunnelName, input.tunnelDescription, #userAgents {
 }
 
 #notReady, #down {
-  margin: 35px auto 30px;
+  margin: 50px auto;
   padding: 30px;
   width: 400px;
   text-align: center;
   font-size: 11pt;
   font-weight: bold;
-  border: 1px solid #900;
-  border-radius: 2px;
-  box-shadow: inset 0 0 0 1px #000;
+  box-shadow: inset 0 0 0 1px #000, inset 0 0 4px 4px rgba(0,0,0,.4), 0 0 0 1px #000, 0 0 0 2px #020, 0 0 0 6px #030, 0 0 0 8px #040;
   background: #020;
+  background: repeating-linear-gradient(to bottom, #020 2px, #010 4px);
+}
+
+#down {
+  font-size: 0;
+}
+
+#down::after {
+  width: 32px;
+  height: 32px;
+  display: inline-block;
+  vertical-align: middle;
+  box-shadow: inset 0 0 0 1px #000, inset 0 0 4px 4px rgba(0,0,0,.4), 0 0 0 1px #000, 0 0 0 2px #020, 0 0 0 6px #030, 0 0 0 8px #400;
+  background: url(/themes/console/images/svg/update.svg) center center no-repeat;
+  background-size: 32px 32px;
+  content: "";
+  animation: linear spin 5s forwards infinite;
+}
+
+@keyframes spin {
+  from {transform: rotate(-360deg)}
 }
 
 /* wizard specifics */

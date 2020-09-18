@@ -1,12 +1,12 @@
 .snarkMessages {
-    min-height: 56px !important;
+  min-height: 56px !important;
+  background-size: 80px auto, calc(100% - 80px) calc(100% - 4px), 100% 100%, 100% 100% !important;
+  background-position: right -4px bottom -10px, left bottom 2px, center center, center top !important;
 }
 
 .snarkMessages.xpanded {
   height: auto;
   max-height: 300px;
-  background-size: 80px auto, calc(100% + 80px) calc(100% + 58px), 100% 100%, 100% 100% !important;
-  background-position: right -4px bottom -10px, left -60px bottom -48px, center center, center top !important;
 }
 
 .snarkMessages:hover, .snarkMessages:focus {

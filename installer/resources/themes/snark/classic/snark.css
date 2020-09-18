@@ -262,20 +262,17 @@ td input[type="image"]::after {
   text-align: left;
   border-bottom: 1px solid #aaafce;
   box-shadow: inset 0 0 0 1px #f2f2ff;
+}
+
+#screenlog, #screenlog.expanded, #screenlog.collapsed {
   background: url(images/hat.png) right -4px bottom -10px no-repeat,
               url("/viewstat.jsp?stat=[I2PSnark] InBps&showEvents=false&period=60000&periodCount=1440&end=0&width=2000&height=160&hideLegend=true&hideTitle=true&hideGrid=true") no-repeat, #ddf;
   background: url(images/hat.png) right -4px bottom -10px no-repeat,
               url("/viewstat.jsp?stat=[I2PSnark] InBps&showEvents=false&period=60000&periodCount=1440&end=0&width=2000&height=160&hideLegend=true&hideTitle=true&hideGrid=true") no-repeat,
               linear-gradient(to bottom, rgba(239, 243, 255, .7), rgba(233, 239, 255, .7));
   background-size: auto 80px, calc(100% + 80px) calc(100% + 20px), 100% 100%;
+  background-position: right -4px bottom -10px, left bottom 1px, center center, center top !important;
   background-blend-mode: normal, soft-light, normal;
-}
-
-.iframed .snarkMessages {
-  background: url(images/hat.png) right -4px bottom -10px no-repeat,
-              url("/viewstat.jsp?stat=[I2PSnark] InBps&showEvents=false&period=60000&periodCount=1440&end=0&width=2000&height=160&hideLegend=true&hideTitle=true&hideGrid=true") no-repeat,
-              linear-gradient(to bottom, #f2f2ff, #e8e8ff);
-  background-size: auto 80px, calc(100% + 80px) calc(100% + 20px), 100% 100%;
 }
 
 .snarkMessages:hover, .snarkMessages:focus {

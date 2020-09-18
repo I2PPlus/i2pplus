@@ -73,11 +73,14 @@ class SummaryRenderer {
     private static final Color FONT_COLOR_MIDNIGHT = new Color(201, 206, 255);
     private static final Color AXIS_COLOR_DARK = new Color(244, 244, 190, 200);
     private static final Color AXIS_COLOR_MIDNIGHT = new Color(201, 206, 255, 200);
-    private static final Color FRAME_COLOR = new Color(51, 51, 63);
-    private static final Color FRAME_COLOR_DARK = new Color(16, 16, 16);
+    //private static final Color FRAME_COLOR = new Color(51, 51, 63);
+    private static final Color FRAME_COLOR = new Color(0, 0, 0, 0);
+    //private static final Color FRAME_COLOR_DARK = new Color(16, 16, 16);
+    private static final Color FRAME_COLOR_DARK = new Color(0 , 0, 0, 0);
     private static final Color AREA_COLOR = new Color(100, 160, 200, 200);
     private static final Color AREA_COLOR_DARK = new Color(0, 72, 8, 220);
     private static final Color AREA_COLOR_MIDNIGHT = new Color(0, 72, 160, 200);
+    private static final Color AREA_COLOR_NEUTRAL = new Color(128, 128, 128, 128);
     private static final Color LINE_COLOR = new Color(0, 30, 110, 255);
     private static final Color LINE_COLOR_DARK = new Color(100, 200, 160);
     private static final Color LINE_COLOR_MIDNIGHT = new Color(128, 180, 212);
@@ -107,7 +110,8 @@ class SummaryRenderer {
     private static final int SIZE_TITLE = 12;
     private static final long[] RATES = new long[] { 60*60*1000 };
     // dotted line
-    private static final Stroke GRID_STROKE = new BasicStroke(1, BasicStroke.CAP_BUTT, BasicStroke.JOIN_MITER, 1, new float[] {1, 1}, 0);
+//    private static final Stroke GRID_STROKE = new BasicStroke(1, BasicStroke.CAP_BUTT, BasicStroke.JOIN_MITER, 1, new float[] {1, 1}, 0);
+    private static final Stroke GRID_STROKE = new BasicStroke(1, BasicStroke.CAP_ROUND, BasicStroke.JOIN_ROUND, 1, new float[] {1, 1}, 0);
 
     GraphicsEnvironment e = GraphicsEnvironment.getLocalGraphicsEnvironment();
         String[] sysfonts = e.getAvailableFontFamilyNames();
@@ -174,8 +178,13 @@ class SummaryRenderer {
         try {
             RrdGraphDef def = new RrdGraphDef();
             boolean hiDPI = _context.getBooleanProperty("routerconsole.graphHiDpi");
+            if ((width == 250 && height == 50 && hideTitle && hideLegend && hideGrid) ||
+                (width == 2000 && height == 160 && hideTitle && hideLegend && hideGrid)) {
+                def.setColor(ElementsNames.xaxis, TRANSPARENT);
+                def.setColor(ElementsNames.yaxis, TRANSPARENT);
+                def.setColor(ElementsNames.frame, TRANSPARENT);
             // Override defaults (dark themes)
-            if (theme.equals("midnight")) {
+            } else if (theme.equals("midnight")) {
                 def.setColor(ElementsNames.font,    FONT_COLOR_MIDNIGHT);
                 def.setColor(ElementsNames.xaxis,   AXIS_COLOR_MIDNIGHT);
                 def.setColor(ElementsNames.yaxis,   AXIS_COLOR_MIDNIGHT);
@@ -214,6 +223,9 @@ class SummaryRenderer {
                 def.setColor(ElementsNames.font,   FONT_COLOR);
                 def.setColor(ElementsNames.frame,  FRAME_COLOR);
             }
+
+            if (width < 400 || height < 200)
+                def.setColor(ElementsNames.grid,   GRID_COLOR_HIDDEN);
 
             // improve text legibility
             String lang = Messages.getLanguage(_context);
@@ -419,7 +431,9 @@ class SummaryRenderer {
             //    def.vrule(started / 1000, RESTART_BAR_COLOR, _t("Restart"), 4.0f);
 
             def.datasource(plotName, path, plotName, SummaryListener.CF, _listener.getBackendFactory());
-            if (theme.equals("dark")) {
+            if (width == 2000 && height == 160 && hideTitle && hideLegend && hideGrid) {
+                def.area(plotName, AREA_COLOR_NEUTRAL);
+            } else if (theme.equals("dark")) {
                 if (descr.length() > 0) {
                     def.area(plotName, AREA_COLOR_DARK, descr + "\\l");
                 } else {
@@ -488,10 +502,10 @@ class SummaryRenderer {
                     def.gprint("last2", ' ' + _t("Now") + ": %.2f%S\\l");
                 }
             }
+            SimpleDateFormat sdf = new SimpleDateFormat("dd MMM HH:mm");
             if (!hideLegend) {
                 // '07 Jul 21:09' with month name in the system locale
                 // TODO: Fix Arabic time display
-                SimpleDateFormat sdf = new SimpleDateFormat("dd MMM HH:mm");
                 Map<Long, String> events = ((RouterContext)_context).router().eventLog().getEvents(EventLog.STARTED, start);
                 for (Map.Entry<Long, String> event : events.entrySet()) {
                     long started = event.getKey().longValue();
@@ -521,8 +535,14 @@ class SummaryRenderer {
                 }
                 def.comment(sdf.format(new Date(start)) + " — " + sdf.format(new Date(end)) + " UTC\\r");
             }
-            if (!showCredit)
+            if (!showCredit) {
                 def.setShowSignature(false);
+            } else if (hideLegend) {
+                if (height > 65)
+                    def.setSignature("    " + sdf.format(new Date(end)) + " UTC");
+                else
+                    def.setSignature(sdf.format(new Date(end)) + " UTC");
+            }
             /*
             // these four lines set up a graph plotting both values and events on the same chart
             // (but with the same coordinates, so the values may look pretty skewed)
@@ -547,20 +567,26 @@ class SummaryRenderer {
             def.setHeight(height);
             def.setImageFormat("PNG");
             def.setLazy(true);
+            def.setPoolUsed(true);
+            def.setAltYMrtg(true);
+            if (width < 400 || height < 200)
+              def.setNoMinorGrid(true);
+
             if (hiDPI) {
                 if (width < 800 || height < 400)
                     def.setAltYMrtg(false);
             } else {
-                if (width < 280 || height < 200)
+                if (width < 400 || height < 200)
                     def.setAltYMrtg(false);
             }
+
             // render unembellished graph if we're on the sidebar or snark
             if ((width == 250 && height == 50 && hideTitle && hideLegend && hideGrid) ||
                 (width == 2000 && height == 160 && hideTitle && hideLegend && hideGrid)) {
                 def.setOnlyGraph(true);
-//                if (theme.equals("classic") || theme.equals("light"))
-                    def.setColor(RrdGraphDef.COLOR_CANVAS, TRANSPARENT);
-                    def.setColor(RrdGraphDef.COLOR_BACK, TRANSPARENT);
+                //if (theme.equals("classic") || theme.equals("light"))
+                def.setColor(RrdGraphDef.COLOR_CANVAS, TRANSPARENT);
+                def.setColor(RrdGraphDef.COLOR_BACK, TRANSPARENT);
             }
             RrdGraph graph;
             try {

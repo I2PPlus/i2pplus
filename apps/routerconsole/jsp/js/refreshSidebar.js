@@ -221,7 +221,8 @@ function refreshSidebar(timestamp) {
             services.remove();
           }
           if (advanced) {
-            advanced.nextElementSibling.remove();
+            if (advanced.nextElementSibling !== "undefined" && advanced.nextElementSibling != null)
+              advanced.nextElementSibling.remove();
             advanced.remove();
           }
           if (internals) {

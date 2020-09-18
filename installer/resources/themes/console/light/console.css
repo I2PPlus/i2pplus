@@ -13331,7 +13331,7 @@ div.app:not(:hover) a:not(:hover):not(:focus):not(:active):visited,
   display: block;
   background: #f90;
   content: "";
-  animation: ease-in bar .2s reverse;
+  animation: ease-in bar .15s reverse;
   will-change: transform;
 
 }

@@ -21,7 +21,7 @@ function refreshTorrents(timestamp) {
 
   var xhrsnark = new XMLHttpRequest();
 
-  xhrsnark.open('GET', url);
+  xhrsnark.open("GET", url);
   xhrsnark.setRequestHeader("If-Modified-Since", "Sat, 1 Jan 2000 00:00:00 GMT");
   xhrsnark.responseType = "document";
   xhrsnark.onreadystatechange = function() {
@@ -37,15 +37,16 @@ function refreshTorrents(timestamp) {
         var incomplete = document.getElementsByClassName("incomplete");
         var peerinfo = document.getElementsByClassName("peerinfo");
         var debuginfo = document.getElementsByClassName("debuginfo");
-        if (torrents)
+        if (torrents) {
           var torrentsResponse = xhrsnark.responseXML.getElementById("snarkTorrents");
-        var filterbarResponse = xhrsnark.responseXML.getElementById("torrentDisplay");
-
-        if (!down && !noload) {
-          refreshHeaderAndFooter();
-        } else if (down || noload || (torrents && (!filterbar && typeof filterbarResponse !== "undefined"))) {
-          window.requestAnimationFrame(refreshAll);
+          var filterbarResponse = xhrsnark.responseXML.getElementById("torrentDisplay");
         }
+
+        if (down || noload || (torrents && (!filterbar && typeof filterbarResponse !== "undefined")))
+          window.requestAnimationFrame(refreshAll);
+
+        if (!down && !noload)
+          refreshHeaderAndFooter();
 
         if (info) {
           var infoResponse = xhrsnark.responseXML.getElementById("torrentInfoStats");
@@ -133,7 +134,7 @@ function refreshTorrents(timestamp) {
           }
         }
 
-        function refreshAll(timeStamp) {
+        function refreshAll(timestamp) {
           if (mainsection) {
             var mainsectionResponse = xhrsnark.responseXML.getElementById("mainsection");
             if (typeof mainsectionResponse !== "undefined" && !Object.is(mainsection.innerHTML, mainsectionResponse.innerHTML))

@@ -331,6 +331,16 @@ _:-ms-lang(x), .snarkNav:link, .snarkNav:visited {
   background-size: auto 105%, 100% 100%;
 }
 
+.snarkMessages, #screenlog.collapsed, #screenlog.xpanded {
+  background: repeating-linear-gradient(to bottom, rgba(77, 69, 62, .4) 2px, rgba(111, 96, 90, .3) 4px),
+              url(images/whippy.png) no-repeat scroll right center,
+              url("/viewstat.jsp?stat=[I2PSnark] InBps&showEvents=false&period=60000&periodCount=1440&end=0&width=2000&height=160&hideLegend=true&hideTitle=true&hideGrid=true") no-repeat,
+              linear-gradient(to bottom, #5f554d, #3f3833);
+  background-size: 100% 100%, 60px auto, calc(100% - 80px) 100%, 100% 100% !important;
+  background-position: center center, right -4px bottom -10px, left bottom 1px, center center !important;
+  background-blend-mode: darken, lighten, luminosity, normal, normal;
+}
+
 .snarkMessages:hover, .snarkMessages:focus {
   overflow: auto;
 }
