@@ -46,41 +46,53 @@
   var graphImage = document.getElementById("graphSingle");
   var graphWidth = graphImage.naturalWidth;
   var graphHeight = graphImage.height;
+  var graphcss = document.querySelector("#graphcss");
+  var imgSrc = graphImage.src;
 
   function injectCss() {
-    window.addEventListener("load", function() {
-      if (graphImage.width != graphWidth && graphcss)
-        graphcss.parentNode.removeChild("graphcss");
-      if (typeof graphcss == "undefined") {
+    graphImage.addEventListener("load", function() {
+      if (document.head.contains(graphcss))
+        if (graphcss)
+          graphcss.remove();
         var s = document.createElement("style");
         s.type="text/css";
         s.setAttribute("id", "graphcss");
 <%
     if (graphHelper.getGraphHiDpi()) {
 %>
-        var w = graphWidth / 2 + 8;
-        var h = graphHeight / 2 + 8;
+        if (graphWidth !== 0)
+          var w = graphWidth / 2 + 8;
+        else
+          var w = graphImage.width / 2 + 8;
+        if (graphHeight !== 0)
+          var h = graphHeight / 2 + 8;
+        else
+          var h = graphImage.height / 2 + 8;
         s.innerHTML = ".graphContainer#hidpi {width: " + w + "px; height: " + h + "px;}";
 <%
     } else {
 %>
-        var w = graphWidth + 4;
-        var h = graphHeight + 4;
-        s.innerHTML= ".graphContainer {width: " + w + "px; height: " + h + "px;}";
+        if (graphWidth !== 0)
+          var w = graphWidth + 4;
+        else
+          var w = graphImage.width + 4;
+        if (graphHeight !== 0)
+          var h = graphHeight + 4;
+        else
+          var h = graphImage.height + 4;
+        s.innerHTML = ".graphContainer {width: " + w + "px; height: " + h + "px;}";
 <%
     }
 %>
         document.head.appendChild(s);
-      }
     });
   }
   function initCss() {
       injectCss();
-      if (timer) {
+      if (timer)
         clearInterval(timer);
-      } else {
+      else
         var timer = function() {setInterval(injectCss, 500)};
-      }
   }
   initCss();
 <%
