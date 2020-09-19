@@ -492,7 +492,7 @@ class SummaryRenderer {
                     else if (width == 250 && height == 50 && hideTitle && hideLegend && hideGrid)
                         linewidth = 3;
                 } else {
-                    if (periodCount >= 720 || (periodCount >= 480 && width <= 400))
+                    if (periodCount >= 720 || (periodCount >= 480 && width <= 600))
                         linewidth = 1;
                     // sidebar graph
                     else if (width == 250 && height == 50 && hideTitle && hideLegend && hideGrid)
