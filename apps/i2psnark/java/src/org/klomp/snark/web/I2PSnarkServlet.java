@@ -954,7 +954,7 @@ public class I2PSnarkServlet extends BasicServlet {
 
         // Add a pagenav to bottom of table if we have 50+ torrents per page
         // TODO: disable on pages where torrents is < 50 e.g. last page
-        if (total > 0 && (start > 0 || total > pageSize) && pageSize >= 50) {
+        if (total > 0 && (start > 0 || total > pageSize) && pageSize >= 50 && total - start >= 20) {
             out.write("<tr id=\"pagenavbottom\"><td colspan=\"12\"><div class=\"pagenavcontrols\">");
             writePageNav(out, req, start, pageSize, total, noThinsp);
             out.write("</div></td></tr>\n</tbody>\n");

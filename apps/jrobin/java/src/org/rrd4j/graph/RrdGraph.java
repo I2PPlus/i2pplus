@@ -186,7 +186,8 @@ public class RrdGraph implements RrdGraphConstants {
             int x = (int) (im.xgif - 2 - worker.getFontAscent(font));
             int y = 4;
             worker.transform(x, y, Math.PI / 2);
-            worker.drawString(signature, 0, 0, font, Color.LIGHT_GRAY);
+//            worker.drawString(signature, 0, 0, font, Color.LIGHT_GRAY);
+            worker.drawString(signature, 0, 0, font, new Color(128, 128, 128, 128));
             worker.reset();
             worker.setTextAntiAliasing(false);
         }
