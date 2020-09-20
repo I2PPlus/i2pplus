@@ -1,10 +1,11 @@
+var log = document.getElementById("screenlog");
+var noload = document.getElementById("noload");
+
 function initGraphRefresh() {
 
   var now = new Date().getTime();
-  var screenlog = document.getElementById("screenlog");
   var graphcss = document.getElementById("graphcss");
-  var noload = document.getElementById("noload");
-  if (screenlog) {
+  if (log) {
     var graph = "'/viewstat.jsp?stat=[I2PSnark] InBps&showEvents=false&period=60000&periodCount=1440&end=0&width=2000&height=160&hideLegend=true&hideTitle=true&hideGrid=true&t=" + now + "'";
     if (graphcss)
       graphcss.remove();
@@ -12,7 +13,7 @@ function initGraphRefresh() {
     var s = document.createElement("style");
     s.type="text/css";
     s.setAttribute("id", "graphcss");
-    if (document.body.classList.contains("classic"))
+    if (document.body.classList.contains("classic")) {
       s.innerHTML = "" +
         ".classic #screenlog, .classic #screenlog.expanded, .classic #screenlog.collapsed {" +
         "  background: url('/themes/snark/ubergine/images/hat.png') right -4px bottom -10px no-repeat," +
@@ -25,7 +26,7 @@ function initGraphRefresh() {
         "  background-blend-mode: normal, soft-light, normal !important;" +
         "}";
 
-    else if (document.body.classList.contains("dark"))
+    } else if (document.body.classList.contains("dark")) {
       s.innerHTML = "" +
         ".dark #screenlog, .dark #screenlog.expanded, .dark #screenlog.collapsed {" +
         "  background: url('/themes/snark/ubergine/images/hat.png') no-repeat scroll right bottom," +
@@ -40,10 +41,10 @@ function initGraphRefresh() {
         "  background-blend-mode: screen, darken, normal, normal !important;" +
         "}";
 
-    else if (document.body.classList.contains("light"))
+    } else if (document.body.classList.contains("light")) {
       s.innerHTML = "" +
         ".light #screenlog, .light #screenlog.expanded, .light #screenlog.collapsed {" +
-        "  background: url(/themes/snark/images/kitty.png) no-repeat right center," +
+        "  background: url('/themes/snark/light/images/kitty.png') no-repeat right center," +
         "              repeating-linear-gradient(to bottom, rgba(255,255,255,.5) 2px, rgba(220,220,255,.5) 4px)," +
         "              url(" + graph + ") no-repeat," +
         "              linear-gradient(to bottom, #fff, #eef);" +
@@ -52,7 +53,7 @@ function initGraphRefresh() {
         "  background-blend-mode: multiply, overlay, luminosity, normal !important;" +
         "}";
 
-    else if (document.body.classList.contains("midnight"))
+    } else if (document.body.classList.contains("midnight")) {
       s.innerHTML = "" +
         ".midnight #screenlog, .midnight #screenlog.expanded, .midnight #screenlog.collapsed {" +
         "  background: url('/themes/snark/ubergine/images/hat.png') no-repeat scroll right top," +
@@ -64,10 +65,10 @@ function initGraphRefresh() {
         "  background-blend-mode: normal, overlay, normal, normal !important;" +
         "}";
 
-    else if (document.body.classList.contains("ubergine"))
+    } else if (document.body.classList.contains("ubergine")) {
       s.innerHTML = "" +
         ".ubergine .snarkMessages, .ubergine #screenlog.collapsed, .ubergine #screenlog.xpanded {" +
-        "  background: url(/themes/snark/ubergine/images/hat.png) no-repeat scroll right center," +
+        "  background: url('/themes/snark/ubergine/images/hat.png') no-repeat scroll right center," +
         "              repeating-linear-gradient(to bottom, rgba(16,0,16,.5) 2px, rgba(48,16,48,.6) 4px)," +
         "              url(" + graph + ") no-repeat," +
         "              linear-gradient(to bottom, rgba(255,200,255,.1), rgba(255,240,255,.05), rgba(0,0,0,.1))," +
@@ -77,26 +78,24 @@ function initGraphRefresh() {
         "  background-blend-mode: lighten, darken, luminosity, normal, normal !important;" +
         "}";
 
-    else if (document.body.classList.contains("vanilla"))
+    } else if (document.body.classList.contains("vanilla")) {
       s.innerHTML= "" +
         ".vanilla .snarkMessages, .vanilla #screenlog.collapsed, .vanilla #screenlog.xpanded {" +
         "  background: repeating-linear-gradient(to bottom, rgba(77, 69, 62, .4) 2px, rgba(111, 96, 90, .3) 4px)," +
-        "              url(/themes/snark/images/whippy.png) no-repeat scroll right center," +
+        "              url('themes/snark/vanilla/images/whippy.png') no-repeat scroll right center," +
         "              url(" + graph + ") no-repeat," +
         "              linear-gradient(to bottom, #5f554d, #3f3833);" +
         "  background-size: 100% 100%, 60px auto, calc(100% - 80px) 100%, 100% 100% !important;" +
         "  background-position: center center, right -4px bottom -10px, left bottom 1px, center center !important;" +
         "  background-blend-mode: darken, lighten, luminosity, normal, normal !important;" +
         "}";
-
+    }
     document.head.appendChild(s);
   }
 
 }
-
-initGraphRefresh();
-
+document.addEventListener("DOMContentLoaded", initGraphRefresh);
 if (noload)
-  setInterval(initGraphRefresh, 4 * 60 * 1000);
+  setInterval(initGraphRefresh, 5 * 60 * 1000);
 else
-  setInterval(initGraphRefresh, 30 * 60 * 1000);
+  setInterval(initGraphRefresh, 15 * 60 * 1000);
