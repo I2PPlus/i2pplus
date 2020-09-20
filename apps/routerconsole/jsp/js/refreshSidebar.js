@@ -231,7 +231,7 @@ function refreshSidebar(timestamp) {
             internals.remove();
           }
           if (graph) {
-            if (typeof graph.nextElementSibling !== "undefined" || graph.nextElementSibling !== null)
+            if (typeof graph.nextElementSibling !== "undefined" || graph.nextElementSibling != null)
               graph.nextElementSibling.remove();
             graph.remove();
           }
@@ -241,7 +241,7 @@ function refreshSidebar(timestamp) {
             tunnelstatus.remove();
           }
           if (shutdownstatus) {
-            if (typeof shutdownstatus.nextElementSibling !== "undefined" || shutdownstatus.nextElementSibling !== null)
+            if (typeof shutdownstatus.nextElementSibling !== "undefined" || shutdownstatus.nextElementSibling != null)
               shutdownstatus.nextElementSibling.remove();
             shutdownstatus.remove();
           }
