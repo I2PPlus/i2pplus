@@ -396,6 +396,7 @@ class SummaryRenderer {
                 name = name.replace("InBps", "Inbound B/s");
             if (name.endsWith("OutBps"))
                 name = name.replace("OutBps", "Outbound B/s");
+            name = CSSHelper.StringFormatter.capitalizeWord(name);
             // heuristic to set K=1024
             //if ((name.startsWith("bw.") || name.indexOf("Size") >= 0 || name.indexOf("Bps") >= 0 || name.indexOf("memory") >= 0)
 
