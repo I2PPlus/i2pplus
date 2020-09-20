@@ -91,7 +91,7 @@
       injectCss();
       if (timer)
         clearInterval(timer);
-      else
+      else if (!graphcss)
         var timer = function() {setInterval(injectCss, 500)};
   }
   initCss();

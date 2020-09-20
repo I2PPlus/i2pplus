@@ -50,9 +50,10 @@ public class GraphHelper extends FormHandler {
     private static final boolean DEFAULT_GRAPH_HIDPI = false;
     private static final int MIN_X = 160;
     private static final int MIN_Y = 40;
-    private static final int MIN_C = 20;
+    //private static final int MIN_C = 20;
+    private static final int MIN_C = 5; // minimum period (minutes)
     private static final int MAX_C = SummaryListener.MAX_ROWS;
-    private static final int MIN_REFRESH = 15;
+    private static final int MIN_REFRESH = 5;
 
     /** set the defaults after we have a context */
     @Override
@@ -426,7 +427,7 @@ public class GraphHelper extends FormHandler {
                + "\">";
     }
 
-    private static final int[] times = { 15, 30, 60, 2*60, 5*60, 10*60, 30*60, 60*60, -1 };
+    private static final int[] times = { 5, 10, 15, 30, 60, 2*60, 5*60, 10*60, 30*60, 60*60, -1 };
 
     public String getForm() {
         StatSummarizer ss = StatSummarizer.instance(_context);

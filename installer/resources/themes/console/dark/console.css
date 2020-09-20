@@ -1755,11 +1755,8 @@ div#graphs {
 
 .graphspanel img {
   padding: 2px;
-  max-width: 95%;
-  max-width: calc(100% - 18px);
   vertical-align: top;
   box-shadow: inset 0 0 0 1px #000, inset 0 0 2px 1px #050;
-  background: rgba(0,0,0,0.5);
 }
 
 .graphspanel a img {
@@ -1774,7 +1771,6 @@ div#graphs {
   text-align: center !important;
   border: 1px solid #d40 !important;
   box-shadow: inset 0 0 0 1px #000, inset 0 0 2px 1px #d30;
-  background: #000;
   cursor: zoom-in, default;
   filter: none;
   transition: ease border 0.05s;
@@ -13816,7 +13812,7 @@ i {
 
 .graphContainer {
   margin: 4px 3px !important;
-  padding: 2px 1px 0 !important;
+  padding: 4px 0 !important;
   max-width: calc(100% - 18px);
   min-width: 140px;
   min-height: 60px;
@@ -13827,19 +13823,7 @@ i {
   text-align: center;
   border: 1px solid #242;
   box-shadow: inset 0 0 0 1px #000, inset 0 0 1px 1px #050;
-  box-sizing: border-box;
   animation: ease grid-fade 2s forwards;
-}
-
-.graphContainer#hidpi {
-  padding-left: 2px !important;
-  padding-right: 6px !important;
-  box-sizing: border-box;
-}
-
-#graph_single .graphContainer {
-  padding-top: 5px !important;
-  padding-left: 8px !important;
 }
 
 .graphContainer:hover {
@@ -13848,11 +13832,17 @@ i {
 }
 
 .statimage, .statimage:hover, #graphs a:hover .statimage, #graph_single .statimage, #graph_single .statimage:hover {
-  margin: 0 !important;
+  margin: 4px 0 2px !important;
   padding: 0 !important;
-  max-width: calc(100% + 2px) !important;
   border: none !important;
   box-shadow: none !important;
+  filter: opacity(0);
+  animation: ease graph-fade .15s .4s forwards;
+}
+
+@keyframes graph-fade {
+  from {filter: opacity(0)}
+  to {filter: opacity(1)}
 }
 
 @keyframes grid-fade {
@@ -13863,8 +13853,7 @@ from {
 }
 to {
   background: #000;
-  background: repeating-linear-gradient(to right, rgba(0,0,0,0), #000 1px, rgba(0,0,0,0) 1px, rgba(0,0,0,0) 10px),
-        repeating-linear-gradient(to bottom, #000, #000 1px, #000 1px, #000 10px);
+  background: repeating-linear-gradient(#000 2px, #010 4px);
 }
 }
 
