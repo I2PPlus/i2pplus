@@ -7,8 +7,6 @@
 <%@include file="css.jsi" %>
 <%=intl.title("config stats")%>
 <noscript><style type="text/css">.script {display: none;}</style></noscript>
-<%@include file="summaryajax.jsi" %>
-<!--<script src="/js/configstats.js?<%=net.i2p.CoreVersion.VERSION%>" type="text/javascript"></script>-->
 </head>
 <body>
 <script nonce="<%=cspNonce%>" type="text/javascript">progressx.show();</script>
