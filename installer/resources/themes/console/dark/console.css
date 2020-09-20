@@ -13834,6 +13834,7 @@ i {
 .statimage, .statimage:hover, #graphs a:hover .statimage, #graph_single .statimage, #graph_single .statimage:hover {
   margin: 4px 0 2px !important;
   padding: 0 !important;
+  max-width: 100%;
   border: none !important;
   box-shadow: none !important;
   filter: opacity(0);
