@@ -427,7 +427,7 @@ public class GraphHelper extends FormHandler {
                + "\">";
     }
 
-    private static final int[] times = { 5, 15, 30, 60, 2*60, 5*60, 10*60, 30*60, 60*60, -1 };
+    private static final int[] times = { 5, 10, 15, 30, 60, 2*60, 5*60, 10*60, 30*60, 60*60, -1 };
 
     public String getForm() {
         StatSummarizer ss = StatSummarizer.instance(_context);
