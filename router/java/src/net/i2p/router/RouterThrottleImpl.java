@@ -556,12 +556,12 @@ public class RouterThrottleImpl implements RouterThrottle {
 //            setTunnelStatus("Not expecting tunnel requests: Advertised bandwidth too low");
 //        else
 //            setTunnelStatus(_x("No participating tunnels" + ":<br>" + _x("Starting up")));
-            setTunnelStatus(_x("Starting up"));
+            setTunnelStatus(_x("Starting up") + "&hellip;");
     }
 
     /** @since 0.8.12 */
     public void setShutdownStatus() {
-        setTunnelStatus(_x("Declining tunnel requests" + ":<br>" + _x("Shutting down")));
+        setTunnelStatus(_x("Declining tunnel requests") + ":<br>" + _x("Shutting down") + "&hellip;");
     }
 
     /** @since 0.8.12 */
