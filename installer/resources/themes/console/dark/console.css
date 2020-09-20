@@ -12057,7 +12057,12 @@ input[type="text"]:focus::placeholder {
   animation: routerdown linear 3s forwards infinite;
 }
 
-#down::after {
+#nographs {
+  font-size: 0;
+  line-height: 60px;
+}
+
+#down::after, #nographs::after {
   width: 26px;
   height: 26px;
   vertical-align: middle;

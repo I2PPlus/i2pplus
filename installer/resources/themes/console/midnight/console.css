@@ -12095,11 +12095,16 @@ html, body {
   animation: routerdown linear 3s forwards infinite;
 }
 
+#nographs {
+  line-height: 40px;
+  font-size: 0;
+}
+
 @keyframes routerdown {
   from {background-position: left center}
 }
 
-#down::after {
+#down::after, #nographs::after {
   width: 24px;
   height: 24px;
   vertical-align: middle;

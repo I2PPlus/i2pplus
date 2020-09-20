@@ -875,7 +875,11 @@ p:empty + .sb_notice {
   animation: down linear 10s reverse infinite;
 }
 
-#down::after {
+#nographs {
+  font-size: 0;
+}
+
+#down::after, #nographs::after {
   width: 26px;
   height: 26px;
   vertical-align: middle;
