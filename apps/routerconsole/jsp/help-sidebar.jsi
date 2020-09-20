@@ -24,7 +24,7 @@ The skew (offset) of your computer's clock relative to the network-synced time (
 
 <li>
 <b>Memory:</b>
-This indicates the amount of RAM I2P is using, and the total amount available, allocated by Java. If the usage is consistently high relative to the available RAM, this may indicate that you need to increase the ram allocated to the JVM. You can allocate more RAM by editing your <code>wrapper.config</code> file which is normally located in the I2P application directory. You will need to edit the <code>wrapper.java.maxmemory</code> parameter, which by default is set to 128(MB). <!--<b>Note:</b> Memory usage is only displayed in the <i>Router Information (advanced)</i> section or on the <i>Memory Usage Bar</i>, both of which may be added to your Sidebar on the <a href="configsidebar">Sidebar Configuration page</a>.-->
+This indicates the amount of RAM I2P is using, and the total amount available, allocated by Java. If the usage is consistently high relative to the available RAM, this may indicate that you need to increase the ram allocated to the JVM. You can allocate more RAM by editing your <code>wrapper.config</code> file which is normally located in the I2P application directory. You will need to edit the <code>wrapper.java.maxmemory</code> parameter, which by default is set to 256(MB) for I2P, or 384 for I2P+. Note: if the memory bar is enabled, the memory entry in the router info section will be suppressed.
 </li>
 
 </ul>
