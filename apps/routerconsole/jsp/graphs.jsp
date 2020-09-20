@@ -68,22 +68,34 @@
   function updateGraphs(timestamp) {
     progressx.show();
     var graphs = document.getElementById("allgraphs");
+    var nographs = document.getElementById("nographs");
     var xhrgraphs = new XMLHttpRequest();
     xhrgraphs.open('GET', '/graphs?t=' + new Date().getTime(), true);
     xhrgraphs.responseType = "document";
     xhrgraphs.onreadystatechange = function () {
-      if (xhrgraphs.readyState==4 && xhrgraphs.status==200) {
-        var graphsResponse = xhrgraphs.responseXML.getElementById("allgraphs");
-        var graphsParent = graphs.parentNode;
-        graphsParent.replaceChild(graphsResponse, graphs);
+      if (xhrgraphs.readyState==4) {
+        if (xhrgraphs.status==200) {
+          if (nographs)
+            nographs.outerHTML = allgraphs.outerHTML;
+          var graphsResponse = xhrgraphs.responseXML.getElementById("allgraphs");
+          var graphsParent = graphs.parentNode;
+          graphsParent.replaceChild(graphsResponse, graphs);
+          } else {
+            function isDown() {
+              if (!nographs)
+                graphs.innerHTML = "<span id=\'nographs\'><b>No connection to Router<\/b><\/span>";
+            }
+            setTimeout(isDown, 5000);
+          }
       }
     }
     window.addEventListener("pageshow", progressx.hide());
     graph.addEventListener("load", initCss());
     xhrgraphs.send();
   }
+
   setTimeout(function refresh() {
-     window.requestAnimationFrame(updateGraphs);
+    window.requestAnimationFrame(updateGraphs);
     setTimeout(refresh, <% out.print(graphHelper.getRefreshValue() * 1000); %>);
   }, <% out.print(graphHelper.getRefreshValue() * 1000); %>);
 <%  } %>

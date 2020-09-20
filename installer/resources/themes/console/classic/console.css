@@ -4867,7 +4867,7 @@ h3#graphdisplay {
   margin: 10px 20px 10px 20px;
 }
 
-form[action="graphs"] {
+#graphs form[action="graphs"] {
   border: 1px solid #aaafce;
   padding: 5px 10px;
   margin: -11px 0 5px;
@@ -4878,12 +4878,12 @@ form[action="graphs"] {
   margin: -10px -14px;
 }
 
-form[action="graphs"] hr {
+#graphs form[action="graphs"] hr {
   margin: 5px -11px 3px;
   height: 1px;
 }
 
-form[action="graphs"] input[type="text"] {
+#graphs form[action="graphs"] input[type="text"] {
   min-width: 80px !important;
 }
 
@@ -12074,7 +12074,11 @@ from {transform: scaleX(0); transform-origin: 0 -50px;}
   animation: down linear 10s reverse infinite;
 }
 
-#down::after {
+#nographs {
+  font-size: 0;
+}
+
+#down::after, #nographs::after {
   width: 26px;
   height: 26px;
   vertical-align: middle;

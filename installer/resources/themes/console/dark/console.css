@@ -12057,7 +12057,12 @@ input[type="text"]:focus::placeholder {
   animation: routerdown linear 3s forwards infinite;
 }
 
-#down::after {
+#nographs {
+  font-size: 0;
+  line-height: 60px;
+}
+
+#down::after, #nographs::after {
   width: 26px;
   height: 26px;
   vertical-align: middle;
@@ -13834,6 +13839,7 @@ i {
 .statimage, .statimage:hover, #graphs a:hover .statimage, #graph_single .statimage, #graph_single .statimage:hover {
   margin: 4px 0 2px !important;
   padding: 0 !important;
+  max-width: 100%;
   border: none !important;
   box-shadow: none !important;
   filter: opacity(0);
