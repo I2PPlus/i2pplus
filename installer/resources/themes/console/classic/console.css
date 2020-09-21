@@ -29,8 +29,9 @@ body:not(old) {
   url(/themes/console/images/buttons/search_hover.png) no-repeat,
   url(/themes/console/images/buttons/shutdown_hover.png) no-repeat,
   url(/themes/console/images/buttons/update_hover.png) no-repeat,
+  url(/themes/console/images/svg/update.svg) no-repeat,
   url(images/dropdown_hover.png) #e2e2f3;
-  background-size: 90px 90px, 0 0, 0 0, 0 0, 0 0, 0 0, 0 0, 0 0, 0 0, 0 0;
+  background-size: 90px 90px, 0 0, 0 0, 0 0, 0 0, 0 0, 0 0, 0 0, 0 0, 0 0, 0 0;
 }
 
 @supports (text-justify: auto) { /* Firefox 55+ */
@@ -739,12 +740,18 @@ img[src="/themes/console/images/i2plogo.png"] {
 
 #sb_localtunnels a {
   width: 100%;
-  max-width: 180px;
+  max-width: 164px;
   white-space: nowrap;
   display: inline-block;
   overflow: hidden;
   text-overflow: ellipsis;
   text-transform: none;
+}
+
+@media screen and (min-width: 1500px) {
+  #sb_localtunnels a {
+  max-width: 194px;
+  }
 }
 
 #sb_localtunnels td:first-child {

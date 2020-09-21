@@ -487,6 +487,12 @@ h4.sb_info + hr + form {
   text-overflow: ellipsis;
 }
 
+@media screen and (min-width: 1500px) {
+  #sb_localtunnels a {
+  max-width: 188px;
+  }
+}
+
 #sb_localtunnels tr:hover td {
   background: #fffff0 !important;
 }

@@ -9499,7 +9499,7 @@ pre, #logs li {
 }
 
 #sb_localtunnels a {
-  max-width: 205px;
+  max-width: 200px;
 }
 
 .sb_update {
@@ -12244,10 +12244,6 @@ a:hover .tier, a:focus .tier {
 
 #sb_localtunnels tr:last-child td {
   padding-bottom: 0;
-}
-
-#sb_localtunnels a {
-  max-width: 220px;
 }
 
 #sb_advanced, #sb_internals, #sb_services {
