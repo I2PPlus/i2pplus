@@ -740,12 +740,18 @@ img[src="/themes/console/images/i2plogo.png"] {
 
 #sb_localtunnels a {
   width: 100%;
-  max-width: 180px;
+  max-width: 164px;
   white-space: nowrap;
   display: inline-block;
   overflow: hidden;
   text-overflow: ellipsis;
   text-transform: none;
+}
+
+@media screen and (min-width: 1500px) {
+  #sb_localtunnels a {
+  max-width: 194px;
+  }
 }
 
 #sb_localtunnels td:first-child {
