@@ -13827,6 +13827,10 @@ i {
   animation: ease grid-fade 2s forwards;
 }
 
+#graph_single .graphContainer {
+  animation: ease grid-fade .5s forwards;
+}
+
 .graphContainer:hover {
   border: 1px solid #f60;
   box-shadow: inset 0 0 0 1px #000, inset 0 0 1px 1px #f60;
@@ -13839,6 +13843,10 @@ i {
   border: none !important;
   box-shadow: none !important;
   filter: opacity(0);
+  animation: ease graph-fade .15s forwards;
+}
+
+#graph_single {
   animation: ease graph-fade .15s .4s forwards;
 }
 
