@@ -692,10 +692,13 @@ public class SummaryHelper extends HelperBase {
                 String name = getName(client);
                 Hash h = client.calculateHash();
                 Boolean server = _context.clientManager().shouldPublishLeaseSet(h);
+                Boolean isPing = name.startsWith("Ping") && name.contains("[");
 
                 buf.append("<tr><td ");
                 if (server)
                     buf.append("class=\"tunnelServer\" ");
+                else if (isPing)
+                    buf.append("class=\"ping\" ");
                 buf.append("align=\"right\"><img src=\"/themes/console/images/svg/");
                 if (server) {
                     buf.append("server.svg\" alt=\"Server\" title=\"").append(_t("Server"));
@@ -703,9 +706,11 @@ public class SummaryHelper extends HelperBase {
                         buf.append(" (").append(_t("service may be available to peers")).append(")");
                      }
                      buf.append("\" width=\"16\" height=\"16\">");
-                }
-                else {
-                    buf.append("client.svg\" alt=\"Client\" title=\"").append(_t("Client"));
+                } else {
+                    if (isPing)
+                        buf.append("ping.svg\" alt=\"Client\" title=\"").append(_t("Client"));
+                    else
+                        buf.append("client.svg\" alt=\"Client\" title=\"").append(_t("Client"));
                     if (!isAdvanced()) {
                         buf.append(" (").append(_t("service is only available locally")).append(")");
                     }

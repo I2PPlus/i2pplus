@@ -1687,6 +1687,10 @@ div.logo hr {
   background-image: url(/themes/console/images/svg/server.svg) !important;
 }
 
+#sb_localtunnels td.ping {
+  background-image: url(/themes/console/images/svg/ping.svg) !important;
+}
+
 #sb_localtunnels td:last-child {
   background-image: url(/themes/console/images/local_inprogress.png) !important;
   background-position: right 1px center !important;
