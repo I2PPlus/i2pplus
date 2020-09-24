@@ -665,6 +665,11 @@ pre {
   background-size: 16px 16px;
 }
 
+#sb_localtunnels td.ping {
+  background-image: url(/themes/console/images/svg/ping.svg) !important;
+  background-size: 16px 16px;
+}
+
 #sb_localtunnels td:last-child {
   background-image: url(/themes/console/images/local_inprogress.png) !important;
   background-position: right 1px center !important;
