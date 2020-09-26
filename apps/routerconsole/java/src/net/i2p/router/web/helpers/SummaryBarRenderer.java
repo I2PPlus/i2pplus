@@ -692,31 +692,33 @@ class SummaryBarRenderer {
            .append("</b></td>" +
                    "<td class=\"digits\" align=\"right\">")
            .append(_helper.getUptime())
-           .append("</td></tr>\n" +
-
-                   "<tr title=\"")
-           .append(_t("Difference between network-synced time and local time"))
-           .append("\">" +
-                   "<td align=\"left\"><b>")
-           .append(_t("Clock Skew"))
-           .append("</b></td>" +
-                   "<td class=\"digits\" align=\"right\">")
-           .append(DataHelper.formatDuration2(_context.clock().getOffset()))
            .append("</td></tr>\n");
+
+           if (_context.clock().getOffset() != 0) {
+               buf.append("<tr title=\"")
+                  .append(_t("Difference between network-synced time and local time"))
+                  .append("\">" +
+                           "<td align=\"left\"><b>")
+                  .append(_t("Clock Skew"))
+                  .append("</b></td>" +
+                           "<td class=\"digits\" align=\"right\">")
+                  .append(DataHelper.formatDuration2(_context.clock().getOffset()))
+                  .append("</td></tr>\n");
+           }
 
            String requestURI = _helper.getRequestURI();
            String page = requestURI.replace("/", "").replace(".jsp", "");
            List<String> sections = _helper.getSummaryBarSections(page);
            if (!sections.contains("MemoryBar")) {
                buf.append("<tr title=\"")
-                 .append(_t("How much RAM I2P is using / total RAM available to I2P (excludes RAM allocated to the JVM)"))
-                 .append("\">" +
-                         "<td align=\"left\"><b>")
-                 .append(_t("Memory"))
-                 .append("</b></td>" +
-                         "<td class=\"digits\" align=\"right\">")
-                 .append(_helper.getMemory().replace("iB", ""))
-                 .append("</td></tr>\n");
+                  .append(_t("How much RAM I2P is using / total RAM available to I2P (excludes RAM allocated to the JVM)"))
+                  .append("\">" +
+                          "<td align=\"left\"><b>")
+                  .append(_t("Memory"))
+                  .append("</b></td>" +
+                          "<td class=\"digits\" align=\"right\">")
+                  .append(_helper.getMemory().replace("iB", ""))
+                  .append("</td></tr>\n");
            }
            buf.append("</table>\n");
         return buf.toString();
@@ -1156,12 +1158,12 @@ class SummaryBarRenderer {
                    "<td align=\"left\"><b>")
            .append(_t("Job lag"))
            .append("</b></td><td class=\"digits\" align=\"right\">");
-            if (_context.jobQueue().getMaxLag() > 1000) {
-                buf.append("<span class=\"warntext\">").append(_helper.getJobLag()).append("</span>");
-           } else {
-                buf.append(_helper.getJobLag());
-           }
-           buf.append("</td></tr>\n" +
+        if (_context.jobQueue().getMaxLag() > 1000) {
+            buf.append("<span class=\"warntext\">").append(_helper.getJobLag()).append("</span>");
+        } else {
+            buf.append(_helper.getJobLag());
+        }
+        buf.append("</td></tr>\n" +
 
                    "<tr title=\"")
            .append(_t("Indicates how quickly outbound messages to other I2P routers are sent"))
@@ -1169,24 +1171,25 @@ class SummaryBarRenderer {
                    "<td align=\"left\"><b>")
            .append(_t("Message delay"))
            .append("</b></td><td class=\"digits\" align=\"right\">");
-           if (_context.throttle().getMessageDelay() > 2000) {
-               buf.append("<span class=\"warntext\">").append(_helper.getMessageDelay()).append("</span>");
-           } else {
-               buf.append(_helper.getMessageDelay());
-           }
-           buf.append("</td></tr>\n");
+        if (_context.throttle().getMessageDelay() > 2000) {
+            buf.append("<span class=\"warntext\">").append(_helper.getMessageDelay()).append("</span>");
+        } else {
+            buf.append(_helper.getMessageDelay());
+        }
+        buf.append("</td></tr>\n");
 
         if (!_context.getBooleanPropertyDefaultTrue("router.disableTunnelTesting")) {
             buf.append("<tr title=\"")
-           .append(_t("Round trip time for a tunnel test"))
-           .append("\">" +
-                   "<td align=\"left\"><b>")
-           .append(_t("Tunnel lag"))
-           .append("</b></td><td class=\"digits\" align=\"right\">")
-           .append(_helper.getTunnelLag())
-           .append("</td></tr>\n");
+               .append(_t("Round trip time for a tunnel test"))
+               .append("\">" +
+                       "<td align=\"left\"><b>")
+               .append(_t("Tunnel lag"))
+               .append("</b></td><td class=\"digits\" align=\"right\">")
+               .append(_helper.getTunnelLag())
+               .append("</td></tr>\n");
         }
 
+        if (Integer.parseInt(_helper.getInboundBacklog()) > 0) {
         buf.append("<tr title=\"")
            .append(_t("Queued requests from other routers to participate in tunnels"))
            .append("\">" +
@@ -1194,9 +1197,9 @@ class SummaryBarRenderer {
            .append(_t("Backlog"))
            .append("</b></td><td class=\"digits\" align=\"right\">")
            .append(_helper.getInboundBacklog())
-           .append("</td></tr>\n" +
-
-                   "</table>\n");
+           .append("</td></tr>\n");
+        }
+        buf.append("</table>\n");
         return buf.toString();
     }
 
