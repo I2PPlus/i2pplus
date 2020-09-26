@@ -727,9 +727,8 @@ class ClientConnectionRunner {
      * @since 0.8.2
      */
     void disconnectClient(String reason, int logLevel) {
-        if (_log.shouldLog(logLevel))
-            _log.log(logLevel, "Disconnecting the client - "
-                     + reason);
+        if (_log.shouldLog(Log.WARN))
+            _log.warn("Disconnecting the client - " + reason);
         DisconnectMessage msg = new DisconnectMessage();
         if (reason.length() > 255)
             reason = reason.substring(0, 255);
@@ -800,7 +799,7 @@ class ClientConnectionRunner {
         if (_dontSendMSM || nonce == 0)
             return;
         if (_log.shouldLog(Log.DEBUG))
-            _log.debug("Acking message send [accepted]" + id + " / " + nonce + " for sessionId "
+            _log.debug("ACKing message send [accepted]" + id + " / " + nonce + " for sessionId "
                        + sid);
         MessageStatusMessage status = new MessageStatusMessage();
         status.setMessageId(id.getMessageId());
