@@ -74,16 +74,16 @@ public class I2Ping extends I2PTunnelClientBase {
             listenerReady = true;
             notifyAll();
         }
-        l.log("*** I2Ping results:");
+        l.log(" • I2Ping results:");
         try {
             runCommand(getTunnel().getClientOptions().getProperty(PROP_COMMAND));
         } catch (InterruptedException ex) {
-            l.log("*** Interrupted");
+            l.log(" ✖ Interrupted");
             _log.error("Pinger interrupted", ex);
         } catch (IOException ex) {
             _log.error("Pinger exception", ex);
         }
-        l.log("*** Finished.");
+        l.log(" ✔ Finished");
         finished = true;
         close(false);
     }
@@ -221,12 +221,12 @@ public class I2Ping extends I2PTunnelClientBase {
         if (!open) return true;
         super.close(forced);
         if (!forced && !finished) {
-            l.log("There are still pings running!");
+            l.log(" ‣ There are still pings running!");
             return false;
         }
         //l.log("Closing pinger " + toString());
-        l.log("Closing pinger...");
-        l.log("Pinger closed.");
+        l.log(" ‣ Closing pinger…");
+        l.log(" ‣ Pinger closed");
         return true;
     }
 
@@ -293,7 +293,7 @@ public class I2Ping extends I2PTunnelClientBase {
                 Destination dest = lookup(destination);
                 if (dest == null) {
                     //l.log("Unresolvable: " + destination); // if null dest, then won't display so..
-                    l.log("\n* Ignoring unresolvable destination");
+                    l.log("\n • Ignoring unresolvable destination");
                     return;
                 }
                 int pass = 0;
