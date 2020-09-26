@@ -1402,7 +1402,7 @@ public class I2PTunnel extends EventDispatcherImpl implements Logging {
             notifyEvent("owndestResult", "ok");
         } else {
             l.log("owndest yes|no\n" +
-                  "  Specifies whether to use its own destination \n" + "  for each outgoing tunnel");
+                  "  Specifies whether client should use its own destination \n" + "  for each outgoing tunnel");
             notifyEvent("owndestResult", "error");
         }
     }
@@ -1421,7 +1421,7 @@ public class I2PTunnel extends EventDispatcherImpl implements Logging {
             notifyEvent("listen_onResult", "ok");
         } else {
             l.log("listen_on <ip>\n" +
-                  "  sets the interface to listen for the I2PClient.");
+                  "  Sets the interface to listen for the I2PClient.");
             notifyEvent("listen_onResult", "error");
         }
     }
@@ -1444,7 +1444,7 @@ public class I2PTunnel extends EventDispatcherImpl implements Logging {
             notifyEvent("read_timeoutResult", "ok");
         } else {
             l.log("read_timeout <msecs>\n" +
-                  "  sets the read timeout (in milliseconds) for I2P connections\n"
+                  "  Sets the read timeout (in milliseconds) for I2P connections\n"
                   +"  Negative values will make the connections wait forever");
             notifyEvent("read_timeoutResult", "error");
         }
@@ -1473,7 +1473,7 @@ public class I2PTunnel extends EventDispatcherImpl implements Logging {
             }
         } else if (args.length != 1) {
             l.log("genkeys <privkeyfile> [<pubkeyfile>]\n" +
-                  "   creates a new keypair and prints the public key.\n"
+                  "   Creates a new keypair and prints the public key.\n"
                   + "   if pubkeyfile is given, saves the public key there." + "\n"
                   + "   if the privkeyfile already exists, just print/save" + "the pubkey.");
             //notifyEvent("genkeysResult", "error");
@@ -1563,7 +1563,7 @@ public class I2PTunnel extends EventDispatcherImpl implements Logging {
     public void runClose(String args[], Logging l) {
         if (args.length == 0 || args.length > 2) {
             l.log("close [forced|destroy] <jobnumber>|all\n" +
-                  "   stop running tasks. either only one or all.\n"
+                  "   Stop running tasks. either only one or all.\n"
                   + "   use 'forced' to also stop tasks with active connections.\n"
                   + "   use the 'list' command to show the job numbers");
             notifyEvent("closeResult", "error");
@@ -1637,7 +1637,7 @@ public class I2PTunnel extends EventDispatcherImpl implements Logging {
             }
         } else {
             l.log("run <commandfile>\n" +
-                  "   loads commandfile and runs each line in it. \n"
+                  "   Loads commandfile and runs each line in it. \n"
                   + "   You can also give the filename on the commandline.");
             notifyEvent("runResult", "error");
         }
@@ -1655,7 +1655,7 @@ public class I2PTunnel extends EventDispatcherImpl implements Logging {
     private void runLookup(String args[], Logging l) {
         if (args.length != 1) {
             l.log("lookup <name>\n" +
-                  "   try to resolve the name into a destination key");
+                  "   Try to resolve the name into a destination key");
             notifyEvent("lookupResult", "invalidUsage");
         } else {
             try {
