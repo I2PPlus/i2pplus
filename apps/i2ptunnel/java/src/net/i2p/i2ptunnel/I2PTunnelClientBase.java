@@ -564,11 +564,13 @@ public abstract class I2PTunnelClientBase extends I2PTunnelTask implements Runna
         }
 
         if (open && listenerReady) {
-            boolean openNow = !Boolean.parseBoolean(getTunnel().getClientOptions().getProperty("i2cp.delayOpen"));
-            if (openNow || chained)
-                l.log("Client ready -> Listening on " + getTunnel().listenHost + ':' + localPort);
-            else
-                l.log("Client ready -> Listening on " + getTunnel().listenHost + ':' + localPort + " (standby mode)");
+            if (localPort > 0) {  // -1 for I2Ping
+                boolean openNow = !Boolean.parseBoolean(getTunnel().getClientOptions().getProperty("i2cp.delayOpen"));
+                if (openNow || chained)
+                    l.log("Client ready -> Listening on " + getTunnel().listenHost + ':' + localPort);
+                else
+                    l.log("Client ready -> Listening on " + getTunnel().listenHost + ':' + localPort + " (standby mode)");
+            }
             notifyEvent("openBaseClientResult", "ok");
         } else {
             l.log("Client error for " + getTunnel().listenHost + ':' + localPort + " - Check logs");

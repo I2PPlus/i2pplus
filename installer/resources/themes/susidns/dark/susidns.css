@@ -1284,8 +1284,13 @@ p.book {
 }
 
 #host_list td.b32link a::after {
-  content: url(/themes/console/images/buttons/link.png);
+  width: 16px;
+  height: 16px;
+  display: inline-block;
   text-align: center;
+  background: url(/themes/console/images/svg/link.svg) center center no-repeat;
+  background-size: 16px 16px;
+  content: "";
   cursor: pointer;
 }
 

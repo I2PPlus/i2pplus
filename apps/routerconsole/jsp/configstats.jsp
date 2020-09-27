@@ -6,7 +6,6 @@
 <head>
 <%@include file="css.jsi" %>
 <%=intl.title("config stats")%>
-<noscript><style type="text/css">.script {display: none;}</style></noscript>
 </head>
 <body>
 <script nonce="<%=cspNonce%>" type="text/javascript">progressx.show();</script>

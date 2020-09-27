@@ -637,20 +637,13 @@ a:active #sb_bandwidthgraph {
   display: inline-block;
 }
 
-/*div#minigraph:not(.script) {
-  margin: -18px 1px 0;
-  background-position: left 2px bottom 27px;
-  background-size: 234px 40px !important;
-}*/
-
 #sb_graphcontainer {
-  margin: -5px -5px -6px;
+  margin: -6px -5px -7px;
   height: 44px;
   display: inline-block;
   overflow: hidden;
   box-shadow: inset 0 0 0 2px #fff, inset 0 0 1px 1px #adadeb;
   border: 1px solid #afafcf;
-  border-radius: 2px;
   box-shadow: 0 0 1px #e0e0eb, inset 0 0 0 1px #fff;
   background: linear-gradient(to bottom, rgba(255,255,255,.3), rgba(32,32,64,.1)),
               repeating-linear-gradient(to left, rgba(255,255,255,.0) 18px, rgba(120,120,255,.4) 18px, rgba(255,255,255,.0) 19px, rgba(255,255,255,.0) 36px),

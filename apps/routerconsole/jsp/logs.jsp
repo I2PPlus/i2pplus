@@ -11,7 +11,6 @@
 <body id="i2plogs">
 <script nonce="<%=cspNonce%>" type="text/javascript">progressx.show();</script>
 <%@include file="summary.jsi" %>
-<noscript><style type="text/css">.script {display: none;}</style></noscript>
 <h1 class="log"><%=intl._t("Logs")%></h1>
 <div class="main" id="logs">
 <table id="bugreports">

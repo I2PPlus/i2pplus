@@ -569,7 +569,6 @@ public class I2PTunnelHTTPServer extends I2PTunnelServer {
             String val = opts.getProperty(TunnelController.PROP_TUN_GZIP);
             if ( (val != null) && (!Boolean.parseBoolean(val)) )
                 allowGZIP = false;
-//            if (_log.shouldLog(Log.DEBUG))
             if (_log.shouldLog(Log.DEBUG) && (enc != null || altEnc != null))
                 _log.debug("[HTTPServer] Encoding header: " + enc + "/" + altEnc);
             boolean alt = (altEnc != null) && (altEnc.indexOf("x-i2p-gzip") >= 0);
