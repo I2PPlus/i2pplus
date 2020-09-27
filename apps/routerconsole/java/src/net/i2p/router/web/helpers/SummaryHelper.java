@@ -59,6 +59,7 @@ public class SummaryHelper extends HelperBase {
         "MemoryBar" + S +
         "UpdateStatus" + S +
         "Bandwidth" + S +
+        "BandwidthGraph" + S +
         "NetworkReachability" + S +
         "FirewallAndReseedStatus" + S +
         "I2PServices" + S +
@@ -76,6 +77,7 @@ public class SummaryHelper extends HelperBase {
         "MemoryBar" + S +
         "UpdateStatus" + S +
         "Bandwidth" + S +
+        "BandwidthGraph" + S +
         "NetworkReachability" + S +
         "FirewallAndReseedStatus" + S +
         "I2PServices" + S +
@@ -92,6 +94,7 @@ public class SummaryHelper extends HelperBase {
         "MemoryBar" + S +
         "UpdateStatus" + S +
         "Bandwidth" + S +
+        "BandwidthGraph" + S +
         "NetworkReachability" + S +
         "FirewallAndReseedStatus" + S +
         "I2PServices" + S +
@@ -110,6 +113,7 @@ public class SummaryHelper extends HelperBase {
         "MemoryBar" + S +
         "UpdateStatus" + S +
         "Bandwidth" + S +
+        "BandwidthGraph" + S +
         "NetworkReachability" + S +
         "FirewallAndReseedStatus" + S +
         "I2PServices" + S +
@@ -127,6 +131,7 @@ public class SummaryHelper extends HelperBase {
         "MemoryBar" + S +
         "UpdateStatus" + S +
         "Bandwidth" + S +
+        "BandwidthGraph" + S +
         "NetworkReachability" + S +
         "FirewallAndReseedStatus" + S +
         "I2PServices" + S +
@@ -145,6 +150,7 @@ public class SummaryHelper extends HelperBase {
         "MemoryBar" + S +
         "UpdateStatus" + S +
         "Bandwidth" + S +
+        "BandwidthGraph" + S +
         "NetworkReachability" + S +
         "FirewallAndReseedStatus" + S +
         "I2PServices" + S +
@@ -164,6 +170,7 @@ public class SummaryHelper extends HelperBase {
         "MemoryBar" + S +
         "UpdateStatus" + S +
         "Bandwidth" + S +
+        "BandwidthGraph" + S +
         "NetworkReachability" + S +
         "FirewallAndReseedStatus" + S +
         "Peers" + S +
@@ -179,6 +186,7 @@ public class SummaryHelper extends HelperBase {
         "MemoryBar" + S +
         "UpdateStatus" + S +
         "Bandwidth" + S +
+        "BandwidthGraph" + S +
         "NetworkReachability" + S +
         "FirewallAndReseedStatus" + S +
         "Peers" + S +
