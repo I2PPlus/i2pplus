@@ -6668,33 +6668,39 @@ h3#udpcon {
 /* /tunnels */
 
 #tunnels h3.server {
-  padding-left: 28px;
-  background: url(/themes/console/images/info/server.png) 5px 5px no-repeat, linear-gradient(to bottom, #fff 50%, rgba(255,255,255,.6) 50%, rgba(240,240,255,.4)), linear-gradient(to right, #fafaff 5%, rgba(231, 231, 255, .8) 25%) !important;
+  padding-left: 32px;
+  background: url(/themes/console/images/svg/server.svg) 6px center no-repeat, linear-gradient(to bottom, #fff 50%, rgba(255,255,255,.6) 50%, rgba(240,240,255,.4)), linear-gradient(to right, #fafaff 5%, rgba(231, 231, 255, .8) 25%) !important;
   background-size: 20px 20px, 100% 100%, 100% 100% !important;
 }
 
-#tunnels h3:not(#exploratory):not(#participating):not(.server):not(:last-of-type) {
-  padding-left: 28px;
-  background: url(/themes/console/images/info/client.png) 6px 7px no-repeat, linear-gradient(to bottom, #fff 50%, rgba(255,255,255,.6) 50%, rgba(240,240,255,.4)), linear-gradient(to right, #fafaff 5%, rgba(231, 231, 255, .8) 25%) !important;
-  background-size: 18px 18px, 100% 100%, 100% 100% !important;
+#tunnels h3.client {
+  padding-left: 32px;
+  background: url(/themes/console/images/svg/client.svg) 6px center no-repeat, linear-gradient(to bottom, #fff 50%, rgba(255,255,255,.6) 50%, rgba(240,240,255,.4)), linear-gradient(to right, #fafaff 5%, rgba(231, 231, 255, .8) 25%) !important;
+  background-size: 20px 20px, 100% 100%, 100% 100% !important;
+}
+
+#tunnels h3.ping {
+  padding-left: 32px;
+  background: url(/themes/console/images/svg/ping.svg) 6px center no-repeat, linear-gradient(to bottom, #fff 50%, rgba(255,255,255,.6) 50%, rgba(240,240,255,.4)), linear-gradient(to right, #fafaff 5%, rgba(231, 231, 255, .8) 25%) !important;
+  background-size: 20px 20px, 100% 100%, 100% 100% !important;
 }
 
 #tunnels h3#participating {
-  padding-left: 28px;
-  background: url(/themes/console/images/info/share.png) 5px 5px no-repeat, linear-gradient(to bottom, #fff 50%, rgba(255,255,255,.6) 50%, rgba(240,240,255,.4)), linear-gradient(to right, #fafaff 5%, rgba(231, 231, 255, .8) 25%) !important;
+  padding-left: 32px;
+  background: url(/themes/console/images/info/share.png) 6px center no-repeat, linear-gradient(to bottom, #fff 50%, rgba(255,255,255,.6) 50%, rgba(240,240,255,.4)), linear-gradient(to right, #fafaff 5%, rgba(231, 231, 255, .8) 25%) !important;
   background-size: 20px 20px, 100% 100%, 100% 100% !important;
 }
 
 #tunnels h3#exploratory {
-  padding-left: 28px;
-  background: url(/themes/console/images/info/globe.png) 6px 6px no-repeat, linear-gradient(to bottom, #fff 50%, rgba(255,255,255,.6) 50%, rgba(240,240,255,.4)), linear-gradient(to right, #fafaff 5%, rgba(231, 231, 255, .8) 25%) !important;
-  background-size: 18px 18px, 100% 100%, 100% 100% !important;
+  padding-left: 32px;
+  background: url(/themes/console/images/svg/globe.svg) 6px center no-repeat, linear-gradient(to bottom, #fff 50%, rgba(255,255,255,.6) 50%, rgba(240,240,255,.4)), linear-gradient(to right, #fafaff 5%, rgba(231, 231, 255, .8) 25%) !important;
+  background-size: 20px 20px, 100% 100%, 100% 100% !important;
 }
 
 #tunnels h3:last-of-type {
-  padding-left: 28px;
-  background: url(/themes/console/images/info/bandwidth.png) 5px 5px no-repeat, linear-gradient(to bottom, #fff 50%, rgba(255,255,255,.6) 50%, rgba(240,240,255,.4)), linear-gradient(to right, #fafaff 5%, rgba(231, 231, 255, .8) 25%) !important;
-  background-size: 18px 18px, 100% 100%, 100% 100% !important;
+  padding-left: 32px;
+  background: url(/themes/console/images/svg/speedometer.svg) 6px center no-repeat, linear-gradient(to bottom, #fff 50%, rgba(255,255,255,.6) 50%, rgba(240,240,255,.4)), linear-gradient(to right, #fafaff 5%, rgba(231, 231, 255, .8) 25%) !important;
+  background-size: 20px 20px, 100% 100%, 100% 100% !important;
 }
 
 #tunnels h3 + h3 {
