@@ -50,7 +50,6 @@ class TunnelRenderer {
         TunnelPool ei = _context.tunnelManager().getInboundExploratoryPool();
         TunnelPool eo = _context.tunnelManager().getOutboundExploratoryPool();
         out.write("<h3 class=\"tabletitle\" id=\"exploratory\">" + _t("Exploratory"));
-//        }
         // links are set to float:right in CSS so they will be displayed in reverse order
         out.write(" <a href=\"/configtunnels#exploratory\" title=\"" +
                _t("Configure tunnels") + "\">[" + _t("configure") + "]</a>");
@@ -88,9 +87,12 @@ class TunnelRenderer {
             }
             if (isLocal) {
                 out.write("<h3 class=\"");
-                if (_context.clientManager().shouldPublishLeaseSet(client)) {
+                if (_context.clientManager().shouldPublishLeaseSet(client))
                     out.write("server ");
-                }
+                else if ((name.startsWith("Ping") && name.contains("[")) || name.equals("I2Ping"))
+                    out.write("ping ");
+                else
+                    out.write("client ");
                 out.write("tabletitle\" ");
                 out.write("id=\"" + client.toBase64().substring(0,4) + "\" >");
                 out.write(dname);
@@ -148,7 +150,8 @@ class TunnelRenderer {
             if (bwShare > 12) {
                 if (!participating.isEmpty()) {
                     out.write("<table class=\"tunneldisplay tunnels_participating\" id=\"tunnels_part\" data-sortable><thead><tr><th>" +
-                           _t("Role") + "</th><th>" + _t("Expiry") + "</th><th title=\"" + _t("Data transferred") + "\">" + _t("Usage") + "</th><th>" + _t("Rate") + "</th><th>");
+                              _t("Role") + "</th><th>" + _t("Expiry") + "</th><th title=\"" + _t("Data transferred") + "\">" +
+                              _t("Usage") + "</th><th>" + _t("Rate") + "</th><th>");
                     if (debug)
                         out.write(_t("Receive on") + "</th><th>");
                     out.write(_t("From") + "</th><th>");

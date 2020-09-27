@@ -450,10 +450,6 @@ pre {
   outline: none !important;
 }
 
-.routersummary a[href="/"]:focus img, .routersummary a[href="/console"]:focus img {
-/*  filter: drop-shadow(0 0 2px #f60) saturate(200%);*/
-}
-
 .routersummary input[type="text"] {
   text-align: right !important;
   box-shadow: inset 1px 1px 1px 0 #000;
@@ -466,15 +462,9 @@ pre {
   margin: 9px -10px 7px -10px;
 }
 
-/*@media screen and (max-width: 1500px) {
-.routersummary .sb_update + hr {
-  margin-top: 18px;
-}
-}*/
-
-.routersummary h3 {
+#sidebar h3 {
   margin: -7px -10px -8px -10px;
-  padding: 4px 0 5px!important;
+  padding: 5px 0 !important;
   letter-spacing: 0.08em;
   text-transform: uppercase;
   font-size: 9.5pt;
@@ -482,6 +472,11 @@ pre {
   border-radius: 0;
   box-shadow: inset 0 0 0 1px #000, inset 0 0 1px 1px #191;
   transition: ease color .05s, ease box-shadow 0.1s;
+  transition: ease all 0.2s;
+  background: radial-gradient(at center bottom, rgba(16, 72, 16, .4) 0, rgba(0, 0, 0, 0) 50%),
+              linear-gradient(to bottom, rgba(0,0,0,0) 50%, #000 50%),
+              repeating-linear-gradient(to right, rgba(0,0,0,0.5) 1px, rgba(0,0,0,0.5) 2px, rgba(0,16,0,0.5) 3px),
+              linear-gradient(to bottom, #005000, #000 75%) !important;
 }
 
 .routersummary h3::after {
@@ -491,32 +486,32 @@ pre {
   vertical-align: middle;
 }
 
-.routersummary h3 a {
+#sidebar h3 a {
   vertical-align: middle;
   display: inline-block;
   width: 100%;
 }
 
-.routersummary h3:hover {
+#sidebar h3:hover {
   background: #010 !important;
   background: radial-gradient(at center bottom, rgba(96, 48, 0, .4) 0, rgba(0, 0, 0, 0) 80%),
-        repeating-linear-gradient(to bottom, #010, #010 1px, #020 2px) !important;
+              repeating-linear-gradient(to bottom, #010, #010 1px, #020 2px) !important;
   box-shadow: inset 0 0 0 1px rgba(255,96,0,0.4), inset 0 0 2px 2px #000;
   mix-blend-mode: normal;
   transition: ease color .05s, ease box-shadow 0.1s;
 }
 
-.routersummary h3:hover a {
+#sidebar h3:hover a {
   color: #f60;
   text-shadow: 0 1px 1px rgba(0,0,0,0.8);
 }
 
-.routersummary h3:active {
+#sidebar h3:active {
   box-shadow: inset 0 0 0 1px #000, inset 4px 4px 3px 1px #000;
   background: repeating-linear-gradient(to bottom, #000, #000 1px, #530 2px) !important;
   transition: ease box-shadow 0.1s;
 }
-.routersummary h3:active a {
+#sidebar h3:active a {
   color: #f90 !important;
   color: rgba(255,144,0,.4) !important;
   text-shadow: 0 0 1px #000;
@@ -536,13 +531,6 @@ pre {
   line-height: 120%;
   box-shadow: inset 0 0 0 1px #121, inset 0 0 5px 2px #000;
 }
-
-/*.routersummary h4::after {
-  content: "";
-  display: inline-block;
-  min-height: 16px;
-  vertical-align: middle;
-}*/
 
 .routersummary h3 a, .routersummary h4 a {
   white-space: normal !important;
@@ -2321,18 +2309,13 @@ h4 {
   font-size: 11pt;
 }
 
-h1, h2, h3:not([id*="help"]), h4.app, h4.app2, .routersummary h3 {
+h1, h2, h3:not([id*="help"]), h4.app, h4.app2 {
   background: linear-gradient(to bottom, #1a261a, #223022 7%, #212f21 9%, #172317 21%, #091109 49%, #050d05 50%, #020602 51%, #010301 53%, #000000 56%) !important;
   background: linear-gradient(to bottom, rgba(0,0,0,0) 50%, #000 50%), repeating-linear-gradient(to right, rgba(0,0,0,0.5) 1px, rgba(0,0,0,0.5) 2px, rgba(0,16,0,0.5) 3px), linear-gradient(to bottom, #005000, #000 75%) !important;
 }
 
 h2, h3, h4 {
   box-shadow: inset 0 0 0 1px #000;
-}
-
-.routersummary h3 {
-  background: repeating-linear-gradient(to right, rgba(0,0,0,0.5) 1px, rgba(0,0,0,0.5) 2px, rgba(0,16,0,0.5) 3px), linear-gradient(to bottom, #1a261a, #223022 7%, #212f21 9%, #172317 21%, #091109 49%, #050d05 50%, #020602 51%, #010301 53%, #000000 56%) !important;
-  transition: ease all 0.2s;
 }
 
 h1, h4.app, h4.app2, #news h3 {
@@ -4789,26 +4772,32 @@ h3#servicedebug a, h3#graphinfo a {
   padding-bottom: 6px;
 }
 
-#tunnels h3 {
-  padding-left: 32px;
-  background: url(/themes/console/images/info/client.png) 6px center no-repeat, linear-gradient(to bottom, rgba(0,0,0,0) 50%, #000 50%), repeating-linear-gradient(to right, rgba(0,0,0,0.5) 1px, rgba(0,0,0,0.5) 2px, rgba(0,16,0,0.5) 3px), linear-gradient(to bottom, #005000, #000 75%) !important;
+#tunnels h3.client {
+  padding-left: 35px;
+  background: url(/themes/console/images/svg/client.svg) 8px center no-repeat, linear-gradient(to bottom, rgba(0,0,0,0) 50%, #000 50%), repeating-linear-gradient(to right, rgba(0,0,0,0.5) 1px, rgba(0,0,0,0.5) 2px, rgba(0,16,0,0.5) 3px), linear-gradient(to bottom, #005000, #000 75%) !important;
+  background-size: 20px 20px, 100% 100%, 100% 100%, 100% 100% !important;
+}
+
+#tunnels h3.ping {
+  padding-left: 35px;
+  background: url(/themes/console/images/svg/ping.svg) 8px center no-repeat, linear-gradient(to bottom, rgba(0,0,0,0) 50%, #000 50%), repeating-linear-gradient(to right, rgba(0,0,0,0.5) 1px, rgba(0,0,0,0.5) 2px, rgba(0,16,0,0.5) 3px), linear-gradient(to bottom, #005000, #000 75%) !important;
   background-size: 20px 20px, 100% 100%, 100% 100%, 100% 100% !important;
 }
 
 #tunnels h3#exploratory {
-  padding-left: 32px;
-  background: url(/themes/console/images/info/globe.png) 6px center no-repeat, linear-gradient(to bottom, rgba(0,0,0,0) 50%, #000 50%), repeating-linear-gradient(to right, rgba(0,0,0,0.5) 1px, rgba(0,0,0,0.5) 2px, rgba(0,16,0,0.5) 3px), linear-gradient(to bottom, #005000, #000 75%) !important;
+  padding-left: 35px;
+  background: url(/themes/console/images/svg/globe.svg) 8px center no-repeat, linear-gradient(to bottom, rgba(0,0,0,0) 50%, #000 50%), repeating-linear-gradient(to right, rgba(0,0,0,0.5) 1px, rgba(0,0,0,0.5) 2px, rgba(0,16,0,0.5) 3px), linear-gradient(to bottom, #005000, #000 75%) !important;
   background-size: 20px 20px, 100% 100%, 100% 100%, 100% 100% !important;
 }
 
 #tunnels h3.server {
-  padding-left: 32px;
-  background: url(/themes/console/images/info/server.png) 6px center no-repeat, linear-gradient(to bottom, rgba(0,0,0,0) 50%, #000 50%), repeating-linear-gradient(to right, rgba(0,0,0,0.5) 1px, rgba(0,0,0,0.5) 2px, rgba(0,16,0,0.5) 3px), linear-gradient(to bottom, #005000, #000 75%) !important;
+  padding-left: 35px;
+  background: url(/themes/console/images/svg/server.svg) 8px center no-repeat, linear-gradient(to bottom, rgba(0,0,0,0) 50%, #000 50%), repeating-linear-gradient(to right, rgba(0,0,0,0.5) 1px, rgba(0,0,0,0.5) 2px, rgba(0,16,0,0.5) 3px), linear-gradient(to bottom, #005000, #000 75%) !important;
   background-size: 20px 20px, 100% 100%, 100% 100%, 100% 100% !important;
 }
 
 #tunnels h3#participating {
-  padding-left: 32px;
+  padding-left: 35px;
   background: url(/themes/console/images/info/share.png) 6px center no-repeat, linear-gradient(to bottom, rgba(0,0,0,0) 50%, #000 50%), repeating-linear-gradient(to right, rgba(0,0,0,0.5) 1px, rgba(0,0,0,0.5) 2px, rgba(0,16,0,0.5) 3px), linear-gradient(to bottom, #005000, #000 75%) !important;
   background-size: 20px 20px, 100% 100%, 100% 100%, 100% 100% !important;
 }
@@ -4833,9 +4822,9 @@ h3.dead span {
 }
 
 #tunnels h3:last-of-type {
-  padding-left: 32px;
+  padding-left: 35px;
   padding-bottom: 7px !important;
-  background: url(/themes/console/images/info/bandwidth.png) 6px center no-repeat, linear-gradient(to bottom, rgba(0,0,0,0) 50%, #000 50%), repeating-linear-gradient(to right, rgba(0,0,0,0.5) 1px, rgba(0,0,0,0.5) 2px, rgba(0,16,0,0.5) 3px), linear-gradient(to bottom, #005000, #000 75%) !important;
+  background: url(/themes/console/images/svg/speedometer.svg) 8px center no-repeat, linear-gradient(to bottom, rgba(0,0,0,0) 50%, #000 50%), repeating-linear-gradient(to right, rgba(0,0,0,0.5) 1px, rgba(0,0,0,0.5) 2px, rgba(0,16,0,0.5) 3px), linear-gradient(to bottom, #005000, #000 75%) !important;
   background-size: 20px 20px, 100% 100%, 100% 100%, 100% 100% !important;
 }
 
@@ -9611,7 +9600,7 @@ p#fullhistory {
 }
 
 .routersummary h3::after {
-  min-height: 19px;
+  min-height: 20px;
 }
 
 #sb_services a:link, #sb_internals a:link, #sb_advanced a:link, #sb_help a:link {

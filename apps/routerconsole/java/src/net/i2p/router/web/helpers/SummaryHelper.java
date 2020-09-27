@@ -692,7 +692,7 @@ public class SummaryHelper extends HelperBase {
                 String name = getName(client);
                 Hash h = client.calculateHash();
                 Boolean server = _context.clientManager().shouldPublishLeaseSet(h);
-                Boolean isPing = name.startsWith("Ping") && name.contains("[");
+                Boolean isPing = (name.startsWith("Ping") && name.contains("[")) || name.equals("I2Ping");
 
                 buf.append("<tr><td ");
                 if (server)

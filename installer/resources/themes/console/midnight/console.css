@@ -3010,10 +3010,6 @@ h4.app img, h4.app2 img {
   padding-bottom: 8px !important;
 }
 
-/*img[src$="inbound.png"], img[src$="outbound.png"] {
-  filter: hue-rotate(-47deg);
-}*/
-
 h3#iptransport a:not(old), h3#advancedconfig a:not(old), #reseedsetup a:not(old) {
   font-size: 0;
   height: 20px;
@@ -8692,6 +8688,47 @@ form[action="events"] > * {
 
 #tunnels .tunneldisplay .cells:nth-child(3) {
   white-space: nowrap !important;
+}
+
+#tunnels h3 {
+    padding-top: 8px !important;
+    padding-bottom: 5px !important;
+}
+
+#tunnels h3.server {
+  padding-left: 34px !important;
+  background: url(/themes/console/images/svg/server.svg) 8px center no-repeat, linear-gradient(to bottom, #080818 50%, #000008 50%) !important;
+  background-size: 19px 19px, 100% 100%, 100% 100% !important;
+}
+
+#tunnels h3.client {
+  padding-left: 34px !important;
+  background: url(/themes/console/images/svg/client.svg) 8px center no-repeat, linear-gradient(to bottom, #080818 50%, #000008 50%) !important;
+  background-size: 19px 19px, 100% 100%, 100% 100% !important;
+}
+
+#tunnels h3.ping {
+  padding-left: 34px !important;
+  background: url(/themes/console/images/svg/ping.svg) 8px center no-repeat, linear-gradient(to bottom, #080818 50%, #000008 50%) !important;
+  background-size: 19px 19px, 100% 100%, 100% 100% !important;
+}
+
+#tunnels h3#participating {
+  padding-left: 34px !important;
+  background: url(/themes/console/images/info/share.png) 6px center no-repeat, linear-gradient(to bottom, #080818 50%, #000008 50%) !important;
+  background-size: 19px 19px, 100% 100%, 100% 100% !important;
+}
+
+#tunnels h3#exploratory {
+  padding-left: 34px !important;
+  background: url(/themes/console/images/svg/globe.svg) 8px center no-repeat, linear-gradient(to bottom, #080818 50%, #000008 50%) !important;
+  background-size: 19px 19px, 100% 100%, 100% 100% !important;
+}
+
+#tunnels h3:last-of-type {
+  padding-left: 34px !important;
+  background: url(/themes/console/images/svg/speedometer.svg) 8px center no-repeat, linear-gradient(to bottom, #080818 50%, #000008 50%) !important;
+  background-size: 19px 19px, 100% 100%, 100% 100% !important;
 }
 
 #tunnels h3 img {
