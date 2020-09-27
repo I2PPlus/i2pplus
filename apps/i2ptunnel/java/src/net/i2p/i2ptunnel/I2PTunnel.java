@@ -1403,7 +1403,7 @@ public class I2PTunnel extends EventDispatcherImpl implements Logging {
             notifyEvent("owndestResult", "ok");
         } else {
             l.log("owndest yes|no\n" +
-                  "  Specifies whether client should use its own destination \n" + "  for each outgoing tunnel\n" +
+                  "  Specifies whether client should use its own destination for each outgoing tunnel\n" +
                   "Current setting: " + (ownDest ? "yes" : "no (shared client)"));
             notifyEvent("owndestResult", "error");
         }
