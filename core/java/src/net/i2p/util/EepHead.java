@@ -158,7 +158,7 @@ public class EepHead extends EepGet {
             } else if (cc == null && (cl != null && cl.equals("217")) && lm != null && (ar != null && ar.equals("bytes")) && et == null) {
                 System.out.println("Server: Jetty (ZZZOT)");
             } else if (cc == null && (xf != null && xf.equals("DENY")) && (cto != null && cto.equals("nosniff")) && (st != null && st.equals("200"))) {
-                System.out.println("Server: Jetty (?) (MuCats)");
+                System.out.println("Server: Jetty (?)"); // MuCats
             } else if ((ar != null && ar.equals("bytes")) && lm != null && et != null) {
                 System.out.println("Server: nginx (?)");
             } else {
@@ -329,13 +329,13 @@ public class EepHead extends EepGet {
         try {
             url = new URI(_actualURL);
         } catch (URISyntaxException use) {
-            IOException ioe = new MalformedURLException("Bad URL");
+            IOException ioe = new MalformedURLException("Invalid URL");
             ioe.initCause(use);
             throw ioe;
         }
         String host = url.getHost();
         if (host == null)
-            throw new MalformedURLException("Bad URL");
+            throw new MalformedURLException("Invalid URL");
         int port = url.getPort();
         String path = url.getRawPath();
         String query = url.getRawQuery();
