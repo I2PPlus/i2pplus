@@ -5601,7 +5601,7 @@ th > img[src^="/imagegen"], .identicon { /* scale down header images */
   background: #020;
 }
 
-.netdb_leases .tunnel_peer tt, .netdb_leases .tunnel_peer tt a {
+.netdb_leases .tunnel_peer tt, .netdb_leases .tunnel_peer tt {
   font-size: 8.5pt !important;
   font-weight: bold !important;
 }
@@ -5610,6 +5610,13 @@ th > img[src^="/imagegen"], .identicon { /* scale down header images */
   letter-spacing: 0.1em !important;
   margin: 0 !important;
   padding: 0 !important;
+}
+
+.routerid tt {
+  min-width: 36px;
+  display: inline-block;
+  line-height: 150%;
+  font-weight: bold;
 }
 
 .main li .netdb_expiry {
