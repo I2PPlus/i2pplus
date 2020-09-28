@@ -5546,9 +5546,9 @@ th > img[src^="/imagegen"], .identicon { /* scale down header images */
 }
 
 .netdb_leases {
-  columns: auto 420px !important;
+  columns: 2 280px !important;
   column-rule: 1px solid #131;
-  column-gap: 1em;
+  column-gap: 4px;
 }
 
 .netdb_leases li {
@@ -5556,12 +5556,12 @@ th > img[src^="/imagegen"], .identicon { /* scale down header images */
   display: inline-block;
   padding: 1px 20px 1px 0;
   margin: 1px 0;
-  min-width: 400px;
+  min-width: 280px;
 }
 
 .netdb_leases li b:first-child {
   display: inline-block;
-  min-width: 80px !important;
+  min-width: 60px !important;
   text-align: right;
   margin: 0 !important;
   padding: 0 !important;
@@ -5583,6 +5583,7 @@ th > img[src^="/imagegen"], .identicon { /* scale down header images */
 
 .netdb_leases .tunnel_id {
   min-width: 74px;
+  text-align: center;
 }
 
 .netdb_leases .tunnel_peer, .tunneldisplay .tunnel_peer {
@@ -5590,13 +5591,14 @@ th > img[src^="/imagegen"], .identicon { /* scale down header images */
 }
 
 .netdb_leases .routerid {
-  margin-left: 11px !important;
-  border-radius: 3px !important;
+  margin: 0 0 0 3px !important;
+  padding-top: 1px;
+  padding-bottom: 1px;
   display: inline-block;
-  padding-top: 2px;
-  padding-bottom: 2px;
-  background: #020;
+  line-height: 136%;
   border: 1px solid #000;
+  border-radius: 3px !important;
+  background: #020;
 }
 
 .netdb_leases .tunnel_peer tt, .netdb_leases .tunnel_peer tt a {
@@ -6785,12 +6787,17 @@ table:not(:first-of-type).netdbentry th:first-child, table:not(:first-of-type).n
 }
 
 .netdbentry, .leaseset {
-  width: 100% !important;
   margin-bottom: 10px;
+  width: 100% !important;
 }
 
 .netdbentry td, .leaseset td, #leasesetdebug td, .sybil_routerinfo td {
+  line-height: 160%;
   color: #bb7 !important;
+}
+
+.leaseset tr:nth-child(2) td {
+  line-height: 120%;
 }
 
 .netdbentry td b, .leaseset td b, #leasesetdebug td b, .sybil_routerinfo td b {
@@ -6941,6 +6948,8 @@ h4 span[style="float: right;"] .unbold {
 }
 
 .addtobook a::after {
+  display: inline-block;
+  vertical-align: middle;
   content: url(/themes/console/images/buttons/add_address.png);
 }
 
@@ -8310,14 +8319,15 @@ tt a, img + tt {
 }
 
 .tunnel_id {
-  display: inline-block;
   min-width: 78px;
+  display: inline-block;
+  line-height: 120%;
   text-align: right;
 }
 
 .tunnel_peer {
-  display: inline-block;
   min-width: 56px;
+  display: inline-block;
   text-align: right;
 }
 
@@ -8689,7 +8699,7 @@ th code {
 }
 
 .netdb_expiry {
-  margin-left: 5px;
+  margin-left: 3px;
 }
 
 .sybil_routerinfo th img[src^="/flags"] {
