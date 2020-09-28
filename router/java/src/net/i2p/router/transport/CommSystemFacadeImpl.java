@@ -377,7 +377,7 @@ public class CommSystemFacadeImpl extends CommSystemFacade {
     public X25519KeyFactory getXDHFactory() {
         return _manager.getXDHFactory();
     }
-    
+
     /*
      * GeoIP stuff
      *
@@ -622,9 +622,10 @@ public class CommSystemFacadeImpl extends CommSystemFacade {
             buf.append("</a>");
         buf.append("</tt></span>");
         } else {
+            buf.append("<span class=\"routerid\"><span class=\"flag\">");
             buf.append("<img class=\"unknownflag\" height=\"11\" width=\"16\" alt=\"??\"" +
                        " src=\"/flags.jsp?c=a0\" title=\"").append(_t("unknown"));
-            buf.append("\"></span> ");
+            buf.append("\"></span><tt>???</tt></span> ");
         }
         return buf.toString();
     }
