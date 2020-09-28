@@ -5117,6 +5117,11 @@ img[src^="/flags"] {
   margin-left: -3px;
 }
 
+#netdb .netdb_leases {
+  columns: auto 380px;
+  column-gap: 4px;
+}
+
 #netdb .netdb_leases li {
   display: inline-block;
 }
@@ -5130,16 +5135,6 @@ img[src^="/flags"] {
 
 #netdb .netdb_leases li > * {
   vertical-align: middle;
-}
-
-#netdb .netdb_leases li:nth-child(odd) {
-  border: none;
-  background: #e9e9ff;
-}
-
-#netdb .netdb_leases li:nth-child(odd) {
-  border: none;
-  background: #f0f0ff;
 }
 
 #netdb .netdb_leases .routerid {
@@ -5955,20 +5950,18 @@ p:empty { /* empty paragraph nuke */
   margin: -1px 0 0 !important;
   padding: 0 !important;
   columns: 400px auto;
-  column-rule: 1px solid #ccdeff;
 }
 
 .netdb_leases li {
-  line-height: 140%;
-  list-style: none;
-  vertical-align: middle;
-  border-bottom: 1px solid #ccdeff;
   padding: 2px 0 3px !important;
+  line-height: 140%;
+  vertical-align: middle;
+  list-style: none;
 }
 
 .netdb_leases b:first-child {
   display: inline-block;
-  min-width: 80px;
+  min-width: 60px;
   margin-right: 2px;
   text-align: right;
 }

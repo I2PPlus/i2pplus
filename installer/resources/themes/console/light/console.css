@@ -7528,25 +7528,24 @@ b.netdb_transport {
 }
 
 .netdb_leases {
-  columns: auto 420px !important;
-  column-gap: 1em;
+  columns: auto 380px !important;
+  column-gap: 4px;
   display: block;
 }
 
 .netdb_leases li {
-  list-style: none;
-  display: inline-block;
-  padding: 1px 0;
   margin: 1px 0;
-  min-width: 400px;
+  padding: 1px 0;
+  display: inline-block;
+  list-style: none;
 }
 
 .netdb_leases li b:first-child {
-  display: inline-block;
-  min-width: 80px !important;
-  text-align: right;
   margin: 0 !important;
   padding: 0 !important;
+  min-width: 60px !important;
+  display: inline-block;
+  text-align: right;
 }
 
 .netdb_gateway {

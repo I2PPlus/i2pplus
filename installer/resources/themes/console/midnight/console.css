@@ -6065,7 +6065,7 @@ table[cellspacing="30"] > tbody > tr > th[colspan="3"] { /* netdb header */
 }
 
 .netdb_leases {
-  columns: auto 420px !important;
+  columns: auto 400px;
   column-rule: 1px solid #26235c;
   column-gap: 1em;
 }
@@ -6073,7 +6073,7 @@ table[cellspacing="30"] > tbody > tr > th[colspan="3"] { /* netdb header */
 .netdb_leases li {
   margin: 1px 0;
   padding: 1px 5px 1px 0 !important;
-  min-width: 400px;
+  min-width: 380px;
   display: inline-block;
   list-style: none;
 }
@@ -6081,7 +6081,7 @@ table[cellspacing="30"] > tbody > tr > th[colspan="3"] { /* netdb header */
 .netdb_leases li b:first-child {
   margin: 0 !important;
   padding: 0 !important;
-  min-width: 58px !important;
+  min-width: 60px !important;
   display: inline-block;
   text-align: right;
 }
@@ -6126,7 +6126,7 @@ table[cellspacing="30"] > tbody > tr > th[colspan="3"] { /* netdb header */
 }
 
 .netdb_leases .tunnel_peer {
-  margin: 0 3px 0 12px !important;
+  margin: 0 3px !important;
   padding-right: 2px !important;
   vertical-align: middle;
   border-radius: 2px;
@@ -8762,9 +8762,9 @@ img + tt {
 }
 
 .tunnel_id {
-  display: inline-block;
   min-width: 78px;
-  text-align: right !important;
+  display: inline-block;
+  text-align: center;
 }
 
 #tunnels td > * {
@@ -11231,8 +11231,8 @@ input[type="file"]:hover {
 }
 
 .netdb_tunnel {
-  margin-right: 4px;
-  margin-left: 0;
+  margin-right: 3px;
+  margin-left: -3px;
   border-radius: 0 2px 2px 0;
   background: #113;
 }

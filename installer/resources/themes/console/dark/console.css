@@ -5546,17 +5546,15 @@ th > img[src^="/imagegen"], .identicon { /* scale down header images */
 }
 
 .netdb_leases {
-  columns: 2 280px !important;
-  column-rule: 1px solid #131;
+  columns: auto 360px !important;
   column-gap: 4px;
 }
 
 .netdb_leases li {
+  margin: 1px 0;
+  padding: 1px 5px 1px 0;
   list-style: none;
   display: inline-block;
-  padding: 1px 20px 1px 0;
-  margin: 1px 0;
-  min-width: 280px;
 }
 
 .netdb_leases li b:first-child {
@@ -5613,7 +5611,7 @@ th > img[src^="/imagegen"], .identicon { /* scale down header images */
 }
 
 .routerid tt {
-  min-width: 36px;
+  min-width: 40px;
   display: inline-block;
   line-height: 150%;
   font-weight: bold;
@@ -10026,7 +10024,7 @@ th.options, #externali2cp th {
   margin: 0;
   padding: 1px 2px;
   display: inline-block;
-  min-width: 50px;
+  min-width: 64px;
   text-align: center;
   box-shadow: 0 0 0 1px #000;
   background: #020;
