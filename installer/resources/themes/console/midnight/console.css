@@ -6060,22 +6060,34 @@ table[cellspacing="30"] > tbody > tr > th[colspan="3"] { /* netdb header */
 
 /* leasesets */
 
+.leaseset td {
+  line-height: 150%;
+}
+
 .netdb_leases, .netdb_leases li, .netdb_leases li:first-child {
   margin: 0 !important;
 }
 
 .netdb_leases {
-  columns: auto 400px;
-  column-rule: 1px solid #26235c;
-  column-gap: 1em;
+  columns: 12 100px !important;
+  column-gap: 4px;
+}
+
+.debugMode .netdb_leases {
+  columns: 12 380px !important;
+  column-gap: 4px;
 }
 
 .netdb_leases li {
   margin: 1px 0;
   padding: 1px 5px 1px 0 !important;
-  min-width: 380px;
   display: inline-block;
   list-style: none;
+}
+
+.debugMode .netdb_leases li {
+  padding: 1px 2px 1px 0 !important;
+  min-width: 380px;
 }
 
 .netdb_leases li b:first-child {
@@ -6084,6 +6096,12 @@ table[cellspacing="30"] > tbody > tr > th[colspan="3"] { /* netdb header */
   min-width: 60px !important;
   display: inline-block;
   text-align: right;
+}
+
+.netdb_leases li b.leaseNumber {
+  margin-right: -6px !important;
+  min-width: 22px !important;
+  text-align: center;
 }
 
 .netdb_gateway {

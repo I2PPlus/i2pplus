@@ -7507,6 +7507,10 @@ b.netdb_transport {
   margin-bottom: 5px;
 }
 
+.leaseset td {
+  line-height: 150%:
+}
+
 .addtobook {
   text-align: right;
 }
@@ -7528,9 +7532,13 @@ b.netdb_transport {
 }
 
 .netdb_leases {
-  columns: auto 380px !important;
+  columns: 12 100px !important;
   column-gap: 4px;
-  display: block;
+}
+
+.debugMode .netdb_leases {
+  columns: 12 380px !important;
+  column-gap: 4px;
 }
 
 .netdb_leases li {
@@ -7540,12 +7548,22 @@ b.netdb_transport {
   list-style: none;
 }
 
+.debugMode .netdb_leases li {
+  min-width: 380px;
+}
+
 .netdb_leases li b:first-child {
   margin: 0 !important;
   padding: 0 !important;
   min-width: 60px !important;
   display: inline-block;
   text-align: right;
+}
+
+.netdb_leases li b.leaseNumber {
+  margin-right: -6px !important;
+  min-width: 22px !important;
+  text-align: center;
 }
 
 .netdb_gateway {

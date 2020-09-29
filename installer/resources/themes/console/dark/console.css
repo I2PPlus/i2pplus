@@ -5546,15 +5546,21 @@ th > img[src^="/imagegen"], .identicon { /* scale down header images */
 }
 
 .netdb_leases {
-  columns: auto 360px !important;
+  columns: 12 100px !important;
+  column-gap: 4px;
+}
+
+.debugMode .netdb_leases {
+  columns: 12 360px !important;
   column-gap: 4px;
 }
 
 .netdb_leases li {
   margin: 1px 0;
   padding: 1px 5px 1px 0;
-  list-style: none;
   display: inline-block;
+  white-space: nowrap;
+  list-style: none;
 }
 
 .netdb_leases li b:first-child {
@@ -5563,6 +5569,12 @@ th > img[src^="/imagegen"], .identicon { /* scale down header images */
   text-align: right;
   margin: 0 !important;
   padding: 0 !important;
+}
+
+.netdb_leases li b.leaseNumber {
+  margin-right: -4px;
+  min-width: 22px !important;
+  text-align: center;
 }
 
 .netdb_gateway {

@@ -5124,39 +5124,6 @@ img[src^="/flags"], img.unknownflag {
   margin-left: -3px;
 }
 
-#netdb .netdb_leases {
-  columns: auto 380px;
-  column-gap: 4px;
-}
-
-#netdb .netdb_leases li {
-  display: inline-block;
-}
-
-#netdb .netdb_leases li::before {
-  content: "";
-  display: inline-block;
-  min-height: 24px;
-  vertical-align: middle;
-}
-
-#netdb .netdb_leases li > * {
-  vertical-align: middle;
-}
-
-#netdb .netdb_leases .routerid {
-  vertical-align: middle;
-  overflow: hidden;
-}
-
-#netdb .netdb_leases img[src^="/flags"] {
-  margin: -1px 0 0 -5px !important;
-}
-
-#netdb .netdb_leases img.unknownflag, #peers img.unknownflag, #profiles img.unknownflag {
-  margin-top: -2px !important;
-}
-
 /* Theme choice & Language selection in /configui */
 
 .themechoice .optbox, .langselect .optbox {
@@ -5359,12 +5326,14 @@ p#helptranslate {
 }
 
 .langselect img[src^="/flags"] {
-  border: 1px solid #aaafce;
-  margin-bottom: 42px;
   margin-left: -72px;
-  opacity: 1;
-  z-index: 3;
+  margin-bottom: 42px;
+  width: 40px !important;
+  height: auto !important;
   position: relative;
+  z-index: 3;
+  border: 1px solid #aaafce;
+  opacity: 1;
 }
 
 .langselect input, .themechoice input {
@@ -5957,10 +5926,56 @@ p:empty { /* empty paragraph nuke */
 
 /* leasesets */
 
+#netdb .netdb_leases {
+  margin-left: 0 !important;
+  columns: 8 104px;
+  column-gap: 2px;
+}
+
+#netdb .debugMode .netdb_leases {
+  margin-right: 12px;
+  columns: auto 380px;
+  column-gap: 4px;
+  page-break-inside: avoid;
+}
+
+#netdb .netdb_leases li {
+  display: inline-block;
+  white-space: nowrap;
+  vertical-align: middle;
+}
+
+#netdb tr:not(.debugMode) .netdb_leases li {
+  margin: -2px -4px -4px 0 !important;
+}
+
+#netdb .netdb_leases li::before {
+  min-height: 24px;
+  display: inline-block;
+  vertical-align: middle;
+  content: "";
+}
+
+#netdb .netdb_leases li > * {
+  vertical-align: middle;
+}
+
+#netdb .netdb_leases .routerid {
+  vertical-align: middle;
+  overflow: hidden;
+}
+
+#netdb .netdb_leases img[src^="/flags"] {
+  margin: -1px 0 0 -5px !important;
+}
+
+#netdb .netdb_leases img.unknownflag, #peers img.unknownflag, #profiles img.unknownflag {
+  margin-top: -2px !important;
+}
+
 .netdb_leases, .netdb_leases li {
   margin: -1px 0 0 !important;
   padding: 0 !important;
-  columns: 400px auto;
 }
 
 .netdb_leases li {
@@ -5970,11 +5985,30 @@ p:empty { /* empty paragraph nuke */
   list-style: none;
 }
 
-.netdb_leases b:first-child {
-  display: inline-block;
-  min-width: 60px;
+.netdb_leases li b:first-child {
   margin-right: 2px;
+  display: inline-block;
+}
+
+.debugMode .netdb_leases li b:first-child {
+  min-width: 60px;
   text-align: right;
+}
+
+@supports (-moz-appearance: none) {
+  .netdb_leases b.leaseNumber {
+    margin: 2px -3px 0 6px !important;
+  }
+}
+
+.netdb_leases b.leaseNumber {
+  margin: 0 -3px 0 6px !important;
+  padding: 0 1px;
+  min-width: 24px;
+  vertical-align: middle;
+  text-align: center;
+  border: 1px solid #bbc;
+  background: #eef;
 }
 
 .netdb_leases .tunnel_peer img {
@@ -5986,11 +6020,11 @@ p:empty { /* empty paragraph nuke */
 }
 
 .netdb_tunnel {
-  display: inline-block;
-  background: #ddf;
-  padding: 0 4px;
   margin-right: -4px;
+  padding: 0 4px;
+  display: inline-block;
   border-radius: 2px;
+  background: #ddf;
 }
 
 .netdb_leases .tunnel_peer {
