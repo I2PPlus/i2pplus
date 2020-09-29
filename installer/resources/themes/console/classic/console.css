@@ -5995,20 +5995,12 @@ p:empty { /* empty paragraph nuke */
   text-align: right;
 }
 
-@supports (-moz-appearance: none) {
-  .netdb_leases b.leaseNumber {
-    margin: 2px -3px 0 6px !important;
-  }
-}
-
 .netdb_leases b.leaseNumber {
-  margin: 0 -3px 0 6px !important;
-  padding: 0 1px;
+  margin: 1px -3px 0 6px !important;
   min-width: 24px;
-  vertical-align: middle;
+  display: inline-block;
+  vertical-align: baseline;
   text-align: center;
-  border: 1px solid #bbc;
-  background: #eef;
 }
 
 .netdb_leases .tunnel_peer img {
