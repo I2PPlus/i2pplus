@@ -205,7 +205,7 @@ public class RouterThrottleImpl implements RouterThrottle {
                     _log.warn("Refusing participating tunnel request: already participating in "
                               + numTunnels + " (max: " + maxTunnels + ")");
                 _context.statManager().addRateData("router.throttleTunnelMaxExceeded", numTunnels);
-                setTunnelStatus(_x("Declining tunnel requests" + ":<br>" + _x("Limit reached")));
+                setTunnelStatus(_x("Declining requests" + ": " + _x("Limit reached")));
             } else {
                 if (_log.shouldLog(Log.WARN))
                     _log.warn("Refusing participating tunnel request: disabled by configuration");
