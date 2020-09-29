@@ -14066,18 +14066,13 @@ h3#bannedpeers {
   #minigraph {
     margin: -20px -1px 0 0;
     height: 40px;
-    width: 229px !important;
+    width: 230px !important;
   }
 
-  @supports (-moz-appearance: none) {
-    #minigraph {
-      height: 40px;
-      width: 230px !important;
+  #homepage #minigraph {
+    height: 39px;
     }
-  }
 }
-
-
 
 #sb_graphcontainer::before {
   position: absolute;
