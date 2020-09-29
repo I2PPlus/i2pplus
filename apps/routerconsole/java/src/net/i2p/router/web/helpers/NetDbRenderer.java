@@ -599,8 +599,9 @@ class NetDbRenderer {
                 buf.append("&nbsp; &bullet; &nbsp;<b>").append(_t("Distance")).append(": </b>").append(fmt.format(biLog2(dist)));
                 if (type != DatabaseEntry.KEY_TYPE_LEASESET) {
                     LeaseSet2 ls2 = (LeaseSet2) ls;
-                    if (ls2.isUnpublished())
-                        buf.append("&nbsp; &bullet; &nbsp;<b>").append(_t("Unpublished?").replace("?", ":")).append("</b> ").append(ls2.isUnpublished());
+                    // unpublished status shown in header
+                    //if (ls2.isUnpublished())
+                    //    buf.append("&nbsp; &bullet; &nbsp;<b>").append(_t("Unpublished?").replace("?", ":")).append("</b> ").append(ls2.isUnpublished());
                     boolean isOff = ls2.isOffline();
                     if (isOff) {
                         buf.append("&nbsp; &bullet; &nbsp;<b>").append(_t("Offline signed?").replace("?", ":")).append("</b> ").append(isOff);
