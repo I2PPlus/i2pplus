@@ -5572,7 +5572,7 @@ th > img[src^="/imagegen"], .identicon { /* scale down header images */
 }
 
 .netdb_leases li b.leaseNumber {
-  margin-right: -4px;
+  margin-right: -4px !important;
   min-width: 22px !important;
   text-align: center;
 }
@@ -6946,14 +6946,15 @@ h4 span[style="float: right;"] .unbold {
 }
 
 .leaseset th {
-  font-weight: normal;
   padding: 5px;
   text-align: left;
+  font-weight: normal;
 }
 
 .leaseset th:last-child, .leaseset td:nth-child(2) {
-  text-align: right;
   padding-right: 5px;
+  white-space: nowrap;
+  text-align: right;
 }
 
 .addtobook {

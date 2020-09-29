@@ -8757,6 +8757,17 @@ img + tt {
   letter-spacing: 0.15em;
 }
 
+.routerid tt, .routerid a tt {
+  font-weight: bold;
+}
+
+.routerid tt {
+  min-width: 32px;
+  display: inline-block;
+  letter-spacing: 0.15em;
+  text-align: center;
+}
+
 .tunnel_cap {
   margin: 1px 2px !important;
   padding: 2px 3px !important;
@@ -11381,10 +11392,10 @@ input[type="file"]:hover {
 }
 
 #netdb .netdbentry th code, #netdb .sybil_routerinfo th code, .leaseset th code {
-/*  width: 150px;
+  width: 150px;
   overflow: hidden;
   text-overflow: ellipsis;
-  vertical-align: middle;*/
+  vertical-align: middle;
   white-space: nowrap;
 }
 
@@ -14055,9 +14066,18 @@ h3#bannedpeers {
   #minigraph {
     margin: -20px -1px 0 0;
     height: 40px;
-    width: 230px !important;
+    width: 229px !important;
+  }
+
+  @supports (-moz-appearance: none) {
+    #minigraph {
+      height: 40px;
+      width: 230px !important;
+    }
   }
 }
+
+
 
 #sb_graphcontainer::before {
   position: absolute;
