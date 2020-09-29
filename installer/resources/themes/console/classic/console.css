@@ -5075,16 +5075,23 @@ body.iframed {
 
 /* end iframed console fixes */
 
-img[src^="/flags"] {
-  width: 16px;
-  height: 12px;
+img[src^="/flags"], img.unknownflag {
+  width: 16px !important;
+  height: 12px !important;
   vertical-align: middle;
   border: 1px solid #d8d8d8;
 }
 
+#tunnelpeercount img[src^="/flags"] {
+  margin-left: -6px;
+  width: 20px !important;
+  height: 15px !important;
+  font-size: 0;
+}
+
 #netdbcountrylist img[src^="/flags"], .netdb_header img[src^="/flags"] {
-  width: 24px;
-  height: 18px;
+  width: 24px !important;
+  height: 18px !important;
 }
 
 #tunnels img[src^="/flags"], #profiles img[src^="/flags"], #peers img[src^="/flags"], #netdb img[src^="/flags"] {
@@ -5144,6 +5151,10 @@ img[src^="/flags"] {
 
 #netdb .netdb_leases img[src^="/flags"] {
   margin: -1px 0 0 -5px !important;
+}
+
+#netdb .netdb_leases img.unknownflag, #peers img.unknownflag, #profiles img.unknownflag {
+  margin-top: -2px !important;
 }
 
 /* Theme choice & Language selection in /configui */
@@ -5992,6 +6003,8 @@ p:empty { /* empty paragraph nuke */
 
 .netdb_leases .tunnel_id {
   min-width: 74px;
+  line-height: 150%;
+  text-align: center;
 }
 
 .netdb_leases .tunnel_peer tt {
@@ -7513,7 +7526,7 @@ th code {
 }
 
 .netdb_expiry {
-  margin-left: 5px;
+  margin-left: 1px;
 }
 
 .sybil_routerinfo th img[src^="/flags"] {
@@ -10187,10 +10200,11 @@ th.queue {
 }
 
 #netdb li, #netdb li:first-child {
-  display: inline-block;
   margin: 1px 0;
   padding: 0 0 2px;
   width: 100%;
+  display: inline-block;
+  vertical-align: middle;
 }
 
 .netdbentry tr:nth-child(2) td:last-child {
@@ -10296,7 +10310,7 @@ a.keysearch {
 }
 
 .netdb_tunnel {
-  margin: 0 5px;
+  margin: 1px 3px 0;
 }
 
 #leasesetsummary tr:last-child td:last-child {

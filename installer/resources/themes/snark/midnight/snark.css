@@ -4212,7 +4212,7 @@ td.snarkTorrentDetails img, .snarkDirInfo td:first-child img:not(.thumb) {
 
 @media screen and (min-width: 1500px) {
 .iframed #torrentDisplay {
-  margin: -10px 0 -1px;
+  margin: 0 0 -1px;
 }
 }
 
