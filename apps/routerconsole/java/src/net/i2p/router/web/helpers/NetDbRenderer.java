@@ -618,9 +618,9 @@ class NetDbRenderer {
                     buf.append(ls.getSigningKey().getType());
                 }
                 if (type == DatabaseEntry.KEY_TYPE_LEASESET) {
-                    buf.append("<br>&nbsp; &bullet; &nbsp;<b>").append(_t("Encryption Key")).append(":</b> ELGAMAL_2048 ")
-                       .append(ls.getEncryptionKey().toBase64().substring(0, 20))
-                       .append("&hellip;");
+                    buf.append("<br>&nbsp; &bullet; &nbsp;<b>").append(_t("Encryption Key")).append(":</b> ELGAMAL_2048 [")
+                       .append(ls.getEncryptionKey().toBase64().substring(0, 8))
+                       .append("&hellip;]");
                 } else if (type == DatabaseEntry.KEY_TYPE_LS2) {
                     LeaseSet2 ls2 = (LeaseSet2) ls;
                     for (PublicKey pk : ls2.getEncryptionKeys()) {
@@ -630,14 +630,38 @@ class NetDbRenderer {
                             buf.append(etype);
                         else
                             buf.append("Unsupported type ").append(pk.getUnknownTypeCode());
-                        buf.append(' ')
-                           .append(pk.toBase64().substring(0, 20))
-                           .append("&hellip;");
+                        buf.append(" [")
+                           .append(pk.toBase64().substring(0, 8))
+                           .append("&hellip;]");
                     }
                 }
                 buf.append("<br>&nbsp; &bullet; &nbsp;<b>").append(_t("Routing Key")).append(":</b> ").append(ls.getRoutingKey().toBase64());
                 buf.append("</td></tr>");
 
+            } else {
+                buf.append("</td></tr><tr><td colspan=\"2\">");
+                buf.append("&nbsp; &bullet; &nbsp;<b>Signature type:</b> ");
+                if (dest != null && type != DatabaseEntry.KEY_TYPE_ENCRYPTED_LS2) {
+                    buf.append(dest.getSigningPublicKey().getType());
+                } else {
+                    // encrypted, show blinded key type
+                    buf.append(ls.getSigningKey().getType());
+                }
+                if (type == DatabaseEntry.KEY_TYPE_LEASESET) {
+                    buf.append("&nbsp; &bullet; &nbsp;<b>").append(_t("Encryption Key")).append(":</b> ELGAMAL_2048");
+                } else if (type == DatabaseEntry.KEY_TYPE_LS2) {
+                    LeaseSet2 ls2 = (LeaseSet2) ls;
+                    for (PublicKey pk : ls2.getEncryptionKeys()) {
+                        buf.append("&nbsp; &bullet; &nbsp;<b>").append(_t("Encryption Key")).append(":</b> ");
+                        EncType etype = pk.getType();
+                        if (etype != null)
+                            buf.append(etype);
+                        else
+                            buf.append("&nbsp; &bullet; &nbsp").append(_t("Encryption Key")).append(":</b> ")
+                               .append("Unsupported type ").append(pk.getUnknownTypeCode());
+                    }
+                }
+                buf.append("</td></tr>");
             }
             buf.append("<tr><td colspan=\"2\"><ul class=\"netdb_leases\">");
             boolean isMeta = ls.getType() == DatabaseEntry.KEY_TYPE_META_LS2;
