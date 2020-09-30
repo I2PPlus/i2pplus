@@ -7999,6 +7999,11 @@ h2#debug_portmapper {
   font-weight: normal !important;
 }
 
+.routerid tt {
+  display: inline-block;
+  min-width: 38px;
+}
+
 .revision, .sha256, .unsignedmod {
   -moz-user-select: all;
   -webkit-user-select: all;
