@@ -5569,6 +5569,19 @@ td#pw_adduser input {
   border-radius: 3px;
 }
 
+.leaseset th:first-child code {
+  display: inline-block;
+  width: 150px;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+  vertical-align: text-bottom;
+  color: #fff !important;
+  border-radius: 2px;
+  background: #89b;
+
+}
+
 a.viewfullentry:not(old), #profilelist a[href^="viewprofile"]:not(old) {
   font-size: 0;
 }
@@ -7984,6 +7997,11 @@ h2#debug_portmapper {
 
 .sha256 tt, .revision tt {
   font-weight: normal !important;
+}
+
+.routerid tt {
+  display: inline-block;
+  min-width: 38px;
 }
 
 .revision, .sha256, .unsignedmod {
