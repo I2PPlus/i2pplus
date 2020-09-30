@@ -1094,6 +1094,9 @@ public class SummaryHelper extends HelperBase {
         if (status.length() > 0) {
             // Show status message even if not running, timer in ReseedChecker should remove after 20 minutes
             buf.append("<div class=\"sb_notice\" id=\"sb_notice\"><i>").append(status).append("</i></div>");
+        } else {
+            // Hide status message but retain div so ajax refresh picks it up
+            buf.append("<div class=\"sb_notice hide\" id=\"sb_notice\" hidden></div>");
         }
         if (!checker.inProgress()) {
             // If a new reseed isn't running, and the last reseed had errors, show error message

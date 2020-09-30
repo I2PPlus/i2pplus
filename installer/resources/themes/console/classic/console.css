@@ -838,6 +838,10 @@ img[src="/themes/console/images/i2plogo.png"] {
   background: #fff;
 }
 
+#sb_notice.hide, #sb_notice.hide + hr {
+  display: none;
+}
+
 .sb_notice + .sb_notice {
   margin-top: 8px;
 }

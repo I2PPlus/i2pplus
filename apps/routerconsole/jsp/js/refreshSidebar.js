@@ -111,8 +111,11 @@ function refreshSidebar(timestamp) {
         }
         if (notify) {
           var notifyParent = notify.parentNode;
-          if (!Object.is(notify.innerHTML, notifyResponse.innerHTML))
+          if (!Object.is(notify.innerHTML, notifyResponse.innerHTML) || notifyResponse) {
+            if (notify.classList.contains("hide"))
+              notify.classList.remove("hide");
             notifyParent.replaceChild(notifyResponse, notify);
+          }
         }
         if (peers) {
           var peersParent = peers.parentNode;
