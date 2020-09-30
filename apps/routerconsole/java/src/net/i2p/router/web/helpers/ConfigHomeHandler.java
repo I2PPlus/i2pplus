@@ -25,16 +25,10 @@ public class ConfigHomeHandler extends FormHandler {
         if (_action.equals(_t("Save")) && "0".equals(group)) {
             boolean old = _context.getBooleanProperty(HomeHelper.PROP_OLDHOME);
             boolean nnew = getJettyString("oldHome") != null;
-//            boolean newTab = _context.getBooleanProperty(HomeHelper.PROP_NEWTAB);
-//            boolean newTabEnabled = getJettyString("newTabs") != null;
             if (old != nnew) {
                 _context.router().saveConfig(HomeHelper.PROP_OLDHOME, Boolean.toString(nnew));
                 addFormNotice(_t("Home page changed"));
             }
-//            if (newTab != newTabEnabled) {
-//                _context.router().saveConfig(HomeHelper.PROP_OLDHOME, "" + newTabEnabled);
-//                addFormNotice(_t("Behavior for external links and webapps changed on homepage"));
-//            }
         } else if (adding || deleting || restoring) {
             String prop;
             String dflt;
