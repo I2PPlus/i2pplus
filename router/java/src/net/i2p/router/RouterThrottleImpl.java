@@ -430,7 +430,8 @@ public class RouterThrottleImpl implements RouterThrottle {
             else if (probReject >= 0.5)
                 // hard to do {0} from here
                 //setTunnelStatus("Rejecting " + ((int)(100.0*probReject)) + "% of tunnels: Bandwidth limit");
-                setTunnelStatus(_x("Declining most tunnel requests" + ":<br>" + "Bandwidth limit"));
+                //setTunnelStatus(_x("Declining most tunnel requests" + ":<br>" + "Bandwidth limit"));
+                setTunnelStatus(_x("Declining requests" + ": " + "Bandwidth limit"));
             else if(probReject >= 0.1)
                 // hard to do {0} from here
                 //setTunnelStatus("Accepting " + (100-(int)(100.0*probReject)) + "% of tunnels");
