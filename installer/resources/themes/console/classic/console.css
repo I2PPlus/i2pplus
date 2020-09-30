@@ -1595,8 +1595,23 @@ select[name="newlogclass"] {
   margin-right: 0;
 }
 
+#config_homepage .noicon {
+  background: url(/themes/console/images/svg/search.svg) center center no-repeat;
+  background-size: 20px 20px;
+}
+
 .homelinkedit .optbox {
   margin: 0;
+}
+
+.homelinkedit td:nth-child(2) {
+  width: 52px;
+  text-align: center;
+}
+
+.homelinkedit td:nth-child(2) img {
+  width: 20px;
+  height: 20px;
 }
 
 #config_homepage .delete {
@@ -12028,10 +12043,10 @@ div.app:hover img, .sitemaplink:hover img {
 
 #sb_graphcontainer {
   margin: -5px 1px -6px 1px !important;
+  overflow: hidden;
   border: 1px solid #aaafce;
   box-shadow: inset 0 0 0 1px #fff;
   background: repeating-linear-gradient(to right, rgba(0, 0, 0, 0) 15px, rgba(120, 120, 255, .5) 16px, rgba(0, 0, 0, 0) 16px, rgba(0, 0, 0, 0) 30px), repeating-linear-gradient(to top, rgba(0, 0, 0, 0) 11px, rgba(120, 120, 255, .5) 12px, rgba(255, 255, 255, 0) 12px, rgba(255, 255, 255, 0) 24px) !important;
-  overflow: hidden;
 }
 
 @media screen and (max-width: 1200px) {
