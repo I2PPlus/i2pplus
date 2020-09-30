@@ -822,6 +822,10 @@ to {
 }
 }
 
+#sb_notice.hide, #sb_notice.hide + hr {
+  display: none;
+}
+
 #sb_warning a {
   line-height: 100%;
 }
