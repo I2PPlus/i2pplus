@@ -483,7 +483,7 @@ public class RouterThrottleImpl implements RouterThrottle {
 ***/
     }
 
-    /** dont ever probabalistically throttle tunnels if we have less than this many */
+    /** don't ever probabalistically throttle tunnels if we have less than this many */
     private int getMinThrottleTunnels() {
         return _context.getProperty("router.minThrottleTunnels", DEFAULT_MIN_THROTTLE_TUNNELS);
     }
