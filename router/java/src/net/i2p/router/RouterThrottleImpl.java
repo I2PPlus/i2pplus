@@ -133,7 +133,7 @@ public class RouterThrottleImpl implements RouterThrottle {
     public int acceptTunnelRequest() {
         if (_context.router().gracefulShutdownInProgress()) {
             if (_log.shouldLog(Log.WARN))
-                _log.warn("Refusing tunnel request - graceful shutdown in progress");
+                _log.warn("Refusing tunnel requests - graceful shutdown in progress");
             setShutdownStatus();
             // Don't use CRIT because this tells everybody we are shutting down
             return TunnelHistory.TUNNEL_REJECT_BANDWIDTH;
@@ -142,10 +142,9 @@ public class RouterThrottleImpl implements RouterThrottle {
         // Don't use CRIT because we don't want peers to think we're failing
         if (_context.router().getUptime() < _rejectStartupTime && !_context.router().isHidden()) {
 //            setTunnelStatus(_x("No participating tunnels" + ":<br>" + _x("Starting up")));
-            setTunnelStatus(_x("Starting up"));
+            setTunnelStatus(_x("Starting up") + "&hellip;");
         } else if (_context.router().isHidden()) {
-//            setTunnelStatus(_x("Declining all tunnel requests" + ":<br>" + _x("Hidden Mode")));
-            setTunnelStatus(_x("Hidden Mode"));
+            setTunnelStatus(_x("Declining all tunnel requests" + ":<br>" + _x("Hidden Mode")));
             return TunnelHistory.TUNNEL_REJECT_BANDWIDTH;
         }
 
@@ -359,7 +358,8 @@ public class RouterThrottleImpl implements RouterThrottle {
     private static final int DEFAULT_MESSAGES_PER_TUNNEL_ESTIMATE = 40; // .067KBps
     /** also limited to 90% - see below */
     private static final int MIN_AVAILABLE_BPS = 4*1024; // always leave at least 4KBps free when allowing
-    private static final String LIMIT_STR = _x("Declining tunnel requests" + ":<br>" + "Bandwidth limit");
+    //private static final String LIMIT_STR = _x("Declining tunnel requests" + ":<br>" + "Bandwidth limit");
+    private static final String LIMIT_STR = _x("Declining requests" + ": " + "Bandwidth limit");
 
     /**
      * with bytesAllocated already accounted for across the numTunnels existing
@@ -483,7 +483,7 @@ public class RouterThrottleImpl implements RouterThrottle {
 ***/
     }
 
-    /** dont ever probabalistically throttle tunnels if we have less than this many */
+    /** don't ever probabalistically throttle tunnels if we have less than this many */
     private int getMinThrottleTunnels() {
         return _context.getProperty("router.minThrottleTunnels", DEFAULT_MIN_THROTTLE_TUNNELS);
     }

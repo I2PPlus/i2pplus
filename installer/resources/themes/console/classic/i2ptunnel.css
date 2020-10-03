@@ -324,7 +324,7 @@ h2, h3 {
 /* title images */
 
 #messages h2 {
-  background: url(/themes/console/images/info/logs.png) 5px center no-repeat, linear-gradient(to bottom, #fff 50%, #fafbff 50%) !important;
+  background: url(/themes/console/images/svg/logs.svg) 5px center no-repeat, linear-gradient(to bottom, #fff 50%, #fafbff 50%) !important;
   background-size: 20px auto, 100% 100%, 100% 100% !important;
 }
 
@@ -334,12 +334,12 @@ h2, h3 {
 }
 
 #servers h2 {
-  background: url(/themes/console/images/info/server.png) 5px center no-repeat, linear-gradient(to bottom, #fff 50%, #fafbff 50%) !important;
+  background: url(/themes/console/images/svg/server.svg) 5px center no-repeat, linear-gradient(to bottom, #fff 50%, #fafbff 50%) !important;
   background-size: 20px auto, 100% 100%, 100% 100% !important;
 }
 
 #clients h2 {
-  background: url(/themes/console/images/info/client.png) 5px center no-repeat, linear-gradient(to bottom, #fff 50%, #fafbff 50%) !important;
+  background: url(/themes/console/images/svg/client.svg) 5px center no-repeat, linear-gradient(to bottom, #fff 50%, #fafbff 50%) !important;
   background-size: 20px auto, 100% 100%, 100% 100% !important;
 }
 
