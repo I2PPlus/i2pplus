@@ -3,6 +3,7 @@ package net.i2p.data.i2np;
 import java.io.ByteArrayInputStream;
 import java.io.IOException;
 import java.security.GeneralSecurityException;
+import java.util.Date;
 import java.util.Properties;
 
 import com.southernstorm.noise.protocol.HandshakeState;
@@ -147,7 +148,7 @@ public class BuildRequestRecord {
     private static final int OFF_OPTIONS = OFF_SEND_MSG_ID_EC + 4;
     private static final int LENGTH_EC = 464;
     private static final int MAX_OPTIONS_LENGTH = LENGTH_EC - OFF_OPTIONS; // includes options length
-    
+
     private static final boolean TEST = false;
     private static KeyFactory TESTKF;
 
@@ -270,7 +271,7 @@ public class BuildRequestRecord {
             return null;
         }
     }
-    
+
     /**
      * Encrypt the record to the specified peer.  The result is formatted as: <pre>
      *   bytes 0-15: truncated SHA-256 of the current hop's identity (the toPeer parameter)
@@ -351,7 +352,7 @@ public class BuildRequestRecord {
      */
     public byte[] getChaChaReplyAD() { return _chachaReplyAD; }
 
-    
+
     /**
      * Decrypt the data from the specified record, writing the decrypted record into this instance's
      * data buffer
@@ -431,7 +432,7 @@ public class BuildRequestRecord {
         byte buf[] = new byte[LENGTH];
         _data = buf;
         _isEC = false;
-        
+
        /*   bytes     0-3: tunnel ID to receive messages as
         *   bytes    4-35: local router identity hash
         *   bytes   36-39: next tunnel ID
@@ -468,7 +469,7 @@ public class BuildRequestRecord {
     }
 
     /**
-     * Populate this instance with data.  A new buffer is created to contain the data, with the 
+     * Populate this instance with data.  A new buffer is created to contain the data, with the
      * necessary randomized padding.
      *
      * ECIES only. ElGamal constructor above.
@@ -493,7 +494,7 @@ public class BuildRequestRecord {
         byte buf[] = new byte[LENGTH_EC];
         _data = buf;
         _isEC = true;
-        
+
         DataHelper.toLong(buf, OFF_RECV_TUNNEL, 4, receiveTunnelId);
         DataHelper.toLong(buf, OFF_SEND_TUNNEL_EC, 4, nextTunnelId);
         System.arraycopy(nextHop.getData(), 0, buf, OFF_SEND_IDENT_EC, Hash.HASH_LENGTH);
@@ -528,7 +529,7 @@ public class BuildRequestRecord {
     @Override
     public String toString() {
         StringBuilder buf = new StringBuilder(256);
-        buf.append("\n* );
+        buf.append("\n* ");
         buf.append(_isEC ? "ECIES" : "ElGamal");
         buf.append(" BuildRequestRecord: [");
         boolean isIBGW = readIsInboundGateway();
@@ -601,4 +602,4 @@ public class BuildRequestRecord {
         System.out.println("reply status: " + (ebr.getData()[511] & 0xff));
     }
 ****/
-}   
+}
