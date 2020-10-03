@@ -7294,11 +7294,13 @@ tt a, .cells tt {
 
 .tunnel_peer .routerid {
   padding: 1px 1px 1px 5px;
+  min-width: 66px;
   text-align: center;
 }
 
 .tunnel_local {
   padding: 4px 0;
+  min-width: 71px;
   font-size: 8pt;
   text-transform: lowercase;
   text-align: center;
