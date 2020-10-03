@@ -207,7 +207,8 @@ public class EepGet {
     public static void main(String args[]) {
         String proxyHost = "127.0.0.1";
         int proxyPort = 4444;
-        int numRetries = 0;
+//        int numRetries = 0;
+        int numRetries = 3;
         int markSize = 1024;
         int lineLen = 40;
         long inactivityTimeout = INACTIVITY_TIMEOUT;
@@ -506,20 +507,20 @@ public class EepGet {
             if (_firstTime) {
                 if (alreadyTransferred > 0) {
                     _previousWritten = alreadyTransferred;
-                    System.out.println("File found with length " + alreadyTransferred + ", resuming");
+                    System.out.println(" • File found with length " + alreadyTransferred + ", resuming");
                 }
                 _firstTime = false;
             }
             if (_written == 0 && alreadyTransferred == 0 && _previousWritten > 0) {
                 // boo
-                System.out.println("Server does not support resume, discarding " + _previousWritten + " bytes");
+                System.out.println(" • Server does not support resume, discarding " + _previousWritten + " bytes");
                 _discarded += _previousWritten;
                 _previousWritten = 0;
             }
             for (int i = 0; i < currentWrite; i++) {
                 _written++;
                 if ( (_markSize > 0) && (_written % _markSize == 0) ) {
-                    System.out.print("#");
+                    System.out.print("◼");
 
                     if ( (_lineSize > 0) && (_written % ((long)_markSize*(long)_lineSize) == 0l) ) {
                         long now = _context.clock().now();
@@ -563,14 +564,14 @@ public class EepGet {
             System.out.println();
             //System.out.println("== " + new Date());
             if (notModified) {
-                System.out.println("== Source not modified since last download");
+                System.out.println(" • Source not modified since last download");
             } else {
                 if ( bytesRemaining > 0 ) {
-                    System.out.println("== Transfer of " + url + " completed with " + transferred
+                    System.out.println(" ✔ Transfer of " + url + " completed with " + transferred
                             + " transferred and " + (bytesRemaining - bytesTransferred) + " remaining" +
                             (_discarded > 0 ? (" and " + _discarded + " bytes discarded") : ""));
                 } else {
-                    System.out.println("== Transfer of " + url + " completed with " + transferred
+                    System.out.println(" ✔ Transfer of " + url + " completed with " + transferred
                             + " bytes transferred" +
                             (_discarded > 0 ? (" and " + _discarded + " bytes discarded") : ""));
                 }
@@ -578,16 +579,16 @@ public class EepGet {
                     long sz = (new File(outputFile)).length();
                     if (sz <= 0)
                         sz = alreadyTransferred;
-                    System.out.println("== Output saved to " + outputFile + " (" + sz + " bytes)");
+                    System.out.println(" ✔ Output saved to " + outputFile + " (" + sz + " bytes)");
                 }
             }
             long timeToSend = _context.clock().now() - _startedOn;
-            System.out.println("== Transfer time: " + DataHelper.formatDuration(timeToSend));
+            System.out.println(" • Transfer time: " + DataHelper.formatDuration(timeToSend));
             if (_etag != null)
-                System.out.println("== ETag: " + _etag);
+                System.out.println(" • ETag: " + _etag);
             if (transferred > 0) {
                 StringBuilder buf = new StringBuilder(64);
-                buf.append("== Transfer rate: ");
+                buf.append(" • Transfer rate: ");
                 if (timeToSend <= 0)
                     timeToSend = 1;
                 long kbps = (long) (1000.0d * transferred / timeToSend);
@@ -599,25 +600,25 @@ public class EepGet {
         public void attemptFailed(String url, long bytesTransferred, long bytesRemaining, int currentAttempt, int numRetries, Exception cause) {
             System.out.println();
             //System.out.println("** " + new Date());
-            System.out.println("** Attempt " + currentAttempt + " of " + url + " failed");
-            System.out.println("** Transfered " + bytesTransferred
+            System.out.println(" ✖ Attempt " + currentAttempt + " of " + url + " failed");
+            System.out.println(" • Transfered " + bytesTransferred
                                + " with " + (bytesRemaining < 0 ? "unknown" : Long.toString(bytesRemaining)) + " remaining");
-            System.out.println("** " + cause.getMessage());
+            System.out.println(" • " + cause.getMessage());
             _previousWritten += _written;
             _written = 0;
         }
         public void transferFailed(String url, long bytesTransferred, long bytesRemaining, int currentAttempt) {
             //System.out.println("== " + new Date());
-            System.out.println("== Transfer of " + url + " failed after " + currentAttempt + " attempts");
-            System.out.println("== Transfer size: " + bytesTransferred + " with "
+            System.out.println(" ✖ Transfer of " + url + " failed after " + currentAttempt + " attempts");
+            System.out.println(" • Transfer size: " + bytesTransferred + " with "
                                + (bytesRemaining < 0 ? "unknown" : Long.toString(bytesRemaining)) + " remaining");
             long timeToSend = _context.clock().now() - _startedOn;
-            System.out.println("== Transfer time: " + DataHelper.formatDuration(timeToSend));
+            System.out.println(" • Transfer time: " + DataHelper.formatDuration(timeToSend));
             if (timeToSend <= 0)
                 timeToSend = 1;
             long kbps = (long) (1000.0d * bytesTransferred / timeToSend);
             StringBuilder buf = new StringBuilder(64);
-            buf.append("== Transfer rate: ");
+            buf.append(" • Transfer rate: ");
             buf.append(DataHelper.formatSize2Decimal(kbps, false));
             buf.append("Bps");
             System.out.println(buf.toString());
