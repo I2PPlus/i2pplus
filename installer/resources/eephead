@@ -1,0 +1,3 @@
+#!/bin/sh
+I2P="%INSTALL_PATH"
+java -jar "$I2P/lib/i2p.jar" eephead "$@"
