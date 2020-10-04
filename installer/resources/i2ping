@@ -1,4 +1,4 @@
 #!/bin/sh
 I2P="%INSTALL_PATH"
-echo " • Initiating ping of $@…"
-java -jar ~/i2p/lib/i2ptunnel.jar -die -e "ownDest yes" -e "ping $@"
+echo " ➤ Initiating ping of $@…"
+java -jar "$I2P/lib/i2ptunnel.jar" -die -e "ownDest yes" -e "ping $@"

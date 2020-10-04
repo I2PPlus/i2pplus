@@ -535,10 +535,10 @@ public class EepGet {
                                 double pct = 100 * ((double)_written + _previousWritten) /
                                              ((double)alreadyTransferred + (double)currentWrite + bytesRemaining);
                                 fmt.format("%4.1f", Double.valueOf(pct));
-                                buf.append("%: ");
+                                buf.append("% ");
                             }
                             fmt.format("%8d", Long.valueOf(_written));
-                            buf.append(" @ ");
+                            buf.append("B ");
                             double lineKBytes = ((double)_markSize * (double)_lineSize)/1024.0d;
                             double kbps = lineKBytes/(timeToSend/1000.0d);
                             fmt.format("%7.2f", Double.valueOf(kbps));

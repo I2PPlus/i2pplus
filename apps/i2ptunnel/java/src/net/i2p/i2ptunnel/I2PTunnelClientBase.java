@@ -834,7 +834,7 @@ public abstract class I2PTunnelClientBase extends I2PTunnelTask implements Runna
                 // probably an IllegalArgumentException from
                 // connecting to the router in a delay-open or
                 // close-on-idle tunnel (in connectManager() above)
-                _log.error("Uncaught error in i2ptunnel client", t);
+                _log.error("Uncaught error in I2PTunnel client", t);
                 try { _s.close(); } catch (IOException ioe) {}
             }
         }
@@ -884,8 +884,9 @@ public abstract class I2PTunnelClientBase extends I2PTunnelTask implements Runna
             }
             if (!toString().contains("-1"))
                 l.log(" ‣ Stopping client " + toString() + "…");
-            else
-                l.log(" ‣ Stopping client…");
+                // hide from i2ping
+                //else
+                //l.log(" ‣ Stopping client…");
             open = false;
             try {
                 if (ss != null) ss.close();
