@@ -561,29 +561,31 @@ public class EepGet {
                 transferred = 0;
             else
                 transferred = alreadyTransferred - _previousWritten;
-            System.out.println();
+            //System.out.println();
             //System.out.println("== " + new Date());
             if (notModified) {
                 System.out.println(" • Source not modified since last download");
             } else {
                 if ( bytesRemaining > 0 ) {
-                    System.out.println(" ✔ Transfer of " + url + " completed with " + transferred
-                            + " transferred and " + (bytesRemaining - bytesTransferred) + " remaining" +
-                            (_discarded > 0 ? (" and " + _discarded + " bytes discarded") : ""));
+                    System.out.println(" ✔ Transfer of " + url + " complete (" + transferred
+                            + " bytes transferred, " + (bytesRemaining - bytesTransferred) + " bytes remaining" +
+                            (_discarded > 0 ? (" and " + _discarded + " bytes discarded") : ")"));
                 } else {
-                    System.out.println(" ✔ Transfer of " + url + " completed with " + transferred
+                    System.out.println(" ✔ Transfer of " + url + " complete (" + transferred
                             + " bytes transferred" +
-                            (_discarded > 0 ? (" and " + _discarded + " bytes discarded") : ""));
+                            (_discarded > 0 ? (", " + _discarded + " bytes discarded") : ")"));
                 }
                 if (transferred > 0) {
                     long sz = (new File(outputFile)).length();
                     if (sz <= 0)
                         sz = alreadyTransferred;
-                    System.out.println(" ✔ Output saved to " + outputFile + " (" + sz + " bytes)");
+                    System.out.println(" ✔ Saved to: " + outputFile + " (" + sz + " bytes)");
                 }
             }
             long timeToSend = _context.clock().now() - _startedOn;
             System.out.println(" • Transfer time: " + DataHelper.formatDuration(timeToSend));
+            if (_lastModified != null)
+                System.out.println(" • Last Modified: " + _lastModified);
             if (_etag != null)
                 System.out.println(" • ETag: " + _etag);
             if (transferred > 0) {
@@ -598,18 +600,18 @@ public class EepGet {
             }
         }
         public void attemptFailed(String url, long bytesTransferred, long bytesRemaining, int currentAttempt, int numRetries, Exception cause) {
-            System.out.println();
+            //System.out.println();
             //System.out.println("** " + new Date());
-            System.out.println(" ✖ Attempt " + currentAttempt + " of " + url + " failed");
-            System.out.println(" • Transfered " + bytesTransferred
-                               + " with " + (bytesRemaining < 0 ? "unknown" : Long.toString(bytesRemaining)) + " remaining");
+            System.out.println(" ✖ Attempt " + (currentAttempt + 1) + " to retrieve " + url + " failed");
+            System.out.println(" • Transferred " + bytesTransferred
+                               + " bytes (" + (bytesRemaining < 0 ? "unknown" : Long.toString(bytesRemaining)) + " bytes remaining)");
             System.out.println(" • " + cause.getMessage());
             _previousWritten += _written;
             _written = 0;
         }
         public void transferFailed(String url, long bytesTransferred, long bytesRemaining, int currentAttempt) {
             //System.out.println("== " + new Date());
-            System.out.println(" ✖ Transfer of " + url + " failed after " + currentAttempt + " attempts");
+            System.out.println(" ✖ Transfer of " + url + " failed after " + (currentAttempt + 1) + " attempts");
             System.out.println(" • Transfer size: " + bytesTransferred + " with "
                                + (bytesRemaining < 0 ? "unknown" : Long.toString(bytesRemaining)) + " remaining");
             long timeToSend = _context.clock().now() - _startedOn;
