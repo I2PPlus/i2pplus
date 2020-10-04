@@ -73,7 +73,7 @@ public class I2Ping extends I2PTunnelClientBase {
         synchronized (this) {
             listenerReady = true;
             notifyAll();
-            l.log(" ‣ Tunnels ready for I2Ping client");
+            l.log(" • Tunnels ready for I2Ping client");
         }
         //l.log(" • I2Ping results:");
         try {
@@ -227,7 +227,7 @@ public class I2Ping extends I2PTunnelClientBase {
         }
         //l.log("Closing pinger " + toString());
         //l.log(" ‣ Closing pinger…");
-        l.log(" ‣ Pinger closed");
+        l.log(" ‣ I2Ping client closed");
         return true;
     }
 
@@ -327,13 +327,13 @@ public class I2Ping extends I2PTunnelClientBase {
                     }
                     //    System.out.println(sent+" -> "+destination);
                 }
+
+                pingResults.append(" • ").append(destination).append(" results: ");
                 if (reportTimes) {
-                    pingResults.append(" • ").append(pass).append(" pongs received ");
-                    pingResults.append("and ").append(fail).append(" lost for ");
+                    pingResults.append(pass).append(" / ").append(pass + fail).append(" pongs received");
                 }
-                pingResults.append(destination);
                 if (pass > 0 && reportTimes)
-                    pingResults.append(" (average ").append(totalTime/pass).append("ms) ");
+                    pingResults.append(", average response ").append(totalTime/pass).append("ms");
                 l.log(pingResults.toString());
             } catch (I2PException ex) {
                 _log.error("Error pinging " + destination, ex);
