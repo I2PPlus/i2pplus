@@ -530,7 +530,7 @@ public abstract class I2PTunnelClientBase extends I2PTunnelTask implements Runna
                     // FIXME there is a loop in buildSocketManager(), do we really need another one here?
                     // no matter, buildSocketManager() now throws an IllegalArgumentException
                     try { Thread.sleep(10*1000); } catch (InterruptedException ie) {}
-                } else {
+                } else if (!_handlerName.contains("Ping")) {
                     l.log("Tunnels ready for client [" + _handlerName + "]");
                 }
             }
@@ -882,7 +882,10 @@ public abstract class I2PTunnelClientBase extends I2PTunnelTask implements Runna
                     // TCG will try to destroy it too
                 } // else the app chaining to this one closes it!
             }
-            l.log("Stopping client " + toString());
+            if (!toString().contains("-1"))
+                l.log(" ‣ Stopping client " + toString() + "…");
+            else
+                l.log(" ‣ Stopping client…");
             open = false;
             try {
                 if (ss != null) ss.close();
