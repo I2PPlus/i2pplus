@@ -1316,6 +1316,8 @@
     <target name="preppkg-unix" depends="preppkg-base, prep-script-translation" >
         <copy file="installer/resources/runplain.sh" todir="pkg-temp/" />
         <copy file="installer/resources/eepget" todir="pkg-temp/" />
+        <copy file="installer/resources/eephead" todir="pkg-temp/" />
+        <copy file="installer/resources/i2ping" todir="pkg-temp/" />
         <copy file="installer/resources/i2prouter" todir="pkg-temp/" />
         <copy file="installer/resources/osid" todir="pkg-temp/" />
         <copy file="installer/resources/postinstall.sh" todir="pkg-temp/" />
@@ -1368,6 +1370,7 @@
     <target name="preppkg-windows" depends="preppkg-base, preplicenses-windows, buildUtilityJar, buildexe">
         <copy file="build/i2p.exe" todir="pkg-temp/" failonerror="false" />
         <copy file="installer/resources/eepget.bat" todir="pkg-temp/" />
+        <copy file="installer/resources/eephead.bat" todir="pkg-temp/" />
         <copy file="installer/resources/i2prouter.bat" todir="pkg-temp/" />
         <copy file="installer/resources/fixperms.bat" todir="pkg-temp/" />
         <copy file="installer/resources/install_i2p_service_winnt.bat" todir="pkg-temp/" />
@@ -1836,6 +1839,11 @@
         <copy file="build/i2psnark.war" todir="pkg-temp/webapps/" />
         <copy file="installer/resources/deletelist.txt" todir="pkg-temp/" />
         <copy file="installer/resources/blocklist.txt" todir="pkg-temp/" />
+        <!-- will overwrite existing instances, resetting i2p path
+        <copy file="installer/resources/eephead" todir="pkg-temp/" />
+        <copy file="installer/resources/eephead.bat" todir="pkg-temp/" />
+        <copy file="installer/resources/i2ping" todir="pkg-temp/" />
+        -->
         <copy todir="pkg-temp/man/">
             <fileset dir="installer/resources/man/" />
         </copy>
@@ -2123,7 +2131,7 @@
         <delete dir="pkg-temp/locale/" />
         <delete dir="pkg-temp/man/" />
         <delete dir="pkg-temp/Start I2P Router.app/" />
-        <delete dir="pkg-temp" includes="eepget i2prouter INSTALL-headless.txt osid postinstall.sh runplain.sh" />
+        <delete dir="pkg-temp" includes="eepget eephead i2ping i2prouter INSTALL-headless.txt osid postinstall.sh runplain.sh" />
     </target>
 
     <!-- IzPack 4 -->

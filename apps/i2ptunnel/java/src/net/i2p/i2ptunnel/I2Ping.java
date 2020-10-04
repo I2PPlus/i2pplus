@@ -73,8 +73,9 @@ public class I2Ping extends I2PTunnelClientBase {
         synchronized (this) {
             listenerReady = true;
             notifyAll();
+            l.log(" ‣ Tunnels ready for I2Ping client");
         }
-        l.log(" • I2Ping results:");
+        //l.log(" • I2Ping results:");
         try {
             runCommand(getTunnel().getClientOptions().getProperty(PROP_COMMAND));
         } catch (InterruptedException ex) {
@@ -83,7 +84,7 @@ public class I2Ping extends I2PTunnelClientBase {
         } catch (IOException ex) {
             _log.error("Pinger exception", ex);
         }
-        l.log(" ✔ Finished");
+        //l.log(" ✔ Finished");
         finished = true;
         close(false);
     }
@@ -225,7 +226,7 @@ public class I2Ping extends I2PTunnelClientBase {
             return false;
         }
         //l.log("Closing pinger " + toString());
-        l.log(" ‣ Closing pinger…");
+        //l.log(" ‣ Closing pinger…");
         l.log(" ‣ Pinger closed");
         return true;
     }
@@ -315,24 +316,24 @@ public class I2Ping extends I2PTunnelClientBase {
                                 pass++;
                                 long rtt = System.currentTimeMillis() - lastPingTime;
                                 totalTime += rtt;
-                                l.log((i+1) + ": + " + rtt + "ms");
+                                l.log(" ✔ " + (i+1) + ":\t " + rtt + "ms");
                             } else {
                                 fail++;
-                                l.log((i+1) + ": -");
+                                l.log(" ✖ " + (i+1) + ":\t ------");
                             }
                         } else {
-                            pingResults.append(sent ? "+ " : "- ");
+                            pingResults.append(sent ? "\t +" : "\t -");
                         }
                     }
                     //    System.out.println(sent+" -> "+destination);
                 }
                 if (reportTimes) {
-                    pingResults.append("  ").append(pass).append(" received ");
-                    if (pass > 0)
-                        pingResults.append("(average time ").append(totalTime/pass).append("ms) ");
-                    pingResults.append("and ").append(fail).append(" lost for: ");
+                    pingResults.append(" • ").append(pass).append(" pongs received ");
+                    pingResults.append("and ").append(fail).append(" lost for ");
                 }
                 pingResults.append(destination);
+                if (pass > 0 && reportTimes)
+                    pingResults.append(" (average ").append(totalTime/pass).append("ms) ");
                 l.log(pingResults.toString());
             } catch (I2PException ex) {
                 _log.error("Error pinging " + destination, ex);

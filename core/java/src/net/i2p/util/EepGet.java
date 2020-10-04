@@ -496,6 +496,7 @@ public class EepGet {
         public CLIStatusListener() {
             this(1024, 40);
         }
+
         public CLIStatusListener(int markSize, int lineSize) {
             _markSize = markSize;
             _lineSize = lineSize;
@@ -503,6 +504,7 @@ public class EepGet {
             _startedOn = _lastComplete;
             _firstTime = true;
         }
+
         public void bytesTransferred(long alreadyTransferred, int currentWrite, long bytesTransferred, long bytesRemaining, String url) {
             if (_firstTime) {
                 if (alreadyTransferred > 0) {
@@ -541,12 +543,13 @@ public class EepGet {
                             double kbps = lineKBytes/(timeToSend/1000.0d);
                             fmt.format("%7.2f", Double.valueOf(kbps));
                             buf.append(" KBps");
-
+/*
                             buf.append(" / ");
                             long lifetime = _context.clock().now() - _startedOn;
                             double lifetimeKBps = (1000.0d*(_written)/(lifetime*1024.0d));
                             fmt.format("%7.2f", Double.valueOf(lifetimeKBps));
                             buf.append(" KBps");
+*/
                             System.out.println(buf.toString());
                             fmt.close();
                         }
@@ -555,6 +558,7 @@ public class EepGet {
                 }
             }
         }
+
         public void transferComplete(long alreadyTransferred, long bytesTransferred, long bytesRemaining, String url, String outputFile, boolean notModified) {
             long transferred;
             if (_firstTime)
@@ -567,62 +571,65 @@ public class EepGet {
                 System.out.println(" • Source not modified since last download");
             } else {
                 if ( bytesRemaining > 0 ) {
-                    System.out.println(" ✔ Transfer of " + url + " completed with " + transferred
-                            + " transferred and " + (bytesRemaining - bytesTransferred) + " remaining" +
-                            (_discarded > 0 ? (" and " + _discarded + " bytes discarded") : ""));
+                    System.out.println(" ✔ Transfer of " + url + " complete (" + transferred
+                            + " bytes transferred, " + (bytesRemaining - bytesTransferred) + " bytes remaining" +
+                            (_discarded > 0 ? (" and " + _discarded + " bytes discarded") : ")"));
                 } else {
-                    System.out.println(" ✔ Transfer of " + url + " completed with " + transferred
+                    System.out.println(" ✔ Transfer of " + url + " complete (" + transferred
                             + " bytes transferred" +
-                            (_discarded > 0 ? (" and " + _discarded + " bytes discarded") : ""));
+                            (_discarded > 0 ? (", " + _discarded + " bytes discarded") : ")"));
                 }
+                long timeToSend = _context.clock().now() - _startedOn;
+                StringBuilder buf = new StringBuilder(128);
+                buf.append(" • Transfer time: " + DataHelper.formatDuration(timeToSend));
                 if (transferred > 0) {
+                    buf.append(" @ ");
+                    if (timeToSend <= 0)
+                        timeToSend = 1;
+                    long kbps = (long) (1000.0d * transferred / timeToSend);
+                    buf.append(DataHelper.formatSize2Decimal(kbps, false));
+                    buf.append("Bps");
+                    System.out.println(buf.toString());
                     long sz = (new File(outputFile)).length();
                     if (sz <= 0)
                         sz = alreadyTransferred;
-                    System.out.println(" ✔ Output saved to " + outputFile + " (" + sz + " bytes)");
+                    System.out.println(" ✔ Saved to: " + outputFile + " (" + sz + " bytes)");
                 }
             }
-            long timeToSend = _context.clock().now() - _startedOn;
-            System.out.println(" • Transfer time: " + DataHelper.formatDuration(timeToSend));
+            if (_lastModified != null)
+                System.out.println(" • Last Modified: " + _lastModified);
             if (_etag != null)
                 System.out.println(" • ETag: " + _etag);
-            if (transferred > 0) {
-                StringBuilder buf = new StringBuilder(64);
-                buf.append(" • Transfer rate: ");
-                if (timeToSend <= 0)
-                    timeToSend = 1;
-                long kbps = (long) (1000.0d * transferred / timeToSend);
-                buf.append(DataHelper.formatSize2Decimal(kbps, false));
-                buf.append("Bps");
-                System.out.println(buf.toString());
-            }
         }
+
         public void attemptFailed(String url, long bytesTransferred, long bytesRemaining, int currentAttempt, int numRetries, Exception cause) {
-            System.out.println();
+            //System.out.println();
             //System.out.println("** " + new Date());
-            System.out.println(" ✖ Attempt " + currentAttempt + " of " + url + " failed");
-            System.out.println(" • Transfered " + bytesTransferred
-                               + " with " + (bytesRemaining < 0 ? "unknown" : Long.toString(bytesRemaining)) + " remaining");
+            System.out.println(" ✖ Attempt " + (currentAttempt + 1) + " to retrieve " + url + " failed");
+            System.out.println(" • Transferred " + bytesTransferred
+                               + " bytes (" + (bytesRemaining < 0 ? "unknown" : Long.toString(bytesRemaining)) + " bytes remaining)");
             System.out.println(" • " + cause.getMessage());
             _previousWritten += _written;
             _written = 0;
         }
+
         public void transferFailed(String url, long bytesTransferred, long bytesRemaining, int currentAttempt) {
             //System.out.println("== " + new Date());
-            System.out.println(" ✖ Transfer of " + url + " failed after " + currentAttempt + " attempts");
+            System.out.println(" ✖ Transfer of " + url + " failed after " + (currentAttempt + 1) + " retries");
             System.out.println(" • Transfer size: " + bytesTransferred + " with "
                                + (bytesRemaining < 0 ? "unknown" : Long.toString(bytesRemaining)) + " remaining");
             long timeToSend = _context.clock().now() - _startedOn;
-            System.out.println(" • Transfer time: " + DataHelper.formatDuration(timeToSend));
+            StringBuilder buf = new StringBuilder(128);
+            buf.append(" • Transfer time: " + DataHelper.formatDuration(timeToSend));
             if (timeToSend <= 0)
                 timeToSend = 1;
             long kbps = (long) (1000.0d * bytesTransferred / timeToSend);
-            StringBuilder buf = new StringBuilder(64);
-            buf.append(" • Transfer rate: ");
+            buf.append(" @ ");
             buf.append(DataHelper.formatSize2Decimal(kbps, false));
             buf.append("Bps");
             System.out.println(buf.toString());
         }
+
         public void attempting(String url) {}
         public void headerReceived(String url, int currentAttempt, String key, String val) {}
     }
