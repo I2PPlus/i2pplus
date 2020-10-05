@@ -266,38 +266,38 @@ h2, h3 {
 }
 
 #messages h2 {
-  background: url(/themes/console/images/info/logs.png) left 6px center no-repeat, linear-gradient(to bottom, #191729 50%, #000 50%) !important;
-  background: url(/themes/console/images/info/logs.png) left 6px center no-repeat, linear-gradient(to bottom, #080818 50%, #000008 50%) !important;
+  background: url(/themes/console/images/svg/logs.svg) left 6px center no-repeat, linear-gradient(to bottom, #191729 50%, #000 50%) !important;
+  background: url(/themes/console/images/svg/logs.svg) left 6px center no-repeat, linear-gradient(to bottom, #080818 50%, #000008 50%) !important;
   background-size: 20px auto, 100% 100%, 100% 100% !important;
 }
 
 #globalTunnelControl h2 {
-  background: url(/themes/console/images/info/control.png) left 6px center no-repeat, linear-gradient(to bottom, #191729 50%, #000 50%) !important;
-  background: url(/themes/console/images/info/control.png) left 6px center no-repeat, linear-gradient(to bottom, #080818 50%, #000008 50%) !important;
+  background: url(/themes/console/images/svg/mouse.svg) left 6px center no-repeat, linear-gradient(to bottom, #191729 50%, #000 50%) !important;
+  background: url(/themes/console/images/svg/mouse.svg) left 6px center no-repeat, linear-gradient(to bottom, #080818 50%, #000008 50%) !important;
   background-size: 20px auto, 100% 100%, 100% 100% !important;
 }
 
 #servers h2 {
-  background: url(/themes/console/images/info/server.png) left 6px center no-repeat, linear-gradient(to bottom, #191729 50%, #000 50%) !important;
-  background: url(/themes/console/images/info/server.png) left 6px center no-repeat, linear-gradient(to bottom, #080818 50%, #000008 50%) !important;
+  background: url(/themes/console/images/svg/server.svg) left 6px center no-repeat, linear-gradient(to bottom, #191729 50%, #000 50%) !important;
+  background: url(/themes/console/images/svg/server.svg) left 6px center no-repeat, linear-gradient(to bottom, #080818 50%, #000008 50%) !important;
   background-size: 20px auto, 100% 100%, 100% 100% !important;
 }
 
 #clients h2 {
-  background: url(/themes/console/images/info/client.png) left 6px center no-repeat, linear-gradient(to bottom, #191729 50%, #000 50%) !important;
-  background: url(/themes/console/images/info/client.png) left 6px center no-repeat, linear-gradient(to bottom, #080818 50%, #000008 50%) !important;
+  background: url(/themes/console/images/svg/client.svg) left 6px center no-repeat, linear-gradient(to bottom, #191729 50%, #000 50%) !important;
+  background: url(/themes/console/images/svg/client.svg) left 6px center no-repeat, linear-gradient(to bottom, #080818 50%, #000008 50%) !important;
   background-size: 20px auto, 100% 100%, 100% 100% !important;
 }
 
 #tunnelEditPage h2, #tunnelEditPage h3, #registration h2, #registration h3 {
-  background: url(/themes/console/images/info/configure.png) left 6px center no-repeat, linear-gradient(to bottom, #191729 50%, #000 50%) !important;
-  background: url(/themes/console/images/info/configure.png) left 6px center no-repeat, linear-gradient(to bottom, #080818 50%, #000008 50%) !important;
+  background: url(/themes/console/images/svg/configure.svg) left 6px center no-repeat, linear-gradient(to bottom, #191729 50%, #000 50%) !important;
+  background: url(/themes/console/images/svg/configure.svg) left 6px center no-repeat, linear-gradient(to bottom, #080818 50%, #000008 50%) !important;
   background-size: 20px auto, 100% 100%, 100% 100% !important;
 }
 
 #wizardPanel h2, #ssl h2 {
-  background: url(/themes/console/images/info/wizard.png) left 6px center no-repeat, linear-gradient(to bottom, #191729 50%, #000 50%) !important;
-  background: url(/themes/console/images/info/wizard.png) left 6px center no-repeat, linear-gradient(to bottom, #080818 50%, #000008 50%) !important;
+  background: url(/themes/console/images/svg/wizard.svg) 8px center no-repeat, linear-gradient(to bottom, #191729 50%, #000 50%) !important;
+  background: url(/themes/console/images/svg/wizard.svg) 8px center no-repeat, linear-gradient(to bottom, #080818 50%, #000008 50%) !important;
   background-size: 20px auto, 100% 100%, 100% 100% !important;
 }
 

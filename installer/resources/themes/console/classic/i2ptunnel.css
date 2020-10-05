@@ -329,7 +329,7 @@ h2, h3 {
 }
 
 #globalTunnelControl h2 {
-  background: url(/themes/console/images/info/control.png) 5px center no-repeat, linear-gradient(to bottom, #fff 50%, #fafbff 50%) !important;
+  background: url(/themes/console/images/svg/mouse.svg) 5px center no-repeat, linear-gradient(to bottom, #fff 50%, #fafbff 50%) !important;
   background-size: 20px auto, 100% 100%, 100% 100% !important;
 }
 
@@ -344,12 +344,12 @@ h2, h3 {
 }
 
 #tunnelEditPage h2, #tunnelEditPage h3, #registration h2, #registration h3 {
-  background: url(/themes/console/images/info/configure.png) 5px center no-repeat, linear-gradient(to bottom, #fff 50%, #fafbff 50%) !important;
+  background: url(/themes/console/images/svg/configure.svg) 5px center no-repeat, linear-gradient(to bottom, #fff 50%, #fafbff 50%) !important;
   background-size: 20px auto, 100% 100%, 100% 100% !important;
 }
 
 #wizardPanel h2, #ssl h2 {
-  background: url(/themes/console/images/info/wizard.png) left 6px center no-repeat, linear-gradient(to bottom, #fff 50%, #fafbff 50%) !important;
+  background: url(/themes/console/images/svg/wizard.svg) left 6px center no-repeat, linear-gradient(to bottom, #fff 50%, #fafbff 50%) !important;
   background-size: 20px auto, 100% 100%, 100% 100% !important;
 }
 

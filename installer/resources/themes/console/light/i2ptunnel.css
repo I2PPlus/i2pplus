@@ -510,27 +510,27 @@ h2.error {
 }
 
 #messages h2 {
-  background: url(/themes/console/images/info/logs.png) left 5px center no-repeat, linear-gradient(to bottom, #fcfcff 50%, rgba(255,255,255,.6) 50%, rgba(240,240,255,.4)), linear-gradient(135deg, #fcfcff 15%, rgba(231, 231, 255, .8) 35%) #fff !important;
+  background: url(/themes/console/images/svg/logs.svg) left 5px center no-repeat, linear-gradient(to bottom, #fcfcff 50%, rgba(255,255,255,.6) 50%, rgba(240,240,255,.4)), linear-gradient(135deg, #fcfcff 15%, rgba(231, 231, 255, .8) 35%) #fff !important;
 }
 
 #globalTunnelControl h2 {
-  background: url(/themes/console/images/info/control.png) left 5px center no-repeat, linear-gradient(to bottom, #fcfcff 50%, rgba(255,255,255,.6) 50%, rgba(240,240,255,.4)), linear-gradient(135deg, #fcfcff 15%, rgba(231, 231, 255, .8) 35%) #fff !important;
+  background: url(/themes/console/images/svg/mouse.svg) left 5px center no-repeat, linear-gradient(to bottom, #fcfcff 50%, rgba(255,255,255,.6) 50%, rgba(240,240,255,.4)), linear-gradient(135deg, #fcfcff 15%, rgba(231, 231, 255, .8) 35%) #fff !important;
 }
 
 #servers h2 {
-  background: url(/themes/console/images/info/server.png) left 5px center no-repeat, linear-gradient(to bottom, #fcfcff 50%, rgba(255,255,255,.6) 50%, rgba(240,240,255,.4)), linear-gradient(135deg, #fcfcff 15%, rgba(231, 231, 255, .8) 35%) #fff !important;
+  background: url(/themes/console/images/svg/server.svg) left 5px center no-repeat, linear-gradient(to bottom, #fcfcff 50%, rgba(255,255,255,.6) 50%, rgba(240,240,255,.4)), linear-gradient(135deg, #fcfcff 15%, rgba(231, 231, 255, .8) 35%) #fff !important;
 }
 
 #clients h2 {
-  background: url(/themes/console/images/info/client.png) left 5px center no-repeat, linear-gradient(to bottom, #fcfcff 50%, rgba(255,255,255,.6) 50%, rgba(240,240,255,.4)), linear-gradient(135deg, #fcfcff 15%, rgba(231, 231, 255, .8) 35%) #fff !important;
+  background: url(/themes/console/images/svg/client.svg) left 5px center no-repeat, linear-gradient(to bottom, #fcfcff 50%, rgba(255,255,255,.6) 50%, rgba(240,240,255,.4)), linear-gradient(135deg, #fcfcff 15%, rgba(231, 231, 255, .8) 35%) #fff !important;
 }
 
 #tunnelEditPage h2, #tunnelEditPage h3, #registration h2, #registration h3 {
-  background: url(/themes/console/images/info/configure.png) left 5px center no-repeat, linear-gradient(to bottom, #fcfcff 50%, rgba(255,255,255,.6) 50%, rgba(240,240,255,.4)), linear-gradient(135deg, #fcfcff 15%, rgba(231, 231, 255, .8) 35%) #fff !important;
+  background: url(/themes/console/images/svg/configure.svg) left 5px center no-repeat, linear-gradient(to bottom, #fcfcff 50%, rgba(255,255,255,.6) 50%, rgba(240,240,255,.4)), linear-gradient(135deg, #fcfcff 15%, rgba(231, 231, 255, .8) 35%) #fff !important;
 }
 
 #wizardPanel h2, #ssl h2 {
-  background: url(/themes/console/images/info/wizard.png) left 5px center no-repeat, linear-gradient(to bottom, #fcfcff 50%, rgba(255,255,255,.6) 50%, rgba(240,240,255,.4)), linear-gradient(135deg, #fcfcff 15%, rgba(231, 231, 255, .8) 35%) #fff !important;
+  background: url(/themes/console/images/svg/wizard.svg) left 5px center no-repeat, linear-gradient(to bottom, #fcfcff 50%, rgba(255,255,255,.6) 50%, rgba(240,240,255,.4)), linear-gradient(135deg, #fcfcff 15%, rgba(231, 231, 255, .8) 35%) #fff !important;
 }
 
 #messages h2, #globalTunnelControl h2, #servers h2, #clients h2, #tunnelEditPage h2, #tunnelEditPage h3, #registration h2, #registration h3, #wizardPanel h2, #ssl h2 {
