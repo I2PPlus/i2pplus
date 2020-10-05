@@ -250,26 +250,26 @@ h2, h3 {
 
 #messages h2 {
   margin-top: 12px;
-  background: url(/themes/console/images/info/logs.png) left 8px center no-repeat, linear-gradient(to bottom, #1a261a 50%, #000 50%) !important;
-  background: url(/themes/console/images/info/logs.png) left 8px center no-repeat, repeating-linear-gradient(to right, rgba(0,0,0,.4) 1px, rgba(0,0,0,.4) 2px, rgba(0,32,0,.6) 3px), linear-gradient(to bottom, #001800, #000 75%) !important;
+  background: url(/themes/console/images/svg/logs.svg) left 8px center no-repeat, linear-gradient(to bottom, #1a261a 50%, #000 50%) !important;
+  background: url(/themes/console/images/svg/logs.svg) left 8px center no-repeat, repeating-linear-gradient(to right, rgba(0,0,0,.4) 1px, rgba(0,0,0,.4) 2px, rgba(0,32,0,.6) 3px), linear-gradient(to bottom, #001800, #000 75%) !important;
   background-size: 20px auto, 100% 100%, 100% 100% !important;
 }
 
 #globalTunnelControl h2 {
-  background: url(/themes/console/images/info/control.png) left 8px center no-repeat, linear-gradient(to bottom, #1a261a 50%, #000 50%) !important;
-  background: url(/themes/console/images/info/control.png) left 8px center no-repeat, repeating-linear-gradient(to right, rgba(0,0,0,.4) 1px, rgba(0,0,0,.4) 2px, rgba(0,32,0,.6) 3px), linear-gradient(to bottom, #001800, #000 75%) !important;
+  background: url(/themes/console/images/svg/mouse.svg) left 8px center no-repeat, linear-gradient(to bottom, #1a261a 50%, #000 50%) !important;
+  background: url(/themes/console/images/svg/mouse.svg) left 8px center no-repeat, repeating-linear-gradient(to right, rgba(0,0,0,.4) 1px, rgba(0,0,0,.4) 2px, rgba(0,32,0,.6) 3px), linear-gradient(to bottom, #001800, #000 75%) !important;
   background-size: 20px auto, 100% 100%, 100% 100% !important;
 }
 
 #servers h2 {
-  background: url(/themes/console/images/info/server.png) left 8px center no-repeat, linear-gradient(to bottom, #1a261a 50%, #000 50%) !important;
-  background: url(/themes/console/images/info/server.png) left 8px center no-repeat, repeating-linear-gradient(to right, rgba(0,0,0,.4) 1px, rgba(0,0,0,.4) 2px, rgba(0,32,0,.6) 3px), linear-gradient(to bottom, #001800, #000 75%) !important;
+  background: url(/themes/console/images/svg/server.svg) left 8px center no-repeat, linear-gradient(to bottom, #1a261a 50%, #000 50%) !important;
+  background: url(/themes/console/images/svg/server.svg) left 8px center no-repeat, repeating-linear-gradient(to right, rgba(0,0,0,.4) 1px, rgba(0,0,0,.4) 2px, rgba(0,32,0,.6) 3px), linear-gradient(to bottom, #001800, #000 75%) !important;
   background-size: 20px auto, 100% 100%, 100% 100% !important;
 }
 
 #clients h2 {
-  background: url(/themes/console/images/info/client.png) left 8px center no-repeat, linear-gradient(to bottom, #1a261a 50%, #000 50%) !important;
-  background: url(/themes/console/images/info/client.png) left 8px center no-repeat, repeating-linear-gradient(to right, rgba(0,0,0,.4) 1px, rgba(0,0,0,.4) 2px, rgba(0,32,0,.6) 3px), linear-gradient(to bottom, #001800, #000 75%) !important;
+  background: url(/themes/console/images/svg/client.svg) left 8px center no-repeat, linear-gradient(to bottom, #1a261a 50%, #000 50%) !important;
+  background: url(/themes/console/images/svg/client.svg) left 8px center no-repeat, repeating-linear-gradient(to right, rgba(0,0,0,.4) 1px, rgba(0,0,0,.4) 2px, rgba(0,32,0,.6) 3px), linear-gradient(to bottom, #001800, #000 75%) !important;
   background-size: 20px auto, 100% 100%, 100% 100% !important;
 }
 
@@ -278,15 +278,15 @@ h2, h3 {
 }
 
 #tunnelEditPage h2, #tunnelEditPage h3, #registration h2, #registration h3 {
-  background: url(/themes/console/images/info/configure.png) left 8px center no-repeat, linear-gradient(to bottom, #1a261a 50%, #000 50%) !important;
-  background: url(/themes/console/images/info/configure.png) left 8px center no-repeat, repeating-linear-gradient(to right, rgba(0,0,0,.4) 1px, rgba(0,0,0,.4) 2px, rgba(0,32,0,.6) 3px), linear-gradient(to bottom, #001800, #000 75%) !important;
+  background: url(/themes/console/images/svg/configure.svg) left 8px center no-repeat, linear-gradient(to bottom, #1a261a 50%, #000 50%) !important;
+  background: url(/themes/console/images/svg/configure.svg) left 8px center no-repeat, repeating-linear-gradient(to right, rgba(0,0,0,.4) 1px, rgba(0,0,0,.4) 2px, rgba(0,32,0,.6) 3px), linear-gradient(to bottom, #001800, #000 75%) !important;
   background-size: 20px auto, 100% 100%, 100% 100% !important;
   background-blend-mode: normal, normal, exclusion, normal;
 }
 
 #wizardPanel h2, #ssl h2 {
-  background: url(/themes/console/images/info/wizard.png) left 8px center no-repeat, linear-gradient(to bottom, #1a261a 50%, #000 50%) !important;
-  background: url(/themes/console/images/info/wizard.png) left 8px center no-repeat, repeating-linear-gradient(to right, rgba(0,0,0,.4) 1px, rgba(0,0,0,.4) 2px, rgba(0,32,0,.6) 3px), linear-gradient(to bottom, #001800, #000 75%) !important;
+  background: url(/themes/console/images/svg/wizard.svg) left 8px center no-repeat, linear-gradient(to bottom, #1a261a 50%, #000 50%) !important;
+  background: url(/themes/console/images/svg/wizard.svg) left 8px center no-repeat, repeating-linear-gradient(to right, rgba(0,0,0,.4) 1px, rgba(0,0,0,.4) 2px, rgba(0,32,0,.6) 3px), linear-gradient(to bottom, #001800, #000 75%) !important;
   background-size: 20px auto, 100% 100%, 100% 100% !important;
   background-blend-mode: normal, normal, exclusion, normal;
 }
