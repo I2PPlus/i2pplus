@@ -81,10 +81,6 @@ a:link, a:visited {
   outline: none;
 }
 
-/*a:visited {
-  color: #7b7;
-}*/
-
 a:hover, a:focus {
   color: #f60;
 }
@@ -104,6 +100,10 @@ form {
 
 br {
   clear: left;
+}
+
+.unbold {
+  font-weight: normal;
 }
 
 .statusNotRunning {
