@@ -809,22 +809,6 @@
         }
 %>
 </th></tr>
-<!--
-<tr>
-<td colspan="2">
-<span class="multiOption">
-<label title="<%=intl._t("Allow all clients to connect to this service")%>"><input value="0" type="radio" name="accessMode"<%=(editBean.getAccessMode(curTunnel).equals("0") ? " checked=\"checked\"" : "")%> class="optbox" />&nbsp;<%=intl._t("Disable")%></label>
-</span>
-<span class="multiOption">
-<label title="<%=intl._t("Prevent listed clients from connecting to this service")%>"><input value="2" type="radio" name="accessMode"<%=(editBean.getAccessMode(curTunnel).equals("2") ? " checked=\"checked\"" : "")%> class="optbox" />&nbsp;<%=intl._t("Blacklist")%></label>
-</span>
-<span class="multiOption">
-<label title="<%=intl._t("Only allow listed clients to connect to this service")%>"><input value="1" type="radio" name="accessMode"<%=(editBean.getAccessMode(curTunnel).equals("1") ? " checked=\"checked\"" : "")%> class="optbox" />&nbsp;<%=intl._t("Whitelist")%></label>
-</span>
-</td>
-</tr>
--->
-<!--<tr><td colspan="2"><b><%=intl._t("Access List")%></b>&nbsp;(<%=intl._t("Specify client destinations, 1 per line")%>)</td></tr>-->
 <tr>
 <td colspan="2">
 <span class="multiOption" <%=(editBean.getAccessMode(curTunnel).equals("0") ? " id=\"accesslistDisabled\"" : "")%>>
@@ -836,7 +820,13 @@
 <span class="multiOption">
 <label title="<%=intl._t("Only allow listed clients to connect to this service")%>"><input value="1" type="radio" name="accessMode"<%=(editBean.getAccessMode(curTunnel).equals("1") ? " checked=\"checked\"" : "")%> class="optbox" />&nbsp;<%=intl._t("Whitelist")%></label>
 </span>
+<%
+        if (!editBean.getAccessMode(curTunnel).equals("0")) {
+%>
 <textarea rows="2" style="height: 8em;" cols="60" name="accessList" title="<%=intl._t("Control access to this service")%>" wrap="off" spellcheck="false"><%=editBean.getAccessList(curTunnel)%></textarea>
+<%
+        }
+%>
 </td>
 </tr>
 <tr><th><b><%=intl._t("Tunnel Filter")%></b></th><th><b><%=intl._t("Absolute path to filter file")%></b></th></tr>
@@ -844,8 +834,7 @@
 <td class="infohelp"><%=intl._t("You can define an <a href=\"/help/tunnelfilter\">advanced filter</a> for this tunnel.")%></td>
 <td><input title="<%=intl._t("Absolute path to file containing filter definition")%>" type="text" id="filterDefinition" class="freetext filemanager" name="filterDefinition" value="<%=editBean.getFilterDefinition(curTunnel)%>" size="80"/></td>
 </tr>
-<tr>
-<th colspan="2"><%=intl._t("Server Throttling")%></th></tr>
+<tr><th colspan="2"><%=intl._t("Server Throttling")%></th></tr>
 <tr>
 <td id="throttle" colspan="4">
 <table id="throttler">
@@ -855,7 +844,7 @@
 <td><b><%=intl._t("Per Minute")%></b></td>
 <td><b><%=intl._t("Per Hour")%></b></td>
 <td><b><%=intl._t("Per Day")%></b></td>
-<td class="blankColumn"></td>
+<td><b><%=intl._t("Concurrent")%></b></td>
 </tr>
 <tr>
 <td><b><%=intl._t("Per Client")%></b></td>
@@ -881,17 +870,9 @@
 <td>
 <input type="text" name="totalDay" title="<%=intl._t("Total number of web page requests per day before access to the server is blocked")%>" value="<%=editBean.getTotalDay(curTunnel)%>" class="freetext" />
 </td>
-<td class="blankColumn"></td>
-</tr>
-<tr><th colspan="5"><%=intl._t("Max concurrent connections")%>&nbsp;<span class="unbold"><%=intl._t("(0 = unlimited)")%></span></th></tr>
-<tr>
-<td></td>
 <td>
 <input type="text" name="maxStreams" title="<%=intl._t("Maximum number of simultaneous client connections")%>" value="<%=editBean.getMaxStreams(curTunnel)%>" class="freetext" />
 </td>
-<td></td>
-<td></td>
-<td class="blankColumn"></td>
 </tr>
 <%
         if (("httpserver".equals(tunnelType)) || ("httpbidirserver".equals(tunnelType))) {
@@ -901,7 +882,7 @@
 <td></td>
 <td><b><%=intl._t("Per Period")%></b></td>
 <td><b><%=intl._t("Ban Duration")%></b></td>
-<td></td>
+<td><b><%=intl._t("POST limit period")%></b></td>
 <td class="blankColumn"></td>
 </tr>
 <tr>
@@ -909,10 +890,11 @@
 <td>
 <input type="text" name="postMax" title="<%=intl._t("Maximum number of post requests permitted for a unique client for the configured timespan")%>" value="<%=editBean.getPostMax(curTunnel)%>" class="freetext quantity"/>
 </td>
-<td colspan="2">
+<td>
 <input type="text" name="postBanTime" title="<%=intl._t("If a client exceeds the maximum number of post requests per allocated period, enforce a ban for this number of minutes")%>" value="<%=editBean.getPostBanTime(curTunnel)%>" class="freetext period"/>
 <%=intl._t("minutes")%>
 </td>
+<td><input type="text" name="postCheckTime" title="<%=intl._t("Timespan for the maximum number of post requests to be reached before a ban is triggered")%>" value="<%=editBean.getPostCheckTime(curTunnel)%>" class="freetext period"/></td>
 <td class="blankColumn"></td>
 </tr>
 <tr>
@@ -924,18 +906,6 @@
 <input type="text" name="postTotalBanTime" title="<%=intl._t("If the maximum number of post requests per allocated period is exceeded, enforce a global access ban for this number of minutes")%>" value="<%=editBean.getPostTotalBanTime(curTunnel)%>" class="freetext period"/>
 <%=intl._t("minutes")%>
 </td>
-<td class="blankColumn"></td>
-</tr>
-<tr>
-<td>
-<b><%=intl._t("POST limit period")%>
-</b>
-</td>
-<td colspan="2">
-<input type="text" name="postCheckTime" title="<%=intl._t("Timespan for the maximum number of post requests to be reached before a ban is triggered")%>" value="<%=editBean.getPostCheckTime(curTunnel)%>" class="freetext period"/>
-<%=intl._t("minutes")%>
-</td>
-<td></td>
 <td class="blankColumn"></td>
 </tr>
 <%
