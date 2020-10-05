@@ -14090,6 +14090,12 @@ h3#bannedpeers {
     }
 }
 
+@media screen and (min-width: 1840px) {
+  #minigraph {
+    width: 250px !important;
+  }
+}
+
 #sb_graphcontainer::before {
   position: absolute;
   top: 2px;
