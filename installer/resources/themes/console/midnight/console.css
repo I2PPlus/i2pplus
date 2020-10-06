@@ -9773,23 +9773,23 @@ table#reseedconfig input[type="text"], table#reseedconfig input[type="password"]
 
 @media screen and (min-width: 1840px) {
 .main, .news, h1, #warning.sorry, #warning2.sorry {
-  margin-left: 248px !important;
+  margin-left: 268px !important;
 }
 
 .routersummary {
-  width: 220px !important;
+  width: 240px !important;
 }
 
 .routersummary div[style="height: 36px;"] {
-  height: 40px !important;
   margin-top: 1px;
+  height: 46px !important;
 }
 
 .routersummary img[src$="i2plogo.png"] {
-  margin-left: -4px;
-  transform: none;
-  width: 224px;
   margin-top: -2px;
+  margin-left: -4px;
+  width: 244px;
+  transform: none;
 }
 
 #error500 .routersummary img[src$="i2plogo.png"] {
@@ -9798,32 +9798,42 @@ table#reseedconfig input[type="text"], table#reseedconfig input[type="password"]
 }
 
 .routersummary table[id^="sb_"], #sb_localtunnels {
-  width: 236px !important;
+  width: 256px !important;
 }
 
 .routersummary button, .routersummary .stop, .routersummary .reload {
-  min-width: 111px !important;
+  min-width: 121px !important;
 }
 
 .routersummary td:first-child {
-  max-width: 110px !important;
+  max-width: 120px !important;
 }
 
 #sb_services {
-  width: 240px !important;
+  width: 260px !important;
+}
+
+#sb_internals, #sb_advanced, #sb_help {
+  margin: -3px 0 -9px -7px !important;
+  width: 255px !important;
+}
+
+#sb_internals td:first-child, #sb_advanced td:first-child, #sb_help td:first-child {
+  margin: 0;
+  width: auto !important;
 }
 
 .percentBarOuter {
-  width: 230px;
+  width: 250px;
 }
 
 .sb_newsheadings table {
-  width: 238px !important;
+  width: 258px !important;
 }
 
 .sb_newsheadings td:first-child {
-  max-width: 220px !important;
-  width: 220px !important;
+  max-width: 240px !important;
+  width: 240px !important;
 }
 
 #sb_services a {
@@ -9831,16 +9841,12 @@ table#reseedconfig input[type="text"], table#reseedconfig input[type="password"]
   padding-bottom: 5px !important;
 }
 
-/*#sb_graphcontainer {
-  background-size: 320px 77px !important;
-}*/
-
 .routersummary form {
   margin-bottom: -8px;
 }
 
 #sb_services a:link, #sb_internals a:link, #sb_advanced a:link, #sb_help a:link {
-  max-width: 227px !important;
+  max-width: 247px !important;
 }
 
 .routersummary td {
@@ -9953,6 +9959,12 @@ div[id^="config_"] .tab:first-child {
 
 #logs li, pre#servicelogs, #routerlogs li {
   font-size: 9.5pt !important;
+}
+
+h1 {
+   padding-top: 17px;
+   padding-bottom: 16px;
+   font-size: 20pt;
 }
 
 h2 {
@@ -14076,6 +14088,12 @@ h3#bannedpeers {
   #homepage #minigraph {
     height: 39px;
     }
+}
+
+@media screen and (min-width: 1840px) {
+  #minigraph {
+    width: 250px !important;
+  }
 }
 
 #sb_graphcontainer::before {
