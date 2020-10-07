@@ -629,14 +629,6 @@ a:active #sb_bandwidthgraph {
   transition: ease opacity .1s;
 }
 
-#minigraph {
-  margin-top: -18px;
-  padding: 0 1px;
-  width: 198px;
-  height: 40px;
-  display: inline-block;
-}
-
 #sb_graphcontainer {
   margin: -6px -5px -7px;
   height: 44px;
@@ -651,12 +643,37 @@ a:active #sb_bandwidthgraph {
   mix-blend-mode: multiply;
 }
 
-@media screen and (min-width: 1500px) {
 #minigraph {
-  margin-top: -22px;
-  width: 234px;
-  height: 43px;
+  margin-top: -18px;
+  padding: 0 1px;
+  width: 198px;
+  height: 40px;
+  display: inline-block;
 }
+
+div#minigraph {
+  margin-top: -42px;
+  margin-left: 1px;
+  width: 196px;
+  height: 38px;
+  background-repeat: no-repeat;
+  background-size: 197px 40px;
+}
+
+@media screen and (min-width: 1500px) {
+  #minigraph {
+    margin-top: -22px;
+    width: 234px;
+    height: 43px;
+  }
+
+  div#minigraph {
+    margin-top: -43px;
+    margin-left: 1px;
+    width: 234px;
+    height: 38px;
+    background-size: 235px 40px;
+  }
 }
 
 /* end mini sidebar graph */
