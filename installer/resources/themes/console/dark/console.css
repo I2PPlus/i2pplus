@@ -14303,6 +14303,20 @@ h3 + table {
   height: 39px;
 }
 
+div#minigraph {
+  margin-top: -43px;
+  margin-left: 1px;
+  width: 204px;
+  height: 39px;
+  background-repeat: no-repeat;
+  background-size: 204px 40px;
+}
+
+#homepage div#minigraph {
+  margin-top: -42px;
+  height: 38px;
+}
+
 @media screen and (min-width: 1500px) {
   #minigraph {
     margin-top: -21px;
@@ -14311,6 +14325,18 @@ h3 + table {
 
   #homepage #minigraph {
     height: 41px;
+  }
+
+  div#minigraph {
+    margin-top: -43px;
+    margin-left: 1px;
+    width: 258px;
+    height: 39px;
+    background-size: 250px 40px;
+  }
+
+  #homepage div#minigraph {
+    height: 37px;
   }
 }
 

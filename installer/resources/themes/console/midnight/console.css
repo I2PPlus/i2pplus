@@ -14061,12 +14061,6 @@ h3#bannedpeers {
 
 /* minigraph */
 
-#minigraph {
-  margin: -18px -1px 0 0;
-  height: 40px;
-  width: 194px !important;
-}
-
 #sb_graphcontainer {
   margin: -4px -7px -7px !important;
   padding: 0 1px;
@@ -14076,6 +14070,26 @@ h3#bannedpeers {
   overflow: hidden;
   position: relative;
   z-index: 10;
+}
+
+#minigraph {
+  margin: -18px -1px 0 0;
+  height: 40px;
+  width: 194px !important;
+}
+
+div#minigraph {
+  margin-top: -43px;
+  margin-left: 1px;
+  width: 204px;
+  height: 39px;
+  background-repeat: no-repeat;
+  background-size: 204px 40px;
+}
+
+#homepage div#minigraph {
+  margin-top: -42px;
+  height: 38px;
 }
 
 @media screen and (min-width: 1500px) {
@@ -14091,12 +14105,29 @@ h3#bannedpeers {
 
   #homepage #minigraph {
     height: 39px;
-    }
+  }
+
+  div#minigraph {
+    margin-top: -43px;
+    margin-left: 1px;
+    width: 258px;
+    height: 39px;
+    background-size: 250px 40px;
+  }
+
+  #homepage div#minigraph {
+    height: 38px;
+  }
 }
 
 @media screen and (min-width: 1840px) {
   #minigraph {
     width: 250px !important;
+  }
+
+  div#minigraph {
+    width: 264px;
+    background-size: 256px 40px;
   }
 }
 

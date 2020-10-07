@@ -12049,10 +12049,28 @@ div.app:hover img, .sitemaplink:hover img {
   z-index: 0;
 }
 
-@media screen and (max-width: 1200px) {
-#minigraph {
-  margin-left: -50px !important;
+div#minigraph {
+  margin-top: -57px;
+  margin-left: 1px;
+  width: 240px;
+  height: 38px;
+  background-size: 239px 40px;
+  background-repeat: no-repeat;
 }
+
+@media screen and (max-width: 1200px) {
+  #minigraph {
+    margin-left: -50px !important;
+  }
+
+  div#minigraph {
+    margin-top: -57px;
+    margin-left: 1px;
+    width: 249px;
+    height: 38px;
+    background-size: 248px 38px;
+    background-position: left 51px bottom;
+  }
 }
 
 #sb_graphcontainer {
