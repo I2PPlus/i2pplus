@@ -13969,10 +13969,14 @@ h1 {
   background: #000;
   background: url(/themes/console/images/svg/infohelp.svg) no-repeat 15px center,
               url(/themes/snark/light/images/delete.png) right 6px top 6px no-repeat, #000;
-  background-size: 28px 28px, 14px 14px;
+  background-size: 28px 28px, 14px 14px !important;
   background-blend-mode: normal, luminosity;
   filter: drop-shadow(0 2px 2px rgba(0,0,0,.5));
   animation: 2s hide-up 8s ease-out forwards;
+}
+
+#wizardpage #messages {
+  top: -13px;
 }
 
 .main:not(#config_update) div.messages:hover, #config_update #messages:hover {

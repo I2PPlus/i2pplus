@@ -13955,6 +13955,7 @@ h3 + table {
 }
 
 #enablefull label {
+  margin-top: 7px;
   display: inline-block;
 }
 
@@ -14001,7 +14002,8 @@ h3 + table {
 }
 
 #enablefullstats {
-  background: #000 url(/themes/console/images/info/statistics.png) 12px center no-repeat !important;
+  background: #000 url(/themes/console/images/svg/stats.svg) 12px center no-repeat !important;
+  background-size: 28px 28px !important;
 }
 
 /* TunnelPeerCount */
