@@ -589,13 +589,8 @@ public class I2PTunnelHTTPServer extends I2PTunnelServer {
             else
                 s.setSoTimeout(SERVER_READ_TIMEOUT_POST);
 
-            Runnable t;
-            if (allowGZIP && useGZIP) {
-                t = new CompressedRequestor(s, socket, modifiedHeader, getTunnel().getContext(), _log);
-            } else {
-                t = new I2PTunnelRunner(s, socket, slock, null, DataHelper.getUTF8(modifiedHeader),
-                                               null, (I2PTunnelRunner.FailCallback) null);
-            }
+            boolean compress = allowGZIP && useGZIP;
+            Runnable t = new CompressedRequestor(s, socket, modifiedHeader, getTunnel().getContext(), _log, compress);
             // run in the unlimited client pool
             //t.start();
             _clientExecutor.execute(t);
@@ -654,20 +649,24 @@ public class I2PTunnelHTTPServer extends I2PTunnelServer {
         private final I2PAppContext _ctx;
         // shadows _log in super()
         private final Log _log;
+        private final boolean _shouldCompress;
 
         private static final int BUF_SIZE = 8*1024;
 
-        public CompressedRequestor(Socket webserver, I2PSocket browser, String headers, I2PAppContext ctx, Log log) {
+        /**
+         *  @param shouldCompress if false, don't compress, just filter server headers
+         */
+        public CompressedRequestor(Socket webserver, I2PSocket browser, String headers,
+                                   I2PAppContext ctx, Log log, boolean shouldCompress) {
             _webserver = webserver;
             _browser = browser;
             _headers = headers;
             _ctx = ctx;
             _log = log;
+            _shouldCompress = shouldCompress;
         }
 
         public void run() {
-            if (_log.shouldLog(Log.DEBUG))
-                _log.debug("[HTTPServer] CompressedRequestor running (Buffer: " + BUF_SIZE + "K / Min to compress: " + MIN_TO_COMPRESS + "B)");
             OutputStream serverout = null;
             OutputStream browserout = null;
             InputStream browserin = null;
@@ -711,27 +710,22 @@ public class I2PTunnelHTTPServer extends I2PTunnelServer {
                 } catch (NullPointerException npe) {
                     throw new IOException("getInputStream NPE");
                 }
-                CompressedResponseOutputStream compressedOut = new CompressedResponseOutputStream(browserout);
 
                 //Change headers to protect server identity
                 StringBuilder command = new StringBuilder(128);
                 Map<String, List<String>> headers = readHeaders(null, serverin, command,
                     SERVER_SKIPHEADERS, _ctx);
                 String modifiedHeaders = formatHeaders(headers, command);
-                compressedOut.write(DataHelper.getUTF8(modifiedHeaders));
 
-                s = new Sender(compressedOut, serverin, "Server -> Client", _log);
-                if (_log.shouldLog(Log.DEBUG))
-//                    _log.info("[HTTPServer] Before pumping the compressed response");
-                    _log.debug("[HTTPServer] Preparing compressed response...");
+                if (_shouldCompress) {
+                    CompressedResponseOutputStream compressedOut = new CompressedResponseOutputStream(browserout);
+                    compressedOut.write(DataHelper.getUTF8(modifiedHeaders));
+                    s = new Sender(compressedOut, serverin, "server: server to browser compressor", _log);
+                } else {
+                    browserout.write(DataHelper.getUTF8(modifiedHeaders));
+                    s = new Sender(browserout, serverin, "server: server to browser uncompressed", _log);
+                }
                 s.run(); // same thread
-                if (_log.shouldLog(Log.DEBUG))
-                    if (compressedOut.getTotalRead() > 0 || compressedOut.getTotalRead() > 0) {
-                        _log.debug("[HTTPServer] After pumping compressed response: " + compressedOut.getTotalRead() + " bytes read / "
-                                  + compressedOut.getTotalCompressed() + " bytes compressed");
-                      } else {
-                        _log.debug("[HTTPServer] After pumping compressed response: nothing to compress!");
-                      }
             } catch (SSLException she) {
                 _log.error("[HTTPServer] SSL error", she);
                 try {
