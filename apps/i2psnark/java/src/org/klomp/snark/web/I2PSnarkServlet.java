@@ -564,7 +564,7 @@ public class I2PSnarkServlet extends BasicServlet {
                     out.write("<noscript><style type=\"text/css\">.script {display: none;}</style></noscript>\n");
                     out.write("<div id=\"torrentDisplay\" class=\"script\">\n" +
                               "<input type=\"radio\" name=\"torrentDisplay\" id=\"all\" hidden><label for=\"all\" class=\"filterbutton\">Show All</label>" +
-                              "<input type=\"radio\" name=\"torrentDisplay\" id=\"active\"hidden><label for=\"active\" class=\"filterbutton\">Active</label>" +
+                              "<input type=\"radio\" name=\"torrentDisplay\" id=\"active\" hidden><label for=\"active\" class=\"filterbutton\">Active</label>" +
                               "<input type=\"radio\" name=\"torrentDisplay\" id=\"inactive\" hidden><label for=\"inactive\" class=\"filterbutton\">Inactive</label>" +
                               "<input type=\"radio\" name=\"torrentDisplay\" id=\"downloading\" hidden><label for=\"downloading\" class=\"filterbutton\">Downloading</label>" +
                               "<input type=\"radio\" name=\"torrentDisplay\" id=\"seeding\" hidden><label for=\"seeding\" class=\"filterbutton\">Seeding</label>" +
