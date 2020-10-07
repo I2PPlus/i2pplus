@@ -520,12 +520,16 @@ public class I2PSnarkServlet extends BasicServlet {
             out.write("<script src=\"" + _contextPath + WARBASE + "js/toggleLog.js?" + CoreVersion.VERSION + "\" type=\"text/javascript\"></script>\n");
             // FIXME only show once
             out.write("<noscript>\n<li class=\"noscriptWarning\">" +
-                     _t("Warning! Javascript is disabled in your browser. If {0} is enabled, you will lose any input in the add/create torrent sections when a refresh occurs.", "<a href=\"configure\">" + _t("page refresh") + "</a>"));
+                      _t("Warning! Javascript is disabled in your browser. If {0} is enabled, you will lose any input in the add/create torrent sections when a refresh occurs.",
+                      "<a href=\"configure\">" + _t("page refresh") + "</a>"));
             out.write("</li>\n</noscript>\n");
 
             for (int i = msgs.size()-1; i >= 0; i--) {
                 String msg = msgs.get(i).message
-                             .replace("Adding Magnet ", "Magnet added: " + "<span class=\"infohash\">").replaceFirst(" \\(", "</span> (");
+                             .replace("Adding Magnet ", "Magnet added: " + "<span class=\"infohash\">")
+                             .replaceFirst(" \\(", "</span> (");
+                if (msg.contains(_t("Warning - No I2P")))
+                    msg = msg.replace("</span>", "");
                 out.write("<li>" + msg + "</li>\n");
             }
             out.write("</ul>\n</div>\n");
