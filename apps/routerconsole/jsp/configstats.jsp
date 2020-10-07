@@ -41,7 +41,7 @@
  <%     } // end iterating over required groups for the current stat %>
 
 
- <% if (statshelper.getCurrentCanBeGraphed()) { %>
+ <% if (statshelper.getCurrentCanBeGraphed() && !statshelper.getCurrentGraphName().contains("Ping")) { %>
     <label for="<%=statshelper.getCurrentStatName()%>" data-tooltip="<%=statshelper.getCurrentStatDescription()%>"><div class="stattograph">
     <input type="checkbox" class="optbox <%=statshelper.getCurrentGroupName()%>" id="<%=statshelper.getCurrentStatName()%>" name="graphList" value="<%=statshelper.getCurrentGraphName()%>"
  <%     if (statshelper.getCurrentIsGraphed()) { %>checked="checked" <% } %> >
