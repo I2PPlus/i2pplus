@@ -492,10 +492,10 @@ public class I2PSnarkServlet extends BasicServlet {
     private void writeMessages(PrintWriter out, boolean isConfigure, String peerString) throws IOException {
         List<UIMessages.Message> msgs = _manager.getMessages();
         if (!msgs.isEmpty()) {
-            out.write("<div class=\"snarkMessages\" id=\"screenlog\"");
+            out.write("<div id=\"screenlog\" class=\"snarkMessages");
             if (!_manager.util().connected())
-                out.write(" class=\"init\"");
-             out.write(" tabindex=\"0\">\n" +
+                out.write(" init");
+             out.write("\" tabindex=\"0\">\n" +
                       "<a id=\"closeLog\" href=\"" + _contextPath + '/');
             if (isConfigure)
                 out.write("configure");

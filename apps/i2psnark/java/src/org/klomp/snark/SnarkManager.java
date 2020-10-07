@@ -1724,13 +1724,14 @@ public class SnarkManager implements CompleteListener, ClientApp {
                         if (info.isPrivate()) {
                             addMessage(_t("ERROR - No I2P trackers in private torrent \"{0}\"", info.getName()));
                         } else if (!_util.getOpenTrackers().isEmpty()) {
-                            addMessage(_t("Warning - No I2P trackers in \"{0}\", will announce to I2P open trackers and DHT only.", info.getName()));
-                            //addMessage(_t("Warning - No I2P trackers in \"{0}\", will announce to I2P open trackers only.", info.getName()));
+                            addMessage(_t("Warning - No I2P trackers in \"{0}\", will announce to I2P open trackers and DHT only.",
+                            info.getName()).replace("</span>", ""));
                         } else if (_util.shouldUseDHT()) {
-                            addMessage(_t("Warning - No I2P trackers in \"{0}\", and open trackers are disabled, will announce to DHT only.", info.getName()));
+                            addMessage(_t("Warning - No I2P trackers in \"{0}\", and open trackers are disabled, will announce to DHT only.",
+                            info.getName()).replace("</span>", ""));
                         } else {
-                            addMessage(_t("Warning - No I2P trackers in \"{0}\", and DHT and open trackers are disabled, you should enable open trackers or DHT before starting the torrent.", info.getName()));
-                            //addMessage(_t("Warning - No I2P Trackers found in \"{0}\". Make sure Open Tracker is enabled before starting this torrent.", info.getName()));
+                            addMessage(_t("Warning - No I2P trackers in \"{0}\", and DHT and open trackers are disabled, you should enable open trackers or DHT before starting the torrent.",
+                            info.getName()).replace("</span>", ""));
                             dontAutoStart = true;
                         }
                     }
@@ -3014,7 +3015,6 @@ public class SnarkManager implements CompleteListener, ClientApp {
         if ((!connected) && !_util.isConnecting())
             addMessage(_t("Opening the I2P tunnel"));
         addMessageNoEscape(_t("Starting torrent: {0}", linkify(snark)).replace("Magnet ", ""));
-//                           .replace("Magnet ", "<span class=\"infohash\">").replaceFirst(" \\(", "</span> (");
         if (connected) {
             snark.startTorrent();
         } else {
