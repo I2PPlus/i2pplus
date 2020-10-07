@@ -1666,7 +1666,7 @@ public class SnarkManager implements CompleteListener, ClientApp {
             filename = sfile.getCanonicalPath();
         } catch (IOException ioe) {
             _log.error("Unable to add the torrent " + filename, ioe);
-            addMessage(_t("Error: Could not add the torrent {0}", filename) + ": " + ioe);
+            addMessage(_t("Error: Could not add the torrent {0}", filename) + ": " + ioe.getMessage());
             return false;
         }
         if (dataDir == null)
@@ -2846,11 +2846,11 @@ public class SnarkManager implements CompleteListener, ClientApp {
                         rv = false;
                     }
                 } catch (Snark.RouterException e) {
-                    addMessage(_t("Error: Could not add the torrent {0}", name) + ": " + e);
+                    addMessage(_t("Error: Could not add the torrent {0}", name) + ": " + e.getMessage());
                     _log.error("Unable to add the torrent " + name, e);
                     return false;
                 } catch (RuntimeException e) {
-                    addMessage(_t("Error: Could not add the torrent {0}", name) + ": " + e);
+                    addMessage(_t("Error: Could not add the torrent {0}", name) + ": " + e.getMessage());
                     _log.error("Unable to add torrent: " + name, e);
                     disableTorrentFile(name);
                     rv = false;
