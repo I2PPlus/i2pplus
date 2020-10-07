@@ -4235,8 +4235,8 @@ select, input, input.r, input[name="nofilter_dataDir"], textarea[name="i2cpOpts"
 }
 
 #torrentDisplay label {
-  font-size: 8pt;
   min-width: 50px !important;
+  font-size: 8pt;
 }
 
 th.snarkTorrentStatus a img, .snarkTorrentETA a img, .snarkTrackerDetails a img {
@@ -4244,8 +4244,8 @@ th.snarkTorrentStatus a img, .snarkTorrentETA a img, .snarkTrackerDetails a img 
 }
 
 .snarkGraphicStatus {
-  max-width: 24px !important;
   padding-left: 3px !important;
+  max-width: 24px !important;
 }
 
 .snarkGraphicStatus img {
@@ -4258,19 +4258,17 @@ th.snarkTorrentPeerCount img {
 
 td.snarkTorrentPeerCount a, td.snarkTorrentPeerCount a:hover, td.snarkTorrentPeerCount a:active, .snarkTorrentPeerCount span {
   color: #ddd;
-/*  text-shadow: none !important;*/
-  cursor: text;
 }
 
 .snarkTorrentStatus b.alwaysShow {
-  font-size: 0 !important;
   display: none;
+  font-size: 0 !important;
 }
 
 .snarkTorrentDetails {
+  padding-right: 0 !important;
   width: 1% !important;
   text-align: right !important;
-  padding-right: 0 !important;
 }
 
 .snarkTorrentName a:not(old) {
@@ -4281,7 +4279,7 @@ td.snarkTorrentPeerCount a, td.snarkTorrentPeerCount a:hover, td.snarkTorrentPee
   max-height: 18px !important;
 }
 
-.snarkTorrentUploaded, .snarkTorrentRateUp, .peerinfo, .debuginfo, .alwaysShow {
+.snarkTorrentUploaded, .snarkTorrentRateUp, .debuginfo, .alwaysShow {
   display: none !important;
 }
 
@@ -4290,12 +4288,12 @@ td.snarkTorrentPeerCount {
 }
 
 .snarkTorrentStatus, .snarkTorrentETA, .snarkTrackerDetails {
-  font-size: 0 !important;
+  padding: 0;
+  width: 0 !important;
   max-width: 0 !important;
   min-width: 0 !important;
-  width: 0 !important;
-  padding: 0;
   overflow: hidden;
+  font-size: 0 !important;
   color: transparent !important;
 }
 
@@ -5753,6 +5751,14 @@ th.snarkTorrentPeerCount img {
   background: linear-gradient(to bottom, #414, #313);
 }
 
+@media screen and (max-width: 900px) {
+  .clientid {
+    margin-top: 1px;
+    padding-top: 5px;
+    padding-bottom: 4px;
+  }
+}
+
 .clientVersion {
   display: none;
 }
@@ -6530,8 +6536,12 @@ td.snarkTorrentPeerCount b a:not(:hover):not(:focus), td.snarkTorrentPeerCount b
   text-shadow: 0 1px 1px #990 !important;
 }
 
-.inactive.downloading.nopeers td.snarkTorrentPeerCount b {
+.inactive.downloading td.snarkTorrentPeerCount b {
   text-shadow: 0 1px 1px #990 !important;
+}
+
+.inactive.downloading.nopeers td.snarkTorrentPeerCount b {
+  text-shadow: 0 1px 1px #999 !important;
 }
 }
 
