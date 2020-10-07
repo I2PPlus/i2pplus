@@ -33,7 +33,7 @@ To get development branch from source control: https://gitlab.com/i2p.plus/I2P.P
   - Non-linux operating systems and JVMs: See https://trac.i2p2.de/wiki/java
   - Certain subsystems for embedded (core, router, mstreaming, streaming, i2ptunnel)
     require only Java 1.6
-- Apache Ant 1.7.0 or higher
+- Apache Ant 1.9.8 or higher
 - The xgettext, msgfmt, and msgmerge tools installed from the GNU gettext package
   http://www.gnu.org/software/gettext/
 - Build environment must use a UTF-8 locale.
