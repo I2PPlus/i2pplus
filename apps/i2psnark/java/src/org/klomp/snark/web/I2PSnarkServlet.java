@@ -492,10 +492,10 @@ public class I2PSnarkServlet extends BasicServlet {
     private void writeMessages(PrintWriter out, boolean isConfigure, String peerString) throws IOException {
         List<UIMessages.Message> msgs = _manager.getMessages();
         if (!msgs.isEmpty()) {
-            out.write("<div class=\"snarkMessages\" id=\"screenlog\"");
+            out.write("<div id=\"screenlog\" class=\"snarkMessages");
             if (!_manager.util().connected())
-                out.write(" class=\"init\"");
-             out.write(" tabindex=\"0\">\n" +
+                out.write(" init");
+             out.write("\" tabindex=\"0\">\n" +
                       "<a id=\"closeLog\" href=\"" + _contextPath + '/');
             if (isConfigure)
                 out.write("configure");
@@ -519,13 +519,19 @@ public class I2PSnarkServlet extends BasicServlet {
             out.write("<ul>\n");
             out.write("<script src=\"" + _contextPath + WARBASE + "js/toggleLog.js?" + CoreVersion.VERSION + "\" type=\"text/javascript\"></script>\n");
             // FIXME only show once
-            out.write("<noscript>\n<li class=\"noscriptWarning\">" +
-                     _t("Warning! Javascript is disabled in your browser. If {0} is enabled, you will lose any input in the add/create torrent sections when a refresh occurs.", "<a href=\"configure\">" + _t("page refresh") + "</a>"));
-            out.write("</li>\n</noscript>\n");
+            if (!_manager.util().connected()) {
+                out.write("<noscript>\n<li class=\"noscriptWarning\">" +
+                          _t("Warning! Javascript is disabled in your browser. If {0} is enabled, you will lose any input in the add/create torrent sections when a refresh occurs.",
+                          "<a href=\"configure\">" + _t("page refresh") + "</a>"));
+                out.write("</li>\n</noscript>\n");
+            }
 
             for (int i = msgs.size()-1; i >= 0; i--) {
                 String msg = msgs.get(i).message
-                             .replace("Adding Magnet ", "Magnet added: " + "<span class=\"infohash\">").replaceFirst(" \\(", "</span> (");
+                             .replace("Adding Magnet ", "Magnet added: " + "<span class=\"infohash\">")
+                             .replaceFirst(" \\(", "</span> (");
+                if (msg.contains(_t("Warning - No I2P")))
+                    msg = msg.replace("</span>", "");
                 out.write("<li>" + msg + "</li>\n");
             }
             out.write("</ul>\n</div>\n");
@@ -564,7 +570,7 @@ public class I2PSnarkServlet extends BasicServlet {
                     out.write("<noscript><style type=\"text/css\">.script {display: none;}</style></noscript>\n");
                     out.write("<div id=\"torrentDisplay\" class=\"script\">\n" +
                               "<input type=\"radio\" name=\"torrentDisplay\" id=\"all\" hidden><label for=\"all\" class=\"filterbutton\">Show All</label>" +
-                              "<input type=\"radio\" name=\"torrentDisplay\" id=\"active\"hidden><label for=\"active\" class=\"filterbutton\">Active</label>" +
+                              "<input type=\"radio\" name=\"torrentDisplay\" id=\"active\" hidden><label for=\"active\" class=\"filterbutton\">Active</label>" +
                               "<input type=\"radio\" name=\"torrentDisplay\" id=\"inactive\" hidden><label for=\"inactive\" class=\"filterbutton\">Inactive</label>" +
                               "<input type=\"radio\" name=\"torrentDisplay\" id=\"downloading\" hidden><label for=\"downloading\" class=\"filterbutton\">Downloading</label>" +
                               "<input type=\"radio\" name=\"torrentDisplay\" id=\"seeding\" hidden><label for=\"seeding\" class=\"filterbutton\">Seeding</label>" +

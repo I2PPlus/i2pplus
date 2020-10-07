@@ -140,7 +140,7 @@ _:-ms-lang(x), .snarknavbar {
 
 .iframed .snarknavbar {
   margin-top: 0 !important;
-  margin-bottom: -6px !important;
+  margin-bottom: -5px !important;
   padding-bottom: 12px;
   width: auto !important;
   position: static !important;
@@ -5754,8 +5754,12 @@ th.snarkTorrentPeerCount img {
 @media screen and (max-width: 900px) {
   .clientid {
     margin-top: 1px;
-    padding-top: 5px;
-    padding-bottom: 4px;
+    padding-top: 3px;
+    padding-bottom: 3px;
+  }
+
+  .peerinfo td:first-child {
+    background-position: 8px center;
   }
 }
 
