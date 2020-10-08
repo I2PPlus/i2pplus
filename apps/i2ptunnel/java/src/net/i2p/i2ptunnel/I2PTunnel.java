@@ -1639,8 +1639,8 @@ public class I2PTunnel extends EventDispatcherImpl implements Logging {
             }
         } else {
             l.log("run <commandfile>\n" +
-                  "   Loads commandfile and runs each line in it. \n"
-                  + "   You can also give the filename on the commandline.");
+                  "   Loads commandfile and runs each line in it. \n" +
+                  "   You can also give the filename on the commandline.");
             notifyEvent("runResult", "error");
         }
     }
@@ -1691,11 +1691,11 @@ public class I2PTunnel extends EventDispatcherImpl implements Logging {
     private void runPing(String allargs, Logging l) {
         if (allargs.length() != 0) {
             _clientOptions.setProperty(I2Ping.PROP_COMMAND, allargs);
+            if (!_clientOptions.containsKey("inbound.nickname"))
+                _clientOptions.setProperty("inbound.nickname", "I2Ping");
+            if (!_clientOptions.containsKey("outbound.nickname"))
+                _clientOptions.setProperty("outbound.nickname", "I2Ping");
             if (ownDest) {
-                if (!_clientOptions.containsKey("inbound.nickname"))
-                    _clientOptions.setProperty("inbound.nickname", "I2Ping");
-                if (!_clientOptions.containsKey("outbound.nickname"))
-                    _clientOptions.setProperty("outbound.nickname", "I2Ping");
                 if (!_clientOptions.containsKey("inbound.quantity"))
                     _clientOptions.setProperty("inbound.quantity", "1");
                 if (!_clientOptions.containsKey("outbound.quantity"))
