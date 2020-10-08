@@ -1,3 +1,4 @@
 #!/bin/sh
 I2P="%INSTALL_PATH"
+echo " ➤ Attempting eepget retrieval of $@…"
 java -cp "$I2P/lib/i2p.jar" net.i2p.util.EepGet "$@"

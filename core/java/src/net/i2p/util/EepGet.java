@@ -27,6 +27,8 @@ import java.util.Map;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
+import net.i2p.util.SystemVersion;
+
 import gnu.getopt.Getopt;
 
 import net.i2p.I2PAppContext;
@@ -509,20 +511,20 @@ public class EepGet {
             if (_firstTime) {
                 if (alreadyTransferred > 0) {
                     _previousWritten = alreadyTransferred;
-                    System.out.println(" • File found with length " + alreadyTransferred + ", resuming");
+                    System.out.println(" • File found (" + alreadyTransferred + " bytes) - attempting to resume…\n");
                 }
                 _firstTime = false;
             }
             if (_written == 0 && alreadyTransferred == 0 && _previousWritten > 0) {
                 // boo
-                System.out.println(" • Server does not support resume, discarding " + _previousWritten + " bytes");
+                System.out.println(" • Server does not support resume - discarding " + _previousWritten + " bytes\n");
                 _discarded += _previousWritten;
                 _previousWritten = 0;
             }
             for (int i = 0; i < currentWrite; i++) {
                 _written++;
                 if ( (_markSize > 0) && (_written % _markSize == 0) ) {
-                    System.out.print("◼");
+//                    System.out.print("◼");
 
                     if ( (_lineSize > 0) && (_written % ((long)_markSize*(long)_lineSize) == 0l) ) {
                         long now = _context.clock().now();
@@ -530,19 +532,28 @@ public class EepGet {
                         if (timeToSend > 0) {
                             StringBuilder buf = new StringBuilder(50);
                             Formatter fmt = new Formatter(buf);
-                            buf.append(" ");
-                            if ( bytesRemaining > 0 ) {
-                                double pct = 100 * ((double)_written + _previousWritten) /
-                                             ((double)alreadyTransferred + (double)currentWrite + bytesRemaining);
-                                fmt.format("%4.1f", Double.valueOf(pct));
-                                buf.append("% ");
+//                            buf.append(" ");
+//                            fmt.format("%8d", Long.valueOf(_written));
+                            Float received = Float.valueOf(_written) / 1024;
+                            if (received > 1024) {
+                                received = received / 1024;
+                                fmt.format("%3.2f", received);
+                                buf.append("M  ");
+                            } else {
+                                fmt.format("%3.0f", received);
+                                buf.append("K  ");
                             }
-                            fmt.format("%8d", Long.valueOf(_written));
-                            buf.append("B ");
                             double lineKBytes = ((double)_markSize * (double)_lineSize)/1024.0d;
                             double kbps = lineKBytes/(timeToSend/1000.0d);
                             fmt.format("%7.2f", Double.valueOf(kbps));
-                            buf.append(" KBps");
+                            buf.append("KB/s");
+                            if ( bytesRemaining > 0 ) {
+                                double pct = 100 * ((double)_written + _previousWritten) /
+                                             ((double)alreadyTransferred + (double)currentWrite + bytesRemaining);
+                                buf.append("  [");
+                                fmt.format("%4.1f", Double.valueOf(pct));
+                                buf.append("%]");
+                            }
 /*
                             buf.append(" / ");
                             long lifetime = _context.clock().now() - _startedOn;
@@ -550,7 +561,10 @@ public class EepGet {
                             fmt.format("%7.2f", Double.valueOf(lifetimeKBps));
                             buf.append(" KBps");
 */
-                            System.out.println(buf.toString());
+                            if (SystemVersion.isWindows())
+                                System.out.println(" ◼ " + buf.toString());
+                            else
+                                System.out.println("\033[1A\033[K\r ◼ " + buf.toString());
                             fmt.close();
                         }
                         _lastComplete = now;
@@ -570,14 +584,24 @@ public class EepGet {
             if (notModified) {
                 System.out.println(" • Source not modified since last download");
             } else {
-                if ( bytesRemaining > 0 ) {
-                    System.out.println(" ✔ Transfer of " + url + " complete (" + transferred
-                            + " bytes transferred, " + (bytesRemaining - bytesTransferred) + " bytes remaining" +
-                            (_discarded > 0 ? (" and " + _discarded + " bytes discarded") : ")"));
+                if (bytesRemaining > 0) {
+                    if (SystemVersion.isWindows()) {
+                        System.out.println(" ✔ Transfer of " + url + " complete (" + transferred + " bytes transferred, " +
+                                          (bytesRemaining - bytesTransferred) + " bytes remaining" +
+                                          (_discarded > 0 ? (" and " + _discarded + " bytes discarded") : ")"));
+                    } else {
+                        System.out.println("\033[1A\033[1A\033[K\r ✔ Transfer of " + url + " complete (" + transferred + " bytes transferred, " +
+                                          (bytesRemaining - bytesTransferred) + " bytes remaining" +
+                                          (_discarded > 0 ? (" and " + _discarded + " bytes discarded") : ")"));
+                    }
                 } else {
-                    System.out.println(" ✔ Transfer of " + url + " complete (" + transferred
-                            + " bytes transferred" +
-                            (_discarded > 0 ? (", " + _discarded + " bytes discarded") : ")"));
+                    if (SystemVersion.isWindows()) {
+                        System.out.println(" ✔ Transfer of " + url + " complete (" + transferred + " bytes transferred" +
+                                          (_discarded > 0 ? (", " + _discarded + " bytes discarded") : ")"));
+                    } else {
+                        System.out.println("\033[1A\033[1A\033[K\r ✔ Transfer of " + url + " complete (" + transferred + " bytes transferred" +
+                                          (_discarded > 0 ? (", " + _discarded + " bytes discarded") : ")"));
+                    }
                 }
                 long timeToSend = _context.clock().now() - _startedOn;
                 StringBuilder buf = new StringBuilder(128);
@@ -607,7 +631,7 @@ public class EepGet {
             //System.out.println("** " + new Date());
             System.out.println(" ✖ Attempt " + (currentAttempt + 1) + " to retrieve " + url + " failed");
             System.out.println(" • Transferred " + bytesTransferred
-                               + " bytes (" + (bytesRemaining < 0 ? "unknown" : Long.toString(bytesRemaining)) + " bytes remaining)");
+                               + " bytes (" + (bytesRemaining < 0 ? "unknown" : Long.toString(bytesRemaining) + " bytes") + " remaining)");
             System.out.println(" • " + cause.getMessage());
             _previousWritten += _written;
             _written = 0;
@@ -617,7 +641,7 @@ public class EepGet {
             //System.out.println("== " + new Date());
             System.out.println(" ✖ Transfer of " + url + " failed after " + (currentAttempt + 1) + " retries");
             System.out.println(" • Transfer size: " + bytesTransferred + " with "
-                               + (bytesRemaining < 0 ? "unknown" : Long.toString(bytesRemaining)) + " remaining");
+                               + (bytesRemaining < 0 ? "unknown" : Long.toString(bytesRemaining) + " bytes") + " remaining");
             long timeToSend = _context.clock().now() - _startedOn;
             StringBuilder buf = new StringBuilder(128);
             buf.append(" • Transfer time: " + DataHelper.formatDuration(timeToSend));
@@ -1333,7 +1357,7 @@ public class EepGet {
         String[] toks = DataHelper.split(line, " ", 3);
         if (toks.length < 2) {
             if (_log.shouldLog(Log.WARN))
-                _log.warn("Error: status "+  line);
+                _log.warn("Error: status " + line);
             return -1;
         }
         String rc = toks[1];
