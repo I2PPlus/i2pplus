@@ -1332,7 +1332,7 @@ td.destinations {
   max-width: 50px !important;
 }
 
-tr:hover .destinations {
+tr:hover td.destinations {
   color: #bb0;
 }
 
