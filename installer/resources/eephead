@@ -1,3 +1,4 @@
 #!/bin/sh
 I2P="%INSTALL_PATH"
+echo " ➤ Initiating eephead probe of $@…"
 java -jar "$I2P/lib/i2p.jar" eephead "$@"

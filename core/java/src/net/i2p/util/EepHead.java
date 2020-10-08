@@ -141,7 +141,7 @@ public class EepHead extends EepGet {
         }
 
         if (get.fetch(10*1000, -1, inactivityTimeout)) {
-            System.out.println("URL: " + url);
+            System.out.println(" • URL: " + url);
             String x = get.getServer();
             String cc = get.getCacheControl();
             String ar = get.getAcceptRanges();
@@ -152,69 +152,69 @@ public class EepHead extends EepGet {
             String cto = get.getXContentTypeOptions();
             String st = get.getStatus().toString();
             if (x != null) {
-                System.out.println("Server: " + x);
+                System.out.println(" • Server: " + x);
             } else if (cc != null && (cc.equals("max-age=3600,public") || cc.equals("no-cache, private, max-age=2628000"))) {
-                System.out.println("Server: Jetty (?)");
+                System.out.println(" • Server: Jetty (?)");
             } else if (cc == null && (cl != null && cl.equals("217")) && lm != null && (ar != null && ar.equals("bytes")) && et == null) {
-                System.out.println("Server: Jetty (ZZZOT)");
+                System.out.println(" • Server: Jetty (ZZZOT)");
             } else if (cc == null && (xf != null && xf.equals("DENY")) && (cto != null && cto.equals("nosniff")) && (st != null && st.equals("200"))) {
-                System.out.println("Server: Jetty (?)"); // MuCats
+                System.out.println(" • Server: Jetty (?)"); // MuCats
             } else if ((ar != null && ar.equals("bytes")) && lm != null && et != null) {
-                System.out.println("Server: nginx (?)");
+                System.out.println(" • Server: nginx (?)");
             } else {
-                System.out.println("Server: unknown");
+                System.out.println(" • Server: unknown");
             }
             x = get.getXPoweredBy();
             if (x != null)
-                System.out.println("X-Powered-By: " + x);
+                System.out.println(" • X-Powered-By: " + x);
             if (st != null)
-                System.out.println("Status: " + st);
+                System.out.println(" • Status: " + st);
             x = get.getContentType();
             if (x != null)
-                System.out.println("Content-Type: " + x);
-            System.out.println("Content-Length: " + cl);
+                System.out.println(" • Content-Type: " + x);
+            System.out.println(" • Content-Length: " + cl);
             x = get.getTransferEncoding();
             if (x != null)
-                System.out.println("Transfer-Encoding: " + x);
+                System.out.println(" • Transfer-Encoding: " + x);
             x = get.getContentEncoding();
             if (x != null)
-                System.out.println("Content-Encoding: " + x);
+                System.out.println(" • Content-Encoding: " + x);
             x = get.getContentLanguage();
             if (x != null && !x.equals(""))
-                System.out.println("Content-Language: " + x);
+                System.out.println(" • Content-Language: " + x);
             if (lm != null)
-                System.out.println("Last-Modified: " + lm);
+                System.out.println(" • Last-Modified: " + lm);
             if (et != null)
-                System.out.println("Etag: " + et);
+                System.out.println(" • Etag: " + et);
             if (cc != null)
-                System.out.println("Cache-Control: " + cc);
+                System.out.println(" • Cache-Control: " + cc);
             if (ar != null)
-                System.out.println("Accept-Ranges: " + ar);
+                System.out.println(" • Accept-Ranges: " + ar);
             x = get.getVary();
             if (x != null)
-                System.out.println("Vary: " + x);
+                System.out.println(" • Vary: " + x);
             x = get.getExpiryDate();
             if (x != null)
-                System.out.println("Expires: " + x);
+                System.out.println(" • Expires: " + x);
             x = get.getCookie();
             if (x != null)
-                System.out.println("Set-Cookie: " + x);
+                System.out.println(" • Set-Cookie: " + x);
             x = get.getReferrerPolicy();
             if (x != null)
-                System.out.println("Referrer-Policy: " + x);
+                System.out.println(" • Referrer-Policy: " + x);
             if (cto != null)
-                System.out.println("X-Content-Type-Options: " + cto);
+                System.out.println(" • X-Content-Type-Options: " + cto);
             if (xf != null)
-                System.out.println("X-FrameOptions: " + xf);
+                System.out.println(" • X-FrameOptions: " + xf);
             x = get.getCSP();
             if (x != null)
-                System.out.println("Content-Security-Policy: " + x);
+                System.out.println(" • Content-Security-Policy: " + x);
             x = get.getXSSProtection();
             if (x != null)
-                System.out.println("X-XSS-Protection: " + x);
+                System.out.println(" • X-XSS-Protection: " + x);
 //            System.out.println("Response time: " + "ms"); // TODO response time from request start -> request end
         } else {
-            System.out.println("No response from: " + url);
+            System.out.println(" ✖ No response from: " + url);
             System.exit(1);
         }
     }
