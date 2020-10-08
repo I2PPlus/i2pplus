@@ -51,6 +51,7 @@ public class I2Ping extends I2PTunnelClientBase {
     private final Object simulLock = new Object();
     private int simulPings;
     private long lastPingTime;
+    private boolean fromList = false;
 
     /**
      *  tunnel.getOptions must contain "command".
@@ -124,6 +125,7 @@ public class I2Ping extends I2PTunnelClientBase {
             break;
 
           case 'h': // ping all hosts
+            fromList = true;
             if (hostListFile != null)
                 error = true;
             else
@@ -131,6 +133,7 @@ public class I2Ping extends I2PTunnelClientBase {
             break;
 
           case 'l':  // ping a list of hosts
+            fromList = true;
             if (hostListFile != null)
                 error = true;
             else
@@ -294,7 +297,7 @@ public class I2Ping extends I2PTunnelClientBase {
                 Destination dest = lookup(destination);
                 if (dest == null) {
                     //l.log("Unresolvable: " + destination); // if null dest, then won't display so..
-                    l.log("\n • Ignoring unresolvable destination");
+                    l.log(" • Ignoring unresolvable destination: " + destination);
                     return;
                 }
                 int pass = 0;
@@ -311,7 +314,7 @@ public class I2Ping extends I2PTunnelClientBase {
                             pingResults.append("+ ");
                         }
                     } else {
-                        if (reportTimes) {
+                        if (reportTimes && !fromList) {
                             if (sent) {
                                 pass++;
                                 long rtt = System.currentTimeMillis() - lastPingTime;
@@ -322,17 +325,19 @@ public class I2Ping extends I2PTunnelClientBase {
                                 l.log(" ✖ " + (i+1) + ":\t ------");
                             }
                         } else {
-                            pingResults.append(sent ? "\t +" : "\t -");
+                            pingResults.append(sent ? " ✔" : " ✖");
                         }
                     }
-                    //    System.out.println(sent+" -> "+destination);
+                    //System.out.println(sent + " -> " + destination);
                 }
 
-                pingResults.append(" • ").append(destination).append(" results: ");
-                if (reportTimes) {
+                if (reportTimes && !fromList) {
+                    pingResults.append(" • ").append(destination).append(" results: ");
                     pingResults.append(pass).append(" / ").append(pass + fail).append(" pongs received");
+                } else {
+                    pingResults.append("  ‣ ").append(destination);
                 }
-                if (pass > 0 && reportTimes)
+                if (pass > 0 && reportTimes && !fromList)
                     pingResults.append(", average response ").append(totalTime/pass).append("ms");
                 l.log(pingResults.toString());
             } catch (I2PException ex) {
