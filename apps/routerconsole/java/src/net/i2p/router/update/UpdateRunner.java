@@ -54,7 +54,7 @@ class UpdateRunner extends I2PAppThread implements UpdateTask, EepGet.StatusList
     /**
      *  Uses router version for partial checks
      */
-    public UpdateRunner(RouterContext ctx, ConsoleUpdateManager mgr, UpdateType type, List<URI> uris) { 
+    public UpdateRunner(RouterContext ctx, ConsoleUpdateManager mgr, UpdateType type, List<URI> uris) {
         this(ctx, mgr, type, uris, RouterVersion.VERSION);
     }
 
@@ -72,7 +72,7 @@ class UpdateRunner extends I2PAppThread implements UpdateTask, EepGet.StatusList
      *  @since 0.9.7
      */
     public UpdateRunner(RouterContext ctx, ConsoleUpdateManager mgr, UpdateType type,
-                        List<URI> uris, String currentVersion) { 
+                        List<URI> uris, String currentVersion) {
         this(ctx, mgr, type, HTTP, uris, currentVersion);
     }
 
@@ -82,7 +82,7 @@ class UpdateRunner extends I2PAppThread implements UpdateTask, EepGet.StatusList
      *  @since 0.9.9
      */
     public UpdateRunner(RouterContext ctx, ConsoleUpdateManager mgr, UpdateType type,
-                        UpdateMethod method, List<URI> uris, String currentVersion) { 
+                        UpdateMethod method, List<URI> uris, String currentVersion) {
         super("Update Runner");
         setDaemon(true);
         _context = ctx;
@@ -242,7 +242,7 @@ class UpdateRunner extends I2PAppThread implements UpdateTask, EepGet.StatusList
         if (!this.done)
             _mgr.notifyTaskFailed(this, "", null);
     }
-    
+
     // EepGet Listeners below.
     // We use the same for both the partial and the full EepGet,
     // with a couple of adjustments depending on which mode.
@@ -295,7 +295,7 @@ class UpdateRunner extends I2PAppThread implements UpdateTask, EepGet.StatusList
         if (_log.shouldLog(Log.WARN))
             _log.warn("Update from " + url + " did not download completely (" +
                            bytesRemaining + " remaining after " + currentAttempt + " tries)");
-        updateStatus("<b>" + _t("Transfer failed from {0}", linkify(url)) + "</b>");
+        updateStatus("<b>" + _t("Transfer of {0} failed", linkify(url)) + "</b>");
         _mgr.notifyAttemptFailed(this, url, null);
         // update() will call notifyTaskFailed() after last URL
     }
