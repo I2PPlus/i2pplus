@@ -122,9 +122,6 @@ public class IterativeSearchJob extends FloodSearchJob {
             !SystemVersion.isApache() && !SystemVersion.isGNU() &&
             NativeBigInteger.isNative();
 
-    //private static final String MIN_QUERY_VERSION = SigType.EdDSA_SHA512_Ed25519.getSupportedSince();
-    private static final String MIN_QUERY_VERSION = StoreJob.MIN_STORE_VERSION;
-
     /**
      *  Lookup using exploratory tunnels
      */
@@ -324,13 +321,10 @@ public class IterativeSearchJob extends FloodSearchJob {
                 // querying old floodfills that don't know about those sig types.
                 // This is also more recent than the version that supports encrypted replies,
                 // so we won't request unencrypted replies anymore either.
-                String v = ri.getVersion();
-                String since = MIN_QUERY_VERSION;
-                if (VersionComparator.comp(v, since) < 0) {
+                if (!StoreJob.shouldStoreTo(ri)) {
                     failed(peer, false);
                     if (_log.shouldLog(Log.DEBUG))
-                        _log.debug("[Job " + getJobId() + "] Not sending query to old Router [" + peer.toBase64().substring(0,6) +
-                                  "]" + " (" + v + ")");
+                        _log.debug("[Job " + getJobId() + "] Not sending query to old Router [" + ri.toBase64().substring(0,6) + "]");
                     return;
                 }
             }
