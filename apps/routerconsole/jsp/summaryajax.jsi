@@ -14,5 +14,14 @@
   }
 </script>
 <%
+    } else {
+%>
+
+<script nonce="<%=cspNonce%>" type="module">
+  import {refreshSidebar} from "/js/refreshSidebar.js";
+    window.requestAnimationFrame(refreshSidebar);
+</script>
+<%
     }
 %>
+
