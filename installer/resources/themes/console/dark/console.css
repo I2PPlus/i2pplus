@@ -4762,6 +4762,10 @@ h3#servicedebug a, h3#graphinfo a {
 
 /* /tunnels */
 
+#tunnels .tab, #tunnels .tab2 {
+  min-width: 140px !important;
+}
+
 #tunnels table {
   position: relative;
   z-index: 1;
