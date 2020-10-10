@@ -1047,8 +1047,8 @@ class ClientConnectionRunner {
                 _log.warn("Error sending I2CP message - client went away", eofe);
             stopRunning();
         } catch (IOException ioe) {
-            if (_log.shouldLog(Log.ERROR))
-                _log.error("IO Error sending I2CP message to client", ioe);
+            if (_log.shouldLog(Log.WARN))
+                _log.warn("IO Error sending I2CP message to client \n* Error: " + ioe.getMessage());
             stopRunning();
         } catch (Throwable t) {
             _log.log(Log.CRIT, "Unhandled exception sending I2CP message to client", t);
