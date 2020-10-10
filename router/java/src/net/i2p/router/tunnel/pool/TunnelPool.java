@@ -138,8 +138,8 @@ public class TunnelPool {
     }
 
     synchronized void shutdown() {
-        if (_log.shouldLog(Log.WARN))
-            _log.warn(toString() + ": Shutdown called");
+        if (_log.shouldLog(Log.INFO))
+            _log.info(toString() + ": Shutdown called");
         _alive = false;
         _context.statManager().removeRateStat(_rateName);
         synchronized (_inProgress) {
