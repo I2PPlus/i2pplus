@@ -38,7 +38,7 @@ public class I2Ping extends I2PTunnelClientBase {
     private static final int PING_COUNT = 10;
     private static final int CPING_COUNT = 5;
 //    private static final int PING_TIMEOUT = 30*1000;
-    private static final int PING_TIMEOUT = 10*1000;
+    private static final int PING_TIMEOUT = 8*1000;
 
     private static final long PING_DISTANCE = 1000;
 
@@ -215,7 +215,7 @@ public class I2Ping extends I2PTunnelClientBase {
             "     -c (require 5 consecutive pings to report success)\n" +
             "     -m maxSimultaneousPings (default 16)\n" +
             "     -n numberOfPings (default 10)\n" +
-            "     -t timeout (ms, default 10000)\n" +
+            "     -t timeout (ms, default 8000)\n" +
             "     -f fromPort\n" +
             "     -p toPort";
     }
