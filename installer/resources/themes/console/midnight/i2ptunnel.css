@@ -804,7 +804,45 @@ td[colspan="2"] > select#profile {
 
 textarea[name="accessList"] {
   margin: 0 !important;
+  padding: 4px 8px;
   height: 80px !important;
+}
+
+::placeholder {
+  font-style: italic;
+}
+
+input::-moz-placeholder {
+  color: #f00;
+  font-weight: bold;
+  opacity: 1;
+}
+
+::-webkit-input-placeholder {
+  color: #f00;
+  font-weight: bold;
+  opacity: 1;
+}
+
+input:focus::-moz-placeholder {
+  opacity: 0;
+}
+
+:focus::-webkit-input-placeholder {
+  opacity: 0;
+}
+
+#filter {
+  vertical-align: top;
+}
+
+#filter input::placeholder {
+  color: #c9ceff;
+  opacity: .5;
+}
+
+input:focus::placeholder, textarea:focus::placeholder, #filter input:focus::placeholder {
+  opacity: 0;
 }
 
 #localDestination, .authentication {
@@ -895,26 +933,6 @@ table {
 
 .required:not(old) {
   display: none;
-}
-
-input::-moz-placeholder {
-  color: #f00;
-  font-weight: bold;
-  opacity: 1;
-}
-
-::-webkit-input-placeholder {
-  color: #f00;
-  font-weight: bold;
-  opacity: 1;
-}
-
-input:focus::-moz-placeholder {
-  opacity: 0;
-}
-
-:focus::-webkit-input-placeholder {
-  opacity: 0;
 }
 
 input.tunnelName, input.tunnelDescriptionText, #userAgents, .tunnelDescription, #localDest {
@@ -1416,7 +1434,7 @@ td#throttle, td#tunnelMessages {
 }
 
 textarea[name="accessList"], #hostField, #localDestination, .authentication {
-  margin: 10px !important;
+  margin: 6px !important;
 }
 
 #registration .displayText {
@@ -1425,7 +1443,6 @@ textarea[name="accessList"], #hostField, #localDestination, .authentication {
 
 .freetext, .displayText, #leasesetKey {
   padding: 8px 10px !important;
-/*  height: 30px !important;*/
 }
 
 .username, .password {

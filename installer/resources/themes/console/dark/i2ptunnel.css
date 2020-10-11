@@ -885,6 +885,23 @@ textarea[name="accessList"] {
   height: 80px !important;
 }
 
+textarea::placeholder, input::placeholder {
+  font-style: italic;
+}
+
+textarea:focus::placeholder, input:focus::placeholder {
+  opacity: 0;
+}
+
+#filter {
+  vertical-align: top;
+}
+
+#filter input::placeholder {
+  color: #ee8;
+  opacity: .4;
+}
+
 #localDestination {
   height: 34px !important;
   margin: 0 !important;
