@@ -11302,7 +11302,7 @@ h3#webappconfig {
   text-align: center;
   border: 1px solid #aaafce;
   box-shadow: 0 0 1px 1px #e8e8f8;
-  background: #f6f6ff;
+  background: #fff !important;
   animation: ease grid-fade 1s forwards;
 }
 

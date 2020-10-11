@@ -56,11 +56,11 @@ class SummaryRenderer {
     private static final Color WHITE = new Color(255, 255, 255);
     private static final Color TRANSPARENT = new Color(0, 0, 0, 0);
     private static final Color CANVAS_COLOR_DARK = new Color(0, 0, 0);
-    private static final Color BACK_COLOR = new Color(246, 246, 255);
+    private static final Color BACK_COLOR = new Color(255, 255, 255);
     private static final Color BACK_COLOR_DARK = new Color(0, 0, 0, 192);
-    private static final Color SHADEA_COLOR = new Color(246, 246, 255);
+    private static final Color SHADEA_COLOR = new Color(255, 255, 255);
     private static final Color SHADEA_COLOR_DARK = new Color(0, 0, 0);
-    private static final Color SHADEB_COLOR = new Color(246, 246, 255);
+    private static final Color SHADEB_COLOR = new Color(255, 255, 255);
     private static final Color SHADEB_COLOR_DARK = new Color(0, 0, 0);
     private static final Color GRID_COLOR = new Color(100, 100, 100, 75);
     private static final Color GRID_COLOR_DARK = new Color(244, 244, 190, 50);

@@ -2631,25 +2631,21 @@ p#tunnelconfig {
 }
 
 .graphspanel img {
-  padding: 1px;
   margin: 6px 5px;
+  padding: 1px;
   vertical-align: top !important;
   text-align: center !important;
-  border: 1px solid #8d8daa;
-  box-shadow: 0 0 1px #ccc;
   max-width: 98%;
   background: #fff;
 }
 
 .graphspanel a img {
-  box-shadow: inset 0 0 0 1px #fff, 0 0 1px #e0e0eb;
   filter: none !important;
   white-space: nowrap;
 }
 
 .graphspanel a img:hover {
   box-shadow: inset 0 0 1px 1px #f60;
-/*  cursor: url(/themes/console/images/cursor_zoom.png), pointer;*/
   cursor: zoom-in;
 }
 
@@ -12986,7 +12982,7 @@ i {
 
 .graphContainer {
   margin: 4px 3px !important;
-  padding: 2px 0 0 !important;
+  padding: 0 !important;
   position: relative;
   display: inline-block;
   min-width: 140px;
@@ -12998,23 +12994,26 @@ i {
   border: 1px solid #8d8daa;
   box-shadow: inset 0 0 0 1px #fff, 0 0 1px 1px #ddf;
   animation: ease grid-fade 1s forwards;
-  background: #f6f6ff;
+  background: #fff !important;
   box-sizing: border-box;
 }
 
+#graphContainer img {
+  box-shadow: none !important;
+  border: none !important;
+  filter: none !important;
+}
+
 .graphContainer#hidpi {
-  padding: 4px 8px 0 0 !important;
+  padding: 8px !important;
 }
 
 #graph_single .graphContainer {
-  padding-top: 5px !important;
+  padding: 6px 6px 6px 0 !important;
   max-width: calc(100% - 32px);
   box-sizing: content-box;
+  background: #fff !important;
   animation: ease grid-fade 2s forwards;
-}
-
-#graph_single .graphContainer#hidpi {
-  padding-bottom: 4px !important;
 }
 
 .graphContainer:hover {
