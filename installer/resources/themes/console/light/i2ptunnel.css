@@ -149,6 +149,7 @@ textarea {
 }
 
 textarea[name="accessList"] {
+  padding: 4px 8px;
   height: 56px !important;
   line-height: 110%;
   will-change: transform;
@@ -1763,11 +1764,24 @@ select[disabled], select[disabled]:hover, select[disabled]:focus, select[disable
   font-weight: normal;
 }
 
-#accesslistDisabled ~ textarea[name="accessList"] {
-  display: none;
-}
-
 @keyframes showToggle {
   from {transform: scale(0)}
-  to {trsnaform: scale(1)}
+  to {transform: scale(1)}
+}
+
+textarea::placeholder, input::placeholder {
+  font-style: italic;
+}
+
+textarea:focus::placeholder, input:focus::placeholder, #filter input:focus::placeholder {
+  opacity: 0;
+}
+
+#filter {
+  vertical-align: top;
+}
+
+#filter input::placeholder {
+  color: #33333f;
+  opacity: .4;
 }
