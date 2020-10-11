@@ -14303,6 +14303,10 @@ h3 + table {
   opacity: .9;
 }
 
+#xhr > hr + #sb_graphcontainer > span + a > #minigraph {
+  height: 39px;
+}
+
 #homepage #minigraph {
   height: 39px;
 }
@@ -14325,6 +14329,10 @@ div#minigraph {
   #minigraph {
     margin-top: -21px;
     width: 250px;
+  }
+
+  #xhr > hr + #sb_graphcontainer > span + a > #minigraph {
+    height: 41px;
   }
 
   #homepage #minigraph {
