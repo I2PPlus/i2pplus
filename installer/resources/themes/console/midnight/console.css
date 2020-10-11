@@ -1392,6 +1392,7 @@ div.logo hr {
   color: #c9ceff;
   border: 1px solid #26235c;
   background: #000010;
+  background: repeating-linear-gradient(to right, rgba(0,0,16,.4) 2px, rgba(8,8,40,.4) 4px), repeating-linear-gradient(to bottom, #000010 2px, #000020 4px);
 }
 
 .routersummary div[style="height: 36px;"] {
@@ -11690,6 +11691,10 @@ th .version {
   font-size: 90%;
 }
 
+.leaseset th:last-child {
+  white-space: nowrap;
+}
+
 #netdb_ram {
   margin: 0 0 0 -2px;
   padding: 3px 4px;
@@ -14083,6 +14088,10 @@ h3#bannedpeers {
   width: 194px !important;
 }
 
+#xhr > hr + #sb_graphcontainer > span + a > #minigraph {
+  height: 41px;
+}
+
 div#minigraph {
   margin-top: -43px;
   margin-left: 1px;
@@ -14106,6 +14115,10 @@ div#minigraph {
     margin: -20px -1px 0 0;
     height: 40px;
     width: 230px !important;
+  }
+
+  #xhr > hr + #sb_graphcontainer > span + a > #minigraph {
+    height: 39px;
   }
 
   #homepage #minigraph {
