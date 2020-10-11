@@ -805,7 +805,7 @@
         }
 %>
 </th>
-<th><b><%=intl._t("Tunnel Filter")%></b>&nbsp;<a class="help" href=\"/help/tunnelfilter\" style="float:right">Help</a></th>
+<th><b><%=intl._t("Tunnel Filter")%></b>&nbsp;<a class="help" href="/help/tunnelfilter" style="float:right" title="<%=intl._t("Help with defining tunnel filters")%>">Help</a></th>
 </tr>
 <tr>
 <td>
@@ -818,16 +818,18 @@
 <span class="multiOption">
 <label title="<%=intl._t("Only allow listed clients to connect to this service")%>"><input value="1" type="radio" name="accessMode"<%=(editBean.getAccessMode(curTunnel).equals("1") ? " checked=\"checked\"" : "")%> class="optbox" />&nbsp;<%=intl._t("Whitelist")%></label>
 </span>
-<%
-        if (!editBean.getAccessMode(curTunnel).equals("0")) {
-%>
-<textarea rows="2" style="height: 8em;" cols="60" name="accessList" placeholder="<%=intl._t("Specify client destinations, 1 per line")%>" title="<%=intl._t("Specify client destinations, 1 per line")%>" wrap="off" spellcheck="false"><%=editBean.getAccessList(curTunnel)%></textarea>
-<%
-        }
-%>
 </td>
 <td id="filter"><input title="<%=intl._t("Absolute path to file containing filter definition")%>" type="text" id="filterDefinition" class="freetext filemanager" name="filterDefinition" value="<%=editBean.getFilterDefinition(curTunnel)%>" placeholder="<%=intl._t("Absolute path to filter definition")%>" size="80"/></td>
 </tr>
+<%
+        if (!editBean.getAccessMode(curTunnel).equals("0")) {
+%>
+<tr><td>
+<textarea rows="2" style="height: 8em;" cols="60" name="accessList" placeholder="<%=intl._t("Specify client destinations, 1 per line")%>" title="<%=intl._t("Specify client destinations, 1 per line")%>" wrap="off" spellcheck="false"><%=editBean.getAccessList(curTunnel)%></textarea>
+</td><td></td></tr>
+<%
+        }
+%>
 <tr><th colspan="2"><%=intl._t("Server Throttling")%></th></tr>
 <tr>
 <td id="throttle" colspan="4">
