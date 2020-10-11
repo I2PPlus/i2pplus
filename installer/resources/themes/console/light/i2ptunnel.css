@@ -150,9 +150,13 @@ textarea {
 
 textarea[name="accessList"] {
   padding: 4px 8px;
-  height: 56px !important;
+  height: 32px !important;
   line-height: 110%;
   will-change: transform;
+}
+
+textarea[name="accessList"]:focus {
+  height: 80px !important;
 }
 
 textarea:focus, textarea[name="accessList"]:focus {
@@ -180,6 +184,28 @@ textarea#statusMessages {
 
 textarea#statusMessages:focus {
   background: #fafaff;
+}
+
+#filter {
+  vertical-align: top;
+}
+
+#filter input::placeholder {
+  color: #33333f;
+  opacity: .4;
+}
+
+th .help {
+  font-size: 0;
+}
+
+th .help::after {
+  width: 16px;
+  height: 16px;
+  display: inline-block;
+  background: url(/themes/console/images/svg/helplink.svg) center center no-repeat;
+  background-size: 16px 16px;
+  content: "";
 }
 
 br {
@@ -1209,6 +1235,12 @@ th {
   font-size: 10.5pt;
 }
 
+th .help::after {
+  width: 20px;
+  height: 20px;
+  background-size: 20px 20px;
+}
+
 textarea#statusMessages {
   font-size: 9pt;
 }
@@ -1775,13 +1807,4 @@ textarea::placeholder, input::placeholder {
 
 textarea:focus::placeholder, input:focus::placeholder, #filter input:focus::placeholder {
   opacity: 0;
-}
-
-#filter {
-  vertical-align: top;
-}
-
-#filter input::placeholder {
-  color: #33333f;
-  opacity: .4;
 }

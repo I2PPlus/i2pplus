@@ -698,6 +698,11 @@ td[colspan="2"] select#profile {
 
 textarea[name="accessList"] {
   padding: 4px 8px;
+  height: 32px !important;
+}
+
+textarea[name="accessList"]:focus {
+  height: 80px !important;
 }
 
 #localDestination, .authentication {
@@ -1206,6 +1211,19 @@ input[name="nofilter_blindedPassword"] {
   width: 45% !important;
 }
 
+th .help {
+  font-size: 0 !important;
+}
+
+th .help::after {
+  width: 16px;
+  height: 16px;
+  display: inline-block;
+  background: url(/themes/console/images/svg/helplink.svg) center center no-repeat;
+  background-size: 16px 16px;
+  content: "";
+}
+
 @media screen and (max-width: 800px) {
 .displayText, .displayText:empty:hover, .displayText:empty:focus {
   width: 260px;
@@ -1243,6 +1261,12 @@ textarea#statusMessages {
 
 #registration .displayText {
   width: 800px;
+}
+
+th .help::after {
+  width: 20px;
+  height: 20px;
+  background-size: 20px 20px;
 }
 }
 
