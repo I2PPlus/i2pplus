@@ -881,7 +881,12 @@ select#connectionProfile, #targetDestination {
 }
 
 textarea[name="accessList"] {
-  margin: 0 !important;
+  padding: 4px 8px;
+  height: 32px !important;
+}
+
+textarea[name="accessList"]:focus {
+  padding: 4px 8px;
   height: 80px !important;
 }
 
@@ -889,8 +894,21 @@ textarea::placeholder, input::placeholder {
   font-style: italic;
 }
 
-textarea:focus::placeholder, input:focus::placeholder {
+textarea:focus::placeholder, input:focus::placeholder, #filter input:focus::placeholder {
   opacity: 0;
+}
+
+th .help {
+  font-size: 0 !important;
+}
+
+th .help::after {
+  width: 16px;
+  height: 16px;
+  display: inline-block;
+  background: url(/themes/console/images/svg/helplink.svg) center center no-repeat;
+  background-size: 16px 16px;
+  content: "";
 }
 
 #filter {
@@ -1117,16 +1135,16 @@ input.tunnelName, input.tunnelDescription, #userAgents {
 }
 
 #wizardTunnelTypes td:first-child, #wizardSummary td:first-child {
-  font-weight: bold;
   width: 10%;
   min-width: 150px;
-  text-align: right;
   white-space: nowrap;
+  text-align: right;
+  font-weight: bold;
 }
 
 #wizardTunnelTypes td:last-child {
-  text-align: justify;
   padding: 10px 15px 10px 10px;
+  text-align: justify;
 }
 
 #wizardTunnelTypes select {
@@ -1155,8 +1173,8 @@ input.tunnelName, input.tunnelDescription, #userAgents {
 }
 
 #wizardPanel p {
-  padding: 5px;
   margin: 0;
+  padding: 5px;
   text-align: justify;
 }
 
@@ -1165,13 +1183,13 @@ input.tunnelName, input.tunnelDescription, #userAgents {
 }
 
 #wizardPanel input::-moz-placeholder {
-  color: #bb7;
   font-weight: normal;
+  color: #bb7;
 }
 
 #wizardPanel ::-webkit-input-placeholder {
-  color: #bb7;
   font-weight: normal;
+  color: #bb7;
 }
 
 #wizardPanel .options {
@@ -1179,18 +1197,18 @@ input.tunnelName, input.tunnelDescription, #userAgents {
 }
 
 #wizardPanel .tag {
+  margin-right: 3px;
   width: 10%;
   min-width: 150px;
   white-space: nowrap;
   display: inline-block;
   font-weight: bold;
   text-align: right;
-  margin-right: 3px;
 }
 
 #wizardPanel select {
-  min-width: 160px;
   margin: 5px 0 !important;
+  min-width: 160px;
 }
 
 #wizardPanel .infohelp p { /* wizard complete - advanced options info */
@@ -1201,8 +1219,8 @@ input.tunnelName, input.tunnelDescription, #userAgents {
 /* more space */
 
 .tunnelConfig td, td {
-  border-top: 1px inset #1c3f1b;
   padding: 8px 5px;
+  border-top: 1px inset #1c3f1b;
 }
 
 input[type="checkbox"], input[type="radio"] {
@@ -1233,14 +1251,18 @@ textarea[name="accessList"], #hostField, #localDestination, .authentication {
   margin: 5px !important;
 }
 
+textarea[name="accessList"] {
+  margin-top: 0 !important;
+}
+
 #customOptions, #userAgents, #leasesetKey, #filterDefinition {
   width: calc(100% - 10px) !important;
 }
 
 .tunnelConfig td > b {
+  margin-left: 5px;
   min-width: 30px;
   display: inline-block;
-  margin-left: 5px;
 }
 
 .tunnelDestination {
@@ -1434,6 +1456,12 @@ input[type="text"] + label {
 @media screen and (min-width: 1500px) {
 th {
   font-size: 10pt;
+}
+
+th .help::after {
+  width: 20px;
+  height: 20px;
+  background-size: 20px 20px;
 }
 
 .displayText, .displayText:empty:hover, .displayText:empty:focus {

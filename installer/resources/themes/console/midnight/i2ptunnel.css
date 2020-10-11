@@ -803,8 +803,11 @@ td[colspan="2"] > select#profile {
 }
 
 textarea[name="accessList"] {
-  margin: 0 !important;
   padding: 4px 8px;
+  height: 32px !important;
+}
+
+textarea[name="accessList"]:focus {
   height: 80px !important;
 }
 
@@ -834,6 +837,19 @@ input:focus::-moz-placeholder {
 
 #filter {
   vertical-align: top;
+}
+
+th .help {
+  font-size: 0;
+}
+
+th .help::after {
+  width: 16px;
+  height: 16px;
+  display: inline-block;
+  background: url(/themes/console/images/svg/helplink.svg) center center no-repeat;
+  background-size: 16px 16px;
+  content: "";
 }
 
 #filter input::placeholder {
@@ -1403,6 +1419,12 @@ h2, h3 {
 
 th {
   font-size: 11pt !important;
+}
+
+th .help::after {
+  width: 20px;
+  height: 20px;
+  background-size: 20px 20px;
 }
 
 td {
