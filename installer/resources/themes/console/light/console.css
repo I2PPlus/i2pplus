@@ -839,7 +839,7 @@ to {
 }
 }
 
-#sb_notice.hide, #sb_notice.hide + hr {
+#sb_notice.hide, #sb_notice.hide + hr, #sb_updatesection.hide, #sb_updatesection.hide + hr {
   display: none;
 }
 

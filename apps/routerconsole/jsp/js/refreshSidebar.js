@@ -32,6 +32,7 @@ function refreshSidebar(timestamp) {
         var general = document.getElementById("sb_general");
         var shortgeneral = document.getElementById("sb_shortgeneral");
         var advgeneral = document.getElementById("sb_advancedgeneral");
+        var updatesection = document.getElementById("sb_updatesection");
         var updatestatus = document.getElementById("sb_updatestatus");
         var peers = document.getElementById("sb_peers");
         var advpeers = document.getElementById("sb_peersadvanced");
@@ -53,6 +54,7 @@ function refreshSidebar(timestamp) {
         var shortgeneralResponse = xhr.responseXML.getElementById("sb_shortgeneral");
         var advgeneralResponse = xhr.responseXML.getElementById("sb_advancedgeneral");
         var netstatusResponse = xhr.responseXML.getElementById("sb_status");
+        var updatesectionResponse = xhr.responseXML.getElementById("sb_updatesection");
         var updatestatusResponse = xhr.responseXML.getElementById("sb_updatestatus");
         var peersResponse = xhr.responseXML.getElementById("sb_peers");
         var advpeersResponse = xhr.responseXML.getElementById("sb_peersadvanced");
@@ -103,6 +105,14 @@ function refreshSidebar(timestamp) {
         if (netstatus) {
           if (!Object.is(netstatus.innerHTML, netstatusResponse.innerHTML))
             netstatus.innerHTML = netstatusResponse.innerHTML;
+        }
+        if (updatesection || updatesectionResponse) {
+          var updatesectionParent = updatesection.parentNode;
+          if (!Object.is(updatesection.innerHTML, updatesectionResponse.innerHTML)) {
+            if (updatesection.classList.contains("hide"))
+              updatesection.classList.remove("hide");
+            updatesectionParent.replaceChild(updatesectionResponse, updatesection);
+          }
         }
         if (updatestatus) {
           var updatestatusParent = updatestatus.parentNode;
@@ -250,6 +260,8 @@ function refreshSidebar(timestamp) {
           }
           if (localtunnels)
             localtunnels.innerHTML = "<tr><td colspan=\"3\">&nbsp;<\/td><\/tr>";
+          if (updatesection)
+            updatesection.remove();
         }
 
         setTimeout(isDown, 4000);

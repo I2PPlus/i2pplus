@@ -787,16 +787,22 @@ class SummaryBarRenderer {
     }
 
     public String renderUpdateStatusHTML() {
-        if (_helper == null) return "";
+//        if (_helper == null) return "";
         String updateStatus = _helper.getUpdateStatus();
-        if ("".equals(updateStatus)) return "";
+//        if ("".equals(updateStatus)) return "";
         StringBuilder buf = new StringBuilder(512);
-        buf.append("<h3 id=\"sb_updatestatus\"><a href=\"/configupdate\" target=\"_top\" title=\"")
-           .append(_t("Configure I2P Updates"))
-           .append("\">")
-           .append(_t("Update Status"))
-           .append("</a></h3>\n<hr class=\"b\">\n");
-        buf.append(updateStatus);
+        if (_helper == null || "".equals(updateStatus)) {
+            buf.append("<div id=\"sb_updatesection\" class=\"hide\"></div>\n");
+        } else {
+            buf.append("<div id=\"sb_updatesection\">\n")
+               .append("<h3 id=\"sb_updatestatus\"><a href=\"/configupdate\" target=\"_top\" title=\"")
+               .append(_t("Configure I2P Updates"))
+               .append("\">")
+               .append(_t("Update Status"))
+               .append("</a></h3>\n<hr class=\"b\">\n")
+               .append(updateStatus)
+               .append("\n</div>\n");
+        }
         return buf.toString();
     }
 
