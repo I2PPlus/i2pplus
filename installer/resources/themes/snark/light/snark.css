@@ -4234,7 +4234,7 @@ td.snarkTrackerDetails img {
 }
 
 .downloading.active .percentBarOuter, .peerinfo.active .percentBarOuter {
-  animation: downloadbar 1s 3s linear forwards reverse;
+  animation: downloadbar 1s 3s linear forwards;
   opacity: 1;
 }
 
