@@ -6,7 +6,7 @@
 <head>
 <%@include file="css.jsi" %>
 <%=intl.title("home")%>
-<head>
+</head>
 <body id="homepage">
 <script nonce="<%=cspNonce%>" type="text/javascript">progressx.show();</script>
 <%
