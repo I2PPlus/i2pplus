@@ -140,7 +140,7 @@ _:-ms-lang(x), .snarknavbar {
 
 .iframed .snarknavbar {
   margin-top: 0 !important;
-  margin-bottom: -5px !important;
+  margin-bottom: -6px !important;
   padding-bottom: 12px;
   width: auto !important;
   position: static !important;
@@ -4217,7 +4217,6 @@ select, input, input.r, input[name="nofilter_dataDir"], textarea[name="i2cpOpts"
 }
 
 .iframed .snarknavbar {
-  margin-bottom: -6px !important;
   padding: 9px 4px 9px 0;
 }
 
