@@ -1786,18 +1786,25 @@ input[type="text"] {
   font-weight: bold;
 }
 
+input[type="text"]:disabled {
+  opacity: .5;
+}
+
 input[type="text"]:focus, input.r:focus, textarea:focus, input[name="nofilter_dataDir"]:focus {
   color: #19191f;
+  color: #47475f;
   border: 1px solid #676c7f;
-  box-shadow: 0 0 1px #89f;
+  box-shadow: 0 0 1px #89f, inset 0 0 0 1px #fff, inset 0 0 0 2px rgba(255,96,0,.8), inset 3px 3px 3px #ccd;
   background: #fff;
+  background: linear-gradient(to bottom, #eef, #fff);
 }
 
 input[type="text"], input.r, input[name="nofilter_dataDir"], textarea, select {
-  padding: 5px 4px !important;
+  padding: 5px 7px !important;
   min-width: 120px;
   font-size: 9pt;
   color: #47475f;
+  color: #6373b6;
   box-shadow: inset 1px 1px 1px rgba(204, 204, 204, 0.6);
   background: #fbfbff;
   filter: drop-shadow(0 0 1px rgba(220,220,255,.7));
@@ -1860,6 +1867,7 @@ select {
   margin: 2px 4px 2px 0;
   padding: 5px 24px 5px 3px !important;
   color: #41465f;
+  color: #6373b6;
   font: bold 9pt "Droid Sans", "Open Sans", "Noto Sans", Ubuntu, "Segoe UI", "Bitstream Vera Sans", Verdana, "Lucida Grande", Helvetica, sans-serif;
   border: 1px solid #97a2ce;
   border-radius: 2px;
@@ -3084,7 +3092,7 @@ input[type="radio"]:checked::before {
 }
 
 input[type="radio"]:not(:checked), input[type="checkbox"]:not(:checked) {
-  box-shadow: inset 0 0 0 1px #f8f8ff, inset 3px 3px 3px #aad;
+  box-shadow: inset 0 0 0 2px #f8f8ff, inset 3px 3px 3px #aad;
 }
 
 .optbox {
@@ -3112,8 +3120,9 @@ input[type="radio"]:not(:checked), input[type="checkbox"]:not(:checked) {
   left: 24%; /* fix weird positional bug */
 }
 
-.optbox:checked {
-  box-shadow: inset 0 0 0 1px #f8f8ff;
+.optbox:checked, .optbox:disabled, .knownTracker .optbox {
+  box-shadow: inset 0 0 0 1px #f8f8ff !important;
+  border: 1px solid #97a2ce !important;
   background: linear-gradient(to bottom, #fff, #f0f0ff) !important;
 }
 
@@ -3127,10 +3136,14 @@ input[type="radio"]:not(:checked), input[type="checkbox"]:not(:checked) {
   height: 19px !important;
   min-width: 19px !important;
   min-height: 19px !important;
-  border: 1px solid #41465f !important;
   border: 1px solid #7a7d8f !important;
   box-shadow: 0 0 0 1px #f8f8ff, 0 0 0 2px #f60 !important;
-/*  filter: drop-shadow(0 0 3px #89f) !important;*/
+}
+
+.optbox:disabled:hover, .optbox:disabled:focus, .optbox:disabled:active,
+.knownTracker .optbox:checked:hover, .knownTracker .optbox:checked:focus, .knownTracker .optbox:checked:active {
+  box-shadow: none !important;
+  background: linear-gradient(to bottom, #fff, #f0f0ff) !important;
 }
 
 .optbox:checked::before {
