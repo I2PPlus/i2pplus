@@ -1417,7 +1417,7 @@ td.destinations {
   border-right: 1px solid #17142f;
 }
 
-tr:hover .destinations {
+tr:hover td.destinations {
   color: #aa0;
 }
 
