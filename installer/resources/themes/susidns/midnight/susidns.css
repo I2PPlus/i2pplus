@@ -571,10 +571,12 @@ li {
 
 #host_list tr:nth-child(odd), #host_details tr:nth-child(odd) {
   background-color: #010011;
+  background: linear-gradient(to bottom, #080818, #010010);
 }
 
 #host_list tr:nth-child(even), #host_details tr:nth-child(even) {
   background-color: #000;
+  background: linear-gradient(to bottom, #080818, #010010);
 }
 
 p.messages {
@@ -1415,7 +1417,7 @@ td.destinations {
   border-right: 1px solid #17142f;
 }
 
-tr:hover .destinations {
+tr:hover td.destinations {
   color: #aa0;
 }
 
