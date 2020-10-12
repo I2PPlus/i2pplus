@@ -4238,6 +4238,10 @@ td.snarkTrackerDetails img {
   opacity: 1;
 }
 
+.peerinfo.active .percentBarOuter {
+  animation: downloadbar 1s 3s linear forwards reverse;
+}
+
 .snarkTorrents tr.active:hover td,
 .snarkTorrents tr.downloading.active:hover td,
 .snarkTorrents tr.active:hover td.snarkTorrentETA, .snarkTorrents tr.active:hover td.snarkTorrentUploaded {
