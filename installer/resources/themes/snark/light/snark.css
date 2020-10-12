@@ -988,7 +988,7 @@ td {
 */
 
 .snarkTorrents tr:hover, .snarkDirInfo tr:hover {
-  background: #ffd;
+  background: #ffd !important;
   box-shadow: none !important;
   color: #292b2f !important;
 }
@@ -1002,7 +1002,7 @@ td {
 }
 
 .peerinfo:hover td:first-child {
-  background: url(images/peer.png) center center no-repeat  #ffd !important;
+  background: url(images/peer.png) center center no-repeat #ffd !important;
 }
 
 .snarkTorrentEven + .snarkTorrentEven td:nth-child(2), .snarkTorrentOdd td + .snarkTorrentOdd td:nth-child(2) {
@@ -1013,13 +1013,13 @@ td {
 tr + .peerinfo:nth-child(even) {
   border-top: 1px solid #ccccf0;
   background: #e0e0ef;
-  background: repeating-linear-gradient(45deg, rgba(255,255,255,0.5) 2px, rgba(201, 201, 255, 0.3) 3px, #fff 4px);
+  background: repeating-linear-gradient(45deg, rgba(255,255,255,.5) 2px, rgba(201,201,255,.6) 3px, #eef 4px);
 }
 
 tr + .peerinfo:nth-child(odd) {
   border-top: 1px solid #ccccf0;
   background: #d1d1ef;
-  background: repeating-linear-gradient(135deg, rgba(255,255,255,0.5) 2px, rgba(220, 220, 255, 0.3) 3px, #fff 4px);
+  background: repeating-linear-gradient(135deg, rgba(255,255,255,0.5) 2px, rgba(220,220,255,.6) 3px, #fff 4px), repeating-linear-gradient(45deg, #eef 2px, #f8f8f8 4px);
 }
 
 .snarkFileName {
@@ -1110,7 +1110,7 @@ th.snarkFileSize {
   max-width: 84px;
   width: 84px;
   line-height: 120%;
-  color: #556 !important;
+  color: #667 !important;
   text-align: center;
   font-weight: bold;
   border-radius: 15px;
@@ -1133,7 +1133,7 @@ th.snarkFileSize {
 }
 
 tr:hover .percentBarComplete {
-  color: #44444f !important;
+  color: #556 !important;
   background: linear-gradient(to bottom, #fff, #c9c9ff);
   box-shadow: inset 0 0 0 1px #a2a2ff, inset 0 0 2px 1px #fff;
 }
@@ -4378,8 +4378,11 @@ td.snarkTrackerDetails {
 
 .peerclient {
   padding: 1px;
+  border: 1px solid #bbc;
   border-radius: 2px;
-  background: #dbdbff;
+  box-shadow: inset 0 0 0 1px #fff;
+  background: #ddf;
+  background: linear-gradient(to bottom, #fff, #ddf);
 }
 
 .peerclient, .peerinfo tt, .clientid {
@@ -4391,10 +4394,11 @@ td.snarkTrackerDetails {
 
 .peerinfo tt {
   margin: 0;
-  border-radius: 2px 0 0 2px;
   padding: 0 5px;
-  background: none;
   color: #282;
+  text-shadow: 0 1px 1px #fff;
+  border-radius: 2px 0 0 2px;
+  background: none;
 }
 
 .clientid {
@@ -4430,11 +4434,11 @@ td.snarkTrackerDetails {
   margin: -1px 0 -1px 3px;
   padding: 0 0 0 4px;
   display: inline-block;
-  border: 1px solid #89f;
+  border: 1px solid #bbc;
   border-radius: 2px;
   box-shadow: inset 0 0 0 1px #fff;
   background: #eef;
-  background: linear-gradient(to bottom, #eef, #ddf);
+  background: linear-gradient(to bottom, #fff, #ddf);
   opacity: 0.85;
   line-height: 140%;
 }
@@ -4463,8 +4467,9 @@ td.snarkTorrentDetails img, .snarkDirInfo td:first-child img:not(.thumb) {
   margin: 1px 1px 1px 4px !important;
   padding: 0 4px 0 6px;
   display: inline-block;
-  background: #dbdbff;
   border-radius: 0 1px 1px 0;
+  background: #dbdbff;
+  background: linear-gradient(to bottom, #eef, #ddf);
 }
 
 .peerinfo td > * {
@@ -4485,12 +4490,14 @@ td.snarkTorrentDetails img, .snarkDirInfo td:first-child img:not(.thumb) {
   margin-left: 12px;
   min-width: 5px;
   max-width: 400px;
-  height: 6px;
+  height: 8px;
   display: inline-block;
-  border-radius: 3px;
+  border-radius: 8px;
   box-shadow: inset 0 0 0 1px rgba(255,255,255,0.4);
   background: #99b;
-  background: repeating-linear-gradient(to right, rgba(0,0,0,0), rgba(0,0,0,0) 15px, rgba(255,255,255,.5) 15px, rgba(255,255,255,.5) 16px, rgba(0,0,0,0) 16px), linear-gradient(to bottom, rgba(255,255,255,0.3) 50%, rgba(0,0,0,0.3) 50%), linear-gradient(to right, #bb0 60px, #900 120px);
+  background: repeating-linear-gradient(to right, rgba(0,0,0,0), rgba(0,0,0,0) 15px, rgba(255,255,255,.5) 15px, rgba(255,255,255,.5) 16px, rgba(0,0,0,0) 16px),
+              linear-gradient(to bottom, rgba(255,255,255,.4) 50%, rgba(0,0,0,.1) 50%),
+              linear-gradient(to right, #bb0 60px, #900 120px);
 }
 
 .inactivity[style="width: 0px;"], .inactivity[style="width: 1px;"], .inactivity[style="width: 2px;"],
