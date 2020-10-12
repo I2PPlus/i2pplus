@@ -136,14 +136,16 @@ public class ConfigUIHelper extends HelperBase {
         { "de", "de", "Deutsch", null },
         { "et", "ee", "Eesti", null },
         { "es", "es", "Español", null },
+        //{ "arg", "ar", "Español Argentino", null },
         { "fa", "ir", "Persian فارسی", null },
         { "fr", "fr", "Français", null },
         { "gl", "lang_gl", "Galego", null },
         { "el", "gr", "Greek Ελληνικά", null },
         //{ "iw", "il", "Hebrew עברית", null },
-        { "in", "id", "bahasa Indonesia", null },
+        { "in", "id", "Bahasa Indonesia", null },
         { "it", "it", "Italiano", null },
         { "ja", "jp", "Japanese 日本語", null },
+        //{ "ku", "ku", "Kurdî", null },
         { "ko", "kr", "Korean 한국어", null },
         { "mg", "mg", "Malagasy", null },
         { "hu", "hu", "Magyar", null },
@@ -158,11 +160,11 @@ public class ConfigUIHelper extends HelperBase {
         { "fi", "fi", "Suomi", null },
         { "sv", "se", "Svenska", null },
         { "tr", "tr", "Türkçe", null },
+        //{ "tk", "tm", "Türkmen", null },
         { "uk", "ua", "Ukraine Українська", null },
         { "vi", "vn", "Vietnam Tiếng Việt", null },
         { "xx", "a1", "Untagged strings", null },
     };
-
 
 
     public String getLangSettings() {
