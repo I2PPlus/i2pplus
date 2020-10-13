@@ -69,16 +69,16 @@ a.footref {
   font-size: 70%;
 }
 
-a:link {
+a:visited, a:visited:not(:hover):not(:focus):not(:active) {
+  text-decoration: none;
+  color: #b96;
+}
+
+a:link, #navbar a:visited {
   text-decoration: none;
   font-weight: 600;
   color: #ec7;
   outline: none;
-}
-
-a:visited, a:visited:not(:hover):not(:focus):not(:active) {
-  text-decoration: none;
-  color: #b96;
 }
 
 a:active {
@@ -163,6 +163,7 @@ hr {
   color: #555353;
   border: none;
   background: #555353;
+  background: linear-gradient(to right, rgba(0,0,0,0), #555353, rgba(0,0,0,0));
 }
 
 .langbar {
@@ -369,8 +370,8 @@ th {
 
 #navbar a {
   margin: -1px 0;
-  padding: 4px 10px 8px;
-  min-width: 120px;
+  padding: 4px 8px 8px;
+  min-width: 140px;
   position: relative;
   display: inline-block;
   letter-spacing: 0.08em;
