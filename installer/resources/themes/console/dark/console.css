@@ -14264,13 +14264,25 @@ h3 + table {
   font-weight: normal;
 }
 
-#accesslistDisabled ~ textarea[name="accessList"] {
-  display: none;
+#sb_graphcontainer {
+  margin: -5px -7px -7px !important;
+  padding: 0 1px 1px;
+  height: 41px;
+  box-shadow: inset 0 0 0 1px #131, inset 0 0 0 2px #000, inset 0 0 3px 1px #040;
+  background: repeating-linear-gradient(to right, rgba(0,0,0,0) 14px, rgba(64,160,64,.3) 15px, rgba(0,0,0,0) 15px, rgba(0,0,0,0) 30px), repeating-linear-gradient(to top, rgba(0,0,0,0), rgba(48,152,48,.2), rgba(0,0,0,0) 1px, rgba(0,0,0,0) 14px) !important;
+  overflow: hidden;
+  position: relative;
+  z-index: 10;
+}
+
+#sb_graphstats {
+  position: relative;
+  z-index: 1000;
 }
 
 #minigraph {
-  margin-top: -15px;
-  height: 40px;
+  margin-top: -17px;
+  height: 38px !important;
   width: 204px;
   opacity: .9;
 }
@@ -14280,12 +14292,7 @@ h3 + table {
 }
 
 #homepage #minigraph {
-  margin-top: -16px;
-  height: 39px;
-}
-
-#sb_graphcontainer {
-  padding-bottom: 1px !important;
+  margin-top: -18px;
 }
 
 div#minigraph {
@@ -14302,47 +14309,19 @@ div#minigraph {
   height: 38px;
 }
 
-#sb_graphcontainer {
-  margin: -5px -7px -7px !important;
-  padding: 0 1px;
-  height: 44px;
-  box-shadow: inset 0 0 0 1px #131, inset 0 0 0 2px #000, inset 0 0 3px 1px #040;
-  background: repeating-linear-gradient(to right, rgba(0,0,0,0) 14px, rgba(64,160,64,.3) 15px, rgba(0,0,0,0) 15px, rgba(0,0,0,0) 30px), repeating-linear-gradient(to top, rgba(0,0,0,0), rgba(48,152,48,.2), rgba(0,0,0,0) 1px, rgba(0,0,0,0) 14px) !important;
-  overflow: hidden;
-  position: relative;
-  z-index: 10;
-}
-
-#sb_graphcontainer::before {
-  position: absolute;
-  top: 2px;
-  left: -1px;
-  width: 100%;
-  height: 40px;
-  content: "";
-  display: inline-block;
-  background: linear-gradient(to bottom, rgba(0,0,0,0), rgba(0,0,0,0), rgba(0,0,0,0.3));
-  pointer-events: none;
-  will-change: transform;
-}
-
-#sb_graphstats {
-  position: relative;
-  z-index: 1000;
-}
-
 @media screen and (min-width: 1500px) {
   #sb_graphcontainer {
     height: 41px;
   }
 
   #minigraph {
-    margin-top: -22px !important;
+    margin-top: -21px !important;
     width: 250px;
+    height: 38px !important;
   }
 
   #homepage #minigraph {
-    margin-top: -21px !important;
+    margin-top: -20px !important;
     height: 41px;
   }
 
