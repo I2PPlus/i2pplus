@@ -5566,6 +5566,10 @@ select, input[type="text"] {
   min-width: 120px;
 }
 
+select:hover, select:focus, select:active {
+  border: 1px solid #535979;
+}
+
 select:hover, select:active {
   color: #19191f;
   background: url(images/dropdown_hover.svg) right 8px center no-repeat, linear-gradient(to bottom, #eee, #fff) !important;
