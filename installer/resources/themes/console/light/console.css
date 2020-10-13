@@ -615,13 +615,16 @@ a:active #sb_bandwidthgraph {
   display: inline-block;
   position: relative;
   z-index: 10000;
+  font-size: 110%;
   font-weight: bold;
-  border: 1px solid #afafcf;
+  text-shadow: 0 1px 1px rgba(255,255,255,.9);
+  border: 1px solid #f60;
   border-top: none;
-  background: #fff;
+  box-shadow: inset 0 0 0 1px rgba(255,255,255,.9);
+  background: linear-gradient(to bottom, rgba(255,255,255,.7) 50%, rgba(220,220,255,.7) 50%);
   opacity: 0;
-  mix-blend-mode: hard-light;
   transition: ease opacity .1s .2s;
+  pointer-events: none;
 }
 
 #sb_graphcontainer:hover #sb_graphstats {
@@ -637,10 +640,13 @@ a:active #sb_bandwidthgraph {
   box-shadow: inset 0 0 0 2px #fff, inset 0 0 1px 1px #adadeb;
   border: 1px solid #afafcf;
   box-shadow: 0 0 1px #e0e0eb, inset 0 0 0 1px #fff;
-  background: linear-gradient(to bottom, rgba(255,255,255,.3), rgba(32,32,64,.1)),
+  background: linear-gradient(to bottom, rgba(255,255,255,.3), rgba(32,32,64,.05)),
               repeating-linear-gradient(to left, rgba(255,255,255,.0) 18px, rgba(120,120,255,.4) 18px, rgba(255,255,255,.0) 19px, rgba(255,255,255,.0) 36px),
               repeating-linear-gradient(to top, rgba(0,0,0,0), rgba(0,0,0,0) 14px, rgba(120,120,255,.4) 14px, rgba(0,0,0,0) 15px) !important;
-  mix-blend-mode: multiply;
+}
+
+#sb_graphcontainer:hover {
+  border: 1px solid #f60;
 }
 
 #minigraph {
@@ -11646,11 +11652,11 @@ tt {
 }
 
 .routersummary h3::after {
-  content: "";
-  display: inline-block;
   min-height: 18px;
+  display: inline-block;
   vertical-align: middle;
   box-sizing: border-box;
+  content: "";
 }
 
 div.app {
@@ -11670,8 +11676,8 @@ h3#pconfig, h3#webappconfig, h3#i2pclientconfig, p#clientconf.infohelp, #config_
 }
 
 .routersummary .reload, .routersummary .stop {
-  min-width: 110px;
   margin: 0 3px -5px;
+  min-width: 110px;
 }
 
 .subheading b {
@@ -11692,8 +11698,8 @@ h1 {
 }
 
 .routersummary h3 a {
-  font-size: 11pt !important;
   padding: 4px 0 2px;
+  font-size: 11pt !important;
 }
 
 .routersummary img[src$="i2plogo.png"] {
@@ -11726,8 +11732,8 @@ h1 {
 }
 
 .langbox {
-  line-height: 120%;
   margin: 4px 2px 0 5px;
+  line-height: 120%;
 }
 
 .langbox img {
@@ -11759,9 +11765,9 @@ button.control {
 }
 
 .newsAuthor {
+  padding: 0 0 0 14px;
   font-size: 9pt;
   background-size: 11px 11px;
-  padding: 0 0 0 14px;
   background-position: left center !important;
 }
 
@@ -11860,30 +11866,6 @@ to {
 /* chrome/blink overrides */
 
 @supports not (-moz-appearance: none) {
-/*.main, .main#console, .main#news, table, .routersummary {
-  background: #f6f6ff !important;
-}
-
-#help #sidebarhelp, #help #configurationhelp, #help pre, #help #faq, .debug_container, .statlist, .optionlist, .optionsingle {
-  background: #f3f3ff !important;
-}
-
-#help #volunteer, #help #sidebarhelp, #help #configurationhelp, #help pre, #help #faq, #help #legal,
-#help #reachabilityhelp, .debug_container, #help #advancedsettings, #themesettings, #langsettings,
-#help tr:nth-child(odd), .main tr:nth-child(odd) {
-  background: #f8f8ff !important;
-}
-
-#help #volunteer, #wrapperlogs pre {
-  background: #f3f3ff url(/themes/snark/ubergine/images/hat.png) no-repeat right -3px bottom -3px !important;
-  background: url(/themes/snark/ubergine/images/hat.png) no-repeat right -3px bottom -3px, linear-gradient(135deg, #f8f8ff, #f3f3ff) !important;
-  background-size: 100% 100%, auto 80%;
-}
-
-#help tr:nth-child(even), .main tr:nth-child(even), #themeoptions, .main#news .newscontent {
-  background: #f0f0ff !important;
-}*/
-
 .main tr, #themeoptions {
   box-shadow: none !important;
 }
