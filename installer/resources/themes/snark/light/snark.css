@@ -900,18 +900,44 @@ tr:not(.peerinfo) .snarkTorrentUploaded:empty::after {
 
 .routerdown {
   margin: 0 10px;
-  padding: 20px;
+  padding: 15px;
   font-size: 140%;
+  font-size: 0;
   color: #001;
-  border: 1px solid #89f;
+  border: 1px solid #bbc;
   border-radius: 3px;
-  box-shadow: inset 0 0 0 1px #fff;
+  box-shadow: inset 0 0 0 1px #fff, inset 5px 5px 3px #88a;
   background: #ddf;
-  background: linear-gradient(to right, #eef, #fff, #eef);
+  background: repeating-linear-gradient(45deg, #fff, #eef 20px, #eef 20px, #fff 40px) right top,
+              repeating-linear-gradient(135deg, #ddf, #eef 20px, #fff 20px, #eef 40px) left top;
+  background-size: 200% 200%, 200% 200%;
+  animation: linear down 60s forwards infinite reverse;
+  background-blend-mode: multiply, normal;
+}
+
+@keyframes down {
+  from {background-position: left bottom, right bottom}
+  to {background-position: left bottom, left top}
 }
 
 .iframed .routerdown {
   margin-bottom: 11px !important;
+}
+
+.routerdown::after {
+  content: "";
+  display: inline-block;
+  width: 40px;
+  height: 40px;
+  vertical-align: middle;
+  background: url(../ubergine/images/offline.svg) center center no-repeat;
+  background-size: 40px 40px;
+  mix-blend-mode: luminosity;
+  animation: linear spin 5s reverse infinite;
+}
+
+@keyframes spin {
+from {transform: rotate(360deg)}
 }
 
 /* end main torrents listing */
@@ -2033,7 +2059,7 @@ img[src$="details.png"] {
   padding: 0;
   word-wrap: break-word;
   text-align: center;
-  background: linear-gradient(to bottom, #fafaff, #f8f8ff, #fafaff);
+/*  background: linear-gradient(to bottom, #fafaff, #f8f8ff, #fafaff);*/
   opacity: 1 !important;
 }
 
@@ -4875,7 +4901,7 @@ td.snarkTorrentStatus b::before {
 
 .active.seeding.complete .snarkTorrentStatus b {
   background: #937;
-  background: repeating-linear-gradient(135deg, #937, #937 8px, #826 9px, #826 17px);
+  background: repeating-linear-gradient(135deg, #937, #937 8px, #a48 9px, #a48 17px);
 }
 
 .active.seeding.complete .snarkTorrentStatus b::before {
@@ -4884,47 +4910,47 @@ td.snarkTorrentStatus b::before {
 
 .active.downloading .snarkTorrentStatus b {
   background: #252;
-  background: repeating-linear-gradient(135deg, #252, #252 8px, #373 9px, #373 17px);
+  background: repeating-linear-gradient(135deg, #484, #484 8px, #373 9px, #373 17px);
 }
 
 .active.downloading .snarkTorrentStatus b::before {
-  border-color: transparent #252 transparent transparent;
+  border-color: transparent #484 transparent transparent;
 }
 
 .inactive.downloading .snarkTorrentStatus b, .snarkTorrents tr.inactive.downloading:hover .snarkTorrentStatus b {
   color: #101 !important;
   text-shadow: 0 1px 1px #dd0;
-  background: #cc0;
+  background: #dd5;
 }
 
 .inactive.downloading .snarkTorrentStatus b::before {
-  border-color: transparent #cc0 transparent transparent;
+  border-color: transparent #dd5 transparent transparent;
 }
 
 .stopped.complete .snarkTorrentStatus b {
-  background: #28f;
+  background: #59f;
 }
 
 .stopped.complete .snarkTorrentStatus b::before {
-  border-color: transparent #28f transparent transparent;
+  border-color: transparent #59f transparent transparent;
 }
 
 .nopeers.incomplete .snarkTorrentStatus b, .snarkTorrents tr.nopeers.incomplete:hover .snarkTorrentStatus b {
   color: #101 !important;
   text-shadow: 0 1px 1px #bbb;
-  background: #aaa;
+  background: #bbb;
 }
 
 .nopeers.incomplete .snarkTorrentStatus b::before {
-  border-color: transparent #aaa transparent transparent;
+  border-color: transparent #bbb transparent transparent;
 }
 
 .stopped.incomplete .snarkTorrentStatus b, .inactive.error .snarkTorrentStatus b {
-  background: #900 !important;
+  background: #b11 !important;
 }
 
 .stopped.incomplete .snarkTorrentStatus b::before, .inactive.error .snarkTorrentStatus b::before {
-  border-color: transparent #900 transparent transparent !important;
+  border-color: transparent #b11 transparent transparent !important;
 }
 
 .snarkTorrentDownloaded, .snarkTorrentUploaded, .snarkTorrentRateDown, .snarkTorrentRateUp {
