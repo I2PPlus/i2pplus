@@ -129,6 +129,21 @@ a img:hover, a:focus img {
   background: #000;
 }
 
+#netdb #netdbcountrylist img:hover {
+  filter: none;
+}
+
+#netdb #netdbcountrylist a:hover img {
+  border: 1px solid #f60;
+  transform: scale(1.1);
+}
+
+#netdb #netdbcountrylist a {
+  padding: 2px 0;
+  width: 100%;
+  display: inline-block;
+}
+
 .netdb_header img[src^="/flags"] {
   width: 24px !important;
   height: 18px !important;
@@ -943,49 +958,24 @@ div.refresh {
 
 /* mini sidebar graph */
 
-#sb_bandwidthgraph {
-  margin: -5px 0 -5px -2px !important;
-  padding: 0 !important;
-  width: 100%;
-  border-collapse: collapse;
-  border-spacing: 0;
-  box-shadow: 0 0 0 1px #000;
-  will-change: transform;
-}
-
-#sb_bandwidthgraph:hover {
-  border-color: #d40;
-  cursor: zoom-in;
-}
-
-a:active #sb_bandwidthgraph {
-  box-shadow: 0 0 0 1px #f60, inset 0 0 0 2px #000, inset 5px 5px 5px 3px #000;;
-}
-
-a:active #sb_bandwidthgraph td {
-  box-shadow: inset 0 0 0 1px #000, inset 3px 3px 3px #000 !important;
-}
-
-#sb_bandwidthgraph td {
-  padding: 0 1px;
-  height: 40px;
-  vertical-align: top;
-  box-shadow: inset 0 0 0 1px #131, inset 0 0 0 2px #000, inset 0 0 3px 1px #050;
-  background: repeating-linear-gradient(to right, rgba(0,0,0,0) 15px, rgba(64,160,64,.3) 16px, rgba(0,0,0,0) 16px, rgba(0,0,0,0) 30px), repeating-linear-gradient(to top, rgba(0,0,0,0), rgba(64,160,64,.15), rgba(0,0,0,0) 1px, rgba(0,0,0,0) 13px) !important;
+#sb_graphcontainer:hover a {
+  cursor: zoom-in !important;
 }
 
 #sb_graphstats {
   padding: 2px 8px;
   display: inline-block;
+  font-size: 110%;
   font-weight: bold;
   color: #050;
   text-shadow: none;
-  border: 1px solid #050;
+  border: 1px solid #131;
   border-top: none;
   border-radius: 0 0 2px 2px;
   background: #000;
   transition: ease opacity 0.3s;
   opacity: 0;
+  pointer-events: none;
 }
 
 #sb_graphcontainer:hover #sb_graphstats {
@@ -993,24 +983,6 @@ a:active #sb_bandwidthgraph td {
   transition: ease opacity 0.2s;
 }
 
-/*#sb_graphcontainer {
-  margin-bottom: -7px !important;
-  margin-left: -6px;
-  margin-right: -8px;
-  position: relative;
-  background-size: 212px 38px !important;
-  background-position: left -7px top 0 !important;
-  background-repeat: no-repeat !important;
-  will-change: transform;
-}
-
-@media screen and (min-width: 1500px) {
-#sb_graphcontainer {
-  background-size: 260px 38px !important;
-  background-position: left -6px top 0 !important;
-}
-}
-*/
 /* end mini sidebar graph */
 
 /* status bar */
@@ -14297,7 +14269,7 @@ h3 + table {
 }
 
 #minigraph {
-  margin-top: -17px;
+  margin-top: -15px;
   height: 40px;
   width: 204px;
   opacity: .9;
@@ -14308,7 +14280,12 @@ h3 + table {
 }
 
 #homepage #minigraph {
+  margin-top: -16px;
   height: 39px;
+}
+
+#sb_graphcontainer {
+  padding-bottom: 1px !important;
 }
 
 div#minigraph {
@@ -14323,33 +14300,6 @@ div#minigraph {
 #homepage div#minigraph {
   margin-top: -42px;
   height: 38px;
-}
-
-@media screen and (min-width: 1500px) {
-  #minigraph {
-    margin-top: -21px;
-    width: 250px;
-  }
-
-  #xhr > hr + #sb_graphcontainer > span + a > #minigraph {
-    height: 41px;
-  }
-
-  #homepage #minigraph {
-    height: 41px;
-  }
-
-  div#minigraph {
-    margin-top: -43px;
-    margin-left: 1px;
-    width: 258px;
-    height: 39px;
-    background-size: 250px 40px;
-  }
-
-  #homepage div#minigraph {
-    height: 37px;
-  }
 }
 
 #sb_graphcontainer {
@@ -14379,6 +14329,34 @@ div#minigraph {
 #sb_graphstats {
   position: relative;
   z-index: 1000;
+}
+
+@media screen and (min-width: 1500px) {
+  #sb_graphcontainer {
+    height: 41px;
+  }
+
+  #minigraph {
+    margin-top: -22px !important;
+    width: 250px;
+  }
+
+  #homepage #minigraph {
+    margin-top: -21px !important;
+    height: 41px;
+  }
+
+  div#minigraph {
+    margin-top: -43px;
+    margin-left: 1px;
+    width: 258px;
+    height: 39px;
+    background-size: 250px 40px;
+  }
+
+  #homepage div#minigraph {
+    height: 37px;
+  }
 }
 
 .routersummary table {
