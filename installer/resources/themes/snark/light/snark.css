@@ -925,13 +925,14 @@ tr:not(.peerinfo) .snarkTorrentUploaded:empty::after {
 }
 
 .routerdown::after {
-  content: "";
-  display: inline-block;
+  margin-top: 6px;
   width: 40px;
   height: 40px;
+  display: inline-block;
   vertical-align: middle;
   background: url(../ubergine/images/offline.svg) center center no-repeat;
   background-size: 40px 40px;
+  content: "";
   mix-blend-mode: luminosity;
   animation: linear spin 5s reverse infinite;
 }
@@ -4917,13 +4918,14 @@ td.snarkTorrentStatus b::before {
   border-color: transparent #484 transparent transparent;
 }
 
-.inactive.downloading .snarkTorrentStatus b, .snarkTorrents tr.inactive.downloading:hover .snarkTorrentStatus b {
+.inactive.downloading .snarkTorrentStatus b, .snarkTorrents tr.inactive.downloading:hover .snarkTorrentStatus b,
+.active.starting .snarkTorrentStatus b, .snarkTorrents tr.active.starting:hover .snarkTorrentStatus b {
   color: #101 !important;
   text-shadow: 0 1px 1px #dd0;
   background: #dd5;
 }
 
-.inactive.downloading .snarkTorrentStatus b::before {
+.inactive.downloading .snarkTorrentStatus b::before, .active.starting .snarkTorrentStatus b::before {
   border-color: transparent #dd5 transparent transparent;
 }
 

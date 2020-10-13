@@ -5141,13 +5141,13 @@ td.snarkTorrentStatus b::before {
   border-color: transparent #252 transparent transparent;
 }
 
-.inactive.downloading .snarkTorrentStatus b {
+.inactive.downloading .snarkTorrentStatus b, .active.starting .snarkTorrentStatus b {
   color: #101;
   text-shadow: 0 1px 1px #dd0;
   background: #bb0;
 }
 
-.inactive.downloading .snarkTorrentStatus b::before {
+.inactive.downloading .snarkTorrentStatus b::before, .active.starting .snarkTorrentStatus b::before {
   border-color: transparent #bb0 transparent transparent;
 }
 
