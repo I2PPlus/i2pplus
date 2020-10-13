@@ -2065,12 +2065,12 @@ public class I2PSnarkServlet extends BasicServlet {
                            _t("Checking file integrity") + "\">" + "<div class=\"percentBarInner\" style=\"height: 8px !important; width: " +
                            (new DecimalFormat("0%")).format(snark.getCheckingProgress()) + "\">" +
                            "<div class=\"percentBarText\"></div></div></div>";
-                           snarkStatus = "active";
+                           snarkStatus = "active starting";
         } else if (snark.isAllocating()) {
             statusString = toThemeImg("stalled", "", _t("Allocating")) + "</td>" +
                            "<td class=\"snarkTorrentStatus\"><b>" + _t("Allocating") +
                            "</b></td><td class=\"snarkTorrentPeerCount\"><b>";
-                           snarkStatus = "active";
+                           snarkStatus = "active starting";
         } else if (err != null && isRunning && curPeers == 0) {
         //} else if (err != null && curPeers == 0) {
             // Also don't show if seeding... but then we won't see the not-registered error
@@ -2101,7 +2101,7 @@ public class I2PSnarkServlet extends BasicServlet {
             statusString = toThemeImg("stalled", "", _t("Starting")) + "</td>\n" +
                            "<td class=\"snarkTorrentStatus\"><b class=\"alwaysShow\">" + _t("Starting") +
                            "</b></td>\n<td class=\"snarkTorrentPeerCount\"><b>";
-                           snarkStatus = "active";
+                           snarkStatus = "active starting";
         } else if (remaining == 0 || needed == 0) {  // < 0 means no meta size yet
             // partial complete or seeding
             if (isRunning) {
