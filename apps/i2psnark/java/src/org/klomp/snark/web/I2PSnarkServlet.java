@@ -343,9 +343,12 @@ public class I2PSnarkServlet extends BasicServlet {
                 out.write("<script nonce=\"" + cspNonce + "\" type=\"module\">\n" +
                           "import {refreshTorrents} from \""  + _contextPath + WARBASE + "js/refreshTorrents.js?" + CoreVersion.VERSION + "\";\n" +
                           "var ajaxDelay = " + (delay * 1000) + ";\n" +
+                          "var visibility = document.visibilityState;\n" +
+                          "if (visibility = \"visible\") {\n" +
                           "setInterval(function() {\n" +
                           "requestAnimationFrame(refreshTorrents);\n" +
                           "}, ajaxDelay);\n" +
+                          "}\n" +
                           "</script>\n");
             }
         }
