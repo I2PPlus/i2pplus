@@ -1147,15 +1147,15 @@ pre {
 /* proxy/server errors */
 
 .logo {
-  margin: -2px 20px 0 20px;
-  padding: 10px;
+  margin: 2px 20px 0 20px;
+  padding: 10px 10px 0;
   width: 185px;
   float: left;
   text-align: center;
   font-size: 9pt;
   color: #c9ceff;
   border: 1px solid rgba(38, 35, 92,.7);
-  box-shadow: inset 0 0 0 1px #44175f;
+  box-shadow: inset 0 0 0 1px #000, 0 0 0 4px #225;
   background: #000;
   background: repeating-linear-gradient(to bottom, #000, #002 2px);
 }
@@ -1165,7 +1165,7 @@ pre {
 }
 
 .logo a img {
-  margin: 2px -5px -1px;
+  margin: -3px -5px -4px;
   width: 181px;
   opacity: .7;
 }
@@ -1176,20 +1176,64 @@ pre {
 }
 
 div.logo hr {
-  margin: 11px -10px 10px;
-  height: 1px;
+  margin: 11px -11px 10px;
+  height: 4px;
   color: #44175f;
-  border: 0 solid #44175f;
-  background: #44175f;
+  border: 0 solid #225;
+  background: #225;
 }
 
 .logo a:link {
-  display: block;
   padding: 4px;
+  display: block;
+}
+
+  .logo hr ~ a {
+    border: 1px solid #225;
+    background: radial-gradient(at center bottom, rgba(128, 0, 128, .15), rgba(64, 0, 64, .08) 30%, rgba(0, 0, 0, 0) 90%),
+                linear-gradient(to right, rgba(0,0,0,0), rgba(96,0,96,0.1), rgba(0,0,0,0)),
+                linear-gradient(to right, rgba(0,0,16,.1), rgba(0,0,0,0), rgba(0,0,16,.1)),
+                linear-gradient(to bottom, #0a0a1a 50%, #040414 50%) !important;
+  }
+
+  .logo hr ~ a:hover {
+    z-index: 10;
+    box-shadow: inset 0 0 0 1px #000;
+    background: radial-gradient(at center bottom, rgba(96, 32, 96, .6) 0, rgba(0, 0, 0, 0) 80%),
+                linear-gradient(to right, rgba(64,0,64,.03), rgba(96,0,96,.1), rgba(64,0,64,.03)),
+                linear-gradient(to bottom, #1d1a2d 50%, #000 50%) !important;
+}
+
+  .logo hr ~ a:active {
+    box-shadow: inset 0 0 0 1px #000, inset 0 0 1px 1px #737, inset 4px 4px 4px #000;
+    background: radial-gradient(at center bottom, rgba(192, 72, 192, .3) 0, rgba(0, 0, 0, 0) 45%),
+                linear-gradient(to right, rgba(64,0,64,0.1), rgba(64,0,64,0.2), rgba(64,0,64,0.1)),
+                linear-gradient(to bottom, #1d1a2d, #000) !important;
+  }
+
+@media screen and (max-width: 800px) {
+  .logo hr ~ a {
+    margin: -8px -3px 12px !important;
+    padding: 6px 8px !important;
+    min-width: 110px;
+    position: relative;
+    background: #225;
+  }
+}
+@media screen and (min-width: 800px) {
+  .logo hr + a {
+    margin-top: -20px !important;
+  }
+
+  .logo hr ~ a {
+    margin: 0 -11px -1px;
+    padding: 10px 4px !important;
+    display: inline-block;
+  }
 }
 
 .warning { /* proxy/server error messages */
-  margin: 20px 20px 20px 245px;
+  margin: 20px 20px 20px 250px;
   padding: 14px 40px 40px 100px;
   min-width: 300px;
   text-align: left;
@@ -1260,18 +1304,18 @@ div.logo hr {
 }
 
 #jumplinks a {
-  display: inline-block;
   padding: 2px 0;
+  display: inline-block;
   line-height: 16px;
 }
 
 #jumplinks a::before {
-  content: "\279F\00A0";
-  font-size: 200%;
-  display: inline-block;
   padding: 4px 5px 4px 0;
+  display: inline-block;
   vertical-align: sub;
   line-height: 16px;
+  font-size: 200%;
+  content: "\279F\00A0";
 }
 
 #proxyNewAddressHelper .warning {
@@ -1296,17 +1340,17 @@ div.logo hr {
 }
 
 #proxyNewHost textarea {
-  white-space: pre-wrap;
-  word-break: break-all;
-  overflow: auto;
-  border: none;
-  resize: none;
-  background: none !important;
-  box-shadow: none !important;
-  width: 100% !important;
-  height: 6em;
   margin: 0 !important;
   padding: 0 !important;
+  height: 6em;
+  width: 100% !important;
+  overflow: auto;
+  white-space: pre-wrap;
+  word-break: break-all;
+  border: none;
+  box-shadow: none !important;
+  background: none !important;
+  resize: none;
 }
 
 #proxyNewHost textarea:focus {
@@ -10009,7 +10053,7 @@ h3#pluginfromfile, h3#updateplugins, h3#pluginmanage, h3#bannedpeers, h3.ptitle,
 }
 
 .warning {
-  margin: 142px 22px 0 20px !important;
+  margin: 150px 18px 0 16px !important;
   padding: 5px 30px 25px !important;
 }
 
@@ -10032,7 +10076,7 @@ h3#pluginfromfile, h3#updateplugins, h3#pluginmanage, h3#bannedpeers, h3.ptitle,
   min-width: 320px;
   display: block;
   position: absolute;
-  top: -130px;
+  top: -140px;
   z-index: 999;
 }
 
@@ -10043,7 +10087,6 @@ h3#pluginfromfile, h3#updateplugins, h3#pluginmanage, h3#bannedpeers, h3.ptitle,
 }
 
 .logo hr ~ a {
-  padding: 0 5px 7px !important;
   font-size: 110%;
 }
 
