@@ -27,10 +27,10 @@ function initGraphRefresh() {
     else if (document.body.classList.contains("dark"))
       s.innerHTML = "" +
         ".dark #screenlog, .dark #screenlog.expanded, .dark #screenlog.collapsed {\n" +
-        "  background: url('/themes/snark/ubergine/images/hat.png') no-repeat scroll right bottom,\n" +
+        "  background: url('/themes/snark/dark/images/hat.png') no-repeat scroll right bottom,\n" +
         "              url(" + graph + ") no-repeat,\n" +
         "              #000;\n" +
-        "  background: url('/themes/snark/ubergine/images/hat.png') no-repeat scroll right bottom,\n" +
+        "  background: url('/themes/snark/dark/images/hat.png') no-repeat scroll right bottom,\n" +
         "              repeating-linear-gradient(to bottom, rgba(0,0,0,.7) 2px, rgba(0,32,0,.6) 4px),\n" +
         "              url(" + graph + ") no-repeat,\n" +
         "              linear-gradient(to bottom, #000a00, #000) !important;\n" +
