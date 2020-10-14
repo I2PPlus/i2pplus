@@ -29,14 +29,14 @@ function initGraphRefresh() {
     } else if (document.body.classList.contains("dark")) {
       s.innerHTML = "" +
         ".dark #screenlog, .dark #screenlog.expanded, .dark #screenlog.collapsed {" +
-        "  background: url('/themes/snark/ubergine/images/hat.png') no-repeat scroll right bottom," +
+        "  background: url('/themes/snark/dark/images/hat.png') no-repeat scroll right bottom," +
         "              url(" + graph + ") no-repeat," +
         "              #000;" +
-        "  background: url('/themes/snark/ubergine/images/hat.png') no-repeat scroll right bottom," +
+        "  background: url('/themes/snark/dark/images/hat.png') no-repeat scroll right bottom," +
         "              repeating-linear-gradient(to bottom, rgba(0,0,0,.7) 2px, rgba(0,32,0,.6) 4px)," +
         "              url(" + graph + ") no-repeat," +
         "              linear-gradient(to bottom, #000a00, #000) !important;" +
-        "  background-size: 60px auto, 100% 100%, calc(100% - 80px) calc(100% - 4px), 100% 100% !important;" +
+        "  background-size: 80px auto, 100% 100%, calc(100% - 80px) calc(100% - 4px), 100% 100% !important;" +
         "  background-position: right bottom, center center, left bottom, center center !important;" +
         "  background-blend-mode: screen, darken, normal, normal !important;" +
         "}";
@@ -82,7 +82,7 @@ function initGraphRefresh() {
       s.innerHTML= "" +
         ".vanilla .snarkMessages, .vanilla #screenlog.collapsed, .vanilla #screenlog.xpanded {" +
         "  background: repeating-linear-gradient(to bottom, rgba(77, 69, 62, .4) 2px, rgba(111, 96, 90, .3) 4px)," +
-        "              url('themes/snark/vanilla/images/whippy.png') no-repeat scroll right center," +
+        "              url('/themes/snark/vanilla/images/whippy.png') no-repeat scroll right center," +
         "              url(" + graph + ") no-repeat," +
         "              linear-gradient(to bottom, #5f554d, #3f3833);" +
         "  background-size: 100% 100%, 60px auto, calc(100% - 80px) 100%, 100% 100% !important;" +
