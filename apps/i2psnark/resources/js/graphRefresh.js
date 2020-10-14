@@ -29,16 +29,15 @@ function initGraphRefresh() {
     } else if (document.body.classList.contains("dark")) {
       s.innerHTML = "" +
         ".dark #screenlog, .dark #screenlog.expanded, .dark #screenlog.collapsed {" +
-        "  background: url('/themes/snark/dark/images/hat.png') no-repeat scroll right bottom," +
+        "  background: repeating-linear-gradient(to bottom, rgba(0,16,0,.7) 2px, rgba(0,32,0,.6) 4px)," +
+        "              url('/themes/snark/dark/images/hat.png') no-repeat scroll right bottom," +
+        "              linear-gradient(to bottom, #001000, #000)," +
         "              url(" + graph + ") no-repeat," +
-        "              #000;" +
-        "  background: url('/themes/snark/dark/images/hat.png') no-repeat scroll right bottom," +
-        "              repeating-linear-gradient(to bottom, rgba(0,0,0,.7) 2px, rgba(0,32,0,.6) 4px)," +
-        "              url(" + graph + ") no-repeat," +
-        "              linear-gradient(to bottom, #000a00, #000) !important;" +
-        "  background-size: 80px auto, 100% 100%, calc(100% - 80px) calc(100% - 4px), 100% 100% !important;" +
-        "  background-position: right bottom, center center, left bottom, center center !important;" +
-        "  background-blend-mode: screen, darken, normal, normal !important;" +
+        "              repeating-linear-gradient(to bottom, rgba(0,0,0,.9) 2px, rgba(0,16,0,.6) 4px)," +
+        "              #001000 !important;" +
+        "  background-size: 100% 100%, 80px auto, 100% 100%, calc(100% - 80px) calc(100% - 4px), 100% 100% !important;" +
+        "  background-position: center center, right bottom, center center, left bottom !important;" +
+        "  background-blend-mode: darken, lighten, screen, luminosity, normal, normal;" +
         "}";
 
     } else if (document.body.classList.contains("light")) {
