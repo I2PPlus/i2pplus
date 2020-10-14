@@ -61,7 +61,7 @@
 }
 
 .dark .snarkTorrentOdd, .dark .snarkTorrentEven, .dark .peerinfo {
-    background: linear-gradient(to bottom, #002000, #001000) !important;
+    background: linear-gradient(to bottom, #001400, #000600) !important;
 }
 
 .dark #torrentDisplay input#inactive + label {
