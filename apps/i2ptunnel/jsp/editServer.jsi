@@ -805,7 +805,7 @@
         }
 %>
 </th>
-<th><b><%=intl._t("Tunnel Filter")%></b>&nbsp;<a class="help" href="/help/tunnelfilter" style="float:right" title="<%=intl._t("Help with defining tunnel filters")%>">Help</a></th>
+<th><b><%=intl._t("Tunnel Filter")%></b>&nbsp;<a class="help" href="/help/tunnelfilter" target="_blank" style="float:right" title="<%=intl._t("Help with defining tunnel filters")%>">Help</a></th>
 </tr>
 <tr>
 <td>
