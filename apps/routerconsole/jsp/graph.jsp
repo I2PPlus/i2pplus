@@ -98,7 +98,8 @@
 <%
     if (graphHelper.getRefreshValue() > 0) {
 %>
-if (graph) {
+var visibility = document.visibilityState;
+if (graph && visibility == "visible") {
   setInterval(function() {
     progressx.show();
     var graphURL = window.location.href + "&t=" + new Date().getTime();

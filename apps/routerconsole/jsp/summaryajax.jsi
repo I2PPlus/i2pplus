@@ -8,7 +8,7 @@
   var visibility = document.visibilityState;
   if (refresh > 0) {
     window.requestAnimationFrame(refreshSidebar);
-    if (visibility = "visible") {
+    if (visibility == "visible") {
       setTimeout(function updateSidebar() {
         window.requestAnimationFrame(refreshSidebar);
         setTimeout(updateSidebar, <%=intl.getRefresh()%> * 1000);

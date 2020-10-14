@@ -19,24 +19,27 @@
 <jsp:getProperty name="tunnelHelper" property="tunnelSummary" />
 </div>
 <script nonce="<%=cspNonce%>" type="text/javascript">
-  setInterval(function() {
-    progressx.show();
-    progressx.progress(0.5);
-    var xhr = new XMLHttpRequest();
-    xhr.open('GET', '/tunnels?' + new Date().getTime(), true);
-    xhr.responseType = "document";
-    xhr.onreadystatechange = function () {
-      if (xhr.readyState==4 && xhr.status==200) {
-        var tunnels = document.getElementById("tunnels");
-        var tunnelsResponse = xhr.responseXML.getElementById("tunnels");
-        var tunnelsParent = tunnels.parentNode;
-          if (!Object.is(tunnels.innerHTML, tunnelsResponse.innerHTML))
-            tunnelsParent.replaceChild(tunnelsResponse, tunnels);
+  var visibility = document.visibilityState;
+  if (visibility == "visible") {
+    setInterval(function() {
+      progressx.show();
+      progressx.progress(0.5);
+      var xhr = new XMLHttpRequest();
+      xhr.open('GET', '/tunnels?' + new Date().getTime(), true);
+      xhr.responseType = "document";
+      xhr.onreadystatechange = function () {
+        if (xhr.readyState==4 && xhr.status==200) {
+          var tunnels = document.getElementById("tunnels");
+          var tunnelsResponse = xhr.responseXML.getElementById("tunnels");
+          var tunnelsParent = tunnels.parentNode;
+            if (!Object.is(tunnels.innerHTML, tunnelsResponse.innerHTML))
+              tunnelsParent.replaceChild(tunnelsResponse, tunnels);
+        }
       }
-    }
-    window.addEventListener("pageshow", progressx.hide());
-    xhr.send();
-  }, 15000);
+      window.addEventListener("pageshow", progressx.hide());
+      xhr.send();
+    }, 15000);
+  }
 </script>
 <%@include file="summaryajax.jsi" %>
 <script nonce="<%=cspNonce%>" type="text/javascript">window.addEventListener("pageshow", progressx.hide());</script>
