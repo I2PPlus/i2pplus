@@ -124,36 +124,39 @@
 </table>
 </div>
 <script nonce="<%=cspNonce%>" type="text/javascript">
-  setInterval(function() {
-    progressx.show();
-    progressx.progress(0.5);
-    var xhr = new XMLHttpRequest();
-    xhr.open('GET', '/logs?' + new Date().getTime(), true);
-    xhr.responseType = "document";
-    xhr.onreadystatechange = function () {
-      if (xhr.readyState==4 && xhr.status==200) {
-        var criticallogs = document.getElementById("criticallogs");
-        var routerlogs = document.getElementById("routerlogs");
-        var servicelogs = document.getElementById("servicelogs");
-        var routerlogsResponse = xhr.responseXML.getElementById("routerlogs");
-        var criticallogsResponse = xhr.responseXML.getElementById("criticallogs");
-        var criticallogsParent = criticallogs.parentNode;
-        var routerlogsParent = routerlogs.parentNode;
-        var servicelogsParent = servicelogs.parentNode;
-        if (!Object.is(criticallogs.innerHTML, criticallogsResponse.innerHTML))
-          criticallogsParent.replaceChild(criticallogsResponse, criticallogs);
-        if (!Object.is(routerlogs.innerHTML, routerlogsResponse.innerHTML))
-          routerlogsParent.replaceChild(routerlogsResponse, routerlogs);
-        if (servicelogs) {
-          var servicelogsResponse = xhr.responseXML.getElementById("servicelogs");
-          if (!Object.is(servicelogs.innerHTML, servicelogsResponse.innerHTML))
-            servicelogsParent.replaceChild(servicelogsResponse, servicelogs);
+  var visibility = document.visibilityState;
+  if (visibility == "visible") {
+    setInterval(function() {
+      progressx.show();
+      progressx.progress(0.5);
+      var xhr = new XMLHttpRequest();
+      xhr.open('GET', '/logs?' + new Date().getTime(), true);
+      xhr.responseType = "document";
+      xhr.onreadystatechange = function () {
+        if (xhr.readyState==4 && xhr.status==200) {
+          var criticallogs = document.getElementById("criticallogs");
+          var routerlogs = document.getElementById("routerlogs");
+          var servicelogs = document.getElementById("servicelogs");
+          var routerlogsResponse = xhr.responseXML.getElementById("routerlogs");
+          var criticallogsResponse = xhr.responseXML.getElementById("criticallogs");
+          var criticallogsParent = criticallogs.parentNode;
+          var routerlogsParent = routerlogs.parentNode;
+          var servicelogsParent = servicelogs.parentNode;
+          if (!Object.is(criticallogs.innerHTML, criticallogsResponse.innerHTML))
+            criticallogsParent.replaceChild(criticallogsResponse, criticallogs);
+          if (!Object.is(routerlogs.innerHTML, routerlogsResponse.innerHTML))
+            routerlogsParent.replaceChild(routerlogsResponse, routerlogs);
+          if (servicelogs) {
+            var servicelogsResponse = xhr.responseXML.getElementById("servicelogs");
+            if (!Object.is(servicelogs.innerHTML, servicelogsResponse.innerHTML))
+              servicelogsParent.replaceChild(servicelogsResponse, servicelogs);
+          }
         }
       }
-    }
-    window.addEventListener("pageshow", progressx.hide());
-    xhr.send();
-  }, 30000);
+      window.addEventListener("pageshow", progressx.hide());
+      xhr.send();
+    }, 30000);
+  }
   window.addEventListener("pageshow", progressx.hide());
 </script>
 <%@include file="summaryajax.jsi" %>

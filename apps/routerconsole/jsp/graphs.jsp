@@ -94,12 +94,17 @@
     xhrgraphs.send();
   }
 
-  setTimeout(function refresh() {
-    window.requestAnimationFrame(updateGraphs);
-    setTimeout(refresh, <% out.print(graphHelper.getRefreshValue() * 1000); %>);
-  }, <% out.print(graphHelper.getRefreshValue() * 1000); %>);
-<%  } %>
-  progressx.hide();
+  var visibility = document.visibilityState;
+  if (visibility == "visible") {
+    setTimeout(function refresh() {
+      window.requestAnimationFrame(updateGraphs);
+      setTimeout(refresh, <% out.print(graphHelper.getRefreshValue() * 1000); %>);
+    }, <% out.print(graphHelper.getRefreshValue() * 1000); %>);
+  }
+<%
+    }
+%>
+  window.addEventListener("pageshow", progressx.hide());
 </script>
 <%@include file="summaryajax.jsi" %>
 </body>
