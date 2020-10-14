@@ -14120,7 +14120,7 @@ h3#bannedpeers {
 }
 
 #minigraph {
-  margin: -18px -1px 0 0;
+  margin: -19px -1px 0 0;
   height: 40px;
   width: 194px !important;
 }
@@ -14149,17 +14149,13 @@ div#minigraph {
   }
 
   #minigraph {
-    margin: -20px -1px 0 0;
-    height: 40px;
+    margin-top: -21px !important;
+    height: 38px;
     width: 230px !important;
   }
 
-  #xhr > hr + #sb_graphcontainer > span + a > #minigraph {
-    height: 39px;
-  }
-
   #homepage #minigraph {
-    height: 39px;
+    margin-top: -22px !important;
   }
 
   div#minigraph {
