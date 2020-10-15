@@ -1492,7 +1492,7 @@ td.snarkFileStatus {
   box-shadow: inset 0 0 0 1px rgba(0,0,0,.7), inset 0 0 0 2px rgba(16,64,16,.5);
   background: radial-gradient(at center bottom, rgba(16, 72, 16, .4) 0, rgba(0, 0, 0, 0) 40%),
               linear-gradient(to bottom, #030, #000400);
-  animation: ease-in seeding 1.5s forwards;
+  animation: ease-in seeding .5s forwards;
 }
 
 @keyframes seeding {
@@ -1975,34 +1975,8 @@ input[type=image], th a:link img, th a:visited img {
   opacity: 1;
 }
 
-/*
-input[type=text], input.r, select {
-  min-width: 120px !important;
-}
-*/
-
 select {
   min-width: 120px !important;
-}
-
-input[type=radio] {
-  padding: 2px;
-  margin: 0 3px 0 8px;
-  vertical-align: bottom;
-  background: none;
-}
-
-input[type="checkbox"], input[type="radio"], input[type="checkbox"]:disabled:hover, input[type="radio"]:disabled:hover {
-  background: none;
-  filter: invert(100%) sepia(100%) hue-rotate(70deg) saturate(200%); /* colorize radios and checkboxes */
-  min-width: 16px;
-  min-height: 16px;
-  outline: none;
-}
-
-input[type="checkbox"]:hover, input[type="radio"]:hover, input[type="checkbox"]:focus, input[type="radio"]:focus {
-  filter: invert(100%) sepia(100%) hue-rotate(70deg) saturate(200%) drop-shadow(0 0 3px #f60);
-  box-shadow: inset 0 0 2px 1px #f60;
 }
 
 label {
@@ -2033,11 +2007,10 @@ select {
   font-weight: bold;
   text-overflow: ellipsis;
   outline: none;
-  box-shadow: inset 0 0 0 1px #151, inset 0 0 2px 1px #040, inset 0 0 0 3px #000, 0 0 0 1px rgba(0,16,0,.2);
   box-shadow: inset 0 0 0 1px #151, inset 0 0 0 2px #000, inset 0 0 2px 2px #040, inset 0 0 0 3px #000, 0 0 0 1px rgba(0,16,0,.2);
   border: 1px solid #000;
   border-radius: 2px;
-  background: #000 url(images/dropdown.png) right 10px center no-repeat !important;
+  background: #000 url(images/dropdown.svg) right 10px center no-repeat !important;
   background: url(images/dropdown.svg) right 10px center no-repeat, linear-gradient(to bottom, #001000, #000 5%, #000 95%, #001000) !important;
   background-size: 10px auto, 100% 100% !important;
   cursor: pointer;
@@ -4241,6 +4214,11 @@ input[name="nofilter_commentsName"] {
   text-align: center
 }
 
+.numeric:disabled {
+  opacity: .5;
+  cursor: not-allowed !important;
+}
+
 #snarkLang {
   margin: 0 3px;
   padding: 7px 10px;
@@ -4890,14 +4868,14 @@ td.snarkTorrentPeerCount {
 input[type="checkbox"], input[type="checkbox"]:checked, input[type="checkbox"][disabled], input[type="checkbox"][disabled]:checked,
 input[type="radio"], input[type="radio"]:checked, input[type="radio"][disabled], input[type="radio"][disabled]:checked {
   position: relative;
-  width: 19px !important;
-  height: 19px !important;
-  min-width: 19px !important;
+  width: 20px !important;
+  height: 20px !important;
   outline: none;
   vertical-align: middle !important;
   box-sizing: border-box;
   border: 1px solid #252 !important;
-  background: #010;
+  background: #001800;
+  background: linear-gradient(to bottom, #020, #001800);
   -moz-appearance: none;
   -webkit-appearance: inherit;
   filter: drop-shadow(0 0 2px #000);
@@ -4905,24 +4883,24 @@ input[type="radio"], input[type="radio"]:checked, input[type="radio"][disabled],
 }
 
 input[type="checkbox"], input[type="checkbox"]:checked, input[type="checkbox"][disabled], input[type="checkbox"][disabled]:checked {
-  border-radius: 2px;
-  box-shadow: inset 3px 3px 3px 1px #000;
+  border-radius: 1px;
+  box-shadow: inset 0 0 0 1px #000, inset 3px 3px 3px 1px #000;
 }
 
 input[type="radio"], input[type="radio"]:checked, input[type="radio"][disabled], input[type="radio"][disabled]:checked {
   border-radius: 50%;
-  box-shadow: inset 3px 3px 3px 1px #000;
+  box-shadow: inset 0 0 0 1px #000, inset 3px 3px 3px 1px #000;
 }
 
 input[type="checkbox"]:checked::before, input[type="radio"]:checked::before,
 input[type="checkbox"]:not(:checked)::before, input[type="radio"]:not(:checked)::before {
   position: absolute;
-  transition: linear all .05s;
+  transition: linear transform .05s;
   transform: scale(1);
 }
 
 .optbox:not(:checked) {
-  box-shadow: inset 3px 3px 3px 1px #000;
+  box-shadow: inset 0 0 0 1px #000, inset 3px 3px 3px 1px #000;
 }
 
 .optbox:active {
@@ -4931,27 +4909,28 @@ input[type="checkbox"]:not(:checked)::before, input[type="radio"]:not(:checked):
 
 input[type="checkbox"]:checked::before, input[type="checkbox"]:not(:checked)::before {
   content: "";
-  top: 3px;
-  left: 3px;
-  width: 11px;
-  height: 11px;
+  top: 4px;
+  left: 4px;
+  width: 10px;
+  height: 10px;
   line-height: 80%;
-  font-family: sans-serif;
-  font-size: 15pt;
   color: #5a5;
   border-radius: 1px;
-  box-shadow: 0 0 0 1px #000;
+  box-shadow: inset 0 0 0 1px #6b6, 0 0 0 1px #000;
   background: #5a5;
+  background: linear-gradient(135deg, #5a5, #383);
 }
 
 input[type="radio"]:checked::before {
   content: "";
   border-radius: 50%;
-  left: 25%;
-  top: 25%;
-  width: 9px;
-  height: 9px;
+  left: 4px;
+  top: 4px;
+  width: 10px;
+  height: 10px;
+  box-shadow: inset 0 0 0 1px #6b6, 0 0 0 1px #000;
   background: #5a5;
+  background: linear-gradient(135deg, #5a5, #383);
 }
 
 input[type="checkbox"]:checked:hover::before {
@@ -4963,15 +4942,16 @@ input[type="radio"]:checked:hover::before {
 }
 
 input[type="checkbox"]:not(:checked)::before, input[type="radio"]:not(:checked)::before {
-  transform: scale(0);
   color: transparent;
   background: transparent;
+  transform: scale(0);
+  transition: linear transform .05s;
 }
 
 input[type="checkbox"]:hover, input[type="radio"]:hover, input[type="checkbox"]:focus, input[type="radio"]:focus {
   background: #000;
-  width: 19px !important;
-  height: 19px !important;
+  width: 20px !important;
+  height: 20px !important;
   border: 1px solid #5a5 !important;
   box-shadow: 0 0 2px #f60 !important;
   filter: drop-shadow(0 0 1px #f60) !important;
