@@ -7,7 +7,7 @@ body {
   margin: 2.5% 2%;
   padding: 0;
   text-align: center;
-  font-family: "Droid Sans", "Open Sans", "Noto Sans", Ubuntu, "Segoe UI", "Lucida Grande", "DejaVu Sans", Verdana, Helvetica, sans-serif;
+  font-family: Droid Sans, Open Sans, Noto Sans, Ubuntu, Segoe UI, Lucida Grande, DejaVu Sans, Verdana, Helvetica, sans-serif;
   font-size: 9pt;
   color: #41444d;
   background: #eef url(images/bg0.png) center center scroll;
@@ -427,7 +427,7 @@ td.infohelp {
   background: #fcfcff !important;
 }
 
-.tunnelProperties:hover {
+.tunnelProperties:hover, .tunnelProperties:hover + .tunnelInfo, .tunnelProperties:hover + .tunnelInfo + .tunnelInfo {
   background: #ffd !important;
   transition: ease background .3s;
 }
@@ -648,7 +648,7 @@ button.control, input[type="submit"], input[type="reset"] {
   border-top: 1px solid #aaafce;
 }
 
-.tunnelDescriptionLabel, .tunnelDestinationLabel {
+.tunnelDestinationLabel {
   margin-right: 3px;
   min-width: 150px;
   display: inline-block;
@@ -1010,21 +1010,45 @@ textarea[name="accessList"], #hostField, #localDestination, .authentication {
   display: inline-block;
 }
 
-.tunnelDestination {
-  padding-bottom: 1px !important;
-  border-bottom: 1px solid transparent !important;
+.tunnelInfo {
+  background: linear-gradient(to bottom, #fcfcff, #eff2ff) !important;
+}
+
+.tunnelInfo td {
+  background: none !important;
+  text-align: left !important;
+}
+
+.tunnelInfo td:first-child {
+  border-right: 1px solid #ced1e3;
 }
 
 td.tunnelDescription, .tunnelInfo + .tunnelInfo .tunnelDestination {
   padding-top: 1px !important;
 }
 
-.tunnelInfo + .tunnelInfo .tunnelDescription:empty {
-  padding-top: 0 !important;
+.tunnelInfo b, .tunnelInfo .selectAll {
+  display: inline-block;
+  vertical-align: text-bottom;
 }
 
-td.tunnelDestination, td.tunnelDescription {
-  background: linear-gradient(to right, #fcfcff 50%, #eff2ff);
+.tunnelInfo .selectAll {
+  max-width: 140px;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+@media screen and (max-width: 900px) {
+  .tunnelInfo .selectAll {
+    max-width: 110px;
+  }
+}
+
+@media screen and (min-width: 1500px) {
+  .tunnelInfo .selectAll {
+    max-width: none;
+  }
 }
 
 /* end more space */

@@ -5,6 +5,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
 <jsp:useBean class="net.i2p.i2ptunnel.web.IndexBean" id="indexBean" scope="request" />
+<jsp:useBean class="net.i2p.i2ptunnel.web.EditBean" id="editBean" scope="request" />
 <jsp:setProperty name="indexBean" property="tunnel" /><%-- must be set before key1-4 --%>
 <jsp:setProperty name="indexBean" property="*" />
 <jsp:useBean class="net.i2p.i2ptunnel.ui.Messages" id="intl" scope="request" />
@@ -90,7 +91,19 @@
 %>
 <tr class="tunnelProperties">
 <td class="tunnelName">
+<%
+
+            String serverDesc = indexBean.getTunnelDescription(curServer);
+            if (serverDesc != null && serverDesc.length() > 0) {
+%>
+<a href="edit?tunnel=<%=curServer%>" title="<%=serverDesc%>"><%=indexBean.getTunnelName(curServer)%></a>
+<%
+            } else {
+%>
 <a href="edit?tunnel=<%=curServer%>" title="<%=intl._t("Edit Server Tunnel Settings for")%>&nbsp;<%=indexBean.getTunnelName(curServer)%>"><%=indexBean.getTunnelName(curServer)%></a>
+<%
+            }
+%>
 </td>
 <td class="tunnelType"><%=indexBean.getTunnelType(curServer)%></td>
 <td class="tunnelLocation">
@@ -162,7 +175,7 @@
 </td>
 </tr>
 <tr class="tunnelInfo" style="display: none;">
-<td class="tunnelDestination" colspan="6">
+<td class="tunnelDestination" colspan="2">
 <span class="tunnelDestinationLabel">
 <%
             String name = indexBean.getSpoofedHost(curServer);
@@ -182,36 +195,74 @@
             }
 %>
 </td>
+<td class="tunnelSig" colspan="4">
+<span class="tunnelDestinationLabel"><b><%=intl._t("Signature")%>:</b></span>
+<%
+            String tunnelType = editBean.getInternalType(curServer);
+            int currentSigType = editBean.getSigType(curServer, tunnelType);
+            if (currentSigType == 7) {
+%>
+Ed25519-SHA-512
+<%
+            } else if (currentSigType == 3) {
+%>
+ECDSA-P521
+<%
+            } else if (currentSigType == 2) {
+%>
+ECDSA-P384
+<%
+            } else if (currentSigType == 1) {
+%>
+ECDSA-P256
+<%
+            } else if (currentSigType == 0) {
+%>
+<font style="color:red">DSA-SHA1</font>
+<%
+            }
+%>
+</td>
 </tr>
 <%
             String encName = indexBean.getEncryptedBase32(curServer);
             if (encName != null && encName.length() > 0) {
 %>
 <tr class="tunnelInfo" style="display: none;">
-<td class="tunnelDestination" colspan="6">
+<td class="tunnelDestinationEncrypted" colspan="2">
 <span class="tunnelDestinationLabel"><b><%=intl._t("Encrypted")%>:</b></span>
 <span class="selectAll"><%=encName%></span>
 </td>
-</tr>
 <%
-            } // encName
-            String serverDesc = indexBean.getTunnelDescription(curServer);
-            if (serverDesc != null && serverDesc.length() > 0) {
+            } else {
 %>
 <tr class="tunnelInfo" style="display: none;">
-<td class="tunnelDescription" colspan="6">
-<span class="tunnelDestinationLabel"><b><%=intl._t("Description")%>:</b></span>
-<%=serverDesc%>
+<td class="tunnelDestinationEncrypted empty" colspan="2"></td>
+<%
+            }
+%>
+<td class="tunnelEncryption" colspan="4">
+<span class="tunnelDestinationLabel"><b><%=intl._t("Encryption")%>:</b></span>
+<%
+            boolean has0 = editBean.hasEncType(curServer, 0);
+            boolean has4 = editBean.hasEncType(curServer, 4);
+            if (has0 && has4) {
+%>
+ElGamal-2048 & ECIES-X25519
+<%
+            } else if (has4) {
+%>
+ECIES-X25519
+<%
+            } else if (has0) {
+%>
+ElGamal-2048
+<%
+            }
+%>
 </td>
 </tr>
 <%
-            } else { // description != null
-%>
-<tr class="tunnelInfo" style="display: none;">
-<td class="tunnelDescription" colspan="6"></td>
-</tr>
-<%
-            }
         } // for loop
 %>
 <tr>
@@ -246,10 +297,21 @@
         for (int curClient = 0; curClient < indexBean.getTunnelCount(); curClient++) {
             boolean isShared = indexBean.isSharedClient(curClient);
             if (!indexBean.isClient(curClient)) continue;
+            String clientDesc = indexBean.getTunnelDescription(curClient);
 %>
 <tr class="tunnelProperties">
 <td class="tunnelName">
+<%
+            if (clientDesc != null && clientDesc.length() != 0) {
+%>
+<a href="edit?tunnel=<%=curClient%>" title="<%=clientDesc%>"><%=indexBean.getTunnelName(curClient)%></a>
+<%
+            } else {
+%>
 <a href="edit?tunnel=<%=curClient%>" title="<%=intl._t("Edit Tunnel Settings for")%>&nbsp;<%=indexBean.getTunnelName(curClient)%>"><%=indexBean.getTunnelName(curClient)%></a>
+<%
+            }
+%>
 </td>
 <td class="tunnelType"><%=indexBean.getTunnelType(curClient)%>
 <%
@@ -321,58 +383,96 @@
 </td>
 </tr>
 <tr class="tunnelInfo" style="display: none;">
-<td class="tunnelDestination" colspan="6">
+<td class="tunnelDestination" colspan="2">
 <span class="tunnelDestinationLabel">
 <%             if ("httpclient".equals(indexBean.getInternalType(curClient)) || "connectclient".equals(indexBean.getInternalType(curClient)) ||
                    "sockstunnel".equals(indexBean.getInternalType(curClient)) || "socksirctunnel".equals(indexBean.getInternalType(curClient))) { %>
 <b><%=intl._t("Outproxy")%>:</b>
-<%             } else { %>
+<%
+               } else {
+%>
 <b><%=intl._t("Destination")%>:</b>
-<%             } %>
+<%
+               }
+%>
 </span>
 <%
                if (indexBean.getIsUsingOutproxyPlugin(curClient)) {
-                   %>
+%>
 <%=intl._t("internal plugin")%>
 <%
                } else {
                    String cdest = indexBean.getClientDestination(curClient);
                    if (cdest.length() > 70) { // Probably a B64 (a B32 is 60 chars) so truncate
 %>
-<%=cdest.substring(0, 45)%>&hellip;<%=cdest.substring(cdest.length() - 15, cdest.length())%>
+<span class="selectAll"><%=cdest.substring(0, 45)%>&hellip;<%=cdest.substring(cdest.length() - 15, cdest.length())%></span>
 <%
                    } else if (cdest.length() > 0) {
 %>
-<%=cdest%>
+<span class="selectAll"><%=cdest%></span>
 <%
                    } else {
-%><i><%=intl._t("none")%></i>
+%>
+<i><%=intl._t("none")%></i>
 <%
                    }
                }
 %>
 </td>
-</tr>
-<% /* TODO SSL outproxy for httpclient if plugin not present */
-               String clientDesc = indexBean.getTunnelDescription(curClient);
-               if (clientDesc != null && clientDesc.length() > 0) {
-%>
-<tr class="tunnelInfo" style="display: none;">
-<td class="tunnelDescription" colspan="6">
-<span class="tunnelDescriptionLabel"><b><%=intl._t("Description")%>:</b></span>
-<%=clientDesc%>
-</td>
-</tr>
+<td class="tunnelSig" colspan="4">
+<span class="tunnelDestinationLabel"><b><%=intl._t("Signature")%>:</b></span>
 <%
-               } else { // if clientDesc != null
+               String tunnelType = editBean.getInternalType(curClient);
+               int currentSigType = editBean.getSigType(curClient, tunnelType);
+               if (currentSigType == 7) {
 %>
-<tr class="tunnelInfo" style="display: none;">
-<td class="tunnelDescription" colspan="6"></td>
-</tr>
+Ed25519-SHA-512
+<%
+               } else if (currentSigType == 3) {
+%>
+ECDSA-P521
+<%
+               } else if (currentSigType == 2) {
+%>
+ECDSA-P384
+<%
+               } else if (currentSigType == 1) {
+%>
+ECDSA-P256
+<%
+               } else if (currentSigType == 0) {
+%>
+<font style="color:red">DSA-SHA1</font>
 <%
                }
-        }
+
 %>
+<tr class="tunnelInfo" style="display: none;">
+<td class="empty" colspan="2"></td>
+<td class="tunnelEncryption" colspan="4">
+<span class="tunnelDestinationLabel"><b><%=intl._t("Encryption")%>:</b></span>
+<%
+               boolean has0 = editBean.hasEncType(curClient, 0);
+               boolean has4 = editBean.hasEncType(curClient, 4);
+               if (has0 && has4) {
+%>
+ElGamal-2048 & ECIES-X25519
+<%
+               } else if (has4) {
+%>
+ECIES-X25519
+<%
+               } else if (has0) {
+%>
+ElGamal-2048
+<%
+               }
+%>
+<%
+        } // for loop
+%>
+</td>
+</tr>
 <tr>
 <td class="newTunnel" colspan="6">
 <form id="addNewClientTunnelForm" action="edit">

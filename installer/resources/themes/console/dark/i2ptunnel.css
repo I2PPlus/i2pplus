@@ -27,13 +27,13 @@ body.iframed {
 }
 
 ::selection {
-  background: #030 !important;
-  color: white;
+  background: #ff0 !important;
+  color: black;
 }
 
 ::-moz-selection {
-  background: #030 !important;
-  color: white;
+  background: #ff0 !important;
+  color: black;
 }
 
 h2, h3, th, .buttons, .newTunnel, .control, label, .infohelp, .infowarn, .nowrap, b, #throttler td {
@@ -197,12 +197,6 @@ hr {
 .iframed .panel#clients, #tunnelEditPage .panel, #tunnelRegistration .panel, #tunnelWizardPage .panel, #tunnelSSL .panel {
   margin-bottom: 6px !important;
 }
-
-/*@supports not (-moz-appearance: none) {
-.iframed .panel#clients, #tunnelEditPage .panel, #tunnelRegistration .panel, #tunnelWizardPage .panel, #tunnelSSL .panel {
-  margin-bottom: 10px !important;
-}
-}*/
 
 .iframed #messages, .iframed #messages, #tunnelEditPage .panel, #tunnelRegistration .panel, #tunnelWizardPage .panel, #tunnelSSL .panel {
   margin-top: -5px !important;
@@ -390,26 +384,67 @@ td.infohelp {
   overflow: hidden;
   text-align: left;
   border: 1px solid #242;
-  border-bottom: 1px inset #010 !important;
 }
 
 #serverTunnels th:nth-child(n+2), #clientTunnels th:nth-child(n+2), .tunnelProperties td:nth-child(n+2) {
   text-align: center;
 }
 
-.tunnelProperties:hover, .tunnelProperties:hover + tr td, .tunnelProperties:hover + tr + tr td {
+.tunnelProperties:hover, .tunnelProperties:hover + .tunnelInfo td,
+.tunnelProperties:hover + .tunnelInfo + .tunnelInfo td,
+.tunnelProperties:hover + .tunnelInfo + .tunnelInfo + .tunnelInfo td {
   background: #002000 !important;
   box-shadow: none !important;
 }
 
-.tunnelProperties + tr + tr, .tunnelProperties + tr + tr td {
-  border-top: 1px solid transparent !important;
+.tunnelProperties + .tunnelInfo td {
+  border-top: 1px solid #242 !important;
+}
+
+.tunnelInfo td {
+  border-top: none;
+  background: none;
+  padding-top: 4px;
+  padding-bottom: 4px;
+}
+
+.tunnelInfo .tunnelDestination, .tunnelInfo .tunnelSig {
+  padding-top: 8px;
+}
+
+.tunnelInfo .tunnelDestinationEncrypted, .tunnelInfo .tunnelEncryption {
+  padding-top: 0;
+  padding-bottom: 8px;
+}
+
+.tunnelInfo b, .tunnelInfo .selectAll {
+  display: inline-block;
+  vertical-align: text-bottom;
+}
+
+.tunnelInfo .selectAll {
+  max-width: 200px;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+@media screen and (max-width: 900px) {
+  .tunnelInfo .selectAll {
+    max-width: 110px;
+  }
+}
+
+@media screen and (min-width: 1500px) {
+  .tunnelInfo .selectAll {
+    max-width: none;
+  }
 }
 
 .newTunnel {
+  padding: 5px !important;
   text-align: right;
   border-top: 1px solid #242 !important;
-  padding: 5px !important;
   background: #fff;
 }
 
@@ -626,7 +661,6 @@ input[type="radio"][disabled]:hover, input[type="radio"][disabled]:focus {
 
 .editDisabled .optbox:checked + span {
   font-weight: bold;
-/*  text-decoration: underline;*/
 }
 
 .editDisabled .optbox:not(:checked), .editDisabled .optbox:not(:checked) + span {
@@ -1093,7 +1127,7 @@ input.tunnelName, input.tunnelDescription, #userAgents {
 }
 
 #notReady, #down {
-  margin: 50px auto;
+  margin: 53px auto 50px;
   padding: 30px;
   width: 400px;
   text-align: center;
@@ -1220,7 +1254,7 @@ input.tunnelName, input.tunnelDescription, #userAgents {
 
 .tunnelConfig td, td {
   padding: 8px 5px;
-  border-top: 1px inset #1c3f1b;
+  border-top: 1px solid #1c3f1b;
 }
 
 input[type="checkbox"], input[type="radio"] {
@@ -1265,9 +1299,9 @@ textarea[name="accessList"] {
   display: inline-block;
 }
 
-.tunnelDestination {
-  padding-bottom: 1px !important;
-  border-bottom: 1px solid transparent !important;
+.tunnelInfo {
+  background: linear-gradient(to right, #000 50%, #010) !important;
+  box-shadow: none !important;
 }
 
 _:-ms-lang(x), .tunnelDestination {
@@ -1282,16 +1316,8 @@ _:-ms-lang(x), .tunnelProperties {
   border-bottom: 1px solid #010 !important;
 }
 
-.tunnelDestination b, .tunnelDescription b {
+.tunnelInfo b {
   color: #bb7;
-}
-
-td.tunnelDestination, td.tunnelDescription {
-  background: linear-gradient(to right, #000 50%, #010) !important;
-}
-
-.tunnelInfo + .tunnelInfo .tunnelDescription:empty {
-  padding-top: 0 !important;
 }
 
 /* end more space */
