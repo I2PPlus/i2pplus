@@ -326,27 +326,32 @@
 <%             if ("httpclient".equals(indexBean.getInternalType(curClient)) || "connectclient".equals(indexBean.getInternalType(curClient)) ||
                    "sockstunnel".equals(indexBean.getInternalType(curClient)) || "socksirctunnel".equals(indexBean.getInternalType(curClient))) { %>
 <b><%=intl._t("Outproxy")%>:</b>
-<%             } else { %>
+<%
+               } else {
+%>
 <b><%=intl._t("Destination")%>:</b>
-<%             } %>
+<%
+               }
+%>
 </span>
 <%
                if (indexBean.getIsUsingOutproxyPlugin(curClient)) {
-                   %>
+%>
 <%=intl._t("internal plugin")%>
 <%
                } else {
                    String cdest = indexBean.getClientDestination(curClient);
                    if (cdest.length() > 70) { // Probably a B64 (a B32 is 60 chars) so truncate
 %>
-<%=cdest.substring(0, 45)%>&hellip;<%=cdest.substring(cdest.length() - 15, cdest.length())%>
+<span class="selectAll"><%=cdest.substring(0, 45)%>&hellip;<%=cdest.substring(cdest.length() - 15, cdest.length())%></span>
 <%
                    } else if (cdest.length() > 0) {
 %>
-<%=cdest%>
+<span class="selectAll"><%=cdest%></span>
 <%
                    } else {
-%><i><%=intl._t("none")%></i>
+%>
+<i><%=intl._t("none")%></i>
 <%
                    }
                }

@@ -27,13 +27,13 @@ body.iframed {
 }
 
 ::selection {
-  background: #030 !important;
-  color: white;
+  background: #ff0 !important;
+  color: black;
 }
 
 ::-moz-selection {
-  background: #030 !important;
-  color: white;
+  background: #ff0 !important;
+  color: black;
 }
 
 h2, h3, th, .buttons, .newTunnel, .control, label, .infohelp, .infowarn, .nowrap, b, #throttler td {
