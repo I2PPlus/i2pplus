@@ -575,10 +575,12 @@ li {
 
 #host_list tr:nth-child(odd), #host_details tr:nth-child(odd) {
   background-color: rgba(0,12,0,.5);
+  background: linear-gradient(to bottom, #001400, #000600);
 }
 
 #host_list tr:nth-child(even), #host_details tr:nth-child(even) {
   background-color: rgba(0,24,0,.5);
+  background: linear-gradient(to bottom, #001400, #000600);
 }
 
 .help {
@@ -1464,7 +1466,7 @@ input[type="radio"], input[type="radio"]:checked, input[type="radio"][disabled],
 }
 
 input[type="checkbox"], input[type="checkbox"]:checked, input[type="checkbox"][disabled], input[type="checkbox"][disabled]:checked {
-  border-radius: 2px;
+  border-radius: 1px;
   box-shadow: inset 3px 3px 3px 1px #000;
 }
 
