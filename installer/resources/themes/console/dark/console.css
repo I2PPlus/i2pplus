@@ -1917,11 +1917,13 @@ tr:nth-child(even) {
   background: #000400;
   background: repeating-linear-gradient(135deg, #000 1px, #000a00 2px, #000a00 3px);
   background: repeating-linear-gradient(135deg, rgba(0,0,0,.8) 1px, rgba(0,6,0,.8) 2px, rgba(0,6,0,.8) 3px), repeating-linear-gradient(45deg, rgba(0,0,0,.8) 1px, rgba(0,6,0,.8) 2px, rgba(0,6,0,.8) 3px);
+  background: linear-gradient(to bottom, #001400, #000600);
   vertical-align: middle;
 }
 
 tr:nth-child(odd) {
   background: #000a00;
+  background: linear-gradient(to bottom, #001400, #000600);
   vertical-align: middle;
 }
 
@@ -3488,7 +3490,8 @@ h3[id="udpcon"] {
   margin-top: 3px !important;
 }
 
-#udpconnections tr:hover, #ntcpconnections tr:hover, #jobstats tr:hover, #schedjobs tr:hover, #netdboverview table tr:hover, #portfaq tr:hover, .tunneldisplay tr:hover {
+#udpconnections tr:hover, #ntcpconnections tr:hover, #jobstats tr:hover, #schedjobs tr:hover,
+#netdboverview table tr:hover, #portfaq tr:hover, .tunneldisplay tr:hover, #tunnels tr:hover {
   background: #020;
 }
 
@@ -4369,6 +4372,13 @@ p#gatherstats {
 
 #webappconfig th, #clientconfig th {
   text-align: center;
+}
+
+#webappconfig td:first-child::before {
+  display: inline-block;
+  vertical-align: middle;
+  min-height: 40px;
+  content: "";
 }
 
 .configtable#webappconfig tr:last-child, .configtable#clientconfig tr:last-child {
@@ -7348,18 +7358,18 @@ h3#advancedconfig a:hover::after, h3#advancedconfig a:focus::after,
 }
 
 #netconfig th, #externali2cp th, #plugininstall th, #plugininstall2 th, .configtable th, th.th_title {
-  text-align: left;
-  padding: 5px 10px !important;
-  text-transform: uppercase;
-  font-size: 10pt;
-  letter-spacing: 0.08em;
+  padding: 7px 10px !important;
   word-spacing: 0.1em;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  text-align: left;
+  font-size: 10pt;
 }
 
 .configtable td {
   padding: 6px 10px;
-  background: #000;
   line-height: 180%;
+  background: #000;
 }
 
 #plugininstall2 td {
@@ -7374,23 +7384,23 @@ textarea#advancedsettings {
   margin: 0 !important;
   padding-top: 3px;
   width: 100%;
-  resize: none;
   overflow-x: hidden;
-  white-space: pre-wrap;
-  border: 0 none transparent;
-  border-radius: 0;
   word-break: break-all;
+  white-space: pre-wrap;
+  border: none;
+  border-radius: 0;
+  resize: none;
 }
 
 .configtable td.infohelp, p.infohelp, td.infohelp, p.infowarn, td.infowarn, p#debugmode, p.sybilinfo, #sybilanalysis {
-  background: #000 url(images/infohelp.png) 12px center no-repeat !important;
   padding: 15px 15px 15px 50px !important;
-  text-align: justify;
   line-height: 130% !important;
-  border-bottom: 1px solid #252;
-  border-top: 1px solid #252;
   white-space: normal !important;
   font-weight: normal !important;
+  text-align: justify;
+  border-bottom: 1px solid #252;
+  border-top: 1px solid #252;
+  background: #000 url(images/infohelp.png) 12px center no-repeat !important;
   background-size: 28px 28px !important;
 }
 
@@ -7426,12 +7436,10 @@ p.infohelp, p#debugmode, p.sybilinfo, p#gatherstats, #bugreports td.infohelp {
 }
 
 p.infowarn, td.infowarn {
-  background: #000 url(images/infowarn.png) 12px center no-repeat !important;
-  border: 1px solid #252;
-  box-shadow: inset 0 0 0 1px #300;
-  box-shadow: inset 0 0 0 1px #000, inset 0 0 2px 1px #040, inset 0 0 3px 1px #900, inset 0 0 0 4px #000;
-  box-shadow: inset 0 0 0 1px #000, inset 0 0 2px 1px #900;
   padding: 15px 15px 15px 50px;
+  border: 1px solid #252;
+  box-shadow: inset 0 0 0 1px #000, inset 0 0 2px 1px #900;
+  background: #000 url(images/infowarn.png) 12px center no-repeat !important;
   background-size: 28px 28px !important;
 }
 
@@ -7440,9 +7448,9 @@ p.infowarn, td.infowarn {
 }
 
 td.optionsave {
+  padding: 5px !important;
   text-align: right;
   border-top: 1px solid #252;
-  padding: 5px !important;
   background: #000;
 }
 
@@ -7453,11 +7461,11 @@ td.optionsave {
 h3.tabletitle, h3#i2pclientconfig, h3#advancedclientconfig, h3#webappconfig, h3#pconfig, h3#pluginfromurl, h3#pluginfromfile,
 h3#updateplugins, h3#pluginmanage, h3#bannedpeers, h3.ptitle, h3#transports, h3#upnpstatus, h3.sybils, #certs h3 {
   margin-bottom: 0 !important;
-  border-radius: 0;
-  border: 1px solid #252;
-  text-transform: uppercase;
-  letter-spacing: 0.08em;
   padding: 8px 10px;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  border: 1px solid #252;
+  border-radius: 0;
 }
 
 h3.sybils {
@@ -7486,9 +7494,9 @@ h3#upnp {
 }
 
 #upnpscan {
-  border: 1px solid #252;
   margin: -11px 0 10px;
   padding: 0 15px 5px;
+  border: 1px solid #252;
   background: #000;
 }
 
@@ -7522,11 +7530,11 @@ p#webappconfigtext {
 }
 
 #peers #ntcpconnections th:nth-last-child(2)::after, #peers #ntcpconnections th:nth-last-child(3)::after {
-  content: "";
-  display: inline-block;
   width: 16px;
   height: 16px;
+  display: inline-block;
   background: url(/themes/console/images/info/network_status/network_clockskew.png) center center no-repeat;
+  content: "";
 }
 
 #peers #ntcpconnections th:nth-last-child(3)::after {
@@ -7534,10 +7542,10 @@ p#webappconfigtext {
 }
 
 #peers #ntcpconnections th:nth-last-child(4) {
-  max-width: 22px;
-  overflow: hidden;
   padding-left: 0;
   padding-right: 0;
+  max-width: 22px;
+  overflow: hidden;
 }
 
 #peers .ipv6, #peers .rto, #peers .mtu, #peers .sst, #peers .cwnd, #peers .rtt {
@@ -7623,9 +7631,9 @@ h3#i2pclientconfig {
 }
 
 p#javaclienthelp {
+  padding: 10px 10px 10px 50px !important;
   border: 1px solid #252;
   background: url(images/infohelp.png) 12px center no-repeat !important;
-  padding: 10px 10px 10px 50px !important;
 }
 
 div#clientsconfig {
@@ -7665,10 +7673,10 @@ input#hideme {
 }
 
 #pluginupdater {
-  border: 1px solid #252;
-  padding: 15px 5px 15px 50px;
   margin-top: -11px;
   margin-bottom: 10px !important;
+  padding: 15px 5px 15px 50px;
+  border: 1px solid #252;
   background: url(/themes/console/images/info/update.png) 12px center no-repeat, #000;
   background-size: 28px 28px;
 }
@@ -7682,16 +7690,16 @@ input#hideme {
 }
 
 h4.embeddedtitle#updateplugins {
+  margin-top: -13px;
   padding: 5px 10px;
+  word-spacing: 0.1em;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  text-align: left;
+  font-size: 10pt;
+  border: 1px solid #252;
   background: #000 url(images/header.png) center center repeat-x;
   background: linear-gradient(to bottom, #002000, #000 75%) !important;
-  border: 1px solid #252;
-  text-align: left;
-  text-transform: uppercase;
-  font-size: 10pt;
-  letter-spacing: 0.08em;
-  word-spacing: 0.1em;
-  margin-top: -13px;
 }
 
 #manualreseed input[type="text"] {
@@ -7716,8 +7724,8 @@ h4.embeddedtitle#updateplugins {
 .main#config_stats h3 a, .main#config_logging h3 a {
   float: right;
   letter-spacing: normal;
-  font-size: 9pt;
   text-transform: none;
+  font-size: 9pt;
 }
 
 #configstats {
@@ -7740,10 +7748,10 @@ h4.embeddedtitle#updateplugins {
 }
 
 #configstats th b {
+  word-spacing: 0.1em;
+  letter-spacing: 0.08em;
   text-transform: uppercase;
   font-size: 10pt;
-  letter-spacing: 0.08em;
-  word-spacing: 0.1em;
 }
 
 #configstats td {
@@ -7751,9 +7759,9 @@ h4.embeddedtitle#updateplugins {
 }
 
 #configstats td:first-child {
+  padding: 8px;
   width: 1%;
   white-space: nowrap;
-  padding: 8px;
 }
 
 #configstats td:first-child:empty + td > label { /* remove pointer from inert labels */
@@ -7768,21 +7776,9 @@ h4.embeddedtitle#updateplugins {
   border-top: 1px inset #131;
 }
 
-/*
-#configstats .tablefooter b:not(old) {
-  font-size: 0;
-}
-
-#configstats .tablefooter b::after {
-  content: url(images/chart.png);
-  vertical-align: bottom;
-  filter: sepia(100%) hue-rotate(70deg) !important;
-}
-*/
-
 #configstats .tablefooter:last-child td {
-  background: #000 !important;
   text-align: right;
+  background: #000 !important;
 }
 
 #configstats td {
@@ -11094,7 +11090,7 @@ input[type="radio"], input[type="radio"]:checked, input[type="radio"][disabled],
   box-sizing: border-box;
   border: 1px solid #252 !important;
   background: #010;
-  background: linear-gradient(to bottom, #020, #010);
+  background: linear-gradient(to bottom, #020, #001800);
   -moz-appearance: none;
   -webkit-appearance: inherit;
   filter: drop-shadow(0 0 2px #000);
@@ -11102,24 +11098,23 @@ input[type="radio"], input[type="radio"]:checked, input[type="radio"][disabled],
 }
 
 input[type="checkbox"], input[type="checkbox"]:checked, input[type="checkbox"][disabled], input[type="checkbox"][disabled]:checked {
-  border-radius: 2px;
-  box-shadow: inset 3px 3px 3px 1px #000;
+  border-radius: 1px;
+  box-shadow: inset 0 0 0 1px #000, inset 3px 3px 3px 1px #000;
 }
 
 input[type="radio"], input[type="radio"]:checked, input[type="radio"][disabled], input[type="radio"][disabled]:checked {
   border-radius: 50%;
-  box-shadow: inset 3px 3px 3px 1px #000;
+  box-shadow: inset 0 0 0 1px #000, inset 3px 3px 3px 1px #000;
 }
 
 input[type="checkbox"]:checked::before, input[type="radio"]:checked::before,
 input[type="checkbox"]:not(:checked)::before, input[type="radio"]:not(:checked)::before {
   position: absolute;
-  transition: linear all 0.05s;
   transform: scale(1);
 }
 
 .optbox:not(:checked) {
-  box-shadow: inset 3px 3px 3px 1px #000;
+  box-shadow: inset 0 0 0 1px #000, inset 3px 3px 3px 1px #000;
 }
 
 .optbox:active {
@@ -11127,31 +11122,36 @@ input[type="checkbox"]:not(:checked)::before, input[type="radio"]:not(:checked):
 }
 
 input[type="checkbox"]:checked::before, input[type="checkbox"]:not(:checked)::before {
-  content: "";
-  top: 3px;
-  left: 3px;
   width: 11px;
   height: 11px;
-  box-shadow: inset 0 0 0 1px #000;
+  top: 3px;
+  left: 3px;
+  box-shadow: inset 0 0 0 1px #6b6, 0 0 0 1px #000;
   background: #5a5;
+  background: linear-gradient(135deg, #5a5, #383);
+  content: "";
 }
 
 input[type="radio"]:checked::before {
-  content: "";
-  border-radius: 50%;
-  left: 25%;
-  top: 25%;
   width: 9px;
   height: 9px;
+  left: 25%;
+  top: 25%;
+  border-radius: 50%;
+  box-shadow: inset 0 0 0 1px #6b6, 0 0 0 1px #000;
   background: #5a5;
+  background: linear-gradient(135deg, #5a5, #383);
+  content: "";
 }
 
 input[type="checkbox"]:checked:hover::before {
   color: #6b6;
+  transition: ease transform 0.05s;
 }
 
 input[type="radio"]:checked:hover::before {
   background: #6b6;
+  transition: ease transform 0.05s;
 }
 
 input[type="checkbox"]:not(:checked)::before, input[type="radio"]:not(:checked)::before {
@@ -13165,7 +13165,8 @@ table.search {
 /* setup wizard */
 
 #wizardpage .routersummary h3, #wizardpage .routersummary h3:hover, #wizardpage .routersummary h3:active {
-  background: repeating-linear-gradient(to right, rgba(0,0,0,0.5) 1px, rgba(0,0,0,0.5) 2px, rgba(0,16,0,0.5) 3px), linear-gradient(to bottom, #1a261a, #223022 7%, #212f21 9%, #172317 21%, #091109 49%, #050d05 50%, #020602 51%, #010301 53%, #000000 56%) !important;
+  background: repeating-linear-gradient(to right, rgba(0,0,0,0.5) 1px, rgba(0,0,0,0.5) 2px, rgba(0,16,0,0.5) 3px),
+              linear-gradient(to bottom, #1a261a, #223022 7%, #212f21 9%, #172317 21%, #091109 49%, #050d05 50%, #020602 51%, #010301 53%, #000000 56%) !important;
   box-shadow: inset 0 0 0 1px #000 !important;
   mix-blend-mode: normal !important;
 }
@@ -13788,15 +13789,12 @@ i {
   padding: 2px 3px;
   max-width: 160px;
   display: inline-block;
-/*  white-space: nowrap;
-  overflow: hidden;
-  text-overflow: ellipsis;*/
   white-space: pre-wrap;
   word-break: break-all;
-  font-size: 70% !important;
+  font-size: 80% !important;
   color: #ee9;
-  border: 1px solid #775;
   border-radius: 3px;
+  border: none;
   -moz-user-select: all;
   -webkit-user-select: all;
   user-select: all;
