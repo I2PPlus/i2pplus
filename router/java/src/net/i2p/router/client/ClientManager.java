@@ -586,7 +586,7 @@ class ClientManager {
         } else {
             if (_log.shouldLog(Log.WARN))
                 _log.warn("Cannot request LeaseSet, as we can't find a client runner for ["
-                          + dest.toBase64().substring(0,6) + "] - disconnected?");
+                          + dest.toBase32().substring(0,6) + "] - disconnected?");
         }
     }
 
@@ -680,13 +680,13 @@ class ClientManager {
         ClientConnectionRunner runner = getRunner(fromDest);
         if (runner != null) {
             if (_log.shouldLog(Log.DEBUG))
-                _log.debug("Delivering status " + status + " to "
-                           + fromDest.calculateHash() + " for message " + id);
+                _log.debug("Delivering status " + status + " to ["
+                           + fromDest.toBase32().substring(0,6) + "] for message " + id);
             runner.updateMessageDeliveryStatus(fromDest, id, messageNonce, status);
         } else {
             if (_log.shouldLog(Log.WARN))
-                _log.warn("Cannot deliver status " + status + " to "
-                          + fromDest.calculateHash() + " for message " + id);
+                _log.warn("Cannot deliver status " + status + " to ["
+                          + fromDest.toBase32().substring(0,6) + "] for message " + id);
         }
     }
 
@@ -802,9 +802,9 @@ class ClientManager {
                 // no client connection...
                 // we should pool these somewhere...
                 if (_log.shouldLog(Log.WARN))
-                    _log.warn("Message received but we don't have a connection to "
-                              + dest + "/" + _msg.getDestinationHash()
-                              + " currently.  DROPPED", new Exception());
+                    _log.warn("Message received but we don't have a connection to ["
+                              + dest + "/" + _msg.getDestinationHash().toBase32().substring(0,6)
+                              + "] currently.  DROPPED", new Exception());
             }
         }
     }
