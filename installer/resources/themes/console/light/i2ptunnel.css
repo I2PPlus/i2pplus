@@ -629,7 +629,7 @@ td {
 }*/
 
 #serverTunnels td, #clientTunnels td {
-  border-top: 1px inset #efefff;
+  border-top: 1px solid #efefff;
 }
 
 td.infohelp {
@@ -1139,27 +1139,62 @@ textarea[name="accessList"], #hostField, #localDestination, .authentication {
   width: calc(100% - 20px) !important;
 }
 
-td.tunnelDestination {
-  padding-bottom: 1px !important;
-  border-bottom: none !important;
-}
-
-td.tunnelDescription, .tunnelInfo + .tunnelInfo .tunnelDestination {
-  padding-top: 1px !important;
-  border-top: none !important;
-}
-
-.tunnelInfo + .tunnelInfo .tunnelDescription:empty {
-  padding-top: 0 !important;
-}
-
 .tunnelDestination b, .tunnelDescription b {
   color: #41465f;
 }
 
-td.tunnelDestination, td.tunnelDescription {
-  border-bottom: 1px solid #8d8daa;
-  background: linear-gradient(to right, #fafaff, rgba(255,255,255,.1) 50%, #eef);
+.tunnelInfo {
+  background: linear-gradient(to right, #f2f2ff, #eef);
+}
+
+.tunnelInfo td {
+  background: none !important;
+  border: none !important;
+}
+
+.tunnelInfo td:first-child {
+  border-right: 1px solid #8d8daa !important;
+}
+
+.tunnelProperties + tr td {
+  border-top: 1px solid #8d8daa !important;
+}
+
+.tunnelProperties + tr + tr td {
+  border-bottom: 1px solid #8d8daa !important;
+}
+
+.tunnelProperties + tr td {
+  padding-top: 8px;
+}
+
+.tunnelProperties + tr + tr td {
+  padding-top: 0 !important;
+  padding-bottom: 8px;
+}
+
+.tunnelInfo b, .tunnelInfo .selectAll {
+  display: inline-block;
+  vertical-align: text-bottom;
+}
+
+.tunnelInfo .selectAll {
+  max-width: 140px;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+@media screen and (max-width: 900px) {
+  .tunnelInfo .selectAll {
+    max-width: 110px;
+  }
+}
+
+@media screen and (min-width: 1500px) {
+  .tunnelInfo .selectAll {
+    max-width: none;
+  }
 }
 
 #oldDestFile {

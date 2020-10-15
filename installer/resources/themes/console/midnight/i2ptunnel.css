@@ -369,7 +369,7 @@ td.infohelp {
   width: 50%;
 }
 
-#clientTunnels tr, #serverTunnels tr, .tunnelConfig tr {
+#clientTunnels tr:not(.tunnelInfo), #serverTunnels tr:not(.tunnelInfo), .tunnelConfig tr {
   background: #000010;
 }
 
@@ -1135,9 +1135,46 @@ input.tunnelName, input.tunnelDescriptionText, #userAgents, .tunnelDescription, 
 
 /* more space */
 
-.tunnelConfig td, td {
+.tunnelConfig td, tr:not(.tunnelInfo) td {
   padding: 6px 5px;
-  border-top: 1px inset #17142f;
+  border-top: 1px solid #17142f;
+}
+
+.tunnelInfo td {
+  border: none;
+}
+
+.tunnelProperties + tr  td {
+  padding-top: 8px;
+}
+
+.tunnelProperties + tr + tr td {
+  padding-top: 0;
+  padding-bottom: 8px;
+}
+
+.tunnelInfo b, .tunnelInfo .selectAll {
+  display: inline-block;
+  vertical-align: text-bottom;
+}
+
+.tunnelInfo .selectAll {
+  max-width: 140px;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+@media screen and (max-width: 900px) {
+  .tunnelInfo .selectAll {
+    max-width: 110px;
+  }
+}
+
+@media screen and (min-width: 1500px) {
+  .tunnelInfo .selectAll {
+    max-width: none;
+  }
 }
 
 input[type="checkbox"], input[type="radio"] {
@@ -1200,8 +1237,12 @@ textarea[name="accessList"], #hostField, #localDestination, .authentication {
   color: #a8accf;
 }
 
-td.tunnelDestination, td.tunnelDescription {
+.tunnelInfo {
   background: linear-gradient(to right, #000 50%, #000020);
+}
+
+.tunnelInfo td {
+  background: none;
 }
 
 /* end more space */
