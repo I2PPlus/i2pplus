@@ -656,6 +656,12 @@ button.control, input[type="submit"], input[type="reset"] {
   text-align: right;
 }
 
+@media screen and (max-width: 1200px) {
+  .tunnelDestinationLabel {
+    min-width: 120px;
+  }
+}
+
 input {
   vertical-align: middle;
 }

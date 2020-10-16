@@ -378,11 +378,15 @@ td.infohelp {
   overflow: hidden;
   text-align: left;
   border: 1px solid #26235c;
-  border-bottom: 1px inset #120f35 !important;
+  border-bottom: 1px solid #17142f !important;
+}
+
+.tunnelProperties td {
+  border-top: 1px solid #26235c !important;
 }
 
 _:-ms-lang(x), .tunnelProperties {
-  border-bottom: 1px solid #120f35 !important;
+  border-bottom: 1px solid #17142f !important;
 }
 
 #serverTunnels {
@@ -1220,19 +1224,6 @@ textarea[name="accessList"], #hostField, #localDestination, .authentication {
   margin-left: 5px;
 }
 
-.tunnelDestination {
-  padding-bottom: 1px !important;
-  border-bottom: 1px solid transparent !important;
-}
-
-.tunnelDescription, .tunnelInfo + .tunnelInfo .tunnelDestination {
-  padding-top: 3px !important;
-}
-
-.tunnelInfo + .tunnelInfo .tunnelDescription:empty {
-  padding-top: 0 !important;
-}
-
 .tunnelDestination b, .tunnelDescription b {
   color: #a8accf;
 }
@@ -1243,6 +1234,26 @@ textarea[name="accessList"], #hostField, #localDestination, .authentication {
 
 .tunnelInfo td {
   background: none;
+}
+
+.tunnelInfo td {
+  border-top: none;
+  background: none;
+  padding-top: 4px !important;
+  padding-bottom: 4px !important;
+}
+
+.tunnelInfo td:first-child {
+  border-right: 1px solid #17142f;
+}
+
+.tunnelInfo .tunnelDestination, .tunnelInfo .tunnelSig {
+  padding-top: 8px !important;
+}
+
+.tunnelInfo .tunnelDestinationEncrypted, .tunnelInfo .tunnelEncryption {
+  padding-top: 0 !important;
+  padding-bottom: 8px !important;
 }
 
 /* end more space */

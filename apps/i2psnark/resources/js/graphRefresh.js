@@ -21,7 +21,7 @@ function initGraphRefresh() {
         "  background: url('/themes/snark/ubergine/images/hat.png') right -4px bottom -10px no-repeat," +
         "              url(" + graph + ") no-repeat," +
         "              linear-gradient(to bottom, rgba(239, 243, 255, .7), rgba(233, 239, 255, .7));" +
-        "  background-size: auto 80px, calc(100% + 80px) calc(100% + 20px), 100% 100%;" +
+        "  background-size: auto 80px, calc(100% - 80px) calc(100% - 4px), 100% 100% !important;" +
         "  background-position: right -4px bottom -10px, left bottom 1px, center center, center top !important;" +
         "  background-blend-mode: normal, soft-light, normal !important;" +
         "}";

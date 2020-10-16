@@ -1464,6 +1464,12 @@ public class I2PSnarkServlet extends BasicServlet {
                     // b32
                     newURL = newURL.toUpperCase(Locale.US);
                     addMagnet(MagnetURI.MAGNET_FULL + newURL, dir);
+                } else if (newURL.length() == 68 && newURL.startsWith("1220") &&
+                           newURL.replaceAll("[a-fA-F0-9]", "").length() == 0) {
+                    // hex v2 multihash
+                    // TODO
+                    _manager.addMessage("Error: Version 2 info hashes are not supported");
+                    //addMagnet(MagnetURI.MAGNET_FULL_V2 + newURL, dir);
                 } else {
                     // try as file path, hopefully we're on the same box
                     if (newURL.startsWith("file://"))
@@ -3876,9 +3882,8 @@ public class I2PSnarkServlet extends BasicServlet {
                    .append(_t("Size"))
                    .append(":</b> ")
                    .append(formatSize(snark.getTotalLength()));
-                if (meta != null) {
-                    List<List<String>> files = meta.getFiles();
-                    int fileCount = files != null ? files.size() : 1;
+                if (storage != null) {
+                    int fileCount = storage.getFileCount();
                     buf.append("</span>&nbsp;<span class=\"nowrap\">");
                     toThemeImg(buf, "file");
                     buf.append("<b>")
@@ -4235,7 +4240,16 @@ public class I2PSnarkServlet extends BasicServlet {
         long[] remainingArray = (arrays != null) ? arrays[0] : null;
         long[] previewArray = (arrays != null) ? arrays[1] : null;
         for (int i = 0; i < ls.length; i++) {
-            fileList.add(new Sorters.FileAndIndex(ls[i], storage, remainingArray, previewArray));
+            File f = ls[i];
+            if (isTopLevel) {
+                // Hide (assumed) padding directory if it's in the filesystem.
+                // Storage now will not create padding files, but
+                // may have been created by an old version or other client.
+                String n = f.getName();
+                if ((n.equals(".pad") || n.equals("_pad")) && f.isDirectory())
+                    continue;
+            }
+            fileList.add(new Sorters.FileAndIndex(f, storage, remainingArray, previewArray));
         }
 
         boolean showSort = fileList.size() > 1;
@@ -4419,7 +4433,7 @@ public class I2PSnarkServlet extends BasicServlet {
             buf.append("<tr class=\"").append(rowClass).append(' ').append(completed).append("\">");
 
             String path = addPaths(decodedBase, item.getName());
-            if (item.isDirectory() && !path.endsWith("/"))
+            if (fai.isDirectory && !path.endsWith("/"))
                 path=addPaths(path,"/");
             path = encodePath(path);
             String icon = toIcon(item);
@@ -4512,7 +4526,7 @@ public class I2PSnarkServlet extends BasicServlet {
                 buf.append(preview);
             }
             buf.append("</td><td align=right class=\"snarkFileSize\">");
-            if (!item.isDirectory())
+            if (!fai.isDirectory)
                 buf.append(formatSize(length));
             buf.append("</td><td class=\"snarkFileStatus volatile\">");
             //buf.append(dfmt.format(new Date(item.lastModified())));
@@ -4520,7 +4534,7 @@ public class I2PSnarkServlet extends BasicServlet {
             buf.append("</td>");
             if (showPriority) {
                 buf.append("<td class=\"priority volatile\">");
-                if ((!complete) && (!item.isDirectory())) {
+                if ((!complete) && (!fai.isDirectory)) {
                     if (!inOrder) {
                     buf.append("<label class=\"priorityHigh\" title=\"").append(_t("Download file at high priority")).append("\">" +
                                "\n<input type=\"radio\" class=\"prihigh optbox\" value=\"5\" name=\"pri.").append(fileIndex).append("\" ");
