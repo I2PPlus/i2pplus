@@ -1648,7 +1648,7 @@ tr {
   vertical-align: middle;
   cursor: pointer;
   transform: scale(1);
-  animation: linear showToggle .1s 4.99s backwards;
+  animation: linear showToggle .1s .2s backwards;
 }
 
 #toggleInfo img {

@@ -179,6 +179,7 @@
 <span class="tunnelDestinationLabel">
 <%
             String name = indexBean.getSpoofedHost(curServer);
+            boolean hasHostname = false;
             if (name == null || name.equals("")) {
                 name = indexBean.getTunnelName(curServer);
                 out.write("<b>");
@@ -187,6 +188,7 @@
                 out.write(indexBean.getDestHashBase32(curServer));
                 out.write("</span>");
             } else {
+                hasHostname = true;
                 out.write("<b>");
                 out.write(intl._t("Hostname"));
                 out.write(":</b></span> <span class=\"selectAll\">");
@@ -232,6 +234,14 @@ ECDSA-P256
 <td class="tunnelDestinationEncrypted" colspan="2">
 <span class="tunnelDestinationLabel"><b><%=intl._t("Encrypted")%>:</b></span>
 <span class="selectAll"><%=encName%></span>
+</td>
+<%
+            } else if (hasHostname) {
+%>
+<tr class="tunnelInfo" style="display: none;">
+<td class="tunnelDestinationEncrypted" colspan="2">
+<span class="tunnelDestinationLabel"><b><%=intl._t("Destination")%>:</b></span>
+<span class="selectAll"><%=indexBean.getDestHashBase32(curServer)%></span>
 </td>
 <%
             } else {
