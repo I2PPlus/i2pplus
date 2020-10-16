@@ -86,4 +86,5 @@ function refreshIndex() {
   bindToggle();
 }
 
+bindToggle();
 setInterval(refreshIndex, 5000);
