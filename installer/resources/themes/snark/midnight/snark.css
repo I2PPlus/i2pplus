@@ -3306,7 +3306,7 @@ b.alwaysShow {
   word-break: break-all;
 }
 
-.snarkTorrentStatus, .snarkTorrentUploaded, .snarkTorrentRateUp, tfoot .snarkTorrentAction, .peerinfo, .debuginfo {
+.snarkTorrentStatus, .snarkTorrentUploaded, .snarkTorrentRateUp, tfoot .snarkTorrentAction, .debuginfo {
   display: none;
 }
 
