@@ -570,10 +570,10 @@ h2.error {
 }
 
 .panel table {
+  margin: 0;
   width: 100%;
   border-collapse: collapse;
   border: 1px solid #8d8daa;
-  margin: 0;
   background: repeating-linear-gradient(135deg, rgba(255,255,255,.5) 2px, rgba(240, 240, 255, .3) 3px, #fff 5px) #fff;
 }
 
@@ -584,14 +584,14 @@ h2.error {
 }
 
 th {
-  background: #eef url(images/header.png) center center repeat-x;
-  background: linear-gradient(to bottom, #fcfcff 51%, #fafaff 51%, #f6f6ff 100%) !important;
   padding: 6px 5px;
   text-align: left;
-  border-top: 1px solid #8d8daa;
-  border-bottom: 1px solid #8d8daa;
   font-size: 9.5pt;
   color: #41465f;
+  border-bottom: 1px solid #8d8daa;
+  border-top: 1px solid #8d8daa;
+  background: #eef url(images/header.png) center center repeat-x;
+  background: linear-gradient(to bottom, #fcfcff 51%, #fafaff 51%, #f6f6ff 100%) !important;
 }
 
 th::first-letter {
@@ -619,14 +619,10 @@ a:hover, a:focus, a:active, button:hover, button:focus, button:active, select:ho
 }
 
 td {
-  border-top: 1px solid #e0e0eb;
-  vertical-align: middle;
   padding: 5px;
-}
-
-/*td > * {
   vertical-align: middle;
-}*/
+  border-top: 1px solid #e0e0eb;
+}
 
 #serverTunnels td, #clientTunnels td {
   border-top: 1px solid #efefff;
@@ -667,22 +663,19 @@ td.infohelp {
   border-top: 1px solid #e0e0eb !important;
 }
 
-.tunnelProperties:hover td {
-  background: #fffff9 !important;
-  color: #19191f;
-  transition: ease background .1s;
+.tunnelProperties:hover, .tunnelProperties:hover + .tunnelInfo, .tunnelProperties:hover + .tunnelInfo + .tunnelInfo {
+  background: #ffd !important;
+  transition: ease background .05s;
 }
 
-.tunnelProperties:hover + .tunnelInfo td, .tunnelProperties:hover + .tunnelInfo + .tunnelInfo td,
-.tunnelProperties:hover + .tunnelInfo + .tunnelInfo + .tunnelInfo td {
-  background: #fffff9 !important;
-  transition: ease background .1s;
+.tunnelProperties:hover + .tunnelInfo + .tunnelInfo td {
+  border-top: 1px solid #ffd !important;
 }
 
 .newTunnel {
+  padding: 7px !important;
   text-align: right;
   border-top: 2px solid #8d8daa !important;
-  padding: 7px !important;
   background: #fff;
 }
 
@@ -702,8 +695,8 @@ td.infohelp {
 }
 
 .tunnelName a {
-  background: url(/themes/console/images/buttons/configure.png) left center no-repeat;
   padding: 3px 3px 3px 20px !important;
+  background: url(/themes/console/images/buttons/configure.png) left center no-repeat;
 }
 
 .tunnelName a:hover {
@@ -739,8 +732,8 @@ td.infohelp {
 
 .tunnelControl {
   width: 5%;
-  text-align: right;
   white-space: nowrap;
+  text-align: right;
 }
 
 th.tunnelControl {
@@ -748,13 +741,12 @@ th.tunnelControl {
 }
 
 .buttons, .newTunnel {
-  text-align: right;
   padding: 7px 5px;
-  background: #fff;
-  background: linear-gradient(to bottom, #fafaff, #eef);
-  background: linear-gradient(to bottom, #fafaff 50%, rgba(220,220,255,.3)), repeating-linear-gradient(135deg, rgba(255,255,255,.5) 2px, rgba(221, 221, 255, .3) 3px, #fff 4px) !important;
+  text-align: right;
   border-top: 1px solid #8d8daa !important;
   box-shadow: inset 0 0 0 1px #fff;
+  background: #fff;
+  background: linear-gradient(to bottom, #fafaff 50%, rgba(220,220,255,.3)), repeating-linear-gradient(135deg, rgba(255,255,255,.5) 2px, rgba(221, 221, 255, .3) 3px, #fff 4px) !important;
 }
 
 .buttons > * {
@@ -762,11 +754,11 @@ th.tunnelControl {
 }
 
 .tunnelDescriptionLabel, .tunnelDestinationLabel {
-  text-align: right;
+  margin-right: 3px;
   min-width: 150px;
   display: inline-block;
-  margin-right: 3px;
   white-space: nowrap;
+  text-align: right;
 }
 
 input {
@@ -779,22 +771,22 @@ input {
 }
 
 #hostField, #userAgents {
-  width: 90% !important;
   margin: 0 !important;
+  width: 90% !important;
   text-align: left !important;
 }
 
 #tunnelDepth, #tunnelVariance, #tunnelQuantity, #tunnelBackupQuantity,
 #tunnelDepthOut, #tunnelVarianceOut, #tunnelQuantityOut, #tunnelBackupQuantityOut,
 #localDestination, #customOptions, #name, #description, textarea[name="accessList"] {
-  width: 100% !important;
   margin: 0 !important;
+  width: 100% !important;
   text-align: left !important;
 }
 
 #oldName {
-  min-width: 310px;
   width: 30%;
+  min-width: 310px;
 }
 
 select#connectionProfile {
@@ -810,13 +802,9 @@ td[colspan="2"] > select#profile {
 }
 
 #localDestination, textarea[name="accessList"], #hostField {
-  width: calc(100% - 5px) !important;
   margin: 3px 0 !important;
+  width: calc(100% - 5px) !important;
 }
-
-/*#localDestination {
-  height: 32px !important;
-}*/
 
 .multiOption {
   margin: 5px 10px 5px 5px;
@@ -862,9 +850,9 @@ td#throttle, #clientAuthConfig {
 }
 
 #throttler td:first-child {
-  text-align: right;
   width: 20%;
   white-space: nowrap;
+  text-align: right;
 }
 
 #throttler tr:first-child th {
@@ -895,9 +883,9 @@ table {
 
 table#statusMessages textarea, table#statusMessages textarea:active {
   margin: 0;
-  border: 0;
-  box-shadow: none;
   height: 80px;
+  border: none;
+  box-shadow: none;
 }
 
 #tunnelMessages {
@@ -1144,7 +1132,7 @@ textarea[name="accessList"], #hostField, #localDestination, .authentication {
 }
 
 .tunnelInfo {
-  background: linear-gradient(to right, #f2f2ff, #eef);
+  background: linear-gradient(to bottom, #f8f8ff, #ebebff);
 }
 
 .tunnelInfo td {
@@ -1164,13 +1152,8 @@ textarea[name="accessList"], #hostField, #localDestination, .authentication {
   border-bottom: 1px solid #8d8daa !important;
 }
 
-.tunnelProperties + tr td {
-  padding-top: 8px;
-}
-
-.tunnelProperties + tr + tr td {
-  padding-top: 0 !important;
-  padding-bottom: 8px;
+.tunnelInfo + .tunnelInfo td {
+  border-top: 1px solid #d2d2e0 !important
 }
 
 .tunnelInfo b, .tunnelInfo .selectAll {
