@@ -393,8 +393,8 @@ _:-ms-lang(x), .tunnelProperties {
   margin: -1px 0 10px;
 }
 
-.tunnelProperties:hover {
-  background: #002 !important;
+.tunnelProperties:hover, .tunnelProperties:hover + .tunnelInfo, .tunnelProperties:hover + .tunnelInfo + .tunnelInfo {
+  background: #140014 !important;
 }
 
 .newTunnel {
