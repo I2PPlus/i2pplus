@@ -395,8 +395,11 @@ ElGamal-2048
 <tr class="tunnelInfo" style="display: none;">
 <td class="tunnelDestination" colspan="2">
 <span class="tunnelDestinationLabel">
-<%             if ("httpclient".equals(indexBean.getInternalType(curClient)) || "connectclient".equals(indexBean.getInternalType(curClient)) ||
-                   "sockstunnel".equals(indexBean.getInternalType(curClient)) || "socksirctunnel".equals(indexBean.getInternalType(curClient))) { %>
+<%
+               String cdest = indexBean.getClientDestination(curClient);
+               if ("httpclient".equals(indexBean.getInternalType(curClient)) || "connectclient".equals(indexBean.getInternalType(curClient)) ||
+                   "sockstunnel".equals(indexBean.getInternalType(curClient)) || "socksirctunnel".equals(indexBean.getInternalType(curClient))) {
+%>
 <b><%=intl._t("Outproxy")%>:</b>
 <%
                } else {
@@ -412,7 +415,6 @@ ElGamal-2048
 <%=intl._t("internal plugin")%>
 <%
                } else {
-                   String cdest = indexBean.getClientDestination(curClient);
                    if (cdest.length() > 70) { // Probably a B64 (a B32 is 60 chars) so truncate
 %>
 <span class="selectAll"><%=cdest.substring(0, 45)%>&hellip;<%=cdest.substring(cdest.length() - 15, cdest.length())%></span>
@@ -423,7 +425,7 @@ ElGamal-2048
 <%
                    } else {
 %>
-<i><%=intl._t("none")%></i>
+<span class="selectAll"><i><%=intl._t("none")%></i></span>
 <%
                    }
                }
@@ -455,10 +457,22 @@ ECDSA-P256
 <font style="color:red">DSA-SHA1</font>
 <%
                }
-
+               String clientB32 = indexBean.getDestHashBase32(curClient);
+               if ((cdest.contains(".i2p") && !cdest.contains(".b32") || cdest.length() > 70) && clientB32.length() > 0) {
+%>
+<tr class="tunnelInfo" style="display: none;">
+<td class="tunnelDestinationEncrypted" colspan="2">
+<span class="tunnelDestinationLabel"><b>B32:</b></span>
+<span class="selectAll"><%=clientB32%></span>
+</td>
+<%
+               } else {
 %>
 <tr class="tunnelInfo" style="display: none;">
 <td class="empty" colspan="2"></td>
+<%
+               }
+%>
 <td class="tunnelEncryption" colspan="4">
 <span class="tunnelDestinationLabel"><b><%=intl._t("Encryption")%>:</b></span>
 <%
