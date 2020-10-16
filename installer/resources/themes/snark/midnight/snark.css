@@ -2618,7 +2618,7 @@ input:checked + label + hr + table + table {
 }
 
 .snarkTorrentEven td, .snarkTorrentOdd td {
-  border-top: 1px solid #112 !important;
+  border-top: 1px solid #113 !important;
 }
 
 .peerinfo td:first-child {
@@ -4960,3 +4960,42 @@ td.snarkTorrentPeerCount b a:not(:hover):not(:focus), td.snarkTorrentPeerCount b
 .stopped.incomplete .snarkTorrentPeerCount b::before, .inactive.error .snarkTorrentPeerCount b::before {
   border-color: transparent #900 transparent transparent !important;
 }
+
+td.snarkTorrentPeerCount b .left, td.snarkTorrentPeerCount b .right {
+  margin: 0 1px;
+  padding: 1px 3px;
+  min-width: 22px;
+  display: inline-block;
+  text-align: center;
+  border-radius: 1px;
+  box-shadow: 0 0 0 1px rgba(16,0,16,.5), inset 2px 2px 2px rgba(0,0,0,.3);
+  background: linear-gradient(to bottom, rgba(32,0,32,.3), rgba(16,0,16,.3));
+  opacity: 1 !important;
+}
+
+td.snarkTorrentPeerCount b a:hover .left, td.snarkTorrentPeerCount b a:hover .right {
+  box-shadow: rgba(255,96,0,.5), inset 2px 2px 2px rgba(0,0,0,.3);
+  background: linear-gradient(to bottom, rgba(32,16,32,.9), rgba(64,16,64,.9));
+}
+
+td.snarkTorrentPeerCount b:not(:empty) {
+  color: #aaa !important;
+}
+
+.nopeers td.snarkTorrentPeerCount b {
+  content: "‒";
+  color: #000 !important;
+}
+
+td.snarkTorrentPeerCount b a {
+  color: #fff !important;
+}
+
+td.snarkTorrentPeerCount b a:hover, td.snarkTorrentPeerCount b a:focus {
+  color: #bf2295 !important;
+}
+
+td.snarkTorrentPeerCount b a:active {
+  color: #fc1c66 !important;
+}
+ /* end peer count */
