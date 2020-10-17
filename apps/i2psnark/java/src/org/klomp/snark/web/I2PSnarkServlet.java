@@ -509,15 +509,15 @@ public class I2PSnarkServlet extends BasicServlet {
             int lastID = msgs.get(msgs.size() - 1).id;
             out.write("action=Clear&amp;id=" + lastID + "&amp;nonce=" + _nonce + "\">");
             String tx = _t("clear messages");
-            out.write(toThemeImg("delete", tx, tx));
+            out.write(toThemeSVG("delete", tx, tx));
             out.write("</a>\n");
             out.write("<a class=\"script\" id=\"expand\" href=\"#\">");
             String x = _t("Expand");
-            out.write(toThemeImg("expand", x, x));
+            out.write(toThemeSVG("expand", x, x));
             out.write("</a>\n");
             out.write("<a class=\"script\" id=\"shrink\" href=\"#\">");
             String s = _t("Shrink");
-            out.write(toThemeImg("shrink", s, s));
+            out.write(toThemeSVG("shrink", s, s));
             out.write("</a>\n");
             out.write("<ul>\n");
             out.write("<script src=\"" + _contextPath + WARBASE + "js/toggleLog.js?" + CoreVersion.VERSION + "\" type=\"text/javascript\"></script>\n");
@@ -894,7 +894,7 @@ public class I2PSnarkServlet extends BasicServlet {
                 out.write("<input type=\"image\" name=\"action_StopAll\" value=\"foo\" title=\"");
             }
             out.write(_t("Stop all torrents and the I2P tunnel"));
-            out.write("\" src=\"" + _imgPath + "stop_all.png\" alt=\"");
+            out.write("\" src=\"" + _imgPath + "stop_all.svg\" alt=\"");
             out.write(_t("Stop All"));
             out.write("\">");
             if (isDegraded)
@@ -907,7 +907,7 @@ public class I2PSnarkServlet extends BasicServlet {
                     else
                         out.write("<input type=\"image\" name=\"action_StartAll\" value=\"foo\" title=\"");
                     out.write(_t("Start all stopped torrents"));
-                    out.write("\" src=\"" + _imgPath + "start_all.png\" alt=\"");
+                    out.write("\" src=\"" + _imgPath + "start_all.svg\" alt=\"");
                     out.write(_t("Start All"));
                     out.write("\">");
                     if (isDegraded)
@@ -921,7 +921,7 @@ public class I2PSnarkServlet extends BasicServlet {
             else
                 out.write("<input type=\"image\" name=\"action_StartAll\" value=\"foo\" title=\"");
             out.write(_t("Start all torrents and the I2P tunnel"));
-            out.write("\" src=\"" + _imgPath + "start_all.png\" alt=\"");
+            out.write("\" src=\"" + _imgPath + "start_all.svg\" alt=\"");
             out.write(_t("Start All"));
             out.write("\">");
             if (isDegraded)
@@ -2388,7 +2388,7 @@ public class I2PSnarkServlet extends BasicServlet {
             else
                 out.write("<input type=\"image\" name=\"action_Stop_" + b64 + "\" value=\"foo\" title=\"");
             out.write(_t("Stop the torrent"));
-            out.write("\" src=\"" + _imgPath + "stop.png\" alt=\"");
+            out.write("\" src=\"" + _imgPath + "stop.svg\" alt=\"");
             out.write(_t("Stop"));
             out.write("\">");
             if (isDegraded)
@@ -2403,7 +2403,7 @@ public class I2PSnarkServlet extends BasicServlet {
                 else
                     out.write("<input type=\"image\" name=\"action_Start_" + b64 + "\" value=\"foo\" title=\"");
                 out.write(_t("Start the torrent"));
-                out.write("\" src=\"" + _imgPath + "start.png\" alt=\"");
+                out.write("\" src=\"" + _imgPath + "start.svg\" alt=\"");
                 out.write(_t("Start"));
                 out.write("\">");
                 if (isDegraded)
@@ -2421,7 +2421,7 @@ public class I2PSnarkServlet extends BasicServlet {
 //                out.write("\" onclick=\"new customAlert(); if (!confirm('");
                 out.write("\" client=\"");
                 out.write(escapeJSString(snark.getName()));
-                out.write("\" src=\"" + _imgPath + "remove.png\" alt=\"");
+                out.write("\" src=\"" + _imgPath + "remove.svg\" alt=\"");
                 out.write(_t("Remove"));
                 out.write("\">");
                 if (isDegraded)
@@ -2441,7 +2441,7 @@ public class I2PSnarkServlet extends BasicServlet {
 //                out.write("\" onclick=\"new customAlert(); if(!confirm('");
                 out.write("\" client=\"");
                 out.write(escapeJSString(snark.getName()));
-                out.write("\" src=\"" + _imgPath + "delete.png\" alt=\"");
+                out.write("\" src=\"" + _imgPath + "delete.svg\" alt=\"");
                 out.write(_t("Delete"));
                 out.write("\">");
                 if (isDegraded)
@@ -5160,6 +5160,35 @@ public class I2PSnarkServlet extends BasicServlet {
      */
     private void toThemeImg(StringBuilder buf, String image, String altText, String titleText) {
         buf.append("<img alt=\"").append(altText).append("\" src=\"").append(_imgPath).append(image).append(".png\"");
+        if (titleText.length() > 0)
+            buf.append(" title=\"").append(titleText).append('"');
+        buf.append('>');
+    }
+
+    /**
+     *  SVG Image file in the theme.
+     *
+     *  @param image name without the ".svg"
+     *  @param altText non-null
+     *  @param titleText non-null
+     *  @since 0.9.48 (I2P+)
+     */
+    private String toThemeSVG(String image, String altText, String titleText) {
+        StringBuilder buf = new StringBuilder(128);
+        toThemeSVG(buf, image, altText, titleText);
+        return buf.toString();
+    }
+
+    /**
+     *  SVG Image file in the theme.
+     *
+     *  @param image name without the ".svg"
+     *  @param altText non-null
+     *  @param titleText non-null
+     *  @since 0.9.48 (I2P+)
+     */
+    private void toThemeSVG(StringBuilder buf, String image, String altText, String titleText) {
+        buf.append("<img alt=\"").append(altText).append("\" src=\"").append(_imgPath).append(image).append(".svg\"");
         if (titleText.length() > 0)
             buf.append(" title=\"").append(titleText).append('"');
         buf.append('>');
