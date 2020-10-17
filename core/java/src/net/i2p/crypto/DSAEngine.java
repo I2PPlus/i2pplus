@@ -764,7 +764,7 @@ public final class DSAEngine {
             } catch (GeneralSecurityException gse) {
                 gse.printStackTrace();
             }
-            boolean jjok = false;;
+            boolean jjok = false;
             try {
                 jjok = ctx.dsa().altVerifySigSHA1(jsig, data, (SigningPublicKey)keys[0]);
             } catch (GeneralSecurityException gse) {

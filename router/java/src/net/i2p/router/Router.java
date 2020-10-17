@@ -1847,7 +1847,7 @@ public class Router implements RouterClock.ClockShiftListener {
             if (remaining > 1) {
                 error = true;
             } else if (remaining == 1) {
-                rebuild = args[g.getOptind()].equals("rebuild");;
+                rebuild = args[g.getOptind()].equals("rebuild");
                 if (!rebuild)
                     error = true;
             }
@@ -1944,7 +1944,7 @@ public class Router implements RouterClock.ClockShiftListener {
         _context.simpleTimer2().addPeriodicEvent(new MarkLiveliness(this, f), 0, LIVELINESS_DELAY - (5*1000));
     }
 
-    /** 
+    /**
      *  How long this router was down before it started, or 0 if unknown.
      *
      *  This may be used for a determination of whether to regenerate keys, for example.
@@ -1974,7 +1974,7 @@ public class Router implements RouterClock.ClockShiftListener {
         }
     }
 
-    /** 
+    /**
      *  Only for soft restart. Not for external use.
      *
      *  @since 0.0.47
