@@ -273,8 +273,8 @@ class OutboundMessageFragments {
         List<OutboundMessageState> states = null;
         // Keep track of how many we've looked at, since we don't start the iterator at the beginning.
         int peersProcessed = 0;
+        int nextSendDelay = Integer.MAX_VALUE;
         while (_alive && (states == null) ) {
-            int nextSendDelay = Integer.MAX_VALUE;
             // no, not every time - O(n**2) - do just before waiting below
             //finishMessages();
 
@@ -291,8 +291,8 @@ class OutboundMessageFragments {
                     // Otherwise, wait()
                     long now = _context.clock().now();
                     while (_iterator.hasNext()) {
-                        peer = _iterator.next();
-                        int remaining = peer.finishMessages(now);
+                        PeerState p = _iterator.next();
+                        int remaining = p.finishMessages(now);
                         if (remaining <= 0) {
                             // race with add()
                             _iterator.remove();
@@ -301,20 +301,19 @@ class OutboundMessageFragments {
                             continue;
                         }
                         peersProcessed++;
-                        states = peer.allocateSend();
+                        states = p.allocateSend();
                         if (states != null) {
+                            peer = p;
                             // we have something to send and we will be returning it
                             break;
-                        } else if (peersProcessed >= _activePeers.size()) {
+                        } 
+                        int delay = p.getNextDelay();
+                        if (delay < nextSendDelay)
+                            nextSendDelay = delay;
+                        
+                        if (peersProcessed >= _activePeers.size()) {
                             // we've gone all the way around, time to sleep
                             break;
-                        } else {
-                            // Update the minimum delay for all peers
-                            // which will be used if we found nothing to send across all peers
-                            int delay = peer.getNextDelay();
-                            if (delay < nextSendDelay)
-                                nextSendDelay = delay;
-                            peer = null;
                         }
                     }
 
@@ -332,8 +331,10 @@ class OutboundMessageFragments {
                         // use max of 1 second so finishMessages() and/or PeerState.finishMessages()
                         // gets called regularly
                         int toWait = Math.min(Math.max(nextSendDelay, 10), MAX_WAIT);
-                        //if (_log.shouldLog(Log.DEBUG))
-                        //    _log.debug("wait for " + toWait);
+                        if (_log.shouldLog(Log.DEBUG))
+                            _log.debug("wait for " + toWait);
+
+                        nextSendDelay = Integer.MAX_VALUE;
                         // wait.. or somethin'
                         synchronized (_activePeers) {
                             try {
