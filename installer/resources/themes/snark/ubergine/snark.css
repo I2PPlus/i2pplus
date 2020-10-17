@@ -6414,7 +6414,7 @@ td.snarkTorrentPeerCount b .right {
   margin-left: 2px !important;
 }
 
-td.snarkTorrentPeerCount b a .right {
+td.snarkTorrentPeerCount b:hover a .right {
   margin-left: -6px !important;
 }
 
@@ -6430,7 +6430,7 @@ td.snarkTorrentPeerCount b .left, td.snarkTorrentPeerCount b .right {
   background: linear-gradient(to bottom, rgba(32,0,32,.3), rgba(16,0,16,.3));
 }
 
-td.snarkTorrentPeerCount b a .left, td.snarkTorrentPeerCount b a .right {
+td.snarkTorrentPeerCount b:hover a .left, td.snarkTorrentPeerCount b:hover a .right {
   min-width: 26px !important;
   color: #fff !important;
 }
@@ -6438,6 +6438,7 @@ td.snarkTorrentPeerCount b a .left, td.snarkTorrentPeerCount b a .right {
 td.snarkTorrentPeerCount b a:hover .left, td.snarkTorrentPeerCount b a:hover .right {
   box-shadow: rgba(255,96,0,.5), inset 2px 2px 2px rgba(0,0,0,.3);
   background: linear-gradient(to bottom, rgba(220,80,0,.3), rgba(255,96,0,.3));
+  color: #f60 !important;
 }
 
 td.snarkTorrentPeerCount b .right {
@@ -6464,7 +6465,7 @@ td.snarkTorrentPeerCount b a:hover, td.snarkTorrentPeerCount b a:focus {
   color: #f60 !important;
 }
 
-td.snarkTorrentPeerCount b a::after {
+td.snarkTorrentPeerCount b:hover a::after {
   width: 0;
   height: 0;
   position: absolute;
@@ -6476,16 +6477,16 @@ td.snarkTorrentPeerCount b a::after {
   content: "";
 }
 
-td.snarkTorrentPeerCount b a[href*="?p="]::after {
+td.snarkTorrentPeerCount b:hover a[href*="?p="]::after {
   top: calc(50% - 2px);
   border-color: #fff transparent transparent transparent;
 }
 
-td.snarkTorrentPeerCount b a:hover::after, td.snarkTorrentPeerCount b a:focus::after {
+td.snarkTorrentPeerCount b:hover a:hover::after, td.snarkTorrentPeerCount b:hover a:focus::after {
   border-color: transparent transparent #f60 transparent;
 }
 
-td.snarkTorrentPeerCount b a[href*="?p="]:hover::after, td.snarkTorrentPeerCount b a[href*="?p="]:focus::after {
+td.snarkTorrentPeerCount b:hover a[href*="?p="]:hover::after, td.snarkTorrentPeerCount b:hover a[href*="?p="]:focus::after {
   border-color: #f60 transparent transparent transparent;
 }
 
