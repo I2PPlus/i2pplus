@@ -53,7 +53,7 @@ import net.i2p.util.EventDispatcher;
     protected long _clientId;
 
     private final Object startLock = new Object();
-    
+
     private final I2PSession _session;
     private final Source _i2pSource;
     private final Sink _i2pSink;
@@ -66,13 +66,13 @@ import net.i2p.util.EventDispatcher;
    public I2PTunnelUDPClientBase(String destination, Logging l, EventDispatcher notifyThis,
                                   I2PTunnel tunnel) throws IllegalArgumentException {
         super("UDPServer", notifyThis, tunnel);
-        _clientId = __clientId.incrementAndGet();;
+        _clientId = __clientId.incrementAndGet();
         this.l = l;
 
         _context = tunnel.getContext();
 
         tunnel.getClientOptions().setProperty("i2cp.dontPublishLeaseSet", "true");
-        
+
         // create i2pclient and destination
         I2PClient client = I2PClientFactory.createClient();
         byte[] key;
@@ -117,9 +117,9 @@ import net.i2p.util.EventDispatcher;
         } else {
             _otherDest = null;
             _i2pSink = new I2PSinkAnywhere(_session, false);
-        }   
+        }
     }
-    
+
     /**
      * Actually start working on outgoing connections.
      * Classes should override to start UDP side as well.
