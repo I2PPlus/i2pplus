@@ -378,7 +378,7 @@ td.infohelp {
   overflow: hidden;
   text-align: left;
   border: 1px solid #26235c;
-  border-bottom: 1px solid #17142f !important;
+  border-bottom: 1px solid #26235c !important;
 }
 
 .tunnelProperties td {
@@ -746,12 +746,18 @@ button, input[type="submit"], input[type="reset"], a.control {
   background: linear-gradient(to bottom, #001, #000);
 }
 
-.tunnelDescriptionLabel, .tunnelDestinationLabel {
+.tunnelDestinationLabel {
   margin-right: 3px;
   display: inline-block;
   min-width: 150px;
   text-align: right;
   white-space: nowrap;
+}
+
+@media screen and (max-width: 1200px) {
+  .tunnelDestinationLabel {
+    min-width: 120px;
+  }
 }
 
 input {
@@ -1229,7 +1235,7 @@ textarea[name="accessList"], #hostField, #localDestination, .authentication {
 }
 
 .tunnelInfo {
-  background: linear-gradient(to right, #000 50%, #000020);
+  background: #020212;
 }
 
 .tunnelInfo td {
@@ -1244,7 +1250,7 @@ textarea[name="accessList"], #hostField, #localDestination, .authentication {
 }
 
 .tunnelInfo td:first-child {
-  border-right: 1px solid #17142f;
+  border-right: 1px solid #26235c;
 }
 
 .tunnelInfo .tunnelDestination, .tunnelInfo .tunnelSig {
