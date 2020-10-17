@@ -2190,7 +2190,7 @@ public class I2PSnarkServlet extends BasicServlet {
                                "<span class=\"left\">" + knownPeers + "</span></a>";
                                snarkStatus = "active downloading incomplete";
             } else if (isRunning && curPeers > 0 && !showPeers) {
-                statusString = toThemeImg("stalled", "", _t("Stalled") + " (" + ngettext("Connected to {0} peer", "Connected to {0} peers", curPeers)) + "</td>\n" +
+                statusString = toThemeImg("stalled", "", _t("Stalled") + " (" + ngettext("Connected to {0} peer", "Connected to {0} peers", curPeers) + ")") + "</td>\n" +
                                "<td class=\"snarkTorrentStatus\"><b>" + _t("Stalled") +
                                "</b></td>\n<td class=\"snarkTorrentPeerCount\"><b><a href=\"" +
                                uri + getQueryString(req, b64, null, null) + "\"><span class=\"right\">" +
