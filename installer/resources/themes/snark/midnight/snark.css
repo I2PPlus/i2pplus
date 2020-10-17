@@ -4964,7 +4964,7 @@ td.snarkTorrentPeerCount b a:not(:hover):not(:focus), td.snarkTorrentPeerCount b
 td.snarkTorrentPeerCount b .left, td.snarkTorrentPeerCount b .right {
   margin: 0 1px;
   padding: 1px 3px;
-  min-width: 22px;
+  min-width: 26px;
   display: inline-block;
   text-align: center;
   border-radius: 1px;
