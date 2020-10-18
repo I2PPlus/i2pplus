@@ -1230,7 +1230,7 @@ textarea[name="accessList"], #hostField, #localDestination, .authentication {
   margin-left: 5px;
 }
 
-.tunnelDestination b, .tunnelDescription b {
+.tunnelDestinationLabel b {
   color: #a8accf;
 }
 
