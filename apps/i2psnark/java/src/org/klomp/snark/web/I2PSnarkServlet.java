@@ -2341,21 +2341,36 @@ public class I2PSnarkServlet extends BasicServlet {
         out.write("</td>\n");
         out.write("<td align=\"right\" class=\"snarkTorrentUploaded\">");
         if (isValid) {
+            double ratio = uploaded / ((double) total);
+            if (total <= 0)
+                ratio = 0;
+            String txPercent = (new DecimalFormat("0")).format(ratio * 100);
+            if (ratio <= 0.01)
+                txPercent = (new DecimalFormat("0.00")).format(ratio * 100);
             if (showRatios) {
                 if (total > 0) {
-                    double ratio = uploaded / ((double) total);
+//                    double ratio = uploaded / ((double) total);
+//                    double txPercent = ratio * 100;
 //                    out.write((new DecimalFormat("0.000")).format(ratio));
-                    if (ratio >= 0.1 || ratio == 0)
-                        out.write((new DecimalFormat("0")).format(ratio * 100));
-                    else if (ratio <= 0.01)
-                        out.write((new DecimalFormat("0.00")).format(ratio * 100));
-                    else
-                        out.write((new DecimalFormat("0.0")).format(ratio * 100));
+//                    if (ratio >= 0.1 || ratio == 0) {
+//                        String txPercent = (new DecimalFormat("0")).format(ratio * 100);
+//                        out.write((new DecimalFormat("0")).format(ratio * 100));
+//                    } else if (ratio <= 0.01)
+//                        out.write((new DecimalFormat("0.00")).format(ratio * 100));
+//                    else
+//                        out.write((new DecimalFormat("0.0")).format(ratio * 100));
 //                    out.write("&nbsp;x");
+                    out.write(txPercent);
                     out.write("&nbsp;%");
+                } else {
+                    out.write("‒");
                 }
             } else if (uploaded > 0) {
-                out.write("<span class=\"right\">");
+                out.write("<span class=\"right\" title=\"");
+                out.write(_t("Upload ratio"));
+                out.write(": ");
+                out.write(txPercent);
+                out.write("&nbsp;%\">");
                 out.write(formatSize(uploaded).replaceAll("iB","")
                                               .replace("B", "</span><span class=\"left\">B</span>")
                                               .replace("K", "</span><span class=\"left\">K</span>")
