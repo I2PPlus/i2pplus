@@ -4217,6 +4217,7 @@ select, input, input.r, input[name="nofilter_dataDir"], textarea[name="i2cpOpts"
 }
 
 .iframed .snarknavbar {
+  margin-bottom: -5px !important;
   padding: 9px 4px 9px 0;
 }
 

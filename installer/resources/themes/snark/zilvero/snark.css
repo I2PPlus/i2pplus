@@ -2291,6 +2291,22 @@ td.snarkTorrentDetails img, .snarkDirInfo td:first-child img:not(.thumb) {
 	background: linear-gradient(to bottom, #fff 50%, #efefef 50%);
 }
 
+@media screen and (max-width: 900px) {
+	#torrentDisplay {
+		display: flex;
+	}
+	#torrentDisplay label {
+		min-width: 0;
+		flex-grow: 1;
+	}
+	#torrentDisplay label[for="all"] {
+		border-left: none !important;
+	}
+	#torrentDisplay label:last-child {
+		border-right: none !important;
+	}
+}
+
 #torrentDisplay label:last-child {
 	border-right: 1px solid #999;
 }

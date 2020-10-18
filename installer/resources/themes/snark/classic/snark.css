@@ -3754,6 +3754,12 @@ td.snarkTorrentPeerCount, .nopeers td.snarkTorrentPeerCount {
   color: #559;
 }
 
+@media screen and (max-width: 900px) {
+  #torrentDisplay label {
+    min-width: 60px;
+  }
+}
+
 #torrentDisplay label:last-child {
   border-right: 1px solid #aaafce;
 }

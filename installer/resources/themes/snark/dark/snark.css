@@ -4752,20 +4752,22 @@ td input[type="image"]::after {
 }
 
 @media screen and (max-width: 1000px) {
-#torrentDisplay {
-  display: flex;
-}
+  #torrentDisplay {
+    display: flex;
+  }
 
-#torrentDisplay label {
-  flex-grow: 1;
-}
+  #torrentDisplay label {
+    min-width: 0;
+    flex-grow: 1;
+  }
 
-#torrentDisplay label:first-child {
-  border-left: none;
-}
-#torrentDisplay label:last-child {
-  border-right: none;
-}
+  #torrentDisplay label:first-child, #torrentDisplay label[for="all"] {
+    border-left: none !important;
+  }
+
+  #torrentDisplay label:last-child {
+    border-right: none !important;
+  }
 }
 
 td.snarkTorrentPeerCount {
