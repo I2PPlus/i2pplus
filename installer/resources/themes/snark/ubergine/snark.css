@@ -6449,11 +6449,11 @@ td.snarkTorrentPeerCount b::before {
 }
 
 td.snarkTorrentPeerCount b a {
-  color: #fff;
+  color: #fff !important;
 }
 
 td.snarkTorrentPeerCount b a:hover, td.snarkTorrentPeerCount b a:focus {
-  color: #f60;
+  color: #f60 !important;
 }
 
 td.snarkTorrentPeerCount b a:hover::after {
@@ -6502,6 +6502,10 @@ td.snarkTorrentPeerCount b:hover a[href*="?p="]:hover::after, td.snarkTorrentPee
 .inactive.downloading .snarkTorrentPeerCount b {
   color: #101;
   background: #bb0;
+}
+
+.inactive.downloading .snarkTorrentPeerCount b, .snarkTorrentPeerCount b .right, .snarkTorrentPeerCount b .left {
+  text-shadow: 0 1px 1px #222 !important;
 }
 
 .inactive.downloading .snarkTorrentPeerCount b::before {
