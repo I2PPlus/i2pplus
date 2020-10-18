@@ -1270,7 +1270,12 @@ _:-ms-lang(x), .snarkTorrentOdd, .snarkTorrentOdd td, .SnarkTorrentEven, .SnarkT
 
 .snarkTorrentOdd:nth-child(odd) {
   background: #040408 !important;
-}*/
+}
+
+.snarkTorrentOdd tr:nth-child(odd) {
+  background: #010010;
+}
+*/
 
 .snarkTorrentOdd td, .snarkTorrentEven td {
   color: #ccd1ff !important;
@@ -1279,10 +1284,6 @@ _:-ms-lang(x), .snarkTorrentOdd, .snarkTorrentOdd td, .SnarkTorrentEven, .SnarkT
 
 .snarkTorrents .snarkTorrentEven:first-of-type td {
   border-top: none !important
-}
-
-.SnarkTorrentOdd tr:nth-child(odd) {
-  background: #010010;
 }
 
 #filterResults td {
@@ -2621,6 +2622,16 @@ input:checked + label + hr + table + table {
   border-top: 1px solid #113 !important;
 }
 
+.peerinfo, .debuginfo {
+  background: #080828;
+  background: #040424 !important;
+  box-shadow: inset 0 0 0 1px #000;
+}
+
+.debuginfo {
+  background: #001000 !important;
+}
+
 .peerinfo td:first-child {
   background: url(images/peer.png) center center no-repeat;
 }
@@ -2690,19 +2701,19 @@ input:checked + label + hr + table + table {
 }
 
 tfoot .dhtDebug th {
+  padding: 0 !important;
   word-break: break-all;
-  padding: 0 10px 10px !important;
 }
 
 /* debug panel */
 
 #dhtDebugPanel {
-  background: linear-gradient(to bottom, #001, #000009);
-  border: 1px solid #26235c;
-  border-top: none;
-  box-shadow: inset 0 0 0 1px #000;
-  text-align: center;
   padding-bottom: 13px;
+  text-align: center;
+  border: none;
+  border-top: 1px solid #26235c;
+  box-shadow: inset 0 0 0 1px #000;
+  background: linear-gradient(to bottom, #001, #000009);
 }
 
 #dhtDebugPanel .toggleview {
@@ -2741,7 +2752,7 @@ input#toggle_debug:checked + label + #dhtDebugInner {
 }
 
 #debugStats {
-  margin-top: 2px;
+  margin-top: 8px;
   line-height: 150%;
 }
 
@@ -2753,44 +2764,54 @@ input#toggle_debug:checked + label + #dhtDebugInner {
   margin: 15px 0 -5px;
 }
 
+#bucketSet code {
+  color: #880;
+  user-select: all;
+}
+
 .bucketsContainer, .bucketCount {
-  margin: 0 15%;
+  margin: 0 5%;
   text-align: center;
   border: 1px solid #120f35;
   box-shadow: inset 0 0 0 1px #000;
 }
 
 .bucketsContainer {
-  margin: -1px 15% -20px;
-  padding: 5px;
-  background: #000007;
+  margin: -1px 5% -20px;
+  padding: 8px;
+  text-align: left;
+  background: #000;
 }
 
 .bucketCount {
-  padding: 3px 0;
-  background: linear-gradient(to right, rgba(0,0,0,0), rgba(0,0,0,.7), rgba(0,0,0,0)), linear-gradient(to bottom, #001 50%, #000 50%);
+  padding: 6px 8px;
+  width: 240px;
+  background: linear-gradient(to bottom, #002 50%, #000008 50%);
 }
 
 .bucket {
   margin: 4px 3px;
-  padding: 1px 4px;
+  padding: 4px;
+  width: 120px;
   display: inline-block;
   white-space: nowrap !important;
-  color: #660;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  color: #880;
   font-family: monospace;
-  box-shadow: 0 0 0 1px #003, inset 0 0 0 1px #000;
-  background: #002;
-  -moz-user-select: all;
-  -webkit-user-select: all;
+  border: 1px solid #225;
+  border-radius: 3px;
+  box-shadow: inset 0 0 0 1px #000;
+  background: #113;
   user-select: all;
 }
 
-.bucket::-moz-selection {
+.bucket::-moz-selection, #bucketSet code::-moz-selection {
   background: #770 !important;
   color: #fff;
 }
 
-.bucket::selection {
+.bucket::selection, #bucketSet code::selection {
   background: #770 !important;
   color: #fff;
 }
@@ -2802,31 +2823,10 @@ input#toggle_debug:checked + label + #dhtDebugInner {
 /* end debug panel */
 
 hr.debug {
+  margin: 3px 0 -5px;
   width: 100%;
   background: #120f35;
-  margin: 3px 0 -5px;
 }
-
-/*hr.debug:first-of-type {
-  background: transparent;
-  margin-bottom: -5px;
-  margin-top: -2px;
-}
-
-hr.debug + hr {
-  display: block;
-  background: transparent;
-  margin-bottom: -3px;
-}
-
-hr.debug:nth-child(n+7) {
-  margin: -10px 0 3px;
-}
-
-hr.debug:last-child {
-  background: #000;
-  margin-bottom: -5px;
-}*/
 
 /* end debug */
 
@@ -3252,7 +3252,7 @@ _:-ms-lang(x), * {
 
 @media screen and (max-width: 950px) {
 td, th, td a, input {
-  font-size: 8pt !important;
+  font-size: 9pt !important;
 }
 
 .snarkTorrents td:nth-child(2) {
@@ -4385,15 +4385,15 @@ input[type="checkbox"][disabled]:checked, input[type="radio"][disabled]:checked,
 
 .snarkTorrentOdd:not(.peerinfo) .snarkTorrentDownloaded .percentBarText,
 .snarkTorrentEven:not(.peerinfo) .snarkTorrentDownloaded .percentBarText {
-  display: inline-block;
   padding: 3px;
+  min-width: 140px !important;
+  display: inline-block;
   position: relative;
-  z-index: 999;
   top: -22px;
   left: -32px;
-  min-width: 140px !important;
-  background: #000;
+  z-index: 999;
   border-radius: 2px;
+  background: #000;
   filter: drop-shadow(0 0 1px #7972d1) drop-shadow(0 0 1px #000) drop-shadow(0 0 1px #113);
 }
 
@@ -4406,22 +4406,22 @@ input[type="checkbox"][disabled]:checked, input[type="radio"][disabled]:checked,
 }
 
 tr:not(.peerinfo) .snarkTorrentDownloaded .percentBarText::after {
-  content: "";
+  margin-left: -7px;
   position: absolute;
   top: 90%;
   left: 50%;
-  margin-left: -7px;
   border-width: 7px;
   border-style: solid;
   border-color: #000 transparent transparent transparent;
+  content: "";
 }
 
 @media screen and (max-width: 1000px) {
 .snarkTorrentOdd:not(.peerinfo) .snarkTorrentDownloaded .percentBarText,
 .snarkTorrentEven:not(.peerinfo) .snarkTorrentDownloaded .percentBarText {
+  min-width: 120px !important;
   top: -22px;
   left: -22px;
-  min-width: 120px !important;
 }
 }
 /* end alternative popup */
@@ -4991,7 +4991,7 @@ td.snarkTorrentPeerCount b a:not(:hover):not(:focus), td.snarkTorrentPeerCount b
 
 td.snarkTorrentPeerCount b .left, td.snarkTorrentPeerCount b .right {
   margin: 0 1px;
-  padding: 1px 3px;
+  padding: 2px 3px 1px;
   min-width: 26px;
   display: inline-block;
   text-align: center;
