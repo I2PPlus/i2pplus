@@ -4230,6 +4230,13 @@ td.snarkTorrentDetails img, .snarkDirInfo td:first-child img:not(.thumb) {
   background: linear-gradient(to bottom, #080818 50%, #000 50%);
 }
 
+@media screen and (max-width: 900px) {
+  #torrentDisplay label {
+    padding-top: 2px;
+    min-width: 0;
+  }
+}
+
 #torrentDisplay label:hover {
   color: #743c93;
   background: linear-gradient(to bottom, #080818 50%, #000 50%);
