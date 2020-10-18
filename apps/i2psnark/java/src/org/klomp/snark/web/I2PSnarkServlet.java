@@ -2345,7 +2345,7 @@ public class I2PSnarkServlet extends BasicServlet {
             if (total <= 0)
                 ratio = 0;
             String txPercent = (new DecimalFormat("0")).format(ratio * 100);
-            if (ratio <= 0.01)
+            if (ratio <= 0.01 && ratio > 0)
                 txPercent = (new DecimalFormat("0.00")).format(ratio * 100);
             if (showRatios) {
                 if (total > 0) {
