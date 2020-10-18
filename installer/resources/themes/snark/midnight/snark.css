@@ -4556,8 +4556,29 @@ tr:not(.peerinfo) .snarkTorrentDownloaded .percentBarText::after {
   text-align: right;
 }
 
+.snarkTorrentUploaded .left, .snarkTorrentUploaded .right {
+  padding: 2px 0;
+  color: #a7acff;
+  text-shadow: 0 1px 1px #000, 0 0 2px #337;
+  border: 1px solid #181838;
+  box-shadow: inset 0 0 0 1px #000;
+  background: linear-gradient(to bottom, #080828, #000);
+}
+
 .snarkTorrentUploaded .left {
+  margin-left: -1px;
+  padding-right: 2px;
   min-width: 12px;
+  min-width: 18px;
+  text-align: center;
+  border-left: none;
+}
+
+.snarkTorrentUploaded .right {
+  margin-right: -1px;
+  padding-left: 3px;
+  border-right: none;
+  border-left-width: 5px;
 }
 
 tr:not(.peerinfo) .snarkTorrentUploaded:empty::after {
