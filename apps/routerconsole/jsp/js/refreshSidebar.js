@@ -1,5 +1,6 @@
 function refreshSidebar(timestamp) {
 
+  var pageVisibility = document.visibilityState;
   var xhr = new XMLHttpRequest();
   var uri = location.pathname.substring(1);
   var xhrContainer = document.getElementById("xhr");
@@ -21,7 +22,7 @@ function refreshSidebar(timestamp) {
   xhr.setRequestHeader('Cache-Control', 'no-store');
   xhr.setRequestHeader("Content-Security-Policy", "default-src 'self'; style-src 'none'; script-src 'self'; frame-ancestors 'none'; object-src 'none'; media-src 'none'");
   xhr.onreadystatechange = function() {
-    if (xhr.readyState == 4) {
+    if (xhr.readyState == 4 && pageVisibility == "visible") {
       if (xhr.status == 200) {
 
         if (down) {
