@@ -806,7 +806,8 @@ th.snarkTorrentStatus img:hover {
   padding: 4px !important;
 }
 
-.snarkTorrents tr:hover, .knowntracker:hover, #trackerselect tr:nth-child(n+2):hover, #snarkDirInfo tr:hover {
+.snarkTorrents tr:hover, .knowntracker:hover, #trackerselect tr:nth-child(n+2):hover, #snarkDirInfo tr:hover,
+#trackerselect tr:nth-child(n+2):hover td {
   background: #1e0b28 !important;
 }
 
@@ -1251,7 +1252,7 @@ tr:hover .percentBarText {
   background: #080811;
 }*/
 
-.snarkTorrentOdd, .snarkTorrentOdd td, .SnarkTorrentEven, .SnarkTorrentEven td, .peerinfo td {
+.snarkTorrentOdd, .snarkTorrentOdd td, .SnarkTorrentEven, .SnarkTorrentEven td, .peerinfo td, .knownTracker td {
   border-top: 1px solid #113 !important;
 }
 
@@ -1259,7 +1260,7 @@ _:-ms-lang(x), .snarkTorrentOdd, .snarkTorrentOdd td, .SnarkTorrentEven, .SnarkT
   border-top: 1px solid #113 !important;
 }
 
-.snarkTorrentOdd {
+.snarkTorrentOdd, .knownTracker, #trackerselect tr:nth-child(n+2) td {
   background: #040408 !important;
   background: linear-gradient(to bottom, #080818, #010010) !important;
 }
@@ -1548,24 +1549,21 @@ video:hover::-webkit-media-controls-panel, video:focus::-webkit-media-controls-p
 /* section headings */
 
 .snarkConfigTitle, .toggleview {
-  font-size: 10pt;
-  font-weight: bold;
-  font-variant: small-caps !important;
-  display: inline-block;
-  min-width: 300px;
   margin: -1px 0 -5px 0;
   padding: 4px 1px 4px 1px;
-  text-align: center !important;
+  min-width: 300px;
+  display: inline-block;
   letter-spacing: .15em;
+  font-size: 10pt;
+  font-weight: bold;
+  text-align: center !important;
+  text-shadow: 0 0 1px #000;
   border: 1px solid #26235c;
   border-radius: 0 0 2px 2px;
+  box-shadow: inset 0 0 0 1px #000, inset 0 0 1px 1px #224;
   background: #003;
   background: linear-gradient(to right, rgba(0,0,16,.7), rgba(0,0,0,.1), rgba(0,0,16,.7)),
-        linear-gradient(to bottom, #181828 50%, #000 50%);
-  box-shadow: inset 0 0 0 1px #000;
-  box-shadow: inset 0 0 0 1px #000, inset 0 0 1px 1px #224;
-  text-shadow: 0 0 1px #000;
-  transition: ease all .1s;
+              linear-gradient(to bottom, #181828 50%, #000 50%);
 }
 
 .toggleview {
@@ -1579,16 +1577,15 @@ video:hover::-webkit-media-controls-panel, video:focus::-webkit-media-controls-p
 .snarkConfigTitle:hover, .toggleview:hover, input.toggle_input:focus + .toggleview {
   box-shadow: inset 0 0 0 1px #101;
   background: #002 !important;
-  background: linear-gradient(to bottom, #1f1e32, #000) !important;
-  background: linear-gradient(to right, rgba(0,0,16,.05), rgba(96,0,96,.15), rgba(0,0,16,.05)), linear-gradient(to bottom, #1d1a2d 50%, #000 50%) !important;
+  background: linear-gradient(to right, rgba(0,0,16,.05), rgba(96,0,96,.15), rgba(0,0,16,.05)),
+              linear-gradient(to bottom, #1d1a2d 50%, #000 50%) !important;
   opacity: 1;
-  transition: ease all .1s;
 }
 
 .snarkConfigTitle:active, .toggleview:active {
-  box-shadow: inset 3px 3px 3px 3px #000;
-  background: linear-gradient(to right, rgba(0,0,16,.1), rgba(64,0,64,.2), rgba(0,0,16,.1)), linear-gradient(to bottom, #1d1a2d, #000) !important;
-  transition: ease all .1s;
+  box-shadow: inset 0 0 0 1px #000, inset 3px 3px 3px 3px #000;
+  background: linear-gradient(to right, rgba(0,0,16,.1), rgba(64,0,64,.2), rgba(0,0,16,.1)), linear-gradient(to bottom, #080008, #0a000a) !important;
+  transition: ease all .01s;
 }
 
 .configsectionpanel .snarkConfigTitle, .configsectionpanel .snarkConfigTitle:hover, .configsectionpanel .snarkConfigTitle:active {
@@ -1636,7 +1633,7 @@ video:hover::-webkit-media-controls-panel, video:focus::-webkit-media-controls-p
 
 .snarkConfigTitle a:active img, .toggleview:active img {
   transform: rotate(90deg) !important;
-  transition: ease transform .1s;
+  transition: ease transform .05s;
 }
 
 input:checked + .toggleview:active > img {
@@ -2194,7 +2191,7 @@ _:-ms-lang(x), #trackerselect tr:last-child {
 #trackerselect tr:first-child td {
   font-weight: bold;
   border-bottom: 1px solid #120f35;
-  background: linear-gradient(to bottom, #010011, #000);
+  background: linear-gradient(to bottom, #080818, #000);
 }
 
 #trackerselect tr:first-child td {
@@ -3710,8 +3707,8 @@ code, tt {
 .toggleview img, .configsection .snarkConfigTitle a img, #dhtDebugPanel .toggleview img {
   margin: -2px auto -21px !important;
   padding: 3px !important;
-  max-width: 16px;
-  max-height: 16px;
+  width: 16px;
+  height: 16px;
   display: block;
   overflow: hidden;
   text-align: center !important;
@@ -4286,10 +4283,8 @@ td.snarkTrackerDetails img {
 input[type="checkbox"], input[type="checkbox"]:checked, input[type="checkbox"][disabled], input[type="checkbox"][disabled]:checked,
 input[type="radio"], input[type="radio"]:checked, input[type="radio"][disabled], input[type="radio"][disabled]:checked {
   position: relative;
-  width: 19px !important;
-  height: 19px !important;
-  min-width: 19px !important;
-  min-height: 19px !important;
+  width: 21px !important;
+  height: 21px !important;
   outline: none;
   vertical-align: middle !important;
   border: 1px solid #363181 !important;
@@ -4304,10 +4299,6 @@ input[type="radio"], input[type="radio"]:checked, input[type="radio"][disabled],
   cursor: pointer;
 }
 
-input[type="checkbox"], input[type="checkbox"]:checked, input[type="checkbox"][disabled], input[type="checkbox"][disabled]:checked {
-  border-radius: 2px !important;
-}
-
 input[type="radio"], input[type="radio"]:checked, input[type="radio"][disabled], input[type="radio"][disabled]:checked {
   border-radius: 50% !important;
 }
@@ -4315,37 +4306,36 @@ input[type="radio"], input[type="radio"]:checked, input[type="radio"][disabled],
 input[type="checkbox"]:checked::before, input[type="radio"]:checked::before,
 input[type="checkbox"]:not(:checked)::before, input[type="radio"]:not(:checked)::before {
   position: absolute;
-  transition: linear all .05s;
   transform: scale(1);
+  transition: linear transform .05s;
 }
 
 .optbox:not(:checked) {
   box-shadow: inset 3px 3px 3px 1px #000;
 }
 
-.optbox:active {
-  background: #000 !important;
+input[type="checkbox"]:checked::before, input[type="checkbox"]:not(:checked)::before,
+input[type="radio"]:checked::before, input[type="radio"][disabled]:checked:hover::before {
+  box-shadow: 0 0 0 1px #000, inset 0 0 0 1px #6c66bc;
+  background: #655fb9;
+  background: linear-gradient(135deg, #655fb9, #544eb1);
+  content: "";
 }
 
 input[type="checkbox"]:checked::before, input[type="checkbox"]:not(:checked)::before {
-  content: "";
-  top: 3px;
-  left: 3px;
+  top: 4px;
+  left: 4px;
   width: 11px;
   height: 11px;
   border-radius: 1px;
-  box-shadow: 0 0 0 1px #000;
-  background: #6c66bc;
 }
 
 input[type="radio"]:checked::before, input[type="radio"][disabled]:checked:hover::before {
-  content: "";
-  border-radius: 50%;
-  left: 25%;
   top: 25%;
+  left: 25%;
   width: 9px;
   height: 9px;
-  background: #6c66bc;
+  border-radius: 50%;
 }
 
 input[type="checkbox"]:checked:hover::before {
@@ -4357,15 +4347,12 @@ input[type="radio"]:checked:hover::before {
 }
 
 input[type="checkbox"]:not(:checked)::before, input[type="radio"]:not(:checked)::before {
+  opacity: 0;
   transform: scale(0);
-  color: transparent;
-  background: transparent;
 }
 
 input[type="checkbox"]:hover, input[type="radio"]:hover, input[type="checkbox"]:focus, input[type="radio"]:focus {
   background: #000;
-  width: 19px !important;
-  height: 19px !important;
   border: 1px solid #6466a5 !important;
   box-shadow: 0 0 0 1px rgba(101, 39, 135, .5), 0 0 2px 2px #202 !important;
   filter: drop-shadow(0 0 1px #202) !important;
@@ -4378,6 +4365,10 @@ input[type="checkbox"][disabled]:checked, input[type="radio"][disabled]:checked,
   background: #000;
   opacity: .5 !important;
   filter: none !important;
+}
+
+.optbox:active::before, .optbox:not(:checked)::before {
+  background: #7771c1 !important;
 }
 }
 
