@@ -1,0 +1,7 @@
+/* I2PSnark Midnight theme override (embedded mode) */
+/* Enable console midnight purple override for best results! */
+/* Author: dr|z3d */
+
+.iframed table img, .iframed .toggleview img, .iframed .snarkConfigTitle img, .iframed .snarkTorrentPeerCount b {
+  filter: hue-rotate(-30deg) !important;
+}
