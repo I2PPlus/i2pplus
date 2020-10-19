@@ -163,6 +163,10 @@ Information defining the unique identity of a router on the network which includ
 SAM (Simple Anonymous Messaging) is a protocol which allows a client application written in any programming language to communicate over I2P, by using a socket-based interface to the I2P router. For more information, see the <a href="https://geti2p.net/en/docs/api/samv3" class="sitelink external" target="_blank">online documentation</a>.
 </p>
 
+<p><b>Shared Client</b><br>
+In order to use a single set of tunnels for multiple client services, clients can be configured from the <i>Tunnel Manager</i> to operate in <i>Shared Client</i> mode. This mode conserves resources and blends the traffic from multiple clients into a single set of tunnels, making traffic analysis harder. Clients configured as Shared Clients share the same tunnel options.
+</p>
+
 <p><b>SSU</b><br>
 SSU (Secure Semi-reliable UDP) is an I2P network transport providing encrypted, connection-oriented, point-to-point connections, in addition to IP address detection and NAT traversal services. For more information, see the <a href="https://geti2p.net/en/docs/transport/ssu" class="sitelink external" target="_blank">online documentation</a>.
 </p>
