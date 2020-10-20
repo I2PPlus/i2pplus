@@ -2367,10 +2367,22 @@ public class I2PSnarkServlet extends BasicServlet {
                 }
             } else if (uploaded > 0) {
                 out.write("<span class=\"right\" title=\"");
-                out.write(_t("Upload ratio"));
+                out.write(_t("Upload ratio").replace("Upload", "Share"));
                 out.write(": ");
                 out.write(txPercent);
-                out.write("&nbsp;%\">");
+                out.write("%");
+                SimpleDateFormat fmt = new SimpleDateFormat("HH:mm, EEE dd MMM yyyy");
+                fmt.setTimeZone(SystemVersion.getSystemTimeZone(_context));
+                Storage storage = snark.getStorage();
+                long lastActive = storage.getActivity();
+                String date = fmt.format(new Date(lastActive));
+                if (storage != null) {
+                    out.write(" &bullet; ");
+                    out.write(_t("Last activity"));
+                    out.write(": ");
+                    out.write(date);
+                }
+                out.write("\">");
                 out.write(formatSize(uploaded).replaceAll("iB","")
                                               .replace("B", "</span><span class=\"left\">B</span>")
                                               .replace("K", "</span><span class=\"left\">K</span>")

@@ -34,10 +34,9 @@
 
 <p class="infohelp">The router configuration options listed below are not available in the user interface, usually because they are rarely used or provide access to advanced settings that most users will not need. This is not a comprehensive list. Some settings will require a restart of the router to take effect. Note that all settings are case sensitive. You will need to edit your <code>router.config</code> file to add options, or, once you have added <code>routerconsole.advanced=true</code> to the router.config file, you may edit settings within the console on the <a href="/configadvanced">Advanced Configuration page</a>.</p>
 
-<table id="configinfo"> <!-- sections separated for legibility -->
+<table id="configinfo">
 
 <tr><th id="advancedconsole">routerconsole.advanced={true|false}</th></tr>
-<!--<tr><td class="infowarn">Only set this to true if you know what you are doing!</td></tr>-->
 <tr><td>When set to true, additional functionality will be enabled in the console and the user will be able to edit settings directly on the <a href="/configadvanced">Advanced Configuration page</a>. Extra display options are provided in the <a href="/netdb">Network Database section</a>, including the <a href="/netdb?f=3">Sybil Analysis tool</a>, and there are additional configuration options on the <a href="/configclients">Clients Configuration page</a>. This will also enable the installation of unsigned updates, manual configuration of the news URL, and additional sections on the sidebar.</td></tr>
 
 <tr><th>routerconsole.allowUntrustedPlugins={true|false}</th></tr>
@@ -55,21 +54,11 @@
 <tr><th>routerconsole.redirectToHTTPS={true|false}</th></tr>
 <tr><td>When set to true, accessing the router console via http:// when https:// is enabled will automatically redirect to https. To configure router console access, edit the settings in your <code>clients.config</code> file in your profile directory (<i>not</i> the application installation directory). [Enabled by default]</td></tr>
 
-<!--
-<tr><th>routerconsole.showSearch={true|false}</th></tr>
-<tr><td>When set to true, a configurable search bar will appear on the <a href="/home">console homepage</a>. Additional searches may then be added on the <a href="/confighome">Home Configuration page</a>.</td></tr>
--->
-
 <tr><th>router.buildHandlerThreads={n}</th></tr>
 <tr><td>Allocate number of processor threads for building tunnels. If your processor supports hyperthreading or simultaneous multithreading, you may multiply the number of processor cores by 2 to get the maximum number of threads to allocate, otherwise number of processor cores = maximum number of threads available. Note that you may wish to allocate less than the theoretical maximum to ensure you have headroom for other tasks.</td></tr>
 
 <tr><th>router.disableTunnelTesting={true|false}</th></tr>
 <tr><td>Periodically test tunnels to determine the average lag, and display the results in the Congestion sidepanel section. To enable, set this value to false. [Default is true]</td></tr>
-
-<!-- causes NPEs if set to true
-<tr><th>router.dispatchThreaded={true|false}</th></tr>
-<tr><td>When set to true, the router will create 2 additional threads, one for dispatching tunnel data messages, and a second for dispatching tunnel gateway messages, rather than using the Job Queue. Note: A change to this setting requires a restart of the router. [Default is false]</td></tr>
--->
 
 <tr><th>router.dynamicKeys={true|false}</th></tr>
 <tr><td>When set to true, the router will change its identity and UDP port every time the router restarts. [Default is false]</td></tr>
@@ -140,13 +129,11 @@
 <tr><th>routerconsole.graphHiDpi={true|false} <span class="plus">I2P+</span></th></tr>
 <tr><td>This setting, when set to true, will enable HiDPI mode for the graphs on <a href="/graphs">the graphs page</a>. Once enabled, you may need to refresh the page to see the settings applied, and the graph display may take a couple of refresh cycles to stabilize. Note that Javascript should be enabled in your browser. [Experimental]</td></tr>
 
-<!--
-<tr><th>routerconsole.homeExtLinksToNewTab={true|false} <span class="plus">I2P+</span></th></tr>
-<tr><td>This setting, when set to true, will force all external links on <a href="/home">the homepage</a> to open in new browser tabs rather than the same window.</td></tr>
--->
-
 <tr><th>routerconsole.sitemapSites={true|false} <span class="plus">I2P+</span></th></tr>
 <tr><td>This setting, when set to true, will display the <i>Sites of Interest</i> links on <a href="/sitemap">the sitemap</a>. [Default is false]</td></tr>
+
+<tr><th>desktopgui.enabled={true|false}</th></tr>
+<tr><td>If set to true, this option will place an icon in the system tray / notification area, with basic service control options. [Disabled by default]</td></tr>
 
 <tr><th>i2psnark.maxFilesPerTorrent={n} <span class="plus">I2P+</span></th></tr>
 <tr><td>This setting allows configuration of the maximum number of files per torrent I2PSnark will permit, when downloading or creating a torrent. Note that substantially increasing this value from the default of 2000 files may require additional configuration on the host system to increase the maximum number of open files the operating system will permit (e.g. <code>ulimit -n</code> on Linux). To change, add to I2PSnark's configuration file <code>i2psnark.config</code>. [Restart of I2PSnark or router required]</td></tr>
