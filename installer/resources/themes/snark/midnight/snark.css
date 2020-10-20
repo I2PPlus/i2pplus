@@ -1678,17 +1678,12 @@ hr {
   margin-bottom: 10px;
 }
 
-a:link, .snarkTorrentPeerCount a:visited, .snarkMessages .infohash, .trackerName a:visited,
-.snarkTorrents a:visited, .info_tracker a:visited, .snarkMessages a:visited {
+a:link, a:visited {
   color: #7972d1;
   font-weight: bold;
   text-decoration: none;
   word-wrap: break-word;
   border-radius: 0;
-}
-
-a:visited {
-  color: #473ec1;
 }
 
 a:hover, a:focus, .trackerName a:visited:hover, .trackerName a:visited:focus,
@@ -1706,7 +1701,7 @@ input {
   padding: 3px 4px !important;
   cursor: pointer;
   text-align: left;
-  color: #4e47bf;
+  color: #6c66bc;
   border: 1px solid #26235c;
   background: #001;
 }
@@ -1746,16 +1741,15 @@ input[type="submit"], input[type="reset"] {
 
 a.control, a.controld, a.control:hover, a.controld:hover, a.control:focus, a.controld:focus {
   margin: 0 5px 0 1px !important;
-  display: inline-block;
   min-width: 0 !important;
+  display: inline-block;
 }
 
 a.control img, a.controld img {
-/*  margin: -4px 4px 0 0 !important;*/
   padding: 0;
-  display: inline-block;
   max-height: 16px !important;
   max-width: 16px !important;
+  display: inline-block;
 }
 
 #configs input[type="submit"], .trackerconfig input[type="submit"], input[name="savepri"] {
@@ -1856,9 +1850,9 @@ textarea[name="i2cpOpts"], input[name="nofilter_dataDir"] {
   min-width: 500px;
   width: 70%;
   resize: none;
-  font-family: "Droid Sans", "Open Sans", "Noto Sans", Ubuntu, "Segoe UI", "Lucida Grande", "DejaVu Sans", Verdana, Helvetica, sans-serif;
-  cursor: text;
   overflow: hidden;
+  font-family: Droid Sans, Open Sans, Noto Sans, Ubuntu, Segoe UI, Lucida Grande, DejaVu Sans, Verdana, Helvetica, sans-serif;
+  cursor: text;
 }
 
 thead img, thead img:hover {
@@ -1877,8 +1871,8 @@ input[type=image], th a:link img, th a:visited img {
 }
 
 input[type=text], input.r {
-  min-width: 100px;
   padding: 5px 6px !important;
+  min-width: 100px;
 }
 
 input[type=radio] {
@@ -1888,9 +1882,9 @@ input[type=radio] {
 }
 
 input.default {
-  visibility: hidden;
   width: 1px;
   height: 1px;
+  visibility: hidden;
 }
 
 input[size="85"] {
@@ -1915,7 +1909,7 @@ select {
   padding: 5px 24px 5px 4px;
   cursor: pointer;
   text-overflow: ellipsis;
-  color: #4e47bf;
+  color: #6c66bc;
   border: 1px solid #27235f;
   border-bottom-color: #171539;
   border-right-color: #171539;
@@ -4311,7 +4305,7 @@ input[type="checkbox"]:not(:checked)::before, input[type="radio"]:not(:checked):
 }
 
 .optbox:not(:checked) {
-  box-shadow: inset 3px 3px 3px 1px #000;
+  box-shadow: inset 0 0 0 1px #000, inset 3px 3px 3px 1px #000;
 }
 
 input[type="checkbox"]:checked::before, input[type="checkbox"]:not(:checked)::before,

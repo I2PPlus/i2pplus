@@ -1854,9 +1854,14 @@ div.logo hr {
 }
 
 #sb_warning {
-  border-bottom: 1px solid rgba(38, 35, 92,.7);
   margin-left: -10px !important;
+  margin-bottom: 7px !important;
   margin-right: -10px !important;
+  border-bottom: 1px solid #26235c;
+}
+
+#sb_warning a:not(:hover):not(:focus):not(:active) {
+  color: #900;
 }
 
 #sb_warning + .sb_notice {
@@ -2922,7 +2927,6 @@ h3 {
   overflow: hidden;
 }
 
-
 h3 + p, h3 + table {
   position: relative;
   z-index: 20;
@@ -2937,7 +2941,7 @@ h3 + p, h3 + table {
 }
 
 .h3navlinks a {
-  margin: 0;
+  margin: -1px 0;
   padding: 9px 16px;
   display: inline-block;
   vertical-align: middle;
@@ -8249,13 +8253,35 @@ h3#pluginfromfile, h3#updateplugins, h3#pluginmanage, h3#bannedpeers, h3.ptitle,
   border: 1px solid rgba(38, 35, 92,.7);
 }
 
+#logs h3.tabletitle {
+  padding: 7px 0 7px 10px;
+}
+
 .sybils#samefamily {
   margin-bottom: 10px !important;
 }
 
 h3.tabletitle a {
-  text-transform: lowercase;
   letter-spacing: normal;
+  text-transform: lowercase;
+  padding-left: 12px !important;
+}
+
+@media screen and (min-width: 1200px) {
+  h3.tabletitle a {
+    padding-left: 16px !important;
+  }
+}
+
+#logs h3.tabetitle a {
+  margin: -9px 0;
+  padding: 10px 8px 8px;
+  display: inline-block;
+  border-left: 1px solid rgba(38, 35, 92,.7);
+}
+
+h3.tabletitle a:first-child {
+  padding-left: 0;
 }
 
 h3.sybils + div, h3.sybils + a[name] + table {
