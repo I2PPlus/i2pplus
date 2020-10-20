@@ -4933,8 +4933,8 @@ input, input:visited, button, button:visited, input[type=file]::file-selector-bu
   filter: drop-shadow(0 0 1px rgba(220,220,255,.7));
 }
 
-input[type=file]:active::file-selector-button {
-  padding: 4px 8px;
+input[type=file]::file-selector-button {
+  padding: 4px 10px;
 }
 
 input[type="text"], textarea, input[type="password"] {
