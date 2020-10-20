@@ -10,7 +10,7 @@ html, body {
 
 html {
   margin: 0 !important;
-  scrollbar-color: #676f98 #a4a4cb;
+  scrollbar-color: #779 #a4a4cb;
 }
 
 body {
@@ -25,6 +25,16 @@ body {
 
 .main {
   scrollbar-color: rgba(180,180,255,.7) rgba(255,255,255,.5);
+}
+
+.main textarea {
+  scrollbar-color: rgba(180,180,255,.4) rgba(255,255,255,.1);
+  scrollbar-width: thin;
+}
+
+.main textarea:hover {
+  scrollbar-color: rgba(180,180,255,.6) rgba(255,255,255,1);
+  scrollbar-width: auto;
 }
 
 /* preload button mouseovers */
