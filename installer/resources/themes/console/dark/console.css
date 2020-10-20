@@ -2366,23 +2366,22 @@ button::-moz-focus-inner, input::-moz-focus-inner {
   border: none;
 }
 
-button, button:visited {
-  font: bold 9pt "Droid Sans", "Open Sans", "Noto Sans", Ubuntu, "Segoe UI", "Bitstream Vera Sans", "DejaVu Sans", Verdana, "Lucida Grande", Helvetica, sans-serif;
-  border: 1px outset #191;
-  padding: 4px 2px !important;
-  text-decoration: none;
-  border-radius: 2px;
-  font-weight: bold;
+button, button:visited, input[type=file]::file-selector-button {
   margin: 2px 3px;
-  text-align: center;
-  vertical-align: middle;
+  padding: 4px 2px !important;
   min-width: 75px;
-  background: #000;
+  vertical-align: middle;
+  font: bold 9pt Droid Sans, Open Sans, Noto Sans, Ubuntu, Segoe UI, Bitstream Vera Sans, DejaVu Sans, Verdana, Lucida Grande, Helvetica, sans-serif;
+  text-align: center;
+  text-decoration: none;
   color: #494;
+  border: 1px outset #191;
+  border-radius: 2px;
+  background: #000;
   filter: drop-shadow(0 0 1px #000);
 }
 
-button:hover, button:focus {
+button:hover, button:focus, input[type=file]:hover::file-selector-button, input[type=file]:focus::file-selector-button {
   color: #f60;
   border: 1px solid #f60;
   box-shadow: inset 0 0 0 1px #000, inset 0 0 2px 1px rgba(255,86,0,0.8), inset 0 0 0 3px #000;
@@ -2398,7 +2397,7 @@ button:active a {
   color: #ee9;
 }
 
-button:active {
+button:active, input[type=file]:active::file-selector-button {
   color: #ee9;
   border: 1px solid #f60;
   box-shadow: inset 0 0 0 1px #000;
@@ -2490,11 +2489,6 @@ button.download.control:active {
 
 /* end project "X" */
 
-button, input[type="submit"], input[type="reset"], select
-button:hover, input[type="submit"]:hover, input[type="reset"]:hover, select:hover {
-  transition: ease border 0.05s;
-}
-
 .routersummary button.reload, .routersummary button.stop, .routersummary button.cancel {
   min-width: 97px;
   text-transform: capitalize;
@@ -2528,11 +2522,6 @@ button:hover, input[type="submit"]:hover, input[type="reset"]:hover, select:hove
 #updateAvailable + br + button + br + #updateAvailable {
   margin-top: 2px;
 }
-
-/*#updateAvailable::before {
-  content: '\1F6C8\00A0';
-  display: inline;
-}*/
 
 .underline {
   border-bottom: 1px solid #ee9;
@@ -2598,21 +2587,21 @@ hr:last-child {
 }
 
 input {
-  border: 1px outset #191;
-  background: #000;
-  color: #494;
   margin: 5px;
-  font: bold 9pt "Droid Sans", "Open Sans", "Noto Sans", Ubuntu, "Segoe UI", "Bitstream Vera Sans", "DejaVu Sans", Verdana, "Lucida Grande", Helvetica, sans-serif;
   padding: 4px 2px;
-  text-decoration: none;
   min-width: 110px;
+  font: bold 9pt Droid Sans, Open Sans, Noto Sans, Ubuntu, Segoe UI, Bitstream Vera Sans, DejaVu Sans, Verdana, Lucida Grande, Helvetica, sans-serif;
+  text-decoration: none;
+  color: #494;
+  border: 1px outset #191;
   border-radius: 2px;
+  background: #000;
 }
 
 input:hover, input:focus {
-  background: #000;
   color: #f60 !important;
   border: 1px solid #f60 !important;
+  background: #000;
   cursor: pointer;
 }
 
@@ -2620,29 +2609,29 @@ input[type="submit"]:hover, input[type="reset"]:hover, input[type="submit"]:focu
   box-shadow: inset 0 0 0 1px #000, inset 0 0 2px 1px rgba(255,86,0,0.8), inset 0 0 0 3px #000 !important;
 }
 
-input[type="submit"]:active, input[type="reset"]:active, button:active {
+input[type="submit"]:active, input[type="reset"]:active, button:active. input[type=file]:active::file-selector-button {
+  text-shadow: 0 1px 1px #000;
   box-shadow: inset 0 0 0 1px #000 !important;
   box-shadow: inset 0 0 0 1px #000, inset 3px 3px 3px 2px #310 !important;
-  text-shadow: 0 1px 1px #000;
 }
 
 input:active {
+  color: #ee9 !important;
   border: 1px solid #f60 !important;
   background: #f60 !important;
-  color: #ee9 !important;
 }
 
 input[type="text"], input[type="password"] {
-  background: #000;
-  background: linear-gradient(to bottom, #000 0%, #010 100%);
-  color: #ee9;
   margin: 5px 10px;
   padding: 6px;
-  font: bold 9pt "Droid Sans", "Open Sans", "Noto Sans", Ubuntu, "Segoe UI", "Bitstream Vera Sans", "DejaVu Sans", Verdana, "Lucida Grande", Helvetica, sans-serif;
-  border: 1px solid #252 !important;
   text-decoration: none;
+  color: #ee9;
+  font: bold 9pt Droid Sans, Open Sans, Noto Sans, Ubuntu, Segoe UI, Bitstream Vera Sans, DejaVu Sans, Verdana, Lucida Grande, Helvetica, sans-serif;
+  border: 1px solid #252 !important;
   border-radius: 1px;
   box-shadow: inset 0 0 3px 3px #000;
+  background: #000;
+  background: linear-gradient(to bottom, #000 0%, #010 100%);
   cursor: text;
   filter: none;
 }
@@ -2859,7 +2848,7 @@ textarea[readonly]:focus {
   font-weight: normal;
 }
 
-input[type="submit"], input[type="reset"], select, button {
+input[type="submit"], input[type="reset"], select, button, input[type=file]::file-selector-button {
   line-height: 120%;
   font-size: 8.5pt;
   border: 1px solid #000;
@@ -2868,7 +2857,7 @@ input[type="submit"], input[type="reset"], select, button {
   background: linear-gradient(to bottom, #001000, #000 5%, #000 95%, #001000);
 }
 
-input[type="submit"], input[type="reset"], button {
+input[type="submit"], input[type="reset"], button, input[type=file]::file-selector-button {
   padding: 7px 8px !important;
   outline: none;
 }

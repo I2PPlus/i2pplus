@@ -1693,19 +1693,20 @@ input[type="text"][readonly], input[type="text"][readonly]:focus, input[type="te
   background: #eff0ff;
 }
 
-button, input, select {
+button, input, select, input[type=file]::file-selector-button {
   font: 9pt/130% Droid Sans, Open Sans, Noto Sans, Ubuntu, Segoe UI, Lucida Grande, DejaVu Sans, Verdana, Helvetica, sans-serif;
   color: #5e626e;
   background-color: #eee;
 }
 
-button:hover, input[type="submit"]:hover, input[type="reset"]:hover {
+button:hover, input[type="submit"]:hover, input[type="reset"]:hover,
+input[type=file]:hover::file-selector-button, input[type=file]:focus::file-selector-button {
   color: #41444d;
   background-color: #ddd;
   background: linear-gradient(to bottom, #ddd, #fff);
 }
 
-button:active, input[type="submit"]:active, input[type="reset"]:active {
+button:active, input[type="submit"]:active, input[type="reset"]:active, input[type=file]:active::file-selector-button {
   background-color: #fff;
 }
 
@@ -1766,7 +1767,7 @@ button::-moz-focus-inner, input::-moz-focus-inner {
 
 /* graphical buttons */
 
-input[type="submit"], input[type="reset"], button {
+input[type="submit"], input[type="reset"], button, input[type=file]::file-selector-button {
   margin: 3px 8px 3px 0;
   padding: 4px 5px;
   text-decoration: none;
@@ -1779,6 +1780,10 @@ input[type="submit"], input[type="reset"], button {
   background: linear-gradient(to bottom, #fff, #f4f5ff);
   background-size: 14px auto, 100% 100% !important;
   opacity: 1;
+}
+
+input[type=file]::file-selector-button {
+  padding: 4px 8px;
 }
 
 button a, button a:visited {

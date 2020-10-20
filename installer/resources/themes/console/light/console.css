@@ -10,7 +10,7 @@ html, body {
 
 html {
   margin: 0 !important;
-  scrollbar-color: #676f98 #a4a4cb;
+  scrollbar-color: #779 #a4a4cb;
 }
 
 body {
@@ -25,6 +25,16 @@ body {
 
 .main {
   scrollbar-color: rgba(180,180,255,.7) rgba(255,255,255,.5);
+}
+
+.main textarea {
+  scrollbar-color: rgba(180,180,255,.4) rgba(255,255,255,.1);
+  scrollbar-width: thin;
+}
+
+.main textarea:hover {
+  scrollbar-color: rgba(180,180,255,.6) rgba(255,255,255,1);
+  scrollbar-width: auto;
 }
 
 /* preload button mouseovers */
@@ -3812,7 +3822,7 @@ th code {
   margin-left: 3px;
 }
 
-a, h1, h2, h3, h4, th, input[type="submit"], input[type="reset"], button, select {
+a, h1, h2, h3, h4, th, input[type="submit"], input[type="reset"], button, select, input[type=file]::file-selector-button {
   text-shadow: 0 1px 1px #fff;
 }
 
@@ -4880,7 +4890,7 @@ div[lang="de"] .links li {
 
 /* end welcome section */
 
-input[type="submit"], input[type="reset"], button, .optbox, select {
+input[type="submit"], input[type="reset"], button, .optbox, select, input[type=file]::file-selector-button {
   cursor: pointer;
 }
 
@@ -4906,7 +4916,7 @@ input.search[type="text"]:focus {
   background-blend-mode: normal;
 }
 
-input, input:visited, button, button:visited {
+input, input:visited, button, button:visited, input[type=file]::file-selector-button {
   margin: 3px;
   padding: 4px 5px;
   line-height: 140%;
@@ -4923,11 +4933,15 @@ input, input:visited, button, button:visited {
   filter: drop-shadow(0 0 1px rgba(220,220,255,.7));
 }
 
+input[type=file]::file-selector-button {
+  padding: 4px 10px;
+}
+
 input[type="text"], textarea, input[type="password"] {
   filter: drop-shadow(0 0 1px rgba(220,220,255,.7));
 }
 
-input[type="submit"], input[type="reset"], button, select {
+input[type="submit"], input[type="reset"], button, select, input[type=file]::file-selector-button {
   filter: drop-shadow(0 0 1px rgba(220,220,255,.7));
 }
 
@@ -4940,7 +4954,8 @@ button a, button a:visited {
   font-weight: normal !important;
   color: #41465f;
 }
-button:hover, input[type="submit"]:hover, input[type="reset"]:hover, button:focus, input[type="submit"]:focus, input[type="reset"]:focus {
+button:hover, input[type="submit"]:hover, input[type="reset"]:hover, button:focus, input[type="submit"]:focus, input[type="reset"]:focus,
+input[type=file]:hover::file-selector-button, input[type=file]:focus::file-selector-button {
   color: #19191f;
   border: 1px solid #f60;
   background: linear-gradient(to bottom, #eee, #fff);
