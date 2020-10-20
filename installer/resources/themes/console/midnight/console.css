@@ -3027,14 +3027,15 @@ h4.app img, h4.app2 img {
 }
 
 @media screen and (max-width: 1500px) {
-.main#tunnels h3 a[href^="/configtunnels#"]::after, .main#tunnels h3 a[href$="i2ptunnelmgr"]::after, #logs a.configure::after, #logs a.delete::after {
-  width: 14px;
-  height: 14px;
-  background-size: 12px 12px !important;
-}
-#logs a.configure::after {
-  background-size: 14px 14px !important;
-}
+  .main#tunnels h3 a[href^="/configtunnels#"]::after, .main#tunnels h3 a[href$="i2ptunnelmgr"]::after, #logs a.configure::after, #logs a.delete::after {
+    width: 14px;
+    height: 14px;
+    background-size: 12px 12px !important;
+  }
+
+  #logs a.configure::after {
+    background-size: 14px 14px !important;
+  }
 }
 
 .main#tunnels h3 + h3 {
@@ -8273,15 +8274,48 @@ h3.tabletitle a {
   }
 }
 
-#logs h3.tabetitle a {
+#logs h3.tabletitle a {
   margin: -9px 0;
   padding: 10px 8px 8px;
   display: inline-block;
   border-left: 1px solid rgba(38, 35, 92,.7);
 }
 
-h3.tabletitle a:first-child {
-  padding-left: 0;
+#criticallogs + h3.tabletitle a:first-child {
+  padding-left: 10px !important;
+}
+
+#criticallogs + h3.tabletitle a:last-child {
+  padding-left: 18px !important;
+  padding-right: 18px !important;
+}
+
+#servicelogs a {
+    padding-left: 12px !important;
+}
+
+@media screen and (max-width: 1800px) {
+  #criticallogs + h3.tabletitle a:first-child {
+    padding-left: 4px !important;
+    padding-right: 10px !important;
+  }
+
+  #criticallogs + h3.tabletitle a:last-child {
+    padding-left: 20px;
+    padding-right: 12px;
+  }
+}
+
+@media screen and (max-width: 1400px) {
+  #criticallogs + h3.tabletitle a:first-child {
+    padding-left: 4px !important;
+    padding-right: 10px !important;
+  }
+
+  #criticallogs + h3.tabletitle a:last-child {
+    padding-left: 12px !important;
+    padding-right: 12px !important;
+  }
 }
 
 h3.sybils + div, h3.sybils + a[name] + table {
