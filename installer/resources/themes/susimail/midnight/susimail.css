@@ -391,10 +391,12 @@ td {
 
 .list0 {
   background-color: #080818;
+  background: linear-gradient(to bottom, #080818, #010010);
 }
 
 .list1 {
   background-color: #010010;
+  background: linear-gradient(to bottom, #080818, #010010);
 }
 
 /* mailbox display finessing */
