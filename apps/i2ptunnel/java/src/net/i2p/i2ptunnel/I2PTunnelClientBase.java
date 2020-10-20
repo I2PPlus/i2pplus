@@ -883,7 +883,7 @@ public abstract class I2PTunnelClientBase extends I2PTunnelTask implements Runna
                 } // else the app chaining to this one closes it!
             }
             if (!toString().contains("-1"))
-                l.log(" ‣ Stopping client " + toString() + "…");
+                l.log("Stopping client " + toString() + "…");
                 // hide from i2ping
                 //else
                 //l.log(" ‣ Stopping client…");
