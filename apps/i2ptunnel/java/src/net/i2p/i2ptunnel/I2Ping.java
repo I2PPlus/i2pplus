@@ -319,10 +319,10 @@ public class I2Ping extends I2PTunnelClientBase {
                                 pass++;
                                 long rtt = System.currentTimeMillis() - lastPingTime;
                                 totalTime += rtt;
-                                l.log(" ✔ " + (i+1) + ":\t\t " + rtt + "ms");
+                                l.log(" ✔ " + (i+1) + ":   \t " + rtt + "ms");
                             } else {
                                 fail++;
-                                l.log(" ✖ " + (i+1) + ":\t\t ------");
+                                l.log(" ✖ " + (i+1) + ":   \t ------");
                             }
                         } else {
                             pingResults.append(sent ? " ✔" : " ✖");
