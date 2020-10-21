@@ -349,6 +349,14 @@ public class UDPTransport extends TransportImpl implements TimedWeightedPriority
     }
 
     /**
+     * @returns the instance of OutboundMessageFragments
+     * @since 0.9.48
+     */
+    OutboundMessageFragments getOMF() {
+        return _fragments;
+    }
+
+    /**
      *  Pick a port if not previously configured, so that TransportManager may
      *  call getRequestedPort() before we've started to get a best-guess of what our
      *  port is going to be, and pass that to NTCP
