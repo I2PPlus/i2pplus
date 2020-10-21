@@ -52,7 +52,7 @@ class SummaryRenderer {
     private final SummaryListener _listener;
     private final I2PAppContext _context;
     private static final String PROP_THEME_NAME = "routerconsole.theme";
-    private static final String DEFAULT_THEME = "light";
+    private static final String DEFAULT_THEME = "dark";
     private static final Color WHITE = new Color(255, 255, 255);
     private static final Color TRANSPARENT = new Color(0, 0, 0, 0);
     private static final Color CANVAS_COLOR_DARK = new Color(0, 0, 0);

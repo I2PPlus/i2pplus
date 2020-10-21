@@ -49,7 +49,7 @@ public class ErrorServlet extends HttpServlet {
     private static final String CONSOLE_BUNDLE_NAME = "net.i2p.router.web.messages";
     private static final String PROP_THEME_NAME = "routerconsole.theme";
     private static final String PROP_THEME_PFX = PROP_THEME_NAME + '.';
-    private static final String DEFAULT_THEME = "light";
+    private static final String DEFAULT_THEME = "dark";
     private static final String BASE_THEME_PATH = "/themes/console/";
     private static final String DEFAULT_ICO = "images/favicon.ico";
     private static final String DEFAULT_CSS = "console.css";

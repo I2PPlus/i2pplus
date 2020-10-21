@@ -22,7 +22,7 @@ public class CSSHelper extends HelperBase {
     public static final String PROP_THEME_NAME = "routerconsole.theme";
     /**  @since 0.9.33 moved from ConfigUIHelper */
     public static final String PROP_THEME_PFX = PROP_THEME_NAME + '.';
-    public static final String DEFAULT_THEME = "light";
+    public static final String DEFAULT_THEME = "dark";
     public static final String BASE_THEME_PATH = "/themes/console/";
     private static final String FORCE = "classic";
     public static final String PROP_REFRESH = "routerconsole.summaryRefresh";
