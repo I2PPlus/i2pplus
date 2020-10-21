@@ -319,10 +319,10 @@ public class I2Ping extends I2PTunnelClientBase {
                                 pass++;
                                 long rtt = System.currentTimeMillis() - lastPingTime;
                                 totalTime += rtt;
-                                l.log(" ✔ " + (i+1) + ":\t " + rtt + "ms");
+                                l.log(" ✔ " + (i+1) + ":\t\t " + rtt + "ms");
                             } else {
                                 fail++;
-                                l.log(" ✖ " + (i+1) + ":\t ------");
+                                l.log(" ✖ " + (i+1) + ":\t\t ------");
                             }
                         } else {
                             pingResults.append(sent ? " ✔" : " ✖");
@@ -332,10 +332,10 @@ public class I2Ping extends I2PTunnelClientBase {
                 }
 
                 if (reportTimes && !fromList) {
-                    pingResults.append(" • ").append(destination).append(" results: ");
+                    pingResults.append(" • Results for ").append(destination).append(": ");
                     pingResults.append(pass).append(" / ").append(pass + fail).append(" pongs received");
                 } else {
-                    pingResults.append("  ‣ ").append(destination);
+                    pingResults.append(" ‣ ").append(destination);
                 }
                 if (pass > 0 && reportTimes && !fromList)
                     pingResults.append(", average response ").append(totalTime/pass).append("ms");
