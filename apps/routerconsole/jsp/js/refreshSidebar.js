@@ -22,7 +22,7 @@ function refreshSidebar(timestamp) {
   xhr.setRequestHeader('Cache-Control', 'no-store');
   xhr.setRequestHeader("Content-Security-Policy", "default-src 'self'; style-src 'none'; script-src 'self'; frame-ancestors 'none'; object-src 'none'; media-src 'none'");
   xhr.onreadystatechange = function() {
-    if (xhr.readyState == 4 && pageVisibility == "visible") {
+    if (xhr.readyState == 4) {
       if (xhr.status == 200) {
 
         if (down) {
@@ -72,147 +72,148 @@ function refreshSidebar(timestamp) {
         var minigraphResponse = xhr.responseXML.getElementById("minigraph");
         var notifyResponse = xhr.responseXML.getElementById("sb_notice");
 
-
-        if (services) {
-          var servicesParent = services.parentNode;
-          if (!Object.is(services.innerHTML, servicesResponse.innerHTML))
-            servicesParent.replaceChild(servicesResponse, services);
-        }
-        if (advanced) {
-          var advancedParent = advanced.parentNode;
-          if (!Object.is(advanced.innerHTML, advancedResponse.innerHTML))
-            advancedParent.replaceChild(advancedResponse, advanced);
-        }
-        if (internals) {
-          var internalsParent = internals.parentNode;
-          if (!Object.is(internals.innerHTML, internalsResponse.innerHTML))
-            internalsParent.replaceChild(internalsResponse, internals);
-        }
-        if (general) {
-          var generalParent = general.parentNode;
-          if (!Object.is(general.innerHTML, generalResponse.innerHTML))
-            generalParent.replaceChild(generalResponse, general);
-        }
-        if (shortgeneral) {
-          var shortgeneralParent = shortgeneral.parentNode;
-          if (!Object.is(shortgeneral.innerHTML, shortgeneralResponse.innerHTML))
-            shortgeneralParent.replaceChild(shortgeneralResponse, shortgeneral);
-        }
-        if (advgeneral) {
-          var advgeneralParent = advgeneral.parentNode;
-          if (!Object.is(advgeneral.innerHTML, advgeneralResponse.innerHTML))
-            advgeneralParent.replaceChild(advgeneralResponse, advgeneral);
-        }
-        if (netstatus) {
-          if (!Object.is(netstatus.innerHTML, netstatusResponse.innerHTML))
-            netstatus.innerHTML = netstatusResponse.innerHTML;
-        }
-        if (updatesection || updatesectionResponse) {
-          var updatesectionParent = updatesection.parentNode;
-          if (!Object.is(updatesection.innerHTML, updatesectionResponse.innerHTML)) {
-            if (updatesection.classList.contains("hide"))
-              updatesection.classList.remove("hide");
-            updatesectionParent.replaceChild(updatesectionResponse, updatesection);
+        if (pageVisibility == "visible") {
+          if (services) {
+            var servicesParent = services.parentNode;
+            if (!Object.is(services.innerHTML, servicesResponse.innerHTML))
+              servicesParent.replaceChild(servicesResponse, services);
           }
-        }
-        if (updatestatus) {
-          var updatestatusParent = updatestatus.parentNode;
-          if (!Object.is(updatestatus.innerHTML, updatestatusResponse.innerHTML))
-            updatestatusParent.replaceChild(updatestatusResponse, updatestatus);
-        }
-        if (notify) {
-          var notifyParent = notify.parentNode;
-          if (!Object.is(notify.innerHTML, notifyResponse.innerHTML) || notifyResponse) {
-            if (notify.classList.contains("hide"))
-              notify.classList.remove("hide");
-            notifyParent.replaceChild(notifyResponse, notify);
+          if (advanced) {
+            var advancedParent = advanced.parentNode;
+            if (!Object.is(advanced.innerHTML, advancedResponse.innerHTML))
+              advancedParent.replaceChild(advancedResponse, advanced);
           }
-        }
-        if (peers) {
-          var peersParent = peers.parentNode;
-          if (!Object.is(peers.innerHTML, peersResponse.innerHTML))
-            peersParent.replaceChild(peersResponse, peers);
-        }
-        if (advpeers) {
-          var advpeersParent = advpeers.parentNode;
-          if (!Object.is(advpeers.innerHTML, advpeersResponse.innerHTML))
-            advpeersParent.replaceChild(advpeersResponse, advpeers);
-        }
-        if (bandwidth) {
-          var bandwidthParent = bandwidth.parentNode;
-          if (!Object.is(bandwidth.innerHTML, bandwidthResponse.innerHTML))
-            bandwidthParent.replaceChild(bandwidthResponse, bandwidth);
-        }
-        if (minigraph && minigraphResponse) {
-          var graphstatsParent = graphstats.parentNode;
-          graphstatsParent.replaceChild(graphstatsResponse, graphstats);
-        }
-        if (ram) {
-          var ramParent = ram.parentNode;
-          if (!Object.is(ram.innerHTML, ramResponse.innerHTML))
-            bandwidthParent.replaceChild(ramResponse, ram);
-        }
-        if (clock) {
-          var clockParent = clock.parentNode;
-          if (!Object.is(clock.innerHTML, clockResponse.innerHTML))
-            clockParent.replaceChild(clockResponse, clock);
-        }
-        if (tunnels) {
-          var tunnelsParent = tunnels.parentNode;
-          if (!Object.is(tunnels.innerHTML, tunnelsResponse.innerHTML))
-            tunnelsParent.replaceChild(tunnelsResponse, tunnels);
-        }
-        if (queue) {
-          var queueParent = queue.parentNode;
-          if (!Object.is(queue.innerHTML, queueResponse.innerHTML))
-            queueParent.replaceChild(queueResponse, queue);
-        }
-        if (tunnelstatus) {
-          var tunnelstatusParent = tunnelstatus.parentNode;
-          if (!Object.is(tunnelstatus.innerHTML, tunnelstatusResponse.innerHTML))
-            if (tunnelstatusParent != null)
-              tunnelstatusParent.replaceChild(tunnelstatusResponse, tunnelstatus);
-            else
-              tunnelstatus.innerHTML = tunnelstatusResponse.innerHTML;
-        }
-        if (shutdownstatus) {
-          var shutdownstatusParent = shutdownstatus.parentNode;
-          if (!Object.is(shutdownstatus.innerHTML, shutdownstatusResponse.innerHTML))
-            shutdownstatusParent.replaceChild(shutdownstatusResponse, shutdownstatus);
-          else if (typeof shutdownstatusResponse === "undefined")
-            shutdownstatus.remove();
-        }
-        if (localtunnels) {
-          if (!Object.is(localtunnels.innerHTML, localtunnelsResponse.innerHTML))
-            localtunnels.innerHTML = localtunnelsResponse.innerHTML;
-        }
-        if (control) {
-          var controlParent = control.parentNode;
-          var controlResponse = xhr.responseXML.getElementById("sb_routerControl");
-          if (!Object.is(control.innerHTML, controlResponse.innerHTML))
-            controlParent.replaceChild(controlResponse, control);
-        }
-        if (minigraph) {
-          window.requestAnimationFrame(refreshGraph);
-          var minigraphResponse = xhr.responseXML.getElementById("minigraph");
-          minigraph = minigraphResponse;
-        }
-
-        function refreshGraph(timestamp) {
-          var minigraph = document.getElementById("minigraph");
-          var routerdown = document.getElementById("down");
+          if (internals) {
+            var internalsParent = internals.parentNode;
+            if (!Object.is(internals.innerHTML, internalsResponse.innerHTML))
+              internalsParent.replaceChild(internalsResponse, internals);
+          }
+          if (general) {
+            var generalParent = general.parentNode;
+            if (!Object.is(general.innerHTML, generalResponse.innerHTML))
+              generalParent.replaceChild(generalResponse, general);
+          }
+          if (shortgeneral) {
+            var shortgeneralParent = shortgeneral.parentNode;
+            if (!Object.is(shortgeneral.innerHTML, shortgeneralResponse.innerHTML))
+              shortgeneralParent.replaceChild(shortgeneralResponse, shortgeneral);
+          }
+          if (advgeneral) {
+            var advgeneralParent = advgeneral.parentNode;
+            if (!Object.is(advgeneral.innerHTML, advgeneralResponse.innerHTML))
+              advgeneralParent.replaceChild(advgeneralResponse, advgeneral);
+          }
+          if (netstatus) {
+            if (!Object.is(netstatus.innerHTML, netstatusResponse.innerHTML))
+              netstatus.innerHTML = netstatusResponse.innerHTML;
+          }
+          if (updatesection || updatesectionResponse) {
+            var updatesectionParent = updatesection.parentNode;
+            if (!Object.is(updatesection.innerHTML, updatesectionResponse.innerHTML)) {
+              if (updatesection.classList.contains("hide"))
+                updatesection.classList.remove("hide");
+              updatesectionParent.replaceChild(updatesectionResponse, updatesection);
+            }
+          }
+          if (updatestatus) {
+            var updatestatusParent = updatestatus.parentNode;
+            if (!Object.is(updatestatus.innerHTML, updatestatusResponse.innerHTML))
+              updatestatusParent.replaceChild(updatestatusResponse, updatestatus);
+          }
+          if (notify) {
+            var notifyParent = notify.parentNode;
+            if (!Object.is(notify.innerHTML, notifyResponse.innerHTML) || notifyResponse) {
+              if (notify.classList.contains("hide"))
+                notify.classList.remove("hide");
+              notifyParent.replaceChild(notifyResponse, notify);
+            }
+          }
+          if (peers) {
+            var peersParent = peers.parentNode;
+            if (!Object.is(peers.innerHTML, peersResponse.innerHTML))
+              peersParent.replaceChild(peersResponse, peers);
+          }
+          if (advpeers) {
+            var advpeersParent = advpeers.parentNode;
+            if (!Object.is(advpeers.innerHTML, advpeersResponse.innerHTML))
+              advpeersParent.replaceChild(advpeersResponse, advpeers);
+          }
+          if (bandwidth) {
+            var bandwidthParent = bandwidth.parentNode;
+            if (!Object.is(bandwidth.innerHTML, bandwidthResponse.innerHTML))
+              bandwidthParent.replaceChild(bandwidthResponse, bandwidth);
+          }
+          if (minigraph && minigraphResponse) {
+            var graphstatsParent = graphstats.parentNode;
+            graphstatsParent.replaceChild(graphstatsResponse, graphstats);
+          }
+          if (ram) {
+            var ramParent = ram.parentNode;
+            if (!Object.is(ram.innerHTML, ramResponse.innerHTML))
+              bandwidthParent.replaceChild(ramResponse, ram);
+          }
+          if (clock) {
+            var clockParent = clock.parentNode;
+            if (!Object.is(clock.innerHTML, clockResponse.innerHTML))
+              clockParent.replaceChild(clockResponse, clock);
+          }
+          if (tunnels) {
+            var tunnelsParent = tunnels.parentNode;
+            if (!Object.is(tunnels.innerHTML, tunnelsResponse.innerHTML))
+              tunnelsParent.replaceChild(tunnelsResponse, tunnels);
+          }
+          if (queue) {
+            var queueParent = queue.parentNode;
+            if (!Object.is(queue.innerHTML, queueResponse.innerHTML))
+              queueParent.replaceChild(queueResponse, queue);
+          }
+          if (tunnelstatus) {
+            var tunnelstatusParent = tunnelstatus.parentNode;
+            if (!Object.is(tunnelstatus.innerHTML, tunnelstatusResponse.innerHTML))
+              if (tunnelstatusParent != null)
+                tunnelstatusParent.replaceChild(tunnelstatusResponse, tunnelstatus);
+              else
+                tunnelstatus.innerHTML = tunnelstatusResponse.innerHTML;
+          }
+          if (shutdownstatus) {
+            var shutdownstatusParent = shutdownstatus.parentNode;
+            if (!Object.is(shutdownstatus.innerHTML, shutdownstatusResponse.innerHTML))
+              shutdownstatusParent.replaceChild(shutdownstatusResponse, shutdownstatus);
+            else if (typeof shutdownstatusResponse === "undefined")
+              shutdownstatus.remove();
+          }
+          if (localtunnels) {
+            if (!Object.is(localtunnels.innerHTML, localtunnelsResponse.innerHTML))
+              localtunnels.innerHTML = localtunnelsResponse.innerHTML;
+          }
+          if (control) {
+            var controlParent = control.parentNode;
+            var controlResponse = xhr.responseXML.getElementById("sb_routerControl");
+            if (!Object.is(control.innerHTML, controlResponse.innerHTML))
+              controlParent.replaceChild(controlResponse, control);
+          }
           if (minigraph) {
-            const ctx = minigraph.getContext("2d");
-            const image = new Image(245, 50);
-            image.onload = renderGraph;
-            image.src = "/viewstat.jsp?stat=bw.combined&periodCount=20&width=250&height=50&hideLegend=true&hideGrid=true&hideTitle=true&t=" + new Date().getTime();
-            ctx.globalCompositeOperation = "copy";
-            ctx.globalAlpha = 1;
+            window.requestAnimationFrame(refreshGraph);
+            var minigraphResponse = xhr.responseXML.getElementById("minigraph");
+            minigraph = minigraphResponse;
+          }
 
-            function renderGraph() {
-              minigraph.width = 245;
-              minigraph.height = 50;
-              ctx.drawImage(this, 0, 0, 245, 50);
+          function refreshGraph(timestamp) {
+            var minigraph = document.getElementById("minigraph");
+            var routerdown = document.getElementById("down");
+            if (minigraph) {
+              const ctx = minigraph.getContext("2d");
+              const image = new Image(245, 50);
+              image.onload = renderGraph;
+              image.src = "/viewstat.jsp?stat=bw.combined&periodCount=20&width=250&height=50&hideLegend=true&hideGrid=true&hideTitle=true&t=" + new Date().getTime();
+              ctx.globalCompositeOperation = "copy";
+              ctx.globalAlpha = 1;
+
+              function renderGraph() {
+                minigraph.width = 245;
+                minigraph.height = 50;
+                ctx.drawImage(this, 0, 0, 245, 50);
+              }
             }
           }
         }
