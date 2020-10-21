@@ -28,7 +28,7 @@ public class BaseBean
 
     private static final String RC_PROP_THEME_NAME = "routerconsole.theme";
     private static final String PROP_THEME_NAME = "theme";
-    private static final String DEFAULT_THEME = "light";
+    private static final String DEFAULT_THEME = "dark";
     private static final String BASE_THEME_PATH = "/themes/susidns/";
     /** From CSSHelper */
     private static final String PROP_DISABLE_OLD = "routerconsole.disableOldThemes";

@@ -84,7 +84,7 @@ public class IndexBean {
     private static final Map<Integer, SessionKey> _formKeys = new HashMap<Integer, SessionKey>();
 
     private static final String PROP_THEME_NAME = "routerconsole.theme";
-    private static final String DEFAULT_THEME = "light";
+    private static final String DEFAULT_THEME = "dark";
     /** From CSSHelper */
     private static final String PROP_DISABLE_OLD = "routerconsole.disableOldThemes";
     private static final boolean DEFAULT_DISABLE_OLD = false;

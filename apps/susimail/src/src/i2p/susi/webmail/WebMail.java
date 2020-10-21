@@ -254,7 +254,7 @@ public class WebMail extends HttpServlet
     private static final String RC_PROP_UNIVERSAL_THEMING = "routerconsole.universal.theme";
     private static final String RC_PROP_FORCE_MOBILE_CONSOLE = "routerconsole.forceMobileConsole";
     private static final String CONFIG_THEME = "theme";
-    private static final String DEFAULT_THEME = "light";
+    private static final String DEFAULT_THEME = "dark";
     /** From CSSHelper */
     private static final String PROP_DISABLE_OLD = "routerconsole.disableOldThemes";
     private static final boolean DEFAULT_DISABLE_OLD = false;
