@@ -5,6 +5,9 @@
 
 body, html {
   min-height: 100%;
+  background: #000;
+  background: repeating-linear-gradient(to bottom, rgba(0,0,0,0.3), rgba(0,16,0,0.5) 1px, rgba(0,16,0,0.5) 2px), url(/themes/console/dark/images/camotile2.png) top left fixed #010;
+  background: repeating-linear-gradient(to right, rgba(0,80,0,.1) 1px, rgba(0,16,0,.3) 2px, rgba(0,16,0,.3) 3px), linear-gradient(to bottom, rgba(0,0,0,.5), rgba(0,0,0,.5)), repeating-linear-gradient(to bottom, rgba(0,0,0,.6) 1px, rgba(0,32,0,.3) 2px, rgba(0,32,0,.3) 3px), url(/themes/console/dark/images/camotile.png) #010 !important;
 }
 
 html {
@@ -16,16 +19,20 @@ html:hover {
   transition: ease scrollbar-color .1s;
 }
 
+body, input, input[type="submit"], input[type="reset"], .fakebutton, #hostNotes td:last-child, #hostNotes textarea {
+  font-family: Droid Sans, Open Sans, Noto Sans, Ubuntu, Bitstream Vera Sans, Lucida Grande, DejaVu Sans, Segoe UI, Verdana, Helvetica, sans-serif;
+}
+
+textarea, #helpconfig li b, .destaddress {
+  font-family: Droid Sans Mono, Noto Mono, Lucida Console, DejaVu Sans Mono, monospace;
+}
+
 body {
-  font-family: "Droid Sans", "Open Sans", "Noto Sans", Ubuntu, "Bitstream Vera Sans", "Lucida Grande", "DejaVu Sans", "Segoe UI", Verdana, Helvetica, sans-serif;
-  line-height: 120%;
-  background: #000;
-  background: repeating-linear-gradient(to bottom, rgba(0,0,0,0.3), rgba(0,16,0,0.5) 1px, rgba(0,16,0,0.5) 2px), url(/themes/console/dark/images/camotile2.png) top left fixed #010;
-  background: repeating-linear-gradient(to right, rgba(0,80,0,.1) 1px, rgba(0,16,0,.3) 2px, rgba(0,16,0,.3) 3px), linear-gradient(to bottom, rgba(0,0,0,.5), rgba(0,0,0,.5)), repeating-linear-gradient(to bottom, rgba(0,0,0,.6) 1px, rgba(0,32,0,.3) 2px, rgba(0,32,0,.3) 3px), url(/themes/console/dark/images/camotile.png) #010 !important;
-  color: #ee9;
-  padding-top: 5px;
   margin: 0 10px;
+  padding-top: 5px;
   min-width: 650px;
+  line-height: 120%;
+  color: #ee9;
 }
 
 body.iframed {
@@ -334,14 +341,14 @@ h3 {
 }
 
 #content {
-  padding-bottom: 10px;
+  padding: 10px 10px 20px;
 }
 
 #content h3 {
-  border: 1px solid #242;
   padding-left: 34px;
   letter-spacing: 0.12em;
   word-spacing: 0.1em;
+  border: 1px solid #242;
   background: url(/themes/console/images/info/question.png) 8px center no-repeat #000;
   background: url(/themes/console/images/info/question.png) 8px center no-repeat, linear-gradient(to bottom, rgba(0,0,0,0) 50%, #000 50%), repeating-linear-gradient(to right, rgba(0,0,0,0.5) 1px, rgba(0,16,0,0.5) 2px, rgba(0,16,0,0.5) 3px), linear-gradient(to bottom, #004000, #000 75%);
   background-size: 18px 18px, 100% 100%;
@@ -356,9 +363,9 @@ h3 {
 }
 
 #content p {
+  margin-bottom: 8px;
   line-height: 160%;
   font-size: 110%;
-  margin-bottom: 8px;
 }
 
 .headline h3:first-child + h4 {
@@ -371,11 +378,10 @@ h3 {
 }
 
 div#messages {
-/*  margin: -16px 0 25px !important;*/
   padding: 18px 20px 20px;
+  width: calc(100% - 66px);
   position: absolute;
   top: 0;
-  width: calc(100% - 66px);
   z-index: 999;
   line-height: 120%;
   font-weight: bold;
@@ -391,12 +397,11 @@ div#messages:hover {
 }
 
 #messages p {
-  padding: 15px 15px 15px 50px !important;
-  background: url(/themes/console/dark/images/infohelp.png) 6px center no-repeat;
-  color: #ee9;
-  padding: 5px 5px 10px;
   margin: 0;
+  padding: 15px 15px 15px 50px !important;
+  color: #ee9;
   border-radius: 0;
+  background: url(/themes/console/dark/images/infohelp.png) 6px center no-repeat;
 }
 
 #messages + p, p.book {
@@ -411,9 +416,9 @@ div#messages:hover {
 }
 
 p#filtered {
+  margin: -27px 0 10px;
   padding: 12px 10px 8px 20px;
   font-size: 10pt;
-  margin: -27px 0 10px;
 }
 
 div#book p, p.messages {
@@ -434,9 +439,9 @@ div#book p, p.messages {
 }
 
 .book td:nth-child(3) {
+  padding: 2px 25px 2px 0 !important;
   text-align: center;
   width: 20px;
-  padding: 2px 25px 2px 0 !important;
 }
 
 h4 {
@@ -474,17 +479,17 @@ a:active {
 }
 
 th {
-  color: #ee9;
-  font-size: 9pt;
   padding: 5px 10px;
   text-align: left;
+  color: #ee9;
+  font-size: 9pt;
 }
 
 td {
-  color: #ee9;
   padding: 5px;
-  font-size: 9pt;
   vertical-align: middle;
+  color: #ee9;
+  font-size: 9pt;
 }
 
 td.checkbox {
@@ -643,7 +648,6 @@ li {
 }
 
 #helpconfig li b {
-  font-family: "Droid Sans Mono", "Noto Mono", "Lucida Console", monospace;
   color: #990;
 }
 
@@ -935,13 +939,6 @@ div#add, div#import {
   margin-top: 18px !important;
 }
 
-input[type="submit"]:hover, input[type="reset"]:hover, input[type="submit"]:focus, input[type="reset"]:focus, .fakebutton:hover, #fakebutton:focus {
-  background: #000;
-  color: #f60;
-  border: 1px solid #f60;
-  box-shadow: inset 0 0 0 1px #000, inset 0 0 2px 1px rgba(255,86,0,0.8), inset 0 0 0 3px #000 !important;
-}
-
 #add input[type="text"], #import input[type="file"] {
   width: calc(100% - 2px);
 }
@@ -973,33 +970,54 @@ input[type="submit"]::-moz-focus-inner, input[type="reset"]::-moz-focus-inner {
 }
 
 input {
-  font-size: 9pt;
-  font-weight: bold;
-  text-align: left;
-  padding: 5px !important;
-  border-radius: 2px;
-  border: 1px solid #252;
-  background: #000 none !important;
-  color: #494;
   margin: 2px 4px 2px 0;
-  font: bold 8pt "Droid Sans", "Open Sans", "Noto Sans", Ubuntu, "Bitstream Vera Sans", "Lucida Grande", "DejaVu Sans", "Segoe UI", Verdana, Helvetica, sans-serif;
+  padding: 5px !important;
   min-width: 64px !important;
+  text-align: left;
+  font-size: 8.5pt;
+  color: #494;
+  border: 1px solid #252;
+  border-radius: 2px;
+  background: none;
 }
 
-input[type="submit"], input[type="reset"], .fakebutton {
+input[type="file"] {
+  cursor: pointer;
+}
+
+input[type="submit"], input[type="reset"], .fakebutton, input[type=file]::file-selector-button {
   margin: 5px 2px;
   padding: 7px 12px !important;
   min-width: 92px !important;
-  font: bold 8.5pt "Droid Sans", "Open Sans", "Noto Sans", Ubuntu, "Bitstream Vera Sans", "Lucida Grande", "DejaVu Sans", "Segoe UI", Verdana, Helvetica, sans-serif;
   text-align: center;
+  font-weight: bold;
   color: #494;
   border-radius: 2px;
-  background: #000;
-  cursor: pointer;
-  box-shadow: inset 0 0 0 1px #151, inset 0 0 0 2px #000, inset 0 0 2px 2px #040, inset 0 0 0 3px #000, 0 0 0 1px rgba(0,16,0,.2);
   border: 1px solid #000;
   border-radius: 2px;
+  box-shadow: inset 0 0 0 1px #151, inset 0 0 0 2px #000, inset 0 0 2px 2px #040, inset 0 0 0 3px #000, 0 0 0 1px rgba(0,16,0,.2);
+  background: #000;
   background: linear-gradient(to bottom, #001000, #000 5%, #000 95%, #001000);
+  cursor: pointer;
+}
+
+input[type="submit"]:hover, input[type="reset"]:hover,
+input[type="submit"]:focus, input[type="reset"]:focus,
+.fakebutton:hover, #fakebutton:focus,
+input[type=file]:hover::file-selector-button, input[type=file]:focus::file-selector-button {
+  color: #f60;
+  border: 1px solid #f60;
+  box-shadow: inset 0 0 0 1px #000, inset 0 0 2px 1px rgba(255,86,0,0.8), inset 0 0 0 3px #000 !important;
+  background: #000;
+}
+
+input[type=submit]:active, input[type=reset]:active, .fakebutton:active, input[type=file]:active::file-selector-button {
+  color: #ee9 !important;
+  text-shadow: 0 1px 1px #000;
+  border: 1px solid #f60;
+  box-shadow: inset 0 0 0 1px #000, inset 3px 3px 3px 2px #310 !important;
+  background: #f60 !important;
+  filter: none;
 }
 
 input.update {
@@ -1012,15 +1030,6 @@ input.update {
 
 input[type="submit"]:last-of-type, input[type="reset"]:last-of-type {
   margin-right: 5px;
-}
-
-input[type=submit]:active, input[type=reset]:active, .fakebutton:active {
-  color: #ee9 !important;
-  border: 1px solid #f60;
-  box-shadow: inset 0 0 0 1px #000, inset 3px 3px 3px 2px #310 !important;
-  text-shadow: 0 1px 1px #000;
-  background: #f60 !important;
-  filter: none;
 }
 
 input[type="text"] {
@@ -1047,14 +1056,15 @@ input[type="text"] {
 }
 
 textarea {
-  color: #bb7;
-  border: 1px solid #242;
   padding: 3px 5px;
-  font: bold 8.5pt "Droid Sans Mono", "Noto Mono", "Lucida Console", "DejaVu Sans Mono", monospace;
-  border-radius: 2px;
   width: 100%;
   height: 120px;
   line-height: 140%;
+  color: #bb7;
+  font-weight: bold;
+  font-size: 8.5pt;
+  border: 1px solid #242;
+  border-radius: 2px;
   resize: none;
 }
 
@@ -1066,9 +1076,9 @@ textarea[cols="70"] {
 input:focus, #add textarea:focus {
   color: #ee9;
   background: #000 !important;
+  outline: none;
   filter: drop-shadow(0 0 1px #880);
   transition: ease filter 0.3s;
-  outline: none;
 }
 
 textarea:focus {
@@ -1129,13 +1139,9 @@ p#filtered {
 }
 
 @media screen and (min-width: 1500px) {
-/*p#filtered {
-  padding-top: 9px !important;
-}*/
-
-input.export {
-  margin-right: 0 !important;
-}
+  input.export {
+    margin-right: 0 !important;
+  }
 }
 
 p.book {
@@ -1185,7 +1191,6 @@ p.book {
 
 #host_details .destaddress {
   margin-right: 5px;
-  font-family: "Droid Sans Mono", "Noto Mono", "Lucida Console", "DejaVu Sans Mono", monospace !important;
   word-break: break-all !important;
   white-space: normal !important;
   -moz-user-select: all;
@@ -1313,7 +1318,6 @@ p.book {
 
 #host_list .destaddress {
   white-space: nowrap;
-  font-family: "Droid Sans Mono", "Noto Mono", "Lucida Console", "DejaVu Sans Mono", monospace !important;
   font-weight: normal;
   padding: 3px 10px !important;
   -moz-user-select: all;
@@ -1553,24 +1557,17 @@ input[type="checkbox"][disabled]:checked, input[type="radio"][disabled]:checked,
 /* host notes */
 
 #host_details .destaddress {
-  font-family: "Droid Sans Mono", "Noto Mono", "Lucida Console", "DejaVu Sans Mono", monospace;
   word-break: break-all !important;
   white-space: normal !important;
 }
 
 #hostNotes td:last-child {
   padding: 0 0 1px !important;
-  font-family: "Droid Sans", "Open Sans", "Noto Sans", Ubuntu, "Segoe UI", "Lucida Grande", "Bitstream Vera Sans", Verdana, sans-serif;
-/*  background: linear-gradient(to bottom, #fafaff 90px, rgba(220,220,255,0.3)), repeating-linear-gradient(135deg, rgba(255,255,255,0.5) 2px, rgba(221, 221, 255, 0.3) 3px, #fff 5px) #fafaff !important;*/
 }
 
 #hostNotes:hover td {
   background: transparent !important;
 }
-
-/*#hostNotes:hover td:first-child, #hostNotes:hover textarea {
-  background: #000 !important;
-}*/
 
 #hostNotes td:last-child input[type="submit"] {
   margin: 13px 10px 10px;
@@ -1586,13 +1583,12 @@ input[type="checkbox"][disabled]:checked, input[type="radio"][disabled]:checked,
   margin: 0;
   padding: 7px 8px !important;
   height: 72px !important;
-  font-family: "Droid Sans", "Open Sans", "Noto Sans", Ubuntu, "Segoe UI", "Lucida Grande", "Bitstream Vera Sans", Verdana, sans-serif;
   font-size: 9pt;
   font-weight: normal;
   border: none !important;
   border-radius: 0;
-  background: transparent !important;
   box-shadow: none;
+  background: transparent !important;
 }
 
 #hostNotes textarea:hover, #hostNotes textarea:focus {
@@ -1639,7 +1635,6 @@ p#filtered, #export {
 
 form[action="addressbook"] > p.buttons, #filter, #search, #visualid tr:last-child td, #buttons, #add p.buttons {
   box-shadow: inset 0 0 0 1px #000, inset 0 0 2px 1px #030 !important;
-/*  background: repeating-linear-gradient(to bottom, rgba(0,0,0,0.8), rgba(0,16,0,.5) 1px, rgba(0,16,0,.5) 2px), url(/themes/console/dark/images/camotile2.png) !important;*/
   background: repeating-linear-gradient(to right, rgba(0,0,0,.5) 1px, rgba(0,0,0,.5) 2px, rgba(0,16,0,.5) 3px), linear-gradient(to bottom, #020, #000 75%) !important;
 }
 
