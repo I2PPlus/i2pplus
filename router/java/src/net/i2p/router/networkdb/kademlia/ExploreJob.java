@@ -167,13 +167,13 @@ class ExploreJob extends SearchJob {
                 if (sess != null) {
                     if (sess.tag != null) {
                         if (_log.shouldInfo())
-                            _log.info("[Job " + getJobId() + "] Requesting AES reply from " + ident.calculateHash() + 
-                                      "\n* Session Key: " + sess.key + "\n* Tag: + sess.tag);
+                            _log.info("[Job " + getJobId() + "] Requesting AES reply from " + ident.calculateHash() +
+                                      "\n* Session Key: " + sess.key + "\n* Tag: " + sess.tag);
                         msg.setReplySession(sess.key, sess.tag);
                     } else {
                         if (_log.shouldInfo())
-                            _log.info("[Job " + getJobId() + "] Requesting AEAD reply from " + ident.calculateHash() + 
-                                      "\n* Session Key: " + sess.key + "\n* Tag: + sess.rtag);
+                            _log.info("[Job " + getJobId() + "] Requesting AEAD reply from " + ident.calculateHash() +
+                                      "\n* Session Key: " + sess.key + "\n* Tag: + " + sess.rtag);
                         msg.setReplySession(sess.key, sess.rtag);
                     }
                 } else {

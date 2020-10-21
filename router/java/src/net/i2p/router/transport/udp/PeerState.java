@@ -370,11 +370,11 @@ public class PeerState {
 
         _rto = INIT_RTO;
         _rtt = INIT_RTT;
-        if (rtt > 0)  
+        if (rtt > 0)
             recalculateTimeouts(rtt);
         else
             _rttDeviation = _rtt;
-            
+
         _inboundMessages = new HashMap<Long, InboundMessageState>(8);
         _outboundMessages = new CachedIteratorCollection<OutboundMessageState>();
         //_outboundQueue = new CoDelPriorityBlockingQueue(ctx, "UDP-PeerState", 32);
@@ -603,7 +603,7 @@ public class PeerState {
      *  A positive number means our clock is ahead of theirs.
      *  @param skew milliseconds, NOT adjusted for RTT.
      */
-    void adjustClockSkew(long skew) { 
+    void adjustClockSkew(long skew) {
         // the real one-way delay is much less than RTT / 2, due to ack delays,
         // so add a fudge factor
         long actualSkew = skew + CLOCK_SKEW_FUDGE - (_rtt / 2);
@@ -683,8 +683,8 @@ public class PeerState {
      * the previous second's ACKs be sent?
      */
     //public void remoteDoesNotWantPreviousACKs() { _remoteWantsPreviousACKs = false; }
-    
-    /** 
+
+    /**
      * Decrement the remaining bytes in the current period's window,
      * returning true if the full size can be decremented, false if it
      * cannot.  If it is not decremented, the window size remaining is
@@ -699,7 +699,7 @@ public class PeerState {
     /**
      *  Caller should synch
      */
-    private boolean allocateSendingBytes(int size, boolean isForACK, int messagePushCount, long now) { 
+    private boolean allocateSendingBytes(int size, boolean isForACK, int messagePushCount, long now) {
         long duration = now - _lastSendRefill;
         if (duration >= 1000) {
             _sendWindowBytesRemaining = _sendWindowBytes;
@@ -882,7 +882,7 @@ public class PeerState {
      * try to send them any messages (and don't receive any messages from them either)
      *
      */
-    int expireInboundMessages() { 
+    int expireInboundMessages() {
         int rv = 0;
 
         synchronized (_inboundMessages) {
@@ -1237,7 +1237,7 @@ public class PeerState {
                 adjustMTU();
             //}
         }
-        
+
         if (!anyPending) {
             if (_log.shouldLog(Log.DEBUG))
                 _log.debug(_remotePeer + " nothing pending, cancelling timer");
@@ -1327,7 +1327,7 @@ public class PeerState {
     }
 
     /** we are resending a packet, so lets jack up the rto */
-    synchronized void messageRetransmitted(int packets) { 
+    synchronized void messageRetransmitted(int packets) {
         _context.statManager().addRateData("udp.congestionOccurred", _sendWindowBytes);
         _context.statManager().addRateData("udp.congestedRTO", _rto, _rttDeviation);
         _packetsRetransmitted += packets;
@@ -1335,8 +1335,8 @@ public class PeerState {
         adjustMTU();
     }
 
-    synchronized void packetsTransmitted(int packets) { 
-        _packetsTransmitted += packets; 
+    synchronized void packetsTransmitted(int packets) {
+        _packetsTransmitted += packets;
     }
 
     /** how long does it usually take to get a message ACKed? */
@@ -1384,8 +1384,8 @@ public class PeerState {
     /**
      *  @param size not including IP header, UDP header, MAC or IV
      */
-    synchronized void packetReceived(int size) { 
-        _packetsReceived++; 
+    synchronized void packetReceived(int size) {
+        _packetsReceived++;
         int minMTU;
         if (_remoteIP.length == 4) {
             size += OVERHEAD_SIZE;
@@ -1692,7 +1692,7 @@ public class PeerState {
                 if (_retransmitTimer == 0)
                     _retransmitTimer = now + getRTO();
                 if (_log.shouldLog(Log.DEBUG))
-                    _log.debug([" + _remotePeer.toBase64().substring(0,6) + "] allocated " + rv.size() + " pushing retransmitter from " + old + " to " + _retransmitTimer);
+                    _log.debug("[" + _remotePeer.toBase64().substring(0,6) + "] allocated " + rv.size() + " pushing retransmitter from " + old + " to " + _retransmitTimer);
             }
         }
         return rv;
@@ -1736,11 +1736,11 @@ public class PeerState {
                             if (rv == null)
                                 _log.debug("Bandwidth limit reached: Nothing to send to [" + _remotePeer.toBase64().substring(0,6) + "] with " + _outboundMessages.size() +
                                            " bytes / " + _outboundQueue.size() + "bytes remaining");
-                            else 
-                               _log.debug([" + _remotePeer.toBase64().substring(0,6) + "] ran out of bandwidth, but managed to send " + rv.size() + " bytes");
+                            else
+                               _log.debug("[" + _remotePeer.toBase64().substring(0,6) + "] ran out of bandwidth, but managed to send " + rv.size() + " bytes");
                         }
                         return rv;
-                    } 
+                    }
                 }
                 return null;
             }
@@ -1777,7 +1777,7 @@ public class PeerState {
         }
         if ( rv == null && _log.shouldLog(Log.DEBUG))
             _log.debug("Nothing to send to [" + _remotePeer.toBase64().substring(0,6) + "] with " + _outboundMessages.size() +
-                       " bytes / " + _outboundQueue.size() + " bytes remaining in queue" + 
+                       " bytes / " + _outboundQueue.size() + " bytes remaining in queue" +
                        "\n* Retransmit in: " + (_retransmitTimer - _context.clock().now()) + "ms");
         return rv;
     }
@@ -1795,7 +1795,7 @@ public class PeerState {
         int rv = Integer.MAX_VALUE;
         if (_dead) return rv;
         synchronized(this) {
-            if (_retransmitTimer >= now) 
+            if (_retransmitTimer >= now)
                 return (int) (_retransmitTimer - now);
         }
         return rv;
@@ -1836,7 +1836,7 @@ public class PeerState {
             int size = state.getUnackedSize();
             if (allocateSendingBytes(size, state.getPushCount(), now)) {
                 if (_log.shouldLog(Log.DEBUG))
-                    _log.debug("Allocation of " + size + " bytes for [" + _remotePeer.toBase64()substring(0,6) + "] allowed with "
+                    _log.debug("Allocation of " + size + " bytes for [" + _remotePeer.toBase64().substring(0,6) + "] allowed with "
                               + getSendWindowBytesRemaining()
                               + "/" + getSendWindowBytes()
                               + " remaining"
@@ -1854,7 +1854,7 @@ public class PeerState {
                 //if (state.getMessage() != null)
                 //    state.getMessage().timestamp("send rejected, available=" + getSendWindowBytesRemaining());
                 if (_log.shouldLog(Log.DEBUG))
-                    _log.debug("Allocation of " + size + " bytes for [" + _remotePeer.toBase64()substring(0,6) + "] rejected with: wsize=" + getSendWindowBytes()
+                    _log.debug("Allocation of " + size + " bytes for [" + _remotePeer.toBase64().substring(0,6) + "] rejected with: wsize=" + getSendWindowBytes()
                               + " available=" + getSendWindowBytesRemaining()
                               + " for [MsgID" + state.getMessageId() + "]" + state);
                 //_throttle.choke(peer.getRemotePeer());
