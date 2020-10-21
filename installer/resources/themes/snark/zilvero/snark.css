@@ -291,6 +291,10 @@ th img {
 	background: #f0f0f0;
 }
 
+.snarkTorrentOdd, .snarkTorrentEven {
+	background: linear-gradient(to bottom, #fafafa, #e8e8e8);
+}
+
 .snarkTorrentInfo td {
 	padding-top: 8px;
 	padding-bottom: 8px;
@@ -2172,7 +2176,11 @@ tr:not(.peerinfo) .snarkTorrentUploaded:empty::after {
 
 .peerclient {
 	padding-right: 0;
-	width: 111px;
+	width: 110px;
+}
+
+.peerclient tt {
+	margin: 0 3px 0 1px;
 }
 
 .clientid {
