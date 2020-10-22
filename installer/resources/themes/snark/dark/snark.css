@@ -1180,7 +1180,8 @@ tr:not(.peerinfo) .snarkTorrentUploaded:empty::after {
 }
 
 .peerinfo:hover td:first-child {
-  background: #030 url(images/peer.png) center center no-repeat !important;
+  background: #030 url(images/peer.svg) 9px center no-repeat !important;
+  background-size: 18px 18px !important;
 }
 
 tr:hover .percentBarText {
@@ -1253,18 +1254,6 @@ _:-ms-lang(x), .snarkTorrentOdd, .SnarkTorrentEven {
 
 .peerinfo, .debuginfo.snarkTorrentOdd, .debuginfo.snarkTorrentEven {
   background: linear-gradient(to right, #000800 70%, #000d00) !important;
-}
-
-@supports (-moz-appearance: none) {
-  .peerinfo {
-    box-shadow: inset 0 0 0 1px #000, inset 0 -1px 1px 1px #000, inset 0 -2px 1px 1px #000,
-                inset 0 -2px 1px 1px rgba(255,255,0,.2), inset 0 0 1px 1px rgba(255,255,0,.2) !important;
-  }
-
-  .debuginfo {
-    box-shadow: inset 0 0 0 1px #000, inset 0 -1px 1px 1px #000, inset 0 -2px 1px 1px #000,
-                inset 0 -2px 1px 1px rgba(64,96,255,.5), inset 0 0 1px 1px rgba(64,96,255,.5) !important;
-  }
 }
 
 .snarkTorrents tbody td, .debuginfo.snarkTorrentOdd td, .debuginfo.snarkTorrentEven td {
@@ -1387,7 +1376,7 @@ td.snarkFileStatus {
   animation: ease downloading .3s forwards;
 }
 
-.active:not(.peerinfo) .percentBarOuter {
+.active.downloading:not(.peerinfo) .percentBarOuter {
   background: repeating-linear-gradient(to right, rgba(0,0,0,0), rgba(0,0,0,0) 7px, rgba(0,16,0,.6) 7px, rgba(0,16,0,.6) 8px, rgba(0,0,0,0) 8px),
               linear-gradient(to left, rgba(0,255,0,.2), rgba(255,255,0,.2), rgba(255,0,0,.2)) #010;
 }
@@ -2675,7 +2664,8 @@ input:checked + .toggleview + hr + table, input:checked + .toggleview + hr + tab
 }
 
 .peerinfo td:first-child {
-  background: url(images/peer.png) center center no-repeat;
+  background: url(images/peer.svg) 9px center no-repeat;
+  background-size: 18px 18px !important;
 }
 
 .snarkTorrents .peerinfo td, .snarkTorrents .debuginfo td {
