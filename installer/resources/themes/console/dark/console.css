@@ -8052,11 +8052,11 @@ h4#sb_shutdownstatus span {
 
 .routersummary h4 a {
   width: auto !important;
-/*  vertical-align: middle;*/
   display: inline;
 }
 
 #sb_warning { /* check connection/firewall */
+  margin-bottom: 7px !important;
   padding: 6px 4px;
   background: #000;
   text-align: center;
@@ -8091,8 +8091,8 @@ h4#sb_shutdownstatus span {
 }
 
 .routersummary .firewalled, .tunnelBuildStatus {
-  box-shadow: inset 0 0 0 1px #000, inset 0 0 2px 1px #040;
   color: #bb7;
+  box-shadow: inset 0 0 0 1px #000, inset 0 0 2px 1px #040;
 }
 
 .routersummary .error, .tunnelBuildStatus.rejecting, #sb_warning {
@@ -8106,45 +8106,40 @@ h4#sb_shutdownstatus span {
 }
 
 .routersummary .testing, .tunnelBuildStatus.starting, #sb_localtunnels td[colspan="3"] {
-  box-shadow: inset 0 0 0 1px #000, inset 0 0 2px 1px #bb0, inset 0 0 0 3px #000;
   color: #aa3;
+  box-shadow: inset 0 0 0 1px #000, inset 0 0 2px 1px #bb0, inset 0 0 0 3px #000;
   background: repeating-linear-gradient(135deg, rgba(0,0,0,.5), rgba(0,0,0,.5) 10px, rgba(32,32,0,.5) 10px, rgba(32,32,0,.5) 20px) !important;
   background-size: 400% 400%;
-/*  animation: linear progress 60s 3s forwards;*/
 }
 
 .routersummary .hidden, .routersummary .vmcomm, .tunnelBuildStatus.hidden {
-  box-shadow: inset 0 0 0 1px #000, inset 0 0 2px 1px #777;
   color: #999;
+  box-shadow: inset 0 0 0 1px #000, inset 0 0 2px 1px #777;
 }
 
 .routersummary .running, .tunnelBuildStatus.active {
+  color: #dd8;
   box-shadow: inset 0 0 0 1px #000, inset 0 0 2px 1px #060;
   background: rgba(64,255,64,.02);
-  color: #dd8;
 }
 
-/*.tunnelBuildStatus.active, */#bandwidthTestRunning {
+#bandwidthTestRunning {
   background: repeating-linear-gradient(to right, rgba(0,0,0,.3), rgba(0,0,0,.3) 10px, rgba(0,32,0,.3) 10px, rgba(0,32,0,.3) 20px) #010;
   background-size: 400% 400%;
   animation: progress 120s 3s linear infinite both;
 }
 
 @keyframes progress {
-from {
-background-position: 200%
-}
-to {
-background-position: 0;
-}
+  from {background-position: 200%}
+  to {background-position: 0}
 }
 
 .sb_netstatus::before, .tunnelBuildStatus::before {
   margin: 0 4px 0 -4px;
   height: 16px;
   width: 16px;
-  vertical-align: middle;
   display: inline-block;
+  vertical-align: middle;
   content: "";
 }
 
@@ -8153,9 +8148,9 @@ background-position: 0;
 }
 
 @supports not (-moz-appearance: none) {
-.tunnelBuildStatus, .tunnelBuildStatus::before {
-   vertical-align: middle !important;
-}
+  .tunnelBuildStatus, .tunnelBuildStatus::before {
+    vertical-align: middle !important;
+  }
 }
 
 .sb_netstatus.error::before {

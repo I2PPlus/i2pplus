@@ -1237,22 +1237,18 @@ _:-ms-lang(x), .snarkTorrentOdd, .SnarkTorrentEven {
   background: linear-gradient(to bottom, #001400, #000600) !important;
 }
 
-/*.SnarkTorrentOdd tr:nth-child(odd) {
-  background: #001000;
-}*/
-
 .snarkTorrentOdd td, .snarkTorrentEven td {
   color: #bb7 !important;
 }
 
-tr + .peerinfo:nth-child(odd) {}
-
 .snarkDirInfo .snarkTorrentOdd {
   background: #000800 !important;
+  background: linear-gradient(to bottom, #001400, #000600) !important;
 }
 
 .snarkDirInfo .snarkTorrentEven {
-  background: #000100 !important;
+  background: #000180 !important;
+  background: linear-gradient(to bottom, #001400, #000600) !important;
 }
 
 .peerinfo, .debuginfo.snarkTorrentOdd, .debuginfo.snarkTorrentEven {
@@ -1386,7 +1382,7 @@ td.snarkFileStatus {
   opacity: .7;
 }
 
-.active .percentBarOuter, .volatile .percentBarOuter {
+.active.downloading .percentBarOuter, .snarkDirInfo .volatile .percentBarOuter {
   border: 1px solid #030;
   animation: ease downloading .3s forwards;
 }
@@ -1556,6 +1552,17 @@ audio, video {
   border: 1px solid #000;
   box-shadow: inset 0 0 0 1px #131;
   background: #000;
+}
+
+audio {
+  height: 28px;
+}
+
+.audioPreview {
+  padding: 0 4px;
+  white-space: nowrap;
+  border-radius: 3px;
+  background: #001800;
 }
 
 audio:hover, video:hover, audio:focus, video:focus {
