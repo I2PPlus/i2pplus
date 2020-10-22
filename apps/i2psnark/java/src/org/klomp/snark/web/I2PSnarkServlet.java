@@ -2106,7 +2106,7 @@ public class I2PSnarkServlet extends BasicServlet {
         } else if (snark.isStarting()) {
             statusString = toThemeImg("stalled", "", _t("Starting")) + "</td>\n" +
                            "<td class=\"snarkTorrentStatus\"><b class=\"alwaysShow\">" + _t("Starting") +
-                           "</b></td>\n<td class=\"snarkTorrentPeerCount\"><b>";
+                           "&hellip;</b></td>\n<td class=\"snarkTorrentPeerCount\"><b>";
                            snarkStatus = "active starting";
         } else if (remaining == 0 || needed == 0) {  // < 0 means no meta size yet
             // partial complete or seeding
@@ -4381,9 +4381,9 @@ public class I2PSnarkServlet extends BasicServlet {
                 URIUtil.encodePath(buf, addPaths(decodedBase,"../"));
                 buf.append("/").append(getQueryString(up));
                 buf.append("\">");
-                toThemeImg(buf, "up");
+                buf.append(toThemeSVG(up, "", ""));
                 buf.append(' ')
-                   .append(_t("Up to higher level directory"))
+                   .append(_t("Up to higher level directory").replace("Up to higher level", "Parent"))
                    .append("</a>");
             }
 
@@ -4484,8 +4484,7 @@ public class I2PSnarkServlet extends BasicServlet {
                 String ppath = complete ? path : path + "?limit=" + fai.preview;
                 if (!complete) {
                     double pct = fai.preview / (double) fai.length;
-                    preview = "<br>" + _t("Preview") + ": " +
-                              (new DecimalFormat("0.00%")).format(pct);
+                    preview = " &nbsp;<span class=\"audioPreview\">" + _t("Preview") + ": " + (new DecimalFormat("0.00%")).format(pct) + "</span>";
                 }
                 if (isAudio || isVideo) {
                     // scale up image thumbnails if directory also contains audio/video
