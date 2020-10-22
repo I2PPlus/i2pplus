@@ -7266,6 +7266,10 @@ font[color="#006600"] span {
 
 /* /tunnels */
 
+#tunnels .tab, #tunnels .tab2 {
+  min-width: 140px !important;
+}
+
 #tunnels td > * {
   vertical-align: middle;
 }
@@ -9858,7 +9862,6 @@ input[type="file"]:hover {
 }
 
 /* /peers */
-
 
 #peerdefs img {
   font-size: 0;

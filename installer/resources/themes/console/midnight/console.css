@@ -11814,6 +11814,10 @@ th .version {
 
 /* tunnels */
 
+#tunnels .tab, #tunnels .tab2 {
+  min-width: 140px !important;
+}
+
 #tunnels img {
   font-size: 0;
 }
