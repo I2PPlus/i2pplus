@@ -1373,34 +1373,27 @@ td.snarkFileStatus {
 
 .percentBarOuter {
   margin: 1px auto;
-  border: 1px solid #030;
-  border-bottom: 1px solid #020;
-  border-right: 1px solid #020;
+  border: 1px solid #020;
   border-radius: 1px;
-  box-shadow: 0 0 1px 1px rgba(0,0,0,.8), inset 0 0 0 1px #000, inset 0 0 2px 2px rgba(0,16,0,.7);
-  background: #000;
-  background: repeating-linear-gradient(135deg, #000 1px, #000 5px, #010 6px, #010 11px);
+  box-shadow: 0 0 1px 1px rgba(0,0,0,.8), inset 0 0 0 1px #000, inset 0 2px 2px 2px rgba(0,0,0,.7);
+  background: repeating-linear-gradient(to right, rgba(0,0,0,0), rgba(0,0,0,0) 7px, rgba(0,32,0,.6) 7px, rgba(0,32,0,.6) 8px, rgba(0,0,0,0) 8px) #010;
   background-size: 400% 400%;
   opacity: 1;
 }
 
-.active .percentBarOuter {
-  animation: progress 60s linear infinite both;
+.peerinfo.inactive .percentBarOuter {
+  background: #000;
+  opacity: .7;
 }
 
-.active.downloading .percentBarOuter {
-  border-right: 1px solid #020;
-  background: repeating-linear-gradient(135deg, #000 1px, #000 5px, #001800 6px, #001800 11px);
-  background-size: 400% 400%;
-  animation: progress 60s linear infinite both;
+.active .percentBarOuter, .volatile .percentBarOuter {
+  border: 1px solid #030;
+  animation: ease downloading .3s forwards;
 }
 
-.inactive:not(.peerinfo) .percentBarOuter {
-  border: 1px solid #333;
-  border-bottom: 1px solid #222;
-  border-right: 1px solid #222;
-  box-shadow: 0 0 1px 1px rgba(0,0,0,.8), inset 0 0 0 1px #000, inset 0 0 2px 2px rgba(0,0,0,.7);
-  background: repeating-linear-gradient(135deg, #000 1px, #000 5px, #111 6px, #111 11px);
+.active:not(.peerinfo) .percentBarOuter {
+  background: repeating-linear-gradient(to right, rgba(0,0,0,0), rgba(0,0,0,0) 7px, rgba(0,16,0,.6) 7px, rgba(0,16,0,.6) 8px, rgba(0,0,0,0) 8px),
+              linear-gradient(to left, rgba(0,255,0,.2), rgba(255,255,0,.2), rgba(255,0,0,.2)) #010;
 }
 
 .percentBarInner {
@@ -1409,28 +1402,26 @@ td.snarkFileStatus {
   border-radius: 1px;
   box-shadow: inset 0 0 0 1px #000;
   background: #0e5f00;
-  background: linear-gradient(to bottom, rgba(28, 148, 58, .6) 0%, rgba(9, 47, 16, .6) 50%, rgba(13, 39, 7, .6) 50%, rgba(9, 27, 5, .6) 50%, rgba(9, 21, 3, .6) 100%);
+  background: #020;
+  background: linear-gradient(to bottom, rgba(148, 148, 148, .2) 0%, rgba(47, 47, 47, .2) 50%, rgba(39, 39, 39, .2) 50%, rgba(27, 27, 27, .2) 50%, rgba(21, 21, 21, .2) 100%), #020;
 }
 
-.active .percentBarInner {
-  background: linear-gradient(to bottom, rgba(148, 148, 58, .6) 0%, rgba(47, 47, 16, .6) 50%, rgba(39, 39, 7, .6) 50%, rgba(27, 27, 5, .6) 50%, rgba(21, 21, 3, .6) 100%);
+.peerinfo.inactive .percentBarInner {
+  background: #020;
 }
 
-.inactive:not(.peerinfo) .percentBarInner {
-  border-right: 1px solid #222;
-  background: linear-gradient(to bottom, rgba(148, 148, 148, .6) 0%, rgba(47, 47, 47, .6) 50%, rgba(39, 39, 39, .6) 50%, rgba(27, 27, 27, .6) 50%, rgba(21, 21, 21, .6) 100%);
-}
-
-.peerinfo .percentBarInner, .peerinfo.active .percentBarInner {
-  border-right: 1px solid #020;
-  background: linear-gradient(to bottom, rgba(0, 148, 0, .6) 0%, rgba(0, 47, 0, .6) 50%, rgba(0, 39, 0, .6) 50%, rgba(0, 27, 0, .6) 50%, rgba(0, 21, 0, .6) 100%);
+.active.downloading .percentBarInner {
+  background: linear-gradient(to bottom, rgba(148, 148, 148, .4) 0%, rgba(47, 47, 47, .4) 50%, rgba(39, 39, 39, .4) 50%, rgba(27, 27, 27, .4) 50%, rgba(21, 21, 21, .4) 100%),
+              repeating-linear-gradient(135deg, rgba(0,32,0,.8) 1px, rgba(0,32,0,.8) 5px, rgba(0,64,0,.8) 6px, rgba(0,64,0,.8) 11px);
+  background-size: 200% 200%;
+  animation: progress .7s linear forwards;
 }
 
 .percentBarText, .percentBarOuter {
   width: 110px;
-  text-align: center;
-  vertical-align: middle;
   display: inline-block;
+  vertical-align: middle;
+  text-align: center;
 }
 
 .snarkDirInfo .percentBarOuter {
@@ -1438,8 +1429,12 @@ td.snarkFileStatus {
 }
 
 @keyframes progress {
-  from {background-position: 0}
-  to {background-position: 200%}
+  from {background-position: left center}
+  to {background-position: right center}
+}
+
+@keyframes downloading {
+  from {border: 1px solid #050;}
 }
 
 .snarkDirInfo .percentBarText, .snarkDirInfo .percentBarOuter, .peerinfo .percentBarText, .peerinfo .percentBarOuter {
