@@ -1192,9 +1192,9 @@ class SummaryBarRenderer {
            .append("\">" +
                    "<td align=\"left\"><b>")
            .append(_t("Backlog"))
-           .append("</b></td><td class=\"digits\" align=\"right\">")
+           .append("</b></td><td class=\"digits\" align=\"right\"><span class=\"warntext\">")
            .append(_helper.getInboundBacklog())
-           .append("</td></tr>\n");
+           .append("</span></td></tr>\n");
         }
         buf.append("</table>\n");
         return buf.toString();
