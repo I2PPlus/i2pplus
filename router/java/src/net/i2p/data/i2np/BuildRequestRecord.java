@@ -563,7 +563,7 @@ public class BuildRequestRecord {
            .append("\n* Reply key: ").append(readReplyKey())
            .append("\n* Reply IV: ").append(Base64.encode(readReplyIV()))
            .append("\n* Reply MsgID: ").append(readReplyMessageId())
-           .append("\n* Time: ").append(new Date(readRequestTime())
+           .append("\n* Time: ").append(new Date(readRequestTime()))
            .append("\n* Expires in: ").append(DataHelper.formatDuration(readExpiration()));
         if (_isEC) {
             buf.append("\n* Options: ").append(readOptions());
