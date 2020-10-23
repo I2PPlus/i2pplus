@@ -608,6 +608,11 @@ td.snarkTorrentPeerCount:empty {
 .snarkTrackerDetails img {
   max-width: 16px;
   max-height: 16px;
+  opacity: .7;
+}
+
+tr:hover .snarkTrackerDetails img {
+  opacity: 1;
 }
 
 .snarkDirInfo td:first-child img {
