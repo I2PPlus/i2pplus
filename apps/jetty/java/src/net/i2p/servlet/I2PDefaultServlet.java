@@ -207,7 +207,7 @@ public class I2PDefaultServlet extends DefaultServlet
                              "h1 {margin: -1px -1px 0; padding: 5px 8px; font-size: 14pt; background: #f2f2f2; " +
                              "border: 1px solid #ddd}\n" +
                              "#dirlist a {text-decoration: none; outline: none; color: #b33}\n" +
-                             "#dirlist td a {width: 100%; display: inline-block; font-weight: 600}" +
+                             "#dirlist td a {width: 100%; display: inline-block; font-weight: 600}\n" +
                              "#dirlist a:visited {color: #700}\n" +
                              "#dirlist a:hover, #dirlist a:focus {color: #d30}\n" +
                              "</style>\n";
