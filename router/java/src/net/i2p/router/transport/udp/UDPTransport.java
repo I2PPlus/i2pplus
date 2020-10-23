@@ -349,7 +349,7 @@ public class UDPTransport extends TransportImpl implements TimedWeightedPriority
     }
 
     /**
-     * @returns the instance of OutboundMessageFragments
+     * @return the instance of OutboundMessageFragments
      * @since 0.9.48
      */
     OutboundMessageFragments getOMF() {

@@ -6,7 +6,7 @@ html {
 	margin: 2.5% auto;
 	min-width: 500px;
 	max-width: 1200px;
-	font-family: sans-serif;
+	font-family: Open Sans, Segoe UI, sans-serif;
 	font-size: 10.5pt;
 	color: #eee;
 	border: 1px solid #333;
@@ -183,6 +183,10 @@ td.lastmodified, td.size {
 }
 
 /* filetype icons */
+
+#dirlist td.name a {
+	font-weight: 600 !important;
+}
 
 td.name a {
 	padding: 4px 0 4px 25px;
