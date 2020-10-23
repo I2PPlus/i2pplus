@@ -637,6 +637,11 @@ th.snarkTorrentStatus {
   margin: 0 !important;
 }
 
+.snarkTrackerDetails img {
+  width: 16px;
+  height: 16px;
+}
+
 .snarkDirInfo td:first-child img:not(.thumb) {
   margin: 0 2px !important;
 }
