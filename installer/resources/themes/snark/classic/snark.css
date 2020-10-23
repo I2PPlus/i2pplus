@@ -3716,7 +3716,8 @@ td.snarkTorrentPeerCount, .nopeers td.snarkTorrentPeerCount {
 }
 
 .snarkTrackerDetails img {
-  max-height: 16px;
+  height: 16px;
+  width: 16px;
 }
 
 #torrentDisplay {

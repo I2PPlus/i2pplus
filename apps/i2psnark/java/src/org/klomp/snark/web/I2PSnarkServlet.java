@@ -2769,7 +2769,7 @@ public class I2PSnarkServlet extends BasicServlet {
         if (linkUrl != null) {
             StringBuilder buf = new StringBuilder(128);
             buf.append(linkUrl);
-            toThemeImg(buf, "details", _t("Info"), "");
+            buf.append(toThemeSVG("details", _t("Info"), ""));
             buf.append("</a>");
             return buf.toString();
         }

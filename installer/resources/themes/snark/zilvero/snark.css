@@ -1521,7 +1521,12 @@ tr:hover td.snarkTorrentRateDown, tr:hover td.snarkTorrentAction {
 }
 
 .snarkTrackerDetails img {
-	filter: saturate(0);
+	width: 16px;
+	height: 16px;
+}
+
+tr:hover .snarkTrackerDetails img {
+	filter: saturate(2) brightness(1.6);
 }
 
 #bwHoverHelp img {
