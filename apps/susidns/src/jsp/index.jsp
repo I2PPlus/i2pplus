@@ -52,7 +52,7 @@
 <script type="text/javascript" src="/js/iframeResizer/iframeResizer.contentWindow.js?<%=net.i2p.CoreVersion.VERSION%>"></script>
 </head>
 <body id="ovrvw">
-<style type="text/css">body{opacity: 0;}</style>
+<style type="text/css">body{opacity:0}</style>
 <div class="page">
 <div id="navi">
 <a class="abook router" href="addressbook?book=router&amp;filter=none"><%=intl._t("Router")%></a>&nbsp;

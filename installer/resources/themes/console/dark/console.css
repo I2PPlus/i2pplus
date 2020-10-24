@@ -8194,10 +8194,11 @@ h4#sb_shutdownstatus span {
 }
 
 .tunnelBuildStatus::before {
-  margin: 3px 5px 0 0;
+  margin: 0 5px 0 0;
   width: 9px;
   height: 9px;
   display: inline-block;
+  vertical-align: middle;
   border-radius: 50%;
   content: "";
 }
