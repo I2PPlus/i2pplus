@@ -66,11 +66,21 @@ Note that if the number of connections is 1 (e.g. <i class="example">1/60</i>), 
 
 <p>The <i class="example">default</i> threshold applies to any remote destination not explicitly listed in the definition or in any of the referenced files. To set a default threshold use the keyword <i class="example">default</i>.</p>
 
-<p>The following threshold definition <i class="example">15/5</i> specifies that the same remote destination is allowed to make 14 connection attempts during a 5 second period. If it makes one more attempt within the same period, the threshold will be breached.</p>
+<p>The following threshold definition <i class="example">15/5</i> specifies that the same remote destination is allowed to make 14 connection attempts during a 5 second period. If it makes one more attempt within the same period, the threshold will be breached. Note that there can only be a single reference to <i>default</i> in a filter file. If unstated, all connections are permitted unless explicitly forbidden.</p>
 
 <code>
-15/5 default<br>
-allow default<br>
+15/5 default
+</code>
+
+<p>To allow all unspecified client destinations:</p>
+
+<code>
+allow default
+</code>
+
+<p>Or to deny all unspecified destinations:</p>
+
+<code>
 deny default
 </code>
 
