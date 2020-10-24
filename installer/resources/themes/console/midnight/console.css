@@ -12492,7 +12492,7 @@ html, body {
   padding-left: 28px;
   letter-spacing: 0.12em;
   font-size: 10.5pt;
-  border: 1px solid rgba(38, 35, 92,.7);
+  border: 1px solid #26235c;
   background: url(/themes/console/images/eepsite.png) 5px center no-repeat, linear-gradient(to bottom, #080818 50%, #000008 50%) !important;
   background-size: 18px 18px, 100% 100% !important;
 }

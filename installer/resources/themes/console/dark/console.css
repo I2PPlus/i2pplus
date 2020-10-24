@@ -7849,7 +7849,7 @@ p.sybilinfo.experimental {
 }
 
 #floodfillconfig tr:nth-child(2) td {
-  padding: 8px 10px 8px 18px;
+  padding: 12px 10px 12px 18px;
 }
 
 #floodfillconfig tr:nth-child(2) b {
@@ -12730,74 +12730,79 @@ h1[class], h1 {
 
 #configurationhelp h2, #advancedsettings h2, #filterlist h2 {
   padding-left: 38px;
-  background: url(/themes/console/images/info/configure.png) 8px center no-repeat, linear-gradient(to bottom, rgba(0,0,0,0) 50%, #000 50%), repeating-linear-gradient(to right, rgba(0,0,0,0.5) 1px, rgba(0,0,0,0.5) 2px, rgba(0,16,0,0.5) 3px), linear-gradient(to bottom, #005000, #000 75%) !important;
-  background-size: 24px 24px, 100% 100%, 100% 100%, 100% 100% !important;
+  background: url(/themes/console/images/info/configure.png) 10px center no-repeat, linear-gradient(to bottom, rgba(0,0,0,0) 50%, #000 50%), repeating-linear-gradient(to right, rgba(0,0,0,0.5) 1px, rgba(0,0,0,0.5) 2px, rgba(0,16,0,0.5) 3px), linear-gradient(to bottom, #005000, #000 75%) !important;
+  background-size: 20px 20px, 100% 100%, 100% 100%, 100% 100% !important;
 }
 
 #sidebarhelp h2, #reachabilityhelp h2 {
   padding-left: 38px;
-  background: url(/themes/console/images/info/sidebar.png) 8px center no-repeat, linear-gradient(to bottom, rgba(0,0,0,0) 50%, #000 50%), repeating-linear-gradient(to right, rgba(0,0,0,0.5) 1px, rgba(0,0,0,0.5) 2px, rgba(0,16,0,0.5) 3px), linear-gradient(to bottom, #005000, #000 75%) !important;
-  background-size: 24px 24px, 100% 100%, 100% 100%, 100% 100% !important;
+  background: url(/themes/console/images/info/sidebar.png) 10px center no-repeat, linear-gradient(to bottom, rgba(0,0,0,0) 50%, #000 50%), repeating-linear-gradient(to right, rgba(0,0,0,0.5) 1px, rgba(0,0,0,0.5) 2px, rgba(0,16,0,0.5) 3px), linear-gradient(to bottom, #005000, #000 75%) !important;
+  background-size: 20px 20px, 100% 100%, 100% 100%, 100% 100% !important;
 }
 
 #reseedhelp h2 {
   padding-left: 38px;
-  background: url(/themes/console/images/info/connect.png) 8px center no-repeat, linear-gradient(to bottom, rgba(0,0,0,0) 50%, #000 50%), repeating-linear-gradient(to right, rgba(0,0,0,0.5) 1px, rgba(0,0,0,0.5) 2px, rgba(0,16,0,0.5) 3px), linear-gradient(to bottom, #005000, #000 75%) !important;
-  background-size: 24px 24px, 100% 100%, 100% 100%, 100% 100% !important;
+  background: url(/themes/console/images/svg/reseed.svg) 10px center no-repeat, linear-gradient(to bottom, rgba(0,0,0,0) 50%, #000 50%), repeating-linear-gradient(to right, rgba(0,0,0,0.5) 1px, rgba(0,0,0,0.5) 2px, rgba(0,16,0,0.5) 3px), linear-gradient(to bottom, #005000, #000 75%) !important;
+  background-size: 20px 20px, 100% 100%, 100% 100%, 100% 100% !important;
 }
 
 #newuserguide h2 {
   padding-left: 38px;
-  background: url(/themes/console/images/info/notice.png) 8px center no-repeat, linear-gradient(to bottom, rgba(0,0,0,0) 50%, #000 50%), repeating-linear-gradient(to right, rgba(0,0,0,0.5) 1px, rgba(0,0,0,0.5) 2px, rgba(0,16,0,0.5) 3px), linear-gradient(to bottom, #005000, #000 75%) !important;
-  background-size: 24px 24px, 100% 100%, 100% 100%, 100% 100% !important;
+  background: url(/themes/console/images/info/notice.png) 10px center no-repeat, linear-gradient(to bottom, rgba(0,0,0,0) 50%, #000 50%), repeating-linear-gradient(to right, rgba(0,0,0,0.5) 1px, rgba(0,0,0,0.5) 2px, rgba(0,16,0,0.5) 3px), linear-gradient(to bottom, #005000, #000 75%) !important;
+  background-size: 20px 20px, 100% 100%, 100% 100%, 100% 100% !important;
 }
 
 #troubleshoot h2 {
   padding-left: 38px;
-  background: url(/themes/console/images/wrench_orange.png) 8px center no-repeat, linear-gradient(to bottom, rgba(0,0,0,0) 50%, #000 50%), repeating-linear-gradient(to right, rgba(0,0,0,0.5) 1px, rgba(0,0,0,0.5) 2px, rgba(0,16,0,0.5) 3px), linear-gradient(to bottom, #005000, #000 75%) !important;
-  background-size: 24px 24px, 100% 100%, 100% 100%, 100% 100% !important;
+  background: url(/themes/console/images/wrench_orange.png) 10px center no-repeat, linear-gradient(to bottom, rgba(0,0,0,0) 50%, #000 50%), repeating-linear-gradient(to right, rgba(0,0,0,0.5) 1px, rgba(0,0,0,0.5) 2px, rgba(0,16,0,0.5) 3px), linear-gradient(to bottom, #005000, #000 75%) !important;
+  background-size: 20px 20px, 100% 100%, 100% 100%, 100% 100% !important;
 }
 
 #legal h2 {
   padding-left: 38px;
-  background: url(/themes/console/images/info/legal.png) 8px center no-repeat, linear-gradient(to bottom, rgba(0,0,0,0) 50%, #000 50%), repeating-linear-gradient(to right, rgba(0,0,0,0.5) 1px, rgba(0,0,0,0.5) 2px, rgba(0,16,0,0.5) 3px), linear-gradient(to bottom, #005000, #000 75%) !important;
-  background-size: 24px 24px, 100% 100%, 100% 100%, 100% 100% !important;
+  background: url(/themes/console/images/info/legal.png) 10px center no-repeat, linear-gradient(to bottom, rgba(0,0,0,0) 50%, #000 50%), repeating-linear-gradient(to right, rgba(0,0,0,0.5) 1px, rgba(0,0,0,0.5) 2px, rgba(0,16,0,0.5) 3px), linear-gradient(to bottom, #005000, #000 75%) !important;
+  background-size: 20px 20px, 100% 100%, 100% 100%, 100% 100% !important;
 }
 
 #changelog h2 {
   padding-left: 38px;
-  background: url(/themes/console/images/info/logs.png) 8px center no-repeat, linear-gradient(to bottom, rgba(0,0,0,0) 50%, #000 50%), repeating-linear-gradient(to right, rgba(0,0,0,0.5) 1px, rgba(0,0,0,0.5) 2px, rgba(0,16,0,0.5) 3px), linear-gradient(to bottom, #005000, #000 75%) !important;
-  background-size: 24px 24px, 100% 100%, 100% 100%, 100% 100% !important;
+  background: url(/themes/console/images/svg/logs.svg) 10px center no-repeat, linear-gradient(to bottom, rgba(0,0,0,0) 50%, #000 50%), repeating-linear-gradient(to right, rgba(0,0,0,0.5) 1px, rgba(0,0,0,0.5) 2px, rgba(0,16,0,0.5) 3px), linear-gradient(to bottom, #005000, #000 75%) !important;
+  background-size: 20px 20px, 100% 100%, 100% 100%, 100% 100% !important;
 }
 
 #faq h2, #glossary h2 {
   padding-left: 38px;
-  background: url(/themes/console/images/info/question.png) 8px center no-repeat, linear-gradient(to bottom, rgba(0,0,0,0) 50%, #000 50%), repeating-linear-gradient(to right, rgba(0,0,0,0.5) 1px, rgba(0,0,0,0.5) 2px, rgba(0,16,0,0.5) 3px), linear-gradient(to bottom, #005000, #000 75%) !important;
-  background-size: 24px 24px, 100% 100%, 100% 100%, 100% 100% !important;
+  background: url(/themes/console/images/info/question.png) 10px center no-repeat, linear-gradient(to bottom, rgba(0,0,0,0) 50%, #000 50%), repeating-linear-gradient(to right, rgba(0,0,0,0.5) 1px, rgba(0,0,0,0.5) 2px, rgba(0,16,0,0.5) 3px), linear-gradient(to bottom, #005000, #000 75%) !important;
+  background-size: 20px 20px, 100% 100%, 100% 100%, 100% 100% !important;
 }
 
 #webhosting h2 {
   padding-left: 38px;
-  background: url(/themes/console/images/server_32x32.png) 8px center no-repeat, linear-gradient(to bottom, rgba(0,0,0,0) 50%, #000 50%), repeating-linear-gradient(to right, rgba(0,0,0,0.5) 1px, rgba(0,0,0,0.5) 2px, rgba(0,16,0,0.5) 3px), linear-gradient(to bottom, #005000, #000 75%) !important;
-  background-size: 24px 24px, 100% 100%, 100% 100%, 100% 100% !important;
+  background: url(/themes/console/images/server_32x32.png) 10px center no-repeat, linear-gradient(to bottom, rgba(0,0,0,0) 50%, #000 50%), repeating-linear-gradient(to right, rgba(0,0,0,0.5) 1px, rgba(0,0,0,0.5) 2px, rgba(0,16,0,0.5) 3px), linear-gradient(to bottom, #005000, #000 75%) !important;
+  background-size: 20px 20px, 100% 100%, 100% 100%, 100% 100% !important;
 }
 
 #themeoverride h2 {
   padding-left: 38px;
-  background: url(/themes/console/images/info/ui.png) 8px center no-repeat, linear-gradient(to bottom, rgba(0,0,0,0) 50%, #000 50%), repeating-linear-gradient(to right, rgba(0,0,0,0.5) 1px, rgba(0,0,0,0.5) 2px, rgba(0,16,0,0.5) 3px), linear-gradient(to bottom, #005000, #000 75%) !important;
-  background-size: 24px 24px, 100% 100%, 100% 100%, 100% 100% !important;
+  background: url(/themes/console/images/svg/ui.svg) 10px center no-repeat, linear-gradient(to bottom, rgba(0,0,0,0) 50%, #000 50%), repeating-linear-gradient(to right, rgba(0,0,0,0.5) 1px, rgba(0,0,0,0.5) 2px, rgba(0,16,0,0.5) 3px), linear-gradient(to bottom, #005000, #000 75%) !important;
+  background-size: 20px 20px, 100% 100%, 100% 100%, 100% 100% !important;
 }
 
 #browserconfig h2 {
   padding-left: 38px;
-  background: url(/themes/console/images/info/launch_browser.png) 8px center no-repeat, linear-gradient(to bottom, rgba(0,0,0,0) 50%, #000 50%), repeating-linear-gradient(to right, rgba(0,0,0,0.5) 1px, rgba(0,0,0,0.5) 2px, rgba(0,16,0,0.5) 3px), linear-gradient(to bottom, #005000, #000 75%) !important;
-  background-size: 24px 24px, 100% 100%, 100% 100%, 100% 100% !important;
+  background: url(/themes/console/images/svg/firefox.svg) 10px center no-repeat, linear-gradient(to bottom, rgba(0,0,0,0) 50%, #000 50%), repeating-linear-gradient(to right, rgba(0,0,0,0.5) 1px, rgba(0,0,0,0.5) 2px, rgba(0,16,0,0.5) 3px), linear-gradient(to bottom, #005000, #000 75%) !important;
+  background-size: 20px 20px, 100% 100%, 100% 100%, 100% 100% !important;
+}
+
+#browserconfig ol {
+  margin: -10px 20px -5px -20px !important;
+  display: inline-block;
 }
 
 #tunnman h2 {
   padding-left: 38px;
-  background: url(/themes/console/images/info/tunnels.png) 8px center no-repeat, linear-gradient(to bottom, rgba(0,0,0,0) 50%, #000 50%), repeating-linear-gradient(to right, rgba(0,0,0,0.5) 1px, rgba(0,0,0,0.5) 2px, rgba(0,16,0,0.5) 3px), linear-gradient(to bottom, #005000, #000 75%) !important;
-  background-size: 24px 24px, 100% 100%, 100% 100%, 100% 100% !important;
+  background: url(/themes/console/images/info/tunnels.png) 10px center no-repeat, linear-gradient(to bottom, rgba(0,0,0,0) 50%, #000 50%), repeating-linear-gradient(to right, rgba(0,0,0,0.5) 1px, rgba(0,0,0,0.5) 2px, rgba(0,16,0,0.5) 3px), linear-gradient(to bottom, #005000, #000 75%) !important;
+  background-size: 20px 20px, 100% 100%, 100% 100%, 100% 100% !important;
 }
 
 /* end TOC */
