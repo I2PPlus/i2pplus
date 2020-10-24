@@ -1077,6 +1077,10 @@ input[type="text"]:focus, textarea:focus {
   background: #000 !important;
 }
 
+textarea:focus::placeholder {
+  opacity: 0;
+}
+
 input[type=text]:focus, textarea[name="destination"]:focus {
   color: #c9ceff !important;
   border: 1px solid #6466a5 !important;
