@@ -2356,7 +2356,7 @@ to {
   margin: 0 4px 0 -4px;
   height: 16px;
   width: 16px;
-  vertical-align: middle;
+  vertical-align: text-bottom;
   display: inline-block;
   content: "";
 }
