@@ -79,9 +79,9 @@ public class I2PSnarkUtil {
     private long _startedTime;
 
 //    private static final int EEPGET_CONNECT_TIMEOUT = 45*1000;
-    private static final int EEPGET_CONNECT_TIMEOUT = 120*1000;
+    private static final int EEPGET_CONNECT_TIMEOUT = 60*1000;
 //    private static final int EEPGET_CONNECT_TIMEOUT_SHORT = 5*1000;
-    private static final int EEPGET_CONNECT_TIMEOUT_SHORT = 15*1000;
+    private static final int EEPGET_CONNECT_TIMEOUT_SHORT = 10*1000;
     public static final int DEFAULT_STARTUP_DELAY = 3;
     public static final boolean DEFAULT_COLLAPSE_PANELS = true;
     public static final boolean DEFAULT_SHOW_STATUSFILTER = false;
@@ -298,13 +298,13 @@ public class I2PSnarkUtil {
             //    opts.setProperty("i2p.streaming.readTimeout", "120000");
             if (opts.getProperty("i2p.streaming.maxConnsPerMinute") == null)
 //                opts.setProperty("i2p.streaming.maxConnsPerMinute", "2"); // per peer max incoming connections
-                opts.setProperty("i2p.streaming.maxConnsPerMinute", "24");
+                opts.setProperty("i2p.streaming.maxConnsPerMinute", "16");
             if (opts.getProperty("i2p.streaming.maxTotalConnsPerMinute") == null)
 //                opts.setProperty("i2p.streaming.maxTotalConnsPerMinute", "8");
-                opts.setProperty("i2p.streaming.maxTotalConnsPerMinute", "1024"); // total incoming connections
+                opts.setProperty("i2p.streaming.maxTotalConnsPerMinute", "60"); // total incoming connections
             if (opts.getProperty("i2p.streaming.maxConnsPerHour") == null)
 //                opts.setProperty("i2p.streaming.maxConnsPerHour", "20");
-                opts.setProperty("i2p.streaming.maxConnsPerHour", "1440");
+                opts.setProperty("i2p.streaming.maxConnsPerHour", "480");
             if (opts.getProperty("i2p.streaming.enforceProtocol") == null)
                 opts.setProperty("i2p.streaming.enforceProtocol", "true");
             if (opts.getProperty("i2p.streaming.disableRejectLogging") == null)
