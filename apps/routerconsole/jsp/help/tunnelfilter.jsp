@@ -32,7 +32,9 @@
 
 <h2><%=intl._t("Introduction to Tunnel Filtering")%></h2>
 
-<p>Server tunnels, configurable in the <a href="/i2ptunnelmgr">Tunnel Manager</a>, provide a number of ways to limit access including whitelisting, blacklisting, and tunnel filtering. Below we introduce you to the syntax required to implement a custom filter for your server tunnels. This can provide protection against denial of service attacks, without otherwise interrupting the service for genuine users. It can also be used to log access to a hosted service to determine if the server is under attack.</p>
+<p>Server tunnels, configurable in the <a href="/i2ptunnelmgr">Tunnel Manager</a>, provide a number of ways to limit access including whitelisting, blacklisting, and tunnel filtering. Below we introduce you to the syntax required to implement a custom filter for your server tunnels.</p>
+
+<p>A tunnel filter can provide protection against denial of service attacks, without otherwise interrupting the service for genuine users, either in conjunction with the tunnel throttler or as an alternative. It can also be used to log access to a hosted service, to determine if the server is under attack, or simply to log all visitors by I2P destination. Note that multiple server tunnels can share a single filter file if you wish to implement a global filter.</p>
 
 <h3>Overview</h3>
 
@@ -66,7 +68,7 @@ Note that if the number of connections is 1 (e.g. <i class="example">1/60</i>), 
 
 <p>The <i class="example">default</i> threshold applies to any remote destination not explicitly listed in the definition or in any of the referenced files. To set a default threshold use the keyword <i class="example">default</i>.</p>
 
-<p>The following threshold definition <i class="example">15/5</i> specifies that the same remote destination is allowed to make 14 connection attempts during a 5 second period. If it makes one more attempt within the same period, the threshold will be breached. Note that there can only be a single reference to <i>default</i> in a filter file. If unstated, all connections are permitted unless explicitly forbidden.</p>
+<p>The following threshold definition <i class="example">15/5</i> specifies that the same remote destination is allowed to make 14 connection attempts during a 5 second period. If it makes one more attempt within the same period, the threshold will be breached. Note that there can only be a single reference to the <i>default</i> keyword in a filter file. If unstated, all connections are permitted unless explicitly forbidden. Errors in the filter file will result in the tunnel failing to start, so be sure to double check the syntax before deployment.</p>
 
 <code>15/5 default</code>
 
