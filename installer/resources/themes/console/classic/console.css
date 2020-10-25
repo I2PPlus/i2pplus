@@ -3967,6 +3967,24 @@ td.infowarn, p.infowarn {
   line-height: 125%;
 }
 
+.infohelp#jsRequired {
+  margin-top: 0 !important;
+  padding-top: 20px !important;
+  border: none;
+  background-position: 12px calc(50% + 4px);
+}
+
+#tunnelmgr .infohelp#jsRequired {
+  padding-top: 30px !important;
+  background-position: 12px calc(50% + 8px);
+}
+
+.infohelp#jsRequired::before, .infohelp#jsRequired::after {
+  height: 20px;
+  display: block;
+  content: "";
+}
+
 .confignav + .infohelp, .confignav + h3.tabletitle, .confignav + form > h3.tabletitle, .confignav + .configure > form > h3.ptitle {
   margin-top: 15px !important;
 }
