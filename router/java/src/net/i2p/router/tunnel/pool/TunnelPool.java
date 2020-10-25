@@ -806,7 +806,7 @@ public class TunnelPool {
         for (int i = 0; i < count; i++)
              ls.addLease(iter.next());
         if (_log.shouldLog(Log.INFO))
-            _log.info(toString() + " -> new LeaseSet built" + ls);
+            _log.info(toString() + " -> New LeaseSet built" + ls);
         return ls;
     }
 
