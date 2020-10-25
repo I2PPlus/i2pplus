@@ -266,7 +266,7 @@ function refreshSidebar(timestamp) {
             updatesection.remove();
         }
 
-        setTimeout(isDown, 4000);
+        setTimeout(isDown, 6000);
 
       }
     }
