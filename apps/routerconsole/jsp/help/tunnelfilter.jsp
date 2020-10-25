@@ -32,13 +32,13 @@
 
 <h2><%=intl._t("Introduction to Tunnel Filtering")%></h2>
 
-<p>Server tunnels, configurable in the <a href="/i2ptunnelmgr">Tunnel Manager</a>, provide a number of ways to limit access including whitelisting, blacklisting, and tunnel filtering. Below we introduce you to the syntax required to implement a custom filter for your server tunnels.</p>
+<p>Server tunnels, configurable in the <a href="/i2ptunnelmgr">Tunnel Manager</a>, provide a number of ways to limit access to the hosted service. Destination whitelisting, blacklisting, connection throttling, and tunnel filtering are methods provisioned to mitigate denial of service attacks, grant exclusive access to known I2P destinations, and manage traffic to the server.</p>
 
-<p>A tunnel filter can provide protection against denial of service attacks, without otherwise interrupting the service for genuine users, either in conjunction with the tunnel throttler or as an alternative. It can also be used to log access to a hosted service, to determine if the server is under attack, or simply to log all visitors by I2P destination. Note that multiple server tunnels can share a single filter file if you wish to implement a global filter.</p>
+<p>A tunnel filter can provide protection against denial of service attacks, without otherwise interrupting the service for genuine users, either in conjunction with the tunnel throttler or as an alternative strategy. It can also be used to log access to a hosted service to determine if the server is under attack, or simply to log all visitors by I2P destination. Additionally, a filter can function simulatenously as a whitelist and blacklist making it more flexible than the Tunnel Manager's access list controls. Note that multiple server tunnels can share a single filter file if you wish to implement a global filter.</p>
 
 <h3>Overview</h3>
 
-<p>A filter is a file that can contain one or more declarations. Blank lines and lines beginning with <i class="example">#</i> are ignored.</p>
+<p>A filter is a text file that can contain one or more declarations. Blank lines and lines beginning with <i class="example">#</i> are ignored.</p>
 
 <p>A declaration will contain a directive (keyword) with parameters to define the scope of the declaration, and can represent one of the following:</p>
 
@@ -68,7 +68,7 @@ Note that if the number of connections is 1 (e.g. <i class="example">1/60</i>), 
 
 <p>The <i class="example">default</i> threshold applies to any remote destination not explicitly listed in the definition or in any of the referenced files. To set a default threshold use the keyword <i class="example">default</i>.</p>
 
-<p>The following threshold definition <i class="example">15/5</i> specifies that the same remote destination is allowed to make 14 connection attempts during a 5 second period. If it makes one more attempt within the same period, the threshold will be breached. Note that there can only be a single reference to the <i>default</i> keyword in a filter file. If unstated, all connections are permitted unless explicitly forbidden. Errors in the filter file will result in the tunnel failing to start, so be sure to double check the syntax before deployment.</p>
+<p>The following threshold definition <i class="example">15/5</i> specifies that the same remote destination is allowed to make 14 connection attempts during a 5 second period. If it makes one more attempt within the same period, the threshold will be breached:</p>
 
 <code>15/5 default</code>
 
@@ -79,6 +79,8 @@ Note that if the number of connections is 1 (e.g. <i class="example">1/60</i>), 
 <p>Or to deny all unspecified destinations:</p>
 
 <code>deny default</code>
+
+<p>Note that there can only be a single reference to the <i class="example">default</i> keyword in a filter file. If unstated, all connections are permitted unless explicitly forbidden. Errors in the filter file will prevent a stopped tunnel from starting, so be sure to double check the syntax before deployment.</p>
 
 <h4>Explicit Thresholds</h4>
 
