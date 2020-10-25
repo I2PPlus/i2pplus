@@ -82,11 +82,14 @@ Note that if the number of connections is 1 (e.g. <i class="example">1/60</i>), 
 
 <h4>Explicit Thresholds</h4>
 
-<p>Explicit thresholds are applied to a remote destination listed in the definition itself:</p>
+<p>Using the <i class="example">explicit</i> directive, a threshold can be applied to a remote destination listed in the definition itself, with the option to specify custom thresholds for multiple destinations. Remote destinations can also be excluded from the default threshold using the <i class="example">allow</i> keyword, or permanently blocked using the <i class="example">deny</i> keyword:</p>
 
-<code>15/5 explicit asdfasdf&hellip;asdf.b32.i2p</code><br>
-<code>allow explicit fdsafdsa&hellip;fdsa.b32.i2p</code><br>
-<code>deny explicit qwerqwer&hellip;qwerq.b32.i2p</code>
+<code>
+60/240 default<br>
+15/5 explicit szdb4cdtbahqkapustcrc37xwxc65ejithdiqdxffs73wxbswdc2.b32.i2p<br>
+allow explicit zyakly6qqzjnad2kqqrpnupex7ryl6cyfrj52abm3kqrougtxids.b32.i2p<br>
+deny explicit cqfnbbvxz5xjgo3saix4ygtqlyuujraz4ptclq5o7tdqzg3jffkm.b32.i2p
+</code>
 
 <h4>Bulk Thresholds</h4>
 
@@ -100,10 +103,12 @@ allow file /path/unlimited_destinations.txt
 
 <h3>Recorders</h3>
 
-<p>Recorders keep track of connection attempts made by a remote destination, and if that breaches the defined threshold, the destination gets logged in the specified file:</p>
+<p>Recorders keep track of connection attempts made by a remote destination, and if that breaches the defined threshold, the destination gets logged in the specified file. Multiple recorders can be specified:</p>
 
-<code>30/5 record /path/aggressive.txt</code><br>
-<code>60/5 record /path/very_aggressive.txt</code>
+<code>
+30/5 record /path/aggressive.txt<br>
+60/5 record /path/very_aggressive.txt
+</code>
 
 <p>You can use a recorder to log aggressive destinations to a given file, and then use that same file to throttle them. The following snippet defines a filter that initially allows all connection attempts, but if any single destination exceeds 30 attempts in 5 seconds, it gets throttled down to 15 attempts every 5 seconds:</p>
 
