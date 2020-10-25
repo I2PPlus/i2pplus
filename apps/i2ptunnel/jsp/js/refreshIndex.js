@@ -72,7 +72,7 @@ function refreshTunnelStatus(timestamp) {
           var down = "<div id=\"down\"><b><span>Router is down<\/span><\/b><\/div>";
           index.innerHTML = down;
         }
-        setTimeout(noRouter, 6000)
+        setTimeout(noRouter, 8000)
       }
     }
   }
