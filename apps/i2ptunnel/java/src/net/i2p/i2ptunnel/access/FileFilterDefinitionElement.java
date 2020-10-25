@@ -34,9 +34,9 @@ class FileFilterDefinitionElement extends FilterDefinitionElement {
         if (!(file.exists() && file.isFile() && file.lastModified() > lastLoading))
             return;
         lastLoading = System.currentTimeMillis();
-        BufferedReader reader = null; 
+        BufferedReader reader = null;
         try {
-            reader = new BufferedReader(new FileReader(file)); 
+            reader = new BufferedReader(new FileReader(file));
             String b32;
             while((b32 = reader.readLine()) != null) {
                 Hash hash = fromBase32(b32);
@@ -45,7 +45,7 @@ class FileFilterDefinitionElement extends FilterDefinitionElement {
                 map.put(hash, new DestTracker(hash, threshold));
             }
         } catch (InvalidDefinitionException bad32) {
-            throw new IOException("invalid access list entry", bad32);
+            throw new IOException("Invalid entry in tunnel filter access list (bad b32)", bad32);
         } finally {
             if (reader != null) {
                 try { reader.close(); } catch (IOException ignored) {}
