@@ -991,7 +991,7 @@ public class TunnelDispatcher implements Service {
                 if (exp < now) {
                     _configs.poll();
                     if (_log.shouldLog(Log.INFO))
-                        _log.info("Expiring Participating tunnel [" + cur + "]");
+                        _log.info("Expiring Participating tunnel: " + cur);
                     remove(cur);
                 } else {
                     if (exp < nextTime)
