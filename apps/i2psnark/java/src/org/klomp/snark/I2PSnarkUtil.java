@@ -285,7 +285,7 @@ public class I2PSnarkUtil {
 //                opts.setProperty(I2PSocketOptions.PROP_CONNECT_TIMEOUT, "300000"); // 5 minutes
             if (opts.getProperty("i2p.streaming.inactivityTimeout") == null)
 //                opts.setProperty("i2p.streaming.inactivityTimeout", "240000");
-                opts.setProperty("i2p.streaming.inactivityTimeout", "300000"); // 5 minute idle time before disconnect
+                opts.setProperty("i2p.streaming.inactivityTimeout", "180000"); // 3 minute idle time before disconnect
             if (opts.getProperty("i2p.streaming.inactivityAction") == null)
                 opts.setProperty("i2p.streaming.inactivityAction", "1"); // 1 == disconnect, 2 == ping
             if (opts.getProperty("i2p.streaming.initialWindowSize") == null)
@@ -298,13 +298,13 @@ public class I2PSnarkUtil {
             //    opts.setProperty("i2p.streaming.readTimeout", "120000");
             if (opts.getProperty("i2p.streaming.maxConnsPerMinute") == null)
 //                opts.setProperty("i2p.streaming.maxConnsPerMinute", "2"); // per peer max incoming connections
-                opts.setProperty("i2p.streaming.maxConnsPerMinute", "16");
+                opts.setProperty("i2p.streaming.maxConnsPerMinute", "8");
             if (opts.getProperty("i2p.streaming.maxTotalConnsPerMinute") == null)
 //                opts.setProperty("i2p.streaming.maxTotalConnsPerMinute", "8");
-                opts.setProperty("i2p.streaming.maxTotalConnsPerMinute", "60"); // total incoming connections
+                opts.setProperty("i2p.streaming.maxTotalConnsPerMinute", "32"); // total incoming connections
             if (opts.getProperty("i2p.streaming.maxConnsPerHour") == null)
 //                opts.setProperty("i2p.streaming.maxConnsPerHour", "20");
-                opts.setProperty("i2p.streaming.maxConnsPerHour", "480");
+                opts.setProperty("i2p.streaming.maxConnsPerHour", "240");
             if (opts.getProperty("i2p.streaming.enforceProtocol") == null)
                 opts.setProperty("i2p.streaming.enforceProtocol", "true");
             if (opts.getProperty("i2p.streaming.disableRejectLogging") == null)

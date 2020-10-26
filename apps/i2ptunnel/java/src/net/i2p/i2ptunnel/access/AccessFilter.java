@@ -43,7 +43,8 @@ import net.i2p.client.streaming.StatefulConnectionFilter;
 class AccessFilter implements StatefulConnectionFilter {
 
     private static final long PURGE_INTERVAL = 1000;
-    private static final long SYNC_INTERVAL = 10 * 1000;
+//    private static final long SYNC_INTERVAL = 10 * 1000;
+    private static final long SYNC_INTERVAL = 5 * 1000;
 
     /**
      * All disk i/o from all instances of this filter
@@ -119,14 +120,14 @@ class AccessFilter implements StatefulConnectionFilter {
         for (FilterDefinitionElement element : definition.getElements()) {
             element.update(tmp);
         }
-        
+
         synchronized(knownDests) {
             knownDests.keySet().retainAll(tmp.keySet());
             for (Hash newHash : tmp.keySet()) {
-                if (knownDests.containsKey(newHash)) 
+                if (knownDests.containsKey(newHash))
                     continue;
                 knownDests.put(newHash, tmp.get(newHash));
-            }    
+            }
         }
 
     }
@@ -235,7 +236,7 @@ class AccessFilter implements StatefulConnectionFilter {
                             syncer.schedule(SYNC_INTERVAL);
                     } catch (IOException bad) {
                         Log log = context.logManager().getLog(AccessFilter.class);
-                       log.log(Log.CRIT, "Syncing access list failed", bad);
+                       log.log(Log.CRIT, "Syncing access list for tunnel filter failed", bad);
                     }
                 }
             });
