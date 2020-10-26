@@ -480,15 +480,15 @@ img[src="/themes/console/images/i2plogo.png"] {
 }
 
 .routersummary a img:first-child {
-  opacity: .8;
   border: none;
+  opacity: .8;
   image-rendering: -webkit-optimize-contrast;
 }
 
 .routersummary a img:first-child:hover, .routersummary a img:first-child:active {
+  box-shadow: none;
   opacity: 1;
   filter: drop-shadow(0 0 1px #f60);
-  box-shadow: none;
 }
 
 .routersummary a[href="/"], .routersummary a[href="/console"] {
@@ -1107,7 +1107,7 @@ div.refresh {
 }
 
 @keyframes participating {
-  0,49%,51%,100% {background: #5c5}
+  0%,49%,51%,100% {background: #5c5}
   50% {background: #494}
 }
 
@@ -4417,20 +4417,13 @@ h2#jobrunners {
 .joblog ol {
   margin-bottom: 5px !important;
   margin-top: -21px;
-  -moz-column-count: 2;
-  -moz-column-width: 400px;
-  -moz-column-gap: 100px;
-  -moz-column-rule: 1px dotted #ced1e3;
-  -webkit-column-count: 2;
-  -webkit-column-width: 400px;
-  -webkit-column-gap: 100px;
+  padding: 15px 50px;
+  border: 1px solid #aaafce;
+  background: #eff1ff;
   column-count: 2;
   column-width: 400px;
   column-gap: 100px;
   column-rule: 1px dotted #ced1e3;
-  background: #eff1ff;
-  border: 1px solid #aaafce;
-  padding: 15px 50px;
 }
 
 .joblog ol:empty + h3 {
@@ -4442,13 +4435,13 @@ h2#jobrunners {
 }
 
 .joblog ol li {
+  margin-left: -15px;
+  margin-bottom: 5px;
+  min-width: 400px;
+  border-bottom: 1px dotted #ced1e3;
   break-inside: avoid;
   page-break-inside: avoid;
   -webkit-column-break-inside: avoid;
-  border-bottom: 1px dotted #ced1e3;
-  min-width: 400px;
-  margin-left: -15px;
-  margin-bottom: 5px;
 }
 
 .joblog ol li:first-child {
@@ -4532,20 +4525,16 @@ h3#totaljobstats {
 }
 
 #schedjobs ul {
-  -moz-columns: 272px auto;
-  -webkit-columns: 272px auto;
-  columns: 272px auto;
-  -moz-column-gap: 20px;
-  -webkit-column-gap: 20px;
-  column-gap: 20px;
   margin: 0 !important;
   padding: 0 !important;
+  columns: 272px auto;
+  column-gap: 20px;
 }
 
 #schedjobs li {
-  display: inline-block;
   margin: 2px 0;
   min-width: 272px;
+  display: inline-block;
   border-radius: 0 15px 15px 0;
 }
 
@@ -4565,9 +4554,9 @@ h3#totaljobstats {
 }
 
 .homelinkedit th:first-child, #sidebarconf th:first-child, #consolepass th:first-child {
-  background: url(/themes/console/images/buttons/delete.png) center center no-repeat, linear-gradient(to bottom, #fff, #fafbff);
-  font-size: 0 !important;
   width: 5%;
+  font-size: 0 !important;
+  background: url(/themes/console/images/buttons/delete.png) center center no-repeat, linear-gradient(to bottom, #fff, #fafbff);
 }
 
 .homelinkedit th:last-child, .homelinkedit th:nth-child(3) {
@@ -4577,12 +4566,6 @@ h3#totaljobstats {
 .homelinkedit input[type="text"], #reseedconfig input[type="text"], #reseedconfig input[type="password"], #reseedconfig .optbox, #reseedconfig textarea {
   margin-left: 0;
 }
-
-/*
-#reseedconfig textarea {
-  width: 100% !important;
-}
-*/
 
 .homelinkedit tr:last-child {
   border-top: 1px solid #aaafce;
@@ -4819,14 +4802,12 @@ p#enablefullstats {
 }
 
 #externali2cp tr:nth-child(3) .optionlist {
-  -moz-columns: auto;
-  -webkit-columns: auto;
   columns: auto;
 }
 
 #externali2cp .optionlist b {
-  display: inline-block;
   min-width: 120px;
+  display: inline-block;
   text-align: right;
 }
 
@@ -4840,17 +4821,17 @@ p#enablefullstats {
 }
 
 .tidylist {
-  text-align: justify;
-  padding-right: 25px;
-  margin-right: 15px !important;
   margin-left: 15px;
+  margin-right: 15px !important;
+  padding-right: 25px;
+  text-align: justify;
 }
 
 .tidylist code {
   text-align: left;
-  font: 9pt "Droid Sans Mono", "Andale Mono", "DejaVu Sans Mono", "Lucida Console", monospace;
-  color: #723;
+  font: 9pt Droid Sans Mono, Andale Mono, DejaVu Sans Mono, Lucida Console, monospace;
   font-weight: bold;
+  color: #723;
 }
 
 /* graphs */
@@ -7539,11 +7520,7 @@ span.b32 {
 /* netdb router address info */
 
 .leasesets_container {
-  -moz-columns: 680px 2;
-  -webkit-columns: 680px 2;
   columns: 680px 2;
-  -moz-column-gap: 10px;
-  -webkit-column-gap: 10px;
   column-gap: 10px;
 }
 
@@ -7637,8 +7614,6 @@ th code {
 
 .sybil_container {
   margin: 10px 0;
-  -moz-columns: 680px 2;
-  -webkit-columns: 680px 2;
   columns: 680px 2;
 }
 
@@ -8980,8 +8955,6 @@ _:-ms-lang(x), .tunnels_client th:first-child::after {
 }
 
 .optionlist {
-  -moz-columns: 500px auto;
-  -webkit-columns: 500px auto;
   columns: 500px auto;
 }
 
@@ -11769,12 +11742,8 @@ to {
 }
 
 @keyframes reloader {
-0, 100% {
-  width: 0;
-}
-80%, 99% {
-  width: 120%;
-}
+  0%, 100% {width: 0}
+  80%, 99% {width: 120%}
 }
 
 th, td {
