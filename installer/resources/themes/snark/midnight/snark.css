@@ -27,8 +27,9 @@ body {
   url(images/button_forum_active.png) no-repeat,
   url(images/button_search_hover.png) no-repeat,
   url(images/button_search_active.png) no-repeat,
+  url(images/offline.svg) no-repeat,
   url(images/dropdown_hover.svg) center center no-repeat, #000010 !important;
-  background-size: 100% 100%, 171px 148px, 0 0, 0 0, 0 0, 0 0, 0 0, 0 0, 0 0, 0 0, 0 0, 0 0 !important;
+  background-size: 100% 100%, 171px 148px, 0 0, 0 0, 0 0, 0 0, 0 0, 0 0, 0 0, 0 0, 0 0, 0 0, 0 0 !important;
 }
 
 body.iframed {
@@ -2554,23 +2555,39 @@ form:last-child > .configsectionpanel {
 }
 
 .configsection table {
-  opacity: 1;
   color: #c0bbff;
+  opacity: 1;
 }
 
 code {
-  font-family: "Droid Sans Mono", "Noto Mono", "DejaVu Sans Mono", "Lucida Console", monospace;
+  padding: 0 2px;
+  font-family: Droid Sans Mono, Noto Mono, DejaVu Sans Mono, Lucida Console, monospace;
   font-size: 8.5pt;
   font-weight: bold;
-  padding: 0 2px;
   color: #7166ff;
 }
 
 .routerdown {
-  margin-top: -5px;
-  padding: 10px;
+  padding: 18px 10px 15px;
   color: #c9ceff;
-  border-bottom: 1px solid #26235c;
+}
+
+.routerdown span {
+  display: none;
+}
+
+.routerdown::after {
+  width: 40px;
+  height: 40px;
+  display: inline-block;
+  background: url(images/offline.svg) center center no-repeat;
+  background-size: 40px 40px;
+  content: "";
+  animation: linear spin 5s reverse infinite;
+}
+
+@keyframes spin {
+  from {transform: rotate(360deg)}
 }
 
 input.trackername {
@@ -4196,9 +4213,12 @@ td.snarkTorrentDetails img, .snarkDirInfo td:first-child img:not(.thumb) {
 }
 
 @media screen and (min-width: 1500px) {
-.iframed #torrentDisplay {
-  margin: 0 0 -1px;
-}
+  #torrentDisplay {
+    margin-top: 9px;
+  }
+  .iframed #torrentDisplay {
+    margin: 0 0 -1px;
+  }
 }
 
 #torrentDisplay input {
