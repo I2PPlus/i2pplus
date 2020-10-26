@@ -1132,7 +1132,7 @@ textarea[name="accessList"], #hostField, #localDestination, .authentication {
 }
 
 .tunnelInfo {
-  background: linear-gradient(to bottom, #f8f8ff, #ebebff);
+  background: linear-gradient(to bottom, #fff, #eef);
 }
 
 .tunnelInfo td {
