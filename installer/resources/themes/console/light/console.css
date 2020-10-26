@@ -3387,11 +3387,13 @@ tr {
 tr:nth-child(even), pre#transports, #debug .sentTags:hover td, #debug .expiry:hover td {
   background: #efefff;
   background: repeating-linear-gradient(135deg, rgba(252,252,255,.5) 2px, rgba(240, 240, 255, .3) 3px, #fafaff 5px) #fafaff;
+  background: linear-gradient(to bottom, #fff, #eef);
 }
 
 tr:nth-child(odd) {
   background: #f7f8ff;
   background: repeating-linear-gradient(45deg, rgba(255,255,255,.5) 2px, rgba(200, 200, 255, .3) 3px, #fafaff 5px), #fafaff;
+  background: linear-gradient(to bottom, #fff, #eef);
 }
 
 td {
@@ -7019,6 +7021,7 @@ p:empty { /* empty paragraph nuke */
   padding: 5px 10px;
   box-shadow: inset 0 0 0 1px #fff !important;
   background: rgba(240,240,255,.4);
+  background: linear-gradient(to bottom, #fff, #eef);
 }
 
 #netdboverview #netdbversions td:first-child, #netdboverview #netdbtransports td:first-child, #netdboverview #netdbcountrylist td:first-child,
@@ -7445,10 +7448,16 @@ b.netdb_transport {
   padding: 5px !important;
 }
 
+#leasesetdebug td {
+  border-top: 1px solid #8d8daa !important;
+  border-bottom: 1px solid #8d8daa !important;
+}
+
 #leasesetdebug td:nth-child(odd) {
   width: 200px;
   text-align: right;
   border-right: 1px solid #e0e0eb;
+  border-right: 1px solid #8d8daa;
 }
 
 #leasesetdebug td:nth-child(even) {
@@ -7457,6 +7466,10 @@ b.netdb_transport {
 
 #leasesetdebug td:nth-child(2) {
   width: 1%;
+}
+
+#leasesetdebug tr:nth-child(n+3) td:nth-child(3) {
+  border-left: none !important;
 }
 
 #leasesetsummary {
@@ -7491,8 +7504,8 @@ b.netdb_transport {
 }
 
 .leaseset th:last-child, .leaseset td:nth-child(2) {
-  text-align: right;
   padding-right: 5px;
+  text-align: right;
 }
 
 .leaseset td:first-child img {
@@ -7514,6 +7527,14 @@ b.netdb_transport {
 
 .leaseset td {
   line-height: 150%;
+  background: linear-gradient(to bottom, #fff, #eef);
+  border-top: 1px solid #8d8daa;
+  border-bottom: 1px solid #8d8daa;
+}
+
+.leaseset td a[href$=".i2p"] {
+  margin-left: 6px;
+  font-size: 80%;
 }
 
 .addtobook {
@@ -7525,6 +7546,8 @@ b.netdb_transport {
 }
 
 .addtobook a::after {
+  display: inline-block;
+  vertical-align: middle;
   content: url(/themes/console/images/buttons/add_address.png);
 }
 
@@ -8820,6 +8843,7 @@ table#schedjobs {
 
 #thresholds td {
   padding: 6px;
+  border: 1px solid #8d8daa;
 }
 
 #capabilities_key td:first-child::before {
@@ -13159,9 +13183,9 @@ to {
 }
 
 #tunnels #tunnelPeerCount .cells {
-  width: auto !important;
   max-width: none !important;
   min-width: 0 !important;
+  white-space: nowrap;
   text-align: center;
 }
 
@@ -13173,9 +13197,20 @@ to {
   white-space: nowrap;
 }
 
+#tunnels #tunnelPeerCount td:first-child {
+  width: 1% !important;
+}
+
 #tunnels #tunnelPeerCount td:nth-child(2) {
   white-space: normal;
   word-break: break-all;
+  width: 15%;
+}
+
+@media screen and (min-width: 1200px) {
+  #tunnels #tunnelPeerCount td:nth-child(2) {
+    white-space: nowrap;
+  }
 }
 
 #tunnelPeerCount .configpeer {
