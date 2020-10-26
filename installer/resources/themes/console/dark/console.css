@@ -1588,17 +1588,17 @@ h1 {
 }
 
 @keyframes hide-up {
-0% {
-  margin-top: 0
-  filter: opacity(1);
-}
+  0% {
+    margin-top: 0;
+    filter: opacity(1);
+  }
 
-30% {
-  filter: opacity(0);
-}
-100% {
-  margin-top: -300px;
-}
+  30% {
+    filter: opacity(0);
+ }
+  100% {
+    margin-top: -300px;
+  }
 }
 
 div.messages {
@@ -1740,7 +1740,7 @@ div#graphs {
   text-align: center !important;
   border: 1px solid #d40 !important;
   box-shadow: inset 0 0 0 1px #000, inset 0 0 2px 1px #d30;
-  cursor: zoom-in, default;
+  cursor: zoom-in;
   filter: none;
   transition: ease border 0.05s;
 }
@@ -2121,13 +2121,9 @@ code {
 /* welcome */
 
 .twocol {
-  -moz-columns: 2 400px;
-  -webkit-columns: 2 400px;
-  columns: 2 400px;
-  -moz-column-gap: 0 !important;
-  -webkit-column-gap: 0 !important;
-  column-gap: 0 !important;
   display: block;
+  columns: 2 400px;
+  column-gap: 0 !important;
 }
 
 .twocol li {
@@ -2141,11 +2137,11 @@ code {
 }
 
 div[lang="pt"] .twocol, div[lang="es"] .twocol, div[lang="sv"] .twocol {
-  background: rgba(0,32,0,0.3);
+  margin: 10px -5px 5px !important;
+  padding: 10px;
   border: 1px solid #000;
   border-radius: 4px;
-  padding: 10px;
-  margin: 10px -5px 5px !important;
+  background: rgba(0,32,0,0.3);
 }
 
 div[lang="es"] li, div[lang="pt"] li, div[lang="sv"] li {
@@ -8239,7 +8235,7 @@ h4#sb_shutdownstatus span {
 }
 
 @keyframes participating {
-  0,49%,51%,100% {background: #5c5}
+  0%,49%,51%,100% {background: #5c5}
   50% {background: #373}
 }
 
@@ -8578,11 +8574,7 @@ tr:hover .cells, #profiles tr:hover td {
 /* netdb router address info */
 
 .leasesets_container {
-  -moz-columns: 680px 2;
-  -webkit-columns: 680px 2;
   columns: 680px 2;
-  -moz-column-gap: 10px;
-  -webkit-column-gap: 10px;
   column-gap: 10px;
 }
 
@@ -10098,16 +10090,13 @@ th.options, #externali2cp th {
 }
 
 .optionlist {
-  -moz-columns: 500px auto;
-  -webkit-columns: 500px auto;
   columns: 500px auto;
 }
 
 @supports not (-moz-appearance: none) {
-.optionlist {
-  -webkit-columns: 500px 2;
-  columns: 500px 2;
-}
+  .optionlist {
+    columns: 500px 2;
+  }
 }
 
 .optionlist, .optionsingle, #reseedssl {
@@ -11897,7 +11886,7 @@ div.app {
   width: 21px;
   height: 18px;
   opacity: 0;
-  transition: ease border .15s, ease box-shadow .15s, ease opacity 0.15, ease-out background 0.15s !important;
+  transition: ease border .15s, ease box-shadow .15s, ease opacity 0.15s, ease-out background 0.15s !important;
   border: 1px solid #000 !important;
   border-radius: 0 2px 0 2px;
   background: transparent;
@@ -11908,7 +11897,7 @@ div.app {
 div.app:hover .extlink::after, .sitemapLink.extlink:hover::after {
   border: 1px solid #f50 !important;
   opacity: .75;
-  transition: ease box-shadow .15s, ease border .15s, ease opacity 0.15, ease-out background 0.15s 0.05s !important;
+  transition: ease box-shadow .15s, ease border .15s, ease opacity 0.15s, ease-out background 0.15s 0.05s !important;
   background: #000 url(images/newtab.png) 4.5px center no-repeat;
   background-size: 12.5px 10px;
   transform: scale(1);
@@ -14026,8 +14015,8 @@ h3 + table {
 #tunnels #tunnelPeerCount .cells {
   white-space: nowrap;
   width: auto !important;
-  max-width: none !important;
-  min-width: none !important;
+  max-width: inherit !important;
+  min-width: 0 !important;
 }
 
 #tunnels .percentBarInner {
@@ -14040,8 +14029,8 @@ h3 + table {
 
 #tunnelPeerCount th, #tunnelPeerCount .cells, #tunnelPeerCount .cells:first-child {
   width: auto !important;
-  max-width: none !important;
-  min-width: none !important;
+  max-width: inherit !important;
+  min-width: 0 !important;
 }
 
 #tunnels #tunnelPeerCount .cells.bar, #tunnels #tunnelPeerCount th.bar,
@@ -14171,7 +14160,7 @@ h3 + table {
 
 .small img {
   margin: 0 !important;
-  padding 0 !important;
+  padding: 0 !important;
 }
 
 .direction .small {
@@ -14223,12 +14212,8 @@ h3 + table {
 }
 
 @keyframes reloader {
-0, 100% {
-  width: 0;
-}
-80%, 99% {
-  width: 120%;
-}
+  0%, 100% {width: 0}
+  80%, 99% {width: 120%}
 }
 
 .unbold {
