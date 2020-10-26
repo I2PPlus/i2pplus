@@ -11094,6 +11094,10 @@ p#gatherstats {
   margin-top: 10px;
 }
 
+#filterlist p + p, #filterlist ul + p {
+  margin-top: -6px;
+}
+
 #filterlist h3 {
   margin-bottom: 8px;
 }
