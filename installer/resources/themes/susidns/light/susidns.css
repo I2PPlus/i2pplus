@@ -520,11 +520,13 @@ li {
 #host_list tr:nth-child(odd), #host_details tr:nth-child(odd) {
   background-color: #f7f8ff;
   background: repeating-linear-gradient(45deg, rgba(255,255,255,0.5) 2px, rgba(192, 192, 255, 0.3) 3px, #fff 5px), #fff;
+  background: linear-gradient(to bottom, #fff, #eef);
 }
 
 #host_list tr:nth-child(even), #host_details tr:nth-child(even) {
   background-color: #eef;
   background: repeating-linear-gradient(135deg, rgba(255,255,255,0.5) 2px, rgba(240, 240, 255, 0.3) 3px, #fff 5px), #fff;
+  background: linear-gradient(to bottom, #fff, #eef);
 }
 
 _:-ms-lang(x), #host_list td, #host_list tr:hover td, #host_details td, #host_details tr:hover td {

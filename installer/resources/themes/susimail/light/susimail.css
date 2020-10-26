@@ -1690,11 +1690,13 @@ td[onclick] {
 tr.list0 {
   background: #eef;
   background: repeating-linear-gradient(45deg, rgba(255,255,255,.5) 2px, rgba(221, 221, 255, .3) 3px, #fff 5px), #fff;
+  background: linear-gradient(to bottom, #fff, #eef);
 }
 
 tr.list1 {
   background: #f7f8ff;
   background: repeating-linear-gradient(135deg, rgba(255,255,255,.5) 2px, rgba(240, 240, 255, .3) 3px, #fff 5px), #fff;
+  background: linear-gradient(to bottom, #fff, #eef);
 }
 
 tr.list0:hover, tr.list1:hover {
