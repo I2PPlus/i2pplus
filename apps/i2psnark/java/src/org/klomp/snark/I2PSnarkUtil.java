@@ -472,13 +472,14 @@ public class I2PSnarkUtil {
         }
         EepGet get = new I2PSocketEepGet(_context, _manager, retries, out.getAbsolutePath(), fetchURL);
         get.addHeader("User-Agent", EEPGET_USER_AGENT);
+        int truncate = url.indexOf("&");
         if (get.fetch(timeout)) {
             if (_log.shouldLog(Log.DEBUG))
-                _log.debug("Fetch successful [" + url + "] (Size: " + out.length() + " bytes)");
+                _log.debug("Fetch successful [" + url.substring(0, truncate) + "...] (Size: " + out.length() + " bytes)");
             return out;
         } else {
             if (_log.shouldLog(Log.WARN))
-                _log.warn("Fetch failed [" + url + "]");
+                _log.warn("Fetch failed [" + url.substring(0, truncate) + "...]");
             out.delete();
             return null;
         }
@@ -514,13 +515,14 @@ public class I2PSnarkUtil {
         ByteArrayOutputStream out = new ByteArrayOutputStream(initialSize);
         EepGet get = new I2PSocketEepGet(_context, _manager, retries, -1, maxSize, null, out, fetchURL);
         get.addHeader("User-Agent", EEPGET_USER_AGENT);
+        int truncate = url.indexOf("&");
         if (get.fetch(timeout)) {
             if (_log.shouldLog(Log.DEBUG))
-                _log.debug("Fetch successful [" + url + "] (Size: " + out.size() + " bytes)");
+                _log.debug("Fetch successful [" + url.substring(0, truncate) + "...] (Size: " + out.size() + " bytes)");
             return out.toByteArray();
         } else {
             if (_log.shouldLog(Log.WARN))
-                _log.warn("Fetch failed [" + url + "]");
+                _log.warn("Fetch failed [" + url.substring(0, truncate) + "...]");
             return null;
         }
     }

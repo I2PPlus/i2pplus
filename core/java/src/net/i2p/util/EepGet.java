@@ -733,8 +733,12 @@ public class EepGet {
                     timeout.cancel();
                 for (int i = 0; i < _listeners.size(); i++)
                     _listeners.get(i).attemptFailed(_url, _bytesTransferred, _bytesRemaining, _currentAttempt, _numRetries, ioe);
+                int truncate = _url.indexOf("&");
                 if (_log.shouldLog(Log.WARN))
-                    _log.warn("Eepget error: Fetch of [" + _url + "] failed (" + ioe.getMessage() + ")");
+                     if (_url.contains("&") && _url.contains("info_hash"))
+                        _log.warn("Eepget error: Fetch of [" + _url.substring(0, truncate) + "...] failed (" + ioe.getMessage() + ")");
+                     else
+                        _log.warn("Eepget error: Fetch of [" + _url + "] failed (" + ioe.getMessage() + ")");
                 if (ioe instanceof MalformedURLException ||
                     ioe instanceof UnknownHostException ||
                     ioe instanceof ConnectException) // proxy or nonproxied host Connection Refused
@@ -768,8 +772,12 @@ public class EepGet {
 
         for (int i = 0; i < _listeners.size(); i++)
             _listeners.get(i).transferFailed(_url, _bytesTransferred, _bytesRemaining, _currentAttempt);
+        int truncate = _url.indexOf("&");
         if (_log.shouldLog(Log.WARN))
-            _log.warn("Eepget error: All attempts failed for [" + _url + "]");
+            if (_url.contains("&") && _url.contains("info_hash"))
+                _log.warn("Eepget error: All attempts failed for [" + _url.substring(0, truncate) + "...]");
+            else
+                _log.warn("Eepget error: All attempts failed for [" + _url + "]");
         return false;
     }
 
