@@ -143,6 +143,8 @@ deny file /path/enemies.txt<br>
 60/60 record /path/suspicious.txt
 </code>
 
+<p>Note that the full path to the output files must be accessible before deploying the filter. If the target directory does not exist, the destinations will not be recorded and an error will appear in the router logs. The files will be created as required.</p>
+
 </div>
 
 </div>
