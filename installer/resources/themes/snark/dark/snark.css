@@ -29,8 +29,9 @@ body:not(old) {
   url(images/button_forum_active.png) no-repeat,
   url(images/button_search_hover.png) no-repeat,
   url(images/button_search_active.png) no-repeat,
-  url(images/dropdown_hover.svg) no-repeat #010 !important;
-  background-size: 100% 100%, 175px 175px, 0 0, 0 0, 0 0, 0 0, 0 0, 0 0, 0 0, 0 0, 0 0 !important;
+  url(images/offline.svg) no-repeat,
+  url(images/dropdown_hover.svg), no-repeat #010 !important;
+  background-size: 100% 100%, 175px 175px, 0 0, 0 0, 0 0, 0 0, 0 0, 0 0, 0 0, 0 0, 0 0, 0 0 !important;
 }
 
 body.iframed {
@@ -2634,9 +2635,27 @@ code {
 }
 
 @media screen and (min-width: 1500px) {
-.routerdown {
-  margin-bottom: 10px;
+  .routerdown {
+    margin-bottom: 10px;
+  }
 }
+
+.routerdown span {
+  display: none;
+}
+
+.routerdown::after {
+  width: 40px;
+  height: 40px;
+  display: inline-block;
+  background: url(images/offline.svg) center center no-repeat;
+  background-size: 40px 40px;
+  content: "";
+  animation: linear spin 5s reverse infinite;
+}
+
+@keyframes spin {
+  from {transform: rotate(360deg)}
 }
 
 input.trackername {

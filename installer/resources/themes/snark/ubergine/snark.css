@@ -2732,7 +2732,7 @@ from {background-size: 100% 100%, 15% 100%}
 }
 
 @keyframes spin {
-from {transform: rotate(360deg)}
+  from {transform: rotate(360deg)}
 }
 
 .trackerconfig {
