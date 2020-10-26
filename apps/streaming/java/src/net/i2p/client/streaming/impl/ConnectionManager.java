@@ -62,10 +62,12 @@ class ConnectionManager {
 
     /** @since 0.9.3 */
     public static final String PROP_BLACKLIST = "i2p.streaming.blacklist";
-    private static final long MAX_PING_TIMEOUT = 5*60*1000;
+//    private static final long MAX_PING_TIMEOUT = 5*60*1000;
+    private static final long MAX_PING_TIMEOUT = 60*1000;
     private static final int MAX_PONG_PAYLOAD = 32;
     /** once over throttle limits, respond this many times before just dropping */
-    private static final int DROP_OVER_LIMIT = 3;
+//    private static final int DROP_OVER_LIMIT = 3;
+    private static final int DROP_OVER_LIMIT = 1;
 
     // TODO https://stackoverflow.com/questions/16022624/examples-of-http-api-rate-limiting-http-response-headers
     private static final String LIMIT_HTTP_RESPONSE =
@@ -341,7 +343,7 @@ class ConnectionManager {
         int mtu = opts.getMaxMessageSize();
         if (size < mtu) {
             if (_log.shouldInfo())
-                _log.info("Reducing MTU for IB conn to " + size 
+                _log.info("Reducing MTU for IB conn to " + size
                           + " from " + mtu);
             opts.setMaxMessageSize(size);
             opts.setMaxInitialMessageSize(size);
@@ -349,7 +351,7 @@ class ConnectionManager {
             if (size > mtu)
                 size = mtu;
             if (_log.shouldInfo())
-                _log.info("Increasing MTU for IB conn to " + size 
+                _log.info("Increasing MTU for IB conn to " + size
                           + " from " + mtu);
             if (size != mtu)
                 opts.setMaxMessageSize(size);
