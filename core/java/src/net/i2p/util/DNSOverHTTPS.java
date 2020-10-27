@@ -43,11 +43,14 @@ public class DNSOverHTTPS implements EepGet.StatusListener {
     private static final Map<String, Result> v4Cache = new LHMCache<String, Result>(32);
     private static final Map<String, Result> v6Cache = new LHMCache<String, Result>(32);
     // v4 URLs to query, ending with '&'
-    private static final List<String> v4urls = new ArrayList<String>(4);
+    private static final List<String> v4urls = new ArrayList<String>(8);
     // v6 URLs to query, ending with '&'
-    private static final List<String> v6urls = new ArrayList<String>(4);
+    private static final List<String> v6urls = new ArrayList<String>(8);
     // consecutive failures
     private static final ObjectCounter<String> fails = new ObjectCounter<String>();
+
+    // ESR version of Firefox, same as Tor Browser
+    private static final String UA_CLEARNET = "Mozilla/5.0 (Windows NT 10.0; rv:78.0) Gecko/20100101 Firefox/78.0";
 
     // Don't look up any of these TLDs
     // RFC 2606, 6303, 7393
@@ -64,7 +67,11 @@ public class DNSOverHTTPS implements EepGet.StatusListener {
     } );
 
     static {
-        // Warning: All hostnames MUST be in loop check in lookup() below
+        // Public lists:
+        // https://dnscrypt.info/public-servers/
+        // https://github.com/curl/curl/wiki/DNS-over-HTTPS#publicly-available-servers
+        // https://dnsprivacy.org/wiki/display/DP/DNS+Privacy+Public+Resolvers#DNSPrivacyPublicResolvers-DNS-over-HTTPS(DoH)
+
         // Google
         // https://developers.google.com/speed/public-dns/docs/doh/
         // 8.8.8.8 and 8.8.4.4 now redirect to dns.google, but SSLEepGet doesn't support redirect
@@ -97,9 +104,13 @@ public class DNSOverHTTPS implements EepGet.StatusListener {
     // keep the timeout very short, as we try multiple addresses,
     // and will be falling back to regular DNS.
     private static final long TIMEOUT = 3*1000;
+    // total for v4 + v6
+    private static final long OVERALL_TIMEOUT = 10*1000;
     private static final int MAX_TTL = 24*60*60;
     // don't use a URL after this many consecutive failures
     private static final int MAX_FAILS = 3;
+    // each for v4 and v6
+    private static final int MAX_REQUESTS = 4;
     private static final int V4_CODE = 1;
     private static final int CNAME_CODE = 5;
     private static final int V6_CODE = 28;
@@ -141,6 +152,16 @@ public class DNSOverHTTPS implements EepGet.StatusListener {
      *  @return null if not found
      */
     public String lookup(String host, Type type) {
+        return lookup(host, type, null);
+    }
+
+    /**
+     *  Lookup in cache, then query servers
+     *  @param url null to query several default servers, or specify single server
+     *  @return null if not found
+     *  @since 0.9.48
+     */
+    private String lookup(String host, Type type, String url) {
         if (Addresses.isIPAddress(host))
             return host;
         if (host.startsWith("["))
@@ -175,7 +196,7 @@ public class DNSOverHTTPS implements EepGet.StatusListener {
             if (rv != null)
                 return rv;
         }
-        return query(host, type);
+        return query(host, type, url);
     }
 
     public static void clearCaches() {
@@ -206,26 +227,32 @@ public class DNSOverHTTPS implements EepGet.StatusListener {
 
     /**
      *  Query servers
+     *  @param url null to query several default servers, or specify single server
      *  @return null if not found
      */
-    private String query(String host, Type type) {
-        List<String> toQuery = new ArrayList<String>((type == Type.V6_ONLY) ? v6urls : v4urls);
+    private String query(String host, Type type, String url) {
+        List<String> toQuery;
+        if (url != null)
+            toQuery = Collections.singletonList(url);
+        else
+            toQuery = new ArrayList<String>((type == Type.V6_ONLY) ? v6urls : v4urls);
         Collections.shuffle(toQuery);
+        final long timeout = System.currentTimeMillis() + OVERALL_TIMEOUT;
         if (type == Type.V4_ONLY || type == Type.V4_PREFERRED) {
             // v4 query
-            String rv = query(host, false, toQuery);
+            String rv = query(host, false, toQuery, timeout);
             if (rv != null)
                 return rv;
         }
         if (type != Type.V4_ONLY) {
             // v6 query
-            String rv = query(host, true, toQuery);
+            String rv = query(host, true, toQuery, timeout);
             if (rv != null)
                 return rv;
         }
         if (type == Type.V6_PREFERRED) {
             // v4 query after v6 query
-            String rv = query(host, false, toQuery);
+            String rv = query(host, false, toQuery, timeout);
             if (rv != null)
                 return rv;
         }
@@ -235,8 +262,16 @@ public class DNSOverHTTPS implements EepGet.StatusListener {
     /**
      *  @return null if not found
      */
-    private String query(String host, boolean isv6, List<String> toQuery) {
+    private String query(String host, boolean isv6, List<String> toQuery, long timeout) {
+        int requests = 0;
+        final String loopcheck = "https://" + host + '/';
         for (String url : toQuery) {
+            if (requests >= MAX_REQUESTS)
+                break;
+            if (System.currentTimeMillis() >= timeout)
+                break;
+            if (url.startsWith(loopcheck))
+                continue;
             if (fails.count(url) > MAX_FAILS)
                 continue;
             int tcode = isv6 ? V6_CODE : V4_CODE;
@@ -244,6 +279,8 @@ public class DNSOverHTTPS implements EepGet.StatusListener {
             log("Fetching " + furl);
             baos.reset();
             SSLEepGet eepget = new SSLEepGet(ctx, baos, furl, state);
+            eepget.forceDNSOverHTTPS(false);
+            eepget.addHeader("User-Agent", UA_CLEARNET);
             if (ctx.isRouterContext())
                 eepget.addStatusListener(this);
             else
@@ -256,9 +293,11 @@ public class DNSOverHTTPS implements EepGet.StatusListener {
             if (state == null)
                 state = eepget.getSSLState();
             // we treat all fails the same, whether server responded or not
+            requests++;
             fails.increment(url);
             log("No result from " + furl);
         }
+        log("No result after " + requests + " attempts");
         return null;
     }
 
@@ -351,7 +390,7 @@ public class DNSOverHTTPS implements EepGet.StatusListener {
             }
             log("Bad response:\n" + new String(b));
         } else {
-            log("Fail fetching");
+            log("Fail fetching, rc: " + eepget.getStatusCode());
         }
         return null;
     }
@@ -418,7 +457,8 @@ public class DNSOverHTTPS implements EepGet.StatusListener {
     public static void main(String[] args) {
         Type type = Type.V4_PREFERRED;
         boolean error = false;
-        Getopt g = new Getopt("dnsoverhttps", args, "46fs");
+        String url = null;
+        Getopt g = new Getopt("dnsoverhttps", args, "46fsu:");
         try {
             int c;
             while ((c = g.getopt()) != -1) {
@@ -439,6 +479,10 @@ public class DNSOverHTTPS implements EepGet.StatusListener {
                     type = Type.V6_PREFERRED;
                     break;
 
+                case 'u':
+                    url = g.getOptarg();
+                    break;
+
                 case '?':
                 case ':':
                 default:
@@ -455,18 +499,19 @@ public class DNSOverHTTPS implements EepGet.StatusListener {
             System.exit(1);
         }
 
-        String url = args[g.getOptind()];
-        String result = (new DNSOverHTTPS(I2PAppContext.getGlobalContext())).lookup(url, type);
+        String hostname = args[g.getOptind()];
+        String result = (new DNSOverHTTPS(I2PAppContext.getGlobalContext())).lookup(hostname, type, url);
         if (result != null)
-            System.out.println(type + " lookup for " + url + " is " + result);
+            System.out.println(type + " lookup for " + hostname + " is " + result);
         else
-            System.err.println(type + " lookup failed for " + url);
+            System.err.println(type + " lookup failed for " + hostname);
     }
 
     private static void usage() {
         System.err.println("DNSOverHTTPS [-fs46] hostname\n" +
                            "             [-f] (IPv4 preferred) (default)\n" +
                            "             [-s] (IPv6 preferred)\n" +
+                           "             [-u 'https://host/dns-query?...&'] (request from this URL only)\n" +
                            "             [-4] (IPv4 only)\n" +
                            "             [-6] (IPv6 only)");
     }

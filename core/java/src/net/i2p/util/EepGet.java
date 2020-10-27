@@ -36,7 +36,6 @@ import net.i2p.data.Base32;
 import net.i2p.data.Base64;
 import net.i2p.data.ByteArray;
 import net.i2p.data.DataHelper;
-import net.i2p.util.InternalSocket;
 
 /**
  * EepGet [-p 127.0.0.1:4444]
@@ -195,6 +194,7 @@ public class EepGet {
         _bytesRemaining = -1;
         _fetchHeaderTimeout = CONNECT_TIMEOUT;
         _listeners = new ArrayList<StatusListener>(1);
+        _allowCaching = allowCaching;
         _etag = etag;
         _lastModified = lastModified;
         _etagOrig = etag;
