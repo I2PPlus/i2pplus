@@ -103,10 +103,10 @@ class I2CPMessageProducer {
             _log.debug("Setting " + _maxBytesPerSecond + "Bps max");
     }
 
-    /** 
+    /**
      * Strip out the client-side options from the session options.
      * @return a new copy, may be modified
-     * @since 0.9.38 
+     * @since 0.9.38
      */
     private Properties getRouterOptions(I2PSessionImpl session) {
         Properties props = new Properties();
@@ -125,7 +125,7 @@ class I2CPMessageProducer {
                 if (_log.shouldLog(Log.WARN))
                     _log.warn("Not passing on property ["
                               + key
-                              + "] in the session config, key or value is too long (max = 255): "
+                              + "] in the session config, key or value is too long (max = 255) \n* Value: "
                               + val);
                 iter.remove();
             }
@@ -133,7 +133,7 @@ class I2CPMessageProducer {
         return props;
     }
 
-    /** 
+    /**
      * Send all the messages that a client needs to send to a router to establish
      * a new session.
      */
@@ -357,7 +357,7 @@ class I2CPMessageProducer {
             _lock.unlock();
         }
     }
-    
+
     /**
      * Create a new payload.
      * No more end-to-end encryption, just set the "encrypted" data to the payload.
