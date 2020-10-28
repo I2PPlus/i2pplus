@@ -210,7 +210,7 @@ public final class ElGamalAESEngine {
         Set<SessionTag> foundTags = new HashSet<SessionTag>();
         final boolean shouldDebug = _log.shouldDebug();
         if (shouldDebug)
-            _log.debug("Decrypting existing session with tag: " + st.toString() + ": key: " + key.toBase64() + ": " + data.length + " bytes");
+            _log.debug("Decrypting existing session \n* Tag: " + st.toString() + "\n* Key: " + key.toBase64() + " (" + data.length + " bytes)");
         byte[] decrypted = decryptExistingSession(data, key, targetPrivateKey, foundTags, usedKey, foundKey);
         if (decrypted != null) {
             _context.statManager().updateFrequency("crypto.elGamalAES.decryptExistingSession");
@@ -384,7 +384,7 @@ public final class ElGamalAESEngine {
             //if (_log.shouldLog(Log.DEBUG))
             //    _log.debug("Decrypt with a non session tag, but tags read: " + foundTags.size());
             if (_log.shouldLog(Log.WARN))
-                _log.warn("Decrypting looks negative... existing key fails with existing tag, lets try as a new one");
+                _log.warn("Decrypting looks negative (existing key fails with existing tag) - let's try as a new one...");
             byte rv[] = decryptNewSession(data, targetPrivateKey, foundTags, usedKey, foundKey);
             if (_log.shouldLog(Log.WARN)) {
                 if (rv == null)
