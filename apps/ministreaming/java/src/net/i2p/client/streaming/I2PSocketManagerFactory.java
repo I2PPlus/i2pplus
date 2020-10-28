@@ -55,7 +55,7 @@ public class I2PSocketManagerFactory {
      * @return the newly created socket manager, or null if there were errors
      */
     public static I2PSocketManager createManager() {
-        return createManager(getHost(), getPort(), (Properties) System.getProperties().clone(), 
+        return createManager(getHost(), getPort(), (Properties) System.getProperties().clone(),
                     IncomingConnectionFilter.ALLOW);
     }
 
@@ -63,10 +63,10 @@ public class I2PSocketManagerFactory {
      * Create a socket manager using a brand new destination connected to the
      * I2CP router on the local machine on the default port (7654) with the
      * specified incoming connection filter.
-     * 
+     *
      * Blocks for a long time while the router builds tunnels.
      * The nonblocking createDisconnectedManager() is preferred.
-     * 
+     *
      * @since 0.9.40
      * @param filter The filter for incoming connections
      * @return the newly created socket manager, or null if there were errors
@@ -124,10 +124,10 @@ public class I2PSocketManagerFactory {
     /**
      * Create a socket manager using a brand new destination connected to the
      * I2CP router on the specified host and port with the specified connection filter
-     * 
+     *
      * Blocks for a long time while the router builds tunnels.
      * The nonblocking createDisconnectedManager() is preferred.
-     * 
+     *
      * @param host I2CP host null to use default, ignored if in router context
      * @param port I2CP port &lt;= 0 to use default, ignored if in router context
      * @param filter The filter to use for incoming connections
@@ -136,7 +136,7 @@ public class I2PSocketManagerFactory {
     public static I2PSocketManager createManager(String host, int port, IncomingConnectionFilter filter) {
         return createManager(host, port, (Properties) System.getProperties().clone(), filter);
     }
-    
+
     /**
      * Create a socket manager using a brand new destination connected to the
      * I2CP router on the given machine reachable through the given port.
@@ -155,9 +155,9 @@ public class I2PSocketManagerFactory {
 
     /**
      * Create a socket manager using a brand new destination connected to the
-     * I2CP router on the given machine reachable through the given port with 
+     * I2CP router on the given machine reachable through the given port with
      * the specified connection filter
-     * 
+     *
      * Blocks for a long time while the router builds tunnels.
      * The nonblocking createDisconnectedManager() is preferred.
      *
@@ -203,7 +203,7 @@ public class I2PSocketManagerFactory {
     /**
      * Create a socket manager using the destination loaded from the given private key
      * stream and connected to the default I2CP host and port with the specified connection filter
-     * 
+     *
      * Blocks for a long time while the router builds tunnels.
      * The nonblocking createDisconnectedManager() is preferred.
      *
@@ -213,12 +213,8 @@ public class I2PSocketManagerFactory {
      * @param filter The filter to use for incoming connections
      * @return the newly created socket manager, or null if there were errors
      */
-    public static I2PSocketManager createManager(InputStream myPrivateKeyStream, 
-                    IncomingConnectionFilter filter) {
-        return createManager(myPrivateKeyStream, getHost(), getPort(), 
-                             (Properties) System.getProperties().clone(),
-                             filter);
-
+    public static I2PSocketManager createManager(InputStream myPrivateKeyStream, IncomingConnectionFilter filter) {
+        return createManager(myPrivateKeyStream, getHost(), getPort(), (Properties) System.getProperties().clone(), filter);
     }
 
     /**
@@ -240,7 +236,7 @@ public class I2PSocketManagerFactory {
     /**
      * Create a socket manager using the destination loaded from the given private key
      * stream and connected to the default I2CP host and port.
-     * 
+     *
      * Blocks for a long time while the router builds tunnels.
      * The nonblocking createDisconnectedManager() is preferred.
      *
@@ -250,9 +246,7 @@ public class I2PSocketManagerFactory {
      * @param filter The filter to use for incoming connections
      * @return the newly created socket manager, or null if there were errors
      */
-    public static I2PSocketManager createManager(InputStream myPrivateKeyStream,
-		                                 Properties opts,
-                                                 IncomingConnectionFilter filter) {
+    public static I2PSocketManager createManager(InputStream myPrivateKeyStream, Properties opts, IncomingConnectionFilter filter) {
         return createManager(myPrivateKeyStream, getHost(), getPort(), opts, filter);
     }
 
@@ -271,8 +265,7 @@ public class I2PSocketManagerFactory {
      * @param opts Streaming and I2CP options, may be null
      * @return the newly created socket manager, or null if there were errors
      */
-    public static I2PSocketManager createManager(InputStream myPrivateKeyStream, String i2cpHost, int i2cpPort,
-                                                 Properties opts) {
+    public static I2PSocketManager createManager(InputStream myPrivateKeyStream, String i2cpHost, int i2cpPort, Properties opts) {
          return createManager(myPrivateKeyStream, i2cpHost, i2cpPort, opts, IncomingConnectionFilter.ALLOW);
     }
 
@@ -280,7 +273,7 @@ public class I2PSocketManagerFactory {
      * Create a socket manager using the destination loaded from the given private key
      * stream and connected to the I2CP router on the specified machine on the given
      * port.
-     * 
+     *
      * Blocks for a long time while the router builds tunnels.
      * The nonblocking createDisconnectedManager() is preferred.
      *
@@ -292,18 +285,15 @@ public class I2PSocketManagerFactory {
      * @param filter The filter to use for incoming connections
      * @return the newly created socket manager, or null if there were errors
      */
-    public static I2PSocketManager createManager(InputStream myPrivateKeyStream,
-		                                 String i2cpHost,
-                                                 int i2cpPort,
-                                                 Properties opts,
+    public static I2PSocketManager createManager(InputStream myPrivateKeyStream, String i2cpHost, int i2cpPort, Properties opts,
                                                  IncomingConnectionFilter filter) {
         try {
             return createManager(myPrivateKeyStream, i2cpHost, i2cpPort, opts, true, filter);
         } catch (I2PSessionException ise) {
-            getLog().error("Error creating session for socket manager", ise);
+            getLog().error("Error creating session for Socket Manager (" + ise.getMessage() + ")");
             return null;
         }
-    }	    
+    }
 
     /**
      * Create a disconnected socket manager using the destination loaded from the given private key
@@ -329,13 +319,13 @@ public class I2PSocketManagerFactory {
                                          i2cpHost,
                                          i2cpPort,
                                          opts,
-                                         IncomingConnectionFilter.ALLOW);	 
+                                         IncomingConnectionFilter.ALLOW);
     }
-    
+
     /**
      * Create a disconnected socket manager using the destination loaded from the given private key
      * stream, or null for a transient destination.
-     * 
+     *
      * Non-blocking. Does not connect to the router or build tunnels.
      * For servers, caller MUST call getSession().connect() to build tunnels and start listening.
      * For clients, caller may do that to build tunnels in advance;
@@ -355,7 +345,7 @@ public class I2PSocketManagerFactory {
                                                              String i2cpHost,
                                                              int i2cpPort,
                                                              Properties opts,
-                                                             IncomingConnectionFilter filter) 
+                                                             IncomingConnectionFilter filter)
                                     throws I2PSessionException {
         if (myPrivateKeyStream == null) {
             I2PClient client = I2PClientFactory.createClient();
@@ -429,7 +419,7 @@ public class I2PSocketManagerFactory {
             if (!I2PSocketManager.class.isAssignableFrom(cls))
                 throw new IllegalArgumentException(classname + " is not an I2PSocketManager");
             Constructor<?> con =
-                  cls.getConstructor(I2PAppContext.class, 
+                  cls.getConstructor(I2PAppContext.class,
                                      I2PSession.class,
                                      Properties.class,
                                      String.class,
@@ -474,7 +464,7 @@ public class I2PSocketManagerFactory {
                     return rv;
                 if (rv != null)
                     st = rv.toString();
-                getLog().logAlways(Log.WARN, "Unsupported signature type " + st +
+                getLog().logAlways(Log.WARN, "Unsupported Signature Type " + st +
                                              ", reverting to " + I2PClient.DEFAULT_SIGTYPE);
             }
         }

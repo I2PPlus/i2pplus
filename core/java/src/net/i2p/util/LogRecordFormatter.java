@@ -132,8 +132,7 @@ class LogRecordFormatter {
 
     /** truncates or pads to the specified size */
     private static String toString(String str, int size) {
-    String utf16 = "2026"; // ellipsis
-    String ellipsis = String.valueOf(Character.toChars(Integer.parseInt(utf16, 16)));
+    String ellipsis = "...";
         StringBuilder buf = new StringBuilder();
         if (str == null) str = "";
         if (str.length() > size) {
