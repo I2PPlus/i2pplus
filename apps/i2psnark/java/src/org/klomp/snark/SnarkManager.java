@@ -1665,8 +1665,8 @@ public class SnarkManager implements CompleteListener, ClientApp {
         try {
             filename = sfile.getCanonicalPath();
         } catch (IOException ioe) {
-            _log.error("Unable to add the torrent " + filename, ioe);
-            addMessage(_t("Error: Could not add the torrent {0}", filename) + ": " + ioe.getMessage());
+            _log.error("Unable to add torrent: " + filename + " (" + ioe.getMessage() + ")");
+            addMessage(_t("Error: Could not add torrent: {0}", filename) + " (" + ioe.getMessage() + ")");
             return false;
         }
         if (dataDir == null)

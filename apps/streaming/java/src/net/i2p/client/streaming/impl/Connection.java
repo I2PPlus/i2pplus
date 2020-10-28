@@ -216,7 +216,7 @@ class Connection {
 
                 // no need to wait until the other side has ACKed us before sending the first few wsize
                 // packets through
-		// Incorrect assumption, the constructor defaults _connected to true --Sponge
+                // Incorrect assumption, the constructor defaults _connected to true --Sponge
                 if (!_connected.get()) {
                     if (getResetReceived())
                         throw new I2PSocketException(I2PSocketException.STATUS_CONNECTION_RESET);
@@ -443,7 +443,7 @@ class Connection {
 
                 } else {
                     if (_log.shouldLog(Log.DEBUG))
-                        _log.debug("[" + Connection.this + "] Timer was already running");
+                        _log.debug("[" + Connection.this + "] Timer was already running!");
                 }
 
                 packet.setTimeout(timeout);
@@ -768,7 +768,7 @@ class Connection {
 
         if (cleanDisconnect) {
             if (_log.shouldLog(Log.DEBUG))
-                _log.debug("Clean disconnecting; remove? " + removeFromConMgr +
+                _log.debug("Clean disconnecting - removed from Connection Manager? " + removeFromConMgr +
                            "\n* " + toString(), new Exception("discon"));
             _outputStream.closeInternal();
         } else {
@@ -777,13 +777,13 @@ class Connection {
                 // only send a RESET if we ever got something (and he didn't RESET us),
                 // otherwise don't waste the crypto and tags
                 if (_log.shouldLog(Log.WARN))
-                    _log.warn("Hard disconnecting and sending reset; remove? " + removeFromConMgr +
+                    _log.warn("Hard disconnecting and sending reset - removed from Connection Manager? " + removeFromConMgr +
 //                             "\n* " + toString(), new Exception("cause"));
                               "\n* " + toString());
                 sendReset();
             } else {
                 if (_log.shouldLog(Log.WARN))
-                    _log.warn("Hard disconnecting; remove? " + removeFromConMgr +
+                    _log.warn("Hard disconnecting - removed from Connection Manager? " + removeFromConMgr +
 //                              "\n* " + toString(), new Exception("cause"));
                               "\n* " + toString());
             }
@@ -942,7 +942,7 @@ class Connection {
     public void setRemoteTransientSPK(SigningPublicKey transientSPK) {
         synchronized(this) {
             if (_transientSPK != null)
-                throw new RuntimeException("Remote SPK already set");
+                throw new RuntimeException("Remote Signing Public Key already set");
             _transientSPK = transientSPK;
         }
     }
@@ -959,7 +959,7 @@ class Connection {
      */
     public void setSendStreamId(long id) {
         if (!_sendStreamId.compareAndSet(0, id))
-            throw new IllegalStateException("Send stream ID already set [" + _sendStreamId + ", " + id + "]");
+            throw new IllegalStateException("Send Stream ID already set [" + _sendStreamId + ", " + id + "]");
     }
 
     /**
@@ -974,7 +974,7 @@ class Connection {
      */
     public void setReceiveStreamId(long id) {
         if (!_receiveStreamId.compareAndSet(0, id))
-            throw new IllegalStateException("Receive stream ID already set [" + _receiveStreamId + ", " + id + "]");
+            throw new IllegalStateException("Receive Stream ID already set [" + _receiveStreamId + ", " + id + "]");
         synchronized (_connectLock) { _connectLock.notifyAll(); }
     }
 
@@ -1206,7 +1206,7 @@ class Connection {
             if (_connected.get() && (_receiveStreamId.get() > 0) && (_sendStreamId.get() > 0) ) {
                 // w00t
                 if (_log.shouldLog(Log.DEBUG))
-                    _log.debug("waitForConnect(): Connected and we have stream IDs");
+                    _log.debug("waitForConnect(): Connected and we have Stream IDs");
                 return;
             }
             if (_connectionError != null) {
@@ -1274,7 +1274,7 @@ class Connection {
                 _log.debug("Fire inactivity timer on " + Connection.this.toString());
             // uh, nothing more to do...
             if (!_connected.get()) {
-                if (_log.shouldLog(Log.DEBUG)) _log.debug("Inactivity timeout reached, but we are already closed");
+                if (_log.shouldLog(Log.DEBUG)) _log.debug("Inactivity timeout reached, but we are already closed!");
                 return;
             }
             // we got rescheduled already
@@ -1291,7 +1291,7 @@ class Connection {
             }
             // this shouldn't have been scheduled
             if (_options.getInactivityTimeout() <= 0) {
-                if (_log.shouldLog(Log.DEBUG)) _log.debug("Inactivity timeout reached, but there is no timer...");
+                if (_log.shouldLog(Log.DEBUG)) _log.debug("Inactivity timeout reached, but there is no timer!");
                 return;
             }
             // if one of us can't talk...
@@ -1316,7 +1316,7 @@ class Connection {
                 case ConnectionOptions.INACTIVITY_ACTION_SEND:
                     if (_closeSentOn.get() <= 0 && _closeReceivedOn.get() <= 0) {
                         if (_log.shouldLog(Log.WARN))
-                            _log.warn("Sending some data due to inactivity");
+                            _log.warn("Sending some data due to inactivity...");
                         _receiver.send(null, 0, 0, true);
                         break;
                     } // else fall through
@@ -1428,11 +1428,11 @@ class Connection {
             buf.append("\n* Close received: ").append(DataHelper.formatDuration(_context.clock().now() - getCloseReceivedOn())).append(" ago");
         buf.append("\n* Sent: ").append(1 + _lastSendId.get());
         buf.append("; Rcvd: ").append(1 + _inputStream.getHighestBlockId() - missing);
-        buf.append("; ACKThru ").append(_highestAckedThrough);
-        buf.append("; SSThresh ").append(_ssthresh);
-        buf.append("; MinRTT ").append(_options.getMinRTT());
-        buf.append("; MaxWin ").append(_options.getMaxWindowSize());
-        buf.append("; MTU ").append(_options.getMaxMessageSize());
+        buf.append("; ACKThru: ").append(_highestAckedThrough);
+        buf.append("; SSThresh: ").append(_ssthresh);
+        buf.append("; MinRTT: ").append(_options.getMinRTT());
+        buf.append("; MaxWin: ").append(_options.getMaxWindowSize());
+        buf.append("; MTU: ").append(_options.getMaxMessageSize());
         return buf.toString();
     }
 
