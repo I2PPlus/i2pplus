@@ -18,60 +18,60 @@
     <!-- You probably don't want to change anything from here down -->
     <target name="help" depends="all" />
     <target name="all" >
-        <echo message="Useful targets: " />
-        <echo message="  pkg:           distclean then package everything up (updater, installer)" />
-        <echo message="  dist:          pkg and javadoc" />
-        <echo message="  dist200:       pkg, updater200, and javadoc" />
-        <echo message="  installer:     build the GUI installer" />
-        <echo message="  installer-freebsd: build the GUI installer (FreeBSD only)" />
-        <echo message="  installer-linux: build the GUI installer (Linux only)" />
-        <echo message="  installer-osx: build the GUI installer (OSX only)" />
-        <echo message="  installer-windows: build the GUI installer (Windows only)" />
-        <echo message="  installer-nowindows: build the GUI installer (all but Windows)" />
-        <echo message="  installer5, installer5-linux, installer5-nowindows, installer5-windows: use IzPack 5" />
-        <echo message="  osxLauncher:   build the Mac OS X router/GUI launcher (OSX only)" />
-        <echo message="  bbLauncher:    build the Browser Bundle router launcher" />
-        <echo message="  tarball:       tar the full install into i2p.tar.bz2 (extracts to build a new clean install)" />
-        <echo message="  updater:       Package the built files in i2pupdate.zip (extracts safely over existing installs)" />
-        <echo message="  updater200:    updater compressed with pack200 (creates i2pupdate200.zip, 60% smaller)" />
-        <echo message="  updater200WithGeoIP: Updater compressed with pack200 including GeoIP Files" />
-        <echo message="  signed-updater200: Signed updater compressed with pack200 (creates i2pupdate.su3, 60% smaller)" />
-        <echo message="  updaterWithJavadoc: updater including the javadocs, for display in the console" />
-        <echo message="  updater200WithJavadoc: updater including the javadocs, for display in the console (creates i2pupdate200.zip)" />
-        <echo message="  signed-updater200WithJavadoc: Signed updater including the javadocs, for display in the console (creates i2pupdate.su3)" />
-        <echo message="  updaterWithJavadocAndJetty: updater including the javadocs, for display in the console, and Jetty " />
-        <echo message="  updater200WithJavadocAndJetty: updater including the javadocs, for display in the console, and Jetty (creates i2pupdate200.zip)" />
-        <echo message="  signed-updater200WithJavadocAndJetty: Signed updater including the javadocs, for display in the console, and Jetty (creates i2pupdate.su3)" />
-        <echo message="  updaterWithJetty: updater including Jetty" />
-        <echo message="  updater200WithJetty: updater including Jetty (pack200)" />
-        <echo message="  signed-updater200withJetty: Signed updater including Jetty" />
-        <echo message="  updaterWithJettyFixes: updater including local jetty patches" />
-        <echo message="  updaterWithGeoIP: updater including GeoIP Files" />
-        <echo message="  updaterWithJettyFixesAndGeoIP" />
-        <echo message="  updater200WithJettyFixesAndGeoIP" />
-        <echo message="  updater200WithJettyAndGeoIP: Updater including Jetty and GeopIP files" />
-        <echo message="  updater200WithJettyAndGeoIPAndLicenses: Updater including Jetty and GeoIP files and Licenses" />
-        <echo message="  updaterWithJettyFixesAndJbigi" />
-        <echo message="  updaterWithJbigi" />
-        <echo message="  updater200WithJbigi" />
-        <echo message="  updaterSmall:  updater with the essentials only - no SAM, i2psnark, SusiMail, SusiDNS, or history.txt" />
-        <echo message="  updaterRouter: updater with the i2p.jar and router.jar only" />
-        <echo message="  distclean:     clean up all derived files" />
-        <!-- <echo message="  syndie:    generate a standalone syndie install" /> -->
-        <echo message="  desktopgui:    generate a standalone desktopgui install" />
-        <echo message="  i2psnark:      generate a standalone i2psnark install" />
-        <echo message="  justBOB:       generate a standalone BOB-one.jar" />
-        <echo message="  javadoc:       generate javadoc for the entire project into ./build/javadoc and ./javadoc.zip" />
-        <echo message="  javadoc-test:  Javadocs for unit test classes (build/javadoc-test)" />
-        <echo message="  slackpkg:      generate Slackware package in ./Slackware/i2p" />
-        <echo message="  debianhowto:   instructions on building Debian packages" />
-        <echo message="  debian:        generate Debian packages in ../ (run &quot;ant debianhowto&quot; for instructions)" />
-        <echo message="  debian-clean:  rollback debian specific patches and run the &quot;distclean&quot; target (done automatically at the end of the &quot;debian&quot; target)" />
-        <!-- <echo message="  debianrepo: build a Debian repository (reprepro required)" /> -->
-        <echo message="  poupdate:      update the .po files for translators" />
-        <echo message="  pkg-portable-win32:  build a minimum portable version for win32" />
-        <echo message="  bench:         build the benchmarks" />
-   </target>
+        <echo message="Useful targets:" />
+        <echo message="  bench:                                       Build benchmarks" />
+        <echo message="  debian-clean:                                Rollback Debian specific patches then run &quot;distclean&quot;" />
+        <echo message="  debian:                                      Generate Debian packages in ../ then run &quot;debian-clean&quot;" />
+        <echo message="  debianhowto:                                 Instructions on building Debian packages" />
+        <echo message="  desktopgui:                                  Generate a standalone DesktopGUI install" />
+        <echo message="  dist200:                                     Run &quot;pkg&quot;, &quot;updater200&quot; and &quot;javadoc&quot;" />
+        <echo message="  distclean:                                   Clean up all derived and temporary files" />
+        <echo message="  dist:                                        Run &quot;pkg&quot; and &quot;javadoc&quot;" />
+        <echo message="  i2psnark:                                    Generate standalone I2PSnark install" />
+        <echo message="  installer / installer5:                      Build GUI installer (IZPack4 / IZpack5)" />
+        <echo message="  installer-freebsd:                           Build FreeBSD GUI installer" />
+        <echo message="  installer-linux / installer5-linux:          Build Linux GUI installer (IZPack4 / IZpack5)" />
+        <echo message="  installer-nowindows / installer5-nowindows:  Build GUI installer without Windows support (IZPack4 / IZpack5)" />
+        <echo message="  installer-osx:                               Build OS X GUI installer" />
+        <echo message="  installer-windows / installer5-windows:      Build Windows GUI installer (IZPack4 / IZpack5)" />
+        <echo message="  javadoc:                                     Generate javadoc for the entire project into ./build/javadoc and ./javadoc.zip" />
+        <echo message="  javadoc-test:                                Javadocs for unit test classes (build/javadoc-test)" />
+        <echo message="  justBOB:                                     Generate a standalone BOB-one.jar" />
+        <echo message="  osxLauncher:                                 Build Mac OS X router/GUI launcher" />
+        <echo message="  pkg:                                         &quot;distclean&quot; then package everything up (updater, installer)" />
+        <echo message="  pkg-portable-win32:                          Build a minimum portable version for Win32" />
+        <echo message="  poupdate:                                    Update the .po files for translators" />
+        <echo message="  signed-updater200:                           Signed Updater compressed with pack200 -> creates i2pupdate.su3" />
+        <echo message="  signed-updater200WithJavadocAndJetty:        Signed Updater + javadocs (linked in console) and Jetty -> creates i2pupdate.su3" />
+        <echo message="  signed-updater200WithJavadoc:                Signed Updater + javadocs (linked in console) -> creates i2pupdate.su3" />
+        <echo message="  signed-updater200withJetty:                  Signed Updater + Jetty" />
+        <echo message="  slackpkg:                                    Generate Slackware package in ./Slackware/i2p" />
+        <echo message="  tarball:                                     tar the full install into i2p.tar.bz2 -> extracts to build a new clean install" />
+        <echo message="  updater200:                                  Updater compressed with pack200 -> creates i2pupdate200.zip (60% smaller)" />
+        <echo message="  updater200WithGeoIP:                         Updater compressed with pack200 + GeoIP files" />
+        <echo message="  updater200WithJavadocAndJetty:               Updater + javadocs (linked in console) and Jetty -> creates i2pupdate200.zip" />
+        <echo message="  updater200WithJavadoc:                       Updater + javadocs (linked in console) -> creates i2pupdate200.zip" />
+        <echo message="  updater200WithJbigi                          Updater + jBigi library (pack200)" />
+        <echo message="  updater200WithJettyAndGeoIPAndLicenses:      Updater + Jetty and GeoIP files and licenses (pack200)" />
+        <echo message="  updater200WithJettyAndGeoIP:                 Updater + Jetty and GeoIP files (pack200)" />
+        <echo message="  updater200WithJettyFixesAndGeoIP             Updater + local Jetty patches + GeoIP files (pack200)" />
+        <echo message="  updater200WithJetty:                         Updater + Jetty (pack200)" />
+        <echo message="  updater:                                     Package the built files in i2pupdate.zip -> updates existing installs" />
+        <echo message="  updaterRouter:                               Updater with i2p.jar and router.jar only" />
+        <echo message="  updaterSmall:                                Updater with essentials only (no SAM, I2PSnark, SusiMail, SusiDNS, or history.txt)" />
+        <echo message="  updaterWithGeoIP:                            Updater + GeoIP files" />
+        <echo message="  updaterWithJavadocAndJetty:                  Updater + javadocs (linked in console), and Jetty " />
+        <echo message="  updaterWithJavadoc:                          Updater + javadocs (linked in console)" />
+        <echo message="  updaterWithJbigi                             Updater + jBigi library" />
+        <echo message="  updaterWithJettyFixesAndGeoIP                Updater + local Jetty patches + GeoIP files" />
+        <echo message="  updaterWithJettyFixesAndJbigi                Updater + local Jetty patches + jBigi library" />
+        <echo message="  updaterWithJettyFixes:                       Updater + local Jetty patches" />
+        <echo message="  updaterWithJetty:                            Updater + Jetty webserver" />
+        <!-- <echo message="  bbLauncher:                                  Build Browser Bundle router launcher" /> -->
+        <!-- <echo message="  debianrepo:                                  Build a Debian repository (reprepro required)" /> -->
+        <!-- <echo message="  installer5, installer5-linux, installer5-nowindows, installer5-windows: use IzPack 5" /> -->
+        <!-- <echo message="  syndie:                                      Generate a standalone syndie install" /> -->
+    </target>
     <target name="debianhowto">
             <echo message="To build debian packages, you must make sure that you have" />
             <echo message="the necessary build-dependencies installed." />
@@ -90,7 +90,7 @@
             <echo message="sudo apt-get install geoip-database famfamfam-flag-png" />
             <echo message=" " />
             <echo message="Once the dependencies are installed, run &quot;ant debian&quot;"/>
-            <echo message="to patch the source and build the packages." />
+            <echo message="to patch the source and Build packages." />
     </target>
 
     <property name="gpg" value="gpg" />
@@ -2396,7 +2396,7 @@
         <copy file="i2pupdate.zip" tofile="i2pupdate_${release.number}.zip" />
         <copy file="i2pinstall_${full.version}.jar" tofile="i2pinstall_${release.number}.jar" />
         <copy file="i2pinstall_${full.version}_windows.exe" tofile="i2pinstall_${release.number}_windows.exe" />
-        <!-- remove these, we don't build them anymore -->
+        <!-- remove these, we don't Buildm anymore -->
         <delete file="i2pupdate.sud" />
         <delete file="i2pupdate.su2" />
         <!-- make this a lot easier by putting release.privkey.su3=/path/to/su3keystore.ks in override.properties -->

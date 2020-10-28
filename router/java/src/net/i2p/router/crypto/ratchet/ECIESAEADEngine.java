@@ -643,7 +643,7 @@ public final class ECIESAEADEngine {
         if (data.length == TAGLEN + MACLEN) {
             // legal?
             if (_log.shouldWarn())
-                _log.warn("Zero length payload in ES");
+                _log.warn("Zero length payload in ExistingSession");
             return NO_CLOVES;
         }
         PublicKey remote = key.getRemoteKey();
@@ -651,11 +651,11 @@ public final class ECIESAEADEngine {
         try {
             int blocks = RatchetPayload.processPayload(_context, pc, data, TAGLEN, data.length - (TAGLEN + MACLEN), false);
             if (_log.shouldDebug())
-                _log.debug("Processed " + blocks + " blocks in IB ES");
+                _log.debug("Processed " + blocks + " blocks in Inbound ExistingSession");
         } catch (DataFormatException e) {
             throw e;
         } catch (Exception e) {
-            throw new DataFormatException("ES payload error", e);
+            throw new DataFormatException("ExistingSession payload error", e);
         }
         boolean shouldAck = false;
         if (pc.nextKeys != null) {
@@ -675,7 +675,7 @@ public final class ECIESAEADEngine {
         if (pc.cloveSet.isEmpty()) {
             // this is legal
             if (_log.shouldDebug())
-                _log.debug("No garlic block in ES payload");
+                _log.debug("No garlic block in ExistingSession payload");
             return NO_CLOVES;
         }
         int num = pc.cloveSet.size();
@@ -757,13 +757,13 @@ public final class ECIESAEADEngine {
         }
         if (priv == null) {
             if (_log.shouldDebug())
-                _log.debug("Encrypting as NS zero-key to " + target);
+                _log.debug("Encrypting as NewSession (zero-key) \n* Target: " + target);
             return encryptNewSession(cloves, target, null, null, null, null);
         }
         RatchetEntry re = keyManager.consumeNextAvailableTag(target);
         if (re == null) {
             if (_log.shouldDebug())
-                _log.debug("Encrypting as NS to " + target);
+                _log.debug("Encrypting as NewSession \n* Target: " + target);
             return encryptNewSession(cloves, target, to, priv, keyManager, callback);
         }
 
@@ -777,11 +777,11 @@ public final class ECIESAEADEngine {
                 return null;
             }
             if (_log.shouldDebug())
-                _log.debug("Encrypting as NSR to " + target + " with tag " + re.tag.toBase64());
+                _log.debug("Encrypting as NewSession Reply \n* Target: " + target + "\n* Tag: " + re.tag.toBase64());
             return encryptNewSessionReply(cloves, target, state, re.tag, keyManager, callback);
         }
         if (_log.shouldDebug())
-            _log.debug("Encrypting as ES to " + target + " with key " + re.key + " and tag " + re.tag.toBase64());
+            _log.debug("Encrypting as ExistingSession \n* Target: " + target + "\n* Key: " + re.key + "\n* Tag: " + re.tag.toBase64());
         byte rv[] = encryptExistingSession(cloves, target, re, callback, keyManager);
         return rv;
     }
@@ -846,7 +846,7 @@ public final class ECIESAEADEngine {
         DHState eph = state.getLocalEphemeralKeyPair();
         if (eph == null || !eph.hasEncodedPublicKey()) {
             if (_log.shouldWarn())
-                _log.warn("Bad NS state");
+                _log.warn("Bad NewSession state");
             state.destroy();
             return null;
         }
@@ -887,11 +887,11 @@ public final class ECIESAEADEngine {
                                           RatchetSessionTag currentTag, RatchetSKM keyManager,
                                           ReplyCallback callback) {
         if (_log.shouldDebug())
-            _log.debug("State before encrypt new session reply: " + state);
+            _log.debug("State before encrypt NewSessionReply: " + state);
         byte[] tag = currentTag.getData();
         state.mixHash(tag, 0, TAGLEN);
         if (_log.shouldDebug())
-            _log.debug("State after mixhash tag before encrypt new session reply: " + state);
+            _log.debug("State after mixhash tag before encrypt NewSessionReply: " + state);
 
         byte[] payload = createPayload(cloves, 0, NSR_OVERHEAD);
 
@@ -902,17 +902,17 @@ public final class ECIESAEADEngine {
             state.writeMessage(enc, TAGLEN, ZEROLEN, 0, 0);
         } catch (GeneralSecurityException gse) {
             if (_log.shouldWarn())
-                _log.warn("Encrypt fail NSR part 1", gse);
+                _log.warn("Encrypt fail NewSessionReply part 1", gse);
             return null;
         }
         if (_log.shouldDebug())
-            _log.debug("Encrypted NSR: " + enc.length + " bytes, state: " + state);
+            _log.debug("Encrypted NewSessionReply: " + enc.length + " bytes, state: " + state);
 
         // overwrite eph. key with encoded key
         DHState eph = state.getLocalEphemeralKeyPair();
         if (eph == null || !eph.hasEncodedPublicKey()) {
             if (_log.shouldWarn())
-                _log.warn("Bad NSR state");
+                _log.warn("Bad NewSessionReply state");
             return null;
         }
         eph.getEncodedPublicKey(enc, TAGLEN);
@@ -932,7 +932,7 @@ public final class ECIESAEADEngine {
             sender.encryptWithAd(hash, payload, 0, enc, TAGLEN + KEYLEN + MACLEN, payload.length);
         } catch (GeneralSecurityException gse) {
             if (_log.shouldWarn())
-                _log.warn("Encrypt fail NSR part 2", gse);
+                _log.warn("Encrypt fail NewSessionReply part 2", gse);
             return null;
         }
         // tell the SKM
@@ -966,7 +966,7 @@ public final class ECIESAEADEngine {
         if (callback != null) {
             keyManager.registerCallback(target, re.keyID, nonce, callback);
         }
-            _log.debug("Encrypted ES: " + encr.length + " bytes");
+            _log.debug("Encrypted ExistingSession: " + encr.length + " bytes");
         return encr;
     }
 
@@ -1000,7 +1000,7 @@ public final class ECIESAEADEngine {
      * for netdb lookups.
      * Called from MessageWrapper.
      *
-     * @param target public key to which the data should be encrypted. 
+     * @param target public key to which the data should be encrypted.
      * @return encrypted data or null on failure
      * @since 0.9.48
      */
@@ -1085,7 +1085,7 @@ public final class ECIESAEADEngine {
             long now = _context.clock().now();
             if (time < now - MAX_NS_AGE ||
                 time > now + MAX_NS_FUTURE) {
-                throw new DataFormatException("Excess clock skew in IB NS: " + DataHelper.formatTime(time));
+                throw new DataFormatException("Excess clock skew in Inbound NewSession: " + DataHelper.formatTime(time));
             }
         }
 
@@ -1312,7 +1312,7 @@ public final class ECIESAEADEngine {
             // OK, we have a valid place to send the reply
             Destination d = ls2.getDestination();
             if (_log.shouldInfo())
-                _log.info("Validated NS sender: " + d.toBase32());
+                _log.info("Validated NewSession sender: " + d.toBase32());
             ACKTimer ack = new ACKTimer(_context, us, d);
             if (skm.registerTimer(from, d, ack)) {
                 ack.schedule(1000);
@@ -1320,7 +1320,7 @@ public final class ECIESAEADEngine {
             return;
         }
         if (_log.shouldInfo())
-            _log.info("Unvalidated NS sender: " + from);
+            _log.info("Unvalidated NewSession sender: " + from);
     }
 
     /*
@@ -1344,7 +1344,7 @@ public final class ECIESAEADEngine {
         } else {
             // we didn't get a LS in the original NS, but maybe we have one now
             if (_log.shouldInfo())
-                _log.info("No full dest to ack to, looking for LS from: " + from);
+                _log.info("No full dest to ACK to, looking for LeaseSet from: " + from);
             setResponseTimerNS(from, cloveSet, skm);
         }
     }
