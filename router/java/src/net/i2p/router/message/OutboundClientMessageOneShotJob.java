@@ -962,7 +962,7 @@ public class OutboundClientMessageOneShotJob extends JobImpl {
         long sendTime = getContext().clock().now() - _start;
         if (_log.shouldLog(Log.WARN))
             _log.warn("[Job " + getJobId() + "] Sending of " + _clientMessageId + " to " + _toString
-                      + " failed after " + sendTime + "ms (status: " + status + ")");
+                      + " failed after " + sendTime + "ms (Status: " + status + ")");
 //                      + "\n\t" + _outTunnel
 //                      + "\n\t" + _inTunnel
 //                      + "\n\t" + _lease + " ACK");
