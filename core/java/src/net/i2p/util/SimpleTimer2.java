@@ -38,7 +38,7 @@ public class SimpleTimer2 {
 //    private static final int MIN_THREADS = 2;
 //    private static final int MAX_THREADS = 4;
     private static final int MIN_THREADS = 1;
-    private static final int MAX_THREADS = 1;
+    private static final int MAX_THREADS = 3;
 
     private final ScheduledThreadPoolExecutor _executor;
     private final String _name;
@@ -293,12 +293,13 @@ public class SimpleTimer2 {
          *  Does nothing if already scheduled.
          */
         public synchronized void schedule(long timeoutMs) {
+            String truncClass = this.toString().replace("net.i2p.router.", "...");
             if (_log.shouldLog(Log.DEBUG))
-                _log.debug("Scheduling: " + this + " (timeout: " + timeoutMs + "ms) [" + _state + "]");
+                _log.debug("Scheduling: " + truncClass + " (timeout: " + timeoutMs + "ms) [..." + _state + "]");
             if (timeoutMs <= 0) {
                 // streaming timers do call with timeoutMs == 0
                 if (timeoutMs < 0 && _log.shouldLog(Log.WARN))
-                    _log.warn("Scheduled timeout < 0ms (" + timeoutMs + "ms): " + this + " [" + _state + "]");
+                    _log.warn("Scheduled timeout < 0ms (" + timeoutMs + "ms): " + truncClass + " [" + _state + "]");
                 timeoutMs = 1; // otherwise we may execute before _future is updated, which is fine
                                // except it triggers 'early execution' warning logging
             }
@@ -340,9 +341,10 @@ public class SimpleTimer2 {
          *                        two timeouts, else use the later
          */
         public synchronized void reschedule(long timeoutMs, boolean useEarliestTime) {
+            String truncClass = this.toString().replace("net.i2p.router.", "...");
             if (timeoutMs <= 0) {
                 if (timeoutMs < 0 && _log.shouldInfo())
-                    _log.info("Resched. timeout < 0: " + this + " (timeout: " + timeoutMs + "ms) [" + _state + "]");
+                    _log.info("Resched. timeout < 0: " + truncClass + " (timeout: " + timeoutMs + "ms) [" + _state + "]");
                 timeoutMs = 1;
             }
             final long now = System.currentTimeMillis();
@@ -360,12 +362,12 @@ public class SimpleTimer2 {
                 if (scheduled && oldTimeout <= 5) {
                     // don't reschedule to avoid race
                     if (_log.shouldWarn())
-                        _log.warn("Not rescheduling to " + timeoutMs + ", about to execute " + this + " in " + oldTimeout);
+                        _log.warn("Not rescheduling to " + timeoutMs + ", about to execute " + truncClass + " in " + oldTimeout);
                     return;
                 }
                 if (scheduled && (now + timeoutMs) < _nextRun) {
                     if (_log.shouldLog(Log.INFO))
-                        _log.info("Re-scheduling: " + this + " timeout = " + timeoutMs + " old timeout was " + oldTimeout + " state: " + _state);
+                        _log.info("Re-scheduling: " + truncClass + " timeout = " + timeoutMs + " old timeout was " + oldTimeout + " state: " + _state);
                     cancel();
                 }
                 schedule(timeoutMs);

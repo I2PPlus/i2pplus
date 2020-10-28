@@ -1,4 +1,5 @@
 #!/bin/sh
+# if I2P="%INSTALL_PATH" then manually change to to full path of i2p install e.g. /home/user/i2p (no trailing /)
 I2P="%INSTALL_PATH"
 echo " ➤ Attempting eepget retrieval of $@…"
 java -cp "$I2P/lib/i2p.jar" net.i2p.util.EepGet "$@"
