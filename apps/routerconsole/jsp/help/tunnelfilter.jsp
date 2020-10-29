@@ -49,7 +49,7 @@
 <li>A threshold that if breached will cause the offending remote destination to be recorded in a specified file</li>
 </ul>
 
-<p>Note: The order of the declarations matters. The first threshold declaration for a given destination (whether explicit or listed in a referenced file) overrides any future thresholds for the same destination, whether explicit or listed in a file. Note: to apply a new filter file, the tunnel must be restarted after the location has been specified in the tunnel manager. Once configured, a definition file can be updated without requiring a restart of the target tunnel.</p>
+<p>Note: The order of the declarations matters. The first threshold declaration for a given destination (whether explicit or listed in a referenced file) overrides any future thresholds for the same destination, whether explicit or listed in a file. Note: to apply a new filter file, the tunnel must be restarted after the location has been specified in the tunnel manager. Once configured, a definition file can be updated without requiring a restart of the target tunnel, although destinations that are blocked will persist until the tunnel is restarted.</p>
 
 <h3>Thresholds</h3>
 
@@ -68,9 +68,9 @@ Note that if the number of connections is 1 (e.g. <i class="example">1/60</i>), 
 
 <p>The <i class="example">default</i> threshold applies to any remote destination not explicitly listed in the definition or in any of the referenced files. To set a default threshold use the keyword <i class="example">default</i>.</p>
 
-<p>The following threshold definition <i class="example">15/5</i> specifies that the same remote destination is allowed to make 14 connection attempts during a 5 second period. If it makes one more attempt within the same period, the threshold will be breached:</p>
+<p>The following threshold definition <i class="example">180/60</i> specifies that the same remote destination is allowed to make 179 connection attempts during a 60 second period. If it makes one more attempt within the same period, the threshold will be breached and further connection attempts will be rejected until the end of the period:</p>
 
-<code>15/5 default</code>
+<code>180/60 default</code>
 
 <p>To allow all unspecified client destinations:</p>
 
@@ -87,7 +87,7 @@ Note that if the number of connections is 1 (e.g. <i class="example">1/60</i>), 
 <p>Using the <i class="example">explicit</i> directive, a threshold can be applied to a remote destination listed in the definition itself, with the option to specify custom thresholds for multiple destinations. Remote destinations can also be excluded from the default threshold using the <i class="example">allow</i> keyword, or permanently blocked using the <i class="example">deny</i> keyword:</p>
 
 <code>
-60/240 default<br>
+180/240 default<br>
 15/5 explicit szdb4cdtbahqkapustcrc37xwxc65ejithdiqdxffs73wxbswdc2.b32.i2p<br>
 allow explicit zyakly6qqzjnad2kqqrpnupex7ryl6cyfrj52abm3kqrougtxids.b32.i2p<br>
 deny explicit cqfnbbvxz5xjgo3saix4ygtqlyuujraz4ptclq5o7tdqzg3jffkm.b32.i2p
@@ -98,7 +98,7 @@ deny explicit cqfnbbvxz5xjgo3saix4ygtqlyuujraz4ptclq5o7tdqzg3jffkm.b32.i2p
 <p>For convenience you can maintain a list of destinations in a file and define a threshold for all of them in bulk:</p>
 
 <code>
-15/5 file /path/throttled_destinations.txt<br>
+90/60 file /path/throttled_destinations.txt<br>
 deny file /path/forbidden_destinations.txt<br>
 allow file /path/unlimited_destinations.txt
 </code>
@@ -118,9 +118,9 @@ allow file /path/unlimited_destinations.txt
 # by default there are no limits<br>
 allow default<br>
 # but log overly aggressive destinations<br>
-30/5 record /path/throttled.txt<br>
+180/60 record /path/throttled.txt<br>
 # and any that end up in that file will get throttled in the future<br>
-15/5 file /path/throttled.txt
+30/60 file /path/throttled.txt
 </code>
 
 <p>To log all unique remote destinations connecting to a server, and also log aggressive connection attempts:</p>
@@ -128,8 +128,8 @@ allow default<br>
 <code>
 # log all unique destinations</br>
 1/60 record /path/visitors.txt<br>
-# log visitors making 60 or more connections a minute<br>
-60/60 record /path/aggressive.txt
+# log visitors making 90 or more connections a minute<br>
+90/60 record /path/aggressive.txt
 </code>
 
 <p>You can use a recorder in one tunnel that writes to a file that another tunnel, or multiple tunnels, can use for throttling. These files can also be edited by hand.</p>
@@ -137,13 +137,13 @@ allow default<br>
 <p>The following filter definition applies some throttling by default, no throttling for destinations in the file <i class="example">friends.txt</i>, forbids any connections from destinations in the file <i class="example">enemies.txt</i>, and logs any aggressive behavior in a file called <i class="example">suspicious.txt</i>:</p>
 
 <code>
-15/5 default<br>
+30/5 default<br>
 allow file /path/friends.txt<br>
 deny file /path/enemies.txt<br>
 60/60 record /path/suspicious.txt
 </code>
 
-<p>Note that the full path to the output files must be accessible before deploying the filter. If the target directory does not exist, the destinations will not be recorded and an error will appear in the router logs. The files will be created as required.</p>
+<p>Note that the full path to the output files must be accessible before deploying the filter. If the target directory does not exist, the destinations will not be recorded and an error will appear in the router logs. The files will be created as required. The examples provided above are not recommendations; your configuration should be tuned according to the amount of content (number and size of files) your site is serving, the speed of the server, and the frequency with which the site is updated. Configuring recorders and monitoring the resulting files will help you fine tune the settings.</p>
 
 </div>
 

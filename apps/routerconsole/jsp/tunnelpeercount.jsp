@@ -15,7 +15,11 @@
 <%@include file="summary.jsi" %>
 <h1 class="netwrk"><%=intl._t("Tunnel Count by Peer")%></h1>
 <div class="main" id="tunnels">
-<div class="confignav"><span class="tab" title="Locally hosted tunnels (exploratory and client)"><a href="/tunnels">Local</a></span> <span class="tab"><a href="/tunnelsparticipating">Participating</a></span> <span class="tab2">Tunnel Count by Peer</span></div>
+<div class="confignav">
+<span class="tab" title="Locally hosted tunnels (exploratory and client)"><a href="/tunnels">Local</a></span>
+<span class="tab"><a href="/tunnelsparticipating">Participating</a></span>
+<span class="tab2">Tunnel Count by Peer</span>
+</div>
 <jsp:useBean class="net.i2p.router.web.helpers.TunnelPeerCountHelper" id="tunnelPeerCountHelper" scope="request" />
 <jsp:setProperty name="tunnelPeerCountHelper" property="contextId" value="<%=i2pcontextId%>" />
 <% tunnelPeerCountHelper.storeWriter(out); %>

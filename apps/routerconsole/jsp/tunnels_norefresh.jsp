@@ -12,26 +12,16 @@
 <%@include file="summary.jsi" %>
 <h1 class="netwrk"><%=intl._t("Tunnel Summary")%></h1>
 <div class="main" id="tunnels">
+<div class="confignav">
+<span class="tab" title="Locally hosted tunnels (exploratory and client)"><a href="/tunnels">Local</a></span>
+<span class="tab"><a href="/tunnelsparticipating">Participating</a></span>
+<span class="tab2">Tunnel Count by Peer</span>
+</div>
 <jsp:useBean class="net.i2p.router.web.helpers.TunnelHelper" id="tunnelHelper" scope="request" />
 <jsp:setProperty name="tunnelHelper" property="contextId" value="<%=i2pcontextId%>" />
 <% tunnelHelper.storeWriter(out); %>
 <jsp:getProperty name="tunnelHelper" property="tunnelSummary" />
 </div>
-<!--
-<script nonce="<%=cspNonce%>" type="text/javascript">
-  setInterval(function() {
-    var xhr = new XMLHttpRequest();
-    xhr.open('GET', '/tunnels?' + new Date().getTime(), true);
-    xhr.responseType = "text";
-    xhr.onreadystatechange = function () {
-      if (xhr.readyState==4 && xhr.status==200) {
-        document.getElementById("routertunnels").innerHTML = xhr.responseText;
-      }
-    }
-    xhr.send();
-  }, 15000);
-</script>
--->
 <%@include file="summaryajax.jsi" %>
 <script nonce="<%=cspNonce%>" type="text/javascript">window.addEventListener("pageshow", progressx.hide());</script>
 </body>
