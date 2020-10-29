@@ -194,7 +194,7 @@ public class SnarkManager implements CompleteListener, ClientApp {
        ,"DgTrack", "http://opentracker.dg2.i2p/a=http://opentracker.dg2.i2p/"
        ,"Freedom", "http://torrfreedom.i2p/announce.php=http://torrfreedom.i2p/"
        ,"PsiOpenTracker", "http://tracker.psi.i2p/a=http://tracker.psi.i2p/stats"
-       ,"Fazanka", "http://tracker.fazanka.i2p/a=http://torrents.fazanka.i2p/"
+       ,"Chudo", "http://tracker.chudo.i2p/a=http://torrents.chudo.i2p/"
        ,"Lodikon", "http://tracker.lodikon.i2p/announce=http://tracker.lodikon.i2p/"
        ,"PTT", "http://5m3pd32zx43xk3uz6hvrdksj6tlg7abnjsc3j5kkd2yzctet4nmq.b32.i2p/announce=http://ptt.i2p/index_eng.html"
        //The following is ECDSA_SHA256_P256
@@ -216,7 +216,7 @@ public class SnarkManager implements CompleteListener, ClientApp {
         "http://opentracker.dg2.i2p/a," +
         "http://tracker.lodikon.i2p/announce," +
         "http://tracker.psi.i2p/a," +
-        "http://tracker.fazanka.i2p/a," +
+        "http://tracker.chudo.i2p/a," +
         "http://5m3pd32zx43xk3uz6hvrdksj6tlg7abnjsc3j5kkd2yzctet4nmq.b32.i2p/announce," +
         (SigType.ECDSA_SHA256_P256.isAvailable() ? "http://tracker.thebland.i2p/a" : "");
 //        "http://uajd4nctepxpac4c4bdyrdw7qvja2a5u3x25otfhkptcjgd53ioq.b32.i2p/announce," +
@@ -230,7 +230,7 @@ public class SnarkManager implements CompleteListener, ClientApp {
     /** host names for config form */
     static final Set<String> KNOWN_OPENTRACKERS = new HashSet<String>(Arrays.asList(new String[] {
         "opentracker.dg2.i2p", "w7tpbzncbcocrqtwwm3nezhnnsw4ozadvi2hmvzdhrqzfxfum7wa.b32.i2p",
-        "tracker.fazanka.i2p", "3czgwbtato5yja67krtadzhc6szu3n7rqbxmu7dwhuyaighcsb3q.b32.i2p",
+        "tracker.chudo.i2p", "swhb5i7wcjcohmus3gbt3w6du6pmvl3isdvxvepuhdxxkfbzao6q.b32.i2p",
         "tracker.lodikon.i2p", "q2a7tqlyddbyhxhtuia4bmtqpohpp266wsnrkm6cgoahdqrjo3ra.b32.i2p",
         "tracker.psi.i2p", "vmow3h54yljn7zvzbqepdddt5fmygijujycod2q6yznpy2rrzuwa.b32.i2p",
         "tracker.thebland.i2p", "s5ikrdyjwbcgxmqetxb3nyheizftms7euacuub2hic7defkh3xhq.b32.i2p",
