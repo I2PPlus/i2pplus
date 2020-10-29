@@ -91,7 +91,7 @@ public class FetchAndAdd extends Snark implements EepGet.StatusListener, Runnabl
      *  Set off by startTorrent()
      */
     public void run() {
-        _mgr.addMessageNoEscape(_t("Fetching {0}", urlify(_url)).replace("Fetching", "Requesting");
+        _mgr.addMessageNoEscape(_t("Fetching {0}", urlify(_url)).replace("Fetching", "Requesting"));
         File file = get();
         if (!_isRunning)  // stopped?
             return;
