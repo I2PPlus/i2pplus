@@ -14006,6 +14006,8 @@ h3 + table {
 
 #tunnels #participating a:active::after, #tunnels #peercount a:active::after {
   opacity: .7;
+  transform: rotate(90deg);
+  transition: ease transform .15s;
 }
 
 #tunnelPeerCount {
