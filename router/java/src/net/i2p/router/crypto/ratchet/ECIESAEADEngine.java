@@ -261,23 +261,23 @@ public final class ECIESAEADEngine {
         HandshakeState state = key.getHandshakeState();
         if (state == null) {
             if (shouldDebug)
-                _log.debug("Decrypting ES with tag: " + st.toBase64() + " key: " + key + ": " + data.length + " bytes");
+                _log.debug("Decrypting ExistingSession with tag: " + st.toBase64() + "\n* Key: " + key + " (" + data.length + " bytes)");
             decrypted = decryptExistingSession(tag, data, key, targetPrivateKey, keyManager);
         } else if (data.length >= MIN_NSR_SIZE) {
             if (shouldDebug)
-                _log.debug("Decrypting NSR with tag: " + st.toBase64() + " key: " + key + ": " + data.length + " bytes");
+                _log.debug("Decrypting NewSessionReply with tag: " + st.toBase64() + "\n* Key: " + key + "(" + data.length + " bytes)");
             decrypted = decryptNewSessionReply(tag, data, state, keyManager);
         } else {
             decrypted = null;
             if (_log.shouldWarn())
-                _log.warn("ECIES decrypt fail, tag found but no state and too small for NSR: " + data.length + " bytes");
+                _log.warn("ECIES decrypt fail, tag found but no state and too small (" + data.length + " bytes) for NewSessionReply");
         }
         if (decrypted != null) {
             _context.statManager().updateFrequency("crypto.eciesAEAD.decryptExistingSession");
         } else {
             _context.statManager().updateFrequency("crypto.eciesAEAD.decryptFailed");
             if (_log.shouldWarn()) {
-                _log.warn("ECIES decrypt fail: known tag [" + st + "], failed decrypt with key " + key);
+                _log.warn("ECIES decrypt fail: known tag [" + st + "] but failed decrypt with key \n* Key: " + key);
             }
         }
         return decrypted;
@@ -325,7 +325,7 @@ public final class ECIESAEADEngine {
         } else {
             decrypted = null;
             if (_log.shouldDebug())
-                _log.debug("ECIES decrypt fail, too small for NS: " + data.length + " bytes");
+                _log.debug("ECIES decrypt fail, too small (" + data.length + " bytes) for NewSession");
         }
         return decrypted;
     }
@@ -366,7 +366,7 @@ public final class ECIESAEADEngine {
         // fast MSB check for key < 2^255
         if ((pk.getData()[KEYLEN - 1] & 0x80) != 0) {
             if (_log.shouldDebug())
-                _log.debug("Bad PK decode fail NS");
+                _log.debug("Bad PublicKey decode fail for NewSession");
             data[KEYLEN - 1] = xx31;
             return null;
         }
@@ -407,7 +407,7 @@ public final class ECIESAEADEngine {
         // But that would put everything in the bloom filter.
         if (keyManager.isDuplicate(pk)) {
             if (_log.shouldWarn())
-                _log.warn("Dup eph. key in IB NS: " + pk);
+                _log.warn("Duplicate ephemeral key in Inbound NewSession: " + pk);
             state.destroy();
             return NO_CLOVES;
         }
@@ -416,7 +416,7 @@ public final class ECIESAEADEngine {
         if (payloadlen == 0) {
             // disallowed, datetime block required
             if (_log.shouldWarn())
-                _log.warn("Zero length payload in NS");
+                _log.warn("Zero length payload in NewSession");
             state.destroy();
             return NO_CLOVES;
         }
@@ -424,19 +424,19 @@ public final class ECIESAEADEngine {
         try {
             int blocks = RatchetPayload.processPayload(_context, pc, payload, 0, payload.length, true);
             if (_log.shouldDebug())
-                _log.debug("Processed " + blocks + " blocks in IB NS");
+                _log.debug("Processed " + blocks + " blocks in Inbound NewSession");
         } catch (DataFormatException e) {
             state.destroy();
             throw e;
         } catch (Exception e) {
             state.destroy();
-            throw new DataFormatException("NS payload error", e);
+            throw new DataFormatException("NewSession payload error", e);
         }
 
         if (pc.datetime == 0) {
             // disallowed, datetime block required
             if (_log.shouldWarn())
-                _log.warn("No datetime block in IB NS");
+                _log.warn("No datetime block in Inbound NewSession");
             state.destroy();
             return NO_CLOVES;
         }
@@ -444,7 +444,7 @@ public final class ECIESAEADEngine {
         if (pc.cloveSet.isEmpty()) {
             // this is legal
             if (_log.shouldDebug())
-                _log.debug("No garlic block in NS payload");
+                _log.debug("No garlic block in NewSession payload");
             state.destroy();
             return NO_CLOVES;
         }
@@ -452,7 +452,7 @@ public final class ECIESAEADEngine {
         byte[] alicePK = new byte[KEYLEN];
         state.getRemotePublicKey().getPublicKey(alicePK, 0);
         if (_log.shouldDebug()) {
-            _log.debug("NS decrypt success from PK " + Base64.encode(alicePK));
+            _log.debug("NewSession decrypt success from PublicKey [" + Base64.encode(alicePK) + "]");
             _log.debug("State after decrypt new session: " + state);
         }
         if (Arrays.equals(alicePK, NULLPK)) {
@@ -511,7 +511,7 @@ public final class ECIESAEADEngine {
         if (k == null) {
             // very unlikely
             if (_log.shouldDebug())
-                _log.debug("Elg2 decode fail NSR");
+                _log.debug("ElG2 decode fail NewSessionReply");
             data[TAGLEN + KEYLEN - 1] = yy31;
             return null;
         }
@@ -521,12 +521,12 @@ public final class ECIESAEADEngine {
         System.arraycopy(k.getData(), 0, data, TAGLEN, KEYLEN);
         state.mixHash(tag, 0, TAGLEN);
         if (_log.shouldDebug())
-            _log.debug("State after mixhash tag before decrypt new session reply: " + state);
+            _log.debug("State after mixhash tag before decrypt NewSessionReply: " + state);
         try {
             state.readMessage(data, 8, 48, ZEROLEN, 0);
         } catch (GeneralSecurityException gse) {
             if (_log.shouldWarn()) {
-                _log.warn("Decrypt fail NSR part 1", gse);
+                _log.warn("Decrypt fail NewSessionReply part 1", gse);
                 if (_log.shouldDebug())
                     _log.debug("State at failure: " + state);
             }
@@ -537,7 +537,7 @@ public final class ECIESAEADEngine {
             return null;
         }
         if (_log.shouldDebug())
-            _log.debug("State after decrypt new session reply: " + state);
+            _log.debug("State after decrypt NewSessionReply: " + state);
 
         // split()
         // Noise does it too but it trashes the keys
@@ -555,7 +555,7 @@ public final class ECIESAEADEngine {
             rcvr.decryptWithAd(hash, data, TAGLEN + KEYLEN + MACLEN, payload, 0, payload.length + MACLEN);
         } catch (GeneralSecurityException gse) {
             if (_log.shouldWarn()) {
-                _log.warn("Decrypt fail NSR part 2", gse);
+                _log.warn("Decrypt fail NewSessionReply part 2", gse);
                 if (_log.shouldDebug())
                     _log.debug("State at failure: " + state);
             }
@@ -567,28 +567,28 @@ public final class ECIESAEADEngine {
             // this is legal
             pc = null;
             if (_log.shouldDebug())
-                _log.debug("Zero length payload in IB NSR");
+                _log.debug("Zero length payload in Inbound NewSessionReply");
         } else {
             pc = new PLCallback();
             try {
                 int blocks = RatchetPayload.processPayload(_context, pc, payload, 0, payload.length, false);
                 if (_log.shouldDebug())
-                    _log.debug("Processed " + blocks + " blocks in IB NSR");
+                    _log.debug("Processed " + blocks + " blocks in Inbound NewSessionReply");
             } catch (DataFormatException e) {
                 throw e;
             } catch (Exception e) {
-                throw new DataFormatException("NSR payload error", e);
+                throw new DataFormatException("NewSessionReply payload error", e);
             }
         }
 
         byte[] bobPK = new byte[KEYLEN];
         state.getRemotePublicKey().getPublicKey(bobPK, 0);
         if (_log.shouldDebug())
-            _log.debug("NSR decrypt success from PK " + Base64.encode(bobPK));
+            _log.debug("NewSessionReply decrypt success from PK " + Base64.encode(bobPK));
         if (Arrays.equals(bobPK, NULLPK)) {
             // TODO
             if (_log.shouldWarn())
-                _log.warn("NSR reply to zero static key NS");
+                _log.warn("NewSessionReply reply to zero static key NewSession");
             return NO_CLOVES;
         }
 
@@ -601,7 +601,7 @@ public final class ECIESAEADEngine {
         if (pc.cloveSet.isEmpty()) {
             // this is legal
             if (_log.shouldDebug())
-                _log.debug("No garlic block in NSR payload");
+                _log.debug("No garlic block in NewSessionReply payload");
             return NO_CLOVES;
         }
         int num = pc.cloveSet.size();
@@ -637,7 +637,7 @@ public final class ECIESAEADEngine {
         boolean ok = decryptAEADBlock(tag, data, TAGLEN, data.length - TAGLEN, key, nonce);
         if (!ok) {
             if (_log.shouldWarn())
-                _log.warn("Decrypt of ES failed");
+                _log.warn("Decrypt of ExistingSession failed");
             return null;
         }
         if (data.length == TAGLEN + MACLEN) {
@@ -815,7 +815,7 @@ public final class ECIESAEADEngine {
         try {
             state = new HandshakeState(HandshakeState.PATTERN_ID_IK, HandshakeState.INITIATOR, _edhThread);
         } catch (GeneralSecurityException gse) {
-            throw new IllegalStateException("bad proto", gse);
+            throw new IllegalStateException("Bad protocol", gse);
         }
         state.getRemotePublicKey().setPublicKey(target.getData(), 0);
         if (priv != null) {
@@ -835,12 +835,12 @@ public final class ECIESAEADEngine {
             state.writeMessage(enc, 0, payload, 0, payload.length);
         } catch (GeneralSecurityException gse) {
             if (_log.shouldWarn())
-                _log.warn("Encrypt fail NS", gse);
+                _log.warn("Encrypt fail NewSession", gse);
             state.destroy();
             return null;
         }
         if (_log.shouldDebug())
-            _log.debug("Encrypted NS: " + enc.length + " bytes, state: " + state);
+            _log.debug("Encrypted NewSession: " + enc.length + " bytes " + state);
 
         // overwrite eph. key with encoded key
         DHState eph = state.getLocalEphemeralKeyPair();
@@ -852,7 +852,7 @@ public final class ECIESAEADEngine {
         }
         eph.getEncodedPublicKey(enc, 0);
         if (_log.shouldDebug())
-            _log.debug("Elligator2 encoded eph. key: " + Base64.encode(enc, 0, 32));
+            _log.debug("Elligator2 encoded ephemeral key [" + Base64.encode(enc, 0, 32) + "]");
 
         if (priv != null) {
             // tell the SKM
@@ -906,7 +906,7 @@ public final class ECIESAEADEngine {
             return null;
         }
         if (_log.shouldDebug())
-            _log.debug("Encrypted NewSessionReply: " + enc.length + " bytes, state: " + state);
+            _log.debug("Encrypted NewSessionReply: " + enc.length + " bytes " + state);
 
         // overwrite eph. key with encoded key
         DHState eph = state.getLocalEphemeralKeyPair();
@@ -1277,7 +1277,7 @@ public final class ECIESAEADEngine {
         byte[] payload = new byte[len];
         int payloadlen = RatchetPayload.writePayload(payload, 0, blocks);
         if (payloadlen != len)
-            throw new IllegalStateException("payload size mismatch");
+            throw new IllegalStateException("Payload size mismatch");
         return payload;
     }
 
