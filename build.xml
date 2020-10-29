@@ -20,14 +20,14 @@
     <target name="all" >
         <echo message="Useful targets:" />
         <echo message="  bench:                                       Build benchmarks" />
-        <echo message="  debian-clean:                                Rollback Debian specific patches then run &quot;distclean&quot;" />
-        <echo message="  debian:                                      Generate Debian packages in ../ then run &quot;debian-clean&quot;" />
+        <echo message="  debian-clean:                                Rollback Debian specific patches then run &apos;distclean&apos;" />
+        <echo message="  debian:                                      Generate Debian packages in ../ then run &apos;debian-clean&apos;" />
         <echo message="  debianhowto:                                 Instructions on building Debian packages" />
         <echo message="  desktopgui:                                  Generate a standalone DesktopGUI install" />
-        <echo message="  dist200:                                     Run &quot;pkg&quot;, &quot;updater200&quot; and &quot;javadoc&quot;" />
-        <echo message="  distclean:                                   Clean up all derived and temporary files" />
-        <echo message="  dist:                                        Run &quot;pkg&quot; and &quot;javadoc&quot;" />
-        <echo message="  i2psnark:                                    Build standalone I2PSnark install -> ./i2psnark-standalone.zip" />
+        <echo message="  dist200:                                     Run &apos;pkg&apos;, &apos;updater200&apos; and &apos;javadoc&apos;" />
+        <echo message="  distclean:                                   Clean up all derived and temporary files in workspace" />
+        <echo message="  dist:                                        Run &apos;pkg&apos; and &apos;javadoc&apos;" />
+        <echo message="  i2psnark:                                    Build standalone I2PSnark install &#10140; ./i2psnark-standalone.zip" />
         <echo message="  installer / installer5:                      Build GUI installer (IZPack4 / IZpack5)" />
         <echo message="  installer-freebsd:                           Build FreeBSD GUI installer" />
         <echo message="  installer-linux / installer5-linux:          Build Linux GUI installer (IZPack4 / IZpack5)" />
@@ -38,25 +38,25 @@
         <echo message="  javadoc-test:                                Javadocs for unit test classes (build/javadoc-test)" />
         <echo message="  justBOB:                                     Build a standalone BOB-one.jar" />
         <echo message="  osxLauncher:                                 Build Mac OS X router/GUI launcher" />
-        <echo message="  pkg:                                         &quot;distclean&quot; then package everything up (updater, installer)" />
+        <echo message="  pkg:                                         Run &apos;distclean&apos; then package everything up (updater, installer)" />
         <echo message="  pkg-portable-win32:                          Build a minimum portable version for Win32" />
         <echo message="  poupdate:                                    Update the .po files for translators" />
-        <echo message="  signed-updater200:                           Signed Updater compressed with pack200 -> creates i2pupdate.su3" />
-        <echo message="  signed-updater200WithJavadocAndJetty:        Signed Updater + javadocs (linked in console) + Jetty -> creates i2pupdate.su3" />
-        <echo message="  signed-updater200WithJavadoc:                Signed Updater + javadocs (linked in console) -> creates i2pupdate.su3" />
+        <echo message="  signed-updater200:                           Signed Updater compressed with pack200 &#10140; ./i2pupdate.su3" />
+        <echo message="  signed-updater200WithJavadocAndJetty:        Signed Updater + javadocs (linked in console) + Jetty &#10140; ./i2pupdate.su3" />
+        <echo message="  signed-updater200WithJavadoc:                Signed Updater + javadocs (linked in console) &#10140; ./i2pupdate.su3" />
         <echo message="  signed-updater200withJetty:                  Signed Updater + Jetty" />
         <echo message="  slackpkg:                                    Build Slackware package in ./Slackware/i2p" />
-        <echo message="  tarball:                                     tar the full install into i2p.tar.bz2 -> extracts to new clean install" />
-        <echo message="  updater200:                                  Updater compressed with pack200 -> creates i2pupdate200.zip (60% smaller)" />
+        <echo message="  tarball:                                     tar the full install into i2p.tar.bz2 &#10140; extracts to new clean install" />
+        <echo message="  updater200:                                  Updater compressed with pack200 &#10140; creates i2pupdate200.zip (60% smaller)" />
         <echo message="  updater200WithGeoIP:                         Updater compressed with pack200 + GeoIP files" />
-        <echo message="  updater200WithJavadocAndJetty:               Updater + javadocs (linked in console) + Jetty -> creates i2pupdate200.zip" />
-        <echo message="  updater200WithJavadoc:                       Updater + javadocs (linked in console) -> creates i2pupdate200.zip" />
+        <echo message="  updater200WithJavadocAndJetty:               Updater + javadocs (linked in console) + Jetty &#10140; ./i2pupdate200.zip" />
+        <echo message="  updater200WithJavadoc:                       Updater + javadocs (linked in console) &#10140; ./i2pupdate200.zip" />
         <echo message="  updater200WithJbigi                          Updater + jBigi library (pack200)" />
         <echo message="  updater200WithJettyAndGeoIPAndLicenses:      Updater + Jetty + GeoIP files + licenses (pack200)" />
         <echo message="  updater200WithJettyAndGeoIP:                 Updater + Jetty + GeoIP files (pack200)" />
         <echo message="  updater200WithJettyFixesAndGeoIP             Updater + local Jetty patches + GeoIP files (pack200)" />
         <echo message="  updater200WithJetty:                         Updater + Jetty (pack200)" />
-        <echo message="  updater:                                     Package the built files in i2pupdate.zip -> updates existing installs" />
+        <echo message="  updater:                                     Package the built files in i2pupdate.zip &#10140; updates existing installs" />
         <echo message="  updaterRouter:                               Updater with i2p.jar and router.jar only" />
         <echo message="  updaterSmall:                                Updater with essentials only (no SAM/I2PSnark/SusiMail/SusiDNS/history.txt)" />
         <echo message="  updaterWithGeoIP:                            Updater + GeoIP files" />
@@ -76,9 +76,9 @@
             <echo message="To build debian packages, you must make sure that you have" />
             <echo message="the necessary build-dependencies installed." />
             <echo message="The packages required to build can be found in the file "/>
-            <echo message="&quot;debian/control&quot; in the &quot;Build-Depends&quot; field."/>
-            <echo message="In addition to those packages, be sure to install &quot;fakeroot&quot;,"/>
-            <echo message="&quot;quilt&quot; and &quot;build-essential&quot;!" />
+            <echo message="&apos;debian/control&apos; in the &apos;Build-Depends&apos; field."/>
+            <echo message="In addition to those packages, be sure to install &apos;fakeroot&apos;,"/>
+            <echo message="&apos;quilt&apos; and &apos;build-essential&apos;!" />
             <echo message="" />
             <echo message="The following command will install the build dependencies for you:" />
             <echo message=" " />
@@ -89,7 +89,7 @@
             <echo message="The following command will install the additional runtime dependencies:" />
             <echo message="sudo apt-get install geoip-database famfamfam-flag-png" />
             <echo message=" " />
-            <echo message="Once the dependencies are installed, run &quot;ant debian&quot;"/>
+            <echo message="Once the dependencies are installed, run &apos;ant debian&apos;"/>
             <echo message="to patch the source and Build packages." />
     </target>
 
@@ -684,7 +684,7 @@
 
     <!-- this makes an empty build/launchi2p.jar and the build/i2p.exe for the no-wrapper windows startup, if possible -->
     <target name="buildexe" depends="buildProperties, launch4j" unless="noExe">
-        <echo message="See the file &quot;build.properties&quot; if this step fails." />
+        <echo message="See the file &apos;build.properties&apos; if this step fails." />
         <jar destfile="./build/launchi2p.jar">
             <manifest>
                 <attribute name="Main-Class" value="net.i2p.router.RouterLaunch" />
@@ -735,7 +735,7 @@
         <!-- \n in an attribute value generates an invalid manifest -->
         <exec executable="tr" inputstring="${workspace.changes.jbigi}" outputproperty="workspace.changes.jbigi.tr" errorproperty="mtn.error2" failifexecutionfails="false" >
             <arg value="-s" />
-            <arg value="&quot;[:space:]&quot;" />
+            <arg value="&apos;[:space:]&apos;" />
             <arg value="," />
         </exec>
     </target>
@@ -1652,7 +1652,7 @@
     </target>
 
     <target name="-areRouterInfosEnabled">
-        <fail message="Option requires &quot;bundle.routerInfos&quot; to be configured. Please read &quot;build.properties&quot; for more info." >
+        <fail message="Option requires &apos;bundle.routerInfos&apos; to be configured. Please read &apos;build.properties&apos; for more info." >
             <condition>
                 <isfalse value="${bundle.routerInfos}" />m
             </condition>
@@ -2023,7 +2023,7 @@
          They will be corrupted.
     -->
     <target name="installerexe" depends="launch4j" unless="noExe">
-        <echo message="See the file &quot;build.properties&quot; if this step fails." />
+        <echo message="See the file &apos;build.properties&apos; if this step fails." />
         <!-- now the installer exe -->
         <launch4j configFile="./installer/i2pinstaller.xml" />
         <!-- thazzit -->
@@ -2330,7 +2330,7 @@
                 </outputfilterchain>
             </redirector>
         </exec>
-        <echo message="sloccount report saved to the file &quot;${sloccount.report.file}&quot;" />
+        <echo message="sloccount report saved to the file &apos;${sloccount.report.file}&apos;" />
     </target>
 
     <target name="findbugs" depends="build2, buildUtilityJar">
@@ -2779,7 +2779,7 @@
             <arg value="0" />
             <arg value="-v" />
             <arg value="${Extended.Version}-1" />
-            <arg value="Unofficial Debian package built using &quot;ant debian&quot;" />
+            <arg value="Unofficial Debian package built using &apos;ant debian&apos;" />
         </exec>
     </target>
 
