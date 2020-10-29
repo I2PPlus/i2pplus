@@ -15,12 +15,18 @@
 <%@include file="summary.jsi" %>
 <h1 class="netwrk"><%=intl._t("Participating Tunnels")%></h1>
 <div class="main" id="tunnels">
-<div class="confignav"><span class="tab" title="Locally hosted tunnels (exploratory and client)"><a href="/tunnels">Local</a></span> <span class="tab2">Participating</span> <span class="tab"><a href="/tunnelpeercount">Tunnel Count by Peer</a></span></div>
+<div class="confignav">
+<span class="tab" title="Locally hosted tunnels (exploratory and client)"><a href="/tunnels">Local</a></span>
+<span class="tab2">Participating</span>
+<span class="tab"><a href="/tunnelpeercount">Tunnel Count by Peer</a></span>
+</div>
 <jsp:useBean class="net.i2p.router.web.helpers.TunnelParticipatingHelper" id="tunnelParticipatingHelper" scope="request" />
 <jsp:setProperty name="tunnelParticipatingHelper" property="contextId" value="<%=i2pcontextId%>" />
-<% tunnelParticipatingHelper.storeWriter(out); %>
+<%
+    tunnelParticipatingHelper.storeWriter(out);
+%>
 <jsp:getProperty name="tunnelParticipatingHelper" property="tunnelsParticipating" />
-<script nonce=" + cspNonce + " type="text/javascript">new Tablesort(document.getElementById("tunnels_part"));</script>
+<script nonce="<%=cspNonce%>" type="text/javascript">new Tablesort(document.getElementById("tunnels_part"));</script>
 </div>
 <%@include file="summaryajax.jsi" %>
 <script nonce="<%=cspNonce%>" type="text/javascript">window.addEventListener("pageshow", progressx.hide());</script>
