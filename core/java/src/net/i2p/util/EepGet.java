@@ -736,9 +736,9 @@ public class EepGet {
                 int truncate = _url.indexOf("&");
                 if (_log.shouldLog(Log.WARN))
                      if (_url.contains("&") && _url.contains("info_hash"))
-                        _log.warn("Eepget error: Fetch of [" + _url.substring(0, truncate) + "...] failed (" + ioe.getMessage() + ")");
+                        _log.warn("Transfer failed [" + _url.substring(0, truncate) + "...] (" + ioe.getMessage() + ")");
                      else
-                        _log.warn("Eepget error: Fetch of [" + _url + "] failed (" + ioe.getMessage() + ")");
+                        _log.warn("Transfer failed [" + _url + "] (" + ioe.getMessage() + ")");
                 if (ioe instanceof MalformedURLException ||
                     ioe instanceof UnknownHostException ||
                     ioe instanceof ConnectException) // proxy or nonproxied host Connection Refused

@@ -475,11 +475,11 @@ public class I2PSnarkUtil {
         int truncate = url.indexOf("&");
         if (get.fetch(timeout)) {
             if (_log.shouldLog(Log.DEBUG))
-                _log.debug("Fetch successful [" + url.substring(0, truncate) + "...] (Size: " + out.length() + " bytes)");
+                _log.debug("Transfer successful [" + url.substring(0, truncate) + "...] (Size: " + out.length() + " bytes)");
             return out;
         } else {
             if (_log.shouldLog(Log.WARN))
-                _log.warn("Fetch failed [" + url.substring(0, truncate) + "...]");
+                _log.warn("Transfer failed [" + url.substring(0, truncate) + "...]");
             out.delete();
             return null;
         }
@@ -518,11 +518,11 @@ public class I2PSnarkUtil {
         int truncate = url.indexOf("&");
         if (get.fetch(timeout)) {
             if (_log.shouldLog(Log.DEBUG))
-                _log.debug("Fetch successful [" + url.substring(0, truncate) + "...] (Size: " + out.size() + " bytes)");
+                _log.debug("Transfer successful [" + url.substring(0, truncate) + "...] (Size: " + out.size() + " bytes)");
             return out.toByteArray();
         } else {
             if (_log.shouldLog(Log.WARN))
-                _log.warn("Fetch failed [" + url.substring(0, truncate) + "...]");
+                _log.warn("Transfer failed [" + url.substring(0, truncate) + "...]");
             return null;
         }
     }

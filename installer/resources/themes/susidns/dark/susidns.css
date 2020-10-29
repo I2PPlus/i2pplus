@@ -1082,13 +1082,21 @@ textarea:focus {
   box-shadow: inset 0 0 1px #880;
 }
 
-input[name="search"] {
-  padding: 7px 7px 7px 26px !important;
-  background: url(/themes/console/images/buttons/search.png) 5px center no-repeat, linear-gradient(to bottom, #000 0%, #010 100%) !important;
+#booksearch input[name="search"] {
+  min-width: 280px !important;
+  padding: 6px 8px 6px 32px !important;
+  background: url(/themes/console/images/buttons/search.png) 9px center no-repeat, linear-gradient(to bottom, #000 0%, #010 100%) !important;
 }
 
-input[name="search"]:focus {
-  background: #000 url(/themes/console/images/buttons/search.png) 5px center no-repeat !important;
+#booksearch input[name="search"]:focus {
+  background: #000 url(/themes/console/images/buttons/search.png) 9px center no-repeat !important;
+}
+
+@media screen and (min-width: 1500px) {
+  #booksearch input[name="search"], #booksearch input[name="search"]:focus {
+    min-width: 320px !important;
+    padding: 7px 8px 7px 32px !important;
+  }
 }
 
 /* page titles */

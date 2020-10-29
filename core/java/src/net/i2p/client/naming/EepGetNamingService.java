@@ -126,7 +126,7 @@ public class EepGetNamingService extends DummyNamingService {
                 }
                 return key;
             }
-            _log.error("Fetch failed from: " + url + hostname);
+            _log.error("Transfer failed: " + url + hostname);
             return null;
         } catch (Throwable t) {
             _log.error("Error fetching the addr", t);

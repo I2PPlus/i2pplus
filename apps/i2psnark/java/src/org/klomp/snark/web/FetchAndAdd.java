@@ -91,7 +91,7 @@ public class FetchAndAdd extends Snark implements EepGet.StatusListener, Runnabl
      *  Set off by startTorrent()
      */
     public void run() {
-        _mgr.addMessageNoEscape(_t("Fetching {0}", urlify(_url)));
+        _mgr.addMessageNoEscape(_t("Fetching {0}", urlify(_url)).replace("Fetching", "Requesting"));
         File file = get();
         if (!_isRunning)  // stopped?
             return;
@@ -114,13 +114,13 @@ public class FetchAndAdd extends Snark implements EepGet.StatusListener, Runnabl
      */
     private File get() {
         if (_log.shouldLog(Log.DEBUG))
-            _log.debug("Fetching [" + _url + "]");
+            _log.debug("Requesting [" + _url + "]");
         File out = null;
         try {
             out = SecureFile.createTempFile("torrentFile", null, _mgr.util().getTempDir());
         } catch (IOException ioe) {
             _log.error("temp file error", ioe);
-            _mgr.addMessage("Temp file error: " + ioe);
+            _mgr.addMessage("Temp file error: " + ioe.getMessage());
             if (out != null)
                 out.delete();
             return null;
@@ -140,11 +140,11 @@ public class FetchAndAdd extends Snark implements EepGet.StatusListener, Runnabl
         _eepGet.addHeader("User-Agent", I2PSnarkUtil.EEPGET_USER_AGENT);
         if (_eepGet.fetch()) {
             if (_log.shouldLog(Log.DEBUG))
-                _log.debug("Fetch successful [" + _url + "]: size=" + out.length());
+                _log.debug("Transfer successful [" + _url + "]: size=" + out.length());
             return out;
         } else {
             if (_log.shouldLog(Log.DEBUG))
-                _log.debug("Fetch failed [" + _url + ']');
+                _log.debug("Transfer failed [" + _url + ']');
             out.delete();
             return null;
         }
@@ -155,7 +155,7 @@ public class FetchAndAdd extends Snark implements EepGet.StatusListener, Runnabl
      *  This Snark may then be deleted.
      */
     private void add(File file) {
-        _mgr.addMessageNoEscape(_t("Torrent fetched from {0}", urlify(_url)));
+        _mgr.addMessageNoEscape(_t("Torrent downloaded from {0}", urlify(_url)));
         FileInputStream in = null;
         try {
             in = new FileInputStream(file);
