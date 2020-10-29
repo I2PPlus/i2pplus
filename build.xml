@@ -41,9 +41,9 @@
         <echo message="  pkg:                                         Run &apos;distclean&apos; then package everything up (updater, installer)" />
         <echo message="  pkg-portable-win32:                          Build a minimum portable version for Win32" />
         <echo message="  poupdate:                                    Update the .po files for translators" />
-        <echo message="  signed-updater200:                           Signed Updater compressed with pack200 &#10140; ./ i2pupdate.su3" />
+        <echo message="  signed-updater200:                           Signed Updater compressed with pack200 &#10140; ./i2pupdate.su3" />
         <echo message="  signed-updater200WithJavadocAndJetty:        Signed Updater + javadocs (linked in console) + Jetty &#10140; ./i2pupdate.su3" />
-        <echo message="  signed-updater200WithJavadoc:                Signed Updater + javadocs (linked in console) &#10140; ./ i2pupdate.su3" />
+        <echo message="  signed-updater200WithJavadoc:                Signed Updater + javadocs (linked in console) &#10140; ./i2pupdate.su3" />
         <echo message="  signed-updater200withJetty:                  Signed Updater + Jetty" />
         <echo message="  slackpkg:                                    Build Slackware package in ./Slackware/i2p" />
         <echo message="  tarball:                                     tar the full install into i2p.tar.bz2 &#10140; extracts to new clean install" />
