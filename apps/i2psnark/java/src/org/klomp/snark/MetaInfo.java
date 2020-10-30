@@ -795,7 +795,7 @@ public class MetaInfo
       boolean error = false;
       String created_by = null;
       String announce = null;
-      String url = null;
+      List<String> url_list = null;
       String comment = null;
       Getopt g = new Getopt("Storage", args, "a:c:m:w:");
       try {
@@ -815,7 +815,9 @@ public class MetaInfo
                   break;
 
               case 'w':
-                  url = g.getOptarg();
+                  if (url_list == null)
+                      url_list = new ArrayList<String>();
+                  url_list.add(g.getOptarg());
                   break;
 
               case '?':
@@ -830,7 +832,7 @@ public class MetaInfo
           error = true;
       }
       if (error || args.length - g.getOptind() <= 0) {
-          System.err.println("Usage: MetaInfo [-a announceURL] [-c created-by] [-m comment] [-w web-seed-url] file.torrent [file2.torrent...]");
+          System.err.println("Usage: MetaInfo [-a announceURL] [-c created-by] [-m comment] [-w webseed-url]* file.torrent [file2.torrent...]");
           System.exit(1);
       }
       for (int i = g.getOptind(); i < args.length; i++) {
@@ -845,11 +847,11 @@ public class MetaInfo
                                  "\nWebSeed URLs: " + meta.getWebSeedURLs() +
                                  "\nCreated By:   " + meta.getCreatedBy() +
                                  "\nComment:      " + meta.getComment());
-              if (created_by != null || announce != null || url != null || comment != null) {
+              if (created_by != null || announce != null || url_list != null || comment != null) {
                   String cb = created_by != null ? created_by : meta.getCreatedBy();
                   String an = announce != null ? announce : meta.getAnnounce();
                   String cm = comment != null ? comment : meta.getComment();
-                  List<String> urls = url != null ? Collections.singletonList(url) : meta.getWebSeedURLs();
+                  List<String> urls = url_list != null ? url_list : meta.getWebSeedURLs();
                   // changes/adds creation date
                   MetaInfo meta2 = new MetaInfo(an, meta.getName(), null, meta.getFiles(), meta.getLengths(),
                                                 meta.getPieceLength(0), meta.getPieceHashes(), meta.getTotalLength(), meta.isPrivate(),
