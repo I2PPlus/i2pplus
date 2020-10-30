@@ -34,7 +34,7 @@
 
 <p>Server tunnels, configurable in the <a href="/i2ptunnelmgr">Tunnel Manager</a>, provide a number of ways to limit access to the hosted service. Destination whitelisting, blacklisting, connection throttling, and tunnel filtering are methods provisioned to mitigate denial of service attacks, grant exclusive access to known I2P destinations, and manage traffic to the server.</p>
 
-<p>A tunnel filter can provide protection against denial of service attacks, without otherwise interrupting the service for genuine users, either in conjunction with the tunnel throttler or as an alternative strategy. It can also be used to log access to a hosted service to determine if the server is under attack, or simply to log all visitors by I2P destination. Additionally, a filter can function simulatenously as a whitelist and blacklist making it more flexible than the Tunnel Manager's access list controls. Note that multiple server tunnels can share a single filter file if you wish to implement a global filter.</p>
+<p>A tunnel filter can provide protection against denial of service attacks, without otherwise interrupting the service for genuine users, either in conjunction with the tunnel throttler or as an alternative strategy. It can also be used to log access to a hosted service to determine if the server is under attack, or simply to log all visitors by I2P destination. Additionally, a filter can function simultaneously as a whitelist and blacklist making it more flexible than the Tunnel Manager's access list controls. Note that multiple server tunnels can share a single filter file if you wish to implement a global filter.</p>
 
 <h3>Overview</h3>
 
