@@ -191,7 +191,16 @@
             <parsable targetfile="$INSTALL_PATH/eepget" type="shell">
                 <os family="unix" />
             </parsable>
+            <parsable targetfile="$INSTALL_PATH/eephead" type="shell">
+                <os family="unix" />
+            </parsable>
+            <parsable targetfile="$INSTALL_PATH/i2ping" type="shell">
+                <os family="unix" />
+            </parsable>
             <parsable targetfile="$INSTALL_PATH/eepget.bat" type="shell">
+                <os family="windows" />
+            </parsable>
+            <parsable targetfile="$INSTALL_PATH/eephead.bat" type="shell">
                 <os family="windows" />
             </parsable>
             <parsable targetfile="$INSTALL_PATH/runplain.sh" type="shell">
