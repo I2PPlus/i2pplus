@@ -110,9 +110,9 @@ img {
   font-size: 0;
 }
 
-a img:hover, a:focus img {
+/*a img:hover, a:focus img {
   filter: drop-shadow(0 0 1px #f60);
-}
+}*/
 
 #tunnels img[src^="/flags.jsp?"], #profiles img[src^="/flags.jsp?"], #peers img[src^="/flags.jsp?"] {
   width: 16px !important;
@@ -124,17 +124,14 @@ a img:hover, a:focus img {
   padding: 0 !important;
   width: 24px !important;
   height: 18px !important;
-  border: 1px solid #030;
-  border-radius: 3px;
+  border: 1px solid #000;
+  border-radius: 2px;
+  box-shadow: 0 0 0 1px #010;
   background: #000;
 }
 
-#netdb #netdbcountrylist img:hover {
-  filter: none;
-}
-
 #netdb #netdbcountrylist a:hover img {
-  border: 1px solid #f60;
+  box-shadow: 0 0 0 1px rgba(255,96,0,.8);
   transform: scale(1.1);
 }
 
@@ -6789,6 +6786,11 @@ table:not(:first-of-type).netdbentry th:first-child, table:not(:first-of-type).n
   width: 100% !important;
 }
 
+.netdb_family > *, .netdb_info, .netdb_entry tr:nth-child(2) td:first-child  {
+  vertical-align: text-bottom;
+  display: inline-block;
+}
+
 .netdbentry td, .leaseset td, #leasesetdebug td, .sybil_routerinfo td {
   line-height: 160%;
   color: #bb7 !important;
@@ -7167,26 +7169,21 @@ p.family {
 
 p.family b {
   margin-right: -3px;
+  min-width: 118px;
   display: inline-block;
-  min-width: 136px;
   vertical-align: middle;
   text-align: right;
-}
-
-@media screen and (max-width: 1500px) {
-p.family b {
-  min-width: 130px;
-}
+  font-size: 90%;
 }
 
 p.family a {
   padding-left: 4px;
-  display: inline-block;
   width: calc(100% - 141px);
   max-width: 400px;
+  display: inline-block;
+  vertical-align: middle;
   overflow: hidden;
   text-overflow: ellipsis;
-  vertical-align: middle;
   border-radius: 0 10px 10px 0;
 }
 
@@ -7211,10 +7208,10 @@ p.sybil_info + a[name] + table.sybil_routerinfo, p.hashdist + a[name] + table.sy
 }
 
 .threatpoints + ul {
-  background: #000;
-  border: 1px solid #242;
-  padding: 5px 5px 0;
   margin: -4px 0 10px;
+  padding: 5px 5px 0;
+  border: 1px solid #242;
+  background: #000;
 }
 
 .threatpoints + ul li:last-child {
@@ -7261,8 +7258,8 @@ h3, th {
 }
 
 .h3navlinks {
-  white-space: nowrap;
   margin-top: -2px;
+  white-space: nowrap;
 }
 
 th .h3navlinks, #config_stats .h3navlinks, #config_webapps .h3navlinks {
@@ -8265,6 +8262,10 @@ h4#sb_shutdownstatus span {
   box-shadow: 0 0 0 1px #000;
   background: #020;
   background: linear-gradient(to bottom, #020, #010);
+}
+
+.tunnel_cap, .tier, .reachable, .ff {
+  box-shadow: inset 0 0 0 1px #010, 0 0 0 1px #000 !important;
 }
 
 #tunnels .tunnel_cap {
@@ -10013,14 +10014,17 @@ th.options, #externali2cp th {
 }
 
 .routerid .flag {
-  padding: 4px 4px 2px 1.5px;
+  padding: 3px 4px 2px 2px;
   border-right: 1px solid #030;
 }
 
 .routerid .flag img {
-  width: 16px;
-  height: 12px;
+  margin: -2px 0 -3px;
+  padding: 0;
+  width: 16px !important;
+  height: 12px !important;
   display: inline-block;
+  border: 1px solid #000;
 }
 
 .routerid .flag a {
@@ -11548,6 +11552,11 @@ input[type="checkbox"][disabled]:checked, input[type="radio"][disabled]:checked,
   box-shadow: 0 0 0 1px #000;
   background: #020;
   background: linear-gradient(to bottom, #020, #010);
+}
+
+.viewprofile img:hover, .viewfullentry img:hover, .familysearch img:hover, .configpeer img:hover, .profiledump img:hover {
+  border: 1px solid #f60;
+  background: linear-gradient(to bottom, #030, #000);
 }
 
 #profilelist td:last-child img {
@@ -14240,6 +14249,7 @@ h3 + table {
 }
 
 #tunnels #tunnelPeerCount td:first-child {
+  padding-left: 5px !important;
   padding-right: 5px !important;
   width: 1%;
   white-space: nowrap;
@@ -14251,9 +14261,18 @@ h3 + table {
 }
 
 #tunnelPeerCount td:first-child span, #tunnelPeerCount td:first-child b {
-  min-width: 0 !important;
   box-shadow: none !important;
-  background: none !important;
+  background: #000 !important;
+  background: linear-gradient(to bottom, #020, #000) !important;
+}
+
+#tunnels #tunnelPeerCount .routerid {
+  min-width: 72px !important;
+}
+
+#tunnelPeerCount .tunnel_cap {
+  padding: 1px !important;
+  min-width: 22px !important;
 }
 
 #logs .tabletitle, #jobs h3, #tunnels h3[id] {
