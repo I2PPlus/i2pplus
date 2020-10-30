@@ -441,10 +441,10 @@ public class EepGet {
 
     private static void usage() {
         System.err.println("eepget [-p 127.0.0.1[:4444]] [-c] [-o outputFile]\n" +
-                           "       [-n #retries] (default 0)\n" +
+                           "       [-n #retries] (default 3)\n" +
                            "       [-m markSize] (default 1024)\n" +
                            "       [-l lineLen]  (default 40)\n" +
-                           "       [-t timeout]  (default 60 sec)\n" +
+                           "       [-t timeout]  (default 120 sec)\n" +
                            "       [-e etag]\n" +
                            "       [-h headerName=headerValue]\n" +
                            "       [-u username] [-x password] url\n" +
