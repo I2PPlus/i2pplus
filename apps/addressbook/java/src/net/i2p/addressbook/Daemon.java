@@ -500,7 +500,7 @@ class Daemon {
                                 else
                                     success = publishedNS.putIfAbsent(key, dest, props);
                                 if (log != null && !success) {
-                                    log.append("Save to published addressbook " + publishedNS.getName() + " failed for new key " + key);
+                                    log.append("Failed to save " + key + " to published addressbook [" + publishedNS.getName() + "]");
                                 }
                             }
                             if (knownNames != null) {
@@ -540,7 +540,7 @@ class Daemon {
                                             if (publishedNS != null) {
                                                 success = publishedNS.remove(poldname, pod);
                                                 if (log != null && !success)
-                                                    log.append("Remove from published addressbook " + publishedNS.getName() + " failed for " + poldname);
+                                                    log.append("Failed to remove " + poldname + " from published addressbook [" + publishedNS.getName() + "]");
                                             }
                                         } else if (pod2 != null) {
                                             // mismatch, disallow
@@ -582,7 +582,7 @@ class Daemon {
                                                 if (publishedNS != null) {
                                                     success = publishedNS.remove(poldname, pod);
                                                     if (log != null && !success)
-                                                        log.append("Remove from published addressbook " + publishedNS.getName() + " failed for " + poldname);
+                                                        log.append("Failed to remove " + poldname + " from published addressbook [" + publishedNS.getName() + "]");
                                                 }
                                             } else if (pod2 != null) {
                                                 // mismatch, disallow
@@ -615,7 +615,7 @@ class Daemon {
                                                 if (publishedNS != null) {
                                                     success = publishedNS.remove(rev, pod);
                                                     if (log != null && !success)
-                                                        log.append("Remove from published addressbook " + publishedNS.getName() + " failed for " + rev);
+                                                        log.append("Failed to remove " + rev + " from published addressbook [" + publishedNS.getName() + "]");
                                                 }
                                             }
                                         }
