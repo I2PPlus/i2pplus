@@ -105,6 +105,9 @@ public class I2PTunnelHTTPServer extends I2PTunnelServer {
     private long _startedOn = 0L;
     private ConnThrottler _postThrottler;
 
+    private final static String ERR_STYLE = "<body style=\"margin: 3% 4%; padding: 0 0 15px; font-family: sans-serif; color: #dda; " +
+                                            "text-shadow: 0 1px 1px #000; border-bottom: 1px solid #aa8;background: #311;\">\n";
+
     private final static String ERR_UNAVAILABLE =
          "HTTP/1.1 503 Service Unavailable\r\n" +
          "Content-Type: text/html; charset=iso-8859-1\r\n" +
@@ -113,22 +116,23 @@ public class I2PTunnelHTTPServer extends I2PTunnelServer {
          "Proxy-Connection: close\r\n" +
          "\r\n" +
          "<!DOCTYPE html>\n<html>\n<head><title>503 Service Unavailable</title></head>\n" +
-         "<body style=\"margin: 3% 4%; padding: 0 0 15px; font-family: sans-serif; color: #dda; text-shadow: 0 1px 1px #000; border-bottom: 1px solid #aa8; background: #311;\">\n" +
+         ERR_STYLE +
          "<h2>503 Service Unavailable</h2>\n" +
          "<p>This I2P website is unavailable. It may be down or undergoing maintenance.</p>\n" +
          "</body>\n</html>";
 
     // TODO https://stackoverflow.com/questions/16022624/examples-of-http-api-rate-limiting-http-response-headers
     private final static String ERR_DENIED =
-         "HTTP/1.1 429 Denied\r\n" +
+         "HTTP/1.1 429 Too Many Requests\r\n" +
          "Content-Type: text/html; charset=iso-8859-1\r\n" +
+         "Retry-After: 3600\r\n" +
          "Cache-Control: no-cache\r\n" +
          "Connection: close\r\n" +
          "Proxy-Connection: close\r\n" +
          "\r\n" +
-         "<!DOCTYPE html>\n<html>\n<head><title>403 Denied</title></head>\n" +
-         "<body style=\"margin: 3% 4%; padding: 0 0 15px; font-family: sans-serif; color: #dda; text-shadow: 0 1px 1px #000; border-bottom: 1px solid #aa8; background: #311;\">\n" +
-         "<h2>429 Denied</h2>\n" +
+         "<!DOCTYPE html>\n<html>\n<head><title>429 Too Many Requests</title></head>\n" +
+         ERR_STYLE +
+         "<h2>429 Too Many Requests</h2>\n" +
          "<p>Denied due to excessive requests. Please try again later.</p>\n" +
          "</body>\n</html>";
 
@@ -139,8 +143,8 @@ public class I2PTunnelHTTPServer extends I2PTunnelServer {
          "Connection: close\r\n" +
          "Proxy-Connection: close\r\n"+
          "\r\n" +
-         "<html><head><title>403 Denied</title></head>\n"+
-         "<body style=\"margin: 3% 4%; padding: 0 0 15px; font-family: sans-serif; color: #dda; text-shadow: 0 1px 1px #000; border-bottom: 1px solid #aa8; background: #311;\">\n" +
+         "<!DOCTYPE html><html><head><title>403 Denied</title></head>\n"+
+         ERR_STYLE +
          "<h2>403 Denied</h2>\n" +
          "<p>Inproxy access denied. You must run <a style=\"color: #ee7 !important;\" href=\"https://geti2p.net/\">I2P</a> to access this site.</p>\n" +
          "</body>\n</html>";
@@ -153,7 +157,7 @@ public class I2PTunnelHTTPServer extends I2PTunnelServer {
          "Proxy-Connection: close\r\n" +
          "\r\n" +
          "<!DOCTYPE html>\n<html>\n<head><title>503 Service Unavailable</title></head>\n" +
-         "<body style=\"margin: 3% 4%; padding: 0 0 15px; font-family: sans-serif; color: #dda; text-shadow: 0 1px 1px #000; border-bottom: 1px solid #aa8; background: #311;\">\n" +
+         ERR_STYLE +
          "<h2>503 Service Unavailable</h2>\n" +
          "<p>This I2P website is not configured for SSL.</p>\n" +
          "</body>\n</html>";
@@ -166,7 +170,7 @@ public class I2PTunnelHTTPServer extends I2PTunnelServer {
          "Proxy-Connection: close\r\n" +
          "\r\n" +
          "<!DOCTYPE html>\n<html>\n<head><title>414 Request URI Too Long</title></head>\n" +
-         "<body style=\"margin: 3% 4%; padding: 0 0 15px; font-family: sans-serif; color: #dda; text-shadow: 0 1px 1px #000; border-bottom: 1px solid #aa8; background: #311;\">\n" +
+         ERR_STYLE +
          "<h2>414 Request URI too long</h2>\n" +
          "<p>The requested URL contains too many characters and cannot be processed.</p>\n" +
          "</body>\n</html>";
@@ -179,7 +183,7 @@ public class I2PTunnelHTTPServer extends I2PTunnelServer {
          "Proxy-Connection: close\r\n" +
          "\r\n" +
          "<!DOCTYPE html>\n<html>\n<head><title>431 Request Header Fields Too Large</title></head>\n" +
-         "<body style=\"margin: 3% 4%; padding: 0 0 15px; font-family: sans-serif; color: #dda; text-shadow: 0 1px 1px #000; border-bottom: 1px solid #aa8; background: #311;\">\n" +
+         ERR_STYLE +
          "<h2>431 Request header fields too large</h2>\n" +
          "<p>The request headers submitted by your client are too large and cannot be processed.</p>\n" +
          "</body>\n</html>";
@@ -193,7 +197,7 @@ public class I2PTunnelHTTPServer extends I2PTunnelServer {
          "Proxy-Connection: close\r\n" +
          "\r\n" +
          "<!DOCTYPE html>\n<html>\n<head><title>408 Request Timeout</title></head>\n" +
-         "<body style=\"margin: 3% 4%; padding: 0 0 15px; font-family: sans-serif; color: #dda; text-shadow: 0 1px 1px #000; border-bottom: 1px solid #aa8; background: #311;\">\n" +
+         ERR_STYLE +
          "<h2>408 Request timeout</h2>\n" +
          "<p>The connection took too long to establish and has been dropped.</p>\n" +
          "</body>\n</html>";
@@ -206,7 +210,7 @@ public class I2PTunnelHTTPServer extends I2PTunnelServer {
          "Proxy-Connection: close\r\n" +
          "\r\n" +
          "<!DOCTYPE html>\n<html>\n<head><title>400 Bad Request</title></head>\n" +
-         "<body style=\"margin: 3% 4%; padding: 0 0 15px; font-family: sans-serif; color: #dda; text-shadow: 0 1px 1px #000; border-bottom: 1px solid #aa8; background: #311;\">\n" +
+         ERR_STYLE +
          "<h2>400 Bad request</h2>\n" +
          "<p>The datastream sent by your client is malformed and cannot be processed.</p>\n" +
          "</body>\n</html>";
