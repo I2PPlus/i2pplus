@@ -125,7 +125,7 @@ public class I2PTunnelHTTPServer extends I2PTunnelServer {
     private final static String ERR_DENIED =
          "HTTP/1.1 429 Too Many Requests\r\n" +
          "Content-Type: text/html; charset=iso-8859-1\r\n" +
-         "Retry-After: 3600\r\n" +
+         "Retry-After: 600\r\n" +
          "Cache-Control: no-cache\r\n" +
          "Connection: close\r\n" +
          "Proxy-Connection: close\r\n" +
@@ -353,7 +353,7 @@ public class I2PTunnelHTTPServer extends I2PTunnelServer {
                 }
                 if (_log.shouldLog(Log.WARN))
 //                    _log.warn("[HTTPServer] Error in the HTTP request (timeout) \n* From: " + peerB32, ste);
-                    _log.warn("[HTTPServer] Error in the HTTP request (timeout) \n* From: " + peerB32);
+                    _log.warn("[HTTPServer] Error in the HTTP request (timeout) \n* Client: " + peerB32);
                 return;
             } catch (EOFException eofe) {
                 try {
@@ -838,7 +838,7 @@ public class I2PTunnelHTTPServer extends I2PTunnelServer {
      *  This plus a typ. HTTP response header will fit into a 1730-byte streaming message.
      */
 //    private static final int MIN_TO_COMPRESS = 1300;
-    private static final int MIN_TO_COMPRESS = 128;
+    private static final int MIN_TO_COMPRESS = 512;
 
     private static class CompressedResponseOutputStream extends HTTPResponseOutputStream {
         private InternalGZIPOutputStream _gzipOut;
