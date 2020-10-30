@@ -110,9 +110,9 @@ img {
   font-size: 0;
 }
 
-a img:hover, a:focus img {
+/*a img:hover, a:focus img {
   filter: drop-shadow(0 0 1px #f60);
-}
+}*/
 
 #tunnels img[src^="/flags.jsp?"], #profiles img[src^="/flags.jsp?"], #peers img[src^="/flags.jsp?"] {
   width: 16px !important;
@@ -7167,26 +7167,21 @@ p.family {
 
 p.family b {
   margin-right: -3px;
+  min-width: 118px;
   display: inline-block;
-  min-width: 136px;
   vertical-align: middle;
   text-align: right;
-}
-
-@media screen and (max-width: 1500px) {
-p.family b {
-  min-width: 130px;
-}
+  font-size: 90%;
 }
 
 p.family a {
   padding-left: 4px;
-  display: inline-block;
   width: calc(100% - 141px);
   max-width: 400px;
+  display: inline-block;
+  vertical-align: middle;
   overflow: hidden;
   text-overflow: ellipsis;
-  vertical-align: middle;
   border-radius: 0 10px 10px 0;
 }
 
@@ -7211,10 +7206,10 @@ p.sybil_info + a[name] + table.sybil_routerinfo, p.hashdist + a[name] + table.sy
 }
 
 .threatpoints + ul {
-  background: #000;
-  border: 1px solid #242;
-  padding: 5px 5px 0;
   margin: -4px 0 10px;
+  padding: 5px 5px 0;
+  border: 1px solid #242;
+  background: #000;
 }
 
 .threatpoints + ul li:last-child {
@@ -7261,8 +7256,8 @@ h3, th {
 }
 
 .h3navlinks {
-  white-space: nowrap;
   margin-top: -2px;
+  white-space: nowrap;
 }
 
 th .h3navlinks, #config_stats .h3navlinks, #config_webapps .h3navlinks {
@@ -11548,6 +11543,11 @@ input[type="checkbox"][disabled]:checked, input[type="radio"][disabled]:checked,
   box-shadow: 0 0 0 1px #000;
   background: #020;
   background: linear-gradient(to bottom, #020, #010);
+}
+
+.viewprofile img:hover, .viewfullentry img:hover, .familysearch img:hover, .configpeer img:hover, .profiledump img:hover {
+  border: 1px solid #f60;
+  background: linear-gradient(to bottom, #030, #000);
 }
 
 #profilelist td:last-child img {
