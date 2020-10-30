@@ -147,7 +147,9 @@ a img:hover, a:focus img {
 .netdb_header img[src^="/flags"] {
   width: 24px !important;
   height: 18px !important;
+  vertical-align: middle !important;
   border: 1px solid #030;
+  box-shadow: 0 0 0 1px #000;
 }
 
 pre {
@@ -5342,13 +5344,23 @@ ul#upnphelp li:last-child, #legal ul li:last-child {
 
 #netdboverview #netdbtransports th {
   padding-top: 5px !important;
+  padding-bottom: 5px !important;
+  border-top: 1px solid #131 !important;
 }
 
 #netdboverview #netdbtiers tr:last-child td {
   border-bottom: none !important;
 }
 
-#netdbversions tbody tr:first-child td, #netdbtransports tbody tr:first-child td, #netdbcountrylist tbody tr:first-child td, #netdbtiers tbody tr:first-child td {
+#netdboverview table th:first-child::before,
+#netdboverview table td:first-child::before {
+  content: "";
+  display: inline-block;
+  min-height: 28px;
+  vertical-align: middle;
+}
+
+#netdbversions tbody tr:first-child td, #netdbcountrylist tbody tr:first-child td, #netdbtiers tbody tr:first-child td {
   border-top: 2px solid #141 !important;
 }
 
@@ -5374,11 +5386,6 @@ ul#upnphelp li:last-child, #legal ul li:last-child {
 #netdbversions .version {
   min-width: 48px;
 }
-
-/*#netdbtransports, #netdbtransports tr:nth-child(n+2) td:first-child {
-  border-left: none !important;
-  border-right: none !important;
-}*/
 
 #netdbcountrylist {
   border-right: none !important;
@@ -5409,9 +5416,9 @@ table[cellspacing="30"] > tbody > tr > td:first-child > table > tbody > tr > th:
 /* /netdb - Sybil */
 
 th > img[src^="/imagegen"], .identicon { /* scale down header images */
+  margin: 0 0 0 3px;
   height: 26px;
   width: 26px;
-  margin: 0 0 0 3px;
   border: 1px solid #242;
 }
 
@@ -5422,25 +5429,24 @@ th > img[src^="/imagegen"], .identicon { /* scale down header images */
 }
 
 #netdblookup th {
-  text-align: left;
-  font-size: 11pt;
-  letter-spacing: 0.08em;
   padding: 10px;
+  letter-spacing: 0.08em;
+  text-align: left;
   text-transform: uppercase;
+  font-size: 11pt;
 }
 
 #netdblookup td:nth-child(odd) {
-  text-align: right;
-/*  width: 100px !important;*/
-  white-space: nowrap;
-  font-weight: bold;
   padding-left: 10px;
   padding-right: 0;
+  text-align: right;
+  white-space: nowrap;
+  font-weight: bold;
 }
 
 #netdblookup td:nth-child(even) {
-  width: 50%;
   padding-left: 0;
+  width: 50%;
 }
 
 #netdblookup td:nth-child(2) {
@@ -5457,10 +5463,10 @@ th > img[src^="/imagegen"], .identicon { /* scale down header images */
 }
 
 .subheading {
-  text-align: left !important;
-  background: #000;
   padding: 10px;
+  text-align: left !important;
   border: 1px solid #252;
+  background: #000;
 }
 
 .subheading b {
@@ -8243,22 +8249,27 @@ h4#sb_shutdownstatus span {
 
 /* /tunnels */
 
-tt a, img + tt {
+.routerid tt {
   letter-spacing: 0.1em;
 }
 
 .tunnel_cap, .tier, .ff, .unreachable, .reachable, #capabilities_key b {
   margin: 1px 2px;
-  padding: 1px 2px;
+  padding: 3px 2px;
   display: inline-block;
-  min-width: 15px;
+  min-width: 20px;
   color: #bb7;
   text-shadow: 0 1px 1px #000;
   text-align: center !important;
+  border: 1px solid #030;
   box-shadow: 0 0 0 1px #000;
-  border-radius: 2px;
   background: #020;
   background: linear-gradient(to bottom, #020, #010);
+}
+
+#tunnels .tunnel_cap {
+  padding: 2px 2px 1px;
+  border-radius: 0;
 }
 
 .tier, a .tier, #capabilities_key b {
@@ -8317,11 +8328,10 @@ tt a, img + tt {
 .tunnel_local {
   margin-left: -4px;
   margin-right: 4px;
-  padding: 2px 0;
+  padding: 3px 0 2px;
   font-size: 8pt;
   text-transform: lowercase;
   text-align: center;
-  border-radius: 2px;
   box-shadow: 0 0 0 1px #000;
   background: #020;
   background: linear-gradient(to bottom, #020, #010);
@@ -9991,10 +10001,31 @@ th.options, #externali2cp th {
   padding: 1px 2px;
   display: inline-block;
   min-width: 64px;
+  overflow: hidden;
   text-align: center;
-  box-shadow: 0 0 0 1px #000;
+  box-shadow: 0 0 0 1px #000 !important;
   background: #020;
   background: linear-gradient(to bottom, #020, #010);
+}
+
+.routerid, .tunnel_local, #tunnels .tunnel_cap, .version, #netdbtiers a {
+  border: 1px solid #030;
+}
+
+.routerid .flag {
+  padding: 4px 4px 2px 1.5px;
+  border-right: 1px solid #030;
+}
+
+.routerid .flag img {
+  width: 16px;
+  height: 12px;
+  display: inline-block;
+}
+
+.routerid .flag a {
+  margin-top: 2.5px !important;
+  display: inline-block;
 }
 
 .routerid tt {
@@ -10004,7 +10035,7 @@ th.options, #externali2cp th {
   user-select: all;
 }
 
-.routerid tt, .routerid a {
+.routerid tt, .routerid tt a {
   letter-spacing: 0.2em !important;
 }
 
@@ -10012,14 +10043,13 @@ th.options, #externali2cp th {
   margin: 1px 0 -1px;
 }
 
-.routerid tt, .routerid a {
-  margin-top: -3px !important;
+.routerid tt, .routerid tt a {
   display: inline-block;
 }
 
 .tunneldisplay .routerid {
   box-sizing: border-box;
-  border-radius: 2px;
+/*  border-radius: 2px;*/
 }
 
 .tunneldisplay .routerid, .tunnel_local {
@@ -11509,12 +11539,12 @@ input[type="checkbox"][disabled]:checked, input[type="radio"][disabled]:checked,
 
 .viewprofile img, .viewfullentry img, .familysearch img, .configpeer img, .profiledump img {
   margin: -1px 5px 1px !important;
-  padding: 3px;
+  padding: 4px;
   display: inline-block;
   width: 14px;
   height: 14px;
   line-height: 0;
-  border-radius: 2px;
+  border: 1px solid #030;
   box-shadow: 0 0 0 1px #000;
   background: #020;
   background: linear-gradient(to bottom, #020, #010);
@@ -11559,6 +11589,10 @@ input[type="checkbox"][disabled]:checked, input[type="radio"][disabled]:checked,
   vertical-align: calc(50% + 2px) !important;
 }
 
+.version {
+  line-height: 140%;
+}
+
 .version, #netdbtiers a {
   margin: 0;
   padding: 1px 5px;
@@ -11566,7 +11600,6 @@ input[type="checkbox"][disabled]:checked, input[type="radio"][disabled]:checked,
   text-align: center !important;
   font-weight: bold;
   box-shadow: 0 0 0 1px #000;
-  border-radius: 2px;
   background: #020;
   background: linear-gradient(to bottom, #020, #010) !important;
 }
@@ -11604,10 +11637,6 @@ input[type="checkbox"][disabled]:checked, input[type="radio"][disabled]:checked,
 
 #netdboverview td, .sybil_addresses td {
   line-height: 160% !important;
-}
-
-#netdboverview .version {
-  line-height: 120%;
 }
 
 .keysearch, .signingkey, .version, .version a {
