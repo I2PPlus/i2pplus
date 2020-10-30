@@ -1097,12 +1097,8 @@ class NetDbRenderer {
            .append(info.getIdentity().getPublicKey().getType())
            .append("</span></td></tr>\n<tr>")
            .append("<td><b>" + _t("Addresses") + ":</b></td>")
-           .append("<td colspan=\"2\" class=\"netdb_addresses\">");
-//        if (!isUs) {
-            buf.append("<ul>");
-//        } else {
-//            buf.append("<span class=\"netdb_ouraddresses\">");
-//        }
+           .append("<td colspan=\"2\" class=\"netdb_addresses\">")
+           .append("<ul>");
 
         Collection<RouterAddress> addrs = info.getAddresses();
         if (addrs.isEmpty()) {
@@ -1116,9 +1112,7 @@ class NetDbRenderer {
             }
             for (RouterAddress addr : addrs) {
                 String style = addr.getTransportStyle();
-//                if (!isUs) {
                     buf.append("<li>");
-//                }
                 buf.append("<b class=\"netdb_transport\"");
                 int cost = addr.getCost();
                 if (!((style.equals("SSU") && cost == 5) || (style.equals("NTCP") && cost == 10))) {
@@ -1129,7 +1123,7 @@ class NetDbRenderer {
                 for (Map.Entry<Object, Object> e : p.entrySet()) {
                     String name = (String) e.getKey();
                     String val = (String) e.getValue();
-                    // hide keys which are dupes of the router hash displayed in header and ntcp version
+                    // hide keys which are dupes of the router hash displayed in header, and ntcp version
                     if (name.contains("key") || name.contains("itag") || name.contains("iexp") || name.equals("v")) {
                         buf.append("<span class=\"hide\"><span class=\"nowrap\"><span class=\"netdb_name\">")
                            .append(_t(DataHelper.stripHTML(name)))
@@ -1155,11 +1149,7 @@ class NetDbRenderer {
                     buf.append("</li>");
                 }
             }
-//            if (!isUs) {
                 buf.append("</ul>");
-//            } else {
-//                buf.append("</span>");
-//            }
             buf.append("</td></tr>\n");
          }
         if (full) {
@@ -1168,9 +1158,9 @@ class NetDbRenderer {
             for (Map.Entry<Object, Object> e : p.entrySet()) {
                 String key = (String) e.getKey();
                 String netDbKey = DataHelper.stripHTML(key)
-                   .replace("caps", "<li class=\"cap_stat hide\"><b>" + _t("Capabilities")) // hide caps as already in the header
-                   .replace("router.version", "<li class=\"hide\"><b>" + _t("Version")) // hide version as already in the header
-                   .replace("coreVersion", "<li class=\"hide\"><b>" + _t("Core version")) // do we need this?
+                   .replace("caps", "<li class=\"cap_stat hide\" hidden><b>" + _t("Capabilities")) // hide caps as already in the header
+                   .replace("router.version", "<li class=\"hide\" hidden><b>" + _t("Version")) // hide version as already in the header
+                   .replace("coreVersion", "<li class=\"hide\" hidden><b>" + _t("Core version")) // do we need this?
                    .replace("netdb.", "")
                    .replace("netId", "<hr><li><b>" + _t("Network ID")) // do we need this?
                    .replace("knownLeaseSets", "<li><b>" + _t("LeaseSets"))
@@ -1180,7 +1170,7 @@ class NetDbRenderer {
                    // TODO: place family entries underneath general network stats
                    .replace("family.", "Family ")
                    // hide family name in css as it's already displayed above
-                   .replace("family", "<li class=\"longstat fam hide\"><b>" + _t("Family"))
+                   .replace("family", "<li class=\"longstat fam hide\" hidden><b>" + _t("Family"))
                    .replace("Family key", "<li class=\"longstat fam\"><b>" + _t("Family Key"))
                    .replace("Family sig", "<li class=\"longstat fam\"><b>" + _t("Family Sig"))
                    .replace("tunnel.buildExploratoryExpire.60m",  "<hr id=\"expl\"><li class=\"longstat\"><b>"   + _t("Exploratory tunnels expire (1h)"))
