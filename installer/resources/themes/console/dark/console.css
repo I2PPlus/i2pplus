@@ -12898,8 +12898,47 @@ td.optionsave, #addkeyring tr:last-child, #criticallogs td, #routerlogs td, #eve
   border-bottom: 1px solid #242;
 }
 
-#logs h3 a, #permabanned td:first-child {
+#logs h3 a, #permabanned td:first-child, #homepage h4 a,
+#tunnels h3#exploratory a, #tunnels h3.server a, #tunnels h3.client a,
+#tunnels #participating a, #tunnels #peercount a {
   border-left: 1px solid #242;
+}
+
+#homepage h4 a {
+  margin: -7px 0;
+  padding: 9px 4px 9px 11px;
+}
+
+#homepage h4.app2 a {
+  padding: 7px 4px 8px 11px;
+}
+
+#tunnels h3#exploratory a, #tunnels h3.server a, #tunnels h3.client a {
+  margin: -8px 0 -8px 0 !important;
+  padding: 7px 4px 14px 10px !important;
+}
+
+#tunnels #participating a::after, #tunnels #peercount a::after {
+  margin: -10px 0 -15px -12px !important;
+  padding: 9px 2px 9px 0 !important;
+}
+
+@media screen and (min-width: 1500px) {
+  #homepage h4 a, #homepage h4.app2 a {
+    padding-left: 12px;
+  }
+  #tunnels h3 a::after {
+    margin: -8px -8px -8px 0;
+    padding: 9px 8px 9px 16px;
+  }
+  #tunnels h3#exploratory a, #tunnels h3.server a, #tunnels h3.client a {
+    margin: -8px 0 -8px 0 !important;
+    padding: 7px 2px 14px 0 !important;
+  }
+  #tunnels #participating a::after, #tunnels #peercount a::after {
+    margin: -8px 0 -13px -12px !important;
+    padding: 9px 6px 9px 0 !important;
+  }
 }
 
 #banneduntilrestart td {
@@ -13970,12 +14009,6 @@ h3 + table {
   background-size: 20px 20px, 100% 100%, 100% 100%, 100% 100% !important;
 }
 
-#tunnels #peercount a, #tunnels #participating a {
-  padding: 0;
-  vertical-align: middle;
-  line-height: 0;
-}
-
 #tunnels #peercount img, #tunnels #participating img {
   margin: 0 0 -2px !important;
   padding: 8px 6px 6px;
@@ -13989,7 +14022,6 @@ h3 + table {
 }
 
 #tunnels #participating a::after, #tunnels #peercount a::after {
-  padding: 10px 6px 6px;
   content: "";
   display: inline-block;
   width: 16px;
