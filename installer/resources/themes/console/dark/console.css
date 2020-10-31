@@ -6793,7 +6793,7 @@ table:not(:first-of-type).netdbentry th:first-child, table:not(:first-of-type).n
   width: 100% !important;
 }
 
-.netdb_family > *, .netdb_info, .netdb_entry tr:nth-child(2) td:first-child  {
+.netdbentry .netdb_family > *, .netdbentry .netdb_info, .netdbentry tr:nth-child(2) td:first-child  {
   vertical-align: text-bottom;
   display: inline-block;
 }
@@ -8319,6 +8319,22 @@ h4#sb_shutdownstatus span {
   text-align: right;
 }
 
+#tunnels #tunnels_part .cells, #tunnels_part .cells > * {
+  vertical-align: middle;
+}
+
+#tunnels_part .tunnel_id {
+  margin: 0;
+  padding: 2px 4px;
+  display: inline-block;
+  line-height: inherit;
+  vertical-align: middle !important;
+  text-align: center;
+  border: 1px solid #000;
+  border-radius: 2px;
+  background: #020;
+}
+
 .tunnel_peer {
   min-width: 56px;
   display: inline-block;
@@ -8712,7 +8728,6 @@ th code {
 }
 
 .sybil_container, .sybilinfo_container, .threatpoints + ul {
- /*   margin: 10px 0;*/
   padding: 4px 5px;
   columns: 300px 5;
   column-gap: 0;
@@ -11459,7 +11474,7 @@ input[type="checkbox"][disabled]:checked, input[type="radio"][disabled]:checked,
   line-height: 0;
 }
 
-.netdb_name,.netdb_addresses .netdb_info {
+.netdbentry .netdb_name, .netdb_addresses .netdb_info {
   display: inline-block;
   vertical-align: middle;
 }
