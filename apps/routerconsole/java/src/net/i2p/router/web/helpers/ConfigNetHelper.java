@@ -249,7 +249,12 @@ public class ConfigNetHelper extends HelperBase {
 //            buf.append(_t("Add host name or IP"))
 //               .append(": ");
 //        }
-        buf.append("<input name=\"udpHost1\" type=\"text\" size=\"16\" >");
+        buf.append("<input name=\"udpHost1\" type=\"text\" size=\"16\"");
+        String hostname = _context.getProperty(UDPTransport.PROP_EXTERNAL_HOST);
+        boolean specified = hostname != null && hostname.length() > 0;
+        if (specified)
+            buf.append(" value=\"").append(hostname).append("\"");
+        buf.append(" />");
         return buf.toString();
     }
 
