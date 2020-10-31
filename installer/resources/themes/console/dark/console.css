@@ -4859,9 +4859,41 @@ h3.dead span {
 }
 
 @media screen and (max-width: 1200px) {
-#participatingtunnels .statusnotes:last-of-type {
-  margin-bottom: 6px;
+  #participatingtunnels .statusnotes:last-of-type {
+    margin-bottom: 6px;
+  }
+  #tunnels .tunneldisplay .cells {
+    padding-left: 2px;
+    padding-right: 2px;
+  }
+  #tunnels .tunneldisplay .cells .tunnel_id {
+    display: none;
+  }
+  #tunnels .tunneldisplay .cells .tunnel_peer.tunnel_local {
+    padding: 4px !important;
+  }
 }
+
+@media screen and (max-width: 1000px) {
+  #tunnels .tunneldisplay .cells span, #tunnels .tunneldisplay .cells .tunnel_cap, #tunnels .tunneldisplay .cells tt {
+    margin: 1px !important;
+    padding: 0 !important;
+    display: inline-block;
+    vertical-align: middle;
+    line-height: 120% !important;
+    border: none !important;
+    box-shadow: none !important;
+    background: none !important;
+  }
+  #tunnels .tunneldisplay .cells .tunnel_cap {
+    min-width: 0;
+    text-align: left;
+  }
+
+  #tunnels .tunneldisplay .cells .routerid, #tunnels .tunneldisplay .cells .tunnel_peer.tunnel_local {
+    width: 74px;
+    box-sizing: border-box !important;
+  }
 }
 
 #tunnels .tunnels_participating tbody tr:first-child {
@@ -6127,7 +6159,6 @@ h3#bannedpeers {
 }
 
 #banlist li .routerid {
-  margin: 0 -2px !important;
   background: none;
 }
 
@@ -6793,7 +6824,7 @@ table:not(:first-of-type).netdbentry th:first-child, table:not(:first-of-type).n
   width: 100% !important;
 }
 
-.netdb_family > *, .netdb_info, .netdb_entry tr:nth-child(2) td:first-child  {
+.netdbentry .netdb_family > *, .netdbentry .netdb_info, .netdbentry tr:nth-child(2) td:first-child  {
   vertical-align: text-bottom;
   display: inline-block;
 }
@@ -8276,7 +8307,7 @@ h4#sb_shutdownstatus span {
 }
 
 #tunnels .tunnel_cap {
-  padding: 2px 2px 1px;
+  padding: 2px;
   border-radius: 0;
 }
 
@@ -8317,6 +8348,22 @@ h4#sb_shutdownstatus span {
   display: inline-block;
   line-height: 120%;
   text-align: right;
+}
+
+#tunnels #tunnels_part .cells, #tunnels_part .cells > * {
+  vertical-align: middle;
+}
+
+#tunnels_part .tunnel_id {
+  margin: 0;
+  padding: 2px 4px;
+  display: inline-block;
+  line-height: inherit;
+  vertical-align: middle !important;
+  text-align: center;
+  border: 1px solid #000;
+  border-radius: 2px;
+  background: #020;
 }
 
 .tunnel_peer {
@@ -8378,8 +8425,8 @@ h4#sb_shutdownstatus span {
 
 .tunnel_local {
   margin-left: 2px;
-  padding: 2px 4px;
-  min-width: 64px !important;
+  padding: 4px;
+  min-width: 76px !important;
 }
 
 .tunnel_peer:empty {
@@ -8397,6 +8444,7 @@ h4#sb_shutdownstatus span {
 }
 
 #tunnels .tunnel_cap {
+  padding: 3px 2px 2px;
   margin: 0;
   line-height: 120%;
 }
@@ -8414,8 +8462,8 @@ h4#sb_shutdownstatus span {
 
 @media screen and (min-width: 1500px) {
 .tunnel_cap {
-  padding: 1px 2px;
-  min-width: 16px;
+  padding: 2px 2px 1px !important;
+  min-width: 18px;
 }
 
 .tunnel_id {
@@ -8712,7 +8760,6 @@ th code {
 }
 
 .sybil_container, .sybilinfo_container, .threatpoints + ul {
- /*   margin: 10px 0;*/
   padding: 4px 5px;
   columns: 300px 5;
   column-gap: 0;
@@ -10046,7 +10093,8 @@ th.options, #externali2cp th {
   user-select: all;
 }
 
-.routerid tt, .routerid tt a {
+.routerid tt {
+  margin-left: 2px !Important;
   letter-spacing: 0.2em !important;
 }
 
@@ -10058,9 +10106,18 @@ th.options, #externali2cp th {
   display: inline-block;
 }
 
+#banlist .routerid, #banlist .routerid .flag {
+  border: none;
+  padding: 0;
+  vertical-align: middle;
+}
+
+#banlist .routerid {
+  margin: -1px 1px 1px 0 !important;
+}
+
 .tunneldisplay .routerid {
   box-sizing: border-box;
-/*  border-radius: 2px;*/
 }
 
 .tunneldisplay .routerid, .tunnel_local {
@@ -11459,7 +11516,7 @@ input[type="checkbox"][disabled]:checked, input[type="radio"][disabled]:checked,
   line-height: 0;
 }
 
-.netdb_name,.netdb_addresses .netdb_info {
+.netdbentry .netdb_name, .netdb_addresses .netdb_info {
   display: inline-block;
   vertical-align: middle;
 }
