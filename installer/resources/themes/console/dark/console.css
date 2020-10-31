@@ -10067,13 +10067,18 @@ th.options, #externali2cp th {
   border: 1px solid #030;
 }
 
-.routerid .flag {
+.routerid .flag, #peers .routerid .flag {
   padding: 3px 4px 2px 2px;
   border-right: 1px solid #030;
 }
 
-.routerid .flag img {
-  margin: -2px 0 -3px;
+#peers #udpconnections .routerid {
+  margin: 2px 0 !important;
+  min-width: 70px;
+}
+
+.routerid .flag img, #peers .routerid .flag img, #peers #udpconnections .routerid .flag img  {
+  margin: -2px 0 -3px !important;
   padding: 0;
   width: 16px !important;
   height: 12px !important;
