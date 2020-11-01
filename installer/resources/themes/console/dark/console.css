@@ -7926,6 +7926,32 @@ form[action="events"] {
 
 /* responsive /profiles & /peers */
 
+#profiles .tier, #profiles .reachable, #profiles .ff {
+  margin-top: -6px;
+  margin-bottom: -6px;
+  padding-top: 2px;
+  padding-bottom: 1px;
+}
+
+#profilelist th {
+  font-size: 90% !important;
+}
+
+#profilelist td {
+  padding-top: 2px;
+  padding-bottom: 2px;
+}
+
+#profilelist td:first-child, #profilelist td:nth-child(2), #profilelist td:nth-child(3) {
+  padding-left: 3px;
+  padding-right: 3px;
+}
+
+#profilelist td:last-child {
+  padding-left: 0;
+  padding-right: 0;
+}
+
 #profiles_overview {
   margin-bottom: 9px;
 }
@@ -13009,13 +13035,9 @@ table.search {
 }
 
 @media screen and (max-width: 1240px) {
-#profiles #ff {
-  margin: -18px -6px -9px;
-}
-
-#floodfills {
-/*  border-bottom: none;*/
-}
+  #profiles #ff {
+    margin: -18px -6px -9px;
+  }
 }
 
 /* sitemap */
