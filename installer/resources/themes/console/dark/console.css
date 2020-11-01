@@ -15,7 +15,7 @@ body {
   padding: 0;
   text-align: center;
   color: #ee9;
-  font: 8.5pt/130% "Droid Sans", "Open Sans", "Noto Sans", Ubuntu, "Segoe UI", "Bitstream Vera Sans", "DejaVu Sans", Verdana, "Lucida Grande", Helvetica, sans-serif;
+  font: 8.5pt/130% Droid Sans, Open Sans, Noto Sans, Ubuntu, Segoe UI, Bitstream Vera Sans, DejaVu Sans, Verdana, Lucida Grande, Helvetica, sans-serif;
   background: #010 url(images/camotile2.png) top left scroll;
   background: url(/themes/console/images/svg/update.svg) center center no-repeat, repeating-linear-gradient(to bottom, rgba(0,0,0,.9) 1px, rgba(0,8,0,.5) 2px, rgba(0,8,0,.5) 3px), url(images/camotile2.png) top left scroll #000800;
   background-size: 0 0, 100% 100%, auto;
@@ -153,7 +153,7 @@ pre {
   width: 98%;
   overflow-x: auto;
   text-align: left;
-  font: 8.5pt "Droid Sans Mono", "Noto Mono", "DejaVu Sans Mono", "Lucida Console", monospace;
+  font: 8.5pt Droid Sans Mono, Noto Mono, DejaVu Sans Mono, Lucida Console, monospace;
 }
 
 /* proxy errors */
@@ -206,11 +206,11 @@ pre {
 }
 
 .logo hr {
-  color: #494;
-  background: #252;
-  height: 1px;
-  border: 0 solid #252;
   margin: 10px -10px 0;
+  height: 1px;
+  color: #494;
+  border: 0 solid #252;
+  background: #252;
 }
 
 .logo, .warning {
@@ -220,11 +220,11 @@ pre {
 .warning {
   margin: 20px 20px 20px 248px;
   padding: 10px 30px 20px 100px;
-  border: 1px solid #252;
-  text-align: justify;
-  word-wrap: break-word;
-  font-size: 10pt;
   min-width: 300px;
+  border: 1px solid #252;
+  word-wrap: break-word;
+  text-align: justify;
+  font-size: 10pt;
   border: 5px solid #010;
   border-image: repeating-linear-gradient(135deg, #010 0px, #010 20px, #440 20px, #440 40px, #010 40px) 5 repeat repeat;
   border-image-width: 5px;
@@ -237,9 +237,9 @@ pre {
 }
 
 #servleterror .warning {
+  padding-left: 70px;
   background-size: auto 90px, 100% 100%, 175px auto;
   background-position: 12px calc(50% + 16px);
-  padding-left: 70px;
 }
 
 .iframed#servletError .logo {
@@ -285,19 +285,19 @@ pre {
 }
 
 .warning h3 {
-  font-size: 10pt;
+  margin: -9px -29px 15px -99px;
   padding: 9px 10px 7px;
   text-align: left;
-  margin: -9px -29px 15px -99px;
+  font-size: 10pt;
   border: none;
   border-bottom: 1px solid #700;
 }
 
 .warning h4 {
-  font-size: 10pt;
-  box-shadow: none;
   margin: 12px 0 5px;
   padding: 0 0 5px;
+  font-size: 10pt;
+  box-shadow: none;
 }
 
 .warning hr {
@@ -338,12 +338,12 @@ pre {
 }
 
 #jumplinks a::before {
-  content: "\279F\00A0";
-  font-size: 16pt;
-  display: inline-block;
   padding: 3px 0;
+  display: inline-block;
   vertical-align: sub;
   line-height: 16px;
+  font-size: 16pt;
+  content: "\279F\00A0";
 }
 
 #proxyNewAddressHelper .proxyfooter {
@@ -372,17 +372,17 @@ pre {
 }
 
 #proxyNewHost textarea {
+  margin: 0 !important;
+  padding: 0 !important;
+  width: 100% !important;
+  height: 6em;
+  resize: none;
   white-space: pre-wrap;
   word-break: break-all;
   overflow: auto;
   border: none;
-  resize: none;
   background: none !important;
   box-shadow: none !important;
-  width: 100% !important;
-  height: 6em;
-  margin: 0 !important;
-  padding: 0 !important;
 }
 
 #proxyNewHost textarea:focus {
@@ -394,9 +394,9 @@ pre {
 }
 
 .warning h4 {
-  box-shadow: none !important;
   text-align: left;
   font-size: 10pt;
+  box-shadow: none !important;
 }
 
 #proxyNewHost a {
@@ -419,15 +419,15 @@ pre {
 /* sidebar */
 
 .routersummaryouter {
-  float: left;
-  width: 200px;
   margin: 0 0 10px 5px;
   padding: 0;
-  border: 0;
-  clear: left; /* fixes a bug in Opera */
-  text-align: center;
+  width: 200px;
   display: block;
   position: absolute; /* so no interference with /home app icons */
+  float: left;
+  clear: left; /* fixes a bug in Opera */
+  text-align: center;
+  border: 0;
 }
 
 .routersummary {
@@ -470,10 +470,10 @@ pre {
 }
 
 .routersummary hr {
+  margin: 9px -10px 7px -10px;
+  height: 1px;
   color: #494;
   background: #252;
-  height: 1px;
-  margin: 9px -10px 7px -10px;
 }
 
 #sidebar h3 {
@@ -494,16 +494,16 @@ pre {
 }
 
 .routersummary h3::after {
-  content: "";
-  display: inline-block;
   min-height: 15px;
+  display: inline-block;
   vertical-align: middle;
+  content: "";
 }
 
 #sidebar h3 a {
-  vertical-align: middle;
-  display: inline-block;
   width: 100%;
+  display: inline-block;
+  vertical-align: middle;
 }
 
 #sidebar h3:hover {
@@ -533,23 +533,23 @@ pre {
 }
 
 .routersummary h4 {
-  border: 0;
-  border-bottom: 0 !important;
-  font-size: 8pt;
   margin: -6px -9px -8px !important;
   padding: 6px 1px;
-  background: #010;
-  background: linear-gradient(to right, #001900, #001000 5%, #000 50%, #001000 95%, #001900);
+  line-height: 120%;
+  font-size: 8pt;
   text-decoration: none !important;
   color: #2b2;
-  line-height: 120%;
+  border: 0;
+  border-bottom: 0 !important;
   box-shadow: inset 0 0 0 1px #121, inset 0 0 5px 2px #000;
+  background: #010;
+  background: linear-gradient(to right, #001900, #001000 5%, #000 50%, #001000 95%, #001900);
 }
 
 .routersummary h3 a, .routersummary h4 a {
-  white-space: normal !important;
-  display: inline-block;
   width: calc(100% - 5px);
+  display: inline-block;
+  white-space: normal !important;
 }
 
 .routersummary ul {
@@ -576,9 +576,9 @@ pre {
 
 #sb_general td::after, #sb_shortgeneral td::after, #sb_advancedgeneral td::after, #sb_bandwidth td::after,
 #sb_peers td::after, #sb_peersadvanced td::after, #sb_tunnels td::after, #sb_queue td::after {
-   content: "";
-   display: inline-block;
    min-height: 14px;
+   display: inline-block;
+   content: "";
 }
 
 #sb_general td, #sb_shortgeneral td, #sb_advancedgeneral td, #sb_peersadvanced td {
@@ -594,16 +594,16 @@ pre {
 }
 
 #sb_localtunnels td:first-child {
+  padding: 1px 0;
   width: 16px;
   text-align: left !important;
-  padding: 1px 0;
 }
 
 #sb_localtunnels td::after {
-  content: "";
-  display: inline-block;
   min-height: 10px;
+  display: inline-block;
   vertical-align: middle;
+  content: "";
 }
 
 #sb_localtunnels a {
@@ -637,18 +637,18 @@ pre {
 #sb_localtunnels img {
   width: 16px;
   height: 16px;
-  font-size: 0;
   vertical-align: middle;
+  font-size: 0;
   mix-blend-mode: overlay;
   opacity: 0;
 }
 
 #sb_localtunnels img::after {
-  content: "";
-  display: inline-block;
   width: 19px;
   height: 16px;
+  display: inline-block;
   vertical-align: middle;
+  content: "";
 }
 
 #sb_localtunnels td:first-child {
@@ -712,12 +712,12 @@ pre {
 }
 
 #sb_services a:link, #sb_internals a:link, #sb_advanced a:link, #sb_help a:link {
-  word-break: break-all;
   max-width: 192px;
-  overflow: hidden;
-  white-space: nowrap;
-  text-overflow: ellipsis;
+  word-break: break-all;
   line-height: 140%;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
 }
 
 #sb_peers a, #sb_peersadvanced a, #sb_tunnels a {
@@ -729,12 +729,12 @@ pre {
 }
 
 .routersummary .separator hr, .routersummary .separator hr:last-child {
+  margin: 4px 0 3px !important;
+  height: 1px;
   display: block !important;
   color: transparent;
-  background: transparent;
   border-bottom: 1px dashed #141;
-  height: 1px;
-  margin: 4px 0 3px !important;
+  background: transparent;
 }
 
 .sb_notice {
@@ -760,9 +760,9 @@ pre {
 }
 
 #sb_warning {
-  border-bottom: 1px solid #252 !important;
   margin-left: -10px !important;
   margin-right: -10px !important;
+  border-bottom: 1px solid #252 !important;
 }
 
 #sb_warning a {
@@ -782,9 +782,9 @@ p:empty + .sb_notice {
 }
 
 .routersummary tr {
+  border: none !important;
   background-image: none !important;
   background-color: transparent !important;
-  border: 0 !important;
 }
 
 .routersummary form {
@@ -813,87 +813,6 @@ div.refresh {
 .routersummary a:hover {
   color: #f60;
 }
-
-/* "experimental" custom sidebar links for apps */
-/*
-#sb_services {
-  width: 204px !important;
-  margin: 0 !important;
-  margin: -7px -10px -9px !important;
-  border-collapse: collapse;
-  background: url(images/camotile.png) repeat fixed left top;
-}
-
-#sb_services tr {
-  padding: 0;
-}
-
-#sb_services td {
-  padding: 0;
-}
-
-#sb_services a, #sb_services a:hover, #sb_services a:active {
-  border-bottom: 1px solid #151 !important;
-  outline: none !important;
-  display: inline-block;
-  width: calc(100% - 32px) !important;
-}
-
-#sb_services a:hover {
-  background: #020;
-}
-
-#sb_services a:last-child {
-  border-bottom: 1px solid transparent !important;
-}
-
-#sb_services a[href*="mail"], #sb_services a[href*="torrents"], #sb_services a[href*="7658"], #sb_services a[href*="bote"] {
-  padding: 5px 5px 5px 26px !important;
-  border: 1px outset transparent;
-  margin: 0 !important;
-  float: left;
-  text-align: left;
-  text-decoration: none;
-  text-transform: uppercase;
-  letter-spacing: 0.1em;
-  white-space: nowrap;
-  text-overflow: ellipsis;
-  overflow: hidden;
-  clear: both;
-}
-
-#sb_services a[href*="mail"] {
-  background: #000 url(images/mail.png) 5px center no-repeat;
-}
-#sb_services a[href*="mail"]:hover {
-  background: #020 url(images/mail.png) 5px center no-repeat;
-}
-
-#sb_services a[href*="bote"] {
-  background: #000 url(images/webmail.png) 5px center no-repeat;
-}
-
-#sb_services a[href*="bote"]:hover {
-  background: #020 url(images/webmail.png) 5px center no-repeat;
-}
-
-#sb_services a[href*="torrents"] {
-  background: #000 url(images/magnet.png) 5px center no-repeat;
-}
-
-#sb_services a[href*="torrents"]:hover {
-  background: #020 url(images/magnet.png) 5px center no-repeat;
-}
-
-#sb_services a[href*="7658"] {
-  background: #000 url(images/webserver.png) 5px center no-repeat;
-}
-
-#sb_services a[href*="7658"]:hover {
-  background: #020 url(images/webserver.png) 5px center no-repeat;
-}
-*/
-/* end custom sidebar links */
 
 .routersummary td {
   padding: 0 2px 0 2px;
@@ -1312,7 +1231,7 @@ div.news h3, #newspage h3 {
 
 .main textarea {
   background: #000;
-  font: 8.5pt "Droid Sans Mono", "Noto Mono", "DejaVu Sans Mono", "Lucida Console", monospace;
+  font: 8.5pt Droid Sans Mono, Noto Mono, DejaVu Sans Mono, Lucida Console, monospace;
   resize: none;
 }
 
@@ -2029,7 +1948,7 @@ td img {
 /* end peer sort */
 
 tt {
-  font: bold 8.5pt "Droid Sans Mono", "Noto Mono", "DejaVu Sans Mono", "Lucida Console", monospace;
+  font: bold 8.5pt Droid Sans Mono, Noto Mono, DejaVu Sans Mono, Lucida Console, monospace;
   color: #FF0;
 }
 
@@ -2078,7 +1997,7 @@ a:active tt {
 
 .tidylist code {
   text-align: left;
-  font: 8.5pt "Droid Sans Mono", "Noto Mono", "DejaVu Sans Mono", "Lucida Console", monospace;
+  font: 8.5pt Droid Sans Mono, Noto Mono, DejaVu Sans Mono, Lucida Console, monospace;
   color: #dd0;
   padding: 1px 3px;
   background: #030;
@@ -2714,7 +2633,7 @@ select {
   overflow: hidden;
   text-overflow: ellipsis;
   color: #494;
-  font: 9.5pt "Droid Sans", "Open Sans", "Noto Sans", Ubuntu, "Segoe UI", "Bitstream Vera Sans", "DejaVu Sans", Verdana, "Lucida Grande", Helvetica, sans-serif;
+  font: 9.5pt Droid Sans, Open Sans, Noto Sans, Ubuntu, Segoe UI, Bitstream Vera Sans, DejaVu Sans, Verdana, Lucida Grande, Helvetica, sans-serif;
   font-weight: bold;
   border-radius: 2px;
   background: #000 url(images/dropdown.svg) right 10px center no-repeat !important;
@@ -2802,7 +2721,7 @@ textarea {
   padding: 5px;
   margin: 10px;
   border-radius: 2px;
-  font: 8.5pt "Droid Sans Mono", "Noto Mono", "DejaVu Sans Mono", "Lucida Console", monospace;
+  font: 8.5pt Droid Sans Mono, Noto Mono, DejaVu Sans Mono, Lucida Console, monospace;
   min-height: 100px;
   min-width: 97%;
   width: calc(100% - 15px);
@@ -5088,7 +5007,7 @@ h4.app2 a::after {
   background: #000 !important;
   border: none;
   border-bottom: 1px solid #131 !important;
-  font: 9pt "Droid Sans Mono", "Noto Mono", "DejaVu Sans Mono", "Lucida Console", monospace;
+  font: 9pt Droid Sans Mono, Noto Mono, DejaVu Sans Mono, Lucida Console, monospace;
 }
 
 #configinfo td {
@@ -5765,7 +5684,7 @@ table[id$="logs"] ul {
 
 #logs li {
   list-style: none;
-  font: bold 8.5pt "Droid Sans Mono", "Noto Mono", "DejaVu Sans Mono", "Lucida Console", monospace;
+  font: bold 8.5pt Droid Sans Mono, Noto Mono, DejaVu Sans Mono, Lucida Console, monospace;
   line-height: 140%;
   text-align: left;
   width: 100%;
@@ -9079,7 +8998,7 @@ th code {
   overflow: hidden;
   text-overflow: ellipsis;
   color: #880;
-  font-family: "Droid Sans Mono", "Noto Mono", "DejaVu Sans Mono", "Lucida Console", monospace;
+  font-family: Droid Sans Mono, Noto Mono, DejaVu Sans Mono, Lucida Console, monospace;
   box-shadow: 0 0 0 1px #030, inset 0 0 0 1px #000;
   background: #010;
   -moz-user-select: all;
@@ -11982,36 +11901,34 @@ div.app {
 }
 
 .extlink::after, .sitemapLink.extlink::after {
+  width: 21px;
+  height: 18px;
   position: absolute;
   top: -1px;
   right: -1px;
-  content: "";
   display: inline-block;
-  width: 21px;
-  height: 18px;
-  opacity: 0;
-  transition: ease border .15s, ease box-shadow .15s, ease opacity 0.15s, ease-out background 0.15s !important;
   border: 1px solid #000 !important;
   border-radius: 0 2px 0 2px;
   background: transparent;
   background-size: 12.5px 10px;
+  opacity: 0;
+  content: "";
   transform: scale(0);
 }
 
 div.app:hover .extlink::after, .sitemapLink.extlink:hover::after {
   border: 1px solid #f50 !important;
-  opacity: .75;
-  transition: ease box-shadow .15s, ease border .15s, ease opacity 0.15s, ease-out background 0.15s 0.05s !important;
   background: #000 url(images/newtab.png) 4.5px center no-repeat;
   background-size: 12.5px 10px;
+  opacity: .75;
   transform: scale(1);
 }
 
 /* /events */
 
 #eventlog {
-  background: #010;
   border-bottom: 2px solid #242 !important;
+  background: #010;
 }
 #events h3 {
   box-shadow: inset 0 0 0 1px #000;
@@ -12089,7 +12006,7 @@ div.app:hover .extlink::after, .sitemapLink.extlink:hover::after {
   margin: -2px 10px 0 0;
   padding: 2px 5px;
   float: right;
-  font-family: "Droid Sans Mono", "Noto Mono", "DejaVu Sans Mono", "Lucida Console", monospace;
+  font-family: Droid Sans Mono, Noto Mono, DejaVu Sans Mono, Lucida Console, monospace;
   font-size: 80%;
   color: #aa0;
   text-transform: none;
@@ -12555,7 +12472,7 @@ a[href^="/netdb"]:hover span {
 }
 
 #debug .skm_key td:first-child b {
-  font-family: "Droid Sans", "Open Sans", "Noto Sans", Ubuntu, "Segoe UI", "Bitstream Vera Sans", "DejaVu Sans", Verdana, "Lucida Grande", Helvetica, sans-serif;
+  font-family: Droid Sans, Open Sans, Noto Sans, Ubuntu, Segoe UI, Bitstream Vera Sans, DejaVu Sans, Verdana, Lucida Grande, Helvetica, sans-serif;
   color: #ee9;
 }
 
