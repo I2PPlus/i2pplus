@@ -252,8 +252,10 @@ public class ConfigNetHelper extends HelperBase {
         buf.append("<input name=\"udpHost1\" type=\"text\" size=\"16\"");
         String hostname = _context.getProperty(UDPTransport.PROP_EXTERNAL_HOST);
         boolean specified = hostname != null && hostname.length() > 0;
-        if (specified)
-            buf.append(" value=\"").append(hostname).append("\"");
+        if (specified) {
+            buf.append(" value=\"").append(hostname).append("\" checked title=\"")
+               .append(_t("Delete this value to disable")).append("\"");
+        }
         buf.append(" />");
         return buf.toString();
     }
