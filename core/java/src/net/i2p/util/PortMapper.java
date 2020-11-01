@@ -328,10 +328,8 @@ public class PortMapper {
             InetSocketAddress ia = _dir.get(s);
             if (ia == null)
                 continue;
-            out.write("<tr><td>" + s + "<td>" + convertWildcard(ia.getHostName(), DEFAULT_HOST) + "<td>" + ia.getPort() + '\n');
+            out.write("<tr><td>" + s + "</td><td>" + convertWildcard(ia.getHostName(), DEFAULT_HOST) + "</td><td>" + ia.getPort() + "</td><\tr>\n");
         }
-        String cspNonce = Integer.toHexString(net.i2p.util.RandomSource.getInstance().nextInt());
-        out.write("<script nonce=\"" + cspNonce + "\" type=\"text/javascript\">new Tablesort(document.getElementById(\"portmapper\"));</script>");
         out.write("</table>\n");
     }
 }
