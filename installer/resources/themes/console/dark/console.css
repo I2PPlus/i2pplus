@@ -2989,10 +2989,10 @@ h3[id*="jobs"]:first-of-type {
 }
 
 @media screen and (min-width: 1200px) {
-#jobstats tr:nth-last-child(n+2) td:first-child {
-  padding-left: 30px !important;
-  background: url(/themes/console/images/buttons/yes.png) 8px center no-repeat;
-}
+  #jobstats tr:nth-last-child(n+2) td:first-child {
+    padding-left: 30px !important;
+    background: url(/themes/console/images/buttons/yes.png) 8px center no-repeat;
+  }
 }
 
 #jobstats tr:last-child {
@@ -5108,22 +5108,27 @@ ul#upnphelp li:last-child, #legal ul li:last-child {
 }
 
 @media screen and (min-width: 1200px) {
-#terms {
-  padding: 5px 0 15px;
-  columns: 2 auto;
-  column-gap: 35px;
-  column-rule: 1px solid #020;
-}
+  #terms {
+    padding: 5px 0 15px;
+    columns: 2 auto;
+    column-gap: 35px;
+    column-rule: 1px solid #020;
+  }
 
-#terms p {
-  break-inside: avoid;
-  page-break-inside: avoid;
-  -webkit-column-break-inside: avoid;
-}
+  #terms p {
+    break-inside: avoid;
+    page-break-inside: avoid;
+    -webkit-column-break-inside: avoid;
+  }
 
-#terms p:first-child {
-  margin-top: 0;
-}
+  #terms p:first-child {
+    margin-top: 0;
+  }
+
+  .ls_crypto {
+    display: inline-block;
+    columns: 340px 4;
+  }
 }
 
 #glossary b {

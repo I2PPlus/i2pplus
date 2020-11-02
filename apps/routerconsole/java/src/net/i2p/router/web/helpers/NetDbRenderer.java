@@ -580,14 +580,14 @@ class NetDbRenderer {
                 LeaseSet2 ls2 = (LeaseSet2) ls;
                 long pub = now - ls2.getPublished();
                 buf.append("&nbsp; &bullet; &nbsp;<b>").append(_t("Type")).append(":</b> ").append(type)
-                   .append("&nbsp; &bullet; &nbsp;<b>").append(_t("Published {0} ago", ":</b> " + DataHelper.formatDuration2(pub)));
+                   .append("&nbsp; &bullet; &nbsp;<b>").append(_t("Published{0} ago", ":</b> " + DataHelper.formatDuration2(pub)));
                 exp = ((LeaseSet2)ls).getExpires()-now;
             }
             buf.append("&nbsp; &bullet; &nbsp;<b>");
             if (exp > 0)
-                buf.append(_t("Expires in {0}", ":</b> " + DataHelper.formatDuration2(exp)));
+                buf.append(_t("Expires in{0}", ":</b> " + DataHelper.formatDuration2(exp)).replace(" in", ""));
             else
-                buf.append(_t("Expired {0} ago", "</b>" + DataHelper.formatDuration2(0-exp)));
+                buf.append(_t("Expired{0} ago", ":</b> " + DataHelper.formatDuration2(0-exp)));
             if (debug) {
                 buf.append("&nbsp; &bullet; &nbsp;<b title=\"").append(_t("Received as published?")).append("\">RAP:</b> ").append(ls.getReceivedAsPublished());
                 buf.append("&nbsp; &bullet; &nbsp;<b title=\"").append(_t("Received as reply?")).append("\">RAR:</b> ").append(ls.getReceivedAsReply());
@@ -608,60 +608,60 @@ class NetDbRenderer {
                         buf.append("&nbsp; &bullet; &nbsp;<b>").append(_t("Type")).append(":</b> ").append(ls2.getTransientSigningKey().getType());
                     }
                 }
-                buf.append("</td></tr>\n<tr><td colspan=\"2\">");
+                buf.append("</td></tr>\n<tr><td colspan=\"2\"><span class=\"ls_crypto\">");
                 //buf.append(dest.toBase32()).append("<br>");
-                buf.append("&nbsp; &bullet; &nbsp;<b>").append(_t("Signature type")).append(":</b> ");
+                buf.append("<span class=\"nowrap\">&nbsp; &bullet; &nbsp;<b>").append(_t("Signature type")).append(":</b> ");
                 if (dest != null && type != DatabaseEntry.KEY_TYPE_ENCRYPTED_LS2) {
                     buf.append(dest.getSigningPublicKey().getType());
                 } else {
                     // encrypted, show blinded key type
                     buf.append(ls.getSigningKey().getType());
                 }
+                buf.append("</span>");
                 if (type == DatabaseEntry.KEY_TYPE_LEASESET) {
-                    buf.append("<br>&nbsp; &bullet; &nbsp;<b>").append(_t("Encryption Key")).append(":</b> ELGAMAL_2048 [")
-                       .append(ls.getEncryptionKey().toBase64().substring(0, 8))
-                       .append("&hellip;]");
+                    buf.append("<br><span class=\"nowrap\">&nbsp; &bullet; &nbsp;<b>").append(_t("Encryption Key"))
+                       .append(":</b> ELGAMAL_2048 [").append(ls.getEncryptionKey().toBase64().substring(0, 8))
+                       .append("&hellip;]</span>");
                 } else if (type == DatabaseEntry.KEY_TYPE_LS2) {
                     LeaseSet2 ls2 = (LeaseSet2) ls;
                     for (PublicKey pk : ls2.getEncryptionKeys()) {
-                        buf.append("<br>&nbsp; &bullet; &nbsp;<b>").append(_t("Encryption Key")).append(":</b> ");
+                        buf.append("<br><span class=\"nowrap\">&nbsp; &bullet; &nbsp;<b>").append(_t("Encryption Key")).append(":</b> ");
                         EncType etype = pk.getType();
                         if (etype != null)
                             buf.append(etype);
                         else
                             buf.append(_t("Unsupported type")).append(" ").append(pk.getUnknownTypeCode());
-                        buf.append(" [")
-                           .append(pk.toBase64().substring(0, 8))
-                           .append("&hellip;]");
+                        buf.append(" [").append(pk.toBase64().substring(0, 8)).append("&hellip;]</span>");
                     }
                 }
-                buf.append("<br>&nbsp; &bullet; &nbsp;<b>").append(_t("Routing Key")).append(":</b> ").append(ls.getRoutingKey().toBase64());
-                buf.append("</td></tr>");
-
+                buf.append("<br><span class=\"nowrap\">&nbsp; &bullet; &nbsp;<b>").append(_t("Routing Key"))
+                   .append(":</b> ").append(ls.getRoutingKey().toBase64().substring(0,16));
+                buf.append("&hellip;</span></span></td></tr>");
             } else {
-                buf.append("</td></tr><tr><td colspan=\"2\">");
-                buf.append("&nbsp; &bullet; &nbsp;<b>").append(_t("Signature type")).append(":</b> ");
+                buf.append("</span></td></tr><tr><td colspan=\"2\"><span class=\"ls_crypto\">");
+                buf.append("<span class=\"nowrap\">&nbsp; &bullet; &nbsp;<b>").append(_t("Signature type")).append(":</b> ");
                 if (dest != null && type != DatabaseEntry.KEY_TYPE_ENCRYPTED_LS2) {
                     buf.append(dest.getSigningPublicKey().getType());
                 } else {
                     // encrypted, show blinded key type
                     buf.append(ls.getSigningKey().getType());
                 }
+                buf.append("</span><br>");
                 if (type == DatabaseEntry.KEY_TYPE_LEASESET) {
-                    buf.append("&nbsp; &bullet; &nbsp;<b>").append(_t("Encryption Key")).append(":</b> ELGAMAL_2048");
+                    buf.append("<span class=\"nowrap\">&nbsp; &bullet; &nbsp;<b>").append(_t("Encryption Key")).append(":</b> ELGAMAL_2048");
                 } else if (type == DatabaseEntry.KEY_TYPE_LS2) {
                     LeaseSet2 ls2 = (LeaseSet2) ls;
                     for (PublicKey pk : ls2.getEncryptionKeys()) {
-                        buf.append("&nbsp; &bullet; &nbsp;<b>").append(_t("Encryption Key")).append(":</b> ");
+                        buf.append("<span class=\"nowrap\">&nbsp; &bullet; &nbsp;<b>").append(_t("Encryption Key")).append(":</b> ");
                         EncType etype = pk.getType();
                         if (etype != null)
                             buf.append(etype);
                         else
-                            buf.append("&nbsp; &bullet; &nbsp").append(_t("Encryption Key")).append(":</b> ")
-                               .append(_t("Unsupported type")).append(" ").append(pk.getUnknownTypeCode());
+                            buf.append(_t("Unsupported type")).append(" ").append(pk.getUnknownTypeCode());
+                        buf.append("</span><br>");
                     }
                 }
-                buf.append("</td></tr>");
+                buf.append("</span></td></tr>");
             }
             buf.append("<tr");
             if (debug)
