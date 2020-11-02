@@ -6615,7 +6615,6 @@ div.app:hover .applabel, .sitemapLink:hover .sitemapLabel,
 div.app:hover .applabel {
   color: #f60;
   border-top: 1px solid #f60 !important;
-  background: #000;
 }
 
 @media screen and (max-width: 1500px) {
@@ -6634,7 +6633,6 @@ div.app:hover .applabel {
     max-width: 112px;
   }
 }
-
 
 /* end home page */
 
