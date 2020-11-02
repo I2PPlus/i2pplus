@@ -3904,8 +3904,6 @@ div.ui_lang { /* lang text label */
   text-transform: capitalize;
   border-top: 1px solid #252;
   border-radius: 0 0 2px 2px;
-  background: #001000;
-  background: linear-gradient(to bottom, #001000, #001900 50%, #000 51%, #000);
 }
 
 p#helptranslate {
@@ -6534,13 +6532,12 @@ button.search {
 }
 
 div.app img {
+  padding: 10px 52px 38px;
+  margin: -4px 0 1px;
   height: 32px;
   width: auto;
   max-height: 32px;
   max-width: 32px;
-  padding: 10px 52px 38px;
-  margin: -4px 0 1px;
-/*  filter: sepia(100%) hue-rotate(70deg); enable for green-tinted app icons */
 }
 
 div.app img, .sitemapLink img {
@@ -6548,56 +6545,62 @@ div.app img, .sitemapLink img {
 }
 
 div.app:hover img, .sitemapLink:hover img, a:focus .app img, a:focus .sitemaplink img {
-  filter: drop-shadow(0 0 1px #f60);
   opacity: 1;
+  filter: drop-shadow(0 0 1px #f60);
   transition: filter ease 0.3s;
 }
 
 .app table {
-  background: none;
-  border: 0;
   margin: auto;
   width: auto;
+  border: none;
+  background: none;
 }
 
 .app tr {
-  background: none;
-  border: 0;
   margin: 0;
+  border: none;
+  background: none;
 }
 
 .app td {
-  background: none;
-  border: none;
   margin: 0;
   padding: 3px 0 0;
+  border: none;
+  background: none;
+}
+
+.applabel, .sitemapLabel, .themeLabel, .ui_lang {
+  background: radial-gradient(at center bottom, rgba(16, 72, 16, .3) 0, rgba(0, 0, 0, 0) 50%) #000 !important;
+}
+
+div.app:hover .applabel, .sitemapLink:hover .sitemapLabel,
+.themechoice:hover .themeLabel, .langselect:hover .ui_lang {
+  background: radial-gradient(at center bottom, rgba(256, 96, 0, .25) 0, rgba(0, 0, 0, 0) 50%) #000 !important;
 }
 
 .applabel {
   margin: 2px 0 0;
-  width: 155px;
   padding: 4px 2px;
-  text-align: center;
-  vertical-align: bottom;
+  width: 155px;
   line-height: 120%;
   overflow: hidden;
   text-overflow: ellipsis;
+  vertical-align: bottom;
+  text-align: center;
   white-space: nowrap;
   font-size: 8.5pt;
   color: #494;
-  text-transform: lowercase;
   border-radius: 0 0 2px 2px;
   border: none;
   border-top: 1px solid #252;
   box-shadow: inset 0 0 0 1px #000;
   background: #001000;
-  background: linear-gradient(to right, rgba(0,0,0,0), rgba(0,0,0,.3), rgba(0,0,0,0)), linear-gradient(to bottom, #001000, #001900 50%, #000 50%);
 }
 
 .applabel:hover {
-  background: #000;
-  border-top: 1px solid #f60;
   color: #f60;
+  border-top: 1px solid #f60;
 }
 
 .applabel a {
@@ -6607,7 +6610,12 @@ div.app:hover img, .sitemapLink:hover img, a:focus .app img, a:focus .sitemaplin
   overflow: hidden;
   text-overflow: ellipsis;
   white-space: nowrap;
+  text-transform: capitalize;
   text-shadow: 0 1px 1px #000;
+}
+
+.app2 + .appgroup .applabel a {
+  text-transform: none !important;
 }
 
 .applabel a, .applabel a:hover {
@@ -6616,10 +6624,28 @@ div.app:hover img, .sitemapLink:hover img, a:focus .app img, a:focus .sitemaplin
 }
 
 div.app:hover .applabel {
+  color: #f60;
   border-top: 1px solid #f60 !important;
   background: #000;
-  color: #f60;
 }
+
+@media screen and (max-width: 1500px) {
+  div.app img, .sitemapLink img {
+    height: 24px;
+    max-height: 24px;
+    max-width: 24px;
+  }
+  .appimg {
+    padding: 2px 0 0;
+  }
+  .applabel {
+    width: 116px !important;
+  }
+  .applabel a {
+    max-width: 112px;
+  }
+}
+
 
 /* end home page */
 
@@ -6638,8 +6664,6 @@ iframe.iframed {
 
 #i2psnarkframe {
   margin-bottom: -2px !important;
-/*  background: linear-gradient(to bottom, rgba(0,0,0,0), rgba(0,0,0,0.7)), url(images/camotile2.png);
-  background-size: 100% 100%, 175px 175px;*/
 }
 
 #i2ptunnelframe {
@@ -9383,7 +9407,7 @@ td.optionsave {
 }
 
 div.app img {
-  padding: 10px 50px 40px;
+  padding: 10px 40px 40px;
 }
 
 .applabel {
@@ -9512,8 +9536,8 @@ pre, #logs li {
 }
 
 .appimg {
-  height: 35px;
   padding: 5px 0 8px;
+  height: 35px;
 }
 
 div.app img {
@@ -9522,7 +9546,7 @@ div.app img {
 }
 
 .applabel {
-  padding: 4px 2px 6px !important;
+  padding: 4px 2px !important;
   width: 150px !important;
 }
 
@@ -9536,8 +9560,8 @@ code, tt {
 }
 
 #floodfills th:first-child, #floodfills td:first-child {
-  width: 58px;
   padding-right: 3px !important;
+  width: 58px;
 }
 
 h3, .routersummary h3 a, th.th_title, #leasesetdebug th, #leasesetsummary th, .netdbentry th {
@@ -13108,11 +13132,10 @@ table.search {
 }
 
 .sitemapLink, .sitemapLabel {
-  display: inline-block;
   width: 180px !important;
+  display: inline-block;
   text-align: center;
   border: 1px solid #252;
-  background: #000;
   will-change: transform;
 }
 
@@ -13155,7 +13178,6 @@ table.search {
 .sitemapLink:hover, .sitemapLink:hover .sitemapLabel, #sitemap div.app:hover {
   border-color: #f60;
   box-shadow: inset 0 0 0 1px #000, inset 0 0 2px 1px #f60;
-  background: #000;
 }
 
 .sitemapLink img {
@@ -13187,7 +13209,6 @@ table.search {
   border: none;
   border-top: 1px solid #252;
   box-shadow: inset 0 0 0 1px #000, inset 0 0 2px 1px #242;
-  background: linear-gradient(to right, rgba(0,0,0,0), rgba(0,0,0,.3), rgba(0,0,0,0)), linear-gradient(to bottom, #001000, #001900 50%, #000 50%);
 }
 
 #sitemap div.app {
