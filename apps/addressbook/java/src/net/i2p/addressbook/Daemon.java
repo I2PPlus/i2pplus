@@ -282,7 +282,7 @@ class Daemon {
                                                 // FIXME this fails, no support in SFNS
                                                 success = publishedNS.addDestination(key, dest, props);
                                                 if (log != null && !success)
-                                                    log.append("Add to published addressbook " + publishedNS.getName() + " failed for " + key);
+                                                    log.append("Failed to add " + key + " to published addressbook [" + publishedNS.getName() + "]");
                                             }
                                             nnew++;
                                             continue;
