@@ -8,6 +8,7 @@ default:
       - install.jar
       - i2psnark-standalone.zip
       - javadoc.zip
+      - i2p.tar.bz2
     expire_in: 2 weeks
 
 stages:
