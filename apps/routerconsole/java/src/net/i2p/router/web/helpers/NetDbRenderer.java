@@ -638,7 +638,7 @@ class NetDbRenderer {
                    .append(":</b> ").append(ls.getRoutingKey().toBase64().substring(0,16));
                 buf.append("&hellip;</span></span></td></tr>");
             } else {
-                buf.append("</span></td></tr><tr><td colspan=\"2\"><span class=\"ls_crypto\">");
+                buf.append("</span></td></tr><tr><td colspan=\"2\">");
                 buf.append("<span class=\"nowrap\">&nbsp; &bullet; &nbsp;<b>").append(_t("Signature type")).append(":</b> ");
                 if (dest != null && type != DatabaseEntry.KEY_TYPE_ENCRYPTED_LS2) {
                     buf.append(dest.getSigningPublicKey().getType());
@@ -646,7 +646,7 @@ class NetDbRenderer {
                     // encrypted, show blinded key type
                     buf.append(ls.getSigningKey().getType());
                 }
-                buf.append("</span><br>");
+                buf.append("</span> ");
                 if (type == DatabaseEntry.KEY_TYPE_LEASESET) {
                     buf.append("<span class=\"nowrap\">&nbsp; &bullet; &nbsp;<b>").append(_t("Encryption Key")).append(":</b> ELGAMAL_2048");
                 } else if (type == DatabaseEntry.KEY_TYPE_LS2) {
@@ -658,10 +658,10 @@ class NetDbRenderer {
                             buf.append(etype);
                         else
                             buf.append(_t("Unsupported type")).append(" ").append(pk.getUnknownTypeCode());
-                        buf.append("</span><br>");
+                        buf.append("</span> ");
                     }
                 }
-                buf.append("</span></td></tr>");
+                buf.append("</td></tr>");
             }
             buf.append("<tr");
             if (debug)
