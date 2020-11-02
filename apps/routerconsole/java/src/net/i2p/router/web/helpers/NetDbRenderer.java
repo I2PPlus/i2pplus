@@ -579,13 +579,13 @@ class NetDbRenderer {
             } else {
                 LeaseSet2 ls2 = (LeaseSet2) ls;
                 long pub = now - ls2.getPublished();
-                buf.append("&nbsp; &bullet; &nbsp;<b>").append(_t("Type")).append(": </b>").append(type)
-                   .append("&nbsp; &bullet; &nbsp;<b>").append(_t("Published {0} ago", "</b>" + DataHelper.formatDuration2(pub)));
+                buf.append("&nbsp; &bullet; &nbsp;<b>").append(_t("Type")).append(":</b> ").append(type)
+                   .append("&nbsp; &bullet; &nbsp;<b>").append(_t("Published {0} ago", ":</b> " + DataHelper.formatDuration2(pub)));
                 exp = ((LeaseSet2)ls).getExpires()-now;
             }
             buf.append("&nbsp; &bullet; &nbsp;<b>");
             if (exp > 0)
-                buf.append(_t("Expires in {0}", "</b>" + DataHelper.formatDuration2(exp)));
+                buf.append(_t("Expires in {0}", ":</b> " + DataHelper.formatDuration2(exp)));
             else
                 buf.append(_t("Expired {0} ago", "</b>" + DataHelper.formatDuration2(0-exp)));
             if (debug) {
@@ -596,7 +596,7 @@ class NetDbRenderer {
                     if (c++ == medianCount)
                         median = dist;
                 }
-                buf.append("&nbsp; &bullet; &nbsp;<b>").append(_t("Distance")).append(": </b>").append(fmt.format(biLog2(dist)));
+                buf.append("&nbsp; &bullet; &nbsp;<b>").append(_t("Distance")).append(":</b> ").append(fmt.format(biLog2(dist)));
                 if (type != DatabaseEntry.KEY_TYPE_LEASESET) {
                     LeaseSet2 ls2 = (LeaseSet2) ls;
                     // unpublished status shown in header
@@ -610,7 +610,7 @@ class NetDbRenderer {
                 }
                 buf.append("</td></tr>\n<tr><td colspan=\"2\">");
                 //buf.append(dest.toBase32()).append("<br>");
-                buf.append("&nbsp; &bullet; &nbsp;<b>Signature type:</b> ");
+                buf.append("&nbsp; &bullet; &nbsp;<b>").append(_t("Signature type")).append(":</b> ");
                 if (dest != null && type != DatabaseEntry.KEY_TYPE_ENCRYPTED_LS2) {
                     buf.append(dest.getSigningPublicKey().getType());
                 } else {
@@ -629,7 +629,7 @@ class NetDbRenderer {
                         if (etype != null)
                             buf.append(etype);
                         else
-                            buf.append("Unsupported type ").append(pk.getUnknownTypeCode());
+                            buf.append(_t("Unsupported type")).append(" ").append(pk.getUnknownTypeCode());
                         buf.append(" [")
                            .append(pk.toBase64().substring(0, 8))
                            .append("&hellip;]");
@@ -640,7 +640,7 @@ class NetDbRenderer {
 
             } else {
                 buf.append("</td></tr><tr><td colspan=\"2\">");
-                buf.append("&nbsp; &bullet; &nbsp;<b>Signature type:</b> ");
+                buf.append("&nbsp; &bullet; &nbsp;<b>").append(_t("Signature type")).append(":</b> ");
                 if (dest != null && type != DatabaseEntry.KEY_TYPE_ENCRYPTED_LS2) {
                     buf.append(dest.getSigningPublicKey().getType());
                 } else {
@@ -658,7 +658,7 @@ class NetDbRenderer {
                             buf.append(etype);
                         else
                             buf.append("&nbsp; &bullet; &nbsp").append(_t("Encryption Key")).append(":</b> ")
-                               .append("Unsupported type ").append(pk.getUnknownTypeCode());
+                               .append(_t("Unsupported type")).append(" ").append(pk.getUnknownTypeCode());
                     }
                 }
                 buf.append("</td></tr>");
