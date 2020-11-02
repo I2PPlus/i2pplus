@@ -11,8 +11,6 @@
 <head>
 <%@include file="css.jsi" %>
 <%=intl.title("Debug")%>
-<script  nonce="<%=cspNonce%>" src="/js/tablesort/tablesort.js" type="text/javascript"></script>
-<script  nonce="<%=cspNonce%>" src="/js/tablesort/tablesort.number.js" type="text/javascript"></script>
 <link href="/themes/console/tablesort.css" rel="stylesheet" type="text/css">
 </head>
 <body>
