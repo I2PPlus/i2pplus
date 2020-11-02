@@ -20,26 +20,26 @@
     <target name="all" >
         <echo message="Useful targets:" />
         <echo message="  bench:                                       Build benchmarks" />
+        <echo message="  buildDesktopGui:                             Build a standalone DesktopGUI &#10140; ./build/desktopgui.jar" />
         <echo message="  debian:                                      Generate Debian packages in ../ then run &apos;debian-clean&apos;" />
         <echo message="  debian-clean:                                Rollback Debian specific patches then run &apos;distclean&apos;" />
         <echo message="  debianhowto:                                 Instructions on building Debian packages" />
-        <echo message="  desktopgui:                                  Generate a standalone DesktopGUI install" />
         <echo message="  dist:                                        Run &apos;pkg&apos; and &apos;javadoc&apos;" />
         <echo message="  dist200:                                     Run &apos;pkg&apos;, &apos;updater200&apos; and &apos;javadoc&apos;" />
         <echo message="  distclean:                                   Clean up all derived and temporary files in workspace" />
         <echo message="  i2psnark:                                    Build standalone I2PSnark install &#10140; ./i2psnark-standalone.zip" />
-        <echo message="  installer / installer5:                      Build GUI installer (IZPack4 / IZpack5)" />
+        <echo message="  installer / installer5:                      Build GUI installer (IzPack4 / IzPack5)" />
         <echo message="  installer-freebsd:                           Build FreeBSD GUI installer" />
-        <echo message="  installer-linux / installer5-linux:          Build Linux GUI installer (IZPack4 / IZpack5)" />
-        <echo message="  installer-nowindows / installer5-nowindows:  Build GUI installer without Windows support (IZPack4 / IZpack5)" />
+        <echo message="  installer-linux / installer5-linux:          Build Linux GUI installer (IzPack4 / Izpack5)" />
+        <echo message="  installer-nowindows / installer5-nowindows:  Build GUI installer without Windows support (IzPack4 / IzPack5)" />
         <echo message="  installer-osx:                               Build OS X GUI installer" />
-        <echo message="  installer-windows / installer5-windows:      Build Windows GUI installer (IZPack4 / IZpack5)" />
+        <echo message="  installer-windows / installer5-windows:      Build Windows GUI installer (IzPack4 / IzPack5)" />
         <echo message="  javadoc:                                     Create javadocs for project in ./build/javadoc and ./javadoc.zip" />
         <echo message="  javadoc-test:                                Javadocs for unit test classes (build/javadoc-test)" />
         <echo message="  justBOB:                                     Build a standalone BOB-one.jar" />
         <echo message="  osxLauncher:                                 Build Mac OS X router/GUI launcher" />
         <echo message="  pkg:                                         Run &apos;distclean&apos; then package everything up (updater, installer)" />
-        <echo message="  pkg-portable-win32:                          Build a minimum portable version for Win32" />
+        <echo message="  pkg-portable-win32:                          Build a minimal, portable install for Win32 &#10140; ./portable-win32.zip" />
         <echo message="  poupdate:                                    Update the .po files for translators" />
         <echo message="  slackpkg:                                    Build Slackware package in ./Slackware/i2p" />
         <echo message="  tarball:                                     tar full install into i2p.tar.bz2 &#10140; extracts to new clean install" />
@@ -3161,9 +3161,9 @@
             <copy file="installer/resources/blocklist.txt" todir="pkg-temp/" />
             <copy file="installer/resources/hosts.txt" todir="pkg-temp/" />
             <copy file="installer/resources/readme.license.txt" todir="pkg-temp/" />
-        <mkdir dir="pkg-temp/addressbook" />
-            <copy file="apps/addressbook/subscriptions.txt" todir="pkg-temp/addressbook/" />
-            <copy file="apps/addressbook/myhosts.txt"  todir="pkg-temp/addressbook/" />
+        <!--<mkdir dir="pkg-temp/addressbook" />-->
+            <!--<copy file="apps/addressbook/subscriptions.txt" todir="pkg-temp/addressbook/" />-->
+            <!--<copy file="apps/addressbook/myhosts.txt"  todir="pkg-temp/addressbook/" />-->
             <!-- config.txt is in installer/resources/portable -->
         <mkdir dir="pkg-temp/docs" />
             <copy file="installer/resources/initialNews/initialNews.xml" tofile="pkg-temp/docs/news.xml" overwrite="true" />
