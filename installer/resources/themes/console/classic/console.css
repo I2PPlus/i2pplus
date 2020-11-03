@@ -518,7 +518,7 @@ img[src="/themes/console/images/i2plogo.png"] {
   text-align: right !important;
 }
 
-.routersummary button[type="submit"] {
+.routersummary button[type=submit] {
   min-width: 87px;
   margin: 2px 2px 1px;
 }
@@ -1670,7 +1670,7 @@ input[type="file"] {
   background: none;
 }
 
-input[type="text"], input[type="password"] {
+input[type=text], input[type="password"] {
   margin: 3px 5px 3px 5px;
   padding: 4px;
   min-width: 120px;
@@ -1682,35 +1682,50 @@ input[type="text"], input[type="password"] {
   background-color: #fefefe;
 }
 
-input[type="text"]:focus, input[type="password"]:focus {
+input[type=text]:focus, input[type="password"]:focus {
   color: #41444d;
   box-shadow: inset 0 0 0 1px rgba(255,96,0,.5);
 }
 
-input[type="text"][readonly], input[type="text"][readonly]:focus, input[type="text"][disabled] {
+input[type=text][readonly], input[type=text][readonly]:focus, input[type=text][disabled] {
   color: #757a8a;
   box-shadow: inset 1px 1px 1px #ddd;
   background: #eff0ff;
 }
 
-button, input, select, input[type=file]::file-selector-button {
+button, input, select {
   font: 9pt/130% Droid Sans, Open Sans, Noto Sans, Ubuntu, Segoe UI, Lucida Grande, DejaVu Sans, Verdana, Helvetica, sans-serif;
   color: #5e626e;
   background-color: #eee;
 }
 
-button:hover, input[type="submit"]:hover, input[type="reset"]:hover,
+input[type=file]::file-selector-button {
+  font: 9pt/130% Droid Sans, Open Sans, Noto Sans, Ubuntu, Segoe UI, Lucida Grande, DejaVu Sans, Verdana, Helvetica, sans-serif;
+  color: #5e626e;
+  background-color: #eee;
+}
+
+button:hover, input[type=submit]:hover, input[type=reset]:hover {
+  color: #41444d;
+  background-color: #ddd;
+  background: linear-gradient(to bottom, #ddd, #fff);
+}
+
 input[type=file]:hover::file-selector-button, input[type=file]:focus::file-selector-button {
   color: #41444d;
   background-color: #ddd;
   background: linear-gradient(to bottom, #ddd, #fff);
 }
 
-button:active, input[type="submit"]:active, input[type="reset"]:active, input[type=file]:active::file-selector-button {
+button:active, input[type=submit]:active, input[type=reset]:active {
   background-color: #fff;
 }
 
-input.search[type="text"] {
+input[type=file]:active::file-selector-button {
+  background-color: #fff;
+}
+
+input.search[type=text] {
   padding: 5px 5px 5px 28px;
   color: #333 !important;
   border: 1px solid #aaafce;
@@ -1723,7 +1738,7 @@ input[name="refreshInterval"] {
   text-align: right;
 }
 
-input[type="submit"], input[type="reset"], button, .optbox {
+input[type=submit], input[type=reset], button, .optbox {
   outline: none;
   cursor: pointer;
 }
@@ -1755,7 +1770,7 @@ button::-moz-focus-inner, input::-moz-focus-inner {
   display: inline-block !important;
 }
 
-#netconfig input[type="text"] + br + .optbox, #netconfig .optbox[name="ntcpAutoPort"] {
+#netconfig input[type=text] + br + .optbox, #netconfig .optbox[name="ntcpAutoPort"] {
   margin-top: 3px !important;
 }
 
@@ -1767,7 +1782,7 @@ button::-moz-focus-inner, input::-moz-focus-inner {
 
 /* graphical buttons */
 
-input[type="submit"], input[type="reset"], button, input[type=file]::file-selector-button {
+input[type=submit], input[type=reset], button {
   margin: 3px 8px 3px 0;
   padding: 4px 5px;
   text-decoration: none;
@@ -1783,7 +1798,18 @@ input[type="submit"], input[type="reset"], button, input[type=file]::file-select
 }
 
 input[type=file]::file-selector-button {
+  margin: 3px 8px 3px 0;
   padding: 4px 8px;
+  text-decoration: none;
+  font: 9pt Droid Sans, Ubuntu, Noto Sans, Segoe UI, Lucida Grande, Verdana, Helvetica, sans-serif;
+  color: #5e626e;
+  border: 1px solid #aaafce;
+  border-radius: 2px;
+  box-shadow: inset 0 0 0 1px #fff, 0 0 1px #ddd;
+  background: #eee;
+  background: linear-gradient(to bottom, #fff, #f4f5ff);
+  background-size: 14px auto, 100% 100% !important;
+  opacity: 1;
 }
 
 button a, button a:visited {
@@ -1799,7 +1825,7 @@ button:active a {
   color: #555 !important;
 }
 
-button:hover, input[type="submit"]:hover, input[type="reset"]:hover, button:focus, input[type="submit"]:focus, input[type="reset"]:focus {
+button:hover, input[type=submit]:hover, input[type=reset]:hover, button:focus, input[type=submit]:focus, input[type=reset]:focus {
   color: #41444d;
   border: 1px solid #aaafce;
   box-shadow: inset 0 0 0 1px #fff, 0 0 1px #89f;
@@ -1807,7 +1833,7 @@ button:hover, input[type="submit"]:hover, input[type="reset"]:hover, button:focu
   background: linear-gradient(to bottom, #ddd, #fff);
 }
 
-button:active, input[type="submit"]:active, input[type="reset"]:active {
+button:active, input[type=submit]:active, input[type=reset]:active {
   color: #555;
   border: 1px solid #999;
   box-shadow: inset 0 0 0 1px #fff, inset 3px 3px 3px 1px #555;
@@ -2212,7 +2238,7 @@ button.download.control:hover, button.download.control:focus {
   background: url(/themes/console/images/buttons/download.png) center center no-repeat, linear-gradient(to bottom, #ddd, #fff);
 }
 
-button::-moz-focus-inner, input[type="submit"]::-moz-focus-inner, input[type="reset"]::-moz-focus-inner {
+button::-moz-focus-inner, input[type=submit]::-moz-focus-inner, input[type=reset]::-moz-focus-inner {
   outline: none;
   border: none;
 }
@@ -2810,7 +2836,7 @@ table.configtable, #permabanned, #loggingoptions, #configstats, ul#banlist {
   line-height: 115%;
 }
 
-#addkeyring input[type="text"] {
+#addkeyring input[type=text] {
   width: 99%;
   width: calc(100% - 5px);
 }
@@ -3357,7 +3383,7 @@ pre#transports {
   background-blend-mode: luminosity;
 }
 
-#i2pupdates input[type="text"], #i2pupdates select {
+#i2pupdates input[type=text], #i2pupdates select {
   min-width: 200px;
   margin-left: 10px;
 }
@@ -3367,7 +3393,7 @@ pre#transports {
   width: calc(100% - 12px) !important;
 }
 
-#i2pupdates input[type="submit"] {
+#i2pupdates input[type=submit] {
   margin-right: 6px;
 }
 
@@ -4563,7 +4589,7 @@ h3#totaljobstats {
   text-align: left !important;
 }
 
-.homelinkedit input[type="text"], #reseedconfig input[type="text"], #reseedconfig input[type="password"], #reseedconfig .optbox, #reseedconfig textarea {
+.homelinkedit input[type=text], #reseedconfig input[type=text], #reseedconfig input[type="password"], #reseedconfig .optbox, #reseedconfig textarea {
   margin-left: 0;
 }
 
@@ -4579,7 +4605,7 @@ tr#addnew:hover {
   color: #41444d !important;
 }
 
-#loggingoptions tr:nth-last-child(n+3) input[type="text"], #loggingoptions tr:nth-last-child(n+3) select {
+#loggingoptions tr:nth-last-child(n+3) input[type=text], #loggingoptions tr:nth-last-child(n+3) select {
   width: 180px;
 }
 
@@ -4917,7 +4943,7 @@ h3#graphdisplay {
   height: 1px;
 }
 
-#graphs form[action="graphs"] input[type="text"] {
+#graphs form[action="graphs"] input[type=text] {
   min-width: 80px !important;
 }
 
@@ -4977,7 +5003,7 @@ h3#graphdisplay {
   vertical-align: middle;
 }
 
-#graphs input[type="text"] {
+#graphs input[type=text] {
   min-width: 60px;
 }
 
@@ -5937,11 +5963,11 @@ p:empty { /* empty paragraph nuke */
   width: 50%;
 }
 
-#netdblookup tr:nth-last-child(n+3) input[type="text"] {
+#netdblookup tr:nth-last-child(n+3) input[type=text] {
   width: calc(100% - 8px);
 }
 
-#netdblookup tr:nth-last-child(2) input[type="text"] {
+#netdblookup tr:nth-last-child(2) input[type=text] {
   width: calc(45% + 2px);
 }
 
@@ -8122,7 +8148,7 @@ h2#debug_portmapper {
   width: 240px !important;
 }
 
-#newfamily input[type="text"] {
+#newfamily input[type=text] {
   width: 160px !important;
 }
 
@@ -8199,7 +8225,7 @@ input[name="pluginFile"] {
   padding: 2px 10px;
 }
 
-input.search[type="text"] {
+input.search[type=text] {
   width: 200px;
 }
 
@@ -8663,7 +8689,7 @@ h1 {
   max-width: 232px;
 }
 
-.routersummary button[type="submit"] {
+.routersummary button[type=submit] {
   min-width: 110px !important;
   margin: 2px 4px 1px;
 }
@@ -9251,13 +9277,13 @@ b.suboption {
   width: 250px !important;
 }
 
-#netconfig input[type="text"] {
+#netconfig input[type=text] {
   transition: ease width .1s;
   will-change: transform;
 }
 
-#netconfig .optbox:not(:checked) + input[type="text"][name="ntcphost"]:not(:focus),
-#netconfig .optbox:not(:checked) + input[type="text"][name="udpHost1"]:not(:focus) {
+#netconfig .optbox:not(:checked) + input[type=text][name="ntcphost"]:not(:focus),
+#netconfig .optbox:not(:checked) + input[type=text][name="udpHost1"]:not(:focus) {
   width: 140px !important;
   min-width: 140px !important;
   transition: ease width .1s;
@@ -9369,7 +9395,7 @@ b.suboption {
   vertical-align: middle;
 }
 
-#i2pupdates textarea, #i2pupdates input[type="text"] {
+#i2pupdates textarea, #i2pupdates input[type=text] {
   width: calc(100% - 216px) !important;
   min-width: 0 !important;
   margin: 5px 5px 5px 10px !important;
@@ -9533,7 +9559,7 @@ b.suboption {
   padding: 0 !important;
 }
 
-#manualreseed .optionlist input[type="text"], #manualreseed .optionlist input[type="file"] {
+#manualreseed .optionlist input[type=text], #manualreseed .optionlist input[type="file"] {
   min-width: 0 !important;
   max-width: 50% !important;
   width: 50% !important;
@@ -9623,12 +9649,12 @@ b.suboption {
   display: inline-block;
 }
 
-#reseedurl input[type="text"], #reseedzip input[type="file"], #reseedcreatefile p {
+#reseedurl input[type=text], #reseedzip input[type="file"], #reseedcreatefile p {
   width: calc(100% - 5px);
 }
 
 @media screen and (max-width: 1200px) {
-#reseedurl input[type="text"], #reseedzip input[type="file"], #reseedcreatefile p {
+#reseedurl input[type=text], #reseedzip input[type="file"], #reseedcreatefile p {
   white-space: normal;
 }
 }
@@ -9716,7 +9742,7 @@ b.suboption {
   box-shadow: none !important;
 }
 
-#installPluginUrl input[type="text"], #installPluginFile input[type="file"], #config_family input[type="text"], #config_family input[type="file"] {
+#installPluginUrl input[type=text], #installPluginFile input[type="file"], #config_family input[type=text], #config_family input[type="file"] {
   width: 100%;
 }
 
@@ -9745,7 +9771,7 @@ b.suboption {
   background-size: 28px 28px !important;
 }
 
-#installPluginUrl input[type="text"], #installPluginFile input[type="file"] {
+#installPluginUrl input[type=text], #installPluginFile input[type="file"] {
   width: 100%;
 }
 
@@ -11179,7 +11205,7 @@ h3#webappconfig {
   margin: 6px;
 }
 
-#sybilTask select, #sybilTask input[type="text"] {
+#sybilTask select, #sybilTask input[type=text] {
   width: 140px;
 }
 
@@ -11463,7 +11489,7 @@ to {
   display: inline-block;
 }
 
-#enablefull input[type="submit"] {
+#enablefull input[type=submit] {
   float: right;
 }
 
@@ -11909,7 +11935,7 @@ div.app, .sitemapLink, .sitemapLabel {
   min-width: 180px;
 }
 
-#config_tunnels input[type="text"] {
+#config_tunnels input[type=text] {
   width: calc(100% - 6px);
 }
 

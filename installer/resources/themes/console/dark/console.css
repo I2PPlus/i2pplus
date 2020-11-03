@@ -468,7 +468,7 @@ pre {
   outline: none !important;
 }
 
-.routersummary input[type="text"] {
+.routersummary input[type=text] {
   text-align: right !important;
   box-shadow: inset 1px 1px 1px 0 #000;
 }
@@ -1787,7 +1787,7 @@ form[action="updategraphs"] {
   margin: 3px 5px 3px 0;
 }
 
-#graphs input[type="text"] {
+#graphs input[type=text] {
   width: 60px;
   min-width: 60px;
 }
@@ -2282,7 +2282,7 @@ button::-moz-focus-inner, input::-moz-focus-inner {
   border: none;
 }
 
-button, button:visited, input[type=file]::file-selector-button {
+button, button:visited {
   margin: 2px 3px;
   padding: 4px 2px !important;
   min-width: 75px;
@@ -2297,7 +2297,30 @@ button, button:visited, input[type=file]::file-selector-button {
   filter: drop-shadow(0 0 1px #000);
 }
 
-button:hover, button:focus, input[type=file]:hover::file-selector-button, input[type=file]:focus::file-selector-button {
+input[type=file]::file-selector-button {
+  margin: 2px 3px;
+  padding: 4px 2px !important;
+  min-width: 75px;
+  vertical-align: middle;
+  font: bold 9pt Droid Sans, Open Sans, Noto Sans, Ubuntu, Segoe UI, Bitstream Vera Sans, DejaVu Sans, Verdana, Lucida Grande, Helvetica, sans-serif;
+  text-align: center;
+  text-decoration: none;
+  color: #494;
+  border: 1px outset #191;
+  border-radius: 2px;
+  background: #000;
+  filter: drop-shadow(0 0 1px #000);
+}
+
+button:hover, button:focus {
+  color: #f60;
+  border: 1px solid #f60;
+  box-shadow: inset 0 0 0 1px #000, inset 0 0 2px 1px rgba(255,86,0,0.8), inset 0 0 0 3px #000;
+  background: #000;
+  cursor: pointer;
+}
+
+input[type=file]:hover::file-selector-button, input[type=file]:focus::file-selector-button {
   color: #f60;
   border: 1px solid #f60;
   box-shadow: inset 0 0 0 1px #000, inset 0 0 2px 1px rgba(255,86,0,0.8), inset 0 0 0 3px #000;
@@ -2313,7 +2336,14 @@ button:active a {
   color: #ee9;
 }
 
-button:active, input[type=file]:active::file-selector-button {
+button:active {
+  color: #ee9;
+  border: 1px solid #f60;
+  box-shadow: inset 0 0 0 1px #000;
+  background: #f60;
+}
+
+input[type=file]:active::file-selector-button {
   color: #ee9;
   border: 1px solid #f60;
   box-shadow: inset 0 0 0 1px #000;
@@ -2521,13 +2551,22 @@ input:hover, input:focus {
   cursor: pointer;
 }
 
-input[type="submit"]:hover, input[type="reset"]:hover, input[type="submit"]:focus, input[type="reset"]:focus {
+input[type=submit]:hover, input[type=reset]:hover, input[type=submit]:focus, input[type=reset]:focus {
   box-shadow: inset 0 0 0 1px #000, inset 0 0 2px 1px rgba(255,86,0,0.8), inset 0 0 0 3px #000 !important;
 }
 
-input[type="submit"]:active, input[type="reset"]:active, button:active, input[type=file]:active::file-selector-button {
+input[type=submit]:active, input[type=reset]:active {
   text-shadow: 0 1px 1px #000;
-  box-shadow: inset 0 0 0 1px #000 !important;
+  box-shadow: inset 0 0 0 1px #000, inset 3px 3px 3px 2px #310 !important;
+}
+
+button:active {
+  text-shadow: 0 1px 1px #000;
+  box-shadow: inset 0 0 0 1px #000, inset 3px 3px 3px 2px #310 !important;
+}
+
+input[type=file]:active::file-selector-button {
+  text-shadow: 0 1px 1px #000;
   box-shadow: inset 0 0 0 1px #000, inset 3px 3px 3px 2px #310 !important;
 }
 
@@ -2537,7 +2576,7 @@ input:active {
   background: #f60 !important;
 }
 
-input[type="text"], input[type="password"] {
+input[type=text], input[type=password] {
   margin: 5px 10px;
   padding: 6px;
   text-decoration: none;
@@ -2553,12 +2592,12 @@ input[type="text"], input[type="password"] {
 }
 
 @media screen and (min-width: 1500px) {
-  input[type="text"], input[type="password"] {
+  input[type=text], input[type=password] {
     padding: 7px;
   }
 }
 
-input[type="text"], input[type="password"], textarea {
+input[type=text], input[type=password], textarea {
   color: #bb7 !important;
 }
 
@@ -2609,7 +2648,7 @@ input:disabled {
   cursor: default;
 }
 
-input[type="text"]:disabled, input[type="text"]:disabled:active, input[readonly="readonly"] {
+input[type=text]:disabled, input[type=text]:disabled:active, input[readonly="readonly"] {
   color: #161 !important;
   border: 1px solid #252 !important;
   background: #000 !important;
@@ -2735,7 +2774,7 @@ textarea[cols="70"], textarea[name="levels"] {
   width: calc(100% - 20px);
 }
 
-input[type="text"]:focus, input[type="password"]:focus, textarea:focus {
+input[type=text]:focus, input[type=password]:focus, textarea:focus {
   color: #ee9 !important;
   background: #000 !important;
   filter: drop-shadow(0 0 1px #f60);
@@ -2744,7 +2783,7 @@ input[type="text"]:focus, input[type="password"]:focus, textarea:focus {
   outline: none;
 }
 
-input[type="text"]:focus, input[type="password"]:focus {
+input[type=text]:focus, input[type=password]:focus {
   border: 1px solid #373 !important;
 }
 
@@ -2764,7 +2803,7 @@ textarea[readonly]:focus {
   font-weight: normal;
 }
 
-input[type="submit"], input[type="reset"], select, button, input[type=file]::file-selector-button {
+input[type=submit], input[type=reset], select, button {
   line-height: 120%;
   font-size: 8.5pt;
   border: 1px solid #000;
@@ -2773,13 +2812,30 @@ input[type="submit"], input[type="reset"], select, button, input[type=file]::fil
   background: linear-gradient(to bottom, #001000, #000 5%, #000 95%, #001000);
 }
 
-input[type="submit"], input[type="reset"], button, input[type=file]::file-selector-button {
+input[type=file]::file-selector-button {
+  line-height: 120%;
+  font-size: 8.5pt;
+  border: 1px solid #000;
+  border-radius: 2px;
+  box-shadow: inset 0 0 0 1px #151, inset 0 0 0 2px #000, inset 0 0 2px 2px #040, inset 0 0 0 3px #000, 0 0 0 1px rgba(0,16,0,.2);
+  background: linear-gradient(to bottom, #001000, #000 5%, #000 95%, #001000);
+}
+
+input[type=submit], input[type=reset], button {
+  padding: 7px 8px !important;
+  outline: none;
+}
+
+input[type=file]::file-selector-button {
   padding: 7px 8px !important;
   outline: none;
 }
 
 @media screen and (min-width: 1500px) {
-  input[type="submit"], input[type="reset"], button, input[type=file]::file-selector-button {
+  input[type=submit], input[type=reset], button {
+    padding: 8px 12px !important;
+  }
+  input[type=file]::file-selector-button {
     padding: 8px 12px !important;
   }
 }
@@ -3483,8 +3539,8 @@ a[name="chelp"]:hover, a[name="help"]:hover, a[name="chelp"]:active, a[name="hel
 
 /* hide superfluous cancel buttons */
 
-#config_ui input[type="reset"], #config_homepage input[type="reset"], #config_keyring input[type="reset"], #config_i2cp .cancel,
-#config_logging input[type="reset"], #config_reseed .cancel, #config_plugins .cancel, #config_clients .cancel {
+#config_ui input[type=reset], #config_homepage input[type=reset], #config_keyring input[type=reset], #config_i2cp .cancel,
+#config_logging input[type=reset], #config_reseed .cancel, #config_plugins .cancel, #config_clients .cancel {
   display: none;
 }
 
@@ -3515,7 +3571,7 @@ a[name="chelp"]:hover, a[name="help"]:hover, a[name="chelp"]:active, a[name="hel
   padding-left: 5px;
 }
 
-.homelinkedit input[type="text"] {
+.homelinkedit input[type=text] {
   margin-left: 0;
 }
 
@@ -3982,7 +4038,7 @@ td#pw_adduser input {
   margin-right: 20px;
 }
 
-#consolepass input[type="password"] {
+#consolepass input[type=password] {
   width: 200px;
 }
 
@@ -4066,7 +4122,7 @@ form[action="/createreseed"] > h3 {
 
 /* configreseed */
 
-#reseedconfig input[type="text"], #reseedconfig input[type="password"] {
+#reseedconfig input[type=text], #reseedconfig input[type=password] {
   width: 170px;
 }
 
@@ -4180,7 +4236,7 @@ p#ipconfig, p#ipv4config, p#udpconfig, p#externaltcp {
   margin-bottom: 6px !important;
 }
 
-#netconfig input[type="text"] + br + .optbox, #netconfig .optbox[name="ntcpAutoPort"] {
+#netconfig input[type=text] + br + .optbox, #netconfig .optbox[name="ntcpAutoPort"] {
   margin-top: 3px !important;
 }
 
@@ -4252,7 +4308,7 @@ form[action="events"] > .formaction {
   padding-right: 6px;
 }
 
-#addkeyring textarea, #addkeyring input[type="text"], #addkeyring select, #addkeyring input[type="password"] {
+#addkeyring textarea, #addkeyring input[type=text], #addkeyring select, #addkeyring input[type=password] {
   width: 95%;
   width: calc(100% - 15px);
 }
@@ -4426,7 +4482,7 @@ form > table {
   margin-top: -32px !important;
 }
 
-#tunnelconfig input[type="text"] {
+#tunnelconfig input[type=text] {
   margin: 6px 16px 6px 0;
   width: 100%;
   width: calc(100% - 4px);
@@ -4488,7 +4544,7 @@ input[name="logfilename"], input[name="logformat"], input[name="logdateformat"],
   white-space: nowrap;
 }
 
-#loggingoptions input[type="text"], #loggingoptions select, #loggingoptions textarea {
+#loggingoptions input[type=text], #loggingoptions select, #loggingoptions textarea {
   margin: 3px;
   min-width: 170px !important;
 }
@@ -5427,16 +5483,16 @@ th > img[src^="/imagegen"], .identicon { /* scale down header images */
   margin-bottom: -2px !important;
 }
 
-#netdblookup input[type="text"] {
+#netdblookup input[type=text] {
   width: calc(100% - 11px);
 }
 
-#sybilSearch input[type="text"] {
+#sybilSearch input[type=text] {
   width: calc(50% - 66px);
 }
 
 @media screen and (max-width: 1000px) {
-#netdblookup input[type="text"] {
+#netdblookup input[type=text] {
   min-width: 0 !important;
 }
 
@@ -5531,7 +5587,7 @@ th > img[src^="/imagegen"], .identicon { /* scale down header images */
   display: inline-block;
   border: 1px solid #030;
   border-radius: 2px;
-  box-shadow; 0 0 0 1px #000;
+  box-shadow: 0 0 0 1px #000;
   background: #020;
 }
 
@@ -5555,8 +5611,8 @@ th > img[src^="/imagegen"], .identicon { /* scale down header images */
   padding-bottom: 1px;
   display: inline-block;
   border: 1px solid #030;
-  box-shadow; 0 0 0 1px #000;
   border-radius: 2px !important;
+  box-shadow: 0 0 0 1px #000;
   background: #020;
 }
 
@@ -5566,9 +5622,9 @@ th > img[src^="/imagegen"], .identicon { /* scale down header images */
 }
 
 .netdb_leases .tunnel_peer tt, .netdb_leases .tunnel_peer a {
-  letter-spacing: 0.1em !important;
   margin: 0 !important;
   padding: 0 !important;
+  letter-spacing: 0.1em !important;
 }
 
 .routerid tt {
@@ -7643,7 +7699,7 @@ input#hideme {
   display: none;
 }
 
-#plugininstall input[type="text"] {
+#plugininstall input[type=text] {
   width: 50%;
   min-width: 400px;
 }
@@ -7682,7 +7738,7 @@ h4.embeddedtitle#updateplugins {
   background: linear-gradient(to bottom, #002000, #000 75%) !important;
 }
 
-#manualreseed input[type="text"] {
+#manualreseed input[type=text] {
   width: 50%;
   width: calc(100% - 300px);
 }
@@ -8684,7 +8740,7 @@ th code {
 }
 
 .netdbentry td:first-child {
-  padding-right: 5px !important
+  padding-right: 5px !important;
   text-align: right;
   min-width: 80px;
 }
@@ -9358,7 +9414,7 @@ th {
   padding: 2px 14px;
 }
 
-#plugininstall input[type="text"] {
+#plugininstall input[type=text] {
   min-width: 200px !important;
 }
 
@@ -9460,7 +9516,7 @@ div.app img {
 }
 
 @media screen and (min-width: 1460px) {
-input[type="submit"], input[type="reset"], select, button {
+input[type=submit], input[type=reset], select, button {
   font-size: 9pt;
 }
 }
@@ -9484,13 +9540,17 @@ ul.statlist a[name], ul.statlist b, ul.statlist li b, ul.statlist a[name]:hover,
 }
 
 .cells tt, #profilelist tt, #floodfills tt {
-  font-size: 9pt !important;
-  letter-spacing: 0.07em;
   margin-left: 2px !important;
   margin-right: 2px !important;
+  letter-spacing: 0.07em;
+  font-size: 9pt !important;
 }
 
-.main button, .main input, select, textarea, input[type=file]::file-selector-button, div.news {
+.main button, .main input, select, textarea, div.news {
+  font-size: 10pt !important;
+}
+
+input[type=file]::file-selector-button {
   font-size: 10pt !important;
 }
 
@@ -9693,7 +9753,7 @@ h1 {
   padding-left: 19px !important;
 }
 
-#reseedconfig input[type="text"], #reseedconfig input[type="password"] {
+#reseedconfig input[type=text], #reseedconfig input[type=password] {
   width: 250px;
 }
 
@@ -10471,13 +10531,13 @@ b.suboption {
   width: 250px !important;
 }
 
-#netconfig input[type="text"] {
+#netconfig input[type=text] {
   transition: ease width 0.1s;
   will-change: transform;
 }
 
-#netconfig .optbox:not(:checked) + input[type="text"][name="ntcphost"]:not(:focus),
-#netconfig .optbox:not(:checked) + input[type="text"][name="udpHost1"]:not(:focus) {
+#netconfig .optbox:not(:checked) + input[type=text][name="ntcphost"]:not(:focus),
+#netconfig .optbox:not(:checked) + input[type=text][name="udpHost1"]:not(:focus) {
   width: 140px !important;
   min-width: 140px !important;
   transition: ease width 0.1s;
@@ -10591,7 +10651,7 @@ b.suboption {
   vertical-align: middle;
 }
 
-#i2pupdates textarea, #i2pupdates input[type="text"] {
+#i2pupdates textarea, #i2pupdates input[type=text] {
   width: calc(100% - 216px) !important;
   min-width: 0 !important;
   margin: 5px 5px 5px 10px !important;
@@ -10748,7 +10808,7 @@ b.suboption {
   padding: 0 !important;
 }
 
-#manualreseed .optionlist input[type="text"], #manualreseed .optionlist input[type="file"] {
+#manualreseed .optionlist input[type=text], #manualreseed .optionlist input[type="file"] {
   min-width: 0 !important;
   max-width: 50% !important;
   width: 50% !important;
@@ -10810,13 +10870,13 @@ b.suboption {
   vertical-align: middle;
 }
 
-#manualreseed input[type="submit"] {
+#manualreseed input[type=submit] {
   margin-right: 0 !important;
   min-width: 120px;
 }
 
 @media screen and (min-width: 1500px) {
-#manualreseed input[type="submit"] {
+#manualreseed input[type=submit] {
   min-width: 140px;
 }
 }
@@ -10861,7 +10921,7 @@ b.suboption {
   line-height: 130%;
 }
 
-#reseedurl input[type="text"], #reseedzip input[type="file"], #reseedcreatefile p {
+#reseedurl input[type=text], #reseedzip input[type="file"], #reseedcreatefile p {
   width: calc(100% - 5px);
 }
 
@@ -10983,7 +11043,7 @@ input[type="file"] {
   padding: 2px 12px 3px 10px;
 }
 
-#installPluginUrl input[type="text"], #installPluginFile input[type="file"],  #joinfamily input[type="file"], #newfamily input[type="text"] {
+#installPluginUrl input[type=text], #installPluginFile input[type="file"],  #joinfamily input[type="file"], #newfamily input[type=text] {
   width: 100% !important;
 }
 
@@ -12113,7 +12173,7 @@ div.app:hover .extlink::after, .sitemapLink.extlink:hover::after {
   margin: 0;
 }
 
-input[type="text"]:focus::placeholder {
+input[type=text]:focus::placeholder {
   opacity: 0;
 }
 
@@ -13207,7 +13267,6 @@ table.search {
 .sitemapLink:hover, .sitemapLink:hover .sitemapLabel, #sitemap div.app:hover {
   border-color: #f60;
   box-shadow: inset 0 0 0 1px #000, inset 0 0 1px 1px #f60;
-  background: #000;
 }
 
 .sitemapLink img {
@@ -13807,7 +13866,7 @@ i {
   margin: 6px;
 }
 
-#sybilTask select, #sybilTask input[type="text"] {
+#sybilTask select, #sybilTask input[type=text] {
   width: 140px;
 }
 
@@ -14045,7 +14104,7 @@ h3 + table {
   display: inline-block;
 }
 
-#enablefull input[type="submit"] {
+#enablefull input[type=submit] {
   float: right;
 }
 

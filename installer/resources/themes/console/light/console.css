@@ -177,40 +177,40 @@ a:hover img {
 }
 
 pre {
+  margin: 10px;
   width: 98%;
   overflow: auto;
   text-align: left;
   font-size: 8.5pt;
   color: #33333f;
-  margin: 10px;
 }
 
 /* sidebar */
 
 .routersummaryouter {
-  float: left;
-  width: 200px;
   margin: 0 0 10px;
   padding: 0;
-  border: 0;
-  clear: left;/* fixes a bug in Opera */
-  text-align: center !important;
+  width: 200px;
   display: block;
-  position: absolute;/* so no interference with /home app icons */
+  position: absolute; /* so no interference with /home app icons */
+  float: left;
+  clear: left; /* fixes a bug in Opera */
+  text-align: center !important;
+  border: 0;
 }
 
 .routersummary {
-  width: 192px;
-  padding: 8px;
   margin-bottom: 2px;
+  padding: 8px;
+  width: 192px;
   text-align: center !important;
-  border: 1px solid #447;
-  color: #33333f;
   font-size: 8pt;
-  clear: left;/* fixes a bug in Opera */
+  color: #33333f;
+  clear: left; /* fixes a bug in Opera */
+  border: 1px solid #447;
   border-radius: 2px;
-  background: #fafaff;
   box-shadow: inset 0 0 0 1px rgba(185,185,198,.65);
+  background: #fafaff;
   filter: drop-shadow(0 0 1px #97a2ce);
 }
 
@@ -1968,7 +1968,7 @@ td.tabletextarea {
   background: none !important;
 }
 
-#config_reseed input[type="text"], #config_reseed input[type="password"] {
+#config_reseed input[type=text], #config_reseed input[type=password] {
   min-width: 300px;
 }
 
@@ -2657,7 +2657,7 @@ p#tunnelconfig {
   display: none;
 }
 
-#graphs input[type="text"] {
+#graphs input[type=text] {
   min-width: 70px !important;
 }
 
@@ -2797,7 +2797,7 @@ to {
   vertical-align: middle;
 }
 
-#graphs input[type="text"] {
+#graphs input[type=text] {
   min-width: 60px;
 }
 
@@ -3718,7 +3718,7 @@ table.search td:nth-child(3) {
   padding-right: 8px;
 }
 
-table.search input[type="text"] {
+table.search input[type=text] {
   margin-top: 0;
   margin-bottom: 0;
   padding-left: 24px;
@@ -3793,13 +3793,17 @@ th code {
   margin-left: 3px;
 }
 
-a, h1, h2, h3, h4, th, input[type="submit"], input[type="reset"], button, select, input[type=file]::file-selector-button {
+a, h1, h2, h3, h4, th, input[type=submit], input[type=reset], button, select {
+  text-shadow: 0 1px 1px #fff;
+}
+
+input[type=file]::file-selector-button {
   text-shadow: 0 1px 1px #fff;
 }
 
 a:hover, a:focus, a:active, .app:hover a, .app:focus a, .app:active a,
-input[type="submit"]:hover, input[type="submit"]:focus, input[type="submit"]:active,
-input[type="reset"]:hover, input[type="reset"]:focus, input[type="reset"]:active,
+input[type=submit]:hover, input[type=submit]:focus, input[type=submit]:active,
+input[type=reset]:hover, input[type=reset]:focus, input[type=reset]:active,
 button:hover, button:focus, button:active, select:hover, select:focus, select:active, .graphspanel a {
   text-shadow: none;
 }
@@ -3992,7 +3996,7 @@ p.infowarn {
   background-size: 28px 28px;
 }
 
-#addkeyring input[name="key"], #addkeyring input[type="text"], #addkeyring select, #addkeyring .password {
+#addkeyring input[name="key"], #addkeyring input[type=text], #addkeyring select, #addkeyring .password {
   margin: 5px 0 5px 3px;
   width: calc(100% - 5px);
 }
@@ -4857,7 +4861,11 @@ div[lang="de"] .links li {
 
 /* end welcome section */
 
-input[type="submit"], input[type="reset"], button, .optbox, select, input[type=file]::file-selector-button {
+input[type=submit], input[type=reset], button, .optbox, select {
+  cursor: pointer;
+}
+
+input[type=file]::file-selector-button {
   cursor: pointer;
 }
 
@@ -4871,19 +4879,19 @@ button.search:hover, button.search:focus, button.search:active {
   background-size: 14px 14px, 100% 100% !important;
 }
 
-input.search[type="text"] {
+input.search[type=text] {
   background: #fbfbff url(/themes/console/images/buttons/search.png) no-repeat 4px center !important;
   padding: 4px 3px 4px 22px;
   background-size: 16px 16px !important;
   background-blend-mode: luminosity;
 }
 
-input.search[type="text"]:focus {
+input.search[type=text]:focus {
   background: #fff url(/themes/console/images/buttons/search.png) no-repeat 4px center !important;
   background-blend-mode: normal;
 }
 
-input, input:visited, button, button:visited, input[type=file]::file-selector-button {
+input, input:visited, button, button:visited {
   margin: 3px;
   padding: 4px 5px;
   line-height: 140%;
@@ -4901,18 +4909,35 @@ input, input:visited, button, button:visited, input[type=file]::file-selector-bu
 }
 
 input[type=file]::file-selector-button {
+  margin: 3px;
   padding: 4px 10px;
-}
-
-input[type="text"], textarea, input[type="password"] {
+  line-height: 140%;
+  font-size: 9pt;
+  color: #41465f;
+  text-decoration: none;
+  border: 1px solid #97a2ce;
+  border-radius: 2px;
+  box-shadow: inset 0 0 0 1px #fff, inset 0 0 0 1px #fff;
+  background: #eee;
+  background: linear-gradient(to bottom, #fff, #efefff);
+  background-size: 14px auto, 100% 100% !important;
+  opacity: 1;
   filter: drop-shadow(0 0 1px rgba(220,220,255,.7));
 }
 
-input[type="submit"], input[type="reset"], button, select, input[type=file]::file-selector-button {
+input[type=text], textarea, input[type=password] {
   filter: drop-shadow(0 0 1px rgba(220,220,255,.7));
 }
 
-button::-moz-focus-inner, input[type="submit"]::-moz-focus-inner, input[type="reset"]::-moz-focus-inner {
+input[type=submit], input[type=reset], button, select {
+  filter: drop-shadow(0 0 1px rgba(220,220,255,.7));
+}
+
+input[type=file]::file-selector-button {
+  filter: drop-shadow(0 0 1px rgba(220,220,255,.7));
+}
+
+button::-moz-focus-inner, input[type=submit]::-moz-focus-inner, input[type=reset]::-moz-focus-inner {
   outline: none;
   border: none;
 }
@@ -4921,7 +4946,14 @@ button a, button a:visited {
   font-weight: normal !important;
   color: #41465f;
 }
-button:hover, input[type="submit"]:hover, input[type="reset"]:hover, button:focus, input[type="submit"]:focus, input[type="reset"]:focus,
+button:hover, input[type=submit]:hover, input[type=reset]:hover, button:focus, input[type=submit]:focus, input[type=reset]:focus {
+  color: #19191f;
+  border: 1px solid #f60;
+  background: linear-gradient(to bottom, #eee, #fff);
+  filter: saturate(100%) drop-shadow(0 0 1px rgba(204, 204, 204, .8));
+  transition: ease border .7s;
+}
+
 input[type=file]:hover::file-selector-button, input[type=file]:focus::file-selector-button {
   color: #19191f;
   border: 1px solid #f60;
@@ -4934,7 +4966,7 @@ button:hover a {
   color: #19191f;
 }
 
-button:active, input[type="submit"]:active, input[type="reset"]:active {
+button:active, input[type=submit]:active, input[type=reset]:active {
   color: #4c526f;
   box-shadow: inset 0 0 0 1px #fff, inset 2px 2px 2px #555;
   background-blend-mode: luminosity;
@@ -5117,13 +5149,13 @@ input.download[value^="Dump"]:focus, button.download[value^="Dump"]:focus {
   background: url(/themes/console/images/buttons/dump-threads.png) no-repeat 8px center, linear-gradient(to bottom, #eee, #fff);
 }
 
-input.go, button.go, input[value="GO"], #embedurl input[type="submit"], button#run {
+input.go, button.go, input[value="GO"], #embedurl input[type=submit], button#run {
   padding: 5px 9px 5px 24px;
   background: url(/themes/console/images/buttons/go.png) no-repeat 8px center, linear-gradient(to bottom, #fff, #efefff);
 }
 
 input.go:hover, button.go:hover, input[value="GO"]:hover, input.go:focus, button.go:focus, input[value="GO"]:focus,
-#embedurl input[type="submit"]:hover, #embedurl input[type="submit"]:focus {
+#embedurl input[type=submit]:hover, #embedurl input[type=submit]:focus {
   background: url(/themes/console/images/buttons/go.png) no-repeat 8px center, linear-gradient(to bottom, #eee, #fff);
 }
 
@@ -5417,7 +5449,7 @@ button.download.control:hover, button.download.control:focus {
 
 /* end sidebar buttons */
 
-input[type="text"], input[type="password"] {
+input[type=text], input[type=password] {
   background: #fbfbff;
   box-shadow: inset 1px 1px 1px rgba(204, 204, 204, .6);
 }
@@ -5428,7 +5460,7 @@ input[name="refreshInterval"] {
   width: 80px;
 }
 
-input[type="text"]:focus, input[type="password"]:focus {
+input[type=text]:focus, input[type=password]:focus {
   background: #fff;
   box-shadow: none;
   filter: drop-shadow(0 0 1px #89f);
@@ -5550,7 +5582,7 @@ select option {
   background: #fff;
 }
 
-select, input[type="text"] {
+select, input[type=text] {
   min-width: 120px;
 }
 
@@ -6446,7 +6478,7 @@ table#consolepass input[name="name"] {
 }
 
 #consolepass input[name="name"], #externali2cp input[name="user"], #reseedconfig input[name="username"], #reseedconfig input[name="susername"]
-#consolepass input[name="nofilter_pw"], #externali2cp input[name="nofilter_pw"], #reseedconfig input[type="password"] {
+#consolepass input[name="nofilter_pw"], #externali2cp input[name="nofilter_pw"], #reseedconfig input[type=password] {
   padding: 4px 5px 4px 26px !important;
   background-size: 16px 16px !important;
   background-blend-mode: luminosity;
@@ -6456,14 +6488,14 @@ table#consolepass input[name="name"] {
   background: #fbfbff url(/themes/console/images/buttons/user.png) 5px center no-repeat;
 }
 
-#consolepass input[name="nofilter_pw"], #externali2cp input[name="nofilter_pw"], #reseedconfig input[type="password"] {
+#consolepass input[name="nofilter_pw"], #externali2cp input[name="nofilter_pw"], #reseedconfig input[type=password] {
   padding: 4px 5px 4px 26px !important;
   background: #fbfbff url(/themes/console/images/buttons/password.png) 5px center no-repeat !important;
   background-blend-mode: luminosity;
 }
 
 #consolepass input[name="name"]:focus, #externali2cp input[name="user"]:focus, #reseedconfig input[name="username"]:focus,
-#consolepass input[name="nofilter_pw"]:focus, #externali2cp input[name="nofilter_pw"]:focus, #reseedconfig input[type="password"]:focus {
+#consolepass input[name="nofilter_pw"]:focus, #externali2cp input[name="nofilter_pw"]:focus, #reseedconfig input[type=password]:focus {
   background-color: #fff !important;
   background-blend-mode: normal;
 }
@@ -6908,12 +6940,12 @@ p:empty { /* empty paragraph nuke */
   margin-left: 3px;
 }
 
-#netdblookup input[type="text"] {
+#netdblookup input[type=text] {
   margin-top: 5px;
   margin-bottom: 5px;
 }
 
-#netdblookup tr:nth-last-child(n+4) input[type="text"] {
+#netdblookup tr:nth-last-child(n+4) input[type=text] {
   width: calc(100% - 5px);
 }
 
@@ -8431,7 +8463,7 @@ p.sybil_info + a[name] + table.sybil_routerinfo, p.hashdist + a[name] + table.sy
   text-align: left;
 }
 
-#tunnelconfig td input[type="text"] {
+#tunnelconfig td input[type=text] {
   width: calc(100% - 4px);
 }
 
@@ -9005,7 +9037,7 @@ table#schedjobs {
 
 /* end /viewprofile */
 
-#loggingoptions input[type="text"], #loggingoptions select:not([name="newlogclass"]):not([name="newloglevel"]) {
+#loggingoptions input[type=text], #loggingoptions select:not([name="newlogclass"]):not([name="newloglevel"]) {
   margin: 5px 3px;
   width: calc(100% - 6px);
 }
@@ -9450,11 +9482,11 @@ select[name="newlogclass"] {
   margin: 5px 0;
 }
 
-.homelinkedit input[type="text"], #sidebarconf select {
+.homelinkedit input[type=text], #sidebarconf select {
   margin-left: 0;
 }
 
-.homelinkedit input[type="text"] {
+.homelinkedit input[type=text] {
   margin-top: 6px;
   margin-bottom: 6px;
 }
@@ -9585,7 +9617,7 @@ form[action="events"] {
   background-size: 28px 28px;
 }
 
-form[action="events"] select + b, form[action="events"] input[type="submit"] {
+form[action="events"] select + b, form[action="events"] input[type=submit] {
   margin-left: 8px;
 }
 
@@ -10563,13 +10595,13 @@ b.suboption {
   width: 250px !important;
 }
 
-#netconfig input[type="text"] {
+#netconfig input[type=text] {
   transition: ease width .1s;
   will-change: transform;
 }
 
-#netconfig .optbox:not(:checked) + input[type="text"][name="ntcphost"]:not(:focus),
-#netconfig .optbox:not(:checked) + input[type="text"][name="udpHost1"]:not(:focus) {
+#netconfig .optbox:not(:checked) + input[type=text][name="ntcphost"]:not(:focus),
+#netconfig .optbox:not(:checked) + input[type=text][name="udpHost1"]:not(:focus) {
   width: 140px !important;
   min-width: 140px !important;
   transition: ease width .1s;
@@ -10628,7 +10660,7 @@ b.suboption {
 /* configupdate */
 
 
-#i2pupdates input[type="text"]:not([readonly]), #i2pupdates textarea, .main[id^="config_"] textarea, input[name="newsURL"] {
+#i2pupdates input[type=text]:not([readonly]), #i2pupdates textarea, .main[id^="config_"] textarea, input[name="newsURL"] {
   margin-left: 3px !important;
   width: calc(100% - 6px);
 }
@@ -10709,7 +10741,7 @@ b.suboption {
   vertical-align: middle;
 }
 
-#i2pupdates textarea, #i2pupdates input[type="text"] {
+#i2pupdates textarea, #i2pupdates input[type=text] {
   width: calc(100% - 216px) !important;
   min-width: 0 !important;
   margin: 5px 5px 5px 10px !important;
@@ -10875,7 +10907,7 @@ b.suboption {
   padding: 0 !important;
 }
 
-#manualreseed .optionlist input[type="text"], #manualreseed .optionlist input[type="file"] {
+#manualreseed .optionlist input[type=text], #manualreseed .optionlist input[type="file"] {
   min-width: 0 !important;
   max-width: 50% !important;
   width: 50% !important;
@@ -10978,7 +11010,7 @@ b.suboption {
   display: inline-block;
 }
 
-#reseedurl input[type="text"], #reseedzip input[type="file"], #reseedcreatefile p {
+#reseedurl input[type=text], #reseedzip input[type="file"], #reseedcreatefile p {
   width: calc(100% - 5px);
 }
 
@@ -11021,7 +11053,7 @@ form[action="configplugins"] input.reload {
   background: none !important;
 }
 
-#installPluginUrl input[type="text"], #installPluginFile input[type="file"], #config_family input[type="text"], #config_family input[type="file"] {
+#installPluginUrl input[type=text], #installPluginFile input[type="file"], #config_family input[type=text], #config_family input[type="file"] {
   width: 100%;
 }
 
@@ -11272,11 +11304,11 @@ input[name="pluginFile"], #manualreseed input[name="url"] {
 @media screen and (max-width: 1000px) {
 #consolepass input[name="name"], #consolepass input[name="nofilter_pw"],
 #externali2cp input[name="user"],  #externali2cp input[name="nofilter_pw"],
-#newfamily input[type="text"] {
+#newfamily input[type=text] {
   max-width: 140px !important;
 }
 
-#config_reseed input[type="text"], #config_reseed input[type="password"] {
+#config_reseed input[type=text], #config_reseed input[type=password] {
   max-width: 200px;
 }
 
@@ -11293,7 +11325,7 @@ input[name="pluginFile"], #manualreseed input[name="url"] {
   padding-right: 0;
 }
 
-#bandwidthconfig select, #bandwidthconfig input[type="text"] {
+#bandwidthconfig select, #bandwidthconfig input[type=text] {
   min-width: 70px;
   width: 70px;
 }
@@ -11372,7 +11404,7 @@ form[action="events"] select {
   min-width: 80px;
 }
 
-form[action="events"] select + b, form[action="events"] input[type="submit"] {
+form[action="events"] select + b, form[action="events"] input[type=submit] {
   margin-left: 3px;
 }
 
@@ -12844,7 +12876,7 @@ i {
   margin: 6px;
 }
 
-#sybilTask select, #sybilTask input[type="text"] {
+#sybilTask select, #sybilTask input[type=text] {
   width: 140px;
 }
 
@@ -13089,7 +13121,7 @@ to {
   vertical-align: middle;
 }
 
-#enablefull input[type="submit"] {
+#enablefull input[type=submit] {
   margin: 3px 0;
   float: right;
 }

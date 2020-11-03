@@ -1829,3 +1829,11 @@ select[disabled], select[disabled]:hover, select[disabled]:focus, select[disable
 #accesslistDisabled ~ textarea[name="accessList"] {
   display: none;
 }
+
+h2, h3 {
+  -webkit-text-stroke: 1px rgba(179,186,255,.3);
+}
+
+h2 a, h3 a {
+  -webkit-text-stroke: 0 !important;
+}

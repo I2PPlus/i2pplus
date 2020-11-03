@@ -7,7 +7,7 @@
 
 @import url("/themes/fonts/DroidSans.css");
 
-body, body:not(old), textarea {
+textarea {
   will-change: transform;
 }
 
@@ -20,7 +20,7 @@ body {
   background: url(images/tile.png);
   background-size: auto 3px;
   color: #c9ceff;
-  font: 8.5pt/130% "Droid Sans", "Open Sans", "Noto Sans", Ubuntu, "Segoe UI", "Bitstream Vera Sans", "DejaVu Sans", Verdana, "Lucida Grande", Helvetica, sans-serif;
+  font: 8.5pt/130% Droid Sans, Open Sans, Noto Sans, Ubuntu, Segoe UI, Bitstream Vera Sans, DejaVu Sans, Verdana, Lucida Grande, Helvetica, sans-serif;
 }
 
 /* preload button mouseovers */
@@ -42,7 +42,6 @@ body:not(old) {
               url(/themes/console/images/svg/update.svg),
               url(images/newtab.png), #001;
   background-size: 100% 100%, 100% 100%, 100% 100%, 100% 100%, 171px 148px, 0 0, 0 0, 0 0, 0 0, 0 0, 0 0, 0 0, 0 0, 0 0, 0 0, 0 0;
-  will-change: transform;
 }
 
 @supports (-moz-appearance: none) {
@@ -107,7 +106,7 @@ input {
   background: #000;
   color: #26235c;
   margin: 5px;
-  font: bold 9pt "Droid Sans", "Open Sans", "Noto Sans", Ubuntu, "Segoe UI", "Bitstream Vera Sans", "DejaVu Sans", Verdana, "Lucida Grande", Helvetica, sans-serif;
+  font: bold 9pt Droid Sans, Open Sans, Noto Sans, Ubuntu, Segoe UI, Bitstream Vera Sans, DejaVu Sans, Verdana, Lucida Grande, Helvetica, sans-serif;
   padding: 3px 2px;
   text-decoration: none;
   min-width: 110px;
@@ -161,7 +160,7 @@ textarea[cols="70"], textarea[name="levels"] {
   width: calc(100% - 20px);
 }
 
-button::-moz-focus-inner, input[type="submit"]::-moz-focus-inner, input[type="reset"]::-moz-focus-inner {
+button::-moz-focus-inner, input[type=submit]::-moz-focus-inner, input[type=reset]::-moz-focus-inner {
   outline: none;
   border: none;
 }
@@ -220,7 +219,7 @@ input:disabled {
   cursor: not-allowed;
 }
 
-input[type="text"]:disabled, input[readonly], input[readonly]:focus {
+input[type=text]:disabled, input[readonly], input[readonly]:focus {
   color: #26235c !important;
   border: 1px solid rgba(38, 35, 92,.7) !important;
   box-shadow: none;
@@ -242,7 +241,7 @@ select {
   appearance: none;
   overflow: hidden;
   text-overflow: ellipsis;
-  font: bold 9pt "Droid Sans", "Open Sans", "Noto Sans", Ubuntu, "Segoe UI", "Bitstream Vera Sans", "DejaVu Sans", Verdana, "Lucida Grande", Helvetica, sans-serif;
+  font: bold 9pt Droid Sans, Open Sans, Noto Sans, Ubuntu, Segoe UI, Bitstream Vera Sans, DejaVu Sans, Verdana, Lucida Grande, Helvetica, sans-serif;
   color: #6c66bc;
   text-align: center;
   border: 1px solid #363181;
@@ -264,7 +263,7 @@ select {
   display: none;
 }
 
-#config_tunnels input[type="text"][disabled] {
+#config_tunnels input[type=text][disabled] {
   width: calc(100% - 15px);
 }
 
@@ -308,16 +307,22 @@ select::-ms-expand {
 
 /* buttons */
 
-button, input[type="submit"], input[type="reset"], button, select, input[type=file]::file-selector-button {
-  cursor: pointer;
+button, input[type=submit], input[type=reset], button, select {
   box-shadow: inset 0 0 0 1px #000, inset 0 0 1px 1px #446, 0 0 0 1px #000;
   background: 8px 5px no-repeat, linear-gradient(to bottom, #191a24 50%, #000 50%);
+  cursor: pointer;
 }
 
-button, button:visited, input[type="submit"], input[type="reset"], input[type=file]::file-selector-button {
+input[type=file]::file-selector-button {
+  box-shadow: inset 0 0 0 1px #000, inset 0 0 1px 1px #446, 0 0 0 1px #000;
+  background: 8px 5px no-repeat, linear-gradient(to bottom, #191a24 50%, #000 50%);
+  cursor: pointer;
+}
+
+button, button:visited, input[type=submit], input[type=reset] {
   margin: 2px 3px;
   padding: 5px 4px;
-  font: bold 9pt "Droid Sans", "Open Sans", "Noto Sans", Ubuntu, "Segoe UI", "Bitstream Vera Sans", "DejaVu Sans", Verdana, "Lucida Grande", Helvetica, sans-serif;
+  font: bold 9pt Droid Sans, Open Sans, Noto Sans, Ubuntu, Segoe UI, Bitstream Vera Sans, DejaVu Sans, Verdana, Lucida Grande, Helvetica, sans-serif;
   color: #6c66bc;
   text-decoration: none;
   text-align: center;
@@ -329,30 +334,56 @@ button, button:visited, input[type="submit"], input[type="reset"], input[type=fi
 }
 
 input[type=file]::file-selector-button {
+  margin: 2px 3px;
   padding: 5px 8px;
+  font: bold 9pt Droid Sans, Open Sans, Noto Sans, Ubuntu, Segoe UI, Bitstream Vera Sans, DejaVu Sans, Verdana, Lucida Grande, Helvetica, sans-serif;
+  color: #6c66bc;
+  text-decoration: none;
+  text-align: center;
+  text-shadow: 0 1px 1px #000;
+  vertical-align: middle;
+  border: 1px solid #363181;
+  background: #000;
+  background: linear-gradient(to bottom, #191a24 50%, #001 50%) !important;
 }
 
-input[type="submit"]:hover, input[type="reset"]:hover, button:hover, button:focus,
-input[type="submit"]:focus, input[type="reset"]:focus, select:hover, select:focus,
-input[type=file]:hover::file-selector-button, input[type=file]:focus::file-selector-button {
+input[type=submit]:hover, input[type=reset]:hover, button:hover, button:focus,
+input[type=submit]:focus, input[type=reset]:focus, select:hover, select:focus {
   color: #652787;
-  cursor: pointer;
   border: 1px solid #652787;
   box-shadow: inset 0 0 0 1px #000, inset 0 0 1px 1px #757;
   background: #000;
+  cursor: pointer;
 }
 
-input[type="submit"], input[type="reset"], button {
+input[type=file]:hover::file-selector-button, input[type=file]:focus::file-selector-button {
+  color: #652787;
+  border: 1px solid #652787;
+  box-shadow: inset 0 0 0 1px #000, inset 0 0 1px 1px #757;
+  background: #000;
+  cursor: pointer;
+}
+
+input[type=submit], input[type=reset], button {
   background-size: 14px 14px, 100% 100%;
   min-width: 0 !important;
 }
 
-input[type="submit"]:hover, input[type="reset"]:hover, button:hover {
+input[type=submit]:hover, input[type=reset]:hover, button:hover {
   background-blend-mode: luminosity;
   background-size: 14px 14px, 100% 100%;
 }
 
-input[type="submit"]:active, input[type="reset"]:active, button:active,
+input[type=submit]:active, input[type=reset]:active, button:active {
+  color: #83529f !important;
+  text-shadow: 0 1px 1px #3c1751;
+  border: 1px solid #652787;
+  box-shadow: inset 0 0 0 1px #000, inset 3px 3px 3px #000;
+  background: #652787;
+  background-size: 14px 14px, 100% 100%;
+  background-blend-mode: luminosity !important;
+}
+
 input[type=file]:active::file-selector-button {
   color: #83529f !important;
   text-shadow: 0 1px 1px #3c1751;
@@ -363,10 +394,10 @@ input[type=file]:active::file-selector-button {
   background-blend-mode: luminosity !important;
 }
 
-input.accept, button.accept, button[type="submit"] {
+input.accept, button.accept, button[type=submit] {
+  padding: 4px 9px 6px 25px !important;
   background: url(/themes/console/images/buttons/yes.png) 8px 5px no-repeat, linear-gradient(to bottom, #11101c 50%, #000010 50%) !important;
   background-size: 14px 14px, 100% 100%, 100% 100% !important;
-  padding: 4px 9px 6px 25px !important;
 }
 
 input.accept:hover, button.accept:hover,
@@ -1001,7 +1032,7 @@ button.download.control:active {
   background: url(/themes/console/images/buttons/download.png) center center no-repeat, linear-gradient(to bottom, #401856, #501f6c) !important;
 }
 
-button::-moz-focus-inner, input[type="submit"]::-moz-focus-inner, input[type="reset"]::-moz-focus-inner {
+button::-moz-focus-inner, input[type=submit]::-moz-focus-inner, input[type=reset]::-moz-focus-inner {
   outline: none;
   border: none;
 }
@@ -3281,7 +3312,7 @@ h3#graphdisplay a {
   margin: 0;
 }
 
-#graphs input[type="text"] {
+#graphs input[type=text] {
   min-width: 70px !important;
 }
 
@@ -3327,7 +3358,7 @@ h3#graphdisplay a {
   display: none;
 }
 
-#graphs input[type="text"] {
+#graphs input[type=text] {
   min-width: 60px;
 }
 
@@ -4295,7 +4326,7 @@ a[name="chelp"]:hover, a[name="help"]:hover, a[name="chelp"]:active, a[name="hel
   text-align: right;
 }
 
-.homelinkedit input[type="text"] {
+.homelinkedit input[type=text] {
   margin-left: 0;
 }
 
@@ -4735,7 +4766,7 @@ table#consolepass input[name="name"] {
   margin-right: 20px;
 }
 
-table#consolepass input[type="password"] {
+table#consolepass input[type=password] {
   width: 200px;
 }
 
@@ -4808,7 +4839,7 @@ table#configclient {
 
 /* configreseed */
 
-table#reseedconfig input[type="text"], table#reseedconfig input[type="password"] {
+table#reseedconfig input[type=text], table#reseedconfig input[type=password] {
   width: 170px;
 }
 
@@ -4996,7 +5027,7 @@ table#bandwidthconfig input, table#bandwidthconfig select {
   margin-bottom: 6px !important;
 }
 
-#netconfig input[type="text"] + br + .optbox, #netconfig .optbox[name="ntcpAutoPort"] {
+#netconfig input[type=text] + br + .optbox, #netconfig .optbox[name="ntcpAutoPort"] {
   margin-top: 3px !important;
 }
 
@@ -5059,7 +5090,7 @@ table#addkeyring tr:last-child td {
   padding-right: 6px;
 }
 
-#addkeyring textarea, #addkeyring input[type="text"] {
+#addkeyring textarea, #addkeyring input[type=text] {
   width: 95%;
   width: calc(100% - 15px);
   resize: none;
@@ -5390,7 +5421,7 @@ input[name="logfilename"], input[name="logformat"], input[name="logdateformat"],
   white-space: nowrap;
 }
 
-#loggingoptions input[type="text"], #loggingoptions select, #loggingoptions textarea {
+#loggingoptions input[type=text], #loggingoptions select, #loggingoptions textarea {
   min-width: 170px !important;
   margin: 3px;
 }
@@ -6096,7 +6127,7 @@ table[cellspacing="30"] > tbody > tr > th[colspan="3"] { /* netdb header */
   padding: 10px !important;
 }
 
-#netdblookup tr:nth-last-child(n+3) input[type="text"] {
+#netdblookup tr:nth-last-child(n+3) input[type=text] {
   width: calc(100% - 15px) !important;
 }
 
@@ -8417,7 +8448,7 @@ input#hideme {
   display: none;
 }
 
-#plugininstall input[type="text"] {
+#plugininstall input[type=text] {
   width: 50%;
   min-width: 400px;
 }
@@ -8456,7 +8487,7 @@ h4.embeddedtitle#updateplugins {
   margin-top: -13px;
 }
 
-#manualreseed input[type="text"] {
+#manualreseed input[type=text] {
   width: 50%;
   width: calc(100% - 300px);
 }
@@ -9452,7 +9483,7 @@ b.netdb_transport {
   border-right: 1px solid rgba(38, 35, 92,.7);
 }
 
-#plugininstall input[type="text"] {
+#plugininstall input[type=text] {
   min-width: 200px !important;
 }
 
@@ -9585,12 +9616,12 @@ select {
   padding-bottom: 6px !important;
 }
 
-.main input[type="submit"], .main input[type="reset"], input.download[value^="Dump"]:hover, button.download[value^="Dump"]:hover,
+.main input[type=submit], .main input[type=reset], input.download[value^="Dump"]:hover, button.download[value^="Dump"]:hover,
 input.download[value^="Dump"]:focus, button.download[value^="Dump"]:focus {
   padding-bottom: 4px !important;
 }
 
-.main input[type="submit"]:active, .main input[type="reset"]:active {
+.main input[type=submit]:active, .main input[type=reset]:active {
   padding-bottom: 3px !important;
 }
 
@@ -9816,7 +9847,7 @@ button.control, button.control:hover, button.control:focus {
 
 /* end news */
 
-table#reseedconfig input[type="text"], table#reseedconfig input[type="password"] {
+table#reseedconfig input[type=text], table#reseedconfig input[type=password] {
   width: 250px;
 }
 
@@ -10306,7 +10337,7 @@ th.options, table#externali2cp th {
   display: inline-block;
 }
 
-#graphs input[type="text"] {
+#graphs input[type=text] {
   min-width: 80px;
 }
 
@@ -10461,7 +10492,7 @@ b.suboption {
   border: 1px solid rgba(38, 35, 92,.7) !important;
 }
 
-#config_reseed .optionsave input[type="submit"] {
+#config_reseed .optionsave input[type=submit] {
   display: inline-block !important;
 }
 
@@ -10555,13 +10586,13 @@ span.newtab {
   width: 250px !important;
 }
 
-#netconfig input[type="text"] {
+#netconfig input[type=text] {
   transition: ease width 0.1s;
   will-change: transform;
 }
 
-#netconfig .optbox:not(:checked) + input[type="text"][name="ntcphost"]:not(:focus),
-#netconfig .optbox:not(:checked) + input[type="text"][name="udpHost1"]:not(:focus) {
+#netconfig .optbox:not(:checked) + input[type=text][name="ntcphost"]:not(:focus),
+#netconfig .optbox:not(:checked) + input[type=text][name="udpHost1"]:not(:focus) {
   width: 140px !important;
   min-width: 140px !important;
   transition: ease width 0.1s;
@@ -10676,7 +10707,7 @@ h3#shutdownrouter {
   vertical-align: middle;
 }
 
-#i2pupdates textarea, #i2pupdates input[type="text"] {
+#i2pupdates textarea, #i2pupdates input[type=text] {
   width: calc(100% - 216px) !important;
   min-width: 0 !important;
   margin: 5px 5px 5px 10px !important;
@@ -10828,7 +10859,7 @@ h3#shutdownrouter {
   padding: 0 !important;
 }
 
-#manualreseed .optionlist input[type="text"], #manualreseed .optionlist input[type="file"] {
+#manualreseed .optionlist input[type=text], #manualreseed .optionlist input[type="file"] {
   min-width: 0 !important;
   max-width: 50% !important;
   width: 50% !important;
@@ -10912,7 +10943,7 @@ h3#shutdownrouter {
   vertical-align: middle;
 }
 
-#reseedurl input[type="text"], #reseedzip input[type="file"], #reseedcreatefile p {
+#reseedurl input[type=text], #reseedzip input[type="file"], #reseedcreatefile p {
   width: calc(100% - 25px);
 }
 
@@ -11220,7 +11251,7 @@ tr:nth-child(4) .net_bwrate::before {
   padding: 2px 12px 3px 10px;
 }
 
-#installPluginUrl input[type="text"], #installPluginFile input[type="file"], #config_family input[type="text"], #config_family input[type="file"] {
+#installPluginUrl input[type=text], #installPluginFile input[type="file"], #config_family input[type=text], #config_family input[type="file"] {
   width: 100%;
 }
 
@@ -11258,7 +11289,7 @@ tr:nth-child(4) .net_bwrate::before {
   background-size: 28px 28px !important;
 }
 
-#installPluginUrl input[type="text"], #installPluginFile input[type="file"] {
+#installPluginUrl input[type=text], #installPluginFile input[type="file"] {
   width: 100%;
 }
 
@@ -13422,7 +13453,7 @@ h1[class], h1 {
   margin: 6px;
 }
 
-#sybilTask select, #sybilTask input[type="text"] {
+#sybilTask select, #sybilTask input[type=text] {
   width: 140px;
 }
 
@@ -13672,7 +13703,7 @@ to {
   display: inline-block;
 }
 
-#enablefull input[type="submit"] {
+#enablefull input[type=submit] {
   float: right;
 }
 
@@ -14272,4 +14303,12 @@ div#minigraph {
   line-height: 20px;
   font-size: 0 !important;
   background: repeating-linear-gradient(135deg, #001 1px, #001 5px, #003 6px, #003 11px) !important;
+}
+
+h1, .main h2, h4.app, h4.app2, .main h3 {
+  -webkit-text-stroke: 1px rgba(179, 186, 255,.3);
+}
+
+.main h3 a {
+  -webkit-text-stroke: 0 !important;
 }
