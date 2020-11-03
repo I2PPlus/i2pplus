@@ -845,8 +845,8 @@ _:-ms-lang(x), img.illustrate {
 /* end overview -> svg */
 
 div#book, #emptybook {
+  margin: -29px 0 -5px;
   padding: 0;
-  margin: -15px 0 -5px;
 }
 
 #emptybook {
@@ -870,8 +870,8 @@ div#book, #emptybook {
 }
 
 #book th:last-child {
-  background: url(/themes/console/dark/images/header.png) repeat-x scroll center center #000;
-  background: url(images/bin.png) center center no-repeat !important;
+  background: url(images/nuke.svg) center center no-repeat !important;
+  background-size: 15px 15px !important;
 }
 
 #host_list td {
@@ -1467,6 +1467,14 @@ _:-ms-lang(x), * {
   }
 }
 
+@media screen and (min-width: 1200px) and (max-width: 1400px) {
+  #export {
+    padding-top: 11px !important;
+    padding-left: 8px !important;
+    right: -9px !important;
+  }
+}
+
 @media screen and (min-width: 1500px) {
   body, input[type=submit], input[type=reset], .fakebutton, input,
   select, h4, td.names a, li, #filter a, #filter span a, #host_details td, th, #search td, .destaddress {
@@ -1748,7 +1756,7 @@ form[action="addressbook"] > p.buttons, #filter, #search, #visualid tr:last-chil
   top: calc(50% - 19px);
   font-size: 0 !important;
   background: url(/themes/console/images/info/arrow_down.png) center center no-repeat, linear-gradient(to bottom, #010, #000) !important;
-  background-size: 16px 16px !important;
+  background-size: 16px 16px, 100% 100% !important;
 }
 
 form[action="export"]::after {
