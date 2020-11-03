@@ -306,7 +306,7 @@ span.addrhlpr {
 
 h3 {
   padding: 7px 10px;
-  letter-spacing: 0.08em;
+  letter-spacing: 0.18em;
   word-spacing: 0.1em;
   font-size: 10pt;
   font-weight: bold;
@@ -316,8 +316,10 @@ h3 {
   border: 1px solid #242;
   box-shadow: inset 0 0 0 1px #000;
   background: #000 url(/themes/console/dark/images/header.png) repeat-x scroll center center;
-  background: linear-gradient(to bottom, #1a261a 0%, #223022 7%, #212f21 9%, #172317 21%, #091109 49%, #050d05 50%, #020602 51%, #010301 53%, #000000 56%, #000000 100%);
-  background: linear-gradient(to bottom, rgba(0,0,0,0) 50%, #000 50%), repeating-linear-gradient(to right, rgba(0,0,0,0.5) 1px, rgba(0,16,0,0.5) 2px, rgba(0,16,0,0.5) 3px), linear-gradient(to bottom, #004000, #000 75%);
+  background: linear-gradient(to bottom, rgba(0,0,0,0) 50%, #000 50%),
+              repeating-linear-gradient(to right, rgba(0,0,0,0.5) 1px, rgba(0,16,0,0.5) 2px, rgba(0,16,0,0.5) 3px),
+              linear-gradient(to bottom, #004000, #000 75%);
+  -webkit-text-stroke: 1px rgba(237, 237, 146,.3);
 }
 
 #content h3 {
@@ -414,7 +416,8 @@ div#messages:hover {
   padding: 20px 20px 20px 50px !important;
   border: 1px solid #242;
   box-shadow: inset 0 0 0 1px #000, inset 0 0 2px 1px #030;
-  background: #000 url(/themes/susidns/images/addressbook.png) 10px center no-repeat;
+  background: #000 url(images/addressbook.svg) 10px center no-repeat;
+  background-size: 20px 20px;
 }
 
 #messages:empty {
@@ -984,7 +987,7 @@ input {
   font-size: 8.5pt;
   color: #494;
   border: 1px solid #252;
-  border-radius: 2px;
+  border-radius: 1px;
   background: none;
 }
 
@@ -1103,14 +1106,13 @@ textarea:focus {
 
 .headline h3 {
   padding: 10px 5px 10px 35px;
-  letter-spacing: 0.18em;
-  word-spacing: 0.1em;
   text-transform: uppercase;
   font-size: 11.5pt;
-  background: url(/themes/susidns/images/addressbook.png) 5px 40% no-repeat,
+  background: url(images/addressbook.svg) 9px center no-repeat,
               linear-gradient(to bottom, rgba(0,0,0,0) 50%, #000 50%),
               repeating-linear-gradient(to right, rgba(0,0,0,0.5) 1px, rgba(0,16,0,0.5) 2px, rgba(0,16,0,0.5) 3px),
               linear-gradient(to bottom, #004000, #000 75%);
+  background-size: 20px 20px, 100% 100%, 100% 100%, 100% 100%;
 }
 
 .headline h3::first-letter {
@@ -1124,10 +1126,10 @@ textarea:focus {
 }
 
 .headline#configure h3 {
-  background: url(/themes/susidns/images/configure_24.png) 6px 40% no-repeat,
+  background: url(images/configure.svg) 9px center no-repeat,
               linear-gradient(to bottom, rgba(0,0,0,0) 50%, #000 50%), repeating-linear-gradient(to right, rgba(0,0,0,0.5) 1px, rgba(0,16,0,0.5) 2px, rgba(0,16,0,0.5) 3px),
               linear-gradient(to bottom, #004000, #000 75%);
-  background-size: 24px 24px, 100% 100%, 100% 100% !important;
+  background-size: 20px 20px, 100% 100%, 100% 100% !important;
 }
 
 /* export hosts button adjustments */
@@ -1155,7 +1157,8 @@ p.book {
 
 #messages + p, p.book {
   border: 1px solid #242;
-  background: #000 url(/themes/susidns/images/addressbook.png) 5px center no-repeat;
+  background: #000 url(images/addressbook.svg) 5px center no-repeat;
+  background-size: 20px 20px;
 }
 
 /* hide export button on published addressbook if empty */
