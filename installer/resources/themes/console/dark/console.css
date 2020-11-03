@@ -17,15 +17,17 @@ body {
   color: #ee9;
   font: 8.5pt/130% Droid Sans, Open Sans, Noto Sans, Ubuntu, Segoe UI, Bitstream Vera Sans, DejaVu Sans, Verdana, Lucida Grande, Helvetica, sans-serif;
   background: #010 url(images/camotile2.png) top left scroll;
-  background: url(/themes/console/images/svg/update.svg) center center no-repeat, repeating-linear-gradient(to bottom, rgba(0,0,0,.9) 1px, rgba(0,8,0,.5) 2px, rgba(0,8,0,.5) 3px), url(images/camotile2.png) top left scroll #000800;
+  background: url(/themes/console/images/svg/update.svg) center center no-repeat,
+              repeating-linear-gradient(to bottom, rgba(0,0,0,.9) 1px, rgba(0,8,0,.5) 2px, rgba(0,8,0,.5) 3px),
+              url(images/camotile2.png) top left scroll #000800;
   background-size: 0 0, 100% 100%, auto;
   will-change: transform;
 }
 
 @supports (text-justify: auto) { /* Firefox 55+ */
-body {
-  background-attachment: fixed;
-}
+  body {
+    background-attachment: fixed;
+  }
 }
 
 :-moz-broken { /* hides broken images (e.g. missing graphs) in Firefox */
@@ -35,6 +37,10 @@ body {
 #config_ui :-moz-broken {
   display: inline-block !important;
   visibility: hidden !important;
+}
+
+#graphs :-moz-broken {
+  font-size: 9pt;
 }
 
 .hide, .hideme {
@@ -87,7 +93,8 @@ a:link, h2 a:link, #graphopts a:visited, #newsDisplay a:visited, .confignav a:vi
 }
 
 a:visited {
-  color: #7b7;
+/*  color: #7b7;*/
+  color: #494;
   text-decoration: none;
   font-weight: bold;
   word-wrap: break-word;
@@ -109,10 +116,6 @@ img {
   border: none;
   font-size: 0;
 }
-
-/*a img:hover, a:focus img {
-  filter: drop-shadow(0 0 1px #f60);
-}*/
 
 #tunnels img[src^="/flags.jsp?"], #profiles img[src^="/flags.jsp?"], #peers img[src^="/flags.jsp?"] {
   width: 16px !important;
@@ -142,8 +145,9 @@ img {
 }
 
 .netdb_header img[src^="/flags"] {
-  width: 24px !important;
-  height: 18px !important;
+  margin-top: 1px;
+  width: 30px !important;
+  height: auto !important;
   vertical-align: middle !important;
   border: 1px solid #030;
   box-shadow: 0 0 0 1px #000;
@@ -6553,8 +6557,7 @@ div.app img, .sitemapLink img {
 
 div.app:hover img, .sitemapLink:hover img, a:focus .app img, a:focus .sitemaplink img {
   opacity: 1;
-  filter: drop-shadow(0 0 1px #f60);
-  transition: filter ease 0.3s;
+  filter: none;
 }
 
 .app table {
@@ -11503,6 +11506,7 @@ input[type="checkbox"][disabled]:checked, input[type="radio"][disabled]:checked,
 }
 
 .netdb_header {
+  margin: -3px 0 0;
   padding: 3px 3px 0;
   min-width: 100px;
   display: inline-block;
@@ -11631,10 +11635,16 @@ input[type="checkbox"][disabled]:checked, input[type="radio"][disabled]:checked,
 }
 
 .netdb_header img[src="/flags.jsp?c=a0"] {
-  margin-bottom: -4px !important;
+  margin-bottom: -5px !important;
   margin-right: 0 !important;
   display: inline-block;
   opacity: .8;
+}
+
+@media screen and (max-width: 1499px) {
+  .netdb_header img[src="/flags.jsp?c=a0"] {
+    margin-bottom: -4px !important;
+  }
 }
 
 .sybil_routerinfo .viewprofile img, .sybil_routerinfo .viewfullentry img, .sybil_routerinfo .familysearch img, .sybil_routerinfo .configpeer img {
@@ -13207,23 +13217,19 @@ table.search {
   opacity: .8;
 }
 
-.sitemapLink:hover img {
-  opacity: 1;
-  filter: drop-shadow(0 0 1px #f60);
-}
-
-.sitemapLink:active img {
+.sitemapLink:active img, .sitemapLink img:active, div.app:active img, div.app img:active {
   transform: scale(0.9);
+  filter: sepia(100%) drop-shadow(0 0 1px #f60) drop-shadow(0 0 2px rgba(148,0,0,.5)) !important;
 }
 
 .sitemapLabel {
   padding: 6px 4px 8px;
   display: inline-block;
-  box-sizing: border-box;
-  white-space: nowrap;
-  overflow: hidden;
-  text-overflow: ellipsis;
   line-height: 105%;
+  overflow: hidden;
+  white-space: nowrap;
+  box-sizing: border-box;
+  text-overflow: ellipsis;
   font-size: 90%;
   text-shadow: 0 1px 1px #000;
   border: none;
@@ -13533,6 +13539,7 @@ th[aria-sort] {
 
 #stats h3 {
   border-width: 1px;
+  border-radius: 0;
 }
 
 #stats .toggle_input {
@@ -14448,4 +14455,8 @@ div#minigraph {
 
 h1, .main h2, h4.app, h4.app2, .main h3 {
   -webkit-text-stroke: 1px rgba(237, 237, 146,.3);
+}
+
+.main h3 a {
+  -webkit-text-stroke: 0 !important;
 }
