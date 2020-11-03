@@ -5493,9 +5493,28 @@ th > img[src^="/imagegen"], .identicon { /* scale down header images */
 }
 
 .netdb_leases li b.leaseNumber {
-  margin-right: -4px !important;
+  margin-right: 0 !important;
+  padding: 1px 0 0;
   min-width: 22px !important;
+  position: relative;
+  vertical-align: middle;
   text-align: center;
+  text-shadow: 0 1px 1px #000;
+  background: #020;
+  border-radius: 2px 0 0 2px;
+  filter: drop-shadow(0 0 1px #000);
+}
+
+.netdb_leases li b.leaseNumber::after {
+  width: 0;
+  height: 0;
+  position: absolute;
+  right: -10px;
+  bottom: calc(50% - 5px);
+  border-color: transparent transparent transparent #020;
+  border-style: solid;
+  border-width: 5px;
+  content: "";
 }
 
 .netdb_gateway {
@@ -5505,7 +5524,7 @@ th > img[src^="/imagegen"], .identicon { /* scale down header images */
 }
 
 .netdb_tunnel {
-  margin: 0 5px 0 2px;
+  margin: 0 5px 0 -1px;
   padding: 1px 4px;
   display: inline-block;
   border: 1px solid #030;
@@ -5515,7 +5534,7 @@ th > img[src^="/imagegen"], .identicon { /* scale down header images */
 }
 
 .netdb_leases .tunnel_id {
-  min-width: 74px;
+  min-width: 76px;
   text-align: center;
 }
 
@@ -10041,6 +10060,14 @@ th.options, #externali2cp th {
 .routerid .flag, #peers .routerid .flag {
   padding: 3px 4px 2px 2px;
   border-right: 1px solid #030;
+}
+
+.leaseNumber + .tunnel_peer .routerid {
+  margin-right: -2px !important;
+}
+
+.Lease .flag {
+  padding: 2px 4px 2px 2px;
 }
 
 #peers #udpconnections .routerid {
