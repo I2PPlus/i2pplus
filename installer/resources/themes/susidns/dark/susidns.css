@@ -1334,8 +1334,13 @@ p.book {
 }
 
 #host_list td.helper a::after {
-  content: url(/themes/console/images/buttons/helper.png);
+  width: 16px;
+  height: 16px;
+  display: inline-block;
+  background: url(images/helper.svg) center center no-repeat;
+  background-size: 16px 16px;
   cursor: pointer;
+  content: "";
 }
 
 #host_list td.b32link a:hover, #host_list td.helper a:hover,
