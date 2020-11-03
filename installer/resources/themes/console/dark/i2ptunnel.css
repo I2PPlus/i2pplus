@@ -1809,3 +1809,34 @@ h2, h3 {
 h2 a, h3 a {
   -webkit-text-stroke: 0 !important;
 }
+
+body:not(.iframed) .panel, body:not(.iframed) .panel#clients {
+  margin: 24px auto 22px !important;
+  padding: 0 !important;
+  max-width: calc(100% - 28px);
+  box-shadow: 0 0 0 2px #000, 0 0 0 5px #020, 0 0 1px 5px #010, 0 0 0 7px #000;
+}
+
+body:not(.iframed) .panel h2 {
+  margin-top: 0 !important;
+}
+
+body:not(.iframed) #serverTunnels {
+  margin-bottom: 0;
+}
+
+body#tunnelEditPage:not(.iframed) .panel,
+body#tunnelRegistration:not(.iframed) .panel,
+body#tunnelWizardPage:not(.iframed) .panel {
+  margin-top: 24px !important;
+  margin-bottom: 24px !important;
+}
+
+body#tunnelSSL:not(.iframed) {
+  margin-top: 32px !important;
+  margin-bottom: 32px !important;
+}
+
+body#tunnelEditPage:not(.iframed) h3 {
+  margin-top: -1px;
+}
