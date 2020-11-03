@@ -735,7 +735,7 @@ public class SummaryHelper extends HelperBase {
                 LeaseSet ls = _context.netDb().lookupLeaseSetLocally(h);
                 if (ls != null && _context.tunnelManager().getOutboundClientTunnelCount(h) > 0) {
                     long timeToExpire = ls.getEarliestLeaseDate() - _context.clock().now();
-                        if ((timeToExpire < 0) && !ls.isCurrent(0)) {
+                        if ((timeToExpire < 0) || !ls.isCurrent(0)) {
                         // red or yellow light
                         buf.append("<td class=\"tunnelBuilding\"><img src=\"/themes/console/images/local_down.png\" alt=\"")
                            .append(_t("Rebuilding")).append("&hellip;\" title=\"").append(_t("Leases expired")).append(" ")
