@@ -932,12 +932,12 @@ div.refresh {
   height: 14px;
   max-width: 100%;
   background: #0e5f00;
-  background: linear-gradient(to bottom, rgba(28, 148, 58, 0.6) 0%, rgba(9, 47, 16, 0.6) 50%, rgba(13, 39, 7, 0.6) 50%, rgba(9, 27, 5, 0.6) 50%, rgba(9, 21, 3, 0.6) 100%);
+  background: linear-gradient(to bottom, rgba(28, 148, 58, 0.6), rgba(9, 47, 16, 0.6) 50%, rgba(13, 39, 7, 0.6) 50%, rgba(9, 27, 5, 0.6) 50%, rgba(9, 21, 3, 0.6));
   box-shadow: inset 0 0 0 1px #000;
 }
 
 #sb_memoryBar .percentBarInner {
-  background: linear-gradient(to right, rgba(0,0,0,0.05), rgba(128,128,0,0.15) 160px, rgba(196,0,0,0.15) 180px, rgba(196,0,0,0.2)), linear-gradient(to bottom, rgba(28, 148, 58, 0.6) 0%, rgba(9, 47, 16, 0.6) 50%, rgba(13, 39, 7, 0.6) 50%, rgba(9, 27, 5, 0.6) 50%, rgba(9, 21, 3, 0.6) 100%);
+  background: linear-gradient(to right, rgba(0,0,0,0.05), rgba(128,128,0,0.15) 160px, rgba(196,0,0,0.15) 180px, rgba(196,0,0,0.2)), linear-gradient(to bottom, rgba(28, 148, 58, 0.6), rgba(9, 47, 16, 0.6) 50%, rgba(13, 39, 7, 0.6) 50%, rgba(9, 27, 5, 0.6) 50%, rgba(9, 21, 3, 0.6));
 }
 
 .percentBarText {
@@ -996,19 +996,18 @@ div.refresh {
 }
 
 @media screen and (min-width: 1500px) {
-.sb_info.sb_update {
-  padding: 7px 5px 9px !important;
-}
+  .sb_info.sb_update {
+    padding: 7px 5px 9px !important;
+  }
 }
 
 @keyframes downloadbar {
-from {
-  background: repeating-linear-gradient(135deg, #000 1px, #000 5px, #010 6px, #010 11px);
-}
-
-to {
-  background: repeating-linear-gradient(135deg, #010 1px, #010 6px, #000 7px, #000 11px);
-}
+  from {
+    background: repeating-linear-gradient(135deg, #000 1px, #000 5px, #010 6px, #010 11px);
+  }
+  to {
+    background: repeating-linear-gradient(135deg, #010 1px, #010 6px, #000 7px, #000 11px);
+  }
 }
 
 /* end status bar */
@@ -1361,7 +1360,7 @@ div.news hr {
   background: rgba(0,48,0,0.6);
 }
 
-#news #newsDisplay a:hover, #news #newsDisplay a:focus, #graphopts a:hover, #graphopts a:focus, .graphstat:hover, .graphstat:focus
+#news #newsDisplay a:hover, #news #newsDisplay a:focus, #graphopts a:hover, #graphopts a:focus, .graphstat:hover, .graphstat:focus,
 #routerinformation tr:nth-child(n+2) a:hover, #routerinformation tr:nth-child(n+2) a:focus, #fullhistory a:hover, #fullhistory a:focus {
   border: 1px solid #020;
   background: #030;
@@ -1419,7 +1418,7 @@ div.widescroll { /* only scroll content, not entire page eg /peers */
   box-shadow: inset 0 0 0 1px #000;
   background: url(images/header.png) repeat-x scroll center center #000;
   background: linear-gradient(to bottom, #001000, #001900 50%, #000 51%, #000) !important;
-  background: repeating-linear-gradient(to right, rgba(0,0,0,0.5) 1px, rgba(0,0,0,0.5) 2px, rgba(0,16,0,0.5) 3px), linear-gradient(to bottom, #1a261a, #223022 7%, #212f21 9%, #172317 21%, #091109 49%, #050d05 50%, #020602 51%, #010301 53%, #000000 56%) repeat scroll 0 0%, rgba(0, 0, 0, 0) url("/themes/console/dark/images/camotile2.png") !important;
+  background: repeating-linear-gradient(to right, rgba(0,0,0,0.5) 1px, rgba(0,0,0,0.5) 2px, rgba(0,16,0,0.5) 3px), linear-gradient(to bottom, #1a261a, #223022 7%, #212f21 9%, #172317 21%, #091109 49%, #050d05 50%, #020602 51%, #010301 53%, #000000 56%) repeat scroll 0, rgba(0, 0, 0, 0) url("/themes/console/dark/images/camotile2.png") !important;
   background-blend-mode: normal, exclusion, normal;
 }
 
@@ -1510,7 +1509,6 @@ h1 {
     margin-top: 0;
     filter: opacity(1);
   }
-
   30% {
     filter: opacity(0);
  }
@@ -2545,15 +2543,15 @@ input[type="text"], input[type="password"] {
   border-radius: 1px;
   box-shadow: inset 0 0 3px 3px #000;
   background: #000;
-  background: linear-gradient(to bottom, #000 0%, #010 100%);
+  background: linear-gradient(to bottom, #000, #010);
   cursor: text;
   filter: none;
 }
 
 @media screen and (min-width: 1500px) {
-input[type="text"], input[type="password"] {
-  padding: 7px;
-}
+  input[type="text"], input[type="password"] {
+    padding: 7px;
+  }
 }
 
 input[type="text"], input[type="password"], textarea {
@@ -2622,8 +2620,8 @@ input[name="ntcphost"], input[name="udpHost1"] {
 }
 
 fieldset {
-  overflow: hidden;
   position: relative;
+  overflow: hidden;
 }
 
 select {
@@ -2715,7 +2713,7 @@ select::-ms-expand {
 
 textarea {
   background: #000;
-  background: linear-gradient(to bottom, #000 0%, #010 100%) !important;
+  background: linear-gradient(to bottom, #000, #010) !important;
   box-shadow: inset 0 0 3px 3px #000;
   color: #ee9;
   padding: 5px;
@@ -3367,7 +3365,7 @@ h3[id$="con"] { /* peers h3 + tables */
   word-spacing: 0.1em;
   letter-spacing: 0.08em;
   background: #000;
-  background: linear-gradient(to right, #000 0%, #001000 70%, #001300 90%);
+  background: linear-gradient(to right, #000, #001000 70%, #001300 90%);
   border: 1px solid #242;
 }
 
@@ -3575,7 +3573,7 @@ tr#addnew, tr#addnew:hover {
   text-align: center;
   border: 1px solid #252;
   background: #000;
-  background: linear-gradient(to bottom, #010 0%, #000 100%);
+  background: linear-gradient(to bottom, #010, #000);
 }
 
 .themechoice:hover {
@@ -3715,7 +3713,7 @@ h3#themeheading, h3#langheading, h3#passwordheading {
   border-radius: 0;
   border: 1px solid #252;
   background: #000;
-  background: linear-gradient(to right, #000 0%, #001000 70%, #001300 90%);
+  background: linear-gradient(to right, #000, #001000 70%, #001300 90%);
 }
 
 #themesettings {
@@ -3745,7 +3743,7 @@ td#themeselect {
   text-align: center;
   border: 1px solid #252;
   background: #000;
-  background: linear-gradient(to bottom, #010 0%, #000 80%);
+  background: linear-gradient(to bottom, #010, #000 80%);
 }
 
 .langselect:hover {
@@ -4005,7 +4003,7 @@ td#pw_adduser input {
 #consolepass input[name="name"], #externali2cp input[name="user"] {
   padding: 6px 5px 6px 26px !important;
   background: #000 url(/themes/console/images/buttons/user.png) 5px center no-repeat;
-  background: url(/themes/console/images/buttons/user.png) 5px center no-repeat, linear-gradient(to bottom, #000 0%, #010 100%);
+  background: url(/themes/console/images/buttons/user.png) 5px center no-repeat, linear-gradient(to bottom, #000, #010);
   background-size: 16px 16px, 100% 100% !important;
 }
 
@@ -4016,7 +4014,7 @@ td#pw_adduser input {
 #consolepass input[name="nofilter_pw"], #externali2cp input[name="nofilter_pw"] {
   padding: 6px 5px 6px 22px !important;
   background: #000 url(/themes/console/images/buttons/password.png) 3px center no-repeat;
-  background: url(/themes/console/images/buttons/password.png) 3px center no-repeat, linear-gradient(to bottom, #000 0%, #010 100%);
+  background: url(/themes/console/images/buttons/password.png) 3px center no-repeat, linear-gradient(to bottom, #000, #010);
   background-size: 16px 16px, 100% 100% !important;
 }
 #consolepass input[name="nofilter_pw"]:focus, #externali2cp input[name="nofilter_pw"]:focus {
@@ -4033,7 +4031,7 @@ form[action="/createreseed"] > h3 {
   font-size: 10.5pt;
   border-radius: 0;
   border: 1px solid #252;
-  background: linear-gradient(to right, #000 0%, #001000 70%, #001300 90%);
+  background: linear-gradient(to right, #000, #001000 70%, #001300 90%);
 }
 
 #configclient {
@@ -4972,7 +4970,7 @@ h4.app2 a::after {
   word-spacing: 0.1em;
   border-radius: 0;
   margin: -1px -21px 10px !important;
-  background: linear-gradient(to right, #000 0%, #001000 70%, #001300 90%);
+  background: linear-gradient(to right, #000, #001000 70%, #001300 90%);
 }
 
 #advancedsettings h2 {
@@ -5017,7 +5015,7 @@ h4.app2 a::after {
   word-spacing: 0.1em;
   border-radius: 0;
   margin: 0 -21px 10px !important;
-  background: linear-gradient(to right, #000 0%, #001000 70%, #001300 90%);
+  background: linear-gradient(to right, #000, #001000 70%, #001300 90%);
   border: 1px solid #252;
 }
 
@@ -6370,7 +6368,7 @@ div.app {
   border: 1px solid #252;
   opacity: 0.9;
   background: #000;
-  background: linear-gradient(to bottom, #010 0%, #000 100%);
+  background: linear-gradient(to bottom, #000800, #000);
 }
 
 div.app, .extlink::after, input, button {
@@ -6384,14 +6382,13 @@ div.app.js:hover::before {
   top: -1px;
   left: -1px;
   border: 1px solid #f60;
-  box-shadow: inset 0 0 0 1px #000, inset 0 0 2px 1px #730, inset 0 0 0 3px #000 !important;
+  box-shadow: inset 0 0 0 1px #000, inset 0 0 1px 1px #730 !important;
   content: "*js";
 }
 
 div.app, .applabel, .statusnotes, .main, div.news, .routersummary, .search tr, .logo,
 .themechoice, .themelabel, .langselect, .ui_lang {
-  box-shadow: inset 0 0 0 1px #000;
-  box-shadow: inset 0 0 0 1px #000, inset 0 0 2px 1px #050, inset 0 0 0 3px #000 !important;
+  box-shadow: inset 0 0 0 1px #000, inset 0 0 1px 1px #050 !important;
 }
 
 .search tr {
@@ -6400,7 +6397,7 @@ div.app, .applabel, .statusnotes, .main, div.news, .routersummary, .search tr, .
 
 div.app:hover, div.app:hover .applabel, div.app:hover .extlink::after, .sitemapLink.extlink:hover::after,
 .themechoice:hover, .themechoice:hover .themelabel, .langselect:hover, .langselect:hover .ui_lang {
-  box-shadow: inset 0 0 0 1px #000, inset 0 0 2px 1px #730, inset 0 0 0 3px #000 !important;
+  box-shadow: inset 0 0 0 1px #000, inset 0 0 1px 1px #730 !important;
 }
 
 .app a:link, .app a:visited {
@@ -6509,26 +6506,23 @@ input.search {
   vertical-align: middle;
   box-shadow: inset 0 0 3px 3px #000;
   background: #000 url(/themes/console/images/buttons/search.png) 4px center no-repeat;
-  background: url(/themes/console/images/buttons/search.png) 4px center no-repeat, linear-gradient(to bottom, #000 0%, #010 100%);
+  background: url(/themes/console/images/buttons/search.png) 4px center no-repeat, linear-gradient(to bottom, #000, #010);
 }
 
 @media screen and (min-width: 1500px) {
-input.search {
-  padding: 7px 7px 7px 26px;
-}
-
-.search td {
-  padding: 6px 6px 6px 5px !important;
-}
-
-.search td:nth-child(2) {
-  padding: 5px 8px 5px 8px !important;
-}
-
-.search td:last-child {
-  padding-left: 0 !important;
-  padding-right: 0 !important;
-}
+  input.search {
+    padding: 7px 7px 7px 26px;
+  }
+  .search td {
+    padding: 6px 6px 6px 5px !important;
+  }
+  .search td:nth-child(2) {
+    padding: 5px 8px 5px 8px !important;
+  }
+  .search td:last-child {
+    padding-left: 0 !important;
+    padding-right: 0 !important;
+  }
 }
 
 input.search:focus {
@@ -6607,8 +6601,6 @@ div.app:hover .applabel, .sitemapLink:hover .sitemapLabel,
   border-radius: 0 0 2px 2px;
   border: none;
   border-top: 1px solid #252;
-  box-shadow: inset 0 0 0 1px #000;
-  background: #001000;
 }
 
 .applabel:hover {
@@ -7053,7 +7045,7 @@ h4 span[style="float: right;"] .unbold {
   min-width: 150px;
   white-space: nowrap;
   border: 1px solid #151;
-  background: linear-gradient(to right, #000 0%, #010 80%);
+  background: linear-gradient(to right, #000, #010 80%);
   box-shadow: inset 0 0 0 1px #000, inset 0 0 2px 1px #030;
 }
 
@@ -7135,7 +7127,7 @@ p.sybil_info, p.family, p.threatpoints, p.hashdist, p#sybil_totals, p.notfound {
   color: #cc0;
   font-weight: bold;
   background: url(images/eye.svg) 8px center no-repeat;
-  background: url(images/eye.svg) 8px center no-repeat, linear-gradient(to right, #000 0%, #000800 80%, #001000 100%);
+  background: url(images/eye.svg) 8px center no-repeat, linear-gradient(to right, #000, #000800 80%, #001000);
   background-size: 16px 16px, 100% 100%;
   box-shadow: inset 0 0 0 1px #300;
 }
@@ -7148,19 +7140,19 @@ p.sybil_info, p#sybil_totals {
 }
 
 p.threatpoints {
-  background: url(images/eye_threat.svg) 8px center no-repeat, linear-gradient(to right, #000 0%, #000800 80%, #001000 100%);
+  background: url(images/eye_threat.svg) 8px center no-repeat, linear-gradient(to right, #000, #000800 80%, #001000);
   background-size: 20px 20px, 100% 100%;
 }
 
 p.threatpoints.hot {
-  background: url(images/eye_threat.svg) 8px center no-repeat, url(/themes/console/images/info/hot.png) right 2px center no-repeat, linear-gradient(to right, #000 0%, #000800 80%, #001000 100%);
+  background: url(images/eye_threat.svg) 8px center no-repeat, url(/themes/console/images/info/hot.png) right 2px center no-repeat, linear-gradient(to right, #000, #000800 80%, #001000);
   background-size: 20px 20px, 24px 24px, 100% 100%;
 }
 
 p.family {
   white-space: nowrap;
   background: url(/themes/console/images/buttons/users.png) 8px center no-repeat;
-  background: url(/themes/console/images/buttons/users.png) 8px center no-repeat, linear-gradient(to right, #000 0%, #000800 80%, #001000 100%);
+  background: url(/themes/console/images/buttons/users.png) 8px center no-repeat, linear-gradient(to right, #000, #000800 80%, #001000);
   background-blend-mode: normal;
 }
 
@@ -7640,7 +7632,7 @@ div#clientsconfig {
 th.th_title {
   padding: 8px 10px !important;
   text-align: left;
-  background: linear-gradient(to bottom, #1a261a 0%,#223022 7%,#212f21 9%,#172317 21%,#091109 49%,#050d05 50%,#020602 51%,#010301 53%,#000000 56%,#000000 100%) !important;
+  background: linear-gradient(to bottom, #1a261a,#223022 7%,#212f21 9%,#172317 21%,#091109 49%,#050d05 50%,#020602 51%,#010301 53%,#000000 56%,#000000) !important;
   background: linear-gradient(to bottom, rgba(0,0,0,0) 50%, #000 50%), repeating-linear-gradient(to right, rgba(0,0,0,0.5) 1px, rgba(0,0,0,0.5) 2px, rgba(0,16,0,0.5) 3px), linear-gradient(to bottom, #005000, #000 75%) !important;
 }
 
@@ -8261,7 +8253,7 @@ h4#sb_shutdownstatus span {
 }
 
 @keyframes participating {
-  0%,49%,51%,100% {background: #5c5}
+ 0%,49%,51%,100% {background: #5c5}
   50% {background: #373}
 }
 
@@ -8993,12 +8985,12 @@ th code {
 
 #debug h3.debug_outboundsessions {
   margin-top: -2px !important;
-  background: url(/themes/console/images/outbound.png) 6px center no-repeat, linear-gradient(to bottom, #1a261a 0%, #223022 7%, #212f21 9%, #172317 21%, #091109 49%, #050d05 50%, #020602 51%, #010301 53%, #000 56%) !important;
+  background: url(/themes/console/images/outbound.png) 6px center no-repeat, linear-gradient(to bottom, #1a261a, #223022 7%, #212f21 9%, #172317 21%, #091109 49%, #050d05 50%, #020602 51%, #010301 53%, #000 56%) !important;
   background: url(/themes/console/images/outbound.png) 6px center no-repeat, linear-gradient(to bottom, rgba(0,0,0,0) 50%, #000 50%), repeating-linear-gradient(to right, rgba(0,0,0,.5) 1px, rgba(0,16,0,.5) 2px, rgba(0,16,0,.4) 3px), linear-gradient(to bottom, #005000, #000 75%) !important;
 }
 
 #debug h3.debug_inboundsessions {
-  background: url(/themes/console/images/inbound.png) 6px center no-repeat, linear-gradient(to bottom, #1a261a 0%, #223022 7%, #212f21 9%, #172317 21%, #091109 49%, #050d05 50%, #020602 51%, #010301 53%, #000 56%) !important;
+  background: url(/themes/console/images/inbound.png) 6px center no-repeat, linear-gradient(to bottom, #1a261a, #223022 7%, #212f21 9%, #172317 21%, #091109 49%, #050d05 50%, #020602 51%, #010301 53%, #000 56%) !important;
   background: url(/themes/console/images/inbound.png) 6px center no-repeat, linear-gradient(to bottom, rgba(0,0,0,0) 50%, #000 50%), repeating-linear-gradient(to right, rgba(0,0,0,.5) 1px, rgba(0,16,0,.5) 2px, rgba(0,16,0,.4) 3px), linear-gradient(to bottom, #005000, #000 75%) !important;
 }
 
@@ -9552,10 +9544,6 @@ pre, #logs li {
   margin-bottom: -16px !important;
 }
 
-.applabel {
-  min-width: 160px;
-}
-
 .appimg {
   padding: 5px 0 8px;
   height: 35px;
@@ -9563,16 +9551,18 @@ pre, #logs li {
 
 div.app img {
   margin-top: -8px;
-  padding: 10px 58px 38px;
+  padding: 10px 53px 38px;
 }
 
 .applabel {
   padding: 4px 2px !important;
-  width: 150px !important;
+  width: 140px !important;
 }
 
 .applabel a {
-  max-width: 148px;
+  max-width: 130px;
+  overflow: hidden;
+  text-overflow: ellipsis;
   font-size: 9pt !important;
 }
 
@@ -13075,9 +13065,9 @@ table.search {
 }
 
 @media screen and (min-width: 1400px) {
-.statsName {
-  border: 1px solid #131;
-}
+  .statsName {
+    border: 1px solid #131;
+  }
 }
 
 #configinfo th {
@@ -13126,9 +13116,9 @@ table.search {
 }
 
 @media screen and (min-width: 1500px) {
-#sitemap h3 {
-  font-size: 12pt !important;
-}
+  #sitemap h3 {
+    font-size: 12pt !important;
+  }
 }
 
 #sitemap h3::first-letter {
@@ -13184,15 +13174,14 @@ table.search {
 }
 
 @media screen and (max-width: 1500px) {
-.sitemapLink, .sitemapLabel, #sitemap div.app, #sitemap .applabel {
-  width: 160px !important;
-  min-width: 160px !important;
-}
-
-.en .sitemapLink, .en .sitemapLabel, .en #sitemap div.app, .en #sitemap .applabel, .en #sitemap .app table {
-  width: 120px !important;
-  min-width: 120px !important;
-}
+  .sitemapLink, .sitemapLabel, #sitemap div.app, #sitemap .applabel {
+    width: 160px !important;
+    min-width: 160px !important;
+  }
+  .en .sitemapLink, .en .sitemapLabel, .en #sitemap div.app, .en #sitemap .applabel, .en #sitemap .app table {
+    width: 120px !important;
+    min-width: 120px !important;
+  }
 }
 
 #sitemap .applabel {
@@ -13201,13 +13190,14 @@ table.search {
 
 .sitemapLink, #sitemap div.app {
   margin: 2px 2px 6px;
-  box-shadow: 0 0 0 1px #000, inset 0 0 0 1px #000, inset 0 0 2px 1px #242;
-  background: linear-gradient(to bottom, #010 0%, #000 100%);
+  box-shadow: 0 0 0 1px #000, inset 0 0 0 1px #000, inset 0 0 1px 1px #242;
+  background: linear-gradient(to bottom, #000800, #000);
 }
 
 .sitemapLink:hover, .sitemapLink:hover .sitemapLabel, #sitemap div.app:hover {
   border-color: #f60;
-  box-shadow: inset 0 0 0 1px #000, inset 0 0 2px 1px #f60;
+  box-shadow: inset 0 0 0 1px #000, inset 0 0 1px 1px #f60;
+  background: #000;
 }
 
 .sitemapLink img {
@@ -13238,7 +13228,7 @@ table.search {
   text-shadow: 0 1px 1px #000;
   border: none;
   border-top: 1px solid #252;
-  box-shadow: inset 0 0 0 1px #000, inset 0 0 2px 1px #242;
+  box-shadow: inset 0 0 0 1px #000, inset 0 0 1px 1px #242;
 }
 
 #sitemap div.app {
@@ -13971,15 +13961,15 @@ i {
 }
 
 @keyframes grid-fade {
-from {
-  background: #001000;
-  background: repeating-linear-gradient(to right, rgba(0,0,0,0), #020 1px, rgba(0,0,0,0) 1px, rgba(0,0,0,0) 10px),
-        repeating-linear-gradient(to bottom, #000, #020 1px, #000 1px, #000 10px);
-}
-to {
-  background: #000;
-  background: repeating-linear-gradient(#000 2px, #010 4px);
-}
+  from {
+    background: #001000;
+    background: repeating-linear-gradient(to right, rgba(0,0,0,0), #020 1px, rgba(0,0,0,0) 1px, rgba(0,0,0,0) 10px),
+                repeating-linear-gradient(to bottom, #000, #020 1px, #000 1px, #000 10px);
+  }
+  to {
+    background: #000;
+    background: repeating-linear-gradient(#000 2px, #010 4px);
+  }
 }
 
 .graphContainer > * {
@@ -14353,8 +14343,8 @@ h3 + table {
 }
 
 @keyframes reloader {
-  0%, 100% {width: 0}
-  80%, 99% {width: 120%}
+ 0%,100% {width: 0}
+  80%,99% {width: 120%}
 }
 
 .unbold {
@@ -14454,4 +14444,8 @@ div#minigraph {
 
 @keyframes bar {
   from {width: calc(100%)}
+}
+
+h1, .main h2, h4.app, h4.app2, .main h3 {
+  -webkit-text-stroke: 1px rgba(237, 237, 146,.3);
 }

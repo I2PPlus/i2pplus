@@ -173,7 +173,7 @@ class ExploreJob extends SearchJob {
                     } else {
                         if (_log.shouldInfo())
                             _log.info("[Job " + getJobId() + "] Requesting AEAD reply from " + ident.calculateHash() +
-                                      "\n* Session Key: " + sess.key + "\n* Tag: + " + sess.rtag);
+                                      "\n* Session Key: " + sess.key + "\n* Tag: " + sess.rtag);
                         msg.setReplySession(sess.key, sess.rtag);
                     }
                 } else {
