@@ -14,26 +14,26 @@ body {
   padding: 0;
   text-align: center;
   font-family: Droid Sans, Open Sans, Noto Sans, Ubuntu, Segoe UI, Bitstream Vera Sans, DejaVu Sans, Verdana, Lucida Grande, Helvetica, sans-serif;
-  font-size: 9pt;
-  color: #ee9;
   background: repeating-linear-gradient(to bottom, rgba(0,0,0,.9) 1px, rgba(0,8,0,.5) 2px, rgba(0,8,0,.5) 3px), url(images/camotile2.png) top left scroll #010;
+  color: #ee9;
+  font-size: 9pt;
 }
 
 body.iframed {
+  background: none !important;
   margin: 0;
   padding: 0;
   overflow: hidden;
-  background: none !important;
 }
 
 ::selection {
-  color: black;
   background: #ff0 !important;
+  color: black;
 }
 
 ::-moz-selection {
-  color: black;
   background: #ff0 !important;
+  color: black;
 }
 
 h2, h3, th, .buttons, .newTunnel, .control, label, .infohelp, .infowarn, .nowrap, b, #throttler td {
@@ -126,7 +126,7 @@ br {
   background: url(/themes/console/images/info/tunnelStandby.png);
 }
 
-div[class^=status] {
+div[class^="status"] {
   margin: 0;
   padding: 0;
   width: 100%;
@@ -139,7 +139,7 @@ div[class^=status] {
 }
 
 @media screen and (min-width: 1500px) {
-div[class^=status] {
+div[class^="status"] {
   height: 18px;
   background-size: auto 18px !important;
 }
@@ -503,7 +503,7 @@ td.infohelp {
   width: 20%;
 }
 
-.tunnelLocation font[color=red] {
+.tunnelLocation font[color="red"] {
   margin-left: 3px;
 }
 
@@ -593,7 +593,7 @@ _:-ms-lang(x), textarea#statusMessages, textarea#statusMessages:active, textarea
   opacity: .8;
 }
 
-input[type=hidden], input.default {
+input[type="hidden"], input.default {
   display: none;
 }
 
@@ -622,12 +622,12 @@ input[type=submit]::-moz-focus-inner, input[type=reset]::-moz-focus-inner, butto
   outline: none;
 }
 
-input[type=file] {
+input[type="file"] {
   background: none;
   border: none;
 }
 
-input[type=checkbox], input[type=radio] {
+input[type="checkbox"], input[type="radio"] {
   vertical-align: sub;
   min-width: 16px;
   min-height: 16px;
@@ -636,26 +636,26 @@ input[type=checkbox], input[type=radio] {
   filter: invert(100%) sepia(100%) hue-rotate(70deg) saturate(200%); /* colorize radios and checkboxes */
 }
 
-input[type=checkbox]:hover, input[type=radio]:hover,
-input[type=checkbox]:focus, input[type=radio]:focus  {
+input[type="checkbox"]:hover, input[type="radio"]:hover,
+input[type="checkbox"]:focus, input[type="radio"]:focus  {
   outline: none;
   filter: invert(100%) sepia(100%) hue-rotate(70deg) saturate(200%) drop-shadow(0 0 3px #f60);
 }
 
-input[type=radio][disabled]:hover, input[type=radio][disabled]:focus {
+input[type="radio"][disabled]:hover, input[type="radio"][disabled]:focus {
   box-shadow: none !important;
   filter: invert(100%) sepia(100%) hue-rotate(70deg) saturate(200%) !important;
 }
 
-.editDisabled input[type=radio], .editDisabled label {
+.editDisabled input[type="radio"], .editDisabled label {
   cursor: not-allowed !important;
 }
 
-.editDisabled input[type=radio]:checked {
+.editDisabled input[type="radio"]:checked {
   opacity: 1 !important;
 }
 
-.editDisabled input[type=radio]:not(:checked) {
+.editDisabled input[type="radio"]:not(:checked) {
   opacity: .4;
 }
 
@@ -680,7 +680,7 @@ input[type=password] {
   cursor: text;
 }
 
-input[type=text], input[type=password], textarea, textarea[readonly=readonly]:focus  {
+input[type=text], input[type=password], textarea, textarea[readonly="readonly"]:focus  {
   padding: 6px;
   color: #bb7;
   font-weight: bold;
@@ -690,7 +690,7 @@ input[type=text], input[type=password], textarea, textarea[readonly=readonly]:fo
   filter: none;
 }
 
-textarea[readonly=readonly]:focus {
+textarea[readonly="readonly"]:focus {
   box-shadow: inset 0 0 0 1px #880;
 }
 
@@ -701,7 +701,7 @@ input[type=text]:focus, input[type=password]:focus {
   transition: ease filter .3s 0s;
 }
 
-input[readonly=readonly]:focus {
+input[readonly="readonly"]:focus {
   filter: none;
   background: linear-gradient(to bottom, #000 0%, #010 100%) !important;
 }
@@ -884,7 +884,7 @@ input {
 
 #tunnelDepth, #tunnelVariance, #tunnelQuantity, #tunnelBackupQuantity,
 #tunnelDepthOut, #tunnelVarianceOut, #tunnelQuantityOut, #tunnelBackupQuantityOut,
-#localDestination, #customOptions, #leasesetKey, #name, #description, textarea[name=accessList] {
+#localDestination, #customOptions, #leasesetKey, #name, #description, textarea[name="accessList"] {
   width: 100% !important;
   margin: 0 !important;
   text-align: left !important;
@@ -908,18 +908,18 @@ select#connectionProfile, #targetDestination {
   width: 100% !important;
 }
 
-#localDestination, textarea[name=accessList], #hostField {
+#localDestination, textarea[name="accessList"], #hostField {
   width: calc(100% - 5px) !important;
   width: 100% !important;
   margin: 3px 0 !important;
 }
 
-textarea[name=accessList] {
+textarea[name="accessList"] {
   padding: 4px 8px;
   height: 32px !important;
 }
 
-textarea[name=accessList]:focus {
+textarea[name="accessList"]:focus {
   padding: 4px 8px;
   height: 80px !important;
 }
@@ -1257,7 +1257,7 @@ input.tunnelName, input.tunnelDescription, #userAgents {
   border-top: 1px solid #1c3f1b;
 }
 
-input[type=checkbox], input[type=radio] {
+input[type="checkbox"], input[type="radio"] {
   margin: 5px 3px 5px 5px;
 }
 
@@ -1271,7 +1271,7 @@ input[type=checkbox], input[type=radio] {
 }
 
 #tunnelDepth, #tunnelVariance, #tunnelQuantity, #tunnelBackupQuantity, #tunnelDepthOut, #tunnelVarianceOut, #sigType, .clientKey, .clientName,
-#tunnelQuantityOut, #tunnelBackupQuantityOut, #leasesetKey, #encryptMode, select#profile, input[name=nofilter_blindedPassword] {
+#tunnelQuantityOut, #tunnelBackupQuantityOut, #leasesetKey, #encryptMode, select#profile, input[name="nofilter_blindedPassword"] {
   margin: 5px !important;
   width: calc(100% - 10px) !important;
 }
@@ -1280,12 +1280,12 @@ input[type=checkbox], input[type=radio] {
   margin: 5px !important;
 }
 
-textarea[name=accessList], #hostField, #localDestination, .authentication {
+textarea[name="accessList"], #hostField, #localDestination, .authentication {
   width: calc(100% - 10px) !important;
   margin: 5px !important;
 }
 
-textarea[name=accessList] {
+textarea[name="accessList"] {
   margin-top: 0 !important;
 }
 
@@ -1441,7 +1441,7 @@ input[type=text] + label {
   padding-bottom: 15px !important;
 }
 
-#registration input[type=file] {
+#registration input[type="file"] {
   margin-top: 5px;
   margin-bottom: 5px;
 }
@@ -1502,8 +1502,8 @@ th .help::after {
 /* custom radios/checkboxes to enforce color scheme when OS widgets are non-standard  */
 /*@media screen and (-webkit-min-device-pixel-ratio: 0) and (min-resolution:.001dpcm) {*/
 @supports (background-blend-mode: luminosity) { /* exclude ms browsers */
-input[type=checkbox], input[type=checkbox]:checked, input[type=checkbox][disabled], input[type=checkbox][disabled]:checked,
-input[type=radio], input[type=radio]:checked, input[type=radio][disabled], input[type=radio][disabled]:checked {
+input[type="checkbox"], input[type="checkbox"]:checked, input[type="checkbox"][disabled], input[type="checkbox"][disabled]:checked,
+input[type="radio"], input[type="radio"]:checked, input[type="radio"][disabled], input[type="radio"][disabled]:checked {
   position: relative;
   width: 19px !important;
   height: 19px !important;
@@ -1519,18 +1519,18 @@ input[type=radio], input[type=radio]:checked, input[type=radio][disabled], input
   will-change: transform;
 }
 
-input[type=checkbox], input[type=checkbox]:checked, input[type=checkbox][disabled], input[type=checkbox][disabled]:checked {
+input[type="checkbox"], input[type="checkbox"]:checked, input[type="checkbox"][disabled], input[type="checkbox"][disabled]:checked {
   border-radius: 2px;
   box-shadow: inset 3px 3px 3px 1px #000;
 }
 
-input[type=radio], input[type=radio]:checked, input[type=radio][disabled], input[type=radio][disabled]:checked {
+input[type="radio"], input[type="radio"]:checked, input[type="radio"][disabled], input[type="radio"][disabled]:checked {
   border-radius: 50%;
   box-shadow: inset 3px 3px 3px 1px #000;
 }
 
-input[type=checkbox]:checked::before, input[type=radio]:checked::before,
-input[type=checkbox]:not(:checked)::before, input[type=radio]:not(:checked)::before {
+input[type="checkbox"]:checked::before, input[type="radio"]:checked::before,
+input[type="checkbox"]:not(:checked)::before, input[type="radio"]:not(:checked)::before {
   position: absolute;
   transition: linear all .05s;
   transform: scale(1);
@@ -1544,7 +1544,7 @@ input[type=checkbox]:not(:checked)::before, input[type=radio]:not(:checked)::bef
   background: #000 !important;
 }
 
-input[type=checkbox]:checked::before, input[type=checkbox]:not(:checked)::before {
+input[type="checkbox"]:checked::before, input[type="checkbox"]:not(:checked)::before {
   content: "";
   top: 3px;
   left: 3px;
@@ -1555,7 +1555,7 @@ input[type=checkbox]:checked::before, input[type=checkbox]:not(:checked)::before
   background: #5a5;
 }
 
-input[type=radio]:checked::before {
+input[type="radio"]:checked::before {
   content: "";
   border-radius: 50%;
   left: 25%;
@@ -1565,21 +1565,21 @@ input[type=radio]:checked::before {
   background: #5a5;
 }
 
-input[type=checkbox]:checked:hover::before {
+input[type="checkbox"]:checked:hover::before {
   color: #6b6;
 }
 
-input[type=radio]:checked:hover::before {
+input[type="radio"]:checked:hover::before {
   background: #6b6;
 }
 
-input[type=checkbox]:not(:checked)::before, input[type=radio]:not(:checked)::before {
+input[type="checkbox"]:not(:checked)::before, input[type="radio"]:not(:checked)::before {
   transform: scale(0);
   color: transparent;
   background: transparent;
 }
 
-input[type=checkbox]:hover, input[type=radio]:hover, input[type=checkbox]:focus, input[type=radio]:focus {
+input[type="checkbox"]:hover, input[type="radio"]:hover, input[type="checkbox"]:focus, input[type="radio"]:focus {
   background: #000;
   width: 19px !important;
   height: 19px !important;
@@ -1588,8 +1588,8 @@ input[type=checkbox]:hover, input[type=radio]:hover, input[type=checkbox]:focus,
   filter: drop-shadow(0 0 1px #f60) !important;
 }
 
-input[type=checkbox][disabled], input[type=radio][disabled], input[type=checkbox][disabled]:hover, input[type=radio][disabled]:hover,
-input[type=checkbox][disabled]:checked, input[type=radio][disabled]:checked, input[type=checkbox][disabled]:checked:hover, input[type=radio][disabled]:checked:hover {
+input[type="checkbox"][disabled], input[type="radio"][disabled], input[type="checkbox"][disabled]:hover, input[type="radio"][disabled]:hover,
+input[type="checkbox"][disabled]:checked, input[type="radio"][disabled]:checked, input[type="checkbox"][disabled]:checked:hover, input[type="radio"][disabled]:checked:hover {
   border: 1px solid #494 !important;
   box-shadow: none !important;
   opacity: .5 !important;
@@ -1801,3 +1801,11 @@ th span {
 }
 
 /* end server tunnel options */
+
+h2, h3 {
+  -webkit-text-stroke: 1px rgba(237,237,146,.3);
+}
+
+h2 a, h3 a {
+  -webkit-text-stroke: 0 !important;
+}

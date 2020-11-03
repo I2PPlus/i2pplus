@@ -6,16 +6,16 @@
 body, html {
   min-height: 100%;
   background: #000;
-  background: repeating-linear-gradient(to bottom, rgba(0,0,0,.3), rgba(0,16,0,.5) 1px, rgba(0,16,0,.5) 2px), url(/themes/console/dark/images/camotile2.png) top left fixed #010;
+  background: repeating-linear-gradient(to bottom, rgba(0,0,0,0.3), rgba(0,16,0,0.5) 1px, rgba(0,16,0,0.5) 2px), url(/themes/console/dark/images/camotile2.png) top left fixed #010;
   background: repeating-linear-gradient(to right, rgba(0,80,0,.1) 1px, rgba(0,16,0,.3) 2px, rgba(0,16,0,.3) 3px), linear-gradient(to bottom, rgba(0,0,0,.5), rgba(0,0,0,.5)), repeating-linear-gradient(to bottom, rgba(0,0,0,.6) 1px, rgba(0,32,0,.3) 2px, rgba(0,32,0,.3) 3px), url(/themes/console/dark/images/camotile.png) #010 !important;
 }
 
 html {
-  scrollbar-color: rgba(8,48,8,.8) #000800;
+  scrollbar-color: rgba(8,48,8,0.8) #000800;
 }
 
 html:hover {
-  scrollbar-color: rgba(16,72,16,.8) #000800;
+  scrollbar-color: rgba(16,72,16,0.8) #000800;
   transition: ease scrollbar-color .1s;
 }
 
@@ -41,7 +41,7 @@ body.iframed {
 }
 
 ::selection {
-  background: rgba(0,187,0,.99) !important;
+  background: rgba(0,187,0,0.99) !important;
   color: #000;
   text-shadow: none;
 }
@@ -53,11 +53,11 @@ body.iframed {
 }
 
 .destaddress, textarea {
-  scrollbar-color: rgba(16,48,16,.4) rgba(0,0,0,0);
+  scrollbar-color: rgba(16,48,16,0.4) rgba(0,0,0,0);
 }
 
 .destaddress:hover, textarea:hover {
-  scrollbar-color: rgba(24,80,24,.9) rgba(0,0,0,.9);
+  scrollbar-color: rgba(24,80,24,0.9) rgba(0,0,0,.9);
 }
 
 #navi, .buttons, #buttons, #host_list tr:first-child, #host_list img, #host_list td:nth-child(n+2) a {
@@ -92,7 +92,7 @@ body.iframed {
   text-align: center;
   border: 1px solid #252;
   border-radius: 0 1px 2px 2px;
-  box-shadow: inset 0 0 0 1px #000, 0 2px 2px 2px rgba(0,0,0,.7);
+  box-shadow: inset 0 0 0 1px #000, 0 2px 2px 2px rgba(0,0,0,0.7);
   background: #000 url(/themes/console/dark/images/header.png) repeat-x scroll center center !important;
   background: repeating-linear-gradient(135deg, #000 1px, #000 2px, #010 2px, #010 4px), repeating-linear-gradient(45deg, #000 1px, #000 2px, #010 2px, #010 4px), linear-gradient(to bottom, #1a261a 0%, #223022 7%, #212f21 9%, #172317 21%, #091109 49%, #050d05 50%, #020602 51%, #010301 53%, #000000 56%, #000000 100%), url(/themes/console/dark/images/camotile2.png) top left !important;
   background-blend-mode: exclusion, exclusion, normal, normal;
@@ -262,7 +262,7 @@ hr {
   margin: 8px 0 -8px;
   padding: 0 10px;
   line-height: 210%;
-  word-spacing: .1em;
+  word-spacing: 0.1em;
   font-weight: bold;
   text-align: center;
   text-transform: capitalize;
@@ -306,8 +306,8 @@ span.addrhlpr {
 
 h3 {
   padding: 7px 10px;
-  letter-spacing: .18em;
-  word-spacing: .1em;
+  letter-spacing: 0.18em;
+  word-spacing: 0.1em;
   font-size: 10pt;
   font-weight: bold;
   text-transform: uppercase;
@@ -317,7 +317,7 @@ h3 {
   box-shadow: inset 0 0 0 1px #000;
   background: #000 url(/themes/console/dark/images/header.png) repeat-x scroll center center;
   background: linear-gradient(to bottom, rgba(0,0,0,0) 50%, #000 50%),
-              repeating-linear-gradient(to right, rgba(0,0,0,.5) 1px, rgba(0,16,0,.5) 2px, rgba(0,16,0,.5) 3px),
+              repeating-linear-gradient(to right, rgba(0,0,0,0.5) 1px, rgba(0,16,0,0.5) 2px, rgba(0,16,0,0.5) 3px),
               linear-gradient(to bottom, #004000, #000 75%);
   -webkit-text-stroke: 1px rgba(237, 237, 146,.3);
 }
@@ -352,12 +352,12 @@ h3 {
 
 #content h3 {
   padding-left: 34px;
-  letter-spacing: .12em;
-  word-spacing: .1em;
+  letter-spacing: 0.12em;
+  word-spacing: 0.1em;
   border: 1px solid #242;
   background: url(/themes/console/images/info/question.png) 8px center no-repeat #000;
   background: url(/themes/console/images/info/question.png) 8px center no-repeat, linear-gradient(to bottom, rgba(0,0,0,0) 50%, #000 50%),
-              repeating-linear-gradient(to right, rgba(0,0,0,.5) 1px, rgba(0,16,0,.5) 2px, rgba(0,16,0,.5) 3px),
+              repeating-linear-gradient(to right, rgba(0,0,0,0.5) 1px, rgba(0,16,0,0.5) 2px, rgba(0,16,0,0.5) 3px),
               linear-gradient(to bottom, #004000, #000 75%);
   background-size: 18px 18px, 100% 100%;
 }
@@ -457,7 +457,7 @@ h4 {
   margin-top: -15px;
   margin-bottom: 30px !important;
   padding: 8px 10px 8px 35px;
-  word-spacing: .1em;
+  word-spacing: 0.1em;
   font-size: 9pt;
   border: 1px solid #242;
   box-shadow: inset 0 0 0 1px #000, inset 0 0 2px 1px #030 !important;
@@ -506,7 +506,7 @@ td.checkbox {
   width: 1% !important;
 }
 
-input[type=checkbox], input[type=radio] {
+input[type="checkbox"], input[type="radio"] {
   min-width: 16px;
   min-height: 16px;
   background: none;
@@ -545,7 +545,7 @@ input[type=checkbox], input[type=radio] {
   text-align: left;
 }
 
-#visualid td[colspan=2] {
+#visualid td[colspan="2"] {
   padding: 15px 3px;
   border-top: 1px solid #242;
 }
@@ -554,13 +554,13 @@ input[type=checkbox], input[type=radio] {
   background: #000;
 }
 
-form[action=addressbook] > p.buttons {
+form[action="addressbook"] > p.buttons {
   margin: -13px -3px 0;
   padding: 8px 5px;
   border: 1px solid #242;
 }
 
-td > img[width=320], td > img[src^=/imagegen] {
+td > img[width="320"], td > img[src^="/imagegen"] {
   border-radius: 4px;
   width: 240px;
   height: 240px;
@@ -570,7 +570,7 @@ td > img[width=320], td > img[src^=/imagegen] {
   background: #000;
 }
 
-img[src=/imagegen/id?s=256&c=], img[src=/imagegen/id?s=20&c=] {
+img[src="/imagegen/id?s=256&c="], img[src="/imagegen/id?s=20&c="] {
   opacity: 0; /* hide broken identicons but ensure hostlist remains intact */
 }
 
@@ -639,11 +639,7 @@ li {
 
 #helpconfig ul {
   display: block;
-  -moz-columns: 2 500px;
-  -webkit-columns: 2 500px;
   columns: 2 500px;
-  -moz-column-gap: 40px;
-  -webkit-column-gap: 40px;
   column-gap: 40px;
   margin: 0 0 -5px -40px;
 }
@@ -687,7 +683,7 @@ div#book + div#buttons {
   background: #000;
 }
 
-form[action=export] > div#buttons {
+form[action="export"] > div#buttons {
   margin-top: 15px;
   padding: 0 0 10px;
   border: 1px solid #242;
@@ -700,17 +696,17 @@ div#config > textarea, div#content > textarea {
   border-radius: 0;
 }
 
-textarea[name=config] {
+textarea[name="config"] {
   height: 250px;
   overflow-y: scroll;
   resize: none;
 }
 
-textarea[name=log] {
+textarea[name="log"] {
   height: calc(100% - 105px);
 }
 
-.iframed textarea[name=log] {
+.iframed textarea[name="log"] {
   height: 400px;
   height: auto;
 }
@@ -739,7 +735,7 @@ div#content + div#buttons {
   border: 1px solid #242;
   box-shadow: inset 0 0 0 1px #000, inset 0 0 2px 1px #242;
   background: #000;
-  opacity: .8;
+  opacity: 0.8;
 }
 
 .illustrate:hover {
@@ -865,7 +861,7 @@ div#book, #emptybook {
 
 #book tr.head {
   background: url(/themes/console/dark/images/header.png) repeat-x scroll center center #000;
-  background: linear-gradient(to bottom, rgba(0,0,0,0) 50%, #000 50%), repeating-linear-gradient(to right, rgba(0,0,0,.5) 1px, rgba(0,16,0,.5) 2px, rgba(0,16,0,.5) 3px), linear-gradient(to bottom, #002000, #000 75%) !important;
+  background: linear-gradient(to bottom, rgba(0,0,0,0) 50%, #000 50%), repeating-linear-gradient(to right, rgba(0,0,0,0.5) 1px, rgba(0,16,0,0.5) 2px, rgba(0,16,0,0.5) 3px), linear-gradient(to bottom, #002000, #000 75%) !important;
 }
 
 #book table th {
@@ -898,7 +894,7 @@ div#book, #emptybook {
   color: #ee9;
 }
 
-#book input[type=checkbox] {
+#book input[type="checkbox"] {
   margin: 0;
 }
 
@@ -922,8 +918,8 @@ div#add, div#import {
   padding: 6px 3px;
   width: 100%;
   border-collapse: separate;
-  border-top: 1px solid rgba(0,48,0,.5);
-  border-bottom: 1px solid rgba(0,48,0,.5);
+  border-top: 1px solid rgba(0,48,0,0.5);
+  border-bottom: 1px solid rgba(0,48,0,0.5);
   border-spacing: 0;
 }
 
@@ -949,11 +945,11 @@ div#add, div#import {
   margin-top: 18px !important;
 }
 
-#add input[type=text], #import input[type=file] {
+#add input[type=text], #import input[type="file"] {
   width: calc(100% - 2px);
 }
 
-#import input[type=file] {
+#import input[type="file"] {
   border: none;
   background: none;
 }
@@ -991,7 +987,7 @@ input {
   background: none;
 }
 
-input[type=file] {
+input[type="file"] {
   cursor: pointer;
 }
 
@@ -1032,14 +1028,14 @@ input[type=submit]:focus, input[type=reset]:focus,
 .fakebutton:hover, #fakebutton:focus {
   color: #f60;
   border: 1px solid #f60;
-  box-shadow: inset 0 0 0 1px #000, inset 0 0 2px 1px rgba(255,86,0,.8), inset 0 0 0 3px #000 !important;
+  box-shadow: inset 0 0 0 1px #000, inset 0 0 2px 1px rgba(255,86,0,0.8), inset 0 0 0 3px #000 !important;
   background: #000;
 }
 
 input[type=file]:hover::file-selector-button, input[type=file]:focus::file-selector-button {
   color: #f60;
   border: 1px solid #f60;
-  box-shadow: inset 0 0 0 1px #000, inset 0 0 2px 1px rgba(255,86,0,.8), inset 0 0 0 3px #000 !important;
+  box-shadow: inset 0 0 0 1px #000, inset 0 0 2px 1px rgba(255,86,0,0.8), inset 0 0 0 3px #000 !important;
   background: #000;
 }
 
@@ -1098,7 +1094,7 @@ textarea {
   border-radius: 2px;
 }
 
-textarea[cols=70] {
+textarea[cols="70"] {
   width: 100% !important;
   height: 40px;
 }
@@ -1108,17 +1104,17 @@ input:focus, #add textarea:focus {
   outline: none;
   background: #000 !important;
   filter: drop-shadow(0 0 1px #880);
-  transition: ease filter .3s;
+  transition: ease filter 0.3s;
 }
 
 textarea:focus {
-  filter: none;
   box-shadow: inset 0 0 1px #880;
+  filter: none;
 }
 
 #booksearch input[name=search] {
-  padding: 6px 8px 6px 32px !important;
   min-width: 280px !important;
+  padding: 6px 8px 6px 32px !important;
   background: url(/themes/console/images/buttons/search.png) 9px center no-repeat, linear-gradient(to bottom, #000 0%, #010 100%) !important;
 }
 
@@ -1128,8 +1124,8 @@ textarea:focus {
 
 @media screen and (min-width: 1500px) {
   #booksearch input[name=search], #booksearch input[name=search]:focus {
-    padding: 7px 8px 7px 32px !important;
     min-width: 320px !important;
+    padding: 7px 8px 7px 32px !important;
   }
 }
 
@@ -1141,7 +1137,7 @@ textarea:focus {
   font-size: 11.5pt;
   background: url(images/addressbook.svg) 9px center no-repeat,
               linear-gradient(to bottom, rgba(0,0,0,0) 50%, #000 50%),
-              repeating-linear-gradient(to right, rgba(0,0,0,.5) 1px, rgba(0,16,0,.5) 2px, rgba(0,16,0,.5) 3px),
+              repeating-linear-gradient(to right, rgba(0,0,0,0.5) 1px, rgba(0,16,0,0.5) 2px, rgba(0,16,0,0.5) 3px),
               linear-gradient(to bottom, #004000, #000 75%);
   background-size: 20px 20px, 100% 100%, 100% 100%, 100% 100%;
 }
@@ -1152,13 +1148,13 @@ textarea:focus {
 
 .headline#subscriptions h3 {
   background: url(/themes/susidns/images/subs_24.png) 7px 40% no-repeat, linear-gradient(to bottom, rgba(0,0,0,0) 50%, #000 50%),
-              repeating-linear-gradient(to right, rgba(0,0,0,.5) 1px, rgba(0,16,0,.5) 2px, rgba(0,16,0,.5) 3px),
+              repeating-linear-gradient(to right, rgba(0,0,0,0.5) 1px, rgba(0,16,0,0.5) 2px, rgba(0,16,0,0.5) 3px),
               linear-gradient(to bottom, #004000, #000 75%);
 }
 
 .headline#configure h3 {
   background: url(images/configure.svg) 9px center no-repeat,
-              linear-gradient(to bottom, rgba(0,0,0,0) 50%, #000 50%), repeating-linear-gradient(to right, rgba(0,0,0,.5) 1px, rgba(0,16,0,.5) 2px, rgba(0,16,0,.5) 3px),
+              linear-gradient(to bottom, rgba(0,0,0,0) 50%, #000 50%), repeating-linear-gradient(to right, rgba(0,0,0,0.5) 1px, rgba(0,16,0,0.5) 2px, rgba(0,16,0,0.5) 3px),
               linear-gradient(to bottom, #004000, #000 75%);
   background-size: 20px 20px, 100% 100%, 100% 100% !important;
 }
@@ -1194,7 +1190,7 @@ p.book {
 
 /* hide export button on published addressbook if empty */
 
-#messages + form[action=export] {
+#messages + form[action="export"] {
   display: none;
 }
 
@@ -1265,7 +1261,7 @@ p.book {
 
 .names a:active img, .names a:focus img {
   transform: rotate(45deg) scale(0.8);
-  transition: ease border .1s;
+  transition: ease border 0.1s;
 }
 
 /* hostname list */
@@ -1444,7 +1440,7 @@ _:-ms-lang(x), * {
   #navi a#subs, #navi a#subs:hover, #navi a#subs:focus, #navi a#subs:active,
   #navi a#config, #navi a#config:hover, #navi a#config:focus, #navi a#config:active {
     padding: 6px 10px 6px 29px !important;
-    letter-spacing: .1em;
+    letter-spacing: 0.1em;
     font-size: 10pt !important;
     background-position: 10px center !important;
   }
@@ -1462,11 +1458,11 @@ _:-ms-lang(x), * {
     background: linear-gradient(to right, #000, #001000 10%, #001000 90%, #000);
   }
 
-  form[action=addressbook] > p.buttons {
+  form[action="addressbook"] > p.buttons {
     margin-bottom: -20px;
   }
 
-  textarea[name=config] {
+  textarea[name="config"] {
     height: 280px;
   }
 }
@@ -1504,8 +1500,8 @@ _:-ms-lang(x), * {
 
 /* custom radios/checkboxes to enforce color scheme when OS widgets are non-standard  */
 @supports (background-blend-mode: luminosity) { /* exclude ms browsers */
-  input[type=checkbox], input[type=checkbox]:checked, input[type=checkbox][disabled], input[type=checkbox][disabled]:checked,
-  input[type=radio], input[type=radio]:checked, input[type=radio][disabled], input[type=radio][disabled]:checked {
+  input[type="checkbox"], input[type="checkbox"]:checked, input[type="checkbox"][disabled], input[type="checkbox"][disabled]:checked,
+  input[type="radio"], input[type="radio"]:checked, input[type="radio"][disabled], input[type="radio"][disabled]:checked {
     margin: 2px;
     position: relative;
     width: 19px !important;
@@ -1522,20 +1518,20 @@ _:-ms-lang(x), * {
     will-change: transform;
   }
 
-  input[type=checkbox], input[type=checkbox]:checked, input[type=checkbox][disabled], input[type=checkbox][disabled]:checked {
+  input[type="checkbox"], input[type="checkbox"]:checked, input[type="checkbox"][disabled], input[type="checkbox"][disabled]:checked {
     border-radius: 1px;
     box-shadow: inset 3px 3px 3px 1px #000;
   }
 
-  input[type=radio], input[type=radio]:checked, input[type=radio][disabled], input[type=radio][disabled]:checked {
+  input[type="radio"], input[type="radio"]:checked, input[type="radio"][disabled], input[type="radio"][disabled]:checked {
     border-radius: 50%;
     box-shadow: inset 3px 3px 3px 1px #000;
   }
 
-  input[type=checkbox]:checked::before, input[type=radio]:checked::before,
-  input[type=checkbox]:not(:checked)::before, input[type=radio]:not(:checked)::before {
+  input[type="checkbox"]:checked::before, input[type="radio"]:checked::before,
+  input[type="checkbox"]:not(:checked)::before, input[type="radio"]:not(:checked)::before {
     position: absolute;
-    transition: linear all .05s;
+    transition: linear all 0.05s;
     transform: scale(1);
   }
 
@@ -1547,7 +1543,7 @@ _:-ms-lang(x), * {
     background: #000 !important;
   }
 
-  input[type=checkbox]:checked::before, input[type=checkbox]:not(:checked)::before {
+  input[type="checkbox"]:checked::before, input[type="checkbox"]:not(:checked)::before {
     content: "";
     top: 3px;
     left: 3px;
@@ -1562,7 +1558,7 @@ _:-ms-lang(x), * {
     background: #5a5;
   }
 
-  input[type=radio]:checked::before {
+  input[type="radio"]:checked::before {
     content: "";
     border-radius: 50%;
     left: 25%;
@@ -1572,21 +1568,21 @@ _:-ms-lang(x), * {
     background: #5a5;
   }
 
-  input[type=checkbox]:checked:hover::before {
+  input[type="checkbox"]:checked:hover::before {
     color: #6b6;
   }
 
-  input[type=radio]:checked:hover::before {
+  input[type="radio"]:checked:hover::before {
     background: #6b6;
   }
 
-  input[type=checkbox]:not(:checked)::before, input[type=radio]:not(:checked)::before {
+  input[type="checkbox"]:not(:checked)::before, input[type="radio"]:not(:checked)::before {
     transform: scale(0);
     color: transparent;
     background: transparent;
   }
 
-  input[type=checkbox]:hover, input[type=radio]:hover, input[type=checkbox]:focus, input[type=radio]:focus {
+  input[type="checkbox"]:hover, input[type="radio"]:hover, input[type="checkbox"]:focus, input[type="radio"]:focus {
     background: #000;
     width: 19px !important;
     height: 19px !important;
@@ -1595,13 +1591,13 @@ _:-ms-lang(x), * {
     filter: drop-shadow(0 0 1px #f60) !important;
   }
 
-  input[type=checkbox][disabled], input[type=radio][disabled],
-  input[type=checkbox][disabled]:hover, input[type=radio][disabled]:hover,
-  input[type=checkbox][disabled]:checked, input[type=radio][disabled]:checked,
-  input[type=checkbox][disabled]:checked:hover, input[type=radio][disabled]:checked:hover {
+  input[type="checkbox"][disabled], input[type="radio"][disabled],
+  input[type="checkbox"][disabled]:hover, input[type="radio"][disabled]:hover,
+  input[type="checkbox"][disabled]:checked, input[type="radio"][disabled]:checked,
+  input[type="checkbox"][disabled]:checked:hover, input[type="radio"][disabled]:checked:hover {
     border: 1px solid #252 !important;
     box-shadow: none !important;
-    opacity: .5 !important;
+    opacity: 0.5 !important;
     background: #000;
     filter: none !important;
   }
@@ -1649,7 +1645,7 @@ _:-ms-lang(x), * {
 #hostNotes textarea:hover, #hostNotes textarea:focus {
   border-right: none;
   border-left: none;;
-  box-shadow: inset 0 0 0 1px rgba(255,96,0,.5);
+  box-shadow: inset 0 0 0 1px rgba(255,96,0,0.5);
   background: #000 !important;
 }
 
@@ -1663,7 +1659,7 @@ _:-ms-lang(x), * {
 
 p#filtered {
   box-shadow: inset 0 0 0 1px #000, inset 0 0 2px 1px #030 !important;
-  background: repeating-linear-gradient(to bottom, rgba(0,0,0,.8), rgba(0,16,0,.6) 1px, rgba(0,16,0,.6) 2px), url(/themes/console/dark/images/camotile2.png) !important;
+  background: repeating-linear-gradient(to bottom, rgba(0,0,0,0.8), rgba(0,16,0,0.6) 1px, rgba(0,16,0,0.6) 2px), url(/themes/console/dark/images/camotile2.png) !important;
 }
 
 p#filtered, #export {
@@ -1680,7 +1676,7 @@ p#filtered, #export {
   border-bottom: 1px solid #242;
   box-shadow: none !important;
   background: #010;
-  background: repeating-linear-gradient(to bottom, rgba(0,0,0,.8), rgba(0,16,0,.5) 1px, rgba(0,16,0,.5) 2px), url(/themes/console/dark/images/camotile2.png) !important;
+  background: repeating-linear-gradient(to bottom, rgba(0,0,0,0.8), rgba(0,16,0,.5) 1px, rgba(0,16,0,.5) 2px), url(/themes/console/dark/images/camotile2.png) !important;
 }
 
 #visualid tr:last-child td {
@@ -1688,14 +1684,14 @@ p#filtered, #export {
   border: none;
 }
 
-form[action=addressbook] > p.buttons, #filter, #search, #visualid tr:last-child td, #buttons, #add p.buttons {
+form[action="addressbook"] > p.buttons, #filter, #search, #visualid tr:last-child td, #buttons, #add p.buttons {
   box-shadow: inset 0 0 0 1px #000, inset 0 0 2px 1px #030 !important;
   background: repeating-linear-gradient(to right, rgba(0,0,0,.5) 1px, rgba(0,0,0,.5) 2px, rgba(0,16,0,.5) 3px), linear-gradient(to bottom, #020, #000 75%) !important;
 }
 
 #add {
   box-shadow: inset 0 0 0 1px #000, inset 0 0 2px 1px #030 !important;
-  background: repeating-linear-gradient(to bottom, rgba(0,0,0,.8), rgba(0,16,0,.5) 1px, rgba(0,16,0,.5) 2px), url(/themes/console/dark/images/camotile2.png) !important;
+  background: repeating-linear-gradient(to bottom, rgba(0,0,0,0.8), rgba(0,16,0,.5) 1px, rgba(0,16,0,.5) 2px), url(/themes/console/dark/images/camotile2.png) !important;
 }
 
 #add p.buttons {
@@ -1724,11 +1720,11 @@ form[action=addressbook] > p.buttons, #filter, #search, #visualid tr:last-child 
   margin: 0 !important;
 }
 
-#messages + form[action=export] {
+#messages + form[action="export"] {
   display: inline-block;
 }
 
-#importexport form, form[action=export] {
+#importexport form, form[action="export"] {
   display: inline-block;
 }
 
@@ -1755,7 +1751,7 @@ form[action=addressbook] > p.buttons, #filter, #search, #visualid tr:last-child 
   background-size: 16px 16px !important;
 }
 
-form[action=export]::after {
+form[action="export"]::after {
   margin-bottom: -2px;
   width: 0;
   height: 20px;
@@ -1888,7 +1884,7 @@ form[action=export]::after {
   right: -10px;
 }
 
-form[action=export]::after {
+form[action="export"]::after {
   height: 19px;
 }
 

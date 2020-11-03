@@ -70,7 +70,7 @@ body {
   transition: ease scrollbar-color .2s;
 }
 
-.routersummary img[src$=i2plogo.png], .routersummary h3, .confignav, *::before, *::after, h1, h2, h3, #sb_internals, #sb_services, #sb_advanced,
+.routersummary img[src$="i2plogo.png"], .routersummary h3, .confignav, *::before, *::after, h1, h2, h3, #sb_internals, #sb_services, #sb_advanced,
 div.app, .sitemaplink, #sitemapcontainer {
   -ms-user-select: none;
   -moz-user-select: none;
@@ -117,7 +117,7 @@ img {
   font-size: 0;
 }
 
-#tunnels img[src^=/flags.jsp?], #profiles img[src^=/flags.jsp?], #peers img[src^=/flags.jsp?] {
+#tunnels img[src^="/flags.jsp?"], #profiles img[src^="/flags.jsp?"], #peers img[src^="/flags.jsp?"] {
   width: 16px !important;
   height: 12px !important;
 }
@@ -144,7 +144,7 @@ img {
   display: inline-block;
 }
 
-.netdb_header img[src^=/flags] {
+.netdb_header img[src^="/flags"] {
   margin-top: 1px;
   width: 30px !important;
   height: auto !important;
@@ -449,7 +449,7 @@ pre {
   background: linear-gradient(to bottom, rgba(0,0,0,.5), rgba(0,0,0,.6)), repeating-linear-gradient(to bottom, rgba(0,0,0,.5) 1px, rgba(0,16,0,.3) 2px, rgba(0,16,0,.3) 3px), url(images/camotile.png) #010;
 }
 
-.routersummary img[src$=i2plogo.png] {
+.routersummary img[src$="i2plogo.png"] {
   margin-top: -3px;
   margin-left: -6px;
   width: 206px;
@@ -458,13 +458,13 @@ pre {
   transition: ease filter 0.15s, ease opacity 0.15s;
 }
 
-.routersummary img[src$=i2plogo.png]:hover {
+.routersummary img[src$="i2plogo.png"]:hover {
   opacity: 1;
   transition: ease filter 0.15s, ease opacity 0.15s;
   filter: saturate(200%);
 }
 
-.routersummary a[href=/], .routersummary a[href=/console] {
+.routersummary a[href="/"], .routersummary a[href="/console"] {
   outline: none !important;
 }
 
@@ -687,7 +687,7 @@ pre {
   background-image: url(/themes/console/images/local_up.png) !important;
 }
 
-#sb_localtunnels td[colspan=3] {
+#sb_localtunnels td[colspan="3"] {
   line-height: 20px;
   font-size: 0 !important;
 }
@@ -1019,19 +1019,19 @@ div.refresh {
 
 /* console error messages */
 
-img[src=/themes/console/images/i2plogo.png] {
+img[src="/themes/console/images/i2plogo.png"] {
   margin-top: 2px !important;
   margin-left: -1px !important;
   width: 180px !important;
   filter: invert(1) sepia(100%) hue-rotate(70deg) !important;
 }
 
-img[src=/themes/console/images/i2plogo.png]:hover,
-img[src=/themes/console/images/i2plogo.png]:focus {
+img[src="/themes/console/images/i2plogo.png"]:hover,
+img[src="/themes/console/images/i2plogo.png"]:focus {
   filter: invert(1) sepia(100%) hue-rotate(70deg) drop-shadow(0 0 2px #930) !important;
 }
 
-a:active img[src=/themes/console/images/i2plogo.png] {
+a:active img[src="/themes/console/images/i2plogo.png"] {
   filter: invert(1) sepia(100%) hue-rotate(70deg) drop-shadow(0 0 3px #f60) !important;
 }
 
@@ -1727,7 +1727,7 @@ h3#graphdisplay a {
   font-size: 9pt;
 }
 
-form[action=updategraphs] {
+form[action="updategraphs"] {
   margin: -11px 0 -5px;
   margin: -11px -11px -18px;
   border: 1px solid #252;
@@ -2056,7 +2056,7 @@ code {
   margin-top: 0 !important;
 }
 
-div[lang=pt] .twocol, div[lang=es] .twocol, div[lang=sv] .twocol {
+div[lang="pt"] .twocol, div[lang="es"] .twocol, div[lang="sv"] .twocol {
   margin: 10px -5px 5px !important;
   padding: 10px;
   border: 1px solid #000;
@@ -2064,11 +2064,11 @@ div[lang=pt] .twocol, div[lang=es] .twocol, div[lang=sv] .twocol {
   background: rgba(0,32,0,0.3);
 }
 
-div[lang=es] li, div[lang=pt] li, div[lang=sv] li {
+div[lang="es"] li, div[lang="pt"] li, div[lang="sv"] li {
   list-style: none;
 }
 
-div[lang=sv] li::first-letter {
+div[lang="sv"] li::first-letter {
   text-transform: uppercase !important;
 }
 
@@ -2203,7 +2203,7 @@ h4 {
   font-size: 11pt;
 }
 
-h1, h2, h3:not([id*=help]), h4.app, h4.app2 {
+h1, h2, h3:not([id*="help"]), h4.app, h4.app2 {
   background: linear-gradient(to bottom, #1a261a, #223022 7%, #212f21 9%, #172317 21%, #091109 49%, #050d05 50%, #020602 51%, #010301 53%, #000000 56%) !important;
   background: linear-gradient(to bottom, rgba(0,0,0,0) 50%, #000 50%), repeating-linear-gradient(to right, rgba(0,0,0,0.5) 1px, rgba(0,0,0,0.5) 2px, rgba(0,16,0,0.5) 3px), linear-gradient(to bottom, #005000, #000 75%) !important;
 }
@@ -2312,7 +2312,15 @@ input[type=file]::file-selector-button {
   filter: drop-shadow(0 0 1px #000);
 }
 
-button:hover, button:focus, input[type=file]:hover::file-selector-button, input[type=file]:focus::file-selector-button {
+button:hover, button:focus {
+  color: #f60;
+  border: 1px solid #f60;
+  box-shadow: inset 0 0 0 1px #000, inset 0 0 2px 1px rgba(255,86,0,0.8), inset 0 0 0 3px #000;
+  background: #000;
+  cursor: pointer;
+}
+
+input[type=file]:hover::file-selector-button, input[type=file]:focus::file-selector-button {
   color: #f60;
   border: 1px solid #f60;
   box-shadow: inset 0 0 0 1px #000, inset 0 0 2px 1px rgba(255,86,0,0.8), inset 0 0 0 3px #000;
@@ -2328,7 +2336,14 @@ button:active a {
   color: #ee9;
 }
 
-button:active, input[type=file]:active::file-selector-button {
+button:active {
+  color: #ee9;
+  border: 1px solid #f60;
+  box-shadow: inset 0 0 0 1px #000;
+  background: #f60;
+}
+
+input[type=file]:active::file-selector-button {
   color: #ee9;
   border: 1px solid #f60;
   box-shadow: inset 0 0 0 1px #000;
@@ -2488,7 +2503,7 @@ button.download.control:active {
   transform: scale(1);
 }
 
-img[src*=bound]:not(.statimage), img[src*=bound]:not(.statimage):hover {
+img[src*="bound"]:not(.statimage), img[src*="bound"]:not(.statimage):hover {
   filter: sepia(100%) hue-rotate(70deg) !important;
 }
 
@@ -2509,7 +2524,7 @@ hr:last-child {
   margin: 10px 0;
 }
 
-.wideload > a[href^=tunnels] ~ hr, .wideload > a[href^=/susidns/] ~ hr { /* tighten up /netdb (leasesets) hr */
+.wideload > a[href^="tunnels"] ~ hr, .wideload > a[href^="/susidns/"] ~ hr { /* tighten up /netdb (leasesets) hr */
   margin: 10px 0;
 }
 
@@ -2540,9 +2555,18 @@ input[type=submit]:hover, input[type=reset]:hover, input[type=submit]:focus, inp
   box-shadow: inset 0 0 0 1px #000, inset 0 0 2px 1px rgba(255,86,0,0.8), inset 0 0 0 3px #000 !important;
 }
 
-input[type=submit]:active, input[type=reset]:active, button:active, input[type=file]:active::file-selector-button {
+input[type=submit]:active, input[type=reset]:active {
   text-shadow: 0 1px 1px #000;
-  box-shadow: inset 0 0 0 1px #000 !important;
+  box-shadow: inset 0 0 0 1px #000, inset 3px 3px 3px 2px #310 !important;
+}
+
+button:active {
+  text-shadow: 0 1px 1px #000;
+  box-shadow: inset 0 0 0 1px #000, inset 3px 3px 3px 2px #310 !important;
+}
+
+input[type=file]:active::file-selector-button {
+  text-shadow: 0 1px 1px #000;
   box-shadow: inset 0 0 0 1px #000, inset 3px 3px 3px 2px #310 !important;
 }
 
@@ -2577,7 +2601,7 @@ input[type=text], input[type=password], textarea {
   color: #bb7 !important;
 }
 
-input[type=image] {
+input[type="image"] {
   min-width: 0;
 }
 
@@ -2590,11 +2614,11 @@ label.disabled {
   opacity: 0.5;
 }
 
-.main#config_clients label[for=0] {
+.main#config_clients label[for="0"] {
   cursor: default;
 }
 
-input[type=file] {
+input[type="file"] {
   margin: 5px 8px;
   padding: 0 !important;
   font-weight: normal;
@@ -2605,16 +2629,16 @@ input[type=file] {
   cursor: pointer;
 }
 
-input[type=file]:hover {
+input[type="file"]:hover {
   border-radius: 0 15px 15px 0 !important;
   background: linear-gradient(to right, rgba(0,0,0,0), #000) !important;
 }
 
-input[type=file]:hover, input[type=file]:active {
+input[type="file"]:hover, input[type="file"]:active {
   color: #f60;
 }
 
-input[name=refreshInterval] {
+input[name="refreshInterval"] {
   margin-right: 3px;
   width: 40px;
   text-align: right;
@@ -2624,17 +2648,17 @@ input:disabled {
   cursor: default;
 }
 
-input[type=text]:disabled, input[type=text]:disabled:active, input[readonly=readonly] {
+input[type=text]:disabled, input[type=text]:disabled:active, input[readonly="readonly"] {
   color: #161 !important;
   border: 1px solid #252 !important;
   background: #000 !important;
 }
 
-input[class=check] { /* nudge "check for updates" button into alignment on /configupdate */
+input[class="check"] { /* nudge "check for updates" button into alignment on /configupdate */
   margin-left: 10px !important;
 }
 
-input[name=ntcphost], input[name=udpHost1] {
+input[name="ntcphost"], input[name="udpHost1"] {
   width: 260px;
 }
 
@@ -2746,7 +2770,7 @@ textarea {
   border: 1px solid #252;
 }
 
-textarea[cols=70], textarea[name=levels] {
+textarea[cols="70"], textarea[name="levels"] {
   width: calc(100% - 20px);
 }
 
@@ -2966,13 +2990,13 @@ h3#scheduledjobs + ol li::before, #scheduledjobs + ol li::before {
   margin-bottom: 5px;
 }
 
-h3[id*=jobs] {
+h3[id*="jobs"] {
   clear: both;
   margin-top: 25px !important;
 }
 
 @media screen and (max-width: 1500px) {
-h3[id*=jobs]:first-of-type {
+h3[id*="jobs"]:first-of-type {
   margin-top: 21px !important;
 }
 }
@@ -3330,7 +3354,7 @@ li.noevents::after {
   padding: 3px 10px;
 }
 
-form[action=events] {
+form[action="events"] {
   background: #000;
 }
 
@@ -3393,7 +3417,7 @@ form[action=events] {
   margin-bottom: -5px;
 }
 
-h3[id$=con] { /* peers h3 + tables */
+h3[id$="con"] { /* peers h3 + tables */
   margin-bottom: -2px;
   border-radius: 0;
   padding: 8px 10px;
@@ -3405,7 +3429,7 @@ h3[id$=con] { /* peers h3 + tables */
   border: 1px solid #242;
 }
 
-h3[id=udpcon] {
+h3[id="udpcon"] {
   width: auto;
 }
 
@@ -3466,7 +3490,7 @@ h3[id=udpcon] {
   padding-left: 9px;
 }
 
-#udpconnections td[class=cells]:first-child, #ntcpconnections td[class=cells]:first-child {
+#udpconnections td[class="cells"]:first-child, #ntcpconnections td[class="cells"]:first-child {
   width: 50px;
   white-space: nowrap;
   text-align: right;
@@ -3477,7 +3501,7 @@ h3[id=udpcon] {
   vertical-align: middle !important;
 }*/
 
-#ntcpconnections td[class=cells]:last-child {
+#ntcpconnections td[class="cells"]:last-child {
   font-weight: bold !important;
   width: 100px;
 }
@@ -3486,7 +3510,7 @@ h3[id=udpcon] {
   overflow-x: scroll !important;
 }
 
-#profilelist a[href^=viewprofile] {
+#profilelist a[href^="viewprofile"] {
   display: inline-block;
   margin-bottom: 2px;
 }
@@ -3507,7 +3531,7 @@ pre#transports {
   width: calc(100% - 42px) !important;
 }
 
-a[name=chelp]:hover, a[name=help]:hover, a[name=chelp]:active, a[name=help]:active { /* hide /help anchorpoints */
+a[name="chelp"]:hover, a[name="help"]:hover, a[name="chelp"]:active, a[name="help"]:active { /* hide /help anchorpoints */
   color: #ee9 !important;
   text-decoration: none;
   text-shadow: none;
@@ -3526,7 +3550,7 @@ a[name=chelp]:hover, a[name=help]:hover, a[name=chelp]:active, a[name=help]:acti
   background: none;
 }
 
-#oldhome input[type=checkbox] {
+#oldhome input[type="checkbox"] {
   vertical-align: sub;
   min-width: 16px;
   min-height: 16px;
@@ -3722,7 +3746,7 @@ p#helptranslate {
   margin: 1px 5px;
 }
 
-#themeoptions input[type=checkbox] {
+#themeoptions input[type="checkbox"] {
   min-height: 16px;
 }
 
@@ -3815,7 +3839,7 @@ td#themeselect {
   border: 1px solid #002000;
 }
 
-.langselect img[src=/flags.jsp?c=a1] {
+.langselect img[src="/flags.jsp?c=a1"] {
   width: 16px !important;
   height: 11px !important;
 }
@@ -3853,7 +3877,7 @@ td#themeselect {
   box-shadow: inset 0 0 0 1px #000;
 }
 
-.langselect input[name=lang]:checked + img, .langselect input[name=lang]:checked + #config_ui img[src=/flags.jsp?c=a1] {
+.langselect input[name="lang"]:checked + img, .langselect input[name="lang"]:checked + #config_ui img[src="/flags.jsp?c=a1"] {
   margin-top: 6px !important;
   margin-left: -72px;
   width: 19px !important;
@@ -3862,14 +3886,14 @@ td#themeselect {
   box-shadow: 0 0 1px #f30;
 }
 
-.langselect input[name=lang]:checked + img + div.ui_lang {
+.langselect input[name="lang"]:checked + img + div.ui_lang {
   color: #ee9;
   font-weight: bold;
   box-shadow: inset 0 0 0 1px #000, inset 0 0 2px 1px #050 !important;
   background: #030 !important;
 }
 
-.langselect input:focus + img + div.ui_lang, .langselect input[name=lang]:checked:focus + img + div.ui_lang {
+.langselect input:focus + img + div.ui_lang, .langselect input[name="lang"]:checked:focus + img + div.ui_lang {
   color: #f60 !important;
   box-shadow: inset 0 0 10px 3px #000 !important;
 }
@@ -3892,7 +3916,7 @@ td#themeselect {
   filter: drop-shadow(0 0 1px #000);
 }
 
-.langselect input[name=lang]:checked + img, .langselect input[name=lang]:checked + #config_ui img[src=/flags.jsp?c=a1] {
+.langselect input[name="lang"]:checked + img, .langselect input[name="lang"]:checked + #config_ui img[src="/flags.jsp?c=a1"] {
   margin-top: -2px !important;
   margin-left: -78px;
   margin-bottom: 0;
@@ -3915,7 +3939,7 @@ td#themeselect {
   margin-top: -6px !important;
 }
 
-.langselect input[name=lang]:checked + img, .langselect input[name=lang]:checked + #config_ui img[src=/flags.jsp?c=a1] {
+.langselect input[name="lang"]:checked + img, .langselect input[name="lang"]:checked + #config_ui img[src="/flags.jsp?c=a1"] {
   margin-top: -27px !important;
   margin-top: -2px !important;
 }
@@ -4010,7 +4034,7 @@ td#pw_adduser input {
   margin: 5px 20px 5px 5px !important;
 }
 
-#consolepass input[name=name] {
+#consolepass input[name="name"] {
   margin-right: 20px;
 }
 
@@ -4036,30 +4060,30 @@ td#pw_adduser input {
   float: left;
 }
 
-#consolepass input[name=name], #externali2cp input[name=user] {
+#consolepass input[name="name"], #externali2cp input[name="user"] {
   padding: 6px 5px 6px 26px !important;
   background: #000 url(/themes/console/images/buttons/user.png) 5px center no-repeat;
   background: url(/themes/console/images/buttons/user.png) 5px center no-repeat, linear-gradient(to bottom, #000, #010);
   background-size: 16px 16px, 100% 100% !important;
 }
 
-#consolepass input[name=name]:focus, #externali2cp input[name=user]:focus {
+#consolepass input[name="name"]:focus, #externali2cp input[name="user"]:focus {
   background: #000 url(/themes/console/images/buttons/user.png) 5px center no-repeat !important;
 }
 
-#consolepass input[name=nofilter_pw], #externali2cp input[name=nofilter_pw] {
+#consolepass input[name="nofilter_pw"], #externali2cp input[name="nofilter_pw"] {
   padding: 6px 5px 6px 22px !important;
   background: #000 url(/themes/console/images/buttons/password.png) 3px center no-repeat;
   background: url(/themes/console/images/buttons/password.png) 3px center no-repeat, linear-gradient(to bottom, #000, #010);
   background-size: 16px 16px, 100% 100% !important;
 }
-#consolepass input[name=nofilter_pw]:focus, #externali2cp input[name=nofilter_pw]:focus {
+#consolepass input[name="nofilter_pw"]:focus, #externali2cp input[name="nofilter_pw"]:focus {
   background: #000 url(/themes/console/images/buttons/password.png) 3px center no-repeat !important;
 }
 
 /* end /configui mods */
 
-form[action=/createreseed] > h3 {
+form[action="/createreseed"] > h3 {
   margin-bottom: -13px;
   padding: 10px;
   word-spacing: 0.1em;
@@ -4208,15 +4232,15 @@ p#ipconfig, p#ipv4config, p#udpconfig, p#externaltcp {
   margin-bottom: 6px !important;
 }
 
-#netconfig .optbox:last-child, #netconfig .optbox[value=only], #netconfig .optbox[name=disableUDP], #netconfig .optbox[value=disabled] {
+#netconfig .optbox:last-child, #netconfig .optbox[value="only"], #netconfig .optbox[name="disableUDP"], #netconfig .optbox[value="disabled"] {
   margin-bottom: 6px !important;
 }
 
-#netconfig input[type=text] + br + .optbox, #netconfig .optbox[name=ntcpAutoPort] {
+#netconfig input[type=text] + br + .optbox, #netconfig .optbox[name="ntcpAutoPort"] {
   margin-top: 3px !important;
 }
 
-#netconfig input[name*=ost] {
+#netconfig input[name*="ost"] {
   width: 250px !important;
 }
 
@@ -4229,18 +4253,18 @@ div.eventspanel {
   margin-top: -15px;
 }
 
-form[action=events] {
+form[action="events"] {
   margin-top: -11px;
   margin-bottom: 20px;
   padding: 10px 20px 10px;
   border: 1px solid #242;
 }
 
-form[action=events] > br {
+form[action="events"] > br {
   display: none;
 }
 
-form[action=events] > .formaction {
+form[action="events"] > .formaction {
   margin-bottom: -11px !important;
   margin-right: -21px;
   margin-left: -21px;
@@ -4363,27 +4387,27 @@ p#webappconfig + p, p#pluginconfigtext {
 
 /* /advanced */
 
-input[name=ff] + br {
+input[name="ff"] + br {
   display: none;
 }
 
-input[name=ff] + br + input[name=ff] + br {
+input[name="ff"] + br + input[name="ff"] + br {
   display: none;
 }
 
-.wideload > form > input[type=hidden] + table  + p + hr + .formaction {
+.wideload > form > input[type="hidden"] + table  + p + hr + .formaction {
   border-left: none;
   border-right: none;
 }
 
-input[type=hidden] + p {
+input[type="hidden"] + p {
   margin-bottom: -21px;
   padding: 10px;
   border: 1px solid #252;
   background: #000;
 }
 
-form[action=configclients]:first-child > input[type=hidden] + p {
+form[action="configclients"]:first-child > input[type="hidden"] + p {
   margin-top: -1px !important;
   margin-bottom: -21px;
   padding: 10px;
@@ -4391,7 +4415,7 @@ form[action=configclients]:first-child > input[type=hidden] + p {
   background: #000;
 }
 
-input[type=hidden] + p + p {
+input[type="hidden"] + p + p {
   margin-top: 20px;
   margin-bottom: -21px;
   padding: 10px;
@@ -4488,7 +4512,7 @@ form > table {
   margin-left: 10px;
 }
 
-#i2pupdates input[name*=URL], #i2pupdates textarea {
+#i2pupdates input[name*="URL"], #i2pupdates textarea {
   width: 98%;
   width: calc(100% - 17px);
 }
@@ -4500,7 +4524,7 @@ form > table {
 
 /* /configlogging */
 
-input[name=logfilename], input[name=logformat], input[name=logdateformat], input[name=logfilesize], select[name=defaultloglevel], select[name=newloglevel] {
+input[name="logfilename"], input[name="logformat"], input[name="logdateformat"], input[name="logfilesize"], select[name="defaultloglevel"], select[name="newloglevel"] {
   width: 125px;
 }
 
@@ -4538,7 +4562,7 @@ input[name=logfilename], input[name=logformat], input[name=logdateformat], input
   min-height: 80px !important;
 }
 
-#loggingoptions select[name=newlogclass] {
+#loggingoptions select[name="newlogclass"] {
   width: calc(100% - 185px);
 }
 
@@ -4852,7 +4876,7 @@ h4.app img, h4.app2 img {
   display: none;
 }
 
-.main#tunnels h3 a[href^=/configtunnels#]::after, .main#tunnels h3 a[href$=/i2ptunnelmgr]::after,
+.main#tunnels h3 a[href^="/configtunnels#"]::after, .main#tunnels h3 a[href$="/i2ptunnelmgr"]::after,
 #logs a.configure::after, #logs a.delete::after, h4.app a::after, h4.app2 a::after {
   width: 16px;
   height: 16px;
@@ -4862,14 +4886,14 @@ h4.app img, h4.app2 img {
   content: "";
 }
 
-.main#tunnels h3 a[href^=/configtunnels#]:hover::after, .main#tunnels h3 a[href^=/configtunnels#]:focus::after,
-.main#tunnels h3 a[href$=/i2ptunnelmgr]:hover::after, .main#tunnels h3 a[href$=/i2ptunnelmgr]:focus::after,
+.main#tunnels h3 a[href^="/configtunnels#"]:hover::after, .main#tunnels h3 a[href^="/configtunnels#"]:focus::after,
+.main#tunnels h3 a[href$="/i2ptunnelmgr"]:hover::after, .main#tunnels h3 a[href$="/i2ptunnelmgr"]:focus::after,
  #logs a.configure:hover::after, #logs a.configure:focus::after,
  h4.app a:hover::after, h4.app a:focus::after, h4.app2 a:hover::after, h4.app2 a:focus::after {
   background: url(/themes/susidns/dark/images/configure_hover.png) center center no-repeat;
 }
 
-.main#tunnels h3 a[href^=/configtunnels#]:active::after, .main#tunnels h3 a[href$=/i2ptunnelmgr]:active::after,
+.main#tunnels h3 a[href^="/configtunnels#"]:active::after, .main#tunnels h3 a[href$="/i2ptunnelmgr"]:active::after,
  #logs a.configure:active::after,  h4.app a:active::after, h4.app2 a:active::after {
   opacity: .7;
   transform: rotate(90deg);
@@ -5211,7 +5235,7 @@ ul#upnphelp li:last-child, #legal ul li:last-child {
   padding: 8px 5px !important;
 }
 
-#portfaq th[colspan=3] {
+#portfaq th[colspan="3"] {
   text-align: left;
   font-size: 10.5pt !important;
   letter-spacing: 0.08em;
@@ -5219,7 +5243,7 @@ ul#upnphelp li:last-child, #legal ul li:last-child {
   padding: 8px 10px !important;
 }
 
-#portfaq td[colspan=3] {
+#portfaq td[colspan="3"] {
   font-weight: normal;
 }
 
@@ -5231,7 +5255,7 @@ ul#upnphelp li:last-child, #legal ul li:last-child {
   padding-left: 10px;
 }
 
-#portfaq td:last-child, #portfaq td[colspan=3] {
+#portfaq td:last-child, #portfaq td[colspan="3"] {
   text-align: justify;
   padding-right: 10px;
 }
@@ -5259,12 +5283,12 @@ ul#upnphelp li:last-child, #legal ul li:last-child {
   margin-bottom: 10px;
 }
 
-#netdboverview th[colspan=3] {
+#netdboverview th[colspan="3"] {
   font-size: 12pt !important;
 }
 
 @media screen and (max-width: 1500px) {
-#netdboverview th[colspan=3] {
+#netdboverview th[colspan="3"] {
   font-size: 11pt !important;
 }
 }
@@ -5366,7 +5390,7 @@ ul#upnphelp li:last-child, #legal ul li:last-child {
   border-bottom: none !important;
 }
 
-table[cellspacing=30] > tbody > tr > th[colspan=3] { /* netdb header */
+table[cellspacing="30"] > tbody > tr > th[colspan="3"] { /* netdb header */
   padding: 10px;
   text-transform: uppercase;
   font-size: 11pt;
@@ -5374,22 +5398,22 @@ table[cellspacing=30] > tbody > tr > th[colspan=3] { /* netdb header */
   word-spacing: 0.1em;
 }
 
-table[cellspacing=30] > tbody > tr > td {
+table[cellspacing="30"] > tbody > tr > td {
   padding: 8px;
 }
 
-table[cellspacing=30] > tbody > tr > td > table > tbody > tr > th:first-child {
+table[cellspacing="30"] > tbody > tr > td > table > tbody > tr > th:first-child {
   text-align: left;
   padding: 5px;
 }
 
-table[cellspacing=30] > tbody > tr > td:first-child > table > tbody > tr > th:first-child {
+table[cellspacing="30"] > tbody > tr > td:first-child > table > tbody > tr > th:first-child {
   text-align: center;
 }
 
 /* /netdb - Sybil */
 
-th > img[src^=/imagegen], .identicon { /* scale down header images */
+th > img[src^="/imagegen"], .identicon { /* scale down header images */
   margin: 0 0 0 3px;
   height: 26px;
   width: 26px;
@@ -5563,7 +5587,7 @@ th > img[src^=/imagegen], .identicon { /* scale down header images */
   display: inline-block;
   border: 1px solid #030;
   border-radius: 2px;
-  box-shadow; 0 0 0 1px #000;
+  box-shadow: 0 0 0 1px #000;
   background: #020;
 }
 
@@ -5587,8 +5611,8 @@ th > img[src^=/imagegen], .identicon { /* scale down header images */
   padding-bottom: 1px;
   display: inline-block;
   border: 1px solid #030;
-  box-shadow; 0 0 0 1px #000;
   border-radius: 2px !important;
+  box-shadow: 0 0 0 1px #000;
   background: #020;
 }
 
@@ -5598,9 +5622,9 @@ th > img[src^=/imagegen], .identicon { /* scale down header images */
 }
 
 .netdb_leases .tunnel_peer tt, .netdb_leases .tunnel_peer a {
-  letter-spacing: 0.1em !important;
   margin: 0 !important;
   padding: 0 !important;
+  letter-spacing: 0.1em !important;
 }
 
 .routerid tt {
@@ -5690,15 +5714,15 @@ img.unknownflag {
   display: none;
 }
 
-table[id$=logs] tr:first-child{
+table[id$="logs"] tr:first-child{
   background: #001000;
 }
 
-table[id$=logs] tr:nth-child(even){
+table[id$="logs"] tr:nth-child(even){
   background: #000;
 }
 
-table[id$=logs] ul {
+table[id$="logs"] ul {
   margin: -6px 12px -5px -18px !important;
 }
 
@@ -5755,7 +5779,7 @@ table[id$=logs] ul {
   margin: 0;
 }
 
-#logs font[color^=#]::before {
+#logs font[color^="#"]::before {
   margin-left: 0;
   margin-right: 5px;
   content: "";
@@ -5801,11 +5825,11 @@ table[id$=logs] ul {
 
 /* critical */
 
-font[color=#cc0000] {
+font[color="#cc0000"] {
   color: #900 !important;
 }
 
-#logs li font[color=#cc0000]::before {
+#logs li font[color="#cc0000"]::before {
   background: #900;
 }
 
@@ -5816,11 +5840,11 @@ font[color=#cc0000] {
 
 /* warning */
 
-font[color=#bf00df] {
+font[color="#bf00df"] {
   color: #636 !important;
 }
 
-#logs li font[color=#bf00df]::before {
+#logs li font[color="#bf00df"]::before {
   background: #636;
 }
 
@@ -5830,11 +5854,11 @@ font[color=#bf00df] {
 
 /* error */
 
-font[color=#ff3300] {
+font[color="#ff3300"] {
   color: #730 !important;
 }
 
-#logs li font[color=#ff3300]::before {
+#logs li font[color="#ff3300"]::before {
   background: #730;
 }
 
@@ -5844,11 +5868,11 @@ font[color=#ff3300] {
 
 /* debug */
 
-font[color=#006600] {
+font[color="#006600"] {
   color: #346 !important;
 }
 
-#logs li font[color=#006600]::before {
+#logs li font[color="#006600"]::before {
   background: #346;
 }
 
@@ -5858,13 +5882,13 @@ font[color=#006600] {
 
 /* info */
 
-font[color=#000099], #servicelogs {
+font[color="#000099"], #servicelogs {
   color: #660 !important;
   color: #346 !important;
   color: #363 !important;
 }
 
-#logs li font[color=#000099]::before {
+#logs li font[color="#000099"]::before {
   background: #660;
   background: #346;
   background: #363;
@@ -5930,7 +5954,7 @@ font[color=#000099], #servicelogs {
   white-space: nowrap;
 }
 
-#profilelist td[colspan=9] { /* profile class separator */
+#profilelist td[colspan="9"] { /* profile class separator */
   background: #040;
   padding: 1px;
   border: 1px solid #242;
@@ -5938,18 +5962,18 @@ font[color=#000099], #servicelogs {
   border-bottom: 1px solid #000;
 }
 
-a[href^=configpeer?peer] {
+a[href^="configpeer?peer"] {
   font-size: 0;
   filter: drop-shadow(0 0 1px #777);
 }
 
-a[href^=configpeer?peer]::after {
+a[href^="configpeer?peer"]::after {
   content: url(/themes/console/images/buttons/edit.png);
   vertical-align: bottom;
   margin-left: 4px;
 }
 
-a[href^=configpeer?peer]:hover {
+a[href^="configpeer?peer"]:hover {
   filter: drop-shadow(0 0 1px #f60);
 }
 
@@ -6150,7 +6174,7 @@ h3#bannedpeers {
   display: none;
 }
 
-#banlist li a[href^=configpeer] {
+#banlist li a[href^="configpeer"] {
   padding: 2px 2px 1px 0;
   position: absolute;
   top: 0;
@@ -6164,12 +6188,12 @@ h3#bannedpeers {
   filter: none;
 }
 
-#banlist li a[href^=configpeer]:hover, #banlist li a[href^=configpeer]:focus {
+#banlist li a[href^="configpeer"]:hover, #banlist li a[href^="configpeer"]:focus {
   box-shadow: 0 0 0 1px #121, inset 0 0 0 1px #000, inset 0 0 0 2px #f60;
   background: #000;
 }
 
-#banlist li a[href^=configpeer]:active {
+#banlist li a[href^="configpeer"]:active {
   background: #f60;
   box-shadow: inset 0 0 0 1px #000, inset 3px 3px 3px 1px #5f2400;
 }
@@ -6494,7 +6518,7 @@ div.search {
   width: auto;
 }
 
-form[action=/search.jsp] {
+form[action="/search.jsp"] {
   margin: 0;
 }
 
@@ -6730,7 +6754,7 @@ body.iframed {
 
 /* global overrides */
 
-h3[id*=job] {
+h3[id*="job"] {
   border: 1px solid #242;
   padding: 8px;
   margin: 12px 0 10px 0;
@@ -6928,7 +6952,7 @@ h4 .unbold {
   vertical-align: middle;
 }
 
-h4 span[style=float: right;] .unbold {
+h4 span[style="float: right;"] .unbold {
   max-width: 300px;
 }
 }
@@ -7619,7 +7643,7 @@ p#webappconfigtext {
   margin-left: 0;
 }
 
-#peerdefs img[width=12] {
+#peerdefs img[width="12"] {
   margin-right: 3px;
   margin-left: 2px;
 }
@@ -7861,7 +7885,7 @@ p.sybilinfo.experimental {
   background-size: 28px 28px, 100% 100%, 100% 100% !important;
 }
 
-#oldhome input[type=checkbox], #enablefullstats input[type=checkbox] {
+#oldhome input[type="checkbox"], #enablefullstats input[type="checkbox"] {
   vertical-align: middle;
 }
 
@@ -7971,7 +7995,7 @@ p#enablefullstats, p#gatherstats {
   background-size: 28px 28px, 100% 100% !important;
 }
 
-form[action=events] {
+form[action="events"] {
   padding: 10px 10px 10px 50px;
   background: #000 url(/themes/console/images/svg/logs.svg) 12px center no-repeat;
   background-size: 28px 28px;
@@ -8154,7 +8178,7 @@ h4#sb_shutdownstatus span {
   box-shadow: inset 0 0 0 1px #000, inset 0 0 2px 1px #730;
 }
 
-.routersummary .testing, .tunnelBuildStatus.starting, #sb_localtunnels td[colspan=3] {
+.routersummary .testing, .tunnelBuildStatus.starting, #sb_localtunnels td[colspan="3"] {
   color: #aa3;
   box-shadow: inset 0 0 0 1px #000, inset 0 0 2px 1px #bb0, inset 0 0 0 3px #000;
   background: repeating-linear-gradient(135deg, rgba(0,0,0,.5), rgba(0,0,0,.5) 10px, rgba(32,32,0,.5) 10px, rgba(32,32,0,.5) 20px) !important;
@@ -8716,7 +8740,7 @@ th code {
 }
 
 .netdbentry td:first-child {
-  padding-right: 5px !important
+  padding-right: 5px !important;
   text-align: right;
   min-width: 80px;
 }
@@ -8756,7 +8780,7 @@ th code {
   margin-left: 3px;
 }
 
-.sybil_routerinfo th img[src^=/flags] {
+.sybil_routerinfo th img[src^="/flags"] {
   height: 11px;
   width: 16px;
   margin-right: 5px;
@@ -8772,7 +8796,7 @@ th code {
   padding-right: 0;
 }
 
-.sybil_routerinfo td[colspan=3] {
+.sybil_routerinfo td[colspan="3"] {
   white-space: normal;
 }
 
@@ -9249,7 +9273,7 @@ th code {
   color: #dd0;
 }
 
-#jardump font[color=red] {
+#jardump font[color="red"] {
   color: #d00;
 }
 
@@ -9516,10 +9540,10 @@ ul.statlist a[name], ul.statlist b, ul.statlist li b, ul.statlist a[name]:hover,
 }
 
 .cells tt, #profilelist tt, #floodfills tt {
-  font-size: 9pt !important;
-  letter-spacing: 0.07em;
   margin-left: 2px !important;
   margin-right: 2px !important;
+  letter-spacing: 0.07em;
+  font-size: 9pt !important;
 }
 
 .main button, .main input, select, textarea, div.news {
@@ -9546,7 +9570,7 @@ button.control {
   width: 240px !important;
 }
 
-.routersummary table[id^=sb_] {
+.routersummary table[id^="sb_"] {
   width: 256px !important;
 }
 
@@ -9649,18 +9673,18 @@ p#fullhistory {
   margin-top: -13px;
 }
 
-.routersummary div[style=height: 36px;] {
+.routersummary div[style="height: 36px;"] {
   height: 44px !important;
 }
 
-.routersummary img[src$=i2plogo.png] {
+.routersummary img[src$="i2plogo.png"] {
   margin-top: -3px;
   margin-left: -4px;
   width: 249px;
   transform: none;
 }
 
-#error500 .routersummary img[src$=i2plogo.png] {
+#error500 .routersummary img[src$="i2plogo.png"] {
   margin-bottom: -5px;
 }
 
@@ -9680,7 +9704,7 @@ p#fullhistory {
   margin-top: -3px;
 }
 
-#udpconnections td[class=cells]:first-child, #ntcpconnections td[class=cells]:first-child {
+#udpconnections td[class="cells"]:first-child, #ntcpconnections td[class="cells"]:first-child {
   width: 55px;
   padding-right: 8px;
 }
@@ -9698,7 +9722,7 @@ h1 {
   font-size: 9pt !important;
 }
 
-.main[id^=config_] th, h4#updateplugins {
+.main[id^="config_"] th, h4#updateplugins {
   font-size: 10.5pt !important;
 }
 
@@ -9750,11 +9774,11 @@ h1 {
   margin-left: -80px !important;
 }
 
-.langselect input[name=lang]:checked + img {
+.langselect input[name="lang"]:checked + img {
   margin-left: -76px !important;
 }
 
-img[src=/themes/console/images/i2plogo.png] {
+img[src="/themes/console/images/i2plogo.png"] {
   margin-top: 3px !important;
   width: 200px !important;
 }
@@ -9766,12 +9790,12 @@ img[src=/themes/console/images/i2plogo.png] {
 
 /*@supports (display: -webkit-box) {
 @media screen  and (min-width: 1500px) and (-webkit-min-device-pixel-ratio:0) and (min-resolution:.001dpcm) {
-.langselect img, .langselect input[name=lang]:checked + img {
+.langselect img, .langselect input[name="lang"]:checked + img {
   margin-left: -20px !important;
   margin-top: -31px !important;
 }
 
-.langselect input[name=lang]:checked + img {
+.langselect input[name="lang"]:checked + img {
   margin-left: -16px !important;
   margin-top: -27px !important;
 }
@@ -9779,7 +9803,7 @@ img[src=/themes/console/images/i2plogo.png] {
 }*/
 
 @media screen and (min-width: 1840px) {
-div[id^=config_] .confignav {
+div[id^="config_"] .confignav {
   display: flex;
   flex-direction: row;
   flex-wrap: wrap;
@@ -9788,7 +9812,7 @@ div[id^=config_] .confignav {
   padding: 4px 4px 5px 3px !important;
 }
 
-div[id^=config_] .tab, div[id^=config_] .tab2 {
+div[id^="config_"] .tab, div[id^="config_"] .tab2 {
   margin: 0 -1px -1px 0 !important;
   min-width: 70px !important;
   flex: auto;
@@ -9797,27 +9821,27 @@ div[id^=config_] .tab, div[id^=config_] .tab2 {
   white-space: nowrap;
 }
 
-div[id^=config_] .tab2:first-child {
+div[id^="config_"] .tab2:first-child {
   border-left: none;
 }
 
-div[id^=config_] .tab2 {
+div[id^="config_"] .tab2 {
   padding: 5px 6px;
 }
 
-div[id^=config_] .tab a {
+div[id^="config_"] .tab a {
   padding: 4px 6px;
 }
 
-div[id^=config_] .confignav {
+div[id^="config_"] .confignav {
   padding: 0 !important;
 }
 
-div[id^=config_] .tab, div[id^=config_] .tab2 {
+div[id^="config_"] .tab, div[id^="config_"] .tab2 {
   margin-top: -1px !important;
 }
 
-div[id^=config_] .tab:first-child {
+div[id^="config_"] .tab:first-child {
   margin-left: -1px !important;
 }
 }
@@ -9970,7 +9994,7 @@ th.options, #externali2cp th {
   padding: 7px 10px !important;
 }
 
-.options input[type=checkbox], #i2pupdates .options .optbox {
+.options input[type="checkbox"], #i2pupdates .options .optbox {
   margin: 0 3px 0 0;
 }
 
@@ -10279,7 +10303,7 @@ th.options {
   font-size: 9pt !important;
 }
 
-.options input[type=checkbox], .suboption .optbox {
+.options input[type="checkbox"], .suboption .optbox {
   margin: 0 3px 0 0;
 }
 
@@ -10301,7 +10325,7 @@ b.suboption {
   padding: 1px 0;
 }
 
-#config_update .suboption label[for=newsThroughProxy] {
+#config_update .suboption label[for="newsThroughProxy"] {
   margin-right: 20px;
 }
 
@@ -10313,14 +10337,14 @@ b.suboption {
   margin-right: 0;
 }
 
-#config_reseed .suboption .optbox, .suboption .optbox[name=sauth], #externali2cp .suboption .optbox {
+#config_reseed .suboption .optbox, .suboption .optbox[name="sauth"], #externali2cp .suboption .optbox {
   margin: -3px 3px 3px;
   margin-bottom: 0;
 }
 
 /* end multi-column responsive globals */
 
-#externali2cp input[name=port] {
+#externali2cp input[name="port"] {
   margin-left: 6px;
 }
 
@@ -10503,7 +10527,7 @@ b.suboption {
 }
 }
 
-#netconfig input[name*=ost] {
+#netconfig input[name*="ost"] {
   width: 250px !important;
 }
 
@@ -10512,8 +10536,8 @@ b.suboption {
   will-change: transform;
 }
 
-#netconfig .optbox:not(:checked) + input[type=text][name=ntcphost]:not(:focus),
-#netconfig .optbox:not(:checked) + input[type=text][name=udpHost1]:not(:focus) {
+#netconfig .optbox:not(:checked) + input[type=text][name="ntcphost"]:not(:focus),
+#netconfig .optbox:not(:checked) + input[type=text][name="udpHost1"]:not(:focus) {
   width: 140px !important;
   min-width: 140px !important;
   transition: ease width 0.1s;
@@ -10662,7 +10686,7 @@ b.suboption {
   text-align: right;
 }
 
-#reseedconfig th[colspan=2], #i2pupdates th[colspan=2] {
+#reseedconfig th[colspan="2"], #i2pupdates th[colspan="2"] {
   padding: 8px;
   vertical-align: middle;
 }
@@ -10676,12 +10700,12 @@ b.suboption {
   display: inline-block;
 }
 
-#reseedconfig .optbox[type=checkbox] {
+#reseedconfig .optbox[type="checkbox"] {
   vertical-align: sub !important;
 }
 
 @supports not (-moz-appearance: none) {
-#reseedconfig .optbox[type=radio] {
+#reseedconfig .optbox[type="radio"] {
   margin: 4px 4px 4px 15px !important;
 }
 
@@ -10784,7 +10808,7 @@ b.suboption {
   padding: 0 !important;
 }
 
-#manualreseed .optionlist input[type=text], #manualreseed .optionlist input[type=file] {
+#manualreseed .optionlist input[type=text], #manualreseed .optionlist input[type="file"] {
   min-width: 0 !important;
   max-width: 50% !important;
   width: 50% !important;
@@ -10897,7 +10921,7 @@ b.suboption {
   line-height: 130%;
 }
 
-#reseedurl input[type=text], #reseedzip input[type=file], #reseedcreatefile p {
+#reseedurl input[type=text], #reseedzip input[type="file"], #reseedcreatefile p {
   width: calc(100% - 5px);
 }
 
@@ -10928,7 +10952,7 @@ b.suboption {
   border-bottom: 1px solid #252;
 }
 
-input[type=file] {
+input[type="file"] {
   background: none;
 }
 
@@ -11019,7 +11043,7 @@ input[type=file] {
   padding: 2px 12px 3px 10px;
 }
 
-#installPluginUrl input[type=text], #installPluginFile input[type=file],  #joinfamily input[type=file], #newfamily input[type=text] {
+#installPluginUrl input[type=text], #installPluginFile input[type="file"],  #joinfamily input[type="file"], #newfamily input[type=text] {
   width: 100% !important;
 }
 
@@ -11183,8 +11207,8 @@ h3#pconfig {
 
 /* custom radios/checkboxes to enforce color scheme when OS widgets are non-standard  */
 @supports (background-blend-mode: luminosity) { /* exclude ms browsers */
-input[type=checkbox], input[type=checkbox]:checked, input[type=checkbox][disabled], input[type=checkbox][disabled]:checked,
-input[type=radio], input[type=radio]:checked, input[type=radio][disabled], input[type=radio][disabled]:checked {
+input[type="checkbox"], input[type="checkbox"]:checked, input[type="checkbox"][disabled], input[type="checkbox"][disabled]:checked,
+input[type="radio"], input[type="radio"]:checked, input[type="radio"][disabled], input[type="radio"][disabled]:checked {
   position: relative;
   width: 19px !important;
   height: 19px !important;
@@ -11201,18 +11225,18 @@ input[type=radio], input[type=radio]:checked, input[type=radio][disabled], input
   will-change: transform;
 }
 
-input[type=checkbox], input[type=checkbox]:checked, input[type=checkbox][disabled], input[type=checkbox][disabled]:checked {
+input[type="checkbox"], input[type="checkbox"]:checked, input[type="checkbox"][disabled], input[type="checkbox"][disabled]:checked {
   border-radius: 1px;
   box-shadow: inset 0 0 0 1px #000, inset 3px 3px 3px 1px #000;
 }
 
-input[type=radio], input[type=radio]:checked, input[type=radio][disabled], input[type=radio][disabled]:checked {
+input[type="radio"], input[type="radio"]:checked, input[type="radio"][disabled], input[type="radio"][disabled]:checked {
   border-radius: 50%;
   box-shadow: inset 0 0 0 1px #000, inset 3px 3px 3px 1px #000;
 }
 
-input[type=checkbox]:checked::before, input[type=radio]:checked::before,
-input[type=checkbox]:not(:checked)::before, input[type=radio]:not(:checked)::before {
+input[type="checkbox"]:checked::before, input[type="radio"]:checked::before,
+input[type="checkbox"]:not(:checked)::before, input[type="radio"]:not(:checked)::before {
   position: absolute;
   transform: scale(1);
 }
@@ -11225,7 +11249,7 @@ input[type=checkbox]:not(:checked)::before, input[type=radio]:not(:checked)::bef
   background: #000 !important;
 }
 
-input[type=checkbox]:checked::before, input[type=checkbox]:not(:checked)::before {
+input[type="checkbox"]:checked::before, input[type="checkbox"]:not(:checked)::before {
   width: 11px;
   height: 11px;
   top: 3px;
@@ -11236,7 +11260,7 @@ input[type=checkbox]:checked::before, input[type=checkbox]:not(:checked)::before
   content: "";
 }
 
-input[type=radio]:checked::before {
+input[type="radio"]:checked::before {
   width: 9px;
   height: 9px;
   left: 25%;
@@ -11248,23 +11272,23 @@ input[type=radio]:checked::before {
   content: "";
 }
 
-input[type=checkbox]:checked:hover::before {
+input[type="checkbox"]:checked:hover::before {
   color: #6b6;
   transition: ease transform 0.05s;
 }
 
-input[type=radio]:checked:hover::before {
+input[type="radio"]:checked:hover::before {
   background: #6b6;
   transition: ease transform 0.05s;
 }
 
-input[type=checkbox]:not(:checked)::before, input[type=radio]:not(:checked)::before {
+input[type="checkbox"]:not(:checked)::before, input[type="radio"]:not(:checked)::before {
   transform: scale(0);
   color: transparent;
   background: transparent;
 }
 
-input[type=checkbox]:hover, input[type=radio]:hover, input[type=checkbox]:focus, input[type=radio]:focus {
+input[type="checkbox"]:hover, input[type="radio"]:hover, input[type="checkbox"]:focus, input[type="radio"]:focus {
   background: #000;
   width: 19px !important;
   height: 19px !important;
@@ -11272,8 +11296,8 @@ input[type=checkbox]:hover, input[type=radio]:hover, input[type=checkbox]:focus,
   box-shadow: 0 0 1px #f60, 0 0 2px #f60 !important;
 }
 
-input[type=checkbox][disabled], input[type=radio][disabled], input[type=checkbox][disabled]:hover, input[type=radio][disabled]:hover,
-input[type=checkbox][disabled]:checked, input[type=radio][disabled]:checked, input[type=checkbox][disabled]:checked:hover, input[type=radio][disabled]:checked:hover {
+input[type="checkbox"][disabled], input[type="radio"][disabled], input[type="checkbox"][disabled]:hover, input[type="radio"][disabled]:hover,
+input[type="checkbox"][disabled]:checked, input[type="radio"][disabled]:checked, input[type="checkbox"][disabled]:checked:hover, input[type="radio"][disabled]:checked:hover {
   border: 1px solid #252 !important;
   box-shadow: none !important;
   opacity: 0.5 !important;
@@ -11670,7 +11694,7 @@ input[type=checkbox][disabled]:checked, input[type=radio][disabled]:checked, inp
   margin-left: -5px !important;
 }
 
-.netdb_header img[src=/flags.jsp?c=a0] {
+.netdb_header img[src="/flags.jsp?c=a0"] {
   margin-bottom: -5px !important;
   margin-right: 0 !important;
   display: inline-block;
@@ -11678,7 +11702,7 @@ input[type=checkbox][disabled]:checked, input[type=radio][disabled]:checked, inp
 }
 
 @media screen and (max-width: 1499px) {
-  .netdb_header img[src=/flags.jsp?c=a0] {
+  .netdb_header img[src="/flags.jsp?c=a0"] {
     margin-bottom: -4px !important;
   }
 }
@@ -11692,7 +11716,7 @@ input[type=checkbox][disabled]:checked, input[type=radio][disabled]:checked, inp
   margin-right: 1px !important;
 }
 
-.sybil_routerinfo .netdb_header img[src^=/flags.jsp?c=] {
+.sybil_routerinfo .netdb_header img[src^="/flags.jsp?c="] {
   margin: 0 5px 0 3px !important;
   vertical-align: calc(50% + 2px) !important;
 }
@@ -11848,7 +11872,7 @@ input[type=checkbox][disabled]:checked, input[type=radio][disabled]:checked, inp
   background: linear-gradient(to bottom, rgba(255,255,255,.1) 50%, rgba(0,0,0,.1) 50%), linear-gradient(to right, #700 25px, #800 40px, #900 50px);
 }
 
-#floodfills .percentBarInner[style=width:0%] {
+#floodfills .percentBarInner[style="width:0%"] {
   width: 100% !important;
   background: #090;
   background: linear-gradient(to bottom, rgba(255,255,255,.1) 50%, rgba(0,0,0,.1) 50%), linear-gradient(to right, #070, #080);
@@ -12290,7 +12314,7 @@ a:hover .tier, a:focus .tier {
   box-shadow: inset 0 0 0 1px #000, 0 1px 5px #000;
 }
 
-.routersummary div[style=height: 36px;] {
+.routersummary div[style="height: 36px;"] {
   width: 100%;
   margin: -8px 0 -9px -10px;
   padding: 8px 10px 9px;
@@ -12301,13 +12325,13 @@ a:hover .tier, a:focus .tier {
   background: repeating-linear-gradient(to right, rgba(0,80,0,.1) 1px, rgba(0,16,0,.3) 2px, rgba(0,16,0,.3) 3px) !important;
 }
 
-.routersummary div[style=height: 36px;]:hover {
+.routersummary div[style="height: 36px;"]:hover {
   box-shadow: inset 0 0 0 1px #000, inset 0 0 2px 1px #f60, inset 0 0 0 3px #000;
   background: rgba(0,96,0,.1) !important;
   transition: ease background 0.15s;
 }
 
-.routersummary div[style=height: 36px;]:active {
+.routersummary div[style="height: 36px;"]:active {
   box-shadow: inset 0 0 0 1px #000, inset 0 0 2px 2px #f90, inset 0 0 0 3px #000;
 }
 
@@ -12413,7 +12437,7 @@ a:hover .tier, a:focus .tier {
   filter: saturate(300%);
 }
 
-#routerlogs li:hover font[color=#cc0000], #criticallogs li:hover [color=#cc0000] {
+#routerlogs li:hover font[color="#cc0000"], #criticallogs li:hover [color="#cc0000"] {
   filter: saturate(120%);
 }
 
@@ -12429,7 +12453,7 @@ h3#servicelogs {
   border-spacing: 2px;
 }
 
-a[href^=/netdb]:hover span {
+a[href^="/netdb"]:hover span {
   color: #f60 !important;
 }
 
@@ -12444,7 +12468,7 @@ a[href^=/netdb]:hover span {
 }
 
 .formaction, td.optionsave, #pluginconfigtext, #plugininstall tr:first-child .infohelp, #helptranslate,
-#consolepass td[colspan=3], #themeoptions, #themesettings, #langsettings, #certs h4, #certs textarea, #certs p,
+#consolepass td[colspan="3"], #themeoptions, #themesettings, #langsettings, #certs h4, #certs textarea, #certs p,
 #config_advanced td, #config_peers tr:not(:last-child) td, #config_peers #banlist, #help div, #enablefullstats, .buckets,
 #criticallogs tr:first-child td, #routerlogs tr:first-child td, #wrapperlogs tr:first-child td, #config_bandwidth td.infohelp {
   box-shadow: inset 0 0 0 1px #000, inset 0 0 1px 1px #040 !important;
@@ -12759,7 +12783,7 @@ h1[class], h1 {
 
 /* temp fix for 0.9.36 news */
 
-.newscontent a[href=/configadvanced] + tt {
+.newscontent a[href="/configadvanced"] + tt {
   margin-left: 0.35em;
 }
 
@@ -13385,7 +13409,7 @@ table.search {
   line-height: 140%;
 }
 
-#setupwizard input[name=skipbw], #setupwizard input[name=cancelbw] {
+#setupwizard input[name="skipbw"], #setupwizard input[name="cancelbw"] {
   float: left;
 }
 
@@ -13893,7 +13917,7 @@ i {
   background: #020;
 }
 
-#sybilTask input[type=checkbox] {
+#sybilTask input[type="checkbox"] {
   margin: 14px 8px;
 }
 
@@ -13914,7 +13938,7 @@ i {
 .encDests th:nth-child(3), .encDests td:nth-child(3),
 .encDests th:nth-child(4), .encDests td:nth-child(4),
 .encDests th:nth-child(5), .encDests td:nth-child(5),
-.encDests td[colspan=8] {
+.encDests td[colspan="8"] {
   text-align: center !important;
 }
 
@@ -14303,7 +14327,7 @@ h3 + table {
   line-height: 1 !important;
 }
 
-#tunnels img[src$=bound.png], #peers img[src$=bound.png] {
+#tunnels img[src$="bound.png"], #peers img[src$="bound.png"] {
   opacity: 0;
 }
 
