@@ -719,10 +719,10 @@ public class PeerHelper extends HelperBase {
             buf.append("K");
             buf.append("</span>").append(THINSP).append("<span class=\"right\">").append(peer.getConcurrentSends());
             buf.append("</span>").append(THINSP).append("<span class=\"right\">").append(peer.getConcurrentSendWindow());
-            buf.append("</span>").append(THINSP).append("<span class=\"left\">").append(peer.getConsecutiveSendRejections());
+            buf.append("</span>").append(THINSP).append("<span class=\"left\">").append(peer.getConsecutiveSendRejections()).append("</span>");
             if (peer.isBacklogged())
-                buf.append(' ').append(_t("backlogged"));
-            buf.append("</span></td>");
+                buf.append("<br><span class=\"peerBacklogged\">").append(_t("backlogged")).append("</span>");
+            buf.append("</td>");
 
             buf.append("<td class=\"cells sst\" align=\"right\">");
             buf.append(peer.getSlowStartThreshold()/1024);
