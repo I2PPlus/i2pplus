@@ -570,7 +570,7 @@ _:-ms-lang(x), textarea#statusMessages, textarea#statusMessages:active, textarea
   font: 8.5pt "Droid Sans Mono", "Noto Mono", "Lucida Console", "DejaVu Sans Mono", monospace;
   background: #fff;
   color: #333;
-  border-radius: 2px;
+  border-radius: 1px;
   box-shadow: inset 2px 2px 1px #ccc;
 }
 
@@ -602,7 +602,6 @@ input, select, button, a {
   -moz-box-sizing: border-box;
   box-sizing: border-box;
   font-size: 9pt;
-  border-radius: 2px;
   color: #ee9;
   resize: none;
   cursor: pointer;
@@ -1520,7 +1519,6 @@ input[type="radio"], input[type="radio"]:checked, input[type="radio"][disabled],
 }
 
 input[type="checkbox"], input[type="checkbox"]:checked, input[type="checkbox"][disabled], input[type="checkbox"][disabled]:checked {
-  border-radius: 2px;
   box-shadow: inset 3px 3px 3px 1px #000;
 }
 
@@ -1808,4 +1806,35 @@ h2, h3 {
 
 h2 a, h3 a {
   -webkit-text-stroke: 0 !important;
+}
+
+body:not(.iframed) .panel, body:not(.iframed) .panel#clients {
+  margin: 24px auto 22px !important;
+  padding: 0 !important;
+  max-width: calc(100% - 28px);
+  box-shadow: 0 0 0 2px #000, 0 0 0 5px #020, 0 0 1px 5px #010, 0 0 0 7px #000;
+}
+
+body:not(.iframed) .panel h2 {
+  margin-top: 0 !important;
+}
+
+body:not(.iframed) #serverTunnels {
+  margin-bottom: 0;
+}
+
+body#tunnelEditPage:not(.iframed) .panel,
+body#tunnelRegistration:not(.iframed) .panel,
+body#tunnelWizardPage:not(.iframed) .panel {
+  margin-top: 24px !important;
+  margin-bottom: 24px !important;
+}
+
+body#tunnelSSL:not(.iframed) {
+  margin-top: 32px !important;
+  margin-bottom: 32px !important;
+}
+
+body#tunnelEditPage:not(.iframed) h3 {
+  margin-top: -1px;
 }
