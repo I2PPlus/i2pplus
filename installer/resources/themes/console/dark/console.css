@@ -7,7 +7,7 @@
 
 html {
   min-height: 100%;
-  scrollbar-color: rgba(16,72,16,0.8) rgba(0,16,0,.5);
+  scrollbar-color: rgba(16,72,16,.8) rgba(0,16,0,.5);
 }
 
 body {
@@ -61,12 +61,12 @@ body {
 }
 
 .main * {
-  scrollbar-color: rgba(16,48,16,0.4) rgba(0,0,0,0);
+  scrollbar-color: rgba(16,48,16,.4) rgba(0,0,0,0);
   transition: ease scrollbar-color .5s;
 }
 
 .main pre:hover, .main textarea:hover, .widescroll:hover {
-  scrollbar-color: rgba(24,80,24,0.8) rgba(0,0,0,.9);
+  scrollbar-color: rgba(24,80,24,.8) rgba(0,0,0,.9);
   transition: ease scrollbar-color .2s;
 }
 
@@ -454,13 +454,13 @@ pre {
   margin-left: -6px;
   width: 206px;
   height: auto;
-  opacity: 0.9;
-  transition: ease filter 0.15s, ease opacity 0.15s;
+  opacity: .9;
+  transition: ease filter .15s, ease opacity .15s;
 }
 
 .routersummary img[src$="i2plogo.png"]:hover {
   opacity: 1;
-  transition: ease filter 0.15s, ease opacity 0.15s;
+  transition: ease filter .15s, ease opacity .15s;
   filter: saturate(200%);
 }
 
@@ -483,17 +483,17 @@ pre {
 #sidebar h3 {
   margin: -7px -10px -8px -10px;
   padding: 5px 0 !important;
-  letter-spacing: 0.08em;
+  letter-spacing: .08em;
   text-transform: uppercase;
   font-size: 9.5pt;
   border: none;
   border-radius: 0;
   box-shadow: inset 0 0 0 1px #000, inset 0 0 1px 1px #191;
-  transition: ease color .05s, ease box-shadow 0.1s;
-  transition: ease all 0.2s;
+  transition: ease color .05s, ease box-shadow .1s;
+  transition: ease all .2s;
   background: radial-gradient(at center bottom, rgba(16, 72, 16, .4) 0, rgba(0, 0, 0, 0) 50%),
               linear-gradient(to bottom, rgba(0,0,0,0) 50%, #000 50%),
-              repeating-linear-gradient(to right, rgba(0,0,0,0.5) 1px, rgba(0,0,0,0.5) 2px, rgba(0,16,0,0.5) 3px),
+              repeating-linear-gradient(to right, rgba(0,0,0,.5) 1px, rgba(0,0,0,.5) 2px, rgba(0,16,0,.5) 3px),
               linear-gradient(to bottom, #005000, #000 75%) !important;
 }
 
@@ -514,20 +514,20 @@ pre {
   background: #010 !important;
   background: radial-gradient(at center bottom, rgba(96, 48, 0, .4) 0, rgba(0, 0, 0, 0) 80%),
               repeating-linear-gradient(to bottom, #010, #010 1px, #020 2px) !important;
-  box-shadow: inset 0 0 0 1px rgba(255,96,0,0.4), inset 0 0 2px 2px #000;
+  box-shadow: inset 0 0 0 1px rgba(255,96,0,.4), inset 0 0 2px 2px #000;
   mix-blend-mode: normal;
-  transition: ease color .05s, ease box-shadow 0.1s;
+  transition: ease color .05s, ease box-shadow .1s;
 }
 
 #sidebar h3:hover a {
   color: #f60;
-  text-shadow: 0 1px 1px rgba(0,0,0,0.8);
+  text-shadow: 0 1px 1px rgba(0,0,0,.8);
 }
 
 #sidebar h3:active {
   box-shadow: inset 0 0 0 1px #000, inset 4px 4px 3px 1px #000;
   background: repeating-linear-gradient(to bottom, #000, #000 1px, #530 2px) !important;
-  transition: ease box-shadow 0.1s;
+  transition: ease box-shadow .1s;
 }
 #sidebar h3:active a {
   color: #f90 !important;
@@ -624,7 +624,7 @@ pre {
 
 #sb_localtunnels a:hover {
   background: #030;
-  background: linear-gradient(to right, rgba(0,0,0,0), rgba(0,48,0,0.5));
+  background: linear-gradient(to right, rgba(0,0,0,0), rgba(0,48,0,.5));
 }
 
 #sb_localtunnels a:active {
@@ -810,7 +810,7 @@ div.refresh {
 }
 
 .routersummary a:link, .routersummary a:visited {
-  word-spacing: 0.05em;
+  word-spacing: .05em;
   color: #494;
 }
 
@@ -895,14 +895,14 @@ div.refresh {
   border-top: none;
   border-radius: 0 0 2px 2px;
   background: #000;
-  transition: ease opacity 0.3s;
+  transition: ease opacity .3s;
   opacity: 0;
   pointer-events: none;
 }
 
 #sb_graphcontainer:hover #sb_graphstats {
   opacity: 1;
-  transition: ease opacity 0.2s;
+  transition: ease opacity .2s;
 }
 
 /* end mini sidebar graph */
@@ -918,7 +918,7 @@ div.refresh {
   border-bottom: 1px solid #020;
   border-right: 1px solid #020;
   opacity: 1;
-  box-shadow: 0 0 1px 1px rgba(0,0,0,0.8), inset 0 0 0 1px #000, inset 0 0 3px 3px rgba(0,0,0,0.5);
+  box-shadow: 0 0 1px 1px rgba(0,0,0,.8), inset 0 0 0 1px #000, inset 0 0 3px 3px rgba(0,0,0,.5);
 }
 
 @media screen and (min-width: 1500px) {
@@ -929,19 +929,19 @@ div.refresh {
 
 .percentBarouter:hover .percentBarText {
   opacity: 1;
-  transition: ease opacity 0.2s;
+  transition: ease opacity .2s;
 }
 
 .percentBarInner {
   height: 14px;
   max-width: 100%;
   background: #0e5f00;
-  background: linear-gradient(to bottom, rgba(28, 148, 58, 0.6), rgba(9, 47, 16, 0.6) 50%, rgba(13, 39, 7, 0.6) 50%, rgba(9, 27, 5, 0.6) 50%, rgba(9, 21, 3, 0.6));
+  background: linear-gradient(to bottom, rgba(28, 148, 58, .6), rgba(9, 47, 16, .6) 50%, rgba(13, 39, 7, .6) 50%, rgba(9, 27, 5, .6) 50%, rgba(9, 21, 3, .6));
   box-shadow: inset 0 0 0 1px #000;
 }
 
 #sb_memoryBar .percentBarInner {
-  background: linear-gradient(to right, rgba(0,0,0,0.05), rgba(128,128,0,0.15) 160px, rgba(196,0,0,0.15) 180px, rgba(196,0,0,0.2)), linear-gradient(to bottom, rgba(28, 148, 58, 0.6), rgba(9, 47, 16, 0.6) 50%, rgba(13, 39, 7, 0.6) 50%, rgba(9, 27, 5, 0.6) 50%, rgba(9, 21, 3, 0.6));
+  background: linear-gradient(to right, rgba(0,0,0,.05), rgba(128,128,0,.15) 160px, rgba(196,0,0,.15) 180px, rgba(196,0,0,.2)), linear-gradient(to bottom, rgba(28, 148, 58, .6), rgba(9, 47, 16, .6) 50%, rgba(13, 39, 7, .6) 50%, rgba(9, 27, 5, .6) 50%, rgba(9, 21, 3, .6));
 }
 
 .percentBarText {
@@ -951,7 +951,7 @@ div.refresh {
   vertical-align: middle;
   float: left;
   opacity: 0;
-  transition: ease opacity 0.2s;
+  transition: ease opacity .2s;
 }
 
 /* update bar */
@@ -1118,7 +1118,7 @@ a:active img[src="/themes/console/images/i2plogo.png"] {
   color: #ee9;
   border-top: 1px solid #ee9;
   background: #ee9;
-  opacity: 0.7;
+  opacity: .7;
 }
 
 /* main section */
@@ -1153,7 +1153,7 @@ a:active img[src="/themes/console/images/i2plogo.png"] {
   height: 100%;
   background: url(images/camotile2.png);
   z-index: -1;
-  opacity: 0.3;
+  opacity: .3;
 }
 
 .routersummary {
@@ -1213,17 +1213,17 @@ a:active img[src="/themes/console/images/i2plogo.png"] {
 
 #news h3 {
   padding: 6px 8px 6px 10px;
-  letter-spacing: 0.08em !important;
+  letter-spacing: .08em !important;
   word-spacing: normal !important;
 }
 
 #news h3 font {
-  letter-spacing: 0.2em !important;
+  letter-spacing: .2em !important;
   text-transform: none;
 }
 
 div.news h3, #newspage h3 {
-  letter-spacing: 0.03em;
+  letter-spacing: .03em;
   text-align: left !important;
   font-size: 10pt !important;
 }
@@ -1361,7 +1361,7 @@ div.news hr {
   border-radius: 15px;
   box-shadow: 0 0 0 1px #000;
   background: #020;
-  background: rgba(0,48,0,0.6);
+  background: rgba(0,48,0,.6);
 }
 
 #news #newsDisplay a:hover, #news #newsDisplay a:focus, #graphopts a:hover, #graphopts a:focus, .graphstat:hover, .graphstat:focus,
@@ -1387,7 +1387,7 @@ div.news hr {
   float: right;
   font-size: 8pt !important;
   text-transform: none;
-  opacity: 0.7;
+  opacity: .7;
   background: url(/themes/console/images/info/author_dark.png) left 2px center no-repeat;
   background-size: 14px 14px;
 }
@@ -1395,7 +1395,7 @@ div.news hr {
 .newsDate {
   margin-right: 3px;
   font-style: italic;
-  opacity: 0.9;
+  opacity: .9;
 }
 
 #newspage {
@@ -1422,7 +1422,7 @@ div.widescroll { /* only scroll content, not entire page eg /peers */
   box-shadow: inset 0 0 0 1px #000;
   background: url(images/header.png) repeat-x scroll center center #000;
   background: linear-gradient(to bottom, #001000, #001900 50%, #000 51%, #000) !important;
-  background: repeating-linear-gradient(to right, rgba(0,0,0,0.5) 1px, rgba(0,0,0,0.5) 2px, rgba(0,16,0,0.5) 3px), linear-gradient(to bottom, #1a261a, #223022 7%, #212f21 9%, #172317 21%, #091109 49%, #050d05 50%, #020602 51%, #010301 53%, #000000 56%) repeat scroll 0, rgba(0, 0, 0, 0) url("/themes/console/dark/images/camotile2.png") !important;
+  background: repeating-linear-gradient(to right, rgba(0,0,0,.5) 1px, rgba(0,0,0,.5) 2px, rgba(0,16,0,.5) 3px), linear-gradient(to bottom, #1a261a, #223022 7%, #212f21 9%, #172317 21%, #091109 49%, #050d05 50%, #020602 51%, #010301 53%, #000000 56%) repeat scroll 0, rgba(0, 0, 0, 0) url("/themes/console/dark/images/camotile2.png") !important;
   background-blend-mode: normal, exclusion, normal;
 }
 
@@ -1484,7 +1484,7 @@ div.widescroll { /* only scroll content, not entire page eg /peers */
 .tab:active {
   box-shadow: inset 0 0 0 1px #000, inset 3px 3px 3px 1px #5f2400;
   background: #f60 !important;
-  transition: ease box-shadow 0.15s;
+  transition: ease box-shadow .15s;
 }
 
 .tab:active a {
@@ -1586,8 +1586,8 @@ div.widepanel h3 {
   padding: 8px 10px;
   text-transform: uppercase;
   font-size: 10.5pt;
-  letter-spacing: 0.08em;
-  word-spacing: 0.1em;
+  letter-spacing: .08em;
+  word-spacing: .1em;
   border-radius: 0;
   border: 1px solid #242;
 }
@@ -1662,7 +1662,7 @@ div#graphs {
   box-shadow: inset 0 0 0 1px #000, inset 0 0 2px 1px #d30;
   cursor: zoom-in;
   filter: none;
-  transition: ease border 0.05s;
+  transition: ease border .05s;
 }
 
 .singlegraph img:hover {
@@ -1683,7 +1683,7 @@ div#graphs {
   border-top: 1px solid #252;
   text-align: center;
   background: #010;
-  background: rgba(0,16,0,0.5);
+  background: rgba(0,16,0,.5);
 }
 
 #graphopts a {
@@ -1877,7 +1877,7 @@ td img {
   padding: 1px 0;
   border: 1px solid #171;
   border-radius: 1px;
-  opacity: 0.7;
+  opacity: .7;
   margin: 5px 1px 0 !important;
   vertical-align: middle;
   text-align: center;
@@ -1902,8 +1902,8 @@ td img {
 }
 
 .sortup:hover, .sortdown:hover {
-  opacity: 0.9;
-  transition: ease all 0.3s;
+  opacity: .9;
+  transition: ease all .3s;
 }
 
 .sortupactive, .sortdownactive {
@@ -1921,7 +1921,7 @@ td img {
 }
 
 .sortup a:focus, .sortdown a:focus {
-  background: rgba(255,255,0,0.2);
+  background: rgba(255,255,0,.2);
   border-radius: 1px;
   margin-top: -1px;
   height: 14px;
@@ -2022,7 +2022,7 @@ ul {
 
 code {
   text-align: left;
-  font: 9pt "Droid Sans Mono", "Noto Mono", "Lucida Console", "DejaVu Sans Mono", monospace;
+  font: 9pt Droid Sans Mono, Noto Mono, Lucida Console, DejaVu Sans Mono, monospace;
   color: #dd0;
 }
 
@@ -2061,7 +2061,7 @@ div[lang="pt"] .twocol, div[lang="es"] .twocol, div[lang="sv"] .twocol {
   padding: 10px;
   border: 1px solid #000;
   border-radius: 4px;
-  background: rgba(0,32,0,0.3);
+  background: rgba(0,32,0,.3);
 }
 
 div[lang="es"] li, div[lang="pt"] li, div[lang="sv"] li {
@@ -2092,7 +2092,7 @@ p + .twocol {
 
 .links b {
   color: #bb0 !important;
-  letter-spacing: 0.08em;
+  letter-spacing: .08em;
   line-height: 165%;
 }
 
@@ -2123,7 +2123,7 @@ h1 {
   min-width: 620px;
   white-space: normal;
   line-height: 120%;
-  letter-spacing: 0.15em;
+  letter-spacing: .15em;
   text-transform: uppercase;
   text-align: left;
   font-size: 17pt;
@@ -2163,8 +2163,8 @@ h2, h2.welcome {
   margin: 15px 0 12px 0 !important;
   padding: 10px;
   vertical-align: middle;
-  letter-spacing: 0.08em;
-  word-spacing: 0.1em;
+  letter-spacing: .08em;
+  word-spacing: .1em;
   word-wrap: break-word;
   text-transform: uppercase;
   font-size: 12pt;
@@ -2191,7 +2191,7 @@ h3, h3.welcome {
   background: #000 url(images/header.png) center center ;
   text-transform: uppercase;
   text-shadow: 0 0 2px #010;
-  letter-spacing: 0.08em;
+  letter-spacing: .08em;
 }
 
 h4 {
@@ -2205,7 +2205,7 @@ h4 {
 
 h1, h2, h3:not([id*="help"]), h4.app, h4.app2 {
   background: linear-gradient(to bottom, #1a261a, #223022 7%, #212f21 9%, #172317 21%, #091109 49%, #050d05 50%, #020602 51%, #010301 53%, #000000 56%) !important;
-  background: linear-gradient(to bottom, rgba(0,0,0,0) 50%, #000 50%), repeating-linear-gradient(to right, rgba(0,0,0,0.5) 1px, rgba(0,0,0,0.5) 2px, rgba(0,16,0,0.5) 3px), linear-gradient(to bottom, #005000, #000 75%) !important;
+  background: linear-gradient(to bottom, rgba(0,0,0,0) 50%, #000 50%), repeating-linear-gradient(to right, rgba(0,0,0,.5) 1px, rgba(0,0,0,.5) 2px, rgba(0,16,0,.5) 3px), linear-gradient(to bottom, #005000, #000 75%) !important;
 }
 
 h2, h3, h4 {
@@ -2221,7 +2221,7 @@ h1, h4.app, h4.app2, #news h3 {
 
 h4.app, h4.app2 {
   padding-left: 28px !important;
-  letter-spacing: 0.15em !important;
+  letter-spacing: .15em !important;
   word-spacing: 0 !important;
 }
 
@@ -2262,7 +2262,7 @@ h4.app img, h4.app2 img {
 
 h4.app:hover img, h4.app2:hover img {
   opacity: 1;
-  transition: ease all 0.3s;
+  transition: ease all .3s;
 }
 
 h4.app2 img, #sitemap h3 a img {
@@ -2315,7 +2315,7 @@ input[type=file]::file-selector-button {
 button:hover, button:focus {
   color: #f60;
   border: 1px solid #f60;
-  box-shadow: inset 0 0 0 1px #000, inset 0 0 2px 1px rgba(255,86,0,0.8), inset 0 0 0 3px #000;
+  box-shadow: inset 0 0 0 1px #000, inset 0 0 2px 1px rgba(255,86,0,.8), inset 0 0 0 3px #000;
   background: #000;
   cursor: pointer;
 }
@@ -2323,7 +2323,7 @@ button:hover, button:focus {
 input[type=file]:hover::file-selector-button, input[type=file]:focus::file-selector-button {
   color: #f60;
   border: 1px solid #f60;
-  box-shadow: inset 0 0 0 1px #000, inset 0 0 2px 1px rgba(255,86,0,0.8), inset 0 0 0 3px #000;
+  box-shadow: inset 0 0 0 1px #000, inset 0 0 2px 1px rgba(255,86,0,.8), inset 0 0 0 3px #000;
   background: #000;
   cursor: pointer;
 }
@@ -2453,7 +2453,7 @@ button.download.control:active {
   color: #dd3;
   font-size: 9pt;
   text-shadow: 0 1px 1px #000;
-  opacity: 0.9;
+  opacity: .9;
 }
 
 #updateAvailable + br + button + br + #updateAvailable::before {
@@ -2490,8 +2490,8 @@ button.download.control:active {
   margin: 0 1px -2px !important;
   padding: 0 !important;
   border: 1px solid #000;
-  opacity: 0.7;
-  transition: ease opacity 0.3s;
+  opacity: .7;
+  transition: ease opacity .3s;
 }
 
 .langbox img:hover, .langbox a:focus img {
@@ -2552,7 +2552,7 @@ input:hover, input:focus {
 }
 
 input[type=submit]:hover, input[type=reset]:hover, input[type=submit]:focus, input[type=reset]:focus {
-  box-shadow: inset 0 0 0 1px #000, inset 0 0 2px 1px rgba(255,86,0,0.8), inset 0 0 0 3px #000 !important;
+  box-shadow: inset 0 0 0 1px #000, inset 0 0 2px 1px rgba(255,86,0,.8), inset 0 0 0 3px #000 !important;
 }
 
 input[type=submit]:active, input[type=reset]:active {
@@ -2601,7 +2601,7 @@ input[type=text], input[type=password], textarea {
   color: #bb7 !important;
 }
 
-input[type="image"] {
+input[type=image] {
   min-width: 0;
 }
 
@@ -2611,14 +2611,14 @@ label {
 
 label.disabled {
   cursor: not-allowed;
-  opacity: 0.5;
+  opacity: .5;
 }
 
 .main#config_clients label[for="0"] {
   cursor: default;
 }
 
-input[type="file"] {
+input[type=file] {
   margin: 5px 8px;
   padding: 0 !important;
   font-weight: normal;
@@ -2629,12 +2629,12 @@ input[type="file"] {
   cursor: pointer;
 }
 
-input[type="file"]:hover {
+input[type=file]:hover {
   border-radius: 0 15px 15px 0 !important;
   background: linear-gradient(to right, rgba(0,0,0,0), #000) !important;
 }
 
-input[type="file"]:hover, input[type="file"]:active {
+input[type=file]:hover, input[type=file]:active {
   color: #f60;
 }
 
@@ -2722,7 +2722,7 @@ select option:hover, select option:checked {
 select:focus, select:hover {
   color: #f60;
   border: 1px solid #f60;
-  box-shadow: inset 0 0 0 1px #000, inset 0 0 2px 1px rgba(255,86,0,0.8), inset 0 0 0 3px #000;
+  box-shadow: inset 0 0 0 1px #000, inset 0 0 2px 1px rgba(255,86,0,.8), inset 0 0 0 3px #000;
 }
 
 select:hover, select:focus, select:active {
@@ -2779,7 +2779,7 @@ input[type=text]:focus, input[type=password]:focus, textarea:focus {
   background: #000 !important;
   filter: drop-shadow(0 0 1px #f60);
   box-shadow: 0 0 0 1px rgba(200,48,0,.3);
-  transition: filter ease 0.3s;
+  transition: filter ease .3s;
   outline: none;
 }
 
@@ -3293,7 +3293,7 @@ ul.statlist {
 
 .statlist li i {
   margin-left: 6px;
-  opacity: 0.8;
+  opacity: .8;
 }
 
 .statlist li li b {
@@ -3422,8 +3422,8 @@ h3[id$="con"] { /* peers h3 + tables */
   border-radius: 0;
   padding: 8px 10px;
   font-size: 10pt;
-  word-spacing: 0.1em;
-  letter-spacing: 0.08em;
+  word-spacing: .1em;
+  letter-spacing: .08em;
   background: #000;
   background: linear-gradient(to right, #000, #001000 70%, #001300 90%);
   border: 1px solid #242;
@@ -3444,7 +3444,7 @@ h3[id="udpcon"] {
 #udpconnections table i {
   font-weight: bold;
   line-height: 150%;
-  letter-spacing: 0.1em;
+  letter-spacing: .1em;
 }
 
 #udpconnections tr a img {
@@ -3550,7 +3550,7 @@ a[name="chelp"]:hover, a[name="help"]:hover, a[name="chelp"]:active, a[name="hel
   background: none;
 }
 
-#oldhome input[type="checkbox"] {
+#oldhome input[type=checkbox] {
   vertical-align: sub;
   min-width: 16px;
   min-height: 16px;
@@ -3642,7 +3642,7 @@ tr#addnew, tr#addnew:hover {
 }
 
 .themechoice img {
-  opacity: 0.6;
+  opacity: .6;
 }
 
 .themechoice .optbox:checked + img {
@@ -3746,7 +3746,7 @@ p#helptranslate {
   margin: 1px 5px;
 }
 
-#themeoptions input[type="checkbox"] {
+#themeoptions input[type=checkbox] {
   min-height: 16px;
 }
 
@@ -3767,8 +3767,8 @@ p#helptranslate {
 h3#themeheading, h3#langheading, h3#passwordheading {
   margin-bottom: 0;
   padding: 8px 10px;
-  letter-spacing: 0.08em;
-  word-spacing: 0.1em;
+  letter-spacing: .08em;
+  word-spacing: .1em;
   font-size: 10.5pt;
   border-radius: 0;
   border: 1px solid #252;
@@ -3845,12 +3845,12 @@ td#themeselect {
 }
 
 .langselect input + img {
-  opacity: 0.6;
+  opacity: .6;
 }
 
 .langselect input:hover + img {
   box-shadow: 0 0 2px 1px #f60;
-  transition: ease all 0.05s;
+  transition: ease all .05s;
   opacity: 1;
 }
 
@@ -3912,7 +3912,7 @@ td#themeselect {
   margin-left: -82px;
   position: absolute;
   box-shadow: none;
-  opacity: 0.6;
+  opacity: .6;
   filter: drop-shadow(0 0 1px #000);
 }
 
@@ -4086,8 +4086,8 @@ td#pw_adduser input {
 form[action="/createreseed"] > h3 {
   margin-bottom: -13px;
   padding: 10px;
-  word-spacing: 0.1em;
-  letter-spacing: 0.08em;
+  word-spacing: .1em;
+  letter-spacing: .08em;
   font-size: 10.5pt;
   border-radius: 0;
   border: 1px solid #252;
@@ -4272,8 +4272,8 @@ form[action="events"] > .formaction {
 
 .eventspanel th {
   padding-left: 10px;
-  word-spacing: 0.1em;
-  letter-spacing: 0.08em;
+  word-spacing: .1em;
+  letter-spacing: .08em;
   text-transform: uppercase;
   text-align: left;
   font-size: 10pt;
@@ -4712,42 +4712,42 @@ h3#servicedebug a, h3#graphinfo a {
 
 #tunnels h3.client {
   padding-left: 35px;
-  background: url(/themes/console/images/svg/client.svg) 8px center no-repeat, linear-gradient(to bottom, rgba(0,0,0,0) 50%, #000 50%), repeating-linear-gradient(to right, rgba(0,0,0,0.5) 1px, rgba(0,0,0,0.5) 2px, rgba(0,16,0,0.5) 3px), linear-gradient(to bottom, #005000, #000 75%) !important;
+  background: url(/themes/console/images/svg/client.svg) 8px center no-repeat, linear-gradient(to bottom, rgba(0,0,0,0) 50%, #000 50%), repeating-linear-gradient(to right, rgba(0,0,0,.5) 1px, rgba(0,0,0,.5) 2px, rgba(0,16,0,.5) 3px), linear-gradient(to bottom, #005000, #000 75%) !important;
   background-size: 20px 20px, 100% 100%, 100% 100%, 100% 100% !important;
 }
 
 #tunnels h3.ping {
   padding-left: 35px;
-  background: url(/themes/console/images/svg/ping.svg) 8px center no-repeat, linear-gradient(to bottom, rgba(0,0,0,0) 50%, #000 50%), repeating-linear-gradient(to right, rgba(0,0,0,0.5) 1px, rgba(0,0,0,0.5) 2px, rgba(0,16,0,0.5) 3px), linear-gradient(to bottom, #005000, #000 75%) !important;
+  background: url(/themes/console/images/svg/ping.svg) 8px center no-repeat, linear-gradient(to bottom, rgba(0,0,0,0) 50%, #000 50%), repeating-linear-gradient(to right, rgba(0,0,0,.5) 1px, rgba(0,0,0,.5) 2px, rgba(0,16,0,.5) 3px), linear-gradient(to bottom, #005000, #000 75%) !important;
   background-size: 20px 20px, 100% 100%, 100% 100%, 100% 100% !important;
 }
 
 #tunnels h3#exploratory {
   padding-left: 35px;
-  background: url(/themes/console/images/svg/globe.svg) 8px center no-repeat, linear-gradient(to bottom, rgba(0,0,0,0) 50%, #000 50%), repeating-linear-gradient(to right, rgba(0,0,0,0.5) 1px, rgba(0,0,0,0.5) 2px, rgba(0,16,0,0.5) 3px), linear-gradient(to bottom, #005000, #000 75%) !important;
+  background: url(/themes/console/images/svg/globe.svg) 8px center no-repeat, linear-gradient(to bottom, rgba(0,0,0,0) 50%, #000 50%), repeating-linear-gradient(to right, rgba(0,0,0,.5) 1px, rgba(0,0,0,.5) 2px, rgba(0,16,0,.5) 3px), linear-gradient(to bottom, #005000, #000 75%) !important;
   background-size: 20px 20px, 100% 100%, 100% 100%, 100% 100% !important;
 }
 
 #tunnels h3.server {
   padding-left: 35px;
-  background: url(/themes/console/images/svg/server.svg) 8px center no-repeat, linear-gradient(to bottom, rgba(0,0,0,0) 50%, #000 50%), repeating-linear-gradient(to right, rgba(0,0,0,0.5) 1px, rgba(0,0,0,0.5) 2px, rgba(0,16,0,0.5) 3px), linear-gradient(to bottom, #005000, #000 75%) !important;
+  background: url(/themes/console/images/svg/server.svg) 8px center no-repeat, linear-gradient(to bottom, rgba(0,0,0,0) 50%, #000 50%), repeating-linear-gradient(to right, rgba(0,0,0,.5) 1px, rgba(0,0,0,.5) 2px, rgba(0,16,0,.5) 3px), linear-gradient(to bottom, #005000, #000 75%) !important;
   background-size: 20px 20px, 100% 100%, 100% 100%, 100% 100% !important;
 }
 
 #tunnels h3#participating {
   padding-left: 35px;
-  background: url(/themes/console/images/info/share.png) 6px center no-repeat, linear-gradient(to bottom, rgba(0,0,0,0) 50%, #000 50%), repeating-linear-gradient(to right, rgba(0,0,0,0.5) 1px, rgba(0,0,0,0.5) 2px, rgba(0,16,0,0.5) 3px), linear-gradient(to bottom, #005000, #000 75%) !important;
+  background: url(/themes/console/images/info/share.png) 6px center no-repeat, linear-gradient(to bottom, rgba(0,0,0,0) 50%, #000 50%), repeating-linear-gradient(to right, rgba(0,0,0,.5) 1px, rgba(0,0,0,.5) 2px, rgba(0,16,0,.5) 3px), linear-gradient(to bottom, #005000, #000 75%) !important;
   background-size: 20px 20px, 100% 100%, 100% 100%, 100% 100% !important;
 }
 
 #tunnels h3.dead {
   padding-left: 32px;
-  background: url(/themes/console/images/info/rip.png) 6px center no-repeat, linear-gradient(to bottom, rgba(0,0,0,0) 50%, #000 50%), repeating-linear-gradient(to right, rgba(0,0,0,0.5) 1px, rgba(0,0,0,0.5) 2px, rgba(0,16,0,0.5) 3px), linear-gradient(to bottom, #005000, #000 75%) !important;
+  background: url(/themes/console/images/info/rip.png) 6px center no-repeat, linear-gradient(to bottom, rgba(0,0,0,0) 50%, #000 50%), repeating-linear-gradient(to right, rgba(0,0,0,.5) 1px, rgba(0,0,0,.5) 2px, rgba(0,16,0,.5) 3px), linear-gradient(to bottom, #005000, #000 75%) !important;
   background-size: 20px 20px, 100% 100%, 100% 100%, 100% 100% !important;
 }
 
 #tunnels h3.dead, #tunnels h3.dead + table, #tunnels h3.dead + table + .statusnotes, #tunnels h3.dead + table + .statusnotes + .statusnotes {
-  opacity: 0.8;
+  opacity: .8;
   filter: saturate(0.5);
 }
 
@@ -4762,7 +4762,7 @@ h3.dead span {
 #tunnels h3:last-of-type {
   padding-left: 35px;
   padding-bottom: 7px !important;
-  background: url(/themes/console/images/svg/speedometer.svg) 8px center no-repeat, linear-gradient(to bottom, rgba(0,0,0,0) 50%, #000 50%), repeating-linear-gradient(to right, rgba(0,0,0,0.5) 1px, rgba(0,0,0,0.5) 2px, rgba(0,16,0,0.5) 3px), linear-gradient(to bottom, #005000, #000 75%) !important;
+  background: url(/themes/console/images/svg/speedometer.svg) 8px center no-repeat, linear-gradient(to bottom, rgba(0,0,0,0) 50%, #000 50%), repeating-linear-gradient(to right, rgba(0,0,0,.5) 1px, rgba(0,0,0,.5) 2px, rgba(0,16,0,.5) 3px), linear-gradient(to bottom, #005000, #000 75%) !important;
   background-size: 20px 20px, 100% 100%, 100% 100%, 100% 100% !important;
 }
 
@@ -5026,8 +5026,8 @@ h4.app2 a::after {
   text-transform: uppercase;
   font-size: 11pt;
   text-align: left;
-  letter-spacing: 0.08em;
-  word-spacing: 0.1em;
+  letter-spacing: .08em;
+  word-spacing: .1em;
   border-radius: 0;
   margin: -1px -21px 10px !important;
   background: linear-gradient(to right, #000, #001000 70%, #001300 90%);
@@ -5048,7 +5048,7 @@ h4.app2 a::after {
   text-align: left;
   padding: 5px 0;
   color: #dd0;
-  letter-spacing: 0.05em;
+  letter-spacing: .05em;
   background: #000 !important;
   border: none;
   border-bottom: 1px solid #131 !important;
@@ -5071,8 +5071,8 @@ h4.app2 a::after {
   text-transform: uppercase;
   font-size: 10.5pt;
   text-align: left;
-  letter-spacing: 0.08em;
-  word-spacing: 0.1em;
+  letter-spacing: .08em;
+  word-spacing: .1em;
   border-radius: 0;
   margin: 0 -21px 10px !important;
   background: linear-gradient(to right, #000, #001000 70%, #001300 90%);
@@ -5084,8 +5084,8 @@ h4.app2 a::after {
   text-transform: uppercase;
   font-size: 11pt;
   text-align: left;
-  letter-spacing: 0.08em;
-  word-spacing: 0.1em;
+  letter-spacing: .08em;
+  word-spacing: .1em;
   border-radius: 0;
   margin: 0 0 -11px !important;
 }
@@ -5238,8 +5238,8 @@ ul#upnphelp li:last-child, #legal ul li:last-child {
 #portfaq th[colspan="3"] {
   text-align: left;
   font-size: 10.5pt !important;
-  letter-spacing: 0.08em;
-  word-spacing: 0.1em;
+  letter-spacing: .08em;
+  word-spacing: .1em;
   padding: 8px 10px !important;
 }
 
@@ -5394,8 +5394,8 @@ table[cellspacing="30"] > tbody > tr > th[colspan="3"] { /* netdb header */
   padding: 10px;
   text-transform: uppercase;
   font-size: 11pt;
-  letter-spacing: 0.08em;
-  word-spacing: 0.1em;
+  letter-spacing: .08em;
+  word-spacing: .1em;
 }
 
 table[cellspacing="30"] > tbody > tr > td {
@@ -5428,7 +5428,7 @@ th > img[src^="/imagegen"], .identicon { /* scale down header images */
 
 #netdblookup th {
   padding: 10px;
-  letter-spacing: 0.08em;
+  letter-spacing: .08em;
   text-align: left;
   text-transform: uppercase;
   font-size: 11pt;
@@ -5624,7 +5624,7 @@ th > img[src^="/imagegen"], .identicon { /* scale down header images */
 .netdb_leases .tunnel_peer tt, .netdb_leases .tunnel_peer a {
   margin: 0 !important;
   padding: 0 !important;
-  letter-spacing: 0.1em !important;
+  letter-spacing: .1em !important;
 }
 
 .routerid tt {
@@ -5641,7 +5641,7 @@ th > img[src^="/imagegen"], .identicon { /* scale down header images */
 }
 
 img.unknownflag {
-  opacity: 0.8;
+  opacity: .8;
 }
 
 /* end leasesets */
@@ -5834,7 +5834,7 @@ font[color="#cc0000"] {
 }
 
 .log_crit {
-  background: rgba(140,0,0,0.8);
+  background: rgba(140,0,0,.8);
   background: #900;
 }
 
@@ -5895,7 +5895,7 @@ font[color="#000099"], #servicelogs {
 }
 
 .log_info {
-  background: rgba(48,80,48,0.8);
+  background: rgba(48,80,48,.8);
   background: #363;
 }
 
@@ -5945,7 +5945,7 @@ font[color="#000099"], #servicelogs {
 }
 
 #profilelist td:nth-child(3) {
-  letter-spacing: 0.1em;
+  letter-spacing: .1em;
 }
 
 #profilelist td:last-child {
@@ -6293,7 +6293,7 @@ h3#bannedpeers {
   border-radius: 2px;
   box-shadow: inset 0 0 0 1px #020, inset 0 0 0 2px #000, inset 0 0 3px 1px #020, 0 0 1px 1px #000;
   background: url(/themes/console/images/info/rosette.png) right 8px top 8px no-repeat #001900;
-  background: url(/themes/console/images/info/rosette.png) right 8px top 8px no-repeat rgba(0,32,0,0.4);
+  background: url(/themes/console/images/info/rosette.png) right 8px top 8px no-repeat rgba(0,32,0,.4);
   background-blend-mode: color-burn;
 }
 
@@ -6318,7 +6318,7 @@ h3#bannedpeers {
   border-radius: 2px;
   box-shadow: inset 0 0 0 1px #020, inset 0 0 0 2px #000, inset 0 0 3px 1px #020, 0 0 1px 1px #000;
   background: #001900;
-  background: rgba(0,32,0,0.4);
+  background: rgba(0,32,0,.4);
 }
 
 #oldconsole b {
@@ -6376,7 +6376,7 @@ h3#bannedpeers {
 }
 
 #console .welcome h2 {
-  background: url(/themes/console/images/eepsite.png) right 6px center no-repeat, repeating-linear-gradient(to right, rgba(0,0,0,0.5) 1px, rgba(0,0,0,0.5) 2px, rgba(0,16,0,0.5) 3px), linear-gradient(to bottom, rgba(0,0,0,0) 50%, #000 50%), linear-gradient(to bottom, #005000, #000 75%) !important;
+  background: url(/themes/console/images/eepsite.png) right 6px center no-repeat, repeating-linear-gradient(to right, rgba(0,0,0,.5) 1px, rgba(0,0,0,.5) 2px, rgba(0,16,0,.5) 3px), linear-gradient(to bottom, rgba(0,0,0,0) 50%, #000 50%), linear-gradient(to bottom, #005000, #000 75%) !important;
   background-size: 24px 24px, 100% 100%, 100% 100% !important;
   background-blend-mode: luminosity, normal, normal;
 }
@@ -6405,8 +6405,8 @@ h4.app, h4.app2 {
   font-variant: small-caps;
   text-transform: uppercase;
   text-align: left;
-  letter-spacing: 0.08em;
-  word-spacing: 0.1em;
+  letter-spacing: .08em;
+  word-spacing: .1em;
   border-radius: 0;
 }
 
@@ -6426,7 +6426,7 @@ div.app {
   float: left;
   text-align: center !important;
   border: 1px solid #252;
-  opacity: 0.9;
+  opacity: .9;
   background: #000;
   background: linear-gradient(to bottom, #000800, #000);
 }
@@ -6761,7 +6761,7 @@ h3[id*="job"] {
   border-radius: 0;
   text-transform: uppercase;
   text-shadow: 0 0 2px #010;
-  letter-spacing: 0.08em;
+  letter-spacing: .08em;
 }
 
 /* netdb */
@@ -6886,7 +6886,7 @@ table:not(:first-of-type).netdbentry th:first-child, table:not(:first-of-type).n
   padding: 8px 10px;
   margin: 15px 0 0;
   border: 1px solid #252;
-  letter-spacing: 0.08em;
+  letter-spacing: .08em;
   font-size: 10pt;
   background: linear-gradient(to right, #000, #001000);
 }
@@ -7010,8 +7010,8 @@ h4 span[style="float: right;"] .unbold {
   font-weight: bold;
   text-transform: uppercase;
   font-size: 10pt;
-  letter-spacing: 0.08em;
-  word-spacing: 0.1em;
+  letter-spacing: .08em;
+  word-spacing: .1em;
   padding: 5px 5px 5px 10px;
 }
 
@@ -7395,8 +7395,8 @@ h3#advancedconfig a:hover::after, h3#advancedconfig a:focus::after,
 
 #netconfig th, #externali2cp th, #plugininstall th, #plugininstall2 th, .configtable th, th.th_title {
   padding: 7px 10px !important;
-  word-spacing: 0.1em;
-  letter-spacing: 0.08em;
+  word-spacing: .1em;
+  letter-spacing: .08em;
   text-transform: uppercase;
   text-align: left;
   font-size: 10pt;
@@ -7498,7 +7498,7 @@ h3.tabletitle, h3#i2pclientconfig, h3#advancedclientconfig, h3#webappconfig, h3#
 h3#updateplugins, h3#pluginmanage, h3#bannedpeers, h3.ptitle, h3#transports, h3#upnpstatus, h3.sybils, #certs h3 {
   margin-bottom: 0 !important;
   padding: 8px 10px;
-  letter-spacing: 0.08em;
+  letter-spacing: .08em;
   text-transform: uppercase;
   border: 1px solid #252;
   border-radius: 0;
@@ -7692,7 +7692,7 @@ th.th_title {
   padding: 8px 10px !important;
   text-align: left;
   background: linear-gradient(to bottom, #1a261a,#223022 7%,#212f21 9%,#172317 21%,#091109 49%,#050d05 50%,#020602 51%,#010301 53%,#000000 56%,#000000) !important;
-  background: linear-gradient(to bottom, rgba(0,0,0,0) 50%, #000 50%), repeating-linear-gradient(to right, rgba(0,0,0,0.5) 1px, rgba(0,0,0,0.5) 2px, rgba(0,16,0,0.5) 3px), linear-gradient(to bottom, #005000, #000 75%) !important;
+  background: linear-gradient(to bottom, rgba(0,0,0,0) 50%, #000 50%), repeating-linear-gradient(to right, rgba(0,0,0,.5) 1px, rgba(0,0,0,.5) 2px, rgba(0,16,0,.5) 3px), linear-gradient(to bottom, #005000, #000 75%) !important;
 }
 
 input#hideme {
@@ -7728,8 +7728,8 @@ input#hideme {
 h4.embeddedtitle#updateplugins {
   margin-top: -13px;
   padding: 5px 10px;
-  word-spacing: 0.1em;
-  letter-spacing: 0.08em;
+  word-spacing: .1em;
+  letter-spacing: .08em;
   text-transform: uppercase;
   text-align: left;
   font-size: 10pt;
@@ -7784,8 +7784,8 @@ h4.embeddedtitle#updateplugins {
 }
 
 #configstats th b {
-  word-spacing: 0.1em;
-  letter-spacing: 0.08em;
+  word-spacing: .1em;
+  letter-spacing: .08em;
   text-transform: uppercase;
   font-size: 10pt;
 }
@@ -7885,7 +7885,7 @@ p.sybilinfo.experimental {
   background-size: 28px 28px, 100% 100%, 100% 100% !important;
 }
 
-#oldhome input[type="checkbox"], #enablefullstats input[type="checkbox"] {
+#oldhome input[type=checkbox], #enablefullstats input[type=checkbox] {
   vertical-align: middle;
 }
 
@@ -8321,7 +8321,7 @@ h4#sb_shutdownstatus span {
 /* /tunnels */
 
 .routerid tt {
-  letter-spacing: 0.1em;
+  letter-spacing: .1em;
 }
 
 .tunnel_cap, .tier, .ff, .unreachable, .reachable, #capabilities_key b {
@@ -9542,7 +9542,7 @@ ul.statlist a[name], ul.statlist b, ul.statlist li b, ul.statlist a[name]:hover,
 .cells tt, #profilelist tt, #floodfills tt {
   margin-left: 2px !important;
   margin-right: 2px !important;
-  letter-spacing: 0.07em;
+  letter-spacing: .07em;
   font-size: 9pt !important;
 }
 
@@ -9817,7 +9817,7 @@ div[id^="config_"] .tab, div[id^="config_"] .tab2 {
   min-width: 70px !important;
   flex: auto;
   flex-basis: content;
-  flex-grow: 0.06;
+  flex-grow: .06;
   white-space: nowrap;
 }
 
@@ -9905,7 +9905,7 @@ div[id^="config_"] .tab:first-child {
   text-align: right;
   background: #030;
   width: 100%;
-  opacity: 0.7;
+  opacity: .7;
   border-top: 1px solid #000;
   display: none; /* hide until we resolve position */
 }
@@ -9942,7 +9942,7 @@ _:-ms-lang(x), .tunnels_client th:first-child::after {
 
 /*#xhr {
   width: 204px;
-  background: rgba(255,0,0,0.05);
+  background: rgba(255,0,0,.05);
   margin: 0 0 0 -12px;
   text-align: center !important;
 }
@@ -9994,7 +9994,7 @@ th.options, #externali2cp th {
   padding: 7px 10px !important;
 }
 
-.options input[type="checkbox"], #i2pupdates .options .optbox {
+.options input[type=checkbox], #i2pupdates .options .optbox {
   margin: 0 3px 0 0;
 }
 
@@ -10151,7 +10151,7 @@ th.options, #externali2cp th {
 
 .routerid tt {
   margin-left: 2px !Important;
-  letter-spacing: 0.2em !important;
+  letter-spacing: .2em !important;
 }
 
 .routerid img {
@@ -10269,7 +10269,7 @@ th.options, #externali2cp th {
   border: 1px solid #131 !important;
   box-shadow: inset 0 0 0 2px #000;
   column-gap: 1px;
-  transition: ease box-shadow 0.2s;
+  transition: ease box-shadow .2s;
   background: #000 !important;
   background: repeating-linear-gradient(to bottom, #000 1px, #000800 2px, #000800 3px) !important;
 }
@@ -10281,13 +10281,13 @@ th.options, #externali2cp th {
 .optionlist:hover, .optionsingle:hover, .optiontextarea:hover {
   border: 1px solid #131;
   box-shadow: inset 0 0 0 1px #002500 !important;
-  transition: ease box-shadow 0.5s, ease background 0.2s 0.01s;
+  transition: ease box-shadow .5s, ease background .2s .01s;
   background: #002500 !important;
 }
 
 #reseedconfig .optiontextarea:hover {
   box-shadow: inset 0 0 0 1px #002500 !important;
-  transition: ease box-shadow 0.5s, ease background 0.2s 0.01s;
+  transition: ease box-shadow .5s, ease background .2s .01s;
 }
 
 .optionlist label, .optionlist .nowrap {
@@ -10301,7 +10301,7 @@ th.options, #externali2cp th {
 #updatehelper .optionlist:hover, #updateProxyHostPort.optionlist:hover {
   vertical-align: middle;
   background: #000 !important;
-  transition: ease box-shadow 0.2s;
+  transition: ease box-shadow .2s;
   box-shadow: inset 0 0 0 1px #002500;
 }
 
@@ -10314,7 +10314,7 @@ th.options {
   font-size: 9pt !important;
 }
 
-.options input[type="checkbox"], .suboption .optbox {
+.options input[type=checkbox], .suboption .optbox {
   margin: 0 3px 0 0;
 }
 
@@ -10543,7 +10543,7 @@ b.suboption {
 }
 
 #netconfig input[type=text] {
-  transition: ease width 0.1s;
+  transition: ease width .1s;
   will-change: transform;
 }
 
@@ -10551,7 +10551,7 @@ b.suboption {
 #netconfig .optbox:not(:checked) + input[type=text][name="udpHost1"]:not(:focus) {
   width: 140px !important;
   min-width: 140px !important;
-  transition: ease width 0.1s;
+  transition: ease width .1s;
 }
 
 /* end /confignet */
@@ -10711,12 +10711,12 @@ b.suboption {
   display: inline-block;
 }
 
-#reseedconfig .optbox[type="checkbox"] {
+#reseedconfig .optbox[type=checkbox] {
   vertical-align: sub !important;
 }
 
 @supports not (-moz-appearance: none) {
-#reseedconfig .optbox[type="radio"] {
+#reseedconfig .optbox[type=radio] {
   margin: 4px 4px 4px 15px !important;
 }
 
@@ -10740,7 +10740,7 @@ b.suboption {
 #config_reseed .optionsingle:hover {
   border: 1px solid #252;
   box-shadow: inset 0 0 0 1px #002500;
-  transition: ease box-shadow 0.5s;
+  transition: ease box-shadow .5s;
 }
 
 #config_reseed .optionsingle.optiontextarea textarea {
@@ -10819,7 +10819,7 @@ b.suboption {
   padding: 0 !important;
 }
 
-#manualreseed .optionlist input[type=text], #manualreseed .optionlist input[type="file"] {
+#manualreseed .optionlist input[type=text], #manualreseed .optionlist input[type=file] {
   min-width: 0 !important;
   max-width: 50% !important;
   width: 50% !important;
@@ -10843,7 +10843,7 @@ b.suboption {
 #manualreseed .optionsingle:hover, .optiontextarea:hover, #reseed_urlselection:hover {
   border: 1px solid #252;
   box-shadow: inset 0 0 0 1px #002500 !important;
-  transition: ease box-shadow 0.5s;
+  transition: ease box-shadow .5s;
 }
 
 #manualreseed {
@@ -10932,7 +10932,7 @@ b.suboption {
   line-height: 130%;
 }
 
-#reseedurl input[type=text], #reseedzip input[type="file"], #reseedcreatefile p {
+#reseedurl input[type=text], #reseedzip input[type=file], #reseedcreatefile p {
   width: calc(100% - 5px);
 }
 
@@ -10963,7 +10963,7 @@ b.suboption {
   border-bottom: 1px solid #252;
 }
 
-input[type="file"] {
+input[type=file] {
   background: none;
 }
 
@@ -11054,7 +11054,7 @@ input[type="file"] {
   padding: 2px 12px 3px 10px;
 }
 
-#installPluginUrl input[type=text], #installPluginFile input[type="file"],  #joinfamily input[type="file"], #newfamily input[type=text] {
+#installPluginUrl input[type=text], #installPluginFile input[type=file],  #joinfamily input[type=file], #newfamily input[type=text] {
   width: 100% !important;
 }
 
@@ -11106,7 +11106,7 @@ input[type="file"] {
 #joinfamily .optionsingle:hover, #joinfamily .optionsingle:hover tr, #joinfamily .optionsingle:hover td,
 #newfamily .optionsingle:hover, #newfamily .optionsingle:hover tr, #newfamily .optionsingle:hover td {
   background-color: #020 !important;
-  transition: ease background 0.1s;
+  transition: ease background .1s;
 }
 
  #joinfamily tr:last-child td, #newfamily tr:last-child td, #plugininstall tr:nth-child(n+2) td {
@@ -11141,7 +11141,7 @@ input[type="file"] {
   text-align: left;
   font-weight: bold;
   border-radius: 2px 15px 15px 2px;
-  box-shadow: 0 0 0 1px #010, 0 0 0 2px rgba(0,0,0,0.7);
+  box-shadow: 0 0 0 1px #010, 0 0 0 2px rgba(0,0,0,.7);
   background: #020 url(/themes/console/images/svg/plugin.svg) 5px center no-repeat;
   background: url(/themes/console/images/svg/plugin.svg) 5px center no-repeat, linear-gradient(to bottom, #020, #000);
   background-size: 14px 14px, 100% 100%;
@@ -11194,7 +11194,7 @@ h3#pconfig {
   font-weight: bold;
   min-width: 120px;
   background: repeating-linear-gradient(135deg, #010 1px, #010 5px, #030 5px, #030 10px);
-  animation: downloadbar 0.6s infinite;
+  animation: downloadbar .6s infinite;
 }
 
 #timer::after, #countdown::after {
@@ -11208,7 +11208,7 @@ h3#pconfig {
   display: inline-block;
   min-width: 120px;
   text-align: center;
-  letter-spacing: 0.1em;
+  letter-spacing: .1em;
   text-shadow: 0 1px 1px #000;
   background: #020;
   background: linear-gradient(to right, #010, #000, #010);
@@ -11218,8 +11218,8 @@ h3#pconfig {
 
 /* custom radios/checkboxes to enforce color scheme when OS widgets are non-standard  */
 @supports (background-blend-mode: luminosity) { /* exclude ms browsers */
-input[type="checkbox"], input[type="checkbox"]:checked, input[type="checkbox"][disabled], input[type="checkbox"][disabled]:checked,
-input[type="radio"], input[type="radio"]:checked, input[type="radio"][disabled], input[type="radio"][disabled]:checked {
+input[type=checkbox], input[type=checkbox]:checked, input[type=checkbox][disabled], input[type=checkbox][disabled]:checked,
+input[type=radio], input[type=radio]:checked, input[type=radio][disabled], input[type=radio][disabled]:checked {
   position: relative;
   width: 19px !important;
   height: 19px !important;
@@ -11236,18 +11236,18 @@ input[type="radio"], input[type="radio"]:checked, input[type="radio"][disabled],
   will-change: transform;
 }
 
-input[type="checkbox"], input[type="checkbox"]:checked, input[type="checkbox"][disabled], input[type="checkbox"][disabled]:checked {
+input[type=checkbox], input[type=checkbox]:checked, input[type=checkbox][disabled], input[type=checkbox][disabled]:checked {
   border-radius: 1px;
   box-shadow: inset 0 0 0 1px #000, inset 3px 3px 3px 1px #000;
 }
 
-input[type="radio"], input[type="radio"]:checked, input[type="radio"][disabled], input[type="radio"][disabled]:checked {
+input[type=radio], input[type=radio]:checked, input[type=radio][disabled], input[type=radio][disabled]:checked {
   border-radius: 50%;
   box-shadow: inset 0 0 0 1px #000, inset 3px 3px 3px 1px #000;
 }
 
-input[type="checkbox"]:checked::before, input[type="radio"]:checked::before,
-input[type="checkbox"]:not(:checked)::before, input[type="radio"]:not(:checked)::before {
+input[type=checkbox]:checked::before, input[type=radio]:checked::before,
+input[type=checkbox]:not(:checked)::before, input[type=radio]:not(:checked)::before {
   position: absolute;
   transform: scale(1);
 }
@@ -11260,7 +11260,7 @@ input[type="checkbox"]:not(:checked)::before, input[type="radio"]:not(:checked):
   background: #000 !important;
 }
 
-input[type="checkbox"]:checked::before, input[type="checkbox"]:not(:checked)::before {
+input[type=checkbox]:checked::before, input[type=checkbox]:not(:checked)::before {
   width: 11px;
   height: 11px;
   top: 3px;
@@ -11271,7 +11271,7 @@ input[type="checkbox"]:checked::before, input[type="checkbox"]:not(:checked)::be
   content: "";
 }
 
-input[type="radio"]:checked::before {
+input[type=radio]:checked::before {
   width: 9px;
   height: 9px;
   left: 25%;
@@ -11283,23 +11283,23 @@ input[type="radio"]:checked::before {
   content: "";
 }
 
-input[type="checkbox"]:checked:hover::before {
+input[type=checkbox]:checked:hover::before {
   color: #6b6;
-  transition: ease transform 0.05s;
+  transition: ease transform .05s;
 }
 
-input[type="radio"]:checked:hover::before {
+input[type=radio]:checked:hover::before {
   background: #6b6;
-  transition: ease transform 0.05s;
+  transition: ease transform .05s;
 }
 
-input[type="checkbox"]:not(:checked)::before, input[type="radio"]:not(:checked)::before {
+input[type=checkbox]:not(:checked)::before, input[type=radio]:not(:checked)::before {
   transform: scale(0);
   color: transparent;
   background: transparent;
 }
 
-input[type="checkbox"]:hover, input[type="radio"]:hover, input[type="checkbox"]:focus, input[type="radio"]:focus {
+input[type=checkbox]:hover, input[type=radio]:hover, input[type=checkbox]:focus, input[type=radio]:focus {
   background: #000;
   width: 19px !important;
   height: 19px !important;
@@ -11307,11 +11307,11 @@ input[type="checkbox"]:hover, input[type="radio"]:hover, input[type="checkbox"]:
   box-shadow: 0 0 1px #f60, 0 0 2px #f60 !important;
 }
 
-input[type="checkbox"][disabled], input[type="radio"][disabled], input[type="checkbox"][disabled]:hover, input[type="radio"][disabled]:hover,
-input[type="checkbox"][disabled]:checked, input[type="radio"][disabled]:checked, input[type="checkbox"][disabled]:checked:hover, input[type="radio"][disabled]:checked:hover {
+input[type=checkbox][disabled], input[type=radio][disabled], input[type=checkbox][disabled]:hover, input[type=radio][disabled]:hover,
+input[type=checkbox][disabled]:checked, input[type=radio][disabled]:checked, input[type=checkbox][disabled]:checked:hover, input[type=radio][disabled]:checked:hover {
   border: 1px solid #252 !important;
   box-shadow: none !important;
-  opacity: 0.5 !important;
+  opacity: .5 !important;
   background: #000;
   filter: none !important;
 }
@@ -11432,7 +11432,7 @@ input[type="checkbox"][disabled]:checked, input[type="radio"][disabled]:checked,
 }
 
 #netdboverview td {
-  background: repeating-linear-gradient(to bottom, rgba(0,0,0,.5), rgba(0,16,0,0.5) 1px, rgba(0,16,0,0.5) 2px) #000;
+  background: repeating-linear-gradient(to bottom, rgba(0,0,0,.5), rgba(0,16,0,.5) 1px, rgba(0,16,0,.5) 2px) #000;
 }
 
 #netdbcountrylist td, #netdbversions td, #netdbtransports td, #netdbtiers td {
@@ -11524,7 +11524,7 @@ input[type="checkbox"][disabled]:checked, input[type="radio"][disabled]:checked,
 #netdb .netdbentry th code, #netdb .sybil_routerinfo th code, #netdb .leaseset th code {
   margin: 2px 5px 2px 7px;
   padding: 1px 4px 2px;
-  font-family: "Droid Sans", "Open Sans", "Noto Sans", Ubuntu, "Segoe UI", "Lucida Grande", Verdana, Helvetica, sans-serif !important;
+  font-family: Droid Sans, Open Sans, Noto Sans, Ubuntu, Segoe UI, Lucida Grande, Verdana, Helvetica, sans-serif !important;
   font-weight: bold !important;
   letter-spacing: .12em;
   color: #bb0;
@@ -11683,13 +11683,36 @@ input[type="checkbox"][disabled]:checked, input[type="radio"][disabled]:checked,
 }
 
 .viewprofile img:hover, .viewfullentry img:hover, .familysearch img:hover, .configpeer img:hover, .profiledump img:hover {
-  border: 1px solid #f60;
+  border: 1px solid #d50;
   background: linear-gradient(to bottom, #030, #000);
 }
 
+#profilelist .routerid {
+  margin-left: 1px;
+  margin-right: 1px;
+}
+
+#profilelist th:last-child {
+  text-align: left;
+}
+
+#profilelist th:last-child, #profilelist td:last-child {
+  padding-left: 4px;
+  padding-right: 4px;
+}
+
 #profilelist td:last-child img {
-  margin: 1px 5px !important;
+  margin-top: 1px !important;
+  margin-bottom: 1px !important;
   vertical-align: middle;
+}
+
+#profilelist td:last-child .configpeer img {
+  margin-right: 0 !important;
+}
+
+#profilelist td:last-child .viewprofile img {
+  margin-left: 0 !important;
 }
 
 .familysearch img {
@@ -11702,7 +11725,7 @@ input[type="checkbox"][disabled]:checked, input[type="radio"][disabled]:checked,
 }
 
 .viewprofile + .viewfullentry, .viewfullentry + .configpeer, .viewprofile + .configpeer {
-  margin-left: -5px !important;
+  margin-left: -7px !important;
 }
 
 .netdb_header img[src="/flags.jsp?c=a0"] {
@@ -12009,7 +12032,7 @@ input[type="checkbox"][disabled]:checked, input[type="radio"][disabled]:checked,
   right: 1px;
   width: 27px;
   height: 27px;
-  opacity: 0.7;
+  opacity: .7;
 }
 
 @media screen and (max-width: 1480px) {
@@ -12090,7 +12113,7 @@ div.app:hover .extlink::after, .sitemapLink.extlink:hover::after {
 }
 
 #events tr:nth-child(n+1):hover td {
-  background: rgba(0,0,0,0.1);
+  background: rgba(0,0,0,.1);
 }
 
 #events td:first-child span {
@@ -12164,7 +12187,7 @@ div.app:hover .extlink::after, .sitemapLink.extlink:hover::after {
   border-radius: 2px;
   box-shadow: 0 0 1px 1px #010;
   background: #020;
-  background: rgba(0,48,0,0.5);
+  background: rgba(0,48,0,.5);
 }
 
 .embedlink {
@@ -12339,7 +12362,7 @@ a:hover .tier, a:focus .tier {
 .routersummary div[style="height: 36px;"]:hover {
   box-shadow: inset 0 0 0 1px #000, inset 0 0 2px 1px #f60, inset 0 0 0 3px #000;
   background: rgba(0,96,0,.1) !important;
-  transition: ease background 0.15s;
+  transition: ease background .15s;
 }
 
 .routersummary div[style="height: 36px;"]:active {
@@ -12348,7 +12371,7 @@ a:hover .tier, a:focus .tier {
 
 .routersummary table, .routersummary form {
   background: rgba(0,16,0,.1) !important;
-  background: repeating-linear-gradient(to right, rgba(0,80,0,.1) 1px, rgba(0,16,0,0.1) 2px, rgba(0,16,0,0.1) 3px) !important;
+  background: repeating-linear-gradient(to right, rgba(0,80,0,.1) 1px, rgba(0,16,0,.1) 2px, rgba(0,16,0,.1) 3px) !important;
 }
 
 .routersummary form {
@@ -12441,7 +12464,7 @@ a:hover .tier, a:focus .tier {
 }
 
 #routerlogs li:hover, #criticallogs li:hover {
-  background: rgba(0,48,0,0.3)
+  background: rgba(0,48,0,.3)
 }
 
 #routerlogs li:hover font, #criticallogs li:hover font {
@@ -12529,11 +12552,11 @@ a[href^="/netdb"]:hover span {
 }
 
 #themesettings, #consolepass, #langsettings, #pw_adduser {
-  background: repeating-linear-gradient(to bottom, rgba(0,0,0,0.8), rgba(0,16,0,.5) 1px, rgba(0,16,0,.5) 2px), url(/themes/console/dark/images/camotile2.png) #000 !important;
+  background: repeating-linear-gradient(to bottom, rgba(0,0,0,.8), rgba(0,16,0,.5) 1px, rgba(0,16,0,.5) 2px), url(/themes/console/dark/images/camotile2.png) #000 !important;
 }
 
 #config_ui .formaction {
-  background: repeating-linear-gradient(to right, rgba(0,0,0,.4), rgba(0,0,0,.4) 2px, rgba(0,32,0,.4) 3px), repeating-linear-gradient(to bottom, rgba(0,0,0,0.8), rgba(0,16,0,.5) 1px, rgba(0,16,0,.5) 2px), url(/themes/console/dark/images/camotile2.png) #000 !important;
+  background: repeating-linear-gradient(to right, rgba(0,0,0,.4), rgba(0,0,0,.4) 2px, rgba(0,32,0,.4) 3px), repeating-linear-gradient(to bottom, rgba(0,0,0,.8), rgba(0,16,0,.5) 1px, rgba(0,16,0,.5) 2px), url(/themes/console/dark/images/camotile2.png) #000 !important;
   background: #000 !important;
 }
 
@@ -12547,13 +12570,13 @@ a[href^="/netdb"]:hover span {
 
 #pluginconfig tr {
   box-shadow: inset 0 0 0 1px #000, inset 0 -1px 0 1px #000, inset -1px 0 0 1px #000, inset 0 0 1px 1px #020, inset 0 -1px 1px 1px #020, inset -1px 0 1px 1px #020 !important;
-  background: repeating-linear-gradient(to bottom, rgba(0,0,0,0.8), rgba(0,16,0,.5) 1px, rgba(0,16,0,.5) 2px), url(/themes/console/dark/images/camotile2.png) !important;
+  background: repeating-linear-gradient(to bottom, rgba(0,0,0,.8), rgba(0,16,0,.5) 1px, rgba(0,16,0,.5) 2px), url(/themes/console/dark/images/camotile2.png) !important;
 }
 
 #plugininstall, #plugininstall2, #reseedconfig tr, #manualreseed tr, #i2pupdates tr, #netconfig tr, #externali2cp tr,
 #joinfamily tr:last-child, #newfamily tr:last-child {
   box-shadow: inset 0 0 0 1px #000, inset 0 0 1px 1px #040 !important;
-  background: repeating-linear-gradient(to bottom, rgba(0,0,0,0.8), rgba(0,16,0,.5) 1px, rgba(0,16,0,.5) 2px), url(/themes/console/dark/images/camotile2.png) !important;
+  background: repeating-linear-gradient(to bottom, rgba(0,0,0,.8), rgba(0,16,0,.5) 1px, rgba(0,16,0,.5) 2px), url(/themes/console/dark/images/camotile2.png) !important;
 }
 
 #plugininstall tr, #plugininstall2 tr, #plugininstall td, #plugininstall2 td, #reseedconfig td, #manualreseed td, #i2pupdates td,
@@ -12617,7 +12640,7 @@ a[href^="/netdb"]:hover span {
 }
 
 #debug .skm_key td:first-child, .debug_pubkey, .debug_sesskey {
-  font-family: "Droid Sans Mono", "Noto Mono", "Lucida Console", "DejaVu Sans Mono", monospace;
+  font-family: Droid Sans Mono, Noto Mono, Lucida Console, DejaVu Sans Mono, monospace;
   font-weight: bold;
   color: #bb0 !important;
 }
@@ -12792,10 +12815,10 @@ h1[class], h1 {
   background-color: #010;
 }
 
-/* temp fix for 0.9.36 news */
+/* temp fix for .9.36 news */
 
 .newscontent a[href="/configadvanced"] + tt {
-  margin-left: 0.35em;
+  margin-left: .35em;
 }
 
 /* help toc */
@@ -12891,67 +12914,67 @@ h1[class], h1 {
 
 #configurationhelp h2, #advancedsettings h2, #filterlist h2 {
   padding-left: 38px;
-  background: url(/themes/console/images/info/configure.png) 10px center no-repeat, linear-gradient(to bottom, rgba(0,0,0,0) 50%, #000 50%), repeating-linear-gradient(to right, rgba(0,0,0,0.5) 1px, rgba(0,0,0,0.5) 2px, rgba(0,16,0,0.5) 3px), linear-gradient(to bottom, #005000, #000 75%) !important;
+  background: url(/themes/console/images/info/configure.png) 10px center no-repeat, linear-gradient(to bottom, rgba(0,0,0,0) 50%, #000 50%), repeating-linear-gradient(to right, rgba(0,0,0,.5) 1px, rgba(0,0,0,.5) 2px, rgba(0,16,0,.5) 3px), linear-gradient(to bottom, #005000, #000 75%) !important;
   background-size: 20px 20px, 100% 100%, 100% 100%, 100% 100% !important;
 }
 
 #sidebarhelp h2, #reachabilityhelp h2 {
   padding-left: 38px;
-  background: url(/themes/console/images/info/sidebar.png) 10px center no-repeat, linear-gradient(to bottom, rgba(0,0,0,0) 50%, #000 50%), repeating-linear-gradient(to right, rgba(0,0,0,0.5) 1px, rgba(0,0,0,0.5) 2px, rgba(0,16,0,0.5) 3px), linear-gradient(to bottom, #005000, #000 75%) !important;
+  background: url(/themes/console/images/info/sidebar.png) 10px center no-repeat, linear-gradient(to bottom, rgba(0,0,0,0) 50%, #000 50%), repeating-linear-gradient(to right, rgba(0,0,0,.5) 1px, rgba(0,0,0,.5) 2px, rgba(0,16,0,.5) 3px), linear-gradient(to bottom, #005000, #000 75%) !important;
   background-size: 20px 20px, 100% 100%, 100% 100%, 100% 100% !important;
 }
 
 #reseedhelp h2 {
   padding-left: 38px;
-  background: url(/themes/console/images/svg/reseed.svg) 10px center no-repeat, linear-gradient(to bottom, rgba(0,0,0,0) 50%, #000 50%), repeating-linear-gradient(to right, rgba(0,0,0,0.5) 1px, rgba(0,0,0,0.5) 2px, rgba(0,16,0,0.5) 3px), linear-gradient(to bottom, #005000, #000 75%) !important;
+  background: url(/themes/console/images/svg/reseed.svg) 10px center no-repeat, linear-gradient(to bottom, rgba(0,0,0,0) 50%, #000 50%), repeating-linear-gradient(to right, rgba(0,0,0,.5) 1px, rgba(0,0,0,.5) 2px, rgba(0,16,0,.5) 3px), linear-gradient(to bottom, #005000, #000 75%) !important;
   background-size: 20px 20px, 100% 100%, 100% 100%, 100% 100% !important;
 }
 
 #newuserguide h2 {
   padding-left: 38px;
-  background: url(/themes/console/images/info/notice.png) 10px center no-repeat, linear-gradient(to bottom, rgba(0,0,0,0) 50%, #000 50%), repeating-linear-gradient(to right, rgba(0,0,0,0.5) 1px, rgba(0,0,0,0.5) 2px, rgba(0,16,0,0.5) 3px), linear-gradient(to bottom, #005000, #000 75%) !important;
+  background: url(/themes/console/images/info/notice.png) 10px center no-repeat, linear-gradient(to bottom, rgba(0,0,0,0) 50%, #000 50%), repeating-linear-gradient(to right, rgba(0,0,0,.5) 1px, rgba(0,0,0,.5) 2px, rgba(0,16,0,.5) 3px), linear-gradient(to bottom, #005000, #000 75%) !important;
   background-size: 20px 20px, 100% 100%, 100% 100%, 100% 100% !important;
 }
 
 #troubleshoot h2 {
   padding-left: 38px;
-  background: url(/themes/console/images/wrench_orange.png) 10px center no-repeat, linear-gradient(to bottom, rgba(0,0,0,0) 50%, #000 50%), repeating-linear-gradient(to right, rgba(0,0,0,0.5) 1px, rgba(0,0,0,0.5) 2px, rgba(0,16,0,0.5) 3px), linear-gradient(to bottom, #005000, #000 75%) !important;
+  background: url(/themes/console/images/wrench_orange.png) 10px center no-repeat, linear-gradient(to bottom, rgba(0,0,0,0) 50%, #000 50%), repeating-linear-gradient(to right, rgba(0,0,0,.5) 1px, rgba(0,0,0,.5) 2px, rgba(0,16,0,.5) 3px), linear-gradient(to bottom, #005000, #000 75%) !important;
   background-size: 20px 20px, 100% 100%, 100% 100%, 100% 100% !important;
 }
 
 #legal h2 {
   padding-left: 38px;
-  background: url(/themes/console/images/info/legal.png) 10px center no-repeat, linear-gradient(to bottom, rgba(0,0,0,0) 50%, #000 50%), repeating-linear-gradient(to right, rgba(0,0,0,0.5) 1px, rgba(0,0,0,0.5) 2px, rgba(0,16,0,0.5) 3px), linear-gradient(to bottom, #005000, #000 75%) !important;
+  background: url(/themes/console/images/info/legal.png) 10px center no-repeat, linear-gradient(to bottom, rgba(0,0,0,0) 50%, #000 50%), repeating-linear-gradient(to right, rgba(0,0,0,.5) 1px, rgba(0,0,0,.5) 2px, rgba(0,16,0,.5) 3px), linear-gradient(to bottom, #005000, #000 75%) !important;
   background-size: 20px 20px, 100% 100%, 100% 100%, 100% 100% !important;
 }
 
 #changelog h2 {
   padding-left: 38px;
-  background: url(/themes/console/images/svg/logs.svg) 10px center no-repeat, linear-gradient(to bottom, rgba(0,0,0,0) 50%, #000 50%), repeating-linear-gradient(to right, rgba(0,0,0,0.5) 1px, rgba(0,0,0,0.5) 2px, rgba(0,16,0,0.5) 3px), linear-gradient(to bottom, #005000, #000 75%) !important;
+  background: url(/themes/console/images/svg/logs.svg) 10px center no-repeat, linear-gradient(to bottom, rgba(0,0,0,0) 50%, #000 50%), repeating-linear-gradient(to right, rgba(0,0,0,.5) 1px, rgba(0,0,0,.5) 2px, rgba(0,16,0,.5) 3px), linear-gradient(to bottom, #005000, #000 75%) !important;
   background-size: 20px 20px, 100% 100%, 100% 100%, 100% 100% !important;
 }
 
 #faq h2, #glossary h2 {
   padding-left: 38px;
-  background: url(/themes/console/images/info/question.png) 10px center no-repeat, linear-gradient(to bottom, rgba(0,0,0,0) 50%, #000 50%), repeating-linear-gradient(to right, rgba(0,0,0,0.5) 1px, rgba(0,0,0,0.5) 2px, rgba(0,16,0,0.5) 3px), linear-gradient(to bottom, #005000, #000 75%) !important;
+  background: url(/themes/console/images/info/question.png) 10px center no-repeat, linear-gradient(to bottom, rgba(0,0,0,0) 50%, #000 50%), repeating-linear-gradient(to right, rgba(0,0,0,.5) 1px, rgba(0,0,0,.5) 2px, rgba(0,16,0,.5) 3px), linear-gradient(to bottom, #005000, #000 75%) !important;
   background-size: 20px 20px, 100% 100%, 100% 100%, 100% 100% !important;
 }
 
 #webhosting h2 {
   padding-left: 38px;
-  background: url(/themes/console/images/server_32x32.png) 10px center no-repeat, linear-gradient(to bottom, rgba(0,0,0,0) 50%, #000 50%), repeating-linear-gradient(to right, rgba(0,0,0,0.5) 1px, rgba(0,0,0,0.5) 2px, rgba(0,16,0,0.5) 3px), linear-gradient(to bottom, #005000, #000 75%) !important;
+  background: url(/themes/console/images/server_32x32.png) 10px center no-repeat, linear-gradient(to bottom, rgba(0,0,0,0) 50%, #000 50%), repeating-linear-gradient(to right, rgba(0,0,0,.5) 1px, rgba(0,0,0,.5) 2px, rgba(0,16,0,.5) 3px), linear-gradient(to bottom, #005000, #000 75%) !important;
   background-size: 20px 20px, 100% 100%, 100% 100%, 100% 100% !important;
 }
 
 #themeoverride h2 {
   padding-left: 38px;
-  background: url(/themes/console/images/svg/ui.svg) 10px center no-repeat, linear-gradient(to bottom, rgba(0,0,0,0) 50%, #000 50%), repeating-linear-gradient(to right, rgba(0,0,0,0.5) 1px, rgba(0,0,0,0.5) 2px, rgba(0,16,0,0.5) 3px), linear-gradient(to bottom, #005000, #000 75%) !important;
+  background: url(/themes/console/images/svg/ui.svg) 10px center no-repeat, linear-gradient(to bottom, rgba(0,0,0,0) 50%, #000 50%), repeating-linear-gradient(to right, rgba(0,0,0,.5) 1px, rgba(0,0,0,.5) 2px, rgba(0,16,0,.5) 3px), linear-gradient(to bottom, #005000, #000 75%) !important;
   background-size: 20px 20px, 100% 100%, 100% 100%, 100% 100% !important;
 }
 
 #browserconfig h2 {
   padding-left: 38px;
-  background: url(/themes/console/images/svg/firefox.svg) 10px center no-repeat, linear-gradient(to bottom, rgba(0,0,0,0) 50%, #000 50%), repeating-linear-gradient(to right, rgba(0,0,0,0.5) 1px, rgba(0,0,0,0.5) 2px, rgba(0,16,0,0.5) 3px), linear-gradient(to bottom, #005000, #000 75%) !important;
+  background: url(/themes/console/images/svg/firefox.svg) 10px center no-repeat, linear-gradient(to bottom, rgba(0,0,0,0) 50%, #000 50%), repeating-linear-gradient(to right, rgba(0,0,0,.5) 1px, rgba(0,0,0,.5) 2px, rgba(0,16,0,.5) 3px), linear-gradient(to bottom, #005000, #000 75%) !important;
   background-size: 20px 20px, 100% 100%, 100% 100%, 100% 100% !important;
 }
 
@@ -12962,7 +12985,7 @@ h1[class], h1 {
 
 #tunnman h2 {
   padding-left: 38px;
-  background: url(/themes/console/images/info/tunnels.png) 10px center no-repeat, linear-gradient(to bottom, rgba(0,0,0,0) 50%, #000 50%), repeating-linear-gradient(to right, rgba(0,0,0,0.5) 1px, rgba(0,0,0,0.5) 2px, rgba(0,16,0,0.5) 3px), linear-gradient(to bottom, #005000, #000 75%) !important;
+  background: url(/themes/console/images/info/tunnels.png) 10px center no-repeat, linear-gradient(to bottom, rgba(0,0,0,0) 50%, #000 50%), repeating-linear-gradient(to right, rgba(0,0,0,.5) 1px, rgba(0,0,0,.5) 2px, rgba(0,16,0,.5) 3px), linear-gradient(to bottom, #005000, #000 75%) !important;
   background-size: 20px 20px, 100% 100%, 100% 100%, 100% 100% !important;
 }
 
@@ -13134,7 +13157,7 @@ h2#jobrunners {
 }
 
 #news.news hr {
-  opacity: 0.7;
+  opacity: .7;
 }
 
 table.search {
@@ -13188,7 +13211,7 @@ table.search {
   margin-left: -7px;
   margin-right: -7px;
   padding-left: 32px;
-  letter-spacing: 0.12em;
+  letter-spacing: .12em;
   font-size: 10.5pt;
   border: 1px solid #252;
   background: url(/themes/console/images/eepsite.png) 8px center no-repeat, repeating-linear-gradient(to right, rgba(0,0,0,.5) 1px, rgba(0,0,0,.5) 2px, rgba(0,16,0,.5) 3px), linear-gradient(to bottom, #1a261a, #223022 7%, #212f21 9%, #172317 21%, #091109 46%, #050d05 48%, #020602 52%, #010301 54%, #000000 56%), url(images/camotile2.png) #000 !important;
@@ -13343,7 +13366,7 @@ table.search {
 /* setup wizard */
 
 #wizardpage .routersummary h3, #wizardpage .routersummary h3:hover, #wizardpage .routersummary h3:active {
-  background: repeating-linear-gradient(to right, rgba(0,0,0,0.5) 1px, rgba(0,0,0,0.5) 2px, rgba(0,16,0,0.5) 3px),
+  background: repeating-linear-gradient(to right, rgba(0,0,0,.5) 1px, rgba(0,0,0,.5) 2px, rgba(0,16,0,.5) 3px),
               linear-gradient(to bottom, #1a261a, #223022 7%, #212f21 9%, #172317 21%, #091109 49%, #050d05 50%, #020602 51%, #010301 53%, #000000 56%) !important;
   box-shadow: inset 0 0 0 1px #000 !important;
   mix-blend-mode: normal !important;
@@ -13809,7 +13832,7 @@ i {
   margin: -7px -10px -9px;
   padding: 8px 0 6px;
   position: relative;
-  letter-spacing: 0.1em;
+  letter-spacing: .1em;
   font-size: 18pt;
   font-weight: bold;
   color: #ffa;
@@ -13862,7 +13885,7 @@ i {
 #sybilTask th {
   padding-left: 8px;
   text-transform: uppercase;
-  letter-spacing: 0.1em;
+  letter-spacing: .1em;
   font-size: 11pt !important;
   text-align: left;
 }
@@ -13928,7 +13951,7 @@ i {
   background: #020;
 }
 
-#sybilTask input[type="checkbox"] {
+#sybilTask input[type=checkbox] {
   margin: 14px 8px;
 }
 
@@ -14168,7 +14191,7 @@ h3 + table {
   margin-bottom: -3px !important;
   background: url(/themes/console/images/info/tunnels.png) 6px center no-repeat,
         linear-gradient(to bottom, rgba(0,0,0,0) 50%, #000 50%),
-        repeating-linear-gradient(to right, rgba(0,0,0,0.5) 1px, rgba(0,0,0,0.5) 2px, rgba(0,16,0,0.5) 3px),
+        repeating-linear-gradient(to right, rgba(0,0,0,.5) 1px, rgba(0,0,0,.5) 2px, rgba(0,16,0,.5) 3px),
         linear-gradient(to bottom, #005000, #000 75%) !important;
   background-size: 20px 20px, 100% 100%, 100% 100%, 100% 100% !important;
 }
