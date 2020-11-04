@@ -6,16 +6,16 @@
 body, html {
   min-height: 100%;
   background: #000;
-  background: repeating-linear-gradient(to bottom, rgba(0,0,0,0.3), rgba(0,16,0,0.5) 1px, rgba(0,16,0,0.5) 2px), url(/themes/console/dark/images/camotile2.png) top left fixed #010;
+  background: repeating-linear-gradient(to bottom, rgba(0,0,0,.3), rgba(0,16,0,.5) 1px, rgba(0,16,0,.5) 2px), url(/themes/console/dark/images/camotile2.png) top left fixed #010;
   background: repeating-linear-gradient(to right, rgba(0,80,0,.1) 1px, rgba(0,16,0,.3) 2px, rgba(0,16,0,.3) 3px), linear-gradient(to bottom, rgba(0,0,0,.5), rgba(0,0,0,.5)), repeating-linear-gradient(to bottom, rgba(0,0,0,.6) 1px, rgba(0,32,0,.3) 2px, rgba(0,32,0,.3) 3px), url(/themes/console/dark/images/camotile.png) #010 !important;
 }
 
 html {
-  scrollbar-color: rgba(8,48,8,0.8) #000800;
+  scrollbar-color: rgba(8,48,8,.8) #000800;
 }
 
 html:hover {
-  scrollbar-color: rgba(16,72,16,0.8) #000800;
+  scrollbar-color: rgba(16,72,16,.8) #000800;
   transition: ease scrollbar-color .1s;
 }
 
@@ -41,7 +41,7 @@ body.iframed {
 }
 
 ::selection {
-  background: rgba(0,187,0,0.99) !important;
+  background: rgba(0,187,0,.99) !important;
   color: #000;
   text-shadow: none;
 }
@@ -53,11 +53,11 @@ body.iframed {
 }
 
 .destaddress, textarea {
-  scrollbar-color: rgba(16,48,16,0.4) rgba(0,0,0,0);
+  scrollbar-color: rgba(16,48,16,.4) rgba(0,0,0,0);
 }
 
 .destaddress:hover, textarea:hover {
-  scrollbar-color: rgba(24,80,24,0.9) rgba(0,0,0,.9);
+  scrollbar-color: rgba(24,80,24,.9) rgba(0,0,0,.9);
 }
 
 #navi, .buttons, #buttons, #host_list tr:first-child, #host_list img, #host_list td:nth-child(n+2) a {
@@ -92,7 +92,7 @@ body.iframed {
   text-align: center;
   border: 1px solid #252;
   border-radius: 0 1px 2px 2px;
-  box-shadow: inset 0 0 0 1px #000, 0 2px 2px 2px rgba(0,0,0,0.7);
+  box-shadow: inset 0 0 0 1px #000, 0 2px 2px 2px rgba(0,0,0,.7);
   background: #000 url(/themes/console/dark/images/header.png) repeat-x scroll center center !important;
   background: repeating-linear-gradient(135deg, #000 1px, #000 2px, #010 2px, #010 4px), repeating-linear-gradient(45deg, #000 1px, #000 2px, #010 2px, #010 4px), linear-gradient(to bottom, #1a261a 0%, #223022 7%, #212f21 9%, #172317 21%, #091109 49%, #050d05 50%, #020602 51%, #010301 53%, #000000 56%, #000000 100%), url(/themes/console/dark/images/camotile2.png) top left !important;
   background-blend-mode: exclusion, exclusion, normal, normal;
@@ -262,7 +262,7 @@ hr {
   margin: 8px 0 -8px;
   padding: 0 10px;
   line-height: 210%;
-  word-spacing: 0.1em;
+  word-spacing: .1em;
   font-weight: bold;
   text-align: center;
   text-transform: capitalize;
@@ -306,8 +306,8 @@ span.addrhlpr {
 
 h3 {
   padding: 7px 10px;
-  letter-spacing: 0.18em;
-  word-spacing: 0.1em;
+  letter-spacing: .18em;
+  word-spacing: .1em;
   font-size: 10pt;
   font-weight: bold;
   text-transform: uppercase;
@@ -317,7 +317,7 @@ h3 {
   box-shadow: inset 0 0 0 1px #000;
   background: #000 url(/themes/console/dark/images/header.png) repeat-x scroll center center;
   background: linear-gradient(to bottom, rgba(0,0,0,0) 50%, #000 50%),
-              repeating-linear-gradient(to right, rgba(0,0,0,0.5) 1px, rgba(0,16,0,0.5) 2px, rgba(0,16,0,0.5) 3px),
+              repeating-linear-gradient(to right, rgba(0,0,0,.5) 1px, rgba(0,16,0,.5) 2px, rgba(0,16,0,.5) 3px),
               linear-gradient(to bottom, #004000, #000 75%);
   -webkit-text-stroke: 1px rgba(237, 237, 146,.3);
 }
@@ -352,12 +352,12 @@ h3 {
 
 #content h3 {
   padding-left: 34px;
-  letter-spacing: 0.12em;
-  word-spacing: 0.1em;
+  letter-spacing: .12em;
+  word-spacing: .1em;
   border: 1px solid #242;
   background: url(/themes/console/images/info/question.png) 8px center no-repeat #000;
   background: url(/themes/console/images/info/question.png) 8px center no-repeat, linear-gradient(to bottom, rgba(0,0,0,0) 50%, #000 50%),
-              repeating-linear-gradient(to right, rgba(0,0,0,0.5) 1px, rgba(0,16,0,0.5) 2px, rgba(0,16,0,0.5) 3px),
+              repeating-linear-gradient(to right, rgba(0,0,0,.5) 1px, rgba(0,16,0,.5) 2px, rgba(0,16,0,.5) 3px),
               linear-gradient(to bottom, #004000, #000 75%);
   background-size: 18px 18px, 100% 100%;
 }
@@ -457,7 +457,7 @@ h4 {
   margin-top: -15px;
   margin-bottom: 30px !important;
   padding: 8px 10px 8px 35px;
-  word-spacing: 0.1em;
+  word-spacing: .1em;
   font-size: 9pt;
   border: 1px solid #242;
   box-shadow: inset 0 0 0 1px #000, inset 0 0 2px 1px #030 !important;
@@ -506,7 +506,7 @@ td.checkbox {
   width: 1% !important;
 }
 
-input[type="checkbox"], input[type="radio"] {
+input[type=checkbox], input[type=radio] {
   min-width: 16px;
   min-height: 16px;
   background: none;
@@ -561,12 +561,13 @@ form[action="addressbook"] > p.buttons {
 }
 
 td > img[width="320"], td > img[src^="/imagegen"] {
-  border-radius: 4px;
+  margin: 10px 3px;
+  padding: 2px;
   width: 240px;
   height: 240px;
+  border-radius: 1px;
   border: 1px solid #242;
-  padding: 5px;
-  margin: 10px 3px;
+  box-shadow: inset 0 0 0 1px #000;
   background: #000;
 }
 
@@ -627,9 +628,9 @@ li {
 }
 
 #helpsubs p {
-  border: none;
-  line-height: 130%;
   padding: 15px;
+  line-height: 130%;
+  border: none;
 }
 
 #helpconfig {
@@ -638,10 +639,10 @@ li {
 }
 
 #helpconfig ul {
+  margin: 0 0 -5px -40px;
   display: block;
   columns: 2 500px;
   column-gap: 40px;
-  margin: 0 0 -5px -40px;
 }
 
 .iframed #helpconfig, .iframed #helpsubs {
@@ -661,9 +662,9 @@ div#content p {
 }
 
 p.footer {
+  display: none;
   font-size: 7pt;
   text-align: center;
-  display: none;
 }
 
 .iframed #footer {
@@ -671,15 +672,15 @@ p.footer {
 }
 
 p.buttons, #buttons {
-  text-align: right;
   margin: 5px 0 -5px;
   padding: 0 3px;
+  text-align: right;
 }
 
 div#book + div#buttons {
-  border: 1px solid #242;
-  padding: 0 0 10px;
   margin-top: 3px;
+  padding: 0 0 10px;
+  border: 1px solid #242;
   background: #000;
 }
 
@@ -731,11 +732,11 @@ div#content + div#buttons {
   max-width: 700px;
   height: auto;
   font-size: 10pt;
-  border-radius: 4px;
   border: 1px solid #242;
+  border-radius: 4px;
   box-shadow: inset 0 0 0 1px #000, inset 0 0 2px 1px #242;
   background: #000;
-  opacity: 0.8;
+  opacity: .8;
 }
 
 .illustrate:hover {
@@ -861,7 +862,7 @@ div#book, #emptybook {
 
 #book tr.head {
   background: url(/themes/console/dark/images/header.png) repeat-x scroll center center #000;
-  background: linear-gradient(to bottom, rgba(0,0,0,0) 50%, #000 50%), repeating-linear-gradient(to right, rgba(0,0,0,0.5) 1px, rgba(0,16,0,0.5) 2px, rgba(0,16,0,0.5) 3px), linear-gradient(to bottom, #002000, #000 75%) !important;
+  background: linear-gradient(to bottom, rgba(0,0,0,0) 50%, #000 50%), repeating-linear-gradient(to right, rgba(0,0,0,.5) 1px, rgba(0,16,0,.5) 2px, rgba(0,16,0,.5) 3px), linear-gradient(to bottom, #002000, #000 75%) !important;
 }
 
 #book table th {
@@ -894,14 +895,14 @@ div#book, #emptybook {
   color: #ee9;
 }
 
-#book input[type="checkbox"] {
+#book input[type=checkbox] {
   margin: 0;
 }
 
 div#add, div#import {
-  border: 1px solid #242;
-  padding: 0 0 10px;
   margin-top: 23px;
+  padding: 0 0 10px;
+  border: 1px solid #242;
   background: #000;
 }
 
@@ -918,8 +919,8 @@ div#add, div#import {
   padding: 6px 3px;
   width: 100%;
   border-collapse: separate;
-  border-top: 1px solid rgba(0,48,0,0.5);
-  border-bottom: 1px solid rgba(0,48,0,0.5);
+  border-top: 1px solid rgba(0,48,0,.5);
+  border-bottom: 1px solid rgba(0,48,0,.5);
   border-spacing: 0;
 }
 
@@ -945,11 +946,11 @@ div#add, div#import {
   margin-top: 18px !important;
 }
 
-#add input[type=text], #import input[type="file"] {
+#add input[type=text], #import input[type=file] {
   width: calc(100% - 2px);
 }
 
-#import input[type="file"] {
+#import input[type=file] {
   border: none;
   background: none;
 }
@@ -987,7 +988,7 @@ input {
   background: none;
 }
 
-input[type="file"] {
+input[type=file] {
   cursor: pointer;
 }
 
@@ -1028,14 +1029,14 @@ input[type=submit]:focus, input[type=reset]:focus,
 .fakebutton:hover, #fakebutton:focus {
   color: #f60;
   border: 1px solid #f60;
-  box-shadow: inset 0 0 0 1px #000, inset 0 0 2px 1px rgba(255,86,0,0.8), inset 0 0 0 3px #000 !important;
+  box-shadow: inset 0 0 0 1px #000, inset 0 0 2px 1px rgba(255,86,0,.8), inset 0 0 0 3px #000 !important;
   background: #000;
 }
 
 input[type=file]:hover::file-selector-button, input[type=file]:focus::file-selector-button {
   color: #f60;
   border: 1px solid #f60;
-  box-shadow: inset 0 0 0 1px #000, inset 0 0 2px 1px rgba(255,86,0,0.8), inset 0 0 0 3px #000 !important;
+  box-shadow: inset 0 0 0 1px #000, inset 0 0 2px 1px rgba(255,86,0,.8), inset 0 0 0 3px #000 !important;
   background: #000;
 }
 
@@ -1104,7 +1105,7 @@ input:focus, #add textarea:focus {
   outline: none;
   background: #000 !important;
   filter: drop-shadow(0 0 1px #880);
-  transition: ease filter 0.3s;
+  transition: ease filter .3s;
 }
 
 textarea:focus {
@@ -1137,7 +1138,7 @@ textarea:focus {
   font-size: 11.5pt;
   background: url(images/addressbook.svg) 9px center no-repeat,
               linear-gradient(to bottom, rgba(0,0,0,0) 50%, #000 50%),
-              repeating-linear-gradient(to right, rgba(0,0,0,0.5) 1px, rgba(0,16,0,0.5) 2px, rgba(0,16,0,0.5) 3px),
+              repeating-linear-gradient(to right, rgba(0,0,0,.5) 1px, rgba(0,16,0,.5) 2px, rgba(0,16,0,.5) 3px),
               linear-gradient(to bottom, #004000, #000 75%);
   background-size: 20px 20px, 100% 100%, 100% 100%, 100% 100%;
 }
@@ -1148,13 +1149,13 @@ textarea:focus {
 
 .headline#subscriptions h3 {
   background: url(/themes/susidns/images/subs_24.png) 7px 40% no-repeat, linear-gradient(to bottom, rgba(0,0,0,0) 50%, #000 50%),
-              repeating-linear-gradient(to right, rgba(0,0,0,0.5) 1px, rgba(0,16,0,0.5) 2px, rgba(0,16,0,0.5) 3px),
+              repeating-linear-gradient(to right, rgba(0,0,0,.5) 1px, rgba(0,16,0,.5) 2px, rgba(0,16,0,.5) 3px),
               linear-gradient(to bottom, #004000, #000 75%);
 }
 
 .headline#configure h3 {
   background: url(images/configure.svg) 9px center no-repeat,
-              linear-gradient(to bottom, rgba(0,0,0,0) 50%, #000 50%), repeating-linear-gradient(to right, rgba(0,0,0,0.5) 1px, rgba(0,16,0,0.5) 2px, rgba(0,16,0,0.5) 3px),
+              linear-gradient(to bottom, rgba(0,0,0,0) 50%, #000 50%), repeating-linear-gradient(to right, rgba(0,0,0,.5) 1px, rgba(0,16,0,.5) 2px, rgba(0,16,0,.5) 3px),
               linear-gradient(to bottom, #004000, #000 75%);
   background-size: 20px 20px, 100% 100%, 100% 100% !important;
 }
@@ -1244,15 +1245,16 @@ p.book {
 /* end host details */
 
 .names img {
-  margin: 6px 8px 6px 2px;
+  margin: 6px 8px 6px 3px;
   padding: 2px;
-  width: 22px;
-  height: 22px;
+  width: 20px;
+  height: 20px;
   vertical-align: middle;
   border: 1px solid #242;
-  border-radius: 2px;
-  box-shadow: 0 0 2px 1px rgba(0,0,0,.5);
+  border-radius: 1px;
+  box-shadow: inset 0 0 0 1px #000;
   background: #000;
+  image-rendering: crisp-edges;
 }
 
 .names img:hover, .names a:focus img {
@@ -1261,7 +1263,7 @@ p.book {
 
 .names a:active img, .names a:focus img {
   transform: rotate(45deg) scale(0.8);
-  transition: ease border 0.1s;
+  transition: ease border .1s;
 }
 
 /* hostname list */
@@ -1305,6 +1307,17 @@ p.book {
   white-space: nowrap;
   font-weight: bold;
   border-right: none;
+}
+
+.names a[href$=".i2p/"], #host_list td.b32link a, #host_list td.helper a {
+  width: 100%;
+  display: inline-block;
+  vertical-align: middle;
+}
+
+td.names:hover, #host_list td.b32link:hover, #host_list td.helper:hover, #host_list td.destinations:hover {
+  box-shadow: inset 0 0 0 1px #930 !important;
+  background: #000 !important;
 }
 
 #host_list .b32link, #host_list .helper {
@@ -1445,7 +1458,7 @@ _:-ms-lang(x), * {
   #navi a#subs, #navi a#subs:hover, #navi a#subs:focus, #navi a#subs:active,
   #navi a#config, #navi a#config:hover, #navi a#config:focus, #navi a#config:active {
     padding: 6px 10px 6px 29px !important;
-    letter-spacing: 0.1em;
+    letter-spacing: .1em;
     font-size: 10pt !important;
     background-position: 10px center !important;
   }
@@ -1513,8 +1526,8 @@ _:-ms-lang(x), * {
 
 /* custom radios/checkboxes to enforce color scheme when OS widgets are non-standard  */
 @supports (background-blend-mode: luminosity) { /* exclude ms browsers */
-input[type="checkbox"], input[type="checkbox"]:checked, input[type="checkbox"][disabled], input[type="checkbox"][disabled]:checked,
-  input[type="radio"], input[type="radio"]:checked, input[type="radio"][disabled], input[type="radio"][disabled]:checked {
+input[type=checkbox], input[type=checkbox]:checked, input[type=checkbox][disabled], input[type=checkbox][disabled]:checked,
+  input[type=radio], input[type=radio]:checked, input[type=radio][disabled], input[type=radio][disabled]:checked {
     position: relative;
     width: 19px !important;
     height: 19px !important;
@@ -1531,18 +1544,18 @@ input[type="checkbox"], input[type="checkbox"]:checked, input[type="checkbox"][d
     will-change: transform;
   }
 
-  input[type="checkbox"], input[type="checkbox"]:checked, input[type="checkbox"][disabled], input[type="checkbox"][disabled]:checked {
+  input[type=checkbox], input[type=checkbox]:checked, input[type=checkbox][disabled], input[type=checkbox][disabled]:checked {
     border-radius: 1px;
     box-shadow: inset 0 0 0 1px #000, inset 3px 3px 3px 1px #000;
   }
 
-  input[type="radio"], input[type="radio"]:checked, input[type="radio"][disabled], input[type="radio"][disabled]:checked {
+  input[type=radio], input[type=radio]:checked, input[type=radio][disabled], input[type=radio][disabled]:checked {
     border-radius: 50%;
     box-shadow: inset 0 0 0 1px #000, inset 3px 3px 3px 1px #000;
   }
 
-  input[type="checkbox"]:checked::before, input[type="radio"]:checked::before,
-  input[type="checkbox"]:not(:checked)::before, input[type="radio"]:not(:checked)::before {
+  input[type=checkbox]:checked::before, input[type=radio]:checked::before,
+  input[type=checkbox]:not(:checked)::before, input[type=radio]:not(:checked)::before {
     position: absolute;
     transform: scale(1);
   }
@@ -1555,7 +1568,7 @@ input[type="checkbox"], input[type="checkbox"]:checked, input[type="checkbox"][d
     background: #000 !important;
   }
 
-  input[type="checkbox"]:checked::before, input[type="checkbox"]:not(:checked)::before {
+  input[type=checkbox]:checked::before, input[type=checkbox]:not(:checked)::before {
     width: 11px;
     height: 11px;
     top: 3px;
@@ -1566,7 +1579,7 @@ input[type="checkbox"], input[type="checkbox"]:checked, input[type="checkbox"][d
     content: "";
   }
 
-  input[type="radio"]:checked::before {
+  input[type=radio]:checked::before {
     width: 9px;
     height: 9px;
     left: 25%;
@@ -1578,23 +1591,23 @@ input[type="checkbox"], input[type="checkbox"]:checked, input[type="checkbox"][d
     content: "";
   }
 
-  input[type="checkbox"]:checked:hover::before {
+  input[type=checkbox]:checked:hover::before {
     color: #6b6;
-    transition: ease transform 0.05s;
+    transition: ease transform .05s;
   }
 
-  input[type="radio"]:checked:hover::before {
+  input[type=radio]:checked:hover::before {
     background: #6b6;
-    transition: ease transform 0.05s;
+    transition: ease transform .05s;
   }
 
-  input[type="checkbox"]:not(:checked)::before, input[type="radio"]:not(:checked)::before {
+  input[type=checkbox]:not(:checked)::before, input[type=radio]:not(:checked)::before {
     color: transparent;
     background: transparent;
     transform: scale(0);
   }
 
-  input[type="checkbox"]:hover, input[type="radio"]:hover, input[type="checkbox"]:focus, input[type="radio"]:focus {
+  input[type=checkbox]:hover, input[type=radio]:hover, input[type=checkbox]:focus, input[type=radio]:focus {
     background: #000;
     width: 19px !important;
     height: 19px !important;
@@ -1602,8 +1615,8 @@ input[type="checkbox"], input[type="checkbox"]:checked, input[type="checkbox"][d
     box-shadow: 0 0 1px #f60, 0 0 2px #f60 !important;
   }
 
-  input[type="checkbox"][disabled], input[type="radio"][disabled], input[type="checkbox"][disabled]:hover, input[type="radio"][disabled]:hover,
-  input[type="checkbox"][disabled]:checked, input[type="radio"][disabled]:checked, input[type="checkbox"][disabled]:checked:hover, input[type="radio"][disabled]:checked:hover {
+  input[type=checkbox][disabled], input[type=radio][disabled], input[type=checkbox][disabled]:hover, input[type=radio][disabled]:hover,
+  input[type=checkbox][disabled]:checked, input[type=radio][disabled]:checked, input[type=checkbox][disabled]:checked:hover, input[type=radio][disabled]:checked:hover {
     border: 1px solid #252 !important;
     box-shadow: none !important;
     background: #000;
@@ -1654,7 +1667,7 @@ input[type="checkbox"], input[type="checkbox"]:checked, input[type="checkbox"][d
 #hostNotes textarea:hover, #hostNotes textarea:focus {
   border-right: none;
   border-left: none;;
-  box-shadow: inset 0 0 0 1px rgba(255,96,0,0.5);
+  box-shadow: inset 0 0 0 1px rgba(255,96,0,.5);
   background: #000 !important;
 }
 
@@ -1668,7 +1681,7 @@ input[type="checkbox"], input[type="checkbox"]:checked, input[type="checkbox"][d
 
 p#filtered {
   box-shadow: inset 0 0 0 1px #000, inset 0 0 2px 1px #030 !important;
-  background: repeating-linear-gradient(to bottom, rgba(0,0,0,0.8), rgba(0,16,0,0.6) 1px, rgba(0,16,0,0.6) 2px), url(/themes/console/dark/images/camotile2.png) !important;
+  background: repeating-linear-gradient(to bottom, rgba(0,0,0,.8), rgba(0,16,0,.6) 1px, rgba(0,16,0,.6) 2px), url(/themes/console/dark/images/camotile2.png) !important;
 }
 
 p#filtered, #export {
@@ -1685,7 +1698,7 @@ p#filtered, #export {
   border-bottom: 1px solid #242;
   box-shadow: none !important;
   background: #010;
-  background: repeating-linear-gradient(to bottom, rgba(0,0,0,0.8), rgba(0,16,0,.5) 1px, rgba(0,16,0,.5) 2px), url(/themes/console/dark/images/camotile2.png) !important;
+  background: repeating-linear-gradient(to bottom, rgba(0,0,0,.8), rgba(0,16,0,.5) 1px, rgba(0,16,0,.5) 2px), url(/themes/console/dark/images/camotile2.png) !important;
 }
 
 #visualid tr:last-child td {
@@ -1700,7 +1713,7 @@ form[action="addressbook"] > p.buttons, #filter, #search, #visualid tr:last-chil
 
 #add {
   box-shadow: inset 0 0 0 1px #000, inset 0 0 2px 1px #030 !important;
-  background: repeating-linear-gradient(to bottom, rgba(0,0,0,0.8), rgba(0,16,0,.5) 1px, rgba(0,16,0,.5) 2px), url(/themes/console/dark/images/camotile2.png) !important;
+  background: repeating-linear-gradient(to bottom, rgba(0,0,0,.8), rgba(0,16,0,.5) 1px, rgba(0,16,0,.5) 2px), url(/themes/console/dark/images/camotile2.png) !important;
 }
 
 #add p.buttons {
