@@ -10183,9 +10183,20 @@ th.options, #externali2cp th {
 }
 
 @media screen and (min-width: 1500px) {
-.tunneldisplay .routerid, .tunnel_local {
-  min-width: 76px !important;
-}
+  .tunneldisplay .tunnel_peer {
+    margin: 0 2px 0 0 !important;
+    min-width: 80px !important;
+  }
+  .tunneldisplay .tunnel_peer.tunnel_local {
+    min-width: 78px !important;
+    margin: 0 3px 0 0 !important;
+  }
+  .tunneldisplay .tunnel_peer + b.tunnel_cap {
+    margin: 0 0 0 -1px !important;
+  }
+  .tunneldisplay .tunnel_peer.tunnel_local + b.tunnel_cap {
+    margin-left: 1px !important;
+  }
 }
 
 .tunneldisplay .routerid, .tunnel_cap {
