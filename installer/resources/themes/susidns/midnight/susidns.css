@@ -362,10 +362,10 @@ p {
 }
 
 #messages + p, p.book {
-  border: 1px solid #26235c;
-  background: #001 url(/themes/susidns/images/addressbook.png) 10px center no-repeat;
-  background-size: 24px 24px;
   padding: 20px 20px 20px 42px !important;
+  border: 1px solid #26235c;
+  background: #001 url(images/addressbook.svg) 10px center no-repeat;
+  background-size: 24px 24px;
 }
 
 #messages {
@@ -822,15 +822,16 @@ div#book, #emptybook {
 }
 
 #book th:last-child {
-  background: url(/themes/console/images/buttons/delete.png) center center no-repeat, url(/themes/console/midnight/images/titles.png) repeat-x scroll center center #000 !important;
-  background: url(/themes/console/images/buttons/delete.png) center center no-repeat, linear-gradient(to bottom, #080818, #000008 75%) !important;
-  font-size: 0;
   padding: 0 !important;
+  font-size: 0;
+  background: url(../images/nuke.svg) center center no-repeat, url(/themes/console/midnight/images/titles.png) repeat-x scroll center center #000 !important;
+  background: url(../images/nuke.svg) center center no-repeat, linear-gradient(to bottom, #080818, #000008 75%) !important;
+  background-size: 14px 14px, 100% 100% !important;
 }
 
 #book td {
-  border-bottom: 1px solid #17142f;
   padding: 0;
+  border-bottom: 1px solid #17142f;
 }
 
 #book table tr:hover {
@@ -861,20 +862,13 @@ div#book, #emptybook {
 }
 
 .book td:nth-child(3) {
-  text-align: center;
-  width: 20px;
   padding: 2px 25px 2px 0 !important;
+  width: 20px;
+  text-align: center;
 }
 
 .book td:nth-child(3) a:not(old) {
   font-size: 0 !important;
-}
-
-.book td:nth-child(3) .addrhlpr a::after {
-  content: url(/themes/console/images/buttons/fullview.png);
-  text-align: center;
-  padding: 2px 10px !important;
-  filter: drop-shadow(0 0 1px #555);
 }
 
 .book td:nth-child(3) .addrhlpr:hover {
@@ -1183,13 +1177,14 @@ input.export {
 /* page titles */
 
 .headline h3 {
-  padding: 10px 5px 10px 40px;
-  background: url(/themes/susidns/images/addressbook.png) 10px center no-repeat, linear-gradient(to bottom, #080818, #000008 75%);
-  background: url(/themes/susidns/images/addressbook.png) 10px center no-repeat, linear-gradient(to bottom, #080818 50%, #000 50%) !important;
-  font-size: 11pt;
-  text-transform: uppercase;
-  letter-spacing: 0.08em;
+  padding: 10px 5px 10px 34px;
   word-spacing: 0.1em;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  font-size: 11pt;
+  background: url(images/addressbook.svg) 10px center no-repeat, linear-gradient(to bottom, #080818, #000008 75%);
+  background: url(images/addressbook.svg) 10px center no-repeat, linear-gradient(to bottom, #080818 50%, #000 50%) !important;
+  background-size: 18px 18px, 100% 100% !important;
 }
 
 .headline#subscriptions h3 {
@@ -1202,8 +1197,9 @@ input.export {
 }
 
 .headline#configure h3 {
-  background: url(/themes/susidns/images/configure_24.png) 10px center no-repeat, linear-gradient(to bottom, #080818, #000008 75%);
-  background: url(/themes/susidns/images/configure_24.png) 10px center no-repeat, linear-gradient(to bottom, #080818 50%, #000 50%) !important;
+  background: url(images/configure.svg) 10px center no-repeat, linear-gradient(to bottom, #080818, #000008 75%);
+  background: url(images/configure.svg) 10px center no-repeat, linear-gradient(to bottom, #080818 50%, #000 50%) !important;
+  background-size: 18px 18px, 100% 100% !important;
 }
 
 .headline h4 {
@@ -1242,7 +1238,8 @@ p.book {
 
 #messages + p, p.book {
   border: 1px solid #26235c;
-  background: #000 url(/themes/susidns/images/addressbook.png) 5px center no-repeat;
+  background: #000 url(images/addressbook.svg) 5px center no-repeat;
+  background-size: 24px 24px;
 }
 
 /* hide export button on published addressbook if empty */
@@ -1290,9 +1287,9 @@ p.book {
 }
 
 #host_details .destaddress {
-  word-break: break-all !important;
-  white-space: normal !important;
   margin-right: -2px;
+  white-space: normal !important;
+  word-break: break-all !important;
 }
 
 #dtls #book form {
