@@ -782,7 +782,7 @@ tr.active .snarkTorrentStatus {
   white-space: nowrap;
 }
 
-.snarkTorrentInfo input[type="submit"] {
+.snarkTorrentInfo input[type=submit] {
   min-width: 85px;
 }
 
@@ -1683,6 +1683,37 @@ video:hover::-webkit-media-controls-panel, video:focus::-webkit-media-controls-p
   filter: sepia(1) hue-rotate(70deg);
 }
 
+#trackers .snarkConfigTitle img[src$="config.png"], .configsectionpanel .snarkConfigTitle img[src$="config.png"],
+.snarkConfig img[src$="infocircle.png"] {
+  margin: 0 !important;
+  padding: 0 !important;
+  width: 0 !important;
+  height: 0 !important;
+}
+
+#trackers .snarkConfig .snarkConfigTitle::before, .configsectionpanel .snarkConfigTitle::before {
+  width: 16px;
+  height: 18px;
+  display: inline-block;
+  vertical-align: middle;
+  background: url(images/configure.svg) center calc(50% - 1px) no-repeat;
+  background-size: 16px 16px;
+  content: "";
+  opacity: .8;
+}
+
+.snarkConfig #bwHoverHelp::before {
+  margin-left: 4px;
+  width: 16px;
+  height: 18px;
+  display: inline-block;
+  vertical-align: middle;
+  background: url(images/infocircle.svg) center calc(50% - 1px) no-repeat;
+  background-size: 16px 16px;
+  content: "";
+  opacity: .8;
+}
+
 #lowersection:hover .snarkConfigTitle img, #lowersection:hover .toggleview img {
   will-change: transform;
 }
@@ -1810,7 +1841,7 @@ input {
   cursor: pointer;
 }
 
-input[type="submit"]::-moz-focus-inner, input[type="reset"]::-moz-focus-inner {
+input[type=submit]::-moz-focus-inner, input[type=reset]::-moz-focus-inner {
   border: none;
   outline: none;
 }
@@ -1820,7 +1851,7 @@ input.disabled, a.controld {
   cursor: not-allowed !important;
 }
 
-#configs input[type="submit"], .trackerconfig input[type="submit"], input[name="savepri"] {
+#configs input[type=submit], .trackerconfig input[type=submit], input[name="savepri"] {
   text-transform: capitalize;
 }
 
@@ -1922,12 +1953,12 @@ input.r {
 }
 
 input[type=text], input.r, textarea[name="i2cpOpts"], input[name="nofilter_dataDir"], textarea[name="nofilter_newComment"] {
-  padding: 5px !important;
+  padding: 7px !important;
   color: #bb7;
   border: 1px solid #252;
-  box-shadow: inset 0 0 3px 3px #000;
-  background: #000;
-  background: linear-gradient(to bottom, #000, #010);
+  box-shadow: inset 0 0 0 1px #000, inset 4px 4px 4px #000, 0 0 0 1px #000;
+  background: #010;
+  background: linear-gradient(to bottom, #001800, #001000);
   outline: none;
   transition: ease box-shadow .1s;
 }
@@ -2081,7 +2112,7 @@ textarea:focus {
   color: #ee9 !important;
 }
 
-/*input[type="submit"], input[type="reset"], select, button, a.control, a.controld {
+/*input[type=submit], input[type=reset], select, button, a.control, a.controld {
   border: 1px solid #8b8;
   border-bottom: 1px solid #171;
   border-right: 1px solid #171;
@@ -2430,19 +2461,22 @@ _:-ms-lang(x), #trackerselect tr:last-child {
   vertical-align: middle;
   border: 1px solid transparent;
   border-radius: 2px;
-  background: url(images/config.png) center center no-repeat;
+  background: url(images/configure.svg) center center no-repeat;
+  background-size: 16px 16px;
 }
 
 #configs a[href^="/config"]:hover::after {
   border: 1px solid #252 !important;
-  background: #030 url(images/config.png) center center no-repeat;
-  background: url(images/config.png) center center no-repeat, linear-gradient(to bottom, #050 50%, #010 50%);
+  background: #030 url(images/configure.svg) center center no-repeat;
+  background: url(images/configure.svg) center center no-repeat, linear-gradient(to bottom, #050 50%, #010 50%);
+  background-size: 16px 16px, 100% 100%;
 }
 
 #configs a[href^="/config"]:active::after {
   border: 1px solid #f60 !important;
   box-shadow: inset 3px 3px 2px 1px #000;
-  background: #020 url(images/config.png) center center no-repeat;
+  background: #020 url(images/configure.svg) center center no-repeat;
+  background-size: 16px 16px, 100% 100%;
   transform: scale(0.9) !important;
   transition: none !important;
 }
@@ -2920,7 +2954,7 @@ hr.debug:last-child {
   vertical-align: middle;
 }
 
-.priority input[type="radio"] {
+.priority input[type=radio] {
   margin: 3px;
 }
 
@@ -2967,16 +3001,16 @@ td#bwHelp {
 
 /* end configs */
 
-.knownTracker input[type="radio"], .knownTracker input[type="radio"][disabled], .knownTracker input[type="radio"]:hover, .knownTracker input[type="radio"]:focus {
+.knownTracker input[type=radio], .knownTracker input[type=radio][disabled], .knownTracker input[type=radio]:hover, .knownTracker input[type=radio]:focus {
   opacity: .3;
   cursor: default;
 }
 
-.knownTracker input[type="radio"]:checked, .knownTracker input[type="radio"]:checked:hover {
+.knownTracker input[type=radio]:checked, .knownTracker input[type=radio]:checked:hover {
   opacity: .5;
 }
 
-.knownTracker input[type="radio"][disabled], .knownTracker input[type="radio"][disabled]:hover {
+.knownTracker input[type=radio][disabled], .knownTracker input[type=radio][disabled]:hover {
   opacity: .1 !important;
 }
 
@@ -3066,16 +3100,16 @@ _:-ms-lang(x), * {
   filter: none !important;
 }
 
-_:-ms-lang(x), input[type="radio"], input[type="checkbox"] {
+_:-ms-lang(x), input[type=radio], input[type=checkbox] {
   filter: invert(100%) sepia(100%) hue-rotate(70deg) saturate(200%) !important; /* colorize radios and checkboxes */
 }
 
-_:-ms-lang(x), input[type="checkbox"]:hover, input[type="checkbox"]:focus, input[type="radio"]:hover, input[type="radio"]:focus {
+_:-ms-lang(x), input[type=checkbox]:hover, input[type=checkbox]:focus, input[type=radio]:hover, input[type=radio]:focus {
   box-shadow: none !important;
   filter: invert(100%) sepia(100%) hue-rotate(70deg) saturate(200%) drop-shadow(0 0 3px #f60) !important;
 }
 
-input[type="radio"][disabled]:hover, input[type="radio"][disabled]:focus {
+input[type=radio][disabled]:hover, input[type=radio][disabled]:focus {
   filter: invert(100%) sepia(100%) hue-rotate(70deg) saturate(200%) !important;
 }
 
@@ -3217,41 +3251,34 @@ _:-ms-lang(x), .snarkTorrents tr:last-child {
 }
 
 #nameRequired {
-  float: right;
   margin-right: 5px;
+  float: right;
 }
 
-/*#showRatings {
-  background: linear-gradient(to bottom, rgba(0,0,0,0) 50%, #000 50%), repeating-linear-gradient(to right, rgba(0,0,0,.5) 1px, rgba(0,0,0,.5) 2px, rgba(0,16,0,.5) 3px), linear-gradient(to bottom, #004000, #000 75%);
-}*/
-
-.commentRating {
+td.commentRating {
+  padding-left: 2px;
+  padding-right: 0;
   width: 80px;
   white-space: nowrap;
-  padding-left: 0 !important;
-}
-
-.commentRating {
-  padding-left: 3px;
 }
 
 .commentRating img {
   margin: 0;
   padding: 0;
-  height: 16px;
   width: 16px;
+  height: 16px;
 }
 
 .commentDate {
+  padding-left: 20px !important;
   width: 105px;
   background: url(images/clock.png) left center no-repeat;
-  padding-left: 20px !important;
 }
 
 .snarkCommentInfo td:first-child, .snarkComments td:first-child {
-  min-width: 160px !important;
-  width: 160px !important;
   padding-right: 2px;
+  width: 160px !important;
+  min-width: 160px !important;
 }
 
 @media screen and (min-width: 1000px) {
@@ -3261,8 +3288,8 @@ _:-ms-lang(x), .snarkTorrents tr:last-child {
 }
 
 .commentAuthor {
-  text-align: left !important;
   padding-right: 0 !important;
+  text-align: left !important;
 }
 
 .commentAuthorName {
@@ -3277,22 +3304,23 @@ _:-ms-lang(x), .snarkTorrents tr:last-child {
 td .commentAuthorName {
   margin: 0 0 0 4px !important;
   padding: 0 4px 0 24px !important;
-  min-width: 118px;
-  max-width: 118px;
+  min-width: 120px;
+  max-width: 120px;
   white-space: nowrap;
   overflow: hidden;
   text-overflow: ellipsis;
   vertical-align: middle;
   font-size: 90%;
-  box-shadow: 0 0 0 1px rgba(0,0,0,.3);
+  border: 1px solid #002800;
+  box-shadow: 0 0 0 1px #000;
   background: #020 url(images/author.png) 4px center no-repeat;
   background: url(images/author.png) 4px center no-repeat, linear-gradient(to bottom, rgba(0,48,0,.5), rgba(0,16,0,.5));
 }
 
 .commentText {
-  white-space: normal !important;
-  text-align: left;
   width: 90%;
+  text-align: left;
+  white-space: normal !important;
 }
 
 .commentText:empty + .commentDelete {
@@ -3367,7 +3395,8 @@ td .commentAuthorName {
 
 .commentRating img {
   padding: 0;
-  font-size: 14pt;
+  width: 14px;
+  height: 14px;
   color: #ff7200;
   text-shadow: 0 0 1px #900;
   filter: none;
@@ -3487,7 +3516,7 @@ td#bwHelp a {
 }
 
 @media screen and (min-width: 1100px) {
-body, .snarkTorrents td, .snarkAddInfo, th, td,  code, textarea, input, input[type="submit"], input[type="reset"], select, button, a {
+body, .snarkTorrents td, .snarkAddInfo, th, td,  code, textarea, input, input[type=submit], input[type=reset], select, button, a {
   font-size: 9pt !important;
 }
 
@@ -3597,7 +3626,7 @@ th.snarkTorrentUploaded a img {
 }
 
 @media screen and (min-width: 1500px) {
-body, .snarkTorrents td, .snarkAddInfo, th, td,  code, textarea, input, input[type="submit"], input[type="reset"], select, button, a {
+body, .snarkTorrents td, .snarkAddInfo, th, td,  code, textarea, input, input[type=submit], input[type=reset], select, button, a {
   font-size: 10pt !important;
 }
 
@@ -3867,7 +3896,7 @@ th#snarkTorrentSort {
   padding-bottom: 0 !important;
 }
 
-.trackerconfig a, .trackerconfig input[type="text"] {
+.trackerconfig a, .trackerconfig input[type=text] {
   max-width: 150px !important;
 }
 
@@ -3931,7 +3960,7 @@ th a img {
   border: none !important;
 }
 
-.addtorrentsection input[type="text"], .newtorrentsection input[type="text"] {
+.addtorrentsection input[type=text], .newtorrentsection input[type=text] {
   width: 65% !important;
 }
 
@@ -4446,10 +4475,23 @@ input[name="nofilter_commentsName"] {
 /* embed mode */
 
 #embed, #fullscreen {
-  float: right;
+  margin: -2px -3px -4px 0 !important;
+  padding: 3px 5px;
   vertical-align: middle !important;
-  margin-top: 1px !important;
+  float: right;
   font-size: 8.5pt !important;
+  border: 1px solid #030;
+  border-radius: 1px;
+  box-shadow: inset 0 0 0 1px #000, 0 0 0 1px #000;
+}
+
+#embed:hover, #embed:focus, #fullscreen:hover, #fullscreen:focus {
+  background: linear-gradient(to bottom, #020 50%, #000 50%);
+}
+
+#embed:active, #fullscreen:active {
+  box-shadow: inset 0 0 0 1px #000, inset 3px 3px 3px #000, 0 0 0 1px #000;
+  background: #020;
 }
 
 #fullscreen {
@@ -4503,26 +4545,26 @@ input[name="nofilter_commentsName"] {
 }
 
 @media screen and (min-width: 1180px) {
-.trackerconfig th:last-child, .trackerconfig td:last-child {
-  padding-left: 50px !important;
-}
+  .trackerconfig th:last-child, .trackerconfig td:last-child {
+    padding-left: 50px !important;
+  }
 
-.trackerhome, .trackerannounce, .knowntracker a {
-  width: 300px !important;
-  max-width: 300px !important;
-}
+  .trackerhome, .trackerannounce, .knowntracker a {
+    width: 300px !important;
+    max-width: 300px !important;
+  }
 
-.trackerconfig input.trackername {
-  max-width: 180px !important;
-  width: 180px !important;
-}
+  .trackerconfig input.trackername {
+    max-width: 180px !important;
+    width: 180px !important;
+  }
 }
 
 @media screen and (min-width: 1500px) {
-.trackerhome, .trackerannounce, .knowntracker a {
-  width: 400px !important;
-  max-width: 400px !important;
-}
+  .trackerhome, .trackerannounce, .knowntracker a {
+    width: 400px !important;
+    max-width: 400px !important;
+  }
 }
 
 /* end tracker config */
@@ -4530,39 +4572,29 @@ input[name="nofilter_commentsName"] {
 /* torrent column delimiters */
 
 @media screen and (min-width: 1000px) {
-.snarkTorrentAction {
-  padding-left: 4px !important;
-  padding-right: 3px !important;
-}
+  .snarkTorrentAction {
+    padding-left: 4px !important;
+    padding-right: 3px !important;
+  }
 
-.snarkTrackerDetails {
-  padding-left: 4px !important;
-}
+  .snarkTrackerDetails {
+    padding-left: 4px !important;
+  }
 
-.snarkTorrentName {
-  padding-right: 3px;
-}
+  .snarkTorrentName {
+    padding-right: 3px;
+  }
 
-.snarkTorrentDownloaded {
-  padding-left: 9px !important;
-  padding-right: 9px !important;
-}
+  .snarkTorrentDownloaded {
+    padding-left: 9px !important;
+    padding-right: 9px !important;
+  }
 
-.snarkTorrentETA:not(:empty), .snarkTorrentRateUp:not(:empty),
-.snarkTorrentUploaded:not(:empty), .snarkTorrentRateDown:not(:empty) {
-  padding-right: 8px !important;
-  padding-left: 8px !important;
-}
-
-/*td.snarkTrackerDetails, td.snarkTorrentDetails, td.snarkTorrentName, td.snarkTorrentETA, td.snarkTorrentDownloaded,
-td.snarkTorrentRateDown, td.snarkTorrentAction {
-  background: rgba(0,0,0,.1);
-}
-
-tr:hover td.snarkTrackerDetails, tr:hover td.snarkTorrentDetails, tr:hover td.snarkTorrentName, tr:hover td.snarkTorrentDownloaded,
-tr:hover td.snarkTorrentRateDown, tr:hover td.snarkTorrentAction {
-  background: none;
-}*/
+  .snarkTorrentETA:not(:empty), .snarkTorrentRateUp:not(:empty),
+  .snarkTorrentUploaded:not(:empty), .snarkTorrentRateDown:not(:empty) {
+    padding-right: 8px !important;
+    padding-left: 8px !important;
+  }
 }
 
 /* end column delimiters */
@@ -4718,7 +4750,9 @@ td input[type="image"]::after {
   border-right: none;
   box-shadow: inset 0 0 0 1px #000;;
   background: linear-gradient(to bottom, #003000, #000 75%) !important;
-  background: linear-gradient(to bottom, rgba(0,0,0,0) 50%, #000 50%), repeating-linear-gradient(to right, rgba(0,0,0,.5) 1px, rgba(0,16,0,.5) 2px, rgba(0,16,0,.5) 3px), linear-gradient(to bottom, #004000, #000 75%) !important;
+  background: linear-gradient(to bottom, rgba(0,0,0,0) 50%, #000 50%),
+              repeating-linear-gradient(to right, rgba(0,0,0,.5) 1px, rgba(0,16,0,.5) 2px, rgba(0,16,0,.5) 3px),
+              linear-gradient(to bottom, #004000, #000 75%) !important;
 }
 
 .iframed #torrentDisplay {
@@ -4727,11 +4761,11 @@ td input[type="image"]::after {
 }
 
 #torrentDisplay input {
-  position: absolute;
-  opacity: 0;
-  z-index: -1;
-  height: 0 !important;
   width: 0 !important;
+  height: 0 !important;
+  position: absolute;
+  z-index: -1;
+  opacity: 0;
 }
 
 #torrentDisplay label {
@@ -4893,8 +4927,8 @@ td.snarkTorrentPeerCount {
 /* custom radios/checkboxes to enforce color scheme when OS widgets are non-standard  */
 /*@media screen and (-webkit-min-device-pixel-ratio: 0) and (min-resolution:.001dpcm) {*/
 @supports (background-blend-mode: luminosity) { /* exclude ms browsers */
-input[type="checkbox"], input[type="checkbox"]:checked, input[type="checkbox"][disabled], input[type="checkbox"][disabled]:checked,
-input[type="radio"], input[type="radio"]:checked, input[type="radio"][disabled], input[type="radio"][disabled]:checked {
+input[type=checkbox], input[type=checkbox]:checked, input[type=checkbox][disabled], input[type=checkbox][disabled]:checked,
+input[type=radio], input[type=radio]:checked, input[type=radio][disabled], input[type=radio][disabled]:checked {
   position: relative;
   width: 20px !important;
   height: 20px !important;
@@ -4910,18 +4944,18 @@ input[type="radio"], input[type="radio"]:checked, input[type="radio"][disabled],
   will-change: transform;
 }
 
-input[type="checkbox"], input[type="checkbox"]:checked, input[type="checkbox"][disabled], input[type="checkbox"][disabled]:checked {
+input[type=checkbox], input[type=checkbox]:checked, input[type=checkbox][disabled], input[type=checkbox][disabled]:checked {
   border-radius: 1px;
   box-shadow: inset 0 0 0 1px #000, inset 3px 3px 3px 1px #000;
 }
 
-input[type="radio"], input[type="radio"]:checked, input[type="radio"][disabled], input[type="radio"][disabled]:checked {
+input[type=radio], input[type=radio]:checked, input[type=radio][disabled], input[type=radio][disabled]:checked {
   border-radius: 50%;
   box-shadow: inset 0 0 0 1px #000, inset 3px 3px 3px 1px #000;
 }
 
-input[type="checkbox"]:checked::before, input[type="radio"]:checked::before,
-input[type="checkbox"]:not(:checked)::before, input[type="radio"]:not(:checked)::before {
+input[type=checkbox]:checked::before, input[type=radio]:checked::before,
+input[type=checkbox]:not(:checked)::before, input[type=radio]:not(:checked)::before {
   position: absolute;
   transition: linear transform .05s;
   transform: scale(1);
@@ -4935,7 +4969,7 @@ input[type="checkbox"]:not(:checked)::before, input[type="radio"]:not(:checked):
   background: #000 !important;
 }
 
-input[type="checkbox"]:checked::before, input[type="checkbox"]:not(:checked)::before {
+input[type=checkbox]:checked::before, input[type=checkbox]:not(:checked)::before {
   content: "";
   top: 4px;
   left: 4px;
@@ -4949,7 +4983,7 @@ input[type="checkbox"]:checked::before, input[type="checkbox"]:not(:checked)::be
   background: linear-gradient(135deg, #5a5, #383);
 }
 
-input[type="radio"]:checked::before {
+input[type=radio]:checked::before {
   content: "";
   border-radius: 50%;
   left: 4px;
@@ -4961,22 +4995,22 @@ input[type="radio"]:checked::before {
   background: linear-gradient(135deg, #5a5, #383);
 }
 
-input[type="checkbox"]:checked:hover::before {
+input[type=checkbox]:checked:hover::before {
   color: #6b6;
 }
 
-input[type="radio"]:checked:hover::before {
+input[type=radio]:checked:hover::before {
   background: #6b6;
 }
 
-input[type="checkbox"]:not(:checked)::before, input[type="radio"]:not(:checked)::before {
+input[type=checkbox]:not(:checked)::before, input[type=radio]:not(:checked)::before {
   color: transparent;
   background: transparent;
   transform: scale(0);
   transition: linear transform .05s;
 }
 
-input[type="checkbox"]:hover, input[type="radio"]:hover, input[type="checkbox"]:focus, input[type="radio"]:focus {
+input[type=checkbox]:hover, input[type=radio]:hover, input[type=checkbox]:focus, input[type=radio]:focus {
   background: #000;
   width: 20px !important;
   height: 20px !important;
@@ -4985,8 +5019,8 @@ input[type="checkbox"]:hover, input[type="radio"]:hover, input[type="checkbox"]:
   filter: drop-shadow(0 0 1px #f60) !important;
 }
 
-input[type="checkbox"][disabled], input[type="radio"][disabled], input[type="checkbox"][disabled]:hover, input[type="radio"][disabled]:hover,
-input[type="checkbox"][disabled]:checked, input[type="radio"][disabled]:checked, input[type="checkbox"][disabled]:checked:hover, input[type="radio"][disabled]:checked:hover {
+input[type=checkbox][disabled], input[type=radio][disabled], input[type=checkbox][disabled]:hover, input[type=radio][disabled]:hover,
+input[type=checkbox][disabled]:checked, input[type=radio][disabled]:checked, input[type=checkbox][disabled]:checked:hover, input[type=radio][disabled]:checked:hover {
   border: 1px solid #252 !important;
   box-shadow: none !important;
   opacity: .5 !important;
@@ -5060,13 +5094,13 @@ tfoot .snarkTorrentRateUp:not(:empty)::before,tfoot .snarkTorrentUploaded:not(:e
   transform: rotate(-90deg) scaleX(0.6);
 }
 
-.snarkCommentInfo th input[type="submit"] {
+.snarkCommentInfo th input[type=submit] {
   float: none !important;
   display: inline-block;
   vertical-align: middle;
 }
 
-.snarkCommentInfo th input[type="checkbox"] {
+.snarkCommentInfo th input[type=checkbox] {
   margin-left: 4px;
   margin-right: 4px;
 }

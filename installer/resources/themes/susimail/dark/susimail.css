@@ -427,9 +427,10 @@ input[type=radio], input[type=checkbox] {
   filter: sepia(100%) hue-rotate(185deg) drop-shadow(0 0 2px #933);
 }*/
 
-input[type=text], input[type="password"] {
+input[type=text], input[type=password] {
   font-family: "Droid Sans", "Open Sans", "Noto Sans", Ubuntu, "Bitstream Vera Sans", "Segoe UI", Verdana, "Lucida Grande", Helvetica, sans-serif;
   font-size: 9pt;
+  border: 1px solid #184818;
   cursor: text;
 }
 
@@ -1215,7 +1216,7 @@ input[type="file"] {
   background: none;
 }
 
-input[type=text], input[type="password"], textarea {
+input[type=text], input[type=password], textarea {
   padding: 5px !important;
   color: #ee9;
   border: 1px solid #141;
@@ -1229,9 +1230,9 @@ input[name="new_from"] {
   color: #ee9 !important;
 }
 
-input[type=text]:focus, input[type="password"]:focus, textarea:focus {
+input[type=text]:focus, input[type=password]:focus, textarea:focus {
   color: #ee9;
-  border: 1px solid #252;
+  border: 1px solid #373;
   box-shadow: 0 0 1px #000, 0 0 1px 1px rgba(255,96,0,.5);
   background: #000;
 }
@@ -1358,14 +1359,13 @@ hr {
 }
 
 #dologin input[name="user"], #dologin input[name="pass"], #dologin input[name="host"] {
-/*  width: 240px;*/
   margin-right: 5px;
 }
 
 #dologin hr {
   margin: 0 0 4px;
   background: #252;
-  background: linear-gradient(to right, rgba(0,0,0,0), rgba(0,48,0,.8) 45%, rgba(0,48,0,.8) 55%, rgba(0,0,0,0));
+  background: linear-gradient(to right, rgba(0,0,0,0), rgba(0,64,0,.8) 45%, rgba(0,64,0,.8) 55%, rgba(0,0,0,0));
 }
 
 #dologin hr:first-of-type {
@@ -2550,13 +2550,13 @@ td {
   text-transform: capitalize;
 }
 
-input[type=text]::placeholder, input[type="password"]::placeholder {
+input[type=text]::placeholder, input[type=password]::placeholder {
   font-style: italic;
   text-transform: lowercase;
   opacity: .2;
 }
 
-input[type=text]:focus::placeholder, input[type="password"]:focus::placeholder {
+input[type=text]:focus::placeholder, input[type=password]:focus::placeholder {
   opacity: 0;
 }
 

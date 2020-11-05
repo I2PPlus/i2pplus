@@ -1436,13 +1436,22 @@ div.widescroll { /* only scroll content, not entire page eg /peers */
 }
 
 .tab, .tab2 {
-  box-sizing: border-box;
-  display: inline-block;
-  border: 1px solid #252;
-  margin: 0 -2px -1px -2px !important;
+  margin: 0 -3px -1px -3px !important;
   padding: 1px 0 2px;
-  background: #000;
   min-width: 60px !important;
+  display: inline-block;
+  position: relative;
+  box-sizing: border-box;
+  border: 1px solid #252;
+  background: #000;
+}
+
+.tab2 {
+  z-index: 10 !important;
+}
+
+.tab:hover {
+  z-index: 20 !important;
 }
 
 .tab2 {
@@ -1455,8 +1464,8 @@ div.widescroll { /* only scroll content, not entire page eg /peers */
 
 @media screen and (min-width: 1200px) {
 .tab2 {
-  padding: 5px 12px 6px !important;
   margin-bottom: -1px;
+  padding: 5px 12px 6px !important;
 }
 }
 
@@ -1467,14 +1476,14 @@ div.widescroll { /* only scroll content, not entire page eg /peers */
 }
 
 .tab {
+  box-shadow: inset 0 0 0 1px #000, inset 0 0 1px 1px #040;
   background: linear-gradient(to bottom, #002900, #000400) !important;
-  box-shadow: inset 0 0 0 1px #000, inset 0 0 2px 1px #040;
 }
 
 .tab:hover {
   background: #000 !important;
   background: linear-gradient(to bottom, #001800 50%, #000 50%) !important;
-  box-shadow: inset 0 0 0 1px #000, inset 0 0 1px 2px #f60, inset 0 0 2px 2px #000;
+  box-shadow: inset 0 0 0 1px #000, inset 0 0 0 2px rgba(128,48,0,.8);
 }
 
 .tab:hover a {
@@ -2582,7 +2591,7 @@ input[type=text], input[type=password] {
   text-decoration: none;
   color: #ee9;
   font: bold 9pt Droid Sans, Open Sans, Noto Sans, Ubuntu, Segoe UI, Bitstream Vera Sans, DejaVu Sans, Verdana, Lucida Grande, Helvetica, sans-serif;
-  border: 1px solid #252 !important;
+  border: 1px solid #184818 !important;
   border-radius: 1px;
   box-shadow: inset 0 0 0 1px #000, inset 4px 4px 4px #000, 0 0 0 1px #000;
   background: #010;
@@ -2644,7 +2653,7 @@ input:disabled {
 
 input[type=text]:disabled, input[type=text]:disabled:active, input[readonly="readonly"] {
   color: #161 !important;
-  border: 1px solid #252 !important;
+  border: 1px solid #141 !important;
   background: #000 !important;
 }
 
@@ -2662,8 +2671,8 @@ fieldset {
 }
 
 select {
-  padding: 6px 24px 6px 4px !important;
   margin: 5px 10px;
+  padding: 6px 24px 6px 4px !important;
   min-width: 110px;
   overflow: hidden;
   text-overflow: ellipsis;
@@ -2685,21 +2694,21 @@ select {
 }
 
 @media screen and (min-width: 1500px) {
-select {
-  padding: 8px 24px 8px 8px !important;
-}
+  select {
+    padding: 8px 24px 8px 8px !important;
+  }
 }
 
 @media screen and (min-width: 1500px) {
-.search select {
-  padding: 7px 24px 7px 8px !important;
-}
+  .search select {
+    padding: 7px 24px 7px 8px !important;
+  }
 }
 
 @supports not (-moz-appearance: none) {
 select {
   padding: 7px 24px 7px 9px !important;
-}
+  }
 }
 
 select option {
@@ -2749,19 +2758,19 @@ select::-ms-expand {
 }
 
 textarea {
+  margin: 10px;
+  padding: 5px;
+  width: calc(100% - 15px);
+  min-width: 97%;
+  min-height: 100px;
+  font: 8.5pt Droid Sans Mono, Noto Mono, DejaVu Sans Mono, Lucida Console, monospace;
+  color: #ee9;
+  border-radius: 2px;
+  border: 1px solid #184818;
+  box-shadow: inset 0 0 3px 3px #000;
+  text-align: left;
   background: #000;
   background: linear-gradient(to bottom, #000, #010) !important;
-  box-shadow: inset 0 0 3px 3px #000;
-  color: #ee9;
-  padding: 5px;
-  margin: 10px;
-  border-radius: 2px;
-  font: 8.5pt Droid Sans Mono, Noto Mono, DejaVu Sans Mono, Lucida Console, monospace;
-  min-height: 100px;
-  min-width: 97%;
-  width: calc(100% - 15px);
-  text-align: left;
-  border: 1px solid #252;
 }
 
 textarea[cols="70"], textarea[name="levels"] {
@@ -2770,11 +2779,12 @@ textarea[cols="70"], textarea[name="levels"] {
 
 input[type=text]:focus, input[type=password]:focus, textarea:focus {
   color: #ee9 !important;
-  background: #000 !important;
-  filter: drop-shadow(0 0 1px #f60);
+  border: 1px solid #252 !important;
   box-shadow: 0 0 0 1px rgba(200,48,0,.3);
-  transition: filter ease .3s;
+  background: #000 !important;
   outline: none;
+  filter: drop-shadow(0 0 1px #f60);
+  transition: filter ease .3s;
 }
 
 input[type=text]:focus, input[type=password]:focus {
@@ -4666,6 +4676,20 @@ input[name="logfilename"], input[name="logformat"], input[name="logdateformat"],
 
 #config_service .h3navlinks {
   margin-top: 0;
+}
+
+a[href$="#alternative_browser"] img {
+  opacity: 0
+}
+
+a[href$="#alternative_browser"]::after {
+  margin-left: -16px;
+  width: 16px;
+  height: 16px;
+  display: inline-block;
+  background: url(images/helplink.svg) center center no-repeat;
+  background-size: 16px 16px;
+  content: "";
 }
 
 h3#shutdownrouter, h3#restartrouter, h3#servicedebug, h3#browseronstart, h3#rononstartup, h3#systray {
@@ -8146,13 +8170,13 @@ h4#sb_shutdownstatus span {
 }
 
 @media screen and (min-width: 1500px) {
-.sb_netstatus, .tunnelBuildStatus {
-  padding: 9px 3px !important;
-}
+  .sb_netstatus, .tunnelBuildStatus {
+    padding: 9px 3px !important;
+  }
 
-.sb_netstatus::before, .tunnelBuildStatus::before {
-  margin-top: -2px !important;
-}
+  .sb_netstatus::before, .tunnelBuildStatus::before {
+    margin-top: -2px !important;
+  }
 }
 
 .routersummary .firewalled, .tunnelBuildStatus {
@@ -8180,6 +8204,11 @@ h4#sb_shutdownstatus span {
 .routersummary .hidden, .routersummary .vmcomm, .tunnelBuildStatus.hidden {
   color: #999;
   box-shadow: inset 0 0 0 1px #000, inset 0 0 2px 1px #777;
+}
+
+.vmcomm {
+  box-shadow: inset 0 0 0 1px #000, inset 0 0 1px 1px #aaa, inset 0 0 0 2px rgba(0,0,0,.7) !important;
+  background: linear-gradient(to right, #141414, #080808, #141414);
 }
 
 .routersummary .running, .tunnelBuildStatus.active {

@@ -1584,7 +1584,7 @@ public class DataHelper {
 
         String str = fmt.format(val) + space;
         switch (scale) {
-/*
+
             case 1: return str + "Ki";
             case 2: return str + "Mi";
             case 3: return str + "Gi";
@@ -1593,7 +1593,9 @@ public class DataHelper {
             case 6: return str + "Ei";
             case 7: return str + "Zi";
             case 8: return str + "Yi";
-*/
+            default: return bytes + space;
+
+/*
             case 1: return str + "K";
             case 2: return str + "M";
             case 3: return str + "G";
@@ -1603,6 +1605,7 @@ public class DataHelper {
             case 7: return str + "Z";
             case 8: return str + "Y";
             default: return bytes + space;
+*/
         }
     }
 
