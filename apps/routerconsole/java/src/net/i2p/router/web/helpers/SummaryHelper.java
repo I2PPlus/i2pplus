@@ -655,7 +655,8 @@ public class SummaryHelper extends HelperBase {
         if (_context == null)
             return "0";
         long received = _context.bandwidthLimiter().getTotalAllocatedInboundBytes();
-        return DataHelper.formatSize2Decimal(received) + 'B';
+//        return DataHelper.formatSize2Decimal(received) + 'B';
+        return DataHelper.formatSize2(received) + 'B';
     }
 
     /**
@@ -667,7 +668,8 @@ public class SummaryHelper extends HelperBase {
         if (_context == null)
             return "0";
         long sent = _context.bandwidthLimiter().getTotalAllocatedOutboundBytes();
-        return DataHelper.formatSize2Decimal(sent) + 'B';
+//        return DataHelper.formatSize2Decimal(sent) + 'B';
+        return DataHelper.formatSize2(sent) + 'B';
     }
 
     /**
