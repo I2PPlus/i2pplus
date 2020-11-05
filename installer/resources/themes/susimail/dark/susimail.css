@@ -228,12 +228,12 @@ p.footer, p.footer b {
 }
 
 p.mailbody {
-  font: 9pt "Droid Sans Mono", "Noto Mono", "Lucida Console", "DejaVu Sans Mono", monospace;
+  font: 9pt Droid Sans Mono, Noto Mono, Lucida Console, DejaVu Sans Mono, monospace;
   text-align: left;
   padding: 0 0 15px;
   margin-top: 0;
   line-height: 130%;
-  word-break: break-all; // required to ensure super long strings don't break the layout
+  word-break: break-all; /* required to ensure super long strings don't break the layout */
 }
 
 a {
@@ -275,7 +275,7 @@ a:active, tr:hover td[onclick]:active a {
 }
 
 pre {
-  font: 9pt "Droid Sans Mono", "Noto Mono", "Lucida Console", "DejaVu Sans Mono", monospace;
+  font: 9pt Droid Sans Mono, Noto Mono, Lucida Console, DejaVu Sans Mono, monospace;
   margin-left: 10px;
   margin-right: 10px;
 }
@@ -396,7 +396,7 @@ input, select, button {
   font-weight: bold !important;
 }
 
-button::-moz-focus-inner, input[type="submit"]::-moz-focus-inner, input[type="reset"]::-moz-focus-inner  {
+button::-moz-focus-inner, input[type=submit]::-moz-focus-inner, input[type=reset]::-moz-focus-inner  {
   outline: none;
   border: none;
 }
@@ -409,7 +409,7 @@ label:hover {
   color: #000;
 }
 
-input[type="radio"], input[type="checkbox"] {
+input[type=radio], input[type=checkbox] {
   vertical-align: middle;
   background: none;
   outline: none;
@@ -418,22 +418,22 @@ input[type="radio"], input[type="checkbox"] {
   filter: sepia(100%) hue-rotate(185deg) drop-shadow(0 0 1px #ccf);
 }
 
-/*input[type="checkbox"]:hover, input[type="checkbox"]:focus, input[type="radio"]:hover, input[type="radio"]:focus {
+/*input[type=checkbox]:hover, input[type=checkbox]:focus, input[type=radio]:hover, input[type=radio]:focus {
   filter: sepia(100%) hue-rotate(185deg) drop-shadow(0 0 3px #89f);
 }
 
-#attachedfile input[type="checkbox"]:hover, #attachedfile input[type="checkbox"]:focus,
-.mailListDelete input[type="checkbox"]:hover, .mailListDelete input[type="checkbox"]:focus{
+#attachedfile input[type=checkbox]:hover, #attachedfile input[type=checkbox]:focus,
+.mailListDelete input[type=checkbox]:hover, .mailListDelete input[type=checkbox]:focus{
   filter: sepia(100%) hue-rotate(185deg) drop-shadow(0 0 2px #933);
 }*/
 
-input[type="text"], input[type="password"] {
-  cursor: text;
+input[type=text], input[type="password"] {
   font-family: "Droid Sans", "Open Sans", "Noto Sans", Ubuntu, "Bitstream Vera Sans", "Segoe UI", Verdana, "Lucida Grande", Helvetica, sans-serif;
   font-size: 9pt;
+  cursor: text;
 }
 
-input[type="submit"], input[type="reset"], #settings {
+input[type=submit], input[type=reset], #settings {
   margin: 3px;
   padding: 7px 6px;
   color: #494;
@@ -805,14 +805,14 @@ input.switchto:active, input.moveto:active {
   background: #f60 url(/themes/susimail/images/folder-open.png) no-repeat 8px center;
 }
 
-input[type="submit"]:hover, input[type="reset"]:hover, input[type="submit"]:focus, input[type="reset"]:focus,
+input[type=submit]:hover, input[type=reset]:hover, input[type=submit]:focus, input[type=reset]:focus,
 select:hover, select:focus, select:active, #settings:hover, #settings:focus {
   color: #f60;
   border: 1px solid #f60;
   box-shadow: inset 0 0 0 1px #000, inset 0 0 2px 1px rgba(255,86,0,0.8), inset 0 0 0 3px #000 !important;
 }
 
-input[type="submit"]:active, input[type="reset"]:active, #settings:active {
+input[type=submit]:active, input[type=reset]:active, #settings:active {
   border: 1px solid #f60;
   background-color: #f60 !important;
   color: #ee9 !important;
@@ -948,9 +948,9 @@ input.nextpage:hover, input.next:hover, input[name="nextpage"]:hover {
 }
 
 @supports (position: sticky) {
-#pagenavbottom {
-  display: none;
-}
+  #pagenavbottom {
+    display: none;
+  }
 }
 
 #pagenavbottom, #mailbox #pagenavbottom td {
@@ -1064,7 +1064,6 @@ tr.bottombuttons .pagenav {
 
 .delete + .logout {
   display: none;
-}
 }
 
 #messagenav {
@@ -1210,19 +1209,19 @@ img.sort:active {
 /* end list sort */
 
 input[type="file"] {
-  background: none;
-  font-size: 9pt;
   padding: 5px 0;
   max-width: 400px;
+  font-size: 9pt;
+  background: none;
 }
 
-input[type="text"], input[type="password"], textarea {
+input[type=text], input[type="password"], textarea {
   padding: 5px !important;
-  background: #010;
-  box-shadow: inset 2px 2px 1px #000;
-  border: 1px solid #141;
-  border-radius: 2px;
   color: #ee9;
+  border: 1px solid #141;
+  border-radius: 1px;
+  box-shadow: inset 2px 2px 1px #000;
+  background: #010;
 }
 
 input[name="new_from"] {
@@ -1230,14 +1229,14 @@ input[name="new_from"] {
   color: #ee9 !important;
 }
 
-input[type="text"]:focus, input[type="password"]:focus, textarea:focus {
+input[type=text]:focus, input[type="password"]:focus, textarea:focus {
   color: #ee9;
+  border: 1px solid #252;
   box-shadow: 0 0 1px #000, 0 0 1px 1px rgba(255,96,0,.5);
   background: #000;
-  border: 1px solid #252;
 }
 
-input[type="text"][disabled] {
+input[type=text][disabled] {
   margin-left: 0 !important;
   padding-left: 0 !important;
   color: #aa0;
@@ -1249,7 +1248,7 @@ input[type="text"][disabled] {
 }
 
 textarea {
-  font-family: "Droid Sans Mono", "Noto Mono", "Lucida Console", "DejaVu Sans Mono", monospace;
+  font-family: Droid Sans Mono, Noto Mono, Lucida Console, DejaVu Sans Mono, monospace;
   font-size: 9pt;
 }
 
@@ -1294,7 +1293,7 @@ hr {
 }
 
 @keyframes fade-in {
-  0,80% {filter: opacity(0)}
+  0%,80% {filter: opacity(0)}
   100% {filter: opacity(1)}
 }
 
@@ -1336,7 +1335,7 @@ hr {
   display: none;
 }
 
-#dologin input[type="text"], input[name="pagesize"] {
+#dologin input[type=text], input[name="pagesize"] {
   text-align: left !important;
 }
 
@@ -1583,7 +1582,7 @@ h3#config {
   padding: 5px 10px;
 }
 
-.topbuttons input[type="text"] {
+.topbuttons input[type=text] {
   margin: 5px;
 }
 
@@ -1654,7 +1653,7 @@ to {
 }
 
 .notifications:hover {
-  background-image: url(/themes/snark/light/images/delete_hover.png) #020;
+  background-image: url(/themes/snark/light/images/delete_hover.png);
   background-blend-mode: normal;
 }
 
@@ -1717,7 +1716,7 @@ td p.error {
   min-height: 200px;
 }
 
-#composemail textarea, #composemail input[type="text"] {
+#composemail textarea, #composemail input[type=text] {
   width: calc(100% - 20px);
   min-width: 565px;
 }
@@ -1754,11 +1753,11 @@ td p.error {
   padding: 4px 5px !important;
 }
 
-#newmail input[type="checkbox"] {
+#newmail input[type=checkbox] {
   margin: 0;
 }
 
-#attachedfile input[type="checkbox"] {
+#attachedfile input[type=checkbox] {
   margin: 1px;
   float: right;
 }
@@ -1865,8 +1864,8 @@ td p.error {
 /* custom radios/checkboxes to enforce color scheme when OS widgets are non-standard  */
 /*@media screen and (-webkit-min-device-pixel-ratio: 0) and (min-resolution:.001dpcm) {*/
 @supports (background-blend-mode: luminosity) { /* exclude ms browsers */
-input[type="checkbox"], input[type="checkbox"]:checked, input[type="checkbox"][disabled], input[type="checkbox"][disabled]:checked,
-input[type="radio"], input[type="radio"]:checked, input[type="radio"][disabled], input[type="radio"][disabled]:checked {
+input[type=checkbox], input[type=checkbox]:checked, input[type=checkbox][disabled], input[type=checkbox][disabled]:checked,
+input[type=radio], input[type=radio]:checked, input[type=radio][disabled], input[type=radio][disabled]:checked {
   position: relative;
   width: 19px !important;
   height: 19px !important;
@@ -1883,18 +1882,18 @@ input[type="radio"], input[type="radio"]:checked, input[type="radio"][disabled],
   will-change: transform;
 }
 
-input[type="checkbox"], input[type="checkbox"]:checked, input[type="checkbox"][disabled], input[type="checkbox"][disabled]:checked {
+input[type=checkbox], input[type=checkbox]:checked, input[type=checkbox][disabled], input[type=checkbox][disabled]:checked {
   border-radius: 2px;
   box-shadow: inset 3px 3px 3px 1px #000;
 }
 
-input[type="radio"], input[type="radio"]:checked, input[type="radio"][disabled], input[type="radio"][disabled]:checked {
+input[type=radio], input[type=radio]:checked, input[type=radio][disabled], input[type=radio][disabled]:checked {
   border-radius: 50%;
   box-shadow: inset 3px 3px 3px 1px #000;
 }
 
-input[type="checkbox"]:checked::before, input[type="radio"]:checked::before,
-input[type="checkbox"]:not(:checked)::before, input[type="radio"]:not(:checked)::before {
+input[type=checkbox]:checked::before, input[type=radio]:checked::before,
+input[type=checkbox]:not(:checked)::before, input[type=radio]:not(:checked)::before {
   position: absolute;
   transition: linear all 0.05s;
   transform: scale(1);
@@ -1908,7 +1907,7 @@ input[type="checkbox"]:not(:checked)::before, input[type="radio"]:not(:checked):
   background: #000 !important;
 }
 
-input[type="checkbox"]:checked::before, input[type="checkbox"]:not(:checked)::before {
+input[type=checkbox]:checked::before, input[type=checkbox]:not(:checked)::before {
   content: "";
   top: 3px;
   left: 3px;
@@ -1923,7 +1922,7 @@ input[type="checkbox"]:checked::before, input[type="checkbox"]:not(:checked)::be
   background: #5a5;
 }
 
-input[type="radio"]:checked::before {
+input[type=radio]:checked::before {
   content: "";
   border-radius: 50%;
   left: 25%;
@@ -1933,21 +1932,21 @@ input[type="radio"]:checked::before {
   background: #5a5;
 }
 
-input[type="checkbox"]:checked:hover::before {
+input[type=checkbox]:checked:hover::before {
   color: #6b6;
 }
 
-input[type="radio"]:checked:hover::before {
+input[type=radio]:checked:hover::before {
   background: #6b6;
 }
 
-input[type="checkbox"]:not(:checked)::before, input[type="radio"]:not(:checked)::before {
+input[type=checkbox]:not(:checked)::before, input[type=radio]:not(:checked)::before {
   transform: scale(0);
   color: transparent;
   background: transparent;
 }
 
-input[type="checkbox"]:hover, input[type="radio"]:hover, input[type="checkbox"]:focus, input[type="radio"]:focus {
+input[type=checkbox]:hover, input[type=radio]:hover, input[type=checkbox]:focus, input[type=radio]:focus {
   background: #000;
   width: 19px !important;
   height: 19px !important;
@@ -1956,8 +1955,8 @@ input[type="checkbox"]:hover, input[type="radio"]:hover, input[type="checkbox"]:
   filter: drop-shadow(0 0 1px #f60) !important;
 }
 
-input[type="checkbox"][disabled], input[type="radio"][disabled], input[type="checkbox"][disabled]:hover, input[type="radio"][disabled]:hover,
-input[type="checkbox"][disabled]:checked, input[type="radio"][disabled]:checked, input[type="checkbox"][disabled]:checked:hover, input[type="radio"][disabled]:checked:hover {
+input[type=checkbox][disabled], input[type=radio][disabled], input[type=checkbox][disabled]:hover, input[type=radio][disabled]:hover,
+input[type=checkbox][disabled]:checked, input[type=radio][disabled]:checked, input[type=checkbox][disabled]:checked:hover, input[type=radio][disabled]:checked:hover {
   border: 1px solid #252 !important;
   box-shadow: none !important;
   opacity: 0.5 !important;
@@ -2154,7 +2153,7 @@ tr:active td.mailListSubject a {
   border-right: none;
 }
 
-#mailbox .bottombuttons input[type="submit"][disabled] {
+#mailbox .bottombuttons input[type=submit][disabled] {
   display: none;
 }
 
@@ -2442,7 +2441,7 @@ background-position: 0;
 
 @keyframes loading {
 0% {
-  background: linear-gradient(to bottom, rgba(255,255,255,0.2) 50%, rgba(0,0,0,0.3) 50%), repeating-linear-gradient(45deg, #020 1px, #020 20px, #000 20px, #00 40px);
+  background: linear-gradient(to bottom, rgba(255,255,255,0.2) 50%, rgba(0,0,0,0.3) 50%), repeating-linear-gradient(45deg, #020 1px, #020 20px, #000 20px, #000 40px);
 }
 
 100% {
@@ -2551,13 +2550,13 @@ td {
   text-transform: capitalize;
 }
 
-input[type="text"]::placeholder, input[type="password"]::placeholder {
+input[type=text]::placeholder, input[type="password"]::placeholder {
   font-style: italic;
   text-transform: lowercase;
   opacity: .2;
 }
 
-input[type="text"]:focus::placeholder, input[type="password"]:focus::placeholder {
+input[type=text]:focus::placeholder, input[type="password"]:focus::placeholder {
   opacity: 0;
 }
 

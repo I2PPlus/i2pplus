@@ -563,8 +563,6 @@ form[action="addressbook"] > p.buttons {
 td > img[width="320"], td > img[src^="/imagegen"] {
   margin: 10px 3px;
   padding: 2px;
-  width: 240px;
-  height: 240px;
   border-radius: 1px;
   border: 1px solid #242;
   box-shadow: inset 0 0 0 1px #000;
@@ -1077,9 +1075,9 @@ input[type=text] {
 
 input[type=text], textarea {
   color: #bb7;
-  box-shadow: inset 0 0 3px 3px #000;
+  box-shadow: inset 0 0 0 1px #000, inset 4px 4px 4px #000, 0 0 0 1px #000;
   background: #000;
-  background: linear-gradient(to bottom, #000 0%, #010 100%) !important;
+  background: linear-gradient(to bottom, #001800, #001000) !important;
 }
 
 textarea {
@@ -1093,6 +1091,7 @@ textarea {
   color: #bb7;
   border: 1px solid #242;
   border-radius: 2px;
+  box-shadow: inset 0 0 0 1px #000, inset 4px 4px 4px #000;
 }
 
 textarea[cols="70"] {
@@ -1110,13 +1109,14 @@ input:focus, #add textarea:focus {
 
 textarea:focus {
   box-shadow: inset 0 0 1px #880;
+  background: #000 !important;
   filter: none;
 }
 
 #booksearch input[name=search] {
   min-width: 280px !important;
   padding: 6px 8px 6px 32px !important;
-  background: url(/themes/console/images/buttons/search.png) 9px center no-repeat, linear-gradient(to bottom, #000 0%, #010 100%) !important;
+  background: url(/themes/console/images/buttons/search.png) 9px center no-repeat, linear-gradient(to bottom, #001800, #001000) !important;
 }
 
 #booksearch input[name=search]:focus {
@@ -1270,13 +1270,6 @@ p.book {
 
 .book td:nth-child(3) a:not(old) {
   font-size: 0 !important;
-}
-
-.book td:nth-child(3) .addrhlpr a::after {
-  padding: 0 10px !important;
-  text-align: center;
-  content: url(/themes/console/images/buttons/fullview.png);
-  filter: drop-shadow(0 0 1px #555);
 }
 
 #host_list {
