@@ -1683,6 +1683,37 @@ video:hover::-webkit-media-controls-panel, video:focus::-webkit-media-controls-p
   filter: sepia(1) hue-rotate(70deg);
 }
 
+.snarkConfig .snarkConfigTitle img[src$="config.png"], #trackers .snarkConfig .snarkConfigTitle img[src$="config.png"],
+.snarkConfig img[src$="infocircle.png"] {
+  margin: 0 !important;
+  padding: 0 !important;
+  width: 0 !important;
+  height: 0 !important;
+}
+
+.snarkConfig .snarkConfigTitle::before {
+  width: 16px;
+  height: 18px;
+  display: inline-block;
+  vertical-align: middle;
+  background: url(images/configure.svg) center calc(50% - 1px) no-repeat;
+  background-size: 16px 16px;
+  content: "";
+  opacity: .8;
+}
+
+.snarkConfig #bwHoverHelp::before {
+  margin-left: 4px;
+  width: 16px;
+  height: 18px;
+  display: inline-block;
+  vertical-align: middle;
+  background: url(images/infocircle.svg) center calc(50% - 1px) no-repeat;
+  background-size: 16px 16px;
+  content: "";
+  opacity: .8;
+}
+
 #lowersection:hover .snarkConfigTitle img, #lowersection:hover .toggleview img {
   will-change: transform;
 }
@@ -2430,19 +2461,22 @@ _:-ms-lang(x), #trackerselect tr:last-child {
   vertical-align: middle;
   border: 1px solid transparent;
   border-radius: 2px;
-  background: url(images/config.png) center center no-repeat;
+  background: url(images/configure.svg) center center no-repeat;
+  background-size: 16px 16px;
 }
 
 #configs a[href^="/config"]:hover::after {
   border: 1px solid #252 !important;
-  background: #030 url(images/config.png) center center no-repeat;
-  background: url(images/config.png) center center no-repeat, linear-gradient(to bottom, #050 50%, #010 50%);
+  background: #030 url(images/configure.svg) center center no-repeat;
+  background: url(images/configure.svg) center center no-repeat, linear-gradient(to bottom, #050 50%, #010 50%);
+  background-size: 16px 16px, 100% 100%;
 }
 
 #configs a[href^="/config"]:active::after {
   border: 1px solid #f60 !important;
   box-shadow: inset 3px 3px 2px 1px #000;
-  background: #020 url(images/config.png) center center no-repeat;
+  background: #020 url(images/configure.svg) center center no-repeat;
+  background-size: 16px 16px, 100% 100%;
   transform: scale(0.9) !important;
   transition: none !important;
 }
@@ -3217,41 +3251,34 @@ _:-ms-lang(x), .snarkTorrents tr:last-child {
 }
 
 #nameRequired {
-  float: right;
   margin-right: 5px;
+  float: right;
 }
 
-/*#showRatings {
-  background: linear-gradient(to bottom, rgba(0,0,0,0) 50%, #000 50%), repeating-linear-gradient(to right, rgba(0,0,0,.5) 1px, rgba(0,0,0,.5) 2px, rgba(0,16,0,.5) 3px), linear-gradient(to bottom, #004000, #000 75%);
-}*/
-
-.commentRating {
+td.commentRating {
+  padding-left: 2px;
+  padding-right: 0;
   width: 80px;
   white-space: nowrap;
-  padding-left: 0 !important;
-}
-
-.commentRating {
-  padding-left: 3px;
 }
 
 .commentRating img {
   margin: 0;
   padding: 0;
-  height: 16px;
   width: 16px;
+  height: 16px;
 }
 
 .commentDate {
+  padding-left: 20px !important;
   width: 105px;
   background: url(images/clock.png) left center no-repeat;
-  padding-left: 20px !important;
 }
 
 .snarkCommentInfo td:first-child, .snarkComments td:first-child {
-  min-width: 160px !important;
-  width: 160px !important;
   padding-right: 2px;
+  width: 160px !important;
+  min-width: 160px !important;
 }
 
 @media screen and (min-width: 1000px) {
@@ -3261,8 +3288,8 @@ _:-ms-lang(x), .snarkTorrents tr:last-child {
 }
 
 .commentAuthor {
-  text-align: left !important;
   padding-right: 0 !important;
+  text-align: left !important;
 }
 
 .commentAuthorName {
@@ -3277,22 +3304,23 @@ _:-ms-lang(x), .snarkTorrents tr:last-child {
 td .commentAuthorName {
   margin: 0 0 0 4px !important;
   padding: 0 4px 0 24px !important;
-  min-width: 118px;
-  max-width: 118px;
+  min-width: 120px;
+  max-width: 120px;
   white-space: nowrap;
   overflow: hidden;
   text-overflow: ellipsis;
   vertical-align: middle;
   font-size: 90%;
-  box-shadow: 0 0 0 1px rgba(0,0,0,.3);
+  border: 1px solid #002800;
+  box-shadow: 0 0 0 1px #000;
   background: #020 url(images/author.png) 4px center no-repeat;
   background: url(images/author.png) 4px center no-repeat, linear-gradient(to bottom, rgba(0,48,0,.5), rgba(0,16,0,.5));
 }
 
 .commentText {
-  white-space: normal !important;
-  text-align: left;
   width: 90%;
+  text-align: left;
+  white-space: normal !important;
 }
 
 .commentText:empty + .commentDelete {
@@ -3367,7 +3395,8 @@ td .commentAuthorName {
 
 .commentRating img {
   padding: 0;
-  font-size: 14pt;
+  width: 14px;
+  height: 14px;
   color: #ff7200;
   text-shadow: 0 0 1px #900;
   filter: none;
