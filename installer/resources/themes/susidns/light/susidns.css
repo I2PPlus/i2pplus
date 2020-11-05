@@ -228,25 +228,27 @@ h3 {
 
 .headline h3 {
   font-size: 11.5pt;
-  background: url(/themes/susidns/images/addressbook.png) 6px center no-repeat #fcfcff;
-  background-size: 22px 22px, 100% 100%, 100% 100%;
+  background: url(images/addressbook.svg) 7px calc(50% + 2px) no-repeat #fcfcff;
+  background-size: 20px 20px;
 }
 
 .headline#subscriptions h3 {
   background: url(/themes/susidns/images/subs_24.png) 6px center no-repeat #fcfcff;
-  background: url(/themes/susidns/images/subs_24.png) 6px center no-repeat, linear-gradient(to bottom, #fcfcff 50%, rgba(255,255,255,0.6) 50%, rgba(240,240,255,0.4)), linear-gradient(135deg, #fcfcff 5%, rgba(231, 231, 255, 0.8) 15%);
-  background-size: 22px 22px, 100% 100%, 100% 100%;
+  background-size: 22px 22px;
+}
+
+#subscriptions a {
+  float: right;
 }
 
 .headline#configure h3 {
-  background: url(/themes/susidns/images/configure_24.png) 6px center no-repeat #fcfcff;
-  background: url(/themes/susidns/images/configure_24.png) 6px center no-repeat, linear-gradient(to bottom, #fcfcff 50%, rgba(255,255,255,0.6) 50%, rgba(240,240,255,0.4)), linear-gradient(135deg, #fcfcff 5%, rgba(231, 231, 255, 0.8) 15%);
-  background-size: 22px 22px, 100% 100%, 100% 100%;
+  background: url(../images/configure.svg) 7px calc(50% + 1px) no-repeat #fcfcff;
+  background-size: 18px 18px;
 }
 
 .headline#subscriptions h3, .headline#configure h3, .headline#addressbook h3, .headline h3 {
   margin: -8px -5px -5px;
-  padding: 9px 5px 6px 32px;
+  padding: 9px 5px 6px 30px;
 }
 
 #dtls .headline h3 {
@@ -370,7 +372,7 @@ form[action="subscriptions"] #content {
   padding: 3px;
 }
 
-#add input[type="text"], #import input[type="file"] {
+#add input[type=text], #import input[type="file"] {
   width: 100%;
 }
 
@@ -406,10 +408,11 @@ div.help {
 }
 
 .help#helpsubs {
-  background: #eef url(/themes/console/images/info/infohelp.png) 10px center no-repeat;
-  background: url(/themes/console/images/info/infohelp.png) 10px center no-repeat, linear-gradient(135deg, #fafaff, #f8f8ff);
   padding: 0 15px 0 45px;
   font-size: 10pt;
+  background: #eef url(/themes/console/images/svg/infohelp.svg) 10px center no-repeat;
+  background: url(/themes/console/images/svg/infohelp.svg) 10px center no-repeat, linear-gradient(135deg, #fafaff, #f8f8ff);
+  background-size: 26px 26px, 100% 100%;
 }
 
 div.help h3, #add h3, #import h3 {
@@ -420,33 +423,25 @@ div.help h3, #add h3, #import h3 {
   background: linear-gradient(to bottom, #fcfcff 50%, rgba(255,255,255,0.6) 50%, rgba(240,240,255,0.4)), linear-gradient(135deg, #fcfcff 5%, rgba(231, 231, 255, 0.8) 15%);
 }
 
-/*.iframed div.help h3, .iframed #add h3, .iframed #import h3 {
-  margin: -1px -22px 0 !important;
-}*/
-
 p#help {
   margin: 0;
   padding: 0;
 }
 
 p, #helpconfig {
-  font-size: 9pt;
   text-align: justify;
+  font-size: 9pt;
 }
 
 .iframed #helpconfig, .iframed #helpsubs {
   margin-top: 10px;
   margin-bottom: 12px;
-  box-shadow: inset 0 0 0 1px #fff;
   border-radius: 0;
+  box-shadow: inset 0 0 0 1px #fff;
 }
 
 #helpconfig ul {
-  -moz-columns: 2 400px;
-  -webkit-columns: 2 400px;
   columns: 2 400px;
-  -moz-column-gap: 50px;
-  -webkit-column-gap: 50px;
   column-gap: 50px;
 }
 
@@ -460,7 +455,7 @@ span.addrhlpr {
   font-size: 9pt;
 }
 
-a, button, input[type="submit"], input[type="cancel"], select, h3 {
+a, button, input[type=submit], input[type="cancel"], select, h3 {
   text-shadow: 0 1px 1px #fff;
 }
 
@@ -469,11 +464,11 @@ a:hover, a:focus, a:active, select:hover, select:focus, select:active, input:hov
 }
 
 h3 {
-  font-size: 11pt;
-  letter-spacing: 0.08em;
-  font-weight: bold;
-  text-transform: uppercase;
   margin-bottom: 0;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  font-size: 11pt;
+  font-weight: bold;
 }
 
 a {
@@ -683,7 +678,7 @@ _:-ms-lang(x), img.illustrate {
   padding-bottom: 18px;
 }
 
-input[type="text"], input[type="password"], textarea {
+input[type=text], input[type="password"], textarea {
   padding: 5px !important;
   box-shadow: inset 1px 1px 1px rgba(204, 204, 204, 0.6);
   border: 1px solid #97a2ce;
@@ -694,7 +689,7 @@ input[type="text"], input[type="password"], textarea {
   filter: drop-shadow(0 0 1px rgba(220,220,255,.7));
 }
 
-input[type="text"]:focus, input[type="password"]:focus, textarea:focus {
+input[type=text]:focus, input[type="password"]:focus, textarea:focus {
   color: #19191f;
   box-shadow: 0 0 1px #89f;
   background: #fff !important;
@@ -854,9 +849,10 @@ table.book {
 }
 
 .book th:last-child  {
-  background: #fff url(/themes/console/images/buttons/delete.png) center center no-repeat;
-  background: url(/themes/console/images/buttons/delete.png) center center no-repeat, linear-gradient(to bottom, #fcfcff 51%, #fafaff 51%, #f6f6ff 100%);
   width: 16px;
+  background: #fff url(../images/nuke.svg) center center no-repeat;
+  background: url(../images/nuke.svg) center center no-repeat, linear-gradient(to bottom, #fcfcff 51%, #fafaff 51%, #f6f6ff 100%);
+  background-size: 14px 14px;
 }
 
 .book th {
@@ -1076,13 +1072,13 @@ td.destinations textarea {
   background: #ffe !important;
 }
 
-#hostNotes td:last-child input[type="submit"] {
+#hostNotes td:last-child input[type=submit] {
   margin: 10px;
   float: right;
   display: none;
 }
 
-#hostNotes td:last-child textarea:focus + input[type="submit"] {
+#hostNotes td:last-child textarea:focus + input[type=submit] {
   display: inline-block;
 }
 
@@ -1279,7 +1275,7 @@ form[action="export"] {
   margin: -1px 0;
 }
 
-input[type="radio"], input[type="checkbox"] {
+input[type=radio], input[type=checkbox] {
   background: none;
   cursor: pointer;
   min-width: 16px !important;
@@ -1287,16 +1283,16 @@ input[type="radio"], input[type="checkbox"] {
   filter: sepia(100%) hue-rotate(185deg) drop-shadow(0 0 1px rgba(220,220,255,.7));
 }
 
-input[type="checkbox"]:hover, input[type="checkbox"]:focus, input[type="radio"]:hover, input[type="radio"]:focus {
+input[type=checkbox]:hover, input[type=checkbox]:focus, input[type=radio]:hover, input[type=radio]:focus {
   filter: sepia(100%) hue-rotate(185deg) drop-shadow(0 0 3px #89f);
 }
 
-input[type="submit"]::-moz-focus-inner, input[type="reset"]::-moz-focus-inner, button::-moz-focus-inner  {
+input[type=submit]::-moz-focus-inner, input[type=reset]::-moz-focus-inner, button::-moz-focus-inner  {
   outline: none;
   border: none;
 }
 
-input[type="submit"], input[type="reset"], .fakebutton {
+input[type=submit], input[type=reset], .fakebutton {
   margin: 5px 5px 5px 0;
   font: 9pt "Droid Sans", "Open Sans", "Noto Sans", Ubuntu, "Segoe UI", "Lucida Grande", "Bitstream Vera Sans", Verdana, sans-serif;
   padding: 4px 3px;
@@ -1334,7 +1330,7 @@ input[type=submit]:hover, input[type=reset]:hover, input[type=submit]:focus, inp
   transition: ease border 0.7s;
 }
 
-input[type="submit"]:active, input[type="reset"]:active, .fakebutton:active {
+input[type=submit]:active, input[type=reset]:active, .fakebutton:active {
   box-shadow: inset 0 0 0 1px #fff, inset 3px 3px 2px #555;
   background-blend-mode: luminosity;
   color: #666;
@@ -1353,19 +1349,6 @@ input.accept:hover, input.accept:focus {
   background-size: 14px 14px, 100% 100%;
 }
 
-/*
-input.accept[value="Replace"] {
-  background: #eee url(/themes/console/images/buttons/edit2.png) no-repeat 6px center;
-  background:url(/themes/console/images/buttons/edit2.png) no-repeat 6px center, linear-gradient(to bottom, #fff, #efefff);
-  padding: 5px 7px 5px 22px;
-}
-
-input.accept[value="Replace"]:hover, input.accept[value="Replace"]:focus {
-  background: #fff url(/themes/console/images/buttons/edit2.png) no-repeat 6px center;
-  background:url(/themes/console/images/buttons/edit2.png) no-repeat 6px center, linear-gradient(to bottom, #eee, #fff);
-}
-*/
-
 input.add {
   background: #eee url(/themes/console/images/buttons/add.png) no-repeat 6px center;
   background: url(/themes/console/images/buttons/add.png) no-repeat 6px center, linear-gradient(to bottom, #fff, #efefff);
@@ -1380,10 +1363,10 @@ input.add:hover, input.add:focus {
 }
 
 input.cancel {
+  padding: 5px 7px 5px 22px;
   background: #eee url(/themes/console/images/buttons/no.png) no-repeat 6px center;
   background: url(/themes/console/images/buttons/no.png) no-repeat 6px center, linear-gradient(to bottom, #fff, #efefff);
   background-size: 14px 14px, 100% 100%;
-  padding: 5px 7px 5px 22px;
 }
 
 input.cancel:hover, input.cancel:focus {
@@ -1393,24 +1376,24 @@ input.cancel:hover, input.cancel:focus {
 }
 
 input.delete {
-  background: #eee url(/themes/console/images/buttons/delete.png) no-repeat 6px center;
-  background: url(/themes/console/images/buttons/delete.png) no-repeat 6px center, linear-gradient(to bottom, #fff, #efefff);
-  background-size: 14px 14px, 100% 100%;
   padding: 5px 7px 5px 22px;
+  background: #eee url(/../images/nuke.svg) no-repeat 6px center;
+  background: url(../images/nuke.svg) no-repeat 6px center, linear-gradient(to bottom, #fff, #efefff);
+  background-size: 13px 13px, 100% 100%;
 }
 
 input.delete:hover, input.delete:focus {
-  background: #fff url(/themes/console/images/buttons/delete_hover.png) no-repeat 6px center;
-  background: url(/themes/console/images/buttons/delete_hover.png) no-repeat 6px center, linear-gradient(to bottom, #eee, #fff);
-  background-size: 14px 14px, 100% 100%;
+  background: #fff url(../images/nuke.svg) no-repeat 6px center;
+  background: url(../images/nuke.svg) no-repeat 6px center, linear-gradient(to bottom, #eee, #fff);
+  background-size: 13px 13px, 100% 100%;
 }
 
 input.export {
+  margin-top: 5px;
+  padding: 5px 7px 5px 22px;
   background: #eee url(/themes/console/images/buttons/go.png) no-repeat 6px center;
   background: url(/themes/console/images/buttons/go.png) no-repeat 6px center, linear-gradient(to bottom, #fff, #efefff);
-  background-size: 14px 14px, 100% 100%;
-  padding: 5px 7px 5px 22px;
-  margin-top: 5px;
+  background-size: 13px 13px, 100% 100%;
 }
 
 input.export:hover, input.export:focus {
@@ -1420,11 +1403,11 @@ input.export:hover, input.export:focus {
 }
 
 input.download, input.update {
+  margin-top: 5px;
+  padding: 5px 7px 5px 22px;
   background: #eee url(/themes/console/images/buttons/download.png) no-repeat 6px center;
   background: url(/themes/console/images/buttons/download.png) no-repeat 6px center, linear-gradient(to bottom, #fff, #efefff);
   background-size: 14px 14px, 100% 100%;
-  padding: 5px 7px 5px 22px;
-  margin-top: 5px;
 }
 
 input.update {
@@ -1439,10 +1422,10 @@ input.update:hover, input.update:focus {
 }
 
 input.reload {
+  padding: 5px 7px 5px 22px;
   background: #eee url(/themes/console/images/buttons/update.png) no-repeat 6px center;
   background: url(/themes/console/images/buttons/update.png) no-repeat 6px center, linear-gradient(to bottom, #fff, #efefff);
   background-size: 14px 14px, 100% 100%;
-  padding: 5px 7px 5px 22px;
 }
 
 input.reload:hover, input.reload:focus {
@@ -1452,10 +1435,10 @@ input.reload:hover, input.reload:focus {
 }
 
 input.search {
+  padding: 5px 8px 5px 24px;
   background: #eee url(/themes/console/images/buttons/search.png) no-repeat 6px center;
   background: url(/themes/console/images/buttons/search.png) no-repeat 6px center, linear-gradient(to bottom, #fff, #efefff);
   background-size: 14px 14px, 100% 100%;
-  padding: 5px 8px 5px 24px;
 }
 
 input.search:hover, input.search:focus {
@@ -1464,21 +1447,21 @@ input.search:hover, input.search:focus {
   background-size: 14px 14px, 100% 100%;
 }
 
-input.search[type="text"] {
-  background: #fbfbff url(/themes/console/images/buttons/search.png) no-repeat 6px center;
-  padding: 5px 5px 5px 26px !important;
+input.search[type=text] {
   margin: 1px 0 0;
+  padding: 5px 5px 5px 26px !important;
+  background: #fbfbff url(/themes/console/images/buttons/search.png) no-repeat 6px center;
 }
 
-input.search[type="text"]:focus {
+input.search[type=text]:focus {
   background: #fff url(/themes/console/images/buttons/search.png) no-repeat 6px center !important;
 }
 
 #visualid .fakebutton {
+  padding: 6px 8px 6px 22px;
   background: #eee url(/themes/console/images/buttons/go.png) no-repeat 6px center;
   background: url(/themes/console/images/buttons/go.png) no-repeat 6px center, linear-gradient(to bottom, #fff, #efefff);
   background-size: 14px 14px, 100% 100%;
-  padding: 6px 8px 6px 22px;
 }
 
 #visualid .fakebutton:hover, #visualid .fakebutton:focus {
@@ -1517,19 +1500,19 @@ form[action="addressbook"] table {
 
 /* custom radios/checkboxes to enforce color scheme when OS widgets are non-standard  */
 @supports (background-blend-mode: luminosity) { /* exclude ms browsers */
-input[type="checkbox"], input[type="checkbox"]:checked, input[type="checkbox"][disabled], input[type="checkbox"][disabled]:checked {
+input[type=checkbox], input[type=checkbox]:checked, input[type=checkbox][disabled], input[type=checkbox][disabled]:checked {
   width: 19px !important;
   height: 19px !important;
   border-radius: 2px;
 }
 
-input[type="radio"], input[type="radio"]:checked, input[type="radio"][disabled], input[type="radio"][disabled]:checked {
+input[type=radio], input[type=radio]:checked, input[type=radio][disabled], input[type=radio][disabled]:checked {
   width: 19px !important;
   height: 19px !important;
   border-radius: 50%;
 }
 
-input[type="checkbox"]:checked::before {
+input[type=checkbox]:checked::before {
   content: "";
   position: absolute;
   top: 3px;
@@ -1543,7 +1526,7 @@ input[type="checkbox"]:checked::before {
   transition: linear all .05s;
 }
 
-input[type="radio"]:checked::before {
+input[type=radio]:checked::before {
   content: "";
   position: absolute;
   border-radius: 50%;
@@ -1556,11 +1539,11 @@ input[type="radio"]:checked::before {
   transition: linear all .05s;
 }
 
-input[type="radio"]:not(:checked), input[type="checkbox"]:not(:checked) {
+input[type=radio]:not(:checked), input[type=checkbox]:not(:checked) {
   box-shadow: inset 0 0 0 2px #f8f8ff, inset 3px 3px 3px #aad;
 }
 
-.optbox, input[type="checkbox"] {
+.optbox, input[type=checkbox] {
   margin: 3px;
   position: relative;
   vertical-align: middle !important;
@@ -1573,7 +1556,7 @@ input[type="radio"]:not(:checked), input[type="checkbox"]:not(:checked) {
   will-change: transform;
 }
 
-.optbox:checked, input[type="checkbox"]:checked {
+.optbox:checked, input[type=checkbox]:checked {
   box-shadow: inset 0 0 0 1px #cce;
   background: linear-gradient(to bottom, #fff, #f0f0ff) !important;
 }
@@ -1604,7 +1587,7 @@ input[type="radio"]:not(:checked), input[type="checkbox"]:not(:checked) {
   transform: scale(0);
 }
 
-input[type="radio"]:not(:checked)::before {
+input[type=radio]:not(:checked)::before {
   border-radius: 50%;
 }
 }
@@ -1679,25 +1662,25 @@ input.export {
 }
 
 @media screen and (max-width: 1000px) {
-.illustrate {
-  margin: 10px auto 10px;
-  min-width: 450px;
-  width: 90%;
-}
+  .illustrate {
+    margin: 10px auto 10px;
+    width: 90%;
+    min-width: 450px;
+  }
 
-.iframed .illustrate {
-  margin-bottom: 25px !important;
-}
+  .iframed .illustrate {
+    margin-bottom: 25px !important;
+  }
 
-#content h3 {
-  font-size: 10pt;
-}
+  #content h3 {
+    font-size: 10pt;
+  }
 }
 
 @media screen and (min-width: 1000px) {
-#content h3 {
-  font-size: 10.5pt;
-}
+  #content h3 {
+    font-size: 10.5pt;
+  }
 }
 
 /* end responsive layout */
@@ -1712,9 +1695,7 @@ _:-ms-lang(x), * {
 /* end Edge/IE tweaks */
 
 #helpconfig ul {
-  -webkit-columns: 1;
   columns: 1;
-}
 }
 
 /* end chrome overrides */
