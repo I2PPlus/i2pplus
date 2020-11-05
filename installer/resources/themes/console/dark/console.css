@@ -4668,6 +4668,20 @@ input[name="logfilename"], input[name="logformat"], input[name="logdateformat"],
   margin-top: 0;
 }
 
+a[href$="#alternative_browser"] img {
+  opacity: 0
+}
+
+a[href$="#alternative_browser"]::after {
+  margin-left: -16px;
+  width: 16px;
+  height: 16px;
+  display: inline-block;
+  background: url(images/helplink.svg) center center no-repeat;
+  background-size: 16px 16px;
+  content: "";
+}
+
 h3#shutdownrouter, h3#restartrouter, h3#servicedebug, h3#browseronstart, h3#rononstartup, h3#systray {
   margin-bottom: -6px;
 }
