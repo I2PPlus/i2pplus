@@ -869,7 +869,7 @@ div#book, #emptybook {
 }
 
 #book th:last-child {
-  background: url(images/nuke.svg) center center no-repeat !important;
+  background: url(../images/nuke.svg) center center no-repeat !important;
   background-size: 15px 15px !important;
 }
 
