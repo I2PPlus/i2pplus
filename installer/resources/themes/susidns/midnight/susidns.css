@@ -4,7 +4,7 @@
 @import url("/themes/fonts/DroidSans.css");
 
 body {
-  font-family: "Droid Sans", "Open Sans", "Noto Sans", Ubuntu, "Segoe UI", "Bitstream Vera Sans", "DejaVu Sans", Verdana, "Lucida Grande", Helvetica, sans-serif;
+  font-family: Droid Sans, Open Sans, Noto Sans, Ubuntu, Segoe UI, Bitstream Vera Sans, DejaVu Sans, Verdana, Lucida Grande, Helvetica, sans-serif;
   background-color: #000010;
   background: repeating-linear-gradient(to bottom, rgba(0,0,24,.75) 3px, rgba(0,0,0,.9) 5px, rgba(0,0,0,.7) 6px), url(/themes/console/midnight/images/tile.png), #000010;
   color:#c9ceff;
@@ -60,7 +60,7 @@ input, button {
   cursor: pointer;
 }
 
-input[type="text"], textarea {
+input[type=text], textarea {
   cursor: text;
 }
 
@@ -239,14 +239,14 @@ td.search > * {
   vertical-align: middle;
 }
 
-#search input[type="text"] {
+#search input[type=text] {
   background: #000 url(/themes/console/images/buttons/search.png) 5px center no-repeat;
   background: url(/themes/console/images/buttons/search.png) 5px center no-repeat, linear-gradient(to bottom, #000 0%, #000019 100%) !important;
   padding: 5px 5px 5px 25px !important;
   margin-left: 5px;
 }
 
-#search input[type="text"]:focus {
+#search input[type=text]:focus {
   background: #000 url(/themes/console/images/buttons/search.png) 5px center no-repeat !important;
 }
 
@@ -269,7 +269,6 @@ p#filtered {
 
 #search {
   margin-top: -1px !important;
-  padding: 0 10px -20px;
   margin-bottom: 20px;
 }
 
@@ -970,7 +969,7 @@ div#add {
   padding-left: 15px;
 }
 
-#import input[type="file"] {
+#import input[type=file] {
   margin-left: -5px !important;
   border: none;
   background: none !important;
@@ -993,8 +992,7 @@ div#add {
 input {
   margin: 2px 4px 2px 0;
   padding: 4px !important;
-  min-width: 64px !important;
-  font: bold 9pt "Droid Sans", "Open Sans", "Noto Sans", Ubuntu, "Segoe UI", "Bitstream Vera Sans", "DejaVu Sans", Verdana, "Lucida Grande", Helvetica, sans-serif;
+  font: bold 9pt Droid Sans, Open Sans, Noto Sans, Ubuntu, Segoe UI, Bitstream Vera Sans, DejaVu Sans, Verdana, Lucida Grande, Helvetica, sans-serif;
   font-size: 9pt;
   font-weight: bold;
   text-align: left;
@@ -1003,7 +1001,7 @@ input {
   background: #000 none !important;
 }
 
-input[type="text"] {
+input[type=text] {
   padding: 8px !important;
 }
 
@@ -1014,8 +1012,20 @@ input[type=submit]::-moz-focus-inner, input[type=reset]::-moz-focus-inner {
 
 input[type=submit], input[type=reset], .fakebutton, .fakebutton:visited {
   padding: 5px 10px !important;
-  min-width: 90px !important;
-  font: bold 9pt "Droid Sans", "Open Sans", "Noto Sans", Ubuntu, "Segoe UI", "Bitstream Vera Sans", "DejaVu Sans", Verdana, "Lucida Grande", Helvetica, sans-serif;
+  min-width: 100px !important;
+  font: bold 9pt Droid Sans, Open Sans, Noto Sans, Ubuntu, Segoe UI, Bitstream Vera Sans, DejaVu Sans, Verdana, Lucida Grande, Helvetica, sans-serif;
+  color: #6c66bc;
+  text-align: center;
+  border: 1px solid #26225c;
+  box-shadow: inset 0 0 0 1px #000, inset 0 0 1px 1px #446, 0 0 0 1px #000;
+  background: #000;
+  background: linear-gradient(to bottom, #11101c 50%, #000010 50%) !important;
+}
+
+input[type=file]::file-selector-button {
+  padding: 5px 10px !important;
+  min-width: 100px !important;
+  font: bold 9pt Droid Sans, Open Sans, Noto Sans, Ubuntu, Segoe UI, Bitstream Vera Sans, DejaVu Sans, Verdana, Lucida Grande, Helvetica, sans-serif;
   color: #6c66bc;
   text-align: center;
   border: 1px solid #26225c;
@@ -1038,7 +1048,24 @@ input[type=submit]:focus, input[type=reset]:focus,
   background: linear-gradient(to bottom, #202 50%, #000 50%) !important;
 }
 
+input[type=file]:hover::file-selector-button, input[type=file]:focus::file-selector-button {
+  color: #652787;
+  border: 1px solid #652787;
+  box-shadow: inset 0 0 0 1px #000, inset 0 0 1px 1px #757;
+  background: #000 !important;
+  background: linear-gradient(to bottom, #202 50%, #000 50%) !important;
+}
+
 input[type=submit]:active, input[type=reset]:active, .fakebutton:active {
+  color: #83529F !important;
+  text-shadow: 0 1px 1px #3C1751;
+  border: 1px solid #652787;
+  box-shadow: inset 0 0 0 1px #000, inset 3px 3px 3px #000 !important;
+  background: #652787 !important;
+  background:  linear-gradient(to bottom, #401856, #501f6c) !important;
+}
+
+input[type=file]:active::file-selector-button {
   color: #83529F !important;
   text-shadow: 0 1px 1px #3C1751;
   border: 1px solid #652787;
@@ -1067,12 +1094,12 @@ textarea[name="log"], textarea[name="log"]:focus {
   background: #000 !important;
 }
 
-input[type="text"], textarea {
+input[type=text], textarea {
   box-shadow: inset 0 0 3px 3px #000;
   background: linear-gradient(to bottom, #000 0%, #000019 100%) !important;
 }
 
-input[type="text"]:focus, textarea:focus {
+input[type=text]:focus, textarea:focus {
   color: #c9ceff;
   background: #000 !important;
 }
@@ -1190,22 +1217,22 @@ p#filtered {
 }
 
 p.book {
-  background: url(/themes/susidns/images/abook.png) 13px center no-repeat;
   padding: 10px 10px 10px 35px !important;
+  background: url(/themes/susidns/images/abook.png) 13px center no-repeat;
 }
 
 /* export hosts button adjustments */
 
 #export {
-  text-align: right;
   margin-top: -48px;
   margin-bottom: 23px;
   padding-right: 4px;
   float: right;
   clear: left !important;
+  text-align: right;
 }
 
-#export input[type="submit"] {
+#export input[type=submit] {
   display: inline-block;
 }
 
@@ -1230,11 +1257,11 @@ p.book {
 }
 
 #host_details td:first-child {
-  min-width: 10px !important;
   width: 10%;
+  min-width: 10px !important;
   white-space: nowrap;
-  font-weight: bold;
   text-align: right;
+  font-weight: bold;
   border-right: 1px solid #17142f;
 }
 
@@ -1280,20 +1307,20 @@ p.book {
   padding: 0 !important;
 }
 
-#hostNotes input[type="submit"] {
-  float: right;
+#hostNotes input[type=submit] {
   margin: 14px 20px 12px;
   display: none;
+  float: right;
 }
 
-#hostNotes textarea:focus + input[type="submit"] {
+#hostNotes textarea:focus + input[type=submit] {
   display: inline-block;
 }
 
 #hostNotes textarea {
   margin: 0;
   padding: 4px 10px;
-  font-family: "Droid Sans", "Open Sans", "Noto Sans", Ubuntu, "Segoe UI", "Bitstream Vera Sans", "DejaVu Sans", Verdana, "Lucida Grande", Helvetica, sans-serif;
+  font-family: Droid Sans, Open Sans, Noto Sans, Ubuntu, Segoe UI, Bitstream Vera Sans, DejaVu Sans, Verdana, Lucida Grande, Helvetica, sans-serif;
   font-size: inherit !important;
   font-weight: normal;
   color: #c9ceff !important;
@@ -1313,6 +1340,17 @@ p.book {
 }
 
 /* end host details */
+
+.names a[href$=".i2p/"], #host_list td.b32link a, #host_list td.helper a {
+  width: 100%;
+  display: inline-block;
+  vertical-align: middle;
+}
+
+td.names:hover, #host_list td.b32link:hover, #host_list td.helper:hover, #host_list td.destinations:hover {
+  box-shadow: inset 0 0 0 1px #652787 !important;
+  background: #000 !important;
+}
 
 .names img {
   width: 20px;
@@ -1339,6 +1377,10 @@ p.book {
 
 #host_list {
   margin-top: 28px;
+}
+
+#host_list td:not(:first-child):not(:last-child) {
+  border-left: 1px solid #17142f;
 }
 
 #host_list th:first-child,
@@ -1371,16 +1413,18 @@ p.book {
   font-size: 0 !important;
 }
 
-#host_list td.b32link a::after {
-  content: url(/themes/console/images/buttons/link.png);
+#host_list td.b32link a::after, #host_list td.helper a::after {
+  width: 16px;
+  height: 16px;
+  display: inline-block;
   text-align: center;
-  filter: drop-shadow(0 0 1px #555);
   cursor: pointer;
+  content: "";
+  background: url(../images/link.svg) center center no-repeat;
 }
 
 #host_list td.helper a::after {
-  content: url(/themes/console/images/buttons/helper.png);
-  cursor: pointer;
+  background: url(images/helper.svg) center center no-repeat;
 }
 
 #host_list td.b32link a:hover, #host_list td.helper a:hover,
@@ -1468,7 +1512,7 @@ tr:hover td.destinations {
 }
 
 @media screen and (min-width: 1500px) {
-body, input[type="text"], select, h4, td.names a, #filter p, #search td, p, a, .help li, td, tt, code, textarea, input[type="submit"], input[type="reset"], .destaddress {
+body, input[type=text], select, h4, td.names a, #filter p, #search td, p, a, .help li, td, tt, code, textarea, input[type=submit], input[type=reset], .destaddress {
   font-size: 10.5pt !important;
 }
 
@@ -1495,7 +1539,7 @@ h3 {
 }
 
 @media screen and (min-width: 1640px) {
-body, input[type="text"], select, h4, td.names a, #filter p, #search td, p, a, .help li, td, tt, code, input[type="submit"], input[type="reset"], .destaddress {
+body, input[type=text], select, h4, td.names a, #filter p, #search td, p, a, .help li, td, tt, code, input[type=submit], input[type=reset], .destaddress {
   font-size: 10.5pt !important;
 }
 }
@@ -1512,13 +1556,11 @@ _:-ms-lang(x), * {
 
 /* custom radios/checkboxes to enforce color scheme when OS widgets are non-standard  */
 @supports (background-blend-mode: luminosity) { /* exclude ms browsers */
-input[type="checkbox"], input[type="checkbox"]:checked, input[type="checkbox"][disabled], input[type="checkbox"][disabled]:checked,
-input[type="radio"], input[type="radio"]:checked, input[type="radio"][disabled], input[type="radio"][disabled]:checked {
+input[type=checkbox], input[type=checkbox]:checked, input[type=checkbox][disabled], input[type=checkbox][disabled]:checked,
+input[type=radio], input[type=radio]:checked, input[type=radio][disabled], input[type=radio][disabled]:checked {
   position: relative;
-  width: 19px !important;
-  height: 19px !important;
-  min-width: 19px !important;
-  min-height: 19px !important;
+  width: 21px !important;
+  height: 21px !important;
   outline: none;
   vertical-align: middle !important;
   box-sizing: border-box;
@@ -1532,78 +1574,75 @@ input[type="radio"], input[type="radio"]:checked, input[type="radio"][disabled],
   will-change: transform;
 }
 
-input[type="checkbox"], input[type="checkbox"]:checked, input[type="checkbox"][disabled], input[type="checkbox"][disabled]:checked {
-  border-radius: 2px;
-}
-
-input[type="radio"], input[type="radio"]:checked, input[type="radio"][disabled], input[type="radio"][disabled]:checked {
+input[type=radio], input[type=radio]:checked, input[type=radio][disabled], input[type=radio][disabled]:checked {
   border-radius: 50%;
 }
 
-input[type="checkbox"]:checked::before, input[type="radio"]:checked::before,
-input[type="checkbox"]:not(:checked)::before, input[type="radio"]:not(:checked)::before {
+input[type=checkbox]:checked::before, input[type=radio]:checked::before,
+input[type=checkbox]:not(:checked)::before, input[type=radio]:not(:checked)::before {
   position: absolute;
   transition: linear all 0.05s;
   transform: scale(1);
 }
 
 .optbox:not(:checked) {
-  box-shadow: inset 3px 3px 3px 1px #000;
+  box-shadow: inset 0 0 0 1px #000, inset 3px 3px 3px 1px #000;
 }
 
 .optbox:active {
   background: #000 !important;
 }
 
-input[type="checkbox"]:checked::before, input[type="checkbox"]:not(:checked)::before {
+input[type=checkbox]:checked::before, input[type=checkbox]:not(:checked)::before,
+input[type=radio]:checked::before, input[type=radio][disabled]:checked:hover::before {
+  box-shadow: 0 0 0 1px #000, inset 0 0 0 1px #6c66bc;
+  background: #655fb9;
+  background: linear-gradient(135deg, #655fb9, #544eb1);
   content: "";
-  top: 3px;
-  left: 3px;
+}
+
+input[type=checkbox]:checked::before, input[type=checkbox]:not(:checked)::before {
+  top: 4px;
+  left: 4px;
   width: 11px;
   height: 11px;
   border-radius: 1px;
-  box-shadow: 0 0 0 1px #000;
-  background: #6c66bc;
 }
 
-input[type="radio"]:checked::before {
-  content: "";
-  border-radius: 50%;
-  left: 25%;
+input[type=radio]:checked::before, input[type=radio][disabled]:checked:hover::before {
   top: 25%;
+  left: 25%;
   width: 9px;
   height: 9px;
-  background: #6c66bc;
+  border-radius: 50%;
 }
 
-input[type="checkbox"]:checked:hover::before {
+input[type=checkbox]:checked:hover::before {
   color: #7975c2;
 }
 
-input[type="radio"]:checked:hover::before, input[type="radio"][disabled]:checked:hover::before {
+input[type=radio]:checked:hover::before, input[type=radio][disabled]:checked:hover::before {
   background: #7975c2;
 }
 
-input[type="checkbox"]:not(:checked)::before, input[type="radio"]:not(:checked)::before {
+input[type=checkbox]:not(:checked)::before, input[type=radio]:not(:checked)::before {
+  opacity: 0;
   transform: scale(0);
-  color: transparent;
-  background: transparent;
 }
 
-input[type="checkbox"]:hover, input[type="radio"]:hover, input[type="checkbox"]:focus, input[type="radio"]:focus {
+input[type=checkbox]:hover, input[type=radio]:hover, input[type=checkbox]:focus, input[type=radio]:focus {
   background: #000;
-  width: 19px !important;
-  height: 19px !important;
   border: 1px solid #6466a5 !important;
-  box-shadow: 0 0 0 1px rgba(101, 39, 135, 0.5), 0 0 2px 2px #202 !important;
+  box-shadow: 0 0 0 1px rgba(101, 39, 135, .5), 0 0 2px 2px #202 !important;
   filter: drop-shadow(0 0 1px #202) !important;
 }
 
-input[type="checkbox"][disabled], input[type="radio"][disabled], input[type="checkbox"][disabled]:hover, input[type="radio"][disabled]:hover,
-input[type="checkbox"][disabled]:checked, input[type="radio"][disabled]:checked, input[type="checkbox"][disabled]:checked:hover, input[type="radio"][disabled]:checked:hover {
-  box-shadow: 0 0 1px #000 !important;
-  opacity: 0.5 !important;
+input[type=checkbox][disabled], input[type=radio][disabled], input[type=checkbox][disabled]:hover, input[type=radio][disabled]:hover,
+input[type=checkbox][disabled]:checked, input[type=radio][disabled]:checked, input[type=checkbox][disabled]:checked:hover, input[type=radio][disabled]:checked:hover {
+  border: 1px solid #4f4b87 !important;
+  box-shadow: none !important;
   background: #000;
+  opacity: .5 !important;
   filter: none !important;
 }
 }
@@ -1621,7 +1660,7 @@ input:focus::placeholder {
   opacity: 0;
 }
 
-#add input[type="text"], #import input[type="file"] {
+#add input[type=text], #import input[type=file] {
   width: 100%;
 }
 
@@ -1677,7 +1716,27 @@ input:focus::placeholder {
   top: calc(50% - 19px);
   font-size: 0 !important;
   background: url(/themes/console/images/info/arrow_down.png) center center no-repeat, linear-gradient(to bottom, #010, #000) !important;
-  background-size: 16px 16px !important;
+  background-size: 16px 16px, 100% 100% !important;
+}
+
+#addressbook input#exporthosts:hover, #addressbook input#exporthosts:focus {
+  color: #652787;
+  border: 1px solid #652787;
+  box-shadow: inset 0 0 0 1px #000, inset 0 0 1px 1px #757;
+  background: #000 !important;
+  background: url(/themes/console/images/info/arrow_down.png) center center no-repeat, linear-gradient(to bottom, #202 50%, #000 50%) !important;
+  background-size: 16px 16px, 100% 100% !important;
+  background-blend-mode: luminosity;
+}
+
+#addressbook input#exporthosts:active {
+  color: #83529F !important;
+  text-shadow: 0 1px 1px #3C1751;
+  border: 1px solid #652787;
+  box-shadow: inset 0 0 0 1px #000, inset 3px 3px 3px #000 !important;
+  background: #652787 !important;
+  background: url(/themes/console/images/info/arrow_down.png) center center no-repeat, linear-gradient(to bottom, #401856, #501f6c) !important;
+  background-size: 16px 16px, 100% 100% !important;
 }
 
 form[action="export"]::after {
