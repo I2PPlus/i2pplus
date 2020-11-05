@@ -2578,23 +2578,17 @@ input:active {
 
 input[type=text], input[type=password] {
   margin: 5px 10px;
-  padding: 6px;
+  padding: 6px 8px;
   text-decoration: none;
   color: #ee9;
   font: bold 9pt Droid Sans, Open Sans, Noto Sans, Ubuntu, Segoe UI, Bitstream Vera Sans, DejaVu Sans, Verdana, Lucida Grande, Helvetica, sans-serif;
   border: 1px solid #252 !important;
   border-radius: 1px;
-  box-shadow: inset 0 0 3px 3px #000;
-  background: #000;
-  background: linear-gradient(to bottom, #000, #010);
+  box-shadow: inset 0 0 0 1px #000, inset 4px 4px 4px #000, 0 0 0 1px #000;
+  background: #010;
+  background: linear-gradient(to bottom, #001800, #001000);
   cursor: text;
   filter: none;
-}
-
-@media screen and (min-width: 1500px) {
-  input[type=text], input[type=password] {
-    padding: 7px;
-  }
 }
 
 input[type=text], input[type=password], textarea {
@@ -2791,6 +2785,38 @@ input[readonly]:focus {
   filter: none !important;
   color: #161 !important;
   font-weight: normal;
+}
+
+#consolepass input[name="name"], #externali2cp input[name="user"] {
+  padding: 6px 5px 6px 26px !important;
+  background: #000 url(/themes/console/images/buttons/user.png) 5px center no-repeat;
+  background: url(/themes/console/images/buttons/user.png) 5px center no-repeat, linear-gradient(to bottom, #001800, #001000);
+  background-size: 16px 16px, 100% 100% !important;
+}
+
+#consolepass input[name="name"]:focus, #externali2cp input[name="user"]:focus {
+  background: #000 url(/themes/console/images/buttons/user.png) 5px center no-repeat !important;
+}
+
+#consolepass input[name="nofilter_pw"], #externali2cp input[name="nofilter_pw"] {
+  padding: 6px 5px 6px 22px !important;
+  background: #000 url(/themes/console/images/buttons/password.png) 3px center no-repeat;
+  background: url(/themes/console/images/buttons/password.png) 3px center no-repeat, linear-gradient(to bottom, #001800, #001000);
+  background-size: 16px 16px, 100% 100% !important;
+}
+#consolepass input[name="nofilter_pw"]:focus, #externali2cp input[name="nofilter_pw"]:focus {
+  background: #000 url(/themes/console/images/buttons/password.png) 3px center no-repeat !important;
+}
+
+@media screen and (min-width: 1500px) {
+  input[type=text], input[type=password] {
+    padding: 7px 9px;
+  }
+  #consolepass input[name="nofilter_pw"], #consolepass input[name="name"], #externali2cp input[name="nofilter_pw"],
+  #consolepass input[name="nofilter_pw"]:focus, #consolepass input[name="name"]:focus, #externali2cp input[name="nofilter_pw"]:focus {
+    padding: 7px 9px 7px 25px !important;
+    background-position: 6px center !important;
+  }
 }
 
 textarea#advancedsettings:focus {
@@ -4058,27 +4084,6 @@ td#pw_adduser input {
 
 #consolepass .delete {
   float: left;
-}
-
-#consolepass input[name="name"], #externali2cp input[name="user"] {
-  padding: 6px 5px 6px 26px !important;
-  background: #000 url(/themes/console/images/buttons/user.png) 5px center no-repeat;
-  background: url(/themes/console/images/buttons/user.png) 5px center no-repeat, linear-gradient(to bottom, #000, #010);
-  background-size: 16px 16px, 100% 100% !important;
-}
-
-#consolepass input[name="name"]:focus, #externali2cp input[name="user"]:focus {
-  background: #000 url(/themes/console/images/buttons/user.png) 5px center no-repeat !important;
-}
-
-#consolepass input[name="nofilter_pw"], #externali2cp input[name="nofilter_pw"] {
-  padding: 6px 5px 6px 22px !important;
-  background: #000 url(/themes/console/images/buttons/password.png) 3px center no-repeat;
-  background: url(/themes/console/images/buttons/password.png) 3px center no-repeat, linear-gradient(to bottom, #000, #010);
-  background-size: 16px 16px, 100% 100% !important;
-}
-#consolepass input[name="nofilter_pw"]:focus, #externali2cp input[name="nofilter_pw"]:focus {
-  background: #000 url(/themes/console/images/buttons/password.png) 3px center no-repeat !important;
 }
 
 /* end /configui mods */
@@ -5916,8 +5921,8 @@ font[color="#000099"], #servicelogs {
 }
 
 #profilelist th, #profilelist td {
-  text-align: right;
   padding-left: 5px;
+  text-align: right;
 }
 
 #profilelist td {
@@ -5927,17 +5932,6 @@ font[color="#000099"], #servicelogs {
 #profilelist td:nth-child(2), #profilelist th:nth-child(2) {
   text-align: left;
 }
-
-/*
-#profilelist td:first-child, #profilelist th:first-child {
-  width: 40px;
-}
-
-#profilelist td:first-child {
-  text-align: right !important;
-  padding-left: 3px !important;
-}
-*/
 
 #profilelist td:first-child, #profilelist th:first-child, #profilelist td:nth-last-child(2), #profilelist th:nth-last-child(2) {
   white-space: nowrap;
@@ -5949,17 +5943,17 @@ font[color="#000099"], #servicelogs {
 }
 
 #profilelist td:last-child {
-  text-align: center;
   width: 1%;
   white-space: nowrap;
+  text-align: center;
 }
 
 #profilelist td[colspan="9"] { /* profile class separator */
-  background: #040;
   padding: 1px;
   border: 1px solid #242;
   border-top: 1px solid #000;
   border-bottom: 1px solid #000;
+  background: #040;
 }
 
 a[href^="configpeer?peer"] {
@@ -6016,21 +6010,15 @@ a[href^="configpeer?peer"]:hover {
   padding: 3px 5px !important;
 }
 
-/*
-#capabilities_key table td:nth-child(even) {
-  width: 16px;
-}
-*/
-
 #capabilities_key b {
-  text-transform: none !important;
-  display: inline-block;
+  padding: 1px 2px;
   min-width: 16px;
-  background: #002000;
+  display: inline-block;
   text-align: center;
+  text-transform: none !important;
   text-shadow: 0 1px 1px #000;
   border-radius: 2px;
-  padding: 1px 2px;
+  background: #002000;
 }
 
 #profile_defs b {
@@ -6054,24 +6042,23 @@ a[href^="configpeer?peer"]:hover {
 }
 
 #floodfills th {
-  text-align: center;
+  padding: 8px 6px;
   max-width: 55px;
   white-space: normal;
-  padding: 8px 6px;
+  text-align: center;
 }
 
 #floodfills td {
-  color: #bb7;
   padding: 3px 4px !important;
   vertical-align: middle;
-/*  text-align: right !important;*/
   white-space: nowrap;
+  color: #bb7;
 }
 
 #floodfills th:first-child, #floodfills td:first-child {
+  padding: 3px !important;
   width: 1%;
   white-space: nowrap;
-  padding: 3px !important;
 }
 
 .wideload h2 {
@@ -6120,10 +6107,10 @@ h3#bannedpeers {
 #banlist li, #banlist li:first-child {
   margin: 4px 8px !important;
   padding: 6px 8px 6px 10px !important;
-  min-height: 48px !important;
   width: calc(100% - 16px);
-  position: relative;
+  min-height: 48px !important;
   display: inline-block;
+  position: relative;
   list-style: none !important;
   text-shadow: 0 1px 1px #000;
   border: 1px solid #121;
@@ -6189,13 +6176,13 @@ h3#bannedpeers {
 }
 
 #banlist li a[href^="configpeer"]:hover, #banlist li a[href^="configpeer"]:focus {
-  box-shadow: 0 0 0 1px #121, inset 0 0 0 1px #000, inset 0 0 0 2px #f60;
   background: #000;
+  box-shadow: 0 0 0 1px #121, inset 0 0 0 1px #000, inset 0 0 0 2px #f60;
 }
 
 #banlist li a[href^="configpeer"]:active {
-  background: #f60;
   box-shadow: inset 0 0 0 1px #000, inset 3px 3px 3px 1px #5f2400;
+  background: #f60;
 }
 
 /* /configpeers banlist */
@@ -6209,14 +6196,14 @@ h3#bannedpeers {
 }
 
 #bannedips td {
-  vertical-align: top;
   padding: 0;
   width: 50%;
+  vertical-align: top;
 }
 
 #bannedips table td {
-  text-align: center;
   padding: 4px 2px;
+  text-align: center;
 }
 
 #bannedips table tr:last-child {
@@ -6229,10 +6216,10 @@ h3#bannedpeers {
 }
 
 #permabanned td:first-child {
-  border-left: 1px solid #252;
-  text-align: right;
   padding-right: 10px;
   width: 49%;
+  text-align: right;
+  border-left: 1px solid #252;
 }
 
 #permabanned td:nth-child(2) {
