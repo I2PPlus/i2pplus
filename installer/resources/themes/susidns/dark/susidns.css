@@ -1071,6 +1071,11 @@ input[type=submit]:last-of-type, input[type=reset]:last-of-type {
 input[type=text] {
   padding: 7px !important;
   font-size: 110%;
+  border: 1px solid #184818;
+}
+
+input[type=text]:focus {
+  border: 1px solid #373;
 }
 
 input[type=text], textarea {

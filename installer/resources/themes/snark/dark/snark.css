@@ -782,7 +782,7 @@ tr.active .snarkTorrentStatus {
   white-space: nowrap;
 }
 
-.snarkTorrentInfo input[type="submit"] {
+.snarkTorrentInfo input[type=submit] {
   min-width: 85px;
 }
 
@@ -1841,7 +1841,7 @@ input {
   cursor: pointer;
 }
 
-input[type="submit"]::-moz-focus-inner, input[type="reset"]::-moz-focus-inner {
+input[type=submit]::-moz-focus-inner, input[type=reset]::-moz-focus-inner {
   border: none;
   outline: none;
 }
@@ -1851,7 +1851,7 @@ input.disabled, a.controld {
   cursor: not-allowed !important;
 }
 
-#configs input[type="submit"], .trackerconfig input[type="submit"], input[name="savepri"] {
+#configs input[type=submit], .trackerconfig input[type=submit], input[name="savepri"] {
   text-transform: capitalize;
 }
 
@@ -1953,7 +1953,7 @@ input.r {
 }
 
 input[type=text], input.r, textarea[name="i2cpOpts"], input[name="nofilter_dataDir"], textarea[name="nofilter_newComment"] {
-  padding: 5px 7px !important;
+  padding: 7px !important;
   color: #bb7;
   border: 1px solid #252;
   box-shadow: inset 0 0 0 1px #000, inset 4px 4px 4px #000, 0 0 0 1px #000;
@@ -2112,7 +2112,7 @@ textarea:focus {
   color: #ee9 !important;
 }
 
-/*input[type="submit"], input[type="reset"], select, button, a.control, a.controld {
+/*input[type=submit], input[type=reset], select, button, a.control, a.controld {
   border: 1px solid #8b8;
   border-bottom: 1px solid #171;
   border-right: 1px solid #171;
@@ -2954,7 +2954,7 @@ hr.debug:last-child {
   vertical-align: middle;
 }
 
-.priority input[type="radio"] {
+.priority input[type=radio] {
   margin: 3px;
 }
 
@@ -3001,16 +3001,16 @@ td#bwHelp {
 
 /* end configs */
 
-.knownTracker input[type="radio"], .knownTracker input[type="radio"][disabled], .knownTracker input[type="radio"]:hover, .knownTracker input[type="radio"]:focus {
+.knownTracker input[type=radio], .knownTracker input[type=radio][disabled], .knownTracker input[type=radio]:hover, .knownTracker input[type=radio]:focus {
   opacity: .3;
   cursor: default;
 }
 
-.knownTracker input[type="radio"]:checked, .knownTracker input[type="radio"]:checked:hover {
+.knownTracker input[type=radio]:checked, .knownTracker input[type=radio]:checked:hover {
   opacity: .5;
 }
 
-.knownTracker input[type="radio"][disabled], .knownTracker input[type="radio"][disabled]:hover {
+.knownTracker input[type=radio][disabled], .knownTracker input[type=radio][disabled]:hover {
   opacity: .1 !important;
 }
 
@@ -3100,16 +3100,16 @@ _:-ms-lang(x), * {
   filter: none !important;
 }
 
-_:-ms-lang(x), input[type="radio"], input[type="checkbox"] {
+_:-ms-lang(x), input[type=radio], input[type=checkbox] {
   filter: invert(100%) sepia(100%) hue-rotate(70deg) saturate(200%) !important; /* colorize radios and checkboxes */
 }
 
-_:-ms-lang(x), input[type="checkbox"]:hover, input[type="checkbox"]:focus, input[type="radio"]:hover, input[type="radio"]:focus {
+_:-ms-lang(x), input[type=checkbox]:hover, input[type=checkbox]:focus, input[type=radio]:hover, input[type=radio]:focus {
   box-shadow: none !important;
   filter: invert(100%) sepia(100%) hue-rotate(70deg) saturate(200%) drop-shadow(0 0 3px #f60) !important;
 }
 
-input[type="radio"][disabled]:hover, input[type="radio"][disabled]:focus {
+input[type=radio][disabled]:hover, input[type=radio][disabled]:focus {
   filter: invert(100%) sepia(100%) hue-rotate(70deg) saturate(200%) !important;
 }
 
@@ -3516,7 +3516,7 @@ td#bwHelp a {
 }
 
 @media screen and (min-width: 1100px) {
-body, .snarkTorrents td, .snarkAddInfo, th, td,  code, textarea, input, input[type="submit"], input[type="reset"], select, button, a {
+body, .snarkTorrents td, .snarkAddInfo, th, td,  code, textarea, input, input[type=submit], input[type=reset], select, button, a {
   font-size: 9pt !important;
 }
 
@@ -3626,7 +3626,7 @@ th.snarkTorrentUploaded a img {
 }
 
 @media screen and (min-width: 1500px) {
-body, .snarkTorrents td, .snarkAddInfo, th, td,  code, textarea, input, input[type="submit"], input[type="reset"], select, button, a {
+body, .snarkTorrents td, .snarkAddInfo, th, td,  code, textarea, input, input[type=submit], input[type=reset], select, button, a {
   font-size: 10pt !important;
 }
 
@@ -3896,7 +3896,7 @@ th#snarkTorrentSort {
   padding-bottom: 0 !important;
 }
 
-.trackerconfig a, .trackerconfig input[type="text"] {
+.trackerconfig a, .trackerconfig input[type=text] {
   max-width: 150px !important;
 }
 
@@ -3960,7 +3960,7 @@ th a img {
   border: none !important;
 }
 
-.addtorrentsection input[type="text"], .newtorrentsection input[type="text"] {
+.addtorrentsection input[type=text], .newtorrentsection input[type=text] {
   width: 65% !important;
 }
 
@@ -4750,7 +4750,9 @@ td input[type="image"]::after {
   border-right: none;
   box-shadow: inset 0 0 0 1px #000;;
   background: linear-gradient(to bottom, #003000, #000 75%) !important;
-  background: linear-gradient(to bottom, rgba(0,0,0,0) 50%, #000 50%), repeating-linear-gradient(to right, rgba(0,0,0,.5) 1px, rgba(0,16,0,.5) 2px, rgba(0,16,0,.5) 3px), linear-gradient(to bottom, #004000, #000 75%) !important;
+  background: linear-gradient(to bottom, rgba(0,0,0,0) 50%, #000 50%),
+              repeating-linear-gradient(to right, rgba(0,0,0,.5) 1px, rgba(0,16,0,.5) 2px, rgba(0,16,0,.5) 3px),
+              linear-gradient(to bottom, #004000, #000 75%) !important;
 }
 
 .iframed #torrentDisplay {
@@ -4759,11 +4761,11 @@ td input[type="image"]::after {
 }
 
 #torrentDisplay input {
-  position: absolute;
-  opacity: 0;
-  z-index: -1;
-  height: 0 !important;
   width: 0 !important;
+  height: 0 !important;
+  position: absolute;
+  z-index: -1;
+  opacity: 0;
 }
 
 #torrentDisplay label {
@@ -4925,8 +4927,8 @@ td.snarkTorrentPeerCount {
 /* custom radios/checkboxes to enforce color scheme when OS widgets are non-standard  */
 /*@media screen and (-webkit-min-device-pixel-ratio: 0) and (min-resolution:.001dpcm) {*/
 @supports (background-blend-mode: luminosity) { /* exclude ms browsers */
-input[type="checkbox"], input[type="checkbox"]:checked, input[type="checkbox"][disabled], input[type="checkbox"][disabled]:checked,
-input[type="radio"], input[type="radio"]:checked, input[type="radio"][disabled], input[type="radio"][disabled]:checked {
+input[type=checkbox], input[type=checkbox]:checked, input[type=checkbox][disabled], input[type=checkbox][disabled]:checked,
+input[type=radio], input[type=radio]:checked, input[type=radio][disabled], input[type=radio][disabled]:checked {
   position: relative;
   width: 20px !important;
   height: 20px !important;
@@ -4942,18 +4944,18 @@ input[type="radio"], input[type="radio"]:checked, input[type="radio"][disabled],
   will-change: transform;
 }
 
-input[type="checkbox"], input[type="checkbox"]:checked, input[type="checkbox"][disabled], input[type="checkbox"][disabled]:checked {
+input[type=checkbox], input[type=checkbox]:checked, input[type=checkbox][disabled], input[type=checkbox][disabled]:checked {
   border-radius: 1px;
   box-shadow: inset 0 0 0 1px #000, inset 3px 3px 3px 1px #000;
 }
 
-input[type="radio"], input[type="radio"]:checked, input[type="radio"][disabled], input[type="radio"][disabled]:checked {
+input[type=radio], input[type=radio]:checked, input[type=radio][disabled], input[type=radio][disabled]:checked {
   border-radius: 50%;
   box-shadow: inset 0 0 0 1px #000, inset 3px 3px 3px 1px #000;
 }
 
-input[type="checkbox"]:checked::before, input[type="radio"]:checked::before,
-input[type="checkbox"]:not(:checked)::before, input[type="radio"]:not(:checked)::before {
+input[type=checkbox]:checked::before, input[type=radio]:checked::before,
+input[type=checkbox]:not(:checked)::before, input[type=radio]:not(:checked)::before {
   position: absolute;
   transition: linear transform .05s;
   transform: scale(1);
@@ -4967,7 +4969,7 @@ input[type="checkbox"]:not(:checked)::before, input[type="radio"]:not(:checked):
   background: #000 !important;
 }
 
-input[type="checkbox"]:checked::before, input[type="checkbox"]:not(:checked)::before {
+input[type=checkbox]:checked::before, input[type=checkbox]:not(:checked)::before {
   content: "";
   top: 4px;
   left: 4px;
@@ -4981,7 +4983,7 @@ input[type="checkbox"]:checked::before, input[type="checkbox"]:not(:checked)::be
   background: linear-gradient(135deg, #5a5, #383);
 }
 
-input[type="radio"]:checked::before {
+input[type=radio]:checked::before {
   content: "";
   border-radius: 50%;
   left: 4px;
@@ -4993,22 +4995,22 @@ input[type="radio"]:checked::before {
   background: linear-gradient(135deg, #5a5, #383);
 }
 
-input[type="checkbox"]:checked:hover::before {
+input[type=checkbox]:checked:hover::before {
   color: #6b6;
 }
 
-input[type="radio"]:checked:hover::before {
+input[type=radio]:checked:hover::before {
   background: #6b6;
 }
 
-input[type="checkbox"]:not(:checked)::before, input[type="radio"]:not(:checked)::before {
+input[type=checkbox]:not(:checked)::before, input[type=radio]:not(:checked)::before {
   color: transparent;
   background: transparent;
   transform: scale(0);
   transition: linear transform .05s;
 }
 
-input[type="checkbox"]:hover, input[type="radio"]:hover, input[type="checkbox"]:focus, input[type="radio"]:focus {
+input[type=checkbox]:hover, input[type=radio]:hover, input[type=checkbox]:focus, input[type=radio]:focus {
   background: #000;
   width: 20px !important;
   height: 20px !important;
@@ -5017,8 +5019,8 @@ input[type="checkbox"]:hover, input[type="radio"]:hover, input[type="checkbox"]:
   filter: drop-shadow(0 0 1px #f60) !important;
 }
 
-input[type="checkbox"][disabled], input[type="radio"][disabled], input[type="checkbox"][disabled]:hover, input[type="radio"][disabled]:hover,
-input[type="checkbox"][disabled]:checked, input[type="radio"][disabled]:checked, input[type="checkbox"][disabled]:checked:hover, input[type="radio"][disabled]:checked:hover {
+input[type=checkbox][disabled], input[type=radio][disabled], input[type=checkbox][disabled]:hover, input[type=radio][disabled]:hover,
+input[type=checkbox][disabled]:checked, input[type=radio][disabled]:checked, input[type=checkbox][disabled]:checked:hover, input[type=radio][disabled]:checked:hover {
   border: 1px solid #252 !important;
   box-shadow: none !important;
   opacity: .5 !important;
@@ -5092,13 +5094,13 @@ tfoot .snarkTorrentRateUp:not(:empty)::before,tfoot .snarkTorrentUploaded:not(:e
   transform: rotate(-90deg) scaleX(0.6);
 }
 
-.snarkCommentInfo th input[type="submit"] {
+.snarkCommentInfo th input[type=submit] {
   float: none !important;
   display: inline-block;
   vertical-align: middle;
 }
 
-.snarkCommentInfo th input[type="checkbox"] {
+.snarkCommentInfo th input[type=checkbox] {
   margin-left: 4px;
   margin-right: 4px;
 }
