@@ -713,13 +713,18 @@ public abstract class I2PTunnelHTTPClientBase extends I2PTunnelClientBase implem
                 if (!hasI2PTunnel) {
                     // there are also a couple in auth-header.ht that aren't worth stripping, for auth only
                     DataHelper.replace(out,
-                                       "<span class=\"script\">_(\"You may want to {0}retry{1} as this will randomly reselect an outproxy from the pool you have defined {2}here{3} (if you have more than one configured).\", \"<a href=\\\"javascript:parent.window.location.reload()\\\">\", \"</a>\", \"<a href=\\\"http://127.0.0.1:7657/i2ptunnel/index.jsp\\\">\", \"</a>\")</span>",
+                                       "<span class=\"script\">_(\"You may want to {0}retry{1} as this will randomly reselect an outproxy from the pool " +
+                                       "you have defined {2}here{3} (if you have more than one configured).\", \"<a href=\\\"javascript:parent.window.location.reload()\\\">\", " +
+                                       "\"</a>\", \"<a href=\\\"http://127.0.0.1:7657/i2ptunnel/index.jsp\\\">\", \"</a>\")</span>",
                                        "");
                     DataHelper.replace(out,
-                                       "<noscript>_(\"You may want to retry as this will randomly reselect an outproxy from the pool you have defined {0}here{1} (if you have more than one configured).\", \"<a href=\\\"http://127.0.0.1:7657/i2ptunnel/index.jsp\\\">\", \"</a>\")</noscript>",
+                                       "<noscript>_(\"You may want to retry as this will randomly reselect an outproxy from the pool you " +
+                                       "have defined {0}here{1} (if you have more than one configured).\", \"<a href=\\\"http://127.0.0.1:7657/i2ptunnel/index.jsp\\\">\", " +
+                                       "\"</a>\")</noscript>",
                                        "");
                     DataHelper.replace(out,
-                                       "_(\"If you continue to have trouble you may want to edit your outproxy list {0}here{1}.\", \"<a href=\\\"http://127.0.0.1:7657/i2ptunnel/edit.jsp?tunnel=0\\\">\", \"</a>\")",
+                                       "_(\"If you continue to have trouble you may want to edit your outproxy list {0}here{1}.\", " +
+                                       "\"<a href=\\\"http://127.0.0.1:7657/i2ptunnel/edit.jsp?tunnel=0\\\">\", \"</a>\")",
                                        "");
                 }
                 String s = out.toString();
@@ -923,17 +928,18 @@ public abstract class I2PTunnelHTTPClientBase extends I2PTunnelClientBase implem
         if (targetRequest != null) {
             String uri = DataHelper.escapeHTML(targetRequest);
             errMessage = errMessage.replace("<a href=\"\">", "<a href=\"" + uri + "\">");
+            errMessage = errMessage.replace("Could not find the following", "Could not establish a connection to the following");
             out.write(errMessage);
-            out.write("<a href=\"");
+            out.write("<a id=\"proxyrequest\" href=\"");
             out.write(uri);
             out.write("\">");
             // Long URLs are handled in CSS
             out.write(uri);
             out.write("</a>");
             if (usingWWWProxy) {
-                out.write("<br><br><b>");
+                out.write("<hr><b>");
                 out.write(_t("HTTP Outproxy"));
-                out.write(":</b> " + wwwProxy);
+                out.write(":</b> " + wwwProxy + "<br>");
             }
             if (extraMessage != null) {
                 out.write("<br><br><b>" + DataHelper.escapeHTML(extraMessage) + "</b>");

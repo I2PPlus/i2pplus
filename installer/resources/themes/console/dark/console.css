@@ -289,6 +289,11 @@ pre {
   margin-top: 30px !important;
 }
 
+#proxyrequest {
+  margin: 3px 0 15px;
+  display: inline-block;
+}
+
 .warning h3 {
   margin: -9px -29px 15px -99px;
   padding: 9px 10px 7px;
@@ -3849,7 +3854,6 @@ td#themeselect {
 
 .langselect:hover {
   border: 1px solid #f60;
-  background: #000;
 }
 
 /* can we use the flags as the radio icon? */
@@ -6477,24 +6481,30 @@ div.app:hover, div.app:hover .applabel, div.app:hover .extlink::after, .sitemapL
 }
 
 .app a:link, .app a:visited {
-  color: #494;
   padding: 2px;
   display: inline-block;
+  color: #494;
+}
+
+div.app:hover, .sitemapLink:hover, .themechoice:hover, .langselect:hover {
+  background: #000;
+  background: radial-gradient(circle at center -90px, rgba(255,96,0,.3), #000 70%);
 }
 
 div.app:hover {
-  opacity: 1;
-  border: 1px solid #f60;
-  background: #000;
-  box-shadow: none;
   color: #f60 !important;
+  border: 1px solid #f60;
+  opacity: 1;
+}
+
+.langselect:hover {
+  background: radial-gradient(circle at center -60px, rgba(255,96,0,.3), #000 70%);
 }
 
 div.app:active .applabel, .sitemapLink:active .sitemapLabel {
-  background: #f60 !important;
-  box-shadow: inset 0 0 0 1px #000;
-  box-shadow: inset 0 0 0 1px #000, inset 3px 3px 3px 1px #5f2400 !important;
   color: #ee9 !important;
+  box-shadow: inset 0 0 0 1px #000, inset 3px 3px 3px 1px #5f2400 !important;
+  background: #f60 !important;
 }
 
 div.app:active .applabel a {
@@ -6539,11 +6549,11 @@ form[action="/search.jsp"] {
 }
 
 table.search {
-  background: none;
-  width: 80%;
+  margin-top: -9px;
   margin-left: auto;
   margin-right: auto;
-  margin-top: -9px;
+  width: 80%;
+  background: none;
 }
 
 .search tr {
@@ -6671,16 +6681,16 @@ div.app:hover .applabel, .sitemapLink:hover .sitemapLabel,
   padding: 4px 2px;
   width: 155px;
   line-height: 120%;
-  overflow: hidden;
-  text-overflow: ellipsis;
   vertical-align: bottom;
   text-align: center;
   white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
   font-size: 8.5pt;
   color: #494;
-  border-radius: 0 0 2px 2px;
   border: none;
   border-top: 1px solid #252;
+  border-radius: 0 0 2px 2px;
 }
 
 .applabel:hover {
@@ -6692,9 +6702,9 @@ div.app:hover .applabel, .sitemapLink:hover .sitemapLabel,
   padding: 2px 2px 3px !important;
   max-width: 146px;
   display: inline-block;
+  white-space: nowrap;
   overflow: hidden;
   text-overflow: ellipsis;
-  white-space: nowrap;
   text-transform: capitalize;
   text-shadow: 0 1px 1px #000;
 }
@@ -6776,13 +6786,13 @@ body.iframed {
 /* global overrides */
 
 h3[id*="job"] {
-  border: 1px solid #242;
-  padding: 8px;
   margin: 12px 0 10px 0;
-  border-radius: 0;
+  padding: 8px;
+  letter-spacing: .08em;
   text-transform: uppercase;
   text-shadow: 0 0 2px #010;
-  letter-spacing: .08em;
+  border: 1px solid #242;
+  border-radius: 0;
 }
 
 /* netdb */
@@ -6792,16 +6802,16 @@ span#distance {
 }
 
 .netdbentry th {
-  font-weight: normal;
-  text-align: left;
   padding: 5px 6px;
+  text-align: left;
+  font-weight: normal;
 }
 
 .netdbentry th:last-child {
-  text-align: right;
   padding: 5px;
-  white-space: nowrap;
   width: 50px;
+  white-space: nowrap;
+  text-align: right;
 }
 
 .netdbentry th:first-child {
@@ -6821,15 +6831,15 @@ table:not(:first-of-type).netdbentry th:first-child, table:not(:first-of-type).n
 }
 
 table:not(:first-of-type).netdbentry tr:nth-child(2) td:nth-child(2)::before {
-  content: "Published: ";
   display: inline;
   font-weight: bold;
+  content: "Published: ";
 }
 
 table:not(:first-of-type).netdbentry th:first-child, table:not(:first-of-type).netdbentry td:first-child, #netdb table:not(:first-of-type).netdbentry td:first-child b {
+  width: 0;
   min-width: 0 !important;
   max-width: 0 !important;
-  width: 0;
 }
 }
 
@@ -6878,9 +6888,9 @@ table:not(:first-of-type).netdbentry th:first-child, table:not(:first-of-type).n
 }
 
 #leasesetdebug th a::after, #leasesetsummary th a::after {
-  content: url(/themes/console/images/buttons/floodfill.png);
-  vertical-align: text-top;
   padding-right: 0;
+  vertical-align: text-top;
+  content: url(/themes/console/images/buttons/floodfill.png);
 }
 
 #leasesetdebug th a:hover, #leasesetsummary th a:hover {
@@ -6904,11 +6914,11 @@ table:not(:first-of-type).netdbentry th:first-child, table:not(:first-of-type).n
 }
 
 .main#certs h4 {
-  padding: 8px 10px;
   margin: 15px 0 0;
-  border: 1px solid #252;
+  padding: 8px 10px;
   letter-spacing: .08em;
   font-size: 10pt;
+  border: 1px solid #252;
   background: linear-gradient(to right, #000, #001000);
 }
 
@@ -6965,12 +6975,12 @@ table:not(:first-of-type).netdbentry th:first-child, table:not(:first-of-type).n
 
 @media screen and (max-width: 1150px) {
 h4 .unbold {
-  display: inline-block;
   max-width: 150px;
+  display: inline-block;
+  vertical-align: middle;
+  white-space: nowrap;
   overflow: hidden;
   text-overflow: ellipsis;
-  white-space: nowrap;
-  vertical-align: middle;
 }
 
 h4 span[style="float: right;"] .unbold {
@@ -12166,6 +12176,13 @@ input[type=text]:focus::placeholder {
   content: "";
   transform: rotate(0);
   animation: linear spin 3s forwards infinite;
+}
+
+#nographs::after {
+  margin: 22px 15px 18px;
+  width: 48px;
+  height: 48px;
+  background-size: 48px 48px;
 }
 
 @keyframes spin {
