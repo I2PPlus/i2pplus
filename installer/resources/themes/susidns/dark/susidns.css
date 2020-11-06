@@ -47,6 +47,10 @@ body.iframed {
   text-shadow: none;
 }
 
+.destaddress::selection {
+  background: rgba(255,255,0,.99) !important;
+}
+
 ::-moz-selection {
   background: #0b0 !important;
   color: #000;
@@ -492,7 +496,7 @@ th {
   padding: 5px 10px;
   text-align: left;
   color: #ee9;
-  font-size: 9pt;
+  font-size: 8.5pt;
 }
 
 td {
@@ -1244,10 +1248,10 @@ p.book {
 /* end host details */
 
 .names img {
-  margin: 6px 8px 6px 3px;
+  margin: 4px 6px 4px 0;
   padding: 2px;
-  width: 20px;
-  height: 20px;
+  width: 24px;
+  height: 24px;
   vertical-align: middle;
   border: 1px solid #242;
   border-radius: 1px;
@@ -1258,11 +1262,12 @@ p.book {
 
 .names img:hover, .names a:focus img {
   border: 1px solid #f60;
+  box-shadow: none;
+  background: #d30;
 }
 
 .names a:active img, .names a:focus img {
-  transform: rotate(45deg) scale(0.8);
-  transition: ease border .1s;
+  transform: rotate(45deg) scale(.6);
 }
 
 /* hostname list */
@@ -1282,7 +1287,7 @@ p.book {
 }
 
 #host_list th:first-child {
-  padding-left: 46px !important;
+  padding-left: 44px !important;
 }
 
 #host_list td {
@@ -1315,6 +1320,7 @@ td.names:hover, #host_list td.b32link:hover, #host_list td.helper:hover, #host_l
 #host_list .b32link, #host_list .helper {
   padding: 0 5px !important;
   width: 8%;
+  min-width: 72px;
   white-space: nowrap;
   text-align: center;
 }
@@ -1437,7 +1443,7 @@ _:-ms-lang(x), * {
     font-size: 10pt !important;
   }
 
-  textarea {
+  textarea, th {
     font-size: 9pt;
   }
 
@@ -1487,11 +1493,11 @@ _:-ms-lang(x), * {
 
 @media screen and (min-width: 1500px) {
   body, input[type=submit], input[type=reset], .fakebutton, input,
-  select, h4, td.names a, li, #filter a, #filter span a, #host_details td, th, #search td, .destaddress {
+  select, h4, td.names a, li, #filter a, #filter span a, #host_details td, #search td, .destaddress {
     font-size: 10pt !important;
   }
 
-  input[type=submit], input[type=reset], .fakebutton {
+  input[type=submit], input[type=reset], .fakebutton, th {
     padding: 8px 12px 8px !important;
     font-size: 9pt;
   }
@@ -1785,47 +1791,47 @@ form[action="export"]::after {
 }
 
 @media screen and (max-width: 1200px) {
-#filtered, #results {
-  font-size: 9.5pt;
-}
+  #filtered, #results {
+    font-size: 9.5pt;
+  }
 
-#export {
-  padding-top: 13px;
-  padding-left: 7px;
-  right: -10px;
-}
+  #export {
+    padding-top: 13px;
+    padding-left: 7px;
+    right: -10px;
+  }
 
-form[action="export"]::after {
-  height: 19px;
-}
+  form[action="export"]::after {
+    height: 19px;
+  }
 
-#addressbook input#exporthosts {
-  margin-top: 4px !important;
-}
+  #addressbook input#exporthosts {
+    margin-top: 4px !important;
+  }
 
-#paginate {
-  margin-top: -3px;
-}
+  #paginate {
+    margin-top: -3px;
+  }
 
-#prev, #next, #current {
-  font-size: 10pt;
-}
+  #prev, #next, #current {
+    font-size: 10pt;
+  }
 
-.iframed #prev a, .iframed #next a {
-  padding: 11px 10px !important;
-}
+  .iframed #prev a, .iframed #next a {
+    padding: 11px 10px !important;
+  }
 
-.iframed #prev::after, .iframed #next::after {
-  top: calc(50% - 5px);
-}
+  .iframed #prev::after, .iframed #next::after {
+    top: calc(50% - 5px);
+  }
 
-#prev.inactive::after, #next.inactive::after {
-  top: calc(50% - 6px);
-}
+  #prev.inactive::after, #next.inactive::after {
+    top: calc(50% - 6px);
+  }
 
-#current {
-  padding: 2px 10px;
-  display: inline-block;
-  font-size: 10pt;
-}
+  #current {
+    padding: 2px 10px;
+    display: inline-block;
+    font-size: 10pt;
+  }
 }
