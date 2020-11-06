@@ -3,7 +3,8 @@
 /* Comment: Thanks to Florian Kuhlmann for the hatface images. [http://www.flickr.com/photos/floriankuhlmann/] */
 /* Author: dr|z3d */
 
-@import url("/themes/fonts/DroidSans.css");
+@import url(/themes/fonts/DroidSans.css);
+@import url(optbox.css);
 
 html {
   min-height: 100%;
@@ -2779,12 +2780,16 @@ textarea[cols="70"], textarea[name="levels"] {
 
 input[type=text]:focus, input[type=password]:focus, textarea:focus {
   color: #ee9 !important;
-  border: 1px solid #252 !important;
+  border: 1px solid #373 !important;
   box-shadow: 0 0 0 1px rgba(200,48,0,.3);
   background: #000 !important;
   outline: none;
   filter: drop-shadow(0 0 1px #f60);
   transition: filter ease .3s;
+}
+
+#advancedsettings:focus {
+  border: none !important;
 }
 
 input[type=text]:focus, input[type=password]:focus {
@@ -11236,109 +11241,6 @@ h3#pconfig {
   font-size: 10pt;
   box-shadow: inset 0 0 0 1px #000;
 }
-
-/* custom radios/checkboxes to enforce color scheme when OS widgets are non-standard  */
-@supports (background-blend-mode: luminosity) { /* exclude ms browsers */
-input[type=checkbox], input[type=checkbox]:checked, input[type=checkbox][disabled], input[type=checkbox][disabled]:checked,
-input[type=radio], input[type=radio]:checked, input[type=radio][disabled], input[type=radio][disabled]:checked {
-  position: relative;
-  width: 19px !important;
-  height: 19px !important;
-  min-width: 19px !important;
-  outline: none;
-  vertical-align: middle !important;
-  box-sizing: border-box;
-  border: 1px solid #252 !important;
-  background: #010;
-  background: linear-gradient(to bottom, #020, #001800);
-  -moz-appearance: none;
-  -webkit-appearance: inherit;
-  filter: drop-shadow(0 0 2px #000);
-  will-change: transform;
-}
-
-input[type=checkbox], input[type=checkbox]:checked, input[type=checkbox][disabled], input[type=checkbox][disabled]:checked {
-  border-radius: 1px;
-  box-shadow: inset 0 0 0 1px #000, inset 3px 3px 3px 1px #000;
-}
-
-input[type=radio], input[type=radio]:checked, input[type=radio][disabled], input[type=radio][disabled]:checked {
-  border-radius: 50%;
-  box-shadow: inset 0 0 0 1px #000, inset 3px 3px 3px 1px #000;
-}
-
-input[type=checkbox]:checked::before, input[type=radio]:checked::before,
-input[type=checkbox]:not(:checked)::before, input[type=radio]:not(:checked)::before {
-  position: absolute;
-  transform: scale(1);
-}
-
-.optbox:not(:checked) {
-  box-shadow: inset 0 0 0 1px #000, inset 3px 3px 3px 1px #000;
-}
-
-.optbox:active {
-  background: #000 !important;
-}
-
-input[type=checkbox]:checked::before, input[type=checkbox]:not(:checked)::before {
-  width: 11px;
-  height: 11px;
-  top: 3px;
-  left: 3px;
-  box-shadow: inset 0 0 0 1px #6b6, 0 0 0 1px #000;
-  background: #5a5;
-  background: linear-gradient(135deg, #5a5, #383);
-  content: "";
-}
-
-input[type=radio]:checked::before {
-  width: 9px;
-  height: 9px;
-  left: 25%;
-  top: 25%;
-  border-radius: 50%;
-  box-shadow: inset 0 0 0 1px #6b6, 0 0 0 1px #000;
-  background: #5a5;
-  background: linear-gradient(135deg, #5a5, #383);
-  content: "";
-}
-
-input[type=checkbox]:checked:hover::before {
-  color: #6b6;
-  transition: ease transform .05s;
-}
-
-input[type=radio]:checked:hover::before {
-  background: #6b6;
-  transition: ease transform .05s;
-}
-
-input[type=checkbox]:not(:checked)::before, input[type=radio]:not(:checked)::before {
-  transform: scale(0);
-  color: transparent;
-  background: transparent;
-}
-
-input[type=checkbox]:hover, input[type=radio]:hover, input[type=checkbox]:focus, input[type=radio]:focus {
-  background: #000;
-  width: 19px !important;
-  height: 19px !important;
-  border: 1px solid #5a5 !important;
-  box-shadow: 0 0 1px #f60, 0 0 2px #f60 !important;
-}
-
-input[type=checkbox][disabled], input[type=radio][disabled], input[type=checkbox][disabled]:hover, input[type=radio][disabled]:hover,
-input[type=checkbox][disabled]:checked, input[type=radio][disabled]:checked, input[type=checkbox][disabled]:checked:hover, input[type=radio][disabled]:checked:hover {
-  border: 1px solid #252 !important;
-  box-shadow: none !important;
-  opacity: .5 !important;
-  background: #000;
-  filter: none !important;
-}
-}
-
-/* end custom radios/checkboxes */
 
 /* /peers */
 
