@@ -937,9 +937,9 @@ public abstract class I2PTunnelHTTPClientBase extends I2PTunnelClientBase implem
             out.write(uri);
             out.write("</a>");
             if (usingWWWProxy) {
-                out.write("<br><br><b>");
+                out.write("<hr><b>");
                 out.write(_t("HTTP Outproxy"));
-                out.write(":</b> " + wwwProxy);
+                out.write(":</b> " + wwwProxy + "<br>");
             }
             if (extraMessage != null) {
                 out.write("<br><br><b>" + DataHelper.escapeHTML(extraMessage) + "</b>");
