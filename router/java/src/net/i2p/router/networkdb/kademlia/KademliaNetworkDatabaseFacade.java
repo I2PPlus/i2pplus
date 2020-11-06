@@ -149,7 +149,7 @@ public abstract class KademliaNetworkDatabaseFacade extends NetworkDatabaseFacad
     private final static long ROUTER_INFO_EXPIRATION_SHORT = 75*60*1000l;
 //    private final static long ROUTER_INFO_EXPIRATION_FLOODFILL = 60*60*1000l;
     private final static long ROUTER_INFO_EXPIRATION_FLOODFILL = 8*60*60*1000l;
-    private final static long ROUTER_INFO_EXPIRATION_INTRODUCED = 45*60*1000l;
+    private final static long ROUTER_INFO_EXPIRATION_INTRODUCED = 54*60*1000l;
     static final String PROP_ROUTER_INFO_EXPIRATION_ADJUSTED = "router.expireRouterInfo";
 
     static final String PROP_VALIDATE_ROUTERS_AFTER = "router.validateRoutersAfter";
