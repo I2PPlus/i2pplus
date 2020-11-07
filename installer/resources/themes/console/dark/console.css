@@ -289,10 +289,10 @@ pre {
   margin-top: 30px !important;
 }
 
-#proxyrequest {
-  margin: 3px 0 15px;
+/*#proxyrequest {
+  margin: 3px 0;
   display: inline-block;
-}
+}*/
 
 .warning h3 {
   margin: -9px -29px 15px -99px;
@@ -1838,7 +1838,7 @@ th {
   text-align: center;
   font-size: 9pt;
   background: #000 url(images/header.png) center center repeat-x;
-  background: linear-gradient(to bottom, #002000, #000 75%) !important;
+  background: linear-gradient(to bottom, #002000, #000 75%);
   border-top: 1px solid #252;
   border-bottom: 1px solid #252 !important;
   line-height: 110%;
@@ -4903,7 +4903,7 @@ h3.dead span {
   float: right;
 }
 
-.main#tunnels h3 a:not(old), #logs a.configure:not(old), #logs a.delete:not(old) {
+.main#tunnels h3 a:not(old):not(.lsview), #logs a.configure:not(old), #logs a.delete:not(old) {
   font-size: 0;
 }
 
@@ -7006,6 +7006,7 @@ h4 span[style="float: right;"] .unbold {
 
 .leaseset th {
   padding: 5px;
+  position: static;
   text-align: left;
   font-weight: normal;
 }
@@ -12120,6 +12121,11 @@ div.app:hover .extlink::after, .sitemapLink.extlink:hover::after {
   background: rgba(0,48,0,.5);
 }
 
+h3 .b32 {
+  margin-right: 5px;
+  border: 1px solid #030;
+}
+
 .embedlink {
   float: right;
 }
@@ -12137,7 +12143,20 @@ div.app:hover .extlink::after, .sitemapLink.extlink:hover::after {
   margin: 0;
 }
 
-input[type=text]:focus::placeholder {
+::placeholder {
+  font-style: italic;
+  font-weight: 400;
+}
+
+#homesearch input.search::placeholder {
+  opacity: 0;
+}
+
+#homesearch input.search:hover::placeholder {
+  opacity: .7;
+}
+
+input[type=text]:focus::placeholder, #homesearch input.search:focus::placeholder {
   opacity: 0;
 }
 
@@ -12159,8 +12178,8 @@ input[type=text]:focus::placeholder {
 }
 
 #nographs {
-  font-size: 0;
   line-height: 60px;
+  font-size: 0;
 }
 
 #down::after, #nographs::after {
@@ -13031,7 +13050,7 @@ td.optionsave, #addkeyring tr:last-child, #criticallogs td, #routerlogs td, #eve
 }
 
 #logs h3 a, #permabanned td:first-child, #homepage h4 a,
-#tunnels h3#exploratory a, #tunnels h3.server a, #tunnels h3.client a,
+#tunnels h3#exploratory a, #tunnels h3.server a:not(.lsview), #tunnels h3.client a:not(.lsview),
 #tunnels #participating a, #tunnels #peercount a {
   border-left: 1px solid #242;
 }
@@ -14490,3 +14509,28 @@ h1, .main h2, h4.app, h4.app2, .main h3 {
 .main h3 a {
   -webkit-text-stroke: 0 !important;
 }
+
+/* highlight linked leaseset */
+
+.leaseset:target {
+  border: 1px solid #770 !important;
+}
+
+.leaseset:target tr:first-child th, .leaseset:target td {
+  border-top: 1px solid #770 !important;
+  border-bottom: 1px solid #770 !important;
+}
+
+.leaseset:target th:first-child, .leaseset:target td:first-child {
+  border-left: 1px solid #770 !important;
+}
+
+.leaseset:target th:last-child, .leaseset:target td:last-child {
+  border-right: 1px solid #770 !important;
+}
+
+.leaseset:target th, .leaseset:target td {
+  background: #000 !important;
+}
+
+/* end highlight linked leaseset */
