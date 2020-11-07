@@ -1495,13 +1495,13 @@ a:link, a:visited, #sitemapcontainer a:visited, #home .extlink:visited, .main .a
   color: #575779;
 }
 
-a:hover, a:visited:hover, a:focus, a:visited:focus {
+a:hover, a:visited:hover, a:focus, a:visited:focus, a:hover .b32 {
   color: #f60 !important;
   text-decoration: none;
   outline: none;
 }
 
-a:active, a:visited:active {
+a:active, a:visited:active, a:active .b32 {
   color: #f93 !important;
   text-decoration: none;
 }
@@ -4339,7 +4339,7 @@ h3#servicedebug a, h3#graphinfo a, h3#browseronstart a {
   float: right;
 }
 
-.main#tunnels h3 a:not(old), #logs h3 a:not(old) {
+.main#tunnels h3 a:not(old):not(.lsview), #logs h3 a:not(old) {
   font-size: 0;
 }
 
@@ -7417,7 +7417,7 @@ span.b32 {
   margin-right: 5px;
   padding: 2px 4px;
   float: right;
-  line-height: 105%;
+  line-height: 120%;
   letter-spacing: .1em;
   font-family: "Droid Sans Mono", "Andale Mono", "DejaVu Sans Mono", "Lucida Console", monospace;
   font-size: 80%;
@@ -12240,3 +12240,24 @@ from {
   font-size: 0 !important;
   background: repeating-linear-gradient(135deg, #fffff2, #fffff2 10px, #ddddd2 10px, #ddddd2 20px) !important;
 }
+
+/* highlight linked leaseset */
+
+.leaseset:target {
+  border: 1px solid #5a5 !important;
+}
+
+.leaseset:target tr:first-child th, .leaseset:target td {
+  border-top: 1px solid #5a5 !important;
+  border-bottom: 1px solid #5a5 !important;
+}
+
+.leaseset:target th:first-child, .leaseset:target td:first-child {
+  border-left: 1px solid #5a5 !important;
+}
+
+.leaseset:target th:last-child, .leaseset:target td:last-child {
+  border-right: 1px solid #5a5 !important;
+}
+
+/* end highlight linked leaseset */

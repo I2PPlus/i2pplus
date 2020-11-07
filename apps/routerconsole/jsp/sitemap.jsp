@@ -48,11 +48,11 @@
 
 <div class="main" id="sitemap">
 
-<div class="search">
+<div class="search" id="homesearch">
 <form action="/search.jsp" target="_blank" method="POST">
 <table class="search">
 <tr>
-<td align="right"><input size="40" type="text" class="search" name="query" required x-moz-errormessage="<%=intl._t("Please enter a search query")%>" /></td>
+<td align="right"><input size="40" type="text" class="search" name="query" required placeholder="<%=intl._t("Please enter a search query")%>" /></td>
 <td align="left"><button type="submit" value="search" class="search"><%=intl._t("Search")%></button></td>
 <td align="left">
 <jsp:useBean class="net.i2p.router.web.helpers.SearchHelper" id="searchhelper" scope="request" />

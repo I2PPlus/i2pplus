@@ -104,8 +104,9 @@ class TunnelRenderer {
                     out.write(" <a href=\"/i2ptunnelmgr\" title=\"" +
                               _t("Configure tunnels") + "\">[" + _t("configure") + "]</a>");
                 writeGraphLinks(out, in, outPool);
-                out.write(" <span class=\"b32\" title=\"" + _t("Truncated Local Destination (b32)") + "\">" +
-                          client.toBase32().substring(0,4) + "</span>");
+                out.write(" <a class=\"lsview\" href=\"/netdb?l=1#ls_" + client.toBase32().substring(0,4) + "\">" +
+                          "<span class=\"b32\" title=\"" + _t("View LeaseSet") + "\">" +
+                          client.toBase32().substring(0,4) + "</span></a>");
                 out.write("</h3>\n");
                 if (in != null) {
                     // list aliases

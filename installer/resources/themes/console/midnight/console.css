@@ -3012,7 +3012,7 @@ h3 + p, h3 + table {
   margin-top: 10px;
 }
 
-.main#tunnels h3 a:not(old), #logs a.delete:not(old), #logs a.configure:not(old) {
+.main#tunnels h3 a:not(old):not(.lsview), #logs a.delete:not(old), #logs a.configure:not(old) {
   font-size: 0 !important;
 }
 
@@ -3563,14 +3563,14 @@ a:visited {
   word-wrap: break-word;
 }
 
-a:hover, a:focus, .h3navlinks a:hover, .h3navlinks a:focus {
+a:hover, a:focus, .h3navlinks a:hover, .h3navlinks a:focus, a:hover .b32, a:focus .b32 {
   color: #bf2295;
   text-decoration: none;
   font-weight: bold;
   word-wrap: break-word;
 }
 
-a:active,m .h3navlinks a:active {
+a:active, .h3navlinks a:active, a:active .b32 {
   color: #851768 !important;
 }
 
@@ -8854,6 +8854,10 @@ form[action="events"] > * {
   vertical-align: middle;
 }
 
+h3 .b32 {
+  font-size: inherit;
+}
+
 #tunnels .tunneldisplay .cells:nth-child(3) {
   white-space: nowrap !important;
 }
@@ -10116,7 +10120,7 @@ h3#pluginfromfile, h3#updateplugins, h3#pluginmanage, h3#bannedpeers, h3.ptitle,
   padding: 9px 10px !important;
 }
 
-.main#tunnels h3 a:not(old), #criticallogs + h3.tabletitle a:not(old), h3#iptransport a:not(old), h3#advancedconfig a:not(old), #reseedsetup a:not(old) {
+.main#tunnels h3 a:not(old):not(.lsview), #criticallogs + h3.tabletitle a:not(old), h3#iptransport a:not(old), h3#advancedconfig a:not(old), #reseedsetup a:not(old) {
   font-size: 0 !important;
 }
 
@@ -13277,18 +13281,17 @@ h1[class], h1 {
 
 /* /tunnels */
 
-
 .tunnels_participating td.cells:first-child {
   font-size: 0 !important;
 }
 
 .ibgw::after, .obep::after, .ptcp::after {
-  content: "";
-  display: inline-block;
   width: 24px;
   height: 16px;
+  display: inline-block;
   background: url(images/ibgw.png) center center no-repeat;
   background-size: auto 16px !important;
+  content: "";
 }
 
 .obep::after {
@@ -14312,3 +14315,28 @@ h1, .main h2, h4.app, h4.app2, .main h3 {
 .main h3 a {
   -webkit-text-stroke: 0 !important;
 }
+
+/* highlight linked leaseset */
+
+.leaseset:target {
+  border: 1px solid #939 !important;
+}
+
+.leaseset:target tr:first-child th, .leaseset:target td {
+  border-top: 1px solid #939 !important;
+  border-bottom: 1px solid #939 !important;
+}
+
+.leaseset:target th:first-child, .leaseset:target td:first-child {
+  border-left: 1px solid #939 !important;
+}
+
+.leaseset:target th:last-child, .leaseset:target td:last-child {
+  border-right: 1px solid #939 !important;
+}
+
+.leaseset:target th, .leaseset:target td {
+  background: #000 !important;
+}
+
+/* end highlight linked leaseset */

@@ -2336,7 +2336,7 @@ h3 a.script, th a.script {
 }
 
 #bwlimiter a, #i2pclientconfig a, #config_logging h3 a, #graphdisplay a,
-#version a, #logs h3 a, #tunnels h3 a, #advancedconfig a, #iptransport a, #reseedsetup a, #graphinfo a, #config_service h3 a, .h3navlinks a {
+#version a, #logs h3 a, #tunnels h3 a:not(.lsview), #advancedconfig a, #iptransport a, #reseedsetup a, #graphinfo a, #config_service h3 a, .h3navlinks a {
   margin: -6px -5px;
   padding: 6px 10px;
   display: inline-block;
@@ -2361,7 +2361,7 @@ h3 a.script, th a.script {
   min-width: 140px !important;
 }
 
-#tunnels h3 a {
+#tunnels h3 a:not(.lsview) {
   margin: -7px -5px -7px 0 !important;
   border-bottom: 1px solid #8d8daa;
 }
@@ -2386,13 +2386,13 @@ h3 a.script, th a.script {
 }
 
 #bwlimiter a:hover, #i2pclientconfig a:hover, #config_logging h3 a:hover, #graphdisplay a:hover, #version a:hover, #logs h3 a:hover,
-#tunnels h3 a:hover, #advancedconfig a:hover, #iptransport a:hover, #reseedsetup a:hover, #config_service h3 a:hover, .h3navlinks a:hover {
+#tunnels h3 a:not(.lsview):hover, #advancedconfig a:hover, #iptransport a:hover, #reseedsetup a:hover, #config_service h3 a:hover, .h3navlinks a:hover {
   background: #fff linear-gradient(to bottom, #fff 48%, rgba(255, 232, 191, .6) 48%, rgba(239, 217, 179, .4)) !important;
   filter: none !important;
 }
 
 #bwlimiter a:active, #i2pclientconfig a:active, #config_logging h3 a:active, #graphdisplay a:active, #version a:active, #logs h3 a:active,
-#tunnels h3 a:active, #advancedconfig a:active, #iptransport a:active, #reseedsetup a:active, #graphinfo a:active, .h3navlinks a:active {
+#tunnels h3 a:not(.lsview):active, #advancedconfig a:active, #iptransport a:active, #reseedsetup a:active, #graphinfo a:active, .h3navlinks a:active {
   box-shadow: inset 2px 2px 1px #aab;
 }
 
@@ -2459,7 +2459,7 @@ h3#exploratory {
   margin-top: 15px;
 }
 
-#tunnels h3 a:not(old), #logs a.delete:not(old), #logs a.configure:not(old) {
+#tunnels h3 a:not(old):not(.lsview), #logs a.delete:not(old), #logs a.configure:not(old) {
   font-size: 0 !important;
 }
 
@@ -6739,17 +6739,16 @@ h3#udpcon {
   margin-top: 1px !important;
 }
 
-#tunnels h3 + h3 a {
+#tunnels h3 + h3 a:not(.lsview) {
   display: none;
 }
 
-#tunnels .b32 {
-  margin: -1px 6px 0;
+#tunnels a .b32 {
+  margin: -1px 0 0;
   padding: 3px 4px;
   float: right;
   line-height: 100%;
   font-family: "Droid Sans Mono", "DejaVu Sans Mono", "Noto Mono", "Lucida Console", monospace;
-  font-size: 80%;
   text-transform: none;
   color: #171;
   box-shadow: 0 0 0 1px #bbd, inset 0 0 0 1px #fff;
@@ -6757,6 +6756,14 @@ h3#udpcon {
   background: #eef;
   background: linear-gradient(to bottom, #fff, #e2e2ff);
   text-shadow: 0 0 1px #fff, 0 0 2px #ddf;
+}
+
+#tunnels a:hover .b32, #tunnels a:focus .b32 {
+  color: #f60;
+}
+
+#tunnels a:active .b32 {
+  box-shadow: 0 0 0 1px #bbd, inset 0 0 0 1px #fff, inset 3px 3px 3px #778;
 }
 
 #tunnels td, #tunnels td > * {
@@ -13412,3 +13419,24 @@ div.app:not(:hover) a:not(:hover):not(:focus):not(:active):visited,
   font-size: 0 !important;
   background: repeating-linear-gradient(135deg, #fffff2, #fffff2 10px, #ddddd2 10px, #ddddd2 20px) !important;
 }
+
+/* highlight linked leaseset */
+
+.leaseset:target {
+  border: 1px solid #5a5 !important;
+}
+
+.leaseset:target tr:first-child th, .leaseset:target td {
+  border-top: 1px solid #5a5 !important;
+  border-bottom: 1px solid #5a5 !important;
+}
+
+.leaseset:target th:first-child, .leaseset:target td:first-child {
+  border-left: 1px solid #5a5 !important;
+}
+
+.leaseset:target th:last-child, .leaseset:target td:last-child {
+  border-right: 1px solid #5a5 !important;
+}
+
+/* end highlight linked leaseset */

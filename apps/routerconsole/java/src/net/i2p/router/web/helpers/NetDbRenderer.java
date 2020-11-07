@@ -415,7 +415,7 @@ class NetDbRenderer {
                 notifyAll();
             }
         }
-        public String getName() { return "Console netdb lookup"; }
+        public String getName() { return "Console NetDb Lookup"; }
     }
 
     /**
@@ -507,7 +507,7 @@ class NetDbRenderer {
             // warning - will be null for non-local encrypted
             Destination dest = ls.getDestination();
             Hash key = ls.getHash();
-            buf.append("<table class=\"leaseset\">\n")
+            buf.append("<table class=\"leaseset\" id=\"ls_").append(key.toBase32().substring(0,4)).append("\">\n")
                .append("<tr><th><b>").append(_t("LeaseSet")).append(":</b>&nbsp;<code>")
                .append(key.toBase64()).append("</code>");
             int type = ls.getType();
