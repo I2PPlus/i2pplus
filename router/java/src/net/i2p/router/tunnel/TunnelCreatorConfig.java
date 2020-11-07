@@ -97,12 +97,14 @@ public abstract class TunnelCreatorConfig implements TunnelInfo {
      * hop 0.
      */
     public HopConfig getConfig(int hop) { return _config[hop]; }
+
     /**
      * retrieve the tunnelId that the given hop receives messages on.
      * the gateway is hop 0.
      *
      */
     public TunnelId getReceiveTunnelId(int hop) { return _config[hop].getReceiveTunnel(); }
+    
     /**
      * retrieve the tunnelId that the given hop sends messages on.
      * the gateway is hop 0.
@@ -356,13 +358,15 @@ public abstract class TunnelCreatorConfig implements TunnelInfo {
         for (int i = 0; i < _peers.length; i++) {
             buf.append("[" + _peers[i].toBase64().substring(0,6) + "]");
             buf.append(isEC(i) ? " EC:" : " ElG:");
-            if (_config[i].getReceiveTunnel() != null)
-                buf.append(_config[i].getReceiveTunnel());
+            long id = _config[i].getReceiveTunnelId();
+            if (id != 0)
+                buf.append(id);
             else
                 buf.append("local");
-            if (_config[i].getSendTunnel() != null) {
+            id = _config[i].getSendTunnelId();
+            if (id != 0) {
                 buf.append('.');
-                buf.append(_config[i].getSendTunnel());
+                buf.append(id);
             } else if (_isInbound || i == 0) {
                 buf.append(".local");
             }
