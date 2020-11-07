@@ -47,23 +47,27 @@ class BatchedRouterPreprocessor extends BatchedPreprocessor {
     }
 
     private static String getName(HopConfig cfg) {
-        if (cfg == null) return "IB??";
-        if (cfg.getReceiveTunnel() != null)
-            return "[Inbound " + cfg.getReceiveTunnel().getTunnelId() + "]";
-        else if (cfg.getSendTunnel() != null)
-            return "[Inbound " + cfg.getSendTunnel().getTunnelId() + "]";
+        if (cfg == null) return "[Inbound ??]";
+        long id = cfg.getReceiveTunnelId();
+        if (id != 0)
+            return "[Inbound " + id + "]";
+        id = cfg.getSendTunnelId();
+        if (id != 0)
+            return "[Inbound " + id + "]";
         else
-            return "IB??";
+            return "[Inbound ??]";
     }
 
     private static String getName(TunnelCreatorConfig cfg) {
-        if (cfg == null) return "OB??";
-        if (cfg.getReceiveTunnelId(0) != null)
-            return "[Outbound " + cfg.getReceiveTunnelId(0).getTunnelId() + "]";
-        else if (cfg.getSendTunnelId(0) != null)
-            return "[Outbound " + cfg.getSendTunnelId(0).getTunnelId() + "]";
+        if (cfg == null) return "[Outbound ??]";
+        long id = cfg.getConfig(0).getReceiveTunnelId();
+        if (id != 0)
+            return "[Outbound " + id + "]";
+        id = cfg.getConfig(0).getSendTunnelId();
+        if (id != 0)
+            return "[Outbound " + id + "]";
         else
-            return "OB??";
+            return "[Outbound ??]";
     }
 
     /**
