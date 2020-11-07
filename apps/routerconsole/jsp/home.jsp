@@ -55,34 +55,32 @@
 <div class="main" id="home">
 <jsp:useBean class="net.i2p.router.web.helpers.HomeHelper" id="homehelper" scope="request" />
 <jsp:setProperty name="homehelper" property="contextId" value="<%=i2pcontextId%>" />
+<jsp:useBean class="net.i2p.router.web.helpers.SearchHelper" id="searchhelper" scope="request" />
+<jsp:setProperty name="searchhelper" property="contextId" value="<%=i2pcontextId%>" />
 <div id="homepanel">
-<%
-   //if (homehelper.shouldShowSearch()) {
-%>
-<div class="search">
+<div class="search" id="homesearch">
 <form action="/search.jsp" target="_blank" method="POST">
 <table class="search">
 <tr>
-<td align="right"><input size="40" type="text" class="search" name="query" required x-moz-errormessage="<%=intl._t("Please enter a search query")%>" /></td>
+<td align="right"><input size="40" type="text" class="search" name="query" required placeholder="<%=intl._t("Please enter a search query")%>" /></td>
 <td align="left"><button type="submit" value="search" class="search"><%=intl._t("Search")%></button></td>
 <td align="left">
-<jsp:useBean class="net.i2p.router.web.helpers.SearchHelper" id="searchhelper" scope="request" />
-<jsp:setProperty name="searchhelper" property="contextId" value="<%=i2pcontextId%>" />
 <jsp:getProperty name="searchhelper" property="selector" />
 </td>
 </tr>
 </table>
 </form>
 </div>
-<%
-   //}  // shouldShowSearch()
-%>
 <div class="ag2">
 <h4 class="app"><%=intl._t("Applications and Configuration")%>
 <a href="/confighome#configapps" style="float: right" title="Customize links"><img src="/themes/console/images/info/configure.png" height="16" width="16" alt="Customize links"></a>
-<% if (homehelper.shouldShowWelcome()) { %>
+<%
+    if (homehelper.shouldShowWelcome()) {
+%>
 <a href="/configui#langheading" id="chooselang" style="float: right" title="Configure display language"><img src="/themes/console/images/info/flags.png" height="16" width="16" alt="Language"></a>
-<% }  // shouldShowWelcome %>
+<%
+    } // shouldShowWelcome
+%>
 </h4>
 <jsp:getProperty name="homehelper" property="services" /><br>
 </div>
