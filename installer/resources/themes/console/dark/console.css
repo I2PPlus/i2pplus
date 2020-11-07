@@ -3668,18 +3668,26 @@ tr#addnew, tr#addnew:hover {
 
 /* /configui lang selection boxes + theme selection */
 
-.themechoice {
+.themechoice, .langselect {
   margin: 4px;
-  padding: 0 4px;
   width: 140px;
   float: left;
-  white-space: nowrap;
-  overflow: hidden;
-  text-overflow: ellipsis;
   text-align: center;
   border: 1px solid #252;
   background: #000;
-  background: linear-gradient(to bottom, #010, #000);
+  background: radial-gradient(circle at center -90px, rgba(0,96,0,.9), #000 60%), linear-gradient(to bottom, #010, #000 80%);
+}
+
+.themechoice {
+  padding: 0 4px;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.langselect { /* containing box for lang selection */
+  padding: 8px 4px 0;
+  background: radial-gradient(circle at center -70px, rgba(0,96,0,.9), #000 60%), linear-gradient(to bottom, #010, #000 80%);
 }
 
 .themechoice:hover {
@@ -3839,17 +3847,6 @@ td#themeselect {
   border: 1px solid #252;
   padding: 8px 7px 0;
   margin: -1px 0;
-}
-
-.langselect { /* containing box for lang selection */
-  margin: 4px;
-  padding: 8px 4px 0;
-  width: 140px;
-  float: left;
-  text-align: center;
-  border: 1px solid #252;
-  background: #000;
-  background: linear-gradient(to bottom, #010, #000 80%);
 }
 
 .langselect:hover {
@@ -6448,7 +6445,7 @@ div.app {
   border: 1px solid #252;
   opacity: .9;
   background: #000;
-  background: linear-gradient(to bottom, #000800, #000);
+  background: radial-gradient(circle at center -90px, rgba(0,96,0,.9), #000 60%), linear-gradient(to bottom, #000800, #000);
 }
 
 div.app, .extlink::after, input, button {
@@ -6488,7 +6485,7 @@ div.app:hover, div.app:hover .applabel, div.app:hover .extlink::after, .sitemapL
 
 div.app:hover, .sitemapLink:hover, .themechoice:hover, .langselect:hover {
   background: #000;
-  background: radial-gradient(circle at center -90px, rgba(255,96,0,.3), #000 70%);
+  background: radial-gradient(circle at center -90px, rgba(255,96,0,.3), #000 70%), #000;
 }
 
 div.app:hover {
@@ -13235,7 +13232,7 @@ table.search {
 .sitemapLink, #sitemap div.app {
   margin: 2px 2px 6px;
   box-shadow: 0 0 0 1px #000, inset 0 0 0 1px #000, inset 0 0 1px 1px #242;
-  background: linear-gradient(to bottom, #000800, #000);
+  background: radial-gradient(circle at center -90px, rgba(0,96,0,.9), #000 60%), linear-gradient(to bottom, #000800, #000);
 }
 
 .sitemapLink:hover, .sitemapLink:hover .sitemapLabel, #sitemap div.app:hover {
