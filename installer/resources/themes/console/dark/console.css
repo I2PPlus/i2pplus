@@ -2968,6 +2968,8 @@ h3#activejobs + ol li::before, #scheduledjobs + ol li::before, h3#readyjobs + ol
   vertical-align: text-top;
   content: "";
   background: url(/themes/console/images/info/task.png) center center no-repeat;
+  background: url(/themes/console/images/svg/timer2.svg) center center no-repeat;
+  background-size: 12px 12px;
 }
 
 h3#activejobs + ol li::before {
@@ -2975,7 +2977,8 @@ h3#activejobs + ol li::before {
 }
 
 h3#finishedjobs + ol li::before {
-  background: url(/themes/console/images/buttons/yes.png) center center no-repeat;
+  background: url(/themes/console/images/svg/yes.svg) center center no-repeat;
+  background-size: 12px 12px;
 }
 
 h3#readyjobs + ol li::before {
@@ -6872,8 +6875,17 @@ table:not(:first-of-type).netdbentry th:first-child, table:not(:first-of-type).n
   color: #bb7 !important;
 }
 
-.leaseset tr:nth-child(2) td {
-  line-height: 120%;
+#netdb .leaseset tr, #netdb .leaseset td {
+  box-shadow: none !important;
+}
+
+#netdb .leaseset th:first-child {
+  padding-left: 10px !important;
+}
+
+#netdb a[href$="i2p"] {
+  display: inline-block;
+  margin-left: 6px;
 }
 
 .netdbentry td b, .leaseset td b, #leasesetdebug td b, .sybil_routerinfo td b {
@@ -7026,9 +7038,27 @@ h4 span[style="float: right;"] .unbold {
 }
 
 .addtobook a::after {
+  margin: -8px -4px -8px;
+  padding-left: 6px;
+  width: 24px;
+  height: 26px;
   display: inline-block;
   vertical-align: middle;
-  content: url(/themes/console/images/buttons/add_address.png);
+  background: url(/themes/susidns/dark/images/helper.svg) center center no-repeat;
+  background-size: 14px 14px;
+  content: "";
+  border-left: 1px solid #242;
+}
+
+@media screen and (min-width: 1500px) {
+.addtobook a::after {
+  margin: -8px -6px -8px 0;
+  padding-left: 0;
+  padding-left: 8px;
+  width: 24px;
+  height: 30px;
+  background-size: 16px 16px;
+}
 }
 
 .addtobook a:hover {
@@ -7391,15 +7421,27 @@ h3#iptransport a::after, h3#advancedconfig a::after, #reseedsetup a::after {
   width: 16px;
   height: 16px;
   float: right;
-  background: url(/themes/susidns/dark/images/overview.png) center center no-repeat;
+  background: url(images/helplink.svg) center center no-repeat;
   background-size: 16px 16px !important;
   content: "";
+}
+
+@media screen and (min-width: 1500px) {
+  h3#iptransport a::after, h3#advancedconfig a::after, #reseedsetup a::after {
+    margin: -2px 0 -2px 0;
+    width: 20px;
+    height: 20px;
+    background-size: 20px 20px !important;
+  }
+  #reseedsetup a::after {
+    margin: 0 4px -2px 0;
+  }
 }
 
 h3#iptransport a:hover::after, h3#iptransport a:focus::after,
 h3#advancedconfig a:hover::after, h3#advancedconfig a:focus::after,
 #reseedsetup a:hover::after, #reseedsetup a:focus::after {
-  background: url(/themes/susidns/dark/images/overview_hover.png) center center no-repeat;
+  filter: drop-shadow(0 0 2px #f60);
 }
 
 #logs h3 a {
@@ -9609,7 +9651,7 @@ button.control {
 }
 
 .routersummary td, .routersummary a, .routersummary button, .routersummary h4, .routersummary h4 a,
-#floodfill th, #jardump td, .smallhead th {
+#floodfill th, #jardump td, .smallhead th, .leaseset a[href$=".i2p"] {
   font-size: 9pt !important;
 }
 
@@ -14521,7 +14563,8 @@ h1, .main h2, h4.app, h4.app2, .main h3 {
   border-bottom: 1px solid #770 !important;
 }
 
-.leaseset:target th:first-child, .leaseset:target td:first-child {
+.leaseset:target th:first-child, .leaseset:target td:first-child,
+.leaseset:target .addtobook a::after {
   border-left: 1px solid #770 !important;
 }
 
