@@ -2678,7 +2678,7 @@ fieldset {
 
 select {
   margin: 5px 10px;
-  padding: 6px 24px 6px 4px !important;
+  padding: 6px 24px 6px 6px !important;
   min-width: 110px;
   overflow: hidden;
   text-overflow: ellipsis;
@@ -2967,9 +2967,8 @@ h3#activejobs + ol li::before, #scheduledjobs + ol li::before, h3#readyjobs + ol
   display: inline-block;
   vertical-align: text-top;
   content: "";
-  background: url(/themes/console/images/info/task.png) center center no-repeat;
-  background: url(/themes/console/images/svg/timer2.svg) center center no-repeat;
-  background-size: 12px 12px;
+  background: url(/themes/console/images/svg/clock.svg) center center no-repeat;
+  background-size: 16px 16px;
 }
 
 h3#activejobs + ol li::before {
@@ -3097,8 +3096,9 @@ h3[id*="jobs"]:first-of-type {
 
 @media screen and (min-width: 1200px) {
   #jobstats tr:nth-last-child(n+2) td:first-child {
-    padding-left: 30px !important;
-    background: url(/themes/console/images/buttons/yes.png) 8px center no-repeat;
+    padding-left: 28px !important;
+    background: url(/themes/console/images/svg/yes.svg) 8px center no-repeat;
+    background-size: 12px 12px;
   }
 }
 
@@ -3107,8 +3107,8 @@ h3[id*="jobs"]:first-of-type {
 }
 
 #schedjobs th:first-child, #jobstats th:first-child, #jobstats td:first-child {
-  text-align: left;
   padding-left: 10px;
+  text-align: left;
   font-weight: bold;
 }
 
@@ -3130,13 +3130,13 @@ h3#totaljobstats {
 }
 
 #jobs li, #jobs li:first-child {
+  margin: 0 4px !important;
+  padding: 8px 6px !important;
+  width: calc(100% - 8px);
+  list-style: none !important;
   box-shadow: inset 0 0 0 1px #000, inset 0 0 2px 1px #040, inset 0 0 0 3px #000;
   background: #000400;
   background: linear-gradient(to bottom, #000b00, #000600);
-  width: calc(100% - 8px);
-  list-style: none !important;
-  padding: 8px 6px !important;
-  margin: 0 4px !important;
 }
 
 /* end /jobs */
@@ -3144,8 +3144,8 @@ h3#totaljobstats {
 /* /stats */
 
 form#statnav {
-  border: 1px solid #252 !important;
   padding: 10px 10px 10px 15px;
+  border: 1px solid #252 !important;
 }
 
 h3.stats {
@@ -3154,23 +3154,23 @@ h3.stats {
 }
 
 .joblog li {
-  word-wrap: break-word !important;
-  line-height: 120% !important;
-  margin: 2px 0 2px 30px;
   padding: 2px 20px 2px 0;
+  margin: 2px 0 2px 30px;
+  line-height: 120% !important;
+  word-wrap: break-word !important;
 }
 
 .joblog ul {
-  word-wrap: break-word !important;
   margin: 5px 0 -10px;
+  word-wrap: break-word !important;
 }
 
 ul.statlist {
   margin: -11px 0 -31px !important;
-  border: 1px solid #252;
   padding: 10px 0 0;
-  background: #000;
   color: #bb7;
+  border: 1px solid #252;
+  background: #000;
 }
 
 ul.statlist:last-of-type {
@@ -3178,23 +3178,23 @@ ul.statlist:last-of-type {
 }
 
 ul.statlist a[name], ul.statlist b, ul.statlist li b, ul.statlist a[name]:hover {
-  color: #bb3 !important;
-  text-decoration: none;
   letter-spacing: normal;
+  text-decoration: none;
+  color: #bb3 !important;
 }
 
 ul.statlist li::before {
-  content: "\2B26\00A0";
-  font-size: 14pt;
   line-height: 50%;
   vertical-align: baseline;
+  font-size: 14pt;
   color: #bb3;
+  content: "\2B26\00A0";
 }
 
 ul.statlist li {
+  margin-left: 10px;
   line-height: 160% !important;
   list-style: none;
-  margin-left: 10px;
 }
 
 ul.statlist li li {
@@ -3207,10 +3207,10 @@ ul.statlist li li {
 ul.statlist li li::before, ul.statlist li li:last-child::before {
   margin-top: 2px;
   margin-bottom: -12px;
-  content: "\279F\00A0";
   vertical-align: bottom;
   display: inline-block;
   color: #994;
+  content: "\279F\00A0";
 }
 
 ul.statlist li li:last-child {
@@ -3218,16 +3218,16 @@ ul.statlist li li:last-child {
 }
 
 ul.statlist li li:last-child::after {
-  content: "";
-  display: block;
   margin-top: 6px;
   margin-bottom: -12px;
+  display: block;
+  content: "";
 }
 
 @supports not (-moz-appearance: none) {
-ul.statlist li li:last-child::after {
-  margin-bottom: -6px;
-}
+  ul.statlist li li:last-child::after {
+    margin-bottom: -6px;
+  }
 }
 
 li.noevents {
@@ -3247,8 +3247,8 @@ ul.statlist li b {
 ul.statlist li li:last-child::before {
   margin-top: 3px;
   vertical-align: top;
-  content: "\27A1\00A0";
   color: #994;
+  content: "\27A1\00A0";
 }
 
 .nowrap {
@@ -3273,9 +3273,9 @@ ul.statlist li li:last-child::before {
 }
 
 @supports not (-moz-appearance: none) {
-ul.statlist {
-  margin: -11px 0 -25px !important;
-}
+  ul.statlist {
+    margin: -11px 0 -25px !important;
+  }
 }
 
 ul.statlist li li:last-child {
@@ -3291,27 +3291,25 @@ li.noevents {
 }
 
 @supports (columns: 2 500px) {
-@media screen and (max-width: 1400px) {
-
-ul.statlist {
-  padding: 10px;
-  columns: auto 520px;
-  column-gap: 10px;
-  text-align: center;
-}
-}
+  @media screen and (max-width: 1400px) {
+    ul.statlist {
+      padding: 10px;
+      columns: auto 520px;
+      column-gap: 10px;
+      text-align: center;
+    }
+  }
 }
 
 @supports (columns: 2 500px) {
-@media screen and (min-width: 1400px) {
-
-ul.statlist {
-  padding: 10px;
-  columns: auto 540px;
-  column-gap: 10px;
-  text-align: center;
-}
-}
+  @media screen and (min-width: 1400px) {
+    ul.statlist {
+      padding: 10px;
+      columns: auto 540px;
+      column-gap: 10px;
+      text-align: center;
+    }
+  }
 }
 
 .statlist li.statsName:first-child {
@@ -3323,13 +3321,13 @@ ul.statlist {
 }
 
 .statsName {
-  width: calc(100% - 22px);
   margin: 0 6px 10px 0 !important;
   padding: 10px 10px 0 10px !important;
+  width: calc(100% - 22px);
   display: inline-block;
-  background: #000800;
-  box-shadow: inset 0 0 0 1px #000, inset 0 0 2px 1px #030;
   border: 1px solid #242 !important;
+  box-shadow: inset 0 0 0 1px #000, inset 0 0 2px 1px #030;
+  background: #000800;
 }
 
 .statlist li br, .statlist li li br {
@@ -3371,9 +3369,9 @@ li.noevents, ul.statlist li li:last-child::after {
 }
 
 li.noevents::after, ul.statlist li li:last-child::after {
-  border-bottom-color: transparent;
-  padding-bottom: 0;
   margin-bottom: 0 !important;
+  padding-bottom: 0;
+  border-bottom-color: transparent;
 }
 
 li.noevents::after {
@@ -3394,8 +3392,8 @@ li.noevents::after {
 }
 
 #eventlog th {
-  letter-spacing: 0;
   word-spacing: 0;
+  letter-spacing: 0;
   text-transform: none;
 }
 
@@ -7017,7 +7015,7 @@ h4 span[style="float: right;"] .unbold {
 }
 
 .leaseset th {
-  padding: 5px;
+  padding: 3px 5px;
   position: static;
   text-align: left;
   font-weight: normal;
@@ -7027,6 +7025,38 @@ h4 span[style="float: right;"] .unbold {
   padding-right: 5px;
   white-space: nowrap;
   text-align: right;
+}
+
+.leaseset th {
+  font-size: 9pt;
+}
+
+.leaseset th code {
+  font-size: 8.5pt;
+}
+
+.lsdest, .leaseset th:last-child a[href$="i2p/"] {
+  margin-left: 3px;
+  padding: 2px 6px 4px;
+  display: inline-block;
+  border: 1px solid #020;
+  border-radius: 2px;
+  box-shadow: 0 0 0 1px #000;
+  background: #020;
+  background: linear-gradient(to bottom, #020, #010);
+}
+
+.lsdest {
+  border-radius: 0;
+  border-left-width: 4px;
+  border-right-width: 4px;
+}
+
+.leaseset th:last-child a[href$="i2p/"] {
+  padding-left: 22px;
+  background: #020 url(/themes/console/images/svg/link.svg) 5px center no-repeat;
+  background: url(/themes/console/images/svg/link.svg) 5px center no-repeat, linear-gradient(to bottom, #020, #010);
+  background-size: 12px 12px, 100% 100%;
 }
 
 .addtobook {
@@ -9709,6 +9739,15 @@ code, tt {
   font-size: 9.5pt !important;
 }
 
+.leaseset th {
+  font-size: 9.5pt !important;
+  line-height: 1 !important;
+}
+
+.leaseset th code {
+  font-size: 9pt !important;
+}
+
 #floodfills th:first-child, #floodfills td:first-child {
   padding-right: 3px !important;
   width: 58px;
@@ -12164,7 +12203,7 @@ div.app:hover .extlink::after, .sitemapLink.extlink:hover::after {
 }
 
 h3 .b32 {
-  margin-right: 5px;
+  margin: -2px 3px -4px;
   border: 1px solid #030;
 }
 
@@ -12186,8 +12225,8 @@ h3 .b32 {
 }
 
 ::placeholder {
-  font-style: italic;
   font-weight: 400;
+  font-style: italic;
 }
 
 #homesearch input.search::placeholder {
