@@ -513,6 +513,7 @@ public final class ECIESAEADEngine {
             if (_log.shouldDebug())
                 _log.debug("ElG2 decode fail NewSessionReply");
             data[TAGLEN + KEYLEN - 1] = yy31;
+            state.destroy();
             return null;
         }
         if (_log.shouldDebug())
@@ -534,6 +535,7 @@ public final class ECIESAEADEngine {
             // unlikely since we already matched the tag
             System.arraycopy(yy, 0, data, TAGLEN, KEYLEN - 1);
             data[TAGLEN + KEYLEN - 1] = yy31;
+            state.destroy();
             return null;
         }
         if (_log.shouldDebug())
@@ -559,6 +561,7 @@ public final class ECIESAEADEngine {
                 if (_log.shouldDebug())
                     _log.debug("State at failure: " + state);
             }
+            state.destroy();
             return NO_CLOVES;
         }
 
@@ -575,8 +578,10 @@ public final class ECIESAEADEngine {
                 if (_log.shouldDebug())
                     _log.debug("Processed " + blocks + " blocks in Inbound NewSessionReply");
             } catch (DataFormatException e) {
+                state.destroy();
                 throw e;
             } catch (Exception e) {
+                state.destroy();
                 throw new DataFormatException("NewSessionReply payload error", e);
             }
         }
@@ -589,6 +594,7 @@ public final class ECIESAEADEngine {
             // TODO
             if (_log.shouldWarn())
                 _log.warn("NewSessionReply reply to zero static key NewSession");
+            state.destroy();
             return NO_CLOVES;
         }
 
