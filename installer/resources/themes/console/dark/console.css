@@ -289,10 +289,10 @@ pre {
   margin-top: 30px !important;
 }
 
-/*#proxyrequest {
-  margin: 3px 0;
+#proxyrequest {
+  margin: 3px 0 10px;
   display: inline-block;
-}*/
+}
 
 .warning h3 {
   margin: -9px -29px 15px -99px;
