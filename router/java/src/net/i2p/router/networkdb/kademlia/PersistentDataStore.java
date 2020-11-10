@@ -177,8 +177,8 @@ public class PersistentDataStore extends TransientDataStore {
         public String getName() { return "Delete RouterInfo from NetDb"; }
         public void runJob() {
             RouterInfo ri = new RouterInfo();
-            if (_log.shouldLog(Log.DEBUG))
-                _log.debug("Deleting RouterInfo [" + _key.toBase64().substring(0,6) + "] from " + _dbDir /* , getAddedBy() */);
+//            if (_log.shouldLog(Log.DEBUG))
+//                _log.debug("Deleting RouterInfo [" + _key.toBase64().substring(0,6) + "] from " + _dbDir /* , getAddedBy() */);
             try {
                 removeFile(_key, _dbDir);
             } catch (IOException ioe) {
