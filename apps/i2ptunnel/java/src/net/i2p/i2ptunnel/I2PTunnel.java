@@ -299,7 +299,9 @@ public class I2PTunnel extends EventDispatcherImpl implements Logging {
                 Constructor<?> con = cls.getConstructor(I2PTunnel.class);
                 con.newInstance(this);
             } catch (Throwable t) {
-                throw new UnsupportedOperationException("GUI is not available, try -cli", t);
+//                throw new UnsupportedOperationException("GUI is not available, try -cli", t);
+                System.err.println(" • GUI is not available, run with -cli");
+                System.exit(1);
             }
         } else if (cli) {
             try {
@@ -321,7 +323,9 @@ public class I2PTunnel extends EventDispatcherImpl implements Logging {
             }
         } else if (eargs == null && remaining == 0 && dontDie) {
             System.err.println(usage());
-            throw new IllegalArgumentException("Waiting for nothing! Specify gui, cli, command, command file, or die");
+//            throw new IllegalArgumentException("Waiting for nothing! Specify gui, cli, command, command file, or die");
+                System.err.println(" • Waiting for nothing! Specify cli, command, command file, or die");
+                System.exit(1);
         }
 
         while (dontDie) {
@@ -396,7 +400,7 @@ public class I2PTunnel extends EventDispatcherImpl implements Logging {
      *  @since 0.9.48
      */
     TunnelController getController() { return _controller; }
-    
+
     private void addtask(I2PTunnelTask tsk) {
         tsk.setTunnel(this);
         if (tsk.isOpen()) {

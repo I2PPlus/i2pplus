@@ -31,10 +31,15 @@ public class ReadConfigJob extends JobImpl {
 //    private final static long DELAY = 30*1000; // reread every 30 seconds
     private final static long DELAY = 60*1000; // reread every minute
     private volatile long _lastRead;
+    private static final String PROP_ADVANCED = "routerconsole.advanced";
 
     public ReadConfigJob(RouterContext ctx) {
         super(ctx);
         _lastRead = ctx.clock().now();
+    }
+
+    public boolean isAdvanced() {
+        return getContext().getBooleanProperty(PROP_ADVANCED);
     }
 
     public String getName() { return "Read Router Configuration"; }
@@ -48,7 +53,8 @@ public class ReadConfigJob extends JobImpl {
             if (log.shouldDebug())
                 log.debug("Reloaded " + configFile);
         }
-        requeue(DELAY);
+        if (!isAdvanced())
+            requeue(DELAY);
     }
 
     private boolean shouldReread(File configFile) {
