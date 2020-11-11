@@ -139,6 +139,7 @@ public class GarlicMessageReceiver {
         boolean rv = invalidReason == null;
         if (!rv) {
             String howLongAgo = DataHelper.formatDuration(_context.clock().now()-clove.getExpiration());
+            if (_log.shouldLog(Log.DEBUG))
                 _log.debug("Clove is NOT valid: id=" + clove.getCloveId()
                            + " expiration " + howLongAgo + " ago", new Exception("Invalid within..."));
             else if (_log.shouldWarn())
