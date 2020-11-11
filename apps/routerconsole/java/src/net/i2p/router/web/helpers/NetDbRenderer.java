@@ -513,13 +513,19 @@ class NetDbRenderer {
             if (_context.clientManager().isLocal(key)) {
                 //buf.append("<th><a href=\"tunnels#" + key.toBase64().substring(0,4) + "\">" + _t("Local") + "</a> ");
                 buf.append("<th>");
-                boolean unpublished = ! _context.clientManager().shouldPublishLeaseSet(key);
-                if (unpublished)
-                    buf.append("<b>").append(_t("Unpublished")).append("</b>: ");
+                boolean unpublished = !_context.clientManager().shouldPublishLeaseSet(key);
+                //if (unpublished)
+                    //buf.append("<b>").append(_t("Unpublished")).append("</b>: ");
                 //buf.append("<b>").append(_t("Destination")).append(":</b> ");
                 TunnelPoolSettings in = _context.tunnelManager().getInboundSettings(key);
-                buf.append("<a href=\"tunnels#" + key.toBase64().substring(0,4) + "\"><span class=\"lsdest\" title=\"")
-                   .append(_t("View local tunnels for this destination")).append("\">");
+                buf.append("<a href=\"tunnels#" + key.toBase64().substring(0,4) + "\"><span class=\"lsdest");
+                if (!unpublished)
+                    buf.append(" published");
+                buf.append("\" title=\"")
+                   .append(_t("View local tunnels for destination"));
+                if (!unpublished)
+                    buf.append(" (").append(_t("published")).append(")");
+                buf.append("\">");
                 if (in != null && in.getDestinationNickname() != null)
                     buf.append(in.getDestinationNickname());
                 else
@@ -683,7 +689,7 @@ class NetDbRenderer {
                     buf.append("<span class=\"netdb_tunnel\" title=\"Tunnel ID\">").append(" <span class=\"tunnel_id\">")
                        .append(lease.getTunnelId().getTunnelId()).append("</span></span> ");
                 }
-                long exl = lease.getEndDate().getTime() - now;
+                long exl = lease.getEndTime() - now;
                 if (debug) {
                     if (exl > 0)
                         buf.append("&#10140; <b class=\"netdb_expiry\">").append(_t("Expires in {0}", DataHelper.formatDuration2(exl))).append("</b>");
