@@ -689,7 +689,7 @@ class NetDbRenderer {
                     buf.append("<span class=\"netdb_tunnel\" title=\"Tunnel ID\">").append(" <span class=\"tunnel_id\">")
                        .append(lease.getTunnelId().getTunnelId()).append("</span></span> ");
                 }
-                long exl = lease.getEndDate().getTime() - now;
+                long exl = lease.getEndTime() - now;
                 if (debug) {
                     if (exl > 0)
                         buf.append("&#10140; <b class=\"netdb_expiry\">").append(_t("Expires in {0}", DataHelper.formatDuration2(exl))).append("</b>");
