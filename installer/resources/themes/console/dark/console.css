@@ -4685,11 +4685,11 @@ input[name="logfilename"], input[name="logformat"], input[name="logdateformat"],
   margin-top: 0;
 }
 
-a[href$="#alternative_browser"] img {
+#config_service a[href$="#alternative_browser"] img {
   opacity: 0
 }
 
-a[href$="#alternative_browser"]::after {
+#config_service a[href$="#alternative_browser"]::after {
   margin-left: -16px;
   width: 16px;
   height: 16px;
@@ -7037,7 +7037,7 @@ h4 span[style="float: right;"] .unbold {
 
 .lsdest, .leaseset th:last-child a[href$="i2p/"] {
   margin-left: 3px;
-  padding: 2px 6px 4px;
+  padding: 2px 4px 4px;
   display: inline-block;
   border: 1px solid #020;
   border-radius: 2px;
@@ -7047,9 +7047,21 @@ h4 span[style="float: right;"] .unbold {
 }
 
 .lsdest {
+  padding-left: 22px;
   border-radius: 0;
   border-left-width: 4px;
   border-right-width: 4px;
+  background: url(images/ptcp.png) 4px center no-repeat, linear-gradient(to bottom, #020, #010);
+  background: url(/themes/console/images/svg/hardhat.svg) 4px center no-repeat, linear-gradient(to bottom, #020, #010);
+  background-size: auto 14px, 100% 100%;
+}
+
+.lsdest.published {
+  padding-left: 38px;
+  background: url(/themes/console/images/svg/hardhat.svg) 4px center no-repeat,
+              url(/themes/console/images/svg/globe.svg) 22px center no-repeat,
+              linear-gradient(to bottom, #020, #010);
+  background-size: auto 14px, auto 12px, 100% 100%;
 }
 
 .leaseset th:last-child a[href$="i2p/"] {
