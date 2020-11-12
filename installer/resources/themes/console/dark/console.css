@@ -128,13 +128,13 @@ img {
   padding: 0 !important;
   width: 24px !important;
   height: 18px !important;
-  border: 1px solid #000;
-  border-radius: 2px;
-  box-shadow: 0 0 0 1px #010;
+  border: 1px solid #141;
+  border-radius: 1px;
   background: #000;
 }
 
 #netdb #netdbcountrylist a:hover img {
+  border: 1px solid #000;
   box-shadow: 0 0 0 1px rgba(255,96,0,.8);
   transform: scale(1.1);
 }
@@ -5319,6 +5319,11 @@ ul#upnphelp li:last-child, #legal ul li:last-child {
   margin-bottom: 10px;
 }
 
+#netdb #netdboverview th, #netdb #netdboverview tr, #netdb #netdboverview td {
+  line-height: 1 !important;
+  box-shadow: none !important;
+}
+
 #netdboverview th[colspan="3"] {
   font-size: 12pt !important;
 }
@@ -5369,11 +5374,12 @@ ul#upnphelp li:last-child, #legal ul li:last-child {
 #netdbtransports th, #netdbtransports td, #netdbtiers th, #netdbtiers td {
   padding-left: 10px !important;
   padding-right: 10px !important;
+  line-height: 1;
 }
 
 #netdbversions th, #netdbtransports th, #netdbcountrylist th, #netdbtiers th {
-  line-height: 150%;
-  border-top: 1px solid transparent !important;
+/*  line-height: 150%;
+/*  border-top: 1px solid transparent !important;*/*/
 }
 
 #netdboverview #netdbtransports th {
@@ -5390,8 +5396,17 @@ ul#upnphelp li:last-child, #legal ul li:last-child {
 #netdboverview table td:first-child::before {
   content: "";
   display: inline-block;
-  min-height: 28px;
+  min-height: 24px;
   vertical-align: middle;
+}
+
+#netdboverview table span, #netdboverview table a[href^="/netdb?c"] {
+  margin-top: -2px;
+  margin-bottom: -2px;
+  padding: 3px;
+  display: inline-block;
+  vertical-align: middle;
+  line-height: 1;
 }
 
 #netdbversions tbody tr:first-child td, #netdbcountrylist tbody tr:first-child td, #netdbtiers tbody tr:first-child td {

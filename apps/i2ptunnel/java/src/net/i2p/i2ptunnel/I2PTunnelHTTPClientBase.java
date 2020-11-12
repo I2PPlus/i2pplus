@@ -942,7 +942,7 @@ public abstract class I2PTunnelHTTPClientBase extends I2PTunnelClientBase implem
                 out.write(":</b> <span id=\"outproxydest\">" + wwwProxy + "</span></span><br><br>");
             }
             if (extraMessage != null) {
-                out.write("<b>" + DataHelper.escapeHTML(extraMessage) + "</b><br><br>");
+                out.write("<br><b>" + DataHelper.escapeHTML(extraMessage) + "</b><br><br>");
             }
             if (jumpServers != null && jumpServers.length() > 0) {
                 boolean first = true;
