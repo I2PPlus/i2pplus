@@ -1663,7 +1663,7 @@ a.control, input[type="submit"], input[type="reset"] {
 }
 
 a.control, a.controld {
-  background: linear-gradient(to bottom, #eeecea 50%, #ded9d5 50%);
+  background: linear-gradient(to bottom, #eeecea, #ded9d5);
   background-size: 100% 100% !important;
   border: 1px solid #4F3927;
   border-radius: 2px;
@@ -1707,7 +1707,7 @@ input {
   font-size: 8pt;
   font-weight: bold;
   text-align: left;
-  padding: 5px 4px !important;
+  padding: 5px 4px;
   border-radius: 2px;
   border: 1px solid #4d2200;
   background: #efe6e0;
@@ -1735,12 +1735,11 @@ input[type=submit] {
   background-blend-mode: luminosity;
 }
 
-input[type=submit]:hover, input[type=submit]:focus, a.control:hover {
+input[type=submit]:hover, input[type=submit]:focus, a.control:hover, a.control:focus {
   color: #930 !important;
   border: 1px solid #2f1a09;
-  box-shadow: inset 0 0 0 1px #fff5ef, 0 0 1px 0 #4d453e;
+  box-shadow: inset 0 0 0 1px #d50;
   background-blend-mode: normal;
-  filter: drop-shadow(0 0 1px #930);
 }
 
 input[type=submit]:active, a.control:active {
@@ -1761,21 +1760,21 @@ input[type=image]:hover {
 }
 
 input[type=text], input.r, textarea, input[name="nofilter_dataDir"]  {
+  padding: 5px 8px;
   vertical-align: middle;
-  padding: 2px 4px;
-  box-shadow: inset 0 0 0 1px #f9f5f2, 0 0 0 1px rgba(186, 160, 143, .6);
+  box-shadow: inset 0 0 0 1px #f9f5f2, inset 3px 3px 3px rgba(16,12,0,.25);
 }
 
 input[type=text]:focus, input[type=text]:focus, input.r:focus, textarea:focus, input[name="nofilter_dataDir"]:focus {
   background: #fffcdf;
   color: #5f1227;
   text-shadow: none;
-  transition: ease filter .3s 0s;
+  transition: ease box-shadow .3s;
 }
 
 input[type=radio] {
   padding: 2px;
-  margin: 0 3px 0 8px;
+  margin: 0 4px;
   vertical-align: bottom;
   background: none;
 }
@@ -1783,8 +1782,8 @@ input[type=radio] {
 input.default {
   width: 1px;
   height: 1px;
-  visibility: hidden;
   display: none;
+  visibility: hidden;
 }
 
 input.disabled, input.disabled:hover, input.disabled:focus, input.disabled:active, a.controld, a.controld:hover, a.controld:focus, a.controld:active {
@@ -1802,87 +1801,123 @@ a.controld img, a.controld:hover img, a.controld:focus img, a.controld:active im
 }
 
 input.accept, input.disabled[name="savepri"] {
-  background: url(images/accept.png) no-repeat 5px center, linear-gradient(to bottom, #eeecea 50%, #ded9d5 50%);
   padding: 5px 6px 5px 21px !important;
+  background: url(images/accept.png) no-repeat 5px center, linear-gradient(to bottom, #eeecea, #ded9d5);
 }
 
 input.accept:hover, input.accept:focus {
   background: url(images/accept.png) no-repeat 5px center, linear-gradient(to bottom, #fff7ef 51%, #cfc1b5 52%);
 }
 
+input.accept:active {
+  background: url(images/accept.png) no-repeat 5px center, linear-gradient(to bottom, #fff7ef, #cfc1b5);
+}
+
 input.add {
-  background: url(images/add.png) no-repeat 5px center, linear-gradient(to bottom, #eeecea 50%, #ded9d5 50%);
   padding: 5px 6px 5px 21px !important;
+  background: url(images/add.png) no-repeat 5px center, linear-gradient(to bottom, #eeecea, #ded9d5);
 }
 
 input.add:hover, input.add:focus {
   background: url(images/add.png) no-repeat 5px center, linear-gradient(to bottom, #fff7ef 51%, #cfc1b5 52%);
 }
 
+input.add:active {
+  background: url(images/add.png) no-repeat 5px center, linear-gradient(to bottom, #fff7ef, #cfc1b5);
+}
+
 input.cancel {
-  background: url(images/cancel.png) no-repeat 5px center, linear-gradient(to bottom, #eeecea 50%, #ded9d5 50%);
   padding: 5px 6px 5px 21px !important;
+  background: url(images/cancel.png) no-repeat 5px center, linear-gradient(to bottom, #eeecea, #ded9d5);
 }
 
 input.cancel:hover, input.cancel:focus {
   background: url(images/cancel.png) no-repeat 5px center, linear-gradient(to bottom, #fff7ef 51%, #cfc1b5 52%);
 }
 
+input.cancel:active {
+  background: url(images/cancel.png) no-repeat 5px center, linear-gradient(to bottom, #fff7ef, #cfc1b5);
+}
+
 input.create {
-  background: url(images/create.png) no-repeat 5px center, linear-gradient(to bottom, #eeecea 50%, #ded9d5 50%);
   padding: 5px 6px 5px 21px !important;
+  background: url(images/create.png) no-repeat 5px center, linear-gradient(to bottom, #eeecea, #ded9d5);
 }
 
 input.create:hover, input.create:focus {
   background: url(images/create.png) no-repeat 5px center, linear-gradient(to bottom, #fff7ef 51%, #cfc1b5 52%);
 }
 
+input.create:active {
+  background: url(images/create.png) no-repeat 5px center, linear-gradient(to bottom, #fff7ef, #cfc1b5);
+}
+
 input.delete {
-  background: url(images/nuke.png) no-repeat 5px center, linear-gradient(to bottom, #eeecea 50%, #ded9d5 50%);
   padding: 5px 6px 5px 21px !important;
+  background: url(images/nuke.png) no-repeat 5px center, linear-gradient(to bottom, #eeecea, #ded9d5);
 }
 
 input.delete:hover, input.delete:focus {
   background: url(images/nuke.png) no-repeat 5px center, linear-gradient(to bottom, #fff7ef 51%, #cfc1b5 52%);
 }
 
+input.delete:active {
+  background: url(images/nuke.png) no-repeat 5px center, linear-gradient(to bottom, #fff7ef, #cfc1b5);
+}
+
 input.reload {
-  background: url(images/restore.png) no-repeat 5px center, linear-gradient(to bottom, #eeecea 50%, #ded9d5 50%);
   padding: 5px 6px 5px 21px !important;
+  background: url(images/restore.png) no-repeat 5px center, linear-gradient(to bottom, #eeecea, #ded9d5);
 }
 
 input.reload:hover, input.reload:focus {
   background: url(images/restore.png) no-repeat 5px center, linear-gradient(to bottom, #fff7ef 51%, #cfc1b5 52%);
 }
 
+input.reload:active {
+  background: url(images/restore.png) no-repeat 5px center, linear-gradient(to bottom, #fff7ef, #cfc1b5);
+}
+
 input.reload[name="recheck"], input.disabled[name="recheck"] {
-  background: url(images/recheck.png) no-repeat 5px center, linear-gradient(to bottom, #eeecea 50%, #ded9d5 50%);
-  padding: 5px 6px 5px 21px !important;
   margin: 6px 2px;
+  padding: 5px 6px 5px 21px !important;
+  background: url(images/recheck.png) no-repeat 5px center, linear-gradient(to bottom, #eeecea, #ded9d5);
 }
 
 input.reload[name="recheck"]:hover, input.reload[name="recheck"]:focus {
   background: url(images/recheck.png) no-repeat 5px center, linear-gradient(to bottom, #fff7ef 51%, #cfc1b5 52%);
 }
 
+input.reload[name="recheck"]:active {
+  background: url(images/recheck.png) no-repeat 5px center, linear-gradient(to bottom, #fff7ef, #cfc1b5);
+}
+
 input.starttorrent {
-  background: url(images/next.png) no-repeat 5px center, linear-gradient(to bottom, #eeecea 50%, #ded9d5 50%);
-  padding: 5px 6px 5px 18px !important;
   margin: 6px;
+  padding: 5px 6px 5px 18px !important;
+  background: url(images/next.png) no-repeat 5px center, linear-gradient(to bottom, #eeecea, #ded9d5);
 }
 
 input.starttorrent:hover, input.starttorrent:focus {
   background: url(images/next.png) no-repeat 5px center, linear-gradient(to bottom, #fff7ef 51%, #cfc1b5 52%);
 }
 
+input.starttorrent:active {
+  background: url(images/next.png) no-repeat 5px center, linear-gradient(to bottom, #fff7ef, #cfc1b5);
+}
+
 input.stoptorrent {
-  background: url(images/btn_stop.png) no-repeat 5px center, linear-gradient(to bottom, #eeecea 50%, #ded9d5 50%);
-  padding: 5px 6px 5px 21px !important;
   margin: 4px 5px;
+  padding: 5px 6px 5px 21px !important;
+  background: url(images/btn_stop.png) no-repeat 5px center, linear-gradient(to bottom, #eeecea, #ded9d5);
 }
 
 input.stoptorrent:hover, input.stoptorrent:focus {
   background: url(images/btn_stop.png) no-repeat 5px center, linear-gradient(to bottom, #fff7ef 51%, #cfc1b5 52%);
+}
+
+input.stoptorrent:active {
+  background: url(images/btn_stop.png) no-repeat 5px center, linear-gradient(to bottom, #fff7ef, #cfc1b5);
 }
 
 select {
@@ -1911,22 +1946,22 @@ select:hover, select:focus {
 }
 
 @-moz-document url-prefix() {
-select option {
-  color: #5f1227;
-  box-shadow: inset 0 0 20px 20px #fffcdf;
-  background: #fffcdf;
-}
+  select option {
+    color: #5f1227;
+    box-shadow: inset 0 0 20px 20px #fffcdf;
+    background: #fffcdf;
+  }
 
-select option:hover, select option:checked {
-  box-shadow: inset 0 0 20px 20px #5f1227;
-  background: #f60;
-}
+  select option:hover, select option:checked {
+    box-shadow: inset 0 0 20px 20px #5f1227;
+    background: #f60;
+  }
 }
 
 @media all and (-ms-high-contrast: none), (-ms-high-contrast: active) {
-select {
-  padding: 4px;
-}
+  select {
+    padding: 4px;
+  }
 }
 
 select::-ms-expand {
@@ -1934,15 +1969,15 @@ select::-ms-expand {
 }
 
 textarea, input[name="nofilter_dataDir"] {
-  background: #efe6e0;
+  margin-left: 4px;
+  padding: 5px 8px;
+  width: 70%;
+  font-family: Droid Sans, Open Sans, Noto Sans, Ubuntu, Segoe UI, Lucida Grande, Bitstream Vera Sans, Verdana, sans-serif;
+  font-size: 8pt;
   font-weight: bold;
-  padding: 2px 4px;
   border-radius: 2px;
   border: 1px solid #2f1500;
-  font-size: 8pt;
-  margin-left: 4px;
-  font-family: Droid Sans, Open Sans, Noto Sans, Ubuntu, Segoe UI, Lucida Grande, Bitstream Vera Sans, Verdana, sans-serif;
-  width: 70%;
+  background: #efe6e0;
 }
 
 textarea[name="i2cpOpts"] {
@@ -1950,32 +1985,25 @@ textarea[name="i2cpOpts"] {
 }
 
 textarea[name="i2cpOpts"]:focus, .r:focus, input[type="text"]:focus, select:focus, input[name="nofilter_dataDir"]:focus, input[type="checkbox"]:focus, input[type="radio"]:focus {
-  box-shadow: 0 0 1px rgba(223, 0, 103, .6);
-  transition: ease box-shadow .3s 0s, ease filter .3s 0s;
+  box-shadow: inset 0 0 0 1px #f9f5f2, inset 0 0 0 1px rgba(16,12,0,.25), 0 0 1px rgba(223, 0, 103, .6);
+  transition: ease box-shadow .3s;
 }
 
 textarea {
-  resize: none;
-  height: 26px;
-  padding: 4px;
-  color: #4d2200;
-  font-size: 8pt;
   margin-top: 2px;
+  padding: 4px;
+  height: 26px;
+  resize: none;
+  font-size: 8pt;
+  color: #4d2200;
 }
 
 /* end buttons & inputs */
 
 img {
-  border: none;
   margin: 0 2px;
   vertical-align: middle;
-  opacity: 1.0;
-  line-height: 100%;
-}
-
-img:hover {
   border: none;
-  opacity: 1;
   line-height: 100%;
 }
 
