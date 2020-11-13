@@ -7908,11 +7908,6 @@ span#distance {
   white-space: nowrap;
 }
 
-#leasesetdebug th:last-child, #leasesetsummary th:last-child {
-  text-align:right;
-  white-space: nowrap;
-}
-
 #leasesetdebug td:nth-child(odd) {
   width: 200px;
   white-space: nowrap;
@@ -7931,12 +7926,6 @@ span#distance {
 
 #leasesetdebug th a:not(old), #leasesetsummary th a:not(old) {
   font-size: 0;
-}
-
-#leasesetdebug th a::after, #leasesetsummary th a::after {
-  content: url(/themes/console/images/buttons/floodfill.png);
-  vertical-align: text-top;
-  padding-right: 0;
 }
 
 .addtobook {
@@ -11604,6 +11593,10 @@ input[type="file"]:hover {
   vertical-align: middle !important;
 }
 
+#leasesetsummary + .leasesets_container .nowrap {
+  max-width: inherit;
+}
+
 .sybil_addresses .nowrap {
   max-width: 400px !important;
 }
@@ -14319,20 +14312,20 @@ h1, .main h2, h4.app, h4.app2, .main h3 {
 /* highlight linked leaseset */
 
 .leaseset:target {
-  border: 1px solid #939 !important;
+  border: 1px solid #737 !important;
 }
 
 .leaseset:target tr:first-child th, .leaseset:target td {
-  border-top: 1px solid #939 !important;
-  border-bottom: 1px solid #939 !important;
+  border-top: 1px solid #737 !important;
+  border-bottom: 1px solid #737 !important;
 }
 
 .leaseset:target th:first-child, .leaseset:target td:first-child {
-  border-left: 1px solid #939 !important;
+  border-left: 1px solid #737 !important;
 }
 
 .leaseset:target th:last-child, .leaseset:target td:last-child {
-  border-right: 1px solid #939 !important;
+  border-right: 1px solid #737 !important;
 }
 
 .leaseset:target th, .leaseset:target td {
@@ -14340,3 +14333,37 @@ h1, .main h2, h4.app, h4.app2, .main h3 {
 }
 
 /* end highlight linked leaseset */
+
+.lsdest, .leaseset th:last-child a[href$="i2p/"] {
+  margin-left: 3px;
+  padding: 2px 4px 4px;
+  display: inline-block;
+  border: 1px solid #113;
+  border-radius: 2px;
+  background: #002;
+  background: linear-gradient(to bottom, #003, #001);
+}
+
+.lsdest {
+  padding-left: 22px;
+  border-radius: 0;
+  border-left-width: 4px;
+  border-right-width: 4px;
+  background: url(/themes/console/images/svg/hardhat.svg) 4px center no-repeat, linear-gradient(to bottom, #003, #001);
+  background-size: auto 14px, 100% 100%;
+}
+
+.lsdest.published {
+  padding-left: 38px;
+  background: url(/themes/console/images/svg/hardhat.svg) 4px center no-repeat,
+              url(/themes/console/images/svg/globe.svg) 22px center no-repeat,
+              linear-gradient(to bottom, #003, #001);
+  background-size: auto 14px, auto 12px, 100% 100%;
+}
+
+.leaseset th:last-child a[href$="i2p/"] {
+  padding-left: 22px;
+  background: #020 url(/themes/console/images/svg/link.svg) 5px center no-repeat;
+  background: url(/themes/console/images/svg/link.svg) 5px center no-repeat, linear-gradient(to bottom, #003, #001);
+  background-size: 12px 12px, 100% 100%;
+}

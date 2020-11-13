@@ -11,6 +11,15 @@ html {
   scrollbar-color: rgba(16,72,16,.8) rgba(0,16,0,.5);
 }
 
+body, button, input, input[type=text], input[type=password], select, #debug .skm_key td:first-child b {
+  font-family: Droid Sans, Open Sans, Noto Sans, Ubuntu, Segoe UI, Bitstream Vera Sans, DejaVu Sans, Verdana, Lucida Grande, Helvetica, sans-serif;
+}
+
+button, input, input[type=text], input[type=password], select {
+  font-size: 9pt;
+  font-weight: bold;
+}
+
 body {
   margin: 5px 0 0 0;
   padding: 0;
@@ -2302,8 +2311,9 @@ button, button:visited {
   padding: 4px 2px !important;
   min-width: 75px;
   vertical-align: middle;
-  font: bold 9pt Droid Sans, Open Sans, Noto Sans, Ubuntu, Segoe UI, Bitstream Vera Sans, DejaVu Sans, Verdana, Lucida Grande, Helvetica, sans-serif;
   text-align: center;
+  font-weight: bold;
+  font-size: 9pt;
   text-decoration: none;
   color: #494;
   border: 1px outset #191;
@@ -2332,6 +2342,7 @@ button:hover, button:focus {
   border: 1px solid #f60;
   box-shadow: inset 0 0 0 1px #000, inset 0 0 2px 1px rgba(255,86,0,.8), inset 0 0 0 3px #000;
   background: #000;
+  background: radial-gradient(at center bottom, rgba(96, 48, 0, .4) 0, rgba(0, 0, 0, 0) 80%), #000;
   cursor: pointer;
 }
 
@@ -2340,6 +2351,7 @@ input[type=file]:hover::file-selector-button, input[type=file]:focus::file-selec
   border: 1px solid #f60;
   box-shadow: inset 0 0 0 1px #000, inset 0 0 2px 1px rgba(255,86,0,.8), inset 0 0 0 3px #000;
   background: #000;
+  background: radial-gradient(at center bottom, rgba(96, 48, 0, .4) 0, rgba(0, 0, 0, 0) 80%), #000;
   cursor: pointer;
 }
 
@@ -2413,15 +2425,18 @@ button.add.control:active {
 }
 
 button.delete.control {
-  background: url(/themes/console/images/buttons/delete.png) center center no-repeat, linear-gradient(to bottom, #001000, #000 5%, #000 95%, #001000);
+  background: url(/themes/console/images/svg/nuke.svg) center center no-repeat, linear-gradient(to bottom, #001000, #000 5%, #000 95%, #001000);
+  background-size: 14px 14px;
 }
 
 button.delete.control:hover, button.delete.control:focus {
-  background: #000 url(/themes/console/images/buttons/delete_hover.png) center center no-repeat;
+  background: #000 url(/themes/console/images/svg/nuke.svg) center center no-repeat;
+  background-size: 14px 14px;
 }
 
 button.delete.control:active {
-  background: #f60 url(/themes/console/images/buttons/delete_hover.png) center center no-repeat;
+  background: #f60 url(/themes/console/images/svg/nuke.svg) center center no-repeat;
+  background-size: 14px 14px;
 }
 
 button.check.control {
@@ -2451,9 +2466,9 @@ button.download.control:active {
 /* end project "X" */
 
 .routersummary button.reload, .routersummary button.stop, .routersummary button.cancel {
+  margin: 3px 2px;
   min-width: 97px;
   text-transform: capitalize;
-  margin: 3px 2px;
 }
 
 .routersummary button.download {
@@ -2473,11 +2488,11 @@ button.download.control:active {
 
 #updateAvailable + br + button + br + #updateAvailable::before {
   margin: 2px 0 4px;
-  content: "";
-  display: inline-block;
-  height: 1px;
-  background: #020;
   width: 100%;
+  height: 1px;
+  display: inline-block;
+  background: #020;
+  content: "";
 }
 
 #updateAvailable + br + button + br + #updateAvailable {
@@ -2551,7 +2566,6 @@ input {
   margin: 5px;
   padding: 4px 2px;
   min-width: 110px;
-  font: bold 9pt Droid Sans, Open Sans, Noto Sans, Ubuntu, Segoe UI, Bitstream Vera Sans, DejaVu Sans, Verdana, Lucida Grande, Helvetica, sans-serif;
   text-decoration: none;
   color: #494;
   border: 1px outset #191;
@@ -2568,6 +2582,7 @@ input:hover, input:focus {
 
 input[type=submit]:hover, input[type=reset]:hover, input[type=submit]:focus, input[type=reset]:focus {
   box-shadow: inset 0 0 0 1px #000, inset 0 0 2px 1px rgba(255,86,0,.8), inset 0 0 0 3px #000 !important;
+  background: radial-gradient(at center bottom, rgba(96, 48, 0, .4) 0, rgba(0, 0, 0, 0) 80%), #000;
 }
 
 input[type=submit]:active, input[type=reset]:active {
@@ -2596,7 +2611,6 @@ input[type=text], input[type=password] {
   padding: 6px 8px;
   text-decoration: none;
   color: #ee9;
-  font: bold 9pt Droid Sans, Open Sans, Noto Sans, Ubuntu, Segoe UI, Bitstream Vera Sans, DejaVu Sans, Verdana, Lucida Grande, Helvetica, sans-serif;
   border: 1px solid #184818 !important;
   border-radius: 1px;
   box-shadow: inset 0 0 0 1px #000, inset 4px 4px 4px #000, 0 0 0 1px #000;
@@ -2683,8 +2697,7 @@ select {
   overflow: hidden;
   text-overflow: ellipsis;
   color: #494;
-  font: 9.5pt Droid Sans, Open Sans, Noto Sans, Ubuntu, Segoe UI, Bitstream Vera Sans, DejaVu Sans, Verdana, Lucida Grande, Helvetica, sans-serif;
-  font-weight: bold;
+  font-size: 9.5pt;
   border-radius: 2px;
   background: #000 url(images/dropdown.svg) right 10px center no-repeat !important;
   background: url(images/dropdown.svg) right 10px center no-repeat, linear-gradient(to bottom, #001000, #000 5%, #000 95%, #001000) !important;
@@ -4748,58 +4761,45 @@ h3#servicedebug a, h3#graphinfo a {
 
 #tunnels h3.client {
   padding-left: 35px;
-  background: url(/themes/console/images/svg/client.svg) 8px center no-repeat, linear-gradient(to bottom, rgba(0,0,0,0) 50%, #000 50%), repeating-linear-gradient(to right, rgba(0,0,0,.5) 1px, rgba(0,0,0,.5) 2px, rgba(0,16,0,.5) 3px), linear-gradient(to bottom, #005000, #000 75%) !important;
-  background-size: 20px 20px, 100% 100%, 100% 100%, 100% 100% !important;
+  background: url(/themes/console/images/svg/client.svg) 9px center no-repeat, linear-gradient(to bottom, rgba(0,0,0,0) 50%, #000 50%), repeating-linear-gradient(to right, rgba(0,0,0,.5) 1px, rgba(0,0,0,.5) 2px, rgba(0,16,0,.5) 3px), linear-gradient(to bottom, #005000, #000 75%) !important;
+  background-size: 18px 18px, 100% 100%, 100% 100%, 100% 100% !important;
 }
 
 #tunnels h3.ping {
   padding-left: 35px;
-  background: url(/themes/console/images/svg/ping.svg) 8px center no-repeat, linear-gradient(to bottom, rgba(0,0,0,0) 50%, #000 50%), repeating-linear-gradient(to right, rgba(0,0,0,.5) 1px, rgba(0,0,0,.5) 2px, rgba(0,16,0,.5) 3px), linear-gradient(to bottom, #005000, #000 75%) !important;
-  background-size: 20px 20px, 100% 100%, 100% 100%, 100% 100% !important;
+  background: url(/themes/console/images/svg/ping.svg) 9px center no-repeat, linear-gradient(to bottom, rgba(0,0,0,0) 50%, #000 50%), repeating-linear-gradient(to right, rgba(0,0,0,.5) 1px, rgba(0,0,0,.5) 2px, rgba(0,16,0,.5) 3px), linear-gradient(to bottom, #005000, #000 75%) !important;
+  background-size: 18px 18px, 100% 100%, 100% 100%, 100% 100% !important;
 }
 
 #tunnels h3#exploratory {
   padding-left: 35px;
-  background: url(/themes/console/images/svg/globe.svg) 8px center no-repeat, linear-gradient(to bottom, rgba(0,0,0,0) 50%, #000 50%), repeating-linear-gradient(to right, rgba(0,0,0,.5) 1px, rgba(0,0,0,.5) 2px, rgba(0,16,0,.5) 3px), linear-gradient(to bottom, #005000, #000 75%) !important;
-  background-size: 20px 20px, 100% 100%, 100% 100%, 100% 100% !important;
+  background: url(/themes/console/images/svg/globe.svg) 9px center no-repeat, linear-gradient(to bottom, rgba(0,0,0,0) 50%, #000 50%), repeating-linear-gradient(to right, rgba(0,0,0,.5) 1px, rgba(0,0,0,.5) 2px, rgba(0,16,0,.5) 3px), linear-gradient(to bottom, #005000, #000 75%) !important;
+  background-size: 18px 18px, 100% 100%, 100% 100%, 100% 100% !important;
 }
 
 #tunnels h3.server {
   padding-left: 35px;
-  background: url(/themes/console/images/svg/server.svg) 8px center no-repeat, linear-gradient(to bottom, rgba(0,0,0,0) 50%, #000 50%), repeating-linear-gradient(to right, rgba(0,0,0,.5) 1px, rgba(0,0,0,.5) 2px, rgba(0,16,0,.5) 3px), linear-gradient(to bottom, #005000, #000 75%) !important;
-  background-size: 20px 20px, 100% 100%, 100% 100%, 100% 100% !important;
+  background: url(/themes/console/images/svg/server.svg) 9px center no-repeat, linear-gradient(to bottom, rgba(0,0,0,0) 50%, #000 50%), repeating-linear-gradient(to right, rgba(0,0,0,.5) 1px, rgba(0,0,0,.5) 2px, rgba(0,16,0,.5) 3px), linear-gradient(to bottom, #005000, #000 75%) !important;
+  background-size: 18px 18px, 100% 100%, 100% 100%, 100% 100% !important;
 }
 
 #tunnels h3#participating {
   padding-left: 35px;
   background: url(/themes/console/images/info/share.png) 6px center no-repeat, linear-gradient(to bottom, rgba(0,0,0,0) 50%, #000 50%), repeating-linear-gradient(to right, rgba(0,0,0,.5) 1px, rgba(0,0,0,.5) 2px, rgba(0,16,0,.5) 3px), linear-gradient(to bottom, #005000, #000 75%) !important;
-  background-size: 20px 20px, 100% 100%, 100% 100%, 100% 100% !important;
+  background-size: 18px 18px, 100% 100%, 100% 100%, 100% 100% !important;
 }
 
 #tunnels h3.dead {
   padding-left: 32px;
   background: url(/themes/console/images/info/rip.png) 6px center no-repeat, linear-gradient(to bottom, rgba(0,0,0,0) 50%, #000 50%), repeating-linear-gradient(to right, rgba(0,0,0,.5) 1px, rgba(0,0,0,.5) 2px, rgba(0,16,0,.5) 3px), linear-gradient(to bottom, #005000, #000 75%) !important;
-  background-size: 20px 20px, 100% 100%, 100% 100%, 100% 100% !important;
-}
-
-#tunnels h3.dead, #tunnels h3.dead + table, #tunnels h3.dead + table + .statusnotes, #tunnels h3.dead + table + .statusnotes + .statusnotes {
-  opacity: .8;
-  filter: saturate(0.5);
-}
-
-#tunnels h3.dead + table td .tunnel_id {
-  text-decoration: line-through;
-}
-
-h3.dead span {
-  display: none;
+  background-size: 18px 18px, 100% 100%, 100% 100%, 100% 100% !important;
 }
 
 #tunnels h3:last-of-type {
   padding-left: 35px;
   padding-bottom: 7px !important;
-  background: url(/themes/console/images/svg/speedometer.svg) 8px center no-repeat, linear-gradient(to bottom, rgba(0,0,0,0) 50%, #000 50%), repeating-linear-gradient(to right, rgba(0,0,0,.5) 1px, rgba(0,0,0,.5) 2px, rgba(0,16,0,.5) 3px), linear-gradient(to bottom, #005000, #000 75%) !important;
-  background-size: 20px 20px, 100% 100%, 100% 100%, 100% 100% !important;
+  background: url(/themes/console/images/svg/speedometer.svg) 9px center no-repeat, linear-gradient(to bottom, rgba(0,0,0,0) 50%, #000 50%), repeating-linear-gradient(to right, rgba(0,0,0,.5) 1px, rgba(0,0,0,.5) 2px, rgba(0,16,0,.5) 3px), linear-gradient(to bottom, #005000, #000 75%) !important;
+  background-size: 18px 18px, 100% 100%, 100% 100%, 100% 100% !important;
 }
 
 .pending:nth-of-type(2)::before {
@@ -4875,7 +4875,7 @@ h3.dead span {
 }
 
 @media screen and (max-width: 1000px) {
-  #tunnels .tunneldisplay td:nth-child(n+2) span, #tunnels .tunneldisplay .cells .tunnel_cap, #tunnels .tunneldisplay .cells tt {
+  #tunnels .tunneldisplay td:nth-child(n+2) span, #tunnels .tunneldisplay .cells tt {
     margin: 1px !important;
     padding: 0 !important;
     display: inline-block;
@@ -4899,8 +4899,8 @@ h3.dead span {
   }
 
   #tunnels .tunneldisplay .cells .tunnel_cap {
-    min-width: 0;
-    text-align: left;
+    min-width: 14px;
+    text-align: center;
   }
 
   #tunnels .tunneldisplay .cells .routerid, #tunnels .tunneldisplay .cells .tunnel_peer.tunnel_local {
@@ -7079,7 +7079,6 @@ h4 span[style="float: right;"] .unbold {
   border-radius: 0;
   border-left-width: 4px;
   border-right-width: 4px;
-  background: url(images/ptcp.png) 4px center no-repeat, linear-gradient(to bottom, #020, #010);
   background: url(/themes/console/images/svg/hardhat.svg) 4px center no-repeat, linear-gradient(to bottom, #020, #010);
   background-size: auto 14px, 100% 100%;
 }
@@ -7136,35 +7135,34 @@ h4 span[style="float: right;"] .unbold {
 }
 
 #leasesetdebug th, #leasesetsummary th {
+  padding: 5px 5px 5px 10px;
+  word-spacing: .1em;
+  letter-spacing: .08em;
+  font-size: 10pt;
   font-weight: bold;
   text-transform: uppercase;
-  font-size: 10pt;
-  letter-spacing: .08em;
-  word-spacing: .1em;
-  padding: 5px 5px 5px 10px;
 }
 
 #leasesetdebug th a, #leasesetsummary a {
+  word-spacing: normal;
+  letter-spacing: normal;
   font-size: 9pt;
   text-transform: capitalize;
-  letter-spacing: normal;
-  word-spacing: normal;
 }
 
 #leasesetsummary td:first-child {
+  padding-left: 10px;
   width: 100px;
   white-space: nowrap;
-  padding-left: 10px;
 }
 
 #leasesetdebug th:first-child, #leasesetsummary th:first-child {
-  text-align:left;
   white-space: nowrap;
+  text-align: left;
 }
 
-#leasesetdebug th:last-child, #leasesetsummary th:last-child {
-  text-align:right;
-  white-space: nowrap;
+#leasesetsummary th:first-child {
+  padding: 8px 10px;
 }
 
 #leasesetdebug td:nth-child(odd) {
@@ -7175,8 +7173,8 @@ h4 span[style="float: right;"] .unbold {
 }
 
 #leasesetdebug td:nth-child(even) {
-  text-align: left;
   white-space: nowrap;
+  text-align: left;
 }
 
 #leasesetdebug td:nth-child(2) {
@@ -7184,18 +7182,18 @@ h4 span[style="float: right;"] .unbold {
 }
 
 #noleasesets, #notinitialized, .netdbnotfound {
-  background: #000 url(images/infohelp.png) 12px center no-repeat;
-  padding: 15px 15px 15px 50px;
-  border: 1px solid #252;
   margin-bottom: 10px;
+  padding: 15px 15px 15px 50px;
   text-align: left;
+  border: 1px solid #252;
+  background: #000 url(images/infohelp.png) 12px center no-repeat;
 }
 
 #sybilnav, #sybils_summary {
-  border: 1px solid #242;
-  padding: 10px;
   margin-bottom: 10px;
+  padding: 10px;
   line-height: 160%;
+  border: 1px solid #242;
   background: #000;
 }
 
@@ -7226,15 +7224,15 @@ h4 span[style="float: right;"] .unbold {
 }
 
 #sybilnav ul li {
-  list-style: none;
-  padding-left: 0;
   margin-left: 0;
   margin-bottom: 4px;
+  padding-left: 0;
   min-width: 150px;
   white-space: nowrap;
+  list-style: none;
   border: 1px solid #151;
-  background: linear-gradient(to right, #000, #010 80%);
   box-shadow: inset 0 0 0 1px #000, inset 0 0 2px 1px #030;
+  background: linear-gradient(to right, #000, #010 80%);
 }
 
 #sybilnav ul li:hover {
@@ -7254,8 +7252,8 @@ h4 span[style="float: right;"] .unbold {
 }
 
 #sybilnav a {
-  display: inline-block;
   width: 100%;
+  display: inline-block;
   text-shadow: 0 1px 1px #000;
 }
 
@@ -7290,8 +7288,8 @@ h4 span[style="float: right;"] .unbold {
 }
 
 .sybil_routerinfo th:first-child {
-  text-align: left;
   white-space: nowrap;
+  text-align: left;
 }
 
 .sybil_routerinfo th:last-child {
@@ -7309,15 +7307,15 @@ h4 span[style="float: right;"] .unbold {
 }
 
 p.sybil_info, p.family, p.threatpoints, p.hashdist, p#sybil_totals, p.notfound {
-  border: 1px solid #252;
-  padding: 5px 5px 5px 33px;
   margin: 3px 0;
-  color: #cc0;
+  padding: 5px 5px 5px 33px;
   font-weight: bold;
+  color: #cc0;
+  border: 1px solid #252;
+  box-shadow: inset 0 0 0 1px #300;
   background: url(images/eye.svg) 8px center no-repeat;
   background: url(images/eye.svg) 8px center no-repeat, linear-gradient(to right, #000, #000800 80%, #001000);
   background-size: 16px 16px, 100% 100%;
-  box-shadow: inset 0 0 0 1px #300;
 }
 
 p.sybil_info, p#sybil_totals {
@@ -11794,7 +11792,7 @@ h3#pconfig {
 }
 
 .sybil_routerinfo .viewprofile img, .sybil_routerinfo .viewfullentry img, .sybil_routerinfo .familysearch img, .sybil_routerinfo .configpeer img {
-  margin-bottom: 3px !important;
+  margin-bottom: 1px !important;
   margin-right: 6px !important;
 }
 
@@ -12610,7 +12608,6 @@ a[href^="/netdb"]:hover span {
   text-align: center;
 }
 
-.netdbentry tr, #netdboverview tr, #netdblookup tr, .leasesets_container tr, #leasesetsummary tr,
 #config_peers tr:last-child, #config_peers #bannedips td:last-child tr:nth-child(n+3) {
   box-shadow: inset 0 0 0 1px #000, inset 0 -1px 0 1px #000, inset 0 0 1px 1px #030, inset 0 -1px 1px 1px #030, inset 0 0 0 2px #000, inset 0 -1px 0 2px #000 !important;
 }
@@ -12723,7 +12720,6 @@ a[href^="/netdb"]:hover span {
 }
 
 #debug .skm_key td:first-child b {
-  font-family: Droid Sans, Open Sans, Noto Sans, Ubuntu, Segoe UI, Bitstream Vera Sans, DejaVu Sans, Verdana, Lucida Grande, Helvetica, sans-serif;
   color: #ee9;
 }
 
@@ -12737,8 +12733,8 @@ a[href^="/netdb"]:hover span {
 }
 
 .debug_outboundtarget td:last-child, .skm_key td:last-child {
-  white-space: nowrap;
   width: 1%;
+  white-space: nowrap;
 }
 
 .skm_key td, .debug_outboundtarget td {
@@ -12750,12 +12746,12 @@ a[href^="/netdb"]:hover span {
   margin-right: 6px;
   padding: 1px 2px;
   display: inline-block;
+  float: left;
   font-size: 95%;
   font-weight: bold;
   color: #000;
   border-radius: 2px;
   background: #770;
-  float: left;
 }
 
 /* h1 icons */
@@ -12823,10 +12819,10 @@ h1[class], h1 {
 }
 
 @media screen and (max-width: 1500px) {
-h1[class], h1 {
-  padding-left: 50px;
-  background-size: 32px auto, 100% 100%, 100% 100%, 164px 164px !important;
-}
+  h1[class], h1 {
+    padding-left: 50px;
+    background-size: 32px auto, 100% 100%, 100% 100%, 164px 164px !important;
+  }
 }
 
 /* end h1 icons */
@@ -12843,9 +12839,9 @@ h1[class], h1 {
 }
 
 .sitelink, .chatlink, .consolelink {
+  white-space: nowrap;
   border-radius: 1px;
   box-shadow: 0 0 0 1px #000;
-  white-space: nowrap;
 }
 
 .sitelink {
@@ -13940,10 +13936,10 @@ i {
 }
 
 @media screen and (max-width: 1500px) {
-#clock {
-  padding-top: 9px;
-  font-size: 16pt;
-}
+  #clock {
+    padding-top: 9px;
+    font-size: 16pt;
+  }
 }
 
 .sybilscan table, .sybilscan tr {
