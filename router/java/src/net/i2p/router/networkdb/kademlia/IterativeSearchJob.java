@@ -54,7 +54,7 @@ import net.i2p.util.VersionComparator;
  * Advantages: Much more robust than FOSJ, especially in a large network
  * where not all floodfills are known. Longer total timeout.
  * Halves search traffic for successful searches, as this doesn't do
- * two sesarches in parallel like FOSJ does.
+ * two searches in parallel like FOSJ does.
  *
  * Public only for JobQueue, not a public API, not for external use.
  *
