@@ -4875,7 +4875,7 @@ h3.dead span {
 }
 
 @media screen and (max-width: 1000px) {
-  #tunnels .tunneldisplay .cells span, #tunnels .tunneldisplay .cells .tunnel_cap, #tunnels .tunneldisplay .cells tt {
+  #tunnels .tunneldisplay td:nth-child(n+2) span, #tunnels .tunneldisplay .cells .tunnel_cap, #tunnels .tunneldisplay .cells tt {
     margin: 1px !important;
     padding: 0 !important;
     display: inline-block;
@@ -4885,6 +4885,19 @@ h3.dead span {
     box-shadow: none !important;
     background: none !important;
   }
+
+  #tunnels .tunneldisplay .cells span.inbound, #tunnels .tunneldisplay .cells span.outbound {
+    margin: 1px !important;
+    padding: 0 !important;
+    display: inline-block;
+    vertical-align: middle;
+    line-height: 120% !important;
+  }
+
+  span.inbound, span.outbound {
+    background-size: 12px 12px !important;
+  }
+
   #tunnels .tunneldisplay .cells .tunnel_cap {
     min-width: 0;
     text-align: left;
@@ -14430,12 +14443,12 @@ h3 + table {
 }
 
 .inbound, .outbound  {
-  width: 16px;
-  height: 16px;
+  width: 14px;
+  height: 14px;
   display: inline-block;
   vertical-align: middle;
   background: url(images/in.png) center center no-repeat;
-  background-size: 16px 16px !important;
+  background-size: 14px 14px !important;
 }
 
 .inbound.small, .outbound.small {
