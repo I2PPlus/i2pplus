@@ -2319,7 +2319,7 @@ to {
 
 .sb_netstatus {
   margin: -3px -1px -4px;
-  padding: 7px 3px;
+  padding: 7px;
   width: 100%;
   display: inline-block;
   line-height: 120%;
