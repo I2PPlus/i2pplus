@@ -7497,6 +7497,11 @@ h3#iptransport a::after, h3#advancedconfig a::after, #reseedsetup a::after {
   content: "";
 }
 
+h3#iptransport a:hover::after, h3#advancedconfig a:hover::after, #reseedsetup a:hover::after {
+  background: url(images/helplink_hover.svg) center center no-repeat;
+  background-size: 16px 16px !important;
+}
+
 @media screen and (min-width: 1500px) {
   h3#iptransport a::after, h3#advancedconfig a::after, #reseedsetup a::after {
     margin: 0 0 -2px -4px;
@@ -7504,12 +7509,12 @@ h3#iptransport a::after, h3#advancedconfig a::after, #reseedsetup a::after {
     height: 20px;
     background-size: 20px 20px !important;
   }
-}
-
-h3#iptransport a:hover::after, h3#iptransport a:focus::after,
-h3#advancedconfig a:hover::after, h3#advancedconfig a:focus::after,
-#reseedsetup a:hover::after, #reseedsetup a:focus::after {
-  filter: drop-shadow(0 0 2px #f60);
+  h3#iptransport a:hover::after, h3#advancedconfig a:hover::after, #reseedsetup a:hover::after {
+    background-size: 20px 20px !important;
+  }
+  h3#advancedconfig a::after {
+    margin: -1px -6px -2px -5px;
+  }
 }
 
 #logs h3 a {
@@ -10341,8 +10346,8 @@ th.options, #externali2cp th {
     min-width: 80px !important;
   }
   .tunneldisplay .tunnel_peer.tunnel_local {
-    min-width: 78px !important;
-    margin: 0 3px 0 0 !important;
+    min-width: 76px !important;
+    margin: 0 2px 0 0 !important;
   }
   .tunneldisplay .tunnel_peer + b.tunnel_cap {
     margin: 0 0 0 -1px !important;
