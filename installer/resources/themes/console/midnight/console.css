@@ -1719,9 +1719,9 @@ div.logo hr {
 }
 
 @media screen and (min-width: 1500px) {
-#sb_localtunnels a {
-  max-width: 188px;
-}
+  #sb_localtunnels a {
+    max-width: 188px;
+  }
 }
 
 #sb_localtunnels img {
@@ -1776,6 +1776,10 @@ div.logo hr {
 
 #sb_localtunnels td.tunnelReady {
   background-image: url(/themes/console/images/local_up.png) !important;
+}
+
+#sb_localtunnels td.tunnelBuilding {
+  background-image: url(/themes/console/images/local_down.png) !important;
 }
 
 #sb_localtunnels tr:hover td {
