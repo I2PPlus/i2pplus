@@ -702,6 +702,10 @@ pre {
   background-image: url(/themes/console/images/local_up.png) !important;
 }
 
+#sb_localtunnels td.tunnelBuilding {
+  background-image: url(/themes/console/images/local_down.png) !important;
+}
+
 #sb_localtunnels td[colspan="3"] {
   line-height: 20px;
   font-size: 0 !important;

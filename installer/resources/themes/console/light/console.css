@@ -493,6 +493,10 @@ h4.sb_info + hr + form {
   background-image: url(/themes/console/images/local_up.png) !important;
 }
 
+#sb_localtunnels td.tunnelBuilding {
+  background-image: url(/themes/console/images/local_down.png) !important;
+}
+
 #sb_localtunnels a {
   display: inline-block;
   width: 100%;
