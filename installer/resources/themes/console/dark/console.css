@@ -927,19 +927,18 @@ div.refresh {
 .percentBarouter {
   margin: -3px 0 -5px -7px;
   width: 205px;
+  border: 1px solid #131;
+  box-shadow: 0 0 1px 1px rgba(0,0,0,.8), inset 0 0 0 1px #000, inset 0 3px 3px rgba(0,0,0,.7);
   background: #000;
-  background: repeating-linear-gradient(to right, #000 1px, #000 2px, #010 2px, #010 4px);
-  border: 1px solid #040;
-  border-bottom: 1px solid #020;
-  border-right: 1px solid #020;
+  background: linear-gradient(to right, rgba(0,128,0,0) 40%, rgba(255,96,0,.06), rgba(255,0,0,.08)),
+              repeating-linear-gradient(to right, #000 1px, #000 2px, #010 2px, #010 4px);
   opacity: 1;
-  box-shadow: 0 0 1px 1px rgba(0,0,0,.8), inset 0 0 0 1px #000, inset 0 0 3px 3px rgba(0,0,0,.5);
 }
 
 @media screen and (min-width: 1500px) {
-.percentBarouter {
-  width: 251px;
-}
+  .percentBarouter {
+    width: 251px;
+  }
 }
 
 .percentBarouter:hover .percentBarText {
@@ -950,13 +949,15 @@ div.refresh {
 .percentBarInner {
   height: 14px;
   max-width: 100%;
-  background: #0e5f00;
-  background: linear-gradient(to bottom, rgba(28, 148, 58, .6), rgba(9, 47, 16, .6) 50%, rgba(13, 39, 7, .6) 50%, rgba(9, 27, 5, .6) 50%, rgba(9, 21, 3, .6));
+  border-right: 1px solid #131;
   box-shadow: inset 0 0 0 1px #000;
+  background: #0e5f00;
+  background: linear-gradient(to bottom, rgba(28, 148, 58, .6), rgba(9, 47, 16, .6) 50%, rgba(9, 27, 5, .6) 50%, rgba(9, 21, 3, .6));
 }
 
 #sb_memoryBar .percentBarInner {
-  background: linear-gradient(to right, rgba(0,0,0,.05), rgba(128,128,0,.15) 160px, rgba(196,0,0,.15) 180px, rgba(196,0,0,.2)), linear-gradient(to bottom, rgba(28, 148, 58, .6), rgba(9, 47, 16, .6) 50%, rgba(13, 39, 7, .6) 50%, rgba(9, 27, 5, .6) 50%, rgba(9, 21, 3, .6));
+  background: linear-gradient(to right, rgba(0,0,0,.05), rgba(128,128,0,.15) 160px, rgba(196,0,0,.15) 180px, rgba(196,0,0,.2)),
+              linear-gradient(to bottom, rgba(28, 148, 58, .6), rgba(9, 47, 16, .6) 50%, rgba(9, 27, 5, .6) 50%, rgba(9, 21, 3, .6), rgba(0,0,0,0.3));
 }
 
 .percentBarText {
@@ -967,6 +968,12 @@ div.refresh {
   float: left;
   opacity: 0;
   transition: ease opacity .2s;
+}
+
+@media screen and (min-width: 1500px) {
+  #sb_memoryBar .percentBarText {
+    margin-top: -2px;
+  }
 }
 
 /* update bar */
@@ -5356,10 +5363,6 @@ ul#upnphelp li:last-child, #legal ul li:last-child {
   border-right: 1px solid #131;
 }
 
-#netdboverview td:nth-child(3):empty {
-  display: none;
-}
-
 #netdboverview table th, #netdboverview table td {
   padding: 6px 8px !important;
 }
@@ -7496,13 +7499,10 @@ h3#iptransport a::after, h3#advancedconfig a::after, #reseedsetup a::after {
 
 @media screen and (min-width: 1500px) {
   h3#iptransport a::after, h3#advancedconfig a::after, #reseedsetup a::after {
-    margin: -2px 0 -2px 0;
+    margin: 0 0 -2px -4px;
     width: 20px;
     height: 20px;
     background-size: 20px 20px !important;
-  }
-  #reseedsetup a::after {
-    margin: 0 4px -2px 0;
   }
 }
 
@@ -14652,3 +14652,7 @@ h1, .main h2, h4.app, h4.app2, .main h3 {
 }
 
 /* end highlight linked leaseset */
+
+.infohelp.vmcomm {
+  margin-bottom: 0;
+}

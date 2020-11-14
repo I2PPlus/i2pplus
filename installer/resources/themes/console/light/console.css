@@ -7149,10 +7149,10 @@ th code {
 }
 
 .netdbentry th a img {
+  margin-top: -2px;
+  margin-right: 1px;
   display: inline-block;
   vertical-align: middle;
-  margin-right: 1px;
-  margin-top: -2px;
 }
 
 .netdbentry td:first-child {
@@ -7160,8 +7160,8 @@ th code {
 }
 
 b.netdb_transport {
-  display: inline-block;
   margin-right: 3px;
+  display: inline-block;
 }
 
 #netdb code {
@@ -7169,9 +7169,9 @@ b.netdb_transport {
 }
 
 .netdb_name {
-  color: #41465f;
   text-transform: capitalize;
   font-weight: bold;
+  color: #41465f;
 }
 
 .netdb_info {
@@ -7202,17 +7202,17 @@ b.netdb_transport {
 }
 
 .netdbentry tr:nth-child(2) td:last-child {
-  text-align: right;
-  white-space: nowrap;
   min-width: 140px;
+  white-space: nowrap;
+  text-align: right;
 }
 
 .netdbentry .familyname {
   max-width: 140px;
-  overflow: hidden;
-  vertical-align: text-bottom;
-  text-overflow: ellipsis;
   white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  vertical-align: text-bottom;
 }
 
 .netdbStats {

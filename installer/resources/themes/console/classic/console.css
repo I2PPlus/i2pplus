@@ -5685,8 +5685,8 @@ a.viewfullentry:hover {
 }
 
 #leasesetdebug th, #leasesetsummary th {
-  font-weight: bold;
   padding: 8px 5px;
+  font-weight: bold;
   text-align: left;
 }
 
@@ -5695,10 +5695,10 @@ a.viewfullentry:hover {
 }
 
 #leasesetdebug th a, #leasesetsummary th a {
+  word-spacing: normal;
+  letter-spacing: normal;
   font-size: 8pt;
   text-transform: capitalize;
-  letter-spacing: normal;
-  word-spacing: normal;
 }
 
 #leasesetdebug th a:not(old), #leasesetsummary th a:not(old) {
@@ -5713,8 +5713,8 @@ a.viewfullentry:hover {
 }
 
 #leasesetdebug td:nth-child(even) {
-  text-align: left;
   white-space: nowrap;
+  text-align: left;
 }
 
 #leasesetdebug td:nth-child(2) {
@@ -5722,8 +5722,8 @@ a.viewfullentry:hover {
 }
 
 .leaseset {
-  font-size: 9pt;
   margin: 5px 0 10px;
+  font-size: 9pt;
 }
 
 .leaseset:last-child {
@@ -5731,14 +5731,14 @@ a.viewfullentry:hover {
 }
 
 .leaseset th {
-  font-weight: normal;
   padding: 5px;
   text-align: left;
+  font-weight: normal;
 }
 
 .leaseset th:last-child, .leaseset td:nth-child(2) {
-  text-align: right;
   padding-right: 5px;
+  text-align: right;
 }
 
 .addtobook {
@@ -5758,12 +5758,12 @@ a.viewfullentry:hover {
 }
 
 #noleasesets, #notinitialized, .netdbnotfound {
-  border: 1px solid #aaafce;
-  padding: 20px;
-  font-weight: bold;
-  background: #eff1ff;
   margin: 10px 0 7px;
+  padding: 20px;
   text-align: center;
+  font-weight: bold;
+  border: 1px solid #aaafce;
+  background: #eff1ff;
 }
 
 .sybil_routerinfo {
@@ -5792,9 +5792,9 @@ a.viewfullentry:hover {
 }
 
 .sybil_routerinfo img[width="32"] {
+  margin: -1px;
   width: 24px;
   height: 24px;
-  margin: -1px;
   border-left: 1px solid #aaafce;
 }
 
@@ -5805,9 +5805,9 @@ a.viewfullentry:hover {
 }
 
 #sybilnav, #sybils_summary {
-  border: 1px solid #aaafce;
-  padding: 10px;
   margin-bottom: 10px;
+  padding: 10px;
+  border: 1px solid #aaafce;
   background: #fff;
 }
 
