@@ -930,6 +930,11 @@ th .help::after {
   content: "";
 }
 
+th .help:hover::after, th .help:focus::after {
+  background: url(images/helplink_hover.svg) center center no-repeat;
+  background-size: 16px 16px;
+}
+
 #filter {
   vertical-align: top;
 }
@@ -1465,23 +1470,23 @@ input[type=text] + label {
 }
 
 @media screen and (min-width: 1500px) {
-th {
-  font-size: 10pt;
-}
+  th {
+    font-size: 10pt;
+  }
 
-th .help::after {
-  width: 20px;
-  height: 20px;
-  background-size: 20px 20px;
-}
+  th .help::after, th .help:hover::after, th .help:focus::after {
+    width: 20px;
+    height: 20px;
+    background-size: 20px 20px;
+  }
 
-.displayText, .displayText:empty:hover, .displayText:empty:focus {
-  width: 552px;
-}
+  .displayText, .displayText:empty:hover, .displayText:empty:focus {
+    width: 552px;
+  }
 
-#registration .displayText {
-  width: 800px;
-}
+  #registration .displayText {
+    width: 800px;
+  }
 }
 
 #keyringManager {
