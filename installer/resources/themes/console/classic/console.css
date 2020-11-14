@@ -5685,13 +5685,9 @@ a.viewfullentry:hover {
 }
 
 #leasesetdebug th, #leasesetsummary th {
-  font-weight: bold;
   padding: 8px 5px;
+  font-weight: bold;
   text-align: left;
-}
-
-#leasesetdebug th:last-child, #leasesetsummary th:last-child {
-  text-align: right;
 }
 
 #leasesetdebug th:first-child, #leasesetsummary th:first-child {
@@ -5699,22 +5695,14 @@ a.viewfullentry:hover {
 }
 
 #leasesetdebug th a, #leasesetsummary th a {
+  word-spacing: normal;
+  letter-spacing: normal;
   font-size: 8pt;
   text-transform: capitalize;
-  letter-spacing: normal;
-  word-spacing: normal;
 }
 
 #leasesetdebug th a:not(old), #leasesetsummary th a:not(old) {
   font-size: 0;
-}
-
-#leasesetdebug th a::after, #leasesetsummary th a::after {
-  content: url(/themes/console/images/buttons/floodfill.png);
-}
-
-#leasesetdebug th a:hover, #leasesetsummary th a:hover {
-  filter: drop-shadow(0 0 1px #f60);
 }
 
 #leasesetdebug td:nth-child(odd) {
@@ -5725,8 +5713,8 @@ a.viewfullentry:hover {
 }
 
 #leasesetdebug td:nth-child(even) {
-  text-align: left;
   white-space: nowrap;
+  text-align: left;
 }
 
 #leasesetdebug td:nth-child(2) {
@@ -5734,8 +5722,8 @@ a.viewfullentry:hover {
 }
 
 .leaseset {
-  font-size: 9pt;
   margin: 5px 0 10px;
+  font-size: 9pt;
 }
 
 .leaseset:last-child {
@@ -5743,14 +5731,14 @@ a.viewfullentry:hover {
 }
 
 .leaseset th {
-  font-weight: normal;
   padding: 5px;
   text-align: left;
+  font-weight: normal;
 }
 
 .leaseset th:last-child, .leaseset td:nth-child(2) {
-  text-align: right;
   padding-right: 5px;
+  text-align: right;
 }
 
 .addtobook {
@@ -5770,12 +5758,12 @@ a.viewfullentry:hover {
 }
 
 #noleasesets, #notinitialized, .netdbnotfound {
-  border: 1px solid #aaafce;
-  padding: 20px;
-  font-weight: bold;
-  background: #eff1ff;
   margin: 10px 0 7px;
+  padding: 20px;
   text-align: center;
+  font-weight: bold;
+  border: 1px solid #aaafce;
+  background: #eff1ff;
 }
 
 .sybil_routerinfo {
@@ -5804,9 +5792,9 @@ a.viewfullentry:hover {
 }
 
 .sybil_routerinfo img[width="32"] {
+  margin: -1px;
   width: 24px;
   height: 24px;
-  margin: -1px;
   border-left: 1px solid #aaafce;
 }
 
@@ -5817,9 +5805,9 @@ a.viewfullentry:hover {
 }
 
 #sybilnav, #sybils_summary {
-  border: 1px solid #aaafce;
-  padding: 10px;
   margin-bottom: 10px;
+  padding: 10px;
+  border: 1px solid #aaafce;
   background: #fff;
 }
 
@@ -12261,3 +12249,41 @@ from {
 }
 
 /* end highlight linked leaseset */
+
+.lsdest, .leaseset th:last-child a[href$="i2p/"] {
+  margin-left: 3px;
+  padding: 2px 4px 4px;
+  display: inline-block;
+  border: 1px solid #bbc;
+  border-radius: 2px;
+  background: #f2f2ff;
+  background: linear-gradient(to bottom, #fff, #eef);
+}
+
+.lsdest, .leaseset a[href$="i2p/"], .leaseset a[href$="i2p"] {
+  font-size: 90%;
+}
+
+.lsdest {
+  padding-left: 22px;
+  border-radius: 0;
+  border-left-width: 4px;
+  border-right-width: 4px;
+  background: url(/themes/console/images/svg/hardhat.svg) 4px center no-repeat, linear-gradient(to bottom, #fff, #eef);
+  background-size: auto 14px, 100% 100%;
+}
+
+.lsdest.published {
+  padding-left: 38px;
+  background: url(/themes/console/images/svg/hardhat.svg) 4px center no-repeat,
+              url(/themes/console/images/svg/globe.svg) 22px center no-repeat,
+              linear-gradient(to bottom, #fff, #eef);
+  background-size: auto 14px, auto 12px, 100% 100%;
+}
+
+.leaseset th:last-child a[href$="i2p/"] {
+  padding-left: 22px;
+  background: #f2f2ff url(/themes/console/images/svg/link.svg) 5px center no-repeat;
+  background: url(/themes/console/images/svg/link.svg) 5px center no-repeat, linear-gradient(to bottom, #fff, #eef);
+  background-size: 12px 12px, 100% 100%;
+}

@@ -444,6 +444,7 @@ h4.sb_info + hr + form {
 
 #sb_localtunnels td:first-child img {
   margin: 0 0 2px !important;
+  opacity: 0;
 }
 
 #sb_localtunnels td img {
@@ -460,24 +461,24 @@ h4.sb_info + hr + form {
 }
 
 #sb_localtunnels td:last-child {
-  text-align: right !important;
-  width: 16px;
   padding: 2px 0 2px 2px;
+  width: 16px;
+  text-align: right !important;
   border-radius: 0 2px 2px 0;
 }
 
-#sb_localtunnels td:first-child {
+#sb_localtunnels td:first-child, #sb_localtunnels tr:hover td:first-child {
   background-image: url(/themes/console/images/svg/client.svg) !important;
-  background-position: center 1px !important;
+  background-position: center center !important;
   background-repeat: no-repeat !important;
   background-size: 16px 16px !important;
 }
 
-#sb_localtunnels td.tunnelServer {
+#sb_localtunnels td.tunnelServer, #sb_localtunnels tr:hover td.tunnelServer {
   background-image: url(/themes/console/images/svg/server.svg) !important;
 }
 
-#sb_localtunnels td.ping {
+#sb_localtunnels td.ping, #sb_localtunnels tr:hover td.ping {
   background-image: url(/themes/console/images/svg/ping.svg) !important;
 }
 
@@ -508,7 +509,7 @@ h4.sb_info + hr + form {
 }
 
 #sb_localtunnels tr:hover td {
-  background: #fffff0 !important;
+  background: #ffd !important;
 }
 
 #sb_internals, #sb_advanced, #sb_help {
@@ -561,9 +562,9 @@ h4.sb_info + hr + form {
 
 #sb_general td::after, #sb_shortgeneral td::after, #sb_advancedgeneral td::after, #sb_bandwidth td::after,
 #sb_peers td::after, #sb_peersadvanced td::after, #sb_tunnels td::after, #sb_queue td::after {
-   content: "";
-   display: inline-block;
    min-height: 13px;
+   display: inline-block;
+   content: "";
 }
 
 #sb_peers td:first-child, #sb_peersadvanced td:first-child, #sb_tunnels td:first-child, #sb_queue td:first-child, #sb_bandwidth td:first-child,
@@ -584,12 +585,12 @@ h4.sb_info + hr + form {
 }
 
 .separator hr, .separator hr:last-child {
-  color: transparent;
-  background: transparent;
-  height: 1px;
-  border-bottom: 1px dashed #adadeb !important;
   margin: 3px 0 -10px !important;
+  height: 1px;
   display: block !important;
+  color: transparent;
+  border-bottom: 1px dashed #adadeb !important;
+  background: transparent;
 }
 
 #profiles .separator hr {
@@ -1140,7 +1141,7 @@ to {
 }
 
 .routersummary .vmcomm {
-  border: 1px dotted #97a2ce;
+  border: 1px solid #97a2ce;
 }
 
 .routersummary .running, .tunnelBuildStatus.accepting {
@@ -7148,10 +7149,10 @@ th code {
 }
 
 .netdbentry th a img {
+  margin-top: -2px;
+  margin-right: 1px;
   display: inline-block;
   vertical-align: middle;
-  margin-right: 1px;
-  margin-top: -2px;
 }
 
 .netdbentry td:first-child {
@@ -7159,8 +7160,8 @@ th code {
 }
 
 b.netdb_transport {
-  display: inline-block;
   margin-right: 3px;
+  display: inline-block;
 }
 
 #netdb code {
@@ -7168,9 +7169,9 @@ b.netdb_transport {
 }
 
 .netdb_name {
-  color: #41465f;
   text-transform: capitalize;
   font-weight: bold;
+  color: #41465f;
 }
 
 .netdb_info {
@@ -7201,17 +7202,17 @@ b.netdb_transport {
 }
 
 .netdbentry tr:nth-child(2) td:last-child {
-  text-align: right;
-  white-space: nowrap;
   min-width: 140px;
+  white-space: nowrap;
+  text-align: right;
 }
 
 .netdbentry .familyname {
   max-width: 140px;
-  overflow: hidden;
-  vertical-align: text-bottom;
-  text-overflow: ellipsis;
   white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  vertical-align: text-bottom;
 }
 
 .netdbStats {
@@ -7449,17 +7450,6 @@ b.netdb_transport {
   font-size: 0;
 }
 
-#leasesetdebug th a::after, table#leasesetsummary th a::after {
-  content: url(/themes/console/images/buttons/floodfill.png);
-  vertical-align: text-top;
-  padding-right: 0;
-  filter: drop-shadow(0 0 1px #97a2ce);
-}
-
-#leasesetdebug th a:hover, table#leasesetsummary th a:hover {
-  filter: drop-shadow(0 0 1px #f60);
-}
-
 #leasesetdebug th, #leasesetsummary th, #leasesetdebug td, #leasesetsummary td {
   white-space: nowrap;
 }
@@ -7476,11 +7466,6 @@ b.netdb_transport {
   text-transform: uppercase;
   letter-spacing: .08em;
   word-spacing: .1em;
-}
-
-#leasesetdebug th:last-child, #leasesetsummary th:last-child {
-  text-align: right;
-  font-size: 90%;
 }
 
 #leasesetdebug td, .leaseset td, #leasesetsummary td {
@@ -7573,7 +7558,7 @@ b.netdb_transport {
 
 .leaseset td a[href$=".i2p"] {
   margin-left: 6px;
-  font-size: 80%;
+  font-size: 90%;
 }
 
 .addtobook {
@@ -13440,3 +13425,37 @@ div.app:not(:hover) a:not(:hover):not(:focus):not(:active):visited,
 }
 
 /* end highlight linked leaseset */
+
+.lsdest, .leaseset th:last-child a[href$="i2p/"] {
+  margin-left: 3px;
+  padding: 2px 4px 4px;
+  display: inline-block;
+  border: 1px solid #bbc;
+  border-radius: 2px;
+  background: #f2f2ff;
+  background: linear-gradient(to bottom, #fff, #eef);
+}
+
+.lsdest {
+  padding-left: 22px;
+  border-radius: 0;
+  border-left-width: 4px;
+  border-right-width: 4px;
+  background: url(/themes/console/images/svg/hardhat.svg) 4px center no-repeat, linear-gradient(to bottom, #fff, #eef);
+  background-size: auto 14px, 100% 100%;
+}
+
+.lsdest.published {
+  padding-left: 38px;
+  background: url(/themes/console/images/svg/hardhat.svg) 4px center no-repeat,
+              url(/themes/console/images/svg/globe.svg) 22px center no-repeat,
+              linear-gradient(to bottom, #fff, #eef);
+  background-size: auto 14px, auto 12px, 100% 100%;
+}
+
+.leaseset th:last-child a[href$="i2p/"] {
+  padding-left: 22px;
+  background: #f2f2ff url(/themes/console/images/svg/link.svg) 5px center no-repeat;
+  background: url(/themes/console/images/svg/link.svg) 5px center no-repeat, linear-gradient(to bottom, #fff, #eef);
+  background-size: 12px 12px, 100% 100%;
+}
