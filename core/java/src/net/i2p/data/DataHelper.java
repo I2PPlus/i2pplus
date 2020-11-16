@@ -669,7 +669,7 @@ public class DataHelper {
     public static long readLong(InputStream rawStream, int numBytes)
         throws DataFormatException, IOException {
         if (numBytes > 8)
-            throw new DataFormatException("readLong doesn't currently support reading numbers > 8 bytes [as thats bigger than java's long]");
+            throw new DataFormatException("readLong doesn't currently support reading numbers > 8 bytes [as that's bigger than Java's long]");
 
         long rv = 0;
         for (int i = 0; i < numBytes; i++) {
@@ -785,7 +785,7 @@ public class DataHelper {
             rv |= src[i] & 0xFF;
         }
         if (rv < 0)
-            throw new IllegalArgumentException("fromLong got a negative? " + rv + ": offset="+ offset +" numBytes="+numBytes);
+            throw new IllegalArgumentException("fromLong got a negative? " + rv + ": offset=" + offset + " numBytes=" + numBytes);
         return rv;
     }
 
@@ -806,7 +806,7 @@ public class DataHelper {
             rv |= src[i] & 0xFF;
         }
         if (rv < 0)
-            throw new IllegalArgumentException("fromLong got a negative? " + rv + ": offset="+ offset +" numBytes="+numBytes);
+            throw new IllegalArgumentException("fromLong got a negative? " + rv + ": offset="+ offset + " numBytes=" + numBytes);
         return rv;
     }
 
@@ -945,7 +945,7 @@ public class DataHelper {
             int len = string.length();
             if (len > 255)
                 throw new DataFormatException("The I2P data spec limits strings to 255 bytes or less, but this is "
-                                              + len + " [" + string + "]");
+                                              + len + " bytes [" + string + "]");
             out.write((byte) len);
             for (int i = 0; i < len; i++)
                 out.write((byte)(string.charAt(i) & 0xFF));
@@ -975,7 +975,7 @@ public class DataHelper {
             int len = raw.length;
             if (len > 255)
                 throw new DataFormatException("The I2P data spec limits strings to 255 bytes or less, but this is "
-                                              + len + " [" + string + "]");
+                                              + len + " bytes [" + string + "]");
             out.write((byte) len);
             out.write(raw);
         }
@@ -1183,7 +1183,7 @@ public class DataHelper {
     public static int hashCode(byte b[]) {
         // Java 5 now has its own method, and the old way
         // was horrible for arrays much smaller than 32.
-        // otoh, for sizes >> 32, java's method may be too slow
+        // otoh, for sizes >> 32, Java's method may be too slow
         int rv = 0;
         if (b != null) {
             if (b.length <= 32) {
@@ -1573,13 +1573,25 @@ public class DataHelper {
             val /= 1024;
         }
 
-        DecimalFormat fmt = new DecimalFormat("##0.##");
+        DecimalFormat fmt = new DecimalFormat("##0.###");
+
+        if (bytes <= 1 * 1024 * 1024) { // 1MiB
+            fmt.setMaximumFractionDigits(0);
+
+        } else if (bytes <= 1 * 1024 * 1024 * 1024) { // 1GiB
+            fmt.setMaximumFractionDigits(1);
+
+        } else if (bytes <= 1 * 1024 * 1024 * 1024 * 1024) { // 1TiB
+            fmt.setMaximumFractionDigits(2);
+        }
+
+/*
         if (val >= 200) {
             fmt.setMaximumFractionDigits(0);
         } else if (val >= 20) {
             fmt.setMaximumFractionDigits(1);
         }
-
+*/
         // Replace &nbsp; with thin non-breaking space &#8239; (more consistent/predictable width between fonts & point sizes)
 
         String str = fmt.format(val) + space;
