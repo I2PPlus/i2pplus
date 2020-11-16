@@ -151,12 +151,14 @@ public class InfoHelper extends HelperBase {
         // basic router information
         buf.append("<table>\n");
         if (h != null)
-            buf.append("<tr><td><b>" + _t("Identity") + ":</b></td><td><code><a href=\"/netdb?r=.\" title =\"" + _t("Network Database entry") + "\">" + h.toBase64() + "</a></code></td></tr>\n");
+            buf.append("<tr><td><b>" + _t("Identity") + ":</b></td><td><code><a href=\"/netdb?r=.\" title =\"" +
+                       _t("Network Database entry") + "\">" + h.toBase64() + "</a></code></td></tr>\n");
         if (getUdpIP() != null && getUdpPort() != null) {
             buf.append("<tr><td><b>" + _t("IP Address") + ":</b></td><td>" + getUdpIP());
             if (lastCountry() != null)
                 buf.append(" &ensp;<img width=20 height=15 src=\"/flags.jsp?c=" + lastCountry() + "\">");
-            buf.append(" &ensp;<b>" + _t("UDP Port") + ":</b> " + getUdpPort() + " &ensp;<b>" + _t("Status") + ":</b> " + _t(_context.commSystem().getStatus().toStatusString()));
+            buf.append(" &ensp;<b>" + _t("UDP Port") + ":</b> " + getUdpPort() + " &ensp;<b>" + _t("Status") +
+                       ":</b> " + _t(_context.commSystem().getStatus().toStatusString()));
             buf.append(" &ensp;<b>" + _t("Floodfill Role") + ":</b> ");
             if (_context.netDb().floodfillEnabled())
                 buf.append(_t("Active"));
@@ -168,8 +170,10 @@ public class InfoHelper extends HelperBase {
             buf.append("&ensp;<a href=\"/configadvanced\">" + _t("Configure") + "</a></td></tr>\n");
         }
         if (bwIn() != null && bwOut() != null && bwShare() != null) {
-            buf.append("<tr><td><b>" + _t("Bandwidth") + ":</b></td><td><b>" +  _t("Inbound") + ":</b> " + bwIn() + "KB/s &ensp;<b>" + _t("Outbound") + ":</b> " + bwOut() + "KB/s &ensp;<b>" +
-                       _t("Shared") + ":</b> " + bwShare() + "% (" + shareBW + "KB/s) &ensp;<a href=\"/config\">" + _t("Configure") + "</a></td></tr>\n");
+            buf.append("<tr><td><b>" + _t("Bandwidth") + ":</b></td><td><b>" +  _t("Inbound") + ":</b> " + bwIn() +
+                       "KB/s &ensp;<b>" + _t("Outbound") + ":</b> " + bwOut() + "KB/s &ensp;<b>" +
+                       _t("Shared") + ":</b> " + bwShare() + "% (" + shareBW + "KB/s) &ensp;<a href=\"/config\">" +
+                       _t("Configure") + "</a></td></tr>\n");
         }
         if (firstInstalled() != null && firstVersion() != null && lastUpdated() != null) {
             buf.append("<tr><td><b>" + _t("Installed") + ":</b></td><td>" + installDate + " (" + firstVersion() + ")</td></tr>\n");
