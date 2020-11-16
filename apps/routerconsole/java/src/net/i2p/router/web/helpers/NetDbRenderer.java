@@ -559,6 +559,7 @@ class NetDbRenderer {
                         buf.append("<a class=\"destlink\" href=\"http://").append(host).append("/\">").append(host).append("</a></th>");
                     } else {
                         String b32 = key.toBase32();
+                        String truncb32 = b32.substring(0, 24);
                         buf.append("<code title=\"").append(_t("Destination")).append("\">");
                         if (dest != null)
                             buf.append(dest.toBase64().substring(0, 6));
@@ -567,7 +568,7 @@ class NetDbRenderer {
                         buf.append("</code></th></tr>\n<tr>\n<td");
                         if (!linkSusi)
                             buf.append(" colspan=\"2\"");
-                        buf.append("><a href=\"http://").append(b32).append("\">").append(b32).append("</a></td>\n");
+                        buf.append("><a href=\"http://").append(b32).append("\">").append(truncb32).append("&hellip;b32.i2p</a></td>\n");
                         if (linkSusi && dest != null) {
                             buf.append("<td class=\"addtobook\"><a title=\"").append(_t("Add to addressbook"))
                                .append("\" href=\"/susidns/addressbook.jsp?book=private&amp;destination=")
