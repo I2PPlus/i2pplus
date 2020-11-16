@@ -27,9 +27,11 @@ import java.util.Date;
 /**
  * Defines the base message implementation.
  *
+ * Note: No longer extends DataStructureImpl as of 0.9.48
+ *
  * @author jrandom
  */
-public abstract class I2NPMessageImpl extends DataStructureImpl implements I2NPMessage {
+public abstract class I2NPMessageImpl implements I2NPMessage {
     protected final Log _log;
     protected final I2PAppContext _context;
     protected long _expiration;
@@ -216,7 +218,6 @@ public abstract class I2NPMessageImpl extends DataStructureImpl implements I2NPM
             return calculateWrittenLength()+5;
     }
 
-    @Override
     public byte[] toByteArray() {
         byte data[] = new byte[getMessageSize()];
         int written = toByteArray(data);

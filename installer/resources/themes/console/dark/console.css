@@ -12817,15 +12817,17 @@ h1.webapp {
 }
 
 h1[class], h1 {
-  padding-left: 56px;
+  padding-left: 64px;
   background-size: 38px auto, 100% 100%, 100% 100%, 164px 164px !important;
   background-blend-mode: difference, normal, exclusion, normal;
+  background-position: 14px center !important
 }
 
 @media screen and (max-width: 1500px) {
   h1[class], h1 {
     padding-left: 50px;
     background-size: 32px auto, 100% 100%, 100% 100%, 164px 164px !important;
+    background-position: 10px center !important
   }
 }
 
