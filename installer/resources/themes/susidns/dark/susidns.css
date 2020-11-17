@@ -3,6 +3,7 @@
 
 @import url(/themes/fonts/DroidSans.css);
 @import url(/themes/console/dark/optbox.css);
+@import url(/themes/console/dark/chromescroll.css);
 
 body, html {
   min-height: 100%;
