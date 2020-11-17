@@ -1095,26 +1095,39 @@ input.tunnelName, input.tunnelDescription, #userAgents {
   }
 }
 
-.username, .password {
+.username, .password, .filemanager {
   width: 200px;
+  box-shadow: inset 0 0 0 1px #000, inset 4px 4px 4px #000, 0 0 0 1px #000;
 }
 
 .username {
-  padding-left: 22px;
-  background: url(/themes/console/images/buttons/user.png) 4px center no-repeat, linear-gradient(to bottom, #000 0%, #010 100%) !important;
+  padding-left: 28px;
+  background: url(/themes/console/images/buttons/user.png) 6px center no-repeat, linear-gradient(to bottom, #001800, #001000) !important;
 }
 
 .password {
-  padding-left: 22px;
-  background: url(/themes/console/images/buttons/password.png) 4px center no-repeat, linear-gradient(to bottom, #000 0%, #010 100%) !important;
+  padding-left: 28px;
+  background: url(/themes/console/images/buttons/password.png) 6px center no-repeat, linear-gradient(to bottom, #001800, #001000) !important;
+}
+
+.filemanager {
+  padding-left: 28px !important;
+  background: url(/themes/console/images/svg/files.svg) 6px center no-repeat, linear-gradient(to bottom, #001800, #001000) !important;
+  background-size: 16px 16px, 100% 100% !important;
+}
+
+.filemanager:focus {
+  padding-left: 28px !important;
+  background: #000 url(/themes/console/images/svg/files.svg) 6px center no-repeat !important;
+  background-size: 16px 16px !important;
 }
 
 .username:focus {
-  background: #000 url(/themes/console/images/buttons/user.png) 4px center no-repeat !important;
+  background: #000 url(/themes/console/images/buttons/user.png) 6px center no-repeat !important;
 }
 
 .password:focus {
-  background: #000 url(/themes/console/images/buttons/password.png) 4px center no-repeat !important;
+  background: #000 url(/themes/console/images/buttons/password.png) 6px center no-repeat !important;
 }
 
 #notReady, #down {
