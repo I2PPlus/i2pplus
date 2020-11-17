@@ -22,7 +22,9 @@ import net.i2p.data.PublicKey;
 import net.i2p.data.SessionKey;
 import net.i2p.data.SessionTag;
 import net.i2p.data.TunnelId;
+import net.i2p.data.router.RouterIdentity;
 import net.i2p.data.router.RouterInfo;
+import net.i2p.router.LeaseSetKeys;
 import net.i2p.router.crypto.ratchet.RatchetSessionTag;
 import net.i2p.util.VersionComparator;
 
@@ -44,6 +46,8 @@ public class DatabaseLookupMessage extends FastI2NPMessageImpl {
     private RatchetSessionTag _ratchetReplyTag;
     private PublicKey _ratchetPubKey;
     private Type _type;
+
+    public static final boolean USE_ECIES_FF = false;
 
     //private static volatile long _currentLookupPeriod = 0;
     //private static volatile int _currentLookupCount = 0;
@@ -221,7 +225,13 @@ public class DatabaseLookupMessage extends FastI2NPMessageImpl {
         if (to == null)
             return false;
         String v = to.getVersion();
-        return VersionComparator.comp(v, MIN_ENCRYPTION_VERSION) >= 0;
+        if (VersionComparator.comp(v, MIN_ENCRYPTION_VERSION) < 0)
+            return false;
+        RouterIdentity ident = to.getIdentity();
+        EncType type = ident.getPublicKey().getType();
+        if (USE_ECIES_FF)
+            return LeaseSetKeys.SET_BOTH.contains(type);
+        return type == EncType.ELGAMAL_2048;
     }
 
     /**
@@ -234,7 +244,13 @@ public class DatabaseLookupMessage extends FastI2NPMessageImpl {
         if (to == null)
             return false;
         String v = to.getVersion();
-        return VersionComparator.comp(v, MIN_RATCHET_VERSION) >= 0;
+        if (VersionComparator.comp(v, MIN_RATCHET_VERSION) < 0)
+            return false;
+        RouterIdentity ident = to.getIdentity();
+        EncType type = ident.getPublicKey().getType();
+        if (USE_ECIES_FF)
+            return LeaseSetKeys.SET_BOTH.contains(type);
+        return type == EncType.ELGAMAL_2048;
     }
     
     /**
