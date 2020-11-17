@@ -703,7 +703,7 @@ pre {
   background-image: url(/themes/console/images/local_up.png) !important;
 }
 
-#sb_localtunnels td.tunnelBuilding {
+#sb_localtunnels td.tunnelRebuilding {
   background-image: url(/themes/console/images/local_down.png) !important;
 }
 

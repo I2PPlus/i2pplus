@@ -1778,7 +1778,7 @@ div.logo hr {
   background-image: url(/themes/console/images/local_up.png) !important;
 }
 
-#sb_localtunnels td.tunnelBuilding {
+#sb_localtunnels td.tunnelRebuilding {
   background-image: url(/themes/console/images/local_down.png) !important;
 }
 
@@ -1795,28 +1795,28 @@ div.logo hr {
 }
 
 #sb_services a:link, #sb_internals a:link, #sb_advanced a:link, #sb_help a:link {
-  word-break: break-all;
-  max-width: 191px;
-  overflow: hidden;
-  white-space: nowrap;
-  text-overflow: ellipsis;
-  line-height: 140%;
-  vertical-align: middle;
-  display: inline-block;
   padding: 1px .2em;
+  max-width: 191px;
+  display: inline-block;
+  line-height: 140%;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  word-break: break-all;
+  vertical-align: middle;
 }
 
 #sb_services a:hover, #sb_internals a:hover, #sb_advanced a:hover, #sb_localtunnels tr:hover, .sb_newsheadings a:hover,
 #sb_localtunnels tr:hover a, #sb_help a:hover, .news a:hover, #console a:hover, #help a:hover {
-  background-color: #1e0b28;
   color: #bf2295 !important;
   border-radius: 2px;
+  background-color: #1e0b28;
 }
 
 #sb_services a:active, #sb_internals a:active, #sb_advanced a:active, #sb_help a:active, .sb_newsheadings a:active,
 #sb_localtunnels tr:active, .news a:active, #console a:active, #help a:active {
-  background-color: #39144f;
   color: #fc1c66 !important;
+  background-color: #39144f;
 }
 
 #sb_localtunnels tr:active a {
@@ -1839,11 +1839,11 @@ div.logo hr {
 }
 
 #sb_peersadvanced .separator hr, #sb_peersadvanced .separator hr:last-child {
-  display: block !important;
   margin: 3px 0 2px !important;
+  display: block !important;
   color: transparent;
-  background: transparent;
   border-bottom: 1px dashed #2d296f;
+  background: transparent;
 }
 
 #sb_tunnels + hr + h4 {
@@ -1867,9 +1867,9 @@ div.logo hr {
 }
 
 @media screen and (min-width: 1500px) {
-.sb_notice {
-  margin-bottom: -8px;
-}
+  .sb_notice {
+    margin-bottom: -8px;
+  }
 }
 
 #sb_notice.hide, #sb_notice.hide + hr, #sb_updatesection.hide, #sb_updatesection.hide + hr {
@@ -1885,13 +1885,13 @@ div.logo hr {
 }
 
 @supports not (-moz-appearance: none) {
-.sb_notice {
-  margin-bottom: -6px !important;
-}
+  .sb_notice {
+    margin-bottom: -6px !important;
+  }
 
-.sb_netstatus, .tunnelBuildStatus {
-  margin-bottom: -4px !important;
-}
+  .sb_netstatus, .tunnelBuildStatus {
+    margin-bottom: -4px !important;
+  }
 }
 
 #sb_warning {
@@ -1930,9 +1930,9 @@ p:empty + .sb_notice {
 }
 
 .routersummary tr {
+  border: 0 !important;
   background-image: none !important;
   background-color: transparent !important;
-  border: 0 !important;
 }
 
 .routersummary form {
