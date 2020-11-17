@@ -4,7 +4,6 @@
    // http://www.crazysquirrel.com/computing/general/form-encoding.jspx
    if (request.getCharacterEncoding() == null)
        request.setCharacterEncoding("UTF-8");
-
    String i2pcontextId = request.getParameter("i2p.contextId");
    try {
        if (i2pcontextId != null) {
@@ -26,9 +25,11 @@
 <%
     java.io.File fpath = new java.io.File(net.i2p.I2PAppContext.getGlobalContext().getRouterDir(), "docs/news.xml");
 %>
- <jsp:setProperty name="newshelper" property="page" value="<%=fpath.getAbsolutePath()%>" />
- <jsp:setProperty name="newshelper" property="maxLines" value="300" />
+<jsp:setProperty name="newshelper" property="page" value="<%=fpath.getAbsolutePath()%>" />
+<jsp:setProperty name="newshelper" property="maxLines" value="300" />
 <!DOCTYPE HTML>
-<html><body id="sb">
+<html>
+<body id="sb">
 <%@include file="xhr1.jsi" %>
-</body></html>
+</body>
+</html>

@@ -5398,11 +5398,6 @@ ul#upnphelp li:last-child, #legal ul li:last-child {
   line-height: 1;
 }
 
-#netdbversions th, #netdbtransports th, #netdbcountrylist th, #netdbtiers th {
-/*  line-height: 150%;
-/*  border-top: 1px solid transparent !important;*/*/
-}
-
 #netdboverview #netdbtransports th {
   padding-top: 5px !important;
   padding-bottom: 5px !important;
@@ -5415,10 +5410,10 @@ ul#upnphelp li:last-child, #legal ul li:last-child {
 
 #netdboverview table th:first-child::before,
 #netdboverview table td:first-child::before {
-  content: "";
-  display: inline-block;
   min-height: 24px;
+  display: inline-block;
   vertical-align: middle;
+  content: "";
 }
 
 #netdboverview table span, #netdboverview table a[href^="/netdb?c"] {
@@ -5445,8 +5440,8 @@ ul#upnphelp li:last-child, #legal ul li:last-child {
 }
 
 #netdbtransports td:last-child, #netdbtiers td:last-child {
-  text-align: center;
   width: 30%;
+  text-align: center;
 }
 
 #netdbversions {
