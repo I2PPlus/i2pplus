@@ -811,7 +811,7 @@ img[src="/themes/console/images/i2plogo.png"] {
   background-image: url(/themes/console/images/local_up.png) !important;
 }
 
-#sb_localtunnels td.tunnelBuilding, #sb_localtunnels tr:hover td.tunnelBuilding {
+#sb_localtunnels td.tunnelRebuilding, #sb_localtunnels tr:hover td.tunnelRebuilding {
   background-image: url(/themes/console/images/local_down.png) !important;
 }
 
