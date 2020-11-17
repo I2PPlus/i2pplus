@@ -1,7 +1,8 @@
 /* I2PSnark theme "Camo" aka Dark */
 /* Author: dr|z3d */
 
-@import url("/themes/fonts/DroidSans.css");
+@import url(/themes/fonts/DroidSans.css);
+@import url(/themes/console/dark/chromescroll.css);
 
 html {
   min-height: 100%;
@@ -4789,14 +4790,6 @@ td input[type="image"]::after {
   border-right: 1px solid #252;
   box-shadow: inset 0 0 0 1px #000;
   background: linear-gradient(to bottom, #030 50%, #000 50%);
-}
-
-@supports (font-variant: all-petite-caps) and (not (-moz-appearance: none)) {
-#torrentDisplay label  {
-  padding: 1px 10px 5px;
-  font-variant: all-petite-caps;
-  font-size: 150%;
-}
 }
 
 #torrentDisplay label[for="all"] {

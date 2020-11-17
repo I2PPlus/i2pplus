@@ -3,7 +3,9 @@
 /* Thanks to Florian Kuhlmann for the hatface images. [http://www.flickr.com/photos/floriankuhlmann/] */
 /* Droid Sans font family and css3 compliant browser recommended for optimal results */
 
-@import url("/themes/fonts/DroidSans.css");
+@import url(/themes/fonts/DroidSans.css);
+@import url(/themes/console/dark/optbox.css);
+@import url(/themes/console/dark/chromescroll.css);
 
 html {
   min-height: 100%;
@@ -415,24 +417,6 @@ input, label {
 label:hover {
   color: #000;
 }
-
-input[type=radio], input[type=checkbox] {
-  vertical-align: middle;
-  background: none;
-  outline: none;
-  min-width: 16px;
-  min-height: 16px;
-  filter: sepia(100%) hue-rotate(185deg) drop-shadow(0 0 1px #ccf);
-}
-
-/*input[type=checkbox]:hover, input[type=checkbox]:focus, input[type=radio]:hover, input[type=radio]:focus {
-  filter: sepia(100%) hue-rotate(185deg) drop-shadow(0 0 3px #89f);
-}
-
-#attachedfile input[type=checkbox]:hover, #attachedfile input[type=checkbox]:focus,
-.mailListDelete input[type=checkbox]:hover, .mailListDelete input[type=checkbox]:focus{
-  filter: sepia(100%) hue-rotate(185deg) drop-shadow(0 0 2px #933);
-}*/
 
 input[type=text], input[type=password] {
   font-size: 9pt;
@@ -1861,113 +1845,6 @@ td p.error {
 }
 
 /* end attachments */
-
-/* custom radios/checkboxes to enforce color scheme when OS widgets are non-standard  */
-/*@media screen and (-webkit-min-device-pixel-ratio: 0) and (min-resolution:.001dpcm) {*/
-@supports (background-blend-mode: luminosity) { /* exclude ms browsers */
-input[type=checkbox], input[type=checkbox]:checked, input[type=checkbox][disabled], input[type=checkbox][disabled]:checked,
-input[type=radio], input[type=radio]:checked, input[type=radio][disabled], input[type=radio][disabled]:checked {
-  position: relative;
-  width: 19px !important;
-  height: 19px !important;
-  min-width: 19px !important;
-  outline: none;
-  vertical-align: middle !important;
-  box-sizing: border-box;
-  border: 1px solid #151 !important;
-  background: #010;
-  background: linear-gradient(to bottom, #020, #010);
-  -moz-appearance: none;
-  -webkit-appearance: inherit;
-  filter: drop-shadow(0 0 2px #000);
-  will-change: transform;
-}
-
-input[type=checkbox], input[type=checkbox]:checked, input[type=checkbox][disabled], input[type=checkbox][disabled]:checked {
-  border-radius: 2px;
-  box-shadow: inset 3px 3px 3px 1px #000;
-}
-
-input[type=radio], input[type=radio]:checked, input[type=radio][disabled], input[type=radio][disabled]:checked {
-  border-radius: 50%;
-  box-shadow: inset 3px 3px 3px 1px #000;
-}
-
-input[type=checkbox]:checked::before, input[type=radio]:checked::before,
-input[type=checkbox]:not(:checked)::before, input[type=radio]:not(:checked)::before {
-  position: absolute;
-  transition: linear all .05s;
-  transform: scale(1);
-}
-
-.optbox:not(:checked) {
-  box-shadow: inset 3px 3px 3px 1px #000;
-}
-
-.optbox:active {
-  background: #000 !important;
-}
-
-input[type=checkbox]:checked::before, input[type=checkbox]:not(:checked)::before {
-  content: "";
-  top: 3px;
-  left: 3px;
-  width: 11px;
-  height: 11px;
-  line-height: 80%;
-  font-family: sans-serif;
-  font-size: 15pt;
-  color: #5a5;
-  border-radius: 2px;
-  box-shadow: inset 0 0 0 1px rgba(16,48,16,.5), 0 0 0 1px #000;
-  background: #5a5;
-}
-
-input[type=radio]:checked::before {
-  content: "";
-  border-radius: 50%;
-  left: 25%;
-  top: 25%;
-  width: 9px;
-  height: 9px;
-  background: #5a5;
-}
-
-input[type=checkbox]:checked:hover::before {
-  color: #6b6;
-}
-
-input[type=radio]:checked:hover::before {
-  background: #6b6;
-}
-
-input[type=checkbox]:not(:checked)::before, input[type=radio]:not(:checked)::before {
-  transform: scale(0);
-  color: transparent;
-  background: transparent;
-}
-
-input[type=checkbox]:hover, input[type=radio]:hover, input[type=checkbox]:focus, input[type=radio]:focus {
-  background: #000;
-  width: 19px !important;
-  height: 19px !important;
-  border: 1px solid #5a5 !important;
-  box-shadow: 0 0 2px #f60 !important;
-  filter: drop-shadow(0 0 1px #f60) !important;
-}
-
-input[type=checkbox][disabled], input[type=radio][disabled], input[type=checkbox][disabled]:hover, input[type=radio][disabled]:hover,
-input[type=checkbox][disabled]:checked, input[type=radio][disabled]:checked, input[type=checkbox][disabled]:checked:hover, input[type=radio][disabled]:checked:hover {
-  border: 1px solid #252 !important;
-  box-shadow: none !important;
-  opacity: .5 !important;
-  background: #000;
-  filter: none !important;
-}
-}
-
-/* end custom radios/checkboxes */
-
 
 /* Edge/IE tweaks */
 
