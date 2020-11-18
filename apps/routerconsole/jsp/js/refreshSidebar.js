@@ -216,12 +216,6 @@ function refreshSidebar(timestamp) {
               }
             }
           }
-        } else {
-          function backgroundRefresh() {
-          var sbResponse = xhr.responseXML.getElementById("sb");
-          xhrContainer.innerHTML = sbResponse.innerHTML;
-          }
-          setTimeout(backgroundRefresh, 10000);
         }
 
       } else {

@@ -6,13 +6,19 @@
   import {refreshSidebar} from "/js/refreshSidebar.js";
   var refresh = parseInt(<%=intl.getRefresh()%>, 10);
   var visibility = document.visibilityState;
+  var repeat;
   if (refresh > 0) {
     window.requestAnimationFrame(refreshSidebar);
     if (visibility == "visible") {
-      setTimeout(function updateSidebar() {
-        window.requestAnimationFrame(refreshSidebar);
-        setTimeout(updateSidebar, <%=intl.getRefresh()%> * 1000);
-      }, <%=intl.getRefresh()%> * 1000);
+      function runTimer() {
+        var repeat = setTimeout(function updateSidebar() {
+          window.requestAnimationFrame(refreshSidebar);
+          setTimeout(updateSidebar, <%=intl.getRefresh()%> * 1000);
+        }, <%=intl.getRefresh()%> * 1000);
+      }
+      runTimer();
+    } else {
+      clearTimeout(repeat);
     }
   }
 </script>

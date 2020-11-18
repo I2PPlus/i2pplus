@@ -344,17 +344,21 @@ public class I2PSnarkServlet extends BasicServlet {
                           "import {refreshTorrents} from \""  + _contextPath + WARBASE + "js/refreshTorrents.js?" + CoreVersion.VERSION + "\";\n" +
                           "var ajaxDelay = " + (delay * 1000) + ";\n" +
                           "var visibility = document.visibilityState;\n" +
+                          "var cycle;\n" +
                           "if (visibility = \"visible\") {\n" +
-                          "setInterval(function() {\n" +
+                          "function timer() {\n" +
+                          "var cycle = setInterval(function() {\n" +
                           "requestAnimationFrame(refreshTorrents);\n" +
                           "}, ajaxDelay);\n" +
+                          "}\n" +
+                          "timer();\n" +
                           "}\n" +
                           "</script>\n");
             }
         }
         // custom dialog boxes for javascript alerts
-//        out.write("<script src=\"" + jsPfx + "/js/custom-alert.js\" type=\"text/javascript\"></script>\n");
-//        out.write("<link type=\"text/css\" rel=\"stylesheet\" href=\"" + _contextPath + WARBASE + "custom-alert.css\">\n");
+        //out.write("<script src=\"" + jsPfx + "/js/custom-alert.js\" type=\"text/javascript\"></script>\n");
+        //out.write("<link type=\"text/css\" rel=\"stylesheet\" href=\"" + _contextPath + WARBASE + "custom-alert.css\">\n");
 
         // selected theme inserted here
         out.write(HEADER_A + _themePath + HEADER_B + "\n");
@@ -4638,13 +4642,19 @@ public class I2PSnarkServlet extends BasicServlet {
         int delay = _manager.getRefreshDelaySeconds();
         if (delay > 0) {
             buf.append("<script nonce=\"" + cspNonce + "\" type=\"module\">\n" +
-//                       "import {refreshTorrents} from \"/themes/refreshTorrents.js?" + CoreVersion.VERSION + CoreVersion.VERSION + "\";\n" + // debugging
-                       "import {refreshTorrents} from \""  + _contextPath + WARBASE + "js/refreshTorrents.js?" + CoreVersion.VERSION + "\";\n" +
-                       "var ajaxDelay = " + (delay * 1000) + ";\n" +
-                       "setInterval(function() {\n" +
-                       "requestAnimationFrame(refreshTorrents);\n" +
-                       "}, ajaxDelay);\n" +
-                       "</script>\n");
+                        "import {refreshTorrents} from \""  + _contextPath + WARBASE + "js/refreshTorrents.js?" + CoreVersion.VERSION + "\";\n" +
+                        "var ajaxDelay = " + (delay * 1000) + ";\n" +
+                        "var visibility = document.visibilityState;\n" +
+                        "var cycle;\n" +
+                        "if (visibility = \"visible\") {\n" +
+                        "function timer() {\n" +
+                        "var cycle = setInterval(function() {\n" +
+                        "requestAnimationFrame(refreshTorrents);\n" +
+                        "}, ajaxDelay);\n" +
+                        "}\n" +
+                        "timer();\n" +
+                        "}\n" +
+                        "</script>\n");
         }
         buf.append(FOOTER);
         return buf.toString();
