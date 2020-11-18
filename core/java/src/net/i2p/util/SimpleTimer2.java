@@ -38,7 +38,7 @@ public class SimpleTimer2 {
 //    private static final int MIN_THREADS = 2;
 //    private static final int MAX_THREADS = 4;
     private static final int MIN_THREADS = 1;
-    private static final int MAX_THREADS = 3;
+    private static final int MAX_THREADS = 1;
 
     private final ScheduledThreadPoolExecutor _executor;
     private final String _name;
@@ -251,7 +251,8 @@ public class SimpleTimer2 {
         private final Log _log;
         private final SimpleTimer2 _pool;
         private int _fuzz;
-        protected static final int DEFAULT_FUZZ = 3;
+//        protected static final int DEFAULT_FUZZ = 3;
+        protected static final int DEFAULT_FUZZ = 100;
         private ScheduledFuture<?> _future; // _executor.remove() doesn't work so we have to use this
                                          // ... and I expect cancelling this way is more efficient
 
@@ -367,7 +368,7 @@ public class SimpleTimer2 {
                 }
                 if (scheduled && (now + timeoutMs) < _nextRun) {
                     if (_log.shouldLog(Log.INFO))
-                        _log.info("Re-scheduling: " + truncClass + " timeout = " + timeoutMs + " old timeout was " + oldTimeout + " state: " + _state);
+                        _log.info("Rescheduling: " + truncClass + " timeout = " + timeoutMs + " old timeout was " + oldTimeout + " state: " + _state);
                     cancel();
                 }
                 schedule(timeoutMs);
