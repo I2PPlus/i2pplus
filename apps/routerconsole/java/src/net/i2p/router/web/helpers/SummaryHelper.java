@@ -636,7 +636,7 @@ public class SummaryHelper extends HelperBase {
         }
         // control total width
         DecimalFormat fmt;
-        if (mega || (in <= 100 || out <= 100))
+        if (mega || (in <= 10 || out <= 10))
             fmt = new DecimalFormat("#0.00");
         else if ((in >= 1000 || out >= 1000) && !mega)
             fmt = new DecimalFormat("#0");
