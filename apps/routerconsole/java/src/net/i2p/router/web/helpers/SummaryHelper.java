@@ -636,12 +636,14 @@ public class SummaryHelper extends HelperBase {
         }
         // control total width
         DecimalFormat fmt;
-        if (in >= 1000 || out >= 1000)
+        if (mega || (in <= 100 || out <= 100))
+            fmt = new DecimalFormat("#0.00");
+        else if ((in >= 1000 || out >= 1000) && !mega)
             fmt = new DecimalFormat("#0");
         else if (in >= 100 || out >= 100)
             fmt = new DecimalFormat("#0.0");
         else
-            fmt = new DecimalFormat("#0.00");
+            fmt = new DecimalFormat("#0");
         return fmt.format(in) + THINSP + fmt.format(out) + "&nbsp;" +
                (mega ? 'M' : 'K');
     }
