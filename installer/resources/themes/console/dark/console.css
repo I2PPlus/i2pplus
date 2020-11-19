@@ -793,8 +793,8 @@ pre {
   color: #900;
 }
 
-#sb_warning + .sb_notice {
-  margin-top: 11px;
+#sb_warning + #sb_notice {
+  margin-top: -6px !important;
 }
 
 #sb_warning + hr {
@@ -13168,13 +13168,13 @@ td.optionsave, #addkeyring tr:last-child, #criticallogs td, #routerlogs td, #eve
   border-bottom: 1px solid #242;
 }
 
-#logs h3 a, #permabanned td:first-child, #homepage h4 a,
+#logs h3 a, #permabanned td:first-child, #homepage .main h4 a,
 #tunnels h3#exploratory a, #tunnels h3.server a:not(.lsview), #tunnels h3.client a:not(.lsview),
 #tunnels #participating a, #tunnels #peercount a {
   border-left: 1px solid #242;
 }
 
-#homepage h4 a {
+#homepage .main h4 a {
   margin: -7px 0;
   padding: 9px 4px 9px 11px;
 }
@@ -13194,7 +13194,7 @@ td.optionsave, #addkeyring tr:last-child, #criticallogs td, #routerlogs td, #eve
 }
 
 @media screen and (min-width: 1500px) {
-  #homepage h4 a, #homepage h4.app2 a {
+  #homepage .main h4 a, #homepage h4.app2 a {
     padding-left: 12px;
   }
   #tunnels h3 a::after {
