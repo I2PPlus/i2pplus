@@ -207,7 +207,7 @@ pre {
   font-size: 8pt;
   color: #33333f;
   clear: left; /* fixes a bug in Opera */
-  border: 1px solid #447;
+  border: 1px solid #575775;
   border-radius: 2px;
   box-shadow: inset 0 0 0 1px rgba(185,185,198,.65);
   background: #fafaff;
@@ -1320,7 +1320,7 @@ to {
   float: left;
   text-align: center;
   color: #222;
-  border: 1px solid #447;
+  border: 1px solid #575775;
   border-radius: 2px;
   box-shadow: inset 0 0 0 1px rgba(185,185,198,.65);
   background: #f8f8ff;
@@ -1364,7 +1364,7 @@ to {
   text-align: justify;
   font-size: 10pt;
   color: #33333f;
-  border: 1px solid #447;
+  border: 1px solid #575775;
   border-radius: 2px;
   box-shadow: inset 0 0 1px 0 #d00;
   background: #fafaff;
@@ -1409,7 +1409,7 @@ to {
   text-align: left;
   font-size: 115%;
   border: none;
-  border-bottom: 1px solid #447;
+  border-bottom: 1px solid #575775;
   border-radius: 2px 2px 0 0;
 }
 
@@ -1453,7 +1453,7 @@ to {
   font-size: 7pt;
   text-align: right !important;
   border-radius: 2px;
-  border: 1px solid #447;
+  border: 1px solid #575775;
   display: none;
 }
 
@@ -1613,7 +1613,7 @@ to {
   background: none;
   border-radius: 0;
   border: none;
-  border-bottom: 1px solid #447 !important;
+  border-bottom: 1px solid #575775 !important;
   padding-left: 0;
   margin-bottom: -5px;
 }
@@ -1640,7 +1640,7 @@ to {
 .sorry {
   margin: -11px 0 10px 214px;
   padding: 20px 25px 20px 70px;
-  border: 1px solid #447;
+  border: 1px solid #575775;
   border-radius: 0 0 2px 2px;
   text-align: justify;
   background: #fafaff url(/themes/console/images/info/errortriangle.png) 16px 40% no-repeat;
@@ -1781,7 +1781,7 @@ to {
   min-width: 546px;
   text-align: left;
   color: #33333f;
-  border: 1px solid #447;
+  border: 1px solid #575775;
   border-radius: 0 0 2px 2px;
   box-shadow: inset 0 0 0 1px rgba(185,185,198,.65);
   filter: drop-shadow(0 1px 1px #97a2ce);
@@ -1820,7 +1820,7 @@ to {
 .news#news {
   margin: -12px 0 5px 214px;
   padding: 5px 15px 12px;
-  border: 1px solid #447;
+  border: 1px solid #575775;
   color: #224;
   border-radius: 0 0 2px 2px;
   text-align: right !important;
@@ -3686,7 +3686,7 @@ table.search {
   border-spacing: 0;
   border-radius: 0 0 2px 2px;
   border: 1px solid #595a8f;
-  border-top: 1px solid #447;
+  border-top: 1px solid #575775;
   box-shadow: 0 1px 1px 1px rgba(220, 220, 255, .3), inset 0 0 0 1px rgba(185,185,198,.65);
   background: #fafaff !important;
   background: linear-gradient(to bottom, #fafaff 50%, rgba(255,255,255,.6) 50%, rgba(240,240,255,.4)), repeating-linear-gradient(135deg, rgba(255,255,255,.5) 2px, rgba(240, 240, 255, .3) 3px, #fff 4px) !important;
@@ -4402,7 +4402,7 @@ h1 {
   color: #41465f;
   color: #54586F;
   text-shadow: 0 1px 1px #fff,0 -1px 1px #e2e2ff, 0 2px 1px #ddf;
-  border: 1px solid #447;
+  border: 1px solid #575775;
   border-radius: 2px 2px 0 0;
   box-shadow: inset 0 0 0 1px rgba(185,185,198,.65);
   background: #fcfcff;
@@ -6036,12 +6036,12 @@ td.spacer, th.spacer {
   line-height: 120%;
   text-align: right;
   font-size: 90%;
-  color: #447;
+  color: #575775;
 }
 
 .footnote hr {
   margin: 24px 0 5px !important;
-  background: #447;
+  background: #575775;
   background: linear-gradient(to right, #77a, #669, #77a);
   height: 1px;
   border-bottom: 1px solid #fff;
@@ -7022,7 +7022,7 @@ p:empty { /* empty paragraph nuke */
 }
 
 #netdbversions tr {
-  border-right: 1px solid #447;
+  border-right: 1px solid #575775;
 }
 
 #netdbversions th:first-child, #netdbversions td:first-child {
@@ -7039,7 +7039,7 @@ p:empty { /* empty paragraph nuke */
 }
 
 #netdbcountrylist tr {
-  border-left: 1px solid #447;
+  border-left: 1px solid #575775;
 }
 
 #netdboverview #netdbcountrylist td:first-child {
