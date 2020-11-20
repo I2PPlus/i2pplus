@@ -1519,6 +1519,11 @@ public class DataHelper {
 
         DecimalFormat fmt = new DecimalFormat("##0.00");
 
+        if (bytes <= 1 * 512) // 512 bytes
+            fmt.setMaximumFractionDigits(2);
+        else if (bytes <= 1 * 1024 * 1024) // 1MB/s
+            fmt.setMaximumFractionDigits(1);
+
         String str = fmt.format(val);
         switch (scale) {
             case 1: return str + "Ki";
@@ -1573,17 +1578,16 @@ public class DataHelper {
             val /= 1024;
         }
 
-        DecimalFormat fmt = new DecimalFormat("##0.###");
+        DecimalFormat fmt = new DecimalFormat("##0.##");
 
-        if (bytes <= 1 * 1024 * 1024) { // 1MiB
+        if (bytes <= 1 * 1024 * 1024) // 1MiB
             fmt.setMaximumFractionDigits(0);
-
-        } else if (bytes <= 1 * 1024 * 1024 * 1024) { // 1GiB
+        else if (bytes <= 1 * 1024 * 1024 * 1024) // 1GiB
             fmt.setMaximumFractionDigits(1);
-
-        } else if (bytes <= 1 * 1024 * 1024 * 1024 * 1024) { // 1TiB
+        else if (bytes >= 1 * 1024 * 1024 * 1024 * 1024) // 1TiB
             fmt.setMaximumFractionDigits(2);
-        }
+        else if (bytes >= 1 * 1024 * 1024 * 1024) // 1GiB
+            fmt.setMaximumFractionDigits(1);
 
 /*
         if (val >= 200) {
@@ -1606,18 +1610,6 @@ public class DataHelper {
             case 7: return str + "Zi";
             case 8: return str + "Yi";
             default: return bytes + space;
-
-/*
-            case 1: return str + "K";
-            case 2: return str + "M";
-            case 3: return str + "G";
-            case 4: return str + "T";
-            case 5: return str + "P";
-            case 6: return str + "E";
-            case 7: return str + "Z";
-            case 8: return str + "Y";
-            default: return bytes + space;
-*/
         }
     }
 
