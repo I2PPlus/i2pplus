@@ -24,17 +24,12 @@ body {
 }
 
 .main {
-  scrollbar-color: rgba(180,180,255,.7) rgba(255,255,255,.5);
+  scrollbar-color: #8d8daa rgba(255,255,255,.4);
 }
 
 .main textarea {
-  scrollbar-color: rgba(180,180,255,.4) rgba(255,255,255,.1);
-  scrollbar-width: thin;
-}
-
-.main textarea:hover {
-  scrollbar-color: rgba(180,180,255,.6) rgba(255,255,255,1);
-  scrollbar-width: auto;
+  will-change: transform;
+  scrollbar-color: #a7a7be rgba(255,255,255,.4);
 }
 
 /* preload button mouseovers */
@@ -4903,9 +4898,11 @@ input, input:visited, button, button:visited {
   font-size: 9pt;
   color: #41465f;
   text-decoration: none;
+  text-shadow: 0 1px 1px #fff;
   border: 1px solid #97a2ce;
   border-radius: 2px;
   box-shadow: inset 0 0 0 1px #fff, inset 0 0 0 1px #fff;
+  box-shadow: 0 2px 0 rgba(255,255,255,.85) inset, 0 0 10px rgba(0,0,0,.08) inset, 0 1px 1px rgba(0,0,0,.05), 0 7px 4px -4px rgba(0,0,0,.08);
   background: #eee;
   background: linear-gradient(to bottom, #fff, #efefff);
   background-size: 14px auto, 100% 100% !important;
@@ -4923,6 +4920,7 @@ input[type=file]::file-selector-button {
   border: 1px solid #97a2ce;
   border-radius: 2px;
   box-shadow: inset 0 0 0 1px #fff, inset 0 0 0 1px #fff;
+  box-shadow: 0 2px 0 rgba(255,255,255,.85) inset, 0 0 10px rgba(0,0,0,.1) inset, 0 1px 1px rgba(0,0,0,.05), 0 7px 4px -4px rgba(0,0,0,.1);
   background: #eee;
   background: linear-gradient(to bottom, #fff, #efefff);
   background-size: 14px auto, 100% 100% !important;
@@ -4951,9 +4949,12 @@ button a, button a:visited {
   font-weight: normal !important;
   color: #41465f;
 }
+
 button:hover, input[type=submit]:hover, input[type=reset]:hover, button:focus, input[type=submit]:focus, input[type=reset]:focus {
   color: #19191f;
   border: 1px solid #f60;
+  box-shadow: inset 0 0 0 1px #fff;
+  box-shadow: inset 0 0 0 1px #fff, inset 0 -8px 3px 8px rgba(255,96,0,.02), inset 0 0 10px rgba(255,96,0,.05), 0 0 1px rgba(255,96,0,.1), 0 7px 4px -4px rgba(0,0,0,.1);
   background: linear-gradient(to bottom, #eee, #fff);
   filter: saturate(100%) drop-shadow(0 0 1px rgba(204, 204, 204, .8));
   transition: ease border .7s;
@@ -4962,6 +4963,7 @@ button:hover, input[type=submit]:hover, input[type=reset]:hover, button:focus, i
 input[type=file]:hover::file-selector-button, input[type=file]:focus::file-selector-button {
   color: #19191f;
   border: 1px solid #f60;
+  box-shadow: inset 0 0 0 1px #fff, inset 0 -8px 3px 8px rgba(255,96,0,.02), inset 0 0 10px rgba(255,96,0,.05), 0 0 1px rgba(255,96,0,.1), 0 7px 4px -4px rgba(0,0,0,.1);
   background: linear-gradient(to bottom, #eee, #fff);
   filter: saturate(100%) drop-shadow(0 0 1px rgba(204, 204, 204, .8));
   transition: ease border .7s;
@@ -5044,7 +5046,7 @@ input.add[value^="Adjust"]:focus, button.add[value^="Adjust"]:focus {
 input.cancel, button.cancel {
   padding: 5px 9px 5px 24px;
   background: url(/themes/console/images/svg/no.svg) no-repeat 8px center, linear-gradient(to bottom, #fff, #efefff);
-  background-size: 12px 12px !important;
+  background-size: 12px 12px, 100% 100% !important;
 }
 
 input.cancel:hover, button.cancel:hover,
@@ -5564,6 +5566,7 @@ select, select[disabled]:hover, select[disabled]:focus  {
   border: 1px solid #97a2ce;
   border-radius: 2px;
   box-shadow: inset 0 0 0 1px #fff;
+  box-shadow: 0 2px 0 rgba(255,255,255,.85) inset, 0 0 10px rgba(0,0,0,.1) inset, 0 1px 1px rgba(0,0,0,.05), 0 7px 4px -4px rgba(0,0,0,.1);
   background: url(images/dropdown.svg) right 8px center no-repeat #fff;
   background: url(images/dropdown.svg) right 8px center no-repeat, linear-gradient(to bottom, #fff, #efefff);
   background-size: 10px auto, 100% 100% !important;
@@ -5597,6 +5600,7 @@ select:hover, select:focus, select:active {
 
 select:hover, select:active {
   color: #19191f;
+  box-shadow: inset 0 0 0 1px #fff, 0 2px 1px #ddf;
   background: url(images/dropdown_hover.svg) right 8px center no-repeat, linear-gradient(to bottom, #eee, #fff) !important;
   background-size: 10px auto, 100% 100% !important;
 }
