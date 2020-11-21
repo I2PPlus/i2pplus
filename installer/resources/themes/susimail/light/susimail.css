@@ -7,7 +7,7 @@
 body {
   margin: 5px;
   color: #33333f;
-  font-family: "Droid Sans", "Open Sans", "Noto Sans", Ubuntu, "Bitstream Vera Sans", "Segoe UI", Verdana, "Lucida Grande", Helvetica, sans-serif;
+  font-family: Droid Sans, Open Sans, Noto Sans, Ubuntu, Bitstream Vera Sans, Segoe UI, Verdana, Lucida Grande, Helvetica, sans-serif;
   font-size: 9pt;
   background: #a4a4cb url(/themes/console/light/images/tile2.png);
 }
@@ -356,7 +356,7 @@ form {
 
 /* buttons and inputs */
 
-button::-moz-focus-inner, input[type="submit"]::-moz-focus-inner, input[type="reset"]::-moz-focus-inner  {
+button::-moz-focus-inner, input[type=submit]::-moz-focus-inner, input[type=reset]::-moz-focus-inner  {
   outline: none;
   border: none;
 }
@@ -369,7 +369,7 @@ label:hover {
   color: #000;
 }
 
-input[type="radio"], input[type="checkbox"] {
+input[type=radio], input[type=checkbox] {
   vertical-align: middle;
   background: none;
   outline: none;
@@ -378,48 +378,50 @@ input[type="radio"], input[type="checkbox"] {
   filter: sepia(100%) hue-rotate(185deg) drop-shadow(0 0 1px rgba(220,220,255,.7));
 }
 
-input[type="checkbox"]:hover, input[type="checkbox"]:focus, input[type="radio"]:hover, input[type="radio"]:focus {
+input[type=checkbox]:hover, input[type=checkbox]:focus, input[type=radio]:hover, input[type=radio]:focus {
   filter: sepia(100%) hue-rotate(185deg) drop-shadow(0 0 3px #89f);
 }
 
-#attachedfile input[type="checkbox"]:hover, #attachedfile input[type="checkbox"]:focus,
-.mailListDelete input[type="checkbox"]:hover, .mailListDelete input[type="checkbox"]:focus{
+#attachedfile input[type=checkbox]:hover, #attachedfile input[type=checkbox]:focus,
+.mailListDelete input[type=checkbox]:hover, .mailListDelete input[type=checkbox]:focus{
   filter: sepia(100%) hue-rotate(185deg) drop-shadow(0 0 2px #933);
 }
 
 input[type="text"], input[type="password"] {
   cursor: text;
-  font-family: "Droid Sans", "Open Sans", "Noto Sans", Ubuntu, "Bitstream Vera Sans", "Segoe UI", Verdana, "Lucida Grande", Helvetica, sans-serif;
+  font-family: Droid Sans, Open Sans, Noto Sans, Ubuntu, Bitstream Vera Sans, Segoe UI, Verdana, Lucida Grande, Helvetica, sans-serif;
   font-size: 9pt;
 }
 
-input[type="submit"], input[type="reset"], #settings {
-  border: 1px solid #9ea8d1;
-  box-shadow: inset 0 0 0 1px #fff;
-  background: #eee;
-  background: linear-gradient(to bottom, #fff, #efefff);
-  color: #33333f;
+input[type=submit], input[type=reset], #settings {
   margin: 3px;
-  font: 9pt "Droid Sans", "Open Sans", "Noto Sans", Ubuntu, "Bitstream Vera Sans", "Segoe UI", Verdana, "Lucida Grande", Helvetica, sans-serif;
   padding: 4px 5px;
+  font: 9pt Droid Sans, Open Sans, Noto Sans, Ubuntu, Bitstream Vera Sans, Segoe UI, Verdana, Lucida Grande, Helvetica, sans-serif;
   text-decoration: none;
   text-shadow: 0 1px 1px #fff;
+  color: #33333f;
+  border: 1px solid #9ea8d1;
   border-radius: 2px;
-  opacity: 1;
+  box-shadow: inset 0 0 0 1px #fff;
+  box-shadow: 0 2px 0 rgba(255,255,255,.85) inset, 0 0 10px rgba(0,0,0,.1) inset, 0 1px 1px rgba(0,0,0,.05), 0 7px 4px -4px rgba(0,0,0,.1);
+  background: #eee;
+  background: linear-gradient(to bottom, #fff, #efefff);
   background-size: 14px auto, 100% 100% !important;
+  opacity: 1;
   filter: drop-shadow(0 0 1px rgba(220,220,255,.7));;
   cursor: pointer;
 }
 
-input[type="submit"]:hover, input[type="reset"]:hover, input[type="submit"]:focus, input[type="reset"]:focus,
+input[type=submit]:hover, input[type=reset]:hover, input[type=submit]:focus, input[type=reset]:focus,
 #settings:hover, #settings:focus {
-  filter: drop-shadow(0 0 1px rgba(204, 204, 204, .8));
-  border: 1px solid #f60;
   color: #222 !important;
+  border: 1px solid #f60;
+  box-shadow: inset 0 0 0 1px #fff, inset 0 -8px 3px 8px rgba(255,96,0,.02), inset 0 0 10px rgba(255,96,0,.05), 0 0 1px rgba(255,96,0,.1), 0 7px 4px -4px rgba(0,0,0,.1);
   transition: ease border .7s;
+  filter: drop-shadow(0 0 1px rgba(204, 204, 204, .8));
 }
 
-input[type="submit"]:active, input[type="reset"]:active,
+input[type=submit]:active, input[type=reset]:active,
 #settings:active {
   box-shadow: inset 0 0 0 1px #fff, inset 2px 2px 2px #999;
   color: #555;
@@ -1459,11 +1461,11 @@ td p.error {
   padding: 4px 5px !important;
 }
 
-#newmail input[type="checkbox"] {
+#newmail input[type=checkbox] {
   margin: 0;
 }
 
-#attachedfile input[type="checkbox"] {
+#attachedfile input[type=checkbox] {
   margin: 1px;
   float: right;
 }
@@ -1565,19 +1567,19 @@ td p.error {
 /* custom radios/checkboxes to enforce color scheme when OS widgets are non-standard  */
 /* @media screen and (-webkit-min-device-pixel-ratio: 0) and (min-resolution:.001dpcm) {*/
 @supports (background-blend-mode: luminosity) { /* exclude ms browsers */
-input[type="checkbox"], input[type="checkbox"]:checked, input[type="checkbox"][disabled], input[type="checkbox"][disabled]:checked {
+input[type=checkbox], input[type=checkbox]:checked, input[type=checkbox][disabled], input[type=checkbox][disabled]:checked {
   width: 19px !important;
   height: 19px !important;
   border-radius: 2px;
 }
 
-input[type="radio"], input[type="radio"]:checked, input[type="radio"][disabled], input[type="radio"][disabled]:checked {
+input[type=radio], input[type=radio]:checked, input[type=radio][disabled], input[type=radio][disabled]:checked {
   width: 19px !important;
   height: 19px !important;
   border-radius: 50%;
 }
 
-input[type="checkbox"]:checked::before {
+input[type=checkbox]:checked::before {
   content: "";
   position: absolute;
   top: 3px;
@@ -1591,7 +1593,7 @@ input[type="checkbox"]:checked::before {
   transition: linear all .05s;
 }
 
-input[type="radio"]:checked::before {
+input[type=radio]:checked::before {
   content: "";
   position: absolute;
   border-radius: 50%;
@@ -1604,7 +1606,7 @@ input[type="radio"]:checked::before {
   transition: linear all .05s;
 }
 
-input[type="radio"]:not(:checked), input[type="checkbox"]:not(:checked) {
+input[type=radio]:not(:checked), input[type=checkbox]:not(:checked) {
   box-shadow: inset 0 0 0 2px #f8f8ff, inset 3px 3px 3px #aad;
 }
 
@@ -1656,7 +1658,7 @@ input[type="radio"]:not(:checked), input[type="checkbox"]:not(:checked) {
   will-change: transform;
 }
 
-input[type="radio"]:not(:checked)::before {
+input[type=radio]:not(:checked)::before {
   border-radius: 50%;
 }
 }
@@ -1851,7 +1853,7 @@ tr:active td.mailListSubject a {
   padding: 5px 3px;
 }
 
-#mailbox .bottombuttons input[type="submit"][disabled] {
+#mailbox .bottombuttons input[type=submit][disabled] {
   display: none;
 }
 
@@ -2152,7 +2154,7 @@ background-position: 0;
 
 select {
   padding: 4px 24px 4px 4px !important;
-  font-family: "Droid Sans", "Open Sans", "Noto Sans", Ubuntu, "Bitstream Vera Sans", "Segoe UI", Verdana, "Lucida Grande", Helvetica, sans-serif;
+  font-family: Droid Sans, Open Sans, Noto Sans, Ubuntu, Bitstream Vera Sans, Segoe UI, Verdana, Lucida Grande, Helvetica, sans-serif;
   text-align: left !important;
   color: #41465f;
   border: 1px solid #9ea8d1;

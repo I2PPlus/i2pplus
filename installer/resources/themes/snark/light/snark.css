@@ -722,8 +722,7 @@ th.snarkGraphicStatus, th.snarkTorrentStatus {
 .snarkTrackerDetails img, .snarkTorrentDetails img, .snarkCommentDetails img, .snarkDirInfo tr:first-child td:first-child img {
   margin: 0;
   padding: 3px !important;
-  max-width: 16px;
-  max-height: 16px;
+  height: 16px;
   border: 1px solid transparent !important;
   filter: none !important;
 }
@@ -1748,9 +1747,10 @@ a.control img, a.control:hover img, a.control:focus img, a.control:active img {
 
 /* sync iframe buttons with main console theme */
 
-input[type="submit"], a.control {
+input[type="submit"], a.control:not(.disabled) {
   color: #41465f;
   font-weight: normal;
+  box-shadow: 0 2px 0 rgba(255,255,255,.85) inset, 0 0 10px rgba(0,0,0,.1) inset, 0 1px 1px rgba(0,0,0,.05), 0 7px 4px -4px rgba(0,0,0,.1);
   border: 1px solid #97a2ce;
   background: linear-gradient(to bottom, #fff, #efefff);
   transition: ease border 0.7s;
@@ -1759,6 +1759,7 @@ input[type="submit"], a.control {
 input[type="submit"]:hover, input[type="submit"]:focus, a.control:hover, a.control:focus {
   color: #19191f;
   border: 1px solid #f60;
+  box-shadow: inset 0 0 0 1px #fff, inset 0 -8px 3px 8px rgba(255,96,0,.02), inset 0 0 10px rgba(255,96,0,.05), 0 0 1px rgba(255,96,0,.1), 0 7px 4px -4px rgba(0,0,0,.1);
   background: linear-gradient(to bottom, #eee, #fff);
   transition: ease border 0.7s;
 }
