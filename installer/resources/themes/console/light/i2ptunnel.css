@@ -2,13 +2,14 @@
 /* Description: Light blue highlights. */
 /* Author: dr|z3d */
 
-@import url("/themes/fonts/DroidSans.css");
+@import url(/themes/fonts/DroidSans.css);
+@import url(optbox.css);
 
 body {
   margin: 0;
   padding: 0;
   text-align: center;
-  font-family: "Droid Sans", "Open Sans", "Noto Sans", "Ubuntu", "Segoe UI", Verdana, Helvetica, sans-serif;
+  font-family: Droid Sans, Open Sans, Noto Sans, Ubuntu, Segoe UI, Verdana, Helvetica, sans-serif;
   color: #33333f;
   font-size: 9pt;
   background: #a4a4cb url(images/tile2.png) fixed;
@@ -135,7 +136,7 @@ button {
 }
 
 button, input[type="submit"], input[type="reset"], a.control, .freetext, textarea, .displayText {
-  font-family: "Droid Sans", "Open Sans", "Noto Sans", "Ubuntu", "Segoe UI", Verdana, Helvetica, sans-serif;
+  font-family: Droid Sans, Open Sans, Noto Sans, Ubuntu, Segoe UI, Verdana, Helvetica, sans-serif;
   font-size: 9pt;
 }
 
@@ -450,7 +451,7 @@ select {
   background: url(images/dropdown.svg) right 8px center no-repeat, linear-gradient(to bottom, #fff, #efefff);
   background-size: 10px auto, 100% 100% !important;
   color: #33333f;
-  font-family: "Droid Sans", "Open Sans", "Noto Sans", "Ubuntu", "Segoe UI", Verdana, Helvetica, sans-serif;
+  font-family: Droid Sans, Open Sans, Noto Sans, Ubuntu, Segoe UI, Verdana, Helvetica, sans-serif;
   font-size: 9pt;
   border: 1px solid #97a2ce;
   border-radius: 2px;
@@ -1410,123 +1411,6 @@ input[name="nofilter_blindedPassword"] {
 
 #registration .displayText {
   width: 800px;
-}
-}
-
-/* custom radios/checkboxes to enforce color scheme when OS widgets are non-standard  */
-/* custom radios/checkboxes to enforce color scheme when OS widgets are non-standard  */
-/* @media screen and (-webkit-min-device-pixel-ratio: 0) and (min-resolution:.001dpcm) {*/
-@supports (background-blend-mode: luminosity) { /* exclude ms browsers */
-input[type="checkbox"], input[type="checkbox"]:checked, input[type="checkbox"][disabled], input[type="checkbox"][disabled]:checked {
-  width: 19px !important;
-  height: 19px !important;
-  border-radius: 2px;
-}
-
-input[type="radio"], input[type="radio"]:checked, input[type="radio"][disabled], input[type="radio"][disabled]:checked {
-  width: 19px !important;
-  height: 19px !important;
-  border-radius: 50%;
-}
-
-input[type="checkbox"]:checked::before {
-  content: "";
-  position: absolute;
-  top: 3px;
-  left: 3px;
-  width: 11px;
-  height: 11px;
-  line-height: 80%;
-  border-radius: 1px;
-  background: #41465f;
-  transform: scale(1);
-  transition: linear all .05s;
-}
-
-input[type="radio"]:checked::before {
-  content: "";
-  position: absolute;
-  border-radius: 50%;
-  left: 25%;
-  top: 25%;
-  width: 9px;
-  height: 9px;
-  background: #41465f;
-  transform: scale(1);
-  transition: linear all .05s;
-}
-
-input[type="radio"]:not(:checked), input[type="checkbox"]:not(:checked) {
-  box-shadow: inset 0 0 0 2px #f8f8ff, inset 3px 3px 3px #aad;
-}
-
-.optbox {
-  margin: 2px 0;
-  position: relative;
-  vertical-align: middle !important;
-  border: 1px solid #7a7d8f !important;
-  background: #f8f8ff !important;
-  box-sizing: border-box;
-  -moz-appearance: none;
-  -webkit-appearance: none;
-  filter: drop-shadow(0 0 1px #ccf) !important;
-}
-
-.optbox:checked {
-  box-shadow: inset 0 0 0 1px #cce;
-  background: linear-gradient(to bottom, #fff, #f0f0ff) !important;
-}
-
-input[type="radio"][disabled]:checked {
-  opacity: .7 !important;
-}
-
-#netconfig .optbox {
-  vertical-align: middle !important;
-}
-
-.optbox:hover, .optbox:focus, .optbox:active,
-.optbox:checked:hover, .optbox:checked:focus, .optbox:checked:active {
-  width: 19px !important;
-  height: 19px !important;
-  min-width: 19px !important;
-  min-height: 19px !important;
-  border: 1px solid #41465f !important;
-  box-shadow: 0 0 2px #f60 !important;
-  filter: drop-shadow(0 0 3px #89f) !important;
-}
-
-input[type="radio"][disabled]:checked:hover {
-  box-shadow: inset 0 0 0 1px #cce !important;
-}
-
-input[type="radio"][disabled]:not(:checked):hover {
-  box-shadow: inset 0 0 0 2px #f8f8ff, inset 3px 3px 3px #aad !important;
-  filter: none !important;
-}
-
-input[type="radio"][disabled], input[type="radio"][disabled]:hover, input[type="radio"][disabled]:not(:checked):hover {
-  border: 1px solid #7a7d8f !important;
-  filter: none !important;
-}
-
-.optbox:checked::before {
-  transition: linear all .05s;
-}
-
-.optbox:not(:checked)::before {
-  position: absolute;
-  top: 25%;
-  left: 25%;
-  content: "";
-  transition: linear all .05s;
-  color: transparent;
-  background: transparent;
-  transform: scale(0);
-}
-
-input[type="radio"]:not(:checked)::before {
-  border-radius: 50%;
 }
 }
 
