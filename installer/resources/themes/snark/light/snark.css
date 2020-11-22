@@ -3,11 +3,12 @@
 /* Author: dr|z3d */
 /* Thanks to http://www.luxphile.com/2011/01/creative-commons-cat.html for the kitty image */
 
-@import url("/themes/fonts/DroidSans.css");
+@import url(/themes/fonts/DroidSans.css);
+@import url(/themes/console/light/optbox.css);
 
 body {
   color: #31334f;
-  font: 9pt "Droid Sans", "Open Sans", "Noto Sans", Ubuntu, "Segoe UI", "Bitstream Vera Sans", Verdana, "Lucida Grande", Helvetica, sans-serif;
+  font: 9pt Droid Sans, Open Sans, Noto Sans, Ubuntu, Segoe UI, Bitstream Vera Sans, Verdana, Lucida Grande, Helvetica, sans-serif;
   background: #a4a4cb url(/themes/console/light/images/tile2.png) center top;
   background-size: 32px 32px;
   margin: 3px;
@@ -1675,7 +1676,7 @@ input[name="savepri"] {
 }
 
 input {
-  font-family: "Droid Sans", "Open Sans", "Noto Sans", Ubuntu, "Segoe UI", "Bitstream Vera Sans", Verdana, "Lucida Grande", Helvetica, sans-serif;
+  font-family: Droid Sans, Open Sans, Noto Sans, Ubuntu, Segoe UI, Bitstream Vera Sans, Verdana, Lucida Grande, Helvetica, sans-serif;
   text-align: left;
   padding: 4px !important;
   border-radius: 2px;
@@ -1698,7 +1699,7 @@ input[type=submit], a.control, input.disabled {
   padding: 5px 8px !important;
   min-width: 90px;
   text-align: center;
-  font: bold 9pt "Droid Sans", "Open Sans", "Noto Sans", Ubuntu, "Segoe UI", "Bitstream Vera Sans", Verdana, "Lucida Grande", Helvetica, sans-serif;
+  font: bold 9pt Droid Sans, Open Sans, Noto Sans, Ubuntu, Segoe UI, Bitstream Vera Sans, Verdana, Lucida Grande, Helvetica, sans-serif;
   color: #227;
   text-shadow: 0 1px 1px #fff;
   border: 1px solid #97a2ce;
@@ -1848,26 +1849,6 @@ input[type="text"], input.r, input[name="nofilter_dataDir"], textarea, select {
   width: 250px;
 }
 
-.optbox {
-  border: none !important;
-  width: 16px;
-  height: 16px;
-  box-shadow: none;
-  background: none;
-  filter: sepia(100%) hue-rotate(185deg) drop-shadow(0 0 1px rgba(220,220,255,.7));
-}
-
-.optbox:hover, .optbox:focus {
-  filter: sepia(100%) hue-rotate(185deg) drop-shadow(0 0 3px #89f);
-  outline: none;
-}
-
-.optbox[disabled]:hover, .optbox[disabled]:hover,
-.optbox[disabled]:focus, .optbox[disabled]:focus {
-  filter: none;
-  box-shadow: none;
-}
-
 .knownTracker input[type="radio"], .knownTracker input[type="radio"]:hover, .knownTracker input[type="radio"]:focus {
   opacity: 0.3 !important;
 }
@@ -1902,7 +1883,7 @@ select {
   padding: 5px 24px 5px 3px !important;
   color: #41465f;
   color: #6373b6;
-  font: bold 9pt "Droid Sans", "Open Sans", "Noto Sans", Ubuntu, "Segoe UI", "Bitstream Vera Sans", Verdana, "Lucida Grande", Helvetica, sans-serif;
+  font: bold 9pt Droid Sans, Open Sans, Noto Sans, Ubuntu, Segoe UI, Bitstream Vera Sans, Verdana, Lucida Grande, Helvetica, sans-serif;
   border: 1px solid #97a2ce;
   border-radius: 2px;
   box-shadow: inset 0 0 0 1px #fff;
@@ -2436,7 +2417,7 @@ input:checked + label + hr + table, input:checked + label + hr + table + table {
 
 .debuginfo b {
   text-transform: capitalize;
-  font-family: "Droid Sans", "Open Sans", "Noto Sans", Ubuntu, "Segoe UI", "Bitstream Vera Sans", Verdana, "Lucida Grande", Helvetica, sans-serif;
+  font-family: Droid Sans, Open Sans, Noto Sans, Ubuntu, Segoe UI, Bitstream Vera Sans, Verdana, Lucida Grande, Helvetica, sans-serif;
 }
 
 @media screen and (min-width: 1400px) {
@@ -2480,7 +2461,7 @@ input:checked + label + hr + table, input:checked + label + hr + table + table {
 .debugConnStat b {
   color: #272e3f;
   margin-right: 0;
-  font-family: "Droid Sans", "Open Sans", "Noto Sans", Ubuntu, "Segoe UI", "Bitstream Vera Sans", Verdana, "Lucida Grande", Helvetica, sans-serif;
+  font-family: Droid Sans, Open Sans, Noto Sans, Ubuntu, Segoe UI, Bitstream Vera Sans, Verdana, Lucida Grande, Helvetica, sans-serif;
 }
 
 .dhtDebug th, .dhtDebug:hover {
@@ -2719,16 +2700,16 @@ hr.debug:last-child {
 }
 
 .priority {
-  text-align: center;
   width: 1%;
   white-space: nowrap;
+  text-align: center;
 }
 
 .priority::after {
-  content: "";
-  display: inline-block;
   min-height: 28px;
+  display: inline-block;
   vertical-align: middle;
+  content: "";
 }
 
 .priorityHigh, .priorityNormal, .prioritySkip {
@@ -3080,68 +3061,6 @@ td.commentAuthor .commentAuthorName {
 
 /* end Comments section */
 
-/* custom radios/checkboxes to enforce color scheme when OS widgets are non-standard  */
-/* @media screen and (-webkit-min-device-pixel-ratio: 0) and (min-resolution:.001dpcm) {*/
-@supports (background-blend-mode: luminosity) { /* exclude ms browsers */
-input[type="checkbox"], input[type="checkbox"]:checked, input[type="checkbox"][disabled], input[type="checkbox"][disabled]:checked {
-  width: 19px !important;
-  height: 19px !important;
-  border-radius: 2px;
-}
-
-input[type="radio"], input[type="radio"]:checked, input[type="radio"][disabled], input[type="radio"][disabled]:checked {
-  width: 19px !important;
-  height: 19px !important;
-  border-radius: 50%;
-}
-
-input[type="checkbox"]:checked::before {
-  content: "";
-  position: absolute;
-  top: 3px;
-  left: 3px;
-  width: 11px;
-  height: 11px;
-  line-height: 80%;
-  border-radius: 1px;
-  box-shadow: inset 0 0 0 1px #6394cf;
-  background: #3b77bf;
-  background: linear-gradient(to bottom, #3b77bf, #366db0);
-  transform: scale(1);
-  transition: linear all .05s;
-}
-
-input[type="radio"]:checked::before {
-  content: "";
-  position: absolute;
-  border-radius: 50%;
-  left: 25%;
-  top: 25%;
-  width: 9px;
-  height: 9px;
-  background: #3b77bf;
-  background: radial-gradient(at center bottom, #3b77bf, #2a5589);
-  transform: scale(1);
-  transition: linear all .05s;
-}
-
-input[type="radio"]:not(:checked), input[type="checkbox"]:not(:checked) {
-  box-shadow: inset 0 0 0 2px #f8f8ff, inset 3px 3px 3px #aad;
-}
-
-.optbox {
-  margin: 2px 0 !important;
-  position: relative;
-  vertical-align: middle !important;
-  border: 1px solid #97a2ce !important;
-  background: #f8f8ff !important;
-  box-sizing: border-box;
-  -moz-appearance: none;
-  -webkit-appearance: none;
-  filter: drop-shadow(0 0 1px #ccf) !important;
-  will-change: transform;
-}
-
 .knowntracker .optbox[type="radio"] {
   margin: 2px 10px !important;
 }
@@ -3155,23 +3074,11 @@ input[type="radio"]:not(:checked), input[type="checkbox"]:not(:checked) {
 }
 
 .optbox:checked, .optbox:disabled, .knownTracker .optbox {
-  box-shadow: inset 0 0 0 1px #f8f8ff !important;
-  border: 1px solid #97a2ce !important;
   background: linear-gradient(to bottom, #fff, #f0f0ff) !important;
 }
 
 #netconfig .optbox {
   vertical-align: middle !important;
-}
-
-.optbox:hover, .optbox:focus, .optbox:active,
-.optbox:checked:hover, .optbox:checked:focus, .optbox:checked:active {
-  width: 19px !important;
-  height: 19px !important;
-  min-width: 19px !important;
-  min-height: 19px !important;
-  border: 1px solid #7a7d8f !important;
-  box-shadow: 0 0 0 1px #f8f8ff, 0 0 0 2px #f60 !important;
 }
 
 .optbox:disabled:hover, .optbox:disabled:focus, .optbox:disabled:active,
@@ -3184,34 +3091,9 @@ input[type="radio"]:not(:checked), input[type="checkbox"]:not(:checked) {
   transition: linear all .05s;
 }
 
-.optbox:not(:checked)::before {
-  position: absolute;
-  top: 25%;
-  left: 25%;
-  content: "";
-  transition: linear all .05s;
-  color: transparent;
-  background: transparent;
-  transform: scale(0);
-  will-change: transform;
-}
-
-input[type="radio"]:not(:checked)::before {
-  border-radius: 50%;
-}
-
 .priority input[type="radio"] {
   transform: scale(0.8);
 }
-
-input.toggle_input, input.toggle_input:checked { /* hide checkbox and use label as faux panel heading */
-  position: absolute;
-  height: 0 !important;
-  width: 0 !important;
-}
-}
-
-/* end custom radios/checkboxes */
 
 /* MS Edge 14+ rendering bug fix */
 _:-ms-lang(x), *, *:hover, *:focus, input, input:hover, input:focus, a:hover, a:focus {

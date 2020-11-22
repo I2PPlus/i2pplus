@@ -3,6 +3,7 @@
 /* Author: dr|z3d */
 
 @import url(/themes/fonts/DroidSans.css);
+@import url(optbox.css);
 
 html, body {
   height: 100%;
@@ -317,7 +318,7 @@ pre {
   border-left: none;
   border-right: none;
   border-radius: 0;
-  box-shadow: inset 0 0 0 1px #fff, inset 0 0 0 0 #fff;;
+  box-shadow: inset 0 0 0 1px #fff, inset 0 0 0 0 #fff;
   background: #fcfcff !important;
   background: #e7e7ff linear-gradient(to bottom, #fff 50%, rgba(255,255,255,.6) 50%, rgba(240,240,255,.4)) !important;
   filter: none;
@@ -5331,11 +5332,6 @@ button.download.control:hover, button.download.control:focus {
   margin-top: 8px;
 }
 
-/*#updateAvailable::before {
-  content: '\1F6C8\00A0';
-  display: inline;
-}*/
-
 .routersummary button {
   margin: 0 1px -3px;
   min-width: 87px;
@@ -5495,41 +5491,6 @@ input[type="file"]:hover {
   background: linear-gradient(to right, rgba(255,255,255,0), #dda);
   background-size: 100% 100% !important;
   filter: none;
-}
-
-.optbox, input[type="checkbox"], input[type="radio"] {
-  background: none;
-  margin: 5px;
-  padding: 2px;
-  min-height: 16px;
-  height: 16px;
-  min-width: 16px !important;
-  width: 16px !important;
-  opacity: 1.0;
-  border: 0;
-  box-shadow: none;
-  cursor: pointer;
-  filter: sepia(100%) hue-rotate(185deg) drop-shadow(0 0 1px rgba(220,220,255,.7));
-}
-
-.optbox:hover, .optbox:focus {
-  outline: none;
-  min-height: 16px;
-  height: 16px;
-  min-width: 16px !important;
-  width: 16px !important;
-  opacity: 1.0;
-  border: 0;
-  filter: sepia(100%) hue-rotate(185deg) drop-shadow(0 0 3px #89f);
-}
-
-input[type="checkbox"][disabled], input[type="radio"][disabled],
-input[type="checkbox"][disabled]:hover, input[type="radio"][disabled]:hover,
-input[type="checkbox"][disabled]:focus, input[type="radio"][disabled]:focus {
-  filter: sepia(100%) hue-rotate(185deg) !important;
-  box-shadow: none;
-  opacity: 0.5;
-  cursor: not-allowed;
 }
 
 label {
@@ -6146,7 +6107,7 @@ body.iframed {
   box-shadow: inset 0 0 0 1px #fff;
   background: #f8f8ff;
   transition: filter ease .05s;
-  filter: drop-shadow(0 0 1px rgba(220,220,255,.7));;
+  filter: drop-shadow(0 0 1px rgba(220,220,255,.7));
 }
 
 .themechoice:hover {
@@ -6311,7 +6272,7 @@ p#helptranslate {
   box-shadow: inset 0 0 0 1px #fff;
   background: #f8f8ff;
   transition: ease transform .05s;
-  filter: drop-shadow(0 0 1px rgba(220,220,255,.7));;
+  filter: drop-shadow(0 0 1px rgba(220,220,255,.7));
 }
 
 .langselect:hover {
@@ -9717,7 +9678,7 @@ a[href^="configpeer?peer"]:hover {
   background: linear-gradient(to bottom, #fafaff, rgba(250,250,255,.3)), repeating-linear-gradient(135deg, rgba(255,255,255,.5) 2px, rgba(221, 221, 255, .3) 3px, #fff 4px) #efefff !important;
   border: 1px solid #8d8daa;
   box-shadow: inset 0 0 0 1px #fff;
-  filter: drop-shadow(0 0 1px rgba(220,220,255,.7));;
+  filter: drop-shadow(0 0 1px rgba(220,220,255,.7));
 }
 
 .debug_container:empty {
@@ -10230,7 +10191,7 @@ a[href^="configpeer?peer"]:hover {
   box-shadow: inset 0 0 0 2px #fff;
   background: #fff !important;
   column-gap: 2px;
-  filter: drop-shadow(0 0 1px rgba(220,220,255,.7));;
+  filter: drop-shadow(0 0 1px rgba(220,220,255,.7));
   transition: ease box-shadow .1s;
 }
 
@@ -10274,7 +10235,7 @@ th.options {
 }
 
 .options input[type="checkbox"], .suboption .optbox {
-  margin: 0 3px 0 0;
+  margin: 0 3px 0 0 !important;
 }
 
 b.suboption {
@@ -10288,7 +10249,7 @@ b.suboption {
   box-shadow: inset 0 0 0 1px #fff;
   background: #fdfdff;
   background: linear-gradient(to bottom, #fff 50%, #eef 50%);
-  filter: drop-shadow(0 0 1px rgba(220,220,255,.7));;
+  filter: drop-shadow(0 0 1px rgba(220,220,255,.7));
 }
 
 #config_reseed .suboption label, #externali2cp .suboption label {
@@ -10544,7 +10505,7 @@ b.suboption {
 }
 
 #netconfig .optionlist, .service_container {
-  filter: drop-shadow(0 0 1px rgba(220,220,255,.7));;
+  filter: drop-shadow(0 0 1px rgba(220,220,255,.7));
 }
 
 #reseedconfig th.options, #i2pupdates th.options {
@@ -10575,6 +10536,7 @@ b.suboption {
 }
 
 #netconfig label::before {
+  width: 4px;
   min-height: 40px;
 }
 
@@ -11145,107 +11107,6 @@ form[action="configplugins"] input.reload {
 /* end /configfamily */
 /* end config overhaul */
 
-/* custom radios/checkboxes to enforce color scheme when OS widgets are non-standard  */
-@supports (background-blend-mode: luminosity) { /* exclude ms browsers */
-input[type="checkbox"], input[type="checkbox"]:checked, input[type="checkbox"][disabled], input[type="checkbox"][disabled]:checked {
-  width: 19px !important;
-  height: 19px !important;
-  border-radius: 2px;
-}
-
-input[type="radio"], input[type="radio"]:checked, input[type="radio"][disabled], input[type="radio"][disabled]:checked {
-  width: 19px !important;
-  height: 19px !important;
-  border-radius: 50%;
-}
-
-input[type="checkbox"]:checked::before {
-  content: "";
-  position: absolute;
-  top: 3px;
-  left: 3px;
-  width: 11px;
-  height: 11px;
-  line-height: 80%;
-  border-radius: 1px;
-  background: #41465f;
-}
-
-input[type="radio"]:checked::before {
-  position: absolute;
-  left: 25%;
-  top: 25%;
-  width: 9px;
-  height: 9px;
-  content: "";
-  border-radius: 50%;
-  background: #41465f;
-}
-
-input[type="checkbox"]:not(:checked) {
-  box-shadow: inset 0 0 0 1px #f8f8ff, inset 3px 3px 3px #aad;
-}
-
-input[type="radio"]:not(:checked) {
-  box-shadow: inset 0 0 0 2px #f8f8ff, inset 3px 3px 3px #aad;
-}
-
-.optbox {
-  margin: 2px 0;
-  position: relative;
-  vertical-align: middle !important;
-  border: 1px solid #7a7d8f !important;
-  background: #f8f8ff !important;
-  box-sizing: border-box;
-  -moz-appearance: none;
-  -webkit-appearance: none;
-  filter: drop-shadow(0 0 1px #e0e0eb) !important;
-  will-change: transform;
-}
-
-.optbox:checked {
-  box-shadow: inset 0 0 0 1px #cce;
-  background: linear-gradient(to bottom, #fff, #f0f0ff) !important;
-}
-
-#netconfig .optbox {
-  vertical-align: middle !important;
-}
-
-.optbox:hover, .optbox:focus, .optbox:active,
-.optbox:checked:hover, .optbox:checked:focus, .optbox:checked:active {
-  width: 19px !important;
-  height: 19px !important;
-  min-width: 19px !important;
-  min-height: 19px !important;
-  border: 1px solid #41465f !important;
-  box-shadow: 0 0 2px #f60 !important;
-  filter: drop-shadow(0 0 3px #89f) !important;
-}
-
-.optbox:checked::before {
-  transform: scale(1);
-  transition: linear all .05s;
-}
-
-.optbox:not(:checked)::before {
-  position: absolute;
-  top: 25%;
-  left: 25%;
-  content: "";
-  color: transparent;
-  background: transparent;
-  transform: scale(0);
-  transition: linear all .05s;
-  will-change: transform;
-}
-
-input[type="radio"]:not(:checked)::before {
-  border-radius: 50%;
-}
-}
-/* end custom radios/checkboxes */
-
 /* responsive layout */
 
 @media screen and (max-width: 900px) {
@@ -11582,7 +11443,7 @@ body, .main, .main td, .news p, #news p, .newscontent p, .tab, .tab2, .main li b
 
 .routersummary td, .routersummary a, .routersummary button, .routersummary h4, .routersummary h4 a, .news, pre, #help code, #help tt,
 #jardump tt, #jardump td, div.news, #logs li, tt, .cells tt, #profilelist tt, .leaseset tt, .links code, #console code,
-tt a, .cells tt, #profilelist tt, .cells tt a, #profilelist tt a, .leaseset td tt {
+tt a, .cells tt, #profilelist tt, .cells tt a, #profilelist tt a, .leaseset td tt, .main[id^="config_"] .encDests th {
   font-size: 9pt !important;
 }
 
@@ -12943,8 +12804,9 @@ i {
   margin: 14px 8px;
 }
 
-.encDests th {
+.main[id^="config_"] .encDests th {
   text-align: left;
+  font-size: 90%;
 }
 
 .encDests tr:last-child td {
@@ -12956,21 +12818,16 @@ i {
   width: 10%;
 }
 
-.encDests th:nth-child(2), .encDests td:nth-child(2),
-.encDests th:nth-child(3), .encDests td:nth-child(3),
-.encDests th:nth-child(4), .encDests td:nth-child(4),
-.encDests th:nth-child(5), .encDests td:nth-child(5) {
-  text-align: center;
+.main[id^="config_"] .encDests th:nth-child(n+2), .main[id^="config_"] .encDests td:nth-child(n+2) {
+  padding-left: 10px;
+  padding-right: 10px;
+  text-align: center !important;
 }
 
 .encDests th:nth-child(2), .encDests td:nth-child(2),
 .encDests th:nth-child(4), .encDests td:nth-child(4),
 .encDests th:nth-child(5), .encDests td:nth-child(5) {
   width: 25%;
-}
-
-.encDests th:last-child, .encDests td:last-child {
-  text-align: center;
 }
 
 .encDests code {
@@ -12984,6 +12841,10 @@ i {
   -moz-user-select: all;
   -webkit-user-select: all;
   user-select: all;
+}
+
+.encDests .created, .encDests .expires {
+  white-space: nowrap;
 }
 
 @media screen and (max-width: 1000px) {
