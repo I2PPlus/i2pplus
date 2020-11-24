@@ -145,42 +145,55 @@ public class JSONRPC2Servlet extends HttpServlet {
 
     @Override
     protected void doGet(HttpServletRequest httpServletRequest, HttpServletResponse httpServletResponse) throws ServletException, IOException {
-        httpServletResponse.setContentType("text/html");
+        setHeaders(httpServletResponse);
         PrintWriter out = httpServletResponse.getWriter();
         out.println("<!DOCTYPE html>\n");
         out.println("<html>\n<head>\n");
-        out.println("<meta http-equiv=\"Content-Type\" content=\"text/html; charset=UTF-8\">\n");
-//        out.println("<title>I2PControl - I2P Router Console</title>");
-        out.println("<title>I2PControl - I2P+</title>\n");
-        out.println("<link rel=\"icon\" href=\"/themes/console/dark/images/favicon.ico\">\n");
-        out.println("<link href=\"/themes/i2pcontrol/i2pcontrol.css\" rel=\"stylesheet\" type=\"text/css\">\n");
-        out.println("</head>\n<body>\n");
+        out.println("<meta http-equiv=\"Content-Type\" content=\"text/html; charset=UTF-8\">");
+        out.println("<title>I2PControl - I2P+</title>");
+        out.println("<link rel=\"icon\" href=\"/themes/console/dark/images/favicon.ico\">");
+        out.println("<link href=\"/themes/i2pcontrol/i2pcontrol.css\" rel=\"stylesheet\" type=\"text/css\">");
+        out.println("</head>\n<body>");
         out.println("<h1>I2PControl RPC Service&nbsp;&nbsp;<a href=\"/configwebapps\" title=\"Control and configure service\">" +
-                    "<img src=\"/themes/console/images/info/configure.png\" height=\"16\" width=\"16\"></a></h1>\n");
+                    "<img src=\"/themes/console/images/info/configure.png\" height=\"16\" width=\"16\"></a></h1>");
         out.println("<p><b>Version:</b> " + I2PControlVersion.VERSION + "<br>");
         out.println("<b>Status:</b> Running</p>");
-   if ("/password".equals(httpServletRequest.getServletPath())) {
+       if ("/password".equals(httpServletRequest.getServletPath())) {
             out.println("<hr>\n<form method=\"POST\" action=\"password\">\n");
             if (_secMan.isDefaultPasswordValid()) {
                 out.println("<p>The current API password is the default, \"" + _secMan.DEFAULT_AUTH_PASSWORD + "\". You should change it.</p>");
             } else {
                 out.println("<p><span class=\"prompt\">Current API password:</span> <input name=\"password\" type=\"password\"></p>");
             }
-            out.println("\n<p><span class=\"prompt\">New API password (twice):</span> <input name=\"password2\" type=\"password\">&nbsp;" +
-                        "<input name=\"password3\" type=\"password\">" + "</p>\n" +
+            out.println("<p><span class=\"prompt\">New API password:</span> <input name=\"password2\" type=\"password\" placeholder=\"new password\">&nbsp;" +
+                        "<input name=\"password3\" type=\"password\" placeholder=\"confirm new password\">" + "</p>\n" +
                         "<p id=\"password\"><input name=\"save\" type=\"submit\" value=\"Change API Password\"></p>\n" +
-                        "<hr><p>If you forget the API password, stop I2PControl, delete the config file and restart I2PControl.\n" +
+                        "<hr><p class=\"infohelp\">If you forget the API password, stop I2PControl, delete the config file and restart I2PControl.\n" +
                         "<br><b>Location:</b> <code>" + _conf.getConfFile() + "</code></p>\n</form>");
         } else {
             out.println("<hr><p id=\"password\"><a href=\"password\">Change API Password</a></p>");
         }
-        out.println("\n</body>\n</html>");
+        out.println("</body>\n</html>");
         out.close();
+    }
+
+
+    /**
+     *  @since 0.9.48
+     */
+    private static void setHeaders(HttpServletResponse resp) {
+        resp.setContentType("text/html");
+        resp.setHeader("X-Frame-Options", "SAMEORIGIN");
+        resp.setHeader("Content-Security-Policy", "default-src 'self'; style-src 'self'; script-src 'self'; form-action 'self'; frame-ancestors 'self'; object-src 'none'; media-src 'none'");
+        resp.setHeader("X-XSS-Protection", "1; mode=block");
+        resp.setHeader("X-Content-Type-Options", "nosniff");
+        resp.setHeader("Pragma", "no-cache");
+        resp.setHeader("Cache-Control","no-cache");
     }
 
     /** @since 0.12 */
     private void doPasswordChange(HttpServletRequest req, HttpServletResponse httpServletResponse) throws ServletException, IOException {
-        httpServletResponse.setContentType("text/html");
+        setHeaders(httpServletResponse);
         PrintWriter out = httpServletResponse.getWriter();
         String pw = req.getParameter("password");
         if (pw == null)
@@ -189,33 +202,32 @@ public class JSONRPC2Servlet extends HttpServlet {
             pw = pw.trim();
         String pw2 = req.getParameter("password2");
         String pw3 = req.getParameter("password3");
-        out.println("<!DOCTYPE html>\n");
-        out.println("<html>\n<head>\n");
-        out.println("<meta http-equiv=\"Content-Type\" content=\"text/html; charset=UTF-8\">\n");
-//        out.println("<title>I2PControl - I2P Router Console</title>");
-        out.println("<title>I2PControl - I2P+</title>\n");
-        out.println("<link rel=\"icon\" href=\"/themes/console/dark/images/favicon.ico\">\n");
-        out.println("<link href=\"/themes/i2pcontrol/i2pcontrol.css\" rel=\"stylesheet\" type=\"text/css\">\n");
-        out.println("</head>\n<body>\n");
+        out.println("<!DOCTYPE html>");
+        out.println("<html>\n<head>");
+        out.println("<meta http-equiv=\"Content-Type\" content=\"text/html; charset=UTF-8\">");
+        out.println("<title>I2PControl - I2P+</title>");
+        out.println("<link rel=\"icon\" href=\"/themes/console/dark/images/favicon.ico\">");
+        out.println("<link href=\"/themes/i2pcontrol/i2pcontrol.css\" rel=\"stylesheet\" type=\"text/css\">");
+        out.println("</head>\n<body>");
         out.println("<h1>I2PControl RPC Service&nbsp;&nbsp;<a href=\"/configwebapps\" title=\"Control and configure service\">" +
-                    "<img src=\"/themes/console/images/info/configure.png\" height=\"16\" width=\"16\"></a></h1>\n");
+                    "<img src=\"/themes/console/images/info/configure.png\" height=\"16\" width=\"16\"></a></h1>");
         if (pw2 == null || pw3 == null) {
-            out.println("<p>Enter new password twice!</p>\n");
+            out.println("<p>Please fill in both fields&hellip;</p>");
         } else {
             pw2 = pw2.trim();
             pw3 = pw3.trim();
             if (!pw2.equals(pw3)) {
-                out.println("<p>New passwords don't match!</p>\n");
+                out.println("<p>New passwords don't match!</p>");
             } else if (pw2.length() <= 0) {
-                out.println("<p>Enter new password twice!</p>\n");
+                out.println("<p>Enter new password twice!</p>");
             } else if (_secMan.isValid(pw)) {
                 _secMan.setPasswd(pw2);
-                out.println("<p>API Password changed</p>\n");
+                out.println("<p>API Password changed</p>");
             } else {
-                out.println("<p>Incorrect old password, not changed</p>\n");
+                out.println("<p>Incorrect old password, not changed</p>");
             }
         }
-        out.println("<hr>\n<p id=\"password\"><a href=\"password\">Change API Password</a></p>\n");
+        out.println("<hr>\n<p id=\"password\"><a href=\"password\">Change API Password</a></p>");
         out.println("</body>\n</html>");
     }
 
