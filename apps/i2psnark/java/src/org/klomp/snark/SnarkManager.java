@@ -215,7 +215,7 @@ public class SnarkManager implements CompleteListener, ClientApp {
     private static final String DEFAULT_OPENTRACKERS =
         "http://opentracker.dg2.i2p/a," +
         "http://tracker.lodikon.i2p/announce," +
-        "http://tracker.chudo.i2p/a,");
+        "http://tracker.chudo.i2p/a";
 //        (SigType.ECDSA_SHA256_P256.isAvailable() ? "http://tracker.thebland.i2p/a" : "");
 //        "http://5m3pd32zx43xk3uz6hvrdksj6tlg7abnjsc3j5kkd2yzctet4nmq.b32.i2p/announce," +
 //        "http://tracker.psi.i2p/a," +
