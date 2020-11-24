@@ -108,17 +108,17 @@ public class HomeHelper extends HelperBase {
         //"Aktie" + S + _x("I2P-based application with integrated file sharing &amp; distributed forums &amp; private messaging") + S + "http://aktie.i2p/" + S + I + "aktie.png" + S +
         "dropbox.i2p" + S + _x("Private file storage") + S + "http://dropbox.i2p/" + S + I + "svg/cloud.svg" + S +
         "ebooks.i2p" + S + _x("Huge collection of books &amp; magazines &amp; comics") + S + "http://ebooks.i2p/" + S + I + "svg/books.svg" + S +
-        //"echelon.i2p" + S + _x("I2P Applications") + S + "http://echelon.i2p/" + S + I + "svg/package.svg" + S +
         "fs.i2p" + S + _x("Secure filesharing service") + S + "http://fs.i2p/" + S + I + "svg/cloud.svg" + S +
-        "git.repo.i2p" + S + _x("A public anonymous Git hosting site - supports pulling via Git and HTTP and pushing via SSH") + S + "http://git.repo.i2p/" + S + I + "svg/git.svg" + S +
         "git.idk.i2p" + S + _x("A public anonymous Git hosting site - supports pulling via Git and HTTP and pushing via SSH") + S + "http://git.idk.i2p/explore/projects" + S + I + "svg/gitlab.svg" + S +
         "inclib.i2p" + S + _x("The Radical Militant Library") + S + "http://inclib.i2p/" + S + I + "svg/books.svg" + S +
-        //"i2push.i2p" + S + _x("Online encrypted filesharing service") + S + "http://i2push.i2p/" + S + I + "info/fileshare.png" + S +
         "sharefile.i2p" + S + _x("Secure filesharing service") + S + "http://sharefile.i2p/" + S + I + "svg/cloud.svg" + S +
         "skank.i2p" + S + _x("Home of I2P+") + S + "http://skank.i2p/" + S + I + "svg/package.svg" + S +
         "tome.i2p" + S + _x("Collection of books &amp; other reading material") + S + "http://tome.i2p/" + S + I + "svg/books.svg" + S +
-        "xkcd.i2p" + S + _x("Mirror of the XKCD web comic") + S + "http://xkcd.i2p/" + S + I + "svg/books.svg" + S +
+        //"xkcd.i2p" + S + _x("Mirror of the XKCD web comic") + S + "http://xkcd.i2p/" + S + I + "svg/books.svg" + S +
         //"cacapo.i2p" + S + _x("Cacapo's collection of I2P plugins") + S + "http://cacapo.i2p/" + S + I + "info/butterfly.png" + S +
+        //"echelon.i2p" + S + _x("I2P Applications") + S + "http://echelon.i2p/" + S + I + "svg/package.svg" + S +
+        //"git.repo.i2p" + S + _x("A public anonymous Git hosting site - supports pulling via Git and HTTP and pushing via SSH") + S + "http://git.repo.i2p/" + S + I + "svg/git.svg" + S +
+        //"i2push.i2p" + S + _x("Online encrypted filesharing service") + S + "http://i2push.i2p/" + S + I + "info/fileshare.png" + S +
         //"iMule" + S + _x("Anonymous Filesharing Software") + S + "http://www.imule.i2p/" + S + I + "info/box.png" + S +
         //"killyourtv.i2p" + S + _x("Debian and Tahoe-LAFS repositories") + S + "http://killyourtv.i2p/" + S + I + "television_delete.png" + S +
         //"sponge.i2p" + S + _x("Seedless and the Robert BitTorrent applications") + S + "http://sponge.i2p/" + S + I + "user_astronaut.png" + S +

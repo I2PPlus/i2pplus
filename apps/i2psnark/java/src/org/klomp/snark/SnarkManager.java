@@ -172,9 +172,9 @@ public class SnarkManager implements CompleteListener, ClientApp {
 //    public static final int MIN_UP_BW = 10;
     public static final int MIN_UP_BW = 30;
 //    public static final int DEFAULT_MAX_UP_BW = 25;
-    public static final int DEFAULT_MAX_UP_BW = 50;
+    public static final int DEFAULT_MAX_UP_BW = 1024;
     public static final int DEFAULT_STARTUP_DELAY = 3;
-    public static final int DEFAULT_REFRESH_DELAY_SECS = 15;
+    public static final int DEFAULT_REFRESH_DELAY_SECS = 5;
     private static final int DEFAULT_PAGE_SIZE = 50;
     public static final int DEFAULT_TUNNEL_QUANTITY = 16;
     public static final String CONFIG_DIR_SUFFIX = ".d";
@@ -193,12 +193,12 @@ public class SnarkManager implements CompleteListener, ClientApp {
        "Postman", "http://tracker2.postman.i2p/announce.php=http://tracker2.postman.i2p/"
        ,"DgTrack", "http://opentracker.dg2.i2p/a=http://opentracker.dg2.i2p/"
        ,"Freedom", "http://torrfreedom.i2p/announce.php=http://torrfreedom.i2p/"
-       ,"PsiOpenTracker", "http://tracker.psi.i2p/a=http://tracker.psi.i2p/stats"
        ,"Chudo", "http://tracker.chudo.i2p/a=http://torrents.chudo.i2p/"
        ,"Lodikon", "http://tracker.lodikon.i2p/announce=http://tracker.lodikon.i2p/"
-       ,"PTT", "http://5m3pd32zx43xk3uz6hvrdksj6tlg7abnjsc3j5kkd2yzctet4nmq.b32.i2p/announce=http://ptt.i2p/index_eng.html"
-       //The following is ECDSA_SHA256_P256
-       ,"TheBland", "http://tracker.thebland.i2p/a=http://tracker.thebland.i2p/tracker/"
+//       ,"PTT", "http://5m3pd32zx43xk3uz6hvrdksj6tlg7abnjsc3j5kkd2yzctet4nmq.b32.i2p/announce=http://ptt.i2p/index_eng.html"
+//The following is ECDSA_SHA256_P256
+//       ,"TheBland", "http://tracker.thebland.i2p/a=http://tracker.thebland.i2p/tracker/"
+//       ,"PsiOpenTracker", "http://tracker.psi.i2p/a=http://tracker.psi.i2p/stats"
 //       ,"Chihaya", "http://uajd4nctepxpac4c4bdyrdw7qvja2a5u3x25otfhkptcjgd53ioq.b32.i2p/announce=http://uajd4nctepxpac4c4bdyrdw7qvja2a5u3x25otfhkptcjgd53ioq.b32.i2p/"
 //       ,"DifTracker", "http://diftracker.i2p/announce.php=http://diftracker.i2p/"
 //       ,"PsiTracker", "http://psi.i2p/tracker/a=http://psi.i2p/tracker/"
@@ -215,10 +215,10 @@ public class SnarkManager implements CompleteListener, ClientApp {
     private static final String DEFAULT_OPENTRACKERS =
         "http://opentracker.dg2.i2p/a," +
         "http://tracker.lodikon.i2p/announce," +
-        "http://tracker.psi.i2p/a," +
-        "http://tracker.chudo.i2p/a," +
-        "http://5m3pd32zx43xk3uz6hvrdksj6tlg7abnjsc3j5kkd2yzctet4nmq.b32.i2p/announce," +
-        (SigType.ECDSA_SHA256_P256.isAvailable() ? "http://tracker.thebland.i2p/a" : "");
+        "http://tracker.chudo.i2p/a";
+//        (SigType.ECDSA_SHA256_P256.isAvailable() ? "http://tracker.thebland.i2p/a" : "");
+//        "http://5m3pd32zx43xk3uz6hvrdksj6tlg7abnjsc3j5kkd2yzctet4nmq.b32.i2p/announce," +
+//        "http://tracker.psi.i2p/a," +
 //        "http://uajd4nctepxpac4c4bdyrdw7qvja2a5u3x25otfhkptcjgd53ioq.b32.i2p/announce," +
 //        "http://psi.i2p/tracker/a," +
 //        "http://opendiftracker.i2p/announce.php," +
@@ -232,9 +232,9 @@ public class SnarkManager implements CompleteListener, ClientApp {
         "opentracker.dg2.i2p", "w7tpbzncbcocrqtwwm3nezhnnsw4ozadvi2hmvzdhrqzfxfum7wa.b32.i2p",
         "tracker.chudo.i2p", "swhb5i7wcjcohmus3gbt3w6du6pmvl3isdvxvepuhdxxkfbzao6q.b32.i2p",
         "tracker.lodikon.i2p", "q2a7tqlyddbyhxhtuia4bmtqpohpp266wsnrkm6cgoahdqrjo3ra.b32.i2p",
-        "tracker.psi.i2p", "vmow3h54yljn7zvzbqepdddt5fmygijujycod2q6yznpy2rrzuwa.b32.i2p",
-        "tracker.thebland.i2p", "s5ikrdyjwbcgxmqetxb3nyheizftms7euacuub2hic7defkh3xhq.b32.i2p",
-        "ptt.i2p", "5m3pd32zx43xk3uz6hvrdksj6tlg7abnjsc3j5kkd2yzctet4nmq.b32.i2p",
+//        "tracker.thebland.i2p", "s5ikrdyjwbcgxmqetxb3nyheizftms7euacuub2hic7defkh3xhq.b32.i2p",
+//        "ptt.i2p", "5m3pd32zx43xk3uz6hvrdksj6tlg7abnjsc3j5kkd2yzctet4nmq.b32.i2p",
+//        "tracker.psi.i2p", "vmow3h54yljn7zvzbqepdddt5fmygijujycod2q6yznpy2rrzuwa.b32.i2p",
 //        "Chihaya", "uajd4nctepxpac4c4bdyrdw7qvja2a5u3x25otfhkptcjgd53ioq.b32.i2p",
 //        "opendiftracker.i2p", "bikpeyxci4zuyy36eau5ycw665dplun4yxamn7vmsastejdqtfoq.b32.i2p",
 //        "psi.i2p", "avviiexdngd32ccoy4kuckvc3mkf53ycvzbz6vz75vzhv4tbpk5a.b32.i2p",
