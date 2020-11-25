@@ -193,7 +193,7 @@ public class SnarkManager implements CompleteListener, ClientApp {
        "Postman", "http://tracker2.postman.i2p/announce.php=http://tracker2.postman.i2p/"
        ,"DgTrack", "http://opentracker.dg2.i2p/a=http://opentracker.dg2.i2p/"
        ,"Freedom", "http://torrfreedom.i2p/announce.php=http://torrfreedom.i2p/"
-       ,"Chudo", "http://tracker.chudo.i2p/a=http://torrents.chudo.i2p/"
+       ,"Chudo", "http://tracker.chudo.i2p/a=http://tracker.chudo.i2p/"
        ,"Lodikon", "http://tracker.lodikon.i2p/announce=http://tracker.lodikon.i2p/"
 //       ,"PTT", "http://5m3pd32zx43xk3uz6hvrdksj6tlg7abnjsc3j5kkd2yzctet4nmq.b32.i2p/announce=http://ptt.i2p/index_eng.html"
 //The following is ECDSA_SHA256_P256
