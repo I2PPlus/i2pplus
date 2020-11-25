@@ -6673,38 +6673,38 @@ h3#udpcon {
 
 #tunnels h3.server {
   padding-left: 32px;
-  background: url(/themes/console/images/svg/server.svg) 6px center no-repeat, linear-gradient(to bottom, #fff 50%, rgba(255,255,255,.6) 50%, rgba(240,240,255,.4)), linear-gradient(to right, #fafaff 5%, rgba(231, 231, 255, .8) 25%) !important;
-  background-size: 20px 20px, 100% 100%, 100% 100% !important;
+  background: url(/themes/console/images/svg/server.svg) 7px center no-repeat, linear-gradient(to bottom, #fff 50%, rgba(255,255,255,.6) 50%, rgba(240,240,255,.4)), linear-gradient(to right, #fafaff 5%, rgba(231, 231, 255, .8) 25%) !important;
+  background-size: 18px, 100% 100%, 100% 100% !important;
 }
 
 #tunnels h3.client {
   padding-left: 32px;
-  background: url(/themes/console/images/svg/client.svg) 6px center no-repeat, linear-gradient(to bottom, #fff 50%, rgba(255,255,255,.6) 50%, rgba(240,240,255,.4)), linear-gradient(to right, #fafaff 5%, rgba(231, 231, 255, .8) 25%) !important;
-  background-size: 20px 20px, 100% 100%, 100% 100% !important;
+  background: url(/themes/console/images/svg/client.svg) 7px center no-repeat, linear-gradient(to bottom, #fff 50%, rgba(255,255,255,.6) 50%, rgba(240,240,255,.4)), linear-gradient(to right, #fafaff 5%, rgba(231, 231, 255, .8) 25%) !important;
+  background-size: 18px, 100% 100%, 100% 100% !important;
 }
 
 #tunnels h3.ping {
   padding-left: 32px;
-  background: url(/themes/console/images/svg/ping.svg) 6px center no-repeat, linear-gradient(to bottom, #fff 50%, rgba(255,255,255,.6) 50%, rgba(240,240,255,.4)), linear-gradient(to right, #fafaff 5%, rgba(231, 231, 255, .8) 25%) !important;
-  background-size: 20px 20px, 100% 100%, 100% 100% !important;
+  background: url(/themes/console/images/svg/ping.svg) 7px center no-repeat, linear-gradient(to bottom, #fff 50%, rgba(255,255,255,.6) 50%, rgba(240,240,255,.4)), linear-gradient(to right, #fafaff 5%, rgba(231, 231, 255, .8) 25%) !important;
+  background-size: 18px, 100% 100%, 100% 100% !important;
 }
 
 #tunnels h3#participating {
   padding-left: 32px;
-  background: url(/themes/console/images/info/share.png) 6px center no-repeat, linear-gradient(to bottom, #fff 50%, rgba(255,255,255,.6) 50%, rgba(240,240,255,.4)), linear-gradient(to right, #fafaff 5%, rgba(231, 231, 255, .8) 25%) !important;
-  background-size: 20px 20px, 100% 100%, 100% 100% !important;
+  background: url(/themes/console/images/info/share.png) 7px center no-repeat, linear-gradient(to bottom, #fff 50%, rgba(255,255,255,.6) 50%, rgba(240,240,255,.4)), linear-gradient(to right, #fafaff 5%, rgba(231, 231, 255, .8) 25%) !important;
+  background-size: 18px, 100% 100%, 100% 100% !important;
 }
 
 #tunnels h3#exploratory {
   padding-left: 32px;
-  background: url(/themes/console/images/svg/globe.svg) 6px center no-repeat, linear-gradient(to bottom, #fff 50%, rgba(255,255,255,.6) 50%, rgba(240,240,255,.4)), linear-gradient(to right, #fafaff 5%, rgba(231, 231, 255, .8) 25%) !important;
-  background-size: 20px 20px, 100% 100%, 100% 100% !important;
+  background: url(/themes/console/images/svg/globe.svg) 7px center no-repeat, linear-gradient(to bottom, #fff 50%, rgba(255,255,255,.6) 50%, rgba(240,240,255,.4)), linear-gradient(to right, #fafaff 5%, rgba(231, 231, 255, .8) 25%) !important;
+  background-size: 18px, 100% 100%, 100% 100% !important;
 }
 
 #tunnels h3:last-of-type {
   padding-left: 32px;
-  background: url(/themes/console/images/svg/speedometer.svg) 6px center no-repeat, linear-gradient(to bottom, #fff 50%, rgba(255,255,255,.6) 50%, rgba(240,240,255,.4)), linear-gradient(to right, #fafaff 5%, rgba(231, 231, 255, .8) 25%) !important;
-  background-size: 20px 20px, 100% 100%, 100% 100% !important;
+  background: url(/themes/console/images/svg/speedometer.svg) 7px center no-repeat, linear-gradient(to bottom, #fff 50%, rgba(255,255,255,.6) 50%, rgba(240,240,255,.4)), linear-gradient(to right, #fafaff 5%, rgba(231, 231, 255, .8) 25%) !important;
+  background-size: 18px, 100% 100%, 100% 100% !important;
 }
 
 #tunnels h3 + h3 {
@@ -10468,6 +10468,10 @@ b.suboption {
   content: "n/a";
   display: inline-block;
 }
+
+#ntcpconnections td:first-child, #udpconnections td:first-child {
+  padding: 2px 3px !important;
+}
 }
 
 @media screen and (min-width: 1500px) {
@@ -12940,9 +12944,15 @@ to {
   line-height: 1;
 }
 
+.routerid .flag {
+  margin: 0 -3px;
+  padding: 2px 3px 2px 2px;
+  border-right: 1px solid #bbd;
+}
+
 .routerid .flag img {
-  width: 16px;
-  height: 12px;
+  width: 16px !important;
+  height: 12px !important;
   border: 1px solid #ccd;
 }
 
@@ -13075,10 +13085,10 @@ to {
 
 #tunnels #peercount {
   padding-left: 30px !important;
-  background: url(/themes/console/images/info/tunnels.png) 8px 6px no-repeat,
+  background: url(/themes/console/images/info/tunnels.png) 7px 6px no-repeat,
               linear-gradient(to bottom, #fff 50%, rgba(255,255,255,.6) 50%, rgba(240,240,255,.4)),
               linear-gradient(to right, #fafaff 5%, rgba(231, 231, 255, .8) 25%) !important;
-  background-size: 18px 18px, 100% 100%, 100% 100% !important;
+  background-size: 18px, 100% 100%, 100% 100% !important;
 }
 
 #tunnels #tunnelPeerCount .cells {
