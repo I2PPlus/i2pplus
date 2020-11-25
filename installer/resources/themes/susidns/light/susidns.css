@@ -783,6 +783,7 @@ textarea[name="destination"] {
 
 #booksearch {
   padding: 2px 5px 0;
+  vertical-align: middle;
 }
 
 #filter {
@@ -814,7 +815,6 @@ textarea[name="destination"] {
   color: #fff;
   background: #f60;
   text-decoration: none;
-  box-shadow: inset 0 0 0 1px #fff;
   box-shadow: inset 0 0 0 1px #fff, inset 3px 3px 3px #33333f;
 }
 
@@ -939,23 +939,22 @@ tr:hover .destaddress {
   font-size: 0 !important;
 }
 
-#host_list td.b32link a::after {
-  content: url(/themes/console/images/buttons/link.png);
-  text-align: center;
-  filter: drop-shadow(0 0 1px #555);
+#host_list td.b32link a::after, #host_list td.helper a::after {
+  width: 16px;
+  height: 16px;
+  display: inline-block;
   cursor: pointer;
+  content: "";
+  background-size: 16px;
+}
+
+#host_list td.b32link a::after {
+  background: url(../images/link.svg) center center no-repeat;
 }
 
 #host_list td.helper a::after {
-  content: url(/themes/console/images/buttons/helper.png);
-  filter: drop-shadow(0 0 1px #555);
-  cursor: pointer;
+  background: url(images/helper.svg) center center no-repeat;
 }
-
-/*#host_list td:nth-child(2) a:hover, #host_list td:nth-child(3) a:hover, #host_list td:nth-child(4) a:hover,
-#host_list td:nth-child(2) a:focus, #host_list td:nth-child(3) a:focus, #host_list td:nth-child(4) a:focus {
-  filter: drop-shadow(0 0 1px #f60);
-}*/
 
 #host_list .destaddress:focus {
   background: #ffd;
