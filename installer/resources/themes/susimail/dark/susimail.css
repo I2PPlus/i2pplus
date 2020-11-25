@@ -9,11 +9,11 @@
 
 html {
   min-height: 100%;
-  scrollbar-color: rgba(8,48,8,0.8) #000800;
+  scrollbar-color: rgba(8,48,8,.8) #000800;
 }
 
 html:hover {
-  scrollbar-color: rgba(16,72,16,0.8) #000800;
+  scrollbar-color: rgba(16,72,16,.8) #000800;
   transition: ease scrollbar-color .1s;
 }
 
@@ -73,12 +73,12 @@ body.iframed {
 }
 
 textarea {
-  scrollbar-color: rgba(16,48,16,0.4) rgba(0,0,0,0);
+  scrollbar-color: rgba(16,48,16,.4) rgba(0,0,0,0);
   transition: ease scrollbar-color .5s;
 }
 
 textarea:hover {
-  scrollbar-color: rgba(24,80,24,0.8) rgba(0,0,0,.9);
+  scrollbar-color: rgba(24,80,24,.8) rgba(0,0,0,.9);
   transition: ease scrollbar-color .2s;
 }
 
@@ -301,7 +301,7 @@ pre {
   border: 1px solid #252;
   border-radius: 2px;
   background-color: #010;
-  background: repeating-linear-gradient(to right, rgba(0,32,0,0.4), rgba(0,0,0,0.4) 1px, rgba(0,0,0,0.4) 2px), repeating-linear-gradient(to bottom, rgba(0,0,0,0.4) 1px, rgba(0,0,0,0.4) 2px, rgba(0,64,0,0.4) 3px), url(/themes/console/dark/images/camotile2.png);
+  background: repeating-linear-gradient(to right, rgba(0,32,0,.4), rgba(0,0,0,.4) 1px, rgba(0,0,0,.4) 2px), repeating-linear-gradient(to bottom, rgba(0,0,0,.4) 1px, rgba(0,0,0,.4) 2px, rgba(0,64,0,.4) 3px), url(/themes/console/dark/images/camotile2.png);
 }
 
 .iframed .page {
@@ -800,7 +800,7 @@ input[type=submit]:hover, input[type=reset]:hover, input[type=submit]:focus, inp
 select:hover, select:focus, select:active, #settings:hover, #settings:focus {
   color: #f60;
   border: 1px solid #f60;
-  box-shadow: inset 0 0 0 1px #000, inset 0 0 2px 1px rgba(255,86,0,0.8), inset 0 0 0 3px #000 !important;
+  box-shadow: inset 0 0 0 1px #000, inset 0 0 2px 1px rgba(255,86,0,.8), inset 0 0 0 3px #000 !important;
 }
 
 input[type=submit]:active, input[type=reset]:active, #settings:active {
@@ -1262,7 +1262,7 @@ hr {
   border-radius: 2px;
   box-shadow: inset 0 0 0 1px #000, inset 0 0 2px 1px #040, inset 0 0 0 3px #000, 0 0 0 1px #000, 0 0 3px 3px rgba(0,0,0,.8);
   background: #010;
-  background: linear-gradient(to bottom, rgba(0,0,0,0), rgba(0,0,0,.3)), repeating-linear-gradient(to bottom, rgba(0,0,0,.9), rgba(0,32,0,0.3) 1px, rgba(0,32,0,.4) 2px), url(images/hatter_med.png) right bottom no-repeat #000;
+  background: linear-gradient(to bottom, rgba(0,0,0,0), rgba(0,0,0,.3)), repeating-linear-gradient(to bottom, rgba(0,0,0,.9), rgba(0,32,0,.3) 1px, rgba(0,32,0,.4) 2px), url(images/hatter_med.png) right bottom no-repeat #000;
   background-size: 100% 100%, 100% 100%, auto 40%;
   margin: 52px auto 42px;
   filter: opacity(0);
@@ -1445,7 +1445,7 @@ h3#config {
   box-shadow: inset 0 0 0 1px #000;
   text-shadow: 0 1px 1px #000;
   background: #010;
-  background: linear-gradient(to right, rgba(0,64,0,0.1), rgba(0,80,0,0.2), rgba(0,64,0,0.1)), linear-gradient(to bottom, #010 50%, #000 50%);
+  background: linear-gradient(to right, rgba(0,64,0,.1), rgba(0,80,0,.2), rgba(0,64,0,.1)), linear-gradient(to bottom, #010 50%, #000 50%);
 }
 
 #prefsave {
@@ -1684,7 +1684,7 @@ td p.error {
   border-radius: 0 0 2px 2px;
   background: #010;
   background: repeating-linear-gradient(to bottom, #000800 1px, #000800 2px, #000 3px);
-  background: repeating-linear-gradient(to right, rgba(0,32,0,0.4), rgba(0,0,0,0.4) 1px, rgba(0,0,0,0.4) 2px), repeating-linear-gradient(to bottom, rgba(0,0,0,0.4) 1px, rgba(0,0,0,0.4) 2px, rgba(0,64,0,0.4) 3px), url(/themes/console/dark/images/camotile2.png);
+  background: repeating-linear-gradient(to right, rgba(0,32,0,.4), rgba(0,0,0,.4) 1px, rgba(0,0,0,.4) 2px), repeating-linear-gradient(to bottom, rgba(0,0,0,.4) 1px, rgba(0,0,0,.4) 2px, rgba(0,64,0,.4) 3px), url(/themes/console/dark/images/camotile2.png);
 }
 
 .iframed #composemail {
@@ -2000,7 +2000,7 @@ tr:hover td.mailListSubject a {
   width: calc(100% - 2px);
   border-radius: 2px 15px 15px 2px;
   background: #ffc;
-  background: linear-gradient(to right, rgba(0,0,0,0), rgba(0,64,0,0.9) 20%);
+  background: linear-gradient(to right, rgba(0,0,0,0), rgba(0,64,0,.9) 20%);
 }
 
 @media screen and (-webkit-min-device-pixel-ratio: 0) {
@@ -2319,11 +2319,11 @@ background-position: 0;
 
 @keyframes loading {
 0% {
-  background: linear-gradient(to bottom, rgba(255,255,255,0.2) 50%, rgba(0,0,0,0.3) 50%), repeating-linear-gradient(45deg, #020 1px, #020 20px, #000 20px, #000 40px);
+  background: linear-gradient(to bottom, rgba(255,255,255,.2) 50%, rgba(0,0,0,.3) 50%), repeating-linear-gradient(45deg, #020 1px, #020 20px, #000 20px, #000 40px);
 }
 
 100% {
-  background: linear-gradient(to bottom, rgba(255,255,255,0.2) 50%, rgba(0,0,0,0.3) 50%),repeating-linear-gradient(45deg, #000 1px, #000 20px, #020 20px, #020 40px);;
+  background: linear-gradient(to bottom, rgba(255,255,255,.2) 50%, rgba(0,0,0,.3) 50%),repeating-linear-gradient(45deg, #000 1px, #000 20px, #020 20px, #020 40px);;
 }
 }
 
@@ -2357,7 +2357,7 @@ td.mailListDate {
   text-align: center !important;
   font-weight: bold;
   border: none !important;
-  border-bottom: 1px solid rgba(0,64,0,0.4) !important;
+  border-bottom: 1px solid rgba(0,64,0,.4) !important;
   opacity: .85;
   box-shadow: none !important;
   background: none !important;
@@ -2489,7 +2489,7 @@ tr.mailbody td {
 
 #toggleHeaders:hover {
   border: 1px solid #f60;
-  box-shadow: inset 0 0 0 1px #000, inset 0 0 2px 1px rgba(255,86,0,0.8), inset 0 0 0 3px #000 !important;
+  box-shadow: inset 0 0 0 1px #000, inset 0 0 2px 1px rgba(255,86,0,.8), inset 0 0 0 3px #000 !important;
 }
 
 #toggleHeaders:hover a {

@@ -134,7 +134,7 @@ td.destinations {
   margin-bottom: 10px;
 }
 
-#add input[type="text"], #import input[type="file"] {
+#add input[type=text], #import input[type="file"] {
   width: calc(100% - 2px);
 }
 
@@ -450,7 +450,7 @@ div#filter {
   background: linear-gradient(to bottom, #fff 50%, #eff2ff 50%);
 }
 
-#search input[type="text"] {
+#search input[type=text] {
   width: 200px;
   padding: 5px 5px 5px 25px;
   background: #fff url(/themes/console/images/buttons/search.png) 5px center no-repeat;
@@ -521,7 +521,7 @@ img[src="/imagegen/id?s=256&c="], img[src="/imagegen/id?s=20&c="] {
   text-align: center;
   box-shadow: inset 0 0 1px #ccf;
   background: #f8f8ff;
-  background: linear-gradient(rgba(250,250,255,0.5), rgba(246,246,255,0.5)), url(/themes/console/classic/images/bg2.png);
+  background: linear-gradient(rgba(250,250,255,.5), rgba(246,246,255,.5)), url(/themes/console/classic/images/bg2.png);
   background-size: 100% 100%, 120px 120px;
   transition: ease all 0.2s;
 }
@@ -581,11 +581,11 @@ p.buttons {
   font: 9pt/130% "Droid Sans", "Open Sans", "Noto Sans", Ubuntu, "Bitstream Vera Sans", "Lucida Grande", "DejaVu Sans", "Segoe UI", Verdana, Helvetica, sans-serif;
 }
 
-.fakebutton, input[type="submit"], input[type="reset"], input[type="checkbox"], input[type="radio"], select {
+.fakebutton, input[type=submit], input[type="reset"], input[type=checkbox], input[type=radio], select {
   cursor: pointer;
 }
 
-input[type="text"], input[type="password"], textarea {
+input[type=text], input[type=password], textarea {
   margin: 3px 3px 3px 0;
   padding: 6px 10px;
   min-width: 160px;
@@ -598,18 +598,18 @@ input[type="text"], input[type="password"], textarea {
   background: #fff;
 }
 
-input[type="text"]:focus, input[type="password"]:focus, textarea:focus {
+input[type=text]:focus, input[type=password]:focus, textarea:focus {
   color: #000;
   box-shadow: inset 0 0 0 1px #89f;
   box-shadow: inset 0 0 0 1px #89f, 0 0 1px rgba(136, 153, 255, 0.4);
 }
 
-input[type="submit"]::-moz-focus-inner, input[type="reset"]::-moz-focus-inner {
+input[type=submit]::-moz-focus-inner, input[type="reset"]::-moz-focus-inner {
   border: none;
   outline: none;
 }
 
-input[type="submit"], input[type="reset"] {
+input[type=submit], input[type="reset"] {
   min-width: 80px;
 }
 
@@ -637,7 +637,7 @@ td.destinations textarea, td.destinations textarea:focus {
   font: normal 8pt "Noto Mono", "Droid Sans Mono", "Andale Mono", "DejaVu Sans Mono", "Lucida Console", monospace;
 }
 
-.fakebutton, input[type="submit"], input[type="reset"] {
+.fakebutton, input[type=submit], input[type="reset"] {
   margin: 2px 0 2px 4px;
   padding: 5px 8px !important;
   color: #333 !important;
@@ -652,8 +652,8 @@ input.update {
   margin-left: 0;
 }
 
-.fakebutton:hover, input[type="submit"]:hover, input[type="reset"]:hover,
-.fakebutton:focus, input[type="submit"]:focus, input[type="reset"]:focus {
+.fakebutton:hover, input[type=submit]:hover, input[type="reset"]:hover,
+.fakebutton:focus, input[type=submit]:focus, input[type="reset"]:focus {
   color: #222;
   border: 1px solid #aaafce;
   background: #fff;
@@ -661,7 +661,7 @@ input.update {
   filter: drop-shadow(0 0 1px #89f);
 }
 
-.fakebutton:active, input[type="submit"]:active, input[type="reset"]:active {
+.fakebutton:active, input[type=submit]:active, input[type="reset"]:active {
   color: #333;
   border: 1px solid #bbb;
   box-shadow: inset 3px 3px 3px #999;
@@ -677,13 +677,13 @@ input.update {
   margin-bottom: -2px !important;
 }
 
-input[type="radio"], input[type="checkbox"] {
+input[type=radio], input[type=checkbox] {
   min-width: 16px;
   min-height: 16px;
   background: none;
 }
 
-input[type="radio"]:hover, input[type="radio"]:focus, input[type="checkbox"]:hover, input[type="checkbox"]:focus {
+input[type=radio]:hover, input[type=radio]:focus, input[type=checkbox]:hover, input[type=checkbox]:focus {
   box-shadow: inset 0 0 1px 2px #89f;
   filter: drop-shadow(0 0 3px #89f);
   outline: none;
@@ -803,7 +803,7 @@ textarea[name="config"], textarea[name="content"] {
 .headline h3 {
   padding: 10px 5px 10px 36px;
   word-spacing: 0.1em;
-  letter-spacing: 0.08em;
+  letter-spacing: .08em;
   text-transform: uppercase;
   font-size: 12pt;
   background: url(/themes/console/images/svg/addressbook.svg) 10px center no-repeat;
@@ -1134,8 +1134,8 @@ _:-ms-lang(x), * {
 
 /* custom radios/checkboxes to enforce color scheme when OS widgets are non-standard  */
 @supports (background-blend-mode: luminosity) { /* exclude ms browsers */
-input[type="checkbox"], input[type="checkbox"]:checked, input[type="checkbox"][disabled], input[type="checkbox"][disabled]:checked,
-input[type="radio"], input[type="radio"]:checked, input[type="radio"][disabled], input[type="radio"][disabled]:checked {
+input[type=checkbox], input[type=checkbox]:checked, input[type=checkbox][disabled], input[type=checkbox][disabled]:checked,
+input[type=radio], input[type=radio]:checked, input[type=radio][disabled], input[type=radio][disabled]:checked {
   position: relative;
   width: 19px !important;
   height: 19px !important;
@@ -1149,19 +1149,19 @@ input[type="radio"], input[type="radio"]:checked, input[type="radio"][disabled],
   will-change: transform;
 }
 
-input[type="checkbox"], input[type="checkbox"]:checked, input[type="checkbox"][disabled], input[type="checkbox"][disabled]:checked {
+input[type=checkbox], input[type=checkbox]:checked, input[type=checkbox][disabled], input[type=checkbox][disabled]:checked {
   border-radius: 2px;
   box-shadow: inset 1px 1px 1px rgba(204, 204, 204, 0.6);
 }
 
-input[type="radio"], input[type="radio"]:checked, input[type="radio"][disabled], input[type="radio"][disabled]:checked {
+input[type=radio], input[type=radio]:checked, input[type=radio][disabled], input[type=radio][disabled]:checked {
   border-radius: 50%;
 }
 
-input[type="checkbox"]:checked::before, input[type="radio"]:checked::before,
-input[type="checkbox"]:not(:checked)::before, input[type="radio"]:not(:checked)::before {
+input[type=checkbox]:checked::before, input[type=radio]:checked::before,
+input[type=checkbox]:not(:checked)::before, input[type=radio]:not(:checked)::before {
   position: absolute;
-  transition: linear all 0.05s;
+  transition: linear all .05s;
   transform: scale(1);
 }
 
@@ -1169,7 +1169,7 @@ input[type="checkbox"]:not(:checked)::before, input[type="radio"]:not(:checked):
   box-shadow: inset 2px 2px 1px rgba(204, 204, 240, 0.6);
 }
 
-input[type="checkbox"]:checked::before {
+input[type=checkbox]:checked::before {
   content: "";
   position: absolute;
   top: 3px;
@@ -1183,7 +1183,7 @@ input[type="checkbox"]:checked::before {
   transition: linear all .05s;
 }
 
-input[type="radio"]:checked::before {
+input[type=radio]:checked::before {
   content: "";
   border-radius: 50%;
   left: 25%;
@@ -1193,11 +1193,11 @@ input[type="radio"]:checked::before {
   background: #67f;
 }
 
-input[type="checkbox"]:not(:checked)::before, input[type="radio"]:not(:checked)::before {
+input[type=checkbox]:not(:checked)::before, input[type=radio]:not(:checked)::before {
   transform: scale(0);
 }
 
-input[type="checkbox"]:hover, input[type="radio"]:hover, input[type="checkbox"]:focus, input[type="radio"]:focus {
+input[type=checkbox]:hover, input[type=radio]:hover, input[type=checkbox]:focus, input[type=radio]:focus {
   background: #fff;
   width: 19px !important;
   height: 19px !important;
@@ -1207,8 +1207,8 @@ input[type="checkbox"]:hover, input[type="radio"]:hover, input[type="checkbox"]:
   filter: none !important;
 }
 
-input[type="checkbox"][disabled], input[type="radio"][disabled], input[type="checkbox"][disabled]:hover, input[type="radio"][disabled]:hover,
-input[type="checkbox"][disabled]:checked, input[type="radio"][disabled]:checked, input[type="checkbox"][disabled]:checked:hover, input[type="radio"][disabled]:checked:hover {
+input[type=checkbox][disabled], input[type=radio][disabled], input[type=checkbox][disabled]:hover, input[type=radio][disabled]:hover,
+input[type=checkbox][disabled]:checked, input[type=radio][disabled]:checked, input[type=checkbox][disabled]:checked:hover, input[type=radio][disabled]:checked:hover {
   filter: none !important;
   box-shadow: none !important;
   opacity: 0.5;
@@ -1336,7 +1336,7 @@ input[disabled] {
   padding: 5px 12px 4px !important;
   background: linear-gradient(to bottom, #fff 50%, #eaebff 50%) !important;
   text-transform: uppercase;
-  letter-spacing: 0.08em;
+  letter-spacing: .08em;
   flex-grow: 1;
   border-radius: 0;
   position: relative;
@@ -1498,7 +1498,7 @@ div#messages {
   line-height: 150%;
   text-align: center;
   border-radius: 0 0 4px 4px;
-  box-shadow: 0 1px 2px rgba(100,100,200,0.7);
+  box-shadow: 0 1px 2px rgba(100,100,200,.7);
   background: #113 url(/themes/snark/light/images/delete.png) right 8px top 5px no-repeat !important;
   background-size: 16px 16px !important;
   cursor: crosshair;

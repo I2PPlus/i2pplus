@@ -133,7 +133,7 @@ div.footer {
   border-top: 1px solid #aaafce;
   margin: 0 -10px -10px;
   background: #fff;
-  background: rgba(255,255,255,0.5);
+  background: rgba(255,255,255,.5);
   padding: 1px;
   display: none;
 }
@@ -423,7 +423,7 @@ img.sort {
   background: #fff;
 }
 
-#newmail input[type="text"] {
+#newmail input[type=text] {
   width: 665px;
 }
 
@@ -440,7 +440,7 @@ pre {
 
 .page {
   background: #eef url(/themes/console/classic/images/bg2.png);
-  background: linear-gradient(to bottom, rgba(255,255,255,0.7),rgba(255,255,255,0.2)), url(/themes/console/classic/images/bg2.png) #eef;
+  background: linear-gradient(to bottom, rgba(255,255,255,.7),rgba(255,255,255,.2)), url(/themes/console/classic/images/bg2.png) #eef;
   background-size: 100% 100%, 120px 120px;
   color: #0c153d;
   margin: 0;
@@ -505,13 +505,13 @@ table#message_full {
   border-bottom: 1px solid #aaafce;
 }
 
-input[type="checkbox"], input[type="radio"] {
+input[type=checkbox], input[type=radio] {
   background: none;
   min-width: 16px;
   min-height: 16px;
 }
 
-input[type="radio"]:hover, input[type="radio"]:focus, input[type="checkbox"]:hover, input[type="checkbox"]:focus {
+input[type=radio]:hover, input[type=radio]:focus, input[type=checkbox]:hover, input[type=checkbox]:focus {
   filter: drop-shadow(0 0 3px #89f);
   box-shadow: inset 0 0 1px 2px #89f;
   outline: none;
@@ -527,7 +527,7 @@ textarea {
   font-size: 9pt;
 }
 
-input[type="text"], input[type="password"], textarea {
+input[type=text], input[type=password], textarea {
   border: 1px solid #aaafce;
   box-shadow: inset 1px 1px 1px #ddd;
   padding: 4px 5px !important;
@@ -548,17 +548,17 @@ input.new_upload, input.delete_attachment {
 }
 
 @-moz-document url-prefix(http://) {
-button::-moz-focus-inner, input[type="button"]::-moz-focus-inner, input[type="submit"]::-moz-focus-inner, input[type="reset"]::-moz-focus-inner {
+button::-moz-focus-inner, input[type="button"]::-moz-focus-inner, input[type=submit]::-moz-focus-inner, input[type="reset"]::-moz-focus-inner {
   padding: 0 !important;
   border: 0 none !important;
 }
 }
 
-button:focus, input[type="submit"]:focus, input[type="reset"]:focus {
+button:focus, input[type=submit]:focus, input[type="reset"]:focus {
   filter: drop-shadow(0 0 1px #89f);
 }
 
-button, input[type="submit"], input[type="reset"], #settings {
+button, input[type=submit], input[type="reset"], #settings {
   padding: 5px;
   display: inline-block;
   line-height: 130%;
@@ -577,8 +577,8 @@ input[type="file"] {
   padding: 3px 2px;
 }
 
-button:hover, input[type="submit"]:hover, input[type="reset"]:hover,
-button:focus, input[type="submit"]:focus, input[type="reset"]:focus,
+button:hover, input[type=submit]:hover, input[type="reset"]:hover,
+button:focus, input[type=submit]:focus, input[type="reset"]:focus,
 #settings:hover, #settings:focus {
   color: #222;
   border: 1px solid #aaafce;
@@ -587,19 +587,19 @@ button:focus, input[type="submit"]:focus, input[type="reset"]:focus,
   filter: drop-shadow(0 0 1px #89f);
 }
 
-input[type="text"]:focus, input[type="password"]:focus, textarea:focus {
+input[type=text]:focus, input[type=password]:focus, textarea:focus {
   color: #000;
   box-shadow: 0 0 0 1px #fff, 0 0 0 2px #f60;
 }
 
-button:active, input[type="submit"]:active, input[type="reset"]:active, #settings:active {
+button:active, input[type=submit]:active, input[type="reset"]:active, #settings:active {
   color: #555;
   border: 1px solid #bbb;
   box-shadow: inset 0 0 0 1px #fff, inset 3px 3px 3px #999;
   background: #ddd;
 }
 
-input[disabled][type="submit"], input[disabled][type="submit"]:hover, input[disabled][type="submit"]:active {
+input[disabled][type=submit], input[disabled][type=submit]:hover, input[disabled][type=submit]:active {
   border: 1px solid #bbb;
   background: linear-gradient(to bottom, #fff, #eef);
   opacity: 0.3;
@@ -615,7 +615,7 @@ input, label {
   cursor: pointer;
 }
 
-input[type="text"], input[type="password"] {
+input[type=text], input[type=password] {
   cursor: text;
 }
 
@@ -1035,7 +1035,7 @@ div#composemail {
   margin: 55px auto 40px;
   box-shadow: 0 0 0 1px #fff;
   background: #fefefe;
-  background: linear-gradient(to bottom, rgba(240,240,255,0.4), rgba(220,220,255,0.5)) #fefefe;
+  background: linear-gradient(to bottom, rgba(240,240,255,.4), rgba(220,220,255,.5)) #fefefe;
   box-shadow: inset 0 0 0 1px #fff, 0 0 1px #999;
   filter: opacity(0);
   animation: linear fade-in .15s .5s forwards;
@@ -1050,7 +1050,7 @@ div#composemail {
   100% {filter: opacity(1)}
 }
 
-#dologin input[type="text"] {
+#dologin input[type=text] {
   text-align: left !important;
   font-weight: normal;
 }
@@ -1112,7 +1112,7 @@ div#composemail {
   color: #35415f;
   font-size: 14pt;
   text-align: left;
-  letter-spacing: 0.08em;
+  letter-spacing: .08em;
   word-spacing: 0.1em;
   box-shadow: inset 0 0 0 1px #fff;
 }
@@ -1120,7 +1120,7 @@ div#composemail {
 #dologin hr {
   display: block !important;
   background: #aaafce;
-  box-shadow: 0 0 0 1px rgba(255,255,255,0.5);
+  box-shadow: 0 0 0 1px rgba(255,255,255,.5);
 }
 
 #dologin tr:nth-child(6) hr {
@@ -1329,7 +1329,7 @@ table#pagenav td:last-child {
   min-width: 600px;
 }
 
-#composemail textarea, #newmail input[type="text"] {
+#composemail textarea, #newmail input[type=text] {
   min-width: 400px;
   width: 100% !important;
 }
@@ -1377,11 +1377,11 @@ _:-ms-lang(x), * {
   font-size: 80%;
   text-align: left;
   text-transform: lowercase;
-/*  border-bottom: 1px solid rgba(100,100,100,0.3);*/
+/*  border-bottom: 1px solid rgba(100,100,100,.3);*/
 }
 
 tr:hover .listclock {
-/*  border-bottom: 1px solid rgba(100,100,100,0.5);*/
+/*  border-bottom: 1px solid rgba(100,100,100,.5);*/
 }
 
 .listDate {
@@ -1497,8 +1497,8 @@ tr:hover .listDate {
 
 /* custom radios/checkboxes to enforce color scheme when OS widgets are non-standard  */
 @supports (background-blend-mode: luminosity) { /* exclude ms browsers */
-input[type="checkbox"], input[type="checkbox"]:checked, input[type="checkbox"][disabled], input[type="checkbox"][disabled]:checked,
-input[type="radio"], input[type="radio"]:checked, input[type="radio"][disabled], input[type="radio"][disabled]:checked {
+input[type=checkbox], input[type=checkbox]:checked, input[type=checkbox][disabled], input[type=checkbox][disabled]:checked,
+input[type=radio], input[type=radio]:checked, input[type=radio][disabled], input[type=radio][disabled]:checked {
   position: relative;
   width: 19px !important;
   height: 19px !important;
@@ -1512,19 +1512,19 @@ input[type="radio"], input[type="radio"]:checked, input[type="radio"][disabled],
   will-change: transform;
 }
 
-input[type="checkbox"], input[type="checkbox"]:checked, input[type="checkbox"][disabled], input[type="checkbox"][disabled]:checked {
+input[type=checkbox], input[type=checkbox]:checked, input[type=checkbox][disabled], input[type=checkbox][disabled]:checked {
   border-radius: 2px;
   box-shadow: inset 1px 1px 1px rgba(204, 204, 204, 0.6);
 }
 
-input[type="radio"], input[type="radio"]:checked, input[type="radio"][disabled], input[type="radio"][disabled]:checked {
+input[type=radio], input[type=radio]:checked, input[type=radio][disabled], input[type=radio][disabled]:checked {
   border-radius: 50%;
 }
 
-input[type="checkbox"]:checked::before, input[type="radio"]:checked::before,
-input[type="checkbox"]:not(:checked)::before, input[type="radio"]:not(:checked)::before {
+input[type=checkbox]:checked::before, input[type=radio]:checked::before,
+input[type=checkbox]:not(:checked)::before, input[type=radio]:not(:checked)::before {
   position: absolute;
-  transition: linear all 0.05s;
+  transition: linear all .05s;
   transform: scale(1);
 }
 
@@ -1532,7 +1532,7 @@ input[type="checkbox"]:not(:checked)::before, input[type="radio"]:not(:checked):
   box-shadow: inset 2px 2px 1px rgba(204, 204, 240, 0.6);
 }
 
-input[type="checkbox"]:checked::before {
+input[type=checkbox]:checked::before {
   content: "";
   position: absolute;
   top: 3px;
@@ -1546,7 +1546,7 @@ input[type="checkbox"]:checked::before {
   transition: linear all .05s;
 }
 
-input[type="radio"]:checked::before {
+input[type=radio]:checked::before {
   content: "";
   border-radius: 50%;
   left: 25%;
@@ -1556,11 +1556,11 @@ input[type="radio"]:checked::before {
   background: #67f;
 }
 
-input[type="checkbox"]:not(:checked)::before, input[type="radio"]:not(:checked)::before {
+input[type=checkbox]:not(:checked)::before, input[type=radio]:not(:checked)::before {
   transform: scale(0);
 }
 
-input[type="checkbox"]:hover, input[type="radio"]:hover, input[type="checkbox"]:focus, input[type="radio"]:focus {
+input[type=checkbox]:hover, input[type=radio]:hover, input[type=checkbox]:focus, input[type=radio]:focus {
   background: #fff;
   width: 19px !important;
   height: 19px !important;
@@ -1570,8 +1570,8 @@ input[type="checkbox"]:hover, input[type="radio"]:hover, input[type="checkbox"]:
   filter: none !important;
 }
 
-input[type="checkbox"][disabled], input[type="radio"][disabled], input[type="checkbox"][disabled]:hover, input[type="radio"][disabled]:hover,
-input[type="checkbox"][disabled]:checked, input[type="radio"][disabled]:checked, input[type="checkbox"][disabled]:checked:hover, input[type="radio"][disabled]:checked:hover {
+input[type=checkbox][disabled], input[type=radio][disabled], input[type=checkbox][disabled]:hover, input[type=radio][disabled]:hover,
+input[type=checkbox][disabled]:checked, input[type=radio][disabled]:checked, input[type=checkbox][disabled]:checked:hover, input[type=radio][disabled]:checked:hover {
   filter: none !important;
   box-shadow: none !important;
   opacity: 0.5;

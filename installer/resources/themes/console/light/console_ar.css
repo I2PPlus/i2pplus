@@ -30,7 +30,7 @@ h1, h2 ,h3, h4 {
 }
 
 h2, h3 {
-  background: linear-gradient(to bottom, #fff 50%, rgba(255,255,255,0.6) 50%, rgba(240,240,255,0.4)), linear-gradient(to left, #fff 5%, rgba(231, 231, 255, 0.8) 15%) !important;
+  background: linear-gradient(to bottom, #fff 50%, rgba(255,255,255,.6) 50%, rgba(240,240,255,.4)), linear-gradient(to left, #fff 5%, rgba(231, 231, 255, 0.8) 15%) !important;
 }
 
 .welcome h2 {
@@ -38,7 +38,7 @@ h2, h3 {
 }
 
 #debug h2 {
-  background: url(/themes/console/images/info/debug.png) 6px center no-repeat, linear-gradient(to bottom, #fcfcff 50%, rgba(255,255,255,0.6) 50%, rgba(240,240,255,0.4)), linear-gradient(to left, #fcfcff 5%, rgba(231, 231, 255, 0.8) 25%) !important;
+  background: url(/themes/console/images/info/debug.png) 6px center no-repeat, linear-gradient(to bottom, #fcfcff 50%, rgba(255,255,255,.6) 50%, rgba(240,240,255,.4)), linear-gradient(to left, #fcfcff 5%, rgba(231, 231, 255, 0.8) 25%) !important;
   background-size: 20px 20px, 100% 100%, 100% 100% !important;
 }
 
@@ -156,12 +156,12 @@ table.search td:nth-child(3) {
   padding: 0 2px 0 8px;
 }
 
-input.search[type="text"], input.search[type="text"]:focus {
+input.search[type=text], input.search[type=text]:focus {
   background-position: right 4px center !important;
   padding: 5px 24px 5px 5px !important;
 }
 
-button, input[type="submit"], input[type="reset"] {
+button, input[type=submit], input[type="reset"] {
   display: inline-block;
   line-height: 120%;
   font-size: 10pt;
@@ -172,10 +172,10 @@ button, input[type="submit"], input[type="reset"] {
   margin-top: 5px !important;
 }
 
-button.search, input[type="submit"], input[type="reset"],
-button.search:hover, input[type="submit"]:hover, input[type="reset"]:hover,
-button.search:focus, input[type="submit"]:focus, input[type="reset"]:focus,
-button.search:active, input[type="submit"]:active, input[type="reset"]:active {
+button.search, input[type=submit], input[type="reset"],
+button.search:hover, input[type=submit]:hover, input[type="reset"]:hover,
+button.search:focus, input[type=submit]:focus, input[type="reset"]:focus,
+button.search:active, input[type=submit]:active, input[type="reset"]:active {
   background-position: right 6px center !important;
   padding: 5px 24px 5px 7px !important;
 }
@@ -186,8 +186,8 @@ select, select:hover, select:focus, select:active {
   text-align: right !important;
 }
 
-#loggingoptions input[type="text"], #i2pupdates input[type="text"], #addkeyring input[type="text"],
-#reseedconfig input[type="text"], #manualreseed input[type="text"], #plugininstall input[type="text"], .homelinkedit input[type="text"] {
+#loggingoptions input[type=text], #i2pupdates input[type=text], #addkeyring input[type=text],
+#reseedconfig input[type=text], #manualreseed input[type=text], #plugininstall input[type=text], .homelinkedit input[type=text] {
   direction: ltr;
   text-align: right;
 }
@@ -289,7 +289,7 @@ div.wideload {
 
 .percentBarOuter {
   margin: -4px -3px -4px -5px;
-  background: linear-gradient(to left, rgba(0,255,0,0.05) 50%, rgba(255,255,0,0.05) 75%, rgba(255,128,0,0.05) 90%, rgba(255,0,0,0.1)), repeating-linear-gradient(to right, rgba(180, 180, 255,0.7) 1px, rgba(180, 180, 255, 0.7) 2px, rgba(221, 221, 255, 0.7) 2px, rgba(221, 221, 255, 0.7) 4px);
+  background: linear-gradient(to left, rgba(0,255,0,.05) 50%, rgba(255,255,0,.05) 75%, rgba(255,128,0,.05) 90%, rgba(255,0,0,.1)), repeating-linear-gradient(to right, rgba(180, 180, 255,.7) 1px, rgba(180, 180, 255, 0.7) 2px, rgba(221, 221, 255, 0.7) 2px, rgba(221, 221, 255, 0.7) 4px);
 }
 
 .sb_info .percentBarOuter {
@@ -660,7 +660,7 @@ textarea#advancedsettings, #i2pupdates textarea, #addkeyring textarea, #reseedco
   margin-right: 3px;
 }
 
-#i2pupdates input[type="text"]:not([readonly]), #i2pupdates textarea, .main[id^="config_"] textarea, input[name="newsURL"] {
+#i2pupdates input[type=text]:not([readonly]), #i2pupdates textarea, .main[id^="config_"] textarea, input[name="newsURL"] {
   width: calc(100% - 10px);
 }
 
@@ -747,7 +747,7 @@ table.search {
 }
 
 h4.app {
-  background: url(/themes/console/images/eepsite.png) 10px center no-repeat, linear-gradient(to bottom, #fff 50%, rgba(255,255,255,0.6) 50%, rgba(240,240,255,0.4)), linear-gradient(to left, #fff 5%, rgba(231, 231, 255, 0.8) 15%) right center !important;
+  background: url(/themes/console/images/eepsite.png) 10px center no-repeat, linear-gradient(to bottom, #fff 50%, rgba(255,255,255,.6) 50%, rgba(240,240,255,.4)), linear-gradient(to left, #fff 5%, rgba(231, 231, 255, 0.8) 15%) right center !important;
   background-size: 16px 16px, 100% 100%, 100% 100% !important;
   margin-top: 15px;
 }
@@ -755,7 +755,7 @@ h4.app {
 h4.app2 {
   clear: left;
   margin-top: 10px !important;
-  background: url(images/globe.png) 10px center no-repeat, linear-gradient(to bottom, #fff 50%, rgba(255,255,255,0.6) 50%, rgba(240,240,255,0.4)), linear-gradient(to left, #fff 5%, rgba(231, 231, 255, 0.8) 15%) right center !important;
+  background: url(images/globe.png) 10px center no-repeat, linear-gradient(to bottom, #fff 50%, rgba(255,255,255,.6) 50%, rgba(240,240,255,.4)), linear-gradient(to left, #fff 5%, rgba(231, 231, 255, 0.8) 15%) right center !important;
   background-size: 16px 16px, 100% 100%, 100% 100% !important;
 }
 
@@ -781,7 +781,7 @@ div.app:hover .appimg .extlink::after {
 
 div.news h3, #news h3 {
   background: url(images/news.png) right 8px center no-repeat, linear-gradient(to left, #fff, #eef) !important;
-  background: url(images/news.png) right 8px center no-repeat, linear-gradient(to bottom, #fff 50%, rgba(255,255,255,0.6) 50%, rgba(240,240,255,0.4)), linear-gradient(to left, #fff 5%, rgba(231, 231, 255, 0.8) 15%) right center !important;
+  background: url(images/news.png) right 8px center no-repeat, linear-gradient(to bottom, #fff 50%, rgba(255,255,255,.6) 50%, rgba(240,240,255,.4)), linear-gradient(to left, #fff 5%, rgba(231, 231, 255, 0.8) 15%) right center !important;
   padding: 5px 30px 5px 10px;
 }
 
@@ -1244,7 +1244,7 @@ input[type="file"]:hover {
   margin-right: 0;
 }
 
-#reseedurl input[type="text"], #reseedzip input[type="file"], #reseedcreatefile p {
+#reseedurl input[type=text], #reseedzip input[type="file"], #reseedcreatefile p {
   width: calc(100% - 20px);
 }
 

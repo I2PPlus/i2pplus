@@ -1631,7 +1631,7 @@ input {
   margin: 3px 5px 3px 0;
 }
 
-input[type="radio"], input[type="checkbox"] {
+input[type=radio], input[type=checkbox] {
   min-width: 16px !important;
   min-height: 16px !important;
   vertical-align: sub;
@@ -1639,14 +1639,14 @@ input[type="radio"], input[type="checkbox"] {
   margin: 6px;
 }
 
-input[type="radio"]:hover, input[type="radio"]:focus, input[type="checkbox"]:hover, input[type="checkbox"]:focus {
+input[type=radio]:hover, input[type=radio]:focus, input[type=checkbox]:hover, input[type=checkbox]:focus {
   filter: drop-shadow(0 0 2px #89f);
   box-shadow: inset 0 0 1px 2px #89f;
   outline: none;
 }
 
-input[type="checkbox"][disabled]:hover, input[type="radio"][disabled]:hover,
-input[type="checkbox"][disabled]:focus, input[type="radio"][disabled]:focus {
+input[type=checkbox][disabled]:hover, input[type=radio][disabled]:hover,
+input[type=checkbox][disabled]:focus, input[type=radio][disabled]:focus {
   box-shadow: none;
   filter: none;
 }
@@ -1674,7 +1674,7 @@ input[type="file"] {
   background: none;
 }
 
-input[type=text], input[type="password"] {
+input[type=text], input[type=password] {
   margin: 3px 5px 3px 5px;
   padding: 4px;
   min-width: 120px;
@@ -1686,7 +1686,7 @@ input[type=text], input[type="password"] {
   background-color: #fefefe;
 }
 
-input[type=text]:focus, input[type="password"]:focus {
+input[type=text]:focus, input[type=password]:focus {
   color: #41444d;
   box-shadow: inset 0 0 0 1px rgba(255,96,0,.5);
 }
@@ -1749,7 +1749,7 @@ input[type=submit], input[type=reset], button, .optbox {
 
 /* accessibility tweak - colors rather than focus rings where possible */
 
-.optbox:hover, .optbox:focus, input[type="checkbox"]:hover, input[type="checkbox"]:focus {
+.optbox:hover, .optbox:focus, input[type=checkbox]:hover, input[type=checkbox]:focus {
   border: 0;
   box-shadow: 0 0 0 1px #89f;
   outline: none;
@@ -2880,11 +2880,11 @@ table.configtable, #permabanned, #loggingoptions, #configstats, ul#banlist {
 }
 
 @supports not (-moz-appearance: none) {
-#reseedconfig .optbox[type="radio"] {
+#reseedconfig .optbox[type=radio] {
   margin: 4px 4px 4px 15px !important;
 }
 
-#reseedconfig .optbox[type="checkbox"] {
+#reseedconfig .optbox[type=checkbox] {
   vertical-align: sub !important;
 }
 
@@ -4593,7 +4593,7 @@ h3#totaljobstats {
   text-align: left !important;
 }
 
-.homelinkedit input[type=text], #reseedconfig input[type=text], #reseedconfig input[type="password"], #reseedconfig .optbox, #reseedconfig textarea {
+.homelinkedit input[type=text], #reseedconfig input[type=text], #reseedconfig input[type=password], #reseedconfig .optbox, #reseedconfig textarea {
   margin-left: 0;
 }
 
@@ -4634,7 +4634,7 @@ tr#addnew:hover {
 }
 
 /*
-#oldhome input[type="checkbox"] {
+#oldhome input[type=checkbox] {
   vertical-align: sub !important;
 }
 */
@@ -6916,7 +6916,7 @@ p.infowarn, #sybilanalysis {
   margin-right: 8px;
 }
 
-#floodfillconfig input[type="radio"] {
+#floodfillconfig input[type=radio] {
   margin-right: 3px;
 }
 
@@ -8026,7 +8026,7 @@ h2#debug_portmapper {
 }
 
 #jardump tt {
-  letter-spacing: -0.05em;
+  letter-spacing: -.05em;
 }
 
 #jardump a tt {
@@ -8369,7 +8369,7 @@ input[name="speed"], input[name="capacity"] {
   transform: scale(0.9);
 }
 
-p#enablefullstats input[type="checkbox"] {
+p#enablefullstats input[type=checkbox] {
   float: left;
   margin-top: 0;
 }
@@ -8874,7 +8874,7 @@ _:-ms-lang(x), #peerdefs td:first-child {
 }
 
 _:-ms-lang(x), .tunnels_client th:first-child::after {
-  letter-spacing: -0.05em;
+  letter-spacing: -.05em;
   font-weight: normal;
 }
 
@@ -9033,7 +9033,7 @@ th.options {
   font-size: 9pt !important;
 }
 
-.options input[type="checkbox"], .suboption .optbox {
+.options input[type=checkbox], .suboption .optbox {
   margin: 0 3px 0 0;
 }
 
@@ -9432,12 +9432,12 @@ b.suboption {
   display: inline-block;
 }
 
-#reseedconfig .optbox[type="checkbox"] {
+#reseedconfig .optbox[type=checkbox] {
   vertical-align: sub !important;
 }
 
 @supports not (-moz-appearance: none) {
-#reseedconfig .optbox[type="radio"] {
+#reseedconfig .optbox[type=radio] {
   margin: 4px 4px 4px 15px !important;
 }
 
@@ -10404,8 +10404,8 @@ a.keysearch {
 /*@media screen and (-webkit-min-device-pixel-ratio: 0) and (min-resolution:.001dpcm) {*/
 @supports (background-blend-mode: luminosity) { /* exclude ms browsers */
 
-input[type="checkbox"], input[type="checkbox"]:checked, input[type="checkbox"][disabled], input[type="checkbox"][disabled]:checked,
-input[type="radio"], input[type="radio"]:checked, input[type="radio"][disabled], input[type="radio"][disabled]:checked {
+input[type=checkbox], input[type=checkbox]:checked, input[type=checkbox][disabled], input[type=checkbox][disabled]:checked,
+input[type=radio], input[type=radio]:checked, input[type=radio][disabled], input[type=radio][disabled]:checked {
   position: relative;
   width: 19px !important;
   height: 19px !important;
@@ -10419,17 +10419,17 @@ input[type="radio"], input[type="radio"]:checked, input[type="radio"][disabled],
   will-change: transform;
 }
 
-input[type="checkbox"], input[type="checkbox"]:checked, input[type="checkbox"][disabled], input[type="checkbox"][disabled]:checked {
+input[type=checkbox], input[type=checkbox]:checked, input[type=checkbox][disabled], input[type=checkbox][disabled]:checked {
   border-radius: 2px;
   box-shadow: inset 1px 1px 1px rgba(204, 204, 204, .6);
 }
 
-input[type="radio"], input[type="radio"]:checked, input[type="radio"][disabled], input[type="radio"][disabled]:checked {
+input[type=radio], input[type=radio]:checked, input[type=radio][disabled], input[type=radio][disabled]:checked {
   border-radius: 50%;
 }
 
-input[type="checkbox"]:checked::before, input[type="radio"]:checked::before,
-input[type="checkbox"]:not(:checked)::before, input[type="radio"]:not(:checked)::before {
+input[type=checkbox]:checked::before, input[type=radio]:checked::before,
+input[type=checkbox]:not(:checked)::before, input[type=radio]:not(:checked)::before {
   position: absolute;
   transition: linear all .05s;
   transform: scale(1);
@@ -10439,7 +10439,7 @@ input[type="checkbox"]:not(:checked)::before, input[type="radio"]:not(:checked):
   box-shadow: inset 2px 2px 1px rgba(204, 204, 240, .6);
 }
 
-input[type="checkbox"]:checked::before {
+input[type=checkbox]:checked::before {
   content: "";
   position: absolute;
   top: 3px;
@@ -10453,7 +10453,7 @@ input[type="checkbox"]:checked::before {
   transition: linear all .05s;
 }
 
-input[type="radio"]:checked::before {
+input[type=radio]:checked::before {
   content: "";
   border-radius: 50%;
   left: 25%;
@@ -10463,13 +10463,13 @@ input[type="radio"]:checked::before {
   background: #67f;
 }
 
-input[type="checkbox"]:not(:checked)::before, input[type="radio"]:not(:checked)::before {
+input[type=checkbox]:not(:checked)::before, input[type=radio]:not(:checked)::before {
   transform: scale(0);
   color: transparent;
   background: transparent;
 }
 
-input[type="checkbox"]:hover, input[type="radio"]:hover, input[type="checkbox"]:focus, input[type="radio"]:focus {
+input[type=checkbox]:hover, input[type=radio]:hover, input[type=checkbox]:focus, input[type=radio]:focus {
   background: #fff;
   width: 19px !important;
   height: 19px !important;
@@ -10479,8 +10479,8 @@ input[type="checkbox"]:hover, input[type="radio"]:hover, input[type="checkbox"]:
   filter: none !important;
 }
 
-input[type="checkbox"][disabled], input[type="radio"][disabled], input[type="checkbox"][disabled]:hover, input[type="radio"][disabled]:hover,
-input[type="checkbox"][disabled]:checked, input[type="radio"][disabled]:checked, input[type="checkbox"][disabled]:checked:hover, input[type="radio"][disabled]:checked:hover {
+input[type=checkbox][disabled], input[type=radio][disabled], input[type=checkbox][disabled]:hover, input[type=radio][disabled]:hover,
+input[type=checkbox][disabled]:checked, input[type=radio][disabled]:checked, input[type=checkbox][disabled]:checked:hover, input[type=radio][disabled]:checked:hover {
   filter: none !important;
   box-shadow: none !important;
   opacity: .5;
@@ -10592,7 +10592,7 @@ div.app.js:hover::before {
 #sitemapcontainer h3 {
   margin-bottom: 12px;
   text-transform: uppercase;
-  letter-spacing: 0.08em;
+  letter-spacing: .08em;
 }
 
 #sitemapcontainer h3:nth-child(n+2) {
@@ -11249,7 +11249,7 @@ h3#webappconfig {
   background: #ffd;
 }
 
-#sybilTask input[type="checkbox"] {
+#sybilTask input[type=checkbox] {
   margin: 14px 8px;
 }
 

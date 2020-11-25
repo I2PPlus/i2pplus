@@ -25,7 +25,7 @@ body.iframed {
 	background: #777 !important;
 }
 
-body, td, th, span, table a, input[type="submit"], input[type="text"], textarea {
+body, td, th, span, table a, input[type=submit], input[type=text], textarea {
 	font-family: "Droid Sans", "Open Sans", "Noto Sans", Ubuntu, "Segoe UI", "DejaVu Sans", Verdana, "Lucida Grande", Helvetica, sans-serif;
 	font-size: 9pt;
 }
@@ -114,7 +114,7 @@ a:hover, a:focus, .snarkConfigTitle a:hover, .toggleview:hover, .trackerName a:v
 	cursor: pointer;
 }
 
-.snarkNav, .toggleview, .snarkConfigTitle, .suboption, input[type="submit"], input[type="image"], a.control {
+.snarkNav, .toggleview, .snarkConfigTitle, .suboption, input[type=submit], input[type="image"], a.control {
 	font-weight: bold;
 	box-shadow: inset 0 0 0 1px #fff;
 	background: #eee;
@@ -125,11 +125,11 @@ a:hover, a:focus, .snarkConfigTitle a:hover, .toggleview:hover, .trackerName a:v
 	background: linear-gradient(to bottom, #fff 50%, #f3f2f1 50%) !important;
 }
 
-input[type="submit"], a.control, select {
+input[type=submit], a.control, select {
 	text-shadow: 0 1px 1px #fff;
 }
 
-input[type="submit"]:hover, input[type="image"]:hover, a.control:hover {
+input[type=submit]:hover, input[type="image"]:hover, a.control:hover {
 	border: 1px solid #b32;
 	background: #fff !important;
 }
@@ -144,7 +144,7 @@ a.control, a.control:visited {
 	font-weight: normal;
 }
 
-input[type="submit"]::-moz-focus-inner, input[type="reset"]::-moz-focus-inner {
+input[type=submit]::-moz-focus-inner, input[type="reset"]::-moz-focus-inner {
 	border: none;
 	outline: none;
 }
@@ -180,11 +180,11 @@ a.snarkNav:active {
 	border-radius: 2px;
 }
 
-input[type="submit"]:hover, input[type="image"]:hover, a.control:hover {
+input[type=submit]:hover, input[type="image"]:hover, a.control:hover {
 	color: #d23 !important;
 }
 
-input[type="submit"]:active, a.control:active, .snarkNav:active, #torrentDisplay label:active {
+input[type=submit]:active, a.control:active, .snarkNav:active, #torrentDisplay label:active {
 	color: #bbb !important;
 	box-shadow: inset 0 0 0 1px #fff, inset 2px 2px 2px #999 !important;
 }
@@ -450,7 +450,7 @@ td.snarkTorrentPeerCount:empty::after {
 	vertical-align: middle;
 	box-shadow: 0 0 0 1px #999;
 	background: #900;
-	background: repeating-linear-gradient(to right, rgba(0,0,0,0), rgba(0,0,0,0) 15px, rgba(128,128,128,.5) 15px, rgba(128,128,128,.5) 16px, rgba(0,0,0,0) 16px), linear-gradient(to bottom, rgba(255,255,255,0.3) 50%, rgba(0,0,0,0.3) 50%), linear-gradient(to right, #bb0 50px, #900);
+	background: repeating-linear-gradient(to right, rgba(0,0,0,0), rgba(0,0,0,0) 15px, rgba(128,128,128,.5) 15px, rgba(128,128,128,.5) 16px, rgba(0,0,0,0) 16px), linear-gradient(to bottom, rgba(255,255,255,.3) 50%, rgba(0,0,0,.3) 50%), linear-gradient(to right, #bb0 50px, #900);
 }
 
 .inactivity[style="width: 0px;"], .inactivity[style="width: 1px;"], .inactivity[style="width: 2px;"],
@@ -493,7 +493,7 @@ td.snarkTorrentPeerCount:empty {
 	height: 16px !important;
 	border-right: 1px solid #777;
 	box-shadow: inset 0 0 0 1px #fff;
-	box-shadow: inset 0 0 0 1px rgba(255,255,255,0.5);
+	box-shadow: inset 0 0 0 1px rgba(255,255,255,.5);
 	background: #fd0;
 	background: #BFB8B3;
 }
@@ -568,7 +568,7 @@ tr:hover .snarkFileStatus .percentBarText {
 	text-shadow: 0 1px 1px #333;
 	border: 1px solid #777;
 	box-shadow: inset 0 0 0 1px #fff;
-	box-shadow: inset 0 0 0 1px rgba(255,255,255,0.5);
+	box-shadow: inset 0 0 0 1px rgba(255,255,255,.5);
 	background: #aaa;
 }
 
@@ -752,7 +752,7 @@ td.snarkGraphicStatus img {
 	line-height: 125%;
 }
 
-input[type="image"], .control, input[type="submit"], input[type="reset"] {
+input[type="image"], .control, input[type=submit], input[type="reset"] {
 	margin: 1px 2px;
 	padding: 4px 5px;
 	display: inline-block;
@@ -770,7 +770,7 @@ input[type="image"], .control, input[type="submit"], input[type="reset"] {
 	box-sizing: border-box;
 }
 
-input[type="submit"], input[type="reset"] {
+input[type=submit], input[type="reset"] {
 	padding: 5px 8px;
 	min-width: 90px;
 }
@@ -779,19 +779,19 @@ input.add, input.create {
 	min-width: 110px !important;
 }
 
-input[type="submit"], input[type="reset"], input[type="radio"], input[type="checkbox"], select, .snarkConfig label {
+input[type=submit], input[type="reset"], input[type=radio], input[type=checkbox], select, .snarkConfig label {
 	cursor: pointer;
 }
 
-input[type="submit"]:disabled, input[type="reset"]:disabled, input[type="radio"]:disabled, input[type="checkbox"]:disabled, select:disabled {
+input[type=submit]:disabled, input[type="reset"]:disabled, input[type=radio]:disabled, input[type=checkbox]:disabled, select:disabled {
 	cursor: not-allowed;
 }
 
-input[type="radio"], input[type="checkbox"] {
+input[type=radio], input[type=checkbox] {
 	vertical-align: middle;
 }
 
-.knownTracker input[type="radio"]:disabled {
+.knownTracker input[type=radio]:disabled {
 	opacity: 0.3;
 }
 
@@ -805,14 +805,14 @@ input[type="image"]:active, .control:active {
 	background: #f30;
 }
 
-input[type="submit"], a.control {
+input[type=submit], a.control {
 	margin: 2px 4px;
 	float: right;
 	color: #555;
 	font-weight: bold;
 }
 
-input[type="text"] {
+input[type=text] {
 	margin: 1px 2px;
 	padding: 5px;
 	color: #444;
@@ -823,7 +823,7 @@ input[type="text"] {
 	background: #f8f8f8;
 }
 
-input[type="text"]:focus {
+input[type=text]:focus {
 	color: #b23;
 	box-shadow: inset 0 0 0 1px #d30;
 	background: #fff;
@@ -868,7 +868,7 @@ select:disabled {
 	cursor: pointer;
 }
 
-#torrentOrderControl b, #torrentOrderControl input[type="checkbox"] {
+#torrentOrderControl b, #torrentOrderControl input[type=checkbox] {
 	margin: 6px 4px 0 3px;
 	vertical-align: middle;
 }
@@ -879,7 +879,7 @@ select:disabled {
 
 /* custom radios/checkboxes to enforce color scheme when OS widgets are non-standard */
 @supports (background-blend-mode: luminosity) { /* exclude ms browsers */
-input[type="checkbox"], input[type="checkbox"]:checked, input[type="checkbox"][disabled], input[type="checkbox"][disabled]:checked {
+input[type=checkbox], input[type=checkbox]:checked, input[type=checkbox][disabled], input[type=checkbox][disabled]:checked {
 	width: 19px !important;
 	height: 19px !important;
 	position: relative;
@@ -894,11 +894,11 @@ input[type="checkbox"], input[type="checkbox"]:checked, input[type="checkbox"][d
 	-webkit-appearance: inherit;
 }
 
-#torrentOrderControl input[type="checkbox"], #torrentOrderControl input[type="checkbox"]:checked, #torrentOrderControl input[type="checkbox"][disabled], #torrentOrderControl input[type="checkbox"][disabled]:checked {
+#torrentOrderControl input[type=checkbox], #torrentOrderControl input[type=checkbox]:checked, #torrentOrderControl input[type=checkbox][disabled], #torrentOrderControl input[type=checkbox][disabled]:checked {
 	border: 1px solid #bbb !important;
 }
 
-input[type="radio"], input[type="radio"]:checked, input[type="radio"][disabled], input[type="radio"][disabled]:checked {
+input[type=radio], input[type=radio]:checked, input[type=radio][disabled], input[type=radio][disabled]:checked {
 	position: relative;
 	width: 19px !important;
 	height: 19px !important;
@@ -913,20 +913,20 @@ input[type="radio"], input[type="radio"]:checked, input[type="radio"][disabled],
 	-webkit-appearance: none;
 }
 
-input[type="radio"][disabled], input[type="radio"][disabled]:checked {
+input[type=radio][disabled], input[type=radio][disabled]:checked {
 	background: #bbb;
 }
 
-input[type="checkbox"]:checked::before, input[type="radio"]:checked::before,
-input[type="checkbox"]:not(:checked)::before, input[type="radio"]:not(:checked)::before {
+input[type=checkbox]:checked::before, input[type=radio]:checked::before,
+input[type=checkbox]:not(:checked)::before, input[type=radio]:not(:checked)::before {
 	position: absolute;
 	font-size: 0;
-	transition: linear all 0.05s;
+	transition: linear all .05s;
 	transform: scale(1);
 	will-change: transform;
 }
 
-input[type="checkbox"]:checked::before, input[type="checkbox"]:not(:checked)::before {
+input[type=checkbox]:checked::before, input[type=checkbox]:not(:checked)::before {
 	content: "";
 	top: 4px;
 	left: 4px;
@@ -939,11 +939,11 @@ input[type="checkbox"]:checked::before, input[type="checkbox"]:not(:checked)::be
 	overflow: hidden;
 }
 
-input[type="checkbox"]:checked:focus::before {
+input[type=checkbox]:checked:focus::before {
 	background: #b32;
 }
 
-input[type="radio"]:checked::before {
+input[type=radio]:checked::before {
 	content: "";
 	border-radius: 50%;
 	top: 4px;
@@ -953,25 +953,25 @@ input[type="radio"]:checked::before {
 	background: #777;
 }
 
-input[type="radio"]:checked:hover::before, input[type="radio"]:checked:focus::before,
-input[type="checkbox"]:checked:hover::before, input[type="checkbox"]:checked:focus::before {
+input[type=radio]:checked:hover::before, input[type=radio]:checked:focus::before,
+input[type=checkbox]:checked:hover::before, input[type=checkbox]:checked:focus::before {
 	background: #b32;
 }
 
-.iframed input[type="radio"]:checked::before {
+.iframed input[type=radio]:checked::before {
 	top: 24%;
 	left: 23%;
 }
 
-input[type="checkbox"]:not(:checked), input[type="radio"]:not(:checked) {
+input[type=checkbox]:not(:checked), input[type=radio]:not(:checked) {
 	box-shadow: inset 2px 2px 2px #bbb;
 }
 
-input[type="checkbox"]:not(:checked)::before, input[type="radio"]:not(:checked)::before {
+input[type=checkbox]:not(:checked)::before, input[type=radio]:not(:checked)::before {
 	transform: scale(0);
 }
 
-input[type="checkbox"]:hover, input[type="radio"]:hover, input[type="checkbox"]:focus, input[type="radio"]:focus {
+input[type=checkbox]:hover, input[type=radio]:hover, input[type=checkbox]:focus, input[type=radio]:focus {
 	background: #fff;
 	width: 19px !important;
 	height: 19px !important;
@@ -979,8 +979,8 @@ input[type="checkbox"]:hover, input[type="radio"]:hover, input[type="checkbox"]:
 	border: 1px solid #b32 !important;
 }
 
-input[type="checkbox"][disabled], input[type="radio"][disabled], input[type="checkbox"][disabled]:hover, input[type="radio"][disabled]:hover,
-input[type="checkbox"][disabled]:checked, input[type="radio"][disabled]:checked, input[type="checkbox"][disabled]:checked:hover, input[type="radio"][disabled]:checked:hover {
+input[type=checkbox][disabled], input[type=radio][disabled], input[type=checkbox][disabled]:hover, input[type=radio][disabled]:hover,
+input[type=checkbox][disabled]:checked, input[type=radio][disabled]:checked, input[type=checkbox][disabled]:checked:hover, input[type=radio][disabled]:checked:hover {
 	display: inline-block !important;
 	width: 19px !important;
 	height: 19px !important;
@@ -1186,7 +1186,7 @@ tt {
 
 .addtorrentsection:hover, .newtorrentsection:hover, .addtorrentsection:hover .toggleview, .newtorrentsection:hover .toggleview,
 .configsection .snarkConfigTitle:hover, #torrentDisplay label:hover, .mainsection:hover .toggleview {
-	box-shadow: inset 0 0 0 1px rgba(200,32,48,0.5), inset 0 0 0 2px #fff;
+	box-shadow: inset 0 0 0 1px rgba(200,32,48,.5), inset 0 0 0 2px #fff;
 	transition: ease box-shadow 0.3s;
 }
 
@@ -1226,13 +1226,13 @@ tt {
 	text-align: left !important;
 }
 
-.addtorrentsection input[type="text"], .newtorrentsection input[type="text"] {
+.addtorrentsection input[type=text], .newtorrentsection input[type=text] {
 	max-width: 70%;
 	min-width: 452px;
 }
 
 @media screen and (max-width: 1000px) {
-.addtorrentsection input[type="text"], .newtorrentsection input[type="text"] {
+.addtorrentsection input[type=text], .newtorrentsection input[type=text] {
 	min-width: 0;
 }
 
@@ -1245,7 +1245,7 @@ input.add, input.create {
 }
 }
 
-.addtorrentsection input[type="submit"], .newtorrentsection input[type="submit"] {
+.addtorrentsection input[type=submit], .newtorrentsection input[type=submit] {
 	min-width: 90px;
 	float: none !important;
 }
@@ -1512,11 +1512,11 @@ tr:hover td.snarkTorrentRateDown, tr:hover td.snarkTorrentAction {
 
 .snarkTorrentName a:hover, .snarkFileName a:hover {
 	border-radius: 0 15px 15px 0;
-	background: linear-gradient(to right, rgba(0,0,0,0), rgba(155,108,46,0.2) 40%) !important;
+	background: linear-gradient(to right, rgba(0,0,0,0), rgba(155,108,46,.2) 40%) !important;
 }
 
 .snarkTorrentName a:active, .snarkFileName a:active {
-	box-shadow: inset 2px 2px 2px 1px rgba(32,32,0,0.3) !important;
+	box-shadow: inset 2px 2px 2px 1px rgba(32,32,0,.3) !important;
 	border: none !important;
 }
 
@@ -1910,7 +1910,7 @@ select {
 	margin: 4px 8px 0 0;
 }
 
-/*.snarkCommentInfo input[type="checkbox"] {
+/*.snarkCommentInfo input[type=checkbox] {
 	margin-top: 0;
 	margin-bottom: 0;
 }*/
@@ -2237,12 +2237,12 @@ td.snarkTorrentDetails img, .snarkDirInfo td:first-child img:not(.thumb) {
 }
 }
 
-.priority input[type="radio"] {
+.priority input[type=radio] {
 	text-align: left;
 	margin: 3px;
 }
 
-.priority input[type="radio"]:not(:checked):not(:hover) {
+.priority input[type=radio]:not(:checked):not(:hover) {
 	opacity: 0.7;
 }
 

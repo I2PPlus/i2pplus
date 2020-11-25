@@ -302,7 +302,7 @@ p#filtered {
   display: inherit;
   text-align: center;
   text-transform: uppercase;
-  letter-spacing: 0.08em;
+  letter-spacing: .08em;
   font-weight: bold;
   word-spacing: 0.1em;
   vertical-align: middle;
@@ -391,7 +391,7 @@ h3 {
   background: #000 url(/themes/console/midnight/images/titles.png) repeat-x scroll center center;
   background: linear-gradient(to bottom, #080818, #000008 75%);
   background: linear-gradient(to bottom, #080818 50%, #000 50%) !important;
-  letter-spacing: 0.08em;
+  letter-spacing: .08em;
   word-spacing: 0.1em;
   text-shadow: 0 0 2px #010011;
   text-transform: uppercase;
@@ -1179,7 +1179,7 @@ input.export {
 .headline h3 {
   padding: 10px 5px 10px 34px;
   word-spacing: 0.1em;
-  letter-spacing: 0.08em;
+  letter-spacing: .08em;
   text-transform: uppercase;
   font-size: 11pt;
   background: url(images/addressbook.svg) 10px center no-repeat, linear-gradient(to bottom, #080818, #000008 75%);
@@ -1578,7 +1578,7 @@ input[type=radio], input[type=radio]:checked, input[type=radio][disabled], input
 input[type=checkbox]:checked::before, input[type=radio]:checked::before,
 input[type=checkbox]:not(:checked)::before, input[type=radio]:not(:checked)::before {
   position: absolute;
-  transition: linear all 0.05s;
+  transition: linear all .05s;
   transform: scale(1);
 }
 

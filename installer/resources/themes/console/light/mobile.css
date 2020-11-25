@@ -141,7 +141,7 @@ table[id^="sb_"] tr:nth-child(odd) td {
   display: none;
 }
 
-.routersummary button[type="submit"], .routersummary button[type="cancel"] {
+.routersummary button[type=submit], .routersummary button[type=reset] {
   margin: 3px 5px 0 !important;
   padding: 8px 5px !important;
   min-width: 42% !important;
@@ -157,7 +157,7 @@ table[id^="sb_"] tr:nth-child(odd) td {
 }
 
 #sb_memoryBar .percentBarInner {
-  background: linear-gradient(to bottom, rgba(255, 255, 255,0.6), rgba(238, 238, 255, 0.6) 50%, rgba(180, 180, 255, 0.7) 50%, rgba(140, 140, 255, 0.7));
+  background: linear-gradient(to bottom, rgba(255, 255, 255,.6), rgba(238, 238, 255, 0.6) 50%, rgba(180, 180, 255, 0.7) 50%, rgba(140, 140, 255, 0.7));
 }
 
 h1 {

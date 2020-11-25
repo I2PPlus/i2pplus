@@ -115,12 +115,12 @@ div.clearer {
 }
 
 /*.main * {
-  scrollbar-color: rgba(220,220,255,0.8) rgba(0,0,0,0);
+  scrollbar-color: rgba(220,220,255,.8) rgba(0,0,0,0);
   transition: ease scrollbar-color .5s;
 }
 
 .main pre:hover, .main textarea:hover, .widescroll:hover {
-  scrollbar-color: rgba(200,200,255,0.8) rgba(255,255,255,.9);
+  scrollbar-color: rgba(200,200,255,.8) rgba(255,255,255,.9);
   transition: ease scrollbar-color .2s;
 }*/
 
@@ -3452,7 +3452,7 @@ h4.app, h4.app2 {
   word-spacing: .1em;
   background: #eef;
   background: linear-gradient(to bottom, #fff 50%, #eef 50%);
-  box-shadow: inset 0 0 0 1px #fff, 0 0 1px rgba(220,220,220,0.3);
+  box-shadow: inset 0 0 0 1px #fff, 0 0 1px rgba(220,220,220,.3);
   display: inline-block;
   width: calc(100% - 44px);
   border-radius: 2px;
@@ -4026,7 +4026,7 @@ p.infowarn {
   background-size: 28px 28px, 100% 100%, 100% 100%;
 }
 
-#oldhome input[type="checkbox"], #enablefullstats input[type="checkbox"] {
+#oldhome input[type=checkbox], #enablefullstats input[type=checkbox] {
   vertical-align: sub;
 }
 
@@ -4501,14 +4501,14 @@ h2 {
   border: 1px solid #8d8daa;
   border-radius: 2px;
   margin: 15px 0 !important;
-  box-shadow: inset 0 0 0 1px #fff, 0 0 1px rgba(220,220,220,0.3);
+  box-shadow: inset 0 0 0 1px #fff, 0 0 1px rgba(220,220,220,.3);
   word-wrap: break-word;
   text-transform: uppercase !important;
 }
 
 #console .welcome h2 { /* fixes occluded langbox rendering bug */
   filter: none;
-  box-shadow: inset 0 0 0 1px #fff, 0 0 1px rgba(220,220,220,0.3);
+  box-shadow: inset 0 0 0 1px #fff, 0 0 1px rgba(220,220,220,.3);
   white-space: nowrap;
   background: url(/themes/console/images/eepsite.png) right 8px center no-repeat, linear-gradient(to bottom, #fcfcff 50%, rgba(255,255,255,.6) 50%, rgba(240,240,255,.4)), linear-gradient(to right, #fcfcff 5%, rgba(231, 231, 255, .8) 25%) !important;
   background-size: 20px 20px, 100% 100%, 100% 100% !important;
@@ -4548,7 +4548,7 @@ h3, #routerinformation h2 {
   letter-spacing: .08em;
   word-spacing: .1em;
   color: #41465f;
-  box-shadow: inset 0 0 0 1px #fff, 0 0 1px rgba(220,220,220,0.3);
+  box-shadow: inset 0 0 0 1px #fff, 0 0 1px rgba(220,220,220,.3);
 }
 
 #help h3 {
@@ -6673,38 +6673,38 @@ h3#udpcon {
 
 #tunnels h3.server {
   padding-left: 32px;
-  background: url(/themes/console/images/svg/server.svg) 6px center no-repeat, linear-gradient(to bottom, #fff 50%, rgba(255,255,255,.6) 50%, rgba(240,240,255,.4)), linear-gradient(to right, #fafaff 5%, rgba(231, 231, 255, .8) 25%) !important;
-  background-size: 20px 20px, 100% 100%, 100% 100% !important;
+  background: url(/themes/console/images/svg/server.svg) 7px center no-repeat, linear-gradient(to bottom, #fff 50%, rgba(255,255,255,.6) 50%, rgba(240,240,255,.4)), linear-gradient(to right, #fafaff 5%, rgba(231, 231, 255, .8) 25%) !important;
+  background-size: 18px, 100% 100%, 100% 100% !important;
 }
 
 #tunnels h3.client {
   padding-left: 32px;
-  background: url(/themes/console/images/svg/client.svg) 6px center no-repeat, linear-gradient(to bottom, #fff 50%, rgba(255,255,255,.6) 50%, rgba(240,240,255,.4)), linear-gradient(to right, #fafaff 5%, rgba(231, 231, 255, .8) 25%) !important;
-  background-size: 20px 20px, 100% 100%, 100% 100% !important;
+  background: url(/themes/console/images/svg/client.svg) 7px center no-repeat, linear-gradient(to bottom, #fff 50%, rgba(255,255,255,.6) 50%, rgba(240,240,255,.4)), linear-gradient(to right, #fafaff 5%, rgba(231, 231, 255, .8) 25%) !important;
+  background-size: 18px, 100% 100%, 100% 100% !important;
 }
 
 #tunnels h3.ping {
   padding-left: 32px;
-  background: url(/themes/console/images/svg/ping.svg) 6px center no-repeat, linear-gradient(to bottom, #fff 50%, rgba(255,255,255,.6) 50%, rgba(240,240,255,.4)), linear-gradient(to right, #fafaff 5%, rgba(231, 231, 255, .8) 25%) !important;
-  background-size: 20px 20px, 100% 100%, 100% 100% !important;
+  background: url(/themes/console/images/svg/ping.svg) 7px center no-repeat, linear-gradient(to bottom, #fff 50%, rgba(255,255,255,.6) 50%, rgba(240,240,255,.4)), linear-gradient(to right, #fafaff 5%, rgba(231, 231, 255, .8) 25%) !important;
+  background-size: 18px, 100% 100%, 100% 100% !important;
 }
 
 #tunnels h3#participating {
   padding-left: 32px;
-  background: url(/themes/console/images/info/share.png) 6px center no-repeat, linear-gradient(to bottom, #fff 50%, rgba(255,255,255,.6) 50%, rgba(240,240,255,.4)), linear-gradient(to right, #fafaff 5%, rgba(231, 231, 255, .8) 25%) !important;
-  background-size: 20px 20px, 100% 100%, 100% 100% !important;
+  background: url(/themes/console/images/info/share.png) 7px center no-repeat, linear-gradient(to bottom, #fff 50%, rgba(255,255,255,.6) 50%, rgba(240,240,255,.4)), linear-gradient(to right, #fafaff 5%, rgba(231, 231, 255, .8) 25%) !important;
+  background-size: 18px, 100% 100%, 100% 100% !important;
 }
 
 #tunnels h3#exploratory {
   padding-left: 32px;
-  background: url(/themes/console/images/svg/globe.svg) 6px center no-repeat, linear-gradient(to bottom, #fff 50%, rgba(255,255,255,.6) 50%, rgba(240,240,255,.4)), linear-gradient(to right, #fafaff 5%, rgba(231, 231, 255, .8) 25%) !important;
-  background-size: 20px 20px, 100% 100%, 100% 100% !important;
+  background: url(/themes/console/images/svg/globe.svg) 7px center no-repeat, linear-gradient(to bottom, #fff 50%, rgba(255,255,255,.6) 50%, rgba(240,240,255,.4)), linear-gradient(to right, #fafaff 5%, rgba(231, 231, 255, .8) 25%) !important;
+  background-size: 18px, 100% 100%, 100% 100% !important;
 }
 
 #tunnels h3:last-of-type {
   padding-left: 32px;
-  background: url(/themes/console/images/svg/speedometer.svg) 6px center no-repeat, linear-gradient(to bottom, #fff 50%, rgba(255,255,255,.6) 50%, rgba(240,240,255,.4)), linear-gradient(to right, #fafaff 5%, rgba(231, 231, 255, .8) 25%) !important;
-  background-size: 20px 20px, 100% 100%, 100% 100% !important;
+  background: url(/themes/console/images/svg/speedometer.svg) 7px center no-repeat, linear-gradient(to bottom, #fff 50%, rgba(255,255,255,.6) 50%, rgba(240,240,255,.4)), linear-gradient(to right, #fafaff 5%, rgba(231, 231, 255, .8) 25%) !important;
+  background-size: 18px, 100% 100%, 100% 100% !important;
 }
 
 #tunnels h3 + h3 {
@@ -6915,7 +6915,7 @@ p:empty { /* empty paragraph nuke */
   padding: 8px 5px 8px 32px;
 }
 
-#netdblookup input[type="checkbox"] {
+#netdblookup input[type=checkbox] {
   margin-left: 3px;
 }
 
@@ -10234,7 +10234,7 @@ th.options {
   font-size: 9pt !important;
 }
 
-.options input[type="checkbox"], .suboption .optbox {
+.options input[type=checkbox], .suboption .optbox {
   margin: 0 3px 0 0 !important;
 }
 
@@ -10467,6 +10467,10 @@ b.suboption {
 #tunnels .tunnel_id:empty::after {
   content: "n/a";
   display: inline-block;
+}
+
+#ntcpconnections td:first-child, #udpconnections td:first-child {
+  padding: 2px 3px !important;
 }
 }
 
@@ -10754,12 +10758,12 @@ b.suboption {
   display: inline-block;
 }
 
-#reseedconfig .optbox[type="checkbox"] {
+#reseedconfig .optbox[type=checkbox] {
   vertical-align: sub !important;
 }
 
 @supports not (-moz-appearance: none) {
-#reseedconfig .optbox[type="radio"] {
+#reseedconfig .optbox[type=radio] {
   margin: 4px 4px 4px 15px !important;
 }
 
@@ -12800,7 +12804,7 @@ i {
   background: #ffd;
 }
 
-#sybilTask input[type="checkbox"] {
+#sybilTask input[type=checkbox] {
   margin: 14px 8px;
 }
 
@@ -12940,9 +12944,15 @@ to {
   line-height: 1;
 }
 
+.routerid .flag {
+  margin: 0 -3px;
+  padding: 2px 3px 2px 2px;
+  border-right: 1px solid #bbd;
+}
+
 .routerid .flag img {
-  width: 16px;
-  height: 12px;
+  width: 16px !important;
+  height: 12px !important;
   border: 1px solid #ccd;
 }
 
@@ -13075,10 +13085,10 @@ to {
 
 #tunnels #peercount {
   padding-left: 30px !important;
-  background: url(/themes/console/images/info/tunnels.png) 8px 6px no-repeat,
+  background: url(/themes/console/images/info/tunnels.png) 7px 6px no-repeat,
               linear-gradient(to bottom, #fff 50%, rgba(255,255,255,.6) 50%, rgba(240,240,255,.4)),
               linear-gradient(to right, #fafaff 5%, rgba(231, 231, 255, .8) 25%) !important;
-  background-size: 18px 18px, 100% 100%, 100% 100% !important;
+  background-size: 18px, 100% 100%, 100% 100% !important;
 }
 
 #tunnels #tunnelPeerCount .cells {

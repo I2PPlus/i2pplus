@@ -722,7 +722,7 @@ tt, .bucket, #bucketSet code {
   text-align: left !important;
 }
 
-.snarkTorrentInfo input[type="submit"] {
+.snarkTorrentInfo input[type=submit] {
   min-width: 60px;
   text-align: center;
 }
@@ -865,7 +865,7 @@ tt, .bucket, #bucketSet code {
   border-bottom: 1px solid #aaafce;;
 }
 
-.headerpriority input[type="submit"] {
+.headerpriority input[type=submit] {
   margin: 5px;
 }
 
@@ -1559,7 +1559,7 @@ input:disabled {
   opacity: .5 !important;
 }
 
-input:disabled[type="submit"]:hover, input.disabled[type="reset"]:hover, input:disabled[type="submit"]:focus, input.disabled[type="reset"]:focus {
+input:disabled[type=submit]:hover, input.disabled[type="reset"]:hover, input:disabled[type=submit]:focus, input.disabled[type="reset"]:focus {
   border: 1px solid #999 !important;
   background: linear-gradient(to bottom, #fff, #eef);
   cursor: not-allowed !important;
@@ -1597,7 +1597,7 @@ input::-moz-focus-inner {
   outline: 0;
 }
 
-input[type="submit"], input[type="reset"], a.control {
+input[type=submit], input[type="reset"], a.control {
   font-size: 9pt;
   font-weight: normal !important;
   color: #5e626e;
@@ -1614,18 +1614,18 @@ input[type="submit"], input[type="reset"], a.control {
   outline: none;
 }
 
-input[type="submit"]:hover, input[type="reset"]:hover, input[type="submit"]:focus, input[type="reset"]:focus, a.control:hover, a.control:focus {
+input[type=submit]:hover, input[type="reset"]:hover, input[type=submit]:focus, input[type="reset"]:focus, a.control:hover, a.control:focus {
   color: #41444d;
   background: #fff;
   background: linear-gradient(to bottom, #ddd, #fff);
   border: 1px solid #aaafce;
 }
 
-input[type="submit"]:focus, input[type="reset"]:focus, a.control:focus {
+input[type=submit]:focus, input[type="reset"]:focus, a.control:focus {
   filter: drop-shadow(0 0 2px #89f);
 }
 
-input[type="submit"]:active, input[type="reset"]:active, a.control:active {
+input[type=submit]:active, input[type="reset"]:active, a.control:active {
   background: #ddd;
   border: 1px solid #999;
   box-shadow: inset 0 0 0 1px #fff;
@@ -1636,11 +1636,11 @@ input[name="savepri"] {
   margin-right: -2px !important;
 }
 
-#configs input[type="submit"], .trackerconfig input[type="submit"], input[name="savepri"] {
+#configs input[type=submit], .trackerconfig input[type=submit], input[name="savepri"] {
   text-transform: capitalize;
 }
 
-input[type="text"], textarea {
+input[type=text], textarea {
   cursor: text !important;
 }
 
@@ -1680,11 +1680,11 @@ input.r {
   background: #fff;
 }
 
-input[type="text"]:focus, textarea:focus, input.r:focus, textarea[name="i2cpOpts"]:focus, input[name="nofilter_dataDir"]:focus {
+input[type=text]:focus, textarea:focus, input.r:focus, textarea[name="i2cpOpts"]:focus, input[name="nofilter_dataDir"]:focus {
   background: #fff;
 }
 
-input[type="text"], input[type="password"], input.r, input[name="nofilter_dataDir"], textarea[name="i2cpOpts"] {
+input[type=text], input[type=password], input.r, input[name="nofilter_dataDir"], textarea[name="i2cpOpts"] {
   font: 9pt "Droid Sans", "Open Sans", "Noto Sans", Ubuntu, "Segoe UI", Verdana, "Bitstream Vera Sans", "DejaVu Sans", "Lucida Grande", Helvetica, sans-serif !important;
   min-width: 160px;
   margin: 2px 2px 2px 0;
@@ -1698,7 +1698,7 @@ input[type="text"], input[type="password"], input.r, input[name="nofilter_dataDi
   background: #f8f8ff;
 }
 
-input[type="text"]:focus, input[type="password"]:focus, input.r:focus, input[name="nofilter_dataDir"]:focus, textarea[name="i2cpOpts"]:focus {
+input[type=text]:focus, input[type=password]:focus, input.r:focus, input[name="nofilter_dataDir"]:focus, textarea[name="i2cpOpts"]:focus {
   color: #41444d !important;
   box-shadow: inset 0 0 0 1px rgba(255,96,0,.5);
   outline: none;
@@ -1737,7 +1737,7 @@ input[type=radio] {
   vertical-align: bottom;
 }
 
-input[type="checkbox"], input[type="radio"] {
+input[type=checkbox], input[type=radio] {
   min-width: 16px;
   min-height: 16px;
   vertical-align: middle;
@@ -1748,7 +1748,7 @@ label {
   cursor: pointer;
 }
 
-input[type="checkbox"]:hover, input[type="checkbox"]:focus {
+input[type=checkbox]:hover, input[type=checkbox]:focus {
   border: 0;
   box-shadow: inset 0 0 1px 2px #89f;
   outline: none;
@@ -2064,13 +2064,13 @@ img:hover {
   background: #fff;
 }
 
-.knownTracker input[type="radio"] {
+.knownTracker input[type=radio] {
   opacity: .3;
   cursor: default;
   filter: none;
 }
 
-.knownTracker input[type="radio"]:checked, .knownTracker input[type="radio"]:checked:hover {
+.knownTracker input[type=radio]:checked, .knownTracker input[type=radio]:checked:hover {
   opacity: .5;
 }
 
@@ -2110,7 +2110,7 @@ img:hover {
   cursor: pointer; /* active cursor only for clickable radio icons */
 }
 
-.snarkConfig input[type="submit"] {
+.snarkConfig input[type=submit] {
   margin: 3px 2px 3px 5px !important;
   min-width: 100px;
   text-align: center;
@@ -2690,7 +2690,7 @@ td.commentAuthor .commentAuthorName {
   background: none;
 }
 
-.commentAction input[type="submit"] {
+.commentAction input[type=submit] {
   margin-top: 3px;
   margin-bottom: 3px;
 }
@@ -2738,7 +2738,7 @@ _:-ms-lang(x), * {
 
 @media screen and (max-width: 950px) {
 
-body, th, td, table a, input, input[type="text"], input.r, input[name="nofilter_dataDir"], select, textarea, textarea[name="i2cpOpts"], .snarkAddInfo {
+body, th, td, table a, input, input[type=text], input.r, input[name="nofilter_dataDir"], select, textarea, textarea[name="i2cpOpts"], .snarkAddInfo {
   font-size: 8.5pt;
 }
 
@@ -2880,7 +2880,7 @@ body {
 }
 
 @media screen and (min-width: 1100px) {
-body, th, td, table a, input, input[type="text"], input.r, input[name="nofilter_dataDir"], select, textarea, textarea[name="i2cpOpts"], .snarkAddInfo {
+body, th, td, table a, input, input[type=text], input.r, input[name="nofilter_dataDir"], select, textarea, textarea[name="i2cpOpts"], .snarkAddInfo {
   font-size: 9pt !important;
 }
 
@@ -2906,7 +2906,7 @@ body, th, td, table a, input, input[type="text"], input.r, input[name="nofilter_
 }
 
 @media screen and (min-width: 1500px) {
-body, th, td, table a, input, input[type="text"], input.r, input[name="nofilter_dataDir"], select, textarea, textarea[name="i2cpOpts"], .snarkAddInfo, .snarkCommentInfo textarea {
+body, th, td, table a, input, input[type=text], input.r, input[name="nofilter_dataDir"], select, textarea, textarea[name="i2cpOpts"], .snarkAddInfo, .snarkCommentInfo textarea {
   font-size: 10pt !important;
 }
 
@@ -3048,7 +3048,7 @@ th.snarkTorrentStatus a img, .snarkTorrentETA a img, .snarkTrackerDetails a img,
   max-width: 50%;
 }
 
-.trackerconfig a, .trackerconfig input[type="text"] {
+.trackerconfig a, .trackerconfig input[type=text] {
   max-width: 150px !important;
 }
 
@@ -3131,7 +3131,7 @@ th a img {
   border: none !important;
 }
 
-.addtorrentsection input[type="text"], .newtorrentsection input[type="text"] {
+.addtorrentsection input[type=text], .newtorrentsection input[type=text] {
   width: 65% !important;
 }
 
@@ -4022,8 +4022,8 @@ th.snarkTorrentPeerCount img {
 
 /* custom radios/checkboxes to enforce color scheme when OS widgets are non-standard  */
 @supports (background-blend-mode: luminosity) { /* exclude ms browsers */
-input[type="checkbox"], input[type="checkbox"]:checked, input[type="checkbox"][disabled], input[type="checkbox"][disabled]:checked,
-input[type="radio"], input[type="radio"]:checked, input[type="radio"][disabled], input[type="radio"][disabled]:checked {
+input[type=checkbox], input[type=checkbox]:checked, input[type=checkbox][disabled], input[type=checkbox][disabled]:checked,
+input[type=radio], input[type=radio]:checked, input[type=radio][disabled], input[type=radio][disabled]:checked {
   position: relative;
   width: 19px !important;
   height: 19px !important;
@@ -4037,17 +4037,17 @@ input[type="radio"], input[type="radio"]:checked, input[type="radio"][disabled],
   will-change: transform;
 }
 
-input[type="checkbox"], input[type="checkbox"]:checked, input[type="checkbox"][disabled], input[type="checkbox"][disabled]:checked {
+input[type=checkbox], input[type=checkbox]:checked, input[type=checkbox][disabled], input[type=checkbox][disabled]:checked {
   border-radius: 2px;
   box-shadow: inset 1px 1px 1px rgba(204, 204, 204, .6);
 }
 
-input[type="radio"], input[type="radio"]:checked, input[type="radio"][disabled], input[type="radio"][disabled]:checked {
+input[type=radio], input[type=radio]:checked, input[type=radio][disabled], input[type=radio][disabled]:checked {
   border-radius: 50%;
 }
 
-input[type="checkbox"]:checked::before, input[type="radio"]:checked::before,
-input[type="checkbox"]:not(:checked)::before, input[type="radio"]:not(:checked)::before {
+input[type=checkbox]:checked::before, input[type=radio]:checked::before,
+input[type=checkbox]:not(:checked)::before, input[type=radio]:not(:checked)::before {
   position: absolute;
   transition: linear all .05s;
   transform: scale(1);
@@ -4057,7 +4057,7 @@ input[type="checkbox"]:not(:checked)::before, input[type="radio"]:not(:checked):
   box-shadow: inset 2px 2px 1px rgba(204, 204, 240, .6);
 }
 
-input[type="checkbox"]:checked::before {
+input[type=checkbox]:checked::before {
   content: "";
   position: absolute;
   top: 3px;
@@ -4071,7 +4071,7 @@ input[type="checkbox"]:checked::before {
   transition: linear all .05s;
 }
 
-input[type="radio"]:checked::before {
+input[type=radio]:checked::before {
   content: "";
   border-radius: 50%;
   left: 25%;
@@ -4081,11 +4081,11 @@ input[type="radio"]:checked::before {
   background: #67f;
 }
 
-input[type="checkbox"]:not(:checked)::before, input[type="radio"]:not(:checked)::before {
+input[type=checkbox]:not(:checked)::before, input[type=radio]:not(:checked)::before {
   transform: scale(0);
 }
 
-input[type="checkbox"]:hover, input[type="radio"]:hover, input[type="checkbox"]:focus, input[type="radio"]:focus {
+input[type=checkbox]:hover, input[type=radio]:hover, input[type=checkbox]:focus, input[type=radio]:focus {
   background: #fff;
   width: 19px !important;
   height: 19px !important;
@@ -4095,8 +4095,8 @@ input[type="checkbox"]:hover, input[type="radio"]:hover, input[type="checkbox"]:
   filter: none !important;
 }
 
-input[type="checkbox"][disabled], input[type="radio"][disabled], input[type="checkbox"][disabled]:hover, input[type="radio"][disabled]:hover,
-input[type="checkbox"][disabled]:checked, input[type="radio"][disabled]:checked, input[type="checkbox"][disabled]:checked:hover, input[type="radio"][disabled]:checked:hover {
+input[type=checkbox][disabled], input[type=radio][disabled], input[type=checkbox][disabled]:hover, input[type=radio][disabled]:hover,
+input[type=checkbox][disabled]:checked, input[type=radio][disabled]:checked, input[type=checkbox][disabled]:checked:hover, input[type=radio][disabled]:checked:hover {
   filter: none !important;
   box-shadow: none !important;
   opacity: .5;
@@ -4509,13 +4509,13 @@ tfoot .snarkTorrentRateUp:not(:empty)::before,tfoot .snarkTorrentUploaded:not(:e
   transform: rotate(-90deg) scaleX(0.6);
 }
 
-.snarkCommentInfo th input[type="submit"] {
+.snarkCommentInfo th input[type=submit] {
   display: inline-block;
   float: none !important;
   vertical-align: middle;
 }
 
-.snarkCommentInfo th input[type="checkbox"] {
+.snarkCommentInfo th input[type=checkbox] {
   margin-left: 4px;
   margin-right: 4px;
 }
