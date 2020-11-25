@@ -509,7 +509,7 @@ th.tunnelControl {
   text-align: center;
 }
 
-input[type="checkbox"], input[type="radio"] {
+input[type=checkbox], input[type=radio] {
   margin: 2px 2px 2px 0;
   min-width: 16px;
   min-height: 16px;
@@ -517,26 +517,26 @@ input[type="checkbox"], input[type="radio"] {
   background: none;
 }
 
-input[type="radio"]:hover, input[type="radio"]:focus, input[type="checkbox"]:hover, input[type="checkbox"]:focus {
+input[type=radio]:hover, input[type=radio]:focus, input[type=checkbox]:hover, input[type=checkbox]:focus {
   box-shadow: inset 0 0 1px 2px #89f;
   outline: none;
   filter: drop-shadow(0 0 2px #89f);
 }
 
-input[type="radio"][disabled]:hover, input[type="radio"][disabled]:focus {
+input[type=radio][disabled]:hover, input[type=radio][disabled]:focus {
   box-shadow: none !important;
   filter: none !important;
 }
 
-.editDisabled input[type="radio"], .editDisabled label {
+.editDisabled input[type=radio], .editDisabled label {
   cursor: not-allowed !important;
 }
 
-.editDisabled input[type="radio"]:checked {
+.editDisabled input[type=radio]:checked {
   opacity: 1 !important;
 }
 
-.editDisabled input[type="radio"]:not(:checked) {
+.editDisabled input[type=radio]:not(:checked) {
   opacity: .4;
 }
 
@@ -557,7 +557,7 @@ label {
   cursor: pointer;
 }
 
-input[type="checkbox"] {
+input[type=checkbox] {
   margin: 5px 3px 5px 5px;
 }
 
@@ -576,7 +576,7 @@ button {
   cursor: pointer;
 }
 
-button, input[type="submit"], input[type="reset"], a.control {
+button, input[type=submit], input[type="reset"], a.control {
   font-family: "Droid Sans", "Open Sans", "Noto Sans", Ubuntu, "Segoe UI", "Lucida Grande", "DejaVu Sans", Verdana, Helvetica, sans-serif;
   font-size: 9pt;
   cursor: pointer;
@@ -636,7 +636,7 @@ a.control {
   background: linear-gradient(to bottom, #fff, #fafbff);
 }
 
-button.control, input[type="submit"], input[type="reset"] {
+button.control, input[type=submit], input[type="reset"] {
   padding: 5px 8px !important;
 }
 
@@ -740,7 +740,7 @@ textarea[name="accessList"]:focus {
   background-size: 22px 22px;
 }
 
-#wizardPanel input[type="checkbox"], #wizardPanel input[type="radio"] {
+#wizardPanel input[type=checkbox], #wizardPanel input[type=radio] {
   margin-left: 4px;
 }
 
@@ -782,7 +782,7 @@ td.blankColumn {
   background: #fafbff;
 }
 
-#throttler input[type="text"] {
+#throttler input[type=text] {
   width: 80px;
 }
 
@@ -1161,7 +1161,7 @@ label {
   vertical-align: middle;
 }
 
-input[type="text"] + label {
+input[type=text] + label {
   white-space: nowrap;
 }
 
@@ -1302,8 +1302,8 @@ th .help::after {
 
 /* custom radios/checkboxes to enforce color scheme when OS widgets are non-standard  */
 @supports (background-blend-mode: luminosity) { /* exclude ms browsers */
-input[type="checkbox"], input[type="checkbox"]:checked, input[type="checkbox"][disabled], input[type="checkbox"][disabled]:checked,
-input[type="radio"], input[type="radio"]:checked, input[type="radio"][disabled], input[type="radio"][disabled]:checked {
+input[type=checkbox], input[type=checkbox]:checked, input[type=checkbox][disabled], input[type=checkbox][disabled]:checked,
+input[type=radio], input[type=radio]:checked, input[type=radio][disabled], input[type=radio][disabled]:checked {
   width: 19px !important;
   height: 19px !important;
   position: relative;
@@ -1317,12 +1317,12 @@ input[type="radio"], input[type="radio"]:checked, input[type="radio"][disabled],
   will-change: transform;
 }
 
-input[type="checkbox"], input[type="checkbox"]:checked, input[type="checkbox"][disabled], input[type="checkbox"][disabled]:checked {
+input[type=checkbox], input[type=checkbox]:checked, input[type=checkbox][disabled], input[type=checkbox][disabled]:checked {
   border-radius: 2px;
   box-shadow: inset 1px 1px 1px rgba(204, 204, 204, .6);
 }
 
-input[type="radio"], input[type="radio"]:checked, input[type="radio"][disabled], input[type="radio"][disabled]:checked {
+input[type=radio], input[type=radio]:checked, input[type=radio][disabled], input[type=radio][disabled]:checked {
   border-radius: 50%;
 }
 #notReady, #down {
@@ -1337,8 +1337,8 @@ input[type="radio"], input[type="radio"]:checked, input[type="radio"][disabled],
   box-shadow: inset 0 0 0 1px #000;
   background: #002;
 }
-input[type="checkbox"]:checked::before, input[type="radio"]:checked::before,
-input[type="checkbox"]:not(:checked)::before, input[type="radio"]:not(:checked)::before {
+input[type=checkbox]:checked::before, input[type=radio]:checked::before,
+input[type=checkbox]:not(:checked)::before, input[type=radio]:not(:checked)::before {
   position: absolute;
   transform: scale(1);
   transition: linear all .05s;
@@ -1348,7 +1348,7 @@ input[type="checkbox"]:not(:checked)::before, input[type="radio"]:not(:checked):
   box-shadow: inset 2px 2px 1px rgba(204, 204, 240, .6);
 }
 
-input[type="checkbox"]:checked::before {
+input[type=checkbox]:checked::before {
   width: 11px;
   height: 11px;
   position: absolute;
@@ -1362,7 +1362,7 @@ input[type="checkbox"]:checked::before {
   transition: linear all .05s;
 }
 
-input[type="radio"]:checked::before {
+input[type=radio]:checked::before {
   width: 9px;
   height: 9px;
   left: 25%;
@@ -1372,11 +1372,11 @@ input[type="radio"]:checked::before {
   content: "";
 }
 
-input[type="checkbox"]:not(:checked)::before, input[type="radio"]:not(:checked)::before {
+input[type=checkbox]:not(:checked)::before, input[type=radio]:not(:checked)::before {
   transform: scale(0);
 }
 
-input[type="checkbox"]:hover, input[type="radio"]:hover, input[type="checkbox"]:focus, input[type="radio"]:focus {
+input[type=checkbox]:hover, input[type=radio]:hover, input[type=checkbox]:focus, input[type=radio]:focus {
   width: 19px !important;
   height: 19px !important;
   border: 1px solid #67f !important;
@@ -1385,8 +1385,8 @@ input[type="checkbox"]:hover, input[type="radio"]:hover, input[type="checkbox"]:
   filter: none !important;
 }
 
-input[type="checkbox"][disabled], input[type="radio"][disabled], input[type="checkbox"][disabled]:hover, input[type="radio"][disabled]:hover,
-input[type="checkbox"][disabled]:checked, input[type="radio"][disabled]:checked, input[type="checkbox"][disabled]:checked:hover, input[type="radio"][disabled]:checked:hover {
+input[type=checkbox][disabled], input[type=radio][disabled], input[type=checkbox][disabled]:hover, input[type=radio][disabled]:hover,
+input[type=checkbox][disabled]:checked, input[type=radio][disabled]:checked, input[type=checkbox][disabled]:checked:hover, input[type=radio][disabled]:checked:hover {
   box-shadow: none !important;
   opacity: .5;
   filter: none !important;

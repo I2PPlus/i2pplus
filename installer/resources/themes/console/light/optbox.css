@@ -1,17 +1,17 @@
 @supports (background-blend-mode: luminosity) { /* exclude ms browsers */
-input[type="checkbox"], input[type="checkbox"]:checked, input[type="checkbox"][disabled], input[type="checkbox"][disabled]:checked {
+input[type=checkbox], input[type=checkbox]:checked, input[type=checkbox][disabled], input[type=checkbox][disabled]:checked {
   width: 19px !important;
   height: 19px !important;
   border-radius: 1px;
 }
 
-input[type="radio"], input[type="radio"]:checked, input[type="radio"][disabled], input[type="radio"][disabled]:checked {
+input[type=radio], input[type=radio]:checked, input[type=radio][disabled], input[type=radio][disabled]:checked {
   width: 19px !important;
   height: 19px !important;
   border-radius: 50%;
 }
 
-input[type="checkbox"]:checked::before, input[type="radio"]:checked::before {
+input[type=checkbox]:checked::before, input[type=radio]:checked::before {
   position: absolute;
   background: #3c6bc3;
   background: linear-gradient(135deg, #4f7ac9, #3c6bc3);
@@ -20,7 +20,7 @@ input[type="checkbox"]:checked::before, input[type="radio"]:checked::before {
   content: "";
 }
 
-input[type="checkbox"]:checked::before {
+input[type=checkbox]:checked::before {
   top: 3px;
   left: 3px;
   width: 11px;
@@ -29,7 +29,7 @@ input[type="checkbox"]:checked::before {
   border-radius: 1px;
 }
 
-input[type="radio"]:checked::before {
+input[type=radio]:checked::before {
   left: 25%;
   top: 25%;
   width: 9px;
@@ -37,11 +37,11 @@ input[type="radio"]:checked::before {
   border-radius: 50%;
 }
 
-input[type="checkbox"]:not(:checked) {
+input[type=checkbox]:not(:checked) {
   box-shadow: inset 0 0 0 1px #f8f8ff, inset 3px 3px 3px #aad;
 }
 
-input[type="radio"]:not(:checked) {
+input[type=radio]:not(:checked) {
   box-shadow: inset 0 0 0 2px #f8f8ff, inset 3px 3px 3px #aad;
 }
 
@@ -91,7 +91,7 @@ input[type="radio"]:not(:checked) {
   will-change: transform;
 }
 
-input[type="radio"]:not(:checked)::before {
+input[type=radio]:not(:checked)::before {
   border-radius: 50%;
 }
 }

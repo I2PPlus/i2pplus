@@ -237,18 +237,18 @@ p, div[id^="config_"] th, #consolepass tr:first-child td {
   font-size: 11pt !important;
 }
 
-input[type="submit"], input[type="reset"], input[type="submit"]:hover, input[type="reset"]:hover, input[type="submit"]:active, input[type="reset"]:active,
-input[type="submit"]:focus, input[type="reset"]:focus, input.reload[value="Force garbage collection"], input.reload[value="Force garbage collection"]:hover {
+input[type=submit], input[type="reset"], input[type=submit]:hover, input[type="reset"]:hover, input[type=submit]:active, input[type="reset"]:active,
+input[type=submit]:focus, input[type="reset"]:focus, input.reload[value="Force garbage collection"], input.reload[value="Force garbage collection"]:hover {
   padding-top: 2px !important;
   display: inline-block;
   font-size: 12pt !important;
   font-weight: normal !important;
   line-height: 140% !important;
-  letter-spacing: 0.05em;
+  letter-spacing: .05em;
   background-position: 8px 6px, center center !important;
 }
 
-input[type="submit"]:active, input[type="reset"]:active, input.reload[value="Force garbage collection"]:active {
+input[type=submit]:active, input[type="reset"]:active, input.reload[value="Force garbage collection"]:active {
   padding-top: 3px !important;
   padding-bottom: 1px !important;
   background-position: 8px 7px, center center !important;
@@ -286,7 +286,7 @@ label, select, select option, #configstats th b, p.infohelp, p.infowarn, td.info
   font-weight: normal !important;
 }
 
-input[type="text"], input[type="password"], textarea {
+input[type=text], input[type=password], textarea {
   font-size: 11pt !important;
 }
 
@@ -394,11 +394,11 @@ div.app a:link, div.app a:hover, div.app a:active {
   margin-top: -27px !important;
 }
 
-input[type="submit"], input[type="reset"], input[type="submit"]:hover, input[type="reset"]:hover, input[type="submit"]:active, input[type="reset"]:active,
-input[type="submit"]:focus, input[type="reset"]:focus, input.reload[value="Force garbage collection"], input.reload[value="Force garbage collection"]:hover,
-.main input[type="submit"], .main input[type="reset"], .main input[type="submit"]:hover,
-.main input[type="reset"]:hover, .main input[type="submit"]:focus, .main input[type="reset"]:focus,
-.main input[type="submit"]:active, .main input[type="reset"]:active {
+input[type=submit], input[type="reset"], input[type=submit]:hover, input[type="reset"]:hover, input[type=submit]:active, input[type="reset"]:active,
+input[type=submit]:focus, input[type="reset"]:focus, input.reload[value="Force garbage collection"], input.reload[value="Force garbage collection"]:hover,
+.main input[type=submit], .main input[type="reset"], .main input[type=submit]:hover,
+.main input[type="reset"]:hover, .main input[type=submit]:focus, .main input[type="reset"]:focus,
+.main input[type=submit]:active, .main input[type="reset"]:active {
   padding-top: 3px !important;
   padding-bottom: 3px !important;
   background-position: 8px center !important;

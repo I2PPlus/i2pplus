@@ -375,7 +375,7 @@ label:hover {
   filter: sepia(100%) hue-rotate(185deg) drop-shadow(0 0 2px #933);
 }
 
-input[type="text"], input[type="password"] {
+input[type=text], input[type=password] {
   cursor: text;
   font-family: Droid Sans, Open Sans, Noto Sans, Ubuntu, Bitstream Vera Sans, Segoe UI, Verdana, Lucida Grande, Helvetica, sans-serif;
   font-size: 9pt;
@@ -941,7 +941,7 @@ input[type="file"] {
   max-width: 400px;
 }
 
-input[type="text"], input[type="password"], textarea {
+input[type=text], input[type=password], textarea {
   padding: 5px !important;
   background: #fbfbff;
   box-shadow: inset 1px 1px 1px rgba(204, 204, 204, .6);
@@ -951,14 +951,14 @@ input[type="text"], input[type="password"], textarea {
   filter: drop-shadow(0 0 1px rgba(220,220,255,.7));
 }
 
-input[type="text"]:focus, input[type="password"]:focus, textarea:focus {
+input[type=text]:focus, input[type=password]:focus, textarea:focus {
   color: #19191f;
   box-shadow: 0 0 1px #89f;
   background: #fff;
   border: 1px solid #676c7f;
 }
 
-input[type="text"][disabled] {
+input[type=text][disabled] {
   opacity: 1;
   background: #e9e9e9;
   background: repeating-linear-gradient(135deg, rgba(255,255,255,.5) 2px, rgba(220, 220, 255, .3) 3px, #fafaff 4px), #fafaff;
@@ -1045,7 +1045,7 @@ hr {
   display: none;
 }
 
-#dologin input[type="text"], input[name="pagesize"] {
+#dologin input[type=text], input[name="pagesize"] {
   text-align: left !important;
 }
 
@@ -1277,7 +1277,7 @@ h3#config {
   padding: 5px 10px;
 }
 
-.topbuttons input[type="text"] {
+.topbuttons input[type=text] {
   margin: 5px;
 }
 
@@ -1412,7 +1412,7 @@ td p.error {
   min-height: 200px;
 }
 
-#composemail textarea, #composemail input[type="text"] {
+#composemail textarea, #composemail input[type=text] {
   width: calc(100% - 20px);
   min-width: 565px;
 }
@@ -2138,13 +2138,13 @@ input.switchto:hover, input.moveto:hover {
   text-transform: capitalize;
 }
 
-input[type="text"]::placeholder, input[type="password"]::placeholder {
+input[type=text]::placeholder, input[type=password]::placeholder {
   font-style: italic;
   text-transform: lowercase;
   opacity: .4;
 }
 
-input[type="text"]:focus::placeholder, input[type="password"]:focus::placeholder {
+input[type=text]:focus::placeholder, input[type=password]:focus::placeholder {
   opacity: 0;
 }
 

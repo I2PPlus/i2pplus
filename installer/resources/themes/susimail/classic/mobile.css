@@ -50,7 +50,7 @@ p.error, p.info {
   display: none;
 }
 
-#newmail input[type="text"], #composemail textarea {
+#newmail input[type=text], #composemail textarea {
   width: 100%;
   min-width: 360px !important;
 }

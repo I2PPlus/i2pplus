@@ -70,14 +70,14 @@ select {
   padding-bottom: 4px;
 }
 
-a.control, input[type="submit"], input.accept {
+a.control, input[type=submit], input.accept {
   padding-top: 2px !important;
   padding-bottom: 2px !important;
   text-transform: uppercase !important;
-  letter-spacing: 0.05em;
+  letter-spacing: .05em;
 }
 
-a.control, input[type="submit"], input.accept, th {
+a.control, input[type=submit], input.accept, th {
   font-weight: normal !important;
   font-size: 12pt !important;
 }
@@ -170,7 +170,7 @@ a.control, input[type="submit"], input.accept, th {
 #configs td b {
   padding-right: 8px;
   min-width: 185px !important;
-  letter-spacing: 0.08em !important;
+  letter-spacing: .08em !important;
 }
 
 #configs input[name="nofilter_dataDir"], input[name="i2cpOpts"], input[name="nofilter_commentsName"] {

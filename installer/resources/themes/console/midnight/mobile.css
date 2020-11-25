@@ -108,7 +108,7 @@ div.routersummary form {
   margin: -2px 5px -4px -11px !important;
 }
 
-.routersummary button[type="submit"], .routersummary button[type="cancel"] {
+.routersummary button[type=submit], .routersummary button[type=reset] {
   margin: 5px 10px !important;
   padding: 8px 5px !important;
   min-width: 120px !important;

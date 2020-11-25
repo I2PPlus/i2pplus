@@ -117,7 +117,7 @@ table[id^="sb_"] tr:hover td {
   max-width: 600px;
 }
 
-.routersummary button[type="submit"], .routersummary button[type="cancel"] {
+.routersummary button[type=submit], .routersummary button[type=reset] {
   margin: 5px 5px 3px !important;
   padding: 8px 5px !important;
   min-width: 120px !important;

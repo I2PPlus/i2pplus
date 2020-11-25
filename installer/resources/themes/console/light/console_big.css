@@ -12,7 +12,7 @@ h3 {
   font-size: 12pt;
 }
 
-b, a, input, button, input[type="submit"], input[type="reset"], i, th, thead, tfoot, .mediumtags, .themelabel {
+b, a, input, button, input[type=submit], input[type="reset"], i, th, thead, tfoot, .mediumtags, .themelabel {
   font-weight: normal !important;
   font-style: normal !important;
 }
@@ -21,7 +21,7 @@ b {
   color: #112;
 }
 
-button, input[type="submit"], input[type="reset"] {
+button, input[type=submit], input[type="reset"] {
   padding: 3px 5px 3px 22px !important;
   display: inline-block;
   line-height: 140% !important;
@@ -97,7 +97,7 @@ div.news, .newscontent p {
 
 #newsStatus, #newsDisplay {
   font-size: 10.5pt !important;
-  letter-spacing: 0.05em;
+  letter-spacing: .05em;
 }
 
 h4.app, h4.app2 {
@@ -213,7 +213,7 @@ p#enablefullstats {
 #console p a, #console li a {
   padding: 1px 4px;
   display: inline-block;
-  background: rgba(220,220,255,0.5);
+  background: rgba(220,220,255,.5);
   border-radius: 2px;
 }
 

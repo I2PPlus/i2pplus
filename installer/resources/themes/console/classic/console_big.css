@@ -19,17 +19,17 @@ code, tt {
   font-size: 10.5pt !important;
 }
 
-input[type="submit"], input[type="cancel"], input[type="file"], button, button.search, input.cancel {
+input[type=submit], input[type=reset], input[type="file"], button, button.search, input.cancel {
   font-size: 11pt !important;
   padding-top: 3px;
   padding-bottom: 3px;
   line-height: 140% !important;
   display: inline-block;
-  letter-spacing: 0.05em;
+  letter-spacing: .05em;
 }
 
-input[type="submit"], input[type="cancel"], input[type="file"], button, button.search, input.cancel, div.app, .themelabel, .ui_lang, .tab a, label, a, li {
-  letter-spacing: 0.05em !important;
+input[type=submit], input[type=reset], input[type="file"], button, button.search, input.cancel, div.app, .themelabel, .ui_lang, .tab a, label, a, li {
+  letter-spacing: .05em !important;
 }
 
 .routersummary button {
@@ -160,7 +160,7 @@ h4 {
 }
 
 h1, h2, h3, h4 {
-  letter-spacing: 0.08em !important;
+  letter-spacing: .08em !important;
   word-spacing: 0.1em !important;
 }
 
@@ -298,11 +298,11 @@ h3.stats {
   margin-top: 0;
   margin-bottom: -1px;
 }
-input[type="text"], input[type="password"] {
+input[type=text], input[type=password] {
   min-width: 0;
 }
 
-input[type="radio"], input[type="checkbox"] {
+input[type=radio], input[type=checkbox] {
   margin-top: 6px;
   margin-bottom: 6px;
 }
@@ -365,7 +365,7 @@ p[style="margin: 0px 12px"] {
   background-size: 12px 12px !important;
 }
 
-input.search[type="text"] {
+input.search[type=text] {
   padding-left: 30px;
   background-position: 8px center;
 }

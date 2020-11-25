@@ -68,15 +68,15 @@ select, #configs select, #newRating select {
   font-size: 10.5pt !important;
 }
 
-a.control, input[type="submit"],
+a.control, input[type=submit],
 input.reload[name="recheck"], input.disabled[name="recheck"] {
   text-transform: uppercase !important;
-  letter-spacing: 0.05em;
+  letter-spacing: .05em;
   padding-top: 2px !important;
   padding-bottom: 2px !important;
 }
 
-select, a.control, input[type="submit"], input.accept, th, #trackerselect tr:first-child td {
+select, a.control, input[type=submit], input.accept, th, #trackerselect tr:first-child td {
   font-weight: normal !important;
   font-size: 12pt !important;
 }
@@ -141,7 +141,7 @@ select, a.control, input[type="submit"], input.accept, th, #trackerselect tr:fir
 }
 
 #configs td b {
-  letter-spacing: 0.08em !important;
+  letter-spacing: .08em !important;
   min-width: 180px !important;
 }
 

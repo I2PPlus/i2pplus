@@ -92,7 +92,7 @@ html, .main * {
 
 .routersummary h3:hover {
   background: linear-gradient(to bottom, #001020 50%, #000 50%) !important;
-  background: linear-gradient(to right, rgba(64,0,64,0.1), rgba(96,0,96,0.2), rgba(64,0,64,0.1)), linear-gradient(to bottom, #1d1a2d 50%, #000 50%) !important;
+  background: linear-gradient(to right, rgba(64,0,64,.1), rgba(96,0,96,.2), rgba(64,0,64,.1)), linear-gradient(to bottom, #1d1a2d 50%, #000 50%) !important;
 }
 
 :focus, :active, :checked {
@@ -1058,7 +1058,7 @@ button::-moz-focus-inner, input[type=submit]::-moz-focus-inner, input[type=reset
 }
 
 .routersummary .reload, .routersummary .reload[value$="restart"] {
-  background: url(images/restart.svg) center center no-repeat, linear-gradient(to right, rgba(0,0,0,0), rgba(96,0,96,0.1), rgba(0,0,0,0)), linear-gradient(to bottom, #141221 50%, #001 50%) !important;
+  background: url(images/restart.svg) center center no-repeat, linear-gradient(to right, rgba(0,0,0,0), rgba(96,0,96,.1), rgba(0,0,0,0)), linear-gradient(to bottom, #141221 50%, #001 50%) !important;
   background-size: 14px 14px, 100% 100%, 100% 100% !important;
 }
 
@@ -1076,7 +1076,7 @@ button::-moz-focus-inner, input[type=submit]::-moz-focus-inner, input[type=reset
 
 .routersummary .stop {
   background: url(images/shutdown.svg) center center no-repeat, linear-gradient(to bottom, #191a24 50%, #000 50%) !important;
-  background: url(images/shutdown.svg) center center no-repeat, linear-gradient(to right, rgba(0,0,0,0), rgba(96,0,96,0.1), rgba(0,0,0,0)), linear-gradient(to bottom, #141221 50%, #001 50%) !important;
+  background: url(images/shutdown.svg) center center no-repeat, linear-gradient(to right, rgba(0,0,0,0), rgba(96,0,96,.1), rgba(0,0,0,0)), linear-gradient(to bottom, #141221 50%, #001 50%) !important;
   background-size: 14px 14px, 100% 100%, 100% 100% !important;
 }
 
@@ -1104,7 +1104,7 @@ button::-moz-focus-inner, input[type=submit]::-moz-focus-inner, input[type=reset
 
 .routersummary .reload[value="restartImmediate"] {
   background: url(images/restart.svg) center left 6px no-repeat, linear-gradient(to bottom, #191a24 50%, #000 50%) !important;
-  background: url(images/restart.svg) center left 6px no-repeat, linear-gradient(to right, rgba(0,0,0,0), rgba(96,0,96,0.1), rgba(0,0,0,0)), linear-gradient(to right, rgba(0,0,16,0.5), rgba(0,0,0,0) 30%), linear-gradient(to bottom, #141221 50%, #001 50%) !important;
+  background: url(images/restart.svg) center left 6px no-repeat, linear-gradient(to right, rgba(0,0,0,0), rgba(96,0,96,.1), rgba(0,0,0,0)), linear-gradient(to right, rgba(0,0,16,.5), rgba(0,0,0,0) 30%), linear-gradient(to bottom, #141221 50%, #001 50%) !important;
   background-size: 12px auto, 100% 100%, 100% 100%, 100% 100% !important;
 }
 
@@ -1121,7 +1121,7 @@ button::-moz-focus-inner, input[type=submit]::-moz-focus-inner, input[type=reset
 
 .routersummary .stop[value="shutdownImmediate"] {
   background: url(images/shutdown.svg) center left 6px no-repeat, linear-gradient(to bottom, #191a24 50%, #000 50%) !important;
-  background: url(images/shutdown.svg) center left 6px no-repeat, linear-gradient(to right, rgba(0,0,0,0), rgba(96,0,96,0.1), rgba(0,0,0,0)), linear-gradient(to right, rgba(0,0,16,0.5), rgba(0,0,0,0) 30%), linear-gradient(to bottom, #141221 50%, #001 50%) !important;
+  background: url(images/shutdown.svg) center left 6px no-repeat, linear-gradient(to right, rgba(0,0,0,0), rgba(96,0,96,.1), rgba(0,0,0,0)), linear-gradient(to right, rgba(0,0,16,.5), rgba(0,0,0,0) 30%), linear-gradient(to bottom, #141221 50%, #001 50%) !important;
   background-size: 12px auto, 100% 100%, 100% 100%, 100% 100% !important;
 }
 
@@ -1137,7 +1137,7 @@ button::-moz-focus-inner, input[type=submit]::-moz-focus-inner, input[type=reset
 
 .routersummary .reload[value="Reseed"] {
   background: url(/themes/console/images/buttons/download.png) center left 6px no-repeat, linear-gradient(to bottom, #191a24 50%, #000 50%) !important;
-  background: url(/themes/console/images/buttons/download.png) center left 6px no-repeat, linear-gradient(to right, rgba(0,0,0,0), rgba(96,0,96,0.1), rgba(0,0,0,0)), linear-gradient(to right, rgba(0,0,16,0.5), rgba(0,0,0,0) 30%), linear-gradient(to bottom, #141221 50%, #001 50%) !important;
+  background: url(/themes/console/images/buttons/download.png) center left 6px no-repeat, linear-gradient(to right, rgba(0,0,0,0), rgba(96,0,96,.1), rgba(0,0,0,0)), linear-gradient(to right, rgba(0,0,16,.5), rgba(0,0,0,0) 30%), linear-gradient(to bottom, #141221 50%, #001 50%) !important;
   background-size: 14px auto, 100% 100%, 100% 100%, 100% 100% !important;
 }
 
@@ -1228,7 +1228,7 @@ div.logo hr {
   .logo hr ~ a {
     border: 1px solid #225;
     background: radial-gradient(at center bottom, rgba(128, 0, 128, .15), rgba(64, 0, 64, .08) 30%, rgba(0, 0, 0, 0) 90%),
-                linear-gradient(to right, rgba(0,0,0,0), rgba(96,0,96,0.1), rgba(0,0,0,0)),
+                linear-gradient(to right, rgba(0,0,0,0), rgba(96,0,96,.1), rgba(0,0,0,0)),
                 linear-gradient(to right, rgba(0,0,16,.1), rgba(0,0,0,0), rgba(0,0,16,.1)),
                 linear-gradient(to bottom, #0a0a1a 50%, #040414 50%) !important;
   }
@@ -1244,7 +1244,7 @@ div.logo hr {
   .logo hr ~ a:active {
     box-shadow: inset 0 0 0 1px #000, inset 0 0 1px 1px #737, inset 0 0 0 3px #101, inset 5px 5px 5px 2px #000;
     background: radial-gradient(at center bottom, rgba(160,48,160,.2), rgba(0, 0, 0, 0) 35%),
-                linear-gradient(to right, rgba(64,0,64,0.1), rgba(64,0,64,0.2), rgba(64,0,64,0.1)),
+                linear-gradient(to right, rgba(64,0,64,.1), rgba(64,0,64,.2), rgba(64,0,64,.1)),
                 linear-gradient(to bottom, #080820, #1d1a2d) !important;
   }
 
@@ -1548,12 +1548,12 @@ div.logo hr {
   position: relative;
   z-index: 999;
   font-size: 9.5pt;
-  letter-spacing: 0.06em;
+  letter-spacing: .06em;
   text-transform: uppercase;
   border: 0;
   border-radius: 0;
   background: radial-gradient(at center bottom, rgba(128, 0, 128, .15), rgba(64, 0, 64, .08) 30%, rgba(0, 0, 0, 0) 90%),
-        linear-gradient(to right, rgba(0,0,0,0), rgba(96,0,96,0.1), rgba(0,0,0,0)),
+        linear-gradient(to right, rgba(0,0,0,0), rgba(96,0,96,.1), rgba(0,0,0,0)),
         linear-gradient(to right, rgba(0,0,16,.1), rgba(0,0,0,0), rgba(0,0,16,.1)),
         linear-gradient(to bottom, #0a0a1a 50%, #040414 50%) !important;
 }
@@ -1591,7 +1591,7 @@ div.logo hr {
 .routersummary h3:active {
   box-shadow: inset 0 0 0 1px #000, inset 0 0 1px 1px #737, inset 4px 4px 4px #000;
   background: radial-gradient(at center bottom, rgba(160,48,160,.2), rgba(0, 0, 0, 0) 35%),
-              linear-gradient(to right, rgba(64,0,64,0.1), rgba(64,0,64,0.2), rgba(64,0,64,0.1)),
+              linear-gradient(to right, rgba(64,0,64,.1), rgba(64,0,64,.2), rgba(64,0,64,.1)),
               linear-gradient(to bottom, #080820, #1d1a2d) !important;
 }
 
@@ -2219,7 +2219,7 @@ a:active #sb_bandwidthgraph, a:active #sb_graphstats {
   background: repeating-linear-gradient(to right, #000 1px, #000 2px, #003 2px, #003 4px);
   border: 1px solid rgba(38, 35, 92,.7);
   opacity: 1;
-  box-shadow: 0 0 1px 1px rgba(0,0,0,0.8);
+  box-shadow: 0 0 1px 1px rgba(0,0,0,.8);
   margin: -3px 0 -6px -6px;
 }
 
@@ -2238,18 +2238,18 @@ a:active #sb_bandwidthgraph, a:active #sb_graphstats {
   height: 14px;
   max-width: 100%;
   background: #227;
-  background: linear-gradient(to right, rgba(0,0,0,0) 100px, rgba(255,0,255,0.1) 160px, rgba(0,0,255,0.15)), linear-gradient(to bottom,  #33a, #226 50%, #003 50%, #000);
+  background: linear-gradient(to right, rgba(0,0,0,0) 100px, rgba(255,0,255,.1) 160px, rgba(0,0,255,.15)), linear-gradient(to bottom,  #33a, #226 50%, #003 50%, #000);
   box-shadow: inset 0 0 0 1px #000;
 }
 
 #sb_memoryBar .percentBarInner {
-  background: linear-gradient(to right, rgba(0,0,0,0) 100px, rgba(255,0,255,0.1) 160px, rgba(255,0,0,0.15)), linear-gradient(to bottom,  #33a, #226 50%, #003 50%, #000);
-  background: linear-gradient(to right, rgba(0,0,0,0) 100px, rgba(255,0,255,0.1) 160px, rgba(255,0,0,0.15)), linear-gradient(to bottom,  rgba(100,100,220,0.5), rgba(70,70,120,0.5) 50%, rgba(0,0,50,0.5) 50%, rgba(0,0,0,0.5));
+  background: linear-gradient(to right, rgba(0,0,0,0) 100px, rgba(255,0,255,.1) 160px, rgba(255,0,0,.15)), linear-gradient(to bottom,  #33a, #226 50%, #003 50%, #000);
+  background: linear-gradient(to right, rgba(0,0,0,0) 100px, rgba(255,0,255,.1) 160px, rgba(255,0,0,.15)), linear-gradient(to bottom,  rgba(100,100,220,.5), rgba(70,70,120,.5) 50%, rgba(0,0,50,.5) 50%, rgba(0,0,0,.5));
 }
 
 #sb_memoryBar.percentBarOuter {
-  box-shadow: inset 0 0 0 1px #000, inset 0 0 0 2px rgba(0,0,0,0.3);
-  background: linear-gradient(to right, rgba(0,0,0,0), rgba(255,0,255,0.05), rgba(255,0,0,0.12)), repeating-linear-gradient(to right, #000 1px, #000 2px, #003 2px, #003 4px) !important;
+  box-shadow: inset 0 0 0 1px #000, inset 0 0 0 2px rgba(0,0,0,.3);
+  background: linear-gradient(to right, rgba(0,0,0,0), rgba(255,0,255,.05), rgba(255,0,0,.12)), repeating-linear-gradient(to right, #000 1px, #000 2px, #003 2px, #003 4px) !important;
 }
 
 .percentBarText {
@@ -2745,7 +2745,7 @@ div.sorry hr {
   color: #bf2295;
   border: 1px solid #000;
   box-shadow: 0 0 1px #000, inset 0 0 0 1px #303;
-  transition: ease box-shadow 0.05s;
+  transition: ease box-shadow .05s;
 }
 
 #newsDisplay a:active, #graphopts a:active, #routerinfo a:active, .graphstat:active {
@@ -2925,7 +2925,7 @@ div.confignav {
   box-shadow: inset 0 0 0 1px #000, inset 0 0 1px 1px #404, inset 3px 3px 2px #000;
   background: #040033;
   background: linear-gradient(to bottom, #1a1b2f 50%, #000 50%) !important;
-  background: radial-gradient(at center bottom, rgba(128, 0, 128, .4) 0, rgba(0, 0, 0, 0) 90%), linear-gradient(to right, rgba(96,0,96,0.2), rgba(96,0,96,0.2)), linear-gradient(to bottom, #1a1b2f 50%, #000 50%) !important;
+  background: radial-gradient(at center bottom, rgba(128, 0, 128, .4) 0, rgba(0, 0, 0, 0) 90%), linear-gradient(to right, rgba(96,0,96,.2), rgba(96,0,96,.2)), linear-gradient(to bottom, #1a1b2f 50%, #000 50%) !important;
 }
 
 @supports not (-moz-appearance: none) {
@@ -3163,7 +3163,7 @@ div.widepanel h3 {
   text-transform: uppercase;
   font-size: 10.5pt;
   text-align: left;
-  letter-spacing: 0.08em;
+  letter-spacing: .08em;
   word-spacing: 0.1em;
   border-radius: 0;
   border: 1px solid rgba(38, 35, 92,.7);
@@ -3262,7 +3262,7 @@ to {
   padding: 10px 0 8px;
   text-align: center;
   background: #001;
-  background: rgba(0,0,16,0.5);
+  background: rgba(0,0,16,.5);
   border-top: 1px solid rgba(38, 35, 92,.7);
 }
 
@@ -3593,7 +3593,7 @@ a:active, .h3navlinks a:active, a:active .b32 {
 .links b {
   color: #ebdbff !important;
   color: #8f7959 !important;
-  letter-spacing: 0.08em;
+  letter-spacing: .08em;
   line-height: 165%;
 }
 
@@ -3663,7 +3663,7 @@ h2, h2.welcome {
   font-size: 12pt;
   color: #c9ceff;
   text-shadow: 0 0 2px #010011;
-  letter-spacing: 0.05em;
+  letter-spacing: .05em;
   padding: 10px;
   border: 1px solid rgba(38, 35, 92,.7);
   border-radius: 2px;
@@ -3699,7 +3699,7 @@ h3, h3.welcome, div.news h3 {
   background: #000 url(images/header.png) center center ;
   text-transform: uppercase;
   text-shadow: 0 0 2px #010011;
-  letter-spacing: 0.08em;
+  letter-spacing: .08em;
 }
 
 div.news h3 {
@@ -3728,7 +3728,7 @@ h2, h3, h4, .confignav {
   padding-left: 30px !important;
   text-align: left !important;
   font-size: 9.5pt !important;
-  letter-spacing: 0.08em;
+  letter-spacing: .08em;
   color: #c9ceff;
   padding: 6px 10px 6px 30px;
   background: url(/themes/console/images/info/newspaper.png) left 8px center no-repeat, linear-gradient(to bottom, #121225 50%, #00000d 50%) !important;
@@ -3812,7 +3812,7 @@ div[lang="de"] .twocol, div[lang="pt"] .twocol, div[lang="es"] .twocol, div[lang
   border: 1px solid #002;
   border-radius: 2px;
   box-shadow: inset 0 0 0 1px #000;
-  background: rgba(0,0,48,0.3);
+  background: rgba(0,0,48,.3);
 }
 
 p + .twocol, div[lang="de"] p + .twocol {
@@ -4127,7 +4127,7 @@ h3[id$="con"] { /* peers h3 + tables */
   padding: 8px 10px;
   font-size: 10pt;
   word-spacing: 0.1em;
-  letter-spacing: 0.08em;
+  letter-spacing: .08em;
   border: 1px solid rgba(38, 35, 92,.7);
   border: 1px solid rgba(38, 35, 92,.7);
 }
@@ -4531,7 +4531,7 @@ h3#themeheading, h3#langheading, h3#passwordheading {
   margin-bottom: 0;
   padding: 8px 10px;
   word-spacing: 0.1em;
-  letter-spacing: 0.08em;
+  letter-spacing: .08em;
   font-size: 10.5pt;
   border: 1px solid rgba(38, 35, 92,.7);
   border-radius: 0;
@@ -4808,7 +4808,7 @@ form[action="/createreseed"] > h3 {
   margin-bottom: -13px;
   padding: 10px;
   word-spacing: 0.1em;
-  letter-spacing: 0.08em;
+  letter-spacing: .08em;
   font-size: 10.5pt;
   border: 1px solid rgba(38, 35, 92,.7);
   border-radius: 0;
@@ -5710,7 +5710,7 @@ div#volunteer {
   text-transform: uppercase;
   font-size: 11pt;
   text-align: left;
-  letter-spacing: 0.08em;
+  letter-spacing: .08em;
   word-spacing: 0.1em;
   border-radius: 0;
 }
@@ -5723,7 +5723,7 @@ div#volunteer {
   margin: 0 -21px 10px !important;
   padding: 8px 10px;
   word-spacing: 0.1em;
-  letter-spacing: 0.08em;
+  letter-spacing: .08em;
   text-align: left;
   text-transform: uppercase;
   font-size: 10.5pt;
@@ -5735,7 +5735,7 @@ div#volunteer {
   margin: 0 0 -11px !important;
   padding: 10px;
   word-spacing: 0.1em;
-  letter-spacing: 0.08em;
+  letter-spacing: .08em;
   text-align: left;
   text-transform: uppercase;
   font-size: 11pt;
@@ -5912,7 +5912,7 @@ ul#upnphelp li:last-child, #legal ul li:last-child {
 #portfaq th[colspan="3"] {
   padding-left: 10px !important;
   word-spacing: 0.1em;
-  letter-spacing: 0.08em;
+  letter-spacing: .08em;
   text-align: left;
   font-size: 10.5pt !important;
 }
@@ -6066,7 +6066,7 @@ ul#upnphelp li:last-child, #legal ul li:last-child {
 table[cellspacing="30"] > tbody > tr > th[colspan="3"] { /* netdb header */
   padding: 10px;
   word-spacing: 0.1em;
-  letter-spacing: 0.08em;
+  letter-spacing: .08em;
   text-transform: uppercase;
   font-size: 11pt;
 }
@@ -6089,7 +6089,7 @@ table[cellspacing="30"] > tbody > tr > th[colspan="3"] { /* netdb header */
 
 #netdblookup th {
   padding: 10px;
-  letter-spacing: 0.08em;
+  letter-spacing: .08em;
   text-transform: uppercase;
   text-align: left;
   font-size: 11pt;
@@ -6693,7 +6693,7 @@ table#profile_defs + hr {
 }
 
  #floodfills td:nth-child(odd) {
-  background: rgba(0,0,0,0.3);
+  background: rgba(0,0,0,.3);
 }
 
 #profilelist td:first-child > *, #floodfills td:first-child > *,
@@ -6782,7 +6782,7 @@ table#jardump {
 }
 
 #jardump tt {
-  letter-spacing: -0.03em;
+  letter-spacing: -.03em;
 }
 
 #jardump hr {
@@ -6953,7 +6953,7 @@ table#jardump {
 }
 
 #jardump tt {
-  letter-spacing: -0.03em;
+  letter-spacing: -.03em;
   font-size: 8pt !important;
   font-weight: normal !important;
 }
@@ -6975,7 +6975,7 @@ table#jardump {
   padding: 5px 10px;
   margin: 15px 0 0;
   border: 1px solid rgba(38, 35, 92,.7);
-  letter-spacing: 0.05em;
+  letter-spacing: .05em;
   font-size: 10pt;
   background: linear-gradient(to right, #000, #002);
 }
@@ -7048,7 +7048,7 @@ table#jardump {
   border-radius: 2px;
   box-shadow: inset 0 0 0 1px #225, 0 0 1px #000;
   background: url(/themes/console/images/info/rosette.png) right 8px top 8px no-repeat #002;
-  background: url(/themes/console/images/info/rosette.png) right 8px top 8px no-repeat rgba(0,0,32,0.4);
+  background: url(/themes/console/images/info/rosette.png) right 8px top 8px no-repeat rgba(0,0,32,.4);
   background-blend-mode: color-burn;
 }
 
@@ -7073,7 +7073,7 @@ table#jardump {
   border-radius: 2px;
   box-shadow: inset 0 0 0 1px #225, 0 0 1px #000;
   background: #002;
-  background: rgba(0,0,32,0.4);
+  background: rgba(0,0,32,.4);
 }
 
 #oldconsole b {
@@ -7427,7 +7427,7 @@ h4.app, h4.app2 {
   font-size: 10.5pt;
   text-align: left;
   text-transform: uppercase;
-  letter-spacing: 0.08em;
+  letter-spacing: .08em;
   word-spacing: 0.1em;
   letter-spacing: 2px;
   border: 1px solid #26235c;
@@ -7498,7 +7498,7 @@ div.app:hover {
 div.app:active .applabel {
   background: #652787 !important;
   box-shadow: inset 0 0 0 1px #000, inset 3px 3px 2px #1e0b28;
-  transition: ease box-shadow 0.05s !important;
+  transition: ease box-shadow .05s !important;
 }
 
 div.app:active .applabel a {
@@ -7801,7 +7801,7 @@ h3[id*="job"] {
   border-radius: 0;
   text-transform: uppercase;
   text-shadow: 0 0 2px #010011;
-  letter-spacing: 0.08em;
+  letter-spacing: .08em;
 }
 
 /* netdb */
@@ -7889,7 +7889,7 @@ span#distance {
   font-weight: bold;
   text-transform: uppercase;
   font-size: 10pt;
-  letter-spacing: 0.08em;
+  letter-spacing: .08em;
   word-spacing: 0.1em;
   padding: 8px 10px;
 }
@@ -8165,7 +8165,7 @@ p.sybil_info + a[name] + .sybil_routerinfo, p.hashdist + a[name] + .sybil_router
   padding: 5px 10px !important;
   text-transform: uppercase;
   font-size: 10pt;
-  letter-spacing: 0.08em;
+  letter-spacing: .08em;
   word-spacing: 0.1em;
 }
 
@@ -8274,7 +8274,7 @@ h3.h3table, h3.tabletitle, h3#i2pclientconfig, h3#advancedclientconfig, h3#webap
 h3#pluginfromfile, h3#updateplugins, h3#pluginmanage, h3#bannedpeers, h3.ptitle, h3#transports, h3#upnpstatus, h3.sybils, #config_keyring h3 {
   margin-bottom: 0 !important;
   padding: 7px 10px;
-  letter-spacing: 0.08em;
+  letter-spacing: .08em;
   text-transform: uppercase;
   border-radius: 0;
   border: 1px solid rgba(38, 35, 92,.7);
@@ -8475,7 +8475,7 @@ h4.embeddedtitle#updateplugins {
   text-align: left;
   text-transform: uppercase;
   font-size: 10pt;
-  letter-spacing: 0.08em;
+  letter-spacing: .08em;
   word-spacing: 0.1em;
   margin-top: -13px;
 }
@@ -8574,7 +8574,7 @@ table#configstats {
 #configstats th b {
   text-transform: uppercase;
   font-size: 10pt;
-  letter-spacing: 0.08em;
+  letter-spacing: .08em;
   word-spacing: 0.1em;
 }
 
@@ -8699,7 +8699,7 @@ p.sybilinfo.experimental {
   background-size: 28px 28px !important;
 }
 
-#oldhome input[type="checkbox"], #enablefullstats input[type="checkbox"] {
+#oldhome input[type=checkbox], #enablefullstats input[type=checkbox] {
   vertical-align: sub;
 }
 
@@ -8923,9 +8923,9 @@ img + tt {
   color: #c9ceff;
   text-align: center !important;
   text-shadow: 0 1px 1px #000;
-  border: 1px solid rgba(0,0,64,0.2);
+  border: 1px solid rgba(0,0,64,.2);
   border-radius: 2px;
-  background: rgba(0,0,96,0.3);
+  background: rgba(0,0,96,.3);
   background: linear-gradient(to bottom, #113, #112);
 }
 
@@ -10064,7 +10064,7 @@ div[id^="config_"] div.confignav {
 div[id^="config_"] .tab, div[id^="config_"] .tab2 {
   flex: auto;
   flex-basis: auto;
-  flex-grow: 0.06;
+  flex-grow: .06;
   margin: 0 -1px -1px 0 !important;
   white-space: nowrap;
   min-width: 70px !important;
@@ -10210,7 +10210,7 @@ h3#pluginfromfile, h3#updateplugins, h3#pluginmanage, h3#bannedpeers, h3.ptitle,
 /* IE/Edge tweaks */
 
 _:-ms-lang(x), .tunnels_client th:first-child::after {
-  letter-spacing: -0.05em;
+  letter-spacing: -.05em;
   font-weight: normal;
 }
 
@@ -10239,7 +10239,7 @@ th.options, table#externali2cp th {
   padding: 7px 10px !important;
 }
 
-.options input[type="checkbox"], #i2pupdates .options .optbox {
+.options input[type=checkbox], #i2pupdates .options .optbox {
   margin: 0 3px 0 0;
 }
 
@@ -10349,7 +10349,7 @@ th.options {
   font-size: 9pt !important;
 }
 
-.options input[type="checkbox"], .suboption .optbox {
+.options input[type=checkbox], .suboption .optbox {
   margin: 0 3px 0 0;
 }
 
@@ -10362,7 +10362,7 @@ b.suboption {
   border-bottom: none;
   box-shadow: inset 0 0 0 1px #000;
   background: #002;
-  background: linear-gradient(to right, rgba(0,0,16,0.5), rgba(0,0,0,0) 30%), linear-gradient(to bottom, #141221 50%, #001 50%) !important;
+  background: linear-gradient(to right, rgba(0,0,16,.5), rgba(0,0,0,0) 30%), linear-gradient(to bottom, #141221 50%, #001 50%) !important;
 }
 
 #i2pupdates .suboption {
@@ -10758,12 +10758,12 @@ h3#shutdownrouter {
   background: linear-gradient(to bottom, #112, #040414) !important;
 }
 
-#reseedconfig .optbox[type="checkbox"] {
+#reseedconfig .optbox[type=checkbox] {
   vertical-align: sub !important;
 }
 
 @supports not (-moz-appearance: none) {
-#reseedconfig .optbox[type="radio"] {
+#reseedconfig .optbox[type=radio] {
   margin: 4px 4px 4px 15px !important;
 }
 
@@ -11011,7 +11011,7 @@ label:hover .optbox {
 .statusnotes {
   box-shadow: inset 0 0 0 1px #000 !important;
   background: #002 !important;
-  background: linear-gradient(to right, rgba(0,0,24,0.6), rgba(0,0,8,0.6), rgba(0,0,24,0.6)), linear-gradient(to bottom, #002, #001) !important;
+  background: linear-gradient(to right, rgba(0,0,24,.6), rgba(0,0,8,.6), rgba(0,0,24,.6)), linear-gradient(to bottom, #002, #001) !important;
 }
 
 #stats ul ul {
@@ -12021,8 +12021,8 @@ th .version {
 
 /* custom radios/checkboxes to enforce color scheme when OS widgets are non-standard  */
 @supports (background-blend-mode: luminosity) {  /* exclude ms browsers */
-input[type="checkbox"], input[type="checkbox"]:checked, input[type="checkbox"][disabled], input[type="checkbox"][disabled]:checked,
-input[type="radio"], input[type="radio"]:checked, input[type="radio"][disabled], input[type="radio"][disabled]:checked {
+input[type=checkbox], input[type=checkbox]:checked, input[type=checkbox][disabled], input[type=checkbox][disabled]:checked,
+input[type=radio], input[type=radio]:checked, input[type=radio][disabled], input[type=radio][disabled]:checked {
   position: relative;
   width: 21px !important;
   height: 21px !important;
@@ -12039,14 +12039,14 @@ input[type="radio"], input[type="radio"]:checked, input[type="radio"][disabled],
   will-change: transform;
 }
 
-input[type="radio"], input[type="radio"]:checked, input[type="radio"][disabled], input[type="radio"][disabled]:checked {
+input[type=radio], input[type=radio]:checked, input[type=radio][disabled], input[type=radio][disabled]:checked {
   border-radius: 50%;
 }
 
-input[type="checkbox"]:checked::before, input[type="radio"]:checked::before,
-input[type="checkbox"]:not(:checked)::before, input[type="radio"]:not(:checked)::before {
+input[type=checkbox]:checked::before, input[type=radio]:checked::before,
+input[type=checkbox]:not(:checked)::before, input[type=radio]:not(:checked)::before {
   position: absolute;
-  transition: linear all 0.05s;
+  transition: linear all .05s;
   transform: scale(1);
 }
 
@@ -12058,15 +12058,15 @@ input[type="checkbox"]:not(:checked)::before, input[type="radio"]:not(:checked):
   background: #000 !important;
 }
 
-input[type="checkbox"]:checked::before, input[type="checkbox"]:not(:checked)::before,
-input[type="radio"]:checked::before, input[type="radio"][disabled]:checked:hover::before {
+input[type=checkbox]:checked::before, input[type=checkbox]:not(:checked)::before,
+input[type=radio]:checked::before, input[type=radio][disabled]:checked:hover::before {
   box-shadow: 0 0 0 1px #000, inset 0 0 0 1px #6c66bc;
   background: #655fb9;
   background: linear-gradient(135deg, #655fb9, #544eb1);
   content: "";
 }
 
-input[type="checkbox"]:checked::before, input[type="checkbox"]:not(:checked)::before {
+input[type=checkbox]:checked::before, input[type=checkbox]:not(:checked)::before {
   top: 4px;
   left: 4px;
   width: 11px;
@@ -12074,7 +12074,7 @@ input[type="checkbox"]:checked::before, input[type="checkbox"]:not(:checked)::be
   border-radius: 1px;
 }
 
-input[type="radio"]:checked::before, input[type="radio"][disabled]:checked:hover::before {
+input[type=radio]:checked::before, input[type=radio][disabled]:checked:hover::before {
   top: 25%;
   left: 25%;
   width: 9px;
@@ -12082,28 +12082,28 @@ input[type="radio"]:checked::before, input[type="radio"][disabled]:checked:hover
   border-radius: 50%;
 }
 
-input[type="checkbox"]:checked:hover::before {
+input[type=checkbox]:checked:hover::before {
   color: #7975c2;
 }
 
-input[type="radio"]:checked:hover::before, input[type="radio"][disabled]:checked:hover::before {
+input[type=radio]:checked:hover::before, input[type=radio][disabled]:checked:hover::before {
   background: #7975c2;
 }
 
-input[type="checkbox"]:not(:checked)::before, input[type="radio"]:not(:checked)::before {
+input[type=checkbox]:not(:checked)::before, input[type=radio]:not(:checked)::before {
   opacity: 0;
   transform: scale(0);
 }
 
-input[type="checkbox"]:hover, input[type="radio"]:hover, input[type="checkbox"]:focus, input[type="radio"]:focus {
+input[type=checkbox]:hover, input[type=radio]:hover, input[type=checkbox]:focus, input[type=radio]:focus {
   background: #000;
   border: 1px solid #6466a5 !important;
   box-shadow: 0 0 0 1px rgba(101, 39, 135, .5), 0 0 2px 2px #202 !important;
   filter: drop-shadow(0 0 1px #202) !important;
 }
 
-input[type="checkbox"][disabled], input[type="radio"][disabled], input[type="checkbox"][disabled]:hover, input[type="radio"][disabled]:hover,
-input[type="checkbox"][disabled]:checked, input[type="radio"][disabled]:checked, input[type="checkbox"][disabled]:checked:hover, input[type="radio"][disabled]:checked:hover {
+input[type=checkbox][disabled], input[type=radio][disabled], input[type=checkbox][disabled]:hover, input[type=radio][disabled]:hover,
+input[type=checkbox][disabled]:checked, input[type=radio][disabled]:checked, input[type=checkbox][disabled]:checked:hover, input[type=radio][disabled]:checked:hover {
   border: 1px solid #4f4b87 !important;
   box-shadow: none !important;
   background: #000;
@@ -12634,7 +12634,7 @@ a:hover .sitemapLink {
   border: none;
   border-top: 1px solid rgba(38, 35, 92,.7);
   box-shadow: inset 0 0 0 1px #000;
-  background: linear-gradient(to right, rgba(0,0,16,0.5), rgba(0,0,0,0) 30%, rgba(16,0,16,0.1)), linear-gradient(to bottom, #141221, #001);
+  background: linear-gradient(to right, rgba(0,0,16,.5), rgba(0,0,0,0) 30%, rgba(16,0,16,.1)), linear-gradient(to bottom, #141221, #001);
 }
 
 .sitemapLink:hover .sitemapLabel {
@@ -13510,7 +13510,7 @@ h1[class], h1 {
   background: none !important;
 }
 
-#sybilTask input[type="checkbox"] {
+#sybilTask input[type=checkbox] {
   margin: 14px 8px;
 }
 
@@ -13799,7 +13799,7 @@ to {
   margin-bottom: -3px !important;
 /*  background: url(/themes/console/images/info/tunnels.png) 6px center no-repeat,
         linear-gradient(to bottom, rgba(0,0,0,0) 50%, #000 50%),
-        repeating-linear-gradient(to right, rgba(0,0,0,0.5) 1px, rgba(0,0,0,0.5) 2px, rgba(0,16,0,0.5) 3px),
+        repeating-linear-gradient(to right, rgba(0,0,0,.5) 1px, rgba(0,0,0,.5) 2px, rgba(0,16,0,.5) 3px),
         linear-gradient(to bottom, #005000, #000 75%) !important;
   background-size: 20px 20px, 100% 100%, 100% 100%, 100% 100% !important;*/
 }
@@ -14267,7 +14267,7 @@ div#minigraph {
   height: 40px;
   content: "";
   display: inline-block;
-  background: linear-gradient(to bottom, rgba(0,0,0,0), rgba(0,0,0,0), rgba(0,0,0,0.3));
+  background: linear-gradient(to bottom, rgba(0,0,0,0), rgba(0,0,0,0), rgba(0,0,0,.3));
   pointer-events: none;
   will-change: transform;
 }

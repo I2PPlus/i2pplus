@@ -26,7 +26,7 @@ input#toggle_createtorrent:not(:checked) + label + hr + table, input#toggle_crea
   border-top: none;
   background: linear-gradient(to bottom, #656, #323 51%, #202 51%, #101) !important;
   box-shadow: inset 0 0 1px #838 !important;
-  filter: drop-shadow(0 1px 1px rgba(17,0,17,0.6)) !important;
+  filter: drop-shadow(0 1px 1px rgba(17,0,17,.6)) !important;
 }
 
 .iframed .toggleview, .iframed .toggleview:hover, .iframed .toggleview:focus, .iframed .toggleview:active {

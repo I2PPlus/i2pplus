@@ -670,7 +670,7 @@ div[lang="ar"], div[lang="ar"] code, div[lang="ar"] b {
   margin-right: 0;
 }
 
-#reseedurl input[type="text"], #reseedzip input[type="file"], #reseedcreatefile p {
+#reseedurl input[type=text], #reseedzip input[type="file"], #reseedcreatefile p {
   width: calc(100% - 20px);
 }
 

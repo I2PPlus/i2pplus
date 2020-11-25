@@ -628,15 +628,15 @@ input[type="file"] {
   border: none;
 }
 
-.editDisabled input[type="radio"], .editDisabled label {
+.editDisabled input[type=radio], .editDisabled label {
   cursor: not-allowed !important;
 }
 
-.editDisabled input[type="radio"]:checked {
+.editDisabled input[type=radio]:checked {
   opacity: 1 !important;
 }
 
-.editDisabled input[type="radio"]:not(:checked) {
+.editDisabled input[type=radio]:not(:checked) {
   opacity: .4;
 }
 
@@ -1261,7 +1261,7 @@ input.tunnelName, input.tunnelDescription, #userAgents {
   border-top: 1px solid #1c3f1b;
 }
 
-input[type="checkbox"], input[type="radio"] {
+input[type=checkbox], input[type=radio] {
   margin: 5px 3px 5px 5px;
 }
 

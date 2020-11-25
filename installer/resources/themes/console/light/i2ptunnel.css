@@ -76,7 +76,7 @@ form {
   margin: 0;
 }
 
-input[type="checkbox"], input[type="radio"] {
+input[type=checkbox], input[type=radio] {
   margin: 5px 3px 5px 5px;
   background: none;
   vertical-align: sub;
@@ -85,26 +85,26 @@ input[type="checkbox"], input[type="radio"] {
   filter: sepia(100%) hue-rotate(185deg) drop-shadow(0 0 1px rgba(220,220,255,.7));
 }
 
-input[type="checkbox"]:hover, input[type="checkbox"]:focus, input[type="radio"]:hover, input[type="radio"]:focus {
+input[type=checkbox]:hover, input[type=checkbox]:focus, input[type=radio]:hover, input[type=radio]:focus {
   box-shadow: 0 0 1px #89f;
   outline: none;
   filter: sepia(100%) hue-rotate(185deg) drop-shadow(0 0 3px #89f);
 }
 
-input[type="radio"][disabled]:hover, input[type="radio"][disabled]:focus {
+input[type=radio][disabled]:hover, input[type=radio][disabled]:focus {
   box-shadow: none !important;
   filter: sepia(100%) hue-rotate(185deg) drop-shadow(0 0 1px rgba(220,220,255,.7));
 }
 
-.editDisabled input[type="radio"], .editDisabled label {
+.editDisabled input[type=radio], .editDisabled label {
   cursor: not-allowed !important;
 }
 
-.editDisabled input[type="radio"]:checked {
+.editDisabled input[type=radio]:checked {
   opacity: 1 !important;
 }
 
-.editDisabled input[type="radio"]:not(:checked) {
+.editDisabled input[type=radio]:not(:checked) {
   opacity: .4;
 }
 
@@ -135,7 +135,7 @@ button {
   text-decoration: none;
 }
 
-button, input[type="submit"], input[type="reset"], a.control, .freetext, textarea, .displayText {
+button, input[type=submit], input[type="reset"], a.control, .freetext, textarea, .displayText {
   font-family: Droid Sans, Open Sans, Noto Sans, Ubuntu, Segoe UI, Verdana, Helvetica, sans-serif;
   font-size: 9pt;
 }
@@ -300,7 +300,7 @@ hr {
   width: 100px;
 }
 
-.control, input[type="radio"], input[type="checkbox"], select {
+.control, input[type=radio], input[type=checkbox], select {
   cursor: pointer;
 }
 
@@ -878,7 +878,7 @@ td.blankColumn {
   background: repeating-linear-gradient(135deg, rgba(255,255,255,.5) 2px, rgba(230, 230, 255, .3) 3px, #fff 5px);
 }
 
-#throttler input[type="text"] {
+#throttler input[type=text] {
   width: 80px;
 }
 
@@ -1313,7 +1313,7 @@ label {
   vertical-align: middle;
 }
 
-input[type="text"] + label {
+input[type=text] + label {
   white-space: nowrap;
 }
 
@@ -1431,7 +1431,7 @@ input[name="nofilter_blindedPassword"] {
 /* chrome/blink overrides */
 
 @supports not (-moz-appearance: none) {
-textarea, input[type="text"], .displayText, *[readonly] {
+textarea, input[type=text], .displayText, *[readonly] {
   filter: none !important;
   box-shadow: 0 0 1px #ccf;
 }

@@ -52,13 +52,13 @@ h4.app, h4.app2 {
   padding: 7px 34px 7px 8px !important;
   text-align: right;
   background: url(/themes/console/images/eepsite.png) right 10px center no-repeat, linear-gradient(to bottom, #191729, #000 75%) !important;
-  background: url(/themes/console/images/eepsite.png) right 10px center no-repeat, linear-gradient(to right, rgba(0,0,16,0.5), rgba(0,0,0,0) 30%, rgba(16,0,16,0.1)), linear-gradient(to bottom, #191729 50%, #001 50%) !important;
+  background: url(/themes/console/images/eepsite.png) right 10px center no-repeat, linear-gradient(to right, rgba(0,0,16,.5), rgba(0,0,0,0) 30%, rgba(16,0,16,.1)), linear-gradient(to bottom, #191729 50%, #001 50%) !important;
   background-size: 16px 16px, 100% 100%, 100% 100% !important;
 }
 
 h4.app2 {
 background: url(/themes/console/light/images/globe.png) right 10px center no-repeat, linear-gradient(to bottom, #191729, #000 75%) !important;
-background: url(/themes/console/light/images/globe.png) right 10px center no-repeat, linear-gradient(to right, rgba(0,0,16,0.5), rgba(0,0,0,0) 30%, rgba(16,0,16,0.1)), linear-gradient(to bottom, #191729 50%, #001 50%) !important;
+background: url(/themes/console/light/images/globe.png) right 10px center no-repeat, linear-gradient(to right, rgba(0,0,16,.5), rgba(0,0,0,0) 30%, rgba(16,0,16,.1)), linear-gradient(to bottom, #191729 50%, #001 50%) !important;
 }
 
 h4.app a, h4.app2 a {
@@ -474,8 +474,8 @@ textarea[name="trustedKeys"] {
   direction: ltr !important;
 }
 
-input[type="submit"], input[type="reset"], input[type="submit"]:hover, input[type="reset"]:hover,
-input[type="submit"]:focus, input[type="reset"]:focus, input[type="submit"]:active, input[type="reset"]:active {
+input[type=submit], input[type="reset"], input[type=submit]:hover, input[type="reset"]:hover,
+input[type=submit]:focus, input[type="reset"]:focus, input[type=submit]:active, input[type="reset"]:active {
   background-position: right 6px center !important;
   padding: 5px 23px 7px 7px !important;
   max-height: 28px !important;
@@ -683,7 +683,7 @@ div[lang="ar"], div[lang="ar"] code, div[lang="ar"] b {
   margin-right: 0;
 }
 
-#reseedurl input[type="text"], #reseedzip input[type="file"], #reseedcreatefile p {
+#reseedurl input[type=text], #reseedzip input[type="file"], #reseedcreatefile p {
   width: calc(100% - 20px);
 }
 
