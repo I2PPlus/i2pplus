@@ -31,7 +31,7 @@ input[type=checkbox]:checked::before {
 
 input[type=radio]:checked::before {
   left: 25%;
-  top: 25%;
+  top: 4px;
   width: 9px;
   height: 9px;
   border-radius: 50%;
@@ -55,7 +55,6 @@ input[type=radio]:not(:checked) {
   -moz-appearance: none;
   -webkit-appearance: none;
   filter: drop-shadow(0 0 1px #e0e0eb) !important;
-  will-change: transform;
 }
 
 .optbox:checked {
@@ -76,19 +75,15 @@ input[type=radio]:not(:checked) {
 
 .optbox:checked::before {
   transform: scale(1);
-  transition: linear all .05s;
 }
 
 .optbox:not(:checked)::before {
   position: absolute;
   top: 25%;
-  left: 25%;
+  left: 4px;
   content: "";
   color: transparent;
   background: transparent;
-  transform: scale(0);
-  transition: linear all .05s;
-  will-change: transform;
 }
 
 input[type=radio]:not(:checked)::before {
