@@ -1092,7 +1092,9 @@ class PeerCoordinator implements PeerListener
         wantedBytes -= metainfo.getPieceLength(p.getId());
       }  // synch
     } catch (IOException ioe) {
-            String msg = "Error writing storage (piece " + piece + ") for " + metainfo.getName() + ": " + ioe;
+//            String msg = "Error writing storage (piece " + piece + ") for " + metainfo.getName() + ": " + ioe;
+            String msg = "Error writing to storage (piece " + piece + ") for " + metainfo.getName();
+            msg = msg + "\n* ";
             _log.error(msg, ioe);
             if (listener != null) {
                 listener.addMessage(msg);
