@@ -30,7 +30,7 @@ input[type=checkbox]:checked::before {
 }
 
 input[type=radio]:checked::before {
-  left: 25%;
+  left: 4px;
   top: 4px;
   width: 9px;
   height: 9px;
