@@ -269,7 +269,7 @@ public abstract class I2PTunnelHTTPClientBase extends I2PTunnelClientBase implem
         }
         if (isSSL == true) {
             if (_log.shouldInfo())
-                _log.info("[HTTPClient] Request via SSL outproxy [" + proxy + "] -> Success? " + ok + " \n* Target: " + host);
+                _log.info("[HTTPClient] SSL request via outproxy [" + proxy + "] -> Success? " + ok + " \n* Target: " + host);
         } else {
             if (_log.shouldInfo())
                 _log.info("[HTTPClient] Request via outproxy [" + proxy + "] -> Success? " + ok + " \n* Target: " + host);

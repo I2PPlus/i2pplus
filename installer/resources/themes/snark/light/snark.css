@@ -2011,7 +2011,8 @@ img[src$="details.png"] {
   padding: 0;
   word-wrap: break-word;
   text-align: center;
-/*  background: linear-gradient(to bottom, #fafaff, #f8f8ff, #fafaff);*/
+  background: linear-gradient(to bottom, #fafaff, #f8f8ff, #fafaff);
+  background: #fafaff;
   opacity: 1 !important;
 }
 
@@ -4756,8 +4757,8 @@ tfoot .snarkTorrentRateUp:not(:empty)::before,tfoot .snarkTorrentUploaded:not(:e
 
   .inactive.downloading .snarkTorrentStatus b, .snarkTorrents tr.inactive.downloading:hover .snarkTorrentStatus b,
   .active.starting .snarkTorrentStatus b, .snarkTorrents tr.active.starting:hover .snarkTorrentStatus b {
-    color: #101 !important;
-    text-shadow: 0 1px 1px #dd0;
+    color: #27293f !important;
+    text-shadow: 0 1px 1px rgba(255,255,255,.8);
     background: #dd5;
   }
 
@@ -4774,8 +4775,8 @@ tfoot .snarkTorrentRateUp:not(:empty)::before,tfoot .snarkTorrentUploaded:not(:e
   }
 
   .nopeers.incomplete .snarkTorrentStatus b, .snarkTorrents tr.nopeers.incomplete:hover .snarkTorrentStatus b {
-    color: #101 !important;
-    text-shadow: 0 1px 1px #bbb;
+    color: #27293f !important;
+    text-shadow: 0 1px 1px rgba(255,255,255,.8);
     background: #bbb;
   }
 

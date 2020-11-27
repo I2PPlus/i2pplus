@@ -1192,7 +1192,7 @@ public class PeerState {
      *  We sent a message which was ACKed containing the given # of bytes.
      *  Caller should synch on this
      */
-    private void locked_messageACKed(int bytesACKed, long lifetime, int numSends, boolean anyPending) {
+    private void locked_messageACKed(int bytesACKed, long lifetime, int numSends, boolean anyPending, boolean anyQueued) {
         _consecutiveFailedSends = 0;
         // _lastFailedSendPeriod = -1;
         if (numSends < 2) {
@@ -1250,15 +1250,16 @@ public class PeerState {
             if (_log.shouldLog(Log.DEBUG))
                _log.debug(_remotePeer + " ACK, timer: " + oldTimer + " -> " + (_retransmitTimer - now));
         }
+        if (anyPending || anyQueued)
         _transport.getOMF().nudge();
     }
 
     /**
      *  We sent a message which was ACKed containing the given # of bytes.
      */
-    private void messageACKed(int bytesACKed, long lifetime, int numSends, boolean anyPending) {
+    private void messageACKed(int bytesACKed, long lifetime, int numSends, boolean anyPending, boolean anyQueued) {
         synchronized(this) {
-            locked_messageACKed(bytesACKed, lifetime, numSends, anyPending);
+            locked_messageACKed(bytesACKed, lifetime, numSends, anyPending, anyQueued);
         }
         if (numSends >= 2 && _log.shouldLog(Log.INFO))
             _log.info("[" + _remotePeer.toBase64().substring(0,6) + "] ACKed after numSends=" + numSends + " with lifetime=" + lifetime + " and size=" + bytesACKed);
@@ -1905,8 +1906,17 @@ public class PeerState {
                 _context.statManager().addRateData("udp.sendConfirmFragments", state.getFragmentCount());
             _context.statManager().addRateData("udp.sendConfirmVolley", numSends);
             _transport.succeeded(state);
+            boolean anyQueued;
+            if (anyPending) {
+                // locked_messageACKed will nudge()
+                anyQueued = false;
+            } else {
+                synchronized (_outboundQueue) {
+                    anyQueued = !_outboundQueue.isEmpty();
+                }
+            }
             // this adjusts the rtt/rto/window/etc
-            messageACKed(state.getMessageSize(), state.getLifetime(), numSends, anyPending);
+            messageACKed(state.getMessageSize(), state.getLifetime(), numSends, anyPending, anyQueued);
             //if (getSendWindowBytesRemaining() > 0)
             //    _throttle.unchoke(peer.getRemotePeer());
 
@@ -1977,8 +1987,17 @@ public class PeerState {
                 //    state.getMessage().timestamp("partial ack to complete after " + numSends);
                 _transport.succeeded(state);
 
+                boolean anyQueued;
+                if (anyPending) {
+                    // locked_messageACKed will nudge()
+                    anyQueued = false;
+                } else {
+                    synchronized (_outboundQueue) {
+                        anyQueued = !_outboundQueue.isEmpty();
+                    }
+                }
                 // this adjusts the rtt/rto/window/etc
-                messageACKed(state.getMessageSize(), state.getLifetime(), numSends, anyPending);
+                messageACKed(state.getMessageSize(), state.getLifetime(), numSends, anyPending, anyQueued);
                 //if (state.getPeer().getSendWindowBytesRemaining() > 0)
                 //    _throttle.unchoke(state.getPeer().getRemotePeer());
 
