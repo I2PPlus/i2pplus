@@ -568,10 +568,15 @@ public class SummaryHelper extends HelperBase {
      *    @return "x.xx / y.yy {K|M}"
      */
     public String getSecondKBps() {
-        if (_context == null)
+        if (_context == null) {
             return "0 / 0";
-        return formatPair(_context.bandwidthLimiter().getReceiveBps(),
-                          _context.bandwidthLimiter().getSendBps());
+        } else if (_context.bandwidthLimiter().getReceiveBps() < 1024 * 1024 || _context.bandwidthLimiter().getSendBps() < 1024 * 1024) {
+            return formatPair(Math.round(_context.bandwidthLimiter().getReceiveBps() * 10.0 / 10.0),
+                              Math.round(_context.bandwidthLimiter().getSendBps() * 10.0 / 10.0));
+        } else {
+            return formatPair(_context.bandwidthLimiter().getReceiveBps(),
+                              _context.bandwidthLimiter().getSendBps());
+        }
     }
 
     /**
@@ -595,7 +600,11 @@ public class SummaryHelper extends HelperBase {
             if (r != null)
                 out = r.getAverageValue();
         }
-        return formatPair(in, out);
+        if (in < 1024 * 1024 || out < 1024 * 1024) {
+            return formatPair(Math.round(in) * 10.0 / 10.0, Math.round(out) * 10.0 / 10.0);
+        } else {
+            return formatPair(in, out);
+        }
     }
 
     /**
@@ -640,10 +649,10 @@ public class SummaryHelper extends HelperBase {
             fmt = new DecimalFormat("#0.00");
         else if ((in >= 10 || out >= 10) && mega)
             fmt = new DecimalFormat("#0.0");
-        else if (!mega || (in <= 10 || out <= 10))
-            fmt = new DecimalFormat("#0.00");
+        else if (!mega || in <= 10 * 1000 || out <= 10 * 1000)
+            fmt = new DecimalFormat("#0.0");
         else
-            fmt = new DecimalFormat("#0");
+            fmt = new DecimalFormat("#0.0");
         return fmt.format(in) + THINSP + fmt.format(out) + "&nbsp;" +
                (mega ? 'M' : 'K');
     }
