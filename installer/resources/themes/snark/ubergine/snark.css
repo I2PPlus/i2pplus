@@ -2,7 +2,8 @@
 /* Guantanamo Commemorative Edition. */
 /* Author: dr|z3d */
 
-@import url("/themes/fonts/DroidSans.css");
+@import url(/themes/fonts/DroidSans.css);
+@import url(chromescroll.css);
 
 html, body {
   min-height: 100%;
@@ -4198,10 +4199,9 @@ td.snarkTorrentDetails img, .snarkDirInfo td:first-child img:not(.thumb) {
 
 @media screen and (min-width: 1500px) {
   @supports not (-moz-appearance: none) {
-    .configsectionpanel .snarkConfigTitle {
+    .configsectionpanel .snarkConfigTitle, .configsectionpanel .snarkConfigTitle:hover {
       font-size: 12.5pt !important;
     }
-
     select {
       padding: 6px 18px 6px 8px !important;
     }
@@ -4209,245 +4209,196 @@ td.snarkTorrentDetails img, .snarkDirInfo td:first-child img:not(.thumb) {
 }
 
 @media screen and (min-width: 1600px) {
-.snarkTorrentUploaded {
-  padding-left: 6px;
-}
-
-.snarkMessages, .snarkTorrents tt, .snarkAddInfo code {
-  font-size: 9pt !important;
-}
+  .snarkTorrentUploaded {
+    padding-left: 6px;
+  }
+  .snarkMessages, .snarkTorrents tt, .snarkAddInfo code {
+    font-size: 9pt !important;
+  }
 }
 
 /* mini-mode */
 
 @media screen and (max-width: 900px) {
-.page, .snarknavbar {
-  min-width: 650px !important;
-}
-
-.snarknavbar {
-  margin-bottom: 6px !important;
-  padding: 8px 9px 7px;
-}
-
-.iframed .snarknavbar {
-  margin-bottom: -5px !important;
-  padding: 9px 4px 9px 0;
-}
-
-.snarkMessages li {
-  font-size: 8.5pt;
-}
-
-.snarkNav:link, .snarkNav:visited {
-  font-size: 9pt !important;
-  background-size: 10pt auto, 100% 100% !important;
-}
-
-#expand img, #shrink img {
-  margin-top: -3px !important;
-}
-
-#torrentDisplay label {
-  min-width: 50px !important;
-  font-size: 8pt;
-}
-
-th.snarkTorrentStatus a img, .snarkTorrentETA a img, .snarkTrackerDetails a img {
-  display: none !important;
-}
-
-.snarkGraphicStatus {
-  padding-left: 3px !important;
-  max-width: 24px !important;
-}
-
-.snarkGraphicStatus img {
-  max-width: 20px;
-}
-
-th.snarkTorrentPeerCount img {
-  display: none;
-}
-
-td.snarkTorrentPeerCount a, td.snarkTorrentPeerCount a:hover, td.snarkTorrentPeerCount a:active, .snarkTorrentPeerCount span {
-  color: #ddd;
-}
-
-.snarkTorrentStatus b.alwaysShow {
-  display: none;
-  font-size: 0 !important;
-}
-
-.snarkTorrentDetails {
-  padding-right: 0 !important;
-  width: 1% !important;
-  text-align: right !important;
-}
-
-.snarkTorrentName a:not(old) {
-  max-width: 360px !important;
-}
-
-.snarkTorrents th img, .snarkTorrents th a img {
-  max-height: 18px !important;
-}
-
-.snarkTorrentUploaded, .snarkTorrentRateUp, .debuginfo, .alwaysShow {
-  display: none !important;
-}
-
-td.snarkTorrentPeerCount {
-  padding-left: 4px !important;
-}
-
-.snarkTorrentStatus, .snarkTorrentETA, .snarkTrackerDetails {
-  padding: 0;
-  width: 0 !important;
-  max-width: 0 !important;
-  min-width: 0 !important;
-  overflow: hidden;
-  font-size: 0 !important;
-  color: transparent !important;
-}
-
-.addtorrentsection td:first-child, .newtorrentsection td:first-child {
-  width: 20%;
-}
-
-.configsectionpanel .snarkConfigTitle {
-  min-width: 340px !important;
-}
-
-.configsectionpanel .snarkConfigTitle {
-  font-size: 9.5pt !important;
-  font-variant: normal !important;
-  text-transform: uppercase;
-}
-
-.toggleview, .configsection .snarkConfigTitle {
-  width: 260px !important;
-  min-width: 260px !important;
-}
-
-.toggleview img, .snarkConfigTitle img {
-  margin-right: 0 !important;
-  height: 14px;
-}
-
-#configs td, .addtorrentsection td, .newtorrentsection td, input, input[name="nofilter_dataDir"], select, textarea {
-  font-size: 8.5pt !important;
-}
-
-#configs td:first-child, .configsectionpanel input[name="nofilter_dataDir"], .configsectionpanel textarea {
-  min-width: 150px !important;
-}
-
-.trackerconfig a, .trackerconfig input[type=text], #addtracker input[type=text] {
-  max-width: 110px !important;
-  min-width: 0;
-  box-sizing: border-box;
-}
-
-#trackerselect td a {
-  max-width: 180px !important;
-}
-
-.snarkTorrentInfo {
-  position: relative;
-  z-index: 10;
-}
-
-.snarkTorrentInfo th {
-  padding-top: 4px !important;
-  padding-bottom: 4px !important;
-}
-
-.snarkDirInfo td.snarkFileStatus {
-  font-size: 0 !important;
-  text-align: center !important;
-}
-
-.snarkDirInfo td.snarkFileStatus .percentbarText {
-  font-size: 7pt !important;
-}
-
-.snarkDirInfo .snarkFileStatus img {
-  float: none;
-}
-
-th a img {
-  max-height: 16px !important;
-}
-
-.snarkTorrentAction input[type="image"] {
-  max-height: 10px !important;
-}
-
-.addtorrentsection input[type=text], .newtorrentsection input[type=text] {
-  width: 65% !important;
-}
-
-.snarkCommentInfo td:first-child, .snarkComments td:first-child {
-  width: 120px !important;
-  max-width: 120px !important;
-  min-width: 120px !important;
-}
-
-.snarkComments .commentDate {
-  width: 70px;
-}
-
-.snarkComments .commentDelete {
-  background: none !important;
-  padding-left: 0 !important;
-}
-
-td .commentAuthorName {
-  margin-left: 1px !important;
-  min-width: 87px;
-  max-width: 87px;
-}
-
-td.commentRating {
-  padding-right: 4px !important;
-  padding-left: 0 !important;
-}
-
-.commentRating img {
-  width: 14px;
-  height: 14px;
-}
-
-.commentWrapper {
-  max-width: 94%;
-  width: calc(100% - 41px) !important;
-}
-
-#dhtDebugInner {
-  margin-top: -25px !important;
-}
-
-.snarkTorrentStatus {
-  -moz-user-select: none !important;
-  -webkit-user-select: none;
-  user-select: none;
-}
-
-#debugStats {
-  margin-top: -5px;
-}
-
-.percentBarComplete {
-  line-height: 140%;
-}
+  .page, .snarknavbar {
+    min-width: 650px !important;
+  }
+  .snarknavbar {
+    margin-bottom: 6px !important;
+    padding: 8px 9px 7px;
+  }
+  .iframed .snarknavbar {
+    margin-bottom: -5px !important;
+    padding: 9px 4px 9px 0;
+  }
+  .snarkMessages li {
+    font-size: 8.5pt;
+  }
+  .snarkNav:link, .snarkNav:visited {
+    font-size: 9pt !important;
+    background-size: 10pt auto, 100% 100% !important;
+  }
+  #expand img, #shrink img {
+    margin-top: -3px !important;
+  }
+  #torrentDisplay label {
+    min-width: 50px !important;
+    font-size: 8pt;
+  }
+  th.snarkTorrentStatus a img, .snarkTorrentETA a img, .snarkTrackerDetails a img {
+    display: none !important;
+  }
+  .snarkGraphicStatus {
+    padding-left: 3px !important;
+    max-width: 24px !important;
+  }
+  .snarkGraphicStatus img {
+    max-width: 20px;
+  }
+  th.snarkTorrentPeerCount img {
+    display: none;
+  }
+  td.snarkTorrentPeerCount a, td.snarkTorrentPeerCount a:hover, td.snarkTorrentPeerCount a:active, .snarkTorrentPeerCount span {
+    color: #ddd;
+  }
+  .snarkTorrentStatus b.alwaysShow {
+    display: none;
+    font-size: 0 !important;
+  }
+  .snarkTorrentDetails {
+    padding-right: 0 !important;
+    width: 1% !important;
+    text-align: right !important;
+  }
+  .snarkTorrentName a:not(old) {
+    max-width: 360px !important;
+  }
+  .snarkTorrents th img, .snarkTorrents th a img {
+    max-height: 18px !important;
+  }
+  .snarkTorrentUploaded, .snarkTorrentRateUp, .debuginfo, .alwaysShow {
+    display: none !important;
+  }
+  td.snarkTorrentPeerCount {
+    padding-left: 4px !important;
+  }
+  .snarkTorrentStatus, .snarkTorrentETA, .snarkTrackerDetails {
+    padding: 0;
+    width: 0 !important;
+    max-width: 0 !important;
+    min-width: 0 !important;
+    overflow: hidden;
+    font-size: 0 !important;
+    color: transparent !important;
+  }
+  .addtorrentsection td:first-child, .newtorrentsection td:first-child {
+    width: 20%;
+  }
+  .configsectionpanel .snarkConfigTitle {
+    min-width: 340px !important;
+  }
+  .configsectionpanel .snarkConfigTitle {
+    font-size: 9.5pt !important;
+    font-variant: normal !important;
+    text-transform: uppercase;
+  }
+  .toggleview, .configsection .snarkConfigTitle {
+    width: 260px !important;
+    min-width: 260px !important;
+  }
+  .toggleview img, .snarkConfigTitle img {
+    margin-right: 0 !important;
+    height: 14px;
+  }
+  #configs td, .addtorrentsection td, .newtorrentsection td, input, input[name="nofilter_dataDir"], select, textarea {
+    font-size: 8.5pt !important;
+  }
+  #configs td:first-child, .configsectionpanel input[name="nofilter_dataDir"], .configsectionpanel textarea {
+    min-width: 150px !important;
+  }
+  .trackerconfig a, .trackerconfig input[type=text], #addtracker input[type=text] {
+    max-width: 110px !important;
+    min-width: 0;
+    box-sizing: border-box;
+  }
+  #trackerselect td a {
+    max-width: 180px !important;
+  }
+  .snarkTorrentInfo {
+    position: relative;
+    z-index: 10;
+  }
+  .snarkTorrentInfo th {
+    padding-top: 4px !important;
+    padding-bottom: 4px !important;
+  }
+  .snarkDirInfo td.snarkFileStatus {
+    font-size: 0 !important;
+    text-align: center !important;
+  }
+  .snarkDirInfo td.snarkFileStatus .percentbarText {
+    font-size: 7pt !important;
+  }
+  .snarkDirInfo .snarkFileStatus img {
+    float: none;
+  }
+  th a img {
+    max-height: 16px !important;
+  }
+  .snarkTorrentAction input[type="image"] {
+    max-height: 10px !important;
+  }
+  .addtorrentsection input[type=text], .newtorrentsection input[type=text] {
+    width: 65% !important;
+  }
+  .snarkCommentInfo td:first-child, .snarkComments td:first-child {
+    width: 120px !important;
+    max-width: 120px !important;
+    min-width: 120px !important;
+  }
+  .snarkComments .commentDate {
+    width: 70px;
+  }
+  .snarkComments .commentDelete {
+    padding-left: 0 !important;
+    background: none !important;
+  }
+  td .commentAuthorName {
+    margin-left: 1px !important;
+    min-width: 87px;
+    max-width: 87px;
+  }
+  td.commentRating {
+    padding-right: 4px !important;
+    padding-left: 0 !important;
+  }
+  .commentRating img {
+    width: 14px;
+    height: 14px;
+  }
+  .commentWrapper {
+    width: calc(100% - 41px) !important;
+    max-width: 94%;
+  }
+  #dhtDebugInner {
+    margin-top: -25px !important;
+  }
+  .snarkTorrentStatus {
+    user-select: none;
+  }
+  #debugStats {
+    margin-top: -5px;
+  }
+  .percentBarComplete {
+    line-height: 140%;
+  }
 }
 
 @media screen and (max-width: 720px) {
-.commentWrapper {
-  max-width: 340px !important;
-  width: calc(100% - 42px) !important;
-}
+  .commentWrapper {
+    width: calc(100% - 42px) !important;
+    max-width: 340px !important;
+  }
 }
 
 /* end mini-mode */
