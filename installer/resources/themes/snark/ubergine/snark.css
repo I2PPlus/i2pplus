@@ -1543,6 +1543,12 @@ tr.active:hover .percentBarInner, tr.active:hover .peerinfo .percentBarInner {
               linear-gradient(to bottom, rgba(51,17,51,.9), rgba(17,0,17,.9));
 }
 
+@supports not (-moz-appearance: none) {
+  .percentBarComplete {
+    padding: 3px 0 1px;
+  }
+}
+
 .active .percentBarComplete {
   animation: ease seeding 1.5s forwards;
 }
