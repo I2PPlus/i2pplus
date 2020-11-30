@@ -2678,6 +2678,10 @@ div.news hr:last-child {
   padding: 5px 15px;
 }
 
+div[id^="config"] .tab a {
+  padding-right: 18px;
+}
+
 .tab:hover a {
   color: #f60 !important;
 }
@@ -8351,6 +8355,10 @@ input[name="speed"], input[name="capacity"] {
 
 .tab a {
   padding: 2px 12px;
+}
+
+div[id^="config"] .tab a {
+  padding-right: 15px;
 }
 
 #peers .confignav {

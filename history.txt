@@ -1,3 +1,9 @@
+2010-11-29 dr|z3d
+ * Console: Display bandwidth rates to 1 decimal place when < 1MB/s
+
+2010-11-27 dr|z3d
+ * Console: Add application location and config directory to /info
+
 2020-11-26 zzz
  * NTCP: Enable nodelay by default
  * SSU: Don't wakeup OMF after ack if no more messages are pending
@@ -28,6 +34,13 @@
  * Crypto: Adjust Java key cache sizes
  * Debian: Update apparmor profile for usrmerge
 
+2010-11-19 dr|z3d
+ * I2PTunnel: Nuke tunnel build threads after 30s inactivity (was 2 minutes)
+
+2010-11-18 dr|z3d
+ * Console: Modifications to sidebar datarate display (decimal places)
+ * Core: Increase fuzz (tolerance) for scheduled jobs to 100ms (was 3)
+
 2020-11-17 zzz
  * Jetty:
    - Update to 9.3.29.v20201019
@@ -42,6 +55,9 @@
  * Imagegen: Update zxing to 3.4.1
  * Wrapper: Update to 3.5.44
 
+2010-11-13 dr|z3d
+ Console: Remove floodfill configuration link from leasesets page
+
 2020-11-11 zzz
  * Data: Store timestamps as longs, not Dates, to save space
  * I2CP: Don't have I2CP Messages extend DataStructureImpl, to save space
@@ -50,6 +66,12 @@
  * Data: SDS no longer extends DataStructureImpl to save space
  * i2psnark: Larger read buffer for large files
  * Ratchet: Destroy HandshakeState after fatal NS/NSR errors
+
+2010-11-10 dr|z3d
+ * Router: Only run readconfig job on repeat if not in advanced mode
+
+2010-11-07 dr|z3d
+ * Console: Link truncated b32 to corresponding leaseset on /tunnels
 
 2020-11-07 zzz
  * Tunnels: Simplify TunnelId and HopConfig to save space
@@ -62,6 +84,11 @@
 
 2020-11-03 zzz
  * i2ptunnel: Add checks for offline expiration of alternate destination
+
+2010-11-03 dr|z3d
+ * Console:
+   - Display red star for tunnels with expired leasesets on sidebar
+   - Use shared optbox.css for checkbox/radio styling (dark theme)
 
 2020-11-02 zzz
  * I2CP: Remove tunnels immediately on client disconnect
@@ -77,6 +104,13 @@
  * i2psnark: Store BEP 47 padding file info
  * Tunnels: Improved logging and handling of offline signature expiration
 
+2010-10-29 dr|z3d
+ * I2PSnark: Replace *.fazanka.i2p with *.chudo.i2p
+ * Ant: refactor build targets help
+
+2010-10-28 dr|z3d
+ * Logging: Ensure ellipsis displays correctly in raw logs
+
 2020-10-28 zzz
  * Tunnels: Fix tunnel tests for ECIES routers
 
@@ -88,9 +122,18 @@
 2020-10-26 zzz
  * Util: Fix EepGet allowCaching parameter
 
+2020-10-26 dr|z3d
+ * Console: Truncate i2psnark announce/fetch urls in console logs
+ * Streaming: Decrease max timeout for pings to 60s (was 5min)
+ * I2PTunnel: Sync tunnel filter access lists every 5s (was 10)
+
 2020-10-25 zzz
  * Router: Quick checks of eph. key MSB before Noise DH
  * Tunnels: Additional checks on ECIES BRR to catch old/buggy routers
+
+2020-10-23 dr|z3d
+ * Console: Update tunnel filter help page with various clarifications
+ * I2PSnark: Tweak peer inactivity timeout and max connections per peer/global
 
 2020-10-23 zzz
  * i2ptunnel: Remove mtn tunnel (new installs only)
@@ -106,9 +149,28 @@
    - Increase socket buffer size (ticket #2781)
    - Redesign of the congestion control (tickets #2412, #2649, #2654, #2713)
 
+2020-10-21 dr|z3d
+ * Console/Webapps: Set dark theme as default (new installs)
+
+2020-10-19 dr|z3d
+ * I2PSnark: Add last activity to tooltip for uploaded values
+
+2020-10-18 dr|z3d
+ * I2PSnark: Display upload ratio on tooltip for uploaded values; don't display
+   decimal place when upload ratio is 0
+
+2020-10-17 dr|z3d
+ * I2PSnark:
+   - Add support for loading svg images from war file
+   - Refresh start(all), stop(all), delete and toggle log icons with svgs
+
 2020-10-17 zzz
  * i2psnark: Remove references to "maggot" links
  * SSU: Fix calculation of nextSendDelay (ticket #2714)
+
+2020-10-16 dr|z3d
+ * I2PTunnel: Display b32 for clients if primary address is hostname or b64 on
+   index page
 
 2020-10-15 zzz
  * Crypto: libjbigi for aarch64 (ticket #1840)
@@ -118,6 +180,14 @@
    - Destroy ratchet HandshakeState after NS failure
    - Add support for ratchet zero key (proposals #144, #156)
  * Util: Singleton OrderedProperties comparator
+
+2020-10-15 dr|z3d
+ * I2PTunnel: Display sig type and encryption type on index page;
+   migrate tunnel description to tooltip on tunnel name
+
+2020-10-14 dr|z3d
+ * Console/I2PSnark: Attempt to mitigate queued sidebar refresh by stopping
+   ajax calls when console isn't visible
 
 2020-10-12 zzz
  * DTG: Enable by default for Linux KDE and LXDE;
@@ -129,6 +199,13 @@
 
 2020-10-11 zzz
  * Installer: Disable pack200 (ticket #2778)
+
+2020-10-11 dr|z3d
+ * I2PTunnel: Refactor some sections to save vertical space on config pages
+
+2020-10-10 dr|z3d
+ * I2CP: Downgrade socket closed class errors to WARN
+ * I2Ping: Reduce default timeout to 8 seconds
 
 2020-10-10 zzz
  * i2psnark: Cache length of metainfo
@@ -149,11 +226,40 @@
    - Fix i2psnark standalone build
  * i2ptunnel: Filter server response headers even if not compressing
 
+2020-10-07 dr|z3d
+ * Console: Don't show ephemeral i2ping tunnels on /configstats
+ * I2PSnark:
+   - Don't show full java error in screenlog
+   - Only show 'javascript disabled' warning in screenlogs pre-init
+
+2020-10-05 dr|z3d
+ * I2PTunnel: Update Firefox/TB user agent string
+
+2020-10-04 dr|z3d
+ * Eepget:
+   - Enhance console output; add shell/bat script (new installs only)
+   - Display 'Last Modified' header if present
+ * I2Ping: Enhance console output; add shell/bat script (new installs only)
+
 2020-10-03 zzz
  * Router: Support building tunnels through ECIES routers (proposal 152)
 
+2020-10-02 dr|z3d
+ * Router: Don't use unreachable peers for exploratory tunnels
+
+2020-09-29 dr|z3d
+ * Console: Only update logging sections if changes detected
+
+2020-09-29 dr|z3d
+ * Console:
+   - Make tunnel build notifications use a single line where practicable
+   - Refactor leasesets pages
+
 2020-09-28 zzz
  * Router: Don't unregister a message without a selector (ticket #2771)
+
+2020-09-27 dr|z3d
+ * Console: Enable sidebar bandwidth graph by default and display on /home
 
 2020-09-27 zzz
  * Streaming: Fix tag option handling
@@ -161,11 +267,35 @@
 2020-09-26 zzz
  * JBigI: GMP 6.2.0 for linux 64 bit Zen and Zen2 (ticket #1869)
 
+2020-09-26 dr|z3d
+ * Console: Don't display clock skew or backlog on sidebar if 0
+ * I2Ping: Enhance console output
+
+2020-09-24 dr|z3d
+ * Console: display custom icon on /tunnels and sidebar for i2ping
+
 2020-09-22 zzz
  * i2ptunnel: Change enctype default to both for:
    HTTP, IRC, and Streamr servers
    IRC, SOCKS IRC, and Streamr clients
  * Susimail, SAM: More defensive ByteBuffer casting (ticket #2775)
+
+2020-09-21 dr|z3d
+ * Console: optimize width of b32s under local services in sidepanel
+
+2020-09-20 dr|z3d
+ * Graphs:
+   - Ensure correct capitalization of graph titles
+   - Change minimum graph period to 5 minutes (was 20) and minimum refresh
+     period to 5 seconds (was 15); add 10 second refresh option
+   - Display 'router down' animation on /graphs when router restarting
+
+2020-09-19 dr|z3d
+ * Graphs: Increase maximum dimensions of graphs to 8K (7680 x 4320)
+
+2020-09-18 dr|z3d
+ * Graphs: enhance presentation of rrd4j graphs; ensure single graph loads
+   at native resolution
 
 2020-09-18 zzz
  * Build: More git support for release and Debian targets
@@ -174,6 +304,17 @@
  * i2psnark: Defensive checks for v2 format files and magnet links
  * Router: Block same-country when in hidden mode (ticket #2759)
 
+2020-09-16 dr|z3d
+ * I2PSnark: If Snark's inbound traffic graph is enabled, overlay a 24hr
+   activity graph on screenlog
+
+2020-09-12 dr|z3d
+ * I2PTunnel: Reinstate auto-refresh on tunnel manager index page and ensure
+   it works with the toggle details button
+
+2020-09-11 dr|z3d
+ * Console: Display loading bar placeholder when no service tunnels active
+
 2020-09-11 zzz
  * Blocklist: Refactoring, Move HTML status generation to console
  * Console: Fix /configclients help message for split client config files
@@ -181,13 +322,37 @@
  * GeoIP: Add methods to get all IPs for a country (ticket #2759)
  * Router: Use MuxedSKM for ECIES routers (proposal 156 WIP)
 
+2020-09-10 dr|z3d
+ * I2PSnark:
+   - Add auto-refresh for downloading files on torrent details page
+
 2020-09-08 zzz
  * Blocklist: Track versions of each file
  * NTCP: Call afterSend() for multiple messages in NTCP2 (ticket #2769)
 
+2020-09-06 dr|z3d
+ * Console:
+   - Change caching policy to reduce requests for cached assets
+   - Selectively hide sidebar sections on shutdown/restart
+ * I2PSnark: Update caching policy to reduce requests for cached assets
+
+2020-09-05 dr|z3d
+ * Console:
+   - Refine sidebar bandwidth graph display to eliminate flicker
+   - Conditionally display some sidebar readouts when value > 0
+ * I2PSnark:
+   - Replace ajax refresh with more fine-grained script that only
+     refreshes updated elements
+
 2020-09-04 zzz
  * Console: Support remote lookup of full router hash from search form
  * Tunnels: Don't try to decrypt build record if router is ECIES (proposal 152 WIP)
+
+2020-09-04 dr|z3d
+ * Console:
+   - Replace sidebar ajax refresh script with more fine-grained script
+     that only refreshes updated sidebar sections, reducing cpu-load
+   - Refactor jsp pages so page content loads before sidebar
 
 2020-09-02 zzz
  * Installer: New Ed25519 destinations for postman's servers
@@ -201,6 +366,12 @@
 2020-08-29 zzz
  * i2ptunnel: Prevent creating bad alt destination when
    tunnel is running
+
+2020-08-28 dr|z3d
+ * Console: Refresh sidebar network status icons with svgs
+
+2020-08-23 dr|z3d
+ * Eepsite: Update presentation, update text (en), update template
 
 * 2020-08-24 0.9.47 released
 
