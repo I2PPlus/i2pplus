@@ -1,3 +1,5 @@
+* 2020-12-01 0.9.48 released
+
 2010-11-29 dr|z3d
  * Console: Display bandwidth rates to 1 decimal place when < 1MB/s
 
