@@ -6,7 +6,6 @@
 <head>
 <title>Frequently Asked Questions - I2P+</title>
 <%@include file="../css.jsi" %>
-<%@include file="../summaryajax.jsi" %>
 </head>
 <body>
 <script nonce="<%=cspNonce%>" type="text/javascript">progressx.show();</script>
@@ -144,6 +143,7 @@
 </table>
 </div>
 </div>
+<%@include file="../summaryajax.jsi" %>
 <script nonce="<%=cspNonce%>" type="text/javascript">window.addEventListener("pageshow", progressx.hide());</script>
 </body>
 </html>

@@ -6,8 +6,6 @@
 <head>
 <title>Licensing Information - I2P+</title>
 <%@include file="../css.jsi" %>
-<script src="/js/ajax.js" type="text/javascript"></script>
-<%@include file="../summaryajax.jsi" %>
 </head>
 <body>
 <script nonce="<%=cspNonce%>" type="text/javascript">progressx.show();</script>
@@ -30,6 +28,7 @@
 </div>
 <div id="legal"><%@include file="../help-legal.jsi" %></div>
 </div>
+<%@include file="../summaryajax.jsi" %>
 <script nonce="<%=cspNonce%>" type="text/javascript">window.addEventListener("pageshow", progressx.hide());</script>
 </body>
 </html>
