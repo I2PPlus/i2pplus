@@ -252,7 +252,7 @@ public class DatabaseLookupMessage extends FastI2NPMessageImpl {
             return LeaseSetKeys.SET_BOTH.contains(type);
         return type == EncType.ELGAMAL_2048;
     }
-    
+
     /**
      *  The included session key or null if unset.
      *  If non-null, either getReplyTag() or getRatchetReplyTag() is non-null.
@@ -306,7 +306,7 @@ public class DatabaseLookupMessage extends FastI2NPMessageImpl {
         _replyKey = encryptKey;
         _ratchetReplyTag = encryptTag;
     }
-    
+
     /**
      *  The included session key or null if unset.
      *  Preliminary, not fully supported, see proposal 154.
@@ -326,7 +326,7 @@ public class DatabaseLookupMessage extends FastI2NPMessageImpl {
     public void setReplySession(PublicKey pubKey) {
         _ratchetPubKey = pubKey;
     }
-    
+
     /**
      * Set of peers that a lookup reply should NOT include.
      * WARNING - returns a copy.
