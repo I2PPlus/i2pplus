@@ -434,7 +434,7 @@ public abstract class TunnelPeerSelector extends ConnectChecker {
                 // Uncomment if stricter than in shouldExclude() below
                 String v = peer.getVersion();
 //                if (VersionComparator.comp(v, "0.9.16") < 0) {
-                if (VersionComparator.comp(v, "0.9.46") < 0) {
+                if (VersionComparator.comp(v, "0.9.47") < 0) {
                     rv.add(h);
                     continue;
                 }
@@ -468,7 +468,7 @@ public abstract class TunnelPeerSelector extends ConnectChecker {
 
     /** NTCP2 */
 //    private static final String MIN_VERSION = "0.9.36";
-    private static final String MIN_VERSION = "0.9.46";
+    private static final String MIN_VERSION = "0.9.47";
 
     /** warning, this is also called by ProfileOrganizer.isSelectable() */
     private static boolean shouldExclude(RouterInfo peer, char excl[]) {
