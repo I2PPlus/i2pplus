@@ -25,10 +25,10 @@ Java8:
   stage: build
   image: openjdk:8
   script:
-    - ./installer/resources/makegeoip.sh
+#    - ./installer/resources/makegeoip.sh
     - ant pkg
     - ant tarball
-    - ant updater200WithJettyAndGeoIP
+#    - ant updater200WithJettyAndGeoIP
     - ant updaterWithJetty
     - ant i2psnark
     - ant javadoc-zip
