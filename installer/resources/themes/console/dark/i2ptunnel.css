@@ -1501,6 +1501,10 @@ input[type=text] + label {
   #registration .displayText {
     width: 800px;
   }
+
+  .tunnelControl .control {
+    margin: 3px -3px 3px 0 !important;
+  }
 }
 
 #keyringManager {
