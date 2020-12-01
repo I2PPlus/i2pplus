@@ -6,7 +6,6 @@
 <head>
 <title>Troubleshooting - I2P+</title>
 <%@include file="../css.jsi" %>
-<%@include file="../summaryajax.jsi" %>
 </head>
 <body>
 <script nonce="<%=cspNonce%>" type="text/javascript">progressx.show();</script>
@@ -80,6 +79,7 @@ If you'd like to report a bug, please file a ticket on <a href="http://trac.i2p2
 <p>You may also try <a href="irc://127.0.0.1:6668/i2p" class="chatlink">I2P's IRC network</a>.</p>
 </div>
 </div>
+<%@include file="../summaryajax.jsi" %>
 <script nonce="<%=cspNonce%>" type="text/javascript">window.addEventListener("pageshow", progressx.hide());</script>
 </body>
 </html>

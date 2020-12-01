@@ -2732,7 +2732,7 @@ select {
 
 @media screen and (min-width: 1500px) {
   .search select {
-    padding: 7px 24px 7px 8px !important;
+    padding: 8px 24px 8px 8px !important;
   }
 }
 
