@@ -9571,7 +9571,7 @@ h3#displayevents {
   margin-top: 0;
 }
 
-form[action="events"] {
+.main form[action="events"] {
   margin: -16px 0 -2px;
   padding: 10px 10px 10px 50px;
   border: 1px solid #8d8daa;
@@ -9580,7 +9580,7 @@ form[action="events"] {
   background-size: 28px 28px;
 }
 
-form[action="events"] select + b, form[action="events"] input[type=submit] {
+.main form[action="events"] select + b, .main form[action="events"] input[type=submit] {
   margin-left: 8px;
 }
 
@@ -9595,10 +9595,10 @@ a[href^="configpeer?peer"] {
 }
 
 a[href^="configpeer?peer"]::after {
-  content: url(/themes/console/images/buttons/edit.png);
+  margin: 0 0 0 3px;
   display: inline-block;
   vertical-align: bottom;
-  margin: 0 0 0 3px;
+  content: url(/themes/console/images/buttons/edit.png);
 }
 
 a[href^="configpeer?peer"]:hover {
@@ -9637,19 +9637,19 @@ a[href^="configpeer?peer"]:hover {
 }
 
 #debug td:last-child {
-  text-align: right;
   vertical-align: top;
+  text-align: right;
 }
 
 #debug ul li {
-  list-style: none;
   margin-left: 0;
   padding: 0;
+  list-style: none;
 }
 
 #debug h2 {
-  border-radius: 0;
   padding: 8px 10px;
+  border-radius: 0;
 }
 
 #debug h3 {
@@ -9675,9 +9675,9 @@ a[href^="configpeer?peer"]:hover {
 .debug_container {
   padding: 10px 15px;
   margin-top: -16px;
-  background: linear-gradient(to bottom, #fafaff, rgba(250,250,255,.3)), repeating-linear-gradient(135deg, rgba(255,255,255,.5) 2px, rgba(221, 221, 255, .3) 3px, #fff 4px) #efefff !important;
   border: 1px solid #8d8daa;
   box-shadow: inset 0 0 0 1px #fff;
+  background: linear-gradient(to bottom, #fafaff, rgba(250,250,255,.3)), repeating-linear-gradient(135deg, rgba(255,255,255,.5) 2px, rgba(221, 221, 255, .3) 3px, #fff 4px) #efefff !important;
   filter: drop-shadow(0 0 1px rgba(220,220,255,.7));
 }
 
@@ -9692,10 +9692,10 @@ a[href^="configpeer?peer"]:hover {
 .debug_pubkey {
   max-width: 300px;
   display: inline-block;
+  vertical-align: bottom;
   white-space: nowrap;
   overflow: hidden;
   text-overflow: ellipsis;
-  vertical-align: bottom;
 }
 
 .skm_key td, .debug_outboundtarget td {
@@ -9704,8 +9704,8 @@ a[href^="configpeer?peer"]:hover {
 }
 
 .debug_outboundtarget td:last-child, .skm_key td:last-child {
-  white-space: nowrap;
   width: 1%;
+  white-space: nowrap;
 }
 
 .debug_outboundtarget:hover td, .debug_outboundtarget:hover + tr td,
@@ -9714,11 +9714,11 @@ a[href^="configpeer?peer"]:hover {
 }
 
 .debug_container.buckets {
-  word-break: break-all;
   margin-bottom: 5px;
   padding-bottom: 0;
   max-height: 600px;
   overflow: auto;
+  word-break: break-all;
 }
 
 #bucketSet {
@@ -9740,9 +9740,9 @@ a[href^="configpeer?peer"]:hover {
   width: 7%;
   min-width: 80px;
   max-width: 100px;
+  display: inline-block;
   overflow: hidden;
   text-overflow: ellipsis;
-  display: inline-block;
   white-space: nowrap !important;
   color: #152;
   font-size: 90%;
@@ -9759,13 +9759,13 @@ a[href^="configpeer?peer"]:hover {
 }
 
 .bucket::-moz-selection {
-  background: #070 !important;
   color: #fff;
+  background: #070 !important;
 }
 
 .bucket::selection {
-  background: #070 !important;
   color: #fff;
+  background: #070 !important;
 }
 
 .bucket:empty {
@@ -9796,12 +9796,12 @@ a[href^="configpeer?peer"]:hover {
 }
 
 #skm_dest {
-  white-space: nowrap;
-  letter-spacing: 0;
-  word-spacing: 0;
   vertical-align: middle;
-  text-transform: none;
   line-height: 100%;
+  word-spacing: 0;
+  letter-spacing: 0;
+  white-space: nowrap;
+  text-transform: none;
   font-size: 80%;
 }
 
@@ -9854,9 +9854,9 @@ a[href^="configpeer?peer"]:hover {
 }
 
 @media screen and (max-width: 1500px) {
-.expiry ul {
-  margin-left: -4px;
-}
+  .expiry ul {
+    margin-left: -4px;
+  }
 }
 
 .expiry li, .sentTags li {

@@ -978,6 +978,10 @@ tr.active .snarkTorrentStatus {
   padding-right: 6px;
 }
 
+.snarkDirInfo .ParentDir img {
+  width: 16px;
+}
+
 .snarkDirInfo .ParentDir a, .snarkDirInfo .snarkFileName a, .snarkTorrents .snarkTorrentName a {
   padding: 2px 0;
   width: 100%;
