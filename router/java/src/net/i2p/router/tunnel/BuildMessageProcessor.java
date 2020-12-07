@@ -31,7 +31,7 @@ public class BuildMessageProcessor {
     private final RouterContext ctx;
     private final Log log;
     private final DecayingBloomFilter _filter;
-    
+
     public BuildMessageProcessor(RouterContext ctx) {
         this.ctx = ctx;
         log = ctx.logManager().getLog(getClass());
@@ -55,15 +55,20 @@ public class BuildMessageProcessor {
             // appx 500 part. tunnels or 6K req/hr
             m = 17;
         } else if (ctx.getProperty(RouterThrottleImpl.PROP_MAX_TUNNELS, RouterThrottleImpl.DEFAULT_MAX_TUNNELS) >
-                   RouterThrottleImpl.DEFAULT_MAX_TUNNELS && maxMemory > 256*1024*1024L) {
+                   RouterThrottleImpl.DEFAULT_MAX_TUNNELS && maxMemory >= 1024*1024*1024L) {
+            m = 24;
+            // 4 MB
+            // appx 40K part. tunnels or 480K req/hr
+        } else if (ctx.getProperty(RouterThrottleImpl.PROP_MAX_TUNNELS, RouterThrottleImpl.DEFAULT_MAX_TUNNELS) >
+                   RouterThrottleImpl.DEFAULT_MAX_TUNNELS && maxMemory >= 256*1024*1024L) {
             // 2 MB
             // appx 20K part. tunnels or 240K req/hr
             m = 23;
-        } else if (maxMemory > 256*1024*1024L) {
+        } else if (maxMemory >= 256*1024*1024L) {
             // 1 MB
             // appx 10K part. tunnels or 120K req/hr
             m = 22;
-        } else if (maxMemory > 128*1024*1024L) {
+        } else if (maxMemory >= 128*1024*1024L) {
             // 512 KB
             // appx 5K part. tunnels or 60K req/hr
             m = 21;
@@ -78,7 +83,7 @@ public class BuildMessageProcessor {
     }
 
     /**
-     * Decrypt the record targeting us, encrypting all of the other records with the included 
+     * Decrypt the record targeting us, encrypting all of the other records with the included
      * reply key and IV.  The original, encrypted record targeting us is removed from the request
      * message (so that the reply can be placed in that position after going through the decrypted
      * request record).
@@ -148,7 +153,7 @@ public class BuildMessageProcessor {
                 log.warn(msg.getUniqueId() + ": No record decrypted");
             return null;
         }
-        
+
         long beforeEncrypt = System.currentTimeMillis();
         SessionKey replyKey = rv.readReplyKey();
         byte iv[] = rv.readReplyIV();
@@ -166,7 +171,7 @@ public class BuildMessageProcessor {
         msg.setRecord(ourHop, null);
         if (afterEncrypt-beforeLoop > 1000) {
             if (log.shouldLog(Log.WARN))
-                log.warn("Slow decryption, total=" + (afterEncrypt-beforeLoop) 
+                log.warn("Slow decryption, total=" + (afterEncrypt-beforeLoop)
                          + " looping=" + (beforeEncrypt-beforeLoop)
                          + " decrypt=" + (afterActualDecrypt-beforeActualDecrypt)
                          + " encrypt=" + (afterEncrypt-beforeEncrypt));
