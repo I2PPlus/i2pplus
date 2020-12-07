@@ -4130,7 +4130,7 @@ public class I2PSnarkServlet extends BasicServlet {
                             wlist.add(s);
                     }
                     if (!wlist.isEmpty()) {
-                        buf.append("<tr id=\"webseeds\"><td colspan=\"3">");
+                        buf.append("<tr id=\"webseeds\"><td colspan=\"3\">");
                         toThemeImg(buf, "torrent");
                         buf.append("<b>")
                            .append(_t("Web Seeds")).append("</b>: ");
@@ -4147,6 +4147,7 @@ public class I2PSnarkServlet extends BasicServlet {
                         buf.append("</td></tr>\n");
                     }
                 }
+            }
 
             if (meta != null) {
                 String com = meta.getComment();
