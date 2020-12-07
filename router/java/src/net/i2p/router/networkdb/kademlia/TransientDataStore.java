@@ -139,8 +139,8 @@ class TransientDataStore implements DataStore {
 //                    if (_log.shouldLog(Log.INFO))
 //                        _log.info("Duplicate RouterInfo [" + key.toBase64().substring(0,6) + "] - not updating");
                 } else {
-                    if (_log.shouldLog(Log.DEBUG))
-                        _log.debug("Updated RouterInfo [" + key.toBase64().substring(0,6) + "]\n* Old: "
+                    if (_log.shouldLog(Log.INFO))
+                        _log.info("Updated RouterInfo [" + key.toBase64().substring(0,6) + "]\n* Old: "
                                   + new Date(ori.getPublished()) + "\n* New: " + new Date(ri.getPublished()));
                     _data.put(key, data);
                     rv = true;
