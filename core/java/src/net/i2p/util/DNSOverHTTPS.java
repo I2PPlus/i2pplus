@@ -407,7 +407,7 @@ public class DNSOverHTTPS implements EepGet.StatusListener {
                 synchronized(cache) {
                     cache.put(host, new Result(data, expires));
                 }
-                        log("Received answer: " + name + ' ' + typ + ' ' + ttl + ' ' + data + " in " + (end - fetchStart) + "ms");
+                        log("Received answer: " + host + ' ' + ttl + ' ' + data + " in " + (end - fetchStart) + "ms");
                 return data;
             } catch (Exception e) {
                 log("Fail parsing", e);
@@ -612,7 +612,7 @@ public class DNSOverHTTPS implements EepGet.StatusListener {
                 System.err.println(type + " lookup failed for " + hostname);
         }
     }
-    
+
     private static void usage() {
         System.err.println("DNSOverHTTPS [-fstu46] hostname\n" +
                            "             [-f] (IPv4 preferred)\n" +

@@ -140,7 +140,8 @@ public class RouterConsoleRunner implements RouterApp {
     /** this is for the handlers only. We will adjust for the connectors and acceptors below. */
     private static final int MIN_THREADS = 1;
     /** this is for the handlers only. We will adjust for the connectors and acceptors below. */
-    private static final int MAX_THREADS = 24;
+//    private static final int MAX_THREADS = 24;
+    private static final int MAX_THREADS = 48;
     private static final int MAX_IDLE_TIME = 90*1000;
     private static final String THREAD_NAME = "RouterConsole Jetty";
     public static final String PROP_DTG_ENABLED = "desktopgui.enabled";
