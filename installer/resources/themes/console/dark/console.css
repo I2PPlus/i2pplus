@@ -770,9 +770,9 @@ pre {
 }
 
 @media screen and (min-width: 1500px) {
-.sb_notice {
-  font-size: 9pt !important;
-}
+  .sb_notice {
+    font-size: 9pt !important;
+  }
 }
 
 #sb_notice.hide, #sb_notice.hide + hr, #sb_updatesection.hide, #sb_updatesection.hide + hr {
@@ -780,7 +780,7 @@ pre {
 }
 
 .sb_notice + .sb_notice {
-  margin-top: 8px;
+  margin-top: -5px;
 }
 
 #sb_warning {

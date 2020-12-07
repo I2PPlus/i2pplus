@@ -53,6 +53,7 @@ import org.klomp.snark.SnarkManager;
 import org.klomp.snark.Storage;
 import org.klomp.snark.Tracker;
 import org.klomp.snark.TrackerClient;
+import org.klomp.snark.URIUtil;
 import org.klomp.snark.dht.DHT;
 import org.klomp.snark.comments.Comment;
 import org.klomp.snark.comments.CommentSet;
@@ -2502,35 +2503,40 @@ public class I2PSnarkServlet extends BasicServlet {
                 out.write(_t("Peer attached to swarm"));
                 out.write("\"></td><td class=\"peerdata\" colspan=\"5\">");
                 PeerID pid = peer.getPeerID();
-                String ch = pid != null ? pid.toString().substring(0, 4) : "????";
-                String client;
-                out.write("<span class=\"peerclient\"><tt title=\"");
-                out.write(_t("Destination (identity) of peer"));
-                out.write("\">" + peer.toString().substring(5, 9)+ "</tt>&nbsp;");
-                out.write("<span class=\"clientid\">");
-                if ("AwMD".equals(ch))
-                    client = _t("I2PSnark");
-                else if ("LUFa".equals(ch))
-                    client = "Vuze" + "<span class=\"clientVersion\"><i>" + getAzVersion(pid.getID()) + "</i></span>";
-                else if ("LUJJ".equals(ch))
-                    client = "BiglyBT" + "<span class=\"clientVersion\"><i>" + getAzVersion(pid.getID()) + "</i></span>";
-                else if ("LVhE".equals(ch))
-                    client = "XD" + "<span class=\"clientVersion\"><i>" + getAzVersion(pid.getID()) + "</i></span>";
-                else if ("ZV".equals(ch.substring(2,4)) || "VUZP".equals(ch))
-                    client = "Robert" + "<span class=\"clientVersion\"><i>" + getRobtVersion(pid.getID()) + "</i></span>";
-                else if (ch.startsWith("LV")) // LVCS 1.0.2?; LVRS 1.0.4
-                    client = "Transmission" + "<span class=\"clientVersion\"><i>" + getAzVersion(pid.getID()) + "</i></span>";
-                else if ("LUtU".equals(ch))
-                    client = "KTorrent" + "<span class=\"clientVersion\"><i>" + getAzVersion(pid.getID()) + "</i></span>";
-                else if ("CwsL".equals(ch))
-                    client = "I2PSnarkXL";
-                else if ("BFJT".equals(ch))
-                    client = "I2PRufus";
-                else if ("TTMt".equals(ch))
-                    client = "I2P-BT";
-                else
-                    client = _t("Unknown") + " (" + ch + ')';
-                out.write(client + "</span></span>");
+                String ch = pid != null ? pid.toString() : "????";
+                if (ch.startsWith("WebSeed@")) {
+                    out.write(ch);
+                } else {
+                    ch = ch.substring(0, 4);
+                    String client;
+                    out.write("<span class=\"peerclient\"><tt title=\"");
+                    out.write(_t("Destination (identity) of peer"));
+                    out.write("\">" + peer.toString().substring(5, 9)+ "</tt>&nbsp;");
+                    out.write("<span class=\"clientid\">");
+                    if ("AwMD".equals(ch))
+                        client = _t("I2PSnark");
+                    else if ("LUFa".equals(ch))
+                        client = "Vuze" + "<span class=\"clientVersion\"><i>" + getAzVersion(pid.getID()) + "</i></span>";
+                    else if ("LUJJ".equals(ch))
+                        client = "BiglyBT" + "<span class=\"clientVersion\"><i>" + getAzVersion(pid.getID()) + "</i></span>";
+                    else if ("LVhE".equals(ch))
+                        client = "XD" + "<span class=\"clientVersion\"><i>" + getAzVersion(pid.getID()) + "</i></span>";
+                    else if ("ZV".equals(ch.substring(2,4)) || "VUZP".equals(ch))
+                        client = "Robert" + "<span class=\"clientVersion\"><i>" + getRobtVersion(pid.getID()) + "</i></span>";
+                    else if (ch.startsWith("LV")) // LVCS 1.0.2?; LVRS 1.0.4
+                       client = "Transmission" + "<span class=\"clientVersion\"><i>" + getAzVersion(pid.getID()) + "</i></span>";
+                    else if ("LUtU".equals(ch))
+                        client = "KTorrent" + "<span class=\"clientVersion\"><i>" + getAzVersion(pid.getID()) + "</i></span>";
+                    else if ("CwsL".equals(ch))
+                        client = "I2PSnarkXL";
+                    else if ("BFJT".equals(ch))
+                        client = "I2PRufus";
+                    else if ("TTMt".equals(ch))
+                        client = "I2P-BT";
+                    else
+                        client = _t("Unknown") + " (" + ch + ')';
+                    out.write(client + "</span></span>");
+                }
                 if (t >= 5000) {
                     if (showDebug) {
                         out.write(" &#10140; <i>" + _t("inactive") + "&nbsp;" + (t / 1000) + "s</i>");
@@ -4112,6 +4118,33 @@ public class I2PSnarkServlet extends BasicServlet {
                         buf.append("</span> ");
                         buf.append("</td></tr>\n");
                         }
+                    }
+                }
+
+                List<String> weblist = meta.getWebSeedURLs();
+                if (weblist != null) {
+                    List<String> wlist = new ArrayList<String>(weblist.size());
+                    // strip non-i2p web seeds
+                    for (String s : weblist) {
+                        if (isI2PTracker(s))
+                            wlist.add(s);
+                    }
+                    if (!wlist.isEmpty()) {
+                        buf.append("<tr id=\"webseeds\"><td colspan=\"3\">");
+                        toThemeImg(buf, "torrent");
+                        buf.append("<b>")
+                           .append(_t("Web Seeds")).append("</b>: ");
+                        boolean more = false;
+                        for (String s : wlist) {
+                            buf.append("<span class=\"info_tracker\">");
+                            if (more)
+                                buf.append(' ');
+                            else
+                                more = true;
+                            buf.append(getShortTrackerLink(DataHelper.stripHTML(s), snark.getInfoHash()));
+                            buf.append("</span> ");
+                        }
+                        buf.append("</td></tr>\n");
                     }
                 }
             }

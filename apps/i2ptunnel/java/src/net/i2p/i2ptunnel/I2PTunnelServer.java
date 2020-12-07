@@ -84,13 +84,13 @@ public class I2PTunnelServer extends I2PTunnelTask implements Runnable {
     protected static volatile long __serverId = 0;
     /** max number of threads  - this many slowlorisses will DOS this server, but too high could OOM the JVM */
     private static final String PROP_HANDLER_COUNT = "i2ptunnel.blockingHandlerCount";
-    private static final int DEFAULT_HANDLER_COUNT = 65;
+//    private static final int DEFAULT_HANDLER_COUNT = 65;
+    private static final int DEFAULT_HANDLER_COUNT = 96;
     /** min number of threads */
-//    private static final int MIN_HANDLERS = 0;
-    private static final int MIN_HANDLERS = 1;
+    private static final int MIN_HANDLERS = 0;
     /** how long to wait before dropping an idle thread */
 //    private static final long HANDLER_KEEPALIVE_MS = 30*1000;
-    private static final long HANDLER_KEEPALIVE_MS = 15*1000;
+    private static final long HANDLER_KEEPALIVE_MS = 25*1000;
 
     protected I2PTunnelTask task;
     protected boolean bidir;
@@ -211,7 +211,7 @@ public class I2PTunnelServer extends I2PTunnelTask implements Runnable {
 
     private static final int RETRY_DELAY = 20*1000;
 //    private static final int MAX_RETRIES = 4;
-    private static final int MAX_RETRIES = 10;
+    private static final int MAX_RETRIES = 20;
 
     /**
      *
@@ -793,7 +793,7 @@ public class I2PTunnelServer extends I2PTunnelTask implements Runnable {
 
             long afterHandle = getTunnel().getContext().clock().now();
             long timeToHandle = afterHandle - afterAccept;
-            if ( (timeToHandle > 1000) && (_log.shouldLog(Log.WARN)) )
+            if ( (timeToHandle > 1500) && (_log.shouldLog(Log.WARN)) )
                 _log.warn("Took a while (" + timeToHandle + "ms) to handle the request for " + remoteHost + ':' + remotePort +
                           "\n* Socket create: " + (afterSocket-afterAccept) + "ms");
         } catch (SocketException ex) {

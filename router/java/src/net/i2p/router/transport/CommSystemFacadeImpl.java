@@ -590,42 +590,42 @@ public class CommSystemFacadeImpl extends CommSystemFacade {
             String caps = ri.getCapabilities();
             String v = ri.getVersion();
             String ip = net.i2p.util.Addresses.toString(getValidIP(ri));
-        buf.append("<span class=\"routerid\"><span class=\"flag\">");
-        if (ri != null && c != null) {
-            String countryName = getCountryName(c);
-            if (countryName.length() > 2)
-                countryName = Translate.getString(countryName, _context, COUNTRY_BUNDLE_NAME);
-            buf.append("<a href=\"/netdb?c=" + c + "\"><img height=\"12\" width=\"16\" alt=\"")
-               .append(c.toUpperCase(Locale.US)).append("\" title=\"");
-            buf.append(countryName).append(" &bullet; ");
-            if (ri != null && ip != null)
-                buf.append(ip);
-            buf.append("\" src=\"/flags.jsp?c=").append(c).append("\"></a></span> ");
-        } else {
-            buf.append("<img class=\"unknownflag\" height=\"12\" width=\"16\" alt=\"??\"" +
-                       " src=\"/flags.jsp?c=a0\" title=\"").append(_t("unknown")).append(" &bullet; ");
-            if (ri != null && ip != null)
-                buf.append(ip);
-            buf.append("\"></span> ");
-        }
-        buf.append("<tt>");
-        buf.append("<a title=\""); //.append(_t("NetDb entry"));
-        if (ri != null) {
-            if (caps.contains("f"))
-                buf.append("Floodfill &bullet;");
-            if (v != null)
-                buf.append(' ' + v);
-            buf.append("\" href=\"netdb?r=").append(h).append("\">");
-        }
-        buf.append(h);
-        if (ri != null)
-            buf.append("</a>");
-        buf.append("</tt></span>");
-        } else {
             buf.append("<span class=\"routerid\"><span class=\"flag\">");
-            buf.append("<img class=\"unknownflag\" height=\"12\" width=\"16\" alt=\"??\"" +
-                       " src=\"/flags.jsp?c=a0\" title=\"").append(_t("unknown"));
-            buf.append("\"></span><tt>????</tt></span> ");
+            if (ri != null && c != null) {
+                String countryName = getCountryName(c);
+                if (countryName.length() > 2)
+                    countryName = Translate.getString(countryName, _context, COUNTRY_BUNDLE_NAME);
+                buf.append("<a href=\"/netdb?c=" + c + "\"><img height=\"12\" width=\"16\" alt=\"")
+                   .append(c.toUpperCase(Locale.US)).append("\" title=\"");
+                buf.append(countryName).append(" &bullet; ");
+                if (ri != null && ip != null)
+                    buf.append(ip);
+                buf.append("\" src=\"/flags.jsp?c=").append(c).append("\"></a></span> ");
+            } else {
+                buf.append("<img class=\"unknownflag\" height=\"12\" width=\"16\" alt=\"??\"" +
+                           " src=\"/flags.jsp?c=a0\" title=\"").append(_t("unknown")).append(" &bullet; ");
+                if (ri != null && ip != null)
+                    buf.append(ip);
+                buf.append("\"></span> ");
+            }
+            buf.append("<tt>");
+            buf.append("<a title=\""); //.append(_t("NetDb entry"));
+            if (ri != null) {
+                if (caps.contains("f"))
+                    buf.append("Floodfill &bullet;");
+                if (v != null)
+                    buf.append(' ' + v);
+                buf.append("\" href=\"netdb?r=").append(h).append("\">");
+            }
+            buf.append(h);
+            if (ri != null)
+                buf.append("</a>");
+            buf.append("</tt></span>");
+        } else {
+            buf.append("<span class=\"routerid\"><span class=\"flag\">")
+               .append("<img class=\"unknownflag\" height=\"12\" width=\"16\" alt=\"??\"" +
+                       " src=\"/flags.jsp?c=a0\" title=\"").append(_t("unknown"))
+               .append("\"></span><tt>????</tt></span> ");
         }
         return buf.toString();
     }

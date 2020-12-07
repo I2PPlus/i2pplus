@@ -983,9 +983,9 @@ public class SummaryHelper extends HelperBase {
             buf.append("<h4 class=\"sb_info sb_update\"><b>").append(_t("Update downloaded")).append("<br>");
             buf.append("[").append(_t("{0}", DataHelper.escapeHTML(dver))).append("]<br>");
             if (_context.hasWrapper())
-                buf.append(_t("Click Restart to install"));
+                buf.append(_t("Click Restart to install").replace("Click ", ""));
             else
-                buf.append(_t("Click Shutdown and restart to install"));
+                buf.append(_t("Click Shutdown and restart to install").replace("Click ", ""));
             buf.append("</b></h4>");
         }
         boolean avail = updateAvailable();

@@ -63,19 +63,21 @@ class ConnectionManager {
     /** @since 0.9.3 */
     public static final String PROP_BLACKLIST = "i2p.streaming.blacklist";
 //    private static final long MAX_PING_TIMEOUT = 5*60*1000;
-    private static final long MAX_PING_TIMEOUT = 60*1000;
+    private static final long MAX_PING_TIMEOUT = 3*60*1000;
     private static final int MAX_PONG_PAYLOAD = 32;
     /** once over throttle limits, respond this many times before just dropping */
 //    private static final int DROP_OVER_LIMIT = 3;
     private static final int DROP_OVER_LIMIT = 1;
 
-    // TODO https://stackoverflow.com/questions/16022624/examples-of-http-api-rate-limiting-http-response-headers
+    // https://stackoverflow.com/questions/16022624/examples-of-http-api-rate-limiting-http-response-headers
+    // RFC 6585
     private static final String LIMIT_HTTP_RESPONSE =
          "HTTP/1.1 429 Denied\r\n" +
          "Content-Type: text/html; charset=iso-8859-1\r\n" +
          "Cache-Control: no-cache\r\n" +
          "Connection: close\r\n" +
          "Proxy-Connection: close\r\n" +
+         "Retry-After: 900\r\n"+
          "\r\n" +
          "<!DOCTYPE html>\n<html>\n<head><title>403 Denied</title></head>\n" +
          "<body style=\"margin: 3% 4%; padding: 0 0 15px; font-family: sans-serif; color: #dda; text-shadow: 0 1px 1px #000; border-bottom: 1px solid #aa8; background: #311;\">\n" +
@@ -239,20 +241,23 @@ class ConnectionManager {
      */
     public Connection receiveConnection(Packet synPacket) {
         boolean reject = false;
+        int retryAfter = 0;
 
             if (locked_tooManyStreams()) {
                 if ((!_defaultOptions.getDisableRejectLogging()) || _log.shouldLog(Log.WARN))
                     _log.logAlways(Log.WARN, "Refusing connection: maximum of "
                               + _defaultOptions.getMaxConns() + " simultaneous connections exceeded");
                 reject = true;
+                retryAfter = 120;
             } else {
                 // this may not be right if more than one is enabled
-                String why = shouldRejectConnection(synPacket);
+                Reason why = shouldRejectConnection(synPacket);
                 if (why != null) {
                     if ((!_defaultOptions.getDisableRejectLogging()) || _log.shouldLog(Log.WARN))
                         _log.logAlways(Log.WARN, "Refusing connection: " + why +
                            (synPacket.getOptionalFrom() == null ? "" : "\n* Client: " + synPacket.getOptionalFrom().toBase32()));
                     reject = true;
+                    retryAfter = why.getSeconds();
                 }
             }
 
@@ -268,9 +273,7 @@ class ConnectionManager {
                 return null;
             }
             Hash h = from.calculateHash();
-            if (_globalBlacklist.contains(h) ||
-                (_defaultOptions.isAccessListEnabled() && !_defaultOptions.getAccessList().contains(h)) ||
-                (_defaultOptions.isBlacklistEnabled() && _defaultOptions.getBlacklist().contains(h))) {
+            if (retryAfter >= MAX_TIME) {
                 // always drop these regardless of setting
                 return null;
             }
@@ -293,7 +296,10 @@ class ConnectionManager {
             boolean custom = !(reset || http);
             String sendResponse;
             if (http) {
-                sendResponse = LIMIT_HTTP_RESPONSE;
+                if (retryAfter > 0)
+                    sendResponse = LIMIT_HTTP_RESPONSE.replace("900", Integer.toString(retryAfter));
+                else
+                    sendResponse = LIMIT_HTTP_RESPONSE.replace("Retry-After: 900\r\n", "");
             } else if (custom) {
                 sendResponse = resp.replace("\\r", "\r").replace("\\n", "\n");
             } else {
@@ -394,7 +400,7 @@ class ConnectionManager {
             return false;
         if (con == null) {
             // Use the same throttling as for connections
-            String why = shouldRejectConnection(ping);
+            Reason why = shouldRejectConnection(ping);
             if (why != null) {
                 if ((!_defaultOptions.getDisableRejectLogging()) || _log.shouldLog(Log.WARN))
                     _log.logAlways(Log.WARN, "Dropping ping: " + why + "\n* " + dest.calculateHash());
@@ -594,14 +600,35 @@ class ConnectionManager {
     }
 
     /**
+     *  @since 0.9.49
+     */
+    private static class Reason {
+        private final String txt;
+        private final int seconds;
+
+        public Reason(String text, int secs) {
+            txt = text; seconds = secs;
+        }
+
+        @Override
+        public String toString() { return txt; }
+
+        public int getSeconds() { return seconds; }
+    }
+
+    private static final int MAX_TIME = 9999999;
+
+
+    /**
+     *  Reason time is in seconds for Retry-After header; MAX_TIME for drop, 0 if unknown
      *  @return reason string or null if not rejected
      */
-    private String shouldRejectConnection(Packet syn) {
+    private Reason shouldRejectConnection(Packet syn) {
         // unfortunately we don't have access to the router client manager here,
         // so we can't whitelist local access
         Destination from = syn.getOptionalFrom();
         if (from == null)
-            return "null";
+            return new Reason("null", MAX_TIME);
         Hash h = from.calculateHash();
 
         // As of 0.9.9, run the blacklist checks BEFORE the port counters,
@@ -634,58 +661,58 @@ class ConnectionManager {
             }
         }
         if (hashes.length() > 0 && _globalBlacklist.contains(h))
-            return "blacklisted globally";
+            return new Reason("blacklisted globally", MAX_TIME);
 
         if (_defaultOptions.isAccessListEnabled() &&
             !_defaultOptions.getAccessList().contains(h))
-            return "not whitelisted";
+            return new Reason("not whitelisted", MAX_TIME);
         if (_defaultOptions.isBlacklistEnabled() &&
             _defaultOptions.getBlacklist().contains(h))
-            return "blacklisted";
+            return new Reason("blacklisted", MAX_TIME);
 
 
         if (_dayThrottler != null && _dayThrottler.shouldThrottle(h)) {
             _context.statManager().addRateData("stream.con.throttledDay", 1);
             if (_defaultOptions.getMaxConnsPerDay() <= 0)
-                return "total daily limit of " + _defaultOptions.getMaxTotalConnsPerDay() +
-                        " connections reached";
+                return new Reason("total daily limit of " + _defaultOptions.getMaxTotalConnsPerDay() +
+                        " connections reached", 86400);
             else if (_defaultOptions.getMaxTotalConnsPerDay() <= 0)
-                return "per-peer daily limit of " + _defaultOptions.getMaxConnsPerDay() +
-                        " connections reached";
+                return new Reason("per-peer daily limit of " + _defaultOptions.getMaxConnsPerDay() +
+                        " connections reached", 86400);
             else
-                return "per-peer limit of " + _defaultOptions.getMaxConnsPerDay() +
+                return new Reason("per-peer limit of " + _defaultOptions.getMaxConnsPerDay() +
                         " or total daily limit of " + _defaultOptions.getMaxTotalConnsPerDay() +
-                        " connections reached";
+                        " connections reached", 86400);
         }
         if (_hourThrottler != null && _hourThrottler.shouldThrottle(h)) {
             _context.statManager().addRateData("stream.con.throttledHour", 1);
             if (_defaultOptions.getMaxConnsPerHour() <= 0)
-                return "total hourly limit of " + _defaultOptions.getMaxTotalConnsPerHour() +
-                        " reached";
+                return new Reason("total hourly limit of " + _defaultOptions.getMaxTotalConnsPerHour() +
+                        " reached", 3600);
             else if (_defaultOptions.getMaxTotalConnsPerHour() <= 0)
-                return "per-peer hourly limit of " + _defaultOptions.getMaxConnsPerHour() +
-                        " connections";
+                return new Reason("per-peer hourly limit of " + _defaultOptions.getMaxConnsPerHour() +
+                        " connections", 3600);
             else
-                return "per-peer hourly limit of " + _defaultOptions.getMaxConnsPerHour() +
+                return new Reason("per-peer hourly limit of " + _defaultOptions.getMaxConnsPerHour() +
                         " or total hourly limit of " + _defaultOptions.getMaxTotalConnsPerHour() +
-                        " connections reached";
+                        " connections reached", 3600);
         }
         if (_minuteThrottler != null && _minuteThrottler.shouldThrottle(h)) {
             _context.statManager().addRateData("stream.con.throttledMinute", 1);
             if (_defaultOptions.getMaxConnsPerMinute() <= 0)
-                return "total limit of " + _defaultOptions.getMaxTotalConnsPerMinute() +
-                        " connections per minute reached";
+                return new Reason("total limit of " + _defaultOptions.getMaxTotalConnsPerMinute() +
+                        " connections per minute reached", 60);
             else if (_defaultOptions.getMaxTotalConnsPerMinute() <= 0)
-                return "per-peer limit of " + _defaultOptions.getMaxConnsPerMinute() +
-                        " connections per minute reached";
+                return new Reason("per-peer limit of " + _defaultOptions.getMaxConnsPerMinute() +
+                        " connections per minute reached", 60);
             else
-                return "per-peer limit of " + _defaultOptions.getMaxConnsPerMinute() +
+                return new Reason("per-peer limit of " + _defaultOptions.getMaxConnsPerMinute() +
                         " connections per minute or total limit of " + _defaultOptions.getMaxTotalConnsPerMinute() +
-                        " connections per minute reached";
+                        " connections per minute reached", 60);
         }
 
         if (!_connectionFilter.allowDestination(from)) {
-            return "destination blocked by tunnel filter";
+            return new Reason("destination blocked by tunnel filter", 0);
         }
 
         return null;

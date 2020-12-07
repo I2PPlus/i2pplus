@@ -15,9 +15,13 @@ import net.i2p.router.JobStats;
 import net.i2p.router.web.HelperBase;
 import net.i2p.util.ObjectCounter;
 
+import net.i2p.util.SystemVersion;
+
 public class JobQueueHelper extends HelperBase {
 
-    private static final int MAX_JOBS = 50;
+//    private static final int MAX_JOBS = 50;
+    // 32 if android (see below)
+    private static int MAX_JOBS = 72;
 
     public String getJobQueueSummary() {
         try {
@@ -50,9 +54,8 @@ public class JobQueueHelper extends HelperBase {
         StringBuilder buf = new StringBuilder(32*1024);
         buf.append("<div class=\"joblog\">");
         if (isAdvanced()) {
-            buf.append("<h2 id=\"jobrunners\">")
-               .append(_t("Job runners")).append(": ").append(numRunners)
-               .append("</h2>\n");
+            buf.append("<h2 id=\"jobrunners\">").append(_t("Job runners"))
+               .append(": ").append(numRunners).append("</h2>\n");
         }
 
         long now = _context.clock().now();
@@ -90,6 +93,8 @@ public class JobQueueHelper extends HelperBase {
             for (int i = 0; i < readyJobs.size(); i++) {
                 Job j = readyJobs.get(i);
                 counter.increment(j.getName());
+                if (SystemVersion.isAndroid())
+                    MAX_JOBS = 32;
                 if (i >= MAX_JOBS)
                     continue;
                 buf.append("<li><b title=\"").append(j.toString()).append("\">").append(j.getName()).append("</b> &#10140; ");
