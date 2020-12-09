@@ -870,7 +870,11 @@ public class SummaryHelper extends HelperBase {
         if (_context == null)
             return "0";
         double sr = _context.tunnelManager().getShareRatio();
-        DecimalFormat fmt = new DecimalFormat("##0.00");
+        DecimalFormat fmt = new DecimalFormat("##0");
+        if (sr < 1)
+            fmt = new DecimalFormat("##0.00");
+        else if (sr < 10)
+            fmt = new DecimalFormat("##0.0");
         return fmt.format(sr).replace("0.00", "0");
     }
 
