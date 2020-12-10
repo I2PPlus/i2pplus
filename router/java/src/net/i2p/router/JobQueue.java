@@ -71,11 +71,11 @@ public class JobQueue {
         if (SystemVersion.isAndroid() || maxMemory < 128*1024*1024L)
             RUNNERS = Math.min((cores / 2), 3);
         else if (maxMemory >= 1024*1024*1024L)
-            RUNNERS = Math.min((cores * 2) + 4, 16);
+            RUNNERS = Math.min((cores * 2), 12);
         else if (maxMemory >= 512*1024*1024L)
-            RUNNERS = Math.min(cores + (cores / 2), 12);
+            RUNNERS = Math.min(cores + 2, 8);
         else
-            RUNNERS = Math.max(cores, 8);
+            RUNNERS = Math.max(cores, 4);
 /**
         if (maxMemory < 64*1024*1024)
             RUNNERS = 3;
@@ -97,7 +97,7 @@ public class JobQueue {
 
     /** how frequently should we check and update the max runners */
 //    private final static long MAX_LIMIT_UPDATE_DELAY = 3*60*1000;
-    private final static long MAX_LIMIT_UPDATE_DELAY = 90*1000;
+    private final static long MAX_LIMIT_UPDATE_DELAY = 2*60*1000;
 
     /** if a job is this lagged, spit out a warning, but keep going */
     private long _lagWarning = DEFAULT_LAG_WARNING;

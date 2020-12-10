@@ -3052,7 +3052,7 @@ h3#scheduledjobs + ol li::before, #scheduledjobs + ol li::before {
   margin-top: 10px !important;
 }
 
-.jobqueue {
+#jobs .jobqueue {
   margin-bottom: 5px !important;
   margin-top: -11px !important;
   width: 97%;
@@ -3062,7 +3062,7 @@ h3#scheduledjobs + ol li::before, #scheduledjobs + ol li::before {
   background: #000800;
 }
 
-.jobqueue li:last-child {
+#jobs .jobqueue li:last-child {
   margin-bottom: 5px;
 }
 
@@ -3072,9 +3072,9 @@ h3[id*="jobs"] {
 }
 
 @media screen and (max-width: 1500px) {
-h3[id*="jobs"]:first-of-type {
-  margin-top: 21px !important;
-}
+  h3[id*="jobs"]:first-of-type {
+    margin-top: 21px !important;
+  }
 }
 
 #schedjobs {
