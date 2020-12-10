@@ -148,6 +148,7 @@ public class HomeHelper extends HelperBase {
         "garden.i2p" + S + _x("Gardening forums") + S + "http://garden.i2p/" + S + I + "svg/garden.svg" + S +
         _x("I2P Forum") + S + _x("I2P-related community forums") + S + "http://i2pforum.i2p/" + S + I + "svg/forum.svg" + S +
         "nitter.i2p" + S + _x("Alternative front-end for Twitter") + S + "http://nitter.i2p/" + S + I + "svg/twitter.svg" + S +
+        "rambler.i2p" + S + _x("Cross-network micro-blogging &amp; forums &amp; wiki") + S + "http://rambler.i2p/" + S + I + "svg/rambler.svg" + S +
         //"NovaBBS" + S + _x("Eclectic selection of forums") + S + "http://novabbs.i2p/" + S + I + "svg/peers.svg" + S +
 //        _x("Visibility") + S + _x("Microblogging service") + S + "http://visibility.i2p/" + S + I + "info/eye.png" + S +
         //"Ident " + _x("Microblog") + S + _x("Your premier microblogging service on I2P") + S + "http://id3nt.i2p/" + S + I + "ident_icon_blue.png" + S +
