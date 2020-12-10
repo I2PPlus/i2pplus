@@ -39,7 +39,8 @@ public class RouterThrottleImpl implements RouterThrottle {
     private static final long MIN_REJECT_STARTUP_TIME = 5*60*1000;
     private static final String PROP_REJECT_STARTUP_TIME = "router.rejectStartupTime";
     private static final int DEFAULT_MIN_THROTTLE_TUNNELS = SystemVersion.isAndroid() ? 100 :
-                                                            SystemVersion.isARM() ? 500 : 1000;
+//                                                            SystemVersion.isARM() ? 500 : 1000;
+                                                            SystemVersion.isARM() ? 500 : 2000;
 
     /**
      *  TO BE FIXED - SEE COMMENTS BELOW
