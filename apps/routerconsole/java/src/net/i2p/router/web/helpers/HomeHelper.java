@@ -184,6 +184,7 @@ public class HomeHelper extends HelperBase {
 
 // news + blogs
         //"io.i2p" + S + _x("Mainstream news aggregation") + S + "http://io.i2p/" + S + I + "svg/news.svg" + S +
+        "LinuxFarm" + S + _x("Router performance monitoring and Linux tips") + S + "http://linuxfarm.i2p/" + S + I + "svg/linuxfarm.svg" + S +
         _x("Planet I2P") + S + _x("I2P News") + S + "http://planet.i2p/" + S + I + "svg/planet.svg" + S +
         //_x("The Tin Hat") + S + _x("Privacy guides and tutorials") + S + "http://secure.thetinhat.i2p/" + S + I + "thetinhat.png" + S +
         //_x("lenta news [ru]") + S + _x("Russian News Feed") + S + "http://lenta.i2p/" + S + I + "lenta_main_logo.png" + S +
