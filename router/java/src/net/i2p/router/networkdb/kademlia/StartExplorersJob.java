@@ -172,32 +172,31 @@ class StartExplorersJob extends JobImpl {
     private long getNextRunDelay() {
         String exploreDelay = getContext().getProperty("router.explorePeersDelay");
         String exploreWhenFloodfill = getContext().getProperty("router.exploreWhenFloodfill");
+        Boolean isFloodfill = _facade.floodfillEnabled();
+        Boolean isHidden =  getContext().router().isHidden();
+        RouterInfo ri = getContext().router().getRouterInfo();
+        int netDbSize = _facade.getDataStore().size();
+        long uptime = getContext().router().getUptime();
+        long delay = getContext().clock().now() - _facade.getLastExploreNewDate();
         // we don't explore if floodfill
-        if (_facade.floodfillEnabled() && exploreDelay == null &&
-            (exploreWhenFloodfill == null || exploreWhenFloodfill == "false"))
+        if (isFloodfill && exploreDelay == null && (exploreWhenFloodfill == null || exploreWhenFloodfill == "false"))
             return MAX_RERUN_DELAY_MS * 3; // every 1/2 hour
 
         // If we don't know too many peers, or just started, explore aggressively
         // Also if hidden or K, as nobody will be connecting to us
         // Use DataStore.size() which includes leasesets because it's faster
-        if ((getContext().router().getUptime() < STARTUP_TIME ||
-            _facade.getDataStore().size() < MIN_ROUTERS ||
-            getContext().router().isHidden()) && exploreDelay == null)
+        if ((uptime < STARTUP_TIME || netDbSize < MIN_ROUTERS || isHidden) ||
+            (ri != null && ri.getCapabilities().contains("" + Router.CAPABILITY_BW12) && exploreDelay == null))
             return MIN_RERUN_DELAY_MS;
-        RouterInfo ri = getContext().router().getRouterInfo();
-        if (ri != null && ri.getCapabilities().contains("" + Router.CAPABILITY_BW12) && exploreDelay == null)
-            return MIN_RERUN_DELAY_MS;
-        if (_facade.getDataStore().size() > MAX_ROUTERS * 2 && exploreDelay == null)
+        else if (_facade.getDataStore().size() > MAX_ROUTERS * 2 && exploreDelay == null)
             return MAX_RERUN_DELAY_MS * 6; // 1 hour if over 8000 known peers
         else if (_facade.getDataStore().size() > MAX_ROUTERS && exploreDelay == null)
             return MAX_RERUN_DELAY_MS;
-
-        long delay = getContext().clock().now() - _facade.getLastExploreNewDate();
         if (delay < MIN_RERUN_DELAY_MS && exploreDelay == null)
             return MIN_RERUN_DELAY_MS;
         else if (delay > MAX_RERUN_DELAY_MS && exploreDelay == null)
             return MAX_RERUN_DELAY_MS;
-        else if (PROP_EXPLORE_DELAY_MS != null)
+        else if (exploreDelay != null)
             return Integer.valueOf(PROP_EXPLORE_DELAY_MS);
         else
             return delay;
