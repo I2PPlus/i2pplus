@@ -62,7 +62,7 @@ class StartExplorersJob extends JobImpl {
     static final int LOW_FFS = 2 * MIN_FFS;
     private static final long MAX_LAG = 150;
     private static final long MAX_MSG_DELAY = 750;
-    static final String PROP_EXPLORE_DELAY_MS = "router.explorePeersDelay";
+    static final String PROP_EXPLORE_DELAY = "router.explorePeersDelay";
     static final String PROP_EXPLORE_BUCKETS = "router.exploreBuckets";
     static final String PROP_FORCE_EXPLORE = "router.exploreWhenFloodfill";
 
@@ -194,7 +194,7 @@ class StartExplorersJob extends JobImpl {
         else if (_facade.getDataStore().size() > MAX_ROUTERS && exploreDelay == null)
             return MAX_RERUN_DELAY_MS;
         else if (exploreDelay != null)
-            return Integer.valueOf(PROP_EXPLORE_DELAY_MS);
+            return Integer.valueOf(exploreDelay) * 1000;
         else
             return delay;
     }
