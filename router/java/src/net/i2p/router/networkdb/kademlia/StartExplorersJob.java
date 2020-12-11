@@ -196,7 +196,7 @@ class StartExplorersJob extends JobImpl {
             return MIN_RERUN_DELAY_MS;
         else if (delay > MAX_RERUN_DELAY_MS && exploreDelay == null)
             return MAX_RERUN_DELAY_MS;
-        else if (PROP_EXPLORE_DELAY_MS != null)
+        else if (exploreDelay != null)
             return Integer.valueOf(PROP_EXPLORE_DELAY_MS);
         else
             return delay;
