@@ -50,7 +50,7 @@ class RefreshRoutersJob extends JobImpl {
 //    private final static long EXPIRE = 2*60*60*1000;
     private final static long EXPIRE = 31*24*60*60*1000;
     private final static long OLDER = 2*60*60*1000;
-    private final static long RESTART_DELAY_MS = 5*60*1000;
+    private static long RESTART_DELAY_MS = 5*60*1000;
 
     public RefreshRoutersJob(RouterContext ctx, FloodfillNetworkDatabaseFacade facade) {
         super(ctx);
@@ -61,6 +61,8 @@ class RefreshRoutersJob extends JobImpl {
     public String getName() { return "Refresh NetDb Routers"; }
 
     public void runJob() {
+        Random rand = new Random();
+        int netDbCount = _facade.getAllRouters().size();
         if (getContext().commSystem().getStatus() == Status.DISCONNECTED) {
             if (_log.shouldLog(Log.WARN))
             _log.warn("Suspending Refresh Routers job - network disconnected");
@@ -80,7 +82,14 @@ class RefreshRoutersJob extends JobImpl {
             }
             if (_routers.isEmpty()) {
                 _routers = null;
-                requeue(RESTART_DELAY_MS);
+                if (netDbCount > 4000) {
+                    RESTART_DELAY_MS *= rand.nextInt(3) + 1;
+                    requeue(RESTART_DELAY_MS);
+                } else if (netDbCount > 8000) {
+                    RESTART_DELAY_MS *= rand.nextInt(12) + 1;
+                } else {
+                    requeue(RESTART_DELAY_MS);
+                }
                 if (_log.shouldLog(Log.INFO))
                     _log.info("Finished refreshing NetDb routers; job will rerun in " + (RESTART_DELAY_MS / 1000) + "s");
                 return;
@@ -99,7 +108,6 @@ class RefreshRoutersJob extends JobImpl {
 //                if (ri.getPublished() < expire) {
 //                long older = getContext().clock().now() - OLDER;
                 long older = getContext().clock().now() - ri.getPublished();
-                int netDbCount = _facade.getAllRouters().size();
                 String freshness = getContext().getProperty("router.refreshSkipIfYounger");
                 int routerAge = 60*60*1000;
                 if (freshness == null) {
@@ -110,9 +118,9 @@ class RefreshRoutersJob extends JobImpl {
                     if (netDbCount > 6000)
                         routerAge = 8*60*60*1000;
                     if (netDbCount > 8000)
-                        routerAge = 12*60*60*1000;
+                        routerAge = 16*60*60*1000;
                     if (netDbCount > 9000)
-                        routerAge = 14*60*60*1000;
+                        routerAge = 20*60*60*1000;
                 } else {
                     routerAge = Integer.valueOf(freshness)*60*60*1000;
                 }
@@ -148,8 +156,6 @@ class RefreshRoutersJob extends JobImpl {
             }
         }
 
-        int netDbCount = _facade.getAllRouters().size();
-        Random rand = new Random();
         int randomDelay = (1500 * (rand.nextInt(3) + 1)) + rand.nextInt(1000) + rand.nextInt(1000) + (rand.nextInt(1000) * (rand.nextInt(3) + 1)); // max 9.5 seconds
         String refresh = getContext().getProperty("router.refreshRouterDelay");
         if (refresh == null) {
@@ -159,8 +165,10 @@ class RefreshRoutersJob extends JobImpl {
                 randomDelay = randomDelay - (rand.nextInt(2000));
             else if (netDbCount < 6000)
                 randomDelay = randomDelay - (rand.nextInt(1250) + rand.nextInt(1250));
-            else
+            else if (netDbCount < 8000)
                 randomDelay = randomDelay - (rand.nextInt(750) / (rand.nextInt(3) + 1));
+            else
+                randomDelay = randomDelay - ((rand.nextInt(750) / (rand.nextInt(3) + 1)) * rand.nextInt(6) + 1);
             requeue(randomDelay);
             if (_log.shouldLog(Log.DEBUG))
                 _log.debug("Next RouterInfo check in " + randomDelay + "ms");
