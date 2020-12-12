@@ -167,13 +167,13 @@ class ExploreJob extends SearchJob {
                 if (sess != null) {
                     if (sess.tag != null) {
                         if (_log.shouldInfo())
-                            _log.info("[Job " + getJobId() + "] Requesting AES reply from " + ident.calculateHash() +
-                                      "\n* Session Key: " + sess.key + "\n* Tag: " + sess.tag);
+                            _log.info("[Job " + getJobId() + "] Requesting AES reply from [" + ident.calculateHash().toBase64().substring(0,6) +
+                                      "] \n* Session Key: " + sess.key + "\n* Tag: " + sess.tag);
                         msg.setReplySession(sess.key, sess.tag);
                     } else {
                         if (_log.shouldInfo())
-                            _log.info("[Job " + getJobId() + "] Requesting AEAD reply from " + ident.calculateHash() +
-                                      "\n* Session Key: " + sess.key + "\n* Tag: " + sess.rtag);
+                            _log.info("[Job " + getJobId() + "] Requesting AEAD reply from [" + ident.calculateHash().toBase64().substring(0,6) +
+                                      "] \n* Session Key: " + sess.key + "\n* Tag: " + sess.rtag);
                         msg.setReplySession(sess.key, sess.rtag);
                     }
                 } else {
@@ -200,7 +200,7 @@ class ExploreJob extends SearchJob {
         String exploreBredth = getContext().getProperty("router.exploreBredth");
         if (exploreBredth == null) {
             if (_log.shouldLog(Log.INFO))
-                _log.info("[Job " + getJobId() + "] Initiating Exploratory Search");
+                _log.info("[Job " + getJobId() + "] Initiating Exploratory Search...");
             return EXPLORE_BREDTH;
         } else {
             if (_log.shouldLog(Log.INFO))
