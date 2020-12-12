@@ -27,6 +27,8 @@ import net.i2p.util.Log;
 import net.i2p.util.ObjectCounter;
 import net.i2p.util.SimpleTimer;
 
+import net.i2p.util.SystemVersion;
+
 /**
  * Manage all the exploratory and client tunnel pools.
  * Run the tunnel builder and handler threads.
@@ -76,8 +78,14 @@ public class TunnelPoolManager implements TunnelManagerFacade {
         _executor = new BuildExecutor(ctx, this);
         _handler = new BuildHandler(ctx, this, _executor);
         int numHandlerThreads;
+        long maxMemory = SystemVersion.getMaxMemory();
+        int cores = SystemVersion.getCores();
         int share = TunnelDispatcher.getShareBandwidth(ctx);
-        if (share >= MIN_KBPS_THREE_HANDLERS)
+        if (share >= MIN_KBPS_THREE_HANDLERS * 2 && maxMemory >= 1024)
+            numHandlerThreads = Math.min(cores, 8);
+        if (share >= MIN_KBPS_THREE_HANDLERS * 2)
+            numHandlerThreads = 4;
+        else if (share >= MIN_KBPS_THREE_HANDLERS)
             numHandlerThreads = 3;
         else if (share >= MIN_KBPS_TWO_HANDLERS)
             numHandlerThreads = 2;
