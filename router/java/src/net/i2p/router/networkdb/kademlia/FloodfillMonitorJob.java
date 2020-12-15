@@ -87,6 +87,8 @@ class FloodfillMonitorJob extends JobImpl {
         // TODO: somehow assess the size of the network to make this adaptive?
         if (!ff)
             delay *= 4; // this was 7, reduced for moar FFs --zab
+        else
+            delay *= 10; // slow down check if we're already a floodfill
         requeue(delay);
     }
 
@@ -201,9 +203,11 @@ class FloodfillMonitorJob extends JobImpl {
         happy = happy && lagStat.getRate(60*60*1000L).getAvgOrLifetimeAvg() < 25;
         happy = happy && queueStat.getRate(60*60*1000L).getAvgOrLifetimeAvg() < 5;
         // Only if we're pretty well integrated...
-        happy = happy && _facade.getKnownRouters() >= 400;
+//        happy = happy && _facade.getKnownRouters() >= 400;
+        happy = happy && _facade.getKnownRouters() >= 2000;
         happy = happy && getContext().commSystem().countActivePeers() >= 50;
-        happy = happy && getContext().tunnelManager().getParticipatingCount() >= 25;
+//        happy = happy && getContext().tunnelManager().getParticipatingCount() >= 25;
+        happy = happy && getContext().tunnelManager().getParticipatingCount() >= 250;
         happy = happy && Math.abs(getContext().clock().getOffset()) < 10*1000;
         // We need an address and no introducers
         if (happy) {
