@@ -1166,7 +1166,7 @@ public class RouterConsoleRunner implements RouterApp {
                     } catch (Throwable t) { t.printStackTrace(); }
                 } else {
                     if (log.shouldWarn())
-                        log.info("Not Stoppping, isn't running " + app);
+                        log.info("Not stoppping " + app + " - isn't running");
                 }
             }
         }

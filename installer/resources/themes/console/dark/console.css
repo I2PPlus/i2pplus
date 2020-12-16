@@ -5723,9 +5723,13 @@ img.unknownflag {
   font-weight: bold;
 }
 
+#criticallogs + .tabletitle {
+  margin-bottom: -2px !important;
+}
+
 #criticallogs ul { /* tidy router logs ul */
-  border: 1px solid #252;
   margin: -6px -11px !important;
+  border: 1px solid #252;
 }
 
 #criticallogs ul:empty {
