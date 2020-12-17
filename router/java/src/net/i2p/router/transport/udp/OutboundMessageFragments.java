@@ -163,7 +163,7 @@ class OutboundMessageFragments {
             // will throw IAE if peer == null
             OutboundMessageState state = new OutboundMessageState(_context, msg, peer);
             peer.add(state);
-            add(peer, state.fragmentSize(0));
+            add(peer, state.getMinSendSize());
         } catch (IllegalArgumentException iae) {
             _transport.failed(msg, "Peer disconnected quickly");
             return;
@@ -180,7 +180,7 @@ class OutboundMessageFragments {
         if (peer == null)
             throw new RuntimeException("null peer for " + state);
         peer.add(state);
-        add(peer, state.fragmentSize(0));
+        add(peer, state.getMinSendSize());
         //_context.statManager().addRateData("udp.outboundActiveCount", active, 0);
     }
 
@@ -197,7 +197,7 @@ class OutboundMessageFragments {
         for (int i = 0; i < sz; i++) {
             OutboundMessageState state = states.get(i);
             peer.add(state);
-            int fsz = state.fragmentSize(0);
+            int fsz = state.getMinSendSize();
             if (fsz < min)
                 min = fsz;
         }
@@ -405,16 +405,9 @@ class OutboundMessageFragments {
         // build the list of fragments to send
         List<Fragment> toSend = new ArrayList<Fragment>(8);
         for (OutboundMessageState state : states) {
-            int fragments = state.getFragmentCount();
-            int queued = 0;
-            for (int i = 0; i < fragments; i++) {
-                if (state.needsSending(i)) {
-                    toSend.add(new Fragment(state, i));
-                    queued++;
-                }
-            }
+            int queued = state.push(toSend);
             // per-state stats
-            if (queued > 0 && state.getPushCount() > 1) {
+            if (queued > 0 && state.getMaxSends() > 1) {
                 peer.messageRetransmitted(queued);
                 // _packetsRetransmitted += toSend; // lifetime for the transport
                 _context.statManager().addRateData("udp.peerPacketsRetransmitted", peer.getPacketsRetransmitted(), peer.getPacketsTransmitted());
