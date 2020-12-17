@@ -93,12 +93,18 @@ class FloodfillMonitorJob extends JobImpl {
     }
 
     private boolean shouldBeFloodfill() {
-        if (!SigType.ECDSA_SHA256_P256.isAvailable())
+        if (!SigType.ECDSA_SHA256_P256.isAvailable()) {
+            if (_log.shouldLog(Log.INFO))
+                _log.info("ECDSA SHA256 P256 unavailable on this router - not enrolling as floodfill");
             return false;
+        }
 
         // Hidden trumps netDb.floodfillParticipant=true
-        if (getContext().router().isHidden())
+        if (getContext().router().isHidden()) {
+            if (_log.shouldLog(Log.INFO))
+                _log.info("Hidden mode enabled - not enrolling as floodfill");
             return false;
+        }
 
         String enabled = getContext().getProperty(PROP_FLOODFILL_PARTICIPANT, "auto");
         if ("true".equals(enabled))
@@ -113,52 +119,82 @@ class FloodfillMonitorJob extends JobImpl {
             return false;
 
         // ARM ElG decrypt is too slow
-        if (SystemVersion.isSlow())
+        if (SystemVersion.isSlow()) {
+            if (_log.shouldLog(Log.INFO))
+                _log.info("Slow processor (Arm/Android) detected on this host - not enrolling as floodfill");
             return false;
+        }
 
-        if (getContext().getBooleanProperty(UDPTransport.PROP_LAPTOP_MODE))
+        if (getContext().getBooleanProperty(UDPTransport.PROP_LAPTOP_MODE)) {
+            if (_log.shouldLog(Log.INFO))
+                _log.info("Laptop mode is enabled on this router - not enrolling as floodfill");
             return false;
-
+        }
         // need IPv4 - The setting is the same for both SSU and NTCP, so just take the SSU one
-        if (TransportUtil.getIPv6Config(getContext(), "SSU") == TransportUtil.IPv6Config.IPV6_ONLY)
+        if (TransportUtil.getIPv6Config(getContext(), "SSU") == TransportUtil.IPv6Config.IPV6_ONLY) {
+            if (_log.shouldLog(Log.INFO))
+                _log.info("IPV4 is not active on this router - not enrolling as floodfill");
             return false;
-
+        }
         // need both transports
-        if (!TransportManager.isNTCPEnabled(getContext()))
+        Boolean ntcpEnabled = TransportManager.isNTCPEnabled(getContext());
+        Boolean udpEnabled = getContext().getBooleanPropertyDefaultTrue(TransportManager.PROP_ENABLE_UDP);
+        if (!ntcpEnabled)
             return false;
-        if (!getContext().getBooleanPropertyDefaultTrue(TransportManager.PROP_ENABLE_UDP))
+        if (!udpEnabled)
             return false;
+        if (!ntcpEnabled || !udpEnabled) {
+            if (_log.shouldLog(Log.INFO))
+                _log.info("Either NTCP or SSU transports are disabled - not enrolling as floodfill");
+        }
 
         if (getContext().commSystem().isInStrictCountry())
             return false;
         String country = getContext().commSystem().getOurCountry();
         // anonymous proxy, satellite provider (not in bad country list)
-        if ("a1".equals(country) || "a2".equals(country))
+        if ("a1".equals(country) || "a2".equals(country)) {
+            if (_log.shouldLog(Log.INFO))
+                _log.info("Not enough uptime (min 2h required) to automatically enroll as a floodfill");
             return false;
+        }
 
         // Only if up a while...
-        if (getContext().router().getUptime() < MIN_UPTIME)
+        if (getContext().router().getUptime() < MIN_UPTIME) {
+            if (_log.shouldLog(Log.INFO))
+                _log.info("Not enough uptime (min 2h required) to automatically enroll as a floodfill");
             return false;
+        }
 
         RouterInfo ri = getContext().router().getRouterInfo();
-        if (ri == null)
+        if (ri == null) {
+            if (_log.shouldLog(Log.INFO))
+                _log.info("No routerinfo for this router found - not enrolling as a floodfill");
             return false;
+        }
 
         RouterIdentity ident = ri.getIdentity();
-        if (ident.getSigningPublicKey().getType() == SigType.DSA_SHA1)
+        if (ident.getSigningPublicKey().getType() == SigType.DSA_SHA1) {
+            if (_log.shouldLog(Log.INFO))
+                _log.info("Our router is using a DSA SHA1 signature - not enrolling as a floodfill");
             return false;
+        }
 
         char bw = ri.getBandwidthTier().charAt(0);
         // Only if class N, O, P, X
         if (bw != Router.CAPABILITY_BW128 && bw != Router.CAPABILITY_BW256 &&
-            bw != Router.CAPABILITY_BW512 && bw != Router.CAPABILITY_BW_UNLIMITED)
+            bw != Router.CAPABILITY_BW512 && bw != Router.CAPABILITY_BW_UNLIMITED) {
+            if (_log.shouldLog(Log.INFO))
+                _log.info("Not enough upstream bandwidth allocated to automatically enroll as a floodfill");
             return false;
+        }
 
         // This list will not include ourselves...
         List<Hash> floodfillPeers = _facade.getFloodfillPeers();
         long now = getContext().clock().now();
         // We know none at all! Must be our turn...
         if (floodfillPeers == null || floodfillPeers.isEmpty()) {
+            if (_log.shouldLog(Log.INFO))
+                _log.info("No floodfills in our NetDb so we're enrolling as a floodfill");
             _lastChanged = now;
             return true;
         }
