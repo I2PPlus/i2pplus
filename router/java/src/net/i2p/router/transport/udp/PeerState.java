@@ -1570,11 +1570,11 @@ public class PeerState {
                             if (rv == null)
                                 _log.debug("Nothing to send (BW) to " + _remotePeer + ", with " + _outboundMessages.size() +
                                        " / " + _outboundQueue.size() + " remaining");
-                            else 
+                            else
                                _log.debug(_remotePeer + " ran out of BW, but managed to send " + rv.size());
                         }
                         return rv;
-                    } 
+                    }
                 }
                 // fall through to new messages
             }
@@ -1669,7 +1669,7 @@ public class PeerState {
     private boolean locked_shouldSend(OutboundMessageState state, long now, boolean resetWindow) {
             if (allocateSendingBytes(state, now, resetWindow)) {
                 if (_log.shouldLog(Log.DEBUG))
-                    _log.debug("Allocation of " + size + " bytes for [" + _remotePeer.toBase64().substring(0,6) + "] allowed with "
+                    _log.debug("Allocation for [" + _remotePeer.toBase64().substring(0,6) + "] allowed with "
                               + getSendWindowBytesRemaining()
                               + "/" + getSendWindowBytes()
                               + " remaining"
@@ -1680,7 +1680,7 @@ public class PeerState {
             } else {
                 _context.statManager().addRateData("udp.sendRejected", state.getPushCount());
                 if (_log.shouldLog(Log.DEBUG))
-                    _log.debug("Allocation of " + size + " bytes for [" + _remotePeer.toBase64().substring(0,6) + "] rejected with: wsize=" + getSendWindowBytes()
+                    _log.debug("Allocation for [" + _remotePeer.toBase64().substring(0,6) + "] rejected with: wsize=" + getSendWindowBytes()
                               + " available=" + getSendWindowBytesRemaining()
                               + " for [MsgID" + state.getMessageId() + "]" + state);
                 return false;
