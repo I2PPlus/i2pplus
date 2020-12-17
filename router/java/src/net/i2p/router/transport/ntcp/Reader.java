@@ -88,7 +88,7 @@ class Reader {
         public void stop() { _stop = true; }
 
         public void run() {
-            if (_log.shouldLog(Log.INFO)) _log.info("Starting reader");
+            if (_log.shouldLog(Log.INFO)) _log.info("Starting NTCP reader...");
             NTCPConnection con = null;
             while (!_stop) {
                 try {
@@ -161,7 +161,7 @@ class Reader {
 
             if (est.isComplete()) {
                 // why is it complete yet !con.isEstablished?
-                _log.error("establishment state [" + est + "] is complete, yet the connection isn't established? "
+                _log.error("Establishment state [" + est + "] is complete, yet the connection isn't established? "
                         + con.isEstablished() + " (inbound? " + con.isInbound() + " " + con + ")");
                 EventPumper.releaseBuf(buf);
                 break;
