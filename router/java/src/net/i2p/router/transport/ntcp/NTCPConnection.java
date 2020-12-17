@@ -431,7 +431,7 @@ public class NTCPConnection implements Closeable {
         }
         return rv;
     }
-    
+
     /** @return milliseconds */
     public long getTimeSinceSend() { return _context.clock().now()-_lastSendTime; }
 
@@ -1474,7 +1474,7 @@ public class NTCPConnection implements Closeable {
         _transport.getPumper().wantsWrite(this, data);
     }
 
-    private static final int MAX_HANDLERS = 4;
+    private static final int MAX_HANDLERS = 8;
 
     /**
      *  FIXME static queue mixes handlers from different contexts in multirouter JVM

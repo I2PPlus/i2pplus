@@ -55,6 +55,8 @@ public class ReadConfigJob extends JobImpl {
         }
         if (!isAdvanced())
             requeue(DELAY);
+        else
+            requeue(DELAY / 2 * 3); // 90 seconds
     }
 
     private boolean shouldReread(File configFile) {

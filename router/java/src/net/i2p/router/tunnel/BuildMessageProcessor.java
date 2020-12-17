@@ -55,7 +55,14 @@ public class BuildMessageProcessor {
             // appx 500 part. tunnels or 6K req/hr
             m = 17;
         } else if (ctx.getProperty(RouterThrottleImpl.PROP_MAX_TUNNELS, RouterThrottleImpl.DEFAULT_MAX_TUNNELS) >
-                   RouterThrottleImpl.DEFAULT_MAX_TUNNELS && maxMemory >= 1024*1024*1024L) {
+                   RouterThrottleImpl.DEFAULT_MAX_TUNNELS && maxMemory >= 2048*1024*1024L &&
+                   SystemVersion.getCores() >= 6) {
+            m = 26;
+            // 16 MB
+            // appx 160K part. tunnels or 1.92M req/hr
+        } else if (ctx.getProperty(RouterThrottleImpl.PROP_MAX_TUNNELS, RouterThrottleImpl.DEFAULT_MAX_TUNNELS) >
+                   RouterThrottleImpl.DEFAULT_MAX_TUNNELS && maxMemory >= 1024*1024*1024L &&
+                   SystemVersion.getCores() >= 4) {
             m = 25;
             // 8 MB
             // appx 80K part. tunnels or 960K req/hr

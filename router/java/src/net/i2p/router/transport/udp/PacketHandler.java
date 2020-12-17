@@ -46,7 +46,7 @@ class PacketHandler {
     private static final int MAX_QUEUE_SIZE = 192;
     private static final int MIN_NUM_HANDLERS = 1;  // if < 32MB
 //    private static final int MAX_NUM_HANDLERS = 1;
-    private static final int MAX_NUM_HANDLERS = 4;
+    private static final int MAX_NUM_HANDLERS = 8;
     /** let packets be up to 30s slow */
     private static final long GRACE_PERIOD = Router.CLOCK_FUDGE_FACTOR + 30*1000;
     private static final long MAX_SKEW = 90*24*60*60*1000L;
