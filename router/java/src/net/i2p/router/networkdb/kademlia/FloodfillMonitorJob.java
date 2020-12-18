@@ -34,16 +34,18 @@ class FloodfillMonitorJob extends JobImpl {
     private final FloodfillNetworkDatabaseFacade _facade;
     private long _lastChanged;
     private boolean _deferredFlood;
-    private Boolean autoff = getContext().getProperty(PROP_FLOODFILL_PARTICIPANT) == null ||
-                             getContext().getProperty(PROP_FLOODFILL_PARTICIPANT) == "auto";
 
-    private static final int REQUEUE_DELAY = 60*60*1000;
+//    private static final int REQUEUE_DELAY = 60*60*1000;
+    private static final int REQUEUE_DELAY = 15*60*1000;
     private static final long MIN_UPTIME = 2*60*60*1000;
-    private static final long MIN_CHANGE_DELAY = 6*60*60*1000;
+//    private static final long MIN_CHANGE_DELAY = 6*60*60*1000;
+    private static final long MIN_CHANGE_DELAY = 3*60*60*1000;
 
-    private static final int MIN_FF = 5000;
+//    private static final int MIN_FF = 5000;
+    private static final int MIN_FF = 2500;
     private static final int MAX_FF = 999999;
     static final String PROP_FLOODFILL_PARTICIPANT = "router.floodfillParticipant";
+    private Boolean autoff = true;
 
     public FloodfillMonitorJob(RouterContext context, FloodfillNetworkDatabaseFacade facade) {
         super(context);
@@ -56,6 +58,8 @@ class FloodfillMonitorJob extends JobImpl {
     public synchronized void runJob() {
         boolean wasFF = _facade.floodfillEnabled();
         boolean ff = shouldBeFloodfill();
+        if (wasFF)
+            autoff = false;
         _facade.setFloodfillEnabledFromMonitor(ff);
         if (ff != wasFF) {
             if (ff) {
@@ -87,16 +91,19 @@ class FloodfillMonitorJob extends JobImpl {
         int delay = (REQUEUE_DELAY / 2) + getContext().random().nextInt(REQUEUE_DELAY);
         // there's a lot of eligible non-floodfills, keep them from all jumping in at once
         // TODO: somehow assess the size of the network to make this adaptive?
-        if (!ff && autoff)
+
+        if (!ff)
             delay *= 4; // this was 7, reduced for moar FFs --zab
-        else if (ff && autoff)
+        else
             delay *= 10; // slow down check if we're already a floodfill
-        if (autoff)
-            requeue(delay);
+        requeue(delay);
     }
 
     private boolean shouldBeFloodfill() {
         if (!SigType.ECDSA_SHA256_P256.isAvailable()) {
+            boolean wasFF = _facade.floodfillEnabled();
+            if (wasFF)
+                autoff = false;
             if (autoff && _log.shouldLog(Log.INFO))
                 _log.info("ECDSA SHA256 P256 unavailable on this router - not automatically enrolling as floodfill");
             return false;
@@ -157,7 +164,7 @@ class FloodfillMonitorJob extends JobImpl {
         // anonymous proxy, satellite provider (not in bad country list)
         if ("a1".equals(country) || "a2".equals(country)) {
             if (autoff && _log.shouldLog(Log.INFO))
-                _log.info("Not enough uptime (min 2h required) to automatically enroll as a floodfill");
+                _log.info("Cannot determine location of router - not automatically enrolling as a floodfill");
             return false;
         }
 
@@ -171,14 +178,14 @@ class FloodfillMonitorJob extends JobImpl {
         RouterInfo ri = getContext().router().getRouterInfo();
         if (ri == null) {
             if (autoff && _log.shouldLog(Log.INFO))
-                _log.info("No routerinfo for this router found - not enrolling as a floodfill");
+                _log.info("No routerinfo for this router found - not automatically enrolling as a floodfill");
             return false;
         }
 
         RouterIdentity ident = ri.getIdentity();
         if (ident.getSigningPublicKey().getType() == SigType.DSA_SHA1) {
             if (autoff && _log.shouldLog(Log.INFO))
-                _log.info("Our router is using a DSA SHA1 signature - not enrolling as a floodfill");
+                _log.info("Our router is using a DSA SHA1 signature - not automatically enrolling as a floodfill");
             return false;
         }
 
@@ -280,7 +287,7 @@ class FloodfillMonitorJob extends JobImpl {
         if (_log.shouldLog(Log.DEBUG)) {
             final RouterContext rc = getContext();
             final String log = String.format(
-                    "FF criteria breakdown: happy=%b, capabilities=%s, maxLag=%d, known=%d, " +
+                    "Floodfill criteria breakdown: happy=%b, capabilities=%s, maxLag=%d, known=%d, " +
                     "active=%d, participating=%d, offset=%d, ssuAddr=%s ElG=%f",
                     happy,
                     rc.router().getRouterInfo().getCapabilities(),
@@ -300,23 +307,25 @@ class FloodfillMonitorJob extends JobImpl {
         if (good < MIN_FF && happy) {
             if (!wasFF) {
                 _lastChanged = now;
-                _log.logAlways(Log.INFO, "Only " + good + " ff peers and we want " + MIN_FF + " so we are becoming floodfill");
+                _log.logAlways(Log.INFO, "We only have " + good + " good floodfill peers and we want at least " + MIN_FF + ", enrolling as a floodfill...");
             }
             return true;
         }
 
         // Too many, or we aren't reachable, let's stop
         if (good > MAX_FF || (good > MIN_FF && !happy)) {
-            if (wasFF) {
+            if (wasFF && happy) {
                 _lastChanged = now;
-                _log.logAlways(Log.INFO, "Have " + good + " ff peers and we need only " + MIN_FF + " to " + MAX_FF +
-                               " so we are disabling floodfill; reachable? " + happy);
+                _log.logAlways(Log.INFO, "We already have " + good + " good floodfill peers and we need only " + MIN_FF + " to " + MAX_FF +
+                               ", disabling floodfill role...");
+            } else if (wasFF && !happy) {
+                _log.logAlways(Log.INFO, "We are no longer reachable, disabling floodfill role...");
             }
             return false;
         }
 
         if (_log.shouldLog(Log.INFO))
-            _log.info("Have " + good + " ff peers, not changing, enabled? " + wasFF + "; reachable? " + happy);
+            _log.info("We have " + good + " good floodfill peers, not changing our floodfill status -> Enabled? " + wasFF + "; reachable? " + happy);
         return wasFF;
     }
 
