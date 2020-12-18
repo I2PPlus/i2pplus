@@ -1664,9 +1664,10 @@ public class PeerState {
     }
 
     /**
-     *  Caller should synch
+     *  Locks this.
      */
     private boolean locked_shouldSend(OutboundMessageState state, long now, boolean resetWindow) {
+        synchronized(this) {
             if (allocateSendingBytes(state, now, resetWindow)) {
                 if (_log.shouldLog(Log.DEBUG))
                     _log.debug("Allocation for [" + _remotePeer.toBase64().substring(0,6) + "] allowed with "
@@ -1685,6 +1686,7 @@ public class PeerState {
                               + " for [MsgID" + state.getMessageId() + "]" + state);
                 return false;
             }
+        }
     }
 
     /**
