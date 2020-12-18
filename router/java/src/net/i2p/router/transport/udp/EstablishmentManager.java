@@ -170,8 +170,8 @@ class EstablishmentManager {
         _context.statManager().createRateStat("udp.congestionOccurred", "How large the cwin was when congestion occurred (duration = sendBps)", "Transport [UDP]", UDPTransport.RATES);
         _context.statManager().createRateStat("udp.congestedRTO", "retransmission timeout after congestion (duration = rtt dev)", "Transport [UDP]", UDPTransport.RATES);
         _context.statManager().createRateStat("udp.sendACKPartial", "Number of partial ACKs sent (duration = number of full ACKs in that ACK packet)", "Transport [UDP]", UDPTransport.RATES);
-        _context.statManager().createRateStat("udp.sendBps", "How fast we are transmitting when a packet is acked", "Transport [UDP]", UDPTransport.RATES);
-        _context.statManager().createRateStat("udp.receiveBps", "How fast we are receiving when a packet is fully received (at most one per second)", "Transport [UDP]", UDPTransport.RATES);
+        //_context.statManager().createRateStat("udp.sendBps", "How fast we are transmitting when a packet is acked", "Transport [UDP]", UDPTransport.RATES);
+        //_context.statManager().createRateStat("udp.receiveBps", "How fast we are receiving when a packet is fully received (at most one per second)", "Transport [UDP]", UDPTransport.RATES);
         _context.statManager().createRateStat("udp.mtuIncrease", "Number of retransmissions have there been to the peer when the MTU was increased", "Transport [UDP]", UDPTransport.RATES);
         _context.statManager().createRateStat("udp.mtuDecrease", "Number of retransmissions have there been to the peer when the MTU was decreased", "Transport [UDP]", UDPTransport.RATES);
         _context.statManager().createRateStat("udp.rejectConcurrentActive", "Number of messages currently being sent to the peer when we reject it (period is how many concurrent packets we allow)", "Transport [UDP]", UDPTransport.RATES);
