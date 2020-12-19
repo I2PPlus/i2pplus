@@ -370,9 +370,8 @@ public class PeerProfile {
             _tunnelTestResponseTimeAvg = 0.75f * _tunnelTestResponseTimeAvg + .25f * ms;
 
         if (_log.shouldLog(Log.INFO))
-            _log.info("Timed tunnel test for [" + _peer.toBase64().substring(0,6)
-//                      + " to " + _tunnelTestResponseTimeAvg + " via " + ms); FIXME: via ms???
-                      + "] updated to " + (_tunnelTestResponseTimeAvg / 1000) + "s");
+            _log.info("Timed tunnel test for [" + _peer.toBase64().substring(0,6) +
+                      "] updated to " + (_tunnelTestResponseTimeAvg / 1000) + "s");
     }
 
     public float getPeakThroughputKBps() {
@@ -603,28 +602,28 @@ public class PeerProfile {
      *  @since 0.9.4
      */
     void coalesceOnly(boolean shouldDecay) {
-    	_coalescing = true;
+        _coalescing = true;
 
-    	//_receiveSize.coalesceStats();
-    	//_sendSuccessSize.coalesceStats();
-    	_tunnelCreateResponseTime.coalesceStats();
-    	_tunnelTestResponseTime.coalesceStats();
-    	_tunnelHistory.coalesceStats();
-    	if (_expandedDB) {
-    		_dbIntroduction.coalesceStats();
-    		_dbResponseTime.coalesceStats();
-    		_dbHistory.coalesceStats();
-    	}
+        //_receiveSize.coalesceStats();
+        //_sendSuccessSize.coalesceStats();
+        _tunnelCreateResponseTime.coalesceStats();
+        _tunnelTestResponseTime.coalesceStats();
+        _tunnelHistory.coalesceStats();
+        if (_expandedDB) {
+            _dbIntroduction.coalesceStats();
+            _dbResponseTime.coalesceStats();
+            _dbHistory.coalesceStats();
+        }
 
-    	coalesceThroughput(shouldDecay);
+        coalesceThroughput(shouldDecay);
 
-    	_speedValueNew = calculateSpeed();
-    	_capacityValueNew = calculateCapacity();
+        _speedValueNew = calculateSpeed();
+        _capacityValueNew = calculateCapacity();
         // These two are not used by InverseCapacityComparator
         // to sort _strictCapacityOrder in ProfileOrganizer
         // (in fact aren't really used at all), so we can
         // update them directly
-    	_integrationValue = calculateIntegration();
+        _integrationValue = calculateIntegration();
     }
 
     /**
@@ -632,12 +631,12 @@ public class PeerProfile {
      *  @since 0.9.4
      */
     void updateValues() {
-    	if (!_coalescing) // can happen
-    		coalesceOnly(false);
-    	_coalescing = false;
+        if (!_coalescing) // can happen
+            coalesceOnly(false);
+        _coalescing = false;
 
-    	_speedValue = _speedValueNew;
-    	_capacityValue = _capacityValueNew;
+        _speedValue = _speedValueNew;
+        _capacityValue = _capacityValueNew;
     }
 
     private float calculateSpeed() { return (float) SpeedCalculator.calc(this); }

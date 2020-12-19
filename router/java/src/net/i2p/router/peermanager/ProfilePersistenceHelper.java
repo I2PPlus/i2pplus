@@ -60,7 +60,7 @@ class ProfilePersistenceHelper {
      *
      */
 //    private static final long EXPIRE_AGE = 15*24*60*60*1000;
-    private static final long EXPIRE_AGE = 8*60*60*1000; // 8 hours
+    private static final long EXPIRE_AGE = 4*60*60*1000; // 4 hours
 
     private final File _profileDir;
     private Hash _us;
@@ -323,7 +323,6 @@ class ProfilePersistenceHelper {
             if (isExpired(lastSentToSuccessfully)) {
                 if (_log.shouldLog(Log.DEBUG))
                     _log.debug("Dropping stale profile: " + file.getName());
-//                              ", since we haven't heard from them in a long time");
                 file.delete();
                 return null;
             } else if (file.getName().endsWith(OLD_SUFFIX)) {
