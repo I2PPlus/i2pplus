@@ -576,7 +576,7 @@ _:-ms-lang(x), textarea#statusMessages, textarea#statusMessages:active, textarea
   box-shadow: inset 2px 2px 1px #ccc;
 }
 
-.freetext.tunnelDescriptionText, .freetext.tunnelName, #privKeyFile, #websiteName, .proxyList, #localDest {
+.freetext.tunnelDescriptionText, .freetext.tunnelName, #privKeyFile, #websiteName, .proxyList, #localDest, #altlocaldest, #altPrivKeyFile {
   width: calc(100% - 10px) !important;
 }
 
@@ -1454,7 +1454,7 @@ input[type=text] + label {
   padding: 8px;
 }
 
-#oldName, #altPrivKeyFile {
+#oldName {
   width: 45% !important;
 }
 

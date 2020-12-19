@@ -7091,6 +7091,11 @@ p:empty { /* empty paragraph nuke */
   margin: 1px 0 0;
 }
 
+.ls_crypto {
+  display: inline-block;
+  columns: 360px 2;
+}
+
 th code {
   -moz-user-select: all;
   -webkit-user-select: all;
@@ -7098,13 +7103,13 @@ th code {
 }
 
 @media screen and (min-width: 1634px) {
-.leasesets_container {
-  margin-bottom: 2px;
-}
+  .leasesets_container {
+    margin-bottom: 2px;
+  }
 
-th code {
-  font-size: 9pt !important;
-}
+  th code {
+    font-size: 9pt !important;
+  }
 }
 
 .netdb_addresses {
@@ -7529,6 +7534,9 @@ b.netdb_transport {
 
 .leaseset td a[href$=".i2p"] {
   margin-left: 6px;
+}
+
+.leaseset a {
   font-size: 90%;
 }
 
@@ -8248,7 +8256,7 @@ p.sybil_info + a[name] + table.sybil_routerinfo, p.hashdist + a[name] + table.sy
 }
 
 .leaseset .routerid img {
-  margin: -2px 2px 0 4px !important;
+  margin: -1px 0 0 4px !important;
 }
 
 #peers .routerid {
@@ -8259,9 +8267,9 @@ p.sybil_info + a[name] + table.sybil_routerinfo, p.hashdist + a[name] + table.sy
 }
 
 @media screen and (min-width: 1500px) {
-#peers .routerid {
-  padding: 1px 0 1px 3px;
-}
+  #peers .routerid {
+    padding: 1px 0 1px 3px;
+  }
 }
 
 .netdb_tunnel {
@@ -12909,16 +12917,16 @@ i {
 }
 
 @keyframes grid-fade {
-from {
-  background: #f6f6ff;
-  background: repeating-linear-gradient(to right, rgba(0,0,0,0), #efefef 1px, rgba(0,0,0,0) 1px, rgba(0,0,0,0) 10px),
-              repeating-linear-gradient(to bottom, #efefff, #efefff 1px, #f6f6ff 1px, #f6f6ff 10px);
-}
-to {
-  background: #f6f6ff;
-  background: repeating-linear-gradient(to right, rgba(0,0,0,0), #f6f6ff 1px, rgba(0,0,0,0) 1px, rgba(0,0,0,0) 10px),
-              repeating-linear-gradient(to bottom, #f6f6ff, #f6f6ff 1px, #f6f6ff 1px, #f6f6ff 10px);
-}
+  from {
+    background: #f6f6ff;
+    background: repeating-linear-gradient(to right, rgba(0,0,0,0), #efefef 1px, rgba(0,0,0,0) 1px, rgba(0,0,0,0) 10px),
+                repeating-linear-gradient(to bottom, #efefff, #efefff 1px, #f6f6ff 1px, #f6f6ff 10px);
+  }
+  to {
+    background: #f6f6ff;
+    background: repeating-linear-gradient(to right, rgba(0,0,0,0), #f6f6ff 1px, rgba(0,0,0,0) 1px, rgba(0,0,0,0) 10px),
+                repeating-linear-gradient(to bottom, #f6f6ff, #f6f6ff 1px, #f6f6ff 1px, #f6f6ff 10px);
+  }
 }
 
 .graphContainer > * {
@@ -12948,6 +12956,10 @@ to {
   margin: 0 -3px;
   padding: 2px 3px 2px 2px;
   border-right: 1px solid #bbd;
+}
+
+.leaseset .routerid .flag {
+  margin-right: 1px;
 }
 
 .routerid .flag img {

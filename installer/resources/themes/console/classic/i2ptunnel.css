@@ -98,7 +98,7 @@ hr {
 .freetext {
   padding: 4px;
   width: 150px;
-  font: 9pt "Droid Sans Mono", "Noto Mono", "Lucida Console", "DejaVu Sans Mono", monospace;
+  font: 9pt Droid Sans Mono, Noto Mono, Lucida Console, DejaVu Sans Mono, monospace;
   color: #5e626e;
   border: 1px solid #aaafce;
   border-radius: 2px;
@@ -583,7 +583,7 @@ button, input[type=submit], input[type="reset"], a.control {
 }
 
 textarea {
-  font-family: "Droid Sans Mono", "Noto Mono", "Lucida Console", "DejaVu Sans Mono", monospace;
+  font-family: Droid Sans Mono, Noto Mono, Lucida Console, DejaVu Sans Mono, monospace;
   color: #5e626e;
   border: 1px solid #aaafce;
   border-radius: 2px;
@@ -1169,7 +1169,7 @@ input[type=text] + label {
   margin-right: 10px !important;
 }
 
-#privKeyFile, input[name="nofilter_blindedPassword"], #localDest {
+#privKeyFile, input[name="nofilter_blindedPassword"], #localDest, #altlocaldest, #altPrivKeyFile {
   width: 200px;
   width: calc(100% - 20px);
   min-width: 200px;
@@ -1188,7 +1188,7 @@ input[name="nofilter_blindedPassword"] {
   text-overflow: ellipsis;
   white-space: nowrap;
   word-break: break-all;
-  font-family: "Droid Sans Mono", "Noto Mono", "Lucida Console", "DejaVu Sans Mono", monospace;
+  font-family: Droid Sans Mono, Noto Mono, Lucida Console, DejaVu Sans Mono, monospace;
   border: 1px solid #aaafce;
   border-radius: 2px;
   box-shadow: inset 1px 1px 1px #ddd;
@@ -1237,7 +1237,7 @@ input[name="nofilter_blindedPassword"] {
   margin-bottom: 5px;
 }
 
-#oldName, #altPrivKeyFile {
+#oldName {
   width: 45% !important;
 }
 

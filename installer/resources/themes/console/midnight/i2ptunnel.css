@@ -1351,13 +1351,13 @@ input[type=text] + label {
   margin-right: 10px !important;
 }
 
-#privKeyFile, input[name="nofilter_blindedPassword"], #websiteName, .proxyList, .tunnelName {
+#privKeyFile, input[name="nofilter_blindedPassword"], #websiteName, .proxyList, .tunnelName, #altPrivKeyFile, #altlocaldest {
   min-width: 200px;
   width: 200px;
   width: calc(100% - 10px);
 }
 
-#oldName, #altPrivKeyFile {
+#oldName {
   width: 45% !important;
 }
 

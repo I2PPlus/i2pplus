@@ -1578,16 +1578,14 @@ public class DataHelper {
             val /= 1024;
         }
 
-        DecimalFormat fmt = new DecimalFormat("##0.##");
+        DecimalFormat fmt = new DecimalFormat("##0.#");
 
         if (bytes <= 1 * 1024 * 1024) // 1MiB
             fmt.setMaximumFractionDigits(0);
-        else if (bytes <= 1 * 1024 * 1024 * 1024) // 1GiB
+        else if (bytes <= 1 * 1024 * 1024 * 1024 * 1024) // 1TiB
             fmt.setMaximumFractionDigits(1);
-        else if (bytes >= 1 * 1024 * 1024 * 1024 * 1024) // 1TiB
+        else
             fmt.setMaximumFractionDigits(2);
-        else if (bytes >= 1 * 1024 * 1024 * 1024) // 1GiB
-            fmt.setMaximumFractionDigits(1);
 
 /*
         if (val >= 200) {

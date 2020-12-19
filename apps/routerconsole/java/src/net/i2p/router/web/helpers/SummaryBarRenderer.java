@@ -1026,9 +1026,13 @@ class SummaryBarRenderer {
         buf.append("<tr><td align=\"left\"><b>")
            .append(_t("Used").replace("Used", "Transferred"))
            .append("</b></td><td class=\"digits\" align=\"right\">")
-           .append(_helper.getInboundTransferred())
+           .append(_helper.getInboundTransferred().replace("KiB", "K").replace("MiB", "M").replace("GiB", "G")
+                                                  .replace("TiB", "T").replace("PiB", "P").replace("EiB", "E")
+                                                  .replace("ZiB", "Z").replace("YiB", "Y"))
            .append(SummaryHelper.THINSP)
-           .append(_helper.getOutboundTransferred())
+           .append(_helper.getOutboundTransferred().replace("KiB", "K").replace("MiB", "M").replace("GiB", "G")
+                                                    .replace("TiB", "T").replace("PiB", "P").replace("EiB", "E")
+                                                    .replace("ZiB", "Z").replace("YiB", "Y"))
            .append("</td></tr>\n" +
 
                    "</table>\n");

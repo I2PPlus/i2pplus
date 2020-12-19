@@ -920,7 +920,7 @@ input:focus::-moz-placeholder {
 }
 
 input.tunnelName, input.tunnelDescriptionText, #userAgents, .freetext.tunnelDescription,
-#websiteName, #localDest, .proxyList, #targetDestination, #leasesetKey {
+#websiteName, #localDest, #altlocaldest, .proxyList, #targetDestination, #leasesetKey {
   width: 80%;
   width: calc(100% - 20px) !important;
   min-width: 280px !important;
@@ -1321,27 +1321,27 @@ input[name="nofilter_blindedPassword"] {
   width: calc(100% - 38px);
 }
 
-#oldName, #altPrivKeyFile {
+#oldName {
   width: 45% !important;
 }
 
 .displayText, .displayText:empty:hover, .displayText:empty:focus {
-  font-family: "Droid Sans Mono", "Noto Mono", "Lucida Console", "DejaVu Sans Mono", monospace;
+  margin: 5px;
+  padding: 4px;
   width: calc(100% - 10px);
   width: 290px;
   overflow: hidden;
   text-overflow: ellipsis;
   white-space: nowrap;
   word-break: break-all;
-  margin: 5px;
-  padding: 4px;
+  font-family: "Droid Sans Mono", "Noto Mono", "Lucida Console", "DejaVu Sans Mono", monospace;
+  border: 1px solid #97a2ce;
+  border-radius: 2px;
+  box-shadow: inset 1px 1px 1px rgba(204, 204, 204, .6);
+  background: #fafaff;
   -moz-user-select: all;
   -webkit-user-select: all;
   user-select: all;
-  border: 1px solid #97a2ce;
-  background: #fafaff;
-  border-radius: 2px;
-  box-shadow: inset 1px 1px 1px rgba(204, 204, 204, .6);
 }
 
 .displayText:empty, .displayText:empty:hover, .displayText:empty:focus {

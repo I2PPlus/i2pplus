@@ -120,7 +120,7 @@
 <%=indexBean.getServerTarget(curServer)%>
 <%
                 if (indexBean.isSSLEnabled(curServer)) { %>
-                    SSL
+SSL
 <%
                 }
             }
@@ -201,6 +201,7 @@
 <span class="tunnelDestinationLabel"><b><%=intl._t("Signature")%>:</b></span>
 <%
             String tunnelType = editBean.getInternalType(curServer);
+            String altDest = editBean.getAltDestinationBase64(curServer);
             int currentSigType = editBean.getSigType(curServer, tunnelType);
             if (currentSigType == 7) {
 %>
@@ -219,9 +220,15 @@ ECDSA-P384
 ECDSA-P256
 <%
             } else if (currentSigType == 0) {
+                if (altDest == null || altDest.equals("")) {
 %>
 <font style="color:red">DSA-SHA1</font>
 <%
+                } else {
+%>
+DSA-SHA1 & Ed25519-SHA-512 (<%=intl._t("Alternate")%>)
+<%
+                }
             }
 %>
 </td>
