@@ -7534,6 +7534,9 @@ b.netdb_transport {
 
 .leaseset td a[href$=".i2p"] {
   margin-left: 6px;
+}
+
+.leaseset a {
   font-size: 90%;
 }
 
