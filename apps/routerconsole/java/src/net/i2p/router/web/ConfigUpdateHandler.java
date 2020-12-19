@@ -49,7 +49,8 @@ public class ConfigUpdateHandler extends FormHandler {
     public static final long DEFAULT_REFRESH_FREQ = 36*60*60*1000l;
     public static final String DEFAULT_REFRESH_FREQUENCY = Long.toString(DEFAULT_REFRESH_FREQ);
     public static final String PROP_UPDATE_POLICY = "router.updatePolicy";
-    public static final String DEFAULT_UPDATE_POLICY = "download";
+//    public static final String DEFAULT_UPDATE_POLICY = "download";
+    public static final String DEFAULT_UPDATE_POLICY = "notify";
     public static final String PROP_SHOULD_PROXY = "router.updateThroughProxy";
     public static final boolean DEFAULT_SHOULD_PROXY = true;
     /** @since 0.9.9 */
