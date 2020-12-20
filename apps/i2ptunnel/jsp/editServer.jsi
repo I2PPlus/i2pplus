@@ -263,31 +263,26 @@
 </tr>
 <%
     }  // b64
-%>
-
-<%
-        /* alternate dest, only if current dest is set and is DSA_SHA1 */
-        int currentSigType = editBean.getSigType(curTunnel, tunnelType);
-        if (currentSigType == 0 && !"".equals(b64) && !"streamrserver".equals(tunnelType)) {
-            String attitle = canChangeEncType ? "" : tstopFirst;
-            String atitle = canChangeEncType ? intl._t("Path to Private Key File") : stopFirst;
-            String adisabled = canChangeEncType ? "" : " readonly=\"readonly\" ";
-            String ab64 = editBean.getAltDestinationBase64(curTunnel);
-%>
-<%
-            if ("".equals(ab64)) {
+    /* alternate dest, only if current dest is set and is DSA_SHA1 */
+    int currentSigType = editBean.getSigType(curTunnel, tunnelType);
+    if (currentSigType == 0 && !"".equals(b64) && !"streamrserver".equals(tunnelType)) {
+        String attitle = canChangeEncType ? "" : tstopFirst;
+        String atitle = canChangeEncType ? intl._t("Path to Private Key File") : stopFirst;
+        String adisabled = canChangeEncType ? "" : " readonly=\"readonly\" ";
+        String ab64 = editBean.getAltDestinationBase64(curTunnel);
+        if ("".equals(ab64)) {
 %>
 <tr><th><%=intl._t("Alternate private key file")%> (Ed25519-SHA-512)</th><th></th></tr>
 <%
-            } else {
+        } else {
 %>
 <tr><th><%=intl._t("Alternate local destination")%></th><th><%=intl._t("Alternate private key file")%> (Ed25519-SHA-512)</th></tr>
 <%
-            }
+        }
 %>
 <tr>
 <%
-            if ("".equals(ab64)) {
+        if ("".equals(ab64)) {
 %>
 <td <%=attitle%> >
 <input type="text" class="freetext filemanager" size="30" id="altPrivKeyFile" name="altPrivKeyFile" title="<%=atitle%>" <%=adisabled%> value="<%=editBean.getAltPrivateKeyFile(curTunnel)%>" />
@@ -295,48 +290,40 @@
 <td></td>
 </tr>
 <%
-            } else {
+        } else {
 %>
 <td>
-
 <input type="text" size="30" id="altlocaldest" readonly="readonly" title="<%=intl._t("Read Only: Alternate Local Destination")%>" value="<%=ab64%>" wrap="off" class="freetext readonly resetScrollLeft" />
-
-<!--
-<div class="displayText resetScrollLeft" title="<%=intl._t("Read Only: Alternate Local Destination")%>"><%=ab64%></div>
--->
-
 </td>
 <td <%=attitle%> >
 <input type="text" class="freetext filemanager" size="30" id="altPrivKeyFile" name="altPrivKeyFile" title="<%=atitle%>" <%=adisabled%> value="<%=editBean.getAltPrivateKeyFile(curTunnel)%>" />
 </td>
 <%
-            }
+        }
 %>
 </tr>
-<!--<tr><td colspan="2"><%=editBean.getAltDestHashBase32(curTunnel)%></td></tr>-->
-
 <%
-            ab64 = ab64.replace("=", "%3d");
-            String name = editBean.getSpoofedHost(curTunnel);
-            if (name == null || name.equals(""))
-                name = editBean.getTunnelName(curTunnel);
-            // mysite.i2p is set in the installed i2ptunnel.config
-            if (name != null && !name.equals("") && !name.equals("mysite.i2p") && !name.contains(" ") && name.endsWith(".i2p")) {
+        ab64 = ab64.replace("=", "%3d");
+        String name = editBean.getSpoofedHost(curTunnel);
+        if (name == null || name.equals(""))
+            name = editBean.getTunnelName(curTunnel);
+        // mysite.i2p is set in the installed i2ptunnel.config
+        if (name != null && !name.equals("") && !name.equals("mysite.i2p") && !name.contains(" ") && name.endsWith(".i2p")) {
 %>
 <tr>
 <td class="buttons" colspan="2">
 <%
-                if (hasImagegen) {
+            if (hasImagegen) {
 %>
 <a class="control" title="<%=intl._t("Generate QR Code")%>" href="/imagegen/qr?s=320&amp;t=<%=name%>&amp;c=http%3a%2f%2f<%=name%>%2f%3fi2paddresshelper%3d<%=ab64%>" target="_top"><%=intl._t("Generate QR Code")%></a>
 <%
-                }
-                if (hasSusiDNS) {
+            }
+            if (hasSusiDNS) {
 %>
 <a class="control" title="<%=intl._t("Add to Private addressbook")%>" href="/susidns/addressbook.jsp?book=private&amp;hostname=<%=name%>&amp;destination=<%=ab64%>#add"><%=intl._t("Add to local addressbook")%></a>
-<%              }
-            }  // ab64
-        } // currentSigType
+<%          }
+        }  // ab64
+    }  // currentSigType
 %>
 <tr>
 <td class="buttons" colspan="2">
@@ -354,7 +341,6 @@
 %>
 <tr><th><%=intl._t("Profile")%></th>
 <%
-//        int currentSigType = editBean.getSigType(curTunnel, tunnelType);
         String tooLate = intl._t("Configuration cannot be changed after destination is created");
         String tTooLate = " title=\"" + tooLate + "\" ";
         boolean canChangeSigType = editBean.canChangeSigType(curTunnel);
@@ -380,9 +366,6 @@
 <td colspan="2">
 <%
         }
-%>
-
-<%
         if (editBean.canChangeSigType(curTunnel)) {
 %>
 <select id="sigType" name="sigType" class="selectbox">
