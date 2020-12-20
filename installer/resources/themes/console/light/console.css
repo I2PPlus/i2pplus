@@ -7340,20 +7340,22 @@ b.netdb_transport {
   margin: 0 !important;
   padding: 0 !important;
   display: inline-block;
-  columns: 520px 2 !important;
-  column-gap: 5px;
+  columns: auto !important;
+  column-gap: 0;
   width: 100%;
 }
 
-.netdb_addresses li, .netdb_ouraddresses {
-  margin: 2px 10px 2px 0 !important;
+.netdb_addresses li, .netdb_ouraddresses li {
+  margin: 2px 2px 2px 0 !important;
   padding: 0 5px 3px;
-  width: calc(100% - 12px);
-  min-width: 500px;
   vertical-align: middle;
   border: 1px solid #ddf;
   box-shadow: inset 0 0 0 1px #fff;
   background: #eef;
+}
+
+.netdbentry:first-of-type .netdb_addresses li {
+  margin-right: 5px !important;
 }
 
 .netdb_addresses .nowrap {
@@ -8144,6 +8146,7 @@ p.sybil_info + a[name] + table.sybil_routerinfo, p.hashdist + a[name] + table.sy
   margin-left: 2px !important;
   width: 23px !important;
   height: auto !important;
+  border: 1px solid #dde;
 }
 
 .netdb_header img[src="/flags.jsp?c=a0"] {
