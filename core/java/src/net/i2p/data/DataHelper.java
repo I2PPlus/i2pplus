@@ -1415,15 +1415,15 @@ public class DataHelper {
             // If you want the digit separator in your locale, translate as {0}.
             // alternates: msec, msecs
             t = ngettext("{0,number,####} ms", "{0,number,####} ms", (int) ms);
-        } else if (ams < 2 * 60 * 1000) {
+        } else if (ams < 5 * 60 * 1000) {
             // seconds
             // alternates: secs, sec. 'seconds' is probably too long.
             t = ngettext("{0} sec", "{0} sec", (int) (ms / 1000));
-        } else if (ams < 120 * 60 * 1000) {
+        } else if (ams < 240 * 60 * 1000) {
             // minutes
             // alternates: mins, min. 'minutes' is probably too long.
             t = ngettext("{0} min", "{0} min", (int) (ms / (60 * 1000)));
-        } else if (ams < 2 * 24 * 60 * 60 * 1000) {
+        } else if (ams < 4 * 24 * 60 * 60 * 1000) {
             // hours
             // alternates: hrs, hr., hrs.
             t = ngettext("{0} hour", "{0} hours", (int) (ms / (60 * 60 * 1000)));
