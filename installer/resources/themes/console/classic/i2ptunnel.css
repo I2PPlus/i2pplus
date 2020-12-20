@@ -603,6 +603,7 @@ textarea#statusMessages {
   padding: 2px 4px 2px 8px;
   width: 99%;
   width: calc(100% - 12px);
+  word-break: break-all;
   font-family: "Droid Sans Mono", "Noto Mono", Consolas, "Lucida Console", "DejaVu Sans Mono", monospace;
   font-size: 8.5pt;
   color: #070;
