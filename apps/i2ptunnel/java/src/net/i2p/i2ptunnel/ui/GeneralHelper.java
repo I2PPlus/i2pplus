@@ -392,9 +392,10 @@ public class GeneralHelper {
     public String getPrivateKeyFile(TunnelControllerGroup tcg, int tunnel) {
         TunnelController tun = getController(tcg, tunnel);
         if (tun != null) {
-            String rv = tun.getPrivKeyFile();
-            if (rv != null)
-                return rv;
+//            String rv = tun.getPrivKeyFile();
+            File f = new File(tun.getPrivKeyFile());
+            if (f != null)
+                return f.getAbsolutePath();
         }
         if (tunnel < 0)
             tunnel = tcg == null ? 999 : tcg.getControllers().size();
