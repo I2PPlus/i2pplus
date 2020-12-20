@@ -176,7 +176,7 @@ public class HomeHelper extends HelperBase {
 
 // wikis
         //_x("I2P Wiki") + S + _x("Anonymous wiki - share the knowledge") + S + "http://i2pwiki.i2p/" + S + I + "i2pwiki_logo.png" + S +
-        //_x("Psychonaut") + S + _x("Wiki relating to altered states of consciousness") + S + "http://psy.i2p/" + S + I + "svg/psy.svg" + S +
+        _x("Psychonaut") + S + _x("Wiki relating to altered states of consciousness") + S + "http://psy.i2p/" + S + I + "svg/psy.svg" + S +
         //"lawiki.i2p" + S + _x("Community Wiki") + S + "http://lawiki.i2p/" + S + I + "svg/wiki.svg" + S +
         //"hiddengate [ru]" + S + _x("Russian I2P-related wiki") + S + "http://hiddengate.i2p/" + S + I + "hglogo32.png" + S +
         //_x("Trac Wiki") + S + S + "http://trac.i2p2.i2p/" + S + I + "svg/wiki.svg" + S +
