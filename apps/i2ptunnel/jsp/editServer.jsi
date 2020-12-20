@@ -189,7 +189,7 @@
             out.write(")</font></span>");
         }
 %>
-<input type="text" size="6" maxlength="5" name="port" title="<%=intl._t("Port required to access service (this can be a different port to the port the service is hosted on)")%>" value="<%=editBean.getClientPort(curTunnel)%>" class="freetext port" placeholder="required" />
+<input type="text" size="6" maxlength="5" name="port" title="<%=intl._t("Port required to access service (this can be a different port to the port the service is hosted on)")%>" value="<%=editBean.getClientPort(curTunnel)%>" class="freetext port" placeholder="<%=intl._t("required")%>" />
 </td>
 <%
     } /* httpbidirserver */
@@ -209,7 +209,7 @@
         out.write(")</font></span>");
     }
 %>
-<input type="text" size="30" id="privKeyFile" name="privKeyFile" title="<%=intl._t("Path to Private Key File")%>" value="<%=editBean.getPrivateKeyFile(curTunnel)%>" class="freetext filemanager" placeholder="required" />
+<input type="text" size="30" id="privKeyFile" name="privKeyFile" title="<%=intl._t("Path to Private Key File")%>" value="<%=editBean.getPrivateKeyFile(curTunnel)%>" class="freetext filemanager" placeholder="<%=intl._t("required")%>" />
 </td>
 </tr>
 <%
@@ -267,7 +267,7 @@
     int currentSigType = editBean.getSigType(curTunnel, tunnelType);
     if (currentSigType == 0 && !"".equals(b64) && !"streamrserver".equals(tunnelType)) {
         String attitle = canChangeEncType ? "" : tstopFirst;
-        String atitle = canChangeEncType ? intl._t("Path to Private Key File") : stopFirst;
+        String atitle = canChangeEncType ? intl._t("Path to Private Key File (will be created if it does not exist)") : stopFirst;
         String adisabled = canChangeEncType ? "" : " readonly=\"readonly\" ";
         String ab64 = editBean.getAltDestinationBase64(curTunnel);
         if ("".equals(ab64)) {
@@ -285,7 +285,7 @@
         if ("".equals(ab64)) {
 %>
 <td <%=attitle%> >
-<input type="text" class="freetext filemanager" size="30" id="altPrivKeyFile" name="altPrivKeyFile" title="<%=atitle%>" <%=adisabled%> value="<%=editBean.getAltPrivateKeyFile(curTunnel)%>" />
+<input type="text" class="freetext filemanager" size="30" id="altPrivKeyFile" name="altPrivKeyFile" title="<%=atitle%>" placeholder="<%=intl._t("Specify filename or full path for new key")%>" <%=adisabled%> value="<%=editBean.getAltPrivateKeyFile(curTunnel)%>" />
 </td>
 <td></td>
 </tr>
@@ -296,7 +296,7 @@
 <input type="text" size="30" id="altlocaldest" readonly="readonly" title="<%=intl._t("Read Only: Alternate Local Destination")%>" value="<%=ab64%>" wrap="off" class="freetext readonly resetScrollLeft" />
 </td>
 <td <%=attitle%> >
-<input type="text" class="freetext filemanager" size="30" id="altPrivKeyFile" name="altPrivKeyFile" title="<%=atitle%>" <%=adisabled%> value="<%=editBean.getAltPrivateKeyFile(curTunnel)%>" />
+<input type="text" class="freetext filemanager" size="30" id="altPrivKeyFile" name="altPrivKeyFile" title="<%=atitle%>" <%=adisabled%> placeholder="<%=intl._t("Specify filename or full path for new key")%>" value="<%=editBean.getAltPrivateKeyFile(curTunnel)%>" />
 </td>
 <%
         }
@@ -375,9 +375,16 @@
 <select id="sigType" name="sigType" class="selectbox" disabled>
 <%
     }
+    String ab64 = editBean.getAltDestinationBase64(curTunnel);
+    if (!editBean.canChangeSigType(curTunnel) && (!"".equals(ab64) || ab64 != null)) {
+%>
+<option title="<%=intl._t("Legacy option, with alternate key configured")%>" value="0" <%=(currentSigType==0 ? " selected=\"selected\"" : disabled)%> >DSA-SHA1 & Ed25519-SHA-512</option>
+<%
+    } else {
 %>
 <option title="<%=intl._t("Legacy option (deprecated), provided for backward compatibility")%>" value="0" <%=(currentSigType==0 ? " selected=\"selected\"" : disabled)%> >DSA-SHA1</option>
 <%
+    }
     if (editBean.isSigTypeAvailable(1)) {
 %>
 <option value="1" <%=(currentSigType==1 ? " selected=\"selected\"" : disabled)%> >ECDSA-P256</option>

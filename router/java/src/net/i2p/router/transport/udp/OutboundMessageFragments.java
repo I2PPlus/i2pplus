@@ -107,8 +107,8 @@ class OutboundMessageFragments {
     }
 
     void dropPeer(PeerState peer) {
-        if (_log.shouldLog(Log.INFO))
-            _log.info("Dropping peer " + peer.getRemotePeer());
+        if (_log.shouldDebug())
+            _log.debug("Dropping peer " + peer.getRemotePeer());
         peer.dropOutbound();
         _activePeers.remove(peer);
     }
@@ -437,8 +437,8 @@ class OutboundMessageFragments {
             OutboundMessageState state = next.state;
             OutNetMessage msg = state.getMessage();
             int msgType = (msg != null) ? msg.getMessageTypeId() : -1;
-            if (_log.shouldLog(Log.INFO))
-                _log.info("Sending UDP packet for " + next + " to: " + peer);
+            if (_log.shouldDebug())
+                _log.debug("Building UDP packet for " + next + " to: " + peer);
             int curTotalDataSize = state.fragmentSize(next.num);
             // now stuff in more fragments if they fit
             if (i +1 < toSend.size()) {
@@ -464,14 +464,13 @@ class OutboundMessageFragments {
             int before = remaining.size();
             UDPPacket pkt = _builder.buildPacket(sendNext, peer, remaining, newFullAckCount, partialACKBitfields);
             if (pkt != null) {
-                if (_log.shouldLog(Log.INFO))
-                    _log.info("Sent UDP packet with " + sendNext.size() + " fragments (" + curTotalDataSize +
+                if (_log.shouldDebug())
+                    _log.debug("Sent UDP packet with " + sendNext.size() + " fragments (" + curTotalDataSize +
                               " data bytes)\n* Target: " + peer);
                 _context.statManager().addRateData("udp.sendFragmentsPerPacket", sendNext.size());
-            }
-            if (pkt == null) {
+            } else {
                 if (_log.shouldLog(Log.WARN))
-                    _log.info("Send UDP packet FAIL for " + DataHelper.toString(sendNext) + " to: " + peer);
+                    _log.info("Building UDP packet FAIL for " + DataHelper.toString(sendNext) + " to: " + peer);
                 sendNext.clear();
                 continue;
             }
@@ -506,8 +505,8 @@ class OutboundMessageFragments {
 
         int sent = rv.size();
         peer.packetsTransmitted(sent);
-        if (_log.shouldLog(Log.INFO))
-            _log.info("Sent " + fragmentsToSend + " fragments of " + states.size() +
+        if (_log.shouldDebug())
+            _log.debug("Sent " + fragmentsToSend + " fragments of " + states.size() +
                       " messages in " + sent + " packets\n* Target: " + peer);
 
         return rv;
