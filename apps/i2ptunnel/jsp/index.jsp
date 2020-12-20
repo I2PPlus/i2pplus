@@ -235,6 +235,7 @@ DSA-SHA1 & Ed25519-SHA-512 (<%=intl._t("Alternate")%>)
 </tr>
 <%
             String encName = indexBean.getEncryptedBase32(curServer);
+            String altDestB32 = editBean.getAltDestHashBase32(curServer);
             if (encName != null && encName.length() > 0) {
 %>
 <tr class="tunnelInfo" style="display: none;">
@@ -249,6 +250,14 @@ DSA-SHA1 & Ed25519-SHA-512 (<%=intl._t("Alternate")%>)
 <td class="tunnelDestinationEncrypted" colspan="2">
 <span class="tunnelDestinationLabel"><b><%=intl._t("Destination")%>:</b></span>
 <span class="selectAll"><%=indexBean.getDestHashBase32(curServer)%></span>
+</td>
+<%
+            } else if (altDest != null && !altDest.equals("")) {
+%>
+<tr class="tunnelInfo" style="display: none;">
+<td class="tunnelDestinationEncrypted" colspan="2">
+<span class="tunnelDestinationLabel"><b><%=intl._t("Alt Destination")%>:</b></span>
+<span class="selectAll"><%=altDestB32%></span>
 </td>
 <%
             } else {
