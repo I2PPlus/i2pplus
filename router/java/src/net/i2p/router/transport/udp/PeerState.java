@@ -994,8 +994,7 @@ public class PeerState {
         if (states != null) {
             for (InboundMessageState ims : states) {
                 ACKBitfield abf = ims.createACKBitfield();
-                if (!abf.receivedComplete())
-                    rv.add(abf);
+                rv.add(abf);
             }
         }
     }
