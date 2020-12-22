@@ -107,7 +107,7 @@ class NetDbRenderer {
     public void renderRouterInfoHTML(Writer out, int pageSize, int page,
                                      String routerPrefix, String version,
                                      String country, String family, String caps,
-                                     String ip, String sybil, int port, SigType type,
+                                     String ip, String sybil, int port, SigType type, EncType etype,
                                      String mtu, String ipv6, String ssucaps,
                                      String tr, int cost) throws IOException {
         StringBuilder buf = new StringBuilder(4*1024);
@@ -137,10 +137,13 @@ class NetDbRenderer {
                    renderRouterInfo(buf, ri, false, true);
                 } else {
                     buf.append("<div class=\"netdbnotfound\">");
-                    buf.append(_t("Router")).append(' ');
-                    if (routerPrefix != null)
+                    if (routerPrefix != null) {
+                        buf.append(_t("Router")).append(' ');
                         buf.append(routerPrefix);
-                    buf.append(' ').append(_t("not found in network database"));
+                        buf.append(' ').append(_t("not found in network database"));
+                    } else {
+                        buf.append(_t("No results"));
+                    }
                     buf.append("</div>");
                 }
             } else {
@@ -165,6 +168,8 @@ class NetDbRenderer {
                 ubuf.append("&amp;tr=").append(tr);
             if (type != null)
                 ubuf.append("&amp;type=").append(type);
+            if (etype != null)
+                ubuf.append("&amp;etype=").append(etype);
             if (ip != null)
                 ubuf.append("&amp;ip=").append(ip);
             if (port != 0)
@@ -223,7 +228,8 @@ class NetDbRenderer {
                     // 'O' will catch PO and XO also
                     (caps != null && hasCap(ri, caps)) ||
                     (tr != null && ri.getTargetAddress(tr) != null) ||
-                    (type != null && type == ri.getIdentity().getSigType())) {
+                    (type != null && type == ri.getIdentity().getSigType()) ||
+                    (etype != null && etype == ri.getIdentity().getEncType())) {
                     if (skipped < toSkip) {
                         skipped++;
                         continue;

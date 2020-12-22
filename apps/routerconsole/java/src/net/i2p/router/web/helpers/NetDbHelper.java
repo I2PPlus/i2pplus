@@ -5,6 +5,7 @@ import java.util.HashMap;
 import java.util.Locale;
 import java.util.Map;
 
+import net.i2p.crypto.EncType;
 import net.i2p.crypto.SigType;
 import net.i2p.data.DataHelper;
 import net.i2p.util.SystemVersion;
@@ -28,6 +29,7 @@ public class NetDbHelper extends FormHandler {
     private boolean _debug;
     private boolean _graphical;
     private SigType _type;
+    private EncType _etype;
     private String _newNonce;
     private boolean _postOK;
 
@@ -119,6 +121,12 @@ public class NetDbHelper extends FormHandler {
     public void setType(String f) {
         if (f != null && f.length() > 0)
             _type = SigType.parseSigType(f);
+    }
+
+    /** @since 0.9.49 */
+    public void setEtype(String f) {
+        if (f != null && f.length() > 0)
+            _etype = EncType.parseEncType(f);
     }
 
     /** @since 0.9.28 */
@@ -273,10 +281,10 @@ public class NetDbHelper extends FormHandler {
             if (_routerPrefix != null || _version != null || _country != null ||
                 _family != null || _caps != null || _ip != null || _sybil != null ||
                 _port != 0 || _type != null || _mtu != null || _ipv6 != null ||
-                _ssucaps != null || _transport != null || _cost != 0) {
+                _ssucaps != null || _transport != null || _cost != 0 || _etype != null) {
                 renderer.renderRouterInfoHTML(_out, _limit, _page,
                                               _routerPrefix, _version, _country,
-                                              _family, _caps, _ip, _sybil, _port, _type,
+                                              _family, _caps, _ip, _sybil, _port, _type, _etype,
                                               _mtu, _ipv6, _ssucaps, _transport, _cost);
             } else if (_lease) {
                 renderer.renderLeaseSetHTML(_out, _debug);
@@ -310,7 +318,7 @@ public class NetDbHelper extends FormHandler {
         if (_routerPrefix != null || _version != null || _country != null ||
             _family != null || _caps != null || _ip != null || _sybil != null ||
             _port != 0 || _type != null || _mtu != null || _ipv6 != null ||
-            _ssucaps != null || _transport != null || _cost != 0)
+            _ssucaps != null || _transport != null || _cost != 0 || _etype != null)
             return 2;
         if (_full == 2)
             return 3;
@@ -402,8 +410,9 @@ public class NetDbHelper extends FormHandler {
                    "<tr><td><b>Port Number</b></td><td><input type=\"text\" name=\"port\"></td>\n" +
                    "<td><b>Signature Type</b></td><td><input type=\"text\" name=\"type\"></td></tr>\n" +
                    "<tr><td><b>SSU Capabilities</b></td><td><input type=\"text\" name=\"ssucaps\"></td>\n" +
+                   "<td><b>Encryption Type</b></td><td><input type=\"text\" name=\"etype\"></td></tr>\n" +
+                   "<tr><td><b>Router Version</b></td><td><input type=\"text\" name=\"v\"></td>\n" +
                    "<td><b>Transport</b></td><td><input type=\"text\" name=\"tr\" title=\"e.g. SSU or NTCP2\"></td></tr>\n" +
-                   "<tr><td><b>Router Version</b></td><td><input type=\"text\" name=\"v\"><td></td><td></td></tr>\n" +
                    "<tr><td colspan=\"4\" class=\"subheading\"><b>Add Sybil analysis (must pick one above)</b></td></tr>\n" +
                    "<tr id=\"sybilSearch\"><td><b>Sybil close to</b></td><td colspan=\"3\"><input type=\"text\" name=\"sybil2\" title=\"Router hash, dest hash, b32, or from address book\">&nbsp;" +
                    "<label for=\"closetorouter\"><b>or Sybil close to this router</b></label><input type=\"checkbox\" class=\"optbox\" value=\"1\" name=\"sybil\" id=\"closetorouter\"></td></tr>\n" +

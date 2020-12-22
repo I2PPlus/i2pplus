@@ -827,8 +827,8 @@ public class NTCPTransport extends TransportImpl {
     private static final int MIN_CONCURRENT_WRITERS = 2;  // unless < 32MB
 //    private static final int MAX_CONCURRENT_READERS = 4;
 //    private static final int MAX_CONCURRENT_WRITERS = 4;
-    private static final int MAX_CONCURRENT_READERS = SystemVersion.usableCores();
-    private static final int MAX_CONCURRENT_WRITERS = Math.min(SystemVersion.usableCores(), 3);
+    private static final int MAX_CONCURRENT_READERS = SystemVersion.getCores() * 3 / 2 ;
+    private static final int MAX_CONCURRENT_WRITERS = SystemVersion.getCores() * 3 / 2;
 
     /**
      *  Called by TransportManager.
@@ -1066,14 +1066,14 @@ public class NTCPTransport extends TransportImpl {
      */
     private void stopWaitAndRestart() {
         if (_log.shouldLog(Log.WARN))
-            _log.warn("Halting NTCP to change address");
+            _log.warn("Halting NTCP to change address...");
         stopListening();
         // Wait for NTCP Pumper to stop so we don't end up with two...
         while (isAlive()) {
             try { Thread.sleep(5*1000); } catch (InterruptedException ie) {}
         }
         if (_log.shouldLog(Log.WARN))
-            _log.warn("Restarting NTCP transport listening");
+            _log.warn("Restarting NTCP transport listener...");
         startIt();
     }
 
