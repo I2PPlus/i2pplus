@@ -137,10 +137,13 @@ class NetDbRenderer {
                    renderRouterInfo(buf, ri, false, true);
                 } else {
                     buf.append("<div class=\"netdbnotfound\">");
-                    buf.append(_t("Router")).append(' ');
-                    if (routerPrefix != null)
+                    if (routerPrefix != null) {
+                        buf.append(_t("Router")).append(' ');
                         buf.append(routerPrefix);
-                    buf.append(' ').append(_t("not found in network database"));
+                        buf.append(' ').append(_t("not found in network database"));
+                    } else {
+                        buf.append(_t("No results"));
+                    }
                     buf.append("</div>");
                 }
             } else {
