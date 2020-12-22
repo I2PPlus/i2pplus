@@ -328,8 +328,7 @@ class PeerTestManager {
                 // but without the error message to the log.
                 // To do: fix the bug.
                 if (_log.shouldLog(Log.WARN))
-                    _log.warn("Bad IP length " + ipSize +
-                               " from Bob's reply: " + from + ", " + testInfo);
+                    _log.warn("Bad IP length " + ipSize + " from Bob's reply: " + from + ", " + testInfo);
                 return;
             }
             byte ip[] = new byte[ipSize];
@@ -394,7 +393,7 @@ class PeerTestManager {
                         testComplete(true);
                 } catch (UnknownHostException uhe) {
                     if (_log.shouldLog(Log.ERROR))
-                        _log.error("Charlie @ " + from + " said we were an invalid IP address: " + uhe.getMessage(), uhe);
+                        _log.error("Charlie @ " + from + " said we have an invalid IP address: " + uhe.getMessage(), uhe);
                     _context.statManager().addRateData("udp.testBadIP", 1);
                 }
             } else {
@@ -406,8 +405,9 @@ class PeerTestManager {
                 }
 
                 if (_log.shouldLog(Log.INFO) && charlieSession != null)
-                    _log.info("Bob chose a Charlie we last acked " + DataHelper.formatDuration(_context.clock().now() - charlieSession.getLastACKSend()) + " last sent " + DataHelper.formatDuration(_context.clock().now() - charlieSession.getLastSendTime()) + " (Bob: "
-                              + _currentTest + ", Charlie: " + from + ")");
+                    _log.info("Bob chose a Charlie we last ACKed " + DataHelper.formatDuration(_context.clock().now() -
+                              charlieSession.getLastACKSend()) + " last sent " + DataHelper.formatDuration(_context.clock().now() -
+                              charlieSession.getLastSendTime()) + " (Bob: " + _currentTest + ", Charlie: " + from + ")");
 
                 // ok, first charlie.  send 'em a packet
                 test.setReceiveCharlieTime(_context.clock().now());
@@ -694,7 +694,7 @@ class PeerTestManager {
             PeerState bob = _transport.getPeerState(from);
             if (bob == null) {
                 if (_log.shouldLog(Log.WARN))
-                    _log.warn("Received from Bob (" + from + ") who hasn't established a session with us, refusing to help him test " + aliceIP +":" + alicePort);
+                    _log.warn("Received from Bob (" + from + ") who hasn't established a session with us, refusing to help him test " + aliceIP + ":" + alicePort);
                 return;
             } else {
                 state.setBobCipherKey(bob.getCurrentCipherKey());
@@ -784,7 +784,7 @@ class PeerTestManager {
             byte[] ikey = addr.getIntroKey();
             if (ikey == null) {
                 if (_log.shouldLog(Log.WARN))
-                    _log.warn("Unable to pick a charlie (no ikey), IPv6? " + isIPv6);
+                    _log.warn("Unable to pick a Charlie (no ikey), IPv6? " + isIPv6);
                 return;
             }
             SessionKey charlieIntroKey = new SessionKey(ikey);
