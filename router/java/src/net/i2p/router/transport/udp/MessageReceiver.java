@@ -33,7 +33,7 @@ class MessageReceiver {
 
     private static final int MIN_THREADS = 2;  // unless < 32MB
 //    private static final int MAX_THREADS = 5;
-    private static final int MAX_THREADS = SystemVersion.getCores() * 3 / 2;
+    private static final int MAX_THREADS = SystemVersion.getCores();
     private static final int MIN_QUEUE_SIZE = 32;  // unless < 32MB
 //    private static final int MAX_QUEUE_SIZE = 128;
     private static final int MAX_QUEUE_SIZE = 1024;
