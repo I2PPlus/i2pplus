@@ -39,8 +39,8 @@ public class SimpleTimer2 {
 
 //    private static final int MIN_THREADS = 2;
 //    private static final int MAX_THREADS = 4;
-    private static final int MIN_THREADS = 2;
-    private static final int MAX_THREADS = Math.min(SystemVersion.getCores() / 2, 4);
+    private static final int MIN_THREADS = 1;
+    private static final int MAX_THREADS = 1;
 
     private final ScheduledThreadPoolExecutor _executor;
     private final String _name;

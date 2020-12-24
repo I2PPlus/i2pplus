@@ -827,8 +827,8 @@ public class NTCPTransport extends TransportImpl {
     private static final int MIN_CONCURRENT_WRITERS = 2;  // unless < 32MB
 //    private static final int MAX_CONCURRENT_READERS = 4;
 //    private static final int MAX_CONCURRENT_WRITERS = 4;
-    private static final int MAX_CONCURRENT_READERS = SystemVersion.getCores() * 3 / 2 ;
-    private static final int MAX_CONCURRENT_WRITERS = SystemVersion.getCores() * 3 / 2;
+    private static final int MAX_CONCURRENT_READERS = SystemVersion.getCores();
+    private static final int MAX_CONCURRENT_WRITERS = SystemVersion.getCores();
 
     /**
      *  Called by TransportManager.
