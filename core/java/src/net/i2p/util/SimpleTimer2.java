@@ -312,14 +312,14 @@ public class SimpleTimer2 {
             _cancelAfterRun = false;
 
             switch(_state) {
-              case RUNNING:
-                _rescheduleAfterRun = true;  // signal that we need rescheduling.
-                break;
+                case RUNNING:
+                    _rescheduleAfterRun = true;  // signal that we need rescheduling.
+                    break;
               case IDLE:  // fall through
               case CANCELLED:
-                _future = _pool.schedule(this, timeoutMs);
-                _state = TimedEventState.SCHEDULED;
-                break;
+                  _future = _pool.schedule(this, timeoutMs);
+                  _state = TimedEventState.SCHEDULED;
+                  break;
               case SCHEDULED: // nothing
             }
         }
@@ -394,17 +394,17 @@ public class SimpleTimer2 {
             _rescheduleAfterRun = false;
 
             switch(_state) {
-              case CANCELLED:  // fall through
-              case IDLE:
-                break; // my preference is to throw IllegalState here, but let it be.
-              case RUNNING:
-                _cancelAfterRun = true;
-                return true;
-              case SCHEDULED:
-                // There's probably a race here, where it's cancelled after it's running
-                // The result (if rescheduled) is a dup on the queue, see tickets 1694, 1705
-                // Mitigated by close-to-execution check in reschedule()
-                boolean cancelled = _future.cancel(true);
+                case CANCELLED:  // fall through
+                case IDLE:
+                    break; // my preference is to throw IllegalState here, but let it be.
+                case RUNNING:
+                    _cancelAfterRun = true;
+                    return true;
+                    case SCHEDULED:
+                        // There's probably a race here, where it's cancelled after it's running
+                        // The result (if rescheduled) is a dup on the queue, see tickets 1694, 1705
+                        // Mitigated by close-to-execution check in reschedule()
+                        boolean cancelled = _future.cancel(true);
                 if (cancelled)
                     _state = TimedEventState.CANCELLED;
                 else
@@ -439,15 +439,15 @@ public class SimpleTimer2 {
                     throw new IllegalStateException(this + " rescheduleAfterRun cannot be true here");
 
                 switch(_state) {
-                  case CANCELLED:
-                      if (_log.shouldInfo())
-                          _log.info("Not actually running: CANCELLED " + this);
-                    return; // goodbye
-                  case IDLE:  // fall through
-                  case RUNNING:
-                    throw new IllegalStateException(this + " not possible to be in " + _state);
+                    case CANCELLED:
+                        if (_log.shouldInfo())
+                            _log.info("Not actually running: CANCELLED " + this);
+                        return; // goodbye
+                    case IDLE:  // fall through
+                    case RUNNING:
+                        throw new IllegalStateException(this + " not possible to be in " + _state);
                   case SCHEDULED:
-                    // proceed, will switch to IDLE to reschedule
+                      // proceed, will switch to IDLE to reschedule
                 }
 
                 // if I was rescheduled by the user, re-submit myself to the executor.
@@ -484,25 +484,25 @@ public class SimpleTimer2 {
             } finally { // must be in finally
                 synchronized(this) {
                     switch(_state) {
-                      case SCHEDULED:  // fall through
-                      case IDLE:
-                        throw new IllegalStateException(this + " can't be " + _state);
-                      case CANCELLED:
-                        break; // nothing
-                      case RUNNING:
-                        if (_cancelAfterRun) {
-                            _cancelAfterRun = false;
-                            _state = TimedEventState.CANCELLED;
-                        } else {
-                            _state = TimedEventState.IDLE;
-                            // do we need to reschedule?
-                            if (_rescheduleAfterRun) {
-                                _rescheduleAfterRun = false;
-                                if (_log.shouldInfo())
-                                    _log.info("Rescheduling after run: " + this);
-                                schedule(_nextRun - System.currentTimeMillis());
+                        case SCHEDULED:  // fall through
+                        case IDLE:
+                            throw new IllegalStateException(this + " can't be " + _state);
+                        case CANCELLED:
+                            break; // nothing
+                        case RUNNING:
+                            if (_cancelAfterRun) {
+                                _cancelAfterRun = false;
+                                _state = TimedEventState.CANCELLED;
+                            } else {
+                                _state = TimedEventState.IDLE;
+                                // do we need to reschedule?
+                                if (_rescheduleAfterRun) {
+                                    _rescheduleAfterRun = false;
+                                    if (_log.shouldInfo())
+                                        _log.info("Rescheduling after run: " + this);
+                                    schedule(_nextRun - System.currentTimeMillis());
+                                }
                             }
-                        }
                     }
                 }
             }
