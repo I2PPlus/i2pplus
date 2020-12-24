@@ -53,7 +53,7 @@ import net.i2p.router.crypto.ratchet.MuxedSKM;
 import net.i2p.util.ConcurrentHashSet;
 import net.i2p.util.I2PThread;
 import net.i2p.util.Log;
-import net.i2p.util.SimpleTimer;
+import net.i2p.util.SimpleTimer2;
 
 /**
  * Bridge the router and the client - managing state for a client.
@@ -229,6 +229,8 @@ class ClientConnectionRunner {
             for (SessionParams sp : _sessions.values()) {
                 if (sp.isPrimary)
                     _context.tunnelManager().removeTunnels(sp.dest);
+                if (sp.rerequestTimer != null)
+                    sp.rerequestTimer.cancel();
             }
         }
         synchronized (_alreadyProcessed) {
@@ -466,6 +468,10 @@ class ClientConnectionRunner {
                     _context.tunnelManager().removeTunnels(sp.dest);
                 else
                     _context.tunnelManager().removeAlias(sp.dest);
+                synchronized(this) {
+                    if (sp.rerequestTimer != null)
+                        sp.rerequestTimer.cancel();
+                }
                 break;
             }
         }
@@ -483,6 +489,10 @@ class ClientConnectionRunner {
                 if (ls != null)
                     _context.netDb().unpublish(ls);
                 _context.tunnelManager().removeAlias(sp.dest);
+                synchronized(this) {
+                    if (sp.rerequestTimer != null)
+                        sp.rerequestTimer.cancel();
+                }
             }
             _sessions.clear();
         }
@@ -690,6 +700,10 @@ class ClientConnectionRunner {
                     _log.debug("LeaseSet created fully: " + state + '\n' + ls);
                 sp.leaseRequest = null;
                 _consecutiveLeaseRequestFails = 0;
+                if (sp.rerequestTimer != null) {
+                    sp.rerequestTimer.cancel();
+                    sp.rerequestTimer = null;
+                }
             }
         }
         if ( (state != null) && (state.getOnGranted() != null) )
@@ -887,7 +901,8 @@ class ClientConnectionRunner {
      * @param h the Destination's hash
      * @param set LeaseSet with requested leases - this object must be updated to contain the
      *            signed version (as well as any changed/added/removed Leases)
-     *            The LeaseSet contains Leases and destination only, it is unsigned.
+     *            The LeaseSet contains Leases only, it is unsigned.
+     *            Must be unique for this hash, do not reuse for subsessions.
      * @param expirationTime ms to wait before failing
      * @param onCreateJob Job to run after the LeaseSet is authorized, null OK
      * @param onFailedJob Job to run after the timeout passes without receiving authorization, null OK
@@ -957,7 +972,7 @@ class ClientConnectionRunner {
                     set.setDestination(dest);
                     Rerequest timer = new Rerequest(set, expirationTime, onCreateJob, onFailedJob);
                     sp.rerequestTimer = timer;
-                    _context.simpleTimer2().addEvent(timer, 3*1000);
+                    timer.schedule(3*1000);
                     if (_log.shouldLog(Log.DEBUG))
                         _log.debug("Already requesting, ours is newer; waiting 3 sec: " + state);
                 }
@@ -971,13 +986,16 @@ class ClientConnectionRunner {
                     // before we are ready
                     Rerequest timer = new Rerequest(set, expirationTime, onCreateJob, onFailedJob);
                     sp.rerequestTimer = timer;
-                    _context.simpleTimer2().addEvent(timer, 1000);
+                    timer.schedule(1000);
                     if (_log.shouldLog(Log.DEBUG))
                         _log.debug("No current LeaseSet and no Outbound tunnels, waiting 1 sec for [" + h.toBase64().substring(0,6) + "]");
                     return;
                 } else {
                     // so the timer won't fire off with an older LS request
-                    sp.rerequestTimer = null;
+                    if (sp.rerequestTimer != null) {
+                        sp.rerequestTimer.cancel();
+                        sp.rerequestTimer = null;
+                    }
                     long earliest = (current != null) ? current.getEarliestLeaseDate() : 0;
                     sp.leaseRequest = state = new LeaseRequestState(onCreateJob, onFailedJob, earliest,
                                                                 _context.clock().now() + expirationTime, set);
@@ -989,14 +1007,18 @@ class ClientConnectionRunner {
         _context.jobQueue().addJob(new RequestLeaseSetJob(_context, this, state));
     }
 
-    private class Rerequest implements SimpleTimer.TimedEvent {
+    private class Rerequest extends SimpleTimer2.TimedEvent {
         private final LeaseSet _ls;
         private final long _expirationTime;
         private final Job _onCreate;
         private final Job _onFailed;
 
-        /** @param ls dest must be set */
+        /**
+         * Caller must schedule()
+         * @param ls dest must be set
+         */
         public Rerequest(LeaseSet ls, long expirationTime, Job onCreate, Job onFailed) {
+            super(_context.simpleTimer2());
             _ls = ls;
             _expirationTime = expirationTime;
             _onCreate = onCreate;
