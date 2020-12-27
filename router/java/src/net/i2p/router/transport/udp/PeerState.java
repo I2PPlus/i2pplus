@@ -1421,33 +1421,33 @@ public class PeerState {
             int failedSize = 0;
             int failedCount = 0;
             for (int i = 0; i < failed.size(); i++) {
-            OutboundMessageState state = failed.get(i);
+                OutboundMessageState state = failed.get(i);
                 failedSize += state.getUnackedSize();
                 failedCount += state.getUnackedFragments();
-            OutNetMessage msg = state.getMessage();
-            if (msg != null) {
-                msg.timestamp("expired in the active pool");
-                _transport.failed(state);
+                OutNetMessage msg = state.getMessage();
+                if (msg != null) {
+                    msg.timestamp("expired in the active pool");
+                    _transport.failed(state);
                     if (_log.shouldWarn())
                         _log.warn("Message expired: " + state + " to: " + this);
-            } else {
-                // it can not have an OutNetMessage if the source is the
-                // final after establishment message
-                if (_log.shouldLog(Log.WARN))
-                    _log.warn("Unable to send a direct message: " + state + " to: " + this);
-            }
-                if (failedSize > 0) {
-                    // restore the window
-                    synchronized(this) {
-                        // this isn't exactly right, because some fragments may not have been sent at all,
-                        // but that should be unlikely
-                        _sendWindowBytesRemaining += failedSize;
-                        _sendWindowBytesRemaining += failedCount * fragmentOverhead();
-                        if (_sendWindowBytesRemaining > _sendWindowBytes)
-                            _sendWindowBytesRemaining = _sendWindowBytes;
-                    }
-                    // no need to nudge(), this is called from OMF loop before allocateSend()
+                } else {
+                    // it can not have an OutNetMessage if the source is the
+                    // final after establishment message
+                    if (_log.shouldLog(Log.WARN))
+                        _log.warn("Unable to send a direct message: " + state + " to: " + this);
                 }
+            }
+            if (failedSize > 0) {
+                // restore the window
+                synchronized(this) {
+                    // this isn't exactly right, because some fragments may not have been sent at all,
+                    // but that should be unlikely
+                    _sendWindowBytesRemaining += failedSize;
+                    _sendWindowBytesRemaining += failedCount * fragmentOverhead();
+                    if (_sendWindowBytesRemaining > _sendWindowBytes)
+                        _sendWindowBytesRemaining = _sendWindowBytes;
+                }
+                // no need to nudge(), this is called from OMF loop before allocateSend()
             }
         }
 

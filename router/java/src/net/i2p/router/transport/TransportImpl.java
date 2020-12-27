@@ -129,7 +129,8 @@ public abstract class TransportImpl implements Transport {
     public abstract int countActiveSendPeers();
 
     /** ...and 50/100/150/200/250 for BW Tiers K/L/M/N/O */
-    private static final int MAX_CONNECTION_FACTOR = 50;
+//    private static final int MAX_CONNECTION_FACTOR = 50;
+    private static final int MAX_CONNECTION_FACTOR = 100;
 
     /** Per-transport connection limit */
     public int getMaxConnections() {
@@ -181,7 +182,13 @@ public abstract class TransportImpl implements Transport {
         // increase limit for SSU, for now
         if (style.equals("SSU"))
             //def = def * 3 / 2;
-            def *= 3;
+            def *= 2;
+        long maxMemory = SystemVersion.getMaxMemory();
+        if (maxMemory >= 1024) {
+            def *= 3; def /= 2;
+        } else if (maxMemory >= 512) {
+            def *= 7; def /= 6;
+        }
         return _context.getProperty(maxProp, def);
     }
 
@@ -373,7 +380,7 @@ public abstract class TransportImpl implements Transport {
             if (debug)
                 _log.debug("Took too long (" + allTime + "ms) from preparation to afterSend (ok? " + sendSuccessful +
                           ")\n* Sent: " + new Date(sendTime) + " after failing on " +
-                          msg.getFailedTransports() + 
+                          msg.getFailedTransports() +
                           (sendSuccessful ? (" and succeeding on " + getStyle()) : ""));
             if ( (allTime > 60*1000) && (sendSuccessful) ) {
                 // VERY slow

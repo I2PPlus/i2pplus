@@ -158,14 +158,14 @@ class FragmentHandler {
         } catch (ArrayIndexOutOfBoundsException aioobe) {
             _context.statManager().addRateData("tunnel.corruptMessage", 1, 1);
         } catch (NullPointerException npe) {
-            if (_log.shouldLog(Log.ERROR))
+            if (_log.shouldLog(Log.WARN))
 //                _log.error("Corrupt fragment received: (offset: " + offset + ")", npe);
-                _log.error("Corrupt fragment received [Offset: " + offset + "]");
+                _log.warn("Corrupt fragment received [Offset: " + offset + "]");
             _context.statManager().addRateData("tunnel.corruptMessage", 1, 1);
         } catch (RuntimeException e) {
-            if (_log.shouldLog(Log.ERROR))
+            if (_log.shouldLog(Log.WARN))
 //                _log.error("Corrupt fragment received: (offset: " + offset + ")", e);
-                _log.error("Corrupt fragment received [Offset: " + offset + "]");
+                _log.warn("Corrupt fragment received [Offset: " + offset + "]");
             _context.statManager().addRateData("tunnel.corruptMessage", 1, 1);
             // java.lang.IllegalStateException: don't get the completed size when we're not complete - null fragment i=0 of 1
             // at net.i2p.router.tunnel.FragmentedMessage.getCompleteSize(FragmentedMessage.java:194)
