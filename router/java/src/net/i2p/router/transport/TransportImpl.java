@@ -183,10 +183,12 @@ public abstract class TransportImpl implements Transport {
         if (style.equals("SSU"))
             //def = def * 3 / 2;
             def *= 2;
-        if (maxMemory >= 1024)
+        long maxMemory = SystemVersion.getMaxMemory();
+        if (maxMemory >= 1024) {
             def *= 3; def /= 2;
-        else if (maxMemory >= 512)
+        } else if (maxMemory >= 512) {
             def *= 7; def /= 6;
+        }
         return _context.getProperty(maxProp, def);
     }
 
