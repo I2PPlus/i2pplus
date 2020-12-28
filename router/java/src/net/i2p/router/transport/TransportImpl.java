@@ -180,14 +180,15 @@ public abstract class TransportImpl implements Transport {
             def *= 17; def /= 10;
         }
         // increase limit for SSU, for now
-        if (style.equals("SSU"))
-            //def = def * 3 / 2;
-            def *= 2;
         long maxMemory = SystemVersion.getMaxMemory();
-        if (maxMemory >= 1024) {
-            def *= 3; def /= 2;
-        } else if (maxMemory >= 512) {
-            def *= 7; def /= 6;
+        if (!SystemVersion.isSlow()) {
+            if (maxMemory >= 1024) {
+                def *= 3; def /= 2;
+            } else if (maxMemory >= 512) {
+                def *= 7; def /= 6;
+            } else if (style.equals("SSU")) {
+                def *= 2;
+            }
         }
         return _context.getProperty(maxProp, def);
     }
