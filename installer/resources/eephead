@@ -1,5 +1,19 @@
 #!/bin/sh
 # if I2P="%INSTALL_PATH" then manually change to to full path of i2p install e.g. /home/user/i2p (no trailing /)
-I2P="%INSTALL_PATH"
-echo " ➤ Initiating eephead probe of $@…"
-java -jar "$I2P/lib/i2p.jar" eephead "$@"
+scr_dir="$(cd "$(dirname "$0")" && pwd)"
+I2P="$($scr_dir/i2prouter getdir)"
+
+check_http="$(echo $@ | grep -Eo '(http|https)://[^/"]+')"
+if [ -z $check_http ]; then
+	echo "Invalid or missing URL, eg. ./eephead http://skank.i2p"
+	java -jar "$I2P/lib/i2p.jar" eephead
+	exit 1
+fi
+
+if [ -f "$I2P/lib/i2p.jar" ]; then
+	echo " ➤ Initiating eephead probe of $@…"
+	java -jar "$I2P/lib/i2p.jar" eephead "$@"
+else
+	echo "File $I2P/lib/i2p.jar not found."
+	exit 1
+fi

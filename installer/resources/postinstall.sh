@@ -107,6 +107,10 @@ if [ ! "X$wrapperpath" = "x" ]; then
 fi
 
 chmod 755 ./eepget
+chmod 755 ./eephead
+chmod 755 ./i2ping
+chmod 755 ./graceful_helper
+
 rm -rf ./icons ./lib/wrapper
 rm -f ./lib/*.dll ./*.bat ./*.cmd ./*.exe ./utility.jar
 
