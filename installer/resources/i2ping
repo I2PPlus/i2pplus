@@ -11,5 +11,5 @@ if [ -f "$I2P/lib/i2ptunnel.jar" ]; then
 		java -jar "$I2P/lib/i2ptunnel.jar" -die -e "ownDest yes" -e "ping $@"
 	fi
 else
-	echo "File $I2P/lib/i2ptunnel.jar not fount."
+	echo "File $I2P/lib/i2ptunnel.jar not found."
 fi
