@@ -982,8 +982,11 @@ public abstract class KademliaNetworkDatabaseFacade extends NetworkDatabaseFacad
                           + "\n* First expired: " + new Date(earliest)
                           + "\n* Last expired: " + new Date(latest));
 //                          new Exception("Rejecting store"));
-            return "LeaseSet for " + leaseSet.getDestination().toBase32()
-                   + " expired " + DataHelper.formatDuration(age) + " ago";
+            if (leaseSet.getDestination() != null)
+                return "LeaseSet for " + leaseSet.getDestination().toBase32() +
+                       " expired " + DataHelper.formatDuration(age) + " ago";
+            else
+                return "LeaseSet for unknown destination expired " + DataHelper.formatDuration(age) + " ago";
         }
         if (latest > now + (Router.CLOCK_FUDGE_FACTOR + MAX_LEASE_FUTURE) &&
             (leaseSet.getType() != DatabaseEntry.KEY_TYPE_META_LS2 ||
