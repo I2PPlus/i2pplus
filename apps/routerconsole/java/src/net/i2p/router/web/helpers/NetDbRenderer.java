@@ -530,7 +530,7 @@ class NetDbRenderer {
                         buf.append(" (").append(_t("published")).append(")");
                     buf.append("\">");
                     if (in != null && in.getDestinationNickname() != null)
-                        buf.append(in.getDestinationNickname());
+                        buf.append(DataHelper.escapeHTML(in.getDestinationNickname()));
                     else
                         buf.append(dest.toBase64().substring(0, 6));
                     buf.append("</span></a></th></tr>\n");
