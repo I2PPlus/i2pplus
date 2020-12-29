@@ -420,7 +420,7 @@ class PacketHandler {
                     List<PeerState> peers = _transport.getPeerStatesByIP(remoteHost);
                     if (!peers.isEmpty()) {
                         StringBuilder buf = new StringBuilder(256);
-                        buf.append("Established peers with this IP address: ");
+                        buf.append("Established peers with IP address: ");
                         boolean foundSamePort = false;
                         PeerState state = null;
                         int newPort = remoteHost.getPort();

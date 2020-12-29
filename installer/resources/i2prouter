@@ -1859,16 +1859,17 @@ showUsage() {
         echo "";
         if [ ! -n "$FIXED_COMMAND" ] ; then
             echo "`gettext 'Commands:'`"
-            echo "  console      `gettext 'Launch in the current console.'`"
-            echo "  start        `gettext 'Start in the background as a daemon process.'`"
-            echo "  stop         `gettext 'Stop if running as a daemon or in another console.'`"
-            echo "  graceful     `gettext 'Stop gracefully, may take up to 11 minutes.'`"
-            echo "  restart      `gettext 'Stop if running and then start.'`"
-            echo "  condrestart  `gettext 'Restart only if already running.'`"
-            echo "  status       `gettext 'Query the current status.'`"
-            echo "  install      `gettext 'Install to start automatically when system boots.'`"
-            echo "  remove       `gettext 'Uninstall.'`"
-            echo "  dump         `gettext 'Request a Java thread dump if running.'`"
+            echo "  console          `gettext 'Launch in the current console.'`"
+            echo "  start            `gettext 'Start in the background as a daemon process.'`"
+            echo "  stop             `gettext 'Stop if running as a daemon or in another console.'`"
+            echo "  graceful         `gettext 'Stop gracefully, may take up to 11 minutes or more.'`"
+            echo "  gracefulrestart  `gettext 'Restart gracefully, may take up to 11 minutes or more.'`"
+            echo "  restart          `gettext 'Stop if running and then start.'`"
+            echo "  condrestart      `gettext 'Restart only if already running.'`"
+            echo "  status           `gettext 'Query the current status.'`"
+            echo "  install          `gettext 'Install to start automatically when system boots.'`"
+            echo "  remove           `gettext 'Uninstall.'`"
+            echo "  dump             `gettext 'Request a Java thread dump if running.'`"
             echo "";
         fi
         if [ -n "$PASS_THROUGH" ] ; then
@@ -1916,6 +1917,12 @@ raiseopenfilesulimit() {
     fi
 }
 
+graceful_helper() {
+	echo "Starting graceful restart helper, $APP_NAME will restart once $APP_NAME has stopped."
+	echo 'This may take 11 minutes or more complete the graceful restart.'
+	$I2P/graceful_helper &
+}
+
 docommand() {
     case "$COMMAND" in
         'console')
@@ -1951,6 +1958,12 @@ docommand() {
 
         'graceful')
             checkUser "" "$COMMAND"
+            graceful "0"
+            ;;
+
+        'gracefulrestart')
+            checkUser "" "$COMMAND"
+			graceful_helper
             graceful "0"
             ;;
 

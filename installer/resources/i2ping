@@ -1,5 +1,15 @@
 #!/bin/sh
 # if I2P="%INSTALL_PATH" then manually change to to full path of i2p install e.g. /home/user/i2p (no trailing /)
-I2P="%INSTALL_PATH"
-echo " ➤ Initiating ping of $@…"
-java -jar "$I2P/lib/i2ptunnel.jar" -die -e "ownDest yes" -e "ping $@"
+scr_dir="$(cd "$(dirname "$0")" && pwd)"
+I2P="$($scr_dir/i2prouter getdir)"
+
+if [ -f "$I2P/lib/i2ptunnel.jar" ]; then
+	if [ -z "$@" ]; then
+		java -jar "$I2P/lib/i2ptunnel.jar" -die -e "ownDest yes" -e "ping -h"
+	else
+		echo " ➤ Initiating ping of $@…"
+		java -jar "$I2P/lib/i2ptunnel.jar" -die -e "ownDest yes" -e "ping $@"
+	fi
+else
+	echo "File $I2P/lib/i2ptunnel.jar not found."
+fi
