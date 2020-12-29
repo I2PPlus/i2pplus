@@ -29,6 +29,7 @@ class FloodfillStoreJob extends StoreJob {
     private final FloodfillNetworkDatabaseFacade _facade;
 
     private static final String PROP_RI_VERIFY = "router.verifyRouterInfoStore";
+    private static final long RI_VERIFY_STARTUP_TIME = 3*60*60*1000L;
 
     /**
      * Send a data structure to the floodfills
@@ -69,9 +70,10 @@ class FloodfillStoreJob extends StoreJob {
                     _log.info("Skipping verify, one already in progress for: [" + key.toBase64().substring(0,6) + "]");
                 return;
             }
-            if (getContext().router().gracefulShutdownInProgress()) {
+            RouterContext ctx = getContext();
+            if (ctx.router().gracefulShutdownInProgress()) {
                 if (shouldLog)
-                    _log.info("Skipping verify, shutdown in progress for: [" + key.toBase64().substring(0,6) + "]");
+                    _log.info("Skipping verify of [" + key.toBase64().substring(0,6) + "] - shutdown in progress...");
                 return;
             }
             // Get the time stamp from the data we sent, so the Verify job can make sure that
@@ -80,7 +82,9 @@ class FloodfillStoreJob extends StoreJob {
             final int type = data.getType();
             final boolean isRouterInfo = type == DatabaseEntry.KEY_TYPE_ROUTERINFO;
             // default false since 0.9.7.1
-            if (isRouterInfo && !getContext().getBooleanProperty(PROP_RI_VERIFY)) {
+            // verify for a while after startup until we've vetted the floodfills
+            if (isRouterInfo && !ctx.getBooleanProperty(PROP_RI_VERIFY) &&
+                ctx.router().getUptime() > RI_VERIFY_STARTUP_TIME) {
                 _facade.routerInfoPublishSuccessful();
                 return;
             }
@@ -105,13 +109,13 @@ class FloodfillStoreJob extends StoreJob {
             } else {
                 client = key;
             }
-            Job fvsj = new FloodfillVerifyStoreJob(getContext(), key, client,
+            Job fvsj = new FloodfillVerifyStoreJob(ctx, key, client,
                                                    published, type,
                                                    sentTo, _facade);
             if (shouldLog)
                 _log.info("[Job " + getJobId() + "] Succeeded sending key [" + key.toBase64().substring(0,6) +
                           "] - queueing VerifyFloodfillStore Job [" + fvsj.getJobId() + "]");
-            getContext().jobQueue().addJob(fvsj);
+            ctx.jobQueue().addJob(fvsj);
     }
 
     @Override
