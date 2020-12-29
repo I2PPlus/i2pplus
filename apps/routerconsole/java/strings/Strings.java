@@ -38,8 +38,6 @@ class Dummy {
         // keep the old string here as well for existing installs
         _t("shared clients");
         _t("Shared Clients");
-        _t("shared clients (DSA)");
-        _t("Shared Clients (DSA)");
         _t("I2PMail SMTP Server");
         _t("I2PMail POP3 Server");
         _t("Postman's SMTP Mail Server (smtp.postman.i2p)");
