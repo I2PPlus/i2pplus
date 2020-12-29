@@ -61,7 +61,7 @@ class PeerManager {
     /** After first two hours of uptime ~= 246 */
     static final int REORGANIZES_PER_DAY = (int) (24*60*60*1000L / REORGANIZE_TIME_LONG);
 //    private static final long STORE_TIME = 19*60*60*1000;
-    private static final long STORE_TIME = 4*60*60*1000;
+    private static final long STORE_TIME = 2*60*60*1000;
 //    private static final long EXPIRE_AGE = 3*24*60*60*1000;
     private static final long EXPIRE_AGE = 8*60*60*1000;
 
