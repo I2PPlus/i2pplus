@@ -47,7 +47,8 @@ public abstract class I2PTunnelClientBase extends I2PTunnelTask implements Runna
     protected final I2PAppContext _context;
     protected final Logging l;
 
-    static final long DEFAULT_CONNECT_TIMEOUT = 60 * 1000;
+//    static final long DEFAULT_CONNECT_TIMEOUT = 60 * 1000;
+    static final long DEFAULT_CONNECT_TIMEOUT = 75*1000;
 
     private static final AtomicLong __clientId = new AtomicLong();
     protected long _clientId;
@@ -385,8 +386,10 @@ public abstract class I2PTunnelClientBase extends I2PTunnelTask implements Runna
         return buildSocketManager(tunnel, null);
     }
 
-    private static final int RETRY_DELAY = 20*1000;
-    private static final int MAX_RETRIES = 4;
+//    private static final int RETRY_DELAY = 20*1000;
+    private static final int RETRY_DELAY = 15*1000;
+//    private static final int MAX_RETRIES = 4;
+    private static final int MAX_RETRIES = 8;
 
     /**
      * As of 0.9.20 this is fast, and does NOT connect the manager to the router.
