@@ -742,7 +742,7 @@ public abstract class I2PTunnelClientBase extends I2PTunnelTask implements Runna
                     // be enabled via the GUI only.
                     // If it was done manually, the keys will be regenerated at every startup,
                     // which is bad.
-                    _log.logAlways(Log.WARN, "Created new i2ptunnel SSL keys but can't save the config, disable and enable via i2ptunnel GUI");
+                    _log.logAlways(Log.WARN, "Created new I2PTunnel SSL keys but can't save the config -> Disable and enable via I2PTunnel GUI");
                 }
                 SSLServerSocketFactory fact = SSLClientUtil.initializeFactory(opts);
                 ss = fact.createServerSocket(localPort, 0, addr);
