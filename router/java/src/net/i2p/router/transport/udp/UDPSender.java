@@ -90,6 +90,7 @@ class UDPSender {
             _log.debug("Starting the runner: " + _name);
         _keepRunning = true;
         I2PThread t = new I2PThread(_runner, _name, true);
+        t.setPriority(Thread.NORM_PRIORITY + 1);
         t.start();
     }
 

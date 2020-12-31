@@ -22,7 +22,7 @@ class UDPFlooder implements Runnable {
     private final List<PeerState> _peers;
     private boolean _alive;
     private static final byte _floodData[] = new byte[4096];
-    
+
     public UDPFlooder(RouterContext ctx, UDPTransport transport) {
         _context = ctx;
         // _log = ctx.logManager().getLog(UDPFlooder.class);
@@ -30,7 +30,7 @@ class UDPFlooder implements Runnable {
         _peers = new ArrayList<PeerState>(4);
         ctx.random().nextBytes(_floodData);
     }
-    
+
     public void addPeer(PeerState peer) {
         synchronized (_peers) {
             if (!_peers.contains(peer))
@@ -46,21 +46,22 @@ class UDPFlooder implements Runnable {
             _peers.notifyAll();
         }
     }
-    
+
     public void startup() {
         _alive = true;
         I2PThread t = new I2PThread(this, "flooder");
         t.setDaemon(true);
+        t.setPriority(Thread.NORM_PRIORITY + 1);
         t.start();
     }
-    
-    public void shutdown() { 
+
+    public void shutdown() {
         _alive = false;
         synchronized (_peers) {
             _peers.notifyAll();
         }
     }
-    
+
     public void run() {
         long nextSend = _context.clock().now();
         while (_alive) {
@@ -70,7 +71,7 @@ class UDPFlooder implements Runnable {
                         _peers.wait();
                 }
             } catch (InterruptedException ie) {}
-            
+
             long now = _context.clock().now();
             if (now >= nextSend) {
                 // peers always grows, so this is fairly safe
@@ -97,7 +98,7 @@ class UDPFlooder implements Runnable {
                 }
                 nextSend = now + calcFloodDelay();
             }
-            
+
             long delay = nextSend - now;
             if (delay > 0) {
                 if (delay > 10*1000) {
@@ -111,7 +112,7 @@ class UDPFlooder implements Runnable {
             }
         }
     }
-    
+
     private long calcFloodDelay() {
         try {
             return Long.parseLong(_context.getProperty("udp.floodDelay", "300000"));
