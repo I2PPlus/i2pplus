@@ -209,7 +209,8 @@ public class I2PTunnelServer extends I2PTunnelTask implements Runnable {
         return rv;
     }
 
-    private static final int RETRY_DELAY = 20*1000;
+//    private static final int RETRY_DELAY = 20*1000;
+    private static final int RETRY_DELAY = 15*1000;
 //    private static final int MAX_RETRIES = 4;
     private static final int MAX_RETRIES = 20;
 
@@ -376,7 +377,7 @@ public class I2PTunnelServer extends I2PTunnelTask implements Runnable {
                     msg = "Unable to build tunnels for server at " + remoteHost.getHostAddress() + ':' + remotePort;
                 else
                     msg = "Unable to connect to the router at " + getTunnel().host + ':' + portNum +
-                             " and build tunnels for server at " + remoteHost.getHostAddress() + ':' + remotePort;
+                          " and build tunnels for server at " + remoteHost.getHostAddress() + ':' + remotePort;
                 if (++retries < MAX_RETRIES) {
                     msg += ", retrying in " + (RETRY_DELAY / 1000) + " seconds";
                     this.l.log(msg);

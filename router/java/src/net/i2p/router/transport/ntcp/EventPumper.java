@@ -139,7 +139,9 @@ class EventPumper implements Runnable {
         try {
             _selector = Selector.open();
             _alive = true;
-            new I2PThread(this, "NTCP Pumper", true).start();
+            I2PThread t = new I2PThread(this, "NTCP Pumper", true);
+            t.setPriority(Thread.NORM_PRIORITY + 1);
+            t.start();
         } catch (IOException ioe) {
             _log.log(Log.CRIT, "Error opening the NTCP selector", ioe);
         } catch (java.lang.InternalError jlie) {
@@ -325,7 +327,7 @@ class EventPumper implements Runnable {
                         continue;
                     }
                 } else {
-                    // another 100% CPU workaround 
+                    // another 100% CPU workaround
                     // TODO remove or only if we appear to be looping with no interest ops
                     if ((loopCount % failsafeLoopCount) == failsafeLoopCount - 1) {
                         if (_log.shouldLog(Log.INFO))
@@ -860,7 +862,7 @@ class EventPumper implements Runnable {
                 if (_log.shouldLog(Log.WARN)) _log.warn("Error registering", cce);
             }
         }
-        
+
         while ((con = _wantsConRegister.poll()) != null) {
             final SocketChannel schan = con.getChannel();
             try {

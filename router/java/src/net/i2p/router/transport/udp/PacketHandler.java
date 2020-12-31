@@ -115,6 +115,7 @@ class PacketHandler {
         _keepReading = true;
         for (int i = 0; i < _handlers.length; i++) {
             I2PThread t = new I2PThread(_handlers[i], "UDP Packet handler " + (i+1) + '/' + _handlers.length, true);
+            t.setPriority(Thread.NORM_PRIORITY + 1);
             t.start();
         }
     }
