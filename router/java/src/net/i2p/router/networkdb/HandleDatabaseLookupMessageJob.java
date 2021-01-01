@@ -35,6 +35,7 @@ import net.i2p.router.networkdb.kademlia.MessageWrapper;
 import net.i2p.router.message.SendMessageDirectJob;
 import net.i2p.util.Log;
 
+
 /**
  * Handle a lookup for a key received from a remote peer.  Needs to be implemented
  * to send back replies, etc
@@ -67,8 +68,8 @@ public class HandleDatabaseLookupMessageJob extends JobImpl {
     public void runJob() {
 
         Hash fromKey = _message.getFrom();
-        TunnelId toTunnel = toTunnel;
-        Hash searchKey = searchKey;
+        TunnelId toTunnel = _message.getReplyTunnel();
+        Hash searchKey = _message.getSearchKey();
         if (toTunnel == null && fromKey.equals(getContext().routerHash())) {
             if (_log.shouldWarn())
                 // exploratory, no reply key/tag. i2pd bug?
@@ -98,8 +99,8 @@ public class HandleDatabaseLookupMessageJob extends JobImpl {
                 _log.debug("DbLookup received with replies going to [" + fromKey.toBase64().substring(0,6) +
                            "] -> [Tunnel " + toTunnel + "]");
             else
-                _log.debug("Handling database lookup message for [" + searchKey.toBase64().substring(0,6) + "] with replies to [" + 
-                           fromKey.toBase64.substring(0,6) + "]");
+                _log.debug("Handling database lookup message for [" + searchKey.toBase64().substring(0,6) + "] with replies to [" +
+                           fromKey.toBase64().substring(0,6) + "]");
         }
 
         DatabaseLookupMessage.Type lookupType = _message.getSearchType();
@@ -141,7 +142,7 @@ public class HandleDatabaseLookupMessageJob extends JobImpl {
                 // Only send it out if it is in our estimated keyspace.
                 // For this, we do NOT use their dontInclude list as it can't be trusted
                 // (i.e. it could mess up the closeness calculation)
-                Set<Hash> closestHashes = getContext().netDb().findNearestRouters(searchKey, 
+                Set<Hash> closestHashes = getContext().netDb().findNearestRouters(searchKey,
                                                                             CLOSENESS_THRESHOLD, null);
                 if (weAreClosest(closestHashes)) {
                     // It's in our keyspace, so give it to them
@@ -240,7 +241,7 @@ public class HandleDatabaseLookupMessageJob extends JobImpl {
         // Honor flag to exclude all floodfills
         //if (dontInclude.contains(Hash.FAKE_HASH)) {
         // This is handled in FloodfillPeerSelector
-        return getContext().netDb().findNearestRouters(searchKey,
+        return getContext().netDb().findNearestRouters(_message.getSearchKey(),
                                                        MAX_ROUTERS_RETURNED,
                                                        dontInclude);
     }
