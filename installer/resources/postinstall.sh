@@ -110,6 +110,7 @@ chmod 755 ./eepget
 chmod 755 ./eephead
 chmod 755 ./i2ping
 chmod 755 ./graceful_helper
+chmod 755 ./ssleepget
 
 rm -rf ./icons ./lib/wrapper
 rm -f ./lib/*.dll ./*.bat ./*.cmd ./*.exe ./utility.jar

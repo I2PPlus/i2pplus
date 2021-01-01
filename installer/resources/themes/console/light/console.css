@@ -5686,10 +5686,10 @@ h3 + .statusnotes {
 }
 
 #jobs h3 {
+  margin-bottom: -2px;
   border-width: 1px;
   border-radius: 0;
   filter: none;
-  margin-bottom: -2px;
 }
 
 #jobs h3:first-child {
@@ -5698,7 +5698,7 @@ h3 + .statusnotes {
 
 #jobs ol {
   margin-top: 1px;
-  padding: 6px 0;
+  padding: 4px 2px 2px;
   border: 1px solid #8d8daa;
   box-shadow: inset 0 0 0 1px #fff;
   background: #efefff;
@@ -5710,19 +5710,19 @@ h3 + .statusnotes {
   -webkit-break-inside: avoid;
 }
 
+#jobs ol.jobqueue:last-of-type {
+  padding-bottom: 4px;
+}
+
 #jobs ol:empty {
   display: none;
 }
 
 #jobs ol li {
-  margin: -1px 8px -1px 28px;
-  padding: 5px 0;
+  margin: 2px 2px 3px;
+  padding: 5px 0 5px 20px;
   white-space: nowrap;
-  border-radius: 0 15px 15px 0;
-}
-
-#jobs li:nth-child(even) {
-  background: linear-gradient(to right, rgba(255,255,255,0), rgba(240,240,255,.6));
+  border: 1px solid #dde;
 }
 
 #jobs ol li:first-child {
@@ -5735,45 +5735,37 @@ h3 + .statusnotes {
 
 h3#finishedjobs + ol li, h3#scheduledjobs + ol li, h3#activejobs + ol li, h3#readyjobs + ol li {
   list-style: none !important;
+  background: linear-gradient(to bottom, #fff, #eef);
 }
 
-h3#activejobs + ol li:before, h3#scheduledjobs + ol li:before, h3#readyjobs + ol li:before, h3#finishedjobs + ol li:before {
-  content: '\2023\00A0\00A0';
-  margin-left: -20px;
-  vertical-align: sub;
-  line-height: 50%;
-  font-size: 15pt;
+h3#activejobs + ol li::before, h3#scheduledjobs + ol li::before, h3#readyjobs + ol li::before, h3#finishedjobs + ol li::before {
+  margin: 0 6px 0 -20px;
+  display: inline-block;
+  width: 18px;
+  height: 12px;
   font-weight: bold;
   color: #41465f;
+  background: url(/themes/console/images/svg/yes.svg) 6px center no-repeat;
+  background-size: 12px 12px;
+  content: "";
 }
 
-h3#activejobs + ol li:before {
+h3#activejobs + ol li::before {
   color: #5a5;
 }
 
-h3#finishedjobs + ol li:before {
-  color: #5a5;
-  font-size: 12.5pt;
-  content: '\2714\00A0';
-}
-
-h3#readyjobs + ol li:before {
+h3#readyjobs + ol li::before {
   color: #dd3;
 }
 
-h3#scheduledjobs + ol li:before {
-  content: '\23F2\00A0';
-  vertical-align: inherit;
-  color: #970;
-  font-size: 11pt;
-  opacity: .6;
-  background: none !important;
-  border: none !important;
+h3#scheduledjobs + ol li::before {
+  background: url(/themes/console/images/svg/timer.svg) 6px center no-repeat;
+  background-size: 12px 12px;
 }
 
 #schedjobs {
-  width: 100% !important;
   margin: 15px 0 -2px !important;
+  width: 100% !important;
 }
 
 #jobs #schedjobs th {
@@ -5781,43 +5773,42 @@ h3#scheduledjobs + ol li:before {
 }
 
 #schedjobs td, #jobs #schedjobs tr:hover td {
-  padding: 5px 0;
+  padding: 2px 4px;
   font-weight: normal !important;
   color: #33333f;
   background: #fcfcff !important;
 }
 
 #schedjobs tr:hover td:first-child {
-  background-image: url(/themes/console/images/info/task.png);
-  background-position: 5px center;
-  background-repeat: no-repeat;
+  background-image: url(/themes/console/images/svg/timer.svg) 6px center no-repeat;
 }
 
 #schedjobs ul {
   margin: 0;
   columns: 272px auto;
   column-gap: 20px;
+  font-size: 90%;
 }
 
 #schedjobs li {
   margin: 2px 0;
-  min-width: 272px;
+  padding: 3px 5px;
+  min-width: 280px;
   display: inline-block;
-  border-radius: 0 15px 15px 0;
+  border: 1px solid #dde;
 }
 
 @media screen and (min-width: 1200px) {
-#jobstats td:first-child, #jobstats tr:hover td:first-child {
-  padding: 6px 0 6px 26px;
-  background-image: url(/themes/console/images/buttons/yes.png);
-  background-position: 5px center;
-  background-repeat: no-repeat;
-}
+  #jobstats td:first-child, #jobstats tr:hover td:first-child {
+    padding: 6px 0 6px 26px;
+    background: url(/themes/console/images/svg/yes.svg) 8px center no-repeat;
+    background-size: 12px 12px;
+  }
 
-#jobstats tr:last-child td:first-child, #jobstats tr:last-child:hover td:first-child {
-  padding: 7px 8px;
-  background-image: none;
-}
+  #jobstats tr:last-child td:first-child, #jobstats tr:last-child:hover td:first-child {
+    padding: 7px 8px;
+    background-image: none;
+  }
 }
 
 #jobstats {
@@ -5830,9 +5821,10 @@ h3#scheduledjobs + ol li:before {
 
 .jobcount {
   margin-right: 10px;
-  padding: 2px 10px 2px 20px;
+  padding: 2px 10px 2px 16px;
   white-space: nowrap;
-  background: url(/themes/console/images/info/task.png) left center no-repeat;
+  background: url(/themes/console/images/svg/timer.svg) left center no-repeat;
+  background-size: 12px 12px;
 }
 
 /* end /jobs */

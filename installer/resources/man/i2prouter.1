@@ -5,7 +5,7 @@ i2prouter \- start and stop the I2P router
 
 .SH SYNOPSIS
 .B i2prouter
-.RI { console | start | stop | graceful | restart | condrestart | status | dump | install | remove }
+.RI { console | start | stop | graceful | gracefulrestart | restart | condrestart | status | dump | install | remove }
 .br
 
 .SH DESCRIPTION
@@ -26,6 +26,10 @@ Stops the I2P service.
 .B
 .IP restart
 Stops the I2P service and then starts it.
+
+.B
+.IP gracefulrestart
+Gracefully stops the I2P service and starts it again.
 
 .B
 .IP condrestart
