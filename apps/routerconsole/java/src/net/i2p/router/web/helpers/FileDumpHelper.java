@@ -32,7 +32,7 @@ import net.i2p.util.SystemVersion;
 public class FileDumpHelper extends HelperBase {
 
     private static final boolean isWindows = SystemVersion.isWindows();
-    private static final String LINK = "https://gitlab.com/i2pplus/I2P.Plus/-/tree/master/";
+    private static final String LINK = "https://gitlab.com/i2pplus/I2P.Plus/-/commit/";
 
     public String getFileSummary() {
         StringBuilder buf = new StringBuilder(16*1024);
