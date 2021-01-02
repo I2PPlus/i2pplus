@@ -32,6 +32,8 @@ import net.i2p.util.SystemVersion;
 public class FileDumpHelper extends HelperBase {
 
     private static final boolean isWindows = SystemVersion.isWindows();
+    private static final String LINK = "https://gitlab.com/i2pplus/I2P.Plus/-/commit/";
+
     public String getFileSummary() {
         StringBuilder buf = new StringBuilder(16*1024);
         buf.append("<table id=\"jardump\">\n<thead>\n<tr><th>File</th><th>Size</th><th>Date</th><th>SHA 256</th><th>Revision</th>" +
@@ -56,7 +58,7 @@ public class FileDumpHelper extends HelperBase {
             }
             Collections.sort(flist);
             for (File f : flist) {
-                dumpFile(buf, f);
+                dumpFile(buf, f, true);
             }
         }
 
@@ -65,14 +67,14 @@ public class FileDumpHelper extends HelperBase {
         buf.append("<tr><th class=\"subheading routerfiles\" colspan=\"9\"><b>Router Jar Files:</b> <code>");
         buf.append(dir.getAbsolutePath());
         buf.append("</code></th></tr>\n");
-        dumpDir(buf, dir, ".jar");
+        dumpDir(buf, dir, ".jar", true);
 
         // our wars
         dir = new File(_context.getBaseDir(), "webapps");
         buf.append("<tr><th class=\"subheading routerfiles\" colspan=\"9\"><b>Router War Files:</b> <code>");
         buf.append(dir.getAbsolutePath());
         buf.append("</code></th></tr>\n");
-        dumpDir(buf, dir, ".war");
+        dumpDir(buf, dir, ".war", true);
 
         // plugins
         File pluginDir = new File(_context.getConfigDir(), PluginStarter.PLUGIN_DIR);
@@ -87,9 +89,9 @@ public class FileDumpHelper extends HelperBase {
                 buf.append("<tr><th class=\"subheading pluginfiles\" colspan=\"9\"><b>Plugin File Location:</b> <code>");
                 buf.append(dir.getAbsolutePath());
                 buf.append("</code></th></tr>");
-                dumpDir(buf, dir, ".jar");
+                dumpDir(buf, dir, ".jar", false);
                 dir = new File(files[i], "console/webapps");
-                dumpDir(buf, dir, ".war");
+                dumpDir(buf, dir, ".war", false);
             }
         }
 
@@ -97,23 +99,23 @@ public class FileDumpHelper extends HelperBase {
         return buf.toString();
     }
 
-    private static void dumpDir(StringBuilder buf, File dir, String suffix) {
+    private static void dumpDir(StringBuilder buf, File dir, String suffix, boolean linkrev) {
         File[] files = dir.listFiles(new FileSuffixFilter(suffix));
         if (files == null)
             return;
         Arrays.sort(files);
         for (int i = 0; i < files.length; i++) {
-            dumpFile(buf, files[i]);
+            dumpFile(buf, files[i], linkrev);
         }
     }
 
-    private static void dumpFile(StringBuilder buf, File f) {
+    private static void dumpFile(StringBuilder buf, File f, boolean linkrev) {
         buf.append("<tr><td><b title=\"").append(f.getAbsolutePath()).append("\">").append(f.getName()).append("</b></td>" +
                    "<td align=\"right\">").append(f.length()).append("</td>" +
                    "<td>");
         long mod = f.lastModified();
         if (mod > 0)
-            buf.append((new Date(mod)).toString());
+            buf.append((new Date(mod)).toString().replace("GMT", "UTC"));
         else
             buf.append("<font color=\"red\">Not found</font>");
         buf.append("</td><td align=\"center\">");
@@ -143,24 +145,26 @@ public class FileDumpHelper extends HelperBase {
         if (s != null && s.length() > 20) {
             if (iv != null)
                 buf.append("<br>");
-            // fix and uncomment if a reliable viewmtn host appears
-            //buf.append("<a href=\"http://killyourtv.i2p/viewmtn/revision/info/").append(s)
-            //   .append("\">");
+            if (linkrev)
+                buf.append("<a href=\"").append(LINK).append(s).append("\">");
             buf.append("<span class=\"revision\"><tt>").append(s.substring(0, 20)).append("</tt>" +
                        "<br>" +
                        "<tt>").append(s.substring(20)).append("</tt></span>");
-            //buf.append("</tt>");
+            if (linkrev)
+                buf.append("</a>");
         }
         buf.append("</td><td>");
         s = getAtt(att, "Created-By");
-        if (s != null)
+        if (s != null) {
             buf.append(s.replace("(Oracle Corporation)", "(Oracle)")
                         .replace("Apache Maven", "Maven")
-                        .replace("(Sun Microsystems Inc.)", "(Sun)"));
-        buf.append("</td><td>");
+                        .replace("(Sun Microsystems Inc.)", "(Sun)")
+                        .replace(" (Private Build)", ""));
+        }
+        buf.append("</td><td title=\"UTC\">");
         s = getAtt(att, "Build-Date");
         if (s != null)
-            buf.append(s);
+            buf.append(s.replace(" UTC", ""));
         buf.append("</td><td align=\"center\">");
         s = getAtt(att, "Built-By");
         if (s != null)
