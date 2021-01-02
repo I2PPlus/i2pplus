@@ -37,10 +37,8 @@ public class SimpleTimer2 {
         return I2PAppContext.getGlobalContext().simpleTimer2();
     }
 
-//    private static final int MIN_THREADS = 2;
-//    private static final int MAX_THREADS = 4;
-    private static final int MIN_THREADS = 1;
-    private static final int MAX_THREADS = 1;
+    private static final int MIN_THREADS = 2;
+    private static final int MAX_THREADS = SystemVersion.getCores();
 
     private final ScheduledThreadPoolExecutor _executor;
     private final String _name;
@@ -71,7 +69,10 @@ public class SimpleTimer2 {
     protected SimpleTimer2(I2PAppContext context, String name, boolean prestartAllThreads) {
         _name = name;
         long maxMemory = SystemVersion.getMaxMemory();
-        _threads = (int) Math.max(MIN_THREADS, Math.min(MAX_THREADS, 1 + (maxMemory / (32*1024*1024))));
+        if (SystemVersion.isSlow())
+            _threads = 2;
+        else
+            _threads = (int) Math.max(MIN_THREADS, Math.min(MAX_THREADS, 1 + (maxMemory / (32*1024*1024))));
         _executor = new CustomScheduledThreadPoolExecutor(_threads, new CustomThreadFactory());
         if (prestartAllThreads)
             _executor.prestartAllCoreThreads();
@@ -123,7 +124,7 @@ public class SimpleTimer2 {
 //                (new Exception("OWCH! DAMN! Wrong ThreadGroup `" + name +"', `" + rv.getName() + "'")).printStackTrace();
 //           }
             rv.setDaemon(true);
-            rv.setPriority(Thread.NORM_PRIORITY + 1);
+            rv.setPriority(Thread.MAX_PRIORITY - 1);
             return rv;
         }
     }
