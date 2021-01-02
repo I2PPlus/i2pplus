@@ -113,10 +113,10 @@ public class FileDumpHelper extends HelperBase {
     private static void dumpFile(StringBuilder buf, File f, boolean linkrev) {
         buf.append("<tr><td><b title=\"").append(f.getAbsolutePath()).append("\">").append(f.getName()).append("</b></td>" +
                    "<td align=\"right\">").append(f.length()).append("</td>" +
-                   "<td>");
+                   "<td title=\"UTC\">");
         long mod = f.lastModified();
         if (mod > 0)
-            buf.append((new Date(mod)).toString().replace("GMT", "UTC"));
+            buf.append((new Date(mod)).toString().replace(" GMT", ""));
         else
             buf.append("<font color=\"red\">Not found</font>");
         buf.append("</td><td align=\"center\">");
@@ -179,7 +179,7 @@ public class FileDumpHelper extends HelperBase {
             buf.append(s);
         buf.append("</td><td>");
         s = getAtt(att, "Workspace-Changes");
-        if (s != null) {
+        if (s != null && s != "") {
             // Encase each mod in a span so we can single click select individual mods
             buf.append("<font color=\"red\"><span class=\"unsignedmod\">")
                .append(s.replace(",", "</span></font><hr><font color=\"red\"><span class=\"unsignedmod\">"))
