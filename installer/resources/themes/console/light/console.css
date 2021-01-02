@@ -11327,10 +11327,15 @@ form[action="events"] select + b, form[action="events"] input[type=submit] {
   min-width: 100px;
 }
 
+#jardump td:last-child:empty {
+  min-width: 0;
+}
+
 .sha256, .revision {
   display: inline-block;
   width: 100px;
   overflow: auto;
+  scrollbar-width: thin;
 }
 
 #proof p {
