@@ -1192,6 +1192,7 @@ public class I2PTunnelHTTPClient extends I2PTunnelHTTPClientBase implements Runn
                 Thread t = new I2PTunnelOutproxyRunner(s, outSocket, sockLock, data, response, onTimeout);
                 // we are called from an unlimited thread pool, so run inline
                 //t.start();
+                t.setPriority(Thread.MAX_PRIORITY);
                 t.run();
                 return;
             }
