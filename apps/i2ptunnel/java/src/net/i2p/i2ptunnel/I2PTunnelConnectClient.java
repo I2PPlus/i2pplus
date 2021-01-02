@@ -305,6 +305,7 @@ public class I2PTunnelConnectClient extends I2PTunnelHTTPClientBase implements R
                 byte[] response = SUCCESS_RESPONSE.getBytes("UTF-8");
                 Thread t = new I2PTunnelOutproxyRunner(s, outSocket, sockLock, null, response, onTimeout);
                 // we are called from an unlimited thread pool, so run inline
+                t.setPriority(Thread.MAX_PRIORITY);
                 t.run();
                 return;
             }
@@ -357,6 +358,7 @@ public class I2PTunnelConnectClient extends I2PTunnelHTTPClientBase implements R
             }
             // we are called from an unlimited thread pool, so run inline
             //t.start();
+            t.setPriority(Thread.MAX_PRIORITY);
             t.run();
         } catch (IOException ex) {
             _log.info(getPrefix(requestId) + "Error trying to connect", ex);

@@ -156,6 +156,7 @@ public class I2PTunnelClient extends I2PTunnelClientBase {
                                 (I2PTunnelRunner.FailCallback) null);
             // we are called from an unlimited thread pool, so run inline
             //t.start();
+            t.setPriority(Thread.MAX_PRIORITY);
             t.run();
         } catch (IOException ex) {
             if (_log.shouldLog(Log.INFO))
