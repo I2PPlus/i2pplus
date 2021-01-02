@@ -32,7 +32,8 @@ import net.i2p.util.SystemVersion;
 public class FileDumpHelper extends HelperBase {
 
     private static final boolean isWindows = SystemVersion.isWindows();
-    private static final String LINK = "https://gitlab.com/i2pplus/I2P.Plus/-/commit/";
+    private static final String LINK = "https://gitlab.com/i2pplus/I2P.Plus/-/tree/";
+    private static final String UPSTREAMLINK = "https://github.com/i2p/i2p.i2p/tree/";
 
     public String getFileSummary() {
         StringBuilder buf = new StringBuilder(16*1024);
@@ -112,10 +113,10 @@ public class FileDumpHelper extends HelperBase {
     private static void dumpFile(StringBuilder buf, File f, boolean linkrev) {
         buf.append("<tr><td><b title=\"").append(f.getAbsolutePath()).append("\">").append(f.getName()).append("</b></td>" +
                    "<td align=\"right\">").append(f.length()).append("</td>" +
-                   "<td>");
+                   "<td title=\"UTC\">");
         long mod = f.lastModified();
         if (mod > 0)
-            buf.append((new Date(mod)).toString().replace("GMT", "UTC"));
+            buf.append((new Date(mod)).toString().replace(" GMT", ""));
         else
             buf.append("<font color=\"red\">Not found</font>");
         buf.append("</td><td align=\"center\">");
@@ -142,11 +143,18 @@ public class FileDumpHelper extends HelperBase {
         if (iv != null)
             buf.append("<b>").append(iv).append("</b>");
         String s = getAtt(att, "Base-Revision");
+        String builder = getAtt(att, "Built-By");
         if (s != null && s.length() > 20) {
             if (iv != null)
                 buf.append("<br>");
-            if (linkrev)
-                buf.append("<a href=\"").append(LINK).append(s).append("\">");
+            if (linkrev) {
+                buf.append("<a href=\"");
+                if (builder.equals("zzz"))
+                    buf.append(UPSTREAMLINK);
+                else
+                    buf.append(LINK);
+                buf.append(s).append("\">");
+            }
             buf.append("<span class=\"revision\"><tt>").append(s.substring(0, 20)).append("</tt>" +
                        "<br>" +
                        "<tt>").append(s.substring(20)).append("</tt></span>");
@@ -171,7 +179,7 @@ public class FileDumpHelper extends HelperBase {
             buf.append(s);
         buf.append("</td><td>");
         s = getAtt(att, "Workspace-Changes");
-        if (s != null) {
+        if (s != null && s != "") {
             // Encase each mod in a span so we can single click select individual mods
             buf.append("<font color=\"red\"><span class=\"unsignedmod\">")
                .append(s.replace(",", "</span></font><hr><font color=\"red\"><span class=\"unsignedmod\">"))

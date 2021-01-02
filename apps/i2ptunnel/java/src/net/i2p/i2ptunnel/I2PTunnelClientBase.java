@@ -48,7 +48,7 @@ public abstract class I2PTunnelClientBase extends I2PTunnelTask implements Runna
     protected final Logging l;
 
 //    static final long DEFAULT_CONNECT_TIMEOUT = 60 * 1000;
-    static final long DEFAULT_CONNECT_TIMEOUT = 75*1000;
+    static final long DEFAULT_CONNECT_TIMEOUT = 90*1000;
 
     private static final AtomicLong __clientId = new AtomicLong();
     protected long _clientId;

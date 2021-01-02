@@ -691,6 +691,7 @@ public class I2PTunnelHTTPServer extends I2PTunnelServer {
                     browserin.available() > 0) {  // just in case
                     I2PAppThread sender = new I2PAppThread(new Sender(serverout, browserin, "Client -> Server", _log),
                                                                       Thread.currentThread().getName() + "hcs");
+                    sender.setPriority(Thread.MAX_PRIORITY - 1);
                     sender.start();
                 } else {
                     // todo - half close? reduce MessageInputStream buffer size?
