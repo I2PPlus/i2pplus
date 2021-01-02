@@ -32,7 +32,8 @@ import net.i2p.util.SystemVersion;
 public class FileDumpHelper extends HelperBase {
 
     private static final boolean isWindows = SystemVersion.isWindows();
-    private static final String LINK = "https://gitlab.com/i2pplus/I2P.Plus/-/commit/";
+    private static final String LINK = "https://gitlab.com/i2pplus/I2P.Plus/-/tree/";
+    private static final String UPSTREAMLINK = "https://github.com/i2p/i2p.i2p/tree/";
 
     public String getFileSummary() {
         StringBuilder buf = new StringBuilder(16*1024);
@@ -142,11 +143,18 @@ public class FileDumpHelper extends HelperBase {
         if (iv != null)
             buf.append("<b>").append(iv).append("</b>");
         String s = getAtt(att, "Base-Revision");
+        String builder = getAtt(att, "Built-By");
         if (s != null && s.length() > 20) {
             if (iv != null)
                 buf.append("<br>");
-            if (linkrev)
-                buf.append("<a href=\"").append(LINK).append(s).append("\">");
+            if (linkrev) {
+                buf.append("<a href=\"");
+                if (builder.equals("zzz"))
+                    buf.append(UPSTREAMLINK);
+                else
+                    buf.append(LINK);
+                buf.append(s).append("\">");
+            }
             buf.append("<span class=\"revision\"><tt>").append(s.substring(0, 20)).append("</tt>" +
                        "<br>" +
                        "<tt>").append(s.substring(20)).append("</tt></span>");
