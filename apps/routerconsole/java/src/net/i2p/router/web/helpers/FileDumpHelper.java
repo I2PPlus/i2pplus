@@ -115,7 +115,7 @@ public class FileDumpHelper extends HelperBase {
                    "<td>");
         long mod = f.lastModified();
         if (mod > 0)
-            buf.append((new Date(mod)).toString());
+            buf.append((new Date(mod)).toString().replace("GMT", "UTC"));
         else
             buf.append("<font color=\"red\">Not found</font>");
         buf.append("</td><td align=\"center\">");
@@ -155,14 +155,16 @@ public class FileDumpHelper extends HelperBase {
         }
         buf.append("</td><td>");
         s = getAtt(att, "Created-By");
-        if (s != null)
+        if (s != null) {
             buf.append(s.replace("(Oracle Corporation)", "(Oracle)")
                         .replace("Apache Maven", "Maven")
-                        .replace("(Sun Microsystems Inc.)", "(Sun)"));
-        buf.append("</td><td>");
+                        .replace("(Sun Microsystems Inc.)", "(Sun)")
+                        .replace(" (Private Build)", ""));
+        }
+        buf.append("</td><td title=\"UTC\">");
         s = getAtt(att, "Build-Date");
         if (s != null)
-            buf.append(s);
+            buf.append(s.replace(" UTC", ""));
         buf.append("</td><td align=\"center\">");
         s = getAtt(att, "Built-By");
         if (s != null)
