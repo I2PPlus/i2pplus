@@ -35,6 +35,8 @@ import net.i2p.stat.RateStat;
 import net.i2p.util.PortMapper;
 import net.i2p.util.SystemVersion;
 
+import net.i2p.router.web.ConfigUpdateHandler;
+
 
 /**
  * Simple helper to query the appropriate router for data necessary to render
@@ -1070,15 +1072,19 @@ public class SummaryHelper extends HelperBase {
                        .append(_t("Download I2P Update"))
                        .append("</button><br>\n");
                 }
+                String source = _context.getProperty(ConfigUpdateHandler.PROP_ZIP_URL);
                 if (unsignedAvail) {
                     buf.append("<span id=\"updateAvailable\">").append(_t("Unsigned update available")).append("<br><i>").append(getUnsignedUpdateVersion());
-                    buf.append("</i></span><br><button type=\"submit\" class=\"download\" name=\"updateAction\" value=\"Unsigned\" >")
+                    buf.append("</i></span><br><button type=\"submit\" class=\"download\" name=\"updateAction\" value=\"Unsigned\" >");
                        // Note to translators: parameter is a date and time, e.g. "02-Mar 20:34 UTC"
                        // <br> is optional, to help the browser make the lines even in the button
                        // If the translation is shorter than the English, you should probably not include <br>
 //                       .append(_t("Download Unsigned<br>Update {0}", getUnsignedUpdateVersion()))
-                       .append(_t("Download I2P Update"))
-                       .append("</button><br>\n");
+                    if (source != null && source.contains("skank"))
+                        buf.append(_t("Download I2P Update").replace("I2P", "I2P+"));
+                    else
+                        buf.append(_t("Download I2P Update"));
+                    buf.append("</button><br>\n");
                 }
                 buf.append("</form>\n");
         }
