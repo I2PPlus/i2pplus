@@ -143,9 +143,9 @@ public class I2PTunnelOutproxyRunner extends I2PAppThread {
                 out.write(initialSocketData);
             }
             if (_log.shouldLog(Log.DEBUG))
-                _log.debug("Initial data " + (initialI2PData != null ? initialI2PData.length : 0)
-                           + " written to the outproxy, " + (initialSocketData != null ? initialSocketData.length : 0)
-                           + " written to the socket, starting forwarders");
+                _log.debug("Initial data (" + (initialI2PData != null ? initialI2PData.length : 0)
+                           + " bytes) written to the outproxy, " + (initialSocketData != null ? initialSocketData.length : 0)
+                           + " bytes written to the socket, starting forwarders...");
             if (!(s instanceof InternalSocket))
                 in = new BufferedInputStream(in, 2*NETWORK_BUFFER_SIZE);
             Thread t1 = new StreamForwarder(in, i2pout, true);
