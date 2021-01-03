@@ -6,6 +6,7 @@ sourceSets {
     main {
         java {
             srcDir 'java/src'
+            srcDir 'java/build/messages-proxy-src'
         }
     }
     test {
@@ -22,6 +23,15 @@ dependencies {
     providedCompile project(':apps:jetty')
 }
 
+// Create the java files from the po files. The jar task will compile them.
+// This requires gettext 0.19 or higher.
+// We don't support the "slow way"
+task bundleProxy {
+    doLast {
+        println "apps/i2ptunnel/java/bundle-messages-proxy.sh".execute().text
+    }
+}
+
 task i2ptunnelJar(type: Jar) {
     from sourceSets.main.output 
     exclude '**/ui/*.class'
@@ -32,6 +42,7 @@ task i2ptunnelJar(type: Jar) {
         attributes 'Class-Path': 'i2p.jar mstreaming.jar'
     }
 }
+i2ptunnelJar.dependsOn bundleProxy
 
 task tempBeansJar(type: Jar) {
     from sourceSets.main.output
