@@ -1430,7 +1430,16 @@ public class Router implements RouterClock.ClockShiftListener {
         // help us shut down esp. after OOM
         int priority = (exitCode == EXIT_OOM) ? Thread.MAX_PRIORITY - 1 : Thread.NORM_PRIORITY + 2;
         Thread.currentThread().setPriority(priority);
-        _log.log(Log.CRIT, "Starting final shutdown(" + exitCode + ')');
+        if (exitCode == 2)
+            _log.log(Log.CRIT, "Initiating graceful shutdown...");
+        else if (exitCode == 3)
+            _log.log(Log.CRIT, "Initiating hard shutdown...");
+        else if (exitCode == 4)
+            _log.log(Log.CRIT, "Initiating hard restart...");
+        else if (exitCode == 5)
+            _log.log(Log.CRIT, "Initiating graceful restart...");
+        else if (exitCode == 10)
+            _log.log(Log.CRIT, "Initiating forced restart (Out of Memory error)...");
         // So we can get all the way to the end
         // No, you can't do Thread.currentThread.setDaemon(false)
         if (_killVMOnEnd) {

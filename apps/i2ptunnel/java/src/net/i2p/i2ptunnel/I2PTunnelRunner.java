@@ -300,9 +300,9 @@ public class I2PTunnelRunner extends I2PAppThread implements I2PSocket.SocketErr
                 out.write(initialSocketData);
             }
             if (_log.shouldLog(Log.DEBUG))
-                _log.debug("Initial data " + (initialI2PData != null ? initialI2PData.length : 0)
-                           + " written to I2P, " + (initialSocketData != null ? initialSocketData.length : 0)
-                           + " written to the socket, starting forwarders");
+                _log.debug("Initial data (" + (initialI2PData != null ? initialI2PData.length : 0)
+                           + " bytes) written to I2P, " + (initialSocketData != null ? initialSocketData.length : 0)
+                           + " bytes written to the socket, starting forwarders...");
             if (!(s instanceof InternalSocket))
                 in = new BufferedInputStream(in, 2*NETWORK_BUFFER_SIZE);
             toI2P = new StreamForwarder(in, i2pout, true, null);
@@ -317,7 +317,7 @@ public class I2PTunnelRunner extends I2PAppThread implements I2PSocket.SocketErr
                 }
             }
             if (_log.shouldLog(Log.DEBUG))
-                _log.debug("Both forwarders completed, sent: " + totalSent + " received: " + totalReceived);
+                _log.debug("Both forwarders completed: " + totalSent + "bytes sent, " + totalReceived + " bytes received");
 
             // this task is useful for the httpclient
             if ((onTimeout != null || _onFail != null) && totalReceived <= 0) {
@@ -391,7 +391,7 @@ public class I2PTunnelRunner extends I2PAppThread implements I2PSocket.SocketErr
             removeRef();
             if (i2pReset) {
                 if (_log.shouldWarn())
-                    _log.warn("Received I2P reset, resetting socket");
+                    _log.warn("Received I2P reset, resetting socket...");
                 try {
                     s.setSoLinger(true, 0);
                 } catch (IOException ioe) {}
@@ -403,7 +403,7 @@ public class I2PTunnelRunner extends I2PAppThread implements I2PSocket.SocketErr
                 } catch (IOException ioe) {}
             } else if (sockReset) {
                 if (_log.shouldWarn())
-                    _log.warn("Received socket reset, resetting I2P socket");
+                    _log.warn("Received socket reset, resetting I2P socket...");
                 try {
                     i2ps.reset();
                 } catch (IOException ioe) {}

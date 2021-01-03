@@ -1393,7 +1393,7 @@ public class ConsoleUpdateManager implements UpdateManager, RouterApp {
             _context.router().saveConfig(NewsHelper.PROP_LAST_UPDATE_TIME, Long.toString(modtime));
 
             if ("install".equals(policy)) {
-                _log.log(Log.CRIT, "Update was downloaded and verified, restarting to install it");
+                _log.log(Log.CRIT, "Update was downloaded and verified, restarting to install it...");
                 updateStatus("<b>" + _t("Update verified") + "</b><br>" + _t("Restarting"));
                 restart();
             } else {
@@ -1413,13 +1413,19 @@ public class ConsoleUpdateManager implements UpdateManager, RouterApp {
      *  @return success
      */
     private boolean handleUnsignedFile(URI uri, String lastmod, File updFile) {
+        String url = uri.toString();
         if (FileUtil.verifyZip(updFile)) {
-            updateStatus("<b>" + _t("Update downloaded") + "</b>");
+            if (url.contains("skank"))
+                updateStatus("<b>" + _t("Update downloaded").replace("Update", "I2P+ Update") + "</b>");
+            else
+                updateStatus("<b>" + _t("Update downloaded") + "</b>");
         } else {
             updFile.delete();
-            String url = uri.toString();
-            updateStatus("<b>" + _t("Unsigned update file from {0} is corrupt", url) + "</b>");
-            _log.log(Log.CRIT, "Corrupt zip file from " + url);
+            if (url.contains("skank"))
+                updateStatus("<b>" + _t("Unsigned update file from {0} is corrupt", url).replace("Unsigned update file", "I2P+ Update") + "</b>");
+            else
+                updateStatus("<b>" + _t("Unsigned update file from {0} is corrupt", url) + "</b>");
+            _log.log(Log.CRIT, "Corrupt unsigned update from: " + url);
             return false;
         }
         File to = new File(_context.getRouterDir(), Router.UPDATE_FILE);

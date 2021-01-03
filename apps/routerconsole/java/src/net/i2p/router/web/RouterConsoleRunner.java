@@ -141,7 +141,7 @@ public class RouterConsoleRunner implements RouterApp {
     private static final int MIN_THREADS = 1;
     /** this is for the handlers only. We will adjust for the connectors and acceptors below. */
 //    private static final int MAX_THREADS = 24;
-    private static final int MAX_THREADS = 48;
+    private static final int MAX_THREADS = 96;
     private static final int MAX_IDLE_TIME = 90*1000;
     private static final String THREAD_NAME = "RouterConsole Jetty";
     public static final String PROP_DTG_ENABLED = "desktopgui.enabled";
@@ -582,7 +582,7 @@ public class RouterConsoleRunner implements RouterApp {
                         boundAddresses++;
                         hosts.add(host);
                     } catch (Exception ioe) {
-                        System.err.println("Unable to bind routerconsole to " + host + " port " + _listenPort + ": " + ioe);
+                        System.err.println("Unable to bind the Router Console to " + host + " port " + _listenPort + ": " + ioe);
                         System.err.println("You may ignore this warning if the console is still available at http://localhost:" + _listenPort);
                     }
                 }
@@ -673,7 +673,7 @@ public class RouterConsoleRunner implements RouterApp {
                             boundAddresses++;
                             hosts.add(host);
                         } catch (Exception e) {
-                            System.err.println("Unable to bind RouterConsole to " + host + " port " + sslPort + " for SSL: " + e);
+                            System.err.println("Unable to bind the Router Console to " + host + " port " + sslPort + " for SSL: " + e);
                             if (SystemVersion.isGNU())
                                 System.err.println("Probably because GNU classpath does not support Sun keystores");
                             System.err.println("You may ignore this warning if the console is still available at https://localhost:" + sslPort);
@@ -694,13 +694,14 @@ public class RouterConsoleRunner implements RouterApp {
             }
 
             if (boundAddresses <= 0) {
-                System.err.println("Unable to bind RouterConsole to any address on port " + _listenPort + (sslPort > 0 ? (" or SSL port " + sslPort) : ""));
+                System.err.println("Unable to bind the Router Console to any address on port " + _listenPort + (sslPort > 0 ? (" or SSL port " + sslPort) : ""));
                 return;
             }
             // Each address spawns a Connector and an Acceptor thread
             // If the min is less than this, we have no thread for the handlers or the expiration thread.
             qtp.setMinThreads(MIN_THREADS + (2 * boundAddresses));
-            qtp.setMaxThreads(MAX_THREADS + (2 * boundAddresses));
+//            qtp.setMaxThreads(MAX_THREADS + (2 * boundAddresses));
+            qtp.setMaxThreads(MAX_THREADS);
 
             File tmpdir = new SecureDirectory(workDir, ROUTERCONSOLE + "-" +
                                                        (_listenPort != null ? _listenPort : _sslListenPort));
@@ -760,7 +761,7 @@ public class RouterConsoleRunner implements RouterApp {
             _server.start();
         } catch (Throwable me) {
             // NoClassFoundDefError from a webapp is a throwable, not an exception
-            System.err.println("Error starting the RouterConsole server: " + me);
+            System.err.println("Error starting the Router Console server: " + me);
             me.printStackTrace();
         }
 
@@ -785,7 +786,7 @@ public class RouterConsoleRunner implements RouterApp {
             }
             if (error) {
                 String port = (_listenPort != null) ? _listenPort : ((_sslListenPort != null) ? _sslListenPort : Integer.toString(DEFAULT_LISTEN_PORT));
-                System.err.println("WARNING: Error starting one or more listeners of the RouterConsole server.\n" +
+                System.err.println("WARNING: Error starting one or more listeners of the Router Console server.\n" +
                                "If your console is still accessible at http://127.0.0.1:" + port + "/,\n" +
                                "this may be a problem only with binding to the IPV6 address ::1.\n" +
                                "If so, you may ignore this error, or remove the\n" +
@@ -839,7 +840,7 @@ public class RouterConsoleRunner implements RouterApp {
                     _mgr.register(this);
             }
         } else {
-            System.err.println("ERROR: RouterConsole did not start, not starting webapps");
+            System.err.println("ERROR: Router Console did not start, not starting webapps");
             changeState(START_FAILED);
         }
 
@@ -906,7 +907,7 @@ public class RouterConsoleRunner implements RouterApp {
             KeyStoreUtil.logCertExpiration(ks, ksPW, 180*24*60*60*1000L);
             boolean rv = _context.getProperty(PROP_KEY_PASSWORD) != null;
             if (!rv)
-                System.err.println("RouterConsole SSL error, must set " + PROP_KEY_PASSWORD + " in " +
+                System.err.println("Router Console SSL error, must set " + PROP_KEY_PASSWORD + " in " +
                                    (new File(_context.getConfigDir(), "router.config")).getAbsolutePath());
             return rv;
         }
@@ -1091,7 +1092,7 @@ public class RouterConsoleRunner implements RouterApp {
             UserIdentity rv = super.login(username, credentials, request);
             if (rv == null)
                 //_log.logAlways(net.i2p.util.Log.WARN, "Console authentication failed, webapp: " + _webapp + ", user: " + username);
-                _log.logAlways(net.i2p.util.Log.WARN, "RouterConsole authentication failed for user: " + username);
+                _log.logAlways(net.i2p.util.Log.WARN, "Router Console authentication failed for user: " + username);
             return rv;
         }
     }
