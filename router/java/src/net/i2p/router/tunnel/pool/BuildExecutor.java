@@ -46,7 +46,7 @@ class BuildExecutor implements Runnable {
     private volatile boolean _isRunning;
     private boolean _repoll;
 //    private static final int MAX_CONCURRENT_BUILDS = 13;
-    private static final int MAX_CONCURRENT_BUILDS = 24;
+    private static final int MAX_CONCURRENT_BUILDS = 48;
     /** accept replies up to a minute after we gave up on them */
     private static final long GRACE_PERIOD = 60*1000;
 
