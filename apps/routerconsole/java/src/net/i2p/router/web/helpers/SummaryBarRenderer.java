@@ -1127,10 +1127,10 @@ class SummaryBarRenderer {
               .append("</td></tr>\n");
 
            buf.append("<tr title=\"")
-              .append(_t("Concurrent tunnel builds (averaged over 1 minute)"))
+              .append(_t("Maximum concurrent tunnel builds / time to build a tunnel (1 minute average)"))
               .append("\">" +
                       "<td align=\"left\"><b>")
-              .append(_t("Concurrent Builds"))
+              .append(_t("Concurrency"))
               .append("</b></td><td class=\"digits\" align=\"right\">")
               .append(_helper.getConcurrency())
               .append("</td></tr>\n");

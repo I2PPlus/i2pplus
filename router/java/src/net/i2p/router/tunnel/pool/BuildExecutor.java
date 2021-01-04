@@ -142,9 +142,9 @@ class BuildExecutor implements Runnable {
                 avg = rs.getLifetimeAverageValue();
             if (avg > 1) {
                 // If builds take more than 75 ms, start throttling
-                int throttle = (int) (75 * MAX_CONCURRENT_BUILDS / avg);
+                int throttle = (int) (200 * MAX_CONCURRENT_BUILDS / avg);
                 if (SystemVersion.isSlow() || SystemVersion.getMaxMemory() < 512)
-                    throttle = (int) (40 * MAX_CONCURRENT_BUILDS / avg);
+                    throttle = (int) (100 * MAX_CONCURRENT_BUILDS / avg);
                 if (throttle < allowed) {
                     allowed = throttle;
                     if (allowed < MAX_CONCURRENT_BUILDS && _log.shouldLog(Log.INFO))
@@ -241,7 +241,8 @@ class BuildExecutor implements Runnable {
             if (_log.shouldLog(Log.WARN))
                 _log.warn("Job queue too lagged (" + lag + "ms): deferring new tunnel builds");
             _context.statManager().addRateData("tunnel.concurrentBuildsLagged", concurrent, lag);
-            return 0; // if we have a job heavily blocking our jobqueue, ssllloowww dddooowwwnnn
+//            return 0; // if we have a job heavily blocking our jobqueue, ssllloowww dddooowwwnnn
+            return 1; // if we have a job heavily blocking our jobqueue, ssllloowww dddooowwwnnn
         }
 
         // Trim the number of allowed tunnels for overload,
@@ -250,6 +251,8 @@ class BuildExecutor implements Runnable {
         // allowed = trimForOverload(allowed,concurrent);
         if (_log.shouldLog(Log.DEBUG))
             _log.debug("Current tunnel concurrent build rate: " + allowed);
+        if (allowed < 3)
+            allowed *= 3;
         return allowed;
     }
 
