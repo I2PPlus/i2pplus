@@ -13,7 +13,7 @@ sourceSets {
 
 dependencies {
     compile project(':core')
-    compile project(':apps:systray')
+    providedCompile project(':apps:systray')
     compile 'gnu.getopt:java-getopt:1.0.13'
     providedCompile project(':apps:ministreaming')
     providedCompile project(':apps:jetty')
