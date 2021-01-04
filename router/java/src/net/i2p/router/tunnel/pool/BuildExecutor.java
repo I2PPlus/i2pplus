@@ -21,6 +21,8 @@ import net.i2p.stat.RateStat;
 import net.i2p.stat.StatManager;
 import net.i2p.util.Log;
 
+import net.i2p.util.SystemVersion;
+
 /**
  * Single threaded controller of the tunnel creation process, spanning all tunnel pools.
  * Essentially, this loops across the pools, sees which want to build tunnels, and fires
@@ -46,7 +48,7 @@ class BuildExecutor implements Runnable {
     private volatile boolean _isRunning;
     private boolean _repoll;
 //    private static final int MAX_CONCURRENT_BUILDS = 13;
-    private static final int MAX_CONCURRENT_BUILDS = 24;
+    private static final int MAX_CONCURRENT_BUILDS = SystemVersion.getCores() * 8;
     /** accept replies up to a minute after we gave up on them */
     private static final long GRACE_PERIOD = 60*1000;
 
@@ -79,7 +81,7 @@ class BuildExecutor implements Runnable {
         _context.statManager().createRateStat("tunnel.buildConfigTime", "Time to build a tunnel config (ms)", "Tunnels [Build]", new long[] { 60*1000, 10*60*1000 });
         //_context.statManager().createRateStat("tunnel.buildRequestZeroHopTime", "How long it takes to build a zero hop tunnel", "Tunnels [Build]", new long[] { 60*1000, 10*60*1000 });
         //_context.statManager().createRateStat("tunnel.pendingRemaining", "How many inbound requests are pending after a pass (period is how long the pass takes)?", "Tunnels", new long[] { 60*1000, 10*60*1000 });
-        _context.statManager().createRateStat("tunnel.buildFailFirstHop", "How often we fail to build a OB tunnel because we can't contact the first hop", "Tunnels [Build]", new long[] { 60*1000, 10*60*1000 });
+        _context.statManager().createRateStat("tunnel.buildFailFirstHop", "How often we fail to build an OB tunnel because we can't contact 1st hop", "Tunnels [Build]", new long[] { 60*1000, 10*60*1000 });
         _context.statManager().createRateStat("tunnel.buildReplySlow", "Build reply late, but not too late", "Tunnels [Build]", new long[] { 10*60*1000 });
         //ctx.statManager().createRateStat("tunnel.buildClientExpireIB", "", "Tunnels [Build]", new long[] { 60*60*1000 });
         //ctx.statManager().createRateStat("tunnel.buildClientExpireOB", "", "Tunnels [Build]", new long[] { 60*60*1000 });
@@ -141,6 +143,8 @@ class BuildExecutor implements Runnable {
             if (avg > 1) {
                 // If builds take more than 75 ms, start throttling
                 int throttle = (int) (75 * MAX_CONCURRENT_BUILDS / avg);
+                if (SystemVersion.isSlow() || SystemVersion.getMaxMemory() < 512)
+                    throttle = (int) (40 * MAX_CONCURRENT_BUILDS / avg);
                 if (throttle < allowed) {
                     allowed = throttle;
                     if (allowed < MAX_CONCURRENT_BUILDS && _log.shouldLog(Log.INFO))

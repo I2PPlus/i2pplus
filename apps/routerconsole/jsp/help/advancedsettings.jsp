@@ -83,6 +83,9 @@
 <tr><th>router.rebuildKeys={true|false}</th></tr>
 <tr><td>When set to true, the router will change its identity and UDP port when the router restarts and then delete the key from router.config to prevent further changes. [Default is false]</td></tr>
 
+<tr><th>router.tunnelConcurrentBuilds={n}</th></tr>
+<tr><td>When configured, this setting will configure a hard limit for the number of tunnels the router is permitted to build concurrently. By default the router uses the average build time to determine the optimum build rate.</td></tr>
+
 <tr><th>router.updateUnsigned={true|false}</th></tr>
 <tr><td>If you wish to install unsigned (.zip) I2P updates, this should be added to your <code>router.config</code> file unless you have already configured <code>routerconsole.advanced=true</code>, in which case this option is already provisioned.</td></tr>
 

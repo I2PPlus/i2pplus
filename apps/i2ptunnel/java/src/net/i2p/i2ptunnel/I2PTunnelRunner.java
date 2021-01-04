@@ -317,7 +317,7 @@ public class I2PTunnelRunner extends I2PAppThread implements I2PSocket.SocketErr
                 }
             }
             if (_log.shouldLog(Log.DEBUG))
-                _log.debug("Both forwarders completed: " + totalSent + "bytes sent, " + totalReceived + " bytes received");
+                _log.debug("Both forwarders completed: " + totalSent + " bytes sent, " + totalReceived + " bytes received");
 
             // this task is useful for the httpclient
             if ((onTimeout != null || _onFail != null) && totalReceived <= 0) {
