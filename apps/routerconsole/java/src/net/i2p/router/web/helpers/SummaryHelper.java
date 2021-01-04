@@ -926,6 +926,16 @@ public class SummaryHelper extends HelperBase {
         return _context.throttle().getLocalizedTunnelStatus();
     }
 
+    public String getConcurrency() {
+        if (_context == null)
+            return "0";
+        RateStat rs = _context.statManager().getRate("tunnel.concurrentBuilds");
+        if (rs == null)
+            return "0";
+        Rate concurrentBuilds = rs.getRate(60*1000);
+        return String.valueOf((int)concurrentBuilds.getAverageValue());
+    }
+
     public String getInboundBacklog() {
         if (_context == null)
             return "0";

@@ -35,7 +35,6 @@ import java.text.SimpleDateFormat;
 import java.util.Locale;
 import java.util.TimeZone;
 
-
 /**
  *  Refactored from summarynoframe.jsp to save ~100KB
  *
@@ -1125,6 +1124,15 @@ class SummaryBarRenderer {
               .append(_helper.getInboundTunnels() + _helper.getOutboundTunnels() +
                       _helper.getInboundClientTunnels() + _helper.getOutboundClientTunnels() +
                       partTunnels)
+              .append("</td></tr>\n");
+
+           buf.append("<tr title=\"")
+              .append(_t("Concurrent tunnel builds (averaged over 1 minute)"))
+              .append("\">" +
+                      "<td align=\"left\"><b>")
+              .append(_t("Concurrent Builds"))
+              .append("</b></td><td class=\"digits\" align=\"right\">")
+              .append(_helper.getConcurrency())
               .append("</td></tr>\n");
 
            if ((maxTunnels == null || Integer.valueOf(maxTunnels) > 0) && !_context.router().isHidden() && ri != null &&
