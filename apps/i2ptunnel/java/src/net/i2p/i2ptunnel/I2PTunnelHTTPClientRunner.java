@@ -67,9 +67,10 @@ public class I2PTunnelHTTPClientRunner extends I2PTunnelRunner {
         try {
             s.close();
         } catch (IOException ioe) {}
-        if (t1 != null)
+        if (t1 != null) {
             t1.setPriority(Thread.MAX_PRIORITY);
             t1.join(30*1000);
+        }
         // t2 = fromI2P now run inline
         //t2.join(30*1000);
     }
