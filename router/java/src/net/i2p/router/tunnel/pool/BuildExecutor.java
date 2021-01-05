@@ -158,6 +158,8 @@ class BuildExecutor implements Runnable {
 //            allowed = 2; // Never choke below 2 builds (but congestion may)
         if (allowed < SystemVersion.getCores())
             allowed = SystemVersion.getCores(); // Never choke below # cores
+        if (SystemVersion.getMaxMemory() >= 1024)
+            allowed *= 2;
         else if (allowed > MAX_CONCURRENT_BUILDS)
              allowed = MAX_CONCURRENT_BUILDS;
         allowed = _context.getProperty("router.tunnelConcurrentBuilds", allowed);
@@ -245,7 +247,7 @@ class BuildExecutor implements Runnable {
                 _log.warn("Job queue too lagged (" + lag + "ms): deferring new tunnel builds");
             _context.statManager().addRateData("tunnel.concurrentBuildsLagged", concurrent, lag);
 //            return 0; // if we have a job heavily blocking our jobqueue, ssllloowww dddooowwwnnn
-            return SystemVersion.getCores() / 2;
+            return Math.min(SystemVersion.getCores() / 2, 4);
         }
 
         // Trim the number of allowed tunnels for overload,
@@ -256,7 +258,7 @@ class BuildExecutor implements Runnable {
              allowed += 3; allowed *= 4;
         }
         if (_log.shouldLog(Log.DEBUG))
-            _log.debug("Current tunnel concurrent build rate: " + allowed);
+            _log.debug("Current maximum tunnel concurrent build rate: " + allowed);
         return allowed;
     }
 
