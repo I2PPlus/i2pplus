@@ -48,7 +48,7 @@ class BuildExecutor implements Runnable {
     private volatile boolean _isRunning;
     private boolean _repoll;
 //    private static final int MAX_CONCURRENT_BUILDS = 13;
-    private static final int MAX_CONCURRENT_BUILDS = SystemVersion.getCores() * 8;
+    private static final int MAX_CONCURRENT_BUILDS = SystemVersion.getCores() * 10;
     /** accept replies up to a minute after we gave up on them */
     private static final long GRACE_PERIOD = 60*1000;
 
@@ -140,7 +140,8 @@ class BuildExecutor implements Runnable {
                 avg = r.getAverageValue();
             if (avg <= 0)
                 avg = rs.getLifetimeAverageValue();
-            if (avg > 1) {
+//            if (avg > 1) {
+            if (avg > 100) {
                 // If builds take more than 75 ms, start throttling
                 int throttle = (int) (200 * MAX_CONCURRENT_BUILDS / avg);
                 if (SystemVersion.isSlow() || SystemVersion.getMaxMemory() < 512)
@@ -153,8 +154,10 @@ class BuildExecutor implements Runnable {
                 }
             }
         }
-        if (allowed < 2)
-            allowed = 2; // Never choke below 2 builds (but congestion may)
+//        if (allowed < 2)
+//            allowed = 2; // Never choke below 2 builds (but congestion may)
+        if (allowed < SystemVersion.getCores())
+            allowed = SystemVersion.getCores(); // Never choke below # cores
         else if (allowed > MAX_CONCURRENT_BUILDS)
              allowed = MAX_CONCURRENT_BUILDS;
         allowed = _context.getProperty("router.tunnelConcurrentBuilds", allowed);
@@ -234,7 +237,7 @@ class BuildExecutor implements Runnable {
             }
         }
 
-        _context.statManager().addRateData("tunnel.concurrentBuilds", concurrent, 0);
+        _context.statManager().addRateData("tunnel.concurrentBuilds", concurrent, SystemVersion.getCores() / 2);
 
         long lag = _context.jobQueue().getMaxLag();
         if ( (lag > 2000) && (_context.router().getUptime() > 5*60*1000) ) {
@@ -242,17 +245,18 @@ class BuildExecutor implements Runnable {
                 _log.warn("Job queue too lagged (" + lag + "ms): deferring new tunnel builds");
             _context.statManager().addRateData("tunnel.concurrentBuildsLagged", concurrent, lag);
 //            return 0; // if we have a job heavily blocking our jobqueue, ssllloowww dddooowwwnnn
-            return 1; // if we have a job heavily blocking our jobqueue, ssllloowww dddooowwwnnn
+            return SystemVersion.getCores() / 2;
         }
 
         // Trim the number of allowed tunnels for overload,
         // initiate a tunnel drop on severe overload
         // tunnel building is high priority, don't do this
         // allowed = trimForOverload(allowed,concurrent);
+        if (allowed < 3) {
+             allowed += 3; allowed *= 4;
+        }
         if (_log.shouldLog(Log.DEBUG))
             _log.debug("Current tunnel concurrent build rate: " + allowed);
-        if (allowed < 3)
-            allowed *= 3;
         return allowed;
     }
 
