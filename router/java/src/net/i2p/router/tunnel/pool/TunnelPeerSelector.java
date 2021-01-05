@@ -179,7 +179,7 @@ public abstract class TunnelPeerSelector extends ConnectChecker {
             else
                 buf.append(" Outbound");
             buf.append(" peers: ").append(rv);
-            buf.append(", out of ").append(sz).append(" (not including self)");
+            buf.append(", out of ").append(sz).append(" (not including us)");
             log.info(buf.toString());
         }
 

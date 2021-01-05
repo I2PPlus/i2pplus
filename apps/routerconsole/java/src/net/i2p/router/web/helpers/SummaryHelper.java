@@ -936,7 +936,7 @@ public class SummaryHelper extends HelperBase {
         Rate concurrentBuilds = cb.getRate(60*1000);
         Rate buildRequestTime = brt.getRate(60*1000);
         DecimalFormat fmt = new DecimalFormat("##0.0");
-        return String.valueOf(fmt.format((long)concurrentBuilds.getAverageValue()).replace(".0", "") + " / " +
+        return String.valueOf(fmt.format((double)concurrentBuilds.getAverageValue()).replace(".0", "") + " / " +
                DataHelper.formatDuration2((long)buildRequestTime.getAverageValue()));
     }
 

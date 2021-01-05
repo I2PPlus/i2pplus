@@ -184,7 +184,7 @@ public class UDPTransport extends TransportImpl implements TimedWeightedPriority
     private static final String PROP_ADVANCED = "routerconsole.advanced";
     /** @since 0.9.48 */
     public static final String PROP_INTRO_KEY = "i2np.udp.introKey";
-        
+
     private static final String CAP_TESTING = Character.toString(UDPAddress.CAPACITY_TESTING);
     private static final String CAP_TESTING_INTRO = CAP_TESTING + UDPAddress.CAPACITY_INTRODUCER;
 
@@ -214,7 +214,7 @@ public class UDPTransport extends TransportImpl implements TimedWeightedPriority
     private static final int MIN_INTRODUCER_POOL = 10;
     static final long INTRODUCER_EXPIRATION_MARGIN = 20*60*1000L;
     private static final long MIN_DOWNTIME_TO_REKEY = 30*24*60*60*1000L;
-    
+
     private static final int[] BID_VALUES = { 15, 20, 50, 65, 80, 95, 100, 115, TransportBid.TRANSIENT_FAIL };
     private static final int FAST_PREFERRED_BID = 0;
     private static final int SLOW_PREFERRED_BID = 1;
@@ -396,7 +396,8 @@ public class UDPTransport extends TransportImpl implements TimedWeightedPriority
         _introManager.reset();
         UDPPacket.clearCache();
 
-        if (_log.shouldLog(Log.WARN)) _log.warn("Starting SSU transport listening");
+        if (_log.shouldLog(Log.INFO))
+            _log.info("Starting SSU transport listener...");
 
         // set up random intro key, as of 0.9.48
         byte[] ikey = new byte[SessionKey.KEYSIZE_BYTES];
@@ -415,7 +416,7 @@ public class UDPTransport extends TransportImpl implements TimedWeightedPriority
             _context.random().nextBytes(ikey);
             _context.router().saveConfig(PROP_INTRO_KEY, Base64.encode(ikey));
         }
-        
+
         // bind host
         // This is not exposed in the UI and in practice is always null.
         // We use PROP_EXTERNAL_HOST instead. See below.
@@ -1138,7 +1139,7 @@ public class UDPTransport extends TransportImpl implements TimedWeightedPriority
                                     _context.router().eventLog().addEvent(EventLog.CHANGE_IP, newIP);
                                 }
                                 // save the external address but don't publish it
-                                OrderedProperties localOpts = new OrderedProperties(); 
+                                OrderedProperties localOpts = new OrderedProperties();
                                 localOpts.setProperty(UDPAddress.PROP_PORT, String.valueOf(ourPort));
                                 localOpts.setProperty(UDPAddress.PROP_HOST, newIP);
                                 RouterAddress local = new RouterAddress(STYLE, localOpts, DEFAULT_COST);

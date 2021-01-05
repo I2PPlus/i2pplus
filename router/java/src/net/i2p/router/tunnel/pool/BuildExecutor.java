@@ -148,6 +148,8 @@ class BuildExecutor implements Runnable {
                     throttle = (int) (100 * MAX_CONCURRENT_BUILDS / avg);
                 if (throttle < allowed) {
                     allowed = throttle;
+                    if (SystemVersion.getMaxMemory() >= 1024 && avg < 200)
+                        allowed = throttle * 2;
                     if (allowed < MAX_CONCURRENT_BUILDS && _log.shouldLog(Log.INFO))
                         _log.info("Throttling max tunnel builds to " + allowed +
                                   " due to average build time of " + ((int) avg) + "ms");
@@ -158,10 +160,12 @@ class BuildExecutor implements Runnable {
 //            allowed = 2; // Never choke below 2 builds (but congestion may)
         if (allowed < SystemVersion.getCores())
             allowed = SystemVersion.getCores(); // Never choke below # cores
-        if (SystemVersion.getMaxMemory() >= 1024)
+        if (SystemVersion.getMaxMemory() >= 1024 && !SystemVersion.isSlow())
             allowed *= 2;
-        else if (allowed > MAX_CONCURRENT_BUILDS)
-             allowed = MAX_CONCURRENT_BUILDS;
+        if (allowed > MAX_CONCURRENT_BUILDS) {
+            allowed = MAX_CONCURRENT_BUILDS;
+            _log.info("No throttling of concurrent tunnel builds currently active (max is " + allowed + ")");
+        }
         allowed = _context.getProperty("router.tunnelConcurrentBuilds", allowed);
 
         // expire any REALLY old requests
