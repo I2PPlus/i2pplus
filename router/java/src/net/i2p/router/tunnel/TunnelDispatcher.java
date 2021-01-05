@@ -528,7 +528,7 @@ public class TunnelDispatcher implements Service {
         if (participant != null) {
             // we are either just a random participant or the inbound endpoint
             if (_log.shouldLog(Log.DEBUG))
-                _log.debug("Dispatch to participant " + participant + " [MsgID " + msg.getUniqueId() + "] from ["
+                _log.debug("Dispatch to: " + participant + " [MsgID " + msg.getUniqueId() + "] from ["
                            + recvFrom.toBase64().substring(0,6) + "]");
             _context.messageHistory().tunnelDispatched(msg.getUniqueId(), msg.getTunnelId(), "participant");
             participant.dispatch(msg, recvFrom);

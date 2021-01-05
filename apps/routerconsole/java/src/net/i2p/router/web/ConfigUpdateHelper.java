@@ -9,7 +9,7 @@ public class ConfigUpdateHelper extends HelperBase {
     private boolean _dontInstall;
 
     public ConfigUpdateHelper() {}
-    
+
     /** hook this so we can call dontInstall() once after getting a context */
     @Override
     public void setContextId(String contextId) {
@@ -20,11 +20,11 @@ public class ConfigUpdateHelper extends HelperBase {
     public boolean canInstall() {
         return !_dontInstall;
     }
-    
+
     public boolean updateAvailable() {
         return true;
     }
-    
+
     public String getNewsURL() {
         return getNewsURL(_context);
     }
@@ -73,14 +73,14 @@ public class ConfigUpdateHelper extends HelperBase {
                (port == null || port.equals(ConfigUpdateHandler.DEFAULT_PROXY_PORT)) &&
                _context.portMapper().getPort(PortMapper.SVC_HTTP_PROXY) == ConfigUpdateHandler.DEFAULT_PROXY_PORT_INT;
     }
-    
+
     public String getUpdateThroughProxy() {
         if (_context.getProperty(ConfigUpdateHandler.PROP_SHOULD_PROXY, ConfigUpdateHandler.DEFAULT_SHOULD_PROXY))
             return "<input type=\"checkbox\" class=\"optbox\" value=\"true\" name=\"updateThroughProxy\" id=\"updateThroughProxy\" checked=\"checked\" >";
         else
             return "<input type=\"checkbox\" class=\"optbox\" value=\"true\" name=\"updateThroughProxy\" id=\"updateThroughProxy\" >";
     }
-    
+
     /** @since 0.9.9 */
     public String getNewsThroughProxy() {
         if (_context.getProperty(ConfigUpdateHandler.PROP_SHOULD_PROXY_NEWS, ConfigUpdateHandler.DEFAULT_SHOULD_PROXY_NEWS))
@@ -88,28 +88,28 @@ public class ConfigUpdateHelper extends HelperBase {
         else
             return "<input type=\"checkbox\" class=\"optbox\" value=\"true\" name=\"newsThroughProxy\" id=\"newsThroughProxy\" >";
     }
-    
+
     public String getUpdateUnsigned() {
         return "<input type=\"checkbox\" class=\"optbox\" value=\"true\" name=\"updateUnsigned\" id=\"updateUnsigned\" " +
                getChecked(ConfigUpdateHandler.PROP_UPDATE_UNSIGNED) + '>';
     }
-    
+
     /** @since 0.9.20 */
     public String getUpdateDevSU3() {
         return "<input type=\"checkbox\" class=\"optbox\" value=\"true\" name=\"updateDevSU3\" id=\"updateDevSU3\" " +
                getChecked(ConfigUpdateHandler.PROP_UPDATE_DEV_SU3) + '>';
     }
-    
+
     private static final long PERIODS[] = new long[] { 12*60*60*1000l, 24*60*60*1000l,
                                                        36*60*60*1000l, 48*60*60*1000l,
                                                        3*24*60*60*1000l, 7*24*60*60*1000l,
                                                        -1l };
-    
+
     public String getRefreshFrequencySelectBox() {
         String freq = _context.getProperty(ConfigUpdateHandler.PROP_REFRESH_FREQUENCY,
                                            ConfigUpdateHandler.DEFAULT_REFRESH_FREQUENCY);
         long ms = ConfigUpdateHandler.DEFAULT_REFRESH_FREQ;
-        try { 
+        try {
             ms = Long.parseLong(freq);
             if (ms <= 0)
                 ms = -1;
@@ -120,8 +120,8 @@ public class ConfigUpdateHelper extends HelperBase {
         for (int i = 0; i < PERIODS.length; i++) {
             buf.append("<option value=\"").append(PERIODS[i]);
             if (PERIODS[i] == ms)
-                buf.append('"').append(SELECTED);
-            
+                buf.append(SELECTED);
+
             if (PERIODS[i] == -1)
                 buf.append("\">").append(_t("Never")).append("</option>\n");
             else
@@ -130,16 +130,16 @@ public class ConfigUpdateHelper extends HelperBase {
         buf.append("</select>\n");
         return buf.toString();
     }
-    
+
     /**
      *  Right now the jsp hides the whole select box if _dontInstall is true but this could change
      */
     public String getUpdatePolicySelectBox() {
         String policy = _context.getProperty(ConfigUpdateHandler.PROP_UPDATE_POLICY, ConfigUpdateHandler.DEFAULT_UPDATE_POLICY);
-        
+
         StringBuilder buf = new StringBuilder(256);
         buf.append("<select name=\"updatePolicy\">");
-        
+
         buf.append("<option value=\"notify\"");
         if ("notify".equals(policy) || _dontInstall)
             buf.append(SELECTED);
@@ -151,7 +151,7 @@ public class ConfigUpdateHelper extends HelperBase {
         else if ("download".equals(policy))
             buf.append(SELECTED);
         buf.append('>').append(_t("Download and verify only")).append("</option>");
-        
+
         if (_context.hasWrapper()) {
             buf.append("<option value=\"install\"");
             if (_dontInstall)
@@ -160,11 +160,11 @@ public class ConfigUpdateHelper extends HelperBase {
                 buf.append(SELECTED);
             buf.append('>').append(_t("Download, verify, and restart")).append("</option>");
         }
-        
+
         buf.append("</select>\n");
         return buf.toString();
     }
-    
+
     public String getTrustedKeys() {
         return new TrustedUpdate(_context).getTrustedKeysString();
     }
@@ -178,7 +178,7 @@ public class ConfigUpdateHelper extends HelperBase {
         return _context.getProperty(ConfigUpdateHandler.PROP_DEV_SU3_URL, "");
     }
 
-    public String getNewsStatus() { 
+    public String getNewsStatus() {
         return NewsHelper.status(_context);
     }
 }

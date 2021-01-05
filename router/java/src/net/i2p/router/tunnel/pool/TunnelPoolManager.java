@@ -80,10 +80,12 @@ public class TunnelPoolManager implements TunnelManagerFacade {
         int numHandlerThreads;
         long maxMemory = SystemVersion.getMaxMemory();
         int cores = SystemVersion.getCores();
+        Boolean isSlow = SystemVersion.isSlow();
         int share = TunnelDispatcher.getShareBandwidth(ctx);
-        if (share >= MIN_KBPS_THREE_HANDLERS * 2 && maxMemory >= 1024)
-            numHandlerThreads = Math.min(cores, 8);
-        if (share >= MIN_KBPS_THREE_HANDLERS * 2)
+/**
+        if (share >= MIN_KBPS_THREE_HANDLERS * 2 && maxMemory >= 1024 && !isSlow)
+            numHandlerThreads = cores;
+        else if (share >= MIN_KBPS_THREE_HANDLERS * 2)
             numHandlerThreads = 4;
         else if (share >= MIN_KBPS_THREE_HANDLERS)
             numHandlerThreads = 3;
@@ -91,7 +93,8 @@ public class TunnelPoolManager implements TunnelManagerFacade {
             numHandlerThreads = 2;
         else
             numHandlerThreads = 1;
-        _numHandlerThreads = ctx.getProperty("router.buildHandlerThreads", numHandlerThreads);
+**/
+        _numHandlerThreads = ctx.getProperty("router.buildHandlerThreads", cores);
 
         // The following are for TestJob
         long[] RATES = { 60*1000, 10*60*1000l, 60*60*1000l };
@@ -599,6 +602,7 @@ public class TunnelPoolManager implements TunnelManagerFacade {
             _handler.init();
             for (int i = 1; i <= _numHandlerThreads; i++) {
                 I2PThread hThread = new I2PThread(_handler, "BuildHandler " + i + '/' + _numHandlerThreads, true);
+                hThread.setPriority(Thread.MAX_PRIORITY);
                 hThread.start();
             }
         }

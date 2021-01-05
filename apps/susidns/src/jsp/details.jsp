@@ -79,12 +79,10 @@
 <jsp:setProperty name="book" property="trClass"	value="0" />
 <div class="headline">
 <h3><%=intl._t("Details")%>: <%=addr.getName()%></h3>
-<!--<h3><%=intl._t("Address book")%>: <%=intl._t(book.getBook())%></h3>-->
-<!--<h4><%=intl._t("Storage")%>: ${book.displayName}</h4>-->
 </div>
 <div id="book">
 <%
-    if (showNotes) {
+                if (showNotes) {
 %>
 <form method="POST" action="details">
 <input type="hidden" name="book" value="${book.book}">
@@ -92,7 +90,7 @@
 <input type="hidden" name="h" value="<%=detail%>">
 <input type="hidden" name="destination" value="<%=addr.getDestination()%>">
 <%
-    }  // showNotes
+                }  // showNotes
 %>
 <table class="book" id="host_details" cellspacing="0" cellpadding="5">
 <tr>
@@ -102,14 +100,14 @@
 </tr>
 <tr>
 <%
-    if (addr.isIDN()) {
+                if (addr.isIDN()) {
 %>
 <td><%=intl._t("Encoded Name")%></td>
 <td><a href="http://<%=addr.getName()%>/" target="_blank"><%=addr.getName()%></a></td>
 </tr>
 <tr>
 <%
-    }
+                }
 %>
 <td><%=intl._t("Base 32 Address")%></td>
 <td><a href="http://<%=b32%>/" target="_blank"><%=b32%></a></td>
@@ -118,12 +116,6 @@
 <td><%=intl._t("Base 64 Hash")%></td>
 <td><%=addr.getB64()%></td>
 </tr>
-<!--
-<tr>
-<td><%=intl._t("Address Helper")%></td>
-<td><a href="http://<%=addr.getName()%>/?i2paddresshelper=<%=addr.getDestination()%>" target="_blank"><%=intl._t("link")%></a></td>
-</tr>
--->
 <tr>
 <td><%=intl._t("Public Key")%></td>
 <td><%=intl._t("ElGamal 2048 bit")%>&nbsp;<wbr><b><%=intl._t("Signing Key")%></b>&nbsp;<%=addr.getSigType()%>&nbsp;<wbr><b><%=intl._t("Certificate")%></b>&nbsp;<%=addr.getCert()%>
@@ -135,43 +127,40 @@
 </tr>
 <tr>
 <td><%=intl._t("Added Date")%></td>
-<td><%=addr.getAdded()%>&nbsp;<b><%=intl._t("Last Modified")%></b>&nbsp;<span id="lastMod"><%=addr.getModded()%></span></td>
+<td><%=addr.getAdded()%>&nbsp;
+<%
+                String lastmod = addr.getModded();
+                if (lastmod.length() > 0) {
+%>
+<%=addr.getAdded()%>&nbsp;<b><%=intl._t("Last Modified")%></b>&nbsp;<span id="lastMod"><%=lastmod%></span>
+<%
+                }
+%>
+</td>
 </tr>
-<!--
-<tr>
-<td><%=intl._t("Signing Key")%></td>
-<td><%=addr.getSigType()%></td>
-</tr>
-<tr>
-<td><%=intl._t("Certificate")%></td>
-<td><%=addr.getCert()%>&nbsp;<b><%=intl._t("Validated")%></b>&nbsp;<%=addr.isValidated() ? intl._t("yes") : intl._t("no")%></td>
-</tr>
-<tr>
-<td><%=intl._t("Validated")%></td>
-<td><%=addr.isValidated() ? intl._t("yes") : intl._t("no")%></td>
-</tr>
-<% if (showNotes) { %>
-<tr>
-<td><%=intl._t("Last Modified")%></td>
-<td><%=addr.getModded()%></td>
-</tr>
-<% }  // showNotes  %>
--->
 <tr>
 <td><%=intl._t("Destination")%></td>
 <td class="destinations"><div class="destaddress" tabindex="0"><%=addr.getDestination()%></div></td>
 </tr>
-<% if (showNotes) { %>
+<%
+                if (showNotes) {
+%>
 <tr class="list${book.trClass}" id="hostNotes">
 <td><%=intl._t("Notes")%></td>
 <td><textarea name="nofilter_notes" rows="3" style="height:6em" cols="70" placeholder="<%=intl._t("Add notes about domain")%>"><%=addr.getNotes()%></textarea>
 <input class="accept" type="submit" name="action" value="<%=intl._t("Save Notes")%>"></td>
 </tr>
-<% }  // showNotes  %>
+<%
+                }  // showNotes
+%>
 </table>
-<% if (showNotes) { %>
+<%
+                if (showNotes) {
+%>
 </form>
-<% }  // showNotes  %>
+<%
+                }  // showNotes
+%>
 <div id="buttons">
 <form method="POST" action="addressbook">
 <p class="buttons">
