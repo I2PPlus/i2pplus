@@ -791,6 +791,7 @@ public class I2PTunnelServer extends I2PTunnelTask implements Runnable {
                                            null, (I2PTunnelRunner.FailCallback) null);
             // run in the unlimited client pool
             //t.start();
+            t.setPriority(Thread.MAX_PRIORITY);
             _clientExecutor.execute(t);
 
             long afterHandle = getTunnel().getContext().clock().now();
