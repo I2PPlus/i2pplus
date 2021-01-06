@@ -57,7 +57,7 @@ class ACKSender implements Runnable {
         _alive = true;
         _peersToACK.clear();
         I2PThread t = new I2PThread(this, "UDP ACK sender", true);
-        t.setPriority(Thread.NORM_PRIORITY + 1);
+        t.setPriority(Thread.MAX_PRIORITY - 1);
         t.start();
     }
 

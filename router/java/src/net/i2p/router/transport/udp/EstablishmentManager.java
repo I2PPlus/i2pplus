@@ -185,7 +185,7 @@ class EstablishmentManager {
     public synchronized void startup() {
         _alive = true;
         I2PThread t = new I2PThread(new Establisher(), "UDP Establisher", true);
-        t.setPriority(Thread.NORM_PRIORITY + 1);
+        t.setPriority(Thread.MAX_PRIORITY - 1);
         t.start();
     }
 
