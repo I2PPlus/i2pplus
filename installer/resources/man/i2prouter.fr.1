@@ -10,7 +10,7 @@ i2prouter \- démarrer et arrêter le routeur\ I2P
 
 .SH SYNOPSIS
 \fBi2prouter\fP
-{\fIconsole\fP|\fIstart\fP|\fIstop\fP|\fIgraceful\fP|\fIrestart\fP|\fIcondrestart\fP|\fIstatus\fP|\fIdump\fP|\fIinstall\fP|\fIremove\fP}
+{\fIconsole\fP|\fIstart\fP|\fIstop\fP|\fIgraceful\fP|\fIgracefulrestart\f\fIrestart\fP|P|\fIcondrestart\fP|\fIstatus\fP|\fIdump\fP|\fIinstall\fP|\fIremove\fP}
 .br
 
 .SH DESCRIPTION
@@ -33,7 +33,10 @@ Arrête le service I2P et le démarre ensuite.
 Redémarrer le service I2P seulement s’il est déjà en cours d’exécution.
 
 .IP \fBgraceful\fP
-Arrêter I2P respectueusement (peut prendre jusqu’à 11 minutes)
+Arrêter I2P respectueusement (peut prendre jusqu’à 11 minutes ou plus)
+
+.IP \fBgracefulrestart\fP
+Arrêter I2P respectueusement et le démarrer de nouveau. (peut prendre jusqu'à 11 minutes ou plus)
 
 .IP \fBinstall\fP
 Installer un script d’initialisation pour lancer I2P automatiquement quand

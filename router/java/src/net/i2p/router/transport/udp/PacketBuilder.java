@@ -547,7 +547,7 @@ class PacketBuilder {
 
         authenticate(packet, peer.getCurrentCipherKey(), peer.getCurrentMACKey());
         setTo(packet, peer.getRemoteIPAddress(), peer.getRemotePort());
-        
+
         // FIXME ticket #2675
         // the packet could have been built before the current mtu got lowered, so
         // compare to LARGE_MTU
@@ -556,14 +556,14 @@ class PacketBuilder {
             int maxMTU = peer.isIPv6() ? PeerState.MAX_IPV6_MTU : PeerState.LARGE_MTU;
             if (off + (ipHeaderSize + UDP_HEADER_SIZE) > maxMTU) {
                 _log.warn("Size is " + off + " for " + packet +
-                       " data size " + dataSize +
-                       " pkt size " + (off + (ipHeaderSize + UDP_HEADER_SIZE)) +
-                       " MTU " + currentMTU +
-                       ' ' + availableForAcks + " for all ACKs, " +
-                       availableForExplicitAcks + " for full ACKs, " +
-                       explicitToSend + " full ACKs included, " +
-                       partialAcksToSend + " partial ACKs included, " +
-                       " Fragments: " + DataHelper.toString(fragments), new Exception());
+                          " data size " + dataSize +
+                          " pkt size " + (off + (ipHeaderSize + UDP_HEADER_SIZE)) +
+                          " MTU " + currentMTU +
+                          ' ' + availableForAcks + " for all ACKs, " +
+                          availableForExplicitAcks + " for full ACKs, " +
+                          explicitToSend + " full ACKs included, " +
+                          partialAcksToSend + " partial ACKs included, " +
+                          " Fragments: " + DataHelper.toString(fragments), new Exception());
             }
         }
 
@@ -753,10 +753,10 @@ class PacketBuilder {
             buf.append(" Alice: ").append(Addresses.toString(sentIP, state.getSentPort()));
             buf.append(" Bob: ").append(Addresses.toString(state.getReceivedOurIP(), externalPort));
             buf.append(" RelayTag: ").append(state.getSentRelayTag());
-            buf.append(" SignedOn: ").append(state.getSentSignedOnTime());
-            buf.append(" Signature: ").append(Base64.encode(sig.getData()));
-            buf.append("\nRawCreated: ").append(Base64.encode(data, 0, off));
-            buf.append("\nSignedTime: ").append(Base64.encode(data, off - padding - siglen - 4, 4));
+            buf.append("\n* SignedOn: ").append(state.getSentSignedOnTime());
+            buf.append("\n* Signature: ").append(Base64.encode(sig.getData()));
+            buf.append("\n* RawCreated: ").append(Base64.encode(data, 0, off));
+            buf.append("\n* SignedTime: ").append(Base64.encode(data, off - padding - siglen - 4, 4));
             _log.debug(buf.toString());
         }
 
