@@ -935,9 +935,16 @@ public class SummaryHelper extends HelperBase {
             return "0 / 0";
         Rate concurrentBuilds = cb.getRate(60*1000);
         Rate buildRequestTime = brt.getRate(60*1000);
+        double cbavg = concurrentBuilds.getAverageValue();
         DecimalFormat fmt = new DecimalFormat("##0.0");
-        return String.valueOf(fmt.format((double)concurrentBuilds.getAverageValue()).replace(".0", "") + " / " +
-               DataHelper.formatDuration2((long)buildRequestTime.getAverageValue()));
+        if (cbavg < 0.1) {
+            fmt = new DecimalFormat("##0.00");
+            return String.valueOf(fmt.format(cbavg).replace(".00", "") + " / " +
+                   DataHelper.formatDuration2((long)buildRequestTime.getAverageValue()));
+        } else {
+            return String.valueOf(fmt.format(cbavg).replace(".0", "") + " / " +
+                   DataHelper.formatDuration2((long)buildRequestTime.getAverageValue()));
+        }
     }
 
     public String getInboundBacklog() {
