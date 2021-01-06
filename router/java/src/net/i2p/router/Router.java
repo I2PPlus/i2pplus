@@ -1873,7 +1873,7 @@ public class Router implements RouterClock.ClockShiftListener {
                 throw new IllegalArgumentException();
         }
 
-        System.out.println("Starting I2P " + RouterVersion.FULL_VERSION);
+        System.out.println("Starting I2P+ " + RouterVersion.FULL_VERSION + "...");
         //verifyWrapperConfig();
         Router r;
         try {
