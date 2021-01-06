@@ -1575,12 +1575,14 @@ public class Router implements RouterClock.ClockShiftListener {
             _log.log(Log.CRIT, "Completed graceful shutdown");
         else if (exitCode == 3)
             _log.log(Log.CRIT, "Completed hard shutdown");
+/*
         else if (exitCode == 4)
             _log.log(Log.CRIT, "Completed hard restart, now restarting...");
         else if (exitCode == 5)
             _log.log(Log.CRIT, "Completed graceful restart, now restarting...");
         else if (exitCode == 10)
             _log.log(Log.CRIT, "Completed forced restart, now restarting...");
+*/
         try { _context.logManager().shutdown(); } catch (Throwable t) { }
         if (ALLOW_DYNAMIC_KEYS) {
             if (_context.getBooleanProperty(PROP_DYNAMIC_KEYS))
@@ -1873,7 +1875,7 @@ public class Router implements RouterClock.ClockShiftListener {
                 throw new IllegalArgumentException();
         }
 
-        System.out.println("Starting I2P " + RouterVersion.FULL_VERSION);
+        System.out.println("Starting I2P+ " + RouterVersion.FULL_VERSION + "...");
         //verifyWrapperConfig();
         Router r;
         try {

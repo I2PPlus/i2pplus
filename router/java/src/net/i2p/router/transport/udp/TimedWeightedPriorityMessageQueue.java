@@ -83,6 +83,7 @@ class TimedWeightedPriorityMessageQueue implements MessageQueue, OutboundMessage
         _context.statManager().createRateStat("udp.messageQueueSize", "How many messages are on the current class queue at removal", "Transport [UDP]", UDPTransport.RATES);
         _expirer = new Expirer();
         I2PThread t = new I2PThread(_expirer, "UDP outbound expirer");
+        t.setPriority(Thread.MAX_PRIORITY - 1);
         t.setDaemon(true);
         t.start();
     }

@@ -561,6 +561,7 @@ public abstract class I2PTunnelClientBase extends I2PTunnelTask implements Runna
         boolean isDaemon = getTunnel().getContext().isRouterContext();
         open = true;
         Thread t = new I2PAppThread(this, "I2PTunnel Client " + getTunnel().listenHost + ':' + localPort, isDaemon);
+        t.setPriority(Thread.MAX_PRIORITY);
         t.start();
         synchronized (this) {
             while (!listenerReady && open) {

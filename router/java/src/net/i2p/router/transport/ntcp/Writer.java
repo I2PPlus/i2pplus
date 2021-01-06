@@ -36,7 +36,7 @@ class Writer {
         for (int i = 1; i <=numWriters; i++) {
             Runner r = new Runner();
             I2PThread t = new I2PThread(r, "NTCP writer " + i + '/' + numWriters, true);
-            t.setPriority(Thread.NORM_PRIORITY + 1);
+            t.setPriority(Thread.MAX_PRIORITY - 1);
             _runners.add(r);
             t.start();
         }

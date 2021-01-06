@@ -248,7 +248,7 @@ class BuildExecutor implements Runnable {
         long lag = _context.jobQueue().getMaxLag();
         if ( (lag > 2000) && (_context.router().getUptime() > 5*60*1000) ) {
             if (_log.shouldLog(Log.WARN))
-                _log.warn("Job queue too lagged (" + lag + "ms): deferring new tunnel builds");
+                _log.warn("Job queue too lagged (" + lag + "ms) - slowing down new tunnel builds...");
             _context.statManager().addRateData("tunnel.concurrentBuildsLagged", concurrent, lag);
 //            return 0; // if we have a job heavily blocking our jobqueue, ssllloowww dddooowwwnnn
             return Math.min(SystemVersion.getCores() / 2, 4);

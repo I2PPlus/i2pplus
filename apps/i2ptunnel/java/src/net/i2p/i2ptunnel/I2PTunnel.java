@@ -373,7 +373,7 @@ public class I2PTunnel extends EventDispatcherImpl implements Logging {
         boolean added = _sessions.add(session);
         if (added && _log.shouldLog(Log.INFO))
 //            _log.info(getPrefix() + " Session added: " + session, new Exception());
-            _log.info(getPrefix().replace("]:", "]") + " Session added: " + session);
+            _log.info("Session added: " + session);
     }
 
     /**
@@ -384,7 +384,7 @@ public class I2PTunnel extends EventDispatcherImpl implements Logging {
         boolean removed = _sessions.remove(session);
         if (removed && _log.shouldLog(Log.INFO))
 //            _log.info(getPrefix() + " Session removed: " + session, new Exception());
-            _log.info(getPrefix().replace("]:", "]") + " Session removed: " + session);
+            _log.info("Session removed: " + session);
     }
 
     /**
@@ -408,10 +408,12 @@ public class I2PTunnel extends EventDispatcherImpl implements Logging {
             next_task_id++;
             tasks.add(tsk);
             if (_log.shouldLog(Log.INFO))
-                _log.info(getPrefix().replace("]:", "]") + " Adding task: " + tsk);
+//                _log.info(getPrefix().replace("]:", "]") + " Adding task: " + tsk);
+                _log.info("Adding task: " + tsk);
         } else {
             if (_log.shouldLog(Log.INFO))
-                _log.info(getPrefix().replace("]:", "]") + " Not adding task that isn't open: " + tsk);
+//                _log.info(getPrefix().replace("]:", "]") + " Not adding task that isn't open: " + tsk);
+                _log.info("Not adding task that isn't open: " + tsk);
         }
     }
 
