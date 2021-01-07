@@ -1471,7 +1471,7 @@ public class PeerState {
             }
             if (rv <= 0) {
                 if (_log.shouldLog(Log.DEBUG))
-                    _log.debug([" + _remotePeer.toBase64().substring(0,6) + "] -> nothing pending, cancelling timer...");
+                    _log.debug("[" + _remotePeer.toBase64().substring(0,6) + "] -> nothing pending, cancelling timer...");
                 synchronized(this) {
                     _retransmitTimer = 0;
                     exitFastRetransmit();
@@ -1548,17 +1548,17 @@ public class PeerState {
                             _log.debug("Allocate sending (FAST) to [" + _remotePeer.toBase64().substring(0,6) + "] -> " + state);
                     } else {
                         if (_log.shouldLog(Log.DEBUG))
-                            _log.debug("Allocate sending (OLD) to "[" + _remotePeer.toBase64().substring(0,6) + "] -> " + state.getMessageId());
+                            _log.debug("Allocate sending (OLD) to [" + _remotePeer.toBase64().substring(0,6) + "] -> " + state.getMessageId());
                     }
                     if (rv == null) {
                             rv = new ArrayList<OutboundMessageState>((1 + _outboundMessages.size()) / 2);
                         _lastSendTime = now;
                     }
-                        rv.add(state);
+                    rv.add(state);
                     // Retransmit up to half of the packets in flight (RFC 6298 section 5.4 and RFC 5681 section 4.3)
                     // TODO this is fragments from half the messages... OK as is?
                     if (rv.size() >= _outboundMessages.size() / 2 && !_fastRetransmit.get())
-                            return rv;
+                        return rv;
                 }
                 return rv;
             } else if (!_outboundMessages.isEmpty()) {
@@ -1569,7 +1569,7 @@ public class PeerState {
                     boolean should = locked_shouldSend(state, now);
                     if (should) {
                         if (_log.shouldLog(Log.DEBUG))
-                            _log.debug("Allocate sending more fragments to " + _remotePeer + ": " + state.getMessageId());
+                            _log.debug("Allocate sending more fragments to [" + _remotePeer.toBase64().substring(0,6) + "] -> " + state.getMessageId());
                         if (rv == null)
                             rv = new ArrayList<OutboundMessageState>(_concurrentMessagesAllowed);
                         rv.add(state);
@@ -1577,7 +1577,7 @@ public class PeerState {
                         // no more bandwidth available
                         if (_log.shouldLog(Log.DEBUG)) {
                             if (rv == null)
-                                _log.debug("Nothing to send (BW) to " + _remotePeer + ", with " + _outboundMessages.size() +
+                                _log.debug("Nothing to send (BW) to [" + _remotePeer.toBase64().substring(0,6) + "], with " + _outboundMessages.size() +
                                        " / " + _outboundQueue.size() + " remaining");
                             else
                                _log.debug(_remotePeer + " ran out of BW, but managed to send " + rv.size());
@@ -1683,7 +1683,7 @@ public class PeerState {
         return (_remoteIP.length == 4 ? PacketBuilder.MIN_DATA_PACKET_OVERHEAD : PacketBuilder.MIN_IPV6_DATA_PACKET_OVERHEAD) +
                MIN_ACK_SIZE;
     }
-    
+
     /**
      *  Locks this.
      */
