@@ -1100,7 +1100,12 @@ public class SummaryHelper extends HelperBase {
                 }
                 String source = _context.getProperty(ConfigUpdateHandler.PROP_ZIP_URL);
                 if (unsignedAvail) {
-                    buf.append("<span id=\"updateAvailable\">").append(_t("Unsigned update available")).append("<br><i>").append(getUnsignedUpdateVersion());
+                    buf.append("<span id=\"updateAvailable\">");
+                    if (source.contains("skank"))
+                        buf.append(_t("Unsigned update available").replace("update", "I2P+ update"));
+                    else
+                        buf.append(_t("Unsigned update available").replace("update", "I2P update"));
+                    buf.append("<br><i>").append(getUnsignedUpdateVersion());
                     buf.append("</i></span><br><button type=\"submit\" class=\"download\" name=\"updateAction\" value=\"Unsigned\" >");
                        // Note to translators: parameter is a date and time, e.g. "02-Mar 20:34 UTC"
                        // <br> is optional, to help the browser make the lines even in the button
