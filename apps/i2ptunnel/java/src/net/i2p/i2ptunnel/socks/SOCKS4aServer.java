@@ -289,17 +289,17 @@ class SOCKS4aServer extends SOCKSServer {
             try {
                 sendRequestReply(Reply.CONNECTION_REFUSED, InetAddress.getByName("127.0.0.1"), 0, out);
             } catch (IOException ioe) {}
-            throw new SOCKSException("Error in destination format", e);
+            throw new SOCKSException("Error in destination format: " + e.getMessage());
         } catch (IOException e) {
             try {
                 sendRequestReply(Reply.CONNECTION_REFUSED, InetAddress.getByName("127.0.0.1"), 0, out);
             } catch (IOException ioe) {}
-            throw new SOCKSException("Error connecting", e);
+            throw new SOCKSException("Error connecting: " + e.getMessage());
         } catch (I2PException e) {
             try {
                 sendRequestReply(Reply.CONNECTION_REFUSED, InetAddress.getByName("127.0.0.1"), 0, out);
             } catch (IOException ioe) {}
-            throw new SOCKSException("Error connecting", e);
+            throw new SOCKSException("Error connecting: " + e.getMessage());
         }
 
         return destSock;
