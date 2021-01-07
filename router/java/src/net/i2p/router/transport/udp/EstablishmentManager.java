@@ -93,8 +93,10 @@ class EstablishmentManager {
 
     /** max outbound in progress - max inbound is half of this */
     private final int DEFAULT_MAX_CONCURRENT_ESTABLISH;
-    private static final int DEFAULT_LOW_MAX_CONCURRENT_ESTABLISH = 20;
-    private static final int DEFAULT_HIGH_MAX_CONCURRENT_ESTABLISH = 150;
+//    private static final int DEFAULT_LOW_MAX_CONCURRENT_ESTABLISH = 20;
+    private static final int DEFAULT_LOW_MAX_CONCURRENT_ESTABLISH = 40;
+//    private static final int DEFAULT_HIGH_MAX_CONCURRENT_ESTABLISH = 150;
+    private static final int DEFAULT_HIGH_MAX_CONCURRENT_ESTABLISH = 300;
     private static final String PROP_MAX_CONCURRENT_ESTABLISH = "i2np.udp.maxConcurrentEstablish";
 
     /** max pending outbound connections (waiting because we are at MAX_CONCURRENT_ESTABLISH) */
@@ -114,7 +116,8 @@ class EstablishmentManager {
      * But SSU probably isn't higher priority than NTCP.
      * And it's important to not fail an establishment too soon and waste it.
      */
-    private static final int MAX_OB_ESTABLISH_TIME = 35*1000;
+//    private static final int MAX_OB_ESTABLISH_TIME = 35*1000;
+    private static final int MAX_OB_ESTABLISH_TIME = 30*1000;
 
     /**
      * Kill any inbound that takes more than this
@@ -155,13 +158,13 @@ class EstablishmentManager {
         DEFAULT_MAX_CONCURRENT_ESTABLISH = Math.max(DEFAULT_LOW_MAX_CONCURRENT_ESTABLISH,
                                                     Math.min(DEFAULT_HIGH_MAX_CONCURRENT_ESTABLISH,
                                                              ctx.bandwidthLimiter().getOutboundKBytesPerSecond() / 2));
-        _context.statManager().createRateStat("udp.inboundEstablishTime", "Time taken for a new inbound session to be established", "Transport [UDP]", UDPTransport.RATES);
-        _context.statManager().createRateStat("udp.outboundEstablishTime", "Time taken for a new outbound session to be established", "Transport [UDP]", UDPTransport.RATES);
+        _context.statManager().createRateStat("udp.inboundEstablishTime", "Time taken for a new inbound session to be established (ms)", "Transport [UDP]", UDPTransport.RATES);
+        _context.statManager().createRateStat("udp.outboundEstablishTime", "Time taken for a new outbound session to be established (ms)", "Transport [UDP]", UDPTransport.RATES);
         //_context.statManager().createRateStat("udp.inboundEstablishFailedState", "What state a failed inbound establishment request fails in", "Transport [UDP]", UDPTransport.RATES);
         //_context.statManager().createRateStat("udp.outboundEstablishFailedState", "What state a failed outbound establishment request fails in", "Transport [UDP]", UDPTransport.RATES);
         _context.statManager().createRateStat("udp.sendIntroRelayRequest", "How often we send a relay request to reach a peer", "Transport [UDP]", UDPTransport.RATES);
         _context.statManager().createRateStat("udp.sendIntroRelayTimeout", "How often a relay request times out before getting a response (target or intro peer offline)", "Transport [UDP]", UDPTransport.RATES);
-        _context.statManager().createRateStat("udp.receiveIntroRelayResponse", "How long it took to receive a relay response", "Transport [UDP]", UDPTransport.RATES);
+        _context.statManager().createRateStat("udp.receiveIntroRelayResponse", "How long it took to receive a relay response (ms)", "Transport [UDP]", UDPTransport.RATES);
         _context.statManager().createRateStat("udp.establishDropped", "Dropped an inbound establish message", "Transport [UDP]", UDPTransport.RATES);
         _context.statManager().createRateStat("udp.establishRejected", "Number of pending outbound connections when we refuse to add any more", "Transport [UDP]", UDPTransport.RATES);
         _context.statManager().createRateStat("udp.establishOverflow", "Number of messages queued up on a pending connection when it was too much", "Transport [UDP]", UDPTransport.RATES);
