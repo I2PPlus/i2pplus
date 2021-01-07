@@ -155,8 +155,7 @@ public class I2PTunnelIRCClient extends I2PTunnelClientBase {
         } catch (IOException ex) {
             // generally NoRouteToHostException
             if (_log.shouldLog(Log.WARN))
-                _log.warn("[IRC Client] Error connecting", ex);
-            //l.log("Error connecting: " + ex.getMessage());
+                _log.warn("[IRC Client] Error connecting: " + ex.getMessage());
             try {
                 // Send a response so the user doesn't just see a disconnect
                 // and blame his router or the network.
@@ -166,8 +165,7 @@ public class I2PTunnelIRCClient extends I2PTunnelClientBase {
             } catch (IOException ioe) {}
         } catch (I2PException ex) {
             if (_log.shouldLog(Log.WARN))
-                _log.warn("[IRC Client] Error connecting", ex);
-            //l.log("Error connecting: " + ex.getMessage());
+                _log.warn("[IRC Client] Error connecting: " + ex.getMessage());
             try {
                 // Send a response so the user doesn't just see a disconnect
                 // and blame his router or the network.

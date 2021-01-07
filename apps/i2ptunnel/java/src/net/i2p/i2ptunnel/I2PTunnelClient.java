@@ -160,10 +160,10 @@ public class I2PTunnelClient extends I2PTunnelClientBase {
             t.run();
         } catch (IOException ex) {
             if (_log.shouldLog(Log.INFO))
-                _log.info("Error connecting", ex);
+                _log.info("Error connecting: " + ex.getMessage());
         } catch (I2PException ex) {
             if (_log.shouldLog(Log.INFO))
-                _log.info("Error connecting", ex);
+                _log.info("Error connecting: " + ex.getMessage());
         } finally {
             // only because we are running it inline
             closeSocket(s);
