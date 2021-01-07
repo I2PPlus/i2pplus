@@ -1443,11 +1443,19 @@ public class ConsoleUpdateManager implements UpdateManager, RouterApp {
                 modtime = _context.clock().now();
             _context.router().saveConfig(NewsHelper.PROP_LAST_UPDATE_TIME, Long.toString(modtime));
             if ("install".equals(policy)) {
-                _log.log(Log.CRIT, "Update was downloaded, restarting to install it");
-                updateStatus("<b>" + _t("Update downloaded") + "</b><br>" + _t("Restarting"));
+                if (url.contains("skank")) {
+                    _log.log(Log.CRIT, "I2P+ update downloaded, restarting to install it...");
+                    updateStatus("<b>" + _t("Update downloaded").replace("Update", "I2P+ Update") + "</b><br>" + _t("Restarting") + "&hellip;");
+                } else {
+                    _log.log(Log.CRIT, "Update was downloaded, restarting to install it...");
+                    updateStatus("<b>" + _t("Update downloaded") + "</b><br>" + _t("Restarting") + "&hellip;");
+                }
                 restart();
             } else {
-                _log.logAlways(Log.WARN, "Update was downloaded, will be installed at next restart");
+                if (url.contains("skank"))
+                    _log.logAlways(Log.WARN, "I2P+ update downloaded - will be installed at next restart");
+                else
+                    _log.logAlways(Log.WARN, "Update was downloaded - will be installed at next restart");
                 // SummaryHelper will display restart info separately
                 updateStatus("");
             }

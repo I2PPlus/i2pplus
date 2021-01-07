@@ -198,6 +198,7 @@ public class I2Ping extends I2PTunnelClientBase {
       String host = argv[g.getOptind()];
       Thread t = new PingHandler(host, count, localPort, remotePort,
                                  timeout, countPing, reportTimes);
+      t.setPriority(Thread.MAX_PRIORITY - 1);
       t.start();
       t.join();
     }

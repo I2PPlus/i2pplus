@@ -931,13 +931,25 @@ public class SummaryHelper extends HelperBase {
             return "0 / 0";
         RateStat cb = _context.statManager().getRate("tunnel.concurrentBuilds");
         RateStat brt = _context.statManager().getRate("tunnel.buildRequestTime");
-        if (cb == null || brt == null)
-            return "0 / 0";
         Rate concurrentBuilds = cb.getRate(60*1000);
         Rate buildRequestTime = brt.getRate(60*1000);
-        DecimalFormat fmt = new DecimalFormat("##0.0");
-        return String.valueOf(fmt.format((double)concurrentBuilds.getAverageValue()).replace(".0", "") + " / " +
-               DataHelper.formatDuration2((long)buildRequestTime.getAverageValue()));
+        double cbavg = concurrentBuilds.getAvgOrLifetimeAvg();
+        String brtavg = DataHelper.formatDuration2((long)buildRequestTime.getAvgOrLifetimeAvg());
+        Router router = _context.router();
+        if (router.getUptime() < 15 * 1000) {
+            return "0 / 0";
+        } else {
+            DecimalFormat fmt = new DecimalFormat("##0.0");
+            if (cbavg < 0.1 || cbavg > 10) {
+                if (cbavg < 0.1)
+                    fmt = new DecimalFormat("##0.00");
+                if (cbavg > 10)
+                    fmt = new DecimalFormat("##0");
+                return String.valueOf(fmt.format(cbavg).replace(".00", "")) + " / " + brtavg;
+            } else {
+                return String.valueOf(fmt.format(cbavg).replace(".0", "")) + " / " + brtavg;
+            }
+        }
     }
 
     public String getInboundBacklog() {
