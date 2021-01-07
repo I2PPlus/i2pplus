@@ -1095,6 +1095,7 @@ public class TunnelControllerGroup implements ClientApp {
         public Thread newThread(Runnable r) {
             Thread rv = Executors.defaultThreadFactory().newThread(r);
             rv.setName("I2PTunnel Client Runner " + _executorThreadCount.incrementAndGet());
+            rv.setPriority(Thread.MAX_PRIORITY - 1);
             rv.setDaemon(true);
             return rv;
         }

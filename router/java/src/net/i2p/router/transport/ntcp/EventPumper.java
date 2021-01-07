@@ -139,7 +139,7 @@ class EventPumper implements Runnable {
         try {
             _selector = Selector.open();
             _alive = true;
-            I2PThread t = new I2PThread(this, "NTCP Pumper", true);
+            I2PThread t = new I2PThread(this, "NTCPPumper", true);
             t.setPriority(Thread.MAX_PRIORITY - 1);
             t.start();
         } catch (IOException ioe) {

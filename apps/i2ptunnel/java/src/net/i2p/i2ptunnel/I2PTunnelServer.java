@@ -738,6 +738,7 @@ public class I2PTunnelServer extends I2PTunnelTask implements Runnable {
         public Thread newThread(Runnable r) {
             Thread rv = Executors.defaultThreadFactory().newThread(r);
             rv.setName(_name);
+            rv.setPriority(Thread.MAX_PRIORITY - 1);
             rv.setDaemon(true);
             return rv;
         }
