@@ -74,7 +74,7 @@ class MessageReceiver {
     public synchronized void startup() {
         _alive = true;
         for (int i = 0; i < _threadCount; i++) {
-            I2PThread t = new I2PThread(new Runner(), "UDP message receiver " + (i+1) + '/' + _threadCount, true);
+            I2PThread t = new I2PThread(new Runner(), "UDPMsgRX " + (i+1) + '/' + _threadCount, true);
             t.setPriority(Thread.MAX_PRIORITY - 1);
             t.start();
         }

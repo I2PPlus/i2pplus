@@ -532,7 +532,7 @@ class ConnectionManager {
                         return null;
                     }
 
-                    // no remaining streams, lets wait a bit
+                    // no remaining streams, let's wait a bit
                     // got rid of the lock, so just sleep (fixme?)
                     // try { _connectionLock.wait(remaining); } catch (InterruptedException ie) {}
                     try { Thread.sleep(remaining/4); } catch (InterruptedException ie) {}

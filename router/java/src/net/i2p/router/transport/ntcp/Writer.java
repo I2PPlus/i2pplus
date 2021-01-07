@@ -35,7 +35,7 @@ class Writer {
     public synchronized void startWriting(int numWriters) {
         for (int i = 1; i <=numWriters; i++) {
             Runner r = new Runner();
-            I2PThread t = new I2PThread(r, "NTCP writer " + i + '/' + numWriters, true);
+            I2PThread t = new I2PThread(r, "NTCPWriter " + i + '/' + numWriters, true);
             t.setPriority(Thread.MAX_PRIORITY - 1);
             _runners.add(r);
             t.start();

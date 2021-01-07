@@ -39,7 +39,7 @@ class Reader {
     public synchronized void startReading(int numReaders) {
         for (int i = 1; i <= numReaders; i++) {
             Runner r = new Runner();
-            I2PThread t = new I2PThread(r, "NTCP reader " + i + '/' + numReaders, true);
+            I2PThread t = new I2PThread(r, "NTCPReader " + i + '/' + numReaders, true);
             t.setPriority(Thread.MAX_PRIORITY - 1);
             _runners.add(r);
             t.start();
@@ -89,7 +89,7 @@ class Reader {
         public void stop() { _stop = true; }
 
         public void run() {
-            if (_log.shouldLog(Log.INFO)) _log.info("Starting NTCP reader...");
+            if (_log.shouldLog(Log.INFO)) _log.info("Starting NTCP Reader...");
             NTCPConnection con = null;
             while (!_stop) {
                 try {
