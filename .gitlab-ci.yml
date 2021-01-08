@@ -56,7 +56,8 @@ Java14:
   allow_failure: true
   script:
 #    - ./installer/resources/makegeoip.sh
-    - ant pkg
+#    - ant pkg // izpack fail
+    - ant updater
 
 testing:
   stage: test
