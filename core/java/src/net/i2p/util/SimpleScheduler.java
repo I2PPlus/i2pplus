@@ -144,6 +144,7 @@ public class SimpleScheduler {
 //            if(!name.equals("main")) {
 //                (new Exception("OWCH! DAMN! Wrong ThreadGroup `" + name +"', `" + rv.getName() + "'")).printStackTrace();
 //            }
+            rv.setPriority(Thread.MAX_PRIORITY - 1);
             rv.setDaemon(true);
             return rv;
         }

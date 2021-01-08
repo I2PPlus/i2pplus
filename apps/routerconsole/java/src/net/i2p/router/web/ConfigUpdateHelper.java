@@ -100,7 +100,7 @@ public class ConfigUpdateHelper extends HelperBase {
                getChecked(ConfigUpdateHandler.PROP_UPDATE_DEV_SU3) + '>';
     }
 
-    private static final long PERIODS[] = new long[] { 12*60*60*1000l, 24*60*60*1000l,
+    private static final long PERIODS[] = new long[] { 8*60*60*1000l, 12*60*60*1000l, 24*60*60*1000l,
                                                        36*60*60*1000l, 48*60*60*1000l,
                                                        3*24*60*60*1000l, 7*24*60*60*1000l,
                                                        -1l };
@@ -116,16 +116,17 @@ public class ConfigUpdateHelper extends HelperBase {
         } catch (NumberFormatException nfe) {}
 
         StringBuilder buf = new StringBuilder(256);
-        buf.append("<select name=\"refreshFrequency\">");
+        buf.append("<select name=\"refreshFrequency\">\n");
         for (int i = 0; i < PERIODS.length; i++) {
-            buf.append("<option value=\"").append(PERIODS[i]);
+            buf.append("<option value=\"").append(PERIODS[i]).append("\"");
             if (PERIODS[i] == ms)
                 buf.append(SELECTED);
-
+            buf.append(">");
             if (PERIODS[i] == -1)
-                buf.append("\">").append(_t("Never")).append("</option>\n");
+                buf.append(_t("Never"));
             else
-                buf.append("\">").append(_t("Every")).append(' ').append(DataHelper.formatDuration2(PERIODS[i])).append("</option>\n");
+                buf.append(_t("Every")).append(' ').append(DataHelper.formatDuration2(PERIODS[i]));
+            buf.append("</option>\n");
         }
         buf.append("</select>\n");
         return buf.toString();

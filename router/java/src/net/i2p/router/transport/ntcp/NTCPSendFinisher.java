@@ -62,7 +62,7 @@ class NTCPSendFinisher {
             _executor.execute(new RunnableEvent(msg));
         } catch (RejectedExecutionException ree) {
             // race with stop()
-            _log.warn("NTCP send finisher stopped, discarding msg.afterSend()");
+            _log.warn("NTCP Send Finisher stopped, discarding msg.afterSend()");
         }
     }
 
@@ -78,7 +78,8 @@ class NTCPSendFinisher {
     private static class CustomThreadFactory implements ThreadFactory {
         public Thread newThread(Runnable r) {
             Thread rv = Executors.defaultThreadFactory().newThread(r);
-            rv.setName("NTCPSendFinisher " + _count.incrementAndGet() + '/' + THREADS);
+            rv.setName("NTCPTXFinisher " + _count.incrementAndGet() + '/' + THREADS);
+            rv.setPriority(Thread.MAX_PRIORITY - 1);
             rv.setDaemon(true);
             return rv;
         }
