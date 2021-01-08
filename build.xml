@@ -586,6 +586,7 @@
     <target name="getGitRev" depends="checkForGit" if="git.available" >
         <exec executable="git" outputproperty="workspace.version" errorproperty="git.error1" failifexecutionfails="false" >
             <arg value="rev-parse" />
+            <arg value="--short=8" />
             <arg value="HEAD" />
         </exec>
     </target>
