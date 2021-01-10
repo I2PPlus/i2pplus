@@ -426,10 +426,10 @@ public class GeneralHelper {
      */
     public String getPrivateKeyFile(TunnelControllerGroup tcg, int tunnel) {
         TunnelController tun = getController(tcg, tunnel);
-        String slash = System.getProperty("file.separator");
         if (tun != null) {
-            File f = new File (tun.getPrivKeyFile());
-            return f.getAbsolutePath();
+            String rv = tun.getPrivKeyFile();
+            if (rv != null)
+                return rv;
         }
         if (tunnel < 0)
             tunnel = tcg == null ? 999 : tcg.getControllers().size();
@@ -438,17 +438,9 @@ public class GeneralHelper {
         // which could happen after other tunnels are deleted.
         int i = 0;
         while ((new File(_context.getConfigDir(), rv)).exists()) {
-            rv = _context.getConfigDir().getAbsolutePath() + slash + "i2ptunnel" + tunnel + '.' + (++i) + "-privKeys.dat";
+            rv = "i2ptunnel" + tunnel + '.' + (++i) + "-privKeys.dat";
         }
-        if (tun != null) {
-            File f = new File (tun.getPrivKeyFile());
-            if (f.getAbsolutePath().startsWith(_context.getConfigDir().getAbsolutePath()))
-                return _context.getConfigDir().getAbsolutePath() + slash + f;
-            else
-                return f.getAbsolutePath();
-        } else {
-            return rv;
-        }
+        return rv;
     }
 
     /**

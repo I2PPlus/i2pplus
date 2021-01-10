@@ -94,7 +94,10 @@ public class TunnelPoolManager implements TunnelManagerFacade {
         else
             numHandlerThreads = 1;
 **/
-        _numHandlerThreads = ctx.getProperty("router.buildHandlerThreads", cores);
+        if (maxMemory >= 1024 && !isSlow)
+            _numHandlerThreads = ctx.getProperty("router.buildHandlerThreads", Math.max(cores, 4));
+        else
+            _numHandlerThreads = ctx.getProperty("router.buildHandlerThreads", Math.max(cores / 2, 4));
 
         // The following are for TestJob
         long[] RATES = { 60*1000, 10*60*1000l, 60*60*1000l };
@@ -596,13 +599,15 @@ public class TunnelPoolManager implements TunnelManagerFacade {
     public synchronized void startup() {
         _isShutdown = false;
         if (!_executor.isRunning()) {
-            I2PThread t = new I2PThread(_executor, "BuildExecutor", true);
-            t.setPriority(Thread.MAX_PRIORITY);
-            t.start();
+            for (int i = 1; i <= _numHandlerThreads; i++) {
+                I2PThread t = new I2PThread(_executor, "BuildExecutor " + i + '/' + _numHandlerThreads, true);
+                t.setPriority(Thread.MAX_PRIORITY - 1);
+                t.start();
+            }
             _handler.init();
             for (int i = 1; i <= _numHandlerThreads; i++) {
                 I2PThread hThread = new I2PThread(_handler, "BuildHandler " + i + '/' + _numHandlerThreads, true);
-                hThread.setPriority(Thread.MAX_PRIORITY);
+                hThread.setPriority(Thread.MAX_PRIORITY - 1);
                 hThread.start();
             }
         }
