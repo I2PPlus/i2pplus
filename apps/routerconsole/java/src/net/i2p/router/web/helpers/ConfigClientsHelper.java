@@ -9,6 +9,8 @@ import java.util.Locale;
 import java.util.Properties;
 import java.util.Set;
 import java.util.TreeSet;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 
 import net.i2p.app.ClientApp;
 import net.i2p.app.ClientAppState;
@@ -38,6 +40,15 @@ public class ConfigClientsHelper extends HelperBase {
     public static final String PROP_AUTH = "i2cp.auth";
     public static final String PROP_ENABLE_CLIENT_CHANGE = "routerconsole.enableClientChange";
     public static final String PROP_ENABLE_PLUGIN_INSTALL = "routerconsole.enablePluginInstall";
+
+    /**
+     * simple regex from
+     * https://stackoverflow.com/questions/8204680/java-regex-email
+     * not the massive RFC 822 compliant one
+     * modified so .i2p will work
+     */
+    private static final Pattern VALID_EMAIL_ADDRESS_REGEX =
+        Pattern.compile("[A-Z0-9._%+-]+@[A-Z0-9.-]+\\.[A-Z2]{2,6}", Pattern.CASE_INSENSITIVE);
 
     public ConfigClientsHelper() {}
 
@@ -305,10 +316,13 @@ public class ConfigClientsHelper extends HelperBase {
                 }
                 s = stripHTML(appProps, "author");
                 if (s != null) {
+                    String[] authors = DataHelper.split(s, "[,; \r\n\t]");
+                    Matcher m = VALID_EMAIL_ADDRESS_REGEX.matcher(s);
+                    String author = m.find() ? m.group() : null;
                     desc.append("<tr><td><b>")
                         .append(_t("Author")).append("</b></td><td>");
-                    if (s.indexOf('@') > 0)
-                        desc.append("<a href=\"mailto:").append(s).append("\">").append(s).append("</a>");
+                    if (author != null)
+                        desc.append("<a href=\"mailto:").append(author).append("\">").append(s).append("</a>");
                     else
                         desc.append(s);
                     desc.append("</td></tr>\n");
