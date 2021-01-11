@@ -132,7 +132,7 @@ public class Clock implements Timestamper.UpdateListener {
                 getLog().info("Updating clock offset to " + offsetMs + "ms from " + _offset + "ms");
 
             if (!_statCreated) {
-//                _context.statManager().createRateStat("clock.skew", "Clock step adjustment (ms)", "Router", new long[] { 10*60*1000, 3*60*60*1000, 24*60*60*1000 });
+//                _context.statManager().createRateStat("clock.skew", "Clock step adjustment (ms)", "Router", new long[] { 60*1000, 10*60*1000, 3*60*60*1000, 24*60*60*1000 });
                 _context.statManager().createRateStat("clock.skew", "Clock step adjustment (ms)", "Router", new long[] { 60*1000, 3*60*60*1000, 24*60*60*1000 });
                 _statCreated = true;
             }

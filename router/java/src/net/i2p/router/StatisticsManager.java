@@ -86,13 +86,13 @@ public class StatisticsManager {
             //includeRate("router.invalidMessageTime", stats, new long[] { 10*60*1000 });
             //includeRate("router.duplicateMessageId", stats, new long[] { 24*60*60*1000 });
             //includeRate("tunnel.duplicateIV", stats, new long[] { 24*60*60*1000 });
-            //includeRate("tunnel.fragmentedDropped", stats, new long[] { 10*60*1000, 3*60*60*1000 });
-            //includeRate("tunnel.fullFragments", stats, new long[] { 10*60*1000, 3*60*60*1000 });
-            //includeRate("tunnel.smallFragments", stats, new long[] { 10*60*1000, 3*60*60*1000 });
+            //includeRate("tunnel.fragmentedDropped", stats, new long[] { 60*1000, 10*60*1000, 3*60*60*1000 });
+            //includeRate("tunnel.fullFragments", stats, new long[] { 60*1000, 10*60*1000, 3*60*60*1000 });
+            //includeRate("tunnel.smallFragments", stats, new long[] { 60*1000, 10*60*1000, 3*60*60*1000 });
             //includeRate("tunnel.testFailedTime", stats, new long[] { 10*60*1000 });
 
-            //includeRate("tunnel.batchDelaySent", stats, new long[] { 10*60*1000, 60*60*1000 });
-            //includeRate("tunnel.batchMultipleCount", stats, new long[] { 10*60*1000, 60*60*1000 });
+            //includeRate("tunnel.batchDelaySent", stats, new long[] { 60*1000, 10*60*1000, 60*60*1000 });
+            //includeRate("tunnel.batchMultipleCount", stats, new long[] { 60*1000, 10*60*1000, 60*60*1000 });
             //includeRate("tunnel.corruptMessage", stats, new long[] { 60*60*1000l, 3*60*60*1000l });
 
             //includeRate("router.throttleTunnelProbTestSlow", stats, new long[] { 60*60*1000 });
@@ -109,7 +109,7 @@ public class StatisticsManager {
             //includeRate("udp.addressUpdated", stats, new long[] { 1*60*1000 });
             //includeRate("udp.addressTestInsteadOfUpdate", stats, new long[] { 1*60*1000 });
 
-            //includeRate("clock.skew", stats, new long[] { 10*60*1000, 3*60*60*1000, 24*60*60*1000 });
+            //includeRate("clock.skew", stats, new long[] { 60*1000, 10*60*1000, 3*60*60*1000, 24*60*60*1000 });
 
             //includeRate("transport.sendProcessingTime", stats, new long[] { 60*60*1000 });
             //includeRate("jobQueue.jobRunSlow", stats, new long[] { 10*60*1000l, 60*60*1000l });

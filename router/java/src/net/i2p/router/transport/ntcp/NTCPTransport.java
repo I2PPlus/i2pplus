@@ -115,7 +115,7 @@ public class NTCPTransport extends TransportImpl {
     private final DHSessionKeyBuilder.Factory _dhFactory;
     private final X25519KeyFactory _xdhFactory;
     private long _lastBadSkew;
-    private static final long[] RATES = { 10*60*1000 };
+    private static final long[] RATES = { 60*1000, 10*60*1000 };
 
     /**
      *  RI sigtypes supported in 0.9.16
