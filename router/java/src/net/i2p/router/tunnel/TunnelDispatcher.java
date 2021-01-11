@@ -181,18 +181,18 @@ public class TunnelDispatcher implements Service {
                                          "Number of messages sent through a tunnel that only failed partially (period = failures)", "Tunnels",
                                          new long[] { 60*1000l, 10*60*1000l, 60*60*1000l });
         // following are for BatchedPreprocessor
-        ctx.statManager().createRateStat("tunnel.batchMultipleCount", "Number of messages batched into a tunnel message", "Tunnels [BatchedPreprocessor]", new long[] { 10*60*1000, 60*60*1000 });
-        ctx.statManager().createRateStat("tunnel.batchDelay", "Number of messages pending when the batching waited", "Tunnels [BatchedPreprocessor]", new long[] { 10*60*1000, 60*60*1000 });
-        ctx.statManager().createRateStat("tunnel.batchDelaySent", "Number of messages flushed when the batching delay completed", "Tunnels [BatchedPreprocessor]", new long[] { 10*60*1000, 60*60*1000 });
-        ctx.statManager().createRateStat("tunnel.batchCount", "Number of groups of messages flushed together", "Tunnels [BatchedPreprocessor]", new long[] { 10*60*1000, 60*60*1000 });
-        ctx.statManager().createRateStat("tunnel.batchDelayAmount", "Delay before flushing the batch", "Tunnels [BatchedPreprocessor]", new long[] { 10*60*1000, 60*60*1000 });
-        ctx.statManager().createRateStat("tunnel.batchFlushRemaining", "Number of messages remaining after flush", "Tunnels [BatchedPreprocessor]", new long[] { 10*60*1000, 60*60*1000 });
-        ctx.statManager().createRateStat("tunnel.writeDelay", "Time to process a message after it reaches the gateway (lifetime is size)", "Tunnels [BatchedPreprocessor]", new long[] { 10*60*1000, 60*60*1000 });
+        ctx.statManager().createRateStat("tunnel.batchMultipleCount", "Number of messages batched into a tunnel message", "Tunnels [BatchedPreprocessor]", new long[] { 60*1000, 10*60*1000, 60*60*1000 });
+        ctx.statManager().createRateStat("tunnel.batchDelay", "Number of messages pending when the batching waited", "Tunnels [BatchedPreprocessor]", new long[] { 60*1000, 10*60*1000, 60*60*1000 });
+        ctx.statManager().createRateStat("tunnel.batchDelaySent", "Number of messages flushed when the batching delay completed", "Tunnels [BatchedPreprocessor]", new long[] { 60*1000, 10*60*1000, 60*60*1000 });
+        ctx.statManager().createRateStat("tunnel.batchCount", "Number of groups of messages flushed together", "Tunnels [BatchedPreprocessor]", new long[] { 60*1000, 10*60*1000, 60*60*1000 });
+        ctx.statManager().createRateStat("tunnel.batchDelayAmount", "Delay before flushing the batch", "Tunnels [BatchedPreprocessor]", new long[] { 60*1000, 10*60*1000, 60*60*1000 });
+        ctx.statManager().createRateStat("tunnel.batchFlushRemaining", "Number of messages remaining after flush", "Tunnels [BatchedPreprocessor]", new long[] { 60*1000, 10*60*1000, 60*60*1000 });
+        ctx.statManager().createRateStat("tunnel.writeDelay", "Time to process a message after it reaches the gateway (lifetime is size)", "Tunnels [BatchedPreprocessor]", new long[] { 60*1000, 10*60*1000, 60*60*1000 });
         ctx.statManager().createRateStat("tunnel.batchSmallFragments", "Number of outgoing pad bytes in small fragments",
                                          "Tunnels [BatchedPreprocessor]", new long[] { 10*60*1000l, 60*60*1000l });
         ctx.statManager().createRateStat("tunnel.batchFullFragments", "Number of outgoing tunnel messages using the full data area",
                                          "Tunnels [BatchedPreprocessor]", new long[] { 10*60*1000l, 60*60*1000l });
-        ctx.statManager().createRateStat("tunnel.batchFragmentation", "Average number of fragments per message", "Tunnels [BatchedPreprocessor]", new long[] { 10*60*1000, 60*60*1000 });
+        ctx.statManager().createRateStat("tunnel.batchFragmentation", "Average number of fragments per message", "Tunnels [BatchedPreprocessor]", new long[] { 60*1000, 10*60*1000, 60*60*1000 });
         // following is for OutboundMessageDistributor
         ctx.statManager().createRateStat("tunnel.distributeLookupSuccess", "Success rate for deferred lookup (outbound distribution)", "Tunnels", new long[] { 60*60*1000 });
         ctx.statManager().createRateStat("tunnel.dropAtOBEP", "Tunnels droppped at outbound gateway (throttled)", "Tunnels", new long[] { 60*60*1000 });

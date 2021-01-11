@@ -182,8 +182,8 @@ public class TransientSessionKeyManager extends SessionKeyManager {
         _context = context;
         _outboundSessions = new HashMap<PublicKey, OutboundSession>(64);
         _inboundTagSets = new HashMap<SessionTag, TagSet>(128);
-        context.statManager().createRateStat("crypto.sessionTagsExpired", "Number of expired tags/sessions", "Encryption", new long[] { 10*60*1000, 60*60*1000, 3*60*60*1000 });
-        context.statManager().createRateStat("crypto.sessionTagsRemaining", "Number of remaining tags/sessions after a cleanup", "Encryption", new long[] { 10*60*1000, 60*60*1000, 3*60*60*1000 });
+        context.statManager().createRateStat("crypto.sessionTagsExpired", "Number of expired tags/sessions", "Encryption", new long[] { 60*1000, 10*60*1000, 60*60*1000, 3*60*60*1000 });
+        context.statManager().createRateStat("crypto.sessionTagsRemaining", "Number of remaining tags/sessions after a cleanup", "Encryption", new long[] { 60*1000, 10*60*1000, 60*60*1000, 3*60*60*1000 });
          _alive = true;
         _context.simpleTimer2().addEvent(new CleanupEvent(), 60*1000);
     }

@@ -39,13 +39,13 @@ class ConnectionPacketHandler {
         _context.statManager().createRateStat("stream.con.receiveMessageSize", "Size of a message received on a connection", "Stream", new long[] { 60*1000, 10*60*1000, 60*60*1000 });
         _context.statManager().createRateStat("stream.con.receiveDuplicateSize", "Size of a duplicate message received on a connection", "Stream", new long[] { 60*1000, 10*60*1000, 60*60*1000 });
         _context.statManager().createRateStat("stream.con.packetsAckedPerMessageReceived", "Avg number of acks in a message", "Stream", new long[] { 60*1000, 10*60*1000, 60*60*1000 });
-        _context.statManager().createRateStat("stream.sendsBeforeAck", "Number of times a message was sent before it was ACKed", "Stream", new long[] { 10*60*1000, 60*60*1000 });
+        _context.statManager().createRateStat("stream.sendsBeforeAck", "Number of times a message was sent before it was ACKed", "Stream", new long[] { 60*1000, 10*60*1000, 60*60*1000 });
         _context.statManager().createRateStat("stream.resetReceived", "Number of messages had we sent successfully before receiving a RESET", "Stream", new long[] { 60*60*1000, 24*60*60*1000 });
         _context.statManager().createRateStat("stream.trend", "What direction the RTT is trending in (with period = windowsize)", "Stream", new long[] { 60*1000, 60*60*1000 });
-        _context.statManager().createRateStat("stream.con.initialRTT.in", "RTT for the first packet of an inbound connection", "Stream", new long[] { 10*60*1000, 60*60*1000 });
-        _context.statManager().createRateStat("stream.con.initialRTT.out", "RTT for the first packet of an outbound connection", "Stream", new long[] { 10*60*1000, 60*60*1000 });
-        _context.statManager().createFrequencyStat("stream.ack.dup.immediate","How often duplicate packets get acked immediately", "Stream", new long[] { 10*60*1000, 60*60*1000 });
-        _context.statManager().createRateStat("stream.ack.dup.sent","Whether the ACK for a duplicate packet was sent as scheduled", "Stream", new long[] { 10*60*1000, 60*60*1000 });
+        _context.statManager().createRateStat("stream.con.initialRTT.in", "RTT for the first packet of an inbound connection", "Stream", new long[] { 60*1000, 10*60*1000, 60*60*1000 });
+        _context.statManager().createRateStat("stream.con.initialRTT.out", "RTT for the first packet of an outbound connection", "Stream", new long[] { 60*1000, 10*60*1000, 60*60*1000 });
+        _context.statManager().createFrequencyStat("stream.ack.dup.immediate","How often duplicate packets get acked immediately", "Stream", new long[] { 60*1000, 10*60*1000, 60*60*1000 });
+        _context.statManager().createRateStat("stream.ack.dup.sent","Whether the ACK for a duplicate packet was sent as scheduled", "Stream", new long[] { 60*1000, 10*60*1000, 60*60*1000 });
     }
 
     /** distribute a packet to the connection specified */
