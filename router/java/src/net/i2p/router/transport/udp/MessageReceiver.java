@@ -33,10 +33,10 @@ class MessageReceiver {
 
     private static final int MIN_THREADS = 2;  // unless < 32MB
 //    private static final int MAX_THREADS = 5;
-    private static final int MAX_THREADS = Math.max(SystemVersion.getCores(), 4);
+    private static final int MAX_THREADS = Math.max(SystemVersion.getCores(), 5);
     private static final int MIN_QUEUE_SIZE = 32;  // unless < 32MB
 //    private static final int MAX_QUEUE_SIZE = 128;
-    private static final int MAX_QUEUE_SIZE = 1024;
+    private static final int MAX_QUEUE_SIZE = 512;
     private final int _threadCount;
     private static final long POISON_IMS = -99999999999l;
 
@@ -55,7 +55,12 @@ class MessageReceiver {
             qsize = 32;
         } else {
             _threadCount = Math.max(MIN_THREADS, Math.min(MAX_THREADS, ctx.bandwidthLimiter().getInboundKBytesPerSecond() / 20));
-            qsize = (int) Math.max(MIN_QUEUE_SIZE, Math.min(MAX_QUEUE_SIZE, maxMemory / (2*1024*1024)));
+            if (maxMemory >= 1024*1024*1024)
+                qsize = 1024;
+            else if (maxMemory >= 512*1024*1024)
+                qsize = 512;
+            else
+                qsize = (int) Math.max(MIN_QUEUE_SIZE, Math.min(MAX_QUEUE_SIZE, maxMemory / (2*1024*1024)));
         }
         _completeMessages = new CoDelBlockingQueue<InboundMessageState>(ctx, "UDP-MessageReceiver", qsize);
 
