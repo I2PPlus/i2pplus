@@ -80,7 +80,7 @@ class BloomFilterIVValidator implements IVValidator {
             _filter = new DecayingBloomFilter(ctx, HALFLIFE_MS, 16, "TunnelIVV");  // 2MB fixed
         }
         ctx.statManager().createRateStat("tunnel.duplicateIV", "Note that a duplicate IV was received", "Tunnels",
-                                         new long[] { 60*60*1000l });
+                                         new long[] { 60*1000, 60*60*1000l });
     }
 
     public boolean receiveIV(byte ivData[], int ivOffset, byte payload[], int payloadOffset) {

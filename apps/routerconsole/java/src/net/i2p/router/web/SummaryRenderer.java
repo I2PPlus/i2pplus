@@ -112,7 +112,7 @@ class SummaryRenderer {
     private static final int SIZE_MONO = 10;
     private static final int SIZE_LEGEND = 10;
     private static final int SIZE_TITLE = 12;
-    private static final long[] RATES = new long[] { 60*60*1000 };
+    private static final long[] RATES = new long[] { 60*1000, 60*60*1000 };
     // dotted line
 //    private static final Stroke GRID_STROKE = new BasicStroke(1, BasicStroke.CAP_BUTT, BasicStroke.JOIN_MITER, 1, new float[] {1, 1}, 0);
     private static final Stroke GRID_STROKE = new BasicStroke(1, BasicStroke.CAP_ROUND, BasicStroke.JOIN_ROUND, 1, new float[] {1, 1}, 0);

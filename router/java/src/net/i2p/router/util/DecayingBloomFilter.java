@@ -141,12 +141,12 @@ public class DecayingBloomFilter {
                      " numExtenders = " + numExtenders + " cycle (s) = " + (durationMs / 1000));
         // try to get a handle on memory usage vs. false positives
         context.statManager().createRateStat("router.decayingBloomFilter." + name + ".size",
-             "Size", "Router [DecayingBloomFilter]", new long[] { 10 * Math.max(60*1000, durationMs) });
+             "Size", "Router", new long[] { 10 * Math.max(60*1000, durationMs) });
         context.statManager().createRateStat("router.decayingBloomFilter." + name + ".dups",
-             "1000000 * Duplicates/Size", "Router [DecayingBloomFilter]", new long[] { 10 * Math.max(60*1000, durationMs) });
+             "1000000 * Duplicates/Size", "Router", new long[] { 10 * Math.max(60*1000, durationMs) });
         context.statManager().createRateStat("router.decayingBloomFilter." + name + ".log10(falsePos)",
              "log10 of the false positive rate (must have net.i2p.util.DecayingBloomFilter=DEBUG)",
-             "Router [DecayingBloomFilter]", new long[] { 10 * Math.max(60*1000, durationMs) });
+             "Router", new long[] { 10 * Math.max(60*1000, durationMs) });
         context.addShutdownTask(new Shutdown());
     }
 

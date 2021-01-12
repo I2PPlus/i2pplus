@@ -101,19 +101,19 @@ public final class ECIESAEADEngine {
 
         _context.statManager().createFrequencyStat("crypto.eciesAEAD.encryptNewSession",
                                                    "how frequently we encrypt to a new ECIES/AEAD+SessionTag session?",
-                                                   "Encryption", new long[] { 60*60*1000l});
+                                                   "Encryption", new long[] { 60*1000, 60*60*1000l});
         _context.statManager().createFrequencyStat("crypto.eciesAEAD.encryptExistingSession",
                                                    "how frequently we encrypt to an existing ECIES/AEAD+SessionTag session?",
-                                                   "Encryption", new long[] { 60*60*1000l});
+                                                   "Encryption", new long[] { 60*1000, 60*60*1000l});
         _context.statManager().createFrequencyStat("crypto.eciesAEAD.decryptNewSession",
                                                    "how frequently we decrypt with a new ECIES/AEAD+SessionTag session?",
-                                                   "Encryption", new long[] { 60*60*1000l});
+                                                   "Encryption", new long[] { 60*1000, 60*60*1000l});
         _context.statManager().createFrequencyStat("crypto.eciesAEAD.decryptExistingSession",
                                                    "how frequently we decrypt with an existing ECIES/AEAD+SessionTag session?",
-                                                   "Encryption", new long[] { 60*60*1000l});
+                                                   "Encryption", new long[] { 60*1000, 60*60*1000l});
         _context.statManager().createFrequencyStat("crypto.eciesAEAD.decryptFailed",
                                                    "how frequently we fail to decrypt with ECIES/AEAD+SessionTag?",
-                                                   "Encryption", new long[] { 60*60*1000l});
+                                                   "Encryption", new long[] { 60*1000, 60*60*1000l});
     }
 
     /**

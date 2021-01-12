@@ -93,13 +93,13 @@ public class StatisticsManager {
 
             //includeRate("tunnel.batchDelaySent", stats, new long[] { 60*1000, 10*60*1000, 60*60*1000 });
             //includeRate("tunnel.batchMultipleCount", stats, new long[] { 60*1000, 10*60*1000, 60*60*1000 });
-            //includeRate("tunnel.corruptMessage", stats, new long[] { 60*60*1000l, 3*60*60*1000l });
+            //includeRate("tunnel.corruptMessage", stats, new long[] { 60*1000, 60*60*1000l, 3*60*60*1000l });
 
-            //includeRate("router.throttleTunnelProbTestSlow", stats, new long[] { 60*60*1000 });
-            //includeRate("router.throttleTunnelProbTooFast", stats, new long[] { 60*60*1000 });
-            //includeRate("router.throttleTunnelProcessingTime1m", stats, new long[] { 60*60*1000 });
+            //includeRate("router.throttleTunnelProbTestSlow", stats, new long[] { 60*1000, 60*60*1000 });
+            //includeRate("router.throttleTunnelProbTooFast", stats, new long[] { 60*1000, 60*60*1000 });
+            //includeRate("router.throttleTunnelProcessingTime1m", stats, new long[] { 60*1000, 60*60*1000 });
 
-            //includeRate("router.fastPeers", stats, new long[] { 60*60*1000 });
+            //includeRate("router.fastPeers", stats, new long[] { 60*1000, 60*60*1000 });
 
             //includeRate("udp.statusOK", stats, new long[] { 20*60*1000 });
             //includeRate("udp.statusDifferent", stats, new long[] { 20*60*1000 });
@@ -111,19 +111,19 @@ public class StatisticsManager {
 
             //includeRate("clock.skew", stats, new long[] { 60*1000, 10*60*1000, 3*60*60*1000, 24*60*60*1000 });
 
-            //includeRate("transport.sendProcessingTime", stats, new long[] { 60*60*1000 });
+            //includeRate("transport.sendProcessingTime", stats, new long[] { 60*1000, 60*60*1000 });
             //includeRate("jobQueue.jobRunSlow", stats, new long[] { 10*60*1000l, 60*60*1000l });
-            //includeRate("crypto.elGamal.encrypt", stats, new long[] { 60*60*1000 });
+            //includeRate("crypto.elGamal.encrypt", stats, new long[] { 60*1000, 60*60*1000 });
             // total event count can be used to track uptime
-            includeRate("tunnel.participatingTunnels", stats, new long[] { 60*60*1000 }, true);
+            includeRate("tunnel.participatingTunnels", stats, new long[] { 60*1000, 60*60*1000 }, true);
             //includeRate("tunnel.testSuccessTime", stats, new long[] { 10*60*1000l });
-            //includeRate("client.sendAckTime", stats, new long[] { 60*60*1000 }, true);
+            //includeRate("client.sendAckTime", stats, new long[] { 60*1000, 60*60*1000 }, true);
             //includeRate("udp.sendConfirmTime", stats, new long[] { 10*60*1000 });
             //includeRate("udp.sendVolleyTime", stats, new long[] { 10*60*1000 });
             //includeRate("udp.ignoreRecentDuplicate", stats, new long[] { 60*1000 });
             //includeRate("udp.congestionOccurred", stats, new long[] { 10*60*1000 });
-            //includeRate("stream.con.sendDuplicateSize", stats, new long[] { 60*60*1000 });
-            //includeRate("stream.con.receiveDuplicateSize", stats, new long[] { 60*60*1000 });
+            //includeRate("stream.con.sendDuplicateSize", stats, new long[] { 60*1000, 60*60*1000 });
+            //includeRate("stream.con.receiveDuplicateSize", stats, new long[] { 60*1000, 60*60*1000 });
 
             //stats.setProperty("stat__rateKey", "avg;maxAvg;pctLifetime;[sat;satLim;maxSat;maxSatLim;][num;lifetimeFreq;maxFreq]");
 

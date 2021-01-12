@@ -115,9 +115,9 @@ class ClientManager {
         _port = port;
         _clientTimestamper = new ClientTimestamper();
         // following are for RequestLeaseSetJob
-        _ctx.statManager().createRateStat("client.requestLeaseSetSuccess", "How often our router successfully requests a new LeaseSet", "ClientMessages", new long[] { 60*60*1000 });
-        _ctx.statManager().createRateStat("client.requestLeaseSetTimeout", "How often our router requests a new LeaseSet without a reply", "ClientMessages", new long[] { 60*60*1000 });
-        _ctx.statManager().createRateStat("client.requestLeaseSetDropped", "How often our router requests a new LeaseSet dropped by the client", "ClientMessages", new long[] { 60*60*1000 });
+        _ctx.statManager().createRateStat("client.requestLeaseSetSuccess", "How often our router successfully requests a new LeaseSet", "ClientMessages", new long[] { 60*1000, 60*60*1000 });
+        _ctx.statManager().createRateStat("client.requestLeaseSetTimeout", "How often our router requests a new LeaseSet without a reply", "ClientMessages", new long[] { 60*1000, 60*60*1000 });
+        _ctx.statManager().createRateStat("client.requestLeaseSetDropped", "How often our router requests a new LeaseSet dropped by the client", "ClientMessages", new long[] { 60*1000, 60*60*1000 });
     }
 
     /** @since 0.9.8 */

@@ -539,7 +539,7 @@ public class PeerProfile {
         if (_dbResponseTime == null)
             _dbResponseTime = new RateStat("dbResponseTime", "Time (ms) for db response from the peer", group, new long[] { 10*60*1000l, 60*60*1000l, 24*60*60*1000 } );
         if (_dbIntroduction == null)
-            _dbIntroduction = new RateStat("dbIntroduction", "Total new peers received from DbSearchReplyMsgs or DbStore messages", group, new long[] { 60*60*1000l, 6*60*60*1000l, 24*60*60*1000l });
+            _dbIntroduction = new RateStat("dbIntroduction", "Total new peers received from DbSearchReplyMsgs or DbStore messages", group, new long[] { 60*1000, 60*60*1000l, 6*60*60*1000l, 24*60*60*1000l });
 
         if (_dbHistory == null)
             _dbHistory = new DBHistory(_context, group);

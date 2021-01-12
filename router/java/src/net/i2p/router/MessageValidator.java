@@ -16,19 +16,19 @@ public class MessageValidator {
     private final Log _log;
     private final RouterContext _context;
     private DecayingBloomFilter _filter;
-    
-    
+
+
     public MessageValidator(RouterContext context) {
         _log = context.logManager().getLog(MessageValidator.class);
         _context = context;
-        long[] rates = new long[] { 60*60*1000, 24*60*60*1000 };
-        context.statManager().createRateStat("router.duplicateMessageId", "Note that a duplicate messageId was received", "Router", 
+        long[] rates = new long[] { 60*1000, 60*60*1000, 24*60*60*1000 };
+        context.statManager().createRateStat("router.duplicateMessageId", "Note that a duplicate messageId was received", "Router",
                                              rates);
-        context.statManager().createRateStat("router.invalidMessageTime", "Note that a message outside the valid range was received", "Router", 
+        context.statManager().createRateStat("router.invalidMessageTime", "Note that a message outside the valid range was received", "Router",
                                              rates);
     }
-    
-    
+
+
     /**
      * Determine if this message should be accepted as valid (not expired, not a duplicate)
      *
@@ -38,7 +38,7 @@ public class MessageValidator {
         String msg = validateMessage(expiration);
         if (msg != null)
             return msg;
-        
+
         boolean isDuplicate = noteReception(messageId, expiration);
         if (isDuplicate) {
             if (_log.shouldLog(Log.INFO))
@@ -70,9 +70,9 @@ public class MessageValidator {
         }
         return null;
     }
-    
+
     private static final long TIME_MASK = 0xFFFFFC00;
-    
+
     /**
      * Note that we've received the message (which has the expiration given).
      * This functionality will need to be reworked for I2P 3.0 when we take into
@@ -88,18 +88,18 @@ public class MessageValidator {
         val ^= (messageExpiration & TIME_MASK);
         boolean dup = _filter.add(val);
         if (dup && _log.shouldLog(Log.WARN)) {
-            _log.warn("Duplicate with " + _filter.getCurrentDuplicateCount() 
-                      + " other dups, " + _filter.getInsertedCount() 
+            _log.warn("Duplicate with " + _filter.getCurrentDuplicateCount()
+                      + " other dups, " + _filter.getInsertedCount()
                       + " other entries, and a false positive rate of "
                       + _filter.getFalsePositiveRate());
         }
         return dup;
     }
-    
+
     public synchronized void startup() {
         _filter = new DecayingHashSet(_context, (int)Router.CLOCK_FUDGE_FACTOR * 2, 8, "RouterMV");
     }
-    
+
     synchronized void shutdown() {
         _filter.stopDecaying();
     }

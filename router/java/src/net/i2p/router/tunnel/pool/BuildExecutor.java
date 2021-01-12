@@ -83,10 +83,10 @@ class BuildExecutor implements Runnable {
         //_context.statManager().createRateStat("tunnel.pendingRemaining", "How many inbound requests are pending after a pass (period is how long the pass takes)?", "Tunnels", new long[] { 60*1000, 10*60*1000 });
         _context.statManager().createRateStat("tunnel.buildFailFirstHop", "How often we fail to build an OB tunnel because we can't contact 1st hop", "Tunnels", new long[] { 60*1000, 10*60*1000 });
         _context.statManager().createRateStat("tunnel.buildReplySlow", "Build reply late, but not too late", "Tunnels", new long[] { 10*60*1000 });
-        //ctx.statManager().createRateStat("tunnel.buildClientExpireIB", "", "Tunnels", new long[] { 60*60*1000 });
-        //ctx.statManager().createRateStat("tunnel.buildClientExpireOB", "", "Tunnels", new long[] { 60*60*1000 });
-        //ctx.statManager().createRateStat("tunnel.buildExploratoryExpireIB", "", "Tunnels [Exploratory]", new long[] { 60*60*1000 });
-        //ctx.statManager().createRateStat("tunnel.buildExploratoryExpireOB", "", "Tunnels [Exploratory]", new long[] { 60*60*1000 });
+        //ctx.statManager().createRateStat("tunnel.buildClientExpireIB", "", "Tunnels", new long[] { 60*1000, 60*60*1000 });
+        //ctx.statManager().createRateStat("tunnel.buildClientExpireOB", "", "Tunnels", new long[] { 60*1000, 60*60*1000 });
+        //ctx.statManager().createRateStat("tunnel.buildExploratoryExpireIB", "", "Tunnels [Exploratory]", new long[] { 60*1000, 60*60*1000 });
+        //ctx.statManager().createRateStat("tunnel.buildExploratoryExpireOB", "", "Tunnels [Exploratory]", new long[] { 60*1000, 60*60*1000 });
 
         // Get stat manager, get recognized bandwidth tiers
         StatManager statMgr = _context.statManager();
