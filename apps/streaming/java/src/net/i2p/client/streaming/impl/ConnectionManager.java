@@ -120,19 +120,19 @@ class ConnectionManager {
         _soTimeout = -1;
 
         // Stats for this class
-        _context.statManager().createRateStat("stream.con.lifetimeMessagesSent", "Number of messages we send on a stream", "Stream", new long[] { 60*60*1000, 24*60*60*1000 });
-        _context.statManager().createRateStat("stream.con.lifetimeMessagesReceived", "Number of messages we receive on a stream", "Stream", new long[] { 60*60*1000, 24*60*60*1000 });
-        _context.statManager().createRateStat("stream.con.lifetimeBytesSent", "How many bytes we send on a stream", "Stream", new long[] { 60*60*1000, 24*60*60*1000 });
-        _context.statManager().createRateStat("stream.con.lifetimeBytesReceived", "How many bytes we receive on a stream", "Stream", new long[] { 60*60*1000, 24*60*60*1000 });
-        _context.statManager().createRateStat("stream.con.lifetimeDupMessagesSent", "Number of duplicate messages we send on a stream", "Stream", new long[] { 60*60*1000, 24*60*60*1000 });
-        _context.statManager().createRateStat("stream.con.lifetimeDupMessagesReceived", "Number of duplicate messages we receive on a stream", "Stream", new long[] { 60*60*1000, 24*60*60*1000 });
-        _context.statManager().createRateStat("stream.con.lifetimeRTT", "Final RTT when a stream closes", "Stream", new long[] { 60*60*1000, 24*60*60*1000 });
-        _context.statManager().createRateStat("stream.con.lifetimeSendWindowSize", "Final send window size when a stream closes", "Stream", new long[] { 60*60*1000, 24*60*60*1000 });
-        _context.statManager().createRateStat("stream.receiveActive", "Number of active streams when a new one is received (period being not yet dropped)", "Stream", new long[] { 60*60*1000, 24*60*60*1000 });
+        _context.statManager().createRateStat("stream.con.lifetimeMessagesSent", "Number of messages we send on a stream", "Stream", new long[] { 60*1000, 60*60*1000, 24*60*60*1000 });
+        _context.statManager().createRateStat("stream.con.lifetimeMessagesReceived", "Number of messages we receive on a stream", "Stream", new long[] { 60*1000, 60*60*1000, 24*60*60*1000 });
+        _context.statManager().createRateStat("stream.con.lifetimeBytesSent", "How many bytes we send on a stream", "Stream", new long[] { 60*1000, 60*60*1000, 24*60*60*1000 });
+        _context.statManager().createRateStat("stream.con.lifetimeBytesReceived", "How many bytes we receive on a stream", "Stream", new long[] { 60*1000, 60*60*1000, 24*60*60*1000 });
+        _context.statManager().createRateStat("stream.con.lifetimeDupMessagesSent", "Number of duplicate messages we send on a stream", "Stream", new long[] { 60*1000, 60*60*1000, 24*60*60*1000 });
+        _context.statManager().createRateStat("stream.con.lifetimeDupMessagesReceived", "Number of duplicate messages we receive on a stream", "Stream", new long[] { 60*1000, 60*60*1000, 24*60*60*1000 });
+        _context.statManager().createRateStat("stream.con.lifetimeRTT", "Final RTT when a stream closes", "Stream", new long[] { 60*1000, 60*60*1000, 24*60*60*1000 });
+        _context.statManager().createRateStat("stream.con.lifetimeSendWindowSize", "Final send window size when a stream closes", "Stream", new long[] { 60*1000, 60*60*1000, 24*60*60*1000 });
+        _context.statManager().createRateStat("stream.receiveActive", "Number of active streams when a new one is received (period being not yet dropped)", "Stream", new long[] { 60*1000, 60*60*1000, 24*60*60*1000 });
         // Stats for Connection
-        _context.statManager().createRateStat("stream.con.windowSizeAtCongestion", "Size of our send window when we send a dup", "Stream", new long[] { 60*60*1000 });
-        _context.statManager().createRateStat("stream.chokeSizeBegin", "Number of outstanding messages when we started to choke", "Stream", new long[] { 60*60*1000 });
-        _context.statManager().createRateStat("stream.chokeSizeEnd", "Number of outstanding messages when we stopped being choked", "Stream", new long[] { 60*60*1000 });
+        _context.statManager().createRateStat("stream.con.windowSizeAtCongestion", "Size of our send window when we send a dup", "Stream", new long[] { 60*1000, 60*60*1000 });
+        _context.statManager().createRateStat("stream.chokeSizeBegin", "Number of outstanding messages when we started to choke", "Stream", new long[] { 60*1000, 60*60*1000 });
+        _context.statManager().createRateStat("stream.chokeSizeEnd", "Number of outstanding messages when we stopped being choked", "Stream", new long[] { 60*1000, 60*60*1000 });
         _context.statManager().createRateStat("stream.fastRetransmit", "How long a packet has been around for if it has been resent per the fast retransmit timer", "Stream", new long[] { 10*60*1000 });
         // Stats for PacketQueue
         _context.statManager().createRateStat("stream.con.sendMessageSize", "Size of a message sent on a connection", "Stream", new long[] { 60*1000, 10*60*1000, 60*60*1000 });

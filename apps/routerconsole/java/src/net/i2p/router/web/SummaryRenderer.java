@@ -112,7 +112,7 @@ class SummaryRenderer {
     private static final int SIZE_MONO = 10;
     private static final int SIZE_LEGEND = 10;
     private static final int SIZE_TITLE = 12;
-    private static final long[] RATES = new long[] { 60*60*1000 };
+    private static final long[] RATES = new long[] { 60*1000, 60*60*1000 };
     // dotted line
 //    private static final Stroke GRID_STROKE = new BasicStroke(1, BasicStroke.CAP_BUTT, BasicStroke.JOIN_MITER, 1, new float[] {1, 1}, 0);
     private static final Stroke GRID_STROKE = new BasicStroke(1, BasicStroke.CAP_ROUND, BasicStroke.JOIN_ROUND, 1, new float[] {1, 1}, 0);
@@ -243,7 +243,7 @@ class SummaryRenderer {
             // improve text legibility
             String lang = Messages.getLanguage(_context);
             if (lang == null)
-                lang= "en";
+                lang = "en";
 
             int smallSize = SIZE_MONO;
             int legendSize = SIZE_LEGEND;
@@ -255,19 +255,19 @@ class SummaryRenderer {
             }
             if (hiDPI) {
                 def.setTimeAxis(RrdGraphDef.MINUTE, 15, RrdGraphDef.HOUR, 1, RrdGraphDef.HOUR, 1, 0, "%H:00");
-                if (width >= 1200) {
-                    smallSize = 20;
-                    legendSize = 20;
-                    largeSize = 22;
+                if (width >= 1600) {
+                    smallSize = 18;
+                    legendSize = 18;
+                    largeSize = 20;
                 } else {
-                    smallSize = SIZE_MONO;
-                    legendSize = SIZE_LEGEND;
-                    largeSize = SIZE_TITLE;
+                    smallSize = 16;
+                    legendSize = 16;
+                    largeSize = 18;
                 }
-            } else if (width >= 600) {
+            } else if (width >= 800) {
                     smallSize += 1;
                     legendSize += 1;
-                    largeSize += 2;
+                    largeSize += 1;
             }
 
 /**

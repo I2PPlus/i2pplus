@@ -115,11 +115,11 @@ public class ProfileOrganizer {
         _strictCapacityOrder = new TreeSet<PeerProfile>(_comp);
         _persistenceHelper = new ProfilePersistenceHelper(_context);
 
-        _context.statManager().createRequiredRateStat("peer.profileSortTime", "Time taken by profile manager to sort peers", "Peers", new long[] { 60*60*1000 });
-        _context.statManager().createRateStat("peer.profileCoalesceTime", "Time taken by profile manager to coalesce peer stats", "Peers", new long[] { 60*60*1000 });
-        _context.statManager().createRateStat("peer.profileThresholdTime", "Time taken by profile manager to determine tier thresholds", "Peers", new long[] { 60*60*1000 });
-        _context.statManager().createRateStat("peer.profilePlaceTime", "Time taken by profile manager to sort peers into tiers", "Peers", new long[] { 60*60*1000 });
-        _context.statManager().createRateStat("peer.profileReorgTime", "Total time taken by profile manager to reorganize peers", "Peers", new long[] { 60*60*1000 });
+        _context.statManager().createRequiredRateStat("peer.profileSortTime", "Time taken by profile manager to sort peers", "Peers", new long[] { 60*1000, 60*60*1000 });
+        _context.statManager().createRateStat("peer.profileCoalesceTime", "Time taken by profile manager to coalesce peer stats", "Peers", new long[] { 60*1000, 60*60*1000 });
+        _context.statManager().createRateStat("peer.profileThresholdTime", "Time taken by profile manager to determine tier thresholds", "Peers", new long[] { 60*1000, 60*60*1000 });
+        _context.statManager().createRateStat("peer.profilePlaceTime", "Time taken by profile manager to sort peers into tiers", "Peers", new long[] { 60*1000, 60*60*1000 });
+        _context.statManager().createRateStat("peer.profileReorgTime", "Total time taken by profile manager to reorganize peers", "Peers", new long[] { 60*1000, 60*60*1000 });
         // used in DBHistory
         _context.statManager().createRequiredRateStat("peer.failedLookupRate", "NetDb Lookup fail rate", "Peers", new long[] { 10*60*1000l, 60*60*1000l, 24*60*60*1000l });
     }

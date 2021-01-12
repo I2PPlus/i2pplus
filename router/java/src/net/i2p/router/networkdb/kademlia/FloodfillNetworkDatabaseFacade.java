@@ -68,7 +68,7 @@ public class FloodfillNetworkDatabaseFacade extends KademliaNetworkDatabaseFacad
         _activeFloodQueries = new HashMap<Hash, FloodSearchJob>();
          _verifiesInProgress = new ConcurrentHashSet<Hash>(8);
 
-        long[] rate = new long[] { 60*60*1000L };
+        long[] rate = new long[] { 60*1000, 60*60*1000L };
         _context.statManager().createRequiredRateStat("netDb.successTime", "Time for successful NetDb lookup", "NetworkDatabase", rate);
         _context.statManager().createRateStat("netDb.failedTime", "Time a failed NetDb search takes", "NetworkDatabase", rate);
         _context.statManager().createRateStat("netDb.failedAttemptedPeers", "Number of peers we sent a search to that failed", "NetworkDatabase", rate);
@@ -384,10 +384,10 @@ public class FloodfillNetworkDatabaseFacade extends KademliaNetworkDatabaseFacad
         _floodfillEnabled = yes;
         if (yes && _floodThrottler == null) {
             _floodThrottler = new FloodThrottler();
-            _context.statManager().createRateStat("netDb.floodThrottled", "How often we decline to flood the NetDb", "NetworkDatabase", new long[] { 60*60*1000l });
+            _context.statManager().createRateStat("netDb.floodThrottled", "How often we decline to flood the NetDb", "NetworkDatabase", new long[] { 60*1000, 60*60*1000l });
             // following are for HFDSMJ
-            _context.statManager().createRateStat("netDb.storeFloodNew", "Time to flood out a newly received NetDb entry", "NetworkDatabase", new long[] { 60*60*1000l });
-            _context.statManager().createRateStat("netDb.storeFloodOld", "How often we receive an old NetDb entry", "NetworkDatabase", new long[] { 60*60*1000l });
+            _context.statManager().createRateStat("netDb.storeFloodNew", "Time to flood out a newly received NetDb entry", "NetworkDatabase", new long[] { 60*1000, 60*60*1000l });
+            _context.statManager().createRateStat("netDb.storeFloodOld", "How often we receive an old NetDb entry", "NetworkDatabase", new long[] { 60*1000, 60*60*1000l });
         }
     }
 
