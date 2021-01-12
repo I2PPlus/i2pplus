@@ -146,8 +146,8 @@ public class TunnelPoolManager implements TunnelManagerFacade {
         if (pool != null) {
             return pool.selectTunnel();
         }
-        if (_log.shouldLog(Log.ERROR))
-            _log.error("Want the Inbound tunnel for " + destination.toBase32() +
+        if (_log.shouldLog(Log.WARN))
+            _log.warn("Want the Inbound tunnel for " + destination.toBase32() +
                      " but there isn't a pool?");
         return null;
     }
@@ -222,8 +222,8 @@ public class TunnelPoolManager implements TunnelManagerFacade {
         if (pool != null) {
             return pool.selectTunnel(closestTo);
         }
-        if (_log.shouldLog(Log.ERROR))
-            _log.error("Want the Inbound tunnel for " + destination.toBase32() +
+        if (_log.shouldLog(Log.WARN))
+            _log.warn("Want the Inbound tunnel for " + destination.toBase32() +
                      " but there isn't a pool?");
         return null;
     }
