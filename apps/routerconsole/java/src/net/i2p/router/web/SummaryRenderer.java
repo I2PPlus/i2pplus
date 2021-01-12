@@ -243,7 +243,7 @@ class SummaryRenderer {
             // improve text legibility
             String lang = Messages.getLanguage(_context);
             if (lang == null)
-                lang= "en";
+                lang = "en";
 
             int smallSize = SIZE_MONO;
             int legendSize = SIZE_LEGEND;
@@ -255,19 +255,19 @@ class SummaryRenderer {
             }
             if (hiDPI) {
                 def.setTimeAxis(RrdGraphDef.MINUTE, 15, RrdGraphDef.HOUR, 1, RrdGraphDef.HOUR, 1, 0, "%H:00");
-                if (width >= 1200) {
-                    smallSize = 20;
-                    legendSize = 20;
-                    largeSize = 22;
+                if (width >= 1600) {
+                    smallSize = 18;
+                    legendSize = 18;
+                    largeSize = 20;
                 } else {
-                    smallSize = SIZE_MONO;
-                    legendSize = SIZE_LEGEND;
-                    largeSize = SIZE_TITLE;
+                    smallSize = 16;
+                    legendSize = 16;
+                    largeSize = 18;
                 }
-            } else if (width >= 600) {
+            } else if (width >= 800) {
                     smallSize += 1;
                     legendSize += 1;
-                    largeSize += 2;
+                    largeSize += 1;
             }
 
 /**
