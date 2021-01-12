@@ -2042,20 +2042,22 @@ background-position: 0;
 /* end loading mail */
 
 select {
+  margin: 5px;
   padding: 4px 24px 4px 4px !important;
-  font-family: Droid Sans, Open Sans, Noto Sans, Ubuntu, Bitstream Vera Sans, Segoe UI, Verdana, Lucida Grande, Helvetica, sans-serif;
+  min-width: 120px;
   text-align: left !important;
+  font-size: 9pt;
   color: #41465f;
-  border: 1px solid #9ea8d1;
+  border: 1px solid #97a2ce;
   border-radius: 2px;
-  box-shadow: inset 0 0 0 1px #fff;
+  box-shadow: 0 2px 0 rgba(255,255,255,.85) inset, 0 0 10px rgba(0,0,0,.1) inset, 0 1px 1px rgba(0,0,0,.05), 0 7px 4px -4px rgba(0,0,0,.1);
   background: url(/themes/console/light/images/dropdown.svg) right 8px center no-repeat #fff;
   background: url(/themes/console/light/images/dropdown.svg) right 8px center no-repeat, linear-gradient(to bottom, #fff, #efefff);
   background-size: 10px auto, 100% 100% !important;
-  filter: drop-shadow(0 0 1px rgba(220,220,255,.7));
   -moz-appearance: none;
   -webkit-appearance: none;
   appearance: none;
+  filter: drop-shadow(0 0 1px rgba(220,220,255,.7));
 }
 
 @supports not (-moz-appearance: none) {
@@ -2075,6 +2077,7 @@ select option {
 select:hover, select:active {
   cursor: pointer;
   color: #19191f;
+  box-shadow: inset 0 0 0 1px #fff;
   background: url(/themes/console/light/images/dropdown_hover.svg) right 8px center no-repeat, linear-gradient(to bottom, #eee, #fff) !important;
   background-size: 10px auto, 100% 100% !important;
 }
@@ -2151,123 +2154,118 @@ input[type=text]:focus::placeholder, input[type=password]:focus::placeholder {
 /* responsive layout */
 
 @media screen and (max-width: 900px) {
-body {
-  margin: 3px;
+  body {
+    margin: 3px;
+  }
+
+  body, td, a, button, input, p.mailbody, select {
+    font-size: 8.5pt !important;
+  }
+
+  th.mailListDate {
+    white-space: nowrap;
+    text-align: center !important;
+  }
+
+  td.mailListDate {
+    padding: 0;
+    white-space: normal !important;
+    width: 1%;
+    line-height: 100%;
+    text-align: center;
+  }
+
+  .listDate {
+    padding-bottom: 1px !important;
+    text-align: center !important;
+    font-weight: bold;
+    border: none !important;
+    border-bottom: 1px solid #ddd !important;
+    box-shadow: none !important;
+    background: none !important;
+    opacity: .85;
 }
 
-body, td, a, button, input, p.mailbody, select {
-  font-size: 8.5pt !important;
-}
+  .listDate span {
+    min-width: 0 !important;
+  }
 
-th.mailListDate {
-  white-space: nowrap;
-  text-align: center !important;
-}
+  .listTime {
+    margin-top: 1px;
+    margin-bottom: 2px;
+    text-align: center !important;
+    font-size: 95%;
+  }
 
-td.mailListDate {
-  padding: 0;
-  white-space: normal !important;
-  width: 1%;
-  line-height: 100%;
-  text-align: center;
-}
+  .pagenavcontainer {
+    position: fixed;
+    top: 13px;
+    right: 5px !important;
+  }
 
-.listDate {
-  padding-bottom: 1px !important;
-  text-align: center !important;
-  font-weight: bold;
-  border: none !important;
-  border-bottom: 1px solid #ddd !important;
-  opacity: .85;
-  box-shadow: none !important;
-  background: none !important;
-}
+  .topbuttons .pagenav td {
+    padding: 0;
+    width: auto;
+  }
 
-.listDate span {
-  min-width: 0 !important;
-}
+  .topbuttons .pagenav input {
+    margin: 1px !important;
+  }
 
-.listTime {
-  margin-top: 1px;
-  margin-bottom: 2px;
-  text-align: center !important;
-  font-size: 95%;
-}
+  .topbuttons .pagenav td:nth-child(2) {
+    display: none;
+  }
 
-.pagenavcontainer {
-  position: fixed;
-  top: 13px;
-  right: 5px !important;
-}
+  .topbuttons input.nextpage {
+    margin-left: 5px !important;
+  }
 
-.topbuttons .pagenav td {
-  padding: 0;
-  width: auto;
-}
+  #messagenav {
+    margin: 7px 1px 0;
+    position: fixed;
+    float: none;
+  }
 
-.topbuttons .pagenav input {
-  margin: 1px !important;
-}
-
-.topbuttons .pagenav td:nth-child(2) {
-  display: none;
-}
-
-.topbuttons input.nextpage {
-  margin-left: 5px !important;
-}
-
-#messagenav {
-  position: fixed;
-  float: none;
-  margin: 7px 1px 0;
-}
-
-.delete + .logout {
-  display: none;
-}
+  .delete + .logout {
+    display: none;
+  }
 }
 
 @media screen and (max-width: 1000px) {
-#info {
-  display: none !important;
-}
+  #info {
+    display: none !important;
+  }
 
-.folders{
-  margin-top: -1px;
-  float: left;
-}
+  .folders{
+    margin-top: -1px;
+    float: left;
+  }
 }
 
 @media screen and (max-width: 1300px) {
-select {
-  font-size: 9pt;
-}
+  select {
+    font-size: 9pt;
+  }
 }
 
 @media screen and (min-width: 1300px) {
-.iframed body, .iframed td, .iframed textarea, .iframed input, .iframed div, .iframed p.mailbody, .iframed th, .iframed a {
-  font-size: 10pt !important;
-}
+  .iframed body, .iframed td, .iframed textarea, .iframed input, .iframed div, .iframed p.mailbody, .iframed th, .iframed a {
+    font-size: 10pt !important;
+  }
 
-.iframed td {
-  padding: 3px 5px;
-}
-
-/*select {
-  padding-top: 5px !important;
-  padding-bottom: 5px !important;
-}*/
+  .iframed td {
+    padding: 3px 5px;
+  }
 }
 
 @media screen and (min-width: 1500px) {
-body, td, textarea, input, div, p.mailbody, th, a {
-  font-size: 10pt !important;
-}
+  body, td, textarea, input, div, p.mailbody, th, a {
+    font-size: 10pt !important;
+  }
 
-td {
-  padding: 3px 5px;
-}
+  td {
+    padding: 3px 5px;
+  }
 }
 
 /* end responsive layout */

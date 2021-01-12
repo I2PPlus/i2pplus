@@ -997,24 +997,23 @@ div.refresh {
 }
 
 .sb_info .percentBarOuter {
-  margin: 6px -2px -14px -3px;
+  margin: 6px -2px -3px -3px;
   box-shadow: none !important;
   background: repeating-linear-gradient(135deg, #000 1px, #000 5px, #010 6px, #010 11px);
   animation: downloadbar 3s infinite alternate;
 }
 
 @media screen and (min-width: 1500px) {
-.sb_info.sb_update .percentBarOuter {
-  margin-bottom: -5px !important;
+  .sb_info.sb_update .percentBarOuter {
+    margin-bottom: -5px !important;
+  }
+
+  .sb_info .percentBarText {
+    margin-top: -1px;
+  }
 }
 
 .sb_info .percentBarText {
-  margin-top: -1px;
-}
-}
-
-.sb_info .percentBarText {
-/*  opacity: 1;*/
   padding-top: 2px;
 }
 

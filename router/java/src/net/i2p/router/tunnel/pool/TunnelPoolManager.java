@@ -599,11 +599,9 @@ public class TunnelPoolManager implements TunnelManagerFacade {
     public synchronized void startup() {
         _isShutdown = false;
         if (!_executor.isRunning()) {
-            for (int i = 1; i <= _numHandlerThreads; i++) {
-                I2PThread t = new I2PThread(_executor, "BuildExecutor " + i + '/' + _numHandlerThreads, true);
-                t.setPriority(Thread.MAX_PRIORITY - 1);
-                t.start();
-            }
+            I2PThread t = new I2PThread(_executor, "BuildExecutor", true);
+            t.setPriority(Thread.MAX_PRIORITY - 1);
+            t.start();
             _handler.init();
             for (int i = 1; i <= _numHandlerThreads; i++) {
                 I2PThread hThread = new I2PThread(_handler, "BuildHandler " + i + '/' + _numHandlerThreads, true);

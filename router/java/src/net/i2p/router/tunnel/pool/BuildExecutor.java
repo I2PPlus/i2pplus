@@ -596,7 +596,8 @@ class BuildExecutor implements Runnable {
         // this prevents high CPU usage when there is no network connection
         // (via BuildRequestor.TunnelBuildFirstHopFailJob)
         long buildTime = _context.clock().now() + 10*60*1000- cfg.getExpiration();
-        if (buildTime > 250) {
+//        if (buildTime > 250) {
+        if (buildTime > 100) {
             synchronized (_currentlyBuilding) {
                 _currentlyBuilding.notifyAll();
             }
