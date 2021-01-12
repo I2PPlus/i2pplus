@@ -29,7 +29,8 @@ class TunnelGatewayPumper implements Runnable {
      *  Wait just a little, but this lets the pumper queue back up.
      *  See additional comments in PTG.
      */
-    private static final long REQUEUE_TIME = 50;
+//    private static final long REQUEUE_TIME = 50;
+    private static final long REQUEUE_TIME = 30;
 
     private static final TryCache<List<PendingGatewayMessage>> _bufferCache = new TryCache<>(new BufferFactory(), 16);
 
