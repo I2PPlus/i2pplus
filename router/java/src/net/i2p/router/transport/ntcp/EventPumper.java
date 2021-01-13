@@ -65,6 +65,7 @@ class EventPumper implements Runnable {
      *  The occasional larger message can use multiple buffers.
      */
     private static final int BUF_SIZE = 8*1024;
+    private static final int BUF_SIZE_LARGE = 10*1024;
     private static final int MAX_CACHE_SIZE = 64;
 
     private static class BufferFactory implements TryCache.ObjectFactory<ByteBuffer> {
@@ -74,7 +75,7 @@ class EventPumper implements Runnable {
                 return ByteBuffer.allocateDirect(BUF_SIZE);
             } else {
                 if (maxMemory >= 1024)
-                    return ByteBuffer.allocate(BUF_SIZE * 2);
+                    return ByteBuffer.allocate(BUF_SIZE_LARGE);
                 else
                     return ByteBuffer.allocate(BUF_SIZE);
             }
@@ -89,7 +90,8 @@ class EventPumper implements Runnable {
      * less frequently (or not at all), but while the connection count is small,
      * the time to iterate across them to check a few flags shouldn't be a problem.
      */
-    private static final long FAILSAFE_ITERATION_FREQ = 2*1000l;
+//    private static final long FAILSAFE_ITERATION_FREQ = 2*1000l;
+    private static final long FAILSAFE_ITERATION_FREQ = 15*1000l;
     private static final int FAILSAFE_LOOP_COUNT = 512;
     private static final long SELECTOR_LOOP_DELAY = 200;
     private static final long BLOCKED_IP_FREQ = 3*60*1000;
@@ -174,7 +176,8 @@ class EventPumper implements Runnable {
      *  why this needs a queue.
      */
     public void register(ServerSocketChannel chan) {
-        if (_log.shouldLog(Log.DEBUG)) _log.debug("Registering server socket channel");
+        if (_log.shouldLog(Log.DEBUG))
+            _log.debug("Registering server socket channel...");
         _wantsRegister.offer(chan);
         _selector.wakeup();
     }
@@ -184,7 +187,7 @@ class EventPumper implements Runnable {
      */
     public void registerConnect(NTCPConnection con) {
         if (_log.shouldLog(Log.DEBUG))
-            _log.debug("Registering " + con);
+            _log.debug("Registering " + con + "...");
         _context.statManager().addRateData("ntcp.registerConnect", 1);
         _wantsConRegister.offer(con);
         _selector.wakeup();
