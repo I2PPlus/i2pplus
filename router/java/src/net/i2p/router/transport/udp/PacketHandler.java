@@ -43,7 +43,8 @@ class PacketHandler {
 
     private static final int TYPE_POISON = -99999;
     private static final int MIN_QUEUE_SIZE = 16;
-    private static final int MAX_QUEUE_SIZE = 192;
+//    private static final int MAX_QUEUE_SIZE = 192;
+    private static final int MAX_QUEUE_SIZE = 512;
     private static final int MIN_NUM_HANDLERS = 1;  // if < 32MB
 //    private static final int MAX_NUM_HANDLERS = 1;
     private static final int MAX_NUM_HANDLERS = SystemVersion.getCores();

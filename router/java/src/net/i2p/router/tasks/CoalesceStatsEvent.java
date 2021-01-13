@@ -38,7 +38,7 @@ public class CoalesceStatsEvent implements SimpleTimer.TimedEvent {
         sm.createRequiredRateStat("bw.sendRate", _x("Low-level send rate (B/s)"), "Router", new long[] { 60*1000l, 5*60*1000l, 60*60*1000l });
         sm.createRequiredRateStat("bw.recvRate", _x("Low-level receive rate (B/s)"), "Router", new long[] { 60*1000l, 5*60*1000l, 60*60*1000l });
         sm.createRequiredRateStat("router.knownPeers", _x("Number of peers in our NetDb"), "Router", new long[] { 60*1000 });
-        sm.createRequiredRateStat("router.activePeers", _x("Number of active peers"), "Router", new long[] { 60*1000 });
+        sm.createRequiredRateStat("router.activePeers", _x("Number of peers active in the last 5 minutes"), "Router", new long[] { 60*1000 });
         sm.createRequiredRateStat("router.highCapacityPeers", _x("Known high capacity peers"), "Router", new long[] { 60*1000 });
         sm.createRequiredRateStat("router.activeSendPeers", _x("Peers sent to in last minute"), "Router", new long[] { 60*1000 });
         sm.createRequiredRateStat("router.fastPeers", _x("Known fast peers"), "Router", new long[] { 60*1000 });
