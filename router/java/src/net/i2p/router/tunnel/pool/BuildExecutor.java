@@ -144,11 +144,11 @@ class BuildExecutor implements Runnable {
             if (avg > 100) {
                 // If builds take more than 75 ms, start throttling
                 int throttle = (int) (200 * MAX_CONCURRENT_BUILDS / avg);
-                if (SystemVersion.isSlow() || SystemVersion.getMaxMemory() < 512)
+                if (SystemVersion.isSlow() || SystemVersion.getMaxMemory() < 512*1024*1024)
                     throttle = (int) (100 * MAX_CONCURRENT_BUILDS / avg);
                 if (throttle < allowed) {
                     allowed = throttle;
-                    if (SystemVersion.getMaxMemory() >= 1024 && avg < 200)
+                    if (SystemVersion.getMaxMemory() >= 1024*1024*1024 && avg < 200)
                         allowed = throttle * 2;
                     if (allowed < MAX_CONCURRENT_BUILDS && _log.shouldLog(Log.INFO))
                         _log.info("Throttling max tunnel builds to " + allowed +
@@ -160,7 +160,7 @@ class BuildExecutor implements Runnable {
 //            allowed = 2; // Never choke below 2 builds (but congestion may)
         if (allowed < SystemVersion.getCores())
             allowed = SystemVersion.getCores(); // Never choke below # cores
-        if (SystemVersion.getMaxMemory() >= 1024 && !SystemVersion.isSlow())
+        if (SystemVersion.getMaxMemory() >= 1024*1024*1024 && !SystemVersion.isSlow())
             allowed *= 2;
         if (allowed > MAX_CONCURRENT_BUILDS) {
             allowed = MAX_CONCURRENT_BUILDS;
