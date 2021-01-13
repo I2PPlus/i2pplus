@@ -103,10 +103,10 @@ public class InNetMessagePool implements Service {
             _shortCircuitGatewayJob = new SharedShortCircuitGatewayJob(context);
         }
         _log = _context.logManager().getLog(InNetMessagePool.class);
-        _context.statManager().createRateStat("inNetPool.dropped", "How often we drop a message", "InNetPool", new long[] { 60*60*1000l });
-        _context.statManager().createRateStat("inNetPool.droppedDeliveryStatusDelay", "How long after a delivery status message is created do we receive it back again (for messages too slow to be handled)", "InNetPool", new long[] { 60*60*1000l });
-        _context.statManager().createRateStat("inNetPool.duplicate", "How often we receive a duplicate message", "InNetPool", new long[] { 60*60*1000l });
-        _context.statManager().createRateStat("inNetPool.droppedDbLookupResponseMessage", "How often we drop a slow-to-arrive db search response", "InNetPool", new long[] { 60*60*1000l });
+        _context.statManager().createRateStat("inNetPool.dropped", "How often we drop a message", "InNetPool", new long[] { 60*1000, 60*60*1000l });
+        _context.statManager().createRateStat("inNetPool.droppedDeliveryStatusDelay", "How long after a delivery status message is created do we receive it back again (for messages too slow to be handled)", "InNetPool", new long[] { 60*1000, 60*60*1000l });
+        _context.statManager().createRateStat("inNetPool.duplicate", "How often we receive a duplicate message", "InNetPool", new long[] { 60*1000, 60*60*1000l });
+        _context.statManager().createRateStat("inNetPool.droppedDbLookupResponseMessage", "How often we drop a slow-to-arrive db search response", "InNetPool", new long[] { 60*1000, 60*60*1000l });
     }
 
     /**

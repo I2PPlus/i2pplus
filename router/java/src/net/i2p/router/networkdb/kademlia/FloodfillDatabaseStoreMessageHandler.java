@@ -29,9 +29,9 @@ public class FloodfillDatabaseStoreMessageHandler implements HandlerJobBuilder {
         _facade = facade;
         // following are for HFDSMJ
         context.statManager().createRateStat("netDb.storeHandled", "Number of DbStore messages we have handled", "NetworkDatabase", new long[] { 60*1000, 60*60*1000l });
-        context.statManager().createRateStat("netDb.storeLeaseSetHandled", "Number of LeaseSet store messages we have handled", "NetworkDatabase", new long[] { 60*60*1000l });
-        context.statManager().createRateStat("netDb.storeRouterInfoHandled", "Number of RouterInfo store messages we have handled", "NetworkDatabase", new long[] { 60*60*1000l });
-        context.statManager().createRateStat("netDb.storeRecvTime", "Time to handle the local store part of a DbStore", "NetworkDatabase", new long[] { 60*60*1000l });
+        context.statManager().createRateStat("netDb.storeLeaseSetHandled", "Number of LeaseSet store messages we have handled", "NetworkDatabase", new long[] { 60*1000, 60*60*1000l });
+        context.statManager().createRateStat("netDb.storeRouterInfoHandled", "Number of RouterInfo store messages we have handled", "NetworkDatabase", new long[] { 60*1000, 60*60*1000l });
+        context.statManager().createRateStat("netDb.storeRecvTime", "Time to handle the local store part of a DbStore", "NetworkDatabase", new long[] { 60*1000, 60*60*1000l });
     }
 
     public Job createJob(I2NPMessage receivedMessage, RouterIdentity from, Hash fromHash) {

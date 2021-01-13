@@ -45,7 +45,7 @@ public class CoalesceStatsEvent implements SimpleTimer.TimedEvent {
         sm.createRequiredRateStat("router.integratedPeers", _x("Known integrated (floodfill) peers"), "Router", new long[] { 60*1000 });
         sm.createRequiredRateStat("router.bannedPeers", _x("Number of peers in our banlist"), "Router", new long[] { 60*1000 });
         sm.createRequiredRateStat("router.unreachablePeers", _x("Number of peers without a published IP address"), "Router", new long[] { 60*1000 });
-        sm.createRateStat("router.tunnelBacklog", _x("Size of tunnel acceptor backlog"), "Tunnels", new long[] { 60*60*1000 });
+        sm.createRateStat("router.tunnelBacklog", _x("Size of tunnel acceptor backlog"), "Tunnels", new long[] { 60*1000, 60*60*1000 });
         sm.createRateStat("clock.skew", "Clock step adjustment (ms)", "Router", new long[] { 60*1000, 3*60*60*1000, 24*60*60*1000 });
         _maxMemory = Runtime.getRuntime().maxMemory();
         String legend = "(Bytes)";

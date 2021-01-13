@@ -83,9 +83,9 @@ class FloodfillVerifyStoreJob extends JobImpl {
         }
         // wait some time before trying to verify the store
         getTiming().setStartAfter(ctx.clock().now() + START_DELAY + ctx.random().nextInt(START_DELAY_RAND));
-        getContext().statManager().createRateStat("netDb.floodfillVerifyOK", "Time taken for successful floodfill verify", "NetworkDatabase", new long[] { 60*60*1000 });
-        getContext().statManager().createRateStat("netDb.floodfillVerifyFail", "Time taken for failed floodfill verify", "NetworkDatabase", new long[] { 60*60*1000 });
-        getContext().statManager().createRateStat("netDb.floodfillVerifyTimeout", "Time taken for floodfill verify timeout", "NetworkDatabase", new long[] { 60*60*1000 });
+        getContext().statManager().createRateStat("netDb.floodfillVerifyOK", "Time taken for successful floodfill verify", "NetworkDatabase", new long[] { 60*1000, 60*60*1000 });
+        getContext().statManager().createRateStat("netDb.floodfillVerifyFail", "Time taken for failed floodfill verify", "NetworkDatabase", new long[] { 60*1000, 60*60*1000 });
+        getContext().statManager().createRateStat("netDb.floodfillVerifyTimeout", "Time taken for floodfill verify timeout", "NetworkDatabase", new long[] { 60*1000, 60*60*1000 });
     }
 
     public String getName() { return "Verify NetDb Store"; }

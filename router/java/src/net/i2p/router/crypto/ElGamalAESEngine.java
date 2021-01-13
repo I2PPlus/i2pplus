@@ -54,19 +54,19 @@ public final class ElGamalAESEngine {
 
         _context.statManager().createFrequencyStat("crypto.elGamalAES.encryptNewSession",
                                                    "How often we encrypt to a new ElGamal/AES+SessionTag session",
-                                                   "Encryption", new long[] { 60*60*1000l});
+                                                   "Encryption", new long[] { 60*1000, 60*60*1000l});
         _context.statManager().createFrequencyStat("crypto.elGamalAES.encryptExistingSession",
                                                    "How often we encrypt to an existing ElGamal/AES+SessionTag session",
-                                                   "Encryption", new long[] { 60*60*1000l});
+                                                   "Encryption", new long[] { 60*1000, 60*60*1000l});
         _context.statManager().createFrequencyStat("crypto.elGamalAES.decryptNewSession",
                                                    "How often we decrypt with a new ElGamal/AES+SessionTag session",
-                                                   "Encryption", new long[] { 60*60*1000l});
+                                                   "Encryption", new long[] { 60*1000, 60*60*1000l});
         _context.statManager().createFrequencyStat("crypto.elGamalAES.decryptExistingSession",
                                                    "How often we decrypt with an existing ElGamal/AES+SessionTag session",
-                                                   "Encryption", new long[] { 60*60*1000l});
+                                                   "Encryption", new long[] { 60*1000, 60*60*1000l});
         _context.statManager().createFrequencyStat("crypto.elGamalAES.decryptFailed",
                                                    "How often we fail to decrypt with ElGamal/AES+SessionTag",
-                                                   "Encryption", new long[] { 60*60*1000l});
+                                                   "Encryption", new long[] { 60*1000, 60*60*1000l});
     }
 
     /**

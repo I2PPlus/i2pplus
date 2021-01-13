@@ -69,10 +69,15 @@ class EventPumper implements Runnable {
 
     private static class BufferFactory implements TryCache.ObjectFactory<ByteBuffer> {
         public ByteBuffer newInstance() {
-            if (_useDirect)
+            long maxMemory = SystemVersion.getMaxMemory() * 1024 * 1024;
+            if (_useDirect) {
                 return ByteBuffer.allocateDirect(BUF_SIZE);
-            else
-                return ByteBuffer.allocate(BUF_SIZE);
+            } else {
+                if (maxMemory >= 1024)
+                    return ByteBuffer.allocate(BUF_SIZE * 2);
+                else
+                    return ByteBuffer.allocate(BUF_SIZE);
+            }
         }
     }
 

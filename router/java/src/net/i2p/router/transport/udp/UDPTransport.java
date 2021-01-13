@@ -204,7 +204,7 @@ public class UDPTransport extends TransportImpl implements TimedWeightedPriority
     private static final int MAX_CONSECUTIVE_FAILED = 5;
 
     public static final int DEFAULT_COST = 5;
-    static final long[] RATES = { 10*60*1000 };
+    static final long[] RATES = { 60*1000, 10*60*1000 };
     /** minimum active peers to maintain IP detection, etc. */
 //    private static final int MIN_PEERS = 5;
     private static final int MIN_PEERS = 10;

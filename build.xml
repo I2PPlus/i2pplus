@@ -586,6 +586,7 @@
     <target name="getGitRev" depends="checkForGit" if="git.available" >
         <exec executable="git" outputproperty="workspace.version" errorproperty="git.error1" failifexecutionfails="false" >
             <arg value="rev-parse" />
+            <arg value="--short=8" />
             <arg value="HEAD" />
         </exec>
     </target>
@@ -1376,6 +1377,7 @@
         <copy file="installer/resources/eephead" todir="pkg-temp/" />
         <copy file="installer/resources/i2ping" todir="pkg-temp/" />
         <copy file="installer/resources/i2prouter" todir="pkg-temp/" />
+        <copy file="installer/resources/graceful_helper" todir="pkg-temp/" />
         <copy file="installer/resources/osid" todir="pkg-temp/" />
         <copy file="installer/resources/postinstall.sh" todir="pkg-temp/" />
         <copy todir="pkg-temp/man/">
@@ -2203,7 +2205,7 @@
         <delete dir="pkg-temp/locale/" />
         <delete dir="pkg-temp/man/" />
         <delete dir="pkg-temp/Start I2P Router.app/" />
-        <delete dir="pkg-temp" includes="eepget eephead i2ping i2prouter INSTALL-headless.txt osid postinstall.sh runplain.sh" />
+        <delete dir="pkg-temp" includes="eepget eephead i2ping i2prouter graceful_helper INSTALL-headless.txt osid postinstall.sh runplain.sh" />
     </target>
 
     <!-- IzPack 4 -->

@@ -30,7 +30,7 @@ class MessageHandler implements I2PSessionMuxedListener {
         _context = ctx;
         _listeners = new CopyOnWriteArraySet<DisconnectListener>();
         _log = ctx.logManager().getLog(MessageHandler.class);
-        _context.statManager().createRateStat("stream.packetReceiveFailure", "Number of times we fail to decrypt or otherwise receive a packet sent to us", "Stream", new long[] { 60*60*1000, 24*60*60*1000 });
+        _context.statManager().createRateStat("stream.packetReceiveFailure", "Number of times we fail to decrypt or otherwise receive a packet sent to us", "Stream", new long[] { 60*1000, 60*60*1000, 24*60*60*1000 });
     }
 
     /** Instruct the client that the given session has received a message with

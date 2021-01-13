@@ -1966,7 +1966,12 @@ docommand() {
 			graceful_helper
             graceful "0"
             ;;
-
+        
+        'getdir')
+            echo "$I2P"
+            exit 0
+            ;;
+            
         'restart')
             checkifstartingasroot
             raiseopenfilesulimit
