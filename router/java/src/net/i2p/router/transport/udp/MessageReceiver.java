@@ -59,13 +59,13 @@ class MessageReceiver {
                     _threadCount = 8;
                 else
                     _threadCount = cores;
-                qsize = 160;
+                qsize = 384;
             } else if (maxMemory >= 512*1024*1024) {
                 if (cores > 6)
                     _threadCount = 6;
                 else
                     _threadCount = cores;
-                qsize = 128;
+                qsize = 192;
             } else {
                 _threadCount = Math.max(MIN_THREADS, Math.min(MAX_THREADS, ctx.bandwidthLimiter().getInboundKBytesPerSecond() / 20));
                 qsize = (int) Math.max(MIN_QUEUE_SIZE, Math.min(MAX_QUEUE_SIZE, maxMemory / (2*1024*1024)));
