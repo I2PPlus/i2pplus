@@ -105,7 +105,7 @@ class PacketHandler {
         Connection con = (sendId > 0 ? _manager.getConnectionByInboundId(sendId) : null);
         if (con != null) {
             if (_log.shouldDebug())
-                displayPacket(packet, "RECV", "wsize " + con.getOptions().getWindowSize() + "; rto " + con.getOptions().getRTO());
+                displayPacket(packet, "RECV", "WSIZE " + con.getOptions().getWindowSize() + "; RTO " + con.getOptions().getRTO());
             receiveKnownCon(con, packet);
         } else {
             if (_log.shouldDebug())
@@ -309,10 +309,10 @@ class PacketHandler {
                 if (con != null) {
                     if ( (con.getHighestAckedThrough() <= 5) && (packet.getSequenceNum() <= 5) ) {
                         if (_log.shouldLog(Log.INFO))
-                            _log.info("Received additional packet without SendStreamID after the SYN\n" + con + ": " + packet);
+                            _log.info("Received additional packet without SendStreamID after the SYN\n* " + con + ": " + packet);
                     } else {
                         if (_log.shouldLog(Log.WARN))
-                            _log.warn("hrmph, received while ACK of SYN was in flight\n" + con + ": " + packet + " ACKed: " + con.getAckedPackets());
+                            _log.warn("hrmph, received while ACK of SYN was in flight\n* " + con + ": " + packet + " ACKed: " + con.getAckedPackets());
                         // allow unlimited packets without a SendStreamID for now
                     }
                     receiveKnownCon(con, packet);
