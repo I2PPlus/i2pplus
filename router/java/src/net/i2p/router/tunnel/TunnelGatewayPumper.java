@@ -47,7 +47,10 @@ class TunnelGatewayPumper implements Runnable {
         _livepumps = new ConcurrentHashSet<PumpedTunnelGateway>(16);
         _inbound = new ConcurrentHashSet<PumpedTunnelGateway>(16);
         _outbound = new LinkedHashSet<PumpedTunnelGateway>(16);
-        new I2PThread(this, "Tunnel GW pumper ", true).start();
+//        new I2PThread(this, "Tunnel GW pumper ", true).start();
+        I2PThread gwPumper = new I2PThread(this, "Tunnel GW pumper", true);
+        gwPumper.setPriority(Thread.MAX_PRIORITY - 1);
+        gwPumper.start();
     }
 
     public void stopPumping() {
