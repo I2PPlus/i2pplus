@@ -166,9 +166,12 @@ class ProfilePersistenceHelper {
             buf.append("#").append(TAB).append("Groups:").append(TAB).append(TAB).append(groups).append(NL);
             buf.append(HR).append(NL).append(NL);
         }
-        add(buf, addComments, "speedBonus", profile.getSpeedBonus(), "Manual Speed Score adjustment: " +  profile.getSpeedBonus());
-        add(buf, addComments, "capacityBonus", profile.getCapacityBonus(), "Manual Capacity Score adjustment: " +  profile.getCapacityBonus());
-        add(buf, addComments, "integrationBonus", profile.getIntegrationBonus(), "Manual Integration Score adjustment: " + profile.getIntegrationBonus());
+        if (profile.getSpeedBonus() != 0)
+            add(buf, addComments, "speedBonus", profile.getSpeedBonus(), "Manual Speed Score adjustment: " +  profile.getSpeedBonus());
+        if (profile.getCapacityBonus() != 0)
+            add(buf, addComments, "capacityBonus", profile.getCapacityBonus(), "Manual Capacity Score adjustment: " +  profile.getCapacityBonus());
+        if (profile.getIntegrationBonus() != 0)
+            add(buf, addComments, "integrationBonus", profile.getIntegrationBonus(), "Manual Integration Score adjustment: " + profile.getIntegrationBonus());
         addDate(buf, addComments, "firstHeardAbout", profile.getFirstHeardAbout(), "First reference to peer received:");
         addDate(buf, addComments, "lastHeardAbout", profile.getLastHeardAbout(), "Last reference to peer received:");
         addDate(buf, addComments, "lastHeardFrom", profile.getLastHeardFrom(), "Last message from peer received:");
@@ -494,7 +497,7 @@ class ProfilePersistenceHelper {
             Hash h = Hash.create(b);
             return h;
         } catch (RuntimeException dfe) {
-            _log.warn("Invalid base64 [" + key + "]", dfe);
+            _log.warn("Invalid Base64 [" + key + "]", dfe);
             return null;
         }
     }

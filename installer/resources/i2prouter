@@ -787,18 +787,28 @@ checkUser() {
 
         # Wrap the parameters so they can be passed.
         ADDITIONAL_PARA=""
-        while [ -n "$1" ] ; do
-            ADDITIONAL_PARA="$ADDITIONAL_PARA \"$1\""
-            shift
-        done
-
+        if [ -n "$2" ]; then
+            while [ -n "$1" ] ; do
+                ADDITIONAL_PARA="$ADDITIONAL_PARA $1"
+                shift
+            done
+        else
+            ADDITIONAL_PARA="$1"
+        fi
         # Use "runuser" if this exists.  runuser should be used on RedHat in preference to su.
         #
         if test -f "/sbin/runuser"
         then
             /sbin/runuser -s /bin/sh - $RUN_AS_USER -c "\"$REALPATH\" $ADDITIONAL_PARA"
         else
-            su - $RUN_AS_USER -s /bin/sh -c "\"$REALPATH\" $ADDITIONAL_PARA"
+            case "$DIST_OS" in
+                'freebsd')
+                    su - $RUN_AS_USER "$REALPATH" "$ADDITIONAL_PARA"
+                ;;
+                *)
+                    su - $RUN_AS_USER -s /bin/sh -c "\"$REALPATH\" $ADDITIONAL_PARA"
+                ;;
+            esac
         fi
         RUN_AS_USER_EXITCODE=$?
         # Now that we are the original user again, we may need to clean up the lock file.
@@ -1966,12 +1976,12 @@ docommand() {
 			graceful_helper
             graceful "0"
             ;;
-        
+
         'getdir')
             echo "$I2P"
             exit 0
             ;;
-            
+
         'restart')
             checkifstartingasroot
             raiseopenfilesulimit
