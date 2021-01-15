@@ -46,10 +46,8 @@ public class ReseedBundler {
     private final RouterContext _context;
     private final static String ROUTERINFO_PREFIX = "routerInfo-";
     private final static String ROUTERINFO_SUFFIX = ".dat";
-    //private static final int MINIMUM = 50;
     private static final int MINIMUM = 200;
-    /** NTCP2 */
-    private static final String MIN_VERSION = "0.9.36";
+    private static final String MIN_VERSION = "0.9.48";
 
     public ReseedBundler(RouterContext ctx) {
         _context = ctx;
@@ -68,7 +66,7 @@ public class ReseedBundler {
         Hash me = _context.routerHash();
         int routerCount = 0;
         int copied = 0;
-        long tooOld = System.currentTimeMillis() - 7*24*60*60*1000L;
+        long tooOld = System.currentTimeMillis() - 16*60*60*1000L; // 16 hours
         List<RouterInfo> infos = new ArrayList<RouterInfo>(_context.netDb().getRouters());
         // IP to router hash
         Map<String, Hash> ipMap = new HashMap<String, Hash>(count);
@@ -86,6 +84,8 @@ public class ReseedBundler {
             if (ri.getCapabilities().contains("U"))
                 continue;
             if (ri.getCapabilities().contains("K"))
+                continue;
+            if (ri.getCapabilities().contains("L"))
                 continue;
             if (ri.getCapabilities().contains("H"))
                 continue;
