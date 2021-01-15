@@ -169,12 +169,7 @@ class PeerManager {
         try {
             Set<Hash> peers = selectPeers();
             for (Hash peer : peers) {
-                for (Set<Hash> p : _peersByCapability.values()) {
-                    if (!p.contains("HIDDEN") || !p.contains("UNREACHABLE") ||
-                        !p.contains("BW12") || !p.contains("BW32")) {
-                            storeProfile(peer);
-                    }
-                }
+                storeProfile(peer);
             }
         } finally {
             _storeLock.set(false);
