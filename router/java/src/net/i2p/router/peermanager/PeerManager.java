@@ -61,9 +61,9 @@ class PeerManager {
     /** After first two hours of uptime ~= 246 */
     static final int REORGANIZES_PER_DAY = (int) (24*60*60*1000L / REORGANIZE_TIME_LONG);
 //    private static final long STORE_TIME = 19*60*60*1000;
-    private static final long STORE_TIME = 2*60*60*1000;
+    private static final long STORE_TIME = 60*60*1000;
 //    private static final long EXPIRE_AGE = 3*24*60*60*1000;
-    private static final long EXPIRE_AGE = 8*60*60*1000;
+    private static final long EXPIRE_AGE = 4*60*60*1000;
 
     public static final String TRACKED_CAPS = "" +
         FloodfillNetworkDatabaseFacade.CAPABILITY_FLOODFILL +
@@ -169,7 +169,12 @@ class PeerManager {
         try {
             Set<Hash> peers = selectPeers();
             for (Hash peer : peers) {
-                storeProfile(peer);
+                for (Set<Hash> p : _peersByCapability.values()) {
+                    if (!p.contains("HIDDEN") || !p.contains("UNREACHABLE") ||
+                        !p.contains("BW12") || !p.contains("BW32")) {
+                            storeProfile(peer);
+                    }
+                }
             }
         } finally {
             _storeLock.set(false);

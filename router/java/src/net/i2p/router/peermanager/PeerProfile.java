@@ -98,6 +98,8 @@ public class PeerProfile {
 
     private long _lastCoalesceDate = System.currentTimeMillis();
 
+    private static final long[] RATES = { 10*60*1000l, 60*60*1000l, 24*60*60*1000 };
+
     /**
      *  Countries with more than about a 2% share of the netdb.
      *  Only routers in these countries will use a same-country metric.
@@ -521,9 +523,9 @@ public class PeerProfile {
         //if (_receiveSize == null)
         //    _receiveSize = new RateStat("receiveSize", "How large received messages are", group, new long[] { 5*60*1000l, 60*60*1000l } );
         if (_tunnelCreateResponseTime == null)
-            _tunnelCreateResponseTime = new RateStat("tunnelCreateResponseTime", "Time (ms) for tunnel create response from the peer", group, new long[] { 10*60*1000l, 30*60*1000l, 60*60*1000l, 24*60*60*1000 } );
+            _tunnelCreateResponseTime = new RateStat("tunnelCreateResponseTime", "Time (ms) for tunnel create response from the peer", group, RATES);
         if (_tunnelTestResponseTime == null)
-            _tunnelTestResponseTime = new RateStat("tunnelTestResponseTime", "Time (ms) to test a tunnel this peer participates in", group, new long[] { 10*60*1000l, 30*60*1000l, 60*60*1000l, 3*60*60*1000l, 24*60*60*1000 } );
+            _tunnelTestResponseTime = new RateStat("tunnelTestResponseTime", "Time (ms) to test a tunnel this peer participates in", group, RATES);
 
         if (_tunnelHistory == null)
             _tunnelHistory = new TunnelHistory(_context, group);
@@ -537,9 +539,9 @@ public class PeerProfile {
     public synchronized void expandDBProfile() {
         String group = (null == _peer ? "profileUnknown" : _peer.toBase64().substring(0,6));
         if (_dbResponseTime == null)
-            _dbResponseTime = new RateStat("dbResponseTime", "Time (ms) for db response from the peer", group, new long[] { 10*60*1000l, 60*60*1000l, 24*60*60*1000 } );
+            _dbResponseTime = new RateStat("dbResponseTime", "Time (ms) for db response from the peer", group, RATES);
         if (_dbIntroduction == null)
-            _dbIntroduction = new RateStat("dbIntroduction", "Total new peers received from DbSearchReplyMsgs or DbStore messages", group, new long[] { 60*1000, 60*60*1000l, 6*60*60*1000l, 24*60*60*1000l });
+            _dbIntroduction = new RateStat("dbIntroduction", "Total new peers received from DbSearchReplyMsgs or DbStore messages", group, RATES);
 
         if (_dbHistory == null)
             _dbHistory = new DBHistory(_context, group);
