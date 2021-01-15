@@ -12,12 +12,12 @@ import net.i2p.stat.RateStat;
  * Estimate how many of our tunnels the peer can join per hour.
  */
 class CapacityCalculator {
-    
+
     public static final String PROP_COUNTRY_BONUS = "profileOrganizer.sameCountryBonus";
 
     /** used to adjust each period so that we keep trying to expand the peer's capacity */
     static final long GROWTH_FACTOR = 5;
-    
+
     /** the calculator estimates over a 1 hour period */
     private static long ESTIMATE_PERIOD = 60*60*1000;
 
@@ -31,34 +31,34 @@ class CapacityCalculator {
     // we make this a bonus for non-ff, not a penalty for ff, so we
     // don't drive the ffs below the default
     private static final double BONUS_NON_FLOODFILL = 1.0;
-    
+
     public static double calc(PeerProfile profile) {
         double capacity;
 
-        if (tooOld(profile)) { 
+        if (tooOld(profile)) {
             capacity = 1;
         } else {
             RateStat acceptStat = profile.getTunnelCreateResponseTime();
             RateStat rejectStat = profile.getTunnelHistory().getRejectionRate();
             RateStat failedStat = profile.getTunnelHistory().getFailedRate();
-        
+
             double capacity10m = estimateCapacity(acceptStat, rejectStat, failedStat, 10*60*1000);
             // if we actively know they're bad, who cares if they used to be good?
             if (capacity10m <= 0) {
                 capacity = 0;
             } else {
-                double capacity30m = estimateCapacity(acceptStat, rejectStat, failedStat, 30*60*1000);
+//                double capacity30m = estimateCapacity(acceptStat, rejectStat, failedStat, 30*60*1000);
                 double capacity60m = estimateCapacity(acceptStat, rejectStat, failedStat, 60*60*1000);
                 double capacity1d  = estimateCapacity(acceptStat, rejectStat, failedStat, 24*60*60*1000);
-        
-                capacity = capacity10m * periodWeight(10*60*1000) + 
-                           capacity30m * periodWeight(30*60*1000) + 
-                           capacity60m * periodWeight(60*60*1000) + 
+
+                capacity = capacity10m * periodWeight(10*60*1000) +
+//                           capacity30m * periodWeight(30*60*1000) +
+                           capacity60m * periodWeight(60*60*1000) +
                            capacity1d  * periodWeight(24*60*60*1000);
             }
-        }        
-        
-        // now take into account non-rejection tunnel rejections (which haven't 
+        }
+
+        // now take into account non-rejection tunnel rejections (which haven't
         // incremented the rejection counter, since they were only temporary)
         RouterContext context = profile.getContext();
         long now = context.clock().now();
@@ -106,21 +106,21 @@ class CapacityCalculator {
         capacity += profile.getCapacityBonus();
         if (capacity < 0)
             capacity = 0;
-        
+
         return capacity;
     }
-    
+
     /**
      * If we haven't heard from them in an hour, they aren't too useful.
      *
      */
     private static boolean tooOld(PeerProfile profile) {
-        if (profile.getIsActive(60*60*1000)) 
+        if (profile.getIsActive(60*60*1000))
             return false;
-        else 
+        else
             return true;
     }
-    
+
     /**
      * Compute a tunnel accept capacity-per-hour for the given period
      * This is perhaps the most critical part of the peer ranking and selection
@@ -174,20 +174,20 @@ class CapacityCalculator {
                 val -= 0.04 * failed * stretch;
             }
         }
-        
+
         val += GROWTH_FACTOR;
-        
+
         if (val >= 0) {
             return val;
         } else {
             return 0.0d;
         }
     }
-    
+
     private static double periodWeight(int period) {
         switch (period) {
             case 10*60*1000: return .4;
-            case 30*60*1000: return .3;
+//            case 30*60*1000: return .3;
             case 60*60*1000: return .2;
             case 24*60*60*1000: return .1;
             default: throw new IllegalArgumentException("undefined period passed, period [" + period + "]???");

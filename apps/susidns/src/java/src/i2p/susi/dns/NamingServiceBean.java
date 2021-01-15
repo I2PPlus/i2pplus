@@ -390,7 +390,7 @@ public class NamingServiceBean extends AddressbookBean
 						search = null;
 				}
 				if( changed ) {
-					message += "<br>" + _t("Address book saved.");
+					message += "<br>" + _t("Address book saved.") + "&nbsp;" + _t("Browse away from this addressbook and return to see update.");
 				}
 			}
 			else {

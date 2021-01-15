@@ -89,7 +89,7 @@ class UnsignedUpdateHandler implements Checker, Updater {
         UpdateRunner update = new UnsignedUpdateRunner(_context, _mgr, updateSources);
         // set status before thread to ensure UI feedback
         if (updateSources.toString().contains("skank") && type == ROUTER_UNSIGNED)
-            _mgr.notifyProgress(update, "<b>" + _mgr._t("Updating I2P").replace("Updating I2P", "Downloading I2P+ update") + "&hellip;</b>");
+            _mgr.notifyProgress(update, "<b>" + _mgr._t("Updating I2P").replace("Updating I2P", "Contacting I2P+ update server") + "&hellip;</b>");
         else
             _mgr.notifyProgress(update, "<b>" + _mgr._t("Updating I2P").replace("Updating I2P", "Downloading update") + "&hellip;</b>");
         return update;

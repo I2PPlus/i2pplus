@@ -14,6 +14,6 @@ public class ReseedGenerator extends HelperBase {
 
     public File createZip() throws IOException {
         ReseedBundler rb = new ReseedBundler(_context);
-        return rb.createZip(100);
+        return rb.createZip(200);
     }
 }
