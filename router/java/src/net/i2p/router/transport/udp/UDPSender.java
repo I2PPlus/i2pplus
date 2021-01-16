@@ -12,6 +12,7 @@ import net.i2p.util.I2PThread;
 import net.i2p.util.Log;
 import net.i2p.util.SystemVersion;
 
+
 /**
  * Lowest level packet sender, pushes anything on its queue ASAP.
  *
@@ -49,9 +50,12 @@ class UDPSender {
         long maxMemory = SystemVersion.getMaxMemory();
         int cores = SystemVersion.getCores();
         boolean isSlow = SystemVersion.isSlow();
+        long messageDelay = _context.throttle().getMessageDelay();
         int qsize = (int) Math.max(MIN_QUEUE_SIZE, Math.min(MAX_QUEUE_SIZE, maxMemory / (1024*1024)));
-        if (maxMemory > 1024*1024*1024 && cores >= 4 && !isSlow)
+        if (messageDelay < 200 && maxMemory >= 1024*1024*1024 && cores >= 4 && !isSlow)
             qsize = 512;
+        else if (messageDelay < 300 && maxMemory >= 1024*1024*1024 && cores >= 4 && !isSlow)
+            qsize = 384;
         _outboundQueue = new CoDelBlockingQueue<UDPPacket>(ctx, "UDP-Sender", qsize);
         _socket = socket;
         _runner = new Runner();

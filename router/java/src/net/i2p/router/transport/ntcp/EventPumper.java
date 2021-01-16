@@ -71,10 +71,11 @@ class EventPumper implements Runnable {
     private static class BufferFactory implements TryCache.ObjectFactory<ByteBuffer> {
         public ByteBuffer newInstance() {
             long maxMemory = SystemVersion.getMaxMemory() * 1024 * 1024;
+            boolean isSlow = SystemVersion.isSlow();
             if (_useDirect) {
                 return ByteBuffer.allocateDirect(BUF_SIZE);
             } else {
-                if (maxMemory >= 1024)
+                if (maxMemory >= 1024 && !isSlow)
                     return ByteBuffer.allocate(BUF_SIZE_LARGE);
                 else
                     return ByteBuffer.allocate(BUF_SIZE);
@@ -177,7 +178,7 @@ class EventPumper implements Runnable {
      */
     public void register(ServerSocketChannel chan) {
         if (_log.shouldLog(Log.DEBUG))
-            _log.debug("Registering server socket channel...");
+            _log.debug("Registering ServerSocketChannel...");
         _wantsRegister.offer(chan);
         _selector.wakeup();
     }
