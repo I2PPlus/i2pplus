@@ -21,6 +21,8 @@ class IntegrationCalculator {
             val /= 24;
 
             if (val > 0 && val < 1)
+                val *= 10;
+            if (val > 0 && val < 1)
                 val = 1;
         }
         val += profile.getIntegrationBonus();
