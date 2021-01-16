@@ -269,6 +269,9 @@ case $0 in
     /*)
         SCRIPT="$0"
         ;;
+    \.*)
+        SCRIPT="$(cd "$(dirname "$0")" && pwd)/$(basename $0)"
+        ;;
     *)
         PWD=`pwd`
         SCRIPT="$PWD/$0"
