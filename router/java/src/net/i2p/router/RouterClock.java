@@ -49,7 +49,8 @@ public class RouterClock extends Clock {
      *  call the callback, we probably need a soft restart.
      *  @since 0.8.8
      */
-    private static final long MASSIVE_SHIFT_FORWARD = 150*1000;
+//    private static final long MASSIVE_SHIFT_FORWARD = 150*1000;
+    private static final long MASSIVE_SHIFT_FORWARD = 360*1000;
     private static final long MASSIVE_SHIFT_BACKWARD = 61*1000;
 
     /** testing only */
