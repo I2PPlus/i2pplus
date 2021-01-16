@@ -82,7 +82,7 @@ class PacketHandler {
             _handlers[i] = new Handler();
         }
 
-        //_context.statManager().createRateStat("udp.handleTime", "Time taken to handle a received packet after its been pulled off the queue", "Transport [UDP]", UDPTransport.RATES);
+        //_context.statManager().createRateStat("udp.handleTime", "Time to handle a received packet after its been pulled off the queue", "Transport [UDP]", UDPTransport.RATES);
         //_context.statManager().createRateStat("udp.queueTime", "How long after a packet is received can we begin handling it", "Transport [UDP]", UDPTransport.RATES);
         _context.statManager().createRateStat("udp.receivePacketSkew", "How long ago after the packet was sent did we receive it", "Transport [UDP]", UDPTransport.RATES);
         _context.statManager().createRateStat("udp.droppedInvalidUnkown", "Age of packet we dropped due to invalidity (unkown type) was", "Transport [UDP]", UDPTransport.RATES);
