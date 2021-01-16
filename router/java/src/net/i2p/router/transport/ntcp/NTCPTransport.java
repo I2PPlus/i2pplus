@@ -166,47 +166,47 @@ public class NTCPTransport extends TransportImpl {
         _context.statManager().createRateStat("ntcp.failsafeInvalid", "Number of times connection to peer closed to work around a JVM bug", "Transport [NTCP]", RATES);
         _context.statManager().createRateStat("ntcp.failsafeThrottle", "Delay event pumper", "Transport [NTCP]", RATES);
         _context.statManager().createRateStat("ntcp.accept", "Number of times NTCP request accepted", "Transport [NTCP]", RATES);
-        _context.statManager().createRateStat("ntcp.attemptBanlistedPeer", "Number of attempts to connect to banlisted NTCP peer", "Transport [NTCP]", RATES);
-        _context.statManager().createRateStat("ntcp.attemptUnreachablePeer", "Number of attempts to connect to unreachable NTCP peer", "Transport [NTCP]", RATES);
-        _context.statManager().createRateStat("ntcp.closeOnBacklog", "Number of times we closed an NTCP connection due to backlog", "Transport [NTCP]", RATES);
-        _context.statManager().createRateStat("ntcp.connectFailedIOE", "Number failed connection attempts to NTCP peer (IOerror)", "Transport [NTCP]", RATES);
+        _context.statManager().createRateStat("ntcp.attemptBanlistedPeer", "Connection attempts to banlisted NTCP peer", "Transport [NTCP]", RATES);
+        _context.statManager().createRateStat("ntcp.attemptUnreachablePeer", "Connection attempts to unreachable NTCP peer", "Transport [NTCP]", RATES);
+        _context.statManager().createRateStat("ntcp.closeOnBacklog", "NTCP connection closed due to backlog", "Transport [NTCP]", RATES);
+        _context.statManager().createRateStat("ntcp.connectFailedIOE", "Failed connection attempts to NTCP peer (IOerror)", "Transport [NTCP]", RATES);
         //_context.statManager().createRateStat("ntcp.connectFailedInvalidPort", "", "Transport [NTCP]", RATES);
         //_context.statManager().createRateStat("ntcp.bidRejectedLocalAddress", "", "Transport [NTCP]", RATES);
         //_context.statManager().createRateStat("ntcp.bidRejectedNoNTCPAddress", "", "Transport [NTCP]", RATES);
-        _context.statManager().createRateStat("ntcp.connectFailedTimeout", "Number of failed connection attempt timeouts to NTCP peer", "Transport [NTCP]", RATES);
-        _context.statManager().createRateStat("ntcp.connectFailedTimeoutIOE", "Number of failed connection attempt timeouts to NTCP peer (IOerror)", "Transport [NTCP]", RATES);
-        _context.statManager().createRateStat("ntcp.connectFailedUnresolved", "Number of unresolved connection attempts to NTCP peer", "Transport [NTCP]", RATES);
+        _context.statManager().createRateStat("ntcp.connectFailedTimeout", "Failed connection attempt timeouts to NTCP peer", "Transport [NTCP]", RATES);
+        _context.statManager().createRateStat("ntcp.connectFailedTimeoutIOE", "Failed connection attempt timeouts to NTCP peer (IOerror)", "Transport [NTCP]", RATES);
+        _context.statManager().createRateStat("ntcp.connectFailedUnresolved", "Unresolved connection attempts to NTCP peer", "Transport [NTCP]", RATES);
         //_context.statManager().createRateStat("ntcp.connectImmediate", "", "Transport [NTCP]", RATES);
-        _context.statManager().createRateStat("ntcp.connectSuccessful", "Number of successful connection attempts to NTCP peer", "Transport [NTCP]", RATES);
+        _context.statManager().createRateStat("ntcp.connectSuccessful", "Successful connection attempts to NTCP peer", "Transport [NTCP]", RATES);
         _context.statManager().createRateStat("ntcp.corruptDecryptedI2NP", "Number of corrupt NTCP messages decrypted", "Transport [NTCP]", RATES);
-        _context.statManager().createRateStat("ntcp.corruptI2NPCRC", "Number of corrupt NTCP messages decrypted (CRC fail)", "Transport [NTCP]", RATES);
-        _context.statManager().createRateStat("ntcp.corruptI2NPIME", "Number of corrupt NTCP messages decrypted (IME)", "Transport [NTCP]", RATES);
-        _context.statManager().createRateStat("ntcp.corruptI2NPIOE", "Number of corrupt NTCP messages decrypted (IOerror)", "Transport [NTCP]", RATES);
-        _context.statManager().createRateStat("ntcp.corruptMetaCRC", "Number of corrupt MetaCRCs received from NTCP peer", "Transport [NTCP]", RATES);
-        _context.statManager().createRateStat("ntcp.corruptSkew", "Number of corrupt clock skews received from NTCP peer", "Transport [NTCP]", RATES);
+        _context.statManager().createRateStat("ntcp.corruptI2NPCRC", "Corrupt NTCP messages decrypted (CRC fail)", "Transport [NTCP]", RATES);
+        _context.statManager().createRateStat("ntcp.corruptI2NPIME", "Corrupt NTCP messages decrypted (IME)", "Transport [NTCP]", RATES);
+        _context.statManager().createRateStat("ntcp.corruptI2NPIOE", "Corrupt NTCP messages decrypted (IOerror)", "Transport [NTCP]", RATES);
+        _context.statManager().createRateStat("ntcp.corruptMetaCRC", "Corrupt MetaCRCs received from NTCP peer", "Transport [NTCP]", RATES);
+        _context.statManager().createRateStat("ntcp.corruptSkew", "Corrupt clock skews received from NTCP peer", "Transport [NTCP]", RATES);
         _context.statManager().createRateStat("ntcp.corruptTooLargeI2NP", "Number of corrupt NTCP TooLargeI2NP events", "Transport [NTCP]", RATES);
-        _context.statManager().createRateStat("ntcp.dontSendOnBacklog", "Number of dropped message sends to NTCP peer because of backlog", "Transport [NTCP]", RATES);
+        _context.statManager().createRateStat("ntcp.dontSendOnBacklog", "Dropped message sends to NTCP peer because of backlog", "Transport [NTCP]", RATES);
         //_context.statManager().createRateStat("ntcp.inboundCheckConnection", "", "Transport [NTCP]", RATES);
-        _context.statManager().createRateStat("ntcp.inboundEstablished", "Number of established Inbound NTCP connections", "Transport [NTCP]", RATES);
-        _context.statManager().createRateStat("ntcp.inboundEstablishedDuplicate", "Number of duplicate established Inbound NTCP connections", "Transport [NTCP]", RATES);
-        _context.statManager().createRateStat("ntcp.inboundIPv4Conn", "Number of Inbound IPv4 NTCP connections", "Transport [NTCP]", RATES);
-        _context.statManager().createRateStat("ntcp.inboundIPv6Conn", "Number of Inbound IPv6 NTCP connections", "Transport [NTCP]", RATES);
+        _context.statManager().createRateStat("ntcp.inboundEstablished", "Established Inbound NTCP connections", "Transport [NTCP]", RATES);
+        _context.statManager().createRateStat("ntcp.inboundEstablishedDuplicate", "Duplicate established Inbound NTCP connections", "Transport [NTCP]", RATES);
+        _context.statManager().createRateStat("ntcp.inboundIPv4Conn", "Inbound IPv4 NTCP connections", "Transport [NTCP]", RATES);
+        _context.statManager().createRateStat("ntcp.inboundIPv6Conn", "Inbound IPv6 NTCP connections", "Transport [NTCP]", RATES);
         //_context.statManager().createRateStat("ntcp.infoMessageEnqueued", "", "Transport [NTCP]", RATES);
         //_context.statManager().createRateStat("ntcp.floodInfoMessageEnqueued", "", "Transport [NTCP]", RATES);
-        _context.statManager().createRateStat("ntcp.invalidDH", "Number of invalid NTCP Diffie-Hellman key exchange attempts", "Transport [NTCP]", RATES);
-        _context.statManager().createRateStat("ntcp.invalidHXY", "Number of invalid NTCP HXY encryption attempts", "Transport [NTCP]", RATES); // ?
-        _context.statManager().createRateStat("ntcp.invalidHXxorBIH", "Number of invalid NTCP HXxorBIH encryption attempts", "Transport [NTCP]", RATES); // ?
-        _context.statManager().createRateStat("ntcp.invalidInboundDFE", "Number of invalid NTCP Inbound DFEs", "Transport [NTCP]", RATES); // ?
-        _context.statManager().createRateStat("ntcp.invalidInboundIOE", "Number of invalid NTCP Inbound ioerrors", "Transport [NTCP]", RATES);
-        _context.statManager().createRateStat("ntcp.invalidInboundSignature", "Number of invalid Inbound signatures received from NTCP peer", "Transport [NTCP]", RATES);
-        _context.statManager().createRateStat("ntcp.invalidInboundSize", "Number of invalid Inbound messages received from NTCP peer (incorrect size)", "Transport [NTCP]", RATES);
-        _context.statManager().createRateStat("ntcp.invalidInboundSkew", "Number of invalid clockskew reports received from NTCP peer", "Transport [NTCP]", RATES);
-        _context.statManager().createRateStat("ntcp.invalidSignature", "Total number of invalid signatures received from NTCP peer", "Transport [NTCP]", RATES);
+        _context.statManager().createRateStat("ntcp.invalidDH", "Invalid NTCP Diffie-Hellman key exchange attempts", "Transport [NTCP]", RATES);
+        _context.statManager().createRateStat("ntcp.invalidHXY", "Invalid NTCP HXY encryption attempts", "Transport [NTCP]", RATES); // ?
+        _context.statManager().createRateStat("ntcp.invalidHXxorBIH", "Invalid NTCP HXxorBIH encryption attempts", "Transport [NTCP]", RATES); // ?
+        _context.statManager().createRateStat("ntcp.invalidInboundDFE", "Invalid NTCP Inbound DFEs", "Transport [NTCP]", RATES); // ?
+        _context.statManager().createRateStat("ntcp.invalidInboundIOE", "Invalid NTCP Inbound ioerrors", "Transport [NTCP]", RATES);
+        _context.statManager().createRateStat("ntcp.invalidInboundSignature", "Invalid Inbound signatures received from NTCP peer", "Transport [NTCP]", RATES);
+        _context.statManager().createRateStat("ntcp.invalidInboundSize", "Invalid Inbound messages received from NTCP peer (incorrect size)", "Transport [NTCP]", RATES);
+        _context.statManager().createRateStat("ntcp.invalidInboundSkew", "Invalid clockskew reports received from NTCP peer", "Transport [NTCP]", RATES);
+        _context.statManager().createRateStat("ntcp.invalidSignature", "Total Invalid signatures received from NTCP peer", "Transport [NTCP]", RATES);
         //_context.statManager().createRateStat("ntcp.liveReadBufs", "", "Transport [NTCP]", RATES);
         _context.statManager().createRateStat("ntcp.multipleCloseOnRemove", "Number of NTCP multipleCloseOnRemove events", "Transport [NTCP]", RATES);
-        _context.statManager().createRateStat("ntcp.outboundEstablishFailed", "Number of failed NTCP Outbound Tunnel Establishment events", "Transport [NTCP]", RATES);
-        _context.statManager().createRateStat("ntcp.outboundFailedIOEImmediate", "Number of failed NTCP Outbound Tunnel events (IOerror)", "Transport [NTCP]", RATES);
-        _context.statManager().createRateStat("ntcp.invalidOutboundSkew", "Number of invalid NTCP Outbound clock skews", "Transport [NTCP]", RATES);
+        _context.statManager().createRateStat("ntcp.outboundEstablishFailed", "Failed NTCP Outbound Tunnel Establishment events", "Transport [NTCP]", RATES);
+        _context.statManager().createRateStat("ntcp.outboundFailedIOEImmediate", "Failed NTCP Outbound Tunnel events (IOerror)", "Transport [NTCP]", RATES);
+        _context.statManager().createRateStat("ntcp.invalidOutboundSkew", "Invalid NTCP Outbound clock skews", "Transport [NTCP]", RATES);
         _context.statManager().createRateStat("ntcp.noBidTooLargeI2NP", "NTCP tunnel send size", "Transport [NTCP]", RATES);
         _context.statManager().createRateStat("ntcp.queuedRecv", "Number of queued NTCP RECV packets", "Transport [NTCP]", RATES);
         _context.statManager().createRateStat("ntcp.read", "Number of NTCP read events", "Transport [NTCP]", RATES);
@@ -216,8 +216,8 @@ public class NTCPTransport extends TransportImpl {
         _context.statManager().createRateStat("ntcp.receiveMeta", "Number of NTCP receiveMeta events", "Transport [NTCP]", RATES);
         _context.statManager().createRateStat("ntcp.registerConnect", "Number of NTCP registerConnect events", "Transport [NTCP]", RATES);
         _context.statManager().createRateStat("ntcp.replayHXxorBIH", "Number of NTCP replayHXxorBIH events", "Transport [NTCP]", RATES);
-        _context.statManager().createRateStat("ntcp.throttledReadComplete", "Number of throttled NTCP ReadComplete events", "Transport [NTCP]", RATES);
-        _context.statManager().createRateStat("ntcp.throttledWriteComplete", "Number of throttled NTCP WriteComplete events", "Transport [NTCP]", RATES);
+        _context.statManager().createRateStat("ntcp.throttledReadComplete", "Throttled NTCP ReadComplete events", "Transport [NTCP]", RATES);
+        _context.statManager().createRateStat("ntcp.throttledWriteComplete", "Throttled NTCP WriteComplete events", "Transport [NTCP]", RATES);
         _context.statManager().createRateStat("ntcp.wantsQueuedWrite", "Number of wanted NTCP QueuedWrite events", "Transport [NTCP]", RATES);
         //_context.statManager().createRateStat("ntcp.write", "", "Transport [NTCP]", RATES);
         _context.statManager().createRateStat("ntcp.writeError", "Number of NTCP write errors", "Transport [NTCP]", RATES);

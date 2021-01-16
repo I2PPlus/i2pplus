@@ -121,7 +121,7 @@ public class ProfileOrganizer {
         _context.statManager().createRateStat("peer.profilePlaceTime", "Time taken by profile manager to sort peers into tiers", "Peers", new long[] { 60*1000, 60*60*1000 });
         _context.statManager().createRateStat("peer.profileReorgTime", "Total time taken by profile manager to reorganize peers", "Peers", new long[] { 60*1000, 60*60*1000 });
         // used in DBHistory
-        _context.statManager().createRequiredRateStat("peer.failedLookupRate", "NetDb Lookup fail rate", "Peers", new long[] { 10*60*1000l, 60*60*1000l, 24*60*60*1000l });
+        _context.statManager().createRequiredRateStat("peer.failedLookupRate", "NetDb Lookup fail rate", "Peers", new long[] { 60*1000, 10*60*1000l, 60*60*1000l, 24*60*60*1000l });
     }
 
     private void getReadLock() {
@@ -315,7 +315,8 @@ public class ProfileOrganizer {
 
     public int countActivePeers() {
         int activePeers = 0;
-        long hideBefore = _context.clock().now() - 6*60*60*1000;
+//        long hideBefore = _context.clock().now() - 6*60*60*1000;
+        long hideBefore = _context.clock().now() - 2*60*60*1000;
 
         getReadLock();
         try {
@@ -376,7 +377,7 @@ public class ProfileOrganizer {
      *
      */
 //    private final static int MAX_BAD_REPLIES_PER_HOUR = 5;
-    private final static int MAX_BAD_REPLIES_PER_HOUR = 30; // increase value to factor in old peers marked as invalid
+    private final static int MAX_BAD_REPLIES_PER_HOUR = 10; // increase value to factor in old peers marked as invalid
 
     /**
      * Does the given peer send us bad replies - either invalid store messages

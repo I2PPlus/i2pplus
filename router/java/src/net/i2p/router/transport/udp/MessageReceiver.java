@@ -78,8 +78,8 @@ class MessageReceiver {
         _context.statManager().createRateStat("udp.inboundExpired", "Number of inbound messages expired before reception", "Transport [UDP]", UDPTransport.RATES);
         //_context.statManager().createRateStat("udp.inboundRemaining", "How many messages were remaining when a message is pulled off the complete queue?", "Transport [UDP]", UDPTransport.RATES);
         //_context.statManager().createRateStat("udp.inboundReady", "How many messages were ready when a message is added to the complete queue?", "Transport [UDP]", UDPTransport.RATES);
-        //_context.statManager().createRateStat("udp.inboundReadTime", "How long it takes to parse in the completed fragments into a message?", "Transport [UDP]", UDPTransport.RATES);
-        //_context.statManager().createRateStat("udp.inboundReceiveProcessTime", "How long it takes to add the message to the transport?", "Transport [UDP]", UDPTransport.RATES);
+        //_context.statManager().createRateStat("udp.inboundReadTime", "Time to parse in the completed fragments into a message?", "Transport [UDP]", UDPTransport.RATES);
+        //_context.statManager().createRateStat("udp.inboundReceiveProcessTime", "Time to add the message to the transport?", "Transport [UDP]", UDPTransport.RATES);
         //_context.statManager().createRateStat("udp.inboundLag", "How long the oldest ready message has been sitting on the queue (period is the queue size)?", "Transport [UDP]", UDPTransport.RATES);
 
         _alive = true;

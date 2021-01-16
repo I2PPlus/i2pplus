@@ -451,8 +451,8 @@ public class DHSessionKeyBuilder {
             super("DH Precalc");
             _context = ctx;
             _log = ctx.logManager().getLog(DHSessionKeyBuilder.class);
-            ctx.statManager().createRateStat("crypto.dhGeneratePublicTime", "How long it takes to create x and X", "Encryption", new long[] { 60*1000, 60*60*1000 });
-            ctx.statManager().createRateStat("crypto.dhCalculateSessionTime", "How long it takes to create the session key", "Encryption", new long[] { 60*1000, 60*60*1000 });
+            ctx.statManager().createRateStat("crypto.dhGeneratePublicTime", "Time to create x and X", "Encryption", new long[] { 60*1000, 60*60*1000 });
+            ctx.statManager().createRateStat("crypto.dhCalculateSessionTime", "Time to create the session key", "Encryption", new long[] { 60*1000, 60*60*1000 });
             ctx.statManager().createRateStat("crypto.DHUsed", "Need a Diffie–Hellman key exchange from the queue", "Encryption", new long[] { 60*1000, 60*60*1000 });
             ctx.statManager().createRateStat("crypto.DHReused", "Unused Diffie–Hellman key exchange requeued", "Encryption", new long[] { 60*1000, 60*60*1000 });
             ctx.statManager().createRateStat("crypto.DHEmpty", "Diffie–Hellman key exchange queue empty", "Encryption", new long[] { 60*1000, 60*60*1000 });
