@@ -163,7 +163,7 @@ public class JobQueue {
         // following are for JobQueueRunner
         _context.statManager().createRateStat("jobQueue.jobRun", "Duration of scheduled jobs", "JobQueue", new long[] { 60*1000l, 60*60*1000l, 24*60*60*1000l });
         _context.statManager().createRateStat("jobQueue.jobRunSlow", "Duration of scheduled jobs that take over a second", "JobQueue", new long[] { 60*1000l, 60*60*1000l, 24*60*60*1000l });
-        _context.statManager().createRequiredRateStat("jobQueue.jobLag", "Lag of scheduled jobs", "JobQueue", new long[] { 60*1000l, 60*60*1000l, 24*60*60*1000l });
+        _context.statManager().createRequiredRateStat("jobQueue.jobLag", "Delay before scheduled jobs are executed", "JobQueue", new long[] { 60*1000l, 60*60*1000l, 24*60*60*1000l });
         _context.statManager().createRateStat("jobQueue.jobWait", "Time a scheduled job stays in the queue before running", "JobQueue", new long[] { 60*1000, 60*60*1000l, 24*60*60*1000l });
 
         _readyJobs = new LinkedBlockingQueue<Job>();
