@@ -116,10 +116,10 @@ public class TunnelDispatcher implements Service {
         ctx.statManager().createRateStat("tunnel.joinParticipant", "Tunnels joined as participant", "Tunnels [Participating]", RATES);
         ctx.statManager().createRateStat("tunnel.joinOutboundEndpoint", "Tunnels joined as Outbound Endpoint", "Tunnels [Participating]", RATES);
         ctx.statManager().createRateStat("tunnel.joinInboundGateway", "Tunnels joined as Inbound Gateway", "Tunnels [Participating]", RATES);
-        //ctx.statManager().createRateStat("tunnel.dispatchGatewayTime", "How long it takes to dispatch a TunnelGatewayMessage", "Tunnels", RATES);
-        //ctx.statManager().createRateStat("tunnel.dispatchDataTime", "How long it takes to dispatch a TunnelDataMessage", "Tunnels", RATES);
-        //ctx.statManager().createRateStat("tunnel.dispatchOutboundTime", "How long it takes to dispatch an outbound message", "Tunnels", RATES);
-        //ctx.statManager().createRateStat("tunnel.dispatchOutboundZeroHopTime", "How long it takes to dispatch an outbound message through a zero hop tunnel", "Tunnels", RATES);
+        //ctx.statManager().createRateStat("tunnel.dispatchGatewayTime", "Time to dispatch a TunnelGatewayMessage", "Tunnels", RATES);
+        //ctx.statManager().createRateStat("tunnel.dispatchDataTime", "Time to dispatch a TunnelDataMessage", "Tunnels", RATES);
+        //ctx.statManager().createRateStat("tunnel.dispatchOutboundTime", "Time to dispatch an outbound message", "Tunnels", RATES);
+        //ctx.statManager().createRateStat("tunnel.dispatchOutboundZeroHopTime", "Time to dispatch an outbound message through a zero hop tunnel", "Tunnels", RATES);
         ctx.statManager().createRequiredRateStat("tunnel.participating InBps", "In (B/s) for Participating tunnels ", "Tunnels [Participating]", RATES);
         ctx.statManager().createRequiredRateStat("tunnel.participating OutBps", "Out (B/s) for Participating tunnels", "Tunnels [Participating]", RATES);
         ctx.statManager().createRateStat("tunnel.participatingMessageDropped", "Dropped participating messages (share limit exceeded)", "Tunnels [Participating]", RATES);

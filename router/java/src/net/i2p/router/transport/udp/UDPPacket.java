@@ -143,7 +143,7 @@ class UDPPacket implements CDQEntry {
     private static final int MAX_VALIDATE_SIZE = MAX_PACKET_SIZE;
 
     private UDPPacket(RouterContext ctx) {
-        //ctx.statManager().createRateStat("udp.fetchRemoteSlow", "How long it takes to grab the remote ip info", "Transport [UDP]", UDPTransport.RATES);
+        //ctx.statManager().createRateStat("udp.fetchRemoteSlow", "Time to grab the remote ip info", "Transport [UDP]", UDPTransport.RATES);
         // the data buffer is clobbered on init(..), but we need it to bootstrap
         _data = new byte[MAX_PACKET_SIZE];
         _packet = new DatagramPacket(_data, MAX_PACKET_SIZE);

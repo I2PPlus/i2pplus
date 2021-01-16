@@ -79,7 +79,7 @@ class BuildExecutor implements Runnable {
         _context.statManager().createRequiredRateStat("tunnel.buildExploratoryReject", "Response time for rejection (ms)", "Tunnels [Exploratory]", new long[] { 60*1000, 10*60*1000, 60*60*1000 });
         _context.statManager().createRequiredRateStat("tunnel.buildRequestTime", "Time to build a tunnel request (ms)", "Tunnels [Participating]", new long[] { 60*1000, 10*60*1000 });
         _context.statManager().createRequiredRateStat("tunnel.buildConfigTime", "Time to build a tunnel config (ms)", "Tunnels", new long[] { 60*1000, 10*60*1000 });
-        //_context.statManager().createRateStat("tunnel.buildRequestZeroHopTime", "How long it takes to build a zero hop tunnel", "Tunnels", new long[] { 60*1000, 10*60*1000 });
+        //_context.statManager().createRateStat("tunnel.buildRequestZeroHopTime", "Time to build a zero hop tunnel", "Tunnels", new long[] { 60*1000, 10*60*1000 });
         //_context.statManager().createRateStat("tunnel.pendingRemaining", "How many inbound requests are pending after a pass (period is how long the pass takes)?", "Tunnels", new long[] { 60*1000, 10*60*1000 });
         _context.statManager().createRateStat("tunnel.buildFailFirstHop", "How often we fail to build an OB tunnel because we can't contact 1st hop", "Tunnels", new long[] { 60*1000, 10*60*1000 });
         _context.statManager().createRateStat("tunnel.buildReplySlow", "Build reply late, but not too late", "Tunnels", new long[] { 10*60*1000 });

@@ -82,7 +82,7 @@ class PacketHandler {
             _handlers[i] = new Handler();
         }
 
-        //_context.statManager().createRateStat("udp.handleTime", "How long it takes to handle a received packet after its been pulled off the queue", "Transport [UDP]", UDPTransport.RATES);
+        //_context.statManager().createRateStat("udp.handleTime", "Time to handle a received packet after its been pulled off the queue", "Transport [UDP]", UDPTransport.RATES);
         //_context.statManager().createRateStat("udp.queueTime", "How long after a packet is received can we begin handling it", "Transport [UDP]", UDPTransport.RATES);
         _context.statManager().createRateStat("udp.receivePacketSkew", "How long ago after the packet was sent did we receive it", "Transport [UDP]", UDPTransport.RATES);
         _context.statManager().createRateStat("udp.droppedInvalidUnkown", "Age of packet we dropped due to invalidity (unkown type) was", "Transport [UDP]", UDPTransport.RATES);
@@ -94,9 +94,9 @@ class PacketHandler {
         _context.statManager().createRateStat("udp.droppedInvalidInboundEstablish", "Age of packet we dropped due to invalidity (inbound establishment, bad key) was", "Transport [UDP]", UDPTransport.RATES);
         _context.statManager().createRateStat("udp.droppedInvalidSkew", "Skew of packet we dropped due to invalidity (valid except bad skew) was", "Transport [UDP]", UDPTransport.RATES);
         _context.statManager().createRateStat("udp.destroyedInvalidSkew", "Destroyed session due to bad skew", "Transport [UDP]", UDPTransport.RATES);
-        //_context.statManager().createRateStat("udp.packetDequeueTime", "How long it takes the UDPReader to pull a packet off the inbound packet queue (when its slow)", "Transport [UDP]", UDPTransport.RATES);
-        //_context.statManager().createRateStat("udp.packetVerifyTime", "How long it takes the PacketHandler to verify a data packet after dequeueing (period is dequeue time)", "Transport [UDP]", UDPTransport.RATES);
-        //_context.statManager().createRateStat("udp.packetVerifyTimeSlow", "How long it takes the PacketHandler to verify a data packet after dequeueing when its slow (period is dequeue time)", "Transport [UDP]", UDPTransport.RATES);
+        //_context.statManager().createRateStat("udp.packetDequeueTime", "Time for UDPReader to pull a packet off the inbound packet queue (when its slow)", "Transport [UDP]", UDPTransport.RATES);
+        //_context.statManager().createRateStat("udp.packetVerifyTime", "Time for PacketHandler to verify a data packet after dequeueing (period is dequeue time)", "Transport [UDP]", UDPTransport.RATES);
+        //_context.statManager().createRateStat("udp.packetVerifyTimeSlow", "Time for PacketHandler to verify a data packet after dequeueing when its slow (period is dequeue time)", "Transport [UDP]", UDPTransport.RATES);
         //_context.statManager().createRateStat("udp.packetValidateMultipleCount", "How many times we validate a packet, if done more than once (period = afterValidate-enqueue)", "Transport [UDP]", UDPTransport.RATES);
         //_context.statManager().createRateStat("udp.packetNoValidationLifetime", "How long packets that are never validated are around for", "Transport [UDP]", UDPTransport.RATES);
         //_context.statManager().createRateStat("udp.receivePacketSize.sessionRequest", "Size of given inbound packet type (period is the packet's lifetime)", "Transport [UDP]", UDPTransport.RATES);
