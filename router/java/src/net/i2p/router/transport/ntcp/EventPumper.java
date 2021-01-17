@@ -65,7 +65,7 @@ class EventPumper implements Runnable {
      *  The occasional larger message can use multiple buffers.
      */
     private static final int BUF_SIZE = 8*1024;
-    private static final int BUF_SIZE_LARGE = 10*1024;
+    private static final int BUF_SIZE_LARGE = 12*1024;
     private static final int MAX_CACHE_SIZE = 64;
 
     private static class BufferFactory implements TryCache.ObjectFactory<ByteBuffer> {
@@ -118,7 +118,13 @@ class EventPumper implements Runnable {
     private static final int MIN_BUFS;
     static {
         long maxMemory = SystemVersion.getMaxMemory();
-        MIN_BUFS = (int) Math.max(MIN_MINB, Math.min(MAX_MINB, 1 + (maxMemory / (16*1024*1024))));
+        boolean isSlow = SystemVersion.isSlow();
+        if (maxMemory >= 1024*1024*1024 && !isSlow)
+            MIN_BUFS = 32;
+        else if (maxMemory >= 768*1024*1024 && !isSlow)
+            MIN_BUFS = 24;
+        else
+            MIN_BUFS = (int) Math.max(MIN_MINB, Math.min(MAX_MINB, 1 + (maxMemory / (16*1024*1024))));
     }
 
     private static final TryCache<ByteBuffer> _bufferCache = new TryCache<>(new BufferFactory(), MIN_BUFS);
