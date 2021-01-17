@@ -124,7 +124,7 @@ public class TunnelDispatcher implements Service {
         ctx.statManager().createRequiredRateStat("tunnel.participating OutBps", "Out (B/s) for Participating tunnels", "Tunnels [Participating]", RATES);
         ctx.statManager().createRateStat("tunnel.participatingMessageDropped", "Dropped participating messages (share limit exceeded)", "Tunnels [Participating]", RATES);
         // count for console
-        ctx.statManager().createRequiredRateStat("tunnel.participatingMessageCount", "Number of 1KB participating messages", "Tunnels [Participating]", RATES);
+        ctx.statManager().createRequiredRateStat("tunnel.participatingMessageCount", "Total 1KB participating messages", "Tunnels [Participating]", RATES);
         // estimate for RouterThrottleImpl
         ctx.statManager().createRequiredRateStat("tunnel.participatingMessageCountAvgPerTunnel", "Estimated participating messages per tunnel lifetime", "Tunnels [Participating]", new long[] { 60*1000l });
         ctx.statManager().createRateStat("tunnel.ownedMessageCount", "Messages sent through a tunnel we created (period = failures)", "Tunnels", RATES);

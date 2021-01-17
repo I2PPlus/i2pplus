@@ -37,14 +37,14 @@ public class CoalesceStatsEvent implements SimpleTimer.TimedEvent {
         sm.createRequiredRateStat("bw.sendBps", _x("Message send rate (B/s)"), "Router", new long[] { 60*1000, 5*60*1000, 60*60*1000 });
         sm.createRequiredRateStat("bw.sendRate", _x("Low-level send rate (B/s)"), "Router", new long[] { 60*1000l, 5*60*1000l, 60*60*1000l });
         sm.createRequiredRateStat("bw.recvRate", _x("Low-level receive rate (B/s)"), "Router", new long[] { 60*1000l, 5*60*1000l, 60*60*1000l });
-        sm.createRequiredRateStat("router.knownPeers", _x("Number of peers in our NetDb"), "Router", new long[] { 60*1000 });
-        sm.createRequiredRateStat("router.activePeers", _x("Number of peers active in the last 5 minutes"), "Router", new long[] { 60*1000 });
+        sm.createRequiredRateStat("router.knownPeers", _x("Total peers in our NetDb"), "Router", new long[] { 60*1000 });
+        sm.createRequiredRateStat("router.activePeers", _x("Peers active in the last 5 minutes"), "Router", new long[] { 60*1000 });
         sm.createRequiredRateStat("router.highCapacityPeers", _x("Known high capacity peers"), "Router", new long[] { 60*1000 });
         sm.createRequiredRateStat("router.activeSendPeers", _x("Peers sent to in last minute"), "Router", new long[] { 60*1000 });
         sm.createRequiredRateStat("router.fastPeers", _x("Known fast peers"), "Router", new long[] { 60*1000 });
         sm.createRequiredRateStat("router.integratedPeers", _x("Known integrated (floodfill) peers"), "Router", new long[] { 60*1000 });
-        sm.createRequiredRateStat("router.bannedPeers", _x("Number of peers in our banlist"), "Router", new long[] { 60*1000 });
-        sm.createRequiredRateStat("router.unreachablePeers", _x("Number of peers without a published IP address"), "Router", new long[] { 60*1000 });
+        sm.createRequiredRateStat("router.bannedPeers", _x("Total peers in our banlist"), "Router", new long[] { 60*1000 });
+        sm.createRequiredRateStat("router.unreachablePeers", _x("Peers without a published IP address"), "Router", new long[] { 60*1000 });
         sm.createRateStat("router.tunnelBacklog", _x("Size of tunnel acceptor backlog"), "Tunnels", new long[] { 60*1000, 60*60*1000 });
         sm.createRateStat("clock.skew", "Clock step adjustment (ms)", "Router", new long[] { 60*1000, 3*60*60*1000, 24*60*60*1000 });
         _maxMemory = Runtime.getRuntime().maxMemory();

@@ -161,14 +161,14 @@ public class JobQueue {
     public JobQueue(RouterContext context) {
         _context = context;
         _log = context.logManager().getLog(JobQueue.class);
-        _context.statManager().createRateStat("jobQueue.readyJobs", "Number of ready and waiting scheduled jobs", "JobQueue", new long[] { 60*1000l, 60*60*1000l, 24*60*60*1000l });
+        _context.statManager().createRateStat("jobQueue.readyJobs", "Ready and waiting scheduled jobs", "JobQueue", new long[] { 60*1000l, 60*60*1000l, 24*60*60*1000l });
         _context.statManager().createRateStat("jobQueue.droppedJobs", "Scheduled jobs dropped due to insane overload", "JobQueue", new long[] { 60*1000l, 60*60*1000l, 24*60*60*1000l });
-        _context.statManager().createRateStat("jobQueue.queuedJobs", "Number of scheduled jobs", "JobQueue", new long[] { 60*1000l, 60*60*1000l, 24*60*60*1000l });
+        _context.statManager().createRateStat("jobQueue.queuedJobs", "Scheduled jobs in queue", "JobQueue", new long[] { 60*1000l, 60*60*1000l, 24*60*60*1000l });
         // following are for JobQueueRunner
         _context.statManager().createRateStat("jobQueue.jobRun", "Duration of scheduled jobs", "JobQueue", new long[] { 60*1000l, 60*60*1000l, 24*60*60*1000l });
         _context.statManager().createRateStat("jobQueue.jobRunSlow", "Duration of scheduled jobs that take over a second", "JobQueue", new long[] { 60*1000l, 60*60*1000l, 24*60*60*1000l });
         _context.statManager().createRequiredRateStat("jobQueue.jobLag", "Delay before scheduled jobs are executed", "JobQueue", new long[] { 60*1000l, 60*60*1000l, 24*60*60*1000l });
-        _context.statManager().createRateStat("jobQueue.jobWait", "Time a scheduled job stays in the queue before running", "JobQueue", new long[] { 60*1000, 60*60*1000l, 24*60*60*1000l });
+        _context.statManager().createRateStat("jobQueue.jobWait", "Time a scheduled job stays queued before running", "JobQueue", new long[] { 60*1000, 60*60*1000l, 24*60*60*1000l });
 
         _readyJobs = new LinkedBlockingQueue<Job>();
         _timedJobs = new TreeSet<Job>(new JobComparator());
