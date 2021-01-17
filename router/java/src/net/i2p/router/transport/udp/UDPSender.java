@@ -52,9 +52,9 @@ class UDPSender {
         boolean isSlow = SystemVersion.isSlow();
         long messageDelay = _context.throttle().getMessageDelay();
         int qsize = (int) Math.max(MIN_QUEUE_SIZE, Math.min(MAX_QUEUE_SIZE, maxMemory / (1024*1024)));
-        if (messageDelay < 200 && maxMemory >= 1024*1024*1024 && cores >= 4 && !isSlow)
+        if (messageDelay < 300 && maxMemory >= 1024*1024*1024 && cores >= 4 && !isSlow)
             qsize = 512;
-        else if (messageDelay < 300 && maxMemory >= 1024*1024*1024 && cores >= 4 && !isSlow)
+        else if (messageDelay < 400 && maxMemory >= 1024*1024*1024 && cores >= 4 && !isSlow)
             qsize = 384;
         _outboundQueue = new CoDelBlockingQueue<UDPPacket>(ctx, "UDP-Sender", qsize);
         _socket = socket;
