@@ -37,7 +37,7 @@ class UDPSender {
     // bandwidth requests, and so CoDel can work well.
     // When full, packets back up into the PacketPusher thread, pre-CoDel.
     private static final int MIN_QUEUE_SIZE = 64;
-    private static final int MAX_QUEUE_SIZE = 384;
+    private static final int MAX_QUEUE_SIZE = 512;
 
     public boolean fullStats() {
         return _context.getBooleanProperty("stat.full");
@@ -53,9 +53,9 @@ class UDPSender {
         long messageDelay = _context.throttle().getMessageDelay();
         int qsize = (int) Math.max(MIN_QUEUE_SIZE, Math.min(MAX_QUEUE_SIZE, maxMemory / (1024*1024)));
         if (messageDelay < 400 && maxMemory >= 1024*1024*1024 && cores >= 4 && !isSlow)
-            qsize = 512;
+            qsize = 1024;
         else if (messageDelay < 500 && maxMemory >= 1024*1024*1024 && cores >= 4 && !isSlow)
-            qsize = 384;
+            qsize = 512;
         _outboundQueue = new CoDelBlockingQueue<UDPPacket>(ctx, "UDP-Sender", qsize);
         _socket = socket;
         _runner = new Runner();
