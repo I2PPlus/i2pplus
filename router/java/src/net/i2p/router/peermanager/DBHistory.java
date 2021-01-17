@@ -236,7 +236,7 @@ public class DBHistory {
     }
 
     private final static String NL = System.getProperty("line.separator");
-    private final static String HR = "# ----------------------------------------------------------------------------------------";    
+    private final static String HR = "# ----------------------------------------------------------------------------------------";
     /**
      * write out the data from the profile to the stream
      * includes comments
@@ -309,13 +309,13 @@ public class DBHistory {
             _failedLookupRate.load(props, "dbHistory.failedLookupRate", true);
             _log.debug("Loading dbHistory.failedLookupRate");
         } catch (IllegalArgumentException iae) {
-            _log.warn("DB History failed lookup rate is corrupt, resetting", iae);
+            _log.warn("Db History Failed Lookup rate is corrupt -> resetting...", iae);
         }
 
         try {
             _invalidReplyRate.load(props, "dbHistory.invalidReplyRate", true);
         } catch (IllegalArgumentException iae) {
-            _log.warn("DB History invalid reply rate is corrupt, resetting", iae);
+            _log.warn("Db History Invalid Reply rate is corrupt -> resetting...", iae);
             createRates(_statGroup);
         }
     }

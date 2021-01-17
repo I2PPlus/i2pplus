@@ -72,10 +72,10 @@ public class RouterThrottleImpl implements RouterThrottle {
         _context.statManager().createRateStat("router.throttleTunnelProbTooFast", "Participating tunnel count beyond the previous 1h average when we throttle", "Router [Throttle]", RATES);
         //_context.statManager().createRateStat("router.throttleTunnelProbTestSlow", "How slow are our tunnel tests when our average exceeds the old average and we throttle?", "Router [Throttle]", RATES);
         _context.statManager().createRateStat("router.throttleTunnelBandwidthExceeded", "Bandwidth allocated when we refuse to build tunnel (bandwidth exceeded)", "Router [Throttle]", RATES);
-        _context.statManager().createRateStat("router.throttleTunnelBytesAllowed", "Number of bytes permitted to be sent when we get a tunnel request (period is how many are currently allocated)", "Router [Throttle]", RATES);
+        _context.statManager().createRateStat("router.throttleTunnelBytesAllowed", "Bytes permitted to be sent when we get a tunnel request (period is how many are currently allocated)", "Router [Throttle]", RATES);
         _context.statManager().createRateStat("router.throttleTunnelBytesUsed", "Used Bps at request (period = max KBps)", "Router [Throttle]", RATES);
-        _context.statManager().createRateStat("router.throttleTunnelFailCount1m", "Number of failed message sends in the last 2 minutes when we throttle based on a spike in failures (period = 10 minute average failure count)", "Router [Throttle]", new long[] { 60*1000, 10*60*1000, 60*60*1000});
-        //_context.statManager().createRateStat("router.throttleTunnelQueueOverload", "How many pending tunnel request messages have we received when we reject them due to overload (period = time to process each)?", "Router [Throttle]", new long[] { 60*1000, 10*60*1000, 60*60*1000});
+        _context.statManager().createRateStat("router.throttleTunnelFailCount1m", "Average failed message sends in last 2 minutes due to throttle based on failure spike", "Router [Throttle]", RATES);
+        //_context.statManager().createRateStat("router.throttleTunnelQueueOverload", "How many pending tunnel request messages have we received when we reject them due to overload (period = time to process each)?", "Router [Throttle]", RATES);
     }
 
     /**
@@ -136,7 +136,7 @@ public class RouterThrottleImpl implements RouterThrottle {
     public int acceptTunnelRequest() {
         if (_context.router().gracefulShutdownInProgress()) {
             if (_log.shouldLog(Log.WARN))
-                _log.warn("Refusing tunnel requests - graceful shutdown in progress");
+                _log.warn("Refusing tunnel requests -> Graceful shutdown in progress...");
             setShutdownStatus();
             // Don't use CRIT because this tells everybody we are shutting down
             return TunnelHistory.TUNNEL_REJECT_BANDWIDTH;

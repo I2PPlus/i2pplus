@@ -87,10 +87,10 @@ public class FIFOBandwidthLimiter {
     public FIFOBandwidthLimiter(I2PAppContext context) {
         _context = context;
         _log = context.logManager().getLog(FIFOBandwidthLimiter.class);
-        _context.statManager().createRateStat("bwLimiter.pendingOutboundRequests", "Number of outbound requests ahead of current (ignoring zero length requests)", "BandwidthLimiter", new long[] { 5*60*1000l, 60*60*1000l });
-        _context.statManager().createRateStat("bwLimiter.pendingInboundRequests", "Number of inbound requests ahead of current (ignoring zero length requests)", "BandwidthLimiter", new long[] { 5*60*1000l, 60*60*1000l });
-        _context.statManager().createRateStat("bwLimiter.outboundDelayedTime", "Time to honor an outbound request (ignoring zero length requests that go instantly)", "BandwidthLimiter", new long[] { 5*60*1000l, 60*60*1000l });
-        _context.statManager().createRateStat("bwLimiter.inboundDelayedTime", "Time to honor an inbound request (ignoring zero length requests that go instantly)", "BandwidthLimiter", new long[] { 5*60*1000l, 60*60*1000l });
+        _context.statManager().createRateStat("bwLimiter.pendingOutboundRequests", "Outbound requests ahead of current (ignoring zero length requests)", "BandwidthLimiter", new long[] { 5*60*1000l, 60*60*1000l });
+        _context.statManager().createRateStat("bwLimiter.pendingInboundRequests", "Inbound requests ahead of current (ignoring zero length requests)", "BandwidthLimiter", new long[] { 5*60*1000l, 60*60*1000l });
+        _context.statManager().createRateStat("bwLimiter.outboundDelayedTime", "Time to honor an outbound request (ignoring zero length requests)", "BandwidthLimiter", new long[] { 5*60*1000l, 60*60*1000l });
+        _context.statManager().createRateStat("bwLimiter.inboundDelayedTime", "Time to honor an inbound request (ignoring zero length requests)", "BandwidthLimiter", new long[] { 5*60*1000l, 60*60*1000l });
         _pendingInboundRequests = new ArrayList<SimpleRequest>(16);
         _pendingOutboundRequests = new ArrayList<SimpleRequest>(16);
         _lastTotalSent = _totalAllocatedOutboundBytes.get();

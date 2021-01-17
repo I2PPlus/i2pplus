@@ -44,7 +44,7 @@ class PacketHandler {
     private static final int TYPE_POISON = -99999;
     private static final int MIN_QUEUE_SIZE = 16;
 //    private static final int MAX_QUEUE_SIZE = 192;
-    private static final int MAX_QUEUE_SIZE = 512;
+    private static final int MAX_QUEUE_SIZE = 256;
     private static final int MIN_NUM_HANDLERS = 1;  // if < 32MB
 //    private static final int MAX_NUM_HANDLERS = 1;
     private static final int MAX_NUM_HANDLERS = SystemVersion.getCores();
@@ -66,12 +66,17 @@ class PacketHandler {
         _failCache = new LHMCache<RemoteHostId, Object>(24);
 
         long maxMemory = SystemVersion.getMaxMemory();
+        boolean isSlow = SystemVersion.isSlow();
         int qsize = (int) Math.max(MIN_QUEUE_SIZE, Math.min(MAX_QUEUE_SIZE, maxMemory / (2*1024*1024)));
+        if (maxMemory >= 1024*1024*1024 && !isSlow)
+            qsize = 512;
+        else if (maxMemory >= 768*1024*1024 && !isSlow)
+            qsize = 384;
         _inboundQueue = new CoDelBlockingQueue<UDPPacket>(ctx, "UDP-Receiver", qsize);
         int num_handlers;
         if (maxMemory < 32*1024*1024)
             num_handlers = 1;
-        else if (maxMemory < 64*1024*1024)
+        else if (maxMemory < 64*1024*1024 || isSlow)
             num_handlers = 2;
         else
             num_handlers = MAX_NUM_HANDLERS;
