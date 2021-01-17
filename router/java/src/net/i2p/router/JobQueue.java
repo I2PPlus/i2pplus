@@ -68,7 +68,11 @@ public class JobQueue {
     static {
         long maxMemory = SystemVersion.getMaxMemory();
         int cores = SystemVersion.getCores();
-        if (SystemVersion.isAndroid() || maxMemory < 128*1024*1024L)
+        if (cores == 1)
+            RUNNERS = 1;
+        else if (cores <= 4)
+            RUNNERS = 2;
+        else if (SystemVersion.isSlow() || maxMemory < 128*1024*1024L)
             RUNNERS = Math.min((cores / 2), 3);
         else if (maxMemory >= 1024*1024*1024L)
             RUNNERS = Math.min((cores * 2), 12);
