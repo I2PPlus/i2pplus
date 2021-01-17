@@ -94,7 +94,7 @@ public class TunnelPoolManager implements TunnelManagerFacade {
         else
             numHandlerThreads = 1;
 **/
-        if (maxMemory >= 1024 && !isSlow)
+        if (maxMemory >= 1024*1024*1024 && !isSlow)
             _numHandlerThreads = ctx.getProperty("router.buildHandlerThreads", Math.max(cores, 4));
         else
             _numHandlerThreads = ctx.getProperty("router.buildHandlerThreads", Math.max(cores / 2, 4));
