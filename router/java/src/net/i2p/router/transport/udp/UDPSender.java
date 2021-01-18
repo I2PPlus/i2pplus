@@ -12,6 +12,7 @@ import net.i2p.util.I2PThread;
 import net.i2p.util.Log;
 import net.i2p.util.SystemVersion;
 
+
 /**
  * Lowest level packet sender, pushes anything on its queue ASAP.
  *
@@ -36,7 +37,7 @@ class UDPSender {
     // bandwidth requests, and so CoDel can work well.
     // When full, packets back up into the PacketPusher thread, pre-CoDel.
     private static final int MIN_QUEUE_SIZE = 64;
-    private static final int MAX_QUEUE_SIZE = 384;
+    private static final int MAX_QUEUE_SIZE = 512;
 
     public boolean fullStats() {
         return _context.getBooleanProperty("stat.full");
@@ -49,8 +50,11 @@ class UDPSender {
         long maxMemory = SystemVersion.getMaxMemory();
         int cores = SystemVersion.getCores();
         boolean isSlow = SystemVersion.isSlow();
+        long messageDelay = _context.throttle().getMessageDelay();
         int qsize = (int) Math.max(MIN_QUEUE_SIZE, Math.min(MAX_QUEUE_SIZE, maxMemory / (1024*1024)));
-        if (maxMemory > 1024*1024*1024 && cores >= 4 && !isSlow)
+        if (messageDelay < 400 && maxMemory >= 1024*1024*1024 && cores >= 4 && !isSlow)
+            qsize = 1024;
+        else if (messageDelay < 500 && maxMemory >= 1024*1024*1024 && cores >= 4 && !isSlow)
             qsize = 512;
         _outboundQueue = new CoDelBlockingQueue<UDPPacket>(ctx, "UDP-Sender", qsize);
         _socket = socket;

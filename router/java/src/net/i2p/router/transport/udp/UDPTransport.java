@@ -342,8 +342,8 @@ public class UDPTransport extends TransportImpl implements TimedWeightedPriority
         _context.statManager().createRateStat("udp.inboundIPv4Conn", "Inbound IPv4 UDP Connection", "Transport [UDP]", RATES);
         _context.statManager().createRateStat("udp.inboundIPv6Conn", "Inbound IPv4 UDP Connection", "Transport [UDP]", RATES);
         // following are for PacketBuider
-        //_context.statManager().createRateStat("udp.packetAuthTime", "How long it takes to encrypt and MAC a packet for sending", "Transport [UDP]", RATES);
-        //_context.statManager().createRateStat("udp.packetAuthTimeSlow", "How long it takes to encrypt and MAC a packet for sending (when its slow)", "Transport [UDP]", RATES);
+        //_context.statManager().createRateStat("udp.packetAuthTime", "Time to encrypt and MAC a packet for sending", "Transport [UDP]", RATES);
+        //_context.statManager().createRateStat("udp.packetAuthTimeSlow", "Time to encrypt and MAC a packet for sending (when its slow)", "Transport [UDP]", RATES);
 
         _context.simpleTimer2().addPeriodicEvent(new PingIntroducers(), MIN_EXPIRE_TIMEOUT * 3 / 4);
     }

@@ -64,7 +64,13 @@ class UDPPacket implements CDQEntry {
     static {
         if (CACHE) {
             long maxMemory = SystemVersion.getMaxMemory();
+            boolean isSlow = SystemVersion.isSlow();
+            int cores = SystemVersion.getCores();
             int csize = (int) Math.max(MIN_CACHE_SIZE, Math.min(MAX_CACHE_SIZE, maxMemory / (1024*1024)));
+            if (maxMemory >= 1024*1024*1024 && cores >= 4 && !isSlow)
+                csize = 512;
+            else if (maxMemory >= 768*1024*1024 && cores >= 4 && !isSlow)
+                csize = 384;
             _packetFactory = new PacketFactory();
             _packetCache = new TryCache<>(_packetFactory, csize);
         } else {
@@ -137,7 +143,7 @@ class UDPPacket implements CDQEntry {
     private static final int MAX_VALIDATE_SIZE = MAX_PACKET_SIZE;
 
     private UDPPacket(RouterContext ctx) {
-        //ctx.statManager().createRateStat("udp.fetchRemoteSlow", "How long it takes to grab the remote ip info", "Transport [UDP]", UDPTransport.RATES);
+        //ctx.statManager().createRateStat("udp.fetchRemoteSlow", "Time to grab the remote ip info", "Transport [UDP]", UDPTransport.RATES);
         // the data buffer is clobbered on init(..), but we need it to bootstrap
         _data = new byte[MAX_PACKET_SIZE];
         _packet = new DatagramPacket(_data, MAX_PACKET_SIZE);

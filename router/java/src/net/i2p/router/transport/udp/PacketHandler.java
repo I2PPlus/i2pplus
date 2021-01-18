@@ -66,12 +66,17 @@ class PacketHandler {
         _failCache = new LHMCache<RemoteHostId, Object>(24);
 
         long maxMemory = SystemVersion.getMaxMemory();
+        boolean isSlow = SystemVersion.isSlow();
         int qsize = (int) Math.max(MIN_QUEUE_SIZE, Math.min(MAX_QUEUE_SIZE, maxMemory / (2*1024*1024)));
+        if (maxMemory >= 1024*1024*1024 && !isSlow)
+            qsize = 1024;
+        else if (maxMemory >= 768*1024*1024 && !isSlow)
+            qsize = 512;
         _inboundQueue = new CoDelBlockingQueue<UDPPacket>(ctx, "UDP-Receiver", qsize);
         int num_handlers;
         if (maxMemory < 32*1024*1024)
             num_handlers = 1;
-        else if (maxMemory < 64*1024*1024)
+        else if (maxMemory < 64*1024*1024 || isSlow)
             num_handlers = 2;
         else
             num_handlers = MAX_NUM_HANDLERS;
@@ -82,7 +87,7 @@ class PacketHandler {
             _handlers[i] = new Handler();
         }
 
-        //_context.statManager().createRateStat("udp.handleTime", "How long it takes to handle a received packet after its been pulled off the queue", "Transport [UDP]", UDPTransport.RATES);
+        //_context.statManager().createRateStat("udp.handleTime", "Time to handle a received packet after its been pulled off the queue", "Transport [UDP]", UDPTransport.RATES);
         //_context.statManager().createRateStat("udp.queueTime", "How long after a packet is received can we begin handling it", "Transport [UDP]", UDPTransport.RATES);
         _context.statManager().createRateStat("udp.receivePacketSkew", "How long ago after the packet was sent did we receive it", "Transport [UDP]", UDPTransport.RATES);
         _context.statManager().createRateStat("udp.droppedInvalidUnkown", "Age of packet we dropped due to invalidity (unkown type) was", "Transport [UDP]", UDPTransport.RATES);
@@ -94,9 +99,9 @@ class PacketHandler {
         _context.statManager().createRateStat("udp.droppedInvalidInboundEstablish", "Age of packet we dropped due to invalidity (inbound establishment, bad key) was", "Transport [UDP]", UDPTransport.RATES);
         _context.statManager().createRateStat("udp.droppedInvalidSkew", "Skew of packet we dropped due to invalidity (valid except bad skew) was", "Transport [UDP]", UDPTransport.RATES);
         _context.statManager().createRateStat("udp.destroyedInvalidSkew", "Destroyed session due to bad skew", "Transport [UDP]", UDPTransport.RATES);
-        //_context.statManager().createRateStat("udp.packetDequeueTime", "How long it takes the UDPReader to pull a packet off the inbound packet queue (when its slow)", "Transport [UDP]", UDPTransport.RATES);
-        //_context.statManager().createRateStat("udp.packetVerifyTime", "How long it takes the PacketHandler to verify a data packet after dequeueing (period is dequeue time)", "Transport [UDP]", UDPTransport.RATES);
-        //_context.statManager().createRateStat("udp.packetVerifyTimeSlow", "How long it takes the PacketHandler to verify a data packet after dequeueing when its slow (period is dequeue time)", "Transport [UDP]", UDPTransport.RATES);
+        //_context.statManager().createRateStat("udp.packetDequeueTime", "Time for UDPReader to pull a packet off the inbound packet queue (when its slow)", "Transport [UDP]", UDPTransport.RATES);
+        //_context.statManager().createRateStat("udp.packetVerifyTime", "Time for PacketHandler to verify a data packet after dequeueing (period is dequeue time)", "Transport [UDP]", UDPTransport.RATES);
+        //_context.statManager().createRateStat("udp.packetVerifyTimeSlow", "Time for PacketHandler to verify a data packet after dequeueing when its slow (period is dequeue time)", "Transport [UDP]", UDPTransport.RATES);
         //_context.statManager().createRateStat("udp.packetValidateMultipleCount", "How many times we validate a packet, if done more than once (period = afterValidate-enqueue)", "Transport [UDP]", UDPTransport.RATES);
         //_context.statManager().createRateStat("udp.packetNoValidationLifetime", "How long packets that are never validated are around for", "Transport [UDP]", UDPTransport.RATES);
         //_context.statManager().createRateStat("udp.receivePacketSize.sessionRequest", "Size of given inbound packet type (period is the packet's lifetime)", "Transport [UDP]", UDPTransport.RATES);

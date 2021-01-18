@@ -371,7 +371,7 @@ public class AddressbookBean extends BaseBean
 				if( changed ) {
 					try {
 						save();
-						message += "<br>" + _t("Address book saved.");
+						message += "<br>" + _t("Address book saved.") + "&nbsp;" + _t("Browse away from this addressbook and return to see update.");
 					} catch (IOException e) {
 						warn(e);
 						message += "<br>" + _t("ERROR: Could not write addressbook file.");

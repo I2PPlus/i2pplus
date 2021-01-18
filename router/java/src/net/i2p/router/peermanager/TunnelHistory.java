@@ -39,6 +39,8 @@ public class TunnelHistory {
     /** tunnel rejection due to system failure - essentially unused */
     public static final int TUNNEL_REJECT_CRIT = 50;
 
+    private static final long[] RATES = { 10*60*1000l, 60*60*1000l, 24*60*60*1000 };
+
     public TunnelHistory(RouterContext context, String statGroup) {
         _context = context;
         _log = context.logManager().getLog(TunnelHistory.class);
@@ -47,8 +49,8 @@ public class TunnelHistory {
     }
 
     private void createRates(String statGroup) {
-        _rejectRate = new RateStat("tunnelHistory.rejectRate", "How often does this peer reject a tunnel request?", statGroup, new long[] { 10*60*1000l, 30*60*1000l, 60*60*1000l, 24*60*60*1000l });
-        _failRate = new RateStat("tunnelHistory.failRate", "How often do tunnels this peer accepts fail?", statGroup, new long[] { 10*60*1000l, 30*60*1000l, 60*60*1000l, 24*60*60*1000l });
+        _rejectRate = new RateStat("tunnelHistory.rejectRate", "How often does this peer reject a tunnel request?", statGroup, RATES);
+        _failRate = new RateStat("tunnelHistory.failRate", "How often do tunnels this peer accepts fail?", statGroup, RATES);
     }
 
     /** total tunnels the peer has agreed to participate in */
@@ -157,9 +159,9 @@ public class TunnelHistory {
         addDate(buf, addComments, "lastRejectedBandwidth", _lastRejectedBandwidth, "Last time peer refused tunnel participation (Bandwidth):");
         addDate(buf, addComments, "lastRejectedTransient", _lastRejectedTransient, "Last time peer refused tunnel participation (Transient):");
         addDate(buf, addComments, "lastRejectedProbabalistic", _lastRejectedProbabalistic, "Last time peer refused tunnel participation (Probabalistic):");
-        add(buf, addComments, "lifetimeAgreedTo", _lifetimeAgreedTo.get(), "Total number of tunnels peer agreed to participate in: " + _lifetimeAgreedTo.get());
-        add(buf, addComments, "lifetimeFailed", _lifetimeFailed.get(), "Total number of failed tunnels peer agreed to participate in: " + _lifetimeFailed.get());
-        add(buf, addComments, "lifetimeRejected", _lifetimeRejected.get(), "Total number of tunnels peer refused to participate in: " + _lifetimeRejected.get());
+        add(buf, addComments, "lifetimeAgreedTo", _lifetimeAgreedTo.get(), "Total tunnels peer agreed to participate in: " + _lifetimeAgreedTo.get());
+        add(buf, addComments, "lifetimeFailed", _lifetimeFailed.get(), "Total failed tunnels peer agreed to participate in: " + _lifetimeFailed.get());
+        add(buf, addComments, "lifetimeRejected", _lifetimeRejected.get(), "Total tunnels peer refused to participate in: " + _lifetimeRejected.get());
         out.write(buf.toString().getBytes("UTF-8"));
         _rejectRate.store(out, "tunnelHistory.rejectRate", addComments);
         _failRate.store(out, "tunnelHistory.failRate", addComments);
@@ -200,7 +202,7 @@ public class TunnelHistory {
             if (_log.shouldLog(Log.DEBUG))
                 _log.debug("Loading tunnelHistory.failRate");
         } catch (IllegalArgumentException iae) {
-            _log.warn("TunnelHistory rates are corrupt, resetting", iae);
+            _log.warn("TunnelHistory rates are corrupt, resetting...", iae);
             createRates(_statGroup);
         }
     }

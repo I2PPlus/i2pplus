@@ -238,7 +238,7 @@
             }
             if (hasSusiDNS) {
 %>
-<a class="control" title="<%=intl._t("Add to Private addressbook")%>" href="/susidns/addressbook.jsp?book=private&amp;hostname=<%=name%>&amp;destination=<%=b64%>#add"><%=intl._t("Add to local addressbook")%></a>
+<a class="control" title="<%=intl._t("Add to Private addressbook")%>" href="/susidns/addressbook.jsp?book=private&amp;hostname=<%=name%>&amp;destination=<%=b64%>#add" target="_top"><%=intl._t("Add to local addressbook")%></a>
 <%
             }
 %>
@@ -316,12 +316,12 @@
 <%
                 if (hasImagegen) {
 %>
-<a class="control" title="<%=intl._t("Generate QR Code")%>" href="/imagegen/qr?s=320&amp;t=<%=name%>&amp;c=http%3a%2f%2f<%=name%>%2f%3fi2paddresshelper%3d<%=ab64%>" target="_top"><%=intl._t("Generate QR Code")%></a>
+<a class="control" title="<%=intl._t("Generate QR Code")%>" href="/imagegen/qr?s=320&amp;t=<%=name%>&amp;c=http%3a%2f%2f<%=name%>%2f%3fi2paddresshelper%3d<%=ab64%>" target="_blank"><%=intl._t("Generate QR Code")%></a>
 <%
                 }
                 if (hasSusiDNS) {
 %>
-<a class="control" title="<%=intl._t("Add to Private addressbook")%>" href="/susidns/addressbook.jsp?book=private&amp;hostname=<%=name%>&amp;destination=<%=ab64%>#add"><%=intl._t("Add to local addressbook")%></a>
+<a class="control" title="<%=intl._t("Add to Private addressbook")%>" href="/susidns/addressbook.jsp?book=private&amp;hostname=<%=name%>&amp;destination=<%=ab64%>#add" target="_blank"><%=intl._t("Add to local addressbook")%></a>
 <%
                 }
             }

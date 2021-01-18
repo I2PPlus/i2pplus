@@ -65,16 +65,17 @@ class EventPumper implements Runnable {
      *  The occasional larger message can use multiple buffers.
      */
     private static final int BUF_SIZE = 8*1024;
-    private static final int BUF_SIZE_LARGE = 10*1024;
+    private static final int BUF_SIZE_LARGE = 12*1024;
     private static final int MAX_CACHE_SIZE = 64;
 
     private static class BufferFactory implements TryCache.ObjectFactory<ByteBuffer> {
         public ByteBuffer newInstance() {
             long maxMemory = SystemVersion.getMaxMemory() * 1024 * 1024;
+            boolean isSlow = SystemVersion.isSlow();
             if (_useDirect) {
                 return ByteBuffer.allocateDirect(BUF_SIZE);
             } else {
-                if (maxMemory >= 1024)
+                if (maxMemory >= 1024 && !isSlow)
                     return ByteBuffer.allocate(BUF_SIZE_LARGE);
                 else
                     return ByteBuffer.allocate(BUF_SIZE);
@@ -117,7 +118,13 @@ class EventPumper implements Runnable {
     private static final int MIN_BUFS;
     static {
         long maxMemory = SystemVersion.getMaxMemory();
-        MIN_BUFS = (int) Math.max(MIN_MINB, Math.min(MAX_MINB, 1 + (maxMemory / (16*1024*1024))));
+        boolean isSlow = SystemVersion.isSlow();
+        if (maxMemory >= 1024*1024*1024 && !isSlow)
+            MIN_BUFS = 32;
+        else if (maxMemory >= 768*1024*1024 && !isSlow)
+            MIN_BUFS = 24;
+        else
+            MIN_BUFS = (int) Math.max(MIN_MINB, Math.min(MAX_MINB, 1 + (maxMemory / (16*1024*1024))));
     }
 
     private static final TryCache<ByteBuffer> _bufferCache = new TryCache<>(new BufferFactory(), MIN_BUFS);
@@ -177,7 +184,7 @@ class EventPumper implements Runnable {
      */
     public void register(ServerSocketChannel chan) {
         if (_log.shouldLog(Log.DEBUG))
-            _log.debug("Registering server socket channel...");
+            _log.debug("Registering ServerSocketChannel...");
         _wantsRegister.offer(chan);
         _selector.wakeup();
     }

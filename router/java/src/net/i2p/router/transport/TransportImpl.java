@@ -73,6 +73,8 @@ public abstract class TransportImpl implements Transport {
     /** @since 0.9.44 */
     protected static final String PROP_IPV6_FIREWALLED = "i2np.lastIPv6Firewalled";
 
+    private static final long[] RATES = { 60*1000, 10*60*1000l, 60*60*1000l, 24*60*60*1000l };
+
     static {
         long maxMemory = SystemVersion.getMaxMemory();
         long min = 512;
@@ -90,14 +92,14 @@ public abstract class TransportImpl implements Transport {
         _context = context;
         _log = _context.logManager().getLog(getClass());
 
-        _context.statManager().createRateStat("transport.sendMessageFailureLifetime", "Lifetime of failed sent messages", "Transport", new long[] { 60*1000l, 10*60*1000l, 60*60*1000l, 24*60*60*1000l });
-        _context.statManager().createRequiredRateStat("transport.sendMessageSize", "Size of sent messages (bytes)", "Transport", new long[] { 60*1000l, 5*60*1000l, 60*60*1000l, 24*60*60*1000l });
-        _context.statManager().createRequiredRateStat("transport.receiveMessageSize", "Size of received messages (bytes)", "Transport", new long[] { 60*1000l, 5*60*1000l, 60*60*1000l, 24*60*60*1000l });
-        _context.statManager().createRateStat("transport.receiveMessageTime", "Time to read a received message", "Transport", new long[] { 60*1000l, 5*60*1000l, 10*60*1000l, 60*60*1000l, 24*60*60*1000l });
-        _context.statManager().createRateStat("transport.receiveMessageTimeSlow", "Time to read a received message (when it takes more than a second)", "Transport", new long[] { 60*1000l, 5*60*1000l, 10*60*1000l, 60*60*1000l, 24*60*60*1000l });
-        _context.statManager().createRequiredRateStat("transport.sendProcessingTime", "Time to process and send a message (ms)", "Transport", new long[] { 60*1000l, 10*60*1000l, 60*60*1000l, 24*60*60*1000l });
+        _context.statManager().createRateStat("transport.sendMessageFailureLifetime", "Lifetime of failed sent messages", "Transport", RATES);
+        _context.statManager().createRequiredRateStat("transport.sendMessageSize", "Size of sent messages (bytes)", "Transport", RATES);
+        _context.statManager().createRequiredRateStat("transport.receiveMessageSize", "Size of received messages (bytes)", "Transport", RATES);
+        _context.statManager().createRateStat("transport.receiveMessageTime", "Time to read a received message (ms)", "Transport", RATES);
+        _context.statManager().createRateStat("transport.receiveMessageTimeSlow", "Time to read a received message (when it takes more than a second)", "Transport", RATES);
+        _context.statManager().createRequiredRateStat("transport.sendProcessingTime", "Time to process and send a message (ms)", "Transport", RATES);
         //_context.statManager().createRateStat("transport.sendProcessingTime." + getStyle(), "Time to process and send a message (ms)", "Transport", new long[] { 60*1000l });
-        _context.statManager().createRateStat("transport.expiredOnQueueLifetime", "Time to process a message that expires on our outbound queue", "Transport", new long[] { 60*1000l, 10*60*1000l, 60*60*1000l, 24*60*60*1000l } );
+        _context.statManager().createRateStat("transport.expiredOnQueueLifetime", "Time to process a message that expires on our outbound queue", "Transport", RATES );
 
         _currentAddresses = new CopyOnWriteArrayList<RouterAddress>();
         if (getStyle().equals("NTCP"))
@@ -182,9 +184,9 @@ public abstract class TransportImpl implements Transport {
         // increase limit for SSU, for now
         long maxMemory = SystemVersion.getMaxMemory();
         if (!SystemVersion.isSlow()) {
-            if (maxMemory >= 1024) {
+            if (maxMemory >= 1024*1024*1024) {
                 def *= 3; def /= 2;
-            } else if (maxMemory >= 512) {
+            } else if (maxMemory >= 512*1024*1024) {
                 def *= 7; def /= 6;
             } else if (style.equals("SSU")) {
                 def *= 2;

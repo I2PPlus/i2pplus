@@ -53,6 +53,8 @@ public class RouterThrottleImpl implements RouterThrottle {
     /** = TrivialPreprocessor.PREPROCESSED_SIZE */
     private static final int PREPROCESSED_SIZE = 1024;
 
+    private static final long[] RATES = { 60*1000, 10*60*1000l, 60*60*1000l };
+
 
     public RouterThrottleImpl(RouterContext context) {
         _context = context;
@@ -60,20 +62,20 @@ public class RouterThrottleImpl implements RouterThrottle {
         setTunnelStatus();
         _rejectStartupTime = Math.max(MIN_REJECT_STARTUP_TIME, _context.getProperty(PROP_REJECT_STARTUP_TIME, DEFAULT_REJECT_STARTUP_TIME));
         _context.simpleTimer2().addEvent(new ResetStatus(), 5*1000 + _rejectStartupTime);
-        _context.statManager().createRateStat("router.throttleNetworkCause", "JobQueue lag when an I2NP event was throttled", "Router [Throttle]", new long[] { 60*1000, 10*60*1000, 60*60*1000, 24*60*60*1000 });
-        //_context.statManager().createRateStat("router.throttleNetDbCause", "How lagged the jobQueue was when a networkDb request was throttled", "Throttle", new long[] { 60*1000, 10*60*1000, 60*60*1000, 24*60*60*1000 });
-        _context.statManager().createRateStat("router.throttleTunnelCause", "JobQueue lag when a tunnel request was throttled", "Router [Throttle]", new long[] { 60*1000, 10*60*1000, 60*60*1000, 24*60*60*1000 });
-        _context.statManager().createRateStat("tunnel.bytesAllocatedAtAccept", "Number of allocated bytes for participating tunnels when we accepted a request", "Tunnels [Participating]", new long[] { 60*1000, 10*60*1000, 60*60*1000, 24*60*60*1000 });
-        _context.statManager().createRateStat("router.throttleTunnelProcessingTime1m", "Time to process a message when we throttle a tunnel", "Router [Throttle]", new long[] { 60*1000, 10*60*1000, 60*60*1000, 24*60*60*1000 });
+        _context.statManager().createRateStat("router.throttleNetworkCause", "JobQueue lag when an I2NP event was throttled", "Router [Throttle]", RATES);
+        //_context.statManager().createRateStat("router.throttleNetDbCause", "How lagged the jobQueue was when a networkDb request was throttled", "Throttle", RATES);
+        _context.statManager().createRateStat("router.throttleTunnelCause", "JobQueue lag when a tunnel request was throttled", "Router [Throttle]", RATES);
+        _context.statManager().createRateStat("tunnel.bytesAllocatedAtAccept", "Number of allocated bytes for participating tunnels when we accepted a request", "Tunnels [Participating]", RATES);
+        _context.statManager().createRateStat("router.throttleTunnelProcessingTime1m", "Message processing time when we throttle a tunnel", "Router [Throttle]", RATES);
  //       _context.statManager().createRateStat("router.throttleTunnelProcessingTime10m", "Time to process a message when we throttle a tunnel (10 minute average)", "Router [Throttle]", new long[] { 10*60*1000, 60*60*1000, 24*60*60*1000 });
-        _context.statManager().createRateStat("router.throttleTunnelMaxExceeded", "Number of tunnels we are participating in when we refuse one due to excees", "Router [Throttle]", new long[] { 60*1000, 10*60*1000, 60*60*1000, 24*60*60*1000 });
-        _context.statManager().createRateStat("router.throttleTunnelProbTooFast", "Number of tunnels beyond the previous 1h average we are participating in when we throttle", "Router [Throttle]", new long[] { 60*1000, 10*60*1000, 60*60*1000, 24*60*60*1000 });
-        //_context.statManager().createRateStat("router.throttleTunnelProbTestSlow", "How slow are our tunnel tests when our average exceeds the old average and we throttle?", "Router [Throttle]", new long[] { 60*1000, 10*60*1000, 60*60*1000, 24*60*60*1000 });
-        _context.statManager().createRateStat("router.throttleTunnelBandwidthExceeded", "How much bandwidth is allocated when we refuse to build tunnel due to bandwidth allocation", "Router [Throttle]", new long[] { 60*1000, 10*60*1000, 60*60*1000, 24*60*60*1000 });
-        _context.statManager().createRateStat("router.throttleTunnelBytesAllowed", "Number of bytes permitted to be sent when we get a tunnel request (period is how many are currently allocated)", "Router [Throttle]", new long[] { 60*1000, 10*60*1000, 60*60*1000, 24*60*60*1000 });
-        _context.statManager().createRateStat("router.throttleTunnelBytesUsed", "Used Bps at request (period = max KBps)", "Router [Throttle]", new long[] { 60*1000, 10*60*1000, 60*60*1000, 24*60*60*1000 });
-        _context.statManager().createRateStat("router.throttleTunnelFailCount1m", "Number of failed message sends in the last 2 minutes when we throttle based on a spike in failures (period = 10 minute average failure count)", "Router [Throttle]", new long[] { 60*1000, 10*60*1000, 60*60*1000});
-        //_context.statManager().createRateStat("router.throttleTunnelQueueOverload", "How many pending tunnel request messages have we received when we reject them due to overload (period = time to process each)?", "Router [Throttle]", new long[] { 60*1000, 10*60*1000, 60*60*1000});
+        _context.statManager().createRateStat("router.throttleTunnelMaxExceeded", "Participating tunnel count when we refuse one due to excees", "Router [Throttle]", RATES);
+        _context.statManager().createRateStat("router.throttleTunnelProbTooFast", "Participating tunnel count beyond the previous 1h average when we throttle", "Router [Throttle]", RATES);
+        //_context.statManager().createRateStat("router.throttleTunnelProbTestSlow", "How slow are our tunnel tests when our average exceeds the old average and we throttle?", "Router [Throttle]", RATES);
+        _context.statManager().createRateStat("router.throttleTunnelBandwidthExceeded", "Bandwidth allocated when we refuse to build tunnel (bandwidth exceeded)", "Router [Throttle]", RATES);
+        _context.statManager().createRateStat("router.throttleTunnelBytesAllowed", "Bytes permitted to be sent when we get a tunnel request (period is how many are currently allocated)", "Router [Throttle]", RATES);
+        _context.statManager().createRateStat("router.throttleTunnelBytesUsed", "Used Bps at request (period = max KBps)", "Router [Throttle]", RATES);
+        _context.statManager().createRateStat("router.throttleTunnelFailCount1m", "Average failed message sends in last 2 minutes due to throttle based on failure spike", "Router [Throttle]", RATES);
+        //_context.statManager().createRateStat("router.throttleTunnelQueueOverload", "How many pending tunnel request messages have we received when we reject them due to overload (period = time to process each)?", "Router [Throttle]", RATES);
     }
 
     /**
@@ -134,7 +136,7 @@ public class RouterThrottleImpl implements RouterThrottle {
     public int acceptTunnelRequest() {
         if (_context.router().gracefulShutdownInProgress()) {
             if (_log.shouldLog(Log.WARN))
-                _log.warn("Refusing tunnel requests - graceful shutdown in progress");
+                _log.warn("Refusing tunnel requests -> Graceful shutdown in progress...");
             setShutdownStatus();
             // Don't use CRIT because this tells everybody we are shutting down
             return TunnelHistory.TUNNEL_REJECT_BANDWIDTH;

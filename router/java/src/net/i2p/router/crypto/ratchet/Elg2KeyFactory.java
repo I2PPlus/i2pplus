@@ -44,7 +44,7 @@ public class Elg2KeyFactory extends I2PThread implements KeyFactory {
         super("EDH Precalc");
         _context = ctx;
         _log = ctx.logManager().getLog(Elg2KeyFactory.class);
-        ctx.statManager().createRateStat("crypto.EDHGenerateTime", "How long it takes to create x and X", "Encryption", new long[] { 60*1000, 60*60*1000 });
+        ctx.statManager().createRateStat("crypto.EDHGenerateTime", "Time to create x and X", "Encryption", new long[] { 60*1000, 60*60*1000 });
         ctx.statManager().createRateStat("crypto.EDHUsed", "Need a DH from the queue", "Encryption", new long[] { 60*1000, 60*60*1000 });
         ctx.statManager().createRateStat("crypto.EDHReused", "Unused DH requeued", "Encryption", new long[] { 60*1000, 60*60*1000 });
         ctx.statManager().createRateStat("crypto.EDHEmpty", "DH queue empty", "Encryption", new long[] { 60*1000, 60*60*1000 });
