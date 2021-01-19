@@ -45,7 +45,7 @@ public abstract class TunnelCreatorConfig implements TunnelInfo {
     private byte[][] _ChaReplyADs;
     private final SessionKey[] _AESReplyKeys;
     private final byte[][] _AESReplyIVs;
-    
+
     /**
      *  IV length for {@link #getAESReplyIV}
      *  @since 0.9.48 moved from HopConfig
@@ -104,7 +104,7 @@ public abstract class TunnelCreatorConfig implements TunnelInfo {
      *
      */
     public TunnelId getReceiveTunnelId(int hop) { return _config[hop].getReceiveTunnel(); }
-    
+
     /**
      * retrieve the tunnelId that the given hop sends messages on.
      * the gateway is hop 0.
@@ -268,7 +268,7 @@ public abstract class TunnelCreatorConfig implements TunnelInfo {
         _AESReplyKeys[hop] = key;
         _AESReplyIVs[hop] = iv;
     }
-    
+
     /**
      *  Key to encrypt the reply sent for the tunnel creation crypto.
      *
@@ -345,7 +345,6 @@ public abstract class TunnelCreatorConfig implements TunnelInfo {
     public String toString() {
         // H0:1235 -> H1:2345 -> H2:2345
         StringBuilder buf = new StringBuilder(128);
-        buf.append("\n* ");
         if (_isInbound)
             buf.append("Inbound");
         else
