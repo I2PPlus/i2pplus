@@ -36,8 +36,8 @@ class PeerTestJob extends JobImpl {
         super(context);
         _log = context.logManager().getLog(PeerTestJob.class);
         _keepTesting = false;
-        getContext().statManager().createRateStat("peer.testOK", "How long a successful test takes", "Peers", new long[] { 60*1000, 10*60*1000 });
-        getContext().statManager().createRateStat("peer.testTooSlow", "How long a too-slow (yet successful) test takes", "Peers", new long[] { 60*1000, 10*60*1000 });
+        getContext().statManager().createRateStat("peer.testOK", "Time a successful test takes (ms)", "Peers", new long[] { 60*1000, 10*60*1000 });
+        getContext().statManager().createRateStat("peer.testTooSlow", "Time a too-slow (yet successful) test takes (ms)", "Peers", new long[] { 60*1000, 10*60*1000 });
         getContext().statManager().createRateStat("peer.testTimeout", "How often a test times out without a reply", "Peers", new long[] { 60*1000, 10*60*1000 });
     }
 

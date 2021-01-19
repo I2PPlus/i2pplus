@@ -74,8 +74,8 @@ final class YKGenerator {
         //    _log.debug("ElGamal YK Precalc (minimum: " + MIN_NUM_BUILDERS + " max: " + MAX_NUM_BUILDERS + ", delay: "
         //               + CALC_DELAY + ")");
 
-        ctx.statManager().createRateStat("crypto.YKUsed", "How often a precalculated ephemeral key (YK) is needed from the queue", "Encryption", new long[] { 60*1000, 60*60*1000 });
-        ctx.statManager().createRateStat("crypto.YKEmpty", "How often the precalculated ephemeral key (YK) queue is empty", "Encryption", new long[] { 60*1000, 60*60*1000 });
+        ctx.statManager().createRateStat("crypto.YKUsed", "How often a precalculated ephemeral key (YK) is needed from queue", "Encryption", new long[] { 60*1000, 60*60*1000 });
+        ctx.statManager().createRateStat("crypto.YKEmpty", "How often precalculated ephemeral key (YK) queue is empty", "Encryption", new long[] { 60*1000, 60*60*1000 });
     }
 
     /**

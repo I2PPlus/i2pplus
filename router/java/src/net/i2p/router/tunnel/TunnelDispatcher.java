@@ -137,13 +137,13 @@ public class TunnelDispatcher implements Service {
         ctx.statManager().createRateStat("tunnel.batchCount", "Number of groups of messages flushed together", "Tunnels [BatchedPreprocessor]", RATES);
         ctx.statManager().createRateStat("tunnel.batchDelayAmount", "Delay before flushing the batch", "Tunnels [BatchedPreprocessor]", RATES);
         ctx.statManager().createRateStat("tunnel.batchFlushRemaining", "Messages remaining after flush", "Tunnels [BatchedPreprocessor]", RATES);
-        ctx.statManager().createRateStat("tunnel.writeDelay", "Message processing time after reaching gateway (lifetime = size)", "Tunnels [BatchedPreprocessor]", RATES);
+        ctx.statManager().createRateStat("tunnel.writeDelay", "Message processing time after reaching gateway", "Tunnels [BatchedPreprocessor]", RATES);
         ctx.statManager().createRateStat("tunnel.batchSmallFragments", "Number of outgoing pad bytes in small fragments", "Tunnels [BatchedPreprocessor]", RATES);
         ctx.statManager().createRateStat("tunnel.batchFullFragments", "Outgoing tunnel messages using full data area", "Tunnels [BatchedPreprocessor]", RATES);
         ctx.statManager().createRateStat("tunnel.batchFragmentation", "Average number of fragments per message", "Tunnels [BatchedPreprocessor]", RATES);
         // following is for OutboundMessageDistributor
         ctx.statManager().createRateStat("tunnel.distributeLookupSuccess", "Success rate for deferred lookup (outbound distribution)", "Tunnels", RATES);
-        ctx.statManager().createRateStat("tunnel.dropAtOBEP", "Tunnels droppped at outbound gateway (throttled)", "Tunnels", RATES);
+        ctx.statManager().createRateStat("tunnel.dropAtOBEP", "Tunnels droppped at Outbound Endpoint (throttled)", "Tunnels", RATES);
         // following is for OutboundReceiver
         ctx.statManager().createRateStat("tunnel.outboundLookupSuccess", "Success rate for deferred lookup (outbound receive)", "Tunnels", RATES);
         // following is for InboundGatewayReceiver

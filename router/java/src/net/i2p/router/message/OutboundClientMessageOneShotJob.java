@@ -187,6 +187,8 @@ public class OutboundClientMessageOneShotJob extends JobImpl {
 
     private static final int REPLY_REQUEST_INTERVAL = 60*1000;
 
+    private static final long[] RATES = { 60*1000l, 60*60*1000l, 24*60*60*1000l };
+
     /**
      * Send it.
      *
@@ -257,22 +259,22 @@ public class OutboundClientMessageOneShotJob extends JobImpl {
 
     /** call once only */
     public static void init(RouterContext ctx) {
-        ctx.statManager().createFrequencyStat("client.sendMessageFailFrequency", "How often client fails to send a message", "ClientMessages", new long[] { 60*1000l, 60*60*1000l, 24*60*60*1000l });
-        ctx.statManager().createRateStat("client.sendMessageSize", "Size of messages sent by the client", "ClientMessages", new long[] { 60*1000l, 60*60*1000l, 24*60*60*1000l });
-        ctx.statManager().createRequiredRateStat("client.sendAckTime", "Message round trip time (ms)", "ClientMessages", new long[] { 60*1000l, 5*60*1000l, 60*60*1000l, 24*60*60*1000l });
-        ctx.statManager().createRateStat("client.timeoutCongestionTunnel", "Local tunnel lag when a send times out", "ClientMessages", new long[] { 60*1000l, 5*60*1000l, 60*60*1000l, 24*60*60*1000l });
-        ctx.statManager().createRateStat("client.timeoutCongestionMessage", "Time to process local messages when a send times out", "ClientMessages", new long[] { 5*60*1000l, 60*60*1000l, 24*60*60*1000l });
-        ctx.statManager().createRateStat("client.timeoutCongestionInbound", "How much faster than our average bps we are receiving data when a send times out", "ClientMessages", new long[] { 5*60*1000l, 60*60*1000l, 24*60*60*1000l });
-        //ctx.statManager().createRateStat("client.leaseSetFoundLocally", "How often we tried to look for a leaseSet and found it locally?", "ClientMessages", new long[] { 5*60*1000l, 60*60*1000l, 24*60*60*1000l });
-        ctx.statManager().createRateStat("client.leaseSetFoundRemoteTime", "Time to look for a remote LeaseSet (when we succeeded)", "ClientMessages", new long[] { 5*60*1000l, 60*60*1000l, 24*60*60*1000l });
-        ctx.statManager().createRateStat("client.leaseSetFailedRemoteTime", "Time to look for a remote LeaseSet (when we failed)", "ClientMessages", new long[] { 5*60*1000l, 60*60*1000l, 24*60*60*1000l });
-        ctx.statManager().createRateStat("client.dispatchPrepareTime", "Time to queue up the Dispatch job (since we started)", "ClientMessages", new long[] { 5*60*1000l, 60*60*1000l, 24*60*60*1000l });
-        ctx.statManager().createRateStat("client.dispatchTime", "Time to dispatch the message (since we started)", "ClientMessages", new long[] { 5*60*1000l, 60*60*1000l, 24*60*60*1000l });
-        ctx.statManager().createRateStat("client.dispatchSendTime", "Time taken by the Dispatch job", "ClientMessages", new long[] { 5*60*1000l, 60*60*1000l, 24*60*60*1000l });
-        ctx.statManager().createRateStat("client.dispatchNoTunnels", "Time taken after startup to run out of local tunnels to send/receive with", "ClientMessages", new long[] { 5*60*1000l, 60*60*1000l, 24*60*60*1000l });
-        ctx.statManager().createRateStat("client.dispatchNoACK", "Number of repeated message sends to a peer (no ACK required)", "ClientMessages", new long[] { 60*1000l, 5*60*1000l, 60*60*1000l });
+        ctx.statManager().createFrequencyStat("client.sendMessageFailFrequency", "How often client fails to send a message", "ClientMessages", RATES);
+        ctx.statManager().createRateStat("client.sendMessageSize", "Size of messages sent by the client", "ClientMessages", RATES);
+        ctx.statManager().createRequiredRateStat("client.sendAckTime", "Message round trip time (ms)", "ClientMessages", RATES);
+        ctx.statManager().createRateStat("client.timeoutCongestionTunnel", "Local tunnel lag when a send times out", "ClientMessages", RATES);
+        ctx.statManager().createRateStat("client.timeoutCongestionMessage", "Time to process local messages when a send times out", "ClientMessages", RATES);
+        ctx.statManager().createRateStat("client.timeoutCongestionInbound", "How much faster than our average bps we are receiving data when a send times out", "ClientMessages", RATES);
+        //ctx.statManager().createRateStat("client.leaseSetFoundLocally", "How often we tried to look for a leaseSet and found it locally?", "ClientMessages", RATES);
+        ctx.statManager().createRateStat("client.leaseSetFoundRemoteTime", "Time to look for a remote LeaseSet (when we succeeded)", "ClientMessages", RATES);
+        ctx.statManager().createRateStat("client.leaseSetFailedRemoteTime", "Time to look for a remote LeaseSet (when we failed)", "ClientMessages", RATES);
+        ctx.statManager().createRateStat("client.dispatchPrepareTime", "Time to queue up the Dispatch job (since we started)", "ClientMessages", RATES);
+        ctx.statManager().createRateStat("client.dispatchTime", "Time to dispatch the message (since we started)", "ClientMessages", RATES);
+        ctx.statManager().createRateStat("client.dispatchSendTime", "Time taken by the Dispatch job", "ClientMessages", RATES);
+        ctx.statManager().createRateStat("client.dispatchNoTunnels", "How long after startup we run out of local tunnels to send/receive with", "ClientMessages", RATES);
+        ctx.statManager().createRateStat("client.dispatchNoACK", "Number of repeated message sends to a peer (no ACK required)", "ClientMessages", RATES);
         // for HandleGarlicMessageJob / GarlicMessageReceiver
-        ctx.statManager().createRateStat("crypto.garlic.decryptFail", "How often undecryptable garlic messages are received", "Encryption", new long[] { 5*60*1000, 60*60*1000, 24*60*60*1000 });
+        ctx.statManager().createRateStat("crypto.garlic.decryptFail", "How often undecryptable garlic messages are received", "Encryption", RATES);
     }
 
     public String getName() { return "Outbound client message"; }
