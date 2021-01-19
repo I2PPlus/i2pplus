@@ -36,15 +36,16 @@ class PeerTestJob extends JobImpl {
         super(context);
         _log = context.logManager().getLog(PeerTestJob.class);
         _keepTesting = false;
-        getContext().statManager().createRateStat("peer.testOK", "How long a successful test takes", "Peers", new long[] { 60*1000, 10*60*1000 });
-        getContext().statManager().createRateStat("peer.testTooSlow", "How long a too-slow (yet successful) test takes", "Peers", new long[] { 60*1000, 10*60*1000 });
+        getContext().statManager().createRateStat("peer.testOK", "Time a successful test takes (ms)", "Peers", new long[] { 60*1000, 10*60*1000 });
+        getContext().statManager().createRateStat("peer.testTooSlow", "Time a too-slow (yet successful) test takes (ms)", "Peers", new long[] { 60*1000, 10*60*1000 });
         getContext().statManager().createRateStat("peer.testTimeout", "How often a test times out without a reply", "Peers", new long[] { 60*1000, 10*60*1000 });
     }
 
     /** how long should we wait before firing off new tests?  */
     private long getPeerTestDelay() { return DEFAULT_PEER_TEST_DELAY; }
     /** how long to give each peer before marking them as unresponsive? */
-    private int getTestTimeout() { return 30*1000; }
+//    private int getTestTimeout() { return 30*1000; }
+    private int getTestTimeout() { return 10*1000; }
     /** number of peers to test each round */
     private int getTestConcurrency() { return 1; }
 
@@ -54,13 +55,13 @@ class PeerTestJob extends JobImpl {
         this.getTiming().setStartAfter(getContext().clock().now() + DEFAULT_PEER_TEST_DELAY);
         getContext().jobQueue().addJob(this);
         if (_log.shouldLog(Log.INFO))
-            _log.info("Initialising peer tests - timeout: " + (getTestTimeout() / 1000) + "s per peer");
+            _log.info("Initialising peer tests -> Timeout: " + (getTestTimeout() / 1000) + "s per peer");
     }
 
     public synchronized void stopTesting() {
         _keepTesting = false;
         if (_log.shouldLog(Log.INFO))
-            _log.info("Ending peer tests");
+            _log.info("Ending peer tests...");
     }
 
     public String getName() { return "Test Peers"; }
@@ -68,12 +69,16 @@ class PeerTestJob extends JobImpl {
     public void runJob() {
         if (!_keepTesting) return;
         Set<RouterInfo> peers = selectPeersToTest();
+/**
         if (_log.shouldLog(Log.DEBUG))
-            _log.debug("Testing " + peers.size() + " peers");
-
+            if (peers.size() == 1)
+                _log.debug("Testing " + peers.size() + " peer");
+            else
+                _log.debug("Testing " + peers.size() + " peers");
+**/
         for (RouterInfo peer : peers) {
-            if (_log.shouldLog(Log.DEBUG))
-                _log.debug("Testing peer [" + peer.getIdentity().getHash().toBase64().substring(0,6) + "]");
+            if (_log.shouldLog(Log.INFO))
+                _log.info("Testing peer [" + peer.getIdentity().getHash().toBase64().substring(0,6) + "]");
             testPeer(peer);
         }
         requeue(getPeerTestDelay());
@@ -92,8 +97,13 @@ class PeerTestJob extends JobImpl {
         criteria.setPurpose(PeerSelectionCriteria.PURPOSE_TEST);
         List<Hash> peerHashes = _manager.selectPeers(criteria);
 
+/**
         if (_log.shouldLog(Log.DEBUG))
-            _log.debug("Peer selection found " + peerHashes.size() + " peers for testing");
+            if (peers.size == 1)
+               _log.debug("Peer selection found " + peerHashes.size() + " peer for testing");
+            else
+                _log.debug("Peer selection found " + peerHashes.size() + " peers for testing");
+**/
 
         Set<RouterInfo> peers = new HashSet<RouterInfo>(peerHashes.size());
         for (Hash peer : peerHashes) {
@@ -144,7 +154,7 @@ class PeerTestJob extends JobImpl {
 
         if (_log.shouldLog(Log.DEBUG))
             _log.debug("[Job " + getJobId() + "] Initiating peer test to [" + peer.getIdentity().getHash().toBase64().substring(0,6)
-                       + "]: \n* Out: " + outTunnel + "\n* Replies: " + inTunnel);
+                       + "]: \n* " + outTunnel + "\n* Replies: " + inTunnel);
 
         ReplySelector sel = new ReplySelector(peer.getIdentity().getHash(), nonce, expiration);
         PeerReplyFoundJob reply = new PeerReplyFoundJob(getContext(), peer, inTunnel, outTunnel);
@@ -254,8 +264,8 @@ class PeerTestJob extends JobImpl {
 
             if (_log.shouldLog(Log.DEBUG))
                 _log.debug("Successful peer test after " + responseTime + "ms for ["
-                           + _peer.getIdentity().getHash().toBase64() + "]\n* Outbound tunnel: "
-                           + _sendTunnel + "\n* Inbound tunnel: "
+                           + _peer.getIdentity().getHash().toBase64().substring(0,6) + "]\n* "
+                           + _sendTunnel + "\n* "
                            + _replyTunnel);
             getContext().profileManager().dbLookupSuccessful(_peer.getIdentity().getHash(), responseTime);
             // we know the tunnels are working
@@ -293,10 +303,8 @@ class PeerTestJob extends JobImpl {
                 getContext().profileManager().dbLookupFailed(_peer.getIdentity().getHash());
 
             if (_log.shouldLog(Log.DEBUG))
-                _log.debug("Failed peer test for ["
-                           + _peer.getIdentity().getHash().toBase64().substring(0,6) + "]\n* Outbound tunnel: "
-                           + _sendTunnel + "\n* Inbound tunnel: "
-                           + _replyTunnel);
+                _log.debug("Failed peer test for [" +
+                           _peer.getIdentity().getHash().toBase64().substring(0,6) + "]\n* " + _sendTunnel + "\n* " + _replyTunnel);
 
             // don't fail the tunnels, as the peer might just plain be down, or
             // otherwise overloaded

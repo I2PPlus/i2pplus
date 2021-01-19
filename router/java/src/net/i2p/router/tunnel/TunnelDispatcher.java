@@ -104,9 +104,9 @@ public class TunnelDispatcher implements Service {
         _pumper = new TunnelGatewayPumper(ctx);
         _leaveJob = new LeaveTunnel(ctx);
         ctx.statManager().createRequiredRateStat("tunnel.participatingTunnels", "Tunnels routed for others", "Tunnels [Participating]", RATES);
-        ctx.statManager().createRateStat("tunnel.dispatchOutboundPeer", "Messages we sent out a tunnel targeting a peer", "Tunnels [Participating]", RATES);
-        ctx.statManager().createRateStat("tunnel.dispatchOutboundTunnel", "Messages we sent out a tunnel targeting a tunnel", "Tunnels [Participating]", RATES);
-        ctx.statManager().createRateStat("tunnel.dispatchInbound", "Messages we sent through our tunnel gateway", "Tunnels [Participating]", RATES);
+        ctx.statManager().createRateStat("tunnel.dispatchOutboundPeer", "Outbound messages targeting a peer", "Tunnels [Participating]", RATES);
+        ctx.statManager().createRateStat("tunnel.dispatchOutboundTunnel", "Outbound messages targeting a tunnel", "Tunnels [Participating]", RATES);
+        ctx.statManager().createRateStat("tunnel.dispatchInbound", "Messages we sent through our Tunnel Gateway", "Tunnels [Participating]", RATES);
         ctx.statManager().createRateStat("tunnel.dispatchParticipant", "Messages we sent through a tunnel we are participating in", "Tunnels [Participating]", RATES);
         ctx.statManager().createRateStat("tunnel.dispatchEndpoint", "Messages received as Outbound Endpoint of a tunnel", "Tunnels [Participating]", RATES);
         ctx.statManager().createRateStat("tunnel.joinOutboundGateway","Tunnels joined as Outbound Gateway", "Tunnels [Participating]", RATES);
@@ -127,9 +127,9 @@ public class TunnelDispatcher implements Service {
         ctx.statManager().createRequiredRateStat("tunnel.participatingMessageCount", "Total 1KB participating messages", "Tunnels [Participating]", RATES);
         // estimate for RouterThrottleImpl
         ctx.statManager().createRequiredRateStat("tunnel.participatingMessageCountAvgPerTunnel", "Estimated participating messages per tunnel lifetime", "Tunnels [Participating]", new long[] { 60*1000l });
-        ctx.statManager().createRateStat("tunnel.ownedMessageCount", "Messages sent through a tunnel we created (period = failures)", "Tunnels", RATES);
-        ctx.statManager().createRateStat("tunnel.failedCompletelyMessages", "Messages sent through a tunnel that failed prematurely (period = failures)", "Tunnels", RATES);
-        ctx.statManager().createRateStat("tunnel.failedPartially", "Messages sent through a tunnel that only failed partially (period = failures)", "Tunnels", RATES);
+        ctx.statManager().createRateStat("tunnel.ownedMessageCount", "Messages sent through a tunnel we created", "Tunnels", RATES);
+        ctx.statManager().createRateStat("tunnel.failedCompletelyMessages", "Messages sent through a prematurely failed tunnel", "Tunnels", RATES);
+        ctx.statManager().createRateStat("tunnel.failedPartially", "Messages sent through a partially failed tunnel", "Tunnels", RATES);
         // following are for BatchedPreprocessor
         ctx.statManager().createRateStat("tunnel.batchMultipleCount", "Messages batched into a tunnel message", "Tunnels [BatchedPreprocessor]", RATES);
         ctx.statManager().createRateStat("tunnel.batchDelay", "Messages pending when the batching waited", "Tunnels [BatchedPreprocessor]", RATES);
@@ -137,13 +137,13 @@ public class TunnelDispatcher implements Service {
         ctx.statManager().createRateStat("tunnel.batchCount", "Number of groups of messages flushed together", "Tunnels [BatchedPreprocessor]", RATES);
         ctx.statManager().createRateStat("tunnel.batchDelayAmount", "Delay before flushing the batch", "Tunnels [BatchedPreprocessor]", RATES);
         ctx.statManager().createRateStat("tunnel.batchFlushRemaining", "Messages remaining after flush", "Tunnels [BatchedPreprocessor]", RATES);
-        ctx.statManager().createRateStat("tunnel.writeDelay", "Message processing time after it reaches the gateway (lifetime is size)", "Tunnels [BatchedPreprocessor]", RATES);
+        ctx.statManager().createRateStat("tunnel.writeDelay", "Message processing time after reaching gateway", "Tunnels [BatchedPreprocessor]", RATES);
         ctx.statManager().createRateStat("tunnel.batchSmallFragments", "Number of outgoing pad bytes in small fragments", "Tunnels [BatchedPreprocessor]", RATES);
         ctx.statManager().createRateStat("tunnel.batchFullFragments", "Outgoing tunnel messages using full data area", "Tunnels [BatchedPreprocessor]", RATES);
         ctx.statManager().createRateStat("tunnel.batchFragmentation", "Average number of fragments per message", "Tunnels [BatchedPreprocessor]", RATES);
         // following is for OutboundMessageDistributor
         ctx.statManager().createRateStat("tunnel.distributeLookupSuccess", "Success rate for deferred lookup (outbound distribution)", "Tunnels", RATES);
-        ctx.statManager().createRateStat("tunnel.dropAtOBEP", "Tunnels droppped at outbound gateway (throttled)", "Tunnels", RATES);
+        ctx.statManager().createRateStat("tunnel.dropAtOBEP", "Tunnels droppped at Outbound Endpoint (throttled)", "Tunnels", RATES);
         // following is for OutboundReceiver
         ctx.statManager().createRateStat("tunnel.outboundLookupSuccess", "Success rate for deferred lookup (outbound receive)", "Tunnels", RATES);
         // following is for InboundGatewayReceiver
@@ -157,8 +157,8 @@ public class TunnelDispatcher implements Service {
         ctx.statManager().createRateStat("tunnel.smallFragments", "Number of pad bytes in small fragments", "Tunnels [FragmentHandler]", RATES);
         ctx.statManager().createRateStat("tunnel.fullFragments", "Tunnel messages using full data area", "Tunnels [FragmentHandler]", RATES);
         ctx.statManager().createRateStat("tunnel.fragmentedComplete", "Fragments in a completely received message", "Tunnels [FragmentHandler]", RATES);
-        ctx.statManager().createRateStat("tunnel.fragmentedDropped", "Number of dropped fragments", "Tunnels [FragmentHandler]", RATES);
-        ctx.statManager().createRateStat("tunnel.corruptMessage", "Number of corrupt messages received", "Tunnels [FragmentHandler]", RATES);
+        ctx.statManager().createRateStat("tunnel.fragmentedDropped", "Total dropped fragments", "Tunnels [FragmentHandler]", RATES);
+        ctx.statManager().createRateStat("tunnel.corruptMessage", "Total corrupt messages received", "Tunnels [FragmentHandler]", RATES);
         // following are for InboundMessageDistributor
         ctx.statManager().createRateStat("tunnel.dropDangerousClientTunnelMessage", "Dropped dangerous Inbound messages", "Tunnels", RATES);
         ctx.statManager().createRateStat("tunnel.dropDangerousExplTunnelMessage", "Dropped dangerous Exploratory messages", "Tunnels [Exploratory]", RATES);

@@ -65,7 +65,7 @@ class EventPumper implements Runnable {
      *  The occasional larger message can use multiple buffers.
      */
     private static final int BUF_SIZE = 8*1024;
-    private static final int BUF_SIZE_LARGE = 12*1024;
+    private static final int BUF_SIZE_LARGE = 16*1024;
     private static final int MAX_CACHE_SIZE = 64;
 
     private static class BufferFactory implements TryCache.ObjectFactory<ByteBuffer> {
@@ -92,7 +92,7 @@ class EventPumper implements Runnable {
      * the time to iterate across them to check a few flags shouldn't be a problem.
      */
 //    private static final long FAILSAFE_ITERATION_FREQ = 2*1000l;
-    private static final long FAILSAFE_ITERATION_FREQ = 60*1000l;
+    private static final long FAILSAFE_ITERATION_FREQ = 180*1000l;
     private static final int FAILSAFE_LOOP_COUNT = 512;
     private static final long SELECTOR_LOOP_DELAY = 200;
     private static final long BLOCKED_IP_FREQ = 3*60*1000;
