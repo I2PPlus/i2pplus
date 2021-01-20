@@ -153,7 +153,7 @@ class PeerTestJob extends JobImpl {
         TunnelId outTunnelId = outTunnel.getSendTunnelId(0);
 
         if (_log.shouldLog(Log.DEBUG))
-            _log.debug("[Job " + getJobId() + "] Initiating peer test to [" + peer.getIdentity().getHash().toBase64().substring(0,6)
+            _log.debug("[Job " + getJobId() + "] Initiating test of peer [" + peer.getIdentity().getHash().toBase64().substring(0,6)
                        + "]: \n* " + outTunnel + "\n* Replies: " + inTunnel);
 
         ReplySelector sel = new ReplySelector(peer.getIdentity().getHash(), nonce, expiration);
