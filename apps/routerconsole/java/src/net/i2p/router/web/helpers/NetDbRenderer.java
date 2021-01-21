@@ -1127,12 +1127,9 @@ class NetDbRenderer {
                         buf.append("<span class=\"nowrap\"><span class=\"netdb_name\">")
                            .append(_t(DataHelper.stripHTML(name))).append(":</span> ")
                            .append("<span class=\"netdb_info host\">").append("<a title=\"")
-                           .append(_t("Show all routers with this address in the NetDb")).append("\" ");
-                        if (val.contains(":"))
-                            buf.append(" href=\"/netdb?ipv6=");
-                        else
-                            buf.append(" href=\"/netdb?ip=");
-                        buf.append(DataHelper.stripHTML(val).replace("::", _t("n/a"))).append("\">")
+                           .append(_t("Show all routers with this address in the NetDb")).append("\" ")
+                           .append(" href=\"/netdb?ip=")
+                           .append(DataHelper.stripHTML(val).replace("::", _t("n/a"))).append("\">")
                            .append(DataHelper.stripHTML(val).replace("::", _t("n/a"))) // fix empty ipv6
                            .append("</a></span></span> ");
                     } else if (name.contains("port")) {
