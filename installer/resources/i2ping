@@ -28,7 +28,7 @@ if [ -f "$I2P/lib/i2ptunnel.jar" ]; then
                 shift
                 port_to=$(echo "scale=0; $1 + 0" | bc)
                 if [ $port_to -lt 1 ] || [ $port_to -gt 65535 ]; then
-                    echo " ✖ Port range to is wrong or missing, port tried $port_to."
+                    echo " ✖ Port range: to is wrong or missing, port tried $port_to"
                     send_help 1
                 fi
                 args="$args -p $port_to "
@@ -38,7 +38,7 @@ if [ -f "$I2P/lib/i2ptunnel.jar" ]; then
                 shift
                 port_from=$1
                 if [ $port_from -le 0 ] || [ $port_from -ge 65536 ]; then
-                    echo " ✖ Port range from is wrong or missing, port tried $port_from."
+                    echo " ✖ Port range: from is wrong or missing, port tried $port_from"
                     send_help 1
                 fi
                 args="$args -f $port_from "
@@ -47,7 +47,7 @@ if [ -f "$I2P/lib/i2ptunnel.jar" ]; then
             -h) # -h (pings all hosts in hosts.txt in current directory)
                 host_file=./hosts.txt
                 if [ ! -f $host_file ]; then
-                    echo " ✖ File ./hosts.txt not found."
+                    echo " ✖ Required hosts file ./hosts.txt not found"
                 fi
                 args="$args -h"
                 shift
@@ -56,7 +56,7 @@ if [ -f "$I2P/lib/i2ptunnel.jar" ]; then
                 shift
                 list_file=$1
                 if [ ! -f $list_file ]; then
-                    echo " ✖ File $list can not be found."
+                    echo " ✖ File $list not found"
                     send_help 1
                 fi
                 args="$args -l $list_file"
@@ -78,7 +78,7 @@ if [ -f "$I2P/lib/i2ptunnel.jar" ]; then
                 shift
                 timeout=$1
                 if [ $timeout -gt 0 ] && [ $timeout -lt 9 ]; then
-                    echo " ✖ Timeout is to be used in milliseconds, example for 6 seconds: -t 6000"
+                    echo " ✖ Timeout is in milliseconds e.g. for 6 seconds: -t 6000"
                     send_help 1
                 fi
                 args="$args -t $timeout"
@@ -94,16 +94,16 @@ if [ -f "$I2P/lib/i2ptunnel.jar" ]; then
         esac
     done
     if [ $host_file ] && [ $list_file ]; then
-        echo " ✖ Unable to use -h and -l together."
+        echo " ✖ Unable to use -h and -l together"
         send_help 1
     elif [ $host_file ] && [ -f $host_file ]; then
-        echo " • Found $host_file, pinging..."
+        echo " • Found $host_file, initiating ping..."
         echo " • Trying to open tunnel"
         cmd='java -jar '"$I2P"'/lib/i2ptunnel.jar -die -e "ownDest yes" -e "ping '"${args}"'"'
         eval ${cmd}
         exit $?
     elif [ $list_file ] && [ -f $list_file ]; then
-        echo " • Found list file $list_file, pinging..."
+        echo " • Found list file $list_file, initiating ping..."
         echo " • Trying to open tunnel"
         cmd='java -jar '"$I2P"'/lib/i2ptunnel.jar -die -e "ownDest yes" -e "ping '"${args}"'"'
         eval ${cmd}
@@ -111,44 +111,44 @@ if [ -f "$I2P/lib/i2ptunnel.jar" ]; then
     elif [ "$address" ]; then # Do we really have an address?
             # Check address type
         if [ $(echo $address | wc -c) -eq 525 ]; then
-            echo " ✔ Address is in b64 format."
+            echo " ✔ Address is in B64 format"
             lookup=$address
         elif [ "$(echo $address | grep -oiE 'b32.i2p$')" = 'b32.i2p' ] && [ $(echo $address | wc -c) -eq 61 ]; then
-            echo " • Address is in b32 format."
+            echo " • Address is in B32 format"
         elif [ "$(echo $address | grep -ioE '.i2p$')" = '.i2p' ]; then
             echo " • Address is in .i2p format"
         else
-            echo " ✖ Address is an unknown format."
+            echo " ✖ Address is an unknown format"
             send_help 1
         fi
 
-            # Try to resolv B64 address
+            # Try to resolve B64 address
         if [ "$lookup" = "" ]; then
-            echo " ➤ Starting B64 lookup..."
+            echo " ➤ Validating B64 address..."
             lookup=$(java -jar -Xms8m -Xmx8m $I2P/lib/i2ptunnel.jar -nocli -w -e "lookup ${address}" -d)
             if [ "$lookup" != "Unknown host: $address" ]; then
-                echo " ✔ Found B64 address"
+                echo " ✔ B64 address is valid"
             else
-                echo " ✖ Could not find B64 address."
+                echo " ✖ Invalid B64 address"
             fi
         fi
 
             # If lookup != null & char count -eq 525(B64)
         if [ $(echo $lookup | wc -c) -eq 525 ]; then
             echo " • Using B64"
-            echo " • Trying to open tunnel"
+            echo " • Opening tunnel..."
             cmd='java -jar '"$I2P"'/lib/i2ptunnel.jar -die -e "ownDest yes" -e "ping '"${args}"' '"${lookup}"'"'
             eval ${cmd}
         else
-            echo " • Trying to open tunnel"
+            echo " • Opening tunnel..."
             cmd='java -jar '"$I2P"'/lib/i2ptunnel.jar -die -e "ownDest yes" -e "ping '"${args}"' '"${address}"'"'
             eval ${cmd}
         fi
     else
-        echo " ✖ Missing address field."
+        echo " ✖ Missing address field"
         send_help 1
     fi
 else
-	echo " ✖ File $I2P/lib/i2ptunnel.jar not found."
+    echo " ✖ File $I2P/lib/i2ptunnel.jar not found"
 fi
 exit 0
