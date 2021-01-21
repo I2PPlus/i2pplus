@@ -57,8 +57,8 @@ public class FloodfillDatabaseLookupMessageHandler implements HandlerJobBuilder 
             //}
         } else {
             if (_log.shouldLog(Log.WARN))
-                _log.warn("Dropping lookup request for [" + dlm.getSearchKey().toBase64().substring(0,6) + "] (throttled)\n* Reply was to: [" + dlm.getFrom().toBase64().substring(0,6) + "] - [Tunnel " + dlm.getReplyTunnel() + "]");
-            _context.statManager().addRateData("netDb.lookupsDropped", 1, 1);
+                _log.warn("Dropping " + dlm.getSearchType() + " lookup request for [" + dlm.getSearchKey().toBase64().substring(0,6) + "] (throttled)\n* Reply was to: [" + dlm.getFrom().toBase64().substring(0,6) + "] - [Tunnel " + dlm.getReplyTunnel() + "]");
+            _context.statManager().addRateData("netDb.lookupsDropped", 1);
             return null;
         }
     }

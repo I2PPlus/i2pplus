@@ -115,13 +115,13 @@ public class ProfileOrganizer {
         _strictCapacityOrder = new TreeSet<PeerProfile>(_comp);
         _persistenceHelper = new ProfilePersistenceHelper(_context);
 
-        _context.statManager().createRequiredRateStat("peer.profileSortTime", "Time taken by profile manager to sort peers", "Peers", new long[] { 60*1000, 60*60*1000 });
-        _context.statManager().createRateStat("peer.profileCoalesceTime", "Time taken by profile manager to coalesce peer stats", "Peers", new long[] { 60*1000, 60*60*1000 });
-        _context.statManager().createRateStat("peer.profileThresholdTime", "Time taken by profile manager to determine tier thresholds", "Peers", new long[] { 60*1000, 60*60*1000 });
-        _context.statManager().createRateStat("peer.profilePlaceTime", "Time taken by profile manager to sort peers into tiers", "Peers", new long[] { 60*1000, 60*60*1000 });
-        _context.statManager().createRateStat("peer.profileReorgTime", "Total time taken by profile manager to reorganize peers", "Peers", new long[] { 60*1000, 60*60*1000 });
+        _context.statManager().createRequiredRateStat("peer.profileSortTime", "Time for Profile Manager to sort peers (ms)", "Peers", new long[] { 60*1000, 60*60*1000 });
+        _context.statManager().createRateStat("peer.profileCoalesceTime", "Time for Profile Manager to coalesce peer stats (ms)", "Peers", new long[] { 60*1000, 60*60*1000 });
+        _context.statManager().createRateStat("peer.profileThresholdTime", "Time for Profile Manager to determine tier thresholds (ms)", "Peers", new long[] { 60*1000, 60*60*1000 });
+        _context.statManager().createRateStat("peer.profilePlaceTime", "Time for Profile Manager to sort peers into tiers (ms)", "Peers", new long[] { 60*1000, 60*60*1000 });
+        _context.statManager().createRateStat("peer.profileReorgTime", "Time for Profile Manager to reorganize peers (ms)", "Peers", new long[] { 60*1000, 60*60*1000 });
         // used in DBHistory
-        _context.statManager().createRequiredRateStat("peer.failedLookupRate", "NetDb Lookup fail rate", "Peers", new long[] { 60*1000, 10*60*1000l, 60*60*1000l, 24*60*60*1000l });
+        _context.statManager().createRequiredRateStat("peer.failedLookupRate", "NetDb Lookup failure rate", "Peers", new long[] { 60*1000, 10*60*1000l, 60*60*1000l, 24*60*60*1000l });
     }
 
     private void getReadLock() {
@@ -877,8 +877,10 @@ public class ProfileOrganizer {
         } finally { releaseReadLock(); }
     }
 
-    private static final long MIN_EXPIRE_TIME = 60*60*1000;
-    private static final long MAX_EXPIRE_TIME = 6*60*60*1000;
+//    private static final long MIN_EXPIRE_TIME = 60*60*1000;
+    private static final long MIN_EXPIRE_TIME = 30*60*1000;
+//    private static final long MAX_EXPIRE_TIME = 6*60*60*1000;
+    private static final long MAX_EXPIRE_TIME = 4*60*60*1000;
     private static final long ADJUST_EXPIRE_TIME = 60*1000;
     private static final int ENOUGH_PROFILES = 400;
     private long _currentExpireTime = MAX_EXPIRE_TIME;
