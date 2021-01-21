@@ -4,6 +4,14 @@ use_dir="$($scr_dir/i2prouter getdir)"
 
 PIDFILE="$use_dir/gracefule_helper.pid"
 
+rm_pid() {
+	test ! -f $PIDFILE || rm $PIDFILE
+}
+
+if [ -f "$PIDFILE" ] && [ $($use_dir/i2prouter status > /dev/null; echo $?) -eq 1 ]; then
+    rm_pid
+fi
+
 if [ -f $PIDFILE ]; then
   PID=$(cat $PIDFILE)
   ps -p $PID > /dev/null 2>&1
@@ -21,9 +29,7 @@ else
     exit 1
   fi
 fi
-rm_pid() {
-	test ! -f $PIDFILE || rm $PIDFILE
-}
+
 
 until [ $($use_dir/i2prouter status > /dev/null ; echo $?) -eq 1 ]; do
 	sleep 1

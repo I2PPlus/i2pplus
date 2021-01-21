@@ -137,7 +137,7 @@ public class TunnelDispatcher implements Service {
         ctx.statManager().createRateStat("tunnel.batchCount", "Number of groups of messages flushed together", "Tunnels [BatchedPreprocessor]", RATES);
         ctx.statManager().createRateStat("tunnel.batchDelayAmount", "Delay before flushing the batch", "Tunnels [BatchedPreprocessor]", RATES);
         ctx.statManager().createRateStat("tunnel.batchFlushRemaining", "Messages remaining after flush", "Tunnels [BatchedPreprocessor]", RATES);
-        ctx.statManager().createRateStat("tunnel.writeDelay", "Message processing time after reaching gateway", "Tunnels [BatchedPreprocessor]", RATES);
+        ctx.statManager().createRateStat("tunnel.writeDelay", "Message processing time after reaching gateway (ms)", "Tunnels [BatchedPreprocessor]", RATES);
         ctx.statManager().createRateStat("tunnel.batchSmallFragments", "Number of outgoing pad bytes in small fragments", "Tunnels [BatchedPreprocessor]", RATES);
         ctx.statManager().createRateStat("tunnel.batchFullFragments", "Outgoing tunnel messages using full data area", "Tunnels [BatchedPreprocessor]", RATES);
         ctx.statManager().createRateStat("tunnel.batchFragmentation", "Average number of fragments per message", "Tunnels [BatchedPreprocessor]", RATES);

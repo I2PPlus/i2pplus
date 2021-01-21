@@ -791,7 +791,7 @@ public class PeerState {
             _log.info(_remotePeer + " Congestion, RTO: " + oldRto + " -> " + _rto + " timer: " + oldTimer + " -> " + _rto +
                                     " window: " + congestionAt + " -> " + _sendWindowBytes +
                                     " SST: " + oldsst + " -> " + _slowStartThreshold +
-                                    " FRTX? " + _fastRetransmit +
+                                    " FastReTX? " + _fastRetransmit +
                                     " BWE: " + DataHelper.formatSize2Decimal((long) (bwe * 1000), false) + "bps");
     }
 
@@ -2116,7 +2116,7 @@ public class PeerState {
         buf.append("; Cwin: ").append(_sendWindowBytes).append(" bytes");
         buf.append("; ACwin: ").append(_sendWindowBytesRemaining).append(" bytes");
         buf.append(" SST: ").append(_slowStartThreshold);
-        buf.append(" FRTX? ").append(_fastRetransmit);
+        buf.append(" FastReTX? ").append(_fastRetransmit);
         buf.append("; Consecutive fails: ").append(_consecutiveFailedSends);
         buf.append("\n* Msgs rcvd: ").append(_messagesReceived);
         buf.append("; Msgs sent: ").append(_messagesSent);
