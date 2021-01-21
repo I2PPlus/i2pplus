@@ -1078,16 +1078,18 @@ class NetDbRenderer {
                .append(":</b> <span class=\"familyname\">").append(family).append("</span></span>");
         }
         buf.append("</td>\n<td>");
-        buf.append("<span class=\"signingkey\" title=\"").append(_t("Show all routers with this signature type in the NetDb"))
+        buf.append("<span class=\"signingkey\" title=\"")
+           .append(_t("Show all routers with this signature type in the NetDb"))
            .append("\">").append("<a class=\"keysearch\" href=\"/netdb?type=")
            .append(info.getIdentity().getSigningPublicKey().getType().toString())
            .append("\">").append(info.getIdentity().getSigningPublicKey().getType().toString())
            .append("</a></span>")
            .append("&nbsp;<span class=\"signingkey encryption\" title=\"")
-           .append(_t("Encryption Key"))
-           .append("\">")
-           .append(info.getIdentity().getPublicKey().getType())
-           .append("</span></td>\n</tr>\n<tr>\n")
+           .append(_t("Show all routers with this encryption type in the NetDb"))
+           .append("\">").append("<a class=\"keysearch\" href=\"/netdb?etype=")
+           .append(info.getIdentity().getPublicKey().getType().toString())
+           .append("\">").append(info.getIdentity().getPublicKey().getType().toString())
+           .append("</a></span></td>\n</tr>\n<tr>\n")
            .append("<td><b>" + _t("Addresses") + ":</b></td>\n")
            .append("<td colspan=\"2\" class=\"netdb_addresses\">\n")
            .append("<ul>\n");
@@ -1123,14 +1125,22 @@ class NetDbRenderer {
                     // tag the hosts and ports so we can make them visually prominent and single clickable
                     } else if (name.contains("host")) {
                         buf.append("<span class=\"nowrap\"><span class=\"netdb_name\">")
-                           .append(_t(DataHelper.stripHTML(name)))
-                           .append(":</span> <span class=\"netdb_info host\">").append(DataHelper.stripHTML(val).replace("::", _t("n/a"))) // fix empty ipv6
-                           .append("</span></span> ");
+                           .append(_t(DataHelper.stripHTML(name))).append(":</span> ")
+                           .append("<span class=\"netdb_info host\">").append("<a title=\"")
+                           .append(_t("Show all routers with this address in the NetDb")).append("\" ")
+                           .append(" href=\"/netdb?ip=")
+                           .append(DataHelper.stripHTML(val).replace("::", _t("n/a"))).append("\">")
+                           .append(DataHelper.stripHTML(val).replace("::", _t("n/a"))) // fix empty ipv6
+                           .append("</a></span></span> ");
                     } else if (name.contains("port")) {
                         buf.append("<span class=\"nowrap\"><span class=\"netdb_name\">")
                            .append(_t(DataHelper.stripHTML(name)))
-                           .append(":</span> <span class=\"netdb_info port\">").append(DataHelper.stripHTML(val))
-                           .append("</span></span> ");
+                           .append(":</span> <span class=\"netdb_info port\">").append("<a title=\"")
+                           .append(_t("Show all routers with this port in the NetDb")).append("\" ")
+                           .append(" href=\"/netdb?port=")
+                           .append(DataHelper.stripHTML(val)).append("\">")
+                           .append(DataHelper.stripHTML(val))
+                           .append("</a></span></span> ");
                      } else {
                         buf.append(" <span class=\"nowrap\"><span class=\"netdb_name\">");
                         buf.append(_t(DataHelper.stripHTML(name)))
