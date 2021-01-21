@@ -182,7 +182,7 @@ class EstablishmentManager {
         _context.statManager().createRateStat("udp.rejectConcurrentSequence", "Consecutive concurrency rejections when we stop rejecting", "Transport [UDP]", UDPTransport.RATES);
         //_context.statManager().createRateStat("udp.queueDropSize", "How many messages were queued up when it was considered full, causing a tail drop?", "Transport [UDP]", UDPTransport.RATES);
         //_context.statManager().createRateStat("udp.queueAllowTotalLifetime", "When a peer is retransmitting and we probabalistically allow a new message, what is the sum of the pending message lifetimes? (period is the new message's lifetime)?", "Transport [UDP]", UDPTransport.RATES);
-        _context.statManager().createRateStat("udp.dupDHX", "Session request replay", "Transport [UDP]", new long[] { 24*60*60*1000L } );
+        _context.statManager().createRateStat("udp.dupDHX", "Session request replay (duplicate X)", "Transport [UDP]", new long[] { 24*60*60*1000L } );
     }
 
     public synchronized void startup() {
@@ -293,7 +293,7 @@ class EstablishmentManager {
                         // queue it
                         inState.addMessage(msg);
                         if (_log.shouldLog(Log.WARN))
-                            _log.debug("OB msg queued to IES");
+                            _log.debug("Outbound message queued to inbound establish state");
                         break;
 
                       case IB_STATE_COMPLETE:
@@ -303,7 +303,7 @@ class EstablishmentManager {
 
                       case IB_STATE_FAILED:
                         // race, failed
-                        _transport.failed(msg, "OB msg failed during IB establish");
+                        _transport.failed(msg, "Outbound message failed during inbound establish");
                         break;
                     }
                 }
