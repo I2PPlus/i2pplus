@@ -158,28 +158,28 @@ class EstablishmentManager {
         DEFAULT_MAX_CONCURRENT_ESTABLISH = Math.max(DEFAULT_LOW_MAX_CONCURRENT_ESTABLISH,
                                                     Math.min(DEFAULT_HIGH_MAX_CONCURRENT_ESTABLISH,
                                                              ctx.bandwidthLimiter().getOutboundKBytesPerSecond() / 2));
-        _context.statManager().createRateStat("udp.inboundEstablishTime", "Time to establish a new inbound session (ms)", "Transport [UDP]", UDPTransport.RATES);
-        _context.statManager().createRateStat("udp.outboundEstablishTime", "Time to establish a new outbound session (ms)", "Transport [UDP]", UDPTransport.RATES);
+        _context.statManager().createRateStat("udp.inboundEstablishTime", "Time to establish new inbound session (ms)", "Transport [UDP]", UDPTransport.RATES);
+        _context.statManager().createRateStat("udp.outboundEstablishTime", "Time to establish new outbound session (ms)", "Transport [UDP]", UDPTransport.RATES);
         //_context.statManager().createRateStat("udp.inboundEstablishFailedState", "What state a failed inbound establishment request fails in", "Transport [UDP]", UDPTransport.RATES);
         //_context.statManager().createRateStat("udp.outboundEstablishFailedState", "What state a failed outbound establishment request fails in", "Transport [UDP]", UDPTransport.RATES);
         _context.statManager().createRateStat("udp.sendIntroRelayRequest", "How often we send a relay request to reach a peer", "Transport [UDP]", UDPTransport.RATES);
-        _context.statManager().createRateStat("udp.sendIntroRelayTimeout", "How often a relay request times out before getting a response (target or intro peer offline)", "Transport [UDP]", UDPTransport.RATES);
+        _context.statManager().createRateStat("udp.sendIntroRelayTimeout", "Relay request timeouts before response (target or intro peer offline)", "Transport [UDP]", UDPTransport.RATES);
         _context.statManager().createRateStat("udp.receiveIntroRelayResponse", "How long it took to receive a relay response (ms)", "Transport [UDP]", UDPTransport.RATES);
         _context.statManager().createRateStat("udp.establishDropped", "Dropped an inbound establish message", "Transport [UDP]", UDPTransport.RATES);
-        _context.statManager().createRateStat("udp.establishRejected", "Number of pending outbound connections when we refuse to add any more", "Transport [UDP]", UDPTransport.RATES);
-        _context.statManager().createRateStat("udp.establishOverflow", "Number of messages queued up on a pending connection when it was too much", "Transport [UDP]", UDPTransport.RATES);
+        _context.statManager().createRateStat("udp.establishRejected", "Pending outbound connections when we refuse to add any more", "Transport [UDP]", UDPTransport.RATES);
+        _context.statManager().createRateStat("udp.establishOverflow", "Messages queued up on a pending connection when it was too much", "Transport [UDP]", UDPTransport.RATES);
         _context.statManager().createRateStat("udp.establishBadIP", "Received IP or port was bad", "Transport [UDP]", UDPTransport.RATES);
         // following are for PeerState
         _context.statManager().createRateStat("udp.congestionOccurred", "Size of CWIN when congestion occurred (duration = sendBps)", "Transport [UDP]", UDPTransport.RATES);
         _context.statManager().createRateStat("udp.congestedRTO", "Retransmission timeout after congestion (duration = RTT dev)", "Transport [UDP]", UDPTransport.RATES);
-        _context.statManager().createRateStat("udp.sendACKPartial", "Number of partial ACKs sent (duration = number of full ACKs in that ACK packet)", "Transport [UDP]", UDPTransport.RATES);
+        _context.statManager().createRateStat("udp.sendACKPartial", "Number of partial ACKs sent", "Transport [UDP]", UDPTransport.RATES);
         //_context.statManager().createRateStat("udp.sendBps", "How fast we are transmitting when a packet is acked", "Transport [UDP]", UDPTransport.RATES);
         //_context.statManager().createRateStat("udp.receiveBps", "How fast we are receiving when a packet is fully received (at most one per second)", "Transport [UDP]", UDPTransport.RATES);
         _context.statManager().createRateStat("udp.mtuIncrease", "Number of retransmissions to peer when MTU was increased", "Transport [UDP]", UDPTransport.RATES);
         _context.statManager().createRateStat("udp.mtuDecrease", "Number of retransmissions to peer when MTU was decreased", "Transport [UDP]", UDPTransport.RATES);
-        _context.statManager().createRateStat("udp.rejectConcurrentActive", "Number of messages currently being sent to the peer when we reject it (period is how many concurrent packets we allow)", "Transport [UDP]", UDPTransport.RATES);
-        _context.statManager().createRateStat("udp.allowConcurrentActive", "Number of messages currently being sent to the peer when we accept it (period is how many concurrent packets we allow)", "Transport [UDP]", UDPTransport.RATES);
-        _context.statManager().createRateStat("udp.rejectConcurrentSequence", "Number of consecutive concurrency rejections we had when we stop rejecting (period is how many concurrent packets we are on)", "Transport [UDP]", UDPTransport.RATES);
+        _context.statManager().createRateStat("udp.rejectConcurrentActive", "Messages in transit to peer when we reject it", "Transport [UDP]", UDPTransport.RATES);
+        _context.statManager().createRateStat("udp.allowConcurrentActive", "Messages in transit to peer when we accept it", "Transport [UDP]", UDPTransport.RATES);
+        _context.statManager().createRateStat("udp.rejectConcurrentSequence", "Consecutive concurrency rejections when we stop rejecting", "Transport [UDP]", UDPTransport.RATES);
         //_context.statManager().createRateStat("udp.queueDropSize", "How many messages were queued up when it was considered full, causing a tail drop?", "Transport [UDP]", UDPTransport.RATES);
         //_context.statManager().createRateStat("udp.queueAllowTotalLifetime", "When a peer is retransmitting and we probabalistically allow a new message, what is the sum of the pending message lifetimes? (period is the new message's lifetime)?", "Transport [UDP]", UDPTransport.RATES);
         _context.statManager().createRateStat("udp.dupDHX", "Session request replay", "Transport [UDP]", new long[] { 24*60*60*1000L } );
