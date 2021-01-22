@@ -85,12 +85,12 @@ public class I2PTunnelServer extends I2PTunnelTask implements Runnable {
     /** max number of threads  - this many slowlorisses will DOS this server, but too high could OOM the JVM */
     private static final String PROP_HANDLER_COUNT = "i2ptunnel.blockingHandlerCount";
 //    private static final int DEFAULT_HANDLER_COUNT = 65;
-    private static final int DEFAULT_HANDLER_COUNT = 96;
+    private static final int DEFAULT_HANDLER_COUNT = 80;
     /** min number of threads */
     private static final int MIN_HANDLERS = 0;
     /** how long to wait before dropping an idle thread */
 //    private static final long HANDLER_KEEPALIVE_MS = 30*1000;
-    private static final long HANDLER_KEEPALIVE_MS = 25*1000;
+    private static final long HANDLER_KEEPALIVE_MS = 40*1000;
 
     protected I2PTunnelTask task;
     protected boolean bidir;
