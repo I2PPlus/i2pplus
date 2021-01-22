@@ -6682,53 +6682,6 @@ p#fullhistory {
   text-align: left;
 }
 
-.main#proof {
-  padding: 10px;
-  min-width: 570px;
-}
-
-#proof p {
-  margin: 0;
-  padding: 20px 10px 10px;
-  border: 1px solid #aaafce;
-  box-shadow: inset 0 0 0 1px #fff, 0 0 1px #ccc;
-  background: url(/themes/console/images/info/rosette.png) right 8px top 8px no-repeat #eeeffb;
-  background: url(/themes/console/images/info/rosette.png) right 8px top 8px no-repeat rgba(220,225,252,.3);
-  background-blend-mode: luminosity;
-}
-
-#proof textarea, #proof textarea:focus {
-  line-height: 180%;
-  margin: 0;
-  border: none;
-  padding: 15px 20px;
-  width: 100%;
-  box-shadow: none;
-  color: #333;
-  background: none;
-  height: 200px;
-  overflow: hidden;
-  white-space: pre-wrap;
-  word-break: break-all;
-}
-
-#oldconsole p {
-  margin: 0 0 5px;
-  padding: 10px 20px;
-  line-height: 200%;
-  border: 1px solid #aaafce;
-  box-shadow: inset 0 0 0 1px #fff, 0 0 1px #ccc;
-  background: #eeeffb;
-  background: rgba(220,225,252,.3);
-}
-
-#oldconsole b {
-  display: inline-block;
-  min-width: 120px;
-  margin-right: 8px;
-  text-align: right;
-}
-
 #routerinfo p {
   padding: 0;
   margin: -5px -5px 0;
