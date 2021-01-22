@@ -79,6 +79,12 @@ public class BaseBean
                 // added in 0.5, for compatibility with 0.4 config.txt
                 if( properties.getProperty(PRIVATE_BOOK) == null)
                     properties.setProperty(PRIVATE_BOOK, DEFAULT_PRIVATE_BOOK);
+                // migrate from I2P
+                String master = properties.getProperty("master_addressbook");
+                if (master != null) {
+                    properties.setProperty("master_addressbook", master);
+                    properties.remove("local_addressbook");
+                }
                 configLastLoaded = System.currentTimeMillis();
             }
         }
