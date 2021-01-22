@@ -1795,18 +1795,20 @@ to {
   box-shadow: inset 0 0 0 1px rgba(185,185,198,.65) !important;
 }
 
-.main#proof, .main#oldconsole, #warning2 {
+#warning2 {
   background: #f8f8ff url(/themes/snark/ubergine/images/hat.png) no-repeat scroll right bottom;
   background: linear-gradient(to bottom, rgba(248,248,255,.5), rgba(240,240,255,.5)), url(/themes/snark/ubergine/images/hat.png) no-repeat right bottom, repeating-linear-gradient(135deg, rgba(255,255,255,.5) 2px, rgba(221, 221, 255, .3) 3px, #fff 4px) #f8f8ff !important;
   background-size: 100% 100%, auto 160px, 100% 100% !important;
 }
 
 @supports (background-blend-mode: multiply) {
-.main#proof, .main#oldconsole, #warning2, .news#news {
-  background: repeating-linear-gradient(45deg, rgba(221,221,255,.1) 2px, rgba(255,255,255,.1) 2px), repeating-linear-gradient(135deg, rgba(255,255,255,.8), rgba(221,221,255,.3) 1px, #fff 2px), url(/themes/snark/ubergine/images/hat.png) no-repeat scroll right bottom #fafaff !important;
-  background-size: 100% 100%, 100% 100%, auto 150px !important;
-  background-blend-mode: multiply, multiply, normal !important;
-}
+  #warning2, .news#news {
+    background: repeating-linear-gradient(45deg, rgba(221,221,255,.1) 2px, rgba(255,255,255,.1) 2px),
+                repeating-linear-gradient(135deg, rgba(255,255,255,.8), rgba(221,221,255,.3) 1px, #fff 2px),
+                url(/themes/snark/ubergine/images/hat.png) no-repeat scroll right bottom #fafaff !important;
+    background-size: 100% 100%, 100% 100%, auto 150px !important;
+    background-blend-mode: multiply, multiply, normal !important;
+  }
 }
 
 .main#news {
@@ -1832,10 +1834,6 @@ to {
   filter: none;
 }
 }
-
-/*.main#proof, .main#oldconsole {
-  background-size: 100% 100%, auto 70%, 100% 100% !important;
-}*/
 
 .main#torrents {
   padding: 0;
@@ -9331,7 +9329,7 @@ select[name="newlogclass"] {
   background: url(/themes/snark/ubergine/images/hat.png) no-repeat right -3px bottom -3px / auto 120px #f3f3ff !important;
 }
 
-#oldconsole p, #proof p, #routerinfo p {
+#routerinfo p {
   margin: 20px 5px 10px;
   padding: 10px 0;
   line-height: 180%;
@@ -9345,46 +9343,6 @@ select[name="newlogclass"] {
 #routerinfo code {
   font-size: 9pt;
   font-weight: normal;
-}
-
-#oldconsole b {
-  margin-right: 5px;
-  display: inline-block;
-  min-width: 160px;
-  text-align: right;
-}
-
-#proof textarea, #proof textarea:focus, #proof p {
-  margin: 0 !important;
-  padding: 0 !important;
-}
-
-#proof p {
-  margin: 15px 0 5px !important;
-  padding: 15px 0 0 20px !important;
-  width: calc(100% - 22px);
-}
-
-#proof p::before {
-  content: "";
-  display: inline-block;
-  background: url(/themes/console/images/info/rosette.png) right 5px top no-repeat !important;
-  background-size: 24px 24px;
-  height: 32px;
-  width: 100%;
-  margin: -8px 0 -10px;
-  opacity: .7;
-}
-
-#proof textarea, #proof textarea:focus {
-  background: none;
-  border: none;
-  box-shadow: none;
-  color: #33333f !important;
-  filter: none;
-  outline: none;
-  line-height: 160%;
-  height: 200px;
 }
 
 #routerinfo p {
@@ -11241,17 +11199,6 @@ input[name="pluginFile"], #manualreseed input[name="url"] {
   padding-left: 8px;
 }
 
-.main#proof {
-  padding: 0;
-  min-width: 576px;
-}
-
-.main#proof textarea {
-  margin: -5px 10px !important;
-  word-break: break-all;
-  white-space: pre-wrap;
-}
-
 .cells {
   padding: 3px 2px !important;
 }
@@ -11336,20 +11283,6 @@ form[action="events"] select + b, form[action="events"] input[type=submit] {
   width: 100px;
   overflow: auto;
   scrollbar-width: thin;
-}
-
-#proof p {
-  border: none;
-  box-shadow: none;
-  background: none;
-}
-
-#proof p::before {
-  display: inline;
-}
-
-#proof textarea {
-  padding-right: 15px !important;
 }
 
 #tunnels .tunnel_cap {
