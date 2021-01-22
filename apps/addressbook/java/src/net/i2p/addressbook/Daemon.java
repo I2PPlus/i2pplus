@@ -876,7 +876,6 @@ class Daemon {
         // wait
         try {
             Thread.sleep(5*60*1000 + I2PAppContext.getGlobalContext().random().nextLong(5*60*1000));
-       // Static method, and redundent Thread.currentThread().sleep(5*60*1000);
         } catch (InterruptedException ie) {}
 
         while (_running) {
