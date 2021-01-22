@@ -1181,7 +1181,8 @@ class NetDbRenderer {
                    .replace("tunnel.buildClientExpire.60m",       "<hr><li class=\"longstat \"><b>"  + _t("Client tunnels expire (1h)"))
                    .replace("tunnel.buildClientReject.60m",       "<li class=\"longstat\"><b>"       + _t("Client tunnels reject (1h)"))
                    .replace("tunnel.buildClientSuccess.60m",      "<li class=\"longstat\"><b>"       + _t("Client tunnels build success (1h)"))
-                   .replace("tunnel.participatingTunnels.60m",    "<li class=\"longstat\"><b>"       + _t("Participating tunnels build (1h)"))
+                   .replace("tunnel.participatingTunnels.60m",    "<li class=\"longstat\"><b>"       + _t("Participating tunnels (1h)"))
+                   .replace("tunnel.participatingTunnels.60s",    "<li class=\"longstat\"><b>"       + _t("Participating tunnels (60s)"))
                    .replace("stat_bandwidthSendBps.60m",          "<li class=\"longstat\"><b>"       + _t("Bandwidth send rate (1h)"))
                    .replace("stat_bandwidthReceiveBps.60m",       "<li class=\"longstat\"><b>"       + _t("Bandwidth receive rate (1h)"));
                 buf.append(netDbKey);
