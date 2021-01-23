@@ -214,8 +214,8 @@ Select the language to be used for the router console and web applications (<a h
 %>
 <%=wizhelper.isNDTComplete()%></span></td></tr>
 <tr><td nowrap><b><%=intl._t("Test server location")%></b></td><td><%=wizhelper.getServerLocation()%></td></tr>
-<tr><td nowrap><b><%=intl._t("Completion status")%></b></td><td><%=wizhelper.getCompletionStatus()%></td></tr>
 <!--
+<tr><td nowrap><b><%=intl._t("Completion status")%></b></td><td><%=wizhelper.getCompletionStatus()%></td></tr>
 <tr><td nowrap><b><%=intl._t("Details")%></b></td><td><%=wizhelper.getDetailStatus()%></td></tr>
 -->
 <%
