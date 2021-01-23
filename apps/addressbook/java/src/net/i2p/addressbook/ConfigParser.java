@@ -1,16 +1,16 @@
 /*
  * Copyright (c) 2004 Ragnarok
- * 
+ *
  * Permission is hereby granted, free of charge, to any person obtaining a copy
  * of this software and associated documentation files (the "Software"), to deal
  * in the Software without restriction, including without limitation the rights
  * to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
  * copies of the Software, and to permit persons to whom the Software is
  * furnished to do so, subject to the following conditions:
- * 
+ *
  * The above copyright notice and this permission notice shall be included in
  * all copies or substantial portions of the Software.
- * 
+ *
  * THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
  * IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
  * FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
@@ -43,9 +43,9 @@ import net.i2p.util.SystemVersion;
 /**
  * Utility class providing methods to parse and write files in config file
  * format, and subscription file format.
- * 
+ *
  * TODO: switch to the DataHelper loadProps/storeProps methods?
- * 
+ *
  * @author Ragnarok
  */
 class ConfigParser {
@@ -55,7 +55,7 @@ class ConfigParser {
     /**
      * Strip the comments from a String. Lines that begin with '#' and ';' are
      * considered comments, as well as any part of a line after a '#'.
-     * 
+     *
      * @param inputLine
      *            A String to strip comments from.
      * @return A String without comments, but otherwise identical to inputLine.
@@ -78,14 +78,14 @@ class ConfigParser {
      * starting with '#' or ';' are considered comments, and ignored. Lines that
      * are obviously not in the format key=value are also ignored.
      * The key is converted to lower case.
-     * 
+     *
      * @param input
      *            A BufferedReader with lines in key=value format to parse into
      *            a Map.
      * @return A Map containing the key, value pairs from input.
      * @throws IOException
      *             if the BufferedReader cannot be read.
-     *  
+     *
      */
     private static Map<String, String> parse(BufferedReader input) throws IOException {
         try {
@@ -109,7 +109,7 @@ class ConfigParser {
     /**
      * Return a Map using the contents of the File file. See parseBufferedReader
      * for details of the input format.
-     * 
+     *
      * @param file
      *            A File to parse.
      * @return A Map containing the key, value pairs from file.
@@ -136,7 +136,7 @@ class ConfigParser {
     /**
      * Return a Map using the contents of the String string. See
      * parseBufferedReader for details of the input format.
-     * 
+     *
      * @param string
      *            A String to parse.
      * @return A Map containing the key, value pairs from string.
@@ -150,11 +150,11 @@ class ConfigParser {
         return parse(input);
     }
 ****/
-    
+
     /**
      * Return a Map using the contents of the File file. If file cannot be read,
      * use map instead, and write the result to where file should have been.
-     * 
+     *
      * @param file
      *            A File to attempt to parse.
      * @param map
@@ -166,6 +166,10 @@ class ConfigParser {
         Map<String, String> result;
         try {
             result = parse(file);
+            // migrate from I2P
+            String master = result.remove("local_addressbook");
+            if (master != null)
+                result.put("master_addressbook", master);
             for (Map.Entry<String, String> entry : map.entrySet()) {
                 if (!result.containsKey(entry.getKey()))
                     result.put(entry.getKey(), entry.getValue());
@@ -182,7 +186,7 @@ class ConfigParser {
 
     /**
      * Return a List where each element is a line from the BufferedReader input.
-     * 
+     *
      * @param input
      *            A BufferedReader to parse.
      * @return A List consisting of one element for each line in input.
@@ -208,7 +212,7 @@ class ConfigParser {
 
     /**
      * Return a List where each element is a line from the File file.
-     * 
+     *
      * @param file
      *            A File to parse.
      * @return A List consisting of one element for each line in file.
@@ -234,7 +238,7 @@ class ConfigParser {
 
     /**
      * Return a List where each element is a line from the String string.
-     * 
+     *
      * @param string
      *            A String to parse.
      * @return A List consisting of one element for each line in string.
@@ -248,12 +252,12 @@ class ConfigParser {
         return parseSubscriptions(input);
     }
 ****/
-    
+
     /**
      * Return a List using the contents of the File file. If file cannot be
      * read, use list instead, and write the result to where file should have
      * been.
-     * 
+     *
      * @param file
      *            A File to attempt to parse.
      * @param list The default subscriptions to be saved and returned if the file cannot be read
@@ -289,7 +293,7 @@ class ConfigParser {
     /**
      * Write contents of Map map to BufferedWriter output. Output is written
      * with one key, value pair on each line, in the format: key=value.
-     * 
+     *
      * @param map
      *            A Map to write to output.
      * @param output
@@ -342,7 +346,7 @@ class ConfigParser {
     /**
      * Write contents of List list to BufferedReader output. Output is written
      * with each element of list on a new line.
-     * 
+     *
      * @param list
      *            A List to write to file.
      * @param output
@@ -361,11 +365,11 @@ class ConfigParser {
             try { output.close(); } catch (IOException ioe) {}
         }
     }
-    
+
     /**
      * Write contents of List list to File file. Output is written with each
      * element of list on a new line.
-     * 
+     *
      * @param list
      *            A List to write to file.
      * @param file
