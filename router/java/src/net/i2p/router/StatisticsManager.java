@@ -115,7 +115,7 @@ public class StatisticsManager {
             //includeRate("jobQueue.jobRunSlow", stats, new long[] { 10*60*1000l, 60*60*1000l });
             //includeRate("crypto.elGamal.encrypt", stats, new long[] { 60*1000, 60*60*1000 });
             // total event count can be used to track uptime
-            includeRate("tunnel.participatingTunnels", stats, new long[] { 60*1000, 60*60*1000 }, true);
+            includeRate("tunnel.participatingTunnels", stats, new long[] { 60*60*1000 }, true);
             //includeRate("tunnel.testSuccessTime", stats, new long[] { 10*60*1000l });
             //includeRate("client.sendAckTime", stats, new long[] { 60*1000, 60*60*1000 }, true);
             //includeRate("udp.sendConfirmTime", stats, new long[] { 10*60*1000 });
@@ -146,8 +146,10 @@ public class StatisticsManager {
             int ri = _context.router().getUptime() > 30*60*1000 ?
                      _context.netDb().getKnownRouters() :
                      3000 + _context.random().nextInt(1000);   // so it isn't obvious we restarted
-            if (ri > 5000)
-                ri = ri / 2 + _context.random().nextInt(50); // hide our real number of known peers to avoid broadcasting that we're running I2P+
+            if (ri > 12000)
+                ri /= 3 + _context.random().nextInt(50); // hide our real number of known peers to avoid broadcasting that we're running I2P+
+            else if (ri > 5000)
+                ri /= 2 + _context.random().nextInt(50); // hide our real number of known peers to avoid broadcasting that we're running I2P+
             stats.setProperty("netdb.knownRouters", String.valueOf(ri));
             int ls = _context.router().getUptime() > 30*60*1000 ?
                      _context.netDb().getKnownLeaseSets() :
