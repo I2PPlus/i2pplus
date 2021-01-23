@@ -1331,6 +1331,35 @@ input[type=submit]:active, input[type=reset]:active, .fakebutton:active {
   color: #666;
 }
 
+input[type=file]::file-selector-button {
+  margin: 3px;
+  padding: 4px 10px;
+  line-height: 140%;
+  font-size: 9pt;
+  color: #41465f;
+  text-decoration: none;
+  text-shadow: 0 1px 1px #fff;
+  border: 1px solid #97a2ce;
+  border-radius: 2px;
+  box-shadow: inset 0 0 0 1px #fff, inset 0 0 0 1px #fff;
+  box-shadow: 0 2px 0 rgba(255,255,255,.85) inset, 0 0 10px rgba(0,0,0,.1) inset, 0 1px 1px rgba(0,0,0,.05), 0 7px 4px -4px rgba(0,0,0,.1);
+  background: #eee;
+  background: linear-gradient(to bottom, #fff, #efefff);
+  background-size: 14px auto, 100% 100% !important;
+  opacity: 1;
+  filter: drop-shadow(0 0 1px rgba(220,220,255,.7));
+  cursor: pointer;
+}
+
+input[type=file]:hover::file-selector-button, input[type=file]:focus::file-selector-button {
+  color: #19191f;
+  border: 1px solid #f60;
+  box-shadow: inset 0 0 0 1px #fff, inset 0 -8px 3px 8px rgba(255,96,0,.02), inset 0 0 10px rgba(255,96,0,.05), 0 0 1px rgba(255,96,0,.1), 0 7px 4px -4px rgba(0,0,0,.1);
+  background: linear-gradient(to bottom, #eee, #fff);
+  filter: saturate(100%) drop-shadow(0 0 1px rgba(204, 204, 204, .8));
+  transition: ease border .7s;
+}
+
 input.accept {
   background: #eee url(/themes/console/images/buttons/yes.png) no-repeat 6px center;
   background: url(/themes/console/images/buttons/yes.png) no-repeat 6px center, linear-gradient(to bottom, #fff, #efefff);
