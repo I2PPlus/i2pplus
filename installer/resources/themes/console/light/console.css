@@ -59,8 +59,10 @@ body:not(old) {
   url(images/info.png),
   url(images/logs.png),
   url(/themes/console/images/svg/update.svg),
-  url(images/newtab.png), #a4a4cb;
-  background-size: 32px 32px, 0 0, 0 0, 0 0, 0 0, 0 0, 0 0, 0 0, 0 0, 0 0, 0 0, 0 0, 0 0, 0 0, 0 0, 0 0, 0 0, 0 0, 0 0, 0 0, 0 0, 0 0, 0 0, 0 0;
+  url(images/newtab.png),
+  url(images/close_hover.svg),
+  url(images/configure_hover.svg), #a4a4cb;
+  background-size: 32px 32px, 0 0, 0 0, 0 0, 0 0, 0 0, 0 0, 0 0, 0 0, 0 0, 0 0, 0 0, 0 0, 0 0, 0 0, 0 0, 0 0, 0 0, 0 0, 0 0, 0 0, 0 0, 0 0, 0 0, 0 0, 0 0;
 }
 
 @supports (text-justify: auto) and (-moz-appearance: none) { /* Firefox 55+ */
@@ -113,16 +115,6 @@ div.clearer {
   color: white;
   text-shadow: none;
 }
-
-/*.main * {
-  scrollbar-color: rgba(220,220,255,.8) rgba(0,0,0,0);
-  transition: ease scrollbar-color .5s;
-}
-
-.main pre:hover, .main textarea:hover, .widescroll:hover {
-  scrollbar-color: rgba(200,200,255,.8) rgba(255,255,255,.9);
-  transition: ease scrollbar-color .2s;
-}*/
 
 body, input, button, select, #netdb .netdbentry th code, #netdb .sybil_routerinfo th code, #netdb .leaseset th code {
   font-family: "Droid Sans", "Open Sans", "Noto Sans", Ubuntu, "Segoe UI", "Lucida Grande", Verdana, Helvetica, sans-serif;
@@ -2474,21 +2466,50 @@ h3#exploratory {
 #tunnels h3 a[href^="/configtunnels#"]::after, #tunnels h3 a[href$="i2ptunnelmgr"]::after,
 #logs a.delete::after, #logs a.configure::after {
   margin-bottom: -1px;
-  padding: 0;
-  float: right;
-  content: url(/themes/console/images/buttons/configure.png);
   width: 16px;
   height: 16px;
   display: inline-block;
-  filter: drop-shadow(0 0 1px #97a2ce);
+  float: right;
+  background: url(images/configure.svg) center center no-repeat;
+  background-size: 16px 16px;
+  content: "";
+}
+
+#logs a.delete::after, #logs a.configure::after {
+  margin: -7px -8px -6px 0;
+  padding: 8px 4px 6px 20px;
+  border-left: 1px solid #aab;
+}
+
+#logs a.configure::after {
+  padding-left: 18px;
+  padding-right: 10px;
+}
+
+#tunnels h3 a[href^="/configtunnels#"]:hover, #logs a.configure:hover::after {
+  background: url(images/configure_hover.svg) center center no-repeat;
+  background-size: 16px 16px;
+}
+
+#logs a.delete:hover::after {
+  background: url(images/close_hover.svg) center center no-repeat;
+  background-size: 16px 16px;
+}
+
+#tunnels h3 a[href^="/configtunnels#"]:active, #logs a.configure:active::after, #logs a.delete:active::after {
+  background-size: 14px 14px;
 }
 
 #tunnels h3 a[href^="/configtunnels#"]:hover, #logs h3.tabletitle a.delete:hover::after, #logs h3.tabletitle a.configure:hover::after {
-  filter: drop-shadow(0 0 1px #f60);
 }
 
 #logs a.delete::after {
-  content: url(/themes/console/images/buttons/delete.png);
+  content: "";
+  background: url(images/close.svg) center center no-repeat;
+  background-size: 16px 16px;
+  width: 16px;
+  height: 16px;
+  display: inline-block;
 }
 
 h3#passwordheading {
