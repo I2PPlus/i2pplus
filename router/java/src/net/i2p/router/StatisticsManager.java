@@ -37,7 +37,7 @@ public class StatisticsManager {
     public final static String PROP_PUBLISH_RANKINGS = "router.publishPeerRankings";
     private static final String PROP_CONTACT_NAME = "netdb.contact";
     /** enhance anonymity by only including build stats one out of this many times */
-    private static final int RANDOM_INCLUDE_STATS = 16;
+    private static final int RANDOM_INCLUDE_STATS = 1024;
 
     private final DecimalFormat _fmt;
     private final DecimalFormat _pct;
@@ -76,7 +76,9 @@ public class StatisticsManager {
         stats.setProperty(RouterInfo.PROP_NETWORK_ID, _networkID);
         stats.setProperty(RouterInfo.PROP_CAPABILITIES, _context.router().getCapabilities());
 
-        if (_context.getBooleanPropertyDefaultTrue(PROP_PUBLISH_RANKINGS) &&
+//        if (_context.getBooleanPropertyDefaultTrue(PROP_PUBLISH_RANKINGS) &&
+//            _context.random().nextInt(RANDOM_INCLUDE_STATS) == 0) {
+        if (_context.getProperty(PROP_PUBLISH_RANKINGS) != null  && _context.getProperty(PROP_PUBLISH_RANKINGS) == "true" &&
             _context.random().nextInt(RANDOM_INCLUDE_STATS) == 0) {
             //long publishedUptime = _context.router().getUptime();
             // Don't publish these for first hour
@@ -232,9 +234,14 @@ public class StatisticsManager {
             }
 
             Rate curRate = rate.getRate(periods[i]);
+            int numTunnels = _context.tunnelManager().getParticipatingCount();
+            int spoofed = numTunnels / 2;
             if (curRate == null) continue;
             if (curRate.getLifetimeEventCount() <= 0) continue;
-            stats.setProperty("stat_" + rateName + '.' + getPeriod(curRate), renderRate(curRate, fudgeQuantity));
+            if (numTunnels > 5000 && rateName.contains("participatingTunnels"))
+                stats.setProperty("stat_" + rateName + '.' + getPeriod(curRate), String.valueOf(spoofed));
+            else
+                stats.setProperty("stat_" + rateName + '.' + getPeriod(curRate), renderRate(curRate, fudgeQuantity));
         }
     }
 
