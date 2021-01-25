@@ -140,16 +140,18 @@
       xhr.responseType = "document";
       xhr.onreadystatechange = function () {
         if (xhr.readyState==4 && xhr.status==200) {
-          var criticallogs = document.getElementById("criticallogs");
           var routerlogs = document.getElementById("routerlogs");
           var servicelogs = document.getElementById("servicelogs");
           var routerlogsResponse = xhr.responseXML.getElementById("routerlogs");
-          var criticallogsResponse = xhr.responseXML.getElementById("criticallogs");
-          var criticallogsParent = criticallogs.parentNode;
+          var criticallogs = document.getElementById("criticallogs");
+          if (criticallogs) {
+            var criticallogsResponse = xhr.responseXML.getElementById("criticallogs");
+            var criticallogsParent = criticallogs.parentNode;
+            if (!Object.is(criticallogs.innerHTML, criticallogsResponse.innerHTML))
+              criticallogsParent.replaceChild(criticallogsResponse, criticallogs);
+          }
           var routerlogsParent = routerlogs.parentNode;
           var servicelogsParent = servicelogs.parentNode;
-          if (!Object.is(criticallogs.innerHTML, criticallogsResponse.innerHTML))
-            criticallogsParent.replaceChild(criticallogsResponse, criticallogs);
           if (!Object.is(routerlogs.innerHTML, routerlogsResponse.innerHTML))
             routerlogsParent.replaceChild(routerlogsResponse, routerlogs);
           if (servicelogs) {
