@@ -66,15 +66,17 @@
 %>
 <h3 class="tabletitle"><%=intl._t("Critical Logs")%>
 <%
-        if ((ct1 != null || ct2 != null || (ct3 != null && ct4 != null && ct5 != null)) && ctn != null) {
-            int ict1 = -1, ict2 = -1;
-            long ict3 = -1, ict4 = -1;
-            try { ict1 = Integer.parseInt(ct1); } catch (NumberFormatException nfe) {}
-            try { ict2 = Integer.parseInt(ct2); } catch (NumberFormatException nfe) {}
-            try { ict3 = Long.parseLong(ct3); } catch (NumberFormatException nfe) {}
-            try { ict4 = Long.parseLong(ct4); } catch (NumberFormatException nfe) {}
-            logsHelper.clearThrough(ict1, ict2, ict3, ict4, ct5, ctn);
-        }
+    }
+    if ((ct1 != null || ct2 != null || (ct3 != null && ct4 != null && ct5 != null)) && ctn != null) {
+        int ict1 = -1, ict2 = -1;
+        long ict3 = -1, ict4 = -1;
+        try { ict1 = Integer.parseInt(ct1); } catch (NumberFormatException nfe) {}
+        try { ict2 = Integer.parseInt(ct2); } catch (NumberFormatException nfe) {}
+        try { ict3 = Long.parseLong(ct3); } catch (NumberFormatException nfe) {}
+        try { ict4 = Long.parseLong(ct4); } catch (NumberFormatException nfe) {}
+        logsHelper.clearThrough(ict1, ict2, ict3, ict4, ct5, ctn);
+    }
+    if (last >= 0) {
 %>
 &nbsp;<a class="delete" title="<%=intl._t("Clear logs")%>" href="logs?crit=<%=last%>&amp;consoleNonce=<%=consoleNonce%>">[<%=intl._t("Clear logs")%>]</a>
 </h3>
