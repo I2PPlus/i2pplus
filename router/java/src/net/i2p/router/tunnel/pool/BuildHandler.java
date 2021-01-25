@@ -106,6 +106,8 @@ class BuildHandler implements Runnable {
 
     private static final long JOB_LAG_LIMIT_TUNNEL = 350;
 
+    private static final long[] RATES = { 60*1000, 60*60*1000l };
+
 
     public BuildHandler(RouterContext ctx, TunnelPoolManager manager, BuildExecutor exec) {
         _context = ctx;
@@ -117,43 +119,43 @@ class BuildHandler implements Runnable {
         //_inboundBuildMessages = new CoDelBlockingQueue(ctx, "BuildHandler", sz);
         _inboundBuildMessages = new LinkedBlockingQueue<BuildMessageState>(sz);
 
-        _context.statManager().createRateStat("tunnel.reject.10", "How often we reject a tunnel probabalistically", "Tunnels [Participating]", new long[] { 60*1000, 10*60*1000 });
-        _context.statManager().createRateStat("tunnel.reject.20", "How often we reject a tunnel due to transient overload", "Tunnels [Participating]", new long[] { 60*1000, 10*60*1000 });
-        _context.statManager().createRateStat("tunnel.reject.30", "How often we reject a tunnel due to bandwidth overload", "Tunnels [Participating]", new long[] { 60*1000, 10*60*1000 });
-        _context.statManager().createRateStat("tunnel.reject.50", "How often we reject a tunnel due to critical issue (shutdown etc)", "Tunnels [Participating]", new long[] { 60*1000, 10*60*1000 });
+        _context.statManager().createRateStat("tunnel.reject.10", "How often we reject a tunnel probabalistically", "Tunnels [Participating]", RATES);
+        _context.statManager().createRateStat("tunnel.reject.20", "How often we reject a tunnel (transient overload)", "Tunnels [Participating]", RATES);
+        _context.statManager().createRateStat("tunnel.reject.30", "How often we reject a tunnel (bandwidth overload)", "Tunnels [Participating]", RATES);
+        _context.statManager().createRateStat("tunnel.reject.50", "How often we reject a tunnel (critical issue)", "Tunnels [Participating]", RATES);
 
-        _context.statManager().createRequiredRateStat("tunnel.decryptRequestTime", "Time to decrypt a build request (ms)", "Tunnels [Participating]", new long[] { 60*1000, 10*60*1000 });
+        _context.statManager().createRequiredRateStat("tunnel.decryptRequestTime", "Time to decrypt a build request (ms)", "Tunnels [Participating]", RATES);
         _context.statManager().createRateStat("tunnel.rejectTooOld", "Reject tunnel build (too old)", "Tunnels [Participating]", new long[] { 3*60*60*1000 });
         _context.statManager().createRateStat("tunnel.rejectFuture", "Reject tunnel build (time in future)", "Tunnels [Participating]", new long[] { 3*60*60*1000 });
-        _context.statManager().createRateStat("tunnel.rejectTimeout", "Reject tunnel build (unknown next hop)", "Tunnels [Participating]", new long[] { 60*1000, 60*60*1000 });
-        _context.statManager().createRateStat("tunnel.rejectTimeout2", "Reject tunnel build (can't contact next hop)", "Tunnels [Participating]", new long[] { 60*1000, 60*60*1000 });
+        _context.statManager().createRateStat("tunnel.rejectTimeout", "Reject tunnel build (unknown next hop)", "Tunnels [Participating]", RATES);
+        _context.statManager().createRateStat("tunnel.rejectTimeout2", "Reject tunnel build (can't contact next hop)", "Tunnels [Participating]", RATES);
         _context.statManager().createRequiredRateStat("tunnel.rejectDupID", "Reject tunnel build (duplicate ID)", "Tunnels [Participating]", new long[] { 24*60*60*1000 });
         _context.statManager().createRequiredRateStat("tunnel.ownDupID", "Our tunnel dup. ID", "Tunnels [Participating]", new long[] { 24*60*60*1000 });
         _context.statManager().createRequiredRateStat("tunnel.rejectHostile", "Reject malicious tunnel build", "Tunnels [Participating]", new long[] { 24*60*60*1000 });
-        _context.statManager().createRequiredRateStat("tunnel.rejectHopThrottle", "Reject tunnel build (per-hop limit)", "Tunnels [Participating]", new long[] { 60*1000, 60*60*1000 });
-        _context.statManager().createRequiredRateStat("tunnel.dropReqThrottle", "Drop tunnel build (request limit)", "Tunnels [Participating]", new long[] { 60*1000, 60*60*1000 });
-        _context.statManager().createRequiredRateStat("tunnel.dropLookupThrottle", "Drop tunnel build (hop lookup limit)", "Tunnels [Participating]", new long[] { 60*1000, 60*60*1000 });
-        _context.statManager().createRateStat("tunnel.dropDecryptFail", "Can't find our slot", "Tunnels [Participating]", new long[] { 60*1000, 60*60*1000 });
+        _context.statManager().createRequiredRateStat("tunnel.rejectHopThrottle", "Reject tunnel build (per-hop limit)", "Tunnels [Participating]", RATES);
+        _context.statManager().createRequiredRateStat("tunnel.dropReqThrottle", "Drop tunnel build (request limit)", "Tunnels [Participating]", RATES);
+        _context.statManager().createRequiredRateStat("tunnel.dropLookupThrottle", "Drop tunnel build (hop lookup limit)", "Tunnels [Participating]", RATES);
+        _context.statManager().createRateStat("tunnel.dropDecryptFail", "Can't find our slot", "Tunnels [Participating]", RATES);
 
-        _context.statManager().createRequiredRateStat("tunnel.rejectOverloaded", "Delay to process rejected request (ms)", "Tunnels [Participating]", new long[] { 60*1000, 10*60*1000 });
-        _context.statManager().createRequiredRateStat("tunnel.acceptLoad", "Delay to process accepted request (ms)", "Tunnels [Participating]", new long[] { 60*1000, 10*60*1000 });
+        _context.statManager().createRequiredRateStat("tunnel.rejectOverloaded", "Delay to process rejected request (ms)", "Tunnels [Participating]", RATES);
+        _context.statManager().createRequiredRateStat("tunnel.acceptLoad", "Delay to process accepted request (ms)", "Tunnels [Participating]", RATES);
         _context.statManager().createRateStat("tunnel.dropConnLimits", "Drop not reject tunnel build (connection limits)", "Tunnels [Participating]", new long[] { 10*60*1000 });
         _context.statManager().createRateStat("tunnel.rejectConnLimits", "Reject tunnel build (connection limits)", "Tunnels [Participating]", new long[] { 10*60*1000 });
-        _context.statManager().createRequiredRateStat("tunnel.dropLoad", "Delay before dropping request (ms)", "Tunnels [Participating]", new long[] { 60*1000, 10*60*1000 });
-        _context.statManager().createRequiredRateStat("tunnel.dropLoadDelay", "Delay before abandoning request (ms)", "Tunnels [Participating]", new long[] { 60*1000, 10*60*1000 });
-        _context.statManager().createRequiredRateStat("tunnel.dropLoadBacklog", "Pending request count when dropped", "Tunnels [Participating]", new long[] { 60*1000, 10*60*1000 });
-        _context.statManager().createRequiredRateStat("tunnel.dropLoadProactive", "Delay estimate when dropped (ms)", "Tunnels [Participating]", new long[] { 60*1000, 10*60*1000 });
-        _context.statManager().createRequiredRateStat("tunnel.dropLoadProactiveAbort", "Allowed requests during load", "Tunnels [Participating]", new long[] { 60*1000, 10*60*1000 });
-        //_context.statManager().createRateStat("tunnel.handleRemaining", "How many pending inbound requests were left on the queue after one pass?", "Tunnels [Participating]", new long[] { 60*1000, 10*60*1000 });
-        _context.statManager().createRateStat("tunnel.buildReplyTooSlow", "How often we receive a tunnel build reply after we had given up waiting for it", "Tunnels", new long[] { 60*1000, 10*60*1000 });
+        _context.statManager().createRequiredRateStat("tunnel.dropLoad", "Delay before dropping request (ms)", "Tunnels [Participating]", RATES);
+        _context.statManager().createRequiredRateStat("tunnel.dropLoadDelay", "Delay before abandoning request (ms)", "Tunnels [Participating]", RATES);
+        _context.statManager().createRequiredRateStat("tunnel.dropLoadBacklog", "Pending request count when dropped", "Tunnels [Participating]", RATES);
+        _context.statManager().createRequiredRateStat("tunnel.dropLoadProactive", "Delay estimate when dropped (ms)", "Tunnels [Participating]", RATES);
+        _context.statManager().createRequiredRateStat("tunnel.dropLoadProactiveAbort", "Allowed requests during load", "Tunnels [Participating]", RATES);
+        //_context.statManager().createRateStat("tunnel.handleRemaining", "How many pending inbound requests were left on the queue after one pass?", "Tunnels [Participating]", RATES);
+        _context.statManager().createRateStat("tunnel.buildReplyTooSlow", "How often we receive a tunnel build reply after we had given up waiting for it", "Tunnels", RATES);
 
-        _context.statManager().createRateStat("tunnel.receiveRejectionProbabalistic", "How often we are rejected probabalistically", "Tunnels [Participating]", new long[] { 10*60*1000l, 60*60*1000l, 24*60*60*1000l });
-        _context.statManager().createRateStat("tunnel.receiveRejectionTransient", "How often we are rejected due to transient overload", "Tunnels [Participating]", new long[] { 10*60*1000l, 60*60*1000l, 24*60*60*1000l });
-        _context.statManager().createRateStat("tunnel.receiveRejectionBandwidth", "How often we are rejected due to bandwidth overload", "Tunnels [Participating]", new long[] { 10*60*1000l, 60*60*1000l, 24*60*60*1000l });
-        _context.statManager().createRateStat("tunnel.receiveRejectionCritical", "How often we are rejected due to critical failure", "Tunnels [Participating]", new long[] { 10*60*1000l, 60*60*1000l, 24*60*60*1000l });
+        _context.statManager().createRateStat("tunnel.receiveRejectionProbabalistic", "How often we are rejected probabalistically", "Tunnels [Participating]", RATES);
+        _context.statManager().createRateStat("tunnel.receiveRejectionTransient", "How often we are rejected (transient overload)", "Tunnels [Participating]", RATES);
+        _context.statManager().createRateStat("tunnel.receiveRejectionBandwidth", "How often we are rejected (bandwidth overload)", "Tunnels [Participating]", RATES);
+        _context.statManager().createRateStat("tunnel.receiveRejectionCritical", "How often we are rejected (critical failure)", "Tunnels [Participating]", RATES);
 
         _context.statManager().createRateStat("tunnel.corruptBuildReply", "How many corrupt tunnel build replies we've received", "Tunnels", new long[] { 24*60*60*1000l });
-        ctx.statManager().createRateStat("tunnel.buildLookupSuccess", "Confirmation of successful deferred lookup", "Tunnels", new long[] { 60*1000, 60*60*1000 });
+        ctx.statManager().createRateStat("tunnel.buildLookupSuccess", "Confirmation of successful deferred lookup", "Tunnels", RATES);
 
         _processor = new BuildMessageProcessor(ctx);
         // used for previous hop, for all requests

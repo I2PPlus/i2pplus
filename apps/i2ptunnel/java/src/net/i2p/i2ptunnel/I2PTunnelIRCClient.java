@@ -64,7 +64,8 @@ public class I2PTunnelIRCClient extends I2PTunnelClientBase {
               "IRC Client on " + tunnel.listenHost + ':' + localPort, tunnel, pkf);
         // force connect delay and bulk profile
         Properties opts = tunnel.getClientOptions();
-        opts.setProperty("i2p.streaming.connectDelay", "200");
+//        opts.setProperty("i2p.streaming.connectDelay", "200");
+        opts.setProperty("i2p.streaming.connectDelay", "50");
         opts.remove("i2p.streaming.maxWindowSize");
         if (opts.getProperty("i2cp.leaseSetEncType") == null)
             opts.setProperty("i2cp.leaseSetEncType", "4,0");
