@@ -8,6 +8,12 @@ send_help() {
     if [ "$1" ]; then exit $1; else exit 0; fi
 }
 
+debug() {
+    if [ "$debug" ]; then
+        echo "DEBUG> : $@"
+    fi
+}
+
     # Is input empty?
 if [ ! "$1" ]; then
     send_help
@@ -22,6 +28,10 @@ if [ -f "$I2P/lib/i2ptunnel.jar" ]; then
             -c) # -c (require 5 consecutive pings to report success)
                 sec_five=true
                 args="$args -c "
+                shift
+                ;;
+            -d) # -d Enable debug output
+                debug=true
                 shift
                 ;;
             -p) # -p toPort
@@ -98,52 +108,55 @@ if [ -f "$I2P/lib/i2ptunnel.jar" ]; then
         send_help 1
     elif [ $host_file ] && [ -f $host_file ]; then
         echo " • Found $host_file, initiating ping..."
-        echo " • Trying to open tunnel"
+        debug "$(cat $host_file | wc -l) hosts to ping"
+        echo " • Trying to open tunnel(s)"
         cmd='java -jar '"$I2P"'/lib/i2ptunnel.jar -die -e "ownDest yes" -e "ping '"${args}"'"'
         eval ${cmd}
         exit $?
     elif [ $list_file ] && [ -f $list_file ]; then
         echo " • Found list file $list_file, initiating ping..."
-        echo " • Trying to open tunnel"
+        debug "$(cat $list_file | wc -l) hosts to ping"
+        echo " • Trying to open tunnel(s)"
         cmd='java -jar '"$I2P"'/lib/i2ptunnel.jar -die -e "ownDest yes" -e "ping '"${args}"'"'
         eval ${cmd}
         exit $?
     elif [ "$address" ]; then # Do we really have an address?
+
             # Check address type
         if [ $(echo $address | wc -c) -eq 525 ]; then
-            echo " ✔ Address is in B64 format"
-            lookup=$address
+            debug "Adress is B64 format"
+            lookup=""
         elif [ "$(echo $address | grep -oiE 'b32.i2p$')" = 'b32.i2p' ] && [ $(echo $address | wc -c) -eq 61 ]; then
-            echo " • Address is in B32 format"
+            debug "Address is b32.i2p format"
+            lookup=""
         elif [ "$(echo $address | grep -ioE '.i2p$')" = '.i2p' ]; then
-            echo " • Address is in .i2p format"
+            debug "Address is .i2p format"
+            lookup=""
         else
             echo " ✖ Address is an unknown format"
             send_help 1
         fi
 
-            # Try to resolve B64 address
-        if [ "$lookup" = "" ]; then
-            echo " ➤ Validating B64 address..."
-            lookup=$(java -jar -Xms8m -Xmx8m $I2P/lib/i2ptunnel.jar -nocli -w -e "lookup ${address}" -d)
-            if [ "$lookup" != "Unknown host: $address" ]; then
-                echo " ✔ B64 address is valid"
-            else
-                echo " ✖ Invalid B64 address"
-            fi
+        echo " ➤ Initiating ping of $address"
+
+         # Try to resolve B64 address
+        lookup=$(java -jar -Xms8m -Xmx8m $I2P/lib/i2ptunnel.jar -nocli -w -e "lookup ${address}" -d)
+        if [ "$lookup" != "Unknown host: $address" ]; then
+            echo " ✔ Found valid B64 address"
         fi
 
-            # If lookup != null & char count -eq 525(B64)
-        if [ $(echo $lookup | wc -c) -eq 525 ]; then
-            echo " • Using B64"
-            echo " • Opening tunnel..."
-            cmd='java -jar '"$I2P"'/lib/i2ptunnel.jar -die -e "ownDest yes" -e "ping '"${args}"' '"${lookup}"'"'
-            eval ${cmd}
-        else
-            echo " • Opening tunnel..."
-            cmd='java -jar '"$I2P"'/lib/i2ptunnel.jar -die -e "ownDest yes" -e "ping '"${args}"' '"${address}"'"'
-            eval ${cmd}
-        fi
+         # Start single ping command
+        echo " • Opening tunnel..."
+        cmd='java -jar '"$I2P"'/lib/i2ptunnel.jar -die -e "ownDest yes" -e "ping '"${args}"' '"${address}"'"'
+        eval ${cmd} | while read line; do # Parse output
+            filter="$(echo $line | grep ""$address"")" # Filter 1
+            filter="$(echo $line | grep -iEo '[0-9]{1,99}\:|result')" # Filter 2
+            if [ "$filter" ]; then # If fitler found echo the output
+                echo " $line"
+            else
+                debug "Filter: $filter -- Output: $line"
+            fi
+        done
     else
         echo " ✖ Missing address field"
         send_help 1

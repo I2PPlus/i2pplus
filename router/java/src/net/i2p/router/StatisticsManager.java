@@ -117,7 +117,17 @@ public class StatisticsManager {
             //includeRate("jobQueue.jobRunSlow", stats, new long[] { 10*60*1000l, 60*60*1000l });
             //includeRate("crypto.elGamal.encrypt", stats, new long[] { 60*1000, 60*60*1000 });
             // total event count can be used to track uptime
-            includeRate("tunnel.participatingTunnels", stats, new long[] { 60*60*1000 }, true);
+            int partTunnels = _context.tunnelManager().getParticipatingCount();
+            int spoofed = partTunnels;
+            if (partTunnels > 4000) {
+                if (partTunnels > 8000)
+                    spoofed = (partTunnels / 3) - _context.random().nextInt(50);
+                else if (partTunnels > 4000)
+                    spoofed = (partTunnels / 2) + _context.random().nextInt(50);
+                stats.setProperty("tunnels.participatingTunnels", String.valueOf(spoofed));
+            } else {
+                includeRate("tunnel.participatingTunnels", stats, new long[] { 60*60*1000 }, true);
+            }
             //includeRate("tunnel.testSuccessTime", stats, new long[] { 10*60*1000l });
             //includeRate("client.sendAckTime", stats, new long[] { 60*1000, 60*60*1000 }, true);
             //includeRate("udp.sendConfirmTime", stats, new long[] { 10*60*1000 });
@@ -149,7 +159,7 @@ public class StatisticsManager {
                      _context.netDb().getKnownRouters() :
                      3000 + _context.random().nextInt(1000);   // so it isn't obvious we restarted
             if (ri > 12000)
-                ri /= 3 + _context.random().nextInt(50); // hide our real number of known peers to avoid broadcasting that we're running I2P+
+                ri /= 3 - _context.random().nextInt(50); // hide our real number of known peers to avoid broadcasting that we're running I2P+
             else if (ri > 5000)
                 ri /= 2 + _context.random().nextInt(50); // hide our real number of known peers to avoid broadcasting that we're running I2P+
             stats.setProperty("netdb.knownRouters", String.valueOf(ri));
@@ -234,14 +244,9 @@ public class StatisticsManager {
             }
 
             Rate curRate = rate.getRate(periods[i]);
-            int numTunnels = _context.tunnelManager().getParticipatingCount();
-            int spoofed = numTunnels / 2;
             if (curRate == null) continue;
             if (curRate.getLifetimeEventCount() <= 0) continue;
-            if (numTunnels > 5000 && rateName.contains("participatingTunnels"))
-                stats.setProperty("stat_" + rateName + '.' + getPeriod(curRate), String.valueOf(spoofed));
-            else
-                stats.setProperty("stat_" + rateName + '.' + getPeriod(curRate), renderRate(curRate, fudgeQuantity));
+            stats.setProperty("stat_" + rateName + '.' + getPeriod(curRate), renderRate(curRate, fudgeQuantity));
         }
     }
 
