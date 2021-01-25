@@ -480,7 +480,8 @@ class SOCKS5Server extends SOCKSServer {
      */
     private I2PSocket outproxyConnect(I2PSOCKSTunnel tun, String proxy) throws IOException, I2PException {
         Properties overrides = new Properties();
-        overrides.setProperty("option.i2p.streaming.connectDelay", "200");
+//        overrides.setProperty("option.i2p.streaming.connectDelay", "200");
+        overrides.setProperty("option.i2p.streaming.connectDelay", "50");
         I2PSocketOptions proxyOpts = tun.buildOptions(overrides);
         Destination dest = _context.namingService().lookup(proxy);
         if (dest == null)

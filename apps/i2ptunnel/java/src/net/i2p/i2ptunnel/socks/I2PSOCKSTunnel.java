@@ -53,7 +53,8 @@ public class I2PSOCKSTunnel extends I2PTunnelClientBase {
         super(localPort, ownDest, l, notifyThis, "SOCKS Proxy on " + tunnel.listenHost + ':' + localPort, tunnel, pkf);
         // force connect delay and bulk profile
         Properties opts = tunnel.getClientOptions();
-        opts.setProperty("i2p.streaming.connectDelay", "200");
+//        opts.setProperty("i2p.streaming.connectDelay", "200");
+        opts.setProperty("i2p.streaming.connectDelay", "50");
         opts.remove("i2p.streaming.maxWindowSize");
 
         setName("SOCKS Proxy on " + tunnel.listenHost + ':' + localPort);
@@ -129,7 +130,7 @@ public class I2PSOCKSTunnel extends I2PTunnelClientBase {
         return proxies.get(DEFAULT);
     }
 
-    /** 
+    /**
      * Because getDefaultOptions() in super() is protected
      * @since 0.8.2
      */
