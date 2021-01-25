@@ -201,13 +201,13 @@ public class LogsHelper extends HelperBase {
             obuf.append("<p>").append(_t("File not found")).append(": <b><code>").append(loc).append("</code></b></p>");
             toSkip = -1;
         } else {
-            obuf.append("<p>").append(_t("File location")).append(": <a href=\"/wrapper.log\" target=\"_blank\">")
-                .append(loc).append("</a></p></td></tr>\n<tr><td>");
+            obuf.append("<p>").append(_t("File location")).append(": <a href=\"/wrapper.log\" target=\"_blank\">").append(loc).append("</a>")
+                .append("</p></td></tr>\n<tr><td>");
             if (str.length() > 0) {
                 str = str.replace("&", "&amp;").replace("<", "&lt;").replace(">", "&gt;");
                 obuf.append("<pre id=\"servicelogs\">").append(str).append("</pre>");
             } else {
-                obuf.append("<p><i>").append(_t("No log messages")).append("</i></p></td></tr><td><tr>");
+                obuf.append("<p><i>").append(_t("No log messages")).append("</i></p>");
             }
         }
         Object[] rv = new Object[3];

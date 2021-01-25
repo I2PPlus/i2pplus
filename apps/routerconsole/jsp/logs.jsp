@@ -53,7 +53,6 @@
 <tr><td><b>JSTL:</b></td><td><jsp:getProperty name="logsHelper" property="jstlVersion" />&ensp;<span class="nowrap"><b>Encoding:</b>&ensp;<%=System.getProperty("file.encoding")%></span>&ensp;<span class="nowrap"><b>Charset:</b>&ensp;<%=java.nio.charset.Charset.defaultCharset().name()%></span></td></tr>
 </tbody>
 </table>
-<h3 class="tabletitle"><%=intl._t("Critical Logs")%>
 <%
     String consoleNonce = net.i2p.router.web.CSSHelper.getNonce();
     String ct1 = request.getParameter("clear");
@@ -62,6 +61,12 @@
     String ct4 = request.getParameter("svct");
     String ct5 = request.getParameter("svcf");
     String ctn = request.getParameter("consoleNonce");
+    int last = logsHelper.getLastCriticalMessageNumber();
+    if (last >= 0) {
+%>
+<h3 class="tabletitle"><%=intl._t("Critical Logs")%>
+<%
+    }
     if ((ct1 != null || ct2 != null || (ct3 != null && ct4 != null && ct5 != null)) && ctn != null) {
         int ict1 = -1, ict2 = -1;
         long ict3 = -1, ict4 = -1;
@@ -71,11 +76,9 @@
         try { ict4 = Long.parseLong(ct4); } catch (NumberFormatException nfe) {}
         logsHelper.clearThrough(ict1, ict2, ict3, ict4, ct5, ctn);
     }
-    int last = logsHelper.getLastCriticalMessageNumber();
     if (last >= 0) {
 %>
 &nbsp;<a class="delete" title="<%=intl._t("Clear logs")%>" href="logs?crit=<%=last%>&amp;consoleNonce=<%=consoleNonce%>">[<%=intl._t("Clear logs")%>]</a>
-<%  } %>
 </h3>
 <table id="criticallogs" class="logtable">
 <tbody>
@@ -84,6 +87,9 @@
 </td></tr>
 </tbody>
 </table>
+<%
+    }
+%>
 <h3 class="tabletitle"><%=intl._t("Router Logs")%>
 <%
     last = logsHelper.getLastMessageNumber();
