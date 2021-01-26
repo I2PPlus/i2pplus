@@ -688,7 +688,7 @@ public class TunnelPoolManager implements TunnelManagerFacade {
     }
 
 //    private static final int DEFAULT_MAX_PCT_TUNNELS = 33;
-    private static final int DEFAULT_MAX_PCT_TUNNELS = 25;
+    private static final int DEFAULT_MAX_PCT_TUNNELS = 15;
     /**
      *  For reliability reasons, don't allow a peer in more than x% of
      *  client and exploratory tunnels.
