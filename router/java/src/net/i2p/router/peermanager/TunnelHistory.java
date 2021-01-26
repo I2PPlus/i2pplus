@@ -39,7 +39,7 @@ public class TunnelHistory {
     /** tunnel rejection due to system failure - essentially unused */
     public static final int TUNNEL_REJECT_CRIT = 50;
 
-    private static final long[] RATES = { 10*60*1000l, 60*60*1000l, 24*60*60*1000 };
+    private static final long[] RATES = { 60*60*1000l, 24*60*60*1000 };
 
     public TunnelHistory(RouterContext context, String statGroup) {
         _context = context;

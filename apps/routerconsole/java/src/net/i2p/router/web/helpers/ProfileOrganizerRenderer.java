@@ -290,7 +290,7 @@ class ProfileOrganizerRenderer {
             buf.append("<th>").append(_t("Last Heard From")).append("</th>");
             buf.append("<th>").append(_t("Last Good Send")).append("</th>");
             buf.append("<th>").append(_t("Last Bad Send")).append("</th>");
-            buf.append("<th>").append(_t("10m Resp. Time")).append("</th>");
+//            buf.append("<th>").append(_t("10m Resp. Time")).append("</th>");
             buf.append("<th>").append(_t("1h Resp. Time")).append("</th>");
             buf.append("<th>").append(_t("1d Resp. Time")).append("</th>");
             buf.append("<th>").append(_t("Last Good Lookup")).append("</th>");
@@ -342,7 +342,7 @@ class ProfileOrganizerRenderer {
                 buf.append("<td align=\"right\">").append(formatInterval(now, prof.getLastHeardFrom())).append("</td>");
                 buf.append("<td align=\"right\">").append(formatInterval(now, prof.getLastSendSuccessful())).append("</td>");
                 buf.append("<td align=\"right\">").append(formatInterval(now, prof.getLastSendFailed())).append("</td>");
-                buf.append("<td align=\"right\">").append(avg(prof, 10*60*1000l, ra)).append("</td>");
+//                buf.append("<td align=\"right\">").append(avg(prof, 10*60*1000l, ra)).append("</td>");
                 buf.append("<td align=\"right\">").append(avg(prof, 60*60*1000l, ra)).append("</td>");
                 buf.append("<td align=\"right\">").append(avg(prof, 24*60*60*1000l, ra)).append("</td>");
                 if (dbh != null) {

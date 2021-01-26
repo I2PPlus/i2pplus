@@ -316,7 +316,7 @@ public class ProfileOrganizer {
     public int countActivePeers() {
         int activePeers = 0;
 //        long hideBefore = _context.clock().now() - 6*60*60*1000;
-        long hideBefore = _context.clock().now() - 2*60*60*1000;
+        long hideBefore = _context.clock().now() - 15*60*1000;
 
         getReadLock();
         try {

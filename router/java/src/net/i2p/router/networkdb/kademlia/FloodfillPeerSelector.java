@@ -301,7 +301,8 @@ class FloodfillPeerSelector extends PeerSelector {
                             _log.debug("Floodfill Sort: Bad (too new) [" + entry.toBase64().substring(0,6) + "]");
                         badff.add(entry);
                     } else if (prof.getDBHistory() != null) {
-                        if (prof.getDbResponseTime().getRate(10*60*1000).getAverageValue() < maxGoodRespTime
+//                        if (prof.getDbResponseTime().getRate(10*60*1000).getAverageValue() < maxGoodRespTime
+                        if (prof.getDbResponseTime().getRate(60*60*1000).getAverageValue() < maxGoodRespTime
                             && prof.getDBHistory().getLastStoreFailed() < now - NO_FAIL_STORE_GOOD
                             && prof.getDBHistory().getLastLookupFailed() < now - NO_FAIL_LOOKUP_GOOD
                             && prof.getDBHistory().getFailedLookupRate().getRate(60*60*1000).getAverageValue() < maxFailRate) {
