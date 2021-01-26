@@ -1917,9 +1917,9 @@
         <copy file="installer/resources/blocklist.txt" todir="pkg-temp/" />
         <copy file="installer/resources/i2ping" todir="pkg-temp/" />
         <chmod type="file" file="pkg-temp/i2ping" perm="+x" />
-        <!-- will overwrite existing instances, resetting i2p path
         <copy file="installer/resources/eephead" todir="pkg-temp/" />
         <chmod type="file" file="pkg-temp/eephead" perm="+x" />
+        <!-- will overwrite existing instances, resetting i2p path
         <copy file="installer/resources/eephead.bat" todir="pkg-temp/" />
         -->
         <copy todir="pkg-temp/man/">
