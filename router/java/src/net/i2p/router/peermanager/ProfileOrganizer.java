@@ -78,12 +78,12 @@ public class ProfileOrganizer {
      */
     public static final String PROP_MINIMUM_FAST_PEERS = "profileOrganizer.minFastPeers";
 //    public static final int DEFAULT_MINIMUM_FAST_PEERS = 8;
-    public static final int DEFAULT_MINIMUM_FAST_PEERS = 50;
+    public static final int DEFAULT_MINIMUM_FAST_PEERS = 100;
     /** this is misnamed, it is really the max minimum number. */
 //    private static final int DEFAULT_MAXIMUM_FAST_PEERS = 40;
-    private static final int DEFAULT_MAXIMUM_FAST_PEERS = 150;
+    private static final int DEFAULT_MAXIMUM_FAST_PEERS = 200;
 //    private static final int ABSOLUTE_MAX_FAST_PEERS = 75;
-    private static final int ABSOLUTE_MAX_FAST_PEERS = 200;
+    private static final int ABSOLUTE_MAX_FAST_PEERS = 300;
 
 //    private final int known = net.i2p.router.networkdb.kademlia.KademliaNetworkDatabaseFacade.getKnownRouters();
 
@@ -95,9 +95,9 @@ public class ProfileOrganizer {
      */
     public static final String PROP_MINIMUM_HIGH_CAPACITY_PEERS = "profileOrganizer.minHighCapacityPeers";
 //    public static final int DEFAULT_MINIMUM_HIGH_CAPACITY_PEERS = 25;
-    public static final int DEFAULT_MINIMUM_HIGH_CAPACITY_PEERS = 100;
+    public static final int DEFAULT_MINIMUM_HIGH_CAPACITY_PEERS = 200;
 //    private static final int ABSOLUTE_MAX_HIGHCAP_PEERS = 150;
-    private static final int ABSOLUTE_MAX_HIGHCAP_PEERS = 400;
+    private static final int ABSOLUTE_MAX_HIGHCAP_PEERS = 500;
 
     /** synchronized against this lock when updating the tier that peers are located in (and when fetching them from a peer) */
     private final ReentrantReadWriteLock _reorganizeLock = new ReentrantReadWriteLock(false);
@@ -1108,7 +1108,7 @@ public class ProfileOrganizer {
     /** how many not failing/active peers must we have? */
 //    private final static int MIN_NOT_FAILING_ACTIVE = 3;
 //    private final static int MIN_NOT_FAILING_ACTIVE = 8;
-    private final static int MIN_NOT_FAILING_ACTIVE = 32;
+    private final static int MIN_NOT_FAILING_ACTIVE = 50;
 
     /**
      * I'm not sure how much I dislike the following - if there aren't enough
@@ -1307,7 +1307,7 @@ public class ProfileOrganizer {
             if (profile.getCapacityValue() >= _thresholdCapacityValue) {
                 // duplicates being clobbered is fine by us
                 total += profile.getSpeedValue();
-                if (count++ > (maxHighCapPeers / 7) * 5)
+                if (count++ > (maxHighCapPeers / 8) * 5)
                     break;
             } else {
                 // its ordered
@@ -1317,7 +1317,7 @@ public class ProfileOrganizer {
 
         if (count > 0)
 //            _thresholdSpeedValue = total / count;
-            _thresholdSpeedValue = ((total / count) * 7) / 5 ;
+            _thresholdSpeedValue = ((total / count) / 8) * 5 ;
         if (_log.shouldLog(Log.INFO))
             _log.info("Threshold value for speed: " + _thresholdSpeedValue + " (calculated from " + count + " profiles)");
     }
