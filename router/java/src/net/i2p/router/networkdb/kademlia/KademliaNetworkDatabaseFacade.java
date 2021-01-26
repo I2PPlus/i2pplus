@@ -192,6 +192,8 @@ public abstract class KademliaNetworkDatabaseFacade extends NetworkDatabaseFacad
     private static final int KAD_B = 6;
     static final String PROP_KAD_B = "router.exploreKadB";
 
+    private static final long[] RATES = { 60*1000, 60*60*1000 };
+
     public KademliaNetworkDatabaseFacade(RouterContext context) {
         _context = context;
         _log = _context.logManager().getLog(getClass());
@@ -201,22 +203,22 @@ public abstract class KademliaNetworkDatabaseFacade extends NetworkDatabaseFacad
         _activeRequests = new HashMap<Hash, SearchJob>(8);
         _reseedChecker = new ReseedChecker(context);
         _blindCache = new BlindCache(context);
-        context.statManager().createRateStat("netDb.lookupDeferred", "Number of deferred NetDb lookups", "NetworkDatabase", new long[] { 60*1000, 60*60*1000 });
-        context.statManager().createRateStat("netDb.exploreKeySet", "Number of NetDB keys queued for exploration", "NetworkDatabase", new long[] { 60*1000, 60*60*1000 });
-        context.statManager().createRateStat("netDb.negativeCache", "Number of aborted NetDb lookups (already cached)", "NetworkDatabase", new long[] { 60*1000, 60*60*1000l });
+        context.statManager().createRateStat("netDb.lookupDeferred", "Deferred NetDb lookups", "NetworkDatabase", RATES);
+        context.statManager().createRateStat("netDb.exploreKeySet", "NetDb keys queued for exploration", "NetworkDatabase", RATES);
+        context.statManager().createRateStat("netDb.negativeCache", "Aborted NetDb lookups (already cached)", "NetworkDatabase", RATES);
         // following are for StoreJob
-        context.statManager().createRateStat("netDb.storeRouterInfoSent", "Number of RouterInfo store messages sent", "NetworkDatabase", new long[] { 60*1000, 60*60*1000l });
-        context.statManager().createRateStat("netDb.storeLeaseSetSent", "Number of LeaseSet store messages sent", "NetworkDatabase", new long[] { 60*1000, 60*60*1000l });
-        context.statManager().createRateStat("netDb.storePeers", "Number of peers each NetDb must be sent to before success", "NetworkDatabase", new long[] { 60*1000, 60*60*1000l });
-        context.statManager().createRateStat("netDb.storeFailedPeers", "Number of peers each NetDb must be sent to before failing completely", "NetworkDatabase", new long[] { 60*1000, 60*60*1000l });
-        context.statManager().createRateStat("netDb.ackTime", "Time taken for a peer to ACK a DbStore", "NetworkDatabase", new long[] { 60*1000, 60*60*1000l });
-        context.statManager().createRateStat("netDb.replyTimeout", "How long timeout expires after a NetDb send (when peer fails to reply in time)", "NetworkDatabase", new long[] { 60*1000, 60*60*1000l });
+        context.statManager().createRateStat("netDb.storeRouterInfoSent", "Sent RouterInfo store messages", "NetworkDatabase", RATES);
+        context.statManager().createRateStat("netDb.storeLeaseSetSent", "Sent LeaseSet store messages", "NetworkDatabase", RATES);
+        context.statManager().createRateStat("netDb.storePeers", "Peers each NetDb must be sent to before success", "NetworkDatabase", RATES);
+        context.statManager().createRateStat("netDb.storeFailedPeers", "Peers each NetDb must be sent to before failing completely", "NetworkDatabase", RATES);
+        context.statManager().createRateStat("netDb.ackTime", "Time peer takes to ACK a DbStore", "NetworkDatabase", RATES);
+        context.statManager().createRateStat("netDb.replyTimeout", "Timeout expiry after a NetDb send (peer fails to reply in time)", "NetworkDatabase", RATES);
         // following is for RepublishLeaseSetJob
-        context.statManager().createRateStat("netDb.republishLeaseSetCount", "How often we republish a LeaseSet", "NetworkDatabase", new long[] { 60*1000, 60*60*1000l });
+        context.statManager().createRateStat("netDb.republishLeaseSetCount", "How often we republish a LeaseSet", "NetworkDatabase", RATES);
         // following is for DatabaseStoreMessage
-        context.statManager().createRateStat("netDb.DSMAllZeros", "Number of messages stored in NetDb with zero key", "NetworkDatabase", new long[] { 60*1000, 60*60*1000l });
+        context.statManager().createRateStat("netDb.DSMAllZeros", "Messages stored in NetDb with zero key", "NetworkDatabase", RATES);
         // following is for HandleDatabaseLookupMessageJob
-        context.statManager().createRateStat("netDb.DLMAllZeros", "Number of message lookups with zero key in NetDb", "NetworkDatabase", new long[] { 60*1000, 60*60*1000l });
+        context.statManager().createRateStat("netDb.DLMAllZeros", "Message lookups in NetDb with zero key ", "NetworkDatabase", RATES);
     }
 
     @Override
