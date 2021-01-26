@@ -98,7 +98,7 @@ public class PeerProfile {
 
     private long _lastCoalesceDate = System.currentTimeMillis();
 
-    private static final long[] RATES = { 10*60*1000l, 60*60*1000l, 24*60*60*1000 };
+    private static final long[] RATES = { 60*60*1000l, 24*60*60*1000 };
 
     /**
      *  Countries with more than about a 2% share of the netdb.

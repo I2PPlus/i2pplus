@@ -324,7 +324,8 @@ public class DBHistory {
         if (_failedLookupRate == null)
             _failedLookupRate = new RateStat("dbHistory.failedLookupRate", "How often peer responds to a lookup", statGroup, new long[] { 10*60*1000l, 60*60*1000l, 24*60*60*1000l });
         if (_invalidReplyRate == null)
-            _invalidReplyRate = new RateStat("dbHistory.invalidReplyRate", "How often peer gives us an invalid peer", statGroup, new long[] { 30*60*1000l });
+//            _invalidReplyRate = new RateStat("dbHistory.invalidReplyRate", "How often peer gives us an invalid peer", statGroup, new long[] { 30*60*1000l });
+            _invalidReplyRate = new RateStat("dbHistory.invalidReplyRate", "How often peer gives us an invalid peer", statGroup, new long[] { 10*60*1000l, 60*60*1000l, 24*60*60*1000l });
     }
 
     private final static long getLong(Properties props, String key) {
