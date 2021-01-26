@@ -1912,10 +1912,10 @@
         <copy file="build/i2psnark.war" todir="pkg-temp/webapps/" />
         <copy file="installer/resources/deletelist.txt" todir="pkg-temp/" />
         <copy file="installer/resources/blocklist.txt" todir="pkg-temp/" />
+        <copy file="installer/resources/i2ping" todir="pkg-temp/" />
         <!-- will overwrite existing instances, resetting i2p path
         <copy file="installer/resources/eephead" todir="pkg-temp/" />
         <copy file="installer/resources/eephead.bat" todir="pkg-temp/" />
-        <copy file="installer/resources/i2ping" todir="pkg-temp/" />
         -->
         <copy todir="pkg-temp/man/">
             <fileset dir="installer/resources/man/" />
