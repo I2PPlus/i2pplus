@@ -1,19 +1,106 @@
 #!/bin/sh
-# if I2P="%INSTALL_PATH" then manually change to to full path of i2p install e.g. /home/user/i2p (no trailing /)
-scr_dir="$(cd "$(dirname "$0")" && pwd)"
-I2P="$($scr_dir/i2prouter getdir)"
+# This is the location of ./i2prouter
+I2P="" # If lib/i2p.jar not found please specifiy location, example: I2P="/home/user/apps/i2p"
 
-check_http="$(echo $@ | grep -Eo '(http|https)://[^/"]+')"
-if [ -z $check_http ]; then
+ # I2P Variable not set, try and set our own location
+if [ -z "$I2P" ]; then
+    I2P="$(cd "$(dirname "$0")" && pwd)"
+fi
+
+# Missing file
+if [ ! -f "$I2P/lib/i2p.jar" ]; then
+	echo "File $I2P/lib/i2p.jar not found, please edit $0 and change the I2P variable(generally set to the i2prouter location)."
+	exit 1
+fi
+
+ # Show help with exit status
+send_help() {
+    java -jar "$I2P/lib/i2p.jar" eephead
+    if [ "$1" ]; then
+        exit $1
+    else
+        exit 0
+    fi
+}
+
+ # Null input or help request
+if [ -z "$1" ] || [ "$1" = "--help" ] || [ "$1" = "-h" ]; then
+    send_help
+fi
+
+    # Filter arguments
+args=""
+for a in $@; do
+    case $a in
+        -c) # -c (require 5 consecutive pings to report success)
+            no_proxy=true
+            args="$args -c "
+            shift
+            ;;
+        -h)
+            send_help
+            ;;
+        -p) # -p Proxy (:0 for no proxy)
+            shift
+            if [ "$1" = ":0" ]; then no_proxy=true ; fi
+            proxy="$1"
+            args="$args -p $proxy "
+            shift
+            ;;
+        -n) # -n # of retries(seconds)
+            shift
+            retries="$(echo $1 | grep -Eo '[0-9]{1,9}')"
+            if [ -z "$retries" ]; then
+                echo " ✖ retries, must be specified in seconds."
+                send_help 1
+            fi
+            args="$args -n $retries "
+            shift
+            ;;
+        -t) # -t timeout(seconds)
+            shift
+            timeout="$(echo $1 | grep -Eo '[0-9]{1,9}')"
+            if [ -z "$timeout" ]; then
+                echo " ✖ timeout, must be specified in seconds."
+                send_help 1
+            fi
+            args="$args -t $timeout "
+            shift
+            ;;
+        -u) # -u username
+            shift
+            username="$1"
+            args="$args -u $username "
+            shift
+            ;;
+        -x) # -x password
+            shift
+            password="$1"
+            args="$args -x $password "
+            shift
+            ;;
+        http*://*) # URL
+            url="$(echo $@ | grep -iEo '(http|https)://[a-z0-9./?=_%:-]*')"
+            args="$args $url "
+            ;;
+    esac
+done
+
+ # Don't allow the use of -p -c together
+if [ "$no_proxy" ] && [ "$proxy" ]; then
+    echo " ✖ -p and -c can not be used together."
+    send_help 1
+fi
+
+# URL error
+if [ -z "$url" ]; then
 	echo "Invalid or missing URL, eg. ./eephead http://skank.i2p"
-	java -jar "$I2P/lib/i2p.jar" eephead
-	exit 1
+    send_help 1
 fi
 
-if [ -f "$I2P/lib/i2p.jar" ]; then
-	echo " ➤ Initiating eephead probe of $@…"
-	java -jar "$I2P/lib/i2p.jar" eephead "$@"
-else
-	echo "File $I2P/lib/i2p.jar not found."
-	exit 1
-fi
+echo " ➤ Initiating eephead probe of $url…"
+
+cmd='java -jar '"$I2P"'/lib/i2p.jar eephead '"${args}"
+eval ${cmd}
+
+exit $?
