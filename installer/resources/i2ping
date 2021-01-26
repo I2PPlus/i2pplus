@@ -1,6 +1,16 @@
 #!/bin/sh
-scr_dir="$(cd "$(dirname "$0")" && pwd)"
-I2P="$($scr_dir/i2prouter getdir)"
+# This is the location of ./i2prouter
+I2P="" # If lib/i2ptunnel.jar not found please specifiy location, example: I2P="/home/user/apps/i2p"
+
+if [ -z "$I2P" ]; then
+    I2P="$(cd "$(dirname "$0")" && pwd)"
+fi
+
+    # Can we find the i2ptunnel.jar
+if [ ! -f "$I2P/lib/i2ptunnel.jar" ]; then
+    echo " ✖ File $I2P/lib/i2ptunnel.jar not found, please edit $0 and change the I2P variable(generally set to the i2prouter location)."
+    exit 1
+fi
 
     # Show i2ping help with option for exit number
 send_help() {
@@ -19,149 +29,145 @@ if [ ! "$1" ]; then
     send_help
 fi
 
-    # Can we find the i2ptunnel.jar
-if [ -f "$I2P/lib/i2ptunnel.jar" ]; then
-        # Filter arguments
-    args=""
-    for a in $@; do
-        case $a in
-            -c) # -c (require 5 consecutive pings to report success)
-                sec_five=true
-                args="$args -c "
-                shift
-                ;;
-            -d) # -d Enable debug output
-                debug=true
-                shift
-                ;;
-            -p) # -p toPort
-                shift
-                port_to=$(echo "scale=0; $1 + 0" | bc)
-                if [ $port_to -lt 1 ] || [ $port_to -gt 65535 ]; then
-                    echo " ✖ Port range: to is wrong or missing, port tried $port_to"
-                    send_help 1
-                fi
-                args="$args -p $port_to "
-                shift
-                ;;
-            -f) # -f fromPort
-                shift
-                port_from=$1
-                if [ $port_from -le 0 ] || [ $port_from -ge 65536 ]; then
-                    echo " ✖ Port range: from is wrong or missing, port tried $port_from"
-                    send_help 1
-                fi
-                args="$args -f $port_from "
-                shift
-                ;;
-            -h) # -h (pings all hosts in hosts.txt in current directory)
-                host_file=./hosts.txt
-                if [ ! -f $host_file ]; then
-                    echo " ✖ Required hosts file ./hosts.txt not found"
-                fi
-                args="$args -h"
-                shift
-                ;;
-            -l) # -l <destlistfile> (pings a list of hosts in a file)
-                shift
-                list_file=$1
-                if [ ! -f $list_file ]; then
-                    echo " ✖ File $list not found"
-                    send_help 1
-                fi
-                args="$args -l $list_file"
-                shift
-                ;;
-            -m) # -m maxSimultaneousPings (default 16)
-                shift
-                max=$1
-                args="$args -m $max"
-                shift
-                ;;
-            -n) # -n numberOfPings (default 10)
-                shift
-                pings=$1
-                args="$args -n $pings"
-                shift
-                ;;
-            -t) # -t timeout (ms, default 8000)
-                shift
-                timeout=$1
-                if [ $timeout -gt 0 ] && [ $timeout -lt 9 ]; then
-                    echo " ✖ Timeout is in milliseconds e.g. for 6 seconds: -t 6000"
-                    send_help 1
-                fi
-                args="$args -t $timeout"
-                shift
-                ;;
-            --help)
-                send_help
-                shift
-                ;;
-            *)
-                address="$1"
-                ;;
-        esac
-    done
-    if [ $host_file ] && [ $list_file ]; then
-        echo " ✖ Unable to use -h and -l together"
-        send_help 1
-    elif [ $host_file ] && [ -f $host_file ]; then
-        echo " • Found $host_file, initiating ping..."
-        debug "$(cat $host_file | wc -l) hosts to ping"
-        echo " • Trying to open tunnel(s)"
-        cmd='java -jar '"$I2P"'/lib/i2ptunnel.jar -die -e "ownDest yes" -e "ping '"${args}"'"'
-        eval ${cmd}
-        exit $?
-    elif [ $list_file ] && [ -f $list_file ]; then
-        echo " • Found list file $list_file, initiating ping..."
-        debug "$(cat $list_file | wc -l) hosts to ping"
-        echo " • Trying to open tunnel(s)"
-        cmd='java -jar '"$I2P"'/lib/i2ptunnel.jar -die -e "ownDest yes" -e "ping '"${args}"'"'
-        eval ${cmd}
-        exit $?
-    elif [ "$address" ]; then # Do we really have an address?
-
-            # Check address type
-        if [ $(echo $address | wc -c) -eq 525 ]; then
-            debug "Adress is B64 format"
-            lookup=""
-        elif [ "$(echo $address | grep -oiE 'b32.i2p$')" = 'b32.i2p' ] && [ $(echo $address | wc -c) -eq 61 ]; then
-            debug "Address is b32.i2p format"
-            lookup=""
-        elif [ "$(echo $address | grep -ioE '.i2p$')" = '.i2p' ]; then
-            debug "Address is .i2p format"
-            lookup=""
-        else
-            echo " ✖ Address is an unknown format"
-            send_help 1
-        fi
-
-        echo " ➤ Initiating ping of $address"
-
-         # Try to resolve B64 address
-        lookup=$(java -jar -Xms8m -Xmx8m $I2P/lib/i2ptunnel.jar -nocli -w -e "lookup ${address}" -d)
-        if [ "$lookup" != "Unknown host: $address" ]; then
-            echo " ✔ Found valid B64 address"
-        fi
-
-         # Start single ping command
-        echo " • Opening tunnel..."
-        cmd='java -jar '"$I2P"'/lib/i2ptunnel.jar -die -e "ownDest yes" -e "ping '"${args}"' '"${address}"'"'
-        eval ${cmd} | while read line; do # Parse output
-            filter="$(echo $line | grep ""$address"")" # Filter 1
-            filter="$(echo $line | grep -iEo '[0-9]{1,99}\:|result')" # Filter 2
-            if [ "$filter" ]; then # If fitler found echo the output
-                echo " $line"
-            else
-                debug "Filter: $filter -- Output: $line"
+    # Filter arguments
+args=""
+for a in $@; do
+    case $a in
+        -c) # -c (require 5 consecutive pings to report success)
+            sec_five=true
+            args="$args -c "
+            shift
+            ;;
+        -d) # -d Enable debug output
+            debug=true
+            shift
+            ;;
+        -p) # -p toPort
+            shift
+            port_to=$(echo "scale=0; $1 + 0" | bc)
+            if [ $port_to -lt 1 ] || [ $port_to -gt 65535 ]; then
+                echo " ✖ Port range: to is wrong or missing, port tried $port_to"
+                send_help 1
             fi
-        done
+            args="$args -p $port_to "
+            shift
+            ;;
+        -f) # -f fromPort
+            shift
+            port_from=$1
+            if [ $port_from -le 0 ] || [ $port_from -ge 65536 ]; then
+                echo " ✖ Port range: from is wrong or missing, port tried $port_from"
+                send_help 1
+            fi
+            args="$args -f $port_from "
+            shift
+            ;;
+        -h) # -h (pings all hosts in hosts.txt in current directory)
+            host_file=./hosts.txt
+            if [ ! -f $host_file ]; then
+                echo " ✖ Required hosts file ./hosts.txt not found"
+            fi
+            args="$args -h"
+            shift
+            ;;
+        -l) # -l <destlistfile> (pings a list of hosts in a file)
+            shift
+            list_file=$1
+            if [ ! -f $list_file ]; then
+                echo " ✖ File $list not found"
+                send_help 1
+            fi
+            args="$args -l $list_file"
+            shift
+            ;;
+        -m) # -m maxSimultaneousPings (default 16)
+            shift
+            max=$1
+            args="$args -m $max"
+            shift
+            ;;
+        -n) # -n numberOfPings (default 10)
+            shift
+            pings=$1
+            args="$args -n $pings"
+            shift
+            ;;
+        -t) # -t timeout (ms, default 8000)
+            shift
+            timeout=$1
+            if [ $timeout -gt 0 ] && [ $timeout -lt 9 ]; then
+                echo " ✖ Timeout is in milliseconds e.g. for 6 seconds: -t 6000"
+                send_help 1
+            fi
+            args="$args -t $timeout"
+            shift
+            ;;
+        --help)
+            send_help
+            shift
+            ;;
+        *)
+            address="$1"
+            ;;
+    esac
+done
+if [ $host_file ] && [ $list_file ]; then
+    echo " ✖ Unable to use -h and -l together"
+    send_help 1
+elif [ $host_file ] && [ -f $host_file ]; then
+    echo " • Found $host_file, initiating ping..."
+    debug "$(cat $host_file | wc -l) hosts to ping"
+    echo " • Trying to open tunnel(s)"
+    cmd='java -jar '"$I2P"'/lib/i2ptunnel.jar -die -e "ownDest yes" -e "ping '"${args}"'"'
+    eval ${cmd}
+    exit $?
+elif [ $list_file ] && [ -f $list_file ]; then
+    echo " • Found list file $list_file, initiating ping..."
+    debug "$(cat $list_file | wc -l) hosts to ping"
+    echo " • Trying to open tunnel(s)"
+    cmd='java -jar '"$I2P"'/lib/i2ptunnel.jar -die -e "ownDest yes" -e "ping '"${args}"'"'
+    eval ${cmd}
+    exit $?
+elif [ "$address" ]; then # Do we really have an address?
+
+        # Check address type
+    if [ $(echo $address | wc -c) -eq 525 ]; then
+        debug "Adress is B64 format"
+        lookup=""
+    elif [ "$(echo $address | grep -oiE 'b32.i2p$')" = 'b32.i2p' ] && [ $(echo $address | wc -c) -eq 61 ]; then
+        debug "Address is b32.i2p format"
+        lookup=""
+    elif [ "$(echo $address | grep -ioE '.i2p$')" = '.i2p' ]; then
+        debug "Address is .i2p format"
+        lookup=""
     else
-        echo " ✖ Missing address field"
+        echo " ✖ Address is an unknown format"
         send_help 1
     fi
+
+    echo " ➤ Initiating ping of $address"
+
+     # Try to resolve B64 address
+    lookup=$(java -jar -Xms8m -Xmx8m $I2P/lib/i2ptunnel.jar -nocli -w -e "lookup ${address}" -d)
+    if [ "$lookup" != "Unknown host: $address" ]; then
+        echo " ✔ Found valid B64 address"
+    fi
+
+     # Start single ping command
+    echo " • Opening tunnel..."
+    cmd='java -jar '"$I2P"'/lib/i2ptunnel.jar -die -e "ownDest yes" -e "ping '"${args}"' '"${address}"'"'
+    eval ${cmd} | while read line; do # Parse output
+        filter="$(echo $line | grep ""$address"")" # Filter 1
+        filter="$(echo $line | grep -iEo '[0-9]{1,99}\:|result')" # Filter 2
+        if [ "$filter" ]; then # If fitler found echo the output
+            echo " $line"
+        else
+            debug "Filter: $filter -- Output: $line"
+        fi
+    done
 else
-    echo " ✖ File $I2P/lib/i2ptunnel.jar not found"
+    echo " ✖ Missing address field"
+    send_help 1
 fi
+
 exit 0
