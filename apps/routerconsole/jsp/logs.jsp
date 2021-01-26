@@ -146,9 +146,15 @@
           var criticallogs = document.getElementById("criticallogs");
           if (criticallogs) {
             var criticallogsResponse = xhr.responseXML.getElementById("criticallogs");
-            var criticallogsParent = criticallogs.parentNode;
-            if (!Object.is(criticallogs.innerHTML, criticallogsResponse.innerHTML))
-              criticallogsParent.replaceChild(criticallogsResponse, criticallogs);
+            var mainLogs = document.getElementById("logs");
+            var mainLogsResponse = xhr.responseXML.getElementById("logs");
+            if (criticallogs && !criticallogsResponse) {
+              mainLogsParent.replaceChild(mainLogsResponse, mainLogs);
+            } else {
+              var criticallogsParent = criticallogs.parentNode;
+              if (!Object.is(criticallogs.innerHTML, criticallogsResponse.innerHTML))
+                criticallogsParent.replaceChild(criticallogsResponse, criticallogs);
+            }
           }
           var routerlogsParent = routerlogs.parentNode;
           var servicelogsParent = servicelogs.parentNode;
