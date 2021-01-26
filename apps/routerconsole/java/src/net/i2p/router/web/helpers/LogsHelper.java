@@ -207,7 +207,7 @@ public class LogsHelper extends HelperBase {
                 str = str.replace("&", "&amp;").replace("<", "&lt;").replace(">", "&gt;");
                 obuf.append("<pre id=\"servicelogs\">").append(str).append("</pre>");
             } else {
-                obuf.append("<p><i>").append(_t("No log messages")).append("</i></p>");
+                obuf.append("<p class=\"nologs\"><i>").append(_t("No log messages")).append("</i></p>");
             }
         }
         Object[] rv = new Object[3];

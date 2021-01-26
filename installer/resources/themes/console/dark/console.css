@@ -12503,7 +12503,7 @@ h3#servicelogs {
   color: #ee9 !important;
 }
 
-#routerlogs td p.nologs, #criticallogs td p.nologs {
+#logs .nologs {
   padding: 5px 10px 7px;
 }
 
