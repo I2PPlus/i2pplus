@@ -149,6 +149,7 @@
             var mainLogs = document.getElementById("logs");
             var mainLogsResponse = xhr.responseXML.getElementById("logs");
             if (criticallogs && !criticallogsResponse) {
+              var mainLogsParent = mainLogs.parentNode;
               mainLogsParent.replaceChild(mainLogsResponse, mainLogs);
             } else {
               var criticallogsParent = criticallogs.parentNode;
