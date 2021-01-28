@@ -43,7 +43,7 @@ class TestJob extends JobImpl {
     private int _id;
 
     /** base to randomize the test delay on */
-    private static final int TEST_DELAY = 40*1000;
+    private static final int TEST_DELAY = 75*1000;
 
     public TestJob(RouterContext ctx, PooledTunnelCreatorConfig cfg, TunnelPool pool) {
         super(ctx);
