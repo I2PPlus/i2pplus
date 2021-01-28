@@ -95,7 +95,7 @@ public class ProfileOrganizer {
      */
     public static final String PROP_MINIMUM_HIGH_CAPACITY_PEERS = "profileOrganizer.minHighCapacityPeers";
 //    public static final int DEFAULT_MINIMUM_HIGH_CAPACITY_PEERS = 25;
-    public static final int DEFAULT_MINIMUM_HIGH_CAPACITY_PEERS = 200;
+    public static final int DEFAULT_MINIMUM_HIGH_CAPACITY_PEERS = 300;
 //    private static final int ABSOLUTE_MAX_HIGHCAP_PEERS = 150;
     private static final int ABSOLUTE_MAX_HIGHCAP_PEERS = 500;
 
@@ -453,9 +453,9 @@ public class ProfileOrganizer {
         } else {
             if (_log.shouldLog(Log.DEBUG))
                 if (howMany != 1)
-                _log.debug(howMany + " Fast peers selected for tunnel build");
+                   _log.debug(howMany + " Fast peers selected for tunnel build");
                 else
-                _log.debug(howMany + " Fast peer selected for tunnel build");
+                    _log.debug(howMany + " Fast peer selected for tunnel build");
         }
         return;
     }
@@ -1307,7 +1307,7 @@ public class ProfileOrganizer {
             if (profile.getCapacityValue() >= _thresholdCapacityValue) {
                 // duplicates being clobbered is fine by us
                 total += profile.getSpeedValue();
-                if (count++ > (maxHighCapPeers / 8) * 5)
+                if (count++ > (maxHighCapPeers / 7) * 6)
                     break;
             } else {
                 // its ordered
@@ -1569,11 +1569,9 @@ public class ProfileOrganizer {
         if (cm == null)
             return DEFAULT_MAXIMUM_FAST_PEERS;
         int known = _context.netDb().getKnownRouters();
-        int def = Math.max(DEFAULT_MAXIMUM_FAST_PEERS,
-//                           (6 * cm.listClients().size()) + DEFAULT_MINIMUM_FAST_PEERS - 2);
-                          (10 * cm.listClients().size()) + DEFAULT_MINIMUM_FAST_PEERS - 2);
+        int def = Math.max(DEFAULT_MAXIMUM_FAST_PEERS, (10 * cm.listClients().size()) + DEFAULT_MINIMUM_FAST_PEERS - 2);
         if (known > 2000)
-            return _context.getProperty(PROP_MINIMUM_FAST_PEERS, Math.max((known / 60), def));
+            return _context.getProperty(PROP_MINIMUM_FAST_PEERS, Math.max((known / 35), def));
         else
             return _context.getProperty(PROP_MINIMUM_FAST_PEERS, def);
     }
@@ -1597,18 +1595,18 @@ public class ProfileOrganizer {
     }
 
     /**
-     * Defines the minimum number of 'fast' peers that the organizer should select.  If
+     * Defines the minimum number of 'high capacity' peers that the organizer should select.  If
      * the profile calculators derive a threshold that does not select at least this many peers,
      * the threshold will be overridden to make sure this many peers are in the fast+reliable group.
      * This parameter should help deal with a lack of diversity in the tunnels created when some
      * peers are particularly fast.
      *
-     * @return minimum number of peers to be placed in the 'fast' group
+     * @return minimum number of peers to be placed in the 'high capacity' group
      */
     protected int getMinimumHighCapacityPeers() {
         int known = _context.netDb().getKnownRouters();
         if (known > 2000)
-            return _context.getProperty(PROP_MINIMUM_HIGH_CAPACITY_PEERS, Math.max(known / 40, countFastPeers() * 2));
+            return _context.getProperty(PROP_MINIMUM_HIGH_CAPACITY_PEERS, Math.max(known / 15, DEFAULT_MINIMUM_HIGH_CAPACITY_PEERS));
         else
             return _context.getProperty(PROP_MINIMUM_HIGH_CAPACITY_PEERS, DEFAULT_MINIMUM_HIGH_CAPACITY_PEERS);
     }
