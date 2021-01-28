@@ -588,7 +588,7 @@ public class TunnelPoolManager implements TunnelManagerFacade {
     void buildComplete(PooledTunnelCreatorConfig cfg) {
         if (cfg.getLength() > 1 &&
             !_context.router().gracefulShutdownInProgress() &&
-            (_context.getProperty("router.disableTunnelTesting") != "false" ||
+            (_context.getProperty("router.disableTunnelTesting") != "true" ||
              _context.router().isHidden() ||
              _context.router().getRouterInfo().getAddressCount() <= 0)) {
             TunnelPool pool = cfg.getTunnelPool();
