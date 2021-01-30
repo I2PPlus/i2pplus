@@ -40,7 +40,7 @@ public class RouterThrottleImpl implements RouterThrottle {
     private static final String PROP_REJECT_STARTUP_TIME = "router.rejectStartupTime";
     private static final int DEFAULT_MIN_THROTTLE_TUNNELS = SystemVersion.isAndroid() ? 100 :
 //                                                            SystemVersion.isARM() ? 500 : 1000;
-                                                            SystemVersion.isARM() ? 500 : 2000;
+                                                            SystemVersion.isARM() ? 800 : 4000;
 
     /**
      *  TO BE FIXED - SEE COMMENTS BELOW
@@ -102,9 +102,10 @@ public class RouterThrottleImpl implements RouterThrottle {
     public boolean acceptNetworkMessage() {
         //if (true) return true;
         long lag = _context.jobQueue().getMaxLag();
-        if ( (lag > JOB_LAG_LIMIT_NETWORK) && (_context.router().getUptime() > 60*1000) ) {
+//        if ( (lag > JOB_LAG_LIMIT_NETWORK) && (_context.router().getUptime() > 60*1000) ) {
+        if ( (lag > JOB_LAG_LIMIT_NETWORK) && (_context.router().getUptime() > 3*60*1000) ) {
             if (_log.shouldLog(Log.WARN))
-                _log.warn("Throttling network reader - job lag is " + lag + "ms");
+                _log.warn("Throttling Network Reader -> job lag is " + lag + "ms");
             _context.statManager().addRateData("router.throttleNetworkCause", lag);
             return false;
         } else {
@@ -118,7 +119,7 @@ public class RouterThrottleImpl implements RouterThrottle {
         long lag = _context.jobQueue().getMaxLag();
         if (lag > JOB_LAG_LIMIT_NETDB) {
             if (_log.shouldLog(Log.DEBUG))
-                _log.debug("Refusing NetDb Lookup request - job lag is " + lag + "ms");
+                _log.debug("Refusing NetDb Lookup request -> job lag is " + lag + "ms");
             _context.statManager().addRateData("router.throttleNetDbCause", lag);
             return false;
         } else {
@@ -493,17 +494,21 @@ public class RouterThrottleImpl implements RouterThrottle {
 
     private double getTunnelGrowthFactor() {
         try {
-            return Double.parseDouble(_context.getProperty("router.tunnelGrowthFactor", "1.3"));
+//            return Double.parseDouble(_context.getProperty("router.tunnelGrowthFactor", "1.3"));
+            return Double.parseDouble(_context.getProperty("router.tunnelGrowthFactor", "2.5"));
         } catch (NumberFormatException nfe) {
-            return 1.3;
+//            return 1.3;
+            return 2.5;
         }
     }
 
     private double getTunnelTestTimeGrowthFactor() {
         try {
-            return Double.parseDouble(_context.getProperty("router.tunnelTestTimeGrowthFactor", "1.3"));
+//            return Double.parseDouble(_context.getProperty("router.tunnelTestTimeGrowthFactor", "1.3"));
+            return Double.parseDouble(_context.getProperty("router.tunnelTestTimeGrowthFactor", "2.5"));
         } catch (NumberFormatException nfe) {
-            return 1.3;
+//            return 1.3;
+            return 2.5;
         }
     }
 
