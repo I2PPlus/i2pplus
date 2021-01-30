@@ -171,7 +171,7 @@ public class ConfigUpdateHelper extends HelperBase {
     }
 
     public String getZipURL() {
-        return _context.getProperty(ConfigUpdateHandler.PROP_ZIP_URL, "");
+        return _context.getProperty(ConfigUpdateHandler.PROP_ZIP_URL, "http://skank.i2p/i2pupdate.zip");
     }
 
     /** @since 0.9.20 */

@@ -24,26 +24,36 @@
 <input type="hidden" name="nonce" value="<%=pageNonce%>" >
 <% /* set hidden default */ %>
 <input type="submit" name="action" value="" style="display:none" >
-<% if (updatehelper.canInstall()) { %>
+<%
+    if (updatehelper.canInstall()) {
+%>
 <h3 class="tabletitle"><%=intl._t("I2P &amp; News Updates")%></h3>
 <table id="i2pupdates" class="configtable" border="0" cellspacing="5">
-<% } else { %>
+<%
+    } else {
+%>
 <h3><%=intl._t("News Updates")%></h3>
 <table id="i2pupdates" class="configtable" border="0" cellspacing="5">
 <tr>
 <td align="right">
 <b><%=intl._t("News Updates")%>:</b>
 </td>
-<% }   // if canInstall %>
+<%
+    }   // if canInstall
+%>
 <tr>
 <td id="updateHelper">
 <div class="optionlist">
-<% if (updatehelper.canInstall()) { %>
+<%
+    if (updatehelper.canInstall()) {
+%>
 <span class="nowrap">
 <b><%=formhandler._t("I2P update policy")%>:</b>
 <jsp:getProperty name="updatehelper" property="updatePolicySelectBox" />
 </span><br>
-<% }   // if canInstall %>
+<%
+    }   // if canInstall
+%>
 <span class="nowrap">
 <b><%=intl._t("Update check")%>:</b>
 <jsp:getProperty name="updatehelper" property="refreshFrequencySelectBox" />
@@ -53,14 +63,22 @@
 </tr>
 <tr>
 <td class="optionsave">
-<% if ("true".equals(System.getProperty("net.i2p.router.web.UpdateHandler.updateInProgress", "false"))) { %> <i><%=intl._t("Update In Progress")%></i><br>
-<% } else { %>
+<%
+    if ("true".equals(System.getProperty("net.i2p.router.web.UpdateHandler.updateInProgress", "false"))) { %>
+<i><%=intl._t("Update In Progress")%></i><br>
+<%
+    } else {
+%>
 <input type="submit" name="action" class="check" value="<%=intl._t("Check for updates")%>" />
-<% } %>
+<%
+    }
+%>
 </td>
 </tr>
-<% if (updatehelper.canInstall()) { %>
-<% if (updatehelper.isAdvanced()) { %>
+<%
+    if (updatehelper.canInstall()) {
+        if (updatehelper.isAdvanced()) {
+%>
 <tr>
 <td>
 <b class="suboption" title="<%=intl._t("In order to maintain anonymity, it is recommended to update using the I2P http proxy. If the news or I2P update is hosted on I2P, using the proxy will be necessary.")%>">
@@ -95,6 +113,9 @@
 </div>
 </td>
 </tr>
+<%
+        } // isAdvanced
+%>
 <tr title="<%=intl._t("If I2P cannot update via BitTorrent, it will try these addresses in the order they are listed")%>">
 <td>
 <div class="optionsingle optiontextarea">
@@ -136,6 +157,9 @@
 </td>
 </tr>
 <tr>
+<td class="infohelp">To update with unsigned I2P+ release builds: <code>http://skank.i2p/i2pupdate.zip</code> or for the latest unsigned development builds: <code>http://skank.i2p/dev/i2pupdate.zip</code></td>
+</tr>
+<tr>
 <td>
 <b id="unsignedbuild" class="suboption">
 <jsp:getProperty name="updatehelper" property="updateUnsigned" />
@@ -151,12 +175,15 @@
 </div>
 </td>
 </tr>
-<% }   // if isAdvanced %>
-<% } else { %>
+<%
+    } else {
+%>
 <tr>
 <td class="infohelp"><b><%=intl._t("Updates will be dispatched via your package manager.")%></b></td>
 </tr>
-<% }   // if canInstall %>
+<%
+    }   // if canInstall
+%>
 <tr class="tablefooter"><td class="optionsave">
 <input type="reset" class="cancel" value="<%=intl._t("Cancel")%>" >
 <input type="submit" name="action" class="accept" value="<%=intl._t("Save")%>" >

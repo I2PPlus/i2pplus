@@ -110,7 +110,10 @@ public class InfoHelper extends HelperBase {
     }
 
     public String updateUnsigned() {
-        return _context.getProperty("router.updateUnsigned");
+        if (_context.getProperty("router.updateUnsigned") != null)
+            return _context.getProperty("router.updateUnsigned");
+        else
+            return "true";
     }
 
     public String bwIn() {
@@ -118,7 +121,8 @@ public class InfoHelper extends HelperBase {
         if (in != null)
             return in;
         else
-            return "512";
+//            return "512";
+            return "1024";
     }
 
     public String bwOut() {
@@ -126,7 +130,8 @@ public class InfoHelper extends HelperBase {
         if (out != null)
             return out;
         else
-            return "48";
+//            return "48";
+            return "512";
     }
 
     public String bwShare() {

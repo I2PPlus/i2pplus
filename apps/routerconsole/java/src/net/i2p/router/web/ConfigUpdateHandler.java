@@ -244,12 +244,15 @@ public class ConfigUpdateHandler extends FormHandler {
             }
         }
 
+        if (!_context.getBooleanProperty(PROP_UPDATE_DISABLED)) {
+            changes.put(PROP_UPDATE_UNSIGNED, Boolean.toString(_updateUnsigned));
+            changes.put(PROP_UPDATE_DEV_SU3, Boolean.toString(_updateDevSU3));
+        }
+
         if (isAdvanced()) {
             changes.put(PROP_SHOULD_PROXY_NEWS, Boolean.toString(_newsThroughProxy));
             if (!_context.getBooleanProperty(PROP_UPDATE_DISABLED)) {
                 changes.put(PROP_SHOULD_PROXY, Boolean.toString(_updateThroughProxy));
-                changes.put(PROP_UPDATE_UNSIGNED, Boolean.toString(_updateUnsigned));
-                changes.put(PROP_UPDATE_DEV_SU3, Boolean.toString(_updateDevSU3));
             }
         }
 
