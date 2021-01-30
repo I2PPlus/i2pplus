@@ -685,6 +685,16 @@ elif [ "$devel_files" ] && [ "$devel" ]; then
     debug "devel files: $devel_files"
 fi
 
+# Remove old i2pupdate.zip
+if [ -f "$I2P/i2pupdate.zip" ]; then
+    debug "removing $I2P/i2pupdate.zip"
+    rm -f "$I2P/i2pupdate.zip"
+    if [ $? -ne 0 ]; then
+        verbose "Found old $I2P/i2pupdate.zip, failed to remove, unable to continue until file is removed"
+        exit 1
+    fi
+fi
+
  # loop through available downloaders
 for b in $downloader; do
 
