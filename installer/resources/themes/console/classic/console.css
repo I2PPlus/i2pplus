@@ -3416,26 +3416,15 @@ pre#transports {
   margin-left: 5px;
 }
 
-/*
-#i2pupdates th label {
-  margin-right: 10px;
+#i2pupdates td.infohelp {
+  padding: 15px 15px 15px 42px !important;
+  background-size: 24px 24px !important;
+  background-position: 10px center !important;
 }
 
-#i2pupdates td:first-child {
-  padding-right: 0;
-  line-height: 120%;
+#i2pupdates .infohelp code {
+  user-select: all;
 }
-
-#i2pupdates tr:last-child td {
-  background: #fff !important;
-  padding: 5px;
-}
-
-#i2pupdates td:last-child {
-  padding-left: 0;
-  padding-right: 8px;
-}
-*/
 
 div.configure tr, div.configure td {
   padding: 5px;

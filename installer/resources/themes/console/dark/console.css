@@ -4546,14 +4546,14 @@ form > table {
   margin-bottom: 10px;
 }
 
-#i2pupdates td:first-child {
+#i2pupdates td:not(.infohelp):first-child {
   padding-left: 10px;
   width: 15%;
   white-space: nowrap;
   line-height: 120%;
 }
 
-#i2pupdates td {
+#i2pupdates td:not(.infohelp) {
   padding: 2px 3px;
 }
 
@@ -5158,13 +5158,13 @@ h4.app2 a::after {
 }
 
 #changelog pre {
+  margin-top: 11px;
   padding: 10px 10px 10px 20px;
+  width: calc(100% - 32px);
   max-height: 600px;
   overflow-y: scroll;
-  width: calc(100% - 32px);
   border-left: 1px solid #242;
   border-right: 1px solid #242;
-  margin-top: 11px;
   background: #000;
 }
 
@@ -5185,13 +5185,13 @@ p#fullhistory {
 }
 
 #fullhistory a::before {
-  content: "";
-  display: inline-block;
-  vertical-align: middle;
   width: 19px;
   height: 20px;
+  display: inline-block;
+  vertical-align: middle;
   background: url(/themes/console/images/buttons/fullview.png) left 45% no-repeat;
   background-size: 16px auto;
+  content: "";
 }
 
 ul#upnphelp li:last-child, #legal ul li:last-child {
@@ -5199,16 +5199,25 @@ ul#upnphelp li:last-child, #legal ul li:last-child {
 }
 
 .main#help td.infohelp, .main#help td.infowarn {
-  background-size: 24px 24px !important;
   padding-left: 46px !important;
+  background-size: 24px 24px !important;
+}
+
+#i2pupdates td.infohelp {
+  padding: 15px 15px 15px 46px !important;
+  background-size: 24px 24px !important;
+}
+
+#i2pupdates td.infohelp code {
+  user-select: all;
 }
 
 .main#help #configinfo .infowarn {
+  padding: 7px 10px 7px 36px !important;
   border: none;
   border-bottom: 1px solid #000;
   box-shadow: none;
   background-size: 20px 20px !important;
-  padding: 7px 10px 7px 36px !important;
 }
 
 #help li {
@@ -12602,7 +12611,7 @@ a[href^="/netdb"]:hover span {
   background: repeating-linear-gradient(to bottom, rgba(0,0,0,.8), rgba(0,16,0,.5) 1px, rgba(0,16,0,.5) 2px), url(/themes/console/dark/images/camotile2.png) !important;
 }
 
-#plugininstall tr, #plugininstall2 tr, #plugininstall td, #plugininstall2 td, #reseedconfig td, #manualreseed td, #i2pupdates td,
+#plugininstall tr, #plugininstall2 tr, #plugininstall td, #plugininstall2 td, #reseedconfig td, #manualreseed td, #i2pupdates td:not(.infohelp),
 #netconfig td, #externali2cp td, #joinfamily tr:last-child td, #newfamily tr:last-child td, #newfamily tr:last-child table tr {
   background: none !important;
 }
