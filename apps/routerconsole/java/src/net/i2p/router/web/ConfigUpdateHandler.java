@@ -309,7 +309,7 @@ public class ConfigUpdateHandler extends FormHandler {
             String oldURL = _context.router().getConfigSetting(PROP_DEV_SU3_URL);
             if ( (oldURL == null) || (!_devSU3URL.equals(oldURL)) ) {
                 changes.put(PROP_DEV_SU3_URL, _devSU3URL);
-                    addFormNotice(_t("Updating signed development build URL to {0}", _devSU3URL));
+                addFormNotice(_t("Updating signed development build URL to {0}", _devSU3URL));
             }
         }
 
