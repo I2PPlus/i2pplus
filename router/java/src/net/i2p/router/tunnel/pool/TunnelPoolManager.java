@@ -48,6 +48,8 @@ public class TunnelPoolManager implements TunnelManagerFacade {
     private volatile boolean _isShutdown;
     private final int _numHandlerThreads;
 
+    private static final String PROP_DISABLE_TUNNEL_TESTING = "router.disableTunnelTesting";
+
 //    private static final int MIN_KBPS_TWO_HANDLERS = 512;
     private static final int MIN_KBPS_TWO_HANDLERS = 64;
 //    private static final int MIN_KBPS_THREE_HANDLERS = 1024;
@@ -588,12 +590,18 @@ public class TunnelPoolManager implements TunnelManagerFacade {
     void buildComplete(PooledTunnelCreatorConfig cfg) {
         if (cfg.getLength() > 1 &&
             !_context.router().gracefulShutdownInProgress() &&
-            (!_context.getBooleanPropertyDefaultTrue("router.disableTunnelTesting") ||
-             _context.router().isHidden() ||
+            (!disableTunnelTesting() || _context.router().isHidden() ||
              _context.router().getRouterInfo().getAddressCount() <= 0)) {
             TunnelPool pool = cfg.getTunnelPool();
             _context.jobQueue().addJob(new TestJob(_context, cfg, pool));
         }
+    }
+
+    public boolean disableTunnelTesting() {
+        if (_context.getProperty(PROP_DISABLE_TUNNEL_TESTING) == null)
+            return false;
+        else
+            return _context.getBooleanProperty(PROP_DISABLE_TUNNEL_TESTING);
     }
 
     public synchronized void startup() {

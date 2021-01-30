@@ -244,12 +244,15 @@ public class ConfigUpdateHandler extends FormHandler {
             }
         }
 
+        if (!_context.getBooleanProperty(PROP_UPDATE_DISABLED)) {
+            changes.put(PROP_UPDATE_UNSIGNED, Boolean.toString(_updateUnsigned));
+            changes.put(PROP_UPDATE_DEV_SU3, Boolean.toString(_updateDevSU3));
+        }
+
         if (isAdvanced()) {
             changes.put(PROP_SHOULD_PROXY_NEWS, Boolean.toString(_newsThroughProxy));
             if (!_context.getBooleanProperty(PROP_UPDATE_DISABLED)) {
                 changes.put(PROP_SHOULD_PROXY, Boolean.toString(_updateThroughProxy));
-                changes.put(PROP_UPDATE_UNSIGNED, Boolean.toString(_updateUnsigned));
-                changes.put(PROP_UPDATE_DEV_SU3, Boolean.toString(_updateDevSU3));
             }
         }
 
@@ -297,24 +300,16 @@ public class ConfigUpdateHandler extends FormHandler {
         if ( (_zipURL != null) && (_zipURL.length() > 0) ) {
             String oldURL = _context.router().getConfigSetting(PROP_ZIP_URL);
             if ( (oldURL == null) || (!_zipURL.equals(oldURL)) ) {
-                if (isAdvanced()) {
-                    changes.put(PROP_ZIP_URL, _zipURL);
-                    addFormNotice(_t("Updating unsigned update URL to {0}", _zipURL));
-                } else {
-                    addFormError("Changing unsigned update URL disabled");
-                }
+                changes.put(PROP_ZIP_URL, _zipURL);
+                addFormNotice(_t("Updating unsigned update URL to {0}", _zipURL));
             }
         }
 
         if ( (_devSU3URL != null) && (_devSU3URL.length() > 0) ) {
             String oldURL = _context.router().getConfigSetting(PROP_DEV_SU3_URL);
             if ( (oldURL == null) || (!_devSU3URL.equals(oldURL)) ) {
-                if (isAdvanced()) {
-                    changes.put(PROP_DEV_SU3_URL, _devSU3URL);
+                changes.put(PROP_DEV_SU3_URL, _devSU3URL);
                     addFormNotice(_t("Updating signed development build URL to {0}", _devSU3URL));
-                } else {
-                    addFormError("Changing signed update URL disabled");
-                }
             }
         }
 

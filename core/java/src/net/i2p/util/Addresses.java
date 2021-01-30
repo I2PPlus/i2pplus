@@ -40,7 +40,7 @@ import net.i2p.data.DataHelper;
  * @author zzz
  */
 public abstract class Addresses {
-    
+
     private static final File IF_INET6_FILE = new File("/proc/net/if_inet6");
     private static final long INET6_CACHE_EXPIRE = 10*60*1000;
     private static final boolean INET6_CACHE_ENABLED = !SystemVersion.isMac() && !SystemVersion.isWindows() &&
@@ -122,10 +122,9 @@ public abstract class Addresses {
      *
      *  Warning, very slow on Windows, appx. 200ms + 50ms/interface
      *
-     *  @return a sorted set of all addresses including wildcard
      *  @param includeLocal whether to include local
      *  @param includeIPv6 whether to include IPV6
-     *  @return a Set of all addresses
+     *  @return a sorted set of all addresses including wildcard
      *  @since 0.8.3
      */
     public static SortedSet<String> getAddresses(boolean includeLocal, boolean includeIPv6) {
@@ -141,11 +140,10 @@ public abstract class Addresses {
      *
      *  Warning, very slow on Windows, appx. 200ms + 50ms/interface
      *
-     *  @return a sorted set of all addresses
      *  @param includeSiteLocal whether to include private like 192.168.x.x
      *  @param includeLoopbackAndWildcard whether to include 127.x.x.x and 0.0.0.0
      *  @param includeIPv6 whether to include IPV6
-     *  @return a Set of all addresses
+     *  @return a sorted set of all addresses
      *  @since 0.9.4
      */
     public static SortedSet<String> getAddresses(boolean includeSiteLocal,
@@ -163,12 +161,11 @@ public abstract class Addresses {
      *
      *  Warning, very slow on Windows, appx. 200ms + 50ms/interface
      *
-     *  @return a sorted set of all addresses
      *  @param includeSiteLocal whether to include private like 192.168.x.x
      *  @param includeLoopbackAndWildcard whether to include 127.x.x.x and 0.0.0.0
      *  @param includeIPv6 whether to include IPV6
      *  @param includeIPv6Temporary whether to include IPV6 temporary addresses
-     *  @return a Set of all addresses
+     *  @return a sorted set of all addresses
      *  @since 0.9.46
      */
     public static SortedSet<String> getAddresses(boolean includeSiteLocal,
@@ -343,7 +340,7 @@ public abstract class Addresses {
             return "(bad IP length " + addr.length + "):" + port;
         }
     }
-    
+
     /**
      *  Convenience method to convert and validate a port String
      *  without throwing an exception.
@@ -397,12 +394,18 @@ public abstract class Addresses {
      *  Unlike InetAddress.getByName(), we do NOT allow numeric IPs
      *  of the form d.d.d, d.d, or d, as these are almost certainly mistakes.
      *
-     *  @param host DNS or IPv4 or IPv6 host name; if null returns null
+     *  InetAddress.getByName() is documented to return 127.0.0.1 for a null host;
+     *  here we return null.
+     *
+     *  InetAddress.getByName() also returns 127.0.0.1 for a host "",
+     *  but this is undocumented; as of 0.9.49, here we return null.
+     *
+     *  @param host DNS or IPv4 or IPv6 host name; if null or empty returns null
      *  @return IP or null
      *  @since 0.9.3
      */
     public static byte[] getIP(String host) {
-        if (host == null)
+        if (host == null || host.isEmpty())
             return null;
         byte[] rv;
         synchronized (_IPAddress) {

@@ -140,14 +140,13 @@
       xhr.responseType = "document";
       xhr.onreadystatechange = function () {
         if (xhr.readyState==4 && xhr.status==200) {
-          var routerlogs = document.getElementById("routerlogs");
-          var servicelogs = document.getElementById("servicelogs");
-          var routerlogsResponse = xhr.responseXML.getElementById("routerlogs");
+          var mainLogs = document.getElementById("logs");
+          var mainLogsResponse = xhr.responseXML.getElementById("logs");
+          var mainLogsParent = mainLogs.parentNode;
+
           var criticallogs = document.getElementById("criticallogs");
           if (criticallogs) {
             var criticallogsResponse = xhr.responseXML.getElementById("criticallogs");
-            var mainLogs = document.getElementById("logs");
-            var mainLogsResponse = xhr.responseXML.getElementById("logs");
             if (criticallogs && !criticallogsResponse) {
               mainLogsParent.replaceChild(mainLogsResponse, mainLogs);
             } else {
@@ -156,14 +155,25 @@
                 criticallogsParent.replaceChild(criticallogsResponse, criticallogs);
             }
           }
+
+          var routerlogs = document.getElementById("routerlogs");
+          var routerlogsResponse = xhr.responseXML.getElementById("routerlogs");
           var routerlogsParent = routerlogs.parentNode;
-          var servicelogsParent = servicelogs.parentNode;
-          if (!Object.is(routerlogs.innerHTML, routerlogsResponse.innerHTML))
+          if (routerlogs && !routerlogsResponse)
+            mainLogsParent.replaceChild(mainLogsResponse, mainLogs);
+          else if (!Object.is(routerlogs.innerHTML, routerlogsResponse.innerHTML))
             routerlogsParent.replaceChild(routerlogsResponse, routerlogs);
+
+          var servicelogs = document.getElementById("servicelogs");
           if (servicelogs) {
+            var servicelogsParent = servicelogs.parentNode;
             var servicelogsResponse = xhr.responseXML.getElementById("servicelogs");
-            if (!Object.is(servicelogs.innerHTML, servicelogsResponse.innerHTML))
-              servicelogsParent.replaceChild(servicelogsResponse, servicelogs);
+            if (servicelogsResponse) {
+              if (!Object.is(servicelogs.innerHTML, servicelogsResponse.innerHTML))
+                servicelogsParent.replaceChild(servicelogsResponse, servicelogs);
+            } else {
+              mainLogsParent.replaceChild(mainLogsResponse, mainLogs);
+            }
           }
         }
       }

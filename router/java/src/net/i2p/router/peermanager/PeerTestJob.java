@@ -45,7 +45,7 @@ class PeerTestJob extends JobImpl {
     private long getPeerTestDelay() { return DEFAULT_PEER_TEST_DELAY; }
     /** how long to give each peer before marking them as unresponsive? */
 //    private int getTestTimeout() { return 30*1000; }
-    private int getTestTimeout() { return 10*1000; }
+    private int getTestTimeout() { return 15*1000; }
     /** number of peers to test each round */
     private int getTestConcurrency() { return 1; }
 

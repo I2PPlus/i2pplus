@@ -1187,7 +1187,8 @@ class SummaryBarRenderer {
         }
         buf.append("</td></tr>\n");
 
-        if (!_context.getBooleanPropertyDefaultTrue("router.disableTunnelTesting")) {
+        if (_context.getProperty("router.disableTunnelTesting") == null ||
+            !_context.getBooleanProperty("router.disableTunnelTesting")) {
             buf.append("<tr title=\"")
                .append(_t("Round trip time for a tunnel test"))
                .append("\">" +

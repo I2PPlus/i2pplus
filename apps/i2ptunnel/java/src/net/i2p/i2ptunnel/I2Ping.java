@@ -33,19 +33,11 @@ import net.i2p.util.Log;
 public class I2Ping extends I2PTunnelClientBase {
 
     public static final String PROP_COMMAND = "command";
-
-    //private static final int PING_COUNT = 3;
     private static final int PING_COUNT = 10;
     private static final int CPING_COUNT = 5;
-//    private static final int PING_TIMEOUT = 30*1000;
     private static final int PING_TIMEOUT = 8*1000;
-
     private static final long PING_DISTANCE = 1000;
-
-//    private int MAX_SIMUL_PINGS = 10; // not really final...
-    private int MAX_SIMUL_PINGS = 16; // not really final...
-
-
+    private int MAX_SIMUL_PINGS = 16;
     private volatile boolean finished;
 
     private final Object simulLock = new Object();
@@ -76,7 +68,6 @@ public class I2Ping extends I2PTunnelClientBase {
             notifyAll();
             l.log(" • Tunnels ready for I2Ping client");
         }
-        //l.log(" • I2Ping results:");
         try {
             runCommand(getTunnel().getClientOptions().getProperty(PROP_COMMAND));
         } catch (InterruptedException ex) {
@@ -85,7 +76,6 @@ public class I2Ping extends I2PTunnelClientBase {
         } catch (IOException ex) {
             _log.error("Pinger exception", ex);
         }
-        //l.log(" ✔ Finished");
         finished = true;
         close(false);
     }
@@ -209,16 +199,17 @@ public class I2Ping extends I2PTunnelClientBase {
      */
     public static String usage() {
         return
-            "ping <opts> <b64dest|host>\n" +
-            "ping <opts> -h (pings all hosts in hosts.txt in current directory)\n" +
-            "ping <opts> -l <destlistfile> (pings a list of hosts in a file)\n" +
+            "Usage:\n" +
+            "  ping [opts] <b32|b64|host>   pings a single host\n" +
+            "  ping [opts] -h               pings all hosts in hosts.txt in current directory\n" +
+            "  ping [opts] -l <file>        pings a list of hosts in specified file\n\n" +
             "Options:\n" +
-            "     -c (require 5 consecutive pings to report success)\n" +
-            "     -m maxSimultaneousPings (default 16)\n" +
-            "     -n numberOfPings (default 10)\n" +
-            "     -t timeout (ms, default 8000)\n" +
-            "     -f fromPort\n" +
-            "     -p toPort";
+            "  -c           require 5 consecutive pongs to report success\n" +
+            "  -m <value>   max concurrent pings (default 16)\n" +
+            "  -n <value>   number of pings (default 10)\n" +
+            "  -t <value>   timeout in milliseconds (default 8000)\n" +
+            "  -f <value>   from (source) port\n" +
+            "  -p <value>   to (destination) port";
     }
 
     @Override
@@ -229,8 +220,6 @@ public class I2Ping extends I2PTunnelClientBase {
             l.log(" ‣ There are still pings running!");
             return false;
         }
-        //l.log("Closing pinger " + toString());
-        //l.log(" ‣ Closing pinger…");
         l.log(" ‣ I2Ping client closed");
         return true;
     }
@@ -297,7 +286,6 @@ public class I2Ping extends I2PTunnelClientBase {
             try {
                 Destination dest = lookup(destination);
                 if (dest == null) {
-                    //l.log("Unresolvable: " + destination); // if null dest, then won't display so..
                     l.log(" • Ignoring unresolvable destination: " + destination);
                     return;
                 }
