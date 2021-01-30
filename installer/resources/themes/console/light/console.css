@@ -10618,6 +10618,10 @@ b.suboption {
   margin-left: 6px !important;
 }
 
+#i2pupdates .infohelp code {
+  user-select: all;
+}
+
 #updateHelper select, #updateProxyHostPort input, #updateProxyHostPort input[disabled] {
   margin-left: 6px !important;
   position: relative;
