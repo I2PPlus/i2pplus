@@ -5379,26 +5379,35 @@ form > table {
 
 /* /configupdate */
 
-table#i2pupdates {
+#i2pupdates {
   margin-top: -1px;
   margin-bottom: -3px !important;
 }
 
-table#i2pupdates td:first-child {
+#i2pupdates td:not(.infohelp):first-child {
   width: 15%;
   white-space: nowrap;
   padding-left: 10px;
 }
 
-table#i2pupdates input[name*="URL"], table#i2pupdates textarea {
+#i2pupdates input[name*="URL"], #i2pupdates textarea {
   width: 98%;
   width: calc(100% - 10px);
   resize: none;
 }
 
-table#i2pupdates tr:last-child td {
+#i2pupdates tr:last-child td {
   padding-right: 6px;
   background: #000 !important;
+}
+
+#i2pupdates td.infohelp {
+  padding: 15px 15px 15px 46px !important;
+  background-size: 24px 24px !important;
+}
+
+#i2pupdates .infohelp code {
+  user-select: all;
 }
 
 /* /configlogging */
