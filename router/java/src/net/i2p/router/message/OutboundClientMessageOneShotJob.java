@@ -272,7 +272,7 @@ public class OutboundClientMessageOneShotJob extends JobImpl {
         ctx.statManager().createRateStat("client.dispatchTime", "Time to dispatch the message (since we started)", "ClientMessages", RATES);
         ctx.statManager().createRateStat("client.dispatchSendTime", "Time taken by the Dispatch job", "ClientMessages", RATES);
         ctx.statManager().createRateStat("client.dispatchNoTunnels", "How long after startup we run out of local tunnels to send/receive with", "ClientMessages", RATES);
-        ctx.statManager().createRateStat("client.dispatchNoACK", "Number of repeated message sends to a peer (no ACK required)", "ClientMessages", RATES);
+        ctx.statManager().createRateStat("client.dispatchNoACK", "Repeated message sends to a peer (no ACK required)", "ClientMessages", RATES);
         // for HandleGarlicMessageJob / GarlicMessageReceiver
         ctx.statManager().createRateStat("crypto.garlic.decryptFail", "How often undecryptable garlic messages are received", "Encryption", RATES);
     }
@@ -467,30 +467,30 @@ public class OutboundClientMessageOneShotJob extends JobImpl {
 
         // Use the same lease if it's still good
         // Even if _leaseSet changed, _leaseSet.getEncryptionKey() didn't...
-            _lease = _cache.leaseCache.get(_hashPair);
-            if (_lease != null) {
-                // if outbound tunnel length == 0 && lease.firsthop.isBacklogged() don't use it ??
-                if (!_lease.isExpired(Router.CLOCK_FUDGE_FACTOR / 4)) {
-                    // see if the current leaseSet contains the old lease, so that if the dest removes
-                    // it (due to failure for example) we won't continue to use it.
-                    for (int i = 0; i < _leaseSet.getLeaseCount(); i++) {
-                        Lease lease = _leaseSet.getLease(i);
-                        // Don't use Lease.equals(), as that compares expiration time too,
-                        // and that time may change in subsequent publication
-                        //if (_lease.equals(lease)) {
-                        if (_lease.getTunnelId().equals(lease.getTunnelId()) &&
-                            _lease.getGateway().equals(lease.getGateway())) {
-                            if (_log.shouldLog(Log.INFO))
-                                _log.info("[Job " + getJobId() + "] Lease for " + _toString + " found in cache");
-                            return 0;
-                        }
+        _lease = _cache.leaseCache.get(_hashPair);
+        if (_lease != null) {
+            // if outbound tunnel length == 0 && lease.firsthop.isBacklogged() don't use it ??
+            if (!_lease.isExpired(Router.CLOCK_FUDGE_FACTOR / 4)) {
+                // see if the current leaseSet contains the old lease, so that if the dest removes
+                // it (due to failure for example) we won't continue to use it.
+                for (int i = 0; i < _leaseSet.getLeaseCount(); i++) {
+                    Lease lease = _leaseSet.getLease(i);
+                    // Don't use Lease.equals(), as that compares expiration time too,
+                    // and that time may change in subsequent publication
+                    //if (_lease.equals(lease)) {
+                    if (_lease.getTunnelId().equals(lease.getTunnelId()) &&
+                        _lease.getGateway().equals(lease.getGateway())) {
+                        if (_log.shouldLog(Log.INFO))
+                            _log.info("[Job " + getJobId() + "] Lease for " + _toString + " found in cache");
+                        return 0;
                     }
                 }
-                // remove only if still equal to _lease (concurrent)
-                _cache.leaseCache.remove(_hashPair, _lease);
-                if (_log.shouldLog(Log.INFO))
-                    _log.info("[Job " + getJobId() + "] Lease for " + _toString + " expired from cache");
             }
+            // remove only if still equal to _lease (concurrent)
+            _cache.leaseCache.remove(_hashPair, _lease);
+            if (_log.shouldLog(Log.INFO))
+                _log.info("[Job " + getJobId() + "] Lease for " + _toString + " expired from cache");
+        }
 
         // get the possible leases
         List<Lease> leases = new ArrayList<Lease>(_leaseSet.getLeaseCount());
@@ -586,7 +586,6 @@ public class OutboundClientMessageOneShotJob extends JobImpl {
                 long lookupTime = getContext().clock().now() - _leaseSetLookupBegin;
                 getContext().statManager().addRateData("client.leaseSetFailedRemoteTime", lookupTime);
             }
-
 
             int cause;
             if (getContext().netDb().isNegativeCachedForever(_to.calculateHash())) {
