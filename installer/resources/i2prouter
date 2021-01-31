@@ -1933,7 +1933,57 @@ raiseopenfilesulimit() {
 graceful_helper() {
 	echo "Starting graceful restart helper, $APP_NAME will restart once $APP_NAME has stopped."
 	echo 'This may take 11 minutes or more complete the graceful restart.'
-	$I2P/graceful_helper &
+
+    GPIDFILE="$I2P/gracefule_helper.pid"
+
+    rm_pid() {
+    	test ! -f $GPIDFILE || rm $GPIDFILE
+    }
+
+    if [ -f "$GPIDFILE" ] && [ -z "$(ps -p $(cat $GPIDFILE) | grep -v 'PID TTY')" ]; then
+        rm_pid
+    fi
+
+    if [ -f "$GPIDFILE" ] && [ $($I2P/i2prouter status > /dev/null; echo $?) -eq 1 ]; then
+        rm_pid
+    fi
+
+    if [ -f $GPIDFILE ]; then
+      GPID=$(cat $GPIDFILE)
+      ps -p $GPID > /dev/null 2>&1
+      if [ $? -eq 0 ]; then
+        echo "gracefulrestart already in progress..."
+        exit 1
+      else
+        echo $$ > $GPIDFILE
+        if [ $? -ne 0 ]; then
+          exit 1
+        fi
+      fi
+    else
+      echo $$ > $GPIDFILE
+      if [ $? -ne 0 ]; then
+        exit 1
+      fi
+    fi
+
+
+    until [ $($I2P/i2prouter status > /dev/null ; echo $?) -eq 1 ]; do
+    	sleep 1
+    done
+
+    sleep 5
+
+    eval "$I2P/i2prouter start > /dev/null"
+    sleep 15
+    if [ $($I2P/i2prouter status > /dev/null ; echo $?) -eq 0 ]; then
+        rm_pid
+        exit 0
+    else
+        eval "$I2P/i2prouter start > /dev/null"
+        rm_pid
+        exit 0
+    fi
 }
 
 docommand() {
@@ -1976,13 +2026,8 @@ docommand() {
 
         'gracefulrestart')
             checkUser "" "$COMMAND"
-			graceful_helper
+            graceful_helper &
             graceful "0"
-            ;;
-
-        'getdir')
-            echo "$I2P"
-            exit 0
             ;;
 
         'restart')

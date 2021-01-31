@@ -1,0 +1,914 @@
+#!/bin/sh
+# Default location is with ./i2prouter
+I2P="" # Please set this to the same directory with ./i2prouter
+
+## Advanced configuration settings
+### These settings only apply to no input into ./graceful_update
+# "true" for enabled and "" to disable
+
+## Verbosity
+verbose="true" # Default to be verbose
+debug=""
+quiet="" # quiet set to true will override verbose and debug settings
+## Downloaders to use
+use_eepget="" # Default downloader
+use_curl=""
+use_wget=""
+## Downloader variable
+retries="3" # How many times to retry the download
+timeout="120" # Download timeout
+# Release
+stable="" # Stable release
+devel="" # Developer release
+## Network
+use_i2p="" # Default network
+use_tor=""
+use_clear=""
+use_git=""
+any="" # This will try all networks available
+## Proxy
+proxy="" # Override no input proxy settings. ie. proxy="[http://]192.168.1.50:4444"
+
+# Downloader full command line arguments(for automation)
+# Please do not edit unless you know what you're doing
+# These settings will run as if you are running command line, do not specify eepget, curl or wget just the arguments
+# example: eepget_args="http://skank.i2p/dev/i2pupdate.zip", this will only try and download i2pupdate.zip to the current directory.
+# you may specify more than one argument
+eepget_args="" # eepget --help
+curl_args="" # man curl
+wget_args="" # man wget
+
+## END of Advanced configuration settings
+
+if [ -z "$I2P" ]; then
+    I2P="$(cd "$(dirname "$0")" && pwd)"
+fi
+
+if [ -d "$I2P" ]; then
+    download_dir="$I2P"
+else
+    echo "Unable to find the ./i2prouter directory, please edit $0 and change the I2P variable."
+    exit 1
+fi
+
+send_help() {
+    echo '
+./graceful_update Help
+
+    --help|-h   This help.
+    --stable    Update to the latest stable release and gracefully restart the router
+    --devel     Update to the latest devel release and gracefully restart the router
+            Note: Either --devel or --stable MUST be specified unless -u is specified
+    -q          quiet(this overrides verbose and debug arguments)
+    -v          verbose(default)
+    -d          debug output
+    -nr         No graceful restart after download
+    --restart   Dont do a graceful restart, do a hard restart
+    -n          DRY RUN
+    -u          URL to download i2pupdate.zip from
+    -e          Use eepget as the downloader(default)
+    -c          Use curl as the downloader
+    -w          Use wget as the downloader
+    -p          Use a proxy ([http(s)://]<ip:port> depending on downloader)
+    -r          Download retries(default: 3)
+    -t          Download timeout(default: 120)
+    --any       Use any and all methods to download i2pupdate.zip(may use clearnet and/or tor over outproxy)
+    --pid       Specify PID file name
+    --i2p       Download from skank.i2p
+    --tor       Download from Tor network
+    --clear     Download from i2pplus.com
+    --git       Download from GitLab
+    --insecure  Allows for insecure downloading when using a custom url
+
+Defaults: use eepget to download ip2update.zip the stable release from skank.i2p, and gracefully restart the router.
+Quick start: ./graceful_update --stable, this will download most stable version using eepget only.
+
+Notes:
+* please edit the file ./graceful_update for more advanced configurations.
+* -e, -c and -w can be used together.
+* --i2p, --tor, --clear, and --git can be used together
+* -p | proxy setting will strip http(s) or add http(s) depending on the downloaders chosen
+'
+
+    if [ "$1" ]; then exit $1; else exit $1; fi
+}
+
+
+if [ ! "$1" ]; then
+    send_help
+fi
+
+args=""
+for a in $@; do
+    case $a in
+        -e) # use eepget downloader
+            use_eepget="true"
+            downloader="$downloader eepget"
+            if [ "$2" ]; then shift; fi
+            ;;
+        -c) # use curl downloader
+            use_curl="true"
+            downloader="$downloader curl"
+            if [ "$2" ]; then shift; fi
+            ;;
+        -w) # use wget downloader
+            use_wget="true"
+            downloader="$downloader wget"
+            if [ "$2" ]; then shift; fi
+            ;;
+        -u) # url to download from
+            shift
+            use_url="true"
+            url="$(echo $1 | grep -iEo '(http|https)://[a-z0-9./?=_%:-]*')"
+            if [ -z "$url" ]; then
+                echo "URL is invalid, format is http://skank.i2p/dev/i2pupdate.zip"
+                send_help 1
+            fi
+            if [ "$2" ]; then shift; fi
+            ;;
+        -n) # Dry run
+            dry="true"
+            if [ "$2" ]; then shift; fi
+            ;;
+        -nr) # do not gracefully restart after download completes
+            no_restart="true"
+            if [ "$2" ]; then shift; fi
+            ;;
+        -d) # Show more detailed output
+            debug="true"
+            if [ "$2" ]; then shift; fi
+            ;;
+        -v) # be verbose(default)
+            verbose="true"
+            if [ "$2" ]; then shift; fi
+            ;;
+        -q) # dont output anything
+            quiet="true"
+            if [ "$2" ]; then shift; fi
+            ;;
+        -r)
+            shift
+            retries="$1"
+            if [ "$2" ]; then shift; fi
+            ;;
+        -t)
+            shift
+            timeout="$1"
+            if [ "$2" ]; then shift; fi
+            ;;
+        -p) # use proxy:ip
+            shift
+            if [ "$(echo $1 | grep -iEo 'http.*:\/\/')" ]; then
+                proxy="$1"
+                proxy_strip="$(echo $proxy | sed -e 's/http\:\/\///g' -e 's/https\:\/\///g')"
+            else
+                proxy="$1"
+                proxy_strip="$1"
+            fi
+            if [ "$2" ]; then shift; fi
+            ;;
+        --pid) # pid
+            shift
+            pid="$1"
+            if [ "$2" ]; then shift; fi
+            ;;
+        --any) # download by any means
+            any="true"
+            stable_files="i2p tor clear"
+            devel_files="i2p tor clear git"
+            if [ "$2" ]; then shift; fi
+            ;;
+        --stable) # download stable release
+            stable="true"
+            if [ "$2" ]; then shift; fi
+            ;;
+        --devel) # download developmental version
+            devel="true"
+            if [ "$2" ]; then shift; fi
+            ;;
+        --help|-h) # display help
+            send_help
+            ;;
+        --clear) # allow clearnet
+            use_clear="true"
+            stable_files="$stable_files clear"
+            devel_files="$devel_files clear"
+            if [ "$2" ]; then shift; fi
+            ;;
+        --git) # git devel version
+            use_git="true"
+            devel_files="$devel_files git"
+            if [ "$2" ]; then shift; fi
+            ;;
+        --tor) # use onion url
+            use_tor="true"
+            stable_files="$stable_files tor"
+            devel_files="$devel_files tor"
+            if [ "$2" ]; then shift; fi
+            ;;
+        --insecure) # Ignore invalid certificates
+            insecure="true"
+            if [ "$2" ]; then shift; fi
+            ;;
+        --i2p) # use i2p to download
+            use_i2p="true"
+            use_i2p_request="true"
+            if [ "$2" ]; then shift; fi
+            ;;
+        --restart) # do a hard restart instead of graceful
+            restart="true"
+            if [ "$2" ]; then shift; fi
+            ;;
+    esac
+done
+
+verbose() {
+    if [ "$verbose" ] && [ -z "$quiet" ]; then
+        echo "$@"
+    fi
+}
+debug() {
+    if [ "$debug" ] && [ -z "$quiet" ]; then
+        echo "DEBUG: $@"
+    fi
+}
+ # Dont allow both releases or no releases
+if [ "$stable" ] && [ "$devel" ]; then
+    verbose "Please choose --stable or --devel, but not both"
+    exit 1
+elif [ -z "$stable" ] && [ -z "$devel" ] && [ -z "$use_url" ]; then
+    verbose "Please choose --stable or --devel, one must be selected"
+    exit 1
+else
+    if [ "$stable" ]; then
+        debug "stable release selected"
+    elif [ "$devel" ]; then
+        debug "developmental release selected"
+    elif [ "$use_url" ]; then
+        debug "Using url: $url"
+    fi
+fi
+
+ # set retries/timeout if null
+if [ -z "$retries" ]; then
+    retries=3
+    debug "Set retries default to $retries"
+fi
+if [ -z "$timeout" ]; then
+    timeout=320
+    debug "Set timeout to $timeout"
+fi
+
+ # Set default downloader to eepget
+if [ -z "$use_eepget" ] && [ -z "$use_curl" ] && [ -z "$use_wget" ]; then
+    use_eepget="true"
+    use_eepget_request="true"
+    debug "Setting default downloader to eepget"
+fi
+
+if [ "$use_eepget_request" ]; then
+    use_eepget="true"
+    downloader="$downloader eepget"
+elif [ "$use_curl" ] || [ "$use_wget" ]; then
+    use_eepget=""
+fi
+
+ # Set default location to download from to i2p
+if [ -z "$use_i2p" ] || [ -z "$use_tor" ] || [ -z "$use_clear" ] || [ -z "$use_git" ]; then
+    use_i2p_request="true"
+    use_i2p="true"
+fi
+if [ "$use_i2p_request" ]; then
+    use_i2p="true"
+    if [ -z "$any" ]; then
+        stable_files="$stable_files i2p"
+        devel_files="$devel_files i2p"
+    fi
+elif [ "$use_tor" ] || [ "$use_clear" ] || [ "$use_git" ]; then
+    use_i2p=""
+fi
+
+# PID Section
+    # Is --pid set
+if [ "$pid" ]; then
+    PIDFILE="$pid"
+    debug "PID file set to $pid"
+else
+    PIDFILE="$I2P/graceful_update.pid"
+fi
+
+rm_pid() {
+    test ! -f $PIDFILE || rm -f $PIDFILE
+}
+
+ # Remove stale pid
+if [ -f "$PIDFILE" ] && [ -z "$(ps -p $(cat $PIDFILE) | grep -v 'PID TTY')" ]; then
+    rm_pid
+    debug "Removed stale pid file $PIDFILE"
+fi
+
+ # Error on already running
+if [ -f $PIDFILE ]; then
+    PID="$(cat $PIDFILE)"
+    ps -p $PID > /dev/null 2>&1
+    if [ $? -eq 0 ]; then
+        verbose "$? is already running, as PID: $PID"
+        exit 1
+    else
+        echo $$ > $PIDFILE
+        if [ $? -ne 0 ]; then
+            verbose "Unable to write to $PIDFILE"
+            exit 1
+        fi
+    fi
+else
+    echo $$ > $PIDFILE
+    if [ $? -ne 0 ]; then
+        verbose "Unable to write to $PIDFILE"
+        exit 1
+    fi
+fi
+
+ # if dry then echo command instead of eval
+dry() {
+    if [ "$dry" ]; then
+        verbose "DRY EVAL: eval $@"
+    else
+        eval "eval ${@}"
+        return $?
+    fi
+}
+
+start_restart_precheck() {
+    debug "start sequence started, running prechecks..."
+    if [ -f "$I2P/i2pupdate.zip" ]; then
+        debug "found $I2P/i2pupdate.zip, checking if it's a zip file"
+        file_cmd="$(which file)"
+        if [ "$file_cmd" ]; then
+            is_zip="$($file_cmd $I2P/i2pupdate.zip | sed -e 's/i2pupdate.zip//g' | grep -io zip)"
+            if [ "$is_zip" ]; then
+                debug "$I2P/i2pupdate.zip is a valid zip file, sending restart"
+                start_restart
+            else
+                verbose "did not pass the prechecks, most likely you don't have a valid zip file, per: file i2pupdate.zip"
+                return 1
+            fi
+        else
+            debug "cound not find the command, file"
+            return 0
+        fi
+    else
+        verbose "$I2P/i2pupdate.zip missing"
+        return 1
+    fi
+}
+
+
+ # Start the graceful restart command
+start_restart() {
+     # Set old proxy settings before exit
+    if [ "$use_wget" ] && [ "$wget_proxy" ]; then
+        debug "Setting old http(s)_proxy settings to pre $0 run"
+        export http_proxy="$old_http_proxy"
+        export https_proxy="$old_https_proxy"
+    fi
+
+     # assume downloads are down and script requesting graceful restart
+    if [ "$no_restart" ]; then
+        if [ -f $I2P/i2pupdate.zip ]; then
+            verbose "$0 completed it's download of i2pupdate.zip, no restart enabled, exiting"
+            exit 0
+        else
+            verbose "$0 failed to download i2pupdate.zip, no restart enabled, exiting"
+            exit 1
+        fi
+    fi
+
+    if [ "$reset" ]; then
+        verbose "starting i2prouter restart, please wait..."
+        dry "$I2P/i2prouter restart"
+        if [ $? -eq 0 ]; then
+            verbose "$I2P/i2prouter exited cleanly, exiting $0"
+            exit 0
+        else
+            verbose "$I2P/i2prouter restart failed"
+            exit 4
+        fi
+    fi
+        # Send racefeful shutdown command to $I2P/i2prouter
+    dry "$I2P/i2prouter graceful"
+    if [ $? -eq 0 ]; then
+        verbose "graceful shutdown request was sucessful, this make take up to 11 minutes, please wait..."
+    else
+        verbose "graceful shutdown request failed, please wait."
+        sleep 5
+        dry "$I2P/i2prouter graceful"
+        if [ $? -ne 0 ]; then
+            verbose "$I2P/i2prouter graceful command has failed a 2nd time, please restart manually"
+            exit 4
+        fi
+    fi
+    sleep 3
+
+     # Check if $I2P/router is running
+    if [ "$dry" ]; then
+        debug "DRY RUN: Skipping router running loop check"
+    else
+        until [ $($I2P/i2prouter status > /dev/null ; echo $?) -eq 1 ]; do
+            sleep 3 # Keep it easy on slower systems
+        done
+    fi
+
+    verbose "$I2P/i2prouter has shutdown, sending start command..."
+
+    sleep 5 # Give it a sec...
+
+    dry "$I2P/i2prouter start" # Start i2prouter
+    if [ $? -eq 0 ]; then
+        verbose "$I2P/i2prouter started, $0 exiting"
+        rm_pid
+        exit 0
+    else
+        debug "$I2P/i2prouter start has failed, checking status and trying again..."
+        sleep 15
+        if [ $($I2P/i2prouter status > /dev/null ; echo $?) -eq 0 ]; then
+            verbose "$I2P/i2prouter started, $0 exiting"
+            rm_pid
+            exit 0
+        else # Failed to start once, try a 2nd time
+            dry "$I2P/i2prouter start"
+            if [ $? -ne 0 ]; then
+                verbose "$I2P/i2prouter start failed twice during the update, please check its status, $0 exiting"
+            else
+                verbose "$I2P/i2prouter started on the 2nd try, $0 exiting"
+            fi
+            rm_pid
+            exit 4
+        fi
+    fi
+}
+
+
+# Find our downloaders
+curl_cmd="$(which curl)"
+wget_cmd="$(which wget)"
+eepget_cmd="$I2P/eepget"
+debug "Setting command locations, eepget: $eepget_cmd, curl: $curl_cmd, wget: $wget_cmd"
+
+ # We are missing which, manually search through default directories
+if [ ! -f "$eepget_cmd" ] && [ ! -f "$curl_cmd" ] && [ ! -f "$wget_cmd" ]; then
+    verbose "Unable to find eepget, curl, or wget, searching."
+    common_bins="eepget wget curl"
+    common_dirs="/bin /sbin /usr/bin /usr/sbin /usr/local/bin /usr/local/sbin $HOME/bin $HOME/i2p"
+    debug "Searching for $common_bins in $common_dirs"
+    for dir in $common_dirs; do
+        if [ -d "$dir" ]; then
+            for bin in $common_bins; do
+                if [ -f "$dir/$bin" ]; then
+                    if [ "$bin" = "eepget" ]; then
+                        eepget_cmd="$dir/$bin"
+                        debug "eepget found at $dir/$bin"
+                    elif [ "$bin" = "curl" ]; then
+                        curl_cmd="$dir/$bin"
+                        debug "curl found at $dir/$bin"
+                    elif [ "$bin" = "wget" ]; then
+                        curl_cmd="$dir/$bin"
+                        debug "wget found at $dir/bin"
+                    fi
+                fi
+            done
+        fi
+    done
+fi
+
+ # Missing all three downloaders
+if [ ! -f "$eepget_cmd" ] && [ ! -f "$curl_cmd" ] && [ ! -f "$wget_cmd" ]; then
+    verbose "Unable to locate eepget, curl or wget."
+    exit 1
+fi
+
+if [ -z "$downloader" ]; then
+    downloader="$downloader eepget"
+    use_eepget="true"
+fi
+
+if [ "$use_url" ]; then
+    stable_files=""
+    devel_files=""
+fi
+
+# Skip this, try any downloader selected, if single arg give ie. -e then throw error
+if [ ! -f "$eepget_cmd" ] && [ "$use_eepget" ]; then # -e arg given but unable to locate eepget
+    debug "eepget missing and is being requested to download"
+fi
+if [ ! -f "$curl_cmd" ] && [ "$use_curl" ]; then # -c arg given but unable to locate curl
+    debug "curl missing and is being requested to download"
+fi
+if [ ! -f "$wget_cmd" ] && [ "$use_wget" ]; then # -w arg given but unable to locate wget
+    debug "wget missing and is being requested to download"
+fi
+
+ # Check <downloader>_args configuration
+if [ "$eepget_args" ] || [ "$wget_args" ] || [ "$wget_args" ]; then
+        # Process eepget_args
+    if [ "$eepget_args" ] && [ -f "$eepget_cmd" ]; then
+        debug "eepget_args configuration found: $eepget_args"
+        cmd="$eepget_cmd $eepget_args"
+        dry="${cmd}"
+        exitcode=$?
+        if [ $exitcode -eq 0 ]; then
+            verbose "eepget_args completed, strarting graceful restart process"
+            start_restart
+        else
+            verbose "eepget failure using eepget_args: $eepget_args, eepget exit $exitcode"
+            eepget_failed="true"
+        fi
+    else
+        verbose "eepget_args set but unable to locate eepget"
+        eepget_failed="true"
+    fi
+        # Process curl_args
+    if [ "$curl_args" ] && [ -f "$curl_cmd" ]; then
+        debug "curl_args configuration found: $curl_args"
+        cmd="$curl_cmd $curl_args"
+        dry "${cmd}"
+        exitcode=$?
+        if [ $exitcode -eq 0 ]; then
+            verbose "curl_args completed, strarting graceful restart process"
+            start_restart
+        else
+            verbose "curl failure using curl_args: $curl_args, curl exit $exitcode"
+            curl_failed="true"
+        fi
+    else
+        verbose "curl_args set but unable to locate curl"
+        curl_failed="true"
+    fi
+        # Process wget_args
+    if [ "$wget_args" ] && [ -f "$wget_cmd" ]; then
+        debug "wget_args configuration found: $wget_args"
+        cmd="$wget_cmd $wget_args"
+        dry "${cmd}"
+        exitcode=$?
+        if [ $exitcode -eq 0 ]; then
+            verbose "wget_args completed, strarting graceful restart process"
+            start_restart
+        else
+            verbose "wget failure using wget_args: $wget_args, curl exit $exitcode"
+            wget_failed="true"
+        fi
+    else
+        verbose "wget_args set but unable to locate wget"
+        wget_failed="true"
+    fi
+    if [ "$eepget_failed" ] || [ "$curl_failed" ] || [ "$wget_failed" ]; then
+        debug "eepget, failed: $eepget_failed, $eepget_args"
+        debug "curl, failed: $curl_failed, $curl_args"
+        debug "wget, failed: $wget_failed, $wget_args"
+        verbose "$0 failed to download using <downloader>_args"
+        verbose "exiting"
+        exit 3
+    fi
+else
+    debug "no <downloader>_args variables set"
+fi
+
+ # get_url <release> <update location>
+get_url() {
+     # I2P+ Stable release download URLs
+    stable_url='i2p;http://skank.i2p/i2pupdate.zip
+    tor;http://fhiqjkax7s6cs2shcozpnnq6v64txoovuczw62lpj4jfbiisrkzw5vid.onion/i2pupdate.zip
+    clear;https://i2pplus.com/i2pupdate.zip'
+
+     # I2P+ Devel release download URLs
+    devel_url='i2p;http://skank.i2p/dev/i2pupdate.zip
+    tor;http://fhiqjkax7s6cs2shcozpnnq6v64txoovuczw62lpj4jfbiisrkzw5vid.onion/dev/i2pupdate.zip
+    git;https://gitlab.com/i2pplus/I2P.Plus/-/jobs/artifacts/master/raw/i2pupdate.zip?job=Java8
+    clear;https://i2pplus.com/dev/i2pupdate.zip'
+     # loop through requests
+    if [ "$1" = "stable" ]; then
+        for a in $stable_url; do
+            type="$(echo $a | cut -d';' -f1)"
+            url="$(echo $a | cut -d';' -f2)"
+            if [ "$2" = "$type" ]; then
+                echo "$url"
+            fi
+        done
+    elif [ "$1" = "devel" ]; then
+        for a in $devel_url; do
+            type="$(echo $a | cut -d';' -f1)"
+            url="$(echo $a | cut -d';' -f2)"
+            if [ "$2" = "$type" ]; then
+                echo "$url"
+            fi
+        done
+    fi
+}
+
+ # Check retries/timeout for numbers and set retry variables
+if [ "$retries" ] && [ -z "$(echo $retries | grep -Eo '[0-9]{1,9}')" ]; then
+    verbose "retries, must be in numbers only, -r 3"
+    exit 1
+else
+    if [ "$use_eepget" ]; then
+        eepget_retries="-n 3"
+    fi
+    if [ "$use_curl" ]; then
+        curl_retries="--retry $retries"
+    fi
+    if [ "$use_wget" ]; then
+        wget_retries="--retry-connrefused --waitretry=1"
+    fi
+fi
+
+ # Check timeout is a number and set timeout variables
+if [ "$timeout" ] && [ -z "$(echo $timeout | grep -Eo '[0-9]{1,9}')" ]; then
+    verbose "timeout must be in seconds, -t 320"
+    exit 1
+else
+    if [ "$use_eepget" ]; then
+        eepget_timeout="-t $timeout""000"
+    fi
+    if [ "$use_curl" ]; then
+        curl_timeout="--connect-timeout $timeout"
+    fi
+    if [ "$use_wget" ]; then
+        wget_timeout="--read-timeout=$(echo 'scale=1; 5 + '$timeout | bc) --timeout=$timeout"
+    fi
+fi
+
+# Manage proxy settings
+if [ "$proxy" ]; then
+    if [ "$use_eepget" ]; then
+        eepget_proxy="-p $proxy_strip"
+        debug "eepget proxy set to $proxy_strip"
+    fi
+    if [ test echo "$use_curl" || echo "$use_wget" ]; then
+        if [ -z "$(echo $proxy | grep -Eo 'http.*://')" ]; then
+            proxy="http://$proxy"
+            verbose "Attempting to set proxy to http://$proxy"
+        fi
+        if [ "$use_curl" ]; then
+            curl_proxy="-x $proxy"
+            debug "curl proxy set to $proxy"
+        fi
+        if [ "$use_wget" ]; then
+             # Keep old settings
+            old_http_proxy="$http_proxy"
+            old_https_proxy="$https_proxy"
+             # Write new wget proxy settings
+            export http_proxy="$proxy"
+            export https_proxy="$proxy"
+
+            debug "wget proxy set to $proxy"
+        fi
+    fi
+fi
+ # Set insecure settings
+if [ "$insecure" ]; then
+    if [ "$use_curl" ]; then
+        curl_insecure="--insecure"
+    elif [ "$use_wget" ]; then
+        wget_insecure="--no-check-certificate"
+    fi
+fi
+
+# Debug what downloaders can we use?
+if [ "$downloader" ]; then
+    debug "Downloaders: $downloader"
+fi
+
+# Debug release file locations
+if [ "$stable_files" ] && [ "$stable" ]; then
+    debug "Stable files: $stable_files"
+elif [ "$devel_files" ] && [ "$devel" ]; then
+    debug "devel files: $devel_files"
+fi
+
+# Remove old i2pupdate.zip
+if [ -f "$I2P/i2pupdate.zip" ]; then
+    debug "removing $I2P/i2pupdate.zip"
+    rm -f "$I2P/i2pupdate.zip"
+    if [ $? -ne 0 ]; then
+        verbose "Found old $I2P/i2pupdate.zip, failed to remove, unable to continue until file is removed"
+        exit 1
+    fi
+fi
+
+ # loop through available downloaders
+for b in $downloader; do
+
+     # Try to download i2pupdate.zip with eepget
+    if [ "$(echo $eepget_cmd | grep -o 'eepget')"  = "$b" ]; then
+        if [ ! -f "$eepget_cmd" ]; then
+            verbose "Skipping downloader eepget, file is missing, path: $eepget_cmd"
+            eepget_failed="true"
+        else
+            if [ "$url" ] && [ "$use_url" ]; then
+                eepget_eval="$eepget_cmd -o $I2P/i2pupdate.zip $eepget_retries $eepget_timeout $eepget_proxy $url"
+                debug "Trying to run eepget, url: $eepget_eval"
+                dry "${eepget_eval}"
+                if [ $? -eq 0 ]; then
+                    start_restart_precheck
+                else
+                    verbose "Download of $url failed using eepget, may need to specify --proxy"
+                    eepget_failed="true"
+                fi
+            else
+                if [ "$stable_files" ] && [ "$stable" ]; then
+                    for a in $stable_files; do
+                        url=$(get_url stable "$a")
+                        eepget_eval="$eepget_cmd -o $I2P/i2pupdate.zip $eepget_retries $eepget_timeout $eepget_proxy $url"
+                        debug "Trying to run, stable: $eepget_eval"
+                        dry "${eepget_eval}"
+                        if [ $? -eq 0 ]; then
+                            start_restart_precheck
+                        else
+                            verbose "Download of $url failed using eepget"
+                            eepget_failed="true"
+                        fi
+                    done
+                elif [ "$devel_files" ] && [ "$devel" ]; then
+                    for a in $devel_files; do
+                        url=$(get_url devel "$a")
+                        eepget_eval="$eepget_cmd -o $I2P/i2pupdate.zip $eepget_retries $eepget_timeout $eepget_proxy $url"
+                        debug "Trying to run, devel: $eepget_eval"
+                        dry "${eepget_eval}"
+                        if [ $? -eq 0 ]; then
+                            start_restart_precheck
+                        else
+                            verbose "Download of $url failed using eepget"
+                            eepget_failed="true"
+                        fi
+                    done
+                fi
+            fi
+        fi
+
+     # Try to download i2pupdate.zip with curl
+    elif [ "$(echo $curl_cmd | grep -o 'curl')"  = "$b" ]; then
+        if [ ! -f "$curl_cmd" ]; then
+            verbose "Skipping downloader curl, file is missing, path: $curl_cmd"
+            curl_failed="true"
+        else
+            if [ "$url" ] && [ "$use_url" ]; then
+                search="$(echo $url | grep -iEo '\.onion\/|\.i2p\/')"
+                if [ "$search" ] && [ -z "$proxy" ]; then
+                    debug "curl skipping download of $url with no proxy, found $search in url"
+                    curl_failed="true"
+                else
+                    curl_eval="$curl_cmd -o $I2P/i2pupdate.zip $curl_insecure $curl_retries $curl_timeout $curl_insecure $curl_proxy $url"
+                    debug "Trying to run curl, url: $eepget_eval"
+                    dry "${curl_eval}"
+                    if [ $? -eq 0 ]; then
+                        start_restart_precheck
+                    else
+                        verbose "Download of $url failed using curl"
+                        curl_failed="true"
+                    fi
+                fi
+            else
+                if [ "$stable_files" ] && [ "$stable" ]; then
+                    for a in $stable_files; do
+                        skip=""
+                        url=$(get_url stable "$a")
+                        if [ -z "$proxy" ]; then
+                            if [ "$a" = "i2p" ] || [ "$a" = "tor" ]; then
+                                debug "curl skipping download of $url with no proxy"
+                                skip="true"
+                                curl_failed="true"
+                            fi
+                        fi
+                        if [ -z "$skip" ]; then
+                            curl_eval="$curl_cmd -o $I2P/i2pupdate.zip $curl_retries $curl_timeout $curl_proxy $url"
+                            debug "Trying to run, stable: $curl_eval"
+                            dry "${curl_eval}"
+                            if [ $? -eq 0 ]; then
+                                start_restart_precheck
+                            else
+                                verbose "Download of $url failed using curl"
+                                curl_failed="true"
+                            fi
+                        fi
+                    done
+                elif [ "$devel_files" ] && [ "$devel" ]; then
+                    for a in $devel_files; do
+                        skip=""
+                        url=$(get_url devel "$a")
+                        if [ -z "$proxy" ]; then
+                            if [ "$a" = "i2p" ] || [ "$a" = "tor" ]; then
+                                debug "curl skipping download of $url with no proxy"
+                                skip="true"
+                                curl_failed="true"
+                            fi
+                        fi
+                        if [ -z "$skip" ]; then
+                            if [ "$a" = "git" ]; then
+                                url="$($curl_cmd --raw -q -s $curl_retries $curl_timeout $curl_proxy $url | cut -d'"' -f2)"
+                            fi
+                            curl_eval="$curl_cmd -o $I2P/i2pupdate.zip $curl_retries $curl_timeout $curl_proxy $url"
+                            debug "Trying to run, devel: $curl_eval"
+                            dry "${curl_eval}"
+                            if [ $? -eq 0 ]; then
+                                start_restart_precheck
+                            else
+                                verbose "Download of $url failed using curl"
+                                curl_failed="true"
+                            fi
+                        fi
+                    done
+                fi
+            fi
+        fi
+
+     # Try to download i2pupdate.zip with wget
+    elif [ "$(echo $wget_cmd | grep -o 'wget')"  = "$b" ]; then
+        if [ "$verbose" ]; then
+            wget_verbose="-v"
+        fi
+        if [ ! -f "$wget_cmd" ]; then
+            verbose "Skipping downloader wget, file is missing, path: $wget_cmd"
+            wget_failed="true"
+        else
+            if [ "$url" ] && [ "$use_url" ]; then
+                search="$(echo $url | grep -iEo '\.onion\/|\.i2p\/')"
+                if [ "$search" ] && [ -z "$proxy" ]; then
+                    debug "wget skipping download of $url with no proxy, found $search in url"
+                    wget_failed="true"
+                else
+                    wget_eval="$wget_cmd -O $I2P/i2pupdate.zip $wget_insecure $wget_verbose $wget_retries $wget_timeout $wget_insecure $url"
+                    debug "Trying to run, wget, url: $wget_eval"
+                    dry "${wget_eval}"
+                    if [ $? -eq 0 ]; then
+                        start_restart_precheck
+                    fi
+                fi
+            else
+                c=1
+                until [ $c -gt $retries ]; do
+                    debug "wget download attempt $c..."
+                    if [ "$stable_files" ] && [ "$stable" ]; then
+                        for a in $stable_files; do
+                            skip=""
+                            url=$(get_url stable "$a")
+                            if [ -z "$proxy" ]; then
+                                if [ "$a" = "i2p" ] || [ "$a" = "tor" ]; then
+                                    debug "wget skipping download of $url with no proxy"
+                                    skip="true"
+                                    wget_failed="true"
+                                fi
+                            fi
+                            if [ -z "$skip" ]; then
+                                wget_eval="$wget_cmd -O $I2P/i2pupdate.zip $wget_verbose $wget_retries $wget_timeout $url"
+                                debug "Trying to run, stable: $wget_eval"
+                                dry "${wget_eval}"
+                                if [ $? -eq 0 ]; then
+                                    start_restart_precheck
+                                else
+                                    verbose "Download of $url failed using wget"
+                                    wget_failed="true"
+                                fi
+                            fi
+                        done
+                    elif [ "$devel_files" ] && [ "$devel" ]; then
+                        for a in $devel_files; do
+                            skip=""
+                            url=$(get_url devel "$a")
+                            if [ -z "$proxy" ]; then
+                                if [ "$a" = "i2p" ] || [ "$a" = "tor" ]; then
+                                    debug "wget skipping download of $url with no proxy"
+                                    skip="true"
+                                fi
+                            fi
+                            if [ -z "$skip" ]; then
+                                wget_eval="$wget_cmd -O $I2P/i2pupdate.zip $wget_verbose $wget_retries $wget_timeout $url"
+                                debug "Trying to run, devel: $wget_eval"
+                                dry "${wget_eval}"
+                                if [ $? -eq 0 ]; then
+                                    start_restart_precheck
+                                else
+                                    verbose "Download of $url failed using wget"
+                                    wget_failed="true"
+                                fi
+                            fi
+                        done
+                    fi
+                c=$(($c + 1))
+                done
+                 # Set old proxy settings before exit
+                if [ "$use_wget" ] && [ "$wget_proxy" ]; then
+                    debug "Setting old http(s)_proxy settings to pre $0 run"
+                    export http_proxy="$old_http_proxy"
+                    export https_proxy="$old_https_proxy"
+                fi
+                fi
+            fi
+        fi
+    if [ "eepget_failed" ] && [ "$curl_failed" ] && [ "$wget_failed" ]; then
+        verbose "All downloaders failed to download i2pupdate.zip, check your connection or settings"
+    fi
+done
+
+verbose "Unable to download using, eepget failed:$eepget_failed, curl failed: $curl_failed, wget failed: $wget_failed"
+
+exit 1

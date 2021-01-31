@@ -147,10 +147,7 @@ public class I2Ping extends I2PTunnelClientBase {
 
       int remaining = argv.length - g.getOptind();
 
-      if (error ||
-          remaining > 1 ||
-          (remaining <= 0 && hostListFile == null) ||
-          (remaining > 0 && hostListFile != null)) {
+      if (error || remaining > 1 || (remaining <= 0 && hostListFile == null) || (remaining > 0 && hostListFile != null)) {
           System.out.println(usage());
           return;
       }

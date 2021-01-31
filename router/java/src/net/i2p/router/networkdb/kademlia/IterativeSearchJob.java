@@ -449,7 +449,7 @@ public class IterativeSearchJob extends FloodSearchJob {
                     if (!(type == EncType.ELGAMAL_2048 || (type == EncType.ECIES_X25519 && DatabaseLookupMessage.USE_ECIES_FF))) {
                         failed(peer, false);
                         if (_log.shouldLog(Log.WARN))
-                            _log.warn(getJobId() + ": Can't do encrypted lookup to " + peer + " with EncType " + type);
+                            _log.warn("[Job " + getJobId() + "] Can't do encrypted lookup to [" + peer.toBase64().substring(0,6) + "] with EncType " + type);
                         return;
                     }
 
@@ -463,7 +463,7 @@ public class IterativeSearchJob extends FloodSearchJob {
                         if (ratchet1 && !ratchet2) {
                             failed(peer, false);
                             if (_log.shouldLog(Log.WARN))
-                                _log.warn("[Job " + getJobId() + "] Can't do encrypted lookup to " + peer + ", does not support AEAD replies");
+                                _log.warn("[Job " + getJobId() + "] Can't do encrypted lookup to [" + peer.toBase64().substring(0,6) + "] -> does not support AEAD replies");
                             return;
                         }
                         supportsRatchet = ratchet1 && ratchet2;
