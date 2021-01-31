@@ -309,7 +309,7 @@ public class EepGet {
         }
 
         if (error || args.length - g.getOptind() != 1) {
-            usage();
+            System.out.println(usage());
             System.exit(1);
         }
         String url = args[g.getOptind()];
@@ -439,16 +439,18 @@ public class EepGet {
     return rv;
     }
 
-    private static void usage() {
-        System.err.println("eepget [-p 127.0.0.1[:4444]] [-c] [-o outputFile]\n" +
-                           "       [-n #retries] (default 3)\n" +
-                           "       [-m markSize] (default 1024)\n" +
-                           "       [-l lineLen]  (default 40)\n" +
-                           "       [-t timeout]  (default 120 sec)\n" +
-                           "       [-e etag]\n" +
-                           "       [-h headerName=headerValue]\n" +
-                           "       [-u username] [-x password] url\n" +
-                           "       (use -c or -p :0 for no proxy)");
+    private static String usage() {
+        return
+            "Usage:\n" +
+            "  eepget [opts] <url>   retrieve webpage or file from remote server\n\n" +
+            "Options:\n" +
+            "  -c               do not use proxy\n" +
+            "  -e <value>       require specified etag\n" +
+            "  -n <value>       number of retries (default 3)\n" +
+            "  -p <host:port>   use alternative proxy (default is 127.0.0.1:4444)\n" +
+            "  -t <value>       timeout in seconds (default 120)\n" +
+            "  -u <value>       proxy username\n" +
+            "  -x <value>       proxy password\n";
     }
 
     /**
