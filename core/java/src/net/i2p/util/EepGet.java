@@ -444,14 +444,19 @@ public class EepGet {
             "Usage:\n" +
             "  eepget [opts] <url>   retrieve webpage or file from remote server\n\n" +
             "Options:\n" +
-            "  -c               do not use proxy\n" +
-            "  -e <value>       require specified etag\n" +
-            "  -n <value>       number of retries (default 3)\n" +
-            "  -p <host:port>   use alternative proxy (default is 127.0.0.1:4444)\n" +
-            "  -t <value>       timeout in seconds (default 120)\n" +
-            "  -u <value>       proxy username\n" +
-            "  -x <value>       proxy password\n";
+            "  -c                    do not use proxy\n" +
+            "  -n <value>            number of retries (default 3)\n" +
+            "  -o <filename>         use specified output filename\n" +
+            "  -p <host:port>        use alternative proxy (default is 127.0.0.1:4444)\n" +
+            "  -t <value>            timeout in seconds (default 120)\n" +
+            "  -u <value>            proxy username\n" +
+            "  -x <value>            proxy password\n";
     }
+
+//            "  -e <value>          require specified etag\n" +
+//            "  -h <name=value>     specify header name and value\n" +
+//            "  -l <name:value>     line length (default 40)\n" +
+//            "  -m <name:value>     mark size (default 1KB)\n" +
 
     /**
      *  Callback interface
