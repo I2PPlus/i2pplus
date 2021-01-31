@@ -1942,7 +1942,6 @@ graceful_helper() {
 
     if [ -f "$GPIDFILE" ] && [ -z "$(ps -p $(cat $GPIDFILE) | grep -v 'PID TTY')" ]; then
         rm_pid
-        debug "Removed stale pid file $PIDFILE"
     fi
 
     if [ -f "$GPIDFILE" ] && [ $($I2P/i2prouter status > /dev/null; echo $?) -eq 1 ]; then
