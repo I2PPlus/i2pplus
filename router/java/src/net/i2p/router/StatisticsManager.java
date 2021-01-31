@@ -78,10 +78,10 @@ public class StatisticsManager {
 
 //        if (_context.getBooleanPropertyDefaultTrue(PROP_PUBLISH_RANKINGS) &&
 //            _context.random().nextInt(RANDOM_INCLUDE_STATS) == 0) {
+        int rnd = Math.max(_context.random().nextInt(60), _context.random().nextInt(30) + 30) *
+                  Math.max(_context.random().nextInt(4), _context.random().nextInt(3) + 1) * 2 * 60;
         if (_context.getProperty(PROP_PUBLISH_RANKINGS) != null  && _context.getProperty(PROP_PUBLISH_RANKINGS) == "true" &&
-            _context.random().nextInt(RANDOM_INCLUDE_STATS) == 0) {
-            //long publishedUptime = _context.router().getUptime();
-            // Don't publish these for first hour
+            _context.random().nextInt(RANDOM_INCLUDE_STATS) == 0 && _context.router().getUptime() > Math.max(62*60*1000, rnd)) {
             // Disabled in 0.9
             //if (publishedUptime > 62*60*1000)
             //    includeAverageThroughput(stats);

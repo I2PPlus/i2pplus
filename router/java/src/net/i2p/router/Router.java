@@ -1158,7 +1158,8 @@ public class Router implements RouterClock.ClockShiftListener {
      */
     public String getCapabilities() {
         StringBuilder rv = new StringBuilder(4);
-        char bw = getBandwidthClass();
+        boolean hidden = isHidden();
+        char bw = hidden ? CAPABILITY_BW32 : getBandwidthClass();
         rv.append(bw);
         // 512 and unlimited supported as of 0.9.18;
         // Add 256 as well for compatibility
@@ -1173,7 +1174,7 @@ public class Router implements RouterClock.ClockShiftListener {
         if(_context.getBooleanProperty(PROP_HIDDEN))
             rv.append(RouterInfo.CAPABILITY_HIDDEN);
 
-        if (_context.getBooleanProperty(PROP_FORCE_UNREACHABLE)) {
+        if (hidden || _context.getBooleanProperty(PROP_FORCE_UNREACHABLE)) {
             rv.append(CAPABILITY_UNREACHABLE);
             return rv.toString();
         }
