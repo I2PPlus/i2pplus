@@ -81,7 +81,8 @@ public class ConsoleUpdateManager implements UpdateManager, RouterApp {
     private volatile String _status;
 
     private static final long DEFAULT_MAX_TIME = 3*60*60*1000L;
-    private static final long DEFAULT_CHECK_TIME = 60*1000;
+//    private static final long DEFAULT_CHECK_TIME = 60*1000;
+    private static final long DEFAULT_CHECK_TIME = 90*1000;
     //private static final long STATUS_CLEAN_TIME = 20*60*1000;
     private static final long STATUS_CLEAN_TIME = 5*60*1000; // 5 minutes sidebar notification persistence ?
     private static final long TASK_CLEANER_TIME = 15*60*1000;
