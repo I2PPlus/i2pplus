@@ -56,7 +56,6 @@ public class EepHead extends EepGet {
     public static void main(String args[]) {
         String proxyHost = "127.0.0.1";
         int proxyPort = 4444;
-//        int numRetries = 0;
         int numRetries = 1;
         int inactivityTimeout = 10*1000;
         String username = null;
@@ -116,7 +115,7 @@ public class EepHead extends EepGet {
         }
 
         if (error || args.length - g.getOptind() != 1) {
-            usage();
+            System.out.println(usage());
             System.exit(1);
         }
         String url = args[g.getOptind()];
@@ -219,12 +218,17 @@ public class EepHead extends EepGet {
         }
     }
 
-    private static void usage() {
-        System.out.println("EepHead [-p 127.0.0.1[:4444]] [-c]\n" +
-                           "        [-n #retries] (default 1)\n" +
-                           "        [-t timeout (seconds)]  (default 10s)\n" +
-                           "        [-u username] [-x password] url\n" +
-                           "        (use -c or -p :0 for no proxy)");
+    private static String usage() {
+        return
+            "Usage:\n" +
+            "  eephead [opts] <url>\n\n" +
+            "Options:\n" +
+            "  -c              do not use proxy\n" +
+            "  -n <value>      number of retries (default 1)\n" +
+            "  -p <host:port>  use alternative proxy (default is 127.0.0.1:4444)\n" +
+            "  -t <value>      timeout in seconds (default 10)\n" +
+            "  -u <value>      proxy username\n" +
+            "  -x <value>      proxy password\n";
     }
 
     /** return true if the URL was completely retrieved */
