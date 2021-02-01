@@ -116,13 +116,10 @@ public class EepGet {
 
     /** this will be replaced by the HTTP Proxy if we are using it */
     protected static final String USER_AGENT = "Wget/1.11.4";
-//    protected static final int CONNECT_TIMEOUT = 45*1000;
     protected static final int CONNECT_TIMEOUT = 90*1000;
-//    protected static final int INACTIVITY_TIMEOUT = 60*1000;
     protected static final int INACTIVITY_TIMEOUT = 2*60*1000;
     /** maximum times to try without getting any data at all, even if numRetries is higher @since 0.7.14 */
-//    protected static final int MAX_COMPLETE_FAILS = 5;
-    protected static final int MAX_COMPLETE_FAILS = 10;
+    protected static final int MAX_COMPLETE_FAILS = 20;
 
     public EepGet(I2PAppContext ctx, String proxyHost, int proxyPort, int numRetries, String outputFile, String url) {
         this(ctx, true, proxyHost, proxyPort, numRetries, outputFile, url);
@@ -209,10 +206,9 @@ public class EepGet {
     public static void main(String args[]) {
         String proxyHost = "127.0.0.1";
         int proxyPort = 4444;
-//        int numRetries = 0;
-        int numRetries = 3;
+        int numRetries = 10;
         int markSize = 1024;
-        int lineLen = 40;
+        int lineLen = 10;
         long inactivityTimeout = INACTIVITY_TIMEOUT;
         String etag = null;
         String saveAs = null;
@@ -366,7 +362,7 @@ public class EepGet {
      */
     public static String suggestName(String url) {
         URI nameURL = null;
-        String name;         // suggested name
+        String name; // suggested name
 
         try {
             nameURL = new URI(url);
@@ -445,7 +441,7 @@ public class EepGet {
             "  eepget [opts] <url>   retrieve webpage or file from remote server\n\n" +
             "Options:\n" +
             "  -c                    do not use proxy\n" +
-            "  -n <value>            number of retries (default 3)\n" +
+            "  -n <value>            number of retries (default 10)\n" +
             "  -o <filename>         use specified output filename\n" +
             "  -p <host:port>        use alternative proxy (default is 127.0.0.1:4444)\n" +
             "  -t <value>            timeout in seconds (default 120)\n" +
@@ -455,8 +451,8 @@ public class EepGet {
 
 //            "  -e <value>          require specified etag\n" +
 //            "  -h <name=value>     specify header name and value\n" +
-//            "  -l <name:value>     line length (default 40)\n" +
-//            "  -m <name:value>     mark size (default 1KB)\n" +
+//            "  -l <value>            line length - update refresh (default 10 (KB))\n" +
+//            "  -m <value>            mark size (default 1024)\n" +
 
     /**
      *  Callback interface
