@@ -126,18 +126,18 @@ public class HomeHelper extends HelperBase {
 
 // torrent trackers
         _x("Chudo") + S + _x("No login Bittorrent tracker") + S + "http://torrents.chudo.i2p/" + S + I + "svg/magnet.svg" + S +
-        _x("Freedom") + S + _x("Bittorrent tracker") + S + "http://torrfreedom.i2p/" + S + I + "svg/magnet.svg" + S +
         _x("Postman's Tracker") + S + _x("Bittorrent tracker") + S + "http://tracker2.postman.i2p/" + S + I + "svg/postman.svg" + S +
+        //_x("Freedom") + S + _x("Bittorrent tracker") + S + "http://torrfreedom.i2p/" + S + I + "svg/magnet.svg" + S +
         //_x("diftracker") + S + _x("Bittorrent tracker") + S + "http://diftracker.i2p/" + S + I + "svg/magnet.svg" + S +
         //_x("Pirate Bay") + S + _x("I2P-hosted proxy for The Pirate Bay BitTorrent tracker") + S + "http://thepiratebay.i2p" + S + I + "pirate.png" + S +
         //"colombo-bt.i2p" + S + _x("The Italian Bittorrent Resource") + S + "http://colombo-bt.i2p/" + S + I + "colomboicon.png" + S +
 
 // domain name registration + uptime trackers
         "Identiguy" + S + _x("List of active eepsites and uptime monitor") + S + "http://identiguy.i2p/" + S + I + "svg/servermonitor.svg" + S +
-        _x("inr Domain Registry") + S + _x("I2P Domain Name Registration") + S + "http://inr.i2p/" + S + I + "svg/registrar.svg" + S +
         //"isitup.i2p" + S + _x("List of active eepsites and uptime monitor") + S + "http://isitup.i2p/" + S + I + "svg/servermonitor.svg" + S +
         //_x("no Domain Registry") + S + _x("I2P Domain Name Registration") + S + "http://no.i2p/" + S + I + "svg/registrar.svg" + S +
         "notbob.i2p" + S + _x("List of active eepsites and uptime monitor") + S + "http://notbob.i2p/" + S + I + "notbob.png" + S +
+        "reg.i2p" + S + _x("I2P Domain Name Registration") + S + "http://reg.i2p/" + S + I + "svg/registrar.svg" + S +
         _x("zzz Domain Registry") + S + _x("I2P Domain Name Registration") + S + "http://stats.i2p/i2p/addkey.html" + S + I + "svg/registrar.svg" + S +
 
 // forums + social

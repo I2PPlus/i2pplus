@@ -97,10 +97,10 @@ class TunnelRenderer {
                 out.write("id=\"" + client.toBase64().substring(0,4) + "\" >");
                 out.write(dname);
                 // links are set to float:right in CSS so they will be displayed in reverse order
-                if (debug)
+                if (debug && (!name.startsWith("Ping") && !name.contains("[")) || !name.equals("I2Ping"))
                     out.write(" <a href=\"/configtunnels#" + b64 +"\" title=\"" +
                               _t("Configure tunnels for session") + "\">[" + _t("configure") + "]</a>");
-                else
+                else if ((!name.startsWith("Ping") && !name.contains("[")) || !name.equals("I2Ping"))
                     out.write(" <a href=\"/i2ptunnelmgr\" title=\"" +
                               _t("Configure tunnels") + "\">[" + _t("configure") + "]</a>");
                 writeGraphLinks(out, in, outPool);

@@ -175,6 +175,16 @@ PLIST_DOMAIN=org.tanukisoftware.wrapper
 
 # Do not modify anything beyond this point
 #-----------------------------------------------------------------------------
+
+# Check if these files are execute(+x)
+files="eepget eephead i2ping graceful_update"
+for file in $files; do
+    if [ ! -x "$I2P/$file" ] && [ -f "$I2P/$file" ]; then
+        chmod +x "$I2P/$file"
+    fi
+done
+
+
 if [ ! -e "$WRAPPER_CONF" ]; then
        echo "Starting I2P Failed: Unable to find $WRAPPER_CONF"
        exit 1
