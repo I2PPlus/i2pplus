@@ -2285,6 +2285,14 @@ img:hover {
   filter: none;
 }
 
+.iframed .addtorrentsection, .iframed #new, .iframed .addtorrentsection, .iframed .newtorrentsection {
+  margin-top: -1px !important;
+}
+
+.iframed #new, .iframed #new + .configsection {
+  margin-top: -11px !important;
+}
+
 /* end panels */
 
 .addtorrentsection table, .newtorrentsection table {
@@ -2815,6 +2823,10 @@ body {
 .addtorrentsection, .newtorrentsection, .configsection, .configsectionpanel {
   margin-top: 4px !important;
   margin-bottom: 4px !important;
+}
+
+.iframed #new, .iframed #new + .configsection {
+  margin-top: -5px !important;
 }
 
 .configsection, .configsectionpanel:last-child {
@@ -4582,8 +4594,15 @@ th #nameRequired, th .commentAuthorName {
   border: none !important;
 }
 
-/* end comment indicator */
+@media screen and (max-width: 950px) {
+  .snarkCommented img {
+    position: absolute;
+    top: -8px;
+    right: 0;
+  }
+}
 
+/* end comment indicator */
 
 .mainsection {
   background: #eef;
