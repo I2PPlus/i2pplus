@@ -244,8 +244,7 @@ public class ProfileOrganizer {
             _notFailingPeers.put(peer, rv);
             _notFailingPeersList.add(peer);
             // Add to high cap only if we have room. Don't add to Fast; wait for reorg.
-            if (_thresholdCapacityValue <= rv.getCapacityValue() &&
-                isSelectable(peer) &&
+            if (_thresholdCapacityValue <= rv.getCapacityValue() && isSelectable(peer) &&
                 _highCapacityPeers.size() < getMaximumHighCapPeers()) {
                 _highCapacityPeers.put(peer, rv);
             }
@@ -315,8 +314,7 @@ public class ProfileOrganizer {
 
     public int countActivePeers() {
         int activePeers = 0;
-//        long hideBefore = _context.clock().now() - 6*60*60*1000;
-        long hideBefore = _context.clock().now() - 15*60*1000;
+        long hideBefore = _context.clock().now() - 5*60*1000;
 
         getReadLock();
         try {
@@ -377,7 +375,7 @@ public class ProfileOrganizer {
      *
      */
 //    private final static int MAX_BAD_REPLIES_PER_HOUR = 5;
-    private final static int MAX_BAD_REPLIES_PER_HOUR = 10; // increase value to factor in old peers marked as invalid
+    private final static int MAX_BAD_REPLIES_PER_HOUR = 8; // increase value to factor in old peers marked as invalid
 
     /**
      * Does the given peer send us bad replies - either invalid store messages
@@ -1106,8 +1104,6 @@ public class ProfileOrganizer {
     }
 
     /** how many not failing/active peers must we have? */
-//    private final static int MIN_NOT_FAILING_ACTIVE = 3;
-//    private final static int MIN_NOT_FAILING_ACTIVE = 8;
     private final static int MIN_NOT_FAILING_ACTIVE = 50;
 
     /**
@@ -1201,11 +1197,8 @@ public class ProfileOrganizer {
      */
     private void locked_calculateCapacityThreshold(double totalCapacity, Set<PeerProfile> reordered) {
         int numNotFailing = reordered.size();
-
         double meanCapacity = avg(totalCapacity, numNotFailing);
-
         int minHighCapacityPeers = getMinimumHighCapacityPeers();
-
         int numExceedingMean = 0;
         double thresholdAtMedian = 0;
         double thresholdAtMinHighCap = 0;
@@ -1227,17 +1220,16 @@ public class ProfileOrganizer {
         if (numExceedingMean >= minHighCapacityPeers) {
             // our average is doing well (growing, not recovering from failures)
             if (_log.shouldLog(Log.INFO))
-                _log.info("Our average capacity (" + meanCapacity
-                          + ") is good and includes " + numExceedingMean + " peer profiles");
+                _log.info("Our average capacity (" + meanCapacity + ") is good and includes " +
+                          numExceedingMean + " peer profiles");
             _thresholdCapacityValue = meanCapacity;
-        } else if (meanCapacity > thresholdAtMedian &&
-                   reordered.size()/2 > minHighCapacityPeers) {
+        } else if (meanCapacity > thresholdAtMedian && reordered.size() / 2 > minHighCapacityPeers) {
             // avg > median, get the min High Cap peers
             if (_log.shouldLog(Log.INFO))
                 _log.info("Our average capacity (" + meanCapacity + ") is greater than the median,"
                           + " so we've satisified the threshold (" + thresholdAtMinHighCap + ") to get the min High Capacity peers");
             _thresholdCapacityValue = thresholdAtMinHighCap;
-        } else if (reordered.size()/2 >= minHighCapacityPeers) {
+        } else if (reordered.size() / 2 >= minHighCapacityPeers) {
             // ok mean is skewed low, but we still have enough to use the median
             // We really don't want to be here, since the default is 5.0 and the median
             // is inevitably 5.01 or so.
@@ -1303,11 +1295,12 @@ public class ProfileOrganizer {
         double total = 0;
         int count = 0;
         int maxHighCapPeers = getMaximumHighCapPeers();
+        int maxFastPeers = getMaximumFastPeers();
         for (PeerProfile profile : reordered) {
             if (profile.getCapacityValue() >= _thresholdCapacityValue) {
                 // duplicates being clobbered is fine by us
                 total += profile.getSpeedValue();
-                if (count++ > (maxHighCapPeers / 7) * 6)
+                if (count++ > (maxHighCapPeers / 8) * 5)
                     break;
             } else {
                 // its ordered
@@ -1317,7 +1310,7 @@ public class ProfileOrganizer {
 
         if (count > 0)
 //            _thresholdSpeedValue = total / count;
-            _thresholdSpeedValue = ((total / count) / 8) * 5 ;
+            _thresholdSpeedValue = ((total / count) / 8) * 5;
         if (_log.shouldLog(Log.INFO))
             _log.info("Threshold value for speed: " + _thresholdSpeedValue + " (calculated from " + count + " profiles)");
     }
