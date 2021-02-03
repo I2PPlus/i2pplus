@@ -1447,7 +1447,7 @@ public class ProfileOrganizer {
         if (_context.router() == null) return true;
         if ( (_context.banlist() != null) && (_context.banlist().isBanlisted(peer)) ) {
              if (_log.shouldLog(Log.DEBUG))
-                 _log.debug("Peer " + peer.toBase64() + " is banlisted; not using it to build tunnels");
+                 _log.debug("[" + peer.toBase64().substring(0,6) + "] is banlisted; not using it to build tunnels");
             return false; // never select a banlisted peer
         }
 
@@ -1456,7 +1456,7 @@ public class ProfileOrganizer {
         if (null != info) {
             if (info.isHidden()) {
                if (_log.shouldLog(Log.WARN))
-                    _log.warn("Peer [" + peer.toBase64().substring(0,6) + "] is marked as hidden; not using it to build tunnels");
+                    _log.warn("[" + peer.toBase64().substring(0,6) + "] is marked as hidden; not using it to build tunnels");
                 return false;
             } else {
                 boolean exclude = TunnelPeerSelector.shouldExclude(_context, info);
