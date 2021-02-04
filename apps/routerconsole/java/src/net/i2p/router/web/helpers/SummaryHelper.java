@@ -959,6 +959,14 @@ public class SummaryHelper extends HelperBase {
         return String.valueOf(_context.tunnelManager().getInboundBuildQueueSize());
     }
 
+    /** @since 0.9.40+ */
+    public int getAvgPeerTestTime() {
+        RateStat rs = _context.statManager().getRate("peer.testOK");
+        Rate r = rs.getRate(60*1000);
+        int avgTestTime = (int) r.getLifetimeAverageValue();
+        return avgTestTime;
+    }
+
     private static boolean updateAvailable() {
         return NewsHelper.isUpdateAvailable();
     }

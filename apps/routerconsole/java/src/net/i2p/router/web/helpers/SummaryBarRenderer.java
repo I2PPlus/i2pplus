@@ -1187,6 +1187,20 @@ class SummaryBarRenderer {
         }
         buf.append("</td></tr>\n");
 
+        if (_context.getProperty("routerconsole.showPeerTestAvg") != null &&
+            _context.getBooleanProperty("routerconsole.showPeerTestAvg")) {
+            buf.append("<tr title=\"")
+               .append(_t("Average time to successfully test a peer"))
+               .append("\">" +
+                       "<td align=\"left\"><b>")
+               .append(_t("Peer test average"))
+               .append("</b></td><td class=\"digits\" align=\"right\">")
+               .append(_helper.getAvgPeerTestTime());
+            if (_helper.getAvgPeerTestTime() > 0)
+                buf.append("&nbsp;ms");
+            buf.append("</td></tr>\n");
+        }
+
         if (_context.getProperty("router.disableTunnelTesting") == null ||
             !_context.getBooleanProperty("router.disableTunnelTesting")) {
             buf.append("<tr title=\"")

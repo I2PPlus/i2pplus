@@ -17,6 +17,9 @@ import net.i2p.router.RouterContext;
 import net.i2p.router.TunnelInfo;
 import net.i2p.util.Log;
 
+import net.i2p.stat.Rate;
+import net.i2p.stat.RateStat;
+
 /**
  * Grab some peers that we want to test and probe them briefly to get some
  * more accurate and up to date performance data.  This delegates the peer
@@ -34,16 +37,23 @@ class PeerTestJob extends JobImpl {
     public static final String PROP_PEER_TEST_DELAY = "router.peerTestDelay";
     private static final int DEFAULT_PEER_TEST_CONCURRENCY = 1;
     public static final String PROP_PEER_TEST_CONCURRENCY = "router.peerTestConcurrency";
-    private static final int DEFAULT_PEER_TEST_TIMEOUT = 10*1000;
+    private static final int DEFAULT_PEER_TEST_TIMEOUT = 8*1000;
     public static final String PROP_PEER_TEST_TIMEOUT = "router.peerTestTimeout";
     /** Creates a new instance of PeerTestJob */
     public PeerTestJob(RouterContext context) {
         super(context);
         _log = context.logManager().getLog(PeerTestJob.class);
         _keepTesting = false;
-        getContext().statManager().createRateStat("peer.testOK", "Time a successful test takes (ms)", "Peers", new long[] { 60*1000, 10*60*1000 });
-        getContext().statManager().createRateStat("peer.testTooSlow", "Time a too slow test takes (ms)", "Peers", new long[] { 60*1000, 10*60*1000 });
+        getContext().statManager().createRequiredRateStat("peer.testOK", "Time a successful test takes (ms)", "Peers", new long[] { 60*1000, 10*60*1000 });
+        getContext().statManager().createRateStat("peer.testTooSlow", "Excess time taken by too slow test (ms)", "Peers", new long[] { 60*1000, 10*60*1000 });
         getContext().statManager().createRateStat("peer.testTimeout", "Frequency of test timeouts (no reply)", "Peers", new long[] { 60*1000, 10*60*1000 });
+    }
+
+    public int getAvgPeerTestTime() {
+        RateStat rs = getContext().statManager().getRate("peer.testOK");
+        Rate r = rs.getRate(60*1000);
+        int avgTestTime = (int) r.getLifetimeAverageValue();
+        return avgTestTime;
     }
 
     /** how long should we wait before firing off new tests?  */
@@ -54,7 +64,13 @@ class PeerTestJob extends JobImpl {
     /** how long to give each peer before marking them as unresponsive? */
     private int getTestTimeout() {
         int testTimeout = getContext().getProperty(PROP_PEER_TEST_TIMEOUT, DEFAULT_PEER_TEST_TIMEOUT);
-        return testTimeout;
+        if (getAvgPeerTestTime() > testTimeout) {
+            if (_log.shouldLog(Log.WARN))
+                _log.warn("Peer test timeout set below average successful test time, setting to: " + getAvgPeerTestTime() * 2 / 3 + "ms");
+            return getAvgPeerTestTime() * 2 / 3;
+        } else {
+            return testTimeout;
+        }
     }
     /** number of peers to test each round */
     private int getTestConcurrency() {
@@ -95,6 +111,8 @@ class PeerTestJob extends JobImpl {
             testPeer(peer);
         }
         requeue(getPeerTestDelay());
+        if (_log.shouldLog(Log.INFO))
+            _log.info("Next test run in " + getPeerTestDelay() + "ms");
     }
 
     /**
