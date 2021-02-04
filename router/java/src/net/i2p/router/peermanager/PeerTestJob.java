@@ -66,8 +66,8 @@ class PeerTestJob extends JobImpl {
         int testTimeout = getContext().getProperty(PROP_PEER_TEST_TIMEOUT, DEFAULT_PEER_TEST_TIMEOUT);
         if (getAvgPeerTestTime() > testTimeout) {
             if (_log.shouldLog(Log.WARN))
-                _log.warn("Peer test timeout set below average successful test time, setting to: " + getAvgPeerTestTime() * 2 / 3 + "ms");
-            return getAvgPeerTestTime() * 2 / 3;
+                _log.warn("Peer test timeout set below average successful test time, setting to: " + getAvgPeerTestTime() * 3 / 2 + "ms");
+            return getAvgPeerTestTime() * 3 / 2;
         } else {
             return testTimeout;
         }
@@ -104,12 +104,12 @@ class PeerTestJob extends JobImpl {
                 _log.debug("Testing " + peers.size() + " peer");
             else
                 _log.debug("Testing " + peers.size() + " peers");
+**/
         for (RouterInfo peer : peers) {
-            if (_log.shouldLog(Log.INFO))
-                _log.info("Testing peer [" + peer.getIdentity().getHash().toBase64().substring(0,6) + "]");
+//            if (_log.shouldLog(Log.INFO))
+//                _log.info("Testing peer [" + peer.getIdentity().getHash().toBase64().substring(0,6) + "]");
             testPeer(peer);
         }
-**/
         requeue(getPeerTestDelay());
         if (_log.shouldLog(Log.INFO))
             _log.info("Next test run in " + getPeerTestDelay() + "ms");
@@ -187,12 +187,12 @@ class PeerTestJob extends JobImpl {
 
         TunnelId outTunnelId = outTunnel.getSendTunnelId(0);
 
-        if (_log.shouldLog(Log.DEBUG))
-            _log.debug("[Job " + getJobId() + "] Initiating test of peer [" + peer.getIdentity().getHash().toBase64().substring(0,6)
+        if (_log.shouldLog(Log.DEBUG)) {
+            _log.debug("Initiating test of peer [" + peer.getIdentity().getHash().toBase64().substring(0,6)
                        + "]: \n* " + outTunnel + "\n* " + inTunnel);
-        else if (_log.shouldLog(Log.INFO))
-            _log.info("Initiating test of peer [" + peer.getIdentity().getHash().toBase64().substring(0,6)
-                       + "]");
+        } else if (_log.shouldLog(Log.INFO)) {
+            _log.info("Initiating test of peer [" + peer.getIdentity().getHash().toBase64().substring(0,6) + "]");
+        }
 
         ReplySelector sel = new ReplySelector(peer.getIdentity().getHash(), nonce, expiration);
         PeerReplyFoundJob reply = new PeerReplyFoundJob(getContext(), peer, inTunnel, outTunnel);
@@ -301,12 +301,13 @@ class PeerTestJob extends JobImpl {
         public String getName() { return "Verify Peer Test"; }
         public void runJob() {
             long responseTime = getContext().clock().now() - _testBegin;
-            if (_log.shouldLog(Log.DEBUG))
-                _log.debug("[Job " + getJobId() + "] Peer test of [" + _peer.getIdentity().getHash().toBase64().substring(0,6) + "] succeeded (took " +
+            if (_log.shouldLog(Log.DEBUG)) {
+                _log.debug("Peer test of [" + _peer.getIdentity().getHash().toBase64().substring(0,6) + "] succeeded (took " +
                            responseTime + "ms)\n* " + _sendTunnel + "\n* " + _replyTunnel);
-            else if (_log.shouldLog(Log.INFO))
+            } else if (_log.shouldLog(Log.INFO)) {
                 _log.info("Peer test of [" + _peer.getIdentity().getHash().toBase64().substring(0,6) + "] succeeded (took " +
                            responseTime + "ms)");
+            }
             getContext().profileManager().dbLookupSuccessful(_peer.getIdentity().getHash(), responseTime);
             // we know the tunnels are working
             _sendTunnel.testSuccessful((int)responseTime);
@@ -343,12 +344,13 @@ class PeerTestJob extends JobImpl {
             if (getShouldFailPeer())
                 getContext().profileManager().dbLookupFailed(_peer.getIdentity().getHash());
 
-            if (_log.shouldLog(Log.DEBUG))
-                _log.debug("[Job " + getJobId() + "] Peer test of [" + _peer.getIdentity().getHash().toBase64().substring(0,6) +
+            if (_log.shouldLog(Log.DEBUG)) {
+                _log.debug("Peer test of [" + _peer.getIdentity().getHash().toBase64().substring(0,6) +
                           "] failed\n* " + _sendTunnel + "\n* " + _replyTunnel);
-            else if (_log.shouldLog(Log.INFO))
+            } else if (_log.shouldLog(Log.INFO)) {
                 _log.info("Peer test of [" + _peer.getIdentity().getHash().toBase64().substring(0,6) +
                           "] failed");
+            }
 
             // don't fail the tunnels, as the peer might just plain be down, or
             // otherwise overloaded
