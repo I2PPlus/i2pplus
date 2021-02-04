@@ -115,11 +115,11 @@ public class ProfileOrganizer {
         _strictCapacityOrder = new TreeSet<PeerProfile>(_comp);
         _persistenceHelper = new ProfilePersistenceHelper(_context);
 
-        _context.statManager().createRequiredRateStat("peer.profileSortTime", "Time for Profile Manager to sort peers (ms)", "Peers", new long[] { 60*1000, 60*60*1000 });
-        _context.statManager().createRateStat("peer.profileCoalesceTime", "Time for Profile Manager to coalesce peer stats (ms)", "Peers", new long[] { 60*1000, 60*60*1000 });
-        _context.statManager().createRateStat("peer.profileThresholdTime", "Time for Profile Manager to determine tier thresholds (ms)", "Peers", new long[] { 60*1000, 60*60*1000 });
-        _context.statManager().createRateStat("peer.profilePlaceTime", "Time for Profile Manager to sort peers into tiers (ms)", "Peers", new long[] { 60*1000, 60*60*1000 });
-        _context.statManager().createRateStat("peer.profileReorgTime", "Time for Profile Manager to reorganize peers (ms)", "Peers", new long[] { 60*1000, 60*60*1000 });
+        _context.statManager().createRequiredRateStat("peer.profileSortTime", "Time to sort peers (ms)", "Peers", new long[] { 60*1000, 60*60*1000 });
+        _context.statManager().createRateStat("peer.profileCoalesceTime", "Time to coalesce peer stats (ms)", "Peers", new long[] { 60*1000, 60*60*1000 });
+        _context.statManager().createRateStat("peer.profileThresholdTime", "Time to determine tier thresholds (ms)", "Peers", new long[] { 60*1000, 60*60*1000 });
+        _context.statManager().createRateStat("peer.profilePlaceTime", "Time to sort peers into tiers (ms)", "Peers", new long[] { 60*1000, 60*60*1000 });
+        _context.statManager().createRateStat("peer.profileReorgTime", "Time to reorganize peers (ms)", "Peers", new long[] { 60*1000, 60*60*1000 });
         // used in DBHistory
         _context.statManager().createRequiredRateStat("peer.failedLookupRate", "NetDb Lookup failure rate", "Peers", new long[] { 60*1000, 10*60*1000l, 60*60*1000l, 24*60*60*1000l });
     }
