@@ -299,11 +299,9 @@ class PeerTestJob extends JobImpl {
         public void runJob() {
             long responseTime = getContext().clock().now() - _testBegin;
 
-            if (_log.shouldLog(Log.DEBUG))
-                _log.debug("Successful peer test after " + responseTime + "ms for ["
-                           + _peer.getIdentity().getHash().toBase64().substring(0,6) + "]\n* "
-                           + _sendTunnel + "\n* "
-                           + _replyTunnel);
+            if (_log.shouldLog(Log.INFO))
+                _log.info("Peer test of [" + _peer.getIdentity().getHash().toBase64().substring(0,6) + "] succeeded (took " +
+                           responseTime + "ms)\n* " + _sendTunnel + "\n* " + _replyTunnel);
             getContext().profileManager().dbLookupSuccessful(_peer.getIdentity().getHash(), responseTime);
             // we know the tunnels are working
             _sendTunnel.testSuccessful((int)responseTime);
@@ -340,9 +338,10 @@ class PeerTestJob extends JobImpl {
             if (getShouldFailPeer())
                 getContext().profileManager().dbLookupFailed(_peer.getIdentity().getHash());
 
-            if (_log.shouldLog(Log.DEBUG))
-                _log.debug("Failed peer test for [" +
-                           _peer.getIdentity().getHash().toBase64().substring(0,6) + "]\n* " + _sendTunnel + "\n* " + _replyTunnel);
+            if (_log.shouldLog(Log.INFO))
+                _log.info("Peer test of [" + _peer.getIdentity().getHash().toBase64().substring(0,6) +
+                          "] failed (took longer than " + getTestTimeout() + "ms)\n* " +
+                          _sendTunnel + "\n* " + _replyTunnel);
 
             // don't fail the tunnels, as the peer might just plain be down, or
             // otherwise overloaded
