@@ -30,32 +30,45 @@ class PeerTestJob extends JobImpl {
     private final Log _log;
     private PeerManager _manager;
     private boolean _keepTesting;
-    private static final long DEFAULT_PEER_TEST_DELAY = 5*60*1000;
+    private final int DEFAULT_PEER_TEST_DELAY = Math.max(getContext().random().nextInt(10)*getContext().random().nextInt(90)*1000, 4*60*1000);
+    public static final String PROP_PEER_TEST_DELAY = "router.peerTestDelay";
+    private static final int DEFAULT_PEER_TEST_CONCURRENCY = 1;
+    public static final String PROP_PEER_TEST_CONCURRENCY = "router.peerTestConcurrency";
+    private static final int DEFAULT_PEER_TEST_TIMEOUT = 10*1000;
+    public static final String PROP_PEER_TEST_TIMEOUT = "router.peerTestTimeout";
     /** Creates a new instance of PeerTestJob */
     public PeerTestJob(RouterContext context) {
         super(context);
         _log = context.logManager().getLog(PeerTestJob.class);
         _keepTesting = false;
         getContext().statManager().createRateStat("peer.testOK", "Time a successful test takes (ms)", "Peers", new long[] { 60*1000, 10*60*1000 });
-        getContext().statManager().createRateStat("peer.testTooSlow", "Time a too-slow (yet successful) test takes (ms)", "Peers", new long[] { 60*1000, 10*60*1000 });
-        getContext().statManager().createRateStat("peer.testTimeout", "How often a test times out without a reply", "Peers", new long[] { 60*1000, 10*60*1000 });
+        getContext().statManager().createRateStat("peer.testTooSlow", "Time a too slow test takes (ms)", "Peers", new long[] { 60*1000, 10*60*1000 });
+        getContext().statManager().createRateStat("peer.testTimeout", "Frequency of test timeouts (no reply)", "Peers", new long[] { 60*1000, 10*60*1000 });
     }
 
     /** how long should we wait before firing off new tests?  */
-    private long getPeerTestDelay() { return DEFAULT_PEER_TEST_DELAY; }
+    private long getPeerTestDelay() {
+        int testDelay = getContext().getProperty(PROP_PEER_TEST_DELAY, DEFAULT_PEER_TEST_DELAY);
+        return testDelay;
+    }
     /** how long to give each peer before marking them as unresponsive? */
-//    private int getTestTimeout() { return 30*1000; }
-    private int getTestTimeout() { return 15*1000; }
+    private int getTestTimeout() {
+        int testTimeout = getContext().getProperty(PROP_PEER_TEST_TIMEOUT, DEFAULT_PEER_TEST_TIMEOUT);
+        return testTimeout;
+    }
     /** number of peers to test each round */
-    private int getTestConcurrency() { return 1; }
+    private int getTestConcurrency() {
+        int testConcurrent = getContext().getProperty(PROP_PEER_TEST_CONCURRENCY, DEFAULT_PEER_TEST_CONCURRENCY);
+        return testConcurrent;
+    }
 
     public synchronized void startTesting(PeerManager manager) {
         _manager = manager;
         _keepTesting = true;
-        this.getTiming().setStartAfter(getContext().clock().now() + DEFAULT_PEER_TEST_DELAY);
+        this.getTiming().setStartAfter(getContext().clock().now() + getPeerTestDelay());
         getContext().jobQueue().addJob(this);
         if (_log.shouldLog(Log.INFO))
-            _log.info("Initialising peer tests -> Timeout: " + (getTestTimeout() / 1000) + "s per peer");
+            _log.info("Initialising peer tests -> Timeout: " + getTestTimeout() + "ms per peer");
     }
 
     public synchronized void stopTesting() {
@@ -110,6 +123,10 @@ class PeerTestJob extends JobImpl {
             RouterInfo peerInfo = getContext().netDb().lookupRouterInfoLocally(peer);
             if (peerInfo != null) {
                 peers.add(peerInfo);
+                if (getTestConcurrency() != 1) {
+                    if (_log.shouldLog(Log.INFO))
+                    _log.info("Running " +  getTestConcurrency() + " concurrent peer tests...");
+                }
             } else {
                 if (_log.shouldLog(Log.WARN))
                     _log.warn("Peer test failed: No local RouterInfo found for [" + peer.toBase64().substring(0,6) + "]");
