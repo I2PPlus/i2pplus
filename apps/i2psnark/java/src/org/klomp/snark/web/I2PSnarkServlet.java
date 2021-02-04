@@ -3470,8 +3470,8 @@ public class I2PSnarkServlet extends BasicServlet {
             if (isOpen)
                 buf.append(" checked=\"checked\"");
             else if (t.announceURL.equals("http://diftracker.i2p/announce.php") ||
-                      t.announceURL.equals("http://tracker2.postman.i2p/announce.php") ||
-                      t.announceURL.equals("http://torrfreedom.i2p/announce.php"))
+                     t.announceURL.equals("http://tracker2.postman.i2p/announce.php") ||
+                     t.announceURL.equals("http://torrfreedom.i2p/announce.php"))
                 buf.append(" disabled=\"disabled\"");
             buf.append(">" +
                        "</td><td><input type=\"radio\" class=\"optbox\" value=\"2\" tabindex=\"-1\" name=\"ttype_")
@@ -3479,9 +3479,9 @@ public class I2PSnarkServlet extends BasicServlet {
             if (isPrivate) {
                 buf.append(" checked=\"checked\"");
             } else if (isKnownOpen ||
-                        t.announceURL.equals("http://diftracker.i2p/announce.php") ||
-                        t.announceURL.equals("http://tracker2.postman.i2p/announce.php") ||
-                        t.announceURL.equals("http://torrfreedom.i2p/announce.php")) {
+                       t.announceURL.equals("http://diftracker.i2p/announce.php") ||
+                       t.announceURL.equals("http://tracker2.postman.i2p/announce.php") ||
+                       t.announceURL.equals("http://torrfreedom.i2p/announce.php")) {
                 buf.append(" disabled=\"disabled\"");
             }
             buf.append(">" +
@@ -3866,6 +3866,7 @@ public class I2PSnarkServlet extends BasicServlet {
             String freedomb32 = "nfrjvknwcw47itotkzmk6mdlxmxfxsxhbhlr5ozhlsuavcogv4hq.b32.i2p";
             String icu812b32 = "h77hk3pr622mx5c6qmybvbtrdo5la7pxo6my4kzr47x2mlpnvm2a.b32.i2p";
             String chudob32 = "swhb5i7wcjcohmus3gbt3w6du6pmvl3isdvxvepuhdxxkfbzao6q.b32.i2p";
+            String lyokob32 = "afuuortfaqejkesne272krqvmafn65mhls6nvcwv3t7l2ic2p4kq.b32.i2p";
             if (meta != null) {
                 announce = meta.getAnnounce();
                 if (announce == null)
@@ -3882,7 +3883,8 @@ public class I2PSnarkServlet extends BasicServlet {
                        .replaceAll(odiftb32, "opendiftracker.i2p")
                        .replaceAll(theblandb32, "tracker.thebland.i2p")
                        .replaceAll(icu812b32, "tracker.icu812.i2p")
-                       .replaceAll(chudob32, "tracker.chudo.i2p");
+                       .replaceAll(chudob32, "tracker.chudo.i2p")
+                       .replaceAll(lyokob32, "lyoko.i2p");
                 }
 
                 if (meta != null || !meta.isPrivate()) {

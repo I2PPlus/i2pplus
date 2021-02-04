@@ -192,9 +192,10 @@ public class SnarkManager implements CompleteListener, ClientApp {
     private static final String DEFAULT_TRACKERS[] = {
        "Postman", "http://tracker2.postman.i2p/announce.php=http://tracker2.postman.i2p/"
        ,"DgTrack", "http://opentracker.dg2.i2p/a=http://opentracker.dg2.i2p/"
-       ,"Freedom", "http://torrfreedom.i2p/announce.php=http://torrfreedom.i2p/"
        ,"Chudo", "http://tracker.chudo.i2p/a=http://tracker.chudo.i2p/"
        ,"Lodikon", "http://tracker.lodikon.i2p/announce=http://tracker.lodikon.i2p/"
+       ,"Lyoko", "http://lyoko.i2p/a=http://lyoko.i2p/tracker"
+//       ,"Freedom", "http://torrfreedom.i2p/announce.php=http://torrfreedom.i2p/"
 //       ,"PTT", "http://5m3pd32zx43xk3uz6hvrdksj6tlg7abnjsc3j5kkd2yzctet4nmq.b32.i2p/announce=http://ptt.i2p/index_eng.html"
 //The following is ECDSA_SHA256_P256
 //       ,"TheBland", "http://tracker.thebland.i2p/a=http://tracker.thebland.i2p/tracker/"
@@ -213,6 +214,7 @@ public class SnarkManager implements CompleteListener, ClientApp {
     /** URLs, comma-separated. Used for "announce to open trackers also" */
 //    private static final String DEFAULT_OPENTRACKERS = DEFAULT_BACKUP_TRACKER +
     private static final String DEFAULT_OPENTRACKERS =
+        "http://lyoko.i2p/a," +
         "http://opentracker.dg2.i2p/a," +
         "http://tracker.lodikon.i2p/announce," +
         "http://tracker.chudo.i2p/a";
@@ -229,6 +231,7 @@ public class SnarkManager implements CompleteListener, ClientApp {
 
     /** host names for config form */
     static final Set<String> KNOWN_OPENTRACKERS = new HashSet<String>(Arrays.asList(new String[] {
+        "lyoko.i2p", "afuuortfaqejkesne272krqvmafn65mhls6nvcwv3t7l2ic2p4kq.b32.i2p",
         "opentracker.dg2.i2p", "w7tpbzncbcocrqtwwm3nezhnnsw4ozadvi2hmvzdhrqzfxfum7wa.b32.i2p",
         "tracker.chudo.i2p", "swhb5i7wcjcohmus3gbt3w6du6pmvl3isdvxvepuhdxxkfbzao6q.b32.i2p",
         "tracker.lodikon.i2p", "q2a7tqlyddbyhxhtuia4bmtqpohpp266wsnrkm6cgoahdqrjo3ra.b32.i2p",
