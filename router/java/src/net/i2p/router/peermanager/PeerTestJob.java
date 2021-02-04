@@ -66,8 +66,8 @@ class PeerTestJob extends JobImpl {
         int testTimeout = getContext().getProperty(PROP_PEER_TEST_TIMEOUT, DEFAULT_PEER_TEST_TIMEOUT);
         if (getAvgPeerTestTime() > testTimeout) {
             if (_log.shouldLog(Log.WARN))
-                _log.warn("Peer test timeout set below average successful test time, setting to: " + getAvgPeerTestTime() * 2 / 3 + "ms");
-            return getAvgPeerTestTime() * 2 / 3;
+                _log.warn("Peer test timeout set below average successful test time, setting to: " + getAvgPeerTestTime() * 3 / 2 + "ms");
+            return getAvgPeerTestTime() * 3 / 2;
         } else {
             return testTimeout;
         }
