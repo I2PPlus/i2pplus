@@ -49,7 +49,7 @@ class PeerTestJob extends JobImpl {
         getContext().statManager().createRateStat("peer.testTimeout", "Frequency of test timeouts (no reply)", "Peers", new long[] { 60*1000, 10*60*1000 });
     }
 
-    public int AvgPeerTestTime() {
+    public int getAvgPeerTestTime() {
         RateStat rs = getContext().statManager().getRate("peer.testOK");
         Rate r = rs.getRate(60*1000);
         int avgTestTime = (int) r.getLifetimeAverageValue();
@@ -64,10 +64,10 @@ class PeerTestJob extends JobImpl {
     /** how long to give each peer before marking them as unresponsive? */
     private int getTestTimeout() {
         int testTimeout = getContext().getProperty(PROP_PEER_TEST_TIMEOUT, DEFAULT_PEER_TEST_TIMEOUT);
-        if (AvgPeerTestTime() > testTimeout) {
+        if (getAvgPeerTestTime() > testTimeout) {
             if (_log.shouldLog(Log.WARN))
-                _log.warn("Peer test timeout set below average successful test time, setting to: " + AvgPeerTestTime() * 2 / 3 + "ms");
-            return AvgPeerTestTime() * 2 / 3;
+                _log.warn("Peer test timeout set below average successful test time, setting to: " + getAvgPeerTestTime() * 2 / 3 + "ms");
+            return getAvgPeerTestTime() * 2 / 3;
         } else {
             return testTimeout;
         }
