@@ -955,15 +955,18 @@ public class SummaryHelper extends HelperBase {
     public String getInboundBacklog() {
         if (_context == null)
             return "0";
-
         return String.valueOf(_context.tunnelManager().getInboundBuildQueueSize());
     }
 
-    /** @since 0.9.40+ */
+    /** @since 0.9.49+ */
     public int getAvgPeerTestTime() {
-        RateStat rs = _context.statManager().getRate("peer.testOK");
-        Rate r = rs.getRate(60*1000);
-        int avgTestTime = (int) r.getLifetimeAverageValue();
+        if (_context == null)
+            return 0;
+        RateStat ok = _context.statManager().getRate("peer.testOK");
+        Rate rok = ok.getRate(60*60*1000);
+        RateStat tooslow = _context.statManager().getRate("peer.testTooSlow");
+        Rate rtooslow = ok.getRate(60*60*1000);
+        int avgTestTime = (int) rok.getLifetimeAverageValue() + (int) rtooslow.getLifetimeAverageValue();
         return avgTestTime;
     }
 

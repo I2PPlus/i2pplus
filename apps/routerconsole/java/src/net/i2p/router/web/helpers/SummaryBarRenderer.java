@@ -1190,7 +1190,7 @@ class SummaryBarRenderer {
         if (_context.getProperty("routerconsole.showPeerTestAvg") != null &&
             _context.getBooleanProperty("routerconsole.showPeerTestAvg")) {
             buf.append("<tr title=\"")
-               .append(_t("Average time to successfully test a peer"))
+               .append(_t("Average time to test a peer"))
                .append("\">" +
                        "<td align=\"left\"><b>")
                .append(_t("Peer test average"))

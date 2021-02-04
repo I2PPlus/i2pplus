@@ -33,19 +33,19 @@ class PeerTestJob extends JobImpl {
     private final Log _log;
     private PeerManager _manager;
     private boolean _keepTesting;
-    private final int DEFAULT_PEER_TEST_DELAY = Math.max(getContext().random().nextInt(10)*getContext().random().nextInt(90)*1000, 4*60*1000);
+    private final int DEFAULT_PEER_TEST_DELAY = 5*60*1000;
     public static final String PROP_PEER_TEST_DELAY = "router.peerTestDelay";
     private static final int DEFAULT_PEER_TEST_CONCURRENCY = 1;
     public static final String PROP_PEER_TEST_CONCURRENCY = "router.peerTestConcurrency";
-    private static final int DEFAULT_PEER_TEST_TIMEOUT = 8*1000;
+    private static final int DEFAULT_PEER_TEST_TIMEOUT = 5*1000;
     public static final String PROP_PEER_TEST_TIMEOUT = "router.peerTestTimeout";
     /** Creates a new instance of PeerTestJob */
     public PeerTestJob(RouterContext context) {
         super(context);
         _log = context.logManager().getLog(PeerTestJob.class);
         _keepTesting = false;
-        getContext().statManager().createRequiredRateStat("peer.testOK", "Time a successful test takes (ms)", "Peers", new long[] { 60*1000, 10*60*1000 });
-        getContext().statManager().createRateStat("peer.testTooSlow", "Excess time taken by too slow test (ms)", "Peers", new long[] { 60*1000, 10*60*1000 });
+        getContext().statManager().createRequiredRateStat("peer.testOK", "Time a successful test takes (ms)", "Peers", new long[] { 60*1000, 10*60*1000, 60*60*1000 });
+        getContext().statManager().createRequiredRateStat("peer.testTooSlow", "Excess time taken by too slow test (ms)", "Peers", new long[] { 60*1000, 10*60*1000, 60*60*1000 });
         getContext().statManager().createRateStat("peer.testTimeout", "Frequency of test timeouts (no reply)", "Peers", new long[] { 60*1000, 10*60*1000 });
     }
 
@@ -104,12 +104,12 @@ class PeerTestJob extends JobImpl {
                 _log.debug("Testing " + peers.size() + " peer");
             else
                 _log.debug("Testing " + peers.size() + " peers");
-**/
         for (RouterInfo peer : peers) {
             if (_log.shouldLog(Log.INFO))
                 _log.info("Testing peer [" + peer.getIdentity().getHash().toBase64().substring(0,6) + "]");
             testPeer(peer);
         }
+**/
         requeue(getPeerTestDelay());
         if (_log.shouldLog(Log.INFO))
             _log.info("Next test run in " + getPeerTestDelay() + "ms");
@@ -189,7 +189,10 @@ class PeerTestJob extends JobImpl {
 
         if (_log.shouldLog(Log.DEBUG))
             _log.debug("[Job " + getJobId() + "] Initiating test of peer [" + peer.getIdentity().getHash().toBase64().substring(0,6)
-                       + "]: \n* " + outTunnel + "\n* Replies: " + inTunnel);
+                       + "]: \n* " + outTunnel + "\n* " + inTunnel);
+        else if (_log.shouldLog(Log.INFO))
+            _log.info("Initiating test of peer [" + peer.getIdentity().getHash().toBase64().substring(0,6)
+                       + "]");
 
         ReplySelector sel = new ReplySelector(peer.getIdentity().getHash(), nonce, expiration);
         PeerReplyFoundJob reply = new PeerReplyFoundJob(getContext(), peer, inTunnel, outTunnel);
@@ -298,10 +301,12 @@ class PeerTestJob extends JobImpl {
         public String getName() { return "Verify Peer Test"; }
         public void runJob() {
             long responseTime = getContext().clock().now() - _testBegin;
-
-            if (_log.shouldLog(Log.INFO))
-                _log.info("Peer test of [" + _peer.getIdentity().getHash().toBase64().substring(0,6) + "] succeeded (took " +
+            if (_log.shouldLog(Log.DEBUG))
+                _log.debug("[Job " + getJobId() + "] Peer test of [" + _peer.getIdentity().getHash().toBase64().substring(0,6) + "] succeeded (took " +
                            responseTime + "ms)\n* " + _sendTunnel + "\n* " + _replyTunnel);
+            else if (_log.shouldLog(Log.INFO))
+                _log.info("Peer test of [" + _peer.getIdentity().getHash().toBase64().substring(0,6) + "] succeeded (took " +
+                           responseTime + "ms)");
             getContext().profileManager().dbLookupSuccessful(_peer.getIdentity().getHash(), responseTime);
             // we know the tunnels are working
             _sendTunnel.testSuccessful((int)responseTime);
@@ -338,10 +343,12 @@ class PeerTestJob extends JobImpl {
             if (getShouldFailPeer())
                 getContext().profileManager().dbLookupFailed(_peer.getIdentity().getHash());
 
-            if (_log.shouldLog(Log.INFO))
+            if (_log.shouldLog(Log.DEBUG))
+                _log.debug("[Job " + getJobId() + "] Peer test of [" + _peer.getIdentity().getHash().toBase64().substring(0,6) +
+                          "] failed\n* " + _sendTunnel + "\n* " + _replyTunnel);
+            else if (_log.shouldLog(Log.INFO))
                 _log.info("Peer test of [" + _peer.getIdentity().getHash().toBase64().substring(0,6) +
-                          "] failed (took longer than " + getTestTimeout() + "ms)\n* " +
-                          _sendTunnel + "\n* " + _replyTunnel);
+                          "] failed");
 
             // don't fail the tunnels, as the peer might just plain be down, or
             // otherwise overloaded
