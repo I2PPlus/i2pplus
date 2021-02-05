@@ -141,14 +141,14 @@ class PeerTestJob extends JobImpl {
             RouterInfo peerInfo = getContext().netDb().lookupRouterInfoLocally(peer);
             if (peerInfo != null) {
                 peers.add(peerInfo);
-                if (getTestConcurrency() != 1) {
-                    if (_log.shouldLog(Log.INFO))
-                    _log.info("Running " +  getTestConcurrency() + " concurrent peer tests...");
-                }
             } else {
-                if (_log.shouldLog(Log.WARN))
-                    _log.warn("Peer test failed: No local RouterInfo found for [" + peer.toBase64().substring(0,6) + "]");
+                if (_log.shouldLog(Log.INFO))
+                    _log.info("Test of [" + peer.toBase64().substring(0,6) + "] failed: No local RouterInfo");
             }
+        }
+        if (getTestConcurrency() != 1) {
+            if (_log.shouldLog(Log.INFO))
+                _log.info("Running " +  getTestConcurrency() + " concurrent peer tests");
         }
         return peers;
     }
@@ -259,8 +259,8 @@ class PeerTestJob extends JobImpl {
                 if (_nonce == msg.getMessageId()) {
                     long timeLeft = _expiration - getContext().clock().now();
                     if (timeLeft < 0) {
-                        if (_log.shouldLog(Log.WARN))
-                            _log.warn("Took too long to get a reply from peer [" + _peer.toBase64().substring(0,6)
+                        if (_log.shouldLog(Log.INFO))
+                            _log.info("Took too long to get a reply from [" + _peer.toBase64().substring(0,6)
                                       + "]: " + (0-timeLeft) + "ms too slow");
                         getContext().statManager().addRateData("peer.testTooSlow", 0-timeLeft);
                     } else {
@@ -302,11 +302,11 @@ class PeerTestJob extends JobImpl {
         public void runJob() {
             long responseTime = getContext().clock().now() - _testBegin;
             if (_log.shouldLog(Log.DEBUG)) {
-                _log.debug("Peer test of [" + _peer.getIdentity().getHash().toBase64().substring(0,6) + "] succeeded (took " +
-                           responseTime + "ms)\n* " + _sendTunnel + "\n* " + _replyTunnel);
+                _log.debug("Test of [" + _peer.getIdentity().getHash().toBase64().substring(0,6) + "] succeeded in " +
+                           responseTime + "ms\n* " + _sendTunnel + "\n* " + _replyTunnel);
             } else if (_log.shouldLog(Log.INFO)) {
-                _log.info("Peer test of [" + _peer.getIdentity().getHash().toBase64().substring(0,6) + "] succeeded (took " +
-                           responseTime + "ms)");
+                _log.info("Test of [" + _peer.getIdentity().getHash().toBase64().substring(0,6) + "] succeeded in " +
+                           responseTime + "ms");
             }
             getContext().profileManager().dbLookupSuccessful(_peer.getIdentity().getHash(), responseTime);
             // we know the tunnels are working
@@ -345,15 +345,14 @@ class PeerTestJob extends JobImpl {
                 getContext().profileManager().dbLookupFailed(_peer.getIdentity().getHash());
 
             if (_log.shouldLog(Log.DEBUG)) {
-                _log.debug("Peer test of [" + _peer.getIdentity().getHash().toBase64().substring(0,6) +
-                          "] failed\n* " + _sendTunnel + "\n* " + _replyTunnel);
+                _log.debug("Test of [" + _peer.getIdentity().getHash().toBase64().substring(0,6) +
+                          "] failed (timeout reached)\n* " + _sendTunnel + "\n* " + _replyTunnel);
             } else if (_log.shouldLog(Log.INFO)) {
-                _log.info("Peer test of [" + _peer.getIdentity().getHash().toBase64().substring(0,6) +
-                          "] failed");
+                _log.info("Test of [" + _peer.getIdentity().getHash().toBase64().substring(0,6) +
+                          "] failed (timeout reached)");
             }
 
-            // don't fail the tunnels, as the peer might just plain be down, or
-            // otherwise overloaded
+            // don't fail the tunnels, as the peer might just plain be down, or otherwise overloaded
             getContext().statManager().addRateData("peer.testTimeout", 1);
         }
     }

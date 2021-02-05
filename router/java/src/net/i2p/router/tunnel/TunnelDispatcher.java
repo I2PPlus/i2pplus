@@ -190,7 +190,7 @@ public class TunnelDispatcher implements Service {
      */
     public boolean joinOutbound(TunnelCreatorConfig cfg) {
         if (_log.shouldLog(Log.INFO))
-            _log.info("Outbound built successfully: " + cfg);
+            _log.info("Outbound Gateway built successfully: " + cfg);
         TunnelGateway gw;
         if (cfg.getLength() > 1) {
             TunnelGateway.QueuePreprocessor preproc = createPreprocessor(cfg);
@@ -221,7 +221,7 @@ public class TunnelDispatcher implements Service {
      */
     public boolean joinInbound(TunnelCreatorConfig cfg) {
         if (_log.shouldLog(Log.INFO))
-            _log.info("Inbound tunnel built successfully " + cfg);
+            _log.info("Inbound Endpoint built successfully " + cfg);
 
         if (cfg.getLength() > 1) {
             TunnelParticipant participant = new TunnelParticipant(_context, new InboundEndpointProcessor(_context, cfg, _validator));
@@ -589,7 +589,7 @@ public class TunnelDispatcher implements Service {
                            + ": " + msg);
             if (msg.getMessageExpiration() < before - Router.CLOCK_FUDGE_FACTOR) {
                 if (_log.shouldLog(Log.ERROR))
-                    _log.error("Why are you sending a tunnel message that expired "
+                    _log.error("Why are we sending a tunnel message that expired "
                                + (before-msg.getMessageExpiration()) + "ms ago? "
                                + msg, new Exception("cause"));
                 return;

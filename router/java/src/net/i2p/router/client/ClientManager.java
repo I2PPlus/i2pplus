@@ -164,6 +164,7 @@ class ClientManager {
             else
                 listener = new ClientListenerRunner(_ctx, this, _port);
             Thread t = new I2PThread(listener, "ClientListener:" + _port, true);
+            t.setPriority(Thread.MAX_PRIORITY);
             t.start();
             _listeners.add(listener);
             _clientTimestamper.schedule(ClientTimestamper.LOOP_TIME);

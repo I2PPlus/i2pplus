@@ -28,7 +28,7 @@ class ClientPeerSelector extends TunnelPeerSelector {
      * Returns ENDPOINT FIRST, GATEWAY LAST!!!!
      * In: us .. closest .. middle .. IBGW
      * Out: OBGW .. middle .. closest .. us
-     * 
+     *
      * @return ordered list of Hash objects (one per peer) specifying what order
      *         they should appear in a tunnel (ENDPOINT FIRST).  This includes
      *         the local router in the list.  If there are no tunnels or peers
@@ -39,12 +39,12 @@ class ClientPeerSelector extends TunnelPeerSelector {
         int length = getLength(settings);
         if (length < 0)
             return null;
-        if ( (length == 0) && (settings.getLength()+settings.getLengthVariance() > 0) )
+        if ( (length == 0) && (settings.getLength() + settings.getLengthVariance() > 0) )
             return null;
 
         List<Hash> rv;
         boolean isInbound = settings.isInbound();
-    
+
         if (length > 0) {
             // special cases
             boolean v6Only = isIPv6Only();
@@ -58,7 +58,7 @@ class ClientPeerSelector extends TunnelPeerSelector {
 
             if (shouldSelectExplicit(settings))
                 return selectExplicit(settings, length);
-        
+
             Set<Hash> exclude = getExclude(isInbound, false);
             Set<Hash> matches = new HashSet<Hash>(length);
             if (length == 1) {
@@ -106,15 +106,15 @@ class ClientPeerSelector extends TunnelPeerSelector {
                     lastHopExclude = exclude;
                 }
                 if (hiddenInbound) {
-                    // IB closest hop 
+                    // IB closest hop
                     if (log.shouldInfo())
-                        log.info("CPS SANFP closest IB exclude " + lastHopExclude.size());
+                        log.info("ClientPeerSelector SANFP closest IB exclude " + lastHopExclude.size());
                     // SANFP adds all not-connected to exclude, so make a copy
                     Set<Hash> SANFPExclude = new HashSet<Hash>(lastHopExclude);
                     ctx.profileOrganizer().selectActiveNotFailingPeers(1, SANFPExclude, matches);
                     if (matches.isEmpty()) {
                         if (log.shouldInfo())
-                            log.info("CPS SFP closest IB exclude " + lastHopExclude.size());
+                            log.info("ClientPeerSelector SFP closest IB exclude " + lastHopExclude.size());
                         // ANFP does not fall back to non-connected
                         ctx.profileOrganizer().selectFastPeers(1, lastHopExclude, matches, randomKey, length == 2 ? SLICE_0_1 : SLICE_0);
                     }
@@ -172,14 +172,14 @@ class ClientPeerSelector extends TunnelPeerSelector {
                     }
                     if (pickFurthest) {
                         if (log.shouldInfo())
-                            log.info("CPS SANFP OBEP exclude " + lastHopExclude.size());
+                            log.info("ClientPeerSelector SANFP OBEP exclude " + lastHopExclude.size());
                         // SANFP adds all not-connected to exclude, so make a copy
                         Set<Hash> SANFPExclude = new HashSet<Hash>(lastHopExclude);
                         ctx.profileOrganizer().selectActiveNotFailingPeers(1, SANFPExclude, matches);
                         if (matches.isEmpty()) {
                             // ANFP does not fall back to non-connected
                             if (log.shouldInfo())
-                                log.info("CPS SFP OBEP exclude " + lastHopExclude.size());
+                                log.info("ClientPeerSelector SFP OBEP exclude " + lastHopExclude.size());
                             ctx.profileOrganizer().selectFastPeers(1, lastHopExclude, matches, randomKey, length == 2 ? SLICE_0_1 : SLICE_0);
                         }
                     } else {
@@ -230,9 +230,9 @@ class ClientPeerSelector extends TunnelPeerSelector {
         } else {
             rv = new ArrayList<Hash>(1);
         }
-        
+
         //if (length != rv.size() && log.shouldWarn())
-        //    log.warn("CPS requested " + length + " got " + rv.size() + ": " + DataHelper.toString(rv));
+        //    log.warn("ClientPeerSelector requested " + length + " got " + rv.size() + ": " + DataHelper.toString(rv));
         //else if (log.shouldDebug())
         //    log.debug("EPS result: " + DataHelper.toString(rv));
         if (isInbound)
