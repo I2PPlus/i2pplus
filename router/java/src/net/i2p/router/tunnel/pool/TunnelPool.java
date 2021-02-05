@@ -52,12 +52,10 @@ public class TunnelPool {
 
     private static final int TUNNEL_LIFETIME = 10*60*1000;
     /** if less than one success in this many, reduce quantity (exploratory only) */
-//    private static final int BUILD_TRIES_QUANTITY_OVERRIDE = 12;
     private static final int BUILD_TRIES_QUANTITY_OVERRIDE = 8;
     /** if less than one success in this many, reduce length (exploratory only) */
-    private static final int BUILD_TRIES_LENGTH_OVERRIDE_1 = 8;
+    private static final int BUILD_TRIES_LENGTH_OVERRIDE_1 = 10;
     private static final int BUILD_TRIES_LENGTH_OVERRIDE_2 = 12;
-//    private static final long STARTUP_TIME = 30*60*1000;
     private static final long STARTUP_TIME = 40*60*1000;
 
     TunnelPool(RouterContext ctx, TunnelPoolManager mgr, TunnelPoolSettings settings, TunnelPeerSelector sel) {
@@ -756,8 +754,8 @@ public class TunnelPool {
 
         int wanted = Math.min(_settings.getQuantity(), LeaseSet.MAX_LEASES);
         if (_tunnels.size() < wanted) {
-            if (_log.shouldLog(Log.WARN))
-                _log.warn(toString() + "\n* Not enough tunnels to build full LeaseSet (" + _tunnels.size() + "/" + wanted + " available)");
+            if (_log.shouldInfo())
+                _log.info(toString() + "\n* Not enough tunnels to build full LeaseSet (" + _tunnels.size() + "/" + wanted + " available)");
             // see comment below
             if (_tunnels.isEmpty())
                 return null;
@@ -818,8 +816,8 @@ public class TunnelPool {
         // So we will generate a succession of leases at startup. That's OK.
         // Do we want a config option for this, or are there times when we shouldn't do this?
         if (leases.size() < wanted) {
-            if (_log.shouldLog(Log.WARN))
-                _log.warn(toString() + "\n* Not enough leases to build full LeaseSet (" + leases.size() + "/" + wanted + " available)");
+            if (_log.shouldInfo())
+                _log.info(toString() + "\n* Not enough leases to build full LeaseSet (" + leases.size() + "/" + wanted + " available)");
             if (leases.isEmpty())
                 return null;
         }

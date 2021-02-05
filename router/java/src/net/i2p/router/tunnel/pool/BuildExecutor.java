@@ -667,8 +667,8 @@ class BuildExecutor implements Runnable {
             long requestedOn = rv.getExpiration() - 10*60*1000;
             long rtt = _context.clock().now() - requestedOn;
             _context.statManager().addRateData("tunnel.buildReplySlow", rtt, 0);
-            if (_log.shouldLog(Log.WARN))
-                _log.warn("Received late reply (RTT: " + rtt + "ms) for: " + rv);
+            if (_log.shouldLog(Log.INFO))
+                _log.info("Received late reply (RTT: " + rtt + "ms) for: " + rv);
         }
         return rv;
     }
