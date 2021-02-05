@@ -19,6 +19,7 @@ import net.i2p.util.Log;
 
 import net.i2p.stat.Rate;
 import net.i2p.stat.RateStat;
+import net.i2p.util.SystemVersion;
 
 /**
  * Grab some peers that we want to test and probe them briefly to get some
@@ -33,7 +34,7 @@ class PeerTestJob extends JobImpl {
     private final Log _log;
     private PeerManager _manager;
     private boolean _keepTesting;
-    private final int DEFAULT_PEER_TEST_DELAY = 5*60*1000;
+    private final int DEFAULT_PEER_TEST_DELAY = 3*60*1000;
     public static final String PROP_PEER_TEST_DELAY = "router.peerTestDelay";
     private static final int DEFAULT_PEER_TEST_CONCURRENCY = 1;
     public static final String PROP_PEER_TEST_CONCURRENCY = "router.peerTestConcurrency";
@@ -74,7 +75,11 @@ class PeerTestJob extends JobImpl {
     }
     /** number of peers to test each round */
     private int getTestConcurrency() {
+        int cores = SystemVersion.getCores();
+        long memory = SystemVersion.getMaxMemory()*1024*1024;
         int testConcurrent = getContext().getProperty(PROP_PEER_TEST_CONCURRENCY, DEFAULT_PEER_TEST_CONCURRENCY);
+        if (cores >=4 && memory >= 512)
+            testConcurrent = getContext().getProperty(PROP_PEER_TEST_CONCURRENCY, 4);
         return testConcurrent;
     }
 
