@@ -63,8 +63,12 @@ class PeerTestJob extends JobImpl {
 
     /** how long should we wait before firing off new tests?  */
     private long getPeerTestDelay() {
+        long uptime = getContext().router().getUptime();
         int testDelay = getContext().getProperty(PROP_PEER_TEST_DELAY, DEFAULT_PEER_TEST_DELAY);
-        return testDelay;
+        if (uptime >= 5*60*1000)
+            return testDelay;
+        else
+            return testDelay + (5*60*1000 - uptime);
     }
     /** how long to give each peer before marking them as unresponsive? */
     private int getTestTimeout() {
@@ -90,10 +94,13 @@ class PeerTestJob extends JobImpl {
     public synchronized void startTesting(PeerManager manager) {
         _manager = manager;
         _keepTesting = true;
-        long uptime = getContext().router().getUptime();
         this.getTiming().setStartAfter(getContext().clock().now() + getPeerTestDelay());
-        if (uptime >= 10*60*1000) {
-            getContext().jobQueue().addJob(this);
+        getContext().jobQueue().addJob(this);
+        long uptime = getContext().router().getUptime();
+        if (uptime < 5*60*100) {
+            if (_log.shouldLog(Log.INFO))
+                _log.info("Peer testing will commence in 5 minutes...");
+        } else {
             if (_log.shouldLog(Log.INFO))
                 _log.info("Initialising peer tests -> Timeout: " + getTestTimeout() + "ms per peer");
         }
