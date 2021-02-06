@@ -19,6 +19,11 @@ import net.i2p.util.Log;
 
 import net.i2p.stat.Rate;
 import net.i2p.stat.RateStat;
+import net.i2p.util.SystemVersion;
+
+import net.i2p.router.peermanager.PeerProfile;
+import net.i2p.data.Hash;
+import net.i2p.data.Base64;
 
 /**
  * Grab some peers that we want to test and probe them briefly to get some
@@ -33,9 +38,9 @@ class PeerTestJob extends JobImpl {
     private final Log _log;
     private PeerManager _manager;
     private boolean _keepTesting;
-    private final int DEFAULT_PEER_TEST_DELAY = 5*60*1000;
+    private final int DEFAULT_PEER_TEST_DELAY = 45*1000;
     public static final String PROP_PEER_TEST_DELAY = "router.peerTestDelay";
-    private static final int DEFAULT_PEER_TEST_CONCURRENCY = 1;
+    private static final int DEFAULT_PEER_TEST_CONCURRENCY = 4;
     public static final String PROP_PEER_TEST_CONCURRENCY = "router.peerTestConcurrency";
     private static final int DEFAULT_PEER_TEST_TIMEOUT = 5*1000;
     public static final String PROP_PEER_TEST_TIMEOUT = "router.peerTestTimeout";
@@ -74,17 +79,24 @@ class PeerTestJob extends JobImpl {
     }
     /** number of peers to test each round */
     private int getTestConcurrency() {
+        int cores = SystemVersion.getCores();
+        long memory = SystemVersion.getMaxMemory()*1024*1024;
         int testConcurrent = getContext().getProperty(PROP_PEER_TEST_CONCURRENCY, DEFAULT_PEER_TEST_CONCURRENCY);
+        if (cores >=4 && memory >= 512)
+            testConcurrent = getContext().getProperty(PROP_PEER_TEST_CONCURRENCY, 8);
         return testConcurrent;
     }
 
     public synchronized void startTesting(PeerManager manager) {
         _manager = manager;
         _keepTesting = true;
+        long uptime = getContext().router().getUptime();
         this.getTiming().setStartAfter(getContext().clock().now() + getPeerTestDelay());
-        getContext().jobQueue().addJob(this);
-        if (_log.shouldLog(Log.INFO))
-            _log.info("Initialising peer tests -> Timeout: " + getTestTimeout() + "ms per peer");
+        if (uptime >= 10*60*1000) {
+            getContext().jobQueue().addJob(this);
+            if (_log.shouldLog(Log.INFO))
+                _log.info("Initialising peer tests -> Timeout: " + getTestTimeout() + "ms per peer");
+        }
     }
 
     public synchronized void stopTesting() {
@@ -312,6 +324,19 @@ class PeerTestJob extends JobImpl {
             // we know the tunnels are working
             _sendTunnel.testSuccessful((int)responseTime);
             _replyTunnel.testSuccessful((int)responseTime);
+
+            Hash h = _peer.getIdentity().getHash();
+            if (h != null) {
+                PeerProfile prof = getContext().profileOrganizer().getProfile(h);
+                if (prof != null && prof.getCapacityBonus() == -30) {
+                    try {
+                        prof.setCapacityBonus(0);
+                        if (_log.shouldLog(Log.INFO))
+                            _log.info("Resetting capacity bonus for [" + _peer.getIdentity().getHash().toBase64().substring(0,6) + "] to 0");
+                    } catch (NumberFormatException nfe) {}
+                    return;
+                }
+            }
         }
 
         public void setMessage(I2NPMessage message) {
@@ -354,6 +379,22 @@ class PeerTestJob extends JobImpl {
 
             // don't fail the tunnels, as the peer might just plain be down, or otherwise overloaded
             getContext().statManager().addRateData("peer.testTimeout", 1);
+
+            Hash h = _peer.getIdentity().getHash();
+            if (h != null) {
+                PeerProfile prof = getContext().profileOrganizer().getProfile(h);
+                if (prof != null) {
+//                    try {
+//                        prof.setSpeedBonus(-10240);
+//                    } catch (NumberFormatException nfe) {}
+                    try {
+                        prof.setCapacityBonus(-30);
+                        if (_log.shouldLog(Log.INFO))
+                            _log.info("Setting capacity bonus for [" + _peer.getIdentity().getHash().toBase64().substring(0,6) + "] to -30");
+                    } catch (NumberFormatException nfe) {}
+                    return;
+                }
+            }
         }
     }
 }

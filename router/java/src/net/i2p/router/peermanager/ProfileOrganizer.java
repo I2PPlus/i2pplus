@@ -95,9 +95,9 @@ public class ProfileOrganizer {
      */
     public static final String PROP_MINIMUM_HIGH_CAPACITY_PEERS = "profileOrganizer.minHighCapacityPeers";
 //    public static final int DEFAULT_MINIMUM_HIGH_CAPACITY_PEERS = 25;
-    public static final int DEFAULT_MINIMUM_HIGH_CAPACITY_PEERS = 300;
+    public static final int DEFAULT_MINIMUM_HIGH_CAPACITY_PEERS = 150;
 //    private static final int ABSOLUTE_MAX_HIGHCAP_PEERS = 150;
-    private static final int ABSOLUTE_MAX_HIGHCAP_PEERS = 500;
+    private static final int ABSOLUTE_MAX_HIGHCAP_PEERS = 400;
 
     /** synchronized against this lock when updating the tier that peers are located in (and when fetching them from a peer) */
     private final ReentrantReadWriteLock _reorganizeLock = new ReentrantReadWriteLock(false);
@@ -1295,12 +1295,13 @@ public class ProfileOrganizer {
         double total = 0;
         int count = 0;
         int maxHighCapPeers = getMaximumHighCapPeers();
+        int minHighCapPeers = getMinimumHighCapacityPeers();
         int maxFastPeers = getMaximumFastPeers();
         for (PeerProfile profile : reordered) {
             if (profile.getCapacityValue() >= _thresholdCapacityValue) {
                 // duplicates being clobbered is fine by us
                 total += profile.getSpeedValue();
-                if (count++ > (maxHighCapPeers / 8) * 5)
+                if (count++ > minHighCapPeers / 2 * 3)
                     break;
             } else {
                 // its ordered
