@@ -2923,23 +2923,17 @@ table.configtable, #permabanned, #loggingoptions, #configstats, ul#banlist {
   text-align: right;
 }
 
-/*
-#profilelist td:nth-child(3) {
-  letter-spacing: .2em;
-}
-*/
-
-#profilelist td[colspan="9"], #profilelist tr td[colspan="9"]:hover {
+#profilelist td[colspan="10"], #profilelist tr td[colspan="10"]:hover {
   background: #ced1e3;
   padding: 1px !important;
 }
 
-#profilelist td[colspan="9"]::after {
+#profilelist td[colspan="10"]::after {
   content: none !important;
   display: none !important;
 }
 
-#profilelist td[colspan="9"] hr {
+#profilelist td[colspan="10"] hr {
   display: none;
 }
 
@@ -8568,6 +8562,10 @@ body {
   min-width: 102px !important;
 }
 
+#profilelist th {
+  font-size: 90% !important;
+}
+
 .cells tt, #profilelist tt {
   padding-right: 3px;
   margin-left: -1px !important;
@@ -10094,6 +10092,10 @@ th.queue {
   text-align: center !important;
 }
 
+#profilelist th {
+  font-size: 90% !important;
+}
+
 #profilelist td:nth-child(2) {
   text-align: left !important;
 }
@@ -10107,6 +10109,20 @@ th.queue {
   display: inline-block;
   min-width: 60px;
   text-align: right;
+}
+
+#profilelist .nospeed {
+  text-align: center !important;
+}
+
+#profilelist .lowlatency, #profilelist .highlatency {
+  width: 12px;
+  min-width: 0 !important;
+  color: #373 !important;
+}
+
+#profilelist .highlatency {
+  color: #900 !important;
 }
 
 #profilelist td:nth-child(7) span {
