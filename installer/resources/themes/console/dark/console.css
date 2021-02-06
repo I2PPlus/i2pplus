@@ -6025,12 +6025,26 @@ font[color="#000099"], #servicelogs {
   text-align: center;
 }
 
-#profilelist td[colspan="9"] { /* profile class separator */
+#profilelist td[colspan="10"], #profilelist td[colspan="10"]:hover { /* profile class separator */
   padding: 1px;
   border: 1px solid #242;
   border-top: 1px solid #000;
   border-bottom: 1px solid #000;
   background: #040;
+}
+
+#profilelist .nospeed {
+  text-align: center !important;
+}
+
+#profilelist .lowlatency, #profilelist .highlatency {
+  width: 12px;
+  min-width: 0 !important;
+  color: #373 !important;
+}
+
+#profilelist .highlatency {
+  color: #900 !important;
 }
 
 a[href^="configpeer?peer"] {

@@ -6530,6 +6530,10 @@ font[color="#000099"] { /* info */
   text-align: right;
 }
 
+#profilelist th {
+  font-size: 90% !important;
+}
+
 #profilelist td:nth-child(2), #profilelist th:nth-child(2) {
   text-align: left;
 }
@@ -6561,6 +6565,20 @@ font[color="#000099"] { /* info */
   text-align: center;
   width: 1%;
   white-space: nowrap;
+}
+
+#profilelist .nospeed {
+  text-align: center !important;
+}
+
+#profilelist .lowlatency, #profilelist .highlatency {
+  width: 12px;
+  min-width: 0 !important;
+  color: #373 !important;
+}
+
+#profilelist .highlatency {
+  color: #900 !important;
 }
 
 a[href^="configpeer?peer"]:not(old) {

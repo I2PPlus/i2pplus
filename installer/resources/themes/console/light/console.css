@@ -8391,19 +8391,19 @@ p.sybil_info + a[name] + table.sybil_routerinfo, p.hashdist + a[name] + table.sy
 }
 
 @media screen and (max-width: 1500px) {
-#banlist .routerid img {
-  margin-right: -3px;
-}
+  #banlist .routerid img {
+    margin-right: -3px;
+  }
 }
 
 @media screen and (min-width: 1500px) {
-#banlist .routerid {
-  margin: 0 -5px 0 -2px !important;
-}
+  #banlist .routerid {
+    margin: 0 -5px 0 -2px !important;
+  }
 
-#config_peers #banlist .routerid {
-  margin-left: 0 !important;
-}
+  #config_peers #banlist .routerid {
+    margin-left: 0 !important;
+  }
 }
 
 #banlist li hr {
@@ -8785,6 +8785,10 @@ table#schedjobs {
   margin-bottom: 10px;
 }
 
+#profilelist th {
+  font-size: 90% !important;
+}
+
 #profilelist td:first-child, #profilelist td:nth-child(2), #profilelist td:nth-child(3) {
   width: 1%;
   white-space: nowrap;
@@ -8808,9 +8812,23 @@ table#schedjobs {
   text-align: right;
 }
 
-#profilelist td[colspan="9"] {
+#profilelist td[colspan="10"], #profilelist td[colspan="10"]:hover {
   background: #77f;
   padding: 0;
+}
+
+#profilelist .nospeed {
+  text-align: center !important;
+}
+
+#profilelist .lowlatency, #profilelist .highlatency {
+  width: 12px;
+  min-width: 0 !important;
+  color: #373 !important;
+}
+
+#profilelist .highlatency {
+  color: #900 !important;
 }
 
 #thresholds p {
