@@ -38,7 +38,7 @@ class PeerTestJob extends JobImpl {
     private final Log _log;
     private PeerManager _manager;
     private boolean _keepTesting;
-    private final int DEFAULT_PEER_TEST_DELAY = 45*1000;
+    private final int DEFAULT_PEER_TEST_DELAY = 15*1000;
     public static final String PROP_PEER_TEST_DELAY = "router.peerTestDelay";
     private static final int DEFAULT_PEER_TEST_CONCURRENCY = 4;
     public static final String PROP_PEER_TEST_CONCURRENCY = "router.peerTestConcurrency";
