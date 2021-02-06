@@ -231,7 +231,9 @@ public class EepHead extends EepGet {
             "  -x <value>       proxy password\n";
     }
 
-    /** return true if the URL was completely retrieved */
+    /**
+     *  @param timeout may be null as of 0.9.49
+     */
     @Override
     protected void doFetch(SocketTimeout timeout) throws IOException {
         _aborted = false;
@@ -239,6 +241,7 @@ public class EepHead extends EepGet {
         if (_aborted)
             throw new IOException("Timed out reading the HTTP headers");
 
+        if (timeout != null) {
         timeout.resetTimer();
         if (_fetchInactivityTimeout > 0)
             timeout.setInactivityTimeout(_fetchInactivityTimeout);
