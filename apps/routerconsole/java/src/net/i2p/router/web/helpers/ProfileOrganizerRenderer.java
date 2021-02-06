@@ -94,6 +94,7 @@ class ProfileOrganizerRenderer {
             buf.append("<th>").append(_t("Status")).append("</th>");
             buf.append("<th>").append(_t("Groups")).append("</th>");
             buf.append("<th>").append(_t("Speed")).append("</th>");
+            buf.append("<th>").append(_t("Latency")).append("</th>");
             buf.append("<th>").append(_t("Capacity")).append("</th>");
             buf.append("<th>").append(_t("Integration")).append("</th>");
             buf.append("<th>").append(_t("View/Edit")).append("</th>");
@@ -120,7 +121,7 @@ class ProfileOrganizerRenderer {
                 }
 
                 if (tier != prevTier)
-                    buf.append("<tr><td colspan=\"9\" class=\"separator\"><hr></td></tr>\n");
+                    buf.append("<tr><td colspan=\"10\" class=\"separator\"><hr></td></tr>\n");
                 prevTier = tier;
 
                 buf.append("<tr><td align=\"center\" nowrap>");
@@ -157,7 +158,7 @@ class ProfileOrganizerRenderer {
                     buf.append("<td align=\"left\"><i>").append(_t("unknown")).append("</i>");
                 }
                 buf.append("</td>");
-                buf.append("<td align=\"right\">");
+                buf.append("<td>");
                 String v = info != null ? info.getOption("router.version") : null;
                 if (v != null)
                     buf.append("<span class=\"version\" title=\"").append(_t("Show all routers with this version in the NetDb"))
@@ -180,13 +181,21 @@ class ProfileOrganizerRenderer {
                 RateAverages ra = RateAverages.getTemp();
                 Rate failed = prof.getTunnelHistory().getFailedRate().getRate(60*60*1000);
                 long fails = failed.computeAverages(ra, false).getTotalEventCount();
+                long bonus = prof.getSpeedBonus();
+                long capBonus = prof.getCapacityBonus();
                 if (ok && fails == 0) {
                     buf.append(_t("OK"));
                 } else if (fails > 0) {
                     Rate accepted = prof.getTunnelCreateResponseTime().getRate(60*60*1000);
                     long total = fails + accepted.computeAverages(ra, false).getTotalEventCount();
-                    if (total / fails <= 10)   // hide if < 10%
+                    if (total / fails <= 5) { // don't demote if less than 5%
+                        if (bonus == 9999999)
+                            prof.setSpeedBonus(0);
+                        prof.setCapacityBonus(-30);
+                    }
+                    if (total / fails <= 10) {  // hide if < 10%
                         buf.append(" &bullet; ").append(fails).append('/').append(total).append(' ').append(_t("Test Fails"));
+                    }
                 }
 
                 buf.append("</td>");
@@ -198,13 +207,18 @@ class ProfileOrganizerRenderer {
                     default: buf.append(_t("Failing")); break;
                 }
                 if (isIntegrated) buf.append(", ").append(_t("Integrated"));
-                buf.append("</td><td align=\"right\">");
+                buf.append("</td><td>");
                 String spd = num(Math.round(prof.getSpeedValue())).replace(",", "");
                 String speedApprox = spd.substring(0, spd.indexOf("."));
                 int speed = Integer.parseInt(speedApprox);
-                long bonus = prof.getSpeedBonus();
-                if (prof.getSpeedValue() > 0.5) {
+                if (prof.getSpeedValue() > 0.1) {
                     buf.append("<span class=\"");
+                    if (bonus >= 9999999)
+                        buf.append("testOK ");
+                    else if (capBonus == -30)
+                        buf.append("testFail ");
+                    if (speed >= 9999999)
+                        speed = speed - 9999999;
                     if (speed > 1025) {
                         speed = speed / 1024;
                         buf.append("kilobytes\">");
@@ -213,7 +227,7 @@ class ProfileOrganizerRenderer {
                         buf.append("bytes\">");
                         buf.append(speed).append("&#8239;B");
                     }
-                    if (bonus != 0) {
+                    if (bonus != 0 && bonus != 9999999) {
                         if (bonus > 0)
                             buf.append(" (+");
                         else
@@ -221,17 +235,34 @@ class ProfileOrganizerRenderer {
                         buf.append(bonus).append(')');
                     }
                     buf.append("</span>");
+                } else {
+                    buf.append("<span class=\"");
+                    if (bonus == 9999999)
+                        buf.append("testOK ");
+                    else if (capBonus == -30)
+                        buf.append("testFail ");
+                    buf.append("nospeed\">‒</span>");
                 }
-                buf.append("</td><td align=\"right\"><span>").append(num(Math.round(prof.getCapacityValue())).replace(".00", ""));
-                bonus = prof.getCapacityBonus();
-                if (bonus != 0) {
-                    if (bonus > 0)
+                buf.append("</td>");
+
+                buf.append("<td align=\"center\">");
+                if (bonus == 9999999)
+                    buf.append("<span class=\"lowlatency\">✔</span>");
+                else if (capBonus == -30)
+                    buf.append("<span class=\"highlatency\">✖</span>");
+                buf.append("</td>");
+
+                buf.append("<td><span>").append(num(Math.round(prof.getCapacityValue())).replace(".00", ""));
+                if (capBonus != 0 && capBonus != -30) {
+                    if (capBonus > 0)
                         buf.append(" (+");
                     else
                         buf.append(" (");
-                    buf.append(bonus).append(')');
+                    buf.append(capBonus).append(')');
                 }
-                buf.append("</span></td><td align=\"right\">");
+                buf.append("</span>");
+                buf.append("</td><td>");
+
                 String integration = num(prof.getIntegrationValue()).replace(".00", "");
                 if (prof.getIntegrationValue() > 0) {
                     buf.append("<span>").append(integration).append("</span>");
@@ -417,8 +448,7 @@ class ProfileOrganizerRenderer {
             buf.append("<tr><td><b>")
                .append(_t("status"))
                .append(":</b></td><td>")
-               .append(_t("is the peer banned, or unreachable, or failing tunnel tests?")).append("&nbsp;")
-               .append(_t("Peers indicating a -30 capacity bonus have responded to tests too slowly."))
+               .append(_t("is the peer banned, or unreachable, or failing tunnel tests?"))
                .append("</td></tr>\n");
             buf.append("<tr><td><b>")
                .append(_t("groups")).append(":</b></td><td>")
@@ -436,6 +466,11 @@ class ProfileOrganizerRenderer {
                .append(_t("speed"))
                .append(":</b></td><td>")
                .append(_t("Peak throughput (bytes per second) over a 1 minute period that the peer has sustained in a single tunnel."))
+               .append("</td></tr>\n");
+            buf.append("<tr><td><b>")
+               .append(_t("latency"))
+               .append(":</b></td><td>")
+               .append(_t("Is the peer responding to tests in a timely fashion? To configure the timeout value: <code>router.peerTestTimeout={n}</code> (value is milliseconds, default 5000)"))
                .append("</td></tr>\n");
             buf.append("<tr><td><b>")
                .append(_t("capacity"))

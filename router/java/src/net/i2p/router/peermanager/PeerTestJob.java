@@ -277,13 +277,36 @@ class PeerTestJob extends JobImpl {
                 DeliveryStatusMessage msg = (DeliveryStatusMessage)message;
                 if (_nonce == msg.getMessageId()) {
                     long timeLeft = _expiration - getContext().clock().now();
+                    PeerProfile prof = getContext().profileOrganizer().getProfile(_peer);
                     if (timeLeft < 0) {
                         if (_log.shouldLog(Log.INFO))
-                            _log.info("Took too long to get a reply from [" + _peer.toBase64().substring(0,6)
-                                      + "]: " + (0-timeLeft) + "ms too slow");
+                            _log.info("Took too long to get a reply from [" + _peer.toBase64().substring(0,6) +
+                                      "]: " + (0-timeLeft) + "ms too slow");
                         getContext().statManager().addRateData("peer.testTooSlow", 0-timeLeft);
+                        if (_peer != null) {
+                            try {
+                                prof.setCapacityBonus(-30);
+                                int speedBonus = prof.getSpeedBonus();
+                                if (speedBonus >= 9999999)
+                                    prof.setSpeedBonus(speedBonus - 9999999);
+                                if (_log.shouldLog(Log.INFO))
+                                    _log.info("Setting capacity bonus to -30 for [" + _peer.toBase64().substring(0,6) + "]");
+                            } catch (NumberFormatException nfe) {}
+                        }
                     } else {
                         getContext().statManager().addRateData("peer.testOK", getTestTimeout() - timeLeft);
+                        if (prof.getCapacityBonus() == -30) {
+                            prof.setCapacityBonus(0);
+                            if (_log.shouldLog(Log.INFO))
+                                _log.info("Resetting capacity bonus to 0 for [" + _peer.toBase64().substring(0,6) + "]");
+                        }
+                        try {
+                            if (prof.getSpeedBonus() < 9999999) {
+                                prof.setSpeedBonus(9999999);
+                                if (_log.shouldLog(Log.INFO))
+                                    _log.info("Setting speed bonus to 9999999 for [" + _peer.toBase64().substring(0,6) + "]");
+                            }
+                        } catch (NumberFormatException nfe) {}
                     }
                     _matchFound = true;
                     return true;
@@ -335,11 +358,14 @@ class PeerTestJob extends JobImpl {
             Hash h = _peer.getIdentity().getHash();
             if (h != null) {
                 PeerProfile prof = getContext().profileOrganizer().getProfile(h);
+                prof.setSpeedBonus(9999999);
+                if (_log.shouldLog(Log.INFO))
+                    _log.info("Setting speed bonus to 9999999 for [" + _peer.getIdentity().getHash().toBase64().substring(0,6) + "]");
                 if (prof != null && prof.getCapacityBonus() == -30) {
                     try {
                         prof.setCapacityBonus(0);
                         if (_log.shouldLog(Log.INFO))
-                            _log.info("Resetting capacity bonus for [" + _peer.getIdentity().getHash().toBase64().substring(0,6) + "] to 0");
+                            _log.info("Resetting capacity bonus to 0 for [" + _peer.getIdentity().getHash().toBase64().substring(0,6) + "]");
                     } catch (NumberFormatException nfe) {}
                     return;
                 }
@@ -392,10 +418,12 @@ class PeerTestJob extends JobImpl {
                 PeerProfile prof = getContext().profileOrganizer().getProfile(h);
                 if (prof != null) {
 //                    try {
-//                        prof.setSpeedBonus(-10240);
+//                        prof.setSpeedBonus(-9999999);
 //                    } catch (NumberFormatException nfe) {}
                     try {
                         prof.setCapacityBonus(-30);
+                        if (prof.getSpeedBonus() == 9999999)
+                            prof.setSpeedBonus(0);
                         if (_log.shouldLog(Log.INFO))
                             _log.info("Setting capacity bonus for [" + _peer.getIdentity().getHash().toBase64().substring(0,6) + "] to -30");
                     } catch (NumberFormatException nfe) {}
