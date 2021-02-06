@@ -242,11 +242,12 @@ public class EepHead extends EepGet {
             throw new IOException("Timed out reading the HTTP headers");
 
         if (timeout != null) {
-        timeout.resetTimer();
-        if (_fetchInactivityTimeout > 0)
-            timeout.setInactivityTimeout(_fetchInactivityTimeout);
-        else
-            timeout.setInactivityTimeout(10*1000);
+            timeout.resetTimer();
+            if (_fetchInactivityTimeout > 0)
+                timeout.setInactivityTimeout(_fetchInactivityTimeout);
+            else
+                timeout.setInactivityTimeout(10*1000);
+        }
         // Should we even follow redirects for HEAD?
         if (_redirectLocation != null) {
             try {
