@@ -417,7 +417,8 @@ class ProfileOrganizerRenderer {
             buf.append("<tr><td><b>")
                .append(_t("status"))
                .append(":</b></td><td>")
-               .append(_t("is the peer banned, or unreachable, or failing tunnel tests?"))
+               .append(_t("is the peer banned, or unreachable, or failing tunnel tests?")).append("&nbsp;")
+               .append(_t("Peers indicating a -30 capacity bonus have responded to tests too slowly."))
                .append("</td></tr>\n");
             buf.append("<tr><td><b>")
                .append(_t("groups")).append(":</b></td><td>")

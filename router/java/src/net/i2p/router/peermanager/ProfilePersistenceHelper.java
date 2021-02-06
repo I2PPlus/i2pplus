@@ -60,7 +60,7 @@ class ProfilePersistenceHelper {
      *
      */
 //    private static final long EXPIRE_AGE = 15*24*60*60*1000;
-    private static final long EXPIRE_AGE = 4*60*60*1000; // 4 hours
+    private static final long EXPIRE_AGE = 16*60*60*1000; // 16 hours
 
     private final File _profileDir;
     private Hash _us;
