@@ -1301,6 +1301,9 @@ public class ProfileOrganizer {
             if (profile.getCapacityValue() >= _thresholdCapacityValue) {
                 // duplicates being clobbered is fine by us
                 total += profile.getSpeedValue();
+                int speedBonus = profile.getSpeedBonus();
+                if (speedBonus >= 9999999)
+                    total -= 9999999;
                 if (count++ > minHighCapPeers / 2 * 3)
                     break;
             } else {
