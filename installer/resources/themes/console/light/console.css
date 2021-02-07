@@ -8707,7 +8707,7 @@ table#schedjobs {
 }
 
 #floodfills td:nth-child(3) span, #profilelist td:nth-last-child(3) span, #profilelist td:nth-last-child(4) span,
-#profilelist td:nth-last-child(5) span, #profilelist td:nth-last-child(6) span, #profilelist td:nth-last-child(2) span {
+#profilelist td:nth-last-child(6) span, #profilelist td:nth-last-child(6) span, #profilelist td:nth-last-child(2) span {
   display: inline-block;
   text-align: right;
   min-width: 20px;
@@ -8808,7 +8808,7 @@ table#schedjobs {
 
 #profilelist td:nth-last-child(2) span, #profilelist td:nth-last-child(3) span {
   display: inline-block;
-  min-width: 40px;
+  min-width: 28px;
   text-align: right;
 }
 
