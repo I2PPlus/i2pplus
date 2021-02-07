@@ -30,16 +30,16 @@ public class FloodfillDatabaseLookupMessageHandler implements HandlerJobBuilder 
         _context = context;
         _facade = facade;
         _log = context.logManager().getLog(FloodfillDatabaseLookupMessageHandler.class);
-        _context.statManager().createRateStat("netDb.lookupsReceived", "Number of NetDb lookups we have received", "NetworkDatabase", new long[] { 60*1000, 60*60*1000l });
-        _context.statManager().createRateStat("netDb.lookupsDropped", "Number of NetDb lookups we dropped due to throttling", "NetworkDatabase", new long[] { 60*1000, 60*60*1000l });
+        _context.statManager().createRateStat("netDb.lookupsReceived", "NetDb lookups we have received", "NetworkDatabase", new long[] { 60*1000, 60*60*1000l });
+        _context.statManager().createRateStat("netDb.lookupsDropped", "NetDb lookups we dropped (throttled)", "NetworkDatabase", new long[] { 60*1000, 60*60*1000l });
         // following are for ../HDLMJ
-        _context.statManager().createRateStat("netDb.lookupsHandled", "Number of NetDb lookups we have handled", "NetworkDatabase", new long[] { 60*1000, 60*60*1000l });
-        _context.statManager().createRateStat("netDb.lookupsMatched", "Number of NetDb lookups we had the data for", "NetworkDatabase", new long[] { 60*1000, 60*60*1000l });
-        _context.statManager().createRateStat("netDb.lookupsMatchedLeaseSet", "Number of NetDb LeaseSet lookups we had the data for", "NetworkDatabase", new long[] { 60*1000, 60*60*1000l });
-        _context.statManager().createRateStat("netDb.lookupsMatchedReceivedPublished", "Number of NetDb lookups we had the data for that were published to us", "NetworkDatabase", new long[] { 60*1000, 60*60*1000l });
-        _context.statManager().createRateStat("netDb.lookupsMatchedLocalClosest", "Number of NetDb lookups received for local data where we were the closest peer", "NetworkDatabase", new long[] { 60*1000, 60*60*1000l });
-        _context.statManager().createRateStat("netDb.lookupsMatchedLocalNotClosest", "Number of NetDb lookups received for local data where we were NOT the closest peer", "NetworkDatabase", new long[] { 60*1000, 60*60*1000l });
-        _context.statManager().createRateStat("netDb.lookupsMatchedRemoteNotClosest", "Number of NetDb lookups received for remote data where we were NOT the closest peer", "NetworkDatabase", new long[] { 60*1000, 60*60*1000l });
+        _context.statManager().createRateStat("netDb.lookupsHandled", "NetDb lookups we have handled", "NetworkDatabase", new long[] { 60*1000, 60*60*1000l });
+        _context.statManager().createRateStat("netDb.lookupsMatched", "NetDb lookups we had the data for", "NetworkDatabase", new long[] { 60*1000, 60*60*1000l });
+        _context.statManager().createRateStat("netDb.lookupsMatchedLeaseSet", "NetDb LeaseSet lookups we had the data for", "NetworkDatabase", new long[] { 60*1000, 60*60*1000l });
+        _context.statManager().createRateStat("netDb.lookupsMatchedReceivedPublished", "NetDb lookups we had the data for (published to us)", "NetworkDatabase", new long[] { 60*1000, 60*60*1000l });
+        _context.statManager().createRateStat("netDb.lookupsMatchedLocalClosest", "NetDb lookups received for local data (closest peer)", "NetworkDatabase", new long[] { 60*1000, 60*60*1000l });
+        _context.statManager().createRateStat("netDb.lookupsMatchedLocalNotClosest", "NetDb lookups received for local data (not closest peer)", "NetworkDatabase", new long[] { 60*1000, 60*60*1000l });
+        _context.statManager().createRateStat("netDb.lookupsMatchedRemoteNotClosest", "NetDb lookups received for remote data (not closest peer)", "NetworkDatabase", new long[] { 60*1000, 60*60*1000l });
     }
 
     public Job createJob(I2NPMessage receivedMessage, RouterIdentity from, Hash fromHash) {
@@ -57,7 +57,9 @@ public class FloodfillDatabaseLookupMessageHandler implements HandlerJobBuilder 
             //}
         } else {
             if (_log.shouldLog(Log.WARN))
-                _log.warn("Dropping " + dlm.getSearchType() + " lookup request for [" + dlm.getSearchKey().toBase64().substring(0,6) + "] (throttled)\n* Reply was to: [" + dlm.getFrom().toBase64().substring(0,6) + "] - [Tunnel " + dlm.getReplyTunnel() + "]");
+                _log.warn("Dropping " + dlm.getSearchType() + " lookup request for [" +
+                          dlm.getSearchKey().toBase64().substring(0,6) + "] (throttled)\n* Reply was to: [" +
+                          dlm.getFrom().toBase64().substring(0,6) + "] - [Tunnel " + dlm.getReplyTunnel() + "]");
             _context.statManager().addRateData("netDb.lookupsDropped", 1);
             return null;
         }
