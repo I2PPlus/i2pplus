@@ -246,7 +246,7 @@ class ProfileOrganizerRenderer {
                 buf.append("</td>");
 
                 buf.append("<td align=\"center\">");
-                if (bonus == 9999999)
+                if (bonus >= 9999999)
                     buf.append("<span class=\"lowlatency\">✔</span>");
                 else if (capBonus == -30)
                     buf.append("<span class=\"highlatency\">✖</span>");

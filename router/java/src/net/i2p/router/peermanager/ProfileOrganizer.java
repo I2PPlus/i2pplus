@@ -1547,7 +1547,12 @@ public class ProfileOrganizer {
      * without ejecting any of them, but anyway, this is how we'd do it.  Most likely.
      *
      */
-    private boolean shouldDrop(PeerProfile profile) { return false; }
+    private boolean shouldDrop(PeerProfile profile) {
+        if (profile.getIsFailing())
+            return true;
+        else
+            return false;
+    }
 
     /**
      * Defines the minimum number of 'fast' peers that the organizer should select.  If
