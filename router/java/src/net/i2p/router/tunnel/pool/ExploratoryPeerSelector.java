@@ -244,7 +244,7 @@ class ExploratoryPeerSelector extends TunnelPeerSelector {
      *  is maintained.
      */
     private boolean shouldPickHighCap() {
-        if (ctx.getBooleanProperty("router.exploreHighCapacity"))
+        if (ctx.getBooleanProperty("router.exploreHighCapacity") || ctx.router().getUptime() > 5*60*1000)
             return true;
 
         // If we don't have enough connected peers, use exploratory
