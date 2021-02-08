@@ -362,14 +362,15 @@ class PeerTestJob extends JobImpl {
                     prof.setSpeedBonus(9999999);
                 if (_log.shouldLog(Log.INFO))
                     _log.info("Setting speed bonus to 9999999 for [" + _peer.getIdentity().getHash().toBase64().substring(0,6) + "]");
-                if (prof != null && prof.getCapacityBonus() == -30 && cap != null && reachable && (bw.equals("O") || bw.equals("P") || bw.equals("X"))) {
+//                if (prof != null && prof.getCapacityBonus() == -30 && cap != null && reachable && (bw.equals("O") || bw.equals("P") || bw.equals("X"))) {
+                if (prof != null && prof.getCapacityBonus() == -30 && cap != null && reachable && (!bw.equals("L"))) {
                     try {
                         prof.setCapacityBonus(0);
                         if (_log.shouldLog(Log.INFO))
                             _log.info("Resetting capacity bonus to 0 for [" + _peer.getIdentity().getHash().toBase64().substring(0,6) + "]");
                     } catch (NumberFormatException nfe) {}
                     return;
-                } else if (prof != null && cap != null && reachable && (bw.equals("L"))) {
+                } else if (prof != null && cap != null && (bw.equals("L"))) {
                     try {
                         prof.setCapacityBonus(-30);
                         if (_log.shouldLog(Log.INFO))
@@ -428,20 +429,13 @@ class PeerTestJob extends JobImpl {
                 String cap = peerInfo.getCapabilities();
                 boolean reachable = cap.indexOf(Router.CAPABILITY_REACHABLE) >= 0;
                 String bw = peerInfo.getBandwidthTier();
-                if (prof != null && cap != null && reachable && (bw.equals("O") || bw.equals("P") || bw.equals("X"))) {
+//                if (prof != null && cap != null && reachable && (bw.equals("O") || bw.equals("P") || bw.equals("X"))) {
+                if (prof != null && cap != null) {
                     try {
                         prof.setCapacityBonus(-30);
-                        if (prof.getSpeedBonus() == 9999999)
-                            prof.setSpeedBonus(0);
+                        prof.setSpeedBonus(0);
                         if (_log.shouldLog(Log.INFO))
-                            _log.info("Setting capacity bonus for [" + _peer.getIdentity().getHash().toBase64().substring(0,6) + "] to -30");
-                    } catch (NumberFormatException nfe) {}
-                    return;
-                } else if (prof != null && cap != null && reachable && (bw.equals("L"))) {
-                    try {
-                        prof.setCapacityBonus(-30);
-                        if (_log.shouldLog(Log.INFO))
-                            _log.info("Setting capacity bonus for L class router [" + _peer.getIdentity().getHash().toBase64().substring(0,6) + "] to -30");
+                            _log.info("Setting capacity bonus for [" + _peer.getIdentity().getHash().toBase64().substring(0,6) + "] to -30 and speed bonus to 0");
                     } catch (NumberFormatException nfe) {}
                     return;
                 }
