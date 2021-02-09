@@ -255,7 +255,7 @@ class ProfileOrganizerRenderer {
 
 /**
                 RateStat peerTest = prof.getPeerTestResponseTime();
-                Rate peerTestAvg = peerTest.getRate(60*1000);
+                Rate peerTestAvg = peerTest.getRate(60*60*1000);
                 double testAvg = 0;
                 if (peerTestAvg != null)
                     testAvg = peerTestAvg.getAvgOrLifetimeAvg();

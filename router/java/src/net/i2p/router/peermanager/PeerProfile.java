@@ -546,7 +546,7 @@ public class PeerProfile {
         if (_tunnelTestResponseTime == null)
             _tunnelTestResponseTime = new RateStat("tunnelTestResponseTime", "Time (ms) to test a tunnel this peer participates in", group, RATES);
         if (_peerTestResponseTime == null)
-            _peerTestResponseTime = new RateStat("peerTestResponseTime", "Time (ms) peer takes to respond to a test", group, new long[] { 60*1000l});
+            _peerTestResponseTime = new RateStat("peerTestResponseTime", "Time (ms) peer takes to respond to a test", group, RATES);
 
         if (_tunnelHistory == null)
             _tunnelHistory = new TunnelHistory(_context, group);

@@ -1164,17 +1164,15 @@ public class ProfileOrganizer {
 
             // exclude K,L,M and unreachable peers from fast/high cap groups
             Hash h = profile.getPeer();
-            if (h != null) {
-                RouterInfo peerInfo = _context.netDb().lookupRouterInfoLocally(h);
-                if (peerInfo != null) {
-                    String cap = peerInfo.getCapabilities();
-                    boolean reachable = cap.indexOf(Router.CAPABILITY_REACHABLE) >= 0;
-                    String bw = peerInfo.getBandwidthTier();
-                    PeerProfile prof = _context.profileOrganizer().getProfile(h);
-                    if (cap != null && (bw.equals("K") || bw.equals("L") || bw.equals("M") || !reachable))
-                        continue;
-                }
+            RouterInfo peerInfo = _context.netDb().lookupRouterInfoLocally(h);
+            if (peerInfo != null) {
+                String cap = peerInfo.getCapabilities();
+                boolean reachable = cap.indexOf(Router.CAPABILITY_REACHABLE) >= 0;
+                String bw = peerInfo.getBandwidthTier();
+                if (cap != null && (bw.equals("K") || bw.equals("L") || bw.equals("M") || !reachable))
+                    continue;
             }
+
             // only take into account active peers that aren't failing
             if (profile.getIsFailing() || (!profile.getIsActive()))
                 continue;
