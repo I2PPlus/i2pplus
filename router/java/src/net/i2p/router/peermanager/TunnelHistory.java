@@ -153,12 +153,18 @@ public class TunnelHistory {
             buf.append("# Tunnel History").append(NL);
             buf.append(HR).append(NL).append(NL);
         }
-        addDate(buf, addComments, "lastAgreedTo", _lastAgreedTo, "Last time peer agreed to participate in a tunnel:");
-        addDate(buf, addComments, "lastFailed", _lastFailed, "Last time of participating tunnel failure for peer:");
-        addDate(buf, addComments, "lastRejectedCritical", _lastRejectedCritical, "Last time peer refused tunnel participation (Critical):");
-        addDate(buf, addComments, "lastRejectedBandwidth", _lastRejectedBandwidth, "Last time peer refused tunnel participation (Bandwidth):");
-        addDate(buf, addComments, "lastRejectedTransient", _lastRejectedTransient, "Last time peer refused tunnel participation (Transient):");
-        addDate(buf, addComments, "lastRejectedProbabalistic", _lastRejectedProbabalistic, "Last time peer refused tunnel participation (Probabalistic):");
+        if (_lastAgreedTo != 0)
+            addDate(buf, addComments, "lastAgreedTo", _lastAgreedTo, "Last time peer agreed to participate in a tunnel:");
+        if (_lastFailed != 0)
+            addDate(buf, addComments, "lastFailed", _lastFailed, "Last time of participating tunnel failure for peer:");
+        if (_lastRejectedCritical != 0)
+            addDate(buf, addComments, "lastRejectedCritical", _lastRejectedCritical, "Last time peer refused tunnel participation (Critical):");
+        if (_lastRejectedBandwidth != 0)
+            addDate(buf, addComments, "lastRejectedBandwidth", _lastRejectedBandwidth, "Last time peer refused tunnel participation (Bandwidth):");
+        if (_lastRejectedTransient != 0)
+            addDate(buf, addComments, "lastRejectedTransient", _lastRejectedTransient, "Last time peer refused tunnel participation (Transient):");
+        if (_lastRejectedProbabalistic != 0)
+            addDate(buf, addComments, "lastRejectedProbabalistic", _lastRejectedProbabalistic, "Last time peer refused tunnel participation (Probabalistic):");
         add(buf, addComments, "lifetimeAgreedTo", _lifetimeAgreedTo.get(), "Total tunnels peer agreed to participate in: " + _lifetimeAgreedTo.get());
         add(buf, addComments, "lifetimeFailed", _lifetimeFailed.get(), "Total failed tunnels peer agreed to participate in: " + _lifetimeFailed.get());
         add(buf, addComments, "lifetimeRejected", _lifetimeRejected.get(), "Total tunnels peer refused to participate in: " + _lifetimeRejected.get());
