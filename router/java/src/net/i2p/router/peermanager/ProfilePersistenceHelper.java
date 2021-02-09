@@ -194,6 +194,7 @@ class ProfilePersistenceHelper {
             //profile.getSendSuccessSize().store(out, "sendSuccessSize");
             profile.getTunnelCreateResponseTime().store(out, "tunnelCreateResponseTime", addComments);
             profile.getTunnelTestResponseTime().store(out, "tunnelTestResponseTime", addComments);
+            profile.getPeerTestResponseTime().store(out, "peerTestResponseTime", addComments);
         }
 
         if (profile.getIsExpandedDB()) {
@@ -348,6 +349,7 @@ class ProfilePersistenceHelper {
             profile.setLastSendFailed(getLong(props, "lastFailedSend"));
             profile.setLastHeardFrom(getLong(props, "lastHeardFrom"));
             profile.setTunnelTestTimeAverage(getFloat(props, "tunnelTestTimeAverage"));
+            profile.setPeerTestTimeAverage((int) getLong(props, "peerTestTimeAverage"));
             profile.setPeakThroughputKBps(getFloat(props, "tunnelPeakThroughput"));
             profile.setPeakTunnelThroughputKBps(getFloat(props, "tunnelPeakTunnelThroughput"));
             profile.setPeakTunnel1mThroughputKBps(getFloat(props, "tunnelPeakTunnel1mThroughput"));
@@ -371,6 +373,7 @@ class ProfilePersistenceHelper {
             //profile.getSendSuccessSize().load(props, "sendSuccessSize", true);
             profile.getTunnelCreateResponseTime().load(props, "tunnelCreateResponseTime", true);
             profile.getTunnelTestResponseTime().load(props, "tunnelTestResponseTime", true);
+            profile.getPeerTestResponseTime().load(props, "peerTestResponseTime", true);
 
             if (_log.shouldLog(Log.DEBUG))
                 _log.debug("Loaded the profile for [" + peer.toBase64().substring(0,6) + "] from " + file.getName());

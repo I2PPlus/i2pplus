@@ -1166,12 +1166,14 @@ public class ProfileOrganizer {
             Hash h = profile.getPeer();
             if (h != null) {
                 RouterInfo peerInfo = _context.netDb().lookupRouterInfoLocally(h);
-                String cap = peerInfo.getCapabilities();
-                boolean reachable = cap.indexOf(Router.CAPABILITY_REACHABLE) >= 0;
-                String bw = peerInfo.getBandwidthTier();
-                PeerProfile prof = _context.profileOrganizer().getProfile(h);
-                if (cap != null && !reachable && (bw.equals("K") || bw.equals("L") || bw.equals("M")))
-                    continue;
+                if (peerInfo != null) {
+                    String cap = peerInfo.getCapabilities();
+                    boolean reachable = cap.indexOf(Router.CAPABILITY_REACHABLE) >= 0;
+                    String bw = peerInfo.getBandwidthTier();
+                    PeerProfile prof = _context.profileOrganizer().getProfile(h);
+                    if (cap != null && (bw.equals("K") || bw.equals("L") || bw.equals("M") || !reachable))
+                        continue;
+                }
             }
             // only take into account active peers that aren't failing
             if (profile.getIsFailing() || (!profile.getIsActive()))

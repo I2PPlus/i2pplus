@@ -38,7 +38,7 @@ public class PeerManagerFacadeImpl implements PeerManagerFacade {
     }
 
     public synchronized void startup() {
-        _log.info("Starting Peer Manager");
+        _log.info("Starting Peer Manager...");
         _manager = new PeerManager(_context);
         _persistenceHelper.setUs(_context.routerHash());
         _testJob.startTesting(_manager);

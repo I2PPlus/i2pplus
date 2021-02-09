@@ -42,12 +42,14 @@ public class PeerProfile {
     private long _lastFailedSend;
     private long _lastHeardFrom;
     private float _tunnelTestResponseTimeAvg;
+    private int _peerTestResponseTimeAvg;
     // periodic rates
     //private RateStat _sendSuccessSize = null;
     //private RateStat _receiveSize = null;
     private RateStat _dbResponseTime;
     private RateStat _tunnelCreateResponseTime;
     private RateStat _tunnelTestResponseTime;
+    private RateStat _peerTestResponseTime;
     private RateStat _dbIntroduction;
     // calculation bonuses
     // ints to save some space
@@ -307,6 +309,10 @@ public class PeerProfile {
     /** how long it takes to successfully test a tunnel this peer participates in (in milliseconds), calculated over a 10 minute, 1 hour, and 1 day period
         Warning - may return null if !getIsExpanded() */
     public RateStat getTunnelTestResponseTime() { return _tunnelTestResponseTime; }
+
+    /** how long it takes for a peer to respond to a direct test (ms) */
+    public RateStat getPeerTestResponseTime() { return _peerTestResponseTime; }
+
     /** how many new peers we get from dbSearchReplyMessages or dbStore messages, calculated over a 1 hour, 1 day, and 1 week period
         Warning - may return null if !getIsExpandedDB() */
     public RateStat getDbIntroduction() { return _dbIntroduction; }
@@ -375,6 +381,18 @@ public class PeerProfile {
         if (_log.shouldLog(Log.INFO))
             _log.info("Timed tunnel test for [" + _peer.toBase64().substring(0,6) +
                       "] updated to " + (_tunnelTestResponseTimeAvg / 1000) + "s");
+    }
+
+    public float getPeerTestTimeAverage() { return _peerTestResponseTimeAvg; }
+    void setPeerTestTimeAverage(int avg) { _peerTestResponseTimeAvg = avg; }
+
+    void updatePeerTestTimeAverage(long ms) {
+        if (_peerTestResponseTimeAvg <= 0)
+            _peerTestResponseTimeAvg = 10*1000; // default timeout * 2
+
+        if (_log.shouldLog(Log.INFO))
+            _log.info("Timed peer test average for [" + _peer.toBase64().substring(0,6) +
+                      "] updated to " + (_peerTestResponseTimeAvg) + "ms");
     }
 
     public float getPeakThroughputKBps() {
@@ -527,6 +545,8 @@ public class PeerProfile {
             _tunnelCreateResponseTime = new RateStat("tunnelCreateResponseTime", "Time (ms) for tunnel create response from the peer", group, RATES);
         if (_tunnelTestResponseTime == null)
             _tunnelTestResponseTime = new RateStat("tunnelTestResponseTime", "Time (ms) to test a tunnel this peer participates in", group, RATES);
+        if (_peerTestResponseTime == null)
+            _peerTestResponseTime = new RateStat("peerTestResponseTime", "Time (ms) peer takes to respond to a test", group, new long[] { 60*1000l});
 
         if (_tunnelHistory == null)
             _tunnelHistory = new TunnelHistory(_context, group);
@@ -611,6 +631,7 @@ public class PeerProfile {
         //_sendSuccessSize.coalesceStats();
         _tunnelCreateResponseTime.coalesceStats();
         _tunnelTestResponseTime.coalesceStats();
+        _peerTestResponseTime.coalesceStats();
         _tunnelHistory.coalesceStats();
         if (_expandedDB) {
             _dbIntroduction.coalesceStats();
