@@ -177,7 +177,7 @@ class ProfilePersistenceHelper {
         addDate(buf, addComments, "lastHeardFrom", profile.getLastHeardFrom(), "Last message from peer received:");
         addDate(buf, addComments, "lastSentToSuccessfully", profile.getLastSendSuccessful(), "Last successful message sent to peer:");
         addDate(buf, addComments, "lastFailedSend", profile.getLastSendFailed(), "Last failed message to sent peer:");
-        add(buf, addComments, "tunnelTestTimeAverage", profile.getTunnelTestTimeAverage(), "Average peer response time (ms): " +  profile.getTunnelTestTimeAverage());
+        add(buf, addComments, "tunnelTestTimeAverage", profile.getTunnelTestTimeAverage(), "Average peer response time: " +  profile.getTunnelTestTimeAverage());
         // TODO: needs clarification - difference between tunnel peak and tunnel peak tunnel? And round down KBps display to 2 decimal places
         add(buf, addComments, "tunnelPeakThroughput", profile.getPeakThroughputKBps(), "Tunnel Peak throughput: " + profile.getPeakThroughputKBps() + " KBps");
         add(buf, addComments, "tunnelPeakTunnelThroughput", profile.getPeakTunnelThroughputKBps(), "Tunnel Peak Tunnel throughput: " + profile.getPeakTunnelThroughputKBps() + " KBps");
@@ -320,6 +320,16 @@ class ProfilePersistenceHelper {
             }
             PeerProfile profile = new PeerProfile(_context, peer);
             Properties props = new Properties();
+
+            RouterInfo info = _context.netDb().lookupRouterInfoLocally(peer);
+            if (null != info) {
+                String tier = DataHelper.stripHTML(info.getBandwidthTier());
+                if (tier.equals("K") || tier.equals("L")) {
+                    if (_log.shouldLog(Log.DEBUG))
+                        _log.debug("Dropping K or L class profile: " + file.getName());
+                    return null;
+                }
+            }
 
             loadProps(props, file);
 

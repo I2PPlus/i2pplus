@@ -1157,13 +1157,6 @@ public class ProfileOrganizer {
         for (PeerProfile profile : allPeers) {
             if (_us.equals(profile.getPeer())) continue;
 
-            // exclude K,L,M and unreachable peers from fast/high cap groups
-            if (profile.isSlow()) {
-                if (_log.shouldLog(Log.INFO))
-                    _log.info("Excluding [" + profile.getPeer() + "] from fast/highcap groups -> lower bandwidth tier");
-                continue;
-            }
-
             // exclude unreachable peers
             if (profile.wasUnreachable()) {
                 if (_log.shouldLog(Log.INFO))
@@ -1467,10 +1460,17 @@ public class ProfileOrganizer {
         RouterInfo info = _context.netDb().lookupRouterInfoLocally(peer);
 //        String caps = DataHelper.stripHTML(info.getCapabilities());
         if (null != info) {
+            String tier = DataHelper.stripHTML(info.getBandwidthTier());
             if (info.isHidden()) {
-               if (_log.shouldLog(Log.WARN))
+                if (_log.shouldLog(Log.WARN))
                     _log.warn("[" + peer.toBase64().substring(0,6) + "] is marked as hidden; not using it to build tunnels");
                 return false;
+
+            } else if (tier.equals("L") || tier.equals("M")) {
+                if (_log.shouldLog(Log.WARN))
+                    _log.warn("[" + peer.toBase64().substring(0,6) + "] is in tier L or M; not using it to build tunnels");
+                return false;
+
             } else {
                 boolean exclude = TunnelPeerSelector.shouldExclude(_context, info);
                 if (exclude) {

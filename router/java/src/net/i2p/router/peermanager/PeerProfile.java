@@ -44,7 +44,7 @@ public class PeerProfile {
     private long _lastFailedSend;
     private long _lastHeardFrom;
     private float _tunnelTestResponseTimeAvg;
-    private int _peerTestResponseTimeAvg;
+    private float _peerTestResponseTimeAvg;
     // periodic rates
     //private RateStat _sendSuccessSize = null;
     //private RateStat _receiveSize = null;
@@ -171,17 +171,6 @@ public class PeerProfile {
      */
     public boolean getIsActive() {
         return getIsActive(5*60*1000);
-    }
-
-    /** @since 0.9.49+ */
-    public boolean isSlow() {
-        Hash h = getPeer();
-        RouterInfo peerInfo = _context.netDb().lookupRouterInfoLocally(h);
-        String bw = peerInfo.getBandwidthTier();
-        if (bw.equals("K") || bw.equals("L") || bw.equals("M"))
-            return true;
-        else
-            return false;
     }
 
     /** @since 0.8.11 */
@@ -397,12 +386,13 @@ public class PeerProfile {
     }
 
     public float getPeerTestTimeAverage() { return _peerTestResponseTimeAvg; }
-    void setPeerTestTimeAverage(int avg) { _peerTestResponseTimeAvg = avg; }
+    void setPeerTestTimeAverage(float avg) { _peerTestResponseTimeAvg = avg; }
 
     void updatePeerTestTimeAverage(long ms) {
         if (_peerTestResponseTimeAvg <= 0)
             _peerTestResponseTimeAvg = 10*1000; // default timeout * 2
-
+        else
+             _peerTestResponseTimeAvg = 0.75f * _peerTestResponseTimeAvg + .25f * ms;
         if (_log.shouldLog(Log.INFO))
             _log.info("Timed peer test average for [" + _peer.toBase64().substring(0,6) +
                       "] updated to " + (_peerTestResponseTimeAvg) + "ms");
