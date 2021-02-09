@@ -1466,10 +1466,12 @@ public class ProfileOrganizer {
                     _log.warn("[" + peer.toBase64().substring(0,6) + "] is marked as hidden; not using it to build tunnels");
                 return false;
 
+/**
             } else if (tier.equals("L") || tier.equals("M")) {
                 if (_log.shouldLog(Log.WARN))
                     _log.warn("[" + peer.toBase64().substring(0,6) + "] is in tier L or M; not using it to build tunnels");
                 return false;
+**/
 
             } else {
                 boolean exclude = TunnelPeerSelector.shouldExclude(_context, info);
