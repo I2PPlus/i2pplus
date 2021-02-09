@@ -12,6 +12,8 @@ import net.i2p.router.RouterContext;
 import net.i2p.stat.RateStat;
 import net.i2p.util.Log;
 
+import net.i2p.data.router.RouterInfo;
+
 /**
  * Copied from http://www.i2p2.i2p/how_peerselection.html
  *
@@ -171,6 +173,17 @@ public class PeerProfile {
         return getIsActive(5*60*1000);
     }
 
+    /** @since 0.9.49+ */
+    public boolean isSlow() {
+        Hash h = getPeer();
+        RouterInfo peerInfo = _context.netDb().lookupRouterInfoLocally(h);
+        String bw = peerInfo.getBandwidthTier();
+        if (bw.equals("K") || bw.equals("L") || bw.equals("M"))
+            return true;
+        else
+            return false;
+    }
+
     /** @since 0.8.11 */
     boolean isEstablished() {
         // null for tests
@@ -181,7 +194,7 @@ public class PeerProfile {
     }
 
     /** @since 0.8.11 */
-    boolean wasUnreachable() {
+    public boolean wasUnreachable() {
         // null for tests
         CommSystemFacade cs = _context.commSystem();
         if (cs == null)

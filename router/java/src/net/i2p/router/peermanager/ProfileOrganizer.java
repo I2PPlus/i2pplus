@@ -178,8 +178,6 @@ public class ProfileOrganizer {
      */
     public PeerProfile getProfile(Hash peer) {
         if (peer.equals(_us)) {
-//            if (_log.shouldWarn())
-//                _log.warn("Who wanted our profile?", new Exception("I did"));
             if (_log.shouldLog(Log.DEBUG))
                 _log.debug("Retrieved our own profile for the Profile Manager");
             return null;
@@ -197,8 +195,6 @@ public class ProfileOrganizer {
      */
     public PeerProfile getProfileNonblocking(Hash peer) {
         if (peer.equals(_us)) {
-//            if (_log.shouldWarn())
-//                _log.warn("Who wanted our profile?", new Exception("I did"));
             if (_log.shouldLog(Log.DEBUG))
                 _log.debug("Retrieved our own profile for the Profile Manager");
             return null;
@@ -220,7 +216,6 @@ public class ProfileOrganizer {
     PeerProfile getOrCreateProfileNonblocking(Hash peer) {
         if (peer.equals(_us)) {
             if (_log.shouldDebug())
-//                _log.warn("Who wanted our own profile?", new Exception("I did"));
                 _log.debug("Retrieved our own profile for the Profile Manager");
             return null;
         }
@@ -1163,14 +1158,17 @@ public class ProfileOrganizer {
             if (_us.equals(profile.getPeer())) continue;
 
             // exclude K,L,M and unreachable peers from fast/high cap groups
-            Hash h = profile.getPeer();
-            RouterInfo peerInfo = _context.netDb().lookupRouterInfoLocally(h);
-            if (peerInfo != null) {
-                String cap = peerInfo.getCapabilities();
-                boolean reachable = cap.indexOf(Router.CAPABILITY_REACHABLE) >= 0;
-                String bw = peerInfo.getBandwidthTier();
-                if (cap != null && (bw.equals("K") || bw.equals("L") || bw.equals("M") || !reachable))
-                    continue;
+            if (profile.isSlow()) {
+                if (_log.shouldLog(Log.INFO))
+                    _log.info("Excluding [" + profile.getPeer() + "] from fast/highcap groups -> lower bandwidth tier");
+                continue;
+            }
+
+            // exclude unreachable peers
+            if (profile.wasUnreachable()) {
+                if (_log.shouldLog(Log.INFO))
+                    _log.info("Excluding [" + profile.getPeer() + "] from fast/highcap groups -> unreachable");
+                continue;
             }
 
             // only take into account active peers that aren't failing
