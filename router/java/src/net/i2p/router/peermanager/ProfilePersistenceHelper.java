@@ -160,9 +160,12 @@ class ProfilePersistenceHelper {
             if (info != null)
                 buf.append(DataHelper.stripHTML(info.getCapabilities()).toUpperCase().replace("XO", "X").replace("PO", "P"));
             buf.append(NL);
-            buf.append("#").append(TAB).append("Speed:").append(TAB).append(TAB).append(speed).append(" Bps").append(NL);
-            buf.append("#").append(TAB).append("Capacity:").append(TAB).append(capacity).append(" tunnels/hour").append(NL);
-            buf.append("#").append(TAB).append("Integration:").append(TAB).append(integration).append(" peers").append(NL);
+            if (speed != 0)
+                buf.append("#").append(TAB).append("Speed:").append(TAB).append(TAB).append(speed).append(" Bps").append(NL);
+            if (capacity != 0)
+                buf.append("#").append(TAB).append("Capacity:").append(TAB).append(capacity).append(" tunnels/hour").append(NL);
+            if (integration != 0)
+                buf.append("#").append(TAB).append("Integration:").append(TAB).append(integration).append(" peers").append(NL);
             buf.append("#").append(TAB).append("Groups:").append(TAB).append(TAB).append(groups).append(NL);
             buf.append(HR).append(NL).append(NL);
         }
@@ -174,14 +177,21 @@ class ProfilePersistenceHelper {
             add(buf, addComments, "integrationBonus", profile.getIntegrationBonus(), "Manual Integration Score adjustment: " + profile.getIntegrationBonus());
         addDate(buf, addComments, "firstHeardAbout", profile.getFirstHeardAbout(), "First reference to peer received:");
         addDate(buf, addComments, "lastHeardAbout", profile.getLastHeardAbout(), "Last reference to peer received:");
-        addDate(buf, addComments, "lastHeardFrom", profile.getLastHeardFrom(), "Last message from peer received:");
-        addDate(buf, addComments, "lastSentToSuccessfully", profile.getLastSendSuccessful(), "Last successful message sent to peer:");
-        addDate(buf, addComments, "lastFailedSend", profile.getLastSendFailed(), "Last failed message to sent peer:");
-        add(buf, addComments, "tunnelTestTimeAverage", profile.getTunnelTestTimeAverage(), "Average peer response time (ms): " +  profile.getTunnelTestTimeAverage());
+        if (profile.getLastHeardFrom() != 0)
+            addDate(buf, addComments, "lastHeardFrom", profile.getLastHeardFrom(), "Last message from peer received:");
+        if (profile.getLastSendSuccessful() != 0)
+            addDate(buf, addComments, "lastSentToSuccessfully", profile.getLastSendSuccessful(), "Last successful message sent to peer:");
+        if (profile.getLastSendFailed() != 0)
+            addDate(buf, addComments, "lastFailedSend", profile.getLastSendFailed(), "Last failed message to sent peer:");
+        if (profile.getTunnelTestTimeAverage() != 0)
+            add(buf, addComments, "tunnelTestTimeAverage", profile.getTunnelTestTimeAverage(), "Average peer response time: " +  profile.getTunnelTestTimeAverage());
         // TODO: needs clarification - difference between tunnel peak and tunnel peak tunnel? And round down KBps display to 2 decimal places
-        add(buf, addComments, "tunnelPeakThroughput", profile.getPeakThroughputKBps(), "Tunnel Peak throughput: " + profile.getPeakThroughputKBps() + " KBps");
-        add(buf, addComments, "tunnelPeakTunnelThroughput", profile.getPeakTunnelThroughputKBps(), "Tunnel Peak Tunnel throughput: " + profile.getPeakTunnelThroughputKBps() + " KBps");
-        add(buf, addComments, "tunnelPeakTunnel1mThroughput", profile.getPeakTunnel1mThroughputKBps(), "Tunnel Peak Tunnel throughput for 1 minute: " + profile.getPeakTunnel1mThroughputKBps() + " KBps");
+        if (profile.getPeakThroughputKBps() != 0)
+            add(buf, addComments, "tunnelPeakThroughput", profile.getPeakThroughputKBps(), "Tunnel Peak throughput: " + profile.getPeakThroughputKBps() + " KBps");
+        if (profile.getPeakTunnelThroughputKBps() != 0)
+            add(buf, addComments, "tunnelPeakTunnelThroughput", profile.getPeakTunnelThroughputKBps(), "Tunnel Peak Tunnel throughput: " + profile.getPeakTunnelThroughputKBps() + " KBps");
+        if (profile.getPeakTunnel1mThroughputKBps() != 0)
+            add(buf, addComments, "tunnelPeakTunnel1mThroughput", profile.getPeakTunnel1mThroughputKBps(), "Tunnel Peak Tunnel throughput for 1 minute: " + profile.getPeakTunnel1mThroughputKBps() + " KBps");
         if (addComments)
             buf.append(NL);
 
@@ -194,6 +204,7 @@ class ProfilePersistenceHelper {
             //profile.getSendSuccessSize().store(out, "sendSuccessSize");
             profile.getTunnelCreateResponseTime().store(out, "tunnelCreateResponseTime", addComments);
             profile.getTunnelTestResponseTime().store(out, "tunnelTestResponseTime", addComments);
+            profile.getPeerTestResponseTime().store(out, "peerTestResponseTime", addComments);
         }
 
         if (profile.getIsExpandedDB()) {
@@ -323,9 +334,15 @@ class ProfilePersistenceHelper {
             loadProps(props, file);
 
             long lastSentToSuccessfully = getLong(props, "lastSentToSuccessfully");
+            RouterInfo info = _context.netDb().lookupRouterInfoLocally(profile.getPeer());
+            String caps = DataHelper.stripHTML(info.getCapabilities()).toUpperCase();
+
             if (isExpired(lastSentToSuccessfully)) {
                 if (_log.shouldLog(Log.DEBUG))
                     _log.debug("Dropping stale profile: " + file.getName());
+                file.delete();
+                return null;
+            } else if (!caps.contains("K") || !caps.contains("L") || !caps.contains("U")) {
                 file.delete();
                 return null;
             } else if (file.getName().endsWith(OLD_SUFFIX)) {
@@ -348,6 +365,7 @@ class ProfilePersistenceHelper {
             profile.setLastSendFailed(getLong(props, "lastFailedSend"));
             profile.setLastHeardFrom(getLong(props, "lastHeardFrom"));
             profile.setTunnelTestTimeAverage(getFloat(props, "tunnelTestTimeAverage"));
+            profile.setPeerTestTimeAverage((int) getLong(props, "peerTestTimeAverage"));
             profile.setPeakThroughputKBps(getFloat(props, "tunnelPeakThroughput"));
             profile.setPeakTunnelThroughputKBps(getFloat(props, "tunnelPeakTunnelThroughput"));
             profile.setPeakTunnel1mThroughputKBps(getFloat(props, "tunnelPeakTunnel1mThroughput"));
@@ -360,7 +378,8 @@ class ProfilePersistenceHelper {
             if (getLong(props, "dbHistory.lastLookupSuccessful") > 0 ||
                 getLong(props, "dbHistory.lastLookupFailed") > 0 ||
                 getLong(props, "dbHistory.lastStoreSuccessful") > 0 ||
-                getLong(props, "dbHistory.lastStoreFailed") > 0) {
+                getLong(props, "dbHistory.lastStoreFailed") > 0 &&
+                (!caps.contains("K") || !caps.contains("L") || !caps.contains("U"))) {
                 profile.expandDBProfile();
                 profile.getDBHistory().load(props);
                 profile.getDbIntroduction().load(props, "dbIntroduction", true);
@@ -369,8 +388,11 @@ class ProfilePersistenceHelper {
 
             //profile.getReceiveSize().load(props, "receiveSize", true);
             //profile.getSendSuccessSize().load(props, "sendSuccessSize", true);
-            profile.getTunnelCreateResponseTime().load(props, "tunnelCreateResponseTime", true);
-            profile.getTunnelTestResponseTime().load(props, "tunnelTestResponseTime", true);
+            if (!caps.contains("K") || !caps.contains("L") || !caps.contains("U")) {
+                profile.getTunnelCreateResponseTime().load(props, "tunnelCreateResponseTime", true);
+                profile.getTunnelTestResponseTime().load(props, "tunnelTestResponseTime", true);
+                profile.getPeerTestResponseTime().load(props, "peerTestResponseTime", true);
+            }
 
             if (_log.shouldLog(Log.DEBUG))
                 _log.debug("Loaded the profile for [" + peer.toBase64().substring(0,6) + "] from " + file.getName());

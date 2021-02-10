@@ -283,8 +283,8 @@ class PeerManager {
                           + _organizer.countHighCapacityPeers() + " High Capacity peers and "
                           + _organizer.countFastPeers() + " Fast peers");
         }
-        if (_log.shouldLog(Log.INFO))
-            _log.info("Peers selected for testing: " + peers);
+//        if (_log.shouldLog(Log.INFO))
+//            _log.info("Peers selected for testing: " + peers);
         return new ArrayList<Hash>(peers);
     }
 

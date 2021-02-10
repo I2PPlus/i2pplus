@@ -178,8 +178,6 @@ public class ProfileOrganizer {
      */
     public PeerProfile getProfile(Hash peer) {
         if (peer.equals(_us)) {
-//            if (_log.shouldWarn())
-//                _log.warn("Who wanted our profile?", new Exception("I did"));
             if (_log.shouldLog(Log.DEBUG))
                 _log.debug("Retrieved our own profile for the Profile Manager");
             return null;
@@ -197,8 +195,6 @@ public class ProfileOrganizer {
      */
     public PeerProfile getProfileNonblocking(Hash peer) {
         if (peer.equals(_us)) {
-//            if (_log.shouldWarn())
-//                _log.warn("Who wanted our profile?", new Exception("I did"));
             if (_log.shouldLog(Log.DEBUG))
                 _log.debug("Retrieved our own profile for the Profile Manager");
             return null;
@@ -220,7 +216,6 @@ public class ProfileOrganizer {
     PeerProfile getOrCreateProfileNonblocking(Hash peer) {
         if (peer.equals(_us)) {
             if (_log.shouldDebug())
-//                _log.warn("Who wanted our own profile?", new Exception("I did"));
                 _log.debug("Retrieved our own profile for the Profile Manager");
             return null;
         }
@@ -1162,6 +1157,13 @@ public class ProfileOrganizer {
         for (PeerProfile profile : allPeers) {
             if (_us.equals(profile.getPeer())) continue;
 
+            // exclude unreachable peers
+            if (profile.wasUnreachable()) {
+                if (_log.shouldLog(Log.INFO))
+                    _log.info("Excluding [" + profile.getPeer() + "] from fast/highcap groups -> unreachable");
+                continue;
+            }
+
             // only take into account active peers that aren't failing
             if (profile.getIsFailing() || (!profile.getIsActive()))
                 continue;
@@ -1458,10 +1460,19 @@ public class ProfileOrganizer {
         RouterInfo info = _context.netDb().lookupRouterInfoLocally(peer);
 //        String caps = DataHelper.stripHTML(info.getCapabilities());
         if (null != info) {
+            String tier = DataHelper.stripHTML(info.getBandwidthTier());
             if (info.isHidden()) {
-               if (_log.shouldLog(Log.WARN))
+                if (_log.shouldLog(Log.WARN))
                     _log.warn("[" + peer.toBase64().substring(0,6) + "] is marked as hidden; not using it to build tunnels");
                 return false;
+
+/**
+            } else if (tier.equals("L") || tier.equals("M")) {
+                if (_log.shouldLog(Log.WARN))
+                    _log.warn("[" + peer.toBase64().substring(0,6) + "] is in tier L or M; not using it to build tunnels");
+                return false;
+**/
+
             } else {
                 boolean exclude = TunnelPeerSelector.shouldExclude(_context, info);
                 if (exclude) {

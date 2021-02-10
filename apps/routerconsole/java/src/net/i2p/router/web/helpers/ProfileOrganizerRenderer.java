@@ -75,6 +75,7 @@ class ProfileOrganizerRenderer {
         int fast = 0;
         int reliable = 0;
         int integrated = 0;
+        boolean isAdvanced = _context.getBooleanProperty("routerconsole.advanced");
         StringBuilder buf = new StringBuilder(16*1024);
 
         if (mode < 2) {
@@ -94,7 +95,12 @@ class ProfileOrganizerRenderer {
             buf.append("<th>").append(_t("Status")).append("</th>");
             buf.append("<th>").append(_t("Groups")).append("</th>");
             buf.append("<th>").append(_t("Speed")).append("</th>");
-            buf.append("<th>").append(_t("Latency")).append("</th>");
+/*
+            if (isAdvanced)
+                buf.append("<th>").append(_t("Latency")).append("</th>");
+            else
+*/
+                buf.append("<th>").append(_t("Low Latency")).append("</th>");
             buf.append("<th>").append(_t("Capacity")).append("</th>");
             buf.append("<th>").append(_t("Integration")).append("</th>");
             buf.append("<th>").append(_t("View/Edit")).append("</th>");
@@ -246,6 +252,26 @@ class ProfileOrganizerRenderer {
                 buf.append("</td>");
 
                 buf.append("<td align=\"center\">");
+
+/**
+                RateStat peerTest = prof.getPeerTestResponseTime();
+                Rate peerTestAvg = peerTest.getRate(60*60*1000);
+                double testAvg = 0;
+                if (peerTestAvg != null)
+                    testAvg = peerTestAvg.getAvgOrLifetimeAvg();
+                if (bonus >= 9999999)
+                    if (isAdvanced)
+                        buf.append("<span class=\"lowlatency\">").append(testAvg).append("</span>");
+                    else
+                        buf.append("<span class=\"lowlatency\" title=\"").append(testAvg).append("ms\">✔</span>");
+                else if (capBonus == -30)
+                    if (isAdvanced)
+                        buf.append("<span class=\"highlatency\">").append(testAvg).append("</span>");
+                    else
+                        buf.append("<span class=\"highlatency\" title=\"").append(testAvg).append("ms\">✖</span>");
+                buf.append("</td>");
+**/
+
                 if (bonus >= 9999999)
                     buf.append("<span class=\"lowlatency\">✔</span>");
                 else if (capBonus == -30)
@@ -286,6 +312,10 @@ class ProfileOrganizerRenderer {
             String spd = (num(_organizer.getSpeedThreshold()).replace(",",""));
             String speedApprox = spd.substring(0, spd.indexOf("."));
             int speed = Integer.parseInt(speedApprox);
+            if (speed < -10240)
+                speed += 10240;
+            else if (speed < 0)
+                speed = 0;
             if (speed > 1025) {
                 speed = speed / 1024;
                 buf.append(speed).append(' ' ).append("KB");
