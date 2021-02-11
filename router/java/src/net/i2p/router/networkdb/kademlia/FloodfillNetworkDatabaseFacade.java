@@ -603,7 +603,7 @@ public class FloodfillNetworkDatabaseFacade extends KademliaNetworkDatabaseFacad
 
         // should we skip the search?
         String forceExplore = _context.getProperty("router.exploreWhenFloodfill");
-        if ((_floodfillEnabled && forceExplore == null) ||
+        if ((_floodfillEnabled && (forceExplore == null || forceExplore != "true")) ||
             _context.jobQueue().getMaxLag() > 1000 ||
             _context.banlist().isBanlistedForever(peer)) {
 //            getKBucketSetSize() > MAX_DB_BEFORE_SKIPPING_SEARCH) {
@@ -612,7 +612,7 @@ public class FloodfillNetworkDatabaseFacade extends KademliaNetworkDatabaseFacad
             // Also don't queue a search if we have plenty of routerinfos
             // (KBucketSetSize() includes leasesets but avoids locking)
 //            super.lookupBeforeDropping(peer, info); // we don't want the routerinfo deleted, so this is commented out
-            if (_floodfillEnabled && forceExplore == null) {
+            if (_floodfillEnabled && (forceExplore == null || forceExplore != "true")) {
                 if (_log.shouldLog(Log.INFO))
                     _log.info("Skipping lookup of [" + peer.toBase64().substring(0,6) + "] - Floodfill mode active");
             } else if (_context.banlist().isBanlistedForever(peer)) {
@@ -631,7 +631,7 @@ public class FloodfillNetworkDatabaseFacade extends KademliaNetworkDatabaseFacad
         // we shouldn't drop them but instead use the new data), or if they all time out,
         // firing the dropLookupFailedJob, which actually removes out local reference
 //        search(peer, new DropLookupFoundJob(_context, peer, info), new DropLookupFailedJob(_context, peer, info), 10*1000, false);
-        search(peer, new DropLookupFoundJob(_context, peer, info), new DropLookupFailedJob(_context, peer, info), 15*1000, false);
+        search(peer, new DropLookupFoundJob(_context, peer, info), new DropLookupFailedJob(_context, peer, info), 8*1000, false);
     }
 
     private class DropLookupFailedJob extends JobImpl {
