@@ -1316,7 +1316,7 @@ public class ProfileOrganizer {
 
         if (count > 0)
 //            _thresholdSpeedValue = total / count;
-            _thresholdSpeedValue = ((total / count) / 8) * 5;
+            _thresholdSpeedValue = ((total / count) / 7) * 5;
         if (_log.shouldLog(Log.INFO))
             _log.info("Threshold value for speed: " + _thresholdSpeedValue + " (calculated from " + count + " profiles)");
     }
