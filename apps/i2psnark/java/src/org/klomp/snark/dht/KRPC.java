@@ -156,13 +156,12 @@ public class KRPC implements I2PSessionMuxedListener, DHT {
     /** stagger with other cleaners */
     private static final long CLEAN_TIME = 63*1000;
 //    private static final long EXPLORE_TIME = 877*1000;
-    private static final long EXPLORE_TIME = 120*1000;
+    private static final long EXPLORE_TIME = 10*60*1000;
 //    private static final long BLACKLIST_CLEAN_TIME = 17*60*1000;
     private static final long BLACKLIST_CLEAN_TIME = 3*60*1000;
     private static final int BLACKLIST_MAX_PEERS = 500;
 //    private static final long NODES_SAVE_TIME = 3*60*60*1000;
-//    private static final long NODES_SAVE_TIME = 15*60*1000; // frequency of save of local dht node list
-    private static final long NODES_SAVE_TIME = 10*60*1000; // frequency of save of local dht node list
+    private static final long NODES_SAVE_TIME = 30*60*1000; // frequency of save of local dht node list
     public static final String DHT_FILE_SUFFIX = ".dht.dat";
 
     private static final int SEND_CRYPTO_TAGS = 8;
