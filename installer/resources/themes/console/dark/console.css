@@ -12213,8 +12213,9 @@ div.app:hover .extlink::after, .sitemapLink.extlink:hover::after {
 }
 
 h3 .b32 {
-  margin: -2px 3px -4px;
+  margin: -2px 4px -4px;
   border: 1px solid #030;
+  box-shadow: inset 0 0 0 1px #010;
 }
 
 .embedlink {
