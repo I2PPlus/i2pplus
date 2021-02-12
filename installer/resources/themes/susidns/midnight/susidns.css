@@ -100,7 +100,7 @@ div#navi  {
   text-shadow: 0 1px 1px #000;
   border: 1px solid #224;
   border-radius: 2px;
-  box-shadow: inset 0 0 0 1px #000, inset 0 0 1px 1px #446;
+  box-shadow: inset 0 0 0 1px #000, inset 0 0 1px 0 #446;
   opacity: .7;
   filter: drop-shadow(0 0 1px #000);
 }
@@ -297,27 +297,6 @@ p#filtered {
   box-shadow: inset 0 0 0 1px #000, inset 3px 3px 3px #000;
   background: #652787;
 }
-
-/*#filter span {
-  display: inherit;
-  text-align: center;
-  text-transform: uppercase;
-  letter-spacing: .08em;
-  font-weight: bold;
-  word-spacing: 0.1em;
-  vertical-align: middle;
-  border: 1px solid #26235c;
-  border-radius: 0 0 2px 2px;
-  padding: 5px 10px 8px !important;
-  min-width: 300px;
-  max-width: 500px;
-  width: 40%;
-  white-space: nowrap;
-  margin: -1px auto;
-  box-shadow: inset 0 0 0 1px #000;
-  background: url(/themes/console/midnight/images/titles.png) repeat-x scroll center center #000;
-  background-image: linear-gradient(to bottom, #010010 0%, #020019 50%, #060051%, #0100100%) !important;
-}*/
 
 #filter span a, #filter span a:hover {
   letter-spacing: normal;
@@ -1011,7 +990,8 @@ input[type=submit], input[type=reset], .fakebutton, .fakebutton:visited {
   color: #6c66bc;
   text-align: center;
   border: 1px solid #26225c;
-  box-shadow: inset 0 0 0 1px #000, inset 0 0 1px 1px #446, 0 0 0 1px #000;
+  border-radius: 2px;
+  box-shadow: inset 0 0 0 1px #000, inset 0 0 1px 0 #446;
   background: #000;
   background: linear-gradient(to bottom, #11101c 50%, #000010 50%) !important;
 }
@@ -1023,6 +1003,7 @@ input[type=file]::file-selector-button {
   color: #6c66bc;
   text-align: center;
   border: 1px solid #26225c;
+  border-radius: 2px;
   box-shadow: inset 0 0 0 1px #000, inset 0 0 1px 1px #446, 0 0 0 1px #000;
   background: #000;
   background: linear-gradient(to bottom, #11101c 50%, #000010 50%) !important;
