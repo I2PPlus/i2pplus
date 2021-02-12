@@ -59,10 +59,11 @@ body:not(old) {
   url(images/info.png),
   url(images/logs.png),
   url(/themes/console/images/svg/update.svg),
+  url(images/download_hover.svg),
   url(images/newtab.png),
   url(images/close_hover.svg),
   url(images/configure_hover.svg), #a4a4cb;
-  background-size: 32px 32px, 0 0, 0 0, 0 0, 0 0, 0 0, 0 0, 0 0, 0 0, 0 0, 0 0, 0 0, 0 0, 0 0, 0 0, 0 0, 0 0, 0 0, 0 0, 0 0, 0 0, 0 0, 0 0, 0 0, 0 0, 0 0;
+  background-size: 32px 32px, 0 0, 0 0, 0 0, 0 0, 0 0, 0 0, 0 0, 0 0, 0 0, 0 0, 0 0, 0 0, 0 0, 0 0, 0 0, 0 0, 0 0, 0 0, 0 0, 0 0, 0 0, 0 0, 0 0, 0 0, 0 0, 0 0;
 }
 
 @supports (text-justify: auto) and (-moz-appearance: none) { /* Firefox 55+ */
