@@ -649,7 +649,8 @@ input[type=submit], input.cancel, #settings {
   text-align: center;
   color: #6c66bc;
   border: 1px solid #26225c;
-  box-shadow: inset 0 0 0 1px #000, inset 0 0 1px 1px #446, 0 0 0 1px #000;
+  border-radius: 2px;
+  box-shadow: inset 0 0 0 1px #000, inset 0 0 1px 0 #446;
   background: #000;
   background: linear-gradient(to bottom, #11101c 50%, #000010 50%) !important;
 }
