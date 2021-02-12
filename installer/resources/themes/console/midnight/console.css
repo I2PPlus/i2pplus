@@ -6656,10 +6656,11 @@ table#profile_defs td, table#thresholds td {
   display: inline-block;
   min-width: 16px;
   text-align: center;
-  border: 1px solid #113;
+  border: 1px solid #112;
   border-radius: 2px;
+  box-shadow: inset 0 0 0 1px #001;
   background: #113;
-  background: linear-gradient(to bottom, #113, #112);
+  background: linear-gradient(to bottom, #224, #112);
 }
 
 #capabilities_key td:last-child {
@@ -7455,7 +7456,7 @@ div.app {
   will-change: transform;
 }
 
-.app a:link, .app a:visited {
+.app a:link, .app a:visited, .version a:not(:hover), .version a:not(:hover):visited {
   color: #7670c2;
   display: inline-block;
   width: 100%;
@@ -8925,15 +8926,17 @@ img + tt {
   text-align: center;
 }
 
-.tunnel_peer, .tunnel_local, .b32 {
+.tunnel_peer, .tunnel_local, .b32, .routerid {
   margin-right: 2px;
   padding: 2px;
   min-width: 64px;
   display: inline-block;
   vertical-align: middle;
-  border: 1px solid #002;
+  border: 1px solid #112;
   border-radius: 2px;
-  background: linear-gradient(to bottom, #113, #112);
+  box-shadow: inset 0 0 0 1px #001;
+  background: #113;
+  background: linear-gradient(to bottom, #224, #112);
 }
 
 .b32 {
@@ -8950,8 +8953,8 @@ img + tt {
   text-transform: lowercase;
 }
 
-.tunnel_peer img {
-  margin: 0 4px -1px -3px !important;
+.tunnel_peer img, .routerid img {
+  margin: 2px 4px -2px 2px !important;
   display: inline-block;
 }
 
@@ -11603,17 +11606,15 @@ input[type="file"]:hover {
 .netdb_addresses ul {
   margin: 0 !important;
   padding: 0 !important;
-  display: inline-block;
-  columns: 520px 2 !important;
-  column-gap: 5px;
   width: 100%;
+  display: inline-block;
+  columns: auto !important;
+  column-gap: 0;
 }
 
 .netdb_addresses li, .netdb_ouraddresses {
   margin: 2px 10px 2px 0 !important;
   padding: 0 5px 3px !important;
-  width: calc(100% - 12px);
-  min-width: 500px;
   vertical-align: middle;
   border: 1px solid #113;
   background: #000;
@@ -11669,10 +11670,11 @@ input[type="file"]:hover {
   width: 14px;
   height: 14px;
   line-height: 0;
-  border: 1px solid #113;
+  border: 1px solid #112;
   border-radius: 2px;
+  box-shadow: inset 0 0 0 1px #001;
   background: #113;
-  background: linear-gradient(to bottom, #113, #001);
+  background: linear-gradient(to bottom, #224, #112);
 }
 
 .viewprofile img:hover, .viewfullentry img:hover, .familysearch img:hover, .configpeer img:hover {
@@ -11725,10 +11727,11 @@ input[type="file"]:hover {
   min-width: 50px;
   text-align: center !important;
   font-weight: bold;
-  border: 1px solid #113;
+  border: 1px solid #112;
   border-radius: 2px;
+  box-shadow: inset 0 0 0 1px #001;
   background: #113;
-  background: linear-gradient(to bottom, #113, #112);
+  background: linear-gradient(to bottom, #224, #112);
 }
 
 th .version {
@@ -11768,6 +11771,14 @@ th .version {
   line-height: 120%;
 }
 
+#netdboverview .version::before {
+  margin: -2px 0;
+  min-height: 18px;
+  display: inline-block;
+  vertical-align: middle;
+  content: "";
+}
+
 .signingkey {
   margin: 2px 0;
   padding: 2px 4px 2px 15px;
@@ -11790,14 +11801,14 @@ th .version {
 
 #netdb_ram {
   margin: 0 0 0 -2px;
-  padding: 3px 4px;
+  padding: 2px 6px;
   display: inline-block;
   font-size: 90%;
-  box-shadow: inset 0 0 0 1px #000;
-  border: 1px solid #113;
+  border: 1px solid #112;
   border-radius: 2px;
-  background: #002;
-  background: linear-gradient(to bottom, #003, #000);
+  box-shadow: inset 0 0 0 1px #001;
+  background: #113;
+  background: linear-gradient(to bottom, #224, #112);
 }
 
 /* end netdb */
@@ -11813,7 +11824,7 @@ th .version {
 }
 
 #peers .routerid, #profiles .routerid {
-  padding: 2px;
+  padding: 3px 2px;
   display: inline-block;
   vertical-align: middle;
   border: 1px solid #002;
@@ -11821,17 +11832,22 @@ th .version {
   background: linear-gradient(to bottom, #113, #112);
 }
 
+#peers .routerid img, #profiles .routerid img {
+  margin-right: 0 !important;
+}
+
 .tunnel_cap, .tier, .ff, .unreachable, .reachable, #capabilities_key b  {
   margin: 1px 2px;
-  padding: 2px;
+  padding: 2px 4px;
   display: inline-block;
-  min-width: 14px;
+  min-width: 16px;
   vertical-align: middle;
   text-align: center !important;
-  border: 1px solid #002;
+  border: 1px solid #112;
   border-radius: 2px;
+  box-shadow: inset 0 0 0 1px #001;
   background: #113;
-  background: linear-gradient(to bottom, #113, #112);
+  background: linear-gradient(to bottom, #224, #112);
 }
 
 /* end tunnels */
