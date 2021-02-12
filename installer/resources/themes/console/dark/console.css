@@ -11961,11 +11961,11 @@ h3#pconfig {
   min-width: 20px;
 }
 
-#profilelist td:nth-last-child(3) span, #profilelist td:nth-last-child(4) span {
+#profilelist td:nth-last-child(5) span {
   min-width: 40px;
 }
 
-#profilelist td:nth-child(2), #floodfills td:last-child {
+#profilelist td:nth-child(2), #profilelist td:nth-child(7), #floodfills td:last-child {
   white-space: nowrap;
   width: 1%;
 }

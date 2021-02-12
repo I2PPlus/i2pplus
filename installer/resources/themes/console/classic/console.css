@@ -2910,11 +2910,17 @@ table.configtable, #permabanned, #loggingoptions, #configstats, ul#banlist {
   margin: 0 !important;
 }
 
+#profilelist th {
+  padding: 3px 6px;
+  white-space: nowrap;
+  font-size: 90% !important;
+}
+
 #profilelist th:nth-child(7) {
   text-align: right;
 }
 
-#profilelist td:first-child, #profilelist td:last-child {
+#profilelist td:first-child, #profilelist td:last-child, #profilelist td:nth-last-child(2) {
   width: 1%;
   white-space: nowrap;
 }
@@ -8562,10 +8568,6 @@ body {
   min-width: 102px !important;
 }
 
-#profilelist th {
-  font-size: 90% !important;
-}
-
 .cells tt, #profilelist tt {
   padding-right: 3px;
   margin-left: -1px !important;
@@ -10093,6 +10095,7 @@ th.queue {
 }
 
 #profilelist th {
+  padding: 3px 4px;
   font-size: 90% !important;
 }
 
@@ -10100,7 +10103,7 @@ th.queue {
   text-align: left !important;
 }
 
-#profilelist td:nth-child(1), #profilelist td:nth-child(2), #profilelist td:nth-child(3) {
+#profilelist td:nth-child(1), #profilelist td:nth-child(2), #profilelist td:nth-child(3), #profilelist td:nth-child(7) {
   width: 1%;
   white-space: nowrap;
 }
@@ -11016,16 +11019,25 @@ p#gatherstats {
 }
 
 @media screen and (max-width: 1200px) {
-#tunnels .cells:first-child {
-  width: 1% !important;
-  max-width: 48px !important;
-  min-width: 48px !important;
-}
+  #tunnels .cells:first-child {
+    width: 1% !important;
+    max-width: 48px !important;
+    min-width: 48px !important;
+  }
 
-#tunnels .cells:nth-child(2), #tunnels .cells:nth-child(3), .tunnels_participating td:nth-child(4) {
-  width: 1% !important;
-  min-width: 72px !important;
-}
+  #tunnels .cells:nth-child(2), #tunnels .cells:nth-child(3), .tunnels_participating td:nth-child(4) {
+    width: 1% !important;
+    min-width: 72px !important;
+  }
+
+  #profilelist td:nth-child(6) span, #profilelist td:nth-child(8) span {
+    text-align: center;
+  }
+
+  #profilelist th {
+    white-space: normal;
+    line-height: 1.1;
+  }
 }
 
 /* end /tunnels */
