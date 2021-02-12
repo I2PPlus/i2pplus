@@ -11866,8 +11866,8 @@ th .version {
   padding-left: 8px;
   padding-right: 8px;
 }
-#profilelist th:first-child, #profilelist th:nth-child(2), #profilelist th:nth-child(3), #profilelist th:nth-child(4),
-#profilelist td:first-child, #profilelist td:nth-child(2), #profilelist td:nth-child(3), #profilelist td:nth-child(4) {
+#profilelist th:first-child, #profilelist th:nth-child(2), #profilelist th:nth-child(3), #profilelist th:nth-child(4), #profilelist th:nth-child(7),
+#profilelist td:first-child, #profilelist td:nth-child(2), #profilelist td:nth-child(3), #profilelist td:nth-child(4), #profilelist td:nth-child(7) {
   width: 1%;
   white-space: nowrap;
   text-align: center;
@@ -11947,7 +11947,7 @@ th .version {
   min-width: 20px;
 }
 
-#profilelist td:nth-last-child(3) span, #profilelist td:nth-last-child(4) span {
+#profilelist td:nth-last-child(5) span {
   min-width: 40px;
 }
 
