@@ -2498,41 +2498,37 @@ div.news {
   min-width: 586px;
   text-align: right;
   font-size: 8pt;
-  color: #331e0c;
   border: 1px solid #aaafce;
   border-bottom: 1px solid #aaafce;
   border-right: 1px solid #aaafce;
-  background: #f9f9ea url(images/bg1.png);
-  background: linear-gradient(to bottom, rgba(255,255,255,.6), rgba(255,255,255,.5)), url(images/bg1.png) #efefe0;
-  background-size: 100% 100%, 120px 120px;
+  background: #fafaff;
+  background: linear-gradient(to bottom, #fff, #fafaff);
 }
 
 /* convert the list entry to our title */
 
 div.news li {
-  text-align: justify;
-  list-style: none;
   margin: 15px 15px -10px -20px;
-  border-bottom: 2px dotted #331e0c;
-  border-top: 0 solid #331e0c;
   padding: 3px 5px 5px 0;
-  font-size: 10pt;
-  color: #331e0c;
+  text-align: justify;
   text-transform: capitalize;
+  font-size: 10pt;
+  list-style: none;
+  color: #aaafce;
+  border-bottom: 2px dotted #aaafce;
 }
 
-div.news h3 {
-  text-align: left;
-  border: none !important;
-  border-bottom: 1px dotted !important;
-  box-shadow: none;
-  font-size: 10pt !important;
-  letter-spacing: .05em;
-  text-transform: capitalize !important;
-  text-shadow: none !important;
-  padding: 5px 0 3px 10px;
+#news h3 {
   margin: 10px 10px -7px !important;
+  padding: 5px 0 3px 10px;
   letter-spacing: .1em;
+  text-align: left;
+  text-transform: capitalize;
+  font-size: 10pt !important;
+  text-shadow: none !important;
+  border: none !important;
+  border-bottom: 1px dotted #aaafce !important;
+  box-shadow: none;
 }
 
 .newsentry:first-child {
@@ -2557,7 +2553,6 @@ div.news h3 {
 }
 
 div.news p {
-  color: #331e0c;
   font-size: 9pt;
   margin-bottom: -10px;
 }
@@ -2566,20 +2561,9 @@ div.news p:last-child {
   margin-bottom: 10px;
 }
 
-div.news a {
-  color: #7f560f !important;
-}
-
-div.news a:hover, div.news a:focus, div.news a:visited:hover, div.news a:visited:focus {
-  color: #f60 !important;
-}
-
 div.news hr {
   margin: 10px 0 1px !important;
   height: 1px;
-  color: #cc7;
-  border-bottom: 1px solid #fff9ef;
-  background: #775628;
   opacity: .7;
 }
 
@@ -2598,14 +2582,13 @@ div.news hr:last-child {
 }
 
 .newsAuthor {
-  padding-left: 14px;
+  padding: 2px 4px 0 14px;
   float: right;
+  text-transform: none;
+  font-size: 8.5pt;
   background: url(/themes/console/images/info/author.png) left 2px bottom 3px no-repeat;
   background-size: 10px 10px;
-  font-size: 8.5pt;
-  padding: 2px 4px 0 14px;
   opacity: .8;
-  text-transform: none;
 }
 
 .newsDate {
@@ -4260,32 +4243,41 @@ table.search {
   margin: 0;
 }
 
+input.search::placeholder {
+  opacity: 0;
+}
+
+input.search:hover::placeholder {
+  font-style: italic;
+  opacity: .6;
+}
+
 div.app img {
-  height: 32px;
+  padding: 10px 46px 9px;
   width: auto;
+  height: 32px;
   max-height: 32px;
   max-width: 32px;
-  padding: 10px 46px 9px;
 }
 
 .app table {
-  background: none;
-  border: 0;
   margin: auto;
   width: auto;
+  background: none;
+  border: 0;
 }
 
 .app tr {
-  background: none;
-  border: 0;
   margin: 0;
+  border: 0;
+  background: none;
 }
 
 .app td {
-  background: none;
-  border: 0;
   margin: 0;
   padding: 0;
+  border: 0;
+  background: none;
 }
 
 .applabel:hover {
@@ -4293,10 +4285,6 @@ div.app img {
 }
 
 /* end home page */
-
-/*#i2psnarkframe {
-  margin-bottom: -18px;
-}*/
 
 #i2ptunnelframe {
   margin-bottom: -3px;
