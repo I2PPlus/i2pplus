@@ -2291,7 +2291,7 @@ a:active #sb_bandwidthgraph, a:active #sb_graphstats {
 .sb_info .percentBarOuter {
   margin: 7px -2px -5px 0;
   box-shadow: inset 0 0 0 1px #001, inset 0 2px 2px 2px rgba(0,0,0,.4) !important;
-  background: repeating-linear-gradient(135deg, #001 1px, #001 5px, #003 6px, #003 11px);
+  background: repeating-linear-gradient(135deg, #001 1px, #001 5px, #002 6px, #002 11px);
   animation: downloadbar 3s infinite alternate;
 }
 
@@ -2305,13 +2305,8 @@ a:active #sb_bandwidthgraph, a:active #sb_graphstats {
 }
 
 @keyframes downloadbar {
-from {
-  background: repeating-linear-gradient(135deg, #001 1px, #001 5px, #003 6px, #003 11px);
-}
-
-to {
-  background: repeating-linear-gradient(135deg, #003 1px, #003 6px, #001 7px, #001 11px);
-}
+  from {background: repeating-linear-gradient(135deg, #001 1px, #001 5px, #002 6px, #002 11px)}
+  to {background: repeating-linear-gradient(135deg, #002 1px, #002 6px, #001 7px, #001 11px)}
 }
 
 /* end status bar */
