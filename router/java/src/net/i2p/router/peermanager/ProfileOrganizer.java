@@ -81,9 +81,9 @@ public class ProfileOrganizer {
     public static final int DEFAULT_MINIMUM_FAST_PEERS = 100;
     /** this is misnamed, it is really the max minimum number. */
 //    private static final int DEFAULT_MAXIMUM_FAST_PEERS = 40;
-    private static final int DEFAULT_MAXIMUM_FAST_PEERS = 200;
+    private static final int DEFAULT_MAXIMUM_FAST_PEERS = 250;
 //    private static final int ABSOLUTE_MAX_FAST_PEERS = 75;
-    private static final int ABSOLUTE_MAX_FAST_PEERS = 300;
+    private static final int ABSOLUTE_MAX_FAST_PEERS = 350;
 
 //    private final int known = net.i2p.router.networkdb.kademlia.KademliaNetworkDatabaseFacade.getKnownRouters();
 
@@ -239,10 +239,14 @@ public class ProfileOrganizer {
             _notFailingPeers.put(peer, rv);
             _notFailingPeersList.add(peer);
             // Add to high cap only if we have room. Don't add to Fast; wait for reorg.
+            int minFast = _context.getProperty(PROP_MINIMUM_FAST_PEERS, DEFAULT_MINIMUM_FAST_PEERS);
             if (_thresholdCapacityValue <= rv.getCapacityValue() && isSelectable(peer) &&
                 _highCapacityPeers.size() < getMaximumHighCapPeers()) {
                 _highCapacityPeers.put(peer, rv);
+                if (countFastPeers() < minFast)
+                _fastPeers.put(peer, rv);
             }
+
             _strictCapacityOrder.add(rv);
         } finally { releaseWriteLock(); }
         return rv;
@@ -1583,16 +1587,17 @@ public class ProfileOrganizer {
             return DEFAULT_MAXIMUM_FAST_PEERS;
         int known = _context.netDb().getKnownRouters();
         int def = Math.max(DEFAULT_MAXIMUM_FAST_PEERS, (10 * cm.listClients().size()) + DEFAULT_MINIMUM_FAST_PEERS - 2);
-        if (known > 2000)
-            return _context.getProperty(PROP_MINIMUM_FAST_PEERS, Math.max((known / 35), def));
+        if (known > 3000)
+//            return _context.getProperty(PROP_MINIMUM_FAST_PEERS, Math.max((known / 35), def));
+            return _context.getProperty(PROP_MINIMUM_FAST_PEERS, known / 30);
         else
-            return _context.getProperty(PROP_MINIMUM_FAST_PEERS, def);
+            return _context.getProperty(PROP_MINIMUM_FAST_PEERS, DEFAULT_MINIMUM_FAST_PEERS);
     }
 
     /** fixme add config  @since 0.7.10 */
     protected int getMaximumFastPeers() {
         int known = _context.netDb().getKnownRouters();
-        if (known > 2000)
+        if (known > 3000)
             return known / 20;
         else
             return ABSOLUTE_MAX_FAST_PEERS;
@@ -1601,7 +1606,7 @@ public class ProfileOrganizer {
     /** fixme add config  @since 0.7.11 */
     protected int getMaximumHighCapPeers() {
         int known = _context.netDb().getKnownRouters();
-        if (known > 2000)
+        if (known > 3000)
             return known / 10;
         else
             return ABSOLUTE_MAX_HIGHCAP_PEERS;
@@ -1618,7 +1623,7 @@ public class ProfileOrganizer {
      */
     protected int getMinimumHighCapacityPeers() {
         int known = _context.netDb().getKnownRouters();
-        if (known > 2000)
+        if (known > 3000)
             return _context.getProperty(PROP_MINIMUM_HIGH_CAPACITY_PEERS, Math.max(known / 15, DEFAULT_MINIMUM_HIGH_CAPACITY_PEERS));
         else
             return _context.getProperty(PROP_MINIMUM_HIGH_CAPACITY_PEERS, DEFAULT_MINIMUM_HIGH_CAPACITY_PEERS);
