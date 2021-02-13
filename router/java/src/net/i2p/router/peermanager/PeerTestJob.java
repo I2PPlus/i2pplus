@@ -39,11 +39,11 @@ class PeerTestJob extends JobImpl {
     private final Log _log;
     private PeerManager _manager;
     private boolean _keepTesting;
-    private final int DEFAULT_PEER_TEST_DELAY = 15*1000;
+    private final int DEFAULT_PEER_TEST_DELAY = 5*1000;
     public static final String PROP_PEER_TEST_DELAY = "router.peerTestDelay";
     private static final int DEFAULT_PEER_TEST_CONCURRENCY = 4;
     public static final String PROP_PEER_TEST_CONCURRENCY = "router.peerTestConcurrency";
-    private static final int DEFAULT_PEER_TEST_TIMEOUT = 5*1000;
+    private static final int DEFAULT_PEER_TEST_TIMEOUT = 3*1000;
     public static final String PROP_PEER_TEST_TIMEOUT = "router.peerTestTimeout";
 
     /** Creates a new instance of PeerTestJob */
@@ -272,7 +272,7 @@ class PeerTestJob extends JobImpl {
                             try {
                                 prof.setCapacityBonus(-30);
                                 if (_log.shouldLog(Log.INFO))
-                                    _log.info("Setting capacity bonus for L class router [" + _peer.toBase64().substring(0,6) + "] to -30");
+                                    _log.info("Setting capacity bonus for L tier router [" + _peer.toBase64().substring(0,6) + "] to -30");
                             } catch (NumberFormatException nfe) {}
                         } else if (timeLeft < 0) {
                             if (_log.shouldLog(Log.INFO))
