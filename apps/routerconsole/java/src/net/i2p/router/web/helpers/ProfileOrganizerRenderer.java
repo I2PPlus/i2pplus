@@ -206,14 +206,16 @@ class ProfileOrganizerRenderer {
 
                 buf.append("</td>");
                 buf.append("<td align=\"center\">");
+                buf.append("<span class=\"");
+                if (isIntegrated) buf.append("integrated ");
                 switch (tier) {
-                    case 1: buf.append(_t("Fast, High Capacity")); break;
-                    case 2: buf.append(_t("High Capacity")); break;
-                    case 3: buf.append(_t("Standard")); break;
-                    default: buf.append(_t("Failing")); break;
+                    case 1: buf.append("fast\">").append(_t("Fast, High Capacity")); break;
+                    case 2: buf.append("highcap\">").append(_t("High Capacity")); break;
+                    case 3: buf.append("standard\">").append(_t("Standard")); break;
+                    default: buf.append("failing\">").append(_t("Failing")); break;
                 }
                 if (isIntegrated) buf.append(", ").append(_t("Integrated"));
-                buf.append("</td><td>");
+                buf.append("</span></td><td>");
                 String spd = num(Math.round(prof.getSpeedValue())).replace(",", "");
                 String speedApprox = spd.substring(0, spd.indexOf("."));
                 int speed = Integer.parseInt(speedApprox);
