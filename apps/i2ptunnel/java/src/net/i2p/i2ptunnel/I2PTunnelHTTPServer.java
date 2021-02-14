@@ -528,9 +528,9 @@ public class I2PTunnelHTTPServer extends I2PTunnelServer {
                 }
             }
 
-//            addEntry(headers, HASH_HEADER, peerHash.toBase64());
+            addEntry(headers, HASH_HEADER, peerHash.toBase64());
             addEntry(headers, DEST32_HEADER, peerB32);
-//            addEntry(headers, DEST64_HEADER, socket.getPeerDestination().toBase64());
+            addEntry(headers, DEST64_HEADER, socket.getPeerDestination().toBase64());
 
             // Port-specific spoofhost
             String spoofHost;

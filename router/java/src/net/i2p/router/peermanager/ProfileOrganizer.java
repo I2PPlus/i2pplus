@@ -1589,7 +1589,7 @@ public class ProfileOrganizer {
         int def = Math.max(DEFAULT_MAXIMUM_FAST_PEERS, (10 * cm.listClients().size()) + DEFAULT_MINIMUM_FAST_PEERS - 2);
         if (known > 3000)
 //            return _context.getProperty(PROP_MINIMUM_FAST_PEERS, Math.max((known / 35), def));
-            return _context.getProperty(PROP_MINIMUM_FAST_PEERS, known / 30);
+            return _context.getProperty(PROP_MINIMUM_FAST_PEERS, Math.min(known / 30, DEFAULT_MAXIMUM_FAST_PEERS));
         else
             return _context.getProperty(PROP_MINIMUM_FAST_PEERS, DEFAULT_MINIMUM_FAST_PEERS);
     }
@@ -1607,7 +1607,7 @@ public class ProfileOrganizer {
     protected int getMaximumHighCapPeers() {
         int known = _context.netDb().getKnownRouters();
         if (known > 3000)
-            return known / 10;
+            return (Math.min(known / 10, ABSOLUTE_MAX_HIGHCAP_PEERS));
         else
             return ABSOLUTE_MAX_HIGHCAP_PEERS;
     }
