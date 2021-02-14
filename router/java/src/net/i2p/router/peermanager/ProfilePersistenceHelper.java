@@ -160,12 +160,9 @@ class ProfilePersistenceHelper {
             if (info != null)
                 buf.append(DataHelper.stripHTML(info.getCapabilities()).toUpperCase().replace("XO", "X").replace("PO", "P"));
             buf.append(NL);
-            if (speed != 0)
-                buf.append("#").append(TAB).append("Speed:").append(TAB).append(TAB).append(speed).append(" Bps").append(NL);
-            if (capacity != 0)
-                buf.append("#").append(TAB).append("Capacity:").append(TAB).append(capacity).append(" tunnels/hour").append(NL);
-            if (integration != 0)
-                buf.append("#").append(TAB).append("Integration:").append(TAB).append(integration).append(" peers").append(NL);
+            buf.append("#").append(TAB).append("Speed:").append(TAB).append(TAB).append(speed).append(" Bps").append(NL);
+            buf.append("#").append(TAB).append("Capacity:").append(TAB).append(capacity).append(" tunnels/hour").append(NL);
+            buf.append("#").append(TAB).append("Integration:").append(TAB).append(integration).append(" peers").append(NL);
             buf.append("#").append(TAB).append("Groups:").append(TAB).append(TAB).append(groups).append(NL);
             buf.append(HR).append(NL).append(NL);
         }
@@ -186,12 +183,9 @@ class ProfilePersistenceHelper {
         if (profile.getTunnelTestTimeAverage() != 0)
             add(buf, addComments, "tunnelTestTimeAverage", profile.getTunnelTestTimeAverage(), "Average peer response time: " +  profile.getTunnelTestTimeAverage());
         // TODO: needs clarification - difference between tunnel peak and tunnel peak tunnel? And round down KBps display to 2 decimal places
-        if (profile.getPeakThroughputKBps() != 0)
-            add(buf, addComments, "tunnelPeakThroughput", profile.getPeakThroughputKBps(), "Tunnel Peak throughput: " + profile.getPeakThroughputKBps() + " KBps");
-        if (profile.getPeakTunnelThroughputKBps() != 0)
-            add(buf, addComments, "tunnelPeakTunnelThroughput", profile.getPeakTunnelThroughputKBps(), "Tunnel Peak Tunnel throughput: " + profile.getPeakTunnelThroughputKBps() + " KBps");
-        if (profile.getPeakTunnel1mThroughputKBps() != 0)
-            add(buf, addComments, "tunnelPeakTunnel1mThroughput", profile.getPeakTunnel1mThroughputKBps(), "Tunnel Peak Tunnel throughput for 1 minute: " + profile.getPeakTunnel1mThroughputKBps() + " KBps");
+        add(buf, addComments, "tunnelPeakThroughput", profile.getPeakThroughputKBps(), "Tunnel Peak throughput: " + profile.getPeakThroughputKBps() + " KBps");
+        add(buf, addComments, "tunnelPeakTunnelThroughput", profile.getPeakTunnelThroughputKBps(), "Tunnel Peak Tunnel throughput: " + profile.getPeakTunnelThroughputKBps() + " KBps");
+        add(buf, addComments, "tunnelPeakTunnel1mThroughput", profile.getPeakTunnel1mThroughputKBps(), "Tunnel Peak Tunnel throughput for 1 minute: " + profile.getPeakTunnel1mThroughputKBps() + " KBps");
         if (addComments)
             buf.append(NL);
 
