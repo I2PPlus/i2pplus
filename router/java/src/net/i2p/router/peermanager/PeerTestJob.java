@@ -361,10 +361,11 @@ class PeerTestJob extends JobImpl {
                     boolean reachable = cap.indexOf(Router.CAPABILITY_REACHABLE) >= 0;
                     String bw = peerInfo.getBandwidthTier();
                     PeerProfile prof = getContext().profileOrganizer().getProfile(h);
-                    if (cap != null && reachable && (bw.equals("O") || bw.equals("P") || bw.equals("X")))
+                    if (cap != null && reachable && (bw.equals("O") || bw.equals("P") || bw.equals("X"))) {
                         prof.setSpeedBonus(9999999);
-                    if (_log.shouldLog(Log.INFO))
-                        _log.info("Setting speed bonus to 9999999 for [" + _peer.getIdentity().getHash().toBase64().substring(0,6) + "]");
+                        if (_log.shouldLog(Log.INFO))
+                            _log.info("Setting speed bonus to 9999999 for [" + _peer.getIdentity().getHash().toBase64().substring(0,6) + "]");
+                    }
                     if (prof != null && prof.getCapacityBonus() == -30 && cap != null && reachable && (!bw.equals("L"))) {
                         try {
                             prof.setCapacityBonus(0);
