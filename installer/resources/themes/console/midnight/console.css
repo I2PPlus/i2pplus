@@ -14358,3 +14358,56 @@ h1, .main h2, h4.app, h4.app2, .main h3 {
   background: url(/themes/console/images/svg/link.svg) 5px center no-repeat, linear-gradient(to bottom, #003, #001);
   background-size: 12px 12px, 100% 100%;
 }
+
+/* /profiles group icons */
+
+#profilelist th:nth-child(4), #profilelist td:nth-child(4) {
+  width: 15% !important;
+}
+#profilelist th:nth-child(5), #profilelist td:nth-child(5) {
+  width: 10% !important;
+  min-width: 60px;
+  white-space: nowrap !important;
+}
+
+.fast, .highcap, .standard {
+  display: inline-block;
+  width: 60px;
+  height: 16px;
+  font-size: 0 !important;
+}
+
+.fast {
+  background: url(/themes/console/images/svg/fast.svg) calc(50% - 10px) center no-repeat,
+              url(/themes/console/images/svg/highcap.svg) calc(50% + 10px) center no-repeat;
+  background-size: 16px 16px;
+}
+
+.fast.integrated {
+  background: url(/themes/console/images/svg/fast.svg) calc(50% - 20px) center no-repeat,
+              url(/themes/console/images/svg/highcap.svg) calc(50%) center no-repeat,
+              url(/themes/console/images/svg/integrated.svg) calc(50% + 20px) center no-repeat;
+  background-size: 16px 16px;
+}
+
+.highcap {
+  background: url(/themes/console/images/svg/highcap.svg) center center no-repeat;
+  background-size: 16px 16px;
+}
+
+.highcap.integrated {
+  background: url(/themes/console/images/svg/highcap.svg) calc(50% - 10px) center no-repeat,
+              url(/themes/console/images/svg/integrated.svg) calc(50% + 10px) center no-repeat;
+  background-size: 16px 16px;
+}
+
+.standard {
+  background: url(/themes/console/images/svg/standard.svg) center center no-repeat;
+  background-size: 16px 16px;
+}
+
+.standard.integrated {
+  background: url(/themes/console/images/svg/standard.svg) calc(50% - 10px) center no-repeat,
+              url(/themes/console/images/svg/integrated.svg) calc(50% + 10px) center no-repeat;
+  background-size: 16px 16px;
+}
