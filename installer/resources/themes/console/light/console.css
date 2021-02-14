@@ -7206,16 +7206,32 @@ b.netdb_transport {
 
 .netdbStats li {
   margin: 0 !important;
-  padding: 1px 0 !important;
-  min-width: 240px;
+  padding: 1px 10px 1px 0 !important;
   white-space: normal;
   line-height: 140%;
   list-style: none !important;
 }
 
-.longstat {
-  min-width: 400px !important;
-  width: 100%;
+@media screen and (max-width: 1500px) {
+  .netdbStats li {
+    margin: 0 !important;
+    min-width: 240px;
+  }
+}
+
+.netdb_family {
+  vertical-align: middle;
+}
+
+.longstat.fam {
+  margin: 4px 0 -4px !important;
+  padding: 1px 0;
+  width: 240px !important;
+  display: inline-block;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+  line-height: 1.2;
 }
 
 .netdbStats b {

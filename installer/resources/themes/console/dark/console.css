@@ -11475,26 +11475,46 @@ h3#pconfig {
   white-space: nowrap;
 }
 
-/*
-.netdbStats {
-  margin: 0 !important;
-  columns: 250px auto !important;
-  column-gap: 20px !important;
-}
-*/
-
 .netdbStats li {
   margin: 0 !important;
   padding: 1px 0 !important;
-  min-width: 250px !important;
   white-space: normal;
   line-height: 140%;
   list-style: none !important;
 }
 
-#netdb .longstat {
-  width: 100%;
-  min-width: 500px !important;
+.netdbStats li {
+  margin: 0 !important;
+  padding: 1px 10px 1px 0 !important;
+  white-space: normal;
+  line-height: 140%;
+  list-style: none !important;
+}
+
+.netdb_family {
+  vertical-align: middle;
+}
+
+.longstat.fam {
+  margin: 4px 0 -4px !important;
+  padding: 1px 0;
+  width: 231px !important;
+  display: inline-block;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+  line-height: 1.2;
+}
+
+
+@media screen and (max-width: 1500px) {
+  .netdbStats li {
+    margin: 1px 5px !important;
+  }
+
+  .longstat.fam {
+    margin: 2px 5px -5px !important;
+  }
 }
 
 #netdb .netdbStats b {
