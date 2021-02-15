@@ -384,7 +384,14 @@ class PeerTestJob extends JobImpl {
                         try {
                             prof.setCapacityBonus(-30);
                             if (_log.shouldLog(Log.INFO))
-                                _log.info("Setting capacity bonus for L class router [" + _peer.getIdentity().getHash().toBase64().substring(0,6) + "] to -30");
+                                _log.info("Setting capacity bonus for L tier router [" + _peer.getIdentity().getHash().toBase64().substring(0,6) + "] to -30");
+                        } catch (NumberFormatException nfe) {}
+                        return;
+                    } else if (prof != null && cap == null) {
+                        try {
+                            prof.setCapacityBonus(-30);
+                            if (_log.shouldLog(Log.INFO))
+                                _log.info("Setting capacity bonus for unknown class router [" + _peer.getIdentity().getHash().toBase64().substring(0,6) + "] to -30");
                         } catch (NumberFormatException nfe) {}
                         return;
                     }
