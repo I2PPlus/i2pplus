@@ -14669,44 +14669,68 @@ h1, .main h2, h4.app, h4.app2, .main h3 {
   white-space: nowrap !important;
 }
 
-.fast, .highcap, .standard {
+#profilelist .fast, #profilelist .highcap, #profilelist .standard {
   display: inline-block;
   width: 60px;
   height: 16px;
   font-size: 0 !important;
 }
 
-.fast {
+#profilelist .fast {
   background: url(/themes/console/images/svg/fast.svg) calc(50% - 10px) center no-repeat,
               url(/themes/console/images/svg/highcap.svg) calc(50% + 10px) center no-repeat;
   background-size: 16px 16px;
 }
 
-.fast.integrated {
-  background: url(/themes/console/images/svg/fast.svg) calc(50% - 20px) center no-repeat,
-              url(/themes/console/images/svg/highcap.svg) calc(50%) center no-repeat,
-              url(/themes/console/images/svg/integrated.svg) calc(50% + 20px) center no-repeat;
+#profilelist .fast.integrated {
+  background: url(/themes/console/images/svg/fast.svg) left center no-repeat,
+              url(/themes/console/images/svg/highcap.svg) center center no-repeat,
+              url(/themes/console/images/svg/integrated.svg) right center no-repeat;
   background-size: 16px 16px;
 }
 
-.highcap {
+#profilelist .highcap {
   background: url(/themes/console/images/svg/highcap.svg) center center no-repeat;
   background-size: 16px 16px;
 }
 
-.highcap.integrated {
+#profilelist .highcap.integrated {
   background: url(/themes/console/images/svg/highcap.svg) calc(50% - 10px) center no-repeat,
               url(/themes/console/images/svg/integrated.svg) calc(50% + 10px) center no-repeat;
   background-size: 16px 16px;
 }
-#
-.standard {
+
+#profilelist .standard {
   background: url(/themes/console/images/svg/standard.svg) center center no-repeat;
   background-size: 16px 16px;
 }
 
-.standard.integrated {
+#profilelist .standard.integrated {
   background: url(/themes/console/images/svg/standard.svg) calc(50% - 10px) center no-repeat,
               url(/themes/console/images/svg/integrated.svg) calc(50% + 10px) center no-repeat;
   background-size: 16px 16px;
+}
+
+.profilegroup::before {
+  width: 20px;
+  height: 16px;
+  display: inline-block;
+  vertical-align: middle;
+  content: "";
+}
+
+.profilegroup.fast::before {
+  background: url(/themes/console/images/svg/fast.svg) left center no-repeat;
+}
+
+.profilegroup.highcap::before {
+  background: url(/themes/console/images/svg/highcap.svg) left center no-repeat;
+}
+
+.profilegroup.integrated::before {
+  background: url(/themes/console/images/svg/integrated.svg) left center no-repeat;
+}
+
+.profilegroup.standard::before {
+  background: url(/themes/console/images/svg/standard.svg) left center no-repeat;
 }
