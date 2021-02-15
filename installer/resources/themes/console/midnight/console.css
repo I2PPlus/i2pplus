@@ -8930,7 +8930,7 @@ img + tt {
   text-align: center;
 }
 
-.tunnel_peer, .tunnel_local, .b32, .routerid {
+.tunnel_local, .b32, .routerid {
   margin-right: 2px;
   padding: 2px;
   min-width: 64px;
