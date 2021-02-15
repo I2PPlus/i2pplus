@@ -918,7 +918,7 @@ public class TunnelPool {
 //            avg += 60*1000;   // one minute safety factor
             avg += 90*1000;   // 1.5m safety factor
             if (_settings.isExploratory())
-                avg += 60*1000;   // two minute safety factor
+                avg += 30*1000;   // two minute safety factor
             long now = _context.clock().now();
 
             int expireSoon = 0;
