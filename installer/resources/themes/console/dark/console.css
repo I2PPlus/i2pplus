@@ -8139,7 +8139,7 @@ form[action="events"] {
 
 /* responsive /profiles & /peers */
 
-#profiles .tier, #profiles .reachable, #profiles .ff {
+#profiles .tier, #profiles .reachable, #profiles .unreachable, #profiles .ff {
   margin-top: -6px;
   margin-bottom: -6px;
   padding-top: 2px;
