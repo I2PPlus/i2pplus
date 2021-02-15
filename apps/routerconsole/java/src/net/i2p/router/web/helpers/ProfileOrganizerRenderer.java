@@ -490,9 +490,9 @@ class ProfileOrganizerRenderer {
                .append("<span class=\"profilegroup highcap\"><b>").append(_t("High Capacity")).append(":</b>&nbsp; ")
                .append(_t("Peers that meet or exceed tunnel build rate average for all profiled peers.")).append("</span><br>")
                .append("<span class=\"profilegroup integrated\"><b>").append(_t("Integrated")).append(":</b>&nbsp; ")
-               .append(_t("Floodfill peers currently available for NetDb inquiries.")).append("</span>")
+               .append(_t("Floodfill peers currently available for NetDb inquiries.")).append("</span><br>")
                .append("<span class=\"profilegroup standard\"><b>").append(_t("Standard")).append(":</b>&nbsp; ")
-               .append(_t("Peers not profiled as high capacity (lower build rate than average peer).")).append("</span><br>")
+               .append(_t("Peers not profiled as high capacity (lower build rate than average peer).")).append("</span>")
                .append("</td></tr>\n");
             buf.append("<tr><td><b>")
                .append(_t("speed"))
