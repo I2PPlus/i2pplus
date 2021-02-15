@@ -6,6 +6,8 @@ sourceSets {
     main {
         java {
             srcDir 'java/src'
+            srcDir 'java/build/messages-src'
+            srcDir 'java/build/messages-proxy-src'
         }
     }
     test {
@@ -17,13 +19,31 @@ sourceSets {
 
 dependencies {
     compile project(':core')
-    compile project(':apps:ministreaming')
+    providedCompile project(':apps:ministreaming')
     compile 'gnu.getopt:java-getopt:1.0.13'
     providedCompile project(':apps:jetty')
 }
 
+// Create the java files from the po files. The jar task will compile them.
+// This requires gettext 0.19 or higher.
+// We don't support the "slow way"
+task bundleProxy {
+    doLast {
+        if (!(new File("$buildDir/classes/java/main/net/i2p/i2ptunnel/proxy/messages_de.class")).exists())
+            println "apps/i2ptunnel/java/bundle-messages-proxy.sh".execute().text
+    }
+}
+
+task bundle {
+    doLast {
+        if (!(new File("$buildDir/classes/java/main/net/i2p/i2ptunnel/web/messages_de.class")).exists())
+            println "apps/i2ptunnel/java/bundle-messages.sh".execute().text
+    }
+}
+
 task i2ptunnelJar(type: Jar) {
     from sourceSets.main.output 
+    exclude '**/web/*.class'
     exclude '**/ui/*.class'
     exclude '**/EditBean.class'
     exclude '**/IndexBean.class'
@@ -31,8 +51,21 @@ task i2ptunnelJar(type: Jar) {
         attributes 'Main-Class': 'net.i2p.i2ptunnel.I2PTunnel'
         attributes 'Class-Path': 'i2p.jar mstreaming.jar'
     }
+    from ('resources', {
+        into "net/i2p/i2ptunnel/resources"
+    })
+    from ('../routerconsole/jsp', {
+        include 'themes/console/*/*.css'
+        include 'themes/console/images/i2plogo.png'
+        include 'themes/console/images/favicon.ico'
+        include 'themes/console/images/itoopie_sm.png'
+        into "net/i2p/i2ptunnel/resources"
+    })
 }
+i2ptunnelJar.dependsOn bundleProxy
+war.dependsOn bundle
 
+// not needed unless we're building for both android and regular
 task tempBeansJar(type: Jar) {
     from sourceSets.main.output
     include '**/EditBean.class'
@@ -41,6 +74,7 @@ task tempBeansJar(type: Jar) {
     baseName = 'temp-beans'
 }
 
+// only for android
 task uiJar(type: Jar) {
     baseName = 'i2ptunnel-ui'
     from sourceSets.main.output
@@ -51,12 +85,26 @@ task uiJar(type: Jar) {
 }
 
 artifacts {
-    archives i2ptunnelJar, tempBeansJar, uiJar
+    archives i2ptunnelJar   //, tempBeansJar, uiJar
 }
 
 war {
+    include '**/EditBean.class'
+    include '**/ui/*.class'
+    include '**/IndexBean.class'
     from 'jsp'
+    rootSpec.exclude('/net/i2p/i2ptunnel/*.class')
+    rootSpec.exclude('/net/i2p/i2ptunnel/access')
+    rootSpec.exclude('/net/i2p/i2ptunnel/irc')
+    rootSpec.exclude('/net/i2p/i2ptunnel/localServer')
+    rootSpec.exclude('/net/i2p/i2ptunnel/proxy')
+    rootSpec.exclude('/net/i2p/i2ptunnel/socks')
+    rootSpec.exclude('/net/i2p/i2ptunnel/streamr')
+    rootSpec.exclude('/net/i2p/i2ptunnel/udp')
+    rootSpec.exclude('/net/i2p/i2ptunnel/udpTunnel')
     exclude 'jsp/web.xml'
+    exclude '*.jsi'
+    exclude '*.jsp'
     webXml = file('jsp/web.xml')
 }
 

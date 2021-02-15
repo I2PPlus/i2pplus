@@ -261,7 +261,7 @@ class BuildHandler implements Runnable {
 
             long now = _context.clock().now();
             long dropBefore = now - (BuildRequestor.REQUEST_TIMEOUT/4);
-            int maxTunnels = 200; // avoid NPE
+            int maxTunnels = 10000; // avoid NPE
             if (_context.getProperty("router.maxParticipatingTunnels") != null)
                 maxTunnels = Integer.parseInt(_context.getProperty("router.maxParticipatingTunnels"));
             if (state.recvTime <= dropBefore) {

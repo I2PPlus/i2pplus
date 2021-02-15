@@ -7,6 +7,9 @@ sourceSets {
     main {
         java {
             srcDir 'java/src'
+            srcDir 'java/build/messages-src'
+            srcDir 'java/build/messages-countries-src'
+            srcDir 'java/build/messages-news-src'
         }
     }
 }
@@ -40,7 +43,27 @@ if (System.getenv("TARGET_JAVA_HOME") == null && JavaVersion.current() != JavaVe
     test.dependsOn scalaTest
 }
 
-jar {
+// Create the java files from the po files. The jar task will compile them.
+// This requires gettext 0.19 or higher.
+// We don't support the "slow way"
+task bundleJar {
+    doLast {
+        if (!(new File("$buildDir/classes/java/main/net/i2p/router/countries/messages_de.class")).exists())
+            println "apps/routerconsole/java/bundle-messages-countries.sh".execute().text
+        if (!(new File("$buildDir/classes/java/main/net/i2p/router/news/messages_de.class")).exists())
+            println "apps/routerconsole/java/bundle-messages-news.sh".execute().text
+    }
+}
+task bundle {
+    doLast {
+        if (!(new File("$buildDir/classes/java/main/net/i2p/router/web/messages_de.class")).exists())
+            println "apps/routerconsole/java/bundle-messages.sh".execute().text
+    }
+}
+
+task consoleJar(type: Jar) {
+    from sourceSets.main.output
+    exclude 'net/i2p/router/web/helpers/**'
     manifest {
         // Top level installer will rename to jrobin.jar
         // DTG added in 0.8.4, not in the classpath for very old installs,
@@ -50,12 +73,30 @@ jar {
         // All new jetty 7 jars should have been in 0.9.6, added in 0.9.7
         attributes 'Class-Path': 'i2p.jar router.jar jrobin.jar desktopgui.jar i2psnark.jar jstl.jar standard.jar jetty-continuation.jar jetty-http.jar jetty-io.jar jetty-security.jar jetty-servlet.jar jetty-servlets.jar jetty-util.jar jetty-webapp.jar'
     }
+    from ('resources-news', {
+        into "net/i2p/router/news/resources"
+    })
+}
+consoleJar.dependsOn bundleJar
+war.dependsOn bundle
+
+artifacts {
+    archives consoleJar
 }
 
 war {
+    rootSpec.exclude('/com/vuze/**/*')
+    rootSpec.exclude('/edu/internet2/**/*')
+    rootSpec.exclude('/net/i2p/router/news/*')
+    rootSpec.exclude('/net/i2p/router/sybil/*')
+    rootSpec.exclude('/net/i2p/router/update/*')
+    rootSpec.exclude('/net/i2p/router/web/*.class')
     from 'jsp'
-    // Remove classes from the classpath, they are in the jar.
-    // If we return to precompiling jsps this needs to change.
-    classpath = []
+    exclude 'jsp/web.xml'
+    exclude '*.jsi'
+    exclude '*.jsp'
     webXml = file('jsp/web.xml')
+    from ('resources', {
+        into "WEB-INF/classes/net/i2p/router/web/resources"
+    })
 }
