@@ -117,12 +117,19 @@ class PeerTestJob extends JobImpl {
     public String getName() { return "Test Peers"; }
 
     public void runJob() {
+        long lag = getContext().jobQueue().getMaxLag();
         if (!_keepTesting) return;
         Set<RouterInfo> peers = selectPeersToTest();
         for (RouterInfo peer : peers) {
             testPeer(peer);
         }
-        requeue(getPeerTestDelay());
+        if (lag > 300) {
+            requeue(getPeerTestDelay() * 2);
+            if (_log.shouldLog(Log.WARN))
+                _log.info("High job lag detected (" + lag + "ms) - increasing delay before next run to " + getPeerTestDelay() * 2 + "ms");
+        } else {
+            requeue(getPeerTestDelay());
+        }
         if (_log.shouldLog(Log.INFO))
             _log.info("Next test run in " + getPeerTestDelay() + "ms");
     }
