@@ -12267,46 +12267,41 @@ from {
   white-space: nowrap !important;
 }
 
-#profilelist .fast, #profilelist .highcap, #profilelist .standard {
+#profilelist .fast, #profilelist .highcap, #profilelist .integrated, #profilelist .standard {
   width: 56px;
   height: 16px;
   display: inline-block;
   font-size: 0 !important;
+  background-size: 16px 16px !important;
 }
 
 #profilelist .fast {
   background: url(/themes/console/images/svg/fast.svg) calc(50% - 10px) center no-repeat,
               url(/themes/console/images/svg/highcap.svg) calc(50% + 10px) center no-repeat;
-  background-size: 16px 16px;
 }
 
 #profilelist .fast.integrated {
   background: url(/themes/console/images/svg/fast.svg) left center no-repeat,
               url(/themes/console/images/svg/highcap.svg) center center no-repeat,
               url(/themes/console/images/svg/integrated.svg) right center no-repeat;
-  background-size: 16px 16px;
 }
 
 #profilelist .highcap {
   background: url(/themes/console/images/svg/highcap.svg) center center no-repeat;
-  background-size: 16px 16px;
 }
 
 #profilelist .highcap.integrated {
   background: url(/themes/console/images/svg/highcap.svg) calc(50% - 10px) center no-repeat,
               url(/themes/console/images/svg/integrated.svg) calc(50% + 10px) center no-repeat;
-  background-size: 16px 16px;
 }
 
 #profilelist .standard {
   background: url(/themes/console/images/svg/standard.svg) center center no-repeat;
-  background-size: 16px 16px;
 }
 
 #profilelist .standard.integrated {
   background: url(/themes/console/images/svg/standard.svg) calc(50% - 10px) center no-repeat,
               url(/themes/console/images/svg/integrated.svg) calc(50% + 10px) center no-repeat;
-  background-size: 16px 16px;
 }
 
 .profilegroup::before {
@@ -12331,4 +12326,19 @@ from {
 
 .profilegroup.standard::before {
   background: url(/themes/console/images/svg/standard.svg) left center no-repeat;
+}
+
+@media screen and (max-width: 1200px) {
+  #profilelist .fast, #profilelist .highcap, #profilelist .integrated, #profilelist .standard {
+    width: 50px;
+    height: 16px;
+    background-size: 14px 14px !important;
+  }
+  #profilelist .fast, #profilelist .highcap.integrated, #profilelist .standard.integrated {
+    background-position: calc(50% - 8px) center, calc(50% + 8px) center !important;
+  }
+  .profilegroup::before {
+    width: 18px;
+    height: 14px;
+  }
 }
