@@ -57,7 +57,7 @@ body.iframed {
 
 .iframed form {
   border: 1px solid transparent !important;
-/*  border-top: 1px solid #26235c !important;*/
+/*  border-top: 1px solid #27235c !important;*/
 }
 
 div.header {
@@ -105,7 +105,7 @@ p.text {
 p.info, p.error {
   color: #c9ceff;
   display: block !important;
-  border: 1px solid #26235c;
+  border: 1px solid #27235c;
   margin: 20px 20px 0 !important;
   padding: 15px 10px 15px 45px;
   background: #000 url(/themes/console/images/info/infohelp.png) 10px center no-repeat;
@@ -172,17 +172,14 @@ div.topbuttons {
   margin: -1px -1px -10px -1px;
   padding: 7px 0 8px !important;
   font-weight: bold;
-  border: 1px solid #26235c;
-  border-bottom: 0 solid;
+  border: 1px solid #27235c;
   border-radius: 2px 2px 0 0;
-  border-bottom: 1px solid #26235c;
   background: #000010;
 }
 
 .iframed .topbuttons {
   border: none !important;
-  border-bottom: 1px solid #26235c !important;
-/*  border-top: 1px solid #26235c;*/
+  border-bottom: 1px solid #27235c !important;
   border-radius: 0;
 }
 
@@ -265,7 +262,7 @@ td.mailListSize {
   white-space: nowrap;
   text-transform: capitalize !important;
   text-shadow: 0 1px 1px #000;
-  border-top: 1px solid #26235c;
+  border-top: 1px solid #27235c;
   border-bottom: none;
 }
 
@@ -279,7 +276,7 @@ th.mailListSubject {
 
 #mailbox td {
   padding: 4px 8px;
-  border-right: 1px solid #26235c;
+  border-right: 1px solid #27235c;
   border-right: 1px solid rgba(38, 35, 92,.7);
 }
 
@@ -288,7 +285,7 @@ th.mailListSubject {
 }
 
 #mailbox td[colspan="3"], #mailbox td[colspan="4"] {
-  border-top: 1px solid #26235c !important;
+  border-top: 1px solid #27235c !important;
   padding: 6px 0 2px !important;
 }
 
@@ -328,23 +325,6 @@ th.mailListSubject {
   overflow: hidden;
 }
 
-/*input[type=checkbox], .optbox {
-  min-width: 16px !important;
-  min-height: 16px !important;
-  background: none;
-  filter: invert(100%) sepia(100%) hue-rotate(200deg) saturate(200%);
-}
-
-input.optbox {
-  opacity: 0.8;
-}
-
-input.optbox:hover, input.optbox:focus {
-  opacity: 1.0;
-  filter: invert(100%) sepia(100%) hue-rotate(200deg) saturate(200%) drop-shadow(0 0 5px #652787);
-}
-*/
-
 td#deleteattached {
   padding-top: 5px !important;
 }
@@ -361,7 +341,7 @@ td#deleteattached {
 
 tr.bottombuttons:last-child td {
   padding-bottom: 20px !important;
-  border-bottom: 1px solid #26235c !important;
+  border-bottom: 1px solid #27235c !important;
 }
 
 a:link {
@@ -404,8 +384,8 @@ td {
 .list0 td, .list1 td {
   padding: 4px;
   color: #7670c2;
-  border-top: 1px solid #26235c;
-  border-bottom: 1px solid #26235c;
+  border-top: 1px solid #27235c;
+  border-bottom: 1px solid #27235c;
   border-top: 1px solid rgba(38, 35, 92,.7);
   border-bottom: 1px solid rgba(38, 35, 92,.7);
 }
@@ -473,10 +453,6 @@ img.sort {
   border-bottom: none;
 }
 
-#mailbox tr.bottombuttons td[colspan="9"] {
-/*  display: none; */
-}
-
 tr.bottombuttons td {
   padding-left: 0 !important;
   padding-right: 0 !important;
@@ -519,15 +495,15 @@ th {
   background: #001;
   background: linear-gradient(to bottom, #080818, #001) !important;
   padding: 7px;
-  border-bottom: 1px solid #26235c;
-  border-top: 1px solid #26235c;
+  border-bottom: 1px solid #27235c;
+  border-top: 1px solid #27235c;
 }
 
 form {
   margin: 0;
   padding-bottom: 0;
   line-height: 160%;
-  border: 1px solid #26235c;
+  border: 1px solid #27235c;
   background: #000010;
 }
 
@@ -538,7 +514,7 @@ form table {
 textarea {
   background: #000;
   color: #c9ceff;
-  border: 1px solid #26235c;
+  border: 1px solid #27235c;
   padding: 5px;
 }
 
@@ -567,7 +543,7 @@ td#attachedfile {
   font-size: 9pt;
   font-weight: bold;
   background: #002;
-  border: 1px solid #26235c;
+  border: 1px solid #27235c;
   border-left: none;
   border-right: none;
 }
@@ -586,7 +562,11 @@ td#attachedfile {
   font-weight: normal;
 }
 
-div#composemail {
+#collapse, #expand {
+  margin-right: 12px;
+}
+
+#composemail {
   text-align: center !important;
   padding: 50px;
 }
@@ -629,7 +609,7 @@ input {
   font: bold 9pt "Droid Sans", "Open Sans", "Noto Sans", Ubuntu, "Segoe UI", "Bitstream Vera Sans", "DejaVu Sans", Verdana, "Lucida Grande", Helvetica, sans-serif;
   color: #4e47bf;
   text-align: left;
-  border: 1px solid #26235c;
+  border: 1px solid #27235c;
 }
 
 input.optbox {
@@ -861,7 +841,7 @@ input.delete {
 }
 
 h3#config {
-  border: 1px solid #26235c;
+  border: 1px solid #27235c;
   padding: 5px;
   margin: 9px auto 18px auto;
   width: 400px;
@@ -877,7 +857,7 @@ h3#config {
 #mailheader {
   padding: 10px;
   margin: 3px -1px;
-  border: 1px solid #26235c;
+  border: 1px solid #27235c;
   font-size: 10pt !important;
   background: #020019;
 }
@@ -906,7 +886,7 @@ p.mailbody {
 }
 
 div.attached {
-  border: 1px solid #26235c;
+  border: 1px solid #27235c;
   margin: 0 -1px -1px;
   border-radius: 0 0 2px 2px;
   padding: 10px 10px 10px 30px !important;
@@ -926,7 +906,7 @@ div.attached {
 }
 
 .attached img {
-  border: 1px solid #26235c;
+  border: 1px solid #27235c;
   border-radius: 2px;
   image-orientation: from-image;
 }
@@ -945,15 +925,14 @@ div#emptymailbox {
 }
 
 .pagenav {
-  width: 100%;
   margin: 0 auto;
-  border-top: 1px solid #26235c;
+  width: 100%;
+  border-top: 1px solid #27235c;
   background: #000010;
 }
 
 .topbuttons .pagenav {
-  border-bottom: 1px solid #26235c;
-
+  border-bottom: 1px solid #27235c;
 }
 
 .topbuttons input {
@@ -978,7 +957,7 @@ div#bottombuttons { /* config page button positioning */
   box-shadow: none !important;
   background: #652787 !important;
   cursor: default;
-  opacity: 0.5;
+  opacity: .5;
 }
 
 .pagenavcontrols input[type=submit] {
@@ -991,83 +970,67 @@ div#bottombuttons { /* config page button positioning */
 }
 
 .pagenav input.firstpage {
-  background: #000 url(images/first.png) center center no-repeat !important;
-  background-size: 12px 12px !important;
+  background: #000 url(images/first.svg) center center no-repeat !important;
 }
 
 .pagenav input.firstpage:hover {
-  background: #000 url(images/first_hover.png) center center no-repeat !important;
-  background-size: 12px 12px !important;
+  background: #000 url(images/first_hover.svg) center center no-repeat !important;
 }
 
 .pagenav input.firstpage:active {
-  background: #652787 url(images/first_active.png) center center no-repeat !important;
-  background-size: 12px 12px !important;
+  background: #652787 url(images/first_active.svg) center center no-repeat !important;
 }
 
 .pagenav input[name="firstpage"]:disabled {
-  background: #000 url(images/first_disabled.png) center center no-repeat !important;
-  background-size: 12px 12px !important;
+  background: #000 url(images/first.svg) center center no-repeat !important;
 }
 
 .pagenav input.prevpage {
-  background: #000 url(images/previous.png) center center no-repeat !important;
-  background-size: 12px 12px !important;
+  background: #000 url(images/previous.svg) center center no-repeat !important;
 }
 
 .pagenav input.prevpage:hover {
-  background: #000 url(images/previous_hover.png) center center no-repeat !important;
-  background-size: 12px 12px !important;
+  background: #000 url(images/previous_hover.svg) center center no-repeat !important;
 }
 
 .pagenav input.prevpage:active {
-  background: #652787 url(images/previous_active.png) center center no-repeat !important;
-  background-size: 12px 12px !important;
+  background: #652787 url(images/previous_active.svg) center center no-repeat !important;
 }
 
-.pagenav input[name="prevpage"]:disabled {
-  background: #000 url(images/previous_disabled.png) center center no-repeat !important;
-  background-size: 12px 12px !important;
+.pagenav input[name="prevpage"]:disabled, .pagenav input[name="prevpage"]:hover:disabled {
+  background: #000 url(images/previous.svg) center center no-repeat !important;
 }
 
-.pagenav input.nextpage {
-  background: #000 url(images/next.png) center center no-repeat !important;
-  background-size: 12px 12px !important;
+.pagenav input[name="nextpage"] {
+  background: #000 url(images/next.svg) center center no-repeat !important;
 }
 
-.pagenav input.nextpage:hover {
-  background: #000 url(images/next_hover.png) center center no-repeat !important;
-  background-size: 12px 12px !important;
+.pagenav input[name="nextpage"]:hover {
+  background: #000 url(images/next_hover.svg) center center no-repeat !important;
 }
 
-.pagenav input.nextpage:active {
-  background: #652787 url(images/next_active.png) center center no-repeat !important;
-  background-size: 12px 12px !important;
+.pagenav input[name="nextpage"]:active {
+  background: #652787 url(images/next_active.svg) center center no-repeat !important;
 }
 
-.pagenav input[name="nextpage"]:disabled {
-  background: #000 url(images/next_disabled.png) center center no-repeat !important;
-  background-size: 12px 12px !important;
+.pagenav input[name="nextpage"]:disabled, .pagenav input[name="nextpage"]:hover:disabled {
+  background: #000 url(images/next.svg) center center no-repeat !important;
 }
 
 .pagenav input.lastpage {
-  background: #000 url(images/last.png) center center no-repeat !important;
-  background-size: 12px 12px !important;
+  background: #000 url(images/last.svg) center center no-repeat !important;
 }
 
 .pagenav input.lastpage:hover {
-  background: #000 url(images/last_hover.png) center center no-repeat !important;
-  background-size: 12px 12px !important;
+  background: #000 url(images/last_hover.svg) center center no-repeat !important;
 }
 
 .pagenav input.lastpage:active {
-  background: #652787 url(images/last_active.png) center center no-repeat !important;
-  background-size: 12px 12px !important;
+  background: #652787 url(images/last_active.svg) center center no-repeat !important;
 }
 
-.pagenav input[name="lastpage"]:disabled {
-  background: #000 url(images/last_disabled.png) center center no-repeat !important;
-  background-size: 12px 12px !important;
+.pagenav input[name="lastpage"]:disabled, .pagenav input[name="lastpage"]:hover:disabled {
+  background: #000 url(images/last.svg) center center no-repeat !important;
 }
 
 .pagecount {
@@ -1086,7 +1049,10 @@ div#bottombuttons { /* config page button positioning */
 input[type=submit][class], input[type=reset][class],
 input[type=submit][class]:hover, input[type=reset][class]:hover,
 input[type=submit][class]:focus, input[type=reset][class]:focus,
-#settings, #settings:hover, #settings:focus {
+#settings, #settings:hover, #settings:focus,
+.pagenav input[type=submit], .pagenav input[type=submit]:hover, .pagenav input[type=submit]:focus,
+.pagenav input[type=submit]:disabled, .pagenav input[type=submit]:hover:disabled, .pagenav input[type=submit]:focus:disabled
+ {
   background-size: 14px 14px, 100% 100% !important;
 }
 
@@ -1337,15 +1303,18 @@ input.firstpage, input[name="firstpage"],
 input.firstpage[disabled]:hover, input[name="firstpage"][disabled]:hover {
   padding: 5px 10px !important;
   text-indent: -99999px;
-  background: #000 url(images/first.png) no-repeat center center;
-  background: url(images/first.png) no-repeat center center, linear-gradient(to bottom, #11101c 50%, #000010 50%) !important;
-  background-size: 12px 12px !important;
+  background: #000 url(images/first.svg) no-repeat center center;
+  background: url(images/first.svg) no-repeat center center, linear-gradient(to bottom, #11101c 50%, #000010 50%) !important;
+}
+
+input.firstpage[disabled]:hover, input[name="firstpage"][disabled]:hover {
+  background: #000 url(images/first.svg) no-repeat center center !important;
 }
 
 input.firstpage:hover, input[name="firstpage"]:hover,
 input.firstpage:focus, input[name="firstpage"]:focus {
-  background: #000 url(images/first.png) no-repeat center center;
-  background: url(images/first.png) no-repeat center center, linear-gradient(to bottom, #202 50%, #000 50%) !important;
+  background: #000 url(images/first.svg) no-repeat center center;
+  background: url(images/first.svg) no-repeat center center, linear-gradient(to bottom, #202 50%, #000 50%) !important;
 }
 
 input.lastpage, input[name="lastpage"],
@@ -1353,15 +1322,14 @@ input.lastpage[disabled]:hover, input[name="lastpage"][disabled]:hover,
 input.lastpage[disabled]:focus, input[name="lastpage"][disabled]:focus {
   padding: 5px 10px !important;
   text-indent: -99999px;
-  background: #000 url(/themes/susimail/images/last.png) no-repeat center center;
-  background: url(/themes/susimail/images/last.png) no-repeat center center, linear-gradient(to bottom, #11101c 50%, #000010 50%) !important;
-  background-size: 12px 12px !important;
+  background: #000 url(images/last.svg) no-repeat center center;
+  background: url(images/last.svg) no-repeat center center, linear-gradient(to bottom, #11101c 50%, #000010 50%) !important;
 }
 
 input.lastpage:hover, input[name="lastpage"]:hover,
 input.lastpage:focus, input[name="lastpage"]:focus {
-  background: #000 url(/themes/susimail/images/last.png) no-repeat center center;
-  background: url(/themes/susimail/images/last.png) no-repeat center center, linear-gradient(to bottom, #202 50%, #000 50%) !important;
+  background: #000 url(images/last.svg) no-repeat center center;
+  background: url(images/last.svg) no-repeat center center, linear-gradient(to bottom, #202 50%, #000 50%) !important;
 }
 
 input.prevpage, input.prev, input[name="prev"], input[name="prevpage"],
@@ -1369,30 +1337,29 @@ input.prevpage[disabled]:hover, input.prev[disabled]:hover, input[name="prev"][d
 input.prevpage[disabled]:focus, input.prev[disabled]:focus, input[name="prev"][disabled]:focus, input[name="prevpage"][disabled]:focus {
   padding: 5px 10px !important;
   text-indent: -99999px;
-  background: #000 url(images/previous.png) no-repeat center center;
-  background: url(images/previous.png) no-repeat center center, linear-gradient(to bottom, #11101c 50%, #000010 50%) !important;
-  background-size: 12px 12px !important;
+  background: #000 url(images/previous.svg) no-repeat center center;
+  background: url(images/previous.svg) no-repeat center center, linear-gradient(to bottom, #11101c 50%, #000010 50%) !important;
 }
 
 input.prevpage:hover, input[name="prev"]:hover, input[name="prevpage"]:hover,
 input.prevpage:focus, input[name="prev"]:focus, input[name="prevpage"]:focus {
-  background: #000 url(images/previous.png) no-repeat center center !important;
-  background: url(images/previous.png) no-repeat center center, linear-gradient(to bottom, #202 50%, #000 50%) !important;
+  background: #000 url(images/previous.svg) no-repeat center center !important;
+  background: url(images/previous.svg) no-repeat center center, linear-gradient(to bottom, #202 50%, #000 50%) !important;
 }
 
-input.nextpage, input.next, input[name="nextpage"], input[name="next"],
-input.nextpage[disabled]:hover, input.next[disabled]:hover, input[name="nextpage"][disabled]:hover, input[name="next"][disabled]:hover,
-input.nextpage[disabled]:focus, input.next[disabled]:focus, input[name="nextpage"][disabled]:focus, input[name="next"][disabled]:focus {
+input[name="nextpage"], input.next, input[name="nextpage"], input[name="next"],
+input[name="nextpage"][disabled]:hover, input.next[disabled]:hover, input[name="nextpage"][disabled]:hover, input[name="next"][disabled]:hover,
+input[name="nextpage"][disabled]:focus, input.next[disabled]:focus, input[name="nextpage"][disabled]:focus, input[name="next"][disabled]:focus {
   padding: 5px 10px !important;
   text-indent: -99999px;
-  background: #000 url(images/next.png) no-repeat center center;
-  background: url(images/next.png) no-repeat center center, linear-gradient(to bottom, #11101c 50%, #000010 50%) !important;
+  background: #000 url(images/next.svg) no-repeat center center;
+  background: url(images/next.svg) no-repeat center center, linear-gradient(to bottom, #11101c 50%, #000010 50%) !important;
 }
 
-input.nextpage:hover, input.next:hover, input[name="nextpage"]:hover,
-input.nextpage:focus, input.next:focus, input[name="nextpage"]:focus {
-  background: #000 url(images/next.png) no-repeat center center !important;
-  background: url(images/next.png) no-repeat center center, linear-gradient(to bottom, #202 50%, #000 50%) !important;
+input[name="nextpage"]:hover, input.next:hover, input[name="nextpage"]:hover,
+input[name="nextpage"]:focus, input.next:focus, input[name="nextpage"]:focus {
+  background: #000 url(images/next.svg) no-repeat center center !important;
+  background: url(images/next.svg) no-repeat center center, linear-gradient(to bottom, #202 50%, #000 50%) !important;
 }
 
 input.prev, input[name="next"], input.prev[disabled], input[name="next"][disabled],
@@ -1606,7 +1573,7 @@ input[type=checkbox][disabled]:checked, input[type=radio][disabled]:checked, inp
 
 #info {
   margin: 7px 0 2px 4px !important;
-  padding: 3px 10px;
+  padding: 6px 10px;
   display: inline-block;
   font-weight: bold;
   text-shadow: 0 1px 1px #000;
@@ -1624,7 +1591,7 @@ input[type=checkbox][disabled]:checked, input[type=radio][disabled]:checked, inp
 
 select {
   margin: 5px 10px;
-  padding: 4px 20px 4px 4px !important;
+  padding: 6px 20px 6px 6px !important;
   min-width: 110px;
   -moz-appearance: none;
   -webkit-appearance: none;
@@ -1635,18 +1602,13 @@ select {
   color: #6c66bc;
   text-align: center;
   border: 1px solid #27235f;
+  border-radius: 2px;
   cursor: pointer;
-  box-shadow: inset 0 0 0 1px #000, inset 0 0 1px 1px #446, 0 0 0 1px #000;
+  box-shadow: inset 0 0 0 1px #000, inset 0 0 1px 0 #446;
   background: #000 url(/themes/console/midnight/images/dropdown.svg) center right 10px no-repeat !important;
   background: url(/themes/console/midnight/images/dropdown.svg) center right 10px no-repeat, linear-gradient(to bottom, #11101c 50%, #000010 50%) !important;
   background-size: 10px auto, 100% 100% !important;
   filter: none !important;
-}
-
-@supports not (-moz-appearance: none) {
-select {
-  padding: 5px 20px 5px 6px !important;
-}
 }
 
 select option {
@@ -1714,7 +1676,7 @@ select:hover, select:focus, select:active {
   z-index: 9999;
   text-align: center;
   text-shadow: 0 1px 1px #000;
-  border: 1px solid #26235c;
+  border: 1px solid #27235c;
   background: url(/themes/snark/light/images/delete.png) right 24px top 4px no-repeat #113;
   background-size: 14px 14px !important;
   opacity: 0.9;
@@ -1828,14 +1790,16 @@ div:not(#pagesize).topbuttons, .iframed div:not(#pagesize).topbuttons {
 }
 
 .debugHeader td {
-  color: #eee;
+  color: #ffb;
   border-top: 1px solid #020;
   border-bottom: 1px solid #020;
-  background: #001800;
+  background: #010;
 }
 
 .debugHeader pre {
   margin: 10px 20px;
+  line-height: 1.55;
+  white-space: pre-wrap;
 }
 
 #mailhead, .iframed #mailhead {
