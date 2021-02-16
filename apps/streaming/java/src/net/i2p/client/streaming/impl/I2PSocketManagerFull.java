@@ -164,7 +164,7 @@ public class I2PSocketManagerFull implements I2PSocketManager {
      * This includes the time waiting in the queue.  Currently set to 5 seconds.
      */
 //    private static final long ACCEPT_TIMEOUT_DEFAULT = 5*1000;
-    private static final long ACCEPT_TIMEOUT_DEFAULT = 30*1000;
+    private static final long ACCEPT_TIMEOUT_DEFAULT = 10*1000;
 
     /**
      * @deprecated use 4-arg constructor
