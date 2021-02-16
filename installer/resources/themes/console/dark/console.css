@@ -14665,14 +14665,14 @@ h1, .main h2, h4.app, h4.app2, .main h3 {
 }
 #profilelist th:nth-child(5), #profilelist td:nth-child(5) {
   width: 10% !important;
-  min-width: 60px;
+  min-width: 56px;
   white-space: nowrap !important;
 }
 
 #profilelist .fast, #profilelist .highcap, #profilelist .standard {
-  display: inline-block;
-  width: 60px;
+  width: 56px;
   height: 16px;
+  display: inline-block;
   font-size: 0 !important;
 }
 
