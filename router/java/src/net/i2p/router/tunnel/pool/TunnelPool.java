@@ -916,9 +916,9 @@ public class TunnelPool {
         if (avg > 0 && avg < TUNNEL_LIFETIME / 3) {  // if we're taking less than 200s per tunnel to build
             final int PANIC_FACTOR = 4;  // how many builds to kick off when time gets short
 //            avg += 60*1000;   // one minute safety factor
-            avg += 90*1000;   // 1.5m safety factor
-            if (_settings.isExploratory())
-                avg += 30*1000;   // two minute safety factor
+            avg += 2*60*1000;   // 2m safety factor
+//            if (_settings.isExploratory())
+//                avg += 30*1000;   // two minute safety factor
             long now = _context.clock().now();
 
             int expireSoon = 0;

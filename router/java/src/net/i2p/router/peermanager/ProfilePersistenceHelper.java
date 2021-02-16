@@ -329,7 +329,9 @@ class ProfilePersistenceHelper {
 
             long lastSentToSuccessfully = getLong(props, "lastSentToSuccessfully");
             RouterInfo info = _context.netDb().lookupRouterInfoLocally(profile.getPeer());
-            String caps = DataHelper.stripHTML(info.getCapabilities()).toUpperCase();
+            String caps = "unknown";
+            if (info != null)
+                caps = DataHelper.stripHTML(info.getCapabilities()).toUpperCase();
 
             if (isExpired(lastSentToSuccessfully)) {
                 if (_log.shouldLog(Log.DEBUG))

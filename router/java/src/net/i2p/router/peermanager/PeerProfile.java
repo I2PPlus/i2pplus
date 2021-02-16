@@ -386,7 +386,7 @@ public class PeerProfile {
     }
 
     public float getPeerTestTimeAverage() { return _peerTestResponseTimeAvg; }
-    void setPeerTestTimeAverage(float avg) { _peerTestResponseTimeAvg = avg; }
+    void setPeerTestTimeAverage(float testAvg) { _peerTestResponseTimeAvg = testAvg; }
 
     void updatePeerTestTimeAverage(long ms) {
         if (_peerTestResponseTimeAvg <= 0)

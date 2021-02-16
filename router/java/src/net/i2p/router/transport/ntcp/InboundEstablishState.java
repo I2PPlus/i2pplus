@@ -642,7 +642,7 @@ class InboundEstablishState extends EstablishBase implements NTCP2Payload.Payloa
         _context.aes().encrypt(preSig, 0, _e_bobSig, 0, _dh.getSessionKey(), _e_hXY_tsB, HXY_TSB_PAD_SIZE - AES_SIZE, _e_bobSig.length);
 
         if (_log.shouldLog(Log.DEBUG))
-            _log.debug(prefix() + "Sending encrypted inbound confirmation");
+            _log.debug(prefix() + "Sending encrypted Inbound confirmation");
         _transport.getPumper().wantsWrite(_con, _e_bobSig);
     }
 
