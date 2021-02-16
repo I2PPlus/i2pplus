@@ -149,9 +149,17 @@ class PeerTestJob extends JobImpl {
         Set<RouterInfo> peers = new HashSet<RouterInfo>(peerHashes.size());
         for (Hash peer : peerHashes) {
             RouterInfo peerInfo = getContext().netDb().lookupRouterInfoLocally(peer);
-            if (peerInfo != null) {
+            PeerProfile prof = getContext().profileOrganizer().getProfile(peer);
+            String cap = peerInfo.getCapabilities();
+            boolean reachable = cap.indexOf(Router.CAPABILITY_REACHABLE) >= 0;
+            String bw = peerInfo.getBandwidthTier();
+            if (peerInfo != null && cap != null && reachable &&
+                (bw.equals("N") || bw.equals("O") || bw.equals("P") || bw.equals("X"))) {
                 peers.add(peerInfo);
-            } else {
+            } else if (!reachable || bw.equals("K") || bw.equals("L") || bw.equals("M")) {
+                if (_log.shouldLog(Log.INFO))
+                    _log.info("Skipping test of [" + peer.toBase64().substring(0,6) + "] - K, L, M or unreachable");
+            } else if (peerInfo == null) {
                 if (_log.shouldLog(Log.INFO))
                     _log.info("Test of [" + peer.toBase64().substring(0,6) + "] failed: No local RouterInfo");
             }
