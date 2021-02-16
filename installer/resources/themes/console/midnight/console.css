@@ -7713,6 +7713,19 @@ input.search, input.search:hover {
   background: url(/themes/console/images/buttons/search.png) 4px center no-repeat, linear-gradient(to bottom, #000, #000019);
 }
 
+input.search::placeholder {
+  font-style: italic;
+  opacity: 0;
+}
+
+input.search:hover::placeholder {
+  opacity: .6;
+}
+
+input.search:focus::placeholder {
+  opacity: 0;
+}
+
 input.search:focus {
   background: #000 url(/themes/console/images/buttons/search.png) 4px center no-repeat;
 }
