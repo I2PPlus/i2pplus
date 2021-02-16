@@ -1164,7 +1164,7 @@ public class ProfileOrganizer {
             // exclude unreachable peers
             if (profile.wasUnreachable()) {
                 if (_log.shouldLog(Log.INFO))
-                    _log.info("Excluding [" + profile.getPeer() + "] from fast/highcap groups -> unreachable");
+                    _log.info("Excluding [" + profile.getPeer().toBase64().substring(0,6) + "] from fast/highcap groups -> unreachable");
                 continue;
             }
 
