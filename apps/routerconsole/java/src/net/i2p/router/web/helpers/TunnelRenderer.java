@@ -97,10 +97,10 @@ class TunnelRenderer {
                 out.write("id=\"" + client.toBase64().substring(0,4) + "\" >");
                 out.write(dname);
                 // links are set to float:right in CSS so they will be displayed in reverse order
-                if (debug && (!name.startsWith("Ping") && !name.contains("[")) || !name.equals("I2Ping"))
+                if (debug /*&& (!name.startsWith("Ping") && !name.contains("[")) || !name.equals("I2Ping")*/)
                     out.write(" <a href=\"/configtunnels#" + b64 +"\" title=\"" +
                               _t("Configure tunnels for session") + "\">[" + _t("configure") + "]</a>");
-                else if ((!name.startsWith("Ping") && !name.contains("[")) || !name.equals("I2Ping"))
+                else /*if ((!name.startsWith("Ping") && !name.contains("[")) || !name.equals("I2Ping"))*/
                     out.write(" <a href=\"/i2ptunnelmgr\" title=\"" +
                               _t("Configure tunnels") + "\">[" + _t("configure") + "]</a>");
                 writeGraphLinks(out, in, outPool);
@@ -414,9 +414,9 @@ class TunnelRenderer {
                           "\"><img src=\"/themes/console/images/outbound.png\" alt=\"" + tob + "\"></span></td>");
             out.write("<td class=\"cells\" align=\"center\">" + DataHelper.formatDuration2(timeLeft) + "</td>\n");
             int count = info.getProcessedMessagesCount() * 1024 / 1000;
-            out.write("<td class=\"cells datatransfer\" align=\"center\"><span class=\"right\">");
+            out.write("<td class=\"cells datatransfer\" align=\"center\">");
             if (count > 0)
-                out.write(count + "</span><span class=\"left\">&#8239;KB</span>");
+                out.write("<span class=\"right\">" + count + "</span><span class=\"left\">&#8239;KB</span>");
             out.write("</td>\n");
             int length = info.getLength();
             boolean debug = _context.getBooleanProperty(HelperBase.PROP_ADVANCED);
