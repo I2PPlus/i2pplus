@@ -113,8 +113,23 @@
 <tr><th>router.exploreWhenFloodfill={true|false} <span class="plus">I2P+</span></th></tr>
 <tr><td>This setting determines whether a router acting as a floodfill will explore the NetDb to learn about new peers. [Default is false]</td></tr>
 
+<tr><th>router.forceUnreachable={true|false}</th></tr>
+<tr><td>This setting, when set to true, prevents a router from directly communicating with other routers, forcing the use of introducers. [Default is false unlesss router is in hidden mode]</td></tr>
+
 <tr><th>router.minVersionAllowed={n} <span class="plus">I2P+</span></th></tr>
 <tr><td>This setting allows you to exclude older routers from your NetDb. Routers older than the default or the value you set will be deleted from the NetDb and banned for the duration of the router session. By default, routers older than 0.9.20 are excluded. Note: starting with I2P+ version 0.9.46+, only routers running very recent versions are used for building local tunnels. [Restart required]</td></tr>
+
+<tr><th>router.peerTestConcurrency={n} <span class="plus">I2P+</span></th></tr>
+<tr><td>This setting determines the number of peer tests to run concurrently, used to determine peer latency. [Default is 4]</td></tr>
+
+<tr><th>router.peerTestDelay={n} <span class="plus">I2P+</span></th></tr>
+<tr><td>This setting determines the delay between peer test jobs, configured in milliseconds. [Default is 5000]</td></tr>
+
+<tr><th>router.peerTestTimeout={n} <span class="plus">I2P+</span></th></tr>
+<tr><td>To determine peer latency, this setting allocates the maximum time a peer test should take before being considered a failure, configured in milliseconds. [Default is 3000]</td></tr>
+
+<tr><th>router.publishPeerRankings={true|false}</th></tr>
+<tr><td>This setting determines whether stats about our router are sporadically published to the NetDb. [Default is false]</td></tr>
 
 <tr><th>router.refreshRouterDelay={n} <span class="plus">I2P+</span></th></tr>
 <tr><td>This setting (in milliseconds) allows you to manually configure the delay between router refresh updates run by the Refresh Routers Job. By default the pause between refreshes is determined by the size of the NetDb, and introduces some randomness in the timing to mitigate traffic analysis. For values lower than 2000 milliseconds, increasing the value of <code>router.refreshTimeout</code> is recommended. Note that setting this value below 2000 milliseconds will increase your network traffic and may introduce job lag, and is not recommended for sustained use.</td></tr>
@@ -130,6 +145,9 @@
 
 <tr><th>routerconsole.graphHiDpi={true|false} <span class="plus">I2P+</span></th></tr>
 <tr><td>This setting, when set to true, will enable HiDPI mode for the graphs on <a href="/graphs">the graphs page</a>. Once enabled, you may need to refresh the page to see the settings applied, and the graph display may take a couple of refresh cycles to stabilize. Note that Javascript should be enabled in your browser. [Experimental]</td></tr>
+
+<tr><th>routerconsole.showPeerTestAvg={true|false} <span class="plus">I2P+</span></th></tr>
+<tr><td>This setting, when set to true, will display a Peer Test Average readout in the Congestion section of the sidebar, calculated by adding the successful peer test average and the average excess time taken by failed tests. The average value may be used as a guide to determine the optimal <code>router.peerTestTimeout</code> value. [Default is false]</td></tr>
 
 <tr><th>routerconsole.sitemapSites={true|false} <span class="plus">I2P+</span></th></tr>
 <tr><td>This setting, when set to true, will display the <i>Sites of Interest</i> links on <a href="/sitemap">the sitemap</a>. [Default is false]</td></tr>
