@@ -1126,15 +1126,25 @@ class NetDbRenderer {
                     } else if (name.contains("host")) {
                         buf.append("<span class=\"nowrap\"><span class=\"netdb_name\">")
                            .append(_t(DataHelper.stripHTML(name))).append(":</span> ")
-                           .append("<span class=\"netdb_info host\">").append("<a title=\"")
-                           .append(_t("Show all routers with this address in the NetDb")).append("\" ");
-                        if (DataHelper.stripHTML(val).contains(":"))
-                            buf.append(" href=\"/netdb?ipv6=");
-                        else
-                            buf.append(" href=\"/netdb?ip=");
-                        buf.append(DataHelper.stripHTML(val).replace("::", _t("n/a")).replace("n/a1", _t("n/a"))).append("\">")
-                           .append(DataHelper.stripHTML(val).replace("::", _t("n/a")).replace("n/a1", _t("n/a"))) // fix empty ipv6
-                           .append("</a></span></span> ");
+                           .append("<span class=\"netdb_info host\">");
+                        if (DataHelper.stripHTML(val).equals("::")) {
+                            buf.append(_t("n/a")); // fix empty ipv6
+                        } else {
+                            buf.append("<a title=\"").append(_t("Show all routers with this address in the NetDb")).append("\" ");
+                            if (DataHelper.stripHTML(val).contains(":"))
+                                buf.append(" href=\"/netdb?ipv6=");
+                            else
+                                buf.append(" href=\"/netdb?ip=");
+                            if (DataHelper.stripHTML(val).contains(":")) {
+                                if (DataHelper.stripHTML(val).length() > 8)
+                                    buf.append(DataHelper.stripHTML(val).substring(0,4));
+                                else
+                                    buf.append(DataHelper.stripHTML(val));
+                            }
+                            buf.append("\">").append(DataHelper.stripHTML(val)).append("</a>");
+                            buf.append(DataHelper.stripHTML(val)).append("\">").append(DataHelper.stripHTML(val)).append("</a>");
+                        }
+                        buf.append("</span></span> ");
                     } else if (name.contains("port")) {
                         buf.append("<span class=\"nowrap\"><span class=\"netdb_name\">")
                            .append(_t(DataHelper.stripHTML(name)))
