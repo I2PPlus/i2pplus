@@ -6069,8 +6069,12 @@ ul#upnphelp li:last-child, #legal ul li:last-child {
 }
 
 .netdb_header img[src^="/flags"] {
-  width: 20px !important;
-  height: 15px !important;
+  margin-bottom: 1px;
+  width: 24px !important;
+  height: 18px !important;
+  vertical-align: middle;
+  border: 1px solid #225;
+  border-radius: 3px;
 }
 
 #netdbtiers td b {
@@ -11458,17 +11462,19 @@ input[type="file"]:hover {
 }
 
 .netdbStats li {
-  margin: 0 !important;
+  margin: 0 10px 0 0 !important;
   padding: 1px 0 !important;
-  min-width: 250px !important;
+  max-width: 210px !important;
   white-space: normal;
   line-height: 140%;
+  vertical-align: middle;
   list-style: none !important;
 }
 
 #netdb .longstat {
-  width: 100%;
-  min-width: 500px !important;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
 }
 
 #netdb .netdbStats b {
@@ -11603,7 +11609,6 @@ input[type="file"]:hover {
 
 .netdb_info.host, .netdb_info.port {
   font-size: 90%;
-  color: #090;
   -ms-user-select: all;
   -moz-user-select: all;
   -webkit-user-select: all;
