@@ -1,3 +1,5 @@
+* 2021-02-17 0.9.49+ released
+
 2021-02-16 dr|z3d
  * Console: add new peer test configs and others to /help/advancedsettings
 
