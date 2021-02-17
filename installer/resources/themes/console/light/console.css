@@ -8729,7 +8729,7 @@ table#schedjobs {
 }
 
 #floodfills td:nth-child(3) span, #profilelist td:nth-last-child(3) span, #profilelist td:nth-last-child(4) span,
-#profilelist td:nth-last-child(6) span, #profilelist td:nth-last-child(6) span, #profilelist td:nth-last-child(2) span {
+#profilelist td:nth-last-child(6) span, #profilelist td:nth-last-child(2) span {
   display: inline-block;
   text-align: right;
   min-width: 20px;
@@ -13385,7 +13385,7 @@ div.app:not(:hover) a:not(:hover):not(:focus):not(:active):visited,
 #profilelist .fast.integrated {
   background: url(/themes/console/images/svg/fast.svg) left center no-repeat,
               url(/themes/console/images/svg/highcap.svg) center center no-repeat,
-              url(/themes/console/images/svg/integrated.svg) right center no-repeat;
+              url(/themes/console/images/svg/integrated.svg) right center no-repeat !important;
 }
 
 #profilelist .highcap {
