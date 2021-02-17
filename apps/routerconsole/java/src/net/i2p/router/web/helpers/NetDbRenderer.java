@@ -1132,8 +1132,8 @@ class NetDbRenderer {
                             buf.append(" href=\"/netdb?ipv6=");
                         else
                             buf.append(" href=\"/netdb?ip=");
-                        buf.append(DataHelper.stripHTML(val).replace("::", _t("n/a"))).append("\">")
-                           .append(DataHelper.stripHTML(val).replace("::", _t("n/a"))) // fix empty ipv6
+                        buf.append(DataHelper.stripHTML(val).replace("::", _t("n/a")).replace("n/a1", _t("n/a"))).append("\">")
+                           .append(DataHelper.stripHTML(val).replace("::", _t("n/a")).replace("n/a1", _t("n/a"))) // fix empty ipv6
                            .append("</a></span></span> ");
                     } else if (name.contains("port")) {
                         buf.append("<span class=\"nowrap\"><span class=\"netdb_name\">")
