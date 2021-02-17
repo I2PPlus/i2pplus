@@ -10116,11 +10116,13 @@ th.queue {
   color: #900 !important;
 }
 
-#profilelist td:nth-child(7) span {
+#profilelist td:nth-child(8) span, #profilelist td:nth-child(9) span {
   min-width: 40px;
+  display: inline-block;
+  text-align: right;
 }
 
-#profilelist td:nth-child(8) span {
+#profilelist td:nth-child(9) span {
   min-width: 30px;
 }
 
@@ -12340,5 +12342,9 @@ from {
   .profilegroup::before {
     width: 18px;
     height: 14px;
+  }
+  #profilelist td:nth-child(8) span, #profilelist td:nth-child(9) span {
+  display: inline;
+  text-align: center;
   }
 }
