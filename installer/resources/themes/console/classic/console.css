@@ -5652,7 +5652,7 @@ a.viewfullentry:hover {
 .netdbentry th:first-child, .netdbentry td:first-child {
   white-space: nowrap;
   padding: 4px 6px !important;
-  text-align: left;
+  text-align: right;
 }
 
 .netdbentry td:first-child {
@@ -10257,19 +10257,19 @@ th.queue {
 #netdb ul, .netdb_addresses {
   margin: 0;
   padding: 0;
-  columns: 500px 2;
+  columns: auto;
   line-height: 120%;
 }
 
 #netdb li, #netdb li:first-child {
   margin: 1px 0;
   padding: 0 0 2px;
-  width: 100%;
   display: inline-block;
   vertical-align: middle;
 }
 
 .netdbentry tr:nth-child(2) td:last-child {
+  white-space: nowrap;
   text-align: right;
 }
 
