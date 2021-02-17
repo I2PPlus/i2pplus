@@ -1,12 +1,25 @@
-2021-02-15 zzz
- * Build: Test script fixes
- * Pull translations from Transifex
+* 2021-02-17 0.9.49+ released
+
+2021-02-16 dr|z3d
+ * Console: add new peer test configs and others to /help/advancedsettings
+
+2021-02-14 dr|z3d
+ * Console:
+   - Iconize peer groups on /profiles (fast, highcap etc)
+   - Improve space usage for extended stats for routers in NetDb
 
 2021-02-13 zzz
  * Util: Update router su3 keys
 
 2021-02-10 zzz
  * Util: Fix up KeyStoreUtil CLI
+
+2021-02-09 dr|z3d
+ * Profile Manager: exclude K/L/M/unreachable peers from fast/highcap groups
+ * Router: use highcap peers for exploratory tunnels by default
+
+2021-02-06 dr|z3d
+ * Router: use peertestjob to evict laggy routers from fast/highcap groups
 
 2021-02-06 zzz
  * Proxy: Update default jump servers
@@ -18,8 +31,15 @@
 2021-02-05 zzz
  * GeoIP update
 
+2021-02-04 dr|z3d
+ * Console: add optional Peer Test Avg readout to Congestion section
+   of sidebar (enable with routerconsole.showPeerTestAvg=true)
+
 2021-02-03 zzz
  * Tunnels: Peer selection changes
+
+2021-02-01 term99
+ * Scripts: add graceful_update script for Linux/BSD
 
 2021-01-31 zzz
  * Router:
@@ -30,6 +50,10 @@
    - Improve crashed message in event log
  * Util: Improved classification of public/local IPv6 addresses
 
+2021-01-30 dr|z3d
+ * Console: don't require advanced mode to enable dev build updates;
+   enable updating to I2P+ release builds by default
+
 2021-01-30 zzz
  * UPnP: Fix NPE (android gitlab ticket #1)
 
@@ -37,8 +61,18 @@
  * Tests: Addresses tests
  * Util: Don't allow empty string as valid IP
 
+2021-01-25 dr|z3d
+ * I2PTunnel: reduce connectDelay from 200 to 50ms
+ * NetDb: spoof part tunnel stats if > 4000 and publishing enabled
+
+2021-01-24 dr|z3d
+ * NetDb: Don't publish occasional stats to NetDb by default
+
 2021-01-24 zzz
  * Tunnels: Update profiles for tunnel peers on corrupt message at endpoint
+
+2021-01-23 dr|z3d
+ * Console: streamline bandwidth test results on /wizard
 
 2021-01-23 zzz
  * Console: New readme translations
@@ -53,11 +87,30 @@
  * SSU: Fix deadlock with router restart
  * Tests: ConvertToHash tests
 
+2021-01-19 dr|z3d
+ * Console: reduce recent profile display time from 15 to 5 mins
+
+2021-01-17 dr|z3d
+ * Router: allocate less job handlers to slower routers
+
+2021-01-16 term99
+ * i2prouter.sh: fix service installation issue on Redhat/Centos/Fedora
+
+2021-01-16 dr|z3d
+ * Router: increase max clock shift before forced restart
+
+2021-01-15 dr|z3d
+ * SusiDNS: indicate refresh is required after adding new host
+ * I2PTunnel: open add to addressbook link in new tab
+
 2021-01-14 zzz
  * Router:
    - Change default encryption type to ECIES-X25519 (proposal 156)
    - Move Sybil subsystem from console to router
    - Limit max addresses in RI
+
+2021-01-13 term99
+ * i2prouter.sh: fix start/stop/status issue on FreeBSD
 
 2021-01-13 zzz
  * Jetty: Fix URI in request logs
@@ -65,12 +118,26 @@
 2021-01-12 zzz
  * i2psnark: Don't decrement downloaded counter after receiving bad piece
 
+2021-01-12 dr|z3d
+ * Stats: standardize minumum collection period to 60s
+ * Router:
+   - refresh routers less frequently when our netdb is large
+   - increase tunnel pool threads for high performance routers
+
 2021-01-11 zzz
  * Console: Delete rrd files for no-longer-configured stats at startup
 
 2021-01-08 zzz
  * i2ptunnel: Disable shared clients (DSA) (part 2)
  * SSU: Fix bandwidth estimator deadlock (ticket #2798)
+
+2021-01-08 dr|z3d
+ * I2PTunnel: elevate thread priorities for client and servers
+
+2021-01-07 dr|z3d
+ * Console:
+   - fix update frequency persistence on /configupdate
+   - indicate if unsigned update is I2P+ in sidebar
 
 2021-01-07 zzz
  * Router: Disable reseeding and NTP in vmCommSystem
@@ -81,10 +148,17 @@
  * i2psnark: Add ability to remove I2CP options
  * SusiDNS: Hide last-modified on details page if empty
 
+2021-01-05 dr|z3d
+ * Router: elevate thread priorities for SSU/NTCP
+
 2021-01-04 zzz
  * Build:
    - Gradle build fixes
    - Update external javadoc links
+
+2021-01-04 dr|z3d
+ * Console: add tunnel build concurrency / avg build time to Tunnels
+   section on sidebar
 
 2021-01-02 zzz
  * Sybil: Reduce default threshold
@@ -96,8 +170,15 @@
    - Drop lookups with replies going to us
    - Extend lookup expire time
 
+2020-12-30 dr|z3d
+ * I2PTunnel: open 'preview' links in new tab
+
 2020-12-30 zzz
  * Ratchet: Fix N pattern for ECIES build replies
+
+2020-12-28 term99
+ * i2prouter: add graceful (restart) option
+ * eepget/eephead/i2ping: error and argument handling
 
 2020-12-29 zzz
  * Crypto: Cache AES Ciphers
@@ -138,11 +219,21 @@
  * Proxy: Move error page resources to jar
  * SSU: Westwood+ congestion control (ticket #2427)
 
+2020-12-19 dr|z3d
+ * I2PTunnel: consolidate private key / alt private key on edit page
+
 2020-12-18 zzz
  * Crypto: Fix use after free (ticket #2797)
 
 2020-12-17 zzz
  * SSU: Send subset of fragments (ticket #2427)
+
+2020-12-17 dr|z3d
+ * Console: in advanced mode, check router.config every 1.5 minutes
+ * Router:
+   - don't log or run floodfill monitor job if we've manually
+     configured floodfill status
+   - larger bloom filter for > 2048MB routers if >= 6 cores
 
 2020-12-16 zzz
  * NetDB: Fix rare floodfill monitor NPE
@@ -154,6 +245,9 @@
    - Allow encrypted messages to ECIES routers
    - Allow ECIES routers to become floodfill
    - Add XDH factory to VM comm system for tests
+
+2020-12-07 dr|z3d
+ * Router: increase size of bloom filter for >= 1024MB routers
 
 2020-12-06 zzz
  * Console, webapps: Move web resources to wars
