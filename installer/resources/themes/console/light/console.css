@@ -8735,6 +8735,12 @@ table#schedjobs {
   min-width: 20px;
 }
 
+#profilelist td:nth-child(6) span {
+  min-width: 48px;
+  display: inline-block;
+  text-align: right;
+}
+
 #floodfills .percentBarOuter, #floodfills .percentBarText,
 #tunnels .percentBarOuter, #tunnels .percentBarText {
   display: inline-block;
