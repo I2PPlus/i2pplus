@@ -4337,14 +4337,36 @@ h3#servicedebug a, h3#graphinfo a, h3#browseronstart a {
   height: 16px;
   float: right;
   display: inline-block;
-  background: url(/themes/console/images/svg/configure.svg) center center no-repeat;
+  background: url(/themes/console/light/images/configure.svg) center center no-repeat;
   background-size: 16px 16px;
   content: "";
 }
 
+.main#tunnels h3 a[href^="/configtunnels#"]:hover::after,
+.main#tunnels h3 a[href$="i2ptunnelmgr"]:hover::after, #logs h3 a:hover::after {
+  background: url(/themes/console/light/images/configure_hover.svg) center center no-repeat;
+  background-size: 16px 16px;
+}
+
 #logs h3 a.delete::after {
   margin-left: 6px;
-  background: url(/themes/console/images/buttons/delete.png) center center no-repeat;
+  background: url(/themes/console/light/images/close.svg) center center no-repeat;
+  background-size: 16px 16px;
+}
+
+#logs h3 a.delete:hover::after {
+  background: url(/themes/console/light/images/close_hover.svg) center center no-repeat;
+  background-size: 16px 16px;
+}
+
+#logs h3 a.delete::before {
+  content: "";
+  display: inline-block;
+  width: 1px;
+  height: 24px;
+  background: #aaafce;
+  vertical-align: middle;
+  margin: -6px 0 -6px 6px;
 }
 
 #version a::after {
@@ -10116,11 +10138,13 @@ th.queue {
   color: #900 !important;
 }
 
-#profilelist td:nth-child(7) span {
+#profilelist td:nth-child(8) span, #profilelist td:nth-child(9) span {
   min-width: 40px;
+  display: inline-block;
+  text-align: right;
 }
 
-#profilelist td:nth-child(8) span {
+#profilelist td:nth-child(9) span {
   min-width: 30px;
 }
 
@@ -12340,5 +12364,9 @@ from {
   .profilegroup::before {
     width: 18px;
     height: 14px;
+  }
+  #profilelist td:nth-child(8) span, #profilelist td:nth-child(9) span {
+  display: inline;
+  text-align: center;
   }
 }
