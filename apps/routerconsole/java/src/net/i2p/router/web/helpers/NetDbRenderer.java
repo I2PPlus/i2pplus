@@ -1127,9 +1127,12 @@ class NetDbRenderer {
                         buf.append("<span class=\"nowrap\"><span class=\"netdb_name\">")
                            .append(_t(DataHelper.stripHTML(name))).append(":</span> ")
                            .append("<span class=\"netdb_info host\">").append("<a title=\"")
-                           .append(_t("Show all routers with this address in the NetDb")).append("\" ")
-                           .append(" href=\"/netdb?ip=")
-                           .append(DataHelper.stripHTML(val).replace("::", _t("n/a"))).append("\">")
+                           .append(_t("Show all routers with this address in the NetDb")).append("\" ");
+                        if (DataHelper.stripHTML(val).contains(":"))
+                            buf.append(" href=\"/netdb?ipv6=");
+                        else
+                            buf.append(" href=\"/netdb?ip=");
+                        buf.append(DataHelper.stripHTML(val).replace("::", _t("n/a"))).append("\">")
                            .append(DataHelper.stripHTML(val).replace("::", _t("n/a"))) // fix empty ipv6
                            .append("</a></span></span> ");
                     } else if (name.contains("port")) {
@@ -1151,24 +1154,96 @@ class NetDbRenderer {
                     buf.append("</li>\n");
                 }
             }
-                buf.append("</ul>");
+            buf.append("</ul>\n");
             buf.append("</td>\n</tr>\n");
-         }
-        if (full) {
+        }
+        if (full && !isUs) {
+            PeerProfile prof = _context.profileOrganizer().getProfileNonblocking(info.getHash());
+            if (prof != null) {
+                buf.append("<tr>\n<td><b>" + _t("Stats") + ":</b><td colspan=\"2\">\n<ul class=\"netdbStats\">");
+                Map<Object, Object> p = info.getOptionsMap();
+                for (Map.Entry<Object, Object> e : p.entrySet()) {
+                    String key = (String) e.getKey();
+                    String netDbKey = DataHelper.stripHTML(key)
+                        .replace("caps", "<li class=\"cap_stat hide\" hidden><b>"  + _t("Capabilities")) // hide caps as already in the header
+                        .replace("router.version", "<li class=\"hide\" hidden><b>" + _t("Version")) // hide version as already in the header
+                        .replace("coreVersion", "<li class=\"hide\" hidden><b>"    + _t("Core version")) // do we need this?
+                        .replace("netdb.", "")
+                        .replace("netId", "<li class=\"hide\" hidden><b>" + _t("Network ID"))
+                        .replace("knownLeaseSets", "<li><b>" + _t("LeaseSets"))
+                        .replace("knownRouters", "<li><b>" + _t("Routers"))
+                        .replace("stat_", "")
+                        .replace("uptime", "<li><b>" + _t("Uptime"))
+                        // TODO: place family entries underneath general network stats
+                        .replace("family.", "Family ")
+                        // hide family name in css as it's already displayed above
+                        .replace("family", "<li class=\"longstat fam hide\" hidden><b>" + _t("Family"))
+                        .replace("Family key", "<li class=\"longstat fam\"><b>" + _t("Family Key"))
+                        .replace("Family sig", "<li class=\"longstat fam\"><b>" + _t("Family Sig"))
+                        .replace("tunnel.buildExploratoryExpire.60m",  "<li class=\"longstat\"><b>"   + _t("Exploratory tunnels expire (1h)"))
+                        .replace("tunnel.buildExploratoryReject.60m",  "<li class=\"longstat\"><b>"   + _t("Exploratory tunnels reject (1h)"))
+                        .replace("tunnel.buildExploratorySuccess.60m", "<li class=\"longstat\"><b>"   + _t("Exploratory tunnels build success (1h)"))
+                        .replace("tunnel.buildClientExpire.60m",       "<li class=\"longstat \"><b>"  + _t("Client tunnels expire (1h)"))
+                        .replace("tunnel.buildClientReject.60m",       "<li class=\"longstat\"><b>"   + _t("Client tunnels reject (1h)"))
+                        .replace("tunnel.buildClientSuccess.60m",      "<li class=\"longstat\"><b>"   + _t("Client tunnels build success (1h)"))
+                        .replace("tunnel.participatingTunnels.60m",    "<li class=\"longstat\"><b>"   + _t("Participating tunnels (1h)"))
+                        .replace("tunnel.participatingTunnels.60s",    "<li class=\"longstat\"><b>"   + _t("Participating tunnels (60s)"))
+                        .replace("stat_bandwidthSendBps.60m",          "<li class=\"longstat\"><b>"   + _t("Bandwidth send rate (1h)"))
+                        .replace("stat_bandwidthReceiveBps.60m",       "<li class=\"longstat\"><b>"   + _t("Bandwidth receive rate (1h)"));
+                    buf.append(netDbKey);
+                    String val = (String) e.getValue();
+                    String netDbValue = DataHelper.stripHTML(val)
+                       .replace("XO", "X")
+                       .replace("PO", "P")
+                       .replace("R", "")
+                       .replace("U", "")
+                       .replace(";", " <span class=\"bullet\">&bullet;</span> ")
+                       .replace("&bullet;</span> 555", "&bullet;</span> " +_t("n/a"));
+                    buf.append(":</b> ");
+                    buf.append(netDbValue)
+                       .append("</li>\n");
+                }
+                long now = _context.clock().now();
+                long heard = prof.getFirstHeardAbout();
+                if (heard > 0) {
+                    long peerAge = Math.max(now - heard, 1);
+                    buf.append("<li><b>").append(_t("First heard about")).append(":</b> ")
+                       .append(_t("{0} ago", DataHelper.formatDuration2(peerAge))).append("</li>\n");
+                } else {
+                    buf.append("<li><b>").append(_t("First heard about")).append(":</b> ")
+                       .append(_t("n/a")).append("</li>\n");
+                }
+                heard = prof.getLastHeardAbout();
+                if (heard > 0) {
+                    long peerAge = Math.max(now - heard, 1);
+                    buf.append("<li><b>").append(_t("Last heard about")).append(":</b> ")
+                       .append(_t("{0} ago", DataHelper.formatDuration2(peerAge))).append("</li>\n");
+                } else {
+                    buf.append("<li><b>").append(_t("Last heard about")).append(":</b> ")
+                       .append(_t("n/a")).append("</li>\n");
+                }
+                heard = prof.getLastHeardFrom();
+                if (heard > 0) {
+                    long peerAge = Math.max(now - heard, 1);
+                    buf.append("<li><b>").append(_t("Last heard from")).append(":</b> ")
+                       .append(_t("{0} ago", DataHelper.formatDuration2(peerAge))).append("</li>\n");
+                } else {
+                    buf.append("<li><b>").append(_t("Last heard from")).append(":</b> ")
+                       .append(_t("n/a")).append("</li>\n");
+                }
+                buf.append("</ul>\n</td>\n</tr>\n");
+            }
+        } else if (full) {
             buf.append("<tr>\n<td><b>" + _t("Stats") + ":</b><td colspan=\"2\">\n<ul class=\"netdbStats\">");
             Map<Object, Object> p = info.getOptionsMap();
             for (Map.Entry<Object, Object> e : p.entrySet()) {
                 String key = (String) e.getKey();
                 String netDbKey = DataHelper.stripHTML(key)
-                    .replace("caps", "<li class=\"cap_stat hide\" hidden><b>" + _t("Capabilities")) // hide caps as already in the header
+                    .replace("caps", "<li class=\"cap_stat hide\" hidden><b>"  + _t("Capabilities")) // hide caps as already in the header
                     .replace("router.version", "<li class=\"hide\" hidden><b>" + _t("Version")) // hide version as already in the header
-                    .replace("coreVersion", "<li class=\"hide\" hidden><b>" + _t("Core version")) // do we need this?
-                    .replace("netdb.", "");
-                if (!isUs)
-                    netDbKey = netDbKey.replace("netId", "<li class=\"hide\" hidden><b>" + _t("Network ID"));
-                else
-                    netDbKey = netDbKey.replace("netId", "<hr><li><b>" + _t("Network ID")); // only show for our own id
-                netDbKey = netDbKey
+                    .replace("coreVersion", "<li class=\"hide\" hidden><b>"    + _t("Core version")) // do we need this?
+                    .replace("netdb.", "")
+                    .replace("netId", "<hr><li><b>" + _t("Network ID")) // only show for our own id
                     .replace("knownLeaseSets", "<li><b>" + _t("LeaseSets"))
                     .replace("knownRouters", "<li><b>" + _t("Routers"))
                     .replace("stat_", "")
@@ -1179,69 +1254,32 @@ class NetDbRenderer {
                     .replace("family", "<li class=\"longstat fam hide\" hidden><b>" + _t("Family"))
                     .replace("Family key", "<li class=\"longstat fam\"><b>" + _t("Family Key"))
                     .replace("Family sig", "<li class=\"longstat fam\"><b>" + _t("Family Sig"))
-//                    .replace("tunnel.buildExploratoryExpire.60m",  "<hr id=\"expl\"><li class=\"longstat\"><b>"   + _t("Exploratory tunnels expire (1h)"))
                     .replace("tunnel.buildExploratoryExpire.60m",  "<li class=\"longstat\"><b>"   + _t("Exploratory tunnels expire (1h)"))
-                    .replace("tunnel.buildExploratoryReject.60m",  "<li class=\"longstat\"><b>"       + _t("Exploratory tunnels reject (1h)"))
-                    .replace("tunnel.buildExploratorySuccess.60m", "<li class=\"longstat\"><b>"       + _t("Exploratory tunnels build success (1h)"))
-//                    .replace("tunnel.buildClientExpire.60m",       "<hr><li class=\"longstat \"><b>"  + _t("Client tunnels expire (1h)"))
+                    .replace("tunnel.buildExploratoryReject.60m",  "<li class=\"longstat\"><b>"   + _t("Exploratory tunnels reject (1h)"))
+                    .replace("tunnel.buildExploratorySuccess.60m", "<li class=\"longstat\"><b>"   + _t("Exploratory tunnels build success (1h)"))
                     .replace("tunnel.buildClientExpire.60m",       "<li class=\"longstat \"><b>"  + _t("Client tunnels expire (1h)"))
-                    .replace("tunnel.buildClientReject.60m",       "<li class=\"longstat\"><b>"       + _t("Client tunnels reject (1h)"))
-                    .replace("tunnel.buildClientSuccess.60m",      "<li class=\"longstat\"><b>"       + _t("Client tunnels build success (1h)"))
-                    .replace("tunnel.participatingTunnels.60m",    "<li class=\"longstat\"><b>"       + _t("Participating tunnels (1h)"))
-                    .replace("tunnel.participatingTunnels.60s",    "<li class=\"longstat\"><b>"       + _t("Participating tunnels (60s)"))
-                    .replace("stat_bandwidthSendBps.60m",          "<li class=\"longstat\"><b>"       + _t("Bandwidth send rate (1h)"))
-                    .replace("stat_bandwidthReceiveBps.60m",       "<li class=\"longstat\"><b>"       + _t("Bandwidth receive rate (1h)"));
-                buf.append(netDbKey);
-                String val = (String) e.getValue();
-                String netDbValue = DataHelper.stripHTML(val)
-                   .replace("XO", "X")
-                   .replace("PO", "P")
-                   .replace("R", "")
-                   .replace("U", "")
-                   .replace(";", " <span class=\"bullet\">&bullet;</span> ")
-                   .replace("&bullet;</span> 555",  "&bullet;</span> " +_t("n/a"));
-                buf.append(":</b> ");
-                buf.append(netDbValue)
-                   .append("</li>\n");
-            }
-            long now = _context.clock().now();
-            if (!isUs) {
-                PeerProfile prof = _context.profileOrganizer().getProfileNonblocking(info.getHash());
-                if (prof != null) {
-                    long heard = prof.getFirstHeardAbout();
-                    if (heard > 0) {
-                        long peerAge = Math.max(now - heard, 1);
-//                        buf.append("<hr id=\"hrd\">\n<li><b>").append(_t("First heard about")).append(":</b> ")
-                        buf.append("<li><b>").append(_t("First heard about")).append(":</b> ")
-                           .append(_t("{0} ago", DataHelper.formatDuration2(peerAge))).append("</li>\n");
-                    } else {
-//                        buf.append("<hr id=\"hrd\">\n<li><b>").append(_t("First heard about")).append(":</b> ")
-                        buf.append("<li><b>").append(_t("First heard about")).append(":</b> ")
-                           .append(_t("n/a")).append("</li>\n");
-                    }
-                    heard = prof.getLastHeardAbout();
-                    if (heard > 0) {
-                        long peerAge = Math.max(now - heard, 1);
-                        buf.append("<li><b>").append(_t("Last heard about")).append(":</b> ")
-                           .append(_t("{0} ago", DataHelper.formatDuration2(peerAge))).append("</li>\n");
-                    } else {
-                        buf.append("<li><b>").append(_t("Last heard about")).append(":</b> ")
-                           .append(_t("n/a")).append("</li>\n");
-                    }
-                    heard = prof.getLastHeardFrom();
-                    if (heard > 0) {
-                        long peerAge = Math.max(now - heard, 1);
-                        buf.append("<li><b>").append(_t("Last heard from")).append(":</b> ")
-                           .append(_t("{0} ago", DataHelper.formatDuration2(peerAge))).append("</li>\n");
-                    } else {
-                        buf.append("<li><b>").append(_t("Last heard from")).append(":</b> ")
-                           .append(_t("n/a")).append("</li>\n");
-                    }
-                }
+                    .replace("tunnel.buildClientReject.60m",       "<li class=\"longstat\"><b>"   + _t("Client tunnels reject (1h)"))
+                    .replace("tunnel.buildClientSuccess.60m",      "<li class=\"longstat\"><b>"   + _t("Client tunnels build success (1h)"))
+                    .replace("tunnel.participatingTunnels.60m",    "<li class=\"longstat\"><b>"   + _t("Participating tunnels (1h)"))
+                    .replace("tunnel.participatingTunnels.60s",    "<li class=\"longstat\"><b>"   + _t("Participating tunnels (60s)"))
+                    .replace("stat_bandwidthSendBps.60m",          "<li class=\"longstat\"><b>"   + _t("Bandwidth send rate (1h)"))
+                    .replace("stat_bandwidthReceiveBps.60m",       "<li class=\"longstat\"><b>"   + _t("Bandwidth receive rate (1h)"));
+                    buf.append(netDbKey);
+                    String val = (String) e.getValue();
+                    String netDbValue = DataHelper.stripHTML(val)
+                       .replace("XO", "X")
+                       .replace("PO", "P")
+                       .replace("R", "")
+                       .replace("U", "")
+                       .replace(";", " <span class=\"bullet\">&bullet;</span> ")
+                       .replace("&bullet;</span> 555", "&bullet;</span> " +_t("n/a"));
+                    buf.append(":</b> ");
+                    buf.append(netDbValue)
+                       .append("</li>\n");
             }
             buf.append("</ul>\n</td>\n</tr>\n");
-       }
-       buf.append("</table>\n");
+        }
+        buf.append("</table>\n");
     }
 
     private static final int SSU = 1;
