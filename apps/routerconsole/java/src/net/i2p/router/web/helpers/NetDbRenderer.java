@@ -1140,9 +1140,10 @@ class NetDbRenderer {
                                     buf.append(DataHelper.stripHTML(val).substring(0,4));
                                 else
                                     buf.append(DataHelper.stripHTML(val));
+                            } else {
+                                buf.append(DataHelper.stripHTML(val));
                             }
                             buf.append("\">").append(DataHelper.stripHTML(val)).append("</a>");
-                            buf.append(DataHelper.stripHTML(val)).append("\">").append(DataHelper.stripHTML(val)).append("</a>");
                         }
                         buf.append("</span></span> ");
                     } else if (name.contains("port")) {
