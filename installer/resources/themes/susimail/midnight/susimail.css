@@ -929,6 +929,7 @@ div#emptymailbox {
   width: 100%;
   border-top: 1px solid #27235c;
   background: #000010;
+  user-select: none;
 }
 
 .topbuttons .pagenav {
@@ -1373,6 +1374,14 @@ input[type=submit][disabled], input[type=submit][disabled]:hover, input[type=sub
   box-shadow: none;
   cursor: default;
   mix-blend-mode: luminosity;
+}
+
+#messagenav input {
+  background-size: 16px 16px, 100% 100% !important;
+}
+
+input:disabled {
+  pointer-events: none;
 }
 
 /* end pagenav */

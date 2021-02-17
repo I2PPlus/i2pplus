@@ -14685,7 +14685,7 @@ h1, .main h2, h4.app, h4.app2, .main h3 {
 #profilelist .fast.integrated {
   background: url(/themes/console/images/svg/fast.svg) left center no-repeat,
               url(/themes/console/images/svg/highcap.svg) center center no-repeat,
-              url(/themes/console/images/svg/integrated.svg) right center no-repeat;
+              url(/themes/console/images/svg/integrated.svg) right center no-repeat !important;
 }
 
 #profilelist .highcap {
@@ -14742,5 +14742,8 @@ h1, .main h2, h4.app, h4.app2, .main h3 {
   .profilegroup::before {
     width: 18px;
     height: 14px;
+  }
+  #profilelist td:nth-last-child(2) span, #profilelist td:nth-last-child(3) span, #profilelist td:nth-last-child(5) span {
+    text-align: center !important;
   }
 }
