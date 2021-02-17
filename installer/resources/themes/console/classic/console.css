@@ -12283,7 +12283,7 @@ from {
 #profilelist .fast.integrated {
   background: url(/themes/console/images/svg/fast.svg) left center no-repeat,
               url(/themes/console/images/svg/highcap.svg) center center no-repeat,
-              url(/themes/console/images/svg/integrated.svg) right center no-repeat;
+              url(/themes/console/images/svg/integrated.svg) right center no-repeat !important;
 }
 
 #profilelist .highcap {
