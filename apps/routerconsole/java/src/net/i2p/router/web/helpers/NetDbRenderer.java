@@ -1030,9 +1030,12 @@ class NetDbRenderer {
                    .append("\" title=\"").append(_t("Show all members of the {0} family in NetDb", family))
                    .append("\" alt=\"[Family routers]\"><img src=\"/themes/console/images/info/family.png\" width=\"16\" height=\"16\"></a>");
             }
-            buf.append("<a class=\"viewprofile\" href=\"/viewprofile?peer=").append(hash)
-               .append("\" title=\"").append(_t("View profile"))
-               .append("\" alt=\"[").append(_t("View profile")).append("]\"><img src=\"/themes/console/images/buttons/profile.png\"></a>");
+            PeerProfile prof = _context.profileOrganizer().getProfileNonblocking(info.getHash());
+            if (prof != null) {
+                buf.append("<a class=\"viewprofile\" href=\"/viewprofile?peer=").append(hash)
+                   .append("\" title=\"").append(_t("View profile"))
+                   .append("\" alt=\"[").append(_t("View profile")).append("]\"><img src=\"/themes/console/images/buttons/profile.png\"></a>");
+            }
             if (!full) {
                 buf.append("<a class=\"viewfullentry\" href=\"/netdb?r=").append(hash.substring(0, 6))
                    .append("\" title=\"").append(_t("View extended router info"))
@@ -1140,9 +1143,10 @@ class NetDbRenderer {
                                     buf.append(DataHelper.stripHTML(val).substring(0,4));
                                 else
                                     buf.append(DataHelper.stripHTML(val));
+                            } else {
+                                buf.append(DataHelper.stripHTML(val));
                             }
                             buf.append("\">").append(DataHelper.stripHTML(val)).append("</a>");
-                            buf.append(DataHelper.stripHTML(val)).append("\">").append(DataHelper.stripHTML(val)).append("</a>");
                         }
                         buf.append("</span></span> ");
                     } else if (name.contains("port")) {
