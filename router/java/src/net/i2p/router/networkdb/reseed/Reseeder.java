@@ -244,7 +244,8 @@ public class Reseeder {
                     _t("Imported {0} router infos ({1} errors).", fetched, errors));
             }
             System.err.println("Reseed got " + fetched + " router infos from file with " + errors + " errors");
-            _context.router().eventLog().addEvent(EventLog.RESEED, "imported " + fetched + " router infos from file");
+            if (fetched > 0)
+                _context.router().eventLog().addEvent(EventLog.RESEED, "imported " + fetched + " router infos from file");
             return fetched;
         } finally {
             try { in.close(); } catch (IOException ioe) {}
@@ -409,7 +410,8 @@ public class Reseeder {
             _isRunning = false;
             // ReseedChecker will set timer to clean up
             //_checker.setStatus("");
-            _context.router().eventLog().addEvent(EventLog.RESEED, Integer.toString(total) + " router infos acquired");
+            if (total > 0)
+                _context.router().eventLog().addEvent(EventLog.RESEED, Integer.toString(total) + " router infos acquired");
         }
 
         /**
