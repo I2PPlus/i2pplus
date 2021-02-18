@@ -14382,13 +14382,15 @@ h1, .main h2, h4.app, h4.app2, .main h3 {
 #profilelist th:nth-child(4), #profilelist td:nth-child(4) {
   width: 15% !important;
 }
+
 #profilelist th:nth-child(5), #profilelist td:nth-child(5) {
   width: 10% !important;
   min-width: 56px;
   white-space: nowrap !important;
 }
 
-#profilelist .fast, #profilelist .highcap, #profilelist .integrated, #profilelist .standard {
+#profilelist .fast, #profilelist .highcap, #profilelist .integrated, #profilelist .standard,
+#profilelist .fast.integrated, #profilelist .highcap.integrated, #profilelist .standard.integrated {
   width: 56px;
   height: 16px;
   display: inline-block;
@@ -14450,21 +14452,19 @@ h1, .main h2, h4.app, h4.app2, .main h3 {
 }
 
 @media screen and (max-width: 1200px) {
-  #profilelist .fast, #profilelist .highcap, #profilelist .integrated, #profilelist .standard {
+  #profilelist .fast, #profilelist .highcap, #profilelist .integrated, #profilelist .standard,
+  #profilelist .fast.integrated, #profilelist .highcap.integrated, #profilelist .standard.integrated {
     width: 50px;
-    height: 16px;
+    height: 14px;
     background-size: 14px 14px !important;
   }
   #profilelist .fast, #profilelist .highcap.integrated, #profilelist .standard.integrated {
     background-position: calc(50% - 8px) center, calc(50% + 8px) center !important;
+    background-size: 14px 14px !important;
   }
   .profilegroup::before {
     width: 18px;
     height: 14px;
-  }
-  #profilelist th {
-    padding: 3px 3px 5px;
-    white-space: normal !important;
   }
   #profilelist td:nth-last-child(2) span, #profilelist td:nth-last-child(3) span, #profilelist td:nth-last-child(5) span {
     text-align: center !important;
