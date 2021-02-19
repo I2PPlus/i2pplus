@@ -4660,28 +4660,32 @@ td input[type=image]::after {
 }
 
 @media screen and (max-width: 1000px) {
-th input[type=image]::after {
-  width: 18px;
-}
+  th input[type=image]::after {
+    width: 18px;
+  }
 
-td input[type=image]::after {
-  width: 10px;
-}
+  td input[type=image]::after {
+    width: 10px;
+  }
 
-#closelog img::after {
-  height: 8px;
-}
+  #closelog img::after {
+    height: 8px;
+  }
 
-.canhide {
-  display: none;
-}
+  .canhide {
+    display: none;
+  }
 
-.snarkTorrents .snarkTorrentStatus {
-  width: 0 !important;
-  min-width: 0 !important;
-  padding: 0 !important;
-  font-size: 0 !important;
-}
+  .snarkTorrents .snarkTorrentStatus, .snarkTorrents .snarkTrackerDetails {
+    padding: 0 !important;
+    width: 0 !important;
+    min-width: 0 !important;
+    font-size: 0 !important;
+  }
+
+  .snarkTrackerDetails img {
+    display: none;
+  }
 }
 
 /* end header/column resize mitigation */

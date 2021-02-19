@@ -11862,12 +11862,19 @@ h3#pconfig {
 
 .signingkey {
   margin: 2px 0 2px 2px;
-  padding: 2px 4px 2px 16px;
+  padding: 2px 4px 2px 18px;
   display: inline-block;
   color: #ee9 !important;
-  background: #020 url(/themes/console/images/buttons/cryptokey.png) 1px center no-repeat;
-  background: url(/themes/console/images/buttons/cryptokey.png) 1px center no-repeat, linear-gradient(to bottom, #020, #010);
+  background: #020 url(/themes/console/images/buttons/cryptokey.png) 3px center no-repeat;
+  background: url(/themes/console/images/buttons/cryptokey.png) 3px center no-repeat, linear-gradient(to bottom, #020, #010);
   background-size: 14px 14px, 100% 100%;
+}
+
+.signingkey.encryption {
+  padding-left: 20px;
+  background: #020 url(/themes/console/images/svg/lock.svg) 5px center no-repeat;
+  background: url(/themes/console/images/svg/lock.svg) 5px center no-repeat, linear-gradient(to bottom, #020, #010);
+  background-size: 12px 12px, 100% 100%;
 }
 
 .leaseset th:last-child, .leasesets_container .leaseset tr:nth-child(2) {

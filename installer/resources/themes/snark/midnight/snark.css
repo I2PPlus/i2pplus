@@ -4283,7 +4283,7 @@ th.snarkGraphicStatus img, td.snarkGraphicStatus img {
 }
 
 td.snarkTrackerDetails img {
-  max-height: 16px;
+  height: 16px;
 }
 
 /* custom radios/checkboxes to enforce color scheme when OS widgets are non-standard  */
@@ -4416,12 +4416,23 @@ tr:not(.peerinfo) .snarkTorrentDownloaded .percentBarText::after {
 }
 
 @media screen and (max-width: 1000px) {
-.snarkTorrentOdd:not(.peerinfo) .snarkTorrentDownloaded .percentBarText,
-.snarkTorrentEven:not(.peerinfo) .snarkTorrentDownloaded .percentBarText {
-  min-width: 120px !important;
-  top: -22px;
-  left: -22px;
-}
+  .snarkTorrentOdd:not(.peerinfo) .snarkTorrentDownloaded .percentBarText,
+  .snarkTorrentEven:not(.peerinfo) .snarkTorrentDownloaded .percentBarText {
+    min-width: 120px !important;
+    top: -22px;
+    left: -22px;
+  }
+
+  .snarkTorrents .snarkTorrentStatus, .snarkTorrents .snarkTrackerDetails {
+    padding: 0 !important;
+    width: 0 !important;
+    min-width: 0 !important;
+    font-size: 0 !important;
+  }
+
+  .snarkTrackerDetails img {
+    display: none;
+  }
 }
 /* end alternative popup */
 

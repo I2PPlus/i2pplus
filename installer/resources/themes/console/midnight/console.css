@@ -3557,7 +3557,7 @@ code {
   color: #393;
 }
 
-a:link, .routersummary a:visited, h2 a:link, #news #newsDisplay a:visited, #graphopts a:visited, .h3navlinks a:visited {
+a:link, .routersummary a:visited, h2 a:link, #news #newsDisplay a:visited, #graphopts a:visited, .h3navlinks a:visited, .signingkey a:visited {
   color: #7972d1;
   text-decoration: none;
   font-weight: bold;
@@ -3572,14 +3572,14 @@ a:visited {
   word-wrap: break-word;
 }
 
-a:hover, a:focus, .h3navlinks a:hover, .h3navlinks a:focus, a:hover .b32, a:focus .b32 {
+a:hover, a:focus, .h3navlinks a:hover, .h3navlinks a:focus, a:hover .b32, a:focus .b32, .signingkey a:hover, .signingkey a:focus {
   color: #bf2295;
   text-decoration: none;
   font-weight: bold;
   word-wrap: break-word;
 }
 
-a:active, .h3navlinks a:active, a:active .b32 {
+a:active, .h3navlinks a:active, a:active .b32, .signingkey a:active {
   color: #851768 !important;
 }
 
@@ -11798,13 +11798,20 @@ th .version {
 
 .signingkey {
   margin: 2px 0;
-  padding: 2px 4px 2px 15px;
+  padding: 2px 4px 2px 16px;
   display: inline-block;
   font-size: 90%;
   border: 1px solid #113;
   border-radius: 2px;
-  background: #113 url(/themes/console/images/buttons/cryptokey.png) 2px center no-repeat;
-  background: url(/themes/console/images/buttons/cryptokey.png) 2px center no-repeat, linear-gradient(to bottom, #113, #112);
+  background: #113 url(/themes/console/images/buttons/cryptokey.png) 3px center no-repeat;
+  background: url(/themes/console/images/buttons/cryptokey.png) 3px center no-repeat, linear-gradient(to bottom, #113, #112);
+  background-size: 12px 12px, 100% 100%;
+}
+
+.signingkey.encryption {
+  padding-left: 18px;
+  background: #020 url(/themes/console/images/svg/lock.svg) 4px center no-repeat;
+  background: url(/themes/console/images/svg/lock.svg) 4px calc(50% - 1px) no-repeat, linear-gradient(to bottom, #113, #112);
   background-size: 12px 12px, 100% 100%;
 }
 
