@@ -72,10 +72,6 @@ table.book th {
   text-align: left;
 }
 
-#host_list th.names {
-  padding-left: 39px !important;
-}
-
 .book th:last-child {
   background: url(/themes/console/images/buttons/delete.png) center calc(50% + 2px) no-repeat, linear-gradient(to bottom, #fff 50%, #eff2ff 50%);
 }
@@ -88,23 +84,6 @@ table.book td:last-child {
   padding: 0 5px;
   width: 36px;
   white-space: no-wrap;
-  text-align: center;
-}
-
-table.book td:first-child {
-  width: 200px;
-  white-space: nowrap;
-}
-
-table.book td:nth-child(2) {
-  padding-left: 10px;
-  width: 30px;
-  white-space: nowrap;
-}
-
-.book td:nth-child(3) {
-  padding: 2px 20px 2px 0 !important;
-  width: 20px;
   text-align: center;
 }
 
@@ -898,25 +877,26 @@ p.book {
 
 /* end host details */
 
-.names img {
-  margin: 1px 10px 1px -2px;
+.info img {
+  margin: 2px 0;
   padding: 1px;
   width: 20px;
   height: 20px;
   vertical-align: middle;
+  image-rendering: crisp-edges;
 }
 
-.names img[src^="/imagegen"] {
+.info img[src^="/imagegen"] {
   border: 1px solid #aaafce;
   border-radius: 2px;
   background: #fff;
 }
 
-.names img:hover, .names a:focus img {
+.info img:hover, .info a:focus img {
   filter: drop-shadow(0 0 1px #f60) !important;
 }
 
-.names a:active img, .names a:focus img {
+.info a:active img, .info a:focus img {
   transform: rotate(45deg) scale(0.8);
   transition: ease all 0.1s 0s;
 }
@@ -927,19 +907,27 @@ p.book {
   font-size: 9pt;
 }
 
-#host_list th:first-child,
-#host_list td:first-child {
+#host_list td {
+  border: 1px solid #ced1e3;
+}
+
+#host_list .info {
+  width: 1%;
+  text-align: center !important;
+}
+
+#host_list .names {
   width: 150px;
   width: 30%;
   white-space: nowrap;
   padding-left: 5px;
 }
-
-#host_list th:first-child {
-  padding-left: 39px;
+#host_list .names a {
+  width: 100%;
+  display: inline-block;
 }
 
-#host_list td:last-child {
+#host_list td.checkbox {
   width: 16px;
   white-space: nowrap;
   font-weight: bold;
@@ -947,34 +935,30 @@ p.book {
 
 #host_list td.b32link, #host_list td.helper {
   padding: 0 5px !important;
-  width: 8%;
+  width: 5%;
+  min-width: 72px;
   white-space: nowrap;
   text-align: center;
 }
 
-#host_list td:nth-child(2) a:not(old) {
+#host_list td.b32link a:not(old), #host_list td.helper a:not(old) {
+  width: 100%;
+  display: inline-block;
   font-size: 0 !important;
 }
 
-#host_list td:nth-child(2) a::after, #host_list td:nth-child(3) a::after, #host_list td:nth-child(4) a::after {
+#host_list td.b32link a::after, #host_list td.helper a::after, #host_list td.destinations a::after {
   opacity: .8;
   vertical-align: middle;
 }
 
-#host_list td:nth-child(2) a:hover::after, #host_list td:nth-child(2) a:focus::after,
-#host_list td:nth-child(3) a:hover::after, #host_list td:nth-child(3) a:focus::after,
-#host_list td:nth-child(4) a:hover::after, #host_list td:nth-child(4) a:focus::after {
+#host_list td.b32link a:hover::after, #host_list td.b32link a:focus::after,
+#host_list td.helper a:hover::after, #host_list td.helper a:focus::after,
+#host_list td.destinations a:hover::after, #host_list td.destinations a:focus::after {
   opacity: 1;
 }
 
-/*#host_list td:nth-child(2) a::after {
-  content: url(/themes/console/images/buttons/link.png);
-  text-align: center;
-  filter: drop-shadow(0 0 1px #555);
-  cursor: pointer;
-}*/
-
-#host_list td:nth-child(2) a::after {
+#host_list .b32link a::after {
   content: "";
   width: 14px;
   height: 14px;
@@ -984,24 +968,11 @@ p.book {
   cursor: pointer;
 }
 
-/*#host_list td:nth-child(2) a::after {
-  width: 18px;
-  height: 18px;
-  background: url(/themes/susidns/images/link.svg) center center no-repeat;
-}*/
-
-#host_list td:nth-child(3) a:not(old) {
+#host_list td.helper a:not(old) {
   font-size: 0 !important;
 }
 
-/*#host_list td:nth-child(3) a::after {
-  content: url(/themes/console/images/buttons/helper.png);
-  cursor: pointer;
-  filter: drop-shadow(0 0 1px #555);
-}
-*/
-
-#host_list td:nth-child(3) a::after {
+#host_list td.helper a::after {
   content: "";
   width: 12px;
   height: 12px;
@@ -1012,7 +983,7 @@ p.book {
   transform: rotate(45deg);
 }
 
-#host_list td:nth-child(3) a[href$="AAAA"]::after {
+#host_list td.helper a[href$="AAAA"]::after {
   box-shadow: inset 0 0 0 1px #000, inset 0 0 0 2px #f00;
 }
 
@@ -1045,15 +1016,15 @@ p.book {
   text-overflow: clip;
 }
 
+#host_list td:hover {
+  box-shadow: inset 0 0 0 1px #fff;
+  background: #fec;
+}
+
 /* end hostname list */
 
 .destaddress:focus {
   background: #ffe;
-}
-
-td.b32link, td.helper, td.destinations {
-  border-left: 1px solid #ced1e3;
-  border-right: 1px solid #ced1e3;
 }
 
 td.destinations {
