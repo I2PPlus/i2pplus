@@ -10301,6 +10301,12 @@ a.keysearch {
   background-size: 12px 12px, 100% 100%;
 }
 
+.encryption a.keysearch {
+  background: #eef url(/themes/console/images/svg/lock.svg) 2px center no-repeat;
+  background: url(/themes/console/images/svg/lock.svg) 2px center no-repeat, linear-gradient(to bottom, #fff, #fafbff);
+  background-size: 12px 12px, 100% 100%;
+}
+
 .identicon {
   margin: -1px -1px -1px 8px;
   border-left: 1px solid #aaafce;
