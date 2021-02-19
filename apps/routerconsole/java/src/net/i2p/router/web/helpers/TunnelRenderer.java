@@ -10,6 +10,8 @@ import java.util.List;
 import java.util.Map;
 import java.util.Set;
 
+import java.text.DecimalFormat;
+
 import net.i2p.data.DataHelper;
 import net.i2p.data.Hash;
 import net.i2p.data.router.RouterInfo;
@@ -40,6 +42,7 @@ class TunnelRenderer {
     private final RouterContext _context;
 
     private static final int DISPLAY_LIMIT = 500;
+    private final DecimalFormat fmt = new DecimalFormat("#0.00");
 
     public TunnelRenderer(RouterContext ctx) {
         _context = ctx;
@@ -503,12 +506,12 @@ class TunnelRenderer {
 
         // count up the peers in the participating tunnels
         ObjectCounter<Hash> pc = new ObjectCounter();
-        int partCount = countParticipatingPerPeer(pc);
+        float partCount = countParticipatingPerPeer(pc);
 
         Set<Hash> peers = new HashSet(lc.objects());
         peers.addAll(pc.objects());
         List<Hash> peerList = new ArrayList(peers);
-        int peerCount = peerList.size();
+        float peerCount = peerList.size();
         Collections.sort(peerList, new CountryComparator(this._context.commSystem()));
 
         List<HopConfig> participating = _context.tunnelDispatcher().listParticipatingTunnels();
@@ -516,7 +519,8 @@ class TunnelRenderer {
         out.write("<h3 class=\"tabletitle\" id=\"peercount\">" + _t("Tunnel Count By Peer") +
                   "&nbsp;&nbsp;<a style=\"float: right;\" href=\"/tunnelpeercount\"><img src=\"/themes/console/images/buttons/update.png\"></a></h3>\n");
         out.write("<table id=\"tunnelPeerCount\" data-sortable>");
-        out.write("<thead>\n<tr><th>" + _t("Peer") + "</th><th title=\"Primary IP address\">Address</th><th title=\"Client and Exploratory Tunnels\">" + _t("Local") + "</th><th class=\"bar\">" + _t("% of total") + "</th>");
+        out.write("<thead>\n<tr><th>" + _t("Peer") + "</th><th title=\"Primary IP address\">Address</th><th title=\"Client and Exploratory Tunnels\">" +
+                  _t("Local") + "</th><th class=\"bar\">" + _t("% of total") + "</th>");
         if (!participating.isEmpty())
             out.write("<th>" + _t("Participating") + "</th><th class=\"bar\">" + _t("% of total") + "</th>");
         out.write("</tr>\n</thead>\n");
@@ -552,7 +556,7 @@ class TunnelRenderer {
                 out.write("<span class=\"percentBarOuter\"><span class=\"percentBarInner\" style=\"width:");
                 out.write("" + (lc.count(h) * 100) / tunnelCount);
                 out.write("%\"><span class=\"percentBarText\">");
-                out.write("" + (lc.count(h) * 100) / tunnelCount);
+                out.write("" + fmt.format((lc.count(h) * 100) / tunnelCount).replace(".00", ""));
                 out.write("%</span></span></span>");
             }
             if (!participating.isEmpty()) {
@@ -564,7 +568,7 @@ class TunnelRenderer {
                     out.write("<span class=\"percentBarOuter\"><span class=\"percentBarInner\" style=\"width:");
                     out.write("" + (pc.count(h) * 100) / partCount);
                     out.write("%\"><span class=\"percentBarText\">");
-                    out.write("" + (pc.count(h) * 100) / partCount);
+                    out.write("" + fmt.format((pc.count(h) * 100) / partCount).replace(".00", ""));
                     out.write("%</span></span></span>");
                 }
                 out.write("</td>");
