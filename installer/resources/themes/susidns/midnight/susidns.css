@@ -793,8 +793,7 @@ div#book, #emptybook {
 }
 
 #book table th {
-  padding: 5px 0;
-  font-size: 9pt;
+  font-size: 8.5pt;
   border-bottom: 1px solid #26235c;
   background: url(/themes/console/midnight/images/titles.png) repeat-x scroll center center #000;
   background: linear-gradient(to bottom, #080818, #000008 75%) !important;
@@ -809,7 +808,6 @@ div#book, #emptybook {
 }
 
 #book td {
-  padding: 0;
   border-bottom: 1px solid #17142f;
 }
 
@@ -869,14 +867,13 @@ div#book, #emptybook {
 }
 
 #visualid {
-  border: 1px solid #26235c;
   margin-top: -10px;
+  border: 1px solid #26235c;
   background: #001;
 }
 
 .iframed #visualid {
   margin-bottom: 20px;
-/*  border: none;*/
 }
 
 #visualid h3 {
@@ -890,12 +887,12 @@ div#book, #emptybook {
 }
 
 #visualid table {
-  width: 100%;
   margin-top: -15px;
   margin-bottom: -1px;
-  border-collapse: collapse;
+  width: 100%;
   border-left: none !important;
   border-right: none !important;
+  border-collapse: collapse;
 }
 
 #visualid td:first-child {
@@ -903,9 +900,9 @@ div#book, #emptybook {
 }
 
 #visualid td[colspan="2"] {
+  padding: 17px 9px 15px !important;
   text-align: right;
   border-top: 1px solid #26235c;
-  padding: 17px 9px 15px !important;
 }
 
 .iframed #visualid td[colspan="2"] {
@@ -913,9 +910,9 @@ div#book, #emptybook {
 }
 
 div#add, div#import {
-  border: 1px solid #26235c;
-  padding: 0 10px 15px;
   margin-top: -2px !important;
+  padding: 0 10px 15px;
+  border: 1px solid #26235c;
   background: #001;
 }
 
@@ -952,7 +949,7 @@ div#add {
   margin: 10px 0;
   padding: 0;
   font-size: 9pt !important;
-  color:#c9ceff;
+  color: #c9ceff;
   background: #000010;
 }
 
@@ -1319,10 +1316,38 @@ p.book {
 
 /* end host details */
 
-.names a[href$=".i2p/"], #host_list td.b32link a, #host_list td.helper a {
-  width: 100%;
-  display: inline-block;
-  vertical-align: middle;
+/* hostname list */
+
+#host_list {
+  margin-top: 28px;
+}
+
+#host_list th {
+  padding: 7px 5px !important;
+}
+
+#host_list td {
+  padding: 5px;
+}
+
+#host_list td:not(:first-child):not(:last-child) {
+  border-left: 1px solid #17142f;
+}
+
+.info {
+  width: 1%;
+  text-align: center;
+}
+
+#host_list .names {
+  padding-left: 10px !important;
+  width: 150px;
+  width: 30%;
+  white-space: nowrap;
+}
+
+td.names {
+  border-left: 1px solid #17142f;
 }
 
 td.names:hover, #host_list td.b32link:hover, #host_list td.helper:hover, #host_list td.destinations:hover {
@@ -1330,50 +1355,34 @@ td.names:hover, #host_list td.b32link:hover, #host_list td.helper:hover, #host_l
   background: #000 !important;
 }
 
-.names img {
-  width: 20px;
-  height: 20px;
+.info a[href$=".i2p/"], #host_list td.b32link a, #host_list td.helper a {
+  width: 100%;
+  display: inline-block;
   vertical-align: middle;
-  margin: 5px 8px 5px 0;
+}
+
+.info img {
+  margin: 2px;
   padding: 1px;
+  width: 24px;
+  height: 24px;
+  vertical-align: middle;
   border: 1px solid #334;
   border-radius: 2px;
   background: #000;
 }
 
-.names img:hover, .names a:focus img {
+.info img:hover, .names a:focus img {
   border: 1px solid #652787;
   background: #652787;
 }
 
-.names a:active img, .names a:focus img {
+.info a:active img, .info a:focus img {
   transform: rotate(45deg) scale(0.8);
   transition: ease all 0.1s 0s;
 }
 
-/* hostname list */
-
-#host_list {
-  margin-top: 28px;
-}
-
-#host_list td:not(:first-child):not(:last-child) {
-  border-left: 1px solid #17142f;
-}
-
-#host_list th:first-child,
-#host_list td:first-child {
-  width: 150px;
-  width: 30%;
-  white-space: nowrap;
-  padding-left: 5px !important;
-}
-
-#host_list th:first-child {
-  padding-left: 37px !important;
-}
-
-#host_list td:last-child {
+#host_list .checkbox {
   width: 16px;
   white-space: nowrap;
   font-weight: bold;
@@ -1381,7 +1390,7 @@ td.names:hover, #host_list td.b32link:hover, #host_list td.helper:hover, #host_l
 
 #host_list .b32link, #host_list .helper {
   width: 35px;
-  width: 8%;
+  width: 5%;
   padding: 0 5px !important;
   white-space: nowrap;
   text-align: center;
@@ -1429,7 +1438,6 @@ td.names:hover, #host_list td.b32link:hover, #host_list td.helper:hover, #host_l
 }
 
 #host_list .destaddress:focus {
-  overflow: auto !important;
   text-overflow: clip;
 }
 

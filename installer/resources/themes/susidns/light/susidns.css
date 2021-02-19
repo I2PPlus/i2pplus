@@ -498,8 +498,8 @@ a:active {
 }
 
 th {
-  padding:5px 10px;
-  font-size: 10pt;
+  padding: 5px 10px;
+  font-size: 8.5pt;
 }
 
 td {
@@ -850,11 +850,7 @@ table.book {
   width: 100%;
 }
 
-.book th:first-child {
-  padding-left: 10px;
-}
-
-.book th:last-child  {
+#host_list th.checkbox  {
   width: 16px;
   background: #fff url(../images/nuke.svg) center center no-repeat;
   background: url(../images/nuke.svg) center center no-repeat, linear-gradient(to bottom, #fcfcff 51%, #fafaff 51%, #f6f6ff 100%);
@@ -864,6 +860,7 @@ table.book {
 .book th {
   text-align: left;
   padding-left: 3px;
+  font-size: 90%;
 }
 
 .book tr:hover td, #host_details tr:hover td {
@@ -880,8 +877,8 @@ tr:hover .destaddress {
 }
 
 .book td {
-  border-top: 1px solid #ddf;
   padding: 3px;
+  border-top: 1px solid #ddf;
 }
 
 #bookmessages {
@@ -909,19 +906,14 @@ tr:hover .destaddress {
   border: 1px solid #8d8daa;
 }
 
-#host_list th:first-child,
-#host_list td:first-child {
+#host_list .names {
   width: 150px;
   width: 30%;
   white-space: nowrap;
   padding-left: 5px;
 }
 
-#host_list th:first-child {
-  padding-left: 39px;
-}
-
-#host_list td:last-child {
+#host_list .checkbox {
   width: 1%;
   white-space: nowrap;
   font-weight: bold;
@@ -1186,27 +1178,34 @@ img[src="/imagegen/id?s=256&c="], img[src="/imagegen/id?s=20&c="] {
 
 /* host list identicons */
 
-.names img {
+.info {
+  padding: 1px 4px !important;
+  width: 1%;
+  text-align: center !important;
+}
+
+.info img {
+  margin: 1px;
+  padding: 1px;
   width: 20px;
   height: 20px;
   vertical-align: middle;
-  margin: 1px 10px 1px 1px;
-  padding: 1px;
+  image-rendering: crisp-edges;
 }
 
-.names img:hover, .names a:focus img {
+.info img:hover, .info a:focus img {
   filter: drop-shadow(0 0 1px #f60) !important;
   box-shadow: 0 0 0 1px #f60;
 }
 
-.names a:active img, .names a:focus img {
+.info a:active img, .info a:focus img {
   transform: rotate(45deg) scale(0.8);
   transition: ease all 0.1s 0s;
 }
 
 /* end host list identicons */
 
-.names a[href^="http"], .helper a {
+.info a[href^="http"], .helper a {
   display: inline-block;
   width: 100%;
 }
@@ -1548,11 +1547,11 @@ form[action="addressbook"] table {
 }
 
 @media screen and (min-width: 1500px) {
-body, p, td, textarea, input, button, li, a, th, h4 {
+body, p, td, textarea, input, button, li, a, h4 {
   font-size: 10pt !important;
 }
 
-code, tt, .destaddress {
+code, tt, .destaddress, th {
   font-size: 9pt !important;
 }
 

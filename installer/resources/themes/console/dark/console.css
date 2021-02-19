@@ -8453,7 +8453,7 @@ h4#sb_shutdownstatus span {
   letter-spacing: .1em;
 }
 
-.tunnel_cap, .tier, .ff, .unreachable, .reachable, #capabilities_key b {
+.tunnel_cap, .tier, .ff, .unreachable, .reachable, #capabilities_key b, .tunnel_id {
   margin: 1px 2px;
   padding: 3px 2px;
   display: inline-block;
@@ -8467,7 +8467,7 @@ h4#sb_shutdownstatus span {
   background: linear-gradient(to bottom, #020, #010);
 }
 
-.tunnel_cap, .tier, .reachable, .ff {
+.tunnel_cap, .tier, .reachable, .ff, .tunnel_id {
   box-shadow: inset 0 0 0 1px #010, 0 0 0 1px #000 !important;
 }
 
@@ -8509,26 +8509,26 @@ h4#sb_shutdownstatus span {
 }
 
 .tunnel_id {
+  margin: 1px 2px 1px 5px;
+  padding: 2px;
   min-width: 78px;
   display: inline-block;
   line-height: 120%;
-  text-align: right;
+  display: inline-block;
+  color: #bb7;
+  text-shadow: 0 1px 1px #000;
+  text-align: center !important;
+  border: 1px solid #030;
+  background: #020;
+  background: linear-gradient(to bottom, #020, #010);
+}
+
+.tunnel_id:empty {
+  opacity: 0;
 }
 
 #tunnels #tunnels_part .cells, #tunnels_part .cells > * {
   vertical-align: middle;
-}
-
-#tunnels_part .tunnel_id {
-  margin: 0;
-  padding: 2px 4px;
-  display: inline-block;
-  line-height: inherit;
-  vertical-align: middle !important;
-  text-align: center;
-  border: 1px solid #000;
-  border-radius: 2px;
-  background: #020;
 }
 
 .tunnel_peer {
@@ -10307,15 +10307,15 @@ th.options, #externali2cp th {
 
 @media screen and (min-width: 1500px) {
   .tunneldisplay .tunnel_peer {
-    margin: 0 2px 0 0 !important;
+    margin: 0 !important;
     min-width: 80px !important;
   }
   .tunneldisplay .tunnel_peer.tunnel_local {
-    min-width: 76px !important;
-    margin: 0 2px 0 0 !important;
+    min-width: 78px !important;
+    margin: 0 0 0 -1px !important;
   }
   .tunneldisplay .tunnel_peer + b.tunnel_cap {
-    margin: 0 0 0 -1px !important;
+    margin: 0 -1px !important;
   }
   .tunneldisplay .tunnel_peer.tunnel_local + b.tunnel_cap {
     margin-left: 1px !important;
