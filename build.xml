@@ -981,7 +981,6 @@
             <!-- apps and bridges starting here, alphabetical please -->
             <group title="Addressbook Application" packages="net.i2p.addressbook:net.i2p.router.naming:net.metanotion:net.metanotion.*" />
             <group title="BOB Bridge" packages="net.i2p.BOB" />
-            <group title="BOB Demos" packages="net.i2p.BOB.Demos.echo.echoclient:net.i2p.BOB.Demos.echo.echoserver" />
             <group title="Desktopgui Application" packages="net.i2p.desktopgui:net.i2p.desktopgui.*" />
             <group title="I2PControl Application" packages="net.i2p.i2pcontrol:net.i2p.i2pcontrol.*:org.mindrot.jbcrypt:com.thetransactioncompany.jsonrpc2:com.thetransactioncompany.jsonrpc2.*" />
             <group title="I2PSnark Application" packages="org.klomp.snark:org.klomp.snark.*" />
@@ -1008,8 +1007,6 @@
                 <pathelement location="apps/i2psnark/java/src" />
                 <pathelement location="apps/sam/java/src" />
                 <pathelement location="apps/BOB/src" />
-                <pathelement location="apps/BOB/Demos/echo/echoclient/src" />
-                <pathelement location="apps/BOB/Demos/echo/echoserver/src" />
                 <pathelement location="apps/susidns/src/java/src" />
                 <pathelement location="apps/susimail/src/src" />
                 <pathelement location="apps/jetty/java/src" />
@@ -1200,9 +1197,6 @@
                     <arg value="router/java/src/net/i2p/router/RouterVersion.java" />
             </exec>
             <echo message="Everything is checked in, right? Let's be sure:" />
-            <exec executable="mtn" failonerror="false" >
-                    <arg value="st" />
-            </exec>
             <exec executable="git" failonerror="false" >
                     <arg value="status" />
             </exec>
@@ -1479,8 +1473,11 @@
     <target name="preppkg-base" depends="build, preplicenses, prepConsoleDocs, prepthemeupdates, prepCertificates, prepRouterInfos, copyjetty, copytomcat-unlesspkg, copyjstl-unlesspkg, copystandard-unlesspkg, copyflags, truncatehistory">
         <!-- if updater200 was run previously, it left *.pack files in pkg-temp -->
         <!-- Also remove deletelist.txt used for updater only -->
+        <!-- And empty jars and wars used only in the updater -->
         <delete>
             <fileset dir="pkg-temp" includes="**/*.jar.pack **/*.war.pack deletelist.txt" />
+            <fileset dir="pkg-temp/lib" includes="commons-logging.jar jasper-compiler.jar jetty-java5-threadpool.jar jetty-sslengine.jar" />
+            <fileset dir="pkg-temp" includes="webapps/addressbook.war" />
         </delete>
         <copy file="build/i2p.jar" todir="pkg-temp/lib/" />
         <copy file="build/i2ptunnel.jar" todir="pkg-temp/lib/" />
@@ -1804,6 +1801,7 @@
     <target name="updaterWithGeoIP" depends="prepupdate, prepgeoupdate, preplicenses, zipit" />
     <target name="updaterWithJetty" depends="prepjupdate, preplicenses, zipit" />
     <target name="updaterWithJettyRepack" depends="prepjupdate, preplicenses, repack200, zipit" />
+    <target name="updaterWithJettyAndJbigi" depends="prepjupdate, prepjbigiupdate, preplicenses, zipit" />
     <target name="updaterWithJettyAndJbigiRepack" depends="prepjupdate, prepjbigiupdate, preplicenses, repack200, zipit" />
     <target name="updaterWithJettyAndGeoIPRepack" depends="prepjupdate, prepgeoupdate, preplicenses, repack200, zipit" />
     <!--
@@ -2458,10 +2456,27 @@
          since preppkg puts too much stuff in pkg-temp -->
 
     <!-- Release targets - pick one: with Jbigi, GeoIP, or neither -->
+    <target name="release" >
+        <echo message="Pick a target:" />
+        <echo />
+        <echo message="Pack200 |  no jbigi/geoip    with jbigi              with geoip" />
+        <echo message="---------  --------------    ----------------        ----------------" />
+        <echo message="none    |  releaseit         releaseWithJbigi        releaseWithGeoIP" />
+        <echo message="repack  |  releaseRepack     releaseWithJbigiRepack  releaseWithGeoIPRepack" />
+        <echo message="full    |  release200        releaseWithJbigi200     releaseWithGeoIP200" />
+    </target>
 
-    <target name="release"          depends="verifyReleaseBuildNumbers, -pre-release, distclean, testscripts, updaterWithJettyRepack, updater200WithJetty, delete-j6-update, installer5-nowindows, delete-nonwindows, installer5-windows, -releaseit" />
-    <target name="releaseWithJbigi" depends="verifyReleaseBuildNumbers, -pre-release, distclean, testscripts, updaterWithJettyAndJbigiRepack, updater200WithJettyAndJbigi, delete-j6-update, installer5-nowindows, delete-nonwindows, installer5-windows, -releaseit" />
-    <target name="releaseWithGeoIP" depends="verifyReleaseBuildNumbers, -pre-release, distclean, testscripts, updaterWithJettyAndGeoIPRepack, updater200WithJettyAndGeoIP, delete-j6-update, installer5-nowindows, delete-nonwindows, installer5-windows, -releaseit" />
+    <target name="releaseit"        depends="verifyReleaseBuildNumbers, -pre-release, distclean, testscripts, updaterWithJetty, delete-j6-update, installer5-nowindows, delete-nonwindows, installer5-windows, -releaseit" />
+    <target name="releaseWithJbigi" depends="verifyReleaseBuildNumbers, -pre-release, distclean, testscripts, updaterWithJettyAndJbigi, delete-j6-update, installer5-nowindows, delete-nonwindows, installer5-windows, -releaseit" />
+    <target name="releaseWithGeoIP" depends="verifyReleaseBuildNumbers, -pre-release, distclean, testscripts, updaterWithJettyAndGeoIP, delete-j6-update, installer5-nowindows, delete-nonwindows, installer5-windows, -releaseit" />
+
+    <target name="releaseRepack"          depends="verifyReleaseBuildNumbers, -pre-release, distclean, testscripts, updaterWithJettyRepack, delete-j6-update, installer5-nowindows, delete-nonwindows, installer5-windows, -releaseit" />
+    <target name="releaseWithJbigiRepack" depends="verifyReleaseBuildNumbers, -pre-release, distclean, testscripts, updaterWithJettyAndJbigiRepack, delete-j6-update, installer5-nowindows, delete-nonwindows, installer5-windows, -releaseit" />
+    <target name="releaseWithGeoIPRepack" depends="verifyReleaseBuildNumbers, -pre-release, distclean, testscripts, updaterWithJettyAndGeoIPRepack, delete-j6-update, installer5-nowindows, delete-nonwindows, installer5-windows, -releaseit" />
+
+    <target name="release200"          depends="verifyReleaseBuildNumbers, -pre-release, distclean, testscripts, updaterWithJettyRepack, updater200WithJetty, delete-j6-update, installer5-nowindows, delete-nonwindows, installer5-windows, -releaseit" />
+    <target name="releaseWithJbigi200" depends="verifyReleaseBuildNumbers, -pre-release, distclean, testscripts, updaterWithJettyAndJbigiRepack, updater200WithJettyAndJbigi, delete-j6-update, installer5-nowindows, delete-nonwindows, installer5-windows, -releaseit" />
+    <target name="releaseWithGeoIP200" depends="verifyReleaseBuildNumbers, -pre-release, distclean, testscripts, updaterWithJettyAndGeoIPRepack, updater200WithJettyAndGeoIP, delete-j6-update, installer5-nowindows, delete-nonwindows, installer5-windows, -releaseit" />
 
     <target name="-releaseit">
         <echo message="New version number is ${release.number}" />
@@ -2549,6 +2564,7 @@
         <echo message="    ${gpg} -u ${release.gpg.keyid} -b i2pinstall_${release.number}_windows.exe" />
         <echo message="    sha256sum i2pinstall_${release.number}_windows.exe" />
         <echo message="Don't forget to git tag -s i2p-${release.number}" />
+        <echo message="         ...and git push origin i2p-${release.number}" />
     </target>
 
     <target name="forceJava7">
