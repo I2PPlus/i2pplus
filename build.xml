@@ -1804,6 +1804,7 @@
     <target name="updaterWithGeoIP" depends="prepupdate, prepgeoupdate, preplicenses, zipit" />
     <target name="updaterWithJetty" depends="prepjupdate, preplicenses, zipit" />
     <target name="updaterWithJettyRepack" depends="prepjupdate, preplicenses, repack200, zipit" />
+    <target name="updaterWithJettyAndJbigi" depends="prepjupdate, prepjbigiupdate, preplicenses, zipit" />
     <target name="updaterWithJettyAndJbigiRepack" depends="prepjupdate, prepjbigiupdate, preplicenses, repack200, zipit" />
     <target name="updaterWithJettyAndGeoIPRepack" depends="prepjupdate, prepgeoupdate, preplicenses, repack200, zipit" />
     <!--
