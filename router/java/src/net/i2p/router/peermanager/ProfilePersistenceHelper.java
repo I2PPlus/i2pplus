@@ -117,6 +117,7 @@ class ProfilePersistenceHelper {
      * @param addComments add comment lines to the output
      * @since 0.9.41
      */
+    @SuppressWarnings("deprecation")
     public void writeProfile(PeerProfile profile, OutputStream out, boolean addComments) throws IOException {
         String groups = null;
         if (_context.profileOrganizer().isFailing(profile.getPeer())) {
@@ -180,7 +181,7 @@ class ProfilePersistenceHelper {
             addDate(buf, addComments, "lastSentToSuccessfully", profile.getLastSendSuccessful(), "Last successful message sent to peer:");
         if (profile.getLastSendFailed() != 0)
             addDate(buf, addComments, "lastFailedSend", profile.getLastSendFailed(), "Last failed message to sent peer:");
-        if (profile.getTunnelTestTimeAverage() != 0)
+        if (profile.getTunnelTestTimeAverage() != 0 && PeerProfile.ENABLE_TUNNEL_TEST_RESPONSE_TIME)
             add(buf, addComments, "tunnelTestTimeAverage", profile.getTunnelTestTimeAverage(), "Average peer response time: " +  profile.getTunnelTestTimeAverage());
         // TODO: needs clarification - difference between tunnel peak and tunnel peak tunnel? And round down KBps display to 2 decimal places
         add(buf, addComments, "tunnelPeakThroughput", profile.getPeakThroughputKBps(), "Tunnel Peak throughput: " + profile.getPeakThroughputKBps() + " KBps");
@@ -197,6 +198,7 @@ class ProfilePersistenceHelper {
             //profile.getReceiveSize().store(out, "receiveSize");
             //profile.getSendSuccessSize().store(out, "sendSuccessSize");
             profile.getTunnelCreateResponseTime().store(out, "tunnelCreateResponseTime", addComments);
+            if (PeerProfile.ENABLE_TUNNEL_TEST_RESPONSE_TIME)
             profile.getTunnelTestResponseTime().store(out, "tunnelTestResponseTime", addComments);
             profile.getPeerTestResponseTime().store(out, "peerTestResponseTime", addComments);
         }
@@ -315,6 +317,7 @@ class ProfilePersistenceHelper {
         return (timeSince > EXPIRE_AGE);
     }
 
+    @SuppressWarnings("deprecation")
     public PeerProfile readProfile(File file) {
         Hash peer = getHash(file.getName());
         try {
@@ -360,7 +363,10 @@ class ProfilePersistenceHelper {
             profile.setLastSendSuccessful(getLong(props, "lastSentToSuccessfully"));
             profile.setLastSendFailed(getLong(props, "lastFailedSend"));
             profile.setLastHeardFrom(getLong(props, "lastHeardFrom"));
-            profile.setTunnelTestTimeAverage(getFloat(props, "tunnelTestTimeAverage"));
+
+            if (PeerProfile.ENABLE_TUNNEL_TEST_RESPONSE_TIME)
+                profile.setTunnelTestTimeAverage(getFloat(props, "tunnelTestTimeAverage"));
+
             profile.setPeerTestTimeAverage((int) getLong(props, "peerTestTimeAverage"));
             profile.setPeakThroughputKBps(getFloat(props, "tunnelPeakThroughput"));
             profile.setPeakTunnelThroughputKBps(getFloat(props, "tunnelPeakTunnelThroughput"));
@@ -386,7 +392,10 @@ class ProfilePersistenceHelper {
             //profile.getSendSuccessSize().load(props, "sendSuccessSize", true);
             if (!caps.contains("K") || !caps.contains("L") || !caps.contains("U")) {
                 profile.getTunnelCreateResponseTime().load(props, "tunnelCreateResponseTime", true);
-                profile.getTunnelTestResponseTime().load(props, "tunnelTestResponseTime", true);
+
+                if (PeerProfile.ENABLE_TUNNEL_TEST_RESPONSE_TIME)
+                    profile.getTunnelTestResponseTime().load(props, "tunnelTestResponseTime", true);
+
                 profile.getPeerTestResponseTime().load(props, "peerTestResponseTime", true);
             }
 
