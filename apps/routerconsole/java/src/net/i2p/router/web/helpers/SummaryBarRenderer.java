@@ -326,18 +326,26 @@ class SummaryBarRenderer {
             svcs.put(tx, rbuf.toString());
         }
 
-        String url = getEepsiteURL(pm);
-        if (url != null) {
+        List<String> urls = pm.getEepsiteURLs();
+        if (urls != null) {
             String tx = _t("Web Server");
-            rbuf.setLength(0);
-            rbuf.append("<a href=\"")
-                .append(url)
-                .append("\" target=\"_blank\" title=\"")
-                .append(_t("Local web server"))
-                .append("\">")
-                .append(nbsp(tx))
-                .append("</a>\n");
-            svcs.put(tx, rbuf.toString());
+            String txtt = _t("Local Web Server");
+            int sz = urls.size();
+            if (sz > 1)
+                Collections.sort(urls);
+            for (int i = 0; i < sz; i++) { 
+                String url = urls.get(i);
+                String txp = sz > 1 ? tx + ' ' + (i + 1) : tx;
+                rbuf.setLength(0);
+                rbuf.append("<a href=\"")
+                    .append(url)
+                    .append("\" target=\"_blank\" title=\"")
+                    .append(txtt)
+                    .append("\">")
+                    .append(nbsp(txp))
+                    .append("</a>\n");
+                svcs.put(txp, rbuf.toString());
+            }
         }
 
         Map<String, String> apps = NavHelper.getClientAppLinks();

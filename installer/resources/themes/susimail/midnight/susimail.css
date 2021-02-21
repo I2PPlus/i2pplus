@@ -622,12 +622,12 @@ input[type=submit]::-moz-focus-inner, input.cancel::-moz-focus-inner, button::-m
   box-shadow: none;
 }
 
-input[type=submit], input.cancel, #settings {
+input[type=submit], input.cancel, #settings, .fakebutton {
   margin: 4px 5px;
   padding: 5px 8px !important;
   font: bold 9pt "Droid Sans", "Open Sans", "Noto Sans", Ubuntu, "Segoe UI", "Bitstream Vera Sans", "DejaVu Sans", Verdana, "Lucida Grande", Helvetica, sans-serif;
   text-align: center;
-  color: #6c66bc;
+  color: #6c66bc !important;
   border: 1px solid #26225c;
   border-radius: 2px;
   box-shadow: inset 0 0 0 1px #000, inset 0 0 1px 0 #446;
@@ -635,16 +635,21 @@ input[type=submit], input.cancel, #settings {
   background: linear-gradient(to bottom, #11101c 50%, #000010 50%) !important;
 }
 
+.fakebutton {
+  line-height: 1.3;
+  padding-left: 27px;
+}
+
 input[type=submit]:hover, input.cancel:hover,
 input[type=submit]:focus, input.cancel:focus,
-#settings:hover, #settings:focus {
+#settings:hover, #settings:focus, .fakebutton:hover, .fakebutton:focus {
   color: #652787 !important;
   background: #000 !important;
   border: 1px solid #652787;
   box-shadow: inset 0 0 0 1px #000, inset 0 0 1px 1px #757;
 }
 
-input[type=submit]:active, input.cancel:active, #settings:active, #settings:visited:active {
+input[type=submit]:active, input.cancel:active, #settings:active, #settings:visited:active, #fakebutton:active {
   border: 1px inset #652787;
   background: #652787 !important;
   color: #83529f !important;
@@ -1157,14 +1162,15 @@ input.logout:hover, input.logout:focus {
   background: url(/themes/susimail/images/logout_hover.png) no-repeat 9px center, linear-gradient(to bottom, #202 50%, #000 50%) !important;
 }
 
-input.reload, input.refresh {
+input.reload, input.refresh, .fakebutton {
   padding: 5px 9px 5px 27px !important;
   background: #000 url(/themes/console/images/buttons/update.png) no-repeat 9px center !important;
   background: url(/themes/console/images/buttons/update.png) no-repeat 9px center, linear-gradient(to bottom, #11101c 50%, #000010 50%) !important;
 }
 
 input.reload:hover, input.refresh:hover,
-input.reload:focus, input.refresh:focus {
+input.reload:focus, input.refresh:focus,
+.fakebutton:hover, .fakebutton:focus {
   background: #000 url(/themes/console/images/buttons/update_hover.png) no-repeat 9px center !important;
   background: url(/themes/console/images/buttons/update_hover.png) no-repeat 9px center, linear-gradient(to bottom, #202 50%, #000 50%) !important;
 }
@@ -1425,17 +1431,13 @@ input[type=submit]:active, input.cancel:active {
 }
 
 @media screen and (min-width: 1500px) {
-body, td, textarea, div, p.mailbody, input, input[type=submit], input[type="reset"], p.error, #settings {
+body, td, textarea, div, p.mailbody, input, input[type=submit], input[type="reset"], p.error, #settings, .fakebutton {
   font-size: 10pt !important;
 }
 
 #dologin tr:last-child a {
   font-size: 9pt;
 }
-
-/*.topbuttons input[type=submit], .topbuttons input[type="reset"] {
-  margin: 3px 5px !important;
-}*/
 
 .pagenav input {
   font-size: 0 !important;
