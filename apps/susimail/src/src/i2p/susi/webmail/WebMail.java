@@ -401,6 +401,8 @@ public class WebMail extends HttpServlet
         // scroll to top of non-embedded page if delete clicked to ensure confirmation dialog is visible
         //else if (name.equals(DELETE))
         //buf.append(" onclick=\"smoothScroll(document.getElementById(\'mailbox\'))\"");
+        else if (name.equals(REFRESH))
+            buf.append(" serverRefresh\"");
         else
             buf.append('"');
         // These are icons only now, via the CSS, so add a tooltip
@@ -2349,7 +2351,7 @@ public class WebMail extends HttpServlet
                 out.println("<noscript><style type=\"text/css\">.script {display: none !important;}</style></noscript>");
                 out.println("<script type=\"text/javascript\" src=\"/js/iframeResizer/iframeResizer.contentWindow.js?" + CoreVersion.VERSION + "\"></script>");
                 out.println("<script src=\"/susimail/js/notifications.js?" + CoreVersion.VERSION + "\" type=\"text/javascript\"></script>");
-                out.println("</head>\n<body>\n");
+                out.println("</head>\n<body id=\"susimail\">\n");
                 String nonce = state == State.AUTH ? LOGIN_NONCE : Long.toString(ctx.random().nextLong());
                 sessionObject.addNonce(nonce);
                 out.println(
@@ -2419,11 +2421,11 @@ public class WebMail extends HttpServlet
                     if (sessionObject.info.length() > 0 || showRefresh) {
                         out.println("<p class=\"info\"><b>");
                         if (mc != null && mc.isLoading())
-                            out.println(_t("Loading messages, please wait...") + "<br>");
+                            out.println(_t("Loading messages, please wait...").replace("...", "&hellip;") + "<br>");
                         if (sessionObject.isFetching)
-                            out.println(_t("Checking for new messages on server") + "<br>");
+                            out.println(_t("Checking for new messages on server") + "&hellip;<br>");
                         if (showRefresh)
-                                out.println(_t("Refresh the page for updates") + "<br>");
+                                out.println("<noscript>" + _t("Refresh the page for updates") + "<br></noscript>");
                         if (sessionObject.info.length() > 0)
                             out.println(quoteHTML(sessionObject.info).replace("\n", "<br>"));
                         out.println("</b></p>");
@@ -3212,14 +3214,22 @@ public class WebMail extends HttpServlet
             //button(DELETE, _t("Delete")) + spacer +
         String folderName = mc.getFolderName();
         String floc;
-        if (folderName.equals(DIR_FOLDER)) {
-            out.println((sessionObject.isFetching ? button2(REFRESH, _t("Check Mail")) : button(REFRESH, _t("Check Mail"))) + spacer);
-            floc = "";
-        } else if (folderName.equals(DIR_DRAFTS)) {
-            floc = "";
+        floc = "";
+
+        if (!sessionObject.isFetching) {
+            if (folderName.equals(DIR_FOLDER)) {
+                out.println(button(REFRESH, _t("Check Mail")) + spacer);
+                floc = "";
+            } else if (folderName.equals(DIR_DRAFTS)) {
+                floc = "";
+            } else {
+                floc = '&' + CURRENT_FOLDER + '=' + folderName;
+            }
         } else {
-            floc = '&' + CURRENT_FOLDER + '=' + folderName;
+            out.println("<a class=\"fakebutton\" href=\"\">" + _t("Refresh Page") + "</a>");
+            out.println("<script type=\"text/javascript\" src=\"/susimail/js/refreshInbox.js?" + CoreVersion.VERSION + "\"></script>");
         }
+
         boolean isSpamFolder = folderName.equals(DIR_SPAM);
         boolean showToColumn = folderName.equals(DIR_DRAFTS) || folderName.equals(DIR_SENT);
         out.println(button(LOGOUT, _t("Logout")));
@@ -3276,7 +3286,7 @@ public class WebMail extends HttpServlet
             String b64UIDL = Base64.encode(uidl);
             String loc = myself + '?' + (folderName.equals(DIR_DRAFTS) ? NEW_UIDL : SHOW) + '=' + b64UIDL + floc;
             String link = "<a href=\"" + loc + "\" class=\"" + type + "\">";
-            String jslink = " class=\"tdclick\" onclickloc=\"" + loc + "\" ";
+            String jslink = "tdclick\" onclickloc=\"" + loc + "\"";
 
             boolean idChecked = false;
             String checkId = sessionObject.pageChanged ? null : request.getParameter("check" + b64UIDL);
@@ -3299,7 +3309,7 @@ public class WebMail extends HttpServlet
             if (subj.length() <= 0)
                 subj = "<i>" + _t("no subject") + "</i>";
             out.println("<tr class=\"list" + bg + "\">\n" +
-                "<td class=\"mailListDate\" " + jslink + "><span class=\"listDate\"  title=\"" + mail.dateOnly + "\"><span>" +
+                "<td class=\"mailListDate " + jslink + "><span class=\"listDate\"  title=\"" + mail.dateOnly + "\"><span>" +
                 // let's format time and date so it aligns and wraps nicely (for mobile)
                 mail.localFormattedDate
                 .replace("/", "</span>&#8239;/&#8239;<span>")
@@ -3331,7 +3341,7 @@ public class WebMail extends HttpServlet
                     //out.print("&hellip;");  // must be after html encode
                     //out.println("</a>");
                     //}
-                    out.print("<td class=\"mailListSender\" title=\"" + buildRecipientLine(mail.to).replace("\"", "") + "\"" + jslink + ">" +
+                    out.print("<td class=\"mailListSender " + jslink + " title=\"" + buildRecipientLine(mail.to).replace("\"", "") + "\">" +
                     // remove angle brackets and trim to (consistent) name only so only name shown (with full address on tooltip)
                     //link + buildRecipientLine(mail.to).replace("&lt;", "").replace("&gt;", "").replaceAll("@.*", ""));
                     link + to);
@@ -3339,36 +3349,42 @@ public class WebMail extends HttpServlet
                         out.print("&hellip;");  // must be after html encode
                     out.print("</a></td>\n");
                     } else {
-                        out.print("<td class=\"mailListSender\"></td>\n");
+                        out.print("<td class=\"mailListSender " + jslink + "></td>\n");
                     }
-                } else {
-                    // mail.shortSender and mail.shortSubject already html encoded
-                    out.println("<td class=\"mailListSender\" title=\"" + mail.sender.replace("\"", "") + "\"" + jslink + ">" +
-                    // remove angle brackets and trim to (consistent) name only so only name shown (with full address on tooltip)
-                    link + mail.shortSender.replace("&lt;", "").replace("&gt;", "").replaceAll("@.*", "") + "</a></td>");
-                    // TODO: add name of attachment(s) to tooltip
-                }
-                out.println("<td class=\"mailListAttachment\" " + jslink + ">" + (mail.hasAttachment() ? "<img src=\"/susimail/icons/attach.png\" alt=\"\" title=\"" +
-                _t("Message has an attachment") + "\">" : "&nbsp;") + "</td>\n" +
-                // TODO: show mail fragment on tooltip or hover span
-                "<td class=\"mailListSubject\" " + jslink + ">" + link + subj + "</a></td>\n" +
-                "<td class=\"mailListFlagged\" " + jslink + ">");
-                if (mail.isNew() && !mail.isSpam()) {
-                    out.println("<img src=\"/susimail/icons/flag_green.png\" alt=\"\" title=\"" + _t("Message is new") + "<\">");
-                } else if (mail.isSpam()) {
-                    out.println("<img src=\"/susimail/icons/flag_red.png\" alt=\"\" title=\"" + _t("Message is spam") + "\">");
-                }
-                out.println("<td class=\"mailListSize\" align=\"right\" " + jslink + "><span class=\"listSize\">" +
-                ((mail.getSize() > 0) ? (DataHelper.formatSize2(mail.getSize()) + 'B')
-                // truncate the unit to B/K/M to optimize presentation/alignment
-                .replace("&#8239;KiB", " <span class=\"listSizeUnit\">K")
-                .replace("&#8239;MiB", " <span class=\"listSizeUnit\">M")
-                .replace("&#8239;GiB", " <span class=\"listSizeUnit\">G")
-                .replace("&#8239;B", " <span class=\"listSizeUnit\">B") : "<span class=\"unknown\" title=\"" + _t("Message body not downloaded") + "\">???"));
+            } else {
+                // mail.shortSender and mail.shortSubject already html encoded
+                out.println("<td class=\"mailListSender " + jslink + " title=\"" + mail.sender.replace("\"", "") + "\">" +
+                // remove angle brackets and trim to (consistent) name only so only name shown (with full address on tooltip)
+                link + mail.shortSender.replace("&lt;", "").replace("&gt;", "").replaceAll("@.*", "") + "</a></td>\n");
+                // TODO: add name of attachment(s) to tooltip
+            }
+            out.print("<td class=\"mailListAttachment " + jslink + ">" + (mail.hasAttachment() ? "<img src=\"/susimail/icons/attach.png\" alt=\"\" title=\"" +
+                        _t("Message has an attachment") + "\">" : "&nbsp;") + "</td>\n" +
+                         // TODO: show mail fragment on tooltip or hover span
+                        "<td class=\"mailListSubject " + jslink + ">" + link + subj + "</a></td>\n" +
+                        "<td class=\"mailListFlagged ");
+            if (mail.isNew() && !mail.isSpam())
+                out.print("new ");
+            else if (mail.isSpam())
+                out.print("spam ");
+            out.print(jslink + ">");
+            if (mail.isNew() && !mail.isSpam()) {
+                out.println("<img src=\"/susimail/icons/flag_green.png\" alt=\"\" title=\"" + _t("Message is new") + "<\">");
+            } else if (mail.isSpam()) {
+                out.println("<img src=\"/susimail/icons/flag_red.png\" alt=\"\" title=\"" + _t("Message is spam") + "\">");
+            }
+            out.println("<td class=\"mailListSize " + jslink + " align=\"right\"><span class=\"listSize\">" +
+                        ((mail.getSize() > 0) ? (DataHelper.formatSize2(mail.getSize()) + 'B')
+                        // truncate the unit to B/K/M to optimize presentation/alignment
+                        .replace("&#8239;KiB", " <span class=\"listSizeUnit\">K")
+                        .replace("&#8239;MiB", " <span class=\"listSizeUnit\">M")
+                        .replace("&#8239;GiB", " <span class=\"listSizeUnit\">G")
+                        .replace("&#8239;B", " <span class=\"listSizeUnit\">B") : "<span class=\"unknown\" title=\"" +
+                        _t("Message body not downloaded") + "\">???"));
             out.println("</span></span></td>\n" +
-                            "<td class=\"mailListDelete\"><input type=\"checkbox\" class=\"optbox delete1\" name=\"check" + b64UIDL + "\" value=\"1\"" +
-                            " " + (idChecked ? "checked" : "") + ">" + "</td>\n" +
-                            "</tr>\n");
+                        "<td class=\"mailListDelete\"><input type=\"checkbox\" class=\"optbox delete1\" name=\"check" + b64UIDL + "\" value=\"1\"" +
+                        " " + (idChecked ? "checked" : "") + ">" + "</td>\n" +
+                        "</tr>\n");
             bg = 1 - bg;
             i++;
         }

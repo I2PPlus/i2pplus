@@ -554,11 +554,11 @@ button::-moz-focus-inner, input[type="button"]::-moz-focus-inner, input[type=sub
 }
 }
 
-button:focus, input[type=submit]:focus, input[type="reset"]:focus {
+button:focus, input[type=submit]:focus, input[type="reset"]:focus, .fakebutton:focus {
   filter: drop-shadow(0 0 1px #89f);
 }
 
-button, input[type=submit], input[type="reset"], #settings {
+button, input[type=submit], input[type="reset"], #settings, .fakebutton {
   padding: 5px;
   display: inline-block;
   line-height: 130%;
@@ -579,7 +579,7 @@ input[type="file"] {
 
 button:hover, input[type=submit]:hover, input[type="reset"]:hover,
 button:focus, input[type=submit]:focus, input[type="reset"]:focus,
-#settings:hover, #settings:focus {
+#settings:hover, #settings:focus, .fakebutton:focus {
   color: #222;
   border: 1px solid #aaafce;
   background: #fff;
@@ -592,7 +592,7 @@ input[type=text]:focus, input[type=password]:focus, textarea:focus {
   box-shadow: 0 0 0 1px #fff, 0 0 0 2px #f60;
 }
 
-button:active, input[type=submit]:active, input[type="reset"]:active, #settings:active {
+button:active, input[type=submit]:active, input[type="reset"]:active, #settings:active, .fakebutton:active {
   color: #555;
   border: 1px solid #bbb;
   box-shadow: inset 0 0 0 1px #fff, inset 3px 3px 3px #999;
@@ -604,6 +604,7 @@ input[disabled][type=submit], input[disabled][type=submit]:hover, input[disabled
   background: linear-gradient(to bottom, #fff, #eef);
   opacity: 0.3;
   filter: none;
+  pointer-events: none;
 }
 
 input.optbox {
@@ -725,13 +726,20 @@ input.logout:hover, input.logout:focus {
   background: url(/themes/susimail/images/logout_hover.png) no-repeat 7px center, linear-gradient(to bottom, #ddd 0%, #fff 100%);
 }
 
-input.reload, input.refresh {
+input.reload, input.refresh, .fakebutton {
   background: #eee url(/themes/console/images/buttons/update.png) no-repeat 7px center;
   background: url(/themes/console/images/buttons/update.png) no-repeat 7px center, linear-gradient(to bottom, #fff, #eef);
   padding: 5px 8px 5px 24px;
 }
 
-input.reload:hover, input.refresh:hover, input.reload:focus, input.refresh:focus {
+.fakebutton, .fakebutton:visited {
+  padding-left: 24px;
+  line-height: 1.3;
+  font-weight: normal !important;
+  color: #333;
+}
+
+input.reload:hover, input.refresh:hover, input.reload:focus, input.refresh:focus, .fakebutton:hover, .fakebutton.focus {
   background: #eee url(/themes/console/images/buttons/update_hover.png) no-repeat 7px center;
   background: url(/themes/console/images/buttons/update_hover.png) no-repeat 7px center, linear-gradient(to bottom, #ddd 0%, #fff 100%);
 }
@@ -1245,11 +1253,11 @@ div#pagenav {
 }
 
 .folders {
-  padding: 5px;
+  padding: 0 5px 5px;
 }
 
 .iframed .folders {
-  padding: 5px 5px 4px;
+  padding: 0 5px 4px;
 }
 
 .folders > * {
@@ -1285,6 +1293,10 @@ tr.bottombuttons table#pagenav {
   margin: 0;
   width: 100%;
   border-bottom: 1px solid #555;
+}
+
+#pagenavbottom {
+  display: none;
 }
 
 #pagenavbottom td {
@@ -1441,16 +1453,20 @@ img.sort {
 }
 
 #info {
-  margin-left: 3px;
+  margin: -2px 0 0 3px;
   padding: 5px 6px;
   display: inline-block;
   vertical-align: middle;
-  line-height: normal	;
+  line-height: 1.3;
   color: #333;
-  border: 1px solid #bbb;
+  border: 1px solid #bbc;
   border-radius: 2px;
   box-shadow: inset 0 0 0 1px #fff;
   background: #f2f2f2;
+}
+
+.iframed #info {
+  margin-top: 0;
 }
 
 .listDate, .listTime, .listClock {
