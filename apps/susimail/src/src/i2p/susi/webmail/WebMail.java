@@ -2351,7 +2351,7 @@ public class WebMail extends HttpServlet
                 out.println("<noscript><style type=\"text/css\">.script {display: none !important;}</style></noscript>");
                 out.println("<script type=\"text/javascript\" src=\"/js/iframeResizer/iframeResizer.contentWindow.js?" + CoreVersion.VERSION + "\"></script>");
                 out.println("<script src=\"/susimail/js/notifications.js?" + CoreVersion.VERSION + "\" type=\"text/javascript\"></script>");
-                out.println("</head>\n<body id=\"susimail\">\n");
+                out.println("</head>\n<body>\n");
                 String nonce = state == State.AUTH ? LOGIN_NONCE : Long.toString(ctx.random().nextLong());
                 sessionObject.addNonce(nonce);
                 out.println(
@@ -3227,7 +3227,6 @@ public class WebMail extends HttpServlet
             }
         } else {
             out.println("<a class=\"fakebutton\" href=\"\">" + _t("Refresh Page") + "</a>");
-            out.println("<script type=\"text/javascript\" src=\"/susimail/js/refreshInbox.js?" + CoreVersion.VERSION + "\"></script>");
         }
 
         boolean isSpamFolder = folderName.equals(DIR_SPAM);
@@ -3426,6 +3425,8 @@ public class WebMail extends HttpServlet
             }
         }
         out.println("</tr>\n</table>");
+        if (sessionObject.isFetching)
+            out.println("<script type=\"text/javascript\" src=\"/susimail/js/refreshInbox.js?" + CoreVersion.VERSION + "\"></script>");
     }
 
     /**
