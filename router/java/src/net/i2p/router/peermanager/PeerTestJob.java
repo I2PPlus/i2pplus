@@ -43,7 +43,7 @@ class PeerTestJob extends JobImpl {
     public static final String PROP_PEER_TEST_DELAY = "router.peerTestDelay";
     private static final int DEFAULT_PEER_TEST_CONCURRENCY = 4;
     public static final String PROP_PEER_TEST_CONCURRENCY = "router.peerTestConcurrency";
-    private static final int DEFAULT_PEER_TEST_TIMEOUT = 3*1000;
+    private static final int DEFAULT_PEER_TEST_TIMEOUT = 2*1000;
     public static final String PROP_PEER_TEST_TIMEOUT = "router.peerTestTimeout";
 
     /** Creates a new instance of PeerTestJob */
