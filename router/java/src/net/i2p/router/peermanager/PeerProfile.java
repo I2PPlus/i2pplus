@@ -576,8 +576,8 @@ public class PeerProfile {
         if (ENABLE_TUNNEL_TEST_RESPONSE_TIME && _tunnelTestResponseTime == null)
             _tunnelTestResponseTime = new RateStat("tunnelTestResponseTime", "Time (ms) to test a tunnel this peer participates in", group, RATES);
 
-        if (_peerTestResponseTime == null)
-            _peerTestResponseTime = new RateStat("peerTestResponseTime", "Time (ms) peer takes to respond to a test", group, RATES);
+//        if (_peerTestResponseTime == null)
+//            _peerTestResponseTime = new RateStat("peerTestResponseTime", "Time (ms) peer takes to respond to a test", group, RATES);
 
         if (_tunnelHistory == null)
             _tunnelHistory = new TunnelHistory(_context, group);
@@ -663,7 +663,10 @@ public class PeerProfile {
         _tunnelCreateResponseTime.coalesceStats();
         if (_tunnelTestResponseTime != null)
             _tunnelTestResponseTime.coalesceStats();
-        _peerTestResponseTime.coalesceStats();
+/*
+        if (_peerTestResponseTime != null)
+          _peerTestResponseTime.coalesceStats();
+*/
         _tunnelHistory.coalesceStats();
         if (_expandedDB) {
             _dbIntroduction.coalesceStats();

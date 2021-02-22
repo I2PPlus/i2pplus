@@ -367,7 +367,7 @@ class ProfilePersistenceHelper {
             if (PeerProfile.ENABLE_TUNNEL_TEST_RESPONSE_TIME)
                 profile.setTunnelTestTimeAverage(getFloat(props, "tunnelTestTimeAverage"));
 
-            profile.setPeerTestTimeAverage((int) getLong(props, "peerTestTimeAverage"));
+//            profile.setPeerTestTimeAverage((int) getLong(props, "peerTestTimeAverage"));
             profile.setPeakThroughputKBps(getFloat(props, "tunnelPeakThroughput"));
             profile.setPeakTunnelThroughputKBps(getFloat(props, "tunnelPeakTunnelThroughput"));
             profile.setPeakTunnel1mThroughputKBps(getFloat(props, "tunnelPeakTunnel1mThroughput"));
@@ -396,7 +396,7 @@ class ProfilePersistenceHelper {
                 if (PeerProfile.ENABLE_TUNNEL_TEST_RESPONSE_TIME)
                     profile.getTunnelTestResponseTime().load(props, "tunnelTestResponseTime", true);
 
-                profile.getPeerTestResponseTime().load(props, "peerTestResponseTime", true);
+//                profile.getPeerTestResponseTime().load(props, "peerTestResponseTime", true);
             }
 
             if (_log.shouldLog(Log.DEBUG))
