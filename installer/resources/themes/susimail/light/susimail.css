@@ -2328,3 +2328,33 @@ tr.mailbody td {
 #toggle.showpass {
   background: url(/themes/console/images/buttons/show.png) center center no-repeat;
 }
+
+#mailbox {
+  position: relative;
+}
+
+.page {
+  position: relative;
+}
+
+.page::after {
+  width: 0;
+  height: 3px;
+  position: absolute;
+  z-index: 999;
+  top: -6px;
+  left: -1px;
+  display: block;
+  background: #d60;
+  content: "";
+  animation: ease-in bar 2s reverse;
+  will-change: transform;
+}
+
+.iframed .page::after {
+  top: -4px;
+}
+
+@keyframes bar {
+  from {width: 100%; filter:opacity(.5)}
+}
