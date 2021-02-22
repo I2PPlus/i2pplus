@@ -95,7 +95,7 @@ public class ProfileOrganizer {
      */
     public static final String PROP_MINIMUM_HIGH_CAPACITY_PEERS = "profileOrganizer.minHighCapacityPeers";
 //    public static final int DEFAULT_MINIMUM_HIGH_CAPACITY_PEERS = 25;
-    public static final int DEFAULT_MINIMUM_HIGH_CAPACITY_PEERS = 150;
+    public static final int DEFAULT_MINIMUM_HIGH_CAPACITY_PEERS = 200;
 //    private static final int ABSOLUTE_MAX_HIGHCAP_PEERS = 150;
     private static final int ABSOLUTE_MAX_HIGHCAP_PEERS = 400;
 
@@ -241,7 +241,8 @@ public class ProfileOrganizer {
             // Add to high cap only if we have room. Don't add to Fast; wait for reorg.
             int minFast = _context.getProperty(PROP_MINIMUM_FAST_PEERS, DEFAULT_MINIMUM_FAST_PEERS);
             if (_thresholdCapacityValue <= rv.getCapacityValue() && isSelectable(peer) &&
-                _highCapacityPeers.size() < getMaximumHighCapPeers()) {
+//                _highCapacityPeers.size() < getMaximumHighCapPeers()) {
+                countHighCapacityPeers() < getMaximumHighCapPeers()) {
                 _highCapacityPeers.put(peer, rv);
                 if (countFastPeers() < minFast)
                 _fastPeers.put(peer, rv);
