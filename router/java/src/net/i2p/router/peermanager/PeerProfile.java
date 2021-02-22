@@ -101,7 +101,7 @@ public class PeerProfile {
     // x**4 = .5; x = 4th root of .5,  x = .5**(1/4), x ~= 0.84
     private static final float DEGRADE_FACTOR = (float) Math.pow(TOTAL_DEGRADE_PER_DAY, 1.0d / DEGRADES_PER_DAY);
     //static { System.out.println("Degrade factor is " + DEGRADE_FACTOR); }
-    static final boolean ENABLE_TUNNEL_TEST_RESPONSE_TIME = true;
+    static final boolean ENABLE_TUNNEL_TEST_RESPONSE_TIME = false;
 
     private long _lastCoalesceDate = System.currentTimeMillis();
 
@@ -389,7 +389,7 @@ public class PeerProfile {
      */
     @Deprecated
     void setTunnelTestTimeAverage(float avg) { /* _tunnelTestResponseTimeAvg = avg; */ }
-    
+
     /**
      *  @deprecated unused
      */
@@ -408,8 +408,9 @@ public class PeerProfile {
         if (_log.shouldLog(Log.INFO))
             _log.info("Timed tunnel test for [" + _peer.toBase64().substring(0,6) +
                       "] updated to " + (_tunnelTestResponseTimeAvg / 1000) + "s");
-    }
 */
+    }
+
     public float getPeerTestTimeAverage() { return _peerTestResponseTimeAvg; }
     void setPeerTestTimeAverage(float testAvg) { _peerTestResponseTimeAvg = testAvg; }
 
