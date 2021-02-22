@@ -402,7 +402,7 @@ public class WebMail extends HttpServlet
         //else if (name.equals(DELETE))
         //buf.append(" onclick=\"smoothScroll(document.getElementById(\'mailbox\'))\"");
         else if (name.equals(REFRESH))
-            buf.append(" serverRefresh\"");
+            buf.append("\" id=\"serverRefresh\"");
         else
             buf.append('"');
         // These are icons only now, via the CSS, so add a tooltip
@@ -2005,7 +2005,6 @@ public class WebMail extends HttpServlet
         response.setCharacterEncoding("UTF-8");
         response.setHeader("X-Frame-Options", "SAMEORIGIN");
                 response.setHeader("Content-Security-Policy", "default-src 'self'; style-src 'self' 'unsafe-inline'; script-src 'self'; form-action 'self'; frame-ancestors 'self'; object-src 'none'; media-src 'none'");
-        //response.setHeader("Content-Security-Policy", "default-src 'self'; style-src 'self' 'unsafe-inline'; script-src 'self' 'unsafe-inline'; form-action 'self'; frame-ancestors 'self'; object-src 'none'; media-src 'none'");
         response.setHeader("X-XSS-Protection", "1; mode=block");
         response.setHeader("X-Content-Type-Options", "nosniff");
         response.setHeader("Referrer-Policy", "no-referrer");
@@ -2335,7 +2334,7 @@ public class WebMail extends HttpServlet
                     out.println("<meta name=\"viewport\" content=\"width=device-width, initial-scale=1.0, maximum-scale=2.0, user-scalable=yes\" />\n" +
                         "<link rel=\"stylesheet\" type=\"text/css\" href=\"" + sessionObject.themePath + "mobile.css?" + CoreVersion.VERSION + "\" />");
                 }
-                if(state != State.AUTH)
+                if(state == State.LIST)
                     out.println("<link rel=\"stylesheet\" href=\"/susimail/css/print.css?" + CoreVersion.VERSION + "\" type=\"text/css\" media=\"print\" />");
                 if (state == State.NEW || state == State.CONFIG) {
                     // TODO cancel if to and body are empty
@@ -2345,13 +2344,17 @@ public class WebMail extends HttpServlet
                     out.println("<script src=\"/js/scrollTo.js?" + CoreVersion.VERSION + "\" type=\"text/javascript\"></script>");
                 } else if (state == State.LOADING) {
                     // TODO JS?
-                            out.println("<meta http-equiv=\"refresh\" content=\"5;url=" + myself + "\">");
+//                            out.println("<meta http-equiv=\"refresh\" content=\"5;url=" + myself + "\">");
                 }
                 // setup noscript style so we can hide js buttons when js is disabled
                 out.println("<noscript><style type=\"text/css\">.script {display: none !important;}</style></noscript>");
                 out.println("<script type=\"text/javascript\" src=\"/js/iframeResizer/iframeResizer.contentWindow.js?" + CoreVersion.VERSION + "\"></script>");
-                out.println("<script src=\"/susimail/js/notifications.js?" + CoreVersion.VERSION + "\" type=\"text/javascript\"></script>");
-                out.println("</head>\n<body id=\"susimail\">\n");
+//                out.println("<script src=\"/susimail/js/notifications.js?" + CoreVersion.VERSION + "\" type=\"text/javascript\"></script>");
+                out.println("</head>\n");
+                if (state == State.LIST)
+                    out.print("<body id=\"main\">\n");
+                else
+                    out.print("<body>");
                 String nonce = state == State.AUTH ? LOGIN_NONCE : Long.toString(ctx.random().nextLong());
                 sessionObject.addNonce(nonce);
                 out.println(
@@ -2415,11 +2418,13 @@ public class WebMail extends HttpServlet
                     }
                 }
                 if (showRefresh || sessionObject.error.length() > 0 || sessionObject.info.length() > 0) {
-                    out.println("<div class=\"notifications\">");
-                    if (sessionObject.error.length() > 0)
-                        out.println("<p class=\"error\">" + quoteHTML(sessionObject.error).replace("\n", "<br>") + "</p>");
+                    out.println("<div id=\"notify\" class=\"notifications ");
+                    if (sessionObject.newMails > 0)
+                        out.print("newmail ");
+                    else if (sessionObject.error.length() > 0)
+                        out.println("msgerror\"><p class=\"error\">" + quoteHTML(sessionObject.error).replace("\n", "<br>") + "</p>");
                     if (sessionObject.info.length() > 0 || showRefresh) {
-                        out.println("<p class=\"info\"><b>");
+                        out.println("msginfo\"><p class=\"info\"><b>");
                         if (mc != null && mc.isLoading())
                             out.println(_t("Loading messages, please wait...").replace("...", "&hellip;") + "<br>");
                         if (sessionObject.isFetching)
@@ -2465,7 +2470,10 @@ public class WebMail extends HttpServlet
                     _t("{0} webmail client &copy Susi 2004-2005.", "<b>SusiMail</b>") +
                     "</p>\n</div>\n");
                 }
-                out.println("</form>\n</div>\n<span data-iframe-height></span>\n</body>\n</html>");
+                out.println("</form>\n</div>\n<span data-iframe-height></span>\n");
+                if (sessionObject.isFetching)
+                    out.println("<script id=\"autorefresh\" type=\"module\" src=\"/susimail/js/refreshInbox.js?" + CoreVersion.VERSION + "\"></script>");
+                out.println("</body>\n</html>");
                 out.flush();
         }  // synch sessionObject
     }
@@ -3226,8 +3234,7 @@ public class WebMail extends HttpServlet
                 floc = '&' + CURRENT_FOLDER + '=' + folderName;
             }
         } else {
-            out.println("<a class=\"fakebutton\" href=\"\">" + _t("Refresh Page") + "</a>");
-            out.println("<script type=\"text/javascript\" src=\"/susimail/js/refreshInbox.js?" + CoreVersion.VERSION + "\"></script>");
+            out.println("<a id=\"pageRefresh\" class=\"fakebutton\" href=\"\">" + _t("Refresh Page") + "</a>");
         }
 
         boolean isSpamFolder = folderName.equals(DIR_SPAM);

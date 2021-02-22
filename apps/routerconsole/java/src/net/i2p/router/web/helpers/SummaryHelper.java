@@ -916,7 +916,6 @@ public class SummaryHelper extends HelperBase {
     public String getTunnelLag() {
         if (_context == null)
             return "0";
-
         return DataHelper.formatDuration2(_context.throttle().getTunnelLag());
     }
 

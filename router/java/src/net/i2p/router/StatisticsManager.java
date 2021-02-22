@@ -158,10 +158,13 @@ public class StatisticsManager {
             int ri = _context.router().getUptime() > 30*60*1000 ?
                      _context.netDb().getKnownRouters() :
                      3000 + _context.random().nextInt(1000);   // so it isn't obvious we restarted
-            if (ri > 12000)
-                ri /= 3 - _context.random().nextInt(50); // hide our real number of known peers to avoid broadcasting that we're running I2P+
-            else if (ri > 5000)
-                ri /= 2 + _context.random().nextInt(50); // hide our real number of known peers to avoid broadcasting that we're running I2P+
+            if (ri > 12000) {
+                ri /= 3;
+                ri -= _context.random().nextInt(50); // hide our real number of known peers to avoid broadcasting that we're running I2P+
+            } else if (ri > 5000) {
+                ri /= 2;
+                ri += _context.random().nextInt(50); // hide our real number of known peers to avoid broadcasting that we're running I2P+
+            }
             stats.setProperty("netdb.knownRouters", String.valueOf(ri));
             int ls = _context.router().getUptime() > 30*60*1000 ?
                      _context.netDb().getKnownLeaseSets() :

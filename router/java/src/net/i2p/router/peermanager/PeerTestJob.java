@@ -57,10 +57,24 @@ class PeerTestJob extends JobImpl {
     }
 
     public int getAvgPeerTestTime() {
+        if (getContext() == null)
+            return 0;
         RateStat rs = getContext().statManager().getRate("peer.testOK");
         Rate r = rs.getRate(60*1000);
         int avgTestTime = (int) r.getLifetimeAverageValue();
         return avgTestTime;
+    }
+
+    /** @since 0.9.49+ */
+    public int getTotalAvgPeerTestTime() {
+        if (getContext() == null)
+            return 0;
+        RateStat ok = getContext().statManager().getRate("peer.testOK");
+        Rate rok = ok.getRate(60*60*1000);
+        RateStat tooslow = getContext().statManager().getRate("peer.testTooSlow");
+        Rate rtooslow = ok.getRate(60*60*1000);
+        int totalAvgTestTime = (int) rok.getLifetimeAverageValue() + (int) rtooslow.getLifetimeAverageValue();
+        return totalAvgTestTime;
     }
 
     /** how long should we wait before firing off new tests?  */
@@ -75,10 +89,10 @@ class PeerTestJob extends JobImpl {
     /** how long to give each peer before marking them as unresponsive? */
     private int getTestTimeout() {
         int testTimeout = getContext().getProperty(PROP_PEER_TEST_TIMEOUT, DEFAULT_PEER_TEST_TIMEOUT);
-        if (getAvgPeerTestTime() > testTimeout) {
+        if (testTimeout < getTotalAvgPeerTestTime()) {
             if (_log.shouldLog(Log.WARN))
-                _log.warn("Peer test timeout set below average successful test time, setting to: " + getAvgPeerTestTime() * 3 / 2 + "ms");
-            return getAvgPeerTestTime() * 3 / 2;
+                _log.warn("Peer test timeout set below average test time, setting to: " + getTotalAvgPeerTestTime() + "ms");
+            return getTotalAvgPeerTestTime();
         } else {
             return testTimeout;
         }

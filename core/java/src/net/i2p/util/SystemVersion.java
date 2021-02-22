@@ -80,7 +80,8 @@ public abstract class SystemVersion {
                           (DAEMON_USER.equals(System.getProperty("user.name")) ||
                            (_isGentoo && GENTOO_USER.equals(System.getProperty("user.name"))));
         _isService = _isLinuxService || _isWindowsService;
-        _isSlow = _isAndroid || _isApache || isARM() || _isGNU || _isZero || getMaxMemory() < 48*1024*1024L;
+        // we assume the Apple M1 is not slow, however isSlow() below will still return true until we have a jbigi
+        _isSlow = _isAndroid || _isApache || (isARM() && !_isMac) || _isGNU || _isZero || getMaxMemory() < 128*1024*1024L;
 
         int sdk = 0;
         if (_isAndroid) {
@@ -345,7 +346,7 @@ public abstract class SystemVersion {
         if (maxMemory >= Long.MAX_VALUE / 2)
 //            maxMemory = 96*1024*1024l;
             /** speed: use sane default */
-            maxMemory = 288*1024*1024l;
+            maxMemory = 2048*1024*1024l;
         return maxMemory;
     }
 

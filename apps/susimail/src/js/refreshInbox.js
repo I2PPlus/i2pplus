@@ -1,19 +1,35 @@
-var refresh = document.getElementById("serverRefresh");
-var inbox = document.getElementById("susimail");
-if (inbox && !refresh) {
-  setInterval(function() {
-    var xhr = new XMLHttpRequest();
-    xhr.open("GET", "/susimail?" + new Date().getTime(), true);
-    xhr.responseType = "document";
-    xhr.onreadystatechange = function () {
-      if (xhr.readyState==4 && xhr.status==200) {
-        var inboxResponse = xhr.responseXML.getElementById("susimail");
-        var inboxParent = inbox.parentNode;
-        inboxParent.replaceChild(inboxResponse, inbox);
+import {removeNotify} from "/susimail/js/notifications.js";
+
+var mailbox = document.getElementById("mailbox");
+var main = document.getElementById("main");
+var serverRefresh = document.getElementById("serverRefresh");
+var notify = document.getElementById("notify");
+var autorefresh = document.getElementById("autorefresh");
+
+var interval = setInterval(function() {
+  if (mailbox && !serverRefresh) {
+    var xhrmail = new XMLHttpRequest();
+    xhrmail.open("GET", "/susimail?" + new Date().getTime(), true);
+    xhrmail.responseType = "document";
+    xhrmail.onreadystatechange = function() {
+      if (xhrmail.readyState==4 && xhrmail.status==200 && main && serverRefresh) {
+        var mailboxResponse = xhrmail.responseXML.getElementById("mailbox");
+        main.innerHTML = xhrmail.responseXML.getElementById("main").innerHTML;
       }
     }
-    xhr.send();
-  }, 5000);
-} else {
-  window.location.reload();
+    removeNotify();
+    xhrmail.send();
+  } else if (notify) {
+    setTimeout(clearNotify, 10000);
+  }
+}, 5000);
+
+removeNotify();
+
+function clearNotify() {
+  clearInterval(interval);
+  notify.style.display = "none";
+  notify.remove();
+  autorefresh.remove();
+  window.location.reload(true);
 }
