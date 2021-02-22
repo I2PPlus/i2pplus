@@ -239,15 +239,13 @@ public class ProfileOrganizer {
             _notFailingPeers.put(peer, rv);
             _notFailingPeersList.add(peer);
             // Add to high cap only if we have room. Don't add to Fast; wait for reorg.
+            int minHighCap = _context.getProperty(PROP_MINIMUM_HIGH_CAPACITY_PEERS, DEFAULT_MINIMUM_HIGH_CAPACITY_PEERS);
             int minFast = _context.getProperty(PROP_MINIMUM_FAST_PEERS, DEFAULT_MINIMUM_FAST_PEERS);
-            if (_thresholdCapacityValue <= rv.getCapacityValue() && isSelectable(peer) &&
-//                _highCapacityPeers.size() < getMaximumHighCapPeers()) {
-                countHighCapacityPeers() < getMaximumHighCapPeers()) {
+            if ((_thresholdCapacityValue <= rv.getCapacityValue() && isSelectable(peer) &&
+                countHighCapacityPeers() < getMaximumHighCapPeers()) || countHighCapacityPeers() < minHighCap)
                 _highCapacityPeers.put(peer, rv);
-                if (countFastPeers() < minFast)
+            if (countFastPeers() < minFast)
                 _fastPeers.put(peer, rv);
-            }
-
             _strictCapacityOrder.add(rv);
         } finally { releaseWriteLock(); }
         return rv;
