@@ -2344,7 +2344,7 @@ public class WebMail extends HttpServlet
                     out.println("<script src=\"/js/scrollTo.js?" + CoreVersion.VERSION + "\" type=\"text/javascript\"></script>");
                 } else if (state == State.LOADING) {
                     // TODO JS?
-//                            out.println("<meta http-equiv=\"refresh\" content=\"5;url=" + myself + "\">");
+                    out.println("<noscript><meta http-equiv=\"refresh\" content=\"5;url=" + myself + "\"></noscript>");
                 }
                 // setup noscript style so we can hide js buttons when js is disabled
                 out.println("<noscript><style type=\"text/css\">.script {display: none !important;}</style></noscript>");
