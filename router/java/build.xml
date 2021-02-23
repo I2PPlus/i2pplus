@@ -75,7 +75,7 @@
                 <!-- so people with very old wrapper.config files will still work with Jetty 6 -->
                 <attribute name="${manifest.classpath.name}" value="i2p.jar addressbook.jar jetty-i2p.jar jetty-rewrite-handler.jar jetty-start.jar jetty-util.jar" />
                 <attribute name="Specification-Title" value="I2P Router" />
-                <attribute name="Specification-Version" value="${release.number}" />
+                <attribute name="Specification-Version" value="${api.version}" />
                 <attribute name="Specification-Vendor" value="The I2P Project https://geti2p.net/" />
                 <attribute name="Implementation-Title" value="I2P Java Router" />
                 <attribute name="Implementation-Version" value="${full.version}" />
@@ -185,7 +185,7 @@
             <fileset dir="./build/javadoc" />
             <manifest>
                 <attribute name="Specification-Title" value="I2P Router" />
-                <attribute name="Specification-Version" value="${release.number}" />
+                <attribute name="Specification-Version" value="${api.version}" />
                 <attribute name="Specification-Vendor" value="The I2P Project https://geti2p.net/" />
                 <attribute name="Implementation-Title" value="I2P Java Router" />
                 <attribute name="Implementation-Version" value="${full.version}" />
@@ -202,7 +202,7 @@
             <fileset dir="./src" />
             <manifest>
                 <attribute name="Specification-Title" value="I2P Router" />
-                <attribute name="Specification-Version" value="${release.number}" />
+                <attribute name="Specification-Version" value="${api.version}" />
                 <attribute name="Specification-Vendor" value="The I2P Project https://geti2p.net/" />
                 <attribute name="Implementation-Title" value="I2P Java Router" />
                 <attribute name="Implementation-Version" value="${full.version}" />
@@ -296,7 +296,7 @@
             <manifest>
                 <attribute name="${manifest.classpath.name}" value="i2p.jar" />
                 <attribute name="Specification-Title" value="I2P Router" />
-                <attribute name="Specification-Version" value="${release.number}" />
+                <attribute name="Specification-Version" value="${api.version}" />
                 <attribute name="Specification-Vendor" value="The I2P Project https://geti2p.net/" />
                 <attribute name="Implementation-Title" value="I2P Java Router" />
                 <attribute name="Implementation-Version" value="${full.version}" />
@@ -316,7 +316,7 @@
             <manifest>
                 <attribute name="${manifest.classpath.name}" value="i2p.jar" />
                 <attribute name="Specification-Title" value="I2P Router" />
-                <attribute name="Specification-Version" value="${release.number}" />
+                <attribute name="Specification-Version" value="${api.version}" />
                 <attribute name="Specification-Vendor" value="The I2P Project https://geti2p.net/" />
                 <attribute name="Implementation-Title" value="I2P Java Router" />
                 <attribute name="Implementation-Version" value="${full.version}" />
