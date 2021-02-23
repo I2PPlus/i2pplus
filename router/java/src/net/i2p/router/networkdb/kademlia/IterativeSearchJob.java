@@ -156,6 +156,10 @@ public class IterativeSearchJob extends FloodSearchJob {
             totalSearchLimit *= 3;
         else if (known < 4000)
             totalSearchLimit *= 2;
+        else if (known > 8000)
+            totalSearchLimit = 1;
+        else if (known > 6000)
+            totalSearchLimit = 2;
         _totalSearchLimit = ctx.getProperty("netdb.searchLimit", totalSearchLimit);
         _ipSet = new MaskedIPSet(2 * (_totalSearchLimit + EXTRA_PEERS));
         _singleSearchTime = ctx.getProperty("netdb.singleSearchTime", SINGLE_SEARCH_TIME);
