@@ -149,22 +149,22 @@ public class SybilRenderer {
 
         StringBuilder buf = new StringBuilder(4*1024);
         buf.append("<div id=\"sybilnav\">\n<ul>\n" +
-                   "<li id=\"reviewStored\"><a href=\"netdb?f=3\">" + _t("Review stored analysis") + "</a>" +
-                   "</li>\n<li id=\"runNew\"><a href=\"netdb?f=3&amp;m=14\">" + _t("Run new analysis") + "</a>" +
-                   "</li><li id=\"configurePeriodic\"><a href=\"netdb?f=3&amp;m=15\">" + _t("Configure periodic analysis") + "</a>" +
-                   "</li><li id=\"banlisted\"><a href=\"/profiles?f=3\">" + _t("Review current bans") + "</a>" +
-                   "</li>\n<li id=\"floodfillSummary\"><a href=\"netdb?f=3&amp;m=1\">" + _t("Floodfill Summary") + "</a>" +
-                   "</li>\n<li id=\"sameFamily\"><a href=\"netdb?f=3&amp;m=2\">" + _t("Same Family") + "</a>" +
-                   "</li>\n<li><a href=\"netdb?f=3&amp;m=3\">" + _t("IP close to us") + "</a>" +
-                   "</li>\n<li><a href=\"netdb?f=3&amp;m=4\">" + _t("Same IP") + "</a>" +
-                   "</li>\n<li><a href=\"netdb?f=3&amp;m=5\">" + _t("Same /24") + "</a>" +
-                   "</li>\n<li><a href=\"netdb?f=3&amp;m=6\">" + _t("Same /16") + "</a>" +
-                   "</li>\n<li><a href=\"netdb?f=3&amp;m=7\">" + _t("Pair distance") + "</a>" +
-                   "</li>\n<li><a href=\"netdb?f=3&amp;m=8\">" + _t("Close to us") + "</a>" +
-                   "</li>\n<li><a href=\"netdb?f=3&amp;m=9\">" + _t("Close to us tomorrow") + "</a>" +
-                   "</li>\n<li><a href=\"netdb?f=3&amp;m=10\">" + _t("DHT neighbors") + "</a>" +
-                   "</li>\n<li><a href=\"netdb?f=3&amp;m=11\">" + _t("Close to our destinations") + "</a>" +
-                   "</li>\n</ul>\n</div>\n");
+                   "<li id=\"reviewStored\"><a href=\"netdb?f=3\">" + _t("Review stored analysis") + "</a></li>\n" +
+                   "<li id=\"runNew\"><a href=\"netdb?f=3&amp;m=14\">" + _t("Run new analysis") + "</a></li>\n" +
+                   "<li id=\"configurePeriodic\"><a href=\"netdb?f=3&amp;m=15\">" + _t("Configure periodic analysis") + "</a></li>\n" +
+                   "<li id=\"banlisted\"><a href=\"/profiles?f=3\">" + _t("Review current bans") + "</a></li>\n" +
+                   "<li id=\"floodfillSummary\"><a href=\"netdb?f=3&amp;m=1\">" + _t("Floodfill Summary") + "</a></li>\n" +
+                   "<li id=\"sameFamily\"><a href=\"netdb?f=3&amp;m=2\">" + _t("Same Family") + "</a></li>\n" +
+                   "<li><a href=\"netdb?f=3&amp;m=3\">" + _t("IP close to us") + "</a></li>\n" +
+                   "<li><a href=\"netdb?f=3&amp;m=4\">" + _t("Same IP") + "</a></li>\n" +
+                   "<li><a href=\"netdb?f=3&amp;m=5\">" + _t("Same /24") + "</a></li>\n" +
+                   "<li><a href=\"netdb?f=3&amp;m=6\">" + _t("Same /16") + "</a></li>\n" +
+                   "<li><a href=\"netdb?f=3&amp;m=7\">" + _t("Pair distance") + "</a></li>\n" +
+                   "<li><a href=\"netdb?f=3&amp;m=8\">" + _t("Close to us") + "</a></li>\n" +
+                   "<li><a href=\"netdb?f=3&amp;m=9\">" + _t("Close to us tomorrow") + "</a></li>\n" +
+                   "<li><a href=\"netdb?f=3&amp;m=10\">" + _t("DHT neighbors") + "</a></li>\n" +
+                   "<li><a href=\"netdb?f=3&amp;m=11\">" + _t("Close to our destinations") + "</a></li>\n" +
+                   "</ul>\n</div>\n");
         writeBuf(out, buf);
 
         double avgMinDist = 0;
