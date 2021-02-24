@@ -11726,6 +11726,10 @@ h3#pconfig {
   background: linear-gradient(to bottom, #020, #010);
 }
 
+#tunnelPeerCount .configpeer img  {
+  padding: 3px;
+}
+
 .viewprofile img:hover, .viewfullentry img:hover, .familysearch img:hover, .configpeer img:hover, .profiledump img:hover {
   border: 1px solid #d50;
   background: linear-gradient(to bottom, #030, #000);
