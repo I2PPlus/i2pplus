@@ -840,7 +840,7 @@ public class I2PTunnelHTTPServer extends I2PTunnelServer {
      *  This plus a typ. HTTP response header will fit into a 1730-byte streaming message.
      */
 //    private static final int MIN_TO_COMPRESS = 1300;
-    private static final int MIN_TO_COMPRESS = 512;
+    private static final int MIN_TO_COMPRESS = 1024;
 
     private static class CompressedResponseOutputStream extends HTTPResponseOutputStream {
         private InternalGZIPOutputStream _gzipOut;

@@ -68,6 +68,17 @@ class RefreshRoutersJob extends JobImpl {
             _log.warn("Suspending Refresh Routers job - network disconnected");
             return;
         }
+        long lag = getContext().jobQueue().getMaxLag();
+        if (lag > 500) {
+            if (_log.shouldLog(Log.WARN))
+            _log.warn("Suspending Refresh Routers job - job lag is over 500ms");
+            return;
+        }
+        if (_facade.isInitialized() && netDbCount > 10000) {
+            if (_log.shouldLog(Log.INFO))
+                _log.info("Suspending Refresh Routers job - over 10,000 known peers in NetDb");
+            return;
+        }
         if (_facade.isInitialized()) {
             if (_routers == null || _routers.isEmpty()) {
                 // make a list of all routers, floodfill first

@@ -979,28 +979,29 @@ public abstract class KademliaNetworkDatabaseFacade extends NetworkDatabaseFacad
             // lookupLeaseSetLocally()
             latest <= now - Router.CLOCK_FUDGE_FACTOR) {
             long age = now - earliest;
+            Destination dest = leaseSet.getDestination();
+            String id = dest != null ? dest.toBase32() : leaseSet.getHash().toBase32();
             if (_log.shouldLog(Log.WARN))
-                _log.warn("Old LeaseSet [" + leaseSet.getDestination().toBase32().substring(0,6) + "] - rejecting store"
+                _log.warn("Old LeaseSet [" + id.substring(0,6) + "] - rejecting store "
                           + "\n* First expired: " + new Date(earliest)
-                          + "\n* Last expired: " + new Date(latest));
+                          + "\n*  Last expired: " + new Date(latest));
 //                          new Exception("Rejecting store"));
-            if (leaseSet.getDestination() != null)
-                return "LeaseSet for " + leaseSet.getDestination().toBase32() +
-                       " expired " + DataHelper.formatDuration(age) + " ago";
-            else
-                return "LeaseSet for unknown destination expired " + DataHelper.formatDuration(age) + " ago";
+            return "LeaseSet for [" + id.substring(0,6) + "]"
+                   + " expired " + DataHelper.formatDuration(age) + " ago";
         }
         if (latest > now + (Router.CLOCK_FUDGE_FACTOR + MAX_LEASE_FUTURE) &&
             (leaseSet.getType() != DatabaseEntry.KEY_TYPE_META_LS2 ||
              latest > now + (Router.CLOCK_FUDGE_FACTOR + MAX_META_LEASE_FUTURE))) {
             long age = latest - now;
             // let's not make this an error, it happens when peers have bad clocks
+            Destination dest = leaseSet.getDestination();
+            String id = dest != null ? dest.toBase32() : leaseSet.getHash().toBase32();
             if (_log.shouldLog(Log.WARN))
                 _log.warn("LeaseSet expires too far in the future: ["
-                          + leaseSet.getDestination().toBase32().substring(0,6)
+                          + id.substring(0,6)
                           + "]\n* Expires: " + DataHelper.formatDuration(age) + " from now");
-            return "Future LeaseSet for " + leaseSet.getDestination().toBase32()
-                   + " expiring in " + DataHelper.formatDuration(age);
+            return "Future LeaseSet for [" + id.substring(0,6)
+                   + "] expiring in " + DataHelper.formatDuration(age);
         }
         return null;
     }
