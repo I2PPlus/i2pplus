@@ -323,7 +323,7 @@ public class I2PTunnelServer extends I2PTunnelTask implements Runnable {
      * Warning, blocks while connecting to router and building tunnels;
      *
      * @throws IllegalArgumentException if the I2CP configuration is b0rked so
-     *                                  badly that we cant create a socketManager
+     *                                  badly that we can't create a socketManager
      * @since 0.9.8
      */
     private void connectManager() {
