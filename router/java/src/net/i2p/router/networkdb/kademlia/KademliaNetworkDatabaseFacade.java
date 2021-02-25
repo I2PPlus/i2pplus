@@ -982,11 +982,11 @@ public abstract class KademliaNetworkDatabaseFacade extends NetworkDatabaseFacad
             Destination dest = leaseSet.getDestination();
             String id = dest != null ? dest.toBase32() : leaseSet.getHash().toBase32();
             if (_log.shouldLog(Log.WARN))
-                _log.warn("Old LeaseSet [" + id.substring(0,6) + "] - rejecting store " 
+                _log.warn("Old LeaseSet [" + id.substring(0,6) + "] - rejecting store "
                           + "\n* First expired: " + new Date(earliest)
                           + "\n*  Last expired: " + new Date(latest));
 //                          new Exception("Rejecting store"));
-            return "LeaseSet for [" + id.substring(0,6) + "]
+            return "LeaseSet for [" + id.substring(0,6) + "]"
                    + " expired " + DataHelper.formatDuration(age) + " ago";
         }
         if (latest > now + (Router.CLOCK_FUDGE_FACTOR + MAX_LEASE_FUTURE) &&
@@ -1000,7 +1000,7 @@ public abstract class KademliaNetworkDatabaseFacade extends NetworkDatabaseFacad
                 _log.warn("LeaseSet expires too far in the future: ["
                           + id.substring(0,6)
                           + "]\n* Expires: " + DataHelper.formatDuration(age) + " from now");
-            return "Future LeaseSet for [" + id.substring(0.6)
+            return "Future LeaseSet for [" + id.substring(0,6)
                    + "] expiring in " + DataHelper.formatDuration(age);
         }
         return null;

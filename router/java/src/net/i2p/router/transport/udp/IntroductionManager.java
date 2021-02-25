@@ -195,7 +195,7 @@ class IntroductionManager {
             RouterInfo ri = _context.netDb().lookupRouterInfoLocally(cur.getRemotePeer());
             if (ri == null) {
                 if (_log.shouldLog(Log.INFO))
-                    _log.info("No local RouterInfo for selected peer [" + cur.toBase64().substring(0,6) + "]");
+                    _log.info("No local RouterInfo for selected peer [" + cur + "]");
                 continue;
             }
             // FIXME we can include all his addresses including IPv6 even if we don't support IPv6 (isValid() is false)
