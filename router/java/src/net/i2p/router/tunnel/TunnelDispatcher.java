@@ -481,7 +481,7 @@ public class TunnelDispatcher implements Service {
             if (endpoint != null) {
                 // we are the outobund endpoint
                 if (_log.shouldLog(Log.DEBUG))
-                    _log.debug("Dispatch where we are the Outbound endpoint: " + endpoint + ": "
+                    _log.debug("Dispatch where we are the Outbound Endpoint:\n* " + endpoint + ": "
                                + msg + " from [" + recvFrom.toBase64().substring(0,6) + "]");
                 _context.messageHistory().tunnelDispatched(msg.getUniqueId(), msg.getTunnelId(), "outbound endpoint");
                 endpoint.dispatch(msg, recvFrom);
@@ -517,7 +517,7 @@ public class TunnelDispatcher implements Service {
         TunnelGateway gw = _inboundGateways.get(msg.getTunnelId());
         if (gw != null) {
             if (_log.shouldLog(Log.DEBUG))
-                _log.debug("Dispatch where we are the Inbound gateway: " + gw + ": " + msg);
+                _log.debug("Dispatch where we are the Inbound gateway:\n* " + gw + ": " + msg);
             long minTime = before - Router.CLOCK_FUDGE_FACTOR;
             long maxTime = before + MAX_FUTURE_EXPIRATION;
             if ( (msg.getMessageExpiration() < minTime) || (msg.getMessage().getMessageExpiration() < minTime) ||
