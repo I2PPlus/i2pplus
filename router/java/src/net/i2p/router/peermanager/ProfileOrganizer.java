@@ -1368,7 +1368,7 @@ public class ProfileOrganizer {
                 continue;
             if (matches.contains(peer))
                 continue;
-            if (_us.equals(peer))
+            if (_us != null && _us.equals(peer))
                 continue;
             boolean ok = isSelectable(peer);
             if (ok) {
