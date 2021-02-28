@@ -710,7 +710,7 @@ public class LeaseSet2 extends LeaseSet {
         buf.append("\n\tSignature: ").append(_signature);
         buf.append("\n\tPublished: ").append(new java.util.Date(_published));
         buf.append("\n\tExpires: ").append(new java.util.Date(_expires));
-        buf.append("\n\tLeases: #").append(getLeaseCount());
+        buf.append("\n\tLeases: ").append(getLeaseCount());
         for (int i = 0; i < getLeaseCount(); i++) {
             buf.append("\n\t\t").append(getLease(i));
         }

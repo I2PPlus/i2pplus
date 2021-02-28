@@ -580,16 +580,16 @@ public class BuildRequestRecord {
             buf.append("Participating ->  In: ").append(readReceiveTunnelId())
                .append("; Out: ").append(readNextTunnelId());
         }
-        buf.append("]");
-        buf.append("\n* Target: [").append(readNextIdentity().toBase64().substring(0,6)).append("]")
+        buf.append("]")
+           .append("\n* Time: ").append(new Date(readRequestTime()))
+           .append(" -> Expires in: ").append(DataHelper.formatDuration(readExpiration()))
+           .append("\n* Target: [").append(readNextIdentity().toBase64().substring(0,6)).append("]")
            .append("\n* Layer key: ").append(readLayerKey())
            .append("\n* IV key: ").append(readIVKey())
-           .append("\n* Reply key: ").append(readReplyKey())
-           .append("\n* Reply IV: ").append(Base64.encode(readReplyIV()))
            .append("\n* Reply MsgID: ").append(readReplyMessageId())
-           .append("\n* Time: ").append(new Date(readRequestTime()))
-           .append("\n* Expires in: ").append(DataHelper.formatDuration(readExpiration()));
-        if (_isEC) {
+           .append("\n* Reply key: ").append(readReplyKey())
+           .append("\n* Reply IV: ").append(Base64.encode(readReplyIV()));
+        if (_isEC && readOptions() != null) {
             buf.append("\n* Options: ").append(readOptions());
             if (_chachaReplyKey != null) {
                 buf.append("\n* ChaCha reply key: ").append(_chachaReplyKey)

@@ -156,8 +156,8 @@ public class NTCPTransport extends TransportImpl {
         _xdhFactory = xdh;
         _log = ctx.logManager().getLog(getClass());
 
-        _context.statManager().createRateStat("ntcp.sendTime", "Total message lifetime when sent completely", "Transport [NTCP]", RATES);
-        _context.statManager().createRateStat("ntcp.sendQueueSize", "Messages in connection queue when new message added", "Transport [NTCP]", RATES);
+        _context.statManager().createRateStat("ntcp.sendTime", "Total message lifetime when send complete", "Transport [NTCP]", RATES);
+        _context.statManager().createRateStat("ntcp.sendQueueSize", "Messages in queue when new message added", "Transport [NTCP]", RATES);
         _context.statManager().createRateStat("ntcp.receiveTime", "Time to receive an Inbound message", "Transport [NTCP]", RATES);
         _context.statManager().createRateStat("ntcp.receiveSize", "Size of received message", "Transport [NTCP]", RATES);
         _context.statManager().createRateStat("ntcp.sendBacklogTime", "Send queue latency when adding new message fails (ms)", "Transport [NTCP]", RATES);

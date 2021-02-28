@@ -275,7 +275,7 @@ public class EncryptedLeaseSet extends LeaseSet2 {
             out.write(_encryptedData);
         }
     }
-    
+
     /**
      *  Overridden because we have a blinded key, not a dest
      */
@@ -347,7 +347,7 @@ public class EncryptedLeaseSet extends LeaseSet2 {
         _transientSigningPublicKey.writeBytes(out);
         _offlineSignature.writeBytes(out);
     }
-    
+
     /**
      *  Number of bytes, NOT including signature
      */
@@ -838,7 +838,7 @@ public class EncryptedLeaseSet extends LeaseSet2 {
      * @since 0.9.41
      */
     public void sign(SigningPrivateKey key, int authType, List<? extends SimpleDataStructure> clientKeys) throws DataFormatException {
-        // now sign inner with the unblinded key 
+        // now sign inner with the unblinded key
         // inner LS is always unpublished
         int saveFlags = _flags;
         setUnpublished();
@@ -863,7 +863,7 @@ public class EncryptedLeaseSet extends LeaseSet2 {
             throw new DataFormatException("Signature failed", ioe);
         }
         byte data[] = out.toByteArray();
-        // now sign outer with the blinded key 
+        // now sign outer with the blinded key
         _signature = DSAEngine.getInstance().sign(data, bkey);
         if (_signature == null)
             throw new DataFormatException("Signature failed with " + key.getType() + " key");
@@ -946,7 +946,7 @@ public class EncryptedLeaseSet extends LeaseSet2 {
                DataHelper.eq(_signature, ls.getSignature())
                && DataHelper.eq(_signingKey, ls.getSigningKey());
     }
-    
+
     /** the destination has enough randomness in it to use it by itself for speed */
     @Override
     public int hashCode() {
@@ -954,43 +954,43 @@ public class EncryptedLeaseSet extends LeaseSet2 {
             return 0;
         return _encryptionKey.hashCode();
     }
-    
+
     @Override
     public String toString() {
         StringBuilder buf = new StringBuilder(128);
         buf.append("[EncryptedLeaseSet: ");
         if (_signingKey != null) {
-            buf.append("\n\tBlinded Key: ").append(_signingKey);
+            buf.append("\n* Blinded Key: ").append(_signingKey);
             Hash h = getHash();
-            buf.append("\n\tHash: ").append(h);
-            buf.append("\n\tB32: ").append(h.toBase32());
+            buf.append("\n* Hash: ").append(h);
+            buf.append("\n* B32: ").append(h.toBase32());
         }
         if (isOffline()) {
-            buf.append("\n\tTransient Key: ").append(_transientSigningPublicKey);
-            buf.append("\n\tTransient Expires: ").append(new java.util.Date(_transientExpires));
-            buf.append("\n\tOffline Signature: ").append(_offlineSignature);
+            buf.append("\n* Transient Key: ").append(_transientSigningPublicKey);
+            buf.append("\n* Transient Expires: ").append(new java.util.Date(_transientExpires));
+            buf.append("\n* Offline Signature: ").append(_offlineSignature);
         }
-        buf.append("\n\tUnpublished? ").append(isUnpublished());
-        buf.append("\n\tLength: ").append(_encryptedData.length);
-        buf.append("\n\tSignature: ").append(_signature);
-        buf.append("\n\tPublished: ").append(new java.util.Date(_published));
-        buf.append("\n\tExpires: ").append(new java.util.Date(_expires));
-        buf.append("\n\tAuth Type: ").append(_authType);
-        buf.append("\n\tClient Keys: ").append(_numKeys);
+        buf.append("\n* Unpublished? ").append(isUnpublished());
+        buf.append("\n* Length: ").append(_encryptedData.length);
+        buf.append("\n* Signature: ").append(_signature);
+        buf.append("\n* Published: ").append(new java.util.Date(_published));
+        buf.append("\n* Expires: ").append(new java.util.Date(_expires));
+        buf.append("\n* Auth Type: ").append(_authType);
+        buf.append("\n* Client Keys: ").append(_numKeys);
         if (_decryptedLS2 != null) {
             if (_secret != null)
-                buf.append("\n\tSecret: ").append(_secret);
+                buf.append("\n* Secret: ").append(_secret);
             if (_clientPrivateKey != null)
-                buf.append("\n\tClient Private Key: ").append(_clientPrivateKey.toBase64());
-            buf.append("\n\tDecrypted LS:\n").append(_decryptedLS2);
+                buf.append("\n* Client Private Key: ").append(_clientPrivateKey.toBase64());
+            buf.append("\n* Decrypted LS:\n").append(_decryptedLS2);
         } else if (_destination != null) {
-            buf.append("\n\tDestination: ").append(_destination);
-            buf.append("\n\tLeases: #").append(getLeaseCount());
+            buf.append("\n* Destination: ").append(_destination);
+            buf.append("\n* Leases: ").append(getLeaseCount());
             for (int i = 0; i < getLeaseCount(); i++) {
-                buf.append("\n\t\t").append(getLease(i));
+                buf.append(getLease(i));
             }
         } else {
-            buf.append("\n\tNot decrypted");
+            buf.append("\n* Not decrypted");
         }
         buf.append("]");
         return buf.toString();
