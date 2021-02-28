@@ -53,7 +53,7 @@ class MessageOutputStream extends OutputStream {
      *  we only wait 250 at the start. Guess that's ok, 1000 is too long anyway.
      */
 //    private static final int DEFAULT_PASSIVE_FLUSH_DELAY = 175;
-    private static final int DEFAULT_PASSIVE_FLUSH_DELAY = 125;
+    private static final int DEFAULT_PASSIVE_FLUSH_DELAY = 150;
 
 /****
     public MessageOutputStream(I2PAppContext ctx, DataReceiver receiver) {

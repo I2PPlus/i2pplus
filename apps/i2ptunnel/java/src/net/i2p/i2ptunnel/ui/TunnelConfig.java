@@ -1205,7 +1205,7 @@ public class TunnelConfig {
         updateTunnelQuantities(config);
         if (_connectDelay)
 //            config.setProperty("option.i2p.streaming.connectDelay", "200");
-            config.setProperty("option.i2p.streaming.connectDelay", "50");
+            config.setProperty("option.i2p.streaming.connectDelay", "100");
         else
             config.setProperty("option.i2p.streaming.connectDelay", "0");
         if (TunnelController.isClient(_type) && _sharedClient) {

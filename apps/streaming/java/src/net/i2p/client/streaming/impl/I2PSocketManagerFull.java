@@ -230,7 +230,7 @@ public class I2PSocketManagerFull implements I2PSocketManager {
         if (_log.shouldLog(Log.INFO)) {
             _log.info("Socket manager created. \n\tDefault Options:\n" + _defaultOptions.toString()
                       .replace(" ", "\n\t").replace("=", " = ")
-                      + "\n\n\tOriginal Properties:\n" + opts.toString()
+                      + "\n\n\tOriginal Properties:\n\t" + opts.toString()
                       .replace(",", "\n\t").replace("{", "").replace("}", "").replace("=", " = ")); // TODO: fix "line separator=,"
         }
         debugInit(context);
