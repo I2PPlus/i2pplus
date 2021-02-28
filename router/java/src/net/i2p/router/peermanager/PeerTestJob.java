@@ -41,7 +41,7 @@ class PeerTestJob extends JobImpl {
     private boolean _keepTesting;
     private final int DEFAULT_PEER_TEST_DELAY = 5*1000;
     public static final String PROP_PEER_TEST_DELAY = "router.peerTestDelay";
-    private static final int DEFAULT_PEER_TEST_CONCURRENCY = 4;
+    private static final int DEFAULT_PEER_TEST_CONCURRENCY = 3;
     public static final String PROP_PEER_TEST_CONCURRENCY = "router.peerTestConcurrency";
     private static final int DEFAULT_PEER_TEST_TIMEOUT = 2*1000;
     public static final String PROP_PEER_TEST_TIMEOUT = "router.peerTestTimeout";
@@ -103,7 +103,7 @@ class PeerTestJob extends JobImpl {
         long memory = SystemVersion.getMaxMemory()*1024*1024;
         int testConcurrent = getContext().getProperty(PROP_PEER_TEST_CONCURRENCY, DEFAULT_PEER_TEST_CONCURRENCY);
         if (cores >=4 && memory >= 512)
-            testConcurrent = getContext().getProperty(PROP_PEER_TEST_CONCURRENCY, 8);
+            testConcurrent = getContext().getProperty(PROP_PEER_TEST_CONCURRENCY, 4);
         return testConcurrent;
     }
 
