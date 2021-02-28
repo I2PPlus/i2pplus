@@ -87,7 +87,8 @@ public class I2PTunnelServer extends I2PTunnelTask implements Runnable {
 //    private static final int DEFAULT_HANDLER_COUNT = 65;
     private static final int DEFAULT_HANDLER_COUNT = 80;
     /** min number of threads */
-    private static final int MIN_HANDLERS = 0;
+//    private static final int MIN_HANDLERS = 0;
+    private static final int MIN_HANDLERS = 1;
     /** how long to wait before dropping an idle thread */
 //    private static final long HANDLER_KEEPALIVE_MS = 30*1000;
     private static final long HANDLER_KEEPALIVE_MS = 40*1000;

@@ -3704,7 +3704,7 @@ th.snarkTorrentPeerCount {
 }
 
 td.snarkTorrentPeerCount, .nopeers td.snarkTorrentPeerCount {
-  text-align: center;
+  text-align: center !important;
   white-space: nowrap;
 }
 
@@ -3840,7 +3840,7 @@ td.snarkTorrentPeerCount {
 
 .snarkTorrentPeerCount .left, .snarkTorrentPeerCount .right {
   display: inline-block;
-  min-width: 12px;
+  min-width: 20px;
 }
 
 .snarkTorrentPeerCount .left {
@@ -3852,12 +3852,6 @@ td.snarkTorrentPeerCount {
   padding-right: 2px;
   text-align: right;
 }
-
-/*
-th.snarkTorrentPeerCount img {
-  display: none;
-}
-*/
 
 .snarkTorrentStatus {
   padding-right: 0 !important;
@@ -3871,8 +3865,6 @@ th.snarkTorrentPeerCount img {
   font-weight: bold;
 }
 
-/* alternative download bar popup bar text just for our downloads in .snarkTorrents */
-
 .snarkTorrentOdd:not(.peerinfo) .snarkTorrentDownloaded .percentBarText,
 .snarkTorrentEven:not(.peerinfo) .snarkTorrentDownloaded .percentBarText {
   padding: 3px;
@@ -3885,19 +3877,6 @@ th.snarkTorrentPeerCount img {
   filter: drop-shadow(0 0 1px #77f);
 }
 
-/*
-.snarkTorrentOdd:not(.peerinfo) .snarkTorrentDownloaded .percentBarText::before,
-.snarkTorrentEven:not(.peerinfo) .snarkTorrentDownloaded .percentBarText::before {
-  margin: 0 1px 0 -2px;
-  content: "";
-  display: inline-block;
-  width: 12px;
-  height: 12px;
-  vertical-align: middle;
-  background: url(images/button_tracker.png) left bottom no-repeat;
-  background-size: 12px 12px;
-}
-*/
 .snarkTorrentOdd:not(.peerinfo) .snarkTorrentDownloaded .percentBarText::after,
 .snarkTorrentEven:not(.peerinfo) .snarkTorrentDownloaded .percentBarText::after {
   content: "";
@@ -3911,23 +3890,23 @@ th.snarkTorrentPeerCount img {
 }
 
 @media screen and (max-width: 1000px) {
-.snarkTorrentOdd:not(.peerinfo) .snarkTorrentDownloaded .percentBarText,
-.snarkTorrentEven:not(.peerinfo) .snarkTorrentDownloaded .percentBarText {
-  padding: 4px 3px 2px;
-  top: -16px;
-  left: -26px;
-  min-width: 130px !important;
+  .snarkTorrentOdd:not(.peerinfo) .snarkTorrentDownloaded .percentBarText,
+  .snarkTorrentEven:not(.peerinfo) .snarkTorrentDownloaded .percentBarText {
+    padding: 4px 3px 2px;
+    min-width: 130px !important;
+    top: -16px;
+    left: -26px;
 }
 }
 
 @supports not (-moz-appearance: none) {
-.percentBarText {
-  line-height: 16px;
-}
+  .percentBarText {
+    line-height: 16px;
+  }
 
-.iframed .percentBarText, .iframed .percentBarText:hover, .iframed .percentBarText:focus {
-  transition: none;
-}
+  .iframed .percentBarText, .iframed .percentBarText:hover, .iframed .percentBarText:focus {
+    transition: none;
+  }
 }
 
 .percentBarText:hover, .percentBarText:focus {
@@ -3943,7 +3922,6 @@ th.snarkTorrentPeerCount img {
 }
 
 /* end download bars */
-/* end alternative popup */
 
 /* peerid + client */
 

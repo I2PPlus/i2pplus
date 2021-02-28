@@ -65,7 +65,7 @@ class EventPumper implements Runnable {
      *  The occasional larger message can use multiple buffers.
      */
     private static final int BUF_SIZE = 8*1024;
-    private static final int BUF_SIZE_LARGE = 16*1024;
+    private static final int BUF_SIZE_LARGE = 10*1024;
     private static final int MAX_CACHE_SIZE = 64;
 
     private static class BufferFactory implements TryCache.ObjectFactory<ByteBuffer> {
@@ -92,9 +92,10 @@ class EventPumper implements Runnable {
      * the time to iterate across them to check a few flags shouldn't be a problem.
      */
 //    private static final long FAILSAFE_ITERATION_FREQ = 2*1000l;
-    private static final long FAILSAFE_ITERATION_FREQ = 180*1000l;
+    private static final int FAILSAFE_ITERATION_FREQ = 180*1000;
     private static final int FAILSAFE_LOOP_COUNT = 512;
-    private static final long SELECTOR_LOOP_DELAY = 200;
+//    private static final long SELECTOR_LOOP_DELAY = 200;
+    private static final long SELECTOR_LOOP_DELAY = 50;
     private static final long BLOCKED_IP_FREQ = 3*60*1000;
 
     /** tunnel test now disabled, but this should be long enough to allow an active tunnel to get started */
@@ -120,9 +121,9 @@ class EventPumper implements Runnable {
         long maxMemory = SystemVersion.getMaxMemory();
         boolean isSlow = SystemVersion.isSlow();
         if (maxMemory >= 1024*1024*1024 && !isSlow)
-            MIN_BUFS = 32;
-        else if (maxMemory >= 768*1024*1024 && !isSlow)
             MIN_BUFS = 24;
+        else if (maxMemory >= 768*1024*1024 && !isSlow)
+            MIN_BUFS = 16;
         else
             MIN_BUFS = (int) Math.max(MIN_MINB, Math.min(MAX_MINB, 1 + (maxMemory / (16*1024*1024))));
     }
@@ -236,7 +237,13 @@ class EventPumper implements Runnable {
                 }
 
                 long now = System.currentTimeMillis();
-                if (lastFailsafeIteration + FAILSAFE_ITERATION_FREQ < now) {
+                int known = _context.netDb().getKnownRouters();
+                int loopFreq = FAILSAFE_ITERATION_FREQ;
+                if (known > 6000)
+                    loopFreq = FAILSAFE_ITERATION_FREQ * 2;
+                else if (known < 2000)
+                    loopFreq = FAILSAFE_ITERATION_FREQ / 2;
+                if (lastFailsafeIteration + loopFreq < now) {
                     // in the *cough* unthinkable possibility that there are bugs in
                     // the code, let's periodically pass over all NTCP connections and
                     // make sure that anything which should be able to write has been
@@ -246,7 +253,7 @@ class EventPumper implements Runnable {
                         Set<SelectionKey> all = _selector.keys();
                         int lastKeySetSize = all.size();
                         _context.statManager().addRateData("ntcp.pumperKeySetSize", lastKeySetSize);
-                        _context.statManager().addRateData("ntcp.pumperLoopsPerSecond", loopCount / (FAILSAFE_ITERATION_FREQ / 1000));
+                        _context.statManager().addRateData("ntcp.pumperLoopsPerSecond", loopCount / (loopFreq / 1000));
                         // reset the failsafe loop counter,
                         // and recalculate the max loops before failsafe sleep, based on number of keys
                         loopCount = 0;
