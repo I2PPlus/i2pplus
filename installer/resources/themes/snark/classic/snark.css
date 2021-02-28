@@ -3704,7 +3704,7 @@ th.snarkTorrentPeerCount {
 }
 
 td.snarkTorrentPeerCount, .nopeers td.snarkTorrentPeerCount {
-  text-align: center;
+  text-align: center !important;
   white-space: nowrap;
 }
 
