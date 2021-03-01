@@ -54,6 +54,7 @@ class MessageOutputStream extends OutputStream {
      */
 //    private static final int DEFAULT_PASSIVE_FLUSH_DELAY = 175;
     private static final int DEFAULT_PASSIVE_FLUSH_DELAY = 150;
+    private static final String PROP_PASSIVE_FLUSH_DELAY = "router.passiveFlushDelay";
 
 /****
     public MessageOutputStream(I2PAppContext ctx, DataReceiver receiver) {
@@ -262,14 +263,17 @@ class MessageOutputStream extends OutputStream {
         public void enqueue() {
             // no need to be overly worried about duplicates - it would just
             // push it further out
+            int pfd = _context.getProperty(PROP_PASSIVE_FLUSH_DELAY, DEFAULT_PASSIVE_FLUSH_DELAY);
             if (!_enqueued) {
                 // Maybe we could just use schedule() here - or even SimpleTimer2 - not sure...
                 // To be safe, use forceReschedule() so we don't get lots of duplicates
                 // We've seen the queue blow up before, maybe it was this before the rewrite...
                 // So perhaps it IS wise to be "overly worried" ...
-                forceReschedule(_passiveFlushDelay);
+//                forceReschedule(_passiveFlushDelay);
+                forceReschedule(pfd);
                 if (_log.shouldLog(Log.DEBUG))
-                    _log.debug("Rescheduling the flusher to run in " + _passiveFlushDelay + "ms");
+//                    _log.debug("Rescheduling the flusher to run in " + _passiveFlushDelay + "ms");
+                    _log.debug("Rescheduling the flusher to run in " + pfd + "ms");
                 _enqueued = true;
             } else {
                 if (_log.shouldLog(Log.DEBUG))

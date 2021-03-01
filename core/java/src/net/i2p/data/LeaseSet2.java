@@ -681,40 +681,39 @@ public class LeaseSet2 extends LeaseSet {
     @Override
     public String toString() {
         StringBuilder buf = new StringBuilder(128);
-        buf.append("[LeaseSet2: ");
+        buf.append("LeaseSet2: ");
         if (_destination != null) {
-            buf.append("\n\tDestination: ").append(_destination);
-            buf.append("\n\tB32: ").append(_destination.toBase32());
+            buf.append("\n* Destination: ").append(_destination);
+            buf.append("\n* B32: ").append(_destination.toBase32());
         }
         List<PublicKey> keys = getEncryptionKeys();
         int sz = keys.size();
-        buf.append("\n\tEncryption Keys: ").append(sz);
+        buf.append("\n* Encryption Keys: ").append(sz);
         for (int i = 0; i < sz; i++) {
-            buf.append("\n\tEncryption Key ").append(i).append(": ").append(keys.get(i));
+            buf.append("\n* Encryption Key ").append(i).append(": ").append(keys.get(i));
         }
         if (isOffline()) {
-            buf.append("\n\tTransient Key: ").append(_transientSigningPublicKey);
-            buf.append("\n\tTransient Expires: ").append(new java.util.Date(_transientExpires));
-            buf.append("\n\tOffline Signature: ").append(_offlineSignature);
+            buf.append("\n* Transient Key: ").append(_transientSigningPublicKey);
+            buf.append("\n* Transient Expires: ").append(new java.util.Date(_transientExpires));
+            buf.append("\n* Offline Signature: ").append(_offlineSignature);
         }
-        buf.append("\n\tOptions: ").append((_options != null) ? _options.size() : 0);
+        buf.append("\nOptions: ").append((_options != null) ? _options.size() : 0);
         if (_options != null && !_options.isEmpty()) {
             for (Map.Entry<Object, Object> e : _options.entrySet()) {
                 String key = (String) e.getKey();
                 String val = (String) e.getValue();
-                buf.append("\n\t\t[").append(key).append("] = [").append(val).append("]");
+                buf.append("\n* [").append(key).append("] = [").append(val).append("]");
             }
         }
-        buf.append("\n\tUnpublished? ").append(isUnpublished());
-        buf.append("\n\tBlinded? ").append(isBlindedWhenPublished());
-        buf.append("\n\tSignature: ").append(_signature);
-        buf.append("\n\tPublished: ").append(new java.util.Date(_published));
-        buf.append("\n\tExpires: ").append(new java.util.Date(_expires));
-        buf.append("\n\tLeases: ").append(getLeaseCount());
+        buf.append("\n* Unpublished? ").append(isUnpublished());
+        buf.append("\n* Blinded? ").append(isBlindedWhenPublished());
+        buf.append("\n* Signature: ").append(_signature);
+        buf.append("\n* Published: ").append(new java.util.Date(_published));
+        buf.append("\n* Expires: ").append(new java.util.Date(_expires));
+        buf.append("\n* Leases: ").append(getLeaseCount());
         for (int i = 0; i < getLeaseCount(); i++) {
-            buf.append("\n\t\t").append(getLease(i));
+            buf.append("\n* ").append(getLease(i));
         }
-        buf.append("]");
         return buf.toString();
     }
 
