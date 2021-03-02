@@ -15,7 +15,7 @@ use_eepget="" # Default downloader
 use_curl=""
 use_wget=""
 ## Downloader variable
-retries="3" # How many times to retry the download
+retries="3" # How many times to retry the download Default:
 timeout="120" # Download timeout
 # Release
 stable="" # Stable release
@@ -74,12 +74,12 @@ Note: Either --devel or --stable MUST be specified unless -u is specified
   -r             Download retries (default: 3)
   -t             Download timeout (default: 120)
   --any          Use any and all methods to download i2pupdate.zip(may use clearnet and/or tor over outproxy)
-  --pid          Specify PID file name
-  --i2p          Download from skank.i2p
+  --i2p          Download from skank.i2p (default)
   --tor          Download from I2P+ .onion address
   --clear        Download from i2pplus.com
   --git          Download from GitLab
   --insecure     Allows for insecure downloading when using a custom url
+  --pid          Specify PID file name
 
 Defaults: use eepget to download ip2update.zip the stable release from skank.i2p, and gracefully restart the router.
 Quick start: ./graceful_update --stable, this will download most stable version using eepget only.
@@ -88,10 +88,10 @@ Notes:
 * please edit the file ./graceful_update for more advanced configurations.
 * -e, -c and -w can be used together.
 * --i2p, --tor, --clear, and --git can be used together
-* -p | proxy setting will strip http(s) or add http(s) depending on the downloaders chosen
+* -p proxy setting will strip http(s) or add http(s) depending on the downloaders chosen
 '
 
-    if [ "$1" ]; then exit $1; else exit $1; fi
+    if [ "$1" ]; then exit $1; else exit 0; fi
 }
 
 
@@ -712,7 +712,7 @@ for b in $downloader; do
                 if [ $? -eq 0 ]; then
                     start_restart_precheck
                 else
-                    verbose "Download of $url failed using eepget, may need to specify --proxy"
+                    verbose "Download of $url failed using eepget, may need to specify --proxy, default eepget proxy is http://127.0.0.1:4444"
                     eepget_failed="true"
                 fi
             else
@@ -755,7 +755,7 @@ for b in $downloader; do
             if [ "$url" ] && [ "$use_url" ]; then
                 search="$(echo $url | grep -iEo '\.onion\/|\.i2p\/')"
                 if [ "$search" ] && [ -z "$proxy" ]; then
-                    debug "curl skipping download of $url with no proxy, found $search in url"
+                    verbose "curl skipping download of $url with no proxy, found $search in url. DNS leak protection"
                     curl_failed="true"
                 else
                     curl_eval="$curl_cmd -o $I2P/i2pupdate.zip $curl_insecure $curl_retries $curl_timeout $curl_insecure $curl_proxy $url"
@@ -771,16 +771,12 @@ for b in $downloader; do
             else
                 if [ "$stable_files" ] && [ "$stable" ]; then
                     for a in $stable_files; do
-                        skip=""
                         url=$(get_url stable "$a")
-                        if [ -z "$proxy" ]; then
-                            if [ "$a" = "i2p" ] || [ "$a" = "tor" ]; then
-                                debug "curl skipping download of $url with no proxy"
-                                skip="true"
-                                curl_failed="true"
-                            fi
-                        fi
-                        if [ -z "$skip" ]; then
+                        search="$(echo $url | grep -iEo '\.onion\/|\.i2p\/')"
+                        if [ "$search" ] && [ -z "$proxy" ]; then
+                            verbose "curl skipping download of $url with no proxy, found $search in url. DNS leak protection."
+                            curl_failed="true"
+                        else
                             curl_eval="$curl_cmd -o $I2P/i2pupdate.zip $curl_retries $curl_timeout $curl_proxy $url"
                             debug "Trying to run, stable: $curl_eval"
                             dry "${curl_eval}"
@@ -794,16 +790,12 @@ for b in $downloader; do
                     done
                 elif [ "$devel_files" ] && [ "$devel" ]; then
                     for a in $devel_files; do
-                        skip=""
                         url=$(get_url devel "$a")
-                        if [ -z "$proxy" ]; then
-                            if [ "$a" = "i2p" ] || [ "$a" = "tor" ]; then
-                                debug "curl skipping download of $url with no proxy"
-                                skip="true"
-                                curl_failed="true"
-                            fi
-                        fi
-                        if [ -z "$skip" ]; then
+                        search="$(echo $url | grep -iEo '\.onion\/|\.i2p\/')"
+                        if [ "$search" ] && [ -z "$proxy" ]; then
+                            verbose "curl skipping download of $url with no proxy, found $search in url. DNS leak protection."
+                            curl_failed="true"
+                        else
                             if [ "$a" = "git" ]; then
                                 url="$($curl_cmd --raw -q -s $curl_retries $curl_timeout $curl_proxy $url | cut -d'"' -f2)"
                             fi
@@ -834,7 +826,7 @@ for b in $downloader; do
             if [ "$url" ] && [ "$use_url" ]; then
                 search="$(echo $url | grep -iEo '\.onion\/|\.i2p\/')"
                 if [ "$search" ] && [ -z "$proxy" ]; then
-                    debug "wget skipping download of $url with no proxy, found $search in url"
+                    verbose "wget skipping download of $url with no proxy, found $search in url. DNS leak protection"
                     wget_failed="true"
                 else
                     wget_eval="$wget_cmd -O $I2P/i2pupdate.zip $wget_insecure $wget_verbose $wget_retries $wget_timeout $wget_insecure $url"
@@ -852,14 +844,11 @@ for b in $downloader; do
                         for a in $stable_files; do
                             skip=""
                             url=$(get_url stable "$a")
-                            if [ -z "$proxy" ]; then
-                                if [ "$a" = "i2p" ] || [ "$a" = "tor" ]; then
-                                    debug "wget skipping download of $url with no proxy"
-                                    skip="true"
-                                    wget_failed="true"
-                                fi
-                            fi
-                            if [ -z "$skip" ]; then
+                            search="$(echo $url | grep -iEo '\.onion\/|\.i2p\/')"
+                            if [ "$search" ] && [ -z "$proxy" ]; then
+                                verbose "wget skipping download of $url with no proxy, found $search in url. DNS leak protection"
+                                wget_failed="true"
+                            else
                                 wget_eval="$wget_cmd -O $I2P/i2pupdate.zip $wget_verbose $wget_retries $wget_timeout $url"
                                 debug "Trying to run, stable: $wget_eval"
                                 dry "${wget_eval}"
@@ -873,15 +862,12 @@ for b in $downloader; do
                         done
                     elif [ "$devel_files" ] && [ "$devel" ]; then
                         for a in $devel_files; do
-                            skip=""
                             url=$(get_url devel "$a")
-                            if [ -z "$proxy" ]; then
-                                if [ "$a" = "i2p" ] || [ "$a" = "tor" ]; then
-                                    debug "wget skipping download of $url with no proxy"
-                                    skip="true"
-                                fi
-                            fi
-                            if [ -z "$skip" ]; then
+                            search="$(echo $url | grep -iEo '\.onion\/|\.i2p\/')"
+                            if [ "$search" ] && [ -z "$proxy" ]; then
+                                verbose "wget skipping download of $url with no proxy, found $search in url. DNS leak protection"
+                                wget_filed="true"
+                            else
                                 wget_eval="$wget_cmd -O $I2P/i2pupdate.zip $wget_verbose $wget_retries $wget_timeout $url"
                                 debug "Trying to run, devel: $wget_eval"
                                 dry "${wget_eval}"
@@ -902,14 +888,12 @@ for b in $downloader; do
                     export http_proxy="$old_http_proxy"
                     export https_proxy="$old_https_proxy"
                 fi
-                fi
             fi
         fi
-    if [ "eepget_failed" ] && [ "$curl_failed" ] && [ "$wget_failed" ]; then
-        verbose "All downloaders failed to download i2pupdate.zip, check your connection or settings"
     fi
 done
 
-verbose "Unable to download using, eepget failed:$eepget_failed, curl failed: $curl_failed, wget failed: $wget_failed"
+debug "eepget failed: $eepget_failed, curl failed: $curl_failed, wget failed: $wget_failed"
+verbose "Failed to download, please check your settings or your connection"
 
 exit 1

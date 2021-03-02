@@ -74,6 +74,7 @@ public class TransportManager implements TransportEventListener {
     private final Map<String, Transport> _pluggableTransports;
     private final RouterContext _context;
     private final UPnPManager _upnpManager;
+    private final SimpleTimer2.TimedEvent _upnpRefresher;
     private final DHSessionKeyBuilder.PrecalcRunner _dhThread;
     private final X25519KeyFactory _xdhThread;
     private final boolean _enableUDP;
@@ -86,8 +87,8 @@ public class TransportManager implements TransportEventListener {
     public final static String PROP_ENABLE_NTCP = "i2np.ntcp.enable";
     /** default true */
     public final static String PROP_ENABLE_UPNP = "i2np.upnp.enable";
-    /** default false for now */
     public final static String PROP_ENABLE_UPNP_IPV6 = "i2np.upnp.ipv6.enable";
+    public static final boolean DEFAULT_ENABLE_UPNP_IPV6 = true;
     private static final String PROP_JAVA_PROXY1 = "socksProxyHost";
     private static final String PROP_JAVA_PROXY2 = "java.net.useSystemProxies";
     private static final String PROP_JAVA_PROXY3 = "http.proxyHost";
@@ -103,6 +104,8 @@ public class TransportManager implements TransportEventListener {
 
     /** not forever, since they may update */
     private static final long SIGTYPE_BANLIST_DURATION = 36*60*60*1000L;
+
+    private static final long UPNP_REFRESH_TIME = UPnP.LEASE_TIME_SECONDS * 1000L / 3;
 
     public TransportManager(RouterContext context) {
         _context = context;
@@ -120,6 +123,7 @@ public class TransportManager implements TransportEventListener {
         boolean isProxied = isProxied();
         boolean enableUPnP = !isProxied && _context.getBooleanPropertyDefaultTrue(PROP_ENABLE_UPNP);
         _upnpManager = enableUPnP ? new UPnPManager(context, this) : null;
+        _upnpRefresher = enableUPnP ? new UPnPRefresher() : null;
         _enableUDP = _context.getBooleanPropertyDefaultTrue(PROP_ENABLE_UDP);
         _enableNTCP1 = isNTCPEnabled(context) &&
                        context.getProperty(PROP_NTCP1_ENABLE, DEFAULT_NTCP1_ENABLE);
@@ -453,8 +457,10 @@ public class TransportManager implements TransportEventListener {
         // Always start on Android, as we may have a cellular IPv4 address but
         // are routing all traffic through WiFi.
         // Also, conditions may change rapidly.
-        if (_upnpManager != null && (SystemVersion.isAndroid() || Addresses.getAnyAddress() == null))
+        if (_upnpManager != null && (SystemVersion.isAndroid() || Addresses.getAnyAddress() == null)) {
             _upnpManager.start();
+            _upnpRefresher.schedule(UPNP_REFRESH_TIME);
+        }
         configTransports();
         _log.debug("Starting up the transport manager...");
         // Let's do this in a predictable order to make testing easier
@@ -491,8 +497,10 @@ public class TransportManager implements TransportEventListener {
      *  Can be restarted.
      */
     synchronized void stopListening() {
-        if (_upnpManager != null)
+        if (_upnpManager != null) {
+            _upnpRefresher.cancel();
             _upnpManager.stop();
+        }
         for (Transport t : _transports.values()) {
             t.stopListening();
         }
@@ -805,7 +813,7 @@ public class TransportManager implements TransportEventListener {
                 // ipv4
                 rv.add(new Port(t.getStyle(), port));
                 // ipv6
-                if (_context.getBooleanProperty(PROP_ENABLE_UPNP_IPV6)) {
+                if (_context.getProperty(PROP_ENABLE_UPNP_IPV6, DEFAULT_ENABLE_UPNP_IPV6)) {
                     RouterAddress ra = t.getCurrentAddress(true);
                     if (ra == null) {
                         if (t.getStyle().equals(UDPTransport.STYLE)) {
@@ -986,6 +994,23 @@ public class TransportManager implements TransportEventListener {
                 _upnpUpdateQueued = false;
                 _upnpManager.update(getPorts());
             }
+        }
+    }
+
+    /**
+     * Periodic refresh of UPnP ports.
+     * This is required because UPnP leases expire.
+     * UPnPManager.Rescanner finds new devices but does not refresh the ports.
+     * Caller must schedule.
+     *
+     * @since 0.9.50
+     */
+    private class UPnPRefresher extends SimpleTimer2.TimedEvent {
+        public UPnPRefresher() { super(_context.simpleTimer2()); }
+
+        public void timeReached() {
+            transportAddressChanged();
+            reschedule(UPNP_REFRESH_TIME);
         }
     }
 

@@ -1028,6 +1028,9 @@ public class UDPTransport extends TransportImpl implements TimedWeightedPriority
                 if (getExternalIP() != null && !isIPv4Firewalled())
                     setReachabilityStatus(Status.IPV4_OK_IPV6_UNKNOWN);
             } else if (ip.length == 16) {
+                boolean fwOld = _context.getBooleanProperty(PROP_IPV6_FIREWALLED);
+                if (!fwOld)
+                    _context.router().saveConfig(PROP_IPV6_FIREWALLED, "false");
                 if (!isIPv6Firewalled())
                     setReachabilityStatus(Status.IPV4_UNKNOWN_IPV6_OK, true);
             }
@@ -1244,7 +1247,7 @@ public class UDPTransport extends TransportImpl implements TimedWeightedPriority
         } else if (updated) {
             _context.statManager().addRateData("udp.addressUpdated", 1);
             Map<String, String> changes = new HashMap<String, String>();
-            if (ourIP.length == 4 && !fixedPort)
+            if (!isIPv6 && !fixedPort)
                 changes.put(PROP_EXTERNAL_PORT, Integer.toString(ourPort));
             // queue a country code lookup of the new IP
             _context.commSystem().queueLookup(ourIP);
@@ -1252,7 +1255,7 @@ public class UDPTransport extends TransportImpl implements TimedWeightedPriority
             // IPV4 ONLY
             String oldIP = _context.getProperty(PROP_IP);
             String newIP = Addresses.toString(ourIP);
-            if (ourIP.length == 4 && !newIP.equals(oldIP)) {
+            if (!isIPv6 && !newIP.equals(oldIP)) {
                 long lastChanged = 0;
                 long now = _context.clock().now();
                 String lcs = _context.getProperty(PROP_IP_CHANGE);
@@ -1287,10 +1290,10 @@ public class UDPTransport extends TransportImpl implements TimedWeightedPriority
                     _context.router().shutdown(Router.EXIT_HARD_RESTART);
                     // doesn't return
                 }
-            } else if (ourIP.length == 4 && !fixedPort) {
+            } else if (!isIPv6 && !fixedPort) {
                 // save PROP_EXTERNAL_PORT
                 _context.router().saveConfig(changes, null);
-            } else if (ourIP.length == 16) {
+            } else if (isIPv6) {
                 oldIP = _context.getProperty(PROP_IPV6);
                 if (!newIP.equals(oldIP)) {
                     changes.put(PROP_IPV6, newIP);
@@ -3293,9 +3296,10 @@ public class UDPTransport extends TransportImpl implements TimedWeightedPriority
                           "\n* Caused by update: " + newStatus +
 //                          " from: ", new Exception("traceback"));
                           " from: ");
-            if (old != Status.UNKNOWN)
+            if (old != Status.UNKNOWN && _context.router().getUptime() > 5*60*1000L) {
                 _context.router().eventLog().addEvent(EventLog.REACHABILITY,
                    "from " + _t(old.toStatusString()) + " to " +  _t(status.toStatusString()));
+            }
             // Always rebuild when the status changes, even if our address hasn't changed,
             // as rebuildExternalAddress() calls replaceAddress() which calls CSFI.notifyReplaceAddress()
             // which will start up NTCP inbound when we transition to OK.
