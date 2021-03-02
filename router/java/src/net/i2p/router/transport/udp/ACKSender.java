@@ -39,8 +39,8 @@ class ACKSender implements Runnable {
         _alive = true;
         _context.statManager().createRateStat("udp.sendACKCount", "Number of ACK messages sent to a peer", "Transport [UDP]", UDPTransport.RATES);
         _context.statManager().createRateStat("udp.ackFrequency", "How long ago we sent an ACK to this peer", "Transport [UDP]", UDPTransport.RATES);
-        _context.statManager().createRateStat("udp.sendACKRemaining", "Number of remaining peers waiting to ACK when we ACK a peer", "Transport [UDP]", UDPTransport.RATES);
-        _context.statManager().createRateStat("udp.abortACK", "How often we schedule up an ACK send only to find it had already been sent (through piggyback)", "Transport [UDP]", UDPTransport.RATES);
+        _context.statManager().createRateStat("udp.sendACKRemaining", "Remaining ACKs to send when we ACK a peer", "Transport [UDP]", UDPTransport.RATES);
+        _context.statManager().createRateStat("udp.abortACK", "How often already sent (piggybacked) ACKs scheduled", "Transport [UDP]", UDPTransport.RATES);
     }
 
     /**
