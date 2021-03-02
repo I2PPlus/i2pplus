@@ -78,7 +78,7 @@ This is the webapp that creates identification images. They can be found in the 
 
 <form action="/imagegen/qr" method="get" target="_blank">
 <div class="formtitle">QR Code Generator</div>
-<input type="text" name="c" required x-moz-errormessage="You must provide a URL for the image generation to work!" placeholder="URL to encode" title="Enter URL">
+<input type="text" name="c" required placeholder="URL to encode" title="Enter URL">
 <input type="text" name="t" placeholder="optional display text" title="Optional text to be displayed underneath the QR code">
 <select name="s" title="Select image output size">
 <option value="128">128 by 128 pixels</option>
@@ -100,7 +100,7 @@ This technique renders an ASCII-Art representation of a digital fingerprint so t
 <div id="randomart">
 <table>
 <tr>
-<th colspan="2" class="title">Random Art for the hostname: <i>i2p-projekt.i2p</i></th>
+<th colspan="2" class="title">Random Art for hostname: <i id="ra_hostname">i2p-projekt.i2p</i></th>
 </tr>
 <tr>
 <th>HTML Test [SHA256]</th>
@@ -112,9 +112,9 @@ This technique renders an ASCII-Art representation of a digital fingerprint so t
 </tr>
 </table>
 
-<form action="/imagegen/ra" method="get" target="htmlart">
+<form id="randomartgen" action="/imagegen/ra" method="get" target="htmlart">
 <div class="formtitle">Random Art Generator</div>
-<input type="text" name="c" placeholder="I2P hostname to encode" title="Enter I2P hostname (must be in the addressbook)">
+<input type="text" id="ra_input" name="c" placeholder="I2P hostname to encode" title="Enter I2P hostname (must be in the addressbook)">
 <input hidden="hidden" name="m" value="html">
 <button>Create Random Art</button>
 </form>
@@ -124,5 +124,6 @@ This technique renders an ASCII-Art representation of a digital fingerprint so t
 
 <div id="nav"><a href="../">Return to I2P Console</a></div>
 <span data-iframe-height></span>
+<script type="text/javascript" src="RAhostname.js"></script>
 </body>
 </html>
