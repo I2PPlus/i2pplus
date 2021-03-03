@@ -13,10 +13,10 @@
 <%@include file="summary.jsi" %>
 <h1 class="log"><%=intl._t("Logs")%></h1>
 <div class="main" id="logs">
-<jsp:useBean class="net.i2p.router.web.helpers.LogsHelper" id="logshelper" scope="request" />
-<jsp:setProperty name="logshelper" property="contextId" value="<%=i2pcontextId%>" />
+<jsp:useBean class="net.i2p.router.web.helpers.LogsHelper" id="logsHelper" scope="request" />
+<jsp:setProperty name="logsHelper" property="contextId" value="<%=i2pcontextId%>" />
 <%
-    if (!logshelper.isAdvanced()) {
+    if (!logsHelper.isAdvanced()) {
 %>
 <table id="bugreports">
 <tbody>
@@ -27,28 +27,23 @@
 </td></tr>
 </tbody>
 </table>
-<%
-    }
-%>
 <h3 class="tabletitle" id="version"><%=intl._t("I2P Version and Running Environment")%>&ensp;<a href="/events?from=604800"><!-- 1 week --><%=intl._t("View event log")%></a></h3>
-<jsp:useBean class="net.i2p.router.web.helpers.LogsHelper" id="logsHelper" scope="request" />
-<jsp:setProperty name="logsHelper" property="contextId" value="<%=i2pcontextId%>" />
 <table id="enviro">
 <tbody>
 <tr><td><b>I2P:</b></td><td><%=net.i2p.router.RouterVersion.FULL_VERSION%>&ensp;<b>Wrapper:</b>&ensp;<%=System.getProperty("wrapper.version", "none")%> &ensp;<b>Built by:</b>&ensp;<jsp:getProperty name="logsHelper" property="builtBy" /></td></tr>
 <tr><td><b>Platform:</b></td><td><%=System.getProperty("os.name")%>&ensp;<%=System.getProperty("os.arch")%>&ensp;<%=System.getProperty("os.version")%></td></tr>
 <%
-   boolean isX86 = net.i2p.util.SystemVersion.isX86();
-   if (isX86) {
+       boolean isX86 = net.i2p.util.SystemVersion.isX86();
+       if (isX86) {
 %>
 <%
-   }
+       }
 %><tr><td><b>Processor:</b></td><td><span id="cputype"><%=net.i2p.util.NativeBigInteger.cpuType()%></span>
 <%
-   if (isX86) {
+       if (isX86) {
 %>&ensp;<%=net.i2p.util.NativeBigInteger.cpuModel()%>
 <%
-   }
+       }
 %>
 &ensp;<span class="nowrap">[Jcpuid version: <%=freenet.support.CPUInformation.CPUID.getJcpuidVersion()%></span>]</td></tr>
 <tr><td><b>Java:</b></td><td><%=System.getProperty("java.vendor")%>&ensp;<%=System.getProperty("java.version")%>&ensp;(<%=System.getProperty("java.runtime.name")%>&ensp;<%=System.getProperty("java.runtime.version")%>)</td></tr>
@@ -58,6 +53,9 @@
 <tr><td><b>JSTL:</b></td><td><jsp:getProperty name="logsHelper" property="jstlVersion" />&ensp;<span class="nowrap"><b>Encoding:</b>&ensp;<%=System.getProperty("file.encoding")%></span>&ensp;<span class="nowrap"><b>Charset:</b>&ensp;<%=java.nio.charset.Charset.defaultCharset().name()%></span></td></tr>
 </tbody>
 </table>
+<%
+    } // !isAdvanced()
+%>
 <%
     String consoleNonce = net.i2p.router.web.CSSHelper.getNonce();
     String ct1 = request.getParameter("clear");
