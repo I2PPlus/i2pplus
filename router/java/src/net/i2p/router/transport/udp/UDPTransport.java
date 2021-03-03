@@ -649,9 +649,19 @@ public class UDPTransport extends TransportImpl implements TimedWeightedPriority
                         rebuildExternalAddress(newIP, newPort, false);
                     }
                 } else {
-                    if (!isIPv4Firewalled())
+                    if (isIPv4Firewalled()) {
+                        setReachabilityStatus(Status.IPV4_FIREWALLED_IPV6_UNKNOWN);
+                        // save the external address but don't publish it
+                        // save it where UPnP can get it and try to forward it
+                        OrderedProperties localOpts = new OrderedProperties(); 
+                        localOpts.setProperty(UDPAddress.PROP_PORT, String.valueOf(newPort));
+                        localOpts.setProperty(UDPAddress.PROP_HOST, newIP);
+                        RouterAddress local = new RouterAddress(STYLE, localOpts, DEFAULT_COST);
+                        replaceCurrentExternalAddress(local, false);
+                    } else {
                         setReachabilityStatus(Status.IPV4_OK_IPV6_UNKNOWN);
-                    rebuildExternalAddress(newIP, newPort, false);
+                        rebuildExternalAddress(newIP, newPort, false);
+                    }
                 }
                 if (save && !newIP.equals(oldIP)) {
                     changes.put(prop, newIP);
@@ -1025,7 +1035,7 @@ public class UDPTransport extends TransportImpl implements TimedWeightedPriority
         }
         if (success && ip != null) {
             if (ip.length == 4) {
-                if (getExternalIP() != null && !isIPv4Firewalled())
+                if (getCurrentExternalAddress(false) != null && !isIPv4Firewalled())
                     setReachabilityStatus(Status.IPV4_OK_IPV6_UNKNOWN);
             } else if (ip.length == 16) {
                 boolean fwOld = _context.getBooleanProperty(PROP_IPV6_FIREWALLED);
@@ -1798,16 +1808,19 @@ public class UDPTransport extends TransportImpl implements TimedWeightedPriority
             long now = _context.clock().now();
             int valid = 0;
             for (int i = 0; i < ua.getIntroducerCount(); i++) {
-                // warning: this is only valid as long as we use the ident hash as their key.
-                byte[] key = ua.getIntroducerKey(i);
-                if (key.length != Hash.HASH_LENGTH)
-                    continue;
                 long exp = ua.getIntroducerExpiration(i);
-                if (exp > 0 && exp < now + INTRODUCER_EXPIRATION_MARGIN)
+                if (exp > 0 && exp < now + INTRODUCER_EXPIRATION_MARGIN) {
+                    if (_log.shouldWarn())
+                        _log.warn("Introducer " + i + " is expiring soon, need to replace");
                     continue;
-                PeerState peer = getPeerState(new Hash(key));
-                if (peer != null)
+                }
+                long tag = ua.getIntroducerTag(i);
+                if (_introManager.isInboundTagValid(tag)) {
                     valid++;
+                } else {
+                    if (_log.shouldWarn())
+                        _log.warn("Introducer " + i + " is no longer connected, need to replace");
+                }
             }
             long sinceSelected = now - _introducersSelectedOn;
             if (valid >= PUBLIC_RELAY_COUNT) {
@@ -2495,7 +2508,8 @@ public class UDPTransport extends TransportImpl implements TimedWeightedPriority
         // if we have explicit external addresses, they had better be reachable
         String caps;
         if (introducersRequired || !canIntroduce()) {
-            if (_context.getProperty(PROP_TRANSPORT_CAPS, ENABLE_TRANSPORT_CAPS))
+            if (!directIncluded && !isIPv6 &&
+                _context.getProperty(PROP_TRANSPORT_CAPS, ENABLE_TRANSPORT_CAPS))
                 caps = CAP_TESTING_4;
         else
                 caps = CAP_TESTING;
@@ -2564,6 +2578,17 @@ public class UDPTransport extends TransportImpl implements TimedWeightedPriority
 //                    _log.info("Address rebuilt: " + addr, new Exception());
                     _log.info("Address rebuilt\n* " + addr);
                 replaceAddress(addr);
+                if (!isIPv6 &&
+                    _context.getProperty(PROP_TRANSPORT_CAPS, ENABLE_TRANSPORT_CAPS) &&
+                    getCurrentAddress(true) == null &&
+                    getIPv6Config() != IPV6_DISABLED &&
+                    hasIPv6Address()) {
+                    // Also make an empty "6" address
+                    OrderedProperties opts = new OrderedProperties(); 
+                    opts.setProperty(UDPAddress.PROP_CAPACITY, CAP_IPV6);
+                    RouterAddress addr6 = new RouterAddress(STYLE, opts, SSU_OUTBOUND_COST);
+                    replaceAddress(addr6);
+                }
                 // warning, this calls back into us with allowRebuildRouterInfo = false,
                 // via CSFI.createAddresses->TM.getAddresses()->updateAddress()->REA
                 if (allowRebuildRouterInfo)
@@ -2589,6 +2614,21 @@ public class UDPTransport extends TransportImpl implements TimedWeightedPriority
                 localOpts.setProperty(UDPAddress.PROP_HOST, host);
                 RouterAddress local = new RouterAddress(STYLE, localOpts, DEFAULT_COST);
                 replaceCurrentExternalAddress(local, isIPv6);
+            }
+            if (!isIPv6 &&
+                _context.getProperty(PROP_TRANSPORT_CAPS, ENABLE_TRANSPORT_CAPS)) {
+                // Make an empty "4" address
+                OrderedProperties opts = new OrderedProperties(); 
+                opts.setProperty(UDPAddress.PROP_CAPACITY, CAP_IPV4);
+                RouterAddress addr4 = new RouterAddress(STYLE, opts, SSU_OUTBOUND_COST);
+                RouterAddress current = getCurrentAddress(false);
+                boolean wantsRebuild = !addr4.deepEquals(current);
+                if (!wantsRebuild)
+                    return null;
+                replaceAddress(addr4);
+                if (allowRebuildRouterInfo)
+                    rebuildRouterInfo();
+                return addr4;
             }
             removeExternalAddress(isIPv6, allowRebuildRouterInfo);
             return null;
@@ -2791,7 +2831,7 @@ public class UDPTransport extends TransportImpl implements TimedWeightedPriority
             case IPV4_UNKNOWN_IPV6_OK:
             case IPV4_UNKNOWN_IPV6_FIREWALLED:
             case UNKNOWN:
-                return _introManager.introducerCount() < 2 * MIN_INTRODUCER_POOL;
+                return _introManager.introducerCount() < 3 * MIN_INTRODUCER_POOL;
 
             default:
                 return !allowDirectUDP();
