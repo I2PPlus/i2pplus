@@ -225,23 +225,23 @@ class IntroductionManager {
             }
             int oldFound = found;
             for (RouterAddress ra : ras) {
-                // IPv6 allowed as of 0.9.50
                 byte[] ip = ra.getIP();
-                if (ip.length == 16 && VersionComparator.comp(ri.getVersion(), MIN_IPV6_INTRODUCER_VERSION) < 0) {
-            if (_log.shouldLog(Log.INFO))
-                        _log.info("Would have picked IPv6 introducer but he doesn't support it: " + cur);
-                continue;
-                }
                 int port = ra.getPort();
                 if (!isValid(ip, port, true))
                     continue;
-            cur.setIntroducerTime();
-            UDPAddress ura = new UDPAddress(ra);
-            byte[] ikey = ura.getIntroKey();
-            if (ikey == null)
-                continue;
-            introducers.add(new Introducer(ip, port, ikey, cur.getTheyRelayToUsAs()));
-            found++;
+                // IPv6 allowed as of 0.9.50
+                if (ip.length == 16 && VersionComparator.comp(ri.getVersion(), MIN_IPV6_INTRODUCER_VERSION) < 0) {
+                    if (_log.shouldLog(Log.INFO))
+                        _log.info("Would have picked IPv6 introducer but he doesn't support it: " + cur);
+                    continue;
+                }
+                cur.setIntroducerTime();
+                UDPAddress ura = new UDPAddress(ra);
+                byte[] ikey = ura.getIntroKey();
+                if (ikey == null)
+                    continue;
+                introducers.add(new Introducer(ip, port, ikey, cur.getTheyRelayToUsAs()));
+                found++;
                 // two per router max
                 if (found - oldFound >= 2)
                     break;
@@ -313,20 +313,20 @@ class IntroductionManager {
 
         @Override
         public boolean equals(Object o) {
-         if (o == null) {
-            return false;
-         }
-         if (!(o instanceof Introducer)) {
-            return false;
-         }
+            if (o == null) {
+                return false;
+            }
+            if (!(o instanceof Introducer)) {
+                return false;
+            }
 
-         Introducer i = (Introducer) o;
-         return this.compareTo(i) == 0;
+            Introducer i = (Introducer) o;
+            return this.compareTo(i) == 0;
         }
 
         @Override
         public int hashCode() {
-         return skey.hashCode();
+            return skey.hashCode();
         }
     }
 
@@ -514,9 +514,9 @@ class IntroductionManager {
             if (ipIncluded) {
                 alicePort = port;
             } else if (port != alicePort) {
-            if (_log.shouldWarn())
-                _log.warn("Bad relay req from " + alice + " for " + Addresses.toString(aliceIP, port));
-            _context.statManager().addRateData("udp.relayBadIP", 1);
+                if (_log.shouldWarn())
+                    _log.warn("Bad relay req from " + alice + " for " + Addresses.toString(aliceIP, port));
+                _context.statManager().addRateData("udp.relayBadIP", 1);
             }
             return;
         }
