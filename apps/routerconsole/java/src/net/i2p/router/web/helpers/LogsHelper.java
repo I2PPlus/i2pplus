@@ -404,4 +404,8 @@ public class LogsHelper extends HelperBase {
     private String _c(String s) {
         return Translate.getString(s, _context, CORE_BUNDLE_NAME);
     }
+
+    public boolean isAdvanced() {
+        return _context.getBooleanProperty(PROP_ADVANCED);
+    }
 }
