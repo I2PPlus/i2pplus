@@ -89,10 +89,10 @@ class PeerTestJob extends JobImpl {
     /** how long to give each peer before marking them as unresponsive? */
     private int getTestTimeout() {
         int testTimeout = getContext().getProperty(PROP_PEER_TEST_TIMEOUT, DEFAULT_PEER_TEST_TIMEOUT);
-        if (testTimeout < getTotalAvgPeerTestTime()) {
+        if (testTimeout < getAvgPeerTestTime()) {
             if (_log.shouldLog(Log.WARN))
-                _log.warn("Peer test timeout set below average test time, setting to: " + getTotalAvgPeerTestTime() + "ms");
-            return getTotalAvgPeerTestTime();
+                _log.warn("Peer test timeout set below successful test average, setting to: " + getAvgPeerTestTime() + "ms");
+            return getAvgPeerTestTime();
         } else {
             return testTimeout;
         }
