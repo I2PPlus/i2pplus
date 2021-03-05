@@ -2997,6 +2997,10 @@ td.infowarn, #help tr:hover td.infowarn {
 
 /* logs */
 
+#logs > .tabletitle {
+  margin-top: 15px;
+}
+
 #criticallogs tr:first-child {
   display: none; /* hide empty placeholder for log location */
 }
