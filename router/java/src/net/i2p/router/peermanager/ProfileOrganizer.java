@@ -284,11 +284,22 @@ public class ProfileOrganizer {
             _notFailingPeers.put(peer, profile);
             if (old == null)
                 _notFailingPeersList.add(peer);
+            RouterInfo peerInfo = _context.netDb().lookupRouterInfoLocally(peer);
+            String bw = peerInfo.getBandwidthTier();
+            String cap = peerInfo.getCapabilities();
+            PeerProfile prof = getProfile(peer);
+            boolean reachable = cap.indexOf(Router.CAPABILITY_REACHABLE) >= 0;
             // Add to high cap only if we have room. Don't add to Fast; wait for reorg.
-            if (_thresholdCapacityValue <= profile.getCapacityValue() &&
-                isSelectable(peer) &&
+            if (peerInfo != null && cap != null && (!reachable || bw.equals("K") || bw.equals("L") || bw.equals("M"))) {
+                prof.setCapacityBonus(-30);
+                _highCapacityPeers.remove(peer, profile);
+                if (_log.shouldLog(Log.INFO))
+                    _log.info("[" + peer.toBase64().substring(0,6) + "] evicted from high cap group -> K, L, M or Unreachable");
+            }
+            if (_thresholdCapacityValue <= profile.getCapacityValue() && isSelectable(peer) &&
                 _highCapacityPeers.size() < getMaximumHighCapPeers()) {
-                _highCapacityPeers.put(peer, profile);
+                    if (peerInfo != null && cap != null && reachable && !bw.equals("K") && !bw.equals("L") && !bw.equals("M"))
+                        _highCapacityPeers.put(peer, profile);
             }
             _strictCapacityOrder.add(profile);
         } finally { releaseWriteLock(); }

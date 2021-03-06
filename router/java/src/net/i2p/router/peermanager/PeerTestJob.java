@@ -170,9 +170,11 @@ class PeerTestJob extends JobImpl {
             if (peerInfo != null && cap != null && reachable &&
                 (bw.equals("N") || bw.equals("O") || bw.equals("P") || bw.equals("X"))) {
                 peers.add(peerInfo);
-            } else if (!reachable || bw.equals("K") || bw.equals("L") || bw.equals("M")) {
+            } else if (peerInfo != null && cap != null &&
+                       (!reachable || bw.equals("K") || bw.equals("L") || bw.equals("M"))) {
+                prof.setCapacityBonus(-30);
                 if (_log.shouldLog(Log.INFO))
-                    _log.info("Skipping test of [" + peer.toBase64().substring(0,6) + "] - K, L, M or unreachable");
+                    _log.info("[" + peer.toBase64().substring(0,6) + "] Setting capacity bonus to -30 and skipping test -> K, L, M or unreachable");
             } else if (peerInfo == null) {
                 if (_log.shouldLog(Log.INFO))
                     _log.info("Test of [" + peer.toBase64().substring(0,6) + "] failed: No local RouterInfo");
@@ -213,17 +215,17 @@ class PeerTestJob extends JobImpl {
 
         TunnelInfo outTunnel = getOutboundTunnelId();
         if (outTunnel == null) {
-            _log.warn("No tunnels to send search out through! Something is wrong...");
+            _log.warn("No tunnels to send search out through! We have a problem, Houston!");
             return;
         }
 
         TunnelId outTunnelId = outTunnel.getSendTunnelId(0);
 
         if (_log.shouldLog(Log.DEBUG)) {
-            _log.debug("Initiating test of peer [" + peer.getIdentity().getHash().toBase64().substring(0,6)
-                       + "]: \n* " + outTunnel + "\n* " + inTunnel);
+            _log.debug("[" + peer.getIdentity().getHash().toBase64().substring(0,6) +
+                       "] Initiating peer test:\n* " + outTunnel + "\n* " + inTunnel);
         } else if (_log.shouldLog(Log.INFO)) {
-            _log.info("Initiating test of peer [" + peer.getIdentity().getHash().toBase64().substring(0,6) + "]");
+            _log.info("[" + peer.getIdentity().getHash().toBase64().substring(0,6) + "] Initiating peer test");
         }
 
         ReplySelector sel = new ReplySelector(peer.getIdentity().getHash(), nonce, expiration);
@@ -303,12 +305,12 @@ class PeerTestJob extends JobImpl {
                             try {
                                 prof.setCapacityBonus(-30);
                                 if (_log.shouldLog(Log.INFO))
-                                    _log.info("Setting capacity bonus for L tier router [" + _peer.toBase64().substring(0,6) + "] to -30");
+                                    _log.info("[" + _peer.toBase64().substring(0,6) + "] Setting capacity bonus to -30 for L tier router");
                             } catch (NumberFormatException nfe) {}
                         } else if (timeLeft < 0) {
                             if (_log.shouldLog(Log.INFO))
-                                _log.info("Took too long to get a reply from [" + _peer.toBase64().substring(0,6) +
-                                          "]: " + (0-timeLeft) + "ms too slow");
+                                _log.info("[" + _peer.toBase64().substring(0,6) + "] Test reply took too long: " +
+                                          (0-timeLeft) + "ms too slow");
                             getContext().statManager().addRateData("peer.testTooSlow", 0-timeLeft);
                             if (_peer != null && cap != null && reachable &&
                                 (bw.equals("N") || bw.equals("O") || bw.equals("P") || bw.equals("X"))) {
@@ -317,7 +319,7 @@ class PeerTestJob extends JobImpl {
                                     if (speedBonus >= 9999999)
                                         prof.setSpeedBonus(speedBonus - 9999999);
                                     if (_log.shouldLog(Log.INFO))
-                                        _log.info("Setting capacity bonus to -30 for [" + _peer.toBase64().substring(0,6) + "]");
+                                        _log.info("[" + _peer.toBase64().substring(0,6) + "] Setting capacity bonus to -30");
                                 } catch (NumberFormatException nfe) {}
                             }
                         } else {
@@ -328,7 +330,7 @@ class PeerTestJob extends JobImpl {
                                     if (speedBonus >= 9999999)
                                         prof.setSpeedBonus(speedBonus - 9999999);
                                     if (_log.shouldLog(Log.INFO))
-                                        _log.info("Setting capacity bonus to -30 for [" + _peer.toBase64().substring(0,6) + "]" +
+                                        _log.info("[" + _peer.toBase64().substring(0,6) + "] Setting capacity bonus to -30"  +
                                                   " - avg response is over twice timeout value");
                                 } catch (NumberFormatException nfe) {}
                             } else if ((prof.getCapacityBonus() == -30 || prof.getSpeedBonus() < 9999999) && cap != null && reachable &&
@@ -337,13 +339,13 @@ class PeerTestJob extends JobImpl {
                                     if (prof.getCapacityBonus() == -30) {
                                         prof.setCapacityBonus(0);
                                         if (_log.shouldLog(Log.INFO))
-                                            _log.info("Resetting capacity bonus to 0 for [" + _peer.toBase64().substring(0,6) + "]");
+                                            _log.info("[" + _peer.toBase64().substring(0,6) + "] Resetting capacity bonus to 0");
                                     }
                                     if (prof.getSpeedBonus() < 9999999 && cap != null && reachable &&
                                         (bw.equals("N") || bw.equals("O") || bw.equals("P") || bw.equals("X"))) {
                                         prof.setSpeedBonus(speedBonus + 9999999);
                                         if (_log.shouldLog(Log.INFO))
-                                            _log.info("Setting speed bonus to 9999999 for [" + _peer.toBase64().substring(0,6) + "]");
+                                            _log.info("[" + _peer.toBase64().substring(0,6) + "] Setting speed bonus to 9999999");
                                     }
                                 } catch (NumberFormatException nfe) {}
                                 _matchFound = true;
@@ -385,11 +387,11 @@ class PeerTestJob extends JobImpl {
         public void runJob() {
             long responseTime = getContext().clock().now() - _testBegin;
             if (_log.shouldLog(Log.DEBUG)) {
-                _log.debug("Test of [" + _peer.getIdentity().getHash().toBase64().substring(0,6) + "] succeeded in " +
+                _log.debug("[" + _peer.getIdentity().getHash().toBase64().substring(0,6) + "] Test succeeded in " +
                            responseTime + "ms\n* " + _sendTunnel + "\n* " + _replyTunnel);
             } else if (_log.shouldLog(Log.INFO)) {
-                _log.info("Test of [" + _peer.getIdentity().getHash().toBase64().substring(0,6) + "] succeeded in " +
-                           responseTime + "ms");
+                _log.info("[" + _peer.getIdentity().getHash().toBase64().substring(0,6) + "] Test succeeded in " +
+                          responseTime + "ms");
             }
             getContext().profileManager().dbLookupSuccessful(_peer.getIdentity().getHash(), responseTime);
             // we know the tunnels are working
@@ -407,27 +409,27 @@ class PeerTestJob extends JobImpl {
                     if (cap != null && reachable && (bw.equals("N") || bw.equals("O") || bw.equals("P") || bw.equals("X"))) {
                         prof.setSpeedBonus(9999999);
                         if (_log.shouldLog(Log.INFO))
-                            _log.info("Setting speed bonus to 9999999 for [" + _peer.getIdentity().getHash().toBase64().substring(0,6) + "]");
+                            _log.info("[" + _peer.getIdentity().getHash().toBase64().substring(0,6) + "] Setting speed bonus to 9999999");
                     }
                     if (prof != null && prof.getCapacityBonus() == -30 && cap != null && reachable && (!bw.equals("L"))) {
                         try {
                             prof.setCapacityBonus(0);
                             if (_log.shouldLog(Log.INFO))
-                                _log.info("Resetting capacity bonus to 0 for [" + _peer.getIdentity().getHash().toBase64().substring(0,6) + "]");
+                                _log.info("[" + _peer.getIdentity().getHash().toBase64().substring(0,6) + "] Resetting capacity bonus to 0");
                         } catch (NumberFormatException nfe) {}
                         return;
                     } else if (prof != null && cap != null && (bw.equals("L"))) {
                         try {
                             prof.setCapacityBonus(-30);
                             if (_log.shouldLog(Log.INFO))
-                                _log.info("Setting capacity bonus for L tier router [" + _peer.getIdentity().getHash().toBase64().substring(0,6) + "] to -30");
+                                _log.info("[" + _peer.getIdentity().getHash().toBase64().substring(0,6) + "] Setting capacity bonus to -30 for L tier router");
                         } catch (NumberFormatException nfe) {}
                         return;
                     } else if (prof != null && cap == null) {
                         try {
                             prof.setCapacityBonus(-30);
                             if (_log.shouldLog(Log.INFO))
-                                _log.info("Setting capacity bonus for unknown class router [" + _peer.getIdentity().getHash().toBase64().substring(0,6) + "] to -30");
+                                _log.info("[" + _peer.getIdentity().getHash().toBase64().substring(0,6) + "] Setting capacity bonus to -30 for unknown class router");
                         } catch (NumberFormatException nfe) {}
                         return;
                     }
@@ -466,11 +468,10 @@ class PeerTestJob extends JobImpl {
                 getContext().profileManager().dbLookupFailed(_peer.getIdentity().getHash());
 
             if (_log.shouldLog(Log.DEBUG)) {
-                _log.debug("Test of [" + _peer.getIdentity().getHash().toBase64().substring(0,6) +
-                          "] failed (timeout reached)\n* " + _sendTunnel + "\n* " + _replyTunnel);
+                _log.debug("[" + _peer.getIdentity().getHash().toBase64().substring(0,6) + "] Test failed (timeout reached)" +
+                           "\n* " + _sendTunnel + "\n* " + _replyTunnel);
             } else if (_log.shouldLog(Log.INFO)) {
-                _log.info("Test of [" + _peer.getIdentity().getHash().toBase64().substring(0,6) +
-                          "] failed (timeout reached)");
+                _log.info("[" + _peer.getIdentity().getHash().toBase64().substring(0,6) + "] Test failed (timeout reached)");
             }
 
             // don't fail the tunnels, as the peer might just plain be down, or otherwise overloaded
@@ -489,7 +490,7 @@ class PeerTestJob extends JobImpl {
                             prof.setCapacityBonus(-30);
                             prof.setSpeedBonus(0);
                             if (_log.shouldLog(Log.INFO))
-                                _log.info("Setting capacity bonus for [" + _peer.getIdentity().getHash().toBase64().substring(0,6) + "] to -30 and speed bonus to 0");
+                                _log.info("[" + _peer.getIdentity().getHash().toBase64().substring(0,6) + "] Setting capacity bonus to -30 and speed bonus to 0");
                         } catch (NumberFormatException nfe) {}
                         return;
                     }
