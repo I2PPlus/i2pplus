@@ -171,8 +171,9 @@ class PeerTestJob extends JobImpl {
                 (bw.equals("N") || bw.equals("O") || bw.equals("P") || bw.equals("X"))) {
                 peers.add(peerInfo);
             } else if (!reachable || bw.equals("K") || bw.equals("L") || bw.equals("M")) {
+                prof.setCapacityBonus(-30);
                 if (_log.shouldLog(Log.INFO))
-                    _log.info("Skipping test of [" + peer.toBase64().substring(0,6) + "] - K, L, M or unreachable");
+                    _log.info("Setting capacity bonus to -30 and skipping test of [" + peer.toBase64().substring(0,6) + "] -> K, L, M or unreachable");
             } else if (peerInfo == null) {
                 if (_log.shouldLog(Log.INFO))
                     _log.info("Test of [" + peer.toBase64().substring(0,6) + "] failed: No local RouterInfo");
