@@ -1178,6 +1178,16 @@ public class ProfileOrganizer {
                 continue;
             }
 
+            RouterInfo peerInfo = _context.netDb().lookupRouterInfoLocally(profile.getPeer());
+            String bw = peerInfo.getBandwidthTier();
+            String cap = peerInfo.getCapabilities();
+            boolean reachable = cap.indexOf(Router.CAPABILITY_REACHABLE) >= 0;
+            if (peerInfo != null && cap != null && (!reachable || bw.equals("K") || bw.equals("L") || bw.equals("M"))) {
+                if (_log.shouldLog(Log.INFO))
+                    _log.info("Excluding [" + profile.getPeer().toBase64().substring(0,6) + "] from fast/highcap groups -> K,L,M or unreachable");
+                continue;
+            }
+
             // only take into account active peers that aren't failing
             if (profile.getIsFailing() || (!profile.getIsActive()))
                 continue;
