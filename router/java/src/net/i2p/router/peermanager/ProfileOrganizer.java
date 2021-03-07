@@ -1183,13 +1183,12 @@ public class ProfileOrganizer {
 
             RouterInfo peerInfo = _context.netDb().lookupRouterInfoLocally(profile.getPeer());
             String bw = "K";
-            if (peerInfo.getBandwidthTier() != null)
+            if (peerInfo != null && peerInfo.getBandwidthTier() != null) {
                 bw = peerInfo.getBandwidthTier();
-            String cap = peerInfo.getCapabilities();
-            boolean reachable = cap.indexOf(Router.CAPABILITY_REACHABLE) >= 0;
-            if (peerInfo != null && cap != null && (!reachable || bw.equals("K") || bw.equals("L") || bw.equals("M"))) {
+            }
+            if (peerInfo != null && (bw.equals("K") || bw.equals("L") || bw.equals("M"))) {
                 if (_log.shouldLog(Log.INFO))
-                    _log.info("Excluding [" + profile.getPeer().toBase64().substring(0,6) + "] from fast/highcap groups -> K,L,M or unreachable");
+                    _log.info("Excluding [" + profile.getPeer().toBase64().substring(0,6) + "] from fast/highcap groups -> K, L or M tier");
                 continue;
             }
 
