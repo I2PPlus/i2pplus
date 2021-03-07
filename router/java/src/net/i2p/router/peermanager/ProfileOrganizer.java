@@ -1178,6 +1178,9 @@ public class ProfileOrganizer {
                 continue;
             }
 
+            if (profile.getPeer() == null)
+                continue;
+
             RouterInfo peerInfo = _context.netDb().lookupRouterInfoLocally(profile.getPeer());
             String bw = "K";
             if (peerInfo.getBandwidthTier() != null)
