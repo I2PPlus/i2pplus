@@ -1178,6 +1178,20 @@ public class ProfileOrganizer {
                 continue;
             }
 
+            if (profile.getPeer() == null)
+                continue;
+
+            RouterInfo peerInfo = _context.netDb().lookupRouterInfoLocally(profile.getPeer());
+            String bw = "K";
+            if (peerInfo != null && peerInfo.getBandwidthTier() != null) {
+                bw = peerInfo.getBandwidthTier();
+            }
+            if (peerInfo != null && (bw.equals("K") || bw.equals("L") || bw.equals("M"))) {
+                if (_log.shouldLog(Log.INFO))
+                    _log.info("Excluding [" + profile.getPeer().toBase64().substring(0,6) + "] from fast/highcap groups -> K, L or M tier");
+                continue;
+            }
+
             // only take into account active peers that aren't failing
             if (profile.getIsFailing() || (!profile.getIsActive()))
                 continue;
