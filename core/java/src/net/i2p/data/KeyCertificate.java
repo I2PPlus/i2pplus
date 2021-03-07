@@ -259,6 +259,7 @@ public class KeyCertificate extends Certificate {
             buf.append(" null payload");
         } else {
             buf.append("\n* Crypto type: ").append(getCryptoTypeCode())
+               .append(" (").append(getEncType()).append(')')
                .append("\n* Sig type: ").append(getSigTypeCode())
                .append(" (").append(getSigType()).append(')');
             if (_payload.length > HEADER_LENGTH)
