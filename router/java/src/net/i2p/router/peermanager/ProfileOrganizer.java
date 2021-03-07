@@ -250,13 +250,15 @@ public class ProfileOrganizer {
             }
             PeerProfile prof = getProfile(peer);
             boolean reachable = cap.indexOf(Router.CAPABILITY_REACHABLE) >= 0;
-            if (peerInfo != null && cap != null && reachable &&  (!bw.equals("K") || !bw.equals("L") || !bw.equals("M"))) {
+            if (peerInfo != null && cap != null && reachable && (!bw.equals("K") || !bw.equals("L") || !bw.equals("M"))) {
                 if ((_thresholdCapacityValue <= rv.getCapacityValue() && isSelectable(peer) &&
                     countHighCapacityPeers() < getMaximumHighCapPeers()) || countHighCapacityPeers() < minHighCap)
                     _highCapacityPeers.put(peer, rv);
                 if (countFastPeers() < minFast)
                     _fastPeers.put(peer, rv);
                 _strictCapacityOrder.add(rv);
+            } else if (_highCapacityPeers.remove(peer) != null) {
+                _highCapacityPeers.remove(peer, rv);
             }
         } finally { releaseWriteLock(); }
         return rv;
