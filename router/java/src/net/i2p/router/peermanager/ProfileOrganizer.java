@@ -1179,7 +1179,9 @@ public class ProfileOrganizer {
             }
 
             RouterInfo peerInfo = _context.netDb().lookupRouterInfoLocally(profile.getPeer());
-            String bw = peerInfo.getBandwidthTier();
+            String bw = "K";
+            if (peerInfo.getBandwidthTier() != null)
+                bw = peerInfo.getBandwidthTier();
             String cap = peerInfo.getCapabilities();
             boolean reachable = cap.indexOf(Router.CAPABILITY_REACHABLE) >= 0;
             if (peerInfo != null && cap != null && (!reachable || bw.equals("K") || bw.equals("L") || bw.equals("M"))) {
