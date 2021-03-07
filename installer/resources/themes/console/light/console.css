@@ -3172,6 +3172,10 @@ table#wrapperlogs {
 }
 }
 
+.nologs {
+  padding: 6px 8px;
+}
+
 /* critical */
 #logs li font[color="#cc0000"]::before {
   background: #c00;

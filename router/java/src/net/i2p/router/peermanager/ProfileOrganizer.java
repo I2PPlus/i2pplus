@@ -241,12 +241,23 @@ public class ProfileOrganizer {
             // Add to high cap only if we have room. Don't add to Fast; wait for reorg.
             int minHighCap = _context.getProperty(PROP_MINIMUM_HIGH_CAPACITY_PEERS, DEFAULT_MINIMUM_HIGH_CAPACITY_PEERS);
             int minFast = _context.getProperty(PROP_MINIMUM_FAST_PEERS, DEFAULT_MINIMUM_FAST_PEERS);
-            if ((_thresholdCapacityValue <= rv.getCapacityValue() && isSelectable(peer) &&
-                countHighCapacityPeers() < getMaximumHighCapPeers()) || countHighCapacityPeers() < minHighCap)
-                _highCapacityPeers.put(peer, rv);
-            if (countFastPeers() < minFast)
-                _fastPeers.put(peer, rv);
-            _strictCapacityOrder.add(rv);
+            RouterInfo peerInfo = _context.netDb().lookupRouterInfoLocally(peer);
+            String bw = "K";
+            String cap = "";
+            if (peerInfo != null) {
+                bw = peerInfo.getBandwidthTier();
+                cap = peerInfo.getCapabilities();
+            }
+            PeerProfile prof = getProfile(peer);
+            boolean reachable = cap.indexOf(Router.CAPABILITY_REACHABLE) >= 0;
+            if (peerInfo != null && cap != null && reachable &&  (!bw.equals("K") || !bw.equals("L") || !bw.equals("M"))) {
+                if ((_thresholdCapacityValue <= rv.getCapacityValue() && isSelectable(peer) &&
+                    countHighCapacityPeers() < getMaximumHighCapPeers()) || countHighCapacityPeers() < minHighCap)
+                    _highCapacityPeers.put(peer, rv);
+                if (countFastPeers() < minFast)
+                    _fastPeers.put(peer, rv);
+                _strictCapacityOrder.add(rv);
+            }
         } finally { releaseWriteLock(); }
         return rv;
     }
@@ -259,9 +270,21 @@ public class ProfileOrganizer {
         if (profile == null) return null;
 
         Hash peer = profile.getPeer();
+        RouterInfo peerInfo = _context.netDb().lookupRouterInfoLocally(peer);
+        String bw = peerInfo.getBandwidthTier();
+        String cap = peerInfo.getCapabilities();
+        PeerProfile prof = getProfile(peer);
+        boolean reachable = cap.indexOf(Router.CAPABILITY_REACHABLE) >= 0;
+
         if (peer.equals(_us)) {
             if (_log.shouldLog(Log.DEBUG))
                 _log.debug("Added our own profile to Profile Manager");
+            return null;
+        }
+
+        if (peerInfo != null && (cap != null && !reachable) || cap == null || (bw.equals("K") || bw.equals("L") || bw.equals("M"))) {
+            if (_log.shouldLog(Log.INFO))
+                _log.info("Not creating profile for [" + peer.toBase64().substring(0,6) + "] -> K, L, M or Unreachable");
             return null;
         }
 
@@ -284,13 +307,8 @@ public class ProfileOrganizer {
             _notFailingPeers.put(peer, profile);
             if (old == null)
                 _notFailingPeersList.add(peer);
-            RouterInfo peerInfo = _context.netDb().lookupRouterInfoLocally(peer);
-            String bw = peerInfo.getBandwidthTier();
-            String cap = peerInfo.getCapabilities();
-            PeerProfile prof = getProfile(peer);
-            boolean reachable = cap.indexOf(Router.CAPABILITY_REACHABLE) >= 0;
             // Add to high cap only if we have room. Don't add to Fast; wait for reorg.
-            if (peerInfo != null && cap != null && (!reachable || bw.equals("K") || bw.equals("L") || bw.equals("M"))) {
+            if (peerInfo != null && (cap != null && !reachable) || cap == null || (bw.equals("K") || bw.equals("L") || bw.equals("M"))) {
                 prof.setCapacityBonus(-30);
                 _highCapacityPeers.remove(peer, profile);
                 if (_log.shouldLog(Log.INFO))
