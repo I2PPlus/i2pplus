@@ -40,6 +40,10 @@ class UDPSender {
     private static final int CODEL_TARGET = 100;
     private static final int CODEL_INTERVAL = 500;
 
+    public boolean fullStats() {
+        return _context.getBooleanProperty("stat.full");
+    }
+
     public UDPSender(RouterContext ctx, DatagramSocket socket, String name, SocketListener lsnr) {
         _context = ctx;
         _dummy = false; // ctx.commSystem().isDummy();
