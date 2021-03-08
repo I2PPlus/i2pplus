@@ -565,10 +565,10 @@ public class NTCPConnection implements Closeable {
                     seq = currentOutboundSet ? _currentOutbound.get(0).getSeqNum() : -1;
                 }
                 try {
-                    _log.warn("Outbound connection is too backlogged (Size: " + size
-                          + ") \n* Wants write? " + (0 != (_conKey.interestOps()&SelectionKey.OP_WRITE))
-                          + "; Current Outbound set? " + currentOutboundSet
-                          + "\n* Write buffers: " + writeBufs + " on " + toString());
+                    _log.warn("Outbound connection is too backlogged (Size: " + size +
+                              ") \n* Wants write? " + (0 != (_conKey.interestOps()&SelectionKey.OP_WRITE)) +
+                              "; Current Outbound set? " + currentOutboundSet +
+                              "\n* Write buffers: " + writeBufs + " on " + toString());
                 } catch (RuntimeException e) {}  // java.nio.channels.CancelledKeyException
             }
             return true;
