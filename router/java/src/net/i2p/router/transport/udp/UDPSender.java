@@ -12,7 +12,6 @@ import net.i2p.util.I2PThread;
 import net.i2p.util.Log;
 import net.i2p.util.SystemVersion;
 
-
 /**
  * Lowest level packet sender, pushes anything on its queue ASAP.
  *
@@ -36,8 +35,10 @@ class UDPSender {
     // Queue needs to be big enough that we can compete with NTCP for
     // bandwidth requests, and so CoDel can work well.
     // When full, packets back up into the PacketPusher thread, pre-CoDel.
-    private static final int MIN_QUEUE_SIZE = 64;
-    private static final int MAX_QUEUE_SIZE = 512;
+    private static final int MIN_QUEUE_SIZE = 128;
+    private static final int MAX_QUEUE_SIZE = 768;
+    private static final int CODEL_TARGET = 100;
+    private static final int CODEL_INTERVAL = 500;
 
     public boolean fullStats() {
         return _context.getBooleanProperty("stat.full");
@@ -58,7 +59,7 @@ class UDPSender {
             qsize = 1024;
         else if (maxMemory >= 768*1024*1024 && cores >= 4 && !isSlow)
             qsize = 768;
-        _outboundQueue = new CoDelBlockingQueue<UDPPacket>(ctx, "UDP-Sender", qsize);
+        _outboundQueue = new CoDelBlockingQueue<UDPPacket>(ctx, "UDP-Sender", qsize, CODEL_TARGET, CODEL_INTERVAL);
         _socket = socket;
         _runner = new Runner();
         _name = name;
@@ -301,13 +302,13 @@ class UDPSender {
                         if (throttleTime > 10)
                             _context.statManager().addRateData("udp.sendBWThrottleTime", throttleTime, acquireTime - packet.getBegin());
                         if (packet.getMarkedType() == 1)
-                            _context.statManager().addRateData("udp.sendACKTime", throttleTime, packet.getLifetime());
-                        _context.statManager().addRateData("udp.pushTime", packet.getLifetime(), packet.getLifetime());
-                        _context.statManager().addRateData("udp.sendPacketSize", size, packet.getLifetime());
+                            _context.statManager().addRateData("udp.sendACKTime", throttleTime);
+                        _context.statManager().addRateData("udp.pushTime", packet.getLifetime());
+                        _context.statManager().addRateData("udp.sendPacketSize", size);
                     } catch (IOException ioe) {
                         if (_log.shouldLog(Log.WARN))
                             _log.warn("Error sending to " + packet.getPacket().getAddress(), ioe);
-                        _context.statManager().addRateData("udp.sendException", 1, packet.getLifetime());
+                        _context.statManager().addRateData("udp.sendException", 1);
                         if (_socket.isClosed()) {
                             if (_keepRunning) {
                                 _keepRunning = false;
