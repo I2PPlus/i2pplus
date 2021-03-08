@@ -282,8 +282,12 @@ public class ProfileOrganizer {
 
         Hash peer = profile.getPeer();
         RouterInfo peerInfo = _context.netDb().lookupRouterInfoLocally(peer);
-        String bw = peerInfo.getBandwidthTier();
-        String cap = peerInfo.getCapabilities();
+        String bw = "K";
+        String cap = "";
+        if (peerInfo != null) {
+            bw = peerInfo.getBandwidthTier();
+            cap = peerInfo.getCapabilities();
+        }
         PeerProfile prof = getProfile(peer);
         boolean reachable = cap.indexOf(Router.CAPABILITY_REACHABLE) >= 0;
 
