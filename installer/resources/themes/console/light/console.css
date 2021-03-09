@@ -13020,9 +13020,16 @@ i {
 }
 
 #enablefull label {
+  margin-top: 5px;
   padding: 3px;
   display: inline-block;
   vertical-align: middle;
+}
+
+@media screen and (max-width: 1499px) {
+  #enablefull label {
+    margin-top: 4px;
+  }
 }
 
 #enablefull input[type=submit] {
