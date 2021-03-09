@@ -35,8 +35,7 @@ public class RouterThrottleImpl implements RouterThrottle {
     public static final int DEFAULT_MAX_TUNNELS = 10*1000;
     private static final String PROP_MAX_PROCESSINGTIME = "router.defaultProcessingTimeThrottle";
     private static final long DEFAULT_REJECT_STARTUP_TIME = 10*60*1000;
-//    private static final long MIN_REJECT_STARTUP_TIME = 90*1000;
-    private static final long MIN_REJECT_STARTUP_TIME = 5*60*1000;
+    private static final long MIN_REJECT_STARTUP_TIME = 90*1000;
     private static final String PROP_REJECT_STARTUP_TIME = "router.rejectStartupTime";
     private static final int DEFAULT_MIN_THROTTLE_TUNNELS = SystemVersion.isAndroid() ? 100 :
 //                                                            SystemVersion.isARM() ? 500 : 1000;
@@ -421,8 +420,8 @@ public class RouterThrottleImpl implements RouterThrottle {
             probReject = 1;
             reject = true;
             if (_log.shouldWarn())
-                _log.warn("Reject avail/maxK/used " + availBps + "/" + maxKBps + "/" 
-                          + used + " pReject = 1 numTunnels = " + numTunnels 
+                _log.warn("Reject avail / maxK/ used " + availBps + " / " + maxKBps + " / "
+                          + used + "\n* pReject = 1 numTunnels = " + numTunnels
                           + " est = " + bytesAllocated);
         } else {
             // limit at 90% - 4KBps (see above)
@@ -433,19 +432,19 @@ public class RouterThrottleImpl implements RouterThrottle {
                 probReject = 0;
                 reject = false;
                 if (_log.shouldDebug())
-                    _log.debug("Accept avail / maxK / used " + availBps + " / " + maxKBps + "/" 
-                               + used + "\n* pReject = 0 numTunnels = " + numTunnels 
+                    _log.debug("Accept avail / maxK / used " + availBps + " / " + maxKBps + " / "
+                               + used + "\n* pReject = 0 numTunnels = " + numTunnels
                                + " est = " + bytesAllocated);
             } else {
-                probReject = Math.pow(pctFull, 16); // steep curve 
+                probReject = Math.pow(pctFull, 16); // steep curve
             double rand = _context.random().nextFloat();
                 reject = rand <= probReject;
                 if (reject && _log.shouldWarn())
-                    _log.warn("Reject avail / maxK / used " + availBps + " / " + maxKBps + " / " 
+                    _log.warn("Reject avail / maxK / used " + availBps + " / " + maxKBps + " / "
                           + used + "\n* pReject = " + probReject + " pFull = " + pctFull + " numTunnels = " + numTunnels
                           + " rand = " + rand + " est = " + bytesAllocated);
                 else if (_log.shouldDebug())
-                    _log.debug("Accept avail / maxK/ used " + availBps + " / " + maxKBps + " / " 
+                    _log.debug("Accept avail / maxK/ used " + availBps + " / " + maxKBps + " / "
                            + used + "\n* pReject = " + probReject + " pFull = " + pctFull + " numTunnels = " + numTunnels
                            + " rand = " + rand + " est = " + bytesAllocated);
             }
