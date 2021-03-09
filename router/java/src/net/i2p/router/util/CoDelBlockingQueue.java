@@ -49,6 +49,8 @@ public class CoDelBlockingQueue<E extends CDQEntry> extends LinkedBlockingQueue<
     private static final AtomicLong __id = new AtomicLong();
     private final long _id;
 
+    private static final long[] CODEL_RATES = { 60*1000, 10*60*1000l, 60*60*1000l };
+
     /**
      *  Quote:
      *  Below a target of 5 ms, utilization suffers for some conditions and traffic loads;
@@ -99,8 +101,8 @@ public class CoDelBlockingQueue<E extends CDQEntry> extends LinkedBlockingQueue<
         _interval = interval;
         STAT_DROP = ("codel." + name + ".drop").intern();
         STAT_DELAY = ("codel." + name + ".delay").intern();
-        ctx.statManager().createRateStat(STAT_DROP, "Queue delay of dropped items", "Router [CoDel]", RATES);
-        ctx.statManager().createRateStat(STAT_DELAY, "Average queue delay", "Router [CoDel]", RATES);
+        ctx.statManager().createRateStat(STAT_DROP, "Queue delay of dropped items", "Router [CoDel]", CODEL_RATES);
+        ctx.statManager().createRateStat(STAT_DELAY, "Average queue delay", "Router [CoDel]", CODEL_RATES);
         _id = __id.incrementAndGet();
     }
 
@@ -319,7 +321,7 @@ public class CoDelBlockingQueue<E extends CDQEntry> extends LinkedBlockingQueue<
                       DataHelper.formatDuration(_context.clock().now() - _first_above_time) + " since first above, " +
                       DataHelper.formatDuration(_context.clock().now() - _drop_next) + " since drop next, " +
                       (_count+1) + " dropped in this phase, " +
-                      size() + " remaining in queue " + entry);
+                      size() + " remaining in queue \n* " + entry);
         entry.drop();
     }
 
