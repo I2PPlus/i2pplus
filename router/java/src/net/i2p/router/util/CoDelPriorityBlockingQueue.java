@@ -64,7 +64,8 @@ public class CoDelPriorityBlockingQueue<E extends CDPQEntry> extends PriBlocking
      *
      *  Maybe need to make configurable per-instance.
      */
-    private static final long INTERVAL = 300;
+//    private static final long INTERVAL = 300;
+    private static final long INTERVAL = 500;
     //private static final int MAXPACKET = 512;
 
     private final String STAT_DROP;
@@ -295,7 +296,7 @@ public class CoDelPriorityBlockingQueue<E extends CDPQEntry> extends PriBlocking
                       DataHelper.formatDuration(_context.clock().now() - _first_above_time) + " since first above, " +
                       DataHelper.formatDuration(_context.clock().now() - _drop_next) + " since drop next, " +
                       (_count+1) + " dropped in this phase, " +
-                      size() + " remaining in queue \n* " + entry);
+                      size() + " remaining in queue " + entry);
         entry.drop();
     }
 
