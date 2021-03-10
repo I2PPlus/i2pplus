@@ -124,6 +124,7 @@ public class UDPTransport extends TransportImpl implements TimedWeightedPriority
     private Hash _lastFromv4, _lastFromv6;
     private byte[] _lastOurIPv4, _lastOurIPv6;
     private int _lastOurPortv4, _lastOurPortv6;
+    private boolean _haveUPnP;
     /** since we don't publish our IP/port if introduced anymore, we need
         to store it somewhere. */
     private RouterAddress _currentOurV4Address;
@@ -966,6 +967,8 @@ public class UDPTransport extends TransportImpl implements TimedWeightedPriority
             // (we don't want to set this for Teredo, 6to4, ...)
             _haveIPv6Address = true;
         }
+        if (source == SOURCE_UPNP)
+            _haveUPnP = true;
         if (explicitAddressSpecified())
             return;
         String sources = _context.getProperty(PROP_SOURCES, DEFAULT_SOURCES);
@@ -1036,6 +1039,8 @@ public class UDPTransport extends TransportImpl implements TimedWeightedPriority
      */
     @Override
     public void forwardPortStatus(byte[] ip, int port, int externalPort, boolean success, String reason) {
+        if (success)
+            _haveUPnP = true;
         if (_log.shouldLog(Log.WARN)) {
             if (success)
                 _log.warn("UPnP has opened the SSU port: " + port + " via " + Addresses.toString(ip, externalPort));
@@ -1152,6 +1157,9 @@ public class UDPTransport extends TransportImpl implements TimedWeightedPriority
                 if (_log.shouldLog(Log.INFO))
                     _log.info("[" + from.toBase64().substring(0,6) + "] and another peer agree we have a new IP address: "
                               + Addresses.toString(ourIP, ourPort) + "; updating...");
+                // Never change port for IPv6 or if we have UPnP
+                if (_haveUPnP || ourIP.length == 16)
+                    ourPort = 0;
                 changeAddress(ourIP, ourPort);
             }
         }
