@@ -20,6 +20,7 @@ import net.i2p.util.Log;
 import net.i2p.stat.Rate;
 import net.i2p.stat.RateStat;
 import net.i2p.util.SystemVersion;
+import net.i2p.util.VersionComparator;
 
 import net.i2p.data.Hash;
 import net.i2p.data.Base64;
@@ -167,11 +168,11 @@ class PeerTestJob extends JobImpl {
             String cap = peerInfo.getCapabilities();
             boolean reachable = cap.indexOf(Router.CAPABILITY_REACHABLE) >= 0;
             String bw = peerInfo.getBandwidthTier();
-            if (peerInfo != null && cap != null && reachable &&
+            String version = peerInfo.getVersion();
+            if (peerInfo != null && cap != null && reachable && VersionComparator.comp(version, "0.9.48") >= 0 &&
                 (bw.equals("N") || bw.equals("O") || bw.equals("P") || bw.equals("X"))) {
                 peers.add(peerInfo);
-            } else if (peerInfo != null && cap != null &&
-                       (!reachable || bw.equals("K") || bw.equals("L") || bw.equals("M"))) {
+            } else if (peerInfo != null && cap != null && (!reachable || bw.equals("K") || bw.equals("L") || bw.equals("M"))) {
                 prof.setCapacityBonus(-30);
                 if (_log.shouldLog(Log.INFO))
                     _log.info("[" + peer.toBase64().substring(0,6) + "] Setting capacity bonus to -30 and skipping test -> K, L, M or unreachable");

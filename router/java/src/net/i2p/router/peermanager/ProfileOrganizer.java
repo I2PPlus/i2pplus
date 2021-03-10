@@ -33,6 +33,8 @@ import net.i2p.stat.RateStat;
 import net.i2p.util.Log;
 
 import net.i2p.router.networkdb.kademlia.KademliaNetworkDatabaseFacade;
+import net.i2p.util.SystemVersion;
+import net.i2p.util.VersionComparator;
 
 /**
  * Keep the peer profiles organized according to the tiered model.  This does not
@@ -223,9 +225,11 @@ public class ProfileOrganizer {
         RouterInfo peerInfo = _context.netDb().lookupRouterInfoLocally(peer);
         String bw = "K";
         String cap = "";
+        String version = "0.8";
         if (peerInfo != null) {
             bw = peerInfo.getBandwidthTier();
             cap = peerInfo.getCapabilities();
+            version = peerInfo.getVersion();
         }
         PeerProfile prof = getProfile(peer);
         boolean reachable = cap.indexOf(Router.CAPABILITY_REACHABLE) >= 0;
@@ -233,6 +237,12 @@ public class ProfileOrganizer {
             if (_log.shouldLog(Log.INFO))
                 _log.info("Not creating profile for [" + peer.toBase64().substring(0,6) + "] -> K, L, M or Unreachable");
             return null;
+        }
+
+        if (VersionComparator.comp(version, "0.9.48") < 0 && version != "0.8") {
+            if (_log.shouldLog(Log.INFO))
+                _log.info("Not creating profile for [" + peer.toBase64().substring(0,6) + "] -> older than 0.9.48");
+           return null;
         }
 
         if (!tryReadLock())

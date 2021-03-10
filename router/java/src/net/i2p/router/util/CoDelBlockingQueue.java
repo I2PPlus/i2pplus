@@ -49,6 +49,8 @@ public class CoDelBlockingQueue<E extends CDQEntry> extends LinkedBlockingQueue<
     private static final AtomicLong __id = new AtomicLong();
     private final long _id;
 
+    private static final long[] CODEL_RATES = { 60*1000, 10*60*1000l, 60*60*1000l };
+
     /**
      *  Quote:
      *  Below a target of 5 ms, utilization suffers for some conditions and traffic loads;
@@ -65,7 +67,8 @@ public class CoDelBlockingQueue<E extends CDQEntry> extends LinkedBlockingQueue<
      *  A setting of 100 ms works well across a range of RTTs from 10 ms to 1 second
      *
      */
-    private static final int INTERVAL = 100;
+//    private static final int INTERVAL = 100;
+    private static final int INTERVAL = 500;
     private final long _interval;
     //private static final int MAXPACKET = 512;
 
@@ -99,8 +102,8 @@ public class CoDelBlockingQueue<E extends CDQEntry> extends LinkedBlockingQueue<
         _interval = interval;
         STAT_DROP = ("codel." + name + ".drop").intern();
         STAT_DELAY = ("codel." + name + ".delay").intern();
-        ctx.statManager().createRateStat(STAT_DROP, "Queue delay of dropped items", "Router [CoDel]", RATES);
-        ctx.statManager().createRateStat(STAT_DELAY, "Average queue delay", "Router [CoDel]", RATES);
+        ctx.statManager().createRateStat(STAT_DROP, "Queue delay of dropped items", "Router [CoDel]", CODEL_RATES);
+        ctx.statManager().createRateStat(STAT_DELAY, "Average queue delay", "Router [CoDel]", CODEL_RATES);
         _id = __id.incrementAndGet();
     }
 
@@ -315,7 +318,7 @@ public class CoDelBlockingQueue<E extends CDQEntry> extends LinkedBlockingQueue<
         long delay = _context.clock().now() - entry.getEnqueueTime();
         _context.statManager().addRateData(STAT_DROP, delay);
         if (_log.shouldLog(Log.WARN))
-            _log.warn("CDQ #" + _id + ' ' + _name + " dropped item with " + delay + "ms delay\n* " +
+            _log.warn("CDQ #" + _id + ' ' + _name + " dropped item with " + delay + "ms delay \n* " +
                       DataHelper.formatDuration(_context.clock().now() - _first_above_time) + " since first above, " +
                       DataHelper.formatDuration(_context.clock().now() - _drop_next) + " since drop next, " +
                       (_count+1) + " dropped in this phase, " +
