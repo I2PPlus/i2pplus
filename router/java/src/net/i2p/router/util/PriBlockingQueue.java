@@ -27,7 +27,7 @@ public class PriBlockingQueue<E extends PQEntry> extends PriorityBlockingQueue<E
     private final AtomicLong _seqNum = new AtomicLong();
 
     private final String STAT_FULL;
-    protected static final long[] RATES = {5*60*1000, 60*60*1000};
+    protected static final long[] RATES = {60*1000, 10*60*1000, 60*60*1000};
     protected static final int BACKLOG_SIZE = 256;
     protected static final int MAX_SIZE = 512;
 
