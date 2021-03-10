@@ -353,7 +353,7 @@ class InboundMessageState implements CDQEntry {
     public String toString() {
         StringBuilder buf = new StringBuilder(256);
         buf.append("Inbound Message: ").append(_messageId);
-        buf.append(" from ").append(_from.toString());
+        buf.append(" from [").append(_from.toString().substring(0,6)).append("]");
         if (isComplete()) {
             buf.append(" completely received with ");
             //buf.append(getCompleteSize()).append(" bytes");
@@ -369,7 +369,7 @@ class InboundMessageState implements CDQEntry {
                     buf.append(": unknown");
             }
         }
-        buf.append(" Lifetime: ").append(getLifetime());
+        buf.append(" (Lifetime: ").append(getLifetime()).append("ms)");
         return buf.toString();
     }
 }
