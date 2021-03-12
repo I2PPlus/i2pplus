@@ -41,7 +41,7 @@ import net.i2p.util.Log;
 
 /**
  * Handle the received tunnel build message requests and replies,
- * including sending responsses to requests, updating the
+ * including sending responses to requests, updating the
  * lists of our tunnels and participating tunnels,
  * and updating stats.
  *
@@ -75,7 +75,8 @@ class BuildHandler implements Runnable {
     private enum ExplState { NONE, IB, OB, BOTH }
 
     /** TODO these may be too high, review and adjust */
-    private static final int MIN_QUEUE = 18;
+//    private static final int MIN_QUEUE = 18;
+    private static final int MIN_QUEUE = 12;
 //    private static final int MAX_QUEUE = 192;
     private static final int MAX_QUEUE = 128;
 
