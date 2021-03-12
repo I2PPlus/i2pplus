@@ -3176,6 +3176,10 @@ table#wrapperlogs {
   padding: 6px 8px;
 }
 
+#wrapperlogs .nologs {
+  padding: 11px 12px;
+}
+
 /* critical */
 #logs li font[color="#cc0000"]::before {
   background: #c00;

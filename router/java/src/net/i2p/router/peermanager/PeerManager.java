@@ -63,7 +63,7 @@ class PeerManager {
 //    private static final long STORE_TIME = 19*60*60*1000;
     private static final long STORE_TIME = 60*60*1000;
 //    private static final long EXPIRE_AGE = 3*24*60*60*1000;
-    private static final long EXPIRE_AGE = 4*60*60*1000;
+    private static final long EXPIRE_AGE = 7*24*60*60*1000;
 
     public static final String TRACKED_CAPS = "" +
         FloodfillNetworkDatabaseFacade.CAPABILITY_FLOODFILL +
