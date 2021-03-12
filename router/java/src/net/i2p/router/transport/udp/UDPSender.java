@@ -57,10 +57,12 @@ class UDPSender {
         int qsize = (int) Math.max(MIN_QUEUE_SIZE, Math.min(MAX_QUEUE_SIZE, maxMemory / (1024*1024)));
         int target = CODEL_TARGET;
         int interval = CODEL_INTERVAL;
-        if (maxMemory >= 2048*1024*1024 && cores >= 4 && !isSlow) {
-            qsize = 4096;
+        if (maxMemory >= 4096*1024*1024 && cores >= 4 && !isSlow) {
+            qsize = 16384;
+        } else if (maxMemory >= 2048*1024*1024 && cores >= 4 && !isSlow) {
+            qsize = 8192;
         } else if (maxMemory >= 1024*1024*1024 && cores >= 4 && !isSlow) {
-            qsize = 2048;
+            qsize = 4096;
 //            target = 512;
 //            interval = 1000;
         } else if (maxMemory >= 768*1024*1024 && cores >= 4 && !isSlow) {

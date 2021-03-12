@@ -172,10 +172,9 @@ public class PersistentDataStore extends TransientDataStore {
     /** How many files to write every 10 minutes. Doesn't make sense to limit it,
      *  they just back up in the queue hogging memory.
      */
-//    private static final int WRITE_LIMIT = 10000;
-    private static final int WRITE_LIMIT = 5000;
+    private static final int WRITE_LIMIT = 10000;
 //    private static final long WRITE_DELAY = 10*60*1000;
-    private static final long WRITE_DELAY = 3*60*1000;
+    private static final long WRITE_DELAY = 5*60*1000;
 
     /*
      * Queue up writes, write unlimited files every 10 minutes.
