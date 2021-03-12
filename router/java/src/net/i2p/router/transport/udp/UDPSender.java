@@ -59,7 +59,7 @@ class UDPSender {
         int interval = CODEL_INTERVAL;
         if (maxMemory >= 4096*1024*1024 && cores >= 4 && !isSlow) {
             qsize = 16384;
-        else if (maxMemory >= 2048*1024*1024 && cores >= 4 && !isSlow) {
+        } else if (maxMemory >= 2048*1024*1024 && cores >= 4 && !isSlow) {
             qsize = 8192;
         } else if (maxMemory >= 1024*1024*1024 && cores >= 4 && !isSlow) {
             qsize = 4096;
