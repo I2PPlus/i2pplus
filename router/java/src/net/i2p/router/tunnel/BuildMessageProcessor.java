@@ -125,7 +125,7 @@ public class BuildMessageProcessor {
                     boolean isBad = SessionKey.INVALID_KEY.equals(rv.readReplyKey());
                     if (isBad) {
                         if (log.shouldLog(Log.WARN))
-                            log.warn(msg.getUniqueId() + ": Bad reply key: " + rv);
+                            log.warn("[MsgID " + msg.getUniqueId() + "] Bad reply key: " + rv);
                         ctx.statManager().addRateData("tunnel.buildRequestBadReplyKey", 1);
                         return null;
                     }
@@ -138,13 +138,13 @@ public class BuildMessageProcessor {
                     boolean isDup = _filter.add(rv.getData(), off, 32);
                     if (isDup) {
                         if (log.shouldLog(Log.WARN))
-                            log.warn(msg.getUniqueId() + ": Dup record: " + rv);
+                            log.warn("[MsgID " + msg.getUniqueId() + "] Duplicate record: " + rv);
                         ctx.statManager().addRateData("tunnel.buildRequestDup", 1);
                         return null;
                     }
 
                     if (log.shouldLog(Log.DEBUG))
-                        log.debug(msg.getUniqueId() + ": Matching record: " + rv);
+                        log.debug("[MsgID " + msg.getUniqueId() + "] Matching record: " + rv);
                     ourHop = i;
                     // TODO should we keep looking for a second match and fail if found?
                     break;
@@ -152,7 +152,8 @@ public class BuildMessageProcessor {
                     // For ECIES routers, this is relatively common due to old routers that don't
                     // check enc type sending us ElG requests
                     if (log.shouldLog(Log.WARN))
-                        log.warn(msg.getUniqueId() + ": Matching record decrypt failure " + privKey.getType(), dfe);
+//                        log.warn(msg.getUniqueId() + ": Matching record decrypt failure " + privKey.getType(), dfe);
+                        log.warn("[MsgID " + msg.getUniqueId() + "] Matching record decrypt failure " + privKey.getType() + "\n* Data Format Exception: " + dfe.getMessage());
                     // on the microscopic chance that there's another router
                     // out there with the same first 16 bytes, go around again
                     continue;
@@ -162,7 +163,7 @@ public class BuildMessageProcessor {
         if (rv == null) {
             // none of the records matched, b0rk
             if (log.shouldLog(Log.WARN))
-                log.warn(msg.getUniqueId() + ": No record decrypted");
+                log.warn("[MsgID " + msg.getUniqueId() + "] No record decrypted");
             return null;
         }
 
