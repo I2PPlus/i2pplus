@@ -59,7 +59,8 @@ abstract class BuildRequestor {
      *  so can we use a successfully built tunnel anyway.
      *
      */
-    static final int REQUEST_TIMEOUT = 13*1000;
+//    static final int REQUEST_TIMEOUT = 13*1000;
+    static final int REQUEST_TIMEOUT = 20*1000;
 
     /** make this shorter than REQUEST_TIMEOUT */
     private static final int FIRST_HOP_TIMEOUT = 10*1000;
@@ -133,7 +134,7 @@ abstract class BuildRequestor {
         Log log = ctx.logManager().getLog(BuildRequestor.class);
         final TunnelPool pool = cfg.getTunnelPool();
         final TunnelPoolSettings settings = pool.getSettings();
-        
+
         TunnelInfo pairedTunnel = null;
         Hash farEnd = cfg.getFarEnd();
         TunnelManagerFacade mgr = ctx.tunnelManager();

@@ -332,7 +332,7 @@ class BuildExecutor implements Runnable {
 
     /** Set 1.5 * LOOP_TIME < BuildRequestor.REQUEST_TIMEOUT/4 - margin */
 //    private static final int LOOP_TIME = 1000;
-    private static final int LOOP_TIME = 750;
+    private static final int LOOP_TIME = 4*1000;
 
     public void run() {
         _isRunning = true;

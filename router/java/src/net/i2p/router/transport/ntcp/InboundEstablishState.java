@@ -468,14 +468,16 @@ class InboundEstablishState extends EstablishBase implements NTCP2Payload.Payloa
                 NTCP2Payload.processPayload(_context, this, payload, 0, _msg3p2len - MAC_SIZE, true);
             } catch (IOException ioe) {
                 if (_log.shouldWarn())
-                    _log.warn("Bad msg 3 payload", ioe);
+//                    _log.warn("Bad msg 3 payload", ioe);
+                    _log.warn("Bad msg 3 payload \n* IO Error:" + ioe.getMessage());
                 // probably payload frame/block problems
                 // setDataPhase() will send termination
                 if (_msg3p2FailReason < 0)
                     _msg3p2FailReason = NTCPConnection.REASON_FRAMING;
             } catch (DataFormatException dfe) {
                 if (_log.shouldWarn())
-                    _log.warn("Bad msg 3 payload", dfe);
+//                    _log.warn("Bad msg 3 payload", dfe);
+                    _log.warn("Bad msg 3 payload \n* Data Format Exception: " + dfe.getMessage());
                 // probably RI problems
                 // setDataPhase() will send termination
                 if (_msg3p2FailReason < 0)
@@ -484,7 +486,8 @@ class InboundEstablishState extends EstablishBase implements NTCP2Payload.Payloa
             } catch (I2NPMessageException ime) {
                 // shouldn't happen, no I2NP msgs in msg3p2
                 if (_log.shouldWarn())
-                    _log.warn("Bad msg 3 payload", ime);
+//                    _log.warn("Bad msg 3 payload", ime);
+                    _log.warn("Bad msg 3 payload \n* I2NP Message Exception: " + ime.getMessage());
                 // setDataPhase() will send termination
                 if (_msg3p2FailReason < 0)
                     _msg3p2FailReason = 0;
@@ -517,12 +520,14 @@ class InboundEstablishState extends EstablishBase implements NTCP2Payload.Payloa
         } catch (GeneralSecurityException gse) {
             // buffer length error
             if (!_log.shouldWarn())
-                _log.error("Bad msg 2 out", gse);
+//                _log.error("Bad msg 2 out", gse);
+                _log.warn("Bad msg 2 out\n* General Secruity Exception: " + gse.getMessage());
             fail("Bad msg 2 out", gse);
             return;
         } catch (RuntimeException re) {
             if (!_log.shouldWarn())
-                _log.error("Bad msg 2 out", re);
+//                _log.error("Bad msg 2 out", re);
+                _log.error("Bad msg 2 out \n* Runtime Exception: " + re.getMessage());
             fail("Bad msg 2 out", re);
             return;
         }
