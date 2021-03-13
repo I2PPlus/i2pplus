@@ -376,7 +376,8 @@ public class ConfigNetHelper extends HelperBase {
         return buf.toString();
     }
 
-    public static final int DEFAULT_SHARE_KBPS = 12;
+//    public static final int DEFAULT_SHARE_KBPS = 12;
+    public static final int DEFAULT_SHARE_KBPS = 48;
 
     /**
      *  @return in binary KBytes per second
