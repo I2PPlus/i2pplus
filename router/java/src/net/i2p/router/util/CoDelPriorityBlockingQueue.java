@@ -85,9 +85,9 @@ public class CoDelPriorityBlockingQueue<E extends CDPQEntry> extends PriBlocking
         STAT_DROP = ("codel." + name + ".drop.").intern();
         STAT_DELAY = ("codel." + name + ".delay").intern();
         for (int i = 0; i < PRIORITIES.length; i++) {
-            ctx.statManager().createRateStat(STAT_DROP + PRIORITIES[i], "Queue delay of dropped items by priority [" + PRIORITIES[i] + "]", "Router [CoDel]", CODEL_RATES);
+            ctx.statManager().createRateStat(STAT_DROP + PRIORITIES[i], "Queue delay (ms) of dropped items by priority [" + PRIORITIES[i] + "]", "Router [CoDel]", CODEL_RATES);
         }
-        ctx.statManager().createRateStat(STAT_DELAY, "Average queue delay", "Router [CoDel]", CODEL_RATES);
+        ctx.statManager().createRateStat(STAT_DELAY, "Average queue delay (ms)", "Router [CoDel]", CODEL_RATES);
         _id = __id.incrementAndGet();
     }
 

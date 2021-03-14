@@ -103,8 +103,8 @@ public class CoDelBlockingQueue<E extends CDQEntry> extends LinkedBlockingQueue<
         _interval = interval;
         STAT_DROP = ("codel." + name + ".drop").intern();
         STAT_DELAY = ("codel." + name + ".delay").intern();
-        ctx.statManager().createRateStat(STAT_DROP, "Queue delay of dropped items", "Router [CoDel]", CODEL_RATES);
-        ctx.statManager().createRateStat(STAT_DELAY, "Average queue delay", "Router [CoDel]", CODEL_RATES);
+        ctx.statManager().createRateStat(STAT_DROP, "Queue delay of dropped items (ms)", "Router [CoDel]", CODEL_RATES);
+        ctx.statManager().createRateStat(STAT_DELAY, "Average queue delay (ms)", "Router [CoDel]", CODEL_RATES);
         _id = __id.incrementAndGet();
     }
 

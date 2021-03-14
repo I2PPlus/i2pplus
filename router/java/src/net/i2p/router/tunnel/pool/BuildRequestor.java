@@ -60,7 +60,7 @@ abstract class BuildRequestor {
      *
      */
 //    static final int REQUEST_TIMEOUT = 13*1000;
-    static final int REQUEST_TIMEOUT = 20*1000;
+    static final int REQUEST_TIMEOUT = 18*1000;
 
     /** make this shorter than REQUEST_TIMEOUT */
     private static final int FIRST_HOP_TIMEOUT = 10*1000;

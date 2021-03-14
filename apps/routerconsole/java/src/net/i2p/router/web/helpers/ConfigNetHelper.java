@@ -357,7 +357,7 @@ public class ConfigNetHelper extends HelperBase {
         StringBuilder buf = new StringBuilder(256);
         buf.append("<select style=\"text-align: right !important;\" name=\"sharePercentage\">\n");
         boolean found = false;
-        for (int i = 100; i >= -10; i -= 10) {
+        for (int i = 90; i >= -10; i -= 10) {
             int val = i;
             if (i == -10) {
                 if (found)
@@ -376,7 +376,8 @@ public class ConfigNetHelper extends HelperBase {
         return buf.toString();
     }
 
-    public static final int DEFAULT_SHARE_KBPS = 12;
+//    public static final int DEFAULT_SHARE_KBPS = 12;
+    public static final int DEFAULT_SHARE_KBPS = 48;
 
     /**
      *  @return in binary KBytes per second
