@@ -599,7 +599,7 @@ public class TunnelPool {
                     pct /= 2;
             }
             if (_log.shouldLog(Log.WARN))
-                _log.warn(toString() + ": Blaming [" + cfg.getPeer(i).toBase64().substring(0,6) + "] " + pct + '%');
+                _log.warn(toString() + ": Blaming [" + cfg.getPeer(i).toBase64().substring(0,6) + "] -> " + pct + '%');
             _context.profileManager().tunnelFailed(cfg.getPeer(i), pct);
         }
     }

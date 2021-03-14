@@ -584,16 +584,16 @@ public class BuildRequestRecord {
            .append("\n* Time: ").append(new Date(readRequestTime()))
            .append(" -> Expires in: ").append(DataHelper.formatDuration(readExpiration()))
            .append("\n* Target: [").append(readNextIdentity().toBase64().substring(0,6)).append("]")
-           .append("\n* Layer key: ").append(readLayerKey())
+           .append("\n* Layer Key: ").append(readLayerKey())
            .append("\n* IV key: ").append(readIVKey())
            .append("\n* Reply MsgID: ").append(readReplyMessageId())
-           .append("\n* Reply key: ").append(readReplyKey())
+           .append("\n* Reply Key: ").append(readReplyKey())
            .append("\n* Reply IV: ").append(Base64.encode(readReplyIV()));
         if (_isEC && readOptions() != null) {
             buf.append("\n* Options: ").append(readOptions());
             if (_chachaReplyKey != null) {
-                buf.append("\n* ChaCha reply key: ").append(_chachaReplyKey)
-                   .append("\n* ChaCha reply IV: ").append(Base64.encode(_chachaReplyAD));
+                buf.append("\n* ChaCha Reply Key: ").append(_chachaReplyKey)
+                   .append("\n* ChaCha Reply IV: ").append(Base64.encode(_chachaReplyAD));
             }
         }
         // to chase i2pd bug
