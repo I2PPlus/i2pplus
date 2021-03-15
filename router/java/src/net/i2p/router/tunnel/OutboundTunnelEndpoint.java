@@ -48,7 +48,7 @@ class OutboundTunnelEndpoint {
             Hash h = _config.getReceiveFrom();
             if (h != null) {
                 if (_log.shouldLog(Log.WARN))
-                    _log.warn(toString() + ": Blaming " + h + " 50%");
+                    _log.warn(toString() + ": Blaming [" + h.toBase64().substring(0,6) + "] -> 50%");
                 _context.profileManager().tunnelFailed(h, 50);
             }
         }
@@ -65,10 +65,9 @@ class OutboundTunnelEndpoint {
                 return;
             }
             if (_log.shouldLog(Log.DEBUG))
-                _log.debug("Outbound tunnel " + _config + " received a full message: " + msg
-                           + " to be forwarded on to ["
-                           + toRouter.toBase64().substring(0,6) + "]"
-                           + (toTunnel != null ? ":" + toTunnel.getTunnelId() : ""));
+                _log.debug("Outbound tunnel " + _config + " received a full message: " + msg +
+                           " to be forwarded on to [" + toRouter.toBase64().substring(0,6) + "]" +
+                           (toTunnel != null ? ":" + toTunnel.getTunnelId() : ""));
             int size = msg.getMessageSize();
             // don't drop it if we are the target
             boolean toUs = _context.routerHash().equals(toRouter);
