@@ -26,6 +26,7 @@ class PeerTestEvent extends SimpleTimer2.TimedEvent {
     private final AtomicLong _lastTestedV6 = new AtomicLong();
     private static final int NO_FORCE = 0, FORCE_IPV4 = 1, FORCE_IPV6 = 2;
     private int _forceRun;
+    private boolean _lastTestIPv6 = true;
 
     private static final int TEST_FREQUENCY = 13*60*1000;
 //    private static int TEST_FREQUENCY = 13*60*1000;
@@ -55,14 +56,17 @@ class PeerTestEvent extends SimpleTimer2.TimedEvent {
             long sinceRunV6 = now - _lastTestedV6.get();
             boolean configV4fw = _transport.isIPv4Firewalled();
             boolean configV6fw = _transport.isIPv6Firewalled();
+            boolean preferV4 = _lastTestIPv6;
             if (!configV4fw && _forceRun == FORCE_IPV4 && sinceRunV4 >= MIN_TEST_FREQUENCY) {
                 locked_runTest(false);
             } else if (!configV6fw && _forceRun == FORCE_IPV6 && _transport.hasIPv6Address() && sinceRunV6 >= MIN_TEST_FREQUENCY) {
                 locked_runTest(true);
-            } else if (!configV4fw && sinceRunV4 >= TEST_FREQUENCY && _transport.getIPv6Config() != IPV6_ONLY) {
+            } else if (preferV4 && !configV4fw && sinceRunV4 >= TEST_FREQUENCY && _transport.getIPv6Config() != IPV6_ONLY) {
                 locked_runTest(false);
             } else if (!configV6fw && _transport.hasIPv6Address() && sinceRunV6 >= TEST_FREQUENCY) {
                 locked_runTest(true);
+            } else if (!preferV4 && !configV4fw && sinceRunV4 >= TEST_FREQUENCY && _transport.getIPv6Config() != IPV6_ONLY) {
+                locked_runTest(false);
             } else {
                 if (_log.shouldLog(Log.INFO))
                     _log.info("PeerTestEvent timeReached(), no test run" +
@@ -85,6 +89,7 @@ class PeerTestEvent extends SimpleTimer2.TimedEvent {
     }
 
     private void locked_runTest(boolean isIPv6) {
+        _lastTestIPv6 = isIPv6;
         PeerState bob = _transport.pickTestPeer(BOB, isIPv6, null);
         if (bob != null) {
             if (_log.shouldLog(Log.INFO))
@@ -107,7 +112,7 @@ class PeerTestEvent extends SimpleTimer2.TimedEvent {
     public synchronized void forceRunSoon(boolean isIPv6) {
         forceRunSoon(isIPv6, MIN_TEST_FREQUENCY);
     }
-        
+
     /**
      *  Run within the specified time at the latest
      *  @since 0.9.39
