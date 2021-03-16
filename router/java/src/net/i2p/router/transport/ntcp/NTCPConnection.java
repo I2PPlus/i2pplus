@@ -141,7 +141,8 @@ public class NTCPConnection implements Closeable {
      *  In the meantime, don't let the transport bid on big messages.
      */
     static final int BUFFER_SIZE = 16*1024;
-    private static final int MAX_DATA_READ_BUFS = 16;
+//    private static final int MAX_DATA_READ_BUFS = 16;
+    private static final int MAX_DATA_READ_BUFS = 32;
     private static final ByteCache _dataReadBufs = ByteCache.getInstance(MAX_DATA_READ_BUFS, BUFFER_SIZE);
 
     private static final int INFO_PRIORITY = OutNetMessage.PRIORITY_MY_NETDB_STORE_LOW;

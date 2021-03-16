@@ -500,7 +500,7 @@ class BuildHandler implements Runnable {
         if (req == null) {
             // no records matched, or the decryption failed.  bah
             if (_log.shouldLog(Log.WARN)) {
-                _log.warn("Request " + state.msg.getUniqueId() + " could not be decrypted from [" +
+                _log.warn("Request [MsgID " + state.msg.getUniqueId() + "] could not be decrypted from [" +
                           from.toBase64().substring(0,6) + "]");
             }
             _context.statManager().addRateData("tunnel.dropDecryptFail", 1);
