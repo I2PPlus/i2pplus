@@ -328,9 +328,12 @@ class InboundEstablishState extends EstablishBase implements NTCP2Payload.Payloa
                 if (_padlen1 > 0) {
                     // delayed fail for probing resistance
                     // need more bytes before failure
-                    if (_log.shouldWarn())
-                        _log.warn("Bad msg 1, X = " + Base64.encode(_X, 0, KEY_SIZE) + " with " + src.remaining() +
+                    if (_log.shouldDebug())
+                        _log.warn("Bad msg 1 \n* X = " + Base64.encode(_X, 0, KEY_SIZE) + " with " + src.remaining() +
                                   " more bytes, waiting for " + _padlen1 + " more bytes", gse);
+                    else if (_log.shouldWarn())
+                        _log.warn("Bad msg 1 \n* X = " + Base64.encode(_X, 0, KEY_SIZE) + " with " + src.remaining() +
+                                  " more bytes, waiting for " + _padlen1 + " more bytes \n* General Security Exception: " +  gse.getMessage());
                     changeState(State.IB_NTCP2_READ_RANDOM);
                 } else {
                     // got all we need, fail now
