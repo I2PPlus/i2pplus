@@ -563,7 +563,7 @@ public class NTCPConnection implements Closeable {
                     seq = currentOutboundSet ? _currentOutbound.get(0).getSeqNum() : -1;
                 }
                 try {
-                    _log.warn("Outbound connection is too backlogged (Size: " + size +
+                    _log.warn("Outbound connection too backlogged (Size: " + size +
                               ") \n* Wants write? " + (0 != (_conKey.interestOps()&SelectionKey.OP_WRITE)) +
                               "; Current Outbound set? " + currentOutboundSet +
                               "\n* Write buffers: " + writeBufs + " on " + toString());
@@ -1761,9 +1761,9 @@ public class NTCPConnection implements Closeable {
 
     @Override
     public String toString() {
-        return "[NTCP" + _version + "] connection [ID " + _connID + "]\n* " +
-               (_isInbound ? (" From: " + _chan.socket().getInetAddress() + ":" + _chan.socket().getPort() + ' ')
-                           : (" To: " + _remAddr.getHost() + ":" + _remAddr.getPort() + ' ')) + "[" +
+        return "[NTCP" + _version + "] Connection [ID " + _connID + "]\n* " +
+               (_isInbound ? ("From: " + _chan.socket().getInetAddress() + ":" + _chan.socket().getPort() + ' ')
+                           : ("To: " + _remAddr.getHost() + ":" + _remAddr.getPort() + ' ')) + "[" +
                (_remotePeer == null ? "unknown" : _remotePeer.calculateHash().toBase64().substring(0,6)) + "]" +
                (isEstablished() ? "" : " (not established)") +
                "\n* Created: " + DataHelper.formatDuration(getTimeSinceCreated()) + " ago;" +

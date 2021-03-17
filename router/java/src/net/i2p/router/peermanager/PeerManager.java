@@ -48,7 +48,7 @@ class PeerManager {
 
     private static final long REORGANIZE_TIME = 45*1000;
 //    private static final long REORGANIZE_TIME_MEDIUM = 123*1000;
-    private static final long REORGANIZE_TIME_MEDIUM = 93*1000;
+    private static final long REORGANIZE_TIME_MEDIUM = 90*1000;
     /**
      *  We don't want this much longer than the average connect time,
      *  as the CapacityCalculator now includes connection as a factor.
@@ -56,10 +56,9 @@ class PeerManager {
      *  Rate contained in the profile, as the Rates must be coalesced.
      */
 //    private static final long REORGANIZE_TIME_LONG = 351*1000;
-//    private static final long REORGANIZE_TIME_LONG = 238*1000;
-    private static final long REORGANIZE_TIME_LONG = 188*1000;
+    private static final long REORGANIZE_TIME_LONG = 180*1000;
     /** After first two hours of uptime ~= 246 */
-    static final int REORGANIZES_PER_DAY = (int) (24*60*60*1000L / REORGANIZE_TIME_LONG);
+    static final int REORGANIZES_PER_DAY = (int) (24*60*60*1000L / (REORGANIZE_TIME_LONG * 2));
 //    private static final long STORE_TIME = 19*60*60*1000;
     private static final long STORE_TIME = 60*60*1000;
 //    private static final long EXPIRE_AGE = 3*24*60*60*1000;

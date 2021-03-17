@@ -227,13 +227,17 @@ class OutboundNTCP2State implements EstablishState {
             _handshakeState.writeMessage(_tmp, 0, options, 0, OPTIONS1_SIZE);
         } catch (GeneralSecurityException gse) {
             // buffer length error
-            if (!_log.shouldWarn())
+            if (_log.shouldDebug())
                 _log.error("Bad msg 1 out", gse);
+            else if (_log.shouldWarn())
+                _log.error("Bad msg 1 out \n* General Security Exception: " + gse.getMessage());
             fail("Bad msg 1 out", gse);
             return;
         } catch (RuntimeException re) {
-            if (!_log.shouldWarn())
+            if (_log.shouldDebug())
                 _log.error("Bad msg 1 out", re);
+            else if (_log.shouldWarn())
+                _log.error("Bad msg 1 out \n* Runtime Exception: " + re.getMessage());
             fail("Bad msg 1 out", re);
             return;
         }
@@ -478,7 +482,7 @@ class OutboundNTCP2State implements EstablishState {
             _log.debug(this + "\n* Failed to establish: " + reason, e);
         } else if (_log.shouldWarn()) {
             _log.warn(this + "\n* Failed to establish: " + reason);
-            _log.warn("[NTCP2] Outbound handshake failure " + _handshakeState.toString());
+            _log.warn("[NTCP2] Outbound Handshake failure " + _handshakeState.toString());
         }
         _handshakeState.destroy();
         if (!bySkew)
@@ -501,9 +505,8 @@ class OutboundNTCP2State implements EstablishState {
         StringBuilder buf = new StringBuilder(64);
         buf.append("OutboundEstablishState ");
         buf.append(_con.toString());
-        buf.append(' ').append(_state);
+        buf.append(" (").append(_state).append(")");
         if (_con.isEstablished()) buf.append(" established");
-        buf.append(": ");
         return buf.toString();
     }
 }
