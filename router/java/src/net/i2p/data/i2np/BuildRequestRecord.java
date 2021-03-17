@@ -585,7 +585,7 @@ public class BuildRequestRecord {
            .append(" -> Expires in: ").append(DataHelper.formatDuration(readExpiration()))
            .append("\n* Target: [").append(readNextIdentity().toBase64().substring(0,6)).append("]")
            .append("\n* Layer Key: ").append(readLayerKey())
-           .append("\n* IV key: ").append(readIVKey())
+           .append("\n* IV Key: ").append(readIVKey())
            .append("\n* Reply MsgID: ").append(readReplyMessageId())
            .append("\n* Reply Key: ").append(readReplyKey())
            .append("\n* Reply IV: ").append(Base64.encode(readReplyIV()));
