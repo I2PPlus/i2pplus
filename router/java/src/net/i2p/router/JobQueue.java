@@ -101,7 +101,7 @@ public class JobQueue {
 
     /** how frequently should we check and update the max runners */
 //    private final static long MAX_LIMIT_UPDATE_DELAY = 3*60*1000;
-    private final static long MAX_LIMIT_UPDATE_DELAY = 2*60*1000;
+    private final static long MAX_LIMIT_UPDATE_DELAY = 5*60*1000;
 
     /** if a job is this lagged, spit out a warning, but keep going */
     private long _lagWarning = DEFAULT_LAG_WARNING;
