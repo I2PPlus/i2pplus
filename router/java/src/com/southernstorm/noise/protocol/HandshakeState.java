@@ -998,13 +998,12 @@ public class HandshakeState implements Destroyable, Cloneable {
 	public String toString() {
 		StringBuilder buf = new StringBuilder(256);
 		buf.append(patternId);
-		buf.append(" -> Handshake State:\n");
-		buf.append(symmetric.toString());
+		buf.append("\n").append(symmetric.toString());
 
 		byte[] tmp = new byte[32];
 
 		DHState dh = localKeyPair;
-		buf.append("\n* Local static public key (s) :      ");
+		buf.append("\n* Local static public key: ");
 		if (dh != null && dh.hasPublicKey()) {
 			dh.getPublicKey(tmp, 0);
 			buf.append(net.i2p.data.Base64.encode(tmp));
@@ -1013,7 +1012,7 @@ public class HandshakeState implements Destroyable, Cloneable {
 		}
 
 		dh = remotePublicKey;
-		buf.append("\n* Remote static public key (rs) :    ");
+		buf.append("\n* Remote static public key: ");
 		if (dh != null && dh.hasPublicKey()) {
 			dh.getPublicKey(tmp, 0);
 			buf.append(net.i2p.data.Base64.encode(tmp));
@@ -1022,13 +1021,13 @@ public class HandshakeState implements Destroyable, Cloneable {
 		}
 
 		dh = localEphemeral;
-		buf.append("\n* Local ephemeral public key (e) :   ");
+		buf.append("\n* Local ephemeral public key: ");
 		if (dh != null && dh.hasPublicKey()) {
 			dh.getPublicKey(tmp, 0);
 			buf.append(net.i2p.data.Base64.encode(tmp));
 			if (dh.hasEncodedPublicKey()) {
-				buf.append('\n');
-				buf.append("Local eph. pub key ELG2 encoded:   ");
+				buf.append("\n* ");
+				buf.append("Local ephemeral public key (ELG2 encoded): ");
 				dh.getEncodedPublicKey(tmp, 0);
 				buf.append(net.i2p.data.Base64.encode(tmp));
 			}
@@ -1037,7 +1036,7 @@ public class HandshakeState implements Destroyable, Cloneable {
 		}
 
 		dh = remoteEphemeral;
-		buf.append("\n* Remote ephemeral public key (re) : ");
+		buf.append("\n* Remote ephemeral public key: ");
 		if (dh != null && dh.hasPublicKey()) {
 			dh.getPublicKey(tmp, 0);
 			buf.append(net.i2p.data.Base64.encode(tmp));
