@@ -97,7 +97,7 @@ public class ProfileOrganizer {
      */
     public static final String PROP_MINIMUM_HIGH_CAPACITY_PEERS = "profileOrganizer.minHighCapacityPeers";
 //    public static final int DEFAULT_MINIMUM_HIGH_CAPACITY_PEERS = 25;
-    public static final int DEFAULT_MINIMUM_HIGH_CAPACITY_PEERS = 200;
+    public static final int DEFAULT_MINIMUM_HIGH_CAPACITY_PEERS = 300;
 //    private static final int ABSOLUTE_MAX_HIGHCAP_PEERS = 150;
     private static final int ABSOLUTE_MAX_HIGHCAP_PEERS = 400;
 
