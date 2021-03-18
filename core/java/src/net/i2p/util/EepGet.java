@@ -1350,6 +1350,16 @@ public class EepGet {
         }
     }
 
+    /**
+     *  Should we read the body of the response?
+     *  @return true always, overridden in EepHead
+     *  @since 0.9.50
+     */
+    protected boolean shouldReadBody() { return true; }
+
+    /**
+     *  TODO this does not skip over chunk extensions (RFC 2616 sec. 3.6.1)
+     */
     protected long readChunkLength() throws IOException {
         StringBuilder buf = new StringBuilder(8);
         int nl = 0;
@@ -1447,8 +1457,8 @@ public class EepGet {
         } else if (key.equals("content-language")) {
             _contentLanguage = val;
         } else if (key.equals("transfer-encoding")) {
-            _transferEncoding = val;
-            _encodingChunked = val.toLowerCase(Locale.US).contains("chunked");
+            // don't read chunk header in readHeaders() for EepHead
+            _encodingChunked = shouldReadBody() && val.toLowerCase(Locale.US).contains("chunked");
         } else if (key.equals("content-encoding")) {
             _contentEncoding = val;
             // This is kindof a hack, but if we are downloading a gzip file
