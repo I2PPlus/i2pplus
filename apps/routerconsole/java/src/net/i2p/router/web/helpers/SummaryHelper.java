@@ -964,9 +964,19 @@ public class SummaryHelper extends HelperBase {
         RateStat ok = _context.statManager().getRate("peer.testOK");
         Rate rok = ok.getRate(60*60*1000);
         RateStat tooslow = _context.statManager().getRate("peer.testTooSlow");
-        Rate rtooslow = ok.getRate(60*60*1000);
+        Rate rtooslow = tooslow.getRate(60*60*1000);
         int avgTestTime = (int) rok.getLifetimeAverageValue() + (int) rtooslow.getLifetimeAverageValue();
         return avgTestTime;
+    }
+
+    /** @since 0.9.50+ */
+    public int getAvgPeerTestTimeGood() {
+        if (_context == null)
+            return 0;
+        RateStat ok = _context.statManager().getRate("peer.testOK");
+        Rate rok = ok.getRate(60*60*1000);
+        int avgTestTimeGood = (int) rok.getLifetimeAverageValue();
+        return avgTestTimeGood;
     }
 
     private static boolean updateAvailable() {
