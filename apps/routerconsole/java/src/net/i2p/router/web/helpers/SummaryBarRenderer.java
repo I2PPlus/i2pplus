@@ -333,7 +333,7 @@ class SummaryBarRenderer {
             int sz = urls.size();
             if (sz > 1)
                 Collections.sort(urls);
-            for (int i = 0; i < sz; i++) { 
+            for (int i = 0; i < sz; i++) {
                 String url = urls.get(i);
                 String txp = sz > 1 ? tx + ' ' + (i + 1) : tx;
                 rbuf.setLength(0);
@@ -1198,11 +1198,12 @@ class SummaryBarRenderer {
         if (_context.getProperty("routerconsole.showPeerTestAvg") != null &&
             _context.getBooleanProperty("routerconsole.showPeerTestAvg")) {
             buf.append("<tr title=\"")
-               .append(_t("Average time to test a peer"))
+               .append(_t("Average time to test a peer (successful / total)"))
                .append("\">" +
                        "<td align=\"left\"><b>")
                .append(_t("Peer test average"))
                .append("</b></td><td class=\"digits\" align=\"right\">")
+               .append(_helper.getAvgPeerTestTimeGood()).append(" / " )
                .append(_helper.getAvgPeerTestTime());
             if (_helper.getAvgPeerTestTime() > 0)
                 buf.append("&nbsp;ms");
