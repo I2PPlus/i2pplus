@@ -101,9 +101,9 @@ public class EepGet {
     protected String _xContentTypeOptions;
     protected String _xPoweredBy;
     protected boolean _transferFailed;
-    protected boolean _aborted;
+    protected volatile boolean _aborted;
     protected int _fetchHeaderTimeout;
-    private long _fetchEndTime;
+    protected int _fetchTotalTimeout;
     protected int _fetchInactivityTimeout;
     protected int _redirects;
     protected String _redirectLocation;
@@ -501,6 +501,7 @@ public class EepGet {
 
         public void attempting(String url);
     }
+
     protected class CLIStatusListener implements StatusListener {
         private final int _markSize;
         private final int _lineSize;
@@ -710,8 +711,11 @@ public class EepGet {
      * @return success
      */
     public boolean fetch(long fetchHeaderTimeout, long totalTimeout, long inactivityTimeout) {
+        // we need a SocketTimeout if we have a totalTimeout
+        if (totalTimeout > 0 && fetchHeaderTimeout <= 0)
+            fetchHeaderTimeout = totalTimeout;
         _fetchHeaderTimeout = (int) Math.min(fetchHeaderTimeout, Integer.MAX_VALUE);
-        _fetchEndTime = (totalTimeout > 0 ? System.currentTimeMillis() + totalTimeout : -1);
+        _fetchTotalTimeout = (int) Math.min(totalTimeout, Integer.MAX_VALUE);
         _fetchInactivityTimeout = (int) Math.min(inactivityTimeout, Integer.MAX_VALUE);
         _keepFetching = true;
 
@@ -720,16 +724,21 @@ public class EepGet {
         while (_keepFetching) {
             SocketTimeout timeout = null;
             if (_fetchHeaderTimeout > 0) {
+                // We create the SocketTimeout with an inactivity time of the header timeout.
+                // After fetchHeaders(), we must call either resetTimer() or cancel()
                 timeout = new SocketTimeout(_fetchHeaderTimeout);
-                final SocketTimeout stimeout = timeout; // ugly - why not use sotimeout?
+                final SocketTimeout stimeout = timeout;
+                final Thread thread = Thread.currentThread();
                 timeout.setTimeoutCommand(new Runnable() {
                     public void run() {
                         if (_log.shouldLog(Log.DEBUG))
                             _log.debug("Timeout reached on " + _url + ": " + stimeout);
                         _aborted = true;
+                        thread.interrupt();
                     }
                 });
-                timeout.setTotalTimeoutPeriod(_fetchEndTime);
+                if (_fetchTotalTimeout > 0)
+                    timeout.setTotalTimeoutPeriod(_fetchTotalTimeout);
             }
             try {
                 for (int i = 0; i < _listeners.size(); i++)
@@ -738,14 +747,10 @@ public class EepGet {
                 if (timeout != null)
                     timeout.resetTimer();
                 doFetch(timeout);
-                if (timeout != null)
-                    timeout.cancel();
                 if (!_transferFailed)
                     return true;
                 break;
             } catch (IOException ioe) {
-                if (timeout != null)
-                    timeout.cancel();
                 for (int i = 0; i < _listeners.size(); i++)
                     _listeners.get(i).attemptFailed(_url, _bytesTransferred, _bytesRemaining, _currentAttempt, _numRetries, ioe);
                 int truncate = _url.indexOf("&");
@@ -759,6 +764,8 @@ public class EepGet {
                     ioe instanceof ConnectException) // proxy or nonproxied host Connection Refused
                     _keepFetching = false;
             } finally {
+                if (timeout != null)
+                    timeout.cancel();
                 if (_out != null) {
                     try {
                         _out.close();
@@ -797,7 +804,8 @@ public class EepGet {
     }
 
     /**
-     *  single fetch
+     *  This reads the response to a single fetch.
+     *  Call after sendRequest()
      *  @param timeout may be null
      */
     protected void doFetch(SocketTimeout timeout) throws IOException {
@@ -806,20 +814,28 @@ public class EepGet {
         if (_aborted)
             throw new IOException("Eepget error: Timed out reading the HTTP headers");
 
-        if (timeout != null) {
-            timeout.resetTimer();
-            if (_fetchInactivityTimeout > 0)
-                timeout.setInactivityTimeout(_fetchInactivityTimeout);
-            else
-                timeout.setInactivityTimeout(INACTIVITY_TIMEOUT);
-        }
         // _proxy is null when extended by I2PSocketEepGet
-        if (_proxy != null && !_shouldProxy) {
+        if (_proxy != null) {
+        if (timeout != null) {
+                if (_fetchTotalTimeout > 0) {
+            timeout.resetTimer();
+                } else {
+                    // we don't need the timeout any more, we'll use soTimeout
+                    timeout.cancel();
+                    timeout = null;
+                }
+            }
             // we only set the soTimeout before the headers if not proxied
             if (_fetchInactivityTimeout > 0)
                 _proxy.setSoTimeout(_fetchInactivityTimeout);
             else
                 _proxy.setSoTimeout(INACTIVITY_TIMEOUT);
+        } else if (timeout != null) {
+            timeout.resetTimer();
+            if (_fetchInactivityTimeout > 0)
+                timeout.setInactivityTimeout(_fetchInactivityTimeout);
+            else
+                timeout.setInactivityTimeout(INACTIVITY_TIMEOUT);
         }
 
         if (_redirectLocation != null) {
@@ -1334,6 +1350,16 @@ public class EepGet {
         }
     }
 
+    /**
+     *  Should we read the body of the response?
+     *  @return true always, overridden in EepHead
+     *  @since 0.9.50
+     */
+    protected boolean shouldReadBody() { return true; }
+
+    /**
+     *  TODO this does not skip over chunk extensions (RFC 2616 sec. 3.6.1)
+     */
     protected long readChunkLength() throws IOException {
         StringBuilder buf = new StringBuilder(8);
         int nl = 0;
@@ -1431,8 +1457,8 @@ public class EepGet {
         } else if (key.equals("content-language")) {
             _contentLanguage = val;
         } else if (key.equals("transfer-encoding")) {
-            _transferEncoding = val;
-            _encodingChunked = val.toLowerCase(Locale.US).contains("chunked");
+            // don't read chunk header in readHeaders() for EepHead
+            _encodingChunked = shouldReadBody() && val.toLowerCase(Locale.US).contains("chunked");
         } else if (key.equals("content-encoding")) {
             _contentEncoding = val;
             // This is kindof a hack, but if we are downloading a gzip file
@@ -1508,12 +1534,12 @@ public class EepGet {
                 if ("http".equals(url.getScheme())) {
                     String host = url.getHost();
                     if (host == null)
-                        throw new MalformedURLException("URL is not supported:" + _actualURL);
+                        throw new MalformedURLException("URL is not supported: " + _actualURL);
                     String hostlc = host.toLowerCase(Locale.US);
                     if (hostlc.endsWith(".i2p"))
-                        throw new UnknownHostException("I2P addresses must be proxied. ");
+                        throw new UnknownHostException("I2P addresses must be proxied.");
                     if (hostlc.endsWith(".onion"))
-                        throw new UnknownHostException("Tor addresses must be proxied. ");
+                        throw new UnknownHostException("Tor addresses must be proxied.");
                     int port = url.getPort();
                     if (port == -1)
                         port = 80;
@@ -1525,7 +1551,7 @@ public class EepGet {
                         _proxy = new Socket(host, port);
                     }
                 } else {
-                    throw new MalformedURLException("URL is not supported:" + _actualURL);
+                    throw new MalformedURLException("URL is not supported: " + _actualURL);
                 }
             } catch (URISyntaxException use) {
                 IOException ioe = new MalformedURLException("Request URL is invalid");

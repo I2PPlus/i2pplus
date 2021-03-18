@@ -74,6 +74,7 @@ public abstract class TransportImpl implements Transport {
     /** @since 0.9.50 */
     protected static final String PROP_TRANSPORT_CAPS = "i2np.transportCaps";
     /** @since 0.9.50 */
+    // TODO: Enable before 0.9.50 release I2P+)
     protected static final boolean ENABLE_TRANSPORT_CAPS = false;
     /** @since 0.9.50 */
     public static final String CAP_IPV4 = "4";
