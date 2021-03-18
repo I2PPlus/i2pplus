@@ -268,8 +268,8 @@ public class ProfileOrganizer {
             int minHighCap = _context.getProperty(PROP_MINIMUM_HIGH_CAPACITY_PEERS, DEFAULT_MINIMUM_HIGH_CAPACITY_PEERS);
             int minFast = _context.getProperty(PROP_MINIMUM_FAST_PEERS, DEFAULT_MINIMUM_FAST_PEERS);
             if (peerInfo != null && cap != null && reachable && (!bw.equals("K") || !bw.equals("L") || !bw.equals("M"))) {
-                if ((_thresholdCapacityValue <= rv.getCapacityValue() && isSelectable(peer) &&
-                    countHighCapacityPeers() < getMaximumHighCapPeers()) || countHighCapacityPeers() < minHighCap)
+                if (_thresholdCapacityValue <= rv.getCapacityValue() && isSelectable(peer) &&
+                    countHighCapacityPeers() < getMaximumHighCapPeers())
                     _highCapacityPeers.put(peer, rv);
                 if (countFastPeers() < minFast)
                     _fastPeers.put(peer, rv);
@@ -606,8 +606,10 @@ public class ProfileOrganizer {
         } finally { releaseReadLock(); }
         if (matches.size() < howMany) {
             if (_log.shouldLog(Log.DEBUG))
-                _log.debug("Need " + howMany + " High Capacity peers for tunnel build; " + matches.size() + " found - selecting remainder from Not Failing peers");
-            selectActiveNotFailingPeers2(howMany, exclude, matches, mask);
+//                _log.debug("Need " + howMany + " High Capacity peers for tunnel build; " + matches.size() + " found - selecting remainder from Not Failing peers");
+//            selectActiveNotFailingPeers2(howMany, exclude, matches, mask);
+                _log.debug("Need " + howMany + " High Capacity peers for tunnel build; " + matches.size() + " found - selecting remainder from Fast peers");
+            selectFastPeers(howMany, exclude, matches, mask);
         } else {
             if (_log.shouldLog(Log.DEBUG))
                 _log.debug(howMany + " High Capacity peers selected for tunnel build");
