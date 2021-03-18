@@ -542,7 +542,7 @@ class PacketHandler {
                     return;
                 } else {
                     if (_log.shouldLog(Log.WARN))
-                        _log.warn("Invalid Inbound introduction packet received, treating as non-establishment packet " + packet);
+                        _log.warn("Invalid Inbound introduction packet received, treating as non-establishment " + packet);
                     _state = 33;
                 }
             }
@@ -602,7 +602,7 @@ class PacketHandler {
                 return;
             } else {
                 if (_log.shouldLog(Log.WARN))
-                    _log.warn("Invalid Outbound introduction packet received (stale intro key) for established connection, treating as non-establishment packet " + packet);
+                    _log.warn("Invalid Outbound introduction packet received (stale intro key) for established connection, treating as non-establishment " + packet);
             }
 
             // ok, we couldn't handle it with the established stuff, so fall back

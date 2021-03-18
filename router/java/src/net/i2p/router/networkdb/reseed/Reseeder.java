@@ -350,7 +350,7 @@ public class Reseeder {
             _isRunning = true;
             _checker.setError("");
             _checker.setStatus(_t("Initiating Reseed") + "&hellip;");
-            System.out.println("Starting Reseed process");
+            System.out.println("Starting Reseed process...");
             int total;
             if (_url != null) {
                 String lc = _url.getPath().toLowerCase(Locale.US);
@@ -383,7 +383,7 @@ public class Reseeder {
                 _checker.setError(s);
                 _checker.setStatus("");
             } else {
-                if (total == 0) {
+                if (total == 0 && !_context.router().gracefulShutdownInProgress()) {
                     System.out.println("Reseed failed " + getDisplayString(_url) + " - check network connection");
                     System.out.println("Ensure that nothing blocks outbound HTTP or HTTPS, check the logs, " +
                                        "and if nothing helps, read the FAQ about reseeding manually.");
