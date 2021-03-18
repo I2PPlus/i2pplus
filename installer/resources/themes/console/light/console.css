@@ -1166,9 +1166,10 @@ to {
 }
 
 @supports not (-moz-appearance: none) {
-.tunnelBuildStatus, .tunnelBuildStatus::before {
-   vertical-align: middle !important;
-}
+  .tunnelBuildStatus::before {
+    margin-top: 2px !important;
+    vertical-align: top !important;
+  }
 }
 
 .sb_netstatus.error::before {

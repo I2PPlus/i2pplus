@@ -1074,6 +1074,13 @@ div.refresh {
   content: "";
 }
 
+@supports not (-moz-appearance: none) {
+  .tunnelBuildStatus::before {
+    margin-top: 1px !important;
+    vertical-align: top !important;
+  }
+}
+
 .tunnelBuildStatus.accepting::before {
   box-shadow: inset 0 0 0 2px #5b5;
   background: #fff;
