@@ -1449,8 +1449,8 @@ public class PeerState {
                 if (msg != null) {
                     msg.timestamp("expired in the active pool");
                     _transport.failed(state);
-                    if (_log.shouldWarn())
-                        _log.warn("Message expired: " + state + " to: " + this);
+                    if (_log.shouldInfo())
+                        _log.info("Message expired: " + state + " to: " + this);
                 } else {
                     // it can not have an OutNetMessage if the source is the
                     // final after establishment message
