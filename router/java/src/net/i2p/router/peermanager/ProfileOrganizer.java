@@ -1572,6 +1572,7 @@ public class ProfileOrganizer {
      */
     private void locked_placeProfile(PeerProfile profile) {
         Hash peer = profile.getPeer();
+        int minHighCap = _context.getProperty(PROP_MINIMUM_HIGH_CAPACITY_PEERS, DEFAULT_MINIMUM_HIGH_CAPACITY_PEERS);
         if (profile.getIsFailing()) {
             if (!shouldDrop(profile))
                 _failingPeers.put(peer, profile);
@@ -1608,7 +1609,8 @@ public class ProfileOrganizer {
                     }
                 }
 
-            } else {
+            } else if (countHighCapacityPeers() < minHighCap && isSelectable(peer) && !_context.commSystem().isInStrictCountry(peer)) {
+                _highCapacityPeers.put(peer, profile);
                 // not high capacity, but not failing (yet)
             }
             // We aren't using the well-integrated list yet...
