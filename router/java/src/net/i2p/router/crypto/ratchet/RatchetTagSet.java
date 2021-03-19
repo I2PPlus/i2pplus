@@ -548,35 +548,35 @@ class RatchetTagSet implements TagSetHandle {
             buf.append("ES ");
         buf.append("TagSet #").append(_tagSetID)
            .append(" ID #").append(_id)
-           .append("\nCreated:  ").append(DataHelper.formatTime(_created))
-           .append("\nLast use: ").append(DataHelper.formatTime(_date));
+           .append("\n* Created:  ").append(DataHelper.formatTime(_created))
+           .append("\n* Last used: ").append(DataHelper.formatTime(_date));
         PublicKey pk = getRemoteKey();
         if (pk != null)
-            buf.append("\nRemote Public Key: ").append(pk.toBase64());
-        buf.append("\nRoot Key:   ").append(_key.toBase64());
+            buf.append("\n* Remote Public Key: ").append(pk.toBase64());
+        buf.append("\n* Root Key: ").append(_key.toBase64());
         if (_tagsetKey != null)
-            buf.append("\nTagset Key: ").append(_tagsetKey.toBase64());
+            buf.append("\n* Tagset Key: ").append(_tagsetKey.toBase64());
         if (_nextKey != null)
-            buf.append("\nNext Key:   ").append(_nextKey);
+            buf.append("\n* Next Key: ").append(_nextKey);
         int sz = size();
-        buf.append("\nSize: ").append(sz)
-           .append(" Orig: ").append(_originalSize)
-           .append(" Max: ").append(_maxSize)
-           .append(" Remaining: ").append(remaining());
-        buf.append(" Acked? ").append(_acked);
+        buf.append("\n* Size: ").append(sz)
+           .append("; Original Size: ").append(_originalSize)
+           .append("; Max Size: ").append(_maxSize)
+           .append("; Remaining: ").append(remaining());
+        buf.append("; Acked? ").append(_acked);
         if (_sessionTags != null) {
             for (int i = 0; i < sz; i++) {
                 int n = _sessionTags.keyAt(i);
                 RatchetSessionTag tag = _sessionTags.valueAt(i);
                 if (tag == null)
                     continue;
-                buf.append("\n  ").append(n).append('\t').append(tag.toBase64());
+                buf.append("\n* Session Tag ").append(n).append(": ").append(tag.toBase64());
                 if (_sessionKeys != null) {
                     byte[] key = _sessionKeys.get(n);
                     if (key != null) {
-                        buf.append('\t').append(Base64.encode(key));
+                        buf.append("\n* Session Key: ").append(Base64.encode(key));
                     } else {
-                        buf.append("\tTBD");
+                        buf.append("\n* Session Key: TBD");
                         // set DEBUG if you want to see them all
                         if (!DEBUG) {
                             buf.append(" (" + (sz - (i +1)) + " more)");
