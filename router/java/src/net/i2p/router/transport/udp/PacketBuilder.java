@@ -1223,8 +1223,8 @@ class PacketBuilder {
                 // FIXME this will have already failed in isValid() above, right?
                 (Arrays.equals(iaddr.getAddress(), _transport.getExternalIP()) && !_transport.allowLocal())) {
                 if (_log.shouldLog(Log.WARN))
-                    _log.warn("Cannot build a relay request for " + state.getRemoteIdentity().calculateHash()
-                               + ", as the introducer address is invalid: " + Addresses.toString(iaddr.getAddress(), iport));
+                    _log.warn("Cannot build a relay request for [" + state.getRemoteIdentity().calculateHash().toBase64().substring(0,6) +
+                              "] -> invalid introducer address: " + Addresses.toString(iaddr.getAddress(), iport));
                 // TODO implement some sort of introducer banlist
                 continue;
             }
@@ -1261,8 +1261,8 @@ class PacketBuilder {
             if (pkt != null)
                 rv.add(pkt);
             else if (_log.shouldWarn())
-                _log.warn("Cannot build a relay request for " + state.getRemoteIdentity().calculateHash()
-                          + ", as we don't have an IPv4 address to send to: " + Addresses.toString(iaddr.getAddress(), iport));
+                _log.warn("Cannot build a relay request for [" + state.getRemoteIdentity().calculateHash().toBase64().substring(0,6) +
+                          "] -> no valid IPv4 address to send to: " + Addresses.toString(iaddr.getAddress(), iport));
         }
         return rv;
     }
