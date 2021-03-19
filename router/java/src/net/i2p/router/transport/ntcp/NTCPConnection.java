@@ -123,7 +123,8 @@ public class NTCPConnection implements Closeable {
     /*
      *  Update frequency for send/recv rates in console peers page
      */
-    private static final long STAT_UPDATE_TIME_MS = 30*1000;
+//    private static final long STAT_UPDATE_TIME_MS = 30*1000;
+    private static final long STAT_UPDATE_TIME_MS = 60*1000;
 
     /*
      *  Should be longer than 2 * EventPumper.MAX_EXPIRE_IDLE_TIME so it doesn't
@@ -142,7 +143,7 @@ public class NTCPConnection implements Closeable {
      */
     static final int BUFFER_SIZE = 16*1024;
 //    private static final int MAX_DATA_READ_BUFS = 16;
-    private static final int MAX_DATA_READ_BUFS = 32;
+    private static final int MAX_DATA_READ_BUFS = 12;
     private static final ByteCache _dataReadBufs = ByteCache.getInstance(MAX_DATA_READ_BUFS, BUFFER_SIZE);
 
     private static final int INFO_PRIORITY = OutNetMessage.PRIORITY_MY_NETDB_STORE_LOW;
@@ -1190,7 +1191,9 @@ public class NTCPConnection implements Closeable {
         _clockSkew = newSkew;
     }
 
-    private static final int MAX_HANDLERS = 8;
+
+//    private static final int MAX_HANDLERS = 8;
+    private static final int MAX_HANDLERS = (SystemVersion.isSlow() || SystemVersion.getCores() <= 4 ? 6 : Math.max(SystemVersion.getCores() * 2, 8));
 
     /**
      *  FIXME static queue mixes handlers from different contexts in multirouter JVM
