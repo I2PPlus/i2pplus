@@ -93,10 +93,10 @@ class EventPumper implements Runnable {
      * the time to iterate across them to check a few flags shouldn't be a problem.
      */
 //    private static final long FAILSAFE_ITERATION_FREQ = 2*1000l;
-    private static final int FAILSAFE_ITERATION_FREQ = 180*1000;
+    private static final int FAILSAFE_ITERATION_FREQ = 10*60*1000;
     private static final int FAILSAFE_LOOP_COUNT = 512;
 //    private static final long SELECTOR_LOOP_DELAY = 200;
-    private static final long SELECTOR_LOOP_DELAY = 100;
+    private static final long SELECTOR_LOOP_DELAY = 150;
     private static final long BLOCKED_IP_FREQ = 3*60*1000;
 
     /** tunnel test now disabled, but this should be long enough to allow an active tunnel to get started */
@@ -215,7 +215,6 @@ class EventPumper implements Runnable {
         while (_alive && _selector.isOpen()) {
             try {
                 loopCount++;
-
                 try {
                     int count = _selector.select(SELECTOR_LOOP_DELAY);
                     if (count > 0) {
@@ -244,6 +243,8 @@ class EventPumper implements Runnable {
                     loopFreq = FAILSAFE_ITERATION_FREQ * 2;
                 else if (known < 2000)
                     loopFreq = FAILSAFE_ITERATION_FREQ / 2;
+                else if (known < 1000)
+                    loopFreq = FAILSAFE_ITERATION_FREQ / 3;
                 if (lastFailsafeIteration + loopFreq < now) {
                     // in the *cough* unthinkable possibility that there are bugs in
                     // the code, let's periodically pass over all NTCP connections and

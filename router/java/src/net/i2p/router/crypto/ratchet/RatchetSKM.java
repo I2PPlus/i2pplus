@@ -87,7 +87,7 @@ public class RatchetSKM extends SessionKeyManager implements SessionTagListener 
     }
 
     /**
-     * The session key manager is constructed and accessed through the 
+     * The session key manager is constructed and accessed through the
      * client manager.
      *
      * @param dest null for router's SKM only
@@ -1278,9 +1278,9 @@ public class RatchetSKM extends SessionKeyManager implements SessionTagListener 
                     _nextIBRootKey = ts.getNextRootKey();
                     if (_log.shouldWarn())
                         _log.warn("Got nextkey " + key +
-                                  "from " + (_destination != null ? _destination.toBase32() : "???") +
-                                  "\nold IB TS ID #" + oldtsID +
-                                  "\nratchet to new IB ES TS:\n" + ts);
+                                  "\n* From: [" + (_destination != null ? _destination.toBase32().substring(0,6) : "???") +
+                                  "] \n* Old Inbound TagSet ID #" + oldtsID +
+                                  "\n* Ratchet to new Inbound ES TagSet: \n* " + ts);
                 }
             }
         }
