@@ -87,10 +87,10 @@ public class FIFOBandwidthLimiter {
     public FIFOBandwidthLimiter(RouterContext context) {
         _context = context;
         _log = context.logManager().getLog(FIFOBandwidthLimiter.class);
-        _context.statManager().createRateStat("bwLimiter.pendingOutboundRequests", "Outbound non-zero length requests ahead of current", "BandwidthLimiter", new long[] { 60*1000l, 5*60*1000l, 60*60*1000l });
-        _context.statManager().createRateStat("bwLimiter.pendingInboundRequests", "Inbound non-zero length requests ahead of current", "BandwidthLimiter", new long[] { 60*1000l, 5*60*1000l, 60*60*1000l });
-        _context.statManager().createRateStat("bwLimiter.outboundDelayedTime", "Time to honor non-zero length outbound request (ms)", "BandwidthLimiter", new long[] { 60*1000l, 5*60*1000l, 60*60*1000l });
-        _context.statManager().createRateStat("bwLimiter.inboundDelayedTime", "Time to honor non-zero length inbound request (ms)", "BandwidthLimiter", new long[] { 60*1000l, 5*60*1000l, 60*60*1000l });
+        _context.statManager().createRateStat("bwLimiter.pendingOutboundRequests", "Outbound non-zero length requests ahead of current", "BandwidthLimiter", new long[] { 60*1000l, 10*60*1000l, 60*60*1000l });
+        _context.statManager().createRateStat("bwLimiter.pendingInboundRequests", "Inbound non-zero length requests ahead of current", "BandwidthLimiter", new long[] { 60*1000l, 10*60*1000l, 60*60*1000l });
+        _context.statManager().createRateStat("bwLimiter.outboundDelayedTime", "Time to honor non-zero length outbound request (ms)", "BandwidthLimiter", new long[] { 60*1000l, 10*60*1000l, 60*60*1000l });
+        _context.statManager().createRateStat("bwLimiter.inboundDelayedTime", "Time to honor non-zero length inbound request (ms)", "BandwidthLimiter", new long[] { 60*1000l, 10*60*1000l, 60*60*1000l });
         _pendingInboundRequests = new ArrayList<SimpleRequest>(16);
         _pendingOutboundRequests = new ArrayList<SimpleRequest>(16);
         _lastTotalSent = _totalAllocatedOutboundBytes.get();
