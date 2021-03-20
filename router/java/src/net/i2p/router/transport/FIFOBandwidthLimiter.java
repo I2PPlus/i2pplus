@@ -7,7 +7,7 @@ import java.util.List;
 import java.util.concurrent.atomic.AtomicInteger;
 import java.util.concurrent.atomic.AtomicLong;
 
-import net.i2p.I2PAppContext;
+import net.i2p.router.RouterContext;
 import net.i2p.router.util.PQEntry;
 import net.i2p.util.I2PThread;
 import net.i2p.util.Log;
@@ -33,7 +33,7 @@ import net.i2p.util.Log;
  */
 public class FIFOBandwidthLimiter {
     private final Log _log;
-    private final I2PAppContext _context;
+    private final RouterContext _context;
     private final List<SimpleRequest> _pendingInboundRequests;
     private final List<SimpleRequest> _pendingOutboundRequests;
     /** how many bytes we can consume for inbound transmission immediately */
@@ -84,13 +84,13 @@ public class FIFOBandwidthLimiter {
         return System.currentTimeMillis();
     }
 
-    public FIFOBandwidthLimiter(I2PAppContext context) {
+    public FIFOBandwidthLimiter(RouterContext context) {
         _context = context;
         _log = context.logManager().getLog(FIFOBandwidthLimiter.class);
-        _context.statManager().createRateStat("bwLimiter.pendingOutboundRequests", "Outbound requests ahead of current (ignoring zero length requests)", "BandwidthLimiter", new long[] { 5*60*1000l, 60*60*1000l });
-        _context.statManager().createRateStat("bwLimiter.pendingInboundRequests", "Inbound requests ahead of current (ignoring zero length requests)", "BandwidthLimiter", new long[] { 5*60*1000l, 60*60*1000l });
-        _context.statManager().createRateStat("bwLimiter.outboundDelayedTime", "Time to honor an outbound request (ignoring zero length requests)", "BandwidthLimiter", new long[] { 5*60*1000l, 60*60*1000l });
-        _context.statManager().createRateStat("bwLimiter.inboundDelayedTime", "Time to honor an inbound request (ignoring zero length requests)", "BandwidthLimiter", new long[] { 5*60*1000l, 60*60*1000l });
+        _context.statManager().createRateStat("bwLimiter.pendingOutboundRequests", "Outbound non-zero length requests ahead of current", "BandwidthLimiter", new long[] { 60*1000l, 5*60*1000l, 60*60*1000l });
+        _context.statManager().createRateStat("bwLimiter.pendingInboundRequests", "Inbound non-zero length requests ahead of current", "BandwidthLimiter", new long[] { 60*1000l, 5*60*1000l, 60*60*1000l });
+        _context.statManager().createRateStat("bwLimiter.outboundDelayedTime", "Time to honor non-zero length outbound request (ms)", "BandwidthLimiter", new long[] { 60*1000l, 5*60*1000l, 60*60*1000l });
+        _context.statManager().createRateStat("bwLimiter.inboundDelayedTime", "Time to honor non-zero length inbound request (ms)", "BandwidthLimiter", new long[] { 60*1000l, 5*60*1000l, 60*60*1000l });
         _pendingInboundRequests = new ArrayList<SimpleRequest>(16);
         _pendingOutboundRequests = new ArrayList<SimpleRequest>(16);
         _lastTotalSent = _totalAllocatedOutboundBytes.get();
@@ -187,13 +187,18 @@ public class FIFOBandwidthLimiter {
     }
 
     /**
-     *  We sent a message.
+     *  We intend to send traffic for a participating tunnel
+     *  with the given size and adjustment factor.
+     *  Returns true if the message can be sent within the current
+     *  share bandwidth limits, or false if it should be dropped.
      *
      *  @param size bytes
+     *  @param factor multiplier of size for the drop calculation, 1 for no adjustment
+     *  @return true for accepted, false for drop
      *  @since 0.8.12
      */
-    public void sentParticipatingMessage(int size) {
-        _refiller.incrementParticipatingMessageBytes(size);
+    public boolean sentParticipatingMessage(int size, float factor) {
+        return _refiller.incrementParticipatingMessageBytes(size, factor);
     }
 
     /**
@@ -444,8 +449,8 @@ public class FIFOBandwidthLimiter {
                     locked_satisfyInboundAvailable(satisfied);
                 } else {
                     // no bandwidth available
-                    if (_log.shouldLog(Log.INFO))
-                        _log.info("Still denying " + _pendingInboundRequests.size()
+                    if (_log.shouldLog(Log.DEBUG))
+                        _log.debug("Still denying " + _pendingInboundRequests.size()
                                   + " pending inbound requests (no bandwidth available)\n* Status: " + getStatus().toString()
                                   + "Longest waited " + locked_getLongestInboundWait() + "ms");
                 }
@@ -594,8 +599,8 @@ public class FIFOBandwidthLimiter {
                     locked_satisfyOutboundAvailable(satisfied);
                 } else {
                     // no bandwidth available
-                    if (_log.shouldLog(Log.INFO))
-                        _log.info("Still denying " + _pendingOutboundRequests.size()
+                    if (_log.shouldLog(Log.DEBUG))
+                        _log.debug("Still denying " + _pendingOutboundRequests.size()
                                   + " pending outbound requests (no bandwidth available)\n* Status: " + getStatus().toString()
                                   + "Longest waited " + locked_getLongestOutboundWait() + "ms");
                 }
