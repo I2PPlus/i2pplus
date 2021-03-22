@@ -479,10 +479,10 @@ class OutboundNTCP2State implements EstablishState {
             return;
         changeState(State.CORRUPT);
         if (_log.shouldDebug()) {
-            _log.warn(this + "\n* Failed to establish connection: " + reason, e);
             _log.warn("[NTCP2] Outbound Handshake failure " + _handshakeState.toString());
+            _log.warn(this + "\n* Failed to establish connection: " + reason, e);
         } else if (_log.shouldWarn()) {
-            _log.warn(this + "\n* Failed to establish connection: " + reason);
+            _log.warn(this + "\n* Outbound Handshake failure: " + reason);
         }
         _handshakeState.destroy();
         if (!bySkew)
