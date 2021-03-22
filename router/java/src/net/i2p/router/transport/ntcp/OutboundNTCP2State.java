@@ -422,8 +422,8 @@ class OutboundNTCP2State implements EstablishState {
 
         if (_log.shouldDebug()) {
             _log.debug("Finished establishment for " + this +
-                      "\nGenerated SipHash key for A->B: " + Base64.encode(sip_ab) +
-                      "\nGenerated SipHash key for B->A: " + Base64.encode(sip_ba));
+                      "\n* SipHash key generated for A -> B: " + Base64.encode(sip_ab) +
+                      "\n* SipHash key generated for B -> A: " + Base64.encode(sip_ba));
         }
         // skew in seconds
         _con.finishOutboundEstablishment(sender, rcvr, sip_ab, sip_ba, _peerSkew);
@@ -479,10 +479,10 @@ class OutboundNTCP2State implements EstablishState {
             return;
         changeState(State.CORRUPT);
         if (_log.shouldDebug()) {
-            _log.debug(this + "\n* Failed to establish: " + reason, e);
-        } else if (_log.shouldWarn()) {
-            _log.warn(this + "\n* Failed to establish: " + reason);
+            _log.warn(this + "\n* Failed to establish connection: " + reason, e);
             _log.warn("[NTCP2] Outbound Handshake failure " + _handshakeState.toString());
+        } else if (_log.shouldWarn()) {
+            _log.warn(this + "\n* Failed to establish connection: " + reason);
         }
         _handshakeState.destroy();
         if (!bySkew)
