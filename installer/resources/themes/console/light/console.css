@@ -127,7 +127,7 @@ tt, code, pre, textarea, #logs li, .bucket, .b32 {
 
 .routersummary a, .routersummary img[src$="i2plogo.png"], .routersummary h3, .confignav, *::before, *::after, div.app, .themechoice, .langselect, .langbox,
 .newsAuthor, #netdbcountrylist img, .viewfullentry, .sybil_routerinfo th img, .graphspanel, #themeoptions, #graphopts, #newsDisplay,
-#version a, #sb_internals, #sb_advanced, #sb_services, #sb_help, .sb_netstatus, .tunnelbuildstatus, #routersummary form, h1 {
+#version a, #sb_internals, #sb_advanced, #sb_services, #sb_help, .sb_netstatus, .tunnelbuildstatus, .routersummary form, h1, h2, h3, h4, button, img {
   -ms-user-select: none;
   -moz-user-select: none;
   -webkit-user-select: none;
