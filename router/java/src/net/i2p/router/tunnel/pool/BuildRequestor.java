@@ -9,6 +9,8 @@ import net.i2p.data.Hash;
 import net.i2p.data.PublicKey;
 import net.i2p.data.router.RouterInfo;
 import net.i2p.data.TunnelId;
+import net.i2p.data.i2np.I2NPMessage;
+import net.i2p.data.i2np.InboundTunnelBuildMessage;
 import net.i2p.data.i2np.TunnelBuildMessage;
 import net.i2p.data.i2np.VariableTunnelBuildMessage;
 import net.i2p.router.JobImpl;
@@ -17,6 +19,7 @@ import net.i2p.router.RouterContext;
 import net.i2p.router.TunnelInfo;
 import net.i2p.router.TunnelManagerFacade;
 import net.i2p.router.TunnelPoolSettings;
+import net.i2p.router.networkdb.kademlia.MessageWrapper;
 import net.i2p.router.tunnel.BuildMessageGenerator;
 import net.i2p.router.tunnel.HopConfig;
 import net.i2p.router.tunnel.TunnelCreatorConfig;
@@ -194,7 +197,7 @@ abstract class BuildRequestor {
         }
 
         //long beforeCreate = System.currentTimeMillis();
-        TunnelBuildMessage msg = createTunnelBuildMessage(ctx, pool, cfg, pairedTunnel, exec);
+        I2NPMessage msg = createTunnelBuildMessage(ctx, pool, cfg, pairedTunnel, exec);
         //long createTime = System.currentTimeMillis()-beforeCreate;
         if (msg == null) {
             if (log.shouldLog(Log.WARN))
@@ -207,14 +210,33 @@ abstract class BuildRequestor {
 
         //long beforeDispatch = System.currentTimeMillis();
         if (cfg.isInbound()) {
+            Hash ibgw = cfg.getPeer(0);
+            if (msg.getType() == InboundTunnelBuildMessage.MESSAGE_TYPE) {
+                // ITBM is garlic encrypted to the IBGW, to hide it from the OBEP
+                RouterInfo peer = ctx.netDb().lookupRouterInfoLocally(ibgw);
+                if (peer != null) {
+                    I2NPMessage enc = MessageWrapper.wrap(ctx, msg, peer);
+                    if (enc != null) {
+                        msg = enc;
+                        // log.debug("Wrapping Inbound TunnelBuildMessage to " + ibgw);
+                    } else {
+                        if (log.shouldWarn())
+                            log.warn("Failed to wrap Inbound TunnelBuildMessage to " + ibgw);
+                    }
+                } else {
+                    if (log.shouldWarn())
+                        log.warn("No RouterInfo, failed to wrap Inbound TunnelBuildMessage to " + ibgw);
+                }
+            }
+
             if (log.shouldLog(Log.INFO))
                 log.info("Sending the tunnel build request [MsgID" + msg.getUniqueId() + "] out the tunnel " + pairedTunnel + " to ["
-                          + cfg.getPeer(0).toBase64().substring(0,6) + "] for " + cfg + " waiting for the reply of "
+                          + ibgw.toBase64().substring(0,6) + "] for " + cfg + " waiting for the reply of "
                           + cfg.getReplyMessageId());
             // send it out a tunnel targeting the first hop
             // TODO - would be nice to have a TunnelBuildFirstHopFailJob queued if the
             // pairedTunnel is zero-hop, but no way to do that?
-            ctx.tunnelDispatcher().dispatchOutbound(msg, pairedTunnel.getSendTunnelId(0), cfg.getPeer(0));
+            ctx.tunnelDispatcher().dispatchOutbound(msg, pairedTunnel.getSendTunnelId(0), ibgw);
         } else {
             if (log.shouldLog(Log.INFO))
                 log.info("Sending tunnel build request directly to [" + cfg.getPeer(1).toBase64().substring(0,6)

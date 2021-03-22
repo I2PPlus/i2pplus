@@ -84,7 +84,7 @@ public class FIFOBandwidthRefiller implements Runnable {
 
     private static final float MAX_SHARE_PERCENTAGE = 0.90f;
     private static final float SHARE_LIMIT_FACTOR = 0.95f;
-    
+
     /**
      * how often we replenish the queues.
      * the bandwidth limiter will get an update this often (ms)
@@ -193,7 +193,7 @@ public class FIFOBandwidthRefiller implements Runnable {
         float share = Math.min((float) _context.router().getSharePercentage(), MAX_SHARE_PERCENTAGE);
         return (int) (maxKBps * share * 1024f * SHARE_LIMIT_FACTOR);
     }
-    
+
     private void checkConfig() {
         updateInboundRate();
         updateOutboundRate();
@@ -207,7 +207,7 @@ public class FIFOBandwidthRefiller implements Runnable {
         if (_partBWE == null || maxBps != _partBWE.getMaxBandwidth()) {
             _partBWE = new SyntheticREDQueue(_context, maxBps);
         }
-        
+
         // We are always limited for now
         //_limiter.setInboundUnlimited(_inboundKBytesPerSecond <= 0);
         //_limiter.setOutboundUnlimited(_outboundKBytesPerSecond <= 0);
@@ -358,7 +358,7 @@ public class FIFOBandwidthRefiller implements Runnable {
      *  @since 0.8.12
      */
     private void updateParticipating(long now) {
-            _context.statManager().addRateData("tunnel.participatingBandwidthOut", getCurrentParticipatingBandwidth());
+            _context.statManager().addRateData("tunnel.participating OutBps", getCurrentParticipatingBandwidth());
             _context.statManager().addRateData("bwLimiter.participatingBandwidthQueue", (long) _partBWE.getQueueSizeEstimate());
     }
 }

@@ -34,33 +34,33 @@ public class I2PThread extends Thread {
 
     public I2PThread() {
         super();
-        setPriority(NORM_PRIORITY);
+//        setPriority(NORM_PRIORITY);
     }
 
     public I2PThread(String name) {
         super(name);
-        setPriority(NORM_PRIORITY);
+//        setPriority(NORM_PRIORITY);
     }
 
     public I2PThread(Runnable r) {
         super(r);
-        setPriority(NORM_PRIORITY);
+//        setPriority(NORM_PRIORITY);
     }
 
     public I2PThread(Runnable r, String name) {
         super(r, name);
-        setPriority(NORM_PRIORITY);
+//        setPriority(NORM_PRIORITY);
     }
 
     public I2PThread(Runnable r, String name, boolean isDaemon) {
         super(r, name);
         setDaemon(isDaemon);
-        setPriority(NORM_PRIORITY);
+//        setPriority(NORM_PRIORITY);
     }
 
     public I2PThread(ThreadGroup g, Runnable r) {
         super(g, r);
-        setPriority(NORM_PRIORITY);
+//        setPriority(NORM_PRIORITY);
     }
 
     /**
@@ -68,7 +68,7 @@ public class I2PThread extends Thread {
      */
     public I2PThread(ThreadGroup group, Runnable r, String name) {
         super(group, r, name);
-        setPriority(NORM_PRIORITY);
+//        setPriority(NORM_PRIORITY);
     }
 
     /**
