@@ -143,7 +143,7 @@ public class NTCPConnection implements Closeable {
      */
     static final int BUFFER_SIZE = 16*1024;
 //    private static final int MAX_DATA_READ_BUFS = 16;
-    private static final int MAX_DATA_READ_BUFS = 12;
+    private static final int MAX_DATA_READ_BUFS = 20;
     private static final ByteCache _dataReadBufs = ByteCache.getInstance(MAX_DATA_READ_BUFS, BUFFER_SIZE);
 
     private static final int INFO_PRIORITY = OutNetMessage.PRIORITY_MY_NETDB_STORE_LOW;
