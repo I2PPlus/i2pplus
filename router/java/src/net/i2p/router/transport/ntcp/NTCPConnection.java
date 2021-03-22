@@ -537,7 +537,7 @@ public class NTCPConnection implements Closeable {
     public void send(OutNetMessage msg) {
         if (!_outbound.offer(msg)) {
             if (_log.shouldWarn())
-                _log.warn("Outbound queue full on " + this + ", dropping message " + msg);
+                _log.warn("Dropping message: Outbound queue full on " + this + msg);
             _transport.afterSend(msg, false, false, msg.getLifetime());
             return;
         }
