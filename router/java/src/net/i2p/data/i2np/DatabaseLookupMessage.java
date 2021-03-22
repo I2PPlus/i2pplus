@@ -550,12 +550,13 @@ public class DatabaseLookupMessage extends FastI2NPMessageImpl {
             buf.append(_key.toBase32());
         else
             buf.append(_key);
-        if (_replyKey != null)
+        if (_replyTunnel != null)
             buf.append("\n* Reply Gateway: ");
         else
             buf.append("\n* From: ");
-        buf.append(_fromHash);
-        buf.append("\n* Reply Tunnel: ").append(_replyTunnel);
+        buf.append(_fromHash.toBase64());
+        if (_replyTunnel != null)
+            buf.append("\n* Reply Tunnel: ").append(_replyTunnel);
         if (_replyKey != null)
             buf.append("\n* Reply Key: ").append(_replyKey);
         if (_replyTag != null)
