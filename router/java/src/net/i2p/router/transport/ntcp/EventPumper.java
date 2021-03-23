@@ -541,8 +541,9 @@ class EventPumper implements Runnable {
 
             byte[] ip = chan.socket().getInetAddress().getAddress();
             if (_context.blocklist().isBlocklisted(ip)) {
-                if (_log.shouldLog(Log.WARN))
-                    _log.warn("Received SessionRequest from blocklisted IP address: " + chan.socket().getInetAddress());
+// Already logged in Establishment Manager
+//                if (_log.shouldLog(Log.WARN))
+//                    _log.warn("Received SessionRequest from blocklisted IP address: " + chan.socket().getInetAddress());
                 try { chan.close(); } catch (IOException ioe) { }
                 return;
             }
