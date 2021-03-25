@@ -809,12 +809,14 @@ public class NTCPTransport extends TransportImpl {
         return !_replayFilter.add(hxhi, 0, 8);
     }
 
-    private static final int MIN_CONCURRENT_READERS = 2;  // unless < 32MB
-    private static final int MIN_CONCURRENT_WRITERS = 2;  // unless < 32MB
+//    private static final int MIN_CONCURRENT_READERS = 2;  // unless < 32MB
+//    private static final int MIN_CONCURRENT_WRITERS = 2;  // unless < 32MB
 //    private static final int MAX_CONCURRENT_READERS = 4;
 //    private static final int MAX_CONCURRENT_WRITERS = 4;
-    private static final int MAX_CONCURRENT_READERS = SystemVersion.getCores();
-    private static final int MAX_CONCURRENT_WRITERS = SystemVersion.getCores();
+    private static final int MIN_CONCURRENT_READERS = Math.max(SystemVersion.getCores() / 2, 2);  // unless < 32MB
+    private static final int MIN_CONCURRENT_WRITERS = Math.max(SystemVersion.getCores() / 2, 2);  // unless < 32MB
+    private static final int MAX_CONCURRENT_READERS = Math.max(SystemVersion.getCores(), 4);
+    private static final int MAX_CONCURRENT_WRITERS = Math.max(SystemVersion.getCores(), 4);
 
     /**
      *  Called by TransportManager.
@@ -1138,7 +1140,8 @@ public class NTCPTransport extends TransportImpl {
      * how long from initial connection attempt (accept() or connect()) until
      * the con must be established to avoid premature close()ing
      */
-    public static final int ESTABLISH_TIMEOUT = 10*1000;
+//    public static final int ESTABLISH_TIMEOUT = 10*1000;
+    public static final int ESTABLISH_TIMEOUT = 8*1000;
 
     /** add us to the establishment timeout process */
     void establishing(NTCPConnection con) {
