@@ -131,7 +131,7 @@ class Reader {
                         // at net.i2p.router.transport.ntcp.NTCPConnection.recvEncryptedI2NP(NTCPConnection.java:1383)
                         // at net.i2p.router.transport.ntcp.Reader.processRead(Reader.java:170)
                         if (_log.shouldWarn())
-                            _log.warn("Error in the ntcp reader", iae);
+                            _log.warn("Error in the NTCP reader", iae);
                     } catch (RuntimeException re) {
                         _log.error("Error in the NTCP Reader", re);
                     }
