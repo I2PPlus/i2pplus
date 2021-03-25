@@ -113,7 +113,7 @@ class OutboundNTCP2State implements EstablishState {
         // save because we must know length
         _aliceRI = ctx.router().getRouterInfo();
         if (_aliceRI == null)
-            throw new IllegalStateException("no RI yet");
+            throw new IllegalStateException("no RouterInfo yet");
         _aliceRISize = _aliceRI.toByteArray().length;
         _padlen3 = _context.random().nextInt(PADDING3_MAX);
 
@@ -228,21 +228,21 @@ class OutboundNTCP2State implements EstablishState {
         } catch (GeneralSecurityException gse) {
             // buffer length error
             if (_log.shouldDebug())
-                _log.error("Bad msg 1 out", gse);
+                _log.error("Bad message #1 out", gse);
             else if (_log.shouldWarn())
-                _log.error("Bad msg 1 out \n* General Security Exception: " + gse.getMessage());
-            fail("Bad msg 1 out", gse);
+                _log.error("Bad message #1 out \n* General Security Exception: " + gse.getMessage());
+            fail("Bad message #1 out", gse);
             return;
         } catch (RuntimeException re) {
             if (_log.shouldDebug())
-                _log.error("Bad msg 1 out", re);
+                _log.error("Bad message #1 out", re);
             else if (_log.shouldWarn())
-                _log.error("Bad msg 1 out \n* Runtime Exception: " + re.getMessage());
-            fail("Bad msg 1 out", re);
+                _log.error("Bad message #1 out \n* Runtime Exception: " + re.getMessage());
+            fail("Bad message #1 out", re);
             return;
         }
         if (_log.shouldDebug())
-            _log.debug("After msg 1: " + _handshakeState.toString());
+            _log.debug("After message #1: " + _handshakeState.toString());
 
         // encrypt key before writing
         _context.aes().encrypt(_tmp, 0, _tmp, 0, _bobHash, _bobIV, KEY_SIZE);
@@ -253,7 +253,7 @@ class OutboundNTCP2State implements EstablishState {
             _context.random().nextBytes(_tmp, MSG1_SIZE, padlen1);
             _handshakeState.mixHash(_tmp, MSG1_SIZE, padlen1);
             if (_log.shouldDebug())
-                _log.debug("After mixhash padding " + padlen1 + " msg 1: " + _handshakeState.toString());
+                _log.debug("After mixhash padding " + padlen1 + " message #1: " + _handshakeState.toString());
         }
 
         changeState(State.OB_SENT_X);
@@ -282,21 +282,21 @@ class OutboundNTCP2State implements EstablishState {
                 return;
             _context.aes().decrypt(_tmp, 0, _tmp, 0, _bobHash, _bobIV, KEY_SIZE);
             if (DataHelper.eqCT(_tmp, 0, ZEROKEY, 0, KEY_SIZE)) {
-                fail("Bad msg 2, Y = 0");
+                fail("Bad message #2, Y = 0");
                 return;
             }
             byte[] options2 = new byte[OPTIONS2_SIZE];
             try {
                 _handshakeState.readMessage(_tmp, 0, MSG2_SIZE, options2, 0);
             } catch (GeneralSecurityException gse) {
-                fail("Bad msg 2, Y = " + Base64.encode(_tmp, 0, KEY_SIZE), gse);
+                fail("Bad message #2, Y = " + Base64.encode(_tmp, 0, KEY_SIZE), gse);
                 return;
             } catch (RuntimeException re) {
-                fail("Bad msg 2, Y = " + Base64.encode(_tmp, 0, KEY_SIZE), re);
+                fail("Bad message #2, Y = " + Base64.encode(_tmp, 0, KEY_SIZE), re);
                 return;
             }
             if (_log.shouldDebug())
-                _log.debug("After msg 2: " + _handshakeState.toString());
+                _log.debug("After message #2: " + _handshakeState.toString());
             _padlen2 = (int) DataHelper.fromLong(options2, 2, 2);
             long tsB = DataHelper.fromLong(options2, 8, 4);
             long now = _context.clock().now();
@@ -321,12 +321,12 @@ class OutboundNTCP2State implements EstablishState {
             if (_padlen2 > 0) {
                 _handshakeState.mixHash(_tmp, 0, _padlen2);
                 if (_log.shouldDebug())
-                    _log.debug("After mixhash padding " + _padlen2 + " msg 2: " + _handshakeState.toString());
+                    _log.debug("After mixhash padding " + _padlen2 + " message #2: " + _handshakeState.toString());
             }
             changeState(State.OB_GOT_PADDING);
             if (src.hasRemaining()) {
                 // Outbound conn can never have extra data after msg 2
-                fail("Extra data after msg 2: " + src.remaining());
+                fail("Extra data after message #2: " + src.remaining());
                 return;
             }
             prepareOutbound3();
@@ -378,27 +378,27 @@ class OutboundNTCP2State implements EstablishState {
         int newoff = NTCP2Payload.writePayload(tmp, MSG3P1_SIZE, blocks);
         int expect = MSG3P1_SIZE + msg3p2len;
         if (newoff != expect)
-            throw new IllegalStateException("msg3 size mismatch expected " + expect + " got " + newoff);
+            throw new IllegalStateException("message #3 size mismatch -> expected " + expect + "bytes, got " + newoff);
         try {
             _handshakeState.writeMessage(tmp, 0, tmp, MSG3P1_SIZE, msg3p2len);
         } catch (GeneralSecurityException gse) {
             // buffer length error
             if (!_log.shouldWarn())
-                _log.error("Bad msg 3 out", gse);
-            fail("Bad msg 3 out", gse);
+                _log.error("Bad message #3 out", gse);
+            fail("Bad message #3 out", gse);
             return;
         } catch (RuntimeException re) {
             if (!_log.shouldWarn())
-                _log.error("Bad msg 3 out", re);
-            fail("Bad msg 3 out", re);
+                _log.error("Bad message #3 out", re);
+            fail("Bad message #3 out", re);
             return;
         }
         // send it all at once
         if (_log.shouldDebug())
-            _log.debug("Sending msg3, part 1 is:\n" + net.i2p.util.HexDump.dump(tmp, 0, MSG3P1_SIZE));
+            _log.debug("Sending message #3, part 1 is:\n" + net.i2p.util.HexDump.dump(tmp, 0, MSG3P1_SIZE));
         _transport.getPumper().wantsWrite(_con, tmp);
         if (_log.shouldDebug())
-            _log.debug("After msg 3: " + _handshakeState.toString());
+            _log.debug("After message #3: " + _handshakeState.toString());
         setDataPhase();
     }
 
@@ -422,8 +422,8 @@ class OutboundNTCP2State implements EstablishState {
 
         if (_log.shouldDebug()) {
             _log.debug("Finished establishment for " + this +
-                      "\nGenerated SipHash key for A->B: " + Base64.encode(sip_ab) +
-                      "\nGenerated SipHash key for B->A: " + Base64.encode(sip_ba));
+                      "\n* SipHash key generated for A -> B: " + Base64.encode(sip_ab) +
+                      "\n* SipHash key generated for B -> A: " + Base64.encode(sip_ba));
         }
         // skew in seconds
         _con.finishOutboundEstablishment(sender, rcvr, sip_ab, sip_ba, _peerSkew);
@@ -479,10 +479,10 @@ class OutboundNTCP2State implements EstablishState {
             return;
         changeState(State.CORRUPT);
         if (_log.shouldDebug()) {
-            _log.debug(this + "\n* Failed to establish: " + reason, e);
-        } else if (_log.shouldWarn()) {
-            _log.warn(this + "\n* Failed to establish: " + reason);
             _log.warn("[NTCP2] Outbound Handshake failure " + _handshakeState.toString());
+            _log.warn(this + "\n* Failed to establish connection: " + reason, e);
+        } else if (_log.shouldWarn()) {
+            _log.warn(this + "\n* Outbound Handshake failure: " + reason);
         }
         _handshakeState.destroy();
         if (!bySkew)

@@ -46,15 +46,15 @@
      *  Print out the status for the AppManager
      */
 
-    out.print("<div class=\"debug_section\" id=\"appmanager\">");
+    out.print("<div class=\"debug_section\" id=\"appmanager\">\n");
     ctx.routerAppManager().renderStatusHTML(out);
-            out.print("</div>");
+    out.print("</div>\n");
 
 
     /*
      *  Print out the status for the UpdateManager
      */
-    out.print("<div class=\"debug_section\" id=\"updatemanager\">");
+    out.print("<div class=\"debug_section\" id=\"updatemanager\">\n");
     net.i2p.app.ClientAppManager cmgr = ctx.clientAppManager();
     if (cmgr != null) {
         net.i2p.router.update.ConsoleUpdateManager umgr =
@@ -62,23 +62,23 @@
         if (umgr != null) {
             umgr.renderStatusHTML(out);
         }
-    out.print("</div>");
+    out.print("</div>\n");
     }
 
     /*
      *  Print out the status for all the SessionKeyManagers
      */
-    out.print("<div class=\"debug_section\" id=\"skm\">");
-    out.print("<h2>Session Key Manager: Router</h2>");
+    out.print("<div class=\"debug_section\" id=\"skm\">\n");
+    out.print("<h2>Session Key Manager: Router</h2>\n");
     ctx.sessionKeyManager().renderStatusHTML(out);
     java.util.Set<net.i2p.data.Destination> clients = ctx.clientManager().listClients();
-    out.print("</div>");
+    out.print("</div>\n");
     int i = 0;
     for (net.i2p.data.Destination dest : clients) {
         net.i2p.data.Hash h = dest.calculateHash();
         net.i2p.crypto.SessionKeyManager skm = ctx.clientManager().getClientSessionKeyManager(h);
         if (skm != null) {
-            out.print("<div class=\"debug_section\" id=\"cskm" + (i++) + "\"><h2>Session Key Manager: ");
+            out.print("<div class=\"debug_section\" id=\"cskm" + (i++) + "\">\n<h2>Session Key Manager: ");
             net.i2p.router.TunnelPoolSettings tps = ctx.tunnelManager().getInboundSettings(h);
             if (tps != null) {
                 String nick = tps.getDestinationNickname();
@@ -89,16 +89,16 @@
             } else {
                 out.print("<span id=\"skm_dest\">" + dest.toBase32() + "</span>");
             }
-            out.print("</h2>");
+            out.print("</h2>\n");
             skm.renderStatusHTML(out);
-            out.print("</div>");
+            out.print("</div>\n");
         }
     }
 
     /*
      *  Print out the status for the NetDB
      */
-    out.print("<h2 id=\"dht\">Router DHT</h2>");
+    out.print("<h2 id=\"dht\">Router DHT</h2>\n");
     ctx.netDb().renderStatusHTML(out);
 
 %>

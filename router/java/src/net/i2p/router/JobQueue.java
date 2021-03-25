@@ -69,15 +69,15 @@ public class JobQueue {
         long maxMemory = SystemVersion.getMaxMemory();
         int cores = SystemVersion.getCores();
         if (cores == 1)
-            RUNNERS = 1;
-        else if (cores <= 4)
             RUNNERS = 2;
+        else if (cores <= 4)
+            RUNNERS = 4;
         else if (SystemVersion.isSlow() || maxMemory < 128*1024*1024L)
             RUNNERS = Math.min((cores / 2), 3);
         else if (maxMemory >= 1024*1024*1024L)
-            RUNNERS = Math.min((cores * 2), 12);
+            RUNNERS = Math.max((cores), 8);
         else if (maxMemory >= 512*1024*1024L)
-            RUNNERS = Math.min(cores + 2, 8);
+            RUNNERS = Math.max(cores - 2, 6);
         else
             RUNNERS = Math.max(cores, 4);
 /**

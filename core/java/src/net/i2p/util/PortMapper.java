@@ -377,6 +377,13 @@ public class PortMapper {
                 continue;
             out.write("<tr><td>" + s + "</td><td>" + convertWildcard(ia.getHostName(), DEFAULT_HOST) + "</td><td>" + ia.getPort() + "</td></tr>\n");
         }
+        if (!_eepsites.isEmpty()) {
+            out.write("<tr class=\"separator\"><td colspan=\"3\"></tr>\n<tr><th>Eepsite<th>URL<th>\n");
+            for (String url : _eepsites) {
+                String s = url.startsWith("https://") ? SVC_HTTPS_EEPSITE : SVC_EEPSITE;
+                out.write("<tr><td>" + s + "<td><a href=\"" + url + "\">" + url + "</a><td>\n");
+            }
+        }
         out.write("</table>\n");
     }
 }

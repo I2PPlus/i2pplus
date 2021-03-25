@@ -436,10 +436,10 @@ public abstract class TransportImpl implements Transport {
             if ( (allTime > 60*1000) && (sendSuccessful) ) {
                 // VERY slow
                 if (_log.shouldLog(Log.WARN))
-                    _log.warn("Severe latency? More than a minute slow? " + msg.getMessageType() +
-                              " of [MsgID " + msg.getMessageId() + "] (send begin on " +
-                              new Date(msg.getSendBegin()) + " / created on " +
-                              new Date(msg.getCreated()) + "): " + msg);
+                    _log.warn("Severe latency? More than a minute slow? \n* " + msg.getMessageType() +
+                              " of [MsgID " + msg.getMessageId() + "] \n* Send began: " +
+                              new Date(msg.getSendBegin()) + "\n* Message created: " +
+                              new Date(msg.getCreated()) + msg);
                 _context.messageHistory().messageProcessingError(msg.getMessageId(),
                                                                  msg.getMessageType(),
                                                                  "Took too long to send [" + allTime + "ms]");

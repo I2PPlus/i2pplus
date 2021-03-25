@@ -9710,6 +9710,12 @@ a[href^="configpeer?peer"]:hover {
   line-height: 140%;
 }
 
+#portmapper .separator, #portmapper .separator td {
+  padding: 1px 1px 0;
+  box-shadow: none !important;
+  background: #99a !important;
+}
+
 .debug_container {
   padding: 10px 15px;
   margin-top: -16px;

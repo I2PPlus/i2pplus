@@ -157,7 +157,7 @@ public class Analysis extends JobImpl implements RouterApp {
                     if (b != null && b.length == Hash.HASH_LENGTH) {
                         Hash h = Hash.create(b);
                         long until = e.getValue().longValue();
-                        ban.banlistRouter(h, "Sybil analysis", null, null, until);
+                        ban.banlistRouter(h, "<b>➜</b> Sybil Analysis", null, null, until);
                     }
                 }
             }
@@ -168,7 +168,7 @@ public class Analysis extends JobImpl implements RouterApp {
 
     public void runJob() {
         long now = _context.clock().now();
-        _log.info("Running analysis");
+        _log.info("Running Sybil analysis...");
         Map<Hash, Points> points = backgroundAnalysis(_context.getBooleanProperty(PROP_NONFF));
         if (!points.isEmpty()) {
             try {
