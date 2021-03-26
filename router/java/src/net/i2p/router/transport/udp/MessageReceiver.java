@@ -33,7 +33,7 @@ class MessageReceiver {
 
     private static final int MIN_THREADS = 2;  // unless < 32MB
 //    private static final int MAX_THREADS = 5;
-    private static final int MAX_THREADS = Math.max(SystemVersion.getCores(), 5);
+    private static final int MAX_THREADS = Math.min(SystemVersion.getCores(), 3);
     private static final int MIN_QUEUE_SIZE = 32;  // unless < 32MB
     private static final int MAX_QUEUE_SIZE = 128;
     private final int _threadCount;
@@ -44,32 +44,15 @@ class MessageReceiver {
         _context = ctx;
         _log = ctx.logManager().getLog(MessageReceiver.class);
         _transport = transport;
-
         long maxMemory = SystemVersion.getMaxMemory();
+        _threadCount = MAX_THREADS;
         int qsize;
-        if (maxMemory < 32*1024*1024) {
-            _threadCount = 1;
-            qsize = 16;
-        } else if (maxMemory < 64*1024*1024) {
-            _threadCount = 2;
-            qsize = 32;
+        if (maxMemory >= 1024*1024*1024) {
+            qsize = 384;
+        } else if (maxMemory >= 512*1024*1024) {
+            qsize = 192;
         } else {
-            if (maxMemory >= 1024*1024*1024) {
-                if (cores > 8)
-                    _threadCount = 8;
-                else
-                    _threadCount = cores;
-                qsize = 384;
-            } else if (maxMemory >= 512*1024*1024) {
-                if (cores > 6)
-                    _threadCount = 6;
-                else
-                    _threadCount = cores;
-                qsize = 192;
-            } else {
-                _threadCount = Math.max(MIN_THREADS, Math.min(MAX_THREADS, ctx.bandwidthLimiter().getInboundKBytesPerSecond() / 20));
-                qsize = (int) Math.max(MIN_QUEUE_SIZE, Math.min(MAX_QUEUE_SIZE, maxMemory / (2*1024*1024)));
-            }
+            qsize = (int) Math.max(MIN_QUEUE_SIZE, Math.min(MAX_QUEUE_SIZE, maxMemory / (2*1024*1024)));
         }
         _completeMessages = new CoDelBlockingQueue<InboundMessageState>(ctx, "UDP-MessageReceiver", qsize);
 

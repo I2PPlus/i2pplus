@@ -64,12 +64,8 @@ class UDPSender {
             qsize = 2048;
         } else if (maxMemory >= 1024*1024*1024 && cores >= 4 && !isSlow) {
             qsize = 1024;
-//            target = 512;
-//            interval = 1000;
         } else if (maxMemory >= 768*1024*1024 && cores >= 4 && !isSlow) {
             qsize = 768;
-//            target = 384;
-//            interval = 750;
         }
         _outboundQueue = new CoDelBlockingQueue<UDPPacket>(ctx, "UDP-Sender", qsize, target, interval);
         _socket = socket;
