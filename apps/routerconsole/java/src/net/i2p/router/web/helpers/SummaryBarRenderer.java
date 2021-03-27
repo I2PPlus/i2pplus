@@ -830,15 +830,15 @@ class SummaryBarRenderer {
                    "<table id=\"sb_peers\">\n" +
 
                    "<tr title=\"")
-           .append(_t("Peers we've been talking to in the last few minutes/last hour").replace("last few minutes/last hour", "last 5 minutes / last hour"))
+           .append(_t("Peers we've been talking to in the last few minutes/last hour").replace("last few minutes/last hour", "last 5 minutes"))
            .append("\">" +
                    "<td align=\"left\"><a href=\"/peers\"><b>")
            .append(_t("Active"))
            .append("</b></a></td><td class=\"digits\" align=\"right\">");
         int active = _helper.getActivePeers();
         buf.append(active)
-           .append(SummaryHelper.THINSP)
-           .append(Math.max(active, _helper.getActiveProfiles()))
+//           .append(SummaryHelper.THINSP)
+//           .append(Math.max(active, _helper.getActiveProfiles()))
            .append("</td></tr>\n" +
 
                    "<tr title=\"")
@@ -913,15 +913,15 @@ class SummaryBarRenderer {
                    "<table id=\"sb_peersadvanced\">\n" +
 
                    "<tr title=\"")
-           .append(_t("Peers we've been talking to in the last few minutes/last hour").replace("last few minutes/last hour", "last 5 minutes / last hour"))
+           .append(_t("Peers we've been talking to in the last few minutes/last hour").replace("last few minutes/last hour", "last 5 minutes"))
            .append("\">" +
                    "<td align=\"left\"><b>")
            .append(_t("Active"))
            .append("</b></td><td class=\"digits\" align=\"right\">");
         int active = _helper.getActivePeers();
         buf.append(active)
-           .append(SummaryHelper.THINSP)
-           .append(Math.max(active, _helper.getActiveProfiles()))
+//           .append(SummaryHelper.THINSP)
+//           .append(Math.max(active, _helper.getActiveProfiles()))
            .append("</td></tr>\n" +
 
                    "<tr title=\"")
