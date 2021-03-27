@@ -501,7 +501,7 @@ public class SummaryHelper extends HelperBase {
         if (_context == null)
             return 0;
         else
-            return _context.profileOrganizer().countActivePeers();
+            return _context.profileOrganizer().countActivePeersInLastHour();
     }
     /**
      * How many active peers the router ranks as fast.

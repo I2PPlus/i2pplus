@@ -830,7 +830,7 @@ class SummaryBarRenderer {
                    "<table id=\"sb_peers\">\n" +
 
                    "<tr title=\"")
-           .append(_t("Peers we've been talking to in the last few minutes/last hour"))
+           .append(_t("Peers we've been talking to in the last few minutes/last hour").replace("last few minutes/last hour", "last 5 minutes / last hour"))
            .append("\">" +
                    "<td align=\"left\"><a href=\"/peers\"><b>")
            .append(_t("Active"))
@@ -913,7 +913,7 @@ class SummaryBarRenderer {
                    "<table id=\"sb_peersadvanced\">\n" +
 
                    "<tr title=\"")
-           .append(_t("Peers we've been talking to in the last few minutes/last hour"))
+           .append(_t("Peers we've been talking to in the last few minutes/last hour").replace("last few minutes/last hour", "last 5 minutes / last hour"))
            .append("\">" +
                    "<td align=\"left\"><b>")
            .append(_t("Active"))
