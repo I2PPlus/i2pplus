@@ -549,6 +549,7 @@ public abstract class KademliaNetworkDatabaseFacade extends NetworkDatabaseFacad
      *  For console ConfigKeyringHelper
      *  @since 0.9.41
      */
+    @Override
     public List<BlindData> getBlindData() {
         return _blindCache.getData();
     }
@@ -559,10 +560,23 @@ public abstract class KademliaNetworkDatabaseFacade extends NetworkDatabaseFacad
      *  @return true if removed
      *  @since 0.9.41
      */
+    @Override
     public boolean removeBlindData(SigningPublicKey spk) {
         return _blindCache.removeBlindData(spk);
     }
 
+    /**
+     *  Notify the netDB that the routing key changed at midnight UTC
+     *
+     *  @since 0.9.50
+     */
+    @Override
+    public void routingKeyChanged() {
+        _blindCache.rollover();
+        if (_log.shouldInfo())
+            _log.info("UTC rollover, blind cache updated");
+    }
+    
     /**
      *  @return RouterInfo, LeaseSet, or null, validated
      *  @since 0.8.3
