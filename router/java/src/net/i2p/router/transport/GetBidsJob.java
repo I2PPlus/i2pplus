@@ -71,7 +71,7 @@ class GetBidsJob extends JobImpl {
             if (failedCount == 0) {
                 context.statManager().addRateData("transport.bidFailNoTransports", msg.getLifetime());
                 // This used to be "no common transports" but it is almost always no transports at all
-                context.banlist().banlistRouter(to, _x("No transports (hidden or starting up?)"));
+                context.banlist().banlistRouter(to, "<b>➜</b> " + _x("No transports (hidden or starting up?)"));
             } else if (failedCount >= tmgr.getTransportCount()) {
                 context.statManager().addRateData("transport.bidFailAllTransports", msg.getLifetime());
                 // fail after all transports were unsuccessful

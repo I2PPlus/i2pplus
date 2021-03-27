@@ -386,6 +386,29 @@ public class ProfileOrganizer {
         return activePeers;
     }
 
+    // @since 0.9.50+
+    public int countActivePeersInLastHour() {
+        int activePeers = 0;
+        long hideBefore = _context.clock().now() - 60*60*1000;
+
+        getReadLock();
+        try {
+            for (PeerProfile profile : _failingPeers.values()) {
+                if (profile.getLastSendSuccessful() >= hideBefore)
+                    activePeers++;
+                else if (profile.getLastHeardFrom() >= hideBefore)
+                    activePeers++;
+            }
+            for (PeerProfile profile : _notFailingPeers.values()) {
+                if (profile.getLastSendSuccessful() >= hideBefore)
+                    activePeers++;
+                else if (profile.getLastHeardFrom() >= hideBefore)
+                    activePeers++;
+            }
+        } finally { releaseReadLock(); }
+        return activePeers;
+    }
+
     private boolean isX(Map<Hash, PeerProfile> m, Hash peer) {
         getReadLock();
         try {

@@ -304,12 +304,12 @@ class InboundEstablishState extends EstablishBase implements NTCP2Payload.Payloa
             System.arraycopy(_X, KEY_SIZE - IV_SIZE, _prevEncrypted, 0, IV_SIZE);
             _context.aes().decrypt(_X, 0, _X, 0, bobHash, _transport.getNTCP2StaticIV(), KEY_SIZE);
             if (DataHelper.eqCT(_X, 0, ZEROKEY, 0, KEY_SIZE)) {
-                fail("Bad msg 1, X = 0");
+                fail("Bad message #1, X = 0");
                 return;
             }
             // fast MSB check for key < 2^255
             if ((_X[KEY_SIZE - 1] & 0x80) != 0) {
-                fail("Bad PK msg 1");
+                fail("Bad PK message #1");
                 return;
             }
 
@@ -333,23 +333,23 @@ class InboundEstablishState extends EstablishBase implements NTCP2Payload.Payloa
                     // delayed fail for probing resistance
                     // need more bytes before failure
                     if (_log.shouldDebug())
-                        _log.warn("Bad msg 1 \n* X = " + Base64.encode(_X, 0, KEY_SIZE) + " with " + src.remaining() +
+                        _log.warn("Bad message #1 \n* X = " + Base64.encode(_X, 0, KEY_SIZE) + " with " + src.remaining() +
                                   " more bytes, waiting for " + _padlen1 + " more bytes", gse);
                     else if (_log.shouldWarn())
-                        _log.warn("Bad msg 1 \n* X = " + Base64.encode(_X, 0, KEY_SIZE) + " with " + src.remaining() +
+                        _log.warn("Bad message #1 \n* X = " + Base64.encode(_X, 0, KEY_SIZE) + " with " + src.remaining() +
                                   " more bytes, waiting for " + _padlen1 + " more bytes \n* General Security Exception: " +  gse.getMessage());
                     changeState(State.IB_NTCP2_READ_RANDOM);
                 } else {
                     // got all we need, fail now
-                    fail("Bad msg 1, X = " + Base64.encode(_X, 0, KEY_SIZE) + " remaining = " + src.remaining(), gse);
+                    fail("Bad message #1, X = " + Base64.encode(_X, 0, KEY_SIZE) + " remaining = " + src.remaining(), gse);
                 }
                 return;
             } catch (RuntimeException re) {
-                fail("Bad msg 1, X = " + Base64.encode(_X, 0, KEY_SIZE), re);
+                fail("Bad message #1, X = " + Base64.encode(_X, 0, KEY_SIZE), re);
                 return;
             }
             if (_log.shouldDebug())
-                _log.debug("After msg 1: " + _handshakeState.toString());
+                _log.debug("After message #1: " + _handshakeState.toString());
             int v = options[1] & 0xff;
             if (v != NTCPTransport.NTCP2_INT_VERSION) {
                 fail("Bad version: " + v);
@@ -394,8 +394,8 @@ class InboundEstablishState extends EstablishBase implements NTCP2Payload.Payloa
                 // No padding specified, go straight to sending msg 2
                 changeState(State.IB_NTCP2_GOT_PADDING);
                 if (src.hasRemaining()) {
-                    // Inbound conn can never have extra data after msg 1
-                    fail("Extra data after msg 1: " + src.remaining());
+                    // Inbound conn can never have extra data after message #1
+                    fail("Extra data after message #1: " + src.remaining());
                 } else {
                     // write msg 2
                     prepareOutbound2();
@@ -410,10 +410,10 @@ class InboundEstablishState extends EstablishBase implements NTCP2Payload.Payloa
             _received += src.remaining();
             if (_received < _padlen1) {
                 if (_log.shouldWarn())
-                    _log.warn("Bad msg 1, got " + src.remaining() +
+                    _log.warn("Bad message #1, got " + src.remaining() +
                               " more bytes, waiting for " + (_padlen1 - _received) + " more bytes");
             } else {
-                fail("Bad msg 1, failing after getting " + src.remaining() + " more bytes");
+                fail("Bad message #1, failing after getting " + src.remaining() + " more bytes");
             }
             return;
         }
@@ -429,11 +429,11 @@ class InboundEstablishState extends EstablishBase implements NTCP2Payload.Payloa
             changeState(State.IB_NTCP2_GOT_PADDING);
             _handshakeState.mixHash(_X, 0, _padlen1);
             if (_log.shouldDebug())
-                _log.debug("After mixhash padding " + _padlen1 + " msg 1: " + _handshakeState.toString());
+                _log.debug("After mixhash padding " + _padlen1 + " message #1: " + _handshakeState.toString());
             _received = 0;
             if (src.hasRemaining()) {
                 // Inbound conn can never have extra data after msg 1
-                fail("Extra data after msg 1: " + src.remaining());
+                fail("Extra data after message #1: " + src.remaining());
             } else {
                 // write msg 2
                 prepareOutbound2();
