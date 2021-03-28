@@ -81,12 +81,11 @@ class NextSessionKey extends PublicKey {
     @Override
     public String toString() {
         StringBuilder buf = new StringBuilder(64);
-        buf.append("[NextSessionKey: ");
+        buf.append("\n* NextSessionKey: ");
         buf.append(super.toString());
         buf.append(" ID: ").append(_id);
-        buf.append(" reverse? ").append(_isReverse);
-        buf.append(" request? ").append(_isRequest);
-        buf.append(']');
+        buf.append(" Reverse? ").append(_isReverse);
+        buf.append(" Request? ").append(_isRequest);
         return buf.toString();
     }
 }
