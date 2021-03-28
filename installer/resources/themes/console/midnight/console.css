@@ -6412,7 +6412,7 @@ font[color="#006600"] { /* debug/notify */
 }
 
 font[color="#bf00df"] { /* warning */
-  color: #d6d;
+  color: #848;
 }
 
 font[color="#ff3300"] { /* error */
@@ -6521,7 +6521,7 @@ font[color="#000099"] { /* info */
 /* warning */
 
 #logs li font[color="#bf00df"]::before, .log_warn {
-  background: #d6d;
+  background: #848;
 }
 
 /* info */
