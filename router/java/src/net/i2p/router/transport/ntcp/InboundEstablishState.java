@@ -73,9 +73,9 @@ class InboundEstablishState extends EstablishBase implements NTCP2Payload.Payloa
 
     // same as I2PTunnelRunner
 //    private static final int BUFFER_SIZE = 4*1024;
-    private static final int BUFFER_SIZE = SystemVersion.getMaxMemory() < 1024*1024*1024 ? 4*1024 : 32*1024;
+    private static final int BUFFER_SIZE = SystemVersion.getMaxMemory() < 1024*1024*1024 ? 4*1024 : 8*1024;
 //    private static final int MAX_DATA_READ_BUFS = 32;
-    private static final int MAX_DATA_READ_BUFS = SystemVersion.getMaxMemory() < 1024*1024*1024 ? 32 : 256;
+    private static final int MAX_DATA_READ_BUFS = SystemVersion.getMaxMemory() < 1024*1024*1024 ? 40 : 64;
     private static final ByteCache _dataReadBufs = ByteCache.getInstance(MAX_DATA_READ_BUFS, BUFFER_SIZE);
 
     // 287 - 64 = 223
