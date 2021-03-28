@@ -78,7 +78,7 @@ public class OutboundCache {
      *
      * If not found,
      * fetch the next lease that we should try sending through, randomly chosen
-     * from within the sorted leaseSet (NOT sorted by # of failures through each 
+     * from within the sorted leaseSet (NOT sorted by # of failures through each
      * lease).
      *
      * Concurrent.
@@ -97,8 +97,9 @@ public class OutboundCache {
 
     private final RouterContext _context;
 
-    private static final int CLEAN_INTERVAL = 5*60*1000;
-    
+//    private static final int CLEAN_INTERVAL = 5*60*1000;
+    private static final int CLEAN_INTERVAL = 90*1000;
+
     public OutboundCache(RouterContext ctx) {
         _context = ctx;
         _context.simpleTimer2().addPeriodicEvent(new OCMOSJCacheCleaner(), CLEAN_INTERVAL, CLEAN_INTERVAL);
