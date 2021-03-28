@@ -65,8 +65,8 @@ class EventPumper implements Runnable {
      *  The occasional larger message can use multiple buffers.
      */
 //    private static final int BUF_SIZE = 8*1024;
-    private static final int BUF_SIZE = 6*1024;
-    private static final int BUF_SIZE_LARGE = 8*1024;
+    private static final int BUF_SIZE = 8*1024;
+    private static final int BUF_SIZE_LARGE = 10*1024;
 //    private static final int MAX_CACHE_SIZE = 64;
     private static final int MAX_CACHE_SIZE = 128;
 
@@ -123,9 +123,9 @@ class EventPumper implements Runnable {
         long maxMemory = SystemVersion.getMaxMemory();
         boolean isSlow = SystemVersion.isSlow();
         if (maxMemory >= 1024*1024*1024 && !isSlow)
-            MIN_BUFS = 18;
+            MIN_BUFS = 48;
         else if (maxMemory >= 768*1024*1024 && !isSlow)
-            MIN_BUFS = 14;
+            MIN_BUFS = 32;
         else
             MIN_BUFS = (int) Math.max(MIN_MINB, Math.min(MAX_MINB, 1 + (maxMemory / (16*1024*1024))));
     }
