@@ -2714,7 +2714,7 @@ select {
   font-size: 9.5pt;
   border-radius: 2px;
   background: #000 url(images/dropdown.svg) right 10px center no-repeat !important;
-  background: url(images/dropdown.svg) right 10px center no-repeat, linear-gradient(to bottom, #001000, #000 5%, #000 95%, #001000) !important;
+  background: url("data:image/svg+xml,%3Csvg viewBox='0 0 64 64' xmlns='http://www.w3.org/2000/svg'%3E%3Cpath d='m5.29 17.93 26.71 28.14 26.71-28.14' fill='none' stroke='%23494' stroke-linecap='round' stroke-linejoin='round' stroke-width='10'/%3E%3C/svg%3E") right 10px center no-repeat, linear-gradient(to bottom, #001000, #000 5%, #000 95%, #001000) !important;
   background-size: 10px auto, 100% 100% !important;
   -moz-appearance: none;
   -webkit-appearance: none;
@@ -2762,7 +2762,7 @@ select:focus, select:hover {
 }
 
 select:hover, select:focus, select:active {
-  background: #000 url(images/dropdown_hover.svg) right 10px center no-repeat !important;
+  background: #000 url("data:image/svg+xml,%3Csvg viewBox='0 0 64 64' xmlns='http://www.w3.org/2000/svg'%3E%3Cpath d='m5.29 17.93 26.71 28.14 26.71-28.14' fill='none' stroke='%23f60' stroke-linecap='round' stroke-linejoin='round' stroke-width='10'/%3E%3C/svg%3E") right 10px center no-repeat !important;
   background-size: 10px auto, 100% 100% !important;
 }
 
