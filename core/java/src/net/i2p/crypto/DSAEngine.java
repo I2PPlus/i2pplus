@@ -109,11 +109,11 @@ public final class DSAEngine {
             try {
                 rv = altVerifySig(signature, signedData, offset, size, verifyingKey);
                 if ((!rv) && _log.shouldLog(Log.WARN))
-                    _log.warn(type + " Signature Verify Fail");
+                    _log.warn(type + " Signature verification failure");
                 return rv;
             } catch (GeneralSecurityException gse) {
                 if (_log.shouldLog(Log.WARN))
-                    _log.warn(type + " Signature Verify Fail", gse);
+                    _log.warn(type + " Signature verification failure", gse);
                 return false;
             }
         }
@@ -121,17 +121,17 @@ public final class DSAEngine {
             try {
                 rv = altVerifySigSHA1(signature, signedData, offset, size, verifyingKey);
                 if ((!rv) && _log.shouldLog(Log.WARN))
-                    _log.warn("Lib DSA Signature Verify Fail");
+                    _log.warn("Lib DSA Signature verification failure");
                 return rv;
             } catch (GeneralSecurityException gse) {
                 if (_log.shouldLog(Log.WARN))
-                    _log.warn("Lib DSA Signature Verify Fail");
+                    _log.warn("Lib DSA Signature verification failure");
                 // now try TheCrypto
             }
         }
         rv = verifySignature(signature, calculateHash(signedData, offset, size), verifyingKey);
         if ((!rv) && _log.shouldLog(Log.WARN))
-            _log.warn("TheCrypto DSA Signature Verify Fail");
+            _log.warn("TheCrypto DSA Signature verification failure");
         return rv;
     }
 
