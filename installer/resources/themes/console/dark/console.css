@@ -13698,22 +13698,8 @@ th[aria-sort] {
 #sybilnav ul li#configurePeriodic:active::before {
   filter: sepia(1) hue-rotate(-45deg) saturate(1.4) brightness(1.6);
 }
-/*
-#sybilnav ul li#reviewStored::before {
-  background: url(/themes/console/images/buttons/fullview.png);
-}
-
-#sybilnav ul li#floodfillSummary::before {
-  background: url(/themes/console/images/buttons/floodfill.png);
-}
-
-#sybilnav ul li#sameFamily::before {
-  background: url(/themes/console/images/buttons/users.png);
-}
-*/
 
 /* stats */
-
 
 #stats label {
   display: inline-block;
@@ -13724,28 +13710,15 @@ th[aria-sort] {
   border-radius: 0;
 }
 
-#stats .toggle_input {
-  position: absolute;
-  opacity: 0;
-  width: 0;
-  height: 0;
-  top: -99999px;
-  left: -99999px
-}
-
-#stats input:not(:checked) + h3,
+#stats form, #stats .toggle_input, #stats input:not(:checked) + h3,
 #stats input:not(:checked) + h3 + ul.statlist,
 #stats input:not(:checked) + h3 + ul.statlist + br {
   display: none;
 }
 
 #stats input:checked + h3 + ul.statlist {
-  display: block;
   margin-bottom: -13px !important;
-}
-
-#stats form {
-  display: none;
+  display: block;
 }
 
 #stats .confignav {
@@ -13793,9 +13766,9 @@ p#gatherstats {
 }
 
 @media screen and (min-width: 1400px) {
-#stats .joblog {
-  margin-bottom: -10px !important;
-}
+  #stats .joblog {
+    margin-bottom: -10px !important;
+  }
 }
 
 #stats ul.statlist {
