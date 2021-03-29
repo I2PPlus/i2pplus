@@ -28,7 +28,7 @@ import net.i2p.util.SystemVersion;
 class NTCPSendFinisher {
     private static final int MIN_THREADS = 1;
 //    private static final int MAX_THREADS = 4;
-    private static final int MAX_THREADS = Math.min(SystemVersion.getCores(), 2);
+    private static final int MAX_THREADS = Math.min(SystemVersion.getCores(), 3);
     private final I2PAppContext _context;
     private final NTCPTransport _transport;
     private final Log _log;
@@ -38,7 +38,10 @@ class NTCPSendFinisher {
     static {
         long maxMemory = SystemVersion.getMaxMemory();
 //        THREADS = (int) Math.max(MIN_THREADS, Math.min(MAX_THREADS, 1 + (maxMemory / (32*1024*1024))));
-        THREADS = (int) MAX_THREADS;
+        if (SystemVersion.getCores() <= 2)
+          THREADS = (int) 2;
+        else
+          THREADS = (int) MAX_THREADS;
     }
 
     public NTCPSendFinisher(I2PAppContext context, NTCPTransport transport) {

@@ -349,8 +349,8 @@ public class JobQueue {
      */
     public void startup() {
         _alive = true;
-        I2PThread pumperThread = new I2PThread(_pumper, "Job Queue Pumper", true);
-        pumperThread.setPriority(Thread.NORM_PRIORITY + 1);
+        I2PThread pumperThread = new I2PThread(_pumper, "JobQueuePumper", true);
+        pumperThread.setPriority(Thread.MAX_PRIORITY - 1);
         pumperThread.start();
     }
 
