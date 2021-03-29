@@ -186,15 +186,15 @@ class InboundEstablishState extends EstablishBase implements NTCP2Payload.Payloa
         byte[] ip = (addr == null) ? null : addr.getAddress();
         if (_context.banlist().isBanlistedForever(aliceHash)) {
             if (_log.shouldLog(Log.WARN))
-                _log.warn("Dropping inbound connection from permanently banlisted peer [" + aliceHash + "]");
+                _log.warn("Dropping inbound connection from permanently banlisted peer [" + aliceHash.toBase64().substring(0,6) + "]");
             // So next time we will not accept the con from this IP,
             // rather than doing the whole handshake
             if(ip != null)
                _context.blocklist().add(ip);
             if (getVersion() < 2)
-                fail("Peer is banlisted forever [" + aliceHash  + "]");
+                fail("Peer is banlisted forever [" + aliceHash.toBase64().substring(0,6) + "]");
             else if (_log.shouldWarn())
-                _log.warn("Peer is banlisted forever [" + aliceHash + "]");
+                _log.warn("Peer is banlisted forever [" + aliceHash.toBase64().substring(0,6) + "]");
             _msg3p2FailReason = NTCPConnection.REASON_BANNED;
             return false;
         }
@@ -304,7 +304,7 @@ class InboundEstablishState extends EstablishBase implements NTCP2Payload.Payloa
             System.arraycopy(_X, KEY_SIZE - IV_SIZE, _prevEncrypted, 0, IV_SIZE);
             _context.aes().decrypt(_X, 0, _X, 0, bobHash, _transport.getNTCP2StaticIV(), KEY_SIZE);
             if (DataHelper.eqCT(_X, 0, ZEROKEY, 0, KEY_SIZE)) {
-                fail("Bad message #1, X = 0");
+                fail("Bad message #1: X = 0");
                 return;
             }
             // fast MSB check for key < 2^255
@@ -341,11 +341,11 @@ class InboundEstablishState extends EstablishBase implements NTCP2Payload.Payloa
                     changeState(State.IB_NTCP2_READ_RANDOM);
                 } else {
                     // got all we need, fail now
-                    fail("Bad message #1, X = " + Base64.encode(_X, 0, KEY_SIZE) + " remaining = " + src.remaining(), gse);
+                    fail("\n* Bad message #1: X = " + Base64.encode(_X, 0, KEY_SIZE) + " remaining = " + src.remaining(), gse);
                 }
                 return;
             } catch (RuntimeException re) {
-                fail("Bad message #1, X = " + Base64.encode(_X, 0, KEY_SIZE), re);
+                fail("\n* Bad message #1: X = " + Base64.encode(_X, 0, KEY_SIZE), re);
                 return;
             }
             if (_log.shouldDebug())
@@ -366,7 +366,7 @@ class InboundEstablishState extends EstablishBase implements NTCP2Payload.Payloa
                     // So next time we will not accept the con from this IP
                     _context.blocklist().add(ip);
                 }
-                fail("Bad network id: " + v);
+                fail("Bad NetworkId: " + v);
                 return;
             }
             _padlen1 = (int) DataHelper.fromLong(options, 2, 2);
@@ -387,7 +387,7 @@ class InboundEstablishState extends EstablishBase implements NTCP2Payload.Payloa
                 return;
             }
             if (_msg3p2len < MSG3P2_MIN || _msg3p2len > MSG3P2_MAX) {
-                fail("bad msg3p2 len: " + _msg3p2len);
+                fail("Bad msg3p2 (length: " + _msg3p2len + " bytes)");
                 return;
             }
             if (_padlen1 <= 0) {
@@ -410,10 +410,10 @@ class InboundEstablishState extends EstablishBase implements NTCP2Payload.Payloa
             _received += src.remaining();
             if (_received < _padlen1) {
                 if (_log.shouldWarn())
-                    _log.warn("Bad message #1, got " + src.remaining() +
+                    _log.warn("Bad message #1: received " + src.remaining() +
                               " more bytes, waiting for " + (_padlen1 - _received) + " more bytes");
             } else {
-                fail("Bad message #1, failing after getting " + src.remaining() + " more bytes");
+                fail("Bad message #1: failing after getting " + src.remaining() + " more bytes");
             }
             return;
         }
@@ -461,22 +461,22 @@ class InboundEstablishState extends EstablishBase implements NTCP2Payload.Payloa
             } catch (GeneralSecurityException gse) {
                 // TODO delayed failure per spec, as in NTCPConnection.delayedClose()
                 _dataReadBufs.release(ptmp, false);
-                fail("Bad msg 3, part 1 is:\n" + net.i2p.util.HexDump.dump(tmp, 0, MSG3P1_SIZE), gse);
+                fail("Bad message #3, part 1 is:\n" + net.i2p.util.HexDump.dump(tmp, 0, MSG3P1_SIZE), gse);
                 return;
             } catch (RuntimeException re) {
                 _dataReadBufs.release(ptmp, false);
-                fail("Bad msg 3", re);
+                fail("Bad message #3", re);
                 return;
             }
             if (_log.shouldDebug())
-                _log.debug("After msg 3: " + _handshakeState.toString());
+                _log.debug("After message #3: " + _handshakeState.toString());
             try {
                 // calls callbacks below
                 NTCP2Payload.processPayload(_context, this, payload, 0, _msg3p2len - MAC_SIZE, true);
             } catch (IOException ioe) {
                 if (_log.shouldWarn())
 //                    _log.warn("Bad msg 3 payload", ioe);
-                    _log.warn("Bad msg 3 payload \n* IO Error:" + ioe.getMessage());
+                    _log.warn("Bad message #3 payload \n* IO Error:" + ioe.getMessage());
                 // probably payload frame/block problems
                 // setDataPhase() will send termination
                 if (_msg3p2FailReason < 0)
@@ -484,7 +484,7 @@ class InboundEstablishState extends EstablishBase implements NTCP2Payload.Payloa
             } catch (DataFormatException dfe) {
                 if (_log.shouldWarn())
 //                    _log.warn("Bad msg 3 payload", dfe);
-                    _log.warn("Bad msg 3 payload \n* Data Format Exception: " + dfe.getMessage());
+                    _log.warn("Bad message #3 payload \n* Data Format Exception: " + dfe.getMessage());
                 // probably RI problems
                 // setDataPhase() will send termination
                 if (_msg3p2FailReason < 0)
@@ -494,7 +494,7 @@ class InboundEstablishState extends EstablishBase implements NTCP2Payload.Payloa
                 // shouldn't happen, no I2NP msgs in msg3p2
                 if (_log.shouldWarn())
 //                    _log.warn("Bad msg 3 payload", ime);
-                    _log.warn("Bad msg 3 payload \n* I2NP Message Exception: " + ime.getMessage());
+                    _log.warn("Bad message #3 payload \n* I2NP Message Exception: " + ime.getMessage());
                 // setDataPhase() will send termination
                 if (_msg3p2FailReason < 0)
                     _msg3p2FailReason = 0;
@@ -528,18 +528,18 @@ class InboundEstablishState extends EstablishBase implements NTCP2Payload.Payloa
             // buffer length error
             if (!_log.shouldWarn())
 //                _log.error("Bad msg 2 out", gse);
-                _log.warn("Bad msg 2 out\n* General Secruity Exception: " + gse.getMessage());
+                _log.warn("Bad message #2 out\n* General Secruity Exception: " + gse.getMessage());
             fail("Bad msg 2 out", gse);
             return;
         } catch (RuntimeException re) {
             if (!_log.shouldWarn())
 //                _log.error("Bad msg 2 out", re);
-                _log.error("Bad msg 2 out \n* Runtime Exception: " + re.getMessage());
-            fail("Bad msg 2 out", re);
+                _log.error("Bad message #2 out \n* Runtime Exception: " + re.getMessage());
+            fail("Bad message #2 out", re);
             return;
         }
         if (_log.shouldDebug())
-            _log.debug("After msg 2: " + _handshakeState.toString());
+            _log.debug("After message #2: " + _handshakeState.toString());
         Hash h = _context.routerHash();
         SessionKey bobHash = new SessionKey(h.getData());
         _context.aes().encrypt(tmp, 0, tmp, 0, bobHash, _prevEncrypted, KEY_SIZE);
@@ -547,7 +547,7 @@ class InboundEstablishState extends EstablishBase implements NTCP2Payload.Payloa
             _context.random().nextBytes(tmp, MSG2_SIZE, padlen2);
             _handshakeState.mixHash(tmp, MSG2_SIZE, padlen2);
             if (_log.shouldDebug())
-                _log.debug("After mixhash padding " + padlen2 + " msg 2: " + _handshakeState.toString());
+                _log.debug("After mixhash padding " + padlen2 + " message #2: " + _handshakeState.toString());
         }
 
         changeState(State.IB_NTCP2_SENT_Y);

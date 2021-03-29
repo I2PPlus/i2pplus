@@ -516,14 +516,14 @@ class UDPPacketReader {
                         off += bf.getByteLength();
                     }
                 } catch (DataFormatException dfe) {
-                    buf.append("CORRUPT");
+                    buf.append(" (CORRUPT)");
                     return buf.toString();
                 }
             }
             if (readExtendedDataIncluded()) {
                 int size = _message[off] & 0xff;
                 off++;
-                buf.append("with extended size of ");
+                buf.append(" with extended size of ");
                 buf.append(size);
                 buf.append(' ');
                 off += size;
