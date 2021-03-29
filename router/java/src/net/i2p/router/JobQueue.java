@@ -70,6 +70,8 @@ public class JobQueue {
         int cores = SystemVersion.getCores();
         if (cores == 1 || SystemVersion.isSlow() || maxMemory < 256*1024*1024L)
             RUNNERS = 2;
+        else if (cores <= 2)
+            RUNNERS = 3;
         else if (cores <= 4)
             RUNNERS = cores;
         else if (maxMemory >= 1024*1024*1024L)
@@ -78,18 +80,6 @@ public class JobQueue {
             RUNNERS = Math.min(cores - 2, 6);
         else
             RUNNERS = Math.min(cores, 4);
-/**
-        if (maxMemory < 64*1024*1024)
-            RUNNERS = 3;
-        else if (maxMemory < 256*1024*1024)
-            RUNNERS = 4;
-        else if (maxMemory < 512*1024*1024)
-            RUNNERS = 5;
-        else if (maxMemory < 1024*1024*1024)
-            RUNNERS = 6;
-        else
-            RUNNERS = 8;
-**/
     }
 
     /** default max # job queue runners operating */
@@ -359,8 +349,8 @@ public class JobQueue {
      */
     public void startup() {
         _alive = true;
-        I2PThread pumperThread = new I2PThread(_pumper, "Job Queue Pumper", true);
-        pumperThread.setPriority(Thread.NORM_PRIORITY + 1);
+        I2PThread pumperThread = new I2PThread(_pumper, "JobQueuePumper", true);
+        pumperThread.setPriority(Thread.MAX_PRIORITY - 1);
         pumperThread.start();
     }
 

@@ -365,7 +365,7 @@ public class OutNetMessage implements CDPQEntry {
     @Override
     public String toString() {
         StringBuilder buf = new StringBuilder(256);
-        buf.append("\n* OutNetMessage containing ");
+        buf.append(" OutNetMessage containing ");
         if (_message == null) {
             buf.append("*no message*");
         } else {
@@ -390,7 +390,7 @@ public class OutNetMessage implements CDPQEntry {
         buf.append("; Priority: ").append(_priority);
         buf.append("\n* Expires: ").append(new Date(_expiration));
         if (_timestamps != null && _timestampOrder != null) {
-            buf.append("\n\t Timestamps: ");
+            buf.append("\n* Timestamps: ");
             renderTimestamps(buf);
         }
         return buf.toString();
