@@ -1445,7 +1445,7 @@ public class NTCPTransport extends TransportImpl {
     @Override
     public void externalAddressReceived(AddressSource source, byte[] ip, int port) {
         if (_log.shouldLog(Log.WARN))
-            _log.warn("Received address: " + Addresses.toString(ip, port) + " from: " + source, new Exception());
+            _log.warn("Received address: " + Addresses.toString(ip, port) + " from: " + source); //, new Exception());
         if ((source == SOURCE_INTERFACE || source == SOURCE_SSU)
              && ip != null && ip.length == 16) {
             // must be set before isValid() call
