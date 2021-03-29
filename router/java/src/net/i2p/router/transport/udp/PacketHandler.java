@@ -66,10 +66,11 @@ class PacketHandler {
         _failCache = new LHMCache<RemoteHostId, Object>(24);
 
         long maxMemory = SystemVersion.getMaxMemory();
+        int cores = SystemVersion.getCores();
         boolean isSlow = SystemVersion.isSlow();
         int qsize = (int) Math.max(MIN_QUEUE_SIZE, Math.min(MAX_QUEUE_SIZE, maxMemory / (2*1024*1024)));
-        if (maxMemory >= 1024*1024*1024 && !isSlow)
-            qsize = 1024;
+        if (maxMemory >= 1024*1024*1024 && cores >= 4 && !isSlow)
+            qsize = 768;
         else if (maxMemory >= 768*1024*1024 && !isSlow)
             qsize = 512;
         _inboundQueue = new CoDelBlockingQueue<UDPPacket>(ctx, "UDP-Receiver", qsize);
@@ -79,7 +80,7 @@ class PacketHandler {
         else if (maxMemory < 64*1024*1024 || isSlow)
             num_handlers = 2;
         else
-            num_handlers = MAX_NUM_HANDLERS;
+            num_handlers = Math.min(MAX_NUM_HANDLERS, 3);
 //        else
 //            num_handlers = Math.max(MIN_NUM_HANDLERS, Math.min(MAX_NUM_HANDLERS, ctx.bandwidthLimiter().getInboundKBytesPerSecond() / 20));
         _handlers = new Handler[num_handlers];
