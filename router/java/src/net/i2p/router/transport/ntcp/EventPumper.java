@@ -64,11 +64,8 @@ class EventPumper implements Runnable {
      *  message, which is a 5-slot VTBM (~2700 bytes).
      *  The occasional larger message can use multiple buffers.
      */
-//    private static final int BUF_SIZE = 8*1024;
     private static final int BUF_SIZE = 8*1024;
-    private static final int BUF_SIZE_LARGE = 10*1024;
-//    private static final int MAX_CACHE_SIZE = 64;
-    private static final int MAX_CACHE_SIZE = 128;
+    private static final int MAX_CACHE_SIZE = 64;
 
     private static class BufferFactory implements TryCache.ObjectFactory<ByteBuffer> {
         public ByteBuffer newInstance() {
@@ -77,10 +74,7 @@ class EventPumper implements Runnable {
             if (_useDirect) {
                 return ByteBuffer.allocateDirect(BUF_SIZE);
             } else {
-                if (maxMemory >= 512 && !isSlow)
-                    return ByteBuffer.allocate(BUF_SIZE_LARGE);
-                else
-                    return ByteBuffer.allocate(BUF_SIZE);
+                return ByteBuffer.allocate(BUF_SIZE);
             }
         }
     }
@@ -97,7 +91,7 @@ class EventPumper implements Runnable {
     private static final int FAILSAFE_ITERATION_FREQ = 10*60*1000;
     private static final int FAILSAFE_LOOP_COUNT = 512;
 //    private static final long SELECTOR_LOOP_DELAY = 200;
-    private static final long SELECTOR_LOOP_DELAY = 150;
+    private static final long SELECTOR_LOOP_DELAY = 100;
     private static final long BLOCKED_IP_FREQ = 3*60*1000;
 
     /** tunnel test now disabled, but this should be long enough to allow an active tunnel to get started */
@@ -122,12 +116,7 @@ class EventPumper implements Runnable {
     static {
         long maxMemory = SystemVersion.getMaxMemory();
         boolean isSlow = SystemVersion.isSlow();
-        if (maxMemory >= 1024*1024*1024 && !isSlow)
-            MIN_BUFS = 48;
-        else if (maxMemory >= 768*1024*1024 && !isSlow)
-            MIN_BUFS = 32;
-        else
-            MIN_BUFS = (int) Math.max(MIN_MINB, Math.min(MAX_MINB, 1 + (maxMemory / (16*1024*1024))));
+        MIN_BUFS = (int) Math.max(MIN_MINB, Math.min(MAX_MINB, 1 + (maxMemory / (16*1024*1024))));
     }
 
     private static final TryCache<ByteBuffer> _bufferCache = new TryCache<>(new BufferFactory(), MIN_BUFS);
