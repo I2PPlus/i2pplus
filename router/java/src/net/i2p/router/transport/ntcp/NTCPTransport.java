@@ -435,13 +435,13 @@ public class NTCPTransport extends TransportImpl {
                     con.getEstablishState().prepareOutbound();
                 } catch (IOException ioe) {
                     if (_log.shouldLog(Log.ERROR))
-                        _log.error("Error opening a channel", ioe);
+                        _log.error("Error opening a channel \n* IO Exception: " + ioe.getMessage());
                     _context.statManager().addRateData("ntcp.outboundFailedIOEImmediate", 1);
                     con.close();
                     afterSend(msg, false);
                 } catch (IllegalStateException ise) {
                     if (_log.shouldWarn())
-                        _log.warn("Failed opening a channel", ise);
+                        _log.warn("Failed opening a channel \n* Illegal State Exception: " +  ise.getMessage());
                     afterSend(msg, false);
                 }
             } else {
