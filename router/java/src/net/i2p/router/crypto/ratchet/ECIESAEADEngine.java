@@ -672,7 +672,7 @@ public final class ECIESAEADEngine {
             rcvr.decryptWithAd(hash, data, TAGLEN + KEYLEN + MACLEN, payload, 0, payload.length + MACLEN);
         } catch (GeneralSecurityException gse) {
             if (_log.shouldWarn()) {
-                _log.warn("Decrypt fail NewSessionReply part 2 \n* General Security Exception: " gse.getMessage());
+                _log.warn("Decrypt fail NewSessionReply part 2 \n* General Security Exception: " + gse.getMessage());
                 if (_log.shouldDebug())
                     _log.debug("State at failure: " + state);
             }
