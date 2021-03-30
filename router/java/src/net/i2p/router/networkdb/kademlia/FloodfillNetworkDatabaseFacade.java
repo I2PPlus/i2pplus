@@ -155,7 +155,7 @@ public class FloodfillNetworkDatabaseFacade extends KademliaNetworkDatabaseFacad
         if (!isInitialized()) {
             if (_log.shouldWarn())
 //                _log.warn("Attempted to publish our RouterInfo before NetDb initialized: " + localRouterInfo, new Exception("I did it"));
-                _log.warn("Attempted to publish our RouterInfo before NetDb initialized " + localRouterInfo);
+                _log.warn("Attempted to publish our RouterInfo before NetDb initialized"); //+ localRouterInfo);
             return;
         }
         // no use sending if we have no addresses
