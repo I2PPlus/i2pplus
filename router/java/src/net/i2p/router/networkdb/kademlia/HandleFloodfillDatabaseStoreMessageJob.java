@@ -172,18 +172,23 @@ class HandleFloodfillDatabaseStoreMessageJob extends JobImpl {
                 // Check new routerinfo address against blocklist
                 if (wasNew) {
                     if (prevNetDb == null) {
-                        if ((!getContext().banlist().isBanlistedForever(key)) &&
-                            getContext().blocklist().isBlocklisted(ri) &&
-                            _log.shouldLog(Log.WARN))
+                        if ((!getContext().banlist().isBanlistedForever(key)) && getContext().blocklist().isBlocklisted(ri)) {
+                            if (_log.shouldLog(Log.DEBUG))
                                 _log.warn("Blocklisting new peer [" + key.toBase64().substring(0,6) + "] " + ri);
+                            else if (_log.shouldLog(Log.WARN))
+                                _log.warn("Blocklisting new peer [" + key.toBase64().substring(0,6) + "]");
+                        }
                     } else {
                         Collection<RouterAddress> oldAddr = prevNetDb.getAddresses();
                         Collection<RouterAddress> newAddr = ri.getAddresses();
                         if ((!newAddr.equals(oldAddr)) &&
                             (!getContext().banlist().isBanlistedForever(key)) &&
-                            getContext().blocklist().isBlocklisted(ri) &&
-                            _log.shouldLog(Log.WARN))
+                            getContext().blocklist().isBlocklisted(ri)) {
+                            if (_log.shouldLog(Log.DEBUG))
                                 _log.warn("New address received, blocklisting old peer [" + key.toBase64().substring(0,6) + "] " + ri);
+                            else if (_log.shouldLog(Log.WARN))
+                                _log.warn("New address received, blocklisting old peer [" + key.toBase64().substring(0,6) + "]");
+                        }
                     }
                 }
             } catch (UnsupportedCryptoException uce) {
