@@ -258,7 +258,7 @@ public final class ElGamalAESEngine {
         } else {
             _context.statManager().updateFrequency("crypto.elGamalAES.decryptFailed");
             if (_log.shouldLog(Log.WARN))
-                _log.warn("ElG decrypt fail as new session");
+                _log.warn("ElG decrypt failure as new session");
         }
         if (!foundTags.isEmpty()) {
             if (shouldDebug)

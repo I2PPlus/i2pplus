@@ -961,12 +961,54 @@ public class OutboundClientMessageOneShotJob extends JobImpl {
         }
 
         long sendTime = getContext().clock().now() - _start;
-        if (_log.shouldLog(Log.WARN))
-            _log.warn("[Job " + getJobId() + "] Sending of " + _clientMessageId + " to " + _toString
-                      + " failed after " + sendTime + "ms (Status: " + status + ")");
+        String statusToString = "";
+        if (status == 3)
+            statusToString = "best effort send failed";
+        if (status == 5)
+            statusToString = "guaranteed send failed";
+        if (status == 7)
+            statusToString = "local send failed";
+        if (status == 8)
+            statusToString = "local router not ready";
+        if (status == 9)
+            statusToString = "net connection down";
+        if (status == 10)
+            statusToString = "bad session";
+        if (status == 11)
+            statusToString = "bad message";
+        if (status == 12)
+            statusToString = "bad message options";
+        if (status == 13)
+            statusToString = "queue or buffer full";
+        if (status == 14)
+            statusToString = "message expired";
+        if (status == 15)
+            statusToString = "bad local leaseset";
+        if (status == 16)
+            statusToString = "no tunnels available";
+        if (status == 17)
+            statusToString = "unsupported encryption";
+        if (status == 18)
+            statusToString = "bad remote destination";
+        if (status == 19)
+            statusToString = "bad remote leaseset";
+        if (status == 20)
+            statusToString = "remote leaseset expired";
+        if (status == 21)
+            statusToString = "no remote leaseset";
+        if (status == 22)
+            statusToString = "cannot send to meta-leaseset";
+        if (_log.shouldLog(Log.WARN)) {
+            if (statusToString != "")
+                _log.warn("[Job " + getJobId() + "] Sending of " + _clientMessageId + " to " + _toString +
+                          " failed after " + sendTime + "ms (Status: " + statusToString + ")");
+            else
+                _log.warn("[Job " + getJobId() + "] Sending of " + _clientMessageId + " to " + _toString +
+                          " failed after " + sendTime + "ms (Status: " + status + ")");
 //                      + "\n\t" + _outTunnel
 //                      + "\n\t" + _inTunnel
 //                      + "\n\t" + _lease + " ACK");
+        }
 
         long messageDelay = getContext().throttle().getMessageDelay();
         long tunnelLag = getContext().throttle().getTunnelLag();
