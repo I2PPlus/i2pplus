@@ -223,8 +223,10 @@ class HandleFloodfillDatabaseStoreMessageJob extends JobImpl {
                 getContext().statManager().addRateData("netDb.storeHandled", ackEnd-recvEnd);
             } else {
                 // Should we record in the profile?
-                if (_log.shouldLog(Log.WARN))
+                if (_log.shouldLog(Log.DEBUG))
                     _log.warn("Peer sent us invalid data \n* " + invalidMessage + _from);
+                else if (_log.shouldLog(Log.WARN))
+                    _log.warn("Peer sent us invalid data \n* " + invalidMessage);
             }
         } else if (invalidMessage != null && !dontBlamePeer) {
             if (_log.shouldLog(Log.WARN))
