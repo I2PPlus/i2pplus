@@ -150,7 +150,7 @@ class IntroductionManager {
             _inbound.remove(Long.valueOf(id2));
         }
         if ((id > 0 || id2 > 0) &&_log.shouldLog(Log.DEBUG))
-            _log.debug("Removing peer " [" + peer.getRemotePeer().toBase64().substring(0,6) + "]" + peer.getRemoteHostId() + ", weRelayToThemAs "
+            _log.debug("Removing peer [" + peer.getRemotePeer().toBase64().substring(0,6) + "]" + peer.getRemoteHostId() + ", weRelayToThemAs "
                        + id + ", theyRelayToUsAs " + id2);
     }
 
@@ -163,7 +163,7 @@ class IntroductionManager {
     public boolean isInboundTagValid(long tag) {
         return _inbound.containsKey(Long.valueOf(tag));
     }
-    
+
     private PeerState get(long id) {
         return _outbound.get(Long.valueOf(id));
     }
