@@ -12,6 +12,8 @@ import net.i2p.router.RouterContext;
 import net.i2p.util.I2PThread;
 import net.i2p.util.SimpleTimer;
 
+import net.i2p.util.SystemVersion;
+
 /**
  * straight pumping for multithreaded inbound receivers
  * queueing for outbound I2CP receivers
@@ -29,7 +31,8 @@ class TunnelGatewayPumper implements Runnable {
      *  Wait just a little, but this lets the pumper queue back up.
      *  See additional comments in PTG.
      */
-    private static final long REQUEUE_TIME = 50;
+//    private static final long REQUEUE_TIME = 50;
+    private static final long REQUEUE_TIME = SystemVersion.getMaxMemory() < 1024*1024*1024 ? 50 : 70;
 
     private static final TryCache<List<PendingGatewayMessage>> _bufferCache = new TryCache<>(new BufferFactory(), 16);
 

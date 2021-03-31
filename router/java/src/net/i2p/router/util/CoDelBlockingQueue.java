@@ -69,14 +69,15 @@ public class CoDelBlockingQueue<E extends CDQEntry> extends LinkedBlockingQueue<
      *
      */
 //    private static final int INTERVAL = 100;
-    private static final int INTERVAL = 500;
+    private static final int INTERVAL = 400;
     private final long _interval;
     //private static final int MAXPACKET = 512;
 
     private final String STAT_DROP;
     private final String STAT_DELAY;
     private static final long[] RATES = {60*1000, 5*60*1000, 60*60*1000};
-    private static final long BACKLOG_TIME = 2*1000;
+//    private static final long BACKLOG_TIME = 2*1000;
+    private static final long BACKLOG_TIME = 2500;
 
     /**
      *  Target 15, interval 100
