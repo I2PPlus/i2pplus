@@ -268,9 +268,8 @@ abstract class EstablishBase implements EstablishState {
         else
             buf.append("OutboundEstablishState ");
         buf.append(_con.toString());
-        buf.append(' ').append(_state);
-        if (_con.isEstablished()) buf.append(" established");
-        buf.append(": ");
+        buf.append(" (").append(_state).append(")");
+        if (_con.isEstablished()) buf.append(" -> established");
         return buf.toString();
     }
 
