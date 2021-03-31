@@ -963,45 +963,45 @@ public class OutboundClientMessageOneShotJob extends JobImpl {
         long sendTime = getContext().clock().now() - _start;
         String statusToString = "";
         if (status == 3)
-            statusToString = "best effort send failed";
+            statusToString = "Best effort send failed";
         if (status == 5)
-            statusToString = "guaranteed send failed";
+            statusToString = "Guaranteed send failed";
         if (status == 7)
-            statusToString = "local send failed";
+            statusToString = "Local send failed";
         if (status == 8)
-            statusToString = "local router not ready";
+            statusToString = "Local router not ready";
         if (status == 9)
-            statusToString = "net connection down";
+            statusToString = "Net connection down";
         if (status == 10)
-            statusToString = "bad session";
+            statusToString = "Bad session";
         if (status == 11)
-            statusToString = "bad message";
+            statusToString = "Bad message";
         if (status == 12)
-            statusToString = "bad message options";
+            statusToString = "Bad message options";
         if (status == 13)
-            statusToString = "queue or buffer full";
+            statusToString = "Queue or buffer full";
         if (status == 14)
-            statusToString = "message expired";
+            statusToString = "Message expired";
         if (status == 15)
-            statusToString = "bad local leaseset";
+            statusToString = "Bad local LeaseSet";
         if (status == 16)
-            statusToString = "no tunnels available";
+            statusToString = "No tunnels available";
         if (status == 17)
-            statusToString = "unsupported encryption";
+            statusToString = "Unsupported encryption";
         if (status == 18)
-            statusToString = "bad remote destination";
+            statusToString = "Bad remote destination";
         if (status == 19)
-            statusToString = "bad remote leaseset";
+            statusToString = "Bad remote LeaseSet";
         if (status == 20)
-            statusToString = "remote leaseset expired";
+            statusToString = "Remote LeaseSet expired";
         if (status == 21)
-            statusToString = "no remote leaseset";
+            statusToString = "No remote LeaseSet";
         if (status == 22)
-            statusToString = "cannot send to meta-leaseset";
+            statusToString = "Cannot send to meta-LeaseSet";
         if (_log.shouldLog(Log.WARN)) {
             if (statusToString != "")
                 _log.warn("[Job " + getJobId() + "] Sending of " + _clientMessageId + " to " + _toString +
-                          " failed after " + sendTime + "ms (Status: " + statusToString + ")");
+                          " failed after " + sendTime + "ms -> " + statusToString);
             else
                 _log.warn("[Job " + getJobId() + "] Sending of " + _clientMessageId + " to " + _toString +
                           " failed after " + sendTime + "ms (Status: " + status + ")");
