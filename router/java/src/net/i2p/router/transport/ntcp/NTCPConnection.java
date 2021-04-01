@@ -657,7 +657,7 @@ public class NTCPConnection implements Closeable {
                 if (msg.getExpiration() >= now)
                     break;
                 if (_log.shouldWarn())
-                    _log.warn("Expired on queue, dropping " + msg + " on " + this);
+                    _log.warn("Message Expired on queue, dropping..." + msg + " on " + this);
                 _transport.afterSend(msg, false, false, msg.getLifetime());
             }
             _currentOutbound.add(msg);
@@ -691,7 +691,7 @@ public class NTCPConnection implements Closeable {
                         size += NTCP2Payload.BLOCK_HEADER_SIZE + msz;
                     } else {
                         if (_log.shouldWarn())
-                            _log.warn("Expired on queue, dropping " + msg + " on " + this);
+                            _log.warn("Message Expired on queue, dropping..." + msg + " on " + this);
                         _transport.afterSend(msg, false, false, msg.getLifetime());
                     }
                 }
@@ -1500,9 +1500,12 @@ public class NTCPConnection implements Closeable {
                 _rcvr.decryptWithAd(null, data, off, data, off, _framelen);
             } catch (GeneralSecurityException gse) {
                 // TODO set a random length, then close
-                if (_log.shouldWarn())
+                if (_log.shouldDebug())
                     _log.warn("Bad AEAD data phase frame " + _frameCount +
                               " with " + _framelen + " bytes on " + NTCPConnection.this, gse);
+                else if (_log.shouldWarn())
+                    _log.warn("Bad AEAD data phase frame " + _frameCount +
+                              " with " + _framelen + " bytes on " + NTCPConnection.this);
                 destroy();
                 return false;
             }
@@ -1520,8 +1523,10 @@ public class NTCPConnection implements Closeable {
                 if (_log.shouldWarn())
                     _log.warn("Fail payload " + NTCPConnection.this, dfe);
             } catch (I2NPMessageException ime) {
-                if (_log.shouldWarn())
+                if (_log.shouldDebug())
                     _log.warn("Error parsing I2NP message on " + NTCPConnection.this, ime);
+                else if (_log.shouldWarn())
+                    _log.warn("Error parsing I2NP message on " + NTCPConnection.this + "\n* I2NP Message Exception: " + ime.getMessage());
                 _context.statManager().addRateData("ntcp.corruptI2NPIME", 1);
             }
             _received = -2;
@@ -1764,8 +1769,10 @@ public class NTCPConnection implements Closeable {
 
     @Override
     public String toString() {
+        String fromIP = _chan.socket().getInetAddress().toString();
+        fromIP = fromIP.replace("/", "");
         return "[NTCP" + _version + "] Connection [ID " + _connID + "]\n* " +
-               (_isInbound ? ("From: " + _chan.socket().getInetAddress() + ":" + _chan.socket().getPort() + ' ')
+               (_isInbound ? ("From: " + fromIP + ":" + _chan.socket().getPort() + ' ')
                            : ("To: " + _remAddr.getHost() + ":" + _remAddr.getPort() + ' ')) + "[" +
                (_remotePeer == null ? "unknown" : _remotePeer.calculateHash().toBase64().substring(0,6)) + "]" +
                (isEstablished() ? "" : " (not established)") +

@@ -1412,9 +1412,11 @@ class Connection {
 
         buf.append("\n* Sent: ").append(1 + _lastSendId.get());
         buf.append("; Rcvd: ").append(1 + _inputStream.getHighestBlockId() - missing);
-        buf.append("; AckThru: ").append(_highestAckedThrough);
-        buf.append("; MaxWin: ").append(getOptions().getMaxWindowSize());
-        buf.append("; MTU: ").append(getOptions().getMaxMessageSize());
+        buf.append("; ACKThru: ").append(_highestAckedThrough);
+        buf.append("; SSThresh: ").append(_ssthresh);
+        buf.append("; MinRTT: ").append(_options.getMinRTT());
+        buf.append("; MaxWin: ").append(_options.getMaxWindowSize());
+        buf.append("; MTU: ").append(_options.getMaxMessageSize());
         if (getResetSent())
             buf.append("\n* Reset sent: ").append(DataHelper.formatDuration(_context.clock().now() - getResetSentOn())).append(" ago");
         if (getResetReceived())
@@ -1427,13 +1429,6 @@ class Connection {
         }
         if (getCloseReceivedOn() > 0)
             buf.append("\n* Close received: ").append(DataHelper.formatDuration(_context.clock().now() - getCloseReceivedOn())).append(" ago");
-        buf.append("\n* Sent: ").append(1 + _lastSendId.get());
-        buf.append("; Rcvd: ").append(1 + _inputStream.getHighestBlockId() - missing);
-        buf.append("; ACKThru: ").append(_highestAckedThrough);
-        buf.append("; SSThresh: ").append(_ssthresh);
-        buf.append("; MinRTT: ").append(_options.getMinRTT());
-        buf.append("; MaxWin: ").append(_options.getMaxWindowSize());
-        buf.append("; MTU: ").append(_options.getMaxMessageSize());
         return buf.toString();
     }
 

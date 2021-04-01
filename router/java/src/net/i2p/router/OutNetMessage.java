@@ -365,11 +365,11 @@ public class OutNetMessage implements CDPQEntry {
     @Override
     public String toString() {
         StringBuilder buf = new StringBuilder(256);
-        buf.append("OutNetMessage containing ");
+        buf.append("\n* Contents: OutNetMessage ");
         if (_message == null) {
             buf.append("*no message*");
         } else {
-            buf.append("a ").append(_messageSize).append(" byte ");
+            buf.append("with ").append(_messageSize).append(" byte ");
             buf.append(getMessageType());
             buf.append(" [MsgID ").append(_messageId).append("]");
         }

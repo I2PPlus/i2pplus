@@ -136,7 +136,7 @@ class IntroductionManager {
             _inbound.put(Long.valueOf(id2), peer);
         }
         if (added &&_log.shouldLog(Log.DEBUG))
-            _log.debug("Adding peer " + peer.getRemoteHostId() + ", weRelayToThemAs "
+            _log.debug("Adding peer [" + peer.getRemotePeer().toBase64().substring(0,6) + "]" + peer.getRemoteHostId() + ", weRelayToThemAs "
                        + id + ", theyRelayToUsAs " + id2);
     }
 
@@ -150,7 +150,7 @@ class IntroductionManager {
             _inbound.remove(Long.valueOf(id2));
         }
         if ((id > 0 || id2 > 0) &&_log.shouldLog(Log.DEBUG))
-            _log.debug("Removing peer " + peer.getRemoteHostId() + ", weRelayToThemAs "
+            _log.debug("Removing peer [" + peer.getRemotePeer().toBase64().substring(0,6) + "]" + peer.getRemoteHostId() + ", weRelayToThemAs "
                        + id + ", theyRelayToUsAs " + id2);
     }
 
@@ -163,7 +163,7 @@ class IntroductionManager {
     public boolean isInboundTagValid(long tag) {
         return _inbound.containsKey(Long.valueOf(tag));
     }
-    
+
     private PeerState get(long id) {
         return _outbound.get(Long.valueOf(id));
     }
@@ -273,10 +273,11 @@ class IntroductionManager {
                 int port = ra.getPort();
                 if (!isValid(ip, port, true))
                     continue;
-                // IPv6 allowed as of 0.9.50
-                if (ip.length == 16 && VersionComparator.comp(ri.getVersion(), MIN_IPV6_INTRODUCER_VERSION) < 0) {
+                // IPv6/IPv4 and vice versa allowed as of 0.9.50
+                if (((!ipv6 && ip.length == 16) || (ipv6 && ip.length == 4)) &&
+                    VersionComparator.comp(ri.getVersion(), MIN_IPV6_INTRODUCER_VERSION) < 0) {
                     if (_log.shouldLog(Log.INFO))
-                        _log.info("Would have picked IPv6 introducer but he doesn't support it: " + cur);
+                        _log.info("Would have picked IPv6 introducer for IPv4 or IPv4 introducer for IPv6 but they don't support it: " + cur);
                     continue;
                 }
                 cur.setIntroducerTime();

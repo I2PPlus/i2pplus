@@ -172,7 +172,8 @@ class ClientMessageEventListener implements I2CPMessageReader.I2CPMessageEventLi
     public void readError(I2CPMessageReader reader, Exception error) {
         if (_runner.isDead()) return;
         if (_log.shouldLog(Log.WARN))
-            _log.warn("Unclassified error occurred", error);
+//            _log.warn("Unclassified error occurred", error);
+            _log.warn("Unclassified error occurred \n* Error: " + error.getMessage());
         // Is this is a little drastic for an unknown message type?
         // Send the whole exception string over for diagnostics
         _runner.disconnectClient(error.toString());
