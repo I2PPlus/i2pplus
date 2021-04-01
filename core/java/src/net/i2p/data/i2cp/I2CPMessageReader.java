@@ -2,9 +2,9 @@ package net.i2p.data.i2cp;
 
 /*
  * free (adj.): unencumbered; not under the control of others
- * Written by jrandom in 2003 and released into the public domain 
- * with no warranty of any kind, either expressed or implied.  
- * It probably won't make your computer catch on fire, or eat 
+ * Written by jrandom in 2003 and released into the public domain
+ * with no warranty of any kind, either expressed or implied.
+ * It probably won't make your computer catch on fire, or eat
  * your children, but it might.  Use at your own risk.
  *
  */
@@ -18,7 +18,7 @@ import net.i2p.util.I2PThread;
 import net.i2p.util.Log;
 
 /**
- * The I2CPMessageReader reads an InputStream (using 
+ * The I2CPMessageReader reads an InputStream (using
  * {@link I2CPMessageHandler I2CPMessageHandler}) and passes out events to a registered
  * listener, where events are either messages being received, exceptions being
  * thrown, or the connection being closed.  Applications should use this rather
@@ -31,7 +31,7 @@ public class I2CPMessageReader {
     protected I2CPMessageEventListener _listener;
     protected I2CPMessageReaderRunner _reader;
     protected Thread _readerThread;
-    
+
     protected static final AtomicLong __readerId = new AtomicLong();
 
     public I2CPMessageReader(InputStream stream, I2CPMessageEventListener lsnr) {
@@ -86,7 +86,7 @@ public class I2CPMessageReader {
     }
 
     /**
-     * Cancel reading.  
+     * Cancel reading.
      *
      */
     public void stopReading() {
@@ -154,7 +154,7 @@ public class I2CPMessageReader {
                 try {
                     in.close();
                 } catch (IOException ioe) {
-                    _log.error("Error closing the stream", ioe);
+                    _log.error("Error closing the stream \n* IO Error: " + ioe.getMessage());
                 }
             }
         }
@@ -163,7 +163,7 @@ public class I2CPMessageReader {
             try {
                 run2();
             } catch (RuntimeException e) {
-                _log.log(Log.CRIT, "Uncaught I2CP error", e);
+                _log.log(Log.CRIT, "Uncaught I2CP error \n* Error: " + e.getMessage());
                 _listener.readError(I2CPMessageReader.this, e);
                 _listener.disconnected(I2CPMessageReader.this);
                 cancelRunner();
@@ -190,7 +190,7 @@ public class I2CPMessageReader {
                         _listener.readError(I2CPMessageReader.this, ime);
                         cancelRunner();
                     } catch (IOException ioe) {
-                        _log.warn("IO Error handling message", ioe);
+                        _log.warn("IO Error handling message \n* Error:" + ioe.getMessage());
                         _listener.readError(I2CPMessageReader.this, ioe);
                         _listener.disconnected(I2CPMessageReader.this);
                         cancelRunner();
@@ -198,7 +198,7 @@ public class I2CPMessageReader {
                         // ooms seen here... maybe log and keep going?
                         throw oom;
                     } catch (RuntimeException e) {
-                        _log.log(Log.CRIT, "Unhandled error reading I2CP stream", e);
+                        _log.log(Log.CRIT, "Unhandled error reading I2CP stream \n* Error: " + e.getMessage());
                         _listener.readError(I2CPMessageReader.this, e);
                         _listener.disconnected(I2CPMessageReader.this);
                         cancelRunner();
@@ -211,7 +211,7 @@ public class I2CPMessageReader {
                         Thread.sleep(500);
                     } catch (InterruptedException ie) {
                         // we should break away here.
-                        _log.warn("Breaking away stream", ie);
+                        _log.warn("Breaking away stream \n* Interrupted Exception: " + ie.getMessage());
                         _listener.disconnected(I2CPMessageReader.this);
                         cancelRunner();
                     }
