@@ -995,11 +995,19 @@ public abstract class KademliaNetworkDatabaseFacade extends NetworkDatabaseFacad
             long age = now - earliest;
             Destination dest = leaseSet.getDestination();
             String id = dest != null ? dest.toBase32() : leaseSet.getHash().toBase32();
-            if (_log.shouldLog(Log.WARN))
-                _log.warn("Old LeaseSet [" + id.substring(0,6) + "] - rejecting store "
-                          + "\n* First expired: " + new Date(earliest)
-                          + "\n*  Last expired: " + new Date(latest));
+            if (_log.shouldWarn())
+                _log.warn("Old LeaseSet [" + id.substring(0,6) + "] - rejecting store " +
+                          "\n* First expired: " + new Date(earliest) +
+                          "\n* Last expired: " + new Date(latest) +
+                          "\n* " + leaseSet);
 //                          new Exception("Rejecting store"));
+            // i2pd bug?
+            // So we don't immediately go try to fetch it for a reply
+            if (leaseSet.getLeaseCount() == 0) {
+                for (int i = 0; i < NegativeLookupCache.MAX_FAILS; i++) {
+                     lookupFailed(key);
+                }
+            }
             return "LeaseSet for [" + id.substring(0,6) + "]"
                    + " expired " + DataHelper.formatDuration(age) + " ago";
         }
