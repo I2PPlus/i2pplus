@@ -657,7 +657,7 @@ public class NTCPConnection implements Closeable {
                 if (msg.getExpiration() >= now)
                     break;
                 if (_log.shouldWarn())
-                    _log.warn("Message Expired on queue, dropping..." + msg + " on " + this);
+                    _log.warn("Message expired while waiting in send queue, dropping..." + msg + " on " + this);
                 _transport.afterSend(msg, false, false, msg.getLifetime());
             }
             _currentOutbound.add(msg);
@@ -691,7 +691,7 @@ public class NTCPConnection implements Closeable {
                         size += NTCP2Payload.BLOCK_HEADER_SIZE + msz;
                     } else {
                         if (_log.shouldWarn())
-                            _log.warn("Message Expired on queue, dropping..." + msg + " on " + this);
+                            _log.warn("Message expired while waiting in send queue, dropping..." + msg + " on " + this);
                         _transport.afterSend(msg, false, false, msg.getLifetime());
                     }
                 }
