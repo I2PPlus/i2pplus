@@ -166,7 +166,7 @@ public class HomeHelper extends HelperBase {
 //        "proxynet.i2p" + S + _x("Fast zero-logging outproxies for I2P") + S + "http://proxynet.i2p/" + S + I + "mask.png" + S +
 //        _x("Squeeze") + S + _x("URL shortening service") + S + "http://sqz.i2p/" + S + I + "info/url.png" + S +
         _x("Deep Web Radio") + S + _x("Streaming radio service") + S + "http://deepwebradio.i2p/" + S + I + "svg/radio.svg" + S +
-           "tube.i2p" + S + _x("Alternative front-end to Youtube") + S + "http://tube.i2p/" + S + I + "svg/tv.svg" + S +
+//           "tube.i2p" + S + _x("Alternative front-end to Youtube") + S + "http://tube.i2p/" + S + I + "svg/tv.svg" + S +
            //"bote.i2p" + S + _x("Decentralized secure e-mail") + S + "http://bote.i2p/" + S + I + "info/mail_black.png" + S +
 
 // search engines

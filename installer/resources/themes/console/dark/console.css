@@ -7,6 +7,10 @@
 @import url(optbox.css);
 @import url(chromescroll.css);
 
+:root {
+  --camo: url("data:image/svg+xml,%3Csvg viewBox='0 0 240 240' xmlns='http://www.w3.org/2000/svg' xmlns:xlink='http://www.w3.org/1999/xlink'%3E%3Cfilter id='a'%3E%3CfeTurbulence baseFrequency='.2' numOctaves='4' seed='7' stitchTiles='stitch' type='fractalNoise'/%3E%3CfeTile/%3E%3CfeComponentTransfer%3E%3CfeFuncR slope='0.9469288793103452' tableValues='0 0 0 0 1 1' type='discrete'/%3E%3CfeFuncG slope='1.1477696210488517' tableValues='0 0 0 1 1' type='discrete'/%3E%3CfeFuncB intercept='4.3091942798132177' slope='-1.9643779184626435' tableValues='0 1' type='discrete'/%3E%3CfeFuncA intercept='-3.5179822198275872' slope='3.4636819773706904' type='discrete'/%3E%3C/feComponentTransfer%3E%3CfeColorMatrix values='1 0 0 0 0 -1 1 0 0 0 -1 -1 1 0 0 0 0 0 0 1'/%3E%3CfeColorMatrix type='matrix' values='-0.08 0.42 0.09 0 0.08 -0.17 0.35 -0.08 0 0.17 -0.08 0.15 -0.04 0 0.08 0 0 0 0 1'/%3E%3C/filter%3E%3Cpath d='m-29.6-29.6h256v256h-256z' filter='url(%23a)'/%3E%3Cpath d='m-4-4h256v256h-256z' fill='%23080000' opacity='.7'/%3E%3C/svg%3E");
+}
+
 html {
   min-height: 100%;
   scrollbar-color: rgba(16,72,16,.8) rgba(0,16,0,.5);
@@ -29,8 +33,8 @@ body {
   font: 8.5pt/130% Droid Sans, Open Sans, Noto Sans, Ubuntu, Segoe UI, Bitstream Vera Sans, DejaVu Sans, Verdana, Lucida Grande, Helvetica, sans-serif;
   background: #010 url(images/camotile2.png) top left scroll;
   background: url(/themes/console/images/svg/update.svg) center center no-repeat,
-              repeating-linear-gradient(to bottom, rgba(0,0,0,.9) 2px, rgba(0,16,0,.7) 4px),
-              url("data:image/svg+xml,%3Csvg viewBox='0 0 248 248' xmlns='http://www.w3.org/2000/svg' xmlns:xlink='http://www.w3.org/1999/xlink'%3E%3Cfilter id='a'%3E%3CfeTurbulence baseFrequency='.2' numOctaves='4' seed='7' stitchTiles='stitch' type='fractalNoise'/%3E%3CfeTile/%3E%3CfeComponentTransfer%3E%3CfeFuncR slope='0.9469288793103452' tableValues='0 0 0 0 1 1' type='discrete'/%3E%3CfeFuncG slope='1.1477696210488517' tableValues='0 0 0 1 1' type='discrete'/%3E%3CfeFuncB intercept='4.3091942798132177' slope='-1.9643779184626435' tableValues='0 1' type='discrete'/%3E%3CfeFuncA intercept='-3.5179822198275872' slope='3.4636819773706904' type='discrete'/%3E%3C/feComponentTransfer%3E%3CfeColorMatrix values='1 0 0 0 0 -1 1 0 0 0 -1 -1 1 0 0 0 0 0 0 1'/%3E%3CfeColorMatrix type='matrix' values='-0.08 0.42 0.09 0 0.08 -0.17 0.35 -0.08 0 0.17 -0.08 0.15 -0.04 0 0.08 0 0 0 0 1'/%3E%3C/filter%3E%3Cpath d='m-29.6-29.6h256v256h-256z' filter='url(%23a)'/%3E%3Cpath d='m-4-4h256v256h-256z' fill='%23080000' opacity='.85'/%3E%3C/svg%3E") #000;
+              repeating-linear-gradient(to bottom, rgba(0,0,0,.9) 2px, rgba(0,16,0,.9) 4px),
+              var(--camo), #000;
   background-size: 0, 100%, 100%;
   will-change: transform;
 }
@@ -104,7 +108,6 @@ a:link, h2 a:link, #graphopts a:visited, #newsDisplay a:visited, .confignav a:vi
 }
 
 a:visited {
-/*  color: #7b7;*/
   color: #494;
   text-decoration: none;
   font-weight: bold;
@@ -444,8 +447,6 @@ pre {
   width: 200px;
   display: block;
   position: absolute; /* so no interference with /home app icons */
-  float: left;
-  clear: left; /* fixes a bug in Opera */
   text-align: center;
   border: 0;
 }
@@ -454,15 +455,15 @@ pre {
   margin-bottom: 7px !important;
   padding: 8px 10px 8px;
   width: 194px;
-  float: left;
-  clear: left; /* fixes a bug in Opera */
   text-align: center;
   font-size: 8pt;
   border: 1px solid #252;
   border-radius: 3px;
   box-shadow: 0 1px 5px #000;
   background: #000 url(images/camotile.png) left top;
-  background: linear-gradient(to bottom, rgba(0,0,0,.5), rgba(0,0,0,.6)), repeating-linear-gradient(to bottom, rgba(0,0,0,.5) 1px, rgba(0,16,0,.3) 2px, rgba(0,16,0,.3) 3px), url(images/camotile.png) #010;
+  background: repeating-linear-gradient(to bottom, rgba(0,0,0,.9) 2px, rgba(0,16,0,.9) 4px), var(--camo), #000;
+  background-size: 100% 400%, 1800px;
+  will-change: transform;
 }
 
 .routersummary img[src$="i2plogo.png"] {
@@ -1161,11 +1162,7 @@ a:active img[src="/themes/console/images/i2plogo.png"] {
   border-radius: 0 0 3px 3px;
   box-shadow: inset 0 0 0 1px #000, 0 1px 5px #000;
   box-shadow: 0 1px 5px #000;
-  background:  #000 url(images/camotile2.png) !important;
-  background: linear-gradient(to bottom, rgba(0,0,0,.5), rgba(0,0,0,.5)), url(images/camotile.png) #010 !important;
-  background: linear-gradient(to bottom, rgba(0,0,0,.4), rgba(0,0,0,.4)), repeating-linear-gradient(to right, rgba(0,0,0,.8) 1px, rgba(0,32,0,.6) 2px, rgba(0,32,0,.6) 3px), url(images/camotile.png) #010 !important;
-  background: repeating-linear-gradient(to right, rgba(0,0,0,.6) 1px, rgba(0,16,0,.4) 2px, rgba(0,32,0,.4) 3px) !important;
-  background: repeating-linear-gradient(to right, rgba(0,0,0,.6) 1px, rgba(0,24,0,.5) 2px, rgba(0,24,0,.4) 3px) !important;
+  background: repeating-linear-gradient(to right, rgba(0,0,0,.6) 2px, rgba(0,24,0,.5) 4px) !important;
   z-index: 10 !important;
 }
 
@@ -1178,13 +1175,10 @@ a:active img[src="/themes/console/images/i2plogo.png"] {
   width: 100%;
   height: 100%;
   background: url(images/camotile2.png);
+  background: --var(camo);
+  background-size: 2048px;
   z-index: -1;
-  opacity: .3;
-}
-
-.routersummary {
-  background:  #000 url(images/camotile2.png) !important;
-  background: linear-gradient(to bottom, rgba(0,0,0,.5), rgba(0,0,0,.5)), repeating-linear-gradient(to bottom, rgba(0,0,0,.6) 1px, rgba(0,32,0,.3) 2px, rgba(0,32,0,.3) 3px), url(images/camotile.png) #010 !important;
+  opacity: .05;
 }
 
 .main#dns {
@@ -1206,10 +1200,6 @@ a:active img[src="/themes/console/images/i2plogo.png"] {
   min-width: 665px;
   background-size: 3px 3px, 175px 175px;
 }
-
-/*.main#news {
-  background: #000 url(images/news.png) no-repeat scroll bottom right !important;
-}*/
 
 #main#embedded {
   padding: 0;
@@ -1273,8 +1263,9 @@ div.news {
   border: 1px solid #252;
   box-shadow: 0 1px 5px #000;
   background: #000800 url(images/news.png) no-repeat scroll bottom right;
-  background: linear-gradient(to bottom, rgba(0,0,0,.3), rgba(0,0,0,.5)), url(images/news.png) no-repeat scroll right bottom, url(images/camotile.png) #000 !important;
-  background-blend-mode: normal, lighten, normal, normal;
+  background: linear-gradient(to bottom, rgba(0,0,0,.3), rgba(0,0,0,.5)), url(images/news.png) no-repeat scroll right bottom, repeating-linear-gradient(to bottom, rgba(0,0,0,.8) 2px, rgba(0,16,0,.8) 4px), var(--camo), #000 !important;
+  background-size: 100%, auto, 2048px !important;
+  background-blend-mode: normal, lighten, normal;
 }
 
 #newspage h3 {
@@ -1288,7 +1279,7 @@ div.news {
   padding-bottom: 10px;
   box-shadow: 0 0 0 1px #242, 0 0 2px 2px #000, inset 0 0 0 1px #000, inset 0 0 2px 0 #030;
   background: #000800;
-  background: linear-gradient(to bottom, #000a00, #000800);
+  background: linear-gradient(to bottom, rgba(0,16,0,.3), rgba(0,8,0,.3));
 }
 
 #newspage .newsentry:first-child {
@@ -1298,22 +1289,6 @@ div.news {
 #newspage .newsentry:last-child {
   margin-bottom: -4px;
 }
-
-/*@media screen and (min-width:1500px) {
-#newspage {
-  columns: 2 500px !important;
-}
-
-#newspage .newsentry {
-  break-inside: avoid;
-  page-break-inside: avoid;
-  -webkit-column-break-inside: avoid;
-}
-
-#newspage .newsentry h3 {
-  margin-top: 0;
-}
-}*/
 
 /* MS Edge 14+ fix (no support for blend-mode) */
 _:-ms-lang(x), div.news {
@@ -1448,7 +1423,7 @@ div.widescroll { /* only scroll content, not entire page eg /peers */
   box-shadow: inset 0 0 0 1px #000;
   background: url(images/header.png) repeat-x scroll center center #000;
   background: linear-gradient(to bottom, #001000, #001900 50%, #000 51%, #000) !important;
-  background: repeating-linear-gradient(to right, rgba(0,0,0,.5) 1px, rgba(0,0,0,.5) 2px, rgba(0,16,0,.5) 3px), linear-gradient(to bottom, #1a261a, #223022 7%, #212f21 9%, #172317 21%, #091109 49%, #050d05 50%, #020602 51%, #010301 53%, #000000 56%) repeat scroll 0, rgba(0, 0, 0, 0) url("/themes/console/dark/images/camotile2.png") !important;
+  background: repeating-linear-gradient(to right, rgba(0,0,0,.5) 1px, rgba(0,0,0,.5) 2px, rgba(0,16,0,.5) 3px), linear-gradient(to bottom, #1a261a, #223022 7%, #212f21 9%, #172317 21%, #091109 49%, #050d05 50%, #020602 51%, #010301 53%, #000000 56%) repeat scroll 0, url("/themes/console/dark/images/camotile2.png") !important;
   background-blend-mode: normal, exclusion, normal;
 }
 
