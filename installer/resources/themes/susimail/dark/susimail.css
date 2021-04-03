@@ -852,10 +852,10 @@ input[type=file]::file-selector-button {
   text-align: center;
   text-decoration: none;
   color: #494;
-  border: 1px outset #191;
+  border: 1px solid #000;
   border-radius: 2px;
+  box-shadow: inset 0 0 0 1px #151, inset 0 0 0 2px #000, inset 0 0 2px 2px #040, inset 0 0 0 3px #000, 0 0 0 1px rgba(0,16,0,.2);
   background: #000;
-  filter: drop-shadow(0 0 1px #000);
 }
 
 input[type=file]:hover::file-selector-button, input[type=file]:focus::file-selector-button {
