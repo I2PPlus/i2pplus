@@ -1263,8 +1263,9 @@ div.news {
   border: 1px solid #252;
   box-shadow: 0 1px 5px #000;
   background: #000800 url(images/news.png) no-repeat scroll bottom right;
-  background: linear-gradient(to bottom, rgba(0,0,0,.3), rgba(0,0,0,.5)), url(images/news.png) no-repeat scroll right bottom, url(images/camotile.png) #000 !important;
-  background-blend-mode: normal, lighten, normal, normal;
+  background: linear-gradient(to bottom, rgba(0,0,0,.3), rgba(0,0,0,.5)), url(images/news.png) no-repeat scroll right bottom, repeating-linear-gradient(to bottom, rgba(0,0,0,.8) 2px, rgba(0,16,0,.8) 4px), var(--camo), #000 !important;
+  background-size: 100%, auto, 2048px !important;
+  background-blend-mode: normal, lighten, normal;
 }
 
 #newspage h3 {
@@ -1278,7 +1279,7 @@ div.news {
   padding-bottom: 10px;
   box-shadow: 0 0 0 1px #242, 0 0 2px 2px #000, inset 0 0 0 1px #000, inset 0 0 2px 0 #030;
   background: #000800;
-  background: linear-gradient(to bottom, #000a00, #000800);
+  background: linear-gradient(to bottom, rgba(0,16,0,.3), rgba(0,8,0,.3));
 }
 
 #newspage .newsentry:first-child {
