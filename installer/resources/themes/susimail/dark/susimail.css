@@ -65,15 +65,15 @@ body.iframed {
 
 body.iframed {
   background:
-  url(/themes/susimail/images/compose_hover.png) no-repeat,
+  url(images/compose_hover.svg) no-repeat,
   url(/themes/susimail/images/login_hover.png) no-repeat,
-  url(/themes/susimail/images/logout_hover.png) no-repeat,
+  url(images/logout_hover.svg) no-repeat,
   url(/themes/susimail/images/offline_hover.png) no-repeat,
-  url(/themes/susimail/images/save_hover.png) no-repeat,
-  url(/themes/susimail/images/send_hover.png) no-repeat,
-  url(/themes/console/images/buttons/configure_hover.png),
+  url(images/save_hover.svg) no-repeat,
+  url(images/send_hover.svg) no-repeat,
+  url(images/buttons/configure_hover.svg),
   url(/themes/console/images/buttons/delete_hover.png),
-  url(/themes/console/images/buttons/update_hover.png),
+  url(images/refresh_hover.svg),
   url(/themes/console/images/buttons/dropdown_hover.svg), transparent !important;
   background-size: 0 0, 0 0, 0 0, 0 0, 0 0, 0 0, 0 0, 0 0, 0 0, 0 0 !important;
 }
@@ -454,24 +454,27 @@ input[type=submit], input[type=reset], #settings, .topbuttons .fakebutton {
 }
 
 input.cancel, #nukemail input.clearselection {
-  background: #000 url(/themes/console/images/buttons/no.png) no-repeat 8px center;
-  background: url(/themes/console/images/buttons/no.png) no-repeat 8px center, linear-gradient(to bottom, #001000, #000 5%, #000 95%, #001000);
-  padding: 7px 10px 7px 26px;
+  padding: 7px 10px 7px 24px;
+  background: #000 url(images/no.svg) no-repeat 8px center;
+  background: url(images/no.svg) no-repeat 8px center, linear-gradient(to bottom, #001000, #000 5%, #000 95%, #001000);
+  background-size: 12px, 100% !important;
 }
 
 input.cancel:hover, #nukemail input.clearselection:hover {
-  background: #010 url(/themes/console/images/buttons/no.png) no-repeat 8px center;
-  background: url(/themes/console/images/buttons/no.png) no-repeat 8px center, linear-gradient(to bottom, #000, #010);
+  background: #010 url(images/no_hover.svg) no-repeat 8px center;
+  background: url(images/no_hover.svg) no-repeat 8px center, linear-gradient(to bottom, #000, #010);
+  background-size: 12px, 100% !important;
 }
 
 input.cancel:active, #nukemail input.clearselection:active {
-  background: #f60 url(/themes/console/images/buttons/no.png) no-repeat 8px center;
+  background: #f60 url(images/no_active.svg) no-repeat 8px center;
+  background-size: 12px !important;
 }
 
 input.clearselection {
+  padding: 7px 10px 7px 26px;
   background: #000 url(/themes/susimail/images/none.png) no-repeat 8px center;
   background: url(/themes/susimail/images/none.png) no-repeat 8px center, linear-gradient(to bottom, #001000, #000 5%, #000 95%, #001000);
-  padding: 7px 10px 7px 26px;
 }
 
 input.clearselection:hover {
@@ -592,8 +595,9 @@ input.logout:active {
 
 input.reload, input.refresh, input[name="refresh"][disabled], .topbuttons .fakebutton {
   padding: 7px 10px 7px 26px;
-  background: #000 url(/themes/console/images/buttons/update.png) no-repeat 8px center !important;
-  background: url(/themes/console/images/buttons/update.png) no-repeat 8px center, linear-gradient(to bottom, #001000, #000 5%, #000 95%, #001000) !important;
+  background: #000 url(images/refresh.svg) no-repeat 8px center !important;
+  background: url(images/refresh.svg) no-repeat 8px center, linear-gradient(to bottom, #001000, #000 5%, #000 95%, #001000) !important;
+  background-size: 13px, 100% !important;
 }
 
 .topbuttons .fakebutton {
@@ -606,12 +610,14 @@ input[name="refresh"][disabled] {
 }
 
 input.reload:hover, input.refresh:hover, .fakebutton:hover {
-  background: #000 url(/themes/console/images/buttons/update_hover.png) no-repeat 8px center !important;
-  background: url(/themes/console/images/buttons/update_hover.png) no-repeat 8px center, linear-gradient(to bottom, #000, #010) !important;
+  background: #000 url(images/refresh_hover.svg) no-repeat 8px center !important;
+  background: url(images/refresh_hover.svg) no-repeat 8px center, linear-gradient(to bottom, #000, #010) !important;
+  background-size: 13px, 100% !important;
 }
 
 input.reload:active, input.refresh:active, .fakebutton:active {
-  background: #f60 url(/themes/console/images/buttons/update_hover.png) no-repeat 8px center !important;
+  background: #f60 url(images/refresh_active.svg) no-repeat 8px center !important;
+  background-size: 13px !important;
 }
 
 input.invertselection {
@@ -709,15 +715,15 @@ input.markall {
 }
 
 input.setpagesize, input.save {
+  padding: 7px 10px 7px 26px;
   background: #000 url(/themes/console/images/buttons/yes.png) no-repeat 8px center;
   background: url(/themes/console/images/buttons/yes.png) no-repeat 8px center, linear-gradient(to bottom, #001000, #000 5%, #000 95%, #001000);
-  padding: 7px 10px 7px 26px;
 }
 
 input.setpagesize:hover, input.setpagesize:focus, input.save:hover, input.save:focus {
+  padding: 7px 10px 7px 26px;
   background: #010 url(/themes/console/images/buttons/yes.png) no-repeat 8px center;
   background: url(/themes/console/images/buttons/yes.png) no-repeat 8px center, linear-gradient(to bottom, #000, #010);
-  padding: 7px 10px 7px 26px;
 }
 
 input.setpagesize:active, input.save:active {
@@ -729,18 +735,21 @@ input.setpagesize {
 }
 
 input.send {
-  background: #010 url(/themes/susimail/images/send.png) no-repeat 8px center;
-  background: url(/themes/susimail/images/send.png) no-repeat 8px center, linear-gradient(to bottom, #000, #010);
   padding: 7px 10px 7px 26px;
+  background: #010 url(images/send.svg) no-repeat 8px center;
+  background: url(images/send.svg) no-repeat 8px center, linear-gradient(to bottom, #000, #010);
+  background-size: 16px, 100% !important;
 }
 
 input.send:hover {
-  background: #010 url(/themes/susimail/images/send_hover.png) no-repeat 8px center;
-  background: url(/themes/susimail/images/send_hover.png) no-repeat 8px center, linear-gradient(to bottom, #000, #010);
+  background: #010 url(send_hover.svg) no-repeat 8px center;
+  background: url(images/send_hover.svg) no-repeat 8px center, linear-gradient(to bottom, #000, #010);
+  background-size: 16px, 100% !important;
 }
 
 input.send:active {
-  background: #f60 url(/themes/susimail/images/send_hover.png) no-repeat 8px center;
+  background: #f60 url(images/send_active.svg) no-repeat 8px center;
+  background-size: 16px !important;
 }
 
 input.send + input.cancel {
@@ -748,48 +757,49 @@ input.send + input.cancel {
 }
 
 input.configure, #settings {
-  background: #000 url(/themes/console/images/buttons/configure.png) no-repeat 8px center;
-  background: url(/themes/console/images/buttons/configure.png) no-repeat 8px center, linear-gradient(to bottom, #001000, #000 5%, #000 95%, #001000);
   padding: 7px 10px 7px 26px;
+  background: #000 url(images/configure.svg) no-repeat 8px center;
+  background: url(images/configure.svg) no-repeat 8px center, linear-gradient(to bottom, #001000, #000 5%, #000 95%, #001000);
 }
 
 input.configure:hover, #settings:hover {
-  background: #010 url(/themes/console/images/buttons/configure_hover.png) no-repeat 8px center;
-  background: url(/themes/console/images/buttons/configure_hover.png) no-repeat 8px center, linear-gradient(to bottom, #000, #010);
+  background: #010 url(images/configure_hover.svg) no-repeat 8px center;
+  background: url(images/configure_hover.svg) no-repeat 8px center, linear-gradient(to bottom, #000, #010);
 }
 
 input.configure:active, #settings:active {
-  background: #f60 url(/themes/console/images/buttons/configure_hover.png) no-repeat 8px center;
+  background: #f60 url(images/configure_active.svg) no-repeat 8px center;
 }
 
 input.saveas, input.saveasdraft {
-  background: #000 url(/themes/susimail/images/save.png) no-repeat 8px center;
-  background: url(/themes/susimail/images/save.png) no-repeat 8px center, linear-gradient(to bottom, #001000, #000 5%, #000 95%, #001000);
-  padding: 7px 10px 7px 26px;
+  padding: 7px 10px 7px 27px;
+  background: #000 url(images/save.svg) no-repeat 8px center;
+  background: url(images/save.svg) no-repeat 8px center, linear-gradient(to bottom, #001000, #000 5%, #000 95%, #001000);
+  background-size: 15px, 100% !important;
 }
 
 input.saveas:hover, input.saveasdraft:hover {
-  background: #010 url(/themes/susimail/images/save_hover.png) no-repeat 8px center;
-  background: url(/themes/susimail/images/save_hover.png) no-repeat 8px center, linear-gradient(to bottom, #000, #010);
+  background: #010 url(images/save_hover.svg) no-repeat 8px center;
+  background: url(images/save_hover.svg) no-repeat 8px center, linear-gradient(to bottom, #000, #010);
 }
 
 input.saveas:active, input.saveasdraft:active {
-  background: #f60 url(/themes/susimail/images/save_hover.png) no-repeat 8px center;
+  background: #f60 url(images/save_active.svg) no-repeat 8px center;
 }
 
 input.new_upload {
-  background: #000 url(/themes/susimail/images/attach.png) no-repeat 8px center;
-  background: url(/themes/susimail/images/attach.png) no-repeat 8px center, linear-gradient(to bottom, #001000, #000 5%, #000 95%, #001000);
   padding: 7px 10px 7px 26px;
+  background: #000 url(images/attach.svg) no-repeat 8px center;
+  background: url(images/attach.svg) no-repeat 8px center, linear-gradient(to bottom, #001000, #000 5%, #000 95%, #001000);
 }
 
 input.new_upload:hover {
-  background: #010 url(/themes/susimail/images/attach.png) no-repeat 8px center;
-  background: url(/themes/susimail/images/attach.png) no-repeat 8px center, linear-gradient(to bottom, #000, #010);
+  background: #010 url(images/attach_hover.svg) no-repeat 8px center;
+  background: url(images/attach_hover.svg) no-repeat 8px center, linear-gradient(to bottom, #000, #010);
 }
 
 input.new_upload:active {
-  background: #f60 url(/themes/susimail/images/attach.png) no-repeat 8px center;
+  background: #f60 url(images/attach_active.svg) no-repeat 8px center;
 }
 
 input.new_upload {
@@ -798,9 +808,9 @@ input.new_upload {
 }
 
 input.switchto, input.moveto {
+  padding: 7px 10px 7px 26px;
   background: #000 url(/themes/susimail/images/folder.png) no-repeat 8px center;
   background: var(--folder) no-repeat 8px center, linear-gradient(to bottom, #001000, #000 5%, #000 95%, #001000);
-  padding: 7px 10px 7px 26px;
 }
 
 input.switchto:hover, input.moveto:hover {
@@ -832,6 +842,37 @@ input[disabled], input[disabled]:hover, input[disabled]:focus {
   cursor: default;
   border: 1px solid transparent;
   pointer-events: none;
+}
+
+input[type=file]::file-selector-button {
+  margin: 2px 3px;
+  padding: 4px 2px !important;
+  min-width: 75px;
+  vertical-align: middle;
+  font: bold 9pt Droid Sans, Open Sans, Noto Sans, Ubuntu, Segoe UI, Bitstream Vera Sans, DejaVu Sans, Verdana, Lucida Grande, Helvetica, sans-serif;
+  text-align: center;
+  text-decoration: none;
+  color: #494;
+  border: 1px solid #000;
+  border-radius: 2px;
+  box-shadow: inset 0 0 0 1px #151, inset 0 0 0 2px #000, inset 0 0 2px 2px #040, inset 0 0 0 3px #000, 0 0 0 1px rgba(0,16,0,.2);
+  background: #000;
+}
+
+input[type=file]:hover::file-selector-button, input[type=file]:focus::file-selector-button {
+  color: #f60;
+  border: 1px solid #f60;
+  box-shadow: inset 0 0 0 1px #000, inset 0 0 2px 1px rgba(255,86,0,.8), inset 0 0 0 3px #000;
+  background: #000;
+  background: radial-gradient(at center bottom, rgba(96, 48, 0, .4) 0, rgba(0, 0, 0, 0) 80%), #000;
+  cursor: pointer;
+}
+
+input[type=file]:active::file-selector-button {
+  border: 1px solid #f60;
+  background-color: #f60 !important;
+  color: #ee9 !important;
+  box-shadow: inset 0 0 0 1px #000, inset 3px 3px 3px 2px #310 !important;
 }
 
 select {
