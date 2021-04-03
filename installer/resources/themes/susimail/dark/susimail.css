@@ -576,18 +576,18 @@ input.login:active {
 }
 
 input.logout {
-  background: #000 url(/themes/susimail/images/logout.png) no-repeat 8px center;
-  background: url(/themes/susimail/images/logout.png) no-repeat 8px center, linear-gradient(to bottom, #001000, #000 5%, #000 95%, #001000);
+  background: #000 url(images/logout.svg) no-repeat 8px center;
+  background: url(images/logout.svg) no-repeat 8px center, linear-gradient(to bottom, #001000, #000 5%, #000 95%, #001000);
   padding: 7px 10px 7px 26px;
 }
 
 input.logout:hover {
-  background: #010 url(/themes/susimail/images/logout_hover.png) no-repeat 8px center;
-  background: url(/themes/susimail/images/logout_hover.png) no-repeat 8px center, linear-gradient(to bottom, #000, #010);
+  background: #010 url(images/logout_hover.svg) no-repeat 8px center;
+  background: url(images/logout_hover.svg) no-repeat 8px center, linear-gradient(to bottom, #000, #010);
 }
 
 input.logout:active {
-  background: #f60 url(/themes/susimail/images/logout_hover.png) no-repeat 8px center;
+  background: #f60 url(images/logout_active.svg) no-repeat 8px center;
 }
 
 input.reload, input.refresh, input[name="refresh"][disabled], .topbuttons .fakebutton {
@@ -660,18 +660,18 @@ input.markall:active {
 }
 
 input.new {
-  background: #000 url(/themes/susimail/images/compose.png) no-repeat 8px center;
-  background: url(/themes/susimail/images/compose.png) no-repeat 8px center, linear-gradient(to bottom, #001000, #000 5%, #000 95%, #001000);
+  background: #000 url(images/compose.svg) no-repeat 8px center;
+  background: url(images/compose.svg) no-repeat 8px center, linear-gradient(to bottom, #001000, #000 5%, #000 95%, #001000);
   padding: 7px 10px 7px 26px;
 }
 
 input.new:hover {
-  background: #010 url(/themes/susimail/images/compose_hover.png) no-repeat 8px center;
-  background: url(/themes/susimail/images/compose_hover.png) no-repeat 8px center, linear-gradient(to bottom, #000, #010);
+  background: #010 url(images/compose_hover.svg) no-repeat 8px center;
+  background: url(images/compose_hover.svg) no-repeat 8px center, linear-gradient(to bottom, #000, #010);
 }
 
 input.new:active {
-  background: #f60 url(/themes/susimail/images/compose_hover.png) no-repeat 8px center;
+  background: #f60 url(images/compose_active.svg) no-repeat 8px center;
 }
 
 input.reply {
