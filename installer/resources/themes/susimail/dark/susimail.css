@@ -65,12 +65,12 @@ body.iframed {
 
 body.iframed {
   background:
-  url(/themes/susimail/images/compose_hover.png) no-repeat,
+  url(images/compose_hover.svg) no-repeat,
   url(/themes/susimail/images/login_hover.png) no-repeat,
-  url(/themes/susimail/images/logout_hover.png) no-repeat,
+  url(images/logout_hover.svg) no-repeat,
   url(/themes/susimail/images/offline_hover.png) no-repeat,
   url(/themes/susimail/images/save_hover.png) no-repeat,
-  url(/themes/susimail/images/send_hover.png) no-repeat,
+  url(images/send_hover.svg) no-repeat,
   url(/themes/console/images/buttons/configure_hover.png),
   url(/themes/console/images/buttons/delete_hover.png),
   url(/themes/console/images/buttons/update_hover.png),
@@ -729,18 +729,18 @@ input.setpagesize {
 }
 
 input.send {
-  background: #010 url(/themes/susimail/images/send.png) no-repeat 8px center;
-  background: url(/themes/susimail/images/send.png) no-repeat 8px center, linear-gradient(to bottom, #000, #010);
+  background: #010 url(images/send.svg) no-repeat 8px center;
+  background: url(images/send.svg) no-repeat 8px center, linear-gradient(to bottom, #000, #010);
   padding: 7px 10px 7px 26px;
 }
 
 input.send:hover {
-  background: #010 url(/themes/susimail/images/send_hover.png) no-repeat 8px center;
-  background: url(/themes/susimail/images/send_hover.png) no-repeat 8px center, linear-gradient(to bottom, #000, #010);
+  background: #010 url(send_hover.svg) no-repeat 8px center;
+  background: url(images/send_hover.svg) no-repeat 8px center, linear-gradient(to bottom, #000, #010);
 }
 
 input.send:active {
-  background: #f60 url(/themes/susimail/images/send_hover.png) no-repeat 8px center;
+  background: #f60 url(images/send_active.svg) no-repeat 8px center;
 }
 
 input.send + input.cancel {
@@ -748,9 +748,9 @@ input.send + input.cancel {
 }
 
 input.configure, #settings {
+  padding: 7px 10px 7px 26px;
   background: #000 url(/themes/console/images/buttons/configure.png) no-repeat 8px center;
   background: url(/themes/console/images/buttons/configure.png) no-repeat 8px center, linear-gradient(to bottom, #001000, #000 5%, #000 95%, #001000);
-  padding: 7px 10px 7px 26px;
 }
 
 input.configure:hover, #settings:hover {
@@ -763,24 +763,24 @@ input.configure:active, #settings:active {
 }
 
 input.saveas, input.saveasdraft {
-  background: #000 url(/themes/susimail/images/save.png) no-repeat 8px center;
-  background: url(/themes/susimail/images/save.png) no-repeat 8px center, linear-gradient(to bottom, #001000, #000 5%, #000 95%, #001000);
   padding: 7px 10px 7px 26px;
+  background: #000 url(images/save.svg) no-repeat 8px center;
+  background: url(images/save.svg) no-repeat 8px center, linear-gradient(to bottom, #001000, #000 5%, #000 95%, #001000);
 }
 
 input.saveas:hover, input.saveasdraft:hover {
-  background: #010 url(/themes/susimail/images/save_hover.png) no-repeat 8px center;
-  background: url(/themes/susimail/images/save_hover.png) no-repeat 8px center, linear-gradient(to bottom, #000, #010);
+  background: #010 url(images/save_hover.svg) no-repeat 8px center;
+  background: url(images/save_hover.svg) no-repeat 8px center, linear-gradient(to bottom, #000, #010);
 }
 
 input.saveas:active, input.saveasdraft:active {
-  background: #f60 url(/themes/susimail/images/save_hover.png) no-repeat 8px center;
+  background: #f60 url(images/save_active.svg) no-repeat 8px center;
 }
 
 input.new_upload {
+  padding: 7px 10px 7px 26px;
   background: #000 url(/themes/susimail/images/attach.png) no-repeat 8px center;
   background: url(/themes/susimail/images/attach.png) no-repeat 8px center, linear-gradient(to bottom, #001000, #000 5%, #000 95%, #001000);
-  padding: 7px 10px 7px 26px;
 }
 
 input.new_upload:hover {
@@ -798,9 +798,9 @@ input.new_upload {
 }
 
 input.switchto, input.moveto {
+  padding: 7px 10px 7px 26px;
   background: #000 url(/themes/susimail/images/folder.png) no-repeat 8px center;
   background: var(--folder) no-repeat 8px center, linear-gradient(to bottom, #001000, #000 5%, #000 95%, #001000);
-  padding: 7px 10px 7px 26px;
 }
 
 input.switchto:hover, input.moveto:hover {
