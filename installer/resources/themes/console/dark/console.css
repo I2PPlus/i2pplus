@@ -1848,8 +1848,6 @@ tr {
 
 tr:nth-child(even) {
   background: #000400;
-  background: repeating-linear-gradient(135deg, #000 1px, #000a00 2px, #000a00 3px);
-  background: repeating-linear-gradient(135deg, rgba(0,0,0,.8) 1px, rgba(0,6,0,.8) 2px, rgba(0,6,0,.8) 3px), repeating-linear-gradient(45deg, rgba(0,0,0,.8) 1px, rgba(0,6,0,.8) 2px, rgba(0,6,0,.8) 3px);
   background: linear-gradient(to bottom, #001400, #000600);
   vertical-align: middle;
 }
@@ -9277,31 +9275,46 @@ th code {
   color: #bb7;
 }
 
-#jardump td:nth-child(2) {
-  white-space: nowrap;
-}
-
-#jardump td:first-child, #jardump tr:hover td:first-child {
-  padding-left: 24px;
-  padding-right: 0 !important;
-  background-image: url(/themes/console/images/info/box.png) !important;
-  background-position: 6px center;
-  background-repeat: no-repeat;
-  background-size: 16px 16px;
-}
-
 #jardump td:first-child {
+  padding-left: 22px;
+  padding-right: 0;
   color: #eea;
+  background: url(/themes/console/images/svg/package.svg) 6px center no-repeat, linear-gradient(to bottom, #001400, #000600);
+  background-size: 14px, 100%;
+  background-blend-mode: luminosity, normal;
+}
+
+#jardump tr:hover td:first-child {
+  padding-left: 18px !important;
+  background: #001800 url(/themes/console/images/svg/package.svg) 6px center no-repeat;
+  background-size: 14px !important;
+  background-blend-mode: normal !important;
 }
 
 #jardump td:first-child b {
+  margin-right: 4px;
   display: inline-block;
   padding: 4px;
   border-radius: 2px;
-  margin-right: 4px;
+}
+
+#jardump tr:hover td:first-child b {
+  margin: 0 0 -2px -2px;
+  width: 95%;
+  width: calc(100% - 10px);
+  border: 1px solid #010;
+  box-shadow: 0 0 1px 0 #010;
+  background: #030;
+}
+
+#jardump tr:hover td:first-child {
+  padding-left: 26px !important;
+  padding-right: 0 !important;
 }
 
 #jardump td:nth-child(2) {
+  padding-right: 8px !important;
+  white-space: nowrap;
   text-align: right !important;
   font-weight: bold;
   font-style: italic;
@@ -9334,23 +9347,8 @@ th code {
   color: #fff;
 }
 
-#jardump tr:hover td:first-child b {
-  margin-right: 0;
-  margin-bottom: -2px;
-  width: 95%;
-  width: calc(100% - 10px);
-  border: 1px solid #010;
-  box-shadow: 0 0 1px 0 #010;
-  background: #030;
-}
-
 #jardump tr:hover hr {
   background: transparent;
-}
-
-#jardump tr:hover td:first-child {
-  padding-left: 26px !important;
-  padding-right: 0 !important;
 }
 
 #jardump tt {
