@@ -1217,20 +1217,20 @@ class PacketBuilder {
             if (iaddr == null) {
                 if (_log.shouldWarn())
                     _log.warn("Cannot build a relay request for [" + state.getRemoteIdentity().calculateHash().toBase64().substring(0,6) +
-                               + "] slot " + i + " -> no address");
+                               "] slot " + i + " -> no address");
                 continue;
             }
             if (ikey == null || tag <= 0) {
                 if (_log.shouldWarn())
                     _log.warn("Cannot build a relay request for [" + state.getRemoteIdentity().calculateHash().toBase64().substring(0,6) +
-                               + "] slot " + i + " -> no key/tag");
+                               "] slot " + i + " -> no key/tag");
                 continue;
             }
             if  (exp > 0 && exp < cutoff) {
                 if (_log.shouldWarn())
                     _log.warn("Cannot build a relay request for [" + state.getRemoteIdentity().calculateHash().toBase64().substring(0,6) +
-                               + "] -> expired " + DataHelper.formatTime(exp)
-                               + " : " + Addresses.toString(iaddr.getAddress(), iport));
+                               "] -> expired " + DataHelper.formatTime(exp) +
+                               " : " + Addresses.toString(iaddr.getAddress(), iport));
                 continue;
             }
                 // we must use the same isValid() as EstablishmentManager.receiveRelayResponse().
@@ -1239,8 +1239,8 @@ class PacketBuilder {
                 // FIXME this will have already failed in isValid() above, right?
                 (Arrays.equals(iaddr.getAddress(), _transport.getExternalIP()) && !_transport.allowLocal())) {
                 if (_log.shouldWarn())
-                    _log.warn("Cannot build a relay request for " + state.getRemoteIdentity().calculateHash()
-                               + ", introducer address is invalid or blocklisted: " + Addresses.toString(iaddr.getAddress(), iport));
+                    _log.warn("Cannot build a relay request for " + state.getRemoteIdentity().calculateHash() +
+                              ", introducer address is invalid or blocklisted: " + Addresses.toString(iaddr.getAddress(), iport));
                 // TODO implement some sort of introducer banlist
                 continue;
             }
