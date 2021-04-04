@@ -488,18 +488,21 @@ input.clearselection:active {
 }
 
 input.delete, input.delete_attachment, input.really_delete {
-  background: #000 url(/themes/console/images/buttons/delete.png) no-repeat 8px center;
-  background: url(/themes/console/images/buttons/delete.png) no-repeat 8px center, linear-gradient(to bottom, #001000, #000 5%, #000 95%, #001000);
   padding: 7px 10px 7px 26px;
+  background: #000 url(images/delete.svg) no-repeat 8px center;
+  background: url(images/delete.svg) no-repeat 8px center, linear-gradient(to bottom, #001000, #000 5%, #000 95%, #001000);
+  background-size: 16px, 100%;
 }
 
 input.delete:hover, input.delete_attachment:hover, input.really_delete:hover {
-  background: #010 url(/themes/console/images/buttons/delete_hover.png) no-repeat 8px center;
-  background: url(/themes/console/images/buttons/delete_hover.png) no-repeat 8px center, linear-gradient(to bottom, #000, #010);
+  background: #010 url(images/delete_hover.svg) no-repeat 8px center;
+  background: url(images/delete_hover.svg) no-repeat 8px center, linear-gradient(to bottom, #000, #010);
+  background-size: 16px, 100%;
 }
 
 input.delete:active, input.delete_attachment:active, input.really_delete:active {
-  background: #f60 url(/themes/console/images/buttons/delete_hover.png) no-repeat 8px center;
+  background: #f60 url(images/delete_active.svg) no-repeat 8px center;
+  background-size: 16px, 100%;
 }
 
 input.download {
@@ -550,18 +553,18 @@ input.list:active, input.moveto:active, #pagenav input.switchto:active {
 }
 
 input.forward {
-  background: #000 url(/themes/susimail/images/forward.png) no-repeat 8px center;
-  background: url(/themes/susimail/images/forward.png) no-repeat 8px center, linear-gradient(to bottom, #001000, #000 5%, #000 95%, #001000);
+  background: #000 url(images/forward.svg) no-repeat 8px center;
+  background: url(images/forward.svg) no-repeat 8px center, linear-gradient(to bottom, #001000, #000 5%, #000 95%, #001000);
   padding: 7px 10px 7px 26px;
 }
 
 input.forward:hover {
-  background: #010 url(/themes/susimail/images/forward.png) no-repeat 8px center;
-  background: url(/themes/susimail/images/forward.png) no-repeat 8px center, linear-gradient(to bottom, #000, #010);
+  background: #010 url(images/forward_hover.svg) no-repeat 8px center;
+  background: url(images/forward_hover.svg) no-repeat 8px center, linear-gradient(to bottom, #000, #010);
 }
 
 input.forward:active {
-  background: #f60 url(/themes/susimail/images/forward.png) no-repeat 8px center;
+  background: #f60 url(images/forward_active.svg) no-repeat 8px center;
 }
 
 input.login {
@@ -682,33 +685,33 @@ input.new:active {
 }
 
 input.reply {
-  background: #000 url(/themes/susimail/images/reply.png) no-repeat 8px center;
-  background: url(/themes/susimail/images/reply.png) no-repeat 8px center, linear-gradient(to bottom, #001000, #000 5%, #000 95%, #001000);
+  background: #000 url(images/reply.svg) no-repeat 8px center;
+  background: url(images/reply.svg) no-repeat 8px center, linear-gradient(to bottom, #001000, #000 5%, #000 95%, #001000);
   padding: 7px 10px 7px 26px;
 }
 
 input.reply:hover {
-  background: #010 url(/themes/susimail/images/reply.png) no-repeat 8px center;
-  background: url(/themes/susimail/images/reply.png) no-repeat 8px center, linear-gradient(to bottom, #000, #010);
+  background: #010 url(images/reply_hover.svg) no-repeat 8px center;
+  background: url(images/reply_hover.svg) no-repeat 8px center, linear-gradient(to bottom, #000, #010);
 }
 
 input.reply:active {
-  background: #f60 url(/themes/susimail/images/reply.png) no-repeat 8px center;
+  background: #f60 url(images/reply_active.svg) no-repeat 8px center;
 }
 
 input.replyall {
-  background: #000 url(/themes/susimail/images/reply-all.png) no-repeat 8px center;
-  background: url(/themes/susimail/images/reply-all.png) no-repeat 8px center, linear-gradient(to bottom, #001000, #000 5%, #000 95%, #001000);
+  background: #000 urlimages/replyall.svg) no-repeat 8px center;
+  background: url(images/replyall.svg) no-repeat 8px center, linear-gradient(to bottom, #001000, #000 5%, #000 95%, #001000);
   padding: 7px 10px 7px 26px;
 }
 
 input.replyall:hover {
-  background: #010 url(/themes/susimail/images/reply-all.png) no-repeat 8px center;
-  background: url(/themes/susimail/images/reply-all.png) no-repeat 8px center, linear-gradient(to bottom, #000, #010);
+  background: #010 url(images/replyall_hover.svg) no-repeat 8px center;
+  background: url(images/replyall_hover.svg) no-repeat 8px center, linear-gradient(to bottom, #000, #010);
 }
 
 input.replyall:active {
-  background: #f60 url(/themes/susimail/images/reply-all.png) no-repeat 8px center;
+  background: #f60 url(images/replyall_active.svg) no-repeat 8px center;
 }
 
 input.markall {
@@ -1676,7 +1679,7 @@ tr.bottombuttons:empty {
   border: 1px solid #000;
   border-top: none;
   box-shadow: 0 2px 2px 1px rgba(0,0,0,.5), inset 0 0 0 1px #040;
-  background: url(/themes/snark/light/images/delete.png) right 6px top 6px no-repeat, linear-gradient(to right, #020, #002800, #020) #020;
+  background: url(images/delete.svg) right 6px top 6px no-repeat, linear-gradient(to right, #020, #002800, #020) #020;
   background-size: 14px 14px, 100% 100% !important;
   background-blend-mode: luminosity;
   cursor: crosshair;
