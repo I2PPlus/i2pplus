@@ -3365,11 +3365,12 @@ public class WebMail extends HttpServlet
                 link + mail.shortSender.replace("&lt;", "").replace("&gt;", "").replaceAll("@.*", "") + "</a></td>\n");
                 // TODO: add name of attachment(s) to tooltip
             }
-            out.print("<td class=\"mailListAttachment " + jslink + ">" + (mail.hasAttachment() ? "<img src=\"/susimail/icons/attach.png\" alt=\"\" title=\"" +
-                        _t("Message has an attachment") + "\">" : "&nbsp;") + "</td>\n" +
-                         // TODO: show mail fragment on tooltip or hover span
-                        "<td class=\"mailListSubject " + jslink + ">" + link + subj + "</a></td>\n" +
-                        "<td class=\"mailListFlagged ");
+            out.print("<td class=\"mailListAttachment " + (mail.hasAttachment() ? "isAttached " : "") + jslink + ">" +
+                      (mail.hasAttachment() ? "<img src=\"/susimail/icons/attach.png\" alt=\"\" title=\"" +
+                      _t("Message has an attachment") + "\">" : "&nbsp;") + "</td>\n" +
+                      // TODO: show mail fragment on tooltip or hover span
+                      "<td class=\"mailListSubject " + jslink + ">" + link + subj + "</a></td>\n" +
+                      "<td class=\"mailListFlagged ");
             if (mail.isNew() && !mail.isSpam())
                 out.print("new ");
             else if (mail.isSpam())
