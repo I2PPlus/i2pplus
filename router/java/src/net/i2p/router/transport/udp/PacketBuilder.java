@@ -1214,17 +1214,33 @@ class PacketBuilder {
             long tag = addr.getIntroducerTag(i);
             long exp = addr.getIntroducerExpiration(i);
             // let's not use an introducer on a privileged port, sounds like trouble
-            if (ikey == null ||
-                iaddr == null || tag <= 0 ||
+            if (iaddr == null) {
+                if (_log.shouldWarn())
+                    _log.warn("Cannot build a relay request for [" + state.getRemoteIdentity().calculateHash().toBase64().substring(0,6) +
+                               "] slot " + i + " -> no address");
+                continue;
+            }
+            if (ikey == null || tag <= 0) {
+                if (_log.shouldWarn())
+                    _log.warn("Cannot build a relay request for [" + state.getRemoteIdentity().calculateHash().toBase64().substring(0,6) +
+                               "] slot " + i + " -> no key/tag");
+                continue;
+            }
+            if  (exp > 0 && exp < cutoff) {
+                if (_log.shouldWarn())
+                    _log.warn("Cannot build a relay request for [" + state.getRemoteIdentity().calculateHash().toBase64().substring(0,6) +
+                               "] -> expired " + DataHelper.formatTime(exp) +
+                               " : " + Addresses.toString(iaddr.getAddress(), iport));
+                continue;
+            }
                 // we must use the same isValid() as EstablishmentManager.receiveRelayResponse().
                 // If an introducer isn't valid, we shouldn't send to it
-                !emgr.isValid(iaddr.getAddress(), iport) ||
-                (exp > 0 && exp < cutoff) ||
+            if (!emgr.isValid(iaddr.getAddress(), iport) ||
                 // FIXME this will have already failed in isValid() above, right?
                 (Arrays.equals(iaddr.getAddress(), _transport.getExternalIP()) && !_transport.allowLocal())) {
-                if (_log.shouldLog(Log.WARN))
-                    _log.warn("Cannot build a relay request for [" + state.getRemoteIdentity().calculateHash().toBase64().substring(0,6) +
-                              "] -> invalid introducer address: " + Addresses.toString(iaddr.getAddress(), iport));
+                if (_log.shouldWarn())
+                    _log.warn("Cannot build a relay request for " + state.getRemoteIdentity().calculateHash() +
+                              ", introducer address is invalid or blocklisted: " + Addresses.toString(iaddr.getAddress(), iport));
                 // TODO implement some sort of introducer banlist
                 continue;
             }
@@ -1262,7 +1278,7 @@ class PacketBuilder {
                 rv.add(pkt);
             else if (_log.shouldWarn())
                 _log.warn("Cannot build a relay request for [" + state.getRemoteIdentity().calculateHash().toBase64().substring(0,6) +
-                          "] -> no valid IPv4 address to send to: " + Addresses.toString(iaddr.getAddress(), iport));
+                          "] -> no valid address to send to: " + Addresses.toString(iaddr.getAddress(), iport));
         }
         return rv;
     }
@@ -1278,18 +1294,28 @@ class PacketBuilder {
         byte data[] = pkt.getData();
         int off = HEADER_SIZE;
 
-        // Must specify these if request is going over IPv6
+        // Must specify these if request is going over IPv6 for v4 or vice versa
         byte ourIP[];
         int ourPort;
         if (introHost instanceof Inet6Address) {
-            RouterAddress ra = _transport.getCurrentExternalAddress(false);
+            RouterAddress ra = _transport.getCurrentExternalAddress(true);
+            if (ra == null) {
+                ra = _transport.getCurrentExternalAddress(false);
             if (ra == null)
                 return null;
-            ourIP = ra.getIP();
-            if (ourIP == null)
+            }
+            byte[] ip = ra.getIP();
+            if (ip == null)
                 return null;
+            if (ip.length != 16) {
+                ourIP = ip;
             ourPort = _transport.getRequestedPort();
         } else {
+            ourIP = null;
+            ourPort = 0;
+        }
+        } else {
+            // TODO IPv4 introducer, IPv6 introduction
             ourIP = null;
             ourPort = 0;
         }
