@@ -522,22 +522,22 @@ input.download:active {
 }
 
 input.offline {
-  background: #000 url(/themes/susimail/images/offline.png) no-repeat 8px center;
-  background: url(/themes/susimail/images/offline.png) no-repeat 8px center, linear-gradient(to bottom, #001000, #000 5%, #000 95%, #001000);
+  background: #000 url(images/offline.svg) no-repeat 8px center;
+  background: url(images/offline.svg) no-repeat 8px center, linear-gradient(to bottom, #001000, #000 5%, #000 95%, #001000);
   padding: 7px 10px 7px 26px;
 }
 
 input.offline:hover {
-  background: #010 url(/themes/susimail/images/offline_hover.png) no-repeat 8px center;
-  background: url(/themes/susimail/images/offline_hover.png) no-repeat 8px center, linear-gradient(to bottom, #000, #010);
+  background: #010 url(images/offline_hover.svg) no-repeat 8px center;
+  background: url(images/offline_hover.svg) no-repeat 8px center, linear-gradient(to bottom, #000, #010);
 }
 
 input.offline:active {
-  background: #f60 url(/themes/susimail/images/offline_hover.png) no-repeat 8px center;
+  background: #f60 url(images/offline_active.svg) no-repeat 8px center;
 }
 
 input.list, input.moveto, #pagenav input.switchto {
-  background: #000 url(/themes/susimail/images/folder.png) no-repeat 8px center;
+  background: #000 url(images/folder.svg) no-repeat 8px center;
   background: var(--folder) no-repeat 8px center, linear-gradient(to bottom, #001000, #000 5%, #000 95%, #001000);
   padding: 7px 10px 7px 26px;
 }
@@ -568,18 +568,18 @@ input.forward:active {
 }
 
 input.login {
-  background: #000 url(/themes/susimail/images/login.png) no-repeat 8px center;
-  background: url(/themes/susimail/images/login.png) no-repeat 8px center, linear-gradient(to bottom, #001000, #000 5%, #000 95%, #001000);
+  background: #000 url(images/login.svg) no-repeat 8px center;
+  background: url(images/login.svg) no-repeat 8px center, linear-gradient(to bottom, #001000, #000 5%, #000 95%, #001000);
   padding: 7px 10px 7px 26px;
 }
 
 input.login:hover {
-  background: #010 url(/themes/susimail/images/login_hover.png) no-repeat 8px center;
-  background: url(/themes/susimail/images/login_hover.png) no-repeat 8px center, linear-gradient(to bottom, #000, #010);
+  background: #010 url(images/login_hover.svg) no-repeat 8px center;
+  background: url(images/login_hover.svg) no-repeat 8px center, linear-gradient(to bottom, #000, #010);
 }
 
 input.login:active {
-  background: #f60 url(/themes/susimail/images/login_hover.png) no-repeat 8px center;
+  background: #f60 url(images/login_active.svg) no-repeat 8px center;
 }
 
 input.logout {
