@@ -87,9 +87,6 @@ body {
 
 .routersummary img[src$="i2plogo.png"], .routersummary h3, .confignav, *::before, *::after, h1, h2, h3, #sb_internals, #sb_services, #sb_advanced,
 div.app, .sitemaplink, #sitemapcontainer {
-  -ms-user-select: none;
-  -moz-user-select: none;
-  -webkit-user-select: none;
   user-select: none;
 }
 
@@ -100,14 +97,7 @@ div.app, .sitemaplink, #sitemapcontainer {
   margin-bottom: -16px;
 }
 
-a:link, h2 a:link, #graphopts a:visited, #newsDisplay a:visited, .confignav a:visited, #sybilnav li a:visited {
-  color: #494;
-  text-decoration: none;
-  font-weight: bold;
-  word-wrap: break-word;
-}
-
-a:visited {
+a:link, a:visited {
   color: #494;
   text-decoration: none;
   font-weight: bold;
@@ -117,8 +107,6 @@ a:visited {
 a:hover, a:focus {
   color: #f60 !important;
   text-decoration: none;
-  font-weight: bold;
-  word-wrap: break-word;
   outline: none;
 }
 
@@ -249,14 +237,16 @@ pre {
   border-image-outset: 1px;
   box-shadow: inset 0 0 0 1px #700, inset 0 0 3px 3px #000, 0 0 0 2px #000;
   background: #000 url(/themes/console/images/itoopie_sm.png) 21px center no-repeat;
-  background: url(/themes/console/images/itoopie_sm.png) 21px center no-repeat, repeating-linear-gradient(to bottom, rgba(0,0,0,.6) 1px, rgba(0,16,0,.5) 2px, rgba(0,16,0,.5) 3px), url(images/camotile2.png);
-  background-size: auto 110px, 100% 100%, 175px auto;
+  background: url(/themes/console/images/itoopie_sm.png) 21px center no-repeat,
+              repeating-linear-gradient(to bottom, rgba(0,0,0,.6) 1px, rgba(0,16,0,.5) 2px, rgba(0,16,0,.5) 3px),
+              url(images/camotile2.png);
+  background-size: auto 110px, 100%, 175px;
   background-position: 21px calc(50% + 16px);
 }
 
 #servleterror .warning {
   padding-left: 70px;
-  background-size: auto 90px, 100% 100%, 175px auto;
+  background-size: auto 90px, 100%, 175px;
   background-position: 12px calc(50% + 16px);
 }
 
@@ -676,7 +666,7 @@ pre {
   background-image: url(/themes/console/images/svg/client.svg) !important;
   background-position: center center !important;
   background-repeat: no-repeat !important;
-  background-size: 16px 16px;
+  background-size: 16px;
 }
 
 #sb_localtunnels tr:last-child td:first-child {
@@ -685,19 +675,19 @@ pre {
 
 #sb_localtunnels td.tunnelServer {
   background-image: url(/themes/console/images/svg/server.svg) !important;
-  background-size: 16px 16px;
+  background-size: 16px;
 }
 
 #sb_localtunnels td.ping {
   background-image: url(/themes/console/images/svg/ping.svg) !important;
-  background-size: 16px 16px;
+  background-size: 16px;
 }
 
 #sb_localtunnels td:last-child {
   background-image: url(/themes/console/images/local_inprogress.png) !important;
   background-position: right 1px center !important;
   background-repeat: no-repeat !important;
-  background-size: 16px 16px;
+  background-size: 16px;
 }
 
 #sb_localtunnels td.tunnelReady {
@@ -1198,7 +1188,7 @@ a:active img[src="/themes/console/images/i2plogo.png"] {
 
 .main#tunnelmgr {
   min-width: 665px;
-  background-size: 3px 3px, 175px 175px;
+  background-size: 3px, 175px;
 }
 
 #main#embedded {
@@ -1390,7 +1380,7 @@ div.news hr {
   text-transform: none;
   opacity: .7;
   background: url(/themes/console/images/info/author_dark.png) left 2px center no-repeat;
-  background-size: 14px 14px;
+  background-size: 14px;
 }
 
 .newsDate {
@@ -1541,7 +1531,7 @@ div.messages {
   box-shadow: inset 0 0 1px 0 #990 !important;
   background: #000;
   background: url(images/infohelp.png) no-repeat 12px center, url(images/scarface.jpg) right bottom no-repeat #000;
-  background-size: 28px 28px, auto 90%;
+  background-size: 28px, auto 90%;
 }
 
 .main:not(#config_update) div.messages, #config_update #messages {
@@ -1554,13 +1544,13 @@ div.messages {
   animation: 2s hide-up 8s ease-out forwards;
   box-shadow: inset 0 0 1px 0 #f00, 0 0 2px 2px #000 !important;
   background: url(images/infohelp.png) no-repeat 12px center, url(/themes/snark/light/images/delete.png) right 6px top 6px no-repeat, url(images/scarface.jpg) right bottom no-repeat #000;
-  background-size: 28px 28px, 14px 14px, auto 90%;
+  background-size: 28px, 14px, auto 90%;
   background-blend-mode: normal, luminosity, normal;
 }
 
 .main:not(#config_update) div.messages:hover, #config_update #messages:hover {
   background: url(images/infohelp.png) no-repeat 12px center, url(/themes/snark/light/images/delete_hover.png) right 6px top 6px no-repeat, url(images/scarface.jpg) right bottom no-repeat #000;
-  background-size: 28px 28px, 14px 14px, auto 90%;
+  background-size: 28px, 14px, auto 90%;
   background-blend-mode: normal, normal, normal;
   cursor: crosshair;
 }
@@ -1790,7 +1780,7 @@ form[action="updategraphs"] {
   border: 1px solid #131;
   border-right: none;
   border-left: none;
-  background-size: 20px 20px !important;
+  background-size: 20px !important;
   padding: 5px 5px 5px 40px !important;
   background-color: #000800 !important;
   text-align: left;
@@ -1895,7 +1885,7 @@ td img {
   display: inline-block;
   width: 16px;
   height: 12px;
-  background-size: 10px auto, 100% 100% !important;
+  background-size: 10px auto, 100% !important;
 }
 
 .sortup, .sortdown {
@@ -2238,13 +2228,13 @@ h4.app, h4.app2 {
 
 h4.app {
   background: url(/themes/console/images/eepsite.png) 5px center no-repeat, repeating-linear-gradient(to right, rgba(0,0,0,.5) 1px, rgba(0,0,0,.5) 2px, rgba(0,16,0,.5) 3px), linear-gradient(to bottom, #1a261a, #223022 7%, #212f21 9%, #172317 21%, #091109 46%, #050d05 48%, #020602 52%, #010301 54%, #000000 56%), url(images/camotile2.png) #000 !important;
-  background-size: 18px 18px, 100% 100%, 100% 100%, 175px 175px !important;
+  background-size: 18px, 100%, 100%, 175px !important;
   background-blend-mode: normal, normal, exclusion, exclusion !important;
 }
 
 h4.app2 {
   background: url(/themes/console/images/world.png) 5px center no-repeat, repeating-linear-gradient(to right, rgba(0,0,0,.5) 1px, rgba(0,0,0,.5) 2px, rgba(0,16,0,.5) 3px), linear-gradient(to bottom, #1a261a, #223022 7%, #212f21 9%, #172317 21%, #091109 46%, #050d05 48%, #020602 52%, #010301 54%, #000000 56%), url(images/camotile2.png) #000 !important;
-  background-size: 18px 18px, 100% 100%, 100% 100%, 175px 175px !important;
+  background-size: 18px, 100%, 100%, 175px !important;
   background-blend-mode: normal, normal, exclusion, exclusion !important;
 }
 
@@ -2372,7 +2362,7 @@ button.control {
   min-width: 0;
   font-size: 0 !important;
   text-indent: -99999px !important;
-  background-size: 16px 16px, 100% 100% !important;
+  background-size: 16px, 100% !important;
 }
 
 button.accept.control {
@@ -2413,17 +2403,17 @@ button.add.control:active {
 
 button.delete.control {
   background: url(/themes/console/images/svg/nuke.svg) center center no-repeat, linear-gradient(to bottom, #001000, #000 5%, #000 95%, #001000);
-  background-size: 14px 14px;
+  background-size: 14px;
 }
 
 button.delete.control:hover, button.delete.control:focus {
   background: #000 url(/themes/console/images/svg/nuke.svg) center center no-repeat;
-  background-size: 14px 14px;
+  background-size: 14px;
 }
 
 button.delete.control:active {
   background: #f60 url(/themes/console/images/svg/nuke.svg) center center no-repeat;
-  background-size: 14px 14px;
+  background-size: 14px;
 }
 
 button.check.control {
@@ -2688,7 +2678,7 @@ select {
   border-radius: 2px;
   background: #000 url(images/dropdown.svg) right 10px center no-repeat !important;
   background: url("data:image/svg+xml,%3Csvg viewBox='0 0 64 64' xmlns='http://www.w3.org/2000/svg'%3E%3Cpath d='m5.29 17.93 26.71 28.14 26.71-28.14' fill='none' stroke='%23494' stroke-linecap='round' stroke-linejoin='round' stroke-width='10'/%3E%3C/svg%3E") right 10px center no-repeat, linear-gradient(to bottom, #001000, #000 5%, #000 95%, #001000) !important;
-  background-size: 10px auto, 100% 100% !important;
+  background-size: 10px, 100% !important;
   -moz-appearance: none;
   -webkit-appearance: none;
   appearance: none;
@@ -2736,7 +2726,7 @@ select:focus, select:hover {
 
 select:hover, select:focus, select:active {
   background: #000 url("data:image/svg+xml,%3Csvg viewBox='0 0 64 64' xmlns='http://www.w3.org/2000/svg'%3E%3Cpath d='m5.29 17.93 26.71 28.14 26.71-28.14' fill='none' stroke='%23f60' stroke-linecap='round' stroke-linejoin='round' stroke-width='10'/%3E%3C/svg%3E") right 10px center no-repeat !important;
-  background-size: 10px auto, 100% 100% !important;
+  background-size: 10px, 100% !important;
 }
 
 select::-ms-expand {
@@ -2811,7 +2801,7 @@ input[readonly]:focus {
   padding: 6px 5px 6px 26px !important;
   background: #000 url(/themes/console/images/buttons/user.png) 5px center no-repeat;
   background: url(/themes/console/images/buttons/user.png) 5px center no-repeat, linear-gradient(to bottom, #001800, #001000);
-  background-size: 16px 16px, 100% 100% !important;
+  background-size: 16px, 100% !important;
 }
 
 #consolepass input[name="name"]:focus, #externali2cp input[name="user"]:focus {
@@ -2822,7 +2812,7 @@ input[readonly]:focus {
   padding: 6px 5px 6px 22px !important;
   background: #000 url(/themes/console/images/buttons/password.png) 3px center no-repeat;
   background: url(/themes/console/images/buttons/password.png) 3px center no-repeat, linear-gradient(to bottom, #001800, #001000);
-  background-size: 16px 16px, 100% 100% !important;
+  background-size: 16px, 100% !important;
 }
 #consolepass input[name="nofilter_pw"]:focus, #externali2cp input[name="nofilter_pw"]:focus {
   background: #000 url(/themes/console/images/buttons/password.png) 3px center no-repeat !important;
@@ -2968,7 +2958,7 @@ h3#activejobs + ol li::before, #scheduledjobs + ol li::before, h3#readyjobs + ol
   vertical-align: text-top;
   content: "";
   background: url(/themes/console/images/svg/clock.svg) center center no-repeat;
-  background-size: 16px 16px;
+  background-size: 16px;
 }
 
 h3#activejobs + ol li::before {
@@ -2977,7 +2967,7 @@ h3#activejobs + ol li::before {
 
 h3#finishedjobs + ol li::before {
   background: url(/themes/console/images/svg/yes.svg) center center no-repeat;
-  background-size: 12px 12px;
+  background-size: 12px;
 }
 
 h3#readyjobs + ol li::before {
@@ -3098,7 +3088,7 @@ h3[id*="jobs"] {
   #jobstats tr:nth-last-child(n+2) td:first-child {
     padding-left: 28px !important;
     background: url(/themes/console/images/svg/yes.svg) 8px center no-repeat;
-    background-size: 12px 12px;
+    background-size: 12px;
   }
 }
 
@@ -3632,7 +3622,7 @@ a[name="chelp"]:hover, a[name="help"]:hover, a[name="chelp"]:active, a[name="hel
 
 .homelinkedit td.noicon {
   background: url(/themes/console/images/svg/search.svg) center center no-repeat;
-  background-size: 22px 22px;
+  background-size: 22px;
 }
 
 #config_homepage input.delete {
@@ -3794,7 +3784,7 @@ p#helptranslate {
   border-top: 1px solid #252;
   border-bottom: 1px solid #252;
   background: #000 url(/themes/console/images/info/notice.png) left 14px center no-repeat;
-  background-size: 28px 28px !important;
+  background-size: 28px !important;
 }
 
 #themeoptions input {
@@ -4129,7 +4119,7 @@ form[action="/createreseed"] > h3 {
 #exportfamily tr:nth-child(2) td:first-child {
   padding: 15px 15px 15px 50px;
   background: #000 url(/themes/console/images/info/export_key.png) 12px center no-repeat;
-  background-size: 28px 28px;
+  background-size: 28px;
 }
 
 #leavefamily {
@@ -4139,7 +4129,7 @@ form[action="/createreseed"] > h3 {
 #leavefamily tr:last-child td:first-child {
   padding: 15px 15px 15px 50px;
   background: #000 url(/themes/console/images/info/leave_family.png) 12px center no-repeat;
-  background-size: 28px 28px;
+  background-size: 28px;
 }
 
 /* configreseed */
@@ -4695,7 +4685,7 @@ input[name="logfilename"], input[name="logformat"], input[name="logdateformat"],
   height: 16px;
   display: inline-block;
   background: url(images/helplink.svg) center center no-repeat;
-  background-size: 16px 16px;
+  background-size: 16px;
   content: "";
 }
 
@@ -4749,44 +4739,44 @@ h3#servicedebug a, h3#graphinfo a {
 #tunnels h3.client {
   padding-left: 35px;
   background: url(/themes/console/images/svg/client.svg) 9px center no-repeat, linear-gradient(to bottom, rgba(0,0,0,0) 50%, #000 50%), repeating-linear-gradient(to right, rgba(0,0,0,.5) 1px, rgba(0,0,0,.5) 2px, rgba(0,16,0,.5) 3px), linear-gradient(to bottom, #005000, #000 75%) !important;
-  background-size: 18px 18px, 100% 100%, 100% 100%, 100% 100% !important;
+  background-size: 18px, 100%, 100%, 100% !important;
 }
 
 #tunnels h3.ping {
   padding-left: 35px;
   background: url(/themes/console/images/svg/ping.svg) 9px center no-repeat, linear-gradient(to bottom, rgba(0,0,0,0) 50%, #000 50%), repeating-linear-gradient(to right, rgba(0,0,0,.5) 1px, rgba(0,0,0,.5) 2px, rgba(0,16,0,.5) 3px), linear-gradient(to bottom, #005000, #000 75%) !important;
-  background-size: 18px 18px, 100% 100%, 100% 100%, 100% 100% !important;
+  background-size: 18px, 100%, 100%, 100% !important;
 }
 
 #tunnels h3#exploratory {
   padding-left: 35px;
   background: url(/themes/console/images/svg/globe.svg) 9px center no-repeat, linear-gradient(to bottom, rgba(0,0,0,0) 50%, #000 50%), repeating-linear-gradient(to right, rgba(0,0,0,.5) 1px, rgba(0,0,0,.5) 2px, rgba(0,16,0,.5) 3px), linear-gradient(to bottom, #005000, #000 75%) !important;
-  background-size: 18px 18px, 100% 100%, 100% 100%, 100% 100% !important;
+  background-size: 18px, 100%, 100%, 100% !important;
 }
 
 #tunnels h3.server {
   padding-left: 35px;
   background: url(/themes/console/images/svg/server.svg) 9px center no-repeat, linear-gradient(to bottom, rgba(0,0,0,0) 50%, #000 50%), repeating-linear-gradient(to right, rgba(0,0,0,.5) 1px, rgba(0,0,0,.5) 2px, rgba(0,16,0,.5) 3px), linear-gradient(to bottom, #005000, #000 75%) !important;
-  background-size: 18px 18px, 100% 100%, 100% 100%, 100% 100% !important;
+  background-size: 18px, 100%, 100%, 100% !important;
 }
 
 #tunnels h3#participating {
   padding-left: 35px;
   background: url(/themes/console/images/info/share.png) 6px center no-repeat, linear-gradient(to bottom, rgba(0,0,0,0) 50%, #000 50%), repeating-linear-gradient(to right, rgba(0,0,0,.5) 1px, rgba(0,0,0,.5) 2px, rgba(0,16,0,.5) 3px), linear-gradient(to bottom, #005000, #000 75%) !important;
-  background-size: 18px 18px, 100% 100%, 100% 100%, 100% 100% !important;
+  background-size: 18px, 100%, 100%, 100% !important;
 }
 
 #tunnels h3.dead {
   padding-left: 32px;
   background: url(/themes/console/images/info/rip.png) 6px center no-repeat, linear-gradient(to bottom, rgba(0,0,0,0) 50%, #000 50%), repeating-linear-gradient(to right, rgba(0,0,0,.5) 1px, rgba(0,0,0,.5) 2px, rgba(0,16,0,.5) 3px), linear-gradient(to bottom, #005000, #000 75%) !important;
-  background-size: 18px 18px, 100% 100%, 100% 100%, 100% 100% !important;
+  background-size: 18px, 100%, 100%, 100% !important;
 }
 
 #tunnels h3:last-of-type {
   padding-left: 35px;
   padding-bottom: 7px !important;
   background: url(/themes/console/images/svg/speedometer.svg) 9px center no-repeat, linear-gradient(to bottom, rgba(0,0,0,0) 50%, #000 50%), repeating-linear-gradient(to right, rgba(0,0,0,.5) 1px, rgba(0,0,0,.5) 2px, rgba(0,16,0,.5) 3px), linear-gradient(to bottom, #005000, #000 75%) !important;
-  background-size: 18px 18px, 100% 100%, 100% 100%, 100% 100% !important;
+  background-size: 18px, 100%, 100%, 100% !important;
 }
 
 .pending:nth-of-type(2)::before {
@@ -4882,7 +4872,7 @@ h3#servicedebug a, h3#graphinfo a {
   }
 
   span.inbound, span.outbound {
-    background-size: 12px 12px !important;
+    background-size: 12px !important;
   }
 
   #tunnels .tunneldisplay .cells .tunnel_cap {
@@ -4918,7 +4908,7 @@ h4.app img, h4.app2 img {
   height: 16px;
   float: right;
   background: url(/themes/susidns/dark/images/configure.png) center center no-repeat;
-  background-size: 16px 16px !important;
+  background-size: 16px !important;
   content: "";
 }
 
@@ -4946,7 +4936,7 @@ h4.app img, h4.app2 img {
 
 #logs a.delete::after {
   background: url(images/delete.png) center center no-repeat;
-  background-size: 12px 12px !important;
+  background-size: 12px !important;
 }
 
 #logs a.delete:hover::after {
@@ -5173,12 +5163,12 @@ ul#upnphelp li:last-child, #legal ul li:last-child {
 
 .main#help td.infohelp, .main#help td.infowarn {
   padding-left: 46px !important;
-  background-size: 24px 24px !important;
+  background-size: 24px !important;
 }
 
 #i2pupdates td.infohelp {
   padding: 15px 15px 15px 46px !important;
-  background-size: 24px 24px !important;
+  background-size: 24px !important;
 }
 
 #i2pupdates td.infohelp code {
@@ -5190,7 +5180,7 @@ ul#upnphelp li:last-child, #legal ul li:last-child {
   border: none;
   border-bottom: 1px solid #000;
   box-shadow: none;
-  background-size: 20px 20px !important;
+  background-size: 20px !important;
 }
 
 #help li {
@@ -5244,7 +5234,7 @@ ul#upnphelp li:last-child, #legal ul li:last-child {
   padding-left: 35px !important;
   background: url(/themes/console/images/info/question.png) 10px center no-repeat, linear-gradient(to bottom, #1a261a, #223022 7%, #212f21 9%, #172317 21%, #091109 49%, #050d05 50%, #020602 51%, #010301 53%, #000000 56%) !important;
   background: url(/themes/console/images/info/question.png) 10px center no-repeat, linear-gradient(to bottom, #0000 50%, #000 50%), repeating-linear-gradient(to right, #00000080 1px, #00000080 2px, #00100080 3px), linear-gradient(to bottom, #005000, #000 75%) !important;
-  background-size: 18px 18px, 100% 100% !important;
+  background-size: 18px, 100% !important;
   text-transform: none;
   font-size: 10.5pt !important;
   letter-spacing: 0;
@@ -5311,8 +5301,6 @@ ul#upnphelp li:last-child, #legal ul li:last-child {
 
 #faq code {
   user-select: all;
-  -moz-user-select: all;
-  -webkit-user-select: all;
 }
 
 #faq li code {
@@ -5642,6 +5630,14 @@ th > img[src^="/imagegen"], .identicon { /* scale down header images */
   background: #020;
 }
 
+.netdb_leases .netdb_tunnel {
+  margin: 0;
+  padding: 0;
+  border: none;
+  box-shadow: none;
+  background: none;
+}
+
 .netdb_leases .tunnel_id {
   min-width: 76px;
   text-align: center;
@@ -5731,8 +5727,6 @@ img.unknownflag {
 }
 
 #logs #enviro:hover {
-  -moz-user-select: all;
-  --webkit-user-select: all;
   user-select: all;
   cursor: text;
 }
@@ -6392,7 +6386,7 @@ h3#bannedpeers {
 
 #console .welcome h2 {
   background: url(/themes/console/images/eepsite.png) right 6px center no-repeat, repeating-linear-gradient(to right, rgba(0,0,0,.5) 1px, rgba(0,0,0,.5) 2px, rgba(0,16,0,.5) 3px), linear-gradient(to bottom, rgba(0,0,0,0) 50%, #000 50%), linear-gradient(to bottom, #005000, #000 75%) !important;
-  background-size: 24px 24px, 100% 100%, 100% 100% !important;
+  background-size: 24px, 100%, 100% !important;
   background-blend-mode: luminosity, normal, normal;
 }
 
@@ -6589,13 +6583,13 @@ input.search {
   box-shadow: inset 0 0 0 1px #000, inset 4px 4px 4px #000, 0 0 0 1px #000;
   background: #010 url(/themes/console/images/svg/search.svg) 6px center no-repeat;
   background: url(/themes/console/images/svg/search.svg) 6px center no-repeat, linear-gradient(to bottom, #001800, #001000);
-  background-size: 16px 16px, 100% 100% !important;
+  background-size: 16px, 100% !important;
   background-blend-mode: luminosity;
 }
 
 input.search:focus {
   background: #000 url(/themes/console/images/svg/search.svg) 6px center no-repeat !important;
-  background-size: 16px 16px, 100% 100% !important;
+  background-size: 16px, 100% !important;
   background-blend-mode: normal;
 }
 
@@ -7034,7 +7028,7 @@ h4 span[style="float: right;"] .unbold {
   border-left-width: 4px;
   border-right-width: 4px;
   background: url(/themes/console/images/svg/hardhat.svg) 4px center no-repeat, linear-gradient(to bottom, #020, #010);
-  background-size: auto 14px, 100% 100%;
+  background-size: 14px, 100%;
 }
 
 .lsdest.published {
@@ -7042,14 +7036,14 @@ h4 span[style="float: right;"] .unbold {
   background: url(/themes/console/images/svg/hardhat.svg) 4px center no-repeat,
               url(/themes/console/images/svg/globe.svg) 22px center no-repeat,
               linear-gradient(to bottom, #020, #010);
-  background-size: auto 14px, auto 12px, 100% 100%;
+  background-size: 14px, 12px, 100%;
 }
 
 .leaseset th:last-child a[href$="i2p/"] {
   padding-left: 22px;
   background: #020 url(/themes/console/images/svg/link.svg) 5px center no-repeat;
   background: url(/themes/console/images/svg/link.svg) 5px center no-repeat, linear-gradient(to bottom, #020, #010);
-  background-size: 12px 12px, 100% 100%;
+  background-size: 12px, 100%;
 }
 
 .addtobook {
@@ -7068,7 +7062,7 @@ h4 span[style="float: right;"] .unbold {
   display: inline-block;
   vertical-align: middle;
   background: url(/themes/susidns/dark/images/helper.svg) center center no-repeat;
-  background-size: 14px 14px;
+  background-size: 14px;
   content: "";
   border-left: 1px solid #242;
 }
@@ -7080,7 +7074,7 @@ h4 span[style="float: right;"] .unbold {
   padding-left: 8px;
   width: 24px;
   height: 30px;
-  background-size: 16px 16px;
+  background-size: 16px;
 }
 }
 
@@ -7269,24 +7263,24 @@ p.sybil_info, p.family, p.threatpoints, p.hashdist, p#sybil_totals, p.notfound {
   box-shadow: inset 0 0 0 1px #300;
   background: url(images/eye.svg) 8px center no-repeat;
   background: url(images/eye.svg) 8px center no-repeat, linear-gradient(to right, #000, #000800 80%, #001000);
-  background-size: 16px 16px, 100% 100%;
+  background-size: 16px, 100%;
 }
 
 p.sybil_info, p#sybil_totals {
   margin-bottom: 10px;
   padding-left: 35px;
   background-image: url(images/eye_threat.svg);
-  background-size: 20px 20px, 100% 100%;
+  background-size: 20px, 100%;
 }
 
 p.threatpoints {
   background: url(images/eye_threat.svg) 8px center no-repeat, linear-gradient(to right, #000, #000800 80%, #001000);
-  background-size: 20px 20px, 100% 100%;
+  background-size: 20px, 100%;
 }
 
 p.threatpoints.hot {
   background: url(images/eye_threat.svg) 8px center no-repeat, url(/themes/console/images/info/hot.png) right 2px center no-repeat, linear-gradient(to right, #000, #000800 80%, #001000);
-  background-size: 20px 20px, 24px 24px, 100% 100%;
+  background-size: 20px, 24px, 100%;
 }
 
 p.family {
@@ -7444,13 +7438,13 @@ h3#iptransport a::after, h3#advancedconfig a::after, #reseedsetup a::after {
   height: 16px;
   float: right;
   background: url(images/helplink.svg) center center no-repeat;
-  background-size: 16px 16px !important;
+  background-size: 16px !important;
   content: "";
 }
 
 h3#iptransport a:hover::after, h3#advancedconfig a:hover::after, #reseedsetup a:hover::after {
   background: url(images/helplink_hover.svg) center center no-repeat;
-  background-size: 16px 16px !important;
+  background-size: 16px !important;
 }
 
 @media screen and (min-width: 1500px) {
@@ -7458,10 +7452,10 @@ h3#iptransport a:hover::after, h3#advancedconfig a:hover::after, #reseedsetup a:
     margin: 0 0 -2px -4px;
     width: 20px;
     height: 20px;
-    background-size: 20px 20px !important;
+    background-size: 20px !important;
   }
   h3#iptransport a:hover::after, h3#advancedconfig a:hover::after, #reseedsetup a:hover::after {
-    background-size: 20px 20px !important;
+    background-size: 20px !important;
   }
   h3#advancedconfig a::after {
     margin: -1px -6px -2px -5px;
@@ -7532,7 +7526,7 @@ textarea#advancedsettings {
   border-bottom: 1px solid #252;
   border-top: 1px solid #252;
   background: #000 url(images/infohelp.png) 12px center no-repeat !important;
-  background-size: 28px 28px !important;
+  background-size: 28px !important;
 }
 
 #bannedpeercount {
@@ -7571,7 +7565,7 @@ p.infowarn, td.infowarn {
   border: 1px solid #252;
   box-shadow: inset 0 0 0 1px #000, inset 0 0 2px 1px #900;
   background: #000 url(images/infowarn.png) 12px center no-repeat !important;
-  background-size: 28px 28px !important;
+  background-size: 28px !important;
 }
 
 .infowarn#clientconf {
@@ -7809,7 +7803,7 @@ input#hideme {
   padding: 15px 5px 15px 50px;
   border: 1px solid #252;
   background: url(/themes/console/images/info/update.png) 12px center no-repeat, #000;
-  background-size: 28px 28px;
+  background-size: 28px;
 }
 
 #pluginupdater form {
@@ -7941,43 +7935,43 @@ p#enablefullstats {
 #bugreports td.infohelp {
   padding: 15px 15px 15px 50px;
   background: #000 url(/themes/console/images/info/bugreport.png) 12px center no-repeat !important;
-  background-size: 28px 28px !important;
+  background-size: 28px !important;
 }
 
 p#debugmode {
   padding: 15px 15px 15px 50px;
   background: #000 url(/themes/console/images/svg/bug.svg) 12px center no-repeat !important;
-  background-size: 28px 28px !important;
+  background-size: 28px !important;
 }
 
 p.sybilinfo {
   margin: 8px 0;
   padding: 15px 15px 15px 50px;
   background: #000 url(/themes/console/images/svg/sybil.svg) 12px center no-repeat !important;
-  background-size: 28px 28px !important;
+  background-size: 28px !important;
 }
 
 p.sybilinfo.experimental {
   background: #000 url(/themes/console/images/svg/experimental.svg) 12px center no-repeat !important;
-  background-size: 28px 28px !important;
+  background-size: 28px !important;
 }
 
 #bandwidthconfig tr:first-child .infohelp, #bandwidth.infohelp {
   padding: 15px 15px 15px 50px;
   background: #000 url(/themes/console/images/svg/speedometer.svg) 12px center no-repeat !important;
-  background-size: 28px 28px !important;
+  background-size: 28px !important;
 }
 
 #addkeyring td.infohelp {
   padding: 15px 15px 15px 50px;
   background: #000 url(/themes/console/images/svg/keys.svg) 12px center no-repeat !important;
-  background-size: 28px 28px !important;
+  background-size: 28px !important;
 }
 
 #oldhome td:first-child {
   padding: 15px 15px 15px 50px;
   background: url(/themes/console/images/svg/home.svg) 12px center no-repeat !important;
-  background-size: 28px 28px, 100% 100%, 100% 100% !important;
+  background-size: 28px, 100%, 100% !important;
 }
 
 #oldhome input[type=checkbox], #enablefullstats input[type=checkbox] {
@@ -7987,7 +7981,7 @@ p.sybilinfo.experimental {
 #floodfillconfig tr:first-child .infohelp {
   padding: 15px 15px 15px 50px;
   background: #000 url(/themes/console/images/info/floodfill_32x32.png) 12px center no-repeat !important;
-  background-size: 28px 28px !important;
+  background-size: 28px !important;
 }
 
 #floodfillconfig tr:nth-child(2) td {
@@ -8003,109 +7997,109 @@ p#clientconf.infohelp, p#webappconfigtext.infohelp {
   position: relative;
   z-index: 10;
   background: #000 url(/themes/console/images/svg/editclient.svg) 12px center no-repeat !important;
-  background-size: 28px 28px !important;
+  background-size: 28px !important;
 }
 
 p#pluginconfigtext {
   padding: 15px 15px 15px 50px;
   background: #000 url(/themes/console/images/svg/pluginconfig.svg) 12px center no-repeat !important;
-  background-size: 28px 28px !important;
+  background-size: 28px !important;
 }
 
 #plugininstall .infohelp {
   padding: 15px 15px 15px 50px;
   background: #000 url(/themes/console/images/svg/plugin.svg) 12px center no-repeat !important;
-  background-size: 28px 28px !important;
+  background-size: 28px !important;
 }
 
 #manualreseed tr:nth-last-child(2) td.infohelp {
   padding: 15px 15px 15px 50px;
   background: #000 url(/themes/console/images/svg/package.svg) 12px center no-repeat !important;
-  background-size: 28px 28px !important;
+  background-size: 28px !important;
 }
 
 #config_peers tr:nth-child(3) td.infohelp {
   padding: 15px 15px 15px 50px;
   background: #000 url(/themes/console/images/info/blocked.png) 12px center no-repeat !important;
-  background-size: 28px 28px !important;
+  background-size: 28px !important;
 }
 
 h3#shutdownrouter + p.infohelp {
   padding: 15px 15px 15px 50px;
   background: #000 url(/themes/console/images/info/power.png) 12px center no-repeat !important;
-  background-size: 28px 28px !important;
+  background-size: 28px !important;
 }
 
 h3#restartrouter + p.infohelp, #config_family .infohelp.needrestart {
   padding: 15px 15px 15px 50px;
   background: #000 url(/themes/console/images/info/reboot.png) 12px center no-repeat !important;
-  background-size: 28px 28px !important;
+  background-size: 28px !important;
 }
 
 h3#systray + p.infohelp {
   padding: 15px 15px 15px 50px;
   background: #000 url(/themes/console/images/info/systray.png) 12px center no-repeat !important;
-  background-size: 28px 28px !important;
+  background-size: 28px !important;
 }
 
 h3#servicedebug + p.infohelp {
   padding: 15px 15px 15px 50px;
   background: #000 url(/themes/console/images/svg/bug.svg) 12px center no-repeat !important;
-  background-size: 28px 28px !important;
+  background-size: 28px !important;
 }
 
 h3#browseronstart + p.infohelp, .infohelp#webbrowser {
   padding: 15px 15px 15px 50px;
   background: #000 url(/themes/console/images/info/launch_browser.png) 12px center no-repeat !important;
-  background-size: 28px 28px !important;
+  background-size: 28px !important;
 }
 
 .main#config_reseed p.infohelp {
   padding: 15px 15px 15px 50px;
   background: #000 url(/themes/console/images/svg/reseed.svg) 12px center no-repeat !important;
-  background-size: 28px 28px !important;
+  background-size: 28px !important;
 }
 
 .infohelp#flags {
   padding: 15px 15px 15px 50px;
   background: #000 url(/themes/console/images/info/flags.png) 12px center no-repeat !important;
-  background-size: 28px 28px !important;
+  background-size: 28px !important;
 }
 
 p#enablefullstats, p#gatherstats {
   padding: 15px 15px 15px 50px;
   background: #000 url(/themes/console/images/svg/stats.svg) 12px center no-repeat !important;
-  background-size: 28px 28px !important;
+  background-size: 28px !important;
 }
 
 #config_family .infohelp {
   padding: 15px 15px 15px 50px;
   background: #000 url(/themes/console/images/info/family.png) 12px center no-repeat !important;
-  background-size: 28px 28px !important;
+  background-size: 28px !important;
 }
 
 #consolepass tr:first-child td {
   padding: 15px 15px 15px 50px;
   background: #000 url(/themes/console/images/info/user_add.png) 12px center no-repeat;
-  background-size: 28px 28px, 100% 100% !important;
+  background-size: 28px, 100% !important;
 }
 
 form[action="events"] {
   padding: 10px 10px 10px 50px;
   background: #000 url(/themes/console/images/svg/logs.svg) 12px center no-repeat;
-  background-size: 28px 28px;
+  background-size: 28px;
 }
 
 #plugininstall tr:nth-child(3) td:nth-last-child(2), #manualreseed tr:nth-child(3) td:nth-last-child(2) {
   padding: 15px 15px 15px 50px;
   background: #000 url(/themes/console/images/svg/link.svg) 12px center no-repeat;
-  background-size: 28px 28px;
+  background-size: 28px;
 }
 
 #manualreseed tr:nth-child(5) td:nth-last-child(2), #plugininstall tr:nth-child(5) td:nth-last-child(2) {
   padding: 15px 15px 15px 50px;
   background: #000 url(/themes/console/images/svg/files.svg) 12px center no-repeat;
-  background-size: 28px 28px;
+  background-size: 28px;
 }
 
 /* responsive layout */
@@ -8279,7 +8273,7 @@ h4#sb_shutdownstatus span {
   color: #aa3;
   box-shadow: inset 0 0 0 1px #000, inset 0 0 2px 1px #bb0, inset 0 0 0 3px #000;
   background: repeating-linear-gradient(135deg, rgba(0,0,0,.5), rgba(0,0,0,.5) 10px, rgba(32,32,0,.5) 10px, rgba(32,32,0,.5) 20px) !important;
-  background-size: 400% 400%;
+  background-size: 400%;
 }
 
 .routersummary .hidden, .routersummary .vmcomm, .tunnelBuildStatus.hidden {
@@ -8300,7 +8294,7 @@ h4#sb_shutdownstatus span {
 
 #bandwidthTestRunning {
   background: repeating-linear-gradient(to right, rgba(0,0,0,.3), rgba(0,0,0,.3) 10px, rgba(0,32,0,.3) 10px, rgba(0,32,0,.3) 20px) #010;
-  background-size: 400% 400%;
+  background-size: 400%;
   animation: progress 120s 3s linear infinite both;
 }
 
@@ -8319,7 +8313,7 @@ h4#sb_shutdownstatus span {
 }
 
 .sb_netstatus::before {
-  background-size: 16px 16px !important;
+  background-size: 16px !important;
 }
 
 @supports not (-moz-appearance: none) {
@@ -8414,7 +8408,7 @@ h4#sb_shutdownstatus span {
 }
 
 @keyframes participating {
- 0%,49%,51%,100% {background: #5c5}
+  0%,49%,51%,100% {background: #5c5}
   50% {background: #373}
 }
 
@@ -8613,11 +8607,6 @@ h4#sb_shutdownstatus span {
 }
 }
 
-/*.tunnel_id:empty {
-  margin-right: -10px;
-}
-}*/
-
 #profile_defs td:first-child {
   padding: 3px 10px;
   border-right: 1px solid #131;
@@ -8768,8 +8757,6 @@ tr:hover .cells, #profiles tr:hover td {
 }
 
 th code {
-  -moz-user-select: all;
-  -webkit-user-select: all;
   user-select: all;
 }
 
@@ -9045,7 +9032,7 @@ th code {
   font-size: 11.5pt;
   background: url(/themes/console/images/info/debug.png) right 5px center no-repeat, linear-gradient(to bottom, #1a261a, #223022 7%, #212f21 9%, #172317 21%, #091109 49%, #050d05 50%, #020602 51%, #010301 53%, #000000 56%) !important;
   background: url(/themes/console/images/info/debug.png) right 5px center no-repeat, linear-gradient(to bottom, rgba(0,0,0,0) 50%, #000 50%), repeating-linear-gradient(to right, rgba(0,0,0,.5) 1px, rgba(0,16,0,.5) 2px, rgba(0,16,0,.4) 3px), linear-gradient(to bottom, #005000, #000 75%) !important;
-  background-size: 20px 20px, 100% 100%, 100% 100%, 100% 100% !important;
+  background-size: 20px, 100%, 100%, 100% !important;
   background-blend-mode: luminosity, normal, normal, normal;
 }
 
@@ -9167,8 +9154,6 @@ th code {
 }
 
 #bucketSet code {
-  -moz-user-select: all;
-  -webkit-user-select: all;
   user-select: all;
 }
 
@@ -9210,8 +9195,6 @@ th code {
   font-family: Droid Sans Mono, Noto Mono, DejaVu Sans Mono, Lucida Console, monospace;
   box-shadow: 0 0 0 1px #030, inset 0 0 0 1px #000;
   background: #010;
-  -moz-user-select: all;
-  -webkit-user-select: all;
   user-select: all;
 }
 
@@ -9373,8 +9356,6 @@ th code {
 
 .revision, .sha256, .unsignedmod {
   display: inline-block;
-  -moz-user-select: all;
-  -webkit-user-select: all;
   user-select: all;
 }
 
@@ -9428,13 +9409,13 @@ th code {
 
 .subheading.routerfiles {
   background: url(/themes/console/images/eepsite.png) right 5px center no-repeat, linear-gradient(to right, #000, #001000 40%) !important;
-  background-size: 16px auto, 100% 100% !important;
+  background-size: 16px, 100% !important;
   background-blend-mode: luminosity, normal;
 }
 
 .subheading.pluginfiles {
   background: url(/themes/console/images/plugin.png) right 5px center no-repeat, linear-gradient(to right, #000, #001000 40%) !important;
-  background-size: 16px auto, 100% 100% !important;
+  background-size: 16px, 100% !important;
   background-blend-mode: luminosity, normal;
 }
 
@@ -10240,13 +10221,11 @@ th.options, #externali2cp th {
 
 .routerid tt {
   color: #aa0;
-  -moz-user-select: all;
-  -webkit-user-select: all;
   user-select: all;
 }
 
 .routerid tt {
-  margin-left: 2px !Important;
+  margin-left: 2px !important;
   letter-spacing: .2em !important;
 }
 
@@ -10464,7 +10443,7 @@ b.suboption {
 #bandwidthconfig td:first-child:not(.infohelp):not(.optionsave) {
   padding: 0 50px 0 5px;
   background: #000800 url(/themes/console/images/info/arrow_right.png) right 12px center no-repeat !important;
-  background-size: 24px 24px !important;
+  background-size: 24px !important;
   background-blend-mode: luminosity;
 }
 
@@ -10488,7 +10467,7 @@ b.suboption {
 
 #bandwidthconfig .bw_out, #bandwidthconfig .bw_in, #bandwidthconfig .bw_share {
   margin: 10px 5px;
-  background-size: 24px 24px !important;
+  background-size: 24px !important;
 }
 
 #bandwidthconfig .optionsingle::after {
@@ -10990,33 +10969,33 @@ b.suboption {
 
 #config_reseed #reseedurl {
   background: #010 url(/themes/console/images/svg/link.svg) 10px center no-repeat !important;
-  background-size: 28px 28px, 100% 100%, 100% 100% !important;
+  background-size: 28px, 100%, 100% !important;
 }
 
 #config_reseed #reseedurl:hover {
   background: #002500 url(/themes/console/images/svg/link.svg) 10px center no-repeat !important;
-  background-size: 28px 28px !important;
+  background-size: 28px !important;
 }
 
 #config_reseed  #reseedzip {
   background: #010 url(/themes/console/images/svg/files.svg) 10px center no-repeat !important;
-  background-size: 28px 28px, 100% 100%, 100% 100% !important;
+  background-size: 28px, 100%, 100% !important;
 }
 
 #config_reseed #reseedzip:hover {
   background: #002500 url(/themes/console/images/svg/files.svg) 10px center no-repeat !important;
-  background-size: 28px 28px !important;
+  background-size: 28px !important;
 }
 
 #config_reseed #reseedcreatefile {
   background: #010 url(/themes/console/images/svg/package.svg) 10px center no-repeat !important;
-  background-size: 28px 28px, 100% 100%, 100% 100% !important;
+  background-size: 28px, 100%, 100% !important;
   text-align: justify;
 }
 
 #config_reseed #reseedcreatefile:hover {
   background: #002500 url(/themes/console/images/svg/package.svg) 10px center no-repeat !important;
-  background-size: 28px 28px !important;
+  background-size: 28px !important;
 }
 
 #reseedcreatefile p {
@@ -11157,13 +11136,13 @@ input[type=file] {
 #installPluginUrl td:first-child {
   background: url(/themes/console/images/svg/link.svg) 12px center no-repeat !important;
   padding: 15px 15px 15px 50px !important;
-  background-size: 28px 28px !important;
+  background-size: 28px !important;
 }
 
 #installPluginFile td:first-child {
   background: url(/themes/console/images/svg/files.svg) 12px center no-repeat !important;
   padding: 15px 15px 15px 50px;
-  background-size: 28px 28px !important;
+  background-size: 28px !important;
 }
 
 /* /configfamily */
@@ -11181,7 +11160,7 @@ input[type=file] {
   padding: 5px 5px 0 45px;
   box-shadow: inset 0 0 0 1px #010, inset 0 0 2px 1px #191939 !important;
   background: #010 url(/themes/console/images/info/label.png) 10px center no-repeat !important;
-  background-size: 28px 28px, 100% 100%, 100% 100% !important;
+  background-size: 28px, 100%, 100% !important;
 }
 
 #joinfamily tr:nth-child(3) td {
@@ -11196,7 +11175,7 @@ input[type=file] {
   padding: 5px 5px 0 45px;
   box-shadow: inset 0 0 0 1px #010, inset 0 0 2px 1px #191939 !important;
   background: #010 url(/themes/console/images/info/key.png) 10px center no-repeat !important;
-  background-size: 28px 28px, 100% 100%, 100% 100% !important;
+  background-size: 28px, 100%, 100% !important;
 }
 
 #joinfamily .optionsingle:hover, #joinfamily .optionsingle:hover tr, #joinfamily .optionsingle:hover td,
@@ -11212,13 +11191,13 @@ input[type=file] {
 #joinfamily .infohelp {
   box-shadow: inset 0 0 0 1px #000, inset 0 0 2px 1px #040 !important;
   background: #000 url(/themes/console/images/info/join_family.png) 12px center no-repeat !important;
-  background-size: 28px 28px !important;
+  background-size: 28px !important;
 }
 
 #newfamily .infohelp {
   box-shadow: inset 0 0 0 1px #000, inset 0 0 2px 1px #040 !important;
   background: #000 url(/themes/console/images/info/create_family.png) 12px center no-repeat !important;
-  background-size: 28px 28px !important;
+  background-size: 28px !important;
 }
 
 #config_service .infohelp {
@@ -11240,7 +11219,7 @@ input[type=file] {
   box-shadow: 0 0 0 1px #010, 0 0 0 2px rgba(0,0,0,.7);
   background: #020 url(/themes/console/images/svg/plugin.svg) 5px center no-repeat;
   background: url(/themes/console/images/svg/plugin.svg) 5px center no-repeat, linear-gradient(to bottom, #020, #000);
-  background-size: 14px 14px, 100% 100%;
+  background-size: 14px, 100%;
   background-blend-mode: luminosity;
 }
 
@@ -11618,8 +11597,6 @@ h3#pconfig {
 .netdb_info.host, .netdb_info.port {
   font-size: 90%;
   color: #bb0;
-  -moz-user-select: all;
-  -webkit-user-select: all;
   user-select: all;
 }
 
@@ -11844,14 +11821,14 @@ h3#pconfig {
   color: #ee9 !important;
   background: #020 url(/themes/console/images/buttons/cryptokey.png) 3px center no-repeat;
   background: url(/themes/console/images/buttons/cryptokey.png) 3px center no-repeat, linear-gradient(to bottom, #020, #010);
-  background-size: 14px 14px, 100% 100%;
+  background-size: 14px, 100%;
 }
 
 .signingkey.encryption {
   padding-left: 20px;
   background: #020 url(/themes/console/images/svg/lock.svg) 5px center no-repeat;
   background: url(/themes/console/images/svg/lock.svg) 5px center no-repeat, linear-gradient(to bottom, #020, #010);
-  background-size: 12px 12px, 100% 100%;
+  background-size: 12px, 100%;
 }
 
 .leaseset th:last-child, .leasesets_container .leaseset tr:nth-child(2) {
@@ -12290,7 +12267,7 @@ input[type=text]:focus::placeholder, #homesearch input.search:focus::placeholder
   vertical-align: middle;
   display: inline-block;
   background: url(/themes/console/images/svg/update.svg) center center no-repeat;
-  background-size: 26px 26px;
+  background-size: 26px;
   content: "";
   transform: rotate(0);
   animation: linear spin 3s forwards infinite;
@@ -12300,7 +12277,7 @@ input[type=text]:focus::placeholder, #homesearch input.search:focus::placeholder
   margin: 22px 15px 18px;
   width: 48px;
   height: 48px;
-  background-size: 48px 48px;
+  background-size: 48px;
 }
 
 @keyframes spin {
@@ -12369,7 +12346,7 @@ input[type=text]:focus::placeholder, #homesearch input.search:focus::placeholder
   height: 20px;
   display: inline-block;
   vertical-align: middle;
-  background-size: 14px 14px !important;
+  background-size: 14px !important;
 }
 
 #bandwidthconfig tr:nth-child(2) .net_bwrate::before {
@@ -12382,7 +12359,7 @@ input[type=text]:focus::placeholder, #homesearch input.search:focus::placeholder
 
 .net_bwrate::before, #bandwidthconfig tr:nth-child(4) .net_bwrate::before {
   background: url(/themes/console/images/info/share.png) left center no-repeat;
-  background-size: 18px 18px !important;
+  background-size: 18px !important;
 }
 
 #config_bandwidth tr:nth-last-child(2) .infohelp b {
@@ -12801,7 +12778,7 @@ h1.webapp {
 
 h1[class], h1 {
   padding-left: 64px;
-  background-size: 38px auto, 100% 100%, 100% 100%, 164px 164px !important;
+  background-size: 38px, 100%, 100%, 164px !important;
   background-blend-mode: difference, normal, exclusion, normal;
   background-position: 14px center !important
 }
@@ -12809,7 +12786,7 @@ h1[class], h1 {
 @media screen and (max-width: 1500px) {
   h1[class], h1 {
     padding-left: 50px;
-    background-size: 32px auto, 100% 100%, 100% 100%, 164px 164px !important;
+    background-size: 32px, 100%, 100%, 164px !important;
     background-position: 10px center !important
   }
 }
@@ -12836,7 +12813,7 @@ h1[class], h1 {
 .sitelink {
   padding: 0 3px 0 16px;
   background: rgba(0,64,0,.3) url(/themes/console/images/info/url.png) 2px center no-repeat;
-  background-size: 12px 12px, 100% 100% !important;
+  background-size: 12px, 100% !important;
 }
 
 .chatlink {
@@ -12847,13 +12824,13 @@ h1[class], h1 {
 .consolelink {
   padding: 0 3px 0 18px;
   background: rgba(0,64,0,.3) url(/themes/console/images/eepsite.png) 3px center no-repeat;
-  background-size: 12px 12px, 100% 100% !important;
+  background-size: 12px, 100% !important;
 }
 
 .sitelink.external {
   padding: 0 3px 0 18px;
   background: rgba(0,64,0,.3) url(/themes/console/images/world.png) 3px center no-repeat;
-  background-size: 12px 12px, 100% 100% !important;
+  background-size: 12px, 100% !important;
 }
 
 .sitelink:hover {
@@ -12977,67 +12954,67 @@ h1[class], h1 {
 #configurationhelp h2, #advancedsettings h2, #filterlist h2 {
   padding-left: 38px;
   background: url(/themes/console/images/info/configure.png) 10px center no-repeat, linear-gradient(to bottom, rgba(0,0,0,0) 50%, #000 50%), repeating-linear-gradient(to right, rgba(0,0,0,.5) 1px, rgba(0,0,0,.5) 2px, rgba(0,16,0,.5) 3px), linear-gradient(to bottom, #005000, #000 75%) !important;
-  background-size: 20px 20px, 100% 100%, 100% 100%, 100% 100% !important;
+  background-size: 20px, 100%, 100%, 100% !important;
 }
 
 #sidebarhelp h2, #reachabilityhelp h2 {
   padding-left: 38px;
   background: url(/themes/console/images/info/sidebar.png) 10px center no-repeat, linear-gradient(to bottom, rgba(0,0,0,0) 50%, #000 50%), repeating-linear-gradient(to right, rgba(0,0,0,.5) 1px, rgba(0,0,0,.5) 2px, rgba(0,16,0,.5) 3px), linear-gradient(to bottom, #005000, #000 75%) !important;
-  background-size: 20px 20px, 100% 100%, 100% 100%, 100% 100% !important;
+  background-size: 20px, 100%, 100%, 100% !important;
 }
 
 #reseedhelp h2 {
   padding-left: 38px;
   background: url(/themes/console/images/svg/reseed.svg) 10px center no-repeat, linear-gradient(to bottom, rgba(0,0,0,0) 50%, #000 50%), repeating-linear-gradient(to right, rgba(0,0,0,.5) 1px, rgba(0,0,0,.5) 2px, rgba(0,16,0,.5) 3px), linear-gradient(to bottom, #005000, #000 75%) !important;
-  background-size: 20px 20px, 100% 100%, 100% 100%, 100% 100% !important;
+  background-size: 20px, 100%, 100%, 100% !important;
 }
 
 #newuserguide h2 {
   padding-left: 38px;
   background: url(/themes/console/images/info/notice.png) 10px center no-repeat, linear-gradient(to bottom, rgba(0,0,0,0) 50%, #000 50%), repeating-linear-gradient(to right, rgba(0,0,0,.5) 1px, rgba(0,0,0,.5) 2px, rgba(0,16,0,.5) 3px), linear-gradient(to bottom, #005000, #000 75%) !important;
-  background-size: 20px 20px, 100% 100%, 100% 100%, 100% 100% !important;
+  background-size: 20px, 100%, 100%, 100% !important;
 }
 
 #troubleshoot h2 {
   padding-left: 38px;
   background: url(/themes/console/images/wrench_orange.png) 10px center no-repeat, linear-gradient(to bottom, rgba(0,0,0,0) 50%, #000 50%), repeating-linear-gradient(to right, rgba(0,0,0,.5) 1px, rgba(0,0,0,.5) 2px, rgba(0,16,0,.5) 3px), linear-gradient(to bottom, #005000, #000 75%) !important;
-  background-size: 20px 20px, 100% 100%, 100% 100%, 100% 100% !important;
+  background-size: 20px, 100%, 100%, 100% !important;
 }
 
 #legal h2 {
   padding-left: 38px;
   background: url(/themes/console/images/info/legal.png) 10px center no-repeat, linear-gradient(to bottom, rgba(0,0,0,0) 50%, #000 50%), repeating-linear-gradient(to right, rgba(0,0,0,.5) 1px, rgba(0,0,0,.5) 2px, rgba(0,16,0,.5) 3px), linear-gradient(to bottom, #005000, #000 75%) !important;
-  background-size: 20px 20px, 100% 100%, 100% 100%, 100% 100% !important;
+  background-size: 20px, 100%, 100%, 100% !important;
 }
 
 #changelog h2 {
   padding-left: 38px;
   background: url(/themes/console/images/svg/logs.svg) 10px center no-repeat, linear-gradient(to bottom, rgba(0,0,0,0) 50%, #000 50%), repeating-linear-gradient(to right, rgba(0,0,0,.5) 1px, rgba(0,0,0,.5) 2px, rgba(0,16,0,.5) 3px), linear-gradient(to bottom, #005000, #000 75%) !important;
-  background-size: 20px 20px, 100% 100%, 100% 100%, 100% 100% !important;
+  background-size: 20px, 100%, 100%, 100% !important;
 }
 
 #faq h2, #glossary h2 {
   padding-left: 38px;
   background: url(/themes/console/images/info/question.png) 10px center no-repeat, linear-gradient(to bottom, rgba(0,0,0,0) 50%, #000 50%), repeating-linear-gradient(to right, rgba(0,0,0,.5) 1px, rgba(0,0,0,.5) 2px, rgba(0,16,0,.5) 3px), linear-gradient(to bottom, #005000, #000 75%) !important;
-  background-size: 20px 20px, 100% 100%, 100% 100%, 100% 100% !important;
+  background-size: 20px, 100%, 100%, 100% !important;
 }
 
 #webhosting h2 {
   padding-left: 38px;
   background: url(/themes/console/images/server_32x32.png) 10px center no-repeat, linear-gradient(to bottom, rgba(0,0,0,0) 50%, #000 50%), repeating-linear-gradient(to right, rgba(0,0,0,.5) 1px, rgba(0,0,0,.5) 2px, rgba(0,16,0,.5) 3px), linear-gradient(to bottom, #005000, #000 75%) !important;
-  background-size: 20px 20px, 100% 100%, 100% 100%, 100% 100% !important;
+  background-size: 20px, 100%, 100%, 100% !important;
 }
 
 #themeoverride h2 {
   padding-left: 38px;
   background: url(/themes/console/images/svg/ui.svg) 10px center no-repeat, linear-gradient(to bottom, rgba(0,0,0,0) 50%, #000 50%), repeating-linear-gradient(to right, rgba(0,0,0,.5) 1px, rgba(0,0,0,.5) 2px, rgba(0,16,0,.5) 3px), linear-gradient(to bottom, #005000, #000 75%) !important;
-  background-size: 20px 20px, 100% 100%, 100% 100%, 100% 100% !important;
+  background-size: 20px, 100%, 100%, 100% !important;
 }
 
 #browserconfig h2 {
   padding-left: 38px;
   background: url(/themes/console/images/svg/firefox.svg) 10px center no-repeat, linear-gradient(to bottom, rgba(0,0,0,0) 50%, #000 50%), repeating-linear-gradient(to right, rgba(0,0,0,.5) 1px, rgba(0,0,0,.5) 2px, rgba(0,16,0,.5) 3px), linear-gradient(to bottom, #005000, #000 75%) !important;
-  background-size: 20px 20px, 100% 100%, 100% 100%, 100% 100% !important;
+  background-size: 20px, 100%, 100%, 100% !important;
 }
 
 #browserconfig ol {
@@ -13048,7 +13025,7 @@ h1[class], h1 {
 #tunnman h2 {
   padding-left: 38px;
   background: url(/themes/console/images/info/tunnels.png) 10px center no-repeat, linear-gradient(to bottom, rgba(0,0,0,0) 50%, #000 50%), repeating-linear-gradient(to right, rgba(0,0,0,.5) 1px, rgba(0,0,0,.5) 2px, rgba(0,16,0,.5) 3px), linear-gradient(to bottom, #005000, #000 75%) !important;
-  background-size: 20px 20px, 100% 100%, 100% 100%, 100% 100% !important;
+  background-size: 20px, 100%, 100%, 100% !important;
 }
 
 /* end TOC */
@@ -13277,7 +13254,7 @@ table.search {
   font-size: 10.5pt;
   border: 1px solid #252;
   background: url(/themes/console/images/eepsite.png) 8px center no-repeat, repeating-linear-gradient(to right, rgba(0,0,0,.5) 1px, rgba(0,0,0,.5) 2px, rgba(0,16,0,.5) 3px), linear-gradient(to bottom, #1a261a, #223022 7%, #212f21 9%, #172317 21%, #091109 46%, #050d05 48%, #020602 52%, #010301 54%, #000000 56%), url(images/camotile2.png) #000 !important;
-  background-size: 18px 18px, 100% 100%, 100% 100%, 175px 175px !important;
+  background-size: 18px, 100%, 100%, 175px !important;
   background-blend-mode: normal, normal, exclusion, exclusion !important;
 }
 
@@ -13295,25 +13272,25 @@ table.search {
 
 #sitemap h3:nth-of-type(2) {
   background: url(/themes/console/images/info_rhombus.png) 8px center no-repeat, repeating-linear-gradient(to right, rgba(0,0,0,.5) 1px, rgba(0,0,0,.5) 2px, rgba(0,16,0,.5) 3px), linear-gradient(to bottom, #1a261a, #223022 7%, #212f21 9%, #172317 21%, #091109 46%, #050d05 48%, #020602 52%, #010301 54%, #000000 56%), url(images/camotile2.png) #000 !important;
-  background-size: 18px 18px, 100% 100%, 100% 100%, 175px 175px !important;
+  background-size: 18px, 100%, 100%, 175px !important;
   background-blend-mode: normal, normal, exclusion, exclusion !important;
 }
 
 #sitemap h3:nth-of-type(3) {
   background: url(/themes/console/images/info/configure.png) 8px center no-repeat, repeating-linear-gradient(to right, rgba(0,0,0,.5) 1px, rgba(0,0,0,.5) 2px, rgba(0,16,0,.5) 3px), linear-gradient(to bottom, #1a261a, #223022 7%, #212f21 9%, #172317 21%, #091109 46%, #050d05 48%, #020602 52%, #010301 54%, #000000 56%), url(images/camotile2.png) #000 !important;
-  background-size: 18px 18px, 100% 100%, 100% 100%, 175px 175px !important;
+  background-size: 18px, 100%, 100%, 175px !important;
   background-blend-mode: normal, normal, exclusion, exclusion !important;
 }
 
 #sitemap h3:nth-of-type(4) {
   background: url(/themes/console/images/support.png) 8px center no-repeat, repeating-linear-gradient(to right, rgba(0,0,0,.5) 1px, rgba(0,0,0,.5) 2px, rgba(0,16,0,.5) 3px), linear-gradient(to bottom, #1a261a, #223022 7%, #212f21 9%, #172317 21%, #091109 46%, #050d05 48%, #020602 52%, #010301 54%, #000000 56%), url(images/camotile2.png) #000 !important;
-  background-size: 18px 18px, 100% 100%, 100% 100%, 175px 175px !important;
+  background-size: 18px, 100%, 100%, 175px !important;
   background-blend-mode: normal, normal, exclusion, exclusion !important;
 }
 
 #sitemap h3:nth-of-type(5) {
   background: url(/themes/console/images/world.png) 8px center no-repeat, repeating-linear-gradient(to right, rgba(0,0,0,.5) 1px, rgba(0,0,0,.5) 2px, rgba(0,16,0,.5) 3px), linear-gradient(to bottom, #1a261a, #223022 7%, #212f21 9%, #172317 21%, #091109 46%, #050d05 48%, #020602 52%, #010301 54%, #000000 56%), url(images/camotile2.png) #000 !important;
-  background-size: 18px 18px, 100% 100%, 100% 100%, 175px 175px !important;
+  background-size: 18px, 100%, 100%, 175px !important;
   background-blend-mode: normal, normal, exclusion, exclusion !important;
 }
 
@@ -13601,7 +13578,7 @@ th[aria-sort] {
   border: 1px solid #242;
   box-shadow: inset 0 0 0 1px #000, inset 0 0 2px 1px #030;
   background-image: url(/themes/console/images/svg/sybil.svg) !important;
-  background-size: 28px 28px;
+  background-size: 28px;
 }
 
 #sybilanalysis hr, #sybilanalysis i {
@@ -13640,18 +13617,18 @@ th[aria-sort] {
   display: inline-block;
   background: url(images/eye.svg) left center;
   background-repeat: no-repeat !important;
-  background-size: 16px 16px !important;
+  background-size: 16px !important;
   content: "";
 }
 
 #sybilnav ul li:hover::before {
   background: url(images/eye_hover.svg) left center;
-  background-size: 16px 16px !important;
+  background-size: 16px !important;
 }
 
 #sybilnav ul li:active::before {
   background: url(images/eye_active.svg) left center;
-  background-size: 16px 16px !important;
+  background-size: 16px !important;
 }
 
 #sybilnav ul li#runNew::before {
@@ -13660,12 +13637,12 @@ th[aria-sort] {
 
 #sybilnav ul li#configurePeriodic::before {
   background: url(/themes/susidns/dark/images/configure.png);
-  background-size: 14px 14px !important;
+  background-size: 14px !important;
 }
 
 #sybilnav ul li#configurePeriodic:hover::before {
   background: url(/themes/susidns/dark/images/configure_hover.png);
-  background-size: 14px 14px !important;
+  background-size: 14px !important;
 }
 
 #sybilnav ul li#configurePeriodic:active::before {
@@ -13783,7 +13760,7 @@ p#gatherstats {
 .statlist li.statsName b {
   padding-left: 20px;
   background: url(images/link.png) left top 1px no-repeat;
-  background-size: 14px 14px;
+  background-size: 14px;
 }
 
 .statlist li.statsName ul li b {
@@ -14035,8 +14012,6 @@ i {
   color: #ee9;
   border-radius: 3px;
   border: none;
-  -moz-user-select: all;
-  -webkit-user-select: all;
   user-select: all;
 }
 
@@ -14217,7 +14192,7 @@ h3 + table {
 
 #enablefullstats {
   background: #000 url(/themes/console/images/svg/stats.svg) 12px center no-repeat !important;
-  background-size: 28px 28px !important;
+  background-size: 28px !important;
 }
 
 /* TunnelPeerCount */
@@ -14225,10 +14200,10 @@ h3 + table {
 #tunnels #peercount {
   margin-bottom: -3px !important;
   background: url(/themes/console/images/info/tunnels.png) 6px center no-repeat,
-        linear-gradient(to bottom, rgba(0,0,0,0) 50%, #000 50%),
-        repeating-linear-gradient(to right, rgba(0,0,0,.5) 1px, rgba(0,0,0,.5) 2px, rgba(0,16,0,.5) 3px),
-        linear-gradient(to bottom, #005000, #000 75%) !important;
-  background-size: 20px 20px, 100% 100%, 100% 100%, 100% 100% !important;
+              linear-gradient(to bottom, rgba(0,0,0,0) 50%, #000 50%),
+              repeating-linear-gradient(to right, rgba(0,0,0,.5) 1px, rgba(0,0,0,.5) 2px, rgba(0,16,0,.5) 3px),
+              linear-gradient(to bottom, #005000, #000 75%) !important;
+  background-size: 20px, 100%, 100%, 100% !important;
 }
 
 #tunnels #peercount img, #tunnels #participating img {
@@ -14250,7 +14225,7 @@ h3 + table {
   height: 16px;
   vertical-align: middle;
   background: url(images/refresh.png) center center no-repeat;
-  background-size: 16px 16px !important;
+  background-size: 16px !important;
 }
 
 #tunnels #participating a:hover::after, #tunnels #participating a:focus::after,
@@ -14406,11 +14381,11 @@ h3 + table {
   display: inline-block;
   vertical-align: middle;
   background: url(images/in.png) center center no-repeat;
-  background-size: 14px 14px !important;
+  background-size: 14px !important;
 }
 
 .inbound.small, .outbound.small {
-  background-size: 12px 12px !important;
+  background-size: 12px !important;
   background-position: center center !important;
 }
 
@@ -14637,7 +14612,7 @@ h1, .main h2, h4.app, h4.app2, .main h3 {
   height: 16px;
   display: inline-block;
   font-size: 0 !important;
-  background-size: 16px 16px !important;
+  background-size: 16px !important;
 }
 
 #profilelist .fast {
@@ -14698,11 +14673,11 @@ h1, .main h2, h4.app, h4.app2, .main h3 {
   #profilelist .fast.integrated, #profilelist .highcap.integrated, #profilelist .standard.integrated {
     width: 50px;
     height: 14px;
-    background-size: 14px 14px !important;
+    background-size: 14px !important;
   }
   #profilelist .fast, #profilelist .highcap.integrated, #profilelist .standard.integrated {
     background-position: calc(50% - 8px) center, calc(50% + 8px) center !important;
-    background-size: 14px 14px !important;
+    background-size: 14px !important;
   }
   .profilegroup::before {
     width: 18px;
