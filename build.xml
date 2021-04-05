@@ -37,7 +37,6 @@
         <echo message="  javadoc                                      Create javadocs for project &#10140; ./build/javadoc &amp; ./javadoc.zip" />
         <echo message="  javadoc-test                                 Javadocs for unit test classes &#10140; ./build/javadoc-test" />
         <echo message="  justBOB                                      Build a standalone BOB-one.jar &#10140; ./BOB-one.jar" />
-        <echo message="  osxLauncher                                  Build Mac OS X router/GUI launcher (requires OSX)" />
         <echo message="  pkg                                          Run &apos;distclean&apos; then package everything up (updater, installer)" />
         <echo message="  pkg-portable-win32                           Build a minimal, portable install for Win32 &#10140; ./portable-win32.zip" />
         <echo message="  poupdate                                     Update the .po files for translators" />
@@ -68,7 +67,6 @@
         <echo message="  signed-updater200WithJavadocAndJetty         Signed Updater (pack200) + javadocs + Jetty &#10140; ./i2pupdate.su3" />
         <echo message="  signed-updater200WithJavadoc                 Signed Updater (pack200) + javadocs &#10140; ./i2pupdate.su3" />
         <echo message="  signed-updater200withJetty                   Signed Updater (pack200) + Jetty" />
-        <!-- <echo message="  bbLauncher                                   Build Browser Bundle router launcher" /> -->
         <!-- <echo message="  debianrepo                                   Build a Debian repository (reprepro required)" /> -->
         <!-- <echo message="  syndie                                       Generate a standalone syndie install" /> -->
     </target>
@@ -310,28 +308,6 @@
             <arg value="+%s" />
         </exec>
         <echo message="Epoch is: ${epoch}" />
-    </target>
-
-    <target name="bbLauncher" depends="build">
-        <sequential>
-            <exec executable="./sbt" dir="launchers" failonerror="true">
-                <arg value="browserbundle:clean" />
-            </exec>
-            <exec executable="./sbt" dir="launchers" failonerror="true">
-                <arg value="browserbundle:assembly" />
-            </exec>
-        </sequential>
-    </target>
-
-    <target name="osxLauncher" depends="build,preppkg-osx">
-        <sequential>
-            <exec executable="./sbt" dir="launchers" failonerror="true">
-                <arg value="macosx:cleanAllTask" />
-            </exec>
-            <exec executable="./sbt" dir="launchers" failonerror="true">
-                <arg value="macosx:buildAppBundleTask" />
-            </exec>
-        </sequential>
     </target>
 
     <target name="buildBOB" depends="buildMinistreaming" >
