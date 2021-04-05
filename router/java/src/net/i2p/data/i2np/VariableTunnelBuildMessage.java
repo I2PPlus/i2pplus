@@ -58,8 +58,8 @@ public class VariableTunnelBuildMessage extends TunnelBuildMessage {
     @Override
     public String toString() {
         StringBuilder buf = new StringBuilder(64);
-        buf.append("VariableTunnelBuildMessage" +
-                   "; Records: ").append(getRecordCount());
+        buf.append("VariableTunnelBuildMessage [ID: ").append(getUniqueId())
+           .append("] -> ").append(getRecordCount()).append(" records");
         return buf.toString();
     }
 }

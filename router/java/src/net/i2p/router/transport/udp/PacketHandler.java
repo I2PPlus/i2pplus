@@ -48,7 +48,11 @@ class PacketHandler {
     private static final int MIN_NUM_HANDLERS = 1;  // if < 32MB
 //    private static final int MAX_NUM_HANDLERS = 1;
     private static final int MAX_NUM_HANDLERS = Math.min(SystemVersion.getCores(), 3);
-    /** let packets be up to 30s slow */
+    /**
+     *  Let packets be up to this much skewed.
+     *  This is the same limit as in InNetMessagePool's MessageValidator.
+     *  There's no use making it any larger, as messages will just be thrown out there.
+     */
     private static final long GRACE_PERIOD = Router.CLOCK_FUDGE_FACTOR + 30*1000;
     private static final long MAX_SKEW = 90*24*60*60*1000L;
 

@@ -532,13 +532,14 @@ class BuildHandler implements Runnable {
                     _currentLookups.set(1);
                 if (_log.shouldLog(Log.DEBUG))
                     _log.debug("Request  handled; looking up next peer [" + nextPeer.toBase64().substring(0,6)
-                               + "] - Lookups: " + current + " / " + limit + req);
+                               + "] \n* From: " + from + " [MsgID: " +  state.msg.getUniqueId() + "]\n* Lookups: " + current + " / " + limit + req);
                 _context.netDb().lookupRouterInfo(nextPeer, new HandleReq(_context, state, req, nextPeer),
                                               new TimeoutReq(_context, state, req, nextPeer), NEXT_HOP_LOOKUP_TIMEOUT);
             } else {
                 _currentLookups.decrementAndGet();
                 if (_log.shouldLog(Log.WARN))
-                    _log.warn("Dropping next hop lookup (limit: " + limit + " / " + PERCENT_LOOKUP_LIMIT + "%) " + req);
+                    _log.warn("Dropping next hop lookup (limit: " + limit + " / " + PERCENT_LOOKUP_LIMIT + "%) " +
+                    "\n* From: " + from + "[MsgID: " +  state.msg.getUniqueId() + "]" + req);
                 _context.statManager().addRateData("tunnel.dropLookupThrottle", 1);
                 if (from != null)
                     _context.commSystem().mayDisconnect(from);
@@ -550,7 +551,8 @@ class BuildHandler implements Runnable {
             long handleTime = System.currentTimeMillis() - beforeHandle;
             if (_log.shouldLog(Log.DEBUG))
                 _log.debug("Request handled after " + handleTime + "ms / " + decryptTime + "ms / " + lookupTime + "ms / " + timeSinceReceived + "ms" +
-                           " and we know the next peer [" + nextPeer.toBase64().substring(0,6) + "]" + req);
+                           " and we know the next peer [" + nextPeer.toBase64().substring(0,6) + "]" + 
+                           "\n* From: " + from + "[MsgID: " +  state.msg.getUniqueId() + "]" + req);
             return handleTime;
         }
     }
@@ -622,8 +624,14 @@ class BuildHandler implements Runnable {
             _currentLookups.decrementAndGet();
             getContext().statManager().addRateData("tunnel.rejectTimeout", 1);
             getContext().statManager().addRateData("tunnel.buildLookupSuccess", 0);
-            if (_log.shouldLog(Log.WARN))
-                _log.warn("Next hop lookup failure " + _req);
+            if (_log.shouldLog(Log.WARN)) {
+                Hash from = _state.fromHash;
+                if (from == null && _state.from != null)
+                    from = _state.from.calculateHash();
+                _log.warn("Next hop lookup failure: " + _req
+                          + " From: " + from
+                          + " ID: " + _state.msg.getUniqueId());
+            }
 
             // ???  should we blame the peer here?   getContext().profileManager().tunnelTimedOut(_nextPeer);
             getContext().messageHistory().tunnelRejected(_state.fromHash, new TunnelId(_req.readReceiveTunnelId()), _nextPeer,
@@ -753,7 +761,7 @@ class BuildHandler implements Runnable {
             timeDiff = roundedNow - time;
             maxAge = MAX_REQUEST_AGE;
         }
-        if (timeDiff > MAX_REQUEST_AGE) {
+        if (timeDiff > maxAge) {
             _context.statManager().addRateData("tunnel.rejectTooOld", 1);
             if (_log.shouldLog(Log.WARN))
                 _log.warn("Dropping build request (too old)... replay attack? " + DataHelper.formatDuration(timeDiff) + ": " + req);
@@ -1067,7 +1075,7 @@ class BuildHandler implements Runnable {
                             fh = from.calculateHash();
                         if (fh != null && _requestThrottler.shouldThrottle(fh)) {
                             if (_log.shouldLog(Log.WARN))
-                                _log.warn("Dropping tunnel request (throttled), previous hop -> [" + fh.toBase64().substring(0,6) + "]");
+                                _log.warn("Dropping tunnel request [ID: " + reqId + "] (throttled), previous hop -> [" + fh.toBase64().substring(0,6) + "]");
                             _context.statManager().addRateData("tunnel.dropReqThrottle", 1);
                             accept = false;
                         }
