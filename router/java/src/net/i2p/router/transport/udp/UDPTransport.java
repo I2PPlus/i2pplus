@@ -2886,6 +2886,8 @@ public class UDPTransport extends TransportImpl implements TimedWeightedPriority
             // must be published with '6' cap
             if (!_context.getProperty(PROP_TRANSPORT_CAPS, ENABLE_TRANSPORT_CAPS))
                 return false;
+            if (isIPv6Firewalled())
+                return true;
             switch (status) {
                 case REJECT_UNSOLICITED:
                 case DIFFERENT:
@@ -2898,6 +2900,8 @@ public class UDPTransport extends TransportImpl implements TimedWeightedPriority
         } else {
             if (config == IPV6_ONLY)
                 return false;
+            if (isIPv4Firewalled())
+                return true;
         switch (status) {
             case REJECT_UNSOLICITED:
             case DIFFERENT:
@@ -2937,6 +2941,8 @@ public class UDPTransport extends TransportImpl implements TimedWeightedPriority
             // must be published with '6' cap
             if (!_context.getProperty(PROP_TRANSPORT_CAPS, ENABLE_TRANSPORT_CAPS))
                 return false;
+            if (isIPv6Firewalled())
+                return true;
             switch (status) {
                 case REJECT_UNSOLICITED:
                 case DIFFERENT:
@@ -2950,6 +2956,8 @@ public class UDPTransport extends TransportImpl implements TimedWeightedPriority
         } else {
             if (config == IPV6_ONLY)
                 return false;
+            if (isIPv4Firewalled())
+                return true;
         switch (status) {
             case REJECT_UNSOLICITED:
             case DIFFERENT:
