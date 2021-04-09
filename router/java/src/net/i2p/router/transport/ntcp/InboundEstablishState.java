@@ -720,7 +720,7 @@ class InboundEstablishState extends EstablishBase implements NTCP2Payload.Payloa
     protected synchronized void fail(String reason, Exception e, boolean bySkew) {
         super.fail(reason, e, bySkew);
         if (_handshakeState != null) {
-            if (_log.shouldWarn())
+            if (_log.shouldDebug())
                 _log.warn("State at Handshake failure: " + _handshakeState.toString());
             _handshakeState.destroy();
         }
