@@ -840,16 +840,19 @@ input.switchto, input.moveto {
   padding: 7px 10px 7px 26px;
   background: #000 url(/themes/susimail/images/folder.png) 8px center no-repeat;
   background: var(--folder) 8px center no-repeat, linear-gradient(to bottom, #001000, #000 5%, #000 95%, #001000);
+  background-size: 14px, 100% !important;
 }
 
 input.switchto:hover, input.moveto:hover {
   background: #010 url(images/folder_hover.svg) 8px center no-repeat;
   background: var(--folder_hover) 8px center no-repeat, linear-gradient(to bottom, #000, #010);
+  background-size: 14px, 100% !important;
 }
 
 input.switchto:active, input.moveto:active {
   background: #f60 url(images/folder_active.svg) 8px center no-repeat;
   background: #f60 var(--folder_active) 8px center no-repeat;
+  background-size: 14px;
 }
 
 input[type=submit]:hover, input[type=reset]:hover, input[type=submit]:focus, input[type=reset]:focus,
