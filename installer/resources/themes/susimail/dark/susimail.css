@@ -457,8 +457,12 @@ input[type=submit], input[type=reset], #settings, .topbuttons .fakebutton {
   background-size: 12px, 100% !important;
 }
 
-.topbuttons .fakebutton, .topbuttons input[type=submit] {
+/*.topbuttons .fakebutton, .topbuttons input[type=submit], input.configure {
   background-size: 14px, 100% !important;
+}*/
+
+.topbuttons input.logout {
+  background-size: 16px, 100% !important;
 }
 
 input.cancel, #nukemail input.clearselection {
@@ -498,24 +502,24 @@ input.delete, input.delete_attachment, input.really_delete {
   padding: 7px 10px 7px 26px;
   background: #000 url(images/delete.svg) 8px center no-repeat;
   background: url(images/delete.svg) 8px center no-repeat, linear-gradient(to bottom, #001000, #000 5%, #000 95%, #001000);
-  background-size: 16px, 100%;
+  background-size: 16px, 100% !important;
 }
 
 input.delete:hover, input.delete_attachment:hover, input.really_delete:hover {
   background: #010 url(images/delete_hover.svg) 8px center no-repeat;
   background: url(images/delete_hover.svg) 8px center no-repeat, linear-gradient(to bottom, #000, #010);
-  background-size: 16px, 100%;
+  background-size: 16px, 100% !important;
 }
 
 input.delete:active, input.delete_attachment:active, input.really_delete:active {
   background: #f60 url(images/delete_active.svg) 8px center no-repeat;
-  background-size: 16px, 100%;
+  background-size: 16px !important;
 }
 
 input.download {
+  padding: 7px 10px 7px 26px;
   background: #000 url(/themes/console/images/buttons/download.png) 8px center no-repeat;
   background: url(/themes/console/images/buttons/download.png) 8px center no-repeat, linear-gradient(to bottom, #001000, #000 5%, #000 95%, #001000);
-  padding: 7px 10px 7px 26px;
 }
 
 input.download:hover {
@@ -560,24 +564,27 @@ input.list:active, input.moveto:active, #pagenav input.switchto:active {
 }
 
 input.forward {
+  padding: 7px 10px 7px 26px;
   background: #000 url(images/forward.svg) 8px center no-repeat;
   background: url(images/forward.svg) 8px center no-repeat, linear-gradient(to bottom, #001000, #000 5%, #000 95%, #001000);
-  padding: 7px 10px 7px 26px;
+  background-size: 14px, 100% !important;
 }
 
 input.forward:hover {
   background: #010 url(images/forward_hover.svg) 8px center no-repeat;
   background: url(images/forward_hover.svg) 8px center no-repeat, linear-gradient(to bottom, #000, #010);
+  background-size: 14px, 100% !important;
 }
 
 input.forward:active {
   background: #f60 url(images/forward_active.svg) 8px center no-repeat;
+  background-size: 14px !important;
 }
 
 input.login {
+  padding: 7px 10px 7px 26px;
   background: #000 url(images/login.svg) 8px center no-repeat;
   background: url(images/login.svg) 8px center no-repeat, linear-gradient(to bottom, #001000, #000 5%, #000 95%, #001000);
-  padding: 7px 10px 7px 26px;
 }
 
 input.login:hover {
@@ -678,48 +685,57 @@ input.markall:active {
 }
 
 input.new {
+  padding: 7px 10px 7px 26px;
   background: #000 url(images/compose.svg) 8px center no-repeat;
   background: url(images/compose.svg) 8px center no-repeat, linear-gradient(to bottom, #001000, #000 5%, #000 95%, #001000);
-  padding: 7px 10px 7px 26px;
+  background-size: 14px, 100% !important;
 }
 
 input.new:hover {
   background: #010 url(images/compose_hover.svg) 8px center no-repeat;
   background: url(images/compose_hover.svg) 8px center no-repeat, linear-gradient(to bottom, #000, #010);
+  background-size: 14px, 100% !important;
 }
 
 input.new:active {
   background: #f60 url(images/compose_active.svg) 8px center no-repeat;
+  background-size: 14px, 100% !important;
 }
 
 input.reply {
+  padding: 7px 10px 7px 26px;
   background: #000 url(images/reply.svg) 8px center no-repeat;
   background: url(images/reply.svg) 8px center no-repeat, linear-gradient(to bottom, #001000, #000 5%, #000 95%, #001000);
-  padding: 7px 10px 7px 26px;
+  background-size: 14px, 100% !important;
 }
 
 input.reply:hover {
   background: #010 url(images/reply_hover.svg) 8px center no-repeat;
   background: url(images/reply_hover.svg) 8px center no-repeat, linear-gradient(to bottom, #000, #010);
+  background-size: 14px, 100% !important;
 }
 
 input.reply:active {
   background: #f60 url(images/reply_active.svg) 8px center no-repeat;
+  background-size: 14px, 100% !important;
 }
 
 input.replyall {
+  padding: 7px 10px 7px 26px;
   background: #000 urlimages/replyall.svg) 8px center no-repeat;
   background: url(images/replyall.svg) 8px center no-repeat, linear-gradient(to bottom, #001000, #000 5%, #000 95%, #001000);
-  padding: 7px 10px 7px 26px;
+  background-size: 14px, 100% !important;
 }
 
 input.replyall:hover {
   background: #010 url(images/replyall_hover.svg) 8px center no-repeat;
   background: url(images/replyall_hover.svg) 8px center no-repeat, linear-gradient(to bottom, #000, #010);
+  background-size: 14px, 100% !important;
 }
 
 input.replyall:active {
   background: #f60 url(images/replyall_active.svg) 8px center no-repeat;
+  background-size: 14px !important;
 }
 
 input.markall {
