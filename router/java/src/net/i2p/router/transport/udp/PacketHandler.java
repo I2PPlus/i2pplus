@@ -704,12 +704,12 @@ class PacketHandler {
                     }
                     _context.statManager().addRateData("udp.destroyedInvalidSkew", 0-skew);
                     if (_log.shouldWarn())
-                        _log.warn("Dropped connection - packet [" + packet + "] too far in the future: " + new Date(sendOn) +
-                                  "; PeerState: " + state);
+                        _log.warn("Dropped connection - packet too far in the future " + packet + "; PeerState: " + state +
+                                  "\n* Date: " + new Date(sendOn));
                 } else {
                     if (_log.shouldWarn())
-                        _log.warn("Packet [" + packet + "] too far in the future: " + new Date(sendOn) +
-                                  "; PeerState: " + state);
+                        _log.warn("Packet too far in the future " + packet + "; PeerState: " + state +
+                                  "\n* Date: " + new Date(sendOn));
                 }
                 return;
             }
@@ -726,7 +726,7 @@ class PacketHandler {
                     _state = 47;
                     if (auth == AuthType.BOBINTRO) {
                         if (_log.shouldLog(Log.WARN))
-                            _log.warn("Dropping type " + type + " auth " + auth + ": " + packet);
+                            _log.warn("Dropping type " + type + " auth " + auth + packet);
                         break;
                     }
                     _establisher.receiveSessionRequest(from, reader);
@@ -736,7 +736,7 @@ class PacketHandler {
                     _state = 48;
                     if (auth != AuthType.SESSION) {
                         if (_log.shouldLog(Log.WARN))
-                            _log.warn("Dropping type " + type + " auth " + auth + ": " + packet);
+                            _log.warn("Dropping type " + type + " auth " + auth + packet);
                         break;
                     }
                     _establisher.receiveSessionConfirmed(from, reader);
@@ -747,7 +747,7 @@ class PacketHandler {
                     // this is the only type that allows BOBINTRO
                     if (auth != AuthType.BOBINTRO && auth != AuthType.SESSION) {
                         if (_log.shouldLog(Log.WARN))
-                            _log.warn("Dropping type " + type + " auth " + auth + ": " + packet);
+                            _log.warn("Dropping type " + type + " auth " + auth + packet);
                         break;
                     }
                     _establisher.receiveSessionCreated(from, reader);
@@ -757,13 +757,13 @@ class PacketHandler {
                     _state = 50;
                     if (auth != AuthType.SESSION) {
                         if (_log.shouldLog(Log.WARN))
-                            _log.warn("Dropping type " + type + " auth " + auth + ": " + packet);
+                            _log.warn("Dropping type " + type + " auth " + auth + packet);
                         break;
                     }
                     if (outState != null)
                         state = _establisher.receiveData(outState);
                     if (_log.shouldLog(Log.DEBUG))
-                        _log.debug("Received new DATA packet from " + state + ": " + packet);
+                        _log.debug("Received new DATA packet from " + state + packet);
                     UDPPacketReader.DataReader dr = reader.getDataReader();
                     if (state != null) {
                         if (_log.shouldLog(Log.DEBUG)) {
@@ -798,7 +798,7 @@ class PacketHandler {
                     _state = 51;
                     if (auth == AuthType.BOBINTRO) {
                         if (_log.shouldLog(Log.WARN))
-                            _log.warn("Dropping type " + type + " auth " + auth + ": " + packet);
+                            _log.warn("Dropping type " + type + " auth " + auth + packet);
                         break;
                     }
                     if (_log.shouldLog(Log.DEBUG))
@@ -809,7 +809,7 @@ class PacketHandler {
                 case UDPPacket.PAYLOAD_TYPE_RELAY_REQUEST:
                     if (auth == AuthType.BOBINTRO) {
                         if (_log.shouldLog(Log.WARN))
-                            _log.warn("Dropping type " + type + " auth " + auth + ": " + packet);
+                            _log.warn("Dropping type " + type + " auth " + auth + packet);
                         break;
                     }
                     if (_log.shouldLog(Log.INFO))
@@ -820,7 +820,7 @@ class PacketHandler {
                 case UDPPacket.PAYLOAD_TYPE_RELAY_INTRO:
                     if (auth != AuthType.SESSION) {
                         if (_log.shouldLog(Log.WARN))
-                            _log.warn("Dropping type " + type + " auth " + auth + ": " + packet);
+                            _log.warn("Dropping type " + type + " auth " + auth + packet);
                         break;
                     }
                     if (_log.shouldLog(Log.INFO))
@@ -831,7 +831,7 @@ class PacketHandler {
                 case UDPPacket.PAYLOAD_TYPE_RELAY_RESPONSE:
                     if (auth == AuthType.BOBINTRO) {
                         if (_log.shouldLog(Log.WARN))
-                            _log.warn("Dropping type " + type + " auth " + auth + ": " + packet);
+                            _log.warn("Dropping type " + type + " auth " + auth + packet);
                         break;
                     }
                     if (_log.shouldLog(Log.INFO))
@@ -843,7 +843,7 @@ class PacketHandler {
                     _state = 53;
                     if (auth == AuthType.BOBINTRO) {
                         if (_log.shouldLog(Log.WARN))
-                            _log.warn("Dropping type " + type + " auth " + auth + ": " + packet);
+                            _log.warn("Dropping type " + type + " auth " + auth + packet);
                     } else if (auth != AuthType.SESSION)
                         _establisher.receiveSessionDestroy(from);  // drops
                     else if (outState != null)
@@ -856,7 +856,7 @@ class PacketHandler {
                 default:
                     _state = 52;
                     if (_log.shouldLog(Log.WARN))
-                        _log.warn("Dropping type " + type + " auth " + auth + ": " + packet);
+                        _log.warn("Dropping type " + type + " auth " + auth + packet);
                     _context.statManager().addRateData("udp.droppedInvalidUnknown", packet.getLifetime());
                     return;
             }
