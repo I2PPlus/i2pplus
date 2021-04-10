@@ -16,6 +16,9 @@
   --yes: url("data:image/svg+xml,%3Csvg height='64' width='64' xmlns='http://www.w3.org/2000/svg'%3E%3Cpath d='m55.87 8.64a4.32 4.32 0 0 0 -3.06 1.24 1.78 1.78 0 0 0 0 0l-30.85 30.84-10.76-10.76c-1.6-1.6-4.5-1.56-6.05.05l-4.02 4.16a1.78 1.78 0 0 0 0 0c-1.53 1.58-1.5 4.4.07 5.95l17.78 17.64c1.57 1.56 4.42 1.56 5.98-.01a1.78 1.78 0 0 0 0 0l37.86-37.85c1.57-1.57 1.57-4.43 0-6l-4-4.02a1.78 1.78 0 0 0 0 0 4.29 4.29 0 0 0 -2.93-1.24z' fill='%23494'/%3E%3C/svg%3E");
   --yes_hover: url("data:image/svg+xml,%3Csvg height='64' width='64' xmlns='http://www.w3.org/2000/svg'%3E%3Cpath d='m55.87 8.64a4.32 4.32 0 0 0 -3.06 1.24 1.78 1.78 0 0 0 0 0l-30.85 30.84-10.76-10.76c-1.6-1.6-4.5-1.56-6.05.05l-4.02 4.16a1.78 1.78 0 0 0 0 0c-1.53 1.58-1.5 4.4.07 5.95l17.78 17.64c1.57 1.56 4.42 1.56 5.98-.01a1.78 1.78 0 0 0 0 0l37.86-37.85c1.57-1.57 1.57-4.43 0-6l-4-4.02a1.78 1.78 0 0 0 0 0 4.29 4.29 0 0 0 -2.93-1.24z' fill='%23f60'/%3E%3C/svg%3E");
   --yes_active: url("data:image/svg+xml,%3Csvg height='64' width='64' xmlns='http://www.w3.org/2000/svg'%3E%3Cpath d='m55.87 8.64a4.32 4.32 0 0 0 -3.06 1.24 1.78 1.78 0 0 0 0 0l-30.85 30.84-10.76-10.76c-1.6-1.6-4.5-1.56-6.05.05l-4.02 4.16a1.78 1.78 0 0 0 0 0c-1.53 1.58-1.5 4.4.07 5.95l17.78 17.64c1.57 1.56 4.42 1.56 5.98-.01a1.78 1.78 0 0 0 0 0l37.86-37.85c1.57-1.57 1.57-4.43 0-6l-4-4.02a1.78 1.78 0 0 0 0 0 4.29 4.29 0 0 0 -2.93-1.24z' fill='%23ee9'/%3E%3C/svg%3E");
+  --no: url("data:image/svg+xml,%3Csvg viewBox='0 0 64 64' xmlns='http://www.w3.org/2000/svg'%3E%3Cpath d='m12.49 4c-.93 0-1.86.38-2.55 1.07a1.86 1.86 0 0 0 -.01.01l-4.87 4.91c-1.38 1.38-1.38 3.74 0 5.12a1.86 1.86 0 0 0 .01.01l17.01 16.88-17.02 16.92c-1.38 1.38-1.38 3.74 0 5.12l4.92 4.92c1.38 1.38 3.74 1.38 5.12 0l17.01-16.89 16.8 16.89c1.38 1.38 3.74 1.38 5.12 0l4.92-4.92c1.38-1.38 1.38-3.73 0-5.12l-16.84-16.92 16.8-16.89c1.42-1.4 1.44-3.76-.04-5.16l-4.88-4.9c-1.38-1.38-3.73-1.38-5.12 0a1.86 1.86 0 0 0 -.01.01l-16.75 16.89-17.06-16.89c-.69-.68-1.62-1.06-2.56-1.06z' fill='%23494'/%3E%3C/svg%3E");
+  --no_hover: url("data:image/svg+xml,%3Csvg viewBox='0 0 64 64' xmlns='http://www.w3.org/2000/svg'%3E%3Cpath d='m12.49 4c-.93 0-1.86.38-2.55 1.07a1.86 1.86 0 0 0 -.01.01l-4.87 4.91c-1.38 1.38-1.38 3.74 0 5.12a1.86 1.86 0 0 0 .01.01l17.01 16.88-17.02 16.92c-1.38 1.38-1.38 3.74 0 5.12l4.92 4.92c1.38 1.38 3.74 1.38 5.12 0l17.01-16.89 16.8 16.89c1.38 1.38 3.74 1.38 5.12 0l4.92-4.92c1.38-1.38 1.38-3.73 0-5.12l-16.84-16.92 16.8-16.89c1.42-1.4 1.44-3.76-.04-5.16l-4.88-4.9c-1.38-1.38-3.73-1.38-5.12 0a1.86 1.86 0 0 0 -.01.01l-16.75 16.89-17.06-16.89c-.69-.68-1.62-1.06-2.56-1.06z' fill='%23f60'/%3E%3C/svg%3E");
+  --no_active: url("data:image/svg+xml,%3Csvg viewBox='0 0 64 64' xmlns='http://www.w3.org/2000/svg'%3E%3Cpath d='m12.49 4c-.93 0-1.86.38-2.55 1.07a1.86 1.86 0 0 0 -.01.01l-4.87 4.91c-1.38 1.38-1.38 3.74 0 5.12a1.86 1.86 0 0 0 .01.01l17.01 16.88-17.02 16.92c-1.38 1.38-1.38 3.74 0 5.12l4.92 4.92c1.38 1.38 3.74 1.38 5.12 0l17.01-16.89 16.8 16.89c1.38 1.38 3.74 1.38 5.12 0l4.92-4.92c1.38-1.38 1.38-3.73 0-5.12l-16.84-16.92 16.8-16.89c1.42-1.4 1.44-3.76-.04-5.16l-4.88-4.9c-1.38-1.38-3.73-1.38-5.12 0a1.86 1.86 0 0 0 -.01.01l-16.75 16.89-17.06-16.89c-.69-.68-1.62-1.06-2.56-1.06z' fill='%23ee9'/%3E%3C/svg%3E");
 }
 
 html {
@@ -468,18 +471,19 @@ input[type=submit], input[type=reset], #settings, .topbuttons .fakebutton {
 input.cancel, #nukemail input.clearselection {
   padding: 7px 10px 7px 24px;
   background: #000 url(images/no.svg) 8px center no-repeat;
-  background: url(images/no.svg) 8px center no-repeat, linear-gradient(to bottom, #001000, #000 5%, #000 95%, #001000);
+  background: var(--no) 8px center no-repeat, linear-gradient(to bottom, #001000, #000 5%, #000 95%, #001000);
   background-size: 12px, 100% !important;
 }
 
 input.cancel:hover, #nukemail input.clearselection:hover {
   background: #010 url(images/no_hover.svg) 8px center no-repeat;
-  background: url(images/no_hover.svg) 8px center no-repeat, linear-gradient(to bottom, #000, #010);
+  background: var(--no_hover) 8px center no-repeat, linear-gradient(to bottom, #000, #010);
   background-size: 12px, 100% !important;
 }
 
 input.cancel:active, #nukemail input.clearselection:active {
   background: #f60 url(images/no_active.svg) 8px center no-repeat;
+  background: #f60 var(--no_active) 8px center no-repeat;
   background-size: 12px !important;
 }
 
@@ -597,18 +601,21 @@ input.login:active {
 }
 
 input.logout {
+  padding: 7px 10px 7px 26px;
   background: #000 url(images/logout.svg) 8px center no-repeat;
   background: url(images/logout.svg) 8px center no-repeat, linear-gradient(to bottom, #001000, #000 5%, #000 95%, #001000);
-  padding: 7px 10px 7px 26px;
+  background-size: 15px, 100% !important;
 }
 
 input.logout:hover {
   background: #010 url(images/logout_hover.svg) 8px center no-repeat;
   background: url(images/logout_hover.svg) 8px center no-repeat, linear-gradient(to bottom, #000, #010);
+  background-size: 15px, 100% !important;
 }
 
 input.logout:active {
   background: #f60 url(images/logout_active.svg) 8px center no-repeat;
+  background-size: 15px !important;
 }
 
 input.reload, input.refresh, input[name="refresh"][disabled], .topbuttons .fakebutton {
@@ -667,6 +674,7 @@ input.show:hover {
 input.show:active {
   background: #f60 url(/themes/console/images/buttons/yes.png) 8px center no-repeat;
   background: #f60 var(--yes_active) 8px center no-repeat;
+  background-size: 12px !important;
 }
 
 input.markall {
@@ -757,6 +765,7 @@ input.setpagesize:hover, input.setpagesize:focus, input.save:hover, input.save:f
 input.setpagesize:active, input.save:active {
   background: #f60 url(/themes/console/images/buttons/yes.png) 8px center no-repeat !important;
   background: #f60 var(--yes_active) 8px center no-repeat !important;
+  background-size: 12px !important;
 }
 
 input.setpagesize {
@@ -1707,7 +1716,7 @@ tr.bottombuttons:empty {
   border: 1px solid #000;
   border-top: none;
   box-shadow: 0 2px 2px 1px rgba(0,0,0,.5), inset 0 0 0 1px #040;
-  background: url(images/no.svg) right 6px top 6px no-repeat, linear-gradient(to right, #020, #002800, #020) #020;
+  background: var(--no) right 6px top 6px no-repeat, linear-gradient(to right, #020, #002800, #020) #020;
   background-size: 14px, 100% !important;
   cursor: crosshair;
   animation: 2s hide-up 10s ease-out forwards;
@@ -1728,7 +1737,7 @@ tr.bottombuttons:empty {
 }
 
 .notifications:hover {
-  background-image: url(images/no_hover.svg);
+  background-image: var(--no_hover);
 }
 
 .notifications p.info, .notifications p.info b {
