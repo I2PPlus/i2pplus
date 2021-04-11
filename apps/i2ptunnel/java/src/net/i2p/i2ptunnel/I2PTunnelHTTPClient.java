@@ -418,6 +418,7 @@ public class I2PTunnelHTTPClient extends I2PTunnelHTTPClientBase implements Runn
             String referer = null;
             URI origRequestURI = null;
             boolean preserveConnectionHeader = false;
+            boolean allowGzip = true;
             while((line = reader.readLine(method)) != null) {
                 line = line.trim();
                 if(_log.shouldLog(Log.DEBUG)) {
@@ -986,12 +987,13 @@ public class I2PTunnelHTTPClient extends I2PTunnelHTTPClientBase implements Runn
                                 line = "Accept: text/css,*/*;q=0.1";
                             }  // else allow as-is
                         }
-                    } else if(lowercaseLine.startsWith("accept")) {
+                    } else if (lowercaseLine.startsWith("accept")) {
                         // strip the accept-blah headers, as they vary dramatically from
                         // browser to browser
                         // But allow Accept-Encoding: gzip, deflate
-                        if(!lowercaseLine.startsWith("accept-encoding: ") &&
-                           !Boolean.parseBoolean(getTunnel().getClientOptions().getProperty(PROP_ACCEPT))) {
+                        if (lowercaseLine.startsWith("accept-encoding: ")) {
+                            allowGzip = lowercaseLine.contains("gzip");
+                        } else if (!Boolean.parseBoolean(getTunnel().getClientOptions().getProperty(PROP_ACCEPT))) {
                             line = null;
                             continue;
                         }
@@ -1168,7 +1170,7 @@ public class I2PTunnelHTTPClient extends I2PTunnelHTTPClientBase implements Runn
                             Boolean.parseBoolean(getTunnel().getClientOptions().getProperty(PROP_DISABLE_HELPER))) {
                         out.write(ERR_HELPER_DISABLED.getBytes("UTF-8"));
                     } else {
-                        LocalHTTPServer.serveLocalFile(_context, sockMgr, out, method, internalPath, internalRawQuery, _proxyNonce);
+                        LocalHTTPServer.serveLocalFile(_context, sockMgr, out, method, internalPath, internalRawQuery, _proxyNonce, allowGzip);
                     }
                 } catch (IOException ioe) {
                     // ignore

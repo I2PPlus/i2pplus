@@ -9,8 +9,8 @@ import java.util.zip.InflaterOutputStream;
 import net.i2p.data.DataHelper;
 
 /**
- * Gunzip implementation per 
- * <a href="http://www.faqs.org/rfcs/rfc1952.html">RFC 1952</a>, reusing 
+ * Gunzip implementation per
+ * <a href="http://www.faqs.org/rfcs/rfc1952.html">RFC 1952</a>, reusing
  * java's standard CRC32 and Inflater and InflaterOutputStream implementations.
  *
  * Note that the underlying InflaterOutputStream cannot be reused after close(),
@@ -19,7 +19,7 @@ import net.i2p.data.DataHelper;
  * Modified from net.i2p.util.ResettableGZIPInputStream to use Java 6 InflaterOutputstream
  * @since 0.9.21
  */
-class GunzipOutputStream extends InflaterOutputStream {
+public class GunzipOutputStream extends InflaterOutputStream {
     private static final int FOOTER_SIZE = 8; // CRC32 + ISIZE
     private final CRC32 _crc32;
     private final byte _buf1[] = new byte[1];
@@ -27,13 +27,13 @@ class GunzipOutputStream extends InflaterOutputStream {
     private final byte _footer[] = new byte[FOOTER_SIZE];
     private long _bytesReceived;
     private long _bytesReceivedAtCompletion;
-    
+
     private enum HeaderState { MB1, MB2, CF, MT0, MT1, MT2, MT3, EF, OS, FLAGS,
                                EH1, EH2, EHDATA, NAME, COMMENT, CRC1, CRC2, DONE }
     private HeaderState _state = HeaderState.MB1;
     private int _flags;
     private int _extHdrToRead;
-    
+
     /**
      * Build a new Gunzip stream
      */
@@ -41,13 +41,13 @@ class GunzipOutputStream extends InflaterOutputStream {
         super(uncompressedStream, new Inflater(true));
         _crc32 = new CRC32();
     }
-    
+
     @Override
     public void write(int b) throws IOException {
         _buf1[0] = (byte) b;
         write(_buf1, 0, 1);
     }
-    
+
     @Override
     public void write(byte buf[]) throws IOException {
         write(buf, 0, buf.length);
@@ -56,7 +56,7 @@ class GunzipOutputStream extends InflaterOutputStream {
     @Override
     public void write(byte buf[], int off, int len) throws IOException {
         if (_complete) {
-            // shortcircuit so the inflater doesn't try to refill 
+            // shortcircuit so the inflater doesn't try to refill
             // with the footer's data (which would fail, causing ZLIB err)
             return;
         }
@@ -97,13 +97,13 @@ class GunzipOutputStream extends InflaterOutputStream {
             }
         }
     }
-    
+
     /**
      *  Inflater statistic
      */
     public long getTotalRead() {
         try {
-            return inf.getBytesRead(); 
+            return inf.getBytesRead();
         } catch (RuntimeException e) {
             return 0;
         }
@@ -112,21 +112,9 @@ class GunzipOutputStream extends InflaterOutputStream {
     /**
      *  Inflater statistic
      */
-    public long getTotalExpanded() { 
+    public long getTotalExpanded() {
         try {
-            return inf.getBytesWritten(); 
-        } catch (RuntimeException e) {
-            // possible NPE in some implementations
-            return 0;
-        }
-    }
-
-    /**
-     *  Inflater statistic
-     */
-    public long getRemaining() { 
-        try {
-            return inf.getRemaining(); 
+            return inf.getBytesWritten();
         } catch (RuntimeException e) {
             // possible NPE in some implementations
             return 0;
@@ -136,9 +124,21 @@ class GunzipOutputStream extends InflaterOutputStream {
     /**
      *  Inflater statistic
      */
-    public boolean getFinished() { 
+    public long getRemaining() {
         try {
-            return inf.finished(); 
+            return inf.getRemaining();
+        } catch (RuntimeException e) {
+            // possible NPE in some implementations
+            return 0;
+        }
+    }
+
+    /**
+     *  Inflater statistic
+     */
+    public boolean getFinished() {
+        try {
+            return inf.finished();
         } catch (RuntimeException e) {
             // possible NPE in some implementations
             return true;
@@ -153,7 +153,7 @@ class GunzipOutputStream extends InflaterOutputStream {
     }
 
     @Override
-    public String toString() { 
+    public String toString() {
         return "GOS read: " + getTotalRead() + " expanded: " + getTotalExpanded() + " remaining: " + getRemaining() + " finished: " + getFinished();
     }
 
@@ -171,12 +171,12 @@ class GunzipOutputStream extends InflaterOutputStream {
                 footer[i] = _footer[(int) ((_bytesReceivedAtCompletion + i) % FOOTER_SIZE)];
             }
         }
-        
+
         long actualSize = inf.getTotalOut();
         long expectedSize = DataHelper.fromLongLE(footer, 4, 4);
         if (expectedSize != actualSize)
             throw new IOException("gunzip expected " + expectedSize + " bytes, got " + actualSize);
-        
+
         long actualCRC = _crc32.getValue();
         long expectedCRC = DataHelper.fromLongLE(footer, 0, 4);
         if (expectedCRC != actualCRC)
@@ -233,7 +233,7 @@ class GunzipOutputStream extends InflaterOutputStream {
                 break;
 
             case EF:
-                if ( (c != 0x00) && (c != 0x02) && (c != 0x04) ) 
+                if ( (c != 0x00) && (c != 0x02) && (c != 0x04) )
 	            throw new IOException("Invalid extended flags [" + c + "]");
                 _state = HeaderState.OS;
                 break;
@@ -337,33 +337,33 @@ class GunzipOutputStream extends InflaterOutputStream {
             if (!test(b)) return;
         }
     }
-    
+
     private static boolean test(byte[] b) {
         int size = b.length;
-        try { 
+        try {
             java.io.ByteArrayOutputStream baos = new java.io.ByteArrayOutputStream(size);
             java.util.zip.GZIPOutputStream o = new java.util.zip.GZIPOutputStream(baos);
             o.write(b);
             o.finish();
             o.flush();
             byte compressed[] = baos.toByteArray();
-            
+
             java.io.ByteArrayOutputStream baos2 = new java.io.ByteArrayOutputStream(size);
             GunzipOutputStream out = new GunzipOutputStream(baos2);
             out.write(compressed);
             byte rv[] = baos2.toByteArray();
             if (rv.length != b.length)
                 throw new RuntimeException("read length: " + rv.length + " expected: " + b.length);
-            
+
             if (!net.i2p.data.DataHelper.eq(rv, 0, b, 0, b.length)) {
                 throw new RuntimeException("foo, read=" + rv.length);
             } else {
                 System.out.println("match, w00t @ " + size);
                 return true;
             }
-        } catch (Exception e) { 
+        } catch (Exception e) {
             System.out.println("Error dealing with size=" + size + ": " + e.getMessage());
-            e.printStackTrace(); 
+            e.printStackTrace();
             return false;
         }
     }

@@ -27,6 +27,7 @@ import net.i2p.data.Destination;
 import net.i2p.data.PrivateKey;
 import net.i2p.data.PublicKey;
 import net.i2p.data.SigningPublicKey;
+import net.i2p.i2ptunnel.GunzipOutputStream;
 import net.i2p.i2ptunnel.I2PTunnelHTTPClientBase;
 import net.i2p.util.FileUtil;
 import net.i2p.util.PortMapper;
@@ -119,7 +120,7 @@ public abstract class LocalHTTPServer {
      */
     public static void serveLocalFile(I2PAppContext context, I2PSocketManager sockMgr,
                                       OutputStream out, String method, String targetRequest,
-                                      String query, String proxyNonce) throws IOException {
+                                      String query, String proxyNonce, boolean allowGzip) throws IOException {
         //System.err.println("targetRequest: \"" + targetRequest + "\"");
         // a home page message for the curious...
         if (targetRequest.equals("/")) {
@@ -144,7 +145,7 @@ public abstract class LocalHTTPServer {
             if (file.exists() && !file.isDirectory()) {
                 String type;
                 if (filename.endsWith(".css"))
-                    type = "text/css";
+                    type = "text/css; charset=UTF-8";
                 else if (filename.endsWith(".ico"))
                     type = "image/x-icon";
                 else if (filename.endsWith(".png"))
@@ -155,7 +156,7 @@ public abstract class LocalHTTPServer {
                     type = "image/jpeg";
                 else if (filename.endsWith(".svg"))
                     type = "image/svg+xml";
-                else type = "text/html";
+                else type = "text/html; charset=UTF-8";
                 out.write("HTTP/1.1 200 OK\r\nContent-Type: ".getBytes("UTF-8"));
                 out.write(type.getBytes("UTF-8"));
                 out.write("\r\nAccess-Control-Allow-Origin: *".getBytes("UTF-8"));
