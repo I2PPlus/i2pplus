@@ -203,9 +203,11 @@ public abstract class TransportImpl implements Transport {
         }
         // increase limit for SSU, for now
         long maxMemory = SystemVersion.getMaxMemory();
+        int cores = SystemVersion.getCores();
+        boolean isSlow = SystemVersion.isSlow();
         if (style.equals("SSU")) {
             if (REBALANCE_NTCP) {
-                if (maxMemory >= 1024*1024*1024)
+                if (maxMemory >= 1024*1024*1024 && cores >= 4)
                     def *= 8;
                 else if (maxMemory >= 512*1024*1024)
                     def *= 5;
@@ -214,27 +216,27 @@ public abstract class TransportImpl implements Transport {
             } else {
                 def *= 3;
             }
-            if (def > 4000 && maxMemory >= 2048*1024*1024)
+            if (def > 4000 && maxMemory >= 2048*1024*1024 && cores >= 4 && !isSlow)
                 def = 4000;
-            else if (def > 3000 && maxMemory >= 1024*1024*1024)
+            else if (def > 3000 && maxMemory >= 1024*1024*1024 && cores >= 4 && !isSlow)
                 def = 3000;
-            else if (def > 2000 && maxMemory >= 512*1024*1024)
+            else if (def > 2000 && maxMemory >= 512*1024*1024 && cores >= 4 && !isSlow)
                 def = 2000;
             else if (def > 1500)
                 def = 1500;
         } else if (style.equals("NTCP")) {
             if (REBALANCE_NTCP) {
-                if (maxMemory >= 1024*1024*1024)
+                if (maxMemory >= 1024*1024*1024 && cores >= 4 && !isSlow)
                     def *= 6;
-                else if (maxMemory >= 512*1024*1024)
+                else if (maxMemory >= 512*1024*1024 && cores >= 4 && !isSlow)
                     def *= 4;
                 else
                     def *= 3; def /= 2;
-                if (def > 4000 && maxMemory >= 2048*1024*1024)
+                if (def > 4000 && maxMemory >= 2048*1024*1024 && cores >= 4 && !isSlow)
                     def = 4000;
-                else if (def > 3000 && maxMemory >= 1024*1024*1024)
+                else if (def > 3000 && maxMemory >= 1024*1024*1024 && cores >= 4 && !isSlow)
                     def = 3000;
-                else if (def > 2000 && maxMemory >= 512*1024*1024)
+                else if (def > 2000 && maxMemory >= 512*1024*1024 && cores >= 4 && !isSlow)
                     def = 2000;
                 else if (def > 1500)
                     def = 1500;

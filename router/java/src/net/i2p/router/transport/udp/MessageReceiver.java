@@ -46,11 +46,13 @@ class MessageReceiver {
         _log = ctx.logManager().getLog(MessageReceiver.class);
         _transport = transport;
         long maxMemory = SystemVersion.getMaxMemory();
+        int cores = SystemVersion.getCores();
+        boolean isSlow = SystemVersion.isSlow();
         _threadCount = MAX_THREADS;
         int qsize;
-        if (maxMemory >= 1024*1024*1024) {
+        if (maxMemory >= 1024*1024*1024 && cores >= 4 && !isSlow) {
             qsize = 384;
-        } else if (maxMemory >= 512*1024*1024) {
+        } else if (maxMemory >= 512*1024*1024 && cores >= 4 && !isSlow) {
             qsize = 192;
         } else {
             qsize = (int) Math.max(MIN_QUEUE_SIZE, Math.min(MAX_QUEUE_SIZE, maxMemory / (2*1024*1024)));
