@@ -67,13 +67,13 @@ class InboundEndpointProcessor {
         boolean ok = _validator.receiveIV(orig, offset, orig, offset + HopProcessor.IV_LENGTH);
         if (!ok) {
             if (_log.shouldLog(Log.WARN))
-                _log.warn("Invalid IV, dropping at Inbound Endpoint " + _config);
+                _log.warn("Invalid IV, dropping at Inbound Endpoint... " + _config);
             return false;
         }
 
         // inbound endpoints and outbound gateways have to undo the crypto in the same way
         decrypt(_context, _config, orig, offset, length);
-        
+
         if (_config.getLength() > 0) {
             int rtt = 0; // dunno... may not be related to an rtt
             //if (_log.shouldLog(Log.DEBUG))
