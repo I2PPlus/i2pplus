@@ -2915,9 +2915,9 @@ input[type=file]::file-selector-button {
   display: inline-block;
   text-align: left;
   list-style-position: inside;
+  -webkit-break-inside: avoid;
   break-inside: avoid;
   page-break-inside: avoid;
-  -webkit-break-inside: avoid;
 }
 
 .joblog ol li:last-child {
@@ -6182,9 +6182,9 @@ h3#bannedpeers {
   background: #000400;
   background: linear-gradient(to bottom, #000b00, #000600);
   box-sizing: border-box;
+  -webkit-break-inside: avoid;
   break-inside: avoid;
   page-break-inside: avoid;
-  -webkit-break-inside: avoid;
 }
 
 @media screen and (min-width: 1500px) {

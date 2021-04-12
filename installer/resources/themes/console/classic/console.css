@@ -5403,7 +5403,6 @@ p#helptranslate {
 
 .langselect input[name="lang"]:checked + img {
   transform: scale(1.1);
-  -webkit-transform: scale(1.1);
   border: 1px solid #338;
 }
 
