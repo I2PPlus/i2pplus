@@ -55,7 +55,7 @@ if ( !rendered && ((rs != null) || fakeBw) ) {
             response.setHeader("X-Content-Type-Options", "nosniff");
             if ("xml".equals(format)) {
                 if (!fakeBw) {
-                    response.setContentType("text/xml");
+                    response.setContentType("text/xml; charset=utf-8");
                     response.setHeader("Content-Disposition", "attachment; filename=\"" + stat + ".xml\"");
                     rendered = ss.getXML(rate, cout);
                 }
