@@ -115,6 +115,7 @@ class HopProcessor {
      */
     @Override
     public String toString() {
-        return getClass().getSimpleName() + " for " + _config;
+//        return getClass().getSimpleName() + " for " + _config;
+        return getClass().getSimpleName() + _config;
     }
 }
