@@ -4059,6 +4059,8 @@ h3#finishedjobs + ol li, h3#scheduledjobs + ol li, h3#activejobs + ol li, h3#rea
 
 #finishedjobs + ol li {
   background-image: url(/themes/console/images/svg/yes.svg) !important;
+  background-size: 12px !important;
+  background-position: 6px center;
 }
 
 /* end /jobs */
@@ -11367,8 +11369,9 @@ input[type="file"]:hover {
 #jobstats td:first-child, #jobstats tr:nth-last-child(n+2):hover td:first-child {
   padding: 6px 0 6px 26px;
   background-image: url(/themes/console/images/svg/yes.svg);
-  background-position: 5px center;
+  background-position: 7px center;
   background-repeat: no-repeat;
+  background-size: 12px !important;
 }
 
 #jobstats tr:last-child td:first-child {
