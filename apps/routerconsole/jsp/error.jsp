@@ -24,7 +24,13 @@
         ERROR_MESSAGE = "Not Found";
     // If it can't find the iframe or viewtheme.jsp I wonder if the whole thing blows up...
 %>
-<html>
+<%
+    net.i2p.I2PAppContext ctx = net.i2p.I2PAppContext.getGlobalContext();
+    String lang = "en";
+    if (ctx.getProperty("routerconsole.lang") != null)
+        lang = ctx.getProperty("routerconsole.lang");
+%>
+<html lang="<%=lang%>">
 <head>
 <%@include file="css.jsi" %>
 <%=intl.title("Page Not Found")%>

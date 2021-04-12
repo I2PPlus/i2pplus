@@ -2,7 +2,13 @@
 <%@page trimDirectiveWhitespaces="true"%>
 <%@page pageEncoding="UTF-8"%>
 <!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
-<html>
+<%
+    net.i2p.I2PAppContext ctx = net.i2p.I2PAppContext.getGlobalContext();
+    String lang = "en";
+    if (ctx.getProperty("routerconsole.lang") != null)
+        lang = ctx.getProperty("routerconsole.lang");
+%>
+<html lang="<%=lang%>">
 <head>
 <%@include file="css.jsi" %>
 <%=intl.title("config stats")%>

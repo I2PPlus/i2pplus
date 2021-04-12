@@ -13,7 +13,13 @@
 <jsp:setProperty name="searchhelper" property="contextId" value="<%=i2pcontextId%>" />
 <jsp:setProperty name="searchhelper" property="engine" value="<%=request.getParameter(\"engine\")%>" />
 <jsp:setProperty name="searchhelper" property="query" value="<%=request.getParameter(\"query\")%>" />
-<html>
+<%
+    net.i2p.I2PAppContext ctx = net.i2p.I2PAppContext.getGlobalContext();
+    String lang = "en";
+    if (ctx.getProperty("routerconsole.lang") != null)
+        lang = ctx.getProperty("routerconsole.lang");
+%>
+<html lang="<%=lang%>">
 <head>
 </head>
 <body>
