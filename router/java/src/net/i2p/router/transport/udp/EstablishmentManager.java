@@ -1071,7 +1071,7 @@ class EstablishmentManager {
             // validate clears fields on failure
             // sendDestroy(state) won't work as we haven't sent the confirmed...
             if (_log.shouldLog(Log.WARN))
-                _log.warn("SessionCreated validate failed: " + state);
+                _log.warn("SessionCreated failed validation " + state);
             return;
         }
 
