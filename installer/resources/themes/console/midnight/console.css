@@ -4793,7 +4793,7 @@ table#consolepass input[type=password] {
   width: 200px;
 }
 
-.formaction#consolepass {
+.formaction#submitconsolepass {
   margin-bottom: -2px !important;
   margin-top: -2px;
   border: var(--innerborder);
@@ -14229,7 +14229,7 @@ h3#bannedpeers {
   height: 41px;
 }
 
-div#minigraph {
+#minigraphcontainer {
   margin-top: -43px;
   margin-left: 1px;
   width: 204px;
@@ -14238,7 +14238,7 @@ div#minigraph {
   background-size: 204px 40px;
 }
 
-#homepage div#minigraph {
+#homepage #minigraphcontainer {
   margin-top: -42px;
   height: 38px;
 }
@@ -14258,7 +14258,7 @@ div#minigraph {
     margin-top: -22px !important;
   }
 
-  div#minigraph {
+  #minigraphcontainer {
     margin-top: -43px;
     margin-left: 1px;
     width: 258px;
@@ -14266,7 +14266,7 @@ div#minigraph {
     background-size: 250px 40px;
   }
 
-  #homepage div#minigraph {
+  #homepage #minigraphcontainer {
     height: 38px;
   }
 }
@@ -14276,7 +14276,7 @@ div#minigraph {
     width: 250px !important;
   }
 
-  div#minigraph {
+  #minigraphcontainer {
     width: 264px;
     background-size: 256px 40px;
   }

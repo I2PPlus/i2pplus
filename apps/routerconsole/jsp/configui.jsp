@@ -53,7 +53,7 @@
 <form action="" method="POST">
 <input type="hidden" name="nonce" value="<%=pageNonce%>" >
 <jsp:getProperty name="uihelper" property="passwordForm" />
-<div class="formaction" id="consolepass">
+<div class="formaction" id="submitconsolepass">
 <input type="submit" name="action" class="default" value="<%=intl._t("Add user")%>" >
 <%
   boolean pwEnabled = net.i2p.I2PAppContext.getGlobalContext().getBooleanProperty("routerconsole.auth.enable");
