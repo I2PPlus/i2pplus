@@ -134,7 +134,7 @@ public class ErrorServlet extends HttpServlet {
         else
             out.print(_t("Error 500: Internal Error"));
         out.println("</title>\n");
-        out.println("<meta http-equiv=\"Content-Type\" content=\"text/html; charset=UTF-8\">");
+        out.println("<meta http-equiv=\"Content-Type\" content=\"text/html; charset=utf-8\">");
         if (_icoPath != null)
             out.println("\n<link rel=\"icon\" href=\"" + _icoPath + "\">");
         out.println("\n<link href=\"" + _cssPath + '?' + CoreVersion.VERSION + "\" rel=\"stylesheet\" type=\"text/css\">");

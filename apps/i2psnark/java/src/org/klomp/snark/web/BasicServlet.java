@@ -396,11 +396,13 @@ class BasicServlet extends HttpServlet
         String ctype = content.getContentType();
         if (rtype != null) {
             if (rtype.equals("application/javascript"))
-                response.setCharacterEncoding("ISO-8859-1");
+//                response.setCharacterEncoding("ISO-8859-1");
+                response.setCharacterEncoding("utf-8");
         } else if (ctype != null) {
             response.setContentType(ctype);
             if (ctype.equals("application/javascript"))
-                response.setCharacterEncoding("ISO-8859-1");
+//                response.setCharacterEncoding("ISO-8859-1");
+                response.setCharacterEncoding("utf-8");
         }
         response.setHeader("X-Content-Type-Options", "nosniff");
         long lml = content.getLastModified();

@@ -4727,14 +4727,14 @@ p#enablefullstats {
 
 .formaction#shutdown, .formaction#restart, .formaction#systray, .formaction#runonstart,
 .formaction#dumpthreads, .formaction#browserstart, .formaction#sidebardefaults,
-.formaction#tunnelconfigsave, .formaction#updateplugins, .formaction#consolepass {
+.formaction#tunnelconfigsave, .formaction#updateplugins, .formaction#submitconsolepass {
   margin-top: -13px;
   margin-bottom: -5px;
   border: 1px solid #aaafce;
 }
 
 .formaction#clientsconfig, .formaction#webappconfigactions, .formaction#pluginupdater, .formaction#sidebardefaults,
-.formaction#tunnelconfigsave, .formaction#consolepass {
+.formaction#tunnelconfigsave, .formaction#submitconsolepass {
   margin-top: -6px;
   border: 1px solid #aaafce;
 }
@@ -5403,7 +5403,6 @@ p#helptranslate {
 
 .langselect input[name="lang"]:checked + img {
   transform: scale(1.1);
-  -webkit-transform: scale(1.1);
   border: 1px solid #338;
 }
 
@@ -12067,7 +12066,7 @@ div.app:hover img, .sitemaplink:hover img {
   z-index: 0;
 }
 
-div#minigraph {
+#minigraphcontainer {
   margin-top: -57px;
   margin-left: 1px;
   width: 240px;
@@ -12081,7 +12080,7 @@ div#minigraph {
     margin-left: -50px !important;
   }
 
-  div#minigraph {
+  #minigraphcontainer {
     margin-top: -57px;
     margin-left: 1px;
     width: 249px;

@@ -2325,7 +2325,7 @@ public class WebMail extends HttpServlet
                  */
                 out.println("<!DOCTYPE HTML PUBLIC \"-//W3C//DTD HTML 4.01 Transitional//EN\">\n<html>\n" +
                     "<head>\n" +
-                    "<meta http-equiv=\"Content-Type\" content=\"text/html; charset=UTF-8\">\n" +
+                    "<meta http-equiv=\"Content-Type\" content=\"text/html; charset=utf-8\">\n" +
                     "<title>" + _t("I2PMail") + " - " + subtitle + "</title>\n" +
                     "<link rel=\"shortcut icon\" type=\"image/x-icon\" href=\"/themes/susimail/images/favicon.ico?v=" + CoreVersion.VERSION + "\">\n" +
                     "<link rel=\"stylesheet\" type=\"text/css\" href=\"" + sessionObject.themePath + "susimail.css?" + CoreVersion.VERSION + "\">\n" +

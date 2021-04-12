@@ -288,7 +288,7 @@ public class RandomArt {
                 boolean html = true;
                 if (html) {
                     System.out.println("<!DOCTYPE html>\n<html>\n<head>");
-                    System.out.println("<meta http-equiv=\"Content-Type\" content=\"text/html; charset=UTF-8\">");
+                    System.out.println("<meta http-equiv=\"Content-Type\" content=\"text/html; charset=utf-8\">");
                     System.out.println("</head>\n<body>\n");
                 }
                 byte[] b = new byte[16];

@@ -1064,11 +1064,11 @@ class SummaryBarRenderer {
            .append("Bps</span>\n")
            .append("<a href=\"/graphs\">\n");
         buf.append("<canvas id=\"minigraph\" width=\"245\" height=\"50\">\n")
-           .append("<div id=\"minigraph\" style=\"background-image: url(/viewstat.jsp?stat=bw.combined")
+           .append("<div id=\"minigraphcontainer\" style=\"background-image: url(/viewstat.jsp?stat=bw.combined")
            .append("&amp;periodCount=20&amp;width=250&amp;height=50&amp;hideLegend=true&amp;hideGrid=true&amp;")
            .append("hideTitle=true&amp;time=").append(_context.clock().now() / 1000).append("\"></div>")
            .append("</canvas>\n")
-           .append("<noscript><div id=\"minigraph\" style=\"background-image: url(/viewstat.jsp?stat=bw.combined")
+           .append("<noscript><div id=\"minigraphcontainer\" style=\"background-image: url(/viewstat.jsp?stat=bw.combined")
            .append("&amp;periodCount=20&amp;width=250&amp;height=50&amp;hideLegend=true&amp;hideGrid=true&amp;")
            .append("hideTitle=true&amp;time=").append(_context.clock().now() / 1000).append("\"></div></noscript>");
         buf.append("</a>\n</div>\n");

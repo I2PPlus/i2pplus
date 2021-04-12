@@ -2915,9 +2915,9 @@ input[type=file]::file-selector-button {
   display: inline-block;
   text-align: left;
   list-style-position: inside;
+  -webkit-break-inside: avoid;
   break-inside: avoid;
   page-break-inside: avoid;
-  -webkit-break-inside: avoid;
 }
 
 .joblog ol li:last-child {
@@ -4075,7 +4075,7 @@ td#pw_adduser input {
   width: 200px;
 }
 
-.formaction#consolepass {
+.formaction#submitconsolepass {
   margin-bottom: -1px !important;
   margin-top: -2px;
   padding: 5px;
@@ -4084,7 +4084,7 @@ td#pw_adduser input {
 }
 
 @media screen and (min-width: 1280px) {
-.formaction#consolepass {
+.formaction#submitconsolepass {
   margin-bottom: 0 !important;
 }
 }
@@ -6182,9 +6182,9 @@ h3#bannedpeers {
   background: #000400;
   background: linear-gradient(to bottom, #000b00, #000600);
   box-sizing: border-box;
+  -webkit-break-inside: avoid;
   break-inside: avoid;
   page-break-inside: avoid;
-  -webkit-break-inside: avoid;
 }
 
 @media screen and (min-width: 1500px) {
@@ -13102,7 +13102,7 @@ h3.tabletitle, h3#i2pclientconfig, h3#advancedclientconfig, h3#webappconfig, h3#
 h3#updateplugins, h3#pluginmanage, h3#bannedpeers, h3.ptitle, h3#transports, h3#upnpstatus, h3.sybils, #certs h3, table,
 .formaction#clientsconfig, .formaction#webappconfigactions, .formaction#pluginconfigactions, .formaction#homeapps, .formaction#homesites,
 .formaction#tunnelconfigsave, .formaction#homesearch, .formaction#sidebardefaults, .formaction#shutdown, .formaction#restart,
-.formaction#systray, .formaction#runonstart, .formaction#dumpthreads, .formaction#browserstart, .formaction#consolepass, .formaction#langui, ul#banlist,
+.formaction#systray, .formaction#runonstart, .formaction#dumpthreads, .formaction#browserstart, .formaction#submitconsolepass, .formaction#langui, ul#banlist,
 p.sybil_info, p.family, p.threatpoints, p.hashdist, p#sybil_totals, p.notfound, #sybilnav, #sybils_summary,
 h3#themeheading, h3#langheading, h3#passwordheading, #themesettings, .formaction#themeui, div#langsettings, ul.statlist, h3.stats,
 #volunteer, #legal, #sidebarhelp, #volunteer, #reachabilityhelp, #configurationhelp, #advancedsettings, #faq, #reseedhelp, #troubleshoot,
@@ -14492,7 +14492,7 @@ h3 + table {
   margin-top: -18px;
 }
 
-div#minigraph {
+#minigraphcontainer {
   margin-top: -43px;
   margin-left: 1px;
   width: 204px;
@@ -14501,7 +14501,7 @@ div#minigraph {
   background-size: 204px 40px;
 }
 
-#homepage div#minigraph {
+#homepage #minigraphcontainer {
   margin-top: -42px;
   height: 38px;
 }
@@ -14518,11 +14518,10 @@ div#minigraph {
   }
 
   #homepage #minigraph {
-    margin-top: -20px !important;
     height: 41px;
   }
 
-  div#minigraph {
+  #minigraphcontainer {
     margin-top: -43px;
     margin-left: 1px;
     width: 258px;
@@ -14530,7 +14529,7 @@ div#minigraph {
     background-size: 250px 40px;
   }
 
-  #homepage div#minigraph {
+  #homepage #minigraphcontainer {
     height: 37px;
   }
 }

@@ -666,7 +666,7 @@ a:active #sb_bandwidthgraph {
   display: inline-block;
 }
 
-div#minigraph {
+#minigraphcontainer {
   margin-top: -42px;
   margin-left: 1px;
   width: 196px;
@@ -686,7 +686,7 @@ div#minigraph {
     height: 43px;
   }
 
-  div#minigraph {
+  #minigraphcontainer {
     margin-top: -43px;
     margin-left: 1px;
     width: 234px;
@@ -11030,7 +11030,7 @@ b.suboption {
   width: calc(100% - 5px);
 }
 
-#manualreseed, .formaction#consolepass {
+#manualreseed, .formaction#submitconsolepass {
   margin-bottom: 10px;
 }
 

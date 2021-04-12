@@ -396,7 +396,7 @@ p#helptranslate {
   margin: 0 -16px 0 16px;
 }
 
-.formaction#consolepass, .formaction#tunnelconfigsave, .formaction#homeapps, .formaction#homesites, #sidebardefaults, #loggingoptions,
+.formaction#submitconsolepass, .formaction#tunnelconfigsave, .formaction#homeapps, .formaction#homesites, #sidebardefaults, #loggingoptions,
 #reseedconfig, #addkeyring, #netconfig, #advconf, #bandwidthconfig, #externali2cp, #pluginupdater, #newfamily, #webappconfigactions, #configstats {
   margin-bottom: 15px !important;
 }

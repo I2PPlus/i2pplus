@@ -49,7 +49,7 @@ if (c != null &&
         if (iflast >= ((lastmod / 1000) * 1000)) {
             response.setStatus(304);
             if (ext.equals(".svg"))
-                response.setContentType("image/svg+xml");
+                response.setContentType("image/svg+xml; charset=utf-8");
             else
                 response.setContentType("image/png");
             return;
@@ -64,7 +64,7 @@ if (c != null &&
     if (length > 0)
         response.setHeader("Content-Length", Long.toString(length));
     if (ext.equals(".svg"))
-        response.setContentType("image/svg+xml");
+        response.setContentType("image/svg+xml; charset=utf-8");
     else
         response.setContentType("image/png");
     response.setHeader("Accept-Ranges", "none");

@@ -21,7 +21,7 @@ if (uri.endsWith(".css")) {
 } else if (uri.endsWith(".ico")) {
   response.setContentType("image/x-icon");
 } else if (uri.endsWith(".svg")) {
-  response.setContentType("image/svg+xml");
+  response.setContentType("image/svg+xml; charset=utf-8");
 } else if (uri.endsWith(".ttf")) {
   response.setContentType("font/ttf");
 } else if (uri.endsWith(".html")) {
@@ -30,7 +30,7 @@ if (uri.endsWith(".css")) {
   response.setCharacterEncoding("UTF-8");
 } else if (uri.endsWith(".js")) {
   // /javadoc/
-  response.setContentType("application/x-javascript");
+  response.setContentType("application/x-javascript; charset=utf-8");
   response.setCharacterEncoding("UTF-8");
 }
 response.setHeader("Accept-Ranges", "none");

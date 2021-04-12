@@ -149,7 +149,7 @@ public class JSONRPC2Servlet extends HttpServlet {
         PrintWriter out = httpServletResponse.getWriter();
         out.println("<!DOCTYPE html>\n");
         out.println("<html>\n<head>\n");
-        out.println("<meta http-equiv=\"Content-Type\" content=\"text/html; charset=UTF-8\">");
+        out.println("<meta http-equiv=\"Content-Type\" content=\"text/html; charset=utf-8\">");
         out.println("<title>I2PControl - I2P+</title>");
         out.println("<link rel=\"icon\" href=\"/themes/console/dark/images/favicon.ico\">");
         out.println("<link href=\"/themes/i2pcontrol/i2pcontrol.css\" rel=\"stylesheet\" type=\"text/css\">");
@@ -204,7 +204,7 @@ public class JSONRPC2Servlet extends HttpServlet {
         String pw3 = req.getParameter("password3");
         out.println("<!DOCTYPE html>");
         out.println("<html>\n<head>");
-        out.println("<meta http-equiv=\"Content-Type\" content=\"text/html; charset=UTF-8\">");
+        out.println("<meta http-equiv=\"Content-Type\" content=\"text/html; charset=utf-8\">");
         out.println("<title>I2PControl - I2P+</title>");
         out.println("<link rel=\"icon\" href=\"/themes/console/dark/images/favicon.ico\">");
         out.println("<link href=\"/themes/i2pcontrol/i2pcontrol.css\" rel=\"stylesheet\" type=\"text/css\">");
