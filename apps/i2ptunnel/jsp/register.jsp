@@ -27,7 +27,7 @@
 <html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en" lang="en" id="tman">
 <head>
 <title><%=intl._t("Tunnel Manager")%> - <%=intl._t("Registration Helper")%></title>
-<meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
+<meta charset="utf-8">
 <script type="text/javascript" src="/js/iframeResizer/iframeResizer.contentWindow.js?<%=net.i2p.CoreVersion.VERSION%>"></script>
 <style type="text/css"> body {opacity: 0;}</style>
 <link type="image/x-icon" rel="shortcut icon" href="<%=editBean.getTheme()%>images/favicon.ico" />

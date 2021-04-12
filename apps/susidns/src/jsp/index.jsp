@@ -45,7 +45,7 @@
 <html>
 <head>
 <link rel="preload" href="images/how.svg" as="object">
-<meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+<meta charset="utf-8">
 <title><%=intl._t("Introduction")%> - SusiDNS</title>
 <link rel="stylesheet" type="text/css" href="<%=base.getTheme()%>susidns.css?<%=net.i2p.CoreVersion.VERSION%>">
 <link rel="stylesheet" type="text/css" href="<%=base.getTheme()%>override.css?<%=net.i2p.CoreVersion.VERSION%>">
@@ -68,13 +68,8 @@
 <h3><%=intl._t("What is the addressbook?")%></h3>
 <p>
 <%=intl._t("The addressbook application is part of your I2P installation.")%>&nbsp;<wbr>
-<%=intl._t("It regularly updates your hosts.txt file from distributed sources or \"subscriptions\".")%>
-</p>
-<p>
-<%=intl._t("In the default configuration, the address book is only subscribed to {0}.", "i2p-projekt.i2p")%>&nbsp;<wbr>
-<%=intl._t("Subscribing to additional sites is easy, just add them to your <a href=\"subscriptions\">subscriptions</a> file.")%>
-</p>
-<p>
+<%=intl._t("It regularly updates your hosts.txt file from distributed sources or \"subscriptions\".")%>&nbsp;<wbr>
+<%=intl._t("Subscribing to additional sites is easy, just add them to your <a href=\"subscriptions\">subscriptions</a> file.")%>&nbsp;<wbr>
 <%=intl._t("For more information on naming in I2P, see <a href=\"http://i2p-projekt.i2p/naming.html\" target=\"_blank\">the overview</a>.")%>
 </p>
 <h3><%=intl._t("How does the addressbook application work?")%></h3>

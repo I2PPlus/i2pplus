@@ -7,7 +7,13 @@
    *   Do not tag this file for translation - copy it to help_xx.jsp and translate inline.
    */
 %>
-<html>
+<%
+    net.i2p.I2PAppContext ctx = net.i2p.I2PAppContext.getGlobalContext();
+    String lang = "nl";
+    if (ctx.getProperty("routerconsole.lang") != null)
+        lang = ctx.getProperty("routerconsole.lang");
+%>
+<html lang="<%=lang%>">
 <head>
 <title>Help - I2P+</title>
 <%@include file="css.jsi" %>

@@ -25,7 +25,8 @@
        }
    } catch (IllegalStateException ise) {}
 %>
-<meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width">
 <jsp:useBean class="net.i2p.router.web.CSSHelper" id="intl" scope="request" />
 <jsp:setProperty name="intl" property="contextId" value="<%=i2pcontextId%>" />
 <%
@@ -86,7 +87,6 @@
    }
    if (!intl.allowIFrame(UA)) {
 %>
-<meta name="viewport" content="width=device-width; initial-scale=1.0; maximum-scale=1.0; user-scalable=0;" />
 <link href="<%=themePath%>mobile.css?<%=net.i2p.CoreVersion.VERSION%>" rel="stylesheet" type="text/css">
 <%
    }

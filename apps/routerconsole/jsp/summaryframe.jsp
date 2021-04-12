@@ -8,7 +8,13 @@
  * so they don't load in the iframe
  */
 %>
-<html>
+<%
+    net.i2p.I2PAppContext ctx = net.i2p.I2PAppContext.getGlobalContext();
+    String lang = "en";
+    if (ctx.getProperty("routerconsole.lang") != null)
+        lang = ctx.getProperty("routerconsole.lang");
+%>
+<html lang="<%=lang%>">
 <head>
 <%@include file="css.jsi" %>
 <title>Sidebar - I2P+</title>

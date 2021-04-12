@@ -1,7 +1,13 @@
 <%@page contentType="text/html"%>
 <%@page pageEncoding="UTF-8"%>
 <!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
-<html>
+<%
+    net.i2p.I2PAppContext context = net.i2p.I2PAppContext.getGlobalContext();
+    String lang = "en";
+    if (context.getProperty("routerconsole.lang") != null)
+        lang = context.getProperty("routerconsole.lang");
+%>
+<html lang="<%=lang%>">
 <head>
 <%@include file="css.jsi" %>
 <%=intl.title("config clients")%>
