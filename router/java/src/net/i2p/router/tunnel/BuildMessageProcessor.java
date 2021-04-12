@@ -162,8 +162,9 @@ public class BuildMessageProcessor {
         }
         if (rv == null) {
             // none of the records matched, b0rk
-            if (log.shouldLog(Log.WARN))
-                log.warn("[MsgID " + msg.getUniqueId() + "] No record decrypted");
+// Info presented elsewhere
+//            if (log.shouldLog(Log.WARN))
+//                log.warn("[MsgID " + msg.getUniqueId() + "] No record decrypted");
             return null;
         }
 
