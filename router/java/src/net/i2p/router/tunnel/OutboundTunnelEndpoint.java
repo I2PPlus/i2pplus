@@ -39,7 +39,7 @@ class OutboundTunnelEndpoint {
             // If we pass it on to the handler, it will fail
             // If we don't, the data buf won't get released from the cache... that's ok
             if (_log.shouldLog(Log.WARN))
-                _log.warn("Invalid IV, dropping at Outbound Endpoint " + _config);
+                _log.warn("Invalid IV, dropping at Outbound Endpoint... " + _config);
             return;
         }
         ok = _handler.receiveTunnelMessage(data, 0, data.length);

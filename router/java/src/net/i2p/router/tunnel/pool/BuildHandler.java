@@ -551,7 +551,7 @@ class BuildHandler implements Runnable {
             long handleTime = System.currentTimeMillis() - beforeHandle;
             if (_log.shouldLog(Log.DEBUG))
                 _log.debug("Request handled after " + handleTime + "ms / " + decryptTime + "ms / " + lookupTime + "ms / " + timeSinceReceived + "ms" +
-                           " and we know the next peer [" + nextPeer.toBase64().substring(0,6) + "]" + 
+                           " and we know the next peer [" + nextPeer.toBase64().substring(0,6) + "]" +
                            "\n* From: " + from + "[MsgID: " +  state.msg.getUniqueId() + "]" + req);
             return handleTime;
         }
@@ -628,7 +628,7 @@ class BuildHandler implements Runnable {
                 Hash from = _state.fromHash;
                 if (from == null && _state.from != null)
                     from = _state.from.calculateHash();
-                _log.warn("Next hop lookup failure: " + _req
+                _log.warn("Next hop lookup failure " + _req
                           + " From: " + from
                           + " ID: " + _state.msg.getUniqueId());
             }

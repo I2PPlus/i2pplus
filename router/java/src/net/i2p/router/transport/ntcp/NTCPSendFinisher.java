@@ -29,7 +29,7 @@ class NTCPSendFinisher {
     private static final int MIN_THREADS = 1;
 //    private static final int MAX_THREADS = 4;
 //    private static final int MAX_THREADS = Math.min(SystemVersion.getCores(), 3);
-    private static final int MAX_THREADS = SystemVersion.getMaxMemory() < 1024*1024*1024 ? 6 : Math.min(SystemVersion.getCores() * 2, 10);
+    private static final int MAX_THREADS = SystemVersion.getMaxMemory() < 1024*1024*1024 ? 6 : Math.min(SystemVersion.getCores() * 2, 8);
     private final I2PAppContext _context;
     private final NTCPTransport _transport;
     private final Log _log;

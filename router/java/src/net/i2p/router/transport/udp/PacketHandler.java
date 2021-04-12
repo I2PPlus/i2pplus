@@ -47,7 +47,7 @@ class PacketHandler {
     private static final int MAX_QUEUE_SIZE = 512;
     private static final int MIN_NUM_HANDLERS = 1;  // if < 32MB
 //    private static final int MAX_NUM_HANDLERS = 1;
-    private static final int MAX_NUM_HANDLERS = SystemVersion.getMaxMemory() < 1024*1024*1024 ? 6 : Math.min(SystemVersion.getCores() * 2, 10);
+    private static final int MAX_NUM_HANDLERS = SystemVersion.getMaxMemory() < 1024*1024*1024 ? 6 : Math.min(SystemVersion.getCores() * 2, 8);
     /**
      *  Let packets be up to this much skewed.
      *  This is the same limit as in InNetMessagePool's MessageValidator.
