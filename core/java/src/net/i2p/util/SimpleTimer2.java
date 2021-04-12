@@ -302,7 +302,7 @@ public class SimpleTimer2 {
                 _log.debug("Scheduling: " + truncClass + " (timeout: " + timeoutMs + "ms) [..." + _state + "]");
             if (timeoutMs <= 0) {
                 // streaming timers do call with timeoutMs == 0
-                if (timeoutMs < 0 && _log.shouldLog(Log.WARN))
+                if (timeoutMs < 0 && _log.shouldLog(Log.DEBUG))
                     _log.warn("Scheduled timeout < 0ms (" + timeoutMs + "ms): " + truncClass + " [" + _state + "]");
                 timeoutMs = 1; // otherwise we may execute before _future is updated, which is fine
                                // except it triggers 'early execution' warning logging
