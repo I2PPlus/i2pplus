@@ -94,7 +94,7 @@
     <rect class="subs" width="419" height="66" x="506" y="122" ry="10"/>
     <rect class="a tooltip" width="419" height="62" x="506" y="95" ry="10"/>
     <text class="b" x="715" y="132">
-      <tspan class="c" id="hoverhide" x="715" y="132">http://i2p-projekt.i2p/hosts.txt</tspan>
+      <tspan class="c" id="hoverhide" x="715" y="132">http://notbob.i2p/hosts.txt</tspan>
       <tspan class="c" id="hovershow" x="715" y="132">_("Configure Subscriptions")</tspan>
     </text>
   </a>
