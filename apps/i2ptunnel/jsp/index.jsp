@@ -11,8 +11,8 @@
 <jsp:useBean class="net.i2p.i2ptunnel.ui.Messages" id="intl" scope="request" />
 <html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en" lang="en" id="tman">
 <head>
+<meta charset="utf-8">
 <title><%=intl._t("Tunnel Manager")%></title>
-<meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
 <link href="/themes/console/images/favicon.ico" type="image/x-icon" rel="shortcut icon" />
 <link rel="icon" href="<%=indexBean.getTheme()%>images/favicon.ico" />
 <link href="<%=indexBean.getTheme()%>i2ptunnel.css?<%=net.i2p.CoreVersion.VERSION%>" rel="stylesheet" type="text/css" /> 

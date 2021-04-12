@@ -23,7 +23,7 @@ if (uri.endsWith(".css")) {
 } else if (uri.endsWith(".svg")) {
   response.setContentType("image/svg+xml");
 } else if (uri.endsWith(".ttf")) {
-  response.setContentType("application/x-font-ttf");
+  response.setContentType("font/ttf");
 } else if (uri.endsWith(".html")) {
   // /javadoc/
   response.setContentType("text/html");

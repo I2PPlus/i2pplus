@@ -29,7 +29,7 @@ if (tun != null) {
 <html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en" lang="en" id="tman">
 <head>
 <title><%=intl._t("Tunnel Manager")%> - <%=(__isClient ? intl._t("Edit Client Tunnel") : intl._t("Edit Server Tunnel"))%></title>
-<meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
+<meta charset="utf-8">
 <script type="text/javascript" src="/js/iframeResizer/iframeResizer.contentWindow.js?<%=net.i2p.CoreVersion.VERSION%>"></script>
 <style type="text/css">body{opacity: 0} input.default{width: 1px; height: 1px; visibility: hidden}</style>
 <link rel="shortcut icon" type="image/x-icon" href="<%=editBean.getTheme()%>images/favicon.ico" />
