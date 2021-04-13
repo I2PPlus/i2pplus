@@ -35,7 +35,8 @@ class ParticipatingThrottler {
     private static final int LIFETIME_PORTION = 3;
     private static final int MIN_LIMIT = 18 / LIFETIME_PORTION;
     private static final int MAX_LIMIT = 66 / LIFETIME_PORTION;
-    private static final int PERCENT_LIMIT = 12 / LIFETIME_PORTION;
+//    private static final int PERCENT_LIMIT = 12 / LIFETIME_PORTION;
+    private static final int PERCENT_LIMIT = 24 / LIFETIME_PORTION;
     private static final long CLEAN_TIME = 11*60*1000 / LIFETIME_PORTION;
 
     ParticipatingThrottler(RouterContext ctx) {
