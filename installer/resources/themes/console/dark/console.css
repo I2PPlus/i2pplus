@@ -4,6 +4,7 @@
 /* Author: dr|z3d */
 
 @import url(/themes/fonts/DroidSans.css);
+@import url(/themes/console/images.css);
 @import url(optbox.css);
 @import url(chromescroll.css);
 
@@ -11,8 +12,13 @@
   --camo: url("data:image/svg+xml,%3Csvg viewBox='0 0 240 240' xmlns='http://www.w3.org/2000/svg' xmlns:xlink='http://www.w3.org/1999/xlink'%3E%3Cfilter id='a'%3E%3CfeTurbulence baseFrequency='.2' numOctaves='4' seed='7' stitchTiles='stitch' type='fractalNoise'/%3E%3CfeTile/%3E%3CfeComponentTransfer%3E%3CfeFuncR slope='0.9469288793103452' tableValues='0 0 0 0 1 1' type='discrete'/%3E%3CfeFuncG slope='1.1477696210488517' tableValues='0 0 0 1 1' type='discrete'/%3E%3CfeFuncB intercept='4.3091942798132177' slope='-1.9643779184626435' tableValues='0 1' type='discrete'/%3E%3CfeFuncA intercept='-3.5179822198275872' slope='3.4636819773706904' type='discrete'/%3E%3C/feComponentTransfer%3E%3CfeColorMatrix values='1 0 0 0 0 -1 1 0 0 0 -1 -1 1 0 0 0 0 0 0 1'/%3E%3CfeColorMatrix type='matrix' values='-0.08 0.42 0.09 0 0.08 -0.17 0.35 -0.08 0 0.17 -0.08 0.15 -0.04 0 0.08 0 0 0 0 1'/%3E%3C/filter%3E%3Cpath d='m-29.6-29.6h256v256h-256z' filter='url(%23a)'/%3E%3Cpath d='m-4-4h256v256h-256z' fill='%23080000' opacity='.7'/%3E%3C/svg%3E");
   --bodyfont: Droid Sans, Open Sans, Noto Sans, Ubuntu, Segoe UI, Bitstream Vera Sans, DejaVu Sans, Verdana, Lucida Grande, Helvetica, sans-serif;
   --monospaced: Droid Sans Mono, Noto Mono, DejaVu Sans Mono, Lucida Console, monospace;
-  --h1: repeating-linear-gradient(to right, rgba(0,0,0,.5) 1px, rgba(0,0,0,.5) 2px, rgba(0,16,0,.5) 3px), linear-gradient(to bottom, #1a261a, #223022 7%, #212f21 9%, #172317 21%, #091109 46%, #050d05 48%, #020602 52%, #010301 54%, #000000 56%), url(images/camotile2.png) #000;
+  --h1: var(--h3), linear-gradient(to bottom, #1a261a, #223022 7%, #212f21 9%, #172317 21%, #091109 46%, #050d05 48%, #020602 52%, #010301 54%, #000000 56%), url(images/camotile2.png) #000;
+  --h3: repeating-linear-gradient(to right, rgba(0,0,0,.5) 1px, rgba(0,0,0,.5) 2px, rgba(0,16,0,.5) 3px);
+  --h3_fade: linear-gradient(to bottom, #005000, #000 75%);
+  --h3_blend: normal, normal, exclusion, exclusion;
   --lowlight: inset 0 0 0 1px #000;
+  --element: linear-gradient(to bottom, #020, #010);
+  --navbar: linear-gradient(to bottom, #1a261a, #223022 7%, #212f21 9%, #172317 21%, #091109 49%, #050d05 50%, #020602 51%, #010301 53%, #000000 56%);
 }
 
 html {
@@ -236,7 +242,7 @@ pre {
   text-align: justify;
   font-size: 10pt;
   border: 5px solid #010;
-  border-image: repeating-linear-gradient(135deg, #010 0px, #010 20px, #440 20px, #440 40px, #010 40px) 5 repeat repeat;
+  border-image: repeating-linear-gradient(135deg, #010, #010 20px, #440 20px, #440 40px, #010 40px) 5 repeat repeat;
   border-image-width: 5px;
   border-image-outset: 1px;
   box-shadow: inset 0 0 0 1px #700, inset 0 0 3px 3px #000, 0 0 0 2px #000;
@@ -504,8 +510,8 @@ pre {
   transition: ease all .2s;
   background: radial-gradient(at center bottom, rgba(16, 72, 16, .4) 0, rgba(0, 0, 0, 0) 50%),
               linear-gradient(to bottom, rgba(0,0,0,0) 50%, #000 50%),
-              repeating-linear-gradient(to right, rgba(0,0,0,.5) 1px, rgba(0,0,0,.5) 2px, rgba(0,16,0,.5) 3px),
-              linear-gradient(to bottom, #005000, #000 75%) !important;
+              var(--h3),
+              var(--h3_fade) !important;
 }
 
 .routersummary h3::after {
@@ -574,7 +580,6 @@ pre {
 .routersummary table {
   margin: -5px -7px -6px -8px !important;
   padding: 1px 1px 0;
-  width: 200px !important;
   width: 210px !important;
   overflow: hidden;
   text-align: center !important;
@@ -667,7 +672,7 @@ pre {
 }
 
 #sb_localtunnels td:first-child {
-  background-image: url(/themes/console/images/svg/client.svg) !important;
+  background-image: var(--client) !important;
   background-position: center center !important;
   background-repeat: no-repeat !important;
   background-size: 16px;
@@ -678,12 +683,12 @@ pre {
 }
 
 #sb_localtunnels td.tunnelServer {
-  background-image: url(/themes/console/images/svg/server.svg) !important;
+  background-image: var(--server) !important;
   background-size: 16px;
 }
 
 #sb_localtunnels td.ping {
-  background-image: url(/themes/console/images/svg/ping.svg) !important;
+  background-image: var(--ping) !important;
   background-size: 16px;
 }
 
@@ -1126,11 +1131,11 @@ a:active img[src="/themes/console/images/i2plogo.png"] {
 }
 
 #warning2 b {
-  display: inline-block;
-  min-width: 140px;
-  text-align: right;
   margin-right: 5px;
+  min-width: 140px;
+  display: inline-block;
   line-height: 150%;
+  text-align: right;
 }
 
 .sorry hr {
@@ -1417,7 +1422,7 @@ div.widescroll { /* only scroll content, not entire page eg /peers */
   box-shadow: var(--lowlight);
   background: url(images/header.png) repeat-x scroll center center #000;
   background: linear-gradient(to bottom, #001000, #001900 50%, #000 51%, #000) !important;
-  background: repeating-linear-gradient(to right, rgba(0,0,0,.5) 1px, rgba(0,0,0,.5) 2px, rgba(0,16,0,.5) 3px), linear-gradient(to bottom, #1a261a, #223022 7%, #212f21 9%, #172317 21%, #091109 49%, #050d05 50%, #020602 51%, #010301 53%, #000000 56%) repeat scroll 0, url("/themes/console/dark/images/camotile2.png") !important;
+  background: var(--h3), var(--navbar), url(/themes/console/dark/images/camotile2.png) !important;
   background-blend-mode: normal, exclusion, normal;
 }
 
@@ -2209,8 +2214,8 @@ h4 {
 }
 
 h1, h2, h3:not([id*="help"]), h4.app, h4.app2 {
-  background: linear-gradient(to bottom, #1a261a, #223022 7%, #212f21 9%, #172317 21%, #091109 49%, #050d05 50%, #020602 51%, #010301 53%, #000000 56%) !important;
-  background: linear-gradient(to bottom, rgba(0,0,0,0) 50%, #000 50%), repeating-linear-gradient(to right, rgba(0,0,0,.5) 1px, rgba(0,0,0,.5) 2px, rgba(0,16,0,.5) 3px), linear-gradient(to bottom, #005000, #000 75%) !important;
+  background: var(--navbar) !important;
+  background: linear-gradient(to bottom, rgba(0,0,0,0) 50%, #000 50%), var(--h3), var(--h3_fade) !important;
 }
 
 h2, h3, h4 {
@@ -2233,13 +2238,13 @@ h4.app, h4.app2 {
 h4.app {
   background: url(/themes/console/images/eepsite.png) 5px center no-repeat, var(--h1) !important;
   background-size: 18px, 100%, 100%, 175px !important;
-  background-blend-mode: normal, normal, exclusion, exclusion !important;
+  background-blend-mode: var(--h3_blend) !important;
 }
 
 h4.app2 {
   background: url(/themes/console/images/world.png) 5px center no-repeat, var(--h1) !important;
   background-size: 18px, 100%, 100%, 175px !important;
-  background-blend-mode: normal, normal, exclusion, exclusion !important;
+  background-blend-mode: var(--h3_blend) !important;
 }
 
 h4.app::first-letter, h4.app2::first-letter {
@@ -4742,44 +4747,38 @@ h3#servicedebug a, h3#graphinfo a {
 
 #tunnels h3.client {
   padding-left: 35px;
-  background: url(/themes/console/images/svg/client.svg) 9px center no-repeat, linear-gradient(to bottom, rgba(0,0,0,0) 50%, #000 50%), repeating-linear-gradient(to right, rgba(0,0,0,.5) 1px, rgba(0,0,0,.5) 2px, rgba(0,16,0,.5) 3px), linear-gradient(to bottom, #005000, #000 75%) !important;
+  background: var(--client) 9px center no-repeat, linear-gradient(to bottom, rgba(0,0,0,0) 50%, #000 50%), var(--h3), var(--h3_fade) !important;
   background-size: 18px, 100%, 100%, 100% !important;
 }
 
 #tunnels h3.ping {
   padding-left: 35px;
-  background: url(/themes/console/images/svg/ping.svg) 9px center no-repeat, linear-gradient(to bottom, rgba(0,0,0,0) 50%, #000 50%), repeating-linear-gradient(to right, rgba(0,0,0,.5) 1px, rgba(0,0,0,.5) 2px, rgba(0,16,0,.5) 3px), linear-gradient(to bottom, #005000, #000 75%) !important;
+  background: var(--ping) 9px center no-repeat, linear-gradient(to bottom, rgba(0,0,0,0) 50%, #000 50%), var(--h3), var(--h3_fade) !important;
   background-size: 18px, 100%, 100%, 100% !important;
 }
 
 #tunnels h3#exploratory {
   padding-left: 35px;
-  background: url(/themes/console/images/svg/globe.svg) 9px center no-repeat, linear-gradient(to bottom, rgba(0,0,0,0) 50%, #000 50%), repeating-linear-gradient(to right, rgba(0,0,0,.5) 1px, rgba(0,0,0,.5) 2px, rgba(0,16,0,.5) 3px), linear-gradient(to bottom, #005000, #000 75%) !important;
+  background: var(--globe) 9px center no-repeat, linear-gradient(to bottom, rgba(0,0,0,0) 50%, #000 50%), var(--h3), var(--h3_fade) !important;
   background-size: 18px, 100%, 100%, 100% !important;
 }
 
 #tunnels h3.server {
   padding-left: 35px;
-  background: url(/themes/console/images/svg/server.svg) 9px center no-repeat, linear-gradient(to bottom, rgba(0,0,0,0) 50%, #000 50%), repeating-linear-gradient(to right, rgba(0,0,0,.5) 1px, rgba(0,0,0,.5) 2px, rgba(0,16,0,.5) 3px), linear-gradient(to bottom, #005000, #000 75%) !important;
+  background: var(--server) 9px center no-repeat, linear-gradient(to bottom, rgba(0,0,0,0) 50%, #000 50%), var(--h3), var(--h3_fade) !important;
   background-size: 18px, 100%, 100%, 100% !important;
 }
 
 #tunnels h3#participating {
   padding-left: 35px;
-  background: url(/themes/console/images/info/share.png) 6px center no-repeat, linear-gradient(to bottom, rgba(0,0,0,0) 50%, #000 50%), repeating-linear-gradient(to right, rgba(0,0,0,.5) 1px, rgba(0,0,0,.5) 2px, rgba(0,16,0,.5) 3px), linear-gradient(to bottom, #005000, #000 75%) !important;
-  background-size: 18px, 100%, 100%, 100% !important;
-}
-
-#tunnels h3.dead {
-  padding-left: 32px;
-  background: url(/themes/console/images/info/rip.png) 6px center no-repeat, linear-gradient(to bottom, rgba(0,0,0,0) 50%, #000 50%), repeating-linear-gradient(to right, rgba(0,0,0,.5) 1px, rgba(0,0,0,.5) 2px, rgba(0,16,0,.5) 3px), linear-gradient(to bottom, #005000, #000 75%) !important;
+  background: url(/themes/console/images/info/share.png) 6px center no-repeat, linear-gradient(to bottom, rgba(0,0,0,0) 50%, #000 50%), var(--h3), var(--h3_fade) !important;
   background-size: 18px, 100%, 100%, 100% !important;
 }
 
 #tunnels h3:last-of-type {
   padding-left: 35px;
   padding-bottom: 7px !important;
-  background: url(/themes/console/images/svg/speedometer.svg) 9px center no-repeat, linear-gradient(to bottom, rgba(0,0,0,0) 50%, #000 50%), repeating-linear-gradient(to right, rgba(0,0,0,.5) 1px, rgba(0,0,0,.5) 2px, rgba(0,16,0,.5) 3px), linear-gradient(to bottom, #005000, #000 75%) !important;
+  background: url(/themes/console/images/svg/speedometer.svg) 9px center no-repeat, linear-gradient(to bottom, rgba(0,0,0,0) 50%, #000 50%), var(--h3), var(--h3_fade) !important;
   background-size: 18px, 100%, 100%, 100% !important;
 }
 
@@ -5236,8 +5235,8 @@ ul#upnphelp li:last-child, #legal ul li:last-child {
 
 #faq h3 {
   padding-left: 35px !important;
-  background: url(/themes/console/images/info/question.png) 10px center no-repeat, linear-gradient(to bottom, #1a261a, #223022 7%, #212f21 9%, #172317 21%, #091109 49%, #050d05 50%, #020602 51%, #010301 53%, #000000 56%) !important;
-  background: url(/themes/console/images/info/question.png) 10px center no-repeat, linear-gradient(to bottom, #0000 50%, #000 50%), repeating-linear-gradient(to right, #00000080 1px, #00000080 2px, #00100080 3px), linear-gradient(to bottom, #005000, #000 75%) !important;
+  background: url(/themes/console/images/info/question.png) 10px center no-repeat, var(--navbar) !important;
+  background: url(/themes/console/images/info/question.png) 10px center no-repeat, linear-gradient(to bottom, #0000 50%, #000 50%), repeating-linear-gradient(to right, #00000080 1px, #00000080 2px, #00100080 3px), var(--h3_fade) !important;
   background-size: 18px, 100% !important;
   text-transform: none;
   font-size: 10.5pt !important;
@@ -6389,7 +6388,7 @@ h3#bannedpeers {
 }
 
 #console .welcome h2 {
-  background: url(/themes/console/images/eepsite.png) right 6px center no-repeat, repeating-linear-gradient(to right, rgba(0,0,0,.5) 1px, rgba(0,0,0,.5) 2px, rgba(0,16,0,.5) 3px), linear-gradient(to bottom, rgba(0,0,0,0) 50%, #000 50%), linear-gradient(to bottom, #005000, #000 75%) !important;
+  background: url(/themes/console/images/eepsite.png) right 6px center no-repeat, var(--h3), linear-gradient(to bottom, rgba(0,0,0,0) 50%, #000 50%), var(--h3_fade) !important;
   background-size: 24px, 100%, 100% !important;
   background-blend-mode: luminosity, normal, normal;
 }
@@ -7023,7 +7022,7 @@ h4 span[style="float: right;"] .unbold {
   border-radius: 2px;
   box-shadow: 0 0 0 1px #000;
   background: #020;
-  background: linear-gradient(to bottom, #020, #010);
+  background: var(--element);
 }
 
 .lsdest {
@@ -7031,22 +7030,22 @@ h4 span[style="float: right;"] .unbold {
   border-radius: 0;
   border-left-width: 4px;
   border-right-width: 4px;
-  background: url(/themes/console/images/svg/hardhat.svg) 4px center no-repeat, linear-gradient(to bottom, #020, #010);
+  background: url(/themes/console/images/svg/hardhat.svg) 4px center no-repeat, var(--element);
   background-size: 14px, 100%;
 }
 
 .lsdest.published {
   padding-left: 38px;
   background: url(/themes/console/images/svg/hardhat.svg) 4px center no-repeat,
-              url(/themes/console/images/svg/globe.svg) 22px center no-repeat,
-              linear-gradient(to bottom, #020, #010);
+              var(--globe) 22px center no-repeat,
+              var(--element);
   background-size: 14px, 12px, 100%;
 }
 
 .leaseset th:last-child a[href$="i2p/"] {
   padding-left: 22px;
   background: #020 url(/themes/console/images/svg/link.svg) 5px center no-repeat;
-  background: url(/themes/console/images/svg/link.svg) 5px center no-repeat, linear-gradient(to bottom, #020, #010);
+  background: url(/themes/console/images/svg/link.svg) 5px center no-repeat, var(--element);
   background-size: 12px, 100%;
 }
 
@@ -7785,7 +7784,7 @@ th.th_title {
   padding: 8px 10px !important;
   text-align: left;
   background: linear-gradient(to bottom, #1a261a,#223022 7%,#212f21 9%,#172317 21%,#091109 49%,#050d05 50%,#020602 51%,#010301 53%,#000000 56%,#000000) !important;
-  background: linear-gradient(to bottom, rgba(0,0,0,0) 50%, #000 50%), repeating-linear-gradient(to right, rgba(0,0,0,.5) 1px, rgba(0,0,0,.5) 2px, rgba(0,16,0,.5) 3px), linear-gradient(to bottom, #005000, #000 75%) !important;
+  background: linear-gradient(to bottom, rgba(0,0,0,0) 50%, #000 50%), var(--h3), var(--h3_fade) !important;
 }
 
 input#hideme {
@@ -8435,7 +8434,7 @@ h4#sb_shutdownstatus span {
   border: 1px solid #030;
   box-shadow: 0 0 0 1px #000;
   background: #020;
-  background: linear-gradient(to bottom, #020, #010);
+  background: var(--element);
 }
 
 .tunnel_cap, .tier, .reachable, .ff, .tunnel_id {
@@ -8491,7 +8490,7 @@ h4#sb_shutdownstatus span {
   text-align: center !important;
   border: 1px solid #030;
   background: #020;
-  background: linear-gradient(to bottom, #020, #010);
+  background: var(--element);
 }
 
 .tunnel_id:empty {
@@ -8525,7 +8524,7 @@ h4#sb_shutdownstatus span {
   text-align: center;
   box-shadow: 0 0 0 1px #000;
   background: #020;
-  background: linear-gradient(to bottom, #020, #010);
+  background: var(--element);
 }
 
 @media screen and (min-width: 1500px) {
@@ -9034,8 +9033,8 @@ th code {
   margin-top: 11px !important;
   padding: 8px 10px;
   font-size: 11.5pt;
-  background: url(/themes/console/images/info/debug.png) right 5px center no-repeat, linear-gradient(to bottom, #1a261a, #223022 7%, #212f21 9%, #172317 21%, #091109 49%, #050d05 50%, #020602 51%, #010301 53%, #000000 56%) !important;
-  background: url(/themes/console/images/info/debug.png) right 5px center no-repeat, linear-gradient(to bottom, rgba(0,0,0,0) 50%, #000 50%), repeating-linear-gradient(to right, rgba(0,0,0,.5) 1px, rgba(0,16,0,.5) 2px, rgba(0,16,0,.4) 3px), linear-gradient(to bottom, #005000, #000 75%) !important;
+  background: url(/themes/console/images/info/debug.png) right 5px center no-repeat, var(--navbar) !important;
+  background: url(/themes/console/images/info/debug.png) right 5px center no-repeat, linear-gradient(to bottom, rgba(0,0,0,0) 50%, #000 50%), repeating-linear-gradient(to right, rgba(0,0,0,.5) 1px, rgba(0,16,0,.5) 2px, rgba(0,16,0,.4) 3px), var(--h3_fade) !important;
   background-size: 20px, 100%, 100%, 100% !important;
   background-blend-mode: luminosity, normal, normal, normal;
 }
@@ -9123,12 +9122,12 @@ th code {
 #debug h3.debug_outboundsessions {
   margin-top: -2px !important;
   background: url(/themes/console/images/outbound.png) 6px center no-repeat, linear-gradient(to bottom, #1a261a, #223022 7%, #212f21 9%, #172317 21%, #091109 49%, #050d05 50%, #020602 51%, #010301 53%, #000 56%) !important;
-  background: url(/themes/console/images/outbound.png) 6px center no-repeat, linear-gradient(to bottom, rgba(0,0,0,0) 50%, #000 50%), repeating-linear-gradient(to right, rgba(0,0,0,.5) 1px, rgba(0,16,0,.5) 2px, rgba(0,16,0,.4) 3px), linear-gradient(to bottom, #005000, #000 75%) !important;
+  background: url(/themes/console/images/outbound.png) 6px center no-repeat, linear-gradient(to bottom, rgba(0,0,0,0) 50%, #000 50%), repeating-linear-gradient(to right, rgba(0,0,0,.5) 1px, rgba(0,16,0,.5) 2px, rgba(0,16,0,.4) 3px), var(--h3_fade) !important;
 }
 
 #debug h3.debug_inboundsessions {
   background: url(/themes/console/images/inbound.png) 6px center no-repeat, linear-gradient(to bottom, #1a261a, #223022 7%, #212f21 9%, #172317 21%, #091109 49%, #050d05 50%, #020602 51%, #010301 53%, #000 56%) !important;
-  background: url(/themes/console/images/inbound.png) 6px center no-repeat, linear-gradient(to bottom, rgba(0,0,0,0) 50%, #000 50%), repeating-linear-gradient(to right, rgba(0,0,0,.5) 1px, rgba(0,16,0,.5) 2px, rgba(0,16,0,.4) 3px), linear-gradient(to bottom, #005000, #000 75%) !important;
+  background: url(/themes/console/images/inbound.png) 6px center no-repeat, linear-gradient(to bottom, rgba(0,0,0,0) 50%, #000 50%), repeating-linear-gradient(to right, rgba(0,0,0,.5) 1px, rgba(0,16,0,.5) 2px, rgba(0,16,0,.4) 3px), var(--h3_fade) !important;
 }
 
 .debug_version {
@@ -10019,44 +10018,6 @@ _:-ms-lang(x), .tunnels_client th:first-child::after {
 
 /* end Edge/IE tweaks */
 
-/* TODO: can we simplify sidebar element positioning by getting a handle on the #xhr div? */
-
-/*#xhr {
-  width: 204px;
-  background: rgba(255,0,0,.05);
-  margin: 0 0 0 -12px;
-  text-align: center !important;
-}
-
-.routersummary table, #sb_localtunnels {
-  width: 200px !important;
-  width: 100% !important;
-  margin-left: 2px !important;
-  margin-right: 2px !important;
-}
-
-.routersummary h4 {
-  width: 198px !important;
-  margin: 0 0 0 2px; !important;
-  display: inline-block;
-}
-
-.routersummary h3, .routersummary hr {
-  width: 100% !important;
-  margin-left: 0 !important;
-  margin-right: 0 !important;
-}
-
-.routersummary table {
-  margin-top: -6px !important;
-  margin-bottom: -6px !important;
-  width: 100% !important;
-  border-spacing: 4px;
-  border-collapse: separate;
-  box-shadow: var(--lowlight), inset 0 0 2px 1px #040, inset 0 0 0 3px #000 !important;
-}
-*/
-
 /* TO DO: Merge with main classes */
 
 .optionlist {
@@ -10184,7 +10145,7 @@ th.options, #externali2cp th {
   text-align: center;
   box-shadow: 0 0 0 1px #000 !important;
   background: #020;
-  background: linear-gradient(to bottom, #020, #010);
+  background: var(--element);
 }
 
 .routerid, .tunnel_local, #tunnels .tunnel_cap, .version, #netdbtiers a {
@@ -11530,7 +11491,7 @@ h3#pconfig {
   border-radius: 2px;
   box-shadow: 0 0 0 1px #000;
   background: #020;
-  background: linear-gradient(to bottom, #020, #010);
+  background: var(--element);
 }
 
 #netdb .netdbentry th code, #netdb .sybil_routerinfo th code, .leaseset th code {
@@ -11675,7 +11636,7 @@ h3#pconfig {
   border: 1px solid #030;
   box-shadow: 0 0 0 1px #000;
   background: #020;
-  background: linear-gradient(to bottom, #020, #010);
+  background: var(--element);
 }
 
 #tunnelPeerCount .configpeer img  {
@@ -11767,7 +11728,7 @@ h3#pconfig {
   font-weight: bold;
   box-shadow: 0 0 0 1px #000;
   background: #020;
-  background: linear-gradient(to bottom, #020, #010) !important;
+  background: var(--element) !important;
 }
 
 #netdbtiers a {
@@ -11822,14 +11783,14 @@ h3#pconfig {
   display: inline-block;
   color: #ee9 !important;
   background: #020 url(/themes/console/images/buttons/cryptokey.png) 3px center no-repeat;
-  background: url(/themes/console/images/buttons/cryptokey.png) 3px center no-repeat, linear-gradient(to bottom, #020, #010);
+  background: url(/themes/console/images/buttons/cryptokey.png) 3px center no-repeat, var(--element);
   background-size: 14px, 100%;
 }
 
 .signingkey.encryption {
   padding-left: 20px;
   background: #020 url(/themes/console/images/svg/lock.svg) 5px center no-repeat;
-  background: url(/themes/console/images/svg/lock.svg) 5px center no-repeat, linear-gradient(to bottom, #020, #010);
+  background: url(/themes/console/images/svg/lock.svg) 5px center no-repeat, var(--element);
   background-size: 12px, 100%;
 }
 
@@ -11842,7 +11803,7 @@ h3#pconfig {
   padding: 3px 3px 4px;
   display: inline-block;
   background: #020;
-  background: linear-gradient(to bottom, #020, #010);
+  background: var(--element);
 }
 
 /* end netdb */
@@ -12803,7 +12764,7 @@ h1[class], h1 {
 #config_logging td.optionsave, #config_network td.optionsave, #config_peers .configtable tr:nth-child(4) td, #config_peers .configtable tr:last-child td, #pluginconfigactions.formaction,
 #reseedconfig td.optionsave, #config_service .formaction, #configstats tr.tablefooter, #config_summarybar .formaction,#sidebarconf tr:last-child, #tunnelconfigsave.formaction, #config_ui .formaction,
 #graphing.formaction, #i2pupdates tr:nth-child(2), #i2pupdates tr.tablefooter, #webappconfigactions.formaction, #oldhome tr, #sybilTask .optionsave {
-  background: repeating-linear-gradient(to right, rgba(0,0,0,.5) 1px, rgba(0,0,0,.5) 2px, rgba(0,16,0,.5) 3px), linear-gradient(to bottom, #020, #000 75%) !important;
+  background: var(--h3), linear-gradient(to bottom, #020, #000 75%) !important;
 }
 
 .sitelink, .chatlink, .consolelink {
@@ -12955,67 +12916,67 @@ h1[class], h1 {
 
 #configurationhelp h2, #advancedsettings h2, #filterlist h2 {
   padding-left: 38px;
-  background: url(/themes/console/images/info/configure.png) 10px center no-repeat, linear-gradient(to bottom, rgba(0,0,0,0) 50%, #000 50%), repeating-linear-gradient(to right, rgba(0,0,0,.5) 1px, rgba(0,0,0,.5) 2px, rgba(0,16,0,.5) 3px), linear-gradient(to bottom, #005000, #000 75%) !important;
+  background: url(/themes/console/images/info/configure.png) 10px center no-repeat, linear-gradient(to bottom, rgba(0,0,0,0) 50%, #000 50%), var(--h3), var(--h3_fade) !important;
   background-size: 20px, 100%, 100%, 100% !important;
 }
 
 #sidebarhelp h2, #reachabilityhelp h2 {
   padding-left: 38px;
-  background: url(/themes/console/images/info/sidebar.png) 10px center no-repeat, linear-gradient(to bottom, rgba(0,0,0,0) 50%, #000 50%), repeating-linear-gradient(to right, rgba(0,0,0,.5) 1px, rgba(0,0,0,.5) 2px, rgba(0,16,0,.5) 3px), linear-gradient(to bottom, #005000, #000 75%) !important;
+  background: url(/themes/console/images/info/sidebar.png) 10px center no-repeat, linear-gradient(to bottom, rgba(0,0,0,0) 50%, #000 50%), var(--h3), var(--h3_fade) !important;
   background-size: 20px, 100%, 100%, 100% !important;
 }
 
 #reseedhelp h2 {
   padding-left: 38px;
-  background: url(/themes/console/images/svg/reseed.svg) 10px center no-repeat, linear-gradient(to bottom, rgba(0,0,0,0) 50%, #000 50%), repeating-linear-gradient(to right, rgba(0,0,0,.5) 1px, rgba(0,0,0,.5) 2px, rgba(0,16,0,.5) 3px), linear-gradient(to bottom, #005000, #000 75%) !important;
+  background: url(/themes/console/images/svg/reseed.svg) 10px center no-repeat, linear-gradient(to bottom, rgba(0,0,0,0) 50%, #000 50%), var(--h3), var(--h3_fade) !important;
   background-size: 20px, 100%, 100%, 100% !important;
 }
 
 #newuserguide h2 {
   padding-left: 38px;
-  background: url(/themes/console/images/info/notice.png) 10px center no-repeat, linear-gradient(to bottom, rgba(0,0,0,0) 50%, #000 50%), repeating-linear-gradient(to right, rgba(0,0,0,.5) 1px, rgba(0,0,0,.5) 2px, rgba(0,16,0,.5) 3px), linear-gradient(to bottom, #005000, #000 75%) !important;
+  background: url(/themes/console/images/info/notice.png) 10px center no-repeat, linear-gradient(to bottom, rgba(0,0,0,0) 50%, #000 50%), var(--h3), var(--h3_fade) !important;
   background-size: 20px, 100%, 100%, 100% !important;
 }
 
 #troubleshoot h2 {
   padding-left: 38px;
-  background: url(/themes/console/images/wrench_orange.png) 10px center no-repeat, linear-gradient(to bottom, rgba(0,0,0,0) 50%, #000 50%), repeating-linear-gradient(to right, rgba(0,0,0,.5) 1px, rgba(0,0,0,.5) 2px, rgba(0,16,0,.5) 3px), linear-gradient(to bottom, #005000, #000 75%) !important;
+  background: url(/themes/console/images/wrench_orange.png) 10px center no-repeat, linear-gradient(to bottom, rgba(0,0,0,0) 50%, #000 50%), var(--h3), var(--h3_fade) !important;
   background-size: 20px, 100%, 100%, 100% !important;
 }
 
 #legal h2 {
   padding-left: 38px;
-  background: url(/themes/console/images/info/legal.png) 10px center no-repeat, linear-gradient(to bottom, rgba(0,0,0,0) 50%, #000 50%), repeating-linear-gradient(to right, rgba(0,0,0,.5) 1px, rgba(0,0,0,.5) 2px, rgba(0,16,0,.5) 3px), linear-gradient(to bottom, #005000, #000 75%) !important;
+  background: url(/themes/console/images/info/legal.png) 10px center no-repeat, linear-gradient(to bottom, rgba(0,0,0,0) 50%, #000 50%), var(--h3), var(--h3_fade) !important;
   background-size: 20px, 100%, 100%, 100% !important;
 }
 
 #changelog h2 {
   padding-left: 38px;
-  background: url(/themes/console/images/svg/logs.svg) 10px center no-repeat, linear-gradient(to bottom, rgba(0,0,0,0) 50%, #000 50%), repeating-linear-gradient(to right, rgba(0,0,0,.5) 1px, rgba(0,0,0,.5) 2px, rgba(0,16,0,.5) 3px), linear-gradient(to bottom, #005000, #000 75%) !important;
+  background: url(/themes/console/images/svg/logs.svg) 10px center no-repeat, linear-gradient(to bottom, rgba(0,0,0,0) 50%, #000 50%), var(--h3), var(--h3_fade) !important;
   background-size: 20px, 100%, 100%, 100% !important;
 }
 
 #faq h2, #glossary h2 {
   padding-left: 38px;
-  background: url(/themes/console/images/info/question.png) 10px center no-repeat, linear-gradient(to bottom, rgba(0,0,0,0) 50%, #000 50%), repeating-linear-gradient(to right, rgba(0,0,0,.5) 1px, rgba(0,0,0,.5) 2px, rgba(0,16,0,.5) 3px), linear-gradient(to bottom, #005000, #000 75%) !important;
+  background: url(/themes/console/images/info/question.png) 10px center no-repeat, linear-gradient(to bottom, rgba(0,0,0,0) 50%, #000 50%), var(--h3), var(--h3_fade) !important;
   background-size: 20px, 100%, 100%, 100% !important;
 }
 
 #webhosting h2 {
   padding-left: 38px;
-  background: url(/themes/console/images/server_32x32.png) 10px center no-repeat, linear-gradient(to bottom, rgba(0,0,0,0) 50%, #000 50%), repeating-linear-gradient(to right, rgba(0,0,0,.5) 1px, rgba(0,0,0,.5) 2px, rgba(0,16,0,.5) 3px), linear-gradient(to bottom, #005000, #000 75%) !important;
+  background: url(/themes/console/images/server_32x32.png) 10px center no-repeat, linear-gradient(to bottom, rgba(0,0,0,0) 50%, #000 50%), var(--h3), var(--h3_fade) !important;
   background-size: 20px, 100%, 100%, 100% !important;
 }
 
 #themeoverride h2 {
   padding-left: 38px;
-  background: url(/themes/console/images/svg/ui.svg) 10px center no-repeat, linear-gradient(to bottom, rgba(0,0,0,0) 50%, #000 50%), repeating-linear-gradient(to right, rgba(0,0,0,.5) 1px, rgba(0,0,0,.5) 2px, rgba(0,16,0,.5) 3px), linear-gradient(to bottom, #005000, #000 75%) !important;
+  background: url(/themes/console/images/svg/ui.svg) 10px center no-repeat, linear-gradient(to bottom, rgba(0,0,0,0) 50%, #000 50%), var(--h3), var(--h3_fade) !important;
   background-size: 20px, 100%, 100%, 100% !important;
 }
 
 #browserconfig h2 {
   padding-left: 38px;
-  background: url(/themes/console/images/svg/firefox.svg) 10px center no-repeat, linear-gradient(to bottom, rgba(0,0,0,0) 50%, #000 50%), repeating-linear-gradient(to right, rgba(0,0,0,.5) 1px, rgba(0,0,0,.5) 2px, rgba(0,16,0,.5) 3px), linear-gradient(to bottom, #005000, #000 75%) !important;
+  background: url(/themes/console/images/svg/firefox.svg) 10px center no-repeat, linear-gradient(to bottom, rgba(0,0,0,0) 50%, #000 50%), var(--h3), var(--h3_fade) !important;
   background-size: 20px, 100%, 100%, 100% !important;
 }
 
@@ -13026,7 +12987,7 @@ h1[class], h1 {
 
 #tunnman h2 {
   padding-left: 38px;
-  background: url(/themes/console/images/info/tunnels.png) 10px center no-repeat, linear-gradient(to bottom, rgba(0,0,0,0) 50%, #000 50%), repeating-linear-gradient(to right, rgba(0,0,0,.5) 1px, rgba(0,0,0,.5) 2px, rgba(0,16,0,.5) 3px), linear-gradient(to bottom, #005000, #000 75%) !important;
+  background: url(/themes/console/images/info/tunnels.png) 10px center no-repeat, linear-gradient(to bottom, rgba(0,0,0,0) 50%, #000 50%), var(--h3), var(--h3_fade) !important;
   background-size: 20px, 100%, 100%, 100% !important;
 }
 
@@ -13257,7 +13218,7 @@ table.search {
   border: 1px solid #252;
   background: url(/themes/console/images/eepsite.png) 8px center no-repeat, var(--h1) !important;
   background-size: 18px, 100%, 100%, 175px !important;
-  background-blend-mode: normal, normal, exclusion, exclusion !important;
+  background-blend-mode: var(--h3_blend) !important;
 }
 
 @media screen and (min-width: 1500px) {
@@ -13275,25 +13236,25 @@ table.search {
 #sitemap h3:nth-of-type(2) {
   background: url(/themes/console/images/info_rhombus.png) 8px center no-repeat, var(--h1) !important;
   background-size: 18px, 100%, 100%, 175px !important;
-  background-blend-mode: normal, normal, exclusion, exclusion !important;
+  background-blend-mode: var(--h3_blend) !important;
 }
 
 #sitemap h3:nth-of-type(3) {
   background: url(/themes/console/images/info/configure.png) 8px center no-repeat, var(--h1) !important;
   background-size: 18px, 100%, 100%, 175px !important;
-  background-blend-mode: normal, normal, exclusion, exclusion !important;
+  background-blend-mode: var(--h3_blend) !important;
 }
 
 #sitemap h3:nth-of-type(4) {
   background: url(/themes/console/images/support.png) 8px center no-repeat, var(--h1) !important;
   background-size: 18px, 100%, 100%, 175px !important;
-  background-blend-mode: normal, normal, exclusion, exclusion !important;
+  background-blend-mode: var(--h3_blend) !important;
 }
 
 #sitemap h3:nth-of-type(5) {
   background: url(/themes/console/images/world.png) 8px center no-repeat, var(--h1) !important;
   background-size: 18px, 100%, 100%, 175px !important;
-  background-blend-mode: normal, normal, exclusion, exclusion !important;
+  background-blend-mode: var(--h3_blend) !important;
 }
 
 .sitemapLink, .sitemapLabel {
@@ -13407,8 +13368,8 @@ table.search {
 /* setup wizard */
 
 #wizardpage .routersummary h3, #wizardpage .routersummary h3:hover, #wizardpage .routersummary h3:active {
-  background: repeating-linear-gradient(to right, rgba(0,0,0,.5) 1px, rgba(0,0,0,.5) 2px, rgba(0,16,0,.5) 3px),
-              linear-gradient(to bottom, #1a261a, #223022 7%, #212f21 9%, #172317 21%, #091109 49%, #050d05 50%, #020602 51%, #010301 53%, #000000 56%) !important;
+  background: var(--h3),
+              var(--navbar) !important;
   box-shadow: var(--lowlight) !important;
   mix-blend-mode: normal !important;
 }
@@ -14203,8 +14164,8 @@ h3 + table {
   margin-bottom: -3px !important;
   background: url(/themes/console/images/info/tunnels.png) 6px center no-repeat,
               linear-gradient(to bottom, rgba(0,0,0,0) 50%, #000 50%),
-              repeating-linear-gradient(to right, rgba(0,0,0,.5) 1px, rgba(0,0,0,.5) 2px, rgba(0,16,0,.5) 3px),
-              linear-gradient(to bottom, #005000, #000 75%) !important;
+              var(--h3),
+              var(--h3_fade) !important;
   background-size: 20px, 100%, 100%, 100% !important;
 }
 
@@ -14617,32 +14578,32 @@ h1, .main h2, h4.app, h4.app2, .main h3 {
 }
 
 #profilelist .fast {
-  background: url(/themes/console/images/svg/fast.svg) calc(50% - 10px) center no-repeat,
-              url(/themes/console/images/svg/highcap.svg) calc(50% + 10px) center no-repeat;
+  background: var(--fast) calc(50% - 10px) center no-repeat,
+              var(--highcap) calc(50% + 10px) center no-repeat;
 }
 
 #profilelist .fast.integrated {
-  background: url(/themes/console/images/svg/fast.svg) left center no-repeat,
-              url(/themes/console/images/svg/highcap.svg) center center no-repeat,
-              url(/themes/console/images/svg/integrated.svg) right center no-repeat !important;
+  background: var(--fast) left center no-repeat,
+              var(--highcap) center center no-repeat,
+              var(--integrated) right center no-repeat !important;
 }
 
 #profilelist .highcap {
-  background: url(/themes/console/images/svg/highcap.svg) center center no-repeat;
+  background: var(--highcap) center center no-repeat;
 }
 
 #profilelist .highcap.integrated {
-  background: url(/themes/console/images/svg/highcap.svg) calc(50% - 10px) center no-repeat,
-              url(/themes/console/images/svg/integrated.svg) calc(50% + 10px) center no-repeat;
+  background: var(--highcap) calc(50% - 10px) center no-repeat,
+              var(--integrated) calc(50% + 10px) center no-repeat;
 }
 
 #profilelist .standard {
-  background: url(/themes/console/images/svg/standard.svg) center center no-repeat;
+  background: var(--standard) center center no-repeat;
 }
 
 #profilelist .standard.integrated {
-  background: url(/themes/console/images/svg/standard.svg) calc(50% - 10px) center no-repeat,
-              url(/themes/console/images/svg/integrated.svg) calc(50% + 10px) center no-repeat;
+  background: var(--standard) calc(50% - 10px) center no-repeat,
+              var(--integrated) calc(50% + 10px) center no-repeat;
 }
 
 .profilegroup::before {
@@ -14654,19 +14615,19 @@ h1, .main h2, h4.app, h4.app2, .main h3 {
 }
 
 .profilegroup.fast::before {
-  background: url(/themes/console/images/svg/fast.svg) left center no-repeat;
+  background: var(--fast) left center no-repeat;
 }
 
 .profilegroup.highcap::before {
-  background: url(/themes/console/images/svg/highcap.svg) left center no-repeat;
+  background: var(--highcap) left center no-repeat;
 }
 
 .profilegroup.integrated::before {
-  background: url(/themes/console/images/svg/integrated.svg) left center no-repeat;
+  background: var(--integrated) left center no-repeat;
 }
 
 .profilegroup.standard::before {
-  background: url(/themes/console/images/svg/standard.svg) left center no-repeat;
+  background: var(--standard) left center no-repeat;
 }
 
 @media screen and (max-width: 1200px) {

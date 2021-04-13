@@ -5,7 +5,8 @@
 /* Additional thanks to NASA for the planet earth image */
 /* Author: dr|z3d */
 
-@import url("/themes/fonts/DroidSans.css");
+@import url(/themes/fonts/DroidSans.css);
+@import url(/themes/console/images.css);
 
 :root {
   --title: linear-gradient(to bottom, #080818 50%, #000008 50%);
@@ -16,10 +17,6 @@
   --button_active: linear-gradient(to bottom, #401856, #501f6c);
   --infohelp: url("data:image/svg+xml,%3Csvg viewBox='0 0 64 64' xmlns='http://www.w3.org/2000/svg'%3E%3Cpath d='m59.45 32a27.45 27.45 0 1 1 -54.9 0 27.45 27.45 0 1 1 54.9 0z' fill='%23003380' stroke='%2380b3ff' stroke-width='6'/%3E%3Cg fill='%23fff'%3E%3Cpath d='m35.87 48.82h-7.61v-22.32h7.61z'/%3E%3Ccircle cx='32.06' cy='19.11' r='3.8'/%3E%3C/g%3E%3C/svg%3E");
   --innerborder: 1px solid rgba(38, 35, 92,.7);
-  --fast: url("data:image/svg+xml,%3Csvg viewBox='0 0 64 64' xmlns='http://www.w3.org/2000/svg'%3E%3Cpath d='m22.12 5.66-12.65 23.39a2.38 2.38 59.2 0 0 2.1 3.52h14.85l-14.73 28.03a.86.86 39.83 0 0 1.29 1.07l41.31-32.34a1.38 1.38 70.97 0 0 -.85-2.47h-18.24l12.34-21.26a2.3 2.3 60.07 0 0 -1.99-3.46h-17.53a6.71 6.71 149.2 0 0 -5.9 3.52z' fill='%23fc0'/%3E%3C/svg%3E");
-  --highcap: url("data:image/svg+xml,%3Csvg viewBox='0 0 64 64' xmlns='http://www.w3.org/2000/svg' xmlns:xlink='http://www.w3.org/1999/xlink'%3E%3Cdefs%3E%3Cpath id='a' d='m8.6 38.43v.58c0-.2.02-.39.04-.58zm46.76 0a3.77 3.77 0 0 1 .04.58v-.58z'/%3E%3C/defs%3E%3Cg transform='matrix(.94 0 0 .94 2.05 2.05)'%3E%3Cpath d='m31.64 2.88c-11.47.09-20.88 4.28-21.64 9.64-.03-.22-.05-.44-.05-.66v39.54h.04c.67 5.42 10.27 9.72 22.01 9.72s21.34-4.3 22.01-9.72h.04v-39.55c0 .22-.02.44-.05.66-.78-5.42-10.39-9.63-22-9.63z' fill='%23ccc' stroke='%2337c837' stroke-linejoin='round' stroke-width='8'/%3E%3Cg transform='matrix(.94 0 0 .97 1.85 .94)'%3E%3Cg transform='matrix(1 0 0 1.07 0 -5.38)'%3E%3Cuse fill='%23ccc' xlink:href='%23a'/%3E%3Cuse fill='%23888' xlink:href='%23a' y='-14.03'/%3E%3C/g%3E%3Cpath d='m32 46.98c-12.93 0-23.4-4.76-23.4-10.63v15.64h.04c.71 5.58 10.9 10.01 23.36 10.01s22.65-4.43 23.36-10.01h.04v-15.64c0 5.87-10.48 10.63-23.4 10.63z' fill='%23666'/%3E%3Cpath d='m32 34.43c-12.93 0-23.4-4.76-23.4-10.63v15.64h.04c.71 5.58 10.9 10.01 23.36 10.01s22.65-4.43 23.36-10.01h.04v-15.64c0 5.87-10.48 10.63-23.4 10.63z' fill='%23808080'/%3E%3Cellipse cx='32' cy='12.63' fill='%23ccc' rx='23.4' ry='10.63'/%3E%3Cpath d='m32 21.88c-12.93 0-23.4-4.76-23.4-10.63v15.64h.04c.71 5.57 10.9 10 23.36 10s22.65-4.43 23.36-10.01h.04v-15.64c0 5.87-10.48 10.63-23.4 10.63z' fill='%23999'/%3E%3Cuse fill='%23444' transform='matrix(1 0 0 1.07 0 -5.38)' xlink:href='%23a' y='-28.07'/%3E%3C/g%3E%3C/g%3E%3C/svg%3E");
-  --integrated: url("data:image/svg+xml,%3Csvg viewBox='0 0 64 64' xmlns='http://www.w3.org/2000/svg'%3E%3Cpath d='m32 11.84 21.74 37.65h-43.47z' fill='none' stroke='%236f918a' stroke-linecap='square' stroke-width='7.54'/%3E%3Cg fill='%236f918a'%3E%3Ccircle cx='32' cy='14.94' r='10.91'/%3E%3Ccircle cx='51.86' cy='48.85' r='10.88'/%3E%3Ccircle cx='11.84' cy='48.85' r='10.88'/%3E%3C/g%3E%3C/svg%3E");
-  --standard: url("data:image/svg+xml,%3Csvg viewBox='0 0 64 64' xmlns='http://www.w3.org/2000/svg'%3E%3Cpath d='m32 4a28 28 0 0 0 -28 28 28 28 0 0 0 28 28 28 28 0 0 0 28-28 28 28 0 0 0 -28-28zm3.46 6.38c2.29 0 4.47.26 6.53.77s4.01 1.28 5.84 2.31l-3.89 8.54c-1.63-.84-3.15-1.47-4.55-1.9-1.39-.42-2.66-.63-3.82-.63-.61 0-1.16.06-1.63.2-.48.14-.89.33-1.22.61-.33.27-.57.61-.73.99-.16.4-.24.85-.24 1.36 0 .47.07.93.23 1.37.15.44.4.87.71 1.27.65.81 1.88 1.9 3.69 3.25 1.13.84 2.11 1.7 2.95 2.57.84.88 1.54 1.78 2.08 2.7.55.92.96 1.91 1.23 2.96.28 1.06.42 2.18.42 3.36 0 1.07-.09 2.08-.26 3.03-.18.94-.44 1.83-.79 2.66s-.79 1.6-1.33 2.31c-.52.71-1.14 1.36-1.85 1.96-.7.59-1.47 1.1-2.32 1.54-.84.44-1.75.81-2.74 1.11-.99.32-2.05.54-3.17.69s-2.31.22-3.58.22c-2.1 0-4.1-.23-5.98-.7-1.89-.48-3.5-1.17-4.87-2.07v-10.06c1.61 1.01 3.45 1.87 5.53 2.56 1.05.34 2.04.61 2.98.78.95.17 1.84.26 2.68.26.71 0 1.34-.07 1.88-.23.53-.14.98-.37 1.35-.67.36-.3.64-.66.82-1.07.18-.42.27-.91.27-1.45 0-.52-.12-1-.34-1.44-.23-.46-.56-.91-.98-1.35-.42-.46-1.55-1.46-3.4-2.99-1.12-.9-2.1-1.82-2.91-2.74s-1.48-1.85-1.99-2.79-.89-1.92-1.15-2.96c-.25-1.03-.38-2.1-.38-3.22 0-1.26.15-2.45.47-3.58.31-1.13.78-2.19 1.4-3.19.64-1 1.4-1.9 2.29-2.67.89-.78 1.9-1.45 3.04-1.99 1.15-.56 2.37-.98 3.65-1.26 1.29-.27 2.64-.42 4.06-.42z' fill='%23666'/%3E%3C/svg%3E");
   --tr: linear-gradient(to bottom, #001, #000);
   --th: linear-gradient(to bottom, #000018, #000);
 }
@@ -1781,18 +1778,18 @@ div.logo hr {
 }
 
 #sb_localtunnels td:first-child {
-  background-image: url(/themes/console/images/svg/client.svg) !important;
+  background-image: var(--client) !important;
   background-position: center center !important;
   background-repeat: no-repeat !important;
   background-size: 16px !important;
 }
 
 #sb_localtunnels td.tunnelServer {
-  background-image: url(/themes/console/images/svg/server.svg) !important;
+  background-image: var(--server) !important;
 }
 
 #sb_localtunnels td.ping {
-  background-image: url(/themes/console/images/svg/ping.svg) !important;
+  background-image: var(--ping) !important;
 }
 
 #sb_localtunnels td:last-child {
@@ -8879,19 +8876,19 @@ h3 .b32 {
 
 #tunnels h3.server {
   padding-left: 34px !important;
-  background: url(/themes/console/images/svg/server.svg) 8px center no-repeat, var(--title) !important;
+  background: var(--server) 8px center no-repeat, var(--title) !important;
   background-size: 19px, 100%, 100% !important;
 }
 
 #tunnels h3.client {
   padding-left: 34px !important;
-  background: url(/themes/console/images/svg/client.svg) 8px center no-repeat, var(--title) !important;
+  background: var(--client) 8px center no-repeat, var(--title) !important;
   background-size: 19px, 100%, 100% !important;
 }
 
 #tunnels h3.ping {
   padding-left: 34px !important;
-  background: url(/themes/console/images/svg/ping.svg) 8px center no-repeat, var(--title) !important;
+  background: var(--ping) 8px center no-repeat, var(--title) !important;
   background-size: 19px, 100%, 100% !important;
 }
 
@@ -8903,7 +8900,7 @@ h3 .b32 {
 
 #tunnels h3#exploratory {
   padding-left: 34px !important;
-  background: url(/themes/console/images/svg/globe.svg) 8px center no-repeat, var(--title) !important;
+  background: var(--globe) 8px center no-repeat, var(--title) !important;
   background-size: 19px, 100%, 100% !important;
 }
 
@@ -14383,7 +14380,7 @@ h1, .main h2, h4.app, h4.app2, .main h3 {
 .lsdest.published {
   padding-left: 38px;
   background: url(/themes/console/images/svg/hardhat.svg) 4px center no-repeat,
-              url(/themes/console/images/svg/globe.svg) 22px center no-repeat,
+              var(--globe) 22px center no-repeat,
               linear-gradient(to bottom, #003, #001);
   background-size: auto 14px, auto 12px, 100%;
 }
