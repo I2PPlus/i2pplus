@@ -40,7 +40,7 @@
 <style>iframe{width:1px;min-width:100%;opacity:0}</style>
 <noscript>
 <style type="text/css">iframe{display:none}</style>
-<p class="infohelp" id="jsRequired" style="margin: 10px;">Javascript is required to view <a href="/i2ptunnel/" target="_blank">the Tunnel Manager</a> in embedded mode.</p>
+<p class="infohelp" id="jsRequired" style="margin: 10px;">Javascript is required to view <a href="/i2ptunnel/" target="_blank" rel="noreferrer">the Tunnel Manager</a> in embedded mode.</p>
 </noscript>
 <iframe src="/i2ptunnel/" title="I2P+ <%=intl.title("Tunnel Manager")%>" frameborder="0" border="0" width="100%" scrolling="no" name="i2ptunnelframe" id="i2ptunnelframe" allowtransparency="true">
 <%=intl._t("Your browser does not support iFrames.")%>

@@ -51,7 +51,7 @@
 <div class="main" id="sitemap">
 
 <div class="search" id="homesearch">
-<form action="/search.jsp" target="_blank" method="POST">
+<form action="/search.jsp" target="_blank" rel="noreferrer" method="POST">
 <table class="search">
 <tr>
 <td align="right"><input size="40" type="text" class="search" name="query" required placeholder="<%=intl._t("Please enter a search query")%>" /></td>
@@ -89,7 +89,7 @@
 %>
 
 <% if (!embedApps) { %>
-<a href="/torrents" target="_blank">
+<a href="/torrents" target="_blank" rel="noreferrer">
 <span class="sitemapLink extlink" title="<%=intl._t("Create and download torrents")%>">
 <% } else { %>
 <a href="/torrents">
@@ -108,7 +108,7 @@
 </a>
 
 <% if (!embedApps) { %>
-<a href="/webmail" target="_blank">
+<a href="/webmail" target="_blank" rel="noreferrer">
 <span class="sitemapLink extlink" title="<%=intl._t("Webmail client")%>">
 <% } else { %>
 <a href="/webmail">
@@ -119,7 +119,7 @@
 </span>
 </a>
 
-<a href="http://127.0.0.1:7658/" target="_blank">
+<a href="http://127.0.0.1:7658/" target="_blank" rel="noreferrer">
 <span class="sitemapLink extlink" title="<%=intl._t("Local webserver for hosting content on the I2P network")%>">
 <img src="/themes/console/images/svg/webserver.svg">
 <span class="sitemapLabel"><%=intl._t("Web Server")%></span>

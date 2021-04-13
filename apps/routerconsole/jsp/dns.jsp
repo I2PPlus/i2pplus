@@ -42,7 +42,7 @@
 <style>iframe{width:1px;min-width:100%;opacity:0}</style>
 <noscript>
 <style type="text/css">iframe {display: none}</style>
-<p class="infohelp" id="jsRequired" style="margin: 10px;">Javascript is required to view <a href="/susidns/addressbook?book=router&amp;filter=none" target="_blank">the Addressbook</a> in embedded mode.</p>
+<p class="infohelp" id="jsRequired" style="margin: 10px;">Javascript is required to view <a href="/susidns/addressbook?book=router&amp;filter=none" target="_blank" rel="noreferrer">the Addressbook</a> in embedded mode.</p>
 </noscript>
 <iframe src="/susidns/addressbook?book=router&amp;filter=none" title="I2P+ <%=intl.title("addressbook")%>" width="100%" scrolling="no" frameborder="0" border="0" name="susidnsframe" id="susidnsframe" allowtransparency="true">
 <%=intl._t("Your browser does not support iFrames.")%>

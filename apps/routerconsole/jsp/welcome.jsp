@@ -146,8 +146,8 @@
 <%=intl._t("Please review the M-Lab privacy policies linked below.")%>
 <%=intl._t("If you do not wish to run the M-Lab bandwidth test, you may skip it by clicking the button below.")%>
 </p><p>
-<a href="https://www.measurementlab.net/privacy/" target="_blank"><%=intl._t("M-Lab Privacy Policy")%></a>
-<br><a href="https://github.com/m-lab/mlab-ns/blob/master/MLAB-NS_PRIVACY_POLICY.md" target="_blank"><%=intl._t("M-Lab Name Server Privacy Policy")%></a>
+<a href="https://www.measurementlab.net/privacy/" target="_blank" rel="noreferrer"><%=intl._t("M-Lab Privacy Policy")%></a>
+<br><a href="https://github.com/m-lab/mlab-ns/blob/master/MLAB-NS_PRIVACY_POLICY.md" target="_blank" rel="noreferrer"><%=intl._t("M-Lab Name Server Privacy Policy")%></a>
 </p>
 </td></tr></table>
 <%
@@ -240,14 +240,14 @@
 <h3><%=intl._t("Browser Setup")%></h3>
 <table class="configtable"><tr><td><p>
 <%=intl._t("Your browser needs to be configured to work with I2P.")%>
-<a href="https://geti2p.net/htproxyports" target="_blank"><%=intl._t("If you want to do this yourself, here are instructions.")%></a>
+<a href="https://geti2p.net/htproxyports" target="_blank" rel="noreferrer"><%=intl._t("If you want to do this yourself, here are instructions.")%></a>
 <%
         if (net.i2p.util.SystemVersion.isWindows()) {
 %>
 </p><p>
 <%=intl._t("Otherwise, the recommended way to browse I2P websites is with a separate profile in the Firefox browser.")%>
-<ol><li><a href="https://www.mozilla.org/firefox/" target="_blank"><%=intl._t("Install Firefox")%></a>
-</li><li><a href="https://geti2p.net/firefox" target="_blank"><%=intl._t("Install the I2P Firefox profile")%></a>
+<ol><li><a href="https://www.mozilla.org/firefox/" target="_blank" rel="noreferrer"><%=intl._t("Install Firefox")%></a>
+</li><li><a href="https://geti2p.net/firefox" target="_blank" rel="noreferrer"><%=intl._t("Install the I2P Firefox profile")%></a>
 </li></ol>
 <%
         } //isWindows()

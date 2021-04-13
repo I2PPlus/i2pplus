@@ -66,10 +66,10 @@
 <li>Tick the box marked <i>Use this proxy server for all protocols</i> to avoid requests escaping the proxy.
 <li>In the box marked <i>No Proxy for</i> add the line <code>127.0.0.1,localhost</code> to ensure the I2P console and other locally hosted websites are still available.
 <li>Tick the box marked <i>Proxy DNS when using SOCKS v5</i> to prevent DNS leaks.
-<li>Hit the <i>OK</i> button and test the proxy is working by visiting <a href="http://planet.i2p/" target="_blank" class="sitelink">planet.i2p</a> and <a href="https://www.myip.com/" target="_blank" class="sitelink external">www.myip.com</a>.
+<li>Hit the <i>OK</i> button and test the proxy is working by visiting <a href="http://planet.i2p/" target="_blank" rel="noreferrer" class="sitelink">planet.i2p</a> and <a href="https://www.myip.com/" target="_blank" rel="noreferrer" class="sitelink external">www.myip.com</a>.
 </ol>
-<p>Note: To enhance your security when browsing .i2p sites, you may wish to consider installing an addon to prevent Javascript from running in the browser such as <a href="https://addons.mozilla.org/en-US/firefox/addon/noscript/" target="_blank" class="sitelink external">NoScript</a>, though it's recommended to whitelist the address I2P+ is running on to enable various router console enhancements. In addition, an addon that prevents requests to offsite resources is also recommended, for example <a href="https://addons.mozilla.org/en-US/firefox/addon/umatrix/" target="_blank" class="sitelink external">uMatrix</a>.</p>
-<p>For a more extensive guide to configuration for various browsers, see the <a href="https://geti2p.net/en/about/browser-config" target="_blank" class="sitelink external">browser configuration guide</a>.</p>
+<p>Note: To enhance your security when browsing .i2p sites, you may wish to consider installing an addon to prevent Javascript from running in the browser such as <a href="https://addons.mozilla.org/en-US/firefox/addon/noscript/" target="_blank" rel="noreferrer" class="sitelink external">NoScript</a>, though it's recommended to whitelist the address I2P+ is running on to enable various router console enhancements. In addition, an addon that prevents requests to offsite resources is also recommended, for example <a href="https://addons.mozilla.org/en-US/firefox/addon/umatrix/" target="_blank" rel="noreferrer" class="sitelink external">uMatrix</a>.</p>
+<p>For a more extensive guide to configuration for various browsers, see the <a href="https://geti2p.net/en/about/browser-config" target="_blank" rel="noreferrer" class="sitelink external">browser configuration guide</a>.</p>
 </div>
 <div id="tunnman">
 <h2 id="tunnelmanager"><%=intl._t("The Tunnel Manager")%></h2>

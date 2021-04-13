@@ -39,13 +39,13 @@
 
 <div id="volunteer">
 <h2>Ayuda adicional</h2>
-<p>Si deseas ayudar a mejorar o a traducir la documentación, o deseas ayudar en otros aspectos del proyecto, mira la documentación para los <a href="http://i2p-projekt.i2p/en/get-involved" target="_blank">voluntarios.</a></p>
+<p>Si deseas ayudar a mejorar o a traducir la documentación, o deseas ayudar en otros aspectos del proyecto, mira la documentación para los <a href="http://i2p-projekt.i2p/en/get-involved" target="_blank" rel="noreferrer">voluntarios.</a></p>
 <p>Hay más ayuda disponible aquí:</p>
 <ul class="links">
-<li><a href="http://i2pforum.i2p/" target="_blank">Foro de soporte de I2P</a></li>
-<li><a href="http://zzz.i2p/" target="_blank">Foro de los desarrolladores de I2P</a></li>
-<li><a href="http://wiki.i2p-projekt.i2p/" target="_blank">I2P Wiki</a></li>
-<li>The FAQ on <a href="http://i2p-projekt.i2p/en/faq" target="_blank">i2p-projekt.i2p</a> o <a href="https://geti2p.net/en/faq" target="_blank">geti2p.net</a></li>
+<li><a href="http://i2pforum.i2p/" target="_blank" rel="noreferrer">Foro de soporte de I2P</a></li>
+<li><a href="http://zzz.i2p/" target="_blank" rel="noreferrer">Foro de los desarrolladores de I2P</a></li>
+<li><a href="http://wiki.i2p-projekt.i2p/" target="_blank" rel="noreferrer">I2P Wiki</a></li>
+<li>The FAQ on <a href="http://i2p-projekt.i2p/en/faq" target="_blank" rel="noreferrer">i2p-projekt.i2p</a> o <a href="https://geti2p.net/en/faq" target="_blank" rel="noreferrer">geti2p.net</a></li>
 </ul>
 <p>También puedes probar en la <a href="irc://127.0.0.1:6668/i2p">red IRC de I2P</a>.</p>
 </div>
@@ -265,7 +265,7 @@ Indicaciones básicas de la sobrecarga del rúter:
 
 <h2>PUF de I2P resumido</h2>
 
-<p class="infohelp">Esto es una versión resumida del FAQ oficial. Para ver la versión completa ves a <a href="https://geti2p.net/faq" target="_blank">https://geti2p.net/faq</a> o a <a href="http://i2p-projekt.i2p/faq" target="_blank">http://i2p-projekt.i2p/faq</a>.</p>
+<p class="infohelp">Esto es una versión resumida del FAQ oficial. Para ver la versión completa ves a <a href="https://geti2p.net/faq" target="_blank" rel="noreferrer">https://geti2p.net/faq</a> o a <a href="http://i2p-projekt.i2p/faq" target="_blank" rel="noreferrer">http://i2p-projekt.i2p/faq</a>.</p>
 
 <h3>Mi rúter lleva encendido varios minutos y tiene ninguna o casi ninguna conexión</h3>
 
@@ -279,7 +279,7 @@ Indicaciones básicas de la sobrecarga del rúter:
 
 <p>La suscripción por defecto es a <code>http://i2p-projekt.i2p/hosts.txt</code>, que se auto actualiza automáticamente. Si no tienes otras suscripciones tendrás que usar los enlaces de 'saltos' que son más lentos pero te asegurarás de que en tu libreta de direcciones sólo tienes las webs que utilizas (además de las direcciones por defecto). Para acelerar la navegación en I2P es una buena idea añadir algunas suscripciones a la libreta de direcciones.</p>
 
-<p>Aquí tienes algunos otros enlaces de suscripciones públicas para la libreta de direcciones. Quizás quieras añadir una o dos a tu <a href="/susidns/subscriptions" target="_blank">lista de suscripciones de susidns</a>. En el caso de que las direcciones entre en conflicto con las suscripciones, las listas situadas arriba de tu configuración de susidns tendrán preferencia sobre las que estén colocadas debajo.</p>
+<p>Aquí tienes algunos otros enlaces de suscripciones públicas para la libreta de direcciones. Quizás quieras añadir una o dos a tu <a href="/susidns/subscriptions" target="_blank" rel="noreferrer">lista de suscripciones de susidns</a>. En el caso de que las direcciones entre en conflicto con las suscripciones, las listas situadas arriba de tu configuración de susidns tendrán preferencia sobre las que estén colocadas debajo.</p>
 
 <ul>
 <li><code>http://stats.i2p/cgi-bin/newhosts.txt</code></li>
@@ -293,11 +293,11 @@ Indicaciones básicas de la sobrecarga del rúter:
 
 <h3>¿Cómo accedo a un servicio IRC, BitTorrent u otros servicios en el Internet normal?</h3>
 
-<p>A no ser que hayas configurado un outproxy para el servicio al que deseas conectar, no es posible, con la excepción del protocolo Bittorrent (ver más abajo). Ahora mismo sólo hay 3 tipos de outproxies funcionando; HTTP, HTTPS y email. Date cuenta que actualmente no hay listado públicamente ningún outproxy SOCKS. Si necesitas este tipo de servicio, prueba con <a href="https://torproject.org/" target="_blank">Tor</a>.</p>
+<p>A no ser que hayas configurado un outproxy para el servicio al que deseas conectar, no es posible, con la excepción del protocolo Bittorrent (ver más abajo). Ahora mismo sólo hay 3 tipos de outproxies funcionando; HTTP, HTTPS y email. Date cuenta que actualmente no hay listado públicamente ningún outproxy SOCKS. Si necesitas este tipo de servicio, prueba con <a href="https://torproject.org/" target="_blank" rel="noreferrer">Tor</a>.</p>
 
 <h3>¿Puedo descargar torrents desde trackers que no sean de I2P?</h3>
 
-<p>Hasta que <a href="http://www.vuze.com/" target="_blank">Vuze</a> no integró I2P, no era posible descargar torrents que no estuviesen registrados en los trackers de I2P. Aunque, ahora que Vuze (y más tarde <a href="https://www.biglybt.com/" target="_blank">Bigly</a>) permiten a los usuarios compartir torrents de fuera de I2P en I2P, se pueden descargar torrents de fuera de I2P si los usuarios de Vuze/Bigly han configurado dichas apps para hacer disponible el contenido en la red I2P. Los torrents populares con un gran número de pares son más fáciles de acceder desde I2P; para comprobar si un contenido está disponible, simplemente añade el enlace torrent, margent o infohash a tu cliente de torrents con I2P activado.</p>
+<p>Hasta que <a href="http://www.vuze.com/" target="_blank" rel="noreferrer">Vuze</a> no integró I2P, no era posible descargar torrents que no estuviesen registrados en los trackers de I2P. Aunque, ahora que Vuze (y más tarde <a href="https://www.biglybt.com/" target="_blank" rel="noreferrer">Bigly</a>) permiten a los usuarios compartir torrents de fuera de I2P en I2P, se pueden descargar torrents de fuera de I2P si los usuarios de Vuze/Bigly han configurado dichas apps para hacer disponible el contenido en la red I2P. Los torrents populares con un gran número de pares son más fáciles de acceder desde I2P; para comprobar si un contenido está disponible, simplemente añade el enlace torrent, margent o infohash a tu cliente de torrents con I2P activado.</p>
 
 <h3 id="alternative_browser">¿Cómo configuro I2P para abrir al inicio un navegador web determinado?</h3>
 
@@ -305,15 +305,15 @@ Indicaciones básicas de la sobrecarga del rúter:
 
 <h3>¿Cómo configuro mi navegador para acceder eepsites .i2p?</h3>
 
-<p>Necesitas configurar tu navegador para usar el proxy HTTP (por defecto en la IP: <code>127.0.0.1</code> puerto: <code>4444</code>). Para más detalles mira en <a href="https://geti2p.net/en/about/browser-config" target="_blank">Guía de configuración del proxy en el navegador</a>.</p>
+<p>Necesitas configurar tu navegador para usar el proxy HTTP (por defecto en la IP: <code>127.0.0.1</code> puerto: <code>4444</code>). Para más detalles mira en <a href="https://geti2p.net/en/about/browser-config" target="_blank" rel="noreferrer">Guía de configuración del proxy en el navegador</a>.</p>
 
 <h3>¿Qué es una eepsite?</h3>
 
-<p>Una eepsite es una web que está hospedada anónimamente en la red I2P - puedes acceder a ellas configurando tu navegador web para que use el proxy HTTP de I2P (mirar más arriba) y navegar por webs con el sufijo <code>.i2p</code> (por ejemplo <a href="http://i2p-projekt.i2p" target="_blank">http://i2p-projekt.i2p</a>). Asegúrate que el nabegador está configurado para resolver los DNS remotamente cuando use el proxy y así evitar fugas de DNS.</p>
+<p>Una eepsite es una web que está hospedada anónimamente en la red I2P - puedes acceder a ellas configurando tu navegador web para que use el proxy HTTP de I2P (mirar más arriba) y navegar por webs con el sufijo <code>.i2p</code> (por ejemplo <a href="http://i2p-projekt.i2p" target="_blank" rel="noreferrer">http://i2p-projekt.i2p</a>). Asegúrate que el nabegador está configurado para resolver los DNS remotamente cuando use el proxy y así evitar fugas de DNS.</p>
 
 <h3>¿La mayoría de las eepsites no funcionan?</h3>
 
-<p>Si consideras cada eepsite que se ha creado, sí, la mayoría están caídas. La gente y sus webs van y viene. Una buena forma de iniciarse con I2P es usar una lista de eepsites que están funcionando. <a href="http://identiguy.i2p" target="_blank">http://identiguy.i2p</a> lleva la cuenta de las eepsites activas.</p>
+<p>Si consideras cada eepsite que se ha creado, sí, la mayoría están caídas. La gente y sus webs van y viene. Una buena forma de iniciarse con I2P es usar una lista de eepsites que están funcionando. <a href="http://identiguy.i2p" target="_blank" rel="noreferrer">http://identiguy.i2p</a> lleva la cuenta de las eepsites activas.</p>
 
 <h3>¿Cómo me conecto al IRC dentro de I2P?</h3>
 
@@ -363,9 +363,9 @@ Indicaciones básicas de la sobrecarga del rúter:
 
 <tr><td>8998</td><td>mtn.i2p2.i2p (Monotone DVCS de I2P)</td><td>Puede desactivarse o cambiarse en el <a href="/i2ptunnelmgr">Administrador de Túneles</a>. También puede ser configurado para escuchar en un interfaz específico o en todos. [Desactivado por defecto]</td></tr>
 
-<tr><td>31000</td><td>Puerto local para el control del wrapper</td><td>Sólo de salida hacia 32000, no escucha en este puerto. Se incia en 31000 y se incrementa hasta el 31999 buscando por un puerto libre. Para cambiarlo, mira la <a href="http://wrapper.tanukisoftware.com/doc/english/prop-port.html" target="_blank">documentación del wrapper</a>.</td></tr>
+<tr><td>31000</td><td>Puerto local para el control del wrapper</td><td>Sólo de salida hacia 32000, no escucha en este puerto. Se incia en 31000 y se incrementa hasta el 31999 buscando por un puerto libre. Para cambiarlo, mira la <a href="http://wrapper.tanukisoftware.com/doc/english/prop-port.html" target="_blank" rel="noreferrer">documentación del wrapper</a>.</td></tr>
 
-<tr><td>32000</td><td>Puerto local para el control del servicio wrapper</td><td>Para cambiarlo, mira la <a href="http://wrapper.tanukisoftware.com/doc/english/prop-port.html" target="_blank">documentación del wrapper</a>.</td></tr>
+<tr><td>32000</td><td>Puerto local para el control del servicio wrapper</td><td>Para cambiarlo, mira la <a href="http://wrapper.tanukisoftware.com/doc/english/prop-port.html" target="_blank" rel="noreferrer">documentación del wrapper</a>.</td></tr>
 
 <tr><th colspan="3">PUERTOS ESCUCHANDO en INTERNET</th></tr>
 
@@ -399,32 +399,32 @@ I2P puede ser lento hasta que se integra en la red la primera vez que lo ejecuta
 I2P funciona mejor cuando puedes indicar de forma precisa la velocidad de la conexión de tu red en la <a href="/config">sección de configuración del ancho de banda</a>. Por defecto I2P está configurado con valores bastante conservadores que no se ajustan a todas las necesidades, por lo que , por favor, tómate tu tiempo en revisar estas configuraciones y ajústalas donde sea necesario. Cuanto más ancho de banda asignes, <i>en concreto</i>, cuanto más ancho de banda de subida, más te beneficiarás de la red.</li>
 
 <li><b>Cortafuegos, Modems &amp; Rúters</b><br>
-Donde sea posible, asegúrate de que I2P/Java tiene acceso bidireccional permitido a los puertos desde internet configurando el firewall de tu módem/rúter/pc. Si estás tras un cortafuegos restrictivo pero aún así tienes acceso no restringido de salida, I2P puede seguir funcionando; puedes desactivar el acceso de entrada y confiar en la <a href="http://i2p-projekt.i2p/udp.html" target="_blank">Detección de dirección IP SSU</a> (<a href="https://wikipedia.org/wiki/Hole_punching" target="_blank">firewall hole punching</a>) para que te conecte a la red, aunque el estado de red en el panel lateral indicará "Red: Bloqueada por cortafuegos". Para un rendimiento óptimo, donde sea posible, asegúrate de que los <a href="/confignet#udpconfig">puertos externos</a> de I2P son accesibles desde Internet (mira más abajo para más información).</li>
+Donde sea posible, asegúrate de que I2P/Java tiene acceso bidireccional permitido a los puertos desde internet configurando el firewall de tu módem/rúter/pc. Si estás tras un cortafuegos restrictivo pero aún así tienes acceso no restringido de salida, I2P puede seguir funcionando; puedes desactivar el acceso de entrada y confiar en la <a href="http://i2p-projekt.i2p/udp.html" target="_blank" rel="noreferrer">Detección de dirección IP SSU</a> (<a href="https://wikipedia.org/wiki/Hole_punching" target="_blank" rel="noreferrer">firewall hole punching</a>) para que te conecte a la red, aunque el estado de red en el panel lateral indicará "Red: Bloqueada por cortafuegos". Para un rendimiento óptimo, donde sea posible, asegúrate de que los <a href="/confignet#udpconfig">puertos externos</a> de I2P son accesibles desde Internet (mira más abajo para más información).</li>
 
 <li><b>Comprueba tu configuración Proxy</b><br>
-Si no puedes acceder a ninguna eepsite (ni siquiera a <a href="http://i2p-projekt.i2p/" target="_blank">i2p-projekt.i2p</a>), asegúrate que el proxy de tu navegador está configurado para acceder al tráfico http (<i>no</i> https, <i>no</i> socks) a través de <code>127.0.0.1 puerto 4444</code>. Si necesitas ayuda, hay <a href="https://geti2p.net/en/about/browser-config" target="_blank">una guía</a> para configurar tu navegador y usarlo con I2P.</li>
+Si no puedes acceder a ninguna eepsite (ni siquiera a <a href="http://i2p-projekt.i2p/" target="_blank" rel="noreferrer">i2p-projekt.i2p</a>), asegúrate que el proxy de tu navegador está configurado para acceder al tráfico http (<i>no</i> https, <i>no</i> socks) a través de <code>127.0.0.1 puerto 4444</code>. Si necesitas ayuda, hay <a href="https://geti2p.net/en/about/browser-config" target="_blank" rel="noreferrer">una guía</a> para configurar tu navegador y usarlo con I2P.</li>
 
 <li><b>Comprueba los registros</b><br>
-<a href="/logs">Los registros</a> puede ayudar a resolver los problemas. Quizás quieras pegar fragmentos de los registros en un <a href="http://i2pforum.i2p/" target="_blank">foro</a> para obtener ayuda, o quizás <a href="http://zerobin.i2p/" target="_blank">pegarlo</a> y enlazarlo en el IRC para obtener ayuda.</li>
+<a href="/logs">Los registros</a> puede ayudar a resolver los problemas. Quizás quieras pegar fragmentos de los registros en un <a href="http://i2pforum.i2p/" target="_blank" rel="noreferrer">foro</a> para obtener ayuda, o quizás <a href="http://zerobin.i2p/" target="_blank" rel="noreferrer">pegarlo</a> y enlazarlo en el IRC para obtener ayuda.</li>
 
 <li><b>Asegúrate que tienes Java actualizado</b><br>
-Asegúrate de que Java está actualizado [se necesita la versión 1.7 o mayor]. Comprueba la versión de tu JRE (<a href="https://wikipedia.org/wiki/JRE" target="_blank">Java Runtime Environment</a>) en la parte de arriba de la <a href="/logs">página de los registros</a>. Date cuenta que el soporte de Java 10 está en estado beta, por lo que puedes tener problemas menores si usas Java 10 (por favor, reporta cualquier error que encuentres).</li>
+Asegúrate de que Java está actualizado [se necesita la versión 1.7 o mayor]. Comprueba la versión de tu JRE (<a href="https://wikipedia.org/wiki/JRE" target="_blank" rel="noreferrer">Java Runtime Environment</a>) en la parte de arriba de la <a href="/logs">página de los registros</a>. Date cuenta que el soporte de Java 10 está en estado beta, por lo que puedes tener problemas menores si usas Java 10 (por favor, reporta cualquier error que encuentres).</li>
 
 <li><b>Problemas al ejecutarse en hardware antiguo</b><br>
-[Linux/Unix/Solaris] Si no puedes iniciar el rúter con <code>i2p/i2prouter start</code>, prueba con el script <code>runplain.sh</code> que está en el mismo directorio. No se necesita (y no se recomienda) usar permisos de administrador para ejecutar I2P. Si necesitas compilar la <a href="http://i2p-projekt.i2p/jbigi.html" target="_blank">librería jBigi</a> (lo cual es necesario en muy pocas ocasiones), consulta la documentación, visita los foros, o haz una visita a nuestro <a href="irc://127.0.0.1:6668/i2p-dev">canal IRC para desarrolladores</a>.</li>
+[Linux/Unix/Solaris] Si no puedes iniciar el rúter con <code>i2p/i2prouter start</code>, prueba con el script <code>runplain.sh</code> que está en el mismo directorio. No se necesita (y no se recomienda) usar permisos de administrador para ejecutar I2P. Si necesitas compilar la <a href="http://i2p-projekt.i2p/jbigi.html" target="_blank" rel="noreferrer">librería jBigi</a> (lo cual es necesario en muy pocas ocasiones), consulta la documentación, visita los foros, o haz una visita a nuestro <a href="irc://127.0.0.1:6668/i2p-dev">canal IRC para desarrolladores</a>.</li>
 
 <li><b>Activa Universal Plug and Play (UPnP)</b><br>
-Tu módem o rúter pude que soporten <a href="https://wikipedia.org/wiki/Universal_Plug_and_Play" target="_blank">Universal Plug &amp; Play</a> (UPnP), lo que permite el reenvío de puertos. Asegúrate de que el soporte UPnP para I2P está activado en la <a href="/confignet">página de configuración</a>, e intenta activar UPnP en tu módem/rúter y probáblemente también en tu computadora. Ahora intenta reiniciar el <a href="/">rúter I2P</a>. Si tiene éxito, I2P mostrará "Network: OK" en la barra lateral una vez que I2P complete los tests de conectividad.</li>
+Tu módem o rúter pude que soporten <a href="https://wikipedia.org/wiki/Universal_Plug_and_Play" target="_blank" rel="noreferrer">Universal Plug &amp; Play</a> (UPnP), lo que permite el reenvío de puertos. Asegúrate de que el soporte UPnP para I2P está activado en la <a href="/confignet">página de configuración</a>, e intenta activar UPnP en tu módem/rúter y probáblemente también en tu computadora. Ahora intenta reiniciar el <a href="/">rúter I2P</a>. Si tiene éxito, I2P mostrará "Network: OK" en la barra lateral una vez que I2P complete los tests de conectividad.</li>
 
 <li><b>Reenvío de puertos</b><br>
-Abre los <a href="/confignet#udpconfig">puertos para I2P</a> en tu módem, rúter y/o cortafuegos para tener mejor conectividad (idealmente TCP y UDP). Más información sobre el reenvío de puertos puede encontrarse en <a href="http://portforward.com/" target="_blank">portforward.com</a>, además de en nuestros foros y en los canales de IRC listados más abajo. Date cuenta que I2P no soporta el conectarse a Internet vía http o con un proxy socks [¡los parches son bienvenidos!], aunque puedes conectarte a proxies vía I2P una vez conectado a la red.</li>
+Abre los <a href="/confignet#udpconfig">puertos para I2P</a> en tu módem, rúter y/o cortafuegos para tener mejor conectividad (idealmente TCP y UDP). Más información sobre el reenvío de puertos puede encontrarse en <a href="http://portforward.com/" target="_blank" rel="noreferrer">portforward.com</a>, además de en nuestros foros y en los canales de IRC listados más abajo. Date cuenta que I2P no soporta el conectarse a Internet vía http o con un proxy socks [¡los parches son bienvenidos!], aunque puedes conectarte a proxies vía I2P una vez conectado a la red.</li>
 
 <li><b>Obteniendo soporte online</b><br>
-También puedes querer revisar la información en la <a href="http://i2p-projekt.i2p/" target="_blank">I2P web</a>, poner mensajes en el <a href="http://i2pforum.i2p/viewforum.php?f=8" target="_blank">for de discusión de I2P</a> o pasarte por <a href="irc://127.0.0.1:6668/i2p">#i2p</a> o por <a href="irc://127.0.0.1:6668/i2p-chat">#i2p-chat</a> en la red IRC interna de I2P. Estos canales también están disponibles fuera de I2P a través de <a href="irc://irc.freenode.net/i2p">Freenode</a> o de la red IRC <a href="irc://irc.freenode.net/i2p">OFTC</a>.</li>
+También puedes querer revisar la información en la <a href="http://i2p-projekt.i2p/" target="_blank" rel="noreferrer">I2P web</a>, poner mensajes en el <a href="http://i2pforum.i2p/viewforum.php?f=8" target="_blank" rel="noreferrer">for de discusión de I2P</a> o pasarte por <a href="irc://127.0.0.1:6668/i2p">#i2p</a> o por <a href="irc://127.0.0.1:6668/i2p-chat">#i2p-chat</a> en la red IRC interna de I2P. Estos canales también están disponibles fuera de I2P a través de <a href="irc://irc.freenode.net/i2p">Freenode</a> o de la red IRC <a href="irc://irc.freenode.net/i2p">OFTC</a>.</li>
 <li><b>Reportando Bugs</b><br>
-Si deseas reportar un bug, por favor, crea un ticket en <a href="http://trac.i2p2.i2p/" target="_blank">trac.i2p2.i2p</a>. Para los discusiones de desarrolladores, visita <a href="http://zzz.i2p/" target="_blank">el foro de desarrolladores de zzz</a> o visítanos en el <a href="irc://127.0.0.1:6668/i2p-dev">canal de desarrolladores</a> en la red IRC de I2P.</li>
+Si deseas reportar un bug, por favor, crea un ticket en <a href="http://trac.i2p2.i2p/" target="_blank" rel="noreferrer">trac.i2p2.i2p</a>. Para los discusiones de desarrolladores, visita <a href="http://zzz.i2p/" target="_blank" rel="noreferrer">el foro de desarrolladores de zzz</a> o visítanos en el <a href="irc://127.0.0.1:6668/i2p-dev">canal de desarrolladores</a> en la red IRC de I2P.</li>
 
-<p>La información adicional, incluida la documentación avanzada, está disponible en la <a href="https://geti2p.net/" target="_blank">página web del proyecto</a>.</p>
+<p>La información adicional, incluida la documentación avanzada, está disponible en la <a href="https://geti2p.net/" target="_blank" rel="noreferrer">página web del proyecto</a>.</p>
 </div>
 <div id="legal">
 <h2>Aspectos jurídicos</h2>
@@ -432,30 +432,30 @@ Si deseas reportar un bug, por favor, crea un ticket en <a href="http://trac.i2p
 
 <ul>
 <li>El código de ElGamal y de DSA, escrito por TheCrypto, están bajo la licencia BSD.</li>
-<li>SHA256 y HMAC-SHA256, escritos po la <a href="https://www.bouncycastle.org/" target="_blank">Legion of the Bouncycastle</a>, están bajo la licencia MIT</li>
-<li>El código de AES, escrito por el <a href="http://www.cryptix.org/" target="_blank">Equipo Cryptix</a>, está bajo la licencia Cryptix (MIT)</li>
-<li><a href="http://support.ntp.org/bin/view/Support/JavaSntpClient" target="_blank">cñodigo SNTP</a>, bajo licencia BSD, escrito por Adam Buckley</li>
+<li>SHA256 y HMAC-SHA256, escritos po la <a href="https://www.bouncycastle.org/" target="_blank" rel="noreferrer">Legion of the Bouncycastle</a>, están bajo la licencia MIT</li>
+<li>El código de AES, escrito por el <a href="http://www.cryptix.org/" target="_blank" rel="noreferrer">Equipo Cryptix</a>, está bajo la licencia Cryptix (MIT)</li>
+<li><a href="http://support.ntp.org/bin/view/Support/JavaSntpClient" target="_blank" rel="noreferrer">cñodigo SNTP</a>, bajo licencia BSD, escrito por Adam Buckley</li>
 <li>El resto es de dominio públicon, escrito por jrandom, mihi, hypercubus, oOo, ugha, duck, shendaras y otros .</li>
 </ul>
 
 <p>Sobre el rúter I2P hay una serie de aplicaciones cliente, cada una con sus propias licencias y dependencias:</p>
 
 <ul>
-<li><a href="http://i2p-projekt.i2p/i2ptunnel" target="_blank">I2PTunnel</a> - es una aplicación con licencia GPL escrita por mihi y que permite tunelar tráfico TCP-IP normal sobre I2P (como el proxy http y el proxy irc), con un <a href="/i2ptunnelmgr">interfaz para un navegador.</a></li>
+<li><a href="http://i2p-projekt.i2p/i2ptunnel" target="_blank" rel="noreferrer">I2PTunnel</a> - es una aplicación con licencia GPL escrita por mihi y que permite tunelar tráfico TCP-IP normal sobre I2P (como el proxy http y el proxy irc), con un <a href="/i2ptunnelmgr">interfaz para un navegador.</a></li>
 <li><a href="/webmail">Susimail</a> - es un cliente de correo para un navegador con licencia GPL escrito por susi23.</li>
-<li>LA <a href="http://i2p-projekt.i2p/en/docs/naming#addressbook" target="_blank">aplicación de libreta de direcciones</a>, escrita por Ragnarok ayuda a administrar tu archivo hosts.txt, con un <a href="/dns">interfaz</a> escrito por susi23.</li>
-<li>El puente <a href="http://i2p-projekt.i2p/en/docs/api/samv3" target="_blank">SAM</a> de human (dominio público), es un API que pueden utilizar otras aplicaciones cliente (como el <a href="http://i2pwiki.i2p/index.php?title=Tahoe-LAFS" target="_blank">sistema de archivos en la nuve Tahoe-LAFS para I2P</a>)</li>
-<li><a href="http://i2p-projekt.i2p/en/misc/jbigi" target="_blank">jbigi</a> - es una librería optimizada para hacer una gran número de cálculos que utiliza la librería con licencia LGPL <a href="http://swox.com/gmp/" target="_blank">GMP</a>, optimizada para varias arquitecturas de PC.</li>
-<li>Los lanzadores para los usuarios de windows están creados con <a href="http://launch4j.sourceforge.net/" target="_blank">Launch4J</a>, y el instalador está construido con <a href="http://www.izforge.com/izpack/" target="_blank">IzPack</a>.</li>
-<li>Para implementar I2P como un servicio usamos la versión comunitaria del <a href="https://wrapper.tanukisoftware.com/doc/english/product-overview.html" target="_blank">Tanuki Service Wrapper</a> que está licenciado bajo la GPLv2. Para obtener información de cómo actualizar el wrapper, mirar en <a href="http://i2p-projekt.i2p/en/misc/manual-wrapper" target="_blank">la documentación online</a>.</li>
-<li>La <a href="/">consola del rúter I2P</a>, creada desde una instancia de un servidor <a href="http://jetty.mortbay.com/jetty/index.html" target="_blank">web Jetty</a> nos permite desplegar aplicaciones web estándar JSP/Servlet en tu rúter.</li>
-<li>Jetty hace uso de la implementación <a href="https://docs.oracle.com/javaee/7/api/javax/servlet/package-summary.html" target="_blank">javax.servlet</a> de Apache
-(javax.servlet.jar). Este producto incluye software desarrollado por la <a href="http://www.apache.org/" target="_blank">Apache Software Foundation</a>.</li>
-<li>El código fuente de I2P y de la mayoría de las aplicaciones incluidas puede encontrarse en nuestra <a href="http://i2p-projekt.i2p/download" target="_blank">página de descargas</a> y puede verse online en <a href="https://github.com/i2p" target="_blank">Github</a>.</li>
-<li>La consola del rúter y los <a href="/configui">temas</a> de la aplicación, además de la experiencia general del usuario, son cortesía de dr|z3d, licenciados bajo la licencia <a href="https://www.gnu.org/licenses/agpl-3.0.en.html" target="_blank">Affero GPLv3</a>. Los diseños propios de I2Psnark que vienen con I2P+, y el logo de itoopieç+ <i>no</i> están licenciados para ser reusados a no ser que se permita explícitamente, y actualmente son exlusivos de <a href="http://skank.i2p/static/i2p+.html" target="_blank">I2P+</a> (el <a href="http://p.yusukekamiyamane.com/icons/search/fugue/" target="_blank">conjunto de iconos Fugue</a> se usa bajo la licencia Creative Commons v3).</li>
+<li>LA <a href="http://i2p-projekt.i2p/en/docs/naming#addressbook" target="_blank" rel="noreferrer">aplicación de libreta de direcciones</a>, escrita por Ragnarok ayuda a administrar tu archivo hosts.txt, con un <a href="/dns">interfaz</a> escrito por susi23.</li>
+<li>El puente <a href="http://i2p-projekt.i2p/en/docs/api/samv3" target="_blank" rel="noreferrer">SAM</a> de human (dominio público), es un API que pueden utilizar otras aplicaciones cliente (como el <a href="http://i2pwiki.i2p/index.php?title=Tahoe-LAFS" target="_blank" rel="noreferrer">sistema de archivos en la nuve Tahoe-LAFS para I2P</a>)</li>
+<li><a href="http://i2p-projekt.i2p/en/misc/jbigi" target="_blank" rel="noreferrer">jbigi</a> - es una librería optimizada para hacer una gran número de cálculos que utiliza la librería con licencia LGPL <a href="http://swox.com/gmp/" target="_blank" rel="noreferrer">GMP</a>, optimizada para varias arquitecturas de PC.</li>
+<li>Los lanzadores para los usuarios de windows están creados con <a href="http://launch4j.sourceforge.net/" target="_blank" rel="noreferrer">Launch4J</a>, y el instalador está construido con <a href="http://www.izforge.com/izpack/" target="_blank" rel="noreferrer">IzPack</a>.</li>
+<li>Para implementar I2P como un servicio usamos la versión comunitaria del <a href="https://wrapper.tanukisoftware.com/doc/english/product-overview.html" target="_blank" rel="noreferrer">Tanuki Service Wrapper</a> que está licenciado bajo la GPLv2. Para obtener información de cómo actualizar el wrapper, mirar en <a href="http://i2p-projekt.i2p/en/misc/manual-wrapper" target="_blank" rel="noreferrer">la documentación online</a>.</li>
+<li>La <a href="/">consola del rúter I2P</a>, creada desde una instancia de un servidor <a href="http://jetty.mortbay.com/jetty/index.html" target="_blank" rel="noreferrer">web Jetty</a> nos permite desplegar aplicaciones web estándar JSP/Servlet en tu rúter.</li>
+<li>Jetty hace uso de la implementación <a href="https://docs.oracle.com/javaee/7/api/javax/servlet/package-summary.html" target="_blank" rel="noreferrer">javax.servlet</a> de Apache
+(javax.servlet.jar). Este producto incluye software desarrollado por la <a href="http://www.apache.org/" target="_blank" rel="noreferrer">Apache Software Foundation</a>.</li>
+<li>El código fuente de I2P y de la mayoría de las aplicaciones incluidas puede encontrarse en nuestra <a href="http://i2p-projekt.i2p/download" target="_blank" rel="noreferrer">página de descargas</a> y puede verse online en <a href="https://github.com/i2p" target="_blank" rel="noreferrer">Github</a>.</li>
+<li>La consola del rúter y los <a href="/configui">temas</a> de la aplicación, además de la experiencia general del usuario, son cortesía de dr|z3d, licenciados bajo la licencia <a href="https://www.gnu.org/licenses/agpl-3.0.en.html" target="_blank" rel="noreferrer">Affero GPLv3</a>. Los diseños propios de I2Psnark que vienen con I2P+, y el logo de itoopieç+ <i>no</i> están licenciados para ser reusados a no ser que se permita explícitamente, y actualmente son exlusivos de <a href="http://skank.i2p/static/i2p+.html" target="_blank" rel="noreferrer">I2P+</a> (el <a href="http://p.yusukekamiyamane.com/icons/search/fugue/" target="_blank" rel="noreferrer">conjunto de iconos Fugue</a> se usa bajo la licencia Creative Commons v3).</li>
 </ul>
 
-<p>Para más detalles sobre otras aplicaciones disponibles, y de sus licencias, mira las <a href="http://i2p-projekt.i2p/licenses" target="_blank"> políticas de licencias</a>. Las demás licencias pueden encontrarse en el subdirectorio <code>licenses</code> de tu instalación de I2P.</p>
+<p>Para más detalles sobre otras aplicaciones disponibles, y de sus licencias, mira las <a href="http://i2p-projekt.i2p/licenses" target="_blank" rel="noreferrer"> políticas de licencias</a>. Las demás licencias pueden encontrarse en el subdirectorio <code>licenses</code> de tu instalación de I2P.</p>
 
 </div>
 <div id="changelog">
@@ -466,7 +466,7 @@ Si deseas reportar un bug, por favor, crea un ticket en <a href="http://trac.i2p
  <jsp:setProperty name="contenthelper" property="maxLines" value="768" />
  <jsp:setProperty name="contenthelper" property="startAtBeginning" value="true" />
  <jsp:getProperty name="contenthelper" property="textContent" />
-<p id="fullhistory"><a href="/history.txt" target="_blank">Ver todo el registro de cambios</a></p>
+<p id="fullhistory"><a href="/history.txt" target="_blank" rel="noreferrer">Ver todo el registro de cambios</a></p>
 </div>
 
 </div>

@@ -65,7 +65,7 @@
 <jsp:setProperty name="searchhelper" property="contextId" value="<%=i2pcontextId%>" />
 <div id="homepanel">
 <div class="search" id="homesearch">
-<form action="/search.jsp" target="_blank" method="POST">
+<form action="/search.jsp" target="_blank" rel="noreferrer" method="POST">
 <table class="search">
 <tr>
 <td align="right"><input size="40" type="text" class="search" name="query" required placeholder="<%=intl._t("Please enter a search query")%>" /></td>

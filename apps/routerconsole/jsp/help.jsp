@@ -48,7 +48,7 @@
  <jsp:setProperty name="contenthelper" property="maxLines" value="768" />
  <jsp:setProperty name="contenthelper" property="startAtBeginning" value="true" />
  <jsp:getProperty name="contenthelper" property="textContent" />
-<p id="fullhistory"><a href="/history.txt" target="_blank">View the full change log</a></p>
+<p id="fullhistory"><a href="/history.txt" target="_blank" rel="noreferrer">View the full change log</a></p>
 </div>
 
 </div>

@@ -529,7 +529,7 @@
 <!--<tr><th colspan="4"><%=intl._t("Incoming I2P Port Routing")%></th></tr>-->
 <tr><th colspan="2"><%=intl._t("Virtual Host")%></th><!--<th><%=intl._t("Via SSL?")%></th>--><th><%=intl._t("Points at")%></th><th><%=intl._t("Preview")%></th></tr>
 <!-- TODO: check if tunnel is running, else display "No preview" text -->
-<tr><td colspan="2">http://<%=name%></td><!--<td><%=sslToTarget%></td>--><td><%=targetLink%></td><td><a class="control" title="<%=intl._t("Test HTTP server through I2P")%>" target="_blank" href="http://<%=b32%>/"><%=intl._t("Preview")%></a></td></tr>
+<tr><td colspan="2">http://<%=name%></td><!--<td><%=sslToTarget%></td>--><td><%=targetLink%></td><td><a class="control" title="<%=intl._t("Test HTTP server through I2P")%>" target="_blank" rel="noreferrer" href="http://<%=b32%>/"><%=intl._t("Preview")%></a></td></tr>
 <%
     // output vhost and targets
     for (Integer port : ports) {
@@ -560,10 +560,10 @@
         }
         String portTgt = sslPort ? "https" : "http";
 %>
-<!--<tr><td><a target="_blank" href="<%=portTgt%>://<%=b32%>:<%=port%>/"><%=port%></a></td><td><%=spoof%></td><td><%=ssl%></td><td><%=tgt%></td></tr>-->
+<!--<tr><td><a target="_blank" rel="noreferrer" href="<%=portTgt%>://<%=b32%>:<%=port%>/"><%=port%></a></td><td><%=spoof%></td><td><%=ssl%></td><td><%=tgt%></td></tr>-->
 <!--TODO: logic to determine if destination is available-->
 <tr><td colspan="2">https://<%=spoof%></td><!--<td><%=ssl%></td>--><td><%=tgt%></td><td>
-<a class="control" title="<%=intl._t("Test HTTPS server through I2P")%>" target="_blank" href="<%=portTgt%>://<%=b32%>:<%=port%>/"><%=intl._t("Preview")%></a></td></tr>
+<a class="control" title="<%=intl._t("Test HTTPS server through I2P")%>" target="_blank" rel="noreferrer" href="<%=portTgt%>://<%=b32%>:<%=port%>/"><%=intl._t("Preview")%></a></td></tr>
 <%
     }
 %>
