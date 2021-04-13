@@ -37,6 +37,7 @@
    String cspNonce = Integer.toHexString(net.i2p.util.RandomSource.getInstance().nextInt());
 %>
 <link rel="preload" href="<%=themePath%>images/i2plogo.png" as="image">
+<link rel="preload" href="/themes/fonts/DroidSans.css" as="style">
 <link rel="icon" href="<%=themePath%>images/favicon.ico">
 <script nonce="<%=cspNonce%>" type="text/javascript">if (top.location != location) {top.location.href = location.href;}</script>
 <script src="/js/progressx.js?<%=net.i2p.CoreVersion.VERSION%>" type="text/javascript"></script>
