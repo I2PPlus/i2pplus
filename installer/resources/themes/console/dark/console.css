@@ -4,6 +4,7 @@
 /* Author: dr|z3d */
 
 @import url(/themes/fonts/DroidSans.css);
+@import url(/themes/console/images.css);
 @import url(optbox.css);
 @import url(chromescroll.css);
 
@@ -671,7 +672,7 @@ pre {
 }
 
 #sb_localtunnels td:first-child {
-  background-image: url(/themes/console/images/svg/client.svg) !important;
+  background-image: var(--client) !important;
   background-position: center center !important;
   background-repeat: no-repeat !important;
   background-size: 16px;
@@ -682,12 +683,12 @@ pre {
 }
 
 #sb_localtunnels td.tunnelServer {
-  background-image: url(/themes/console/images/svg/server.svg) !important;
+  background-image: var(--server) !important;
   background-size: 16px;
 }
 
 #sb_localtunnels td.ping {
-  background-image: url(/themes/console/images/svg/ping.svg) !important;
+  background-image: var(--ping) !important;
   background-size: 16px;
 }
 
@@ -4746,37 +4747,31 @@ h3#servicedebug a, h3#graphinfo a {
 
 #tunnels h3.client {
   padding-left: 35px;
-  background: url(/themes/console/images/svg/client.svg) 9px center no-repeat, linear-gradient(to bottom, rgba(0,0,0,0) 50%, #000 50%), var(--h3), var(--h3_fade) !important;
+  background: var(--client) 9px center no-repeat, linear-gradient(to bottom, rgba(0,0,0,0) 50%, #000 50%), var(--h3), var(--h3_fade) !important;
   background-size: 18px, 100%, 100%, 100% !important;
 }
 
 #tunnels h3.ping {
   padding-left: 35px;
-  background: url(/themes/console/images/svg/ping.svg) 9px center no-repeat, linear-gradient(to bottom, rgba(0,0,0,0) 50%, #000 50%), var(--h3), var(--h3_fade) !important;
+  background: var(--ping) 9px center no-repeat, linear-gradient(to bottom, rgba(0,0,0,0) 50%, #000 50%), var(--h3), var(--h3_fade) !important;
   background-size: 18px, 100%, 100%, 100% !important;
 }
 
 #tunnels h3#exploratory {
   padding-left: 35px;
-  background: url(/themes/console/images/svg/globe.svg) 9px center no-repeat, linear-gradient(to bottom, rgba(0,0,0,0) 50%, #000 50%), var(--h3), var(--h3_fade) !important;
+  background: var(--globe) 9px center no-repeat, linear-gradient(to bottom, rgba(0,0,0,0) 50%, #000 50%), var(--h3), var(--h3_fade) !important;
   background-size: 18px, 100%, 100%, 100% !important;
 }
 
 #tunnels h3.server {
   padding-left: 35px;
-  background: url(/themes/console/images/svg/server.svg) 9px center no-repeat, linear-gradient(to bottom, rgba(0,0,0,0) 50%, #000 50%), var(--h3), var(--h3_fade) !important;
+  background: var(--server) 9px center no-repeat, linear-gradient(to bottom, rgba(0,0,0,0) 50%, #000 50%), var(--h3), var(--h3_fade) !important;
   background-size: 18px, 100%, 100%, 100% !important;
 }
 
 #tunnels h3#participating {
   padding-left: 35px;
   background: url(/themes/console/images/info/share.png) 6px center no-repeat, linear-gradient(to bottom, rgba(0,0,0,0) 50%, #000 50%), var(--h3), var(--h3_fade) !important;
-  background-size: 18px, 100%, 100%, 100% !important;
-}
-
-#tunnels h3.dead {
-  padding-left: 32px;
-  background: url(/themes/console/images/info/rip.png) 6px center no-repeat, linear-gradient(to bottom, rgba(0,0,0,0) 50%, #000 50%), var(--h3), var(--h3_fade) !important;
   background-size: 18px, 100%, 100%, 100% !important;
 }
 
@@ -7042,7 +7037,7 @@ h4 span[style="float: right;"] .unbold {
 .lsdest.published {
   padding-left: 38px;
   background: url(/themes/console/images/svg/hardhat.svg) 4px center no-repeat,
-              url(/themes/console/images/svg/globe.svg) 22px center no-repeat,
+              var(--globe) 22px center no-repeat,
               var(--element);
   background-size: 14px, 12px, 100%;
 }
@@ -14583,32 +14578,32 @@ h1, .main h2, h4.app, h4.app2, .main h3 {
 }
 
 #profilelist .fast {
-  background: url(/themes/console/images/svg/fast.svg) calc(50% - 10px) center no-repeat,
-              url(/themes/console/images/svg/highcap.svg) calc(50% + 10px) center no-repeat;
+  background: var(--fast) calc(50% - 10px) center no-repeat,
+              var(--highcap) calc(50% + 10px) center no-repeat;
 }
 
 #profilelist .fast.integrated {
-  background: url(/themes/console/images/svg/fast.svg) left center no-repeat,
-              url(/themes/console/images/svg/highcap.svg) center center no-repeat,
-              url(/themes/console/images/svg/integrated.svg) right center no-repeat !important;
+  background: var(--fast) left center no-repeat,
+              var(--highcap) center center no-repeat,
+              var(--integrated) right center no-repeat !important;
 }
 
 #profilelist .highcap {
-  background: url(/themes/console/images/svg/highcap.svg) center center no-repeat;
+  background: var(--highcap) center center no-repeat;
 }
 
 #profilelist .highcap.integrated {
-  background: url(/themes/console/images/svg/highcap.svg) calc(50% - 10px) center no-repeat,
-              url(/themes/console/images/svg/integrated.svg) calc(50% + 10px) center no-repeat;
+  background: var(--highcap) calc(50% - 10px) center no-repeat,
+              var(--integrated) calc(50% + 10px) center no-repeat;
 }
 
 #profilelist .standard {
-  background: url(/themes/console/images/svg/standard.svg) center center no-repeat;
+  background: var(--standard) center center no-repeat;
 }
 
 #profilelist .standard.integrated {
-  background: url(/themes/console/images/svg/standard.svg) calc(50% - 10px) center no-repeat,
-              url(/themes/console/images/svg/integrated.svg) calc(50% + 10px) center no-repeat;
+  background: var(--standard) calc(50% - 10px) center no-repeat,
+              var(--integrated) calc(50% + 10px) center no-repeat;
 }
 
 .profilegroup::before {
@@ -14620,19 +14615,19 @@ h1, .main h2, h4.app, h4.app2, .main h3 {
 }
 
 .profilegroup.fast::before {
-  background: url(/themes/console/images/svg/fast.svg) left center no-repeat;
+  background: var(--fast) left center no-repeat;
 }
 
 .profilegroup.highcap::before {
-  background: url(/themes/console/images/svg/highcap.svg) left center no-repeat;
+  background: var(--highcap) left center no-repeat;
 }
 
 .profilegroup.integrated::before {
-  background: url(/themes/console/images/svg/integrated.svg) left center no-repeat;
+  background: var(--integrated) left center no-repeat;
 }
 
 .profilegroup.standard::before {
-  background: url(/themes/console/images/svg/standard.svg) left center no-repeat;
+  background: var(--standard) left center no-repeat;
 }
 
 @media screen and (max-width: 1200px) {
