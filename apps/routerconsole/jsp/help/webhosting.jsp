@@ -30,11 +30,11 @@
 
 <h2>Introduction to Hosting Websites on I2P</h2>
 
-<p>By default, I2P is supplied with a webserver to host your own anonymized website (traditionally referred to as an <i>eepsite</i>). Both the site and the I2P Router Console are running on a streamlined version of <a href="https://en.wikipedia.org/wiki/Jetty_(web_server)" target="_blank" class="sitelink external">Jetty</a>, customized for I2P.</p>
+<p>By default, I2P is supplied with a webserver to host your own anonymized website (traditionally referred to as an <i>eepsite</i>). Both the site and the I2P Router Console are running on a streamlined version of <a href="https://en.wikipedia.org/wiki/Jetty_(web_server)" target="_blank" rel="noreferrer" class="sitelink external">Jetty</a>, customized for I2P.</p>
 
-<p>To serve your own static content, you only need to edit or replace the files in the webserver's root directory, and the site will be available on the I2P network after you've followed the instructions below. Additionally, cgi and python scripts can be run from the <code>cgi-bin</code> directory immediately above <code>docroot</code> if you have <a href="https://www.perl.org/about.html" target="_blank" class="sitelink external">perl</a> and <a href="https://www.python.org/" target="_blank" class="sitelink external">python</a> installed.</p>
+<p>To serve your own static content, you only need to edit or replace the files in the webserver's root directory, and the site will be available on the I2P network after you've followed the instructions below. Additionally, cgi and python scripts can be run from the <code>cgi-bin</code> directory immediately above <code>docroot</code> if you have <a href="https://www.perl.org/about.html" target="_blank" rel="noreferrer" class="sitelink external">perl</a> and <a href="https://www.python.org/" target="_blank" rel="noreferrer" class="sitelink external">python</a> installed.</p>
 
-<p>Directory listings (sometimes referred to as virtual directories) are enabled by default, so you can host files from a sub-directory of <code>docroot</code> without providing a page with links to the files. You can also serve content that exists outside of <code>docroot</code> by using a <a href="https://en.wikipedia.org/wiki/Symbolic_link" target="_blank" class="sitelink external">symbolic link</a> to the desired directory.</p>
+<p>Directory listings (sometimes referred to as virtual directories) are enabled by default, so you can host files from a sub-directory of <code>docroot</code> without providing a page with links to the files. You can also serve content that exists outside of <code>docroot</code> by using a <a href="https://en.wikipedia.org/wiki/Symbolic_link" target="_blank" rel="noreferrer" class="sitelink external">symbolic link</a> to the desired directory.</p>
 
 <p>You can override the <a href="http://127.0.0.1:7658/help/images/">default appearance</a> of the directory listing by supplying an edited <a href="http://127.0.0.1:7658/.resources/jetty-dir.css">jetty-dir.css</a> file to set a global appearance. Note that this file will not be displayed in the webserver's directory listing. Files and directories prefixed with . and files named favicon.ico or files ending with ~ or .bak or .old will also be hidden from view (though still accessible). Note: To create hidden files with a . prefix on Windows, add a trailing . to the file or directory e.g. <code>.hidden.</code>; Windows explorer will then save the file with the correct name, removing the trailing dot in the process.</p>
 
@@ -48,7 +48,7 @@
 <code>/var/lib/i2p/i2p-config/eepsite/docroot/</code> (Package/repository installation)</td></tr>
 </table>
 
-<p>On the I2P network, remotely hosted services can be accessed using a <a href="https://en.wikipedia.org/wiki/Base32" target="_blank" class="sitelink external">Base32</a> address ending in ".b32.i2p", a <i>destination</i> represented as a long <a href="https://en.wikipedia.org/wiki/Base64" class="sitelink external">Base64</a> string, or more usually by using an .i2p domain. A destination is I2P's equivalent to an IP address, and is shown on the <a href="http://127.0.0.1:7657/i2ptunnel/edit?tunnel=3">Tunnel Manager Configuration page</a>. You can share your b32.i2p address to allow others to access to your website until you've registered your own .i2p domain.</p>
+<p>On the I2P network, remotely hosted services can be accessed using a <a href="https://en.wikipedia.org/wiki/Base32" target="_blank" rel="noreferrer" class="sitelink external">Base32</a> address ending in ".b32.i2p", a <i>destination</i> represented as a long <a href="https://en.wikipedia.org/wiki/Base64" class="sitelink external">Base64</a> string, or more usually by using an .i2p domain. A destination is I2P's equivalent to an IP address, and is shown on the <a href="http://127.0.0.1:7657/i2ptunnel/edit?tunnel=3">Tunnel Manager Configuration page</a>. You can share your b32.i2p address to allow others to access to your website until you've registered your own .i2p domain.</p>
 
 <h3>Setting up &amp; announcing your website</h3>
 
@@ -66,19 +66,19 @@
 
 <h3>Registering an I2P Domain</h3>
 
-<p>You may wish to register your website with an I2P Domain registrar such as <a href="http://stats.i2p/i2p/addkey.html" target="_blank" class="sitelink">stats.i2p</a> or <a href="http://reg.i2p/" target="_blank" class="sitelink">reg.i2p</a>. Some registration sites require the full B64 destination address, which you should copy in full from the <i>Local destination</i> section on the <a href="http://127.0.0.1:7657/i2ptunnel/edit?tunnel=3">Tunnel Manager Configuration page</a>.</p>
+<p>You may wish to register your website with an I2P Domain registrar such as <a href="http://stats.i2p/i2p/addkey.html" target="_blank" rel="noreferrer" class="sitelink">stats.i2p</a> or <a href="http://reg.i2p/" target="_blank" rel="noreferrer" class="sitelink">reg.i2p</a>. Some registration sites require the full B64 destination address, which you should copy in full from the <i>Local destination</i> section on the <a href="http://127.0.0.1:7657/i2ptunnel/edit?tunnel=3">Tunnel Manager Configuration page</a>.</p>
 
 <p>If a <i>Registration Authentication</i> string is requested, you can find it on the <a href="http://127.0.0.1:7657/i2ptunnel/register?tunnel=3">Registration Authentication page</a> linked from the <a href="http://127.0.0.1:7657/i2ptunnel/edit?tunnel=3">Tunnel Manager Configuration page</a>.</p>
 
 <p>If you are in a hurry and can't wait a few hours, you can tell people to use a "jump" address helper redirection service. This will usually work within a few minutes of your registering your hostname on the same site. Test it yourself first by entering <code>http://stats.i2p/cgi-bin/jump.cgi?a=<i>something</i>.i2p</code> into your browser. Once it is working, you can tell others to use it.</p>
 
-<p>Alternatively, you can copy the <i>address helper link</i> for your domain, indicated either on the addressbook list page, or on the details page for your domain e.g. <a href="http://127.0.0.1:7657/susidns/details?h=i2p-projekt.i2p&book=router" target="_blank">details for i2p-projekt.i2p</a>, and paste the link where it's required to share it with others.</p>
+<p>Alternatively, you can copy the <i>address helper link</i> for your domain, indicated either on the addressbook list page, or on the details page for your domain e.g. <a href="http://127.0.0.1:7657/susidns/details?h=i2p-projekt.i2p&book=router" target="_blank" rel="noreferrer">details for i2p-projekt.i2p</a>, and paste the link where it's required to share it with others.</p>
 
-<p>Services such as <a href="http://identiguy.i2p/" target="_blank" class="sitelink">Identiguy's eepsite status list</a> and <a href="http://notbob.i2p/" target="_blank" class="sitelink">notbob's site uptime monitor</a> may direct visitors to your site. To actively promote your site on the network, there are various options you could try, for example:</p>
+<p>Services such as <a href="http://identiguy.i2p/" target="_blank" rel="noreferrer" class="sitelink">Identiguy's eepsite status list</a> and <a href="http://notbob.i2p/" target="_blank" rel="noreferrer" class="sitelink">notbob's site uptime monitor</a> may direct visitors to your site. To actively promote your site on the network, there are various options you could try, for example:</p>
 
 <ul>
-<li>Post an announcement on one of the I2P forums e.g. <a href="http://i2pforum.i2p/" target="_blank" class="sitelink">I2P forum</a> or <a href="http://def3.i2p" target="_blank" class="sitelink">Dancing Elephants</a></li>
-<li>Publish it on the <a href="http://wiki.i2p-projekt.i2p/wiki/index.php/Eepsite/Services" target="_blank" class="sitelink">I2P Wiki Eepsite Index</a></li>
+<li>Post an announcement on one of the I2P forums e.g. <a href="http://i2pforum.i2p/" target="_blank" rel="noreferrer" class="sitelink">I2P forum</a> or <a href="http://def3.i2p" target="_blank" rel="noreferrer" class="sitelink">Dancing Elephants</a></li>
+<li>Publish it on the <a href="http://wiki.i2p-projekt.i2p/wiki/index.php/Eepsite/Services" target="_blank" rel="noreferrer" class="sitelink">I2P Wiki Eepsite Index</a></li>
 <li>Tell people about it on I2P's IRC network</li>
 </ul>
 
@@ -91,9 +91,9 @@
 <p>Be aware that a poorly configured webserver or web appplication can leak information such as your real IP address or server details that may reduce your anonymity or assist a hacker. If using an alternative platform, be sure to secure it before putting it online. If in doubt, consult online guides about web server and web application hardening, for example:
 
 <ul id="guides">
-<li><a href="https://geekflare.com/apache-web-server-hardening-security/" target="_blank" class="sitelink external">Apache Web Server Security Guide</a></li>
-<li><a href="https://geekflare.com/nginx-webserver-security-hardening-guide/" target="_blank" class="sitelink external">Nginx Web Server Security Guide</a></li>
-<li><a href="https://www.wordfence.com/learn/how-to-harden-wordpress-sites/" target="_blank" class="sitelink external">How to Harden Your WordPress Site</a></li>
+<li><a href="https://geekflare.com/apache-web-server-hardening-security/" target="_blank" rel="noreferrer" class="sitelink external">Apache Web Server Security Guide</a></li>
+<li><a href="https://geekflare.com/nginx-webserver-security-hardening-guide/" target="_blank" rel="noreferrer" class="sitelink external">Nginx Web Server Security Guide</a></li>
+<li><a href="https://www.wordfence.com/learn/how-to-harden-wordpress-sites/" target="_blank" rel="noreferrer" class="sitelink external">How to Harden Your WordPress Site</a></li>
 </ul>
 
 <p><b>Note:</b> On some Apache installations, the <a href="https://httpd.apache.org/docs/2.4/mod/mod_status.html" target="blank" class="sitelink external">mod_status</a> and <a href="https://httpd.apache.org/docs/2.4/mod/mod_info.html" target="blank" class="sitelink external">mod_info</a> modules are enabled by default. It is important to disable these, or otherwise protect access to the urls, to avoid compromising the anonymity and security of your server.</p>

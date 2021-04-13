@@ -76,9 +76,9 @@ class BuildHandler implements Runnable {
 
     /** TODO these may be too high, review and adjust */
 //    private static final int MIN_QUEUE = 18;
-    private static final int MIN_QUEUE = 16;
+    private static final int MIN_QUEUE = 32;
 //    private static final int MAX_QUEUE = 192;
-    private static final int MAX_QUEUE = 160;
+    private static final int MAX_QUEUE = 256;
 
 //    private static final int NEXT_HOP_LOOKUP_TIMEOUT = 15*1000;
     private static final int NEXT_HOP_LOOKUP_TIMEOUT = 20*1000;
@@ -88,9 +88,10 @@ class BuildHandler implements Runnable {
 //    private static final int MIN_LOOKUP_LIMIT = 10;
     private static final int MIN_LOOKUP_LIMIT = 16;
 //    private static final int MAX_LOOKUP_LIMIT = 100;
-    private static final int MAX_LOOKUP_LIMIT = 128;
+    private static final int MAX_LOOKUP_LIMIT = 192;
     /** limit lookups to this % of current participating tunnels */
-    private static final int PERCENT_LOOKUP_LIMIT = 3;
+//    private static final int PERCENT_LOOKUP_LIMIT = 3;
+    private static final int PERCENT_LOOKUP_LIMIT = 5;
 
     /**
      *  This must be high, as if we timeout the send we remove the tunnel from

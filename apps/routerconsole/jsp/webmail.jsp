@@ -36,14 +36,14 @@
 <body class="embed">
 <script nonce="<%=cspNonce%>" type="text/javascript">progressx.show();</script>
 <%@include file="summary.jsi" %>
-<h1 class="mail"><%=intl._t("Webmail")%> <span class="newtab"><a href="/susimail/" target="_blank" title="<%=intl._t("Open in new tab")%>"><img src="<%=intl.getTheme(request.getHeader("User-Agent"))%>images/newtab.png" /></a></span></h1>
+<h1 class="mail"><%=intl._t("Webmail")%> <span class="newtab"><a href="/susimail/" target="_blank" title="<%=intl._t("Open in new tab")%>"><img src="<%=intl.getTheme(request.getHeader("User-Agent"))%>images/newtab.png" alt="<%=intl._t("Open in new tab")%>"></a></span></h1>
 <div class="main" id="webmail">
 <style>iframe{width:1px;min-width:100%;opacity:0}</style>
 <noscript>
 <style type="text/css">iframe {display: none}</style>
-<p class="infohelp" id="jsRequired" style="margin: 10px;">Javascript is required to view <a href="/susimail/" target="_blank">the webmail client</a> in embedded mode.</p>
+<p class="infohelp" id="jsRequired" style="margin: 10px;">Javascript is required to view <a href="/susimail/" target="_blank" rel="noreferrer">the webmail client</a> in embedded mode.</p>
 </noscript>
-<iframe src="/susimail/" title="I2P+ <%=intl.title("webmail")%>" width="100%" frameborder="0" border="0" scrolling="no" name="susimailframe" id="susimailframe" allowtransparency="true">
+<iframe src="/susimail/" title="I2P+ <%=intl._t("webmail")%>" width="100%" frameborder="0" border="0" scrolling="no" name="susimailframe" id="susimailframe" allowtransparency="true">
 <%=intl._t("Your browser does not support iFrames.")%>
 &nbsp;<a href="/susimail/"><%=intl._t("Click here to continue.")%></a>
 </iframe>

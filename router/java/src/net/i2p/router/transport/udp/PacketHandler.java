@@ -454,13 +454,13 @@ class PacketHandler {
                                 packet.decrypt(ps.getCurrentCipherKey());
                                 reader.initialize(packet);
                                 if (_log.shouldLog(Log.WARN))
-                                    buf.append("; VALID (type ").append(reader.readPayloadType()).append("); ");
+                                    buf.append(" (VALID -> type ").append(reader.readPayloadType()).append("); ");
                                 valid = true;
                                 if (state == null)
                                     state = ps;
                             } else {
                                 if (_log.shouldLog(Log.WARN))
-                                    buf.append(" INVALID; ");
+                                    buf.append(" (INVALID) ");
                             }
                         }
                         if (state != null && !foundSamePort) {

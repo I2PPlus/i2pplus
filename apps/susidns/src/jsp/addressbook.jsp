@@ -99,7 +99,7 @@
     if (book.getEntries().length > 0) { /* Don't show if no results. Can't figure out how to do this with c:if */
 %>
 <div id="export">
-<form action="export" method="GET" target="_blank">
+<form action="export" method="GET" target="_blank" rel="noreferrer">
 <input type="hidden" name="book" value="${book.book}">
 <c:if test="${book.search} != null && ${book.search}.length() > 0">
 <input type="hidden" name="search" value="${book.search}">
@@ -436,8 +436,8 @@
 %>
 </td>
 <td class="names"><a href="http://${addr.name}/" target="_top">${addr.displayName}</a></td>
-<td class="b32link"><span class="addrhlpr"><a href="http://${addr.b32}/" target="_blank" title="<%=intl._t("Base 32 address")%>">b32</a></span></td>
-<td class="helper"><a href="http://${addr.name}/?i2paddresshelper=${addr.destination}" target="_blank" title="<%=intl._t("Helper link to share host address with option to add to addressbook")%>">link</a></td>
+<td class="b32link"><span class="addrhlpr"><a href="http://${addr.b32}/" target="_blank" rel="noreferrer" title="<%=intl._t("Base 32 address")%>">b32</a></span></td>
+<td class="helper"><a href="http://${addr.name}/?i2paddresshelper=${addr.destination}" target="_blank" rel="noreferrer" title="<%=intl._t("Helper link to share host address with option to add to addressbook")%>">link</a></td>
 <td class="destinations"><div class="destaddress resetScrollLeft" name="dest_${addr.name}" width="200px" tabindex="0">${addr.destination}</div></td>
 <c:if test="${book.validBook}">
 <td class="checkbox"><input type="checkbox" class="optbox" name="checked" value="${addr.name}" title="<%=intl._t("Mark for deletion")%>"></td>

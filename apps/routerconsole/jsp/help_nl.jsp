@@ -146,7 +146,7 @@ gedeelde bandbreedte en lokaal gegenereerd verkeer. Voor I2P is het niet nodig d
 
 <p>Bovenop de I2P router zijn een aantal client applicaties gemaakt, elk met hun eigen set aan licenties en afhankelijkheden.  Deze webpagine is aangeboden als onderdeel van de I2P routerconsole client applicatie, gebouwd op basis van een afgeslankte <a href="http://jetty.mortbay.com/jetty/index.html">Jetty</a> instantie (afgeslankt, als in, we voegen geen demo applicaties of andere add-ons bij, en hebben de configuratie eenvoudiger gemaakt), welke je standaard JSP/Servlet web applicaties laat deployen in je router. Jetty maakt gebruik van Apache's javax.servlet (javax.servlet.jar) implementatie. Dit product bevat software ontwikkeld door de Apache Software Foundation (http://www.apache.org/).</p>
 
-<p>Een andere applicatie op deze webpagina is <a href="http://i2p-projekt.i2p/nl/docs/api/i2ptunnel">I2PTunnel</a> (je <a href="i2ptunnel/" target="_blank">web interface</a>) - een GPL applicatie geschreven door mihi die normaal TCP/IP verkeer over I2P laat tunnelen (zoals de eepproxy en de irc proxy). Er is ook een web based mail client <a href="/susimail/">beschikbaar</a> op de console, dit is een GPL applicatie geschreven door susi23. De adresboek applicatie, geschreven door
+<p>Een andere applicatie op deze webpagina is <a href="http://i2p-projekt.i2p/nl/docs/api/i2ptunnel">I2PTunnel</a> (je <a href="i2ptunnel/" target="_blank" rel="noreferrer">web interface</a>) - een GPL applicatie geschreven door mihi die normaal TCP/IP verkeer over I2P laat tunnelen (zoals de eepproxy en de irc proxy). Er is ook een web based mail client <a href="/susimail/">beschikbaar</a> op de console, dit is een GPL applicatie geschreven door susi23. De adresboek applicatie, geschreven door
 <a href="http://ragnarok.i2p/">Ragnarok</a> helpt je met het beheren van je hosts.txt bestanden (zie ./addressbook/ voor meer informatie).</p>
 
 <p>De router bevat ook standaard human's public domain <a href="http://i2p-projekt.i2p/nl/docs/api/sam">SAM</a> brug, welke andere client applicaties (zoals de <a href="http://duck.i2p/i2p-bt/">bittorrent port</a>) kan gebruiken. Er is ook een geoptimaliseerde library voor het uitvoeren van berekeningen met grote getallen - jbigi - deze gebruikt de LGPL licensed <a href="http://swox.com/gmp/">GMP</a> library, aangepast voor verschillende PC architecturen.  Opstarters voor windows gebruikers zijn gemaakt met <a href="http://launch4j.sourceforge.net/">Launch4J</a>, en de installer is gemaakt met <a href="http://www.izforge.com/izpack/">IzPack</a>. Voor details over andere beschikbare applicaties, en hun licenties, zie het <a href="http://i2p-projekt.i2p/nl/get-involved/develop/licenses">licentie beleid</a>. Broncode voor I2P en de meeste gebundelde client applicaties kan gevonden worden op onze <a href="http://i2p-projekt.i2p/nl/download">download pagina</a>.</p>
@@ -164,7 +164,7 @@ gedeelde bandbreedte en lokaal gegenereerd verkeer. Voor I2P is het niet nodig d
  <jsp:setProperty name="contenthelper" property="startAtBeginning" value="true" />
  <jsp:getProperty name="contenthelper" property="textContent" />
 
-<p id="fullhistory"><a href="/history.txt" target="_blank">Completere lijst met wijzigingen</a></p>
+<p id="fullhistory"><a href="/history.txt" target="_blank" rel="noreferrer">Completere lijst met wijzigingen</a></p>
 
 </div>
 

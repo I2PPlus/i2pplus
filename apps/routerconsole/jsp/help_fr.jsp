@@ -146,7 +146,7 @@ D'autres détails sont disponibles ici:
 
 <p>Au-dessus du routeur I2P on a une série d'applications clientes, ayant chacune ses particularités en termes de licences et de dépendances. Cette page est affichée en tant qu'élément de l'application cliente console du routeur I2P, qui est une version allégée d'une instance <a href="http://jetty.mortbay.com/jetty/index.html">Jetty</a> (allégée en ce que nous n'avons pas inclus les applications de démo et autres compléments, et que nous avons simplifié la configuration), vous permettant de déployer dans votre routeur des applications web JSP/Servlet standards. De son côté Jetty fait usage de l'implémentation javax.servlet d'Apache. Ce dispositif inclus du logiciel développé par la fondation Apache Software (http://www.apache.org/).</p>
 
-<p>Une autre application visible sur cette page: <a href="http://i2p-projekt.i2p/fr/docs/api/i2ptunnel">I2PTunnel</a> (votre <a href="i2ptunnel/" target="_blank">interface web</a>) sous licence GPL écrite par mihi qui vous permet de mettre en tunnels le trafic normal TCP/IP sur I2P (comme les proxy eep et le proxy irc). Il y a aussi un client webmail <a href=/susimail/">susimail</a> disponible dans la console, qui est sous licence GPL et écrit par susi23. L'application carnet d'adresses, écrite par <a href="http://ragnarok.i2p/">Ragnarok</a> gère votre fichier hosts.txt (voir ./addressbook/ pour plus de détails).</p>
+<p>Une autre application visible sur cette page: <a href="http://i2p-projekt.i2p/fr/docs/api/i2ptunnel">I2PTunnel</a> (votre <a href="i2ptunnel/" target="_blank" rel="noreferrer">interface web</a>) sous licence GPL écrite par mihi qui vous permet de mettre en tunnels le trafic normal TCP/IP sur I2P (comme les proxy eep et le proxy irc). Il y a aussi un client webmail <a href=/susimail/">susimail</a> disponible dans la console, qui est sous licence GPL et écrit par susi23. L'application carnet d'adresses, écrite par <a href="http://ragnarok.i2p/">Ragnarok</a> gère votre fichier hosts.txt (voir ./addressbook/ pour plus de détails).</p>
 
 <p>Le routeur inclu aussi par défaut le pont <a href="http://i2p-projekt.i2p/fr/docs/api/sam">SAM</a> du domaine public de l'humanité, que les autres applications clientes (comme le <a href="http://duck.i2p/i2p-bt/">portage bittorrent</a>) peuvent à leur tour utiliser. Il y a aussi une bibliothèque optimisée pour les calculs sur les grand nombres - jbigi - qui de son côté utilise la bibliothèque sous licence LGPL <a href="http://swox.com/gmp/">GMP</a>, adaptée à diverses architectures PC. Les lanceurs pour Windows sont faits avec <a href="http://launch4j.sourceforge.net/">Launch4J</a>, et l'installeur avec <a href="http://www.izforge.com/izpack/">IzPack</a>. Les détails sur les autres applications disponibles comme sur leurs licences respectives, référez-vous à notre <a href="http://i2p-projekt.i2p/fr/get-involved/develop/licenses">politique de licences</a>. Les sources du code I2P et de la plupart des applications jointes est sur notre page de <a href="http://i2p-projekt.i2p/fr/download">téléchargements</a>.
 .</p>
@@ -163,7 +163,7 @@ D'autres détails sont disponibles ici:
  <jsp:setProperty name="contenthelper" property="startAtBeginning" value="true" />
  <jsp:getProperty name="contenthelper" property="textContent" />
 
-<p id="fullhistory"><a href="/history.txt" target="_blank">Historique complet</a></p>
+<p id="fullhistory"><a href="/history.txt" target="_blank" rel="noreferrer">Historique complet</a></p>
 
 </div>
 

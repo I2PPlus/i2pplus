@@ -401,13 +401,13 @@ public class BuildRequestRecord {
 
             // fast MSB check for key < 2^255
             if ((encrypted[PEER_SIZE + EC_LEN - 1] & 0x80) != 0)
-                throw new DataFormatException("Bad PK decrypt fail");
+                throw new DataFormatException("Bad Public Key -> Decryption failure");
             // i2pd 0.9.46/47 bug, treating us like type 1
             if (DataHelper.eq(ourKey.toPublic().getData(), 0, encrypted, PEER_SIZE, EC_LEN))
-                throw new DataFormatException("Our PK decrypt fail");
+                throw new DataFormatException("Our Public Key -> Decryption failure (i2pd 0.9.46/47 bug?)");
             // very old i2pd bug?
             if (DataHelper.eq(NULL_KEY, 0, encrypted, PEER_SIZE, EC_LEN))
-                throw new DataFormatException("Null PK decrypt fail");
+                throw new DataFormatException("Null Public Key -> Decryption failure (ancient i2pd bug?)");
             HandshakeState state = null;
             try {
                 KeyFactory kf = TEST ? TESTKF : ctx.commSystem().getXDHFactory();
@@ -425,9 +425,9 @@ public class BuildRequestRecord {
                 if (state != null) {
                     Log log = ctx.logManager().getLog(BuildRequestRecord.class);
                     if (log.shouldInfo())
-                        log.info("ECIES BRR decrypt failure, state at failure:\n" + state);
+                        log.info("ECIES BuildRecordRequest decryption failure:\n" + state);
                 }
-                throw new DataFormatException("ChaCha decrypt fail", gse);
+                throw new DataFormatException("ChaCha decryption failure", gse);
             } finally {
                 if (state != null)
                     state.destroy();
@@ -439,7 +439,7 @@ public class BuildRequestRecord {
         if (decrypted != null) {
             _data = decrypted;
         } else {
-            throw new DataFormatException("decrypt fail");
+            throw new DataFormatException("Decryption failure");
         }
     }
 

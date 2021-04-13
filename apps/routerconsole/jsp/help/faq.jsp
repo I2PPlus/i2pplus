@@ -29,7 +29,7 @@
 <div id="faq">
 <h2>Abridged I2P FAQ</h2>
 
-<p class="infohelp">This is a shortened version of the official FAQ. For the full version, please visit <a href="https://geti2p.net/faq" target="_blank" class="sitelink external">https://geti2p.net/faq</a> or <a href="http://i2p-projekt.i2p/faq" target="_blank" class="sitelink">http://i2p-projekt.i2p/faq</a>.
+<p class="infohelp">This is a shortened version of the official FAQ. For the full version, please visit <a href="https://geti2p.net/faq" target="_blank" rel="noreferrer" class="sitelink external">https://geti2p.net/faq</a> or <a href="http://i2p-projekt.i2p/faq" target="_blank" rel="noreferrer" class="sitelink">http://i2p-projekt.i2p/faq</a>.
 
 <h3>My router has been up for several minutes and has zero or very few connections</h3>
 
@@ -43,7 +43,7 @@
 
 <p>The default subscription is to <code>http://i2p-projekt.i2p/hosts.txt</code> which is seldom updated. If you don't have another subscription, you may often have to use "jump" links which is much slower but ensures that your addressbook is only populated by sites you use (in addition to the default subscription addresses). To speed up browsing on I2P, it's a good idea to add some addressbook subscriptions.</p>
 
-<p>Here are some other public addressbook subscription links. You may wish to add one or two to your <a href="/susidns/subscriptions" target="_blank">susidns subscription list</a>. In the event that addresses conflict in the subscriptions, the lists placed at the top of your susidns configuration will take precedence over those placed further down.</p>
+<p>Here are some other public addressbook subscription links. You may wish to add one or two to your <a href="/susidns/subscriptions" target="_blank" rel="noreferrer">susidns subscription list</a>. In the event that addresses conflict in the subscriptions, the lists placed at the top of your susidns configuration will take precedence over those placed further down.</p>
 
 <ul>
 <li><code>http://stats.i2p/cgi-bin/newhosts.txt</code></li>
@@ -57,11 +57,11 @@
 
 <h3>How do I access IRC, BitTorrent, or other services on the regular Internet?</h3>
 
-<p>Unless an outproxy has been set up for the service you want to connect to, this is not possible, with the exception of BitTorrent (see below). There are only three types of outproxies running right now: HTTP, HTTPS, and email. Note that there is currently no publicly listed SOCKS outproxy. If this type of service is required, try <a href="https://torproject.org/" target="_blank" class="sitelink external">Tor</a>.</p>
+<p>Unless an outproxy has been set up for the service you want to connect to, this is not possible, with the exception of BitTorrent (see below). There are only three types of outproxies running right now: HTTP, HTTPS, and email. Note that there is currently no publicly listed SOCKS outproxy. If this type of service is required, try <a href="https://torproject.org/" target="_blank" rel="noreferrer" class="sitelink external">Tor</a>.</p>
 
 <h3>Can I download torrents from non-I2P trackers?</h3>
 
-<p>Until the advent of I2P integration in <a href="http://www.vuze.com/" target="_blank" class="sitelink external">Vuze</a>, it wasn't possible to download torrents that weren't hosted on the I2P network. However, now that Vuze (and latterly <a href="https://www.biglybt.com/" target="_blank" class="sitelink external">Bigly</a>) allow users to share non-I2P torrents on I2P, non-I2P torrents can be downloaded over I2P if Vuze/Bigly users have chosen to make content available to the I2P network. Popular torrents with a large number of peers are more likely to be accessible via I2P; to determine if the content is available, add the torrent link, magnet or infohash to your I2P-enabled BitTorrent client.</p>
+<p>Until the advent of I2P integration in <a href="http://www.vuze.com/" target="_blank" rel="noreferrer" class="sitelink external">Vuze</a>, it wasn't possible to download torrents that weren't hosted on the I2P network. However, now that Vuze (and latterly <a href="https://www.biglybt.com/" target="_blank" rel="noreferrer" class="sitelink external">Bigly</a>) allow users to share non-I2P torrents on I2P, non-I2P torrents can be downloaded over I2P if Vuze/Bigly users have chosen to make content available to the I2P network. Popular torrents with a large number of peers are more likely to be accessible via I2P; to determine if the content is available, add the torrent link, magnet or infohash to your I2P-enabled BitTorrent client.</p>
 
 <h3 id="alternative_browser">How do I configure I2P to open at startup in a specific web browser?</h3>
 
@@ -69,15 +69,15 @@
 
 <h3>How do I configure my browser to access .i2p websites?</h3>
 
-<p>You will need to configure your browser to use the HTTP proxy server (by default on host: <code>127.0.0.1</code> port: <code>4444</code>). See the <a href="https://geti2p.net/en/about/browser-config" target="_blank" class="sitelink external">Browser Proxy Configuration Guide</a> for a more detailed explanation.</p>
+<p>You will need to configure your browser to use the HTTP proxy server (by default on host: <code>127.0.0.1</code> port: <code>4444</code>). See the <a href="https://geti2p.net/en/about/browser-config" target="_blank" rel="noreferrer" class="sitelink external">Browser Proxy Configuration Guide</a> for a more detailed explanation.</p>
 
 <h3>What is an eepsite?</h3>
 
-<p>An eepsite is a website that is hosted anonymously on the I2P network - you can access it by configuring your web browser to use I2P's HTTP proxy (see above) and browsing to the <code>.i2p</code> suffixed website (e.g. <a href="http://i2p-projekt.i2p" target="_blank" class="sitelink">http://i2p-projekt.i2p</a>). Also ensure your browser is configured to resolve DNS remotely when using the proxy to avoid DNS leaks.</p>
+<p>An eepsite is a website that is hosted anonymously on the I2P network - you can access it by configuring your web browser to use I2P's HTTP proxy (see above) and browsing to the <code>.i2p</code> suffixed website (e.g. <a href="http://i2p-projekt.i2p" target="_blank" rel="noreferrer" class="sitelink">http://i2p-projekt.i2p</a>). Also ensure your browser is configured to resolve DNS remotely when using the proxy to avoid DNS leaks.</p>
 
 <h3>Most of the eepsites are down?</h3>
 
-<p>If you consider every eepsite that has ever been created, yes, most of them are down. People and eepsites come and go. A good way to get started in I2P is check out a list of eepsites that are currently up. <a href="http://identiguy.i2p" target="_blank" class="sitelink">http://identiguy.i2p</a> tracks active eepsites.</p>
+<p>If you consider every eepsite that has ever been created, yes, most of them are down. People and eepsites come and go. A good way to get started in I2P is check out a list of eepsites that are currently up. <a href="http://identiguy.i2p" target="_blank" rel="noreferrer" class="sitelink">http://identiguy.i2p</a> tracks active eepsites.</p>
 
 <h3>Where are my I2P configuration files stored?</h3>
 <p>Configuration files for the router, installed plugins, and router logs are stored in the following location:</p>
@@ -131,8 +131,8 @@
 <tr><td>7660</td><td>Incoming mail from pop.postman.i2p</td><td>Can be disabled or changed in the <a href="/i2ptunnelmgr">Tunnel Manager</a>. Can also be configured to bind to a specific interface or all interfaces.</td></tr>
 <tr><td>7667</td><td>I2P Router Console (https://)</td><td>Can be enabled in the <code>clients.config</code> file. Can also be configured to bind to a specific interface or all interfaces. If both http and https are enabled, automatic redirection to https is enabled by default. If you make the Router Console available over the network, you might wish to <a href="/configui#passwordheading">enforce an access password</a> to prevent unauthorized access.</td></tr>
 <tr><td>8998</td><td>mtn.i2p2.i2p (I2P's Monotone DVCS)</td><td>Can be disabled or changed in the <a href="/i2ptunnelmgr">Tunnel Manager</a>. Can also be configured to bind to a specific interface or all interfaces. [Disabled by default]</td></tr>
-<tr><td>31000</td><td>Local connection to wrapper control channel port</td><td>Outbound to 32000 only, does not listen on this port. Starts at 31000 and will increment until 31999 looking for a free port. To change, see the <a href="http://wrapper.tanukisoftware.com/doc/english/prop-port.html" target="_blank" class="sitelink external">wrapper documentation</a>.</td></tr>
-<tr><td>32000</td><td>Local control channel for the service wrapper</td><td>To change, see the <a href="http://wrapper.tanukisoftware.com/doc/english/prop-port.html" target="_blank" class="sitelink external">wrapper documentation</a>.</td></tr>
+<tr><td>31000</td><td>Local connection to wrapper control channel port</td><td>Outbound to 32000 only, does not listen on this port. Starts at 31000 and will increment until 31999 looking for a free port. To change, see the <a href="http://wrapper.tanukisoftware.com/doc/english/prop-port.html" target="_blank" rel="noreferrer" class="sitelink external">wrapper documentation</a>.</td></tr>
+<tr><td>32000</td><td>Local control channel for the service wrapper</td><td>To change, see the <a href="http://wrapper.tanukisoftware.com/doc/english/prop-port.html" target="_blank" rel="noreferrer" class="sitelink external">wrapper documentation</a>.</td></tr>
 <tr><th colspan="3">INTERNET FACING PORTS</th></tr>
 <tr><td colspan="3" class="infohelp">I2P selects a random port between 9000 and 31000 to communicate with other routers when the program is run for the first time, or when your external IP address changes when running in <a href="/confignet#ipchange">Laptop Mode</a>. The <a href="/confignet#udpconfig">selected port</a> is shown on the <a href="/confignet">Network Configuration page</a>.</td></tr>
 <tr><td colspan="3">Outbound UDP from the <a href="/confignet#udpconfig">random port</a> noted on the Network Configuration page to arbitrary remote UDP ports, allowing replies.</td></tr>

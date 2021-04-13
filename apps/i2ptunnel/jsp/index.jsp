@@ -110,9 +110,9 @@
 <%
             if (indexBean.isServerTargetLinkValid(curServer)) {
                 if (indexBean.isSSLEnabled(curServer)) { %>
-<a href="https://<%=indexBean.getServerTarget(curServer)%>/" title="<%=intl._t("Test HTTPS server, bypassing I2P")%>" target="_blank"><%=indexBean.getServerTarget(curServer)%> SSL</a>
+<a href="https://<%=indexBean.getServerTarget(curServer)%>/" title="<%=intl._t("Test HTTPS server, bypassing I2P")%>" target="_blank" rel="noreferrer"><%=indexBean.getServerTarget(curServer)%> SSL</a>
 <%              } else { %>
-<a href="http://<%=indexBean.getServerTarget(curServer)%>/" title="<%=intl._t("Test HTTP server, bypassing I2P")%>" target="_blank"><%=indexBean.getServerTarget(curServer)%></a>
+<a href="http://<%=indexBean.getServerTarget(curServer)%>/" title="<%=intl._t("Test HTTP server, bypassing I2P")%>" target="_blank" rel="noreferrer"><%=indexBean.getServerTarget(curServer)%></a>
 <%
                 }
             } else {
@@ -130,7 +130,7 @@ SSL
 <%
             if (("httpserver".equals(indexBean.getInternalType(curServer)) || ("httpbidirserver".equals(indexBean.getInternalType(curServer)))) && indexBean.getTunnelStatus(curServer) == IndexBean.RUNNING) {
 %>
-<a class="control" title="<%=intl._t("Test HTTP server through I2P")%>" href="http://<%=indexBean.getDestHashBase32(curServer)%>" target="_blank"><%=intl._t("Preview")%></a>
+<a class="control" title="<%=intl._t("Test HTTP server through I2P")%>" href="http://<%=indexBean.getDestHashBase32(curServer)%>" target="_blank" rel="noreferrer"><%=intl._t("Preview")%></a>
 <%
             } else if (indexBean.getTunnelStatus(curServer) == IndexBean.RUNNING) {
 %>
