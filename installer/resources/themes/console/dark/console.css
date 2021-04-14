@@ -7029,13 +7029,13 @@ h4 span[style="float: right;"] .unbold {
   border-radius: 0;
   border-left-width: 4px;
   border-right-width: 4px;
-  background: url(/themes/console/images/svg/hardhat.svg) 4px center no-repeat, var(--element);
+  background: var(--hardhat) 4px center no-repeat, var(--element);
   background-size: 14px, 100%;
 }
 
 .lsdest.published {
   padding-left: 38px;
-  background: url(/themes/console/images/svg/hardhat.svg) 4px center no-repeat,
+  background: var(--hardhat) 4px center no-repeat,
               var(--globe) 22px center no-repeat,
               var(--element);
   background-size: 14px, 12px, 100%;
@@ -7954,7 +7954,7 @@ p.sybilinfo {
 }
 
 p.sybilinfo.experimental {
-  background: #000 url(/themes/console/images/svg/experimental.svg) 12px center no-repeat !important;
+  background: #000 var(--experimental) 12px center no-repeat !important;
   background-size: 28px !important;
 }
 
@@ -11054,7 +11054,7 @@ input[type=file] {
   min-width: 40px;
   display: inline-block;
   vertical-align: middle;
-  background: url(/themes/console/images/info/experimental.png) 12px center no-repeat !important;
+  background: var(--experimental) 12px center no-repeat !important;
   background-size: 16px auto !important;
   content: "";
 }

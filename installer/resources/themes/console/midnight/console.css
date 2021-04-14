@@ -8691,7 +8691,8 @@ p.sybilinfo {
 }
 
 p.sybilinfo.experimental {
-  background: url(/themes/console/images/info/experimental.png) 12px center no-repeat !important;
+  background: var(--experimental) 12px center no-repeat !important;
+  background-size: 28px !important;
 }
 
 #bandwidthconfig tr:first-child .infohelp {
@@ -11052,8 +11053,8 @@ label:hover .optbox {
 .config_experimental::after {
   content: "";
   display: inline-block;
-  background: url(/themes/console/images/info/experimental.png) 12px center no-repeat !important;
-  background-size: 16px auto !important;
+  background: var(--experimental) 12px center no-repeat !important;
+  background-size: 16px !important;
   margin-left: -12px;
   margin-top: -10px;
   min-height: 40px;
@@ -14372,13 +14373,13 @@ h1, .main h2, h4.app, h4.app2, .main h3 {
   border-radius: 0;
   border-left-width: 4px;
   border-right-width: 4px;
-  background: url(/themes/console/images/svg/hardhat.svg) 4px center no-repeat, linear-gradient(to bottom, #003, #001);
+  background: var(--hardhat) 4px center no-repeat, linear-gradient(to bottom, #003, #001);
   background-size: auto 14px, 100%;
 }
 
 .lsdest.published {
   padding-left: 38px;
-  background: url(/themes/console/images/svg/hardhat.svg) 4px center no-repeat,
+  background: var(--hardhat) 4px center no-repeat,
               var(--globe) 22px center no-repeat,
               linear-gradient(to bottom, #003, #001);
   background-size: auto 14px, auto 12px, 100%;
