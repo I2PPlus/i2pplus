@@ -148,12 +148,12 @@ public class FileDumpHelper extends HelperBase {
             if (iv != null)
                 buf.append("<br>");
             if (linkrev) {
-                buf.append("<a href=\"");
+                buf.append("<a target=\"_blank\" rel=\"noreferrer\" href=\"");
                 if (builder.equals("zzz"))
                     buf.append(UPSTREAMLINK);
                 else
                     buf.append(LINK);
-            buf.append(s).append("\" target=\"_blank\">");
+            buf.append(s).append("\">");
             }
             buf.append("<span class=\"revision\"><tt>").append(s.substring(0, 8)).append("</tt>");
             if (linkrev)
@@ -165,7 +165,7 @@ public class FileDumpHelper extends HelperBase {
             buf.append(s.replace("(Oracle Corporation)", "(Oracle)")
                         .replace("Apache Maven", "Maven")
                         .replace("(Sun Microsystems Inc.)", "(Sun)")
-                        .replace(" (Private Build)", ""));
+                        .replace(" (Private Build)", " (OpenJDK)"));
         }
         buf.append("</td><td title=\"UTC\">");
         s = getAtt(att, "Build-Date");
