@@ -7942,7 +7942,7 @@ p#enablefullstats {
 
 p#debugmode {
   padding: 15px 15px 15px 50px;
-  background: #000 url(/themes/console/images/svg/bug.svg) 12px center no-repeat !important;
+  background: #000 var(--bug) 12px center no-repeat !important;
   background-size: 28px !important;
 }
 
@@ -8046,7 +8046,7 @@ h3#systray + p.infohelp {
 
 h3#servicedebug + p.infohelp {
   padding: 15px 15px 15px 50px;
-  background: #000 url(/themes/console/images/svg/bug.svg) 12px center no-repeat !important;
+  background: #000 var(--bug) 12px center no-repeat !important;
   background-size: 28px !important;
 }
 
@@ -9032,10 +9032,12 @@ th code {
   margin-top: 11px !important;
   padding: 8px 10px;
   font-size: 11.5pt;
-  background: url(/themes/console/images/info/debug.png) right 5px center no-repeat, var(--navbar) !important;
-  background: url(/themes/console/images/info/debug.png) right 5px center no-repeat, linear-gradient(to bottom, rgba(0,0,0,0) 50%, #000 50%), repeating-linear-gradient(to right, rgba(0,0,0,.5) 1px, rgba(0,16,0,.5) 2px, rgba(0,16,0,.4) 3px), var(--h3_fade) !important;
+  background: var(--bug) right 5px center no-repeat,
+              linear-gradient(to bottom, rgba(0,0,0,0) 50%, #000 50%),
+              repeating-linear-gradient(to right, rgba(0,0,0,.5) 1px, rgba(0,16,0,.5) 2px, rgba(0,16,0,.4) 3px),
+              var(--h3_fade) !important;
   background-size: 20px, 100%, 100%, 100% !important;
-  background-blend-mode: luminosity, normal, normal, normal;
+  background-blend-mode: difference, normal, normal, normal;
 }
 
 #debug h2#debug_portmapper {
@@ -13539,7 +13541,7 @@ th[aria-sort] {
   padding: 10px 10px 8px 50px !important;
   border: 1px solid #242;
   box-shadow: var(--lowlight), inset 0 0 2px 1px #030;
-  background-image: url(/themes/console/images/svg/sybil.svg) !important;
+  background-image: var(--sybil) !important;
   background-size: 28px;
 }
 
