@@ -53,9 +53,8 @@ body:not(old) {
               url(/themes/console/images/buttons/shutdown_hover.png) no-repeat,
               url(/themes/console/images/buttons/update_hover.png) no-repeat,
               url(images/dropdown_hover.svg),
-              url(/themes/console/images/svg/update.svg),
               url(images/newtab.png), #001;
-  background-size: 100%, 100%, 100%, 100%, 171px 148px, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0;
+  background-size: 100%, 100%, 100%, 100%, 171px 148px, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0;
 }
 
 @supports (-moz-appearance: none) {
@@ -8752,7 +8751,7 @@ p#pluginconfigtext {
 
 #manualreseed tr:nth-last-child(2) td.infohelp {
   padding: 15px 15px 15px 50px;
-  background: #000 url(/themes/console/images/svg/package.png) 12px center no-repeat !important;
+  background: #000 var(--package) 12px center no-repeat !important;
   background-size: 28px !important;
 }
 
@@ -12365,7 +12364,7 @@ html, body {
   height: 24px;
   vertical-align: middle;
   display: inline-block;
-  background: url(/themes/console/images/svg/update.svg) center center no-repeat;
+  background: var(--update) center center no-repeat;
   background-size: 24px;
   content: "";
   transform: rotate(0);
