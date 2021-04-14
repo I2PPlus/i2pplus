@@ -144,7 +144,7 @@ public class FileDumpHelper extends HelperBase {
             buf.append("<b>").append(iv).append("</b>");
         String s = getAtt(att, "Base-Revision");
         String builder = getAtt(att, "Built-By");
-        if (s != null && s.length() > 20) {
+        if (s != null && s.length() >= 8) {
             if (iv != null)
                 buf.append("<br>");
             if (linkrev) {
@@ -153,11 +153,9 @@ public class FileDumpHelper extends HelperBase {
                     buf.append(UPSTREAMLINK);
                 else
                     buf.append(LINK);
-                buf.append(s).append("\">");
+            buf.append(s).append("\" target=\"_blank\">");
             }
-            buf.append("<span class=\"revision\"><tt>").append(s.substring(0, 20)).append("</tt>" +
-                       "<br>" +
-                       "<tt>").append(s.substring(20)).append("</tt></span>");
+            buf.append("<span class=\"revision\"><tt>").append(s.substring(0, 8)).append("</tt>");
             if (linkrev)
                 buf.append("</a>");
         }
