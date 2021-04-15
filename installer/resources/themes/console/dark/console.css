@@ -4851,6 +4851,9 @@ h3#servicedebug a, h3#graphinfo a {
   #tunnels .tunneldisplay .cells .tunnel_peer.tunnel_local {
     padding: 4px !important;
   }
+  #tunnels_part td {
+    white-space: nowrap !important;
+  }
 }
 
 @media screen and (max-width: 1000px) {
@@ -7029,13 +7032,13 @@ h4 span[style="float: right;"] .unbold {
   border-radius: 0;
   border-left-width: 4px;
   border-right-width: 4px;
-  background: url(/themes/console/images/svg/hardhat.svg) 4px center no-repeat, var(--element);
+  background: var(--hardhat) 4px center no-repeat, var(--element);
   background-size: 14px, 100%;
 }
 
 .lsdest.published {
   padding-left: 38px;
-  background: url(/themes/console/images/svg/hardhat.svg) 4px center no-repeat,
+  background: var(--hardhat) 4px center no-repeat,
               var(--globe) 22px center no-repeat,
               var(--element);
   background-size: 14px, 12px, 100%;
@@ -7942,7 +7945,7 @@ p#enablefullstats {
 
 p#debugmode {
   padding: 15px 15px 15px 50px;
-  background: #000 url(/themes/console/images/svg/bug.svg) 12px center no-repeat !important;
+  background: #000 var(--bug) 12px center no-repeat !important;
   background-size: 28px !important;
 }
 
@@ -7954,7 +7957,7 @@ p.sybilinfo {
 }
 
 p.sybilinfo.experimental {
-  background: #000 url(/themes/console/images/svg/experimental.svg) 12px center no-repeat !important;
+  background: #000 var(--experimental) 12px center no-repeat !important;
   background-size: 28px !important;
 }
 
@@ -8046,7 +8049,7 @@ h3#systray + p.infohelp {
 
 h3#servicedebug + p.infohelp {
   padding: 15px 15px 15px 50px;
-  background: #000 url(/themes/console/images/svg/bug.svg) 12px center no-repeat !important;
+  background: #000 var(--bug) 12px center no-repeat !important;
   background-size: 28px !important;
 }
 
@@ -9032,10 +9035,12 @@ th code {
   margin-top: 11px !important;
   padding: 8px 10px;
   font-size: 11.5pt;
-  background: url(/themes/console/images/info/debug.png) right 5px center no-repeat, var(--navbar) !important;
-  background: url(/themes/console/images/info/debug.png) right 5px center no-repeat, linear-gradient(to bottom, rgba(0,0,0,0) 50%, #000 50%), repeating-linear-gradient(to right, rgba(0,0,0,.5) 1px, rgba(0,16,0,.5) 2px, rgba(0,16,0,.4) 3px), var(--h3_fade) !important;
+  background: var(--bug) right 5px center no-repeat,
+              linear-gradient(to bottom, rgba(0,0,0,0) 50%, #000 50%),
+              repeating-linear-gradient(to right, rgba(0,0,0,.5) 1px, rgba(0,16,0,.5) 2px, rgba(0,16,0,.4) 3px),
+              var(--h3_fade) !important;
   background-size: 20px, 100%, 100%, 100% !important;
-  background-blend-mode: luminosity, normal, normal, normal;
+  background-blend-mode: difference, normal, normal, normal;
 }
 
 #debug h2#debug_portmapper {
@@ -11054,7 +11059,7 @@ input[type=file] {
   min-width: 40px;
   display: inline-block;
   vertical-align: middle;
-  background: url(/themes/console/images/info/experimental.png) 12px center no-repeat !important;
+  background: var(--experimental) 12px center no-repeat !important;
   background-size: 16px auto !important;
   content: "";
 }
@@ -12986,7 +12991,7 @@ h1[class], h1 {
 
 #tunnman h2 {
   padding-left: 38px;
-  background: url(/themes/console/images/info/tunnels.png) 10px center no-repeat, linear-gradient(to bottom, rgba(0,0,0,0) 50%, #000 50%), var(--h3), var(--h3_fade) !important;
+  background: var(--hardhat) 10px center no-repeat, linear-gradient(to bottom, rgba(0,0,0,0) 50%, #000 50%), var(--h3), var(--h3_fade) !important;
   background-size: 20px, 100%, 100%, 100% !important;
 }
 
@@ -13539,7 +13544,7 @@ th[aria-sort] {
   padding: 10px 10px 8px 50px !important;
   border: 1px solid #242;
   box-shadow: var(--lowlight), inset 0 0 2px 1px #030;
-  background-image: url(/themes/console/images/svg/sybil.svg) !important;
+  background-image: var(--sybil) !important;
   background-size: 28px;
 }
 
@@ -14161,7 +14166,7 @@ h3 + table {
 
 #tunnels #peercount {
   margin-bottom: -3px !important;
-  background: url(/themes/console/images/info/tunnels.png) 6px center no-repeat,
+  background: var(--hardhat) 8px center no-repeat,
               linear-gradient(to bottom, rgba(0,0,0,0) 50%, #000 50%),
               var(--h3),
               var(--h3_fade) !important;
