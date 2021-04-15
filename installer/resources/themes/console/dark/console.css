@@ -18,7 +18,16 @@
   --h3_blend: normal, normal, exclusion, exclusion;
   --lowlight: inset 0 0 0 1px #000;
   --element: linear-gradient(to bottom, #020, #010);
+  --dropdown: url("data:image/svg+xml,%3Csvg viewBox='0 0 64 64' xmlns='http://www.w3.org/2000/svg'%3E%3Cpath d='m5.29 17.93 26.71 28.14 26.71-28.14' fill='none' stroke='%23494' stroke-linecap='round' stroke-linejoin='round' stroke-width='10'/%3E%3C/svg%3E");
+  --dropdown_hover: url("data:image/svg+xml,%3Csvg viewBox='0 0 64 64' xmlns='http://www.w3.org/2000/svg'%3E%3Cpath d='m5.29 17.93 26.71 28.14 26.71-28.14' fill='none' stroke='%23f60' stroke-linecap='round' stroke-linejoin='round' stroke-width='10'/%3E%3C/svg%3E");
   --navbar: linear-gradient(to bottom, #1a261a, #223022 7%, #212f21 9%, #172317 21%, #091109 49%, #050d05 50%, #020602 51%, #010301 53%, #000000 56%);
+  --eye: url("data:image/svg+xml,%3Csvg height='64' width='64' xmlns='http://www.w3.org/2000/svg'%3E%3Cpath d='m63.95 33.1a2.03 2.03 0 0 0 0-1.97c-6.13-11.3-18.1-18.95-31.85-18.95s-25.7 7.66-31.85 18.94a2.03 2.03 0 0 0 0 1.97c6.13 11.3 18.1 18.95 31.85 18.95s25.7-7.67 31.85-18.95z' fill='%23494'/%3E%3Cpath d='m32.1 47.4c-8.45 0-15.3-6.85-15.3-15.3s6.85-15.3 15.3-15.3 15.3 6.85 15.3 15.3-6.85 15.3-15.3 15.3z' fill='%23000'/%3E%3Cpath d='m32.1 24.3a7.72 7.72 0 0 0 -1.87.22 4.05 4.05 0 0 1 .99 2.65c0 2.24-1.8 4.04-4.04 4.04-1 0-1.93-.37-2.65-1a7.66 7.66 0 0 0 -.22 1.87 7.79 7.79 0 0 0 7.79 7.79c4.3 0 7.8-3.5 7.8-7.8s-3.5-7.8-7.8-7.8z' fill='%23494'/%3E%3C/svg%3E");
+  --eye_hover: url("data:image/svg+xml,%3Csvg height='64' width='64' xmlns='http://www.w3.org/2000/svg'%3E%3Cpath d='m63.95 33.1a2.03 2.03 0 0 0 0-1.97c-6.13-11.3-18.1-18.95-31.85-18.95s-25.7 7.66-31.85 18.94a2.03 2.03 0 0 0 0 1.97c6.13 11.3 18.1 18.95 31.85 18.95s25.7-7.67 31.85-18.95z' fill='%23f60'/%3E%3Cpath d='m32.1 47.4c-8.45 0-15.3-6.85-15.3-15.3s6.85-15.3 15.3-15.3 15.3 6.85 15.3 15.3-6.85 15.3-15.3 15.3z' fill='%23000'/%3E%3Cpath d='m32.1 24.3a7.72 7.72 0 0 0 -1.87.22 4.05 4.05 0 0 1 .99 2.65c0 2.24-1.8 4.04-4.04 4.04-1 0-1.93-.37-2.65-1a7.66 7.66 0 0 0 -.22 1.87 7.79 7.79 0 0 0 7.79 7.79c4.3 0 7.8-3.5 7.8-7.8s-3.5-7.8-7.8-7.8z' fill='%23f60'/%3E%3C/svg%3E");
+  --eye_active: url("data:image/svg+xml,%3Csvg height='64' width='64' xmlns='http://www.w3.org/2000/svg'%3E%3Cpath d='m63.95 33.1a2.03 2.03 0 0 0 0-1.97c-6.13-11.3-18.1-18.95-31.85-18.95s-25.7 7.66-31.85 18.94a2.03 2.03 0 0 0 0 1.97c6.13 11.3 18.1 18.95 31.85 18.95s25.7-7.67 31.85-18.95z' fill='%23ee9'/%3E%3Cpath d='m32.1 47.4c-8.45 0-15.3-6.85-15.3-15.3s6.85-15.3 15.3-15.3 15.3 6.85 15.3 15.3-6.85 15.3-15.3 15.3z' fill='%23f60'/%3E%3Cpath d='m32.1 24.3a7.72 7.72 0 0 0 -1.87.22 4.05 4.05 0 0 1 .99 2.65c0 2.24-1.8 4.04-4.04 4.04-1 0-1.93-.37-2.65-1a7.66 7.66 0 0 0 -.22 1.87 7.79 7.79 0 0 0 7.79 7.79c4.3 0 7.8-3.5 7.8-7.8s-3.5-7.8-7.8-7.8z' fill='%23ee9'/%3E%3C/svg%3E");
+  --eye_threat: url("data:image/svg+xml,%3Csvg height='64' width='64' xmlns='http://www.w3.org/2000/svg'%3E%3Cpath d='m63.95 33.1a2.03 2.03 0 0 0 0-1.97c-6.13-11.3-18.1-18.95-31.85-18.95s-25.7 7.66-31.85 18.94a2.03 2.03 0 0 0 0 1.97c6.13 11.3 18.1 18.95 31.85 18.95s25.7-7.67 31.85-18.95z' fill='%23cc0'/%3E%3Cpath d='m32.1 47.4c-8.45 0-15.3-6.85-15.3-15.3s6.85-15.3 15.3-15.3 15.3 6.85 15.3 15.3-6.85 15.3-15.3 15.3z' fill='%23000'/%3E%3Cpath d='m32.1 24.3a7.72 7.72 0 0 0 -1.87.22 4.05 4.05 0 0 1 .99 2.65c0 2.24-1.8 4.04-4.04 4.04-1 0-1.93-.37-2.65-1a7.66 7.66 0 0 0 -.22 1.87 7.79 7.79 0 0 0 7.79 7.79c4.3 0 7.8-3.5 7.8-7.8s-3.5-7.8-7.8-7.8z' fill='%23cc0'/%3E%3C/svg%3E");
+  --helplink: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 64 64'%3E%3Cg stroke-linejoin='round'%3E%3Cpath d='M59.06 32a27.06 27.06 0 1 1-54.12 0 27.06 27.06 0 1 1 54.12 0z' fill='none' stroke='%23000' stroke-width='9.89'/%3E%3Cpath d='M59.06 32a27.06 27.06 0 1 1-54.12 0 27.06 27.06 0 1 1 54.12 0z' stroke='%23338000' stroke-width='7.91'/%3E%3C/g%3E%3Cpath d='M27.93 37.18V35.6q0-2.05.87-3.56.88-1.5 3.2-3.2 2.24-1.6 2.94-2.6.72-1 .72-2.24 0-1.38-1.02-2.1-1.02-.72-2.86-.72-3.2 0-7.3 2.1l-2.32-4.67q4.75-2.66 10.08-2.66 4.4 0 6.97 2.1 2.6 2.1 2.6 5.62 0 2.34-1.07 4.04-1.07 1.7-4.04 3.83-2.05 1.5-2.6 2.3-.53.8-.53 2.07v1.28zm-.68 7.3q0-1.8.96-2.7.96-.92 2.8-.92 1.77 0 2.73.94.98.94.98 2.68 0 1.68-.98 2.66-.98.96-2.73.96-1.8 0-2.77-.94-.98-.96-.98-2.68z' fill='%2300d400'/%3E%3C/svg%3E");
+  --helplink_hover: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 64 64'%3E%3Cg stroke-linejoin='round'%3E%3Cpath d='M59.06 32a27.06 27.06 0 1 1-54.12 0 27.06 27.06 0 1 1 54.12 0z' fill='none' stroke='%23000' stroke-width='9.89'/%3E%3Cpath d='M59.06 32a27.06 27.06 0 1 1-54.12 0 27.06 27.06 0 1 1 54.12 0z' stroke='%23f60' stroke-width='7.91'/%3E%3C/g%3E%3Cpath d='M27.93 37.18V35.6q0-2.05.87-3.56.88-1.5 3.2-3.2 2.24-1.6 2.94-2.6.72-1 .72-2.24 0-1.38-1.02-2.1-1.02-.72-2.86-.72-3.2 0-7.3 2.1l-2.32-4.67q4.75-2.66 10.08-2.66 4.4 0 6.97 2.1 2.6 2.1 2.6 5.62 0 2.34-1.07 4.04-1.07 1.7-4.04 3.83-2.05 1.5-2.6 2.3-.53.8-.53 2.07v1.28zm-.68 7.3q0-1.8.96-2.7.96-.92 2.8-.92 1.77 0 2.73.94.98.94.98 2.68 0 1.68-.98 2.66-.98.96-2.73.96-1.8 0-2.77-.94-.98-.96-.98-2.68z' fill='%23f60'/%3E%3C/svg%3E");
+  --timer: url("data:image/svg+xml,%3Csvg viewBox='0 0 64 64' xmlns='http://www.w3.org/2000/svg'%3E%3Cg fill='%23373'%3E%3Cpath d='m32 0c-17.67 0-32 14.33-32 32 0 17.68 14.33 32 32 32s32-14.32 32-32c0-17.67-14.33-32-32-32zm0 4.9c1.87 0 3.7.19 5.46.55s3.46.9 5.08 1.58c1.63.69 3.17 1.53 4.61 2.5s2.78 2.08 4.01 3.31 2.34 2.57 3.31 4.01c.98 1.44 1.81 2.98 2.5 4.61.68 1.62 1.22 3.32 1.58 5.08s.55 3.59.55 5.46-.19 3.7-.55 5.46-.9 3.46-1.58 5.08c-.69 1.63-1.52 3.17-2.5 4.61-.97 1.44-2.08 2.78-3.31 4.01s-2.57 2.34-4.01 3.31c-1.44.98-2.98 1.81-4.61 2.5-1.62.68-3.32 1.22-5.08 1.58s-3.59.55-5.46.55-3.7-.19-5.46-.55-3.46-.9-5.08-1.58c-1.63-.69-3.17-1.52-4.61-2.5-1.44-.97-2.78-2.08-4.01-3.31s-2.34-2.57-3.31-4.01-1.81-2.98-2.5-4.61c-.68-1.62-1.22-3.32-1.58-5.08s-.55-3.59-.55-5.46.19-3.7.55-5.46.9-3.46 1.58-5.08c.69-1.63 1.53-3.17 2.5-4.61s2.08-2.78 3.31-4.01 2.57-2.34 4.01-3.31 2.98-1.81 4.61-2.5c1.62-.68 3.32-1.22 5.08-1.58s3.59-.55 5.46-.55z'/%3E%3Cpath d='m32 9.68v22.32h22.32a22.32 22.32 0 1 1 -44.64 0 22.32 22.32 0 0 1 22.32-22.32z'/%3E%3C/g%3E%3C/svg%3E");
 }
 
 html {
@@ -2684,8 +2693,7 @@ select {
   color: #494;
   font-size: 9.5pt;
   border-radius: 2px;
-  background: #000 url(images/dropdown.svg) right 10px center no-repeat !important;
-  background: url("data:image/svg+xml,%3Csvg viewBox='0 0 64 64' xmlns='http://www.w3.org/2000/svg'%3E%3Cpath d='m5.29 17.93 26.71 28.14 26.71-28.14' fill='none' stroke='%23494' stroke-linecap='round' stroke-linejoin='round' stroke-width='10'/%3E%3C/svg%3E") right 10px center no-repeat, linear-gradient(to bottom, #001000, #000 5%, #000 95%, #001000) !important;
+  background: var(--dropdown) right 10px center no-repeat, linear-gradient(to bottom, #001000, #000 5%, #000 95%, #001000) !important;
   background-size: 10px, 100% !important;
   -moz-appearance: none;
   -webkit-appearance: none;
@@ -2733,7 +2741,7 @@ select:focus, select:hover {
 }
 
 select:hover, select:focus, select:active {
-  background: #000 url("data:image/svg+xml,%3Csvg viewBox='0 0 64 64' xmlns='http://www.w3.org/2000/svg'%3E%3Cpath d='m5.29 17.93 26.71 28.14 26.71-28.14' fill='none' stroke='%23f60' stroke-linecap='round' stroke-linejoin='round' stroke-width='10'/%3E%3C/svg%3E") right 10px center no-repeat !important;
+  background: #000 var(--dropdown_hover) right 10px center no-repeat !important;
   background-size: 10px, 100% !important;
 }
 
@@ -2974,7 +2982,7 @@ h3#activejobs + ol li::before {
 }
 
 h3#finishedjobs + ol li::before {
-  background: url(/themes/console/images/svg/yes.svg) center center no-repeat;
+  background: var(--yes) center center no-repeat;
   background-size: 12px;
 }
 
@@ -3095,7 +3103,7 @@ h3[id*="jobs"] {
 @media screen and (min-width: 1200px) {
   #jobstats tr:nth-last-child(n+2) td:first-child {
     padding-left: 28px !important;
-    background: url(/themes/console/images/svg/yes.svg) 8px center no-repeat;
+    background: var(--yes) 8px center no-repeat;
     background-size: 12px;
   }
 }
@@ -4589,9 +4597,9 @@ input[name="logfilename"], input[name="logformat"], input[name="logdateformat"],
 /* configsidebar */
 
 #refreshsidebar td {
-  padding-left: 45px !important;
-  background: #000 url(/themes/console/images/svg/timer.svg) 12px center no-repeat !important;
-  background-size: 32px 32px !important;
+  padding-left: 45px;
+  background: #000 var(--timer) 12px center no-repeat;
+  background-size: 32px;
 }
 
 #refreshsidebar td:last-child {
@@ -4687,12 +4695,15 @@ input[name="logfilename"], input[name="logformat"], input[name="logdateformat"],
   opacity: 0
 }
 
+#config_service a[href$="#alternative_browser"]::after, h3#iptransport a::after, h3#advancedconfig a::after, #reseedsetup a::after {
+  background: var(--helplink) center center no-repeat;
+}
+
 #config_service a[href$="#alternative_browser"]::after {
   margin-left: -16px;
   width: 16px;
   height: 16px;
   display: inline-block;
-  background: url(images/helplink.svg) center center no-repeat;
   background-size: 16px;
   content: "";
 }
@@ -7266,25 +7277,24 @@ p.sybil_info, p.family, p.threatpoints, p.hashdist, p#sybil_totals, p.notfound {
   color: #cc0;
   border: 1px solid #252;
   box-shadow: inset 0 0 0 1px #300;
-  background: url(images/eye.svg) 8px center no-repeat;
-  background: url(images/eye.svg) 8px center no-repeat, linear-gradient(to right, #000, #000800 80%, #001000);
+  background: var(--eye) 8px center no-repeat, linear-gradient(to right, #000, #000800 80%, #001000);
   background-size: 16px, 100%;
 }
 
 p.sybil_info, p#sybil_totals {
   margin-bottom: 10px;
   padding-left: 35px;
-  background-image: url(images/eye_threat.svg);
+  background-image: var(--eye_threat);
   background-size: 20px, 100%;
 }
 
 p.threatpoints {
-  background: url(images/eye_threat.svg) 8px center no-repeat, linear-gradient(to right, #000, #000800 80%, #001000);
+  background: var(--eye_threat) 8px center no-repeat, linear-gradient(to right, #000, #000800 80%, #001000);
   background-size: 20px, 100%;
 }
 
 p.threatpoints.hot {
-  background: url(images/eye_threat.svg) 8px center no-repeat, url(/themes/console/images/info/hot.png) right 2px center no-repeat, linear-gradient(to right, #000, #000800 80%, #001000);
+  background: var(--eye_threat) 8px center no-repeat, url(/themes/console/images/info/hot.png) right 2px center no-repeat, linear-gradient(to right, #000, #000800 80%, #001000);
   background-size: 20px, 24px, 100%;
 }
 
@@ -7442,13 +7452,12 @@ h3#iptransport a::after, h3#advancedconfig a::after, #reseedsetup a::after {
   width: 16px;
   height: 16px;
   float: right;
-  background: url(images/helplink.svg) center center no-repeat;
   background-size: 16px !important;
   content: "";
 }
 
 h3#iptransport a:hover::after, h3#advancedconfig a:hover::after, #reseedsetup a:hover::after {
-  background: url(images/helplink_hover.svg) center center no-repeat;
+  background: var(--helplink_hover) center center no-repeat;
   background-size: 16px !important;
 }
 
@@ -7953,7 +7962,7 @@ p#debugmode {
 p.sybilinfo {
   margin: 8px 0;
   padding: 15px 15px 15px 50px;
-  background: #000 url(/themes/console/images/svg/sybil.svg) 12px center no-repeat !important;
+  background: #000 var(--sybil) 12px center no-repeat !important;
   background-size: 28px !important;
 }
 
@@ -7970,7 +7979,7 @@ p.sybilinfo.experimental {
 
 #addkeyring td.infohelp {
   padding: 15px 15px 15px 50px;
-  background: #000 url(/themes/console/images/svg/keys.svg) 12px center no-repeat !important;
+  background: #000 var(--keys) 12px center no-repeat !important;
   background-size: 28px !important;
 }
 
@@ -11794,8 +11803,7 @@ h3#pconfig {
 
 .signingkey.encryption {
   padding-left: 20px;
-  background: #020 url(/themes/console/images/svg/lock.svg) 5px center no-repeat;
-  background: url(/themes/console/images/svg/lock.svg) 5px center no-repeat, var(--element);
+  background: var(--lock) 5px center no-repeat, var(--element);
   background-size: 12px, 100%;
 }
 
@@ -13583,19 +13591,19 @@ th[aria-sort] {
   width: 18px;
   height: 16px;
   display: inline-block;
-  background: url(images/eye.svg) left center;
+  background: var(--eye) left center;
   background-repeat: no-repeat !important;
   background-size: 16px !important;
   content: "";
 }
 
 #sybilnav ul li:hover::before {
-  background: url(images/eye_hover.svg) left center;
+  background: var(--eye_hover) left center;
   background-size: 16px !important;
 }
 
 #sybilnav ul li:active::before {
-  background: url(images/eye_active.svg) left center;
+  background: var(--eye_active) left center;
   background-size: 16px !important;
 }
 
@@ -14573,15 +14581,6 @@ h1, .main h2, h4.app, h4.app2, .main h3 {
   white-space: nowrap !important;
 }
 
-#profilelist .fast, #profilelist .highcap, #profilelist .integrated, #profilelist .standard,
-#profilelist .fast.integrated, #profilelist .highcap.integrated, #profilelist .standard.integrated {
-  width: 56px;
-  height: 16px;
-  display: inline-block;
-  font-size: 0 !important;
-  background-size: 16px !important;
-}
-
 #profilelist .fast {
   background: var(--fast) calc(50% - 10px) center no-repeat,
               var(--highcap) calc(50% + 10px) center no-repeat;
@@ -14611,12 +14610,13 @@ h1, .main h2, h4.app, h4.app2, .main h3 {
               var(--integrated) calc(50% + 10px) center no-repeat;
 }
 
-.profilegroup::before {
-  width: 20px;
+#profilelist .fast, #profilelist .highcap, #profilelist .integrated, #profilelist .standard,
+#profilelist .fast.integrated, #profilelist .highcap.integrated, #profilelist .standard.integrated {
+  width: 56px;
   height: 16px;
   display: inline-block;
-  vertical-align: middle;
-  content: "";
+  font-size: 0;
+  background-size: 16px;
 }
 
 .profilegroup.fast::before {
@@ -14635,16 +14635,24 @@ h1, .main h2, h4.app, h4.app2, .main h3 {
   background: var(--standard) left center no-repeat;
 }
 
+.profilegroup::before {
+  width: 20px;
+  height: 16px;
+  display: inline-block;
+  vertical-align: middle;
+  content: "";
+}
+
 @media screen and (max-width: 1200px) {
   #profilelist .fast, #profilelist .highcap, #profilelist .integrated, #profilelist .standard,
   #profilelist .fast.integrated, #profilelist .highcap.integrated, #profilelist .standard.integrated {
     width: 50px;
     height: 14px;
-    background-size: 14px !important;
+    background-size: 14px;
   }
   #profilelist .fast, #profilelist .highcap.integrated, #profilelist .standard.integrated {
     background-position: calc(50% - 8px) center, calc(50% + 8px) center !important;
-    background-size: 14px !important;
+    background-size: 14px;
   }
   .profilegroup::before {
     width: 18px;
