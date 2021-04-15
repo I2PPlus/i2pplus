@@ -4851,6 +4851,9 @@ h3#servicedebug a, h3#graphinfo a {
   #tunnels .tunneldisplay .cells .tunnel_peer.tunnel_local {
     padding: 4px !important;
   }
+  #tunnels_part td {
+    white-space: nowrap !important;
+  }
 }
 
 @media screen and (max-width: 1000px) {
@@ -12988,7 +12991,7 @@ h1[class], h1 {
 
 #tunnman h2 {
   padding-left: 38px;
-  background: url(/themes/console/images/info/tunnels.png) 10px center no-repeat, linear-gradient(to bottom, rgba(0,0,0,0) 50%, #000 50%), var(--h3), var(--h3_fade) !important;
+  background: var(--hardhat) 10px center no-repeat, linear-gradient(to bottom, rgba(0,0,0,0) 50%, #000 50%), var(--h3), var(--h3_fade) !important;
   background-size: 20px, 100%, 100%, 100% !important;
 }
 
@@ -14163,7 +14166,7 @@ h3 + table {
 
 #tunnels #peercount {
   margin-bottom: -3px !important;
-  background: url(/themes/console/images/info/tunnels.png) 6px center no-repeat,
+  background: var(--hardhat) 8px center no-repeat,
               linear-gradient(to bottom, rgba(0,0,0,0) 50%, #000 50%),
               var(--h3),
               var(--h3_fade) !important;
