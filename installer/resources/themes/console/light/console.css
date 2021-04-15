@@ -12427,7 +12427,8 @@ th[aria-sort] {
   display: inline-block;
   width: 16px;
   height: 16px;
-  background: url(/themes/console/images/info/network_status/network_clockskew.png) center center no-repeat;
+  background: url(/themes/console/images/info/network_status/network_clockskew.svg) center center no-repeat;
+  background-size: 16px;
 }
 
 #peers #ntcpconnections th:nth-last-child(3)::after {

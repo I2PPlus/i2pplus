@@ -7663,7 +7663,8 @@ p#webappconfigtext {
   width: 16px;
   height: 16px;
   display: inline-block;
-  background: url(/themes/console/images/info/network_status/network_clockskew.png) center center no-repeat;
+  background: var(--net_clockskew) center center no-repeat;
+  background-size: 16px;
   content: "";
 }
 
