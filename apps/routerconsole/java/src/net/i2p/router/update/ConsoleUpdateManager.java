@@ -1398,7 +1398,7 @@ public class ConsoleUpdateManager implements UpdateManager, RouterApp {
                 updateStatus("<b>" + _t("Update verified") + "</b><br>" + _t("Restarting"));
                 restart();
             } else {
-                _log.logAlways(Log.WARN, "Update was downloaded and verified, will be installed at next restart");
+                _log.logAlways(Log.CRITICAL, "Update was downloaded and verified, will be installed at next restart");
                 // SummaryHelper will display restart info separately
                 updateStatus("");
             }
