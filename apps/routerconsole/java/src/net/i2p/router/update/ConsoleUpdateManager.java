@@ -1398,7 +1398,7 @@ public class ConsoleUpdateManager implements UpdateManager, RouterApp {
                 updateStatus("<b>" + _t("Update verified") + "</b><br>" + _t("Restarting"));
                 restart();
             } else {
-                _log.logAlways(Log.WARN, "Update was downloaded and verified, will be installed at next restart");
+                _log.logAlways(Log.CRIT, "I2P Update was downloaded and verified, will be installed at next restart");
                 // SummaryHelper will display restart info separately
                 updateStatus("");
             }
@@ -1454,9 +1454,9 @@ public class ConsoleUpdateManager implements UpdateManager, RouterApp {
                 restart();
             } else {
                 if (url.contains("skank"))
-                    _log.logAlways(Log.WARN, "I2P+ update downloaded - will be installed at next restart");
+                    _log.logAlways(Log.CRIT, "I2P+ update downloaded - will be installed at next restart");
                 else
-                    _log.logAlways(Log.WARN, "Update was downloaded - will be installed at next restart");
+                    _log.logAlways(Log.CRIT, "Update was downloaded - will be installed at next restart");
                 // SummaryHelper will display restart info separately
                 updateStatus("");
             }
