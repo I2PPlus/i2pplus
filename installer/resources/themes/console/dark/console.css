@@ -9360,6 +9360,13 @@ th code {
   color: #dd0;
 }
 
+#jardump a[href^="https://gitlab.com/i2pplus"] {
+  margin-left: -2px;
+  padding-left: 14px;
+  background: var(--gitlab) left center no-repeat;
+  background-size: 12px;
+}
+
 #jardump font[color="red"] {
   color: #d00;
 }
