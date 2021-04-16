@@ -93,7 +93,7 @@
 <tr><td>When configured, this sets a hard limit for the number of tunnels the router is permitted to build concurrently. By default the router uses the average build time and current outbound bandwidth to determine the optimum build rate. [Restart required]</td></tr>
 
 <tr><th>router.updateUnsigned={true|false}</th></tr>
-<tr><td>If you wish to install unsigned (.zip) I2P updates, this should be added to your <code>router.config</code> file unless you have already configured <code>routerconsole.advanced=true</code>, in which case this option is already provisioned.</td></tr>
+<tr><td>If you wish to install unsigned (.zip) I2P updates, this should be added to your <code>router.config</code> file unless you have already configured <code>routerconsole.advanced=true</code>, in which case this option is already provisioned. Note: as of I2P+ 0.9.48+, installation of <a href="/configupdate#i2pupdates">unsigned updates</a> is enabled by default.</td></tr>
 
 <tr><th>router.updateUnsignedURL={url}</th></tr>
 <tr><td>This setting allows you to configure the update url for the unsigned update feature, if enabled. The url should end with <code>/i2pupdate.zip</code>. Note: do not install unsigned updates unless you trust the source of the update!</td></tr>
@@ -132,7 +132,7 @@
 <tr><td>This setting determines the delay between peer test jobs, configured in milliseconds. [Default is 5000]</td></tr>
 
 <tr><th>router.peerTestTimeout={n} <span class="plus">I2P+</span></th></tr>
-<tr><td>To determine peer latency, this setting allocates the maximum time a peer test should take before being considered a failure, configured in milliseconds. [Default is 3000]</td></tr>
+<tr><td>To determine peer latency, this setting allocates the maximum time a peer test should take before being considered a failure, configured in milliseconds. In the event that the timeout is configured lower than the average successful test, the average successful test value will be used. [Default is 1250]</td></tr>
 
 <tr><th>router.publishPeerRankings={true|false}</th></tr>
 <tr><td>This setting determines whether stats about our router are sporadically published to the NetDb. [Default is false]</td></tr>
