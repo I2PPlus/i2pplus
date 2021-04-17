@@ -50,7 +50,7 @@ public class BuildMessageProcessor {
     private DecayingBloomFilter selectFilter() {
         long maxMemory = SystemVersion.getMaxMemory();
         int m;
-        if (SystemVersion.isAndroid() || SystemVersion.isARM() || maxMemory < 96*1024*1024L) {
+        if (SystemVersion.isAndroid() || SystemVersion.isARM() || SystemVersion.isSlow() || maxMemory < 96*1024*1024L) {
             // 32 KB
             // appx 500 part. tunnels or 6K req/hr
             m = 17;
@@ -153,7 +153,8 @@ public class BuildMessageProcessor {
                     // check enc type sending us ElG requests
                     if (log.shouldLog(Log.WARN))
 //                        log.warn(msg.getUniqueId() + ": Matching record decrypt failure " + privKey.getType(), dfe);
-                        log.warn("[MsgID " + msg.getUniqueId() + "] Matching record decrypt failure " + privKey.getType() + "\n* Data Format Exception: " + dfe.getMessage());
+                        log.warn("[MsgID " + msg.getUniqueId() + "] Matching record decrypt failure " + privKey.getType() +
+                                 "\n* Data Format Exception: " + dfe.getMessage());
                     // on the microscopic chance that there's another router
                     // out there with the same first 16 bytes, go around again
                     continue;

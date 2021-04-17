@@ -114,7 +114,8 @@ public class BuildReplyHandler {
                 log.debug("[" + reply.getUniqueId() + "] Decrypting record " + recordNum + "/" + hop + "/" + j + " with replyKey "
                           + replyKey.toBase64() + "/" + Base64.encode(replyIV) + ": " + cfg);
                 log.debug(reply.getUniqueId() + "; Before decrypt: " + Base64.encode(data));
-                log.debug("[" + reply.getUniqueId() + "] Full reply received: sz=" + data.length + " data=" + Base64.encode(data, 0, TunnelBuildReplyMessage.RECORD_SIZE));
+                log.debug("[" + reply.getUniqueId() + "] Full reply received: sz=" + data.length +
+                          " data=" + Base64.encode(data, 0, TunnelBuildReplyMessage.RECORD_SIZE));
             }
             ctx.aes().decrypt(data, 0, data, 0, replyKey, replyIV, 0, TunnelBuildReplyMessage.RECORD_SIZE);
             if (log.shouldLog(Log.DEBUG))
@@ -128,7 +129,7 @@ public class BuildReplyHandler {
             SessionKey replyKey = cfg.getChaChaReplyKey(hop);
             byte[] replyIV = cfg.getChaChaReplyAD(hop);
             if (log.shouldDebug())
-                log.debug(reply.getUniqueId() + ": Decrypting chacha/poly record " + recordNum + "/" + hop + " with replyKey " 
+                log.debug(reply.getUniqueId() + ": Decrypting chacha/poly record " + recordNum + "/" + hop + " with replyKey "
                           + replyKey.toBase64() + "/" + Base64.encode(replyIV) + ": " + cfg);
             boolean ok = BuildResponseRecord.decrypt(rec, replyKey, replyIV);
             if (!ok) {
