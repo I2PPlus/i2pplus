@@ -2370,39 +2370,42 @@ button.control {
 }
 
 button.accept.control {
-  background: url(/themes/console/images/buttons/Xstart.png) center center no-repeat, linear-gradient(to bottom, #001000, #000 5%, #000 95%, #001000);
+  background: url(images/start.svg) center center no-repeat, linear-gradient(to bottom, #001000, #000 5%, #000 95%, #001000);
 }
 
 button.accept.control:hover, button.accept.control:focus {
-  background: #000 url(/themes/console/images/buttons/Xstart.png) center center no-repeat;
+  background: #000 url(images/start_hover.svg) center center no-repeat;
 }
 
 button.accept.control:active {
-  background: #f60 url(/themes/console/images/buttons/Xstart.png) center center no-repeat;
+  background: #f60 url(images/start_active.svg) center center no-repeat;
 }
 
 button.stop.control {
-  background: url(/themes/console/images/buttons/Xstop.png) center center no-repeat, linear-gradient(to bottom, #001000, #000 5%, #000 95%, #001000);
+  background: url(images/stop.svg) center center no-repeat, linear-gradient(to bottom, #001000, #000 5%, #000 95%, #001000);
 }
 
 button.stop.control:hover, button.stop.control:focus {
-  background: #000 url(/themes/console/images/buttons/Xstop.png) center center no-repeat;
+  background: #000 url(images/stop_hover.svg) center center no-repeat;
 }
 
 button.stop.control:active {
-  background: #f60 url(/themes/console/images/buttons/Xstop.png) center center no-repeat;
+  background: #f60 url(images/stop_active.svg) center center no-repeat;
 }
 
 button.add.control {
-  background: url(/themes/console/images/buttons/edit2.png) center center no-repeat, linear-gradient(to bottom, #001000, #000 5%, #000 95%, #001000);
+  background: url(images/edit.svg) center center no-repeat, linear-gradient(to bottom, #001000, #000 5%, #000 95%, #001000);
+  background-size: 16px, 100%;
 }
 
 button.add.control:hover, button.add.control:focus {
-  background: #000 url(/themes/console/images/buttons/edit2.png) center center no-repeat;
+  background: #000 url(images/edit_hover.svg) center center no-repeat;
+  background-size: 16px;
 }
 
 button.add.control:active {
-  background: #f60 url(/themes/console/images/buttons/edit2.png) center center no-repeat;
+  background: #f60 url(images/edit_active.svg) center center no-repeat;
+  background-size: 16px;
 }
 
 button.delete.control {
