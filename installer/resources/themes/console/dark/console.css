@@ -2370,41 +2370,41 @@ button.control {
 }
 
 button.accept.control {
-  background: url(images/start.svg) center center no-repeat, linear-gradient(to bottom, #001000, #000 5%, #000 95%, #001000);
+  background: var(--start) center center no-repeat, linear-gradient(to bottom, #001000, #000 5%, #000 95%, #001000);
 }
 
 button.accept.control:hover, button.accept.control:focus {
-  background: #000 url(images/start_hover.svg) center center no-repeat;
+  background: #000 var(--start_hover) center center no-repeat;
 }
 
 button.accept.control:active {
-  background: #f60 url(images/start_active.svg) center center no-repeat;
+  background: #f60 var(--start_active) center center no-repeat;
 }
 
 button.stop.control {
-  background: url(images/stop.svg) center center no-repeat, linear-gradient(to bottom, #001000, #000 5%, #000 95%, #001000);
+  background: var(--stop) center center no-repeat, linear-gradient(to bottom, #001000, #000 5%, #000 95%, #001000);
 }
 
 button.stop.control:hover, button.stop.control:focus {
-  background: #000 url(images/stop_hover.svg) center center no-repeat;
+  background: #000 var(--stop_hover) center center no-repeat;
 }
 
 button.stop.control:active {
-  background: #f60 url(images/stop_active.svg) center center no-repeat;
+  background: #f60 var(--stop_active) center center no-repeat;
 }
 
 button.add.control {
-  background: url(images/edit.svg) center center no-repeat, linear-gradient(to bottom, #001000, #000 5%, #000 95%, #001000);
+  background: var(--edit) center center no-repeat, linear-gradient(to bottom, #001000, #000 5%, #000 95%, #001000);
   background-size: 16px, 100%;
 }
 
 button.add.control:hover, button.add.control:focus {
-  background: #000 url(images/edit_hover.svg) center center no-repeat;
+  background: #000 var(--edit_hover) center center no-repeat;
   background-size: 16px;
 }
 
 button.add.control:active {
-  background: #f60 url(images/edit_active.svg) center center no-repeat;
+  background: #f60 var(--edit_active) center center no-repeat;
   background-size: 16px;
 }
 
