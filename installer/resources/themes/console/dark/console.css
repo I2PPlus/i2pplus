@@ -18,6 +18,7 @@
   --h3_blend: normal, normal, exclusion, exclusion;
   --lowlight: inset 0 0 0 1px #000;
   --element: linear-gradient(to bottom, #020, #010);
+  --button: linear-gradient(to bottom, #001000, #000 5%, #000 95%, #001000);
 }
 
 html {
@@ -2370,7 +2371,7 @@ button.control {
 }
 
 button.accept.control {
-  background: var(--start) center center no-repeat, linear-gradient(to bottom, #001000, #000 5%, #000 95%, #001000);
+  background: var(--start) center center no-repeat, var(--button);
 }
 
 button.accept.control:hover, button.accept.control:focus {
@@ -2382,7 +2383,7 @@ button.accept.control:active {
 }
 
 button.stop.control {
-  background: var(--stop) center center no-repeat, linear-gradient(to bottom, #001000, #000 5%, #000 95%, #001000);
+  background: var(--stop) center center no-repeat, var(--button);
 }
 
 button.stop.control:hover, button.stop.control:focus {
@@ -2394,7 +2395,7 @@ button.stop.control:active {
 }
 
 button.add.control {
-  background: var(--edit) center center no-repeat, linear-gradient(to bottom, #001000, #000 5%, #000 95%, #001000);
+  background: var(--edit) center center no-repeat, var(--button);
   background-size: 16px, 100%;
 }
 
@@ -2409,7 +2410,7 @@ button.add.control:active {
 }
 
 button.delete.control {
-  background: var(--nuke) center center no-repeat, linear-gradient(to bottom, #001000, #000 5%, #000 95%, #001000);
+  background: var(--nuke) center center no-repeat, var(--button);
   background-size: 14px;
 }
 
@@ -2424,27 +2425,33 @@ button.delete.control:active {
 }
 
 button.check.control {
-  background: url(/themes/console/images/buttons/update.png) center center no-repeat, linear-gradient(to bottom, #001000, #000 5%, #000 95%, #001000);
+  background: var(--update) center center no-repeat, var(--button);
+  background-size: 14px, 100%;
 }
 
 button.check.control:hover, button.check.control:focus {
-  background: #000 url(/themes/console/images/buttons/update_hover.png) center center no-repeat;
+  background: #000 var(--update_hover) center center no-repeat;
+  background-size: 14px;
 }
 
 button.check.control:active {
-  background: #f60 url(/themes/console/images/buttons/update_hover.png) center center no-repeat;
+  background: #f60 var(--update_active) center center no-repeat;
+  background-size: 14px;
 }
 
 button.download.control {
-  background: url(/themes/console/images/buttons/download.png) center center no-repeat, linear-gradient(to bottom, #001000, #000 5%, #000 95%, #001000);
+  background: var(--download) center center no-repeat, var(--button);
+  background-size: 14px, 100%;
 }
 
 button.download.control:hover, button.download.control:focus {
-  background: #000 url(/themes/console/images/buttons/download.png) center center no-repeat;
+  background: #000 var(--download_hover) center center no-repeat;
+  background-size: 14px;
 }
 
 button.download.control:active {
-  background: #f60 url(/themes/console/images/buttons/download.png) center center no-repeat;
+  background: #f60 var(--download_active) center center no-repeat;
+  background-size: 14px;
 }
 
 /* end project "X" */
@@ -2683,7 +2690,7 @@ select {
   color: #494;
   font-size: 9.5pt;
   border-radius: 2px;
-  background: var(--dropdown) right 10px center no-repeat, linear-gradient(to bottom, #001000, #000 5%, #000 95%, #001000) !important;
+  background: var(--dropdown) right 10px center no-repeat, var(--button) !important;
   background-size: 10px, 100% !important;
   -moz-appearance: none;
   -webkit-appearance: none;
@@ -2754,7 +2761,7 @@ select::-ms-expand {
   color: #494;
   border: 1px solid #000;
   box-shadow: inset 0 0 0 1px #151, inset 0 0 0 2px #000, inset 0 0 2px 2px #040, inset 0 0 0 3px #000, 0 0 0 1px rgba(0,16,0,.2);
-  background: linear-gradient(to bottom, #001000, #000 5%, #000 95%, #001000) !important;
+  background: var(--button) !important;
   opacity: .7;
   cursor: default;
 }
@@ -2851,7 +2858,7 @@ input[type=submit], input[type=reset], select, button {
   border: 1px solid #000;
   border-radius: 2px;
   box-shadow: inset 0 0 0 1px #151, inset 0 0 0 2px #000, inset 0 0 2px 2px #040, inset 0 0 0 3px #000, 0 0 0 1px rgba(0,16,0,.2);
-  background: linear-gradient(to bottom, #001000, #000 5%, #000 95%, #001000);
+  background: var(--button);
 }
 
 input[type=file]::file-selector-button {
@@ -2860,7 +2867,7 @@ input[type=file]::file-selector-button {
   border: 1px solid #000;
   border-radius: 2px;
   box-shadow: inset 0 0 0 1px #151, inset 0 0 0 2px #000, inset 0 0 2px 2px #040, inset 0 0 0 3px #000, 0 0 0 1px rgba(0,16,0,.2);
-  background: linear-gradient(to bottom, #001000, #000 5%, #000 95%, #001000);
+  background: var(--button);
 }
 
 input[type=submit], input[type=reset], button {
