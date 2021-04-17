@@ -2969,13 +2969,13 @@ h3#activejobs + ol li::before, #scheduledjobs + ol li::before, h3#readyjobs + ol
   height: 16px;
   display: inline-block;
   vertical-align: text-top;
-  content: "";
-  background: url(/themes/console/images/svg/clock.svg) center center no-repeat;
+  background: var(--clock) center center no-repeat;
   background-size: 16px;
+  content: "";
 }
 
 h3#activejobs + ol li::before {
-  background: url(/themes/console/images/buttons/Xstart.png) center center no-repeat;
+  background: var(--start) center center no-repeat;
 }
 
 h3#finishedjobs + ol li::before {
@@ -13610,7 +13610,8 @@ th[aria-sort] {
 }
 
 #sybilnav ul li#runNew::before {
-  background: url(/themes/console/images/buttons/Xstart.png);
+  background: var(--start) 1px calc(50% - 2px);
+  background-size: 14px !important;
 }
 
 #sybilnav ul li#configurePeriodic::before {
