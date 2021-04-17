@@ -2404,7 +2404,7 @@ button.add.control:hover, button.add.control:focus {
 }
 
 button.add.control:active {
-  background: #f60 url(images/edit_hover.svg) center center no-repeat;
+  background: #f60 url(images/edit_active.svg) center center no-repeat;
   background-size: 16px;
 }
 
