@@ -44,7 +44,7 @@ class PacketHandler {
     private static final int TYPE_POISON = -99999;
     private static final int MIN_QUEUE_SIZE = 16;
 //    private static final int MAX_QUEUE_SIZE = 192;
-    private static final int MAX_QUEUE_SIZE = 512;
+    private static final int MAX_QUEUE_SIZE = 256;
     private static final int MIN_NUM_HANDLERS = 1;  // if < 32MB
 //    private static final int MAX_NUM_HANDLERS = 1;
     private static final int MAX_NUM_HANDLERS = SystemVersion.getMaxMemory() < 1024*1024*1024 ? 6 : Math.min(SystemVersion.getCores() * 2, 8);
@@ -54,7 +54,8 @@ class PacketHandler {
      *  There's no use making it any larger, as messages will just be thrown out there.
      */
     private static final long GRACE_PERIOD = Router.CLOCK_FUDGE_FACTOR + 30*1000;
-    private static final long MAX_SKEW = 90*24*60*60*1000L;
+//    private static final long MAX_SKEW = 90*24*60*60*1000L;
+    private static final long MAX_SKEW = 3*60*1000L;
 
     private enum AuthType { NONE, INTRO, BOBINTRO, SESSION }
 
@@ -74,9 +75,9 @@ class PacketHandler {
         boolean isSlow = SystemVersion.isSlow();
         int qsize = (int) Math.max(MIN_QUEUE_SIZE, Math.min(MAX_QUEUE_SIZE, maxMemory / (2*1024*1024)));
         if (maxMemory >= 1024*1024*1024 && cores >= 4 && !isSlow)
-            qsize = 768;
+            qsize = 384;
         else if (maxMemory >= 768*1024*1024 && cores >= 4 && !isSlow)
-            qsize = 512;
+            qsize = 256;
         _inboundQueue = new CoDelBlockingQueue<UDPPacket>(ctx, "UDP-Receiver", qsize);
         int num_handlers;
         if (maxMemory < 32*1024*1024)

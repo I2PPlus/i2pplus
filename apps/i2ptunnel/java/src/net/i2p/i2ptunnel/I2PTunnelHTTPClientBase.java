@@ -267,12 +267,15 @@ public abstract class I2PTunnelHTTPClientBase extends I2PTunnelClientBase implem
                 }
             }
         }
+        String proxyName = proxy;
+        if (proxy != null && proxy.length() > 20)
+            proxyName = proxy.substring(0,12) + "...";
         if (isSSL == true) {
             if (_log.shouldInfo())
-                _log.info("[HTTPClient] SSL request via outproxy [" + proxy + "] -> Success? " + ok + " \n* Target: " + host);
+                _log.info("[HTTPClient] SSL request via outproxy [" + proxyName + "] -> Success? " + ok + " \n* Target: " + host);
         } else {
             if (_log.shouldInfo())
-                _log.info("[HTTPClient] Request via outproxy [" + proxy + "] -> Success? " + ok + " \n* Target: " + host);
+                _log.info("[HTTPClient] Request via outproxy [" + proxyName + "] -> Success? " + ok + " \n* Target: " + host);
         }
     }
 
