@@ -116,8 +116,7 @@ class EstablishmentManager {
      * But SSU probably isn't higher priority than NTCP.
      * And it's important to not fail an establishment too soon and waste it.
      */
-//    private static final int MAX_OB_ESTABLISH_TIME = 35*1000;
-    private static final int MAX_OB_ESTABLISH_TIME = 30*1000;
+    private static final int MAX_OB_ESTABLISH_TIME = 35*1000;
 
     /**
      * Kill any inbound that takes more than this
