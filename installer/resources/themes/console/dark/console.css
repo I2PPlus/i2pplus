@@ -13026,18 +13026,18 @@ h3#scheduledjobs {
 .ibgw::after, .obep::after, .ptcp::after {
   content: "";
   display: inline-block;
-  width: 24px;
-  height: 16px;
-  background: url(images/ibgw.png) center center no-repeat;
-  background-size: auto 16px !important;
+  width: 26px;
+  height: 26px;
+  background: var(--ibgw) center center no-repeat;
+  background-size: 26px !important;
 }
 
 .obep::after {
-  background: url(images/obep.png) center center no-repeat;
+  background: var(--obep) center center no-repeat;
 }
 
 .ptcp::after {
-  background: url(images/ptcp.png) center center no-repeat;
+  background: var(--ptcp) center center no-repeat;
 }
 
 #tunnels .cells:first-child {
