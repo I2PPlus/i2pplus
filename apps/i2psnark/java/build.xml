@@ -39,11 +39,11 @@
     <target name="compile" depends="depend">
         <mkdir dir="./build" />
         <mkdir dir="./build/obj" />
-        <javac 
-            srcdir="./src" 
-            debug="true" deprecation="on" source="${javac.version}" target="${javac.version}" 
+        <javac
+            srcdir="./src"
+            debug="true" deprecation="on" source="${javac.version}" target="${javac.version}"
             release="${javac.release}"
-            destdir="./build/obj" 
+            destdir="./build/obj"
             encoding="UTF-8"
             includeAntRuntime="false" >
             <compilerarg line="${javac.compilerargs}" />
@@ -303,8 +303,6 @@
               todir="build/standalone-resources/.resources/themes/snark/ubergine/images" />
         <copy file="../../../installer/resources/themes/console/images/i2psnark.png"
               todir="build/standalone-resources/.resources/themes/snark/ubergine/images" />
-        <copy file="../../../installer/resources/themes/console/dark/images/header.png"
-              todir="build/standalone-resources/.resources/themes/snark/dark/images" />
         <copy file="../../../installer/resources/themes/console/light/images/header.png"
               todir="build/standalone-resources/.resources/themes/snark/light/images" />
         <copy file="../../../installer/resources/themes/console/dark/images/camotile2.png"
