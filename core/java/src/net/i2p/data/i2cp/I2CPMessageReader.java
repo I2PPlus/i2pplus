@@ -190,7 +190,7 @@ public class I2CPMessageReader {
                         _listener.readError(I2CPMessageReader.this, ime);
                         cancelRunner();
                     } catch (IOException ioe) {
-                        _log.warn("IO Error handling message \n* Error:" + ioe.getMessage());
+                        _log.warn("IO Error handling message \n* Error: " + ioe.getMessage());
                         _listener.readError(I2CPMessageReader.this, ioe);
                         _listener.disconnected(I2CPMessageReader.this);
                         cancelRunner();
