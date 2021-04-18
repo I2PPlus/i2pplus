@@ -155,6 +155,8 @@ public abstract class LocalHTTPServer {
                     type = "image/gif";
                 else if (filename.endsWith(".jpg"))
                     type = "image/jpeg";
+                else if (filename.endsWith(".webp"))
+                    type = "image/webp";
                 else if (filename.endsWith(".svg"))
                     type = "image/svg+xml";
                 else type = "text/html; charset=UTF-8";
