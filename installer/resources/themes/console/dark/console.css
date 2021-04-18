@@ -19,6 +19,8 @@
   --lowlight: inset 0 0 0 1px #000;
   --element: linear-gradient(to bottom, #020, #010);
   --button: linear-gradient(to bottom, #001000, #000 5%, #000 95%, #001000);
+  --txtinput: linear-gradient(to bottom, #001800, #001000);
+  --vstripe: repeating-linear-gradient(to bottom, rgba(0,0,0,.9) 2px, rgba(0,16,0,.9) 4px);
 }
 
 html {
@@ -42,7 +44,7 @@ body {
   color: #ee9;
   font: 8.5pt/130% var(--bodyfont);
   background: #010 var(--camotile) top left scroll;
-  background: repeating-linear-gradient(to bottom, rgba(0,0,0,.9) 2px, rgba(0,16,0,.9) 4px),
+  background: var(--vstripe),
               var(--camo), #000;
   background-size: 100%, 100%;
   will-change: transform;
@@ -184,7 +186,8 @@ pre {
   border: 1px solid #252;
   box-shadow: inset 0 0 3px 3px #000;
   background: #000 var(--camotile);
-  background: repeating-linear-gradient(to bottom, rgba(0,0,0,.6) 1px, rgba(0,16,0,.5) 2px, rgba(0,16,0,.5) 3px), var(--camotile);
+  background: repeating-linear-gradient(to bottom, rgba(0,16,0,.5) 2px, rgba(0,16,0,.5) 4px), var(--camotile);
+  will-change: transform;
 }
 
 .logo > * {
@@ -247,7 +250,7 @@ pre {
   box-shadow: inset 0 0 0 1px #700, inset 0 0 3px 3px #000, 0 0 0 2px #000;
   background: #000 url(/themes/console/images/itoopie_sm.png) 21px center no-repeat;
   background: url(/themes/console/images/itoopie_sm.png) 21px center no-repeat,
-              repeating-linear-gradient(to bottom, rgba(0,0,0,.6) 1px, rgba(0,16,0,.5) 2px, rgba(0,16,0,.5) 3px),
+              repeating-linear-gradient(to bottom, rgba(0,16,0,.5) 2px, rgba(0,16,0,.5) 4px),
               var(--camotile);
   background-size: auto 110px, 100%, 175px;
   background-position: 21px calc(50% + 16px);
@@ -459,7 +462,7 @@ pre {
   border: 1px solid #252;
   border-radius: 3px;
   box-shadow: 0 1px 5px #000;
-  background: repeating-linear-gradient(to bottom, rgba(0,0,0,.9) 2px, rgba(0,16,0,.9) 4px), var(--camo), #000;
+  background: var(--vstripe), var(--camo), #000;
   background-size: 100% 400%, 1800px;
   will-change: transform;
 }
@@ -2524,10 +2527,6 @@ button.download.control:active {
   transform: scale(1);
 }
 
-img[src*="bound"]:not(.statimage), img[src*="bound"]:not(.statimage):hover {
-  filter: sepia(100%) hue-rotate(70deg) !important;
-}
-
 hr {
   color: #242;
   background: #242;
@@ -2606,7 +2605,7 @@ input[type=text], input[type=password] {
   border-radius: 1px;
   box-shadow: var(--lowlight), inset 4px 4px 4px #000, 0 0 0 1px #000;
   background: #010;
-  background: linear-gradient(to bottom, #001800, #001000);
+  background: var(--txtinput);
   cursor: text;
   filter: none;
 }
@@ -2813,7 +2812,7 @@ input[readonly]:focus {
 #consolepass input[name="name"], #externali2cp input[name="user"] {
   padding: 6px 5px 6px 26px !important;
   background: #000 url(/themes/console/images/buttons/user.png) 5px center no-repeat;
-  background: url(/themes/console/images/buttons/user.png) 5px center no-repeat, linear-gradient(to bottom, #001800, #001000);
+  background: url(/themes/console/images/buttons/user.png) 5px center no-repeat, var(--txtinput);
   background-size: 16px, 100% !important;
 }
 
@@ -2824,7 +2823,7 @@ input[readonly]:focus {
 #consolepass input[name="nofilter_pw"], #externali2cp input[name="nofilter_pw"] {
   padding: 6px 5px 6px 22px !important;
   background: #000 url(/themes/console/images/buttons/password.png) 3px center no-repeat;
-  background: url(/themes/console/images/buttons/password.png) 3px center no-repeat, linear-gradient(to bottom, #001800, #001000);
+  background: url(/themes/console/images/buttons/password.png) 3px center no-repeat, var(--txtinput);
   background-size: 16px, 100% !important;
 }
 #consolepass input[name="nofilter_pw"]:focus, #externali2cp input[name="nofilter_pw"]:focus {
@@ -6595,7 +6594,7 @@ input.search {
   border-radius: 1px;
   box-shadow: var(--lowlight), inset 4px 4px 4px #000, 0 0 0 1px #000;
   background: #010 var(--search) 6px center no-repeat;
-  background: var(--search) 6px center no-repeat, linear-gradient(to bottom, #001800, #001000);
+  background: var(--search) 6px center no-repeat, var(--txtinput);
   background-size: 16px, 100% !important;
   background-blend-mode: luminosity;
 }
@@ -8532,7 +8531,6 @@ h4#sb_shutdownstatus span {
   text-transform: lowercase;
   text-align: center;
   box-shadow: 0 0 0 1px #000;
-  background: #020;
   background: var(--element);
 }
 
