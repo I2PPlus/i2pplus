@@ -1833,7 +1833,6 @@ th {
   padding: 7px 2px;
   text-align: center;
   font-size: 9pt;
-  background: #000 url(images/header.png) center center repeat-x;
   background: linear-gradient(to bottom, #002000, #000 75%);
   border-top: 1px solid #252;
   border-bottom: 1px solid #252 !important;
@@ -2142,7 +2141,6 @@ h1 {
   border: 1px solid #252;
   border-radius: 3px 3px 0 0;
   box-shadow: 0 1px 5px #000;
-  background: #000 url(images/header.png) center center;
 }
 
 h1::first-letter {
@@ -2180,7 +2178,6 @@ h2, h2.welcome {
   text-shadow: 0 0 2px #010;
   border: 1px solid #252;
   border-radius: 2px;
-  background: #000 url(images/header.png) center center;
 }
 
 h2 a:visited {
@@ -2197,7 +2194,6 @@ h3, h3.welcome {
   padding: 7px 10px;
   margin: 12px 0 10px 0;
   border-radius: 0 2px 2px 0;
-  background: #000 url(images/header.png) center center ;
   text-transform: uppercase;
   text-shadow: 0 0 2px #010;
   letter-spacing: .08em;
@@ -2428,17 +2424,17 @@ button.delete.control:active {
 }
 
 button.check.control {
-  background: var(--update) center center no-repeat, var(--button);
+  background: var(--refresh) center center no-repeat, var(--button);
   background-size: 14px, 100%;
 }
 
 button.check.control:hover, button.check.control:focus {
-  background: #000 var(--update_hover) center center no-repeat;
+  background: #000 var(--refresh_hover) center center no-repeat;
   background-size: 14px;
 }
 
 button.check.control:active {
-  background: #f60 var(--update_active) center center no-repeat;
+  background: #f60 var(--refresh_active) center center no-repeat;
   background-size: 14px;
 }
 
@@ -3448,7 +3444,6 @@ form[action="events"] {
   border-top: 1px solid #252 !important;
   border-bottom: 1px solid #252 !important;
   line-height: 140%;
-  background: #000 url(images/header.png) repeat-x center center !important;
   background: linear-gradient(to bottom, #002000, #000 75%) !important;
 }
 
@@ -6314,7 +6309,6 @@ h3#bannedpeers {
 }
 
 #ipv4, #ipv6, #permabanned tr:nth-child(2) {
-  background: #000 url(images/header.png) center center repeat-x;
   background: linear-gradient(to bottom, #002000, #000 75%) !important;
   border-top: 1px solid #252;
   border-bottom: 1px solid #252;
@@ -6559,7 +6553,6 @@ table.search {
 
 .search tr {
   box-shadow: var(--lowlight);
-  background: #000 url(images/header.png) center center repeat-x;
   background: repeating-linear-gradient(to bottom, rgba(0,0,0,.7) 1px, rgba(0,16,0,.4) 2px, rgba(0,16,0,.4) 3px), linear-gradient(to bottom, #010, #000400) !important;
 }
 
@@ -7834,7 +7827,6 @@ h4.embeddedtitle#updateplugins {
   text-align: left;
   font-size: 10pt;
   border: 1px solid #252;
-  background: #000 url(images/header.png) center center repeat-x;
   background: linear-gradient(to bottom, #002000, #000 75%) !important;
 }
 

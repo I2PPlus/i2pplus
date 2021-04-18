@@ -5,6 +5,7 @@ package net.i2p.i2ptunnel.localServer;
 
 import java.io.File;
 import java.io.IOException;
+import java.io.InputStream;
 import java.io.OutputStream;
 import java.util.HashMap;
 import java.util.Map;
@@ -154,6 +155,8 @@ public abstract class LocalHTTPServer {
                     type = "image/gif";
                 else if (filename.endsWith(".jpg"))
                     type = "image/jpeg";
+                else if (filename.endsWith(".webp"))
+                    type = "image/webp";
                 else if (filename.endsWith(".svg"))
                     type = "image/svg+xml";
                 else type = "text/html; charset=UTF-8";
@@ -356,13 +359,14 @@ public abstract class LocalHTTPServer {
 
         PortMapper pm = I2PAppContext.getGlobalContext().portMapper();
         String conURL = pm.getConsoleURL();
+        String idn = I2PTunnelHTTPClientBase.decodeIDNHost(host);
         out.write(("HTTP/1.1 200 OK\r\n"+
                   "Content-Type: text/html; charset=UTF-8\r\n" +
                   "Referrer-Policy: no-referrer\r\n" +
                   "Access-Control-Allow-Origin: *\r\n" +
                   "Connection: close\r\n" +
                   "Proxy-Connection: close\r\n\r\n" +
-                  "<!DOCTYPE html>\n<html>\n<head>\n<title>" + _t("Redirecting to {0}", host) + "</title>\n" + headerLinks +
+                  "<!DOCTYPE html>\n<html>\n<head>\n<title>" + _t("Redirecting to {0}", idn) + "</title>\n" + headerLinks +
                   "<meta http-equiv=\"Refresh\" content=\"1; url=" + url + "\">\n</head>\n<body>\n" +
                   "<div class=\"logo\">\n<a href=\"" + conURL + "\" title=\"" + _t("Router Console") + "\">" + logo +
                   "</a><hr>\n").getBytes("UTF-8"));
@@ -372,8 +376,8 @@ public abstract class LocalHTTPServer {
                   "<a href=\"" + conURL + "help/\">" + _t("Help") + "</a>\n").getBytes("UTF-8"));
         out.write(("</div>\n<div class=\"warning redirect\" id=\"warning\">\n<h3>" + _t("Redirection in progress") + "&hellip;</h3>\n<br>\n<p><b>" +
                   (success ?
-                           _t("Saved {0} to the {1} addressbook, redirecting now.", host, tbook).replace("now.", "now&hellip;") :
-                           _t("Failed to save {0} to the {1} addressbook, redirecting now.", host, tbook).replace("now.", "now&hellip;")) +
+                           _t("Saved {0} to the {1} addressbook, redirecting now.", idn, tbook).replace("now.", "now&hellip;") :
+                           _t("Failed to save {0} to the {1} addressbook, redirecting now.", idn, tbook).replace("now.", "now&hellip;")) +
                   "</h3>\n<hr><p><a href=\"" + url + "\">" +
                   _t("Click here if you are not redirected automatically.") +
                   "</a></p>\n<br></div>\n").getBytes("UTF-8"));
@@ -385,13 +389,14 @@ public abstract class LocalHTTPServer {
     private static void writeB32RedirectPage(OutputStream out, String host, String url) throws IOException {
         PortMapper pm = I2PAppContext.getGlobalContext().portMapper();
         String conURL = pm.getConsoleURL();
+        String idn = I2PTunnelHTTPClientBase.decodeIDNHost(host);
         out.write(("HTTP/1.1 200 OK\r\n" +
                   "Content-Type: text/html; charset=UTF-8\r\n" +
                   "Referrer-Policy: no-referrer\r\n" +
                   "Access-Control-Allow-Origin: *\r\n" +
                   "Connection: close\r\n" +
                   "Proxy-Connection: close\r\n\r\n" +
-                  "<!DOCTYPE html>\n<html>\n<head>\n<title>" + _t("Redirecting to {0}", host) + "</title>\n" + headerLinks +
+                  "<!DOCTYPE html>\n<html>\n<head>\n<title>" + _t("Redirecting to {0}", idn) + "</title>\n" + headerLinks +
                   "<meta http-equiv=\"Refresh\" content=\"1; url=" + url + "\">\n</head>\n<body>\n" +
                   "<div class=\"logo\">\n<a href=\"" + conURL + "\" title=\"" + _t("Router Console") + "\">" + logo +
                   "</a><hr>\n").getBytes("UTF-8"));
@@ -400,7 +405,7 @@ public abstract class LocalHTTPServer {
         out.write(("<a href=\"" + conURL + "config\">" + _t("Configuration") + "</a> " +
                   "<a href=\"" + conURL + "help/\">" + _t("Help") + "</a>\n").getBytes("UTF-8"));
         out.write(("</div>\n<div class=\"warning redirect\" id=\"warning\">\n<h3>" +
-                  _t("Saved the authentication for {0}, redirecting now.", host).replace("now.", "now&hellip;") +
+                  _t("Saved the authentication for {0}, redirecting now.", idn).replace("now.", "now&hellip;") +
                   "</b></p>\n<hr>\n<p><a href=\"" + url + "\">" +
                   _t("Click here if you are not redirected automatically.") +
                   "</a></p>\n<br>\n</div>\n").getBytes("UTF-8"));

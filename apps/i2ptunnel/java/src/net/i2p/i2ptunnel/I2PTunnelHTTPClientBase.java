@@ -14,6 +14,7 @@ import java.io.Reader;
 import java.io.StringReader;
 import java.io.UnsupportedEncodingException;
 import java.io.Writer;
+import java.net.IDN;
 import java.net.Socket;
 import java.net.SocketTimeoutException;
 import java.net.URI;
@@ -141,6 +142,19 @@ public abstract class I2PTunnelHTTPClientBase extends I2PTunnelClientBase implem
     private final Map<String, String> _proxySSLCache = new LHMCache<String, String>(32);
     // very simple, remember last-failed only
     private String _lastFailedSSLProxy;
+
+    /** available as of Java 6 and Android API 9 */
+    private static final boolean _haveIDN;
+    static {
+        boolean h;
+        try {
+            Class.forName("java.net.IDN", false, ClassLoader.getSystemClassLoader());
+            h = true;
+        } catch (ClassNotFoundException cnfe) {
+            h = false;
+        }
+        _haveIDN = h;
+    }
 
     protected String getPrefix(long requestId) {
         return "[HTTPClient] [Request: " + _clientId + '/' + requestId + "] ";
@@ -939,7 +953,7 @@ public abstract class I2PTunnelHTTPClientBase extends I2PTunnelClientBase implem
             out.write(uri);
             out.write("\">");
             // Long URLs are handled in CSS
-            out.write(uri);
+            out.write(decodeIDNURI(uri));
             out.write("</a>");
             if (usingWWWProxy) {
                 out.write("<hr><span id=\"outproxy\"><b>");
@@ -1007,6 +1021,45 @@ public abstract class I2PTunnelHTTPClientBase extends I2PTunnelClientBase implem
         }
         out.write("</div>\n");
         writeFooter(out);
+    }
+
+    /**
+     *  Decode the host part of a URI for display.
+     *  Returns original string on any error.
+     *
+     *  @since 0.9.50
+     */
+    private static String decodeIDNURI(String uri) {
+        if (!_haveIDN)
+             return uri;
+        if (!uri.contains("xn--"))
+             return uri;
+        try {
+            URI u = new URI(uri);
+            String h = u.getHost();
+            String hu = IDN.toUnicode(h);
+            if (hu == null || h.equals(hu))
+                return uri;
+            int idx = uri.indexOf(h);
+            if (idx < 0)
+                return uri;
+            return uri.substring(0, idx) + hu + uri.substring(idx + h.length(), uri.length());
+         } catch(URISyntaxException use) {}
+         return uri;
+    }
+
+    /**
+     *  Decode a hostname for display.
+     *  Returns original string on any error.
+     *
+     *  @since 0.9.50
+     */
+    public static String decodeIDNHost(String host) {
+        if (!_haveIDN)
+             return host;
+        if (!host.contains("xn--"))
+             return host;
+        return IDN.toUnicode(host);
     }
 
     /**

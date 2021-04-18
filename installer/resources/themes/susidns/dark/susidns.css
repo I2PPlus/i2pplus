@@ -99,7 +99,6 @@ body.iframed {
   border: 1px solid #252;
   border-radius: 0 1px 2px 2px;
   box-shadow: inset 0 0 0 1px #000, 0 2px 2px 2px rgba(0,0,0,.7);
-  background: #000 url(/themes/console/dark/images/header.png) repeat-x scroll center center !important;
   background: repeating-linear-gradient(135deg, #000 1px, #000 2px, #010 2px, #010 4px), repeating-linear-gradient(45deg, #000 1px, #000 2px, #010 2px, #010 4px), linear-gradient(to bottom, #1a261a 0%, #223022 7%, #212f21 9%, #172317 21%, #091109 49%, #050d05 50%, #020602 51%, #010301 53%, #000000 56%, #000000 100%), url(/themes/console/dark/images/camotile2.png) top left !important;
   background-blend-mode: exclusion, exclusion, normal, normal;
 }
@@ -321,7 +320,6 @@ h3 {
   color: #ee9;
   border: 1px solid #242;
   box-shadow: inset 0 0 0 1px #000;
-  background: #000 url(/themes/console/dark/images/header.png) repeat-x scroll center center;
   background: linear-gradient(to bottom, rgba(0,0,0,0) 50%, #000 50%),
               repeating-linear-gradient(to right, rgba(0,0,0,.5) 1px, rgba(0,16,0,.5) 2px, rgba(0,16,0,.5) 3px),
               linear-gradient(to bottom, #004000, #000 75%);
@@ -839,8 +837,9 @@ div#book, #emptybook {
 }
 
 #book tr.head {
-  background: url(/themes/console/dark/images/header.png) repeat-x scroll center center #000;
-  background: linear-gradient(to bottom, rgba(0,0,0,0) 50%, #000 50%), repeating-linear-gradient(to right, rgba(0,0,0,.5) 1px, rgba(0,16,0,.5) 2px, rgba(0,16,0,.5) 3px), linear-gradient(to bottom, #002000, #000 75%) !important;
+  background: linear-gradient(to bottom, rgba(0,0,0,0) 50%, #000 50%),
+              repeating-linear-gradient(to right, rgba(0,0,0,.5) 1px, rgba(0,16,0,.5) 2px, rgba(0,16,0,.5) 3px),
+              linear-gradient(to bottom, #002000, #000 75%) !important;
 }
 
 #book table th {
