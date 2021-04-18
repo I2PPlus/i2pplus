@@ -12782,7 +12782,7 @@ h1[class], h1 {
 
 .sitelink {
   padding: 0 3px 0 16px;
-  background: rgba(0,64,0,.3) url(/themes/console/images/info/url.png) 2px center no-repeat;
+  background: rgba(0,64,0,.3) var(--link) 2px center no-repeat;
   background-size: 12px, 100% !important;
 }
 
@@ -12804,7 +12804,7 @@ h1[class], h1 {
 }
 
 .sitelink:hover {
-  background: url(/themes/console/images/info/url.png) 2px center no-repeat, linear-gradient(to bottom, #020 50%, #000 50%);
+  background: var(--link) 2px center no-repeat, linear-gradient(to bottom, #020 50%, #000 50%);
 }
 
 .consolelink:hover {
