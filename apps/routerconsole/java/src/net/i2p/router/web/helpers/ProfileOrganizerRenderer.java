@@ -436,21 +436,27 @@ class ProfileOrganizerRenderer {
                .append(_t("caps")).append(":</b></td><td>").append(_t("Capabilities in the NetDb, not used to determine profiles"))
                .append("</td></tr>\n");
             buf.append("<tr id=\"capabilities_key\"><td></td><td><table><tbody>");
+/*
             buf.append("<tr>")
                .append("<td><a href=\"/netdb?caps=B\" title=\"" + _t("Show all routers with this capability in the NetDb") +
                    "\"><b class=\"ssutesting\">B</b></a></td><td>").append(_t("SSU Testing")).append("</td>")
                .append("<td><a href=\"/netdb?caps=C\" title=\"" + _t("Show all routers with this capability in the NetDb") +
                        "\"><b class=\"ssuintro\">C</b></a></td><td>").append(_t("SSU Introducer")).append("</td>")
                .append("</tr>\n");
+*/
             buf.append("<tr>")
                .append("<td><a href=\"/netdb?caps=f\" title=\"" + _t("Show all routers with this capability in the NetDb") +
                        "\"><b class=\"ff\">F</b></a></td><td>").append(_t("Floodfill")).append("</td>")
-               .append("<td><a href=\"/netdb?caps=H\" title=\"" + _t("Show all routers with this capability in the NetDb") +
-                       "\"><b class=\"hidden\">H</b></a></td><td>").append(_t("Hidden")).append("</td>")
-               .append("</tr>\n");
-            buf.append("<tr>")
                .append("<td><a href=\"/netdb?caps=R\" title=\"" + _t("Show all routers with this capability in the NetDb") +
                        "\"><b class=\"reachable\">R</b></a></td><td>").append(_t("Reachable")).append("</td>")
+/*
+               .append("<td><a href=\"/netdb?caps=H\" title=\"" + _t("Show all routers with this capability in the NetDb") +
+                       "\"><b class=\"hidden\">H</b></a></td><td>").append(_t("Hidden")).append("</td>")
+*/
+
+               .append("</tr>\n");
+/*
+            buf.append("<tr>")
                .append("<td><a href=\"/netdb?caps=U\" title=\"" + _t("Show all routers with this capability in the NetDb") +
                        "\"><b class=\"unreachable\">U</b></a></td><td>").append(_t("Unreachable")).append("</td>")
                .append("</tr>\n");
@@ -460,22 +466,27 @@ class ProfileOrganizerRenderer {
                .append("<td><a href=\"/netdb?caps=L\" title=\"" + _t("Show all routers with this capability in the NetDb") +
                        "\"><b>L</b></a></td><td>").append(_t("{0} shared bandwidth", range(Router.MIN_BW_L, Router.MIN_BW_M))).append("</td>")
                .append("</tr>\n");
+*/
             buf.append("<tr>")
+/*
                .append("<td><a href=\"/netdb?caps=M\" title=\"" + _t("Show all routers with this capability in the NetDb") +
                        "\"><b>M</b></a></td><td>").append(_t("{0} shared bandwidth", range(Router.MIN_BW_M, Router.MIN_BW_N))).append("</td>")
+*/
                .append("<td><a href=\"/netdb?caps=N\" title=\"" + _t("Show all routers with this capability in the NetDb") +
                        "\"><b>N</b></a></td><td>").append(_t("{0} shared bandwidth", range(Router.MIN_BW_N, Router.MIN_BW_O))).append("</td>")
-               .append("</tr>\n");
-            buf.append("<tr>")
                .append("<td><a href=\"/netdb?caps=O\" title=\"" + _t("Show all routers with this capability in the NetDb") +
                        "\"><b>O</b></a></td><td>").append(_t("{0} shared bandwidth", range(Router.MIN_BW_O, Router.MIN_BW_P))).append("</td>")
-               .append("<td><a href=\"/netdb?caps=P\" title=\"" + _t("Show all routers with this capability in the NetDb") +
-                       "\"><b>P</b></a></td><td>").append(_t("{0} shared bandwidth", range(Router.MIN_BW_P, Router.MIN_BW_X))).append("</td>")
                .append("</tr>\n");
             buf.append("<tr>")
+               .append("<td><a href=\"/netdb?caps=P\" title=\"" + _t("Show all routers with this capability in the NetDb") +
+                       "\"><b>P</b></a></td><td>").append(_t("{0} shared bandwidth", range(Router.MIN_BW_P, Router.MIN_BW_X))).append("</td>")
                .append("<td><a href=\"/netdb?caps=X\" title=\"" + _t("Show all routers with this capability in the NetDb") +
                        "\"><b>X</b></a></td><td>").append(_t("Over {0} shared bandwidth", Math.round(Router.MIN_BW_X * 1.024f) + " KBps")).append("</td>")
+               .append("</tr>\n");
+/*
+            buf.append("<tr>")
                .append("<td>&nbsp;</td><td>&nbsp;</td></tr>\n");
+*/
             buf.append("</tbody>\n</table>\n</td></tr>\n"); // profile_defs
             buf.append("<tr><td><b>")
                .append(_t("status"))
