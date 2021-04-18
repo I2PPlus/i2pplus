@@ -387,6 +387,7 @@ public abstract class LocalHTTPServer {
     private static void writeB32RedirectPage(OutputStream out, String host, String url) throws IOException {
         PortMapper pm = I2PAppContext.getGlobalContext().portMapper();
         String conURL = pm.getConsoleURL();
+        String idn = I2PTunnelHTTPClientBase.decodeIDNHost(host);
         out.write(("HTTP/1.1 200 OK\r\n" +
                   "Content-Type: text/html; charset=UTF-8\r\n" +
                   "Referrer-Policy: no-referrer\r\n" +
