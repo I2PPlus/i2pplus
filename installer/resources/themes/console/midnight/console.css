@@ -67,6 +67,10 @@ body#proxy_error {
   background: linear-gradient(to bottom, #001, #000);
 }
 
+.routersummary, h1, .main, iframe {
+  contain: layout;
+}
+
 small {
   font-size: 9pt;
 }
@@ -14486,4 +14490,38 @@ h1, .main h2, h4.app, h4.app2, .main h3 {
   #profilelist td:nth-last-child(2) span, #profilelist td:nth-last-child(3) span, #profilelist td:nth-last-child(5) span {
     text-align: center !important;
   }
+}
+
+.lazy.lazyshow, #profilelist .lazy.lazyshow td, #tunnels .lazy.lazyshow td {
+  visibility: visible;
+  opacity: 1;
+  transition: ease opacity .4s;
+}
+
+#profilelist .lazy.lazyshow td {
+  visibility: visible;
+}
+
+.lazy.lazyhide, #profilelist .lazy.lazyhide td, #tunnels .lazy.lazyhide td {
+  animation: ease bounce .5s;
+  opacity: 0;
+}
+
+#profilelist .lazy.lazyhide, #tunnels .lazy.lazyhide {
+  opacity: 1;
+}
+
+#profilelist .lazy.lazyshow td, #tunnels .lazy.lazyshow td {
+  visibility: hide;
+}
+
+.leasesets_container .lazy.lazyhide {
+  visibility: visible;
+  opacity: 1;
+  animation: none;
+}
+
+@keyframes bounce {
+  from {visibility: hidden}
+  to {visibility: visible}
 }

@@ -24,6 +24,10 @@ body {
   background-size: 32px 32px;
 }
 
+.routersummary, h1, .main, iframe {
+  contain: layout;
+}
+
 .main {
   scrollbar-color: #8d8daa rgba(255,255,255,.4);
 }
@@ -8487,7 +8491,7 @@ p.sybil_info + a[name] + table.sybil_routerinfo, p.hashdist + a[name] + table.sy
   margin-top: -22px;
 }
 
-#profilelist tr:hover td, #floodfills tr:hover td, #ntcpconnections tr:nth-last-child(n+2):hover td, #udpconnections tr:nth-last-child(n+2):hover td,
+#profilelist tr:not(.lazyhide):hover td, #floodfills tr:hover td, #ntcpconnections tr:nth-last-child(n+2):hover td, #udpconnections tr:nth-last-child(n+2):hover td,
 #schedjobs tr:hover td, #jobstats tr:nth-last-child(n+2):hover td, #jardump tr:hover td, #sidebarconf tr:nth-last-child(n+2):hover td, #eventlog tr:hover td,
 #netdboverview table tr:hover td, #debug tr:hover td, #clientconfig tr:hover td, #webappconfig tr:hover td, #portfaq tr:hover td, .tunneldisplay tr:hover td {
   background-color: #ffd !important;
@@ -8919,6 +8923,7 @@ table#schedjobs {
   border: 1px solid #8d8daa;
 }
 
+/*
 #capabilities_key td:first-child::before {
   content: "NetDb Capabilities";
   display: inline-block;
@@ -8947,6 +8952,7 @@ table#schedjobs {
   width: 130%;
 }
 }
+*/
 
 #capabilities_key td {
   padding: 0 !important;
@@ -11032,6 +11038,10 @@ b.suboption {
 
 #manualreseed, .formaction#submitconsolepass {
   margin-bottom: 10px;
+}
+
+.formaction#submitconsolepass {
+  margin-top: -6px;
 }
 
 #manualreseed tr:last-child td.infohelp {
@@ -13483,4 +13493,38 @@ div.app:not(:hover) a:not(:hover):not(:focus):not(:active):visited,
   #profilelist td:nth-last-child(2) span, #profilelist td:nth-last-child(3) span, #profilelist td:nth-last-child(5) span {
     text-align: center !important;
   }
+}
+
+.lazy.lazyshow, #profilelist .lazy.lazyshow td, #tunnels .lazy.lazyshow td {
+  visibility: visible;
+  opacity: 1;
+  transition: ease opacity .4s;
+}
+
+#profilelist .lazy.lazyshow td {
+  visibility: visible;
+}
+
+.lazy.lazyhide, #profilelist .lazy.lazyhide td, #tunnels .lazy.lazyhide td {
+  animation: ease bounce .5s;
+  opacity: 0;
+}
+
+#profilelist .lazy.lazyhide, #tunnels .lazy.lazyhide {
+  opacity: 1;
+}
+
+#profilelist .lazy.lazyshow td, #tunnels .lazy.lazyshow td {
+  visibility: hide;
+}
+
+.leasesets_container .lazy.lazyhide {
+  visibility: visible;
+  opacity: 1;
+  animation: none;
+}
+
+@keyframes bounce {
+  from {visibility: hidden}
+  to {visibility: visible}
 }

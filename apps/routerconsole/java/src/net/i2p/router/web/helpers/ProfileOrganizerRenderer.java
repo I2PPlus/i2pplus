@@ -130,7 +130,7 @@ class ProfileOrganizerRenderer {
                     buf.append("<tr><td colspan=\"10\" class=\"separator\"><hr></td></tr>\n");
                 prevTier = tier;
 
-                buf.append("<tr><td align=\"center\" nowrap>");
+                buf.append("<tr class=\"lazy\"><td align=\"center\" nowrap>");
                 buf.append(_context.commSystem().renderPeerHTML(peer));
                 // debug
                 //if(prof.getIsExpandedDB())

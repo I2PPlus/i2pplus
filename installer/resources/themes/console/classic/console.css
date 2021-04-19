@@ -56,6 +56,10 @@ body {
   outline: none;
 }
 
+.routersummary, h1, .main, iframe {
+  contain: layout;
+}
+
 .routersummary img[src$="i2plogo.png"], .routersummary h3, .routersummary h3 a, #sb_internnals, #sb_advanced, #sb_services,
 .confignav, *::before, *::after, div.app, .themechoice, .langselect, .langbox,
 .newsAuthor, #newsDisplay, #netdbcountrylist img, .viewfullentry, .sybil_routerinfo th img, .graphspanel, h1 {
@@ -12384,4 +12388,38 @@ from {
   #profilelist td:nth-last-child(2) span, #profilelist td:nth-last-child(3) span, #profilelist td:nth-last-child(5) span {
     text-align: center !important;
   }
+}
+
+.lazy.lazyshow, #profilelist .lazy.lazyshow td, #tunnels .lazy.lazyshow td {
+  visibility: visible;
+  opacity: 1;
+  transition: ease opacity .4s;
+}
+
+#profilelist .lazy.lazyshow td {
+  visibility: visible;
+}
+
+.lazy.lazyhide, #profilelist .lazy.lazyhide td, #tunnels .lazy.lazyhide td {
+  animation: ease bounce .5s;
+  opacity: 0;
+}
+
+#profilelist .lazy.lazyhide, #tunnels .lazy.lazyhide {
+  opacity: 1;
+}
+
+#profilelist .lazy.lazyshow td, #tunnels .lazy.lazyshow td {
+  visibility: hide;
+}
+
+.leasesets_container .lazy.lazyhide {
+  visibility: visible;
+  opacity: 1;
+  animation: none;
+}
+
+@keyframes bounce {
+  from {visibility: hidden}
+  to {visibility: visible}
 }

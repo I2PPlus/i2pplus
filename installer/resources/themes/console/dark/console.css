@@ -87,6 +87,10 @@ body {
   background: rgba(0,187,0,.8) !important;
 }
 
+.routersummary, h1, .main, iframe {
+  contain: layout;
+}
+
 .main * {
   scrollbar-color: rgba(16,48,16,.4) rgba(0,0,0,0);
   transition: ease scrollbar-color .5s;
@@ -1811,33 +1815,32 @@ form[action="updategraphs"] {
 /* end graphs */
 
 table {
-  border-collapse: collapse;
-  width: 100%;
-  border: 1px solid #252;
-  padding: 1px;
-  font-size: 9pt;
-  background: #030;
   margin: 1px 0;
+  padding: 1px;
+  width: 100%;
+  font-size: 9pt;
+  border: 1px solid #252;
+  border-collapse: collapse;
 }
 
 table hr {
-  padding: 0 0;
-  color: #494;
-  background: #252;
-  border: 0 solid #252;
   margin: 0 0;
+  padding: 0 0;
   height: 1px;
   display: none;
+  color: #494;
+  border: 0 solid #252;
+  background: #252;
 }
 
 th {
   padding: 7px 2px;
+  line-height: 110%;
   text-align: center;
   font-size: 9pt;
-  background: linear-gradient(to bottom, #002000, #000 75%);
   border-top: 1px solid #252;
   border-bottom: 1px solid #252 !important;
-  line-height: 110%;
+  background: linear-gradient(to bottom, #002000, #000 75%);
 }
 
 tr {
@@ -14625,4 +14628,38 @@ h1, .main h2, h4.app, h4.app2, .main h3 {
   #profilelist td:nth-last-child(2) span, #profilelist td:nth-last-child(3) span, #profilelist td:nth-last-child(5) span {
     text-align: center !important;
   }
+}
+
+.lazy.lazyshow, #profilelist .lazy.lazyshow td, #tunnels .lazy.lazyshow td {
+  visibility: visible;
+  opacity: 1;
+  transition: ease opacity .4s;
+}
+
+#profilelist .lazy.lazyshow td {
+  visibility: show;
+}
+
+.lazy.lazyhide, #profilelist .lazy.lazyhide td, #tunnels .lazy.lazyhide td {
+  animation: ease bounce .5s;
+  opacity: 0;
+}
+
+#profilelist .lazy.lazyhide, #tunnels .lazy.lazyhide {
+  opacity: 1;
+}
+
+#profilelist .lazy.lazyshow td, #tunnels .lazy.lazyshow td {
+  visibility: hide;
+}
+
+.leasesets_container .lazy.lazyhide {
+  visibility: visible;
+  opacity: 1;
+  animation: none;
+}
+
+@keyframes bounce {
+  from {visibility: hidden}
+  to {visibility: visible}
 }
