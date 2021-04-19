@@ -182,7 +182,7 @@ class TunnelRenderer {
                 processed += cfg.getRecentMessagesCount();
                 if (++displayed > DISPLAY_LIMIT)
                     continue;
-                out.write("<tr>");
+                out.write("<tr class=\"lazy\">");
                 if (cfg.getSendTo() == null)
                     out.write("<td class=\"cells obep\" align=\"center\" title=\"" + _t("Outbound Endpoint") + "\">" + _t("Outbound Endpoint") + "</td>");
                 else if (cfg.getReceiveFrom() == null)

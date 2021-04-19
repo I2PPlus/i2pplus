@@ -8919,6 +8919,7 @@ table#schedjobs {
   border: 1px solid #8d8daa;
 }
 
+/*
 #capabilities_key td:first-child::before {
   content: "NetDb Capabilities";
   display: inline-block;
@@ -8947,6 +8948,7 @@ table#schedjobs {
   width: 130%;
 }
 }
+*/
 
 #capabilities_key td {
   padding: 0 !important;
@@ -11032,6 +11034,10 @@ b.suboption {
 
 #manualreseed, .formaction#submitconsolepass {
   margin-bottom: 10px;
+}
+
+.formaction#submitconsolepass {
+  margin-top: -6px;
 }
 
 #manualreseed tr:last-child td.infohelp {
@@ -13483,4 +13489,39 @@ div.app:not(:hover) a:not(:hover):not(:focus):not(:active):visited,
   #profilelist td:nth-last-child(2) span, #profilelist td:nth-last-child(3) span, #profilelist td:nth-last-child(5) span {
     text-align: center !important;
   }
+}
+
+.lazy.lazyshow, #profilelist .lazy.lazyshow td, #tunnels .lazy.lazyshow td {
+  visibility: visible;
+  opacity: 1;
+  transition: ease opacity .4s;
+  contain: layout paint;
+}
+
+#profilelist .lazy.lazyshow td {
+  visibility: show;
+}
+
+.lazy.lazyhide, #profilelist .lazy.lazyhide td, #tunnels .lazy.lazyhide td {
+  animation: ease bounce .5s;
+  opacity: 0;
+}
+
+#profilelist .lazy.lazyhide, #tunnels .lazy.lazyhide {
+  opacity: 1;
+}
+
+#profilelist .lazy.lazyshow td, #tunnels .lazy.lazyshow td {
+  visibility: hide;
+}
+
+.leasesets_container .lazy.lazyhide {
+  visibility: visible;
+  opacity: 1;
+  animation: none;
+}
+
+@keyframes bounce {
+  from {visibility: hidden}
+  to {visibility: visible}
 }

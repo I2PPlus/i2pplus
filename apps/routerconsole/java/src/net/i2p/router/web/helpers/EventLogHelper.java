@@ -201,7 +201,7 @@ public class EventLogHelper extends FormHandler {
             // create a class from truncated event type so we can style the tr's by event severity
             type = type.substring(0,8).replaceAll(" .+$", "").replaceAll("\\d", "").toLowerCase();
             if (isAll) {
-                buf.append("<tr class=\"").append(type).append("\">");
+                buf.append("<tr class=\"").append(type).append(" lazy\">");
             } else {
                 buf.append("<tr>");
             }
