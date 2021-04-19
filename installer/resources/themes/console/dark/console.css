@@ -21,6 +21,7 @@
   --button: linear-gradient(to bottom, #001000, #000 5%, #000 95%, #001000);
   --txtinput: linear-gradient(to bottom, #001800, #001000);
   --vstripe: repeating-linear-gradient(to bottom, rgba(0,0,0,.9) 2px, rgba(0,16,0,.9) 4px);
+  --helpbox: linear-gradient(135deg, #000d00, #000900);
 }
 
 html {
@@ -1538,7 +1539,7 @@ div.messages {
   color: #2b2 !important;
   box-shadow: inset 0 0 1px 0 #990 !important;
   background: #000;
-  background: url(images/infohelp.png) no-repeat 12px center, url(images/scarface.jpg) right bottom no-repeat #000;
+  background: var(--infohelp) no-repeat 12px center, url(images/scarface.jpg) right bottom no-repeat #000;
   background-size: 28px, auto 90%;
 }
 
@@ -1551,13 +1552,13 @@ div.messages {
   z-index: 100;
   animation: 2s hide-up 8s ease-out forwards;
   box-shadow: inset 0 0 1px 0 #f00, 0 0 2px 2px #000 !important;
-  background: url(images/infohelp.png) no-repeat 12px center, url(/themes/snark/light/images/delete.png) right 6px top 6px no-repeat, url(images/scarface.jpg) right bottom no-repeat #000;
+  background: var(--infohelp) no-repeat 12px center, url(/themes/snark/light/images/delete.png) right 6px top 6px no-repeat, url(images/scarface.jpg) right bottom no-repeat #000;
   background-size: 28px, 14px, auto 90%;
   background-blend-mode: normal, luminosity, normal;
 }
 
 .main:not(#config_update) div.messages:hover, #config_update #messages:hover {
-  background: url(images/infohelp.png) no-repeat 12px center, url(/themes/snark/light/images/delete_hover.png) right 6px top 6px no-repeat, url(images/scarface.jpg) right bottom no-repeat #000;
+  background: var(--infohelp) no-repeat 12px center, url(/themes/snark/light/images/delete_hover.png) right 6px top 6px no-repeat, url(images/scarface.jpg) right bottom no-repeat #000;
   background-size: 28px, 14px, auto 90%;
   background-blend-mode: normal, normal, normal;
   cursor: crosshair;
@@ -4212,7 +4213,7 @@ p#defaultswork {
 p#confignotes {
   margin-bottom: -21px;
   padding: 15px 15px 15px 50px;
-  background: url(images/infohelp.png) 12px center no-repeat;
+  background: var(--infohelp) 12px center no-repeat;
 }
 
 p#ipconfig, p#ipv4config, p#udpconfig, p#externaltcp {
@@ -4334,7 +4335,7 @@ form[action="events"] > .formaction {
 
 p#keyringhelp, p#webappconfig, p#availableplugins, p#pluginconfigtext, p#clientdefaultshelp, p#bwshare, p#editclients, p#upnpstatus, p#gatherstats {
   padding: 15px 15px 15px 50px;
-  background: #000 url(images/infohelp.png) 12px center no-repeat;
+  background: #000 var(--infohelp) 12px center no-repeat;
   border: 1px solid #252;
 }
 
@@ -5449,8 +5450,8 @@ table[cellspacing="30"] > tbody > tr > td {
 }
 
 table[cellspacing="30"] > tbody > tr > td > table > tbody > tr > th:first-child {
-  text-align: left;
   padding: 5px;
+  text-align: left;
 }
 
 table[cellspacing="30"] > tbody > tr > td:first-child > table > tbody > tr > th:first-child {
@@ -5589,11 +5590,11 @@ th > img[src^="/imagegen"], .identicon { /* scale down header images */
 }
 
 .netdb_leases li b:first-child {
-  display: inline-block;
-  min-width: 60px !important;
-  text-align: right;
   margin: 0 !important;
   padding: 0 !important;
+  min-width: 60px !important;
+  display: inline-block;
+  text-align: right;
 }
 
 .netdb_leases li b.leaseNumber {
@@ -5729,8 +5730,8 @@ img.unknownflag {
 }
 
 #bugreports td {
-  background: url(images/infohelp.png) 12px center no-repeat !important;
   padding: 15px 10px 15px 50px;
+  background: var(--infohelp) 12px center no-repeat !important;
 }
 
 #logs #enviro:hover {
@@ -5748,10 +5749,10 @@ img.unknownflag {
 }
 
 #logs #enviro td {
-  font-weight: normal !important;
   padding: 7px 10px;
-  box-shadow: var(--lowlight);
+  font-weight: normal !important;
   border-right: 1px inset #131;
+  box-shadow: var(--lowlight);
 }
 
 #logs #enviro td:first-child {
@@ -5761,8 +5762,8 @@ img.unknownflag {
 }
 
 #criticallogs td , #routerlogs td, #eventlogs td, #wrapperlogs td {
-  font-weight: normal !important;
   padding: 5px 10px;
+  font-weight: normal !important;
   border-top: 1px solid #252;
 }
 
@@ -5794,12 +5795,12 @@ table[id$="logs"] ul {
 
 #wrapperlogs pre {
   margin-bottom: 0 !important;
-  white-space: pre-wrap;
+  padding: 0 0 0 5px !important;
   width: 99%;
   width: calc(100% - 5px);
-  resize: none;
   max-height: 600px;
-  padding: 0 0 0 5px !important;
+  white-space: pre-wrap;
+  resize: none;
 }
 
 .logtable ul li {
@@ -5814,12 +5815,6 @@ table[id$="logs"] ul {
   text-align: left;
   width: 100%;
   word-break: break-all;
-}
-
-#criticallogs li {
-/*  width: auto;
-  width: calc(100% - 15px);
-  margin: 2px -10px 2px 7px;*/
 }
 
 #logs li::after {
@@ -5869,9 +5864,9 @@ table[id$="logs"] ul {
 
 @media screen and (min-width: 1500px) {
 .log_debug, .log_info, .log_warn, .log_error, .log_crit, .log_omitted {
+  margin-bottom: -3px;
   min-width: 40px;
   max-width: 40px;
-  margin-bottom: -3px;
 }
 
 #servicelogs pre, #logs li {
@@ -5890,7 +5885,6 @@ font[color="#cc0000"] {
 }
 
 .log_crit {
-  background: rgba(140,0,0,.8);
   background: #900;
 }
 
@@ -5939,19 +5933,14 @@ font[color="#006600"] {
 /* info */
 
 font[color="#000099"], #servicelogs {
-  color: #660 !important;
-  color: #346 !important;
   color: #363 !important;
 }
 
 #logs li font[color="#000099"]::before {
-  background: #660;
-  background: #346;
   background: #363;
 }
 
 .log_info {
-  background: rgba(48,80,48,.8);
   background: #363;
 }
 
@@ -6033,9 +6022,9 @@ a[href^="configpeer?peer"] {
 }
 
 a[href^="configpeer?peer"]::after {
-  content: url(/themes/console/images/buttons/edit.png);
-  vertical-align: bottom;
   margin-left: 4px;
+  vertical-align: bottom;
+  content: url(/themes/console/images/buttons/edit.png);
 }
 
 a[href^="configpeer?peer"]:hover {
@@ -6186,7 +6175,6 @@ h3#bannedpeers {
   text-shadow: 0 1px 1px #000;
   border: 1px solid #121;
   box-shadow: 0 0 2px 2px rgba(0,0,0,.8), var(--lowlight), inset 0 0 2px 1px #040, inset 0 0 0 3px #000;
-  background: #000400;
   background: linear-gradient(to bottom, #000b00, #000600);
   box-sizing: border-box;
   -webkit-break-inside: avoid;
@@ -6223,7 +6211,6 @@ h3#bannedpeers {
 
 #banlist li hr {
   margin: 2px 0 2px -1px;
-  background: #121;
   background: linear-gradient(to right, #121 75%, rgba(0,0,0,0));
   opacity: .75;
 }
@@ -6241,7 +6228,6 @@ h3#bannedpeers {
   border-left: 1px solid #121;
   border-bottom: 1px solid #121;
   box-shadow: var(--lowlight), inset 0 0 1px 1px #040;
-  background: #000400;
   background: linear-gradient(to bottom, #000b00, #000600);
   filter: none;
 }
@@ -6298,9 +6284,9 @@ h3#bannedpeers {
 }
 
 #permabanned td:last-child {
-  text-align: left;
   padding-left: 10px;
   width: 49%;
+  text-align: left;
 }
 
 #banneduntilrestart td {
@@ -6309,26 +6295,26 @@ h3#bannedpeers {
 }
 
 #ipv4, #ipv6, #permabanned tr:nth-child(2) {
-  background: linear-gradient(to bottom, #002000, #000 75%) !important;
   border-top: 1px solid #252;
   border-bottom: 1px solid #252;
+  background: linear-gradient(to bottom, #002000, #000 75%) !important;
 }
 
 /* end /configpeers banlist */
 
 .footnote {
-  text-align: right;
-  color: #494;
-  font-size: 8pt;
   margin-bottom: 5px !important;
+  text-align: right;
+  font-size: 8pt;
+  color: #494;
 }
 
 .footnote hr {
   margin: 10px 0 5px 0 !important;
-  color: #494;
-  background: #252;
   height: 1px;
+  color: #494;
   border: 0 solid #252;
+  background: #252;
 }
 
 .footnote, .footnote hr {
@@ -6336,11 +6322,11 @@ h3#bannedpeers {
 }
 
 .topness {
-  font-size: 8pt;
-  text-align: right;
   margin-top: 0 !important;
-  margin-bottom: 10px;
   margin-right: 5px;
+  margin-bottom: 10px;
+  text-align: right;
+  font-size: 8pt;
 }
 
 #routerinfo p {
@@ -6355,10 +6341,10 @@ h3#bannedpeers {
 }
 
 #routerinfo a {
-  display: inline-block;
-  white-space: nowrap;
   margin: -3px 5px -3px 0 !important;
   padding: 3px 10px !important;
+  display: inline-block;
+  white-space: nowrap;
   font-size: smaller !important;
 }
 
@@ -6442,7 +6428,6 @@ div.app {
   text-align: center !important;
   border: 1px solid #252;
   opacity: .9;
-  background: #000;
   background: radial-gradient(circle at center -90px, rgba(0,96,0,.9), #000 60%), linear-gradient(to bottom, #000800, #000);
 }
 
@@ -6482,7 +6467,6 @@ div.app:hover, div.app:hover .applabel, div.app:hover .extlink::after, .sitemapL
 }
 
 div.app:hover, .sitemapLink:hover, .themechoice:hover, .langselect:hover {
-  background: #000;
   background: radial-gradient(circle at center -90px, rgba(255,96,0,.3), #000 70%), #000;
 }
 
@@ -7139,7 +7123,7 @@ h4 span[style="float: right;"] .unbold {
   padding: 15px 15px 15px 50px;
   text-align: left;
   border: 1px solid #252;
-  background: #000 url(images/infohelp.png) 12px center no-repeat;
+  background: #000 var(--infohelp) 12px center no-repeat;
 }
 
 #sybilnav, #sybils_summary {
@@ -7289,7 +7273,6 @@ p.threatpoints.hot {
 
 p.family {
   white-space: nowrap;
-  background: url(/themes/console/images/buttons/users.png) 8px center no-repeat;
   background: url(/themes/console/images/buttons/users.png) 8px center no-repeat, linear-gradient(to right, #000, #000800 80%, #001000);
   background-blend-mode: normal;
 }
@@ -7528,7 +7511,7 @@ textarea#advancedsettings {
   text-align: justify;
   border-bottom: 1px solid #252;
   border-top: 1px solid #252;
-  background: #000 url(images/infohelp.png) 12px center no-repeat !important;
+  background: #000 var(--infohelp) 12px center no-repeat !important;
   background-size: 28px !important;
 }
 
@@ -7567,7 +7550,7 @@ p.infowarn, td.infowarn {
   padding: 15px 15px 15px 50px;
   border: 1px solid #252;
   box-shadow: var(--lowlight), inset 0 0 2px 1px #900;
-  background: #000 url(images/infowarn.png) 12px center no-repeat !important;
+  background: #000 var(--infowarn) 12px center no-repeat !important;
   background-size: 28px !important;
 }
 
@@ -7762,7 +7745,7 @@ h3#i2pclientconfig {
 p#javaclienthelp {
   padding: 10px 10px 10px 50px !important;
   border: 1px solid #252;
-  background: url(images/infohelp.png) 12px center no-repeat !important;
+  background: var(--infohelp) 12px center no-repeat !important;
 }
 
 div#clientsconfig {
@@ -7784,7 +7767,6 @@ div#clientsconfig {
 th.th_title {
   padding: 8px 10px !important;
   text-align: left;
-  background: linear-gradient(to bottom, #1a261a,#223022 7%,#212f21 9%,#172317 21%,#091109 49%,#050d05 50%,#020602 51%,#010301 53%,#000000 56%,#000000) !important;
   background: linear-gradient(to bottom, rgba(0,0,0,0) 50%, #000 50%), var(--h3), var(--h3_fade) !important;
 }
 
@@ -8777,9 +8759,9 @@ th code {
 }
 
 .leasesets_container table {
+  -webkit-column-break-inside: avoid;
   break-inside: avoid;
   page-break-inside: avoid;
-  -webkit-column-break-inside: avoid;
 }
 
 .netdb_addresses {
@@ -8791,10 +8773,10 @@ th code {
 }
 
 .netdbentry th:first-child::after {
-  content: "";
-  display: inline-block;
   min-height: 20px;
+  display: inline-block;
   vertical-align: middle;
+  content: "";
 }
 
 .netdbentry th:last-child > *, .sybil_routerinfo th:nth-child(2) > * {
@@ -8817,8 +8799,8 @@ th code {
 
 .netdbentry td:first-child {
   padding-right: 5px !important;
-  text-align: right;
   min-width: 80px;
+  text-align: right;
 }
 
 .netdbentry td:first-child b {
@@ -8843,9 +8825,9 @@ th code {
 }
 
 .netdb_name {
-  color: #ee9;
   text-transform: capitalize;
   font-weight: bold;
+  color: #ee9;
 }
 
 .netdb_info {
@@ -8857,9 +8839,9 @@ th code {
 }
 
 .sybil_routerinfo th img[src^="/flags"] {
-  height: 11px;
-  width: 16px;
   margin-right: 5px;
+  width: 16px;
+  height: 11px;
 }
 
 .sybil_routerinfo b.netdb_transport {
@@ -8868,8 +8850,8 @@ th code {
 }
 
 .sybil_routerinfo td:first-child, .netdbentry td:first-child {
-  text-align: right !important;
   padding-right: 0;
+  text-align: right !important;
 }
 
 .sybil_routerinfo td[colspan="3"] {
@@ -8883,10 +8865,10 @@ th code {
 }
 
 .sybil_container p {
+  text-align: left;
+  -webkit-column-break-inside: avoid;
   break-inside: avoid;
   page-break-inside: avoid;
-  -webkit-column-break-inside: avoid;
-  text-align: left;
 }
 
 .sybil_container p:first-child {
@@ -8930,9 +8912,9 @@ th code {
   margin: 0 0 0 3px;
   padding: 0;
   line-height: 140%;
+  -webkit-column-break-inside: avoid;
   break-inside: avoid;
   page-break-inside: avoid;
-  -webkit-column-break-inside: avoid;
 }
 
 .sybilinfo_familyname {
@@ -9531,18 +9513,13 @@ td.optionsave {
 }
 
 @media screen and (max-width: 1220px) {
-/*#udpconnections tr:nth-last-child(n+3):hover td:nth-child(n+2) {
-  transform: scale(1.05);
-  text-align: center !important;
-}*/
+  .main#peers .widescroll td.cells {
+    font-size: 8pt !important;
+  }
 
-.main#peers .widescroll td.cells {
-  font-size: 8pt !important;
-}
-
-.main#help h3, #faq h3 {
-  font-size: 10pt !important;
-}
+  .main#help h3, #faq h3 {
+    font-size: 10pt !important;
+  }
 }
 
 @media screen and (max-width: 1500px) {
@@ -10903,7 +10880,7 @@ b.suboption {
 #manualreseed td.infohelp {
   padding: 15px 15px 15px 50px;
   box-shadow: var(--lowlight), inset 0 0 2px 1px #040 !important;
-  background: #000 url(images/infohelp.png) 12px center no-repeat !important;
+  background: #000 var(--infohelp) 12px center no-repeat !important;
 }
 
 #config_reseed #manualreseed .optionsingle table,
@@ -12592,11 +12569,13 @@ a[href^="/netdb"]:hover span {
 
 #netconfig td.infohelp, #reseedconfig td.infohelp {
   box-shadow: var(--lowlight), inset 0 0 1px 1px #040 !important;
-  background: #000 url(images/infohelp.png) 12px center no-repeat !important;
+  background: #000 var(--infohelp) 12px center no-repeat !important;
+  background-size: 32px !important;
 }
 
 #netconfig td.infowarn {
-  background: #000 url(images/infowarn.png) 12px center no-repeat !important;
+  background: #000 var(--infowarn) 12px center no-repeat !important;
+  background-size: 32px !important;
 }
 
 #manualreseed table tr, #newfamily tr:last-child table tr {
@@ -12780,7 +12759,7 @@ h1[class], h1 {
 
 .sitelink {
   padding: 0 3px 0 16px;
-  background: rgba(0,64,0,.3) url(/themes/console/images/info/url.png) 2px center no-repeat;
+  background: rgba(0,64,0,.3) var(--link) 2px center no-repeat;
   background-size: 12px, 100% !important;
 }
 
@@ -12802,7 +12781,7 @@ h1[class], h1 {
 }
 
 .sitelink:hover {
-  background: url(/themes/console/images/info/url.png) 2px center no-repeat, linear-gradient(to bottom, #020 50%, #000 50%);
+  background: var(--link) 2px center no-repeat, linear-gradient(to bottom, #020 50%, #000 50%);
 }
 
 .consolelink:hover {
@@ -12870,58 +12849,50 @@ h1[class], h1 {
 }
 
 #help_configuration {
-  background: #010 url(/themes/console/images/info/optimize.png) 15px center no-repeat;
-  background: url(/themes/console/images/info/optimize.png) 15px center no-repeat, linear-gradient(135deg, #000d00, #000900);
+  background: url(/themes/console/images/info/optimize.png) 15px center no-repeat, var(--helpbox);
 }
 
 #help_configadv {
-  background: #010 url(/themes/console/images/info/configure.png) 15px center no-repeat;
-  background: url(/themes/console/images/info/configure.png) 15px center no-repeat, linear-gradient(135deg, #000d00, #000900);
+  background: var(--configure) 15px center no-repeat, var(--helpbox);
+  background-size: 32px, 100%;
 }
 
 #help_ui {
-  background: #010 url(/themes/console/images/info/ui.png) 15px center no-repeat;
-  background: url(/themes/console/images/info/ui.png) 15px center no-repeat, linear-gradient(135deg, #000d00, #000900);
+  background: url(/themes/console/images/info/ui.png) 15px center no-repeat, var(--helpbox);
 }
 
 #help_reseed {
-  background: #010 url(/themes/console/images/info/connect.png) 15px center no-repeat;
-  background: url(/themes/console/images/info/connect.png) 15px center no-repeat, linear-gradient(135deg, #000d00, #000900);
+  background: url(/themes/console/images/info/connect.png) 15px center no-repeat, var(--helpbox);
 }
 
 #help_faq, #help_glossary {
-  background: #010 url(/themes/console/images/info/question.png) 15px center no-repeat;
-  background: url(/themes/console/images/info/question.png) 15px center no-repeat, linear-gradient(135deg, #000d00, #000900);
+  background: url(/themes/console/images/info/question.png) 15px center no-repeat, var(--helpbox);
 }
 
 #help_troubleshoot {
-  background: #010 url(/themes/console/images/wrench_orange.png) 15px center no-repeat;
-  background: url(/themes/console/images/wrench_orange.png) 15px center no-repeat, linear-gradient(135deg, #000d00, #000900);
+  background: url(/themes/console/images/wrench_orange.png) 15px center no-repeat, var(--helpbox);
 }
 
 #help_newusers {
-  background: #010 url(/themes/console/images/info/notice.png) 15px center no-repeat;
-  background: url(/themes/console/images/info/notice.png) 15px center no-repeat, linear-gradient(135deg, #000d00, #000900);
+  background: url(/themes/console/images/info/notice.png) 15px center no-repeat, var(--helpbox);
 }
 
 #help_legal {
-  background: #010 url(/themes/console/images/info/legal.png) 15px center no-repeat;
-  background: url(/themes/console/images/info/legal.png) 15px center no-repeat, linear-gradient(135deg, #000d00, #000900);
+  background: url(/themes/console/images/info/legal.png) 15px center no-repeat, var(--helpbox);
 }
 
 #help_changelog {
-  background: #010 url(/themes/console/images/info/logs.png) 15px center no-repeat;
-  background: url(/themes/console/images/info/logs.png) 15px center no-repeat, linear-gradient(135deg, #000d00, #000900);
+  background: url(/themes/console/images/info/logs.png) 15px center no-repeat, var(--helpbox);
 }
 
 #help_webhosting {
-  background: #010 url(/themes/console/images/server_32x32.png) 15px center no-repeat;
-  background: url(/themes/console/images/server_32x32.png) 15px center no-repeat, linear-gradient(135deg, #000d00, #000900);
+  background: var(--server) 15px center no-repeat, var(--helpbox);
+  background-size: 32px, 100%;
 }
 
 #configurationhelp h2, #advancedsettings h2, #filterlist h2 {
   padding-left: 38px;
-  background: url(/themes/console/images/info/configure.png) 10px center no-repeat, linear-gradient(to bottom, rgba(0,0,0,0) 50%, #000 50%), var(--h3), var(--h3_fade) !important;
+  background: var(--configure) 10px center no-repeat, linear-gradient(to bottom, rgba(0,0,0,0) 50%, #000 50%), var(--h3), var(--h3_fade) !important;
   background-size: 20px, 100%, 100%, 100% !important;
 }
 
@@ -12969,7 +12940,7 @@ h1[class], h1 {
 
 #webhosting h2 {
   padding-left: 38px;
-  background: url(/themes/console/images/server_32x32.png) 10px center no-repeat, linear-gradient(to bottom, rgba(0,0,0,0) 50%, #000 50%), var(--h3), var(--h3_fade) !important;
+  background: var(--server) 10px center no-repeat, linear-gradient(to bottom, rgba(0,0,0,0) 50%, #000 50%), var(--h3), var(--h3_fade) !important;
   background-size: 20px, 100%, 100%, 100% !important;
 }
 
@@ -13245,7 +13216,7 @@ table.search {
 }
 
 #sitemap h3:nth-of-type(3) {
-  background: url(/themes/console/images/info/configure.png) 8px center no-repeat, var(--h1) !important;
+  background: var(--configure) 8px center no-repeat, var(--h1) !important;
   background-size: 18px, 100%, 100%, 175px !important;
   background-blend-mode: var(--h3_blend) !important;
 }
