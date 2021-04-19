@@ -14496,7 +14496,7 @@ h1, .main h2, h4.app, h4.app2, .main h3 {
 }
 
 #profilelist .lazy.lazyshow td {
-  visibility: show;
+  visibility: visible;
 }
 
 .lazy.lazyhide, #profilelist .lazy.lazyhide td, #tunnels .lazy.lazyhide td {

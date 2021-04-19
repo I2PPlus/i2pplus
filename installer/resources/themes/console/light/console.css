@@ -13499,7 +13499,7 @@ div.app:not(:hover) a:not(:hover):not(:focus):not(:active):visited,
 }
 
 #profilelist .lazy.lazyshow td {
-  visibility: show;
+  visibility: visible;
 }
 
 .lazy.lazyhide, #profilelist .lazy.lazyhide td, #tunnels .lazy.lazyhide td {

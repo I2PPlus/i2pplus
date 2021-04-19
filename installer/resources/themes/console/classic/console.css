@@ -12394,7 +12394,7 @@ from {
 }
 
 #profilelist .lazy.lazyshow td {
-  visibility: show;
+  visibility: visible;
 }
 
 .lazy.lazyhide, #profilelist .lazy.lazyhide td, #tunnels .lazy.lazyhide td {
