@@ -56,16 +56,14 @@
           xhr.open('GET', uri + '?t=' + new Date().getTime(), true);
         xhr.onreadystatechange = function () {
           if (xhr.readyState==4 && xhr.status==200) {
-            var updating = document.getElementsByClassName("lazy");
-            var updatingResponse = xhr.responseXML.getElementsByClassName("lazy");
-            var i;
-            for (i = 0; i < updating.length; i++) {
-              updating[i].innerHTML = updatingResponse[i].innerHTML;
-            }
             var info = document.getElementById("profiles_overview");
             if (info) {
               var infoResponse = xhr.responseXML.getElementById("profiles_overview");
                 info.innerHTML = infoResponse.innerHTML;
+            }
+            if (profilelist) {
+              var profilelistResponse = xhr.responseXML.getElementById("profilelist");
+                profilelist.innerHTML = profilelistResponse.innerHTML;
             }
             var thresholds = document.getElementById("thresholds");
             if (thresholds) {
