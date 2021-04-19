@@ -24,6 +24,10 @@ body {
   background-size: 32px 32px;
 }
 
+.routersummary, h1, .main, iframe {
+  contain: layout;
+}
+
 .main {
   scrollbar-color: #8d8daa rgba(255,255,255,.4);
 }
@@ -8487,7 +8491,7 @@ p.sybil_info + a[name] + table.sybil_routerinfo, p.hashdist + a[name] + table.sy
   margin-top: -22px;
 }
 
-#profilelist tr:hover td, #floodfills tr:hover td, #ntcpconnections tr:nth-last-child(n+2):hover td, #udpconnections tr:nth-last-child(n+2):hover td,
+#profilelist tr:not(.lazyhide):hover td, #floodfills tr:hover td, #ntcpconnections tr:nth-last-child(n+2):hover td, #udpconnections tr:nth-last-child(n+2):hover td,
 #schedjobs tr:hover td, #jobstats tr:nth-last-child(n+2):hover td, #jardump tr:hover td, #sidebarconf tr:nth-last-child(n+2):hover td, #eventlog tr:hover td,
 #netdboverview table tr:hover td, #debug tr:hover td, #clientconfig tr:hover td, #webappconfig tr:hover td, #portfaq tr:hover td, .tunneldisplay tr:hover td {
   background-color: #ffd !important;
@@ -13495,7 +13499,6 @@ div.app:not(:hover) a:not(:hover):not(:focus):not(:active):visited,
   visibility: visible;
   opacity: 1;
   transition: ease opacity .4s;
-  contain: layout paint;
 }
 
 #profilelist .lazy.lazyshow td {

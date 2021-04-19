@@ -67,6 +67,10 @@ body#proxy_error {
   background: linear-gradient(to bottom, #001, #000);
 }
 
+.routersummary, h1, .main, iframe {
+  contain: layout;
+}
+
 small {
   font-size: 9pt;
 }
@@ -14492,7 +14496,6 @@ h1, .main h2, h4.app, h4.app2, .main h3 {
   visibility: visible;
   opacity: 1;
   transition: ease opacity .4s;
-  contain: layout paint;
 }
 
 #profilelist .lazy.lazyshow td {

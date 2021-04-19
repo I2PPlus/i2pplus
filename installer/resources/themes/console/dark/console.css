@@ -87,6 +87,10 @@ body {
   background: rgba(0,187,0,.8) !important;
 }
 
+.routersummary, h1, .main, iframe {
+  contain: layout;
+}
+
 .main * {
   scrollbar-color: rgba(16,48,16,.4) rgba(0,0,0,0);
   transition: ease scrollbar-color .5s;
@@ -14630,11 +14634,10 @@ h1, .main h2, h4.app, h4.app2, .main h3 {
   visibility: visible;
   opacity: 1;
   transition: ease opacity .4s;
-  contain: layout paint;
 }
 
 #profilelist .lazy.lazyshow td {
-  visibility: visible;
+  visibility: show;
 }
 
 .lazy.lazyhide, #profilelist .lazy.lazyhide td, #tunnels .lazy.lazyhide td {
