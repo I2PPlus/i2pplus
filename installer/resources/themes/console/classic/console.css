@@ -12393,7 +12393,7 @@ from {
 .lazy.lazyshow, #profilelist .lazy.lazyshow td, #tunnels .lazy.lazyshow td {
   visibility: visible;
   opacity: 1;
-  transition: ease opacity .4s;
+  transition: ease opacity .15s;
 }
 
 #profilelist .lazy.lazyshow td {
@@ -12401,7 +12401,6 @@ from {
 }
 
 .lazy.lazyhide, #profilelist .lazy.lazyhide td, #tunnels .lazy.lazyhide td {
-  animation: ease bounce .5s;
   opacity: 0;
 }
 
@@ -12409,17 +12408,7 @@ from {
   opacity: 1;
 }
 
-#profilelist .lazy.lazyshow td, #tunnels .lazy.lazyshow td {
-  visibility: hide;
-}
-
 .leasesets_container .lazy.lazyhide {
   visibility: visible;
   opacity: 1;
-  animation: none;
-}
-
-@keyframes bounce {
-  from {visibility: hidden}
-  to {visibility: visible}
 }

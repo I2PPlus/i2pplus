@@ -13498,7 +13498,7 @@ div.app:not(:hover) a:not(:hover):not(:focus):not(:active):visited,
 .lazy.lazyshow, #profilelist .lazy.lazyshow td, #tunnels .lazy.lazyshow td {
   visibility: visible;
   opacity: 1;
-  transition: ease opacity .4s;
+  transition: ease opacity .15s;
 }
 
 #profilelist .lazy.lazyshow td {
@@ -13506,7 +13506,6 @@ div.app:not(:hover) a:not(:hover):not(:focus):not(:active):visited,
 }
 
 .lazy.lazyhide, #profilelist .lazy.lazyhide td, #tunnels .lazy.lazyhide td {
-  animation: ease bounce .5s;
   opacity: 0;
 }
 
@@ -13514,17 +13513,7 @@ div.app:not(:hover) a:not(:hover):not(:focus):not(:active):visited,
   opacity: 1;
 }
 
-#profilelist .lazy.lazyshow td, #tunnels .lazy.lazyshow td {
-  visibility: hide;
-}
-
 .leasesets_container .lazy.lazyhide {
   visibility: visible;
   opacity: 1;
-  animation: none;
-}
-
-@keyframes bounce {
-  from {visibility: hidden}
-  to {visibility: visible}
 }
