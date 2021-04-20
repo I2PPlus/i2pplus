@@ -22,6 +22,7 @@
   --txtinput: linear-gradient(to bottom, #001800, #001000);
   --vstripe: repeating-linear-gradient(to bottom, rgba(0,0,0,.9) 2px, rgba(0,16,0,.9) 4px);
   --helpbox: linear-gradient(135deg, #000d00, #000900);
+  --border: 1px solid #242;
 }
 
 html {
@@ -188,7 +189,7 @@ pre {
   position: relative;
   text-align: center;
   font-size: 10pt;
-  border: 1px solid #252;
+  border: var(--border);
   box-shadow: inset 0 0 3px 3px #000;
   background: #000 var(--camotile);
   background: repeating-linear-gradient(to bottom, rgba(0,16,0,.5) 2px, rgba(0,16,0,.5) 4px), var(--camotile);
@@ -244,7 +245,7 @@ pre {
   margin: 20px 20px 20px 248px;
   padding: 10px 30px 20px 100px;
   min-width: 300px;
-  border: 1px solid #252;
+  border: var(--border);
   word-wrap: break-word;
   text-align: justify;
   font-size: 10pt;
@@ -464,7 +465,7 @@ pre {
   width: 194px;
   text-align: center;
   font-size: 8pt;
-  border: 1px solid #252;
+  border: var(--border);
   border-radius: 3px;
   box-shadow: 0 1px 5px #000;
   background: var(--vstripe), var(--camo), #000;
@@ -792,7 +793,7 @@ pre {
 #sb_warning {
   margin-left: -10px !important;
   margin-right: -10px !important;
-  border-bottom: 1px solid #252 !important;
+  border-bottom: var(--border) !important;
 }
 
 #sb_warning a {
@@ -998,7 +999,7 @@ div.refresh {
   padding: 5px 2px;
   line-height: 130% !important;
   font-style: italic;
-  border-bottom: 1px solid #252;
+  border-bottom: var(--border);
   box-shadow: var(--lowlight), inset 0 0 2px 1px #030;
 }
 
@@ -1074,7 +1075,7 @@ a:active img[src="/themes/console/images/i2plogo.png"] {
   word-wrap: break-word;
   text-align: justify;
   font-size: 10pt;
-  border: 1px solid #252;
+  border: var(--border);
   border-radius: 0 0 4px 4px;
   box-shadow: inset 0 0 0 1px #700;
   background: #010;
@@ -1155,6 +1156,10 @@ a:active img[src="/themes/console/images/i2plogo.png"] {
 
 /* main section */
 
+.routersummary, .main, h1, .confignav, .tab, .tab2 {
+  border: 1px solid #252;
+}
+
 .main {
   margin: -1px 5px 5px 226px;
   padding: 0 10px 1px 10px;
@@ -1163,7 +1168,6 @@ a:active img[src="/themes/console/images/i2plogo.png"] {
   min-width: 620px;
   font-size: 9pt;
   text-align: left;
-  border: 1px solid #252;
   border-radius: 0 0 3px 3px;
   box-shadow: var(--lowlight), 0 1px 5px #000;
   box-shadow: 0 1px 5px #000;
@@ -1265,7 +1269,7 @@ div.news {
   min-width: 620px !important;
   font-size: 8pt;
   text-align: right;
-  border: 1px solid #252;
+  border: var(--border);
   box-shadow: 0 1px 5px #000;
   background: #000800 url(images/news.png) no-repeat scroll bottom right;
   background: linear-gradient(to bottom, rgba(0,0,0,.3), rgba(0,0,0,.5)), url(images/news.png) no-repeat scroll right bottom, repeating-linear-gradient(to bottom, rgba(0,0,0,.8) 2px, rgba(0,16,0,.8) 4px), var(--camo), #000 !important;
@@ -1421,7 +1425,6 @@ div.widescroll { /* only scroll content, not entire page eg /peers */
 .confignav {
   margin: -1px -11px -1px;
   padding: 7px 7px 8px !important;
-  border: 1px solid #252;
   font-weight: bold !important;
   line-height: 136% !important;
   text-align: center;
@@ -1446,7 +1449,6 @@ div.widescroll { /* only scroll content, not entire page eg /peers */
   display: inline-block;
   position: relative;
   box-sizing: border-box;
-  border: 1px solid #252;
   background: #000;
 }
 
@@ -1537,7 +1539,7 @@ h1 {
 div.messages {
   margin: 12px 0 -1px 0;
   padding: 20px 10px 20px 50px;
-  border: 1px solid #252;
+  border: var(--border);
   font-weight: bold;
   font-size: 9.5pt;
   color: #2b2 !important;
@@ -1691,13 +1693,13 @@ div#graphs {
   padding: 10px 10px 15px;
   text-align: center;
   text-transform: capitalize;
-  border-top: 1px solid #252;
+  border-top: var(--border);
 }
 
 #graphopts {
   margin: 30px -10px -1px !important;
   padding: 10px;
-  border-top: 1px solid #252;
+  border-top: var(--border);
   text-align: center;
   background: #010;
   background: rgba(0,16,0,.5);
@@ -1727,7 +1729,7 @@ h3#graphinfo {
   word-spacing: normal;
   letter-spacing: normal;
   text-transform: capitalize;
-  border: 1px solid #252;
+  border: var(--border);
   border-radius: 0 !important;
 }
 
@@ -1746,7 +1748,7 @@ h3#graphdisplay a {
 
 form[action="updategraphs"] {
   margin: -11px -11px -18px;
-  border: 1px solid #252;
+  border: var(--border);
   border-radius: 0 0 3px 3px;
   background: #000;
 }
@@ -1819,7 +1821,7 @@ table {
   padding: 1px;
   width: 100%;
   font-size: 9pt;
-  border: 1px solid #252;
+  border: var(--border);
   border-collapse: collapse;
 }
 
@@ -1829,7 +1831,7 @@ table hr {
   height: 1px;
   display: none;
   color: #494;
-  border: 0 solid #252;
+  border: none;
   background: #252;
 }
 
@@ -1838,8 +1840,8 @@ th {
   line-height: 110%;
   text-align: center;
   font-size: 9pt;
-  border-top: 1px solid #252;
-  border-bottom: 1px solid #252 !important;
+  border-top: var(--border);
+  border-bottom: var(--border) !important;
   background: linear-gradient(to bottom, #002000, #000 75%);
 }
 
@@ -2142,7 +2144,6 @@ h1 {
   font-weight: bold;
   font-style: normal;
   text-shadow: 0 0 1px #000, 0 0 2px #040, 0 0 3px #000 !important;
-  border: 1px solid #252;
   border-radius: 3px 3px 0 0;
   box-shadow: 0 1px 5px #000;
 }
@@ -2180,7 +2181,7 @@ h2, h2.welcome {
   text-transform: uppercase;
   font-size: 12pt;
   text-shadow: 0 0 2px #010;
-  border: 1px solid #252;
+  border: var(--border);
   border-radius: 2px;
 }
 
@@ -2193,7 +2194,7 @@ h2 a:hover {
 }
 
 h3, h3.welcome {
-  border: 1px solid #252;
+  border: var(--border);
   border-left: 5px solid #252;
   padding: 7px 10px;
   margin: 12px 0 10px 0;
@@ -3147,11 +3148,11 @@ h3#totaljobstats {
 
 form#statnav {
   padding: 10px 10px 10px 15px;
-  border: 1px solid #252 !important;
+  border: var(--border) !important;
 }
 
 h3.stats {
-  border: 1px solid #252;
+  border: var(--border);
   border-radius: 0;
 }
 
@@ -3171,7 +3172,7 @@ ul.statlist {
   margin: -11px 0 -31px !important;
   padding: 10px 0 0;
   color: #bb7;
-  border: 1px solid #252;
+  border: var(--border);
   background: #000;
 }
 
@@ -3445,8 +3446,8 @@ form[action="events"] {
 }
 
 .tablefooter {
-  border-top: 1px solid #252 !important;
-  border-bottom: 1px solid #252 !important;
+  border-top: var(--border) !important;
+  border-bottom: var(--border) !important;
   line-height: 140%;
   background: linear-gradient(to bottom, #002000, #000 75%) !important;
 }
@@ -3531,7 +3532,7 @@ h3[id="udpcon"] {
 }
 
 #udpconnections .tablefooter:hover td {
-  border-top: 1px solid #252;
+  border-top: var(--border);
 }
 
 #udpconnections .tablefooter td:first-child {
@@ -3572,7 +3573,7 @@ h3[id="udpcon"] {
 }
 
 pre#transports {
-  border: 1px solid #252 !important;
+  border: var(--border) !important;
   padding: 15px 5px 5px 15px;
   margin: 0 20px 0 0;
   background: #000;
@@ -3645,7 +3646,7 @@ a[name="chelp"]:hover, a[name="help"]:hover, a[name="chelp"]:active, a[name="hel
 }
 
 .formaction#homeapps, .formaction#homesites, .formaction#tunnelconfigsave, .formaction#homesearch, .formaction#sidebardefaults {
-  border: 1px solid #252;
+  border: var(--border);
   padding: 5px;
   background: #000;
   margin-top: -2px;
@@ -3656,7 +3657,7 @@ a[name="chelp"]:hover, a[name="help"]:hover, a[name="chelp"]:active, a[name="hel
   padding: 5px;
   position: relative;
   z-index: 10;
-  border: 1px solid #252;
+  border: var(--border);
 }
 
 .formaction#homesearch {
@@ -3664,7 +3665,7 @@ a[name="chelp"]:hover, a[name="help"]:hover, a[name="chelp"]:active, a[name="hel
 }
 
 tr#addnew, tr#addnew:hover {
-  border-top: 1px solid #252;
+  border-top: var(--border);
   background: #000800;
 }
 
@@ -3675,7 +3676,7 @@ tr#addnew, tr#addnew:hover {
   width: 140px;
   float: left;
   text-align: center;
-  border: 1px solid #252;
+  border: var(--border);
   background: #000;
   background: radial-gradient(circle at center -90px, rgba(0,96,0,.9), #000 60%), linear-gradient(to bottom, #010, #000 80%);
 }
@@ -3771,8 +3772,8 @@ tr#addnew, tr#addnew:hover {
   position: relative;
   top: 8px;
   clear: both;
-  border-top: 1px solid #252;
-  border-bottom: 1px solid #252;
+  border-top: var(--border);
+  border-bottom: var(--border);
   background: #000800;
 }
 
@@ -3792,8 +3793,8 @@ p#helptranslate {
   position: relative;
   top: 8px;
   text-align: left !important;
-  border-top: 1px solid #252;
-  border-bottom: 1px solid #252;
+  border-top: var(--border);
+  border-bottom: var(--border);
   background: #000 url(/themes/console/images/info/notice.png) left 14px center no-repeat;
   background-size: 28px !important;
 }
@@ -3815,7 +3816,7 @@ p#helptranslate {
   text-overflow: ellipsis;
   line-height: 150%;
   color: #bb7;
-  border-top: 1px solid #252 !important;
+  border-top: var(--border) !important;
   background: #001000;
   background: linear-gradient(to bottom, #001000, #001900 50%, #000 51%, #000);
 }
@@ -3827,14 +3828,14 @@ h3#themeheading, h3#langheading, h3#passwordheading {
   word-spacing: .1em;
   font-size: 10.5pt;
   border-radius: 0;
-  border: 1px solid #252;
+  border: var(--border);
   background: #000;
   background: linear-gradient(to right, #000, #001000 70%, #001300 90%);
 }
 
 #themesettings {
   clear: both;
-  border: 1px solid #252;
+  border: var(--border);
   padding: 8px 7px 0;
   margin: -1px 0;
   background: #000;
@@ -3846,7 +3847,7 @@ h3#themeheading, h3#langheading, h3#passwordheading {
 
 td#themeselect {
   clear: both;
-  border: 1px solid #252;
+  border: var(--border);
   padding: 8px 7px 0;
   margin: -1px 0;
 }
@@ -4003,7 +4004,7 @@ div.ui_lang { /* lang text label */
   text-overflow: ellipsis;
   color: #bb7;
   text-transform: capitalize;
-  border-top: 1px solid #252;
+  border-top: var(--border);
   border-radius: 0 0 2px 2px;
 }
 
@@ -4021,7 +4022,7 @@ div#langsettings {
   margin-top: -1px;
   margin-bottom: -12px;
   padding: 8px 7px 12px;
-  border: 1px solid #252;
+  border: var(--border);
   background: #000;
 }
 
@@ -4032,7 +4033,7 @@ div#langsettings {
 .formaction#langui {
   margin: 7px -8px -15px;
   padding: 5px;
-  border: 1px solid #252;
+  border: var(--border);
   background: #000;
 }
 
@@ -4062,7 +4063,7 @@ h3#passwordheading {
 
 #consolepass td {
   padding: 5px 10px;
-  border-bottom: 1px solid #252;
+  border-bottom: var(--border);
 }
 
 #consolepass input {
@@ -4090,7 +4091,7 @@ td#pw_adduser input {
   margin-bottom: -1px !important;
   margin-top: -2px;
   padding: 5px;
-  border: 1px solid #252;
+  border: var(--border);
   background: #000;
 }
 
@@ -4113,7 +4114,7 @@ form[action="/createreseed"] > h3 {
   letter-spacing: .08em;
   font-size: 10.5pt;
   border-radius: 0;
-  border: 1px solid #252;
+  border: var(--border);
   background: linear-gradient(to right, #000, #001000 70%, #001300 90%);
 }
 
@@ -4179,7 +4180,7 @@ form[action="/createreseed"] > h3 {
   margin-top: -12px;
   margin-bottom: 5px;
   padding: 5px;
-  border: 1px solid #252;
+  border: var(--border);
   background: #000;
 }
 
@@ -4206,7 +4207,7 @@ p#upnpconfig, p#ipchange, p#ipv6config, p#tcpconfig, p#confignotes, p#defaultswo
   margin-top: -12px;
   margin-bottom: -13px;
   padding: 10px;
-  border: 1px solid #252;
+  border: var(--border);
 }
 
 p#defaultswork {
@@ -4221,7 +4222,7 @@ p#confignotes {
 
 p#ipconfig, p#ipv4config, p#udpconfig, p#externaltcp {
   padding: 10px;
-  border: 1px solid #252;
+  border: var(--border);
   border-bottom: none;
   background: #001000;
 }
@@ -4323,7 +4324,7 @@ form[action="events"] > .formaction {
 }
 
 #addkeyring tr:last-child {
-  border-top: 1px solid #252;
+  border-top: var(--border);
   background: #000;
 }
 
@@ -4339,7 +4340,7 @@ form[action="events"] > .formaction {
 p#keyringhelp, p#webappconfig, p#availableplugins, p#pluginconfigtext, p#clientdefaultshelp, p#bwshare, p#editclients, p#upnpstatus, p#gatherstats {
   padding: 15px 15px 15px 50px;
   background: #000 var(--infohelp) 12px center no-repeat;
-  border: 1px solid #252;
+  border: var(--border);
 }
 
 p#gatherstats {
@@ -4426,7 +4427,7 @@ input[name="ff"] + br + input[name="ff"] + br {
 input[type="hidden"] + p {
   margin-bottom: -21px;
   padding: 10px;
-  border: 1px solid #252;
+  border: var(--border);
   background: #000;
 }
 
@@ -4434,7 +4435,7 @@ form[action="configclients"]:first-child > input[type="hidden"] + p {
   margin-top: -1px !important;
   margin-bottom: -21px;
   padding: 10px;
-  border: 1px solid #252;
+  border: var(--border);
   background: #000;
 }
 
@@ -4442,7 +4443,7 @@ input[type="hidden"] + p + p {
   margin-top: 20px;
   margin-bottom: -21px;
   padding: 10px;
-  border: 1px solid #252;
+  border: var(--border);
   background: #001000;
 }
 
@@ -4654,7 +4655,7 @@ input[name="logfilename"], input[name="logformat"], input[name="logdateformat"],
 
 #sidebarconf tr:last-child {
   background: #000;
-  border-top: 1px solid #252;
+  border-top: var(--border);
 }
 
 #sidebarconf tr:last-child td:last-child {
@@ -4716,7 +4717,7 @@ h3#servicedebug + p + p {
   margin-top: 20px;
   margin-bottom: -21px;
   padding: 10px;
-  border: 1px solid #252;
+  border: var(--border);
   border-bottom: none;
   background: #001000;
 }
@@ -4798,12 +4799,12 @@ h3#servicedebug a, h3#graphinfo a {
 #tunnels h3 img, #tunnels h3 a:first-child {
   margin: -8px 0 -8px 0;
   padding: 11px 8px;
-  border-left: 1px solid #252;
+  border-left: var(--border);
 }
 
 #tunnels h3 img:first-of-type {
   margin-left: -1px;
-  border-right: 1px solid #252;
+  border-right: var(--border);
 }
 
 #tunnels h3 a:first-child {
@@ -4997,7 +4998,7 @@ h4.app2 a::after {
 }
 
 .formaction#clientsconfig, .formaction#webappconfigactions, .formaction#pluginconfigactions {
-  border: 1px solid #252;
+  border: var(--border);
   padding: 5px;
   background: #000;
   margin-bottom: -4px;
@@ -5113,7 +5114,7 @@ h4.app2 a::after {
   border-radius: 0;
   margin: 0 -21px 10px !important;
   background: linear-gradient(to right, #000, #001000 70%, #001300 90%);
-  border: 1px solid #252;
+  border: var(--border);
 }
 
 #changelog h2 {
@@ -5513,7 +5514,7 @@ th > img[src^="/imagegen"], .identicon { /* scale down header images */
 .subheading {
   padding: 10px;
   text-align: left !important;
-  border: 1px solid #252;
+  border: var(--border);
   background: #000;
 }
 
@@ -5717,7 +5718,7 @@ img.unknownflag {
 
 #criticallogs ul { /* tidy router logs ul */
   margin: -6px -11px !important;
-  border: 1px solid #252;
+  border: var(--border);
 }
 
 #criticallogs ul:empty {
@@ -5767,7 +5768,7 @@ img.unknownflag {
 #criticallogs td , #routerlogs td, #eventlogs td, #wrapperlogs td {
   padding: 5px 10px;
   font-weight: normal !important;
-  border-top: 1px solid #252;
+  border-top: var(--border);
 }
 
 #criticallogs tr:first-child {
@@ -6065,8 +6066,8 @@ a[href^="configpeer?peer"]:hover {
 #capabilities_key table {
   margin: 0 !important;
   border: none;
-  border-top: 1px solid #252;
-  border-bottom: 1px solid #252;
+  border-top: var(--border);
+  border-bottom: var(--border);
 }
 
 #capabilities_key table td {
@@ -6152,7 +6153,7 @@ h3#bannedpeers {
   columns: 328px auto;
   column-gap: 8px;
   column-rule: 1px dotted #131;
-  border: 1px solid #252;
+  border: var(--border);
   background: none;
 }
 
@@ -6267,7 +6268,7 @@ h3#bannedpeers {
 }
 
 #bannedips table tr:last-child {
-  border-bottom: 1px solid #252;
+  border-bottom: var(--border);
 }
 
 #permabanned, #banneduntilrestart {
@@ -6279,7 +6280,7 @@ h3#bannedpeers {
   padding-right: 10px;
   width: 49%;
   text-align: right;
-  border-left: 1px solid #252;
+  border-left: var(--border);
 }
 
 #permabanned td:nth-child(2) {
@@ -6293,13 +6294,13 @@ h3#bannedpeers {
 }
 
 #banneduntilrestart td {
-  border-right: 1px solid #252;
+  border-right: var(--border);
   text-align: center !important;
 }
 
 #ipv4, #ipv6, #permabanned tr:nth-child(2) {
-  border-top: 1px solid #252;
-  border-bottom: 1px solid #252;
+  border-top: var(--border);
+  border-bottom: var(--border);
   background: linear-gradient(to bottom, #002000, #000 75%) !important;
 }
 
@@ -6354,7 +6355,7 @@ h3#bannedpeers {
 #routerinfo td {
   padding: 8px 4px;
   width: 25%;
-  border-bottom: 1px inset #252;
+  border-bottom: 1px solid #242;
 }
 
 #routerinfo td:first-child, #routerinfo td:nth-child(3) {
@@ -6364,7 +6365,7 @@ h3#bannedpeers {
 
 #routerinfo td:nth-child(2):not([colspan]) {
   white-space: nowrap;
-  border-right: 1px inset #252;
+  border-right: 1px solid #242;
 }
 
 /* home page */
@@ -6404,7 +6405,7 @@ h3#bannedpeers {
 h4.app, h4.app2 {
   margin: 11px -6px -9px;
   padding: 7px 8px 7px 28px !important;
-  border: 1px solid #252;
+  border: var(--border);
   font-size: 10.5pt;
   font-variant: small-caps;
   text-transform: uppercase;
@@ -6429,7 +6430,7 @@ div.app {
   min-width: 70px;
   float: left;
   text-align: center !important;
-  border: 1px solid #252;
+  border: var(--border);
   opacity: .9;
   background: radial-gradient(circle at center -90px, rgba(0,96,0,.9), #000 60%), linear-gradient(to bottom, #000800, #000);
 }
@@ -6670,7 +6671,7 @@ div.app:hover .applabel, .sitemapLink:hover .sitemapLabel,
   font-size: 8.5pt;
   color: #494;
   border: none;
-  border-top: 1px solid #252;
+  border-top: var(--border);
   border-radius: 0 0 2px 2px;
 }
 
@@ -6908,7 +6909,7 @@ table:not(:first-of-type).netdbentry th:first-child, table:not(:first-of-type).n
   padding: 8px 10px;
   letter-spacing: .08em;
   font-size: 10pt;
-  border: 1px solid #252;
+  border: var(--border);
   background: linear-gradient(to right, #000, #001000);
 }
 
@@ -6931,7 +6932,7 @@ table:not(:first-of-type).netdbentry th:first-child, table:not(:first-of-type).n
 .main#certs p:not(.infohelp) {
   margin-top: -1px;
   padding: 10px;
-  border: 1px solid #252;
+  border: var(--border);
   background: #000;
 }
 
@@ -7125,7 +7126,7 @@ h4 span[style="float: right;"] .unbold {
   margin-bottom: 10px;
   padding: 15px 15px 15px 50px;
   text-align: left;
-  border: 1px solid #252;
+  border: var(--border);
   background: #000 var(--infohelp) 12px center no-repeat;
 }
 
@@ -7147,7 +7148,7 @@ h4 span[style="float: right;"] .unbold {
   margin: -12px -11px 10px;
   padding: 6px 5px;
   overflow: hidden;
-  border: 1px solid #252 !important;
+  border: var(--border) !important;
   box-shadow: var(--lowlight), inset 0 0 2px 1px #030;
   columns: 5 200px;
   column-gap: 4px;
@@ -7251,7 +7252,7 @@ p.sybil_info, p.family, p.threatpoints, p.hashdist, p#sybil_totals, p.notfound {
   padding: 5px 5px 5px 33px;
   font-weight: bold;
   color: #cc0;
-  border: 1px solid #252;
+  border: var(--border);
   box-shadow: inset 0 0 0 1px #300;
   background: var(--eye) 8px center no-repeat, linear-gradient(to right, #000, #000800 80%, #001000);
   background-size: 16px, 100%;
@@ -7454,7 +7455,7 @@ h3#iptransport a:hover::after, h3#advancedconfig a:hover::after, #reseedsetup a:
 #logs h3 a {
   margin: -8px 0;
   padding: 8px 2px 8px 10px;
-  border-left: 1px solid #252;
+  border-left: var(--border);
 }
 
 #logs h3 + table {
@@ -7468,7 +7469,7 @@ h3#iptransport a:hover::after, h3#advancedconfig a:hover::after, #reseedsetup a:
 }
 
 .configtable tr:last-child {
-  border-top: 1px solid #252;
+  border-top: var(--border);
 }
 
 #netconfig th, #externali2cp th, #plugininstall th, #plugininstall2 th, .configtable th, th.th_title {
@@ -7512,8 +7513,8 @@ textarea#advancedsettings {
   white-space: normal !important;
   font-weight: normal !important;
   text-align: justify;
-  border-bottom: 1px solid #252;
-  border-top: 1px solid #252;
+  border-bottom: var(--border);
+  border-top: var(--border);
   background: #000 var(--infohelp) 12px center no-repeat !important;
   background-size: 28px !important;
 }
@@ -7545,13 +7546,13 @@ table.logtable, #logs #enviro {
 }
 
 p.infohelp, p#debugmode, p.sybilinfo, p#gatherstats, #bugreports td.infohelp {
-  border: 1px solid #252;
+  border: var(--border);
   box-shadow: var(--lowlight), inset 0 0 2px 1px #040, inset 0 0 0 3px #000;
 }
 
 p.infowarn, td.infowarn {
   padding: 15px 15px 15px 50px;
-  border: 1px solid #252;
+  border: var(--border);
   box-shadow: var(--lowlight), inset 0 0 2px 1px #900;
   background: #000 var(--infowarn) 12px center no-repeat !important;
   background-size: 28px !important;
@@ -7564,7 +7565,7 @@ p.infowarn, td.infowarn {
 td.optionsave {
   padding: 5px !important;
   text-align: right;
-  border-top: 1px solid #252;
+  border-top: var(--border);
   background: #000;
 }
 
@@ -7578,7 +7579,7 @@ h3#updateplugins, h3#pluginmanage, h3#bannedpeers, h3.ptitle, h3#transports, h3#
   padding: 8px 10px;
   letter-spacing: .08em;
   text-transform: uppercase;
-  border: 1px solid #252;
+  border: var(--border);
   border-radius: 0;
 }
 
@@ -7604,13 +7605,13 @@ h3#upnpstatus {
 }
 
 h3#upnp {
-  border: 1px solid #252;
+  border: var(--border);
 }
 
 #upnpscan {
   margin: -11px 0 10px;
   padding: 0 15px 5px;
-  border: 1px solid #252;
+  border: var(--border);
   background: #000;
 }
 
@@ -7747,7 +7748,7 @@ h3#i2pclientconfig {
 
 p#javaclienthelp {
   padding: 10px 10px 10px 50px !important;
-  border: 1px solid #252;
+  border: var(--border);
   background: var(--infohelp) 12px center no-repeat !important;
 }
 
@@ -7790,7 +7791,7 @@ input#hideme {
   margin-top: -11px;
   margin-bottom: 10px !important;
   padding: 15px 5px 15px 50px;
-  border: 1px solid #252;
+  border: var(--border);
   background: url(/themes/console/images/info/update.png) 12px center no-repeat, #000;
   background-size: 28px;
 }
@@ -7811,7 +7812,7 @@ h4.embeddedtitle#updateplugins {
   text-transform: uppercase;
   text-align: left;
   font-size: 10pt;
-  border: 1px solid #252;
+  border: var(--border);
   background: linear-gradient(to bottom, #002000, #000 75%) !important;
 }
 
@@ -7882,7 +7883,7 @@ h4.embeddedtitle#updateplugins {
 }
 
 #configstats td:last-child {
-  border-right: 1px solid #252;
+  border-right: var(--border);
 }
 
 #configstats tr {
@@ -7915,7 +7916,7 @@ h4.embeddedtitle#updateplugins {
 p#enablefullstats {
   margin-top: 5px;
   padding: 5px 10px;
-  border: 1px solid #252;
+  border: var(--border);
 }
 
 /* infohelp/warn overrides and misc ornamentation */
@@ -9041,7 +9042,7 @@ th code {
 
 .debug_container {
   margin-top: -11px;
-  border: 1px solid #252;
+  border: var(--border);
   padding: 10px 15px;
   background: #000800;
 }
@@ -10624,7 +10625,7 @@ b.suboption {
 }
 
 #i2pupdates .optionsave {
-  border-bottom: 1px solid #252;
+  border-bottom: var(--border);
 }
 
 #i2pupdates textarea {
@@ -10747,7 +10748,7 @@ b.suboption {
 }
 
 #manualreseed th:last-child, #manualreseed td:last-child {
-  border-right: 1px solid #252;
+  border-right: var(--border);
 }
 }
 
@@ -10764,7 +10765,7 @@ b.suboption {
 }
 
 #config_reseed .optionsingle:hover {
-  border: 1px solid #252;
+  border: var(--border);
   box-shadow: inset 0 0 0 1px #002500;
   transition: ease box-shadow .5s;
 }
@@ -10866,7 +10867,7 @@ b.suboption {
 
 #config_network .optionlist:hover, #config_i2cp .optionlist:hover, #reseedssl:hover,
 #manualreseed .optionsingle:hover, .optiontextarea:hover, #reseed_urlselection:hover {
-  border: 1px solid #252;
+  border: var(--border);
   box-shadow: inset 0 0 0 1px #002500 !important;
   transition: ease box-shadow .5s;
 }
@@ -10973,18 +10974,18 @@ b.suboption {
 }
 
 #i2pupdates .optionsave {
-  border-bottom: 1px solid #252;
+  border-bottom: var(--border);
 }
 
 @supports not (-moz-appearance: none) {
 #manualreseed th:last-child, #manualreseed td:last-child {
-  border-right: 1px solid #252;
+  border-right: var(--border);
 }
 }
 
 #manualreseed td {
   padding: 5px;
-  border-bottom: 1px solid #252;
+  border-bottom: var(--border);
 }
 
 input[type=file] {
@@ -12017,7 +12018,7 @@ h3#pconfig {
   margin: -26px -1px -1px 0;
   padding: 5px;
   float: right;
-  border: 1px solid #252;
+  border: var(--border);
   background: #000;
 }
 
@@ -12162,7 +12163,7 @@ h3 .b32 {
   padding: 10px;
   font-weight: bold;
   text-align: center;
-  border: 1px solid #252;
+  border: var(--border);
   background: #000;
 }
 
@@ -12687,7 +12688,7 @@ h1.nfo {
 }
 
 h1.hlp {
-  background: url(images/header_help.png) 10px center no-repeat, var(--h1) !important;
+  background: var(--header_help) 10px center no-repeat, var(--h1) !important;
 }
 
 h1.addbook {
@@ -13040,46 +13041,6 @@ h3#scheduledjobs {
 }
 }
 
-h3.tabletitle, h3#i2pclientconfig, h3#advancedclientconfig, h3#webappconfig, h3#pconfig, h3#pluginfromurl, h3#pluginfromfile,
-h3#updateplugins, h3#pluginmanage, h3#bannedpeers, h3.ptitle, h3#transports, h3#upnpstatus, h3.sybils, #certs h3, table,
-.formaction#clientsconfig, .formaction#webappconfigactions, .formaction#pluginconfigactions, .formaction#homeapps, .formaction#homesites,
-.formaction#tunnelconfigsave, .formaction#homesearch, .formaction#sidebardefaults, .formaction#shutdown, .formaction#restart,
-.formaction#systray, .formaction#runonstart, .formaction#dumpthreads, .formaction#browserstart, .formaction#submitconsolepass, .formaction#langui, ul#banlist,
-p.sybil_info, p.family, p.threatpoints, p.hashdist, p#sybil_totals, p.notfound, #sybilnav, #sybils_summary,
-h3#themeheading, h3#langheading, h3#passwordheading, #themesettings, .formaction#themeui, div#langsettings, ul.statlist, h3.stats,
-#volunteer, #legal, #sidebarhelp, #volunteer, #reachabilityhelp, #configurationhelp, #advancedsettings, #faq, #reseedhelp, #troubleshoot,
-#sidebarhelp h3, #faq h3, #reseedhelp h3, .debug_container {
-  border: 1px solid #242;
-}
-
-pre#transports, .statusnotes {
-  border: 1px solid #242 !important;
-}
-
-th, .configtable td.infohelp, p.infohelp, td.infohelp, p.infowarn, td.infowarn, p#debugmode, p.sybilinfo, .tablefooter, p#helptranslate, #ipv4, #ipv6, #permabanned tr:nth-child(2) {
-  border-top: 1px solid #242 !important;
-  border-bottom: 1px solid #242 !important;
-}
-
-p.infohelp, p#keyringhelp, p#webappconfig, p#availableplugins, p#pluginconfigtext, p#clientdefaultshelp, p#bwshare, p#editclients, p#upnpstatus, p#gatherstats,
-p#debugmode, p.sybilinfo, p#gatherstats, #bugreports td.infohelp {
-  border: 1px solid #242 !important;
-}
-
-td.optionsave, #addkeyring tr:last-child, #criticallogs td, #routerlogs td, #eventlogs td, #wrapperlogs td, .configtable tr:last-child, tr#addnew, tr#addnew:hover {
-  border-top: 1px solid #242;
-}
-
-#manualreseed td, #consolepass td, #bannedips table tr:last-child, #i2pupdates .optionsave, #manualreseed td, #consolepass td, #bannedips table tr:last-child, #i2pupdates .optionsave {
-  border-bottom: 1px solid #242;
-}
-
-#logs h3 a, #permabanned td:first-child, #homepage .main h4 a,
-#tunnels h3#exploratory a, #tunnels h3.server a:not(.lsview), #tunnels h3.client a:not(.lsview),
-#tunnels #participating a, #tunnels #peercount a {
-  border-left: 1px solid #242;
-}
-
 #homepage .main h4 a {
   margin: -7px 0;
   padding: 9px 4px 9px 11px;
@@ -13134,7 +13095,7 @@ h2, h2.welcome, h3, h3.welcome, #themeoptions {
 h2#jobrunners {
   padding: 5px 10px;
   font-size: 10pt;
-  border-color: #252 !important;
+  border-color: #242 !important;
 }
 
 #news.news hr {
@@ -13142,7 +13103,7 @@ h2#jobrunners {
 }
 
 table.search {
-  border: 1px solid #252;
+  border: var(--border);
 }
 
 .leaseset th:last-child, .leaseset td:last-child, .sybil_routerinfo th:last-child, .sybil_routerinfo td:last-child {
@@ -13194,7 +13155,7 @@ table.search {
   padding-left: 32px;
   letter-spacing: .12em;
   font-size: 10.5pt;
-  border: 1px solid #252;
+  border: var(--border);
   background: url(/themes/console/images/eepsite.png) 8px center no-repeat, var(--h1) !important;
   background-size: 18px, 100%, 100%, 175px !important;
   background-blend-mode: var(--h3_blend) !important;
@@ -13225,7 +13186,7 @@ table.search {
 }
 
 #sitemap h3:nth-of-type(4) {
-  background: url(/themes/console/images/support.png) 8px center no-repeat, var(--h1) !important;
+  background: var(--help) 8px center no-repeat, var(--h1) !important;
   background-size: 18px, 100%, 100%, 175px !important;
   background-blend-mode: var(--h3_blend) !important;
 }
@@ -13240,7 +13201,7 @@ table.search {
   width: 180px !important;
   display: inline-block;
   text-align: center;
-  border: 1px solid #252;
+  border: var(--border);
   will-change: transform;
 }
 
@@ -13307,7 +13268,7 @@ table.search {
   font-size: 90%;
   text-shadow: 0 1px 1px #000;
   border: none;
-  border-top: 1px solid #252;
+  border-top: var(--border);
   box-shadow: var(--lowlight), inset 0 0 1px 1px #242;
 }
 
