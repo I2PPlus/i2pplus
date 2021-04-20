@@ -47,7 +47,8 @@
       progressx.show();
       var xhr = new XMLHttpRequest();
       xhr.responseType = "document";
-      var profilelist = document.getElementById("profilelist");
+      var plist = document.getElementById("profilelist");
+      var pcontainer = document.getElementById("peerprofiles");
       var uri = (window.location.pathname + window.location.search).substring(1);
       if (!uri.includes("f=2") && !uri.includes("f=3")) {
         if (uri.includes("?"))
@@ -56,16 +57,15 @@
           xhr.open('GET', uri + '?t=' + new Date().getTime(), true);
         xhr.onreadystatechange = function () {
           if (xhr.readyState==4 && xhr.status==200) {
-            var updating = document.getElementsByClassName("lazy");
-            var updatingResponse = xhr.responseXML.getElementsByClassName("lazy");
-            var i;
-            for (i = 0; i < updating.length; i++) {
-              updating[i].innerHTML = updatingResponse[i].innerHTML;
-            }
             var info = document.getElementById("profiles_overview");
             if (info) {
               var infoResponse = xhr.responseXML.getElementById("profiles_overview");
                 info.innerHTML = infoResponse.innerHTML;
+            }
+            if (plist) {
+              var plistResponse = xhr.responseXML.getElementById("profilelist");
+                plist.outerHTML = plistResponse.outerHTML;
+                lazyload();
             }
             var thresholds = document.getElementById("thresholds");
             if (thresholds) {
@@ -76,7 +76,7 @@
         }
       }
       window.addEventListener("pageshow", progressx.hide());
-      profilelist.addEventListener("mouseover", lazyload());
+      pcontainer.addEventListener("mouseover", lazyload());
       xhr.send();
     }, 15000);
   }, true);
