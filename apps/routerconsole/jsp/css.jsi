@@ -35,6 +35,14 @@
    String themePath = intl.getTheme(UA);
    String theme = intl.getTheme(UA).replace("/themes/console/", "").replace("/", "");
    String cspNonce = Integer.toHexString(net.i2p.util.RandomSource.getInstance().nextInt());
+   String override = net.i2p.I2PAppContext.getGlobalContext().getBaseDir().getAbsolutePath() +
+                     java.io.File.separatorChar +
+                     "docs" + java.io.File.separatorChar + "themes" +
+                     java.io.File.separatorChar + "console" +
+                     java.io.File.separatorChar + theme +
+                     java.io.File.separatorChar + "override.css";
+   java.io.File themeOverride = new java.io.File(override);
+   boolean hasOverride = themeOverride.exists();
 %>
 <link rel="preload" href="<%=themePath%>images/i2plogo.png" as="image">
 <link rel="preload" href="/themes/fonts/DroidSans.css" as="style">
@@ -44,53 +52,57 @@
 <script src="/js/progressx.js?<%=net.i2p.CoreVersion.VERSION%>" type="text/javascript"></script>
 <noscript><style type="text/css">.script{display:none!important}</style></noscript>
 <%
-   response.setHeader("Accept-Ranges", "none");
-   // clickjacking
-   if (intl.shouldSendXFrame()) {
-      response.setHeader("X-Frame-Options", "SAMEORIGIN");
-      // unsafe-inline is a fallback for browsers not supporting nonce
-      // https://developer.mozilla.org/en-US/docs/Web/HTTP/Headers/Content-Security-Policy/script-src
-      response.setHeader("Content-Security-Policy", "default-src 'self'; style-src 'self' 'unsafe-inline'; img-src 'self' data:; script-src 'self' 'unsafe-inline' 'nonce-" + cspNonce + "'; form-action 'self'; frame-ancestors 'self'; object-src 'none'; media-src 'none'");
-      response.setHeader("X-XSS-Protection", "1; mode=block");
-      response.setHeader("X-Content-Type-Options", "nosniff");
-      // allow fullscreen in iframes (for video playback)
-      response.setHeader("Feature-Policy", "fullscreen 'self'");
-   }
-   // https://www.w3.org/TR/referrer-policy/
-   // https://developer.mozilla.org/en-US/docs/Web/HTTP/Headers/Referrer-Policy
-   // As of Chrome 56, Firefox 50, Opera 43. "same-origin" not widely supported.
-   response.setHeader("Referrer-Policy", "no-referrer");
-   String uri = request.getRequestURI();
-   if (uri.contains("override.css"))
-       response.setHeader("Cache-Control", "no-cache, private, max-age=84600, must-revalidate");
-   else if (uri.contains(".png") || uri.contains(".svg") || uri.contains(".jpg") || uri.contains(".ttf") ||
-            uri.contains("viewstat") || uri.contains("flags.jsp") || uri.contains(".js"))
-       response.setHeader("Cache-Control", "private, max-age=2628000");
-   else
-       response.setHeader("Cache-Control", "no-cache, private, max-age=2628000");
-   String conNonceParam = request.getParameter("consoleNonce");
-   if (net.i2p.router.web.CSSHelper.getNonce().equals(conNonceParam)) {
-       intl.setLang(request.getParameter("lang"));
-       intl.setNews(request.getParameter("news"));
-   }
+    response.setHeader("Accept-Ranges", "none");
+    // clickjacking
+    if (intl.shouldSendXFrame()) {
+        response.setHeader("X-Frame-Options", "SAMEORIGIN");
+        // unsafe-inline is a fallback for browsers not supporting nonce
+        // https://developer.mozilla.org/en-US/docs/Web/HTTP/Headers/Content-Security-Policy/script-src
+        response.setHeader("Content-Security-Policy", "default-src 'self'; style-src 'self' 'unsafe-inline'; img-src 'self' data:; script-src 'self' 'unsafe-inline' 'nonce-" + cspNonce + "'; form-action 'self'; frame-ancestors 'self'; object-src 'none'; media-src 'none'");
+        response.setHeader("X-XSS-Protection", "1; mode=block");
+        response.setHeader("X-Content-Type-Options", "nosniff");
+        // allow fullscreen in iframes (for video playback)
+        response.setHeader("Feature-Policy", "fullscreen 'self'");
+    }
+    // https://www.w3.org/TR/referrer-policy/
+    // https://developer.mozilla.org/en-US/docs/Web/HTTP/Headers/Referrer-Policy
+    // As of Chrome 56, Firefox 50, Opera 43. "same-origin" not widely supported.
+    response.setHeader("Referrer-Policy", "no-referrer");
+    String uri = request.getRequestURI();
+    if (uri.contains("override.css"))
+        response.setHeader("Cache-Control", "no-cache, private, max-age=84600, must-revalidate");
+    else if (uri.contains(".png") || uri.contains(".svg") || uri.contains(".jpg") || uri.contains(".ttf") ||
+             uri.contains("viewstat") || uri.contains("flags.jsp") || uri.contains(".js"))
+        response.setHeader("Cache-Control", "private, max-age=2628000");
+    else
+        response.setHeader("Cache-Control", "no-cache, private, max-age=2628000");
+    String conNonceParam = request.getParameter("consoleNonce");
+    if (net.i2p.router.web.CSSHelper.getNonce().equals(conNonceParam)) {
+        intl.setLang(request.getParameter("lang"));
+        intl.setNews(request.getParameter("news"));
+    }
 %>
 <link href="<%=themePath%>console.css?<%=net.i2p.CoreVersion.VERSION%>" rel="stylesheet" type="text/css" title="<%=theme%>">
 <%
-   if (intl.getLang().equals("zh")) {
+    if (intl.getLang().equals("zh")) {
        // make the fonts bigger for chinese
 %>
 <link href="<%=themePath%>console_big.css?<%=net.i2p.CoreVersion.VERSION%>" rel="stylesheet" type="text/css">
 <%
-   } else if (intl.getLang().equals("ar")) {
-       // Use RTL theme for Arabic
+    } else if (intl.getLang().equals("ar")) {
+      // Use RTL theme for Arabic
 %>
 <link href="<%=themePath%>console_ar.css?<%=net.i2p.CoreVersion.VERSION%>" rel="stylesheet" type="text/css">
 <%
-   }
-   if (!intl.allowIFrame(UA)) {
+    }
+    if (!intl.allowIFrame(UA)) {
 %>
 <link href="<%=themePath%>mobile.css?<%=net.i2p.CoreVersion.VERSION%>" rel="stylesheet" type="text/css">
 <%
-   }
+    }
+    if (hasOverride) {
 %>
 <link href="<%=themePath%>override.css?<%=net.i2p.CoreVersion.VERSION%>" rel="stylesheet" type="text/css">
+<%
+    }
+%>
