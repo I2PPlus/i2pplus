@@ -214,12 +214,6 @@ pre {
   text-align: center;
 }
 
-/*@supports not (-moz-appearance: none) {
-.routersummary div[style="height: 36px;"] {
-  margin-top: -1px !important;
-}
-}*/
-
 .routersummary img[src$="i2plogo.png"] {
   opacity: .7;
   transition: ease filter .3s, ease opacity .3s;
@@ -268,12 +262,6 @@ pre {
   margin: -2px -7px -3px;
   padding: 0 0 3px;
 }
-
-/*@supports not (-moz-appearance: none) {
-.routersummary form {
-  margin: -1px -7px -3px !important;
-}
-}*/
 
 .routersummary form button.download {
   display: inline-block;
@@ -1873,29 +1861,19 @@ to {
 }
 
 #i2ptunnelframe {
-/*  margin: -4px 0 -1px;*/
   margin: -20px 0 16px;
   overflow: hidden;
 }
 
 .main.embedded {
-/*  padding: 1px 11px 4px;*/
   text-align: center;
   padding: 2px;
   overflow: hidden !important;
 }
 
-.main.embedded {
-/*  height: calc(100% - 68px) !important;*/
-}
-
 .main.embedded iframe {
   margin: 1px -10px -4px !important;
   background: #f2f2ff;
-}
-
-.embedded.bote {
-/*  box-shadow: inset 0 0 0 1px rgba(185,185,198,.65);*/
 }
 
 .main.embedded.bote iframe {
@@ -2508,7 +2486,7 @@ h3#exploratory {
 }
 
 #tunnels h3 a[href^="/configtunnels#"]:active, #logs a.configure:active::after, #logs a.delete:active::after {
-  background-size: 14px 14px;
+  background-size: 14px;
 }
 
 #tunnels h3 a[href^="/configtunnels#"]:hover, #logs h3.tabletitle a.delete:hover::after, #logs h3.tabletitle a.configure:hover::after {
@@ -4262,23 +4240,6 @@ ul.statlist {
   border: 1px solid #335;
 }
 
-/*.statlist li a[href^="graph"]::before {
-  background: #3b6bbf;
-  border: 1px solid #3b6bbf;
-}
-
-.statlist li a[href$="&showEvents=true"]::before {
-  display: none;
-}
-
-.statlist li a[href^="graph"] {
-  margin-top: 4px;
-  margin-bottom: 2px;
-  display: inline-block;
-  vertical-align: middle;
-}
-*/
-
 .statlist li li br {
   display: none;
 }
@@ -4549,7 +4510,7 @@ h2 {
   box-shadow: inset 0 0 0 1px #fff, 0 0 1px rgba(220,220,220,.3);
   white-space: nowrap;
   background: url(/themes/console/images/eepsite.png) right 8px center no-repeat, linear-gradient(to bottom, #fcfcff 50%, rgba(255,255,255,.6) 50%, rgba(240,240,255,.4)), linear-gradient(to right, #fcfcff 5%, rgba(231, 231, 255, .8) 25%) !important;
-  background-size: 20px 20px, 100%, 100% !important;
+  background-size: 20px, 100%, 100% !important;
   background-blend-mode: luminosity, normal, normal;
 }
 
@@ -4913,7 +4874,7 @@ button.search {
 
 button.search:hover, button.search:focus, button.search:active {
   background: url(/themes/console/images/buttons/search_hover.png) no-repeat 8px center, linear-gradient(to bottom, #eee, #fff) !important;
-  background-size: 14px 14px, 100% !important;
+  background-size: 14px, 100% !important;
 }
 
 input.search[type=text] {
@@ -5285,7 +5246,6 @@ input.stop:focus, button.stop:focus {
 button.control {
   padding: 12px !important;
   font-size: 0 !important;
-/*  text-indent: -99999px !important;*/
   background-size: 16px, 100% !important;
   will-change: transform;
 }
@@ -5423,7 +5383,7 @@ button.download.control:hover, button.download.control:focus {
 
 .routersummary .download {
   background: url(/themes/console/images/buttons/download.png) 6px center no-repeat, linear-gradient(to bottom, #fff, #efefff);
-  background-size: 14px 14px, 100% !important;
+  background-size: 14px, 100% !important;
   padding: 5px 7px 5px 22px !important;
 }
 
@@ -5440,7 +5400,7 @@ button.download.control:hover, button.download.control:focus {
   text-indent: 0;
   text-align: left;
   text-transform: capitalize;
-  background-size: 14px 14px, 100% !important;
+  background-size: 14px, 100% !important;
 }
 
 .routersummary .cancel {
@@ -5470,17 +5430,17 @@ button.download.control:hover, button.download.control:focus {
 
 .routersummary .reload[value="Reseed"] {
   background: url(/themes/console/images/buttons/download.png) center left 6px no-repeat, linear-gradient(to bottom, #fff, #efefff) !important;
-  background-size: 14px 14px, 100% !important;
+  background-size: 14px, 100% !important;
 }
 
 .routersummary .reload[value="Reseed"]:hover, .routersummary .reload[value="Reseed"]:focus, .routersummary .reload[value="Reseed"]:active {
   background: url(/themes/console/images/buttons/download.png) center left 6px no-repeat, linear-gradient(to bottom, #eee, #fff);
-  background-size: 14px 14px, 100% !important;
+  background-size: 14px, 100% !important;
 }
 
 .routersummary .download:hover, .routersummary .download:focus, .routersummary .download:active {
   background: url(/themes/console/images/buttons/download.png) 6px center no-repeat, linear-gradient(to bottom, #eee, #fff);
-  background-size: 14px 14px, 100% !important;
+  background-size: 14px, 100% !important;
   padding: 5px 7px 5px 22px !important;
 }
 
@@ -7924,12 +7884,12 @@ p.sybil_info {
 p.threatpoints {
   padding-left: 33px;
   background: url(images/eye_static.svg) 8px center no-repeat, repeating-linear-gradient(135deg, rgba(255,255,255,.5) 2px, rgba(240, 240, 255, .3) 3px, #fafaff 5px), #fafaff;
-  background-size: 20px 20px, 100%;
+  background-size: 20px, 100%;
 }
 
 p.threatpoints.hot {
   background: url(images/eye_static.svg) 8px center no-repeat, url(/themes/console/images/info/hot.png) right 4px center no-repeat, repeating-linear-gradient(135deg, rgba(255,255,255,.5) 2px, rgba(240, 240, 255, .3) 3px, #fafaff 5px), #fafaff;
-  background-size: 20px 20px, 24px, 100%;
+  background-size: 20px, 24px, 100%;
 }
 
 p#sybil_totals {
@@ -8275,13 +8235,13 @@ p.sybil_info + a[name] + table.sybil_routerinfo, p.hashdist + a[name] + table.sy
   box-shadow: inset 0 0 0 1px #fff;
   background: #eef url(/themes/console/images/buttons/cryptokey.png) 1px center no-repeat;
   background: url(/themes/console/images/buttons/cryptokey.png) 1px center no-repeat, linear-gradient(to bottom, #fff, #eef);
-  background-size: 14px 14px, 100%;
+  background-size: 14px, 100%;
 }
 
 .signingkey.encryption {
   background: #eef url(/themes/console/images/svg/lock.svg) 1px center no-repeat;
   background: url(/themes/console/images/svg/lock.svg) 1px center no-repeat, linear-gradient(to bottom, #fff, #eef);
-  background-size: 14px 14px, 100%;
+  background-size: 14px, 100%;
 }
 
 #netdb_ram {
@@ -8923,37 +8883,6 @@ table#schedjobs {
   border: 1px solid #8d8daa;
 }
 
-/*
-#capabilities_key td:first-child::before {
-  content: "NetDb Capabilities";
-  display: inline-block;
-  transform: rotate(-90deg) translateY(30px);
-  font-weight: bold;
-  white-space: nowrap;
-  color: #41465f;
-  text-align: center;
-  width: 100%;
-}
-
-#capabilities_key td:first-child::after {
-  content: "";
-  display: inline-block;
-  width: 150%;
-  height: 5px;
-  line-height: 0;
-  text-align: center;
-  border: 1px solid #333337;
-  border-bottom: none;
-  transform: rotate(-90deg) translateY(-90px);
-}
-
-@supports not (-moz-appearance: none) {
-#capabilities_key td:first-child::after {
-  width: 130%;
-}
-}
-*/
-
 #capabilities_key td {
   padding: 0 !important;
 }
@@ -9510,7 +9439,7 @@ select[name="newlogclass"] {
 .homelinkedit .noicon {
   background-image: url(/themes/console/images/svg/search.svg);
   background-position: center center;
-  background-size: 20px 20px;
+  background-size: 20px;
   background-repeat: no-repeat;
 }
 
@@ -9837,7 +9766,7 @@ a[href^="configpeer?peer"]:hover {
 
 #debug h2 {
   background: url(/themes/console/images/info/debug.png) right 6px center no-repeat, linear-gradient(to bottom, #fcfcff 50%, rgba(255,255,255,.6) 50%, rgba(240,240,255,.4)), linear-gradient(to right, #fcfcff 5%, rgba(231, 231, 255, .8) 25%) !important;
-  background-size: 20px 20px, 100%, 100% !important;
+  background-size: 20px, 100%, 100% !important;
   background-blend-mode: luminosity, normal, normal;
 }
 
@@ -11947,7 +11876,7 @@ th.options .optbox {
   display: inline-block;
   float: right;
   background: url(/themes/console/images/info/rip.png) center center no-repeat;
-  background-size: 20px 20px;
+  background-size: 20px;
 }
 
 .dead, .dead + table, .dead + table + .statusnotes, .dead + table + .statusnotes + .statusnotes,
@@ -13480,11 +13409,11 @@ div.app:not(:hover) a:not(:hover):not(:focus):not(:active):visited,
   #profilelist .fast.integrated, #profilelist .highcap.integrated, #profilelist .standard.integrated {
     width: 50px;
     height: 14px;
-    background-size: 14px 14px !important;
+    background-size: 14px !important;
   }
   #profilelist .fast, #profilelist .highcap.integrated, #profilelist .standard.integrated {
     background-position: calc(50% - 8px) center, calc(50% + 8px) center !important;
-    background-size: 14px 14px !important;
+    background-size: 14px !important;
   }
   .profilegroup::before {
     width: 18px;
