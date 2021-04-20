@@ -1156,7 +1156,7 @@ a:active img[src="/themes/console/images/i2plogo.png"] {
 
 /* main section */
 
-.routersummary, .main, h1, .confignav, .tab, .tab2 {
+.routersummary, .main, h1, div.news, .confignav, .tab, .tab2, table.search, div.app, .sitemapLink, .sitemapLabel {
   border: 1px solid #252;
 }
 
@@ -1269,7 +1269,6 @@ div.news {
   min-width: 620px !important;
   font-size: 8pt;
   text-align: right;
-  border: var(--border);
   box-shadow: 0 1px 5px #000;
   background: #000800 url(images/news.png) no-repeat scroll bottom right;
   background: linear-gradient(to bottom, rgba(0,0,0,.3), rgba(0,0,0,.5)), url(images/news.png) no-repeat scroll right bottom, repeating-linear-gradient(to bottom, rgba(0,0,0,.8) 2px, rgba(0,16,0,.8) 4px), var(--camo), #000 !important;
@@ -6430,7 +6429,6 @@ div.app {
   min-width: 70px;
   float: left;
   text-align: center !important;
-  border: var(--border);
   opacity: .9;
   background: radial-gradient(circle at center -90px, rgba(0,96,0,.9), #000 60%), linear-gradient(to bottom, #000800, #000);
 }
@@ -6671,7 +6669,7 @@ div.app:hover .applabel, .sitemapLink:hover .sitemapLabel,
   font-size: 8.5pt;
   color: #494;
   border: none;
-  border-top: var(--border);
+  border-top: 1px solid #252;
   border-radius: 0 0 2px 2px;
 }
 
@@ -13102,14 +13100,6 @@ h2#jobrunners {
   opacity: .7;
 }
 
-table.search {
-  border: var(--border);
-}
-
-.leaseset th:last-child, .leaseset td:last-child, .sybil_routerinfo th:last-child, .sybil_routerinfo td:last-child {
-  border-color: #242 !important;
-}
-
 @media screen and (min-width: 1400px) {
   .statsName {
     border: 1px solid #131;
@@ -13201,7 +13191,6 @@ table.search {
   width: 180px !important;
   display: inline-block;
   text-align: center;
-  border: var(--border);
   will-change: transform;
 }
 
