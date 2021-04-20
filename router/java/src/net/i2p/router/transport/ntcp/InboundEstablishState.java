@@ -145,7 +145,7 @@ class InboundEstablishState extends EstablishBase implements NTCP2Payload.Payloa
         }
         if (_state == State.IB_INIT && src.hasRemaining()) {
             int remaining = src.remaining();
-            if (_transport.isNTCP2Enabled()) {
+
                 if (remaining + _received < MSG1_SIZE) {
                     // Less than 64 total received, so we defer the NTCP 1 or 2 decision.
                     // Buffer in _X.
@@ -166,7 +166,7 @@ class InboundEstablishState extends EstablishBase implements NTCP2Payload.Payloa
                     // releaseBufs() will return the unused DH
                     return;
                 //}
-            }
+
         }
     }
 
