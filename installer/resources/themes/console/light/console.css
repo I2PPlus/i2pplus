@@ -1744,7 +1744,7 @@ to {
 .main, .routersummary, .logo, .news#news {
   background: linear-gradient(to bottom, rgba(248,248,255,.5), rgba(240,240,255,.5)), repeating-linear-gradient(135deg, rgba(255,255,255,.5) 2px, rgba(221, 221, 255, .3) 3px, #fff 4px) #fafaff !important;
   background: repeating-linear-gradient(45deg, rgba(255,255,255,.5) 1px, rgba(221, 221, 255, .1) 2px, rgba(255,255,255,.1) 2px), repeating-linear-gradient(135deg, rgba(255,255,255,1), rgba(221, 221, 255, .3) 1px, #fff 2px) #fafaff !important;
-  background-blend-mode: multiply, normal !important;
+/*  background-blend-mode: multiply, normal !important;*/
   background: #f8f8ff !important;
 }
 
