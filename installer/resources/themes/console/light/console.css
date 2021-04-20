@@ -1742,18 +1742,20 @@ to {
 /* main content div & variations */
 
 .main, .routersummary, .logo, .news#news {
-  background: #f8f8ff !important;
   background: linear-gradient(to bottom, rgba(248,248,255,.5), rgba(240,240,255,.5)), repeating-linear-gradient(135deg, rgba(255,255,255,.5) 2px, rgba(221, 221, 255, .3) 3px, #fff 4px) #fafaff !important;
   background: repeating-linear-gradient(45deg, rgba(255,255,255,.5) 1px, rgba(221, 221, 255, .1) 2px, rgba(255,255,255,.1) 2px), repeating-linear-gradient(135deg, rgba(255,255,255,1), rgba(221, 221, 255, .3) 1px, #fff 2px) #fafaff !important;
   background-blend-mode: multiply, normal !important;
+  background: #f8f8ff !important;
 }
 
+/*
 @supports (background-blend-mode: multiply) {
 .main, .routersummary, .logo {
   background: repeating-linear-gradient(45deg, rgba(255,255,255,.5) 1px, rgba(221, 221, 255, .1) 2px, rgba(255,255,255,.1) 2px), repeating-linear-gradient(135deg, rgba(255,255,255,1), rgba(221, 221, 255, .3) 1px, #fff 2px) #fafaff !important;
   background-blend-mode: multiply, normal !important;
 }
 }
+*/
 
 @supports not (-moz-appearance: none) {
 .main, .routersummary, .logo {
@@ -1771,7 +1773,7 @@ to {
   border: 1px solid #575775;
   border-radius: 0 0 2px 2px;
   box-shadow: inset 0 0 0 1px rgba(185,185,198,.65);
-  filter: drop-shadow(0 1px 1px #97a2ce);
+/*  filter: drop-shadow(0 1px 1px #97a2ce);*/
 }
 
 .main#home {
@@ -1809,15 +1811,15 @@ to {
 .news#news {
   margin: -12px 0 5px 214px;
   padding: 5px 15px 12px;
-  border: 1px solid #575775;
-  color: #224;
-  border-radius: 0 0 2px 2px;
-  text-align: right !important;
-  font-size: 8pt;
-  line-height: 140%;
-  box-shadow: inset 0 0 0 1px rgba(185,185,198,.65);
   min-width: 546px;
-  filter: drop-shadow(0 1px 1px #97a2ce);
+  text-align: right !important;
+  line-height: 140%;
+  font-size: 8pt;
+  color: #224;
+  border: 1px solid #575775;
+  border-radius: 0 0 2px 2px;
+  box-shadow: inset 0 0 0 1px rgba(185,185,198,.65);
+/*  filter: drop-shadow(0 1px 1px #97a2ce);*/
 }
 
 @supports not (-moz-appearance: none) {
