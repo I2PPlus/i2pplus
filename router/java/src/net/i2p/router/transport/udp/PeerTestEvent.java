@@ -173,6 +173,7 @@ class PeerTestEvent extends SimpleTimer2.TimedEvent {
         if ("true".equalsIgnoreCase(override))
             return false;
         return ! (_context.router().isHidden() ||
+                  _context.router().gracefulShutdownInProgress() ||
                   (_transport.isIPv4Firewalled() && _transport.isIPv6Firewalled()));
         //String val = _context.getProperty(PROP_SHOULD_TEST);
         //return ( (val != null) && ("true".equals(val)) );
