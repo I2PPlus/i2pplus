@@ -3,8 +3,9 @@
 /* Comment: Thanks to Florian Kuhlmann for the hatface images. [http://www.flickr.com/photos/floriankuhlmann/] */
 /* Author: dr|z3d */
 
-@import url(optbox.css);
+@import url(/themes/console/images/images.css);
 @import url(images/images.css);
+@import url(optbox.css);
 @import url(chromescroll.css);
 
 :root {
@@ -85,7 +86,7 @@ body {
   background: rgba(0,187,0,.8) !important;
 }
 
-.routersummary, .routersummaryouter, h1, .main, iframe {
+.routersummary, .routersummaryouter, h1, .main, iframe, div.app, .sitemaplink {
   contain: layout;
 }
 
