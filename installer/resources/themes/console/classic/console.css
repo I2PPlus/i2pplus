@@ -2,8 +2,6 @@
 /* I2P Description: Light blue "classic" I2P theme; optimized for less capable browsers and system specifications. */
 /* Author: dr|z3d */
 
-@import url("/themes/fonts/DroidSans.css");
-
 html, body {
   min-height: 100%;
 }
@@ -56,7 +54,7 @@ body {
   outline: none;
 }
 
-.routersummary, h1, .main, iframe {
+.routersummary, .routersummaryouter, h1, .main, iframe {
   contain: layout;
 }
 
