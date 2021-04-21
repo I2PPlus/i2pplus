@@ -315,7 +315,7 @@ public class PeerHelper extends HelperBase {
             }
 //        }
 
-        StringBuilder buf = new StringBuilder(512);
+        StringBuilder buf = new StringBuilder(4*1024);
         buf.append("<div id=\"ntcp\">\n<h3 id=\"ntcpcon\">").append(_t("NTCP connections")).append(":&nbsp; ").append(peers.size());
         buf.append(" / ").append(nt.getMaxConnections());
         //buf.append(". ").append(_t("Timeout")).append(": ").append(DataHelper.formatDuration2(_pumper.getIdleTimeout()));
@@ -496,7 +496,7 @@ public class PeerHelper extends HelperBase {
         int numPeers = 0;
         int numRTTPeers = 0;
 
-        StringBuilder buf = new StringBuilder(512);
+        StringBuilder buf = new StringBuilder(4*1024);
         buf.append("<div id=\"udp\">\n<h3 id=\"udpcon\">").append(_t("UDP connections")).append(":&nbsp; ").append(peers.size())
            .append(" / ").append(ut.getMaxConnections());
         //buf.append(". ").append(_t("Timeout")).append(": ").append(DataHelper.formatDuration2(_expireTimeout));
