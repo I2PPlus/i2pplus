@@ -1520,7 +1520,7 @@ div.widepanel h3 {
   text-transform: uppercase;
   font-size: 10.5pt;
   border-radius: 0;
-  border: 1px solid #242;
+  border: var(--border);
 }
 
 .main#events .messages {
@@ -1577,7 +1577,7 @@ div#graphs {
   margin: 5px 4px;
   padding: 3px;
   text-align: center !important;
-  border: 1px solid #242;
+  border: var(--border);
 }
 
 .graphspanel a img:hover {
@@ -2738,7 +2738,7 @@ input[type=file]::file-selector-button {
   font-style: italic;
   font-size: 105% !important;
   text-align: center;
-  border: 1px solid #242 !important;
+  border: var(--border) !important;
   background: #000800;
 }
 
@@ -2876,7 +2876,7 @@ h3#scheduledjobs + ol li::before, #scheduledjobs + ol li::before {
   width: 97%;
   width: calc(100% - 14px);
   display: block;
-  border: 1px solid #242;
+  border: var(--border);
   background: #000800;
 }
 
@@ -3096,7 +3096,7 @@ ul.statlist li li:last-child::before {
 .main#stats form {
   margin: -13px 0 -11px;
   padding: 10px;
-  border: 1px solid #242;
+  border: var(--border);
   background: #000;
 }
 
@@ -3135,7 +3135,7 @@ ul.statlist {
   padding: 10px 10px 0 10px !important;
   width: calc(100% - 22px);
   display: inline-block;
-  border: 1px solid #242 !important;
+  border: var(--border) !important;
   box-shadow: var(--lowlight), inset 0 0 2px 1px #030;
   background: #000800;
 }
@@ -3231,23 +3231,6 @@ form[action="events"] {
   font-size: 9pt;
 }
 
-/*
-.optbox {
-  min-width: 16px !important;
-  max-width: 16px !important;
-  width: 16px !important;
-  min-height: 16px;
-  max-height: 16px;
-  height: 16px;
-  opacity: 1.0;
-  border: 0;
-  margin: 2px 4px;
-  padding: 2px;
-  overflow: hidden;
-  position: relative;
-}
-*/
-
 .cells {
   text-align: center;
 }
@@ -3282,7 +3265,7 @@ h3[id$="con"] { /* peers h3 + tables */
   letter-spacing: .08em;
   background: #000;
   background: linear-gradient(to right, #000, #001000 70%, #001300 90%);
-  border: 1px solid #242;
+  border: var(--border);
 }
 
 h3[id="udpcon"] {
@@ -4082,7 +4065,7 @@ form[action="events"] {
   margin-top: -11px;
   margin-bottom: 20px;
   padding: 10px 20px 10px;
-  border: 1px solid #242;
+  border: var(--border);
 }
 
 form[action="events"] > br {
@@ -4194,7 +4177,7 @@ p#webappconfig + p, p#pluginconfigtext {
 }
 
 #pluginconfig table {
-  border: 1px solid #242;
+  border: var(--border);
   filter: drop-shadow(0 0 3px #000);
 }
 
@@ -4766,7 +4749,7 @@ h4.app2 a::after {
 
 #volunteer, #legal, #sidebarhelp, #reachabilityhelp, #configurationhelp, #themeoverride, #browserconfig, #tunnman,
 #advancedsettings, #faq, #reseedhelp, #troubleshoot, #newuserguide, #filterlist, #webhosting, #glossary {
-  border: 1px solid #242;
+  border: var(--border);
   padding: 0 20px;
   margin: 9px 0;
   background: #000;
@@ -4869,8 +4852,8 @@ h4.app2 a::after {
   width: calc(100% - 32px);
   max-height: 600px;
   overflow-y: scroll;
-  border-left: 1px solid #242;
-  border-right: 1px solid #242;
+  border-left: var(--border);
+  border-right: var(--border);
   background: #000;
 }
 
@@ -4881,7 +4864,7 @@ p#fullhistory {
   position: relative;
   z-index: 999;
   text-align: right;
-  border: 1px solid #242;
+  border: var(--border);
   background: #000;
 }
 
@@ -5169,7 +5152,7 @@ th > img[src^="/imagegen"], .identicon { /* scale down header images */
   margin: 0 0 0 3px;
   height: 26px;
   width: 26px;
-  border: 1px solid #242;
+  border: var(--border);
 }
 
 /* Advanced lookup */
@@ -5673,7 +5656,7 @@ font[color="#000099"], #servicelogs {
 
 #profilelist td[colspan="10"], #profilelist td[colspan="10"]:hover { /* profile class separator */
   padding: 1px;
-  border: 1px solid #242;
+  border: var(--border);
   border-top: 1px solid #000;
   border-bottom: 1px solid #000;
   background: #040;
@@ -6016,7 +5999,7 @@ h3#bannedpeers {
 #routerinfo td {
   padding: 8px 4px;
   width: 25%;
-  border-bottom: 1px solid #242;
+  border-bottom: var(--border);
 }
 
 #routerinfo td:first-child, #routerinfo td:nth-child(3) {
@@ -6026,7 +6009,7 @@ h3#bannedpeers {
 
 #routerinfo td:nth-child(2):not([colspan]) {
   white-space: nowrap;
-  border-right: 1px solid #242;
+  border-right: var(--border);
 }
 
 /* home page */
@@ -6380,7 +6363,7 @@ h3[id*="job"] {
   letter-spacing: .08em;
   text-transform: uppercase;
   text-shadow: 0 0 2px #010;
-  border: 1px solid #242;
+  border: var(--border);
   border-radius: 0;
 }
 
@@ -6630,7 +6613,7 @@ span#distance {
   background: url(/themes/susidns/dark/images/helper.svg) center center no-repeat;
   background-size: 14px;
   content: "";
-  border-left: 1px solid #242;
+  border-left: var(--border);
 }
 
 .addtobook a:hover {
@@ -6696,7 +6679,7 @@ span#distance {
   margin-bottom: 10px;
   padding: 10px;
   line-height: 160%;
-  border: 1px solid #242;
+  border: var(--border);
   background: #000;
 }
 
@@ -6886,7 +6869,7 @@ p.sybil_info + a[name] + table.sybil_routerinfo, p.hashdist + a[name] + table.sy
 .threatpoints + ul {
   margin: -4px 0 10px;
   padding: 5px 5px 0;
-  border: 1px solid #242;
+  border: var(--border);
   background: #000;
 }
 
@@ -6947,7 +6930,7 @@ th .h3navlinks, #config_stats .h3navlinks, #config_webapps .h3navlinks {
   padding: 9px 5px 9px 16px;
   text-transform: capitalize !important;
   letter-spacing: normal;
-  border-left: 1px solid #242;
+  border-left: var(--border);
 }
 
 .h3navlinks a:first-child {
@@ -8198,7 +8181,7 @@ th code {
 /* sybils */
 
 .leaseset th:last-child, .leaseset td:last-child, .sybil_routerinfo th:last-child, .sybil_routerinfo td:last-child {
-  border-right: 1px solid #242 !important;
+  border-right: var(--border) !important;
 }
 
 .sybil_routerinfo table td:last-child {
@@ -8207,7 +8190,7 @@ th code {
 
 .sybilinfo_params {
   padding: 0;
-  border-bottom: 1px solid #242;
+  border-bottom: var(--border);
 }
 
 .sybilinfo_container {
@@ -8253,7 +8236,7 @@ th code {
 
 .sybil_addresses {
   padding: 0;
-  border-bottom: 1px solid #242;
+  border-bottom: var(--border);
 }
 
 .sybil_addresses table, .sybil_addresses td {
@@ -9858,12 +9841,12 @@ input[type=file] {
 
 #peers tr, #peers th:first-child, #peers td:first-child,
 #profiles tr, #profiles th:first-child, #profiles td:first-child {
-  border-left: 1px solid #242;
+  border-left: var(--border);
 }
 
 #peers tr, #peers th:last-child, #peers td:last-child,
 #profiles tr, #profiles th:last-child, #profiles td:last-child {
-  border-right: 1px solid #242;
+  border-right: var(--border);
 }
 
 #profiles #capabilities_key, #profiles #capabilities_key tr, #profiles #capabilities_key td:last-child {
@@ -9957,8 +9940,8 @@ input[type=file] {
 }
 
 #peers tr {
-  border-left: 1px solid #242;
-  border-right: 1px solid #242;
+  border-left: var(--border);
+  border-right: var(--border);
 }
 
 /* end peers */
@@ -11611,7 +11594,7 @@ h3#scheduledjobs {
 }
 
 #banneduntilrestart td {
-  border-right: 1px solid #242 !important;
+  border-right: var(--border) !important;
 }
 
 h2, h2.welcome, h3, h3.welcome, #themeoptions {
@@ -11813,7 +11796,7 @@ th[aria-sort] {
 #sybilanalysis {
   margin: 10px 0 9px !important;
   padding: 10px 10px 8px 50px !important;
-  border: 1px solid #242;
+  border: var(--border);
   box-shadow: var(--lowlight), inset 0 0 2px 1px #030;
   background-image: var(--sybil) !important;
   background-size: 28px;
@@ -12251,7 +12234,7 @@ i {
   overflow: hidden;
   vertical-align: middle;
   text-align: center;
-  border: 1px solid #242;
+  border: var(--border);
   box-shadow: var(--lowlight), inset 0 0 1px 1px #050;
   animation: ease grid-fade 2s forwards;
 }
@@ -12496,27 +12479,26 @@ h3 + table {
   word-break: break-all;
 }
 
-#tunnelPeerCount tr:not(:last-child) td {
+#tunnelPeerCount tr:not(.tablefooter) td {
   padding: 3px !important;
   border: 1px solid #131;
 }
 
 #tunnelPeerCount tr:nth-last-child(2) td {
-  border-bottom: 1px solid #242;
-  background: #000;
+  border-bottom: var(--border);
 }
 
-#tunnelPeerCount tr:last-child td {
-  border-top: 1px solid #242;
+#tunnelPeerCount .tablefooter td {
+  border-top: var(--border);
   background: #000;
 }
 
 #tunnelPeerCount td:first-child {
-  border-left: 1px solid #242 !important;
+  border-left: var(--border) !important;
 }
 
 #tunnelPeerCount td:last-child {
-  border-right: 1px solid #242 !important;
+  border-right: var(--border) !important;
 }
 
 #tunnelPeerCount .configpeer {
@@ -12540,7 +12522,7 @@ h3 + table {
 }
 
 #tunnels .percentBarOuter, #tunnels .percentBarText {
-  width: 100px;
+  width: 100px !important;
 }
 
 #tunnels .percentBarOuter {
@@ -12605,17 +12587,6 @@ h3 + table {
   padding-right: 5px !important;
   width: 1%;
   white-space: nowrap;
-  background: linear-gradient(to bottom, #041804, #000);
-}
-
-#tunnels #tunnelPeerCount tr.tablefooter td:first-child {
-  background: #000 !important;
-}
-
-#tunnelPeerCount td:first-child span, #tunnelPeerCount td:first-child b {
-  box-shadow: none !important;
-  background: #000 !important;
-  background: linear-gradient(to bottom, #020, #000) !important;
 }
 
 #tunnels #tunnelPeerCount .routerid {
@@ -12841,12 +12812,15 @@ h1, .main h2, h4.app, h4.app2, .main h3 {
 
 .lazy.lazyshow, .lazy.lazyshow td, #peers .lazy:not(.lazyhide) {
   opacity: 1;
-  contain: layout;
 }
 
 .leasesets_container .lazy.lazyhide, .leasesets_container .lazy.lazyhide td,
 .leasesets_container .lazy:not(.lazyshow) {
   opacity: 1;
+  contain: none;
+}
+
+#tunnelpeercount .lazy {
   contain: none;
 }
 
