@@ -10264,7 +10264,7 @@ input[type=file] {
 
 #floodfills .percentBarOuter, #floodfills .percentBarText {
   display: inline-block;
-  width: 50px;
+  width: 50px !important;
   margin: 0 2px;
 }
 
