@@ -3139,7 +3139,7 @@ h3[id="udpcon"] {
 }
 
 #udpconnections td:first-child {
-  width: 50px;
+  width: 1%;
   padding: 2px 4px;
   white-space: nowrap;
 }
@@ -3169,19 +3169,11 @@ h3[id="udpcon"] {
 }
 
 #udpconnections td[class="cells"]:first-child, #ntcpconnections td[class="cells"]:first-child {
-  width: 50px;
-  white-space: nowrap;
   text-align: right;
 }
 
-/*#udpconnections td > *, #ntcpconnections td > *,
-#profiles td > *, #floodfills td > * {
-  vertical-align: middle !important;
-}*/
-
 #ntcpconnections td[class="cells"]:last-child {
   font-weight: bold !important;
-  width: 100px;
 }
 
 #ntcpconnections {
@@ -7843,20 +7835,14 @@ h4#sb_shutdownstatus span {
   padding-right: 1% !important;
 }
 
-#peers .peer, #peers .direction, #peers .ipv6, #peers .idle, #peers .inout, #peers .uptime, #peers .tx,
-#peers .rx, #peers .skew {
+#peers .peer {
   width: 1%;
-  min-width: 50px;
   white-space: nowrap;
   text-align: center;
 }
 
 #peers .skew, #peers .uptime {
   text-align: right;
-}
-
-#peers .idle, #peers .inout {
-  min-width: 110px;
 }
 
 #peers .cells, #tunnels .cells, #profilelist td:not(.separator) {
