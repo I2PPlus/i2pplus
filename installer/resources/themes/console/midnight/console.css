@@ -4323,7 +4323,7 @@ h3[id="udpcon"] {
   vertical-align: middle;
 }
 
-pre#transports {
+pre#activetransports {
   margin: 0;
   padding: 15px 7px 5px 15px;
   width: calc(100% - 24px);

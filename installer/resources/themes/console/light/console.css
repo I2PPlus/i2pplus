@@ -2416,7 +2416,7 @@ h3#transports, h3#upnp {
   border: 1px solid #8d8daa;
 }
 
-pre#transports {
+pre#activetransports {
   margin: -16px 0 0;
   padding: 10px 0 0 10px;
   display: inline-block;
@@ -2427,7 +2427,7 @@ pre#transports {
   background: #fafaff;
 }
 
-pre#transports b {
+pre#activetransports b {
   padding-bottom: 2px;
 }
 
@@ -3409,7 +3409,7 @@ tr {
   vertical-align: middle !important;
 }
 
-tr:nth-child(even), pre#transports, #debug .sentTags:hover td, #debug .expiry:hover td {
+tr:nth-child(even), pre#activetransports, #debug .sentTags:hover td, #debug .expiry:hover td {
   background: #efefff;
   background: repeating-linear-gradient(135deg, rgba(252,252,255,.5) 2px, rgba(240, 240, 255, .3) 3px, #fafaff 5px) #fafaff;
   background: linear-gradient(to bottom, #fff, #eef);

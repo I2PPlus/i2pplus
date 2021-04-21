@@ -3320,7 +3320,7 @@ a[href^="configpeer?peer"]:hover {
   filter: drop-shadow(0 0 1px #f60);
 }
 
-pre#transports {
+pre#activetransports {
   border: 1px solid #aaafce;
   padding: 15px 15px 0;
   margin: -11px 0 0;

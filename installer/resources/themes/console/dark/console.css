@@ -3193,7 +3193,7 @@ h3[id="udpcon"] {
   line-height: 0;
 }
 
-pre#transports {
+pre#activetransports {
   border: var(--border) !important;
   padding: 15px 5px 5px 15px;
   margin: 0 20px 0 0;
@@ -10379,7 +10379,7 @@ input[type=file] {
   padding: 0;
 }
 
-#viewprofile pre, pre#transports {
+#viewprofile pre, pre#activetransports {
   margin: 0;
   padding: 20px 20px 0;
   line-height: 20px;
