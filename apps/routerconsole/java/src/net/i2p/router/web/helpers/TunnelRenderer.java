@@ -583,7 +583,7 @@ class TunnelRenderer {
         if (!participating.isEmpty())
             out.write("<td align=\"center\" data-sort-method=\"none\"><b>" + partCount + ' ' + _t("participating") +
                       "</b></td><td data-sort-method=\"none\"></td>");
-        out.write("</tr>\n</table>\n</div>\n");
+        out.write("</tr>\n</table>\n");
     }
 
 
