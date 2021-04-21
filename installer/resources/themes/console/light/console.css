@@ -5598,32 +5598,32 @@ input[readonly], input[disabled], input[readonly]:focus, input[disabled]:focus {
 }
 
 textarea {
-  padding: 5px;
   margin: 5px !important;
-  background: #fbfbff;
-  color: #33333f !important;
-  font-size: 9pt;
-  border-radius: 2px;
-  min-height: 100px;
+  padding: 5px;
   min-width: 97%;
+  min-height: 100px;
+  font-size: 9pt;
+  color: #33333f !important;
   border: 1px solid #97a2ce;
+  border-radius: 2px;
   box-shadow: inset 1px 1px 1px rgba(204, 204, 204, .6);
+  background: #fbfbff;
 }
 
 textarea:focus {
-  background: #fff;
   color: #19191f !important;
-  box-shadow: none;
   border: 1px solid #676c7f;
+  box-shadow: none;
+  background: #fff;
   filter: drop-shadow(0 0 1px #89f);
 }
 
 #tunnels h3, #tunnels h3 a, #config_reseed h3, #config_reseed h3 a {
   height: 31px !important; /* hack to avoid button overflow */
-  box-sizing: border-box;
   position: relative;
   z-index: 999;
   overflow: hidden;
+  box-sizing: border-box;
 }
 
 #tunnels h3 {
@@ -13426,25 +13426,22 @@ div.app:not(:hover) a:not(:hover):not(:focus):not(:active):visited,
   }
 }
 
-.lazy.lazyshow, #profilelist .lazy.lazyshow td, #tunnels .lazy.lazyshow td {
-  visibility: visible;
-  opacity: 1;
-  transition: ease opacity .15s;
-}
+/* lazy loading */
 
-#profilelist .lazy.lazyshow td {
-  visibility: visible;
-}
-
-.lazy.lazyhide, #profilelist .lazy.lazyhide td, #tunnels .lazy.lazyhide td {
+.lazy.lazyhide, .lazy.lazyhide td, .lazy:not(.lazyshow) {
   opacity: 0;
+  contain: strict;
 }
 
-#profilelist .lazy.lazyhide, #tunnels .lazy.lazyhide {
+.lazy.lazyshow, .lazy.lazyshow td, #peers .lazy:not(.lazyhide) {
   opacity: 1;
+  contain: layout;
 }
 
-.leasesets_container .lazy.lazyhide {
-  visibility: visible;
+.leasesets_container .lazy.lazyhide, .leasesets_container .lazy.lazyhide td,
+.leasesets_container .lazy:not(.lazyshow) {
   opacity: 1;
+  contain: none;
 }
+
+/* end lazy loading */

@@ -529,7 +529,7 @@ class TunnelRenderer {
             RouterInfo info = _context.netDb().lookupRouterInfoLocally(h);
             String ip = info != null ? net.i2p.util.Addresses.toString(CommSystemFacadeImpl.getValidIP(info)) : null;
             String v = info != null ? info.getOption("router.version") : null;
-            out.write("<tr><td class=\"cells\" align=\"center\">");
+            out.write("<tr class=\"lazy\"><td class=\"cells\" align=\"center\">");
             out.write(netDbLink(h) + "<b class=\"tunnel_cap\" title=\"" + _t("Bandwidth tier") + "\">" + cap + "</b>");
             if (v != null)
                 out.write("<span class=\"version\" title=\"" + _t("Show all routers with this version in the NetDb") +

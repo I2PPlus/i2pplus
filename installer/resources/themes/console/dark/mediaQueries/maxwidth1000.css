@@ -1,0 +1,103 @@
+@media screen and (max-width: 1000px) {
+  #tunnels .tunneldisplay td:nth-child(n+2) span, #tunnels .tunneldisplay .cells tt {
+    margin: 1px !important;
+    padding: 0 !important;
+    display: inline-block;
+    vertical-align: middle;
+    line-height: 120% !important;
+    border: none !important;
+    box-shadow: none !important;
+    background: none !important;
+  }
+
+  #tunnels .tunneldisplay .cells span.inbound, #tunnels .tunneldisplay .cells span.outbound {
+    margin: 1px !important;
+    padding: 0 !important;
+    display: inline-block;
+    vertical-align: middle;
+    line-height: 120% !important;
+  }
+
+  span.inbound, span.outbound {
+    background-size: 12px !important;
+  }
+
+  #tunnels .tunneldisplay .cells .tunnel_cap {
+    min-width: 14px;
+    text-align: center;
+  }
+
+  #tunnels .tunneldisplay .cells .routerid, #tunnels .tunneldisplay .cells .tunnel_peer.tunnel_local {
+    width: 74px;
+    box-sizing: border-box !important;
+  }
+
+  #netdblookup input[type=text] {
+    min-width: 0 !important;
+  }
+
+  #netdblookup td:nth-child(even) {
+    width: auto;
+  }
+
+  table:not(:first-of-type).netdbentry th:first-child, table:not(:first-of-type).netdbentry td:first-child {
+    padding: 0 !important;
+    font-size: 0;
+  }
+
+  table:not(:first-of-type).netdbentry tr:nth-child(2) td:nth-child(2)::before {
+    display: inline;
+    font-weight: bold;
+    content: "Published: ";
+  }
+
+  table:not(:first-of-type).netdbentry th:first-child, table:not(:first-of-type).netdbentry td:first-child, #netdb table:not(:first-of-type).netdbentry td:first-child b {
+    width: 0;
+    min-width: 0 !important;
+    max-width: 0 !important;
+  }
+
+  #jardump th:nth-child(3), #jardump th:nth-child(4), #jardump th:nth-child(5), #jardump th:nth-child(6),
+  #jardump td:nth-child(3), #jardump td:nth-child(4), #jardump td:nth-child(5), #jardump td:nth-child(6) {
+    display: none;
+  }
+
+  #bandwidthconfig .bw_out, #bandwidthconfig .bw_in, #bandwidthconfig .bw_share {
+    padding-left: 5px;
+    padding-right: 8px;
+    background: #002500 !important;
+  }
+
+  #bandwidthconfig td:not(.infohelp):first-child {
+    padding-right: 0;
+    background: none;
+  }
+
+  #bandwidthconfig .infohelp {
+    padding-right: 10px !important;
+  }
+
+  .net_datausage {
+    padding: 4px 0;
+    min-width: 260px;
+    white-space: normal;
+  }
+
+  .bw_title {
+    margin: 2px -6px -2px -3px;
+    font-size: 10pt;
+  }
+
+  #updateHelper select {
+    max-width: 200px !important;
+  }
+
+  #reseedconfig tr:nth-child(3) td label {
+    padding: 5px 4px 5px 0 !important;
+    width: calc(100% - 4px) !important;
+  }
+
+  .encDests code {
+    max-width: 140px;
+  }
+}

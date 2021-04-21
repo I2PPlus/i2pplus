@@ -1,0 +1,160 @@
+@media screen and (max-width: 1199px) {
+  .tab, .tab2 {
+    min-width: 48px !important;
+  }
+
+  .tab a {
+    padding: 4px 9px !important;
+  }
+
+  #participatingtunnels .statusnotes:last-of-type {
+    margin-bottom: 6px;
+  }
+
+  #tunnels .tunneldisplay .cells {
+    padding-left: 2px;
+    padding-right: 2px;
+  }
+
+  #tunnels .tunneldisplay .cells .tunnel_id {
+    display: none;
+  }
+
+  #tunnels .tunneldisplay .cells .tunnel_peer.tunnel_local {
+    padding: 4px !important;
+  }
+
+  #tunnels_part td {
+    white-space: nowrap !important;
+  }
+
+  #tunnel_defs {
+    margin-bottom: 5px;
+  }
+
+  #tunnels .tunnel_cap {
+    margin: 0;
+    padding: 3px 2px 2px;
+    line-height: 120%;
+  }
+
+  .tunnel_local {
+    width: 64px;
+    line-height: 108%;
+    box-sizing: border-box;
+  }
+
+  #tunnels .routerid, .tunnel_local {
+    margin-right: 0 !important;
+  }
+
+  #peers .idle, #peers .inout {
+    min-width: 104px;
+  }
+  #peers .skew {
+    display: none;
+  }
+
+  .tab, .tab2 {
+    padding: 1px 0;
+    min-width: 50px !important;
+  }
+
+  .tab2 {
+    padding: 3px 12px;
+  }
+
+  .tab a {
+    padding: 2px 14px;
+  }
+
+  #plugininstall input[type=text] {
+    min-width: 200px !important;
+  }
+
+  #i2pupdates td:first-child {
+    white-space: normal;
+    width: 30%;
+  }
+
+  td.optionsave {
+    white-space: normal;
+  }
+
+  .main#tunnels {
+    padding: 0 5px;
+    min-width: 640px;
+  }
+
+  .main#tunnels h3 {
+    margin-top: 6px;
+  }
+
+  .statusnotes:last-child {
+    margin-bottom: 6px;;
+  }
+
+  #portfaq td:nth-child(2) {
+    white-space: normal;
+  }
+
+  #faq h3 {
+    font-size: 10pt !important;
+  }
+
+  #udpconnections .cells {
+    border: 1px inset #131;
+  }
+
+  #netconfig label, #externali2cp td label, #externali2cp .optionlist .nowrap, #reseedconfig .nowrap {
+    width: calc(100% - 10px);
+  }
+
+  #tunnels .cells:first-child {
+    width: 1% !important;
+    max-width: 48px !important;
+    min-width: 48px !important;
+  }
+
+  #tunnels .cells:nth-child(2), #tunnels .cells:nth-child(3), .tunnels_participating td:nth-child(4) {
+    width: 1% !important;
+    min-width: 72px !important;
+  }
+
+  #floodfills th:nth-child(8), #floodfills td:nth-child(8),
+  #floodfills th:nth-child(13), #floodfills td:nth-child(13),
+  #floodfills th:nth-child(14), #floodfills td:nth-child(14) {
+    display: none;
+  }
+
+  #tunnels #peercount img {
+    margin: -2px -4px;
+  }
+
+  #tunnelPeerCount {
+    margin-bottom: 4px;
+  }
+
+  #tunnels .percentBarOuter, #tunnels .percentBarText {
+    margin: 0 2px;
+    width: 70px;
+  }
+
+  #profilelist .fast, #profilelist .highcap, #profilelist .integrated, #profilelist .standard,
+  #profilelist .fast.integrated, #profilelist .highcap.integrated, #profilelist .standard.integrated {
+    width: 50px;
+    height: 14px;
+    background-size: 14px;
+  }
+  #profilelist .fast, #profilelist .highcap.integrated, #profilelist .standard.integrated {
+    background-position: calc(50% - 8px) center, calc(50% + 8px) center !important;
+    background-size: 14px;
+  }
+  .profilegroup::before {
+    width: 18px;
+    height: 14px;
+  }
+  #profilelist td:nth-last-child(2) span, #profilelist td:nth-last-child(3) span, #profilelist td:nth-last-child(5) span {
+    text-align: center !important;
+  }
+}

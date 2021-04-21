@@ -30,7 +30,9 @@
  <jsp:setProperty name="peerHelper" property="transport" value="<%=request.getParameter(\"transport\")%>" />
  <jsp:getProperty name="peerHelper" property="peerSummary" />
 </div>
+<script nonce="<%=cspNonce%>" src="/js/lazyload.js" type="text/javascript"></script>
 <script nonce="<%=cspNonce%>" type="text/javascript">
+document.addEventListener("DOMContentLoaded", function() {
   setInterval(function() {
     progressx.show();
     var uri = (window.location.pathname + window.location.search).substring(1);
@@ -40,10 +42,10 @@
     else
       xhr.open('GET', '/peers?' + new Date().getTime(), true);
     xhr.responseType = "document";
+    var udp = document.getElementById("udp");
+    var ntcp = document.getElementById("ntcp");
     xhr.onreadystatechange = function () {
       if (xhr.readyState==4 && xhr.status==200) {
-        var udp = document.getElementById("udp");
-        var ntcp = document.getElementById("ntcp");
         if (udp) {
           var udpResponse = xhr.responseXML.getElementById("udp");
           var udpParent = udp.parentNode;
@@ -59,8 +61,12 @@
       }
     }
     window.addEventListener("pageshow", progressx.hide());
+    ntcp.addEventListener("mouseover", lazyload());
+    udp.addEventListener("mouseover", lazyload());
     xhr.send();
   }, 15000);
+}, true);
+lazyload();
 </script>
 <%@include file="summaryajax.jsi" %>
 <script nonce="<%=cspNonce%>" type="text/javascript">window.addEventListener("pageshow", progressx.hide());</script>
