@@ -1,0 +1,214 @@
+@media screen and (max-width: 1599px) {
+  #reseedproxytype {
+    columns: 250px 3;
+  }
+
+  #reseed_urlselection.optionsingle {
+    columns: 1 auto;
+  }
+}
+
+@media screen and (max-width: 1480px) {
+  #view_profile .identicon {
+    top: 0;
+    right: 0;
+  }
+}
+
+@supports (columns: 2 500px) {
+  @media screen and (max-width: 1399px) {
+    ul.statlist {
+      padding: 10px;
+      columns: auto 520px;
+      column-gap: 10px;
+      text-align: center;
+    }
+  }
+}
+
+@media screen and (max-width: 1399px) {
+  .revision, .sha256 {
+    display: inline-block;
+    max-width: 100px !important;
+    overflow: hidden;
+    text-overflow: ellipsis
+  }
+
+  .revision:hover, .sha256:hover {
+    overflow: auto;
+    text-overflow: clip;
+  }
+
+  #peers .cells, #peers .cells[class] {
+    min-width: 0 !important
+  }
+}
+
+@media screen and (min-width: 1280px) {
+  .formaction#submitconsolepass {
+    margin-bottom: 0 !important;
+  }
+}
+
+@media screen and (max-width: 1220px) {
+  .main#peers .widescroll td.cells {
+    font-size: 8pt !important;
+  }
+
+  .main#help h3, #faq h3 {
+    font-size: 10pt !important;
+  }
+}
+
+@media screen and (max-width: 1150px) {
+  h4 .unbold {
+    max-width: 150px;
+    display: inline-block;
+    vertical-align: middle;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+  }
+
+  h4 span[style="float: right;"] .unbold {
+    max-width: 300px;
+  }
+}
+
+@media screen and (max-width: 1100px) {
+  .tunnel_id, .tunnel_peer {
+    margin: 1px 2px;
+    min-width: 0 !important;
+    text-align: center !important;
+  }
+
+  .tunnel_local {
+    margin-left: 2px;
+    padding: 4px;
+    min-width: 76px !important;
+  }
+
+  .tunnel_peer:empty {
+    vertical-align: middle;
+  }
+
+  .tunnel_peer:empty::before {
+    margin: 1px 6px 1px 2px;
+  }
+
+  #floodfills, #profiles ul#banlist, #profile_defs {
+    margin-bottom: 5px !important;
+  }
+
+  #floodfills td {
+    font-size: 8pt;
+  }
+
+  #graphs td:first-child {
+    padding: 5px 0;
+  }
+}
+
+@media screen and (max-width: 900px) {
+  #ntcpconnections th:last-child:not(old) {
+    font-size: 0;
+  }
+
+  #ntcpconnections th:last-child::before {
+    content: url(/themes/console/images/info/backlogged.png) !important;
+  }
+
+  #ntcpconnections td:last-child {
+    width: 24px !important;
+    white-space: nowrap;
+  }
+
+  th {
+    font-size: 8pt;
+  }
+
+  .tunneldisplay .cells {
+    padding: 4px 2px !important;
+  }
+
+  .langbox {
+    line-height: 15px;
+  }
+}
+
+@media screen and (min-width: 1634px) {
+  .leasesets_container {
+    margin-bottom: 8px;
+  }
+
+  th code {
+    font-size: 9pt !important;
+  }
+}
+
+@media screen and (min-width: 1460px) {
+  input[type=submit], input[type=reset], select, button {
+    font-size: 9pt;
+  }
+}
+
+@media screen and (min-width: 1800px) {
+  #help .confignav {
+    margin-left: -11px;
+    margin-right: -11px;
+    display: flex;
+    justify-content: center;
+    border-left: none;
+    border-right: none;
+}
+
+  #help .tab, #help .tab2 {
+    margin-left: 0 !important;
+    margin-right: 0 !important;
+    flex-grow: 1;
+  }
+}
+
+@media screen and (min-width: 1840px) {
+  div[id^="config_"] .confignav {
+    padding: 4px 4px 5px 3px !important;
+    display: flex;
+    flex-direction: row;
+    flex-wrap: wrap;
+    align-content: space-evenly;
+    justify-content: center;
+  }
+
+  div[id^="config_"] .tab, div[id^="config_"] .tab2 {
+    margin: 0 -1px -1px 0 !important;
+    min-width: 70px !important;
+    white-space: nowrap;
+    flex: auto;
+    flex-basis: content;
+    flex-grow: .06;
+  }
+
+  div[id^="config_"] .tab2:first-child {
+    border-left: none;
+  }
+
+  div[id^="config_"] .tab2 {
+    padding: 5px 6px;
+  }
+
+  div[id^="config_"] .tab a {
+    padding: 4px 6px;
+  }
+
+  div[id^="config_"] .confignav {
+    padding: 0 !important;
+  }
+
+  div[id^="config_"] .tab, div[id^="config_"] .tab2 {
+    margin-top: -1px !important;
+  }
+
+  div[id^="config_"] .tab:first-child {
+    margin-left: -1px !important;
+  }
+}

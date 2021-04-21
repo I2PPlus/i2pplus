@@ -1,0 +1,34 @@
+@media screen and (min-width: 1200px) {
+  .tab2 {
+    margin-bottom: -1px;
+    padding: 5px 12px 6px !important;
+  }
+
+  #jobstats tr:nth-last-child(n+2) td:first-child {
+    padding-left: 28px !important;
+    background: var(--yes) 8px center no-repeat;
+    background-size: 12px;
+  }
+
+  #terms {
+    padding: 5px 0 15px;
+    columns: 2 auto;
+    column-gap: 35px;
+    column-rule: 1px solid #020;
+  }
+
+  #terms p {
+    break-inside: avoid;
+    page-break-inside: avoid;
+    -webkit-column-break-inside: avoid;
+  }
+
+  #terms p:first-child {
+    margin-top: 0;
+  }
+
+  .ls_crypto {
+    display: inline-block;
+    columns: 340px 4;
+  }
+}
