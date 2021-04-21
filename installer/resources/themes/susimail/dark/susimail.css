@@ -537,18 +537,21 @@ input.download:active {
 }
 
 input.offline {
+  padding: 7px 10px 7px 26px;
   background: #000 url(images/offline.svg) 8px center no-repeat;
   background: url(images/offline.svg) 8px center no-repeat, linear-gradient(to bottom, #001000, #000 5%, #000 95%, #001000);
-  padding: 7px 10px 7px 26px;
+  background-size: 14px, 100% !important;
 }
 
 input.offline:hover {
   background: #010 url(images/offline_hover.svg) 8px center no-repeat;
   background: url(images/offline_hover.svg) 8px center no-repeat, linear-gradient(to bottom, #000, #010);
+  background-size: 14px, 100% !important;
 }
 
 input.offline:active {
   background: #f60 url(images/offline_active.svg) 8px center no-repeat;
+  background-size: 14px !important;
 }
 
 input.list, input.moveto, #pagenav input.switchto {
@@ -589,15 +592,18 @@ input.login {
   padding: 7px 10px 7px 26px;
   background: #000 url(images/login.svg) 8px center no-repeat;
   background: url(images/login.svg) 8px center no-repeat, linear-gradient(to bottom, #001000, #000 5%, #000 95%, #001000);
+  background-size: 15px, 100% !important;
 }
 
 input.login:hover {
   background: #010 url(images/login_hover.svg) 8px center no-repeat;
   background: url(images/login_hover.svg) 8px center no-repeat, linear-gradient(to bottom, #000, #010);
+  background-size: 15px, 100% !important;
 }
 
 input.login:active {
   background: #f60 url(images/login_active.svg) 8px center no-repeat;
+  background-size: 14px !important;
 }
 
 input.logout {
@@ -798,15 +804,18 @@ input.configure, #settings {
   padding: 7px 10px 7px 26px;
   background: #000 url(images/configure.svg) 8px center no-repeat;
   background: url(images/configure.svg) 8px center no-repeat, linear-gradient(to bottom, #001000, #000 5%, #000 95%, #001000);
+  background-size: 14px, 100% !important;
 }
 
 input.configure:hover, #settings:hover {
   background: #010 url(images/configure_hover.svg) 8px center no-repeat;
   background: url(images/configure_hover.svg) 8px center no-repeat, linear-gradient(to bottom, #000, #010);
+  background-size: 14px, 100% !important;
 }
 
 input.configure:active, #settings:active {
   background: #f60 url(images/configure_active.svg) 8px center no-repeat;
+  background-size: 14px !important;
 }
 
 input.saveas, input.saveasdraft {

@@ -28,6 +28,12 @@ use_git=""
 any="" # This will try all networks available
 ## Proxy
 proxy="" # Override no input proxy settings. ie. proxy="[http://]192.168.1.50:4444"
+##
+cron="" # true/"" - if true, read updatecheck.txt
+cron_file="./updatecheck.txt" # contains header last modified
+## TODO:
+# function get_date { use downloader to check last modifed }
+# if cron file date differs from get_date then init download and process, else exit
 
 # Downloader full command line arguments(for automation)
 # Please do not edit unless you know what you're doing
@@ -80,6 +86,7 @@ Note: Either --devel or --stable MUST be specified unless -u is specified
   --git          Download from GitLab
   --insecure     Allows for insecure downloading when using a custom url
   --pid          Specify PID file name
+  --cron         Uses downloader only if header dates differ
 
 Defaults: use eepget to download ip2update.zip the stable release from skank.i2p, and gracefully restart the router.
 Quick start: ./graceful_update --stable, this will download most stable version using eepget only.
@@ -93,7 +100,6 @@ Notes:
 
     if [ "$1" ]; then exit $1; else exit 0; fi
 }
-
 
 if [ ! "$1" ]; then
     send_help
@@ -218,6 +224,10 @@ for a in $@; do
             ;;
         --restart) # do a hard restart instead of graceful
             restart="true"
+            if [ "$2" ]; then shift; fi
+            ;;
+        --cron) # download if cron_file dates differ
+            cron="true"
             if [ "$2" ]; then shift; fi
             ;;
     esac
@@ -454,12 +464,13 @@ start_restart() {
 curl_cmd="$(which curl)"
 wget_cmd="$(which wget)"
 eepget_cmd="$I2P/eepget"
-debug "Setting command locations, eepget: $eepget_cmd, curl: $curl_cmd, wget: $wget_cmd"
+eephead_cmd="$I2P/eephead"
+debug "Setting command locations, eepget: $eepget_cmd, curl: $curl_cmd, wget: $wget_cmd eephead: $eephead_cmd"
 
  # We are missing which, manually search through default directories
-if [ ! -f "$eepget_cmd" ] && [ ! -f "$curl_cmd" ] && [ ! -f "$wget_cmd" ]; then
+if [ ! -f "$eepget_cmd" ] && [ ! -f "$eephead_cmd" ] && [ ! -f "$curl_cmd" ] && [ ! -f "$wget_cmd" ]; then
     verbose "Unable to find eepget, curl, or wget, searching."
-    common_bins="eepget wget curl"
+    common_bins="eepget eephead wget curl"
     common_dirs="/bin /sbin /usr/bin /usr/sbin /usr/local/bin /usr/local/sbin $HOME/bin $HOME/i2p"
     debug "Searching for $common_bins in $common_dirs"
     for dir in $common_dirs; do
@@ -469,6 +480,9 @@ if [ ! -f "$eepget_cmd" ] && [ ! -f "$curl_cmd" ] && [ ! -f "$wget_cmd" ]; then
                     if [ "$bin" = "eepget" ]; then
                         eepget_cmd="$dir/$bin"
                         debug "eepget found at $dir/$bin"
+                    elif [ "$bin" = "eepget" ]; then
+                        eephead_cmd="$dir/$bin"
+                        debug "eephead found at $dir/$bin"
                     elif [ "$bin" = "curl" ]; then
                         curl_cmd="$dir/$bin"
                         debug "curl found at $dir/$bin"
@@ -696,6 +710,27 @@ if [ -f "$I2P/i2pupdate.zip" ]; then
     fi
 fi
 
+# Cron job function, checks last modified file date against local saved date of last checked, if update exit 0, else exit 1
+head_check() {
+    if [ -f "$cron_file" ]; then
+        last_modified=$(head -n1 $cron_file)
+    fi
+    eval "${@}" | while read line; do
+        modified=$(echo "$line" | grep -i "last-modified" | grep -Eo '[a-zA-Z]{3}\, [0-9]{1,2} [a-zA-Z]{3} [0-9]{4} [0-9]{2}\:[0-9]{2}\:[0-9]{2} [A-Z]{3}')
+        if [ ! -z "$modified" ]; then
+            if [ "$last_modified" = "$modified" ]; then
+                exit 1
+            else
+                echo "$modified" > $cron_file
+                exit 0
+            fi
+        fi
+    done
+    exit 0
+}
+
+wget_hc=0
+
  # loop through available downloaders
 for b in $downloader; do
 
@@ -720,6 +755,15 @@ for b in $downloader; do
                     for a in $stable_files; do
                         url=$(get_url stable "$a")
                         eepget_eval="$eepget_cmd -o $I2P/i2pupdate.zip $eepget_retries $eepget_timeout $eepget_proxy $url"
+
+                        if [ "$cron" = "true" ] && [ -f "$eepget_cmd" ]; then
+                            eephead_eval="$eephead_cmd $eepget_retries $eepget_timeout $eepget_proxy $url"
+                            head_check "$eephead_eval"
+                            if [ $? -ne 0 ]; then
+                                exit 0
+                            fi
+                        fi
+
                         debug "Trying to run, stable: $eepget_eval"
                         dry "${eepget_eval}"
                         if [ $? -eq 0 ]; then
@@ -733,6 +777,14 @@ for b in $downloader; do
                     for a in $devel_files; do
                         url=$(get_url devel "$a")
                         eepget_eval="$eepget_cmd -o $I2P/i2pupdate.zip $eepget_retries $eepget_timeout $eepget_proxy $url"
+
+                        if [ "$cron" = "true" ] && [ -f "$eepget_cmd" ]; then
+                            eephead_eval="$eephead_cmd $eepget_retries $eepget_timeout $eepget_proxy $url"
+                            head_check "$eephead_eval"
+                            if [ $? -ne 0 ]; then
+                                exit 0
+                            fi
+                        fi
                         debug "Trying to run, devel: $eepget_eval"
                         dry "${eepget_eval}"
                         if [ $? -eq 0 ]; then
@@ -759,7 +811,7 @@ for b in $downloader; do
                     curl_failed="true"
                 else
                     curl_eval="$curl_cmd -o $I2P/i2pupdate.zip $curl_insecure $curl_retries $curl_timeout $curl_insecure $curl_proxy $url"
-                    debug "Trying to run curl, url: $eepget_eval"
+                    debug "Trying to run curl, url: $curl_eval"
                     dry "${curl_eval}"
                     if [ $? -eq 0 ]; then
                         start_restart_precheck
@@ -778,6 +830,15 @@ for b in $downloader; do
                             curl_failed="true"
                         else
                             curl_eval="$curl_cmd -o $I2P/i2pupdate.zip $curl_retries $curl_timeout $curl_proxy $url"
+
+                            if [ "$cron" = "true" ] && [ -f "$curl_cmd" ]; then
+                                curlhead_eval="$curl_cmd -I $curl_retries $curl_timeout $curl_proxy $url"
+                                head_check "$curlhead_eval"
+                                if [ $? -ne 0 ]; then
+                                    exit 0
+                                fi
+                            fi
+
                             debug "Trying to run, stable: $curl_eval"
                             dry "${curl_eval}"
                             if [ $? -eq 0 ]; then
@@ -800,6 +861,15 @@ for b in $downloader; do
                                 url="$($curl_cmd --raw -q -s $curl_retries $curl_timeout $curl_proxy $url | cut -d'"' -f2)"
                             fi
                             curl_eval="$curl_cmd -o $I2P/i2pupdate.zip $curl_retries $curl_timeout $curl_proxy $url"
+
+                            if [ "$cron" = "true" ] && [ -f "$curl_cmd" ]; then
+                                curlhead_eval="$curl_cmd -I $curl_retries $curl_timeout $curl_proxy $url"
+                                head_check "$curlhead_eval"
+                                if [ $? -ne 0 ]; then
+                                    exit 0
+                                fi
+                            fi
+
                             debug "Trying to run, devel: $curl_eval"
                             dry "${curl_eval}"
                             if [ $? -eq 0 ]; then
@@ -850,6 +920,16 @@ for b in $downloader; do
                                 wget_failed="true"
                             else
                                 wget_eval="$wget_cmd -O $I2P/i2pupdate.zip $wget_verbose $wget_retries $wget_timeout $url"
+
+                                if [ "$cron" = "true" ] && [ -f "$wget_cmd" ] && [ $wget_hc -eq 0 ]; then
+                                    wget_hc=$(($wget_hc + 1 ))
+                                    wgethead_eval="$wget_cmd -S -O /dev/null -q $url"
+                                    head_check "$wgethead_eval"
+                                    if [ $? -ne 0 ]; then
+                                        exit 0
+                                    fi
+                                fi
+
                                 debug "Trying to run, stable: $wget_eval"
                                 dry "${wget_eval}"
                                 if [ $? -eq 0 ]; then

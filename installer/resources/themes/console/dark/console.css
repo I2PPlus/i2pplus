@@ -355,9 +355,7 @@ pre {
   transition: ease color .05s, ease box-shadow .1s;
   transition: ease all .2s;
   background: radial-gradient(at center bottom, rgba(16, 72, 16, .4) 0, rgba(0, 0, 0, 0) 50%),
-              linear-gradient(to bottom, rgba(0,0,0,0) 50%, #000 50%),
-              var(--h3),
-              var(--h3_fade) !important;
+              linear-gradient(to bottom, rgba(0,0,0,0) 50%, #000 50%), var(--h3), var(--h3_fade);
 }
 
 .routersummary h3::after {
@@ -378,8 +376,6 @@ pre {
   background: radial-gradient(at center bottom, rgba(96, 48, 0, .4) 0, rgba(0, 0, 0, 0) 80%),
               repeating-linear-gradient(to bottom, #010, #010 1px, #020 2px) !important;
   box-shadow: inset 0 0 0 1px rgba(255,96,0,.4), inset 0 0 2px 2px #000;
-  mix-blend-mode: normal;
-  transition: ease color .05s, ease box-shadow .1s;
 }
 
 #sidebar h3:hover a {
@@ -388,15 +384,13 @@ pre {
 }
 
 #sidebar h3:active {
-  box-shadow: var(--lowlight), inset 4px 4px 3px 1px #000;
-  background: repeating-linear-gradient(to bottom, #000, #000 1px, #530 2px) !important;
-  transition: ease box-shadow .1s;
+  box-shadow: var(--lowlight), inset 4px 4px 4px rgba(0,0,0,.6);
+  background: linear-gradient(to bottom, #310, #420) !important;
+  transition: ease box-shadow .05s;
 }
 #sidebar h3:active a {
-  color: #f90 !important;
-  color: rgba(255,144,0,.4) !important;
+  color: #d50 !important;
   text-shadow: 0 0 1px #000;
-  transition: none;
 }
 
 .routersummary h4 {
@@ -409,7 +403,6 @@ pre {
   border: 0;
   border-bottom: 0 !important;
   box-shadow: inset 0 0 0 1px #121, inset 0 0 5px 2px #000;
-  background: #010;
   background: linear-gradient(to right, #001900, #001000 5%, #000 50%, #001000 95%, #001900);
 }
 
@@ -716,10 +709,11 @@ div.refresh {
 }
 
 .sb_newsheadings td {
-  padding: 4px 5px 4px 24px;
+  padding: 4px 5px 4px 23px;
   text-align: left;
-  background: url(images/newsbullet_mini.png) 4px center no-repeat !important;
   border-bottom: var(--softborder) !important;
+  background: var(--newsbullet) 4px center no-repeat !important;
+  background-size: 14px !important;
 }
 
 .sb_newsheadings tr:last-child td {
@@ -1053,7 +1047,9 @@ div.news {
   text-align: right;
   box-shadow: 0 1px 5px #000;
   background: #000800 url(images/news.png) no-repeat scroll bottom right;
-  background: linear-gradient(to bottom, rgba(0,0,0,.3), rgba(0,0,0,.5)), url(images/news.png) no-repeat scroll right bottom, repeating-linear-gradient(to bottom, rgba(0,0,0,.8) 2px, rgba(0,16,0,.8) 4px), var(--camo), #000 !important;
+  background: linear-gradient(to bottom, rgba(0,0,0,.3), rgba(0,0,0,.5)),
+              url(images/news.png) no-repeat scroll right bottom,
+              repeating-linear-gradient(to bottom, rgba(0,0,0,.8) 2px, rgba(0,16,0,.8) 4px), var(--camo), #000 !important;
   background-size: 100%, auto, 2048px !important;
   background-blend-mode: normal, lighten, normal;
 }
@@ -10264,7 +10260,7 @@ input[type=file] {
 
 #floodfills .percentBarOuter, #floodfills .percentBarText {
   display: inline-block;
-  width: 50px;
+  width: 50px !important;
   margin: 0 2px;
 }
 
@@ -12517,7 +12513,7 @@ h3 + table {
   position: relative;
 }
 
-.routersummary table:not(#sb_localtunnels):not(#sb_services)::before {
+.routersummary table:not(#sb_localtunnels):not(#sb_services):not(.sb_newsheadings)::before {
   width: 0;
   height: 1px;
   position: absolute;
