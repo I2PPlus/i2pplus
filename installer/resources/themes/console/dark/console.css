@@ -12839,7 +12839,7 @@ h1, .main h2, h4.app, h4.app2, .main h3 {
   contain: strict;
 }
 
-.lazy.lazyshow, .lazy.lazyshow td {
+.lazy.lazyshow, .lazy.lazyshow td, #peers .lazy:not(.lazyhide) {
   opacity: 1;
   contain: layout;
 }

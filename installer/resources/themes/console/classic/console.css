@@ -12388,25 +12388,22 @@ from {
   }
 }
 
-.lazy.lazyshow, #profilelist .lazy.lazyshow td, #tunnels .lazy.lazyshow td {
-  visibility: visible;
-  opacity: 1;
-  transition: ease opacity .15s;
-}
+/* lazy loading */
 
-#profilelist .lazy.lazyshow td {
-  visibility: visible;
-}
-
-.lazy.lazyhide, #profilelist .lazy.lazyhide td, #tunnels .lazy.lazyhide td {
+.lazy.lazyhide, .lazy.lazyhide td, .lazy:not(.lazyshow) {
   opacity: 0;
+  contain: strict;
 }
 
-#profilelist .lazy.lazyhide, #tunnels .lazy.lazyhide {
+.lazy.lazyshow, .lazy.lazyshow td, #peers .lazy:not(.lazyhide) {
   opacity: 1;
+  contain: layout;
 }
 
-.leasesets_container .lazy.lazyhide {
-  visibility: visible;
+.leasesets_container .lazy.lazyhide, .leasesets_container .lazy.lazyhide td,
+.leasesets_container .lazy:not(.lazyshow) {
   opacity: 1;
+  contain: none;
 }
+
+/* end lazy loading */
