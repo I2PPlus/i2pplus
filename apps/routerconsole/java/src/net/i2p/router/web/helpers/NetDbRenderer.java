@@ -509,7 +509,7 @@ class NetDbRenderer {
                 // warning - will be null for non-local encrypted
                 Destination dest = ls.getDestination();
                 Hash key = ls.getHash();
-                buf.append("<table class=\"leaseset lazy\" id=\"ls_").append(key.toBase32().substring(0,4)).append("\">\n")
+                buf.append("<table class=\"leaseset\" id=\"ls_").append(key.toBase32().substring(0,4)).append("\">\n")
                    .append("<tr>\n<th><b class=\"lskey\">").append(_t("LeaseSet")).append(":</b> <code title =\"").append(_t("LeaseSet Key")).append("\">")
                    .append(key.toBase64()).append("</code>");
                 int type = ls.getType();
