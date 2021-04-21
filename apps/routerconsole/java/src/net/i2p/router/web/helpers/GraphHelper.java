@@ -229,7 +229,7 @@ public class GraphHelper extends FormHandler {
                 else
                     _out.write("<span class=\"graphContainer\">");
                 _out.write("<a href=\"graph?stat="
-                           + r.getRateStat().getName()
+                           + r.getRateStat().getName().replace(" ", "%20")
                            + '.' + r.getPeriod()
                            + "&amp;c=" + (3 * _periodCount ));
                            // let's set width & height predictably and reduce chance of downscaling
@@ -243,7 +243,7 @@ public class GraphHelper extends FormHandler {
                            + "\">");
                 _out.write("<img class=\"statimage\" border=\"0\""
                            + " src=\"viewstat.jsp?stat="
-                           + r.getRateStat().getName()
+                           + r.getRateStat().getName().replace(" ", "%20")
                            + "&amp;showEvents=" + _showEvents
                            + "&amp;period=" + r.getPeriod()
                            + "&amp;periodCount=" + _periodCount);
@@ -317,7 +317,7 @@ public class GraphHelper extends FormHandler {
             _out.write("<a class=\"singlegraph\" href=\"/graphs\" title=\""
                        + _t("Return to main graphs page") + "\"><img class=\"statimage\" id=\"graphSingle\" border=\"0\""
                        + " src=\"viewstat.jsp?stat="
-                       + name
+                       + name.replace(" ", "%20")
                        + "&amp;showEvents=" + _showEvents
                        + "&amp;period=" + period
                        + "&amp;periodCount=" + _periodCount
@@ -418,7 +418,7 @@ public class GraphHelper extends FormHandler {
                                int width, int height) {
         return
                "<a href=\"graph?stat="
-               + stat
+               + stat.replace(" ", "%20")
                + "&amp;c=" + periodCount
                + "&amp;w=" + width
                + "&amp;h=" + height
