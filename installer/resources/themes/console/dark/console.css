@@ -19,6 +19,7 @@
   --vstripe: repeating-linear-gradient(to bottom, rgba(0,0,0,.9) 2px, rgba(0,16,0,.9) 4px);
   --helpbox: linear-gradient(135deg, #000d00, #000900);
   --border: 1px solid #242;
+  --softborder: 1px solid #131;
 }
 
 html {
@@ -172,71 +173,7 @@ pre {
   font: 8.5pt var(--monospaced);
 }
 
-/* proxy errors */
-
-#proxy_error {
-/*  background: #000;*/
-}
-
-.logo { /* proxy error "fake" sidebar */
-  margin: -1px 20px 0;
-  padding: 10px;
-  width: 185px;
-  float: left;
-  position: relative;
-  text-align: center;
-  font-size: 10pt;
-  border: var(--border);
-  box-shadow: inset 0 0 3px 3px #000;
-  background: #000 var(--camotile);
-  background: repeating-linear-gradient(to bottom, rgba(0,16,0,.5) 2px, rgba(0,16,0,.5) 4px), var(--camotile);
-  will-change: transform;
-}
-
-.logo > * {
-  text-align: center;
-}
-
-.logo a:nth-child(n+2) {
-  padding: 10px 0;
-  width: 100%;
-  display: inline-block;
-  line-height: 180%;
-  border-bottom: 1px solid #020;
-}
-
-.logo a:last-child {
-  margin-bottom: -10px;
-  border-bottom: none;
-}
-
-.logo a img {
-  margin: 2px 0 0;
-  padding: 0;
-  width: 180px;
-  text-align: center;
-  font-size: 0;
-}
-
-.logo a:hover img {
-  filter: drop-shadow(0 0 1px #f60);
-}
-
-.logo a:active img {
-  filter: drop-shadow(0 0 2px #d30);
-}
-
-.logo hr {
-  margin: 10px -10px 0;
-  height: 1px;
-  color: #494;
-  border: 0 solid #252;
-  background: #252;
-}
-
-.logo, .warning {
-  filter: drop-shadow(0 0 5px #000);
-}
+/* servlet errors */
 
 .warning {
   margin: 20px 20px 20px 248px;
@@ -285,14 +222,6 @@ pre {
   margin-left: -69px;
 }
 
-#proxyerror .warning {
-  margin-left: 20px;
-}
-
-#proxyerror p:first-of-type {
-  padding-top: 10px;
-}
-
 .warning p, .warning a {
   font-size: 10pt;
   line-height: 130%;
@@ -305,11 +234,6 @@ pre {
 
 .warning h3 + p {
   margin-top: 30px !important;
-}
-
-#proxyrequest {
-  margin: 3px 0 10px;
-  display: inline-block;
 }
 
 .warning h3 {
@@ -350,86 +274,10 @@ pre {
   box-shadow: none !important;
 }
 
-#jumplinks {
-  margin-bottom: 10px;
-}
-
-#jumplinks h4 {
-  margin-bottom: 13px;
-  padding-bottom: 10px;
-}
-
-#jumplinks a {
-  padding: 2px 0;
-  display: inline-block;
-  line-height: 16px;
-}
-
-#jumplinks a::before {
-  padding: 3px 0;
-  display: inline-block;
-  vertical-align: sub;
-  line-height: 16px;
-  font-size: 16pt;
-  content: "\279F\00A0";
-}
-
-#proxyNewAddressHelper .proxyfooter {
-  display: none;
-}
-
-#proxyNewAddressHelper .warning {
-  padding-bottom: 0 !important;
-}
-
-#proxyNewHost {
-  margin-bottom: 20px;
-}
-
-#proxyNewHost td {
-  padding: 8px !important;
-  font-size: 10pt !important;
-}
-
-#proxyNewHost td:first-child {
-  font-weight: bold;
-}
-
-#proxyNewHost tr:last-child td:first-child {
-  vertical-align: top;
-}
-
-#proxyNewHost textarea {
-  margin: 0 !important;
-  padding: 0 !important;
-  width: 100% !important;
-  height: 6em;
-  resize: none;
-  white-space: pre-wrap;
-  word-break: break-all;
-  overflow: auto;
-  border: none;
-  background: none !important;
-  box-shadow: none !important;
-}
-
-#proxyNewHost textarea:focus {
-  filter: none;
-}
-
-#proxyNewHost + hr {
-  display: none;
-}
-
 .warning h4 {
   text-align: left;
   font-size: 10pt;
   box-shadow: none !important;
-}
-
-#proxyNewHost a {
-  display: inline-block;
-  word-break: break-all;
 }
 
 .warning p + .formaction {
@@ -437,12 +285,7 @@ pre {
   padding: 0;
 }
 
-#denied {
-  padding: 30px 0;
-  font-weight: bold;
-}
-
-/* end proxy errors */
+/* end servlet errors */
 
 /* sidebar */
 
@@ -876,7 +719,7 @@ div.refresh {
   padding: 4px 5px 4px 24px;
   text-align: left;
   background: url(images/newsbullet_mini.png) 4px center no-repeat !important;
-  border-bottom: 1px solid #131 !important;
+  border-bottom: var(--softborder) !important;
 }
 
 .sb_newsheadings tr:last-child td {
@@ -898,7 +741,7 @@ div.refresh {
   font-weight: bold;
   color: #050;
   text-shadow: none;
-  border: 1px solid #131;
+  border: var(--softborder);
   border-top: none;
   border-radius: 0 0 2px 2px;
   background: #000;
@@ -919,7 +762,7 @@ div.refresh {
 .percentBarouter {
   margin: -3px 0 -5px -7px;
   width: 205px;
-  border: 1px solid #131;
+  border: var(--softborder);
   box-shadow: 0 0 1px 1px rgba(0,0,0,.8), var(--lowlight), inset 0 3px 3px rgba(0,0,0,.7);
   background: #000;
   background: linear-gradient(to right, rgba(0,128,0,0) 40%, rgba(255,96,0,.06), rgba(255,0,0,.08)),
@@ -935,7 +778,7 @@ div.refresh {
 .percentBarInner {
   height: 14px;
   max-width: 100%;
-  border-right: 1px solid #131;
+  border-right: var(--softborder);
   box-shadow: var(--lowlight);
   background: #0e5f00;
   background: linear-gradient(to bottom, rgba(28, 148, 58, .6), rgba(9, 47, 16, .6) 50%, rgba(9, 27, 5, .6) 50%, rgba(9, 21, 3, .6));
@@ -1702,7 +1545,7 @@ form[action="updategraphs"] {
 }
 
 #graphs td.infohelp {
-  border: 1px solid #131;
+  border: var(--softborder);
   border-right: none;
   border-left: none;
   background-size: 20px !important;
@@ -4803,7 +4646,7 @@ h4.app2 a::after {
   letter-spacing: .05em;
   background: #000 !important;
   border: none;
-  border-bottom: 1px solid #131 !important;
+  border-bottom: var(--softborder) !important;
   font: 9pt var(--monospaced);
 }
 
@@ -5032,8 +4875,8 @@ ul#upnphelp li:last-child, #legal ul li:last-child {
 }
 
 #netdboverview td:nth-child(2) {
-  border-left: 1px solid #131;
-  border-right: 1px solid #131;
+  border-left: var(--softborder);
+  border-right: var(--softborder);
 }
 
 #netdboverview table th, #netdboverview table td {
@@ -5041,7 +4884,7 @@ ul#upnphelp li:last-child, #legal ul li:last-child {
 }
 
 #netdbversions, #netdbtransports, #netdbcountrylist, #netdbtiers {
-  border: 1px solid #131 !important;
+  border: var(--softborder) !important;
   border-right: none !important;
   border-left: none !important;
   margin-bottom: 0;
@@ -5069,7 +4912,7 @@ ul#upnphelp li:last-child, #legal ul li:last-child {
 #netdboverview #netdbtransports th {
   padding-top: 5px !important;
   padding-bottom: 5px !important;
-  border-top: 1px solid #131 !important;
+  border-top: var(--softborder) !important;
 }
 
 #netdboverview #netdbtiers tr:last-child td {
@@ -6398,7 +6241,7 @@ span#distance {
 
 .netdbentry td:first-child {
   padding-right: 8px !important;
-  border-right: 1px solid #131;
+  border-right: var(--softborder);
 }
 
 .netdbentry td:nth-child(2) {
@@ -7909,7 +7752,7 @@ h4#sb_shutdownstatus span {
 
 #profile_defs td:first-child {
   padding: 3px 10px;
-  border-right: 1px solid #131;
+  border-right: var(--softborder);
 }
 
 #profile_defs td:nth-child(2)::first-letter {
@@ -7934,7 +7777,7 @@ h4#sb_shutdownstatus span {
 }
 
 #capabilities_key td:nth-child(2), #capabilities_key td:nth-child(3) {
-  border-right: 1px solid #131;
+  border-right: var(--softborder);
 }
 
 #capabilities_key td:last-child {
@@ -8380,7 +8223,7 @@ th code {
 
 #debug ul, .debug_targetinfo {
   columns: 400px 2;
-  column-rule: 1px solid #131;
+  column-rule: var(--softborder);
   column-gap: 30px;
 }
 
@@ -8449,7 +8292,7 @@ th code {
 .bucketsContainer, .bucketCount {
   margin: 0;
   text-align: center;
-  border: 1px solid #131;
+  border: var(--softborder);
   box-shadow: var(--lowlight);
 }
 
@@ -8974,7 +8817,7 @@ th.options, #externali2cp th {
 
 .optionlist, .optionsingle, #reseedssl {
   padding: 1px 2px;
-  border: 1px solid #131 !important;
+  border: var(--softborder) !important;
   box-shadow: inset 0 0 0 2px #000;
   column-gap: 1px;
   transition: ease box-shadow .2s;
@@ -8987,7 +8830,7 @@ th.options, #externali2cp th {
 }
 
 .optionlist:hover, .optionsingle:hover, .optiontextarea:hover {
-  border: 1px solid #131;
+  border: var(--softborder);
   box-shadow: inset 0 0 0 1px #002500 !important;
   transition: ease box-shadow .5s, ease background .2s .01s;
   background: #002500 !important;
@@ -9032,7 +8875,7 @@ b.suboption {
   display: inline-block;
   white-space: nowrap;
   text-shadow: 0 1px 1px #000;
-  border: 1px solid #131;
+  border: var(--softborder);
   border-bottom: none;
   box-shadow: var(--lowlight);
   background: #010;
@@ -9903,7 +9746,7 @@ input[type=file] {
   padding: 4px 8px;
   width: calc(100% - 24px);
   display: inline-block;
-  border: 1px solid #131;
+  border: var(--softborder);
   box-shadow: var(--lowlight), inset 0 0 2px 1px #020;
   background: #000800;
   break-inside: avoid;
@@ -10428,7 +10271,7 @@ input[type=file] {
 #floodfills .percentBarOuter {
   text-align: left;
   background: #000;
-  border: 1px solid #131;
+  border: var(--softborder);
   opacity: .9;
 }
 
@@ -11054,7 +10897,7 @@ a[href^="/netdb"]:hover span {
 }
 
 #floodfills td:not(:last-child) {
-  border-right: 1px solid #131;
+  border-right: var(--softborder);
 }
 
 #floodfills td:nth-child(2), #floodfills td:nth-child(n+4) {
@@ -11159,7 +11002,7 @@ a[href^="/netdb"]:hover span {
 }
 
 #routerinformation td:first-child {
-  border-right: 1px solid #131;
+  border-right: var(--softborder);
 }
 
 .skm_dest, #skm_dest {
@@ -11957,7 +11800,7 @@ p#gatherstats {
   padding-bottom: 8px;
   display: block;
   width: calc(100% - 27px);
-  border-bottom: 1px solid #131;
+  border-bottom: var(--softborder);
 }
 
 .statsViewGraphs {
@@ -12311,7 +12154,7 @@ h3 + table {
   display: inline-block;
   font-size: 90%;
   text-align: left;
-  border: 1px solid #131;
+  border: var(--softborder);
   border-radius: 1px;
   box-sizing: border-box;
   background: linear-gradient(to bottom, #020, #000);
@@ -12481,7 +12324,7 @@ h3 + table {
 
 #tunnelPeerCount tr:not(.tablefooter) td {
   padding: 3px !important;
-  border: 1px solid #131;
+  border: var(--softborder);
 }
 
 #tunnelPeerCount tr:nth-last-child(2) td {
