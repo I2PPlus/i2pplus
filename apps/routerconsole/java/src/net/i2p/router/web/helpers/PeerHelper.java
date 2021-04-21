@@ -34,18 +34,15 @@ public class PeerHelper extends HelperBase {
     private boolean _graphical;
 
     private static final String titles[] = {
-//                                            _x("Addresses"),
                                             _x("All Transports"),
                                              "NTCP",
                                              "SSU"
-//                                             _x("UPnP Status")
                                            };
 
     private static final String links[] = {
                                              "",
                                              "?transport=ntcp",
                                              "?transport=ssu",
-//                                             "?tx=upnp"
                                            };
 
     // Opera doesn't have the char, TODO check UA
@@ -98,18 +95,10 @@ public class PeerHelper extends HelperBase {
      */
     private void renderStatusHTML(Writer out, String urlBase, int sortFlags) throws IOException {
         if (_context.commSystem().isDummy()) {
-//            out.write("<p class=\"infohelp\">No peers, no transports, no UPnP: i2p.vmCommSystem=true</p>");
             out.write("<p class=\"infohelp\">No peer connections available (i2p.vmCommSystem=true)</p>");
             return;
         }
         renderNavBar(out);
-//        if (isAdvanced() && _transport == null) {
-//            out.write("<p id=\"upnpstatus\"><b>");
-//            out.write(_t("Status"));
-//            out.write(": ");
-//            out.write(_context.commSystem().getLocalizedStatusString());
-//            out.write("</b></p>");
-//        }
 
         SortedMap<String, Transport> transports = _context.commSystem().getTransports();
         if (_transport != null && !_transport.equals("upnp")) {
@@ -318,13 +307,13 @@ public class PeerHelper extends HelperBase {
         long totalSend = 0;
         long totalRecv = 0;
 
-        if (!isAdvanced()) {
+//        if (!isAdvanced()) {
             for (Iterator<NTCPConnection> iter = peers.iterator(); iter.hasNext(); ) {
                  // outbound conns get put in the map before they are established
                  if (!iter.next().isEstablished())
                      iter.remove();
             }
-        }
+//        }
 
         StringBuilder buf = new StringBuilder(512);
         buf.append("<div id=\"ntcp\">\n<h3 id=\"ntcpcon\">").append(_t("NTCP connections")).append(":&nbsp; ").append(peers.size());
@@ -343,7 +332,6 @@ public class PeerHelper extends HelperBase {
                        "<th class=\"skew\" title=\"").append(_t("Peer's clockskew relative to our clock")).append("\">").append(_t("Skew")).append("</th>" +
                        "<th class=\"tx\" title=\"").append(_t("Messages sent")).append("\">").append(_t("TX")).append("</th>" +
                        "<th class=\"rx\" title=\"").append(_t("Messages received")).append("\">").append(_t("RX")).append("</th>" +
-                       "<th  title=\"").append(_t("Version of NTCP protocol in use")).append("\">").append(_t("Version")).append("</th>" +
                        "<th class=\"queue\" title=\"").append(_t("Queued messages to send to peer")).append("\">").append(_t("Out Queue")).append("</th>" +
                        "<th title=\"").append(_t("Is peer backlogged?")).append("\">").append(_t("Backlogged?")).append("</th>");
             buf.append("<th class=\"spacer\">&nbsp;</th>" +
@@ -405,8 +393,7 @@ public class PeerHelper extends HelperBase {
             buf.append("</td>");
             buf.append("<td class=\"cells tx\" align=\"right\"><span>").append(con.getMessagesSent());
             totalSend += con.getMessagesSent();
-            buf.append("</span></td><td class=\"cells rx\" align=\"right\"><span>").append(con.getMessagesReceived()).append("</span>");
-            buf.append("</td><td class=\"cells peeripv6\" align=\"center\">").append(con.getVersion());
+            buf.append("</span></td><td class=\"cells rx\" align=\"right\"><span>").append(con.getMessagesReceived()).append("</span></td>");
             totalRecv += con.getMessagesReceived();
             long outQueue = con.getOutboundQueueSize();
             buf.append("<td class=\"cells queue\" align=\"center\">");
@@ -444,7 +431,7 @@ public class PeerHelper extends HelperBase {
             buf.append("</b></span></td>");
             buf.append("<td class=\"tx\" align=\"right\"><span><b>").append(totalSend)
                .append("</b></span></td><td class=\"rx\" align=\"right\"><span><b>").append(totalRecv).append("</b></span></td>");
-            buf.append("<td>&nbsp;</td><td>&nbsp;</td><td>&nbsp;</td>");
+            buf.append("<td>&nbsp;</td><td>&nbsp;</td>");
             buf.append("<td class=\"spacer\">&nbsp;</td></tr>\n");
         }
 
