@@ -35,14 +35,14 @@
    String themePath = intl.getTheme(UA);
    String theme = intl.getTheme(UA).replace("/themes/console/", "").replace("/", "");
    String cspNonce = Integer.toHexString(net.i2p.util.RandomSource.getInstance().nextInt());
-   String override = net.i2p.I2PAppContext.getGlobalContext().getBaseDir().getAbsolutePath() +
-                     java.io.File.separatorChar +
-                     "docs" + java.io.File.separatorChar + "themes" +
-                     java.io.File.separatorChar + "console" +
-                     java.io.File.separatorChar + theme +
-                     java.io.File.separatorChar + "override.css";
-   java.io.File themeOverride = new java.io.File(override);
+   String themeBase = net.i2p.I2PAppContext.getGlobalContext().getBaseDir().getAbsolutePath() +
+                      java.io.File.separatorChar + "docs" + java.io.File.separatorChar + "themes" +
+                      java.io.File.separatorChar + "console" + java.io.File.separatorChar + theme +
+                      java.io.File.separatorChar;
+   java.io.File themeOverride = new java.io.File(themeBase + "override.css");
+   java.io.File imports = new java.io.File(themeBase + "import.css");
    boolean hasOverride = themeOverride.exists();
+   boolean hasImport = imports.exists();
 %>
 <link rel="preload" href="<%=themePath%>images/i2plogo.png" as="image">
 <link rel="preload" href="/themes/fonts/DroidSans.css" as="style">
@@ -105,6 +105,11 @@
     if (hasOverride) {
 %>
 <link href="<%=themePath%>override.css?<%=net.i2p.CoreVersion.VERSION%>" rel="stylesheet" type="text/css">
+<%
+    }
+    if (hasImport) {
+%>
+<link href="<%=themePath%>import.css?<%=net.i2p.CoreVersion.VERSION%>" rel="stylesheet" type="text/css">
 <%
     }
 %>
