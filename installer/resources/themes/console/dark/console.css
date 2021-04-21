@@ -19,6 +19,7 @@
   --vstripe: repeating-linear-gradient(to bottom, rgba(0,0,0,.9) 2px, rgba(0,16,0,.9) 4px);
   --helpbox: linear-gradient(135deg, #000d00, #000900);
   --border: 1px solid #242;
+  --softborder: 1px solid #131;
 }
 
 html {
@@ -172,71 +173,7 @@ pre {
   font: 8.5pt var(--monospaced);
 }
 
-/* proxy errors */
-
-#proxy_error {
-/*  background: #000;*/
-}
-
-.logo { /* proxy error "fake" sidebar */
-  margin: -1px 20px 0;
-  padding: 10px;
-  width: 185px;
-  float: left;
-  position: relative;
-  text-align: center;
-  font-size: 10pt;
-  border: var(--border);
-  box-shadow: inset 0 0 3px 3px #000;
-  background: #000 var(--camotile);
-  background: repeating-linear-gradient(to bottom, rgba(0,16,0,.5) 2px, rgba(0,16,0,.5) 4px), var(--camotile);
-  will-change: transform;
-}
-
-.logo > * {
-  text-align: center;
-}
-
-.logo a:nth-child(n+2) {
-  padding: 10px 0;
-  width: 100%;
-  display: inline-block;
-  line-height: 180%;
-  border-bottom: 1px solid #020;
-}
-
-.logo a:last-child {
-  margin-bottom: -10px;
-  border-bottom: none;
-}
-
-.logo a img {
-  margin: 2px 0 0;
-  padding: 0;
-  width: 180px;
-  text-align: center;
-  font-size: 0;
-}
-
-.logo a:hover img {
-  filter: drop-shadow(0 0 1px #f60);
-}
-
-.logo a:active img {
-  filter: drop-shadow(0 0 2px #d30);
-}
-
-.logo hr {
-  margin: 10px -10px 0;
-  height: 1px;
-  color: #494;
-  border: 0 solid #252;
-  background: #252;
-}
-
-.logo, .warning {
-  filter: drop-shadow(0 0 5px #000);
-}
+/* servlet errors */
 
 .warning {
   margin: 20px 20px 20px 248px;
@@ -285,14 +222,6 @@ pre {
   margin-left: -69px;
 }
 
-#proxyerror .warning {
-  margin-left: 20px;
-}
-
-#proxyerror p:first-of-type {
-  padding-top: 10px;
-}
-
 .warning p, .warning a {
   font-size: 10pt;
   line-height: 130%;
@@ -305,11 +234,6 @@ pre {
 
 .warning h3 + p {
   margin-top: 30px !important;
-}
-
-#proxyrequest {
-  margin: 3px 0 10px;
-  display: inline-block;
 }
 
 .warning h3 {
@@ -350,86 +274,10 @@ pre {
   box-shadow: none !important;
 }
 
-#jumplinks {
-  margin-bottom: 10px;
-}
-
-#jumplinks h4 {
-  margin-bottom: 13px;
-  padding-bottom: 10px;
-}
-
-#jumplinks a {
-  padding: 2px 0;
-  display: inline-block;
-  line-height: 16px;
-}
-
-#jumplinks a::before {
-  padding: 3px 0;
-  display: inline-block;
-  vertical-align: sub;
-  line-height: 16px;
-  font-size: 16pt;
-  content: "\279F\00A0";
-}
-
-#proxyNewAddressHelper .proxyfooter {
-  display: none;
-}
-
-#proxyNewAddressHelper .warning {
-  padding-bottom: 0 !important;
-}
-
-#proxyNewHost {
-  margin-bottom: 20px;
-}
-
-#proxyNewHost td {
-  padding: 8px !important;
-  font-size: 10pt !important;
-}
-
-#proxyNewHost td:first-child {
-  font-weight: bold;
-}
-
-#proxyNewHost tr:last-child td:first-child {
-  vertical-align: top;
-}
-
-#proxyNewHost textarea {
-  margin: 0 !important;
-  padding: 0 !important;
-  width: 100% !important;
-  height: 6em;
-  resize: none;
-  white-space: pre-wrap;
-  word-break: break-all;
-  overflow: auto;
-  border: none;
-  background: none !important;
-  box-shadow: none !important;
-}
-
-#proxyNewHost textarea:focus {
-  filter: none;
-}
-
-#proxyNewHost + hr {
-  display: none;
-}
-
 .warning h4 {
   text-align: left;
   font-size: 10pt;
   box-shadow: none !important;
-}
-
-#proxyNewHost a {
-  display: inline-block;
-  word-break: break-all;
 }
 
 .warning p + .formaction {
@@ -437,12 +285,7 @@ pre {
   padding: 0;
 }
 
-#denied {
-  padding: 30px 0;
-  font-weight: bold;
-}
-
-/* end proxy errors */
+/* end servlet errors */
 
 /* sidebar */
 
@@ -876,7 +719,7 @@ div.refresh {
   padding: 4px 5px 4px 24px;
   text-align: left;
   background: url(images/newsbullet_mini.png) 4px center no-repeat !important;
-  border-bottom: 1px solid #131 !important;
+  border-bottom: var(--softborder) !important;
 }
 
 .sb_newsheadings tr:last-child td {
@@ -898,7 +741,7 @@ div.refresh {
   font-weight: bold;
   color: #050;
   text-shadow: none;
-  border: 1px solid #131;
+  border: var(--softborder);
   border-top: none;
   border-radius: 0 0 2px 2px;
   background: #000;
@@ -919,7 +762,7 @@ div.refresh {
 .percentBarouter {
   margin: -3px 0 -5px -7px;
   width: 205px;
-  border: 1px solid #131;
+  border: var(--softborder);
   box-shadow: 0 0 1px 1px rgba(0,0,0,.8), var(--lowlight), inset 0 3px 3px rgba(0,0,0,.7);
   background: #000;
   background: linear-gradient(to right, rgba(0,128,0,0) 40%, rgba(255,96,0,.06), rgba(255,0,0,.08)),
@@ -935,7 +778,7 @@ div.refresh {
 .percentBarInner {
   height: 14px;
   max-width: 100%;
-  border-right: 1px solid #131;
+  border-right: var(--softborder);
   box-shadow: var(--lowlight);
   background: #0e5f00;
   background: linear-gradient(to bottom, rgba(28, 148, 58, .6), rgba(9, 47, 16, .6) 50%, rgba(9, 27, 5, .6) 50%, rgba(9, 21, 3, .6));
@@ -1520,7 +1363,7 @@ div.widepanel h3 {
   text-transform: uppercase;
   font-size: 10.5pt;
   border-radius: 0;
-  border: 1px solid #242;
+  border: var(--border);
 }
 
 .main#events .messages {
@@ -1577,7 +1420,7 @@ div#graphs {
   margin: 5px 4px;
   padding: 3px;
   text-align: center !important;
-  border: 1px solid #242;
+  border: var(--border);
 }
 
 .graphspanel a img:hover {
@@ -1702,7 +1545,7 @@ form[action="updategraphs"] {
 }
 
 #graphs td.infohelp {
-  border: 1px solid #131;
+  border: var(--softborder);
   border-right: none;
   border-left: none;
   background-size: 20px !important;
@@ -2738,7 +2581,7 @@ input[type=file]::file-selector-button {
   font-style: italic;
   font-size: 105% !important;
   text-align: center;
-  border: 1px solid #242 !important;
+  border: var(--border) !important;
   background: #000800;
 }
 
@@ -2876,7 +2719,7 @@ h3#scheduledjobs + ol li::before, #scheduledjobs + ol li::before {
   width: 97%;
   width: calc(100% - 14px);
   display: block;
-  border: 1px solid #242;
+  border: var(--border);
   background: #000800;
 }
 
@@ -3096,7 +2939,7 @@ ul.statlist li li:last-child::before {
 .main#stats form {
   margin: -13px 0 -11px;
   padding: 10px;
-  border: 1px solid #242;
+  border: var(--border);
   background: #000;
 }
 
@@ -3135,7 +2978,7 @@ ul.statlist {
   padding: 10px 10px 0 10px !important;
   width: calc(100% - 22px);
   display: inline-block;
-  border: 1px solid #242 !important;
+  border: var(--border) !important;
   box-shadow: var(--lowlight), inset 0 0 2px 1px #030;
   background: #000800;
 }
@@ -3231,23 +3074,6 @@ form[action="events"] {
   font-size: 9pt;
 }
 
-/*
-.optbox {
-  min-width: 16px !important;
-  max-width: 16px !important;
-  width: 16px !important;
-  min-height: 16px;
-  max-height: 16px;
-  height: 16px;
-  opacity: 1.0;
-  border: 0;
-  margin: 2px 4px;
-  padding: 2px;
-  overflow: hidden;
-  position: relative;
-}
-*/
-
 .cells {
   text-align: center;
 }
@@ -3282,7 +3108,7 @@ h3[id$="con"] { /* peers h3 + tables */
   letter-spacing: .08em;
   background: #000;
   background: linear-gradient(to right, #000, #001000 70%, #001300 90%);
-  border: 1px solid #242;
+  border: var(--border);
 }
 
 h3[id="udpcon"] {
@@ -4082,7 +3908,7 @@ form[action="events"] {
   margin-top: -11px;
   margin-bottom: 20px;
   padding: 10px 20px 10px;
-  border: 1px solid #242;
+  border: var(--border);
 }
 
 form[action="events"] > br {
@@ -4194,7 +4020,7 @@ p#webappconfig + p, p#pluginconfigtext {
 }
 
 #pluginconfig table {
-  border: 1px solid #242;
+  border: var(--border);
   filter: drop-shadow(0 0 3px #000);
 }
 
@@ -4766,7 +4592,7 @@ h4.app2 a::after {
 
 #volunteer, #legal, #sidebarhelp, #reachabilityhelp, #configurationhelp, #themeoverride, #browserconfig, #tunnman,
 #advancedsettings, #faq, #reseedhelp, #troubleshoot, #newuserguide, #filterlist, #webhosting, #glossary {
-  border: 1px solid #242;
+  border: var(--border);
   padding: 0 20px;
   margin: 9px 0;
   background: #000;
@@ -4820,7 +4646,7 @@ h4.app2 a::after {
   letter-spacing: .05em;
   background: #000 !important;
   border: none;
-  border-bottom: 1px solid #131 !important;
+  border-bottom: var(--softborder) !important;
   font: 9pt var(--monospaced);
 }
 
@@ -4869,8 +4695,8 @@ h4.app2 a::after {
   width: calc(100% - 32px);
   max-height: 600px;
   overflow-y: scroll;
-  border-left: 1px solid #242;
-  border-right: 1px solid #242;
+  border-left: var(--border);
+  border-right: var(--border);
   background: #000;
 }
 
@@ -4881,7 +4707,7 @@ p#fullhistory {
   position: relative;
   z-index: 999;
   text-align: right;
-  border: 1px solid #242;
+  border: var(--border);
   background: #000;
 }
 
@@ -5049,8 +4875,8 @@ ul#upnphelp li:last-child, #legal ul li:last-child {
 }
 
 #netdboverview td:nth-child(2) {
-  border-left: 1px solid #131;
-  border-right: 1px solid #131;
+  border-left: var(--softborder);
+  border-right: var(--softborder);
 }
 
 #netdboverview table th, #netdboverview table td {
@@ -5058,7 +4884,7 @@ ul#upnphelp li:last-child, #legal ul li:last-child {
 }
 
 #netdbversions, #netdbtransports, #netdbcountrylist, #netdbtiers {
-  border: 1px solid #131 !important;
+  border: var(--softborder) !important;
   border-right: none !important;
   border-left: none !important;
   margin-bottom: 0;
@@ -5086,7 +4912,7 @@ ul#upnphelp li:last-child, #legal ul li:last-child {
 #netdboverview #netdbtransports th {
   padding-top: 5px !important;
   padding-bottom: 5px !important;
-  border-top: 1px solid #131 !important;
+  border-top: var(--softborder) !important;
 }
 
 #netdboverview #netdbtiers tr:last-child td {
@@ -5169,7 +4995,7 @@ th > img[src^="/imagegen"], .identicon { /* scale down header images */
   margin: 0 0 0 3px;
   height: 26px;
   width: 26px;
-  border: 1px solid #242;
+  border: var(--border);
 }
 
 /* Advanced lookup */
@@ -5673,7 +5499,7 @@ font[color="#000099"], #servicelogs {
 
 #profilelist td[colspan="10"], #profilelist td[colspan="10"]:hover { /* profile class separator */
   padding: 1px;
-  border: 1px solid #242;
+  border: var(--border);
   border-top: 1px solid #000;
   border-bottom: 1px solid #000;
   background: #040;
@@ -6016,7 +5842,7 @@ h3#bannedpeers {
 #routerinfo td {
   padding: 8px 4px;
   width: 25%;
-  border-bottom: 1px solid #242;
+  border-bottom: var(--border);
 }
 
 #routerinfo td:first-child, #routerinfo td:nth-child(3) {
@@ -6026,7 +5852,7 @@ h3#bannedpeers {
 
 #routerinfo td:nth-child(2):not([colspan]) {
   white-space: nowrap;
-  border-right: 1px solid #242;
+  border-right: var(--border);
 }
 
 /* home page */
@@ -6380,7 +6206,7 @@ h3[id*="job"] {
   letter-spacing: .08em;
   text-transform: uppercase;
   text-shadow: 0 0 2px #010;
-  border: 1px solid #242;
+  border: var(--border);
   border-radius: 0;
 }
 
@@ -6415,7 +6241,7 @@ span#distance {
 
 .netdbentry td:first-child {
   padding-right: 8px !important;
-  border-right: 1px solid #131;
+  border-right: var(--softborder);
 }
 
 .netdbentry td:nth-child(2) {
@@ -6630,7 +6456,7 @@ span#distance {
   background: url(/themes/susidns/dark/images/helper.svg) center center no-repeat;
   background-size: 14px;
   content: "";
-  border-left: 1px solid #242;
+  border-left: var(--border);
 }
 
 .addtobook a:hover {
@@ -6696,7 +6522,7 @@ span#distance {
   margin-bottom: 10px;
   padding: 10px;
   line-height: 160%;
-  border: 1px solid #242;
+  border: var(--border);
   background: #000;
 }
 
@@ -6886,7 +6712,7 @@ p.sybil_info + a[name] + table.sybil_routerinfo, p.hashdist + a[name] + table.sy
 .threatpoints + ul {
   margin: -4px 0 10px;
   padding: 5px 5px 0;
-  border: 1px solid #242;
+  border: var(--border);
   background: #000;
 }
 
@@ -6947,7 +6773,7 @@ th .h3navlinks, #config_stats .h3navlinks, #config_webapps .h3navlinks {
   padding: 9px 5px 9px 16px;
   text-transform: capitalize !important;
   letter-spacing: normal;
-  border-left: 1px solid #242;
+  border-left: var(--border);
 }
 
 .h3navlinks a:first-child {
@@ -7926,7 +7752,7 @@ h4#sb_shutdownstatus span {
 
 #profile_defs td:first-child {
   padding: 3px 10px;
-  border-right: 1px solid #131;
+  border-right: var(--softborder);
 }
 
 #profile_defs td:nth-child(2)::first-letter {
@@ -7951,7 +7777,7 @@ h4#sb_shutdownstatus span {
 }
 
 #capabilities_key td:nth-child(2), #capabilities_key td:nth-child(3) {
-  border-right: 1px solid #131;
+  border-right: var(--softborder);
 }
 
 #capabilities_key td:last-child {
@@ -8198,7 +8024,7 @@ th code {
 /* sybils */
 
 .leaseset th:last-child, .leaseset td:last-child, .sybil_routerinfo th:last-child, .sybil_routerinfo td:last-child {
-  border-right: 1px solid #242 !important;
+  border-right: var(--border) !important;
 }
 
 .sybil_routerinfo table td:last-child {
@@ -8207,7 +8033,7 @@ th code {
 
 .sybilinfo_params {
   padding: 0;
-  border-bottom: 1px solid #242;
+  border-bottom: var(--border);
 }
 
 .sybilinfo_container {
@@ -8253,7 +8079,7 @@ th code {
 
 .sybil_addresses {
   padding: 0;
-  border-bottom: 1px solid #242;
+  border-bottom: var(--border);
 }
 
 .sybil_addresses table, .sybil_addresses td {
@@ -8397,7 +8223,7 @@ th code {
 
 #debug ul, .debug_targetinfo {
   columns: 400px 2;
-  column-rule: 1px solid #131;
+  column-rule: var(--softborder);
   column-gap: 30px;
 }
 
@@ -8466,7 +8292,7 @@ th code {
 .bucketsContainer, .bucketCount {
   margin: 0;
   text-align: center;
-  border: 1px solid #131;
+  border: var(--softborder);
   box-shadow: var(--lowlight);
 }
 
@@ -8991,7 +8817,7 @@ th.options, #externali2cp th {
 
 .optionlist, .optionsingle, #reseedssl {
   padding: 1px 2px;
-  border: 1px solid #131 !important;
+  border: var(--softborder) !important;
   box-shadow: inset 0 0 0 2px #000;
   column-gap: 1px;
   transition: ease box-shadow .2s;
@@ -9004,7 +8830,7 @@ th.options, #externali2cp th {
 }
 
 .optionlist:hover, .optionsingle:hover, .optiontextarea:hover {
-  border: 1px solid #131;
+  border: var(--softborder);
   box-shadow: inset 0 0 0 1px #002500 !important;
   transition: ease box-shadow .5s, ease background .2s .01s;
   background: #002500 !important;
@@ -9049,7 +8875,7 @@ b.suboption {
   display: inline-block;
   white-space: nowrap;
   text-shadow: 0 1px 1px #000;
-  border: 1px solid #131;
+  border: var(--softborder);
   border-bottom: none;
   box-shadow: var(--lowlight);
   background: #010;
@@ -9858,12 +9684,12 @@ input[type=file] {
 
 #peers tr, #peers th:first-child, #peers td:first-child,
 #profiles tr, #profiles th:first-child, #profiles td:first-child {
-  border-left: 1px solid #242;
+  border-left: var(--border);
 }
 
 #peers tr, #peers th:last-child, #peers td:last-child,
 #profiles tr, #profiles th:last-child, #profiles td:last-child {
-  border-right: 1px solid #242;
+  border-right: var(--border);
 }
 
 #profiles #capabilities_key, #profiles #capabilities_key tr, #profiles #capabilities_key td:last-child {
@@ -9920,7 +9746,7 @@ input[type=file] {
   padding: 4px 8px;
   width: calc(100% - 24px);
   display: inline-block;
-  border: 1px solid #131;
+  border: var(--softborder);
   box-shadow: var(--lowlight), inset 0 0 2px 1px #020;
   background: #000800;
   break-inside: avoid;
@@ -9957,8 +9783,8 @@ input[type=file] {
 }
 
 #peers tr {
-  border-left: 1px solid #242;
-  border-right: 1px solid #242;
+  border-left: var(--border);
+  border-right: var(--border);
 }
 
 /* end peers */
@@ -10445,7 +10271,7 @@ input[type=file] {
 #floodfills .percentBarOuter {
   text-align: left;
   background: #000;
-  border: 1px solid #131;
+  border: var(--softborder);
   opacity: .9;
 }
 
@@ -11071,7 +10897,7 @@ a[href^="/netdb"]:hover span {
 }
 
 #floodfills td:not(:last-child) {
-  border-right: 1px solid #131;
+  border-right: var(--softborder);
 }
 
 #floodfills td:nth-child(2), #floodfills td:nth-child(n+4) {
@@ -11176,7 +11002,7 @@ a[href^="/netdb"]:hover span {
 }
 
 #routerinformation td:first-child {
-  border-right: 1px solid #131;
+  border-right: var(--softborder);
 }
 
 .skm_dest, #skm_dest {
@@ -11611,7 +11437,7 @@ h3#scheduledjobs {
 }
 
 #banneduntilrestart td {
-  border-right: 1px solid #242 !important;
+  border-right: var(--border) !important;
 }
 
 h2, h2.welcome, h3, h3.welcome, #themeoptions {
@@ -11813,7 +11639,7 @@ th[aria-sort] {
 #sybilanalysis {
   margin: 10px 0 9px !important;
   padding: 10px 10px 8px 50px !important;
-  border: 1px solid #242;
+  border: var(--border);
   box-shadow: var(--lowlight), inset 0 0 2px 1px #030;
   background-image: var(--sybil) !important;
   background-size: 28px;
@@ -11974,7 +11800,7 @@ p#gatherstats {
   padding-bottom: 8px;
   display: block;
   width: calc(100% - 27px);
-  border-bottom: 1px solid #131;
+  border-bottom: var(--softborder);
 }
 
 .statsViewGraphs {
@@ -12251,7 +12077,7 @@ i {
   overflow: hidden;
   vertical-align: middle;
   text-align: center;
-  border: 1px solid #242;
+  border: var(--border);
   box-shadow: var(--lowlight), inset 0 0 1px 1px #050;
   animation: ease grid-fade 2s forwards;
 }
@@ -12328,7 +12154,7 @@ h3 + table {
   display: inline-block;
   font-size: 90%;
   text-align: left;
-  border: 1px solid #131;
+  border: var(--softborder);
   border-radius: 1px;
   box-sizing: border-box;
   background: linear-gradient(to bottom, #020, #000);
@@ -12496,27 +12322,26 @@ h3 + table {
   word-break: break-all;
 }
 
-#tunnelPeerCount tr:not(:last-child) td {
+#tunnelPeerCount tr:not(.tablefooter) td {
   padding: 3px !important;
-  border: 1px solid #131;
+  border: var(--softborder);
 }
 
 #tunnelPeerCount tr:nth-last-child(2) td {
-  border-bottom: 1px solid #242;
-  background: #000;
+  border-bottom: var(--border);
 }
 
-#tunnelPeerCount tr:last-child td {
-  border-top: 1px solid #242;
+#tunnelPeerCount .tablefooter td {
+  border-top: var(--border);
   background: #000;
 }
 
 #tunnelPeerCount td:first-child {
-  border-left: 1px solid #242 !important;
+  border-left: var(--border) !important;
 }
 
 #tunnelPeerCount td:last-child {
-  border-right: 1px solid #242 !important;
+  border-right: var(--border) !important;
 }
 
 #tunnelPeerCount .configpeer {
@@ -12540,7 +12365,7 @@ h3 + table {
 }
 
 #tunnels .percentBarOuter, #tunnels .percentBarText {
-  width: 100px;
+  width: 100px !important;
 }
 
 #tunnels .percentBarOuter {
@@ -12605,17 +12430,6 @@ h3 + table {
   padding-right: 5px !important;
   width: 1%;
   white-space: nowrap;
-  background: linear-gradient(to bottom, #041804, #000);
-}
-
-#tunnels #tunnelPeerCount tr.tablefooter td:first-child {
-  background: #000 !important;
-}
-
-#tunnelPeerCount td:first-child span, #tunnelPeerCount td:first-child b {
-  box-shadow: none !important;
-  background: #000 !important;
-  background: linear-gradient(to bottom, #020, #000) !important;
 }
 
 #tunnels #tunnelPeerCount .routerid {
@@ -12841,12 +12655,15 @@ h1, .main h2, h4.app, h4.app2, .main h3 {
 
 .lazy.lazyshow, .lazy.lazyshow td, #peers .lazy:not(.lazyhide) {
   opacity: 1;
-  contain: layout;
 }
 
 .leasesets_container .lazy.lazyhide, .leasesets_container .lazy.lazyhide td,
 .leasesets_container .lazy:not(.lazyshow) {
   opacity: 1;
+  contain: none;
+}
+
+#tunnelpeercount .lazy {
   contain: none;
 }
 

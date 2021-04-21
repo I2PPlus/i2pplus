@@ -522,7 +522,7 @@ ul.statlist a[name], ul.statlist b, ul.statlist li b, ul.statlist a[name]:hover,
 
   #tunnels h3 a::after {
     margin: -8px -8px -8px 0;
-    padding: 9px 8px 9px 16px;w
+    padding: 9px 8px 9px 16px;
   }
 
   #tunnels h3#exploratory a, #tunnels h3.server a, #tunnels h3.client a {

@@ -1,0 +1,461 @@
+/* proxy errors */
+
+@import url(/themes/fonts/DroidSans.css);
+@import url(optbox.css);
+@import url(chromescroll.css);
+
+:root {
+  --camo: url("data:image/svg+xml,%3Csvg viewBox='0 0 240 240' xmlns='http://www.w3.org/2000/svg' xmlns:xlink='http://www.w3.org/1999/xlink'%3E%3Cfilter id='a'%3E%3CfeTurbulence baseFrequency='.2' numOctaves='4' seed='7' stitchTiles='stitch' type='fractalNoise'/%3E%3CfeTile/%3E%3CfeComponentTransfer%3E%3CfeFuncR slope='0.9469288793103452' tableValues='0 0 0 0 1 1' type='discrete'/%3E%3CfeFuncG slope='1.1477696210488517' tableValues='0 0 0 1 1' type='discrete'/%3E%3CfeFuncB intercept='4.3091942798132177' slope='-1.9643779184626435' tableValues='0 1' type='discrete'/%3E%3CfeFuncA intercept='-3.5179822198275872' slope='3.4636819773706904' type='discrete'/%3E%3C/feComponentTransfer%3E%3CfeColorMatrix values='1 0 0 0 0 -1 1 0 0 0 -1 -1 1 0 0 0 0 0 0 1'/%3E%3CfeColorMatrix type='matrix' values='-0.08 0.42 0.09 0 0.08 -0.17 0.35 -0.08 0 0.17 -0.08 0.15 -0.04 0 0.08 0 0 0 0 1'/%3E%3C/filter%3E%3Cpath d='m-29.6-29.6h256v256h-256z' filter='url(%23a)'/%3E%3Cpath d='m-4-4h256v256h-256z' fill='%23080000' opacity='.7'/%3E%3C/svg%3E");
+}
+
+html {
+  min-height: 100%;
+  scrollbar-color: rgba(16,72,16,.8) rgba(0,16,0,.5);
+}
+
+body, button, input, input[type=text], input[type=password], select, #debug .skm_key td:first-child b {
+  font-family: Droid Sans, Open Sans, Noto Sans, Ubuntu, Segoe UI, Bitstream Vera Sans, DejaVu Sans, Verdana, Lucida Grande, Helvetica, sans-serif;
+}
+
+button, input, input[type=text], input[type=password], select {
+  font-size: 9pt;
+  font-weight: bold;
+}
+
+body {
+  margin: 5px 0 0 0;
+  padding: 0;
+  text-align: center;
+  color: #ee9;
+  font: 8.5pt/130% Droid Sans, Open Sans, Noto Sans, Ubuntu, Segoe UI, Bitstream Vera Sans, DejaVu Sans, Verdana, Lucida Grande, Helvetica, sans-serif;
+  background: #010 url(images/camotile2.png) top left scroll;
+  background: url(/themes/console/images/svg/update.svg) center center no-repeat,
+              repeating-linear-gradient(to bottom, rgba(0,0,0,.9) 2px, rgba(0,16,0,.9) 4px),
+              var(--camo), #000;
+  background-size: 0, 100%, 100%;
+  will-change: transform;
+}
+
+@supports (text-justify: auto) { /* Firefox 55+ */
+  body {
+    background-attachment: fixed;
+  }
+}
+
+h2, h3 {
+  background: linear-gradient(to bottom, rgba(0,0,0,0) 50%, #000 50%), repeating-linear-gradient(to right, rgba(0,0,0,.5) 1px, rgba(0,0,0,.5) 2px, rgba(0,16,0,.5) 3px), linear-gradient(to bottom, #005000, #000 75%) !important
+}
+
+a:link, a:visited {
+  color: #494;
+  text-decoration: none;
+  font-weight: bold;
+  word-wrap: break-word;
+}
+
+a:hover, a:focus {
+  color: #f60 !important;
+  text-decoration: none;
+  outline: none;
+}
+
+a:active {
+  color: #f90 !important;
+}
+
+img {
+  border: none;
+  font-size: 0;
+}
+
+hr {
+  color: #242;
+  background: #242;
+  height: 1px;
+  border: 0 solid #242;
+  margin: 20px 0 10px;
+}
+
+hr:last-child {
+  margin-top: 20px;
+  margin-bottom:
+}
+
+button::-moz-focus-inner, input::-moz-focus-inner {
+  outline: none;
+  border: none;
+}
+
+input[type=submit], input[type=reset], select, button {
+  padding: 7px 8px;
+  line-height: 120%;
+  font-size: 9.5pt;
+  font-weight: bold;
+  color: #494;
+  border: 1px solid #000;
+  border-radius: 2px;
+  box-shadow: inset 0 0 0 1px #151, inset 0 0 0 2px #000, inset 0 0 2px 2px #040, inset 0 0 0 3px #000, 0 0 0 1px rgba(0,16,0,.2);
+  background: linear-gradient(to bottom, #001000, #000 5%, #000 95%, #001000);
+}
+
+input[type=submit]:hover, input[type=reset]:hover, input[type=submit]:focus, input[type=reset]:focus,
+button:hover, button:focus {
+  color: #f60;
+  border: 1px solid #f60;
+  box-shadow: inset 0 0 0 1px #000, inset 0 0 2px 1px rgba(255,86,0,.8), inset 0 0 0 3px #000 !important;
+  background: #000;
+  background: radial-gradient(at center bottom, rgba(96, 48, 0, .4) 0, rgba(0, 0, 0, 0) 80%), #000;
+  cursor: pointer;
+}
+
+input[type=submit]:active, input[type=reset]:active, button:active {
+  color: #ee9;
+  text-shadow: 0 1px 1px #000;
+  border: 1px solid #f60;
+  box-shadow: inset 0 0 0 1px #000, inset 3px 3px 3px 2px #310 !important;
+  background: #f60;
+}
+
+table {
+  width: 100%;
+}
+
+textarea {
+  margin: 10px;
+  padding: 5px;
+  width: calc(100% - 15px);
+  min-width: 97%;
+  min-height: 100px;
+  font: 8.5pt Droid Sans Mono, Noto Mono, DejaVu Sans Mono, Lucida Console, monospace;
+  color: #ee9;
+  border-radius: 2px;
+  border: 1px solid #184818;
+  box-shadow: inset 0 0 3px 3px #000;
+  text-align: left;
+  background: #000;
+  background: linear-gradient(to bottom, #000, #010) !important;
+}
+
+.logo { /* proxy error "fake" sidebar */
+  margin: -1px 20px 0;
+  padding: 10px;
+  width: 185px;
+  float: left;
+  position: relative;
+  text-align: center;
+  font-size: 10pt;
+  border: 1px solid #252;
+  box-shadow: inset 0 0 3px 3px #000;
+  background: #000 url(images/camotile2.png);
+  background: repeating-linear-gradient(to bottom, rgba(0,0,0,.6) 1px, rgba(0,16,0,.5) 2px, rgba(0,16,0,.5) 3px), url(images/camotile2.png);
+}
+
+.logo > * {
+  text-align: center;
+}
+
+.logo a:nth-child(n+2) {
+  padding: 10px 0;
+  width: 100%;
+  display: inline-block;
+  line-height: 180%;
+  border-bottom: 1px solid #020;
+}
+
+.logo a:last-child {
+  margin-bottom: -10px;
+  border-bottom: none;
+}
+
+.logo a img {
+  margin: 2px 0 0;
+  padding: 0;
+  width: 180px;
+  text-align: center;
+  font-size: 0;
+}
+
+.logo a:hover img {
+  filter: drop-shadow(0 0 1px #f60);
+}
+
+.logo a:active img {
+  filter: drop-shadow(0 0 2px #d30);
+}
+
+.logo hr {
+  margin: 10px -10px 0;
+  height: 1px;
+  color: #494;
+  border: 0 solid #252;
+  background: #252;
+}
+
+.logo, #warning {
+  filter: drop-shadow(0 0 5px #000);
+}
+
+#warning {
+  margin: 20px 20px 20px 248px;
+  padding: 10px 30px 20px 100px;
+  min-width: 300px;
+  border: 1px solid #252;
+  word-wrap: break-word;
+  text-align: justify;
+  font-size: 10pt;
+  border: 5px solid #010;
+  border-image: repeating-linear-gradient(135deg, #010 0px, #010 20px, #440 20px, #440 40px, #010 40px) 5 repeat repeat;
+  border-image-width: 5px;
+  border-image-outset: 1px;
+  box-shadow: inset 0 0 0 1px #700, inset 0 0 3px 3px #000, 0 0 0 2px #000;
+  background: #000 url(/themes/console/images/itoopie_sm.png) 21px center no-repeat;
+  background: url(/themes/console/images/itoopie_sm.png) 21px center no-repeat,
+              repeating-linear-gradient(to bottom, rgba(0,0,0,.6) 1px, rgba(0,16,0,.5) 2px, rgba(0,16,0,.5) 3px),
+              url(images/camotile2.png);
+  background-size: auto 110px, 100%, 175px;
+  background-position: 21px calc(50% + 16px);
+}
+
+#proxyerror p:first-of-type {
+  padding-top: 10px;
+}
+
+#warning p, #warning a {
+  font-size: 10pt;
+  line-height: 130%;
+}
+
+#warning p {
+  margin: 0 0 10px;
+  font-size: 110%;
+}
+
+#warning h3 + p {
+  margin-top: 30px !important;
+}
+
+#proxyrequest {
+  margin: 3px 0 10px;
+  display: inline-block;
+}
+
+h3 {
+}
+
+#warning h3 {
+  margin: -9px -29px 15px -99px;
+  padding: 9px 10px 7px;
+  letter-spacing: .1em;
+  text-align: left;
+  font-size: 11.5pt;
+  text-transform: uppercase;
+  text-shadow: 0 0 2px #010;
+  border: none;
+  border-bottom: 1px solid #700;
+}
+
+#warning h4 {
+  margin: 12px 0 5px;
+  padding: 0 0 5px;
+  font-size: 10pt;
+  box-shadow: none;
+}
+
+#warning hr {
+  margin-top: 15px !important;
+  margin-bottom: 15px !important;
+}
+
+#warning_localhost {
+  margin: 20px;
+  background-position: 20px calc(50% + 16px);
+}
+
+#warning_localhost p {
+  padding: 20px 10px 15px;
+}
+
+#warning_localhost + .proxyfooter {
+  display: none !important;
+}
+
+#warning .formaction {
+  text-align: right;
+  box-shadow: none !important;
+}
+
+#jumplinks {
+  margin-bottom: 10px;
+}
+
+#jumplinks h4 {
+  margin-bottom: 13px;
+  padding-bottom: 10px;
+}
+
+#jumplinks a {
+  padding: 2px 0;
+  display: inline-block;
+  line-height: 16px;
+}
+
+#jumplinks a::before {
+  padding: 3px 0;
+  display: inline-block;
+  vertical-align: sub;
+  line-height: 16px;
+  font-size: 16pt;
+  content: "\279F\00A0";
+}
+
+#proxyNewAddressHelper .proxyfooter {
+  display: none;
+}
+
+#proxyNewAddressHelper #warning {
+  padding-bottom: 0 !important;
+}
+
+#proxyNewHost {
+  margin-bottom: 20px;
+}
+
+#proxyNewHost td {
+  padding: 8px !important;
+  font-size: 10pt !important;
+}
+
+#proxyNewHost td:first-child {
+  font-weight: bold;
+}
+
+#proxyNewHost tr:last-child td:first-child {
+  vertical-align: top;
+}
+
+#proxyNewHost textarea {
+  margin: 0 !important;
+  padding: 0 !important;
+  width: 100% !important;
+  height: 6em;
+  resize: none;
+  white-space: pre-wrap;
+  word-break: break-all;
+  overflow: auto;
+  border: none;
+  background: none !important;
+  box-shadow: none !important;
+}
+
+#proxyNewHost textarea:focus {
+  filter: none;
+}
+
+#proxyNewHost + hr {
+  display: none;
+}
+
+#warning h4 {
+  text-align: left;
+  font-size: 10pt;
+  box-shadow: none !important;
+}
+
+#proxyNewHost a {
+  display: inline-block;
+  word-break: break-all;
+}
+
+#warning p + .formaction {
+  margin: 0 0 20px;
+  padding: 0;
+}
+
+#denied {
+  padding: 30px 0;
+  font-weight: bold;
+}
+
+/* end proxy errors */
+
+/* proxy errors */
+
+@media screen and (max-width: 800px) {
+#warning {
+  margin-left: 20px !important;
+  margin-top: 140px !important;
+  padding: 5px 20px 15px !important;
+  background: repeating-linear-gradient(to bottom, rgba(0,0,0,.8) 1px, rgba(0,0,0,.8) 2px, rgba(0,32,0,.8) 3px), url(images/camotile2.png) !important;
+}
+
+#proxyerror #warning {
+  margin-top: 20px !important;
+}
+
+#warning h3 {
+  margin: -4px -19px 10px !important;
+}
+
+#warning h3 + p {
+  margin-top: 15px !important;
+}
+
+.logo {
+  width: calc(100% - 62px) !important;
+  min-width: 330px;
+  position: absolute;
+  top: -124px;
+  z-index: 999;
+}
+
+.logo a {
+  margin-top: 10px !important;
+  padding: 2px 5px !important;
+  width: auto !important;
+}
+.logo a img {
+  padding: 0 !important;
+  margin-top: -2px;
+  margin-bottom: -4px;
+}
+
+.logo a:nth-child(n+2) {
+  border: none !important;
+}
+
+#jumplinks {
+  margin-bottom: 0 !important;
+}
+}
+
+@media screen and (min-height: 700px) {
+.proxyfooter {
+  position: absolute;
+  bottom: 0;
+  right: 0;
+  padding: 0 20px 0 0;
+  text-align: right;
+  background: #030;
+  width: 100%;
+  opacity: .7;
+  border-top: 1px solid #000;
+  display: none; /* hide until we resolve position */
+}
+
+.proxyfooter p {
+  text-align: right;
+  line-height: 130% !important;
+  margin: 5px 0;
+}
+
+#warning {
+  margin-bottom: 30px;
+}
+}
+
+@media screen and (max-height: 700px) {
+.proxyfooter {
+  display: none;
+}
+}
+/* end proxy errors */

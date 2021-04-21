@@ -10,3 +10,4 @@
 @import url(mediaQueries/minwidth1400.css) screen and (min-width: 1400px);
 @import url(mediaQueries/minwidth1500.css) screen and (min-width: 1500px);
 @import url(wizard.css);
+@import url(proxy.css);
