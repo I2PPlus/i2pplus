@@ -16,6 +16,7 @@
 <body>
 <script nonce="<%=cspNonce%>" type="text/javascript">progressx.show();</script>
 <%@include file="summary.jsi" %>
+<%@include file="summaryajax.jsi" %>
 <h1 class="netwrk"><%=intl._t("Network Peers")%></h1>
 <div class="main" id="peers">
  <jsp:useBean class="net.i2p.router.web.helpers.PeerHelper" id="peerHelper" scope="request" />
@@ -66,9 +67,7 @@ document.addEventListener("DOMContentLoaded", function() {
     xhr.send();
   }, 15000);
 }, true);
-lazyload();
 </script>
-<%@include file="summaryajax.jsi" %>
-<script nonce="<%=cspNonce%>" type="text/javascript">window.addEventListener("pageshow", progressx.hide());</script>
+<script nonce="<%=cspNonce%>" type="text/javascript">window.addEventListener("pageshow", progressx.hide();lazyload());</script>
 </body>
 </html>
