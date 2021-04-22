@@ -6497,6 +6497,7 @@ span#distance {
   text-align: left;
   border: var(--border);
   background: #000 var(--infohelp) 12px center no-repeat;
+  background-size: 28px;
 }
 
 #sybilnav, #sybils_summary {
