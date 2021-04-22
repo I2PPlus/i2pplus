@@ -136,8 +136,8 @@
     margin-top: 4px;
   }
 
-    h4.app, h4.app2 {
-    padding: 9px 10px 8px 30px !important;
+  h4.app, h4.app2 {
+    padding: 9px 10px 8px 35px !important;
     font-size: 12pt !important;
   }
 
@@ -162,6 +162,7 @@
   input[type=submit], input[type=reset], button {
     padding: 8px 12px !important;
   }
+
   input[type=file]::file-selector-button {
     padding: 8px 12px !important;
   }
