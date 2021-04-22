@@ -83,7 +83,7 @@ body {
   background: rgba(0,187,0,.8) !important;
 }
 
-.routersummary, .routersummaryouter, h1, .main, iframe, div.app, .sitemaplink {
+.routersummary, .routersummaryouter, h1, .main {
   contain: layout;
 }
 
