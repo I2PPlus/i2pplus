@@ -1371,7 +1371,8 @@ div.widepanel h3 {
 /* graphs */
 
 div#graphs {
-  padding: 0 10px
+  padding: 0 10px;
+  text-align: center;
 }
 
 #graphs .messages {
@@ -1944,61 +1945,10 @@ h2, h3, h4 {
 }
 
 h1, h4.app, h4.app2, #news h3 {
+  text-shadow: 0 1px 1px #000;
+  box-shadow: var(--lowlight);
   background: var(--h1) !important;
   background-blend-mode: normal, exclusion, exclusion;
-  box-shadow: var(--lowlight);
-  text-shadow: 0 1px 1px #000;
-}
-
-h4.app, h4.app2 {
-  padding-left: 28px !important;
-  letter-spacing: .15em !important;
-  word-spacing: 0 !important;
-}
-
-h4.app {
-  background: url(/themes/console/images/eepsite.png) 5px center no-repeat, var(--h1) !important;
-  background-size: 18px, 100%, 100%, 175px !important;
-  background-blend-mode: var(--h3_blend) !important;
-}
-
-h4.app2 {
-  background: url(/themes/console/images/world.png) 5px center no-repeat, var(--h1) !important;
-  background-size: 18px, 100%, 100%, 175px !important;
-  background-blend-mode: var(--h3_blend) !important;
-}
-
-h4.app::first-letter, h4.app2::first-letter {
-  font-size: 115%;
-  display: inline-block;
-  margin-right:.05em;
-}
-
-h4.app img, h4.app2 img {
-  opacity: .5;
-  transition: ease all 1s;
-}
-
-#chooselang img {
-  margin-top: -1px;
-  margin-right: 10px;
-}
-
-h4.app:hover img, h4.app2:hover img {
-  opacity: 1;
-  transition: ease all .3s;
-}
-
-h4.app2 img, #sitemap h3 a img {
-  margin-top: 1px;
-}
-
-h4.app img:hover, h4.app2 img:hover {
-  filter: drop-shadow(0 0 1px #f60) !important;
-}
-
-h4.app img:active, h4.app2 img:active {
-  transform: rotateZ(90deg);
 }
 
 button::-moz-focus-inner, input::-moz-focus-inner {
@@ -5877,16 +5827,60 @@ h3#bannedpeers {
   margin: 0 -8px;
 }
 
+h4.app {
+  background: url(/themes/console/images/eepsite.png) 8px center no-repeat, var(--h1) !important;
+  background-size: 18px, 100%, 100%, 175px !important;
+  background-blend-mode: var(--h3_blend) !important;
+}
+
+h4.app2 {
+  background: url(/themes/console/images/world.png) 8px center no-repeat, var(--h1) !important;
+  background-size: 18px, 100%, 100%, 175px !important;
+  background-blend-mode: var(--h3_blend) !important;
+}
+
+h4.app::first-letter, h4.app2::first-letter {
+  font-size: 115%;
+  display: inline-block;
+  margin-right:.05em;
+}
+
+h4.app img, h4.app2 img {
+  opacity: .5;
+  transition: ease all 1s;
+}
+
+#chooselang img {
+  margin-top: -1px;
+  margin-right: 10px;
+}
+
+h4.app:hover img, h4.app2:hover img {
+  opacity: 1;
+  transition: ease all .3s;
+}
+
+h4.app2 img, #sitemap h3 a img {
+  margin-top: 1px;
+}
+
+h4.app img:hover, h4.app2 img:hover {
+  filter: drop-shadow(0 0 1px #f60) !important;
+}
+
+h4.app img:active, h4.app2 img:active {
+  transform: rotateZ(90deg);
+}
+
 h4.app, h4.app2 {
   margin: 11px -6px -9px;
-  padding: 7px 8px 7px 28px !important;
-  border: var(--border);
+  padding: 9px 8px 7px 35px;
+  letter-spacing: .15em;
+  word-spacing: 0;
   font-size: 10.5pt;
   font-variant: small-caps;
   text-transform: uppercase;
   text-align: left;
-  letter-spacing: .08em;
-  word-spacing: .1em;
   border-radius: 0;
 }
 
@@ -11469,14 +11463,17 @@ h2#jobrunners {
   margin-top: 2px;
 }
 
+#sitemap h3, h4.app, h4.app2 {
+  border: 1px solid #252 !important;
+}
+
 #sitemap h3 {
   margin-left: -7px;
   margin-right: -7px;
-  padding-left: 32px;
+  padding-left: 35px;
   letter-spacing: .12em;
   font-size: 10.5pt;
-  border: var(--border);
-  background: url(/themes/console/images/eepsite.png) 8px center no-repeat, var(--h1) !important;
+  background: url(/themes/console/images/eepsite.png) 9px center no-repeat, var(--h1) !important;
   background-size: 18px, 100%, 100%, 175px !important;
   background-blend-mode: var(--h3_blend) !important;
 }
@@ -11488,25 +11485,25 @@ h2#jobrunners {
 }
 
 #sitemap h3:nth-of-type(2) {
-  background: url(/themes/console/images/info_rhombus.png) 8px center no-repeat, var(--h1) !important;
+  background: url(/themes/console/images/info_rhombus.png) 9px center no-repeat, var(--h1) !important;
   background-size: 18px, 100%, 100%, 175px !important;
   background-blend-mode: var(--h3_blend) !important;
 }
 
 #sitemap h3:nth-of-type(3) {
-  background: var(--configure) 8px center no-repeat, var(--h1) !important;
+  background: var(--configure) 9px center no-repeat, var(--h1) !important;
   background-size: 18px, 100%, 100%, 175px !important;
   background-blend-mode: var(--h3_blend) !important;
 }
 
 #sitemap h3:nth-of-type(4) {
-  background: var(--help) 8px center no-repeat, var(--h1) !important;
+  background: var(--help) 9px center no-repeat, var(--h1) !important;
   background-size: 18px, 100%, 100%, 175px !important;
   background-blend-mode: var(--h3_blend) !important;
 }
 
 #sitemap h3:nth-of-type(5) {
-  background: url(/themes/console/images/world.png) 8px center no-repeat, var(--h1) !important;
+  background: url(/themes/console/images/world.png) 9px center no-repeat, var(--h1) !important;
   background-size: 18px, 100%, 100%, 175px !important;
   background-blend-mode: var(--h3_blend) !important;
 }
@@ -12240,19 +12237,24 @@ h3 + table {
   height: 0;
 }
 
+#tunnels #participating a, #tunnels #peercount a {
+  border-left: var(--border);
+}
+
 #tunnels #participating a::after, #tunnels #peercount a::after {
-  content: "";
+  margin-left: 2px;
+  width: 18px;
+  height: 18px;
   display: inline-block;
-  width: 16px;
-  height: 16px;
   vertical-align: middle;
-  background: url(images/refresh.png) center center no-repeat;
-  background-size: 16px !important;
+  background: var(--refresh) center center no-repeat;
+  background-size: 18px !important;
+  content: "";
 }
 
 #tunnels #participating a:hover::after, #tunnels #participating a:focus::after,
 #tunnels #peercount a:hover::after, #tunnels #peercount a:focus::after {
-  background: url(images/refresh_hover.png) center center no-repeat;
+  background: var(--refresh_hover) center center no-repeat;
 }
 
 #tunnels #participating a:active::after, #tunnels #peercount a:active::after {
@@ -12630,7 +12632,7 @@ h1, .main h2, h4.app, h4.app2, .main h3 {
 
 /* lazy loading */
 
-.lazy.lazyhide, .lazy.lazyhide td, .lazy:not(.lazyshow) {
+.lazy.lazyhide, .lazy.lazyhide td {
   opacity: 0;
   contain: strict;
 }

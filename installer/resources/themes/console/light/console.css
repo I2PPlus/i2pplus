@@ -13428,19 +13428,22 @@ div.app:not(:hover) a:not(:hover):not(:focus):not(:active):visited,
 
 /* lazy loading */
 
-.lazy.lazyhide, .lazy.lazyhide td, .lazy:not(.lazyshow) {
+.lazy.lazyhide, .lazy.lazyhide td {
   opacity: 0;
   contain: strict;
 }
 
 .lazy.lazyshow, .lazy.lazyshow td, #peers .lazy:not(.lazyhide) {
   opacity: 1;
-  contain: layout;
 }
 
 .leasesets_container .lazy.lazyhide, .leasesets_container .lazy.lazyhide td,
 .leasesets_container .lazy:not(.lazyshow) {
   opacity: 1;
+  contain: none;
+}
+
+#tunnelpeercount .lazy {
   contain: none;
 }
 
