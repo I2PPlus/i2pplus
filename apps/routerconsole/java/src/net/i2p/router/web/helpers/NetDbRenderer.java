@@ -631,6 +631,7 @@ class NetDbRenderer {
                         // encrypted, show blinded key type
                         buf.append(ls.getSigningKey().getType()).append("</span>");
                     }
+                    buf.append("</span>");
                     if (type == DatabaseEntry.KEY_TYPE_LEASESET) {
                         buf.append("<br><span class=\"nowrap\">&nbsp; &bullet; &nbsp;<b>").append(_t("Encryption Key"))
                            .append(":</b> ELGAMAL_2048 [").append(ls.getEncryptionKey().toBase64().substring(0, 8))
@@ -1054,7 +1055,7 @@ class NetDbRenderer {
                 buf.append(" title=\"").append(getTranslatedCountry(country)).append('\"');
                 buf.append(" src=\"/flags.jsp?c=").append(country).append("\"> ").append("</a>");
             } else {
-                buf.append("<img height=\"12\" width=\"16\" alt=\"??\"").append(" title=\"unknown\"").append(" src=\"/flags.jsp?c=a0\"></a>");
+                buf.append("<img height=\"12\" width=\"16\" alt=\"??\"").append(" title=\"unknown\"").append(" src=\"/flags.jsp?c=a0\">");
             }
             buf.append("</span>");
         } else {
