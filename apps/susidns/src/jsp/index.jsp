@@ -60,7 +60,7 @@
 <a class="abook private" href="addressbook?book=private&amp;filter=none"><%=intl._t("Private")%></a>&nbsp;
 <a class="abook published" href="addressbook?book=published&amp;filter=none"><%=intl._t("Published")%></a>&nbsp;
 <a id="subs" href="subscriptions"><%=intl._t("Subscriptions")%></a>&nbsp;
-<a id="config" href="config"><%=intl._t("Configuration")%></a>&nbsp;
+<a id="configlink" href="config"><%=intl._t("Configuration")%></a>&nbsp;
 <a id="overview" class="selected" href="index"><%=intl._t("Help")%></a>
 </div>
 <hr>
@@ -96,9 +96,9 @@ document.getElementById("svg").appendChild(xhr.responseXML.documentElement);
 <noscript>
 <%  String theme = base.getTheme();
     if (theme.contains("midnight")) { %>
-<style>.illustrate {border: 1px solid #010011 !important; background: #fff !important; filter: sepia(100%) invert(100%);}</style>
+<style type="text/css">.illustrate {border: 1px solid #010011 !important; background: #fff !important; filter: sepia(100%) invert(100%);}</style>
 <%  } else if (theme.contains("dark")) { %>
-<style>.illustrate {border: 1px solid #111 !important; box-shadow: none !important; background: #fff !important; background: rgba(255,255,255,0.3) !important; filter: invert(1) sepia(100%) hue-rotate(30deg);}</style>
+<style type="text/css">.illustrate {border: 1px solid #111 !important; box-shadow: none !important; background: #fff !important; background: rgba(255,255,255,0.3) !important; filter: invert(1) sepia(100%) hue-rotate(30deg);}</style>
 <%  } %>
 <object type="image/svg+xml" data="images/how.svg?<%=net.i2p.CoreVersion.VERSION%>">
 <img src="/themes/susidns/images/how.png" border="0" alt="How the address book works" title="How the address book works" />

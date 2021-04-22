@@ -22,7 +22,7 @@
 <li id="help_configadv"><a href="advancedsettings"><b>Advanced Settings</b></a><br>Advanced configuration settings</li>
 <li id="help_changelog"><a href="changelog"><b>Change Log</b></a><br>Recent code changes to I2P+</li>
 <li id="help_configuration"><a href="configuration"><b>Configuration</b></a><br>Configuring I2P+: Network, Firefox, Tunnel Manager</li>
-<li id="help_faq"><a href="faq"><b>F.A.Q.</a></b><br>Frequently Asked Questions</b></li>
+<li id="help_faq"><a href="faq"><b>F.A.Q.</b></a><br>Frequently Asked Questions</b></li>
 <li id="help_glossary"><a href="glossary"><b>Glossary</b></a><br>I2P-specific terminology</li>
 <li id="help_legal"><a href="legal"><b>Legal</b></a><br>Licensing and copyright notices</li>
 <li id="help_newusers"><a href="newusers"><b>New User Guide</b></a><br>A gentle introduction to I2P</li>

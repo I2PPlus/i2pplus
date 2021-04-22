@@ -83,7 +83,7 @@ body {
   background: rgba(0,187,0,.8) !important;
 }
 
-.routersummary, .routersummaryouter, h1, .main, iframe, div.app, .sitemaplink {
+.routersummary, .routersummaryouter, h1, .main {
   contain: layout;
 }
 
@@ -295,7 +295,6 @@ pre {
   display: block;
   position: absolute; /* so no interference with /home app icons */
   text-align: center;
-  border: 0;
 }
 
 .routersummary {
@@ -6498,6 +6497,7 @@ span#distance {
   text-align: left;
   border: var(--border);
   background: #000 var(--infohelp) 12px center no-repeat;
+  background-size: 28px;
 }
 
 #sybilnav, #sybils_summary {
@@ -10608,8 +10608,12 @@ input[type=text]:focus::placeholder, #homesearch input.search:focus::placeholder
 
 /* end sidebar routerdown */
 
+#webappconfig {
+  border-left-width: 1px;
+}
+
 #webappconfig + #webappconfigtext {
-  margin-top: 13px !important;
+  margin-top: -11px !important;
 }
 
 /* /info */

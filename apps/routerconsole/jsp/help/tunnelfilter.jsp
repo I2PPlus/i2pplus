@@ -131,7 +131,7 @@ allow default<br>
 <p>To log all unique remote destinations connecting to a server, and also log aggressive connection attempts:</p>
 
 <code>
-# log all unique destinations</br>
+# log all unique destinations<br>
 1/60 record /path/visitors.txt<br>
 # log visitors making 90 or more connections a minute<br>
 90/60 record /path/aggressive.txt

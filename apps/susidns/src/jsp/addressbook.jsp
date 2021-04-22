@@ -72,7 +72,7 @@
 %>
 </head>
 <body id="bk">
-<style type="text/css">body{opacity: 0;}</style>
+<style type="text/css">body{opacity:0}</style>
 <div class="page">
 <div id="navi" class="${book.getBook()}">
 <a class="abook router<%=(here.contains("router") ? " selected" : "")%>" href="addressbook?book=router&amp;filter=none"><%=intl._t("Router")%></a>&nbsp;
@@ -80,7 +80,7 @@
 <a class="abook private<%=(here.contains("private") ? " selected" : "")%>" href="addressbook?book=private&amp;filter=none"><%=intl._t("Private")%></a>&nbsp;
 <a class="abook published<%=(here.contains("published") ? " selected" : "")%>" href="addressbook?book=published&amp;filter=none"><%=intl._t("Published")%></a>&nbsp;
 <a id="subs" href="subscriptions"><%=intl._t("Subscriptions")%></a>&nbsp;
-<a id="config" href="config"><%=intl._t("Configuration")%></a>&nbsp;
+<a id="configlink" href="config"><%=intl._t("Configuration")%></a>&nbsp;
 <a id="overview" href="index"><%=intl._t("Help")%></a>
 </div>
 <hr>
@@ -131,7 +131,6 @@
 <%
     }
 %>
-</div>
 <div id="messages">${book.messages}
 <%
    if (importMessages != null) {
@@ -518,6 +517,7 @@
     }
 %>
 <span data-iframe-height></span>
-<style type="text/css">body{opacity: 1 !important;}</style>
+<style type="text/css">body{opacity:1 !important}</style>
+</div>
 </body>
 </html>

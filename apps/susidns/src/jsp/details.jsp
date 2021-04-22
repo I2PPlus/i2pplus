@@ -51,7 +51,7 @@
 <a class="abook private<%=(query.contains("book=private") ? " details selected" : "")%>" href="addressbook?book=private&amp;filter=none"><%=intl._t("Private")%></a>&nbsp;
 <a class="abook published<%=(query.contains("book=published") ? " details selected" : "")%>" href="addressbook?book=published&amp;filter=none"><%=intl._t("Published")%></a>&nbsp;
 <a id="subs" href="subscriptions"><%=intl._t("Subscriptions")%></a>&nbsp;
-<a id="config" href="config"><%=intl._t("Configuration")%></a>&nbsp;
+<a id="configlink" href="config"><%=intl._t("Configuration")%></a>&nbsp;
 <a id="overview" href="index"><%=intl._t("Help")%></a>
 </div>
 <hr>

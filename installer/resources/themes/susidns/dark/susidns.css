@@ -184,18 +184,18 @@ body.iframed {
   background-size: 14px 14px !important;
 }
 
-#navi a#config {
+#navi a#configlink {
   background: #000 url(/themes/susidns/dark/images/configure.png) 6px center no-repeat;
   background: url(/themes/susidns/dark/images/configure.png) 6px center no-repeat, linear-gradient(to bottom, #002900, #000400);
   background-size: 14px 14px, 100% 100%;
 }
 
-#navi a#config:hover, #navi a#config:focus {
+#navi a#configlink:hover, #navi a#configlink:focus {
   background: #000 url(/themes/susidns/dark/images/configure_hover.png) 6px center no-repeat !important;
   background-size: 14px 14px !important;
 }
 
-#navi a#config:active {
+#navi a#configlink:active {
   background: #f60 url(/themes/susidns/dark/images/configure_active.png) 6px center no-repeat !important;
   background-size: 14px 14px !important;
 }
@@ -1384,13 +1384,13 @@ _:-ms-lang(x), * {
     background: linear-gradient(to bottom, #020 0%, #020 50%, #000 50%, #000 100%) !important;
   }
 
-  #navi a.abook:hover, #navi a#overview:hover, #navi a#subs:hover, #navi a#config:hover,
-  #navi a.abook:focus, #navi a#overview:focus, #navi a#subs:focus, #navi a#config:focus {
+  #navi a.abook:hover, #navi a#overview:hover, #navi a#subs:hover, #navi a#configlink:hover,
+  #navi a.abook:focus, #navi a#overview:focus, #navi a#subs:focus, #navi a#configlink:focus {
     padding: 2px 8px !important;
     background: #000 !important;
   }
 
-  #navi a.abook:active, #navi a#overview:active, #navi a#subs:active, #navi a#config:active {
+  #navi a.abook:active, #navi a#overview:active, #navi a#subs:active, #navi a#configlink:active {
     background: #f60 !important;
   }
 }
@@ -1435,7 +1435,7 @@ _:-ms-lang(x), * {
   #navi a.abook, #navi a.abook:hover, #navi a.abook:focus, #navi a.abook:active,
   #navi a#overview, #navi a#overview:hover, #navi a#overview:focus, #navi a#overview:active,
   #navi a#subs, #navi a#subs:hover, #navi a#subs:focus, #navi a#subs:active,
-  #navi a#config, #navi a#config:hover, #navi a#config:focus, #navi a#config:active {
+  #navi a#configlink, #navi a#configlink:hover, #navi a#configlink:focus, #navi a#configlink:active {
     padding: 6px 10px 6px 29px !important;
     letter-spacing: .1em;
     font-size: 10pt !important;
