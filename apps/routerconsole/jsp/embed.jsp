@@ -58,12 +58,12 @@
 <h1 class="webapp"><%=intl._t("Embed Page")%></h1>
 <div class="main" id="embedpage">
 <div class="confignav">
-<span class="tab"><a href="/embed?url=imagegen&amp;name=Image Generator">ImageGen</a></span>
+<span class="tab"><a href="/embed?url=imagegen&amp;name=Image%20Generator">ImageGen</a></span>
 <span class="tab"><a href="/embed?url=/history.txt&amp;name=Changelog">Changelog</a></span>
-<span class="tab"><a href="/embed?url=/router.log&amp;name=Router Log">Router Log</a></span>
-<span class="tab"><a href="/embed?url=/wrapper.log&amp;name=Wrapper Log">Wrapper Log</a></span>
+<span class="tab"><a href="/embed?url=/router.log&amp;name=Router%20Log">Router Log</a></span>
+<span class="tab"><a href="/embed?url=/wrapper.log&amp;name=Wrapper%20Log">Wrapper Log</a></span>
 </div>
-<p class="infohelp">To embed local pages in the console, set the <code>url</code> query parameter and optional <code>name</code> parameter, e.g. <a href="http://127.0.0.1:7657/embed?url=imagegen&amp;name=image generator">http://127.0.0.1:7657/embed?url=imagegen&name=image generator</a>, or use the form below. Only resources served from 127.0.0.1 or the address the console is running on are supported.</p>
+<p class="infohelp">To embed local pages in the console, set the <code>url</code> query parameter and optional <code>name</code> parameter, e.g. <a href="http://127.0.0.1:7657/embed?url=imagegen&amp;name=image generator">http://127.0.0.1:7657/embed?url=imagegen&name=image%20generator</a>, or use the form below. Only resources served from 127.0.0.1 or the address the console is running on are supported.</p>
 <div id="embedurl">
 <form action="/embed?url=" method="get">
 <input type="hidden" name="norefresh">

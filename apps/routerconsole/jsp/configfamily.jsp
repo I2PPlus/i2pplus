@@ -51,9 +51,9 @@
 </td>
 </tr>
 </table>
+</div>
 </td>
 </tr>
-</div>
 </table>
 </form>
 <form action="" method="POST">
@@ -75,6 +75,7 @@
 </td>
 </tr>
 </table>
+</div>
 </td>
 </tr>
 </table>

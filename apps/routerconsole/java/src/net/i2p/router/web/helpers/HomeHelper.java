@@ -400,7 +400,7 @@ public class HomeHelper extends HelperBase {
             buf.append("<tr><td align=\"center\"><input type=\"checkbox\" class=\"optbox\" name=\"delete_")
                .append(app.name)
                .append("\" id=\"")
-               .append(app.name)
+               .append(app.name.replace(" ", "_"))
                .append("\"></td>");
             if (app.icon != null) {
                 buf.append("<td align=\"center\"><img height=\"16\" alt=\"\" src=\"").append(app.icon).append("\">");
@@ -408,7 +408,7 @@ public class HomeHelper extends HelperBase {
                 buf.append("<td align=\"center\" class=\"noicon\">");
             }
             buf.append("</td><td align=\"left\"><label for=\"")
-               .append(app.name)
+               .append(app.name.replace(" ", "_"))
                .append("\">")
                .append(DataHelper.escapeHTML(app.name))
                .append("</label></td><td align=\"left\"><a href=\"");

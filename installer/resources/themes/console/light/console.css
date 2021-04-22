@@ -2510,7 +2510,7 @@ h3#passwordheading {
   filter: none;
 }
 
-h3#langheading, h3#themeheading, h3#pluginmanage, h3#pconfig, h3#webappconfig, h3#advancedclientconfig, h3#i2pclientconfig, #config_stats h3, #config_keyring h3 {
+h3#langheading, h3#themeheading, h3#pluginmanage, h3#pconfig, h3#webappconfiguration, h3#advancedclientconfig, h3#i2pclientconfig, #config_stats h3, #config_keyring h3 {
   position: relative;
   z-index: 100;
   border: 1px solid #8d8daa;
@@ -2523,7 +2523,7 @@ h3#advancedclientconfig, p#webappconfigtext, p#pluginconfigtext, p#clientconf.in
   margin-bottom: -2px;
 }
 
-h3#pconfig, h3#webappconfig, h3#i2pclientconfig, p#clientconf.infohelp, #config_stats h3 {
+h3#pconfig, h3#webappconfiguration, h3#i2pclientconfig, p#clientconf.infohelp, #config_stats h3 {
   margin-bottom: -13px;
 }
 
@@ -11531,7 +11531,7 @@ div.app {
   font-size: 8pt !important;
 }
 
-h3#pconfig, h3#webappconfig, h3#i2pclientconfig, p#clientconf.infohelp, #config_stats h3 {
+h3#pconfig, h3#webappconfiguration, h3#i2pclientconfig, p#clientconf.infohelp, #config_stats h3 {
   margin-bottom: -15px;
 }
 

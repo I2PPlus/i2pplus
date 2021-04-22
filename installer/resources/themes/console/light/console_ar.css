@@ -635,7 +635,7 @@ div.themechoice, div.langselect {
   margin-bottom: 15px;
 }
 
-.infohelp#webappconfig, h3#webappconfig, #pluginconfig, h3#pconfig {
+.infohelp#webappconfig, h3#webappconfiguration, #pluginconfig, h3#pconfig {
   margin-right: 0;
 }
 

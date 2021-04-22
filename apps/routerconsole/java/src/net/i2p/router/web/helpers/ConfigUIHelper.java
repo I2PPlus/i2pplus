@@ -227,7 +227,7 @@ public class ConfigUIHelper extends HelperBase {
         Properties config = net.i2p.I2PAppContext.getGlobalContext().getProperties();
         // only show delete user button if user(s) configured
         if (!config.toString().contains("routerconsole.auth.i2prouter"))
-            buf.append("<style>#consolepass .delete {display: none !important;)</style>\n");
+            buf.append("<style type=\"text/css\">#consolepass .delete {display: none !important;)</style>\n");
         buf.append("<table id=\"consolepass\">\n");
         if (userpw.isEmpty()) {
             buf.append("<tr><td colspan=\"3\">" +
