@@ -387,7 +387,7 @@ public class ConfigClientsHelper extends HelperBase {
                 boolean embedApps = _context.getBooleanProperty(CSSHelper.PROP_EMBED_APPS);
                 if (name.contains(_t("imagegen")) && (embedApps)) {
                     buf.append("<a href=\"/embed?url=/imagegen&name=").append(_t("Identification Image Generator")
-                       .replace(" ", "%20").append("\">").append(_t(escapedName)).append("</a>");
+                       .replace(" ", "%20")).append("\">").append(_t(escapedName)).append("</a>");
                 } else {
                     buf.append("<a href=\"").append(link).append("\">").append(_t(escapedName)).append("</a>");
              }
