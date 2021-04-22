@@ -329,7 +329,7 @@ pre {
 }
 
 .routersummary h3:active {
-  box-shadow: var(--highlight)9ef, inset 2px 2px 3px #7f3000;
+  box-shadow: var(--highlight),inset 3px 3px 3px rgba(0,0,0,.2);
   background: #fff linear-gradient(to bottom, #fff3df, #fff9ef) !important;
   background: #f60 !important;
   transition: ease box-shadow .05s;
@@ -3604,8 +3604,8 @@ div.app:active .applabel a, .sitemapLink:active .sitemapLabel {
   color: #fff !important;
 }
 
-div.app:active .applabel {
-  box-shadow: var(--highlight)9ef, inset 2px 2px 3px #7f3000;
+div.app:active .applabel, .sitemapLink:active .sitemapLabel {
+  box-shadow: var(--highlight), inset 3px 3px 3px rgba(0,0,0,.2);
 }
 
 div.app:active img {
@@ -6207,7 +6207,7 @@ p#helptranslate {
 .themechoice .optbox:active + img ~ .themelabel {
   color: #fff !important;
   box-shadow: var(--highlight);
-  box-shadow: var(--highlight)9ef, inset 2px 2px 3px #7f3000;
+  box-shadow: var(--highlight)9ef,inset 3px 3px 3px rgba(0,0,0,.2);
   background: #f60 !important;
 }
 
@@ -6316,7 +6316,7 @@ p#helptranslate {
 
 .langselect input[name="lang"]:active + img + .ui_lang {
   color: #fff !important;
-  box-shadow: var(--highlight)9ef, inset 2px 2px 3px #7f3000;
+  box-shadow: var(--highlight)9ef,inset 3px 3px 3px rgba(0,0,0,.2);
   background: #f60 !important;
 }
 
