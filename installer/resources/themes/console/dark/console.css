@@ -9322,6 +9322,7 @@ b.suboption {
   padding: 15px 15px 15px 50px;
   box-shadow: var(--lowlight), inset 0 0 2px 1px #040 !important;
   background: #000 var(--infohelp) 12px center no-repeat !important;
+  background-size: 28px !important;
 }
 
 #config_reseed #manualreseed .optionsingle table,
