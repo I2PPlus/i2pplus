@@ -1371,7 +1371,8 @@ div.widepanel h3 {
 /* graphs */
 
 div#graphs {
-  padding: 0 10px
+  padding: 0 10px;
+  text-align: center;
 }
 
 #graphs .messages {
@@ -12630,7 +12631,7 @@ h1, .main h2, h4.app, h4.app2, .main h3 {
 
 /* lazy loading */
 
-.lazy.lazyhide, .lazy.lazyhide td, .lazy:not(.lazyshow) {
+.lazy.lazyhide, .lazy.lazyhide td {
   opacity: 0;
   contain: strict;
 }
