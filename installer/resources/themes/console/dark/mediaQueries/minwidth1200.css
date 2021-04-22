@@ -638,17 +638,17 @@ ul.statlist a[name], ul.statlist b, ul.statlist li b, ul.statlist a[name]:hover,
   }
 
   #sb_graphcontainer {
-    height: 41px;
+    height: 42px;
   }
 
   #minigraph {
     margin-top: -20px !important;
     width: 250px !important;
-    height: 41px !important;
+    height: 38px !important;
   }
 
   #minigraphcontainer {
-    margin-top: -43px !important;
+    margin-top: -40px !important;
     margin-left: 1px !important;
     width: 258px !important;
     height: 39px !important;

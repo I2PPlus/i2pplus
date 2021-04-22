@@ -12241,19 +12241,24 @@ h3 + table {
   height: 0;
 }
 
+#tunnels #participating a, #tunnels #peercount a {
+  border-left: var(--border);
+}
+
 #tunnels #participating a::after, #tunnels #peercount a::after {
-  content: "";
+  margin-left: 2px;
+  width: 18px;
+  height: 18px;
   display: inline-block;
-  width: 16px;
-  height: 16px;
   vertical-align: middle;
-  background: url(images/refresh.png) center center no-repeat;
-  background-size: 16px !important;
+  background: var(--refresh) center center no-repeat;
+  background-size: 18px !important;
+  content: "";
 }
 
 #tunnels #participating a:hover::after, #tunnels #participating a:focus::after,
 #tunnels #peercount a:hover::after, #tunnels #peercount a:focus::after {
-  background: url(images/refresh_hover.png) center center no-repeat;
+  background: var(--refresh_hover) center center no-repeat;
 }
 
 #tunnels #participating a:active::after, #tunnels #peercount a:active::after {

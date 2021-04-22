@@ -389,6 +389,12 @@
     margin-top: 6px;
   }
 
+  #tunnels #participating a::after, #tunnels #peercount a::after {
+    width: 16px;
+    height: 16px;
+    background-size: 16px !important;
+  }
+
   .statusnotes:last-child {
     margin-bottom: 6px;;
   }
