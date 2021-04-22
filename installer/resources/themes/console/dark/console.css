@@ -1081,30 +1081,26 @@ _:-ms-lang(x), div.news {
 }
 
 div.news li {
-  text-align: justify;
-  list-style: url(images/info_dark.png);
-  list-style: none;
-  margin: 0;
+  margin: 0 0 5px;
   padding: 5px 5px 5px 0;
   vertical-align: middle;
   word-wrap: break-word;
-  color: #494;
-  font-weight: bold;
-  font-size: 9.5pt;
-  border-bottom: 1px dotted #252;
-  margin-bottom: 5px;
+  list-style: none;
+  text-align: justify;
   text-transform: capitalize;
+  color: #494;
+  font-size: 9.5pt;
+  font-weight: bold;
+  border-bottom: 1px dotted #252;
 }
 
 div.news h4 {
-  border-bottom: 1px;
-  border-bottom-style: dotted;
-  border-bottom-color: #252;
-  padding: 0 0 0 0;
-  margin: 5px 0 10px 0;
-  font-size: 10pt;
-  opacity: 1;
+  margin: 5px 0 10px;
+  padding: 0;
   text-transform: capitalize;
+  font-size: 10pt;
+  border-bottom: 1px dotted #252;
+  opacity: 1;
 }
 
 div.news p, div.newscontent p {
@@ -1117,18 +1113,18 @@ div.news p:nth-child(n+2), div.newscontent p:nth-child(n+2) {
 }
 
 div.news hr {
-  margin: 8px 0 5px 0;
+  margin: 8px 0 5px;
 }
 
 #news #newsStatus {
-  float: left;
   padding-top: 3px;
   padding-bottom: 1px;
+  float: left;
 }
 
 #newsDisplay {
-  white-space: nowrap;
   margin-left: 10px;
+  white-space: nowrap;
 }
 
 #news #newsDisplay, #graphopts {
@@ -1174,8 +1170,8 @@ div.news hr {
   font-size: 8pt !important;
   text-transform: none;
   opacity: .7;
-  background: url(/themes/console/images/info/author_dark.png) left 2px center no-repeat;
-  background-size: 14px;
+  background: var(--user) 2px center no-repeat;
+  background-size: 12px;
 }
 
 .newsDate {
@@ -1675,11 +1671,11 @@ td img {
 }
 
 .sortup {
-  background: url(images/sort_up.png) center center no-repeat, linear-gradient(to bottom, #040, #000);
+  background: var(--sortup) center center no-repeat, linear-gradient(to bottom, #040, #000);
 }
 
 .sortup:hover {
-  background: url(images/sort_up.png) center center no-repeat, linear-gradient(to bottom, #000, #040);
+  background: var(--sortup) center center no-repeat, linear-gradient(to bottom, #000, #040);
   border: 1px solid #f60;
 }
 
@@ -1693,20 +1689,20 @@ td img {
 }
 
 .sortupactive {
-  background: url(images/sort_up.png) center center no-repeat, #050;
+  background: var(--sortup) center center no-repeat, #050;
 }
 
 .sortdown {
-  background: url(images/sort_down.png) center center no-repeat, linear-gradient(to bottom, #040, #000);
+  background: var(--sortdown) center center no-repeat, linear-gradient(to bottom, #040, #000);
 }
 
 .sortdown:hover {
-  background: url(images/sort_down.png) center center no-repeat, linear-gradient(to bottom, #000, #040);
+  background: var(--sortdown) center center no-repeat, linear-gradient(to bottom, #000, #040);
   border: 1px solid #f60;
 }
 
 .sortdownactive {
-  background: url(images/sort_down.png) center center no-repeat, #050;
+  background: var(--sortdown) center center no-repeat, #050;
   border: 1px solid #050;
 }
 
@@ -2462,24 +2458,24 @@ input[readonly]:focus {
 }
 
 #consolepass input[name="name"], #externali2cp input[name="user"] {
-  padding: 6px 5px 6px 26px !important;
-  background: #000 url(/themes/console/images/buttons/user.png) 5px center no-repeat;
-  background: url(/themes/console/images/buttons/user.png) 5px center no-repeat, var(--txtinput);
+  padding: 6px 5px 6px 24px !important;
+  background: var(--user) 5px center no-repeat, var(--txtinput);
   background-size: 16px, 100% !important;
 }
 
 #consolepass input[name="name"]:focus, #externali2cp input[name="user"]:focus {
-  background: #000 url(/themes/console/images/buttons/user.png) 5px center no-repeat !important;
+  background: #000 var(--user) 5px center no-repeat !important;
+  background-size: 16px, 100% !important;
 }
 
 #consolepass input[name="nofilter_pw"], #externali2cp input[name="nofilter_pw"] {
-  padding: 6px 5px 6px 22px !important;
-  background: #000 url(/themes/console/images/buttons/password.png) 3px center no-repeat;
-  background: url(/themes/console/images/buttons/password.png) 3px center no-repeat, var(--txtinput);
+  padding: 6px 5px 6px 24px !important;
+  background: var(--key) 3px center no-repeat, var(--txtinput);
   background-size: 16px, 100% !important;
 }
 #consolepass input[name="nofilter_pw"]:focus, #externali2cp input[name="nofilter_pw"]:focus {
-  background: #000 url(/themes/console/images/buttons/password.png) 3px center no-repeat !important;
+  background: #000 var(--key) 3px center no-repeat !important;
+  background-size: 16px, 100% !important;
 }
 
 textarea#advancedsettings:focus {
@@ -4714,8 +4710,7 @@ ul#upnphelp li:last-child, #legal ul li:last-child {
 
 #faq h3 {
   padding-left: 35px !important;
-  background: url(/themes/console/images/info/question.png) 10px center no-repeat, var(--navbar) !important;
-  background: url(/themes/console/images/info/question.png) 10px center no-repeat, linear-gradient(to bottom, #0000 50%, #000 50%), repeating-linear-gradient(to right, #00000080 1px, #00000080 2px, #00100080 3px), var(--h3_fade) !important;
+  background: var(--ask) 10px center no-repeat, linear-gradient(to bottom, #0000 50%, #000 50%), repeating-linear-gradient(to right, #00000080 1px, #00000080 2px, #00100080 3px), var(--h3_fade) !important;
   background-size: 18px, 100% !important;
   text-transform: none;
   font-size: 10.5pt !important;
@@ -5833,7 +5828,7 @@ h4.app {
 }
 
 h4.app2 {
-  background: url(/themes/console/images/world.png) 8px center no-repeat, var(--h1) !important;
+  background: var(--globe) 8px center no-repeat, var(--h1) !important;
   background-size: 18px, 100%, 100%, 175px !important;
   background-blend-mode: var(--h3_blend) !important;
 }
@@ -11150,7 +11145,7 @@ h1[class], h1 {
 
 .sitelink.external {
   padding: 0 3px 0 18px;
-  background: rgba(0,64,0,.3) url(/themes/console/images/world.png) 3px center no-repeat;
+  background: rgba(0,64,0,.3) var(--globe) 3px center no-repeat;
   background-size: 12px, 100% !important;
 }
 
@@ -11163,7 +11158,7 @@ h1[class], h1 {
 }
 
 .sitelink.external:hover {
-  background: url(/themes/console/images/world.png) 3px center no-repeat, linear-gradient(to bottom, #020 50%, #000 50%);
+  background: var(--globe) 3px center no-repeat, linear-gradient(to bottom, #020 50%, #000 50%);
 }
 
 .chatlink:hover {
@@ -11240,11 +11235,13 @@ h1[class], h1 {
 }
 
 #help_faq, #help_glossary {
-  background: url(/themes/console/images/info/question.png) 15px center no-repeat, var(--helpbox);
+  background: var(--ask) 15px center no-repeat, var(--helpbox);
+  background-size: 32px;
 }
 
 #help_troubleshoot {
-  background: url(/themes/console/images/wrench_orange.png) 15px center no-repeat, var(--helpbox);
+  background: var(--wrench) 15px center no-repeat, var(--helpbox);
+  background-size: 32px, 100%;
 }
 
 #help_newusers {
@@ -11290,7 +11287,7 @@ h1[class], h1 {
 
 #troubleshoot h2 {
   padding-left: 38px;
-  background: url(/themes/console/images/wrench_orange.png) 10px center no-repeat, linear-gradient(to bottom, rgba(0,0,0,0) 50%, #000 50%), var(--h3), var(--h3_fade) !important;
+  background: var(--wrench) 10px center no-repeat, linear-gradient(to bottom, rgba(0,0,0,0) 50%, #000 50%), var(--h3), var(--h3_fade) !important;
   background-size: 20px, 100%, 100%, 100% !important;
 }
 
@@ -11308,7 +11305,7 @@ h1[class], h1 {
 
 #faq h2, #glossary h2 {
   padding-left: 38px;
-  background: url(/themes/console/images/info/question.png) 10px center no-repeat, linear-gradient(to bottom, rgba(0,0,0,0) 50%, #000 50%), var(--h3), var(--h3_fade) !important;
+  background: var(--ask) 10px center no-repeat, linear-gradient(to bottom, rgba(0,0,0,0) 50%, #000 50%), var(--h3), var(--h3_fade) !important;
   background-size: 20px, 100%, 100%, 100% !important;
 }
 
@@ -11508,7 +11505,7 @@ h2#jobrunners {
 }
 
 #sitemap h3:nth-of-type(5) {
-  background: url(/themes/console/images/world.png) 9px center no-repeat, var(--h1) !important;
+  background: var(--globe) 9px center no-repeat, var(--h1) !important;
   background-size: 18px, 100%, 100%, 175px !important;
   background-blend-mode: var(--h3_blend) !important;
 }
