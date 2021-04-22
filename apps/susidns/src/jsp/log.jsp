@@ -61,7 +61,7 @@
 <a class="abook private" href="addressbook?book=private&amp;filter=none"><%=intl._t("Private")%></a>&nbsp;
 <a class="abook" href="addressbook?book=published&amp;filter=none"><%=intl._t("Published")%></a>&nbsp;
 <a id="subs" class="selected" href="subscriptions"><%=intl._t("Subscriptions")%></a>&nbsp;
-<a id="config" href="config"><%=intl._t("Configuration")%></a>&nbsp;
+<a id="configlink" href="config"><%=intl._t("Configuration")%></a>&nbsp;
 <a id="overview" href="index"><%=intl._t("Help")%></a>
 </div>
 <hr>
@@ -71,7 +71,6 @@
 </div>
 <script src="/js/closeMessage.js?<%=net.i2p.CoreVersion.VERSION%>" type="text/javascript"></script>
 <div id="messages">${log.messages}</div>
-<form method="POST" action="config#navi">
 <div id="config">
 <textarea name="log" rows="50" cols="150" spellcheck="false">${log.logged}</textarea>
 </div>

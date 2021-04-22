@@ -738,13 +738,13 @@ textarea[name="config"], textarea[name="content"] {
   background: url(/themes/susidns/images/subs.png) 5px center no-repeat, linear-gradient(to bottom, #fff 50%, #ffd 50%);
 }
 
-#navi a#config {
+#navi a#configlink {
   background: #fff url(/themes/console/images/buttons/configure.png) 5px center no-repeat;
   background: url(/themes/console/images/buttons/configure.png) 5px center no-repeat, linear-gradient(to bottom, #fff, #eef);
   padding: 3px 5px 3px 24px;
 }
 
-#navi a#config:hover {
+#navi a#configlink:hover {
   background: url(/themes/console/images/buttons/configure_hover.png) 5px center no-repeat, linear-gradient(to bottom, #fff 50%, #ffd 50%);
 }
 

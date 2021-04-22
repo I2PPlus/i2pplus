@@ -186,15 +186,15 @@ code, tt, .destaddress {
   background: url(/themes/susidns/light/images/subs_active.png) 6px center no-repeat, linear-gradient(to bottom, #fff 50%, #eef 50%, #ebebff) #fff;
 }
 
-#navi a#config {
+#navi a#configlink {
   background: url(/themes/susidns/light/images/configure.png) 6px center no-repeat, linear-gradient(to bottom, #fff 50%, #eef 50%, #ebebff) #fff;
 }
 
-#navi a#config:hover, #navi a#config:focus {
+#navi a#configlink:hover, #navi a#configlink:focus {
   background: url(/themes/susidns/dark/images/configure_hover.png) 6px center no-repeat, linear-gradient(to bottom, #fff 50%, #eef 50%, #ebebff) #fff;
 }
 
-#navi a#config:active {
+#navi a#configlink:active {
   background: url(/themes/susidns/light/images/configure_active.png) 6px center no-repeat, linear-gradient(to bottom, #fff 50%, #eef 50%, #ebebff) #fff;
 }
 

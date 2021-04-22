@@ -61,12 +61,12 @@
 <a class="abook private" href="addressbook?book=private&amp;filter=none"><%=intl._t("Private")%></a>&nbsp;
 <a class="abook published" href="addressbook?book=published&amp;filter=none"><%=intl._t("Published")%></a>&nbsp;
 <a id="subs" class="selected" href="subscriptions"><%=intl._t("Subscriptions")%></a>&nbsp;
-<a id="config" href="config"><%=intl._t("Configuration")%></a>&nbsp;
+<a id="configlink" href="config"><%=intl._t("Configuration")%></a>&nbsp;
 <a id="overview" href="index"><%=intl._t("Help")%></a>
 </div>
 <hr>
 <div class="headline" id="subscriptions">
-<h3><%=intl._t("Subscriptions")%>&nbsp;&nbsp;<span><a href="log.jsp">View Log</a></h3>
+<h3><%=intl._t("Subscriptions")%>&nbsp;&nbsp;<span><a href="log.jsp">View Log</a></span></h3>
 <h4><%=intl._t("File location")%>: <span class="storage">${subs.fileName}</span></h4>
 </div>
 <script src="/js/closeMessage.js?<%=net.i2p.CoreVersion.VERSION%>" type="text/javascript"></script>
