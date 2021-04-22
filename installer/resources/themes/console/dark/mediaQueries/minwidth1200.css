@@ -276,31 +276,18 @@
     font-size: 8.5pt;
   }
 
-body, .main, .main td, .news p, #news p, textarea, .main textarea, code, tt, #changelog pre, th code,
-ul.statlist a[name], ul.statlist b, ul.statlist li b, ul.statlist a[name]:hover, .confignav, th, #configinfo th {
-    font-size: 10pt !important;
-  }
-
-  #help, #help li, #help p, #help code, #help td, #help th {
-    font-size: 11pt !important;
-  }
-
-  #help h2 {
-    font-size: 14pt !important;
-  }
-
-  #help h3 {
-    font-size: 12pt !important;
-  }
-
-  .cells tt, #profilelist tt, #floodfills tt {
-    margin-left: 2px !important;
-    margin-right: 2px !important;
-    letter-spacing: .07em;
+  .routersummary td, .routersummary a, .routersummary button, .routersummary h4, .routersummary h4 a,
+  #floodfill th, #jardump td, .smallhead th, .leaseset a[href$=".i2p"], .leaseset th code, .footnote, .topness {
     font-size: 9pt !important;
   }
 
-  .main button, .main input, select, textarea, div.news {
+  #newsDisplay a, pre, #logs li, #updateAvailable, code, tt {
+    font-size: 9.5pt !important;
+  }
+
+  body, .main, .main td, .news p, #news p, textarea, .main textarea, code, tt, #changelog pre, th code,
+  ul.statlist a[name], ul.statlist b, ul.statlist li b, ul.statlist a[name]:hover, .confignav, th, #configinfo th,
+  .main button, .main input, select, textarea, div.news, .routersummary button {
     font-size: 10pt !important;
   }
 
@@ -308,8 +295,28 @@ ul.statlist a[name], ul.statlist b, ul.statlist li b, ul.statlist a[name]:hover,
     font-size: 10pt !important;
   }
 
-  #newsDisplay a {
-    font-size: 9.5pt !important;
+  #news .newsentry p, .subheading b, .main[id^="config_"] th, h4#updateplugins {
+    font-size: 10.5pt !important;
+  }
+
+  h3, .routersummary h3 a, th.th_title, #leasesetdebug th, #leasesetsummary th, .netdbentry th,
+  #help, #help li, #help p, #help code, #help td, #help th {
+    font-size: 11pt !important;
+  }
+
+  #help h3, #sybilTask th {
+    font-size: 12pt !important;
+  }
+
+  #help h2 {
+    font-size: 14pt !important;
+  }
+
+  .cells tt, #profilelist tt, #floodfills tt {
+    margin-left: 2px !important;
+    margin-right: 2px !important;
+    letter-spacing: .07em;
+    font-size: 9pt !important;
   }
 
   button.control {
@@ -328,15 +335,6 @@ ul.statlist a[name], ul.statlist b, ul.statlist li b, ul.statlist a[name]:hover,
     width: 256px !important;
   }
 
-  .routersummary td, .routersummary a, .routersummary button, .routersummary h4, .routersummary h4 a,
-  #floodfill th, #jardump td, .smallhead th, .leaseset a[href$=".i2p"] {
-    font-size: 9pt !important;
-  }
-
-  pre, #logs li {
-    font-size: 9.5pt !important;
-  }
-
   #sb_localtunnels a {
     max-width: 200px;
   }
@@ -345,16 +343,8 @@ ul.statlist a[name], ul.statlist b, ul.statlist li b, ul.statlist a[name]:hover,
     padding-bottom: 3px !important;
   }
 
-  .routersummary button {
-    font-size: 10pt !important;
-  }
-
   .routersummary button.download {
     width: 248px;
-  }
-
-  #updateAvailable {
-    font-size: 9.5pt;
   }
 
   .sb_info .percentBarOuter {
@@ -383,26 +373,14 @@ ul.statlist a[name], ul.statlist b, ul.statlist li b, ul.statlist a[name]:hover,
     font-size: 9pt !important;
   }
 
-  code, tt {
-    font-size: 9.5pt !important;
-  }
-
   .leaseset th {
     font-size: 9.5pt !important;
     line-height: 1 !important;
   }
 
-  .leaseset th code {
-    font-size: 9pt !important;
-  }
-
   #floodfills th:first-child, #floodfills td:first-child {
     padding-right: 3px !important;
     width: 58px;
-  }
-
-  h3, .routersummary h3 a, th.th_title, #leasesetdebug th, #leasesetsummary th, .netdbentry th {
-    font-size: 11pt !important;
   }
 
   select {
@@ -427,13 +405,9 @@ ul.statlist a[name], ul.statlist b, ul.statlist li b, ul.statlist a[name]:hover,
     min-width: 120px;
   }
 
-  .subheading b {
-    font-size: 10.5pt !important;
-  }
-
   p#fullhistory {
-    text-align: right;
     margin-top: -13px;
+    text-align: right;
   }
 
   .routersummary div[style="height: 36px;"] {
@@ -468,8 +442,8 @@ ul.statlist a[name], ul.statlist b, ul.statlist li b, ul.statlist a[name]:hover,
   }
 
   #udpconnections td[class="cells"]:first-child, #ntcpconnections td[class="cells"]:first-child {
-    width: 55px;
     padding-right: 8px;
+    width: 55px;
   }
 
   h1[class], h1 {
@@ -481,14 +455,6 @@ ul.statlist a[name], ul.statlist b, ul.statlist li b, ul.statlist a[name]:hover,
 
   .main#jobs h2 {
     margin-bottom: 3px !important;
-  }
-
-  .footnote, .topness {
-    font-size: 9pt !important;
-  }
-
-  .main[id^="config_"] th, h4#updateplugins {
-    font-size: 10.5pt !important;
   }
 
   .langbox {
@@ -513,9 +479,9 @@ ul.statlist a[name], ul.statlist b, ul.statlist li b, ul.statlist a[name]:hover,
   }
 
   .newsAuthor {
-    font-size: 9pt !important;
-    background-size: 15px 15px !important;
-    padding-left: 19px !important;
+    font-size: 9pt;
+    background-size: 13px;
+    padding-left: 18px;
   }
 
   #reseedconfig input[type=text], #reseedconfig input[type=password] {
@@ -546,10 +512,6 @@ ul.statlist a[name], ul.statlist b, ul.statlist li b, ul.statlist a[name]:hover,
   img[src="/themes/console/images/i2plogo.png"] {
     margin-top: 3px !important;
     width: 200px !important;
-  }
-
-  #logs li, pre#servicelogs {
-    font-size: 9pt !important;
   }
 
   .tunneldisplay .tunnel_peer {
@@ -628,10 +590,6 @@ ul.statlist a[name], ul.statlist b, ul.statlist li b, ul.statlist a[name]:hover,
 
   #debug .tab, #debug .tab2, #netdb .tab, #netdb .tab2 {
     margin-top: -1px !important;
-  }
-
-  #sybilTask th {
-    font-size: 12pt !important;
   }
 
   #tunnels .tab, #tunnels .tab2 {
