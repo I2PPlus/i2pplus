@@ -3193,7 +3193,7 @@ h3[id="udpcon"] {
   line-height: 0;
 }
 
-pre#transports {
+pre#activetransports {
   border: var(--border) !important;
   padding: 15px 5px 5px 15px;
   margin: 0 20px 0 0;
@@ -6910,7 +6910,7 @@ td.optionsave {
   margin-bottom: 0;
 }
 
-h3.tabletitle, h3#i2pclientconfig, h3#advancedclientconfig, h3#webappconfig, h3#pconfig, h3#pluginfromurl, h3#pluginfromfile,
+h3.tabletitle, h3#i2pclientconfig, h3#advancedclientconfig, h3#webappconfiguration, h3#pconfig, h3#pluginfromurl, h3#pluginfromfile,
 h3#updateplugins, h3#pluginmanage, h3#bannedpeers, h3.ptitle, h3#transports, h3#upnpstatus, h3.sybils, #certs h3 {
   margin-bottom: 0 !important;
   padding: 8px 10px;
@@ -7002,7 +7002,7 @@ p#webappconfigtext {
   line-height: 140%;
 }
 
-h3#i2pclientconfig, h3#pconfig, h3#pluginfromurl, h3#pluginfromfile, h3#webappconfig {
+h3#i2pclientconfig, h3#pconfig, h3#pluginfromurl, h3#pluginfromfile, h3#webappconfiguration {
   margin-bottom: -14px !important;
 }
 
@@ -10379,7 +10379,7 @@ input[type=file] {
   padding: 0;
 }
 
-#viewprofile pre, pre#transports {
+#viewprofile pre, pre#activetransports {
   margin: 0;
   padding: 20px 20px 0;
   line-height: 20px;

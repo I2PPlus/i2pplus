@@ -27,7 +27,7 @@
  <jsp:useBean class="net.i2p.router.web.helpers.ConfigClientsHandler" id="formhandler" scope="request" />
 <%@include file="formhandler.jsi" %>
 <div class="configure">
-<h3 id="webappconfig"><a name="webapp"></a><%=intl._t("WebApp Configuration")%>&nbsp;
+<h3 id="webappconfiguration"><a name="webapp"></a><%=intl._t("WebApp Configuration")%>&nbsp;
 <span class="h3navlinks">
 <a href="configclients" title="<%=intl._t("Client Configuration")%>">Clients</a>&nbsp;
 <a href="configplugins" title="<%=intl._t("Plugin Configuration")%>">Plugins</a>

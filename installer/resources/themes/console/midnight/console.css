@@ -4323,7 +4323,7 @@ h3[id="udpcon"] {
   vertical-align: middle;
 }
 
-pre#transports {
+pre#activetransports {
   margin: 0;
   padding: 15px 7px 5px 15px;
   width: calc(100% - 24px);
@@ -8282,7 +8282,7 @@ td.optionsave {
   margin-bottom: 0;
 }
 
-h3.h3table, h3.tabletitle, h3#i2pclientconfig, h3#advancedclientconfig, h3#webappconfig, h3#pconfig, h3#pluginfromurl,
+h3.h3table, h3.tabletitle, h3#i2pclientconfig, h3#advancedclientconfig, h3#webappconfiguration, h3#pconfig, h3#pluginfromurl,
 h3#pluginfromfile, h3#updateplugins, h3#pluginmanage, h3#bannedpeers, h3.ptitle, h3#transports, h3#upnpstatus, h3.sybils, #config_keyring h3 {
   margin-bottom: 0 !important;
   padding: 7px 10px;
@@ -8391,7 +8391,7 @@ h3.ptitle {
   margin-bottom: -6px !important;
 }
 
-h3#webappconfig {
+h3#webappconfiguration {
   margin-bottom: -13px !important;
 }
 
@@ -9745,7 +9745,7 @@ h3#themeheading, h3#langheading, h3#passwordheading {
   font-size: 12pt !important;
 }
 
-h3#i2pclientconfig, h3#pconfig, h3#pluginfromurl, h3#pluginfromfile, #clientconf.infohelp, h3#webappconfig {
+h3#i2pclientconfig, h3#pconfig, h3#pluginfromurl, h3#pluginfromfile, #clientconf.infohelp, h3#webappconfiguration {
   margin: -4px 0 -15px !important;
 }
 
@@ -10116,7 +10116,7 @@ h2 {
   padding: 12px 10px !important;
 }
 
-h3.h3table, h3.tabletitle, h3#i2pclientconfig, h3#advancedclientconfig, h3#webappconfig, h3#pconfig, h3#pluginfromurl,
+h3.h3table, h3.tabletitle, h3#i2pclientconfig, h3#advancedclientconfig, h3#webappconfiguration, h3#pconfig, h3#pluginfromurl,
 h3#pluginfromfile, h3#updateplugins, h3#pluginmanage, h3#bannedpeers, h3.ptitle, h3#transports, h3#upnpstatus, h3.sybils, #config_keyring h3 {
   padding: 9px 10px !important;
 }

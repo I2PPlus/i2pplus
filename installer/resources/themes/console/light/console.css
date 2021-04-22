@@ -2416,7 +2416,7 @@ h3#transports, h3#upnp {
   border: 1px solid #8d8daa;
 }
 
-pre#transports {
+pre#activetransports {
   margin: -16px 0 0;
   padding: 10px 0 0 10px;
   display: inline-block;
@@ -2427,7 +2427,7 @@ pre#transports {
   background: #fafaff;
 }
 
-pre#transports b {
+pre#activetransports b {
   padding-bottom: 2px;
 }
 
@@ -2510,7 +2510,7 @@ h3#passwordheading {
   filter: none;
 }
 
-h3#langheading, h3#themeheading, h3#pluginmanage, h3#pconfig, h3#webappconfig, h3#advancedclientconfig, h3#i2pclientconfig, #config_stats h3, #config_keyring h3 {
+h3#langheading, h3#themeheading, h3#pluginmanage, h3#pconfig, h3#webappconfiguration, h3#advancedclientconfig, h3#i2pclientconfig, #config_stats h3, #config_keyring h3 {
   position: relative;
   z-index: 100;
   border: 1px solid #8d8daa;
@@ -2523,7 +2523,7 @@ h3#advancedclientconfig, p#webappconfigtext, p#pluginconfigtext, p#clientconf.in
   margin-bottom: -2px;
 }
 
-h3#pconfig, h3#webappconfig, h3#i2pclientconfig, p#clientconf.infohelp, #config_stats h3 {
+h3#pconfig, h3#webappconfiguration, h3#i2pclientconfig, p#clientconf.infohelp, #config_stats h3 {
   margin-bottom: -13px;
 }
 
@@ -3409,7 +3409,7 @@ tr {
   vertical-align: middle !important;
 }
 
-tr:nth-child(even), pre#transports, #debug .sentTags:hover td, #debug .expiry:hover td {
+tr:nth-child(even), pre#activetransports, #debug .sentTags:hover td, #debug .expiry:hover td {
   background: #efefff;
   background: repeating-linear-gradient(135deg, rgba(252,252,255,.5) 2px, rgba(240, 240, 255, .3) 3px, #fafaff 5px) #fafaff;
   background: linear-gradient(to bottom, #fff, #eef);
@@ -11531,7 +11531,7 @@ div.app {
   font-size: 8pt !important;
 }
 
-h3#pconfig, h3#webappconfig, h3#i2pclientconfig, p#clientconf.infohelp, #config_stats h3 {
+h3#pconfig, h3#webappconfiguration, h3#i2pclientconfig, p#clientconf.infohelp, #config_stats h3 {
   margin-bottom: -15px;
 }
 

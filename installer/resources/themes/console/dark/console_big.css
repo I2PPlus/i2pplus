@@ -148,7 +148,7 @@ td > * {
   vertical-align: middle;
 }
 
-h3#webappconfig, h3#i2pclientconfig {
+h3#webappconfiguration, h3#i2pclientconfig {
   margin-bottom: -15px !important;
 }
 
@@ -325,7 +325,7 @@ ul#banlist {
   margin-right: -3px !important;
 }
 
-h3#webappconfig, h3#i2pclientconfig {
+h3#webappconfiguration, h3#i2pclientconfig {
   margin-bottom: -16px !important;
 }
 

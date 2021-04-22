@@ -199,7 +199,7 @@ public class InfoHelper extends HelperBase {
                    " &ensp;<b>" + _t("Clock Skew") + ":</b> " + _context.clock().getOffset() + "ms</td></tr>\n");
         buf.append("</table>\n");
 
-        buf.append("<h3 id=\"transports\">").append(_t("Router Transport Addresses")).append("</h3>\n<pre id=\"transports\">\n");
+        buf.append("<h3 id=\"transports\">").append(_t("Router Transport Addresses")).append("</h3>\n<pre id=\"activetransports\">\n");
         SortedMap<String, Transport> transports = _context.commSystem().getTransports();
         if (!transports.isEmpty()) {
             for (Transport t : transports.values()) {

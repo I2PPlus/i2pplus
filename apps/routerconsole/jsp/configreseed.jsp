@@ -215,6 +215,7 @@
 </tr>
 </table>
 </form>
+</div>
 </td>
 </tr>
 <tr>
@@ -245,6 +246,7 @@
 </tr>
 </table>
 </form>
+</div>
 </td>
 </tr>
 <tr id="create">
@@ -266,6 +268,7 @@
 </tr>
 </table>
 </form>
+</div>
 </td>
 </tr>
 </table>

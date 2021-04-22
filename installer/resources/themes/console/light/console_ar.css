@@ -635,7 +635,7 @@ div.themechoice, div.langselect {
   margin-bottom: 15px;
 }
 
-.infohelp#webappconfig, h3#webappconfig, #pluginconfig, h3#pconfig {
+.infohelp#webappconfig, h3#webappconfiguration, #pluginconfig, h3#pconfig {
   margin-right: 0;
 }
 
@@ -1039,7 +1039,7 @@ p#profiles_overview, #profiles .widescroll + h3, #thresholds + h3, #profiles #ba
   margin-top: -13px;
 }
 
-pre#transports {
+pre#activetransports {
   padding: 10px 10px 0 0;
 }
 

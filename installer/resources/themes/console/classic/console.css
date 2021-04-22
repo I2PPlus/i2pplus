@@ -3320,7 +3320,7 @@ a[href^="configpeer?peer"]:hover {
   filter: drop-shadow(0 0 1px #f60);
 }
 
-pre#transports {
+pre#activetransports {
   border: 1px solid #aaafce;
   padding: 15px 15px 0;
   margin: -11px 0 0;
@@ -3860,7 +3860,7 @@ h3#pluginmanage + p {
   padding: 5px 0 0 !important;
 }
 
-h3#webappconfig {
+h3#webappconfiguration {
   margin-bottom: -13px;
   margin-top: 15px;
 }
@@ -8723,7 +8723,7 @@ h4#updateplugins {
   padding: 5px 10px;
 }
 
-h3#webappconfig {
+h3#webappconfiguration {
   margin-bottom: -33px;
 }
 
@@ -11190,7 +11190,7 @@ p#gatherstats {
   font-size: 12pt !important;
 }
 
-h3#webappconfig {
+h3#webappconfiguration {
   margin-bottom: -14px;
 }
 }
