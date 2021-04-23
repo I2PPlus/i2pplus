@@ -13744,12 +13744,12 @@ to {
 
 .stattograph {
   margin: 3px 1px;
-  padding: 6px 8px;
-  width: auto;
+  padding: 6px 8px 6px 14px;
+  width: 220px;
   position: relative;
   display: inline-block;
   font-size: 90%;
-  text-align: center;
+  text-align: left;
   color: #252;
   border: 1px solid #26235c;
   border-left-width: 3px;
@@ -13765,6 +13765,7 @@ to {
   vertical-align: middle;
   overflow: hidden;
   text-overflow: ellipsis;
+  text-transform: capitalize;
   pointer-events: none !important;
 }
 
@@ -13830,7 +13831,7 @@ to {
   left: 0;
   white-space: nowrap;
   z-index: 10;
-  font-size: 100%;
+  font-size: 110%;
   color: #000;
   border-radius: 1px;
   box-shadow: 0 0 0 1px #113;

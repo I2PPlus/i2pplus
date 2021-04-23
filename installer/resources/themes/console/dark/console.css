@@ -12182,24 +12182,22 @@ h3 + table {
 
 #configstats .graphableStat td {
   padding: 4px 6px;
-/*  columns: auto;*/
   white-space: normal !important;
 }
 
 .stattograph {
   margin: 3px 1px;
-  padding: 6px 8px;
-  width: auto;
+  padding: 6px 8px 6px 12px;
+  width: 220px;
   position: relative;
   display: inline-block;
   font-size: 90%;
-  text-align: center;
+  text-align: left;
   color: #252;
   border: 1px solid #020;
   border-left-width: 3px;
   border-radius: 1px;
   box-sizing: border-box;
-/*  background: linear-gradient(to bottom, #020, #000);*/
   background: #000;
 }
 
@@ -12209,8 +12207,10 @@ h3 + table {
   white-space: nowrap;
   vertical-align: middle;
   overflow: hidden;
+  box-sizing: border-box;
   text-overflow: ellipsis;
   pointer-events: none !important;
+  text-transform: capitalize;
 }
 
 .optbox:not(:checked) + label > .stattograph b {
@@ -12223,16 +12223,17 @@ h3 + table {
 }
 
 .stattograph:hover b, .stattograph:focus b {
-  color: #f60 !important;
+  color: #ee9 !important;
 }
 
 .optbox:checked + label > .stattograph {
-  padding-left: 20px;
+  padding-left: 22px;
   border: var(--softborder);
   border-left-width: 3px;
   box-shadow: var(--lowlight), inset 4px 4px 4px rgba(0,0,0,.6) !important;
   background: var(--yes) 8px center no-repeat, linear-gradient(to bottom, #010, #020);
-  background-size: 8px, 100%;
+  background-size: 8px, 100% !important;
+  background-blend-mode: normal, normal !important;
 }
 
 .stattograph:hover, .optbox:checked + label > .stattograph:hover {
@@ -12246,8 +12247,12 @@ h3 + table {
 }
 
 .optbox:checked + label > .stattograph:hover b {
-  color: #000 !important;
+  color: #ee9 !important;
   text-shadow: none;
+}
+
+.optbox:not(:checked) + label > .stattograph:hover b {
+  color: #f60 !important;
 }
 
 .stattograph:active, .optbox:checked + label > .stattograph:active {
