@@ -4419,7 +4419,7 @@ h4.app img, h4.app2 img {
   width: 16px;
   height: 16px;
   float: right;
-  background: url(/themes/susidns/dark/images/configure.png) center center no-repeat;
+  background: var(--configure) center center no-repeat;
   background-size: 16px !important;
   content: "";
 }
@@ -4428,7 +4428,7 @@ h4.app img, h4.app2 img {
 .main#tunnels h3 a[href$="/i2ptunnelmgr"]:hover::after, .main#tunnels h3 a[href$="/i2ptunnelmgr"]:focus::after,
  #logs a.configure:hover::after, #logs a.configure:focus::after,
  h4.app a:hover::after, h4.app a:focus::after, h4.app2 a:hover::after, h4.app2 a:focus::after {
-  background: url(/themes/susidns/dark/images/configure_hover.png) center center no-repeat;
+  background: var(--configure_hover) center center no-repeat;
 }
 
 .main#tunnels h3 a[href^="/configtunnels#"]:active::after, .main#tunnels h3 a[href$="/i2ptunnelmgr"]:active::after,
@@ -4447,12 +4447,12 @@ h4.app img, h4.app2 img {
 }
 
 #logs a.delete::after {
-  background: url(images/delete.png) center center no-repeat;
-  background-size: 12px !important;
+  background: var(--close) center center no-repeat;
+  background-size: 14px !important;
 }
 
 #logs a.delete:hover::after {
-  background: url(images/delete_hover.png) center center no-repeat;
+  background: var(--close_hover) center center no-repeat;
 }
 
 #logs a.configure:active::after {
@@ -11682,12 +11682,12 @@ th[aria-sort] {
 }
 
 #sybilnav ul li#configurePeriodic::before {
-  background: url(/themes/susidns/dark/images/configure.png);
+  background: var(--configure);
   background-size: 14px !important;
 }
 
 #sybilnav ul li#configurePeriodic:hover::before {
-  background: url(/themes/susidns/dark/images/configure_hover.png);
+  background: var(--configure_hover);
   background-size: 14px !important;
 }
 
