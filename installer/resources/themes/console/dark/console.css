@@ -10478,9 +10478,9 @@ div.app {
 
 div.app:hover .extlink::after, .sitemapLink.extlink:hover::after {
   border: 1px solid #f50 !important;
-  background: #000 url(images/newtab.svg) 4.5px center no-repeat;
+  background: #000 var(--newtab_hover) 4.5px center no-repeat;
   background-size: 12.5px 10px;
-  opacity: .75;
+  opacity: 1;
   transform: scale(1);
 }
 
