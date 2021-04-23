@@ -47,7 +47,7 @@
         } // end iterating over required groups for the current stat
         if (statshelper.getCurrentCanBeGraphed() && !statshelper.getCurrentGraphName().contains("Ping")) {
 %>
-<input hidden type="checkbox" class="optbox" id="<%=statshelper.getCurrentStatName().replace(" ", "_")%>" name="graphList" value="<%=statshelper.getCurrentGraphName()%>" <% if (statshelper.getCurrentIsGraphed()) {%>checked="checked"<%}%> >
+<input hidden type="checkbox" class="optbox" id="<%=statshelper.getCurrentStatName().replace(" ", "_")%>" name="graphList" value="<%=statshelper.getCurrentGraphName()%>"<% if (statshelper.getCurrentIsGraphed()){%> checked="checked"<%}%>>
 <label for="<%=statshelper.getCurrentStatName().replace(" ", "_")%>" data-tooltip="<%=statshelper.getCurrentStatDescription()%>">
 <%
     int dot = statshelper.getCurrentStatName().indexOf(".");
