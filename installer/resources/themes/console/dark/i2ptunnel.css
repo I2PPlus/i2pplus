@@ -2,6 +2,8 @@
 /* Author: dr|z3d */
 
 @import url(/themes/fonts/DroidSans.css);
+@import url(images/images.css);
+@import url(/themes/console/images/images.css);
 @import url(optbox.css);
 @import url(chromescroll.css);
 
@@ -238,7 +240,6 @@ h2, h3 {
   word-spacing: .1em;
   text-shadow: 0 1px 1px #000;
   box-shadow: inset 0 0 0 1px #000, inset 0 0 1px 1px #030;
-  background: linear-gradient(to bottom, #1a261a 50%, #000 50%) !important;
   background: linear-gradient(to bottom, rgba(0,0,0,0) 50%, #000 50%), repeating-linear-gradient(to right, rgba(0,0,0,.5) 1px, rgba(0,0,0,.5) 2px, rgba(0,16,0,.5) 3px), linear-gradient(to bottom, #004000, #000 75%), url(/themes/console/dark/images/camotile2.png) top left !important;
 }
 
@@ -246,27 +247,23 @@ h2, h3 {
 
 #messages h2 {
   margin-top: 12px;
-  background: url(/themes/console/images/svg/logs.svg) left 8px center no-repeat, linear-gradient(to bottom, #1a261a 50%, #000 50%) !important;
   background: url(/themes/console/images/svg/logs.svg) left 8px center no-repeat, repeating-linear-gradient(to right, rgba(0,0,0,.4) 1px, rgba(0,0,0,.4) 2px, rgba(0,32,0,.6) 3px), linear-gradient(to bottom, #001800, #000 75%) !important;
-  background-size: 20px auto, 100% 100%, 100% 100% !important;
+  background-size: 20px auto, 100%, 100% !important;
 }
 
 #globalTunnelControl h2 {
-  background: url(/themes/console/images/svg/mouse.svg) left 8px center no-repeat, linear-gradient(to bottom, #1a261a 50%, #000 50%) !important;
   background: url(/themes/console/images/svg/mouse.svg) left 8px center no-repeat, repeating-linear-gradient(to right, rgba(0,0,0,.4) 1px, rgba(0,0,0,.4) 2px, rgba(0,32,0,.6) 3px), linear-gradient(to bottom, #001800, #000 75%) !important;
-  background-size: 20px auto, 100% 100%, 100% 100% !important;
+  background-size: 20px auto, 100%, 100% !important;
 }
 
 #servers h2 {
-  background: url(/themes/console/images/svg/server.svg) left 8px center no-repeat, linear-gradient(to bottom, #1a261a 50%, #000 50%) !important;
-  background: url(/themes/console/images/svg/server.svg) left 8px center no-repeat, repeating-linear-gradient(to right, rgba(0,0,0,.4) 1px, rgba(0,0,0,.4) 2px, rgba(0,32,0,.6) 3px), linear-gradient(to bottom, #001800, #000 75%) !important;
-  background-size: 20px auto, 100% 100%, 100% 100% !important;
+  background: var(--server) left 8px center no-repeat, repeating-linear-gradient(to right, rgba(0,0,0,.4) 1px, rgba(0,0,0,.4) 2px, rgba(0,32,0,.6) 3px), linear-gradient(to bottom, #001800, #000 75%) !important;
+  background-size: 20px auto, 100%, 100% !important;
 }
 
 #clients h2 {
-  background: url(/themes/console/images/svg/client.svg) left 8px center no-repeat, linear-gradient(to bottom, #1a261a 50%, #000 50%) !important;
-  background: url(/themes/console/images/svg/client.svg) left 8px center no-repeat, repeating-linear-gradient(to right, rgba(0,0,0,.4) 1px, rgba(0,0,0,.4) 2px, rgba(0,32,0,.6) 3px), linear-gradient(to bottom, #001800, #000 75%) !important;
-  background-size: 20px auto, 100% 100%, 100% 100% !important;
+  background: var(--client) left 8px center no-repeat, repeating-linear-gradient(to right, rgba(0,0,0,.4) 1px, rgba(0,0,0,.4) 2px, rgba(0,32,0,.6) 3px), linear-gradient(to bottom, #001800, #000 75%) !important;
+  background-size: 20px auto, 100%, 100% !important;
 }
 
 #clients h2:not(.iframed) {
@@ -274,16 +271,14 @@ h2, h3 {
 }
 
 #tunnelEditPage h2, #tunnelEditPage h3, #registration h2, #registration h3 {
-  background: url(/themes/console/images/svg/configure.svg) left 8px center no-repeat, linear-gradient(to bottom, #1a261a 50%, #000 50%) !important;
-  background: url(/themes/console/images/svg/configure.svg) left 8px center no-repeat, repeating-linear-gradient(to right, rgba(0,0,0,.4) 1px, rgba(0,0,0,.4) 2px, rgba(0,32,0,.6) 3px), linear-gradient(to bottom, #001800, #000 75%) !important;
-  background-size: 20px auto, 100% 100%, 100% 100% !important;
+  background: var(--configure) left 8px center no-repeat, repeating-linear-gradient(to right, rgba(0,0,0,.4) 1px, rgba(0,0,0,.4) 2px, rgba(0,32,0,.6) 3px), linear-gradient(to bottom, #001800, #000 75%) !important;
+  background-size: 20px auto, 100%, 100% !important;
   background-blend-mode: normal, normal, exclusion, normal;
 }
 
 #wizardPanel h2, #ssl h2 {
-  background: url(/themes/console/images/svg/wizard.svg) left 8px center no-repeat, linear-gradient(to bottom, #1a261a 50%, #000 50%) !important;
   background: url(/themes/console/images/svg/wizard.svg) left 8px center no-repeat, repeating-linear-gradient(to right, rgba(0,0,0,.4) 1px, rgba(0,0,0,.4) 2px, rgba(0,32,0,.6) 3px), linear-gradient(to bottom, #001800, #000 75%) !important;
-  background-size: 20px auto, 100% 100%, 100% 100% !important;
+  background-size: 20px auto, 100%, 100% !important;
   background-blend-mode: normal, normal, exclusion, normal;
 }
 
@@ -770,9 +765,8 @@ select {
   font-size: 8.5pt !important;
   color: #494;
   border-radius: 2px;
-  background: #000 url(images/dropdown.svg) right 10px center no-repeat !important;
-  background: #000 url(images/dropdown.svg) right 10px center no-repeat, linear-gradient(to bottom, #001000, #000 5%, #000 95%, #001000) !important;
-  background-size: 10px auto, 100% 100% !important;
+  background: #000 var(--dropdown) right 10px center no-repeat, linear-gradient(to bottom, #001000, #000 5%, #000 95%, #001000) !important;
+  background-size: 10px auto, 100% !important;
   cursor: pointer;
   -moz-appearance: none;
   -webkit-appearance: none;
@@ -804,7 +798,7 @@ select:hover {
 }
 
 select:hover, select:focus, select:active {
-  background: #000 url(images/dropdown_hover.svg) right 10px center no-repeat !important;
+  background: #000 var(--dropdown_hover) right 10px center no-repeat !important;
   background-size: 10px auto !important;
 }
 
@@ -961,14 +955,14 @@ th .help:hover::after, th .help:focus::after {
 
 .multiOption#isServer {
   padding-left: 28px;
-  background: url(/themes/console/images/svg/server.svg) 4px center no-repeat;
-  background-size: 22px 22px;
+  background: var(--server) 4px center no-repeat;
+  background-size: 22px;
 }
 
 .multiOption#isClient {
   padding-left: 28px;
-  background: url(/themes/console/images/svg/client.svg) 4px center no-repeat;
-  background-size: 22px 22px;
+  background: var(--client) 4px center no-repeat;
+  background-size: 22px;
 }
 
 #throttler, #clientAuth {
@@ -1113,7 +1107,7 @@ input.tunnelName, input.tunnelDescription, #userAgents {
 .filemanager {
   padding-left: 28px !important;
   background: url(/themes/console/images/svg/files.svg) 6px center no-repeat, linear-gradient(to bottom, #001800, #001000) !important;
-  background-size: 16px 16px, 100% 100% !important;
+  background-size: 16px 16px, 100% !important;
 }
 
 .filemanager:focus {
@@ -1152,7 +1146,7 @@ input.tunnelName, input.tunnelDescription, #userAgents {
   height: 40px;
   display: inline-block;
   vertical-align: middle;
-  background: url(/themes/console/images/svg/update.svg) center center no-repeat;
+  background: var(--update) center center no-repeat;
   background-size: 40px 40px;
   content: "";
   animation: linear spin 5s forwards infinite;
@@ -1559,12 +1553,30 @@ tr.configerror {
   margin: 0 -2px 0 0 !important;
   padding: 2px 5px;
   vertical-align: middle;
+  background: url(images/expand.svg) center center no-repeat;
+  background-size: 8px;
+}
+
+#toggleInfo:hover, #toggleInfo:focus {
+  background: url(images/expand_hover.svg) center center no-repeat;
+  background-size: 8px;
+}
+
+#toggleInfo.collapse {
+  background: url(images/collapse.svg) center center no-repeat;
+  background-size: 8px;
+}
+
+#toggleInfo.collapse:hover, #toggleInfo.collapse:focus {
+  background: url(images/collapse_hover.svg) center center no-repeat;
+  background-size: 8px;
 }
 
 #toggleInfo img {
   height: 8px;
   width: 12px;
   mix-blend-mode: luminosity;
+  opacity: 0;
 }
 
 #toggleInfo:hover img, #toggleInfo:focus img {

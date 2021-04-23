@@ -19,7 +19,7 @@
 <body>
 <script nonce="<%=cspNonce%>" type="text/javascript">progressx.show();</script>
 <%@include file="summary.jsi" %>
-<h1 class="snark"><%=intl._t("Torrent Manager")%> <span class="newtab"><a href="/i2psnark/" target="_blank" title="<%=intl._t("Open in new tab")%>"><img src="<%=intl.getTheme(request.getHeader("User-Agent"))%>images/newtab.png" alt="<%=intl._t("Open in new tab")%>"></a></span></h1>
+<h1 class="snark"><%=intl._t("Torrent Manager")%> <a href="/i2psnark/" target="_blank" title="<%=intl._t("Open in new tab")%>"><span id="newtab"><img src="<%=intl.getTheme(request.getHeader("User-Agent"))%>images/newtab.png" alt="<%=intl._t("Open in new tab")%>"></span></a></h1>
 <div class="main" id="torrents">
 <style>iframe{width:1px;min-width:100%;opacity:0}</style>
 <noscript>

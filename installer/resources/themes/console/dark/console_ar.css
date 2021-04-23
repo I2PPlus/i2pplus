@@ -186,7 +186,7 @@ div.joblog li {
   direction: ltr;
 }
 
-span.newtab {
+span#newtab {
   text-align: left;
   font-size: 8pt;
   float: left;

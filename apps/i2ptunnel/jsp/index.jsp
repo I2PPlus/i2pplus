@@ -58,7 +58,7 @@
   if (isInitialized) {
 %>
 <div class="panel" id="globalTunnelControl">
-<h2><%=intl._t("Global Tunnel Control")%>&nbsp;<button id="toggleInfo" class="script" style="float: right"><img src="/themes/console/dark/images/sort_down.png" title="Show Tunnel Info"/></button></h2>
+<h2><%=intl._t("Global Tunnel Control")%>&nbsp;<button id="toggleInfo" class="script" style="float: right"><img src="/themes/console/dark/images/expand_hover.svg" title="Show Tunnel Info"/></button></h2>
 <table>
 <tr>
 <td class="buttons">

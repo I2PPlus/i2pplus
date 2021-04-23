@@ -3666,7 +3666,7 @@ h1, h2, h3 {
   background: linear-gradient(to bottom, #141221 50%, #001 50%) !important;
 }
 
-span.newtab {
+span#newtab {
   margin-top: 2px;
   float: right;
   letter-spacing: 0;
@@ -3674,7 +3674,7 @@ span.newtab {
   font-size: 8pt;
 }
 
-.newtab:hover {
+#newtab:hover {
   filter: drop-shadow(0 0 3px #652787) !important;
 }
 
@@ -10582,7 +10582,7 @@ b.suboption {
   min-height: 50px !important;
 }
 
-span.newtab {
+span#newtab {
   margin-top: 5px;
 }
 }

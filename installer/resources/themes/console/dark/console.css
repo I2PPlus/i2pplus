@@ -8,10 +8,10 @@
 :root {
   --bodyfont: Droid Sans, Open Sans, Noto Sans, Ubuntu, Segoe UI, Bitstream Vera Sans, DejaVu Sans, Verdana, Lucida Grande, Helvetica, sans-serif;
   --monospaced: Droid Sans Mono, Noto Mono, DejaVu Sans Mono, Lucida Console, monospace;
-  --h1: var(--h3), linear-gradient(to bottom, #1a261a, #223022 7%, #212f21 9%, #172317 21%, #091109 46%, #050d05 48%, #020602 52%, #010301 54%, #000000 56%), var(--camotile) #000;
   --h3: repeating-linear-gradient(to right, rgba(0,0,0,.5) 1px, rgba(0,0,0,.5) 2px, rgba(0,16,0,.5) 3px);
   --h3_fade: linear-gradient(to bottom, #005000, #000 75%);
   --h3_blend: normal, normal, exclusion, exclusion;
+  --h1: var(--h3), linear-gradient(to bottom, #1a261a, #223022 7%, #212f21 9%, #172317 21%, #091109 46%, #050d05 48%, #020602 52%, #010301 54%, #000000 56%), var(--camotile) #000;
   --lowlight: inset 0 0 0 1px #000;
   --element: linear-gradient(to bottom, #020, #010);
   --button: linear-gradient(to bottom, #001000, #000 5%, #000 95%, #001000);
@@ -1866,38 +1866,34 @@ p img:first-child {
   display: none !important;
 }
 
-p:empty { /* kills empty paragraphs that are likely erroneous eg. see top of /profiles?f=1, /profiles */
+p:empty {
   display: none;
-  border: 1px dotted #f00; /* display in order to bug hunt */
 }
 
 #config_logging p {
-  text-align: left;
   margin: 3px 0 5px !important;
+  text-align: left;
 }
 
-.newtab {
+#newtab {
+  width: 24px;
+  height: 20px;
   text-align: right;
   font-size: 8pt;
   float: right;
   letter-spacing: 0;
 }
 
-.newtab img {
+#newtab img {
   opacity: 0;
 }
 
-.newtab {
+#newtab {
   background: var(--newtab) center center no-repeat;
 }
 
-.newtab:hover {
+#newtab:hover {
   background: var(--newtab_hover) center center no-repeat;
-}
-
-/* opera targetted hack */
-x:-o-prefocus, span.newtab {
-  margin-top: -25px;
 }
 
 h2, h2.welcome {

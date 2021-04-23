@@ -4463,19 +4463,19 @@ h1::first-letter {
   font-size: 112%;
 }
 
-span.newtab {
+span#newtab {
   float: right;
   letter-spacing: 0;
   text-align: right;
   font-size: 8pt;
 }
 
-.newtab img {
+#newtabimg {
   margin-top: -1px;
   opacity: .65;
 }
 
-.newtab img:hover {
+#newtabimg:hover {
   opacity: 0.8;
   filter: drop-shadow(0 0 1px #f60);
 }
