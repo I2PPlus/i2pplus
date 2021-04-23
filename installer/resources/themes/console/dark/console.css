@@ -1308,13 +1308,13 @@ div.messages {
   z-index: 100;
   animation: 2s hide-up 8s ease-out forwards;
   box-shadow: inset 0 0 1px 0 #f00, 0 0 2px 2px #000 !important;
-  background: var(--infohelp) no-repeat 12px center, url(/themes/snark/light/images/delete.png) right 6px top 6px no-repeat, url(images/scarface.jpg) right bottom no-repeat #000;
+  background: var(--infohelp) no-repeat 12px center, var(--close) right 6px top 6px no-repeat, url(images/scarface.jpg) right bottom no-repeat #000;
   background-size: 28px, 14px, auto 90%;
   background-blend-mode: normal, luminosity, normal;
 }
 
 .main:not(#config_update) div.messages:hover, #config_update #messages:hover {
-  background: var(--infohelp) no-repeat 12px center, url(/themes/snark/light/images/delete_hover.png) right 6px top 6px no-repeat, url(images/scarface.jpg) right bottom no-repeat #000;
+  background: var(--infohelp) no-repeat 12px center, var(--close_hover) right 6px top 6px no-repeat, url(images/scarface.jpg) right bottom no-repeat #000;
   background-size: 28px, 14px, auto 90%;
   background-blend-mode: normal, normal, normal;
   cursor: crosshair;
@@ -1792,12 +1792,12 @@ code {
 
 .links li {
   margin-left: 25px;
-  list-style-image: url(images/link.png) !important;
+  list-style-image: var(--star) !important;
   text-align: justify !important;
   line-height: 160% !important;
 }
 
-/* welcome */
+/* welcome */w
 
 .twocol {
   display: block;
@@ -1876,11 +1876,23 @@ p:empty { /* kills empty paragraphs that are likely erroneous eg. see top of /pr
   margin: 3px 0 5px !important;
 }
 
-span.newtab {
+.newtab {
   text-align: right;
   font-size: 8pt;
   float: right;
   letter-spacing: 0;
+}
+
+.newtab img {
+  opacity: 0;
+}
+
+.newtab {
+  background: var(--newtab) center center no-repeat;
+}
+
+.newtab:hover {
+  background: var(--newtab_hover) center center no-repeat;
 }
 
 /* opera targetted hack */
@@ -4224,8 +4236,8 @@ input[name="logfilename"], input[name="logformat"], input[name="logdateformat"],
 #sidebarconf th:nth-child(1), .homelinkedit th:first-child, #consolepass th:first-child {
   text-align: center;
   font-size: 0 !important;
-  background: url(/themes/console/images/buttons/delete.png) center center no-repeat, linear-gradient(to bottom, #001000, #001900 50%, #000 51%, #000) !important;
-  background: url(/themes/console/images/buttons/delete.png) center center no-repeat, linear-gradient(to bottom, #002000, #000 75%) !important;
+  background: var(--nuke) center center no-repeat, linear-gradient(to bottom, #002000, #000 75%) !important;
+  background-size: 16px, 100% !important;
 }
 
 .buttonTop img, .buttonBottom img, .buttonUp img, .buttonDown img {
@@ -10466,9 +10478,9 @@ div.app {
 
 div.app:hover .extlink::after, .sitemapLink.extlink:hover::after {
   border: 1px solid #f50 !important;
-  background: #000 url(images/newtab.png) 4.5px center no-repeat;
+  background: #000 var(--newtab_hover) 4.5px center no-repeat;
   background-size: 12.5px 10px;
-  opacity: .75;
+  opacity: 1;
   transform: scale(1);
 }
 
@@ -11850,7 +11862,7 @@ p#gatherstats {
 
 .statlist li.statsName b {
   padding-left: 20px;
-  background: url(images/link.png) left top 1px no-repeat;
+  background: var(--star) left top 1px no-repeat;
   background-size: 14px;
 }
 
