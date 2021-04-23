@@ -6,6 +6,10 @@
 
 :root {
   --camo: url("data:image/svg+xml,%3Csvg viewBox='0 0 240 240' xmlns='http://www.w3.org/2000/svg' xmlns:xlink='http://www.w3.org/1999/xlink'%3E%3Cfilter id='a'%3E%3CfeTurbulence baseFrequency='.2' numOctaves='4' seed='7' stitchTiles='stitch' type='fractalNoise'/%3E%3CfeTile/%3E%3CfeComponentTransfer%3E%3CfeFuncR slope='0.9469288793103452' tableValues='0 0 0 0 1 1' type='discrete'/%3E%3CfeFuncG slope='1.1477696210488517' tableValues='0 0 0 1 1' type='discrete'/%3E%3CfeFuncB intercept='4.3091942798132177' slope='-1.9643779184626435' tableValues='0 1' type='discrete'/%3E%3CfeFuncA intercept='-3.5179822198275872' slope='3.4636819773706904' type='discrete'/%3E%3C/feComponentTransfer%3E%3CfeColorMatrix values='1 0 0 0 0 -1 1 0 0 0 -1 -1 1 0 0 0 0 0 0 1'/%3E%3CfeColorMatrix type='matrix' values='-0.08 0.42 0.09 0 0.08 -0.17 0.35 -0.08 0 0.17 -0.08 0.15 -0.04 0 0.08 0 0 0 0 1'/%3E%3C/filter%3E%3Cpath d='m-29.6-29.6h256v256h-256z' filter='url(%23a)'/%3E%3Cpath d='m-4-4h256v256h-256z' fill='%23080000' opacity='.7'/%3E%3C/svg%3E");
+  --bodyfont: Droid Sans, Open Sans, Noto Sans, Ubuntu, Segoe UI, Bitstream Vera Sans, DejaVu Sans, Verdana, Lucida Grande, Helvetica, sans-serif;
+  --monospaced: Droid Sans Mono, Noto Mono, DejaVu Sans Mono, Lucida Console, monospace;
+  --h3: repeating-linear-gradient(to right, rgba(0,0,0,.5) 1px, rgba(0,0,0,.5) 2px, rgba(0,16,0,.5) 3px);
+  --h3_fade: linear-gradient(to bottom, #005000, #000 75%);
 }
 
 html {
@@ -14,7 +18,7 @@ html {
 }
 
 body, button, input, input[type=text], input[type=password], select, #debug .skm_key td:first-child b {
-  font-family: Droid Sans, Open Sans, Noto Sans, Ubuntu, Segoe UI, Bitstream Vera Sans, DejaVu Sans, Verdana, Lucida Grande, Helvetica, sans-serif;
+  font-family: var(--bodyfont);
 }
 
 button, input, input[type=text], input[type=password], select {
@@ -22,18 +26,16 @@ button, input, input[type=text], input[type=password], select {
   font-weight: bold;
 }
 
-body {
+body#proxy_error {
   margin: 5px 0 0 0;
   padding: 0;
   text-align: center;
   color: #ee9;
-  font: 8.5pt/130% Droid Sans, Open Sans, Noto Sans, Ubuntu, Segoe UI, Bitstream Vera Sans, DejaVu Sans, Verdana, Lucida Grande, Helvetica, sans-serif;
-  background: #010 url(images/camotile2.png) top left scroll;
+  font: 8.5pt/130% var(--bodyfont);
   background: url(/themes/console/images/svg/update.svg) center center no-repeat,
               repeating-linear-gradient(to bottom, rgba(0,0,0,.9) 2px, rgba(0,16,0,.9) 4px),
               var(--camo), #000;
   background-size: 0, 100%, 100%;
-  will-change: transform;
 }
 
 @supports (text-justify: auto) { /* Firefox 55+ */
@@ -43,7 +45,7 @@ body {
 }
 
 h2, h3 {
-  background: linear-gradient(to bottom, rgba(0,0,0,0) 50%, #000 50%), repeating-linear-gradient(to right, rgba(0,0,0,.5) 1px, rgba(0,0,0,.5) 2px, rgba(0,16,0,.5) 3px), linear-gradient(to bottom, #005000, #000 75%) !important
+  background: var(--h3), var(--h3_fade);
 }
 
 a:link, a:visited {
@@ -126,7 +128,7 @@ textarea {
   width: calc(100% - 15px);
   min-width: 97%;
   min-height: 100px;
-  font: 8.5pt Droid Sans Mono, Noto Mono, DejaVu Sans Mono, Lucida Console, monospace;
+  font: 8.5pt var(--monospaced);
   color: #ee9;
   border-radius: 2px;
   border: 1px solid #184818;
@@ -191,10 +193,6 @@ textarea {
   background: #252;
 }
 
-.logo, #warning {
-  filter: drop-shadow(0 0 5px #000);
-}
-
 #warning {
   margin: 20px 20px 20px 248px;
   padding: 10px 30px 20px 100px;
@@ -237,9 +235,6 @@ textarea {
 #proxyrequest {
   margin: 3px 0 10px;
   display: inline-block;
-}
-
-h3 {
 }
 
 #warning h3 {
