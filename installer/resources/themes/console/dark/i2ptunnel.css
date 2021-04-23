@@ -848,11 +848,11 @@ select::-ms-expand {
 }
 
 .tunnelDescriptionLabel, .tunnelDestinationLabel {
-  text-align: right;
+  margin-right: 3px;
   min-width: 150px;
   display: inline-block;
-  margin-right: 3px;
   white-space: nowrap;
+  text-align: right;
 }
 
 input {
@@ -861,8 +861,8 @@ input {
 }
 
 #hostField, #leasesetKey, #userAgents {
-  width: 90% !important;
   margin: 0 !important;
+  width: 90% !important;
   text-align: left !important;
 }
 
@@ -871,20 +871,19 @@ input {
   white-space: nowrap;
   overflow: hidden;
   text-overflow: ellipsis;
-  -o-text-overflow: ellipsis;
 }
 
 #tunnelDepth, #tunnelVariance, #tunnelQuantity, #tunnelBackupQuantity,
 #tunnelDepthOut, #tunnelVarianceOut, #tunnelQuantityOut, #tunnelBackupQuantityOut,
 #localDestination, #customOptions, #leasesetKey, #name, #description, textarea[name="accessList"] {
-  width: 100% !important;
   margin: 0 !important;
+  width: 100% !important;
   text-align: left !important;
 }
 
 #oldName {
-  min-width: 280px;
   width: 30%;
+  min-width: 280px;
 }
 
 select#profile, select#connectionProfile {
@@ -901,7 +900,6 @@ select#connectionProfile, #targetDestination {
 }
 
 #localDestination, textarea[name="accessList"], #hostField {
-  width: calc(100% - 5px) !important;
   width: 100% !important;
   margin: 3px 0 !important;
 }
@@ -917,6 +915,7 @@ textarea[name="accessList"]:focus {
 }
 
 textarea::placeholder, input::placeholder {
+  font-family: var(--bodyfont);
   font-style: italic;
 }
 
@@ -933,14 +932,14 @@ th .help::after {
   width: 16px;
   height: 16px;
   display: inline-block;
-  background: url(images/helplink.svg) center center no-repeat;
-  background-size: 16px 16px;
+  background: var(--helplink) center center no-repeat;
+  background-size: 16px;
   content: "";
 }
 
 th .help:hover::after, th .help:focus::after {
-  background: url(images/helplink_hover.svg) center center no-repeat;
-  background-size: 16px 16px;
+  background: var(--helplink_hover) center center no-repeat;
+  background-size: 16px;
 }
 
 #filter {
@@ -1103,38 +1102,55 @@ input.tunnelName, input.tunnelDescription, #userAgents {
 }
 
 .username, .password, .filemanager {
+  padding-left: 28px !important;
   width: 200px;
   box-shadow: var(--lowlight), inset 4px 4px 4px #000, 0 0 0 1px #000;
 }
 
 .username {
-  padding-left: 28px;
-  background: url(/themes/console/images/buttons/user.png) 6px center no-repeat, linear-gradient(to bottom, #001800, #001000) !important;
+  background: var(--user) 6px center no-repeat, linear-gradient(to bottom, #001800, #001000) !important;
+  background-size: 16px !important;
 }
 
 .password {
-  padding-left: 28px;
-  background: url(/themes/console/images/buttons/password.png) 6px center no-repeat, linear-gradient(to bottom, #001800, #001000) !important;
+  background: var(--key) 6px center no-repeat, linear-gradient(to bottom, #001800, #001000) !important;
+  background-size: 16px !important;
 }
 
 .filemanager {
-  padding-left: 28px !important;
-  background: url(/themes/console/images/svg/files.svg) 6px center no-repeat, linear-gradient(to bottom, #001800, #001000) !important;
-  background-size: 16px 16px, 100% !important;
+  background: var(--files) 6px center no-repeat, linear-gradient(to bottom, #001800, #001000) !important;
+  background-size: 16px, 100% !important;
 }
 
 .filemanager:focus {
-  padding-left: 28px !important;
-  background: #000 url(/themes/console/images/svg/files.svg) 6px center no-repeat !important;
-  background-size: 16px 16px !important;
+  background: #000 var(--files) 6px center no-repeat !important;
+  background-size: 16px !important;
 }
 
 .username:focus {
-  background: #000 url(/themes/console/images/buttons/user.png) 6px center no-repeat !important;
+  background: #000 var(--user) 6px center no-repeat !important;
+  background-size: 16px !important;
 }
 
 .password:focus {
-  background: #000 url(/themes/console/images/buttons/password.png) 6px center no-repeat !important;
+  background: #000 var(--key) 6px center no-repeat !important;
+  background-size: 16px !important;
+}
+
+::placeholder {
+  font-size: 80%;
+}
+
+.username::placeholder, .password::placeholder {
+  color: #bb7;
+  font-size: 100%;
+  font-style: italic;
+  text-transform: lowercase;
+  opacity: .4;
+}
+
+.username, .password {
+  width: calc(50% - 12px);
 }
 
 #notReady, #down {
@@ -1625,23 +1641,6 @@ tr.configerror {
 
 .nowrap b {
   margin-left: 5px;
-}
-
-::placeholder {
-  font-size: 80%;
-}
-
-.username::placeholder, .password::placeholder {
-  color: #bb7;
-  font-size: 100%;
-  font-style: italic;
-  text-transform: lowercase;
-  opacity: .4;
-}
-
-.username, .password {
-  padding-left: 24px !important;
-  width: calc(50% - 12px);
 }
 
 select[disabled], select[disabled]:hover, select[disabled]:focus, select[disabled]:active {
