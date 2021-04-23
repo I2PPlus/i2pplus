@@ -8,10 +8,10 @@
 :root {
   --bodyfont: Droid Sans, Open Sans, Noto Sans, Ubuntu, Segoe UI, Bitstream Vera Sans, DejaVu Sans, Verdana, Lucida Grande, Helvetica, sans-serif;
   --monospaced: Droid Sans Mono, Noto Mono, DejaVu Sans Mono, Lucida Console, monospace;
-  --h1: var(--h3), linear-gradient(to bottom, #1a261a, #223022 7%, #212f21 9%, #172317 21%, #091109 46%, #050d05 48%, #020602 52%, #010301 54%, #000000 56%), var(--camotile) #000;
   --h3: repeating-linear-gradient(to right, rgba(0,0,0,.5) 1px, rgba(0,0,0,.5) 2px, rgba(0,16,0,.5) 3px);
   --h3_fade: linear-gradient(to bottom, #005000, #000 75%);
   --h3_blend: normal, normal, exclusion, exclusion;
+  --h1: var(--h3), linear-gradient(to bottom, #1a261a, #223022 7%, #212f21 9%, #172317 21%, #091109 46%, #050d05 48%, #020602 52%, #010301 54%, #000000 56%), var(--camotile) #000;
   --lowlight: inset 0 0 0 1px #000;
   --element: linear-gradient(to bottom, #020, #010);
   --button: linear-gradient(to bottom, #001000, #000 5%, #000 95%, #001000);
