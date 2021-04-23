@@ -1553,12 +1553,30 @@ tr.configerror {
   margin: 0 -2px 0 0 !important;
   padding: 2px 5px;
   vertical-align: middle;
+  background: url(images/expand.svg) center center no-repeat;
+  background-size: 8px;
+}
+
+#toggleInfo:hover, #toggleInfo:focus {
+  background: url(images/expand_hover.svg) center center no-repeat;
+  background-size: 8px;
+}
+
+#toggleInfo.collapse {
+  background: url(images/collapse.svg) center center no-repeat;
+  background-size: 8px;
+}
+
+#toggleInfo.collapse:hover, #toggleInfo.collapse:focus {
+  background: url(images/collapse_hover.svg) center center no-repeat;
+  background-size: 8px;
 }
 
 #toggleInfo img {
   height: 8px;
   width: 12px;
   mix-blend-mode: luminosity;
+  opacity: 0;
 }
 
 #toggleInfo:hover img, #toggleInfo:focus img {
