@@ -1792,12 +1792,12 @@ code {
 
 .links li {
   margin-left: 25px;
-  list-style-image: url(images/link.png) !important;
+  list-style-image: var(--star) !important;
   text-align: justify !important;
   line-height: 160% !important;
 }
 
-/* welcome */
+/* welcome */w
 
 .twocol {
   display: block;
@@ -11850,7 +11850,7 @@ p#gatherstats {
 
 .statlist li.statsName b {
   padding-left: 20px;
-  background: url(images/link.png) left top 1px no-repeat;
+  background: var(--star) left top 1px no-repeat;
   background-size: 14px;
 }
 
