@@ -25,6 +25,10 @@
     margin-top: -1px;
   }
 
+  #sitemapcontainer {
+    padding: 0;
+  }
+
   #netdboverview th[colspan="3"] {
     font-size: 11pt !important;
   }
