@@ -509,7 +509,8 @@ class NetDbRenderer {
                 // warning - will be null for non-local encrypted
                 Destination dest = ls.getDestination();
                 Hash key = ls.getHash();
-                buf.append("<table class=\"leaseset\" id=\"ls_").append(key.toBase32().substring(0,4)).append("\">\n")
+//                buf.append("<table class=\"leaseset\" id=\"ls_").append(key.toBase32().substring(0,4)).append("\">\n")
+                buf.append("<table class=\"leaseset\">\n")
                    .append("<tr>\n<th><b class=\"lskey\">").append(_t("LeaseSet")).append(":</b> <code title =\"").append(_t("LeaseSet Key")).append("\">")
                    .append(key.toBase64()).append("</code>");
                 int type = ls.getType();
@@ -991,7 +992,8 @@ class NetDbRenderer {
         String hash = info.getIdentity().getHash().toBase64();
         String family = info.getOption("family");
         buf.append("<table class=\"netdbentry lazy\">\n")
-           .append("<tr id=\"").append(hash.substring(0, 6)).append("\"><th>");
+//           .append("<tr id=\"").append(hash.substring(0, 6)).append("\"><th>");
+           .append("<tr><th>");
         if (isUs) {
             buf.append("<b id=\"our-info\">" + _t("Our info") + ":</b></th><th><code>").append(hash)
                .append("</code></th><th id=\"netdb_ourinfo\">");

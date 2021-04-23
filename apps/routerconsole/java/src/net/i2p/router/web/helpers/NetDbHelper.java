@@ -33,7 +33,7 @@ public class NetDbHelper extends FormHandler {
     private String _newNonce;
     private boolean _postOK;
 
-    private static final int DEFAULT_LIMIT = SystemVersion.isARM() ? 250 : 500;
+    private static final int DEFAULT_LIMIT = SystemVersion.isSlow() ? 250 : 1000;
     private static final int DEFAULT_PAGE = 0;
 
     private static final String titles[] =
