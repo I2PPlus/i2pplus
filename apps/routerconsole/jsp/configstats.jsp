@@ -39,14 +39,19 @@
 <table id="configstats">
 <%
     while (statshelper.hasMoreStats()) {
-        while (statshelper.groupRequired()) { %>
+        while (statshelper.groupRequired()) {
+%>
 <tr><th align="left" colspan="2" id=<%=statshelper.getCurrentGroupName().replace(" ", "_")%>><b><%=statshelper.getCurrentGroupName()%></b></th></tr>
 <tr class="graphableStat"><td colspan="2">
 <%
         } // end iterating over required groups for the current stat
         if (statshelper.getCurrentCanBeGraphed() && !statshelper.getCurrentGraphName().contains("Ping")) {
 %>
-<label for="<%=statshelper.getCurrentStatName().replace(" ", "_")%>" data-tooltip="<%=statshelper.getCurrentStatDescription()%>"><div class="stattograph"><input type="checkbox" class="optbox <%=statshelper.getCurrentGroupName().replace(" ", "_")%>" id="<%=statshelper.getCurrentStatName().replace(" ", "_")%>" name="graphList" value="<%=statshelper.getCurrentGraphName()%>" <% if (statshelper.getCurrentIsGraphed()) {%>checked="checked"<%}%>><b><%=statshelper.getCurrentStatName()%></b><br><span class="statdesc"><%=statshelper.getCurrentStatDescription()%></span></div></label>
+
+<input hidden type="checkbox" class="optbox" id="<%=statshelper.getCurrentStatName().replace(" ", "_")%>" name="graphList" value="<%=statshelper.getCurrentGraphName()%>" <% if (statshelper.getCurrentIsGraphed()) {%>checked="checked"<%}%> >
+<label for="<%=statshelper.getCurrentStatName().replace(" ", "_")%>" data-tooltip="<%=statshelper.getCurrentStatDescription()%>">
+<div class="stattograph"><b><%=statshelper.getCurrentStatName()%></b><br><span class="statdesc"><%=statshelper.getCurrentStatDescription()%></span></div>
+</label>
 <%
         } // end iterating over all stats
     }

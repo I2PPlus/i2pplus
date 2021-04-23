@@ -11513,7 +11513,7 @@ h2#jobrunners {
 }
 
 #sitemapcontainer {
-  padding: 0 0 4px;
+  padding: 0 0 1px;
 }
 
 #sitemapcontainer h3 {
@@ -12182,41 +12182,81 @@ h3 + table {
 
 #configstats .graphableStat td {
   padding: 4px 6px;
-  columns: auto;
+/*  columns: auto;*/
   white-space: normal !important;
 }
 
 .stattograph {
   margin: 3px 1px;
-  padding: 4px;
-  width: 300px;
+  padding: 6px 8px;
+  width: auto;
   position: relative;
   display: inline-block;
   font-size: 90%;
-  text-align: left;
-  border: var(--softborder);
+  text-align: center;
+  color: #252;
+  border: 1px solid #020;
+  border-left-width: 3px;
   border-radius: 1px;
   box-sizing: border-box;
-  background: linear-gradient(to bottom, #020, #000);
+/*  background: linear-gradient(to bottom, #020, #000);*/
+  background: #000;
 }
 
-.stattograph:hover {
-  box-shadow: inset 0 0 0 1px rgba(255,96,0,.2);
-}
-
-.stattograph .optbox {
-  margin: 2px 4px 2px 2px !important;
-  vertical-align: middle !important;
-}
-
-#configstats .stattograph b {
-  max-width: 260px;
+.stattograph b {
   display: inline-block;
   word-break: break-all;
   white-space: nowrap;
   vertical-align: middle;
   overflow: hidden;
   text-overflow: ellipsis;
+  pointer-events: none !important;
+}
+
+.optbox:not(:checked) + label > .stattograph b {
+  color: #494;
+}
+
+.optbox:checked + label > .stattograph b {
+  color: #ee9;
+  text-shadow: 0 1px 1px #000;
+}
+
+.stattograph:hover b, .stattograph:focus b {
+  color: #f60 !important;
+}
+
+.optbox:checked + label > .stattograph {
+  padding-left: 20px;
+  border: var(--softborder);
+  border-left-width: 3px;
+  box-shadow: var(--lowlight), inset 4px 4px 4px rgba(0,0,0,.6) !important;
+  background: var(--yes) 8px center no-repeat, linear-gradient(to bottom, #010, #020);
+  background-size: 8px, 100%;
+}
+
+.stattograph:hover, .optbox:checked + label > .stattograph:hover {
+  border-color: #f60;
+  background: #000;
+}
+
+.optbox:checked + label > .stattograph:hover {
+  background: #d50 var(--yes) 8px center no-repeat;
+  background-size: 8px;
+}
+
+.optbox:checked + label > .stattograph:hover b {
+  color: #000 !important;
+  text-shadow: none;
+}
+
+.stattograph:active, .optbox:checked + label > .stattograph:active {
+  background: #f60;
+  box-shadow: var(--lowlight), inset 4px 4px 4px rgba(0,0,0,.6) !important;
+}
+
+.stattograph:active b, .optbox:checked + label > .stattograph:active b {
+  color: #ee9 !important;
 }
 
 .statdesc {
