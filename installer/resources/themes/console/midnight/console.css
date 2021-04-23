@@ -1851,7 +1851,7 @@ div.logo hr {
   color: #fc1c66 !important;
 }
 
-#sb_peers a, #sb_peersadvanced a, #sb_tunnels a {
+#sb_peers a, #sb_peersadvanced a, #sb_tunnels a, #sb_general a, #sb_shortgeneral a, #sb_advancedgeneral a {
   padding: 0;
   color: #c9ceff;
 }

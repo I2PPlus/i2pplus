@@ -582,7 +582,7 @@ pre {
   text-overflow: ellipsis;
 }
 
-#sb_peers a, #sb_peersadvanced a, #sb_tunnels a {
+#sb_peers a, #sb_peersadvanced a, #sb_tunnels a, #sb_general a, #sb_shortgeneral a, #sb_advancedgeneral a {
   color: #ee9;
 }
 

@@ -624,9 +624,9 @@ class SummaryBarRenderer {
                    "<tr title=\"")
            .append(_t("The version of the I2P software we are running"))
            .append("\">" +
-                   "<td align=\"left\"><b>")
+                   "<td align=\"left\"><a href=\"/configupdate\"><b>")
            .append(_t("Version"))
-           .append("</b></td>" +
+           .append("</b></a></td>" +
                    "<td class=\"digits\" align=\"right\">")
            .append(_helper.getVersion())
            .append("</td></tr>\n" +
@@ -650,9 +650,9 @@ class SummaryBarRenderer {
                    "<tr title=\"")
            .append(_t("The version of the I2P software we are running"))
            .append("\">" +
-                   "<td align=\"left\"><b>")
+                   "<td align=\"left\"><a href=\"/configupdate\"><b>")
            .append(_t("Version"))
-           .append("</b></td>" +
+           .append("</b></a></td>" +
                    "<td class=\"digits\" align=\"right\">")
            .append(_helper.getVersion())
            .append("</td></tr>\n" +
@@ -684,9 +684,9 @@ class SummaryBarRenderer {
                    "<tr title=\"")
            .append(_t("The version of the I2P software we are running"))
            .append("\">" +
-                   "<td align=\"left\"><b>")
+                   "<td align=\"left\"><a href=\"/configupdate\"><b>")
            .append(_t("Version"))
-           .append("</b></td>" +
+           .append("</b></a></td>" +
                    "<td class=\"digits\" align=\"right\">")
            .append(_helper.getVersion())
            .append("</td></tr>\n" +
