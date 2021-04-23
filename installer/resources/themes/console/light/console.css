@@ -6096,8 +6096,8 @@ body.iframed {
 }
 
 .themechoice:active > img ~ .themelabel {
-  background: #f60 !important;
   color: #fff;
+  background: #f60 !important;
 }
 
 .themechoice > img {
@@ -6183,8 +6183,8 @@ p#helptranslate {
   text-overflow: ellipsis;
   font-size: 9pt;
   border-top: 1px solid #999adf;
-  background: #f8f8ff;
   box-shadow: var(--highlight);
+  background: #f8f8ff;
 }
 
 .themechoice .optbox:hover + img ~ .themelabel {
@@ -6207,7 +6207,7 @@ p#helptranslate {
 .themechoice .optbox:active + img ~ .themelabel {
   color: #fff !important;
   box-shadow: var(--highlight);
-  box-shadow: var(--highlight)9ef,inset 3px 3px 3px rgba(0,0,0,.2);
+  box-shadow: var(--highlight), inset 3px 3px 3px rgba(0,0,0,.2);
   background: #f60 !important;
 }
 
@@ -6316,7 +6316,7 @@ p#helptranslate {
 
 .langselect input[name="lang"]:active + img + .ui_lang {
   color: #fff !important;
-  box-shadow: var(--highlight)9ef,inset 3px 3px 3px rgba(0,0,0,.2);
+  box-shadow: var(--highlight), inset 3px 3px 3px rgba(0,0,0,.2);
   background: #f60 !important;
 }
 
