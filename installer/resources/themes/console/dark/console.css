@@ -5966,11 +5966,7 @@ div.app:hover a:link, div.app:hover a:visited {
 }
 
 .ag2 div.app:last-of-type {
-  margin-bottom: 9px;
-}
-
-.ag2:last-of-type div.app:last-of-type {
-  margin-bottom: 14px;
+  margin-bottom: 7px;
 }
 
 div.app:active img {
