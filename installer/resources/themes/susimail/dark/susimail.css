@@ -24,6 +24,7 @@
 html {
   min-height: 100%;
   scrollbar-color: rgba(8,48,8,.8) #000800;
+  background: #000;
   background: repeating-linear-gradient(to bottom, rgba(0,0,0,.9) 2px, rgba(0,16,0,.9) 4px), var(--camo) #010;
   background-size: 100%, 2048px;
 }

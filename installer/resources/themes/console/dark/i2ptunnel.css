@@ -9,6 +9,7 @@
 
 html {
   min-height: 100%;
+  background: #000;
   scrollbar-color: rgba(8,48,8,.8) #000800;
   scrollbar-color: rgba(16,72,16,.8) #000800;
 }

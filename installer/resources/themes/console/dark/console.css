@@ -24,6 +24,7 @@
 
 html {
   min-height: 100%;
+  background: #000;
   scrollbar-color: rgba(16,72,16,.8) rgba(0,16,0,.5);
 }
 
@@ -42,8 +43,7 @@ body {
   text-align: center;
   color: #ee9;
   font: 8.5pt/130% var(--bodyfont);
-  background: var(--vstripe),
-              var(--camo), #000;
+  background: var(--vstripe), var(--camo), #000;
   background-size: 100%, 100%;
 }
 
