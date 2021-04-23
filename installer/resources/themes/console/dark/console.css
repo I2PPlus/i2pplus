@@ -2000,6 +2000,13 @@ input[type=file]:hover::file-selector-button, input[type=file]:focus::file-selec
   cursor: pointer;
 }
 
+input[type=file]:active::file-selector-button {
+  color: #ee9;
+  border: 1px solid #f60;
+  box-shadow: var(--lowlight);
+  background: #f60;
+}
+
 button:hover a {
   color: #f60;
 }
@@ -2015,13 +2022,6 @@ button:active {
   background: #f60;
 }
 
-input[type=file]:active::file-selector-button {
-  color: #ee9;
-  border: 1px solid #f60;
-  box-shadow: var(--lowlight);
-  background: #f60;
-}
-
 /* client config buttons aka project "X" */
 
 button.control {
@@ -2029,7 +2029,6 @@ button.control {
   padding: 15px !important;
   min-width: 0;
   font-size: 0 !important;
-  text-indent: -99999px !important;
   background-size: 16px, 100% !important;
 }
 
@@ -4224,9 +4223,65 @@ input[name="logfilename"], input[name="logformat"], input[name="logdateformat"],
 
 #sidebarconf th:nth-child(1), .homelinkedit th:first-child, #consolepass th:first-child {
   text-align: center;
-  text-indent: -99999px;
+  font-size: 0 !important;
   background: url(/themes/console/images/buttons/delete.png) center center no-repeat, linear-gradient(to bottom, #001000, #001900 50%, #000 51%, #000) !important;
   background: url(/themes/console/images/buttons/delete.png) center center no-repeat, linear-gradient(to bottom, #002000, #000 75%) !important;
+}
+
+.buttonTop img, .buttonBottom img, .buttonUp img, .buttonDown img {
+  opacity: 0;
+}
+
+.buttonTop {
+  background: var(--mv_top) center center no-repeat, var(--button);
+}
+
+.buttonUp {
+  background: var(--mv_up) center center no-repeat, var(--button);
+}
+
+.buttonDown {
+  background: var(--mv_down) center center no-repeat, var(--button);
+}
+
+.buttonBottom {
+  background: var(--mv_bottom) center center no-repeat, var(--button);
+}
+
+.buttonTop:hover, .buttonTop:focus {
+  background: #000 var(--mv_top_hover) center center no-repeat;
+}
+
+.buttonUp:hover, .buttonUp:focus {
+  background: #000 var(--mv_up_hover) center center no-repeat;
+}
+
+.buttonDown:hover, .buttonDown:focus {
+  background: #000 var(--mv_down_hover) center center no-repeat;
+}
+
+.buttonBottom:hover, .buttonBottom:focus {
+  background: #000 var(--mv_bottom_hover) center center no-repeat;
+}
+
+.buttonTop:active {
+  background: #f60 var(--mv_top_active) center center no-repeat;
+}
+
+.buttonUp:active {
+  background: #f60 var(--mv_up_active) center center no-repeat;
+}
+
+.buttonDown:active {
+  background: #f60 var(--mv_down_active) center center no-repeat;
+}
+
+.buttonBottom:active {
+  background: #f60 var(--mv_bottom_active) center center no-repeat;
+}
+
+.buttonTop, .buttonBottom, .buttonUp, .buttonDown {
+  background-size: 11px, 100% !important;
 }
 
 /* end configsidebar */
@@ -5966,11 +6021,7 @@ div.app:hover a:link, div.app:hover a:visited {
 }
 
 .ag2 div.app:last-of-type {
-  margin-bottom: 9px;
-}
-
-.ag2:last-of-type div.app:last-of-type {
-  margin-bottom: 14px;
+  margin-bottom: 7px;
 }
 
 div.app:active img {
@@ -6946,7 +6997,7 @@ h3.ptitle {
 }
 
 p#webappconfigtext {
-  margin: 1px 0 -2px 0;
+  margin: 13px 0 -2px 0;
 }
 
 #pluginconfig, #i2pupdates, .homelinkedit, #peerdefs {

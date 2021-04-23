@@ -640,6 +640,10 @@
     margin-right: 0 !important;
     flex-grow: 1;
   }
+
+  .ag2 div.app:last-of-type {
+    margin-bottom: 9px;
+  }
 }
 
 @media screen and (min-width: 1840px) {
