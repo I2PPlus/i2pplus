@@ -434,7 +434,7 @@
         }
 %>
 </td>
-<td class="names"><a href="http://${addr.name}/" target="_top">${addr.displayName}</a></td>
+<td class="names"><a href="http://${addr.name}/" target="_blank">${addr.displayName}</a></td>
 <td class="b32link"><span class="addrhlpr"><a href="http://${addr.b32}/" target="_blank" rel="noreferrer" title="<%=intl._t("Base 32 address")%>">b32</a></span></td>
 <td class="helper"><a href="http://${addr.name}/?i2paddresshelper=${addr.destination}" target="_blank" rel="noreferrer" title="<%=intl._t("Helper link to share host address with option to add to addressbook")%>">link</a></td>
 <td class="destinations"><div class="destaddress resetScrollLeft" name="dest_${addr.name}" width="200px" tabindex="0">${addr.destination}</div></td>
