@@ -667,11 +667,11 @@ img[src="/themes/console/images/i2plogo.png"] {
   width: 60%;
 }
 
-#sb_peers a, #sb_peersadvanced a {
+#sb_peers a, #sb_peersadvanced a, #sb_tunnels a, #sb_general a, #sb_shortgeneral a, #sb_advancedgeneral a {
   padding: 0;
 }
 
-#sb_peers a b, #sb_peersadvanced a b {
+#sb_peers a b, #sb_peersadvanced a b, #sb_tunnels a a, #sb_general a b, #sb_shortgeneral a b, #sb_advancedgeneral a b {
   color: #41444d;
 }
 
