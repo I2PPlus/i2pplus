@@ -1876,27 +1876,27 @@ p:empty { /* kills empty paragraphs that are likely erroneous eg. see top of /pr
   margin: 3px 0 5px !important;
 }
 
-.newtab {
+#newtab {
   text-align: right;
   font-size: 8pt;
   float: right;
   letter-spacing: 0;
 }
 
-.newtab img {
+#newtabimg {
   opacity: 0;
 }
 
-.newtab {
+#newtab {
   background: var(--newtab) center center no-repeat;
 }
 
-.newtab:hover {
+#newtab:hover {
   background: var(--newtab_hover) center center no-repeat;
 }
 
 /* opera targetted hack */
-x:-o-prefocus, span.newtab {
+x:-o-prefocus, span#newtab {
   margin-top: -25px;
 }
 

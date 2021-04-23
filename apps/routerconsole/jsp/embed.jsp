@@ -75,7 +75,7 @@
 <%
         } else {
 %>
-<h1 class="webapp"><%=intl._t(name)%> <span class="newtab"><a href="<%=url%>" target="_blank" title="<%=intl._t("Open in new tab")%>"><img src="<%=intl.getTheme(request.getHeader("User-Agent"))%>images/newtab.png" alt="<%=intl._t("Open in new tab")%>"></a></span></h1>
+<h1 class="webapp"><%=intl._t(name)%> <a href="<%=url%>" target="_blank" title="<%=intl._t("Open in new tab")%>"><span id="newtab"><img src="<%=intl.getTheme(request.getHeader("User-Agent"))%>images/newtab.png" alt="<%=intl._t("Open in new tab")%>"></span></a></h1>
 <%
             if (url.indexOf("imagegen") >= 0 && url.indexOf("css") == -1) {
                 appname = "imagegen";
