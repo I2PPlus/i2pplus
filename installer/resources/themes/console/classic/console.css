@@ -11488,16 +11488,17 @@ to {
 }
 
 .stattograph {
-  margin: 2px 0;
-  padding: 2px 4px;
-  width: 300px;
-  position: relative;
+  margin: 2px 1px 2px 0;
+  padding: 4px 8px;
   display: inline-block;
-  text-align: left;
-  font-size: 90%;
-  box-shadow: 0 0 0 1px #ced1e3;
-  background: linear-gradient(to bottom, #fff, #f4f5ff);
   box-sizing: border-box;
+  font-size: 90%;
+  text-align: left;
+  border: 1px solid #99b;
+  border-radius: 1px;
+  background: linear-gradient(to bottom, #fff, #eef);
+  will-change: transform;
+  outline: none !important;
 }
 
 .stattograph:hover {
@@ -11506,19 +11507,56 @@ to {
   background: linear-gradient(to bottom, #eef, #fff);
 }
 
-.stattograph .optbox {
-  margin: 2px;
-  vertical-align: middle !important;
-}
-
-#configstats .stattograph b {
-  max-width: 260px;
+.stattograph b {
   display: inline-block;
   word-break: break-all;
   white-space: nowrap;
-  vertical-align: middle;
   overflow: hidden;
   text-overflow: ellipsis;
+  color: #41465f;
+}
+
+.optbox:not(:checked) + label > .stattograph b {
+  opacity: .7;
+}
+
+.stattograph:hover b, .stattograph:focus b {
+  color: #f60 !important;
+}
+
+.optbox:checked + label > .stattograph {
+  padding-left: 18px;
+  border-left-width: 3px;
+  background: var(--yes) 8px center no-repeat, linear-gradient(to bottom, #eef, #fff);
+  background-size: 8px, 100%;
+}
+
+.optbox:checked + label > .stattograph:hover b {
+  color: #41465f !important;
+}
+
+.stattograph:hover, .optbox:checked + label > .stattograph:hover {
+  color: #fff !important;
+  border-color: #f60;
+  background: #fff;
+  box-shadow: none;
+}
+
+.stattograph:active, .optbox:checked + label > .stattograph:active {
+  box-shadow: inset 3px 3px 3px rgba(0,0,0,.2) !important;
+}
+
+.optbox:checked + label > .stattograph:hover {
+  background: #d50 var(--yes) 8px center no-repeat;
+  background-size: 8px;
+}
+
+.stattograph:active b, .optbox:checked + label > .stattograph:active b, .optbox:checked + label > .stattograph:hover b {
+  color: #f60 !important;
+}
+
+.optbox:checked + label > .stattograph:hover b {
+  color: #fff !important;
 }
 
 .statdesc {
