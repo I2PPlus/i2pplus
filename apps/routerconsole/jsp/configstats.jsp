@@ -57,7 +57,7 @@
                          .replace(".data", ".Data").replace(".drop", ".Drop").replace(".delay", ".Delay")
                          .replace(".new", ".New").replace(".in", ".In").replace(".out", ".Out")
                          .replace("Received", "RX").replace("receive", "RX").replace("RXBps", "ReceiveBps")
-                         .repace(".full", ".Full").replace(".size", ".Size").replace(".dups", ".Dups");
+                         .replace(".full", ".Full").replace(".size", ".Size").replace(".dups", ".Dups");
 %>
 
 <div class="stattograph"><b><%=truncated%></b><br><span class="statdesc"><%=statshelper.getCurrentStatDescription()%></span></div>
