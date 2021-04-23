@@ -8582,27 +8582,26 @@ table#configstats {
 
 #configstats th {
   padding: 8px 10px;
-  position: relative;
   overflow: hidden;
   text-align: left;
 }
 
 #configstats th b {
+  word-spacing: 0.1em;
+  letter-spacing: .08em;
   text-transform: uppercase;
   font-size: 10pt;
-  letter-spacing: .08em;
-  word-spacing: 0.1em;
 }
 
 #configstats td {
-  color: #b2bcf7;
   padding: 8px 4px;
+  color: #b2bcf7;
 }
 
 #configstats td:first-child {
+  padding: 8px;
   width: 1%;
   white-space: nowrap;
-  padding: 8px;
 }
 
 #configstats td:first-child:empty + td > label { /* remove pointer from inert labels */
@@ -13729,7 +13728,6 @@ to {
 }
 }
 
-
 #enablefull label {
   margin-top: 4px;
   display: inline-block;
@@ -13746,12 +13744,12 @@ to {
 
 .stattograph {
   margin: 3px 1px;
-  padding: 6px 8px;
-  width: auto;
+  padding: 6px 8px 6px 14px;
+  width: 220px;
   position: relative;
   display: inline-block;
   font-size: 90%;
-  text-align: center;
+  text-align: left;
   color: #252;
   border: 1px solid #26235c;
   border-left-width: 3px;
@@ -13767,6 +13765,7 @@ to {
   vertical-align: middle;
   overflow: hidden;
   text-overflow: ellipsis;
+  text-transform: capitalize;
   pointer-events: none !important;
 }
 
@@ -13832,7 +13831,7 @@ to {
   left: 0;
   white-space: nowrap;
   z-index: 10;
-  font-size: 100%;
+  font-size: 110%;
   color: #000;
   border-radius: 1px;
   box-shadow: 0 0 0 1px #113;

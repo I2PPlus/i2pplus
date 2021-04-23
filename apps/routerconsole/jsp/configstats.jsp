@@ -47,10 +47,19 @@
         } // end iterating over required groups for the current stat
         if (statshelper.getCurrentCanBeGraphed() && !statshelper.getCurrentGraphName().contains("Ping")) {
 %>
-
 <input hidden type="checkbox" class="optbox" id="<%=statshelper.getCurrentStatName().replace(" ", "_")%>" name="graphList" value="<%=statshelper.getCurrentGraphName()%>" <% if (statshelper.getCurrentIsGraphed()) {%>checked="checked"<%}%> >
 <label for="<%=statshelper.getCurrentStatName().replace(" ", "_")%>" data-tooltip="<%=statshelper.getCurrentStatDescription()%>">
-<div class="stattograph"><b><%=statshelper.getCurrentStatName()%></b><br><span class="statdesc"><%=statshelper.getCurrentStatDescription()%></span></div>
+<%
+    int dot = statshelper.getCurrentStatName().indexOf(".");
+    String truncated = statshelper.getCurrentStatName().substring(dot + 1);
+    truncated = truncated.replace("participating", "part").replace("Exploratory", "Expl").replace("Received", "RX")
+                         .replace("con.", "").replace("garlic.decryptFail", "garlic.DecryptFail")
+                         .replace(".data", ".Data").replace(".drop", ".Drop").replace(".delay", ".Delay")
+                         .replace(".new", ".New").replace(".in", ".In").replace(".out", ".Out")
+                         .replace("Received", "RX").replace("receive", "RX");
+%>
+
+<div class="stattograph"><b><%=truncated%></b><br><span class="statdesc"><%=statshelper.getCurrentStatDescription()%></span></div>
 </label>
 <%
         } // end iterating over all stats

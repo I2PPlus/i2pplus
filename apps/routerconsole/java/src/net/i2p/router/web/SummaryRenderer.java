@@ -125,7 +125,7 @@ class SummaryRenderer {
         _log = ctx.logManager().getLog(SummaryRenderer.class);
         _listener = lsnr;
         _context = ctx;
-        ctx.statManager().createRateStat("graph.renderTime", "", "Router", RATES);
+        ctx.statManager().createRateStat("graph.renderTime", "Time to render graphs (ms)", "Router", RATES);
     }
 
     /**

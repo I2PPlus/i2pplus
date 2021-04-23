@@ -12978,6 +12978,7 @@ i {
 .stattograph {
   margin: 2px 1px 2px 0;
   padding: 4px 8px;
+  width: 220px;
   display: inline-block;
   box-sizing: border-box;
   font-size: 90%;
@@ -13001,11 +13002,12 @@ i {
   white-space: nowrap;
   overflow: hidden;
   text-overflow: ellipsis;
+  text-transform: capitalize;
   color: #41465f;
 }
 
 .optbox:not(:checked) + label > .stattograph b {
-  opacity: .7;
+  opacity: .8;
 }
 
 .stattograph:hover b, .stattograph:focus b {
@@ -13037,6 +13039,7 @@ i {
 .optbox:checked + label > .stattograph:hover {
   background: #d50 var(--yes) 8px center no-repeat;
   background-size: 8px;
+  box-shadow: none !important;
 }
 
 .stattograph:active b, .optbox:checked + label > .stattograph:active b, .optbox:checked + label > .stattograph:hover b {
@@ -13061,14 +13064,14 @@ i {
   content: attr(data-tooltip);
   display: none;
   position: absolute;
-  top: -26px;
-  left: 0;
+  top: -30px;
+  left: 1px;
   background: #ffe;
   white-space: nowrap;
   z-index: 10;
   border-radius: 1px;
-  font-size: 100%;
-  box-shadow: 0 0 0 1px #999, 0 0 2px 2px #ddd, var(--highlight);
+  font-size: 110%;
+  box-shadow: 0 0 0 1px #999, var(--highlight);
 }
 
 #configstats label:hover::after {
