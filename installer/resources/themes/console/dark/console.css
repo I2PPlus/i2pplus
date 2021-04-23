@@ -1876,11 +1876,23 @@ p:empty { /* kills empty paragraphs that are likely erroneous eg. see top of /pr
   margin: 3px 0 5px !important;
 }
 
-span.newtab {
+.newtab {
   text-align: right;
   font-size: 8pt;
   float: right;
   letter-spacing: 0;
+}
+
+.newtab img {
+  opacity: 0;
+}
+
+.newtab {
+  background: var(--newtab) center center no-repeat;
+}
+
+.newtab:hover {
+  background: var(--newtab_hover) center center no-repeat;
 }
 
 /* opera targetted hack */
@@ -10466,7 +10478,7 @@ div.app {
 
 div.app:hover .extlink::after, .sitemapLink.extlink:hover::after {
   border: 1px solid #f50 !important;
-  background: #000 url(images/newtab.png) 4.5px center no-repeat;
+  background: #000 url(images/newtab.svg) 4.5px center no-repeat;
   background-size: 12.5px 10px;
   opacity: .75;
   transform: scale(1);
