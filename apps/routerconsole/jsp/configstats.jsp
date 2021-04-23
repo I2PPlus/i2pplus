@@ -56,7 +56,7 @@
                          .replace("con.", "").replace("garlic.decryptFail", "garlic.DecryptFail")
                          .replace(".data", ".Data").replace(".drop", ".Drop").replace(".delay", ".Delay")
                          .replace(".new", ".New").replace(".in", ".In").replace(".out", ".Out")
-                         .replace("Received", "RX").replace("receive", "RX");
+                         .replace("Received", "RX").replace("receive", "RX").replace("RXBps", "ReceiveBps");
 %>
 
 <div class="stattograph"><b><%=truncated%></b><br><span class="statdesc"><%=statshelper.getCurrentStatDescription()%></span></div>
