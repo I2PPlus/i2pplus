@@ -361,14 +361,12 @@ span.addrhlpr {
 }
 
 h3 {
+  padding: 7px 10px;
   color: #c9ceff;
   font-size: 10pt;
   font-weight: bold;
   border: 1px solid #26235c;
-  padding: 7px 10px;
   border-radius: 2px;
-  background: #000 url(/themes/console/midnight/images/titles.png) repeat-x scroll center center;
-  background: linear-gradient(to bottom, #080818, #000008 75%);
   background: linear-gradient(to bottom, #080818 50%, #000 50%) !important;
   letter-spacing: .08em;
   word-spacing: 0.1em;
@@ -414,7 +412,7 @@ h3 {
   margin-top: -1px;
   margin-left: -11px !important;
   margin-right: -11px !important;
-  padding: 8px 10px 8px 36px !important;
+  padding: 8px 10px 8px 30px !important;
   font-size: 10pt;
   background-position: 6px center !important;
 }
@@ -1156,19 +1154,17 @@ input.export {
 
 /* page titles */
 
-.headline h3 {
+.headline h3, h3 {
   padding: 10px 5px 10px 34px;
   word-spacing: 0.1em;
   letter-spacing: .08em;
   text-transform: uppercase;
   font-size: 11pt;
-  background: url(images/addressbook.svg) 10px center no-repeat, linear-gradient(to bottom, #080818, #000008 75%);
   background: url(images/addressbook.svg) 10px center no-repeat, linear-gradient(to bottom, #080818 50%, #000 50%) !important;
   background-size: 18px 18px, 100% 100% !important;
 }
 
 .headline#subscriptions h3 {
-  background: url(/themes/susidns/images/subs_24.png) 10px center no-repeat, linear-gradient(to bottom, #080818, #000008 75%);
   background: url(/themes/susidns/images/subs_24.png) 10px center no-repeat,linear-gradient(to bottom, #080818 50%, #000 50%) !important;
 }
 
@@ -1177,7 +1173,6 @@ input.export {
 }
 
 .headline#configure h3 {
-  background: url(images/configure.svg) 10px center no-repeat, linear-gradient(to bottom, #080818, #000008 75%);
   background: url(images/configure.svg) 10px center no-repeat, linear-gradient(to bottom, #080818 50%, #000 50%) !important;
   background-size: 18px 18px, 100% 100% !important;
 }
