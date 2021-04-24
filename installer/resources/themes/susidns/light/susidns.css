@@ -138,13 +138,13 @@ code, tt, .destaddress {
 }
 
 #navi a, #navi a:visited {
-  margin: 2px 0;
+  margin: 1px -4px;
   padding: 5px 7px 5px 23px;
   display: inline-block;
+  position: relative;
   line-height: 120%;
   color: #3b6bbf;
   border: 1px solid #8d8daa;
-  border-radius: 2px;
   text-transform: capitalize;
   box-shadow: inset 0 0 0 1px #fff;
   background-size: 14px 14px, 100% 100% !important;
@@ -155,6 +155,7 @@ code, tt, .destaddress {
   color: #f60;
   border: 1px solid #f60;
   transition: ease border 0.7s;
+  z-index: 10;
 }
 
 #navi a:active {
@@ -702,7 +703,7 @@ input[type=text]:focus, input[type=password]:focus, textarea:focus {
   border: 1px solid #676c7f;
 }
 
-textarea {
+textarea, #subslog pre {
   font-family: "Droid Sans Mono", "Noto Mono", "Lucida Console", "DejaVu Sans Mono", monospace;
   font-size: 9pt;
   width: 100%;
@@ -727,28 +728,28 @@ textarea {
   margin: 0;
 }
 
-textarea[name="config"], textarea[name="content"], textarea[name="log"] {
+textarea[name="config"], textarea[name="content"], #subslog pre {
+  padding: 3px 6px !important;
+  width: 100% !important;
+  border: 1px solid #8d8daa;
   border-radius: 0;
   box-shadow: none;
-  border: 1px solid #8d8daa;
   background: #fafaff;
-  width: 100% !important;
-  padding: 3px 6px !important;
   filter: none;
 }
 
-textarea[name="log"] {
+#subslog pre {
+  margin: 0 0 -5px;
   padding-left: 10px !important;
-  height: calc(100% - 126px);
+  width: calc(100% - 18px) !important;
   line-height: 15px;
   box-shadow: inset 0 0 0 1px #fafaff;
   background: url(/themes/snark/ubergine/images/hat.png) right 10px bottom -8px no-repeat, linear-gradient(to right, #7e7fb9, #ccf 1px, #ccf 6px, #fafaff 6px) !important;
   background-size: auto 160px, 100% 100%;
 }
 
-.iframed textarea[name="log"] {
-  height: 500px;
-  margin-bottom: 12px;
+#subslog.iframed pre {
+  margin-bottom: 10px !important;
 }
 
 textarea[name="config"]:focus, textarea[name="content"]:focus {
@@ -1498,25 +1499,6 @@ form[action="addressbook"] table {
   font-weight: bold;
 }
 
-/* export hosts */
-
-#export {
-  margin-top: -58px;
-  margin-bottom: 6px;
-  margin-right: 4px !important;
-  text-align: right;
-}
-
-.iframed #export {
-  margin-top: -60px;
-  margin-bottom: 18px;
-}
-
-/* hide export button on published page when empty */
-#messages + form[action="export"] {
-  display: none;
-}
-
 #filter {
   margin-top: -2px !important;
 }
@@ -1561,21 +1543,12 @@ code, tt, .destaddress, th {
   background-size: 15px 15px, 100% 100% !important;
 }
 
-#export {
-  margin-top: -64px !important;
-  margin-right: 4px !important;
-}
-
 #filter span, #filter a {
   font-size: 11pt !important;
 }
 
 td.destinations textarea {
   height: 32px !important;
-}
-
-input.export {
-  margin-top: 8px;
 }
 
 #host_list .b32link, #host_list .helper {
@@ -1640,58 +1613,30 @@ _:-ms-lang(x), * {
   text-transform: none;
 }
 
-#export {
-  margin: 0 !important;
-}
-
-#messages + form[action="export"] {
-  display: inline-block;
-}
-
-#importexport form, form[action="export"] {
-  display: inline-block;
-}
-
 #addressbook.headline h3 {
   padding-right: 40px;
-}
-
-#addressbook.headline {
   position: relative;
 }
 
-#addressbook input#exporthosts {
-  margin-top: 4px;
+#export {
+  padding-left: 5px;
+  height: 39px;
+  position: absolute;
+  top: 0;
+  right: 0;
+  border-left: 1px solid #8d8daa;
+}
+
+input#exporthosts {
+  margin-bottom: -2px;
   padding: 0 !important;
   width: 28px;
   height: 28px;
   min-width: 0;
   display: inline-block;
-  position: absolute;
-  right: 0;
-  top: calc(50% - 17px);
   font-size: 0 !important;
   background: url(/themes/console/images/info/arrow_down.png) center center no-repeat, linear-gradient(to bottom, #fff, #eef);
   background-size: 16px 16px, 100% 100%;
-}
-
-form[action="export"]::after {
-  height: 25px;
-  display: inline-block;
-  content: "";
-}
-
-div#export {
-  margin-bottom: -6px;
-  padding: 6px 4px 8px 3px;
-  width: 31px;
-  display: inline-block;
-  position: absolute;
-  right: 0;
-  top: calc(50% - 10px);
-  top: 0;
-  overflow: hidden;
-  border-left: 1px solid #8d8daa;
 }
 
 #activefilter, .selected {

@@ -84,53 +84,41 @@
 <a id="overview" href="index"><%=intl._t("Help")%></a>
 </div>
 <hr>
+<form action="export" id="exportlist" method="GET" target="_blank" hidden></form>
 <div class="headline" id="addressbook">
-<h3><%=intl._t("Book")%>: <%=intl._t(book.getBook())%>${book.loadBookMessages}<c:if test="${book.isEmpty}">&nbsp;<span class="results">(<%=intl._t("No entries")%>)</span></c:if></h3>
-<c:if test="${book.isEmpty}">
-<div id="export">
-<form action="export">
-<input type="submit" class="export" id="exporthosts" disabled="disabled" />
-</form>
-</div>
-</div>
-</c:if>
+<h3><%=intl._t("Book")%>: <%=intl._t(book.getBook())%>${book.loadBookMessages}<c:if test="${book.isEmpty}">&nbsp;<span class="results">(<%=intl._t("No entries")%>)</span></c:if>
+<c:if test="${book.isEmpty}"><span id="export"><input form="exportlist" type="submit" class="export" id="exporthosts" <c:if test="${book.isEmpty}">disabled</c:if>></span></c:if>
 <c:if test="${book.notEmpty}">
 <%
     if (book.getEntries().length > 0) { /* Don't show if no results. Can't figure out how to do this with c:if */
 %>
-<div id="export">
-<form action="export" method="GET" target="_blank" rel="noreferrer">
-<input type="hidden" name="book" value="${book.book}">
-<c:if test="${book.search} != null && ${book.search}.length() > 0">
-<input type="hidden" name="search" value="${book.search}">
-</c:if>
+<span id="export">
+<input form="exportlist" type="hidden" name="book" value="${book.book}">
+<c:if test="${book.search} != null && ${book.search}.length() > 0"><input form="exportlist" type="hidden" name="search" value="${book.search}"></c:if>
 <c:if test="${book.hasFilter}">
-<input type="hidden" name="filter" value="${book.filter}">
+<input form="exportlist" type="hidden" name="filter" value="${book.filter}">
 </c:if>
 <%
-    if (book.isHasFilter() || book.getSearch() != null) {
+        if (book.isHasFilter() || book.getSearch() != null) {
 %>
-<input type="submit" class="export" id="exporthosts" value="<%=intl._t("Export in hosts.txt format")%>" name="export" title="<%=intl._t("Export results in hosts.txt format")%>" />
+<input form="exportlist" type="submit" class="export" id="exporthosts" value="<%=intl._t("Export in hosts.txt format")%>" name="export" title="<%=intl._t("Export results in hosts.txt format")%>" />
 <%
-    } else {
+        } else {
 %>
-<input type="submit" class="export" id="exporthosts" value="<%=intl._t("Export in hosts.txt format")%>" name="export" title="<%=intl._t("Export book in hosts.txt format")%>" />
+<input form="exportlist" type="submit" class="export" id="exporthosts" value="<%=intl._t("Export in hosts.txt format")%>" name="export" title="<%=intl._t("Export book in hosts.txt format")%>" />
 <%
-    }
+        }
 %>
-</form>
-</div>
+</span>
 <%
     } else { /* book.getEntries().length() > 0 */
 %>
-<div id="export">
-<form action="export">
-<input type="submit" class="export" id="exporthosts" disabled="disabled" />
-</form>
-</div>
+<div id="export"><input form="exportlist" type="submit" class="export" id="exporthosts" disabled="disabled" /></div>
 <%
     }
 %>
+</h3>
+</div>
 <div id="messages">${book.messages}
 <%
    if (importMessages != null) {

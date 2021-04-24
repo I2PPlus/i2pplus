@@ -72,7 +72,7 @@
 <script src="/js/closeMessage.js?<%=net.i2p.CoreVersion.VERSION%>" type="text/javascript"></script>
 <div id="messages">${log.messages}</div>
 <div id="config">
-<textarea name="log" rows="50" cols="150" spellcheck="false">${log.logged}</textarea>
+<pre>${log.logged}</pre>
 </div>
 <div id="footer">
 <hr>

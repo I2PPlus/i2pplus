@@ -667,7 +667,7 @@ form[action="export"] > div#buttons {
   background: #000;
 }
 
-div#config > textarea, div#content > textarea {
+div#config > textarea, div#content > textarea, #subslog pre {
   margin-top: -27px;
   padding: 6px 12px;
   border-radius: 0;
@@ -677,15 +677,6 @@ textarea[name="config"] {
   height: 250px;
   overflow-y: scroll;
   resize: none;
-}
-
-textarea[name="log"] {
-  height: calc(100% - 105px);
-}
-
-.iframed textarea[name="log"] {
-  height: 400px;
-  height: auto;
 }
 
 div#config + div#buttons, div#content + div#buttons {
@@ -1060,7 +1051,7 @@ input[type=text], textarea {
   background: linear-gradient(to bottom, #001800, #001000) !important;
 }
 
-textarea {
+textarea, #subslog pre {
   padding: 3px 5px;
   width: 100%;
   height: 120px;
@@ -1072,6 +1063,14 @@ textarea {
   border: 1px solid #242;
   border-radius: 2px;
   box-shadow: inset 0 0 0 1px #000, inset 4px 4px 4px #000;
+}
+
+#subslog pre {
+  padding: 8px 12px;
+  height: calc(100% - 105px);
+  width: calc(100% - 26px);
+  border-radius: 0 0 2px 2px;
+  white-space: pre-wrap;
 }
 
 textarea[cols="70"] {
@@ -1141,21 +1140,6 @@ textarea:focus {
   background-size: 20px 20px, 100% 100%, 100% 100% !important;
 }
 
-/* export hosts button adjustments */
-
-#export {
-  margin-top: -52px;
-  margin-bottom: 23px;
-  padding-right: 4px;
-  float: right;
-  clear: left !important;
-  text-align: right;
-}
-
-#export input[type=submit] {
-  display: inline-block;
-}
-
 p#filtered {
   padding: 12px 250px 12px 12px !important;
 }
@@ -1168,12 +1152,6 @@ p.book {
   border: 1px solid #242;
   background: #000 url(images/addressbook.svg) 5px center no-repeat;
   background-size: 20px 20px;
-}
-
-/* hide export button on published addressbook if empty */
-
-#messages + form[action="export"] {
-  display: none;
 }
 
 /* host details page */
@@ -1376,138 +1354,6 @@ _:-ms-lang(x), * {
   filter: none !important;
 }
 
-/* responsive layout */
-
-@media screen and (max-width: 710px) {
-  #navi a {
-    padding: 2px 8px !important;
-    background: linear-gradient(to bottom, #020 0%, #020 50%, #000 50%, #000 100%) !important;
-  }
-
-  #navi a.abook:hover, #navi a#overview:hover, #navi a#subs:hover, #navi a#configlink:hover,
-  #navi a.abook:focus, #navi a#overview:focus, #navi a#subs:focus, #navi a#configlink:focus {
-    padding: 2px 8px !important;
-    background: #000 !important;
-  }
-
-  #navi a.abook:active, #navi a#overview:active, #navi a#subs:active, #navi a#configlink:active {
-    background: #f60 !important;
-  }
-}
-
-@media screen and (max-width: 1000px) {
-  .illustrate {
-    margin: 15px auto 10px;
-    width: 90%;
-    min-width: 450px;
-  }
-}
-
-@media screen and (max-width: 1200px) {
-  #filter {
-    padding: 9px 4px 8px;
-  }
-
-  #filter a {
-    margin: 3px 1px;
-    padding: 0 4px;
-  }
-}
-
-@media screen and (min-width: 1400px) {
-  body, input[type=submit], input[type=reset], .fakebutton, input, select, h4, td.names a, li,
-  #filter a, #filter span a,  #host_details td, th, #search td, .destaddress {
-    font-size: 9.5pt !important;
-  }
-
-  p {
-    font-size: 10pt !important;
-  }
-
-  textarea, th {
-    font-size: 9pt;
-  }
-
-  #navi {
-    padding: 6px 5px !important;
-  }
-
-  #navi a.abook, #navi a.abook:hover, #navi a.abook:focus, #navi a.abook:active,
-  #navi a#overview, #navi a#overview:hover, #navi a#overview:focus, #navi a#overview:active,
-  #navi a#subs, #navi a#subs:hover, #navi a#subs:focus, #navi a#subs:active,
-  #navi a#configlink, #navi a#configlink:hover, #navi a#configlink:focus, #navi a#configlink:active {
-    padding: 6px 10px 6px 29px !important;
-    letter-spacing: .1em;
-    font-size: 10pt !important;
-    background-position: 10px center !important;
-  }
-
-  h3 {
-    font-size: 12pt !important;
-  }
-
-  #filter a {
-    margin: 0 2px -2px !important;
-    min-width: 14px;
-  }
-
-  div#filter {
-    background: linear-gradient(to right, #000, #001000 10%, #001000 90%, #000);
-  }
-
-  form[action="addressbook"] > p.buttons {
-    margin-bottom: -20px;
-  }
-
-  textarea[name="config"] {
-    height: 280px;
-  }
-}
-
-@media screen and (min-width: 1200px) and (max-width: 1400px) {
-  #export {
-    padding-top: 11px !important;
-    padding-left: 8px !important;
-    right: -9px !important;
-  }
-}
-
-@media screen and (min-width: 1500px) {
-  body, input[type=submit], input[type=reset], .fakebutton, input,
-  select, h4, td.names a, li, #filter a, #filter span a, #host_details td, #search td, .destaddress {
-    font-size: 10pt !important;
-  }
-
-  input[type=submit], input[type=reset], .fakebutton {
-    padding: 8px 12px 8px !important;
-    font-size: 9pt;
-  }
-
-  input[type=text] {
-    padding: 8px !important;
-  }
-
-  input.export {
-    margin-right: 0 !important;
-  }
-
-  th {
-    font-size: 9pt;
-  }
-}
-
-@media screen and (min-width: 1600px) {
-  p, li {
-    font-size: 10.5pt !important;
-  }
-
-  textarea {
-    font-size: 9.5pt !important;
-  }
-}
-
-/* end responsive layout */
-
 /* host notes */
 
 #host_details .destaddress {
@@ -1565,10 +1411,6 @@ p#filtered {
   background: repeating-linear-gradient(to bottom, rgba(0,0,0,.8), rgba(0,16,0,.6) 1px, rgba(0,16,0,.6) 2px), url(/themes/console/dark/images/camotile2.png) !important;
 }
 
-p#filtered, #export {
-  will-change: transform;
-}
-
 #visualid table {
   border-spacing: 0;
 }
@@ -1619,18 +1461,6 @@ form[action="addressbook"] > p.buttons, #filter, #search, #visualid tr:last-chil
   text-transform: none;
 }
 
-#export {
-  margin: 0 !important;
-}
-
-#messages + form[action="export"] {
-  display: inline-block;
-}
-
-#importexport form, form[action="export"] {
-  display: inline-block;
-}
-
 #addressbook.headline h3 {
   padding-right: 44px;
 }
@@ -1639,39 +1469,31 @@ form[action="addressbook"] > p.buttons, #filter, #search, #visualid tr:last-chil
   position: relative;
 }
 
-#addressbook input#exporthosts {
+input#exporthosts {
   margin-bottom: -2px;
   padding: 0 !important;
   width: 28px;
   height: 28px;
   min-width: 0 !important;
   display: inline-block;
-  position: absolute;
-  right: 11px;
-  top: calc(50% - 19px);
   font-size: 0 !important;
   background: url(/themes/console/images/info/arrow_down.png) center center no-repeat, linear-gradient(to bottom, #010, #000) !important;
   background-size: 16px 16px, 100% 100% !important;
 }
 
-form[action="export"]::after {
-  margin-bottom: -2px;
-  width: 0;
-  height: 20px;
-  display: inline-block;
-  content: "";
+#export {
+  padding-left: 3px;
+  height: 39px;
+  position: absolute;
+  top: 2px;
+  right: 1px;
+  border-left: 1px solid #242;
 }
 
-#export {
-  padding-top: 8px;
-  padding-left: 2px;
-  width: 38px;
-  display: inline-block;
-  position: absolute;
-  right: -5px;
-  top: 0;
-  overflow: hidden;
-  border-left: 1px solid #242;
+@media screen and (min-width: 1500px) {
+  #export {
+    top: 0;
+  }
 }
 
 #activefilter, .selected {
@@ -1776,23 +1598,45 @@ form[action="export"]::after {
   font-size: 10pt;
 }
 
+/* responsive layout */
+
+@media screen and (max-width: 710px) {
+  #navi a {
+    padding: 2px 8px !important;
+    background: linear-gradient(to bottom, #020 0%, #020 50%, #000 50%, #000 100%) !important;
+  }
+
+  #navi a.abook:hover, #navi a#overview:hover, #navi a#subs:hover, #navi a#configlink:hover,
+  #navi a.abook:focus, #navi a#overview:focus, #navi a#subs:focus, #navi a#configlink:focus {
+    padding: 2px 8px !important;
+    background: #000 !important;
+  }
+
+  #navi a.abook:active, #navi a#overview:active, #navi a#subs:active, #navi a#configlink:active {
+    background: #f60 !important;
+  }
+}
+
+@media screen and (max-width: 1000px) {
+  .illustrate {
+    margin: 15px auto 10px;
+    width: 90%;
+    min-width: 450px;
+  }
+}
+
 @media screen and (max-width: 1200px) {
+  #filter {
+    padding: 9px 4px 8px;
+  }
+
+  #filter a {
+    margin: 3px 1px;
+    padding: 0 4px;
+  }
+
   #filtered, #results {
     font-size: 9.5pt;
-  }
-
-  #export {
-    padding-top: 13px;
-    padding-left: 7px;
-    right: -10px;
-  }
-
-  form[action="export"]::after {
-    height: 19px;
-  }
-
-  #addressbook input#exporthosts {
-    margin-top: 4px !important;
   }
 
   #paginate {
@@ -1820,4 +1664,98 @@ form[action="export"]::after {
     display: inline-block;
     font-size: 10pt;
   }
+}
+
+@media screen and (min-width: 1400px) {
+  body, input[type=submit], input[type=reset], .fakebutton, input, select, h4, td.names a, li,
+  #filter a, #filter span a,  #host_details td, th, #search td, .destaddress {
+    font-size: 9.5pt !important;
+  }
+
+  p {
+    font-size: 10pt !important;
+  }
+
+  textarea, th {
+    font-size: 9pt;
+  }
+
+  #navi {
+    padding: 6px 5px !important;
+  }
+
+  #navi a.abook, #navi a.abook:hover, #navi a.abook:focus, #navi a.abook:active,
+  #navi a#overview, #navi a#overview:hover, #navi a#overview:focus, #navi a#overview:active,
+  #navi a#subs, #navi a#subs:hover, #navi a#subs:focus, #navi a#subs:active,
+  #navi a#configlink, #navi a#configlink:hover, #navi a#configlink:focus, #navi a#configlink:active {
+    padding: 6px 10px 6px 29px !important;
+    letter-spacing: .1em;
+    font-size: 10pt !important;
+    background-position: 10px center !important;
+  }
+
+  h3 {
+    font-size: 12pt !important;
+  }
+
+  #filter a {
+    margin: 0 2px -2px !important;
+    min-width: 14px;
+  }
+
+  div#filter {
+    background: linear-gradient(to right, #000, #001000 10%, #001000 90%, #000);
+  }
+
+  form[action="addressbook"] > p.buttons {
+    margin-bottom: -20px;
+  }
+
+  textarea[name="config"] {
+    height: 280px;
+  }
+}
+
+/*@media screen and (min-width: 1200px) and (max-width: 1400px) {
+  #export {
+    padding-top: 11px !important;
+    padding-left: 8px !important;
+    right: -9px !important;
+  }
+}*/
+
+@media screen and (min-width: 1500px) {
+  body, input[type=submit], input[type=reset], .fakebutton, input,
+  select, h4, td.names a, li, #filter a, #filter span a, #host_details td, #search td, .destaddress {
+    font-size: 10pt !important;
+  }
+
+  input[type=submit], input[type=reset], .fakebutton {
+    padding: 8px 12px 8px !important;
+    font-size: 9pt;
+  }
+
+  input[type=text] {
+    padding: 8px !important;
+  }
+
+  th {
+    font-size: 9pt;
+  }
+}
+
+@media screen and (min-width: 1600px) {
+  p, li {
+    font-size: 10.5pt !important;
+  }
+
+  textarea {
+    font-size: 9.5pt !important;
+  }
+}
+
+/* end responsive layout */
+
+input#exporthosts {
+  font-size: 0 !important;
 }
