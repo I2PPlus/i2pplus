@@ -612,8 +612,9 @@ td.destinations textarea, td.destinations textarea:focus {
   background: none;
 }
 
-#subsLog textarea {
+#subsLog pre {
   font: normal 8pt "Noto Mono", "Droid Sans Mono", "Andale Mono", "DejaVu Sans Mono", "Lucida Console", monospace;
+  padding: 8px 10px;
 }
 
 .fakebutton, input[type=submit], input[type="reset"] {
@@ -804,19 +805,6 @@ textarea[name="config"], textarea[name="content"] {
 .headline h4 {
   padding: 5px 10px 5px 40px;
   background: #eff2ff url(/themes/susidns/images/drive.png) 13px center no-repeat;
-}
-
-/* export hosts */
-
-#export {
-  text-align: right;
-  margin-top: -36px;
-  margin-bottom: -4px;
-}
-
-/* hide export button on published page when empty */
-#messages + form[action="export"] {
-  display: none;
 }
 
 #filter {
@@ -1079,10 +1067,6 @@ h3, h3 a {
   font-size: 12pt !important;
 }
 
-#export {
-  margin-top: -40px !important;
-}
-
 #filter span, #filter a, #activefilter {
   font-size: 10pt !important;
   min-width: 16px !important;
@@ -1224,10 +1208,6 @@ input[type=checkbox][disabled]:checked, input[type=radio][disabled]:checked, inp
   font-size: 10pt;
 }
 
-#export {
-  margin: 0 !important;
-}
-
 #messages + form[action="export"] {
   display: inline-block;
 }
@@ -1237,47 +1217,33 @@ input[type=checkbox][disabled]:checked, input[type=radio][disabled]:checked, inp
 }
 
 #addressbook.headline h3 {
-  padding-right: 46px;
-}
-
-#addressbook.headline {
+  padding-right: 40px;
   position: relative;
 }
 
-#addressbook input#exporthosts {
-  margin-bottom: -2px;
+#export {
+  padding-left: 2px;
+  height: 39px;
+  position: absolute;
+  top: 0;
+  right: 3px;
+  border-left: 1px solid #aaafce;
+}
+
+input#exporthosts {
+  margin: 6px 2px -2px 3px;
   padding: 0 !important;
   width: 28px;
   height: 28px;
   min-width: 0;
   display: inline-block;
-  position: absolute;
-  right: 0;
-  top: calc(50% - 15px);
   font-size: 0 !important;
   background: url(/themes/console/images/info/arrow_down.png) center center no-repeat, linear-gradient(to bottom, #fff, #eef);
-  background-size: 16px 16px;
+  background-size: 16px 16px, 100% 100%;
 }
 
-form[action="export"]::after {
-  margin-bottom: -2px;
-  width: 44px;
-  height: 20px;
-  display: inline-block;
-  content: "";
-}
-
-#export {
-  padding-top: 10px;
-  padding-left: 2px;
-  width: 32px;
-  display: inline-block;
-  position: absolute;
-  right: -5px;
-  top: calc(50% - 10px);
-  top: 0;
-  overflow: hidden;
-  border-left: 1px solid #aaafce;
+#addressbook.headline {
+  position: relative;
 }
 
 #activefilter, .selected:not(.details) {
