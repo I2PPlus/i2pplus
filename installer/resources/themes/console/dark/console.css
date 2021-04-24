@@ -83,8 +83,12 @@ body {
   background: rgba(0,187,0,.8) !important;
 }
 
-.routersummary, .routersummaryouter, h1, .main {
+.routersummary, .routersummaryouter, h1 {
   contain: layout;
+}
+
+.main {
+  contain: layout paint;
 }
 
 .main * {
@@ -292,6 +296,7 @@ pre {
 .routersummaryouter {
   margin: 0 0 10px 5px;
   padding: 0;
+  width: auto;
   display: block;
   position: absolute; /* so no interference with /home app icons */
   text-align: center;
