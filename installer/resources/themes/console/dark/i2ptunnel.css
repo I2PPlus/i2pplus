@@ -11,6 +11,7 @@
   --bodyfont: Droid Sans, Open Sans, Noto Sans, Ubuntu, Segoe UI, Bitstream Vera Sans, DejaVu Sans, Verdana, Lucida Grande, Helvetica, sans-serif;
   --monospaced: Droid Sans Mono, Noto Mono, Lucida Console, DejaVu Sans Mono, monospace;
   --h2: repeating-linear-gradient(to right, rgba(0,0,0,.4) 1px, rgba(0,0,0,.4) 2px, rgba(0,32,0,.6) 3px), linear-gradient(to bottom, #001800, #000 75%);
+  --heading: linear-gradient(to bottom, rgba(0,0,0,0) 50%, #000 50%), repeating-linear-gradient(to right, rgba(0,0,0,.5) 1px, rgba(0,0,0,.5) 2px, rgba(0,16,0,.5) 3px);
   --border: 1px solid #242;
   --lowlight: inset 0 0 0 1px #000;
   --textinput: linear-gradient(to bottom, #001800, #001000);
@@ -18,7 +19,6 @@
 
 html {
   min-height: 100%;
-  scrollbar-color: rgba(8,48,8,.8) #000800;
   scrollbar-color: rgba(16,72,16,.8) #000800;
 }
 
@@ -27,38 +27,34 @@ body {
   padding: 0;
   text-align: center;
   font-family: var(--bodyfont);
+  font-size: 9pt;
+  color: #ee9;
   background: #000;
   background: repeating-linear-gradient(to bottom, rgba(0,0,0,.9) 1px, rgba(0,8,0,.5) 2px, rgba(0,8,0,.5) 3px), url(images/camotile2.png) top left scroll #010;
-  color: #ee9;
-  font-size: 9pt;
 }
 
 body.iframed {
-  background: none !important;
   margin: 0;
   padding: 0;
   overflow: hidden;
+  background: none !important;
 }
 
 ::selection {
-  background: #ff0 !important;
   color: black;
+  background: #ff0 !important;
 }
 
 ::-moz-selection {
-  background: #ff0 !important;
   color: black;
+  background: #ff0 !important;
 }
 
 h2, h3, th, .buttons, .newTunnel, .control, label, .infohelp, .infowarn, .nowrap, b, #throttler td {
-  -moz-user-select: none;
-  -webkit-user-select: none;
   user-select: none;
 }
 
 .selectAll {
-  -moz-user-select: all;
-  -webkit-user-select: all;
   user-select: all;
 }
 
@@ -72,16 +68,13 @@ h2, h3, th, .buttons, .newTunnel, .control, label, .infohelp, .infowarn, .nowrap
 
 * {
   scrollbar-color: rgba(16,48,16,.4) rgba(0,0,0,0);
-  transition: ease scrollbar-color .5s;
 }
 
 *:hover {
   scrollbar-color: rgba(24,80,24,.8) rgba(0,0,0,.9);
-  transition: ease scrollbar-color .2s;
 }
 
 div {
-  -moz-box-sizing: border-box;
   box-sizing: border-box;
 }
 
@@ -153,10 +146,10 @@ div[class^="status"] {
 }
 
 @media screen and (min-width: 1500px) {
-div[class^="status"] {
-  height: 18px;
-  background-size: auto 18px !important;
-}
+  div[class^="status"] {
+    height: 18px;
+    background-size: auto 18px !important;
+  }
 }
 
 hr {
@@ -250,7 +243,11 @@ h2, h3 {
   color: #ee9;
   border: var(--border);
   box-shadow: var(--lowlight), inset 0 0 1px 1px #030;
-  background: linear-gradient(to bottom, rgba(0,0,0,0) 50%, #000 50%), repeating-linear-gradient(to right, rgba(0,0,0,.5) 1px, rgba(0,0,0,.5) 2px, rgba(0,16,0,.5) 3px), linear-gradient(to bottom, #004000, #000 75%), url(/themes/console/dark/images/camotile2.png) top left !important;
+  background: var(--heading), linear-gradient(to bottom, #004000, #000 75%), url(/themes/console/dark/images/camotile2.png) top left !important;
+}
+
+h2 span {
+  margin-top: 2px;
 }
 
 /* title images */
@@ -316,7 +313,7 @@ h3 {
 
 #serverTunnels tr:first-child, #clientTunnels tr:first-child {
   background: #000;
-  background: linear-gradient(to bottom, rgba(0,0,0,0) 50%, #000 50%), repeating-linear-gradient(to right, rgba(0,0,0,.5) 1px, rgba(0,0,0,.5) 2px, rgba(0,16,0,.5) 3px), linear-gradient(to bottom, #002000, #000 75%);
+  background: var(--heading), linear-gradient(to bottom, #002000, #000 75%);
   padding: 7px 5px;
 }
 
@@ -1482,58 +1479,9 @@ input[type=text] + label {
   width: 45% !important;
 }
 
-@media screen and (max-width: 800px) {
-.displayText, .displayText:empty:hover, .displayText:empty:focus {
-  width: 260px;
-  font-size: 8pt;
-}
-
-#reachableBy {
-  min-width: 0 !important;
-}
-
-.port {
-  width: 50px !important;
-}
-}
-
-@media screen and (min-width: 1000px) {
-.displayText, .displayText:empty:hover, .displayText:empty:focus {
-  width: 386px;
-}
-
-#registration .displayText {
-  width: 600px;
-}
-}
-
-@media screen and (min-width: 1500px) {
-  th {
-    font-size: 10pt;
-  }
-
-  th .help::after, th .help:hover::after, th .help:focus::after {
-    width: 20px;
-    height: 20px;
-    background-size: 20px 20px;
-  }
-
-  .displayText, .displayText:empty:hover, .displayText:empty:focus {
-    width: 552px;
-  }
-
-  #registration .displayText {
-    width: 800px;
-  }
-
-  .tunnelControl .control {
-    margin: 3px -3px 3px 0 !important;
-  }
-}
-
 #keyringManager {
-  float: right;
   margin-right: 4px;
+  float: right;
 }
 
 tr {
@@ -1562,12 +1510,25 @@ tr.configerror {
   box-shadow: var(--lowlight), inset 0 0 2px 1px #030 !important;
 }
 
-#ssl th:first-child, #ssl td:first-child {
-  padding-left: 10px;
-}
-
 #ssl tr:nth-child(n+3) th:last-child, #ssl tr:nth-child(n+3) td:last-child {
   text-align: center;
+}
+
+#ssl th, #ssl td {
+  padding: 6px 16px;
+}
+
+#ssl th {
+  text-transform: none;
+  word-spacing: 0;
+  letter-spacing: 0;
+}
+
+#ssl td:first-child::after {
+  content: "";
+  display: inline-block;
+  min-height: 28px;
+  vertical-align: middle;
 }
 
 #ssl code {
@@ -1605,18 +1566,13 @@ tr.configerror {
 #toggleInfo img {
   height: 8px;
   width: 12px;
-  mix-blend-mode: luminosity;
   opacity: 0;
 }
 
-#toggleInfo:hover img, #toggleInfo:focus img {
-  mix-blend-mode: normal;
-}
-
 @media screen and (min-width: 1500px) {
-#toggleInfo {
-  margin: -1px -2px 0 0 !important;
-}
+  #toggleInfo {
+    margin: -1px -2px 0 0 !important;
+  }
 }
 
 .base32 {
@@ -1626,8 +1582,6 @@ tr.configerror {
   overflow: hidden;
   text-overflow: ellipsis;
   vertical-align: text-bottom;
-  -moz-user-select: all;
-  -webkit-user-select: all;
   user-select: all;
 }
 
@@ -1763,4 +1717,53 @@ body#tunnelSSL:not(.iframed) {
 
 body#tunnelEditPage:not(.iframed) h3 {
   margin-top: -1px;
+}
+
+@media screen and (max-width: 800px) {
+  .displayText, .displayText:empty:hover, .displayText:empty:focus {
+    width: 260px;
+    font-size: 8pt;
+  }
+
+  #reachableBy {
+    min-width: 0 !important;
+  }
+
+  .port {
+    width: 50px !important;
+  }
+}
+
+@media screen and (min-width: 1000px) {
+  .displayText, .displayText:empty:hover, .displayText:empty:focus {
+    width: 386px;
+  }
+
+  #registration .displayText {
+    width: 600px;
+  }
+}
+
+@media screen and (min-width: 1500px) {
+  th {
+    font-size: 10pt;
+  }
+
+  th .help::after, th .help:hover::after, th .help:focus::after {
+    width: 20px;
+    height: 20px;
+    background-size: 20px 20px;
+  }
+
+  .displayText, .displayText:empty:hover, .displayText:empty:focus {
+    width: 552px;
+  }
+
+  #registration .displayText {
+    width: 800px;
+  }
+
+  .tunnelControl .control {
+    margin: 3px -3px 3px 0 !important;
+  }
 }

@@ -4392,61 +4392,61 @@ h1 {
   border: 1px solid #575775;
   border-radius: 2px 2px 0 0;
   box-shadow: inset 0 0 0 1px rgba(185,185,198,.65);
-  background: url(images/netwrk.png) 8px center no-repeat, var(--h1) #fafaff !important;
+  background: url(images/netwrk.svg) 8px center no-repeat, var(--h1) #fafaff !important;
   background-size: 38px auto, 100%, 100%, 100%, 100% !important;
 }
 
 h1.home {
-  background: url(images/home.png) 10px center no-repeat, var(--h1) #fafaff !important;
+  background: url(images/home.svg) 10px center no-repeat, var(--h1) #fafaff !important;
 }
 
 h1.perf {
-  background: url(images/perf.png) 10px center no-repeat, var(--h1) #fafaff !important;
+  background: url(images/perf.svg) 10px center no-repeat, var(--h1) #fafaff !important;
 }
 
 h1.nfo {
-  background: url(images/info.png) 10px center no-repeat, var(--h1) #fafaff !important;
+  background: url(images/info.svg) 10px center no-repeat, var(--h1) #fafaff !important;
 }
 
 h1.hlp {
-  background: url(images/header_help.png) 10px center no-repeat, var(--h1) #fafaff !important;
+  background: url(images/header_help.svg) 10px center no-repeat, var(--h1) #fafaff !important;
 }
 
 h1.addbook {
-  background: url(images/addbook.png) 10px center no-repeat, var(--h1) #fafaff !important;
+  background: url(images/addbook.svg) 10px center no-repeat, var(--h1) #fafaff !important;
 }
 
 h1.snark {
-  background: url(images/app_snark.png) 10px center no-repeat, var(--h1) #fafaff !important;
+  background: url(images/app_snark.svg) 10px center no-repeat, var(--h1) #fafaff !important;
 }
 
 h1.mail {
-  background: url(images/app_mail.png) 8px center no-repeat, var(--h1) #fafaff !important;
+  background: url(images/app_mail.svg) 8px center no-repeat, var(--h1) #fafaff !important;
 }
 
 h1.conf, #wizardpage h1 {
-  background: url(images/cog.png) 10px center no-repeat, var(--h1) #fafaff !important;
+  background: url(images/cog.svg) 10px center no-repeat, var(--h1) #fafaff !important;
   background-size: 38px auto, 100%, 100%, 100% !important;
 }
 
 h1.adv {
-  background: url(images/info.png) 10px center no-repeat, var(--h1) #fafaff !important;
+  background: url(images/info.svg) 10px center no-repeat, var(--h1) #fafaff !important;
 }
 
 h1.err {
-  background: url(images/error.png) 10px center no-repeat, var(--h1) #fafaff !important;
+  background: url(images/error.svg) 10px center no-repeat, var(--h1) #fafaff !important;
 }
 
 h1.sched {
-  background: url(images/tasks.png) 10px center no-repeat, var(--h1) #fafaff !important;
+  background: url(images/tasks.svg) 10px center no-repeat, var(--h1) #fafaff !important;
 }
 
 h1.log {
-  background: url(images/logs.png) 10px center no-repeat, var(--h1) #fafaff !important;
+  background: url(images/logs.svg) 10px center no-repeat, var(--h1) #fafaff !important;
 }
 
 h1.webapp {
-  background: url(images/webapp.png) 10px center no-repeat, var(--h1) #fafaff !important;
+  background: url(images/webapp.svg) 10px center no-repeat, var(--h1) #fafaff !important;
 }
 
 h1[class] {
@@ -12525,17 +12525,17 @@ p#gatherstats {
   content: "";
   display: inline-block;
   width: 24px;
-  height: 16px;
-  background: url(images/ibgw.png) center center no-repeat;
-  background-size: auto 16px !important;
+  height: 24px;
+  background: url(images/ibgw.svg) center center no-repeat;
+  background-size: 24px !important;
 }
 
 .obep::after {
-  background: url(images/obep.png) center center no-repeat;
+  background: url(images/obep.svg) center center no-repeat;
 }
 
 .ptcp::after {
-  background: url(images/ptcp.png) center center no-repeat;
+  background: url(images/ptcp.svg) center center no-repeat;
 }
 
 #tunnels .cells:first-child {

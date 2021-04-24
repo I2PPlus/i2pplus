@@ -113,7 +113,7 @@
 <%
     } else { /* book.getEntries().length() > 0 */
 %>
-<div id="export"><input form="exportlist" type="submit" class="export" id="exporthosts" disabled="disabled" /></div>
+<span id="export"><input form="exportlist" type="submit" class="export" id="exporthosts" disabled></span>
 <%
     }
 %>
@@ -456,7 +456,7 @@
     /* book.notEmpty */
 %>
 <c:if test="${book.isEmpty}">
-<div id="empty"></div>
+</h3><div id="empty"></div>
 </c:if>
 <form method="POST" action="addressbook?book=${book.book}">
 <input type="hidden" name="book" value="${book.book}">
@@ -504,6 +504,7 @@
 <%
     }
 %>
+<c:if test="${book.isEmpty}"></div></c:if>
 <span data-iframe-height></span>
 <style type="text/css">body{opacity:1 !important}</style>
 </div>

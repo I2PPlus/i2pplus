@@ -361,14 +361,12 @@ span.addrhlpr {
 }
 
 h3 {
+  padding: 7px 10px;
   color: #c9ceff;
   font-size: 10pt;
   font-weight: bold;
   border: 1px solid #26235c;
-  padding: 7px 10px;
   border-radius: 2px;
-  background: #000 url(/themes/console/midnight/images/titles.png) repeat-x scroll center center;
-  background: linear-gradient(to bottom, #080818, #000008 75%);
   background: linear-gradient(to bottom, #080818 50%, #000 50%) !important;
   letter-spacing: .08em;
   word-spacing: 0.1em;
@@ -414,7 +412,7 @@ h3 {
   margin-top: -1px;
   margin-left: -11px !important;
   margin-right: -11px !important;
-  padding: 8px 10px 8px 36px !important;
+  padding: 8px 10px 8px 30px !important;
   font-size: 10pt;
   background-position: 6px center !important;
 }
@@ -1148,27 +1146,19 @@ input.export {
   margin-right: 14px;
 }
 
-@media screen and (min-width: 1500px) {
-.iframed input.export {
-  margin: -1px 14px 0 0;
-}
-}
-
 /* page titles */
 
-.headline h3 {
+.headline h3, h3 {
   padding: 10px 5px 10px 34px;
   word-spacing: 0.1em;
   letter-spacing: .08em;
   text-transform: uppercase;
   font-size: 11pt;
-  background: url(images/addressbook.svg) 10px center no-repeat, linear-gradient(to bottom, #080818, #000008 75%);
   background: url(images/addressbook.svg) 10px center no-repeat, linear-gradient(to bottom, #080818 50%, #000 50%) !important;
   background-size: 18px 18px, 100% 100% !important;
 }
 
 .headline#subscriptions h3 {
-  background: url(/themes/susidns/images/subs_24.png) 10px center no-repeat, linear-gradient(to bottom, #080818, #000008 75%);
   background: url(/themes/susidns/images/subs_24.png) 10px center no-repeat,linear-gradient(to bottom, #080818 50%, #000 50%) !important;
 }
 
@@ -1177,7 +1167,6 @@ input.export {
 }
 
 .headline#configure h3 {
-  background: url(images/configure.svg) 10px center no-repeat, linear-gradient(to bottom, #080818, #000008 75%);
   background: url(images/configure.svg) 10px center no-repeat, linear-gradient(to bottom, #080818 50%, #000 50%) !important;
   background-size: 18px 18px, 100% 100% !important;
 }
@@ -1199,19 +1188,6 @@ p.book {
 
 /* export hosts button adjustments */
 
-#export {
-  margin-top: -48px;
-  margin-bottom: 23px;
-  padding-right: 4px;
-  float: right;
-  clear: left !important;
-  text-align: right;
-}
-
-#export input[type=submit] {
-  display: inline-block;
-}
-
 p.book {
   padding-left: 35px !important;
 }
@@ -1220,11 +1196,6 @@ p.book {
   border: 1px solid #26235c;
   background: #000 url(images/addressbook.svg) 5px center no-repeat;
   background-size: 24px 24px;
-}
-
-/* hide export button on published addressbook if empty */
-#messages + form[action="export"] {
-  display: none;
 }
 
 /* host details page */
@@ -1671,40 +1642,23 @@ input:focus::placeholder {
   text-transform: none;
 }
 
-#export {
-  margin: 0 !important;
-}
-
-#messages + form[action="export"] {
-  display: inline-block;
-}
-
-#importexport form, form[action="export"] {
-  display: inline-block;
-}
-
 #addressbook.headline h3 {
-  margin-bottom: -1px !important;
-  padding-right: 44px;
-  position: relative;
-}
-
-#addressbook.headline h3 {
-  padding-right: 40px;
+  margin-bottom: 0;
+  padding-right: 42px;
   position: relative;
 }
 
 #export {
-  padding-left: 2px;
+  margin: 0 4px important;
   height: 38px;
   position: absolute;
   top: 1px;
-  right: 3px;
+  right: 7px;
   border-left: 1px solid #26235c;
 }
 
 input#exporthosts {
-  margin: 6px -2px -2px 2px;
+  margin: 4px -2px -2px 5px;
   padding: 0 !important;
   width: 28px;
   height: 28px;
@@ -1715,14 +1669,26 @@ input#exporthosts {
   background-size: 16px, 100% !important;
 }
 
+#exporthosts:disabled {
+  pointer-events: none;
+  opacity: .5;
+}
+
 @media screen and (min-width: 1500px) {
   #export {
-    padding-left: 2px;
+    padding-left: 4px;
     height: 39px;
     position: absolute;
-    top: 0;
-    right: 3px;
+    top: -1px;
+    right: 6px;
   }
+
+  input#exporthosts {
+    margin: 6px 0 -2px 2px;
+  }
+
+  #addressbook.headline h3 {
+    padding-right: 45px;
 }
 
 input#exporthosts:hover, #addressbook input#exporthosts:focus {
