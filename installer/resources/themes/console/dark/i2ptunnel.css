@@ -2,13 +2,22 @@
 /* Author: dr|z3d */
 
 @import url(/themes/fonts/DroidSans.css);
-@import url(images/images.css);
 @import url(/themes/console/images/images.css);
+@import url(images/images.css);
 @import url(optbox.css);
 @import url(chromescroll.css);
 
+:root {
+  --bodyfont: Droid Sans, Open Sans, Noto Sans, Ubuntu, Segoe UI, Bitstream Vera Sans, DejaVu Sans, Verdana, Lucida Grande, Helvetica, sans-serif;
+  --monospaced: Droid Sans Mono, Noto Mono, Lucida Console, DejaVu Sans Mono, monospace;
+  --h2: repeating-linear-gradient(to right, rgba(0,0,0,.4) 1px, rgba(0,0,0,.4) 2px, rgba(0,32,0,.6) 3px), linear-gradient(to bottom, #001800, #000 75%);
+  --border: 1px solid #242;
+  --lowlight: inset 0 0 0 1px #000;
+}
+
 html {
   min-height: 100%;
+  background: #000;
   scrollbar-color: rgba(8,48,8,.8) #000800;
   scrollbar-color: rgba(16,72,16,.8) #000800;
 }
@@ -17,7 +26,7 @@ body {
   margin: 0 8px 12px;
   padding: 0;
   text-align: center;
-  font-family: Droid Sans, Open Sans, Noto Sans, Ubuntu, Segoe UI, Bitstream Vera Sans, DejaVu Sans, Verdana, Lucida Grande, Helvetica, sans-serif;
+  font-family: var(--bodyfont)
   background: repeating-linear-gradient(to bottom, rgba(0,0,0,.9) 1px, rgba(0,8,0,.5) 2px, rgba(0,8,0,.5) 3px), url(images/camotile2.png) top left scroll #010;
   color: #ee9;
   font-size: 9pt;
@@ -232,14 +241,14 @@ hr {
 h2, h3 {
   margin: 10px 0 -1px;
   padding: 8px 10px 8px 34px;
-  border: 1px solid #242;
+  border: var(--border);
   font-size: 11pt;
   color: #ee9;
   text-transform: uppercase;
   letter-spacing: .08em;
   word-spacing: .1em;
   text-shadow: 0 1px 1px #000;
-  box-shadow: inset 0 0 0 1px #000, inset 0 0 1px 1px #030;
+  box-shadow: var(--lowlight), inset 0 0 1px 1px #030;
   background: linear-gradient(to bottom, rgba(0,0,0,0) 50%, #000 50%), repeating-linear-gradient(to right, rgba(0,0,0,.5) 1px, rgba(0,0,0,.5) 2px, rgba(0,16,0,.5) 3px), linear-gradient(to bottom, #004000, #000 75%), url(/themes/console/dark/images/camotile2.png) top left !important;
 }
 
@@ -247,22 +256,22 @@ h2, h3 {
 
 #messages h2 {
   margin-top: 12px;
-  background: url(/themes/console/images/svg/logs.svg) left 8px center no-repeat, repeating-linear-gradient(to right, rgba(0,0,0,.4) 1px, rgba(0,0,0,.4) 2px, rgba(0,32,0,.6) 3px), linear-gradient(to bottom, #001800, #000 75%) !important;
+  background: url(/themes/console/images/svg/logs.svg) left 8px center no-repeat, var(--h2) !important;
   background-size: 20px auto, 100%, 100% !important;
 }
 
 #globalTunnelControl h2 {
-  background: url(/themes/console/images/svg/mouse.svg) left 8px center no-repeat, repeating-linear-gradient(to right, rgba(0,0,0,.4) 1px, rgba(0,0,0,.4) 2px, rgba(0,32,0,.6) 3px), linear-gradient(to bottom, #001800, #000 75%) !important;
+  background: url(/themes/console/images/svg/mouse.svg) left 8px center no-repeat, var(--h2) !important;
   background-size: 20px auto, 100%, 100% !important;
 }
 
 #servers h2 {
-  background: var(--server) left 8px center no-repeat, repeating-linear-gradient(to right, rgba(0,0,0,.4) 1px, rgba(0,0,0,.4) 2px, rgba(0,32,0,.6) 3px), linear-gradient(to bottom, #001800, #000 75%) !important;
+  background: var(--server) left 8px center no-repeat, var(--h2) !important;
   background-size: 20px auto, 100%, 100% !important;
 }
 
 #clients h2 {
-  background: var(--client) left 8px center no-repeat, repeating-linear-gradient(to right, rgba(0,0,0,.4) 1px, rgba(0,0,0,.4) 2px, rgba(0,32,0,.6) 3px), linear-gradient(to bottom, #001800, #000 75%) !important;
+  background: var(--client) left 8px center no-repeat, var(--h2) !important;
   background-size: 20px auto, 100%, 100% !important;
 }
 
@@ -271,13 +280,13 @@ h2, h3 {
 }
 
 #tunnelEditPage h2, #tunnelEditPage h3, #registration h2, #registration h3 {
-  background: var(--configure) left 8px center no-repeat, repeating-linear-gradient(to right, rgba(0,0,0,.4) 1px, rgba(0,0,0,.4) 2px, rgba(0,32,0,.6) 3px), linear-gradient(to bottom, #001800, #000 75%) !important;
+  background: var(--configure) left 8px center no-repeat, var(--h2) !important;
   background-size: 20px auto, 100%, 100% !important;
   background-blend-mode: normal, normal, exclusion, normal;
 }
 
 #wizardPanel h2, #ssl h2 {
-  background: url(/themes/console/images/svg/wizard.svg) left 8px center no-repeat, repeating-linear-gradient(to right, rgba(0,0,0,.4) 1px, rgba(0,0,0,.4) 2px, rgba(0,32,0,.6) 3px), linear-gradient(to bottom, #001800, #000 75%) !important;
+  background: url(/themes/console/images/svg/wizard.svg) left 8px center no-repeat, var(--h2) !important;
   background-size: 20px auto, 100%, 100% !important;
   background-blend-mode: normal, normal, exclusion, normal;
 }
@@ -300,7 +309,7 @@ h3 {
 .panel table {
   width: 100%;
   border-collapse: collapse;
-  border: 1px solid #242;
+  border: var(--border);
   margin: 0;
 }
 
@@ -322,8 +331,8 @@ th {
   text-transform: uppercase;
   font-size: 9pt;
   color: #ee9;
-  border-top: 1px solid #242;
-  border-bottom: 1px solid #242;
+  border-top: var(--border);
+  border-bottom: var(--border);
   background: #000;
   background: linear-gradient(to bottom, #001400, #000 75%);
 }
@@ -338,7 +347,7 @@ th {
 }
 
 td {
-  border-top: 1px solid #242;
+  border-top: var(--border);
   vertical-align: middle;
   padding: 5px;
   font-size: 9pt;
@@ -355,7 +364,7 @@ td > b {
 }
 
 td.infohelp {
-  background: url(images/infohelp.png) 10px center no-repeat;
+  background: var(--infohelp) 10px center no-repeat;
   background-size: 20px 20px;
   padding: 15px 10px 15px 38px !important;
 }
@@ -365,11 +374,11 @@ td.infohelp {
 }
 
 .tunnelConfig th:first-child, .tunnelConfig td:first-child {
-  border-left: 1px solid #242;
+  border-left: var(--border);
 }
 
 .tunnelConfig th:last-child, .tunnelConfig td:last-child {
-  border-right: 1px solid #242;
+  border-right: var(--border);
 }
 
 #clientTunnels tr, #serverTunnels tr, .tunnelConfig tr {
@@ -380,7 +389,7 @@ td.infohelp {
   background: #000 !important;
   overflow: hidden;
   text-align: left;
-  border: 1px solid #242;
+  border: var(--border);
 }
 
 #serverTunnels th:nth-child(n+2), #clientTunnels th:nth-child(n+2), .tunnelProperties td:nth-child(n+2) {
@@ -395,7 +404,7 @@ td.infohelp {
 }
 
 .tunnelProperties + .tunnelInfo td {
-  border-top: 1px solid #242 !important;
+  border-top: var(--border) !important;
 }
 
 .tunnelInfo td {
@@ -441,7 +450,7 @@ td.infohelp {
 .newTunnel {
   padding: 5px !important;
   text-align: right;
-  border-top: 1px solid #242 !important;
+  border-top: var(--border) !important;
   background: #fff;
 }
 
@@ -462,17 +471,21 @@ td.infohelp {
 
 .tunnelName a {
   padding: 3px 3px 3px 22px !important;
+  width: 100%;
+  display: inline-block;
   font-weight: bold;
-  background: url(/themes/susidns/dark/images/configure.png) 4px 40% no-repeat;
-  background-size: 14px 14px !important;
+  background: var(--configure) 4px center no-repeat;
+  background-size: 14px;
 }
 
 .tunnelName a:hover, .tunnelName a:focus {
-  background: url(/themes/susidns/dark/images/configure_hover.png) 4px 40% no-repeat;
+  background: var(--configure_hover) 4px center no-repeat;
+  background-size: 14px;
 }
 
 .tunnelName a:active {
   color: #f60 !important;
+  background-size: 14px;
   opacity: .65;
 }
 
@@ -525,7 +538,7 @@ textarea {
   background: #000;
   margin-left: 4px;
   margin-right: 4px;
-  font: 9pt "Droid Sans Mono", "Noto Mono", "Lucida Console", "DejaVu Sans Mono", monospace;
+  font: 9pt var(--monospaced)
   resize: none;
   box-sizing: border-box;
   border-radius: 2px;
@@ -564,7 +577,7 @@ _:-ms-lang(x), textarea#statusMessages, textarea#statusMessages:active, textarea
   width: 150px;
   border: 1px solid #252;
   padding: 4px;
-  font: 8.5pt "Droid Sans Mono", "Noto Mono", "Lucida Console", "DejaVu Sans Mono", monospace;
+  font: 8.5pt var(--monospaced)
   background: #fff;
   color: #333;
   border-radius: 1px;
@@ -595,7 +608,7 @@ input[type="hidden"], input.default {
 }
 
 input, select, button, a {
-  font-family: Droid Sans, Open Sans, Noto Sans, Ubuntu, Segoe UI, Bitstream Vera Sans, DejaVu Sans, Verdana, Lucida Grande, Helvetica, sans-serif;
+  font-family: var(--bodyfont)
   -moz-box-sizing: border-box;
   box-sizing: border-box;
   font-size: 9pt;
@@ -608,7 +621,7 @@ input {
   background-color: #020;
   color: #ee9;
   margin: 0 2px 0 2px;
-  font-family: Droid Sans, Open Sans, Noto Sans, Ubuntu, Segoe UI, Bitstream Vera Sans, DejaVu Sans, Verdana, Lucida Grande, Helvetica, sans-serif;
+  font-family: var(--bodyfont)
   border: 1px solid #252;
   text-decoration: none;
 }
@@ -660,7 +673,7 @@ input[type=text], input[type=password], textarea, textarea[readonly="readonly"]:
   padding: 6px 8px;
   color: #bb7;
   font-weight: bold;
-  box-shadow: inset 0 0 0 1px #000, inset 4px 4px 4px #000, 0 0 0 1px #000;
+  box-shadow: var(--lowlight), inset 4px 4px 4px #000, 0 0 0 1px #000;
   background: #010;
   background: linear-gradient(to bottom, #001800, #001000);
   filter: none;
@@ -716,7 +729,7 @@ a.control, input.control {
   text-align: center;
   text-decoration: none;
   border-radius: 2px;
-  box-shadow: inset 0 0 0 1px #000;
+  box-shadow: var(--lowlight);
   box-sizing: border-box;
 }
 
@@ -733,7 +746,7 @@ a.control, input.control {
   text-decoration: none;
   color: #f60 !important;
   border: 1px solid #f60 !important;
-  box-shadow: inset 0 0 0 1px #000, inset 0 0 2px 1px rgba(255,86,0,.8), inset 0 0 0 3px #000 !important;
+  box-shadow: var(--lowlight), inset 0 0 2px 1px rgba(255,86,0,.8), inset 0 0 0 3px #000 !important;
   background: #000;
 }
 
@@ -744,7 +757,7 @@ a.control, input.control {
 .control:active {
   text-decoration: none;
   color: #ee9 !important;
-  box-shadow: inset 0 0 0 1px #000, inset 3px 3px 3px 2px #310 !important;
+  box-shadow: var(--lowlight), inset 3px 3px 3px 2px #310 !important;
   background: #f60 !important;
 }
 
@@ -757,16 +770,32 @@ a.control {
   float: left;
 }
 
+input, select, button {
+  font-size: 9pt;
+  vertical-align: middle;
+}
+
+button, input[type=submit], input[type=reset], a.control, select {
+  line-height: 120%;
+  font-family: var(--bodyfont)
+  font-size: 8.5pt;
+  font-weight: bold;
+  border: 1px solid #000;
+  border-radius: 2px;
+  box-shadow: inset 0 0 0 1px #151, inset 0 0 0 2px #000, inset 0 0 2px 2px #040, inset 0 0 0 3px #000, 0 0 0 1px rgba(0,16,0,.2) !important;
+  background: linear-gradient(to bottom, #001000, #000 5%, #000 95%, #001000);
+}
+
 select {
   padding: 7px 24px 7px 8px !important;
   min-width: 120px;
-  font-family: Droid Sans, Open Sans, Noto Sans, Ubuntu, Segoe UI, Bitstream Vera Sans, DejaVu Sans, Verdana, Lucida Grande, Helvetica, sans-serif;
+  font-family: var(--bodyfont)
   font-weight: bold;
   font-size: 8.5pt !important;
   color: #494;
   border-radius: 2px;
-  background: #000 var(--dropdown) right 10px center no-repeat, linear-gradient(to bottom, #001000, #000 5%, #000 95%, #001000) !important;
-  background-size: 10px auto, 100% !important;
+  background: var(--dropdown) right 10px center no-repeat, linear-gradient(to bottom, #001000, #000 5%, #000 95%, #001000);
+  background-size: 10px, 100% !important;
   cursor: pointer;
   -moz-appearance: none;
   -webkit-appearance: none;
@@ -794,7 +823,7 @@ select:focus, select:hover {
 }
 
 select:hover {
-  box-shadow: inset 0 0 0 1px #000, inset 0 0 2px 1px rgba(255,86,0,.8), inset 0 0 0 3px #000;
+  box-shadow: var(--lowlight), inset 0 0 2px 1px rgba(255,86,0,.8), inset 0 0 0 3px #000;
 }
 
 select:hover, select:focus, select:active {
@@ -804,22 +833,6 @@ select:hover, select:focus, select:active {
 
 select::-ms-expand {
   display: none;
-}
-
-input, select, button {
-  font-size: 9pt;
-  vertical-align: middle;
-}
-
-button, input[type=submit], input[type=reset], a.control, select {
-  line-height: 120%;
-  font-family: Droid Sans, Open Sans, Noto Sans, Ubuntu, Segoe UI, Bitstream Vera Sans, DejaVu Sans, Verdana, Lucida Grande, Helvetica, sans-serif;
-  font-size: 8.5pt;
-  font-weight: bold;
-  border: 1px solid #000;
-  border-radius: 2px;
-  box-shadow: inset 0 0 0 1px #151, inset 0 0 0 2px #000, inset 0 0 2px 2px #040, inset 0 0 0 3px #000, 0 0 0 1px rgba(0,16,0,.2) !important;
-  background: linear-gradient(to bottom, #001000, #000 5%, #000 95%, #001000);
 }
 
 .buttons, .newTunnel {
@@ -835,11 +848,11 @@ button, input[type=submit], input[type=reset], a.control, select {
 }
 
 .tunnelDescriptionLabel, .tunnelDestinationLabel {
-  text-align: right;
+  margin-right: 3px;
   min-width: 150px;
   display: inline-block;
-  margin-right: 3px;
   white-space: nowrap;
+  text-align: right;
 }
 
 input {
@@ -848,8 +861,8 @@ input {
 }
 
 #hostField, #leasesetKey, #userAgents {
-  width: 90% !important;
   margin: 0 !important;
+  width: 90% !important;
   text-align: left !important;
 }
 
@@ -858,20 +871,19 @@ input {
   white-space: nowrap;
   overflow: hidden;
   text-overflow: ellipsis;
-  -o-text-overflow: ellipsis;
 }
 
 #tunnelDepth, #tunnelVariance, #tunnelQuantity, #tunnelBackupQuantity,
 #tunnelDepthOut, #tunnelVarianceOut, #tunnelQuantityOut, #tunnelBackupQuantityOut,
 #localDestination, #customOptions, #leasesetKey, #name, #description, textarea[name="accessList"] {
-  width: 100% !important;
   margin: 0 !important;
+  width: 100% !important;
   text-align: left !important;
 }
 
 #oldName {
-  min-width: 280px;
   width: 30%;
+  min-width: 280px;
 }
 
 select#profile, select#connectionProfile {
@@ -888,7 +900,6 @@ select#connectionProfile, #targetDestination {
 }
 
 #localDestination, textarea[name="accessList"], #hostField {
-  width: calc(100% - 5px) !important;
   width: 100% !important;
   margin: 3px 0 !important;
 }
@@ -904,6 +915,7 @@ textarea[name="accessList"]:focus {
 }
 
 textarea::placeholder, input::placeholder {
+  font-family: var(--bodyfont);
   font-style: italic;
 }
 
@@ -920,14 +932,14 @@ th .help::after {
   width: 16px;
   height: 16px;
   display: inline-block;
-  background: url(images/helplink.svg) center center no-repeat;
-  background-size: 16px 16px;
+  background: var(--helplink) center center no-repeat;
+  background-size: 16px;
   content: "";
 }
 
 th .help:hover::after, th .help:focus::after {
-  background: url(images/helplink_hover.svg) center center no-repeat;
-  background-size: 16px 16px;
+  background: var(--helplink_hover) center center no-repeat;
+  background-size: 16px;
 }
 
 #filter {
@@ -1090,38 +1102,55 @@ input.tunnelName, input.tunnelDescription, #userAgents {
 }
 
 .username, .password, .filemanager {
+  padding-left: 28px !important;
   width: 200px;
-  box-shadow: inset 0 0 0 1px #000, inset 4px 4px 4px #000, 0 0 0 1px #000;
+  box-shadow: var(--lowlight), inset 4px 4px 4px #000, 0 0 0 1px #000;
 }
 
 .username {
-  padding-left: 28px;
-  background: url(/themes/console/images/buttons/user.png) 6px center no-repeat, linear-gradient(to bottom, #001800, #001000) !important;
+  background: var(--user) 6px center no-repeat, linear-gradient(to bottom, #001800, #001000) !important;
+  background-size: 16px !important;
 }
 
 .password {
-  padding-left: 28px;
-  background: url(/themes/console/images/buttons/password.png) 6px center no-repeat, linear-gradient(to bottom, #001800, #001000) !important;
+  background: var(--key) 6px center no-repeat, linear-gradient(to bottom, #001800, #001000) !important;
+  background-size: 16px !important;
 }
 
 .filemanager {
-  padding-left: 28px !important;
-  background: url(/themes/console/images/svg/files.svg) 6px center no-repeat, linear-gradient(to bottom, #001800, #001000) !important;
-  background-size: 16px 16px, 100% !important;
+  background: var(--files) 6px center no-repeat, linear-gradient(to bottom, #001800, #001000) !important;
+  background-size: 16px, 100% !important;
 }
 
 .filemanager:focus {
-  padding-left: 28px !important;
-  background: #000 url(/themes/console/images/svg/files.svg) 6px center no-repeat !important;
-  background-size: 16px 16px !important;
+  background: #000 var(--files) 6px center no-repeat !important;
+  background-size: 16px !important;
 }
 
 .username:focus {
-  background: #000 url(/themes/console/images/buttons/user.png) 6px center no-repeat !important;
+  background: #000 var(--user) 6px center no-repeat !important;
+  background-size: 16px !important;
 }
 
 .password:focus {
-  background: #000 url(/themes/console/images/buttons/password.png) 6px center no-repeat !important;
+  background: #000 var(--key) 6px center no-repeat !important;
+  background-size: 16px !important;
+}
+
+::placeholder {
+  font-size: 80%;
+}
+
+.username::placeholder, .password::placeholder {
+  color: #bb7;
+  font-size: 100%;
+  font-style: italic;
+  text-transform: lowercase;
+  opacity: .4;
+}
+
+.username, .password {
+  width: calc(50% - 12px);
 }
 
 #notReady, #down {
@@ -1131,7 +1160,7 @@ input.tunnelName, input.tunnelDescription, #userAgents {
   text-align: center;
   font-size: 11pt;
   font-weight: bold;
-  box-shadow: inset 0 0 0 1px #000, inset 0 0 4px 4px rgba(0,0,0,.4), 0 0 0 1px #000, 0 0 0 2px #020, 0 0 0 6px #030, 0 0 0 8px #040;
+  box-shadow: var(--lowlight), inset 0 0 4px 4px rgba(0,0,0,.4), 0 0 0 1px #000, 0 0 0 2px #020, 0 0 0 6px #030, 0 0 0 8px #040;
   background: #020;
   background: repeating-linear-gradient(to bottom, #020 2px, #010 4px);
 }
@@ -1387,7 +1416,7 @@ input[type=text] + label {
 }
 
 .displayText, .displayText:empty:hover, .displayText:empty:focus {
-  font-family: "Droid Sans Mono", "Noto Mono", "Lucida Console", "DejaVu Sans Mono", monospace;
+  font-family: var(--monospaced)
   width: calc(100% - 10px);
   width: 290px;
   overflow: hidden;
@@ -1403,7 +1432,7 @@ input[type=text] + label {
   background: #000;
   background: linear-gradient(to bottom, #000 0%, #010 100%);
   border-radius: 2px;
-  box-shadow: inset 0 0 0 1px #000;
+  box-shadow: var(--lowlight);
 }
 
 .displayText:hover, .displayText:focus {
@@ -1419,7 +1448,7 @@ input[type=text] + label {
 
 .displayText:empty, .displayText:empty:hover, .displayText:empty:focus {
   background: #000;
-  box-shadow: inset 0 0 0 1px #000;
+  box-shadow: var(--lowlight);
   color: #885;
   opacity: .8;
 }
@@ -1507,11 +1536,11 @@ input[type=text] + label {
 }
 
 tr {
-  box-shadow: inset 0 0 0 1px #000, inset 0 -1px 0 1px #000, inset -1px 0 0 1px #000, inset 0 0 1px 1px #030, inset 0 -1px 1px 1px #030, inset -1px 0 1px 1px #030;
+  box-shadow: var(--lowlight), inset 0 -1px 0 1px #000, inset -1px 0 0 1px #000, inset 0 0 1px 1px #030, inset 0 -1px 1px 1px #030, inset -1px 0 1px 1px #030;
 }
 
 tr.configerror {
-  box-shadow: inset 0 0 0 1px #000, inset 0 -1px 0 1px #000, inset -1px 0 0 1px #000, inset 0 0 2px 1px #900, inset 0 -1px 2px 1px #900, inset -1px 0 2px 1px #900;
+  box-shadow: var(--lowlight), inset 0 -1px 0 1px #000, inset -1px 0 0 1px #000, inset 0 0 2px 1px #900, inset 0 -1px 2px 1px #900, inset -1px 0 2px 1px #900;
 }
 
 .configerror td {
@@ -1529,7 +1558,7 @@ tr.configerror {
 }
 
 .buttons, .newTunnel {
-  box-shadow: inset 0 0 0 1px #000, inset 0 0 2px 1px #030 !important;
+  box-shadow: var(--lowlight), inset 0 0 2px 1px #030 !important;
 }
 
 #ssl th:first-child, #ssl td:first-child {
@@ -1614,23 +1643,6 @@ tr.configerror {
   margin-left: 5px;
 }
 
-::placeholder {
-  font-size: 80%;
-}
-
-.username::placeholder, .password::placeholder {
-  color: #bb7;
-  font-size: 100%;
-  font-style: italic;
-  text-transform: lowercase;
-  opacity: .4;
-}
-
-.username, .password {
-  padding-left: 24px !important;
-  width: calc(50% - 12px);
-}
-
 select[disabled], select[disabled]:hover, select[disabled]:focus, select[disabled]:active {
   margin: 0;
   padding: 0;
@@ -1692,7 +1704,7 @@ th span {
 
 #tunnelOpts table td {
   padding: 5px;
-  border-bottom: 1px solid #242;
+  border-bottom: var(--border);
 }
 
 #tunnelOpts table tr:first-child td {

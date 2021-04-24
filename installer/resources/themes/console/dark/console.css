@@ -24,6 +24,7 @@
 
 html {
   min-height: 100%;
+  background: #000;
   scrollbar-color: rgba(16,72,16,.8) rgba(0,16,0,.5);
 }
 
@@ -42,8 +43,7 @@ body {
   text-align: center;
   color: #ee9;
   font: 8.5pt/130% var(--bodyfont);
-  background: var(--vstripe),
-              var(--camo), #000;
+  background: var(--vstripe), var(--camo), #000;
   background-size: 100%, 100%;
 }
 
@@ -1292,10 +1292,9 @@ div.messages {
   border: var(--border);
   font-weight: bold;
   font-size: 9.5pt;
-  color: #2b2 !important;
   box-shadow: inset 0 0 1px 0 #990 !important;
   background: #000;
-  background: var(--infohelp) no-repeat 12px center, url(images/scarface.jpg) right bottom no-repeat #000;
+  background: var(--infohelp) no-repeat 12px center, var(--hat) right 2px bottom 2px no-repeat #000;
   background-size: 28px, auto 90%;
 }
 
@@ -1308,13 +1307,13 @@ div.messages {
   z-index: 100;
   animation: 2s hide-up 8s ease-out forwards;
   box-shadow: inset 0 0 1px 0 #f00, 0 0 2px 2px #000 !important;
-  background: var(--infohelp) no-repeat 12px center, var(--close) right 6px top 6px no-repeat, url(images/scarface.jpg) right bottom no-repeat #000;
+  background: var(--infohelp) no-repeat 12px center, var(--close) right 6px top 6px no-repeat, var(--hat) right bottom no-repeat #000;
   background-size: 28px, 14px, auto 90%;
   background-blend-mode: normal, luminosity, normal;
 }
 
 .main:not(#config_update) div.messages:hover, #config_update #messages:hover {
-  background: var(--infohelp) no-repeat 12px center, var(--close_hover) right 6px top 6px no-repeat, url(images/scarface.jpg) right bottom no-repeat #000;
+  background: var(--infohelp) no-repeat 12px center, var(--close_hover) right 6px top 6px no-repeat, var(--hat) right bottom no-repeat #000;
   background-size: 28px, 14px, auto 90%;
   background-blend-mode: normal, normal, normal;
   cursor: crosshair;
@@ -1919,27 +1918,25 @@ h2 a:hover {
 }
 
 h3, h3.welcome {
-  border: var(--border);
-  border-left: 5px solid #252;
-  padding: 7px 10px;
   margin: 12px 0 10px 0;
-  border-radius: 0 2px 2px 0;
+  padding: 7px 10px;
+  letter-spacing: .08em;
   text-transform: uppercase;
   text-shadow: 0 0 2px #010;
-  letter-spacing: .08em;
+  border: var(--border);
+  border-left: 5px solid #252;
 }
 
 h4 {
+  margin: 5px 0 10px 0;
+  padding: 0 0 10px 0;
+  font-size: 11pt;
   border-bottom: 1px;
   border-bottom-style: solid;
   border-bottom-color: #252;
-  padding: 0 0 10px 0;
-  margin: 5px 0 10px 0;
-  font-size: 11pt;
 }
 
 h1, h2, h3:not([id*="help"]), h4.app, h4.app2 {
-  background: var(--navbar) !important;
   background: linear-gradient(to bottom, rgba(0,0,0,0) 50%, #000 50%), var(--h3), var(--h3_fade) !important;
 }
 
@@ -4599,8 +4596,8 @@ h4.app2 a::after {
 }
 
 #volunteer {
-  background: #000 url(images/scarface.jpg) right bottom no-repeat;
-  background-size: auto 50%;
+  background: var(--hat) right bottom no-repeat, #000;
+  background-size: auto 40%;
 }
 
 #advancedsettings {
@@ -4613,14 +4610,14 @@ h4.app2 a::after {
 
 #legal h2, #sidebarhelp h2, #volunteer h2, #reachabilityhelp h2, #configurationhelp h2, #advancedsettings h2, #browserconfig h2, #tunnman h2,
 #faq h2, #reseedhelp h2, #troubleshoot h2, #newuserguide h2, #filterlist h2, #webhosting h2, #themeoverride h2, #glossary h2 {
+  margin: -1px -21px 10px !important;
   padding: 10px;
+  word-spacing: .1em;
+  letter-spacing: .08em;
+  text-align: left;
   text-transform: uppercase;
   font-size: 11pt;
-  text-align: left;
-  letter-spacing: .08em;
-  word-spacing: .1em;
   border-radius: 0;
-  margin: -1px -21px 10px !important;
   background: linear-gradient(to right, #000, #001000 70%, #001300 90%);
 }
 
@@ -4629,28 +4626,28 @@ h4.app2 a::after {
 }
 
 #configinfo {
-  border: none !important;
   margin: 0 auto 0;
   width: 99%;
   width: calc(100% - 20px);
+  border: none !important;
 }
 
 #configinfo th {
   text-align: left;
   padding: 5px 0;
-  color: #dd0;
   letter-spacing: .05em;
+  font: 9pt var(--monospaced);
+  color: #dd0;
   background: #000 !important;
   border: none;
   border-bottom: var(--softborder) !important;
-  font: 9pt var(--monospaced);
 }
 
 #configinfo td {
   padding: 5px 15px;
   line-height: 140%;
-  background: #000;
   text-align: justify;
+  background: #000;
 }
 
 .main#help h2 a:hover {
@@ -4658,27 +4655,27 @@ h4.app2 a::after {
 }
 
 #sidebarhelp h3, #faq h3, #reseedhelp h3 {
+  margin: 0 -21px 10px !important;
   padding: 10px;
+  word-spacing: .1em;
+  letter-spacing: .08em;
+  text-align: left;
   text-transform: uppercase;
   font-size: 10.5pt;
-  text-align: left;
-  letter-spacing: .08em;
-  word-spacing: .1em;
   border-radius: 0;
-  margin: 0 -21px 10px !important;
   background: linear-gradient(to right, #000, #001000 70%, #001300 90%);
   border: var(--border);
 }
 
 #changelog h2 {
+  margin: 0 0 -11px !important;
   padding: 10px;
+  word-spacing: .1em;
+  letter-spacing: .08em;
+  text-align: left;
   text-transform: uppercase;
   font-size: 11pt;
-  text-align: left;
-  letter-spacing: .08em;
-  word-spacing: .1em;
   border-radius: 0;
-  margin: 0 0 -11px !important;
 }
 
 #changelog:hover pre {

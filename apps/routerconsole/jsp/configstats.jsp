@@ -47,7 +47,7 @@
         } // end iterating over required groups for the current stat
         if (statshelper.getCurrentCanBeGraphed() && !statshelper.getCurrentGraphName().contains("Ping")) {
 %>
-<input hidden type="checkbox" class="optbox" id="<%=statshelper.getCurrentStatName().replace(" ", "_")%>" name="graphList" value="<%=statshelper.getCurrentGraphName()%>" <% if (statshelper.getCurrentIsGraphed()) {%>checked="checked"<%}%> >
+<input hidden type="checkbox" class="optbox" id="<%=statshelper.getCurrentStatName().replace(" ", "_")%>" name="graphList" value="<%=statshelper.getCurrentGraphName()%>"<% if (statshelper.getCurrentIsGraphed()){%> checked="checked"<%}%>>
 <label for="<%=statshelper.getCurrentStatName().replace(" ", "_")%>" data-tooltip="<%=statshelper.getCurrentStatDescription()%>">
 <%
     int dot = statshelper.getCurrentStatName().indexOf(".");
@@ -56,7 +56,8 @@
                          .replace("con.", "").replace("garlic.decryptFail", "garlic.DecryptFail")
                          .replace(".data", ".Data").replace(".drop", ".Drop").replace(".delay", ".Delay")
                          .replace(".new", ".New").replace(".in", ".In").replace(".out", ".Out")
-                         .replace("Received", "RX").replace("receive", "RX");
+                         .replace("Received", "RX").replace("receive", "RX").replace("RXBps", "ReceiveBps")
+                         .replace(".full", ".Full").replace(".size", ".Size").replace(".dups", ".Dups");
 %>
 
 <div class="stattograph"><b><%=truncated%></b><br><span class="statdesc"><%=statshelper.getCurrentStatDescription()%></span></div>
