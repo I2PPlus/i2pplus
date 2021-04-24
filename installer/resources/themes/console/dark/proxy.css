@@ -398,10 +398,11 @@ textarea {
 }
 
 .logo {
-  width: calc(100% - 62px) !important;
+  margin: 0 16px;
+  width: calc(100% - 53px) !important;
   min-width: 330px;
   position: absolute;
-  top: -124px;
+  top: 16px;
   z-index: 999;
 }
 
