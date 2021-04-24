@@ -1146,12 +1146,6 @@ input.export {
   margin-right: 14px;
 }
 
-@media screen and (min-width: 1500px) {
-.iframed input.export {
-  margin: -1px 14px 0 0;
-}
-}
-
 /* page titles */
 
 .headline h3, h3 {
@@ -1194,19 +1188,6 @@ p.book {
 
 /* export hosts button adjustments */
 
-#export {
-  margin-top: -48px;
-  margin-bottom: 23px;
-  padding-right: 4px;
-  float: right;
-  clear: left !important;
-  text-align: right;
-}
-
-#export input[type=submit] {
-  display: inline-block;
-}
-
 p.book {
   padding-left: 35px !important;
 }
@@ -1215,11 +1196,6 @@ p.book {
   border: 1px solid #26235c;
   background: #000 url(images/addressbook.svg) 5px center no-repeat;
   background-size: 24px 24px;
-}
-
-/* hide export button on published addressbook if empty */
-#messages + form[action="export"] {
-  display: none;
 }
 
 /* host details page */
@@ -1666,40 +1642,23 @@ input:focus::placeholder {
   text-transform: none;
 }
 
-#export {
-  margin: 0 !important;
-}
-
-#messages + form[action="export"] {
-  display: inline-block;
-}
-
-#importexport form, form[action="export"] {
-  display: inline-block;
-}
-
 #addressbook.headline h3 {
-  margin-bottom: -1px !important;
-  padding-right: 44px;
-  position: relative;
-}
-
-#addressbook.headline h3 {
-  padding-right: 40px;
+  margin-bottom: 0;
+  padding-right: 42px;
   position: relative;
 }
 
 #export {
-  padding-left: 2px;
+  margin: 0 4px important;
   height: 38px;
   position: absolute;
   top: 1px;
-  right: 3px;
+  right: 7px;
   border-left: 1px solid #26235c;
 }
 
 input#exporthosts {
-  margin: 6px -2px -2px 2px;
+  margin: 4px -2px -2px 5px;
   padding: 0 !important;
   width: 28px;
   height: 28px;
@@ -1712,12 +1671,19 @@ input#exporthosts {
 
 @media screen and (min-width: 1500px) {
   #export {
-    padding-left: 2px;
+    padding-left: 4px;
     height: 39px;
     position: absolute;
-    top: 0;
-    right: 3px;
+    top: -1px;
+    right: 6px;
   }
+
+  input#exporthosts {
+    margin: 6px 0 -2px 2px;
+  }
+
+  #addressbook.headline h3 {
+    padding-right: 45px;
 }
 
 input#exporthosts:hover, #addressbook input#exporthosts:focus {
