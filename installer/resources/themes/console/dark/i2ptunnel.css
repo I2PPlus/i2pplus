@@ -13,11 +13,11 @@
   --h2: repeating-linear-gradient(to right, rgba(0,0,0,.4) 1px, rgba(0,0,0,.4) 2px, rgba(0,32,0,.6) 3px), linear-gradient(to bottom, #001800, #000 75%);
   --border: 1px solid #242;
   --lowlight: inset 0 0 0 1px #000;
+  --textinput: linear-gradient(to bottom, #001800, #001000);
 }
 
 html {
   min-height: 100%;
-  background: #000;
   scrollbar-color: rgba(8,48,8,.8) #000800;
   scrollbar-color: rgba(16,72,16,.8) #000800;
 }
@@ -26,7 +26,8 @@ body {
   margin: 0 8px 12px;
   padding: 0;
   text-align: center;
-  font-family: var(--bodyfont)
+  font-family: var(--bodyfont);
+  background: #000;
   background: repeating-linear-gradient(to bottom, rgba(0,0,0,.9) 1px, rgba(0,8,0,.5) 2px, rgba(0,8,0,.5) 3px), url(images/camotile2.png) top left scroll #010;
   color: #ee9;
   font-size: 9pt;
@@ -228,10 +229,10 @@ hr {
 }
 
 #globalTunnelControl.iframed.panel:first-child ~ .panel#clients::after {
-  content: "";
-  display: block;
-  height: 5px !important;
   width: 100%;
+  height: 5px !important;
+  display: block;
+  content: "";
 }
 
 #serverTunnels {
@@ -241,13 +242,13 @@ hr {
 h2, h3 {
   margin: 10px 0 -1px;
   padding: 8px 10px 8px 34px;
-  border: var(--border);
+  word-spacing: .1em;
+  letter-spacing: .08em;
+  text-transform: uppercase;
+  text-shadow: 0 1px 1px #000;
   font-size: 11pt;
   color: #ee9;
-  text-transform: uppercase;
-  letter-spacing: .08em;
-  word-spacing: .1em;
-  text-shadow: 0 1px 1px #000;
+  border: var(--border);
   box-shadow: var(--lowlight), inset 0 0 1px 1px #030;
   background: linear-gradient(to bottom, rgba(0,0,0,0) 50%, #000 50%), repeating-linear-gradient(to right, rgba(0,0,0,.5) 1px, rgba(0,0,0,.5) 2px, rgba(0,16,0,.5) 3px), linear-gradient(to bottom, #004000, #000 75%), url(/themes/console/dark/images/camotile2.png) top left !important;
 }
@@ -256,12 +257,12 @@ h2, h3 {
 
 #messages h2 {
   margin-top: 12px;
-  background: url(/themes/console/images/svg/logs.svg) left 8px center no-repeat, var(--h2) !important;
+  background: var(--log_icon) left 8px center no-repeat, var(--h2) !important;
   background-size: 20px auto, 100%, 100% !important;
 }
 
 #globalTunnelControl h2 {
-  background: url(/themes/console/images/svg/mouse.svg) left 8px center no-repeat, var(--h2) !important;
+  background: var(--mouse) left 8px center no-repeat, var(--h2) !important;
   background-size: 20px auto, 100%, 100% !important;
 }
 
@@ -280,13 +281,13 @@ h2, h3 {
 }
 
 #tunnelEditPage h2, #tunnelEditPage h3, #registration h2, #registration h3 {
-  background: var(--configure) left 8px center no-repeat, var(--h2) !important;
+  background: var(--configure_inert) left 8px center no-repeat, var(--h2) !important;
   background-size: 20px auto, 100%, 100% !important;
   background-blend-mode: normal, normal, exclusion, normal;
 }
 
 #wizardPanel h2, #ssl h2 {
-  background: url(/themes/console/images/svg/wizard.svg) left 8px center no-repeat, var(--h2) !important;
+  background: var(--wizard) left 8px center no-repeat, var(--h2) !important;
   background-size: 20px auto, 100%, 100% !important;
   background-blend-mode: normal, normal, exclusion, normal;
 }
@@ -298,8 +299,8 @@ h2, h3 {
 }
 
 h3 {
-  border-radius: 0;
   margin-top: 12px;
+  border-radius: 0;
 }
 
 .iframed #globalTunnelControl h2 {
@@ -675,7 +676,7 @@ input[type=text], input[type=password], textarea, textarea[readonly="readonly"]:
   font-weight: bold;
   box-shadow: var(--lowlight), inset 4px 4px 4px #000, 0 0 0 1px #000;
   background: #010;
-  background: linear-gradient(to bottom, #001800, #001000);
+  background: var(--textinput);
   filter: none;
 }
 
@@ -1108,17 +1109,17 @@ input.tunnelName, input.tunnelDescription, #userAgents {
 }
 
 .username {
-  background: var(--user) 6px center no-repeat, linear-gradient(to bottom, #001800, #001000) !important;
+  background: var(--user) 6px center no-repeat, var(--textinput) !important;
   background-size: 16px !important;
 }
 
 .password {
-  background: var(--key) 6px center no-repeat, linear-gradient(to bottom, #001800, #001000) !important;
+  background: var(--key) 6px center no-repeat, var(--textinput) !important;
   background-size: 16px !important;
 }
 
 .filemanager {
-  background: var(--files) 6px center no-repeat, linear-gradient(to bottom, #001800, #001000) !important;
+  background: var(--files) 6px center no-repeat, var(--textinput) !important;
   background-size: 16px, 100% !important;
 }
 
