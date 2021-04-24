@@ -1242,6 +1242,11 @@ input#exporthosts {
   background-size: 16px 16px, 100% 100%;
 }
 
+#exporthosts:disabled {
+  pointer-events: none;
+  opacity: .5;
+}
+
 #addressbook.headline {
   position: relative;
 }

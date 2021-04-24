@@ -1485,6 +1485,11 @@ input#exporthosts {
   background-size: 16px 16px, 100% 100% !important;
 }
 
+#exporthosts:disabled {
+  pointer-events: none;
+  opacity: .5;
+}
+
 #export {
   padding-left: 3px;
   height: 39px;

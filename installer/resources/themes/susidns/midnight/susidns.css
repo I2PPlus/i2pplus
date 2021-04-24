@@ -1669,6 +1669,11 @@ input#exporthosts {
   background-size: 16px, 100% !important;
 }
 
+#exporthosts:disabled {
+  pointer-events: none;
+  opacity: .5;
+}
+
 @media screen and (min-width: 1500px) {
   #export {
     padding-left: 4px;
