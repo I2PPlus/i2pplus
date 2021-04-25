@@ -5,6 +5,7 @@
 @import url(/themes/fonts/DroidSans.css);
 @import url(optbox.css);
 @import url(/themes/console/images/images.css);
+@import url(images/images.css);
 
 :root {
   --bg: url("data:image/svg+xml,%3Csvg height='4' viewBox='0 0 4 4' width='4' xmlns='http://www.w3.org/2000/svg'%3E%3Cpath d='m1 3h1v1h-1zm2-2h1v1h-1z' fill='%23e2e2ff' fill-opacity='.5'/%3E%3C/svg%3E");
@@ -4392,61 +4393,60 @@ h1 {
   border: 1px solid #575775;
   border-radius: 2px 2px 0 0;
   box-shadow: inset 0 0 0 1px rgba(185,185,198,.65);
-  background: url(images/netwrk.svg) 8px center no-repeat, var(--h1) #fafaff !important;
+  background: var(--netwrk) 8px center no-repeat, var(--h1) #fafaff !important;
   background-size: 38px auto, 100%, 100%, 100%, 100% !important;
 }
 
 h1.home {
-  background: url(images/home.svg) 10px center no-repeat, var(--h1) #fafaff !important;
+  background: var(--home) 10px center no-repeat, var(--h1) #fafaff !important;
 }
 
 h1.perf {
-  background: url(images/perf.svg) 10px center no-repeat, var(--h1) #fafaff !important;
+  background: var(--perf) 10px center no-repeat, var(--h1) #fafaff !important;
 }
 
 h1.nfo {
-  background: url(images/info.svg) 10px center no-repeat, var(--h1) #fafaff !important;
+  background: var(--info) 10px center no-repeat, var(--h1) #fafaff !important;
 }
 
 h1.hlp {
-  background: url(images/header_help.svg) 10px center no-repeat, var(--h1) #fafaff !important;
+  background: var(--header_help) 10px center no-repeat, var(--h1) #fafaff !important;
 }
 
 h1.addbook {
-  background: url(images/addbook.svg) 10px center no-repeat, var(--h1) #fafaff !important;
+  background: var(--addbook) 10px center no-repeat, var(--h1) #fafaff !important;
 }
 
 h1.snark {
-  background: url(images/app_snark.svg) 10px center no-repeat, var(--h1) #fafaff !important;
+  background: var(--app_snark) 10px center no-repeat, var(--h1) #fafaff !important;
 }
 
 h1.mail {
-  background: url(images/app_mail.svg) 8px center no-repeat, var(--h1) #fafaff !important;
+  background: var(--app_mail) 8px center no-repeat, var(--h1) #fafaff !important;
 }
 
 h1.conf, #wizardpage h1 {
-  background: url(images/cog.svg) 10px center no-repeat, var(--h1) #fafaff !important;
-  background-size: 38px auto, 100%, 100%, 100% !important;
+  background: var(--cog) 10px center no-repeat, var(--h1) #fafaff !important;
 }
 
 h1.adv {
-  background: url(images/info.svg) 10px center no-repeat, var(--h1) #fafaff !important;
+  background: var(--info) 10px center no-repeat, var(--h1) #fafaff !important;
 }
 
 h1.err {
-  background: url(images/error.svg) 10px center no-repeat, var(--h1) #fafaff !important;
+  background: var(--error) 10px center no-repeat, var(--h1) #fafaff !important;
 }
 
 h1.sched {
-  background: url(images/tasks.svg) 10px center no-repeat, var(--h1) #fafaff !important;
+  background: var(--tasks) 10px center no-repeat, var(--h1) #fafaff !important;
 }
 
 h1.log {
-  background: url(images/logs.svg) 10px center no-repeat, var(--h1) #fafaff !important;
+  background: var(--logs) 10px center no-repeat, var(--h1) #fafaff !important;
 }
 
 h1.webapp {
-  background: url(images/webapp.svg) 10px center no-repeat, var(--h1) #fafaff !important;
+  background: var(--webapp) 10px center no-repeat, var(--h1) #fafaff !important;
 }
 
 h1[class] {
@@ -5188,7 +5188,7 @@ input.reload[value$="restart"], button.reload[value$="restart"] {
 
 input.reload[value$="restart"]:hover, button.reload[value$="restart"]:hover,
 input.reload[value$="restart"]:focus, button.reload[value$="restart"]:focus {
-  background: url(images/restart_hover.svg) no-repeat 8px center, linear-gradient(to bottom, #eee, #fff);
+  background: var(--restart_hover) no-repeat 8px center, linear-gradient(to bottom, #eee, #fff);
 }
 
 .formaction input.reload[value$="restart"] {
@@ -5220,13 +5220,13 @@ input.reload[value="Force garbage collection"]:focus, button.reload[value="Force
 
 input.stop, button.stop {
   padding: 5px 9px 5px 24px;
-  background: url(images/shutdown.svg) no-repeat 8px center, linear-gradient(to bottom, #fff, #efefff);
+  background: var(--shutdown) no-repeat 8px center, linear-gradient(to bottom, #fff, #efefff);
   background-size: 12px 12px, 100% !important;
 }
 
 input.stop:hover, button.stop:hover,
 input.stop:focus, button.stop:focus {
-  background: url(images/shutdown_hover.svg) no-repeat 8px center, linear-gradient(to bottom, #eee, #fff);
+  background: var(--shutdown_hover) no-repeat 8px center, linear-gradient(to bottom, #eee, #fff);
 }
 
 /* client config buttons aka project "X" */
@@ -5332,12 +5332,12 @@ button.download.control:hover, button.download.control:focus {
 }
 
 .routersummary .reload {
-  background: url(images/restart.svg) center center no-repeat, linear-gradient(to bottom, #fff, #efefff) !important;
+  background: var(--restart) center center no-repeat, linear-gradient(to bottom, #fff, #efefff) !important;
   background-size: 16px, 100% !important;
 }
 
 .routersummary .reload:hover, .routersummary .reload:focus {
-  background: url(images/shutdown_hover.svg) 37% center no-repeat, url(images/restart_hover.svg) 63% center no-repeat, linear-gradient(to bottom, #eee, #fff) !important;
+  background: var(--shutdown_hover) 37% center no-repeat, var(--restart_hover) 63% center no-repeat, linear-gradient(to bottom, #eee, #fff) !important;
   background-size: 16px, 16px, 100% !important;
   border: 1px solid #f60;
 }
@@ -5359,13 +5359,13 @@ button.download.control:hover, button.download.control:focus {
 }
 
 .routersummary .stop {
-  background: url(images/shutdown.svg) center center no-repeat, linear-gradient(to bottom, #fff, #efefff);
+  background: var(--shutdown) center center no-repeat, linear-gradient(to bottom, #fff, #efefff);
   background-size: 16px, 100% !important;
 }
 
 .routersummary .stop:hover, .routersummary .stop:focus {
   border: 1px solid #f60;
-  background: url(images/shutdown_hover.svg) center center no-repeat, linear-gradient(to bottom, #eee, #fff);
+  background: var(--shutdown_hover) center center no-repeat, linear-gradient(to bottom, #eee, #fff);
   background-size: 16px, 100% !important;
 }
 
@@ -5396,23 +5396,22 @@ button.download.control:hover, button.download.control:focus {
 }
 
 .routersummary .reload[value="restartImmediate"] {
-  background: url(images/restart.svg) center left 6px no-repeat, linear-gradient(to bottom, #fff, #efefff) !important;
-  background: url(images/restart.svg) center left 6px no-repeat, linear-gradient(to bottom, #fff, #efefff) !important;
+  background: var(--restart) center left 6px no-repeat, linear-gradient(to bottom, #fff, #efefff) !important;
   background-size: 12px 12px, 100% !important;
 }
 
 .routersummary .reload[value="restartImmediate"]:hover, .routersummary .reload[value="restartImmediate"]:focus, .routersummary .reload[value="restartImmediate"]:active {
-  background: url(images/restart_hover.svg) center left 6px no-repeat, linear-gradient(to bottom, #eee, #fff) !important;
+  background: var(--restart_hover) center left 6px no-repeat, linear-gradient(to bottom, #eee, #fff) !important;
   background-size: 12px 12px, 100% !important;
 }
 
 .routersummary .stop[value="shutdownImmediate"] {
-  background: url(images/shutdown.svg) center left 6px no-repeat, linear-gradient(to bottom, #fff, #efefff) !important;
+  background: var(--shutdown) center left 6px no-repeat, linear-gradient(to bottom, #fff, #efefff) !important;
   background-size: 12px 12px, 100% !important;
 }
 
 .routersummary .stop[value="shutdownImmediate"]:hover, .routersummary .stop[value="shutdownImmediate"]:focus, .routersummary .stop[value="shutdownImmediate"]:active {
-  background: url(images/shutdown_hover.svg) center left 6px no-repeat, linear-gradient(to bottom, #eee, #fff) !important;
+  background: var(--shutdown_hover) center left 6px no-repeat, linear-gradient(to bottom, #eee, #fff) !important;
   background-size: 12px 12px, 100% !important;
 }
 
@@ -5510,8 +5509,7 @@ select, select[disabled]:hover, select[disabled]:focus  {
   border-radius: 2px;
   box-shadow: var(--highlight);
   box-shadow: 0 2px 0 rgba(255,255,255,.85) inset, 0 0 10px rgba(0,0,0,.1) inset, 0 1px 1px rgba(0,0,0,.05), 0 7px 4px -4px rgba(0,0,0,.1);
-  background: url(images/dropdown.svg) right 8px center no-repeat #fff;
-  background: url(images/dropdown.svg) right 8px center no-repeat, linear-gradient(to bottom, #fff, #efefff);
+  background: var(--dropdown) right 8px center no-repeat, linear-gradient(to bottom, #fff, #efefff);
   background-size: 10px auto, 100% !important;
   -moz-appearance: none;
   -webkit-appearance: none;
@@ -5544,13 +5542,13 @@ select:hover, select:focus, select:active {
 select:hover, select:active {
   color: #19191f;
   box-shadow: var(--highlight), 0 2px 1px #ddf;
-  background: url(images/dropdown_hover.svg) right 8px center no-repeat, linear-gradient(to bottom, #eee, #fff) !important;
+  background: var(--dropdown_hover) right 8px center no-repeat, linear-gradient(to bottom, #eee, #fff) !important;
   background-size: 10px auto, 100% !important;
 }
 
 select:focus {
   color: #19191f;
-  background: url(images/dropdown_hover.svg) right 8px center no-repeat, linear-gradient(to bottom, #eee, #fff) !important;
+  background: var(--dropdown_hover) right 8px center no-repeat, linear-gradient(to bottom, #eee, #fff) !important;
   background-size: 10px auto, 100% !important;
   box-shadow: 0 0 1px #89f;
 }
@@ -12524,18 +12522,18 @@ p#gatherstats {
 .ibgw::after, .obep::after, .ptcp::after {
   content: "";
   display: inline-block;
-  width: 24px;
-  height: 24px;
-  background: url(images/ibgw.svg) center center no-repeat;
-  background-size: 24px !important;
+  width: 26px;
+  height: 26px;
+  background: var(--ibgw) center center no-repeat;
+  background-size: 26px !important;
 }
 
 .obep::after {
-  background: url(images/obep.svg) center center no-repeat;
+  background: var(--obep) center center no-repeat;
 }
 
 .ptcp::after {
-  background: url(images/ptcp.svg) center center no-repeat;
+  background: var(--ptcp) center center no-repeat;
 }
 
 #tunnels .cells:first-child {
