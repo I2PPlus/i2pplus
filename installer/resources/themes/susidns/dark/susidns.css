@@ -7,9 +7,6 @@
 
 body, html {
   min-height: 100%;
-  background: #000;
-  background: repeating-linear-gradient(to bottom, rgba(0,0,0,.3), rgba(0,16,0,.5) 1px, rgba(0,16,0,.5) 2px), url(/themes/console/dark/images/camotile2.png) top left fixed #010;
-  background: repeating-linear-gradient(to right, rgba(0,80,0,.1) 1px, rgba(0,16,0,.3) 2px, rgba(0,16,0,.3) 3px), linear-gradient(to bottom, rgba(0,0,0,.5), rgba(0,0,0,.5)), repeating-linear-gradient(to bottom, rgba(0,0,0,.6) 1px, rgba(0,32,0,.3) 2px, rgba(0,32,0,.3) 3px), url(/themes/console/dark/images/camotile.png) #010 !important;
 }
 
 html {
@@ -35,6 +32,7 @@ body {
   min-width: 650px;
   line-height: 120%;
   color: #ee9;
+  background: #010;
 }
 
 body.iframed {
@@ -99,8 +97,11 @@ body.iframed {
   border: 1px solid #252;
   border-radius: 0 1px 2px 2px;
   box-shadow: inset 0 0 0 1px #000, 0 2px 2px 2px rgba(0,0,0,.7);
-  background: repeating-linear-gradient(135deg, #000 1px, #000 2px, #010 2px, #010 4px), repeating-linear-gradient(45deg, #000 1px, #000 2px, #010 2px, #010 4px), linear-gradient(to bottom, #1a261a 0%, #223022 7%, #212f21 9%, #172317 21%, #091109 49%, #050d05 50%, #020602 51%, #010301 53%, #000000 56%, #000000 100%), url(/themes/console/dark/images/camotile2.png) top left !important;
-  background-blend-mode: exclusion, exclusion, normal, normal;
+  background: repeating-linear-gradient(to right, rgba(0,0,0,.5) 2px, rgba(0,48,0,.3) 4px),
+              linear-gradient(to bottom, #1a261a 0%, #223022 7%, #212f21 9%, #172317 21%, #091109 49%, #050d05 51%, #020602 52%, #010301 55%, #000000 57%),
+              url(/themes/console/dark/images/camotile2.png) !important;
+  background-size: 4px 100%, 100%, 175px !important;
+  background-blend-mode: normal, exclusion, normal !important;
 }
 
 .iframed #navi  {
@@ -112,8 +113,6 @@ body.iframed {
   border-left: none;
   border-radius: 0;
   box-shadow: inset 0 0 0 1px #000;
-  background: repeating-linear-gradient(to right, rgba(0,0,0,.5) 1px, rgba(0,0,0,.5) 2px, rgba(0,48,0,.3) 3px), linear-gradient(to bottom, #1a261a 0%, #223022 7%, #212f21 9%, #172317 21%, #091109 49%, #050d05 51%, #020602 52%, #010301 55%, #000000 57%), url(/themes/console/dark/images/camotile2.png) top left !important;
-  background-blend-mode: normal, exclusion, normal !important;
 }
 
 #navi a:link {
@@ -320,9 +319,6 @@ h3 {
   color: #ee9;
   border: 1px solid #242;
   box-shadow: inset 0 0 0 1px #000;
-  background: linear-gradient(to bottom, rgba(0,0,0,0) 50%, #000 50%),
-              repeating-linear-gradient(to right, rgba(0,0,0,.5) 1px, rgba(0,16,0,.5) 2px, rgba(0,16,0,.5) 3px),
-              linear-gradient(to bottom, #004000, #000 75%);
   -webkit-text-stroke: 1px rgba(237, 237, 146,.3);
 }
 
@@ -360,10 +356,11 @@ h3 {
   word-spacing: .1em;
   border: 1px solid #242;
   background: url(/themes/console/images/info/question.png) 8px center no-repeat #000;
-  background: url(/themes/console/images/info/question.png) 8px center no-repeat, linear-gradient(to bottom, rgba(0,0,0,0) 50%, #000 50%),
-              repeating-linear-gradient(to right, rgba(0,0,0,.5) 1px, rgba(0,16,0,.5) 2px, rgba(0,16,0,.5) 3px),
+  background: url(/themes/console/images/info/question.png) 8px center no-repeat,
+              linear-gradient(to bottom, rgba(0,0,0,0) 50%, #000 50%),
+              repeating-linear-gradient(to right, rgba(0,0,0,.5) 2px, rgba(0,16,0,.5) 4px),
               linear-gradient(to bottom, #004000, #000 75%);
-  background-size: 18px 18px, 100% 100%;
+  background-size: 18px, 100%, 4px 100%, 100%;
 }
 
 #content h3::first-letter {
@@ -611,7 +608,8 @@ li {
 
 #helpconfig {
   background: #000;
-  background: repeating-linear-gradient(to right, #000 1px, #000 2px, #010 3px);
+  background: repeating-linear-gradient(to right, #000 2px, #010 4px);
+  background-size: 4px 100%;
 }
 
 #helpconfig ul {
@@ -1124,7 +1122,7 @@ textarea:focus {
               linear-gradient(to bottom, rgba(0,0,0,0) 50%, #000 50%),
               repeating-linear-gradient(to right, rgba(0,0,0,.5) 1px, rgba(0,16,0,.5) 2px, rgba(0,16,0,.5) 3px),
               linear-gradient(to bottom, #004000, #000 75%);
-  background-size: 20px 20px, 100% 100%, 100% 100%, 100% 100%;
+  background-size: 20px, 100%, 4px 100%, 100%;
 }
 
 .headline h3::first-letter {
@@ -1139,9 +1137,10 @@ textarea:focus {
 
 .headline#configure h3 {
   background: url(images/configure.svg) 9px center no-repeat,
-              linear-gradient(to bottom, rgba(0,0,0,0) 50%, #000 50%), repeating-linear-gradient(to right, rgba(0,0,0,.5) 1px, rgba(0,16,0,.5) 2px, rgba(0,16,0,.5) 3px),
+              linear-gradient(to bottom, rgba(0,0,0,0) 50%, #000 50%),
+              repeating-linear-gradient(to right, rgba(0,0,0,.5) 1px, rgba(0,16,0,.5) 2px, rgba(0,16,0,.5) 3px),
               linear-gradient(to bottom, #004000, #000 75%);
-  background-size: 20px 20px, 100% 100%, 100% 100% !important;
+  background-size: 20px, 100%, 4px 100%, 100% !important;
 }
 
 p#filtered {
@@ -1435,7 +1434,9 @@ p#filtered {
 
 form[action="addressbook"] > p.buttons, #filter, #search, #visualid tr:last-child td, #buttons, #add p.buttons {
   box-shadow: inset 0 0 0 1px #000, inset 0 0 2px 1px #030 !important;
-  background: repeating-linear-gradient(to right, rgba(0,0,0,.5) 1px, rgba(0,0,0,.5) 2px, rgba(0,16,0,.5) 3px), linear-gradient(to bottom, #020, #000 75%) !important;
+  background: repeating-linear-gradient(to right, rgba(0,0,0,.5) 2px, rgba(0,16,0,.5) 4px),
+              linear-gradient(to bottom, #020, #000 75%) !important;
+  background-size: 4px 100%, 100% !important;
 }
 
 #add, #import {

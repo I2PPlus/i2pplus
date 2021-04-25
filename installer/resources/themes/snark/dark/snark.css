@@ -124,7 +124,7 @@ body, input, select, .snarkCommentInfo textarea, textarea[name="i2cpOpts"] {
   box-shadow: inset 0 0 0 1px #000, inset 0 0 1px 1px #050;
   background: repeating-linear-gradient(to right, rgba(0,0,0,.4) 2px, rgba(0,32,0,.7) 4px),
               linear-gradient(to bottom, rgba(0,16,0,.8), #000), var(--camo) repeat;
-  background-size: 100%, 100%, 2048px;
+  background-size: 4px 100%, 100%, 2048px;
   will-change: transform;
 }
 
@@ -2602,7 +2602,11 @@ _:-ms-lang(x), #trackerselect tr:last-child {
 
 .newtorrentsection, .addtorrentsection, .configsection, .configsectionpanel, #snarkFiles, #snarkCommentSection {
   background: #000;
-  background: repeating-linear-gradient(to right, rgba(0,80,0,.1) 1px, rgba(0,16,0,.3) 2px, rgba(0,16,0,.3) 3px), repeating-linear-gradient(to bottom, rgba(0,0,0,.8) 1px, rgba(0,16,0,.5) 2px, rgba(0,16,0,.5) 3px), linear-gradient(to bottom, rgba(0,16,0,.4), rgba(0,0,0,.5)), url(/themes/console/dark/images/camotile2.png) top left repeat;
+  background: repeating-linear-gradient(to right, rgba(0,80,0,.1) 1px, rgba(0,16,0,.3) 2px, rgba(0,16,0,.3) 3px),
+              repeating-linear-gradient(to bottom, rgba(0,0,0,.8) 1px, rgba(0,16,0,.5) 2px, rgba(0,16,0,.5) 3px),
+              linear-gradient(to bottom, rgba(0,16,0,.4), rgba(0,0,0,.5)),
+              url(/themes/console/dark/images/camotile2.png);
+  background-size: 4px 100%, 100%, 100%, 175px;
 }
 
 .newtorrentsection {
@@ -4743,10 +4747,10 @@ td input[type=image]::after {
   border-left: none;
   border-right: none;
   box-shadow: inset 0 0 0 1px #000;;
-  background: linear-gradient(to bottom, #003000, #000 75%) !important;
   background: linear-gradient(to bottom, rgba(0,0,0,0) 50%, #000 50%),
               repeating-linear-gradient(to right, rgba(0,0,0,.5) 1px, rgba(0,16,0,.5) 2px, rgba(0,16,0,.5) 3px),
               linear-gradient(to bottom, #004000, #000 75%) !important;
+  background-size: 100%, 4px 100%, 100% !important;
 }
 
 .iframed #torrentDisplay {
