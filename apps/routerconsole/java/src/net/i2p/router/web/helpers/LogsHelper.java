@@ -233,6 +233,27 @@ public class LogsHelper extends HelperBase {
         return "Undefined";
     }
 
+    /**
+     * @since 0.9.50+
+     */
+    public String getRevision() {
+        File baseDir = _context.getBaseDir();
+        File f = new File(new File(baseDir, "webapps"), "routerconsole.war");
+        Attributes att = FileDumpHelper.attributes(f);
+        if (att != null) {
+            String rev = FileDumpHelper.getAtt(att, "Base-Revision");
+            String date = FileDumpHelper.getAtt(att, "Build-Date");
+            String by = FileDumpHelper.getAtt(att, "Built-By");
+            if (rev != null && by.contains("|z3d")) {
+                return "<a id=\"revision\" target=\"_blank\" rel=\"noreferrer\" href=\"https://gitlab.com/i2pplus/I2P.Plus/-/tree/" +
+                        rev + "\">" + rev + "</a> (Build date: " + date + ")";
+            } else {
+                return rev + " (Build date: " + date + ")";
+            }
+        }
+        return "";
+    }
+
     private final static String NL = System.getProperty("line.separator");
 
     /** formats in forward order */

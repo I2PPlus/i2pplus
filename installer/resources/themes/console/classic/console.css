@@ -10565,7 +10565,7 @@ div.app.js:hover::before {
   white-space: nowrap;
 }
 
-#routerinformation tr:nth-child(n+2) a {
+#routerinformation tr:nth-child(n+2) a:not(#revision){
   display: none;
 }
 
