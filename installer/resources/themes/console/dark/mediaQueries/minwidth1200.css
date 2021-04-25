@@ -453,7 +453,7 @@
   h1[class], h1 {
     padding: 14px 15px 13px 62px;
     font-size: 20pt !important;
-    background-size: 40px, 100%, 100%, 164px !important;
+    background-size: 40px, 4px 100%, 100%, 164px !important;
     background-position: 12px center;
   }
 
