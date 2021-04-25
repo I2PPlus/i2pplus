@@ -2043,7 +2043,7 @@ button.control {
   padding: 15px !important;
   min-width: 0;
   font-size: 0 !important;
-  background-size: 16px, 100% !important;
+  background-size: 14px, 100% !important;
 }
 
 button.accept.control {
@@ -6935,7 +6935,8 @@ textarea#advancedsettings {
 }
 
 #config_ui .infohelp {
-  background: #000 url(/themes/console/images/info/ui.png) 12px center no-repeat !important;
+  background: #000 var(--ui) 12px center no-repeat !important;
+  background-size: 28px !important;
 }
 
 table.logtable, #logs #enviro {
@@ -11189,6 +11190,7 @@ h1[class], h1 {
 #reseedconfig td.optionsave, #config_service .formaction, #configstats tr.tablefooter, #config_summarybar .formaction,#sidebarconf tr:last-child, #tunnelconfigsave.formaction, #config_ui .formaction,
 #graphing.formaction, #i2pupdates tr:nth-child(2), #i2pupdates tr.tablefooter, #webappconfigactions.formaction, #oldhome tr, #sybilTask .optionsave {
   background: var(--h3), linear-gradient(to bottom, #020, #000 75%) !important;
+  background-size: 4px 100%, 100%, 100%, 100% !important;
 }
 
 .sitelink, .chatlink, .consolelink {
@@ -11298,16 +11300,18 @@ h1[class], h1 {
 }
 
 #help_ui {
-  background: url(/themes/console/images/info/ui.png) 15px center no-repeat, var(--helpbox);
+  background: var(--ui) 15px center no-repeat, var(--helpbox);
+  background-size: 32px, 100%;
 }
 
 #help_reseed {
-  background: url(/themes/console/images/info/connect.png) 15px center no-repeat, var(--helpbox);
+  background: var(--reseed) 15px center no-repeat, var(--helpbox);
+  background-size: 32px, 100%;
 }
 
 #help_faq, #help_glossary {
   background: var(--ask) 15px center no-repeat, var(--helpbox);
-  background-size: 32px;
+  background-size: 32px, 100%;
 }
 
 #help_troubleshoot {
@@ -11324,7 +11328,8 @@ h1[class], h1 {
 }
 
 #help_changelog {
-  background: url(/themes/console/images/info/logs.png) 15px center no-repeat, var(--helpbox);
+  background: var(--changelog) 15px center no-repeat, var(--helpbox);
+  background-size: 32px, 100%;
 }
 
 #help_webhosting {
@@ -11334,68 +11339,68 @@ h1[class], h1 {
 
 #configurationhelp h2, #advancedsettings h2, #filterlist h2 {
   padding-left: 38px;
-  background: var(--configure) 10px center no-repeat, linear-gradient(to bottom, rgba(0,0,0,0) 50%, #000 50%), var(--h3), var(--h3_fade) !important;
-  background-size: 20px, 100%, 100%, 100% !important;
+  background: var(--configure_inert) 10px center no-repeat, linear-gradient(to bottom, rgba(0,0,0,0) 50%, #000 50%), var(--h3), var(--h3_fade) !important;
+  background-size: 20px, 100%, 4px 100%, 100% !important;
 }
 
 #sidebarhelp h2, #reachabilityhelp h2 {
   padding-left: 38px;
   background: url(/themes/console/images/info/sidebar.png) 10px center no-repeat, linear-gradient(to bottom, rgba(0,0,0,0) 50%, #000 50%), var(--h3), var(--h3_fade) !important;
-  background-size: 20px, 100%, 100%, 100% !important;
+  background-size: 20px, 100%, 4px 100%, 100% !important;
 }
 
 #reseedhelp h2 {
   padding-left: 38px;
   background: url(/themes/console/images/svg/reseed.svg) 10px center no-repeat, linear-gradient(to bottom, rgba(0,0,0,0) 50%, #000 50%), var(--h3), var(--h3_fade) !important;
-  background-size: 20px, 100%, 100%, 100% !important;
+  background-size: 20px, 100%, 4px 100%, 100% !important;
 }
 
 #newuserguide h2 {
   padding-left: 38px;
   background: url(/themes/console/images/info/notice.png) 10px center no-repeat, linear-gradient(to bottom, rgba(0,0,0,0) 50%, #000 50%), var(--h3), var(--h3_fade) !important;
-  background-size: 20px, 100%, 100%, 100% !important;
+  background-size: 20px, 100%, 4px 100%, 100% !important;
 }
 
 #troubleshoot h2 {
   padding-left: 38px;
   background: var(--wrench) 10px center no-repeat, linear-gradient(to bottom, rgba(0,0,0,0) 50%, #000 50%), var(--h3), var(--h3_fade) !important;
-  background-size: 20px, 100%, 100%, 100% !important;
+  background-size: 20px, 100%, 4px 100%, 100% !important;
 }
 
 #legal h2 {
   padding-left: 38px;
   background: url(/themes/console/images/info/legal.png) 10px center no-repeat, linear-gradient(to bottom, rgba(0,0,0,0) 50%, #000 50%), var(--h3), var(--h3_fade) !important;
-  background-size: 20px, 100%, 100%, 100% !important;
+  background-size: 20px, 100%, 4px 100%, 100% !important;
 }
 
 #changelog h2 {
   padding-left: 38px;
-  background: url(/themes/console/images/svg/logs.svg) 10px center no-repeat, linear-gradient(to bottom, rgba(0,0,0,0) 50%, #000 50%), var(--h3), var(--h3_fade) !important;
-  background-size: 20px, 100%, 100%, 100% !important;
+  background: var(--changelog) 10px center no-repeat, linear-gradient(to bottom, rgba(0,0,0,0) 50%, #000 50%), var(--h3), var(--h3_fade) !important;
+  background-size: 20px, 100%, 4px 100%, 100% !important;
 }
 
 #faq h2, #glossary h2 {
   padding-left: 38px;
   background: var(--ask) 10px center no-repeat, linear-gradient(to bottom, rgba(0,0,0,0) 50%, #000 50%), var(--h3), var(--h3_fade) !important;
-  background-size: 20px, 100%, 100%, 100% !important;
+  background-size: 20px, 100%, 4px 100%, 100% !important;
 }
 
 #webhosting h2 {
   padding-left: 38px;
   background: var(--server) 10px center no-repeat, linear-gradient(to bottom, rgba(0,0,0,0) 50%, #000 50%), var(--h3), var(--h3_fade) !important;
-  background-size: 20px, 100%, 100%, 100% !important;
+  background-size: 20px, 100%, 4px 100%, 100% !important;
 }
 
 #themeoverride h2 {
   padding-left: 38px;
   background: url(/themes/console/images/svg/ui.svg) 10px center no-repeat, linear-gradient(to bottom, rgba(0,0,0,0) 50%, #000 50%), var(--h3), var(--h3_fade) !important;
-  background-size: 20px, 100%, 100%, 100% !important;
+  background-size: 20px, 100%, 4px 100%, 100% !important;
 }
 
 #browserconfig h2 {
   padding-left: 38px;
   background: url(/themes/console/images/svg/firefox.svg) 10px center no-repeat, linear-gradient(to bottom, rgba(0,0,0,0) 50%, #000 50%), var(--h3), var(--h3_fade) !important;
-  background-size: 20px, 100%, 100%, 100% !important;
+  background-size: 20px, 100%, 4px 100%, 100% !important;
 }
 
 #browserconfig ol {
@@ -11406,7 +11411,7 @@ h1[class], h1 {
 #tunnman h2 {
   padding-left: 38px;
   background: var(--hardhat) 10px center no-repeat, linear-gradient(to bottom, rgba(0,0,0,0) 50%, #000 50%), var(--h3), var(--h3_fade) !important;
-  background-size: 20px, 100%, 100%, 100% !important;
+  background-size: 20px, 100%, 4px 100%, 100% !important;
 }
 
 /* end TOC */
@@ -11547,7 +11552,7 @@ h2#jobrunners {
   letter-spacing: .12em;
   font-size: 10.5pt;
   background: url(/themes/console/images/eepsite.png) 9px center no-repeat, var(--h1) !important;
-  background-size: 18px, 100%, 100%, 175px !important;
+  background-size: 18px, 4px 100%, 100%, 175px !important;
   background-blend-mode: var(--h3_blend) !important;
 }
 
@@ -11559,25 +11564,25 @@ h2#jobrunners {
 
 #sitemap h3:nth-of-type(2) {
   background: url(/themes/console/images/info_rhombus.png) 9px center no-repeat, var(--h1) !important;
-  background-size: 18px, 100%, 100%, 175px !important;
+  background-size: 18px, 4px 100%, 100%, 175px !important;
   background-blend-mode: var(--h3_blend) !important;
 }
 
 #sitemap h3:nth-of-type(3) {
   background: var(--configure) 9px center no-repeat, var(--h1) !important;
-  background-size: 18px, 100%, 100%, 175px !important;
+  background-size: 18px, 4px 100%, 100%, 175px !important;
   background-blend-mode: var(--h3_blend) !important;
 }
 
 #sitemap h3:nth-of-type(4) {
   background: var(--help) 9px center no-repeat, var(--h1) !important;
-  background-size: 18px, 100%, 100%, 175px !important;
+  background-size: 18px, 4px 100%, 100%, 175px !important;
   background-blend-mode: var(--h3_blend) !important;
 }
 
 #sitemap h3:nth-of-type(5) {
   background: var(--globe) 9px center no-repeat, var(--h1) !important;
-  background-size: 18px, 100%, 100%, 175px !important;
+  background-size: 18px, 4px 100%, 100%, 175px !important;
   background-blend-mode: var(--h3_blend) !important;
 }
 

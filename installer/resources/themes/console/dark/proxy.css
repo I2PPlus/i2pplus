@@ -14,11 +14,11 @@
 
 html, body {
   min-height: 100%;
-  background: #000;
 }
 
 html {
   scrollbar-color: rgba(16,72,16,.8) rgba(0,16,0,.5);
+  background: #000;
 }
 
 body, button, input, input[type=text], input[type=password], select, #debug .skm_key td:first-child b {
