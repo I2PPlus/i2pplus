@@ -595,7 +595,6 @@ th {
   color: #41465f;
   border-bottom: 1px solid #8d8daa;
   border-top: 1px solid #8d8daa;
-  background: #eef url(images/header.png) center center repeat-x;
   background: linear-gradient(to bottom, #fcfcff 51%, #fafaff 51%, #f6f6ff 100%) !important;
 }
 

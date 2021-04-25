@@ -53,32 +53,16 @@ body {
 body:not(old) {
   background: url(images/tile2.png),
   url(/themes/console/images/buttons/clean_hover.png) no-repeat,
-  url(/themes/console/images/buttons/configure_hover.png) no-repeat,
   url(/themes/console/images/buttons/delete_hover.png) no-repeat,
-  url(/themes/console/images/buttons/restart_hover.png) no-repeat,
   url(/themes/console/images/buttons/restore_hover.png) no-repeat,
   url(/themes/console/images/buttons/search_hover.png) no-repeat,
-  url(/themes/console/images/buttons/shutdown_hover.png) no-repeat,
-  url(/themes/console/images/buttons/shutdown_hover.png) no-repeat,
   url(/themes/console/images/buttons/update_hover.png) no-repeat,
   url(/themes/console/images/info/notice.png) no-repeat,
-  url(images/dropdown_hover.svg),
-  url(images/home.png),
-  url(images/header_help.png),
-  url(images/cog.png),
-  url(images/webapp.png),
-  url(images/app_snark.png),
-  url(images/netwrk.png),
-  url(images/perf.png),
-  url(images/tasks.png),
-  url(images/info.png),
-  url(images/logs.png),
   url(/themes/console/images/svg/update.svg),
   url(images/download_hover.svg),
   url(images/newtab.png),
-  url(images/close_hover.svg),
-  url(images/configure_hover.svg), #a4a4cb;
-  background-size: 32px, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0;
+  url(images/close_hover.svg), #a4a4cb;
+  background-size: 32px, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0;
 }
 
 @supports (text-justify: auto) and (-moz-appearance: none) { /* Firefox 55+ */
@@ -1290,17 +1274,17 @@ to {
 }
 
 .sb_newsheadings td {
-  background: url(images/newsbullet_mini.png) 3px center no-repeat !important;
-  padding-left: 20px !important;
-  border-bottom: 1px dotted #ddf !important;
-  padding: 6px 1px;
-  text-align: left;
+  padding: 6px 1px 6px 21px;
   line-height: 100%;
+  text-align: left;
+  border-bottom: 1px dotted #ddf !important;
+  background: var(--newsbullet) 3px center no-repeat !important;
+  background-size: 16px !important;
 }
 
 .sb_newsheadings tr:hover td {
-  background: url(images/newsbullet_mini.png) 3px 8px no-repeat #ffe !important;
-  background-blend-mode: luminosity;
+  background: var(--newsbullet_hover) 3px center no-repeat #ffe !important;
+  background-size: 16px !important;
 }
 
 .sb_newsheadings tr:last-child td {
@@ -2451,7 +2435,7 @@ h3#exploratory {
   height: 16px;
   display: inline-block;
   float: right;
-  background: url(images/configure.svg) center center no-repeat;
+  background: var(-settings) center center no-repeat;
   background-size: 16px;
   content: "";
 }
@@ -2468,7 +2452,7 @@ h3#exploratory {
 }
 
 #tunnels h3 a[href^="/configtunnels#"]:hover, #logs a.configure:hover::after {
-  background: url(images/configure_hover.svg) center center no-repeat;
+  background: var(-settings_hover) center center no-repeat;
   background-size: 16px;
 }
 
@@ -7685,19 +7669,18 @@ h3.sybils {
   list-style: none;
   border-radius: 2px;
   box-shadow: 0 0 0 1px rgba(200,200,255,.8), var(--highlight);
-  background: #eef url(images/eye.png) 6px center no-repeat;
-  background: url(images/eye.svg) 6px center no-repeat, linear-gradient(to bottom, #fff 50%, rgba(255,255,255,.6) 50%, rgba(240,240,240,.4)) #e7e7ff;
+  background: var(--eye) 6px center no-repeat, linear-gradient(to bottom, #fff 50%, rgba(255,255,255,.6) 50%, rgba(240,240,240,.4)) #e7e7ff;
   background-size: 16px, 100% !important;
 }
 
 #sybilnav li:hover {
   box-shadow: 0 0 0 1px rgba(255,96,0,.5), var(--highlight);
-  background: #fff url(images/eye_hover.svg) 6px center no-repeat;
+  background: #fff var(--eye_hover) 6px center no-repeat;
 }
 
 #sybilnav li:active {
   box-shadow: 0 0 0 1px rgba(255,96,0,.5), var(--highlight), inset 3px 3px 3px #ccc;
-  background: #fff url(images/eye_active.svg) 6px center no-repeat;
+  background: #fff var(--eye_active) 6px center no-repeat;
 
 }
 
@@ -7859,7 +7842,7 @@ p.sybil_info, p.family, p.threatpoints, p.hashdist, p#sybil_totals, p.notfound {
   font-weight: bold;
   color: #41465f;
   text-align: left;
-  background: url(images/eye.svg) 8px center no-repeat, repeating-linear-gradient(135deg, rgba(255,255,255,.5) 2px, rgba(240, 240, 255, .3) 3px, #fafaff 5px), #fafaff;
+  background: var(--eye) 8px center no-repeat, repeating-linear-gradient(135deg, rgba(255,255,255,.5) 2px, rgba(240, 240, 255, .3) 3px, #fafaff 5px), #fafaff;
   background-size: 16px, 100%;
 }
 
@@ -7869,18 +7852,18 @@ p.sybil_info {
 
 p.threatpoints {
   padding-left: 33px;
-  background: url(images/eye_static.svg) 8px center no-repeat, repeating-linear-gradient(135deg, rgba(255,255,255,.5) 2px, rgba(240, 240, 255, .3) 3px, #fafaff 5px), #fafaff;
+  background: var(--eye_static) 8px center no-repeat, repeating-linear-gradient(135deg, rgba(255,255,255,.5) 2px, rgba(240, 240, 255, .3) 3px, #fafaff 5px), #fafaff;
   background-size: 20px, 100%;
 }
 
 p.threatpoints.hot {
-  background: url(images/eye_static.svg) 8px center no-repeat, url(/themes/console/images/info/hot.png) right 4px center no-repeat, repeating-linear-gradient(135deg, rgba(255,255,255,.5) 2px, rgba(240, 240, 255, .3) 3px, #fafaff 5px), #fafaff;
+  background: var(--eye_static) 8px center no-repeat, url(/themes/console/images/info/hot.png) right 4px center no-repeat, repeating-linear-gradient(135deg, rgba(255,255,255,.5) 2px, rgba(240, 240, 255, .3) 3px, #fafaff 5px), #fafaff;
   background-size: 20px, 24px, 100%;
 }
 
 p#sybil_totals {
   font-weight: normal;
-  background: url(images/eye_static.svg) 8px center no-repeat, repeating-linear-gradient(135deg, rgba(255,255,255,.5) 2px, rgba(240, 240, 255, .3) 3px, #fafaff 5px), #fafaff;
+  background: var(--eye_static) 8px center no-repeat, repeating-linear-gradient(135deg, rgba(255,255,255,.5) 2px, rgba(240, 240, 255, .3) 3px, #fafaff 5px), #fafaff;
   background-size: 16px, 100%;
 }
 
@@ -7890,12 +7873,14 @@ p.family + p.family, p.sybil_info + p.sybil_info {
 
 p.family:nth-child(even) {
   background: #efefff;
-  background: url(images/eye.png) 8px center no-repeat, repeating-linear-gradient(45deg, rgba(255,255,255,.5) 2px, rgba(221, 221, 255, .3) 3px, #fafaff 5px), #fafaff;
+  background: var(--eye) 8px center no-repeat, repeating-linear-gradient(45deg, rgba(255,255,255,.5) 2px, rgba(221, 221, 255, .3) 3px, #fafaff 5px), #fafaff;
+  background-size: 16px, 100% !important;
 }
 
 p.family:nth-child(odd) {
   background: #f7f8ff;
-  background: url(images/eye.png) 8px center no-repeat, repeating-linear-gradient(135deg, rgba(255,255,255,.5) 2px, rgba(240, 240, 255, .3) 3px, #fafaff 5px), #fff;
+  background: var(--eye) 8px center no-repeat, repeating-linear-gradient(135deg, rgba(255,255,255,.5) 2px, rgba(240, 240, 255, .3) 3px, #fafaff 5px), #fff;
+  background-size: 16px, 100% !important;
 }
 
 p.sybil_info + a[name] + table.sybil_routerinfo, p.hashdist + a[name] + table.sybil_routerinfo, table.sybil_routerinfo + p {
