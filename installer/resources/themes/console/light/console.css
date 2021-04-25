@@ -1290,17 +1290,17 @@ to {
 }
 
 .sb_newsheadings td {
-  background: url(images/newsbullet_mini.png) 3px center no-repeat !important;
-  padding-left: 20px !important;
-  border-bottom: 1px dotted #ddf !important;
-  padding: 6px 1px;
-  text-align: left;
+  padding: 6px 1px 6px 21px;
   line-height: 100%;
+  text-align: left;
+  border-bottom: 1px dotted #ddf !important;
+  background: var(--newsbullet) 3px center no-repeat !important;
+  background-size: 16px !important;
 }
 
 .sb_newsheadings tr:hover td {
-  background: url(images/newsbullet_mini.png) 3px 8px no-repeat #ffe !important;
-  background-blend-mode: luminosity;
+  background: var(--newsbullet_hover) 3px center no-repeat #ffe !important;
+  background-size: 16px !important;
 }
 
 .sb_newsheadings tr:last-child td {
@@ -7685,7 +7685,6 @@ h3.sybils {
   list-style: none;
   border-radius: 2px;
   box-shadow: 0 0 0 1px rgba(200,200,255,.8), var(--highlight);
-  background: #eef url(images/eye.png) 6px center no-repeat;
   background: url(images/eye.svg) 6px center no-repeat, linear-gradient(to bottom, #fff 50%, rgba(255,255,255,.6) 50%, rgba(240,240,240,.4)) #e7e7ff;
   background-size: 16px, 100% !important;
 }
@@ -7890,12 +7889,14 @@ p.family + p.family, p.sybil_info + p.sybil_info {
 
 p.family:nth-child(even) {
   background: #efefff;
-  background: url(images/eye.png) 8px center no-repeat, repeating-linear-gradient(45deg, rgba(255,255,255,.5) 2px, rgba(221, 221, 255, .3) 3px, #fafaff 5px), #fafaff;
+  background: url(images/eye.svg) 8px center no-repeat, repeating-linear-gradient(45deg, rgba(255,255,255,.5) 2px, rgba(221, 221, 255, .3) 3px, #fafaff 5px), #fafaff;
+  background-size: 16px, 100% !important;
 }
 
 p.family:nth-child(odd) {
   background: #f7f8ff;
-  background: url(images/eye.png) 8px center no-repeat, repeating-linear-gradient(135deg, rgba(255,255,255,.5) 2px, rgba(240, 240, 255, .3) 3px, #fafaff 5px), #fff;
+  background: url(images/eye.svg) 8px center no-repeat, repeating-linear-gradient(135deg, rgba(255,255,255,.5) 2px, rgba(240, 240, 255, .3) 3px, #fafaff 5px), #fff;
+  background-size: 16px, 100% !important;
 }
 
 p.sybil_info + a[name] + table.sybil_routerinfo, p.hashdist + a[name] + table.sybil_routerinfo, table.sybil_routerinfo + p {
