@@ -22,9 +22,13 @@
   --softborder: 1px solid #131;
 }
 
-html {
+html, body {
   min-height: 100%;
-  background: #000;
+  background: var(--vstripe), var(--camo), #000 !important;
+  background-size: 100% 4px, 2048px !important;
+}
+
+html {
   scrollbar-color: rgba(16,72,16,.8) rgba(0,16,0,.5);
 }
 
@@ -43,13 +47,11 @@ body {
   text-align: center;
   color: #ee9;
   font: 8.5pt/130% var(--bodyfont);
-  background: var(--vstripe), var(--camo), #000;
-  background-size: 100%, 100%;
 }
 
 @supports (text-justify: auto) { /* Firefox 55+ */
-  body {
-    background-attachment: fixed;
+  html, body {
+    background-attachment: fixed !important;
   }
 }
 
@@ -313,7 +315,7 @@ pre {
   border-radius: 3px;
   box-shadow: 0 1px 5px #000;
   background: var(--vstripe), var(--camo), #000;
-  background-size: 100%, 1800px;
+  background-size: 100% 4px, 1800px;
 }
 
 .routersummary img[src$="i2plogo.png"] {
@@ -949,9 +951,8 @@ a:active img[src="/themes/console/images/i2plogo.png"] {
   font-size: 9pt;
   text-align: left;
   border-radius: 0 0 3px 3px;
-  box-shadow: var(--lowlight), 0 1px 5px #000;
-  box-shadow: 0 1px 5px #000;
   background: repeating-linear-gradient(to right, rgba(0,0,0,.6) 2px, rgba(0,24,0,.5) 4px) !important;
+  background-size: 4px 100% !important;
   z-index: 10 !important;
 }
 
@@ -1208,6 +1209,7 @@ div.widescroll { /* only scroll content, not entire page eg /peers */
   text-align: center;
   box-shadow: var(--lowlight);
   background: var(--h3), var(--navbar), var(--camotile) !important;
+  background-size: 4px 100%, 4px 100%, 256px !important;
   background-blend-mode: normal, exclusion, normal;
 }
 
@@ -1944,6 +1946,7 @@ h4 {
 
 h1, h2, h3:not([id*="help"]), h4.app, h4.app2 {
   background: linear-gradient(to bottom, rgba(0,0,0,0) 50%, #000 50%), var(--h3), var(--h3_fade) !important;
+  background-size: 100%, 4px 100%, 100% !important;
 }
 
 h2, h3, h4 {
@@ -4374,38 +4377,38 @@ h3#servicedebug a, h3#graphinfo a {
 #tunnels h3.client {
   padding-left: 35px;
   background: var(--client) 9px center no-repeat, linear-gradient(to bottom, rgba(0,0,0,0) 50%, #000 50%), var(--h3), var(--h3_fade) !important;
-  background-size: 18px, 100%, 100%, 100% !important;
+  background-size: 18px, 100%, 4px 100%, 100% !important;
 }
 
 #tunnels h3.ping {
   padding-left: 35px;
   background: var(--ping) 9px center no-repeat, linear-gradient(to bottom, rgba(0,0,0,0) 50%, #000 50%), var(--h3), var(--h3_fade) !important;
-  background-size: 18px, 100%, 100%, 100% !important;
+  background-size: 18px, 100%, 4px 100%, 100% !important;
 }
 
 #tunnels h3#exploratory {
   padding-left: 35px;
   background: var(--globe) 9px center no-repeat, linear-gradient(to bottom, rgba(0,0,0,0) 50%, #000 50%), var(--h3), var(--h3_fade) !important;
-  background-size: 18px, 100%, 100%, 100% !important;
+  background-size: 18px, 100%, 4px 100%, 100% !important;
 }
 
 #tunnels h3.server {
   padding-left: 35px;
   background: var(--server) 9px center no-repeat, linear-gradient(to bottom, rgba(0,0,0,0) 50%, #000 50%), var(--h3), var(--h3_fade) !important;
-  background-size: 18px, 100%, 100%, 100% !important;
+  background-size: 18px, 100%, 4px 100%, 100% !important;
 }
 
 #tunnels h3#participating {
   padding-left: 35px;
   background: url(/themes/console/images/info/share.png) 6px center no-repeat, linear-gradient(to bottom, rgba(0,0,0,0) 50%, #000 50%), var(--h3), var(--h3_fade) !important;
-  background-size: 18px, 100%, 100%, 100% !important;
+  background-size: 18px, 100%, 4px 100%, 100% !important;
 }
 
 #tunnels h3:last-of-type {
   padding-left: 35px;
   padding-bottom: 7px !important;
   background: url(/themes/console/images/svg/speedometer.svg) 9px center no-repeat, linear-gradient(to bottom, rgba(0,0,0,0) 50%, #000 50%), var(--h3), var(--h3_fade) !important;
-  background-size: 18px, 100%, 100%, 100% !important;
+  background-size: 18px, 100%, 4px 100%, 100% !important;
 }
 
 .pending:nth-of-type(2)::before {
@@ -5281,7 +5284,6 @@ img.unknownflag {
 }
 
 #enviro #revision {
-  margin-right: 4px;
   padding-left: 14px;
   background: var(--gitlab) left center no-repeat;
   background-size: 11px;
@@ -5896,13 +5898,13 @@ h3#bannedpeers {
 
 h4.app {
   background: url(/themes/console/images/eepsite.png) 8px center no-repeat, var(--h1) !important;
-  background-size: 18px, 100%, 100%, 175px !important;
+  background-size: 18px, 4px 100%, 100%, 175px !important;
   background-blend-mode: var(--h3_blend) !important;
 }
 
 h4.app2 {
   background: var(--globe) 8px center no-repeat, var(--h1) !important;
-  background-size: 18px, 100%, 100%, 175px !important;
+  background-size: 18px, 4px 100%, 100%, 175px !important;
   background-blend-mode: var(--h3_blend) !important;
 }
 
