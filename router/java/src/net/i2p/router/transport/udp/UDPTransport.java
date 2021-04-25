@@ -652,7 +652,7 @@ public class UDPTransport extends TransportImpl implements TimedWeightedPriority
                     hasv6 = true;
                     // save the external address but don't publish it
                     // save it where UPnP can get it and try to forward it
-                    OrderedProperties localOpts = new OrderedProperties(); 
+                    OrderedProperties localOpts = new OrderedProperties();
                     localOpts.setProperty(UDPAddress.PROP_PORT, String.valueOf(newPort));
                     localOpts.setProperty(UDPAddress.PROP_HOST, newIP);
                     RouterAddress local = new RouterAddress(STYLE, localOpts, DEFAULT_COST);
@@ -667,7 +667,7 @@ public class UDPTransport extends TransportImpl implements TimedWeightedPriority
                 } else {
                     // save the external address but don't publish it
                     // save it where UPnP can get it and try to forward it
-                    OrderedProperties localOpts = new OrderedProperties(); 
+                    OrderedProperties localOpts = new OrderedProperties();
                     localOpts.setProperty(UDPAddress.PROP_PORT, String.valueOf(newPort));
                     localOpts.setProperty(UDPAddress.PROP_HOST, newIP);
                     RouterAddress local = new RouterAddress(STYLE, localOpts, DEFAULT_COST);
@@ -2513,7 +2513,7 @@ public class UDPTransport extends TransportImpl implements TimedWeightedPriority
         boolean isIPv6 = host != null && host.contains(":");
         if (isIPv6 && host.equals(":"))
             host = null;
-        OrderedProperties options = new OrderedProperties(); 
+        OrderedProperties options = new OrderedProperties();
         if (_context.router().isHidden()) {
             // save the external address, since we didn't publish it
             if (port > 0 && host != null) {
@@ -2523,7 +2523,7 @@ public class UDPTransport extends TransportImpl implements TimedWeightedPriority
                     options.setProperty(UDPAddress.PROP_HOST, host);
                     RouterAddress local = new RouterAddress(STYLE, options, SSU_OUTBOUND_COST);
                     replaceCurrentExternalAddress(local, isIPv6);
-                    options = new OrderedProperties(); 
+                    options = new OrderedProperties();
                 }
             }
             if (!_context.getProperty(PROP_TRANSPORT_CAPS, ENABLE_TRANSPORT_CAPS))
@@ -2669,7 +2669,7 @@ public class UDPTransport extends TransportImpl implements TimedWeightedPriority
                     getIPv6Config() != IPV6_DISABLED &&
                     hasIPv6Address()) {
                     // Also make an empty "6" address
-                    OrderedProperties opts = new OrderedProperties(); 
+                    OrderedProperties opts = new OrderedProperties();
                     opts.setProperty(UDPAddress.PROP_CAPACITY, CAP_IPV6);
                     RouterAddress addr6 = new RouterAddress(STYLE, opts, SSU_OUTBOUND_COST);
                     replaceAddress(addr6);
@@ -2702,7 +2702,7 @@ public class UDPTransport extends TransportImpl implements TimedWeightedPriority
             if (!isIPv6 &&
                 _context.getProperty(PROP_TRANSPORT_CAPS, ENABLE_TRANSPORT_CAPS)) {
                 // Make an empty "4" address
-                OrderedProperties opts = new OrderedProperties(); 
+                OrderedProperties opts = new OrderedProperties();
                 opts.setProperty(UDPAddress.PROP_CAPACITY, CAP_IPV4);
                 RouterAddress addr4 = new RouterAddress(STYLE, opts, SSU_OUTBOUND_COST);
                 RouterAddress current = getCurrentAddress(false);
@@ -3122,7 +3122,8 @@ public class UDPTransport extends TransportImpl implements TimedWeightedPriority
     }
 
     public int countActivePeers() {
-        long old = _context.clock().now() - 5*60*1000;
+//        long old = _context.clock().now() - 5*60*1000;
+        long old = _context.clock().now() - 60*1000;
         int active = 0;
         for (PeerState peer : _peersByIdent.values()) {
             // PeerState initializes times at construction,
@@ -3208,7 +3209,7 @@ public class UDPTransport extends TransportImpl implements TimedWeightedPriority
         boolean includeEverybody = _context.router().getUptime() < 10*60*1000 || _peersByIdent.size() < 10;
         long now = _context.clock().now();
         for (PeerState peer : _peersByIdent.values()) {
-            if ((!includeEverybody) && now - peer.getLastReceiveTime() > 5*60*1000)
+            if ((!includeEverybody) && now - peer.getLastReceiveTime() > 60*1000)
                 continue; // skip old peers
             if (peer.getRTT() > 1250)
                 continue; // Big RTT makes for a poor calculation
