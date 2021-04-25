@@ -80,7 +80,8 @@ input[type="image"], th img, a img {
   border-radius: 4px;
   box-shadow: inset 0 0 3px 0 #101, 0 0 2px 2px rgba(16,0,16,.4);
   background: #323 url(images/tile2.png);
-  background: repeating-linear-gradient(to bottom, #1f081f 1px, #2b172f 1px, #1f081f 3px);
+  background: repeating-linear-gradient(to bottom, #2b172f 2px, #1f081f 4px);
+  background-size: 100% 4px;
   will-change: transform;
 }
 
