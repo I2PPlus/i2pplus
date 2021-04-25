@@ -40,13 +40,22 @@
                       java.io.File.separatorChar + "console" + java.io.File.separatorChar + theme +
                       java.io.File.separatorChar;
    java.io.File themeOverride = new java.io.File(themeBase + "override.css");
-   java.io.File imports = new java.io.File(themeBase + "import.css");
+   java.io.File imports = new java.io.File(themeBase + "images" + java.io.File.separatorChar + "images.css");
+   java.io.File inlineImages = new java.io.File(themeBase + "import.css");
    boolean hasOverride = themeOverride.exists();
    boolean hasImport = imports.exists();
+   boolean hasImages = inlineImages.exists();
 %>
 <link rel="preload" href="<%=themePath%>images/i2plogo.png" as="image">
 <link rel="preload" href="/themes/fonts/DroidSans.css" as="style">
 <link rel="preload" href="/themes/console/images/images.css" as="style">
+<%
+    if (hasImages) {
+%>
+<link rel="preload" href="<%=themePath%>images/images.css" as="style">
+<%
+    }
+%>
 <link rel="icon" href="<%=themePath%>images/favicon.ico">
 <script nonce="<%=cspNonce%>" type="text/javascript">if (top.location != location) {top.location.href = location.href;}</script>
 <script src="/js/progressx.js?<%=net.i2p.CoreVersion.VERSION%>" type="text/javascript"></script>

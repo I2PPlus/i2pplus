@@ -968,73 +968,59 @@ to {
   padding: 4px 2px 4px 24px;
   text-align: left;
   border-bottom: 1px dotted #ddf;
-  background: #f8f8ff url(/themes/console/images/plugin.png) 3px center no-repeat;
-  background: rgba(248, 248, 255, .8) url(/themes/console/images/plugin.png) 3px center no-repeat;
-  background-size: 16px !important;
+  background: url(/themes/console/images/plugin.png) 3px center no-repeat;
 }
 
 #sb_services a:link:last-child {
   border-bottom: none;
 }
 
-#sb_services a {
-  background-blend-mode: luminosity;
-  vertical-align: sub !important;
-}
-
 #sb_services a:hover {
-  background-blend-mode: normal;
   background-color: #ffe;
 }
 
 #sb_services a[href="/webmail"] {
-  background: #f8f8ff url(/themes/console/images/svg/mail.svg) 3px center no-repeat;
-  background: rgba(248, 248, 255, .8) url(/themes/console/images/svg/mail.svg) 3px center no-repeat;
+  background: var(--mail) 3px center no-repeat;
 }
 
 #sb_services a[href="/webmail"]:hover {
-  background: #ffe url(/themes/console/images/svg/mail.svg) 3px center no-repeat;
+  background: #ffe var(--mail) 3px center no-repeat;
 }
 
 #sb_services a[href="/torrents"] {
-  background: #f8f8ff url(/themes/console/images/svg/snark.svg) 3px center no-repeat;
-  background: rgba(248, 248, 255, .8) url(/themes/console/images/svg/snark.svg) 3px center no-repeat;
+  background: var(--snark) 3px center no-repeat;
 }
 
 #sb_services a[href="/torrents"]:hover {
-  background: #ffe url(/themes/console/images/svg/snark.svg) 3px center no-repeat;
+  background: #ffe var(--snark) 3px center no-repeat;
 }
 
 #sb_services a[href="/dns"] {
-  background: #f8f8ff url(/themes/console/images/svg/addressbook.svg) 3px center no-repeat;
-  background: rgba(248, 248, 255, .8) url(/themes/console/images/svg/addressbook.svg) 3px center no-repeat;
+  background: var(--abook) 3px center no-repeat;
 }
 
 #sb_services a[href="/dns"]:hover {
-  background: #ffe url(/themes/console/images/svg/addressbook.svg) 3px center no-repeat;
+  background: #ffe var(--abook) 3px center no-repeat;
 }
 
 #sb_services a[href="/i2ptunnelmgr"] {
-  background: #f8f8ff url(/themes/console/images/svg/tunnelmanager.svg) 3px center no-repeat;
-  background: rgba(248, 248, 255, .8) url(/themes/console/images/svg/tunnelmanager.svg) 3px center no-repeat;
+  background: var(--tunnman) 3px center no-repeat;
 }
 
 #sb_services a[href="/i2ptunnelmgr"]:hover {
-  background: #ffe url(/themes/console/images/svg/tunnelmanager.svg) 3px center no-repeat;
+  background: #ffe var(--tunnman) 3px center no-repeat;
 }
 
 #sb_services a[href$=":7658/"], #sb_services a[href$=":7668/"] {
-  background: #f8f8ff url(/themes/console/images/svg/webserver.svg) 3px center no-repeat;
-  background: rgba(248, 248, 255, .8) url(/themes/console/images/svg/webserver.svg) 3px center no-repeat;
+  background: var(--webserver) 3px center no-repeat;
 }
 
 #sb_services a[href$=":7658/"]:hover, #sb_services a[href$=":7668/"]:hover {
-  background: #ffe url(/themes/console/images/svg/webserver.svg) 3px center no-repeat;
+  background: #ffe var(--webserver) 3px center no-repeat;
 }
 
 #sb_services a[href="/orchid/"], #sb_services a[href*="/orchid/"] {
-  background: #f8f8ff url(images/flower.png) 3px center no-repeat;
-  background: rgba(248, 248, 255, .8) url(images/flower.png) 3px center no-repeat;
+  background: url(images/flower.png) 3px center no-repeat;
 }
 
 #sb_services a[href="/orchid/"]:hover, #sb_services a[href*="/orchid/"]:hover {
@@ -1042,8 +1028,7 @@ to {
 }
 
 #sb_services a[href*="bote"] {
-  background: #f8f8ff url(images/mail_black.png) 3px center no-repeat;
-  background: rgba(248, 248, 255, .8) url(images/mail_black.png) 3px center no-repeat;
+  background: url(images/mail_black.png) 3px center no-repeat;
 }
 
 #sb_services a[href*="bote"]:hover {
@@ -1051,12 +1036,16 @@ to {
 }
 
 #sb_services a[href*="/tracker"] {
-  background: #f8f8ff url(/themes/console/images/zzzot.png) 3px center no-repeat;
-  background: rgba(248, 248, 255, .8) url(/themes/console/images/zzzot.png) 3px center no-repeat;
+  background: url(/themes/console/images/zzzot.png) 3px center no-repeat;
 }
 
 #sb_services a[href*="/tracker"]:hover {
   background: #ffe url(/themes/console/images/zzzot.png) 3px center no-repeat;
+}
+
+#sb_services a {
+  vertical-align: sub !important;
+  background-size: 16px !important;
 }
 
 /* end webapp navigation */
@@ -4111,8 +4100,7 @@ h3#browseronstart + p.infohelp {
 
 .main#config_reseed p.infohelp {
   padding: 15px 15px 15px 50px;
-  background: #fafaff url(/themes/console/images/svg/reseed.svg) 12px center no-repeat;
-  background: url(/themes/console/images/svg/reseed.svg) 12px center no-repeat, var(--p);
+  background: var(--reseed) 12px center no-repeat, var(--p);
   background-size: 28px, 100%;
   border-radius: 2px;
   box-shadow: 0 0 1px #e0e0eb;
@@ -4148,8 +4136,7 @@ p#enablefullstats, p#gatherstats {
 
 #config_ui .infohelp {
   padding: 15px 15px 15px 50px !important;
-  background: #fafaff url(/themes/console/images/svg/ui.svg) 12px center no-repeat !important;
-  background: url(/themes/console/images/svg/ui.svg) 12px center no-repeat, var(--p) !important;
+  background: var(--ui) 12px center no-repeat, var(--p) !important;
   background-size: 28px, 100% !important;
 }
 
@@ -6627,19 +6614,19 @@ h3#udpcon {
 
 #tunnels h3.server {
   padding-left: 32px;
-  background: url(/themes/console/images/svg/server.svg) 7px center no-repeat, var(--h3), linear-gradient(to right, #fafaff 5%, rgba(231, 231, 255, .8) 25%) !important;
+  background: var(--server) 7px center no-repeat, var(--h3), linear-gradient(to right, #fafaff 5%, rgba(231, 231, 255, .8) 25%) !important;
   background-size: 18px, 100%, 100% !important;
 }
 
 #tunnels h3.client {
   padding-left: 32px;
-  background: url(/themes/console/images/svg/client.svg) 7px center no-repeat, var(--h3), linear-gradient(to right, #fafaff 5%, rgba(231, 231, 255, .8) 25%) !important;
+  background: var(--client) 7px center no-repeat, var(--h3), linear-gradient(to right, #fafaff 5%, rgba(231, 231, 255, .8) 25%) !important;
   background-size: 18px, 100%, 100% !important;
 }
 
 #tunnels h3.ping {
   padding-left: 32px;
-  background: url(/themes/console/images/svg/ping.svg) 7px center no-repeat, var(--h3), linear-gradient(to right, #fafaff 5%, rgba(231, 231, 255, .8) 25%) !important;
+  background: var(--ping) 7px center no-repeat, var(--h3), linear-gradient(to right, #fafaff 5%, rgba(231, 231, 255, .8) 25%) !important;
   background-size: 18px, 100%, 100% !important;
 }
 
@@ -12123,53 +12110,52 @@ h1.webapp {
 }
 
 #help_configuration {
-  background: #eef url(/themes/console/images/info/optimize.png) 15px center no-repeat;
-  background: url(/themes/console/images/info/optimize.png) 15px center no-repeat, linear-gradient(135deg, #fff, #f8f8ff);
+  background: var(--configure) 15px center no-repeat, linear-gradient(135deg, #fff, #f8f8ff);
+  background-size: 32px, 100%;
 }
 
 #help_configadv {
-  background: #eef url(/themes/console/images/info/configure.png) 15px center no-repeat;
-  background: url(/themes/console/images/info/configure.png) 15px center no-repeat, linear-gradient(135deg, #fff, #f8f8ff);
+  background: var(--configure) 15px center no-repeat, linear-gradient(135deg, #fff, #f8f8ff);
+  background-size: 32px, 100%;
 }
 
 #help_ui {
-  background: #eef url(/themes/console/images/info/ui.png) 15px center no-repeat;
-  background: url(/themes/console/images/info/ui.png) 15px center no-repeat, linear-gradient(135deg, #fff, #f8f8ff);
+  background: var(--ui) 15px center no-repeat, linear-gradient(135deg, #fff, #f8f8ff);
+  background-size: 32px, 100%;
 }
 
 #help_reseed {
-  background: #eef url(/themes/console/images/info/connect.png) 15px center no-repeat;
-  background: url(/themes/console/images/info/connect.png) 15px center no-repeat, linear-gradient(135deg, #fff, #f8f8ff);
+  background: var(--reseed) 15px center no-repeat, linear-gradient(135deg, #fff, #f8f8ff);
+  background-size: 32px, 100%;
 }
 
 #help_faq, #help_glossary {
-  background: #eef url(/themes/console/images/info/question.png) 15px center no-repeat;
-  background: url(/themes/console/images/info/question.png) 15px center no-repeat, linear-gradient(135deg, #fff, #f8f8ff);
+  background: var(--question) 15px center no-repeat, linear-gradient(135deg, #fff, #f8f8ff);
+  background-size: 32px, 100%;
 }
 
 #help_troubleshoot {
-  background: #eef url(/themes/console/images/wrench_orange.png) 15px center no-repeat;
-  background: url(/themes/console/images/wrench_orange.png) 15px center no-repeat, linear-gradient(135deg, #fff, #f8f8ff);
+  background: var(--wrench) 15px center no-repeat, linear-gradient(135deg, #fff, #f8f8ff);
+  background-size: 32px, 100%;
 }
 
 #help_legal {
-  background: #eef url(/themes/console/images/info/legal.png) 15px center no-repeat;
   background: url(/themes/console/images/info/legal.png) 15px center no-repeat, linear-gradient(135deg, #fff, #f8f8ff);
 }
 
 #help_changelog {
-  background: #eef url(/themes/console/images/info/logs.png) 15px center no-repeat;
-  background: url(/themes/console/images/info/logs.png) 15px center no-repeat, linear-gradient(135deg, #fff, #f8f8ff);
+  background: var(--changelog) 15px center no-repeat, linear-gradient(135deg, #fff, #f8f8ff);
+  background-size: 32px, 100%;
 }
 
 #help_newusers {
-  background: #eef url(/themes/console/images/info/notice.png) 15px center no-repeat;
   background: url(/themes/console/images/info/notice.png) 15px center no-repeat, linear-gradient(135deg, #fff, #f8f8ff);
+  background-size: 32px, 100%;
 }
 
 #help_webhosting {
-  background: #eef url(/themes/console/images/server_32x32.png) 15px center no-repeat;
-  background: url(/themes/console/images/server_32x32.png) 15px center no-repeat, linear-gradient(135deg, #fff, #f8f8ff);
+  background: var(--webserver) 15px center no-repeat, linear-gradient(135deg, #fff, #f8f8ff);
+  background-size: 32px, 100%;
 }
 
 #configurationhelp h2, #advancedsettings h2, #filterlist h2 {
@@ -12240,7 +12226,7 @@ h1.webapp {
 
 #themeoverride h2 {
   padding-left: 38px;
-  background: url(/themes/console/images/info/ui.png) 8px center no-repeat, var(--h2) !important;
+  background: var(--ui) 8px center no-repeat, var(--h2) !important;
   background-size: 24px, 100%, 100%, 100% !important;
 }
 
