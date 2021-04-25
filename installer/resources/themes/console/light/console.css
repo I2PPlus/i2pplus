@@ -2423,9 +2423,15 @@ h3#exploratory {
   height: 16px;
   display: inline-block;
   float: right;
-  background: var(-settings) center center no-repeat;
+  background: var(--settings) center center no-repeat;
   background-size: 16px;
   content: "";
+}
+
+#tunnels h3 a[href^="/configtunnels#"]:hover::after, #tunnels h3 a[href$="i2ptunnelmgr"]:hover::after,
+#logs a.delete::after, #logs a.configure:hover::after {
+  background: var(--settings_hover) center center no-repeat;
+  background-size: 16px;
 }
 
 #logs a.delete::after, #logs a.configure::after {
