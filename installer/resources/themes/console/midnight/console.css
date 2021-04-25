@@ -7,6 +7,7 @@
 
 @import url(/themes/fonts/DroidSans.css);
 @import url(/themes/console/images/images.css);
+@import url(images/images.css);
 
 :root {
   --title: linear-gradient(to bottom, #080818 50%, #000008 50%);
@@ -12407,7 +12408,7 @@ html, body {
   white-space: nowrap;
 }
 
-#routerinformation tr:nth-child(n+2) a {
+#routerinformation tr:nth-child(n+2) a:not(#revision){
   display: none;
 }
 
@@ -13237,59 +13238,59 @@ p#gatherstats {
 /* h1 icons */
 
 h1 {
-  background: url(images/netwrk.png) 10px center no-repeat, var(--th) !important;
+  background: var(--netwrk) 10px center no-repeat, var(--th) !important;
 }
 
 h1.home {
-  background: url(images/home.png) 10px center no-repeat, var(--th) !important;
+  background: var(--home) 10px center no-repeat, var(--th) !important;
 }
 
 h1.perf {
-  background: url(images/perf.png) 10px center no-repeat, var(--th) !important;
+  background: var(--perf) 10px center no-repeat, var(--th) !important;
 }
 
 h1.nfo {
-  background: url(images/info.png) 10px center no-repeat, var(--th) !important;
+  background: var(--info) 10px center no-repeat, var(--th) !important;
 }
 
 h1.hlp {
-  background: url(images/header_help.png) 10px center no-repeat, var(--th) !important;
+  background: var(--header_help) 10px center no-repeat, var(--th) !important;
 }
 
 h1.addbook {
-  background: url(images/addbook.png) 10px center no-repeat, var(--th) !important;
+  background: var(--addbook) 10px center no-repeat, var(--th) !important;
 }
 
 h1.snark {
-  background: url(images/app_snark.png) 10px center no-repeat, var(--th) !important;
+  background: var(--app_snark) 10px center no-repeat, var(--th) !important;
 }
 
 h1.mail {
-  background: url(images/app_mail.png) 10px center no-repeat, var(--th) !important;
+  background: var(--app_mail) 10px center no-repeat, var(--th) !important;
 }
 
 h1.conf {
-  background: url(images/cog.png) 10px center no-repeat, var(--th) !important;
+  background: var(--cog) 10px center no-repeat, var(--th) !important;
 }
 
 h1.adv {
-  background: url(images/info.png) 10px center no-repeat, var(--th) !important;
+  background: var(--info) 10px center no-repeat, var(--th) !important;
 }
 
 h1.err {
-  background: url(images/error.png) 10px center no-repeat, var(--th) !important;
+  background: var(--error) 10px center no-repeat, var(--th) !important;
 }
 
 h1.sched {
-  background: url(images/tasks.png) 10px center no-repeat, var(--th) !important;
+  background: var(--tasks) 10px center no-repeat, var(--th) !important;
 }
 
 h1.log {
-  background: url(images/logs.png) 10px center no-repeat, var(--th) !important;
+  background: var(--logs) 10px center no-repeat, var(--th) !important;
 }
 
 h1.webapp {
-  background: url(images/webapp.png) 10px center no-repeat, var(--th) !important;
+  background: var(--webapp) 10px center no-repeat, var(--th) !important;
 }
 
 h1[class], h1 {
@@ -13318,20 +13319,20 @@ h1[class], h1 {
 }
 
 .ibgw::after, .obep::after, .ptcp::after {
-  width: 24px;
-  height: 16px;
+  width: 28px;
+  height: 28px;
   display: inline-block;
-  background: url(images/ibgw.png) center center no-repeat;
-  background-size: auto 16px !important;
+  background: var(--ibgw) center center no-repeat;
+  background-size: 28px !important;
   content: "";
 }
 
 .obep::after {
-  background: url(images/obep.png) center center no-repeat;
+  background: var(--obep) center center no-repeat;
 }
 
 .ptcp::after {
-  background: url(images/ptcp.png) center center no-repeat;
+  background: var(--ptcp) center center no-repeat;
 }
 
 #tunnels .cells:first-child {

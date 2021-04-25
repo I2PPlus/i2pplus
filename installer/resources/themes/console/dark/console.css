@@ -1140,7 +1140,8 @@ div.news hr {
   display: inline-block;
 }
 
-#news #newsDisplay a, #graphopts a, #routerinfo a, #routerinformation tr:nth-child(n+2) a, #fullhistory a, .graphstat, .graphstat:visited {
+#news #newsDisplay a, #graphopts a, #routerinfo a, #routerinformation tr:nth-child(n+2) a:not(#revision),
+#fullhistory a, .graphstat, .graphstat:visited {
   margin: 0 -2px;
   padding: 1px 10px;
   color: #494;
@@ -1152,13 +1153,13 @@ div.news hr {
 }
 
 #news #newsDisplay a:hover, #news #newsDisplay a:focus, #graphopts a:hover, #graphopts a:focus, .graphstat:hover, .graphstat:focus,
-#routerinformation tr:nth-child(n+2) a:hover, #routerinformation tr:nth-child(n+2) a:focus, #fullhistory a:hover, #fullhistory a:focus {
+#routerinformation tr:nth-child(n+2) a:not(#revision):hover, #routerinformation tr:nth-child(n+2) a:not(#revision):focus, #fullhistory a:hover, #fullhistory a:focus {
   border: 1px solid #020;
   background: #030;
   background: linear-gradient(to bottom, #030 50%, #010 50%);
 }
 
-#news #newsDisplay a:active, #graphopts a:active, #routerinformation tr:nth-child(n+2) a:active, #fullhistory a:active, .graphstat:active {
+#news #newsDisplay a:active, #graphopts a:active, #routerinformation tr:nth-child(n+2) a:not(#revision):active, #fullhistory a:active, .graphstat:active {
   box-shadow: inset 2px 2px 2px #000;
   background: #020;
 }
@@ -5277,6 +5278,13 @@ img.unknownflag {
   width: 1%;
   text-align: right;
   white-space: nowrap;
+}
+
+#enviro #revision {
+  margin-right: 4px;
+  padding-left: 14px;
+  background: var(--gitlab) left center no-repeat;
+  background-size: 11px;
 }
 
 #criticallogs td , #routerlogs td, #eventlogs td, #wrapperlogs td {
@@ -10694,11 +10702,11 @@ input[type=text]:focus::placeholder, #homesearch input.search:focus::placeholder
   text-align: left !important;
 }
 
-#routerinformation tr:nth-child(n+2) a {
+#routerinformation tr:nth-child(n+2) a:not(#revision) {
   display: none;
 }
 
-#routerinformation table:hover tr:nth-child(n+2) a {
+#routerinformation table:hover tr:nth-child(n+2) a:not(#revision) {
   display: inline;
 }
 

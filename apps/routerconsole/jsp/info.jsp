@@ -25,6 +25,7 @@
 <table id="enviro">
 <tbody>
 <tr><td><b>I2P:</b></td><td><%=net.i2p.router.RouterVersion.FULL_VERSION%>&ensp;<b>API:</b>&ensp;<%=net.i2p.CoreVersion.PUBLISHED_VERSION%>&ensp;<b>Wrapper:</b>&ensp;<%=System.getProperty("wrapper.version", "none")%> &ensp;<b>Built by:</b>&ensp;<jsp:getProperty name="logsHelper" property="builtBy" /></td></tr>
+<tr><td><b>Revision:</b></td><td><jsp:getProperty name="logsHelper" property="revision" /></td></tr>
 <tr><td><b>Platform:</b></td><td><%=System.getProperty("os.name")%>&ensp;<%=System.getProperty("os.arch")%>&ensp;<%=System.getProperty("os.version")%></td></tr>
 <%
    boolean isX86 = net.i2p.util.SystemVersion.isX86();
