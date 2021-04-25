@@ -2067,28 +2067,28 @@ p:empty + .sb_notice {
 }
 
 #sb_services a[href*="mail"] {
-  background: #000010 url(/themes/console/images/svg/mail.svg) 6px center no-repeat;
+  background: #000010 var(--mail) 6px center no-repeat;
   background-size: 14px !important;
 }
 
 #sb_services a[href*="mail"]:hover {
-  background: #1e0b28 url(/themes/console/images/svg/mail.svg) 6px center no-repeat;
+  background: #1e0b28 var(--mail) 6px center no-repeat;
 }
 
 #sb_services a[href*="dns"] {
-  background: #000010 url(/themes/console/images/svg/addressbook.svg) 5px center no-repeat;
+  background: #000010 var(--abook) 5px center no-repeat;
 }
 
 #sb_services a[href*="dns"]:hover {
-  background: #1e0b28 url(/themes/console/images/svg/addressbook.svg) 5px center no-repeat;
+  background: #1e0b28 var(--abook) 5px center no-repeat;
 }
 
 #sb_services a[href*="tunnel"] {
-  background: #000010 url(/themes/console/images/svg/tunnelmanager.svg) 5px center no-repeat;
+  background: #000010 var(--tunnman) 5px center no-repeat;
 }
 
 #sb_services a[href*="tunnel"]:hover {
-  background: #1e0b28 url(/themes/console/images/svg/tunnelmanager.svg) 5px center no-repeat;
+  background: #1e0b28 var(--tunnman) 5px center no-repeat;
 }
 
 #sb_services a[href*="bote"] {
@@ -2108,19 +2108,19 @@ p:empty + .sb_notice {
 }
 
 #sb_services a[href*="torrents"] {
-  background: #000010 url(/themes/console/images/svg/snark.svg) 5px center no-repeat;
+  background: #000010 var(--snark) 5px center no-repeat;
 }
 
 #sb_services a[href*="torrents"]:hover {
-  background: #1e0b28 url(/themes/console/images/svg/snark.svg) 5px center no-repeat;
+  background: #1e0b28 var(--snark) 5px center no-repeat;
 }
 
 #sb_services a[href*="7658"], #sb_services a[href*="7668"] {
-  background: #000010 url(/themes/console/images/svg/webserver.svg) 5px center no-repeat;
+  background: #000010 var(--webserver) 5px center no-repeat;
 }
 
 #sb_services a[href*="7658"]:hover, #sb_services a[href*="7668"]:hover {
-  background: #1e0b28 url(/themes/console/images/svg/webserver.svg) 5px center no-repeat;
+  background: #1e0b28 var(--webserver) 5px center no-repeat;
 }
 
 
