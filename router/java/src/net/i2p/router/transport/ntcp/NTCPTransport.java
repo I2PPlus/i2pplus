@@ -713,7 +713,7 @@ public class NTCPTransport extends TransportImpl {
     }
 
     /**
-     * How many peers have we talked to in the last 5 minutes?
+     * How many peers have we talked to in the last minute?
      * As of 0.9.20, actually returns active peer count, not total.
      */
     public int countActivePeers() {
@@ -722,10 +722,17 @@ public class NTCPTransport extends TransportImpl {
         for (NTCPConnection con : _conByIdent.values()) {
             // con initializes times at construction,
             // so check message count also
+            if ((con.getMessagesSent() > 0 && con.getTimeSinceSend(now) <= 60*1000) ||
+                (con.getMessagesReceived() > 0 && con.getTimeSinceReceive(now) <= 60*1000)) {
+                active++;
+            }
+/*
+
             if ((con.getMessagesSent() > 0 && con.getTimeSinceSend(now) <= 5*60*1000) ||
                 (con.getMessagesReceived() > 0 && con.getTimeSinceReceive(now) <= 5*60*1000)) {
                 active++;
             }
+*/
         }
         return active;
     }

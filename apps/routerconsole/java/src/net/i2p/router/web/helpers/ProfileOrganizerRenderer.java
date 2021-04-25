@@ -45,7 +45,7 @@ class ProfileOrganizerRenderer {
 
         long now = _context.clock().now();
 //        long hideBefore = now - 90*60*1000;
-        long hideBefore = now - 5*60*1000;
+        long hideBefore = now - 60*1000;
 
         Set<PeerProfile> order = new TreeSet<PeerProfile>(mode == 2 ? new HashComparator() : new ProfileComparator());
         int older = 0;
@@ -80,7 +80,7 @@ class ProfileOrganizerRenderer {
 
         if (mode < 2) {
             buf.append("<p id=\"profiles_overview\" class=\"infohelp\">");
-            buf.append(ngettext("Showing {0} recent profile.", "Showing {0} recent profiles.", order.size()).replace(".", " (active in the last 5 minutes).")).append('\n');
+            buf.append(ngettext("Showing {0} recent profile.", "Showing {0} recent profiles.", order.size()).replace(".", " (active in the last minute).")).append('\n');
             if (older > 0)
                 buf.append(ngettext("Hiding {0} older profile.", "Hiding {0} older profiles.", older)).append('\n');
             if (standard > 0)

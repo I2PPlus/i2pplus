@@ -90,7 +90,7 @@ public class CommSystemFacadeImpl extends CommSystemFacade {
 
     /**
      *  How many peers are we currently connected to, that we have
-     *  sent a message to or received a message from in the last five minutes.
+     *  sent a message to or received a message from in the last minute.
      */
     @Override
     public int countActivePeers() { return _manager.countActivePeers(); }
@@ -298,7 +298,7 @@ public class CommSystemFacadeImpl extends CommSystemFacade {
             return 0;
         }
     }
-    
+
     /**
      * UDP changed addresses, tell NTCP and restart
      *

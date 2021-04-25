@@ -105,7 +105,7 @@ public class PeerProfile {
 
     private long _lastCoalesceDate = System.currentTimeMillis();
 
-    private static final long[] RATES = { 60*60*1000l, 24*60*60*1000 };
+    private static final long[] RATES = { 60*1000l, 60*60*1000l, 24*60*60*1000 };
 
     /**
      *  Countries with more than about a 2% share of the netdb.
@@ -238,7 +238,8 @@ public class PeerProfile {
         //    return true;
         //else
         //    return false;
-        long before = _context.clock().now() - period;
+//        long before = _context.clock().now() - period;
+        long before = _context.clock().now() - 60*1000l;
         return getLastHeardFrom() < before ||
                getLastSendSuccessful() < before ||
                isEstablished();
