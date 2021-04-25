@@ -95,12 +95,7 @@ class ProfileOrganizerRenderer {
             buf.append("<th>").append(_t("Status")).append("</th>");
             buf.append("<th>").append(_t("Groups")).append("</th>");
             buf.append("<th>").append(_t("Speed")).append("</th>");
-/*
-            if (isAdvanced)
-                buf.append("<th>").append(_t("Latency")).append("</th>");
-            else
-*/
-                buf.append("<th>").append(_t("Low Latency")).append("</th>");
+            buf.append("<th>").append(_t("Low Latency")).append("</th>");
             buf.append("<th>").append(_t("Capacity")).append("</th>");
             buf.append("<th>").append(_t("Integration")).append("</th>");
             buf.append("<th>").append(_t("View/Edit")).append("</th>");
