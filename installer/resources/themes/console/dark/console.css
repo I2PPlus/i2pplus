@@ -8201,9 +8201,9 @@ th code {
   font-size: 11.5pt;
   background: var(--bug) right 5px center no-repeat,
               linear-gradient(to bottom, rgba(0,0,0,0) 50%, #000 50%),
-              repeating-linear-gradient(to right, rgba(0,0,0,.5) 1px, rgba(0,16,0,.5) 2px, rgba(0,16,0,.4) 3px),
+              repeating-linear-gradient(to right, rgba(0,16,0,.5) 2px, rgba(0,16,0,.4) 4px),
               var(--h3_fade) !important;
-  background-size: 20px, 100%, 100%, 100% !important;
+  background-size: 20px, 100%, 4px 100%, 100% !important;
   background-blend-mode: difference, normal, normal, normal;
 }
 
@@ -11147,6 +11147,10 @@ h1.conf {
 
 h1.adv {
   background: var(--info) 10px center no-repeat, var(--h1) !important;
+}
+
+h1.conf.adv {
+  background: var(--debug) 10px center no-repeat, var(--h1) !important;
 }
 
 h1.err {
