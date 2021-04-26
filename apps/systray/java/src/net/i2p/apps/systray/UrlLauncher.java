@@ -34,12 +34,11 @@ import net.i2p.util.ShellCommand;
 import net.i2p.util.SystemVersion;
 
 /**
- * A quick and simple multi-platform URL launcher. It attempts to launch the
+ * <p>A quick and simple multi-platform URL launcher. It attempts to launch the
  * default browser for the host platform first, then popular third-party
- * browsers if that was not successful.
- * <p>
- * Handles Galeon, Internet Explorer, Falkon, Konqueror, Links, Lynx, Mozilla, Mozilla
- * Firefox, Netscape, Opera, and Safari.
+ * browsers if that was not successful.</p>
+ * <p>Handles Galeon, Internet Explorer, Falkon, Konqueror, Links, Lynx, Mozilla, Mozilla
+ * Firefox, Netscape, Opera, and Safari.</p>
  *
  * @author hypercubus
  */
@@ -73,12 +72,13 @@ public class UrlLauncher implements ClientApp {
             "x-www-browser",
             // general graphical browsers
             "defaultbrowser",  // puppy linux
-            "opera -newpage",
             "firefox",
+            "opera -newpage",
+            "falkon",
             "chromium-browser",
+            "microsoft-edge",
             "mozilla",
             "netscape",
-            "falkon",
             "konqueror",
             "galeon",
             // Text Mode Browsers only below here
@@ -193,9 +193,9 @@ public class UrlLauncher implements ClientApp {
     public boolean openUrl(String url) throws IOException {
         if (IS_SERVICE)
             return false;
-        if (_log.shouldDebug()) _log.debug("Waiting for router console to be ready before launching browser");
+        if (_log.shouldDebug()) _log.debug("Waiting for Router Console initialization before launching browser...");
         waitForServer(url);
-        if (_log.shouldDebug()) _log.debug("Done waiting for router console to be ready for browser launch");
+//        if (_log.shouldDebug()) _log.debug("Done waiting for router console to be ready for browser launch");
         if (validateUrlFormat(url)) {
             String cbrowser = _context.getProperty(PROP_BROWSER);
             if (cbrowser != null) {
