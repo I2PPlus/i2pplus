@@ -30,7 +30,7 @@ html, body {
 
 @supports not (-moz-appearance: none) {
   html, body {
-    background: repeating-linear-gradient(to bottom, #010 2px, #000 4px) !important;
+    background: repeating-linear-gradient(to bottom, #010 2px, #000 4px) #000 !important;
     background-size: 100% 4px !important;
   }
 }
@@ -7031,8 +7031,8 @@ h3#upnp {
 }
 
 #upnpscan {
-  margin: -11px 0 10px;
-  padding: 0 15px 5px;
+  margin: 1px 0 -10px;
+  padding: 15px 25px 5px;
   border: var(--border);
   background: #000;
 }
