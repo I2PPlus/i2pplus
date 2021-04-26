@@ -863,7 +863,7 @@ a:active img[src="/themes/console/images/i2plogo.png"] {
   filter: invert(1) sepia(100%) hue-rotate(70deg) drop-shadow(0 0 3px #f60) !important;
 }
 
-.sorry {
+h1 + .sorry, #console_404 .sorry {
   margin: -1px 5px 10px 226px;
   padding: 20px 20px 20px 70px;
   min-width: 595px;
@@ -872,9 +872,9 @@ a:active img[src="/themes/console/images/i2plogo.png"] {
   font-size: 10pt;
   border: var(--border);
   border-radius: 0 0 4px 4px;
-  box-shadow: inset 0 0 0 1px #700;
-  background: #010;
-  background: url(/themes/console/images/info/errortriangle.png) 15px 45% no-repeat #010;
+  box-shadow: inset 0 0 0 1px #000, inset 0 0 0 2px #700;
+  background:  #010 var(--err) no-repeat 15px 45%;
+  background-size: 44px;
 }
 
 #error500 #warning.sorry {
@@ -4725,9 +4725,14 @@ p#fullhistory {
   height: 20px;
   display: inline-block;
   vertical-align: middle;
-  background: url(/themes/console/images/buttons/fullview.png) left 45% no-repeat;
-  background-size: 16px auto;
+  background: var(--eye) left 45% no-repeat;
+  background-size: 16px;
   content: "";
+}
+
+#fullhistory a:hover::before {
+  background: var(--eye_hover) left 45% no-repeat;
+  background-size: 16px;
 }
 
 ul#upnphelp li:last-child, #legal ul li:last-child {
@@ -5529,18 +5534,33 @@ font[color="#000099"], #servicelogs {
 }
 
 a[href^="configpeer?peer"] {
+  width: 24px;
+  height: 24px;
   font-size: 0;
+  display: inline-block;
   filter: drop-shadow(0 0 1px #777);
 }
 
 a[href^="configpeer?peer"]::after {
-  margin-left: 4px;
-  vertical-align: bottom;
-  content: url(/themes/console/images/buttons/edit.png);
+  margin-left: 2px;
+  width: 22px;
+  height: 22px;
+  display: inline-block;
+  vertical-align: middle;
+  text-align: center;
+  background: var(--edit) no-repeat center center;
+  background-size: 14px;
+  content: "";
 }
 
-a[href^="configpeer?peer"]:hover {
-  filter: drop-shadow(0 0 1px #f60);
+a[href^="configpeer?peer"]:hover::after {
+  background: var(--edit_hover) no-repeat center center;
+  background-size: 14px;
+}
+
+a[href^="configpeer?peer"]:active::after {
+  background: var(--edit_active) no-repeat center center;
+  background-size: 14px;
 }
 
 #profile_defs, #thresholds {
@@ -6337,20 +6357,6 @@ span#distance {
   color: #ee9 !important;
 }
 
-#leasesetdebug th a:not(old), #leasesetsummary th a:not(old) {
-  font-size: 0;
-}
-
-#leasesetdebug th a::after, #leasesetsummary th a::after {
-  padding-right: 0;
-  vertical-align: text-top;
-  content: url(/themes/console/images/buttons/floodfill.png);
-}
-
-#leasesetdebug th a:hover, #leasesetsummary th a:hover {
-  filter: drop-shadow(0 0 1px #f60);
-}
-
 #leasesetsummary tr:last-child td:last-child {
   text-align: left;
 }
@@ -6579,7 +6585,8 @@ span#distance {
 #sybils_summary {
   padding: 12px 15px 12px 55px;
   line-height: 200%;
-  background: #000 url(/themes/console/images/info/floodfill_32x32.png) 12px center no-repeat;
+  background: #000 var(--floodfill) 12px center no-repeat;
+  background-size: 32px;
 }
 
 #sybilnav {
@@ -6593,9 +6600,9 @@ span#distance {
 }
 
 #sybilnav li {
+  -webkit-column-break-inside: avoid;
   break-inside: avoid;
   page-break-before: right;
-  -webkit-column-break-inside: avoid;
 }
 
 #sybilnav ul {
@@ -7296,7 +7303,7 @@ p.sybilinfo.experimental {
 
 #floodfillconfig tr:first-child .infohelp {
   padding: 15px 15px 15px 50px;
-  background: #000 url(/themes/console/images/info/floodfill_32x32.png) 12px center no-repeat !important;
+  background: #000 var(--floodfill) 12px center no-repeat !important;
   background-size: 28px !important;
 }
 
