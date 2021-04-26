@@ -4400,14 +4400,16 @@ h3#servicedebug a, h3#graphinfo a {
 
 #tunnels h3#participating {
   padding-left: 35px;
-  background: url(/themes/console/images/info/share.png) 6px center no-repeat, linear-gradient(to bottom, rgba(0,0,0,0) 50%, #000 50%), var(--h3), var(--h3_fade) !important;
+  background: url(/themes/console/images/info/share.png) 6px center no-repeat,
+              linear-gradient(to bottom, rgba(0,0,0,0) 50%, #000 50%),
+              var(--h3), var(--h3_fade) !important;
   background-size: 18px, 100%, 4px 100%, 100% !important;
 }
 
 #tunnels h3:last-of-type {
   padding-left: 35px;
   padding-bottom: 7px !important;
-  background: url(/themes/console/images/svg/speedometer.svg) 9px center no-repeat, linear-gradient(to bottom, rgba(0,0,0,0) 50%, #000 50%), var(--h3), var(--h3_fade) !important;
+  background: var(--speed) 9px center no-repeat, linear-gradient(to bottom, rgba(0,0,0,0) 50%, #000 50%), var(--h3), var(--h3_fade) !important;
   background-size: 18px, 100%, 4px 100%, 100% !important;
 }
 
@@ -7272,7 +7274,7 @@ p.sybilinfo.experimental {
 
 #bandwidthconfig tr:first-child .infohelp, #bandwidth.infohelp {
   padding: 15px 15px 15px 50px;
-  background: #000 url(/themes/console/images/svg/speedometer.svg) 12px center no-repeat !important;
+  background: #000 var(--speed) 12px center no-repeat !important;
   background-size: 28px !important;
 }
 
@@ -7284,7 +7286,7 @@ p.sybilinfo.experimental {
 
 #oldhome td:first-child {
   padding: 15px 15px 15px 50px;
-  background: url(/themes/console/images/svg/home.svg) 12px center no-repeat !important;
+  background: var(--home) 12px center no-repeat !important;
   background-size: 28px, 100%, 100% !important;
 }
 
@@ -7370,7 +7372,7 @@ h3#browseronstart + p.infohelp, .infohelp#webbrowser {
 
 .main#config_reseed p.infohelp {
   padding: 15px 15px 15px 50px;
-  background: #000 url(/themes/console/images/svg/reseed.svg) 12px center no-repeat !important;
+  background: #000 var(--reseed) 12px center no-repeat !important;
   background-size: 28px !important;
 }
 
@@ -7382,7 +7384,7 @@ h3#browseronstart + p.infohelp, .infohelp#webbrowser {
 
 p#enablefullstats, p#gatherstats {
   padding: 15px 15px 15px 50px;
-  background: #000 url(/themes/console/images/svg/stats.svg) 12px center no-repeat !important;
+  background: #000 var(--stats) 12px center no-repeat !important;
   background-size: 28px !important;
 }
 
@@ -7400,7 +7402,7 @@ p#enablefullstats, p#gatherstats {
 
 form[action="events"] {
   padding: 10px 10px 10px 50px;
-  background: #000 url(/themes/console/images/svg/logs.svg) 12px center no-repeat;
+  background: #000 var(--log_icon) 12px center no-repeat;
   background-size: 28px;
 }
 
@@ -12333,7 +12335,7 @@ h3 + table {
 }
 
 #enablefullstats {
-  background: #000 url(/themes/console/images/svg/stats.svg) 12px center no-repeat !important;
+  background: #000 var(--stats) 12px center no-repeat !important;
   background-size: 28px !important;
 }
 

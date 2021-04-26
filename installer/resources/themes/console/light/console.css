@@ -58,16 +58,14 @@ body:not(old) {
   url(/themes/console/images/buttons/search_hover.png) no-repeat,
   url(/themes/console/images/buttons/update_hover.png) no-repeat,
   url(/themes/console/images/info/notice.png) no-repeat,
-  url(/themes/console/images/svg/update.svg),
-  url(images/download_hover.svg),
-  url(images/newtab.png), #a4a4cb;
-  background-size: 32px, 0, 0, 0, 0, 0, 0, 0, 0, 0;
+  url(images/download_hover.svg), #a4a4cb;
+  background-size: 32px, 0, 0, 0, 0, 0, 0, 0;
 }
 
 @supports (text-justify: auto) and (-moz-appearance: none) { /* Firefox 55+ */
-body {
-  background-attachment: fixed !important;
-}
+  body {
+    background-attachment: fixed !important;
+  }
 }
 
 /* optimize paint/scroll performance */
@@ -920,12 +918,16 @@ p:empty + .sb_notice {
   height: 26px;
   vertical-align: middle;
   display: inline-block;
-  background: url(/themes/console/images/svg/update.svg) center center no-repeat;
+  background: var(--update) center center no-repeat;
   background-size: 24px;
   content: "";
   transform: rotate(0);
   filter: sepia(1);
   animation: linear spin 3s forwards infinite;
+}
+
+#nographs::after {
+  background-size: 36px;
 }
 
 @keyframes down {
@@ -2423,9 +2425,15 @@ h3#exploratory {
   height: 16px;
   display: inline-block;
   float: right;
-  background: var(-settings) center center no-repeat;
+  background: var(--settings) center center no-repeat;
   background-size: 16px;
   content: "";
+}
+
+#tunnels h3 a[href^="/configtunnels#"]:hover::after, #tunnels h3 a[href$="i2ptunnelmgr"]:hover::after,
+#logs a.delete::after, #logs a.configure:hover::after {
+  background: var(--settings_hover) center center no-repeat;
+  background-size: 16px;
 }
 
 #logs a.delete::after, #logs a.configure::after {
@@ -3994,16 +4002,14 @@ p.infowarn {
 }
 
 #leavefamily tr:last-child td:first-child {
-  background: #fff url(/themes/console/images/info/leave_family.png) 12px center no-repeat;
-  background: url(/themes/console/images/info/leave_family.png) 12px center no-repeat, linear-gradient(to bottom, #fafaff 50%, rgba(220,220,255,.3)), repeating-linear-gradient(135deg, rgba(255,255,255,.5) 2px, rgba(221, 221, 255, .3) 3px, #fff 4px), #fff !important;
   padding: 15px 15px 15px 50px;
+  background: url(/themes/console/images/info/leave_family.png) 12px center no-repeat, linear-gradient(to bottom, #fafaff 50%, rgba(220,220,255,.3)), repeating-linear-gradient(135deg, rgba(255,255,255,.5) 2px, rgba(221, 221, 255, .3) 3px, #fff 4px), #fff !important;
   background-size: 28px;
 }
 
 #oldhome td:first-child {
-  background: #fff url(/themes/console/images/svg/home.svg) 12px center no-repeat;
-  background: url(/themes/console/images/svg/home.svg) 12px center no-repeat, linear-gradient(to bottom, #fafaff 50%, rgba(220,220,255,.3)), repeating-linear-gradient(135deg, rgba(255,255,255,.5) 2px, rgba(221, 221, 255, .3) 3px, #fff 4px), #fff !important;
   padding: 10px 15px 10px 50px;
+  background: var(--home) 12px center no-repeat, linear-gradient(to bottom, #fafaff 50%, rgba(220,220,255,.3)), repeating-linear-gradient(135deg, rgba(255,255,255,.5) 2px, rgba(221, 221, 255, .3) 3px, #fff 4px), #fff !important;
   background-size: 28px, 100%, 100%;
 }
 
@@ -4012,9 +4018,8 @@ p.infowarn {
 }
 
 #floodfillconfig tr:first-child .infohelp {
-  background: #fff url(/themes/console/images/info/floodfill_32x32.png) 12px center no-repeat;
-  background: url(/themes/console/images/info/floodfill_32x32.png) 12px center no-repeat, var(--p);
   padding: 15px 15px 15px 50px;
+  background: url(/themes/console/images/info/floodfill_32x32.png) 12px center no-repeat, var(--p);
   background-size: 28px, 100%;
 }
 
@@ -4023,23 +4028,19 @@ p.infowarn {
 }
 
 p#clientconf.infohelp, p#webappconfigtext.infohelp {
-  background: #fff url(/themes/console/images/svg/editclient.svg) 12px center no-repeat;
-  background: url(/themes/console/images/svg/editclient.svg) 12px center no-repeat, var(--p);
   padding: 15px 15px 15px 50px;
+  background: url(/themes/console/images/svg/editclient.svg) 12px center no-repeat, var(--p);
   background-size: 28px, 100%;
 }
 
 p#pluginconfigtext {
   padding: 15px 15px 15px 50px;
-  background: #fff url(/themes/console/images/svg/pluginconfig.svg) 12px center no-repeat;
   background: url(/themes/console/images/svg/pluginconfig.svg) 12px center no-repeat, var(--p);
   background-size: 28px, 100%;
 }
 
 #plugininstall .infohelp {
   padding: 15px 15px 15px 50px;
-  background: #fff url(/themes/console/images/svg/plugin.svg) 12px center no-repeat;
-  background: url(/themes/console/images/svg/plugin.svg) 12px center no-repeat, var(--p);
   background: url(/themes/console/images/svg/plugin.svg) 12px center no-repeat, linear-gradient(to bottom, #fafaff 50%, rgba(220, 220, 255, .3)), rgba(0, 0, 0, 0) repeating-linear-gradient(135deg, rgba(255, 255, 255, .5) 2px, rgba(221, 221, 255, .3) 3px, #ffffff 5px);
   background-size: 28px, 100%;
 }
@@ -4055,14 +4056,12 @@ p#pluginconfigtext {
 
 #config_peers tr:nth-child(3) td.infohelp {
   padding: 15px 15px 15px 50px;
-  background: #fafaff url(/themes/console/images/info/blocked.png) 12px center no-repeat;
   background: url(/themes/console/images/info/blocked.png) 12px center no-repeat, var(--p);
   background-size: 28px, 100%;
 }
 
 h3#shutdownrouter + p.infohelp {
   padding: 15px 15px 15px 50px;
-  background: #fafaff url(/themes/console/images/info/power.png) 12px center no-repeat;
   background: url(/themes/console/images/info/power.png) 12px center no-repeat, var(--p);
   background-size: 28px, 100%;
 }
@@ -4079,21 +4078,18 @@ h3#shutdownrouter, h3#systray, h3#servicedebug {
 
 h3#systray + p.infohelp {
   padding: 15px 15px 15px 50px;
-  background: #fafaff url(/themes/console/images/info/systray.png) 12px center no-repeat;
   background: url(/themes/console/images/info/systray.png) 12px center no-repeat, var(--p);
   background-size: 28px, 100%;
 }
 
 h3#servicedebug + p.infohelp {
   padding: 15px 15px 15px 50px;
-  background: #fafaff url(/themes/console/images/svg/bug.svg) 12px center no-repeat;
   background: url(/themes/console/images/svg/bug.svg) 12px center no-repeat, var(--p);
   background-size: 28px, 100%;
 }
 
 h3#browseronstart + p.infohelp {
   padding: 15px 15px 15px 50px;
-  background: #fafaff url(/themes/console/images/info/launch_browser.png) 12px center no-repeat;
   background: url(/themes/console/images/info/launch_browser.png) 12px center no-repeat, var(--p);
   background-size: 28px, 100%;
 }
@@ -4108,28 +4104,24 @@ h3#browseronstart + p.infohelp {
 
 p#enablefullstats, p#gatherstats {
   padding: 15px 15px 15px 50px;
-  background: #fafaff url(/themes/console/images/svg/stats.svg) 12px center no-repeat;
-  background: url(/themes/console/images/svg/stats.svg) 12px center no-repeat, var(--p);
+  background: var(--stats) 12px center no-repeat, var(--p);
   background-size: 28px, 100%;
 }
 
 #config_family .infohelp {
   padding: 15px 15px 15px 50px !important;
-  background: #fafaff url(/themes/console/images/info/family.png) 12px center no-repeat !important;
   background: url(/themes/console/images/info/family.png) 12px center no-repeat, var(--p) !important;
   background-size: 28px, 100% !important;
 }
 
 #newfamily .infohelp {
   padding: 15px 15px 15px 50px !important;
-  background: #fafaff url(/themes/console/images/info/create_family.png) 12px center no-repeat !important;
   background: url(/themes/console/images/info/create_family.png) 12px center no-repeat, var(--p) !important;
   background-size: 28px, 100% !important;
 }
 
 #joinfamily .infohelp {
   padding: 15px 15px 15px 50px !important;
-  background: #fafaff url(/themes/console/images/info/join_family.png) 12px center no-repeat !important;
   background: url(/themes/console/images/info/join_family.png) 12px center no-repeat, var(--p) !important;
   background-size: 28px, 100% !important;
 }
@@ -6644,7 +6636,7 @@ h3#udpcon {
 
 #tunnels h3:last-of-type {
   padding-left: 32px;
-  background: url(/themes/console/images/svg/speedometer.svg) 7px center no-repeat, var(--h3), linear-gradient(to right, #fafaff 5%, rgba(231, 231, 255, .8) 25%) !important;
+  background: var(--speed) 7px center no-repeat, var(--h3), linear-gradient(to right, #fafaff 5%, rgba(231, 231, 255, .8) 25%) !important;
   background-size: 18px, 100%, 100% !important;
 }
 
@@ -10223,16 +10215,15 @@ b.suboption {
 /* bandwidth config */
 
 #bandwidthconfig tr:first-child .infohelp {
-  background: #fff url(/themes/console/images/svg/speedometer.svg) 12px center no-repeat;
-  background: url(/themes/console/images/svg/speedometer.svg) 12px center no-repeat, var(--p);
   padding: 15px 15px 15px 50px;
+  background: var(--speed) 12px center no-repeat, var(--p);
   background-size: 28px;
 }
 
 #bandwidthconfig td:first-child {
+  padding-right: 10px;
   width: 200px;
   white-space: nowrap;
-  padding-right: 10px;
 }
 
 #bandwidthconfig td:last-child {
@@ -13060,7 +13051,8 @@ i {
 }
 
 #enablefullstats {
-  background: url(/themes/console/images/svg/stats.svg) 12px center no-repeat, var(--p)
+  background: var(--stats) 12px center no-repeat, var(--p);
+  background-size: 28px, 100%;
 }
 
 /* /tunnelpeercount */
