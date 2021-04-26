@@ -1603,14 +1603,14 @@ tr {
 
 tr:nth-child(even) {
   background: #000400;
-  background: linear-gradient(to bottom, #001400, #000600);
-  vertical-align: middle;
 }
 
 tr:nth-child(odd) {
   background: #000a00;
-  background: linear-gradient(to bottom, #001400, #000600);
-  vertical-align: middle;
+}
+
+tr:nth-child(even), tr:nth-child(odd) {
+  background: linear-gradient(to bottom, rgba(0,24,0,.5), rgba(0,8,0,.5));
 }
 
 td {
@@ -4318,12 +4318,17 @@ input[name="logfilename"], input[name="logformat"], input[name="logdateformat"],
   background: var(--helplink) center center no-repeat;
 }
 
+#config_service a[href$="#alternative_browser"]:hover::after, h3#iptransport a:hover::after, h3#advancedconfig a:hover::after, #reseedsetup a:hover::after {
+  background: var(--helplink_hover) center center no-repeat;
+}
+
 #config_service a[href$="#alternative_browser"]::after {
-  margin-left: -16px;
-  width: 16px;
-  height: 16px;
+  margin-left: -3px;
+  width: 18px;
+  height: 18px;
   display: inline-block;
-  background-size: 16px;
+  background-size: 18px;
+  vertical-align: middle;
   content: "";
 }
 
@@ -4490,7 +4495,7 @@ h4.app img, h4.app2 img {
   width: 16px;
   height: 16px;
   float: right;
-  background: var(--configure) center center no-repeat;
+  background: var(--settings) center center no-repeat;
   background-size: 16px !important;
   content: "";
 }
@@ -4499,7 +4504,7 @@ h4.app img, h4.app2 img {
 .main#tunnels h3 a[href$="/i2ptunnelmgr"]:hover::after, .main#tunnels h3 a[href$="/i2ptunnelmgr"]:focus::after,
  #logs a.configure:hover::after, #logs a.configure:focus::after,
  h4.app a:hover::after, h4.app a:focus::after, h4.app2 a:hover::after, h4.app2 a:focus::after {
-  background: var(--configure_hover) center center no-repeat;
+  background: var(--settings_hover) center center no-repeat;
 }
 
 .main#tunnels h3 a[href^="/configtunnels#"]:active::after, .main#tunnels h3 a[href$="/i2ptunnelmgr"]:active::after,
@@ -6932,7 +6937,8 @@ textarea#advancedsettings {
 }
 
 #bannedpeercount {
-  background: #000 url(/themes/console/images/info/blocked.png) 12px center no-repeat !important;
+  background: #000 var(--ban) 12px center no-repeat !important;
+  background-size: 28px !important;
 }
 
 #profiles #bannedpeercount {
@@ -7106,6 +7112,7 @@ th.th_title {
   padding: 8px 10px !important;
   text-align: left;
   background: linear-gradient(to bottom, rgba(0,0,0,0) 50%, #000 50%), var(--h3), var(--h3_fade) !important;
+  background-size: 100%, 4px 100%, 100% !important;
 }
 
 input#hideme {
@@ -7343,19 +7350,19 @@ p#pluginconfigtext {
 
 #config_peers tr:nth-child(3) td.infohelp {
   padding: 15px 15px 15px 50px;
-  background: #000 url(/themes/console/images/info/blocked.png) 12px center no-repeat !important;
+  background: #000 var(--ban) 12px center no-repeat !important;
   background-size: 28px !important;
 }
 
 h3#shutdownrouter + p.infohelp {
   padding: 15px 15px 15px 50px;
-  background: #000 url(/themes/console/images/info/power.png) 12px center no-repeat !important;
+  background: #000 var(--power) 12px center no-repeat !important;
   background-size: 28px !important;
 }
 
 h3#restartrouter + p.infohelp, #config_family .infohelp.needrestart {
   padding: 15px 15px 15px 50px;
-  background: #000 url(/themes/console/images/info/reboot.png) 12px center no-repeat !important;
+  background: #000 var(--reboot) 12px center no-repeat !important;
   background-size: 28px !important;
 }
 
@@ -9427,7 +9434,7 @@ b.suboption {
 }
 
 #config_reseed #reseedurl {
-  background: #010 var(--link) 10px center no-repeat !important;
+  background: #010 var(--link) 16px center no-repeat !important;
   background-size: 28px, 100%, 100% !important;
 }
 
@@ -9437,29 +9444,28 @@ b.suboption {
 }
 
 #config_reseed  #reseedzip {
-  background: #010 var(--files) 10px center no-repeat !important;
+  background: #010 var(--files) 16px center no-repeat !important;
   background-size: 28px, 100%, 100% !important;
 }
 
 #config_reseed #reseedzip:hover {
-  background: #002500 var(--files) 10px center no-repeat !important;
+  background: #002500 var(--files) 16px center no-repeat !important;
   background-size: 28px !important;
 }
 
 #config_reseed #reseedcreatefile {
-  background: #010 var(--package) 10px center no-repeat !important;
+  background: #010 var(--package) 16px center no-repeat !important;
   background-size: 28px, 100%, 100% !important;
   text-align: justify;
 }
 
 #config_reseed #reseedcreatefile:hover {
-  background: #002500 var(--package) 10px center no-repeat !important;
+  background: #002500 var(--package) 16px center no-repeat !important;
   background-size: 28px !important;
 }
 
 #reseedcreatefile p {
-  margin-top: 0;
-  margin-bottom: 0;
+  margin: 0 10px;
   padding-top: 0;
   padding-bottom: 0;
   display: inline-block;
@@ -11771,12 +11777,12 @@ th[aria-sort] {
 }
 
 #sybilnav ul li#configurePeriodic::before {
-  background: var(--configure);
+  background: var(--settings);
   background-size: 14px !important;
 }
 
 #sybilnav ul li#configurePeriodic:hover::before {
-  background: var(--configure_hover);
+  background: var(--settings_hover);
   background-size: 14px !important;
 }
 
