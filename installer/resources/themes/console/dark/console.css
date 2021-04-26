@@ -1966,6 +1966,7 @@ h1, h4.app, h4.app2, #news h3 {
   text-shadow: 0 1px 1px #000;
   box-shadow: var(--lowlight);
   background: var(--h1) !important;
+  background-size: 4px 100%, 100%, 175px !important;
   background-blend-mode: normal, exclusion, exclusion;
 }
 

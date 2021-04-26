@@ -9247,7 +9247,6 @@ select[name="newlogclass"] {
   margin: 0 0 0 -10px;
   padding: 7px 5px;
   border-top: 1px solid #8d8daa;
-  background: linear-gradient(to right, #efefff 65%, #fafaff);
 }
 
 #fullhistory a {
@@ -9257,12 +9256,12 @@ select[name="newlogclass"] {
 #fullhistory a::before {
   content: "";
   height: 18px;
-  width: 16px;
+  width: 20px;
   margin-top: -1px;
   display: inline-block;
   vertical-align: middle;
-  background: url(/themes/console/images/buttons/fullview.png) left center no-repeat !important;
-  background-size: 13px 13px !important;
+  background: var(--eye_static) left center no-repeat !important;
+  background-size: 16px !important;
 }
 
 #fullhistory a:active::before {
