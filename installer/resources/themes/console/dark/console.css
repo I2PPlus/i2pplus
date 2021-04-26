@@ -11592,7 +11592,7 @@ h2#jobrunners {
 }
 
 #sitemap h3:nth-of-type(2) {
-  background: url(/themes/console/images/info_rhombus.png) 9px center no-repeat, var(--h1) !important;
+  background: url(/themes/console/images/svg/info.svg) 9px center no-repeat, var(--h1) !important;
   background-size: 18px, 4px 100%, 100%, 175px !important;
   background-blend-mode: var(--h3_blend) !important;
 }
