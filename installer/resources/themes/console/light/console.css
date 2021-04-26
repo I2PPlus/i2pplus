@@ -14,6 +14,7 @@
   --h3: linear-gradient(to bottom, #fff 50%, rgba(255,255,255,.6) 50%, rgba(240,240,255,.4));
   --p: linear-gradient(135deg, #fafaff, #f8f8ff);
   --highlight: inset 0 0 0 1px #fff;
+  --a: #4d5f80;
 }
 
 html, body {
@@ -226,7 +227,7 @@ pre {
 }
 
 .routersummary a, .routersummary a:visited {
-  color: #2c4e8f !important;
+  color: var(--a) !important;
 }
 
 .routersummary a:hover, .routersummary a:focus {
@@ -326,7 +327,7 @@ pre {
   word-spacing: -0.12em;
   text-transform: uppercase;
   text-decoration: none;
-  color: #2c4e8f;
+  color: var(--a);
 }
 
 .routersummary h3:hover a, .routersummary h3 a:hover {
@@ -3800,31 +3801,30 @@ button:hover, button:focus, button:active, select:hover, select:focus, select:ac
   text-shadow: none;
 }
 
-a:link, #graphopts a:visited, .news #newsdisplay a, .news #newsdisplay a:visited, .graphstat, .graphstat:visited,
-#fullhistory a:visited, #routerinformation tr:nth-child(n+2) a:visited, #sitemap a:visited:not(:hover), #sybilnav li a:visited {
+a:link, a:visited {
   color: #3b6bbf;
+  color: var(--a);
   text-decoration: none;
   font-weight: bold;
   word-wrap: break-word;
   outline: none;
 }
 
-a:visited, .tab a {
+/*a:visited, .tab a {
   color: #2c4e8f;
+  color: var(--a);
   text-decoration: none;
   font-weight: bold;
-}
+}*/
 
 a:hover, a:focus {
   color: #f60;
   text-decoration: none;
-  font-weight: bold;
   text-shadow: none;
 }
 
 a:active {
   color: #f30 !important;
-  font-weight: bold;
 }
 
 .links li {
@@ -5398,7 +5398,7 @@ button.download.control:hover, button.download.control:focus {
 
 input[type=text], input[type=password] {
   background: #fbfbff;
-  box-shadow: inset 1px 1px 1px rgba(204, 204, 204, .6);
+  box-shadow: var(--highlight), inset 3px 3px 3px rgba(0,0,48,.2);
 }
 
 input[name="refreshInterval"] {
@@ -6382,20 +6382,14 @@ table#consolepass input[name="name"] {
   margin-right: 20px;
 }
 
-#consolepass input[name="name"], #externali2cp input[name="user"], #reseedconfig input[name="username"], #reseedconfig input[name="susername"]
-#consolepass input[name="nofilter_pw"], #externali2cp input[name="nofilter_pw"], #reseedconfig input[type=password] {
-  padding: 4px 5px 4px 26px !important;
-  background-size: 16px !important;
-  background-blend-mode: luminosity;
-}
-
 #consolepass input[name="name"], #externali2cp input[name="user"], #reseedconfig input[name="username"], #reseedconfig input[name="susername"] {
-  background: #fbfbff url(/themes/console/images/buttons/user.png) 5px center no-repeat;
+  background: #fbfbff var(--user) 5px center no-repeat;
 }
 
 #consolepass input[name="nofilter_pw"], #externali2cp input[name="nofilter_pw"], #reseedconfig input[type=password] {
   padding: 4px 5px 4px 26px !important;
-  background: #fbfbff url(/themes/console/images/buttons/password.png) 5px center no-repeat !important;
+  background: #fbfbff var(--key) 5px center no-repeat !important;
+  background-size: 16px !important;
   background-blend-mode: luminosity;
 }
 
@@ -6403,6 +6397,13 @@ table#consolepass input[name="name"] {
 #consolepass input[name="nofilter_pw"]:focus, #externali2cp input[name="nofilter_pw"]:focus, #reseedconfig input[type=password]:focus {
   background-color: #fff !important;
   background-blend-mode: normal;
+}
+
+#consolepass input[name="name"], #externali2cp input[name="user"], #reseedconfig input[name="username"], #reseedconfig input[name="susername"]
+#consolepass input[name="nofilter_pw"], #externali2cp input[name="nofilter_pw"], #reseedconfig input[type=password] {
+  padding: 4px 5px 4px 26px !important;
+  background-size: 16px !important;
+  background-blend-mode: luminosity;
 }
 
 /* end configui */
@@ -12236,7 +12237,7 @@ h1.webapp {
 }
 
 div.app a, div.app a:visited, #sitemap a:link, #sitemap a:visited, .warning a {
-  color: #2c4e8f !important;
+  color: var(--a) !important;
 }
 
 /* setup wizard */
@@ -12353,7 +12354,7 @@ th[aria-sort] {
 
 .sitelink.external {
   padding: 0 3px 0 18px;
-  background: url(/themes/console/images/world.png) 3px center no-repeat;
+  background: var(--globe) 3px center no-repeat;
   background-size: 12px 12px, 100% !important;
 }
 
@@ -12400,7 +12401,7 @@ th[aria-sort] {
 }
 
 #stats .tab:not(.tab2) {
-  color: #2c4e8f;
+  color: var(--a);
 }
 
 #stats .tab2, #stats .tab2:hover {
