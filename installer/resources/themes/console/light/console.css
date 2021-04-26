@@ -4025,13 +4025,17 @@ p.infowarn {
 
 #leavefamily tr:last-child td:first-child {
   padding: 15px 15px 15px 50px;
-  background: url(/themes/console/images/info/leave_family.png) 12px center no-repeat, linear-gradient(to bottom, #fafaff 50%, rgba(220,220,255,.3)), repeating-linear-gradient(135deg, rgba(255,255,255,.5) 2px, rgba(221, 221, 255, .3) 3px, #fff 4px), #fff !important;
-  background-size: 28px;
+  background: var(--leavefamily) 12px center no-repeat,
+              linear-gradient(to bottom, #fafaff 50%, rgba(220,220,255,.3)),
+              repeating-linear-gradient(135deg, rgba(255,255,255,.5) 2px, rgba(221, 221, 255, .3) 3px, #fff 4px), #fff !important;
+  background-size: 28px, 100%, 100%;
 }
 
 #oldhome td:first-child {
   padding: 10px 15px 10px 50px;
-  background: var(--home) 12px center no-repeat, linear-gradient(to bottom, #fafaff 50%, rgba(220,220,255,.3)), repeating-linear-gradient(135deg, rgba(255,255,255,.5) 2px, rgba(221, 221, 255, .3) 3px, #fff 4px), #fff !important;
+  background: var(--home) 12px center no-repeat,
+              linear-gradient(to bottom, #fafaff 50%, rgba(220,220,255,.3)),
+              repeating-linear-gradient(135deg, rgba(255,255,255,.5) 2px, rgba(221, 221, 255, .3) 3px, #fff 4px), #fff !important;
   background-size: 28px, 100%, 100%;
 }
 
@@ -4138,13 +4142,13 @@ p#enablefullstats, p#gatherstats {
 
 #newfamily .infohelp {
   padding: 15px 15px 15px 50px !important;
-  background: url(/themes/console/images/info/create_family.png) 12px center no-repeat, var(--p) !important;
+  background: var(--newfamily) 12px center no-repeat, var(--p) !important;
   background-size: 28px, 100% !important;
 }
 
 #joinfamily .infohelp {
   padding: 15px 15px 15px 50px !important;
-  background: url(/themes/console/images/info/join_family.png) 12px center no-repeat, var(--p) !important;
+  background: var(--joinfamily) 12px center no-repeat, var(--p) !important;
   background-size: 28px, 100% !important;
 }
 
