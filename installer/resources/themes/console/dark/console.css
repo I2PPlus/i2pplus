@@ -4318,12 +4318,17 @@ input[name="logfilename"], input[name="logformat"], input[name="logdateformat"],
   background: var(--helplink) center center no-repeat;
 }
 
+#config_service a[href$="#alternative_browser"]:hover::after, h3#iptransport a:hover::after, h3#advancedconfig a:hover::after, #reseedsetup a:hover::after {
+  background: var(--helplink_hover) center center no-repeat;
+}
+
 #config_service a[href$="#alternative_browser"]::after {
-  margin-left: -16px;
-  width: 16px;
-  height: 16px;
+  margin-left: -3px;
+  width: 18px;
+  height: 18px;
   display: inline-block;
-  background-size: 16px;
+  background-size: 18px;
+  vertical-align: middle;
   content: "";
 }
 
