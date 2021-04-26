@@ -109,7 +109,7 @@
     padding-bottom: 2px;
   }
 
-  h1[class], h1 {
+  h1[class], h1, h1.conf.adv {
     padding: 13px 15px 12px 50px;
     min-width: 620px;
     font-size: 17pt;

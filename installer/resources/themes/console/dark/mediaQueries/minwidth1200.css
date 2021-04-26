@@ -450,7 +450,7 @@
     width: 55px;
   }
 
-  h1[class], h1 {
+  h1[class], h1, h1.conf.adv {
     padding: 14px 15px 13px 62px;
     font-size: 20pt !important;
     background-size: 40px, 4px 100%, 100%, 164px !important;
