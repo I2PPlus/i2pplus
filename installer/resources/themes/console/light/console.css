@@ -2927,25 +2927,23 @@ td.infohelp, #help tr:hover td.infohelp, #eventlog tr:hover .infohelp, td.infowa
 }
 
 td.infohelp, #help tr:hover td.infohelp, #eventlog tr:hover .infohelp {
-  background: #fff url(/themes/console/images/svg/infohelp.svg) 12px center no-repeat;
   background: url(/themes/console/images/svg/infohelp.svg) 12px center no-repeat, var(--p);
 }
 
 td.infowarn, #help tr:hover td.infowarn {
-  background: #fff url(/themes/console/images/svg/infowarn.svg) 12px center no-repeat;
   background: url(/themes/console/images/svg/infowarn.svg) 12px center no-repeat, var(--p);
 }
 
 #manualpeercontrol tr:nth-child(3) td.infohelp {
   padding: 15px 15px 15px 50px !important;
-  background: #fafaff url(/themes/console/images/info/blocked.png) 12px center no-repeat;
-  background: url(/themes/console/images/info/blocked.png) 12px center no-repeat, linear-gradient(to bottom, #fafaff 50%, rgba(220, 220, 255, .3)), rgba(0, 0, 0, 0) repeating-linear-gradient(135deg, rgba(255, 255, 255, .5) 2px, rgba(221, 221, 255, .3) 3px, #fff 5px) !important;
+  background: var(--ban) 12px center no-repeat,
+              linear-gradient(to bottom, #fafaff 50%, rgba(220, 220, 255, .3)), rgba(0, 0, 0, 0),
+              repeating-linear-gradient(135deg, rgba(255, 255, 255, .5) 2px, rgba(221, 221, 255, .3) 3px, #fff 5px) !important;
   background-size: 28px, 100% !important;
 }
 
 #bannedpeercount {
-  background: #fff url(/themes/console/images/info/blocked.png) 12px center no-repeat;
-  background: url(/themes/console/images/info/blocked.png) 12px center no-repeat, var(--p);
+  background: var(--ban) 12px center no-repeat, var(--p);
 }
 
 #config_peers #bannedpeercount {
@@ -2963,8 +2961,8 @@ td.infowarn, #help tr:hover td.infowarn {
 }
 
 .main#logs ul li {
-  padding-left: 0;
   margin-left: 18px;
+  padding-left: 0;
 }
 
 .main#logs li:first-child {
@@ -3688,46 +3686,70 @@ table.search {
   background: none !important;
 }
 
-table.search td {
+.search td {
   border: none;
   padding: 0 5px;
   white-space: nowrap;
 }
 
-table.search td > * {
+.search td > * {
   vertical-align: middle;
 }
 
-table.search td:first-child {
+.search td:first-child {
   padding-right: 2px;
   padding-left: 0;
 }
 
-table.search td:nth-child(2) {
+.search td:nth-child(2) {
   text-align: center !important;
   padding-right: 0;
   padding-left: 6px;
   width: 60px;
 }
 
-table.search td:nth-child(3) {
+.search td:nth-child(3) {
   padding-left: 0;
   padding-right: 8px;
-}
-
-table.search input[type=text] {
-  margin-top: 0;
-  margin-bottom: 0;
-  padding-left: 24px;
-  width: 100%;
-  min-width: 40px !important;
-  line-height: 140%;
 }
 
 table.search select {
   min-width: 80px;
   width: 100%;
   text-overflow: ellipsis;
+}
+
+button.search {
+  padding: 5px 9px 5px 26px;
+  background: var(--search) no-repeat 8px center, linear-gradient(to bottom, #fff, #efefff);
+  background-blend-mode: luminosity;
+}
+
+button.search:hover, button.search:focus, button.search:active {
+  background: var(--search) no-repeat 8px center, linear-gradient(to bottom, #eee, #fff) !important;
+  background-size: 14px, 100% !important;
+  background-blend-mode: normal;
+}
+
+input.search[type=text] {
+  margin-top: 0;
+  margin-bottom: 0;
+  padding: 5px 5px 5px 28px;
+  width: 100%;
+  min-width: 40px !important;
+  line-height: 140%;
+  box-sizing: border-box;
+  border: 1px solid #transparent;
+  background: #fbfbff var(--search) no-repeat 8px center !important;
+  background-size: 15px !important;
+  background-blend-mode: luminosity;
+}
+
+input.search[type=text]:focus {
+  padding: 5px 5px 5px 28px;
+  background: #fff var(--search) no-repeat 8px center !important;
+  background-size: 15px !important;
+  background-blend-mode: normal;
 }
 
 /* end optional homepage search */
@@ -4003,13 +4025,17 @@ p.infowarn {
 
 #leavefamily tr:last-child td:first-child {
   padding: 15px 15px 15px 50px;
-  background: url(/themes/console/images/info/leave_family.png) 12px center no-repeat, linear-gradient(to bottom, #fafaff 50%, rgba(220,220,255,.3)), repeating-linear-gradient(135deg, rgba(255,255,255,.5) 2px, rgba(221, 221, 255, .3) 3px, #fff 4px), #fff !important;
-  background-size: 28px;
+  background: var(--leavefamily) 12px center no-repeat,
+              linear-gradient(to bottom, #fafaff 50%, rgba(220,220,255,.3)),
+              repeating-linear-gradient(135deg, rgba(255,255,255,.5) 2px, rgba(221, 221, 255, .3) 3px, #fff 4px), #fff !important;
+  background-size: 28px, 100%, 100%;
 }
 
 #oldhome td:first-child {
   padding: 10px 15px 10px 50px;
-  background: var(--home) 12px center no-repeat, linear-gradient(to bottom, #fafaff 50%, rgba(220,220,255,.3)), repeating-linear-gradient(135deg, rgba(255,255,255,.5) 2px, rgba(221, 221, 255, .3) 3px, #fff 4px), #fff !important;
+  background: var(--home) 12px center no-repeat,
+              linear-gradient(to bottom, #fafaff 50%, rgba(220,220,255,.3)),
+              repeating-linear-gradient(135deg, rgba(255,255,255,.5) 2px, rgba(221, 221, 255, .3) 3px, #fff 4px), #fff !important;
   background-size: 28px, 100%, 100%;
 }
 
@@ -4019,7 +4045,7 @@ p.infowarn {
 
 #floodfillconfig tr:first-child .infohelp {
   padding: 15px 15px 15px 50px;
-  background: url(/themes/console/images/info/floodfill_32x32.png) 12px center no-repeat, var(--p);
+  background: var(--floodfill) 12px center no-repeat, var(--p);
   background-size: 28px, 100%;
 }
 
@@ -4056,7 +4082,7 @@ p#pluginconfigtext {
 
 #config_peers tr:nth-child(3) td.infohelp {
   padding: 15px 15px 15px 50px;
-  background: url(/themes/console/images/info/blocked.png) 12px center no-repeat, var(--p);
+  background: var(--ban) 12px center no-repeat, var(--p);
   background-size: 28px, 100%;
 }
 
@@ -4116,13 +4142,13 @@ p#enablefullstats, p#gatherstats {
 
 #newfamily .infohelp {
   padding: 15px 15px 15px 50px !important;
-  background: url(/themes/console/images/info/create_family.png) 12px center no-repeat, var(--p) !important;
+  background: var(--newfamily) 12px center no-repeat, var(--p) !important;
   background-size: 28px, 100% !important;
 }
 
 #joinfamily .infohelp {
   padding: 15px 15px 15px 50px !important;
-  background: url(/themes/console/images/info/join_family.png) 12px center no-repeat, var(--p) !important;
+  background: var(--joinfamily) 12px center no-repeat, var(--p) !important;
   background-size: 28px, 100% !important;
 }
 
@@ -4539,6 +4565,10 @@ h2, h3 {
   width: 50%;
 }
 
+#banlist .flag {
+  border: none !important;
+}
+
 #permabanned tr:nth-child(2) td, #ipv4 td, #ipv6 td {
   border-bottom: 1px solid #8d8daa;
   background: #fff !important;
@@ -4818,31 +4848,9 @@ input[type=submit], input[type=reset], button, .optbox, select {
   cursor: pointer;
 }
 
-button.search {
-  background: url(/themes/console/images/buttons/search.png) no-repeat 8px center, linear-gradient(to bottom, #fff, #efefff);
-  padding: 5px 9px 5px 26px;
-}
-
-button.search:hover, button.search:focus, button.search:active {
-  background: url(/themes/console/images/buttons/search_hover.png) no-repeat 8px center, linear-gradient(to bottom, #eee, #fff) !important;
-  background-size: 14px, 100% !important;
-}
-
-input.search[type=text] {
-  background: #fbfbff url(/themes/console/images/buttons/search.png) no-repeat 4px center !important;
-  padding: 4px 3px 4px 22px;
-  background-size: 16px !important;
-  background-blend-mode: luminosity;
-}
-
-input.search[type=text]:focus {
-  background: #fff url(/themes/console/images/buttons/search.png) no-repeat 4px center !important;
-  background-blend-mode: normal;
-}
-
 input, input:visited, button, button:visited {
   margin: 3px;
-  padding: 4px 5px;
+  padding: 5px;
   line-height: 140%;
   font-size: 9pt;
   color: #41465f;
@@ -5401,6 +5409,14 @@ input[type=text], input[type=password] {
   box-shadow: var(--highlight), inset 3px 3px 3px rgba(0,0,48,.2);
 }
 
+input[type=text]::placeholder {
+  font-style: italic;
+}
+
+.search input[type=text]:not(:hover)::placeholder, input[type=text]:focus::placeholder {
+  opacity: 0;
+}
+
 input[name="refreshInterval"] {
   text-align: right;
   min-width: 80px;
@@ -5463,7 +5479,7 @@ label.disabled, label.disabled:hover, label.disabled:active {
 
 select, select[disabled]:hover, select[disabled]:focus  {
   margin: 5px;
-  padding: 4px 24px 4px 4px !important;
+  padding: 5px 24px 5px 5px !important;
   min-width: 120px;
   text-align: left !important;
   font-size: 9pt;
@@ -7625,7 +7641,8 @@ img.unknownflag {
 #sybils_summary {
   padding: 20px 10px 20px 50px;
   line-height: 160%;
-  background: url(/themes/console/images/info/floodfill_32x32.png) 8px center no-repeat, repeating-linear-gradient(135deg, rgba(248,238,255,.5) 2px, rgba(240, 240, 255, .3) 3px, #fafaff 5px), #fafaff;
+  background: var(--floodfill) 8px center no-repeat,
+              repeating-linear-gradient(135deg, rgba(248,238,255,.5) 2px, rgba(240, 240, 255, .3) 3px, #fafaff 5px), #fafaff;
   columns: 400px auto;
 }
 
@@ -9234,7 +9251,6 @@ select[name="newlogclass"] {
   margin: 0 0 0 -10px;
   padding: 7px 5px;
   border-top: 1px solid #8d8daa;
-  background: linear-gradient(to right, #efefff 65%, #fafaff);
 }
 
 #fullhistory a {
@@ -9244,12 +9260,12 @@ select[name="newlogclass"] {
 #fullhistory a::before {
   content: "";
   height: 18px;
-  width: 16px;
+  width: 20px;
   margin-top: -1px;
   display: inline-block;
   vertical-align: middle;
-  background: url(/themes/console/images/buttons/fullview.png) left center no-repeat !important;
-  background-size: 13px 13px !important;
+  background: var(--eye_static) left center no-repeat !important;
+  background-size: 16px !important;
 }
 
 #fullhistory a:active::before {
@@ -12152,7 +12168,7 @@ h1.webapp {
 
 #configurationhelp h2, #advancedsettings h2, #filterlist h2 {
   padding-left: 38px;
-  background: url(/themes/console/images/info/configure.png) 8px center no-repeat, var(--h2) !important;
+  background: var(--configure) 8px center no-repeat, var(--h2) !important;
   background-size: 24px, 100%, 100%, 100% !important;
 }
 
@@ -12162,9 +12178,9 @@ h1.webapp {
   background-size: 24px, 100%, 100%, 100% !important;
 }
 
- #tunnman h2 {
+#tunnman h2 {
   padding-left: 38px;
-  background: url(/themes/console/images/info/tunnels.png) 8px center no-repeat, var(--h2) !important;
+  background: var(--hardhat) 8px center no-repeat, var(--h2) !important;
   background-size: 24px, 100%, 100%, 100% !important;
 }
 
@@ -12176,19 +12192,19 @@ h1.webapp {
 
 #reseedhelp h2 {
   padding-left: 38px;
-  background: url(/themes/console/images/info/connect.png) 8px center no-repeat, var(--h2) !important;
+  background: var(--reseed) 8px center no-repeat, var(--h2) !important;
   background-size: 24px, 100%, 100%, 100% !important;
 }
 
 #faq h2, #glossary h2 {
   padding-left: 38px;
-  background: url(/themes/console/images/info/question.png) 8px center no-repeat, var(--h2) !important;
+  background: var(--question) 8px center no-repeat, var(--h2) !important;
   background-size: 24px, 100%, 100%, 100% !important;
 }
 
 #troubleshoot h2 {
   padding-left: 38px;
-  background: url(/themes/console/images/wrench_orange.png) 8px center no-repeat, var(--h2) !important;
+  background: var(--wrench) 8px center no-repeat, var(--h2) !important;
   background-size: 24px, 100%, 100%, 100% !important;
 }
 
@@ -12200,7 +12216,7 @@ h1.webapp {
 
 #changelog h2 {
   padding-left: 38px;
-  background: url(/themes/console/images/info/logs.png) 8px center no-repeat, var(--h2) !important;
+  background: var(--changelog) 8px center no-repeat, var(--h2) !important;
   background-size: 24px, 100%, 100%, 100% !important;
 }
 
@@ -12212,7 +12228,7 @@ h1.webapp {
 
 #webhosting h2 {
   padding-left: 38px;
-  background: url(/themes/console/images/server_32x32.png) 8px center no-repeat, var(--h2) !important;
+  background: var(--webserver) 8px center no-repeat, var(--h2) !important;
   background-size: 24px, 100%, 100%, 100% !important;
 }
 
@@ -12228,8 +12244,7 @@ h1.webapp {
   margin: 14px 0 6px !important;
   padding: 10px 10px 8px 50px !important;
   border: 1px solid #8d8daa;
-  background: #fff url(/themes/console/images/svg/sybil.svg) 12px center no-repeat;
-  background: url(/themes/console/images/svg/sybil.svg) 12px center no-repeat, var(--p);
+  background: var(--sybil) 12px center no-repeat, var(--p);
 }
 
 #sybilanalysis form {
@@ -13060,8 +13075,7 @@ i {
 
 #tunnels #peercount {
   padding-left: 30px !important;
-  background: url(/themes/console/images/info/tunnels.png) 7px 6px no-repeat,
-              var(--h3),
+  background: var(--hardhat) 7px 6px no-repeat, var(--h3),
               linear-gradient(to right, #fafaff 5%, rgba(231, 231, 255, .8) 25%) !important;
   background-size: 18px, 100%, 100% !important;
 }

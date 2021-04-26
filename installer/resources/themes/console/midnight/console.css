@@ -12562,22 +12562,22 @@ html, body {
 }
 
 #sitemap h3:nth-of-type(2) {
-  background: url(/themes/console/images/info_rhombus.png) 5px center no-repeat, var(--title) !important;
+  background: url(/themes/console/images/svg/info.svg) 5px center no-repeat, var(--title) !important;
   background-size: 18px, 100% !important;
 }
 
 #sitemap h3:nth-of-type(3) {
-  background: url(/themes/console/images/info/configure.png) 5px center no-repeat, var(--title) !important;
+  background: var(--configure) 5px center no-repeat, var(--title) !important;
   background-size: 18px, 100% !important;
 }
 
 #sitemap h3:nth-of-type(4) {
-  background: url(/themes/console/images/support.png) 5px center no-repeat, var(--title) !important;
+  background: var(--help) 5px center no-repeat, var(--title) !important;
   background-size: 18px, 100% !important;
 }
 
 #sitemap h3:nth-of-type(5) {
-  background: url(/themes/console/images/world.png) 5px center no-repeat,var(--title) !important;
+  background: var(--globe) 5px center no-repeat,var(--title) !important;
   background-size: 18px, 100% !important;
 }
 

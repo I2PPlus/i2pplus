@@ -1966,6 +1966,7 @@ h1, h4.app, h4.app2, #news h3 {
   text-shadow: 0 1px 1px #000;
   box-shadow: var(--lowlight);
   background: var(--h1) !important;
+  background-size: 4px 100%, 100%, 175px !important;
   background-blend-mode: normal, exclusion, exclusion;
 }
 
@@ -3722,7 +3723,7 @@ form[action="/createreseed"] > h3 {
 
 #leavefamily tr:last-child td:first-child {
   padding: 15px 15px 15px 50px;
-  background: #000 url(/themes/console/images/info/leave_family.png) 12px center no-repeat;
+  background: #000 var(--leavefamily) 12px center no-repeat;
   background-size: 28px;
 }
 
@@ -9641,7 +9642,7 @@ input[type=file] {
 #joinfamily .optionsingle {
   padding: 5px 5px 0 45px;
   box-shadow: inset 0 0 0 1px #010, inset 0 0 2px 1px #191939 !important;
-  background: #010 url(/themes/console/images/info/key.png) 10px center no-repeat !important;
+  background: #010 var(--key) 10px center no-repeat !important;
   background-size: 28px, 100%, 100% !important;
 }
 
@@ -9657,13 +9658,13 @@ input[type=file] {
 
 #joinfamily .infohelp {
   box-shadow: var(--lowlight), inset 0 0 2px 1px #040 !important;
-  background: #000 url(/themes/console/images/info/join_family.png) 12px center no-repeat !important;
+  background: #000 var(--joinfamily) 12px center no-repeat !important;
   background-size: 28px !important;
 }
 
 #newfamily .infohelp {
   box-shadow: var(--lowlight), inset 0 0 2px 1px #040 !important;
-  background: #000 url(/themes/console/images/info/create_family.png) 12px center no-repeat !important;
+  background: #000 var(--newfamily) 12px center no-repeat !important;
   background-size: 28px !important;
 }
 
@@ -11591,7 +11592,7 @@ h2#jobrunners {
 }
 
 #sitemap h3:nth-of-type(2) {
-  background: url(/themes/console/images/info_rhombus.png) 9px center no-repeat, var(--h1) !important;
+  background: url(/themes/console/images/svg/info.svg) 9px center no-repeat, var(--h1) !important;
   background-size: 18px, 4px 100%, 100%, 175px !important;
   background-blend-mode: var(--h3_blend) !important;
 }
