@@ -9432,7 +9432,7 @@ b.suboption {
 }
 
 #config_reseed #reseedurl {
-  background: #010 var(--link) 10px center no-repeat !important;
+  background: #010 var(--link) 16px center no-repeat !important;
   background-size: 28px, 100%, 100% !important;
 }
 
@@ -9442,29 +9442,28 @@ b.suboption {
 }
 
 #config_reseed  #reseedzip {
-  background: #010 var(--files) 10px center no-repeat !important;
+  background: #010 var(--files) 16px center no-repeat !important;
   background-size: 28px, 100%, 100% !important;
 }
 
 #config_reseed #reseedzip:hover {
-  background: #002500 var(--files) 10px center no-repeat !important;
+  background: #002500 var(--files) 16px center no-repeat !important;
   background-size: 28px !important;
 }
 
 #config_reseed #reseedcreatefile {
-  background: #010 var(--package) 10px center no-repeat !important;
+  background: #010 var(--package) 16px center no-repeat !important;
   background-size: 28px, 100%, 100% !important;
   text-align: justify;
 }
 
 #config_reseed #reseedcreatefile:hover {
-  background: #002500 var(--package) 10px center no-repeat !important;
+  background: #002500 var(--package) 16px center no-repeat !important;
   background-size: 28px !important;
 }
 
 #reseedcreatefile p {
-  margin-top: 0;
-  margin-bottom: 0;
+  margin: 0 10px;
   padding-top: 0;
   padding-bottom: 0;
   display: inline-block;
