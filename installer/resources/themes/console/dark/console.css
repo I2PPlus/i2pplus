@@ -7349,13 +7349,13 @@ p#pluginconfigtext {
 
 h3#shutdownrouter + p.infohelp {
   padding: 15px 15px 15px 50px;
-  background: #000 url(/themes/console/images/info/power.png) 12px center no-repeat !important;
+  background: #000 var(--power) 12px center no-repeat !important;
   background-size: 28px !important;
 }
 
 h3#restartrouter + p.infohelp, #config_family .infohelp.needrestart {
   padding: 15px 15px 15px 50px;
-  background: #000 url(/themes/console/images/info/reboot.png) 12px center no-repeat !important;
+  background: #000 var(--reboot) 12px center no-repeat !important;
   background-size: 28px !important;
 }
 
