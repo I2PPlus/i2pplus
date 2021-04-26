@@ -12354,7 +12354,7 @@ th[aria-sort] {
 
 .sitelink.external {
   padding: 0 3px 0 18px;
-  background: url(/themes/console/images/world.png) 3px center no-repeat;
+  background: var(--globe) 3px center no-repeat;
   background-size: 12px 12px, 100% !important;
 }
 
