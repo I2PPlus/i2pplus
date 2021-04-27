@@ -324,14 +324,14 @@ select::-ms-expand {
 
 button, input[type=submit], input[type=reset], button, select {
   border-radius: 2px;
-  box-shadow: inset 0 0 0 1px #000, inset 0 0 1px 0 #446;
+  box-shadow: inset 0 0 0 1px #000, inset 0 0 0 1px #446;
   background: 8px 5px no-repeat, var(-button);
   cursor: pointer;
 }
 
 input[type=file]::file-selector-button {
   border-radius: 2px;
-  box-shadow: inset 0 0 0 1px #000, inset 0 0 1px 0 #446, 0 0 0 1px #000;
+  box-shadow: inset 0 0 0 1px #000, inset 0 0 0 1px #446, 0 0 0 1px #000;
   background: 8px 5px no-repeat, var(-button);
   cursor: pointer;
 }
@@ -411,7 +411,7 @@ input[type=file]:active::file-selector-button {
   background-blend-mode: luminosity !important;
 }
 
-input.accept, button.accept, button[type=submit] {
+input.accept, button.accept {
   padding: 5px 9px 5px 25px !important;
   background: url(/themes/console/images/svg/yes.svg) 8px center no-repeat, var(--button) !important;
   background-size: 12px, 100% !important;
@@ -419,14 +419,12 @@ input.accept, button.accept, button[type=submit] {
 
 input.accept:hover, button.accept:hover,
 input.accept:focus, button.accept:focus {
-  background: #000 url(/themes/console/images/svg/yes.svg) 8px center no-repeat !important;
-  background: url(/themes/console/images/svg/yes.svg) 8px center no-repeat, var(--button_hover) !important;
+  background: url(/themes/console/images/svg/yes.svg) 8px center no-repeat, var(--button_hover);
   background-size: 12px, 100% !important;
 }
 
 input.accept:active, button.accept:active {
   padding: 5px 9px 5px 25px !important;
-  background: #652787 url(/themes/console/images/svg/yes.svg) 8px center no-repeat !important;
   background: url(/themes/console/images/svg/yes.svg) 8px center no-repeat, var(--button_active) !important;
   background-size: 12px, 100% !important;
 }
@@ -439,14 +437,12 @@ input.cancel, button.cancel {
 
 input.cancel:hover, button.cancel:hover,
 input.cancel:focus, button.cancel:focus {
-  background: #000 url(/themes/console/images/svg/no.svg) 8px center no-repeat !important;
   background: url(/themes/console/images/svg/no.svg) 8px center no-repeat, var(--button_hover) !important;
   background-size: 11px, 100% !important;
 }
 
 input.cancel:active, button.cancel:active {
   padding: 5px 9px 5px 23px !important;
-  background: #652787 url(/themes/console/images/svg/no.svg) 8px center no-repeat !important;
   background: url(/themes/console/images/svg/no.svg) 8px center no-repeat, var(--button_active) !important;
   background-size: 11px, 100% !important;
 }
@@ -5488,8 +5484,9 @@ table#sidebarconf {
 
 #sidebarconf button {
   margin: 2px;
-  padding: 4px 3px !important;
+  padding: 6px !important;
   min-width: 0;
+  border-radius: 1px;
   background: #000;
   background: 8px 5px no-repeat, var(-button) !important;
 }
@@ -5498,17 +5495,13 @@ table#sidebarconf {
   background: #652787;
 }
 
-#sidebarconf button:hover img {
-  opacity: 1;
-}
-
-#sidebarconf button:active img {
-  mix-blend-mode: luminosity;
+#sidebarconf button img {
+  opacity: 0;
 }
 
 #sidebarconf button img {
   height: 12px;
-  width: auto;
+  width: 12px;
 }
 
 #sidebarconf th:nth-child(1), .homelinkedit th:first-child, #consolepass th:first-child {
@@ -5523,12 +5516,12 @@ table#sidebarconf {
 }
 
 #sidebarconf td:first-child {
-  width: 60px;
+  width: 72px;
 }
 
 #sidebarconf td:nth-child(3), #sidebarconf td:nth-child(4) {
   padding: 0;
-  width: 60px;
+  width: 72px;
   white-space:nowrap;
 }
 
@@ -5554,6 +5547,66 @@ table#sidebarconf {
 .formaction#sidebardefaults {
   margin-top: -2px !important;
   margin-bottom: -2px !important;
+}
+
+.buttonTop img, .buttonBottom img, .buttonUp img, .buttonDown img {
+  opacity: 0;
+}
+
+.buttonTop {
+  background: var(--mv_top) center center no-repeat, var(--button) !important;
+}
+
+.buttonUp {
+  background: var(--mv_up) center center no-repeat, var(--button) !important;
+}
+
+.buttonDown {
+  background: var(--mv_down) center center no-repeat, var(--button) !important;
+}
+
+.buttonBottom {
+  background: var(--mv_bottom) center center no-repeat, var(--button) !important;
+}
+
+.buttonTop:hover, .buttonTop:focus {
+  background: #000 var(--mv_top_hover) center center no-repeat !important;
+}
+
+.buttonUp:hover, .buttonUp:focus {
+  background: #000 var(--mv_up_hover) center center no-repeat !important;
+}
+
+.buttonDown:hover, .buttonDown:focus {
+  background: #000 var(--mv_down_hover) center center no-repeat !important;
+}
+
+.buttonBottom:hover, .buttonBottom:focus {
+  background: #000 var(--mv_bottom_hover) center center no-repeat !important;
+}
+
+.buttonTop:active {
+  background: #652787 var(--mv_top_active) center center no-repeat !important;
+}
+
+.buttonUp:active {
+  background: #652787 var(--mv_up_active) center center no-repeat !important;
+}
+
+.buttonDown:active {
+  background: #652787 var(--mv_down_active) center center no-repeat !important;
+}
+
+.buttonBottom:active {
+  background: #652787 var(--mv_bottom_active) center center no-repeat !important;
+}
+
+.buttonTop, .buttonBottom, .buttonUp, .buttonDown, .buttonTop,
+.buttonTop:hover, .buttonBottom:hover, .buttonUp:hover, .buttonDown:hover,
+.buttonTop:focus, .buttonBottom:focus, .buttonUp:focus, .buttonDown:focus,
+.buttonTop:active, .buttonBottom:active, .buttonUp:active, .buttonDown:active {
+  background-size: 11px, 100% !important;
+  background-blend-mode: normal !important;
 }
 
 /* end configsidebar */
@@ -13410,7 +13463,7 @@ h1[class], h1 {
 }
 
 #pageloader {
-  top: -4px !important;
+  top: -2px !important;
   width: 100% !important;
 }
 

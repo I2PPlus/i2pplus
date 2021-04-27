@@ -4045,9 +4045,16 @@ p#clientconf.infohelp, p#webappconfigtext.infohelp {
 }
 
 p#pluginconfigtext {
+  margin-top: 14px;
   padding: 15px 15px 15px 50px;
   background: url(/themes/console/images/svg/pluginconfig.svg) 12px center no-repeat, var(--p);
   background-size: 28px, 100%;
+}
+
+@media screen and (max-width: 1500px) {
+  p#pluginconfigtext {
+    margin-top: 11px;
+  }
 }
 
 #plugininstall .infohelp {
@@ -4423,12 +4430,12 @@ h1.webapp {
   background: var(--webapp) 10px center no-repeat, var(--h1) #fafaff !important;
 }
 
-h1[class] {
+h1[class], #wizardpage h1 {
   background-size: 34px auto, 4px, 100%, 100%, 100% !important;
 }
 
 @media screen and (min-width: 1500px) {
-h1[class] {
+h1[class], #wizardpage h1 {
   background-size: 38px auto, 4px, 100%, 100%, 100% !important;
 }
 }
@@ -9859,13 +9866,13 @@ a[href^="configpeer?peer"]:hover {
 .subheading.routerfiles {
   padding-left: 10px !important;
   background: url(/themes/console/images/eepsite.png) right 7px center no-repeat, linear-gradient(to right, #7e7fb9 5px, #fafaff 5px, #eef) !important;
-  background-size: 16px auto, 100% !important;
+  background-size: 16px, 100% !important;
 }
 
 .subheading.pluginfiles {
   padding-left: 10px !important;
-  background: url(/themes/console/images/plugin.png) right 7px center no-repeat, linear-gradient(to right, #7e7fb9 5px, #fafaff 5px, #eef) !important;
-  background-size: 16px auto, 100% !important;
+  background: var(--plugin) right 7px center no-repeat, linear-gradient(to right, #7e7fb9 5px, #fafaff 5px, #eef) !important;
+  background-size: 16px, 100% !important;
 }
 
 @supports not (-moz-appearance: none) {
@@ -9883,14 +9890,14 @@ a[href^="configpeer?peer"]:hover {
 .subheading.routerfiles {
   padding-left: 5px !important;
   background: url(/themes/console/images/eepsite.png) right 5px center no-repeat, linear-gradient(to right, #fafaff, #eef) !important;
-  background-size: 16px auto, 100% !important;
+  background-size: 16px, 100% !important;
   box-shadow: none !important;
 }
 
 .subheading.pluginfiles {
   padding-left: 5px !important;
-  background: url(/themes/console/images/plugin.png) right 5px center no-repeat, linear-gradient(to right, #fafaff, #eef) !important;
-  background-size: 16px auto, 100% !important;
+  background: var(--plugin) right 5px center no-repeat, linear-gradient(to right, #fafaff, #eef) !important;
+  background-size: 16px, 100% !important;
   box-shadow: none !important;
 }
 }
@@ -10988,7 +10995,7 @@ form[action="configplugins"] input.reload {
   display: inline-block;
   height: 18px;
   width: 26px;
-  background: url(/themes/console/images/plugin.png) 5px bottom no-repeat !important;
+  background: var(--plugin) 5px bottom no-repeat !important;
   background-size: 16px !important;
   mix-blend-mode: luminosity;
 }
@@ -12944,6 +12951,7 @@ i {
   font-size: 90%;
   text-align: left;
   border: 1px solid #99b;
+  border-left-width: 3px;
   border-radius: 1px;
   background: linear-gradient(to bottom, #fff, #eef);
   will-change: transform;
@@ -12977,6 +12985,7 @@ i {
 .optbox:checked + label > .stattograph {
   padding-left: 18px;
   border-left-width: 3px;
+  box-shadow: inset 0 0 0 1px #eef, inset 3px 3px 3px rgba(0,0,32,.2);
   background: var(--yes) 8px center no-repeat, linear-gradient(to bottom, #eef, #fff);
   background-size: 8px, 100%;
 }
@@ -12992,14 +13001,16 @@ i {
   box-shadow: none;
 }
 
-.stattograph:active, .optbox:checked + label > .stattograph:active {
-  box-shadow: inset 3px 3px 3px rgba(0,0,0,.2) !important;
-}
-
 .optbox:checked + label > .stattograph:hover {
   background: #d50 var(--yes) 8px center no-repeat;
   background-size: 8px;
   box-shadow: none !important;
+}
+
+.stattograph:active, .optbox:checked + label > .stattograph:active {
+  color: #fff;
+  box-shadow: inset 0 0 0 1px #930, inset 3px 3px 3px rgba(0,0,0,.2) !important;
+  background: #f60;
 }
 
 .stattograph:active b, .optbox:checked + label > .stattograph:active b, .optbox:checked + label > .stattograph:hover b {

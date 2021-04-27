@@ -362,7 +362,7 @@ class ProfileOrganizerRenderer {
             for (PeerProfile prof : order) {
                 Hash peer = prof.getPeer();
                 DBHistory dbh = prof.getDBHistory();
-                buf.append("<tr><td align=\"center\" nowrap>");
+                buf.append("<tr class=\"lazy\"><td align=\"center\" nowrap>");
                 buf.append(_context.commSystem().renderPeerHTML(peer));
                 buf.append("</td>");
                 RouterInfo info = _context.netDb().lookupRouterInfoLocally(peer);
