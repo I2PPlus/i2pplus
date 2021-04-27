@@ -10,7 +10,7 @@ body {
   padding: 0;
   text-align: center;
   font-family: Droid Sans, Open Sans, Noto Sans, Ubuntu, Segoe UI, Verdana, Helvetica, sans-serif;
-  color: #33333f;
+  color: #393947;
   font-size: 9pt;
   background: #a4a4cb url(images/tile2.png) fixed;
   background-size: 32px 32px;
@@ -65,7 +65,7 @@ button, h1, h2, h3, th, .control, .newTunnel, .buttons {
 }
 
 b {
-  color: #41465f;
+  color: #484e6a;
 }
 
 a {
@@ -117,7 +117,7 @@ label:hover {
 }
 
 .editDisabled label, .editDisabled label:hover {
-  color: #41465f;
+  color: #484e6a;
 }
 
 .editDisabled .optbox:checked + span {
@@ -142,7 +142,7 @@ button, input[type=submit], input[type="reset"], a.control, .freetext, textarea,
 
 textarea {
   background: #fbfbff;
-  color: #33333f;
+  color: #393947;
   font-family: "Droid Sans Mono", "Noto Mono", "Lucida Console", "DejaVu Sans Mono", monospace;
   border: 1px solid #97a2ce;
   border-radius: 2px;
@@ -193,7 +193,7 @@ textarea#statusMessages:focus {
 }
 
 #filter input::placeholder {
-  color: #33333f;
+  color: #393947;
   opacity: .4;
 }
 
@@ -261,7 +261,7 @@ hr {
   border: 1px solid #97a2ce;
   padding: 4px !important;
   background: #fbfbff;
-  color: #33333f;
+  color: #393947;
   border-radius: 2px;
   box-shadow: inset 1px 1px 1px rgba(204, 204, 204, .6);
 }
@@ -315,7 +315,7 @@ hr {
   text-decoration: none;
   font-style: normal;
   font-weight: normal;
-  color: #33333f;
+  color: #393947;
   border: 1px solid #97a2ce;
   border-radius: 2px;
   background: #eee;
@@ -450,7 +450,7 @@ select {
   background: #fff;
   background: url(images/dropdown.svg) right 8px center no-repeat, linear-gradient(to bottom, #fff, #efefff);
   background-size: 10px auto, 100% 100% !important;
-  color: #33333f;
+  color: #393947;
   font-family: Droid Sans, Open Sans, Noto Sans, Ubuntu, Segoe UI, Verdana, Helvetica, sans-serif;
   font-size: 9pt;
   border: 1px solid #97a2ce;
@@ -516,7 +516,7 @@ h2, h3 {
   letter-spacing: .12em;
   word-spacing: .1em;
   margin: 10px 0 -1px;
-  color: #41465f;
+  color: #484e6a;
   box-shadow: inset 0 0 0 1px #fff;
   position: relative;
 }
@@ -592,7 +592,7 @@ th {
   padding: 6px 5px;
   text-align: left;
   font-size: 9.5pt;
-  color: #41465f;
+  color: #484e6a;
   border-bottom: 1px solid #8d8daa;
   border-top: 1px solid #8d8daa;
   background: linear-gradient(to bottom, #fcfcff 51%, #fafaff 51%, #f6f6ff 100%) !important;
@@ -1027,7 +1027,7 @@ input.tunnelName, input.tunnelDescriptionText, #userAgents, .freetext.tunnelDesc
   min-width: 150px;
   text-align: right;
   white-space: nowrap;
-  color: #41465f;
+  color: #484e6a;
 }
 
 #wizardTunnelTypes td:last-child {
@@ -1080,7 +1080,7 @@ input.tunnelName, input.tunnelDescriptionText, #userAgents, .freetext.tunnelDesc
   font-weight: bold;
   text-align: right;
   margin-right: 10px;
-  color: #41465f;
+  color: #484e6a;
 }
 
 #wizardPanel select {
@@ -1132,7 +1132,7 @@ textarea[name="accessList"], #hostField, #localDestination, .authentication {
 }
 
 .tunnelDestination b, .tunnelDescription b {
-  color: #41465f;
+  color: #484e6a;
 }
 
 .tunnelInfo {
@@ -1582,7 +1582,7 @@ select[disabled], select[disabled]:hover, select[disabled]:focus, select[disable
   margin: 0 !important;
   padding: 0 0 0 3px !important;
   font-weight: normal !important;
-  color: #33333f !important;
+  color: #393947 !important;
   border: none !important;
   box-shadow: none !important;
   background: none !important;

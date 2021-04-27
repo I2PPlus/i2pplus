@@ -105,7 +105,7 @@ td.snarkTorrentPeerCount {
   white-space: nowrap;
   text-align: center;
   font-weight: bold;
-  color: #41465f;
+  color: #484e6a;
 }
 
 .nopeers.zero td.snarkTorrentPeerCount, .stopped.zero td.snarkTorrentPeerCount {
@@ -559,7 +559,7 @@ thead, tfoot {
 th {
   padding: 3px 2px;
   font-size: 9pt;
-  color: #41465f;
+  color: #484e6a;
   border-top: 1px solid #afafcf;
   border-bottom: 1px solid #afafcf;
   background: #f2f2ff;
@@ -643,7 +643,7 @@ th.snarkTorrentStatus {
   vertical-align: middle;
   font-weight: bold;
   font-style: normal !important;
-  color: #41465f !important;
+  color: #484e6a !important;
 }
 
 @media screen and (max-width: 1000px) {
@@ -938,7 +938,7 @@ from {transform: rotate(360deg)}
 
 td {
   padding: 3px 4px;
-  color: #41465f;
+  color: #484e6a;
   opacity: 1;
   font-size: 9pt;
 }
@@ -1652,7 +1652,7 @@ input {
   border-radius: 2px;
   border: 1px solid #97a2ce;
   background: #fff;
-  color: #33333f;
+  color: #393947;
   margin: 2px 4px 2px 0;
   box-shadow: inset 0 0 1px #fff, 0 0 1px #999;
 }
@@ -1661,7 +1661,7 @@ input.r {
   text-align: right;
   background: #fff;
   border: 1px solid #97a2ce;
-  color: #33333f;
+  color: #393947;
 }
 
 input[type=submit], a.control, input.disabled {
@@ -1719,7 +1719,7 @@ a.control img, a.control:hover img, a.control:focus img, a.control:active img {
 /* sync iframe buttons with main console theme */
 
 input[type=submit], a.control:not(.disabled) {
-  color: #41465f;
+  color: #484e6a;
   font-weight: normal;
   box-shadow: 0 2px 0 rgba(255,255,255,.85) inset, 0 0 10px rgba(0,0,0,.1) inset, 0 1px 1px rgba(0,0,0,.05), 0 7px 4px -4px rgba(0,0,0,.1);
   border: 1px solid #97a2ce;
@@ -1849,7 +1849,7 @@ input.disabled, input.disabled:hover, input.disabled:active, a.controld {
 select {
   margin: 2px 4px 2px 0;
   padding: 5px 24px 5px 3px !important;
-  color: #41465f;
+  color: #484e6a;
   color: #6373b6;
   font: bold 9pt Droid Sans, Open Sans, Noto Sans, Ubuntu, Segoe UI, Bitstream Vera Sans, Verdana, Lucida Grande, Helvetica, sans-serif;
   border: 1px solid #97a2ce;
@@ -1870,7 +1870,7 @@ select {
 }
 
 select:hover, select:focus {
-  color: #33333f !important;
+  color: #393947 !important;
   box-shadow: none;
   border: 1px solid #535979;
   background: #fff url(images/dropdown_hover.svg) right 8px center no-repeat !important;
@@ -1895,7 +1895,7 @@ select::-ms-expand {
 
 textarea {
   background: #f8f8ff;
-  color: #33333f;
+  color: #393947;
   font-weight: bold;
   padding: 2px 4px;
   border-radius: 2px;
@@ -2149,7 +2149,7 @@ form:last-child .configsectionpanel {
 .newtorrentsection td:first-child, .addtorrentsection td:first-child {
   min-width: 140px;
   font-weight: bold;
-  color: #41465f;
+  color: #484e6a;
 }
 
 /* new torrent -> tracker select */
@@ -2182,7 +2182,7 @@ form:last-child .configsectionpanel {
   text-overflow: ellipsis;
   font-weight: bold;
   text-align: center;
-  color: #41465f;
+  color: #484e6a;
 }
 
 .iframed #trackerselect tr:first-child td {
@@ -2718,7 +2718,7 @@ hr.debug:last-child {
   min-width: 220px !important;
   width: 30% !important;
   font-weight: bold;
-  color: #41465f;
+  color: #484e6a;
 }
 
 #bwHelp {
@@ -2846,7 +2846,7 @@ hr.debug:last-child {
 
 .snarkCommentInfo td:first-child {
   font-weight: bold;
-  color: #41465f;
+  color: #484e6a;
   white-space: nowrap;
 }
 

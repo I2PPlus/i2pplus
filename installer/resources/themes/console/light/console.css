@@ -15,6 +15,8 @@
   --p: linear-gradient(135deg, #fafaff, #f8f8ff);
   --highlight: inset 0 0 0 1px #fff;
   --a: #4d5f80;
+  --ink: #393947;
+  --inklite: #484e6a;
 }
 
 html, body {
@@ -29,7 +31,7 @@ html {
 body {
   margin: 6px;
   text-align: center;
-  color: #33333f;
+  color: var(--ink);
   font-size: 9pt;
   line-height: 130%;
   background: #a4a4cb url(images/tile2.png) scroll;
@@ -89,7 +91,7 @@ body:not(old) {
 /* end optimize */
 
 b, #routerinformation td:first-child {
-  color: #41465f;
+  color: var(--inklite);
 }
 
 .hide, .hideme {
@@ -168,7 +170,7 @@ pre {
   overflow: auto;
   text-align: left;
   font-size: 8.5pt;
-  color: #33333f;
+  color: var(--ink);
 }
 
 /* sidebar */
@@ -191,7 +193,7 @@ pre {
   width: 192px;
   text-align: center !important;
   font-size: 8pt;
-  color: #33333f;
+  color: var(--ink);
   clear: left; /* fixes a bug in Opera */
   border: 1px solid #575775;
   border-radius: 2px;
@@ -730,7 +732,7 @@ a:active #sb_bandwidthgraph {
   white-space: nowrap;
   text-align: center !important;
   font-weight: bold !important;
-  color: #41465f;
+  color: var(--inklite);
   text-shadow: 0 1px 1px rgba(255,255,255,.8);
   opacity: 0;
   transition: ease opacity .2s;
@@ -1337,7 +1339,7 @@ to {
   word-wrap: break-word;
   text-align: justify;
   font-size: 10pt;
-  color: #33333f;
+  color: var(--ink);
   border: 1px solid #575775;
   border-radius: 2px;
   box-shadow: inset 0 0 1px 0 #d00;
@@ -1595,7 +1597,7 @@ to {
 #jumplinks h4 {
   margin-bottom: 10px;
   border-color: #7e7fb9 !important;
-  color: #41465f;
+  color: var(--inklite);
   padding-bottom: 10px;
 }
 
@@ -1626,7 +1628,7 @@ to {
 }
 
 .sorry {
-  color: #41465f;
+  color: var(--inklite);
 }
 
 .sorry hr, .sorry hr:last-child {
@@ -1644,7 +1646,7 @@ to {
   padding: 20px 20px 5px;
   background: #fafaff;
   background: linear-gradient(to bottom, rgba(252, 252, 255, .8), rgba(252, 252, 255, .5)) #fafaff;
-  color: #33333f;
+  color: var(--ink);
   font-weight: normal;
 }
 
@@ -1738,7 +1740,7 @@ to {
   width: auto;
   min-width: 546px;
   text-align: left;
-  color: #33333f;
+  color: var(--ink);
   border: 1px solid #575775;
   border-radius: 0 0 2px 2px;
   box-shadow: inset 0 0 0 1px rgba(185,185,198,.65);
@@ -1874,7 +1876,7 @@ hr:last-child {
 }
 
 .main textarea {
-  color: #33333f;
+  color: var(--ink);
   margin: 5px 0;
   resize: none;
 }
@@ -1900,7 +1902,7 @@ td.tabletextarea {
   width: 100% !important;
   white-space: pre-wrap;
   word-break: break-all;
-  color: #33333f;
+  color: var(--ink);
   font-size: 9pt;
   border: none !important;
   box-shadow: none;
@@ -1976,7 +1978,7 @@ td.tabletextarea {
 
 #newsStatus, #newsDisplay {
   display: inline-block;
-  color: #41465f;
+  color: var(--inklite);
 }
 
 #newsStatus, .news #newsDisplay {
@@ -2144,7 +2146,7 @@ h1, .confignav {
   text-align: center;
   font-size: 9pt;
   font-weight: bold;
-  color: #33333f;
+  color: var(--ink);
   border: 1px solid #8d8daa;
   border-left: none;
   border-right: none;
@@ -2227,7 +2229,7 @@ h1, .confignav {
 /* end topnav */
 
 .th_title a, .th_title a:hover {
-  color: #41465f !important;
+  color: var(--inklite) !important;
 }
 
 .configure {
@@ -2832,7 +2834,7 @@ to {
 }
 
 #messages li {
-  color: #41465f;
+  color: var(--inklite);
 }
 
 .messages li, .messages li:first-child, .error li:first-child, .error li {
@@ -3176,15 +3178,15 @@ table#wrapperlogs {
 
 /* info */
 #logs li font[color="#000099"]::before {
-  background: #33333f;
+  background: var(--ink);
 }
 
 #logs li font[color="#000099"] {
-  color: #33333f;
+  color: var(--ink);
 }
 
 .log_info {
-  background: #33333f;
+  background: var(--ink);
 }
 
 /* notice */
@@ -3344,7 +3346,7 @@ table hr {
 
 th {
   padding: 6px 5px;
-  color: #41465f;
+  color: var(--inklite);
   text-align: left;
   font-size: 9pt;
   line-height: 110%;
@@ -3393,7 +3395,7 @@ tr:nth-child(odd) {
 
 td {
   padding: 3px 5px;
-  color: #33333f;
+  color: var(--ink);
   vertical-align: middle;
   border-top: 1px inset #e0e0eb;
   border-bottom: 1px inset #e0e0eb;
@@ -3448,7 +3450,7 @@ h4.app, h4.app2 {
   display: inline-block;
   width: calc(100% - 44px);
   border-radius: 2px;
-  color: #41465f;
+  color: var(--inklite);
 }
 
 h4.app {
@@ -3788,7 +3790,7 @@ tt::selection, .sybil_routerinfo th code::selection {
 }
 
 .statlist b a:hover {
-  color: #41465f !important;
+  color: var(--inklite) !important;
 }
 
 ol {
@@ -4477,7 +4479,7 @@ h2 {
   word-wrap: break-word;
   text-transform: uppercase !important;
   font-size: 13pt;
-  color: #41465f;
+  color: var(--inklite);
   border: 1px solid #8d8daa;
   border-radius: 2px;
   box-shadow: var(--highlight), 0 0 1px rgba(220,220,220,.3);
@@ -4521,7 +4523,7 @@ h3, #routerinformation h2 {
   text-transform: uppercase;
   letter-spacing: .08em;
   font-size: 11pt;
-  color: #41465f;
+  color: var(--inklite);
   border: 1px solid #8d8daa;
   border-left: 5px solid #8d8daa;
   box-shadow: var(--highlight), 0 0 1px rgba(220,220,220,.3);
@@ -4642,7 +4644,7 @@ h4 {
   letter-spacing: .08em;
   font-size: 10pt;
   text-transform: uppercase;
-  color: #41465f;
+  color: var(--inklite);
   border: 1px solid #8d8daa;
   border-radius: 2px;
   box-shadow: var(--highlight);
@@ -4853,7 +4855,7 @@ input, input:visited, button, button:visited {
   padding: 5px;
   line-height: 140%;
   font-size: 9pt;
-  color: #41465f;
+  color: var(--inklite);
   text-decoration: none;
   text-shadow: 0 1px 1px #fff;
   border: 1px solid #97a2ce;
@@ -4882,7 +4884,7 @@ button::-moz-focus-inner, input[type=submit]::-moz-focus-inner, input[type=reset
 
 button a, button a:visited {
   font-weight: normal !important;
-  color: #41465f;
+  color: var(--inklite);
 }
 
 button:hover, input[type=submit]:hover, input[type=reset]:hover, button:focus, input[type=submit]:focus, input[type=reset]:focus {
@@ -4900,7 +4902,7 @@ input[type=file]::file-selector-button {
   padding: 4px 10px;
   line-height: 140%;
   font-size: 9pt;
-  color: #41465f;
+  color: var(--inklite);
   text-decoration: none;
   text-shadow: 0 1px 1px #fff;
   border: 1px solid #97a2ce;
@@ -5483,7 +5485,7 @@ select, select[disabled]:hover, select[disabled]:focus  {
   min-width: 120px;
   text-align: left !important;
   font-size: 9pt;
-  color: #41465f;
+  color: var(--inklite);
   border: 1px solid #97a2ce;
   border-radius: 2px;
   box-shadow: var(--highlight);
@@ -5566,7 +5568,7 @@ textarea {
   min-width: 97%;
   min-height: 100px;
   font-size: 9pt;
-  color: #33333f !important;
+  color: var(--ink) !important;
   border: 1px solid #97a2ce;
   border-radius: 2px;
   box-shadow: inset 1px 1px 1px rgba(204, 204, 204, .6);
@@ -5701,7 +5703,7 @@ h3#activejobs + ol li::before, h3#scheduledjobs + ol li::before, h3#readyjobs + 
   width: 18px;
   height: 12px;
   font-weight: bold;
-  color: #41465f;
+  color: var(--inklite);
   background: url(/themes/console/images/svg/yes.svg) 6px center no-repeat;
   background-size: 12px 12px;
   content: "";
@@ -5732,7 +5734,7 @@ h3#scheduledjobs + ol li::before {
 #schedjobs td, #jobs #schedjobs tr:hover td {
   padding: 2px 4px;
   font-weight: normal !important;
-  color: #33333f;
+  color: var(--ink);
   background: #fcfcff !important;
 }
 
@@ -6839,7 +6841,7 @@ p:empty { /* empty paragraph nuke */
   padding: 10px 20px;
   font-weight: bold;
   text-align: center;
-  color: #41465f;
+  color: var(--inklite);
   border: 1px solid #8d8daa;
   box-shadow: 0 0 1px #e0e0eb;
   border-radius: 2px;
@@ -7096,7 +7098,7 @@ b.netdb_transport {
 .netdb_name {
   text-transform: capitalize;
   font-weight: bold;
-  color: #41465f;
+  color: var(--inklite);
 }
 
 .netdb_info {
@@ -7836,7 +7838,7 @@ p.sybil_info, p.family, p.threatpoints, p.hashdist, p#sybil_totals, p.notfound {
   border: 1px solid #8d8daa;
   box-shadow: var(--highlight);
   font-weight: bold;
-  color: #41465f;
+  color: var(--inklite);
   text-align: left;
   background: var(--eye) 8px center no-repeat, repeating-linear-gradient(135deg, rgba(255,255,255,.5) 2px, rgba(240, 240, 255, .3) 3px, #fafaff 5px), #fafaff;
   background-size: 16px, 100%;
@@ -8069,7 +8071,7 @@ p.sybil_info + a[name] + table.sybil_routerinfo, p.hashdist + a[name] + table.sy
   white-space: nowrap;
   text-align: right;
   font-weight: bold;
-  color: #41465f;
+  color: var(--inklite);
 }
 
 #netdblookup td:nth-child(even) {
@@ -8514,7 +8516,7 @@ table#schedjobs {
 
 #schedjobs td:first-child {
   font-weight: bold;
-  color: #41465f;
+  color: var(--inklite);
 }
 
 #jobstats th:nth-child(n+2) {
@@ -8527,7 +8529,7 @@ table#schedjobs {
 
 #jobstats tr:last-child td {
   padding: 5px;
-  color: #41465f;
+  color: var(--inklite);
 }
 
 #peerdefs, #profile_defs, #thresholds, #configinfo, .infohelp, .infowarn {
@@ -8585,7 +8587,7 @@ table#schedjobs {
 }
 
 #tunnel_defs b {
-  color: #41465f !important;
+  color: var(--inklite) !important;
 }
 
 #floodfills .tier, #floodfills .ff, #floodfills .ssuintro, #floodfills .unreachable, #floodfills .reachable, #floodfills .hidden {
@@ -9098,7 +9100,7 @@ select[name="newlogclass"] {
 #help td.infohelp, #help td.infowarn, #help td.infohelp:hover, #help td.infowarn:hover {
   background-size: 24px !important;
   padding-left: 50px !important;
-  color: #33333f !important;
+  color: var(--ink) !important;
   padding-right: 15px !important;
 }
 
@@ -9483,7 +9485,7 @@ h4#updateplugins {
   letter-spacing: 0;
   text-transform: none;
   font-size: 10pt;
-  color: #41465f;
+  color: var(--inklite);
   border: 1px solid #8d8daa;
   background: #fcfcff !important;
   background: linear-gradient(to bottom, #fff 50%, rgba(238, 238, 255, .2) 50%, #eef 100%) #fff !important;
@@ -9571,7 +9573,7 @@ a[href^="configpeer?peer"]:hover {
 
 #debug td:first-child, #debug th:first-child {
   padding-left: 10px;
-  color: #41465f;
+  color: var(--inklite);
 }
 
 #debug td:last-child {
@@ -10072,7 +10074,7 @@ a[href^="configpeer?peer"]:hover {
   padding-left: 7px;
   width: 5%;
   white-space: nowrap;
-  color: #41465f;
+  color: var(--inklite);
   text-align: right;
   font-style: italic;
   font-weight: bold;
@@ -10290,7 +10292,7 @@ b.suboption {
   text-align: left;
   font-weight: bold;
   font-size: 11pt;
-  color: #41465f;
+  color: var(--inklite);
   background: #fff;
   background: linear-gradient(to right, #fff, #eef);
 }
@@ -10314,7 +10316,7 @@ b.suboption {
   width: 100%;
   font-weight: bold;
   font-size: 125%;
-  color: #41465f;
+  color: var(--inklite);
 }
 
 .net_datausage {
@@ -12469,7 +12471,7 @@ p#gatherstats {
 
 .statvalue {
   padding: 0 2px 0 0;
-  color: #41465f;
+  color: var(--inklite);
   font-weight: bold;
   font-style: italic;
 }
@@ -12637,7 +12639,7 @@ i {
   font-size: 18pt;
   font-weight: bold;
   letter-spacing: 0.1em;
-  color: #41465f;
+  color: var(--inklite);
   opacity: .9;
 }
 
@@ -12777,7 +12779,7 @@ i {
   overflow: hidden;
   text-overflow: ellipsis;
   font-size: 85% !important;
-  color: #33333f;
+  color: var(--ink);
   -moz-user-select: all;
   -webkit-user-select: all;
   user-select: all;
@@ -12978,7 +12980,7 @@ i {
   overflow: hidden;
   text-overflow: ellipsis;
   text-transform: capitalize;
-  color: #41465f;
+  color: var(--inklite);
 }
 
 .optbox:not(:checked) + label > .stattograph b {
@@ -12997,7 +12999,7 @@ i {
 }
 
 .optbox:checked + label > .stattograph:hover b {
-  color: #41465f !important;
+  color: var(--inklite) !important;
 }
 
 .stattograph:hover, .optbox:checked + label > .stattograph:hover {
