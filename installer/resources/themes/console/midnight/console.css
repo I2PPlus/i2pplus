@@ -12,7 +12,7 @@
 :root {
   --title: linear-gradient(to bottom, #080818 50%, #000008 50%);
   --bodyfont: Droid Sans, Open Sans, Noto Sans, Ubuntu, Segoe UI, Bitstream Vera Sans, DejaVu Sans, Verdana, Lucida Grande, Helvetica, sans-serif;
-  --monospace: Droid Sans Mono, Noto Mono, DejaVu Sans Mono, Lucida Console, monospace;
+  --monospaced: Droid Sans Mono, Noto Mono, DejaVu Sans Mono, Lucida Console, monospace;
   --button: linear-gradient(to bottom, #11101c 50%, #000010 50%);
   --button_hover: linear-gradient(to bottom, #202 50%, #000 50%);
   --button_active: linear-gradient(to bottom, #401856, #501f6c);
@@ -20,6 +20,7 @@
   --innerborder: 1px solid rgba(38, 35, 92,.7);
   --tr: linear-gradient(to bottom, #001, #000);
   --th: linear-gradient(to bottom, #000018, #000);
+  --panel: linear-gradient(to bottom, #080818, #040410);
 }
 
 textarea {
@@ -40,22 +41,18 @@ body {
 
 /* preload button mouseovers */
 body:not(old) {
-  background: linear-gradient(to bottom, #001, #001 4px, rgba(0,0,0,0) 4px),
-              linear-gradient(to left, #001, #001 4px, rgba(0,0,0,0) 4px),
-              linear-gradient(to right, #001, #001 4px, rgba(0,0,0,0) 4px),
-              repeating-linear-gradient(to bottom, rgba(0,0,32,.5) 3px, rgba(0,0,0,.5) 5px, rgba(0,0,0,.3) 6px),
+  background: repeating-linear-gradient(to right, #001 2px, rgba(0,0,0,.2) 4px),
+              repeating-linear-gradient(to bottom, rgba(0,0,32,.5) 2px, rgba(0,0,0,.3) 4px),
               url(images/tile.png),
               url(/themes/console/images/buttons/clean_hover.png) no-repeat,
               url(/themes/console/images/buttons/configure_hover.png) no-repeat,
               url(/themes/console/images/buttons/delete_hover.png) no-repeat,
-              url(/themes/console/images/buttons/restart_hover.png) no-repeat,
               url(/themes/console/images/buttons/restore_hover.png) no-repeat,
               url(/themes/console/images/buttons/search_hover.png) no-repeat,
-              url(/themes/console/images/buttons/shutdown_hover.png) no-repeat,
               url(/themes/console/images/buttons/update_hover.png) no-repeat,
               url(images/dropdown_hover.svg),
               url(images/newtab.png), #001;
-  background-size: 100%, 100%, 100%, 100%, 171px 148px, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0;
+  background-size: 4px 100%, 100% 4px, 171px 148px, 0, 0, 0, 0, 0, 0, 0, 0;
 }
 
 @supports (-moz-appearance: none) {
@@ -162,7 +159,7 @@ textarea {
   color: #c9ceff;
   padding: 5px;
   margin: 10px;
-  font: 9pt var(--monospace);
+  font: 9pt var(--monospaced);
   min-height: 100px;
   min-width: 97%;
   width: calc(100% - 15px);
@@ -1206,7 +1203,7 @@ pre {
   width: 98%;
   overflow-x: auto;
   text-align: left;
-  font: 8.5pt var(--monospace);
+  font: 8.5pt var(--monospaced);
   color: #c9ceff;
 }
 
@@ -1476,18 +1473,24 @@ div.logo hr {
 
 /* end proxy errors */
 
+.routersummary, .main {
+  background: repeating-linear-gradient(to right, rgba(0,0,16,.4) 2px, rgba(4,4,32,.4) 4px),
+              repeating-linear-gradient(to bottom, #000 2px, #000020 4px);
+  background-size: 4px 100%, 100% 4px;
+}
+
 /* sidebar */
 
 .routersummaryouter {
-  float: left;
-  width: 200px;
   margin: 0 0 10px 5px;
   padding: 0;
-  border: 0;
-  clear: left;
-  text-align: center;
+  width: 200px;
   display: block;
+  float: left;
+  clear: left;
   position: absolute;/* so no interference with /home app icons */
+  text-align: center;
+  border: 0;
 }
 
 .routersummary {
@@ -1495,14 +1498,10 @@ div.logo hr {
   margin-bottom: 7px !important;
   padding: 8px 10px 8px;
   width: 184px;
-  float: left;
-  clear: left;
   text-align: center;
   font-size: 8pt;
   color: #c9ceff;
   border: 1px solid #26235c;
-  background: #000010;
-  background: repeating-linear-gradient(to right, rgba(0,0,16,.4) 2px, rgba(8,8,40,.4) 4px), repeating-linear-gradient(to bottom, #000010 2px, #000020 4px);
 }
 
 .routersummary div[style="height: 36px;"] {
@@ -2631,8 +2630,6 @@ div.sorry hr {
   color: #c9ceff;
   border: 1px solid #26235c;
   box-shadow: inset 0 0 0 1px #000, inset 0 0 2px 1px #26235c;
-  background: #000014 !important;
-  background-size: auto 200px !important;
 }
 
 .news {
@@ -3497,7 +3494,7 @@ td img[src$="c=a1"], td img[src$="c=a2"] {
 }
 
 tt {
-  font: bold 8.5pt var(--monospace);
+  font: bold 8.5pt var(--monospaced);
   color: #393;
 }
 
@@ -3543,7 +3540,7 @@ a:active tt {
 
 .tidylist code {
   text-align: left;
-  font: bold 8.5pt var(--monospace);
+  font: bold 8.5pt var(--monospaced);
   color: #fff;
   padding: 2px 3px;
   background: #040033;
@@ -3567,7 +3564,7 @@ ul {
 
 code {
   text-align: left;
-  font: 9pt var(--monospace);
+  font: 9pt var(--monospaced);
   color: #393;
 }
 
@@ -4910,7 +4907,8 @@ table#reseedconfig textarea {
 }
 
 #bannedpeercount {
-  background: #000 url(/themes/console/images/info/blocked.png) 12px center no-repeat !important;
+  background: #000 var(--ban) 12px center no-repeat !important;
+  background-size: 28px !important;
 }
 
 #banlist {
@@ -5689,7 +5687,7 @@ table#externali2cp {
   text-align: left;
   border: 1px solid #003;
   border-radius: 4px 15px 15px 4px;
-  background: url(/themes/console/images/plugin.png) 5px center no-repeat, linear-gradient(to bottom, #002, #001);
+  background: var(--plugin) 5px center no-repeat, linear-gradient(to bottom, #002, #001);
   background-size: 16px, 100%;
   background-blend-mode: luminosity;
 }
@@ -5801,7 +5799,7 @@ div#volunteer {
 #configinfo th {
   padding: 8px 10px;
   text-align: left;
-  font-family: var(--monospace);
+  font-family: var(--monospaced);
   color: #393;
   background: #002;
   background: linear-gradient(to right, #000, #000016) !important;
@@ -6410,7 +6408,7 @@ table[id$="logs"] ul {
 
 .main#logs li {
   word-break: break-all;
-  font-family: var(--monospace);
+  font-family: var(--monospaced);
 }
 
 .logtable ul li:not(old) {
@@ -6454,7 +6452,7 @@ font[color="#000099"] { /* info */
   line-height: 140% !important;
   list-style: none;
   text-align: left;
-  font: 8.5pt "Droid Sans Mono", "Noto Mono", "Lucida Console", "DejaVu Sans Mono", monospace;
+  font: 8.5pt var(--monospaced);
   filter: opacity(.8);
 }
 
@@ -6635,7 +6633,6 @@ table#profile_defs td, table#thresholds td {
   width: 1%;
   white-space: nowrap;
   text-align: right;
-/*  border-right: 1px inset #120f35 !important;*/
 }
 
 #profile_defs td:last-child {
@@ -6879,8 +6876,8 @@ table#jardump {
 }
 
 .subheading.pluginfiles {
-  background: url(/themes/console/images/plugin.png) right 5px center no-repeat, linear-gradient(to right, #000, #000010 40%) !important;
-  background-size: 16px auto, 100% !important;
+  background: var(--plugin) right 5px center no-repeat, linear-gradient(to right, #000, #000010 40%) !important;
+  background-size: 16px, 100% !important;
   background-blend-mode: luminosity, normal;
 }
 
@@ -7268,7 +7265,7 @@ table#jardump {
 
 .debug_sesskey, .debug_pubkey, .skm_key td:first-child {
   color: #393;
-  font-family: "Droid Sans Mono", "Noto Mono", "Lucida Console", "DejaVu Sans Mono", monospace;
+  font-family: var(--monospaced)
 }
 
 .skm_key td:first-child b {
@@ -7347,7 +7344,7 @@ table#jardump {
 }
 
 #bucketSet code, .bucket, .b32 {
-  font-family: "Droid Sans Mono", "Noto Mono", "Lucida Console", "DejaVu Sans Mono", monospace;
+  font-family: var(--monospaced)
 }
 
 .bucket {
@@ -7436,7 +7433,8 @@ h4.app2 {
   position: relative;
   top: -4px;
   clear: left;
-  background: url(/themes/console/light/images/globe.png) 10px center no-repeat, var(--title) !important;
+  background: var(--globe) 10px center no-repeat, var(--title) !important;
+  background-size: 16px, 100%, 100% !important;
 }
 
 h4.app a, h4.app2 a {
@@ -8252,7 +8250,8 @@ p.infohelp, p#debugmode, p.sybilinfo, #sybilanalysis {
 
 #sybilanalysis {
   margin-bottom: 10px;
-  background: #000 url(/themes/console/images/info/sybils.png) 12px center no-repeat !important;
+  background: #000 var(--sybil) 12px center no-repeat !important;
+  background-size: 32px !important;
 }
 
 #sybilanalysis form {
@@ -8675,21 +8674,21 @@ p#enablefullstats {
 }
 
 table#bugreports td.infohelp {
-  background: url(/themes/console/images/info/bugreport.png) 12px center no-repeat !important;
+  background: var(--bug) 12px center no-repeat !important;
   padding: 15px 15px 15px 50px;
   background-size: 28px !important;
 }
 
 p#debugmode {
   padding: 15px 15px 15px 50px;
-  background: url(/themes/console/images/svg/bug.svg) 12px center no-repeat !important;
+  background: var(--bug) 12px center no-repeat !important;
   background-size: 28px !important;
 }
 
 p.sybilinfo {
   padding: 15px 15px 15px 50px;
   margin-bottom: 10px;
-  background: url(/themes/console/images/info/sybils.png) 12px center no-repeat !important;
+  background: var(--sybil) 12px center no-repeat !important;
   background-size: 28px !important;
 }
 
@@ -8699,19 +8698,19 @@ p.sybilinfo.experimental {
 }
 
 #bandwidthconfig tr:first-child .infohelp {
-  background: url(/themes/console/images/svg/speedometer.svg) 12px center no-repeat !important;
+  background: var(--speed) 12px center no-repeat !important;
   padding: 15px 15px 15px 50px;
   background-size: 28px !important;
 }
 
 #addkeyring td.infohelp {
-  background: #000 url(/themes/console/images/svg/keys.svg) 12px center no-repeat !important;
   padding: 20px 15px 20px 50px !important;
+  background: #000 url(/themes/console/images/svg/keys.svg) 12px center no-repeat !important;
   background-size: 28px !important;
 }
 
 #oldhome td:first-child {
-  background: url(/themes/console/images/svg/home.svg) 12px center no-repeat !important;
+  background: var(--home) 12px center no-repeat !important;
   padding: 15px 15px 15px 50px;
   background-size: 28px !important;
 }
@@ -8721,8 +8720,8 @@ p.sybilinfo.experimental {
 }
 
 #floodfillconfig tr:first-child .infohelp {
-  background: #000 url(/themes/console/images/info/floodfill_32x32.png) 12px center no-repeat !important;
   padding: 15px 15px 15px 50px;
+  background: #000 var(--floodfill) 12px center no-repeat !important;
   background-size: 28px !important;
 }
 
@@ -8761,19 +8760,19 @@ p#pluginconfigtext {
 
 #config_peers tr:nth-child(3) td.infohelp {
   padding: 15px 15px 15px 50px;
-  background: #000 url(/themes/console/images/info/blocked.png) 12px center no-repeat !important;
+  background: #000 var(--ban) 12px center no-repeat !important;
   background-size: 28px !important;
 }
 
 h3#shutdownrouter + p.infohelp {
   padding: 15px 15px 15px 50px;
-  background: #000 url(/themes/console/images/info/power.png) 12px center no-repeat !important;
+  background: #000 var(--power) 12px center no-repeat !important;
   background-size: 28px !important;
 }
 
 h3#restartrouter + p.infohelp, #config_family .infohelp.needrestart {
   padding: 15px 15px 15px 50px;
-  background: #000 url(/themes/console/images/info/reboot.png) 12px center no-repeat !important;
+  background: #000 var(--reboot) 12px center no-repeat !important;
   background-size: 28px !important;
 }
 
@@ -8785,7 +8784,7 @@ h3#systray + p.infohelp {
 
 h3#servicedebug + p.infohelp {
   padding: 15px 15px 15px 50px;
-  background: #000 url(/themes/console/images/svg/bug.png) 12px center no-repeat !important;
+  background: #000 var(--bug) 12px center no-repeat !important;
   background-size: 28px !important;
 }
 
@@ -8797,13 +8796,13 @@ h3#browseronstart + p.infohelp {
 
 .main#config_reseed p.infohelp {
   padding: 15px 15px 15px 50px;
-  background: #000 url(/themes/console/images/svg/reseed.svg) 12px center no-repeat !important;
+  background: #000 var(--reseed) 12px center no-repeat !important;
   background-size: 28px !important;
 }
 
 p#enablefullstats, p#gatherstats {
   padding: 15px 15px 15px 50px;
-  background: #000 url(/themes/console/images/svg/stats.svg) 12px center no-repeat !important;
+  background: #000 var(--stats) 12px center no-repeat !important;
   background-size: 28px !important;
 }
 
@@ -10478,7 +10477,7 @@ b.suboption {
 }
 
 .optionlist label, .optionlist .nowrap, #reseedconfig tr:nth-child(3) td label {
-  background: linear-gradient(to bottom, #112, #040414) !important;
+  background: var(--panel) !important;
   box-shadow: inset 0 0 0 1px #000, inset 0 0 2px 1px #191939 !important;
   opacity: 0.9;
 }
@@ -10507,7 +10506,7 @@ b.suboption {
 }
 
 #reseedconfig .optionsingle.optiontextarea {
-  background: linear-gradient(to bottom, #112, #040414) !important;
+  background: var(--panel) !important;
 }
 
 #graphs .optionlist, #graphs .optionlist:hover {
@@ -10554,7 +10553,7 @@ b.suboption {
   width: calc(100% - 10px);
   display: inline-block;
   line-height: 100% !important;
-  background: linear-gradient(to bottom, #112, #040414) !important;
+  background: var(--panel) !important;
 }
 
 #updateProxyHostPort {
@@ -10763,7 +10762,7 @@ h3#shutdownrouter {
 }
 
 #reseedconfig tr:nth-child(n+2) td label, #reseedconfig tr:nth-child(n+2) td .nowrap {
-  background: linear-gradient(to bottom, #112, #040414) !important;
+  background: var(--panel) !important;
 }
 
 #reseedconfig .optbox[type=checkbox] {
@@ -10924,19 +10923,19 @@ h3#shutdownrouter {
 
 #config_reseed #reseedurl {
   background: #001 var(--link) 14px center no-repeat !important;
-  background: var(--link) 14px center no-repeat, linear-gradient(to bottom, #112, #040414) !important;
+  background: var(--link) 14px center no-repeat, var(--panel) !important;
   background-size: 28px, 100% !important;
 }
 
 #config_reseed  #reseedzip {
   background: #001 var(--files) 14px center no-repeat !important;
-  background: var(--files) 14px center no-repeat, linear-gradient(to bottom, #112, #040414) !important;
+  background: var(--files) 14px center no-repeat, var(--panel) !important;
   background-size: 28px, 100% !important;
 }
 
 #config_reseed #reseedcreatefile {
   background: #001 var(--package) 14px center no-repeat !important;
-  background: var(--package) 14px center no-repeat, linear-gradient(to bottom, #112, #040414) !important;
+  background: var(--package) 14px center no-repeat, var(--panel) !important;
   background-size: 28px, 100% !important;
   text-align: justify;
 }
@@ -11261,7 +11260,7 @@ tr:nth-child(4) .net_bwrate::before {
 }
 
 #installPluginFile, #installPluginUrl {
-  background: linear-gradient(to bottom, #112, #040414);
+  background: var(--panel);
   box-shadow: inset 0 0 0 1px #000, inset 0 0 2px 1px #191939 !important;
 }
 
@@ -11321,7 +11320,7 @@ input[type="file"]:hover {
   padding: 5px 5px 0 45px;
   box-shadow: inset 0 0 0 1px #000, inset 0 0 2px 1px #191939 !important;
   background: #000 url(/themes/console/images/info/label.png) 10px center no-repeat !important;
-  background: url(/themes/console/images/info/label.png) 10px center no-repeat, linear-gradient(to bottom, #112, #040414) !important;
+  background: url(/themes/console/images/info/label.png) 10px center no-repeat, var(--panel) !important;
   background-size: 28px, 100%, 100% !important;
 }
 
@@ -11329,7 +11328,7 @@ input[type="file"]:hover {
   padding: 5px 5px 0 45px;
   box-shadow: inset 0 0 0 1px #000, inset 0 0 2px 1px #191939 !important;
   background: #000 url(/themes/console/images/info/key.png) 10px center no-repeat !important;
-  background: url(/themes/console/images/info/key.png) 10px center no-repeat, linear-gradient(to bottom, #112, #040414) !important;
+  background: url(/themes/console/images/info/key.png) 10px center no-repeat, var(--panel) !important;
   background-size: 28px, 100%, 100% !important;
 }
 
@@ -12749,19 +12748,23 @@ a:hover .sitemapLink {
 }
 
 #help_configuration {
-  background: url(/themes/console/images/info/optimize.png) 15px center no-repeat, repeating-linear-gradient(to bottom, #080820 2px, #010010 4px);
+  background: var(--configure) 15px center no-repeat, repeating-linear-gradient(to bottom, #080820 2px, #010010 4px);
+  background-size: 32px, 100px 4px;
 }
 
 #help_configadv {
-  background: url(/themes/console/images/info/configure.png) 15px center no-repeat, repeating-linear-gradient(to bottom, #080820 2px, #010010 4px);
+  background: var(--configure) 15px center no-repeat, repeating-linear-gradient(to bottom, #080820 2px, #010010 4px);
+  background-size: 32px, 100px 4px;
 }
 
 #help_ui {
-  background: url(/themes/console/images/info/ui.png) 15px center no-repeat, repeating-linear-gradient(to bottom, #080820 2px, #010010 4px);
+  background: var(--ui) 15px center no-repeat, repeating-linear-gradient(to bottom, #080820 2px, #010010 4px);
+  background-size: 32px, 100px 4px;
 }
 
 #help_reseed {
-  background: url(/themes/console/images/info/connect.png) 15px center no-repeat, repeating-linear-gradient(to bottom, #080820 2px, #010010 4px);
+  background: var(--reseed) 15px center no-repeat, repeating-linear-gradient(to bottom, #080820 2px, #010010 4px);
+  background-size: 32px, 100px 4px;
 }
 
 #help_faq, #help_glossary {
@@ -12769,7 +12772,8 @@ a:hover .sitemapLink {
 }
 
 #help_troubleshoot {
-  background: url(/themes/console/images/wrench_orange.png) 15px center no-repeat, repeating-linear-gradient(to bottom, #080820 2px, #010010 4px);
+  background: var(--wrench) 15px center no-repeat, repeating-linear-gradient(to bottom, #080820 2px, #010010 4px);
+  background-size: 32px, 100px 4px;
 }
 
 #help_newusers {
@@ -12781,11 +12785,13 @@ a:hover .sitemapLink {
 }
 
 #help_changelog {
-  background: url(/themes/console/images/info/logs.png) 15px center no-repeat, repeating-linear-gradient(to bottom, #080820 2px, #010010 4px);
+  background: var(--log_icon) 15px center no-repeat, repeating-linear-gradient(to bottom, #080820 2px, #010010 4px);
+  background-size: 32px, 100px 4px;
 }
 
 #help_webhosting {
-  background: url(/themes/console/images/server_32x32.png) 15px center no-repeat, repeating-linear-gradient(to bottom, #080820 2px, #010010 4px);
+  background: var(--webserver) 15px center no-repeat, repeating-linear-gradient(to bottom, #080820 2px, #010010 4px);
+  background-size: 32px, 100px 4px;
 }
 
 #help h2 {
@@ -12802,7 +12808,7 @@ a:hover .sitemapLink {
 
 #configurationhelp h2, #advancedsettings h2, #filterlist h2 {
   padding-left: 38px !important;
-  background: url(/themes/console/images/info/configure.png) 8px center no-repeat, var(--title) !important;
+  background: var(--configure) 8px center no-repeat, var(--title) !important;
   background-size: 24px, 100%, 100%, 100%, 100% !important;
 }
 
@@ -12814,7 +12820,7 @@ a:hover .sitemapLink {
 
 #reseedhelp h2 {
   padding-left: 38px !important;
-  background: url(/themes/console/images/info/connect.png) 8px center no-repeat, var(--title) !important;
+  background: var(--reseed) 8px center no-repeat, var(--title) !important;
   background-size: 24px, 100%, 100%, 100%, 100% !important;
 }
 
@@ -12832,7 +12838,7 @@ a:hover .sitemapLink {
 
 #troubleshoot h2 {
   padding-left: 38px !important;
-  background: url(/themes/console/images/wrench_orange.png) 8px center no-repeat, var(--title) !important;
+  background: var(--wrench) 8px center no-repeat, var(--title) !important;
   background-size: 24px, 100%, 100%, 100%, 100% !important;
 }
 
@@ -12844,7 +12850,7 @@ a:hover .sitemapLink {
 
 #changelog h2 {
   padding-left: 38px !important;
-  background: url(/themes/console/images/info/logs.png) 8px center no-repeat, var(--title) !important;
+  background: var(--changelog) 8px center no-repeat, var(--title) !important;
   background-size: 24px, 100%, 100%, 100%, 100% !important;
 }
 
@@ -12862,19 +12868,19 @@ a:hover .sitemapLink {
 
 #themeoverride h2 {
   padding-left: 38px !important;
-  background: url(/themes/console/images/info/ui.png) 8px center no-repeat, var(--title) !important;
+  background: var(--ui) 8px center no-repeat, var(--title) !important;
   background-size: 24px, 100%, 100%, 100%, 100% !important;
 }
 
 #browserconfig h2 {
   padding-left: 38px !important;
-  background: url(/themes/console/images/info/launch_browser.png) 8px center no-repeat, var(--title) !important;
+  background: url(/themes/console/images/svg/firefox.svg) 8px center no-repeat, var(--title) !important;
   background-size: 24px, 100%, 100%, 100%, 100% !important;
 }
 
 #tunnman h2 {
   padding-left: 38px !important;
-  background: url(/themes/console/images/info/launch_browser.png) 8px center no-repeat, var(--title) !important;
+  background: var(--hardhat) 8px center no-repeat, var(--title) !important;
   background-size: 24px, 100%, 100%, 100%, 100% !important;
 }
 
@@ -12884,13 +12890,13 @@ a:hover .sitemapLink {
 
 
 .sitelink, .chatlink, .consolelink {
-  border-radius: 1px;
   white-space: nowrap;
+  border-radius: 1px;
 }
 
 .sitelink {
   padding: 0 3px 0 16px;
-  background: url(/themes/console/images/info/url.png) 2px center no-repeat;
+  background: var(--link) 2px center no-repeat;
   background-size: 12px, 100% !important;
 }
 
@@ -12901,7 +12907,7 @@ a:hover .sitemapLink {
 
 .sitelink.external {
   padding: 0 3px 0 18px;
-  background: url(/themes/console/images/world.png) 3px center no-repeat;
+  background: var(--globe) 3px center no-repeat;
   background-size: 12px, 100% !important;
 }
 
@@ -12988,12 +12994,12 @@ a:hover .sitemapLink {
 }
 
 #peers #ntcpconnections th:nth-last-child(2)::after, #peers #ntcpconnections th:nth-last-child(3)::after {
-  content: "";
-  display: inline-block;
   width: 16px;
   height: 16px;
+  display: inline-block;
   background: var(--net_clockskew) center center no-repeat;
   background-size: 16px;
+  content: "";
 }
 
 #peers #ntcpconnections th:nth-last-child(3)::after {
@@ -13019,38 +13025,38 @@ a:hover .sitemapLink {
 /* /stats */
 
 @supports (columns: 2 500px) {
-@media screen and (max-width: 1400px) {
-ul.statlist {
-  padding: 10px;
-  columns: auto 500px;
-  column-gap: 10px;
-  text-align: center;
-}
+  @media screen and (max-width: 1400px) {
+    ul.statlist {
+      padding: 10px;
+      columns: auto 500px;
+      column-gap: 10px;
+      text-align: center;
+    }
 
-.statsName {
-  min-width: 0;
-}
+    .statsName {
+      min-width: 0;
+    }
 
-.statlist li li {
-  margin-left: 6px;
-}
-}
+    .statlist li li {
+      margin-left: 6px;
+    }
+  }
 }
 
 @supports (columns: 2 500px) {
-@media screen and (min-width: 1400px) {
+  @media screen and (min-width: 1400px) {
 
-ul.statlist {
-  padding: 10px;
-  columns: auto 540px;
-  column-gap: 10px;
-  text-align: center;
-}
+    ul.statlist {
+      padding: 10px;
+      columns: auto 540px;
+      column-gap: 10px;
+      text-align: center;
+    }
 
-.statsName {
-  min-width: 540px;
-}
-}
+    .statsName {
+      min-width: 540px;
+    }
+  }
 }
 
 .statlist li.statsName:first-child {
@@ -13074,9 +13080,9 @@ ul.statlist:last-of-type {
   padding: 10px 10px 5px 10px !important;
   width: calc(100% - 22px);
   display: inline-block;
-  background: #000010;
   box-shadow: inset 0 0 0 1px #000, inset 0 0 2px 1px #005;
   border: 1px solid #27235c;
+  background: #000010;
 }
 
 .statlist li br, .statlist li li br {
@@ -13091,10 +13097,10 @@ ul.statlist:last-of-type {
   margin-left: 15px;
   margin-bottom: -10px;
   padding-bottom: 6px;
-  display: block;
   width: calc(100% - 12px);
+  display: block;
   border-bottom: 1px solid #27235c;
-  opacity: 0.8;
+  opacity: .8;
 }
 
 .statlist li li b {
@@ -13118,9 +13124,9 @@ li.noevents, ul.statlist li li:last-child::after {
 }
 
 li.noevents::after, ul.statlist li li:last-child::after {
-  border-bottom-color: transparent;
   padding-bottom: 0;
   margin-bottom: 0 !important;
+  border-bottom-color: transparent;
 }
 
 li.noevents::after {
@@ -13138,8 +13144,8 @@ li.noevents::after {
 }
 
 .statlist li.statsName ul li b {
-  background: none;
   padding-left: 0;
+  background: none;
 }
 
 #stats label {
@@ -13151,12 +13157,12 @@ li.noevents::after {
 }
 
 #stats .toggle_input {
-  position: absolute;
-  opacity: 0;
   width: 0;
   height: 0;
+  position: absolute;
   top: -99999px;
   left: -99999px
+  opacity: 0;
 }
 
 #stats input:not(:checked) + h3,
@@ -13166,8 +13172,8 @@ li.noevents::after {
 }
 
 #stats input:checked + h3 + ul.statlist {
-  display: block;
   margin-bottom: -3px !important;
+  display: block;
 }
 
 #stats form {
@@ -13207,17 +13213,17 @@ p#gatherstats {
 }
 
 #stats ul.statlist {
-  border: none;
-  background: none;
   margin: 0 !important;
   padding: 0 !important;
+  border: none;
+  background: none;
 }
 
 .statvalue {
   padding: 0 2px 0 0;
-  color: #ccd1ff;
   font-weight: bold;
   font-style: italic;
+  color: #ccd1ff;
 }
 
 .graphstat {
