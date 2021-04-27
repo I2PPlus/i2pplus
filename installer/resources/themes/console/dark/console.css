@@ -10456,11 +10456,11 @@ input[type=file] {
 
 #view_profile .identicon {
   margin: 0;
+  width: 27px;
+  height: 27px;
   position: absolute;
   top: 1px;
   right: 1px;
-  width: 27px;
-  height: 27px;
   opacity: .7;
 }
 
@@ -10471,11 +10471,13 @@ input[type=file] {
 #viewprofile pre, pre#activetransports {
   margin: 0;
   padding: 20px 20px 0;
-  line-height: 20px;
-  background: repeating-linear-gradient(to bottom, #000800, #000800 20px, #001000 20px, #001000 40px);
   width: calc(100% - 45px);
+  line-height: 20px;
+  letter-spacing: 0.05em;
   text-shadow: 0 1px 1px #000;
   border-left: 5px solid #030;
+  background: repeating-linear-gradient(to bottom, rgba(0,8,0,.6) 0, rgba(0,8,0,.6) 20px, rgba(0,20,0,.6) 20px, rgba(0,20,0,.6) 40px);
+  background-size: 100% 40px;
 }
 
 #viewprofile span {
