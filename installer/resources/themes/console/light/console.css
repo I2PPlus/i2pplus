@@ -6028,8 +6028,7 @@ body.iframed {
 }
 
 #consolepass tr:first-child td {
-  background: #fff url(/themes/console/images/info/user_add.png) 12px center no-repeat;
-  background: url(/themes/console/images/info/user_add.png) 12px center no-repeat, var(--p);
+  background: var(--useradd) 12px center no-repeat, var(--p);
   background-size: 28px;
   padding: 15px 15px 15px 50px;
 }

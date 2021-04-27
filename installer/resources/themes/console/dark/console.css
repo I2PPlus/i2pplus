@@ -7274,7 +7274,7 @@ p#enablefullstats {
 
 #bugreports td.infohelp {
   padding: 15px 15px 15px 50px;
-  background: #000 url(/themes/console/images/info/bugreport.png) 12px center no-repeat !important;
+  background: #000 var(--bug) 12px center no-repeat !important;
   background-size: 28px !important;
 }
 
@@ -7420,7 +7420,7 @@ p#enablefullstats, p#gatherstats {
 
 #consolepass tr:first-child td {
   padding: 15px 15px 15px 50px;
-  background: #000 url(/themes/console/images/info/user_add.png) 12px center no-repeat;
+  background: #000 var(--useradd) 12px center no-repeat;
   background-size: 28px, 100% !important;
 }
 
@@ -11586,13 +11586,13 @@ h2#jobrunners {
 }
 
 #sitemap h3::first-letter {
-  font-size: 115%;
-  display: inline-block;
   margin-right: .05em;
+  display: inline-block;
+  font-size: 115%;
 }
 
 #sitemap h3:nth-of-type(2) {
-  background: url(/themes/console/images/svg/info.svg) 9px center no-repeat, var(--h1) !important;
+  background: var(--infobox) 9px center no-repeat, var(--h1) !important;
   background-size: 18px, 4px 100%, 100%, 175px !important;
   background-blend-mode: var(--h3_blend) !important;
 }

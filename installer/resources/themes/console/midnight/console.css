@@ -4856,7 +4856,7 @@ table#configclient {
 
 #leavefamily tr:last-child td:first-child {
   padding: 15px 15px 15px 50px;
-  background: #000 url(/themes/console/images/info/leave_family.png) 12px center no-repeat;
+  background: #000 var(--leavefamily) 12px center no-repeat;
   background-size: 28px;
 }
 
@@ -8815,25 +8815,25 @@ p#enablefullstats, p#gatherstats {
 
 #config_family .infohelp.joinfamily {
   padding: 15px 15px 15px 50px;
-  background: #000 url(/themes/console/images/info/join_family.png) 12px center no-repeat !important;
+  background: #000 var(--joinfamily) 12px center no-repeat !important;
   background-size: 28px !important;
 }
 
 #config_family .infohelp.newfamily {
   padding: 15px 15px 15px 50px;
-  background: #000 url(/themes/console/images/info/create_family.png) 12px center no-repeat !important;
+  background: #000 var(--newfamily) 12px center no-repeat !important;
   background-size: 28px !important;
 }
 
 #consolepass tr:first-child td {
   padding: 20px 15px 20px 50px !important;
-  background: #000 url(/themes/console/images/info/user_add.png) 12px center no-repeat !important;
+  background: #000 var(--useradd) 12px center no-repeat !important;
   background-size: 28px;
 }
 
 form[action="events"] {
   padding: 10px 10px 10px 50px;
-  background: url(/themes/console/images/info/logs.png) 12px center no-repeat;
+  background: var(--log_icon) 12px center no-repeat;
   background-size: 28px;
 }
 
@@ -8843,7 +8843,7 @@ form[action="events"] > * {
 
 #plugininstall tr:nth-child(3) td:nth-last-child(2), #manualreseed tr:nth-child(3) td:nth-last-child(2) {
   padding: 15px 15px 15px 50px;
-  background: #000 url(/themes/console/images/info/url.png) 12px center no-repeat;
+  background: #000 var(--link) 12px center no-repeat;
   background-size: 28px;
 }
 
@@ -12562,7 +12562,7 @@ html, body {
 }
 
 #sitemap h3:nth-of-type(2) {
-  background: url(/themes/console/images/svg/info.svg) 5px center no-repeat, var(--title) !important;
+  background: var(--infobox) 5px center no-repeat, var(--title) !important;
   background-size: 18px, 100% !important;
 }
 
