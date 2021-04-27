@@ -2786,13 +2786,13 @@ div.sorry hr {
   float: right;
   text-transform: none;
   font-size: 8pt !important;
-  background: url(/themes/console/images/info/author_dark.png) left 2px top no-repeat;
-  background-size: 14px;
-  opacity: 0.7;
+  background: var(--user) left 2px center no-repeat;
+  background-size: 12px;
+  opacity: .7;
 }
 
 .newsDate {
-  opacity: 0.7;
+  opacity: .7;
   font-style: italic;
   margin-right: 2px;
 }
@@ -4799,23 +4799,27 @@ table#consolepass input[type=password] {
 
 #consolepass input[name="name"], #externali2cp input[name="user"] {
   padding: 5px 5px 5px 26px !important;
-  background: #000 url(/themes/console/images/buttons/user.png) 5px center no-repeat;
-  background: url(/themes/console/images/buttons/user.png) 5px center no-repeat, linear-gradient(to bottom, #000, #000019);
+  background: var(--user) 5px center no-repeat, linear-gradient(to bottom, #000, #000019);
   background-size: 16px, 100% !important;
+  background-blend-mode: luminosity;
 }
 
 #consolepass input[name="name"]:focus, #externali2cp input[name="user"]:focus {
-  background: #000 url(/themes/console/images/buttons/user.png) 5px center no-repeat !important;
+  background: #000 var(--user) 5px center no-repeat !important;
+  background-size: 16px !important;
+  background-blend-mode: normal;
 }
 
 #consolepass input[name="nofilter_pw"], #externali2cp input[name="nofilter_pw"] {
-  padding: 6px 8px 6px 22px !important;
-  background: #000 url(/themes/console/images/buttons/password.png) 3px center no-repeat;
-  background: url(/themes/console/images/buttons/password.png) 3px center no-repeat, linear-gradient(to bottom, #000, #000019);
+  padding: 6px 8px 6px 26px !important;
+  background: var(--key) 5px center no-repeat, linear-gradient(to bottom, #000, #000019);
   background-size: 16px, 100% !important;
+  background-blend-mode: luminosity;
 }
 #consolepass input[name="nofilter_pw"]:focus, #externali2cp input[name="nofilter_pw"]:focus {
-  background: #000 url(/themes/console/images/buttons/password.png) 3px center no-repeat !important;
+  background: #000 var(--key) 5px center no-repeat !important;
+  background-size: 16px !important;
+  background-blend-mode: normal;
 }
 
 /* end /configui mods */
