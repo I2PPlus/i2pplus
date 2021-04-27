@@ -676,21 +676,21 @@ input.delete[value^="Ban"]:active, button.delete[value^="Ban"]:active {
 
 input.download, button.download {
   padding: 5px 9px 5px 25px !important;
-  background: url(/themes/console/images/buttons/download.png) 8px center no-repeat, var(--button) !important;
+  background: var(--download) 8px center no-repeat, var(--button) !important;
   background-size: 14px, 100% !important;
 }
 
 input.download:hover, button.download:hover,
 input.download:focus, button.download:focus {
-  background: #000 url(/themes/console/images/buttons/download.png) 8px center no-repeat !important;
-  background: url(/themes/console/images/buttons/download.png) 8px center no-repeat, var(--button_hover) !important;
+  background: #000 var(--download) 8px center no-repeat !important;
+  background: var(--download) 8px center no-repeat, var(--button_hover) !important;
   background-size: 14px, 100% !important;
 }
 
 input.download:active, button.download:active {
   padding: 5px 9px 5px 25px !important;
-  background: #652787 url(/themes/console/images/buttons/download.png) 8px center no-repeat !important;
-  background: url(/themes/console/images/buttons/download.png) 8px center no-repeat, var(--button_active) !important;
+  background: #652787 var(--download) 8px center no-repeat !important;
+  background: var(--download) 8px center no-repeat, var(--button_active) !important;
   background-size: 14px, 100% !important;
 }
 
@@ -843,22 +843,22 @@ input.reload:active, button.reload:active {
 
 input.reload[value$="restart"], button.reload[value$="restart"] {
   padding: 5px 9px 5px 25px !important;
-  background: url(images/restart.svg) 8px center no-repeat, var(--button) !important;
+  background: var(--restart) 8px center no-repeat, var(--button) !important;
   background-size: 12px, 100% !important;
 }
 
 input.reload[value$="restart"]:hover, button.reload[value$="restart"]:hover,
 input.reload[value$="restart"]:focus, button.reload[value$="restart"]:focus {
-  background: #000 url(images/restart_hover.svg) 8px center no-repeat !important;
-  background: url(images/restart_hover.svg) 8px center no-repeat, var(--button_hover) !important;
+  background: #000 var(--restart_hover) 8px center no-repeat !important;
+  background: var(--restart_hover) 8px center no-repeat, var(--button_hover) !important;
   background-blend-mode: normal;
   background-size: 12px, 100% !important;
 }
 
 input.reload[value$="restart"]:active, button.reload[value$="restart"]:active {
   padding: 5px 9px 5px 25px !important;
-  background: #652787 url(images/restart_hover.svg) 8px center no-repeat !important;
-  background: url(images/restart_hover.svg) 8px center no-repeat, var(--button_active) !important;
+  background: #652787 var(--restart_hover) 8px center no-repeat !important;
+  background: var(--restart_hover) 8px center no-repeat, var(--button_active) !important;
   background-size: 12px, 100% !important;
 }
 
@@ -906,16 +906,15 @@ input.reload[value="Force garbage collection"]:active, input.reload[value="Force
 
 input.stop, button.stop {
   padding: 5px 9px 5px 25px !important;
-  background: url(images/shutdown.svg) 8px center no-repeat, var(-button) !important;
-  background: url(images/shutdown.svg) 8px center no-repeat, var(--button) !important;
+  background: var(--shutdown) 8px center no-repeat, var(--button) !important;
   background-size: 12px, 100% !important;
 }
 
 input.stop:hover, button.stop:hover,
 input.stop:focus, button.stop:focus {
   padding: 5px 9px 5px 25px !important;
-  background: #000 url(images/shutdown_hover.svg) 8px center no-repeat !important;
-  background: url(images/shutdown_hover.svg) 8px center no-repeat, var(--button_hover) !important;
+  background: #000 var(--shutdown_hover) 8px center no-repeat !important;
+  background: var(--shutdown_hover) 8px center no-repeat, var(--button_hover) !important;
   background-size: 12px, 100% !important;
   background-blend-mode: normal;
 }
@@ -950,8 +949,8 @@ button.search:active {
 
 button.control, button.control:hover, button.control:focus {
   padding: 12px !important;
+  line-height: 0;
   font-size: 0 !important;
-  text-indent: -99999px !important;
   background-size: 16px, 100% !important;
   background-position: center center !important;
 }
@@ -1032,18 +1031,19 @@ button.check.control:active {
 }
 
 button.download.control {
-  background: url(/themes/console/images/buttons/download.png) center center no-repeat, var(-button) !important;
-  background: url(/themes/console/images/buttons/download.png) center center no-repeat, var(--button) !important;
+  background: var(--download) center center no-repeat, var(--button) !important;
+  background-size: 16px, 100% !important;
 }
 
 button.download.control:hover, button.download.control:focus {
-  background: #000 url(/themes/console/images/buttons/download.png) center center no-repeat !important;
-  background: url(/themes/console/images/buttons/download.png) center center no-repeat, var(--button_hover) !important;
+  background: var(--download) center center no-repeat, var(--button_hover) !important;
+  background-size: 16px, 100% !important;
 }
 
 button.download.control:active {
-  background: #652787 url(/themes/console/images/buttons/download.png) center center no-repeat !important;
-  background: url(/themes/console/images/buttons/download.png) center center no-repeat, var(--button_active) !important;
+  background: #652787 var(--download) center center no-repeat !important;
+  background: var(--download) center center no-repeat, var(--button_active) !important;
+  background-size: 16px, 100% !important;
 }
 
 button::-moz-focus-inner, input[type=submit]::-moz-focus-inner, input[type=reset]::-moz-focus-inner {
@@ -1072,37 +1072,32 @@ button::-moz-focus-inner, input[type=submit]::-moz-focus-inner, input[type=reset
 }
 
 .routersummary .reload, .routersummary .reload[value$="restart"] {
-  background: url(images/restart.svg) center center no-repeat, linear-gradient(to right, rgba(0,0,0,0), rgba(96,0,96,.1), rgba(0,0,0,0)), linear-gradient(to bottom, #141221 50%, #001 50%) !important;
+  background: var(--restart) center center no-repeat, linear-gradient(to right, rgba(0,0,0,0), rgba(96,0,96,.1), rgba(0,0,0,0)), linear-gradient(to bottom, #141221 50%, #001 50%) !important;
   background-size: 14px, 100%, 100% !important;
 }
 
 .routersummary .reload:hover, .routersummary .reload:focus, .routersummary .reload[value$="restart"]:hover, .routersummary .reload[value$="restart"]:focus {
-  background: #000 url(/themes/console/images/buttons/restart_hover.png) center center no-repeat !important;
-  background: url(images/shutdown_hover.svg) 37% center no-repeat, url(images/restart_hover.svg) 63% center no-repeat, var(--button_hover) !important;
+  background: var(--shutdown_hover) 37% center no-repeat, var(--restart_hover) 63% center no-repeat, var(--button_hover) !important;
   background-size: 14px, 14px, 100% !important;
 }
 
 .routersummary .reload:active, .routersummary .reload[value$="restart"]:active {
-  background: url(images/shutdown_hover.svg) 37% center no-repeat, url(images/restart_hover.svg) 63% center no-repeat #652787 !important;
-  background: url(images/shutdown.svg) 37% center no-repeat, url(images/restart.svg) 63% center no-repeat, var(--button_active) !important;
+  background: var(--shutdown) 37% center no-repeat, var(--restart) 63% center no-repeat, var(--button_active) !important;
   background-size: 14px, 14px, 100% !important;
 }
 
 .routersummary .stop {
-  background: url(images/shutdown.svg) center center no-repeat, var(-button) !important;
-  background: url(images/shutdown.svg) center center no-repeat, linear-gradient(to right, rgba(0,0,0,0), rgba(96,0,96,.1), rgba(0,0,0,0)), linear-gradient(to bottom, #141221 50%, #001 50%) !important;
+  background: var(--shutdown) center center no-repeat, linear-gradient(to right, rgba(0,0,0,0), rgba(96,0,96,.1), rgba(0,0,0,0)), linear-gradient(to bottom, #141221 50%, #001 50%) !important;
   background-size: 14px, 100%, 100% !important;
 }
 
 .routersummary .stop:hover, .routersummary .stop:focus {
-  background: url(images/shutdown_hover.svg) center center no-repeat;
-  background: url(images/shutdown_hover.svg) center center no-repeat, var(--button_hover) !important;
+  background: var(--shutdown_hover) center center no-repeat, var(--button_hover) !important;
   background-size: 14px, 100% !important;
 }
 
 .routersummary .stop:active {
-  background: #652787 url(images/shutdown.svg) center 56% no-repeat !important;
-  background: url(images/shutdown.svg) center center no-repeat, var(--button_active) !important;
+  background: var(--shutdown) center center no-repeat, var(--button_active) !important;
   background-size: 14px, 100% !important;
 }
 
@@ -1117,30 +1112,27 @@ button::-moz-focus-inner, input[type=submit]::-moz-focus-inner, input[type=reset
 }
 
 .routersummary .reload[value="restartImmediate"] {
-  background: url(images/restart.svg) center left 6px no-repeat, var(-button) !important;
-  background: url(images/restart.svg) center left 6px no-repeat, linear-gradient(to right, rgba(0,0,0,0), rgba(96,0,96,.1), rgba(0,0,0,0)), linear-gradient(to right, rgba(0,0,16,.5), rgba(0,0,0,0) 30%), linear-gradient(to bottom, #141221 50%, #001 50%) !important;
+  background: var(--restart) center left 6px no-repeat, linear-gradient(to right, rgba(0,0,0,0), rgba(96,0,96,.1), rgba(0,0,0,0)), linear-gradient(to right, rgba(0,0,16,.5), rgba(0,0,0,0) 30%), linear-gradient(to bottom, #141221 50%, #001 50%) !important;
   background-size: 12px auto, 100%, 100%, 100% !important;
 }
 
 .routersummary .reload[value="restartImmediate"]:hover {
-  background: #000 url(images/restart.svg) center left 6px no-repeat !important;
-  background: url(images/restart_hover.svg) center left 6px no-repeat, var(--button_hover) !important;
+  background: var(--restart_hover) center left 6px no-repeat, var(--button_hover) !important;
   background-size: 12px auto !important;
 }
 
 .routersummary .reload[value="restartImmediate"]:focus, .routersummary .reload[value="restartImmediate"]:active {
-  background: #652787 url(images/restart_hover.svg) center left 6px no-repeat !important;
+  background: #652787 var(--restart_hover) center left 6px no-repeat !important;
   background-size: 12px auto !important;
 }
 
 .routersummary .stop[value="shutdownImmediate"] {
-  background: url(images/shutdown.svg) center left 6px no-repeat, var(-button) !important;
-  background: url(images/shutdown.svg) center left 6px no-repeat, linear-gradient(to right, rgba(0,0,0,0), rgba(96,0,96,.1), rgba(0,0,0,0)), linear-gradient(to right, rgba(0,0,16,.5), rgba(0,0,0,0) 30%), linear-gradient(to bottom, #141221 50%, #001 50%) !important;
+  background: var(--shutdown) center left 6px no-repeat, linear-gradient(to right, rgba(0,0,0,0), rgba(96,0,96,.1), rgba(0,0,0,0)), linear-gradient(to right, rgba(0,0,16,.5), rgba(0,0,0,0) 30%), linear-gradient(to bottom, #141221 50%, #001 50%) !important;
   background-size: 12px auto, 100%, 100%, 100% !important;
 }
 
 .routersummary .stop[value="shutdownImmediate"]:hover {
-  background: #000 url(images/shutdown_hover.svg) center left 6px no-repeat !important;
+  background: #000 var(--shutdown_hover) center left 6px no-repeat !important;
   background-size: 12px auto !important;
 }
 
@@ -1150,24 +1142,23 @@ button::-moz-focus-inner, input[type=submit]::-moz-focus-inner, input[type=reset
 }
 
 .routersummary .reload[value="Reseed"] {
-  background: url(/themes/console/images/buttons/download.png) center left 6px no-repeat, var(-button) !important;
-  background: url(/themes/console/images/buttons/download.png) center left 6px no-repeat, linear-gradient(to right, rgba(0,0,0,0), rgba(96,0,96,.1), rgba(0,0,0,0)), linear-gradient(to right, rgba(0,0,16,.5), rgba(0,0,0,0) 30%), linear-gradient(to bottom, #141221 50%, #001 50%) !important;
+  background: var(--download) center left 6px no-repeat, linear-gradient(to right, rgba(0,0,0,0), rgba(96,0,96,.1), rgba(0,0,0,0)), linear-gradient(to right, rgba(0,0,16,.5), rgba(0,0,0,0) 30%), linear-gradient(to bottom, #141221 50%, #001 50%) !important;
   background-size: 14px auto, 100%, 100%, 100% !important;
 }
 
 .routersummary .reload[value="Reseed"]:hover {
-  background: #000 url(/themes/console/images/buttons/download.png) center left 6px no-repeat !important;
+  background: #000 var(--download_hover) center left 6px no-repeat !important;
   background-size: 14px auto !important;
 }
 
 .routersummary .reload[value="Reseed"]:focus, .routersummary .reload[value="Reseed"]:active {
-  background: #652787 url(/themes/console/images/buttons/download.png) center left 6px no-repeat !important;
+  background: #652787 var(--download_hover) center left 6px no-repeat !important;
   background-size: 14px auto !important;
 }
 
 .routersummary .download, .routersummary .download:hover, .routersummary .download:focus {
   min-width: 0 !important;
-  background: url(images/download.svg) 7px center no-repeat !important;
+  background: var(--download) 7px center no-repeat !important;
   background-size: 15px, 100%;
 }
 
@@ -1178,13 +1169,12 @@ button::-moz-focus-inner, input[type=submit]::-moz-focus-inner, input[type=reset
 }
 
 .routersummary .download:hover {
-  background: #000 url(images/download_hover.svg) 7px 5px no-repeat !important;
-  background: url(images/download_hover.svg) 7px center no-repeat, var(--button_hover) !important;
+  background: var(--download_hover) 7px center no-repeat, var(--button_hover) !important;
   background-size: 15px, 100% !important;
 }
 
 .routersummary .download:active {
-  background: #652787 url(images/download.svg) 7px center no-repeat !important;
+  background: #652787 var(--download) 7px center no-repeat !important;
   background-size: 15px, 100% !important;
 }
 
@@ -9861,7 +9851,7 @@ div.joblog h3 {
 button.control[class], button.control[class]:hover, button.control[class]:focus {
   padding: 14px !important;
   font-size: 0 !important;
-  background-position: center calc(50% + 1px) !important;
+  background-position: center center !important;
 }
 
 .main[id^="config_"] th, h4#updateplugins {
