@@ -68,7 +68,7 @@ input[type=radio]:not(:checked) {
   height: 19px !important;
   min-width: 19px !important;
   min-height: 19px !important;
-  border: 1px solid #41465f !important;
+  border: 1px solid #484e6a !important;
   box-shadow: 0 0 2px #f60 !important;
   filter: drop-shadow(0 0 3px #89f) !important;
 }

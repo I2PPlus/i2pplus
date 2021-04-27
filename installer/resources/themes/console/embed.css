@@ -36,7 +36,7 @@ pre {
   background: url(/themes/console/light/images/dropdown.png) right center no-repeat, linear-gradient(to bottom, #fff, #efefff);
   background-blend-mode: hard-light, normal;
   padding: 4px 16px 4px 4px !important;
-  color: #41465f;
+  color: #484e6a;
   margin: 5px;
   border: 1px solid #999daf;
   min-width: 60px;
@@ -51,7 +51,7 @@ pre {
   margin: 3px;
   padding: 4px 8px;
   font-size: 9pt;
-  color: #41465f;
+  color: #484e6a;
   text-decoration: none;
   border: 1px solid #999daf;
   border-radius: 2px;
@@ -80,7 +80,7 @@ pre {
 }
 
 .light body, .light th, .light td, .classic body, .classic th, .classic td {
-  color: #33333f;
+  color: #393947;
 }
 
 .light pre, .classic pre {
@@ -308,13 +308,13 @@ html.bwscheduler, body.bwscheduler {
 }
 
 .bwscheduler.light .plate {
-  color: #33333f !important;
+  color: #393947 !important;
 }
 
 .bwscheduler.light .weekday_container,
 .bwscheduler.light .conatiner_header, .bwscheduler.light .outer {
   background: #ddf !important;
-  color: #33333f !important;
+  color: #393947 !important;
 }
 
 .bwscheduler.light .weekday_container, .bwscheduler.light .conatiner_header, .bwscheduler.light .outer {

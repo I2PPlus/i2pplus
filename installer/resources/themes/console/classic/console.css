@@ -11515,7 +11515,7 @@ to {
   overflow: hidden;
   text-overflow: ellipsis;
   text-transform: capitalize;
-  color: #41465f;
+  color: #484e6a;
 }
 
 .optbox:not(:checked) + label > .stattograph b {
@@ -11534,7 +11534,7 @@ to {
 }
 
 .optbox:checked + label > .stattograph:hover b {
-  color: #41465f !important;
+  color: #484e6a !important;
 }
 
 .stattograph:hover, .optbox:checked + label > .stattograph:hover {
