@@ -27,7 +27,7 @@
 	</target>
 
         <target name="compile" depends="init">
-            <javac debug="true" deprecation="on" source="${javac.version}" target="${javac.version}" 
+            <javac debug="true" deprecation="on" source="${javac.version}" target="${javac.version}"
                        release="${javac.release}"
                        includeAntRuntime="false"
                        encoding="UTF-8"
@@ -53,7 +53,7 @@
             <exec executable="sh" osfamily="windows" failifexecutionfails="false" >
                 <arg value="./bundle-messages.sh" />
             </exec>
-            <javac source="${javac.version}" target="${javac.version}" 
+            <javac source="${javac.version}" target="${javac.version}"
                    release="${javac.release}"
                    includeAntRuntime="false"
                    encoding="UTF-8"
@@ -80,7 +80,7 @@
 		<!-- set if unset -->
 		<property name="workspace.changes.tr" value="" />
                 <!-- ideal for linux: 24x24, but transparency doesn't work -->
-                <copy tofile="${build}/desktopgui/resources/images/logo.png" file="../../installer/resources/themes/console/images/itoopie_xsm.png" />
+                <copy tofile="${build}/desktopgui/resources/images/logo.png" file="../../installer/resources/themes/console/images/eepsite.png" />
                 <copy todir="${build}/desktopgui/resources/images" file="images/itoopie_black_24.png" />
                 <copy todir="${build}/desktopgui/resources/images" file="images/itoopie_white_24.png" />
 		<jar basedir="${build}" excludes="messages-src/**" destfile="${dist}/${jar}">
@@ -114,11 +114,11 @@
     <target name="javadoc">
         <mkdir dir="${build}" />
         <mkdir dir="${build}/${javadoc}" />
-        <javadoc 
-            sourcepath="${src}" destdir="${build}/${javadoc}" 
-            packagenames="*" 
-            use="true" 
-            splitindex="true" 
+        <javadoc
+            sourcepath="${src}" destdir="${build}/${javadoc}"
+            packagenames="*"
+            use="true"
+            splitindex="true"
             windowtitle="Desktopgui">
             <classpath>
                 <pathelement location="../../router/java/build/router.jar" />
@@ -147,7 +147,7 @@
         </exec>
     </target>
 
-	<target name="dist" depends="jar" />	
+	<target name="dist" depends="jar" />
 	<target name="all" depends="jar" />
 </project>
 
