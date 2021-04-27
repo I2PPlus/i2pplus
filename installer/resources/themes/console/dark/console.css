@@ -11936,9 +11936,9 @@ p#gatherstats {
 }
 
 #pageloader {
-  top: -5px !important;
+  top: -1px !important;
   width: 100% !important;
-  height: 1px !important;
+  height: 2px !important;
 }
 
 /* /help/webhosting */
