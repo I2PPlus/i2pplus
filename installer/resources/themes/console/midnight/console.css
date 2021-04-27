@@ -1476,18 +1476,24 @@ div.logo hr {
 
 /* end proxy errors */
 
+.routersummary, .main {
+  background: repeating-linear-gradient(to right, rgba(0,0,16,.4) 2px, rgba(4,4,32,.4) 4px),
+              repeating-linear-gradient(to bottom, #000 2px, #000020 4px);
+  background-size: 4px 100%, 100% 4px;
+}
+
 /* sidebar */
 
 .routersummaryouter {
-  float: left;
-  width: 200px;
   margin: 0 0 10px 5px;
   padding: 0;
-  border: 0;
-  clear: left;
-  text-align: center;
+  width: 200px;
   display: block;
+  float: left;
+  clear: left;
   position: absolute;/* so no interference with /home app icons */
+  text-align: center;
+  border: 0;
 }
 
 .routersummary {
@@ -1495,14 +1501,10 @@ div.logo hr {
   margin-bottom: 7px !important;
   padding: 8px 10px 8px;
   width: 184px;
-  float: left;
-  clear: left;
   text-align: center;
   font-size: 8pt;
   color: #c9ceff;
   border: 1px solid #26235c;
-  background: #000010;
-  background: repeating-linear-gradient(to right, rgba(0,0,16,.4) 2px, rgba(8,8,40,.4) 4px), repeating-linear-gradient(to bottom, #000010 2px, #000020 4px);
 }
 
 .routersummary div[style="height: 36px;"] {
@@ -2631,8 +2633,6 @@ div.sorry hr {
   color: #c9ceff;
   border: 1px solid #26235c;
   box-shadow: inset 0 0 0 1px #000, inset 0 0 2px 1px #26235c;
-  background: #000014 !important;
-  background-size: auto 200px !important;
 }
 
 .news {
@@ -10478,7 +10478,7 @@ b.suboption {
 }
 
 .optionlist label, .optionlist .nowrap, #reseedconfig tr:nth-child(3) td label {
-  background: linear-gradient(to bottom, #112, #040414) !important;
+  background: linear-gradient(to bottom, #080818, #040410) !important;
   box-shadow: inset 0 0 0 1px #000, inset 0 0 2px 1px #191939 !important;
   opacity: 0.9;
 }
@@ -10507,7 +10507,7 @@ b.suboption {
 }
 
 #reseedconfig .optionsingle.optiontextarea {
-  background: linear-gradient(to bottom, #112, #040414) !important;
+  background: linear-gradient(to bottom, #080818, #040410) !important;
 }
 
 #graphs .optionlist, #graphs .optionlist:hover {
@@ -10554,7 +10554,7 @@ b.suboption {
   width: calc(100% - 10px);
   display: inline-block;
   line-height: 100% !important;
-  background: linear-gradient(to bottom, #112, #040414) !important;
+  background: linear-gradient(to bottom, #080818, #040410) !important;
 }
 
 #updateProxyHostPort {
@@ -10763,7 +10763,7 @@ h3#shutdownrouter {
 }
 
 #reseedconfig tr:nth-child(n+2) td label, #reseedconfig tr:nth-child(n+2) td .nowrap {
-  background: linear-gradient(to bottom, #112, #040414) !important;
+  background: linear-gradient(to bottom, #080818, #040410) !important;
 }
 
 #reseedconfig .optbox[type=checkbox] {
@@ -10924,19 +10924,19 @@ h3#shutdownrouter {
 
 #config_reseed #reseedurl {
   background: #001 var(--link) 14px center no-repeat !important;
-  background: var(--link) 14px center no-repeat, linear-gradient(to bottom, #112, #040414) !important;
+  background: var(--link) 14px center no-repeat, linear-gradient(to bottom, #080818, #040410) !important;
   background-size: 28px, 100% !important;
 }
 
 #config_reseed  #reseedzip {
   background: #001 var(--files) 14px center no-repeat !important;
-  background: var(--files) 14px center no-repeat, linear-gradient(to bottom, #112, #040414) !important;
+  background: var(--files) 14px center no-repeat, linear-gradient(to bottom, #080818, #040410) !important;
   background-size: 28px, 100% !important;
 }
 
 #config_reseed #reseedcreatefile {
   background: #001 var(--package) 14px center no-repeat !important;
-  background: var(--package) 14px center no-repeat, linear-gradient(to bottom, #112, #040414) !important;
+  background: var(--package) 14px center no-repeat, linear-gradient(to bottom, #080818, #040410) !important;
   background-size: 28px, 100% !important;
   text-align: justify;
 }
@@ -11261,7 +11261,7 @@ tr:nth-child(4) .net_bwrate::before {
 }
 
 #installPluginFile, #installPluginUrl {
-  background: linear-gradient(to bottom, #112, #040414);
+  background: linear-gradient(to bottom, #080818, #040410);
   box-shadow: inset 0 0 0 1px #000, inset 0 0 2px 1px #191939 !important;
 }
 
@@ -11321,7 +11321,7 @@ input[type="file"]:hover {
   padding: 5px 5px 0 45px;
   box-shadow: inset 0 0 0 1px #000, inset 0 0 2px 1px #191939 !important;
   background: #000 url(/themes/console/images/info/label.png) 10px center no-repeat !important;
-  background: url(/themes/console/images/info/label.png) 10px center no-repeat, linear-gradient(to bottom, #112, #040414) !important;
+  background: url(/themes/console/images/info/label.png) 10px center no-repeat, linear-gradient(to bottom, #080818, #040410) !important;
   background-size: 28px, 100%, 100% !important;
 }
 
@@ -11329,7 +11329,7 @@ input[type="file"]:hover {
   padding: 5px 5px 0 45px;
   box-shadow: inset 0 0 0 1px #000, inset 0 0 2px 1px #191939 !important;
   background: #000 url(/themes/console/images/info/key.png) 10px center no-repeat !important;
-  background: url(/themes/console/images/info/key.png) 10px center no-repeat, linear-gradient(to bottom, #112, #040414) !important;
+  background: url(/themes/console/images/info/key.png) 10px center no-repeat, linear-gradient(to bottom, #080818, #040410) !important;
   background-size: 28px, 100%, 100% !important;
 }
 
