@@ -8827,7 +8827,7 @@ p#enablefullstats, p#gatherstats {
 #consolepass tr:first-child td {
   padding: 20px 15px 20px 50px !important;
   background: #000 var(--useradd) 12px center no-repeat !important;
-  background-size: 28px;
+  background-size: 28px !important;
 }
 
 form[action="events"] {
