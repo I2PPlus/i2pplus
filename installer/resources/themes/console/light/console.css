@@ -968,12 +968,21 @@ to {
 }
 
 #sb_services a:link, #sb_services a:visited {
-  display: inline-block;
+  padding: 4px 2px;
   width: 100%;
-  padding: 4px 2px 4px 24px;
+  display: inline-block;
   text-align: left;
   border-bottom: 1px dotted #ddf;
-  background: url(/themes/console/images/plugin.png) 3px center no-repeat;
+}
+
+#sb_services a::before {
+  margin: 0 5px 0 1px;
+  width: 16px;
+  height: 16px;
+  display: inline-block;
+  background: url(/themes/console/images/plugin.png) no-repeat center center;
+  background-size: 16px;
+  content: "";
 }
 
 #sb_services a:link:last-child {
@@ -984,73 +993,47 @@ to {
   background-color: #ffe;
 }
 
-#sb_services a[href="/webmail"] {
-  background: var(--mail) 3px center no-repeat;
+#sb_services a[href="/webmail"]::before {
+  background: var(--mail) no-repeat center center;
 }
 
-#sb_services a[href="/webmail"]:hover {
-  background: #ffe var(--mail) 3px center no-repeat;
+#sb_services a[href="/torrents"]::before {
+  background: var(--snark) no-repeat center center;
 }
 
-#sb_services a[href="/torrents"] {
-  background: var(--snark) 3px center no-repeat;
+#sb_services a[href="/dns"]::before {
+  background: var(--abook) no-repeat center center;
 }
 
-#sb_services a[href="/torrents"]:hover {
-  background: #ffe var(--snark) 3px center no-repeat;
+#sb_services a[href="/i2ptunnelmgr"]::before {
+  background: var(--tunnman) no-repeat center center;
 }
 
-#sb_services a[href="/dns"] {
-  background: var(--abook) 3px center no-repeat;
+#sb_services a[href$=":7658/"]::before, #sb_services a[href$=":7668/"]::before {
+  background: var(--webserver) no-repeat center center;
 }
 
-#sb_services a[href="/dns"]:hover {
-  background: #ffe var(--abook) 3px center no-repeat;
+#sb_services a[href="/orchid/"]::before, #sb_services a[href*="/orchid/"]::before {
+  background: url(images/flower.png) no-repeat center center;
 }
 
-#sb_services a[href="/i2ptunnelmgr"] {
-  background: var(--tunnman) 3px center no-repeat;
+#sb_services a[href*="bote"]::before {
+  background: url(images/mail_black.png) no-repeat center center;
 }
 
-#sb_services a[href="/i2ptunnelmgr"]:hover {
-  background: #ffe var(--tunnman) 3px center no-repeat;
+#sb_services a[href*="/tracker"]::before {
+  background: url(/themes/console/images/zzzot.png) no-repeat center center;
 }
 
-#sb_services a[href$=":7658/"], #sb_services a[href$=":7668/"] {
-  background: var(--webserver) 3px center no-repeat;
-}
-
-#sb_services a[href$=":7658/"]:hover, #sb_services a[href$=":7668/"]:hover {
-  background: #ffe var(--webserver) 3px center no-repeat;
-}
-
-#sb_services a[href="/orchid/"], #sb_services a[href*="/orchid/"] {
-  background: url(images/flower.png) 3px center no-repeat;
-}
-
-#sb_services a[href="/orchid/"]:hover, #sb_services a[href*="/orchid/"]:hover {
-  background: #ffe url(images/flower.png) 3px center no-repeat;
-}
-
-#sb_services a[href*="bote"] {
-  background: url(images/mail_black.png) 3px center no-repeat;
-}
-
-#sb_services a[href*="bote"]:hover {
-  background: #ffe url(images/mail_black.png) 3px center no-repeat;
-}
-
-#sb_services a[href*="/tracker"] {
-  background: url(/themes/console/images/zzzot.png) 3px center no-repeat;
-}
-
-#sb_services a[href*="/tracker"]:hover {
-  background: #ffe url(/themes/console/images/zzzot.png) 3px center no-repeat;
-}
-
-#sb_services a {
+#sb_services a::before {
   vertical-align: sub !important;
   background-size: 16px !important;
+  filter: saturate(.05);
+}
+
+#sb_services a:hover::before {
+  mix-blend-mode: normal;
+  filter: saturate(1);
 }
 
 /* end webapp navigation */
@@ -8191,7 +8174,7 @@ p.sybil_info + a[name] + table.sybil_routerinfo, p.hashdist + a[name] + table.sy
 }
 
 .keysearch, .signingkey, .version, .version a {
-  color: #4a415e !important;
+  color: var(--a) !important;
 }
 
 .signingkey {
