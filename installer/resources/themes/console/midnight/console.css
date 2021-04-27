@@ -10,7 +10,7 @@
 @import url(images/images.css);
 
 :root {
-  --title: linear-gradient(to bottom, #080818 50%, #000008 50%);
+  --title: repeating-linear-gradient(to right, rgba(0,0,48,.4) 2px, #000 4px), linear-gradient(to bottom, #003, #002 50%, #001 50%, #000);
   --bodyfont: Droid Sans, Open Sans, Noto Sans, Ubuntu, Segoe UI, Bitstream Vera Sans, DejaVu Sans, Verdana, Lucida Grande, Helvetica, sans-serif;
   --monospaced: Droid Sans Mono, Noto Mono, DejaVu Sans Mono, Lucida Console, monospace;
   --button: linear-gradient(to bottom, #11101c 50%, #000010 50%);
@@ -45,14 +45,13 @@ body:not(old) {
               repeating-linear-gradient(to bottom, rgba(0,0,32,.5) 2px, rgba(0,0,0,.3) 4px),
               url(images/tile.png),
               url(/themes/console/images/buttons/clean_hover.png) no-repeat,
-              url(/themes/console/images/buttons/configure_hover.png) no-repeat,
               url(/themes/console/images/buttons/delete_hover.png) no-repeat,
               url(/themes/console/images/buttons/restore_hover.png) no-repeat,
               url(/themes/console/images/buttons/search_hover.png) no-repeat,
               url(/themes/console/images/buttons/update_hover.png) no-repeat,
               url(images/dropdown_hover.svg),
               url(images/newtab.png), #001;
-  background-size: 4px 100%, 100% 4px, 171px 148px, 0, 0, 0, 0, 0, 0, 0, 0;
+  background-size: 4px 100%, 100% 4px, 171px 148px, 0, 0, 0, 0, 0, 0, 0;
 }
 
 @supports (-moz-appearance: none) {
@@ -1001,33 +1000,37 @@ button.add.control:active {
 }
 
 button.delete.control {
-  background: url(/themes/console/images/buttons/delete.png) center center no-repeat, var(-button) !important;
-  background: url(/themes/console/images/buttons/delete.png) center center no-repeat, var(--button) !important;
+  background: var(--nuke) center center no-repeat, var(--button) !important;
+  background-size: 16px, 100% !important;
 }
 
 button.delete.control:hover, button.delete.control:focus {
-  background: #000 url(/themes/console/images/buttons/delete_hover.png) center center no-repeat !important;
-  background: url(/themes/console/images/buttons/delete_hover.png) center center no-repeat, var(--button_hover) !important;
+  background: var(--nuke) center center no-repeat, var(--button_hover) !important;
+  background-size: 16px, 100% !important;
+  background-blend-mode: normal;
 }
 
 button.delete.control:active {
-  background: #652787 url(/themes/console/images/buttons/delete_hover.png) center center no-repeat !important;
-  background: url(/themes/console/images/buttons/delete_hover.png) center center no-repeat, var(--button_active) !important;
+  background: var(--nuke) center center no-repeat, var(--button_active) !important;
+  background-size: 16px, 100% !important;
+  background-blend-mode: normal;
 }
 
 button.check.control {
-  background: url(/themes/console/images/buttons/update.png) center center no-repeat, var(-button) !important;
-  background: url(/themes/console/images/buttons/update.png) center center no-repeat, var(--button) !important;
+  background: var(--refresh) center center no-repeat, var(--button) !important;
+  background-size: 16px, 100% !important;
 }
 
 button.check.control:hover, button.check.control:focus {
-  background: #000 url(/themes/console/images/buttons/update_hover.png) center center no-repeat !important;
-  background: url(/themes/console/images/buttons/update_hover.png) center center no-repeat, var(--button_hover) !important;
+  background: var(--refresh_hover) center center no-repeat, var(--button_hover) !important;
+  background-size: 16px, 100% !important;
+  background-blend-mode: normal;
 }
 
 button.check.control:active {
-  background: #652787 url(/themes/console/images/buttons/update_hover.png) center center no-repeat !important;
-  background: url(/themes/console/images/buttons/update_hover.png) center center no-repeat, var(--button_active) !important;
+  background: var(--refresh_active) center center no-repeat, var(--button_active) !important;
+  background-size: 16px, 100% !important;
+  background-blend-mode: normal;
 }
 
 button.download.control {
@@ -3032,7 +3035,7 @@ h3 + p, h3 + table {
   width: 16px;
   height: 16px;
   float: right;
-  background: url(/themes/susidns/midnight/images/configure.png) center center no-repeat;
+  background: var(--settings) center center no-repeat;
   background-size: 16px !important;
   content: "";
 }
@@ -3041,12 +3044,12 @@ h3 + p, h3 + table {
 .main#tunnels h3 a[href^="/configtunnels#"]:focus::after, .main#tunnels h3 a[href$="i2ptunnelmgr"]:focus::after,
 #logs a.configure:hover::after, #logs a.configure:focus::after,
 h4.app a:hover::after, h4.app a:focus::after, h4.app2 a:hover::after, h4.app2 a:focus::after {
-  background: url(images/configure_hover.png) center center no-repeat;
+  background: var(--settings_hover) center center no-repeat;
 }
 
 .main#tunnels h3 a[href^="/configtunnels#"]:active::after, .main#tunnels h3 a[href$="i2ptunnelmgr"]:active::after, #logs a.configure:active::after,
 h4.app a:active::after, h4.app2 a:active::after  {
-  background: url(images/configure_active.png) center center no-repeat;
+  background: var(--settings_active) center center no-repeat;
   transform: rotate(90deg);
   transition: linear transform .2s;
 }
@@ -3638,17 +3641,19 @@ h1 {
 }
 
 h1, h2, h3, .th_title {
-  background: #000 url(images/header.png) center center;
   background: var(--title) !important;
+  background-size: 4px 100%, 100% !important;
 }
 
 h1, h2, h3 {
   box-shadow: inset 0 0 0 1px #000;
 }
 
+/*
 .th_title {
   background: linear-gradient(to bottom, #141221 50%, #001 50%) !important;
 }
+*/
 
 span#newtab {
   margin-top: 2px;
@@ -7192,7 +7197,7 @@ table#jardump {
 #debug h2 {
   padding: 10px !important;
   background: url(/themes/console/images/info/debug.png) right 5px center no-repeat,  var(--title) !important;
-  background-size: 24px, 100%, 100% !important;
+  background-size: 24px, 4px 100%, 100% !important;
   background-blend-mode: luminosity, normal;
 }
 
@@ -7471,7 +7476,7 @@ h4.app, h4.app2 {
   letter-spacing: 2px;
   border: 1px solid #26235c;
   background: url(/themes/console/images/eepsite.png) 10px center no-repeat, var(--title) !important;
-  background-size: 16px, 100%, 100% !important;
+  background-size: 16px, 4px 100%, 100% !important;
   background-blend-mode: luminosity;
 }
 
@@ -7481,7 +7486,7 @@ h4.app2 {
   top: -4px;
   clear: left;
   background: var(--globe) 10px center no-repeat, var(--title) !important;
-  background-size: 16px, 100%, 100% !important;
+  background-size: 16px, 4px 100%, 100% !important;
 }
 
 h4.app a, h4.app2 a {
@@ -8920,43 +8925,43 @@ h3 .b32 {
 
 #tunnels h3 {
     padding-top: 8px !important;
-    padding-bottom: 5px !important;
+    padding-bottom: 8px !important;
 }
 
 #tunnels h3.server {
   padding-left: 34px !important;
   background: var(--server) 8px center no-repeat, var(--title) !important;
-  background-size: 19px, 100%, 100% !important;
+  background-size: 19px, 4px 100%, 100% !important;
 }
 
 #tunnels h3.client {
   padding-left: 34px !important;
   background: var(--client) 8px center no-repeat, var(--title) !important;
-  background-size: 19px, 100%, 100% !important;
+  background-size: 19px, 4px 100%, 100% !important;
 }
 
 #tunnels h3.ping {
   padding-left: 34px !important;
   background: var(--ping) 8px center no-repeat, var(--title) !important;
-  background-size: 19px, 100%, 100% !important;
+  background-size: 19px, 4px 100%, 100% !important;
 }
 
 #tunnels h3#participating {
   padding-left: 34px !important;
   background: url(/themes/console/images/info/share.png) 6px center no-repeat, var(--title) !important;
-  background-size: 19px, 100%, 100% !important;
+  background-size: 19px, 4px 100%, 100% !important;
 }
 
 #tunnels h3#exploratory {
   padding-left: 34px !important;
   background: var(--globe) 8px center no-repeat, var(--title) !important;
-  background-size: 19px, 100%, 100% !important;
+  background-size: 19px, 4px 100%, 100% !important;
 }
 
 #tunnels h3:last-of-type {
   padding-left: 34px !important;
   background: url(/themes/console/images/svg/speedometer.svg) 8px center no-repeat, var(--title) !important;
-  background-size: 19px, 100%, 100% !important;
+  background-size: 19px, 4px 100%, 100% !important;
 }
 
 #tunnels h3 img {
@@ -12511,7 +12516,8 @@ html, body {
 }
 
 #sybilnav ul li#configurePeriodic::before {
-  background: url(/themes/console/images/buttons/configure.png) center center no-repeat;
+  background: var(--settings) center center no-repeat;
+  background-size: 16px;
 }
 
 #sybilnav ul li#floodfillSummary::before {
@@ -12592,7 +12598,7 @@ html, body {
   font-size: 10.5pt;
   border: 1px solid #26235c;
   background: url(/themes/console/images/eepsite.png) 5px center no-repeat, var(--title) !important;
-  background-size: 18px, 100% !important;
+  background-size: 18px, 4px 100% !important;
 }
 
 @media screen and (min-width: 1500px) {
@@ -12609,22 +12615,22 @@ html, body {
 
 #sitemap h3:nth-of-type(2) {
   background: var(--infobox) 5px center no-repeat, var(--title) !important;
-  background-size: 18px, 100% !important;
+  background-size: 18px, 4px 100% !important;
 }
 
 #sitemap h3:nth-of-type(3) {
   background: var(--configure) 5px center no-repeat, var(--title) !important;
-  background-size: 18px, 100% !important;
+  background-size: 18px, 4px 100% !important;
 }
 
 #sitemap h3:nth-of-type(4) {
   background: var(--help) 5px center no-repeat, var(--title) !important;
-  background-size: 18px, 100% !important;
+  background-size: 18px, 4px 100% !important;
 }
 
 #sitemap h3:nth-of-type(5) {
   background: var(--globe) 5px center no-repeat,var(--title) !important;
-  background-size: 18px, 100% !important;
+  background-size: 18px, 4px 100% !important;
 }
 
 .sitemapLink, .sitemapLabel {
@@ -12856,79 +12862,79 @@ a:hover .sitemapLink {
 #configurationhelp h2, #advancedsettings h2, #filterlist h2 {
   padding-left: 38px !important;
   background: var(--configure) 8px center no-repeat, var(--title) !important;
-  background-size: 24px, 100%, 100%, 100%, 100% !important;
+  background-size: 24px, 4px 100%, 100% !important;
 }
 
 #sidebarhelp h2, #reachabilityhelp h2 {
   padding-left: 38px !important;
   background: url(/themes/console/images/info/sidebar.png) 8px center no-repeat, var(--title) !important;
-  background-size: 24px, 100%, 100%, 100%, 100% !important;
+  background-size: 24px, 4px 100%, 100% !important;
 }
 
 #reseedhelp h2 {
   padding-left: 38px !important;
   background: var(--reseed) 8px center no-repeat, var(--title) !important;
-  background-size: 24px, 100%, 100%, 100%, 100% !important;
+  background-size: 24px, 4px 100%, 100% !important;
 }
 
 #newuserguide h2 {
   padding-left: 38px !important;
   background: url(/themes/console/images/info/question.png) 8px center no-repeat, var(--title) !important;
-  background-size: 24px, 100%, 100%, 100%, 100% !important;
+  background-size: 24px, 4px 100%, 100% !important;
 }
 
 #newuserguide h2 {
   padding-left: 38px !important;
   background: url(/themes/console/images/info/notice.png) 8px center no-repeat, var(--title) !important;
-  background-size: 24px, 100%, 100%, 100%, 100% !important;
+  background-size: 24px, 4px 100%, 100% !important;
 }
 
 #troubleshoot h2 {
   padding-left: 38px !important;
   background: var(--wrench) 8px center no-repeat, var(--title) !important;
-  background-size: 24px, 100%, 100%, 100%, 100% !important;
+  background-size: 24px, 4px 100%, 100% !important;
 }
 
 #legal h2 {
   padding-left: 38px !important;
   background: url(/themes/console/images/info/legal.png) 8px center no-repeat, var(--title) !important;
-  background-size: 24px, 100%, 100%, 100%, 100% !important;
+  background-size: 24px, 4px 100%, 100% !important;
 }
 
 #changelog h2 {
   padding-left: 38px !important;
   background: var(--changelog) 8px center no-repeat, var(--title) !important;
-  background-size: 24px, 100%, 100%, 100%, 100% !important;
+  background-size: 24px, 4px 100%, 100% !important;
 }
 
 #faq h2, #glossary h2 {
   padding-left: 38px !important;
   background: url(/themes/console/images/info/question.png) 8px center no-repeat, var(--title) !important;
-  background-size: 24px, 100%, 100%, 100%, 100% !important;
+  background-size: 24px, 4px 100%, 100% !important;
 }
 
 #webhosting h2 {
   padding-left: 38px !important;
   background: url(/themes/console/images/server_32x32.png) 8px center no-repeat, var(--title) !important;
-  background-size: 24px, 100%, 100%, 100%, 100% !important;
+  background-size: 24px, 4px 100%, 100% !important;
 }
 
 #themeoverride h2 {
   padding-left: 38px !important;
   background: var(--ui) 8px center no-repeat, var(--title) !important;
-  background-size: 24px, 100%, 100%, 100%, 100% !important;
+  background-size: 24px, 4px 100%, 100% !important;
 }
 
 #browserconfig h2 {
   padding-left: 38px !important;
   background: url(/themes/console/images/svg/firefox.svg) 8px center no-repeat, var(--title) !important;
-  background-size: 24px, 100%, 100%, 100%, 100% !important;
+  background-size: 24px, 4px 100%, 100% !important;
 }
 
 #tunnman h2 {
   padding-left: 38px !important;
   background: var(--hardhat) 8px center no-repeat, var(--title) !important;
-  background-size: 24px, 100%, 100%, 100%, 100% !important;
+  background-size: 24px, 4px 100%, 100% !important;
 }
 
 /* end TOC */
@@ -14249,20 +14255,20 @@ h3#bannedpeers {
 #tunnels #participating a::after, #tunnels #peercount a::after {
   content: "";
   display: inline-block;
-  width: 16px;
-  height: 16px;
+  width: 18px;
+  height: 18px;
   vertical-align: middle;
-  background: url(images/refresh.png) center center no-repeat;
-  background-size: 16px !important;
+  background: var(--refresh) center center no-repeat;
+  background-size: 18px !important;
 }
 
 #tunnels #participating a:hover::after, #tunnels #participating a:focus::after,
 #tunnels #peercount a:hover::after, #tunnels #peercount a:focus::after {
-  background: url(images/refresh_hover.png) center center no-repeat;
+  background: var(--refresh_hover) center center no-repeat;
 }
 
 #tunnels #participating a:active::after, #tunnels #peercount a:active::after {
-  background: url(images/refresh_active.png) center center no-repeat;
+  background: var(--refresh_active) center center no-repeat;
   transform: rotate(90deg);
   transition: linear transform .2s;
 }
