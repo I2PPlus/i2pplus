@@ -5980,7 +5980,8 @@ ul#upnphelp li:last-child, #legal ul li:last-child {
 #netdboverview {
   margin: -4px auto 8px;
   background: #000010;
-  background: repeating-linear-gradient(to bottom, #000010, #000 1px, #000020 2px);
+  background: repeating-linear-gradient(to bottom, rgba(0,0,0,.7) 2px, rgba(0,0,16,.5) 4px);
+  background-size: 100% 4px;
 }
 
 #netdboverview tr {
