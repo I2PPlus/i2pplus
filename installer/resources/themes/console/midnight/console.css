@@ -760,14 +760,12 @@ input.go[value^="Create"], button.go[value^="Create"] {
 
 input.go[value^="Create"]:hover, button.go[value^="Create"]:hover,
 input.go[value^="Create"]:focus, button.go[value^="Create"]:focus {
-  background: #000 url(/themes/console/images/buttons/create-file.png) 8px center no-repeat !important;
   background: url(/themes/console/images/buttons/create-file.png) 8px center no-repeat, var(--button_hover) !important;
   background-size: 14px, 100% !important;
 }
 
 input.go[value^="Create"]:active, button.go[value^="Create"]:active {
   padding: 5px 9px 5px 25px !important;
-  background: #652787 url(/themes/console/images/buttons/create-file.png) 8px center no-repeat !important;
   background: url(/themes/console/images/buttons/create-file.png) 8px center no-repeat, var(--button_active) !important;
   background-size: 14px, 100% !important;
 }
@@ -786,21 +784,18 @@ input.back:focus {
 
 input.reload, button.reload {
   padding: 5px 9px 5px 25px !important;
-  background: url(/themes/console/images/buttons/restore.png) 8px center no-repeat, var(-button) !important;
   background: url(/themes/console/images/buttons/restore.png) 8px center no-repeat, var(--button) !important;
   background-size: 14px, 100% !important;
 }
 
 input.reload:hover, button.reload:hover,
 input.reload:focus, button.reload:focus {
-  background: #000 url(/themes/console/images/buttons/restore_hover.png) 8px center no-repeat !important;
   background: url(/themes/console/images/buttons/restore_hover.png) 8px center no-repeat, var(--button_hover) !important;
   background-size: 14px, 100% !important;
 }
 
 input.reload:active, button.reload:active {
   padding: 5px 9px 5px 25px !important;
-  background: #652787 url(/themes/console/images/buttons/restore_hover.png) 8px center no-repeat !important;
   background: url(/themes/console/images/buttons/restore_hover.png) 8px center no-repeat, var(--button_active) !important;
   background-size: 14px, 100% !important;
 }
@@ -813,7 +808,6 @@ input.reload[value$="restart"], button.reload[value$="restart"] {
 
 input.reload[value$="restart"]:hover, button.reload[value$="restart"]:hover,
 input.reload[value$="restart"]:focus, button.reload[value$="restart"]:focus {
-  background: #000 var(--restart_hover) 8px center no-repeat !important;
   background: var(--restart_hover) 8px center no-repeat, var(--button_hover) !important;
   background-blend-mode: normal;
   background-size: 12px, 100% !important;
@@ -821,49 +815,42 @@ input.reload[value$="restart"]:focus, button.reload[value$="restart"]:focus {
 
 input.reload[value$="restart"]:active, button.reload[value$="restart"]:active {
   padding: 5px 9px 5px 25px !important;
-  background: #652787 var(--restart_hover) 8px center no-repeat !important;
   background: var(--restart_hover) 8px center no-repeat, var(--button_active) !important;
   background-size: 12px, 100% !important;
 }
 
 input.reload[value^="Update"], button.reload[value^="Update"] {
   padding: 5px 9px 5px 25px !important;
-  background: url(/themes/console/images/buttons/update.png) 8px center no-repeat, var(-button) !important;
   background: url(/themes/console/images/buttons/update.png) 8px center no-repeat, var(--button) !important;
   background-size: 14px, 100% !important;
 }
 
 input.reload[value^="Update"]:hover, button.reload[value^="Update"]:hover,
 input.reload[value^="Update"]:focus, button.reload[value^="Update"]:focus {
-  background: #000 url(/themes/console/images/buttons/update_hover.png) 8px center no-repeat !important;
   background: url(/themes/console/images/buttons/update_hover.png) 8px center no-repeat, var(--button_hover) !important;
   background-size: 14px, 100% !important;
 }
 
 input.reload[value^="Update"]:active, button.reload[value^="Update"]:active {
   padding: 5px 9px 5px 25px !important;
-  background: #652787 url(/themes/console/images/buttons/update_hover.png) 8px center no-repeat !important;
   background: url(/themes/console/images/buttons/update_hover.png) 8px center no-repeat, var(--button_active) !important;
   background-size: 14px, 100% !important;
 }
 
 input.reload[value="Force GC"], input.reload[value="Force garbage collection"] {
   padding: 5px 9px 5px 25px !important;
-  background: url(/themes/console/images/buttons/clean.png) 8px center no-repeat, var(-button) !important;
   background: url(/themes/console/images/buttons/clean.png) 8px center no-repeat, var(--button) !important;
   background-size: 14px, 100% !important;
 }
 
 input.reload[value="Force GC"]:hover, input.reload[value="Force GC"]:focus,
 input.reload[value="Force garbage collection"]:hover, input.reload[value="Force garbage collection"]:focus {
-  background: #000 url(/themes/console/images/buttons/clean_hover.png) 8px center no-repeat !important;
   background: url(/themes/console/images/buttons/clean_hover.png) 8px center no-repeat, var(--button_hover) !important;
   background-size: 14px, 100% !important;
 }
 
 input.reload[value="Force garbage collection"]:active, input.reload[value="Force garbage collection"]:active {
   padding: 5px 9px 5px 25px !important;
-  background: #652787 url(/themes/console/images/buttons/clean_hover.png) 8px center no-repeat !important;
   background: url(/themes/console/images/buttons/clean_hover.png) 8px center no-repeat, var(--button_active) !important;
   background-size: 14px, 100% !important;
 }
@@ -877,7 +864,6 @@ input.stop, button.stop {
 input.stop:hover, button.stop:hover,
 input.stop:focus, button.stop:focus {
   padding: 5px 9px 5px 25px !important;
-  background: #000 var(--shutdown_hover) 8px center no-repeat !important;
   background: var(--shutdown_hover) 8px center no-repeat, var(--button_hover) !important;
   background-size: 12px, 100% !important;
   background-blend-mode: normal;
@@ -885,27 +871,23 @@ input.stop:focus, button.stop:focus {
 
 input.stop:active, button.stop:active {
   padding: 5px 9px 5px 25px !important;
-  background: #652787 url(/themes/console/images/buttons/shutdown.png) 8px center no-repeat !important;
   background: url(/themes/console/images/buttons/shutdown.png) 8px center no-repeat, var(--button_active) !important;
   background-size: 14px, 100% !important;
 }
 
 button.search {
-  background: url(/themes/console/images/buttons/search.png) 8px center no-repeat, var(-button) !important;
-  background: url(/themes/console/images/buttons/search.png) 8px center no-repeat, var(--button) !important;
+  padding: 5px 12px 5px 30px !important;
+  background: var(--search) 11px center no-repeat, var(--button) !important;
   background-size: 14px, 100% !important;
-  background-position: 8px center !important;
 }
 
 button.search:hover, button.search:focus {
-  background: #000 url(/themes/console/images/buttons/search_hover.png) 8px center no-repeat !important;
-  background: url(/themes/console/images/buttons/search_hover.png) 8px center no-repeat, var(--button_hover) !important;
+  background: var(--search) 11px center no-repeat, var(--button_hover) !important;
   background-size: 14px, 100% !important;
 }
 
 button.search:active {
-  background: #652787 url(/themes/console/images/buttons/search_hover.png) 8px center no-repeat !important;
-  background: url(/themes/console/images/buttons/search_hover.png) 8px center no-repeat, var(--button_active) !important;
+  background: var(--search) 11px center no-repeat, var(--button_active) !important;
   background-size: 14px, 100% !important;
 }
 
@@ -3073,22 +3055,36 @@ h3#iptransport a:not(old), h3#advancedconfig a:not(old), #reseedsetup a:not(old)
   height: 20px;
 }
 
-h3#iptransport a::after, h3#advancedconfig a::after, #reseedsetup a::after {
+.h3navlinks a[href="/help/faq#alternative_browser"] img {
+  display: none;
+}
+
+h3#iptransport a::after, h3#advancedconfig a::after, #reseedsetup a::after,
+.h3navlinks a[href="/help/faq#alternative_browser"]::after {
   padding: 0;
-  width: 16px;
-  height: 16px;
+  width: 20px;
+  height: 20px;
   float: right;
-  background: url(/themes/susidns/midnight/images/overview.png) center center no-repeat;
-  background-size: 16px !important;
+  background: var(--helplink) center center no-repeat;
+  background-size: 20px !important;
   content: "";
 }
 
-@media screen and (max-width: 1500px) {
-h3#iptransport a::after, h3#advancedconfig a::after, #reseedsetup a::after {
-  width: 14px;
-  height: 14px;
-  background-size: 14px !important;
+h3#iptransport a:hover::after, h3#iptransport a:focus::after,
+h3#advancedconfig a:hover::after, h3#advancedconfig a:focus::after,
+#reseedsetup a:hover::after, #reseedsetup a:focus::after,
+.h3navlinks a[href="/help/faq#alternative_browser"]:hover::after,
+.h3navlinks a[href="/help/faq#alternative_browser"]:focus::after {
+  background: var(--helplink_hover) center center no-repeat;
 }
+
+@media screen and (max-width: 1500px) {
+  h3#iptransport a::after, h3#advancedconfig a::after, #reseedsetup a::after,
+  .h3navlinks a[href="/help/faq#alternative_browser"]::after {
+    width: 16px;
+    height: 16px;
+    background-size: 16px !important;
+  }
 }
 
 div.messages {
@@ -4313,8 +4309,8 @@ a[name="chelp"]:hover, a[name="help"]:hover, a[name="chelp"]:active, a[name="hel
 }
 
 .homelinkedit td.noicon {
-  background: url(/themes/console/images/info/search.png) center center no-repeat;
-  background-size: 20px 20px;
+  background: var(--search) center center no-repeat;
+  background-size: 20px;
 }
 
 #config_homepage .delete {
@@ -7731,11 +7727,11 @@ table.search {
 }
 
 input.search, input.search:hover {
-  padding: 5px 5px 5px 24px;
+  padding: 5px 5px 5px 28px;
   width: calc(100% - 20px);
   vertical-align: middle;
-  background: #000 url(/themes/console/images/buttons/search.png) 4px center no-repeat;
-  background: url(/themes/console/images/buttons/search.png) 4px center no-repeat, linear-gradient(to bottom, #000, #000019);
+  background: var(--search) 8px center no-repeat, linear-gradient(to bottom, #000, #000019);
+  background-size: 14px, 100%;
 }
 
 input.search::placeholder {
@@ -7752,16 +7748,13 @@ input.search:focus::placeholder {
 }
 
 input.search:focus {
-  background: #000 url(/themes/console/images/buttons/search.png) 4px center no-repeat;
+  background: #000 var(--search) 8px center no-repeat;
+  background-size: 14px;
 }
 
 .search select {
   width: auto;
   margin: 7px 10px 7px 8px;
-}
-
-.search button {
-  padding-left: 28px !important;
 }
 
 /* end homepage search */
