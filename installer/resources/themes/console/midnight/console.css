@@ -8276,9 +8276,11 @@ p.infowarn, td.infowarn, p.infohelp, td.infohelp {
 
 p.infowarn, td.infowarn, #sybilanalysis {
   padding: 20px 15px 20px 50px !important;
-  background: #000 url(/themes/console/images/svg/infowarn.svg) 12px center no-repeat !important;
-  background-size: 28px !important;
   border: var(--innerborder);
+  background: var(--infowarn) 14px center no-repeat,
+              linear-gradient(to bottom, rgba(128,128,128,.05), rgba(0,0,0,.3)),
+              repeating-linear-gradient(to bottom, #200 2px, #000 4px) !important;
+  background-size: 28px, 100%, 100% 4px !important;
 }
 
 .logtable, #enviro {

@@ -365,9 +365,9 @@ td > b {
 }
 
 td.infohelp {
-  background: url(/themes/console/images/info/infohelp.png) 10px center no-repeat;
-  background-size: 20px 20px;
   padding: 10px 10px 10px 38px !important;
+  background: var(--infohelp) 10px center no-repeat;
+  background-size: 20px;
 }
 
 .tunnelConfig td {
@@ -379,11 +379,11 @@ td.infohelp {
 }
 
 .tunnelProperties {
-  background: #000 !important;
   overflow: hidden;
   text-align: left;
   border: 1px solid #26235c;
   border-bottom: 1px solid #26235c !important;
+  background: #000 !important;
 }
 
 .tunnelProperties td {
