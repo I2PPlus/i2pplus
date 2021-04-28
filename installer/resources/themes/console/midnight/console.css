@@ -8276,9 +8276,11 @@ p.infowarn, td.infowarn, p.infohelp, td.infohelp {
 
 p.infowarn, td.infowarn, #sybilanalysis {
   padding: 20px 15px 20px 50px !important;
-  background: #000 url(/themes/console/images/svg/infowarn.svg) 12px center no-repeat !important;
-  background-size: 28px !important;
   border: var(--innerborder);
+  background: var(--infowarn) 14px center no-repeat,
+              linear-gradient(to bottom, rgba(128,128,128,.05), rgba(0,0,0,.3)),
+              repeating-linear-gradient(to bottom, #200 2px, #000 4px) !important;
+  background-size: 28px, 100%, 100% 4px !important;
 }
 
 .logtable, #enviro {
@@ -8438,7 +8440,7 @@ h3#webappconfiguration {
 
 p#webappconfigtext {
   margin: 12px 0 3px 0;
-  background: #000 url(/themes/console/images/svg/editclient.svg) 12px center no-repeat !important;
+  background: #000 var(--editclient) 12px center no-repeat !important;
   background-size: 28px !important;
 }
 
@@ -8752,7 +8754,7 @@ p.sybilinfo.experimental {
 
 #addkeyring td.infohelp {
   padding: 20px 15px 20px 50px !important;
-  background: #000 url(/themes/console/images/svg/keys.svg) 12px center no-repeat !important;
+  background: #000 var(--keys) 12px center no-repeat !important;
   background-size: 28px !important;
 }
 
@@ -8782,14 +8784,14 @@ p.sybilinfo.experimental {
 
 p#clientconf.infohelp, p#webappconfig.infohelp {
   padding: 15px 15px 15px 50px;
-  background: #000 url(/themes/console/images/svg/editclient.svg) 12px center no-repeat !important;
+  background: #000 var(--editclient) 12px center no-repeat !important;
   background-size: 28px !important;
 }
 
 p#pluginconfigtext {
   padding: 15px 15px 15px 50px;
   vertical-align: middle;
-  background: #000 url(/themes/console/images/svg/pluginconfig.svg) 12px center no-repeat !important;
+  background: #000 var(--pluginconfig) 12px center no-repeat !important;
   background-size: 28px !important;
 }
 
@@ -8955,7 +8957,7 @@ h3 .b32 {
 
 #tunnels h3:last-of-type {
   padding-left: 34px !important;
-  background: url(/themes/console/images/svg/speedometer.svg) 8px center no-repeat, var(--title) !important;
+  background: var(--speed) 8px center no-repeat, var(--title) !important;
   background-size: 19px, 4px 100%, 100% !important;
 }
 
@@ -11412,15 +11414,15 @@ input[type="file"]:hover {
 @media screen and (min-width: 1200px) {
 #jobstats td:first-child, #jobstats tr:nth-last-child(n+2):hover td:first-child {
   padding: 6px 0 6px 26px;
-  background-image: url(/themes/console/images/svg/yes.svg);
+  background-image: var(--yes);
   background-position: 7px center;
   background-repeat: no-repeat;
   background-size: 12px !important;
 }
 
 #jobstats tr:last-child td:first-child {
-  background-image: none;
   padding-left: 8px;
+  background-image: none;
 }
 }
 
@@ -11869,15 +11871,13 @@ th .version {
   font-size: 90%;
   border: 1px solid #113;
   border-radius: 2px;
-  background: #113 url(/themes/console/images/buttons/cryptokey.png) 3px center no-repeat;
   background: url(/themes/console/images/buttons/cryptokey.png) 3px center no-repeat, linear-gradient(to bottom, #113, #112);
   background-size: 12px, 100%;
 }
 
 .signingkey.encryption {
   padding-left: 18px;
-  background: #020 url(/themes/console/images/svg/lock.svg) 4px center no-repeat;
-  background: url(/themes/console/images/svg/lock.svg) 4px calc(50% - 1px) no-repeat, linear-gradient(to bottom, #113, #112);
+  background: var(--lock) 4px calc(50% - 1px) no-repeat, linear-gradient(to bottom, #113, #112);
   background-size: 12px, 100%;
 }
 
@@ -12962,7 +12962,7 @@ a:hover .sitemapLink {
 /* setup wizard */
 
 #wizardpage .yes {
-  background: url(/themes/console/images/svg/yes.svg) center center no-repeat;
+  background: var(--yes) center center no-repeat;
 }
 
 #wizardpage .no {
@@ -13912,7 +13912,7 @@ to {
 }
 
 #enablefullstats {
-  background: #000 url(/themes/console/images/svg/stats.svg) 12px center no-repeat !important;
+  background: #000 var(--stats) 12px center no-repeat !important;
   background-size: 28px !important;
 }
 
