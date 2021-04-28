@@ -4094,7 +4094,7 @@ form > table {
 }
 
 #tunnelconfig th:not([colspan="3"]):nth-child(n+2) {
-  padding-left: 18px !important;
+  padding-left: 20px !important;
   background: url(images/in.png), linear-gradient(to bottom, #002000, #000 75%);
   background-repeat: no-repeat, repeat !important;
   background-position: 20px center !important;
@@ -4102,6 +4102,7 @@ form > table {
 }
 
 #tunnelconfig th:not([colspan="3"]):last-child {
+  padding-left: 17px !important;
   background: url(images/out.png), linear-gradient(to bottom, #002000, #000 75%);
   background-size: 14px, 100% !important;
 }
