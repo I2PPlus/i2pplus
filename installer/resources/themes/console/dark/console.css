@@ -12,7 +12,7 @@
   --h3_fade: linear-gradient(to bottom, #005000, #000 75%);
   --h3_blend: normal, normal, exclusion, exclusion;
   --h1: var(--h3), linear-gradient(to bottom, #1a261a, #223022 7%, #212f21 9%, #172317 21%, #091109 46%, #050d05 48%, #020602 52%, #010301 54%, #000000 56%), var(--camotile) #000;
-  --lowlight: inset 0 0 0 1px #000;
+  --highlight: inset 0 0 0 1px #000;
   --element: linear-gradient(to bottom, #020, #010);
   --button: linear-gradient(to bottom, #001000, #000 5%, #000 95%, #001000);
   --txtinput: linear-gradient(to bottom, #001800, #001000);
@@ -365,7 +365,7 @@ pre {
   font-size: 9.5pt;
   border: none;
   border-radius: 0;
-  box-shadow: var(--lowlight), inset 0 0 1px 1px #191;
+  box-shadow: var(--highlight), inset 0 0 1px 1px #191;
   transition: ease color .05s, ease box-shadow .1s;
   transition: ease all .2s;
   background: radial-gradient(at center bottom, rgba(16, 72, 16, .4) 0, rgba(0, 0, 0, 0) 50%),
@@ -398,7 +398,7 @@ pre {
 }
 
 #sidebar h3:active {
-  box-shadow: var(--lowlight), inset 4px 4px 4px rgba(0,0,0,.6);
+  box-shadow: var(--highlight), inset 4px 4px 4px rgba(0,0,0,.6);
   background: linear-gradient(to bottom, #310, #420) !important;
   transition: ease box-shadow .05s;
 }
@@ -618,7 +618,7 @@ pre {
   margin: -5px -8px -7px;
   padding: 8px;
   font-weight: bold;
-  box-shadow: var(--lowlight), inset 0 0 2px 1px #040, 0 0 0 1px #030;
+  box-shadow: var(--highlight), inset 0 0 2px 1px #040, 0 0 0 1px #030;
   background: #010;
 }
 
@@ -771,7 +771,7 @@ div.refresh {
   margin: -3px 0 -5px -7px;
   width: 205px;
   border: var(--softborder);
-  box-shadow: 0 0 1px 1px rgba(0,0,0,.8), var(--lowlight), inset 0 3px 3px rgba(0,0,0,.7);
+  box-shadow: 0 0 1px 1px rgba(0,0,0,.8), var(--highlight), inset 0 3px 3px rgba(0,0,0,.7);
   background: #000;
   background: linear-gradient(to right, rgba(0,128,0,0) 40%, rgba(255,96,0,.06), rgba(255,0,0,.08)),
               repeating-linear-gradient(to right, #000 1px, #000 2px, #010 2px, #010 4px);
@@ -787,7 +787,7 @@ div.refresh {
   height: 14px;
   max-width: 100%;
   border-right: var(--softborder);
-  box-shadow: var(--lowlight);
+  box-shadow: var(--highlight);
   background: #0e5f00;
   background: linear-gradient(to bottom, rgba(28, 148, 58, .6), rgba(9, 47, 16, .6) 50%, rgba(9, 27, 5, .6) 50%, rgba(9, 21, 3, .6));
 }
@@ -819,7 +819,7 @@ div.refresh {
   line-height: 130% !important;
   font-style: italic;
   border-bottom: var(--border);
-  box-shadow: var(--lowlight), inset 0 0 2px 1px #030;
+  box-shadow: var(--highlight), inset 0 0 2px 1px #030;
 }
 
 .sb_info .percentBarOuter {
@@ -1073,13 +1073,13 @@ div.news {
 #newspage h3 {
   margin: 5px 0 10px;
   border: none;
-  box-shadow: 0 0 0 1px #242, var(--lowlight), inset 0 0 2px 0 #030 !important;
+  box-shadow: 0 0 0 1px #242, var(--highlight), inset 0 0 2px 0 #030 !important;
 }
 
 #newspage .newsentry {
   margin-bottom: 14px;
   padding-bottom: 10px;
-  box-shadow: 0 0 0 1px #242, 0 0 2px 2px #000, var(--lowlight), inset 0 0 2px 0 #030;
+  box-shadow: 0 0 0 1px #242, 0 0 2px 2px #000, var(--highlight), inset 0 0 2px 0 #030;
   background: #000800;
   background: linear-gradient(to bottom, rgba(0,16,0,.3), rgba(0,8,0,.3));
 }
@@ -1218,7 +1218,7 @@ div.widescroll { /* only scroll content, not entire page eg /peers */
   font-weight: bold !important;
   line-height: 136% !important;
   text-align: center;
-  box-shadow: var(--lowlight);
+  box-shadow: var(--highlight);
   background: var(--h3), var(--navbar), var(--camotile) !important;
   background-size: 4px 100%, 4px 100%, 256px !important;
   background-blend-mode: normal, exclusion, normal;
@@ -1254,7 +1254,7 @@ div.widescroll { /* only scroll content, not entire page eg /peers */
 .tab2 {
   padding: 5px 12px !important;
   text-shadow: 0 1px 1px #000;
-  box-shadow: var(--lowlight), inset 3px 3px 3px #010;
+  box-shadow: var(--highlight), inset 3px 3px 3px #010;
   background: #030;
   background: radial-gradient(at center bottom, rgba(0, 128, 0, .6) 0, rgba(0, 0, 0, 0) 80%), linear-gradient(to bottom, #030, #003800);
 }
@@ -1266,14 +1266,14 @@ div.widescroll { /* only scroll content, not entire page eg /peers */
 }
 
 .tab {
-  box-shadow: var(--lowlight), inset 0 0 1px 1px #040;
+  box-shadow: var(--highlight), inset 0 0 1px 1px #040;
   background: linear-gradient(to bottom, #002900, #000400) !important;
 }
 
 .tab:hover {
   background: #000 !important;
   background: linear-gradient(to bottom, #001800 50%, #000 50%) !important;
-  box-shadow: var(--lowlight), inset 0 0 0 2px rgba(128,48,0,.8);
+  box-shadow: var(--highlight), inset 0 0 0 2px rgba(128,48,0,.8);
 }
 
 .tab:hover a {
@@ -1281,7 +1281,7 @@ div.widescroll { /* only scroll content, not entire page eg /peers */
 }
 
 .tab:active {
-  box-shadow: var(--lowlight), inset 3px 3px 3px 1px #5f2400;
+  box-shadow: var(--highlight), inset 3px 3px 3px 1px #5f2400;
   background: #f60 !important;
   transition: ease box-shadow .15s;
 }
@@ -1311,7 +1311,7 @@ div.messages {
   border: var(--border);
   font-weight: bold;
   font-size: 9.5pt;
-  box-shadow: var(--lowlight), inset 0 0 2px 1px #171 !important;
+  box-shadow: var(--highlight), inset 0 0 2px 1px #171 !important;
   background: #000;
   background: var(--infohelp) no-repeat 12px center, repeating-linear-gradient(to bottom, rgba(0,0,0,.8) 2px, rgba(0,64,0,.4) 4px), var(--hat) right 2px bottom -2px no-repeat #010;
   background-size: 28px, 4px 100%, auto 90%;
@@ -1423,7 +1423,7 @@ div#graphs {
 .graphspanel img {
   padding: 2px;
   vertical-align: top;
-  box-shadow: var(--lowlight), inset 0 0 2px 1px #050;
+  box-shadow: var(--highlight), inset 0 0 2px 1px #050;
 }
 
 .graphspanel a img {
@@ -1437,7 +1437,7 @@ div#graphs {
   padding: 3px;
   text-align: center !important;
   border: 1px solid #d40 !important;
-  box-shadow: var(--lowlight), inset 0 0 2px 1px #d30;
+  box-shadow: var(--highlight), inset 0 0 2px 1px #d30;
   cursor: zoom-in;
   filter: none;
   transition: ease border .05s;
@@ -1665,7 +1665,7 @@ td img {
 }
 
 .sortup, .sortdown {
-  box-shadow: var(--lowlight);
+  box-shadow: var(--highlight);
 }
 
 .sortup img, .sortdown img, .sortupactive img, .sortdownactive img {
@@ -1961,12 +1961,12 @@ h1, h2, h3:not([id*="help"]), h4.app, h4.app2 {
 }
 
 h2, h3, h4 {
-  box-shadow: var(--lowlight);
+  box-shadow: var(--highlight);
 }
 
 h1, h4.app, h4.app2, #news h3 {
   text-shadow: 0 1px 1px #000;
-  box-shadow: var(--lowlight);
+  box-shadow: var(--highlight);
   background: var(--h1) !important;
   background-size: 4px 100%, 100%, 175px !important;
   background-blend-mode: normal, exclusion, exclusion;
@@ -2011,7 +2011,7 @@ input[type=file]::file-selector-button {
 button:hover, button:focus {
   color: #f60;
   border: 1px solid #f60;
-  box-shadow: var(--lowlight), inset 0 0 2px 1px rgba(255,86,0,.8), inset 0 0 0 3px #000;
+  box-shadow: var(--highlight), inset 0 0 2px 1px rgba(255,86,0,.8), inset 0 0 0 3px #000;
   background: #000;
   background: radial-gradient(at center bottom, rgba(96, 48, 0, .4) 0, rgba(0, 0, 0, 0) 80%), #000;
   cursor: pointer;
@@ -2020,7 +2020,7 @@ button:hover, button:focus {
 input[type=file]:hover::file-selector-button, input[type=file]:focus::file-selector-button {
   color: #f60;
   border: 1px solid #f60;
-  box-shadow: var(--lowlight), inset 0 0 2px 1px rgba(255,86,0,.8), inset 0 0 0 3px #000;
+  box-shadow: var(--highlight), inset 0 0 2px 1px rgba(255,86,0,.8), inset 0 0 0 3px #000;
   background: #000;
   background: radial-gradient(at center bottom, rgba(96, 48, 0, .4) 0, rgba(0, 0, 0, 0) 80%), #000;
   cursor: pointer;
@@ -2029,7 +2029,7 @@ input[type=file]:hover::file-selector-button, input[type=file]:focus::file-selec
 input[type=file]:active::file-selector-button {
   color: #ee9;
   border: 1px solid #f60;
-  box-shadow: var(--lowlight);
+  box-shadow: var(--highlight);
   background: #f60;
 }
 
@@ -2044,7 +2044,7 @@ button:active a {
 button:active {
   color: #ee9;
   border: 1px solid #f60;
-  box-shadow: var(--lowlight);
+  box-shadow: var(--highlight);
   background: #f60;
 }
 
@@ -2256,23 +2256,23 @@ input:hover, input:focus {
 }
 
 input[type=submit]:hover, input[type=reset]:hover, input[type=submit]:focus, input[type=reset]:focus {
-  box-shadow: var(--lowlight), inset 0 0 2px 1px rgba(255,86,0,.8), inset 0 0 0 3px #000 !important;
+  box-shadow: var(--highlight), inset 0 0 2px 1px rgba(255,86,0,.8), inset 0 0 0 3px #000 !important;
   background: radial-gradient(at center bottom, rgba(96, 48, 0, .4) 0, rgba(0, 0, 0, 0) 80%), #000;
 }
 
 input[type=submit]:active, input[type=reset]:active {
   text-shadow: 0 1px 1px #000;
-  box-shadow: var(--lowlight), inset 3px 3px 3px 2px #310 !important;
+  box-shadow: var(--highlight), inset 3px 3px 3px 2px #310 !important;
 }
 
 button:active {
   text-shadow: 0 1px 1px #000;
-  box-shadow: var(--lowlight), inset 3px 3px 3px 2px #310 !important;
+  box-shadow: var(--highlight), inset 3px 3px 3px 2px #310 !important;
 }
 
 input[type=file]:active::file-selector-button {
   text-shadow: 0 1px 1px #000;
-  box-shadow: var(--lowlight), inset 3px 3px 3px 2px #310 !important;
+  box-shadow: var(--highlight), inset 3px 3px 3px 2px #310 !important;
 }
 
 input:active {
@@ -2288,7 +2288,7 @@ input[type=text], input[type=password] {
   color: #ee9;
   border: 1px solid #184818 !important;
   border-radius: 1px;
-  box-shadow: var(--lowlight), inset 4px 4px 4px #000, 0 0 0 1px #000;
+  box-shadow: var(--highlight), inset 4px 4px 4px #000, 0 0 0 1px #000;
   background: #010;
   background: var(--txtinput);
   cursor: text;
@@ -2406,7 +2406,7 @@ select option:hover, select option:checked {
 select:focus, select:hover {
   color: #f60;
   border: 1px solid #f60;
-  box-shadow: var(--lowlight), inset 0 0 2px 1px rgba(255,86,0,.8), inset 0 0 0 3px #000;
+  box-shadow: var(--highlight), inset 0 0 2px 1px rgba(255,86,0,.8), inset 0 0 0 3px #000;
 }
 
 select:hover, select:focus, select:active {
@@ -2504,7 +2504,7 @@ input[readonly]:focus {
 }
 
 textarea#advancedsettings:focus {
-  box-shadow: var(--lowlight), inset 0 0 2px 1px #f60;
+  box-shadow: var(--highlight), inset 0 0 2px 1px #f60;
   filter: none;
 }
 
@@ -2775,7 +2775,7 @@ h3#totaljobstats {
   padding: 8px 6px !important;
   width: calc(100% - 8px);
   list-style: none !important;
-  box-shadow: var(--lowlight), inset 0 0 2px 1px #040, inset 0 0 0 3px #000;
+  box-shadow: var(--highlight), inset 0 0 2px 1px #040, inset 0 0 0 3px #000;
   background: #000400;
   background: linear-gradient(to bottom, #000b00, #000600);
 }
@@ -2945,7 +2945,7 @@ ul.statlist {
   width: calc(100% - 22px);
   display: inline-block;
   border: var(--border) !important;
-  box-shadow: var(--lowlight), inset 0 0 2px 1px #030;
+  box-shadow: var(--highlight), inset 0 0 2px 1px #030;
   background: #000800;
 }
 
@@ -3052,7 +3052,7 @@ form[action="events"] {
 }
 
  #peers .tablefooter {
-  box-shadow: var(--lowlight), inset -1px -1px 0 1px #000;
+  box-shadow: var(--highlight), inset -1px -1px 0 1px #000;
 }
 
 .tablefooter td {
@@ -3309,7 +3309,7 @@ tr#addnew, tr#addnew:hover {
 
 .themechoice:active .themelabel {
   color: #ee9 !important;
-  box-shadow: var(--lowlight) !important;
+  box-shadow: var(--highlight) !important;
   background: #f60 !important;
 }
 
@@ -3325,7 +3325,7 @@ tr#addnew, tr#addnew:hover {
   background: #030 !important;
   color: #ee9;
   font-weight: bold;
-  box-shadow: var(--lowlight), inset 0 0 2px 1px #050 !important;
+  box-shadow: var(--highlight), inset 0 0 2px 1px #050 !important;
 }
 
 .themechoice .optbox:focus + img ~ .themelabel {
@@ -3335,8 +3335,8 @@ tr#addnew, tr#addnew:hover {
 
 .themechoice .optbox:active:not(:checked) + img ~ .themelabel {
   color: #ee9 !important;
-  box-shadow: var(--lowlight) !important;
-  box-shadow: var(--lowlight), inset 3px 3px 3px 1px #5f2400 !important;
+  box-shadow: var(--highlight) !important;
+  box-shadow: var(--highlight), inset 3px 3px 3px 1px #5f2400 !important;
 }
 
 .themechoice .optbox {
@@ -3497,8 +3497,8 @@ td#themeselect {
 
 .langselect input:active:not(:checked) + img + div.ui_lang {
   color: #ee9 !important;
-  box-shadow: var(--lowlight) !important;
-  box-shadow: var(--lowlight), inset 3px 3px 3px 1px #5f2400 !important;
+  box-shadow: var(--highlight) !important;
+  box-shadow: var(--highlight), inset 3px 3px 3px 1px #5f2400 !important;
 }
 
 .langselect:hover .ui_lang {
@@ -3510,7 +3510,7 @@ td#themeselect {
 .langselect:active .ui_lang {
   background: #f60 !important;
   color: #ee9 !important;
-  box-shadow: var(--lowlight);
+  box-shadow: var(--highlight);
 }
 
 .langselect input[name="lang"]:checked + img, .langselect input[name="lang"]:checked + #config_ui img[src="/flags.jsp?c=a1"] {
@@ -3525,7 +3525,7 @@ td#themeselect {
 .langselect input[name="lang"]:checked + img + div.ui_lang {
   color: #ee9;
   font-weight: bold;
-  box-shadow: var(--lowlight), inset 0 0 2px 1px #050 !important;
+  box-shadow: var(--highlight), inset 0 0 2px 1px #050 !important;
   background: #030 !important;
 }
 
@@ -4075,6 +4075,36 @@ form > table {
 
 #tunnelconfig th:not(.th_title) {
   text-align: left;
+}
+
+#tunnelconfig th:not(.th_title)[colspan="3"] {
+  padding: 12px 10px 12px 34px !important;
+  text-transform: none;
+  letter-spacing: 0;
+  word-spacing: 0;
+  text-shadow: 0 1px 1px #000;
+  background: var(--infowarn) 10px center no-repeat,
+              linear-gradient(to bottom, rgba(128,128,128,.05), rgba(0,0,0,.3)),
+              repeating-linear-gradient(to bottom, #300 2px, #100 4px);
+  background-size: 18px, 100%, 100% 4px;
+}
+
+#tunnelconfig th img {
+ opacity: 0;
+}
+
+#tunnelconfig th:not([colspan="3"]):nth-child(n+2) {
+  padding-left: 20px !important;
+  background: url(images/in.png), linear-gradient(to bottom, #002000, #000 75%);
+  background-repeat: no-repeat, repeat !important;
+  background-position: 20px center !important;
+  background-size: 14px, 100% !important;
+}
+
+#tunnelconfig th:not([colspan="3"]):last-child {
+  padding-left: 17px !important;
+  background: url(images/out.png), linear-gradient(to bottom, #002000, #000 75%);
+  background-size: 14px, 100% !important;
 }
 
 #tunnelconfig td:first-child {
@@ -5298,7 +5328,7 @@ img.unknownflag {
   padding: 7px 10px;
   font-weight: normal !important;
   border-right: 1px inset #131;
-  box-shadow: var(--lowlight);
+  box-shadow: var(--highlight);
 }
 
 #logs #enviro td:first-child {
@@ -5717,7 +5747,7 @@ h3#bannedpeers {
   list-style: none !important;
   text-shadow: 0 1px 1px #000;
   border: 1px solid #121;
-  box-shadow: 0 0 2px 2px rgba(0,0,0,.8), var(--lowlight), inset 0 0 2px 1px #040, inset 0 0 0 3px #000;
+  box-shadow: 0 0 2px 2px rgba(0,0,0,.8), var(--highlight), inset 0 0 2px 1px #040, inset 0 0 0 3px #000;
   background: linear-gradient(to bottom, #000b00, #000600);
   box-sizing: border-box;
   -webkit-break-inside: avoid;
@@ -5764,18 +5794,18 @@ h3#bannedpeers {
   line-height: 0;
   border-left: 1px solid #121;
   border-bottom: 1px solid #121;
-  box-shadow: var(--lowlight), inset 0 0 1px 1px #040;
+  box-shadow: var(--highlight), inset 0 0 1px 1px #040;
   background: linear-gradient(to bottom, #000b00, #000600);
   filter: none;
 }
 
 #banlist li a[href^="configpeer"]:hover, #banlist li a[href^="configpeer"]:focus {
   background: #000;
-  box-shadow: 0 0 0 1px #121, var(--lowlight), inset 0 0 0 2px #f60;
+  box-shadow: 0 0 0 1px #121, var(--highlight), inset 0 0 0 2px #f60;
 }
 
 #banlist li a[href^="configpeer"]:active {
-  box-shadow: var(--lowlight), inset 3px 3px 3px 1px #5f2400;
+  box-shadow: var(--highlight), inset 3px 3px 3px 1px #5f2400;
   background: #f60;
 }
 
@@ -6022,22 +6052,22 @@ div.app.js:hover::before {
   top: -1px;
   left: -1px;
   border: 1px solid #f60;
-  box-shadow: var(--lowlight), inset 0 0 1px 1px #730 !important;
+  box-shadow: var(--highlight), inset 0 0 1px 1px #730 !important;
   content: "*js";
 }
 
 div.app, .applabel, .statusnotes, .main, div.news, .routersummary, .search tr, .logo,
 .themechoice, .themelabel, .langselect, .ui_lang {
-  box-shadow: var(--lowlight), inset 0 0 1px 1px #050 !important;
+  box-shadow: var(--highlight), inset 0 0 1px 1px #050 !important;
 }
 
 .search tr {
-  box-shadow: var(--lowlight), inset -1px -1px 0 1px #000, inset 0 0 2px 1px #040, inset -1px -1px 2px 1px #040, inset 0 0 0 3px #000, inset -1px -1px 0 3px #000 !important;
+  box-shadow: var(--highlight), inset -1px -1px 0 1px #000, inset 0 0 2px 1px #040, inset -1px -1px 2px 1px #040, inset 0 0 0 3px #000, inset -1px -1px 0 3px #000 !important;
 }
 
 div.app:hover, div.app:hover .applabel, div.app:hover .extlink::after, .sitemapLink.extlink:hover::after,
 .themechoice:hover, .themechoice:hover .themelabel, .langselect:hover, .langselect:hover .ui_lang {
-  box-shadow: var(--lowlight), inset 0 0 1px 1px #730 !important;
+  box-shadow: var(--highlight), inset 0 0 1px 1px #730 !important;
 }
 
 .app a:link, .app a:visited {
@@ -6062,7 +6092,7 @@ div.app:hover {
 
 div.app:active .applabel, .sitemapLink:active .sitemapLabel {
   color: #ee9 !important;
-  box-shadow: var(--lowlight), inset 3px 3px 3px 1px #5f2400 !important;
+  box-shadow: var(--highlight), inset 3px 3px 3px 1px #5f2400 !important;
   background: #f60 !important;
 }
 
@@ -6112,7 +6142,7 @@ table.search {
 }
 
 .search tr {
-  box-shadow: var(--lowlight);
+  box-shadow: var(--highlight);
   background: repeating-linear-gradient(to bottom, rgba(0,0,0,.7) 1px, rgba(0,16,0,.4) 2px, rgba(0,16,0,.4) 3px), linear-gradient(to bottom, #010, #000400) !important;
 }
 
@@ -6145,7 +6175,7 @@ input.search {
   width: 100%;
   vertical-align: middle;
   border-radius: 1px;
-  box-shadow: var(--lowlight), inset 4px 4px 4px #000, 0 0 0 1px #000;
+  box-shadow: var(--highlight), inset 4px 4px 4px #000, 0 0 0 1px #000;
   background: #010 var(--search) 6px center no-repeat;
   background: var(--search) 6px center no-repeat, var(--txtinput);
   background-size: 16px, 100% !important;
@@ -6611,7 +6641,7 @@ span#distance {
   padding: 6px 5px;
   overflow: hidden;
   border: var(--border) !important;
-  box-shadow: var(--lowlight), inset 0 0 2px 1px #030;
+  box-shadow: var(--highlight), inset 0 0 2px 1px #030;
   columns: 5 200px;
   column-gap: 4px;
 }
@@ -6634,19 +6664,19 @@ span#distance {
   white-space: nowrap;
   list-style: none;
   border: 1px solid #151;
-  box-shadow: var(--lowlight), inset 0 0 2px 1px #030;
+  box-shadow: var(--highlight), inset 0 0 2px 1px #030;
   background: linear-gradient(to right, #000, #010 80%);
 }
 
 #sybilnav ul li:hover {
   border: 1px solid #f60;
-  box-shadow: var(--lowlight), inset 0 0 2px 1px #f60;
+  box-shadow: var(--highlight), inset 0 0 2px 1px #f60;
   background: #000;
 }
 
 #sybilnav ul li:active {
   border: 1px solid #f60;
-  box-shadow: var(--lowlight), inset 3px 3px 3px 1px #5f2400;
+  box-shadow: var(--highlight), inset 3px 3px 3px 1px #5f2400;
   background: #f60;
 }
 
@@ -6972,13 +7002,13 @@ table.logtable, #logs #enviro {
 
 p.infohelp, p#debugmode, p.sybilinfo, p#gatherstats, #bugreports td.infohelp {
   border: var(--border);
-  box-shadow: var(--lowlight), inset 0 0 2px 1px #040, inset 0 0 0 3px #000;
+  box-shadow: var(--highlight), inset 0 0 2px 1px #040, inset 0 0 0 3px #000;
 }
 
 p.infowarn, td.infowarn {
   padding: 15px 15px 15px 50px;
   border: var(--border);
-  box-shadow: var(--lowlight), inset 0 0 2px 1px #900;
+  box-shadow: var(--highlight), inset 0 0 2px 1px #900;
   background: #000 var(--infowarn) 12px center no-repeat !important;
   background-size: 28px !important;
 }
@@ -7494,7 +7524,7 @@ form[action="events"] {
 #capabilities_key a b, #capabilities_key span {
   padding: 2px !important;
   border-radius: 0 !important;
-  box-shadow: var(--lowlight) !important;
+  box-shadow: var(--highlight) !important;
 }
 
 #profilelist {
@@ -7540,45 +7570,45 @@ h4#sb_shutdownstatus span {
   vertical-align: middle;
   color: #dd8;
   text-shadow: 0 1px 1px #000;
-  box-shadow: var(--lowlight), inset 0 0 2px 1px #040;
+  box-shadow: var(--highlight), inset 0 0 2px 1px #040;
   box-sizing: border-box;
 }
 
 .routersummary .firewalled, .tunnelBuildStatus {
   color: #bb7;
-  box-shadow: var(--lowlight), inset 0 0 2px 1px #040;
+  box-shadow: var(--highlight), inset 0 0 2px 1px #040;
 }
 
 .routersummary .error, .tunnelBuildStatus.rejecting, #sb_warning {
   color: #900;
-  box-shadow: var(--lowlight), inset 0 0 2px 1px #700, inset 0 0 0 3px #000;
+  box-shadow: var(--highlight), inset 0 0 2px 1px #700, inset 0 0 0 3px #000;
   background: linear-gradient(to right, rgba(96,0,0,.25), rgba(96,0,0,.1), rgba(96,0,0,.25));
 }
 
 .routersummary .warn, .routersummary .clockskew {
-  box-shadow: var(--lowlight), inset 0 0 2px 1px #730;
+  box-shadow: var(--highlight), inset 0 0 2px 1px #730;
 }
 
 .routersummary .testing, .tunnelBuildStatus.starting, #sb_localtunnels td[colspan="3"] {
   color: #aa3;
-  box-shadow: var(--lowlight), inset 0 0 2px 1px #bb0, inset 0 0 0 3px #000;
+  box-shadow: var(--highlight), inset 0 0 2px 1px #bb0, inset 0 0 0 3px #000;
   background: repeating-linear-gradient(135deg, rgba(0,0,0,.5), rgba(0,0,0,.5) 10px, rgba(32,32,0,.5) 10px, rgba(32,32,0,.5) 20px) !important;
   background-size: 400%;
 }
 
 .routersummary .hidden, .routersummary .vmcomm, .tunnelBuildStatus.hidden {
   color: #999;
-  box-shadow: var(--lowlight), inset 0 0 2px 1px #777;
+  box-shadow: var(--highlight), inset 0 0 2px 1px #777;
 }
 
 .vmcomm {
-  box-shadow: var(--lowlight), inset 0 0 1px 1px #aaa, inset 0 0 0 2px rgba(0,0,0,.7) !important;
+  box-shadow: var(--highlight), inset 0 0 1px 1px #aaa, inset 0 0 0 2px rgba(0,0,0,.7) !important;
   background: linear-gradient(to right, #141414, #080808, #141414);
 }
 
 .routersummary .running, .tunnelBuildStatus.active {
   color: #dd8;
-  box-shadow: var(--lowlight), inset 0 0 2px 1px #060;
+  box-shadow: var(--highlight), inset 0 0 2px 1px #060;
   background: rgba(64,255,64,.02);
 }
 
@@ -7935,7 +7965,7 @@ h4#sb_shutdownstatus span {
 }
 
 #peers .cells, #tunnels .cells, #profilelist td:not(.separator) {
-  box-shadow: var(--lowlight);
+  box-shadow: var(--highlight);
   border-right: 1px inset #131;
 }
 
@@ -8310,11 +8340,14 @@ th code {
 
 #debug h3.debug_outboundsessions {
   margin-top: -2px !important;
-  background: var(--out) 8px center no-repeat, linear-gradient(to bottom, rgba(0,0,0,0) 50%, #000 50%), repeating-linear-gradient(to right, rgba(0,0,0,.5) 1px, rgba(0,16,0,.5) 2px, rgba(0,16,0,.4) 3px), var(--h3_fade) !important;
+  background: var(--out) 8px center no-repeat, linear-gradient(to bottom, rgba(0,0,0,0) 50%, #000 50%),
+              repeating-linear-gradient(to right, rgba(0,0,0,.5) 1px, rgba(0,16,0,.5) 2px, rgba(0,16,0,.4) 3px), var(--h3_fade) !important;
 }
 
 #debug h3.debug_inboundsessions {
-  background: var(--in) 8px center no-repeat, linear-gradient(to bottom, rgba(0,0,0,0) 50%, #000 50%), repeating-linear-gradient(to right, rgba(0,0,0,.5) 1px, rgba(0,16,0,.5) 2px, rgba(0,16,0,.4) 3px), var(--h3_fade) !important;
+  background: var(--in) 8px center no-repeat, linear-gradient(to bottom, rgba(0,0,0,0) 50%, #000 50%),
+              repeating-linear-gradient(to right, rgba(0,0,0,.5) 1px,
+              rgba(0,16,0,.5) 2px, rgba(0,16,0,.4) 3px), var(--h3_fade) !important;
 }
 
 #debug h3.debug_outboundsessions, #debug h3.debug_inboundsessions {
@@ -8364,7 +8397,7 @@ th code {
   margin: 0;
   text-align: center;
   border: var(--softborder);
-  box-shadow: var(--lowlight);
+  box-shadow: var(--highlight);
 }
 
 .bucketsContainer {
@@ -8388,7 +8421,7 @@ th code {
   text-overflow: ellipsis;
   color: #880;
   font-family: var(--monospaced);
-  box-shadow: 0 0 0 1px #030, var(--lowlight);
+  box-shadow: 0 0 0 1px #030, var(--highlight);
   background: #010;
   user-select: all;
 }
@@ -8948,7 +8981,7 @@ b.suboption {
   text-shadow: 0 1px 1px #000;
   border: var(--softborder);
   border-bottom: none;
-  box-shadow: var(--lowlight);
+  box-shadow: var(--highlight);
   background: #010;
   background: linear-gradient(to bottom, #010 50%, #000 50%);
 }
@@ -9030,7 +9063,7 @@ b.suboption {
   padding: 5px 8px;
   background: #020;
   background: linear-gradient(to bottom, #020, #000);
-  box-shadow: 0 0 0 1px #020, var(--lowlight);
+  box-shadow: 0 0 0 1px #020, var(--highlight);
   white-space: nowrap;
   text-align: center;
   margin: 3px;
@@ -9415,7 +9448,7 @@ b.suboption {
 
 #manualreseed td.infohelp {
   padding: 15px 15px 15px 50px;
-  box-shadow: var(--lowlight), inset 0 0 2px 1px #040 !important;
+  box-shadow: var(--highlight), inset 0 0 2px 1px #040 !important;
   background: #000 var(--infohelp) 12px center no-repeat !important;
   background-size: 28px !important;
 }
@@ -9659,13 +9692,13 @@ input[type=file] {
 }
 
 #joinfamily .infohelp {
-  box-shadow: var(--lowlight), inset 0 0 2px 1px #040 !important;
+  box-shadow: var(--highlight), inset 0 0 2px 1px #040 !important;
   background: #000 var(--joinfamily) 12px center no-repeat !important;
   background-size: 28px !important;
 }
 
 #newfamily .infohelp {
-  box-shadow: var(--lowlight), inset 0 0 2px 1px #040 !important;
+  box-shadow: var(--highlight), inset 0 0 2px 1px #040 !important;
   background: #000 var(--newfamily) 12px center no-repeat !important;
   background-size: 28px !important;
 }
@@ -9726,7 +9759,7 @@ input[type=file] {
   font-weight: bold;
   font-style: italic;
   border: 1px solid #700;
-  box-shadow: var(--lowlight), inset 0 0 3px 1px #040, inset 0 0 0 4px #000;
+  box-shadow: var(--highlight), inset 0 0 3px 1px #040, inset 0 0 0 4px #000;
   background: #010;
   background: repeating-linear-gradient(135deg, #010 1px, #010 5px, #030 5px, #030 10px);
   animation: downloadbar .6s infinite;
@@ -9748,7 +9781,7 @@ input[type=file] {
   text-shadow: 0 1px 1px #000;
   background: #020;
   background: linear-gradient(to right, #010, #000, #010);
-  box-shadow: var(--lowlight);
+  box-shadow: var(--highlight);
 }
 
 /* /peers */
@@ -9818,7 +9851,7 @@ input[type=file] {
   width: calc(100% - 24px);
   display: inline-block;
   border: var(--softborder);
-  box-shadow: var(--lowlight), inset 0 0 2px 1px #020;
+  box-shadow: var(--highlight), inset 0 0 2px 1px #020;
   background: #000800;
   break-inside: avoid;
   page-break-inside: avoid;
@@ -10530,7 +10563,7 @@ div.app:hover .extlink::after, .sitemapLink.extlink:hover::after {
   background: #010;
 }
 #events h3 {
-  box-shadow: var(--lowlight);
+  box-shadow: var(--highlight);
 }
 
 #events tr {
@@ -10665,7 +10698,7 @@ input[type=text]:focus::placeholder, #homesearch input.search:focus::placeholder
   font-size: 0;
   color: #a00;
   text-shadow: 0 1px 1px #000;
-  box-shadow: 0 0 1px 0 #030, var(--lowlight), inset 0 0 1px 3px #131, inset 0 0 0 4px #000, inset 0 0 7px 3px #010;
+  box-shadow: 0 0 1px 0 #030, var(--highlight), inset 0 0 1px 3px #131, inset 0 0 0 4px #000, inset 0 0 7px 3px #010;
   background: repeating-linear-gradient(135deg, #131, #131 10px, #300 11px, #000 12px, #000 19px, #300 19px, #000 20px);
   background-position: right center;
   background-size: 125% 125%;
@@ -10800,7 +10833,7 @@ a:hover .tier, a:focus .tier {
 /* TODO: merge with main classes */
 
 .main {
-  box-shadow: var(--lowlight), 0 1px 5px #000;
+  box-shadow: var(--highlight), 0 1px 5px #000;
 }
 
 .routersummary div[style="height: 36px;"] {
@@ -10809,19 +10842,19 @@ a:hover .tier, a:focus .tier {
   padding: 8px 10px 9px;
   display: inline-block;
   border-radius: 3px 3px 0 0;
-  box-shadow: var(--lowlight), inset 0 0 2px 1px #050, inset 0 0 0 3px #000;
+  box-shadow: var(--highlight), inset 0 0 2px 1px #050, inset 0 0 0 3px #000;
   background: rgba(0,16,0,.1) !important;
   background: repeating-linear-gradient(to right, rgba(0,80,0,.1) 1px, rgba(0,16,0,.3) 2px, rgba(0,16,0,.3) 3px) !important;
 }
 
 .routersummary div[style="height: 36px;"]:hover {
-  box-shadow: var(--lowlight), inset 0 0 2px 1px #f60, inset 0 0 0 3px #000;
+  box-shadow: var(--highlight), inset 0 0 2px 1px #f60, inset 0 0 0 3px #000;
   background: rgba(0,96,0,.1) !important;
   transition: ease background .15s;
 }
 
 .routersummary div[style="height: 36px;"]:active {
-  box-shadow: var(--lowlight), inset 0 0 2px 2px #f90, inset 0 0 0 3px #000;
+  box-shadow: var(--highlight), inset 0 0 2px 2px #f90, inset 0 0 0 3px #000;
 }
 
 .routersummary table, .routersummary form {
@@ -10832,7 +10865,7 @@ a:hover .tier, a:focus .tier {
 .routersummary form {
   margin: -7px -10px -9px;
   padding: 4px 3px;
-  box-shadow: var(--lowlight), inset 0 0 2px 1px #040, inset 0 0 0 3px #000;
+  box-shadow: var(--highlight), inset 0 0 2px 1px #040, inset 0 0 0 3px #000;
 }
 
 #sb_peers, #sb_peersadvanced, #sb_tunnels, #sb_queue, #sb_bandwidth, #sb_general, #sb_advancedgeneral,
@@ -10954,11 +10987,11 @@ a[href^="/netdb"]:hover span {
 #consolepass td[colspan="3"], #themeoptions, #themesettings, #langsettings, #certs h4, #certs textarea, #certs p,
 #config_advanced td, #config_peers tr:not(:last-child) td, #config_peers #banlist, #help div, #enablefullstats, .buckets,
 #criticallogs tr:first-child td, #routerlogs tr:first-child td, #wrapperlogs tr:first-child td, #config_bandwidth td.infohelp {
-  box-shadow: var(--lowlight), inset 0 0 1px 1px #040 !important;
+  box-shadow: var(--highlight), inset 0 0 1px 1px #040 !important;
 }
 
 #enviro td, #routerinformation td, .tunneldisplay td, #profilelist td:not([colspan]), #floodfills td {
-  box-shadow: var(--lowlight), inset 0 0 2px 0 #040 !important;
+  box-shadow: var(--highlight), inset 0 0 2px 0 #040 !important;
 }
 
 #criticallogs tr:first-child td, #routerlogs tr:first-child td, #wrapperlogs tr:first-child td {
@@ -10983,7 +11016,7 @@ a[href^="/netdb"]:hover span {
 }
 
 #config_peers tr:last-child, #config_peers #bannedips td:last-child tr:nth-child(n+3) {
-  box-shadow: var(--lowlight), inset 0 -1px 0 1px #000, inset 0 0 1px 1px #030, inset 0 -1px 1px 1px #030, inset 0 0 0 2px #000, inset 0 -1px 0 2px #000 !important;
+  box-shadow: var(--highlight), inset 0 -1px 0 1px #000, inset 0 0 1px 1px #030, inset 0 -1px 1px 1px #030, inset 0 0 0 2px #000, inset 0 -1px 0 2px #000 !important;
 }
 
 #config_peers tr:last-child {
@@ -11013,17 +11046,17 @@ a[href^="/netdb"]:hover span {
 }
 
 #refreshsidebar tr:first-child {
-  box-shadow: var(--lowlight), inset 0 -1px 0 1px #000, inset 0 0 1px 1px #030, inset 0 -1px 1px 1px #030 !important;
+  box-shadow: var(--highlight), inset 0 -1px 0 1px #000, inset 0 0 1px 1px #030, inset 0 -1px 1px 1px #030 !important;
 }
 
 #pluginconfig tr {
-  box-shadow: var(--lowlight), inset 0 -1px 0 1px #000, inset -1px 0 0 1px #000, inset 0 0 1px 1px #020, inset 0 -1px 1px 1px #020, inset -1px 0 1px 1px #020 !important;
+  box-shadow: var(--highlight), inset 0 -1px 0 1px #000, inset -1px 0 0 1px #000, inset 0 0 1px 1px #020, inset 0 -1px 1px 1px #020, inset -1px 0 1px 1px #020 !important;
   background: repeating-linear-gradient(to bottom, rgba(0,0,0,.8), rgba(0,16,0,.5) 1px, rgba(0,16,0,.5) 2px), var(--camotile) !important;
 }
 
 #plugininstall, #plugininstall2, #reseedconfig tr, #manualreseed tr, #i2pupdates tr, #netconfig tr, #externali2cp tr,
 #joinfamily tr:last-child, #newfamily tr:last-child {
-  box-shadow: var(--lowlight), inset 0 0 1px 1px #040 !important;
+  box-shadow: var(--highlight), inset 0 0 1px 1px #040 !important;
   background: repeating-linear-gradient(to bottom, rgba(0,0,0,.8), rgba(0,16,0,.5) 1px, rgba(0,16,0,.5) 2px), var(--camotile) !important;
 }
 
@@ -11033,7 +11066,7 @@ a[href^="/netdb"]:hover span {
 }
 
 #netconfig td.infohelp, #reseedconfig td.infohelp {
-  box-shadow: var(--lowlight), inset 0 0 1px 1px #040 !important;
+  box-shadow: var(--highlight), inset 0 0 1px 1px #040 !important;
   background: #000 var(--infohelp) 12px center no-repeat !important;
   background-size: 32px !important;
 }
@@ -11063,12 +11096,12 @@ a[href^="/netdb"]:hover span {
 }
 
 #plugininstall table tr:hover, #plugininstall2 table tr:hover {
-  box-shadow: var(--lowlight) !important;
+  box-shadow: var(--highlight) !important;
 }
 
 #config_logging tr, #tunnelconfig tr, #config_summarybar tr, .homelinkedit tr, #config_bandwidth tr, #bandwidthconfig tr, #config_clients tr,
  #config_webapps tr, #config_peers #bannedips td:first-child tr:nth-child(n+3):not(#ipv6), #configstats tr:not(.tablefooter), #oldhome tr {
-  box-shadow: var(--lowlight), inset 0 -1px 0 1px #000, inset -1px 0 0 1px #000, inset 0 0 2px 0 #020, inset 0 -1px 2px 0 #020, inset -1px 0 2px 0 #020;
+  box-shadow: var(--highlight), inset 0 -1px 0 1px #000, inset -1px 0 0 1px #000, inset 0 0 2px 0 #020, inset 0 -1px 2px 0 #020, inset -1px 0 2px 0 #020;
 }
 
 #pluginconfig td:last-child table {
@@ -11296,7 +11329,7 @@ h1[class], h1 {
   padding: 20px 10px 20px 60px !important;
   width: calc(100% - 70px);
   list-style: none;
-  box-shadow: 0 0 0 1px #242, var(--lowlight), inset 0 0 0 2px #020;
+  box-shadow: 0 0 0 1px #242, var(--highlight), inset 0 0 0 2px #020;
   background-blend-mode: luminosity;
   break-inside: avoid;
   page-break-inside: avoid;
@@ -11305,8 +11338,8 @@ h1[class], h1 {
 }
 
 #helptoc li:hover {
-  box-shadow: 0 0 0 1px #242, var(--lowlight), inset 0 0 0 2px #930;
-  box-shadow: 0 0 0 1px #242, var(--lowlight), inset 0 0 0 2px rgba(146,48,0,.7);
+  box-shadow: 0 0 0 1px #242, var(--highlight), inset 0 0 0 2px #930;
+  box-shadow: 0 0 0 1px #242, var(--highlight), inset 0 0 0 2px rgba(146,48,0,.7);
   background-blend-mode: normal;
   transition: ease box-shadow .3s;
 }
@@ -11647,13 +11680,13 @@ h2#jobrunners {
 
 .sitemapLink, #sitemap div.app {
   margin: 2px 2px 6px;
-  box-shadow: 0 0 0 1px #000, var(--lowlight), inset 0 0 1px 1px #242;
+  box-shadow: 0 0 0 1px #000, var(--highlight), inset 0 0 1px 1px #242;
   background: radial-gradient(circle at center -90px, rgba(0,96,0,.9), #000 60%), linear-gradient(to bottom, #000800, #000);
 }
 
 .sitemapLink:hover, .sitemapLink:hover .sitemapLabel, #sitemap div.app:hover {
   border-color: #f60;
-  box-shadow: var(--lowlight), inset 0 0 1px 1px #f60;
+  box-shadow: var(--highlight), inset 0 0 1px 1px #f60;
 }
 
 .sitemapLink img {
@@ -11680,7 +11713,7 @@ h2#jobrunners {
   text-shadow: 0 1px 1px #000;
   border: none;
   border-top: var(--border);
-  box-shadow: var(--lowlight), inset 0 0 1px 1px #242;
+  box-shadow: var(--highlight), inset 0 0 1px 1px #242;
 }
 
 #sitemap div.app {
@@ -11731,7 +11764,7 @@ th[aria-sort] {
   margin: 10px 0 9px !important;
   padding: 10px 10px 8px 50px !important;
   border: var(--border);
-  box-shadow: var(--lowlight), inset 0 0 2px 1px #030;
+  box-shadow: var(--highlight), inset 0 0 2px 1px #030;
   background-image: var(--sybil) !important;
   background-size: 28px;
 }
@@ -11844,7 +11877,7 @@ th[aria-sort] {
 
 #stats .tab2 {
   text-shadow: 0 1px 1px #000;
-  box-shadow: var(--lowlight), inset 3px 3px 2px #010;
+  box-shadow: var(--highlight), inset 3px 3px 2px #010;
   background: #030;
   background: linear-gradient(to bottom, #030, #003800) !important;
 }
@@ -11999,7 +12032,7 @@ i {
   font-weight: bold;
   color: #ffa;
   text-shadow: 0 0 1px #000;
-  box-shadow: var(--lowlight), inset 0 0 1px 1px #050;
+  box-shadow: var(--highlight), inset 0 0 1px 1px #050;
   background: repeating-linear-gradient(to bottom, rgba(255,255,255,.05) 2px, rgba(0,16,0,.2) 4px), linear-gradient(to right, #010, #000, #010);
   -webkit-text-stroke: 1px rgba(220,220,128,.5);
   opacity: .9;
@@ -12012,7 +12045,7 @@ i {
   left: 0;
   height: 100%;
   width: 100%;
-  box-shadow: var(--lowlight), inset 0 0 1px 1px #050;
+  box-shadow: var(--highlight), inset 0 0 1px 1px #050;
   background: repeating-linear-gradient(to right, rgba(0,0,0,.3) 2px, rgba(0,16,0,.2) 4px);
 }
 
@@ -12169,7 +12202,7 @@ i {
   vertical-align: middle;
   text-align: center;
   border: var(--border);
-  box-shadow: var(--lowlight), inset 0 0 1px 1px #050;
+  box-shadow: var(--highlight), inset 0 0 1px 1px #050;
   animation: ease grid-fade 2s forwards;
 }
 
@@ -12179,7 +12212,7 @@ i {
 
 .graphContainer:hover {
   border: 1px solid #f60;
-  box-shadow: var(--lowlight), inset 0 0 1px 1px #f60;
+  box-shadow: var(--highlight), inset 0 0 1px 1px #f60;
 }
 
 .statimage, .statimage:hover, #graphs a:hover .statimage, #graph_single .statimage, #graph_single .statimage:hover {
@@ -12281,7 +12314,7 @@ h3 + table {
   padding-left: 22px;
   border: var(--softborder);
   border-left-width: 3px;
-  box-shadow: var(--lowlight), inset 4px 4px 4px rgba(0,0,0,.6) !important;
+  box-shadow: var(--highlight), inset 4px 4px 4px rgba(0,0,0,.6) !important;
   background: var(--yes) 8px center no-repeat, linear-gradient(to bottom, #010, #020);
   background-size: 8px, 100% !important;
   background-blend-mode: normal, normal !important;
@@ -12308,7 +12341,7 @@ h3 + table {
 
 .stattograph:active, .optbox:checked + label > .stattograph:active {
   background: #f60;
-  box-shadow: var(--lowlight), inset 4px 4px 4px rgba(0,0,0,.6) !important;
+  box-shadow: var(--highlight), inset 4px 4px 4px rgba(0,0,0,.6) !important;
 }
 
 .stattograph:active b, .optbox:checked + label > .stattograph:active b {
