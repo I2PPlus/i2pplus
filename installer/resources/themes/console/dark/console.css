@@ -11358,7 +11358,8 @@ h1[class], h1 {
 }
 
 #help_configuration {
-  background: url(/themes/console/images/info/optimize.png) 15px center no-repeat, var(--helpbox);
+  background: var(--wrench) 15px center no-repeat, var(--helpbox);
+  background-size: 32px, 100%;
 }
 
 #help_configadv {
@@ -11406,7 +11407,7 @@ h1[class], h1 {
 
 #configurationhelp h2, #advancedsettings h2, #filterlist h2 {
   padding-left: 38px;
-  background: var(--configure_inert) 10px center no-repeat, linear-gradient(to bottom, rgba(0,0,0,0) 50%, #000 50%), var(--h3), var(--h3_fade) !important;
+  background: var(--settings_inert) 10px center no-repeat, linear-gradient(to bottom, rgba(0,0,0,0) 50%, #000 50%), var(--h3), var(--h3_fade) !important;
   background-size: 20px, 100%, 4px 100%, 100% !important;
 }
 
@@ -11418,7 +11419,7 @@ h1[class], h1 {
 
 #reseedhelp h2 {
   padding-left: 38px;
-  background: url(/themes/console/images/svg/reseed.svg) 10px center no-repeat, linear-gradient(to bottom, rgba(0,0,0,0) 50%, #000 50%), var(--h3), var(--h3_fade) !important;
+  background: var(--reseed) 10px center no-repeat, linear-gradient(to bottom, rgba(0,0,0,0) 50%, #000 50%), var(--h3), var(--h3_fade) !important;
   background-size: 20px, 100%, 4px 100%, 100% !important;
 }
 
@@ -11460,13 +11461,13 @@ h1[class], h1 {
 
 #themeoverride h2 {
   padding-left: 38px;
-  background: url(/themes/console/images/svg/ui.svg) 10px center no-repeat, linear-gradient(to bottom, rgba(0,0,0,0) 50%, #000 50%), var(--h3), var(--h3_fade) !important;
+  background: var(--ui) 10px center no-repeat, linear-gradient(to bottom, rgba(0,0,0,0) 50%, #000 50%), var(--h3), var(--h3_fade) !important;
   background-size: 20px, 100%, 4px 100%, 100% !important;
 }
 
 #browserconfig h2 {
   padding-left: 38px;
-  background: url(/themes/console/images/svg/firefox.svg) 10px center no-repeat, linear-gradient(to bottom, rgba(0,0,0,0) 50%, #000 50%), var(--h3), var(--h3_fade) !important;
+  background: var(--firefox) 10px center no-repeat, linear-gradient(to bottom, rgba(0,0,0,0) 50%, #000 50%), var(--h3), var(--h3_fade) !important;
   background-size: 20px, 100%, 4px 100%, 100% !important;
 }
 

@@ -19,7 +19,7 @@
   --button_active: linear-gradient(to bottom, #401856, #501f6c);
   --innerborder: 1px solid rgba(38, 35, 92,.7);
   --tr: linear-gradient(to bottom, #001, #000);
-  --th: linear-gradient(to bottom, #000018, #000);
+  --th: repeating-linear-gradient(to right, rgba(0,0,64,.4) 2px, #000 4px), linear-gradient(to bottom, #000018, #000);
   --panel: linear-gradient(to bottom, #080818, #040410);
   --highlight: inset 0 0 0 1px #000;
 }
@@ -42,17 +42,16 @@ body {
 
 /* preload button mouseovers */
 body:not(old) {
-  background: repeating-linear-gradient(to right, #001 2px, rgba(0,0,0,.3) 4px),
+  background: repeating-linear-gradient(to right, rgba(0,16,0,.5) 2px, rgba(0,0,0,.3) 4px),
               repeating-linear-gradient(to bottom, rgba(0,0,32,.6) 2px, rgba(0,0,0,.3) 4px),
               url(images/tile.png),
               url(/themes/console/images/buttons/clean_hover.png) no-repeat,
               url(/themes/console/images/buttons/delete_hover.png) no-repeat,
               url(/themes/console/images/buttons/restore_hover.png) no-repeat,
-              url(/themes/console/images/buttons/search_hover.png) no-repeat,
               url(/themes/console/images/buttons/update_hover.png) no-repeat,
               url(images/dropdown_hover.svg),
               url(images/newtab.png), #001;
-  background-size: 4px 100%, 100% 4px, 171px 148px, 0, 0, 0, 0, 0, 0, 0;
+  background-size: 4px 100%, 100% 4px, 171px 148px, 0, 0, 0, 0, 0, 0;
 }
 
 @supports (-moz-appearance: none) {
@@ -1416,10 +1415,15 @@ div.logo hr {
 
 /* end proxy errors */
 
+.routersummary {
+  background: repeating-linear-gradient(to right, rgba(0,0,0,.5) 2px, rgba(4,4,32,.5) 4px),
+              repeating-linear-gradient(to bottom, rgba(0,0,0,.5) 2px, rgba(4,4,32,.5) 4px);
+}
+
 .routersummary, .main {
-  background: repeating-linear-gradient(to right, rgba(0,0,0,.4) 2px, rgba(4,4,32,.5) 4px),
-              repeating-linear-gradient(to bottom, rgba(0,0,0,.4) 2px, rgba(4,4,32,.5) 4px);
-  background-size: 4px 100%, 100% 4px;
+  background: repeating-linear-gradient(to right, rgba(0,0,0,.3) 2px, rgba(4,4,32,.5) 4px),
+              repeating-linear-gradient(to bottom, rgba(0,0,0,.3) 2px, rgba(4,4,32,.5) 4px);
+  background-size: 4px 100%, 100% 4px !important;
 }
 
 /* sidebar */
@@ -2834,6 +2838,7 @@ div.confignav {
   box-shadow: var(--highlight);
   background: #010010 url(images/titles.png) center center repeat-x !important;
   background: var(--th) !important;
+  background-size: 4px 100%, 100% !important;
 }
 
 .tab, .tab2 {
@@ -3376,8 +3381,8 @@ th {
   color: #c9ceff;
   border-top: var(--innerborder);
   border-bottom: var(--innerborder);
-  background: #000 url(images/titles.png) center center repeat-x;
   background: var(--th);
+  background-size: 4px 100%, 100%;
 }
 
 tr {
@@ -4512,6 +4517,10 @@ h3#themeheading, h3#langheading, h3#passwordheading {
   font-size: 10.5pt;
   border: var(--innerborder);
   border-radius: 0;
+}
+
+#themesettings, #langsettings {
+  background: #001;
 }
 
 div#themesettings {
@@ -5903,8 +5912,8 @@ ul#upnphelp li:last-child, #legal ul li:last-child {
   letter-spacing: 0;
   text-transform: none;
   font-size: 10.5pt !important;
-  background: #001 url(/themes/console/images/info/question.png) 10px 55% no-repeat !important;
-  background-size: 18px !important;
+  background: var(--question) 10px 55% no-repeat, var(--th) !important;
+  background-size: 18px, 4px 100%, 100% !important;
   background-blend-mode: luminosity, normal;
 }
 
@@ -12893,13 +12902,13 @@ a:hover .sitemapLink {
 
 #faq h2, #glossary h2 {
   padding-left: 38px !important;
-  background: url(/themes/console/images/info/question.png) 8px center no-repeat, var(--title) !important;
+  background: var(--question) 8px center no-repeat, var(--title) !important;
   background-size: 24px, 4px 100%, 100% !important;
 }
 
 #webhosting h2 {
   padding-left: 38px !important;
-  background: url(/themes/console/images/server_32x32.png) 8px center no-repeat, var(--title) !important;
+  background: var(--server) 8px center no-repeat, var(--title) !important;
   background-size: 24px, 4px 100%, 100% !important;
 }
 
@@ -12911,7 +12920,7 @@ a:hover .sitemapLink {
 
 #browserconfig h2 {
   padding-left: 38px !important;
-  background: url(/themes/console/images/svg/firefox.svg) 8px center no-repeat, var(--title) !important;
+  background: var(--firefox) 8px center no-repeat, var(--title) !important;
   background-size: 24px, 4px 100%, 100% !important;
 }
 
@@ -13338,7 +13347,7 @@ h1.webapp {
 
 h1[class], h1 {
   padding-left: 56px;
-  background-size: 38px auto, 100%, 100% !important;
+  background-size: 38px auto, 4px 100%, 100%, 100% !important;
   background-blend-mode: difference, normal, exclusion, normal;
 }
 
@@ -13349,7 +13358,7 @@ h1::first-letter {
 @media screen and (max-width: 1500px) {
 h1[class], h1 {
   padding-left: 50px;
-  background-size: 32px auto, 100%, 100%, 164px 164px !important;
+  background-size: 32px auto, 4px 100%, 100%, 100%, 164px 164px !important;
 }
 }
 
