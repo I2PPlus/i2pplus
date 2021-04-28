@@ -1,0 +1,25 @@
+::-webkit-scrollbar {
+  width: 10px;
+  cursor: pointer !important;
+}
+
+::-webkit-scrollbar-track {
+  background: rgba(0,0,0,0);
+  border-radius: 0;
+}
+
+::-webkit-scrollbar-track:hover {
+  background: rgba(0,0,0,.2);
+}
+
+::-webkit-scrollbar-thumb {
+  border-radius: 1px;
+  background: #114;
+}
+::-webkit-scrollbar-thumb:hover {
+  background: #115;
+}
+
+::-webkit-scrollbar-thumb:window-inactive {
+  background: #002;
+}
