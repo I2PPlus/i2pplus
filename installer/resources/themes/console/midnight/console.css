@@ -5993,6 +5993,7 @@ ul#upnphelp li:last-child, #legal ul li:last-child {
 
 #netdboverview th {
   background: var(--title) !important;
+  background-size: 4px 100%, 100% !important;
 }
 
 #netdboverview table th {
@@ -7215,16 +7216,17 @@ table#jardump {
 }
 
 #debug h3.debug_outboundsessions, #debug h3.debug_inboundsessions {
-  padding: 6px 10px 6px 28px !important;
-  background-blend-mode: luminosity, normal;
+  padding: 8px 10px 6px 28px !important;
 }
 
 #debug h3.debug_outboundsessions {
-  background: url(/themes/console/images/outbound.png) 6px center no-repeat, linear-gradient(to bottom, #141221, #000008 75%) !important;
+  background: url(images/out.png) 6px center no-repeat, var(--title) !important;
+  background-size: 16px, 4px 100% !important;
 }
 
 #debug h3.debug_inboundsessions {
-  background: url(/themes/console/images/inbound.png) 6px center no-repeat, linear-gradient(to bottom, #141221, #000008 75%) !important;
+  background: url(images/in.png) 6px center no-repeat, var(--title) !important;
+  background-size: 16px, 4px 100% !important;
 }
 
 .debug_version {
@@ -7246,15 +7248,16 @@ table#jardump {
 #debug h3 {
   padding: 6px 10px !important;
   border-width: 1px !important;
-  background: linear-gradient(to bottom, #141221, #000008 75%) !important;
+  background: var(--title) !important;
+  background-size: 4px 100% !important;
 }
 
 #debug ul, .debug_targetinfo {
+  margin: 0 !important;
+  text-align: left;
   columns: 400px 2;
   column-rule: 1px solid #113;
   column-gap: 30px;
-  margin: 0 !important;
-  text-align: left;
 }
 
 #debug .sentTags ul {
