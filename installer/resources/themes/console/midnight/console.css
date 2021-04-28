@@ -4519,6 +4519,10 @@ h3#themeheading, h3#langheading, h3#passwordheading {
   border-radius: 0;
 }
 
+#themesettings, #langsettings {
+  background: #001;
+}
+
 div#themesettings {
   margin: -1px 0;
   padding: 8px 7px 0;
