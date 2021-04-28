@@ -4224,12 +4224,12 @@ h3[id="udpcon"] {
 }
 
 .sortup {
-  background: url(images/sort_up.png) center center no-repeat, linear-gradient(to bottom, #004, #000);
+  background: url(images/sort_up.svg) center center no-repeat, linear-gradient(to bottom, #004, #000);
 }
 
 .sortup:hover {
   border: 1px solid #652787;
-  background: url(images/sort_up.png) center center no-repeat, linear-gradient(to bottom, #000, #004);
+  background: url(images/sort_up.svg) center center no-repeat, linear-gradient(to bottom, #000, #004);
   opacity: 1;
 }
 
@@ -4247,18 +4247,18 @@ h3[id="udpcon"] {
 }
 
 .sortdown {
-  background: url(images/sort_down.png) center center no-repeat, linear-gradient(to bottom, #004, #000);
+  background: url(images/sort_down.svg) center center no-repeat, linear-gradient(to bottom, #004, #000);
 }
 
 .sortdown:hover {
   border: 1px solid #652787;
-  background: url(images/sort_down.png) center center no-repeat, linear-gradient(to bottom, #000, #004);
+  background: url(images/sort_down.svg) center center no-repeat, linear-gradient(to bottom, #000, #004);
   opacity: 1;
 }
 
 .sortdownactive {
   border: 1px solid #005;
-  background: url(images/sort_down.png) center center no-repeat, #005;
+  background: url(images/sort_svg.png) center center no-repeat, #005;
 }
 
 /* end peer sort */
