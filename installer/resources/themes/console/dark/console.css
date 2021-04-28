@@ -1311,10 +1311,11 @@ div.messages {
   border: var(--border);
   font-weight: bold;
   font-size: 9.5pt;
-  box-shadow: var(--highlight), inset 0 0 2px 1px #171 !important;
+  box-shadow: var(--highlight), inset 0 0 2px 0 #393 !important;
   background: #000;
-  background: var(--infohelp) no-repeat 12px center, repeating-linear-gradient(to bottom, rgba(0,0,0,.8) 2px, rgba(0,64,0,.4) 4px), var(--hat) right 2px bottom -2px no-repeat #010;
-  background-size: 28px, 4px 100%, auto 90%;
+  background: var(--infohelp) no-repeat 12px center, repeating-linear-gradient(to bottom, rgba(0,0,0,.6) 2px, rgba(0,32,0,.3) 4px),
+              var(--hat) right 2px bottom -2px no-repeat, linear-gradient(to bottom, #010, #000400);
+  background-size: 28px, 4px 100%, auto 93%;
 }
 
 .main:not(#config_update) div.messages, #config_update #messages {
@@ -1326,15 +1327,19 @@ div.messages {
   z-index: 100;
   animation: 2s hide-up 8s ease-out forwards;
   box-shadow: inset 0 0 1px 0 #f00, 0 0 2px 2px #000 !important;
-  background: var(--infohelp) no-repeat 12px center, var(--close) right 6px top 6px no-repeat, var(--hat) right bottom no-repeat #000;
-  background-size: 28px, 14px, auto 90%;
-  background-blend-mode: normal, luminosity, normal;
+  background: var(--infohelp) no-repeat 12px center, var(--close) right 7px top 6px no-repeat,
+              repeating-linear-gradient(to bottom, rgba(0,0,0,.6) 2px, rgba(0,32,0,.3) 4px),
+              var(--hat) right 2px bottom -2px no-repeat, linear-gradient(to bottom, #010, #000400);
+  background-size: 28px, 14px, 4px 100%, auto 93%;
+  background-blend-mode: normal, luminosity, normal, normal, normal;
 }
 
 .main:not(#config_update) div.messages:hover, #config_update #messages:hover {
-  background: var(--infohelp) no-repeat 12px center, var(--close_hover) right 6px top 6px no-repeat, var(--hat) right bottom no-repeat #000;
-  background-size: 28px, 14px, auto 90%;
-  background-blend-mode: normal, normal, normal;
+  background: var(--infohelp) no-repeat 12px center, var(--close_hover) right 7px top 6px no-repeat,
+              repeating-linear-gradient(to bottom, rgba(0,0,0,.6) 2px, rgba(0,32,0,.3) 4px),
+              var(--hat) right 2px bottom -2px no-repeat, linear-gradient(to bottom, #010, #000400);
+  background-size: 28px, 14px, 4px 100%, auto 93%;
+  background-blend-mode: normal, normal, normal, normal, normal;
   cursor: crosshair;
 }
 
@@ -6555,7 +6560,7 @@ span#distance {
   height: 26px;
   display: inline-block;
   vertical-align: middle;
-  background: url(/themes/susidns/dark/images/helper.svg) center center no-repeat;
+  background: var(--ahelp) center center no-repeat;
   background-size: 14px;
   content: "";
   border-left: var(--border);
@@ -7368,13 +7373,13 @@ p#clientconf.infohelp, p#webappconfigtext.infohelp {
   padding: 15px 15px 15px 50px;
   position: relative;
   z-index: 10;
-  background: #000 url(/themes/console/images/svg/editclient.svg) 12px center no-repeat !important;
+  background: #000 var(--editclient) 12px center no-repeat !important;
   background-size: 28px !important;
 }
 
 p#pluginconfigtext {
   padding: 15px 15px 15px 50px;
-  background: #000 url(/themes/console/images/svg/pluginconfig.svg) 12px center no-repeat !important;
+  background: #000 var(--pluginconfig) 12px center no-repeat !important;
   background-size: 28px !important;
 }
 
@@ -7422,7 +7427,7 @@ h3#servicedebug + p.infohelp {
 
 h3#browseronstart + p.infohelp, .infohelp#webbrowser {
   padding: 15px 15px 15px 50px;
-  background: #000 url(/themes/console/images/info/launch_browser.png) 12px center no-repeat !important;
+  background: #000 var(--firefox) 12px center no-repeat !important;
   background-size: 28px !important;
 }
 
