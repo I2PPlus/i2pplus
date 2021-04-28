@@ -430,8 +430,18 @@ _:-ms-lang(x), .tunnelProperties {
   border: 1px solid rgba(38,35,92,.3);
   border-radius: 3px;
   box-shadow: inset 0 0 0 1px #000;
-  background: url(/themes/susidns/midnight/images/configure.png) 6px center no-repeat, linear-gradient(to bottom, rgba(16,16,48,.3), rgba(0,0,16,.3));
-  background-size: 14px 14px, 100% 100% !important;
+  background: var(--settings) 6px center no-repeat, linear-gradient(to bottom, rgba(16,16,48,.3), rgba(0,0,16,.3));
+  background-size: 14px, 100% !important;
+}
+
+.tunnelName a:hover {
+  background: var(--settings_hover) 6px center no-repeat, linear-gradient(to bottom, rgba(16,16,48,.3), rgba(0,0,16,.3));
+  background-size: 14px, 100% !important;
+}
+
+.tunnelName a:active {
+  background: var(--settings_active) 6px center no-repeat, linear-gradient(to bottom, rgba(16,16,48,.3), rgba(0,0,16,.3));
+  background-size: 14px, 100% !important;
 }
 
 @media screen and (max-width: 1500px) {
@@ -439,7 +449,7 @@ _:-ms-lang(x), .tunnelProperties {
     margin-left: 2px;
     padding-left: 22px !important;
     width: calc(100% - 40px);
-    background-size: 12px 12px, 100% 100% !important;
+    background-size: 12px, 100% !important;
   }
 }
 
@@ -563,7 +573,7 @@ input {
   background-color: #002;
   color: #c9ceff;
   margin: 0 2px 0 2px;
-  font-family: var(--bodyfont)
+  font-family: var(--bodyfont);
   border: 1px solid #302b74;
   text-decoration: none;
 }
@@ -698,14 +708,12 @@ button, input[type=submit], input[type="reset"], .control, select {
 }
 
 select {
-  -moz-appearance: none;
-  -webkit-appearance: none;
-  appearance: none;
   padding: 4px 24px 4px 4px !important;
   min-width: 120px;
   overflow: hidden;
+  appearance: none;
   text-overflow: ellipsis;
-  font: 8.5pt var(--bodyfont)
+  font: 8.5pt var(--bodyfont);
   font-weight: bold;
   color: #6c66bc;
   border: 1px solid #26225c;
@@ -743,7 +751,7 @@ input, select, button {
 }
 
 button, input[type=submit], input[type="reset"], a.control {
-  font-family: var(--bodyfont)
+  font-family: var(--bodyfont);
   font-weight: bold;
 }
 
@@ -758,10 +766,10 @@ button, input[type=submit], input[type="reset"], a.control {
 
 .tunnelDestinationLabel {
   margin-right: 3px;
-  display: inline-block;
   min-width: 150px;
-  text-align: right;
+  display: inline-block;
   white-space: nowrap;
+  text-align: right;
 }
 
 @media screen and (max-width: 1200px) {
@@ -786,7 +794,6 @@ input {
   white-space: nowrap;
   overflow: hidden;
   text-overflow: ellipsis;
-  -o-text-overflow: ellipsis;
 }
 
 #tunnelDepth, #tunnelVariance, #tunnelQuantity, #tunnelBackupQuantity,
@@ -867,9 +874,14 @@ th .help::after {
   width: 16px;
   height: 16px;
   display: inline-block;
-  background: url(/themes/console/images/svg/helplink.svg) center center no-repeat;
-  background-size: 16px 16px;
+  background: var(--helplink) center center no-repeat;
+  background-size: 16px;
   content: "";
+}
+
+th .help:hover::after, th .help:focus::after {
+  background: var(--helplink_hover) center center no-repeat;
+  background-size: 16px;
 }
 
 #filter input::placeholder {
@@ -1052,8 +1064,8 @@ input.tunnelName, input.tunnelDescriptionText, #userAgents, .tunnelDescription, 
   height: 32px;
   display: inline-block;
   vertical-align: middle;
-  background: url(/themes/console/images/svg/update.svg) center center no-repeat;
-  background-size: 32px 32px;
+  background: var(--update) center center no-repeat;
+  background-size: 32px;
   content: "";
   mix-blend-mode: luminosity;
   animation: linear spin 5s forwards infinite;
@@ -1496,7 +1508,7 @@ th {
   font-size: 11pt !important;
 }
 
-th .help::after {
+th .help::after, th .help:hover::after, th .help:focus::after {
   width: 20px;
   height: 20px;
   background-size: 20px 20px;
