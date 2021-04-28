@@ -583,38 +583,40 @@ input.hideconsole:active {
 
 input.check, button.check {
   padding: 5px 9px 5px 25px !important;
-  background: url(/themes/console/images/svg/yes.svg) 8px center no-repeat, var(--button) !important;
+  background: var(--yes) 8px center no-repeat, var(--button) !important;
   background-size: 14px, 100%, 100% !important;
 }
 
 input.check:hover, button.check:hover,
 input.check:focus, button.check:focus {
-  background: url(/themes/console/images/svg/yes.svg) 8px center no-repeat, var(--button_hover) !important;
+  background: var(--yes) 8px center no-repeat, var(--button_hover) !important;
   background-size: 14px, 100% !important;
 }
 
 input.check:active, button.check:active {
   padding: 5px 9px 5px 25px !important;
-  background: url(/themes/console/images/svg/yes.svg) 8px center no-repeat, var(--button_active) !important;
+  background: var(--yes) 8px center no-repeat, var(--button_active) !important;
   background-size: 14px, 100% !important;
 }
 
 input.check[value$="updates"], button.check[value$="updates"] {
   padding: 5px 9px 5px 25px !important;
-  background: url(/themes/console/images/buttons/update.png) 8px center no-repeat, var(--button) !important;
+  background: var(--refresh) 8px center no-repeat, var(--button) !important;
   background-size: 14px, 100%, 100% !important;
 }
 
 input.check[value$="updates"]:hover, button.check[value$="updates"]:hover,
 input.check[value$="updates"]:focus, button.check[value$="updates"]:focus {
-  background: url(/themes/console/images/buttons/update_hover.png) 8px center no-repeat, var(--button_hover) !important;
+  background: var(--refresh_hover) 8px center no-repeat, var(--button_hover) !important;
   background-size: 14px, 100% !important;
+  background-blend-mode: normal !important;
 }
 
 input.check[value$="updates"]:active, button.check[value$="updates"]:active {
   padding: 5px 9px 5px 25px !important;
-  background: url(/themes/console/images/buttons/update_hover.png) 8px center no-repeat, var(--button_active) !important;
+  background: var(--refresh_active) 8px center no-repeat, var(--button_active) !important;
   background-size: 14px, 100% !important;
+  background-blend-mode: luminosity !important;
 }
 
 input.delete, button.delete {
