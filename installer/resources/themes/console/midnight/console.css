@@ -7248,15 +7248,16 @@ table#jardump {
 #debug h3 {
   padding: 6px 10px !important;
   border-width: 1px !important;
-  background: linear-gradient(to bottom, #141221, #000008 75%) !important;
+  background: var(--title) !important;
+  background-size: 4px 100% !important;
 }
 
 #debug ul, .debug_targetinfo {
+  margin: 0 !important;
+  text-align: left;
   columns: 400px 2;
   column-rule: 1px solid #113;
   column-gap: 30px;
-  margin: 0 !important;
-  text-align: left;
 }
 
 #debug .sentTags ul {
