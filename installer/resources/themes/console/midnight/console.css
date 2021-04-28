@@ -262,8 +262,7 @@ select {
   border: 1px solid #27235c;
   cursor: pointer;
   box-shadow: inset 0 0 0 1px #000, 0 0 0 1px #000;
-  background: #000 url(images/dropdown.svg) center right 10px no-repeat !important;
-  background: url(images/dropdown.svg) center right 10px no-repeat, var(--button) !important;
+  background: var(--dropdown) center right 10px no-repeat, var(--button) !important;
   background-size: 10px auto, 100% !important;
   filter: none !important;
 }
@@ -297,7 +296,7 @@ select:hover, select:focus, select:active {
   color: #652787;
   text-shadow: 0 1px 1px #000;
   border: 1px solid #652787 !important;
-  background: url(images/dropdown_hover.svg) center right 10px no-repeat, var(--button_hover) !important;
+  background: var(--dropdown_hover) center right 10px no-repeat, var(--button_hover) !important;
   background-size: 10px auto, 100% !important;
 }
 
@@ -619,20 +618,21 @@ input.check[value$="updates"]:active, button.check[value$="updates"]:active {
 
 input.delete, button.delete {
   padding: 5px 9px 5px 25px !important;
-  background: url(/themes/console/images/buttons/delete.png) 8px center no-repeat, var(--button) !important;
+  background: var(--nuke) 8px center no-repeat, var(--button) !important;
   background-size: 14px, 100%, 100% !important;
 }
 
 input.delete:hover, button.delete:hover,
 input.delete:focus, button.delete:focus {
-  background: url(/themes/console/images/buttons/delete_hover.png) 8px center no-repeat, var(--button_hover) !important;
+  background: var(--nuke) 8px center no-repeat, var(--button_hover) !important;
   background-size: 14px, 100% !important;
 }
 
 input.delete:active, button.delete:active {
   padding: 5px 9px 5px 25px !important;
-  background: url(/themes/console/images/buttons/delete_hover.png) 8px center no-repeat, var(--button_active) !important;
+  background: var(--nuke) 8px center no-repeat, var(--button_active) !important;
   background-size: 14px, 100% !important;
+  background-blend-mode: luminosity;
 }
 
 input.delete[value^="Ban"], button.delete[value^="Ban"] {
@@ -3002,20 +3002,20 @@ h4.app a:active::after, h4.app2 a:active::after  {
 }
 
 #logs a.delete::after {
-  background: url(images/delete.png) center center no-repeat;
+  background: var(--close) center center no-repeat;
 }
 
 #logs a.delete:hover::after, #logs a.delete:focus::after {
-  background: url(images/delete_hover.png) center center no-repeat;
+  background: var(--close_hover) center center no-repeat;
 }
 
 #logs a.delete:active::after {
-  background: url(images/delete_active.png) center center no-repeat;
+  background: var(--close_active) center center no-repeat;
   transform: scale(.85);
 }
 
-h4.app img, h4.app2 img {
-  display: none;
+h4.app a img, h4.app2 a img {
+  display: none !important;
 }
 
 @media screen and (max-width: 1500px) {
@@ -4224,12 +4224,12 @@ h3[id="udpcon"] {
 }
 
 .sortup {
-  background: url(images/sort_up.png) center center no-repeat, linear-gradient(to bottom, #004, #000);
+  background: url(images/sort_up.svg) center center no-repeat, linear-gradient(to bottom, #004, #000);
 }
 
 .sortup:hover {
   border: 1px solid #652787;
-  background: url(images/sort_up.png) center center no-repeat, linear-gradient(to bottom, #000, #004);
+  background: url(images/sort_up.svg) center center no-repeat, linear-gradient(to bottom, #000, #004);
   opacity: 1;
 }
 
@@ -4247,18 +4247,18 @@ h3[id="udpcon"] {
 }
 
 .sortdown {
-  background: url(images/sort_down.png) center center no-repeat, linear-gradient(to bottom, #004, #000);
+  background: url(images/sort_down.svg) center center no-repeat, linear-gradient(to bottom, #004, #000);
 }
 
 .sortdown:hover {
   border: 1px solid #652787;
-  background: url(images/sort_down.png) center center no-repeat, linear-gradient(to bottom, #000, #004);
+  background: url(images/sort_down.svg) center center no-repeat, linear-gradient(to bottom, #000, #004);
   opacity: 1;
 }
 
 .sortdownactive {
   border: 1px solid #005;
-  background: url(images/sort_down.png) center center no-repeat, #005;
+  background: url(images/sort_svg.png) center center no-repeat, #005;
 }
 
 /* end peer sort */
@@ -5459,7 +5459,8 @@ table#sidebarconf {
   width: 5%;
   text-align: center;
   text-indent: -99999px;
-  background: url(/themes/console/images/buttons/delete.png) center center no-repeat !important;
+  background: var(--nuke) center center no-repeat !important;
+  background-size: 14px !important;
 }
 
 #sidebarconf th:nth-child(2) {
@@ -8747,7 +8748,7 @@ p#clientconf.infohelp, p#webappconfig.infohelp {
 p#pluginconfigtext {
   padding: 15px 15px 15px 50px;
   vertical-align: middle;
-  background: #000 url(/themes/console/images/svg/pluginconfig.png) 12px center no-repeat !important;
+  background: #000 url(/themes/console/images/svg/pluginconfig.svg) 12px center no-repeat !important;
   background-size: 28px !important;
 }
 
@@ -11250,10 +11251,6 @@ tr:nth-child(4) .net_bwrate::before {
   box-shadow: none !important;
 }
 
-#joinfamily table, #joinfamily tr:nth-child(n+3), #joinfamily tr:nth-child(n+3) td {
-/*  background: #000 !important;*/
-}
-
 #joinfamily tr:nth-child(n+3) {
   background: #000 !important;
 }
@@ -11271,8 +11268,8 @@ tr:nth-child(4) .net_bwrate::before {
 }
 
 #installPluginFile, #installPluginUrl {
-  background: var(--panel);
   box-shadow: inset 0 0 0 1px #000, inset 0 0 2px 1px #191939 !important;
+  background: var(--panel);
 }
 
 #config_reseed form, #installPluginUrl form, #installPluginFile form, #newFamily form, #joinfamily form {
@@ -11287,20 +11284,15 @@ tr:nth-child(4) .net_bwrate::before {
   text-align: right;
 }
 
-#installPluginUrl, #installPluginFile, #joinfamily tr:nth-child(n+3) table tr, #joinfamily tr:nth-child(n+3) table td,
-#newfamily tr:nth-child(n+3) table tr, #newfamily tr:nth-child(n+3) table td {
-/*  background: #000 !important;*/
-}
-
-#installPluginUrl td:first-child {
-  background: url(/themes/console/images/info/url.png) 12px center no-repeat !important;
-  padding: 15px 15px 15px 50px;
+#url td:first-child {
+  padding: 15px 15px 15px 50px !important;
+  background: var(--link) 12px center no-repeat !important;
   background-size: 28px !important;
 }
 
 #installPluginFile td:first-child {
-  background: url(/themes/console/images/info/from_file.png) 12px center no-repeat !important;
   padding: 10px 15px 10px 50px;
+  background: var(--files) 12px center no-repeat !important;
   background-size: 28px !important;
 }
 
@@ -11309,14 +11301,13 @@ tr:nth-child(4) .net_bwrate::before {
 }
 
 input[type="file"]:hover {
-  cursor: pointer;
-  background: linear-gradient(to right, rgba(0,0,0,0), #414);
   border-radius: 0 15px 15px 0;
+  background: linear-gradient(to right, rgba(0,0,0,0), #414);
+  cursor: pointer;
 }
 
 #joinfamily td, #newfamily td {
   padding: 5px;
-/*  background-color: #000 !important;*/
 }
 
 #joinfamily .optionsingle td {
@@ -11330,7 +11321,6 @@ input[type="file"]:hover {
 #newfamily .optionsingle {
   padding: 5px 5px 0 45px;
   box-shadow: inset 0 0 0 1px #000, inset 0 0 2px 1px #191939 !important;
-  background: #000 url(/themes/console/images/info/label.png) 10px center no-repeat !important;
   background: url(/themes/console/images/info/label.png) 10px center no-repeat, var(--panel) !important;
   background-size: 28px, 100%, 100% !important;
 }
@@ -11338,8 +11328,7 @@ input[type="file"]:hover {
 #joinfamily .optionsingle {
   padding: 5px 5px 0 45px;
   box-shadow: inset 0 0 0 1px #000, inset 0 0 2px 1px #191939 !important;
-  background: #000 url(/themes/console/images/info/key.png) 10px center no-repeat !important;
-  background: url(/themes/console/images/info/key.png) 10px center no-repeat, var(--panel) !important;
+  background: var(--key) 10px center no-repeat, var(--panel) !important;
   background-size: 28px, 100%, 100% !important;
 }
 
@@ -11353,8 +11342,12 @@ input[type="file"]:hover {
 
 @media screen and (min-width: 1840px) {
   #joinfamily tr:last-child td, #newfamily tr:last-child td, #plugininstall tr:nth-child(n+2) td {
-  padding: 8px !important;
-}
+    padding: 8px !important;
+  }
+
+  #plugininstall #url td:first-child {
+    padding-left: 50px !important;
+  }
 }
 
 #clientconfig td, #webappconfig td {
@@ -14168,9 +14161,8 @@ h1 {
   box-shadow: inset 0 0 0 1px #000, inset 0 0 2px 1px #808 !important;
   background: #000;
   background: var(--infohelp) no-repeat 15px center,
-              url(/themes/snark/light/images/delete.png) right 6px top 6px no-repeat, #000 !important;
+              var(--close) right 6px top 6px no-repeat, #000 !important;
   background-size: 28px, 14px !important;
-  background-blend-mode: normal, luminosity;
   filter: drop-shadow(0 2px 2px rgba(0,0,0,.5));
   animation: 2s hide-up 8s ease-out forwards;
 }
