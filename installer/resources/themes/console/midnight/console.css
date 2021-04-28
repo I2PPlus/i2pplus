@@ -8749,7 +8749,7 @@ p#clientconf.infohelp, p#webappconfig.infohelp {
 p#pluginconfigtext {
   padding: 15px 15px 15px 50px;
   vertical-align: middle;
-  background: #000 url(/themes/console/images/svg/pluginconfig.png) 12px center no-repeat !important;
+  background: #000 url(/themes/console/images/svg/pluginconfig.svg) 12px center no-repeat !important;
   background-size: 28px !important;
 }
 
@@ -11252,10 +11252,6 @@ tr:nth-child(4) .net_bwrate::before {
   box-shadow: none !important;
 }
 
-#joinfamily table, #joinfamily tr:nth-child(n+3), #joinfamily tr:nth-child(n+3) td {
-/*  background: #000 !important;*/
-}
-
 #joinfamily tr:nth-child(n+3) {
   background: #000 !important;
 }
@@ -11273,8 +11269,8 @@ tr:nth-child(4) .net_bwrate::before {
 }
 
 #installPluginFile, #installPluginUrl {
-  background: var(--panel);
   box-shadow: inset 0 0 0 1px #000, inset 0 0 2px 1px #191939 !important;
+  background: var(--panel);
 }
 
 #config_reseed form, #installPluginUrl form, #installPluginFile form, #newFamily form, #joinfamily form {
@@ -11289,20 +11285,15 @@ tr:nth-child(4) .net_bwrate::before {
   text-align: right;
 }
 
-#installPluginUrl, #installPluginFile, #joinfamily tr:nth-child(n+3) table tr, #joinfamily tr:nth-child(n+3) table td,
-#newfamily tr:nth-child(n+3) table tr, #newfamily tr:nth-child(n+3) table td {
-/*  background: #000 !important;*/
-}
-
-#installPluginUrl td:first-child {
-  background: url(/themes/console/images/info/url.png) 12px center no-repeat !important;
-  padding: 15px 15px 15px 50px;
+#url td:first-child {
+  padding: 15px 15px 15px 50px !important;
+  background: var(--link) 12px center no-repeat !important;
   background-size: 28px !important;
 }
 
 #installPluginFile td:first-child {
-  background: url(/themes/console/images/info/from_file.png) 12px center no-repeat !important;
   padding: 10px 15px 10px 50px;
+  background: var(--files) 12px center no-repeat !important;
   background-size: 28px !important;
 }
 
@@ -11311,14 +11302,13 @@ tr:nth-child(4) .net_bwrate::before {
 }
 
 input[type="file"]:hover {
-  cursor: pointer;
-  background: linear-gradient(to right, rgba(0,0,0,0), #414);
   border-radius: 0 15px 15px 0;
+  background: linear-gradient(to right, rgba(0,0,0,0), #414);
+  cursor: pointer;
 }
 
 #joinfamily td, #newfamily td {
   padding: 5px;
-/*  background-color: #000 !important;*/
 }
 
 #joinfamily .optionsingle td {
@@ -11332,7 +11322,6 @@ input[type="file"]:hover {
 #newfamily .optionsingle {
   padding: 5px 5px 0 45px;
   box-shadow: inset 0 0 0 1px #000, inset 0 0 2px 1px #191939 !important;
-  background: #000 url(/themes/console/images/info/label.png) 10px center no-repeat !important;
   background: url(/themes/console/images/info/label.png) 10px center no-repeat, var(--panel) !important;
   background-size: 28px, 100%, 100% !important;
 }
@@ -11340,8 +11329,7 @@ input[type="file"]:hover {
 #joinfamily .optionsingle {
   padding: 5px 5px 0 45px;
   box-shadow: inset 0 0 0 1px #000, inset 0 0 2px 1px #191939 !important;
-  background: #000 url(/themes/console/images/info/key.png) 10px center no-repeat !important;
-  background: url(/themes/console/images/info/key.png) 10px center no-repeat, var(--panel) !important;
+  background: var(--key) 10px center no-repeat, var(--panel) !important;
   background-size: 28px, 100%, 100% !important;
 }
 
@@ -11355,8 +11343,12 @@ input[type="file"]:hover {
 
 @media screen and (min-width: 1840px) {
   #joinfamily tr:last-child td, #newfamily tr:last-child td, #plugininstall tr:nth-child(n+2) td {
-  padding: 8px !important;
-}
+    padding: 8px !important;
+  }
+
+  #plugininstall #url td:first-child {
+    padding-left: 50px !important;
+  }
 }
 
 #clientconfig td, #webappconfig td {
