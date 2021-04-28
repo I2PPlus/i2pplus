@@ -3073,7 +3073,12 @@ h3#iptransport a:not(old), h3#advancedconfig a:not(old), #reseedsetup a:not(old)
   height: 20px;
 }
 
-h3#iptransport a::after, h3#advancedconfig a::after, #reseedsetup a::after {
+.h3navlinks a[href="/help/faq#alternative_browser"] img {
+  display: none;
+}
+
+h3#iptransport a::after, h3#advancedconfig a::after, #reseedsetup a::after,
+.h3navlinks a[href="/help/faq#alternative_browser"]::after {
   padding: 0;
   width: 20px;
   height: 20px;
@@ -3085,12 +3090,15 @@ h3#iptransport a::after, h3#advancedconfig a::after, #reseedsetup a::after {
 
 h3#iptransport a:hover::after, h3#iptransport a:focus::after,
 h3#advancedconfig a:hover::after, h3#advancedconfig a:focus::after,
-#reseedsetup a:hover::after, #reseedsetup a:focus::after {
+#reseedsetup a:hover::after, #reseedsetup a:focus::after,
+.h3navlinks a[href="/help/faq#alternative_browser"]:hover::after,
+.h3navlinks a[href="/help/faq#alternative_browser"]:focus::after {
   background: var(--helplink_hover) center center no-repeat;
 }
 
 @media screen and (max-width: 1500px) {
-  h3#iptransport a::after, h3#advancedconfig a::after, #reseedsetup a::after {
+  h3#iptransport a::after, h3#advancedconfig a::after, #reseedsetup a::after,
+  .h3navlinks a[href="/help/faq#alternative_browser"]::after {
     width: 16px;
     height: 16px;
     background-size: 16px !important;
