@@ -17,7 +17,6 @@
   --button: linear-gradient(to bottom, #11101c 50%, #000010 50%);
   --button_hover: linear-gradient(to bottom, #202 50%, #000 50%);
   --button_active: linear-gradient(to bottom, #401856, #501f6c);
-  --infohelp: url("data:image/svg+xml,%3Csvg viewBox='0 0 64 64' xmlns='http://www.w3.org/2000/svg'%3E%3Cpath d='m59.45 32a27.45 27.45 0 1 1 -54.9 0 27.45 27.45 0 1 1 54.9 0z' fill='%23003380' stroke='%2380b3ff' stroke-width='6'/%3E%3Cg fill='%23fff'%3E%3Cpath d='m35.87 48.82h-7.61v-22.32h7.61z'/%3E%3Ccircle cx='32.06' cy='19.11' r='3.8'/%3E%3C/g%3E%3C/svg%3E");
   --innerborder: 1px solid rgba(38, 35, 92,.7);
   --tr: linear-gradient(to bottom, #001, #000);
   --th: linear-gradient(to bottom, #000018, #000);
@@ -5424,7 +5423,7 @@ input[name="logfilename"], input[name="logformat"], input[name="logdateformat"],
 
 #config_summarybar #refreshsidebar td:not(.optionsave) {
   padding-left: 50px;
-  background: url(/themes/console/images/info/interval.png) 12px center no-repeat !important;
+  background: var(--timer) 12px center no-repeat !important;
   background-size: 28px !important;
 }
 
@@ -5980,7 +5979,8 @@ ul#upnphelp li:last-child, #legal ul li:last-child {
 #netdboverview {
   margin: -4px auto 8px;
   background: #000010;
-  background: repeating-linear-gradient(to bottom, #000010, #000 1px, #000020 2px);
+  background: repeating-linear-gradient(to bottom, rgba(0,0,0,.7) 2px, rgba(0,0,16,.5) 4px);
+  background-size: 100% 4px;
 }
 
 #netdboverview tr {
@@ -8458,11 +8458,17 @@ table#externali2cp th {
   text-align: left;
 }
 
-#tunnelconfig th:not(.th_title) {
-  padding: 6px 10px !important;
+#tunnelconfig th:not(.th_title)[colspan="3"] {
+  padding: 12px 10px 12px 34px !important;
   text-transform: none;
   letter-spacing: 0;
   word-spacing: 0;
+  text-shadow: 0 1px 1px #000;
+  box-shadow: var(--highlight), inset 0 0 2px 1px #f00;
+  background: var(--infowarn) 10px center no-repeat,
+              linear-gradient(to bottom, rgba(128,128,128,.05), rgba(0,0,0,.3)),
+              repeating-linear-gradient(to bottom, #400 2px, #100 4px);
+  background-size: 18px, 100%, 100% 4px;
 }
 
 #tunnelconfig th img {
