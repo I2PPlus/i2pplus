@@ -22,6 +22,7 @@
   --tr: linear-gradient(to bottom, #001, #000);
   --th: linear-gradient(to bottom, #000018, #000);
   --panel: linear-gradient(to bottom, #080818, #040410);
+  --highlight: inset 0 0 0 1px #000;
 }
 
 textarea {
@@ -42,8 +43,8 @@ body {
 
 /* preload button mouseovers */
 body:not(old) {
-  background: repeating-linear-gradient(to right, #001 2px, rgba(0,0,0,.2) 4px),
-              repeating-linear-gradient(to bottom, rgba(0,0,32,.5) 2px, rgba(0,0,0,.3) 4px),
+  background: repeating-linear-gradient(to right, #001 2px, rgba(0,0,0,.3) 4px),
+              repeating-linear-gradient(to bottom, rgba(0,0,32,.6) 2px, rgba(0,0,0,.3) 4px),
               url(images/tile.png),
               url(/themes/console/images/buttons/clean_hover.png) no-repeat,
               url(/themes/console/images/buttons/delete_hover.png) no-repeat,
@@ -140,7 +141,7 @@ input:active {
   background: #000;
   color: #c9ceff;
   border: 1px solid #652787;
-  box-shadow: inset 0 0 0 1px #000;
+  box-shadow: var(--highlight);
 }
 
 input[type=text], input[type=password] {
@@ -261,7 +262,7 @@ select {
   text-align: center;
   border: 1px solid #27235c;
   cursor: pointer;
-  box-shadow: inset 0 0 0 1px #000, 0 0 0 1px #000;
+  box-shadow: var(--highlight), 0 0 0 1px #000;
   background: var(--dropdown) center right 10px no-repeat, var(--button) !important;
   background-size: 10px auto, 100% !important;
   filter: none !important;
@@ -303,7 +304,7 @@ select:hover, select:focus, select:active {
 select[disabled], select[disabled]:hover, select[disabled]:focus, select[disabled]:active {
   color: #6c66bc !important;
   border: 1px solid #27235c !important;
-  box-shadow: inset 0 0 0 1px #000, 0 0 0 1px #000 !important;
+  box-shadow: var(--highlight), 0 0 0 1px #000 !important;
   background: #000 !important;
   background: var(--button) !important;
   opacity: .7;
@@ -323,14 +324,14 @@ select::-ms-expand {
 
 button, input[type=submit], input[type=reset], button, select {
   border-radius: 2px;
-  box-shadow: inset 0 0 0 1px #000, inset 0 0 0 1px #446;
+  box-shadow: var(--highlight), inset 0 0 0 1px #446;
   background: 8px 5px no-repeat, var(-button);
   cursor: pointer;
 }
 
 input[type=file]::file-selector-button {
   border-radius: 2px;
-  box-shadow: inset 0 0 0 1px #000, inset 0 0 0 1px #446, 0 0 0 1px #000;
+  box-shadow: var(--highlight), inset 0 0 0 1px #446, 0 0 0 1px #000;
   background: 8px 5px no-repeat, var(-button);
   cursor: pointer;
 }
@@ -367,7 +368,7 @@ input[type=submit]:hover, input[type=reset]:hover, button:hover, button:focus,
 input[type=submit]:focus, input[type=reset]:focus, select:hover, select:focus {
   color: #652787;
   border: 1px solid #652787;
-  box-shadow: inset 0 0 0 1px #000, inset 0 0 1px 1px #757;
+  box-shadow: var(--highlight), inset 0 0 1px 1px #757;
   background: #000;
   cursor: pointer;
 }
@@ -375,7 +376,7 @@ input[type=submit]:focus, input[type=reset]:focus, select:hover, select:focus {
 input[type=file]:hover::file-selector-button, input[type=file]:focus::file-selector-button {
   color: #652787;
   border: 1px solid #652787;
-  box-shadow: inset 0 0 0 1px #000, inset 0 0 1px 1px #757;
+  box-shadow: var(--highlight), inset 0 0 1px 1px #757;
   background: #000;
   cursor: pointer;
 }
@@ -394,7 +395,7 @@ input[type=submit]:active, input[type=reset]:active, button:active {
   color: #83529f !important;
   text-shadow: 0 1px 1px #3c1751;
   border: 1px solid #652787;
-  box-shadow: inset 0 0 0 1px #000, inset 3px 3px 3px #000;
+  box-shadow: var(--highlight), inset 3px 3px 3px #000;
   background: #652787;
   background-size: 12px, 100%;
   background-blend-mode: luminosity !important;
@@ -404,7 +405,7 @@ input[type=file]:active::file-selector-button {
   color: #83529f !important;
   text-shadow: 0 1px 1px #3c1751;
   border: 1px solid #652787;
-  box-shadow: inset 0 0 0 1px #000, inset 3px 3px 3px #000;
+  box-shadow: var(--highlight), inset 3px 3px 3px #000;
   background: #652787;
   background-size: 14px, 100%;
   background-blend-mode: luminosity !important;
@@ -582,38 +583,40 @@ input.hideconsole:active {
 
 input.check, button.check {
   padding: 5px 9px 5px 25px !important;
-  background: url(/themes/console/images/svg/yes.svg) 8px center no-repeat, var(--button) !important;
+  background: var(--yes) 8px center no-repeat, var(--button) !important;
   background-size: 14px, 100%, 100% !important;
 }
 
 input.check:hover, button.check:hover,
 input.check:focus, button.check:focus {
-  background: url(/themes/console/images/svg/yes.svg) 8px center no-repeat, var(--button_hover) !important;
+  background: var(--yes) 8px center no-repeat, var(--button_hover) !important;
   background-size: 14px, 100% !important;
 }
 
 input.check:active, button.check:active {
   padding: 5px 9px 5px 25px !important;
-  background: url(/themes/console/images/svg/yes.svg) 8px center no-repeat, var(--button_active) !important;
+  background: var(--yes) 8px center no-repeat, var(--button_active) !important;
   background-size: 14px, 100% !important;
 }
 
 input.check[value$="updates"], button.check[value$="updates"] {
   padding: 5px 9px 5px 25px !important;
-  background: url(/themes/console/images/buttons/update.png) 8px center no-repeat, var(--button) !important;
+  background: var(--refresh) 8px center no-repeat, var(--button) !important;
   background-size: 14px, 100%, 100% !important;
 }
 
 input.check[value$="updates"]:hover, button.check[value$="updates"]:hover,
 input.check[value$="updates"]:focus, button.check[value$="updates"]:focus {
-  background: url(/themes/console/images/buttons/update_hover.png) 8px center no-repeat, var(--button_hover) !important;
+  background: var(--refresh_hover) 8px center no-repeat, var(--button_hover) !important;
   background-size: 14px, 100% !important;
+  background-blend-mode: normal !important;
 }
 
 input.check[value$="updates"]:active, button.check[value$="updates"]:active {
   padding: 5px 9px 5px 25px !important;
-  background: url(/themes/console/images/buttons/update_hover.png) 8px center no-repeat, var(--button_active) !important;
+  background: var(--refresh_active) 8px center no-repeat, var(--button_active) !important;
   background-size: 14px, 100% !important;
+  background-blend-mode: luminosity !important;
 }
 
 input.delete, button.delete {
@@ -1149,7 +1152,7 @@ pre {
   font-size: 9pt;
   color: #c9ceff;
   border: var(--innerborder);
-  box-shadow: inset 0 0 0 1px #000, 0 0 0 4px #225;
+  box-shadow: var(--highlight), 0 0 0 4px #225;
   background: #000;
   background: repeating-linear-gradient(to bottom, #000, #002 2px);
 }
@@ -1192,14 +1195,14 @@ div.logo hr {
 
   .logo hr ~ a:hover {
     z-index: 10;
-    box-shadow: inset 0 0 0 1px #000;
+    box-shadow: var(--highlight);
     background: radial-gradient(at center bottom, rgba(96, 32, 96, .6) 0, rgba(0, 0, 0, 0) 80%),
                 linear-gradient(to right, rgba(64,0,64,.03), rgba(96,0,96,.1), rgba(64,0,64,.03)),
                 linear-gradient(to bottom, #1d1a2d 50%, #000 50%) !important;
 }
 
   .logo hr ~ a:active {
-    box-shadow: inset 0 0 0 1px #000, inset 0 0 1px 1px #737, inset 0 0 0 3px #101, inset 5px 5px 5px 2px #000;
+    box-shadow: var(--highlight), inset 0 0 1px 1px #737, inset 0 0 0 3px #101, inset 5px 5px 5px 2px #000;
     background: radial-gradient(at center bottom, rgba(160,48,160,.2), rgba(0, 0, 0, 0) 35%),
                 linear-gradient(to right, rgba(64,0,64,.1), rgba(64,0,64,.2), rgba(64,0,64,.1)),
                 linear-gradient(to bottom, #080820, #1d1a2d) !important;
@@ -1405,8 +1408,8 @@ div.logo hr {
 /* end proxy errors */
 
 .routersummary, .main {
-  background: repeating-linear-gradient(to right, rgba(0,0,16,.4) 2px, rgba(4,4,32,.4) 4px),
-              repeating-linear-gradient(to bottom, #000 2px, #000020 4px);
+  background: repeating-linear-gradient(to right, rgba(0,0,0,.4) 2px, rgba(4,4,32,.5) 4px),
+              repeating-linear-gradient(to bottom, rgba(0,0,0,.4) 2px, rgba(4,4,32,.5) 4px);
   background-size: 4px 100%, 100% 4px;
 }
 
@@ -1536,7 +1539,7 @@ div.logo hr {
 
 .routersummary h3:hover {
   box-shadow: inset 0 0 0 1px #101;
-  box-shadow: inset 0 0 0 1px #000, inset 0 0 1px 1px #a5a;
+  box-shadow: var(--highlight), inset 0 0 1px 1px #a5a;
   background: linear-gradient(to bottom, #001020 50%, #000 50%) !important;
   background: radial-gradient(at center bottom, rgba(96, 32, 96, .6) 0, rgba(0, 0, 0, 0) 80%),
               linear-gradient(to right, rgba(64,0,64,.03), rgba(96,0,96,.1), rgba(64,0,64,.03)),
@@ -1548,7 +1551,7 @@ div.logo hr {
 }
 
 .routersummary h3:active {
-  box-shadow: inset 0 0 0 1px #000, inset 0 0 1px 1px #737, inset 4px 4px 4px #000;
+  box-shadow: var(--highlight), inset 0 0 1px 1px #737, inset 4px 4px 4px #000;
   background: radial-gradient(at center bottom, rgba(160,48,160,.2), rgba(0, 0, 0, 0) 35%),
               linear-gradient(to right, rgba(64,0,64,.1), rgba(64,0,64,.2), rgba(64,0,64,.1)),
               linear-gradient(to bottom, #080820, #1d1a2d) !important;
@@ -1812,7 +1815,7 @@ div.logo hr {
 }
 
 .sb_netstatus, .sb_notice, #sb_tunnels + hr + h4 {
-  box-shadow: inset 0 0 0 1px #000, inset 0 0 2px 1px #191939, inset 0 0 5px 3px #002 !important;
+  box-shadow: var(--highlight), inset 0 0 2px 1px #191939, inset 0 0 5px 3px #002 !important;
 }
 
 .sb_notice {
@@ -1821,7 +1824,7 @@ div.logo hr {
   line-height: 110%;
   font-weight: bold;
   border: var(--innerborder);
-  box-shadow: inset 0 0 0 1px #000, inset 0 0 1px 1px #a3a !important;
+  box-shadow: var(--highlight), inset 0 0 1px 1px #a3a !important;
   background: #001;
 }
 
@@ -2175,7 +2178,7 @@ a:active #sb_bandwidthgraph, a:active #sb_graphstats {
   margin: -3px 0 -6px -6px;
   width: 194px;
   border: var(--innerborder);
-  box-shadow: inset 0 0 0 1px #000, inset 0 2px 2px 2px rgba(0,0,0,.45);
+  box-shadow: var(--highlight), inset 0 2px 2px 2px rgba(0,0,0,.45);
   background: #000;
   background: repeating-linear-gradient(to right, #000 1px, #000 2px, #003 2px, #003 4px);
   opacity: 1;
@@ -2195,7 +2198,7 @@ a:active #sb_bandwidthgraph, a:active #sb_graphstats {
 .percentBarInner {
   height: 14px;
   max-width: 100%;
-  box-shadow: inset 0 0 0 1px #000, inset 0 -2px 4px rgba(0,0,0,.6);
+  box-shadow: var(--highlight), inset 0 -2px 4px rgba(0,0,0,.6);
   background: #227;
   background: linear-gradient(to right, rgba(0,0,0,0) 100px, rgba(255,0,255,.1) 160px, rgba(0,0,255,.15)),
               linear-gradient(to bottom,  #33a, #226 50%, #003 50%, #000);
@@ -2283,7 +2286,7 @@ a:active #sb_bandwidthgraph, a:active #sb_graphstats {
   line-height: 120%;
   vertical-align: middle;
   text-shadow: 0 1px 1px #000;
-  box-shadow: 0 0 0 1px #003, inset 0 0 0 1px #000, inset 0 0 2px 1px #005;
+  box-shadow: 0 0 0 1px #003, var(--highlight), inset 0 0 2px 1px #005;
   box-sizing: border-box;
 }
 
@@ -2296,7 +2299,7 @@ a:active #sb_bandwidthgraph, a:active #sb_graphstats {
 .sb_netstatus.firewalled {
   color: #944;
   border: 1px solid #311;
-  box-shadow: 0 0 0 1px #003, inset 0 0 0 1px #000, inset 0 0 2px 1px #611 !important;
+  box-shadow: 0 0 0 1px #003, var(--highlight), inset 0 0 2px 1px #611 !important;
   background: #200010;
   background: radial-gradient(circle, #200010, #000);
 }
@@ -2304,7 +2307,7 @@ a:active #sb_bandwidthgraph, a:active #sb_graphstats {
 .sb_netstatus.error {
   color: #d00;
   border: 1px solid #a00;
-  box-shadow: 0 0 0 1px #003, inset 0 0 0 1px #000, inset 0 0 2px 1px #d00 !important;
+  box-shadow: 0 0 0 1px #003, var(--highlight), inset 0 0 2px 1px #d00 !important;
   background: #300;
   background: radial-gradient(circle, #300000, #100000);
 }
@@ -2312,7 +2315,7 @@ a:active #sb_bandwidthgraph, a:active #sb_graphstats {
 .sb_netstatus.warn, .sb_netstatus.clockskew {
   color: #911;
   border: 1px solid #400;
-  box-shadow: 0 0 0 1px #003, inset 0 0 0 1px #000, inset 0 0 2px 1px #700 !important;
+  box-shadow: 0 0 0 1px #003, var(--highlight), inset 0 0 2px 1px #700 !important;
   background: #100;
   background: radial-gradient(circle, #200000, #080000);
 }
@@ -2320,7 +2323,7 @@ a:active #sb_bandwidthgraph, a:active #sb_graphstats {
 .sb_netstatus.testing {
   color: #991;
   border: 1px solid #771;
-  box-shadow: 0 0 0 1px #003, inset 0 0 0 1px #000, inset 0 0 2px 1px #551 !important;
+  box-shadow: 0 0 0 1px #003, var(--highlight), inset 0 0 2px 1px #551 !important;
   background: #110;
   background: linear-gradient(to right, #220, #000, #220);
 }
@@ -2328,7 +2331,7 @@ a:active #sb_bandwidthgraph, a:active #sb_graphstats {
 .sb_netstatus.hidden, .sb_netstatus.vmcomm {
   color: #999;
   border: var(--innerborder);
-  box-shadow: 0 0 0 1px #222, inset 0 0 0 1px #000, inset 0 0 2px 1px #333 !important;
+  box-shadow: 0 0 0 1px #222, var(--highlight), inset 0 0 2px 1px #333 !important;
   background: #222;
   background: radial-gradient(circle, #333, #111);
 }
@@ -2336,7 +2339,7 @@ a:active #sb_bandwidthgraph, a:active #sb_graphstats {
 .sb_netstatus.running {
   color: #191;
   border: 1px solid rgba(16,96,16,.7);
-  box-shadow: 0 0 0 1px #003, inset 0 0 0 1px #000, inset 0 0 2px 1px #131 !important;
+  box-shadow: 0 0 0 1px #003, var(--highlight), inset 0 0 2px 1px #131 !important;
   background: #000300;
   background: radial-gradient(circle, #001600, #000300);
 }
@@ -2414,7 +2417,7 @@ background-position: 0;
   vertical-align: middle;
   color: #dd8;
   text-shadow: 0 1px 1px #000;
-  box-shadow: 0 0 0 1px #337, inset 0 0 0 1px #000, inset 0 0 2px 1px #26235c;
+  box-shadow: 0 0 0 1px #337, var(--highlight), inset 0 0 2px 1px #26235c;
   background: #001;
   box-sizing: border-box;
 }
@@ -2499,7 +2502,7 @@ img[src="/themes/console/images/i2plogo.png"]:focus, a:active img[src="/themes/c
   border: var(--innerborder);
   border-radius: 0 0 2px 2px;
   box-shadow: inset 0 0 0 1px #320951;
-  box-shadow: inset 0 0 0 1px #000, inset 0 0 0 2px #320951, inset 0 0 4px 2px #005;
+  box-shadow: var(--highlight), inset 0 0 0 2px #320951, inset 0 0 4px 2px #005;
   background: #001;
   background-image:url(/themes/console/images/info/errortriangle.png);
   background-position: 19px center;
@@ -2548,7 +2551,7 @@ div.sorry hr {
 /* end error msgs */
 
 .main, .news {
-  box-shadow: 0 1px 5px #000, inset 0 0 0 1px #000, inset 0 0 2px 1px #212 !important;
+  box-shadow: 0 1px 5px #000, var(--highlight), inset 0 0 2px 1px #212 !important;
 }
 
 .main {
@@ -2560,7 +2563,7 @@ div.sorry hr {
   font-size: 9pt;
   color: #c9ceff;
   border: 1px solid #26235c;
-  box-shadow: inset 0 0 0 1px #000, inset 0 0 2px 1px #26235c;
+  box-shadow: var(--highlight), inset 0 0 2px 1px #26235c;
 }
 
 .news {
@@ -2581,8 +2584,8 @@ div.sorry hr {
   margin: -11px 0 10px;
   padding: 1px 12px 6px;
   border-radius: 0 0 2px 2px;
-  box-shadow: inset 0 0 0 1px #000;
-  box-shadow: inset 0 0 0 1px #000, inset 0 0 2px 1px #191939, inset 0 0 5px 3px #001;
+  box-shadow: var(--highlight);
+  box-shadow: var(--highlight), inset 0 0 2px 1px #191939, inset 0 0 5px 3px #001;
   background: #000 url(images/earth.jpg) right -50px bottom -50px no-repeat;
   background: url(images/earth.jpg) right -50px bottom -50px no-repeat, linear-gradient(135deg, #000010, #000);
   background-size: 100px auto, 100%;
@@ -2685,7 +2688,7 @@ div.sorry hr {
   border: 1px solid #003;
   border-radius: 15px;
   box-shadow: 0 0 0 1px #000;
-  box-shadow: 0 0 1px rgba(0,0,0,.8), inset 0 0 0 1px #000;
+  box-shadow: 0 0 1px rgba(0,0,0,.8), var(--highlight);
   background: #002;
 }
 
@@ -2786,7 +2789,7 @@ div.sorry hr {
 }
 
 .main#config_update .messages {
-  box-shadow: inset 0 0 0 1px #000 !important;
+  box-shadow: var(--highlight) !important;
   background: var(--infohelp) no-repeat 15px center, url(images/earth.jpg) bottom right no-repeat #000 !important;
   background: var(--infohelp) no-repeat 15px center, url(images/earth.jpg) bottom right no-repeat, linear-gradient(135deg, #000020, #000) !important;
   background-size: 28px, 80px auto, 100% !important;
@@ -2819,7 +2822,7 @@ div.confignav {
   text-align: center;
   font-weight: bold !important;
   border: 1px solid #26235c;
-  box-shadow: inset 0 0 0 1px #000;
+  box-shadow: var(--highlight);
   background: #010010 url(images/titles.png) center center repeat-x !important;
   background: var(--th) !important;
 }
@@ -2830,7 +2833,7 @@ div.confignav {
   min-width: 60px !important;
   display: inline-block;
   border: 1px solid #26235c;
-  box-shadow: inset 0 0 0 1px #000;
+  box-shadow: var(--highlight);
   box-sizing: border-box;
 }
 
@@ -2843,11 +2846,11 @@ div.confignav {
 .tab {
   background: #010010 url(images/titles.png) center center repeat-x;
   background: linear-gradient(to bottom, #181828 50%, #000 50%) !important;
-  box-shadow: inset 0 0 0 1px #000, inset 0 0 1px 0 #446;
+  box-shadow: var(--highlight), inset 0 0 1px 0 #446;
 }
 
 .tab:hover {
-  box-shadow: inset 0 0 0 1px #000, inset 0 0 1px 1px #757;
+  box-shadow: var(--highlight), inset 0 0 1px 1px #757;
   background: #000 !important;
   background: radial-gradient(at center bottom, rgba(96, 32, 96, .6) 0, rgba(0, 0, 0, 0) 90%), var(--button_hover) !important;
 }
@@ -2859,7 +2862,7 @@ div.confignav {
 }
 
 .tab:active {
-  box-shadow: inset 0 0 0 1px #000, inset 3px 3px 3px 1px #2d103f !important;
+  box-shadow: var(--highlight), inset 3px 3px 3px 1px #2d103f !important;
   background: #652787 !important;
   background: radial-gradient(at center bottom, rgba(200, 96, 200, .8) 0, rgba(0, 0, 0, 0) 90%), linear-gradient(to bottom, #652787 50%, #501f6c 50%) !important;
 }
@@ -2873,7 +2876,7 @@ div.confignav {
   padding: 6px 14px;
   color: #c9ceff;
   text-shadow: 0 1px 1px #000;
-  box-shadow: inset 0 0 0 1px #000, inset 0 0 1px 1px #404, inset 3px 3px 2px #000;
+  box-shadow: var(--highlight), inset 0 0 1px 1px #404, inset 3px 3px 2px #000;
   background: #040033;
   background: linear-gradient(to bottom, #1a1b2f 50%, #000 50%) !important;
   background: radial-gradient(at center bottom, rgba(128, 0, 128, .4) 0, rgba(0, 0, 0, 0) 90%), linear-gradient(to right, rgba(96,0,96,.2), rgba(96,0,96,.2)), linear-gradient(to bottom, #1a1b2f 50%, #000 50%) !important;
@@ -3094,7 +3097,7 @@ div.messages {
   font-size: 9.5pt;
   color: #c9ceff !important;
   border: var(--innerborder);
-  box-shadow: inset 0 0 0 1px #000, inset 0 0 2px 1px #808 !important;
+  box-shadow: var(--highlight), inset 0 0 2px 1px #808 !important;
   background: #000 var(--infohelp) no-repeat 15px center;
   background-size: 28px !important;
 }
@@ -3180,7 +3183,7 @@ to {
   max-width: 97%;
   max-width: calc(100% - 20px);
   vertical-align: top;
-  box-shadow: inset 0 0 0 1px #000, inset 0 0 2px 1px #26235c;
+  box-shadow: var(--highlight), inset 0 0 2px 1px #26235c;
   border: var(--innerborder);
   background: rgba(0,0,0,.3);
 }
@@ -3196,7 +3199,7 @@ to {
 .graphspanel a img:hover {
   padding: 3px;
   text-align: center !important;
-  box-shadow: inset 0 0 0 1px #000, inset 0 0 2px 1px #83529f;
+  box-shadow: var(--highlight), inset 0 0 2px 1px #83529f;
   border: 1px solid #83529f;
   background: #000;
   opacity: 1;
@@ -3370,7 +3373,7 @@ th {
 
 tr {
   vertical-align: middle;
-  box-shadow: inset 0 0 0 1px #000, inset 0 0 2px 1px #00003a;
+  box-shadow: var(--highlight), inset 0 0 2px 1px #00003a;
 }
 
 tr:hover {
@@ -3602,7 +3605,7 @@ h1, h2, h3, .th_title {
 }
 
 h1, h2, h3 {
-  box-shadow: inset 0 0 0 1px #000;
+  box-shadow: var(--highlight);
 }
 
 /*
@@ -3684,7 +3687,7 @@ h4 {
 }
 
 h2, h3, h4, .confignav {
-  box-shadow: inset 0 0 0 1px #000;
+  box-shadow: var(--highlight);
 }
 
 .news h3, #newspage h3 {
@@ -3774,7 +3777,7 @@ div[lang="de"] .twocol, div[lang="pt"] .twocol, div[lang="es"] .twocol, div[lang
   padding: 10px;
   border: 1px solid #002;
   border-radius: 2px;
-  box-shadow: inset 0 0 0 1px #000;
+  box-shadow: var(--highlight);
   background: rgba(0,0,48,.3);
 }
 
@@ -3987,7 +3990,7 @@ h3#finishedjobs + ol li, h3#scheduledjobs + ol li, h3#activejobs + ol li, h3#rea
   list-style: none !important;
   font-size: 95%;
   border: 1px solid #1e1c4a;
-  box-shadow: inset 0 0 0 1px #000, inset 0 0 2px 1px #225 !important;
+  box-shadow: var(--highlight), inset 0 0 2px 1px #225 !important;
 }
 
 #activejobs + ol li, #scheduledjobs + ol li, #readyjobs + ol li, #finishedjobs + ol li, #schedjobs li {
@@ -4106,7 +4109,7 @@ h3[id="udpcon"] {
 }
 
 #ntcpconnections td, #udpconnections td, #tunnels td, #profiles td {
-  box-shadow: inset 0 0 0 1px #000, inset 0 0 2px 0 #26235c;
+  box-shadow: var(--highlight), inset 0 0 2px 0 #26235c;
 }
 
 #ntcpconnections tr:hover td, #udpconnections tr:hover td, #tunnels tr:hover td, #profiles tr:hover td {
@@ -4203,7 +4206,7 @@ h3[id="udpcon"] {
 }
 
 .sortup, .sortdown {
-  box-shadow: inset 0 0 0 1px #000;
+  box-shadow: var(--highlight);
   opacity: 0.5;
 }
 
@@ -4366,7 +4369,7 @@ tr#addnew {
   text-overflow: ellipsis;
   white-space: nowrap;
   text-align: center;
-  box-shadow: inset 0 0 0 1px #000;
+  box-shadow: var(--highlight);
   border: var(--innerborder);
   background: linear-gradient(to bottom, #020020, #000);
 }
@@ -4386,7 +4389,7 @@ tr#addnew {
 .themechoice:active .themelabel, .langselect:active .ui_lang {
   color: #c9ceff !important;
   border-top: 1px solid #652787 !important;
-  box-shadow: inset 0 0 0 1px #000, inset 3px 3px 2px #1e0b28 !important;
+  box-shadow: var(--highlight), inset 3px 3px 2px #1e0b28 !important;
   background: #652787 !important;
 }
 
@@ -4487,7 +4490,7 @@ p#helptranslate {
   text-overflow: ellipsis;
   color: #7670c2;
   border-top: var(--innerborder) !important;
-  box-shadow: inset 0 0 0 1px #000;
+  box-shadow: var(--highlight);
   background: #001;
   background: linear-gradient(to bottom, #141221, #001);
 }
@@ -4583,7 +4586,7 @@ td#themeselect {
 
 .langselect input[name="lang"]:active + img + div.ui_lang {
   color: #c9ceff !important;
-  box-shadow: inset 0 0 0 1px #000, inset 3px 3px 2px #1e0b28 !important;
+  box-shadow: var(--highlight), inset 3px 3px 2px #1e0b28 !important;
 }
 
 .langselect:hover, .langselect:active {
@@ -4656,7 +4659,7 @@ td#themeselect {
   color: #7670c2;
   border-top: var(--innerborder);
   border-radius: 0 0 2px 2px;
-  box-shadow: inset 0 0 0 1px #000;
+  box-shadow: var(--highlight);
   background: #001;
   background: linear-gradient(to bottom, #141221, #001);
 }
@@ -4897,7 +4900,7 @@ table#reseedconfig textarea {
   list-style: none !important;
   text-shadow: 0 1px 1px #000;
   border: var(--innerborder);
-  box-shadow: inset 0 0 0 1px #000, inset 0 0 1px 1px #26235c;
+  box-shadow: var(--highlight), inset 0 0 1px 1px #26235c;
   background: linear-gradient(to bottom, #002, #001);
   break-inside: avoid;
   page-break-inside: avoid;
@@ -4915,19 +4918,19 @@ table#reseedconfig textarea {
   top: -1px;
   right: -1px;
   border: var(--innerborder);
-  box-shadow: inset 0 0 0 1px #000, inset 0 0 1px 1px #26235c;
+  box-shadow: var(--highlight), inset 0 0 1px 1px #26235c;
   background: linear-gradient(to bottom, #002, #001);
   filter: none;
   vertical-align: middle;
 }
 
 #banlist li a[href^="configpeer"]:hover, #banlist li a[href^="configpeer"]:focus {
-  box-shadow: inset 0 0 0 1px #000;
+  box-shadow: var(--highlight);
   background: linear-gradient(to bottom, #313 50%, #000 50%);
 }
 
 #banlist li a[href^="configpeer"]:active {
-  box-shadow: inset 0 0 0 1px #000, inset 3px 3px 3px 1px #2d103f !important;
+  box-shadow: var(--highlight), inset 3px 3px 3px 1px #2d103f !important;
   background: linear-gradient(to bottom, #652787 50%, #501f6c 50%) !important;
 }
 
@@ -7336,7 +7339,7 @@ table#jardump {
   margin: 0;
   text-align: center;
   border: 1px solid #120f35;
-  box-shadow: inset 0 0 0 1px #000;
+  box-shadow: var(--highlight);
 }
 
 .bucketsContainer {
@@ -7366,7 +7369,7 @@ table#jardump {
   white-space: nowrap !important;
   color: #770;
   font-weight: bold;
-  box-shadow: 0 0 0 1px #003, inset 0 0 0 1px #000;
+  box-shadow: 0 0 0 1px #003, var(--highlight);
   background: #002;
   -ms-user-select: all;
   -moz-user-select: all;
@@ -7477,7 +7480,7 @@ div.app {
   text-align: center !important;
   border: var(--innerborder);
   opacity: 0.8;
-  box-shadow: inset 0 0 0 1px #000;
+  box-shadow: var(--highlight);
   background: #000;
   background: linear-gradient(to bottom, #020020, #000);
   will-change: transform;
@@ -7499,7 +7502,7 @@ div.app:hover {
 
 div.app:active .applabel {
   background: #652787 !important;
-  box-shadow: inset 0 0 0 1px #000, inset 3px 3px 2px #1e0b28;
+  box-shadow: var(--highlight), inset 3px 3px 2px #1e0b28;
   transition: ease box-shadow .05s !important;
 }
 
@@ -7559,7 +7562,17 @@ h4.app + .appgroup div.app:last-child {
 }
 
 h4.app2 + .appgroup div.app:last-child {
-  margin-bottom: 15px;
+  margin-bottom: 9px;
+}
+
+@media screen and (max-width: 1499px) {
+  h4.app + .appgroup div.app:last-child {
+   margin-bottom: 12px;
+  }
+
+  h4.app2 + .appgroup div.app:last-child {
+    margin-bottom: 8px;
+  }
 }
 
 div.appgroup {
@@ -7646,7 +7659,7 @@ div.app:active img {
   border: none;
   border-top: var(--innerborder);
   border-radius: 0 0 2px 2px;
-  box-shadow: inset 0 0 0 1px #000;
+  box-shadow: var(--highlight);
   background: #001;
   background: linear-gradient(to bottom, #141221, #001);
 }
@@ -8010,7 +8023,7 @@ a[href^="viewprofile"]::after {
   border: var(--innerborder);
   border-radius: 2px;
   background: linear-gradient(to right, #000, #002 80%);
-  box-shadow: inset 0 0 0 1px #000;
+  box-shadow: var(--highlight);
 }
 
 #sybilnav ul li:hover {
@@ -8212,7 +8225,7 @@ textarea#advancedsettings {
   word-break: break-all;
   border: none !important;
   border-radius: 0;
-  box-shadow: inset 0 0 0 1px #000;
+  box-shadow: var(--highlight);
 }
 
 textarea#advancedsettings:focus {
@@ -8456,7 +8469,7 @@ table#externali2cp th {
 th.th_title {
   padding: 9px 10px !important;
   text-align: left;
-  box-shadow: inset 0 0 0 1px #000;
+  box-shadow: var(--highlight);
 }
 
 input#hideme {
@@ -8655,7 +8668,7 @@ table#configstats {
   display: none;
   position: absolute;
   top: -24px;
-  box-shadow: 0 0 0 1px #337, 0 0 2px 2px #000, inset 0 0 0 1px #000;
+  box-shadow: 0 0 0 1px #337, 0 0 2px 2px #000, var(--highlight);
   background: #001;
 }*/
 
@@ -8672,11 +8685,11 @@ p#enablefullstats {
 /* infohelp/warn overrides and misc ornamentation */
 
 .infohelp, #helptranslate, #consolepass tr:first-child td, #gatherstats {
-  box-shadow: inset 0 0 0 1px #000, inset 0 0 2px 1px #606;
+  box-shadow: var(--highlight), inset 0 0 2px 1px #606;
 }
 
 .infowarn {
-  box-shadow: inset 0 0 0 1px #000, inset 0 0 2px 1px rgba(255,0,0,.6);
+  box-shadow: var(--highlight), inset 0 0 2px 1px rgba(255,0,0,.6);
 }
 
 table#bugreports td.infohelp {
@@ -9126,7 +9139,7 @@ img + tt {
   width: calc(100% - 24px);
   margin: 3px;
   padding: 4px 8px;
-  box-shadow: inset 0 0 0 1px #000, inset 0 0 1px 2px #003, 0 0 0 3px #000;
+  box-shadow: var(--highlight), inset 0 0 1px 2px #003, 0 0 0 3px #000;
   border: 1px solid #225;
   background: #002;
   background: linear-gradient(135deg, #001 5%, #000020 15%, #001);
@@ -10379,7 +10392,7 @@ b.suboption {
   text-shadow: 0 1px 1px #000;
   border: var(--innerborder);
   border-bottom: none;
-  box-shadow: inset 0 0 0 1px #000;
+  box-shadow: var(--highlight);
   background: #002;
   background: linear-gradient(to right, rgba(0,0,16,.5), rgba(0,0,0,0) 30%), linear-gradient(to bottom, #141221 50%, #001 50%) !important;
 }
@@ -10451,13 +10464,13 @@ b.suboption {
 
 #i2pupdates .optionsingle, #homesites.formaction, #homeapps.formaction, #oldhome tr:last-child, #bandwidthconfig .optionsave,
 #clientsconfig.formaction, #addkeyring tr:last-child td, #loggingoptions tr:last-child td, #webappconfigactions.formaction, #configstats .optionsave {
-  box-shadow: inset 0 0 0 1px #000, inset 0 0 0 2px transparent, inset 0 0 2px 1px #191939, inset 0 0 5px 3px #002 !important;
+  box-shadow: var(--highlight), inset 0 0 0 2px transparent, inset 0 0 2px 1px #191939, inset 0 0 5px 3px #002 !important;
   background: linear-gradient(to bottom, #001, #030306) !important;
 }
 
 #config_reseed .optionsingle.optiontextarea, #reseedssl, #config_reseed td.optionsave,
 #manualreseed #reseedurl, #manualreseed  #reseedcreatefile, #manualreseed #reseedzip {
-  box-shadow: inset 0 0 0 1px #000, inset 0 0 2px 1px #191939 !important;
+  box-shadow: var(--highlight), inset 0 0 2px 1px #191939 !important;
 }
 
 #manualreseed #reseedurl, #manualreseed #reseedcreatefile, #manualreseed #reseedzip {
@@ -10467,7 +10480,7 @@ b.suboption {
 #config_reseed td.optionsave, #config_reseed #reseedconfig td.optionsave, #bandwidthconfig .optionsave, #i2pupdates .optionsave, #externali2cp .optionsave, #config_advanced .optionsave, #config_ui .formaction, #graphing.formaction, #pluginconfigactions,
 #tunnelconfigsave, #sidebardefaults, #refreshsidebar tr, #addkeyring tr:last-child td, #clientsconfig, #homeapps, #homesites, #loggingoptions .optionsave {
   padding: 12px 8px !important;
-  box-shadow: inset 0 0 0 1px #000, inset 0 0 0 2px transparent, inset 0 0 2px 1px #191939, inset 0 0 5px 3px #002 !important;
+  box-shadow: var(--highlight), inset 0 0 0 2px transparent, inset 0 0 2px 1px #191939, inset 0 0 5px 3px #002 !important;
   background: linear-gradient(to bottom, #001, #030306) !important;
   opacity: 1 !important;
 }
@@ -10480,7 +10493,7 @@ b.suboption {
 #themeui.formaction {
   margin: 0 -7px 0;
   border-top: var(--innerborder);
-  box-shadow: inset 0 0 0 1px #000, inset 0 0 0 2px transparent, inset 0 0 2px 1px #191939, inset 0 0 5px 3px #002 !important;
+  box-shadow: var(--highlight), inset 0 0 0 2px transparent, inset 0 0 2px 1px #191939, inset 0 0 5px 3px #002 !important;
   background: linear-gradient(to bottom, #001, #030306) !important;
 }
 
@@ -10490,7 +10503,7 @@ b.suboption {
 
 .optionlist label, .optionlist .nowrap, #reseedconfig tr:nth-child(3) td label {
   background: var(--panel) !important;
-  box-shadow: inset 0 0 0 1px #000, inset 0 0 2px 1px #191939 !important;
+  box-shadow: var(--highlight), inset 0 0 2px 1px #191939 !important;
   opacity: 0.9;
 }
 
@@ -11028,7 +11041,7 @@ label:hover .optbox {
 }
 
 .statusnotes {
-  box-shadow: inset 0 0 0 1px #000 !important;
+  box-shadow: var(--highlight) !important;
   background: #002 !important;
   background: linear-gradient(to right, rgba(0,0,24,.6), rgba(0,0,8,.6), rgba(0,0,24,.6)), linear-gradient(to bottom, #002, #001) !important;
 }
@@ -11124,7 +11137,7 @@ label:hover .optbox {
   padding: 5px 8px;
   background: #002;
   background: linear-gradient(to bottom, #003, #001);
-  box-shadow: 0 0 0 1px #004, inset 0 0 0 1px #000;
+  box-shadow: 0 0 0 1px #004, var(--highlight);
   white-space: nowrap;
   text-align: center;
   margin: 3px;
@@ -11268,7 +11281,7 @@ tr:nth-child(4) .net_bwrate::before {
 }
 
 #installPluginFile, #installPluginUrl {
-  box-shadow: inset 0 0 0 1px #000, inset 0 0 2px 1px #191939 !important;
+  box-shadow: var(--highlight), inset 0 0 2px 1px #191939 !important;
   background: var(--panel);
 }
 
@@ -11320,14 +11333,14 @@ input[type="file"]:hover {
 
 #newfamily .optionsingle {
   padding: 5px 5px 0 45px;
-  box-shadow: inset 0 0 0 1px #000, inset 0 0 2px 1px #191939 !important;
+  box-shadow: var(--highlight), inset 0 0 2px 1px #191939 !important;
   background: url(/themes/console/images/info/label.png) 10px center no-repeat, var(--panel) !important;
   background-size: 28px, 100%, 100% !important;
 }
 
 #joinfamily .optionsingle {
   padding: 5px 5px 0 45px;
-  box-shadow: inset 0 0 0 1px #000, inset 0 0 2px 1px #191939 !important;
+  box-shadow: var(--highlight), inset 0 0 2px 1px #191939 !important;
   background: var(--key) 10px center no-repeat, var(--panel) !important;
   background-size: 28px, 100%, 100% !important;
 }
@@ -11679,7 +11692,7 @@ input[type="file"]:hover {
   text-align: center;
   border: 1px solid #113;
   border-radius: 2px 0 0 2px;
-  box-shadow: inset 0 0 0 1px #000;
+  box-shadow: var(--highlight);
   background: linear-gradient(to bottom, #003, #000);
   background: #002;
 }
@@ -12067,7 +12080,7 @@ input[type=radio], input[type=radio]:checked, input[type=radio][disabled], input
   vertical-align: middle !important;
   box-sizing: border-box;
   border: 1px solid #27235c !important;
-  box-shadow: inset 0 0 0 1px #000, inset 3px 3px 3px 1px #000;
+  box-shadow: var(--highlight), inset 3px 3px 3px 1px #000;
   background: #001;
   background: linear-gradient(to bottom, #030306, #112);
   -moz-appearance: none;
@@ -12088,7 +12101,7 @@ input[type=checkbox]:not(:checked)::before, input[type=radio]:not(:checked)::bef
 }
 
 .optbox:not(:checked) {
-  box-shadow: inset 0 0 0 1px #000, inset 3px 3px 3px 1px #000;
+  box-shadow: var(--highlight), inset 3px 3px 3px 1px #000;
 }
 
 .optbox:active {
@@ -12259,7 +12272,7 @@ input[type=checkbox][disabled]:checked, input[type=radio][disabled]:checked, inp
 
 #events h3 {
   margin-top: 6px;
-  box-shadow: inset 0 0 0 1px #000;
+  box-shadow: var(--highlight);
 }
 
 #events table {
@@ -12350,7 +12363,7 @@ html, body {
   font-size: 0 !important;
   color: #a00;
   text-shadow: 0 1px 1px #000;
-  box-shadow: 0 0 1px 0 #003, inset 0 0 0 1px #000, inset 0 0 1px 3px #113, inset 0 0 0 4px #000, inset 0 0 7px 3px #100;
+  box-shadow: 0 0 1px 0 #003, var(--highlight), inset 0 0 1px 3px #113, inset 0 0 0 4px #000, inset 0 0 7px 3px #100;
   background: repeating-linear-gradient(135deg, #113, #113 10px, #001 10px, #001 20px);
   background-position: right center;
   background-size: 125% 125%;
@@ -12671,7 +12684,7 @@ a:hover .sitemapLink {
   text-shadow: 0 1px 1px #000;
   border: none;
   border-top: var(--innerborder);
-  box-shadow: inset 0 0 0 1px #000;
+  box-shadow: var(--highlight);
   background: linear-gradient(to right, rgba(0,0,16,.5), rgba(0,0,0,0) 30%, rgba(16,0,16,.1)), linear-gradient(to bottom, #141221, #001);
 }
 
@@ -12725,7 +12738,7 @@ a:hover .sitemapLink {
   padding: 20px 10px 20px 60px !important;
   width: calc(100% - 70px);
   list-style: none;
-  box-shadow: 0 0 0 3px #113, inset 0 0 0 1px #000, inset 0 0 0 2px #26235c;
+  box-shadow: 0 0 0 3px #113, var(--highlight), inset 0 0 0 2px #26235c;
   background-blend-mode: luminosity;
   break-inside: avoid;
   page-break-inside: avoid;
@@ -12734,7 +12747,7 @@ a:hover .sitemapLink {
 }
 
 #helptoc li:hover {
-  box-shadow: 0 0 0 3px #336, inset 0 0 0 1px #000, inset 0 0 0 2px rgba(146,48,0,.7);
+  box-shadow: 0 0 0 3px #336, var(--highlight), inset 0 0 0 2px rgba(146,48,0,.7);
   background-blend-mode: normal;
   transition: ease box-shadow .3s;
 }
@@ -13085,7 +13098,7 @@ ul.statlist:last-of-type {
   padding: 10px 10px 5px 10px !important;
   width: calc(100% - 22px);
   display: inline-block;
-  box-shadow: inset 0 0 0 1px #000, inset 0 0 2px 1px #005;
+  box-shadow: var(--highlight), inset 0 0 2px 1px #005;
   border: 1px solid #27235c;
   background: #000010;
 }
@@ -13449,7 +13462,7 @@ h1[class], h1 {
   font-size: 18pt;
   font-weight: bold;
   letter-spacing: 0.1em;
-  box-shadow: inset 0 0 0 1px #000, inset 0 0 1px 1px #339;
+  box-shadow: var(--highlight), inset 0 0 1px 1px #339;
   opacity: .8;
 }
 
@@ -13618,7 +13631,7 @@ h1[class], h1 {
   vertical-align: middle;
   text-align: center;
   border: var(--innerborder);
-  box-shadow: inset 0 0 0 1px #000, inset 0 0 2px 1px #26235c;
+  box-shadow: var(--highlight), inset 0 0 2px 1px #26235c;
   max-width: calc(100% - 18px);
   animation: ease grid-fade 2s forwards;
 }
@@ -13633,7 +13646,7 @@ h1[class], h1 {
 }
 
 .graphContainer:hover {
-  box-shadow: inset 0 0 0 1px #000, inset 0 0 2px 1px #83529f;
+  box-shadow: var(--highlight), inset 0 0 2px 1px #83529f;
   border: 1px solid #83529f;
 }
 
@@ -14158,7 +14171,7 @@ h1 {
   position: absolute;
   top: 3px;
   z-index: 100;
-  box-shadow: inset 0 0 0 1px #000, inset 0 0 2px 1px #808 !important;
+  box-shadow: var(--highlight), inset 0 0 2px 1px #808 !important;
   background: #000;
   background: var(--infohelp) no-repeat 15px center,
               var(--close) right 6px top 6px no-repeat, #000 !important;

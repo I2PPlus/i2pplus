@@ -31,6 +31,7 @@ public class SearchHelper extends HelperBase {
         "i2pforum.i2p"             + S +     "http://i2pforum.i2p/search.php?keywords=%s" + SOURCE + S +
         "isitup.i2p"               + S +     "http://isitup.i2p/api/check?sitename=%s" + SOURCE + S +
         "legwork.i2p"              + S +     "http://legwork.i2p/yacysearch.html?query=%s" + "&maximumRecords=1000" + SOURCE + S +
+        "notbob.i2p"               + S +     "http://notbob.i2p/cgi-bin/defcon.cgi?search=%s" + SOURCE + S +
         "ransack.i2p"              + S +     "http://ransack.i2p/?q=%s" + SOURCE + S +
         "tome.i2p"                 + S +     "http://tome.i2p/search.php?q=%s" + SOURCE + S +
         "trac.i2p2.i2p"            + S +     "http://trac.i2p2.i2p/search?q=%s" + SOURCE + S +
