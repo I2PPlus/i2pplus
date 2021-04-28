@@ -1415,15 +1415,15 @@ div.logo hr {
 
 /* end proxy errors */
 
-.routersummary {
-  background: repeating-linear-gradient(to right, rgba(0,0,0,.5) 2px, rgba(4,4,32,.5) 4px),
-              repeating-linear-gradient(to bottom, rgba(0,0,0,.5) 2px, rgba(4,4,32,.5) 4px);
-}
-
 .routersummary, .main {
   background: repeating-linear-gradient(to right, rgba(0,0,0,.3) 2px, rgba(4,4,32,.5) 4px),
               repeating-linear-gradient(to bottom, rgba(0,0,0,.3) 2px, rgba(4,4,32,.5) 4px);
   background-size: 4px 100%, 100% 4px !important;
+}
+
+.routersummary {
+  background: repeating-linear-gradient(to right, rgba(0,0,0,.5) 2px, rgba(4,4,32,.5) 4px),
+              repeating-linear-gradient(to bottom, rgba(0,0,0,.5) 2px, rgba(4,4,32,.5) 4px);
 }
 
 /* sidebar */
