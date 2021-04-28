@@ -205,13 +205,13 @@ pre {
   background: url(/themes/console/images/itoopie_sm.png) 21px center no-repeat,
               repeating-linear-gradient(to bottom, rgba(0,16,0,.5) 2px, rgba(0,16,0,.5) 4px),
               var(--camotile);
-  background-size: auto 110px, 100%, 175px;
+  background-size: auto 110px, 100% 4px, 175px;
   background-position: 21px calc(50% + 16px);
 }
 
 #servleterror .warning {
   padding-left: 70px;
-  background-size: auto 90px, 100%, 175px;
+  background-size: auto 90px, 100% 4px, 175px;
   background-position: 12px calc(50% + 16px);
 }
 
@@ -880,9 +880,10 @@ h1 + .sorry, #console_404 .sorry {
   font-size: 10pt;
   border: var(--border);
   border-radius: 0 0 4px 4px;
-  box-shadow: inset 0 0 0 1px #000, inset 0 0 0 2px #700;
-  background:  #010 var(--err) no-repeat 15px 45%;
-  background-size: 44px;
+  box-shadow: inset 0 0 0 1px #000, inset 0 0 0 2px #600, inset 0 0 0 3px #000;
+  background:  var(--err) no-repeat 15px 45%, linear-gradient(to bottom, rgba(255,255,255,.05), rgba(0,0,0,.4)),
+               repeating-linear-gradient(to bottom, rgba(0,0,0,.4) 2px, rgba(0,48,0,.7) 4px) !important;
+  background-size: 44px, 100%, 100% 4px !important;
 }
 
 #error500 #warning.sorry {
@@ -1310,10 +1311,10 @@ div.messages {
   border: var(--border);
   font-weight: bold;
   font-size: 9.5pt;
-  box-shadow: inset 0 0 1px 0 #990 !important;
+  box-shadow: var(--lowlight), inset 0 0 2px 1px #171 !important;
   background: #000;
-  background: var(--infohelp) no-repeat 12px center, var(--hat) right 2px bottom 2px no-repeat #000;
-  background-size: 28px, auto 90%;
+  background: var(--infohelp) no-repeat 12px center, repeating-linear-gradient(to bottom, rgba(0,0,0,.8) 2px, rgba(0,64,0,.4) 4px), var(--hat) right 2px bottom -2px no-repeat #010;
+  background-size: 28px, 4px 100%, auto 90%;
 }
 
 .main:not(#config_update) div.messages, #config_update #messages {
