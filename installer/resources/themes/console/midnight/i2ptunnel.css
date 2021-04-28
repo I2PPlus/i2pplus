@@ -9,6 +9,7 @@
   --bodyfont: Droid Sans, Open Sans, Noto Sans, Ubuntu, Segoe UI, Bitstream Vera Sans, DejaVu Sans, Verdana, Lucida Grande, Helvetica, sans-serif;
   --monospaced: Droid Sans Mono, Noto Mono, DejaVu Sans Mono, Lucida Console, monospace;
   --title: repeating-linear-gradient(to right, rgba(0,0,48,.4) 2px, #000 4px), linear-gradient(to bottom, #003, #002 50%, #001 50%, #000);
+  --highlight: inset 0 0 0 1px #000;
 }
 
 body {
@@ -228,10 +229,10 @@ hr {
 }
 
 #globalTunnelControl.iframed.panel:first-child ~ .panel#clients::after {
-  content: "";
-  display: block;
-  height: 8px !important;
   width: 100%;
+  height: 8px !important;
+  display: block;
+  content: "";
 }
 
 #serverTunnels {
@@ -249,7 +250,7 @@ h2, h3 {
   font-size: 11pt;
   color: #c9ceff;
   border: 1px solid #26235c;
-  box-shadow: inset 0 0 0 1px #000;
+  box-shadow: var(--highlight);
   background: var(--title) !important;
   background-size: 4px 100%, 100%;
 }
@@ -429,7 +430,7 @@ _:-ms-lang(x), .tunnelProperties {
   font-weight: bold;
   border: 1px solid rgba(38,35,92,.3);
   border-radius: 3px;
-  box-shadow: inset 0 0 0 1px #000;
+  box-shadow: var(--highlight);
   background: var(--settings) 6px center no-repeat, linear-gradient(to bottom, rgba(16,16,48,.3), rgba(0,0,16,.3));
   background-size: 14px, 100% !important;
 }
@@ -459,7 +460,7 @@ _:-ms-lang(x), .tunnelProperties {
 }
 
 .tunnelName a:active {
-  box-shadow: inset 0 0 0 1px #000, inset 3px 3px 3px #000;
+  box-shadow: var(--highlight), inset 3px 3px 3px #000;
   background-image: url(images/configure_active.png);
   background-color: #001;
 }
@@ -525,7 +526,7 @@ textarea#statusMessages, textarea#statusMessages:active, textarea#statusMessages
   color: #69f;
   border: none !important;
   border-radius: 0;
-  box-shadow: inset 0 0 0 1px #000 !important;
+  box-shadow: var(--highlight) !important;
   background: linear-gradient(to bottom, #000 0%, #000019 100%) !important;
 }
 
@@ -681,7 +682,7 @@ a.control, input.control {
   text-decoration: none;
   color: #652787 !important;
   border: 1px solid #652787 !important;
-  box-shadow: inset 0 0 0 1px #000, inset 0 0 1px 1px #757;
+  box-shadow: var(--highlight), inset 0 0 1px 1px #757;
   background: #000 !important;
   background: linear-gradient(to bottom, #202 50%, #000 50%) !important;
 }
@@ -690,8 +691,8 @@ a.control, input.control {
   background: #652787 !important;
   color: #c9ceff !important;
   text-decoration: none;
-  box-shadow: inset 0 0 0 1px #000 !important;
-  box-shadow: inset 0 0 0 1px #000, inset 3px 3px 3px #000 !important;
+  box-shadow: var(--highlight) !important;
+  box-shadow: var(--highlight), inset 3px 3px 3px #000 !important;
 }
 
 a.control {
@@ -704,7 +705,7 @@ button.control {
 }
 
 button, input[type=submit], input[type="reset"], .control, select {
-  box-shadow: inset 0 0 0 1px #000, inset 0 0 1px 1px #446;
+  box-shadow: var(--highlight), inset 0 0 1px 1px #446;
 }
 
 select {
@@ -717,7 +718,7 @@ select {
   font-weight: bold;
   color: #6c66bc;
   border: 1px solid #26225c;
-  box-shadow: inset 0 0 0 1px #000, inset 0 0 1px 1px #446, 0 0 0 1px #000;
+  box-shadow: var(--highlight), inset 0 0 1px 1px #446, 0 0 0 1px #000;
   background: var(--dropdown) center right 10px no-repeat, linear-gradient(to bottom, #11101c 50%, #000010 50%) !important;
   background-size: 10px auto, 100% 100% !important;
   filter: none;
@@ -728,7 +729,7 @@ select:hover, select:focus, select:active {
   color: #652787;
   text-shadow: 0 1px 1px #000;
   border: 1px solid #652787 !important;
-  box-shadow: inset 0 0 0 1px #000, inset 0 0 1px 1px #757;
+  box-shadow: var(--highlight), inset 0 0 1px 1px #757;
   background: var(--dropdown_hover) center right 10px no-repeat, linear-gradient(to bottom, #202 50%, #000 50%) !important;
   background-size: 10px auto, 100% 100% !important;
 }
@@ -759,7 +760,7 @@ button, input[type=submit], input[type="reset"], a.control {
   padding: 7px 5px !important;
   text-align: right !important;
   border-top: 1px solid #26235c !important;
-  box-shadow: inset 0 0 0 1px #000, inset 0 0 2px 1px #191939, inset 0 0 5px 3px #002;
+  box-shadow: var(--highlight), inset 0 0 2px 1px #191939, inset 0 0 5px 3px #002;
   background: #000;
   background: linear-gradient(to bottom, #001, #000);
 }
@@ -1049,7 +1050,7 @@ input.tunnelName, input.tunnelDescriptionText, #userAgents, .tunnelDescription, 
   font-weight: bold;
   font-size: 11pt;
   border: 1px solid #005;
-  box-shadow: inset 0 0 0 1px #000, inset 0 0 4px 4px rgba(0,0,0,.4), 0 0 0 1px #000, 0 0 0 2px #001, 0 0 0 6px #002, 0 0 0 8px #003;
+  box-shadow: var(--highlight), inset 0 0 4px 4px rgba(0,0,0,.4), 0 0 0 1px #000, 0 0 0 2px #001, 0 0 0 6px #002, 0 0 0 8px #003;
   background: #002;
   background: repeating-linear-gradient(to bottom, #002 2px, #001 4px);
 }
@@ -1403,7 +1404,7 @@ input[type=text] + label {
   background: #000;
   background: linear-gradient(to bottom, #000 0%, #000019 100%);
   color: #7670c2;
-  box-shadow: inset 0 0 0 1px #000;
+  box-shadow: var(--highlight);
 }
 
 .displayText:hover, .displayText:focus {
@@ -1427,7 +1428,7 @@ input[type=text] + label {
   padding: 4px;
   color: #669;
   border: 1px solid #302b74 !important;
-  box-shadow: inset 0 0 0 1px #000 !important;
+  box-shadow: var(--highlight) !important;
   background: #000;
   opacity: .8;
   filter: none !important;
@@ -1598,7 +1599,7 @@ input[type=radio], input[type=radio]:checked, input[type=radio][disabled], input
   outline: none;
   vertical-align: middle !important;
   border: 1px solid #363181 !important;
-  box-shadow: inset 0 0 0 1px #000, inset 3px 3px 3px 1px #000;
+  box-shadow: var(--highlight), inset 3px 3px 3px 1px #000;
   background: #001;
   background: linear-gradient(to bottom, #030306, #112);
   box-sizing: border-box;
