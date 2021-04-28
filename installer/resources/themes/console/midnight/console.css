@@ -593,29 +593,39 @@ input.check:focus, button.check:focus {
 }
 
 input.check:active, button.check:active {
-  padding: 5px 9px 5px 25px !important;
+  padding: 5px 9px 5px 27px !important;
   background: var(--yes) 8px center no-repeat, var(--button_active) !important;
   background-size: 14px, 100% !important;
 }
 
 input.check[value$="updates"], button.check[value$="updates"] {
-  padding: 5px 9px 5px 25px !important;
+  padding: 5px 9px 5px 27px !important;
   background: var(--refresh) 8px center no-repeat, var(--button) !important;
-  background-size: 14px, 100%, 100% !important;
+  background-size: 16px, 100%, 100% !important;
 }
 
 input.check[value$="updates"]:hover, button.check[value$="updates"]:hover,
 input.check[value$="updates"]:focus, button.check[value$="updates"]:focus {
   background: var(--refresh_hover) 8px center no-repeat, var(--button_hover) !important;
-  background-size: 14px, 100% !important;
+  background-size: 16px, 100% !important;
   background-blend-mode: normal !important;
 }
 
 input.check[value$="updates"]:active, button.check[value$="updates"]:active {
-  padding: 5px 9px 5px 25px !important;
+  padding: 5px 9px 5px 27px !important;
   background: var(--refresh_active) 8px center no-repeat, var(--button_active) !important;
-  background-size: 14px, 100% !important;
+  background-size: 16px, 100% !important;
   background-blend-mode: luminosity !important;
+}
+
+@media screen and (max-width: 1499px) {
+  input.check[value$="updates"], button.check[value$="updates"],
+  input.check[value$="updates"]:hover, button.check[value$="updates"]:hover,
+  input.check[value$="updates"]:focus, button.check[value$="updates"]:focus,
+  input.check[value$="updates"]:active, button.check[value$="updates"]:active {
+    padding-left: 26px !important;
+    background-size: 14px, 100% !important;
+  }
 }
 
 input.delete, button.delete {
