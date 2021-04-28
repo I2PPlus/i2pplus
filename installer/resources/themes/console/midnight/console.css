@@ -43,8 +43,8 @@ body {
 
 /* preload button mouseovers */
 body:not(old) {
-  background: repeating-linear-gradient(to right, #001 2px, rgba(0,0,0,.2) 4px),
-              repeating-linear-gradient(to bottom, rgba(0,0,32,.5) 2px, rgba(0,0,0,.3) 4px),
+  background: repeating-linear-gradient(to right, #001 2px, rgba(0,0,0,.3) 4px),
+              repeating-linear-gradient(to bottom, rgba(0,0,32,.6) 2px, rgba(0,0,0,.3) 4px),
               url(images/tile.png),
               url(/themes/console/images/buttons/clean_hover.png) no-repeat,
               url(/themes/console/images/buttons/delete_hover.png) no-repeat,
@@ -1408,8 +1408,8 @@ div.logo hr {
 /* end proxy errors */
 
 .routersummary, .main {
-  background: repeating-linear-gradient(to right, rgba(0,0,16,.4) 2px, rgba(4,4,32,.4) 4px),
-              repeating-linear-gradient(to bottom, #000 2px, #000020 4px);
+  background: repeating-linear-gradient(to right, rgba(0,0,0,.7) 2px, rgba(4,4,32,.6) 4px),
+              repeating-linear-gradient(to bottom, #000 2px, #002 4px);
   background-size: 4px 100%, 100% 4px;
 }
 
@@ -7562,7 +7562,17 @@ h4.app + .appgroup div.app:last-child {
 }
 
 h4.app2 + .appgroup div.app:last-child {
-  margin-bottom: 15px;
+  margin-bottom: 9px;
+}
+
+@media screen and (max-width: 1499px) {
+  h4.app + .appgroup div.app:last-child {
+   margin-bottom: 12px;
+  }
+
+  h4.app2 + .appgroup div.app:last-child {
+    margin-bottom: 8px;
+  }
 }
 
 div.appgroup {
