@@ -296,7 +296,7 @@ h2::first-letter {
 }
 
 #tunnelEditPage h2, #tunnelEditPage h3, #registration h2, #registration h3 {
-  background: var(--settings_static) 8px center no-repeat, var(--title) !important;
+  background: var(--settings_inert) 8px center no-repeat, var(--title) !important;
   background-size: 16px, 4px 100%, 100% !important;
 }
 
