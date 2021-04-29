@@ -6458,8 +6458,12 @@ table[id$="logs"] ul {
   background: #113;
 }
 
-#routerlogs tr:last-child, #routerlogs tr:last-child td {
+#routerlogs tr:last-child, #routerlogs tr:last-child td, #wrapperlogs tr:last-child {
   background: none;
+}
+
+#wrapperlogs tr:last-child td {
+  background: rgba(10,10,34,.6);
 }
 
 .logtable ul li:not(old) {
