@@ -13127,7 +13127,7 @@ ul.statlist:last-of-type {
   width: calc(100% - 22px);
   display: inline-block;
   box-shadow: var(--highlight), inset 0 0 2px 1px #005;
-  border: 1px solid #27235c;
+  border: var(--innerborder);
   background: #000010;
 }
 
