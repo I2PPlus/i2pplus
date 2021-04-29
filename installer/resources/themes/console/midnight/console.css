@@ -3398,7 +3398,8 @@ tr:hover {
   box-shadow: none;
 }
 
-tr:nth-child(even), #netdbversions tr:nth-child(even), #netdbtransports tr:nth-child(even), #netdbcountrylist tr:nth-child(even), #netdbtiers tr:nth-child(even),
+tr:nth-child(even), #netdbversions tr:nth-child(even), #netdbtransports tr:nth-child(even),
+#netdbcountrylist tr:nth-child(even), #netdbtiers tr:nth-child(even),
 #pluginconfig table tr:nth-child(even) {
   vertical-align: middle;
   background: #080818;
@@ -8264,6 +8265,16 @@ textarea#advancedsettings {
   border: none !important;
   border-radius: 0;
   box-shadow: var(--highlight);
+}
+
+#advconf tr:nth-child(2) {
+  background: none !important;
+}
+
+textarea#advancedsettings:not(:focus) {
+  background: repeating-linear-gradient(to right, rgba(0,0,0,.1) 2px, rgba(0,0,32,.1) 4px),
+              linear-gradient(to bottom, rgba(0,0,0,.4), rgba(0,0,16,.4));
+  background-size: 4px 100%, 100%;
 }
 
 textarea#advancedsettings:focus {
