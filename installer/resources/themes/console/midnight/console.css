@@ -7502,7 +7502,6 @@ div.app {
   float: left;
   text-align: center !important;
   border: var(--innerborder);
-  opacity: 0.8;
   box-shadow: var(--highlight);
   background: #000;
   background: linear-gradient(to bottom, #020020, #000);
