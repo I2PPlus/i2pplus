@@ -21,6 +21,7 @@
   --tr: linear-gradient(to bottom, #001, #000);
   --th: repeating-linear-gradient(to right, rgba(0,0,64,.4) 2px, #000 4px), linear-gradient(to bottom, #000018, #000);
   --panel: linear-gradient(to bottom, #080818, #040410);
+  --helpsection: repeating-linear-gradient(to bottom, #080820 2px, #010010 4px);
   --highlight: inset 0 0 0 1px #000;
   --element: linear-gradient(to bottom, #224, #000);
 }
@@ -6441,8 +6442,23 @@ table[id$="logs"] ul {
 }
 
 .main#logs li {
+  margin: 0 0 0 10px !important;
+  padding: 0 5px 0 8px !important;
   word-break: break-all;
   font-family: var(--monospaced);
+  background: #001;
+}
+
+#logs li:nth-child(odd) {
+  background: #002;
+}
+
+.main#logs li:last-child {
+  margin-bottom: 7px !important;
+}
+
+.main#logs li:hover {
+  background: #003;
 }
 
 .logtable ul li:not(old) {
@@ -7502,7 +7518,6 @@ div.app {
   float: left;
   text-align: center !important;
   border: var(--innerborder);
-  opacity: 0.8;
   box-shadow: var(--highlight);
   background: #000;
   background: linear-gradient(to bottom, #020020, #000);
@@ -12794,49 +12809,49 @@ a:hover .sitemapLink {
 }
 
 #help_configuration {
-  background: var(--configure) 15px center no-repeat, repeating-linear-gradient(to bottom, #080820 2px, #010010 4px);
+  background: var(--configure) 15px center no-repeat, var(--helpsection);
   background-size: 32px, 100px 4px;
 }
 
 #help_configadv {
-  background: var(--configure) 15px center no-repeat, repeating-linear-gradient(to bottom, #080820 2px, #010010 4px);
+  background: var(--configure) 15px center no-repeat, var(--helpsection);
   background-size: 32px, 100px 4px;
 }
 
 #help_ui {
-  background: var(--ui) 15px center no-repeat, repeating-linear-gradient(to bottom, #080820 2px, #010010 4px);
+  background: var(--ui) 15px center no-repeat, var(--helpsection);
   background-size: 32px, 100px 4px;
 }
 
 #help_reseed {
-  background: var(--reseed) 15px center no-repeat, repeating-linear-gradient(to bottom, #080820 2px, #010010 4px);
+  background: var(--reseed) 15px center no-repeat, var(--helpsection);
   background-size: 32px, 100px 4px;
 }
 
 #help_faq, #help_glossary {
-  background: url(/themes/console/images/info/question.png) 15px center no-repeat, repeating-linear-gradient(to bottom, #080820 2px, #010010 4px);
+  background: url(/themes/console/images/info/question.png) 15px center no-repeat, var(--helpsection);
 }
 
 #help_troubleshoot {
-  background: var(--wrench) 15px center no-repeat, repeating-linear-gradient(to bottom, #080820 2px, #010010 4px);
+  background: var(--wrench) 15px center no-repeat, var(--helpsection);
   background-size: 32px, 100px 4px;
 }
 
 #help_newusers {
-  background: url(/themes/console/images/info/notice.png) 15px center no-repeat, repeating-linear-gradient(to bottom, #080820 2px, #010010 4px);
+  background: url(/themes/console/images/info/notice.png) 15px center no-repeat, var(--helpsection);
 }
 
 #help_legal {
-  background: url(/themes/console/images/info/legal.png) 15px center no-repeat, repeating-linear-gradient(to bottom, #080820 2px, #010010 4px);
+  background: url(/themes/console/images/info/legal.png) 15px center no-repeat, var(--helpsection);
 }
 
 #help_changelog {
-  background: var(--log_icon) 15px center no-repeat, repeating-linear-gradient(to bottom, #080820 2px, #010010 4px);
+  background: var(--log_icon) 15px center no-repeat, var(--helpsection);
   background-size: 32px, 100px 4px;
 }
 
 #help_webhosting {
-  background: var(--webserver) 15px center no-repeat, repeating-linear-gradient(to bottom, #080820 2px, #010010 4px);
+  background: var(--webserver) 15px center no-repeat, var(--helpsection);
   background-size: 32px, 100px 4px;
 }
 
