@@ -6453,7 +6453,7 @@ table[id$="logs"] ul {
 }
 
 .main#logs li:hover {
-  background: #003;
+  background: #113;
 }
 
 .logtable ul li:not(old) {
@@ -6465,7 +6465,7 @@ table[id$="logs"] ul {
 
 font[color="#006600"] { /* debug/notify */
   color: #c9ceff;
-  opacity: 0.8;
+  opacity: .8;
 }
 
 font[color="#bf00df"] { /* warning */
