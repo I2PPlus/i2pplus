@@ -4926,11 +4926,11 @@ button a:active {
 
 input.accept, button.accept {
   padding: 5px 9px 5px 26px;
-  background: url(/themes/console/images/svg/yes.svg) no-repeat 8px center, linear-gradient(to bottom, #fff, #efefff);
+  background: var(--yes) no-repeat 8px center, linear-gradient(to bottom, #fff, #efefff);
 }
 
 input.accept:hover, button.accept:hover, input.accept:focus, button.accept:focus {
-  background: url(/themes/console/images/svg/yes.svg) no-repeat 8px center, linear-gradient(to bottom, #eee, #fff);
+  background: var(--yes) no-repeat 8px center, linear-gradient(to bottom, #eee, #fff);
 }
 
 input.accept[value^="Unban"], button.accept[value^="Unban"] {
@@ -4965,12 +4965,12 @@ input.accept[value^="Filter"]:focus, button.accept[value^="Filter"]:focus {
 
 input.add, button.add {
   padding: 5px 7px 5px 25px;
-  background: url(/themes/console/images/svg/add.svg) no-repeat 8px center, linear-gradient(to bottom, #fff, #efefff);
+  background: var(--add) no-repeat 8px center, linear-gradient(to bottom, #fff, #efefff);
 }
 
 input.add:hover, button.add:hover,
 input.add:focus, button.add:focus {
-  background: url(/themes/console/images/svg/add.svg) no-repeat 8px center, linear-gradient(to bottom, #eee, #fff);
+  background: var(--add) no-repeat 8px center, linear-gradient(to bottom, #eee, #fff);
 }
 
 input.add[value^="Adjust"], button.add[value^="Adjust"] {
@@ -4985,13 +4985,13 @@ input.add[value^="Adjust"]:focus, button.add[value^="Adjust"]:focus {
 
 input.cancel, button.cancel {
   padding: 5px 9px 5px 24px;
-  background: url(/themes/console/images/svg/no.svg) no-repeat 8px center, linear-gradient(to bottom, #fff, #efefff);
-  background-size: 12px 12px, 100% !important;
+  background: var(--no) no-repeat 8px center, linear-gradient(to bottom, #fff, #efefff);
+  background-size: 12px, 100% !important;
 }
 
 input.cancel:hover, button.cancel:hover,
 input.cancel:focus, button.cancel:focus {
-  background: url(/themes/console/images/svg/no.svg) no-repeat 8px center, linear-gradient(to bottom, #eee, #fff);
+  background: var(--no) no-repeat 8px center, linear-gradient(to bottom, #eee, #fff);
 }
 
 input.showconsole {
@@ -5014,12 +5014,12 @@ input.hideconsole:hover, input.hideconsole:focus {
 
 input.check, button.check {
   padding: 5px 9px 5px 24px;
-  background: url(/themes/console/images/buttons/yes.png) no-repeat 8px center, linear-gradient(to bottom, #fff, #efefff);
+  background: var(--yes) no-repeat 8px center, linear-gradient(to bottom, #fff, #efefff);
 }
 
 input.check:hover, button.check:hover,
 input.check:focus, button.check:focus {
-  background: url(/themes/console/images/buttons/yes.png) no-repeat 8px center, linear-gradient(to bottom, #eee, #fff);
+  background: var(--yes) no-repeat 8px center, linear-gradient(to bottom, #eee, #fff);
 }
 
 input.check[value$="updates"], button.check[value$="updates"] {
@@ -5054,12 +5054,12 @@ input.delete[value^="Ban"]:focus, button.delete[value^="Ban"]:focus {
 
 input.download, button.download {
   padding: 5px 9px 5px 24px;
-  background: url(/themes/console/images/buttons/download.png) no-repeat 8px center, linear-gradient(to bottom, #fff, #efefff);
+  background: var(--download) no-repeat 8px center, linear-gradient(to bottom, #fff, #efefff);
 }
 
 input.download:hover, button.download:hover,
 input.download:focus, button.download:focus {
-  background: url(/themes/console/images/buttons/download.png) no-repeat 8px center, linear-gradient(to bottom, #eee, #fff);
+  background: var(--download_hover) no-repeat 8px center, linear-gradient(to bottom, #eee, #fff);
 }
 
 input.download[value^="Join"], button.download[value^="Join"] {
@@ -5139,7 +5139,7 @@ input.reload:focus, button.reload:focus {
 input.reload[value$="restart"], button.reload[value$="restart"] {
   padding: 5px 9px 5px 24px;
   background: url(images/restart.svg) no-repeat 8px center, linear-gradient(to bottom, #fff, #efefff);
-  background-size: 12px 12px, 100%;
+  background-size: 12px, 100%;
 }
 
 input.reload[value$="restart"]:hover, button.reload[value$="restart"]:hover,
@@ -5148,7 +5148,7 @@ input.reload[value$="restart"]:focus, button.reload[value$="restart"]:focus {
 }
 
 .formaction input.reload[value$="restart"] {
-  background-size: 12px 12px, 100% !important;
+  background-size: 12px, 100% !important;
 }
 
 input.reload[value^="Update"], button.reload[value^="Update"] {
@@ -5177,7 +5177,7 @@ input.reload[value="Force garbage collection"]:focus, button.reload[value="Force
 input.stop, button.stop {
   padding: 5px 9px 5px 24px;
   background: var(--shutdown) no-repeat 8px center, linear-gradient(to bottom, #fff, #efefff);
-  background-size: 12px 12px, 100% !important;
+  background-size: 12px, 100% !important;
 }
 
 input.stop:hover, button.stop:hover,
@@ -5219,11 +5219,11 @@ button.add.control:hover, button.add.control:focus {
 }
 
 button.delete.control {
-  background: url(/themes/console/images/buttons/delete.png) center center no-repeat, linear-gradient(to bottom, #fff, #efefff);
+  background: var(--nuke) center center no-repeat, linear-gradient(to bottom, #fff, #efefff);
 }
 
 button.delete.control:hover, button.delete.control:focus {
-  background: url(/themes/console/images/buttons/delete_hover.png) center center no-repeat, linear-gradient(to bottom, #eee, #fff);
+  background: var(--nuke) center center no-repeat, linear-gradient(to bottom, #eee, #fff);
 }
 
 button.check.control {
@@ -5235,11 +5235,11 @@ button.check.control:hover, button.check.control:focus {
 }
 
 button.download.control {
-  background: url(/themes/console/images/buttons/download.png) center center no-repeat, linear-gradient(to bottom, #fff, #efefff);
+  background: var(--download) center center no-repeat, linear-gradient(to bottom, #fff, #efefff);
 }
 
 button.download.control:hover, button.download.control:focus {
-  background: url(/themes/console/images/buttons/download.png) center center no-repeat, linear-gradient(to bottom, #eee, #fff);
+  background: var(--download_hover) center center no-repeat, linear-gradient(to bottom, #eee, #fff);
 }
 
 /* end project "X" */
@@ -5306,11 +5306,11 @@ button.download.control:hover, button.download.control:focus {
   text-indent: 0;
   text-align: left;
   min-width: 0;
-  background: url(/themes/console/images/buttons/download.png) center left 6px no-repeat, linear-gradient(to bottom, #fff, #efefff) !important;
+  background: var(--download) center left 6px no-repeat, linear-gradient(to bottom, #fff, #efefff) !important;
 }
 
 .routersummary .reload[value="Reseed"]:hover, .routersummary .reload[value="Reseed"]:focus {
-  background: url(/themes/console/images/buttons/download.png) center left 6px no-repeat, linear-gradient(to bottom, #eee, #fff) !important;
+  background: var(--download_hover) center left 6px no-repeat, linear-gradient(to bottom, #eee, #fff) !important;
   padding: 5px 7px 5px 22px !important;
 }
 
@@ -5326,7 +5326,7 @@ button.download.control:hover, button.download.control:focus {
 }
 
 .routersummary .download {
-  background: url(/themes/console/images/buttons/download.png) 6px center no-repeat, linear-gradient(to bottom, #fff, #efefff);
+  background: var(--download) 6px center no-repeat, linear-gradient(to bottom, #fff, #efefff);
   background-size: 14px, 100% !important;
   padding: 5px 7px 5px 22px !important;
 }
@@ -5353,22 +5353,22 @@ button.download.control:hover, button.download.control:focus {
 
 .routersummary .reload[value="restartImmediate"] {
   background: var(--restart) center left 6px no-repeat, linear-gradient(to bottom, #fff, #efefff) !important;
-  background-size: 12px 12px, 100% !important;
+  background-size: 12px, 100% !important;
 }
 
 .routersummary .reload[value="restartImmediate"]:hover, .routersummary .reload[value="restartImmediate"]:focus, .routersummary .reload[value="restartImmediate"]:active {
   background: var(--restart_hover) center left 6px no-repeat, linear-gradient(to bottom, #eee, #fff) !important;
-  background-size: 12px 12px, 100% !important;
+  background-size: 12px, 100% !important;
 }
 
 .routersummary .stop[value="shutdownImmediate"] {
   background: var(--shutdown) center left 6px no-repeat, linear-gradient(to bottom, #fff, #efefff) !important;
-  background-size: 12px 12px, 100% !important;
+  background-size: 12px, 100% !important;
 }
 
 .routersummary .stop[value="shutdownImmediate"]:hover, .routersummary .stop[value="shutdownImmediate"]:focus, .routersummary .stop[value="shutdownImmediate"]:active {
   background: var(--shutdown_hover) center left 6px no-repeat, linear-gradient(to bottom, #eee, #fff) !important;
-  background-size: 12px 12px, 100% !important;
+  background-size: 12px, 100% !important;
 }
 
 .routersummary .reload[value="Reseed"] {
@@ -5377,12 +5377,12 @@ button.download.control:hover, button.download.control:focus {
 }
 
 .routersummary .reload[value="Reseed"]:hover, .routersummary .reload[value="Reseed"]:focus, .routersummary .reload[value="Reseed"]:active {
-  background: url(/themes/console/images/buttons/download.png) center left 6px no-repeat, linear-gradient(to bottom, #eee, #fff);
+  background: var(--download) center left 6px no-repeat, linear-gradient(to bottom, #eee, #fff);
   background-size: 14px, 100% !important;
 }
 
 .routersummary .download:hover, .routersummary .download:focus, .routersummary .download:active {
-  background: url(/themes/console/images/buttons/download.png) 6px center no-repeat, linear-gradient(to bottom, #eee, #fff);
+  background: var(--download_hover) 6px center no-repeat, linear-gradient(to bottom, #eee, #fff);
   background-size: 14px, 100% !important;
   padding: 5px 7px 5px 22px !important;
 }
@@ -5647,9 +5647,9 @@ h3 + .statusnotes {
   background: repeating-linear-gradient(135deg, rgba(255,255,255,.5) 2px, rgba(240, 240, 255, .3) 3px, #fff 5px), #fff;
   columns: 440px auto;
   column-gap: 0;
+  -webkit-break-inside: avoid;
   break-inside: avoid;
   page-break-inside: avoid;
-  -webkit-break-inside: avoid;
 }
 
 #jobs ol.jobqueue:last-of-type {
@@ -5687,8 +5687,8 @@ h3#activejobs + ol li::before, h3#scheduledjobs + ol li::before, h3#readyjobs + 
   height: 12px;
   font-weight: bold;
   color: var(--inklite);
-  background: url(/themes/console/images/svg/yes.svg) 6px center no-repeat;
-  background-size: 12px 12px;
+  background: var(--yes) 6px center no-repeat;
+  background-size: 12px;
   content: "";
 }
 
@@ -5701,8 +5701,8 @@ h3#readyjobs + ol li::before {
 }
 
 h3#scheduledjobs + ol li::before {
-  background: url(/themes/console/images/svg/timer.svg) 6px center no-repeat;
-  background-size: 12px 12px;
+  background: var(--timer) 6px center no-repeat;
+  background-size: 12px;
 }
 
 #schedjobs {
@@ -5722,7 +5722,7 @@ h3#scheduledjobs + ol li::before {
 }
 
 #schedjobs tr:hover td:first-child {
-  background-image: url(/themes/console/images/svg/timer.svg) 6px center no-repeat;
+  background-image: var(--timer) 6px center no-repeat;
 }
 
 #schedjobs ul {
@@ -5743,8 +5743,8 @@ h3#scheduledjobs + ol li::before {
 @media screen and (min-width: 1200px) {
   #jobstats td:first-child, #jobstats tr:hover td:first-child {
     padding: 6px 0 6px 26px;
-    background: url(/themes/console/images/svg/yes.svg) 8px center no-repeat;
-    background-size: 12px 12px;
+    background: var(--yes) 8px center no-repeat;
+    background-size: 12px;
   }
 
   #jobstats tr:last-child td:first-child, #jobstats tr:last-child:hover td:first-child {
@@ -5765,8 +5765,8 @@ h3#scheduledjobs + ol li::before {
   margin-right: 10px;
   padding: 2px 10px 2px 16px;
   white-space: nowrap;
-  background: url(/themes/console/images/svg/timer.svg) left center no-repeat;
-  background-size: 12px 12px;
+  background: var(--timer) left center no-repeat;
+  background-size: 12px;
 }
 
 /* end /jobs */
@@ -6419,13 +6419,14 @@ table#addkeyring tr:last-child td {
 
 #refreshsidebar tr:first-child td {
   padding-left: 50px;
-  background: url(/themes/console/images/svg/timer.svg) 12px center no-repeat;
-  background: url(/themes/console/images/svg/timer.svg) 12px center no-repeat, linear-gradient(to bottom, #fafaff 50%, rgba(220,220,255,.3)), repeating-linear-gradient(135deg, rgba(255,255,255,.5) 2px, rgba(221, 221, 255, .3) 3px, #fff 4px), #fff !important;
+  background: var(--timer) 12px center no-repeat, linear-gradient(to bottom, #fafaff 50%, rgba(220,220,255,.3)),
+              repeating-linear-gradient(135deg, rgba(255,255,255,.5) 2px, rgba(221, 221, 255, .3) 3px, #fff 4px), #fff !important;
   background-size: 28px, 100%, 100% !important;
 }
 
 #refreshsidebar tr:first-child td:last-child {
-  background: linear-gradient(to bottom, #fafaff 50%, rgba(220,220,255,.3)), repeating-linear-gradient(135deg, rgba(255,255,255,.5) 2px, rgba(221, 221, 255, .3) 3px, #fff 4px), #fff !important;
+  background: linear-gradient(to bottom, #fafaff 50%, rgba(220,220,255,.3)),
+              repeating-linear-gradient(135deg, rgba(255,255,255,.5) 2px, rgba(221, 221, 255, .3) 3px, #fff 4px), #fff !important;
 }
 
 /* peers, profiles, tunnels */
@@ -12244,7 +12245,7 @@ div.app a, div.app a:visited, #sitemap a:link, #sitemap a:visited, .warning a {
 }
 
 #wizardpage .yes {
-  background: url(/themes/console/images/buttons/yes.png) center center no-repeat;
+  background: var(--yes) center center no-repeat;
 }
 
 #wizardpage .no {
@@ -12338,7 +12339,7 @@ th[aria-sort] {
 .sitelink {
   padding: 0 3px 0 16px;
   background: var(--link) 2px center no-repeat;
-  background-size: 12px 12px, 100% !important;
+  background-size: 12px, 100% !important;
 }
 
 .chatlink {
@@ -12349,7 +12350,7 @@ th[aria-sort] {
 .sitelink.external {
   padding: 0 3px 0 18px;
   background: var(--globe) 3px center no-repeat;
-  background-size: 12px 12px, 100% !important;
+  background-size: 12px, 100% !important;
 }
 
 /* end link icons */
@@ -13178,7 +13179,7 @@ i {
 }
 
 .inbound.small, .outbound.small {
-  background-size: 12px 12px !important;
+  background-size: 12px !important;
   background-position: center center !important;
 }
 
@@ -13313,7 +13314,7 @@ div.app:not(:hover) a:not(:hover):not(:focus):not(:active):visited,
 .leaseset th:last-child a[href$="i2p/"] {
   padding-left: 22px;
   background: var(--link) 5px center no-repeat, linear-gradient(to bottom, #fff, #eef);
-  background-size: 12px 12px, 100%;
+  background-size: 12px, 100%;
 }
 
 /* /profiles group icons */
