@@ -524,7 +524,7 @@ class EventPumper implements Runnable {
 
             if (!_transport.allowConnection()) {
                 if (_log.shouldLog(Log.WARN))
-                    _log.warn("Received SessionRequest but at connection limit: " + chan.socket().getInetAddress());
+                    _log.warn("Refusing SessionRequest from " + chan.socket().getInetAddress() + " -> NTCP connection limit reached");
                 try { chan.close(); } catch (IOException ioe) { }
                 return;
             }
