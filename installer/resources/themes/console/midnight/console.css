@@ -22,6 +22,7 @@
   --th: repeating-linear-gradient(to right, rgba(0,0,64,.4) 2px, #000 4px), linear-gradient(to bottom, #000018, #000);
   --panel: linear-gradient(to bottom, #080818, #040410);
   --highlight: inset 0 0 0 1px #000;
+  --element: linear-gradient(to bottom, #224, #000);
 }
 
 textarea {
@@ -1415,14 +1416,15 @@ div.logo hr {
 
 /* end proxy errors */
 
+.main {
+  background: repeating-linear-gradient(to right, rgba(0,0,0,.4) 2px, rgba(4,4,32,.5) 4px),
+              repeating-linear-gradient(to bottom, rgba(0,0,0,.6) 2px, rgba(4,4,32,.5) 4px);
+  background-size: 4px 100%, 100% 4px !important;
+}
+
 .routersummary {
   background: repeating-linear-gradient(to right, rgba(0,0,0,.5) 2px, rgba(4,4,32,.5) 4px),
               repeating-linear-gradient(to bottom, rgba(0,0,0,.5) 2px, rgba(4,4,32,.5) 4px);
-}
-
-.routersummary, .main {
-  background: repeating-linear-gradient(to right, rgba(0,0,0,.3) 2px, rgba(4,4,32,.5) 4px),
-              repeating-linear-gradient(to bottom, rgba(0,0,0,.3) 2px, rgba(4,4,32,.5) 4px);
   background-size: 4px 100%, 100% 4px !important;
 }
 
@@ -6707,11 +6709,10 @@ table#profile_defs td, table#thresholds td {
   display: inline-block;
   min-width: 16px;
   text-align: center;
-  border: 1px solid #112;
-  border-radius: 2px;
-  box-shadow: inset 0 0 0 1px #001;
-  background: #113;
-  background: linear-gradient(to bottom, #224, #112);
+  border: 1px solid #113;
+  border-radius: 1px;
+  box-shadow: var(--highlight);
+  background: var(--element);
 }
 
 #capabilities_key td:last-child {
@@ -8261,7 +8262,7 @@ textarea#advancedsettings:focus {
   font-weight: normal !important;
   border-top: var(--innerborder);
   border-bottom: var(--innerborder);
-  background: #000 var(--infohelp) 12px center no-repeat !important;
+  background: #001 var(--infohelp) 12px center no-repeat !important;
   background-size: 28px !important;
 }
 
@@ -8723,43 +8724,43 @@ p#enablefullstats {
 }
 
 table#bugreports td.infohelp {
-  background: var(--bug) 12px center no-repeat !important;
+  background: #001 var(--bug) 12px center no-repeat !important;
   padding: 15px 15px 15px 50px;
   background-size: 28px !important;
 }
 
 p#debugmode {
   padding: 15px 15px 15px 50px;
-  background: var(--bug) 12px center no-repeat !important;
+  background: #001 var(--bug) 12px center no-repeat !important;
   background-size: 28px !important;
 }
 
 p.sybilinfo {
   padding: 15px 15px 15px 50px;
   margin-bottom: 10px;
-  background: var(--sybil) 12px center no-repeat !important;
+  background: #001 var(--sybil) 12px center no-repeat !important;
   background-size: 28px !important;
 }
 
 p.sybilinfo.experimental {
-  background: var(--experimental) 12px center no-repeat !important;
+  background: #001 var(--experimental) 12px center no-repeat !important;
   background-size: 28px !important;
 }
 
 #bandwidthconfig tr:first-child .infohelp {
-  background: var(--speed) 12px center no-repeat !important;
+  background: #001 var(--speed) 12px center no-repeat !important;
   padding: 15px 15px 15px 50px;
   background-size: 28px !important;
 }
 
 #addkeyring td.infohelp {
   padding: 20px 15px 20px 50px !important;
-  background: #000 var(--keys) 12px center no-repeat !important;
+  background: #001 var(--keys) 12px center no-repeat !important;
   background-size: 28px !important;
 }
 
 #oldhome td:first-child {
-  background: var(--home) 12px center no-repeat !important;
+  background: #001 var(--home) 12px center no-repeat !important;
   padding: 15px 15px 15px 50px;
   background-size: 28px !important;
 }
@@ -8991,7 +8992,7 @@ img + tt {
   border: 1px solid rgba(0,0,64,.2);
   border-radius: 2px;
   background: rgba(0,0,96,.3);
-  background: linear-gradient(to bottom, #113, #112);
+  background: var(--element);
 }
 
 .tunnel_cap:empty {
@@ -9018,11 +9019,11 @@ img + tt {
   min-width: 64px;
   display: inline-block;
   vertical-align: middle;
-  border: 1px solid #112;
-  border-radius: 2px;
-  box-shadow: inset 0 0 0 1px #001;
+  border: 1px solid #113;
+  border-radius: 1px;
+  box-shadow: var(--highlight);
   background: #113;
-  background: linear-gradient(to bottom, #224, #112);
+  background: var(--element);
 }
 
 .b32 {
@@ -9034,7 +9035,7 @@ img + tt {
 
 
 .tunnel_local {
-  padding: 3px 2px;
+  padding: 4px 2px;
   font-size: 8pt;
   text-transform: lowercase;
 }
@@ -11593,7 +11594,7 @@ input[type="file"]:hover {
   text-shadow: none;
   border-radius: 2px;
   box-shadow: 0 0 0 1px #000;
-  background: linear-gradient(to bottom, #113, #112);
+  background: var(--element);
 }
 
 #netdb .netdbentry th code, #netdb .sybil_routerinfo th code, .leaseset th code {
@@ -11755,11 +11756,11 @@ input[type="file"]:hover {
   width: 14px;
   height: 14px;
   line-height: 0;
-  border: 1px solid #112;
+  border: 1px solid #113;
   border-radius: 2px;
-  box-shadow: inset 0 0 0 1px #001;
+  box-shadow: var(--highlight);
   background: #113;
-  background: linear-gradient(to bottom, #224, #112);
+  background: var(--element);
 }
 
 .viewprofile img:hover, .viewfullentry img:hover, .familysearch img:hover, .configpeer img:hover {
@@ -11807,16 +11808,15 @@ input[type="file"]:hover {
 
 .version {
   margin: 0;
-  padding: 1px 4px;
+  padding: 2px 4px;
   display: inline-block;
   min-width: 50px;
   text-align: center !important;
   font-weight: bold;
-  border: 1px solid #112;
-  border-radius: 2px;
-  box-shadow: inset 0 0 0 1px #001;
-  background: #113;
-  background: linear-gradient(to bottom, #224, #112);
+  border: 1px solid #113;
+  border-radius: 1px;
+  box-shadow: var(--highlight);
+  background: var(--element);
 }
 
 th .version {
@@ -11870,14 +11870,15 @@ th .version {
   display: inline-block;
   font-size: 90%;
   border: 1px solid #113;
-  border-radius: 2px;
-  background: url(/themes/console/images/buttons/cryptokey.png) 3px center no-repeat, linear-gradient(to bottom, #113, #112);
+  border-radius: 1px;
+  box-shadow: var(--highlight);
+  background: url(/themes/console/images/buttons/cryptokey.png) 3px center no-repeat, var(--element);
   background-size: 12px, 100%;
 }
 
 .signingkey.encryption {
   padding-left: 18px;
-  background: var(--lock) 4px calc(50% - 1px) no-repeat, linear-gradient(to bottom, #113, #112);
+  background: var(--lock) 4px calc(50% - 1px) no-repeat, var(--element);
   background-size: 12px, 100%;
 }
 
@@ -11894,11 +11895,11 @@ th .version {
   padding: 2px 6px;
   display: inline-block;
   font-size: 90%;
-  border: 1px solid #112;
+  border: 1px solid #113;
   border-radius: 2px;
-  box-shadow: inset 0 0 0 1px #001;
+  box-shadow: var(--highlight);
   background: #113;
-  background: linear-gradient(to bottom, #224, #112);
+  background: var(--element);
 }
 
 /* end netdb */
@@ -11919,7 +11920,7 @@ th .version {
   vertical-align: middle;
   border: 1px solid #002;
   border-radius: 2px;
-  background: linear-gradient(to bottom, #113, #112);
+  background: var(--element);
 }
 
 #peers .routerid img, #profiles .routerid img {
@@ -11933,11 +11934,10 @@ th .version {
   min-width: 16px;
   vertical-align: middle;
   text-align: center !important;
-  border: 1px solid #112;
-  border-radius: 2px;
-  box-shadow: inset 0 0 0 1px #001;
-  background: #113;
-  background: linear-gradient(to bottom, #224, #112);
+  border: 1px solid #113;
+  border-radius: 1px;
+  box-shadow: var(--highlight);
+  background: var(--element);
 }
 
 /* end tunnels */
@@ -14063,7 +14063,7 @@ to {
 
 #tunnelPeerCount .routerid {
   border-radius: 0;
-  background: linear-gradient(to bottom, #113, #000);
+  background: var(--element);
 }
 
 #tunnels .percentBarOuter, #tunnels .PercentBarInner, #tunnels .percentBarText {
