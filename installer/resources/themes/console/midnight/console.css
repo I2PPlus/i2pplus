@@ -8430,6 +8430,12 @@ h3.tabletitle a {
   }
 }
 
+@media screen and (max-width: 1499px) {
+  #logs h3.tabletitle a.delete {
+    padding-right: 16px !important;
+  }
+}
+
 h3.sybils + div, h3.sybils + a[name] + table {
   margin-top: -1px;
 }
