@@ -2,13 +2,9 @@
 /* Description: Light blue highlights. */
 /* Author: dr|z3d */
 
-@import url(/themes/fonts/DroidSans.css);
-@import url(optbox.css);
-@import url(/themes/console/images/images.css);
-@import url(images/images.css);
+@import url(import.css);
 
 :root {
-  --bg: url("data:image/svg+xml,%3Csvg height='4' viewBox='0 0 4 4' width='4' xmlns='http://www.w3.org/2000/svg'%3E%3Cpath d='m1 3h1v1h-1zm2-2h1v1h-1z' fill='%23e2e2ff' fill-opacity='.5'/%3E%3C/svg%3E");
   --h1: var(--bg), linear-gradient(135deg, #fcfcff, rgba(252,252,255,0) 600px), linear-gradient(to bottom, #fcfcff 50%, rgba(248,248,255,.6) 50%), repeating-linear-gradient(135deg, rgba(255,255,255,.5) 2px, rgba(221, 221, 255, .3) 3px, #fff 4px);
   --h2: linear-gradient(to bottom, #fcfcff 50%, rgba(255,255,255,.6) 50%, rgba(240,240,255,.4)), linear-gradient(to right, #fcfcff 5%, rgba(231, 231, 255, .8) 25%);
   --h3: linear-gradient(to bottom, #fff 50%, rgba(255,255,255,.6) 50%, rgba(240,240,255,.4));
@@ -17,6 +13,8 @@
   --a: #4d5f80;
   --ink: #393947;
   --inklite: #484e6a;
+  --bodyfont: Droid Sans, Open Sans, Noto Sans, Ubuntu, Segoe UI, Lucida Grande, Verdana, Helvetica, sans-serif;
+  --monospaced: Droid Sans Mono, Noto Mono, DejaVu Sans Mono, Lucida Console, monospace;
 }
 
 html, body {
@@ -117,11 +115,11 @@ div.clearer {
 }
 
 body, input, button, select, #netdb .netdbentry th code, #netdb .sybil_routerinfo th code, #netdb .leaseset th code {
-  font-family: Droid Sans, Open Sans, Noto Sans, Ubuntu, Segoe UI, Lucida Grande, Verdana, Helvetica, sans-serif;
+  font-family: var(--bodyfont)
 }
 
 tt, code, pre, textarea, #logs li, .bucket, .b32 {
-  font-family: Droid Sans Mono, Noto Mono, DejaVu Sans Mono, Lucida Console, monospace;
+  font-family: var(--monospaced)
 }
 
 .routersummary a, .routersummary img[src$="i2plogo.png"], .routersummary h3, .confignav, *::before, *::after, div.app, .themechoice, .langselect, .langbox,
@@ -1137,35 +1135,36 @@ to {
 }
 
 .sb_netstatus.error::before {
-  background: url(/themes/console/images/info/network_status/network_error.svg) center center no-repeat;
+  background: var(--net_error) center center no-repeat;
+
 }
 
 .sb_netstatus.warn::before {
-  background: url(/themes/console/images/info/network_status/network_warning.svg) center center no-repeat;
+  background: var(--net_warning) center center no-repeat;
 }
 
 .sb_netstatus.testing::before {
-  background: url(/themes/console/images/info/network_status/network_starting.svg) center center no-repeat;
+  background: var(--net_starting) center center no-repeat;
 }
 
 .sb_netstatus.hidden::before {
-  background: url(/themes/console/images/info/network_status/network_hidden.svg) center center no-repeat;
+  background: var(--net_hidden) center center no-repeat;
 }
 
 .sb_netstatus.running::before {
-  background: url(/themes/console/images/info/network_status/network_ok.svg) center center no-repeat;
+  background: var(--net_ok) center center no-repeat;
 }
 
 .sb_netstatus.firewalled::before {
-  background: url(/themes/console/images/info/network_status/network_firewalled.svg) center center no-repeat;
+  background: var(--net_firewalled) center center no-repeat;
 }
 
 .sb_netstatus.vmcomm::before {
-  background: url(/themes/console/images/info/network_status/network_vm.svg) center center no-repeat;
+  background: var(--net_vm) center center no-repeat;
 }
 
 .sb_netstatus.clockskew::before {
-  background: url(/themes/console/images/info/network_status/network_clockskew.svg) center center no-repeat;
+  background: var(--net_clockskew) center center no-repeat;
 }
 
 /* end network status */
@@ -3941,8 +3940,8 @@ p#profiles_overview {
   padding: 0 0 0 10px;
   border-collapse: separate;
   border-radius: 2px;
-  filter: drop-shadow(0 0 1px rgba(220,220,255,.7));
   background: var(--p);
+  filter: drop-shadow(0 0 1px rgba(220,220,255,.7));
 }
 
 #bugreports tr {
@@ -3953,45 +3952,39 @@ p#profiles_overview {
   padding: 10px 15px 10px 40px;
   text-align: justify;
   border: none !important;
-  background: #fff url(/themes/console/images/info/bugreport.png) no-repeat left center !important;
-  background: url(/themes/console/images/info/bugreport.png) no-repeat left center !important;
+  background: var(--bug) no-repeat left center !important;
   background-size: 28px;
 }
 
 p#debugmode {
   padding: 15px 15px 15px 50px;
-  background: #fff url(/themes/console/images/svg/bug.svg) 12px center no-repeat;
-  background: url(/themes/console/images/svg/bug.svg) 12px center no-repeat, var(--p);
+  background: var(--bug) 12px center no-repeat, var(--p);
   background-size: 28px;
 }
 
 p.sybilinfo, #sybilanalysis {
   padding: 15px 15px 15px 50px;
-  background: #fff url(/themes/console/images/svg/sybil.svg) 12px center no-repeat;
-  background: url(/themes/console/images/svg/sybil.svg) 12px center no-repeat, var(--p);
+  background: var(--sybil) 12px center no-repeat, var(--p);
   background-size: 28px;
   border-radius: 2px;
   filter: drop-shadow(0 0 1px rgba(220,220,255,.7));
 }
 
 p.sybilinfo.experimental {
-  background: #fff url(/themes/console/images/svg/experimental.svg) 12px center no-repeat;
   background: var(--experimental) 12px center no-repeat, var(--p);
   background-size: 28px, 100%;
 }
 
 p.infowarn {
-  border: 1px solid #8d8daa;
   padding: 15px 15px 15px 50px;
   line-height: 130%;
-  background: #fff url(/themes/console/images/svg/infowarn.svg) 12px center no-repeat;
+  border: 1px solid #8d8daa;
   background: url(/themes/console/images/svg/infowarn.svg) 12px center no-repeat, var(--p);
 }
 
 #addkeyring td.infohelp {
-  background: #fff url(/themes/console/images/svg/keys.svg) 12px center no-repeat;
-  background: url(/themes/console/images/svg/keys.svg) 12px center no-repeat, var(--p);
   padding: 15px 15px 15px 50px;
+  background: var(--keys) 12px center no-repeat, var(--p);
   background-size: 28px;
 }
 
@@ -4040,14 +4033,14 @@ p.infowarn {
 
 p#clientconf.infohelp, p#webappconfigtext.infohelp {
   padding: 15px 15px 15px 50px;
-  background: url(/themes/console/images/svg/editclient.svg) 12px center no-repeat, var(--p);
+  background: var(--editclient) 12px center no-repeat, var(--p);
   background-size: 28px, 100%;
 }
 
 p#pluginconfigtext {
   margin-top: 14px;
   padding: 15px 15px 15px 50px;
-  background: url(/themes/console/images/svg/pluginconfig.svg) 12px center no-repeat, var(--p);
+  background: var(--pluginconfig) 12px center no-repeat, var(--p);
   background-size: 28px, 100%;
 }
 
@@ -4059,7 +4052,7 @@ p#pluginconfigtext {
 
 #plugininstall .infohelp {
   padding: 15px 15px 15px 50px;
-  background: url(/themes/console/images/svg/plugin.svg) 12px center no-repeat, linear-gradient(to bottom, #fafaff 50%, rgba(220, 220, 255, .3)), rgba(0, 0, 0, 0) repeating-linear-gradient(135deg, rgba(255, 255, 255, .5) 2px, rgba(221, 221, 255, .3) 3px, #ffffff 5px);
+  background: var(--plugin) 12px center no-repeat, var(--p);
   background-size: 28px, 100%;
 }
 
@@ -4080,13 +4073,13 @@ p#pluginconfigtext {
 
 h3#shutdownrouter + p.infohelp {
   padding: 15px 15px 15px 50px;
-  background: url(/themes/console/images/info/power.png) 12px center no-repeat, var(--p);
+  background: var(--power) 12px center no-repeat, var(--p);
   background-size: 28px, 100%;
 }
 
 h3#restartrouter + p.infohelp, #config_family .infohelp.needrestart {
   padding: 15px 15px 15px 50px;
-  background: url(/themes/console/images/info/reboot.png) 12px center no-repeat, var(--p);
+  background: var(--reboot) 12px center no-repeat, var(--p);
   background-size: 28px, 100%;
 }
 
@@ -4102,13 +4095,13 @@ h3#systray + p.infohelp {
 
 h3#servicedebug + p.infohelp {
   padding: 15px 15px 15px 50px;
-  background: url(/themes/console/images/svg/bug.svg) 12px center no-repeat, var(--p);
+  background: var(--bug) 12px center no-repeat, var(--p);
   background-size: 28px, 100%;
 }
 
 h3#browseronstart + p.infohelp {
   padding: 15px 15px 15px 50px;
-  background: url(/themes/console/images/info/launch_browser.png) 12px center no-repeat, var(--p);
+  background: var(--firefox) 12px center no-repeat, var(--p);
   background-size: 28px, 100%;
 }
 
@@ -4128,7 +4121,7 @@ p#enablefullstats, p#gatherstats {
 
 #config_family .infohelp {
   padding: 15px 15px 15px 50px !important;
-  background: url(/themes/console/images/info/family.png) 12px center no-repeat, var(--p) !important;
+  background: var(--family) 12px center no-repeat, var(--p) !important;
   background-size: 28px, 100% !important;
 }
 
@@ -6638,7 +6631,7 @@ h3#udpcon {
 
 #tunnels h3#exploratory {
   padding-left: 32px;
-  background: url(/themes/console/images/svg/globe.svg) 7px center no-repeat, var(--h3), linear-gradient(to right, #fafaff 5%, rgba(231, 231, 255, .8) 25%) !important;
+  background: var(--globe) 7px center no-repeat, var(--h3), linear-gradient(to right, #fafaff 5%, rgba(231, 231, 255, .8) 25%) !important;
   background-size: 18px, 100%, 100% !important;
 }
 
@@ -6661,7 +6654,7 @@ h3#udpcon {
   padding: 3px 4px;
   float: right;
   line-height: 100%;
-  font-family: "Droid Sans Mono", "DejaVu Sans Mono", "Noto Mono", "Lucida Console", monospace;
+  font-family: var(--monospaced);
   text-transform: none;
   color: #171;
   box-shadow: 0 0 0 1px #bbd, var(--highlight);
@@ -6850,8 +6843,7 @@ p:empty { /* empty paragraph nuke */
   font-size: 11pt !important;
   letter-spacing: .08em;
   word-spacing: .1em;
-  background:  #f6f6ff url(/themes/console/images/svg/globe.svg) 8px center no-repeat !important;
-  background:  url(/themes/console/images/svg/globe.svg) 8px center no-repeat, var(--h2) !important;
+  background:  var(--globe) 8px center no-repeat, var(--h2) !important;
   background-size: 18px 18px, 100%, 100% !important;
   padding: 8px 5px 8px 32px;
 }
@@ -8192,14 +8184,12 @@ p.sybil_info + a[name] + table.sybil_routerinfo, p.hashdist + a[name] + table.sy
   border: 1px solid #bbd;
   border-radius: 2px;
   box-shadow: var(--highlight);
-  background: #eef url(/themes/console/images/buttons/cryptokey.png) 1px center no-repeat;
   background: url(/themes/console/images/buttons/cryptokey.png) 1px center no-repeat, linear-gradient(to bottom, #fff, #eef);
   background-size: 14px, 100%;
 }
 
 .signingkey.encryption {
-  background: #eef url(/themes/console/images/svg/lock.svg) 1px center no-repeat;
-  background: url(/themes/console/images/svg/lock.svg) 1px center no-repeat, linear-gradient(to bottom, #fff, #eef);
+  background: var(--lock) 1px center no-repeat, linear-gradient(to bottom, #fff, #eef);
   background-size: 14px, 100%;
 }
 
@@ -8228,10 +8218,10 @@ p.sybil_info + a[name] + table.sybil_routerinfo, p.hashdist + a[name] + table.sy
 }
 
 #peers .routerid {
-  border-radius: 2px;
-  padding: 1px 2px 1px 3px;
   margin: 1px 0;
+  padding: 1px 2px 1px 3px;
   display: inline-block;
+  border-radius: 2px;
 }
 
 @media screen and (min-width: 1500px) {
@@ -9506,7 +9496,7 @@ h3#displayevents {
   padding: 10px 10px 10px 50px;
   border: 1px solid #8d8daa;
   box-shadow: var(--highlight);
-  background: #f2f2ff url(/themes/console/images/svg/logs.svg) 12px center no-repeat;
+  background: #f2f2ff var(--log_icon) 12px center no-repeat;
   background-size: 28px;
 }
 
@@ -9613,7 +9603,8 @@ a[href^="configpeer?peer"]:hover {
   margin-top: -16px;
   border: 1px solid #8d8daa;
   box-shadow: var(--highlight);
-  background: linear-gradient(to bottom, #fafaff, rgba(250,250,255,.3)), repeating-linear-gradient(135deg, rgba(255,255,255,.5) 2px, rgba(221, 221, 255, .3) 3px, #fff 4px) #efefff !important;
+  background: linear-gradient(to bottom, #fafaff, rgba(250,250,255,.3)),
+              repeating-linear-gradient(135deg, rgba(255,255,255,.5) 2px, rgba(221, 221, 255, .3) 3px, #fff 4px) #efefff !important;
   filter: drop-shadow(0 0 1px rgba(220,220,255,.7));
 }
 
@@ -9722,7 +9713,7 @@ a[href^="configpeer?peer"]:hover {
 }
 
 #debug h2 {
-  background: url(/themes/console/images/info/debug.png) right 6px center no-repeat, var(--h2) !important;
+  background: var(--bug) right 6px center no-repeat, var(--h2) !important;
   background-size: 20px, 100%, 100% !important;
   background-blend-mode: luminosity, normal, normal;
 }
@@ -9742,13 +9733,13 @@ a[href^="configpeer?peer"]:hover {
 }
 
 #debug .skm_key td:first-child, .debug_pubkey, .debug_sesskey {
-  font-family: "Droid Sans Mono", "Noto Mono", "Lucida Console", "DejaVu Sans Mono", monospace;
+  font-family: var(--monospaced);
   font-weight: bold;
   color: #070 !important;
 }
 
 #debug .skm_key td:first-child b {
-  font-family: "Droid Sans", "Open Sans", "Noto Sans", Ubuntu, "Segoe UI", "Lucida Grande", Verdana, Helvetica, sans-serif !important;
+  font-family: var(--bodyfont) !important;
 }
 
 .debug_section {
@@ -10519,8 +10510,7 @@ b.suboption {
   width: 16px;
   height: 16px;
   display: inline-block;
-  background: url(/themes/console/images/info/experimental.png) right center no-repeat;
-  background: url(/themes/console/images/svg/experimental.svg) right center no-repeat;
+  background: var(--experimental) right center no-repeat;
   background-size: 16px;
   content: "";
 }
@@ -10876,36 +10866,33 @@ b.suboption {
 }
 
 #config_reseed #reseedurl, #installPluginUrl {
-  background: #eaeaff url(/themes/console/images/svg/link.svg) 10px center no-repeat !important;
-  background: rgba(234,234,255,.7) url(/themes/console/images/svg/link.svg) 10px center no-repeat !important;
+  background: rgba(234,234,255,.7) var(--link) 10px center no-repeat !important;
   background-size: 28px, 100%, 100% !important;
 }
 
 #config_reseed #reseedurl:hover, #installPluginUrl:hover {
-  background: #ffd url(/themes/console/images/svg/link.svg) 10px center no-repeat !important;
+  background: #ffd var(--link) 10px center no-repeat !important;
   background-size: 28px !important;
 }
 
 #config_reseed  #reseedzip, #installPluginFile {
-  background: #eaeaff url(/themes/console/images/svg/files.svg) 10px center no-repeat !important;
-  background: rgba(234,234,255,.7) url(/themes/console/images/svg/files.svg) 10px center no-repeat !important;
+  background: rgba(234,234,255,.7) var(--files) 10px center no-repeat !important;
   background-size: 28px, 100%, 100% !important;
 }
 
 #config_reseed #reseedzip:hover, #installPluginFile:hover {
-  background: #ffd url(/themes/console/images/svg/files.svg) 10px center no-repeat !important;
+  background: #ffd var(--files) 10px center no-repeat !important;
   background-size: 28px !important;
 }
 
 #config_reseed #reseedcreatefile {
   text-align: justify;
-  background: #eaeaff url(/themes/console/images/svg/package.svg) 10px center no-repeat !important;
-  background: rgba(234,234,255,.7) url(/themes/console/images/svg/package.svg) 10px center no-repeat !important;
+  background: rgba(234,234,255,.7) var(--package) 10px center no-repeat !important;
   background-size: 28px, 100%, 100% !important;
 }
 
 #config_reseed #reseedcreatefile:hover {
-  background: #ffd url(/themes/console/images/svg/package.svg) 10px center no-repeat !important;
+  background: #ffd var(--package) 10px center no-repeat !important;
   background-size: 28px !important;
 }
 
@@ -10931,9 +10918,10 @@ b.suboption {
 
 #manualreseed tr:last-child td.infohelp {
   padding: 15px 15px 15px 50px;
-  background: #fafaff url(/themes/console/images/svg/package.svg) 12px center no-repeat;
-  background: url(/themes/console/images/svg/package.svg) 12px center no-repeat, linear-gradient(to bottom, #fafaff 50%, rgba(220, 220, 255, .3)), rgba(0, 0, 0, 0) repeating-linear-gradient(135deg, rgba(255, 255, 255, .5) 2px, rgba(221, 221, 255, .3) 3px, #fff 5px);
-  background-size: 28px, 100%;
+  background: var(--package) 12px center no-repeat,
+              linear-gradient(to bottom, #fafaff 50%, rgba(220, 220, 255, .3)), rgba(0, 0, 0, 0),
+              repeating-linear-gradient(135deg, rgba(255, 255, 255, .5) 2px, rgba(221, 221, 255, .3) 3px, #fff 5px);
+  background-size: 28px, 100%, 100%;
 }
 
 /* end configreseed */
@@ -11042,12 +11030,12 @@ form[action="configplugins"] input.reload {
 
 #joinfamily .optionsingle {
   padding: 5px 5px 0 45px;
-  background: #eaeaff url(/themes/console/images/info/key.png) 10px center no-repeat !important;
+  background: #eaeaff var(--key) 10px center no-repeat !important;
   background-size: 28px, 100%, 100% !important;
 }
 
 #joinfamily .optionsingle:hover {
-  background: #ffd url(/themes/console/images/info/key.png) 10px center no-repeat !important;
+  background: #ffd var(--key) 10px center no-repeat !important;
   background-size: 28px !important;
 }
 
@@ -12320,7 +12308,7 @@ th[aria-sort] {
   display: inline-block;
   width: 16px;
   height: 16px;
-  background: url(/themes/console/images/info/network_status/network_clockskew.svg) center center no-repeat;
+  background: var(--net_clockskew) center center no-repeat;
   background-size: 16px;
 }
 
@@ -13310,22 +13298,21 @@ div.app:not(:hover) a:not(:hover):not(:focus):not(:active):visited,
   border-radius: 0;
   border-left-width: 4px;
   border-right-width: 4px;
-  background: url(/themes/console/images/svg/hardhat.svg) 4px center no-repeat, linear-gradient(to bottom, #fff, #eef);
+  background: var(--hardhat) 4px center no-repeat, linear-gradient(to bottom, #fff, #eef);
   background-size: auto 14px, 100%;
 }
 
 .lsdest.published {
   padding-left: 38px;
-  background: url(/themes/console/images/svg/hardhat.svg) 4px center no-repeat,
-              url(/themes/console/images/svg/globe.svg) 22px center no-repeat,
+  background: var(--hardhat) 4px center no-repeat,
+              var(--globe) 22px center no-repeat,
               linear-gradient(to bottom, #fff, #eef);
   background-size: auto 14px, auto 12px, 100%;
 }
 
 .leaseset th:last-child a[href$="i2p/"] {
   padding-left: 22px;
-  background: #f2f2ff url(/themes/console/images/svg/link.svg) 5px center no-repeat;
-  background: url(/themes/console/images/svg/link.svg) 5px center no-repeat, linear-gradient(to bottom, #fff, #eef);
+  background: var(--link) 5px center no-repeat, linear-gradient(to bottom, #fff, #eef);
   background-size: 12px 12px, 100%;
 }
 
@@ -13351,32 +13338,32 @@ div.app:not(:hover) a:not(:hover):not(:focus):not(:active):visited,
 }
 
 #profilelist .fast {
-  background: url(/themes/console/images/svg/fast.svg) calc(50% - 10px) center no-repeat,
-              url(/themes/console/images/svg/highcap.svg) calc(50% + 10px) center no-repeat;
+  background: var(--fast) calc(50% - 10px) center no-repeat,
+              var(--highcap) calc(50% + 10px) center no-repeat;
 }
 
 #profilelist .fast.integrated {
-  background: url(/themes/console/images/svg/fast.svg) left center no-repeat,
-              url(/themes/console/images/svg/highcap.svg) center center no-repeat,
-              url(/themes/console/images/svg/integrated.svg) right center no-repeat !important;
+  background: var(--fast) left center no-repeat,
+              var(--highcap) center center no-repeat,
+              var(--integrated) right center no-repeat !important;
 }
 
 #profilelist .highcap {
-  background: url(/themes/console/images/svg/highcap.svg) center center no-repeat;
+  background: var(--highcap) center center no-repeat;
 }
 
 #profilelist .highcap.integrated {
-  background: url(/themes/console/images/svg/highcap.svg) calc(50% - 10px) center no-repeat,
-              url(/themes/console/images/svg/integrated.svg) calc(50% + 10px) center no-repeat;
+  background: var(--highcap) calc(50% - 10px) center no-repeat,
+              var(--integrated) calc(50% + 10px) center no-repeat;
 }
 
 #profilelist .standard {
-  background: url(/themes/console/images/svg/standard.svg) center center no-repeat;
+  background: var(--standard) center center no-repeat;
 }
 
 #profilelist .standard.integrated {
-  background: url(/themes/console/images/svg/standard.svg) calc(50% - 10px) center no-repeat,
-              url(/themes/console/images/svg/integrated.svg) calc(50% + 10px) center no-repeat;
+  background: var(--standard) calc(50% - 10px) center no-repeat,
+              var(--integrated) calc(50% + 10px) center no-repeat;
 }
 
 .profilegroup::before {
@@ -13388,19 +13375,19 @@ div.app:not(:hover) a:not(:hover):not(:focus):not(:active):visited,
 }
 
 .profilegroup.fast::before {
-  background: url(/themes/console/images/svg/fast.svg) left center no-repeat;
+  background: var(--fast) left center no-repeat;
 }
 
 .profilegroup.highcap::before {
-  background: url(/themes/console/images/svg/highcap.svg) left center no-repeat;
+  background: var(--highcap) left center no-repeat;
 }
 
 .profilegroup.integrated::before {
-  background: url(/themes/console/images/svg/integrated.svg) left center no-repeat;
+  background: var(--integrated) left center no-repeat;
 }
 
 .profilegroup.standard::before {
-  background: url(/themes/console/images/svg/standard.svg) left center no-repeat;
+  background: var(--standard) left center no-repeat;
 }
 
 @media screen and (max-width: 1200px) {

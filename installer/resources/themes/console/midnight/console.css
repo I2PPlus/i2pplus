@@ -6440,11 +6440,13 @@ table[id$="logs"] ul {
   border-bottom: 1px solid #000;
   border-left: 2px solid #224;
   background: #0a0a22;
+  background: rgba(10,10,34,.6);
 }
 
 #logs li:nth-child(odd) {
   border-left: 2px solid #335;
   background: #101030;
+  background: rgba(26,26,58,.5);
 }
 
 .main#logs li:last-child {
@@ -6454,6 +6456,14 @@ table[id$="logs"] ul {
 
 .main#logs li:hover {
   background: #113;
+}
+
+#routerlogs tr:last-child, #routerlogs tr:last-child td, #wrapperlogs tr:last-child {
+  background: none;
+}
+
+#wrapperlogs tr:last-child td {
+  background: rgba(10,10,34,.6);
 }
 
 .logtable ul li:not(old) {
@@ -6503,6 +6513,7 @@ font[color="#000099"] { /* info */
 
 #logs li:hover {
   filter: opacity(1);
+  border-left-color: #449;
 }
 
 #logs li::first-line {
