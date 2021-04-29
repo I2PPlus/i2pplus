@@ -428,19 +428,19 @@ input.accept:active, button.accept:active {
 
 input.cancel, button.cancel {
   padding: 5px 9px 5px 23px !important;
-  background: url(/themes/console/images/svg/no.svg) 8px center no-repeat, var(--button) !important;
+  background: var(--no) 8px center no-repeat, var(--button) !important;
   background-size: 11px, 100% !important;
 }
 
 input.cancel:hover, button.cancel:hover,
 input.cancel:focus, button.cancel:focus {
-  background: url(/themes/console/images/svg/no.svg) 8px center no-repeat, var(--button_hover) !important;
+  background: var(--no) 8px center no-repeat, var(--button_hover) !important;
   background-size: 11px, 100% !important;
 }
 
 input.cancel:active, button.cancel:active {
   padding: 5px 9px 5px 23px !important;
-  background: url(/themes/console/images/svg/no.svg) 8px center no-repeat, var(--button_active) !important;
+  background: var(--no) 8px center no-repeat, var(--button_active) !important;
   background-size: 11px, 100% !important;
 }
 
@@ -494,19 +494,19 @@ input.accept[value^="Filter"]:focus, button.accept[value^="Filter"]:focus {
 
 input.add, button.add {
   padding: 5px 9px 5px 25px !important;
-  background: url(/themes/console/images/buttons/add.png) 8px center no-repeat, var(--button) !important;
+  background: var(--add) 8px center no-repeat, var(--button) !important;
   background-size: 14px, 100%, 100% !important;
 }
 
 input.add:hover, button.add:hover,
 input.add:focus, button.add:focus {
-  background: url(/themes/console/images/buttons/add.png) 8px center no-repeat, var(--button_hover) !important;
+  background: var(--add) 8px center no-repeat, var(--button_hover) !important;
   background-size: 14px, 100% !important;
 }
 
 input.add:active, button.add:active {
   padding: 5px 9px 5px 25px !important;
-  background: url(/themes/console/images/buttons/add.png) 8px center no-repeat, var(--button_active) !important;
+  background: var(--add) 8px center no-repeat, var(--button_active) !important;
   background-size: 14px, 100% !important;
 }
 
@@ -12899,7 +12899,7 @@ a:hover .sitemapLink {
 }
 
 #wizardpage .no {
-  background: url(/themes/console/images/svg/no.svg) center center no-repeat;
+  background: var(--no) center center no-repeat;
 }
 
 #wizardpage .yes, #wizardpage .no {
