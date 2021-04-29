@@ -98,9 +98,6 @@ html, .main * {
 
 .routersummary img[src$="i2plogo.png"], .routersummary h3, .confignav, *::before, *::after, h1, h2, h3, h4, div.app,
 .clearer, .routersummary img, .formaction, label, #themeoptions, #helptranslate, #consolepass {
-  -ms-user-select: none;
-  -moz-user-select: none;
-  -webkit-user-select: none;
   user-select: none;
 }
 
@@ -413,19 +410,19 @@ input[type=file]:active::file-selector-button {
 
 input.accept, button.accept {
   padding: 5px 9px 5px 25px !important;
-  background: url(/themes/console/images/svg/yes.svg) 8px center no-repeat, var(--button) !important;
+  background: var(--yes) 8px center no-repeat, var(--button) !important;
   background-size: 12px, 100% !important;
 }
 
 input.accept:hover, button.accept:hover,
 input.accept:focus, button.accept:focus {
-  background: url(/themes/console/images/svg/yes.svg) 8px center no-repeat, var(--button_hover);
+  background: var(--yes) 8px center no-repeat, var(--button_hover);
   background-size: 12px, 100% !important;
 }
 
 input.accept:active, button.accept:active {
   padding: 5px 9px 5px 25px !important;
-  background: url(/themes/console/images/svg/yes.svg) 8px center no-repeat, var(--button_active) !important;
+  background: var(--yes) 8px center no-repeat, var(--button_active) !important;
   background-size: 12px, 100% !important;
 }
 
@@ -5938,9 +5935,6 @@ ul#upnphelp li:last-child, #legal ul li:last-child {
 
 #faq code, #help code {
   user-select: all;
-  -ms-user-select: all;
-  -moz-user-select: all;
-  -webkit-user-select: all;
 }
 
 #portfaq {
@@ -6362,9 +6356,6 @@ a[name="criticallogs"] + p + h3 + p + ul {
 }
 
 #logs #enviro:hover {
-  -ms-user-select: all;
-  -moz-user-select: all;
-  --webkit-user-select: all;
   user-select: all;
   cursor: text;
 }
@@ -6443,22 +6434,26 @@ table[id$="logs"] ul {
 
 .main#logs li {
   margin: 0 0 0 10px !important;
-  padding: 0 5px 0 8px !important;
+  padding: 0 3px 0 8px !important;
   word-break: break-all;
   font-family: var(--monospaced);
-  background: #001;
+  border-bottom: 1px solid #000;
+  border-left: 2px solid #224;
+  background: #0a0a22;
 }
 
 #logs li:nth-child(odd) {
-  background: #002;
+  border-left: 2px solid #335;
+  background: #101030;
 }
 
 .main#logs li:last-child {
   margin-bottom: 7px !important;
+  border-bottom: none;
 }
 
 .main#logs li:hover {
-  background: #003;
+  background: #113;
 }
 
 .logtable ul li:not(old) {
@@ -6470,7 +6465,7 @@ table[id$="logs"] ul {
 
 font[color="#006600"] { /* debug/notify */
   color: #c9ceff;
-  opacity: 0.8;
+  opacity: .8;
 }
 
 font[color="#bf00df"] { /* warning */
@@ -7011,9 +7006,6 @@ table#jardump {
 
 .revision, .sha256, .unsignedmod {
   display: inline-block;
-  -ms-user-select: all;
-  -moz-user-select: all;
-  -webkit-user-select: all;
   user-select: all;
 }
 
@@ -7410,9 +7402,6 @@ table#jardump {
   font-weight: bold;
   box-shadow: 0 0 0 1px #003, var(--highlight);
   background: #002;
-  -ms-user-select: all;
-  -moz-user-select: all;
-  -webkit-user-select: all;
   user-select: all;
 }
 
@@ -8532,10 +8521,10 @@ input#hideme {
 }
 
 #pluginupdater {
-  border: var(--innerborder);
-  padding: 15px 5px 15px 50px;
   margin-top: -11px;
   margin-bottom: 10px !important;
+  padding: 15px 5px 15px 50px;
+  border: var(--innerborder);
   background: url(/themes/console/images/info/update.png) 12px center no-repeat, #000;
   background-size: 28px;
 }
@@ -8549,16 +8538,15 @@ input#hideme {
 }
 
 h4.embeddedtitle#updateplugins {
+  margin-top: -13px;
   padding: 5px 10px;
-  font-size: 9pt;
-  background: linear-gradient(to bottom, #121225 50%, #00000d 50%);
-  border: var(--innerborder);
+  word-spacing: 0.1em;
+  letter-spacing: .08em;
   text-align: left;
   text-transform: uppercase;
   font-size: 10pt;
-  letter-spacing: .08em;
-  word-spacing: 0.1em;
-  margin-top: -13px;
+  border: var(--innerborder);
+  background: linear-gradient(to bottom, #121225 50%, #00000d 50%);
 }
 
 #manualreseed input[type=text] {
@@ -8583,9 +8571,9 @@ h4.embeddedtitle#updateplugins {
 }
 
 #bannedips td {
-  vertical-align: top;
   padding: 0;
   width: 50%;
+  vertical-align: top;
 }
 
 #bannedips table tr {
@@ -8593,8 +8581,8 @@ h4.embeddedtitle#updateplugins {
 }
 
 #bannedips table td {
-  text-align: center;
   padding: 4px 2px;
+  text-align: center;
 }
 
 #bannedips table tr:last-child {
@@ -8611,10 +8599,10 @@ h4.embeddedtitle#updateplugins {
 }
 
 #permabanned td:first-child {
-  border-left: var(--innerborder);
-  text-align: right;
   padding-right: 10px;
   width: 49%;
+  text-align: right;
+  border-left: var(--innerborder);
 }
 
 #permabanned td:nth-child(2) {
@@ -8622,9 +8610,9 @@ h4.embeddedtitle#updateplugins {
 }
 
 #permabanned td:last-child {
-  text-align: left;
   padding-left: 10px;
   width: 49%;
+  text-align: left;
 }
 
 #banneduntilrestart td {
@@ -8633,10 +8621,10 @@ h4.embeddedtitle#updateplugins {
 }
 
 #ipv4, #ipv6, #permabanned tr:nth-child(2) {
-  background: #000 url(images/titles.png) center center repeat-x;
-  background: linear-gradient(to bottom, #080818 50%, #000 50%);
   border-top: var(--innerborder) !important;
   border-bottom: var(--innerborder) !important;
+  background: #000 url(images/titles.png) center center repeat-x;
+  background: linear-gradient(to bottom, #080818 50%, #000 50%);
 }
 
 /* end /configpeer banlist */
@@ -8692,31 +8680,6 @@ table#configstats {
   line-height: 140%;
   background: #000 !important;
 }
-
-/*#configstats label br {
-  display: none;
-}
-
-#configstats label {
-  position: relative;
-  -ms-user-select: all;
-  -moz-user-select: all;
-  -webkit-user-select: all;
-  user-select: all;
-}
-
-#configstats label:hover b {
-  display: inline-block;
-}
-
-#configstats label b {
-  padding: 3px 6px;
-  display: none;
-  position: absolute;
-  top: -24px;
-  box-shadow: 0 0 0 1px #337, 0 0 2px 2px #000, var(--highlight);
-  background: #001;
-}*/
 
 p#enablefullstats {
   margin-top: 5px;
@@ -8873,7 +8836,7 @@ p#enablefullstats, p#gatherstats {
 
 #config_family .infohelp {
   padding: 15px 15px 15px 50px;
-  background: #000 url(/themes/console/images/svg/family.svg) 12px center no-repeat !important;
+  background: #000 var(--family) 12px center no-repeat !important;
   background-size: 28px !important;
 }
 
@@ -9006,7 +8969,6 @@ img + tt {
   text-shadow: 0 1px 1px #000;
   border: 1px solid rgba(0,0,64,.2);
   border-radius: 2px;
-  background: rgba(0,0,96,.3);
   background: var(--element);
 }
 
@@ -9037,7 +8999,6 @@ img + tt {
   border: 1px solid #113;
   border-radius: 1px;
   box-shadow: var(--highlight);
-  background: #113;
   background: var(--element);
 }
 
@@ -9093,17 +9054,17 @@ img + tt {
 }
 
 .right {
-  text-align: right !important;
   margin: 0 1px;
+  width: 40%;
   display: inline-block;
-  width: 40%
+  text-align: right !important;
 }
 
 .left {
-  text-align: left !important;
   margin: 0 1px;
+  width: 40%;
   display: inline-block;
-  width: 40%
+  text-align: left !important;
 }
 
 .peeripv6:empty {
@@ -9121,23 +9082,23 @@ img + tt {
 }
 
 .peer_arrow {
-  display: inline-block;
-  width: 18px;
-  text-align: center;
   margin-right: 3px;
+  width: 18px;
+  display: inline-block;
+  text-align: center;
 }
 
 #peers .routerid {
-  padding-right: 4px;
   margin: 0;
+  padding-right: 4px;
 }
 
 .reachability {
   float: right;
-  font-size: 80%;
-  text-transform: none;
-  letter-spacing: 0;
   word-spacing: 0;
+  letter-spacing: 0;
+  text-transform: none;
+  font-size: 80%;
 }
 
 #peers p.infohelp {
@@ -9159,8 +9120,8 @@ img + tt {
 
 #ntcpconnections td:nth-child(n+6) span,
 #ntcpconnections .tablefooter td:nth-child(n+5) span {
-  display: inline-block;
   min-width: 40px;
+  display: inline-block;
   text-align: right;
 }
 
@@ -9173,25 +9134,25 @@ img + tt {
 }
 
 #peerdefs ul {
+  margin: 0;
+  width: 100%;
   display: inline-block;
   columns: 500px auto;
   column-gap: 0;
-  margin: 0;
-  width: 100%;
 }
 
 #peerdefs li {
-  display: inline-block;
-  width: calc(100% - 24px);
   margin: 3px;
   padding: 4px 8px;
-  box-shadow: var(--highlight), inset 0 0 1px 2px #003, 0 0 0 3px #000;
+  width: calc(100% - 24px);
+  display: inline-block;
   border: 1px solid #225;
+  box-shadow: var(--highlight), inset 0 0 1px 2px #003, 0 0 0 3px #000;
   background: #002;
   background: linear-gradient(135deg, #001 5%, #000020 15%, #001);
+  -webkit-column-break-inside: avoid;
   break-inside: avoid;
   page-break-inside: avoid;
-  -webkit-column-break-inside: avoid;
 }
 
 #peers .cells {
@@ -9206,72 +9167,24 @@ img + tt {
   margin-top: 1px !important;
 }
 
-/*.cells.ipv6 {
-  width: 1% !important;
-  max-width: 24px;
-}
-
-.cells.direction {
-  width: 1%;
-  min-width: 60px !important;
-  max-width: 60px !important;
-  white-space: nowrap;
-}
-
-.cells.peer {
-  width: 1%;
-  max-width: 70px !important;
-  min-width: 70px !important;
-  padding: 5px 2px;
-  text-align: center;
-}
-
-.cells.idle, .cells.inout {
-  width: 1%;
-  min-width: 120px;
-}
-
-.cells.inout {
-  min-width: 110px;
-}
-
-.cells.uptime {
-  width: 1%;
-  min-width: 70px;
-}
-
-.cells.skew, .cells.clockskew {
-  width: 1%;
-  min-width: 64px;
-}
-
-.cells.tx, .cells.rx, .cells.duptx, .cells.duprx {
-  width: 1%;
-  min-width: 48px;
-}*/
-
 .cells.mtu {
   white-space: nowrap;
 }
-
-/*.cells.spacer {
-  width: 35%;
-}*/
 
 #peers .spacer {
   display: none
 }
 
 #peers td.direction i {
+  margin: 3px -3px -1px;
+  width: 100%;
   display: inline-block;
+  text-align: center;
+  font-size: 90%;
+  font-style: normal;
+  color: #990;
   border-top: var(--innerborder);
   border-radius: 2px;
-  width: 100%;
-  margin: 3px -3px -1px;
-  font-style: normal;
-  font-size: 90%;
-  text-align: center;
-  color: #990;
 }
 
 /* end peers */
@@ -9284,9 +9197,6 @@ img + tt {
 }
 
 th code {
-  -ms-user-select: all;
-  -moz-user-select: all;
-  -webkit-user-select: all;
   user-select: all;
 }
 
@@ -9305,9 +9215,9 @@ th code {
 }
 
 .leasesets_container table {
+  -webkit-column-break-inside: avoid;
   break-inside: avoid;
   page-break-inside: avoid;
-  -webkit-column-break-inside: avoid;
 }
 
 .netdb_addresses br:first-child, .sybil_routerinfo tr:last-child td br:first-child {
@@ -9315,10 +9225,10 @@ th code {
 }
 
 .netdbentry th:first-child::after {
-  content: "";
-  display: inline-block;
   min-height: 20px;
+  display: inline-block;
   vertical-align: middle;
+  content: "";
 }
 
 .netdbentry th:last-child > *, .sybil_routerinfo th:nth-child(2) > * {
@@ -9327,21 +9237,21 @@ th code {
 }
 
 .netdbentry th a img {
-  display: inline-block;
-  vertical-align: middle;
   margin-right: 1px;
   margin-bottom: 2px;
+  display: inline-block;
+  vertical-align: middle;
 }
 
 .netdbentry a.viewfullentry::after {
+  margin-left: 3px;
   display: inline-block;
   vertical-align: middle !important;
-  margin-left: 3px;
 }
 
 .netdbentry td:first-child {
+  padding-right: 5px !important;
   text-align: right;
-  padding-right: 5px !important
 }
 
 b.netdb_transport {
@@ -11428,18 +11338,18 @@ input[type="file"]:hover {
 }
 
 @media screen and (min-width: 1200px) {
-#jobstats td:first-child, #jobstats tr:nth-last-child(n+2):hover td:first-child {
-  padding: 6px 0 6px 26px;
-  background-image: var(--yes);
-  background-position: 7px center;
-  background-repeat: no-repeat;
-  background-size: 12px !important;
-}
+  #jobstats td:first-child, #jobstats tr:nth-last-child(n+2):hover td:first-child {
+    padding: 6px 0 6px 26px;
+    background-image: var(--yes);
+    background-position: 7px center;
+    background-repeat: no-repeat;
+    background-size: 12px !important;
+  }
 
-#jobstats tr:last-child td:first-child {
-  padding-left: 8px;
-  background-image: none;
-}
+  #jobstats tr:last-child td:first-child {
+    padding-left: 8px;
+    background-image: none;
+  }
 }
 
 #jobstats tr:last-child td {
@@ -11629,8 +11539,8 @@ input[type="file"]:hover {
 }
 
 .leaseset th:last-child code {
-  width: auto;
   margin: 0 0 0 4px !important;
+  width: auto;
 }
 
 #netdb .netdbentry th code:hover, #netdb .netdbentry th code:active, .leaseset th code:hover,
@@ -11639,13 +11549,13 @@ input[type="file"]:hover {
 }
 
 #netdb .netdbentry th code::-moz-selection, #netdb .sybil_routerinfo th code::-moz-selection, .leaseset th code::-moz-selection {
-  background: #007 !important;
   color: #fff;
+  background: #007 !important;
 }
 
 #netdb .netdbentry th code::selection, #netdb .sybil_routerinfo th code::selection, .leaseset th code::selection {
-  background: #007 !important;
   color: #fff;
+  background: #007 !important;
 }
 
 .netdb_addresses {
@@ -11653,21 +11563,21 @@ input[type="file"]:hover {
 }
 
 .netdb_header {
+  padding: 3px 3px 0;
   min-width: 100px;
   display: inline-block;
-  vertical-align: middle;
-  padding: 3px 3px 0;
   line-height: 0;
+  vertical-align: middle;
 }
 
 .netdb_addresses .netdb_info, .netdb_name, .netdbentry code, #netdb .nowrap, .netdb_transport {
-  display: inline-block;
-  white-space: nowrap;
   max-width: 200px;
+  display: inline-block;
+  vertical-align: middle !important;
   line-height: 130%;
+  white-space: nowrap;
   overflow: hidden;
   text-overflow: ellipsis;
-  vertical-align: middle !important;
 }
 
 #netdb .ls_crypto span.nowrap {
@@ -11693,9 +11603,6 @@ input[type="file"]:hover {
 
 .netdb_info.host, .netdb_info.port {
   font-size: 90%;
-  -ms-user-select: all;
-  -moz-user-select: all;
-  -webkit-user-select: all;
   user-select: all;
 }
 
@@ -13635,32 +13542,25 @@ h1[class], h1 {
   background: none;
 }
 
-/*.encDests tr:last-child td {
-  border-top: #ccf !important;
-}*/
-
 .encDests th:nth-child(n+2), .encDests td:nth-child(n+2) {
   text-align: center;
 }
 
 .encDests code {
-  display: inline-block;
   max-width: 100px;
+  display: inline-block;
   white-space: nowrap;
   overflow: hidden;
   text-overflow: ellipsis;
   font-size: 85% !important;
   color: #c9ceff;
-  -ms-user-select: all;
-  -moz-user-select: all;
-  -webkit-user-select: all;
   user-select: all;
 }
 
 @media screen and (max-width: 1000px) {
-.encDests code {
-  max-width: 140px;
-}
+  .encDests code {
+    max-width: 140px;
+  }
 }
 
 .graphContainer {
