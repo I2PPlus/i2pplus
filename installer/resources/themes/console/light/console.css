@@ -3944,10 +3944,9 @@ p {
 }
 
 p.infohelp, p.sybilinfo, p#debugmode, p#upnpstatus, p#pluginconfigtext, p#gatherstats {
-  padding: 15px 15px 15px 50px;
+  padding: 20px 15px 20px 50px;
   line-height: 130%;
   border: 1px solid #8d8daa;
-  background: #fff url(/themes/console/images/svg/infohelp.svg) 12px center no-repeat;
   background: url(/themes/console/images/svg/infohelp.svg) 12px center no-repeat, var(--p);
 }
 
@@ -4036,7 +4035,7 @@ p.sybilinfo.experimental {
 }
 
 p.infowarn {
-  padding: 15px 15px 15px 50px;
+  padding: 20px 15px 20px 50px;
   line-height: 130%;
   border: 1px solid #8d8daa;
   background: url(/themes/console/images/svg/infowarn.svg) 12px center no-repeat, var(--p);
