@@ -57,7 +57,10 @@ body.iframed {
 
 .iframed form {
   border: 1px solid transparent !important;
-/*  border-top: 1px solid #27235c !important;*/
+}
+
+a, button, input {
+  -webkit-text-stroke: .5px rgba(0,0,0,.4);
 }
 
 div.header {
@@ -345,7 +348,7 @@ tr.bottombuttons:last-child td {
 }
 
 a:link {
-  color: #7972d1;
+  color: #7171d1;
   text-decoration: none;
   font-weight: bold;
 }
@@ -627,7 +630,7 @@ input[type=submit], input.cancel, #settings, .fakebutton {
   padding: 5px 8px !important;
   font: bold 9pt "Droid Sans", "Open Sans", "Noto Sans", Ubuntu, "Segoe UI", "Bitstream Vera Sans", "DejaVu Sans", Verdana, "Lucida Grande", Helvetica, sans-serif;
   text-align: center;
-  color: #6c66bc !important;
+  color: #7171d1 !important;
   border: 1px solid #26225c;
   border-radius: 2px;
   box-shadow: inset 0 0 0 1px #000, inset 0 0 1px 0 #446;
@@ -818,7 +821,7 @@ input.delete {
   padding: 3px 10px;
   min-width: 140px;
   display: inline-block;
-  color: #7972d1;
+  color: #7171d1;
   font-size: 8.5pt;
   border: 1px solid #003;
   border-radius: 25px;
@@ -1506,7 +1509,7 @@ input[type=checkbox]:checked::before, input[type=checkbox]:not(:checked)::before
   height: 11px;
   border-radius: 1px;
   box-shadow: 0 0 0 1px #000;
-  background: #6c66bc;
+  background: #7171d1;
 }
 
 input[type=radio]:checked::before, input[type=radio][disabled]:checked:hover::before {
@@ -1516,7 +1519,7 @@ input[type=radio]:checked::before, input[type=radio][disabled]:checked:hover::be
   top: 25%;
   width: 9px;
   height: 9px;
-  background: #6c66bc;
+  background: #7171d1;
 }
 
 input[type=checkbox]:checked:hover::before {
@@ -1610,7 +1613,7 @@ select {
   overflow: hidden;
   text-overflow: ellipsis;
   font: bold 9pt "Droid Sans", "Open Sans", "Noto Sans", Ubuntu, "Segoe UI", "Bitstream Vera Sans", "DejaVu Sans", Verdana, "Lucida Grande", Helvetica, sans-serif;
-  color: #6c66bc;
+  color: #7171d1;
   text-align: center;
   border: 1px solid #27235f;
   border-radius: 2px;
