@@ -467,20 +467,19 @@ input.accept[value^="Unban"]:active, button.accept[value^="Unban"]:active {
 
 input.accept[value^="Create"], button.accept[value^="Create"] {
   padding: 5px 9px 5px 25px !important;
-  background: url(/themes/console/images/buttons/create.png) 8px center no-repeat, var(--button) !important;
-  background-size: 14px, 100% !important;
+  background: var(--add) 8px center no-repeat, var(--button) !important;
+  background-size: 11px, 100% !important;
 }
 
 input.accept[value^="Create"]:hover, button.accept[value^="Create"]:hover,
 input.accept[value^="Create"]:focus, button.accept[value^="Create"]:focus {
-  background: url(/themes/console/images/buttons/create.png) 8px center no-repeat, var(--button_hover) !important;
-  background-size: 14px, 100% !important;
+  background: var(--add) 8px center no-repeat, var(--button_hover) !important;
+  background-size: 11px, 100% !important;
 }
 
 input.accept[value^="Create"]:active, button.accept[value^="Create"]:active {
-  padding: 5px 9px 5px 25px !important;
-  background: url(/themes/console/images/buttons/create.png) 8px center no-repeat, var(--button_active) !important;
-  background-size: 14px, 100% !important;
+  background: var(--add) 8px center no-repeat, var(--button_active) !important;
+  background-size: 11px, 100% !important;
 }
 
 input.accept[value^="Filter"], button.accept[value^="Filter"] {
@@ -685,20 +684,19 @@ input.download:active, button.download:active {
 }
 
 input.download[value^="Join"], button.download[value^="Join"] {
-  padding: 5px 9px 5px 25px !important;
-  background: url(/themes/console/images/buttons/users.png) 8px center no-repeat, var(--button) !important;
+  padding: 5px 9px 5px 27px !important;
+  background: var(--family) 8px center no-repeat, var(--button) !important;
   background-size: 14px, 100% !important;
 }
 
 input.download[value^="Join"]:hover, button.download[value^="Join"]:hover,
 input.download[value^="Join"]:focus, button.download[value^="Join"]:focus {
-  background: url(/themes/console/images/buttons/users.png) 8px center no-repeat, var(--button_hover) !important;
+  background: var(--family) 8px center no-repeat, var(--button_hover) !important;
   background-size: 14px, 100% !important;
 }
 
 input.download[value^="Join"]:active, button.download[value^="Join"]:active {
-  padding: 5px 9px 5px 25px !important;
-  background: url(/themes/console/images/buttons/users.png) 8px center no-repeat, var(--button_active) !important;
+  background: var(--family) 8px center no-repeat, var(--button_active) !important;
   background-size: 14px, 100% !important;
 }
 
