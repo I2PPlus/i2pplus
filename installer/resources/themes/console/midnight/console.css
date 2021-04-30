@@ -321,8 +321,8 @@ select::-ms-expand {
 /* buttons */
 
 button, input[type=submit], input[type=reset], button, select {
-  border-radius: 2px;
-  box-shadow: var(--highlight), inset 0 0 0 1px #446;
+  border-radius: 1px;
+  box-shadow: var(--highlight), inset 0 0 0 1px #446, 0 0 0 1px #000;
   background: 8px 5px no-repeat, var(-button);
   cursor: pointer;
 }
@@ -353,13 +353,14 @@ button, button:visited, input[type=submit], input[type=reset] {
 input[type=file]::file-selector-button {
   margin: 2px 3px;
   padding: 5px 8px;
+  vertical-align: middle;
   font: bold 9pt var(--bodyfont);
   color: var(--a);
   text-decoration: none;
   text-align: center;
   text-shadow: 0 1px 1px #000;
-  vertical-align: middle;
   border: 1px solid #27235c;
+  border-radius: 1px;
   background: #000;
   background: var(--button) !important;
 }
@@ -368,7 +369,7 @@ input[type=submit]:hover, input[type=reset]:hover, button:hover, button:focus,
 input[type=submit]:focus, input[type=reset]:focus, select:hover, select:focus {
   color: #652787;
   border: 1px solid #652787;
-  box-shadow: var(--highlight), inset 0 0 1px 1px #757;
+  box-shadow: var(--highlight), inset 0 0 1px 1px #757, 0 0 0 1px #000;
   background: #000;
   cursor: pointer;
 }
@@ -376,7 +377,7 @@ input[type=submit]:focus, input[type=reset]:focus, select:hover, select:focus {
 input[type=file]:hover::file-selector-button, input[type=file]:focus::file-selector-button {
   color: #652787;
   border: 1px solid #652787;
-  box-shadow: var(--highlight), inset 0 0 1px 1px #757;
+  box-shadow: var(--highlight), inset 0 0 1px 1px #757, 0 0 0 1px #000;
   background: #000;
   cursor: pointer;
 }
@@ -430,21 +431,20 @@ input.accept:active, button.accept:active {
 }
 
 input.cancel, button.cancel {
-  padding: 5px 9px 5px 23px !important;
-  background: var(--no) 8px center no-repeat, var(--button) !important;
-  background-size: 11px, 100% !important;
+  padding: 5px 9px 5px 25px !important;
+  background: var(--no) 10px center no-repeat, var(--button) !important;
+  background-size: 10px, 100% !important;
 }
 
 input.cancel:hover, button.cancel:hover,
 input.cancel:focus, button.cancel:focus {
-  background: var(--no) 8px center no-repeat, var(--button_hover) !important;
-  background-size: 11px, 100% !important;
+  background: var(--no) 10px center no-repeat, var(--button_hover) !important;
+  background-size: 10px, 100% !important;
 }
 
 input.cancel:active, button.cancel:active {
-  padding: 5px 9px 5px 23px !important;
-  background: var(--no) 8px center no-repeat, var(--button_active) !important;
-  background-size: 11px, 100% !important;
+  background: var(--no) 10px center no-repeat, var(--button_active) !important;
+  background-size: 10px, 100% !important;
 }
 
 input.accept[value^="Unban"], button.accept[value^="Unban"] {
@@ -496,9 +496,9 @@ input.accept[value^="Filter"]:focus, button.accept[value^="Filter"]:focus {
 }
 
 input.add, button.add {
-  padding: 5px 9px 5px 25px !important;
+  padding: 5px 9px 5px 22px !important;
   background: var(--add) 8px center no-repeat, var(--button) !important;
-  background-size: 14px, 100%, 100% !important;
+  background-size: 10px, 100%, 100% !important;
 }
 
 input.add:hover, button.add:hover,
@@ -8901,7 +8901,7 @@ h3#servicedebug + p.infohelp {
 
 h3#browseronstart + p.infohelp {
   padding: 15px 15px 15px 50px;
-  background: #000 url(/themes/console/images/info/launch_browser.png) 12px center no-repeat !important;
+  background: #000 var(--firefox) 12px center no-repeat !important;
   background-size: 28px !important;
 }
 
@@ -11115,15 +11115,15 @@ label:hover .optbox {
 }
 
 .config_experimental::after {
-  content: "";
-  display: inline-block;
-  background: var(--experimental) 12px center no-repeat !important;
-  background-size: 16px !important;
-  margin-left: -12px;
   margin-top: -10px;
-  min-height: 40px;
-  min-width: 40px;
+  margin-left: 3px;
+  height: 14px;
+  width: 14px;
   vertical-align: middle;
+  display: inline-block;
+  background: var(--experimental) center center no-repeat !important;
+  background-size: 14px !important;
+  content: "";
 }
 
 /* bandwidth config */
