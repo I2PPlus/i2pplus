@@ -64,6 +64,10 @@ input[type=text], textarea {
   cursor: text;
 }
 
+a, button, input {
+  -webkit-text-stroke: .5px rgba(0,0,0,.4);
+}
+
 /* topnav */
 
 div#navi  {
@@ -460,7 +464,7 @@ div#messages > p.messages {
 }
 
 a:link {
-  color: #7972d1;
+  color: #7171d1;
   text-decoration: none;
   font-weight: bold;
   outline: none;
@@ -982,7 +986,7 @@ input[type=submit], input[type=reset], .fakebutton, .fakebutton:visited {
   padding: 5px 10px !important;
   min-width: 100px !important;
   font: bold 9pt Droid Sans, Open Sans, Noto Sans, Ubuntu, Segoe UI, Bitstream Vera Sans, DejaVu Sans, Verdana, Lucida Grande, Helvetica, sans-serif;
-  color: #6c66bc;
+  color: #7171d1;
   text-align: center;
   border: 1px solid #27235c;
   border-radius: 2px;
@@ -995,7 +999,7 @@ input[type=file]::file-selector-button {
   padding: 5px 10px !important;
   min-width: 100px !important;
   font: bold 9pt Droid Sans, Open Sans, Noto Sans, Ubuntu, Segoe UI, Bitstream Vera Sans, DejaVu Sans, Verdana, Lucida Grande, Helvetica, sans-serif;
-  color: #6c66bc;
+  color: #7171d1;
   text-align: center;
   border: 1px solid #27235c;
   border-radius: 2px;
@@ -1554,7 +1558,7 @@ input[type=checkbox]:not(:checked)::before, input[type=radio]:not(:checked)::bef
 
 input[type=checkbox]:checked::before, input[type=checkbox]:not(:checked)::before,
 input[type=radio]:checked::before, input[type=radio][disabled]:checked:hover::before {
-  box-shadow: 0 0 0 1px #000, inset 0 0 0 1px #6c66bc;
+  box-shadow: 0 0 0 1px #000, inset 0 0 0 1px #7171d1;
   background: #655fb9;
   background: linear-gradient(135deg, #655fb9, #544eb1);
   content: "";
