@@ -5104,12 +5104,14 @@ input.delete:focus, button.delete:focus {
 
 input.delete[value^="Ban"], button.delete[value^="Ban"] {
   padding: 5px 9px 5px 24px;
-  background: url(/themes/console/images/buttons/ban.png) no-repeat 8px center, var(--button);
+  background: var(--doban) no-repeat 8px center, var(--button);
+  background-size: 16px, 100%;
 }
 
 input.delete[value^="Ban"]:hover, button.delete[value^="Ban"]:hover,
 input.delete[value^="Ban"]:focus, button.delete[value^="Ban"]:focus {
-  background: url(/themes/console/images/buttons/ban.png) no-repeat 8px center, var(--button_hover);
+  background: var(--doban) no-repeat 8px center, var(--button_hover);
+  background-size: 16px, 100%;
 }
 
 input.download, button.download {
