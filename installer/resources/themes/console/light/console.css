@@ -4941,7 +4941,7 @@ button:hover, input[type=submit]:hover, input[type=reset]:hover, button:focus, i
 }
 
 input[type=file]::file-selector-button {
-  margin: 3px;
+  margin: 3px 10px 3px 3px;
   padding: 4px 10px;
   line-height: 140%;
   font-size: 9pt;
