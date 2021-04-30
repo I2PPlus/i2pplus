@@ -1042,11 +1042,13 @@ class NetDbRenderer {
                    .append("\" title=\"").append(_t("View profile"))
                    .append("\" alt=\"[").append(_t("View profile")).append("]\"><img src=\"/themes/console/images/buttons/profile.png\"></a>");
             }
+/*
             if (!full) {
                 buf.append("<a class=\"viewfullentry\" href=\"/netdb?r=").append(hash.substring(0, 6))
                    .append("\" title=\"").append(_t("View extended router info"))
                    .append("\" alt=\"[").append(_t("Full entry")).append("]\"><img src=\"/themes/console/images/buttons/fullview.png\"></a>");
             }
+*/
             buf.append("<a class=\"configpeer\" href=\"/configpeer?peer=").append(hash)
                .append("\" title=\"").append(_t("Configure peer"))
                .append("\" alt=\"[").append(_t("Configure peer")).append("]\"><img src=\"/themes/console/images/buttons/edit2.png\"></a>");

@@ -512,19 +512,19 @@ input.add:active, button.add:active {
 
 input.add[value^="Adjust"], button.add[value^="Adjust"] {
   padding: 5px 9px 5px 25px !important;
-  background: url(/themes/console/images/buttons/edit2.png) 8px center no-repeat, var(--button) !important;
+  background: var(--edit) 8px center no-repeat, var(--button) !important;
   background-size: 14px, 100%, 100% !important;
 }
 
 input.add[value^="Adjust"]:hover, button.add[value^="Adjust"]:hover,
 input.add[value^="Adjust"]:focus, button.add[value^="Adjust"]:focus {
-  background: url(/themes/console/images/buttons/edit2.png) 8px center no-repeat, var(--button_hover) !important;
+  background: var(--edit_hover) 8px center no-repeat, var(--button_hover) !important;
   background-size: 14px, 100% !important;
 }
 
 input.add[value^="Adjust"]:active, button.add[value^="Adjust"]:active {
   padding: 5px 9px 5px 25px !important;
-  background: url(/themes/console/images/buttons/edit2.png) 8px center no-repeat, var(--button_active) !important;
+  background: var(--edit) 8px center no-repeat, var(--button_active) !important;
   background-size: 14px, 100% !important;
 }
 
@@ -532,7 +532,7 @@ input.accept[value^="Show"], button.accept[value^="Show"],
 input.check[value^="View"], button.check[value^="View"],
 input.showconsole {
   padding: 5px 9px 5px 25px !important;
-  background: url(/themes/console/images/buttons/show.png) 8px center no-repeat, var(--button) !important;
+  background: var(--eye) 8px center no-repeat, var(--button) !important;
   background-size: 14px, 100%, 100% !important;
 }
 
@@ -541,7 +541,7 @@ input.check[value^="View"]:hover, button.check[value^="View"]:hover,
 input.accept[value^="Show"]:focus, button.accept[value^="Show"]:focus,
 input.check[value^="View"]:focus, button.check[value^="View"]:focus,
 input.showconsole:hover, input.showconsole:focus {
-  background: url(/themes/console/images/buttons/show.png) 8px center no-repeat, var(--button_hover) !important;
+  background: var(--eye) 8px center no-repeat, var(--button_hover) !important;
   background-size: 14px, 100% !important;
 }
 
@@ -549,7 +549,7 @@ input.accept[value^="Show"]:active, button.accept[value^="Show"]:active,
 input.check[value^="View"]:active, button.check[value^="View"]:active,
 input.showconsole:active {
   padding: 5px 9px 5px 25px !important;
-  background: url(/themes/console/images/buttons/show.png) 8px center no-repeat, var(--button_active) !important;
+  background: var(--eye) 8px center no-repeat, var(--button_active) !important;
   background-size: 14px, 100% !important;
 }
 
@@ -647,19 +647,19 @@ input.delete:active, button.delete:active {
 
 input.delete[value^="Ban"], button.delete[value^="Ban"] {
   padding: 5px 9px 5px 25px !important;
-  background: url(/themes/console/images/buttons/ban.png) 8px center no-repeat, var(--button) !important;
+  background: var(--doban) 8px center no-repeat, var(--button) !important;
   background-size: 14px, 100% !important;
 }
 
 input.delete[value^="Ban"]:hover, button.delete[value^="Ban"]:hover,
 input.delete[value^="Ban"]:focus, button.delete[value^="Ban"]:focus {
-  background: url(/themes/console/images/buttons/ban.png) 8px center no-repeat, var(--button_hover) !important;
+  background: var(--doban) 8px center no-repeat, var(--button_hover) !important;
   background-size: 14px, 100% !important;
 }
 
 input.delete[value^="Ban"]:active, button.delete[value^="Ban"]:active {
   padding: 5px 9px 5px 25px !important;
-  background: url(/themes/console/images/buttons/ban.png) 8px center no-repeat, var(--button_active) !important;
+  background: var(--doban) 8px center no-repeat, var(--button_active) !important;
   background-size: 14px, 100% !important;
 }
 
@@ -943,15 +943,18 @@ button.stop.control:active {
 }
 
 button.add.control {
-  background: url(/themes/console/images/buttons/edit2.png) center center no-repeat, var(--button) !important;
+  background: var(--edit) center center no-repeat, var(--button) !important;
+  background-size: 16px, 100% !important;
 }
 
 button.add.control:hover, button.add.control:focus {
-  background: url(/themes/console/images/buttons/edit2.png) center center no-repeat, var(--button_hover) !important;
+  background: var(--edit_hover) center center no-repeat, var(--button_hover) !important;
+  background-size: 16px, 100% !important;
 }
 
 button.add.control:active {
-  background: url(/themes/console/images/buttons/edit2.png) center center no-repeat, var(--button_active) !important;
+  background: var(--edit_hover) center center no-repeat, var(--button_active) !important;
+  background-size: 16px, 100% !important;
 }
 
 button.delete.control {
@@ -4904,8 +4907,11 @@ table#reseedconfig textarea {
 }
 
 #banlist .routerid {
+  margin-top: -3px !important;
   padding: 1px 2px !important;
   line-height: 1;
+  border: none !important;
+  box-shadow: none !important;
   background: none !important;
 }
 
@@ -5856,9 +5862,19 @@ p#fullhistory {
   height: 20px;
   display: inline-block;
   vertical-align: middle;
-  background: url(/themes/console/images/buttons/fullview.png) left 45% no-repeat;
-  background-size: 16px auto;
+  background: var(--eye) left center no-repeat;
+  background-size: 16px;
   content: "";
+}
+
+#fullhistory:hover::before {
+  background: var(--eye_hover) left center no-repeat;
+  background-size: 16px;
+}
+
+#fullhistory:active::before {
+  background: var(--eye_active) left center no-repeat;
+  background-size: 16px;
 }
 
 ul#upnphelp li:last-child, #legal ul li:last-child {
@@ -6666,14 +6682,20 @@ a[href^="configpeer?peer"]:not(old) {
 }
 
 a[href^="configpeer?peer"]::after {
-  content: url(/themes/console/images/buttons/edit.png);
-  vertical-align: top;
-  margin: 0 0 0 4px !important;
+  vertical-align: middle;
+  margin: 1px 2px 1px 4px !important;
   line-height: 0 !important;
+  background: var(--edit) center center no-repeat;
+  background-size: 16px;
+  height: 16px;
+  width: 16px;
+  display: inline-block;
+  content: "";
 }
 
-a[href^="configpeer?peer"]:hover {
-  filter: drop-shadow(0 0 1px #99f);
+a[href^="configpeer?peer"]:hover::after {
+  background: var(--edit_hover) center center no-repeat;
+  background-size: 16px;
 }
 
 table#profile_defs, table#thresholds {
@@ -8102,9 +8124,8 @@ a[href^="viewprofile"]::after {
   display: inline-block;
   vertical-align: middle;
   content: "";
-  background: url(/themes/console/images/buttons/show.png) center center no-repeat;
+  background: var(--eye) center center no-repeat;
   background-size: 16px;
-  mix-blend-mode: luminosity;
 }
 
 #sybilnav ul li:active::before {
@@ -8149,14 +8170,14 @@ p.sybil_info, p.family, p.threatpoints, p.hashdist, p#sybil_totals, p.notfound {
   font-weight: bold;
   border: var(--innerborder);
   box-shadow: inset 0 0 0 1px #211;
-  background: url(/themes/console/images/buttons/show.png) 8px center no-repeat, #002;
-  background: url(/themes/console/images/buttons/show.png) 8px center no-repeat, linear-gradient(to right, #000, #001 80%, #002);
+  background: var(--eye) 8px center no-repeat, linear-gradient(to right, #000, #001 80%, #002);
   background-size: 16px, 100% !important;
   background-blend-mode: luminosity;
 }
 
 p.threatpoints.hot {
-  background: url(/themes/console/images/buttons/show.png) 8px center no-repeat, url(/themes/console/images/info/hot.png) right 4px center no-repeat, linear-gradient(to right, #000, #001 80%, #002);
+  background: var(--eye_static) 8px center no-repeat, url(/themes/console/images/info/hot.png) right 4px center no-repeat,
+              linear-gradient(to right, #000, #001 80%, #002);
   background-size: 16px, 20px, 100% !important;
   background-blend-mode: luminosity, normal;
 }
@@ -11709,7 +11730,6 @@ input[type="file"]:hover {
   border: 1px solid #113;
   border-radius: 2px;
   box-shadow: var(--highlight);
-  background: #113;
   background: var(--element);
 }
 
@@ -11717,9 +11737,45 @@ input[type="file"]:hover {
   border: 1px solid #bf2295;
 }
 
-#profilelist td:last-child img {
-  margin: 1px 5px !important;
-  vertical-align: middle;
+.configpeer img, .viewprofile img {
+  padding: 0;
+  opacity: 0;
+  margin: 0 -2px;
+}
+
+a.configpeer, a.viewprofile {
+  margin: 0;
+  padding: 0;
+  display: inline-block;
+  vertical-align: top;
+  line-height: inherit;
+  border: 1px solid #113;
+  border-radius: 2px;
+  box-shadow: var(--highlight);
+  background: var(--edit) center center no-repeat, var(--element);
+  background-size: 14px, 100%;
+}
+
+a.viewprofile {
+  background: var(--eye) center center no-repeat, var(--element);
+  background-size: 14px, 100%;
+}
+a.configpeer:hover {
+  background: var(--edit_hover) center center no-repeat, var(--element);
+  background-size: 14px, 100%;
+}
+
+a.viewprofile:hover {
+  background: var(--eye_hover) center center no-repeat, var(--element);
+  background-size: 14px, 100%;
+}
+
+a.viewprofile + a.configpeer {
+  margin-left: 3px !important;
+}
+
+a.viewfullentry {
+  display: none;
 }
 
 .familysearch img {
@@ -11727,12 +11783,12 @@ input[type="file"]:hover {
   margin-left: 0;
 }
 
-.netdb_header .configpeer, .netdb_header .configpeer {
-  margin-right: 5px !important;
+.netdb_header {
+  margin-top: -2px !important;
 }
 
-.viewprofile + .viewfullentry, .viewfullentry + .configpeer, .viewprofile + .configpeer {
-  margin-left: -5px !important;
+.netdb_header a.configpeer {
+  margin-right: 5px !important;
 }
 
 .netdb_header img[src="/flags.jsp?c=a0"] {
@@ -12451,7 +12507,8 @@ html, body {
 }
 
 #sybilnav ul li#reviewStored::before {
-  background: url(/themes/console/images/buttons/fullview.png) center center no-repeat;
+  background: var(--eye) center center no-repeat;
+  background-size: 16px;
 }
 
 #sybilnav ul li#runNew::before {
@@ -12464,11 +12521,13 @@ html, body {
 }
 
 #sybilnav ul li#floodfillSummary::before {
-  background: url(/themes/console/images/buttons/floodfill.png) center center no-repeat;
+  background: var(--floodfill) center center no-repeat;
+  background-size: 16px;
 }
 
 #sybilnav ul li#sameFamily::before {
-  background: url(/themes/console/images/buttons/users.png) center center no-repeat;
+  background: var(--family) center center no-repeat;
+  background-size: 16px;
 }
 
 /* sitemap */

@@ -11574,7 +11574,8 @@ h2, h2.welcome, h3, h3.welcome, #themeoptions {
 .news hr {
   color: #242;
   background: #242;
-  background: repeating-linear-gradient(to right, #242 1px, #242 2px, #000 3px);
+  background: repeating-linear-gradient(to right, #242 2px, #000 4px);
+  background-size: 4px 100%;
 }
 
 h2#jobrunners {
