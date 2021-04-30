@@ -1999,7 +1999,7 @@ button, button:visited {
 }
 
 input[type=file]::file-selector-button {
-  margin: 2px 3px;
+  margin: 2px 10px 2px 3px;
   padding: 4px 2px !important;
   min-width: 75px;
   vertical-align: middle;
