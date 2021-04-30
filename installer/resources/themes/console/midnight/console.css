@@ -4312,7 +4312,7 @@ pre#activetransports {
   padding: 15px 7px 5px 15px;
   width: calc(100% - 24px);
   border: var(--innerborder);
-  background: #000;
+  background: rgba(0,0,16,.3);
 }
 
 a[name="chelp"]:hover, a[name="help"]:hover, a[name="chelp"]:active, a[name="help"]:active { /* hide /help anchorpoints */
@@ -6483,24 +6483,24 @@ table[id$="logs"] ul {
 
 .main#logs li {
   margin: 0 0 0 10px !important;
-  padding: 0 3px 0 8px !important;
+  padding: 0 2px 0 8px !important;
   word-break: break-all;
   font-family: var(--monospaced);
+  border-top: 1px solid rgba(64,64,80,.2);
+  border-right: 1px solid rgba(40,40,48,.2);
   border-bottom: 1px solid #000;
   border-left: 2px solid #224;
-  background: #0a0a22;
   background: rgba(10,10,34,.6);
 }
 
 #logs li:nth-child(odd) {
   border-left: 2px solid #335;
-  background: #101030;
   background: rgba(26,26,58,.5);
 }
 
 .main#logs li:last-child {
   margin-bottom: 7px !important;
-  border-bottom: none;
+  border-bottom: 1px solid rgba(64,64,80,.2);
 }
 
 .main#logs li:hover {
@@ -11775,7 +11775,7 @@ input[type="file"]:hover {
   margin: 0 -2px;
 }
 
-a.configpeer, a.viewprofile {
+a.configpeer, a.viewprofile, a.profiledump {
   margin: 0;
   padding: 2px 0;
   display: inline-block;
@@ -11792,6 +11792,12 @@ a.viewprofile {
   background: var(--eye) center center no-repeat, var(--element);
   background-size: 14px, 100%;
 }
+
+a.profiledump {
+  background: var(--log_icon) center center no-repeat, var(--element);
+  background-size: 14px, 100%;
+}
+
 a.configpeer:hover {
   background: var(--edit_hover) center center no-repeat, var(--element);
   background-size: 14px, 100%;
@@ -12277,15 +12283,22 @@ input[type=checkbox][disabled]:checked, input[type=radio][disabled]:checked, inp
 }
 
 #view_profile .profiledump, #view_profile .configpeer {
+  padding: 6px;
   font-size: 0;
 }
 
 #view_profile .profiledump img, #view_profile .configpeer img {
-  margin: -4px 44px 4px 0 !important;
-  vertical-align: middle;
+  opacity: 0;
+  margin: 0 !important;
+  padding: 0 !important;
+
 }
 
-#view_profile .profiledump img {
+#view_profile .profiledump, #view_profile .configpeer {
+  margin-right: 48px;
+}
+
+#view_profile .profiledump {
   margin-right: 6px !important;
 }
 
@@ -12299,6 +12312,10 @@ input[type=checkbox][disabled]:checked, input[type=radio][disabled]:checked, inp
   opacity: 0.7;
 }
 
+#viewprofile tr {
+  background: none;
+}
+
 #viewprofile td {
   padding: 0;
 }
@@ -12307,7 +12324,7 @@ input[type=checkbox][disabled]:checked, input[type=radio][disabled]:checked, inp
   margin: 0;
   padding: 20px 20px 0;
   line-height: 20px;
-  background: repeating-linear-gradient(to bottom, #002, #002 20px, #00002f 20px, #00002f 40px);
+  background: repeating-linear-gradient(to bottom, rgba(0,0,48,.2), rgba(0,0,48,.2) 20px, rgba(0,0,96,.2) 20px, rgba(0,0,96,.2) 40px);
   width: calc(100% - 44px);
   text-shadow: 0 1px 1px #000;
   border-left: 5px solid #1a1840;
