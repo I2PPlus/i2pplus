@@ -503,13 +503,12 @@ input.add, button.add {
 input.add:hover, button.add:hover,
 input.add:focus, button.add:focus {
   background: var(--add) 8px center no-repeat, var(--button_hover) !important;
-  background-size: 14px, 100% !important;
+  background-size: 10px, 100% !important;
 }
 
 input.add:active, button.add:active {
-  padding: 5px 9px 5px 25px !important;
   background: var(--add) 8px center no-repeat, var(--button_active) !important;
-  background-size: 14px, 100% !important;
+  background-size: 10px, 100% !important;
 }
 
 input.add[value^="Adjust"], button.add[value^="Adjust"] {

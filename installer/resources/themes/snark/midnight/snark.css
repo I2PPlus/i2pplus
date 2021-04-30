@@ -3,13 +3,20 @@
 
 @import url("/themes/fonts/DroidSans.css");
 
+:root {
+  --bodyfont: Droid Sans, Open Sans, Noto Sans, Ubuntu, Segoe UI, Lucida Grande, DejaVu Sans, Verdana, Helvetica, sans-serif;
+  --monospaced: Droid Sans Mono, Noto Mono, DejaVu Sans Mono, Lucida Console, monospace;
+  --title: repeating-linear-gradient(to right, rgba(0,0,48,.4) 2px, #000 4px), linear-gradient(to bottom, #003, #002 50%, #001 50%, #000);
+  --highlight: inset 0 0 0 1px #000;
+}
+
 html, body {
   min-height: 100%;
   scrollbar-color: #225 #001;
 }
 
 body {
-  font: 9pt "Droid Sans", "Open Sans", "Noto Sans", Ubuntu, "Segoe UI", "Lucida Grande", "DejaVu Sans", Verdana, Helvetica, sans-serif;
+  font: 9pt var(--bodyfont);
   color: #c9ceff;
   background: #000;
   margin: 4px 2px;
@@ -17,7 +24,7 @@ body {
 
 /* preload top navigation mouseovers */
 body {
-  background: repeating-linear-gradient(to bottom, rgba(0,0,24,.75) 3px, rgba(0,0,0,.9) 5px, rgba(0,0,0,.7) 6px),
+  background: repeating-linear-gradient(to bottom, rgba(0,0,24,.75) 2px, rgba(0,0,0,.7) 4px),
   url(/themes/console/midnight/images/tile.png),
   url(images/button_snark_hover.png) no-repeat,
   url(images/button_snark_active.png) no-repeat,
@@ -29,12 +36,12 @@ body {
   url(images/button_search_active.png) no-repeat,
   url(images/offline.svg) no-repeat,
   url(images/dropdown_hover.svg) center center no-repeat, #000010 !important;
-  background-size: 100% 100%, 171px 148px, 0 0, 0 0, 0 0, 0 0, 0 0, 0 0, 0 0, 0 0, 0 0, 0 0, 0 0 !important;
+  background-size: 100% 4px, 171px 148px, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0 !important;
 }
 
 body.iframed {
   margin: 1px 0 !important;
-  background: transparent url(/themes/console/images/transparent.gif) !important;
+  background: none;
   overflow: hidden;
 }
 
@@ -146,29 +153,24 @@ td input[type="image"]::after {
 /* end header/column resize mitigation */
 
 .page {
-  font-size: 9pt !important;
-  line-height: 160% !important;
   margin: 5px 0 0 0;
   padding: 0 0 12px;
+  line-height: 160% !important;
   text-align: center;
-  opacity: 1;
+  font-size: 9pt !important;
   color: #040033;
   border: 1px solid #26235c;
   border-radius: 0 0 2px 2px;
-  background: #001;
-  background: linear-gradient(to bottom, #000, #003);
-  background: linear-gradient(to right, #001, rgba(0,0,0,.5), #001), repeating-linear-gradient(to right, #000, #224 2px) !important;
-  background-size: 100% 2px;
-  box-shadow: inset 0 0 3px 1px #000;
+  background: #030;
 }
 
 .iframed .page {
   margin: 4px 0 5px;
   padding: 0;
   border: none;
-  background: none;
-  box-shadow: none;
   border-radius: 0;
+  box-shadow: none;
+  background: none;
 }
 
 .snarknavbar, .page {
@@ -188,7 +190,8 @@ td input[type="image"]::after {
   text-align: center;
   border: 1px solid #26235c;
   border-radius: 2px 2px 0 0;
-  background: linear-gradient(to bottom, #05050e 50%, #000 50%);
+  background: var(--title);
+  background-size: 4px 100%, 100%;
   will-change: transform;
 }
 
@@ -212,7 +215,7 @@ td input[type="image"]::after {
   text-shadow: 0 0 1px #000;
   border: 1px solid #26225C;
   border-radius: 0;
-  box-shadow: inset 0 0 0 1px #000, inset 0 0 1px 0 #446;
+  box-shadow: var(--highlight), inset 0 0 1px 0 #446;
   background: #001 url(images/button_tracker.png) 9px center no-repeat;
   background: url(images/button_tracker.png) 9px center no-repeat, linear-gradient(to bottom, #181828 50%, #000 50%);
   transition: ease box-shadow .1s;
@@ -281,11 +284,11 @@ td input[type="image"]::after {
 }
 
 .snarkNav:hover, .snarkNav:focus {
-  box-shadow: inset 0 0 0 1px #000, inset 0 0 1px 1px #717;
+  box-shadow: var(--highlight), inset 0 0 1px 1px #717;
 }
 
 .snarkNav:active, .nav_search:link:active, .nav_forum:link:active, .nav_main:link:active {
-  box-shadow: inset 0 0 0 1px #000, inset 4px 4px 3px 1px #1f002f;
+  box-shadow: var(--highlight), inset 4px 4px 3px 1px #1f002f;
   transition: ease box-shadow .1s;
 }
 
@@ -304,7 +307,7 @@ td input[type="image"]::after {
 .snarkNav:link, .snarkNav:hover, .snarkNav:focus, .snarkNav:active, .snarkNav:link:active,
 .nav_search:link:hover, .nav_search:link:focus, .nav_forum:link:hover, .nav_forum:link:focus,
 .nav_main:link:hover, .nav_main:link:focus {
-  background-size: 16px 16px, 100% 100%, 100% 100% !important;
+  background-size: 16px, 100%, 100% !important;
 }
 
 @supports (justify-content: center) {
@@ -329,7 +332,7 @@ td input[type="image"]::after {
   height: 56px;
   overflow: hidden;
   text-align: left;
-  font: normal 8.5pt "Droid Sans Mono", "Noto Mono", "DejaVu Sans Mono", "Lucida Console", monospace;
+  font: normal 8.5pt var(--monospaced)
   color: #778;
   border-spacing: 0;
   border-bottom: 1px solid #26235c;
@@ -338,13 +341,13 @@ td input[type="image"]::after {
 }
 
 #screenlog, #screenlog.expanded, #screenlog.collapsed {
-  background: url(images/hat.png) no-repeat scroll right top,
-              repeating-linear-gradient(to bottom, rgba(0,0,16,.7) 2px, rgba(0,0,48,.5) 4px),
+  background: repeating-linear-gradient(to bottom, rgba(0,0,16,.7) 2px, rgba(0,0,48,.5) 4px),
+              url(images/hat.png) no-repeat scroll right top,
               url("/viewstat.jsp?stat=[I2PSnark] InBps&showEvents=false&period=60000&periodCount=1440&end=0&width=2000&height=160&hideLegend=true&hideTitle=true&hideGrid=true") no-repeat,
               linear-gradient(to bottom, #001, #000008);
-  background-size: 80px auto, 100% 100%, calc(100% - 80px) calc(100% - 8px), 100% 100% !important;
+  background-size: 100% 4px, 80px auto, calc(100% - 80px) calc(100% - 8px), 100% !important;
   background-position: right -4px bottom -10px, center center, left bottom, center top !important;
-  background-blend-mode: normal, overlay, normal, normal;
+  background-blend-mode: overlay, normal, normal, normal;
 }
 
 .iframed .snarkMessages {
@@ -372,6 +375,7 @@ td input[type="image"]::after {
 .snarkMessages li {
   margin-left: -15px;
   line-height: 125%;
+  color: #8589ad;
 }
 
 .snarkMessages li::before {
@@ -381,7 +385,6 @@ td input[type="image"]::after {
   width: 14px;
   height: 11px;
   background-size: 9px 9px;
-  filter: drop-shadow(0 0 1px #000);
 }
 
 .snarkMessages li, .snarkMessages a {
@@ -413,14 +416,13 @@ td input[type="image"]::after {
 }
 
 #closeLog img:hover, #closeLog img:focus, #expand img:hover, #expand img:focus, #shrink img:hover, #shrink img:focus {
-  box-shadow: inset 0 0 0 1px #000;
+  box-shadow: var(--highlight);
   background: #404;
   mix-blend-mode: normal !important;
-  filter: none !important;
 }
 
 #closelog:active img, #expand:active img, #shrink:active img {
-  box-shadow: inset 0 0 0 1px #000, inset 4px 4px 4px rgba(0,0,0,.7);
+  box-shadow: var(--highlight), inset 4px 4px 4px rgba(0,0,0,.7);
 }
 
 .logshim {
@@ -434,11 +436,11 @@ td input[type="image"]::after {
 /* end screenlog */
 
 tt, code {
-  font-family: "Droid Sans Mono", "Noto Mono", "DejaVu Sans Mono", "Lucida Console", monospace;
+  font-family: var(--monospaced)
 }
 
 pre {
-  font: 8pt "Droid Sans Mono", "Noto Mono", "DejaVu Sans Mono", "Lucida Console", monospace;
+  font: 8pt var(--monospaced)
   font-weight: bold !important;
   width: 100%;
   height: 8px;
@@ -475,12 +477,13 @@ th {
   font-size: 9pt;
 }
 
-thead th {
-  background: linear-gradient(to bottom, #121225, #00000d) !important;
+th {
+  background: var(--title) !important;
+  background-size: 4px 100%, 100% !important;
 }
 
 #torrentInfoControl td, #setPriority th {
-  box-shadow: inset 0 0 0 1px #000, inset 0 0 2px 1px #191939, inset 0 0 5px 3px #002 !important;
+  box-shadow: var(--highlight), inset 0 0 2px 1px #191939, inset 0 0 5px 3px #002 !important;
   background: linear-gradient(to bottom, #000016, #000008) !important;
 }
 
@@ -814,7 +817,7 @@ th.snarkTorrentStatus img:hover {
 }
 
 .snarkDirInfo tr:hover {
-  box-shadow: inset 0 0 0 1px #000, inset 0 0 1px 1px #414;
+  box-shadow: var(--highlight), inset 0 0 1px 1px #414;
   background-color: #180018 !important;
 }
 
@@ -847,7 +850,7 @@ th.snarkTorrentStatus img:hover {
   vertical-align: middle;
   text-align: center;
   border: 1px solid #181833 !important;
-  box-shadow: inset 0 0 0 1px #000, inset 0 0 1px 0 #446;
+  box-shadow: var(--highlight), inset 0 0 1px 0 #446;
   background: linear-gradient(to bottom, #181d4f 50%, #001 50%);
   mix-blend-mode: normal;
   filter: none !important;
@@ -864,13 +867,13 @@ td.snarkTorrentAction input[type="image"] {
 
 .snarkTorrentAction input[type="image"]:hover, .snarkTorrentAction input[type="image"]:focus {
   border: 1px solid #652787 !important;
-  box-shadow: inset 0 0 0 1px #000, inset 0 0 1px 1px #717;
+  box-shadow: var(--highlight), inset 0 0 1px 1px #717;
   background: linear-gradient(to bottom, #652787 50%, #3C1751 50%);
   filter: none !important;
 }
 
 .snarkTorrentAction input[type="image"]:active {
-  box-shadow: inset 0 0 0 1px #000, inset 3px 3px 2px #000;
+  box-shadow: var(--highlight), inset 3px 3px 2px #000;
   transform: none !important;
 }
 
@@ -944,12 +947,12 @@ td.snarkTorrentAction input[type="image"] {
 
 .snarkTorrentInfo tr:nth-child(even) {
   color: #7670c2;
-  background: #010010;
+  background: #001;
 }
 
 .snarkTorrentInfo tr:nth-child(odd) {
   color: #7670c2;
-  background: #080811;
+  background: #001;
 }
 
 .snarkTorrentInfo td {
@@ -980,7 +983,7 @@ td.snarkTorrentAction input[type="image"] {
 }
 
 .magnetlink:active, .torrentlink:active {
-  box-shadow: inset 0 0 0 1px #000, inset 4px 4px 3px 1px rgb(31, 0, 47);
+  box-shadow: var(--highlight), inset 4px 4px 3px 1px rgb(31, 0, 47);
 }
 
 th .magnetlink img, th .torrentlink img {
@@ -1034,6 +1037,12 @@ th .magnetlink img, th .torrentlink img {
 .infohash::selection, .snarkAddInfo code::selection {
   color: #cc0;
   background: #000;
+  user-select: all;
+}
+
+li .infohash::selection, .snarkTorrents .infohash::selection {
+  color: #000;
+  background: #cc0;
 }
 
 .snarkDirInfo {
@@ -1296,7 +1305,7 @@ _:-ms-lang(x), .snarkTorrentOdd, .snarkTorrentOdd td, .SnarkTorrentEven, .SnarkT
   font-style: italic;
   border-top: 1px solid #113 !important;
   border-bottom: 1px solid #113 !important;
-  box-shadow: inset 0 0 0 1px #000;
+  box-shadow: var(--highlight);
   background: linear-gradient(to bottom, #060610, #040408);
 }
 
@@ -1314,7 +1323,7 @@ _:-ms-lang(x), .snarkTorrentOdd, .snarkTorrentOdd td, .SnarkTorrentEven, .SnarkT
 .percentBarOuter {
   margin: 3px auto;
   border: 1px solid #225;
-  box-shadow: 0 0 1px 1px rgba(0,0,0,.8), inset 0 0 0 1px #000, inset 2px 2px 2px rgba(0,0,0,.9);
+  box-shadow: 0 0 1px 1px rgba(0,0,0,.8), var(--highlight), inset 2px 2px 2px rgba(0,0,0,.9);
   background: #000;
   background: repeating-linear-gradient(135deg, #001 1px, #001 5px, #112 6px, #113 11px);
 }
@@ -1343,7 +1352,7 @@ to {
   border: none;
   border-right: 1px solid #225;
   border-radius: 1px;
-  box-shadow: inset 0 0 0 1px #000;
+  box-shadow: var(--highlight);
   background: #33a;
   background: linear-gradient(to bottom,  #33a, #226 50%, #003 50%, #000);
   opacity: .8;
@@ -1408,7 +1417,7 @@ to {
   color: #a7acff;
   text-align: center;
   text-shadow: 0 1px 1px #000;
-  box-shadow: inset 0 0 0 1px #000, inset 0 1px 1px 1px #225, inset 0 -1px 1px 1px #000028;
+  box-shadow: var(--highlight), inset 0 1px 1px 1px #225, inset 0 -1px 1px 1px #000028;
   border-radius: 15px;
   background: #113;
   background: radial-gradient(at center bottom, rgba(32, 32, 80, .55) 10%, rgba(16, 16, 64, .1) 60%, rgba(0, 0, 0, 0) 70%), linear-gradient(to bottom, #113, #000008);
@@ -1437,7 +1446,7 @@ tr:hover .percentBarInner {
 tr:hover .percentBarComplete {
   color: #c9ceff;
   text-shadow: 0 1px 1px #000, 0 0 2px #337;
-  box-shadow: inset 0 0 0 1px #000, inset 0 1px 1px 1px #336, inset 0 -1px 1px 1px #003;
+  box-shadow: var(--highlight), inset 0 1px 1px 1px #336, inset 0 -1px 1px 1px #003;
   background: radial-gradient(at center bottom, rgba(48, 48, 96, .65) 10%, rgba(32, 32, 80, .1) 60%, rgba(0, 0, 0, 0) 70%), linear-gradient(to bottom, #114, #001);
 }
 
@@ -1480,13 +1489,13 @@ tr:hover .percentBarComplete {
 
 .thumb {
   max-height: 32px;
-  box-shadow: 0 0 0 1px #26235c, inset 0 0 0 1px #000;
+  box-shadow: 0 0 0 1px #26235c, var(--highlight);
   background: #001;
   padding: 1px;
 }
 
 .thumb:hover {
-  box-shadow: 0 0 0 1px #652787, inset 0 0 0 1px #000;
+  box-shadow: 0 0 0 1px #652787, var(--highlight);
   filter: none !important;
 }
 
@@ -1494,12 +1503,12 @@ audio, video {
   padding: 1px;
   width: 240px;
 /*  border: 1px solid #26235c;*/
-  box-shadow: 0 0 0 1px #26235c, inset 0 0 0 1px #000;
+  box-shadow: 0 0 0 1px #26235c, var(--highlight);
 }
 
 audio:hover, audio:focus, video:hover, video:focus {
 /*  border: 1px solid #652787;*/
-  box-shadow: 0 0 0 1px #652787, inset 0 0 0 1px #000;
+  box-shadow: 0 0 0 1px #652787, var(--highlight);
 }
 
 video:fullscreen, video:fullscreen:hover, video:fullscreen:focus {
@@ -1562,7 +1571,7 @@ video:hover::-webkit-media-controls-panel, video:focus::-webkit-media-controls-p
   text-shadow: 0 0 1px #000;
   border: 1px solid #26235c;
   border-radius: 0 0 2px 2px;
-  box-shadow: inset 0 0 0 1px #000, inset 0 0 1px 1px #224;
+  box-shadow: var(--highlight), inset 0 0 1px 1px #224;
   background: #003;
   background: linear-gradient(to right, rgba(0,0,16,.7), rgba(0,0,0,.1), rgba(0,0,16,.7)),
               linear-gradient(to bottom, #181828 50%, #000 50%);
@@ -1585,14 +1594,15 @@ video:hover::-webkit-media-controls-panel, video:focus::-webkit-media-controls-p
 }
 
 .snarkConfigTitle:active, .toggleview:active {
-  box-shadow: inset 0 0 0 1px #000, inset 3px 3px 3px 3px #000;
+  box-shadow: var(--highlight), inset 3px 3px 3px 3px #000;
   background: linear-gradient(to right, rgba(0,0,16,.1), rgba(64,0,64,.2), rgba(0,0,16,.1)), linear-gradient(to bottom, #080008, #0a000a) !important;
   transition: ease all .01s;
 }
 
 .configsectionpanel .snarkConfigTitle, .configsectionpanel .snarkConfigTitle:hover, .configsectionpanel .snarkConfigTitle:active {
-  box-shadow: inset 0 0 0 1px #000 !important;
-  background: linear-gradient(to bottom, #05050e 50%, #000 50%) !important;
+  box-shadow: var(--highlight) !important;
+  background: var(--title) !important;
+  background-size: 4px 100%, 100% !important;
 }
 
 .snarkConfigTitle {
@@ -1606,10 +1616,10 @@ video:hover::-webkit-media-controls-panel, video:focus::-webkit-media-controls-p
 .configsectionpanel .snarkConfigTitle {
   margin: -1px -1px -17px;
   padding: 8px !important;
-  text-align: left !important;
   display: block;
-  font-variant: normal !important;
+  text-align: left !important;
   text-transform: uppercase;
+  font-variant: normal !important;
   font-size: 11pt !important;
 }
 
@@ -1698,7 +1708,7 @@ a:active {
 }
 
 input {
-  font: bold 9pt "Droid Sans", "Open Sans", "Noto Sans", Ubuntu, "Segoe UI", "Lucida Grande", "DejaVu Sans", Verdana, Helvetica, sans-serif;
+  font: bold 9pt var(--bodyfont);
   margin: 2px 4px 2px 0;
   padding: 3px 4px !important;
   cursor: pointer;
@@ -1729,11 +1739,11 @@ input:disabled[type=submit], input:disabled:hover[type=submit], input:disabled:a
   padding: 5px 12px !important;
   min-width: 95px !important;
   text-align: center;
-  font: bold 9pt "Droid Sans", "Open Sans", "Noto Sans", Ubuntu, "Segoe UI", "Lucida Grande", "DejaVu Sans", Verdana, Helvetica, sans-serif;
+  font: bold 9pt var(--bodyfont);
   color: #7171d1 !important;
   border: 1px solid #26225c;
   border-radius: 2px;
-  box-shadow: inset 0 0 0 1px #000, inset 0 0 1px 0 #446;
+  box-shadow: var(--highlight), inset 0 0 1px 0 #446;
   background: #000;
   background: linear-gradient(to bottom, #11101c 50%, #000010 50%) !important;
 }
@@ -1763,7 +1773,7 @@ input[type=submit]:hover, input[type=submit]:focus, input[type="reset"]:hover, i
   cursor: pointer;
   color: #652787 !important;
   border: 1px solid #652787 !important;
-  box-shadow: inset 0 0 0 1px #000, inset 0 0 1px 1px #757;
+  box-shadow: var(--highlight), inset 0 0 1px 1px #757;
   background: #000 !important;
   background: linear-gradient(to bottom, #202 50%, #000 50%) !important;
 }
@@ -1905,7 +1915,7 @@ textarea {
 }
 
 select {
-  font: 9pt "Droid Sans", "Open Sans", "Noto Sans", Ubuntu, "Segoe UI", "Lucida Grande", "DejaVu Sans", Verdana, Helvetica, sans-serif;
+  font: 9pt var(--bodyfont);
   font-weight: bold;
   min-width: 100px;
   margin: 2px 4px 2px 0;
@@ -1916,10 +1926,10 @@ select {
   border: 1px solid #27235f;
   border-bottom-color: #171539;
   border-right-color: #171539;
-  box-shadow: inset 0 0 0 1px #000, inset 0 0 1px 0 #446;
+  box-shadow: var(--highlight), inset 0 0 1px 0 #446;
   background: #000 url(images/dropdown.svg) right 10px center no-repeat !important;
   background: url(images/dropdown.svg) center right 10px no-repeat, linear-gradient(to bottom, #11101c 50%, #000010 50%) !important;
-  background-size: 10px auto, 100% 100% !important;
+  background-size: 10px auto, 100% !important;
   -moz-appearance: none;
   -webkit-appearance: none;
 }
@@ -1927,10 +1937,10 @@ select {
 select:hover, select:focus, select:active {
   color: #652787 !important;
   border: 1px solid #652787 !important;
-  box-shadow: inset 0 0 0 1px #000, inset 0 0 1px 1px #757;
+  box-shadow: var(--highlight), inset 0 0 1px 1px #757;
   background: #000 url(images/dropdown_hover.svg) right 10px center no-repeat !important;
   background: url(images/dropdown_hover.svg) right 10px center no-repeat, linear-gradient(to bottom, #202 50%, #000 50%) !important;
-  background-size: 10px auto, 100% 100% !important;
+  background-size: 10px auto, 100% !important;
 }
 
 select[disabled], select[disabled]:hover {
@@ -1957,7 +1967,7 @@ select::-ms-expand {
 }
 
 textarea {
-  font: 8pt "Droid Sans Mono", "Noto Mono", "DejaVu Sans Mono", "Lucida Console", monospace;
+  font: 8pt var(--monospaced)
   font-weight: bold;
   padding: 1px 4px 0;
   color: #4e47bf;
@@ -1971,16 +1981,14 @@ textarea:focus {
 }
 
 img {
-  line-height: 100%;
   margin: 0 3px 1px 3px;
+  line-height: 100%;
   vertical-align: middle;
-  opacity: 1.0;
   border: none;
 }
 
 img:hover {
   line-height: 100%;
-  opacity: 1;
   border: none;
 }
 
@@ -2047,14 +2055,6 @@ a:hover img, a:focus img {
   display: inline !important;
 }
 
-/*
-.pagenav img.disable,
-.pagenav img.disable:hover {
-  opacity: .3;
-  mix-blend-mode: luminosity;
-}
-*/
-
 #pagenav {
   font-weight: bold !important;
 }
@@ -2067,7 +2067,7 @@ a:hover img, a:focus img {
   background: linear-gradient(to bottom, #001 50%, #181d4f 50%);
   border: 1px solid #171c3f !important;
   border-radius: 2px;
-  box-shadow: inset 0 0 0 1px #000;
+  box-shadow: var(--highlight);
   mix-blend-mode: luminosity;
 }
 
@@ -2454,7 +2454,7 @@ _:-ms-lang(x), #trackerselect tr:last-child {
 }
 
 .newtorrentsection, .addtorrentsection, .configsection, #configs .optionlist {
-  box-shadow: inset 0 0 0 1px #000, inset 0 0 2px 1px #191939, inset 0 0 5px 3px rgba(0,0,96,.3) !important;
+  box-shadow: var(--highlight), inset 0 0 2px 1px #191939, inset 0 0 5px 3px rgba(0,0,96,.3) !important;
 }
 
 .newtorrentsection:hover, .addtorrentsection:hover, .configsection:hover, #configs .optionlist:hover {
@@ -2628,7 +2628,7 @@ input:checked + label + hr + table + table {
 .peerinfo, .debuginfo {
   background: #080828;
   background: #040424 !important;
-  box-shadow: inset 0 0 0 1px #000;
+  box-shadow: var(--highlight);
 }
 
 .debuginfo {
@@ -2699,7 +2699,7 @@ input:checked + label + hr + table + table {
 }
 
 .debugConnStat b {
-  font-family: "Droid Sans", "Open Sans", "Noto Sans", Ubuntu, "Segoe UI", "Lucida Grande", "DejaVu Sans", Verdana, Helvetica, sans-serif;
+  font-family: var(--bodyfont);
   color: #c9ceff;
 }
 
@@ -2715,7 +2715,7 @@ tfoot .dhtDebug th {
   text-align: center;
   border: none;
   border-top: 1px solid #26235c;
-  box-shadow: inset 0 0 0 1px #000;
+  box-shadow: var(--highlight);
   background: linear-gradient(to bottom, #001, #000009);
 }
 
@@ -2776,7 +2776,7 @@ input#toggle_debug:checked + label + #dhtDebugInner {
   margin: 0 5%;
   text-align: center;
   border: 1px solid #120f35;
-  box-shadow: inset 0 0 0 1px #000;
+  box-shadow: var(--highlight);
 }
 
 .bucketsContainer {
@@ -2804,7 +2804,7 @@ input#toggle_debug:checked + label + #dhtDebugInner {
   font-family: monospace;
   border: 1px solid #225;
   border-radius: 3px;
-  box-shadow: inset 0 0 0 1px #000;
+  box-shadow: var(--highlight);
   background: #113;
   user-select: all;
 }
@@ -2842,7 +2842,7 @@ hr.debug {
 
 .resourceError th {
   background: url(/themes/console/images/info/errortriangle.png) left 10px center no-repeat, linear-gradient(to bottom, #003, #010011);
-  background-size: 24px auto, 100% 100%;
+  background-size: 24px auto, 100%;
   padding: 10px 10px 10px 40px;
   font-size: 10pt !important;
   border: none;
@@ -3087,7 +3087,7 @@ td#bwHelp a {
 }
 
 .snarkCommentInfo textarea {
-  font-family: "Droid Sans", "Open Sans", "Noto Sans", Ubuntu, "Segoe UI", "Lucida Grande", "DejaVu Sans", Verdana, Helvetica, sans-serif;
+  font-family: var(--bodyfont);
   font-weight: normal;
   width: 100%;
   min-height: 64px;
@@ -3169,7 +3169,7 @@ td .commentAuthorName {
   text-align: left;
   border: 1px solid #113;
   border-radius: 3px;
-  box-shadow: inset 0 0 0 1px #000, 0 0 1px 0 rgba(0,0,0,.3);
+  box-shadow: var(--highlight), 0 0 1px 0 rgba(0,0,0,.3);
   background: url(images/comment.png) 12px center no-repeat #113;
   background-blend-mode: luminosity;
 }
@@ -3375,7 +3375,7 @@ input.trackerhome, input.trackerannounce, .knownTracker a, #trackerselect a {
 
 .snarkNav:link, .snarkNav:hover, .snarkNav:focus, .snarkNav:active, .snarkNav:link:active,
 .nav_search:link:hover, .nav_search:link:focus, .nav_forum:link:hover, .nav_forum:link:focus, .nav_main:link:hover, .nav_main:link:focus{
-  background-size: 14px 14px, 100% 100%, 100% 100% !important;
+  background-size: 14px 14px, 100%, 100% !important;
 }
 
 #pagenavcontrols {
@@ -3492,7 +3492,8 @@ td.snarkTorrentAction input[type="image"] {
 }
 
 @media screen and (min-width: 1500px) {
-a, th, thead th, tfoot th, td, select, select option, .snarkAddInfo, .snarkFileName, textarea, input[name="nofilter_dataDir"], input {
+a, th, thead th, tfoot th, td, select, select option, .snarkAddInfo, .snarkFileName,
+textarea, input[name="nofilter_dataDir"], input {
   font-size: 10pt !important;
 }
 
@@ -3540,10 +3541,6 @@ code, tt {
   padding-left: 28px !important;
 }
 
-/*.snarkTorrentAction input[type="image"] {
-  padding: 4px 5px !important;
-}*/
-
 #pagenavcontrols {
   transform: translateX(70px) !important;
 }
@@ -3572,11 +3569,6 @@ code, tt {
   height: 54px;
 }
 
-/*.snarkTorrents td:nth-child(3), .SnarkTorrents td:nth-child(4) {
-  text-align: center !important;
-  width: 24px !important;
-}*/
-
 .snarkTorrentDownloaded {
   white-space: nowrap;
   padding: 0 10px !important;
@@ -3589,10 +3581,13 @@ code, tt {
 
 .page {
   padding: 10px;
-  background: #003;
-  background: linear-gradient(to right, #004, #002, #004);
-  background: linear-gradient(to right, #002, #004, #002);
-  box-shadow: inset 0 0 0 1px #000;
+  box-shadow: var(--highlight), inset 0 0 2px 1px #337;
+  background: repeating-linear-gradient(to right, #000 2px, #000028 4px) !important;
+  background-size: 4px 100% !important;
+}
+
+.iframed .page {
+  background: none !important;
 }
 
 .newtorrentsection, .addtorrentsection, .configsection, .configsectionpanel, .snarkMessages, .snarkTorrents, .snarkDirInfo, .snarkTorrentInfo {
@@ -3617,28 +3612,6 @@ code, tt {
 }
 
 /* end responsive layout */
-
-/* torrent sort indicator */
-/*
-.snarkTorrents th a[href*="sort="]:hover::after {
-  margin-left: 2px;
-  position: absolute;
-  display: inline-block;
-  font-size: 10pt;
-  color: #b3b;
-  content: "\23F6";
-}
-
-.snarkTorrents th a[href*="sort=-"]:hover::after {
-  margin-left: 2px;
-  position: absolute;
-  display: inline-block;
-  font-size: 10pt;
-  color: #b3b;
-  content: "\23F7";
-}
-*/
-/* end torrent sort indicator */
 
 .info_tracker {
   margin: 1px -1px 1px 0;
@@ -3673,7 +3646,7 @@ code, tt {
 .info_tracker:hover {
   border: 1px solid #652787;
   background: url(images/button_tracker_hover.png) left 3px center no-repeat, linear-gradient(to bottom, #000 50%, #002 50%) !important;
-  background-size: 14px auto, 100% 100% !important;
+  background-size: 14px auto, 100% !important;
 }
 
 .info_tracker:active, .info_tracker:active a {
@@ -3809,7 +3782,8 @@ code, tt {
 #configs th {
   padding: 6px 8px;
   font-size: 10pt !important;
-  background: linear-gradient(to bottom, #05050e 50%, #000 50%);
+  background: var(--title);
+  background-size: 4px 100%, 100%;
 }
 
 .optionlist {
@@ -3822,27 +3796,6 @@ code, tt {
   box-shadow: inset 0 0 0 2px #000;
   transition: ease-in-out .5s box-shadow;
 }
-
-/*.optionlist:hover {
-  box-shadow: inset 0 0 0 1px #414;
-  transition: ease-in-out .5s box-shadow;
-}
-
-tr + tr td .optionlist {
-  display: none;
-}
-
-tr:hover + tr td .optionlist, tr + tr:hover td .optionlist {
-  display: block;
-}
-
-#configs tr:not(:hover) td {
-  border-bottom: 1px solid transparent;
-}
-
-#configs tr:hover + tr td {
-  border-bottom: 1px solid #26235c;
-}*/
 
 .configOption {
   padding: 2px 4px;
@@ -4196,7 +4149,7 @@ td.snarkTorrentDetails img, .snarkDirInfo td:first-child img:not(.thumb) {
   z-index: 500;
   line-height: 1.5;
   border: 1px solid #26235c;
-  box-shadow: inset 0 0 0 1px #000;;
+  box-shadow: var(--highlight);;
   background: linear-gradient(to bottom, #001, #00000d);
 }
 
@@ -4232,7 +4185,7 @@ td.snarkTorrentDetails img, .snarkDirInfo td:first-child img:not(.thumb) {
   font-weight: bold;
   color: #89f;
   border-right: 1px solid #171c3f;
-  box-shadow: inset 0 0 0 1px #000;
+  box-shadow: var(--highlight);
   background: linear-gradient(to bottom, #080818 50%, #000 50%);
 }
 
@@ -4249,7 +4202,7 @@ td.snarkTorrentDetails img, .snarkDirInfo td:first-child img:not(.thumb) {
 }
 
 #torrentDisplay label:active, #torrentDisplay input:checked + label {
-  box-shadow: inset 0 0 0 1px #000, inset 3px 3px 3px #000;
+  box-shadow: var(--highlight), inset 3px 3px 3px #000;
   background: #113;
   color: #349;
   text-shadow: 0 1px 1px #000;
@@ -4297,7 +4250,7 @@ input[type=radio], input[type=radio]:checked, input[type=radio][disabled], input
   outline: none;
   vertical-align: middle !important;
   border: 1px solid #363181 !important;
-  box-shadow: inset 0 0 0 1px #000, inset 3px 3px 3px 1px #000;
+  box-shadow: var(--highlight), inset 3px 3px 3px 1px #000;
   background: #001;
   background: linear-gradient(to bottom, #030306, #112);
   box-sizing: border-box;
@@ -4320,7 +4273,7 @@ input[type=checkbox]:not(:checked)::before, input[type=radio]:not(:checked)::bef
 }
 
 .optbox:not(:checked) {
-  box-shadow: inset 0 0 0 1px #000, inset 3px 3px 3px 1px #000;
+  box-shadow: var(--highlight), inset 3px 3px 3px 1px #000;
 }
 
 input[type=checkbox]:checked::before, input[type=checkbox]:not(:checked)::before,
@@ -4448,7 +4401,7 @@ tr:not(.peerinfo) .snarkTorrentDownloaded .percentBarText::after {
   padding: 1px 0;
   border-radius: 2px;
   background: #002;
-  box-shadow: 0 0 0 1px #113, inset 0 0 0 1px #000;
+  box-shadow: 0 0 0 1px #113, var(--highlight);
 }
 
 #ourDest {
@@ -4458,7 +4411,7 @@ tr:not(.peerinfo) .snarkTorrentDownloaded .percentBarText::after {
   border: 1px solid #003;
   border-radius: 4px;
   background: #002;
-  box-shadow: inset 0 0 0 1px #000;
+  box-shadow: var(--highlight);
 }
 
 #ourDest tt {
@@ -4515,7 +4468,8 @@ tr:not(.peerinfo) .snarkTorrentDownloaded .percentBarText::after {
 
 .inactivity {
   background: #900;
-  background: repeating-linear-gradient(to right, rgba(0,0,0,0), rgba(0,0,0,0) 15px, rgba(0,0,0,.6) 15px, rgba(0,0,0,.6) 16px, rgba(0,0,0,0) 16px), linear-gradient(to bottom, rgba(255,255,255,.3) 50%, rgba(0,0,0,.3) 50%), linear-gradient(to right, #440 40px, #730 100px, #900);
+  background: repeating-linear-gradient(to right, rgba(0,0,0,0), rgba(0,0,0,0) 15px, rgba(0,0,0,.6) 15px, rgba(0,0,0,.6) 16px, rgba(0,0,0,0) 16px),
+              linear-gradient(to bottom, rgba(255,255,255,.3) 50%, rgba(0,0,0,.3) 50%), linear-gradient(to right, #440 40px, #730 100px, #900);
   display: inline-block;
   min-width: 5px;
   height: 4px;
@@ -4572,14 +4526,13 @@ tr:not(.peerinfo) .snarkTorrentDownloaded .percentBarText::after {
   color: #a7acff;
   text-shadow: 0 1px 1px #000, 0 0 2px #337;
   border: 1px solid #181838;
-  box-shadow: inset 0 0 0 1px #000;
+  box-shadow: var(--highlight);
   background: linear-gradient(to bottom, #080828, #000);
 }
 
 .snarkTorrentUploaded .left {
   margin-left: -1px;
   padding-right: 2px;
-  min-width: 12px;
   min-width: 18px;
   text-align: center;
   border-left: none;
@@ -4608,13 +4561,13 @@ tr:not(.peerinfo) .snarkTorrentUploaded:empty::after {
 
 tfoot .snarkTorrentRateDown:not(:empty)::before, tfoot .snarkTorrentDownloaded:not(:empty)::before,
 tfoot .snarkTorrentRateUp:not(:empty)::before,tfoot .snarkTorrentUploaded:not(:empty)::before {
+  margin-top: -3px;
   margin-right: 3px;
   display: inline-block;
+  line-height: 0;
   vertical-align: middle;
   font-size: 90%;
   text-shadow: 0 0 1px #101;
-  line-height: 0;
-  margin-top: -3px;
 }
 
 tfoot .snarkTorrentRateDown:not(:empty)::before, tfoot .snarkTorrentDownloaded:not(:empty)::before {
@@ -4628,8 +4581,8 @@ tfoot .snarkTorrentRateUp:not(:empty)::before,tfoot .snarkTorrentUploaded:not(:e
 }
 
 .snarkCommentInfo th input[type=submit] {
-  float: none !important;
   display: inline-block;
+  float: none !important;
   vertical-align: middle;
 }
 
@@ -4659,8 +4612,8 @@ tfoot .snarkTorrentRateUp:not(:empty)::before,tfoot .snarkTorrentUploaded:not(:e
   height: 19px;
   padding: 2px;
   background: #000 url(/i2psnark/.resources/icons/tick.png) center center no-repeat;
-  background:  url(/i2psnark/.resources/icons/tick.png) center center no-repeat, linear-gradient(to bottom, #11101c 50%, #000010 50%) !important;
-  background-size: 16px 16px !important;
+  background: url(/i2psnark/.resources/icons/tick.png) center center no-repeat, linear-gradient(to bottom, #11101c 50%, #000010 50%) !important;
+  background-size: 16px !important;
 }
 
 #nameRequired, .commentAuthorName {
@@ -4773,14 +4726,14 @@ tfoot .snarkTorrentRateUp:not(:empty)::before,tfoot .snarkTorrentUploaded:not(:e
 
 .customalert {
   border: 1px solid #26235c !important;
-  box-shadow: 0 0 3px 1px rgba(0,0,0,.6), inset 0 0 0 1px #000 !important;
+  box-shadow: 0 0 3px 1px rgba(0,0,0,.6), var(--highlight) !important;
   background: #000 !important;
   background: linear-gradient(to top, #001, #000) !important;
 }
 
 .customalert .header {
   border-bottom: 1px solid #26235c !important;
-  box-shadow: inset 0 0 0 1px #000 !important;
+  box-shadow: var(--highlight) !important;
   background: #002 !important;
   background: linear-gradient(to bottom, #002, #000) !important;
 }
@@ -4858,7 +4811,7 @@ td.snarkTorrentStatus b, .lang_en td.snarkTorrentStatus b {
   padding: 10px 10px 10px 34px;
   border-color: #003;
   border-radius: 0;
-  box-shadow: inset 0 0 0 1px #000, 0 0 1px 0 rgba(0,0,0,.3);
+  box-shadow: var(--highlight), 0 0 1px 0 rgba(0,0,0,.3);
   background: #000024 url(images/button_forum.png) 10px center no-repeat;
   background-size: 16px auto;
 }
