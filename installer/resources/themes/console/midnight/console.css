@@ -852,20 +852,20 @@ input.reload[value^="Update"]:active, button.reload[value^="Update"]:active {
 
 input.reload[value="Force GC"], input.reload[value="Force garbage collection"] {
   padding: 5px 9px 5px 25px !important;
-  background: url(/themes/console/images/buttons/clean.png) 8px center no-repeat, var(--button) !important;
-  background-size: 14px, 100% !important;
+  background: var(--recycle) 8px center no-repeat, var(--button) !important;
+  background-size: 13px, 100% !important;
 }
 
 input.reload[value="Force GC"]:hover, input.reload[value="Force GC"]:focus,
 input.reload[value="Force garbage collection"]:hover, input.reload[value="Force garbage collection"]:focus {
-  background: url(/themes/console/images/buttons/clean_hover.png) 8px center no-repeat, var(--button_hover) !important;
-  background-size: 14px, 100% !important;
+  background: var(--recycle) 8px center no-repeat, var(--button_hover) !important;
+  background-size: 13px, 100% !important;
 }
 
 input.reload[value="Force garbage collection"]:active, input.reload[value="Force garbage collection"]:active {
   padding: 5px 9px 5px 25px !important;
-  background: url(/themes/console/images/buttons/clean_hover.png) 8px center no-repeat, var(--button_active) !important;
-  background-size: 14px, 100% !important;
+  background: var(--recycle) 8px center no-repeat, var(--button_active) !important;
+  background-size: 13px, 100% !important;
 }
 
 input.stop, button.stop {
