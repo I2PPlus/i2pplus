@@ -512,19 +512,19 @@ input.add:active, button.add:active {
 
 input.add[value^="Adjust"], button.add[value^="Adjust"] {
   padding: 5px 9px 5px 25px !important;
-  background: url(/themes/console/images/buttons/edit2.png) 8px center no-repeat, var(--button) !important;
+  background: var(--edit) 8px center no-repeat, var(--button) !important;
   background-size: 14px, 100%, 100% !important;
 }
 
 input.add[value^="Adjust"]:hover, button.add[value^="Adjust"]:hover,
 input.add[value^="Adjust"]:focus, button.add[value^="Adjust"]:focus {
-  background: url(/themes/console/images/buttons/edit2.png) 8px center no-repeat, var(--button_hover) !important;
+  background: var(--edit_hover) 8px center no-repeat, var(--button_hover) !important;
   background-size: 14px, 100% !important;
 }
 
 input.add[value^="Adjust"]:active, button.add[value^="Adjust"]:active {
   padding: 5px 9px 5px 25px !important;
-  background: url(/themes/console/images/buttons/edit2.png) 8px center no-repeat, var(--button_active) !important;
+  background: var(--edit) 8px center no-repeat, var(--button_active) !important;
   background-size: 14px, 100% !important;
 }
 
@@ -647,19 +647,19 @@ input.delete:active, button.delete:active {
 
 input.delete[value^="Ban"], button.delete[value^="Ban"] {
   padding: 5px 9px 5px 25px !important;
-  background: url(/themes/console/images/buttons/ban.png) 8px center no-repeat, var(--button) !important;
+  background: var(--doban) 8px center no-repeat, var(--button) !important;
   background-size: 14px, 100% !important;
 }
 
 input.delete[value^="Ban"]:hover, button.delete[value^="Ban"]:hover,
 input.delete[value^="Ban"]:focus, button.delete[value^="Ban"]:focus {
-  background: url(/themes/console/images/buttons/ban.png) 8px center no-repeat, var(--button_hover) !important;
+  background: var(--doban) 8px center no-repeat, var(--button_hover) !important;
   background-size: 14px, 100% !important;
 }
 
 input.delete[value^="Ban"]:active, button.delete[value^="Ban"]:active {
   padding: 5px 9px 5px 25px !important;
-  background: url(/themes/console/images/buttons/ban.png) 8px center no-repeat, var(--button_active) !important;
+  background: var(--doban) 8px center no-repeat, var(--button_active) !important;
   background-size: 14px, 100% !important;
 }
 
@@ -943,15 +943,18 @@ button.stop.control:active {
 }
 
 button.add.control {
-  background: url(/themes/console/images/buttons/edit2.png) center center no-repeat, var(--button) !important;
+  background: var(--edit) center center no-repeat, var(--button) !important;
+  background-size: 16px, 100% !important;
 }
 
 button.add.control:hover, button.add.control:focus {
-  background: url(/themes/console/images/buttons/edit2.png) center center no-repeat, var(--button_hover) !important;
+  background: var(--edit_hover) center center no-repeat, var(--button_hover) !important;
+  background-size: 16px, 100% !important;
 }
 
 button.add.control:active {
-  background: url(/themes/console/images/buttons/edit2.png) center center no-repeat, var(--button_active) !important;
+  background: var(--edit_hover) center center no-repeat, var(--button_active) !important;
+  background-size: 16px, 100% !important;
 }
 
 button.delete.control {
@@ -4904,8 +4907,11 @@ table#reseedconfig textarea {
 }
 
 #banlist .routerid {
+  margin-top: -3px !important;
   padding: 1px 2px !important;
   line-height: 1;
+  border: none !important;
+  box-shadow: none !important;
   background: none !important;
 }
 
@@ -6666,14 +6672,20 @@ a[href^="configpeer?peer"]:not(old) {
 }
 
 a[href^="configpeer?peer"]::after {
-  content: url(/themes/console/images/buttons/edit.png);
-  vertical-align: top;
-  margin: 0 0 0 4px !important;
+  vertical-align: middle;
+  margin: 1px 2px 1px 4px !important;
   line-height: 0 !important;
+  background: var(--edit) center center no-repeat;
+  background-size: 16px;
+  height: 16px;
+  width: 16px;
+  display: inline-block;
+  content: "";
 }
 
-a[href^="configpeer?peer"]:hover {
-  filter: drop-shadow(0 0 1px #99f);
+a[href^="configpeer?peer"]:hover::after {
+  background: var(--edit_hover) center center no-repeat;
+  background-size: 16px;
 }
 
 table#profile_defs, table#thresholds {
