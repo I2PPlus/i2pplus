@@ -428,19 +428,19 @@ input.accept:active, button.accept:active {
 
 input.cancel, button.cancel {
   padding: 5px 9px 5px 23px !important;
-  background: url(/themes/console/images/svg/no.svg) 8px center no-repeat, var(--button) !important;
+  background: var(--no) 8px center no-repeat, var(--button) !important;
   background-size: 11px, 100% !important;
 }
 
 input.cancel:hover, button.cancel:hover,
 input.cancel:focus, button.cancel:focus {
-  background: url(/themes/console/images/svg/no.svg) 8px center no-repeat, var(--button_hover) !important;
+  background: var(--no) 8px center no-repeat, var(--button_hover) !important;
   background-size: 11px, 100% !important;
 }
 
 input.cancel:active, button.cancel:active {
   padding: 5px 9px 5px 23px !important;
-  background: url(/themes/console/images/svg/no.svg) 8px center no-repeat, var(--button_active) !important;
+  background: var(--no) 8px center no-repeat, var(--button_active) !important;
   background-size: 11px, 100% !important;
 }
 
@@ -494,19 +494,19 @@ input.accept[value^="Filter"]:focus, button.accept[value^="Filter"]:focus {
 
 input.add, button.add {
   padding: 5px 9px 5px 25px !important;
-  background: url(/themes/console/images/buttons/add.png) 8px center no-repeat, var(--button) !important;
+  background: var(--add) 8px center no-repeat, var(--button) !important;
   background-size: 14px, 100%, 100% !important;
 }
 
 input.add:hover, button.add:hover,
 input.add:focus, button.add:focus {
-  background: url(/themes/console/images/buttons/add.png) 8px center no-repeat, var(--button_hover) !important;
+  background: var(--add) 8px center no-repeat, var(--button_hover) !important;
   background-size: 14px, 100% !important;
 }
 
 input.add:active, button.add:active {
   padding: 5px 9px 5px 25px !important;
-  background: url(/themes/console/images/buttons/add.png) 8px center no-repeat, var(--button_active) !important;
+  background: var(--add) 8px center no-repeat, var(--button_active) !important;
   background-size: 14px, 100% !important;
 }
 
@@ -3398,7 +3398,8 @@ tr:hover {
   box-shadow: none;
 }
 
-tr:nth-child(even), #netdbversions tr:nth-child(even), #netdbtransports tr:nth-child(even), #netdbcountrylist tr:nth-child(even), #netdbtiers tr:nth-child(even),
+tr:nth-child(even), #netdbversions tr:nth-child(even), #netdbtransports tr:nth-child(even),
+#netdbcountrylist tr:nth-child(even), #netdbtiers tr:nth-child(even),
 #pluginconfig table tr:nth-child(even) {
   vertical-align: middle;
   background: #080818;
@@ -8266,6 +8267,16 @@ textarea#advancedsettings {
   box-shadow: var(--highlight);
 }
 
+#advconf tr:nth-child(2) {
+  background: none !important;
+}
+
+textarea#advancedsettings:not(:focus) {
+  background: repeating-linear-gradient(to right, rgba(0,0,0,.1) 2px, rgba(0,0,32,.1) 4px),
+              linear-gradient(to bottom, rgba(0,0,0,.4), rgba(0,0,16,.4));
+  background-size: 4px 100%, 100%;
+}
+
 textarea#advancedsettings:focus {
   box-shadow: inset 0 0 0 1px #202 !important;
 }
@@ -8416,6 +8427,12 @@ h3.tabletitle a {
 @media screen and (min-width: 1200px) {
   h3.tabletitle a, h3#version.tabletitle a {
     padding-left: 18px !important;
+  }
+}
+
+@media screen and (max-width: 1499px) {
+  #logs h3.tabletitle a.delete {
+    padding-right: 16px !important;
   }
 }
 
@@ -12899,7 +12916,7 @@ a:hover .sitemapLink {
 }
 
 #wizardpage .no {
-  background: url(/themes/console/images/svg/no.svg) center center no-repeat;
+  background: var(--no) center center no-repeat;
 }
 
 #wizardpage .yes, #wizardpage .no {
