@@ -375,6 +375,7 @@ td input[type="image"]::after {
 .snarkMessages li {
   margin-left: -15px;
   line-height: 125%;
+  color: #8589ad;
 }
 
 .snarkMessages li::before {
