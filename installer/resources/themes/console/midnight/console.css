@@ -328,6 +328,8 @@ button, input[type=submit], input[type=reset], button, select {
 }
 
 input[type=file]::file-selector-button {
+  margin-right: 10px !important;
+  font-size: 100% !important;
   border-radius: 2px;
   box-shadow: var(--highlight), inset 0 0 0 1px #446, 0 0 0 1px #000;
   background: 8px 5px no-repeat, var(-button);
@@ -703,21 +705,21 @@ input.download[value^="Join"]:active, button.download[value^="Join"]:active {
 input.download[value$="from File"], button.download[value$="from File"],
 input.download[value$="from file"], button.download[value$="from file"] {
   padding: 5px 9px 5px 25px !important;
-  background: url(/themes/console/images/buttons/from-file.png) 8px center no-repeat, var(--button) !important;
+  background: var(--package) 8px center no-repeat, var(--button) !important;
   background-size: 14px, 100% !important;
 }
 
 input.download[value$="from File"]:hover, button.download[value$="from File"]:hover,
 input.download[value$="from File"]:focus, button.download[value$="from File"]:focus,
 input.download[value$="from file"]:hover, input.download[value$="from file"]:focus {
-  background: url(/themes/console/images/buttons/from-file.png) 8px center no-repeat, var(--button_hover) !important;
+  background: var(--package) 8px center no-repeat, var(--button_hover) !important;
   background-size: 14px, 100% !important;
 }
 
 input.download[value$="from file"]:active, button.download[value$="from file"]:active,
 input.download[value$="from File"]:active, button.download[value$="from File"]:active {
   padding: 5px 9px 5px 25px !important;
-  background: url(/themes/console/images/buttons/from-file.png) 8px center no-repeat, var(--button_active) !important;
+  background: var(--package) 8px center no-repeat, var(--button_active) !important;
   background-size: 14px, 100% !important;
 }
 
@@ -765,19 +767,19 @@ input.go:active, button.go:active, input[value="GO"]:active {
 
 input.go[value^="Create"], button.go[value^="Create"] {
   padding: 5px 9px 5px 25px !important;
-  background: url(/themes/console/images/buttons/create-file.png) 8px center no-repeat, var(--button) !important;
+  background: var(--createzip) 8px center no-repeat, var(--button) !important;
   background-size: 14px, 100% !important;
 }
 
 input.go[value^="Create"]:hover, button.go[value^="Create"]:hover,
 input.go[value^="Create"]:focus, button.go[value^="Create"]:focus {
-  background: url(/themes/console/images/buttons/create-file.png) 8px center no-repeat, var(--button_hover) !important;
+  background: var(--createzip) 8px center no-repeat, var(--button_hover) !important;
   background-size: 14px, 100% !important;
 }
 
 input.go[value^="Create"]:active, button.go[value^="Create"]:active {
   padding: 5px 9px 5px 25px !important;
-  background: url(/themes/console/images/buttons/create-file.png) 8px center no-repeat, var(--button_active) !important;
+  background: var(--createzip) 8px center no-repeat, var(--button_active) !important;
   background-size: 14px, 100% !important;
 }
 
@@ -10990,14 +10992,12 @@ h3#shutdownrouter {
 }
 
 #config_reseed  #reseedzip {
-  background: #001 var(--files) 14px center no-repeat !important;
   background: var(--files) 14px center no-repeat, var(--panel) !important;
   background-size: 28px, 100% !important;
 }
 
 #config_reseed #reseedcreatefile {
-  background: #001 var(--package) 14px center no-repeat !important;
-  background: var(--package) 14px center no-repeat, var(--panel) !important;
+  background: var(--createzip) 14px center no-repeat, var(--panel) !important;
   background-size: 28px, 100% !important;
   text-align: justify;
 }
