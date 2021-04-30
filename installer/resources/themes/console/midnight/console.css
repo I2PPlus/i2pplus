@@ -532,7 +532,7 @@ input.accept[value^="Show"], button.accept[value^="Show"],
 input.check[value^="View"], button.check[value^="View"],
 input.showconsole {
   padding: 5px 9px 5px 25px !important;
-  background: url(/themes/console/images/buttons/show.png) 8px center no-repeat, var(--button) !important;
+  background: var(--eye) 8px center no-repeat, var(--button) !important;
   background-size: 14px, 100%, 100% !important;
 }
 
@@ -541,7 +541,7 @@ input.check[value^="View"]:hover, button.check[value^="View"]:hover,
 input.accept[value^="Show"]:focus, button.accept[value^="Show"]:focus,
 input.check[value^="View"]:focus, button.check[value^="View"]:focus,
 input.showconsole:hover, input.showconsole:focus {
-  background: url(/themes/console/images/buttons/show.png) 8px center no-repeat, var(--button_hover) !important;
+  background: var(--eye) 8px center no-repeat, var(--button_hover) !important;
   background-size: 14px, 100% !important;
 }
 
@@ -549,7 +549,7 @@ input.accept[value^="Show"]:active, button.accept[value^="Show"]:active,
 input.check[value^="View"]:active, button.check[value^="View"]:active,
 input.showconsole:active {
   padding: 5px 9px 5px 25px !important;
-  background: url(/themes/console/images/buttons/show.png) 8px center no-repeat, var(--button_active) !important;
+  background: var(--eye) 8px center no-repeat, var(--button_active) !important;
   background-size: 14px, 100% !important;
 }
 
@@ -5862,9 +5862,19 @@ p#fullhistory {
   height: 20px;
   display: inline-block;
   vertical-align: middle;
-  background: url(/themes/console/images/buttons/fullview.png) left 45% no-repeat;
-  background-size: 16px auto;
+  background: var(--eye) left center no-repeat;
+  background-size: 16px;
   content: "";
+}
+
+#fullhistory:hover::before {
+  background: var(--eye_hover) left center no-repeat;
+  background-size: 16px;
+}
+
+#fullhistory:active::before {
+  background: var(--eye_active) left center no-repeat;
+  background-size: 16px;
 }
 
 ul#upnphelp li:last-child, #legal ul li:last-child {
@@ -8114,9 +8124,8 @@ a[href^="viewprofile"]::after {
   display: inline-block;
   vertical-align: middle;
   content: "";
-  background: url(/themes/console/images/buttons/show.png) center center no-repeat;
+  background: var(--eye) center center no-repeat;
   background-size: 16px;
-  mix-blend-mode: luminosity;
 }
 
 #sybilnav ul li:active::before {
@@ -8161,14 +8170,14 @@ p.sybil_info, p.family, p.threatpoints, p.hashdist, p#sybil_totals, p.notfound {
   font-weight: bold;
   border: var(--innerborder);
   box-shadow: inset 0 0 0 1px #211;
-  background: url(/themes/console/images/buttons/show.png) 8px center no-repeat, #002;
-  background: url(/themes/console/images/buttons/show.png) 8px center no-repeat, linear-gradient(to right, #000, #001 80%, #002);
+  background: var(--eye) 8px center no-repeat, linear-gradient(to right, #000, #001 80%, #002);
   background-size: 16px, 100% !important;
   background-blend-mode: luminosity;
 }
 
 p.threatpoints.hot {
-  background: url(/themes/console/images/buttons/show.png) 8px center no-repeat, url(/themes/console/images/info/hot.png) right 4px center no-repeat, linear-gradient(to right, #000, #001 80%, #002);
+  background: var(--eye_static) 8px center no-repeat, url(/themes/console/images/info/hot.png) right 4px center no-repeat,
+              linear-gradient(to right, #000, #001 80%, #002);
   background-size: 16px, 20px, 100% !important;
   background-blend-mode: luminosity, normal;
 }
@@ -11721,7 +11730,6 @@ input[type="file"]:hover {
   border: 1px solid #113;
   border-radius: 2px;
   box-shadow: var(--highlight);
-  background: #113;
   background: var(--element);
 }
 
@@ -11729,9 +11737,45 @@ input[type="file"]:hover {
   border: 1px solid #bf2295;
 }
 
-#profilelist td:last-child img {
-  margin: 1px 5px !important;
-  vertical-align: middle;
+.configpeer img, .viewprofile img {
+  padding: 0;
+  opacity: 0;
+  margin: 0 -2px;
+}
+
+a.configpeer, a.viewprofile {
+  margin: 0;
+  padding: 0;
+  display: inline-block;
+  vertical-align: top;
+  line-height: inherit;
+  border: 1px solid #113;
+  border-radius: 2px;
+  box-shadow: var(--highlight);
+  background: var(--edit) center center no-repeat, var(--element);
+  background-size: 14px, 100%;
+}
+
+a.viewprofile {
+  background: var(--eye) center center no-repeat, var(--element);
+  background-size: 14px, 100%;
+}
+a.configpeer:hover {
+  background: var(--edit_hover) center center no-repeat, var(--element);
+  background-size: 14px, 100%;
+}
+
+a.viewprofile:hover {
+  background: var(--eye_hover) center center no-repeat, var(--element);
+  background-size: 14px, 100%;
+}
+
+a.viewprofile + a.configpeer {
+  margin-left: 3px !important;
+}
+
+a.viewfullentry {
+  display: none;
 }
 
 .familysearch img {
@@ -11739,12 +11783,12 @@ input[type="file"]:hover {
   margin-left: 0;
 }
 
-.netdb_header .configpeer, .netdb_header .configpeer {
-  margin-right: 5px !important;
+.netdb_header {
+  margin-top: -2px !important;
 }
 
-.viewprofile + .viewfullentry, .viewfullentry + .configpeer, .viewprofile + .configpeer {
-  margin-left: -5px !important;
+.netdb_header a.configpeer {
+  margin-right: 5px !important;
 }
 
 .netdb_header img[src="/flags.jsp?c=a0"] {
@@ -12463,7 +12507,8 @@ html, body {
 }
 
 #sybilnav ul li#reviewStored::before {
-  background: url(/themes/console/images/buttons/fullview.png) center center no-repeat;
+  background: var(--eye) center center no-repeat;
+  background-size: 16px;
 }
 
 #sybilnav ul li#runNew::before {
@@ -12476,11 +12521,13 @@ html, body {
 }
 
 #sybilnav ul li#floodfillSummary::before {
-  background: url(/themes/console/images/buttons/floodfill.png) center center no-repeat;
+  background: var(--floodfill) center center no-repeat;
+  background-size: 16px;
 }
 
 #sybilnav ul li#sameFamily::before {
-  background: url(/themes/console/images/buttons/users.png) center center no-repeat;
+  background: var(--family) center center no-repeat;
+  background-size: 16px;
 }
 
 /* sitemap */
