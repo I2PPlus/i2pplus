@@ -10828,6 +10828,11 @@ table[id$="logs"] ul {
   background: #220;
 }
 
+#logs li:hover span {
+  text-shadow: none;
+  box-shadow: none;
+}
+
 #logs font[color^="#"]::before {
   margin-left: 0;
   margin-right: 5px;
