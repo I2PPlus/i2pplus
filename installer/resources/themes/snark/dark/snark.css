@@ -2509,7 +2509,7 @@ _:-ms-lang(x), #trackerselect tr:last-child {
   border-top: 1px solid #252;
 }
 
-.snarkConfig tr:nth-last-child(2), .snarkConfig tr:hover:nth-last-child(2)  {
+.snarkConfig tr:nth-last-child(2), .snarkConfig tr:hover:nth-last-child(2) {
   background: none !important;
 }
 
@@ -4766,14 +4766,14 @@ td input[type=image]::after {
   background: radial-gradient(at center bottom, rgba(255,96,0,.2), rgba(0,0,0,0) 80%), linear-gradient(to bottom, #410, #520 50%, #000 51%);
 }
 
-#torrentDisplay label:active, #torrentDisplay input:checked + label  {
+#torrentDisplay label:active, #torrentDisplay input:checked + label {
   color: #b40;
   text-shadow: none;
   box-shadow: var(--highlight), inset 3px 3px 3px #000 !important;
   background: radial-gradient(at center bottom, rgba(255,96,0,.2), rgba(0,0,0,0) 40%), linear-gradient(to bottom, #100800, #200800);
 }
 
-#torrentDisplay input:checked + label  {
+#torrentDisplay input:checked + label {
   color: #262;
   text-shadow: 0 0 1px #000, 0 1px 2px #010;
   background: radial-gradient(at center bottom, rgba(16,72,16,.3), rgba(0,0,0,0) 50%), linear-gradient(to bottom, #000a00, #020);
