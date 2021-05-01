@@ -5,6 +5,12 @@
 @import url(/themes/console/dark/optbox.css);
 @import url(/themes/console/dark/chromescroll.css);
 
+:root {
+  --bodyfont: Droid Sans, Open Sans, Noto Sans, Ubuntu, Segoe UI, Bitstream Vera Sans, DejaVu Sans, Verdana, Lucida Grande, Helvetica, sans-serif;
+  --monospaced: Droid Sans Mono, Noto Mono, DejaVu Sans Mono, Lucida Console, monospace;
+  --highlight: inset 0 0 0 1px #000;
+}
+
 body, html {
   min-height: 100%;
 }
@@ -19,11 +25,11 @@ html:hover {
 }
 
 body, input, input[type=submit], input[type=reset], .fakebutton, #hostNotes td:last-child, #hostNotes textarea {
-  font-family: Droid Sans, Open Sans, Noto Sans, Ubuntu, Bitstream Vera Sans, Lucida Grande, DejaVu Sans, Segoe UI, Verdana, Helvetica, sans-serif;
+  font-family: var(--bodyfont);
 }
 
 textarea, #helpconfig li b, .destaddress {
-  font-family: Droid Sans Mono, Noto Mono, Lucida Console, DejaVu Sans Mono, monospace;
+  font-family: var(--monospaced);
 }
 
 body {
@@ -96,7 +102,7 @@ body.iframed {
   text-align: center;
   border: 1px solid #252;
   border-radius: 0 1px 2px 2px;
-  box-shadow: inset 0 0 0 1px #000, 0 2px 2px 2px rgba(0,0,0,.7);
+  box-shadow: var(--highlight), 0 2px 2px 2px rgba(0,0,0,.7);
   background: repeating-linear-gradient(to right, rgba(0,0,0,.5) 2px, rgba(0,48,0,.3) 4px),
               linear-gradient(to bottom, #1a261a 0%, #223022 7%, #212f21 9%, #172317 21%, #091109 49%, #050d05 51%, #020602 52%, #010301 55%, #000000 57%),
               url(/themes/console/dark/images/camotile2.png) !important;
@@ -112,7 +118,7 @@ body.iframed {
   border-right: none;
   border-left: none;
   border-radius: 0;
-  box-shadow: inset 0 0 0 1px #000;
+  box-shadow: var(--highlight);
 }
 
 #navi a:link {
@@ -135,24 +141,23 @@ body.iframed {
   color: #494 !important;
   text-shadow: 0 1px 1px #000;
   border: 1px solid #252;
-  box-shadow: inset 0 0 0 1px #000, inset 0 0 1px 1px #040;
+  box-shadow: var(--highlight), inset 0 0 1px 1px #040;
 }
 
 #navi a:hover, #navi a:focus  {
   z-index: 10;
   color: #f60 !important;
-  box-shadow: inset 0 0 0 1px #000, inset 0 0 1px 1px rgba(255,128,0,.8);
+  box-shadow: var(--highlight), inset 0 0 1px 1px rgba(255,128,0,.8);
   background: #000;
 }
 
 #navi a:active {
-  box-shadow: inset 0 0 0 1px #000, inset 4px 4px 4px rgba(0,0,0,.85);
+  box-shadow: var(--highlight), inset 4px 4px 4px rgba(0,0,0,.85);
   color: #ee9 !important;
   text-shadow: none !important;
 }
 
 #navi a.abook {
-  background: #000 url(/themes/susidns/dark/images/abook.png) 6px center no-repeat;
   background: url(/themes/susidns/dark/images/abook.png) 6px center no-repeat, linear-gradient(to bottom, #002900, #000400);
   background-size: 14px 14px, 100% 100%;
 }
@@ -168,7 +173,6 @@ body.iframed {
 }
 
 #navi a#subs {
-  background: #000 url(/themes/susidns/dark/images/subs.png) 6px center no-repeat;
   background: url(/themes/susidns/dark/images/subs.png) 6px center no-repeat, linear-gradient(to bottom, #002900, #000400);
   background-size: 14px 14px, 100% 100%;
 }
@@ -184,7 +188,6 @@ body.iframed {
 }
 
 #navi a#configlink {
-  background: #000 url(/themes/susidns/dark/images/configure.png) 6px center no-repeat;
   background: url(/themes/susidns/dark/images/configure.png) 6px center no-repeat, linear-gradient(to bottom, #002900, #000400);
   background-size: 14px 14px, 100% 100%;
 }
@@ -200,7 +203,6 @@ body.iframed {
 }
 
 #navi a#overview {
-  background: #000 url(/themes/susidns/dark/images/overview.png) 6px center no-repeat;
   background: url(/themes/susidns/dark/images/overview.png) 6px center no-repeat, linear-gradient(to bottom, #002900, #000400);
   background-size: 14px 14px, 100% 100%;
 }
@@ -218,14 +220,14 @@ body.iframed {
 /* end topnav */
 
 hr {
-  color: #242;
-  background: #242;
-  height: 1px;
-  border: 0px solid #242;
-  width: 100%;
   margin: 5px 0;
-  text-align: center;
+  width: 100%;
+  height: 1px;
   display: none;
+  text-align: center;
+  color: #242;
+  border: 0px solid #242;
+  background: #242;
 }
 
 #filter {
@@ -237,9 +239,9 @@ hr {
 }
 
 #filter span a {
-  font-size: 8.5pt;
-  display: inline-block;
   padding: 2px 6px !important;
+  display: inline-block;
+  font-size: 8.5pt;
 }
 
 #search {
@@ -281,7 +283,7 @@ hr {
   white-space: nowrap;
   text-transform: capitalize;
   font-size: 105%;
-  box-shadow: 0 0 0 1px #030, 0 0 2px 1px rgba(0,0,0,.8), inset 0 0 0 1px #000;
+  box-shadow: 0 0 0 1px #030, 0 0 2px 1px rgba(0,0,0,.8), var(--highlight);
   background: #000;
   background: linear-gradient(to bottom, #020 0%, #000 100%);
 }
@@ -318,7 +320,7 @@ h3 {
   text-shadow: 0 0 2px #001100;
   color: #ee9;
   border: 1px solid #242;
-  box-shadow: inset 0 0 0 1px #000;
+  box-shadow: var(--highlight);
   -webkit-text-stroke: 1px rgba(237, 237, 146,.3);
 }
 
@@ -395,7 +397,7 @@ div#messages {
   line-height: 120%;
   font-weight: bold;
   border: 1px solid #242;
-  box-shadow: inset 0 0 0 1px #000;
+  box-shadow: var(--highlight);
   background: #020 url(/themes/snark/dark/images/delete.png) right 6px top 6px no-repeat;
   background-blend-mode: luminosity;
 }
@@ -416,7 +418,7 @@ div#messages:hover {
 #messages + p, p.book {
   padding: 20px 20px 20px 50px !important;
   border: 1px solid #242;
-  box-shadow: inset 0 0 0 1px #000, inset 0 0 2px 1px #030;
+  box-shadow: var(--highlight), inset 0 0 2px 1px #030;
   background: #000 url(images/addressbook.svg) 10px center no-repeat;
   background-size: 20px 20px;
 }
@@ -442,7 +444,7 @@ h4 {
   word-spacing: .1em;
   font-size: 9pt;
   border: 1px solid #242;
-  box-shadow: inset 0 0 0 1px #000, inset 0 0 2px 1px #030 !important;
+  box-shadow: var(--highlight), inset 0 0 2px 1px #030 !important;
   background: url(/themes/susidns/images/drive.png) 9px center no-repeat #000 !important;
   background: url(/themes/susidns/images/drive.png) 9px center no-repeat, linear-gradient(to right, #000, #000800) !important;
   display: none; /* largely useless information */
@@ -540,7 +542,7 @@ td > img[width="320"], td > img[src^="/imagegen"] {
   padding: 2px;
   border-radius: 1px;
   border: 1px solid #242;
-  box-shadow: inset 0 0 0 1px #000;
+  box-shadow: var(--highlight);
   background: #000;
 }
 
@@ -595,9 +597,9 @@ li {
 }
 
 #helpsubs {
-  padding: 0 0 0 40px;
-  background: #000 url(/themes/console/dark/images/infohelp.png) 15px center no-repeat !important;
-  background: url(/themes/console/dark/images/infohelp.png) 15px center no-repeat, repeating-linear-gradient(to right, #000 1px, #000 2px, #010 3px) !important;
+  padding: 15px 0 10px 40px;
+  background: url(/themes/console/dark/images/infohelp.png) 15px center no-repeat, repeating-linear-gradient(to right, #000 2px, #010 4px) !important;
+  background-size: 32px, 4px 100% !important;
 }
 
 #helpsubs p {
@@ -699,7 +701,7 @@ div#content + div#buttons {
   font-size: 10pt;
   border: 1px solid #242;
   border-radius: 4px;
-  box-shadow: inset 0 0 0 1px #000, inset 0 0 2px 1px #242;
+  box-shadow: var(--highlight), inset 0 0 2px 1px #242;
   background: #000;
   opacity: .8;
 }
@@ -833,8 +835,9 @@ div#empty {
 
 #book tr.head {
   background: linear-gradient(to bottom, rgba(0,0,0,0) 50%, #000 50%),
-              repeating-linear-gradient(to right, rgba(0,0,0,.5) 1px, rgba(0,16,0,.5) 2px, rgba(0,16,0,.5) 3px),
+              repeating-linear-gradient(to right, rgba(0,0,0,.5) 2px, rgba(0,16,0,.5) 4px),
               linear-gradient(to bottom, #002000, #000 75%) !important;
+  background-size: 100%, 4px 100%, 100% !important;
 }
 
 #book table th {
@@ -995,14 +998,14 @@ input[type=submit]:focus, input[type=reset]:focus,
 .fakebutton:hover, #fakebutton:focus {
   color: #f60;
   border: 1px solid #f60;
-  box-shadow: inset 0 0 0 1px #000, inset 0 0 2px 1px rgba(255,86,0,.8), inset 0 0 0 3px #000 !important;
+  box-shadow: var(--highlight), inset 0 0 2px 1px rgba(255,86,0,.8), inset 0 0 0 3px #000 !important;
   background: #000;
 }
 
 input[type=file]:hover::file-selector-button, input[type=file]:focus::file-selector-button {
   color: #f60;
   border: 1px solid #f60;
-  box-shadow: inset 0 0 0 1px #000, inset 0 0 2px 1px rgba(255,86,0,.8), inset 0 0 0 3px #000 !important;
+  box-shadow: var(--highlight), inset 0 0 2px 1px rgba(255,86,0,.8), inset 0 0 0 3px #000 !important;
   background: #000;
 }
 
@@ -1010,7 +1013,7 @@ input[type=submit]:active, input[type=reset]:active, .fakebutton:active {
   color: #ee9 !important;
   text-shadow: 0 1px 1px #000;
   border: 1px solid #f60;
-  box-shadow: inset 0 0 0 1px #000, inset 3px 3px 3px 2px #310 !important;
+  box-shadow: var(--highlight), inset 3px 3px 3px 2px #310 !important;
   background: #f60 !important;
   filter: none;
 }
@@ -1019,7 +1022,7 @@ input[type=file]:active::file-selector-button {
   color: #ee9 !important;
   text-shadow: 0 1px 1px #000;
   border: 1px solid #f60;
-  box-shadow: inset 0 0 0 1px #000, inset 3px 3px 3px 2px #310 !important;
+  box-shadow: var(--highlight), inset 3px 3px 3px 2px #310 !important;
   background: #f60 !important;
   filter: none;
 }
@@ -1048,7 +1051,7 @@ input[type=text]:focus {
 
 input[type=text], textarea {
   color: #bb7;
-  box-shadow: inset 0 0 0 1px #000, inset 4px 4px 4px #000, 0 0 0 1px #000;
+  box-shadow: var(--highlight), inset 4px 4px 4px #000, 0 0 0 1px #000;
   background: #000;
   background: linear-gradient(to bottom, #001800, #001000) !important;
 }
@@ -1064,7 +1067,7 @@ textarea, #subslog pre {
   color: #bb7;
   border: 1px solid #242;
   border-radius: 2px;
-  box-shadow: inset 0 0 0 1px #000, inset 4px 4px 4px #000;
+  box-shadow: var(--highlight), inset 4px 4px 4px #000;
 }
 
 #subslog pre {
@@ -1130,15 +1133,17 @@ textarea:focus {
 }
 
 .headline#subscriptions h3 {
-  background: url(/themes/susidns/images/subs_24.png) 7px 40% no-repeat, linear-gradient(to bottom, rgba(0,0,0,0) 50%, #000 50%),
-              repeating-linear-gradient(to right, rgba(0,0,0,.5) 1px, rgba(0,16,0,.5) 2px, rgba(0,16,0,.5) 3px),
+  background: url(/themes/susidns/images/subs_24.png) 7px 40% no-repeat,
+              linear-gradient(to bottom, rgba(0,0,0,0) 50%, #000 50%),
+              repeating-linear-gradient(to right, rgba(0,0,0,.5) 2px, rgba(0,16,0,.5) 4px),
               linear-gradient(to bottom, #004000, #000 75%);
+  background-size: 24px, 100%, 4px 100%, 100% !important;
 }
 
 .headline#configure h3 {
   background: url(images/configure.svg) 9px center no-repeat,
               linear-gradient(to bottom, rgba(0,0,0,0) 50%, #000 50%),
-              repeating-linear-gradient(to right, rgba(0,0,0,.5) 1px, rgba(0,16,0,.5) 2px, rgba(0,16,0,.5) 3px),
+              repeating-linear-gradient(to right, rgba(0,0,0,.5) 2px, rgba(0,16,0,.5) 4px),
               linear-gradient(to bottom, #004000, #000 75%);
   background-size: 20px, 100%, 4px 100%, 100% !important;
 }
@@ -1160,7 +1165,7 @@ p.book {
 /* host details page */
 
 #host_details tr {
-  box-shadow: inset 0 0 0 1px #000, inset 0 -1px 0 1px #000, inset 0 0 2px 1px #030, inset 0 -1px 2px 1px #030 !important;
+  box-shadow: var(--highlight), inset 0 -1px 0 1px #000, inset 0 0 2px 1px #030, inset 0 -1px 2px 1px #030 !important;
 }
 
 #host_details td {
@@ -1216,7 +1221,7 @@ p.book {
   padding: 4px 8px;
   border-right: 1px solid #131;
   border-bottom: 1px solid #131;
-  box-shadow: inset 0 0 0 1px #000, inset 0 0 2px 0 #040;
+  box-shadow: var(--highlight), inset 0 0 2px 0 #040;
 }
 
 #host_list tr:hover td {
@@ -1410,7 +1415,7 @@ _:-ms-lang(x), * {
 }
 
 p#filtered {
-  box-shadow: inset 0 0 0 1px #000, inset 0 0 2px 1px #030 !important;
+  box-shadow: var(--highlight), inset 0 0 2px 1px #030 !important;
   background: repeating-linear-gradient(to bottom, rgba(0,0,0,.8), rgba(0,16,0,.6) 1px, rgba(0,16,0,.6) 2px), url(/themes/console/dark/images/camotile2.png) !important;
 }
 
@@ -1433,14 +1438,14 @@ p#filtered {
 }
 
 form[action="addressbook"] > p.buttons, #filter, #search, #visualid tr:last-child td, #buttons, #add p.buttons {
-  box-shadow: inset 0 0 0 1px #000, inset 0 0 2px 1px #030 !important;
+  box-shadow: var(--highlight), inset 0 0 2px 1px #030 !important;
   background: repeating-linear-gradient(to right, rgba(0,0,0,.5) 2px, rgba(0,16,0,.5) 4px),
               linear-gradient(to bottom, #020, #000 75%) !important;
   background-size: 4px 100%, 100% !important;
 }
 
 #add, #import {
-  box-shadow: inset 0 0 0 1px #000, inset 0 0 2px 1px #030 !important;
+  box-shadow: var(--highlight), inset 0 0 2px 1px #030 !important;
   background: repeating-linear-gradient(to bottom, rgba(0,0,0,.8), rgba(0,16,0,.5) 1px, rgba(0,16,0,.5) 2px), url(/themes/console/dark/images/camotile2.png) !important;
 }
 
@@ -1509,11 +1514,11 @@ input#exporthosts {
 #activefilter, .selected {
   font-weight: bold;
   color: #999;
-  box-shadow: inset 0 0 0 1px #000, inset 2px 2px 2px rgba(0,0,0,.9) !important;
+  box-shadow: var(--highlight), inset 2px 2px 2px rgba(0,0,0,.9) !important;
 }
 
 #activefilter {
-  box-shadow: 0 0 0 1px #030, 0 0 2px 1px rgba(0,0,0,.8), inset 0 0 0 1px #000, inset 3px 3px 3px rgba(0,0,0,.9) !important;
+  box-shadow: 0 0 0 1px #030, 0 0 2px 1px rgba(0,0,0,.8), var(--highlight), inset 3px 3px 3px rgba(0,0,0,.9) !important;
 }
 
 .active {
@@ -1540,7 +1545,7 @@ input#exporthosts {
 }
 
 #prev a, #next a, #current {
-  box-shadow: inset 0 0 0 1px #000 !important;
+  box-shadow: var(--highlight) !important;
 }
 
 #current {

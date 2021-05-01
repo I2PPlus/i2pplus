@@ -11,7 +11,7 @@
   --bodyfont: Droid Sans, Open Sans, Noto Sans, Ubuntu, Segoe UI, Bitstream Vera Sans, DejaVu Sans, Verdana, Lucida Grande, Helvetica, sans-serif;
   --monospaced: Droid Sans Mono, Noto Mono, Lucida Console, DejaVu Sans Mono, monospace;
   --h2: repeating-linear-gradient(to right, rgba(0,0,0,.4) 1px, rgba(0,0,0,.4) 2px, rgba(0,32,0,.6) 3px), linear-gradient(to bottom, #001800, #000 75%);
-  --heading: linear-gradient(to bottom, rgba(0,0,0,0) 50%, #000 50%), repeating-linear-gradient(to right, rgba(0,0,0,.5) 1px, rgba(0,0,0,.5) 2px, rgba(0,16,0,.5) 3px);
+  --heading: linear-gradient(to bottom, rgba(0,0,0,0) 50%, #000 50%), repeating-linear-gradient(to right, rgba(0,0,0,.5) 2px, rgba(0,16,0,.5) 4px);
   --border: 1px solid #242;
   --lowlight: inset 0 0 0 1px #000;
   --textinput: linear-gradient(to bottom, #001800, #001000);
@@ -30,7 +30,8 @@ body {
   font-size: 9pt;
   color: #ee9;
   background: #000;
-  background: repeating-linear-gradient(to bottom, rgba(0,0,0,.9) 1px, rgba(0,8,0,.5) 2px, rgba(0,8,0,.5) 3px), url(images/camotile2.png) top left scroll #010;
+  background: repeating-linear-gradient(to bottom, rgba(0,0,0,.9) 2px, rgba(0,8,0,.5) 4px), url(images/camotile2.png) top left scroll #010;
+  background-size: 100% 4px, 175px;
 }
 
 body.iframed {
@@ -312,9 +313,10 @@ h3 {
 }
 
 #serverTunnels tr:first-child, #clientTunnels tr:first-child {
+  padding: 7px 5px;
   background: #000;
   background: var(--heading), linear-gradient(to bottom, #002000, #000 75%);
-  padding: 7px 5px;
+  background-size: 100%, 4px 100%, 100%;
 }
 
 #serverTunnels tr:first-child th, #clientTunnels tr:first-child th {
@@ -1204,7 +1206,7 @@ input.tunnelName, input.tunnelDescription, #userAgents {
 }
 
 #wizardTunnelTypes td:last-child {
-  padding: 10px 15px 10px 10px;
+  padding: 15px;
   text-align: justify;
 }
 

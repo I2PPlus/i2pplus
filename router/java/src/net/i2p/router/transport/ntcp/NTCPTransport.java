@@ -804,10 +804,8 @@ public class NTCPTransport extends TransportImpl {
         return !_replayFilter.add(hxhi, 0, 8);
     }
 
-//    private static final int MIN_CONCURRENT_READERS = 2;  // unless < 32MB
-//    private static final int MIN_CONCURRENT_WRITERS = 2;  // unless < 32MB
-    private static final int MIN_CONCURRENT_READERS = 1;  // unless < 32MB
-    private static final int MIN_CONCURRENT_WRITERS = 1;  // unless < 32MB
+    private static final int MIN_CONCURRENT_READERS = 2;  // unless < 32MB
+    private static final int MIN_CONCURRENT_WRITERS = 2;  // unless < 32MB
 //    private static final int MAX_CONCURRENT_READERS = 4;
 //    private static final int MAX_CONCURRENT_WRITERS = 4;
     private static final int MAX_CONCURRENT_READERS = SystemVersion.getMaxMemory() < 1024*1024*1024 ? 6 : Math.min(SystemVersion.getCores() * 2, 8);
