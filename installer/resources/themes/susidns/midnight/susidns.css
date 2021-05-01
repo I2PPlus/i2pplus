@@ -8,6 +8,8 @@
   --monospaced: Droid Sans Mono, Noto Mono, DejaVu Sans Mono, Lucida Console, monospace;
   --title: repeating-linear-gradient(to right, rgba(0,0,48,.4) 2px, #000 4px), linear-gradient(to bottom, #003, #002 50%, #001 50%, #000);
   --highlight: inset 0 0 0 1px #000;
+  --nav: linear-gradient(to bottom, #181828 50%, #000 50%);
+  --nav_hover: linear-gradient(to bottom, #3c1751 50%, #0a030d 50%);
 }
 
 body {
@@ -128,67 +130,67 @@ div#navi  {
 
 #navi a.abook {
   padding: 5px 8px 5px 23px;
-  background: url(/themes/susidns/midnight/images/abook.png) 6px center no-repeat, linear-gradient(to bottom, #181828 50%, #000 50%);
+  background: url(images/abook.png) 6px center no-repeat, var(--nav);
 }
 
 #navi a.abook:hover, #navi a.abook:focus {
   box-shadow: inset 0 1px 1px 0 #c9ceff;
-  background: url(/themes/susidns/midnight/images/abook_hover.png) 6px center no-repeat, linear-gradient(to bottom, #3c1751 50%, #0a030d 50%);
+  background: url(images/abook_hover.png) 6px center no-repeat, var(--nav_hover);
   background-size: 14px, 100% !important;
 }
 
 #navi a.abook:active {
-  background: #652787 url(/themes/susidns/midnight/images/abook_hover.png) 6px center no-repeat;
+  background: #652787 url(images/abook_hover.png) 6px center no-repeat;
   background-size: 14px !important;
 }
 
 #navi a#subs {
   padding: 5px 8px 5px 23px;
-  background: url(/themes/susidns/midnight/images/subs.png) 6px center no-repeat, linear-gradient(to bottom, #181828 50%, #000 50%);
+  background: url(images/subs.png) 6px center no-repeat, var(--nav);
 }
 
 #navi a#subs:hover, #navi a#subs:focus  {
   box-shadow: inset 0 1px 1px 0 #c9ceff;
-  background: url(/themes/susidns/midnight/images/subs_hover.png) 6px center no-repeat, linear-gradient(to bottom, #3c1751 50%, #0a030d 50%);
+  background: url(images/subs_hover.png) 6px center no-repeat, var(--nav_hover);
   background-size: 14px, 100% !important;
 }
 
 #navi a#subs:active {
-  background: #652787 url(/themes/susidns/midnight/images/subs_hover.png) 6px center no-repeat;
+  background: #652787 url(images/subs_hover.png) 6px center no-repeat;
   background-size: 14px !important;
 }
 
 #navi a#configlink {
   padding: 5px 8px 5px 23px;
-  background: url(/themes/susidns/midnight/images/configure.png) 6px center no-repeat, linear-gradient(to bottom, #181828 50%, #000 50%);
+  background: url(images/configure.png) 6px center no-repeat, var(--nav);
 }
 
 #navi a#configlink:hover, #navi a#configlink:focus {
   box-shadow: inset 0 1px 1px 0 #c9ceff;
-  background: url(/themes/susidns/midnight/images/configure_hover.png) 6px center no-repeat, linear-gradient(to bottom, #3c1751 50%, #0a030d 50%);
+  background: url(images/configure_hover.png) 6px center no-repeat, var(--nav_hover);
   background-size: 14px, 100% !important;
 }
 
 #navi a#configlink:active {
-  background: #652787 url(/themes/susidns/midnight/images/configure_hover.png) 6px center no-repeat;
+  background: #652787 url(images/configure_hover.png) 6px center no-repeat;
   background-size: 14px !important;
 }
 
 #navi a#overview {
   padding: 5px 8px 5px 23px;
-  background: #001 url(/themes/susidns/midnight/images/overview.png) 6px center no-repeat;
-  background: url(/themes/susidns/midnight/images/overview.png) 6px center no-repeat, linear-gradient(to bottom, #181828 50%, #000 50%);
+  background: #001 url(images/overview.png) 6px center no-repeat;
+  background: url(images/overview.png) 6px center no-repeat, var(--nav);
 }
 
 #navi a#overview:hover, #navi a#overview:focus {
   box-shadow: inset 0 1px 1px 0 #c9ceff;
-  background: #000 url(/themes/susidns/midnight/images/overview_hover.png) 6px center no-repeat;
-  background: url(/themes/susidns/midnight/images/overview_hover.png) 6px center no-repeat, linear-gradient(to bottom, #3c1751 50%, #0a030d 50%);
+  background: #000 url(images/overview_hover.png) 6px center no-repeat;
+  background: url(images/overview_hover.png) 6px center no-repeat, var(--nav_hover);
   background-size: 14px, 100% !important;
 }
 
 #navi a#overview:active {
-  background: #652787 url(/themes/susidns/midnight/images/overview_hover.png) 6px center no-repeat;
+  background: #652787 url(images/overview_hover.png) 6px center no-repeat;
   background-size: 14px !important;
 }
 
@@ -242,13 +244,17 @@ td.search > * {
 }
 
 #search input[type=text] {
-  background: url(/themes/console/images/buttons/search.png) 5px center no-repeat, linear-gradient(to bottom, #000 0%, #000019 100%) !important;
-  padding: 5px 5px 5px 25px !important;
   margin-left: 5px;
+  padding: 6px 6px 6px 30px !important;
+  background: url(/themes/console/images/svg/search.svg) 8px center no-repeat, linear-gradient(to bottom, #000 0%, #000019 100%) !important;
+  background-size: 14px, 100% !important;
+  background-blend-mode: luminosity;
 }
 
 #search input[type=text]:focus {
-  background: #000 url(/themes/console/images/buttons/search.png) 5px center no-repeat !important;
+  background: #000 url(/themes/console/images/svg/search.svg) 8px center no-repeat !important;
+  background-size: 14px !important;
+  background-blend-mode: normal;
 }
 
 #bk h4 {
@@ -256,8 +262,8 @@ td.search > * {
 }
 
 #filter p {
-  padding: 12px 10px 0;
   margin: -3px 0 -3px;
+  padding: 12px 10px 0;
 }
 
 #filter p:first-child {
@@ -279,7 +285,7 @@ p#filtered {
   display: inline-block;
   text-align: center;
   text-transform: capitalize;
-  color: #26225d;
+  color: #4a42bd;
   border: 1px solid #26225d;
   background: #000;
 }
@@ -1334,6 +1340,12 @@ td.names:hover, #host_list td.b32link:hover, #host_list td.helper:hover, #host_l
   background: #000 !important;
 }
 
+.names a {
+  padding 3px 0;
+  width: 100%;
+  display: inline-block;
+}
+
 .info a[href$=".i2p/"], #host_list td.b32link a, #host_list td.helper a {
   width: 100%;
   display: inline-block;
@@ -1640,6 +1652,10 @@ input:focus::placeholder {
   display: inline-block;
 }
 
+#showing {
+  margin-left: 4px;
+}
+
 #paginate, #filtered, #results {
   margin-right: 4px;
   display: inline-block;
@@ -1696,6 +1712,7 @@ input#exporthosts {
 
   #addressbook.headline h3 {
     padding-right: 45px;
+  }
 }
 
 input#exporthosts:hover, #addressbook input#exporthosts:focus {
@@ -1834,6 +1851,7 @@ form[action="export"]::after {
 
 #empty {
   margin-top: 9px;
+}
 }
 
 @media screen and (max-width: 1200px) {
