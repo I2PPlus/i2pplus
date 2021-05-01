@@ -563,9 +563,10 @@ td#attachedfile {
 }
 
 #mailhead td:first-child {
-  text-align: right;
   width: 100px;
   white-space: nowrap;
+  vertical-align: text-bottom;
+  text-align: right;
 }
 
 #mailhead td:last-child {
@@ -661,6 +662,11 @@ input[type=submit]:active, input.cancel:active, #settings:active, #settings:visi
   border: 1px inset #652787;
   box-shadow: var(--highlight), inset 3px 3px 3px #000 !important;
   background: #652787 !important;
+}
+
+#collapse, #expand {
+  margin: 0 8px !important;
+  vertical-align: text-bottom;
 }
 
 input[type=text], input[type=password], textarea {
@@ -1791,7 +1797,7 @@ div:not(#pagesize).topbuttons, .iframed div:not(#pagesize).topbuttons {
 .debugHeader td {
   color: #cc3;
   border-bottom: 1px solid #27235c;
-  box-shadow: var(--highlight), inset 0 0 2px 1px #446;
+  box-shadow: var(--highlight), inset 0 0 2px 1px #991;
   background: repeating-linear-gradient(to bottom, #000 2px, #003 4px);
   background-size: 100% 4px;
 }
