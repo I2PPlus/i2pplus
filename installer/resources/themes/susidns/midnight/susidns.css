@@ -817,6 +817,10 @@ div#book, #emptybook {
   border-bottom: 1px solid #17142f;
 }
 
+#book #visualid td {
+  border-color: #26235c;
+}
+
 #book table tr:hover {
   background: #1e0b28;
 }
