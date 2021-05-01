@@ -31,40 +31,36 @@ textarea {
   will-change: transform;
 }
 
+html, body {
+  min-height: 100%;
+}
+
+html {
+  background: repeating-linear-gradient(to right, rgba(0,16,0,.5) 2px, rgba(0,0,0,.3) 4px),
+              repeating-linear-gradient(to bottom, rgba(0,0,32,.6) 2px, rgba(0,0,0,.3) 4px),
+              url(images/tile.png) #001;
+  background-size: 4px 100%, 100% 4px, 171px 148px;
+}
+
 body {
   margin: 2px 0 0;
   padding: 0;
   text-align: center;
-  background: #001;
-  background: linear-gradient(to bottom, #001, #000);
-  background: url(images/tile.png);
-  background-size: auto 3px;
-  color: #c9ceff;
   font: 8.5pt/130% var(--bodyfont);
-}
-
-/* preload button mouseovers */
-body:not(old) {
-  background: repeating-linear-gradient(to right, rgba(0,16,0,.5) 2px, rgba(0,0,0,.3) 4px),
-              repeating-linear-gradient(to bottom, rgba(0,0,32,.6) 2px, rgba(0,0,0,.3) 4px),
-              url(images/tile.png),
-              url(/themes/console/images/buttons/clean_hover.png) no-repeat,
+  color: #c9ceff;
+  background: url(/themes/console/images/buttons/clean_hover.png) no-repeat,
               url(/themes/console/images/buttons/delete_hover.png) no-repeat,
               url(/themes/console/images/buttons/restore_hover.png) no-repeat,
               url(/themes/console/images/buttons/update_hover.png) no-repeat,
               url(images/dropdown_hover.svg),
-              url(images/newtab.png), #001;
-  background-size: 4px 100%, 100% 4px, 171px 148px, 0, 0, 0, 0, 0, 0;
+              url(images/newtab.png);
+  background-size: 0, 0, 0, 0, 0, 0;
 }
 
 @supports (-moz-appearance: none) {
-  body:not(old) {
+  html {
     background-attachment: fixed;
   }
-}
-
-body#proxy_error {
-  background: linear-gradient(to bottom, #001, #000);
 }
 
 .routersummary, h1, .main, iframe {
@@ -260,7 +256,6 @@ select {
   text-align: center;
   border: 1px solid #27235c;
   cursor: pointer;
-  box-shadow: var(--highlight), 0 0 0 1px #000;
   background: var(--dropdown) center right 10px no-repeat, var(--button) !important;
   background-size: 10px auto, 100% !important;
   filter: none !important;
@@ -320,18 +315,9 @@ select::-ms-expand {
 
 /* buttons */
 
-button, input[type=submit], input[type=reset], button, select {
+button, input[type=submit], input[type=reset], select {
   border-radius: 1px;
-  box-shadow: var(--highlight), inset 0 0 0 1px #446, 0 0 0 1px #000;
-  background: 8px 5px no-repeat, var(-button);
-  cursor: pointer;
-}
-
-input[type=file]::file-selector-button {
-  margin-right: 10px !important;
-  font-size: 100% !important;
-  border-radius: 2px;
-  box-shadow: var(--highlight), inset 0 0 0 1px #446, 0 0 0 1px #000;
+  box-shadow: var(--highlight), inset 0 0 2px 0 #559;
   background: 8px 5px no-repeat, var(-button);
   cursor: pointer;
 }
@@ -351,40 +337,44 @@ button, button:visited, input[type=submit], input[type=reset] {
 }
 
 input[type=file]::file-selector-button {
-  margin: 2px 3px;
+  margin: 2px 10px 2px 3px;
   padding: 5px 8px;
   vertical-align: middle;
-  font: bold 9pt var(--bodyfont);
+  font: bold 100% var(--bodyfont);
   color: var(--a);
   text-decoration: none;
   text-align: center;
   text-shadow: 0 1px 1px #000;
   border: 1px solid #27235c;
   border-radius: 1px;
-  background: #000;
+  box-shadow: var(--highlight), inset 0 0 2px 0 #559;
   background: var(--button) !important;
+  cursor: pointer;
 }
 
 input[type=submit]:hover, input[type=reset]:hover, button:hover, button:focus,
 input[type=submit]:focus, input[type=reset]:focus, select:hover, select:focus {
   color: #652787;
   border: 1px solid #652787;
-  box-shadow: var(--highlight), inset 0 0 1px 1px #757, 0 0 0 1px #000;
-  background: #000;
+  box-shadow: var(--highlight), inset 0 0 2px 1px #757;
   cursor: pointer;
 }
 
 input[type=file]:hover::file-selector-button, input[type=file]:focus::file-selector-button {
   color: #652787;
   border: 1px solid #652787;
-  box-shadow: var(--highlight), inset 0 0 1px 1px #757, 0 0 0 1px #000;
-  background: #000;
+  box-shadow: var(--highlight), inset 0 0 2px 1px #757;
+  background: var(--button_hover) !important;
   cursor: pointer;
 }
 
+input[type=file]:active::file-selector-button {
+  background: #652787 !important;
+}
+
 input[type=submit], input[type=reset], button {
-  background-size: 12px, 100%;
   min-width: 0 !important;
+  background-size: 12px, 100%;
 }
 
 input[type=submit]:hover, input[type=reset]:hover, button:hover {
@@ -420,7 +410,7 @@ input.accept, button.accept {
 
 input.accept:hover, button.accept:hover,
 input.accept:focus, button.accept:focus {
-  background: var(--yes) 8px center no-repeat, var(--button_hover);
+  background: var(--yes) 8px center no-repeat, var(--button_hover) !important;
   background-size: 12px, 100% !important;
 }
 
@@ -2874,14 +2864,12 @@ div.confignav {
 }
 
 .tab {
-  background: #010010 url(images/titles.png) center center repeat-x;
   background: linear-gradient(to bottom, #181828 50%, #000 50%) !important;
   box-shadow: var(--highlight), inset 0 0 1px 0 #446;
 }
 
 .tab:hover {
-  box-shadow: var(--highlight), inset 0 0 1px 1px #757;
-  background: #000 !important;
+  box-shadow: var(--highlight), inset 0 0 1px 1px rgba(112,80,112,.7);
   background: radial-gradient(at center bottom, rgba(96, 32, 96, .6) 0, rgba(0, 0, 0, 0) 90%), var(--button_hover) !important;
 }
 
@@ -2894,7 +2882,7 @@ div.confignav {
 .tab:active {
   box-shadow: var(--highlight), inset 3px 3px 3px 1px #2d103f !important;
   background: #652787 !important;
-  background: radial-gradient(at center bottom, rgba(200, 96, 200, .8) 0, rgba(0, 0, 0, 0) 90%), linear-gradient(to bottom, #652787 50%, #501f6c 50%) !important;
+  background: radial-gradient(at center bottom, rgba(200, 96, 200, .8) 0, rgba(0, 0, 0, 0) 90%), linear-gradient(to bottom, #501f6c, #652787) !important;
 }
 
 .tab:active a, #help .tab:active a {
