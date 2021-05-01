@@ -5283,244 +5283,6 @@ img.unknownflag {
 /* end leasesets */
 /* end netdb */
 
-/* logs */
-
-#logs pre, #logs li {
-  font-weight: bold;
-}
-
-#criticallogs + .tabletitle {
-  margin-bottom: -2px !important;
-}
-
-#criticallogs ul { /* tidy router logs ul */
-  margin: -6px -11px !important;
-  border: var(--border);
-}
-
-#criticallogs ul:empty {
-  display: none;
-}
-
-#logs #enviro, #criticallogs, #routerlogs, #eventlogs, #wrapperlogs {
-  margin-top: -11px;
-}
-
-#bugreports {
-  margin-top: 11px;
-}
-
-#bugreports td {
-  padding: 15px 10px 15px 50px;
-  background: var(--infohelp) 12px center no-repeat !important;
-}
-
-#logs #enviro:hover {
-  user-select: all;
-  cursor: text;
-}
-
-#logs #enviro:hover td {
-  color: #9d0;
-  border-top: 1px inset transparent;
-  border-bottom: 1px inset transparent;
-  border-right: 1px inset transparent;
-  box-shadow: none;
-  background: #010;
-}
-
-#logs #enviro td {
-  padding: 7px 10px;
-  font-weight: normal !important;
-  border-right: 1px inset #131;
-  box-shadow: var(--highlight);
-}
-
-#logs #enviro td:first-child {
-  width: 1%;
-  text-align: right;
-  white-space: nowrap;
-}
-
-#enviro #revision {
-  padding-left: 14px;
-  background: var(--gitlab) left center no-repeat;
-  background-size: 11px;
-}
-
-#criticallogs td , #routerlogs td, #eventlogs td, #wrapperlogs td {
-  padding: 5px 10px;
-  font-weight: normal !important;
-  border-top: var(--border);
-}
-
-#criticallogs tr:first-child {
-  display: none;
-}
-
-table[id$="logs"] tr:first-child{
-  background: #001000;
-}
-
-table[id$="logs"] tr:nth-child(even){
-  background: #000;
-}
-
-table[id$="logs"] ul {
-  margin: -6px 12px -5px -18px !important;
-}
-
-#wrapperlogs {
-  width: 100%;
-  table-layout: fixed;
-  margin-bottom: 10px;
-}
-
-#wrapperlogs tr:last-child td {
-  padding: 0 !important;
-}
-
-#wrapperlogs pre {
-  margin-bottom: 0 !important;
-  padding: 0 0 0 5px !important;
-  width: 99%;
-  width: calc(100% - 5px);
-  max-height: 600px;
-  white-space: pre-wrap;
-  resize: none;
-}
-
-.logtable ul li {
-  margin-left: 15px;
-  list-style: none !important;
-}
-
-#logs li {
-  list-style: none;
-  font: bold 8.5pt var(--monospaced);
-  line-height: 140%;
-  text-align: left;
-  width: 100%;
-  word-break: break-all;
-}
-
-#logs li::after {
-  content: "";
-  display: block;
-  border-top: 1px dotted #001000;
-  width: 100%;
-  margin: 3px 0 -4px;
-}
-
-#logs li:last-child::after {
-  border: none;
-  margin: 0;
-}
-
-#logs font[color^="#"]::before {
-  margin-left: 0;
-  margin-right: 5px;
-  content: "";
-  display: inline-block;
-  width: 6px;
-  height: 6px;
-  vertical-align: calc(1px);
-  color: #777;
-  border-radius: 50%;
-  filter: saturate(1);
-  animation: linear ping .1s;
-}
-
-@keyframes ping {
-  from {filter: saturate(2)}
-}
-
-.log_debug, .log_info, .log_warn, .log_error, .log_crit, .log_omitted {
-  padding: 1px 2px;
-  min-width: 36px;
-  max-width: 36px;
-  white-space: nowrap;
-  overflow: hidden;
-  text-overflow: ellipsis;
-  display: inline-block;
-  line-height: 100%;
-  text-align: center;
-  color: #000;
-  border-radius: 2px;
-}
-
-/* critical */
-
-font[color="#cc0000"] {
-  color: #900 !important;
-}
-
-#logs li font[color="#cc0000"]::before {
-  background: #900;
-}
-
-.log_crit {
-  background: #900;
-}
-
-/* warning */
-
-font[color="#bf00df"] {
-  color: #636 !important;
-}
-
-#logs li font[color="#bf00df"]::before {
-  background: #636;
-}
-
-.log_warn {
-  background: #636;
-}
-
-/* error */
-
-font[color="#ff3300"] {
-  color: #730 !important;
-}
-
-#logs li font[color="#ff3300"]::before {
-  background: #730;
-}
-
-.log_error {
-  background: #730;
-}
-
-/* debug */
-
-font[color="#006600"] {
-  color: #346 !important;
-}
-
-#logs li font[color="#006600"]::before {
-  background: #346;
-}
-
-.log_debug, .log_omitted {
-  background: #346;
-}
-
-/* info */
-
-font[color="#000099"], #servicelogs {
-  color: #363 !important;
-}
-
-#logs li font[color="#000099"]::before {
-  background: #363;
-}
-
-.log_info {
-  background: #363;
-}
-
-/* end logs */
-
 /* /profiles */
 
 #profilelist tr:hover, #floodfills tr:hover {
@@ -10923,31 +10685,270 @@ a:hover .tier, a:focus .tier {
 
 /* logs */
 
-#routerlogs tr:nth-child(2) td, #criticallogs tr:nth-child(2) td {
-  padding: 0 8px;
-  line-height: 20px;
-  background: repeating-linear-gradient(to bottom, #000800, #000800 20px, #000 20px, #000 40px);
-  width: calc(100% - 44px);
+#logs pre, #logs li {
+  font-weight: bold;
+}
+
+#criticallogs + .tabletitle {
+  margin-bottom: -2px !important;
+}
+
+#criticallogs ul { /* tidy router logs ul */
+  margin: -6px -11px !important;
+  border: var(--border);
+}
+
+#criticallogs ul:empty {
+  display: none;
+}
+
+#logs #enviro, #criticallogs, #routerlogs, #eventlogs, #wrapperlogs {
+  margin-top: -11px;
+}
+
+#bugreports {
+  margin-top: 11px;
+}
+
+#bugreports td {
+  padding: 15px 10px 15px 50px;
+  background: var(--infohelp) 12px center no-repeat !important;
+}
+
+#logs #enviro:hover {
+  user-select: all;
+  cursor: text;
+}
+
+#logs #enviro:hover td {
+  color: #9d0;
+  border-top: 1px inset transparent;
+  border-bottom: 1px inset transparent;
+  border-right: 1px inset transparent;
+  box-shadow: none;
+  background: #010;
+}
+
+#logs #enviro td {
+  padding: 7px 10px;
+  font-weight: normal !important;
+  border-right: 1px inset #131;
+  box-shadow: var(--highlight);
+}
+
+#logs #enviro td:first-child {
+  width: 1%;
+  text-align: right;
+  white-space: nowrap;
+}
+
+#enviro #revision {
+  padding-left: 14px;
+  background: var(--gitlab) left center no-repeat;
+  background-size: 11px;
+}
+
+#criticallogs td , #routerlogs td, #eventlogs td, #wrapperlogs td {
+  padding: 5px 10px;
+  font-weight: normal !important;
+  border-top: var(--border);
+}
+
+#criticallogs tr:first-child {
+  display: none;
+}
+
+table[id$="logs"] tr:first-child{
+  background: #001000;
+}
+
+table[id$="logs"] tr:nth-child(even){
+  background: #000;
+}
+
+table[id$="logs"] ul {
+  margin: -6px 12px -5px -18px !important;
+}
+
+#wrapperlogs {
+  width: 100%;
+  table-layout: fixed;
+  margin-bottom: 10px;
+}
+
+#wrapperlogs tr:last-child td {
+  padding: 0 !important;
+}
+
+#wrapperlogs pre {
+  margin-bottom: 0 !important;
+  padding: 0 0 0 5px !important;
+  width: 99%;
+  width: calc(100% - 5px);
+  max-height: 600px;
+  white-space: pre-wrap;
+  resize: none;
+}
+
+.logtable ul li {
+  margin-left: 15px;
+  list-style: none !important;
+}
+
+#logs li {
+  list-style: none;
+  font: bold 8.5pt var(--monospaced);
+  line-height: 140%;
+  text-align: left;
+  width: 100%;
+  word-break: break-all;
+  border-top: 1px solid #001800;
+  border-right: 1px solid #001800;
+  border-bottom: 1px solid #000;
+}
+
+#logs li:last-child {
+  border-bottom: 1px solid #001800;
+}
+
+#logs li:nth-child(odd) {
+  border-left: 2px solid #020;
+  background: #000;
+}
+
+#logs li:nth-child(even) {
+  border-left: 2px solid #030;
+  background: #010;
+}
+
+#logs li:hover {
+  text-shadow: 0 1px 1px #000;
+  box-shadow: inset 0 0 0 1px #000;
+  border-color: #550;
+  background: #220;
+}
+
+#logs li:hover span {
   text-shadow: none;
+  box-shadow: none;
+}
+
+#logs font[color^="#"]::before {
+  margin-left: 0;
+  margin-right: 5px;
+  content: "";
+  display: inline-block;
+  width: 6px;
+  height: 6px;
+  vertical-align: calc(1px);
+  color: #777;
+  border-radius: 50%;
+  filter: saturate(1);
+  animation: linear ping .1s;
+}
+
+@keyframes ping {
+  from {filter: saturate(2)}
+}
+
+.log_debug, .log_info, .log_warn, .log_error, .log_crit, .log_omitted {
+  padding: 1px 2px;
+  min-width: 36px;
+  max-width: 36px;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  display: inline-block;
+  line-height: 100%;
+  text-align: center;
+  color: #000;
+  border-radius: 2px;
+}
+
+/* critical */
+
+font[color="#cc0000"] {
+  color: #900 !important;
+}
+
+#logs li font[color="#cc0000"]::before {
+  background: #900;
+}
+
+.log_crit {
+  background: #900;
+}
+
+/* warning */
+
+font[color="#bf00df"] {
+  color: #636 !important;
+}
+
+#logs li font[color="#bf00df"]::before {
+  background: #636;
+}
+
+.log_warn {
+  background: #636;
+}
+
+/* error */
+
+font[color="#ff3300"] {
+  color: #730 !important;
+}
+
+#logs li font[color="#ff3300"]::before {
+  background: #730;
+}
+
+.log_error {
+  background: #730;
+}
+
+/* debug */
+
+font[color="#006600"] {
+  color: #346 !important;
+}
+
+#logs li font[color="#006600"]::before {
+  background: #346;
+}
+
+.log_debug, .log_omitted {
+  background: #346;
+}
+
+/* info */
+
+font[color="#000099"], #servicelogs {
+  color: #363 !important;
+}
+
+#logs li font[color="#000099"]::before {
+  background: #363;
+}
+
+.log_info {
+  background: #363;
 }
 
 #routerlogs ul, #criticallogs ul {
-  margin: 0 !important;
+  margin: -4px 0 !important;
   border: none;
 }
 
 #routerlogs li, #criticallogs li {
-  line-height: 20px;
+  margin: 0 -11px 0 -9px !important;
   padding: 0 10px !important;
-  margin: 0 -10px !important;
+  line-height: 1.7;
+  width: calc(100% - 5px);
 }
 
 #routerlogs li::after, #criticallogs li::after {
   display: none;
-}
-
-#routerlogs li:hover, #criticallogs li:hover {
-  background: rgba(0,48,0,.3)
 }
 
 #routerlogs li:hover font, #criticallogs li:hover font {
@@ -10969,6 +10970,8 @@ h3#servicelogs {
 #logs #wrapperlogs .nologs {
   padding: 7px 18px;
 }
+
+/* end logs */
 
 .routersummary table {
   border-spacing: 2px;
