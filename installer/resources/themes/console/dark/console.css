@@ -10770,6 +10770,10 @@ table[id$="logs"] tr:nth-child(2) {
   background: none;
 }
 
+#wrapperlogs tr:nth-child(2) {
+  background: rgba(0,16,0,.3);
+}
+
 table[id$="logs"] ul {
   margin: -6px 12px -5px -18px !important;
 }
