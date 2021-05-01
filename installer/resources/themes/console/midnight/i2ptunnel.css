@@ -60,14 +60,10 @@ body.iframed {
 }
 
 h2, h3, th, .buttons, .newTunnel, .control, label, .infohelp, .infowarn, .nowrap, b, #throttler td {
-  -moz-user-select: none;
-  -webkit-user-select: none;
   user-select: none;
 }
 
 .selectAll {
-  -moz-user-select: all;
-  -webkit-user-select: all;
   user-select: all;
 }
 
@@ -75,14 +71,7 @@ h2, h3, th, .buttons, .newTunnel, .control, label, .infohelp, .infowarn, .nowrap
   background: #003;
 }
 
-h2, h3, th, .buttons {
-  -moz-user-select: none;
-  -webkit-user-select: none;
-  user-select: none;
-}
-
 div {
-  -moz-box-sizing: border-box;
   box-sizing: border-box;
 }
 
@@ -668,16 +657,15 @@ a.control, input.control {
   margin: 2px !important;
   padding: 5px 8px !important;
   min-width: 70px !important;
+  box-sizing: border-box;
   overflow: hidden;
   white-space: nowrap;
   text-decoration: none;
   text-align: center;
   font-weight: bold;
   font-style: normal;
-  border: 1px solid #26225c;
-  box-sizing: border-box;
   color: #7171d1 !important;
-  background: #000 !important;
+  border: 1px solid #26225c;
   background: linear-gradient(to bottom, #11101c 50%, #000010 50%) !important;
 }
 
@@ -686,7 +674,6 @@ a.control, input.control {
   color: #652787 !important;
   border: 1px solid #652787 !important;
   box-shadow: var(--highlight), inset 0 0 1px 1px #757;
-  background: #000 !important;
   background: linear-gradient(to bottom, #202 50%, #000 50%) !important;
 }
 
@@ -694,7 +681,6 @@ a.control, input.control {
   background: #652787 !important;
   color: #c9ceff !important;
   text-decoration: none;
-  box-shadow: var(--highlight) !important;
   box-shadow: var(--highlight), inset 3px 3px 3px #000 !important;
 }
 
@@ -708,11 +694,11 @@ button.control {
 }
 
 button, input[type=submit], input[type="reset"], .control, select {
-  box-shadow: var(--highlight), inset 0 0 1px 1px #446;
+  box-shadow: var(--highlight), inset 0 0 2px 0 #559;
 }
 
 select {
-  padding: 4px 24px 4px 4px !important;
+  padding: 5px 24px 5px 5px !important;
   min-width: 120px;
   overflow: hidden;
   appearance: none;
@@ -721,7 +707,6 @@ select {
   font-weight: bold;
   color: #7171d1;
   border: 1px solid #26225c;
-  box-shadow: var(--highlight), inset 0 0 1px 1px #446, 0 0 0 1px #000;
   background: var(--dropdown) center right 10px no-repeat, linear-gradient(to bottom, #11101c 50%, #000010 50%) !important;
   background-size: 10px auto, 100% 100% !important;
   filter: none;
@@ -1362,11 +1347,9 @@ td {
 }
 
 @supports not (-moz-appearance: none) { /* fixes chrome/blink overflow issue */
-select {
-  white-space: normal !important;
-  padding-top: 5px !important;
-  padding-bottom: 5px !important;
-}
+  select {
+    white-space: normal !important;
+  }
 }
 
 label {
@@ -1577,7 +1560,7 @@ textarea[name="accessList"], #hostField, #localDestination, .authentication {
 
 select, .newTunnel select {
   margin: 4px 8px 4px 4px !important;
-  padding: 6px 20px 6px 6px !important;
+  padding: 7px 20px 7px 7px !important;
   min-width: 180px;
 }
 

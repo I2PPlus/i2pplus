@@ -981,28 +981,26 @@ input[type=submit]::-moz-focus-inner, input[type=reset]::-moz-focus-inner {
 }
 
 input[type=submit], input[type=reset], .fakebutton, .fakebutton:visited {
-  padding: 5px 10px !important;
+  padding: 6px 10px !important;
   min-width: 100px !important;
   font: bold 9pt var(--bodyfont);
   color: #7171d1;
   text-align: center;
   border: 1px solid #27235c;
-  border-radius: 2px;
-  box-shadow: var(--highlight), inset 0 0 1px 0 #446;
-  background: #000;
+  border-radius: 1px;
+  box-shadow: var(--highlight), inset 0 0 2px 0 #559;
   background: linear-gradient(to bottom, #11101c 50%, #000010 50%) !important;
 }
 
 input[type=file]::file-selector-button {
-  padding: 5px 10px !important;
+  padding: 6px 10px !important;
   min-width: 100px !important;
   font: bold 9pt var(--bodyfont);
   color: #7171d1;
   text-align: center;
   border: 1px solid #27235c;
   border-radius: 2px;
-  box-shadow: var(--highlight), inset 0 0 1px 0 #446;
-  background: #000;
+  box-shadow: var(--highlight), inset 0 0 2px 0 #559;
   background: linear-gradient(to bottom, #11101c 50%, #000010 50%) !important;
 }
 
@@ -1015,15 +1013,15 @@ input[type=submit]:focus, input[type=reset]:focus,
 .fakebutton:hover, .fakebutton:focus {
   color: #652787;
   border: 1px solid #652787;
-  box-shadow: var(--highlight), inset 0 0 1px 1px #757;
-  background: #000 !important;
+  box-shadow: var(--highlight), inset 0 0 2px 1px #757;
   background: linear-gradient(to bottom, #202 50%, #000 50%) !important;
 }
 
 input[type=file]:hover::file-selector-button, input[type=file]:focus::file-selector-button {
   color: #652787;
   border: 1px solid #652787;
-  box-shadow: var(--highlight), inset 0 0 1px 1px #757;
+  border-radius: 1px;
+  box-shadow: var(--highlight), inset 0 0 2px 1px #757;
   background: #000 !important;
   background: linear-gradient(to bottom, #202 50%, #000 50%) !important;
 }
