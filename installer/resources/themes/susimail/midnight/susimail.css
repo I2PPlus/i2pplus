@@ -1596,10 +1596,8 @@ input[type=checkbox][disabled]:checked, input[type=radio][disabled]:checked, inp
 
 select {
   margin: 5px 10px;
-  padding: 6px 20px 6px 6px !important;
+  padding: 7px 20px 7px 7px !important;
   min-width: 110px;
-  -moz-appearance: none;
-  -webkit-appearance: none;
   appearance: none;
   overflow: hidden;
   text-overflow: ellipsis;
@@ -1610,7 +1608,6 @@ select {
   border-radius: 1px;
   cursor: pointer;
   box-shadow: var(--highlight), inset 0 0 2px 0 #559;
-  background: #000 url(/themes/console/midnight/images/dropdown.svg) center right 10px no-repeat !important;
   background: url(/themes/console/midnight/images/dropdown.svg) center right 10px no-repeat, var(--button) !important;
   background-size: 10px auto, 100% 100% !important;
   filter: none !important;
