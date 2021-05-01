@@ -28,7 +28,7 @@ class TunnelParticipant {
     private RouterInfo _nextHopCache;
 
 //    private static final long MAX_LOOKUP_TIME = 15*1000;
-    private static final long MAX_LOOKUP_TIME = 10*1000;
+    private static final long MAX_LOOKUP_TIME = 12*1000;
     /** for next hop when a tunnel is first created */
 //    private static final long LONG_MAX_LOOKUP_TIME = 30*1000;
     private static final long LONG_MAX_LOOKUP_TIME = 25*1000;

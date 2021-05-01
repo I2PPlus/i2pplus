@@ -20,7 +20,8 @@ class RequestThrottler {
     private static final int LIFETIME_PORTION = 6;
     private static final int MIN_LIMIT = 45 / LIFETIME_PORTION;
     private static final int MAX_LIMIT = 165 / LIFETIME_PORTION;
-    private static final int PERCENT_LIMIT = 12 / LIFETIME_PORTION;
+//    private static final int PERCENT_LIMIT = 12 / LIFETIME_PORTION;
+    private static final int PERCENT_LIMIT = 24 / LIFETIME_PORTION;
     private static final long CLEAN_TIME = 11*60*1000 / LIFETIME_PORTION;
 
     RequestThrottler(RouterContext ctx) {
