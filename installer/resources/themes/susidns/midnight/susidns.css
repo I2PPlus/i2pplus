@@ -1334,6 +1334,12 @@ td.names:hover, #host_list td.b32link:hover, #host_list td.helper:hover, #host_l
   background: #000 !important;
 }
 
+.names a {
+  padding 3px 0;
+  width: 100%;
+  display: inline-block;
+}
+
 .info a[href$=".i2p/"], #host_list td.b32link a, #host_list td.helper a {
   width: 100%;
   display: inline-block;
