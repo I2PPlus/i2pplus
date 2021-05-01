@@ -1051,7 +1051,7 @@ textarea, #subslog pre {
   width: 100%;
   height: 120px;
   resize: none;
-  font: bold 8.5pt "Droid Sans Mono", "Noto Mono", "DejaVu Sans Mono", "Lucida Console", monospace;
+  font: bold 8.5pt var(--monospaced);
   line-height: 140%;
   color: #7670c2;
   border: 1px solid #26225d;
@@ -1233,7 +1233,7 @@ p.book {
 }
 
 #host_details .destaddress {
-  font-family: "Droid Sans Mono", "Noto Mono", "Lucida Console", "DejaVu Sans Mono", monospace !important;
+  font-family: var(--monospaced) !important;
 }
 
 #host_details tr:hover, #host_details tr:hover td, #visualid tr:hover, #visualid tr:hover td {
@@ -1405,7 +1405,7 @@ td.names:hover, #host_list td.b32link:hover, #host_list td.helper:hover, #host_l
   white-space: nowrap;
   overflow: hidden !important;
   text-overflow: ellipsis;
-  font-family: "Droid Sans Mono", "Noto Mono", "Lucida Console", "DejaVu Sans Mono", monospace !important;
+  font-family: var(--monospaced) !important;
   font-weight: normal;
   text-shadow: 0 1px 1px #000;
   opacity: .7;
@@ -1513,8 +1513,8 @@ h3 {
 
   .headline#subscriptions h3 span a {
     font-size: 90% !important;
+  }
 }
-
 /* end responsive layout */
 
 /* Edge/IE tweaks */
@@ -1525,8 +1525,6 @@ _:-ms-lang(x), * {
 
 /* end Edge/IE tweaks */
 
-/* custom radios/checkboxes to enforce color scheme when OS widgets are non-standard  */
-@supports (background-blend-mode: luminosity) { /* exclude ms browsers */
 input[type=checkbox], input[type=checkbox]:checked, input[type=checkbox][disabled], input[type=checkbox][disabled]:checked,
 input[type=radio], input[type=radio]:checked, input[type=radio][disabled], input[type=radio][disabled]:checked {
   position: relative;
@@ -1615,7 +1613,6 @@ input[type=checkbox][disabled]:checked, input[type=radio][disabled]:checked, inp
   background: #000;
   opacity: .5 !important;
   filter: none !important;
-}
 }
 
 /* end custom radios/checkboxes */
