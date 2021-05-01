@@ -33,7 +33,13 @@ textarea {
 
 html, body {
   min-height: 100%;
-  background: #001;
+}
+
+html {
+  background: repeating-linear-gradient(to right, rgba(0,16,0,.5) 2px, rgba(0,0,0,.3) 4px),
+              repeating-linear-gradient(to bottom, rgba(0,0,32,.6) 2px, rgba(0,0,0,.3) 4px),
+              url(images/tile.png) #001;
+  background-size: 4px 100%, 100% 4px, 171px 148px;
 }
 
 body {
@@ -42,31 +48,19 @@ body {
   text-align: center;
   font: 8.5pt/130% var(--bodyfont);
   color: #c9ceff;
-  background: #001;
-}
-
-/* preload button mouseovers */
-body:not(old) {
-  background: repeating-linear-gradient(to right, rgba(0,16,0,.5) 2px, rgba(0,0,0,.3) 4px),
-              repeating-linear-gradient(to bottom, rgba(0,0,32,.6) 2px, rgba(0,0,0,.3) 4px),
-              url(images/tile.png),
-              url(/themes/console/images/buttons/clean_hover.png) no-repeat,
+  background: url(/themes/console/images/buttons/clean_hover.png) no-repeat,
               url(/themes/console/images/buttons/delete_hover.png) no-repeat,
               url(/themes/console/images/buttons/restore_hover.png) no-repeat,
               url(/themes/console/images/buttons/update_hover.png) no-repeat,
               url(images/dropdown_hover.svg),
-              url(images/newtab.png), #001;
-  background-size: 4px 100%, 100% 4px, 171px 148px, 0, 0, 0, 0, 0, 0;
+              url(images/newtab.png);
+  background-size: 0, 0, 0, 0, 0, 0;
 }
 
 @supports (-moz-appearance: none) {
-  body:not(old) {
+  html {
     background-attachment: fixed;
   }
-}
-
-body#proxy_error {
-  background: linear-gradient(to bottom, #001, #000);
 }
 
 .routersummary, h1, .main, iframe {
