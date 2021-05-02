@@ -2515,9 +2515,20 @@ p#enablefullstats {
   font-size: 90% !important;
 }
 
+#sidebarconf label {
+  display: inline-block;
+  width: 100%;
+}
+
+#sidebarconf tr:hover label {
+  color: #f60 !important;
+}
+
 #sidebarconf button {
-  margin: 2px 0 2px 3px !important;
+  margin: 2px !important;
   padding: 2px 3px;
+  width: 22px;
+  height: 22px;
   min-width: 0;
 }
 
@@ -2593,35 +2604,15 @@ p#enablefullstats {
   padding-left: 10px;
 }
 
-#sidebarconf td:first-child {
-  width: 60px;
-  text-align: center;
-}
-
-#sidebarconf td:nth-child(3), #sidebarconf td:nth-child(4) {
+#sidebarconf td:first-child, #sidebarconf td:nth-child(3), #sidebarconf td:nth-child(4) {
+  padding: 2px 5px;
   width: 1%;
   white-space: nowrap;
+  text-align: center !important;
 }
 
 #sidebarconf td:nth-child(3) button, #sidebarconf td:nth-child(4) button {
   margin: 0;
-}
-
-#sidebarconf td:nth-child(3) {
-  text-align: right;
-}
-
-#sidebarconf td:nth-child(4) {
-  text-align: left;
-  padding-right: 5px;
-}
-
-#sidebarconf tr:last-child td {
-  padding: 5px !important;
-}
-
-#sidebarconf tr:last-child td:last-child {
-  text-align: left;
 }
 
 p#tunnelconfig {
