@@ -81,7 +81,7 @@ class BuildHandler implements Runnable {
     private static final int MAX_QUEUE = 256;
 
 //    private static final int NEXT_HOP_LOOKUP_TIMEOUT = 15*1000;
-    private static final int NEXT_HOP_LOOKUP_TIMEOUT = 20*1000;
+    private static final int NEXT_HOP_LOOKUP_TIMEOUT = 12*1000;
     private static final int PRIORITY = OutNetMessage.PRIORITY_BUILD_REPLY;
 
     /** limits on concurrent next-hop RI lookup */

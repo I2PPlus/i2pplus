@@ -10820,21 +10820,23 @@ table[id$="logs"] ul {
 }
 
 #logs li:nth-child(odd) {
-  border-left: 2px solid #020;
-  background: rgba(0,0,0,.4);
+  border-left: 2px solid #030;
+  background: rgba(0,8,0,.4);
 }
 
 #logs li:nth-child(even) {
-  border-left: 2px solid #030;
-  background: rgba(0,16,0,.4);
+  border-top: 1px solid #001c00;
+  border-left: 2px solid #040;
+  border-right: 1px solid #001c00;
+  background: rgba(0,28,0,.4);
 }
 
 #logs li:hover {
   text-shadow: 0 1px 1px #000;
   box-shadow: inset 0 0 0 1px #000;
-  border-color: #550;
   border-color: #330;
-  background: repeating-linear-gradient(to right, rgba(0,0,0,.3) 2px, rgba(0,16,0,.3) 4px), repeating-linear-gradient(to bottom, #020 2px, #010 4px);
+  background: repeating-linear-gradient(to right, rgba(0,0,0,.3) 2px, rgba(0,24,0,.3) 4px),
+              repeating-linear-gradient(to bottom, #002800 2px, #010 4px);
   background-size: 4px 100%, 100% 4px;
 }
 
