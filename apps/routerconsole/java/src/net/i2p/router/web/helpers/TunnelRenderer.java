@@ -352,10 +352,10 @@ class TunnelRenderer {
         }
         if (ir.getSummaryListener() != null) {
             out.write("<a href=\"graph?stat=" + irname + ".300000&amp;w=600&amp;h=200\">" +
-                      "<img src=\"/themes/console/images/inbound.png\" alt=\"" + tgd + "\" title=\"" + tgd + "\"></a> ");
+                      "<img src=\"/themes/console/images/inbound.svg\" alt=\"" + tgd + "\" title=\"" + tgd + "\"></a> ");
         } else {
             out.write("<a href=\"configstats#" + irname + "\">" +
-                      "<img src=\"/themes/console/images/inbound.png\" alt=\"" + tcg + "\" title=\"" + tcg + "\"></a>");
+                      "<img src=\"/themes/console/images/inbound.svg\" alt=\"" + tcg + "\" title=\"" + tcg + "\"></a>");
         }
     }
 
@@ -411,7 +411,7 @@ class TunnelRenderer {
             boolean isInbound = info.isInbound();
             if (isInbound)
                 out.write("<tr><td class=\"cells\" align=\"center\"><span class=\"inbound\" title=\"" + tib +
-                          "\"><img src=\"/themes/console/images/inbound.png\" alt=\"" + tib + "\"></span></td>");
+                          "\"><img src=\"/themes/console/images/inbound.svg\" alt=\"" + tib + "\"></span></td>");
             else
                 out.write("<tr><td class=\"cells\" align=\"center\"><span class=\"outbound\" title=\"" + tob +
                           "\"><img src=\"/themes/console/images/outbound.png\" alt=\"" + tob + "\"></span></td>");

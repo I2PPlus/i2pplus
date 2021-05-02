@@ -11887,38 +11887,6 @@ th.options .optbox {
   width: 100%;
 }
 
-.dead:not(old) span {
-  color: transparent;
-  text-shadow: none;
-  font-size: 0;
-  line-height: 0;
-}
-
-.dead span::after {
-  margin-top: -2px;
-  content: "";
-  height: 20px;
-  width: 20px;
-  display: inline-block;
-  float: right;
-  background: url(/themes/console/images/info/rip.png) center center no-repeat;
-  background-size: 20px;
-}
-
-.dead, .dead + table, .dead + table + .statusnotes, .dead + table + .statusnotes + .statusnotes,
-.dead + .statusnotes, .dead + .statusnotes + .statusnotes {
-  opacity: 0.85;
-}
-
-.dead, .dead + .statusnotes, .dead + .statusnotes + .statusnotes,
-.dead + table + .statusnotes, .dead + table + .statusnotes + .statusnotes {
-  font-style: italic;
-}
-
-.dead + table > tbody > tr > td:nth-child(n+1) > .tunnel_id {
-  text-decoration: line-through;
-}
-
 .pending:nth-of-type(2)::before {
   content: "\2022\2008\2008"; /* bullet separator + spaces */
 }

@@ -1183,33 +1183,33 @@ b.suboption {
 }
 
 #config_reseed #reseedurl, #installPluginUrl {
-  background: #eaeaff url(/themes/console/images/info/url.png) right 10px center no-repeat !important;
+  background: #eaeaff var(--link) right 10px center no-repeat !important;
   background-size: 28px 28px, 100% 100%, 100% 100% !important;
 }
 
 #config_reseed #reseedurl:hover, #installPluginUrl:hover {
-  background: #ffd url(/themes/console/images/info/url.png) right 10px center no-repeat !important;
+  background: #ffd var(--link) right 10px center no-repeat !important;
   background-size: 28px 28px !important;
 }
 
 #config_reseed  #reseedzip, #installPluginFile {
-  background: #eaeaff url(/themes/console/images/info/from_file.png) right 10px center no-repeat !important;
+  background: #eaeaff var(--files) right 10px center no-repeat !important;
   background-size: 28px 28px, 100% 100%, 100% 100% !important;
 }
 
 #config_reseed #reseedzip:hover, #installPluginFile:hover {
-  background: #ffd url(/themes/console/images/info/from_file.png) right 10px center no-repeat !important;
+  background: #ffd var(--files) right 10px center no-repeat !important;
   background-size: 28px 28px !important;
 }
 
 #config_reseed #reseedcreatefile {
-  background: #eaeaff url(/themes/console/images/info/box.png) right 10px center no-repeat !important;
+  background: #eaeaff var(--package) right 10px center no-repeat !important;
   background-size: 28px 28px, 100% 100%, 100% 100% !important;
   text-align: justify;
 }
 
 #config_reseed #reseedcreatefile:hover {
-  background: #ffd url(/themes/console/images/info/box.png) right 10px center no-repeat !important;
+  background: #ffd var(--package) right 10px center no-repeat !important;
   background-size: 28px 28px !important;
 }
 
