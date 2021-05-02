@@ -128,9 +128,6 @@ tt, code, pre, textarea, #logs li, .bucket, .b32 {
 .routersummary a, .routersummary img[src$="i2plogo.png"], .routersummary h3, .confignav, *::before, *::after, div.app, .themechoice, .langselect, .langbox,
 .newsAuthor, #netdbcountrylist img, .viewfullentry, .sybil_routerinfo th img, .graphspanel, #themeoptions, #graphopts, #newsDisplay,
 #version a, #sb_internals, #sb_advanced, #sb_services, #sb_help, .sb_netstatus, .tunnelbuildstatus, .routersummary form, h1, h2, h3, h4, button, img {
-  -ms-user-select: none;
-  -moz-user-select: none;
-  -webkit-user-select: none;
   user-select: none;
 }
 
@@ -2518,9 +2515,20 @@ p#enablefullstats {
   font-size: 90% !important;
 }
 
+#sidebarconf label {
+  display: inline-block;
+  width: 100%;
+}
+
+#sidebarconf tr:hover label {
+  color: #f60 !important;
+}
+
 #sidebarconf button {
-  margin: 2px 0 2px 3px !important;
+  margin: 2px !important;
   padding: 2px 3px;
+  width: 22px;
+  height: 22px;
   min-width: 0;
 }
 
@@ -2596,35 +2604,15 @@ p#enablefullstats {
   padding-left: 10px;
 }
 
-#sidebarconf td:first-child {
-  width: 60px;
-  text-align: center;
-}
-
-#sidebarconf td:nth-child(3), #sidebarconf td:nth-child(4) {
+#sidebarconf td:first-child, #sidebarconf td:nth-child(3), #sidebarconf td:nth-child(4) {
+  padding: 2px 5px;
   width: 1%;
   white-space: nowrap;
+  text-align: center !important;
 }
 
 #sidebarconf td:nth-child(3) button, #sidebarconf td:nth-child(4) button {
   margin: 0;
-}
-
-#sidebarconf td:nth-child(3) {
-  text-align: right;
-}
-
-#sidebarconf td:nth-child(4) {
-  text-align: left;
-  padding-right: 5px;
-}
-
-#sidebarconf tr:last-child td {
-  padding: 5px !important;
-}
-
-#sidebarconf tr:last-child td:last-child {
-  text-align: left;
 }
 
 p#tunnelconfig {
@@ -2866,14 +2854,14 @@ to {
 }
 
 .notice {
-  font-style: italic;
   margin: 0;
   padding: 0;
+  font-style: italic;
 }
 
 .messages ul {
-  padding: 0;
   margin: 0;
+  padding: 0;
 }
 
 #messages li {
@@ -2887,8 +2875,8 @@ to {
   list-style: none;
   text-align: justify !important;
   font-weight: bold;
+  border: none !important;
   background: url(images/warning.png) left center no-repeat;
-  border: 0 !important;
 }
 
 .messages li br + b {
@@ -2914,11 +2902,11 @@ to {
 }
 
 table {
-  border-collapse: collapse;
-  width: 100%;
-  border: 1px solid #8d8daa;
   margin: 1px 0 5px;
+  width: 100%;
   font-size: 9pt;
+  border: 1px solid #8d8daa;
+  border-collapse: collapse;
   background: #fafaff;
 }
 
@@ -2927,15 +2915,15 @@ table {
 }
 
 #configinfo td {
-  text-align: justify;
   padding: 10px;
+  text-align: justify;
 }
 
 td.optionsave {
-  text-align: right;
   padding: 5px !important;
-  background: #fafaff;
+  text-align: right;
   border-top: 1px solid #8d8daa !important;
+  background: #fafaff;
 }
 
 td.optionsave, .formaction, form[action="configpeer"] tr:last-child td, table#addkeyring tr:last-child td {
@@ -3895,7 +3883,7 @@ a:active {
 }
 
 .links li {
-  list-style: url(images/link.png) !important;
+  list-style: var(--star) !important;
   text-align: justify !important;
   line-height: 140% !important;
   margin-right: 10px !important;
@@ -3918,8 +3906,6 @@ a:active {
   border-radius: 4px;
   box-shadow: inset 0 0 0 1px #eef;
   background: #eef;
-  -moz-user-select: all;
-  -webkit-user-select: all;
   user-select: all;
 }
 
@@ -9030,9 +9016,6 @@ table#schedjobs {
   box-shadow: var(--highlight);
   background: #eef;
   background: linear-gradient(to bottom, #fff 50%, #e2e2ff 50%);
-  -ms-user-select: none;
-  -moz-user-select: none;
-  -webkit-user-select: none;
   user-select: none;
 }
 
