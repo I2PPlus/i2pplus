@@ -88,7 +88,7 @@ class BuildHandler implements Runnable {
 //    private static final int MIN_LOOKUP_LIMIT = 10;
     private static final int MIN_LOOKUP_LIMIT = 16;
 //    private static final int MAX_LOOKUP_LIMIT = 100;
-    private static final int MAX_LOOKUP_LIMIT = 192;
+    private static final int MAX_LOOKUP_LIMIT = 128;
     /** limit lookups to this % of current participating tunnels */
 //    private static final int PERCENT_LOOKUP_LIMIT = 3;
     private static final int PERCENT_LOOKUP_LIMIT = 5;
@@ -100,7 +100,8 @@ class BuildHandler implements Runnable {
      *  all the traffic in TunnelDispatcher.dispatch(TunnelDataMessage msg, Hash recvFrom).
      *  10s was not enough.
      */
-    private static final int NEXT_HOP_SEND_TIMEOUT = 25*1000;
+//    private static final int NEXT_HOP_SEND_TIMEOUT = 25*1000;
+    private static final int NEXT_HOP_SEND_TIMEOUT = 20*1000;
 
     private static final long MAX_REQUEST_FUTURE = 5*60*1000;
     /** must be > 1 hour due to rounding down */
