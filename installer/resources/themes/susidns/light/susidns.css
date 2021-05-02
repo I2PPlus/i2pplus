@@ -54,13 +54,13 @@ b, td.search {
 
 #logo {
   margin: -5px 0 -1px;
-  text-align: center;
-  background: #eef url(/themes/susidns/images/logo.png) center center no-repeat;
-  background: url(/themes/susidns/images/logo.png) center center no-repeat, linear-gradient(to bottom, #fff, #eef);
   height: 55px;
-  background-size: auto 50px, 100% 100%;
+  text-align: center;
   border: 1px solid #8d8daa;
   box-shadow: inset 0 0 0 1px #fff;
+  background: #eef url(/themes/susidns/images/logo.png) center center no-repeat;
+  background: url(/themes/susidns/images/logo.png) center center no-repeat, linear-gradient(to bottom, #fff, #eef);
+  background-size: auto 50px, 100%;
 }
 
 #logo:not(old) {
@@ -147,7 +147,7 @@ code, tt, .destaddress {
   border: 1px solid #8d8daa;
   text-transform: capitalize;
   box-shadow: inset 0 0 0 1px #fff;
-  background-size: 14px 14px, 100% 100% !important;
+  background-size: 14px, 100% !important;
   filter: drop-shadow(0 0 1px rgba(220,220,255,.3));
 }
 
@@ -236,12 +236,12 @@ h3 {
 .headline h3 {
   font-size: 11.5pt;
   background: url(images/addressbook.svg) 7px calc(50% + 2px) no-repeat #fcfcff;
-  background-size: 20px 20px;
+  background-size: 20px;
 }
 
 .headline#subscriptions h3 {
   background: url(/themes/susidns/images/subs_24.png) 6px center no-repeat #fcfcff;
-  background-size: 22px 22px;
+  background-size: 22px;
 }
 
 #subscriptions a {
@@ -250,7 +250,7 @@ h3 {
 
 .headline#configure h3 {
   background: url(../images/configure.svg) 7px calc(50% + 1px) no-repeat #fcfcff;
-  background-size: 18px 18px;
+  background-size: 18px;
 }
 
 .headline#subscriptions h3, .headline#configure h3, .headline#addressbook h3, .headline h3 {
@@ -313,19 +313,22 @@ form[action="subscriptions"] #content {
 #content + #buttons {
   border: 1px solid #8d8daa;
   margin: -1px 0 10px;
-  background: linear-gradient(to bottom, #fafaff 50%, rgba(220,220,255,.3)), repeating-linear-gradient(135deg, rgba(255,255,255,.5) 2px, rgba(221, 221, 255, 0.3) 3px, #fff 5px), #fff !important;
+  background: linear-gradient(to bottom, #fafaff 50%, rgba(220,220,255,.3)),
+              repeating-linear-gradient(135deg, rgba(255,255,255,.5) 2px, rgba(221, 221, 255, 0.3) 3px, #fff 5px), #fff !important;
 }
 
 #content h3 {
   border: 1px solid #8d8daa;
   padding: 5px 8px 5px 34px;
-  border-radius: 2px;
-  background: url(/themes/console/images/info/question.png) 8px center no-repeat, linear-gradient(to bottom, #fcfcff 50%, rgba(255,255,255,.6) 50%, rgba(240,240,255,.4)), linear-gradient(135deg, #fcfcff 5%, rgba(231, 231, 255, 0.8) 15%) !important;
-  background-size: 20px 20px, 100% 100%, 100% 100% !important;
-  background-blend-mode: luminosity, normal, normal;
-  box-shadow: inset 0 0 0 1px #fff, 0 0 1px #ccc;
-  text-transform: none;
   letter-spacing: 0;
+  text-transform: none;
+  border-radius: 2px;
+  box-shadow: inset 0 0 0 1px #fff, 0 0 1px #ccc;
+  background: url(/themes/console/images/info/question.png) 8px center no-repeat,
+              linear-gradient(to bottom, #fcfcff 50%, rgba(255,255,255,.6) 50%, rgba(240,240,255,.4)),
+              linear-gradient(135deg, #fcfcff 5%, rgba(231, 231, 255, 0.8) 15%) !important;
+  background-size: 20px, 100%, 100% !important;
+  background-blend-mode: luminosity, normal, normal;
 }
 
 .iframed #content h3 {
@@ -394,7 +397,8 @@ input:focus::placeholder {
 div#add p.buttons, div#import p.buttons {
   border: 1px solid #8d8daa;
   margin: 0 -16px -6px;
-  background: linear-gradient(to bottom, #fff 50%, rgba(220,220,255,.3)), repeating-linear-gradient(135deg, rgba(255,255,255,.5) 2px, rgba(221, 221, 255, 0.3) 3px, #fff 5px), #fff !important;
+  background: linear-gradient(to bottom, #fff 50%, rgba(220,220,255,.3)),
+              repeating-linear-gradient(135deg, rgba(255,255,255,.5) 2px, rgba(221, 221, 255, 0.3) 3px, #fff 5px), #fff !important;
 }
 
 .iframed #add p.buttons {
@@ -419,7 +423,7 @@ div.help {
   font-size: 10pt;
   background: #eef url(/themes/console/images/svg/infohelp.svg) 10px center no-repeat;
   background: url(/themes/console/images/svg/infohelp.svg) 10px center no-repeat, linear-gradient(135deg, #fafaff, #f8f8ff);
-  background-size: 26px 26px, 100% 100%;
+  background-size: 26px, 100%;
 }
 
 div.help h3, #add h3, #import h3 {
@@ -453,9 +457,9 @@ p, #helpconfig {
 }
 
 #helpconfig ul li {
+  -webkit-break-inside: avoid;
   break-inside: avoid;
   page-break-inside: avoid;
-  -webkit-break-inside: avoid;
 }
 
 span.addrhlpr {
@@ -479,14 +483,15 @@ h3 {
 }
 
 a {
-  color: #3b6bbf;
+  outline: none;
   text-decoration:none;
   font-weight: bold;
-  outline: none;
+  color: #3b6bbf;
+  color: #4d5f80;
 }
 
 a:visited {
-  color: #2c4e8f;
+  color: #4d5f80;
 }
 
 a:hover, a:focus {
@@ -562,7 +567,7 @@ div#messages {
   border-radius: 0 0 4px 4px;
   box-shadow: 0 1px 2px rgba(100,100,200,.7);
   background: url(/themes/snark/light/images/delete.png) right 8px top 5px no-repeat #113;
-  background-size: 16px 16px !important;
+  background-size: 16px !important;
   cursor: crosshair;
   animation: 2s hide-up 10s ease-out forwards;
 }
@@ -673,12 +678,12 @@ _:-ms-lang(x), img.illustrate {
 }
 
 .iframed .page {
-  background-color: transparent !important;
   margin: 1px;
-  border: none;
   padding: 10px 10px 0;
-  overflow: hidden !important;
   min-width: 520px;
+  overflow: hidden !important;
+  border: none;
+  background-color: transparent !important;
 }
 
 #bk.iframed .page {
@@ -687,40 +692,40 @@ _:-ms-lang(x), img.illustrate {
 
 input[type=text], input[type=password], textarea {
   padding: 5px !important;
-  box-shadow: inset 1px 1px 1px rgba(204, 204, 204, 0.6);
+  font-family: Droid Sans, Open Sans, Noto Sans, Ubuntu, Segoe UI, Lucida Grande, Bitstream Vera Sans, Verdana, sans-serif;
+  color: #393947;
   border: 1px solid #97a2ce;
   border-radius: 2px;
-  color: #393947;
+  box-shadow: inset 1px 1px 1px rgba(204, 204, 204, 0.6);
   background: #fbfbff;
-  font-family: Droid Sans, Open Sans, Noto Sans, Ubuntu, Segoe UI, Lucida Grande, Bitstream Vera Sans, Verdana, sans-serif;
   filter: drop-shadow(0 0 1px rgba(220,220,255,.7));
 }
 
 input[type=text]:focus, input[type=password]:focus, textarea:focus {
   color: #19191f;
+  border: 1px solid #676c7f;
   box-shadow: 0 0 1px #89f;
   background: #fff !important;
-  border: 1px solid #676c7f;
 }
 
 textarea, #subslog pre {
+  padding: 1px 3px;
+  width: 100%;
   font-family: "Droid Sans Mono", "Noto Mono", "Lucida Console", "DejaVu Sans Mono", monospace;
   font-size: 9pt;
-  width: 100%;
+  color: #393947;
   border-radius: 2px;
   border: 1px solid #97a2ce;
-  padding: 1px 3px;
-  color: #393947;
   resize: none;
 }
 
 #content textarea, #host_details textarea  {
   margin: 0 0 0 -15px;
-  border: none;
   width: 100%;
+  border: none;
+  box-shadow: none;
   resize: none;
   filter: none;
-  box-shadow: none;
 }
 
 .iframed #content textarea {
@@ -745,7 +750,7 @@ textarea[name="config"], textarea[name="content"], #subslog pre {
   line-height: 15px;
   box-shadow: inset 0 0 0 1px #fafaff;
   background: url(/themes/snark/ubergine/images/hat.png) right 10px bottom -8px no-repeat, linear-gradient(to right, #7e7fb9, #ccf 1px, #ccf 6px, #fafaff 6px) !important;
-  background-size: auto 160px, 100% 100%;
+  background-size: auto 160px, 100%;
 }
 
 #subslog.iframed pre {
@@ -855,7 +860,7 @@ table.book {
   width: 16px;
   background: #fff url(../images/nuke.svg) center center no-repeat;
   background: url(../images/nuke.svg) center center no-repeat, linear-gradient(to bottom, #fcfcff 51%, #fafaff 51%, #f6f6ff 100%);
-  background-size: 14px 14px;
+  background-size: 14px;
 }
 
 .book th {
@@ -1345,7 +1350,7 @@ input[type=file]::file-selector-button {
   box-shadow: 0 2px 0 rgba(255,255,255,.85) inset, 0 0 10px rgba(0,0,0,.1) inset, 0 1px 1px rgba(0,0,0,.05), 0 7px 4px -4px rgba(0,0,0,.1);
   background: #eee;
   background: linear-gradient(to bottom, #fff, #efefff);
-  background-size: 14px auto, 100% 100% !important;
+  background-size: 14px auto, 100% !important;
   opacity: 1;
   filter: drop-shadow(0 0 1px rgba(220,220,255,.7));
   cursor: pointer;
@@ -1363,53 +1368,53 @@ input[type=file]:hover::file-selector-button, input[type=file]:focus::file-selec
 input.accept {
   background: #eee url(/themes/console/images/buttons/yes.png) no-repeat 6px center;
   background: url(/themes/console/images/buttons/yes.png) no-repeat 6px center, linear-gradient(to bottom, #fff, #efefff);
-  background-size: 14px 14px, 100% 100%;
+  background-size: 14px, 100%;
   padding: 5px 7px 5px 22px;
 }
 
 input.accept:hover, input.accept:focus {
   background: #fff url(/themes/console/images/buttons/yes.png) no-repeat 6px center;
   background: url(/themes/console/images/buttons/yes.png) no-repeat 6px center, linear-gradient(to bottom, #eee, #fff);
-  background-size: 14px 14px, 100% 100%;
+  background-size: 14px, 100%;
 }
 
 input.add {
   background: #eee url(/themes/console/images/buttons/add.png) no-repeat 6px center;
   background: url(/themes/console/images/buttons/add.png) no-repeat 6px center, linear-gradient(to bottom, #fff, #efefff);
-  background-size: 14px 14px, 100% 100%;
+  background-size: 14px, 100%;
   padding: 5px 7px 5px 22px;
 }
 
 input.add:hover, input.add:focus {
   background: #fff url(/themes/console/images/buttons/add.png) no-repeat 6px center;
   background: url(/themes/console/images/buttons/add.png) no-repeat 6px center, linear-gradient(to bottom, #eee, #fff);
-  background-size: 14px 14px, 100% 100%;
+  background-size: 14px, 100%;
 }
 
 input.cancel {
   padding: 5px 7px 5px 22px;
   background: #eee url(/themes/console/images/buttons/no.png) no-repeat 6px center;
   background: url(/themes/console/images/buttons/no.png) no-repeat 6px center, linear-gradient(to bottom, #fff, #efefff);
-  background-size: 14px 14px, 100% 100%;
+  background-size: 14px, 100%;
 }
 
 input.cancel:hover, input.cancel:focus {
   background: #fff url(/themes/console/images/buttons/no.png) no-repeat 6px center;
   background: url(/themes/console/images/buttons/no.png) no-repeat 6px center, linear-gradient(to bottom, #eee, #fff);
-  background-size: 14px 14px, 100% 100%;
+  background-size: 14px, 100%;
 }
 
 input.delete {
   padding: 5px 7px 5px 22px;
   background: #eee url(/../images/nuke.svg) no-repeat 6px center;
   background: url(../images/nuke.svg) no-repeat 6px center, linear-gradient(to bottom, #fff, #efefff);
-  background-size: 13px 13px, 100% 100%;
+  background-size: 13px, 100%;
 }
 
 input.delete:hover, input.delete:focus {
   background: #fff url(../images/nuke.svg) no-repeat 6px center;
   background: url(../images/nuke.svg) no-repeat 6px center, linear-gradient(to bottom, #eee, #fff);
-  background-size: 13px 13px, 100% 100%;
+  background-size: 13px, 100%;
 }
 
 input.export {
@@ -1417,13 +1422,13 @@ input.export {
   padding: 5px 7px 5px 22px;
   background: #eee url(/themes/console/images/buttons/go.png) no-repeat 6px center;
   background: url(/themes/console/images/buttons/go.png) no-repeat 6px center, linear-gradient(to bottom, #fff, #efefff);
-  background-size: 13px 13px, 100% 100%;
+  background-size: 13px, 100%;
 }
 
 input.export:hover, input.export:focus {
   background: #fff url(/themes/console/images/buttons/go.png) no-repeat 6px center;
   background: url(/themes/console/images/buttons/go.png) no-repeat 6px center, linear-gradient(to bottom, #eee, #fff);
-  background-size: 14px 14px, 100% 100%;
+  background-size: 14px, 100%;
 }
 
 input.download, input.update {
@@ -1431,7 +1436,7 @@ input.download, input.update {
   padding: 5px 7px 5px 22px;
   background: #eee url(/themes/console/images/buttons/download.png) no-repeat 6px center;
   background: url(/themes/console/images/buttons/download.png) no-repeat 6px center, linear-gradient(to bottom, #fff, #efefff);
-  background-size: 14px 14px, 100% 100%;
+  background-size: 14px, 100%;
 }
 
 input.update {
@@ -1442,33 +1447,33 @@ input.download:hover, input.download:focus,
 input.update:hover, input.update:focus {
   background: #fff url(/themes/console/images/buttons/download.png) no-repeat 6px center;
   background: url(/themes/console/images/buttons/download.png) no-repeat 6px center, linear-gradient(to bottom, #eee, #fff);
-  background-size: 14px 14px, 100% 100%;
+  background-size: 14px, 100%;
 }
 
 input.reload {
   padding: 5px 7px 5px 22px;
   background: #eee url(/themes/console/images/buttons/update.png) no-repeat 6px center;
   background: url(/themes/console/images/buttons/update.png) no-repeat 6px center, linear-gradient(to bottom, #fff, #efefff);
-  background-size: 14px 14px, 100% 100%;
+  background-size: 14px, 100%;
 }
 
 input.reload:hover, input.reload:focus {
   background: #fff url(/themes/console/images/buttons/update_hover.png) no-repeat 6px center;
   background: url(/themes/console/images/buttons/update_hover.png) no-repeat 6px center, linear-gradient(to bottom, #eee, #fff);
-  background-size: 14px 14px, 100% 100%;
+  background-size: 14px, 100%;
 }
 
 input.search {
   padding: 5px 8px 5px 24px;
   background: #eee url(/themes/console/images/buttons/search.png) no-repeat 6px center;
   background: url(/themes/console/images/buttons/search.png) no-repeat 6px center, linear-gradient(to bottom, #fff, #efefff);
-  background-size: 14px 14px, 100% 100%;
+  background-size: 14px, 100%;
 }
 
 input.search:hover, input.search:focus {
   background: #fff url(/themes/console/images/buttons/search_hover.png) no-repeat 6px center;
   background: url(/themes/console/images/buttons/search_hover.png) no-repeat 6px center, linear-gradient(to bottom, #eee, #fff);
-  background-size: 14px 14px, 100% 100%;
+  background-size: 14px, 100%;
 }
 
 input.search[type=text] {
@@ -1485,13 +1490,13 @@ input.search[type=text]:focus {
   padding: 6px 8px 6px 22px;
   background: #eee url(/themes/console/images/buttons/go.png) no-repeat 6px center;
   background: url(/themes/console/images/buttons/go.png) no-repeat 6px center, linear-gradient(to bottom, #fff, #efefff);
-  background-size: 14px 14px, 100% 100%;
+  background-size: 14px, 100%;
 }
 
 #visualid .fakebutton:hover, #visualid .fakebutton:focus {
   background: #fff url(/themes/console/images/buttons/go.png) no-repeat 6px center;
   background: url(/themes/console/images/buttons/go.png) no-repeat 6px center, linear-gradient(to bottom, #eee, #fff);
-  background-size: 14px 14px, 100% 100%;
+  background-size: 14px, 100%;
 }
 
 form[action="addressbook"] table {
@@ -1540,7 +1545,7 @@ code, tt, .destaddress, th {
 #navi a, #navi a:visited {
   padding-left: 25px;
   font-size: 11pt;
-  background-size: 15px 15px, 100% 100% !important;
+  background-size: 15px, 100% !important;
 }
 
 #filter span, #filter a {
@@ -1636,7 +1641,7 @@ input#exporthosts {
   display: inline-block;
   font-size: 0 !important;
   background: url(/themes/console/images/info/arrow_down.png) center center no-repeat, linear-gradient(to bottom, #fff, #eef);
-  background-size: 16px 16px, 100% 100%;
+  background-size: 16px, 100%;
 }
 
 #exporthosts:disabled {
