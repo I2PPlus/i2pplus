@@ -10,6 +10,7 @@
   --bodyfont: Droid Sans, Open Sans, Noto Sans, Ubuntu, Segoe UI, Lucida Grande, Verdana, Helvetica, sans-serif;
   --monospaced: Droid Sans Mono, Noto Mono, DejaVu Sans Mono, Lucida Console, monospace;
   --highlight: inset 0 0 0 1px #fff;
+  --nav: linear-gradient(to bottom, #fff 50%, #eef 50%, #ebebff);
 }
 
 body {
@@ -39,9 +40,6 @@ body.iframed {
 }
 
 #navi, .buttons, #buttons, #host_list tr:first-child, #host_list img, #host_list td:nth-child(n+2) a {
-  -ms-user-select: none;
-  -moz-user-select: none;
-  -webkit-user-select: none;
   user-select: none;
 }
 
@@ -170,51 +168,51 @@ code, tt, .destaddress {
 }
 
 #navi a.abook {
-  background: url(/themes/susidns/light/images/abook.png) 6px center no-repeat, linear-gradient(to bottom, #fff 50%, #eef 50%, #ebebff) #fff;
+  background: url(/themes/susidns/light/images/abook.png) 6px center no-repeat, var(--nav);
 }
 
 #navi a.abook:hover, #navi a.abook:focus {
-  background: url(/themes/susidns/dark/images/abook_hover.png) 6px center no-repeat, linear-gradient(to bottom, #fff 50%, #eef 50%, #ebebff) #fff;
+  background: url(/themes/susidns/dark/images/abook_hover.png) 6px center no-repeat, var(--nav);
 }
 
 #navi a.abook:active {
-  background: url(/themes/susidns/light/images/abook_active.png) 6px center no-repeat, linear-gradient(to bottom, #fff 50%, #eef 50%, #ebebff) #fff;
+  background: url(/themes/susidns/light/images/abook_active.png) 6px center no-repeat, var(--nav);
 }
 
 #navi a#subs {
-  background: url(/themes/susidns/light/images/subs.png) 6px center no-repeat, linear-gradient(to bottom, #fff 50%, #eef 50%, #ebebff) #fff;
+  background: url(/themes/susidns/light/images/subs.png) 6px center no-repeat, var(--nav);
 }
 
 #navi a#subs:hover, #navi a#subs:focus {
-  background: url(/themes/susidns/dark/images/subs_hover.png) 6px center no-repeat, linear-gradient(to bottom, #fff 50%, #eef 50%, #ebebff) #fff;
+  background: url(/themes/susidns/dark/images/subs_hover.png) 6px center no-repeat, var(--nav);
 }
 
 #navi a#subs:active {
-  background: url(/themes/susidns/light/images/subs_active.png) 6px center no-repeat, linear-gradient(to bottom, #fff 50%, #eef 50%, #ebebff) #fff;
+  background: url(/themes/susidns/light/images/subs_active.png) 6px center no-repeat, var(--nav);
 }
 
 #navi a#configlink {
-  background: url(/themes/susidns/light/images/configure.png) 6px center no-repeat, linear-gradient(to bottom, #fff 50%, #eef 50%, #ebebff) #fff;
+  background: url(/themes/susidns/light/images/configure.png) 6px center no-repeat, var(--nav);
 }
 
 #navi a#configlink:hover, #navi a#configlink:focus {
-  background: url(/themes/susidns/dark/images/configure_hover.png) 6px center no-repeat, linear-gradient(to bottom, #fff 50%, #eef 50%, #ebebff) #fff;
+  background: url(/themes/susidns/dark/images/configure_hover.png) 6px center no-repeat, var(--nav);
 }
 
 #navi a#configlink:active {
-  background: url(/themes/susidns/light/images/configure_active.png) 6px center no-repeat, linear-gradient(to bottom, #fff 50%, #eef 50%, #ebebff) #fff;
+  background: url(/themes/susidns/light/images/configure_active.png) 6px center no-repeat, var(--nav);
 }
 
 #navi a#overview {
-  background: url(/themes/susidns/light/images/overview.png) 6px center no-repeat, linear-gradient(to bottom, #fff 50%, #eef 50%, #ebebff) #fff;
+  background: url(/themes/susidns/light/images/overview.png) 6px center no-repeat, var(--nav);
 }
 
 #navi a#overview:hover, #navi a#overview:focus {
-  background: url(/themes/susidns/dark/images/overview_hover.png) 6px center no-repeat, linear-gradient(to bottom, #fff 50%, #eef 50%, #ebebff) #fff;
+  background: url(/themes/susidns/dark/images/overview_hover.png) 6px center no-repeat, var(--nav);
 }
 
 #navi a#overview:active {
-  background: url(/themes/susidns/light/images/overview_active.png) 6px center no-repeat, linear-gradient(to bottom, #fff 50%, #eef 50%, #ebebff) #fff;
+  background: url(/themes/susidns/light/images/overview_active.png) 6px center no-repeat, var(--nav);
 }
 
 .headline {
@@ -694,7 +692,7 @@ input[type=text], input[type=password], textarea {
   color: #393947;
   border: 1px solid #97a2ce;
   border-radius: 2px;
-  box-shadow: inset 1px 1px 1px rgba(204, 204, 204, 0.6);
+  box-shadow: var(--highlight), inset 3px 3px 3px rgba(0,0,48,.2);
   background: #fbfbff;
   filter: drop-shadow(0 0 1px rgba(220,220,255,.7));
 }
@@ -715,6 +713,8 @@ textarea, #subslog pre {
   border-radius: 2px;
   border: 1px solid #97a2ce;
   resize: none;
+  scrollbar-color: #a7a7be rgba(255,255,255,.4);
+  will-change: transform;
 }
 
 #content textarea, #host_details textarea  {
@@ -727,8 +727,8 @@ textarea, #subslog pre {
 }
 
 .iframed #content textarea {
-  border: 1px solid #8d8daa;
   margin: 0;
+  border: 1px solid #8d8daa;
 }
 
 textarea[name="config"], textarea[name="content"], #subslog pre {
@@ -1492,7 +1492,7 @@ form[action="addressbook"] table {
 
   #navi a {
     padding: 3px 5px !important;
-    background: linear-gradient(to bottom, #fff 50%, #eef 50%, #ebebff) #fff !important;
+    background: var(--nav) #fff !important;
   }
 
   #visualid img[src^="/imagegen"] {
