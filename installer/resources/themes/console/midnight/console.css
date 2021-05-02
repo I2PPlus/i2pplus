@@ -7238,7 +7238,7 @@ table#jardump {
 
 #debug h2 {
   padding: 10px !important;
-  background: url(/themes/console/images/info/debug.png) right 5px center no-repeat,  var(--title) !important;
+  background: var(--bug) right 5px center no-repeat,  var(--title) !important;
   background-size: 24px, 4px 100%, 100% !important;
   background-blend-mode: luminosity, normal;
 }
@@ -8333,7 +8333,8 @@ textarea#advancedsettings:focus {
 }
 
 #config_ui .infohelp {
-  background: #000 url(/themes/console/images/info/ui.png) 12px center no-repeat !important;
+  background: #000 var(--ui) 12px center no-repeat !important;
+  background-size: 28px !important;
 }
 
 p.infowarn, td.infowarn, p.infohelp, td.infohelp {
