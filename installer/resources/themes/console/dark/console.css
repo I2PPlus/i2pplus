@@ -8409,7 +8409,7 @@ th code {
 }
 
 .subheading.pluginfiles {
-  background: url(/themes/console/images/plugin.png) right 5px center no-repeat, linear-gradient(to right, #000, #001000 40%) !important;
+  background: var(--plugin) right 5px center no-repeat, linear-gradient(to right, #000, #001000 40%) !important;
   background-size: 16px, 100% !important;
   background-blend-mode: luminosity, normal;
 }

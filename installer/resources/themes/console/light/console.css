@@ -978,7 +978,7 @@ to {
   width: 16px;
   height: 16px;
   display: inline-block;
-  background: url(/themes/console/images/plugin.png) no-repeat center center;
+  background: var(--plugin) no-repeat center center;
   background-size: 16px;
   content: "";
 }

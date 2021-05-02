@@ -3370,8 +3370,8 @@ pre#activetransports {
   text-align: left;
   border-radius: 2px 15px 15px 2px;
   box-shadow: 0 0 0 1px #aaafce;
-  background: #e2e2ff url(/themes/console/images/plugin.png) 3px center no-repeat;
-  background: url(/themes/console/images/plugin.png) 3px center no-repeat, linear-gradient(to bottom, #f8f8ff, #e2e2ff);
+  background: #e2e2ff url(/themes/console/images/svg/plugin.svg) 3px center no-repeat;
+  background: url(/themes/console/images/svg/plugin.svg) 3px center no-repeat, linear-gradient(to bottom, #f8f8ff, #e2e2ff);
   background-size: 14px, 100%;
   background-blend-mode: luminosity;
 }
@@ -8008,13 +8008,13 @@ h2#debug_portmapper {
 
 .subheading.routerfiles {
   background: url(/themes/console/images/eepsite.png) right 5px center no-repeat, linear-gradient(to right, #fff, #eef) !important;
-  background-size: 16px auto, 100% !important;
+  background-size: 16px, 100% !important;
   background-blend-mode: luminosity, normal;
 }
 
 .subheading.pluginfiles {
-  background: url(/themes/console/images/plugin.png) right 5px center no-repeat, linear-gradient(to right, #fff, #eef) !important;
-  background-size: 16px auto, 100% !important;
+  background: url(/themes/console/images/svg/plugin.svg) right 5px center no-repeat, linear-gradient(to right, #fff, #eef) !important;
+  background-size: 16px, 100% !important;
   background-blend-mode: luminosity, normal;
 }
 
