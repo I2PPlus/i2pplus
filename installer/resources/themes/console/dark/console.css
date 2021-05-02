@@ -10820,13 +10820,13 @@ table[id$="logs"] ul {
 }
 
 #logs li:nth-child(odd) {
-  border-left: 2px solid #020;
-  background: rgba(0,0,0,.4);
+  border-left: 2px solid #030;
+  background: rgba(0,8,0,.4);
 }
 
 #logs li:nth-child(even) {
-  border-left: 2px solid #030;
-  background: rgba(0,16,0,.4);
+  border-left: 2px solid #040;
+  background: rgba(0,28,0,.4);
 }
 
 #logs li:hover {
