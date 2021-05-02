@@ -1015,7 +1015,7 @@ to {
 }
 
 #sb_services a[href="/orchid/"]::before, #sb_services a[href*="/orchid/"]::before {
-  background: url(images/flower.png) no-repeat center center;
+  background: var(--orchid) no-repeat center center;
 }
 
 #sb_services a[href*="bote"]::before {

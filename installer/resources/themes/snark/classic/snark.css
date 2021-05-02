@@ -4,11 +4,11 @@
 @import url("/themes/fonts/DroidSans.css");
 
 body {
+  margin: 3px 4px;
   font: 9pt Droid Sans, Open Sans, Noto Sans, Ubuntu, Segoe UI, Verdana, Bitstream Vera Sans, DejaVu Sans, Lucida Grande, Helvetica, sans-serif;
   color: #2c354f;
   background: #eef url(/themes/console/classic/images/bg0.png) repeat scroll center bottom;
-  background-size: 120px 120px;
-  margin: 3px 4px;
+  background-size: 120px;
 }
 
 /* preload top navigation mouseovers */
@@ -22,7 +22,7 @@ body:not(old) {
   url(images/button_forum_active.png) no-repeat,
   url(images/button_search_hover.png) no-repeat,
   url(images/button_search_active.png) no-repeat, #eef;
-  background-size: 120px 120px, 0 0, 0 0, 0 0, 0 0, 0 0, 0 0, 0 0, 0 0 !important;
+  background-size: 120px, 0, 0, 0, 0, 0, 0, 0, 0 !important;
 }
 
 body.iframed {
@@ -84,24 +84,21 @@ td input[type="image"]::after {
 /* end header/column resize mitigation */
 
 .toggleview, .snarkConfigTitle, .snarknavbar, img, input[type="image"] {
-  -ms-user-select: none;
-  -moz-user-select: none;
-  -webkit-user-select: none;
   user-select: none;
 }
 
 .page {
-  line-height: 160% !important;
-  min-width: 900px !important;
   margin: 5px 0 0 0;
   padding: 9px;
+  min-width: 900px !important;
+  line-height: 160% !important;
   text-align: center;
   border: 1px solid #aaafce;
   border-radius: 0 0 3px 3px;
-  background: #dfe6ff;
-  background: repeating-linear-gradient(to right, #fff 1px, #cfd9ff 2px, #fff 4px);
   box-shadow: inset 0 0 0 1px #fff;
-/*  will-change: transform;*/
+  background: #dfe6ff;
+  background: repeating-linear-gradient(to right, #cfd9ff 2px, #fff 4px);
+  background-size: 4px 100%;
 }
 
 .iframed .page {
@@ -109,33 +106,28 @@ td input[type="image"]::after {
   padding: 0;
   border: none;
   border-radius: 0;
-  background: none;
-  background: linear-gradient(to right, #fff, #ddf, #fff);
-  background: linear-gradient(to right, rgba(220,220,255,.5), rgba(255,255,255,.7), rgba(220,220,255,.5)),
-        repeating-linear-gradient(to right, #fff 1px, #bbf 2px, #fff 4px);
   box-shadow: none;
 }
 
 /* top nav */
 
 .snarknavbar {
-  font-size: 11.5pt;
-  font-weight: bold;
-  min-width: 906px;
   margin: 0 0 -6px !important;
   padding: 8px 0;
-  text-align: center;
-  letter-spacing: 0 !important;
-  text-transform: uppercase !important;
-  color: #000;
-  border: 1px solid #aaafce;
-  border-radius: 3px 3px 0 0;
-  background: #eff2ff !important;
-  background: linear-gradient(to bottom, #fff, #eff2ff) !important;
-  box-shadow: 0 0 1px #fff, inset 0 0 0 1px #fff;
+  min-width: 906px;
   position: sticky;
   top: -1px;
   z-index: 999;
+  letter-spacing: 0 !important;
+  text-align: center;
+  text-transform: uppercase !important;
+  font-size: 11.5pt;
+  font-weight: bold;
+  color: #000;
+  box-shadow: 0 0 1px #fff, inset 0 0 0 1px #fff;
+  border: 1px solid #aaafce;
+  border-radius: 3px 3px 0 0;
+  background: linear-gradient(to bottom, #fff, #eff2ff) !important;
 }
 
 @supports not (-moz-appearance: none) {
@@ -246,7 +238,7 @@ td input[type="image"]::after {
 }
 
 .snarkNav:link, .snarkNav:hover, .snarkNav:focus {
-  background-size: 16px 16px, 100% 100% !important;
+  background-size: 16px 16px, 100% !important;
 }
 
 /* end top nav */
@@ -270,7 +262,7 @@ td input[type="image"]::after {
   background: url(images/hat.png) right -4px bottom -10px no-repeat,
               url("/viewstat.jsp?stat=[I2PSnark] InBps&showEvents=false&period=60000&periodCount=1440&end=0&width=2000&height=160&hideLegend=true&hideTitle=true&hideGrid=true") no-repeat,
               linear-gradient(to bottom, rgba(239, 243, 255, .7), rgba(233, 239, 255, .7));
-  background-size: auto 80px, calc(100% + 80px) calc(100% + 20px), 100% 100%;
+  background-size: auto 80px, calc(100% + 80px) calc(100% + 20px), 100%;
   background-position: right -4px bottom -10px, left bottom 1px, center center, center top !important;
   background-blend-mode: normal, soft-light, normal;
 }
@@ -1780,7 +1772,7 @@ input[name="nofilter_commentsName"] {
 }
 
 select {
-  padding: 4px 20px 4px 5px;
+  padding: 5px 20px 5px 5px;
   vertical-align: middle;
   overflow: hidden;
   text-overflow: ellipsis;
@@ -1789,13 +1781,10 @@ select {
   border: 1px solid #aaafce;
   border-radius: 2px;
   box-shadow: inset 0 0 0 1px #fff;
-  background: url(images/dropdown.png) right 8px center no-repeat #eee;
   background: url(images/dropdown.png) right 8px center no-repeat, linear-gradient(to bottom, #fff, #eef);
-  background-size: 10px auto, 100% 100% !important;
+  background-size: 10px, 100% !important;
   outline: none;
   cursor: pointer;
-  -moz-appearance: none;
-  -webkit-appearance: none;
   appearance: none;
 }
 
@@ -1809,29 +1798,17 @@ select:hover, select:active {
   color: #41444d;
   background: #ddd url(images/dropdown_hover.png) right center no-repeat !important;
   background: url(images/dropdown_hover.png) right 8px center no-repeat, linear-gradient(to bottom, #ddd 0%, #fff 100%) !important;
-  background-size: 10px auto, 100% 100% !important;
+  background-size: 10px, 100% !important;
 }
 
 select:focus {
   background: #f2f3ff url(images/dropdown_hover.png) right center no-repeat !important;
   background: url(images/dropdown_hover.png) right 8px center no-repeat, linear-gradient(to bottom, #ddd 0%, #fff 100%) !important;
-  background-size: 10px auto, 100% 100% !important;
+  background-size: 10px, 100% !important;
 }
-
-/*@supports not (-moz-appearance: none) {
-select {
-  padding: 6px 4px;
-}
-}
-
-@media all and (-ms-high-contrast: none), (-ms-high-contrast: active) {
-select {
-  padding: 4px;
-}
-}*/
 
 select[disabled], select[disabled]:hover {
-  background: url(images/dropdown.png) right center no-repeat, linear-gradient(to bottom, #fff, #eef) !important;
+  background: linear-gradient(to bottom, #fff, #eef) !important;
   opacity: .7;
   cursor: not-allowed;
 }
@@ -1863,7 +1840,7 @@ img {
   line-height: 100%;
   vertical-align: middle;
   border: none;
-  opacity: 1.0;
+  opacity: 1;
 }
 
 img:hover {
@@ -1898,7 +1875,6 @@ img:hover {
   border: 1px solid #aaafce;
   border-radius: 2px;
   box-shadow: inset 0 0 1px 1px #fff;
-  background: #fff;
   background: linear-gradient(to bottom, #f2f2ff 50%, #ddf 50%);
 }
 
@@ -2813,7 +2789,7 @@ body {
 }
 
 .snarkNav:link, .snarkNav:hover, .snarkNav:focus {
-  background-size: 14px 14px, 100% 100% !important;
+  background-size: 14px 14px, 100% !important;
 }
 
 .nav_main {
@@ -3201,7 +3177,7 @@ th a img {
 .info_tracker:hover {
   box-shadow: 0 0 0 1px #aaf;
   background: url(images/button_tracker_hover.png) left 3px center no-repeat, linear-gradient(to bottom, #fff 50%, #f2f2ff 50%) !important;
-  background-size: 14px auto, 100% 100% !important;
+  background-size: 14px auto, 100% !important;
 }
 
 .info_tracker:active, .info_tracker:active a {
