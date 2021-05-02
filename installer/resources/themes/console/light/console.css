@@ -5044,12 +5044,12 @@ input.add:focus, button.add:focus {
 
 input.add[value^="Adjust"], button.add[value^="Adjust"] {
   padding: 5px 9px 5px 24px;
-  background: url(/themes/console/images/buttons/edit2.png) no-repeat 8px center, var(--button);
+  background: var(--edit) no-repeat 8px center, var(--button);
 }
 
 input.add[value^="Adjust"]:hover, button.add[value^="Adjust"]:hover,
 input.add[value^="Adjust"]:focus, button.add[value^="Adjust"]:focus {
-  background: url(/themes/console/images/buttons/edit2.png) no-repeat 8px center, var(--button_hover);
+  background: var(--edit_hover) no-repeat 8px center, var(--button_hover);
 }
 
 input.cancel, button.cancel {
@@ -5261,32 +5261,34 @@ input.stop:focus, button.stop:focus {
 button.control {
   padding: 12px !important;
   font-size: 0 !important;
-  background-size: 16px, 100% !important;
+  background-size: 14px, 100% !important;
   will-change: transform;
 }
 
 button.accept.control {
-  background: url(/themes/console/images/buttons/Xstart.png) center center no-repeat, var(--button);
+  background: var(--start) center center no-repeat, var(--button);
 }
 
 button.accept.control:hover, button.accept.control:focus {
-  background: url(/themes/console/images/buttons/Xstart.png) center center no-repeat, var(--button_hover);
+  background: var(--start_hover) center center no-repeat, var(--button_hover);
 }
 
 button.stop.control {
-  background: url(/themes/console/images/buttons/Xstop.png) center center no-repeat, var(--button);
+  background: var(--stop) center center no-repeat, var(--button);
 }
 
 button.stop.control:hover, button.stop.control:focus {
-  background: url(/themes/console/images/buttons/Xstop.png) center center no-repeat, var(--button_hover);
+  background: var(--stop_hover) center center no-repeat, var(--button_hover);
 }
 
 button.add.control {
-  background: url(/themes/console/images/buttons/edit2.png) center center no-repeat, var(--button);
+  background: var(--edit) center center no-repeat, var(--button);
+  background-size: 16px, 100% !important;
 }
 
 button.add.control:hover, button.add.control:focus {
-  background: url(/themes/console/images/buttons/edit2.png) center center no-repeat, var(--button_hover);
+  background: var(--edit_hover) center center no-repeat, var(--button_hover);
+  background-size: 16px, 100% !important;
 }
 
 button.delete.control {
@@ -5298,11 +5300,13 @@ button.delete.control:hover, button.delete.control:focus {
 }
 
 button.check.control {
-  background: url(/themes/console/images/buttons/update.png) center center no-repeat, var(--button);
+  background: var(--refresh) center center no-repeat, var(--button);
+  background-size: 16px, 100% !important;
 }
 
 button.check.control:hover, button.check.control:focus {
-  background: url(/themes/console/images/buttons/update_hover.png) center center no-repeat, var(--button_hover);
+  background: var(--refresh_hover) center center no-repeat, var(--button_hover);
+  background-size: 16px, 100% !important;
 }
 
 button.download.control {
@@ -9589,12 +9593,18 @@ a[href^="configpeer?peer"] {
 a[href^="configpeer?peer"]::after {
   margin: 0 0 0 3px;
   display: inline-block;
-  vertical-align: bottom;
-  content: url(/themes/console/images/buttons/edit.png);
+  vertical-align: middle;
+  height: 16px;
+  width: 16px;
+  background: var(--edit) center center no-repeat;
+  background-size: 14px;
+  content: "";
+
 }
 
-a[href^="configpeer?peer"]:hover {
-  filter: drop-shadow(0 0 1px #f60);
+a[href^="configpeer?peer"]:hover::after {
+  background: var(--edit_hover) center center no-repeat;
+  background-size: 14px;
 }
 
 .widescroll {
