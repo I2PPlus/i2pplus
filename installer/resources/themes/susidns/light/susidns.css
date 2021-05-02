@@ -6,9 +6,15 @@
 @import url(/themes/fonts/DroidSans.css);
 @import url(/themes/console/light/optbox.css);
 
+:root {
+  --bodyfont: Droid Sans, Open Sans, Noto Sans, Ubuntu, Segoe UI, Lucida Grande, Verdana, Helvetica, sans-serif;
+  --monospaced: Droid Sans Mono, Noto Mono, DejaVu Sans Mono, Lucida Console, monospace;
+  --highlight: inset 0 0 0 1px #fff;
+}
+
 body {
   margin: 0 5px;
-  font-family: Droid Sans, Open Sans, Noto Sans, Ubuntu, Segoe UI, Lucida Grande, Bitstream Vera Sans, Verdana, sans-serif;
+  font-family: var(--bodyfont);
   font-size: 9pt;
   color: #393947;
   background: #a4a4cb url(/themes/console/light/images/tile2.png) center center;
@@ -57,7 +63,7 @@ b, td.search {
   height: 55px;
   text-align: center;
   border: 1px solid #8d8daa;
-  box-shadow: inset 0 0 0 1px #fff;
+  box-shadow: var(--highlight);
   background: #eef url(/themes/susidns/images/logo.png) center center no-repeat;
   background: url(/themes/susidns/images/logo.png) center center no-repeat, linear-gradient(to bottom, #fff, #eef);
   background-size: auto 50px, 100%;
@@ -126,7 +132,7 @@ code, tt, .destaddress {
   font-size: 9pt;
   border: 1px solid #8d8daa;
   border-radius: 2px 2px 0 0;
-  box-shadow: inset 0 0 0 1px #fff;
+  box-shadow: var(--highlight);
   background: linear-gradient(to bottom, #fcfcff 51%, #fafaff 51%, #f6f6ff 100%);
 }
 
@@ -146,7 +152,7 @@ code, tt, .destaddress {
   color: #3b6bbf;
   border: 1px solid #8d8daa;
   text-transform: capitalize;
-  box-shadow: inset 0 0 0 1px #fff;
+  box-shadow: var(--highlight);
   background-size: 14px, 100% !important;
   filter: drop-shadow(0 0 1px rgba(220,220,255,.3));
 }
@@ -160,7 +166,7 @@ code, tt, .destaddress {
 
 #navi a:active {
   color: #5a5a6f;
-  box-shadow: inset 0 0 0 1px #fff, inset 3px 3px 2px #999;
+  box-shadow: var(--highlight), inset 3px 3px 2px #999;
 }
 
 #navi a.abook {
@@ -230,7 +236,7 @@ h3, h4, th, #filter span {
 
 h3 {
   font-size: 11pt;
-  box-shadow: inset 0 0 0 1px #fff;
+  box-shadow: var(--highlight);
 }
 
 .headline h3 {
@@ -323,7 +329,7 @@ form[action="subscriptions"] #content {
   letter-spacing: 0;
   text-transform: none;
   border-radius: 2px;
-  box-shadow: inset 0 0 0 1px #fff, 0 0 1px #ccc;
+  box-shadow: var(--highlight), 0 0 1px #ccc;
   background: url(/themes/console/images/info/question.png) 8px center no-repeat,
               linear-gradient(to bottom, #fcfcff 50%, rgba(255,255,255,.6) 50%, rgba(240,240,255,.4)),
               linear-gradient(135deg, #fcfcff 5%, rgba(231, 231, 255, 0.8) 15%) !important;
@@ -448,7 +454,7 @@ p, #helpconfig {
   margin-top: 10px;
   margin-bottom: 12px;
   border-radius: 0;
-  box-shadow: inset 0 0 0 1px #fff;
+  box-shadow: var(--highlight);
 }
 
 #helpconfig ul {
@@ -541,7 +547,7 @@ _:-ms-lang(x), #host_list td, #host_list tr:hover td, #host_details td, #host_de
 }
 
 #host_list td, #host_details td {
-  box-shadow: inset 0 0 0 1px #fff;
+  box-shadow: var(--highlight);
 }
 
 #host_list tr:hover td, #host_details tr:hover td {
@@ -598,21 +604,15 @@ p.messages {
 }
 
 @keyframes hide-up {
-from {
-  margin-top: 0
-}
-
-to {
-  margin-top: -300px;
-}
+  from {margin-top: 0}
+  to {margin-top: -300px}
 }
 
 #footer {
-  border: 1px solid #8d8daa;
-  background: #eef;
-  background: linear-gradient(to right, #eef, #fafaff, #eef);
   margin: -1px 0 -5px;
-  box-shadow: inset 0 0 0 1px #fff;
+  border: 1px solid #8d8daa;
+  box-shadow: var(--highlight);
+  background: linear-gradient(to right, #eef, #fafaff, #eef);
 }
 
 .iframed #footer {
@@ -629,15 +629,15 @@ p.footer {
   margin: 20px auto 20px;
   padding: 2px 10px;
   width: 70%;
+  height: auto;
   min-width: 550px;
   max-width: 700px;
-  height: auto;
   text-align: center;
   border-radius: 4px;
   border: 1px solid #575775;
   box-shadow: inset 0 0 0 1px #ccc;
   background: #fff;
-  opacity: 0.85;
+  opacity: .85;
   filter: drop-shadow(0 0 1px rgba(220,220,255,.7));;
 }
 
@@ -650,8 +650,8 @@ p.footer {
 
 .iframed .illustrate {
   margin-bottom: 30px;
-  background: #fafaff;
-  background: linear-gradient(to bottom, #fafaff 70%, rgba(220,220,255,.1)), repeating-linear-gradient(135deg, rgba(255,255,255,.5) 2px, rgba(221, 221, 255, 0.6) 3px, #fff 4px) #fff;
+  background: linear-gradient(to bottom, #fafaff 70%, rgba(220,220,255,.1)),
+              repeating-linear-gradient(135deg, rgba(255,255,255,.5) 2px, rgba(221, 221, 255, 0.6) 3px, #fff 4px) #fff;
 }
 
 .iframed .illustrate:hover {
@@ -666,11 +666,10 @@ _:-ms-lang(x), img.illustrate {
 .page {
   margin: -4px 0;
   padding: 10px 0;
+  min-width: 700px;
   font-size: 9pt !important;
-  border: 1px solid #8d8daa;
   border: none;
   border-radius: 2px;
-  min-width: 700px;
 }
 
 #ovrvw .page {
@@ -682,7 +681,6 @@ _:-ms-lang(x), img.illustrate {
   padding: 10px 10px 0;
   min-width: 520px;
   overflow: hidden !important;
-  border: none;
   background-color: transparent !important;
 }
 
@@ -692,7 +690,7 @@ _:-ms-lang(x), img.illustrate {
 
 input[type=text], input[type=password], textarea {
   padding: 5px !important;
-  font-family: Droid Sans, Open Sans, Noto Sans, Ubuntu, Segoe UI, Lucida Grande, Bitstream Vera Sans, Verdana, sans-serif;
+  font-family: var(--bodyfont);
   color: #393947;
   border: 1px solid #97a2ce;
   border-radius: 2px;
@@ -711,7 +709,7 @@ input[type=text]:focus, input[type=password]:focus, textarea:focus {
 textarea, #subslog pre {
   padding: 1px 3px;
   width: 100%;
-  font-family: "Droid Sans Mono", "Noto Mono", "Lucida Console", "DejaVu Sans Mono", monospace;
+  font-family: var(--monospaced);
   font-size: 9pt;
   color: #393947;
   border-radius: 2px;
@@ -749,7 +747,8 @@ textarea[name="config"], textarea[name="content"], #subslog pre {
   width: calc(100% - 18px) !important;
   line-height: 15px;
   box-shadow: inset 0 0 0 1px #fafaff;
-  background: url(/themes/snark/ubergine/images/hat.png) right 10px bottom -8px no-repeat, linear-gradient(to right, #7e7fb9, #ccf 1px, #ccf 6px, #fafaff 6px) !important;
+  background: url(/themes/snark/ubergine/images/hat.png) right 10px bottom -8px no-repeat,
+              linear-gradient(to right, #7e7fb9, #ccf 1px, #ccf 6px, #fafaff 6px) !important;
   background-size: auto 160px, 100%;
 }
 
@@ -768,15 +767,16 @@ textarea[name="destination"] {
 #config + #buttons {
   border: 1px solid #8d8daa;
   margin: -2px 0 10px;
-  background: linear-gradient(to bottom, #fafaff 50%, rgba(220,220,255,.3)), repeating-linear-gradient(135deg, rgba(255,255,255,.5) 2px, rgba(221, 221, 255, 0.3) 3px, #fff 5px), #fff !important;
+  background: linear-gradient(to bottom, #fafaff 50%, rgba(220,220,255,.3)),
+              repeating-linear-gradient(135deg, rgba(255,255,255,.5) 2px, rgba(221, 221, 255, 0.3) 3px, #fff 5px), #fff !important;
 }
 
 #filter, #search {
-  border: 1px solid #8d8daa;
-  padding: 5px 15px;
   margin-bottom: -1px;
-  background: #fafaff;
+  padding: 5px 15px;
   text-align: center;
+  border: 1px solid #8d8daa;
+  background: #fafaff;
 }
 
 #search {
@@ -800,15 +800,15 @@ textarea[name="destination"] {
 }
 
 #filter a, #filter a:visited, #activefilter {
-  display: inline-block;
-  min-width: 10px;
   margin: 2px 1px;
   padding: 4px 8px;
-  border: 1px solid #8d8daa;
-  border-radius: 2px;
-  color: #3b6bbf;
+  min-width: 10px;
+  display: inline-block;
   text-align: center;
   text-transform: capitalize;
+  color: #3b6bbf;
+  border: 1px solid #8d8daa;
+  border-radius: 2px;
   background: #fff;
   filter: drop-shadow(0 0 1px rgba(220,220,255,.7));;
 }
@@ -818,18 +818,19 @@ textarea[name="destination"] {
 }
 
 #filter a:active {
-  color: #fff;
-  background: #f60;
   text-decoration: none;
-  box-shadow: inset 0 0 0 1px #fff, inset 3px 3px 3px #393947;
+  color: #fff;
+  box-shadow: var(--highlight), inset 3px 3px 3px #393947;
+  background: #f60;
 }
 
 p#filtered {
   margin-bottom: 16px !important;
   padding: 15px 200px 18px 32px !important;
-  box-shadow: inset 0 0 0 1px #fff, inset 0 0 2px 1px #ddf;
+  box-shadow: var(--highlight), inset 0 0 2px 1px #ddf;
   background: #eef url(/themes/console/images/buttons/filter.png) 8px center no-repeat;
-  background: url(/themes/console/images/buttons/filter.png) 8px center no-repeat, repeating-linear-gradient(135deg, rgba(255,255,255,.5) 2px, rgba(240, 240, 255, 0.5) 3px, #fff 4px), #fff;
+  background: url(/themes/console/images/buttons/filter.png) 8px center no-repeat,
+              repeating-linear-gradient(135deg, rgba(255,255,255,.5) 2px, rgba(240, 240, 255, 0.5) 2px, #fff 4px), #fff;
 }
 
 #messages + p, .headline + p {
@@ -844,8 +845,8 @@ form {
 }
 
 th {
-  background: linear-gradient(to bottom, #fcfcff 51%, #fafaff 51%, #f6f6ff 100%);
   font-size: 9pt;
+  background: linear-gradient(to bottom, #fcfcff 51%, #fafaff 51%, #f6f6ff 100%);
 }
 
 table {
@@ -864,8 +865,8 @@ table.book {
 }
 
 .book th {
-  text-align: left;
   padding-left: 3px;
+  text-align: left;
   font-size: 90%;
 }
 
@@ -903,9 +904,7 @@ tr:hover .destaddress {
 }
 
 @media screen and (max-width: 1200px) {
-#book .head {
-  top: 90px;
-}
+  #book .head {top: 90px}
 }
 
 #host_list, #host_details {
@@ -959,12 +958,12 @@ tr:hover .destaddress {
 }
 
 #host_list .destaddress {
+  padding: 3px !important;
   overflow: auto !important;
   white-space: nowrap;
-  font-family: "Droid Sans Mono", "Noto Mono", "Lucida Console", "DejaVu Sans Mono", monospace;
+  font-family: var(--monospaced);
   font-weight: normal;
   color: #5a5a6f;
-  padding: 3px !important;
 }
 
 #host_list .destaddress:not(old) {
@@ -973,18 +972,18 @@ tr:hover .destaddress {
 }
 
 #host_list .destaddress:not(old):focus {
+  margin-bottom: -2px;
+  padding: 1px 3px 3px !important;
   overflow: auto !important;
   text-overflow: clip;
-  padding: 1px 3px 3px !important;
-  margin-bottom: -2px;
   color: #393947;
 }
 
 td.destinations {
+  padding: 0;
   max-width: 50px !important;
   border-left: 1px solid #ddf;
   border-right: 1px solid #ddf;
-  padding: 0;
 }
 
 td.destinations textarea {
@@ -995,15 +994,6 @@ td.destinations textarea {
 #host_list td:first-child a:last-of-type, #host_list td:nth-child(3) a, td:nth-child(4) a {
   padding: 4px 0;
 }
-
-/*
-#host_list td:first-child a:last-of-type:hover {
-  width: calc(100% - 35px);
-  border-radius: 2px 15px 15px 2px;
-  background: #ffc;
-  background: linear-gradient(to right, rgba(255,255,255,0), rgba(240,240,200,.9) 20%);
-}
-*/
 
 #host_list td:first-child:hover, #host_list td:nth-child(2):hover, #host_list td:nth-child(3):hover, #host_list td:nth-child(4):hover,
 #host_list td:hover {
@@ -1033,20 +1023,10 @@ td.destinations textarea {
   border-right: none !important;
 }
 
-/*#host_details td.destinations {
-  background: none;
-}*/
-
-/*
-#host_details tr:hover {
-  background: #ffd;
-}
-*/
-
 #host_details .destaddress {
-  font-family: "Droid Sans Mono", "Noto Mono", "Lucida Console", "DejaVu Sans Mono", monospace;
-  word-break: break-all !important;
   white-space: normal !important;
+  word-break: break-all !important;
+  font-family: var(--monospaced);
 }
 
 #host_details td:nth-child(2) b {
@@ -1063,8 +1043,9 @@ td.destinations textarea {
 
 #hostNotes td:last-child {
   padding: 0 0 1px !important;
-  font-family: Droid Sans, Open Sans, Noto Sans, Ubuntu, Segoe UI, Lucida Grande, Bitstream Vera Sans, Verdana, sans-serif;
-  background: linear-gradient(to bottom, #fafaff 90px, rgba(220,220,255,.3)), repeating-linear-gradient(135deg, rgba(255,255,255,.5) 2px, rgba(221, 221, 255, 0.3) 3px, #fff 5px) #fafaff !important;
+  font-family: var(--bodyfont);
+  background: linear-gradient(to bottom, #fafaff 90px, rgba(220,220,255,.3)),
+              repeating-linear-gradient(135deg, rgba(255,255,255,.5) 2px, rgba(221, 221, 255, 0.3) 3px, #fff 5px) #fafaff !important;
 }
 
 #hostNotes:hover td {
@@ -1113,11 +1094,11 @@ td.destinations textarea {
 /* identicon + qr image */
 
 #visualid {
-  border: 1px solid #8d8daa !important;
   margin-top: -1px;
+  padding-top: 0;
+  border: 1px solid #8d8daa !important;
   border-radius: 2px;
   background: #fafaff;
-  padding-top: 0;
 }
 
 .iframed #visualid {
@@ -1126,11 +1107,11 @@ td.destinations textarea {
 }
 
 #visualid h3 {
-  border-bottom: 1px solid #8d8daa;
-  padding: 8px 10px 6px;
   margin-top: 0;
+  padding: 8px 10px 6px;
+  border-bottom: 1px solid #8d8daa;
+  box-shadow: var(--highlight);
   background: linear-gradient(to bottom, #fcfcff 50%, #eef 50%);
-  box-shadow: inset 0 0 0 1px #fff;
 }
 
 #idAddress {
@@ -1139,11 +1120,11 @@ td.destinations textarea {
 }
 
 #visualid table {
-  width: 100% !important;
   margin: 12px 0 0;
-  background: none;
+  width: 100% !important;
   border: none;
   border-collapse: collapse;
+  background: none;
 }
 
 #visualid tr:first-child td {
@@ -1159,11 +1140,12 @@ td.destinations textarea {
 }
 
 #visualid td[colspan="2"] {
-  text-align: right;
   padding: 17px 5px;
+  text-align: right;
   border-top: 1px solid #8d8daa;
   background: #fff;
-  background: linear-gradient(to bottom, #fafaff 50%, rgba(220,220,255,.3)), repeating-linear-gradient(135deg, rgba(255,255,255,.5) 2px, rgba(221, 221, 255, 0.3) 3px, #fff 5px) #fafaff !important;
+  background: linear-gradient(to bottom, #fafaff 50%, rgba(220,220,255,.3)),
+              repeating-linear-gradient(135deg, rgba(255,255,255,.5) 2px, rgba(221, 221, 255, 0.3) 3px, #fff 5px) #fafaff !important;
 }
 
 img[src^="/imagegen"] {
@@ -1200,8 +1182,8 @@ img[src="/imagegen/id?s=256&c="], img[src="/imagegen/id?s=20&c="] {
 }
 
 .info img:hover, .info a:focus img {
-  filter: drop-shadow(0 0 1px #f60) !important;
   box-shadow: 0 0 0 1px #f60;
+  filter: drop-shadow(0 0 1px #f60) !important;
 }
 
 .info a:active img, .info a:focus img {
@@ -1212,8 +1194,8 @@ img[src="/imagegen/id?s=256&c="], img[src="/imagegen/id?s=20&c="] {
 /* end host list identicons */
 
 .info a[href^="http"], .helper a {
-  display: inline-block;
   width: 100%;
+  display: inline-block;
 }
 
 .book th {
@@ -1223,17 +1205,16 @@ img[src="/imagegen/id?s=256&c="], img[src="/imagegen/id?s=20&c="] {
 .book textarea {
   padding: 0 !important;
   margin: 0;
+  resize: none;
   border: none;
   border-left: 1px solid #ccccf0;
   border-right: 1px solid #ccccf0;
-  resize: none;
   background: none;
 }
 
 div#book, #emptybook {
   margin: -12px 0 -1px;
   padding: 0 0 60px;
-  background: #efefff;
   background: repeating-linear-gradient(135deg, rgba(255,255,255,.5) 2px, rgba(220, 220, 255, 0.5) 3px, #fff 4px) #fafaff;
 }
 
@@ -1246,8 +1227,8 @@ div#book, #emptybook {
 }
 
 p.book {
-  background: url(/themes/susidns/images/abook.png) 2px center no-repeat;
   padding: 5px 5px 5px 24px;
+  background: url(/themes/susidns/images/abook.png) 2px center no-repeat;
 }
 
 #buttons {
@@ -1258,9 +1239,9 @@ p.book {
 }
 
 p.buttons {
-  text-align: right;
-  padding: 0;
   margin: 0;
+  padding: 0;
+  text-align: right;
 }
 
 table + p.buttons {
@@ -1268,8 +1249,8 @@ table + p.buttons {
 }
 
 #book + #buttons {
-  border: 1px solid #8d8daa;
   margin: -61px 0 8px;
+  border: 1px solid #8d8daa;
 }
 
 .iframed #book + #buttons {
@@ -1292,23 +1273,21 @@ input[type=submit]::-moz-focus-inner, input[type=reset]::-moz-focus-inner, butto
 
 input[type=submit], input[type=reset], .fakebutton {
   margin: 5px 5px 5px 0;
-  font: 9pt Droid Sans, Open Sans, Noto Sans, Ubuntu, Segoe UI, Lucida Grande, Bitstream Vera Sans, Verdana, sans-serif;
   padding: 4px 3px;
+  font: 9pt var(--bodyfont);
   text-decoration: none;
-  border-radius: 2px;
-  border: 1px solid #97a2ce;
-  box-shadow: inset 0 0 0 1px #fff;
-  box-shadow: 0 2px 0 rgba(255,255,255,.85) inset, 0 0 10px rgba(0,0,0,.1) inset, 0 1px 1px rgba(0,0,0,.05), 0 7px 4px -4px rgba(0,0,0,.1);
-  background: #eee;
-  background: linear-gradient(to bottom, #fff, #efefff);
   color: #393947;
+  border: 1px solid #97a2ce;
+  border-radius: 2px;
+  box-shadow: 0 2px 0 rgba(255,255,255,.85) inset, 0 0 10px rgba(0,0,0,.1) inset, 0 1px 1px rgba(0,0,0,.05), 0 7px 4px -4px rgba(0,0,0,.1);
+  background: linear-gradient(to bottom, #fff, #efefff);
   filter: drop-shadow(0 0 1px rgba(220,220,255,.7));
   cursor: pointer;
 }
 
 a.fakebutton {
-  color: #393947;
   font-weight: normal;
+  color: #393947;
 }
 
 a.fakebutton:hover, a.fakebutton:focus {
@@ -1320,20 +1299,18 @@ a.fakebutton:active {
 }
 
 input[type=submit]:hover, input[type=reset]:hover, input[type=submit]:focus, input[type=reset]:focus, .fakebutton:hover, .fakebutton:focus {
-  background: #eee;
-  background: linear-gradient(to bottom, #eee, #fff);
   color: #111;
   border: 1px solid #f60;
-  box-shadow: inset 0px 0px 0px 1px #fff;
-  box-shadow: inset 0 0 0 1px #fff, inset 0 -8px 3px 8px rgba(255,96,0,.02), inset 0 0 10px rgba(255,96,0,.05), 0 0 1px rgba(255,96,0,.1), 0 7px 4px -4px rgba(0,0,0,.1);
+  box-shadow: var(--highlight), inset 0 -8px 3px 8px rgba(255,96,0,.02), inset 0 0 10px rgba(255,96,0,.05), 0 0 1px rgba(255,96,0,.1), 0 7px 4px -4px rgba(0,0,0,.1);
+  background: linear-gradient(to bottom, #eee, #fff);
   filter: drop-shadow(0 0 1px rgba(204, 204, 204, 0.8));
   transition: ease border 0.7s;
 }
 
 input[type=submit]:active, input[type=reset]:active, .fakebutton:active {
-  box-shadow: inset 0 0 0 1px #fff, inset 3px 3px 2px #555;
-  background-blend-mode: luminosity;
   color: #666;
+  box-shadow: var(--highlight), inset 3px 3px 2px #555;
+  background-blend-mode: luminosity;
 }
 
 input[type=file]::file-selector-button {
@@ -1346,9 +1323,7 @@ input[type=file]::file-selector-button {
   text-shadow: 0 1px 1px #fff;
   border: 1px solid #97a2ce;
   border-radius: 2px;
-  box-shadow: inset 0 0 0 1px #fff, inset 0 0 0 1px #fff;
   box-shadow: 0 2px 0 rgba(255,255,255,.85) inset, 0 0 10px rgba(0,0,0,.1) inset, 0 1px 1px rgba(0,0,0,.05), 0 7px 4px -4px rgba(0,0,0,.1);
-  background: #eee;
   background: linear-gradient(to bottom, #fff, #efefff);
   background-size: 14px auto, 100% !important;
   opacity: 1;
@@ -1359,17 +1334,17 @@ input[type=file]::file-selector-button {
 input[type=file]:hover::file-selector-button, input[type=file]:focus::file-selector-button {
   color: #19191f;
   border: 1px solid #f60;
-  box-shadow: inset 0 0 0 1px #fff, inset 0 -8px 3px 8px rgba(255,96,0,.02), inset 0 0 10px rgba(255,96,0,.05), 0 0 1px rgba(255,96,0,.1), 0 7px 4px -4px rgba(0,0,0,.1);
+  box-shadow: var(--highlight), inset 0 -8px 3px 8px rgba(255,96,0,.02), inset 0 0 10px rgba(255,96,0,.05), 0 0 1px rgba(255,96,0,.1), 0 7px 4px -4px rgba(0,0,0,.1);
   background: linear-gradient(to bottom, #eee, #fff);
   filter: saturate(100%) drop-shadow(0 0 1px rgba(204, 204, 204, .8));
   transition: ease border .7s;
 }
 
 input.accept {
+  padding: 5px 7px 5px 22px;
   background: #eee url(/themes/console/images/buttons/yes.png) no-repeat 6px center;
   background: url(/themes/console/images/buttons/yes.png) no-repeat 6px center, linear-gradient(to bottom, #fff, #efefff);
   background-size: 14px, 100%;
-  padding: 5px 7px 5px 22px;
 }
 
 input.accept:hover, input.accept:focus {
@@ -1379,10 +1354,10 @@ input.accept:hover, input.accept:focus {
 }
 
 input.add {
+  padding: 5px 7px 5px 22px;
   background: #eee url(/themes/console/images/buttons/add.png) no-repeat 6px center;
   background: url(/themes/console/images/buttons/add.png) no-repeat 6px center, linear-gradient(to bottom, #fff, #efefff);
   background-size: 14px, 100%;
-  padding: 5px 7px 5px 22px;
 }
 
 input.add:hover, input.add:focus {
@@ -1511,59 +1486,59 @@ form[action="addressbook"] table {
 /* responsive layout */
 
 @media screen and (max-width: 680px) {
-#navi {
-  padding: 5px 3px !important;
-}
+  #navi {
+    padding: 5px 3px !important;
+  }
 
-#navi a {
-  background: linear-gradient(to bottom, #fff 50%, #eef 50%, #ebebff) #fff !important;
-  padding: 3px 5px !important;
-}
+  #navi a {
+    padding: 3px 5px !important;
+    background: linear-gradient(to bottom, #fff 50%, #eef 50%, #ebebff) #fff !important;
+  }
 
-#visualid img[src^="/imagegen"] {
-  width: 228px !important;
-  height: 228px !important;
-}
+  #visualid img[src^="/imagegen"] {
+    width: 228px !important;
+    height: 228px !important;
+  }
 }
 
 @media screen and (max-width: 1200px) {
-#filter a {
-  min-width: 6px;
-  padding: 2px 6px;
-}
+  #filter a {
+    padding: 2px 6px;
+    min-width: 6px;
+  }
 }
 
 @media screen and (min-width: 1500px) {
-body, p, td, textarea, input, button, li, a, h4 {
-  font-size: 10pt !important;
-}
+  body, p, td, textarea, input, button, li, a, h4 {
+    font-size: 10pt !important;
+  }
 
-code, tt, .destaddress, th {
-  font-size: 9pt !important;
-}
+  code, tt, .destaddress, th {
+    font-size: 9pt !important;
+  }
 
-#navi a, #navi a:visited {
-  padding-left: 25px;
-  font-size: 11pt;
-  background-size: 15px, 100% !important;
-}
+  #navi a, #navi a:visited {
+    padding-left: 25px;
+    font-size: 11pt;
+    background-size: 15px, 100% !important;
+  }
 
-#filter span, #filter a {
-  font-size: 11pt !important;
-}
+  #filter span, #filter a {
+    font-size: 11pt !important;
+  }
 
-td.destinations textarea {
-  height: 32px !important;
-}
+  td.destinations textarea {
+    height: 32px !important;
+  }
 
-#host_list .b32link, #host_list .helper {
-  padding: 0 20px;
-  width: 6%;
-}
+  #host_list .b32link, #host_list .helper {
+    padding: 0 20px;
+    width: 6%;
+  }
 
-.headline h4 {
-  background: url(/themes/susidns/images/drive.png) no-repeat scroll 10px 8px;
-}
+  .headline h4 {
+    background: url(/themes/susidns/images/drive.png) no-repeat scroll 10px 8px;
+  }
 }
 
 @media screen and (max-width: 1000px) {
@@ -1609,6 +1584,10 @@ _:-ms-lang(x), * {
   display: inline-block;
 }
 
+#showing {
+  margin-left: 5px;
+}
+
 #paginate, #filtered, #results {
   margin-right: 4px;
   display: inline-block;
@@ -1645,14 +1624,14 @@ input#exporthosts {
 }
 
 #exporthosts:disabled {
-  pointer-events: none;
   opacity: .5;
+  pointer-events: none;
 }
 
 #activefilter, .selected {
   font-weight: bold;
   color: #999;
-  box-shadow: inset 0 0 0 1px #fff, inset 2px 2px 2px #aaa !important;
+  box-shadow: var(--highlight), inset 2px 2px 2px #aaa !important;
 }
 
 .active {
@@ -1745,15 +1724,15 @@ input#exporthosts {
 }
 
 @media screen and (max-width: 1200px) {
-#filtered, #results {
-  font-size: 9.5pt;
-}
+  #filtered, #results {
+    font-size: 9.5pt;
+  }
 
-.iframed #prev a, .iframed #next a {
-  padding: 11px 10px !important;
-}
+  .iframed #prev a, .iframed #next a {
+    padding: 11px 10px !important;
+  }
 
-.iframed #prev::after, .iframed #next::after {
-  top: calc(50% - 6px);
-}
+  .iframed #prev::after, .iframed #next::after {
+    top: calc(50% - 6px);
+  }
 }
