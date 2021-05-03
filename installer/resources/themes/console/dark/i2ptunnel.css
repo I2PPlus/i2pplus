@@ -538,7 +538,7 @@ textarea {
   background: #000;
   margin-left: 4px;
   margin-right: 4px;
-  font: 9pt var(--monospaced)
+  font: 9pt var(--monospaced);
   resize: none;
   box-sizing: border-box;
   border-radius: 2px;
@@ -577,7 +577,7 @@ _:-ms-lang(x), textarea#statusMessages, textarea#statusMessages:active, textarea
   width: 150px;
   border: 1px solid #252;
   padding: 4px;
-  font: 8.5pt var(--monospaced)
+  font: 8.5pt var(--monospaced);
   background: #fff;
   color: #333;
   border-radius: 1px;
@@ -1418,33 +1418,29 @@ input[type=text] + label {
 }
 
 .displayText, .displayText:empty:hover, .displayText:empty:focus {
-  font-family: var(--monospaced)
-  width: calc(100% - 10px);
-  width: 290px;
-  overflow: hidden;
-  text-overflow: ellipsis;
-  white-space: nowrap;
-  word-break: break-all;
   margin: 5px;
   padding: 6px;
-  -moz-user-select: all;
-  -webkit-user-select: all;
-  user-select: all;
+  width: 290px;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  word-break: break-all;
+  font-family: var(--monospaced);
   border: 1px solid #252;
-  background: #000;
   background: linear-gradient(to bottom, #000 0%, #010 100%);
   border-radius: 2px;
   box-shadow: var(--lowlight);
+  user-select: all;
 }
 
 .displayText:hover, .displayText:focus {
-  overflow: auto;
-  text-overflow: clip;
   margin: .5px 5px;
   padding: 3px;
+  overflow: auto;
+  text-overflow: clip;
+  color: #ff0;
   box-shadow: 0 0 1px #494;
   background: #000;
-  color: #ff0;
   outline: none;
 }
 
@@ -1456,9 +1452,9 @@ input[type=text] + label {
 }
 
 .displayText:empty::before {
-  content: "";
-  display: inline-block;
   min-height: 11px;
+  display: inline-block;
+  content: "";
 }
 
 #registration .displayText {
