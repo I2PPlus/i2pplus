@@ -67,7 +67,7 @@ public class CoDelPriorityBlockingQueue<E extends CDPQEntry> extends PriBlocking
      *  Maybe need to make configurable per-instance.
      */
 //    private static final int INTERVAL = 300;
-    private static final int INTERVAL = 500;
+    private static final int INTERVAL = 400;
     private final long _interval;
     //private static final int MAXPACKET = 512;
 
@@ -96,7 +96,8 @@ public class CoDelPriorityBlockingQueue<E extends CDPQEntry> extends PriBlocking
         STAT_DROP = ("codel." + name + ".drop.").intern();
         STAT_DELAY = ("codel." + name + ".delay").intern();
         for (int i = 0; i < PRIORITIES.length; i++) {
-            ctx.statManager().createRateStat(STAT_DROP + PRIORITIES[i], "Queue delay (ms) of dropped items by priority [" + PRIORITIES[i] + "]", "Router [CoDel]", CODEL_RATES);
+            ctx.statManager().createRateStat(STAT_DROP + PRIORITIES[i], "Queue delay (ms) of dropped items by priority [" +
+            PRIORITIES[i] + "]", "Router [CoDel]", CODEL_RATES);
         }
         ctx.statManager().createRateStat(STAT_DELAY, "Average queue delay (ms)", "Router [CoDel]", CODEL_RATES);
         _id = __id.incrementAndGet();
@@ -183,8 +184,7 @@ public class CoDelPriorityBlockingQueue<E extends CDPQEntry> extends PriBlocking
         super.timestamp(o);
         o.setEnqueueTime(_context.clock().now());
         if (o.getPriority() < MIN_PRIORITY && _log.shouldLog(Log.WARN))
-            _log.warn(_name + " added item with low priority " + o.getPriority() +
-                      ": " + o);
+            _log.warn(_name + " added item with low priority " + o.getPriority() + ": " + o);
     }
 
     /**
