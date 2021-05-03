@@ -3493,7 +3493,7 @@ h4.app {
 h4.app2 {
   clear: left;
   margin-top: 10px !important;
-  background: url(images/globe.png) 10px center no-repeat, var(--h3), linear-gradient(to right, #fcfcff 5%, rgba(231, 231, 255, .8) 25%) #f8f8ff !important;
+  background: var(--globe) 10px center no-repeat, var(--h3), linear-gradient(to right, #fcfcff 5%, rgba(231, 231, 255, .8) 25%) #f8f8ff !important;
   background-size: 16px, 100%, 100% !important;
 }
 
