@@ -921,7 +921,7 @@ input:focus::-moz-placeholder {
 input.tunnelName, input.tunnelDescriptionText, #userAgents, .freetext.tunnelDescription,
 #websiteName, #localDest, #altlocaldest, .proxyList, #targetDestination, #leasesetKey {
   width: 80%;
-  width: calc(100% - 20px) !important;
+  width: calc(100% - 28px) !important;
   min-width: 280px !important;
   text-overflow: ellipsis;
 }
