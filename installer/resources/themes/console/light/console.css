@@ -1973,25 +1973,20 @@ td.tabletextarea {
 }
 
 #newsdisplay a, #graphopts a, #routerinfo a, #fullhistory a, #routerinformation tr:nth-child(n+2) a:not(#revision), .graphstat {
-  border: 1px solid #8b8edf;
+  margin-left: -3px;
   padding: 2px 10px;
+  border: 1px solid var(--a);
   border-radius: 15px;
   background: #f8f8ff;
-  background: rgba(248,248,255,.8);
-  margin-left: -3px;
-  box-shadow: 0 0 0 1px #ddf;
-  box-shadow: 0 0 0 1px rgba(220,220,255,.6);
 }
 
 #newsdisplay a:hover, #newsdisplay a:focus, #routerinfo a:hover, .graphstat:hover, .graphstat:focus,
 #graphopts a:hover, #graphopts a:visited:hover, #graphopts a:focus, #graphopts a:visited:focus,
 #fullhistory a:hover, #fullhistory a:focus, #fullhistory a:visited:hover, #fullhistory a:visited:focus,
 #routerinformation tr:nth-child(n+2) a:not(#revision):hover, #routerinformation tr:nth-child(n+2) a:focus {
-/*  color: #4f8fff;*/
   border: 1px solid #8d8daa;
   background: #e2e2ff;
   background: linear-gradient(to bottom, #f8f8ff 50%, #e2e2ff 50%);
-  box-shadow: 0 0 0 1px rgba(220,220,255,.6), inset 0 0 0 1px #efefff;
 }
 
 #newsdisplay a:focus, #graphopts a:focus, #graphopts a:visited:focus, #routerinformation tr:nth-child(n+2) a:focus, .graphstat:focus {
@@ -4999,13 +4994,15 @@ input.accept[value^="Unban"]:focus, button.accept[value^="Unban"]:focus {
 }
 
 input.accept[value^="Create"], button.accept[value^="Create"] {
-  padding: 5px 9px 5px 24px;
-  background: url(/themes/console/images/buttons/create.png) no-repeat 8px center, var(--button);
+  padding: 5px 9px 5px 26px;
+  background: var(--wizard) no-repeat 8px center, var(--button);
+  background-size: 16px, 100% !important;
 }
 
 input.accept[value^="Create"]:hover, button.accept[value^="Create"]:hover,
 input.accept[value^="Create"]:focus, button.accept[value^="Create"]:focus {
-  background: url(/themes/console/images/buttons/create.png) no-repeat 8px center, var(--button_hover);
+  background: var(--wizard) no-repeat 8px center, var(--button_hover);
+  background-size: 16px, 100% !important;
 }
 
 input.accept[value^="Filter"], button.accept[value^="Filter"] {
@@ -5120,27 +5117,27 @@ input.download:focus, button.download:focus {
 }
 
 input.download[value^="Join"], button.download[value^="Join"] {
-  padding: 5px 9px 5px 24px;
-  background: url(/themes/console/images/buttons/users.png) no-repeat 8px center, var(--button);
+  padding: 5px 9px 5px 26px;
+  background: var(--family) no-repeat 8px center, var(--button);
 }
 
 input.download[value^="Join"]:hover, button.download[value^="Join"]:hover,
 input.download[value^="Join"]:focus, button.download[value^="Join"]:focus {
-  background: url(/themes/console/images/buttons/users.png) no-repeat 8px center, var(--button_hover);
+  background: var(--family) no-repeat 8px center, var(--button_hover);
 }
 
 input.download[value$="from File"], button.download[value$="from File"],
 input.download[value$="from file"], button.download[value$="from file"],
 #reseedzip .download {
   padding: 5px 9px 5px 24px;
-  background: url(/themes/console/images/buttons/from-file.png) no-repeat 8px center, var(--button);
+  background: var(--package) no-repeat 8px center, var(--button);
 }
 
 input.download[value$="from File"]:hover, button.download[value$="from File"]:hover,
 input.download[value$="from file"]:hover, button.download[value$="from file"]:hover,
 input.download[value$="from File"]:focus, button.download[value$="from File"]:focus,
 input.download[value$="from file"]:focus, button.download[value$="from file"]:focus {
-  background: url(/themes/console/images/buttons/from-file.png) no-repeat 8px center, var(--button_hover);
+  background: var(--package) no-repeat 8px center, var(--button_hover);
 }
 
 input.download[value^="Dump"], button.download[value^="Dump"] {

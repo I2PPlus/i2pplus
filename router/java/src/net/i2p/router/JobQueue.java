@@ -69,9 +69,9 @@ public class JobQueue {
         long maxMemory = SystemVersion.getMaxMemory();
         int cores = SystemVersion.getCores();
         if (cores == 1 || SystemVersion.isSlow() || maxMemory < 256*1024*1024L)
-            RUNNERS = 2;
-        else if (cores <= 2)
             RUNNERS = 3;
+        else if (cores <= 2)
+            RUNNERS = 4;
         else if (cores <= 4)
             RUNNERS = cores;
         else if (maxMemory >= 1024*1024*1024L)
@@ -79,11 +79,11 @@ public class JobQueue {
         else if (maxMemory >= 512*1024*1024L)
             RUNNERS = Math.min(cores - 2, 6);
         else
-            RUNNERS = Math.min(cores, 4);
+            RUNNERS = Math.min(cores, 5);
     }
 
     /** default max # job queue runners operating */
-    private static int DEFAULT_MAX_RUNNERS = Math.min(SystemVersion.getCores() - 2, 8);
+    private static int DEFAULT_MAX_RUNNERS = Math.min(SystemVersion.getCores() + 2, 8);
     /** router.config parameter to override the max runners */
     private final static String PROP_MAX_RUNNERS = "router.maxJobRunners";
 
