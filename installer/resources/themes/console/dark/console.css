@@ -6883,6 +6883,10 @@ p#webappconfigtext {
   margin-left: 2px;
 }
 
+#peers img[src$="bound.svg"] {
+  opacity: 0;
+}
+
 #peerdefs td {
   line-height: 140%;
 }

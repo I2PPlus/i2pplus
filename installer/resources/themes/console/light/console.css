@@ -12352,6 +12352,10 @@ th[aria-sort] {
 }
 }
 
+#peers img[src$="bound.svg"] {
+  opacity: 0;
+}
+
 /* link icons for new user guide */
 
 .sitelink, .chatlink, .consolelink {
