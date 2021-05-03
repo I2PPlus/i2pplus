@@ -549,7 +549,7 @@ h2.error {
 }
 
 #tunnelEditPage h2, #tunnelEditPage h3, #registration h2, #registration h3 {
-  background: url(/themes/console/images/svg/configure.svg) left 5px center no-repeat, var(--h2) #fff !important;
+  background: var(--settings_inert) left 5px center no-repeat, var(--h2) #fff !important;
 }
 
 #wizardPanel h2, #ssl h2 {
