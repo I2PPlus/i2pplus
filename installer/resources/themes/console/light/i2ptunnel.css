@@ -1547,7 +1547,7 @@ tr {
 }
 
 .username, .password {
-  width: calc(50% - 40px);
+  width: calc(50% - 52px);
 }
 
 .username::placeholder, .password::placeholder {

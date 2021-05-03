@@ -1987,7 +1987,7 @@ td.tabletextarea {
 #graphopts a:hover, #graphopts a:visited:hover, #graphopts a:focus, #graphopts a:visited:focus,
 #fullhistory a:hover, #fullhistory a:focus, #fullhistory a:visited:hover, #fullhistory a:visited:focus,
 #routerinformation tr:nth-child(n+2) a:not(#revision):hover, #routerinformation tr:nth-child(n+2) a:focus {
-  color: #4f8fff;
+/*  color: #4f8fff;*/
   border: 1px solid #8d8daa;
   background: #e2e2ff;
   background: linear-gradient(to bottom, #f8f8ff 50%, #e2e2ff 50%);
@@ -3872,8 +3872,8 @@ a:link, a:visited {
   font-weight: bold;
 }*/
 
-a:hover, a:focus {
-  color: #f60;
+a:link:hover, a:hover, a:focus, a:visited:hover {
+  color: #f60 !important;
   text-decoration: none;
   text-shadow: none;
 }
