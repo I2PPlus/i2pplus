@@ -444,7 +444,7 @@ a.control {
 
 select {
   margin: 4px !important;
-  padding: 4px 24px 4px 4px !important;
+  padding: 5px 24px 5px 5px !important;
   min-width: 140px;
   background: #fff;
   background: url(images/dropdown.svg) right 8px center no-repeat, linear-gradient(to bottom, #fff, #efefff);
