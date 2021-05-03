@@ -89,8 +89,7 @@ class EventPumper implements Runnable {
      */
 //    private static final long FAILSAFE_ITERATION_FREQ = 2*1000l;
     private static final int FAILSAFE_ITERATION_FREQ = 10*60*1000;
-//    private static final int FAILSAFE_LOOP_COUNT = 512;
-    private static final int FAILSAFE_LOOP_COUNT = 1024;
+    private static final int FAILSAFE_LOOP_COUNT = 512;
 //    private static final long SELECTOR_LOOP_DELAY = 200;
     private static final long SELECTOR_LOOP_DELAY = 150;
     private static final long BLOCKED_IP_FREQ = 3*60*1000;
