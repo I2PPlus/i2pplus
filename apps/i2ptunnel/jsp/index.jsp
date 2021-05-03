@@ -13,10 +13,9 @@
 <head>
 <meta charset="utf-8">
 <title><%=intl._t("Tunnel Manager")%></title>
-<link href="/themes/console/images/favicon.ico" type="image/x-icon" rel="shortcut icon" />
-<link rel="icon" href="<%=indexBean.getTheme()%>images/favicon.ico" />
-<link href="<%=indexBean.getTheme()%>i2ptunnel.css?<%=net.i2p.CoreVersion.VERSION%>" rel="stylesheet" type="text/css" /> 
-<link href="<%=indexBean.getTheme()%>override.css?<%=net.i2p.CoreVersion.VERSION%>" rel="stylesheet" type="text/css" /> 
+<link rel="icon" href="<%=indexBean.getTheme()%>images/favicon.svg">
+<link href="<%=indexBean.getTheme()%>i2ptunnel.css?<%=net.i2p.CoreVersion.VERSION%>" rel="stylesheet" type="text/css"> 
+<link href="<%=indexBean.getTheme()%>override.css?<%=net.i2p.CoreVersion.VERSION%>" rel="stylesheet" type="text/css"> 
 </head>
 <body id="tunnelListPage">
 <style type="text/css">body{opacity:0}</style>

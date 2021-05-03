@@ -56,7 +56,7 @@
 <%
     }
 %>
-<link rel="icon" href="<%=themePath%>images/favicon.ico">
+<link rel="icon" href="<%=themePath%>images/favicon.svg">
 <script nonce="<%=cspNonce%>" type="text/javascript">if (top.location != location) {top.location.href = location.href;}</script>
 <script src="/js/progressx.js?<%=net.i2p.CoreVersion.VERSION%>" type="text/javascript"></script>
 <noscript><style type="text/css">.script{display:none!important}</style></noscript>

@@ -51,7 +51,7 @@ public class ErrorServlet extends HttpServlet {
     private static final String PROP_THEME_PFX = PROP_THEME_NAME + '.';
     private static final String DEFAULT_THEME = "dark";
     private static final String BASE_THEME_PATH = "/themes/console/";
-    private static final String DEFAULT_ICO = "images/favicon.ico";
+    private static final String DEFAULT_ICO = "images/favicon.svg";
     private static final String DEFAULT_CSS = "console.css";
     /** to be added to head */
     private final String _icoPath = BASE_THEME_PATH + '/' + DEFAULT_ICO;
