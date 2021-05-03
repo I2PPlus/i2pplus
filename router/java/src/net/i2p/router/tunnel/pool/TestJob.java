@@ -176,7 +176,7 @@ class TestJob extends JobImpl {
             _otherTunnel.testJobSuccessful(ms);
 
         if (_log.shouldLog(Log.DEBUG))
-            _log.debug("Tunnel test [" + _id + "] succeeded in " + ms + "ms " + _cfg);
+            _log.debug("Tunnel test [" + _id + "] succeeded in " + ms + "ms -> " + _cfg);
         scheduleRetest();
     }
 
@@ -199,7 +199,7 @@ class TestJob extends JobImpl {
         else
             getContext().statManager().addRateData("tunnel.testFailedTime", timeToFail, timeToFail);
         if (_log.shouldLog(Log.WARN))
-            _log.warn("Tunnel test [" + _id + "] failed in " + timeToFail + "ms " + _cfg);
+            _log.warn("Tunnel test [" + _id + "] failed in " + timeToFail + "ms -> " + _cfg);
         boolean keepGoing = _cfg.tunnelFailed();
         // blame the expl. tunnel too
         if (_otherTunnel.getLength() > 1)

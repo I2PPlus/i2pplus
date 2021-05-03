@@ -11,6 +11,7 @@
   --bodyfont: Droid Sans, Open Sans, Noto Sans, Ubuntu, Segoe UI, Lucida Grande, Verdana, Helvetica, sans-serif;
   --monospaced: Droid Sans Mono, Noto Mono, DejaVu Sans Mono, Lucida Console, monospace;
   --highlight: inset 0 0 0 1px #fff;
+  --h2: linear-gradient(to bottom, #fcfcff 50%, rgba(255,255,255,.6) 50%, rgba(240,240,255,.4)), linear-gradient(135deg, #fcfcff 15%, rgba(231, 231, 255, .8) 35%);
 }
 
 body {
@@ -21,7 +22,7 @@ body {
   color: #393947;
   font-size: 9pt;
   background: #a4a4cb url(images/tile2.png) fixed;
-  background-size: 32px 32px;
+  background-size: 32px;
 }
 
 body.iframed {
@@ -205,7 +206,7 @@ th .help::after {
   height: 16px;
   display: inline-block;
   background: var(--helplink) center center no-repeat;
-  background-size: 16px 16px;
+  background-size: 16px;
   content: "";
 }
 
@@ -447,8 +448,8 @@ select {
   padding: 5px 24px 5px 5px !important;
   min-width: 140px;
   background: #fff;
-  background: url(images/dropdown.svg) right 8px center no-repeat, linear-gradient(to bottom, #fff, #efefff);
-  background-size: 10px auto, 100% 100% !important;
+  background: var(--dropdown) right 8px center no-repeat, linear-gradient(to bottom, #fff, #efefff);
+  background-size: 10px, 100% !important;
   color: #393947;
   font-family: var(--bodyfont);
   font-size: 9pt;
@@ -458,8 +459,6 @@ select {
   box-shadow: 0 2px 0 rgba(255,255,255,.85) inset, 0 0 10px rgba(0,0,0,.1) inset, 0 1px 1px rgba(0,0,0,.05), 0 7px 4px -4px rgba(0,0,0,.1);
   overflow: hidden;
   text-overflow: ellipsis;
-  -moz-appearance: none;
-  -webkit-appearance: none;
   appearance: none;
   filter: drop-shadow(0 0 1px rgba(220,220,255,.7));
 }
@@ -471,8 +470,8 @@ select:hover {
 select:hover, select:active, select:focus {
   border: 1px solid #535979;
   box-shadow: inset 0 0 0 1px #fff;
-  background: url(images/dropdown_hover.svg) right 8px center no-repeat, linear-gradient(to bottom, #eee, #fff) !important;
-  background-size: 10px auto, 100% 100% !important;
+  background: var(--dropdown_hover) right 8px center no-repeat, linear-gradient(to bottom, #eee, #fff) !important;
+  background-size: 10px, 100% !important;
 }
 
 select:focus {
@@ -484,10 +483,10 @@ select::-ms-expand {
 }
 
 a:link, a:visited {
-  color: #4d5f80;
+  word-wrap: break-word;
   text-decoration: none;
   font-weight: bold;
-  word-wrap: break-word;
+  color: #4d5f80;
   outline: none;
 }
 
@@ -505,19 +504,19 @@ input[type="hidden"], input.default {
 }
 
 h2, h3 {
+  margin: 10px 0 -1px;
   padding: 9px 10px 7px 30px;
-  border: 1px solid #8d8daa;
-  border-radius: 2px 2px 0 0;
-  background: #fcfcff;
-  background: linear-gradient(to bottom, #fcfcff 50%, rgba(255,255,255,.6) 50%, rgba(240,240,255,.4)), linear-gradient(135deg, #fcfcff 5%, rgba(231, 231, 255, .8) 15%) #fff !important;
+  position: relative;
   font-size: 11.5pt;
   text-transform: uppercase;
   letter-spacing: .12em;
   word-spacing: .1em;
-  margin: 10px 0 -1px;
   color: #484e6a;
+  border: 1px solid #8d8daa;
+  border-radius: 2px 2px 0 0;
   box-shadow: inset 0 0 0 1px #fff;
-  position: relative;
+  background: #fcfcff;
+  background: linear-gradient(to bottom, #fcfcff 50%, rgba(255,255,255,.6) 50%, rgba(240,240,255,.4)), linear-gradient(135deg, #fcfcff 5%, rgba(231, 231, 255, .8) 15%) #fff !important;
 }
 
 .iframed h2, .iframed h3 {
@@ -527,38 +526,38 @@ h2, h3 {
 /* title images */
 
 h2.error {
-  background: url(/themes/console/images/errortriangle.png) left 5px center no-repeat, linear-gradient(to bottom, #fcfcff 50%, rgba(255,255,255,.6) 50%, rgba(240,240,255,.4)), linear-gradient(135deg, #fcfcff 15%, rgba(231, 231, 255, .8) 35%) #fff !important;
-  background-size: 24px auto, 100% 100%, 100% 100% !important;
-  background-position: 8px center, center center, center center !important;
   padding-left: 40px;
+  background: url(/themes/console/images/errortriangle.png) left 5px center no-repeat, var(--h2) #fff !important;
+  background-size: 24px, 100%, 100% !important;
+  background-position: 8px center, center center, center center !important;
 }
 
 #messages h2 {
-  background: url(/themes/console/images/svg/logs.svg) left 5px center no-repeat, linear-gradient(to bottom, #fcfcff 50%, rgba(255,255,255,.6) 50%, rgba(240,240,255,.4)), linear-gradient(135deg, #fcfcff 15%, rgba(231, 231, 255, .8) 35%) #fff !important;
+  background: url(/themes/console/images/svg/logs.svg) left 5px center no-repeat, var(--h2) #fff !important;
 }
 
 #globalTunnelControl h2 {
-  background: url(/themes/console/images/svg/mouse.svg) left 5px center no-repeat, linear-gradient(to bottom, #fcfcff 50%, rgba(255,255,255,.6) 50%, rgba(240,240,255,.4)), linear-gradient(135deg, #fcfcff 15%, rgba(231, 231, 255, .8) 35%) #fff !important;
+  background: url(/themes/console/images/svg/mouse.svg) left 5px center no-repeat, var(--h2) #fff !important;
 }
 
 #servers h2 {
-  background: url(/themes/console/images/svg/server.svg) left 5px center no-repeat, linear-gradient(to bottom, #fcfcff 50%, rgba(255,255,255,.6) 50%, rgba(240,240,255,.4)), linear-gradient(135deg, #fcfcff 15%, rgba(231, 231, 255, .8) 35%) #fff !important;
+  background: url(/themes/console/images/svg/server.svg) left 5px center no-repeat, var(--h2) #fff !important;
 }
 
 #clients h2 {
-  background: url(/themes/console/images/svg/client.svg) left 5px center no-repeat, linear-gradient(to bottom, #fcfcff 50%, rgba(255,255,255,.6) 50%, rgba(240,240,255,.4)), linear-gradient(135deg, #fcfcff 15%, rgba(231, 231, 255, .8) 35%) #fff !important;
+  background: url(/themes/console/images/svg/client.svg) left 5px center no-repeat, var(--h2) #fff !important;
 }
 
 #tunnelEditPage h2, #tunnelEditPage h3, #registration h2, #registration h3 {
-  background: url(/themes/console/images/svg/configure.svg) left 5px center no-repeat, linear-gradient(to bottom, #fcfcff 50%, rgba(255,255,255,.6) 50%, rgba(240,240,255,.4)), linear-gradient(135deg, #fcfcff 15%, rgba(231, 231, 255, .8) 35%) #fff !important;
+  background: var(--settings_inert) left 5px center no-repeat, var(--h2) #fff !important;
 }
 
 #wizardPanel h2, #ssl h2 {
-  background: url(/themes/console/images/svg/wizard.svg) left 5px center no-repeat, linear-gradient(to bottom, #fcfcff 50%, rgba(255,255,255,.6) 50%, rgba(240,240,255,.4)), linear-gradient(135deg, #fcfcff 15%, rgba(231, 231, 255, .8) 35%) #fff !important;
+  background: url(/themes/console/images/svg/wizard.svg) left 5px center no-repeat, var(--h2) #fff !important;
 }
 
 #messages h2, #globalTunnelControl h2, #servers h2, #clients h2, #tunnelEditPage h2, #tunnelEditPage h3, #registration h2, #registration h3, #wizardPanel h2, #ssl h2 {
-  background-size: 18px auto, 100% 100%, 100% 100% !important;
+  background-size: 18px, 100%, 100% !important;
   background-position: 7px center, center center, center center !important;
   background-position: 7px 60%, center center, center center !important;
 }
@@ -1132,7 +1131,7 @@ textarea[name="accessList"], #hostField, #localDestination, .authentication {
 }
 
 #customOptions, #userAgents, #filterDefinition {
-  width: calc(100% - 20px) !important;
+  width: calc(100% - 28px) !important;
 }
 
 .tunnelDestination b, .tunnelDescription b {
@@ -1235,8 +1234,8 @@ h2, h3 {
 }
 
 #messages h2, #globalTunnelControl h2, #servers h2, #clients h2, #tunnelEditPage h2, #tunnelEditPage h3, #registration h2, #registration h3, #wizardPanel h2 {
-  background-size: 20px auto, 100% 100%, 100% 100% !important;
   padding-left: 33px !important;
+  background-size: 20px, 100%, 100% !important;
 }
 
 th {
@@ -1569,17 +1568,19 @@ tr {
 }
 
 @media screen and (max-width: 1100px) {
-.nowrap {
-  margin-right: 0 !important;
-}
-.nowrap .port, .nowrap .quantity, .nowrap .period {
-  width: 30px !important;
-  margin-right: 2px !important;
-}
-.nowrap .multiOption {
-  margin-right: 2px !important;
-  margin-left: 0 !important;
-}
+  .nowrap {
+    margin-right: 0 !important;
+  }
+
+  .nowrap .port, .nowrap .quantity, .nowrap .period {
+    margin-right: 2px !important;
+    width: 24px !important;
+  }
+
+  .nowrap .multiOption {
+    margin-right: 2px !important;
+    margin-left: 0 !important;
+  }
 }
 
 select[disabled], select[disabled]:hover, select[disabled]:focus, select[disabled]:active, #sigtype[disabled] {
@@ -1634,7 +1635,7 @@ select[disabled], select[disabled]:hover, select[disabled]:focus, select[disable
 }
 
 #filterDefinition, .freetext.filemanager {
-  width: calc(100% - 40px) !important;
+  width: calc(100% - 50px) !important;
 }
 
 #regDisabled {

@@ -255,8 +255,8 @@ h3 {
 }
 
 .headline#subscriptions h3, .headline#configure h3, .headline#addressbook h3, .headline h3 {
-  margin: -8px -5px -5px;
-  padding: 9px 5px 6px 30px;
+  margin: -8px -5px -6px;
+  padding: 9px 5px 8px 30px;
 }
 
 #dtls .headline h3 {
@@ -833,7 +833,7 @@ form {
 }
 
 th {
-  font-size: 9pt;
+  font-size: 70% !important;
   background: linear-gradient(to bottom, #fcfcff 51%, #fafaff 51%, #f6f6ff 100%);
 }
 
@@ -1718,5 +1718,20 @@ input#exporthosts {
 
   .iframed #prev::after, .iframed #next::after {
     top: calc(50% - 6px);
+  }
+}
+
+@media screen and (max-width: 1499px) {
+  .headline h3 {
+    font-size: 10.5pt !important;
+    background-size: 18px !important;
+  }
+  #current {
+    font-size: 10pt !important;
+  }
+
+  .headline#subscriptions h3, .headline#configure h3, .headline#addressbook h3, .headline h3 {
+    margin-bottom: -4px;
+    padding-top: 10px;
   }
 }
