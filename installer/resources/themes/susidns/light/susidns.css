@@ -1731,7 +1731,7 @@ input#exporthosts {
   }
 
   .headline#subscriptions h3, .headline#configure h3, .headline#addressbook h3, .headline h3 {
-    margin-bottom: -2px;
+    margin-bottom: -4px;
+    padding-top: 10px;
   }
-
 }
