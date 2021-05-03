@@ -484,7 +484,7 @@ select::-ms-expand {
 }
 
 a:link, a:visited {
-  color: #2c4e8f;
+  color: #4d5f80;
   text-decoration: none;
   font-weight: bold;
   word-wrap: break-word;
@@ -698,12 +698,14 @@ td.infohelp {
 }
 
 .tunnelName a {
-  padding: 3px 3px 3px 20px !important;
-  background: url(/themes/console/images/buttons/configure.png) left center no-repeat;
+  padding: 3px 3px 3px 18px !important;
+  background: var(--settings) left center no-repeat;
+  background-size: 14px;
 }
 
 .tunnelName a:hover {
-  background: url(/themes/console/images/buttons/configure_hover.png) left center no-repeat;
+  background: var(--settings_hover) left center no-repeat;
+  background-size: 14px;
 }
 
 .tunnelName a {
@@ -1461,12 +1463,12 @@ tr {
 }
 
 #keyringManager {
-  padding: 0 3px 0 18px;
+  padding: 2px 3px 2px 22px;
   float: right;
   display: inline-block;
   font-size: 90%;
-  background: url(/themes/console/images/info/keys.png) left center no-repeat;
-  background-size: 14px 14px;
+  background: var(--keys) left center no-repeat;
+  background-size: 20px;
 }
 
 /* SSL wizard */
