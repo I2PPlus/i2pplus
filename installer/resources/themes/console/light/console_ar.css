@@ -38,8 +38,10 @@ h2, h3 {
 }
 
 #debug h2 {
-  background: url(/themes/console/images/info/debug.png) 6px center no-repeat, linear-gradient(to bottom, #fcfcff 50%, rgba(255,255,255,.6) 50%, rgba(240,240,255,.4)), linear-gradient(to left, #fcfcff 5%, rgba(231, 231, 255, 0.8) 25%) !important;
-  background-size: 20px 20px, 100% 100%, 100% 100% !important;
+  background: var(--bug) 6px center no-repeat,
+              linear-gradient(to bottom, #fcfcff 50%, rgba(255,255,255,.6) 50%, rgba(240,240,255,.4)),
+              linear-gradient(to left, #fcfcff 5%, rgba(231, 231, 255, 0.8) 25%) !important;
+  background-size: 20px, 100%, 100% !important;
 }
 
 #portmapper th:last-child, #portmapper td:last-child, #sockets td:last-child {
@@ -113,7 +115,7 @@ h1.sched {
 }
 
 h1.log {
-  background: url(images/logs.png) right 10px center no-repeat, linear-gradient(-135deg, #fcfcff, rgba(252,252,255,0) 600px), linear-gradient(to bottom, #fcfcff 50%, rgba(248,248,255,.6) 50%), repeating-linear-gradient(-135deg, rgba(255,255,255,.5) 2px, rgba(221, 221, 255, .3) 3px, #fff 5px) #fafaff !important;
+  background: var(--log_icon) right 10px center no-repeat, linear-gradient(-135deg, #fcfcff, rgba(252,252,255,0) 600px), linear-gradient(to bottom, #fcfcff 50%, rgba(248,248,255,.6) 50%), repeating-linear-gradient(-135deg, rgba(255,255,255,.5) 2px, rgba(221, 221, 255, .3) 3px, #fff 5px) #fafaff !important;
 }
 
 h1.webapp {
@@ -123,7 +125,7 @@ h1.webapp {
 h1[class] {
   padding-right: 48px;
   background-position: right 10px center !important;
-  background-size: 34px auto, 100% 100%, 100% 100%, 100% 100% !important;
+  background-size: 34px auto, 100%, 100%, 100% !important;
 }
 
 h2 {
@@ -748,7 +750,7 @@ table.search {
 
 h4.app {
   background: url(/themes/console/images/eepsite.png) 10px center no-repeat, linear-gradient(to bottom, #fff 50%, rgba(255,255,255,.6) 50%, rgba(240,240,255,.4)), linear-gradient(to left, #fff 5%, rgba(231, 231, 255, 0.8) 15%) right center !important;
-  background-size: 16px 16px, 100% 100%, 100% 100% !important;
+  background-size: 16px, 100%, 100% !important;
   margin-top: 15px;
 }
 
@@ -756,7 +758,7 @@ h4.app2 {
   clear: left;
   margin-top: 10px !important;
   background: url(images/globe.png) 10px center no-repeat, linear-gradient(to bottom, #fff 50%, rgba(255,255,255,.6) 50%, rgba(240,240,255,.4)), linear-gradient(to left, #fff 5%, rgba(231, 231, 255, 0.8) 15%) right center !important;
-  background-size: 16px 16px, 100% 100%, 100% 100% !important;
+  background-size: 16px, 100%, 100% !important;
 }
 
 h4.app, h4.app2, #news h3, .news h3 {
@@ -1069,7 +1071,7 @@ pre#activetransports {
   background: url(/themes/console/images/info/question.png) no-repeat, linear-gradient(to bottom, #fff 50%, rgba(255, 255, 255, 0.6) 50%, rgba(240, 240, 240, 0.4)) repeat scroll 0 0%, rgba(0, 0, 0, 0) linear-gradient(to left, #fff 5%, rgba(231, 231, 255, 0.8) 15%) !important;
   background-position: right 6px center, right center, right center !important;
   padding-right: 30px;
-  background-size: 18px 18px, 100% 100%, 100% 100% !important;
+  background-size: 18px 18px, 100%, 100% !important;
 }
 
 #consolepass input[name="nofilter_pw"], #externali2cp input[name="nofilter_pw"], #consolepass input[name="nofilter_pw"]:focus, #externali2cp input[name="nofilter_pw"]:focus,
@@ -1184,7 +1186,7 @@ b.suboption {
 
 #config_reseed #reseedurl, #installPluginUrl {
   background: #eaeaff var(--link) right 10px center no-repeat !important;
-  background-size: 28px 28px, 100% 100%, 100% 100% !important;
+  background-size: 28px 28px, 100%, 100% !important;
 }
 
 #config_reseed #reseedurl:hover, #installPluginUrl:hover {
@@ -1194,7 +1196,7 @@ b.suboption {
 
 #config_reseed  #reseedzip, #installPluginFile {
   background: #eaeaff var(--files) right 10px center no-repeat !important;
-  background-size: 28px 28px, 100% 100%, 100% 100% !important;
+  background-size: 28px 28px, 100%, 100% !important;
 }
 
 #config_reseed #reseedzip:hover, #installPluginFile:hover {
@@ -1204,7 +1206,7 @@ b.suboption {
 
 #config_reseed #reseedcreatefile {
   background: #eaeaff var(--package) right 10px center no-repeat !important;
-  background-size: 28px 28px, 100% 100%, 100% 100% !important;
+  background-size: 28px 28px, 100%, 100% !important;
   text-align: justify;
 }
 

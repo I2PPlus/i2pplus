@@ -29,30 +29,31 @@ pre {
 /* light */
 
 .light select {
-  -moz-appearance: none;
-  -webkit-appearance: none;
-  appearance: none;
+  margin: 5px;
+  padding: 4px 16px 4px 4px !important;
+  min-width: 60px;
+  text-align: left !important;
+  font-size: 9pt;
+  color: #484e6a;
+  border: 1px solid #999daf;
+  border-radius: 2px;
+  box-shadow: inset 0 0 0 1px #fff;
   background: url(/themes/console/light/images/dropdown.png) right center no-repeat #fff;
   background: url(/themes/console/light/images/dropdown.png) right center no-repeat, linear-gradient(to bottom, #fff, #efefff);
   background-blend-mode: hard-light, normal;
-  padding: 4px 16px 4px 4px !important;
-  color: #484e6a;
-  margin: 5px;
-  border: 1px solid #999daf;
-  min-width: 60px;
-  font-size: 9pt;
-  border-radius: 2px;
-  text-align: left !important;
-  box-shadow: inset 0 0 0 1px #fff;
   filter: drop-shadow(0 0 1px #ccf);
+  -moz-appearance: none;
+  -webkit-appearance: none;
+  appearance: none;
 }
 
 .light button, .light input[type=submit], .light input[type="reset"] {
   margin: 3px;
   padding: 4px 8px;
+  min-width: 80px;
+  text-decoration: none;
   font-size: 9pt;
   color: #484e6a;
-  text-decoration: none;
   border: 1px solid #999daf;
   border-radius: 2px;
   box-shadow: inset 0 0 0 1px #fff, inset 0 0 0 1px #fff;
@@ -61,7 +62,6 @@ pre {
   background-size: 14px auto, 100% 100% !important;
   opacity: 1;
   filter: drop-shadow(0 0 1px #ccf);
-  min-width: 80px;
 }
 
 .light button:hover, .light input[type=submit]:hover, .light input[type="reset"]:hover, button:focus, .light input[type=submit]:focus, .light input[type="reset"]:focus {
@@ -206,54 +206,51 @@ html.bwscheduler, body.bwscheduler {
 }
 
 .plate div:not(.round-button):not(.weekday_container):not(.conatiner_header):not(.outer):not(.inner):not(.bwaction) {
-/*  padding: 10px !important;
-  margin: 10px !important;*/
   border-radius: 0 !important;
   border-width: 1px !important;
   background: linear-gradient(to bottom, #222, #111);
 }
 
 .plate .round-button + div, .plate h1 {
-  display: none !important;
+  padding: 0 !important;
+  margin: 0 !important;
   width: 0 !important;
   min-width: 0 !important;
-  margin: 0 !important;
-  padding: 0 !important;
+  display: none !important;
 }
 
 .weekday_container, .conatiner_header, .outer {
+  min-height: 0 !important;
   text-align: center;
   background: #111 !important;
-  min-height: 0 !important;
 }
 
 .weekday_container {
-  background: none !important;
-  border: 1px solid #222 !important;
-  background: #080808 !important;
-  float: none !important;
-  display: inline-block !important;
+  margin: 6px !important;
   height: auto !important;
   min-height: 200px !important;
-  vertical-align: top !important;
-  box-shadow: 0 0 1px 1px rgba(0,0,0,.4);
   min-width: 120px !important;
-  margin: 6px !important;
+  display: inline-block !important;
+  float: none !important;
+  vertical-align: top !important;
+  border: 1px solid #222 !important;
+  box-shadow: 0 0 1px 1px rgba(0,0,0,.4);
+  background: #080808 !important;
 }
 
 .plate::after {
-  content: "";
-  display: block;
+  margin-top: 20px;
   width: 100%;
   height: 1px;
-  background: #222;
-  margin-top: 20px;
+  display: block;
   box-shadow: 0 1px 0 1px rgba(0,0,0,.1);
+  background: #222;
+  content: "";
 }
 
 .conatiner_header {
-  height: auto !important;
   padding: 4px 0;
+  height: auto !important;
   vertical-align: middle;
   background: linear-gradient(to bottom, #222 50%, #111 50%) !important;
 }
@@ -438,174 +435,6 @@ html.bwscheduler, body.bwscheduler {
 
 #imagegen h1 {
   display: none !important;
-}
-
-/* orchid */
-
-.orchid body {
-  margin: 0 !important;
-  font-weight: bold;
-  line-height: 150%;
-}
-
-.orchid pre {
-  margin: -10px 0 5px !important;
-  padding: 20px 10px 10px !important;
-  border: 1px solid #8d8daa	;
-  border-radius: 0 0 4px 4px;
-}
-
-.orchid div {
-  padding: 12px 20px 18px !important;
-  vertical-align: top;
-  margin-top: -10px;
-}
-
-.orchid h3 {
-  padding: 6px 8px;
-  padding-left: 32px;
-  border: 1px solid #8d8daa;
-  background: url(/themes/console/images/plugin.png) 8px center no-repeat, linear-gradient(to bottom, #fff 50%, #eef 50%), linear-gradient(to right, #fafaff 5%, rgba(231, 231, 255, .8) 25%) !important;
-  background-size: 20px 20px, 100% 100%, 100% 100% !important;
-  text-transform: uppercase;
-  letter-spacing: .08em;
-  word-spacing: .08em;
-  border-radius: 4px;
-  font-size: 11.5pt;
-  color: #54586f;
-  position: relative;
-  z-index: 999;
-  box-shadow: inset 0 0 0 1px #fff;
-}
-
-.orchid h3:nth-child(n+2) {
-  margin-bottom: -1px;
-  border-radius: 4px 4px 0 0;
-  background: url(/themes/console/images/info/globe.png) 8px center no-repeat, linear-gradient(to bottom, #fff 50%, #eef 50%), linear-gradient(to right, #fafaff 5%, rgba(231, 231, 255, .8) 25%) !important;
-  background-size: 20px 20px, 100% 100%, 100% 100% !important;
-}
-
-.orchid h3:nth-child(n+4) {
-  background: url(/themes/console/images/info/configure.png) 8px center no-repeat, linear-gradient(to bottom, #fff 50%, #eef 50%), linear-gradient(to right, #fafaff 5%, rgba(231, 231, 255, .8) 25%) !important;
-  background-size: 20px 20px, 100% 100%, 100% 100% !important;
-  padding-left: 32px;
-}
-
-.orchid h3:nth-child(n+4), .orchid table {
-  display: none; /* hide configuration table */
-}
-
-.orchid table {
-  border: 1px solid #8d8daa;
-  margin-bottom: 5px !important;
-  border-spacing: 0;
-  border-radius: 0 0 4px 4px;
-}
-
-.orchid th {
-  padding: 5px 8px;
-  font-size: 120%:
-}
-
-.orchid td {
-  padding: 3px 10px;
-}
-
-.orchid tr:nth-child(odd) {
-  background: #ddf;
-}
-
-.orchid tr:nth-child(even) {
-  background: #eef;
-}
-
-.orchid tr:first-child, .orchid tr:first-child td {
-  background: #fff;
-  text-transform: uppercase;
-  font-size: 120%;
-  display: none;
-}
-
-.orchid td:first-child, .orchid th:first-child {
-  width: 50%;
-  white-space: nowrap;
-  font-weight: bold;
-}
-
-.orchid td:last-child {
-  font-style: italic;
-}
-
-/*.orchid.light tr:nth-child(2) td {
-  border-top: 1px solid #99f;
-}*/
-
-.orchid tr:nth-child(n+2):hover {
-  background: #ffd;
-}
-
-/* orchid dark */
-
-html.orchid.dark, body.orchid.dark, .orchid.dark div, html.orchid.midnight, body.orchid.midnight, .orchid.midnight div {
-  background: transparent !important;
-}
-
-body.orchid.dark, .orchid.dark h3, .orchid.dark pre, .orchid.dark th, .orchid.dark td {
-  color: #ee9 !important;
-  line-height: 150%;
-}
-
-.orchid.dark h3, .orchid.dark h3:nth-child(n+1), .orchid.dark table, .orchid.dark pre {
-  border-color: #252 !important;
-  background: #010;
-}
-
-.orchid.dark h3:first-of-type, .orchid.midnight h3:first-of-type {
-  margin-top: 5px;
-}
-
-.orchid.dark h3 {
-  background: url(/themes/console/images/plugin.png) 8px center no-repeat, linear-gradient(to bottom, rgba(0,0,0,0) 50%, #000 50%), repeating-linear-gradient(to right, rgba(0,0,0,.5) 1px, rgba(0,0,0,.5) 2px, rgba(0,16,0,.5) 3px), linear-gradient(to bottom, #005000, #000 75%) !important;
-  background-size: 20px 20px, 100% 100% !important;
-  box-shadow: inset 0 0 0 1px #000;
-}
-
-.orchid.dark h3:nth-child(n+2) {
-  margin-bottom: -1px;
-  border-radius: 4px 4px 0 0;
-  background: url(/themes/console/images/info/globe.png) 8px center no-repeat, linear-gradient(to bottom, rgba(0,0,0,0) 50%, #000 50%), repeating-linear-gradient(to right, rgba(0,0,0,.5) 1px, rgba(0,0,0,.5) 2px, rgba(0,16,0,.5) 3px), linear-gradient(to bottom, #005000, #000 75%) !important;
-  background-size: 20px 20px, 100% 100% !important;
-}
-
-.orchid.dark h3:nth-child(n+4) {
-  background: url(/themes/console/images/info/configure.png) 8px center no-repeat, linear-gradient(to bottom, rgba(0,0,0,0) 50%, #000 50%), repeating-linear-gradient(to right, rgba(0,0,0,.5) 1px, rgba(0,0,0,.5) 2px, rgba(0,16,0,.5) 3px), linear-gradient(to bottom, #005000, #000 75%) !important;
-  background-size: 20px 20px, 100% 100% !important;
-  padding-left: 32px;
-}
-
-/*  orchid midnight */
-
-.orchid.midnight h3, .orchid.midnight h3:nth-child(n+1), .orchid.midnight table, .orchid.midnight pre {
-  border-color: #26225d;
-}
-
-.orchid.midnight h3 {
-  background: url(/themes/console/images/plugin.png) 8px center no-repeat, linear-gradient(to right, #00001080, #0000 30%, #1000101a), linear-gradient(to bottom, #191729 50%, #001 50%) !important;
-  background-size: 20px 20px, 100% 100%, 100% 100% !important;
-  box-shadow: inset 0 0 0 1px #000;
-}
-
-.orchid.midnight h3:nth-child(n+2) {
-  margin-bottom: -1px;
-  border-radius: 4px 4px 0 0;
-  background: url(/themes/console/images/info/globe.png) 8px center no-repeat, linear-gradient(to right, #00001080, #0000 30%, #1000101a), linear-gradient(to bottom, #191729 50%, #001 50%) !important;
-  background-size: 20px 20px, 100% 100%, 100% 100% !important;
-}
-
-.orchid.midnight h3:nth-child(n+4) {
-  background: url(/themes/console/images/info/configure.png) 8px center no-repeat, linear-gradient(to right, #00001080, #0000 30%, #1000101a), linear-gradient(to bottom, #191729 50%, #001 50%) !important;
-  background-size: 20px 20px, 100% 100%, 100% 100% !important;
-  padding-left: 32px;
 }
 
 /* bote */

@@ -1946,8 +1946,8 @@ td p.error {
   width: 20px;
   height: 16px;
   vertical-align: text-bottom;
-  background: url(/themes/console/images/info/box.png) left center no-repeat;
-  background-size: 16px 16px;
+  background: url(/themes/console/images/svg/package.svg) left center no-repeat;
+  background-size: 16px;
 }
 
 /* end attachments */

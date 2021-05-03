@@ -11,11 +11,6 @@ body {
   font: 9pt Droid Sans, Open Sans, Noto Sans, Ubuntu, Segoe UI, Lucida Grande, Bitstream Vera Sans, Verdana, sans-serif;
   color: #2f1500;
   background: #2f231a;
-  background: repeating-linear-gradient(to bottom, #9f948b 1px, #6f5b4c 1px, #bfa285 3px);
-}
-
-/* preload top navigation mouseovers */
-body:not(old) {
   background: repeating-linear-gradient(to bottom, #6f5b4c 1px, #9f948b 1px, #bfa285 4px),
   url(images/button_snark_hover.png) no-repeat,
   url(images/button_snark_active.png) no-repeat,
@@ -26,15 +21,11 @@ body:not(old) {
   url(images/button_search_hover.png) no-repeat,
   url(images/button_search_active.png) no-repeat,
   url(images/dropdown_hover.png) no-repeat !important;
-  background-size: 100% 100%, 0 0, 0 0, 0 0, 0 0, 0 0, 0 0, 0 0, 0 0, 0 0 !important;
+  background-size: 100% 4px, 0 0, 0 0, 0 0, 0 0, 0 0, 0 0, 0 0, 0 0, 0 0 !important;
 }
 
 body.iframed {
-  background: transparent !important;
   margin: 6px 0 !important;
-}
-
-body.iframed:not(old) {
   background: url(images/button_snark_hover.png) no-repeat,
   url(images/button_snark_active.png) no-repeat,
   url(images/button_tracker_hover.png) no-repeat,
@@ -60,18 +51,18 @@ p {
 }
 
 hr {
-  color: #6f533e;
-  background:#6f533e;
-  height: 1px;
-  border: none;
-  width: 0%;
   margin: 5px 0 7px 0;
+  width: 0%;
+  height: 1px;
   text-align: center;
+  color: #6f533e;
+  border: none;
+  background:#6f533e;
 }
 
 ::selection {
-  background: #900 !important;
   color: white;
+  background: #900 !important;
 }
 
 ::-moz-selection {
@@ -80,13 +71,11 @@ hr {
 }
 
 input[type=submit], input[type="reset"], button, a:link, input[type=checkbox], input[type=radio], select, label {
-  cursor: pointer;
   vertical-align: middle;
+  cursor: pointer;
 }
 
 .page {
-  background: #dfdccb url(images/tile2.png);
-  background: repeating-linear-gradient(to bottom, #ecebdd 1px, #efebdd 2px, #ebe5d5 5px);
   color: #310;
   min-width: 934px !important;
   margin: 5px 0 0 0;
@@ -97,13 +86,16 @@ input[type=submit], input[type="reset"], button, a:link, input[type=checkbox], i
   line-height: 160% !important;
   box-shadow: inset 0 0 3px 0 #a08160, 0 0 1px 0 #4f3d36;
   text-align: center;
+  background: #dfdccb url(images/tile2.png);
+  background: repeating-linear-gradient(to bottom, #ecebdd 1px, #efebdd 2px, #ebe5d5 5px);
+  background-size: 100%, 5px;
 }
 
 .iframed .page {
-  background: none;
+  padding: 0;
   border: none;
   box-shadow: none;
-  padding: 0;
+  background: none;
 }
 
 a:link, a:visited {
@@ -129,9 +121,6 @@ a:active, a:visited:active, th a:active, th a:visited:active, td a:active, td a:
 }
 
 .toggleview, .snarkConfigTitle, .snarknavbar, img, input[type=image], label, th img, .newtorrentsection, #closeLog, #pagenavbottom {
-  -ms-user-select: none;
-  -moz-user-select: none;
-  -webkit-user-select: none;
   user-select: none;
 }
 
@@ -147,7 +136,6 @@ a:active, a:visited:active, th a:active, th a:visited:active, td a:active, td a:
   width: 70%;
   border: 1px solid #2f1b0c;
   border-radius: 0 0 2px 2px;
-  box-shadow: inset 0 0 0 1px #fff5ef, 0 0 1px 0 #4f3d36;
   box-shadow: inset 0 0 0 1px #fff5ef, 0 0 0 1px rgba(111, 96, 90, .3), 0 0 1px 1px rgba(79, 61, 54, .5);
   background: #efefef;
   background: linear-gradient(to bottom, #efefef 50%, #cfc7c2 53%);
@@ -181,7 +169,7 @@ a:active, a:visited:active, th a:active, th a:visited:active, td a:active, td a:
   border: 1px solid #2f1b0c;
   border-radius: 0;
   box-shadow: inset 0 0 0 1px #efe6e0, inset 0 0 0 rgba(0,0,0,0), 0 0 0 1px rgba(77, 69, 62, .1);
-  background-size: 17px auto, 100% 100%, 100% 100% !important;
+  background-size: 17px auto, 100% !important;
   background-position: 12px center, center center, center center !important;
   background-repeat: no-repeat !important;
   transition: ease border .1s;
@@ -212,7 +200,7 @@ _:-ms-lang(x), .snarkNav:link, .snarkNav:visited {
 .nav_main:link {
   background: #fff7ef url(images/button_snark.png) 11px center no-repeat !important;
   background: url(images/button_snark.png) 11px center no-repeat, linear-gradient(to bottom, #fff7ef 47%, rgba(207, 193, 181, .6) 50%), repeating-linear-gradient(45deg, #75604e 1px, #a09286 1px, #bfafa2 2px) !important;
-  background-size: 18px auto, 100% 100%, 100% 100% !important;
+  background-size: 18px auto, 100%, 100% !important;
 }
 
 .nav_forum:link {
@@ -233,7 +221,7 @@ _:-ms-lang(x), .snarkNav:link, .snarkNav:visited {
 .nav_main:hover, .nav_main:focus {
   background: #ffeadf url(images/button_snark_hover.png) 11px center no-repeat !important;
   background: url(images/button_snark_hover.png) 11px center no-repeat, linear-gradient(to bottom, #ffeadf 47%, #cfb6a8 50%) !important;
-  background-size: 18px auto, 100% 100%, 100% 100% !important;
+  background-size: 18px auto, 100%, 100% !important;
 }
 
 .nav_forum:hover, .nav_forum:focus {
@@ -254,7 +242,7 @@ _:-ms-lang(x), .snarkNav:link, .snarkNav:visited {
 .nav_main:active {
   background: #dfb899 url(images/button_snark_active.png) 11px center no-repeat !important;
   background: url(images/button_snark_active.png) 11px center no-repeat, linear-gradient(to bottom, #af9178, #dfb899) !important;
-  background-size: 18px auto, 100% 100%, 100% 100% !important;
+  background-size: 18px auto, 100%, 100% !important;
 }
 
 .nav_forum:active {
@@ -328,7 +316,7 @@ _:-ms-lang(x), .snarkNav:link, .snarkNav:visited {
   width: auto;
   background: #3f3833 url(images/hat.png) no-repeat scroll right center;
   background: url(images/whippy.png) no-repeat scroll right 5px bottom -7px, linear-gradient(to bottom, #5f554d, #3f3833);
-  background-size: auto 105%, 100% 100%;
+  background-size: auto 105%, 100%;
 }
 
 .snarkMessages, #screenlog.collapsed, #screenlog.xpanded {
@@ -336,7 +324,7 @@ _:-ms-lang(x), .snarkNav:link, .snarkNav:visited {
               url(images/whippy.png) no-repeat scroll right center,
               url("/viewstat.jsp?stat=[I2PSnark] InBps&showEvents=false&period=60000&periodCount=1440&end=0&width=2000&height=160&hideLegend=true&hideTitle=true&hideGrid=true") no-repeat,
               linear-gradient(to bottom, #5f554d, #3f3833);
-  background-size: 100% 100%, 60px auto, calc(100% - 80px) 100%, 100% 100% !important;
+  background-size: 100%, 60px auto, calc(100% - 80px) 100%, 100% !important;
   background-position: center center, right -4px bottom -10px, left bottom 1px, center center !important;
   background-blend-mode: darken, lighten, luminosity, normal, normal;
 }
@@ -361,12 +349,12 @@ _:-ms-lang(x), .snarkNav:link, .snarkNav:visited {
 }
 
 .snarkMessages li::before {
-  content: "";
-  display: inline-block;
-  background: url(images/bullet.png) left 2px no-repeat;
   width: 13px;
   height: 11px;
+  display: inline-block;
+  background: url(images/bullet.png) left 2px no-repeat;
   background-size: 9px 9px;
+  content: "";
 }
 
 .snarkMessages a:link:not(#closeLog):not(#expand):not(#shrink), .snarkMessages .infohash, .snarkMessages a:visited {
@@ -391,9 +379,9 @@ _:-ms-lang(x), .snarkNav:link, .snarkNav:visited {
 }
 
 #closelog, #expand, #shrink {
-  float: right;
   position: sticky !important;
   top: 0;
+  float: right;
 }
 
 #shrink {
@@ -404,8 +392,8 @@ _:-ms-lang(x), .snarkNav:link, .snarkNav:visited {
   margin: -1px -3px 4px 4px;
   padding: 4px 3px 3px;
   width: 12px;
-  opacity: .8;
   background: #cfbda8;
+  opacity: .8;
 }
 
 #closeLog img:hover, #closeLog img:focus, #expand img:hover, #expand img:focus, #shrink img:hover, #shrink img:focus {
@@ -421,14 +409,14 @@ _:-ms-lang(x), .snarkNav:link, .snarkNav:visited {
 
 table {
   margin: 0 0 10px 0;
-  border: 1px solid #6f533e;
   padding: 0;
+  width: 100%;
+  font-size: 8.5pt !important;
+  color: #4d2200;
+  border: 1px solid #6f533e;
   border-spacing: 0;
   border-collapse: collapse;
-  color: #4d2200;
-  width: 100%;
   opacity: 1 !important;
-  font-size: 8.5pt !important;
 }
 
 th {
@@ -450,10 +438,10 @@ td {
 }
 
 thead, tfoot {
-  background: #efefef;
-  background: linear-gradient(to bottom, #efefef, #cfc7c2);
   font-weight: bold;
   color: #4d2200;
+  background: #efefef;
+  background: linear-gradient(to bottom, #efefef, #cfc7c2);
 }
 
 thead a img, thead img {
@@ -476,13 +464,13 @@ th br {
 }
 
 th:first-child {
-  text-align: left !important;
   padding-left: 3px;
+  text-align: left !important;
 }
 
 tfoot td:first-child {
-  text-align: left !important;
   padding-left: 0;
+  text-align: left !important;
 }
 
 tfoot tr:first-child th {
@@ -496,8 +484,8 @@ tfoot tr:first-child th {
 }
 
 .headerpriority {
-  text-align: center;
   padding: 5px;
+  text-align: center;
 }
 
 .headerpriority br {
@@ -505,8 +493,8 @@ tfoot tr:first-child th {
 }
 
 .ParentDir {
-  text-align: left !important;
   padding: 4px 0 4px 4px;
+  text-align: left !important;
 }
 
 .ParentDir img {
@@ -532,10 +520,10 @@ tfoot tr:first-child th {
 .snarkTorrents {
   margin: 0;
   border: 1px solid #6f533e;
-  background: #e8e5dc;
   border-collapse: separate;
   border-spacing: 0;
   border-radius: 2px;
+  background: #e8e5dc;
 }
 
 .snarkTorrents thead th {
@@ -544,9 +532,9 @@ tfoot tr:first-child th {
 }
 
 .snarkTorrents tfoot th {
-  border-bottom: none !important;
   white-space: normal !important;
   font-weight: normal;
+  border-bottom: none !important;
 }
 
 .snarkTorrents tfoot tr:first-child {
@@ -558,10 +546,10 @@ tfoot tr:first-child th {
 }
 
 .snarkTorrents tfoot tr:first-child th::after {
-  content: "";
+  height: 24px;
   display: inline-block;
-  min-height: 24px;
   vertical-align: middle;
+  content: "";
 }
 
 .snarkTorrents tfoot th:nth-child(n+2) {
@@ -577,8 +565,8 @@ tfoot tr:first-child th {
 }
 
 .snarkTorrents thead th:nth-child(3) {
-  text-align: right;
   padding-right: 0;
+  text-align: right;
 }
 
 .snarkTorrents td[colspan="4"], .snarkTorrents td[colspan="10"] {
@@ -596,16 +584,16 @@ tfoot tr:first-child th {
 }
 
 .snarkGraphicStatus {
-  text-align: center !important;
   width: 1%;
   white-space: nowrap;
+  text-align: center !important;
 }
 
 .snarkGraphicStatus::after {
-  content: "";
-  display: inline-block;
   min-height: 20px !important;
+  display: inline-block;
   vertical-align: middle;
+  content: "";
 }
 
 th.snarkTorrentStatus {
@@ -614,8 +602,8 @@ th.snarkTorrentStatus {
 
 .snarkTorrentStatus {
   padding-right: 5px !important;
-  text-align: left;
   padding-left: 0;
+  text-align: left;
 }
 
 .snarkTorrentName {
@@ -653,14 +641,16 @@ tr:hover .snarkTrackerDetails img {
 }
 
 .snarkTorrentInfo tr:nth-child(10) a {
-  word-break: break-all !important;
   display: inline-block;
+  word-break: break-all !important;
 }
 
 .snarkTrackerDetails a:hover img, .snarkTrackerDetails a:focus img,
-.snarkTorrentDetails a:hover img[src^="/i2psnark/.resources/icons/"], .snarkTorrentDetails a:focus img[src^="/i2psnark/.resources/icons/"],
+.snarkTorrentDetails a:hover img[src^="/i2psnark/.resources/icons/"],
+.snarkTorrentDetails a:focus img[src^="/i2psnark/.resources/icons/"],
 .snarkCommentDetails a:hover img, .snarkCommentDetails a:focus img,
-.snarkDirInfo td:first-child a:hover img:not(.thumb), .snarkDirInfo td:first-child a:focus img:not(.thumb) {
+.snarkDirInfo td:first-child a:hover img:not(.thumb),
+.snarkDirInfo td:first-child a:focus img:not(.thumb) {
   border: 1px solid #f60 !important;
   border-radius: 2px;
   background: #ffeadf;
@@ -713,9 +703,9 @@ tr:hover .snarkTrackerDetails img {
 }
 
 tr:not(.peerinfo) .snarkTorrentUploaded:empty::after {
-  content: "‒";
   display: inline;
   font-size: 9pt;
+  content: "‒";
 }
 
 .snarkTorrentAction {
@@ -933,12 +923,6 @@ img[src$="details.png"] {
   max-height: 16px;
 }
 
-@media screen and (min-width: 1500px) {
-img[src$="details.png"] {
-  max-height: 18px;
-}
-}
-
 #filecheck {
   margin: 5px 0;
   padding-left: 22px;
@@ -961,14 +945,18 @@ img[src$="details.png"] {
 }
 
 @media screen and (min-width: 1500px) {
-.snarkTorrentInfo th:first-child img, #torrentinfostats img, #trackers img {
-  margin: -3px 5px 0 !important;
-  max-height: 18px !important;
-}
+  img[src$="details.png"] {
+    max-height: 18px;
+  }
 
-#torrentInfoStats .nowrap {
-  margin-right: 6px;
-}
+  .snarkTorrentInfo th:first-child img, #torrentinfostats img, #trackers img {
+    margin: -3px 5px 0 !important;
+    max-height: 18px !important;
+  }
+
+  #torrentInfoStats .nowrap {
+    margin-right: 6px;
+  }
 }
 
 #torrentInfoStats img[src$="head_tx.png"], #torrentInfoStats img[src$="head_rx.png"] {
@@ -1040,8 +1028,6 @@ img[src$="details.png"] {
 .infohash {
   font-family: Droid Sans Mono, Noto Mono, DejaVu Sans Mono, Lucida Console, monospace !important;
   color: #050;
-  -moz-user-select: all;
-  -webkit-user-select: all;
   user-select: all;
   margin-right: 3px;
 }
@@ -1068,8 +1054,8 @@ img[src$="details.png"] {
   margin: 0 1px 0 10px;
   padding: 3px 1px 2px 6px;
   border-radius: 1px;
-  background: #fff5ef;
   box-shadow: 0 0 0 1px #cfc6c0;
+  background: #fff5ef;
 }
 
 @media screen and (min-width: 1500px) {
@@ -1656,7 +1642,7 @@ _:-ms-lang(x), .snarkConfigTitle, .snarkConfigTitle a, .toggleview,
 a.control, input[type=submit], input[type="reset"] {
   font: 8pt Droid Sans, Open Sans, Noto Sans, Ubuntu, Segoe UI, Bitstream Vera Sans, Verdana, Helvetica, sans-serif;
   font-weight: bold;
-  background-size: 14px 14px, 100% 100% !important;
+  background-size: 14px 14px, 100% !important;
   box-shadow: inset 0 0 0 1px #efe6e0, 0 0 1px 0 #4d453e;
   box-shadow: inset 0 0 0 1px #efe6e0, 0 0 1px 0 rgba(77, 69, 62, .7);
   display: inline-block;
@@ -1664,7 +1650,7 @@ a.control, input[type=submit], input[type="reset"] {
 
 a.control, a.controld {
   background: linear-gradient(to bottom, #eeecea, #ded9d5);
-  background-size: 100% 100% !important;
+  background-size: 100% !important;
   border: 1px solid #4F3927;
   border-radius: 2px;
   color: #4d2200;
@@ -2080,13 +2066,13 @@ a:hover img, a:focus img {
 .configsectionpanel {
   background: #dfd7d1 url(/themes/snark/ubergine/images/configuration.png) no-repeat scroll right center;
   background: url(/themes/snark/ubergine/images/configuration.png) no-repeat scroll right center, linear-gradient(to bottom, #dfd7d1, #cfc7c2);
-  background-size: 84px 82px, 100% 100%;
+  background-size: 84px 82px, 100%;
 }
 
 #mainsection + form .configsectionpanel {
   background: #dfd7d1;
   background: linear-gradient(to bottom, #dfd7d1, #cfc7c2);
-  background-size: 100% 100%;
+  background-size: 100%;
 }
 
 .configsectionpanel table {
@@ -2507,7 +2493,7 @@ input#toggle_debug:checked + label + #dhtDebugInner {
 .resourceError th {
   padding: 10px 10px 10px 40px;
   background: url(/themes/console/images/info/errortriangle.png) left 10px center no-repeat, linear-gradient(to bottom, #efefef, #cfc7c2);
-  background-size: 24px auto, 100% 100%;
+  background-size: 24px auto, 100%;
 }
 
 .resourceError td {
@@ -2955,7 +2941,7 @@ _:-ms-lang(x), input[type=radio], input[type=checkbox] {
 @media screen and (max-width: 1000px) {
 .snarkNav:link {
   padding: 4px 8px 4px 24px !important;
-  background-size: 15px auto, 100% 100%, 100% 100% !important;
+  background-size: 15px auto, 100%, 100% !important;
   background-position: 8px center, center center, center center !important;
 }
 
@@ -3242,14 +3228,14 @@ body, .snarkTorrents td, .snarkAddInfo, th, td, .snarkFileName, a.control, input
 
 .snarkNav:link {
   padding: 4px 8px 4px 26px !important;
-  background-size: 16px auto, 100% 100%, 100% 100% !important;
+  background-size: 16px auto, 100%, 100% !important;
   background-position: 8px center, center center, center center !important;
 }
 
 .nav_main:link {
   padding: 4px 8px 4px 27px !important;
   background-position: 8px center, center center, center center !important;
-  background-size: 18px auto, 100% 100%, 100% 100% !important;
+  background-size: 18px auto, 100%, 100% !important;
 }
 
 .snarkTorrentAction input[type=image], .snarkTorrents th:last-child input[type=image] {
@@ -3326,7 +3312,7 @@ tt, .snarkTorrents tt, .snarkMessages {
 
 .snarkNav:link {
   font-size: 11.5pt;
-  background-size: 17px auto, 100% 100%, 100% 100% !important;
+  background-size: 17px auto, 100%, 100% !important;
 }
 
 .nav_main:link, .nav_forum:link {
@@ -3651,7 +3637,7 @@ tr#torrentInfoStats td {
 .info_tracker:hover {
   box-shadow: 0 0 0 1px #bfb6b0;
   background: url(images/button_tracker_hover.png) left 3px center no-repeat, linear-gradient(to bottom, #efefef 50%, #cfc7c2 50%);
-  background-size: 14px auto, 100% 100%;
+  background-size: 14px auto, 100%;
 }
 
 .info_tracker:active, .info_tracker:active a, .info_tracker:active a:visited {

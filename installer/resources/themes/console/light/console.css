@@ -978,7 +978,7 @@ to {
   width: 16px;
   height: 16px;
   display: inline-block;
-  background: url(/themes/console/images/plugin.png) no-repeat center center;
+  background: var(--plugin) no-repeat center center;
   background-size: 16px;
   content: "";
 }
@@ -10060,19 +10060,6 @@ a[href^="configpeer?peer"]:hover::after {
   display: block;
 }
 
-#jardump td:first-child {
-  padding-left: 26px;
-  background-image: url(/themes/console/images/info/box.png);
-  background-position: 5px center;
-  background-repeat: no-repeat;
-  background-size: 16px;
-}
-
-#jardump tr:hover td:first-child {
-  background: url(/themes/console/images/info/box.png) 5px center no-repeat #ffd;
-  background-size: 16px;
-}
-
 #jardump tr:hover td:first-child b, #portmapper tr:hover td:first-child, #sockets tr:hover td:first-child, #portfaq tr:hover td:first-child {
   color: #26262f;
 }
@@ -10104,10 +10091,14 @@ a[href^="configpeer?peer"]:hover::after {
 #jardump td:first-child {
   padding-left: 26px;
   padding-right: 3px;
-  white-space: nowrap;
-  background-image: url(/themes/console/images/info/box.png);
+  background-image: var(--package);
   background-position: 5px center;
   background-repeat: no-repeat;
+  background-size: 16px;
+}
+
+#jardump tr:hover td:first-child {
+  background: var(--package) 5px center no-repeat #ffd;
   background-size: 16px;
 }
 
