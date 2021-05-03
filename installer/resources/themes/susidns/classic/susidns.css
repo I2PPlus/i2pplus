@@ -432,7 +432,8 @@ div#filter {
 #search input[type=text] {
   width: 200px;
   padding: 5px 5px 5px 25px;
-  background: #fff url(/themes/console/images/buttons/search.png) 5px center no-repeat;
+  background: #fff url(/themes/console/images/svg/search.svg) 5px center no-repeat;
+  background-size: 14px;
 }
 
 #messages:empty {

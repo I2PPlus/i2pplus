@@ -1101,11 +1101,13 @@ textarea:focus {
 #booksearch input[name=search] {
   padding: 6px 8px 6px 32px !important;
   min-width: 280px !important;
-  background: url(/themes/console/images/buttons/search.png) 9px center no-repeat, linear-gradient(to bottom, #001800, #001000) !important;
+  background: url(/themes/console/images/svg/search.svg) 9px center no-repeat, linear-gradient(to bottom, #001800, #001000) !important;
+  background-size: 14px, 100%;
 }
 
 #booksearch input[name=search]:focus {
-  background: #000 url(/themes/console/images/buttons/search.png) 9px center no-repeat !important;
+  background: #000 url(/themes/console/images/svg/search.svg) 9px center no-repeat !important;
+  background-size: 14px;
 }
 
 @media screen and (min-width: 1500px) {

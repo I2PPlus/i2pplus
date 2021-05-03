@@ -12177,7 +12177,7 @@ h1.webapp {
 
 #browserconfig h2 {
   padding-left: 38px;
-  background: url(/themes/console/images/info/launch_browser.png) 8px center no-repeat, var(--h2) !important;
+  background: var(--firefox) 8px center no-repeat, var(--h2) !important;
   background-size: 24px, 100%, 100%, 100% !important;
 }
 

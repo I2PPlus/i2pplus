@@ -1735,7 +1735,8 @@ input.search[type=text] {
   padding: 5px 5px 5px 28px;
   color: #333 !important;
   border: 1px solid #aaafce;
-  background: #fff url(/themes/console/images/buttons/search.png) no-repeat 5px center;
+  background: #fff url(/themes/console/images/svg/search.svg) no-repeat 5px center;
+  background-size: 14px;
 }
 
 input[name="refreshInterval"] {
@@ -2165,14 +2166,16 @@ input.stop:focus, button.stop:focus {
 
 button.search {
   padding: 5px 7px 5px 25px;
-  background: #eee url(/themes/console/images/buttons/search.png) no-repeat 7px 6px;
-  background: url(/themes/console/images/buttons/search.png) no-repeat 7px 6px, linear-gradient(to bottom, #fff, #f4f5ff);
+  background: #eee url(/themes/console/images/svg/search.svg) no-repeat 7px 6px;
+  background: url(/themes/console/images/svg/search.svg) no-repeat 7px 6px, linear-gradient(to bottom, #fff, #f4f5ff);
+  background-size: 14px, 100%;
 }
 
 button.search:hover,
 button.search:focus {
-  background: #fff url(/themes/console/images/buttons/search_hover.png) no-repeat 7px 6px;
-  background: url(/themes/console/images/buttons/search_hover.png) no-repeat 7px 6px, linear-gradient(to bottom, #ddd, #fff);
+  background: #fff url(/themes/console/images/svg/search.svg) no-repeat 7px 6px;
+  background: url(/themes/console/images/svg/search.svg) no-repeat 7px 6px, linear-gradient(to bottom, #ddd, #fff);
+  background-size: 14px, 100%;
 }
 
 /* client config buttons aka project "X" */
@@ -2803,8 +2806,8 @@ table.configtable, #permabanned, #loggingoptions, #configstats, ul#banlist {
 }
 
 #leavefamily tr:last-child td:first-child {
-  background: #fff url(/themes/console/images/info/leave_family.png) 12px center no-repeat;
   padding: 15px 15px 15px 50px;
+  background: #fff url(/themes/console/images/svg/leavefamily.svg) 12px center no-repeat;
   background-size: 28px;
 }
 
@@ -6785,7 +6788,7 @@ p#fullhistory {
 /* informational images */
 
 #bugreports td.infohelp {
-  background: #fff url(/themes/console/images/info/bugreport.png) no-repeat 12px center;
+  background: #fff url(/themes/console/images/svg/bug.svg) no-repeat 12px center;
   padding: 15px 15px 15px 50px;
   background-size: 28px;
 }
@@ -6803,7 +6806,8 @@ p.sybilinfo {
 }
 
 p.sybilinfo.experimental {
-  background: #fff url(/themes/console/images/info/experimental.png) 12px center no-repeat;
+  background: #fff url(/themes/console/images/svg/experimental.svg) 12px center no-repeat;
+  background-size: 28px;
 }
 
 @media screen and (max-width: 1200px) {
@@ -6889,14 +6893,14 @@ p#pluginconfigtext {
 }
 
 #plugininstall .infohelp {
-  background: #fff url(/themes/console/images/info/plugin_link.png) 12px center no-repeat;
   padding: 15px 15px 15px 50px;
+  background: #fff url(/themes/console/images/info/plugin_link.png) 12px center no-repeat;
   background-size: 28px;
 }
 
 #plugininstall tr:nth-child(3) td:nth-last-child(2), #manualreseed tr:nth-child(3) td:nth-last-child(2) {
-  background: #fff url(/themes/console/images/info/url.png) 12px center no-repeat;
   padding: 15px 15px 15px 50px;
+  background: #fff url(/themes/console/images/svg/link.svg) 12px center no-repeat;
   background-size: 28px;
 }
 
@@ -6915,7 +6919,7 @@ p#pluginconfigtext {
 #config_peers tr:nth-child(3) td.infohelp {
   padding: 15px 15px 15px 50px;
   border-right: none;
-  background: #fff url(/themes/console/images/info/blocked.png) 12px center no-repeat;
+  background: #fff url(/themes/console/images/svg/ban.svg) 12px center no-repeat;
   background-size: 28px;
 }
 
@@ -6945,7 +6949,7 @@ h3#servicedebug + p.infohelp {
 
 h3#browseronstart + p.infohelp {
   padding: 15px 15px 15px 50px;
-  background: #fff url(/themes/console/images/info/launch_browser.png) 12px center no-repeat;
+  background: #fff url(/themes/console/images/svg/firefox.svg) 12px center no-repeat;
   background-size: 28px;
 }
 
@@ -9564,12 +9568,12 @@ b.suboption {
 }
 
 #config_reseed #reseedurl {
-  background: #fafbff url(/themes/console/images/info/url.png) 14px center no-repeat !important;
+  background: #fafbff url(/themes/console/images/svg/link.svg) 14px center no-repeat !important;
   background-size: 28px, 100%, 100% !important;
 }
 
 #config_reseed #reseedurl:hover {
-  background: #ffd url(/themes/console/images/info/url.png) 14px center no-repeat !important;
+  background: #ffd url(/themes/console/images/svg/link.svg) 14px center no-repeat !important;
   background-size: 28px !important;
 }
 
@@ -9711,7 +9715,7 @@ b.suboption {
 }
 
 #installPluginUrl td:first-child {
-  background: url(/themes/console/images/info/url.png) 12px center no-repeat !important;
+  background: url(/themes/console/images/svg/link.svg) 12px center no-repeat !important;
   padding: 15px 15px 15px 50px;
   background-size: 28px !important;
 }
@@ -10483,7 +10487,7 @@ input[type=checkbox][disabled]:checked, input[type=radio][disabled]:checked, inp
 .config_experimental::after {
   content: "";
   display: inline-block;
-  background: url(/themes/console/images/info/experimental.png) right center no-repeat;
+  background: url(/themes/console/images/svg/experimental.svg) right center no-repeat;
   background-size: 16px;
   width: 16px;
   margin-bottom: -2px;
@@ -10837,7 +10841,7 @@ div.app.js:hover::before {
 
 #browserconfig h2 {
   padding-left: 38px;
-  background: url(/themes/console/images/info/launch_browser.png) 8px center no-repeat, linear-gradient(to bottom, #fff 50%, #fafbff 50%) !important;
+  background: url(/themes/console/images/svg/firefox.svg) 8px center no-repeat, linear-gradient(to bottom, #fff 50%, #fafbff 50%) !important;
   background-size: 24px, 100%, 100%, 100% !important;
 }
 
@@ -10892,7 +10896,8 @@ div.app.js:hover::before {
 }
 
 #bannedpeercount {
-  background-image: url(/themes/console/images/info/blocked.png);
+  background-image: url(/themes/console/images/svg/ban.svg);
+  background-size: 28px;
 }
 
 .debug_pubkey {
