@@ -9,7 +9,7 @@
  */
 
 // eslint-disable-next-line sonarjs/cognitive-complexity, no-shadow-restricted-names
-;(function(undefined) {
+;(function (undefined) {
   if (typeof window === 'undefined') return // don't run for server side render
 
   var autoResize = true,
@@ -32,6 +32,7 @@
     interval = 32,
     intervalTimer = null,
     logging = false,
+    mouseEvents = false,
     msgID = '[iFrameSizer]', // Must match host page msg ID
     msgIdLen = msgID.length,
     myID = '',
@@ -53,17 +54,17 @@
     widthCalcModeDefault = 'scroll',
     widthCalcMode = widthCalcModeDefault,
     win = window,
-    onMessage = function() {
+    onMessage = function () {
       warn('onMessage function not defined')
     },
-    onReady = function() {},
-    onPageInfo = function() {},
+    onReady = function () {},
+    onPageInfo = function () {},
     customCalcMethods = {
-      height: function() {
+      height: function () {
         warn('Custom height calculation function not defined')
         return document.documentElement.offsetHeight
       },
-      width: function() {
+      width: function () {
         warn('Custom width calculation function not defined')
         return document.body.scrollWidth
       }
@@ -78,7 +79,7 @@
       {},
       {
         passive: {
-          get: function() {
+          get: function () {
             passiveSupported = true
           }
         }
@@ -109,8 +110,8 @@
       result,
       timeout = null,
       previous = 0,
-      later = function() {
-        previous = getNow()
+      later = function () {
+        previous = Date.now()
         timeout = null
         result = func.apply(context, args)
         if (!timeout) {
@@ -119,8 +120,8 @@
         }
       }
 
-    return function() {
-      var now = getNow()
+    return function () {
+      var now = Date.now()
 
       if (!previous) {
         previous = now
@@ -152,13 +153,6 @@
     }
   }
 
-  var getNow =
-    Date.now ||
-    function() {
-      /* istanbul ignore next */ // Not testable in PhantonJS
-      return new Date().getTime()
-    }
-
   function formatLogMsg(msg) {
     return msgID + '[' + myID + '] ' + msg
   }
@@ -179,7 +173,7 @@
 
   function init() {
     readDataFromParent()
-    log('Initialising iFrame (' + location.href + ')')
+    log('Initialising iFrame (' + window.location.href + ')')
     readDataFromPage()
     setMargin()
     setBodyStyle('background', bodyBackground)
@@ -189,6 +183,7 @@
     checkWidthMode()
     stopInfiniteResizingOfIFrame()
     setupPublicMethods()
+    setupMouseEvents()
     startEventListeners()
     inPageLinks = setupInPageLinks()
     sendSize('init', 'Init message from host page')
@@ -216,6 +211,7 @@
     inPageLinks.enable = undefined !== data[12] ? strBool(data[12]) : false
     resizeFrom = undefined !== data[13] ? data[13] : resizeFrom
     widthCalcMode = undefined !== data[14] ? data[14] : widthCalcMode
+    mouseEvents = undefined !== data[15] ? Boolean(data[15]) : mouseEvents
   }
 
   function depricate(key) {
@@ -311,7 +307,7 @@
 
   function manageTriggerEvent(options) {
     var listener = {
-      add: function(eventName) {
+      add: function (eventName) {
         function handleEvent() {
           sendSize(options.eventName, options.eventType)
         }
@@ -320,7 +316,7 @@
 
         addEventListener(window, eventName, handleEvent, { passive: true })
       },
-      remove: function(eventName) {
+      remove: function (eventName) {
         var handleEvent = eventHandlersByName[eventName]
         delete eventHandlersByName[eventName]
 
@@ -486,15 +482,15 @@
     }
   }
 
-  function stopMsgsToParent() {
-    log('Disable outgoing messages')
-    sendPermit = false
-  }
+  //   function stopMsgsToParent() {
+  //     log('Disable outgoing messages')
+  //     sendPermit = false
+  //   }
 
-  function removeMsgListener() {
-    log('Remove event listener: Message')
-    removeEventListener(window, 'message', receiver)
-  }
+  //   function removeMsgListener() {
+  //     log('Remove event listener: Message')
+  //     removeEventListener(window, 'message', receiver)
+  //   }
 
   function disconnectMutationObserver() {
     if (null !== bodyObserver) {
@@ -509,11 +505,11 @@
     clearInterval(intervalTimer)
   }
 
-  function teardown() {
-    stopMsgsToParent()
-    removeMsgListener()
-    if (true === autoResize) stopEventListeners()
-  }
+  //   function teardown() {
+  //     stopMsgsToParent()
+  //     removeMsgListener()
+  //     if (true === autoResize) stopEventListeners()
+  //   }
 
   function injectClearFixIntoBodyElement() {
     var clearFix = document.createElement('div')
@@ -582,8 +578,11 @@
     }
 
     function checkLocationHash() {
-      if ('' !== location.hash && '#' !== location.hash) {
-        findTarget(location.href)
+      var hash = window.location.hash
+      var href = window.location.href
+
+      if ('' !== hash && '#' !== hash) {
+        findTarget(href)
       }
     }
 
@@ -641,6 +640,22 @@
     }
   }
 
+  function setupMouseEvents() {
+    if (mouseEvents !== true) return
+
+    function sendMouse(e) {
+      sendMsg(0, 0, e.type, e.screenY + ':' + e.screenX)
+    }
+
+    function addMouseListener(evt, name) {
+      log('Add event listener: ' + name)
+      addEventListener(window.document, evt, sendMouse)
+    }
+
+    addMouseListener('mouseenter', 'Mouse Enter')
+    addMouseListener('mouseleave', 'Mouse Leave')
+  }
+
   function setupPublicMethods() {
     log('Enable public methods')
 
@@ -653,13 +668,13 @@
           autoResize = false
           stopEventListeners()
         }
-
+        sendMsg(0, 0, 'autoResize', JSON.stringify(autoResize))
         return autoResize
       },
 
       close: function closeF() {
         sendMsg(0, 0, 'close')
-        teardown()
+        // teardown()
       },
 
       getId: function getIdF() {
@@ -671,7 +686,7 @@
           onPageInfo = callback
           sendMsg(0, 0, 'pageInfo')
         } else {
-          onPageInfo = function() {}
+          onPageInfo = function () {}
           sendMsg(0, 0, 'pageInfoStop')
         }
       },
@@ -731,7 +746,7 @@
   function initInterval() {
     if (0 !== interval) {
       log('setInterval: ' + interval + 'ms')
-      intervalTimer = setInterval(function() {
+      intervalTimer = setInterval(function () {
         sendSize('interval', 'setInterval: ' + interval)
       }, Math.abs(interval))
     }
@@ -773,7 +788,7 @@
 
     function imageEventTriggered(event, type, typeDesc) {
       removeImageLoadListener(event.target)
-      sendSize(type, typeDesc + ': ' + event.target.src, undefined, undefined)
+      sendSize(type, typeDesc + ': ' + event.target.src)
     }
 
     function imageLoaded(event) {
@@ -819,7 +834,7 @@
       observer = createMutationObserver()
 
     return {
-      disconnect: function() {
+      disconnect: function () {
         if ('disconnect' in observer) {
           log('Disconnect body MutationObserver')
           observer.disconnect()
@@ -873,7 +888,7 @@
       elVal = 0,
       maxVal = 0,
       Side = capitalizeFirstLetter(side),
-      timer = getNow()
+      timer = Date.now()
 
     for (var i = 0; i < elementsLength; i++) {
       elVal =
@@ -884,7 +899,7 @@
       }
     }
 
-    timer = getNow() - timer
+    timer = Date.now() - timer
 
     log('Parsed ' + elementsLength + ' HTML elements')
     log('Element position calculated in ' + timer + 'ms')
@@ -894,12 +909,12 @@
     return maxVal
   }
 
-  function getAllMeasurements(dimention) {
+  function getAllMeasurements(dimensions) {
     return [
-      dimention.bodyOffset(),
-      dimention.bodyScroll(),
-      dimention.documentElementOffset(),
-      dimention.documentElementScroll()
+      dimensions.bodyOffset(),
+      dimensions.bodyScroll(),
+      dimensions.documentElementOffset(),
+      dimensions.documentElementScroll()
     ]
   }
 
@@ -911,7 +926,7 @@
 
     var elements = document.querySelectorAll('[' + tag + ']')
 
-    if (0 === elements.length) noTaggedElementsFound()
+    if (elements.length === 0) noTaggedElementsFound()
 
     return getMaxElement(side, elements)
   }
@@ -929,7 +944,7 @@
         )
       },
 
-      offset: function() {
+      offset: function () {
         return getHeight.bodyOffset() // Backwards compatability
       },
 
@@ -1113,7 +1128,7 @@
       log('Trigger event lock on')
     }
     clearTimeout(triggerLockedTimer)
-    triggerLockedTimer = setTimeout(function() {
+    triggerLockedTimer = setTimeout(function () {
       triggerLocked = false
       log('Trigger event lock off')
       log('--')
@@ -1175,7 +1190,7 @@
 
         init()
         firstRun = false
-        setTimeout(function() {
+        setTimeout(function () {
           initLock = false
         }, eventCancelTimer)
       },
@@ -1284,5 +1299,5 @@
   addEventListener(window, 'readystatechange', chkLateLoaded)
   chkLateLoaded()
 
-  
+
 })()

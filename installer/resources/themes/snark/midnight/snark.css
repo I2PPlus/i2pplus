@@ -161,7 +161,7 @@ td input[type="image"]::after {
   color: #040033;
   border: 1px solid #26235c;
   border-radius: 0 0 2px 2px;
-  background: #030;
+  background: #003;
 }
 
 .iframed .page {
