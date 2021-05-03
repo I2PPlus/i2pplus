@@ -32,7 +32,7 @@ class TunnelGatewayPumper implements Runnable {
      *  See additional comments in PTG.
      */
 //    private static final long REQUEUE_TIME = 50;
-    private static final long REQUEUE_TIME = SystemVersion.getMaxMemory() < 1024*1024*1024 ? 50 : 70;
+    private static final long REQUEUE_TIME = SystemVersion.getMaxMemory() < 1024*1024*1024 ? 50 : 60;
 
     private static final TryCache<List<PendingGatewayMessage>> _bufferCache = new TryCache<>(new BufferFactory(), 16);
 

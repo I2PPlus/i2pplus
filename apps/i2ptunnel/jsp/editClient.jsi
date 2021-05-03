@@ -609,7 +609,7 @@ minutes</span>
           } // if httpclient
           if ("httpclient".equals(tunnelType) || "connectclient".equals(tunnelType) || "sockstunnel".equals(tunnelType) || "socksirctunnel".equals(tunnelType)) {
 %>
-<tr><th colspan="2"><%=intl._t("Local Authorization")%></th></tr>
+<tr><th><%=intl._t("Local Authorization")%></th><th><%=intl._t("Local Credentials")%></th></tr>
 <tr>
 <td>
 <label title="<%=intl._t("Enable to require a username and password to access this local service (for example if hosting on a LAN)")%>">
@@ -624,7 +624,7 @@ minutes</span>
 <input type="password" name="nofilter_proxyPassword" title="<%=intl._t("Set password required to access this service")%>" value="" class="freetext password" placeholder="<%=intl._t("Password")%>" />
 </td>
 </tr>
-<tr><th colspan="2"><%=intl._t("Outproxy Authorization")%></th></tr>
+<tr><th><%=intl._t("Outproxy Authorization")%></th><th><%=intl._t("Remote Credentials")%></th></tr>
 <tr>
 <td>
 <label title="<%=intl._t("Enable if the outproxy a username and password to access")%>">
