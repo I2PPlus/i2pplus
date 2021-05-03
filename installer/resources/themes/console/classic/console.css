@@ -6803,7 +6803,8 @@ p.sybilinfo {
 }
 
 p.sybilinfo.experimental {
-  background: #fff url(/themes/console/images/info/experimental.png) 12px center no-repeat;
+  background: #fff url(/themes/console/images/svg/experimental.svg) 12px center no-repeat;
+  background-size: 28px;
 }
 
 @media screen and (max-width: 1200px) {
@@ -10483,7 +10484,7 @@ input[type=checkbox][disabled]:checked, input[type=radio][disabled]:checked, inp
 .config_experimental::after {
   content: "";
   display: inline-block;
-  background: url(/themes/console/images/info/experimental.png) right center no-repeat;
+  background: url(/themes/console/images/svg/experimental.svg) right center no-repeat;
   background-size: 16px;
   width: 16px;
   margin-bottom: -2px;
