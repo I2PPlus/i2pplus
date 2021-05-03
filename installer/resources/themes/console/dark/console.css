@@ -7213,7 +7213,7 @@ p#enablefullstats, p#gatherstats {
 
 #config_family .infohelp {
   padding: 15px 15px 15px 50px;
-  background: #000 url(/themes/console/images/info/family.png) 12px center no-repeat !important;
+  background: #000 var(--family) 12px center no-repeat !important;
   background-size: 28px !important;
 }
 

@@ -1424,25 +1424,25 @@ input.reload:hover, input.reload:focus {
 
 input.search {
   padding: 5px 8px 5px 24px;
-  background: #eee url(/themes/console/images/buttons/search.png) no-repeat 6px center;
-  background: url(/themes/console/images/buttons/search.png) no-repeat 6px center, linear-gradient(to bottom, #fff, #efefff);
+  background: url(/themes/console/images/svg/search.svg) no-repeat 6px center, linear-gradient(to bottom, #fff, #efefff);
   background-size: 14px, 100%;
 }
 
 input.search:hover, input.search:focus {
-  background: #fff url(/themes/console/images/buttons/search_hover.png) no-repeat 6px center;
-  background: url(/themes/console/images/buttons/search_hover.png) no-repeat 6px center, linear-gradient(to bottom, #eee, #fff);
+  background: url(/themes/console/images/svg/search.svg) no-repeat 6px center, linear-gradient(to bottom, #eee, #fff);
   background-size: 14px, 100%;
 }
 
 input.search[type=text] {
   margin: 1px 0 0;
   padding: 5px 5px 5px 26px !important;
-  background: #fbfbff url(/themes/console/images/buttons/search.png) no-repeat 6px center;
+  background: #fbfbff url(/themes/console/images/svg/search.svg) no-repeat 6px center;
+  background-size: 14px !important;
 }
 
 input.search[type=text]:focus {
-  background: #fff url(/themes/console/images/buttons/search.png) no-repeat 6px center !important;
+  background: #fff url(/themes/console/images/svg/search.svg) no-repeat 6px center !important;
+  background-size: 14px !important;
 }
 
 #visualid .fakebutton {
