@@ -3485,15 +3485,15 @@ h4.app, h4.app2 {
 }
 
 h4.app {
-  background: url(/themes/console/images/eepsite.png) 10px center no-repeat, var(--h3), linear-gradient(to right, #fcfcff 5%, rgba(231, 231, 255, .8) 25%) #f8f8ff !important;
-  background-size: 16px, 100%, 100% !important;
   margin-top: 15px;
+  background: url(images/favicon.svg) 10px center no-repeat, var(--h3), linear-gradient(to right, #fcfcff 5%, rgba(231, 231, 255, .8) 25%) #f8f8ff !important;
+  background-size: 16px, 100%, 100% !important;
 }
 
 h4.app2 {
   clear: left;
   margin-top: 10px !important;
-  background: url(images/globe.png) 10px center no-repeat, var(--h3), linear-gradient(to right, #fcfcff 5%, rgba(231, 231, 255, .8) 25%) #f8f8ff !important;
+  background: var(--globe) 10px center no-repeat, var(--h3), linear-gradient(to right, #fcfcff 5%, rgba(231, 231, 255, .8) 25%) #f8f8ff !important;
   background-size: 16px, 100%, 100% !important;
 }
 
@@ -4526,7 +4526,7 @@ h2 {
 #console .welcome h2 { /* fixes occluded langbox rendering bug */
   white-space: nowrap;
   box-shadow: var(--highlight), 0 0 1px rgba(220,220,220,.3);
-  background: url(/themes/console/images/eepsite.png) right 8px center no-repeat, var(--h2) !important;
+  background: url(images/favicon.svg) right 8px center no-repeat, var(--h2) !important;
   background-size: 20px, 100%, 100% !important;
   background-blend-mode: luminosity, normal, normal;
   filter: none;
@@ -9921,7 +9921,7 @@ a[href^="configpeer?peer"]:hover::after {
 
 .subheading.routerfiles {
   padding-left: 10px !important;
-  background: url(/themes/console/images/eepsite.png) right 7px center no-repeat, linear-gradient(to right, #7e7fb9 5px, #fafaff 5px, #eef) !important;
+  background: url(images/favicon.svg) right 7px center no-repeat, linear-gradient(to right, #7e7fb9 5px, #fafaff 5px, #eef) !important;
   background-size: 16px, 100% !important;
 }
 
@@ -9945,7 +9945,7 @@ a[href^="configpeer?peer"]:hover::after {
 
 .subheading.routerfiles {
   padding-left: 5px !important;
-  background: url(/themes/console/images/eepsite.png) right 5px center no-repeat, linear-gradient(to right, #fafaff, #eef) !important;
+  background: url(images/favicon.svg) right 5px center no-repeat, linear-gradient(to right, #fafaff, #eef) !important;
   background-size: 16px, 100% !important;
   box-shadow: none !important;
 }
@@ -12350,6 +12350,10 @@ th[aria-sort] {
 #peers .ipv6, #peers .rto, #peers .mtu, #peers .sst, #peers .cwnd, #peers .rtt {
   display: none;
 }
+}
+
+#peers img[src$="bound.svg"] {
+  opacity: 0;
 }
 
 /* link icons for new user guide */

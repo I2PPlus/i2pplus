@@ -9117,6 +9117,10 @@ img + tt {
   font-size: 0;
 }
 
+#peers img[src$="bound.svg"] {
+  opacity: 0;
+}
+
 .peersort {
   text-align: center;
   display: inline-block;
@@ -14125,24 +14129,24 @@ to {
 }
 
 @media screen and (max-width: 1200px) {
-#tunnels #peercount img {
-  margin: -2px -4px;
-}
+  #tunnels #peercount img {
+    margin: -2px -4px;
+  }
 
-#tunnels .percentBarOuter, #tunnels .percentBarText {
-  margin: 0 2px;
-  width: 70px;
-}
+  #tunnels .percentBarOuter, #tunnels .percentBarText {
+    margin: 0 2px;
+    width: 70px;
+  }
 }
 
 @media screen and (min-width: 1500px) {
-#tunnels .tab, #tunnels .tab2 {
-  line-height: 1.3 !important;
-}
+  #tunnels .tab, #tunnels .tab2 {
+    line-height: 1.3 !important;
+  }
 
-#help .tab, #help .tab2 {
-  margin-top: -1px !important;
-}
+  #help .tab, #help .tab2 {
+    margin-top: -1px !important;
+  }
 }
 
 #tunnels .left, #tunnels .right {

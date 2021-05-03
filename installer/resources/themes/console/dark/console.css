@@ -5711,7 +5711,7 @@ h3#bannedpeers {
 }
 
 #console .welcome h2 {
-  background: url(/themes/console/images/eepsite.png) right 6px center no-repeat, var(--h3), linear-gradient(to bottom, rgba(0,0,0,0) 50%, #000 50%), var(--h3_fade) !important;
+  background: url(images/favicon.svg) right 6px center no-repeat, var(--h3), linear-gradient(to bottom, rgba(0,0,0,0) 50%, #000 50%), var(--h3_fade) !important;
   background-size: 24px, 100%, 100% !important;
   background-blend-mode: luminosity, normal, normal;
 }
@@ -5733,7 +5733,7 @@ h3#bannedpeers {
 }
 
 h4.app {
-  background: url(/themes/console/images/eepsite.png) 8px center no-repeat, var(--h1) !important;
+  background: url(images/favicon.svg) 8px center no-repeat, var(--h1) !important;
   background-size: 18px, 4px 100%, 100%, 175px !important;
   background-blend-mode: var(--h3_blend) !important;
 }
@@ -6881,6 +6881,10 @@ p#webappconfigtext {
 #peerdefs img[width="12"] {
   margin-right: 3px;
   margin-left: 2px;
+}
+
+#peers img[src$="bound.svg"] {
+  opacity: 0;
 }
 
 #peerdefs td {
@@ -8403,7 +8407,7 @@ th code {
 }
 
 .subheading.routerfiles {
-  background: url(/themes/console/images/eepsite.png) right 5px center no-repeat, linear-gradient(to right, #000, #001000 40%) !important;
+  background: url(images/favicon.svg) right 5px center no-repeat, linear-gradient(to right, #000, #001000 40%) !important;
   background-size: 16px, 100% !important;
   background-blend-mode: luminosity, normal;
 }
@@ -11299,7 +11303,7 @@ h1[class], h1 {
 
 .consolelink {
   padding: 0 3px 0 18px;
-  background: rgba(0,64,0,.3) url(/themes/console/images/eepsite.png) 3px center no-repeat;
+  background: rgba(0,64,0,.3) url(images/favicon.svg) 3px center no-repeat;
   background-size: 12px, 100% !important;
 }
 
@@ -11311,14 +11315,17 @@ h1[class], h1 {
 
 .sitelink:hover {
   background: var(--link) 2px center no-repeat, linear-gradient(to bottom, #020 50%, #000 50%);
+  background-size: 12px, 100% !important;
 }
 
 .consolelink:hover {
-  background:url(/themes/console/images/eepsite.png) 3px center no-repeat, linear-gradient(to bottom, #020 50%, #000 50%);
+  background: url(images/favicon.svg) 3px center no-repeat, linear-gradient(to bottom, #020 50%, #000 50%);
+  background-size: 12px, 100% !important;
 }
 
 .sitelink.external:hover {
   background: var(--globe) 3px center no-repeat, linear-gradient(to bottom, #020 50%, #000 50%);
+  background-size: 12px, 100% !important;
 }
 
 .chatlink:hover {
@@ -11640,7 +11647,7 @@ h2#jobrunners {
   padding-left: 35px;
   letter-spacing: .12em;
   font-size: 10.5pt;
-  background: url(/themes/console/images/eepsite.png) 9px center no-repeat, var(--h1) !important;
+  background: url(images/favicon.svg) 9px center no-repeat, var(--h1) !important;
   background-size: 18px, 4px 100%, 100%, 175px !important;
   background-blend-mode: var(--h3_blend) !important;
 }
