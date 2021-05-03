@@ -25,7 +25,7 @@
 <jsp:useBean class="net.i2p.router.web.CSSHelper" id="intl" scope="request" />
 <jsp:setProperty name="intl" property="contextId" value="<%=(String)session.getAttribute(\"i2p.contextId\")%>" />
 <link rel="preload" href="/themes/fonts/DroidSans.css" as="style">
-<link rel="icon" href="<%=intl.getTheme(request.getHeader("User-Agent"))%>images/favicon.ico">
+<link rel="icon" href="<%=intl.getTheme(request.getHeader("User-Agent"))%>images/favicon.svg">
 <%
    String nonce = Integer.toHexString(net.i2p.util.RandomSource.getInstance().nextInt());
 %>

@@ -46,13 +46,13 @@
 <head>
 <title><%=intl._t("I2P Tunnel Manager - Tunnel Creation Wizard")%></title>
 <meta charset="utf-8">
-<style type="text/css"> body {opacity: 0;}</style>
-<link type="image/x-icon" rel="shortcut icon" href="<%=editBean.getTheme()%>images/favicon.ico" />
+<link rel="icon" href="<%=editBean.getTheme()%>images/favicon.svg">
 <script type="text/javascript" src="/js/iframeResizer/iframeResizer.contentWindow.js?<%=net.i2p.CoreVersion.VERSION%>"></script>
-<link href="<%=editBean.getTheme()%>i2ptunnel.css?<%=net.i2p.CoreVersion.VERSION%>" rel="stylesheet" type="text/css" />
-<link href="<%=editBean.getTheme()%>override.css?<%=net.i2p.CoreVersion.VERSION%>" rel="stylesheet" type="text/css" />
+<link href="<%=editBean.getTheme()%>i2ptunnel.css?<%=net.i2p.CoreVersion.VERSION%>" rel="stylesheet" type="text/css">
+<link href="<%=editBean.getTheme()%>override.css?<%=net.i2p.CoreVersion.VERSION%>" rel="stylesheet" type="text/css">
 </head>
 <body id="tunnelWizardPage">
+<style type="text/css">body{opacity:0}</style>
 <form method="post" action="<%=(curPage == 7 ? "list" : "wizard") %>">
 <div id="wizardPanel" class="panel">
 <%
