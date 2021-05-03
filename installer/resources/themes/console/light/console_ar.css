@@ -928,8 +928,9 @@ table.leaseset:last-child, .netdbentry:last-child, #profile_defs {
 }
 
 #sybilnav li {
-  background: url(images/eye.png) right 5px center no-repeat, linear-gradient(to right, #eef 30%, #fff);
   padding: 3px 24px 3px 3px;
+  background: var(--eye) right 5px center no-repeat, linear-gradient(to right, #eef 30%, #fff);
+  background-size: 16px, 100%;
 }
 
 .threatpoints + ul li {
