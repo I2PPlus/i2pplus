@@ -444,7 +444,7 @@ a.control {
 
 select {
   margin: 4px !important;
-  padding: 4px 24px 4px 4px !important;
+  padding: 5px 24px 5px 5px !important;
   min-width: 140px;
   background: #fff;
   background: url(images/dropdown.svg) right 8px center no-repeat, linear-gradient(to bottom, #fff, #efefff);
@@ -939,46 +939,43 @@ input.tunnelName, input.tunnelDescriptionText, #userAgents, .freetext.tunnelDesc
 }
 
 .username, .password, .clientName, .clientKey, .filemanager {
-  padding-left: 22px !important;
+  padding-left: 30px !important;
   background-blend-mode: luminosity;
 }
 
-.filemanager {
-  padding-left: 25px !important;
- }
-
 .username, .clientName {
-  background: var(--user) 5px center no-repeat #fafaff;
-  background-size: 14px;
+  background: var(--user) 8px center no-repeat #fafaff;
+  background-size: 15px;
 }
 
 .password, .clientKey {
-  background: var(--key) 5px center no-repeat #fafaff;
-  background-size: 14px;
+  background: var(--key) 8px center no-repeat #fafaff;
+  background-size: 15px;
 }
 
 .filemanager {
-  background: var(--files) 5px center no-repeat #fafaff;
-  background-size: 14px;
+  background: var(--files) 8px center no-repeat #fafaff;
+  background-size: 15px;
 }
 
 .username:focus, .password:focus, .clientName:focus, .clientKey:focus, .filemanager:focus {
+  padding-left: 30px !important;
   background-blend-mode: normal;
 }
 
 .username:focus, .clientName:focus {
-  background: var(--user) 5px center no-repeat #fff;
-  background-size: 14px;
+  background: var(--user) 8px center no-repeat #fff;
+  background-size: 15px;
 }
 
 .password:focus, .clientKey:focus {
-  background: var(--key) 5px center no-repeat #fff;
-  background-size: 14px;
+  background: var(--key) 8px center no-repeat #fff;
+  background-size: 15px;
 }
 
 .filemanager:focus {
-  background: var(--files) 5px center no-repeat #fff;
-  background-size: 16px;
+  background: var(--files) 8px center no-repeat #fff;
+  background-size: 15px;
 }
 
 #notReady, #notFound, #down {
