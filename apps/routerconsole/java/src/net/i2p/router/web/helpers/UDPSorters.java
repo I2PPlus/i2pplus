@@ -291,16 +291,16 @@ class UDPSorters {
         } else if (sortFlags == ascending) {
             buf.append(" <span class=\"sortdown\"><a href=\"").append(urlBase).append("?transport=ssu&amp;sort=").append(0-ascending);
             buf.append("\" title=\"").append(descr).append("\"><img src=\"/themes/console/images/inbound.svg\" alt=\"V\"></a></span>" +
-                       "<span class=\"sortupactive\"><b><img src=\"/themes/console/images/outbound.png\" alt=\"^\"></b></span>");
+                       "<span class=\"sortupactive\"><b><img src=\"/themes/console/images/outbound.svg\" alt=\"^\"></b></span>");
         } else if (sortFlags == 0 - ascending) {
             buf.append(" <span class=\"sortdownactive\"><b><img src=\"/themes/console/images/inbound.svg\" alt=\"V\"></b></span><span class=\"sortup\"><a href=\"")
                .append(urlBase).append("?transport=ssu&amp;sort=").append(ascending);
-            buf.append("\" title=\"").append(descr).append("\"><img src=\"/themes/console/images/outbound.png\" alt=\"^\"></a></span>");
+            buf.append("\" title=\"").append(descr).append("\"><img src=\"/themes/console/images/outbound.svg\" alt=\"^\"></a></span>");
         } else {
             buf.append(" <span class=\"sortdown\"><a href=\"").append(urlBase).append("?transport=ssu&amp;sort=").append(0-ascending);
             buf.append("\" title=\"").append(descr).append("\"><img src=\"/themes/console/images/inbound.svg\" alt=\"V\"></a></span>" +
                        "<span class=\"sortup\"><a href=\"").append(urlBase).append("?transport=ssu&amp;sort=").append(ascending);
-            buf.append("\" title=\"").append(descr).append("\"><img src=\"/themes/console/images/outbound.png\" alt=\"^\"></a></span>");
+            buf.append("\" title=\"").append(descr).append("\"><img src=\"/themes/console/images/outbound.svg\" alt=\"^\"></a></span>");
         }
     }
 }
