@@ -11511,7 +11511,7 @@ to {
   overflow: hidden;
   text-overflow: ellipsis;
   text-transform: capitalize;
-  color: #484e6a;
+  color: #5b5b71;
 }
 
 .optbox:not(:checked) + label > .stattograph b {
@@ -11530,7 +11530,7 @@ to {
 }
 
 .optbox:checked + label > .stattograph:hover b {
-  color: #484e6a !important;
+  color: #5b5b71 !important;
 }
 
 .stattograph:hover, .optbox:checked + label > .stattograph:hover {
@@ -12446,3 +12446,7 @@ from {
 }
 
 /* end lazy loading */
+
+#peers img[src$="bound.svg"], #profiles img[src$="bound.svg"], #tunnels img[src$="bound.svg"] {
+  opacity: 0;
+}

@@ -6883,7 +6883,7 @@ p#webappconfigtext {
   margin-left: 2px;
 }
 
-#peers img[src$="bound.svg"] {
+#peers img[src$="bound.svg"], #profiles img[src$="bound.svg"], #tunnels img[src$="bound.svg"] {
   opacity: 0;
 }
 
