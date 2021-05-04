@@ -3221,7 +3221,6 @@ to {
   border: 1px solid #83529f;
   background: #000;
   opacity: 1;
-/*  cursor: url(/themes/console/images/cursor_zoom.png), auto;*/
   cursor: zoom-in;
   transition: ease border 0.2s;
 }
@@ -3351,10 +3350,6 @@ h3#graphdisplay a {
   min-width: 60px;
 }
 
-#graph_single {
-  background-size: auto 100px !important;
-}
-
 /* end graphs */
 
 table {
@@ -3363,7 +3358,6 @@ table {
   width: 100%;
   font-size: 9pt;
   border-collapse: collapse;
-  border: var(--innerborder);
   border: var(--innerborder);
 }
 
