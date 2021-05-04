@@ -3849,7 +3849,6 @@ input[type=submit]:hover, input[type=submit]:focus, input[type=submit]:active,
 input[type=reset]:hover, input[type=reset]:focus, input[type=reset]:active,
 button:hover, button:focus, button:active, select:hover, select:focus, select:active, .graphspanel a {
   text-shadow: none;
-  transition: none;
 }
 
 a:link, a:visited {
@@ -4961,7 +4960,7 @@ button:active, input[type=submit]:active, input[type=reset]:active {
   color: #4c526f;
   box-shadow: var(--highlight), inset 2px 2px 2px #555;
   background-blend-mode: luminosity;
-  transition: ease box-shadow .05s;
+  transition: none;
 }
 
 button a:active {
@@ -5000,13 +4999,15 @@ input.accept[value^="Create"]:focus, button.accept[value^="Create"]:focus {
 }
 
 input.accept[value^="Filter"], button.accept[value^="Filter"] {
-  padding: 5px 9px 5px 24px;
-  background: url(/themes/console/images/buttons/filter.png) no-repeat 8px center, var(--button);
+  padding: 5px 9px 5px 27px;
+  background: var(--filter) no-repeat 8px center, var(--button);
+  background-size: 16px, 100%;
 }
 
 input.accept[value^="Filter"]:hover, button.accept[value^="Filter"]:hover,
 input.accept[value^="Filter"]:focus, button.accept[value^="Filter"]:focus {
-  background: url(/themes/console/images/buttons/filter.png) no-repeat 8px center, var(--button_hover);
+  background: var(--filter) no-repeat 8px center, var(--button_hover);
+  background-size: 16px, 100%;
 }
 
 input.add, button.add {
