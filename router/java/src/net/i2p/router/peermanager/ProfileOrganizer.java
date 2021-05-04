@@ -632,7 +632,7 @@ public class ProfileOrganizer {
 //                _log.debug("Need " + howMany + " High Capacity peers for tunnel build; " + matches.size() + " found - selecting remainder from Not Failing peers");
 //            selectActiveNotFailingPeers2(howMany, exclude, matches, mask);
                 _log.debug("Need " + howMany + " High Capacity peers for tunnel build; " + matches.size() + " found - selecting remainder from Fast peers");
-            selectFastPeers(howMany, exclude, matches, mask);
+            selectWellIntegratedPeers(howMany, exclude, matches, mask);
         } else {
             if (_log.shouldLog(Log.DEBUG))
                 _log.debug(howMany + " High Capacity peers selected for tunnel build");

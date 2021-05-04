@@ -19,7 +19,7 @@ body {
   padding: 0;
   text-align: center;
   font-family: var(--bodyfont);
-  color: #393947;
+  color: #4f4f63;
   font-size: 9pt;
   background: #a4a4cb url(images/tile2.png) fixed;
   background-size: 32px;
@@ -65,7 +65,7 @@ button, h1, h2, h3, th, .control, .newTunnel, .buttons {
 }
 
 b {
-  color: #484e6a;
+  color: #5b5b71;
 }
 
 a {
@@ -117,7 +117,7 @@ label:hover {
 }
 
 .editDisabled label, .editDisabled label:hover {
-  color: #484e6a;
+  color: #5b5b71;
 }
 
 .editDisabled .optbox:checked + span {
@@ -142,7 +142,7 @@ button, input[type=submit], input[type="reset"], a.control, .freetext, textarea,
 
 textarea {
   font-family: var(--monospaced);
-  color: #393947;
+  color: #4f4f63;
   border: 1px solid #97a2ce;
   border-radius: 2px;
   box-shadow: inset 1px 1px 1px rgba(204, 204, 204, .6);
@@ -193,7 +193,7 @@ textarea#statusMessages:focus {
 }
 
 #filter input::placeholder {
-  color: #393947;
+  color: #4f4f63;
   opacity: .4;
 }
 
@@ -261,9 +261,8 @@ hr {
   border: 1px solid #97a2ce;
   padding: 5px 8px !important;
   background: #fbfbff;
-  color: #393947;
+  color: #4f4f63;
   border-radius: 2px;
-  box-shadow: var(--highlight), inset 3px 3px 3px rgba(0,0,48,.2);
 }
 
 @supports not (-moz-appearance: none) {
@@ -287,6 +286,10 @@ hr {
   background: #e9e9e9;
   background: repeating-linear-gradient(135deg, rgba(255,255,255,.5) 2px, rgba(220, 220, 255, .3) 3px, #fafaff 4px), #fafaff;
   filter: none;
+}
+
+input[type=text][readonly] {
+  box-shadow: inset 1px 1px 1px rgba(204, 204, 204, .6) !important;
 }
 
 .clientKey[readonly] {
@@ -317,7 +320,7 @@ hr {
   text-decoration: none;
   font-style: normal;
   font-weight: normal;
-  color: #393947;
+  color: #4f4f63;
   border: 1px solid #97a2ce;
   border-radius: 2px;
   background: #eee;
@@ -450,7 +453,7 @@ select {
   background: #fff;
   background: var(--dropdown) right 8px center no-repeat, linear-gradient(to bottom, #fff, #efefff);
   background-size: 10px, 100% !important;
-  color: #393947;
+  color: #4f4f63;
   font-family: var(--bodyfont);
   font-size: 9pt;
   border: 1px solid #97a2ce;
@@ -511,7 +514,7 @@ h2, h3 {
   text-transform: uppercase;
   letter-spacing: .12em;
   word-spacing: .1em;
-  color: #484e6a;
+  color: #5b5b71;
   border: 1px solid #8d8daa;
   border-radius: 2px 2px 0 0;
   box-shadow: inset 0 0 0 1px #fff;
@@ -590,7 +593,7 @@ th {
   padding: 6px 5px;
   text-align: left;
   font-size: 9.5pt;
-  color: #484e6a;
+  color: #5b5b71;
   border-bottom: 1px solid #8d8daa;
   border-top: 1px solid #8d8daa;
   background: linear-gradient(to bottom, #fcfcff 51%, #fafaff 51%, #f6f6ff 100%) !important;
@@ -921,9 +924,14 @@ input:focus::-moz-placeholder {
 input.tunnelName, input.tunnelDescriptionText, #userAgents, .freetext.tunnelDescription,
 #websiteName, #localDest, #altlocaldest, .proxyList, #targetDestination, #leasesetKey {
   width: 80%;
-  width: calc(100% - 20px) !important;
+  width: calc(100% - 28px) !important;
   min-width: 280px !important;
   text-overflow: ellipsis;
+}
+
+input.tunnelName, input.tunnelDescriptionText, #userAgents, .freetext.tunnelDescription,
+#websiteName, #localDest, #altlocaldest, .proxyList, #targetDestination, #leasesetKey, input[type=text]:not([readonly]) {
+  box-shadow: var(--highlight), inset 3px 3px 3px rgba(0,0,48,.2);
 }
 
 #targetHost, .host {
@@ -1030,7 +1038,7 @@ input.tunnelName, input.tunnelDescriptionText, #userAgents, .freetext.tunnelDesc
   min-width: 150px;
   text-align: right;
   white-space: nowrap;
-  color: #484e6a;
+  color: #5b5b71;
 }
 
 #wizardTunnelTypes td:last-child {
@@ -1083,7 +1091,7 @@ input.tunnelName, input.tunnelDescriptionText, #userAgents, .freetext.tunnelDesc
   font-weight: bold;
   text-align: right;
   margin-right: 10px;
-  color: #484e6a;
+  color: #5b5b71;
 }
 
 #wizardPanel select {
@@ -1135,7 +1143,7 @@ textarea[name="accessList"], #hostField, #localDestination, .authentication {
 }
 
 .tunnelDestination b, .tunnelDescription b {
-  color: #484e6a;
+  color: #5b5b71;
 }
 
 .tunnelInfo {
@@ -1431,7 +1439,6 @@ input[name="nofilter_blindedPassword"] {
 @supports not (-moz-appearance: none) {
 textarea, input[type=text], .displayText, *[readonly] {
   filter: none !important;
-  box-shadow: 0 0 1px #ccf;
 }
 
 table {
@@ -1462,7 +1469,8 @@ tr {
 }
 
 #keyringManager {
-  padding: 2px 3px 2px 22px;
+  margin: -2px 0;
+  padding: 3px 3px 3px 22px;
   float: right;
   display: inline-block;
   font-size: 90%;
@@ -1585,9 +1593,9 @@ tr {
 
 select[disabled], select[disabled]:hover, select[disabled]:focus, select[disabled]:active, #sigtype[disabled] {
   margin: 0 !important;
-  padding: 0 0 0 3px !important;
+  padding: 2px 0 2px 3px !important;
   font-weight: normal !important;
-  color: #393947 !important;
+  color: #4f4f63 !important;
   border: none !important;
   box-shadow: none !important;
   background: none !important;
@@ -1605,7 +1613,7 @@ select[disabled], select[disabled]:hover, select[disabled]:focus, select[disable
 }
 
 #clientAuth th:nth-child(2), #clientAuth td:nth-child(2) {
-  width: auto ;
+  width: auto;
 }
 
 #clientAuth td:last-child {
@@ -1634,7 +1642,7 @@ select[disabled], select[disabled]:hover, select[disabled]:focus, select[disable
   width: calc(100% - 38px) !important;
 }
 
-#filterDefinition, .freetext.filemanager {
+#filterDefinition, .freetext.filemanager, #privKeyFile {
   width: calc(100% - 50px) !important;
 }
 

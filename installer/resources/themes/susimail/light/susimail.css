@@ -7,7 +7,7 @@
 
 body {
   margin: 5px;
-  color: #393947;
+  color: #4f4f63;
   font-family: Droid Sans, Open Sans, Noto Sans, Ubuntu, Bitstream Vera Sans, Segoe UI, Verdana, Lucida Grande, Helvetica, sans-serif;
   font-size: 9pt;
   background: #a4a4cb url(/themes/console/light/images/tile2.png);
@@ -71,12 +71,12 @@ body.iframed {
 }
 
 b, h3, .pagenav td, th {
-  color: #484e6a;
+  color: #5b5b71;
   text-shadow: 0 1px 1px #fff;
 }
 
 li {
-  color: #393947;
+  color: #4f4f63;
   line-height: 12pt;
   font-size: 8.5pt;
   margin-left: 5px;
@@ -84,7 +84,7 @@ li {
 }
 
 p {
-  color: #393947;
+  color: #4f4f63;
   margin-left: 15px;
   margin-right: 15px;
   font-size: 8.5pt;
@@ -251,7 +251,7 @@ pre {
   line-height: 160% !important;
   text-align: center;
   font-size: 8.5pt !important;
-  color: #393947;
+  color: #4f4f63;
   box-shadow: inset 0 0 0 1px rgba(185,185,198,.65);
   border: 1px solid #575775;
   border-radius: 2px 2px 0 0;
@@ -350,7 +350,7 @@ form {
   min-width: 60px;
   white-space: nowrap;
   font-weight: bold;
-  color: #484e6a;
+  color: #5b5b71;
 }
 
 /* end message view */
@@ -387,7 +387,7 @@ input[type=submit], input[type=reset], #settings, .fakebutton {
   font: 9pt Droid Sans, Open Sans, Noto Sans, Ubuntu, Bitstream Vera Sans, Segoe UI, Verdana, Lucida Grande, Helvetica, sans-serif;
   text-decoration: none;
   text-shadow: 0 1px 1px #fff;
-  color: #393947 !important;
+  color: #4f4f63 !important;
   border: 1px solid #9ea8d1;
   border-radius: 2px;
   box-shadow: inset 0 0 0 1px #fff;
@@ -955,7 +955,7 @@ input[type=text], input[type=password], textarea {
   box-shadow: inset 1px 1px 1px rgba(204, 204, 204, .6);
   border: 1px solid #9ea8d1;
   border-radius: 2px;
-  color: #393947;
+  color: #4f4f63;
   filter: drop-shadow(0 0 1px rgba(220,220,255,.7));
 }
 
@@ -1024,7 +1024,7 @@ hr {
 #dologin td {
   padding: 3px;
   font-weight: bold;
-  color: #484e6a;
+  color: #5b5b71;
 }
 
 #dologin td:first-child {
@@ -1190,7 +1190,7 @@ h3#config {
   display: inline-block;
   line-height: 150%;
   text-transform: lowercase;
-  color: #484e6a;
+  color: #5b5b71;
   font-weight: normal;
   border: 1px solid #bbd;
   border-radius: 2px;
@@ -1435,12 +1435,12 @@ td p.error {
 
 #newmail td:first-child {
   font-weight: bold;
-  color: #484e6a;
+  color: #5b5b71;
   padding-right: 3px;
 }
 
 #newmail label:hover {
-  color: #393947;
+  color: #4f4f63;
 }
 
 /* end compose mail */
@@ -1575,7 +1575,7 @@ tr.pagenavcontrols:hover .pagenavcontrols td, .topbuttons td, .topbuttons:hover 
 }
 
 td {
-  color: #393947;
+  color: #4f4f63;
   font-size:9pt;
   padding: 1px 3px;
 }
@@ -1615,7 +1615,7 @@ _:-ms-lang(x), tr.list0:hover, tr.list1:hover {
 }
 
 .list0:hover td, .list1:hover td {
-  color: #393947;
+  color: #4f4f63;
   box-shadow: inset 0 0 0 1px #ffe;
   background: rgba(255,255,255,0);
 }
@@ -1677,7 +1677,7 @@ _:-ms-lang(x), tr.list0:hover, tr.list1:hover {
 }
 
 #mailbox td {
-  color: #484e6a !important;
+  color: #5b5b71 !important;
 }
 
 #mailbox tr td {
@@ -1691,7 +1691,7 @@ _:-ms-lang(x), tr.list0:hover, tr.list1:hover {
 
 td.mailListSender a, td.mailListSender a:hover {
   font-weight: normal;
-  color: #484e6a !important;
+  color: #5b5b71 !important;
   line-height: 120%;
 }
 
@@ -1707,7 +1707,7 @@ td.mailListSender, tr:hover td.mailListSender {
 }
 
 #mailbox tr:hover .mailListSender a {
-  color: #393947 !important;
+  color: #4f4f63 !important;
 }
 
 .mailListSubject {
@@ -1809,7 +1809,7 @@ th.mailListDate {
   min-width: 64px;
   text-align: right;
   font-weight: bold;
-  color: #484e6a;
+  color: #5b5b71;
   border: 1px solid #bbc;
   border-radius: 2px;
   box-shadow: inset 0 0 0 1px #fff;
@@ -1869,7 +1869,7 @@ td.mailListSize {
 
 tr:hover .listSize {
   border: 1px solid #afafcf;
-  color: #393947;
+  color: #4f4f63;
 }
 
 .listSizeUnit {
@@ -2054,7 +2054,7 @@ select {
   min-width: 120px;
   text-align: left !important;
   font-size: 9pt;
-  color: #484e6a;
+  color: #5b5b71;
   border: 1px solid #97a2ce;
   border-radius: 2px;
   box-shadow: 0 2px 0 rgba(255,255,255,.85) inset, 0 0 10px rgba(0,0,0,.1) inset, 0 1px 1px rgba(0,0,0,.05), 0 7px 4px -4px rgba(0,0,0,.1);
@@ -2144,7 +2144,7 @@ input.switchto:hover, input.moveto:hover {
 
 #folderName {
   font-weight: bold;
-  color: #484e6a;
+  color: #5b5b71;
   text-transform: capitalize;
 }
 
