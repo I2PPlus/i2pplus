@@ -3849,6 +3849,7 @@ input[type=submit]:hover, input[type=submit]:focus, input[type=submit]:active,
 input[type=reset]:hover, input[type=reset]:focus, input[type=reset]:active,
 button:hover, button:focus, button:active, select:hover, select:focus, select:active, .graphspanel a {
   text-shadow: none;
+  transition: none;
 }
 
 a:link, a:visited {
@@ -3859,13 +3860,6 @@ a:link, a:visited {
   word-wrap: break-word;
   outline: none;
 }
-
-/*a:visited, .tab a {
-  color: #2c4e8f;
-  color: var(--a);
-  text-decoration: none;
-  font-weight: bold;
-}*/
 
 a:link:hover, a:hover, a:focus, a:visited:hover {
   color: #f60 !important;
@@ -11072,12 +11066,12 @@ form[action="configplugins"] input.reload {
 
 #newfamily .optionsingle {
   padding: 5px 5px 0 45px;
-  background: #eaeaff url(/themes/console/images/info/label.png) 12px center no-repeat !important;
+  background: #eaeaff var(--tag) 12px center no-repeat !important;
   background-size: 28px, 100%, 100% !important;
 }
 
 #newfamily .optionsingle:hover {
-  background: #ffd url(/themes/console/images/info/label.png) 12px center no-repeat !important;
+  background: #ffd var(--tag) 12px center no-repeat !important;
   background-size: 28px !important;
 }
 

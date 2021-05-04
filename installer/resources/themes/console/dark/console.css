@@ -1273,7 +1273,8 @@ div.widescroll { /* only scroll content, not entire page eg /peers */
 .tab:hover {
   background: #000 !important;
   background: linear-gradient(to bottom, #001800 50%, #000 50%) !important;
-  box-shadow: var(--highlight), inset 0 0 0 2px rgba(128,48,0,.8);
+  background: linear-gradient(to bottom, #720 50%, #310 50%) !important;
+  box-shadow: var(--highlight), inset 0 0 0 2px rgba(128,48,0,.7);
 }
 
 .tab:hover a {
@@ -1282,7 +1283,7 @@ div.widescroll { /* only scroll content, not entire page eg /peers */
 
 .tab:active {
   box-shadow: var(--highlight), inset 3px 3px 3px 1px #5f2400;
-  background: #f60 !important;
+  background: linear-gradient(to bottom, #b40, #f60) !important;
   transition: ease box-shadow .15s;
 }
 
@@ -9433,7 +9434,7 @@ input[type=file] {
 #newfamily .optionsingle {
   padding: 5px 5px 0 45px;
   box-shadow: inset 0 0 0 1px #010, inset 0 0 2px 1px #191939 !important;
-  background: #010 url(/themes/console/images/info/label.png) 10px center no-repeat !important;
+  background: #010 var(--tag) 10px center no-repeat !important;
   background-size: 28px, 100%, 100% !important;
 }
 
