@@ -12,8 +12,8 @@
   --infohelp: repeating-linear-gradient(to bottom, rgba(255,255,255,.4) 2px, rgba(232,232,255,.7) 4px), var(--p);
   --highlight: inset 0 0 0 1px #fff;
   --a: #4d5f80;
-  --ink: #393947;
-  --inklite: #484e6a;
+  --ink: #4f4f63;
+  --inklite: #5b5b71;
   --bodyfont: Droid Sans, Open Sans, Noto Sans, Ubuntu, Segoe UI, Lucida Grande, Verdana, Helvetica, sans-serif;
   --monospaced: Droid Sans Mono, Noto Mono, DejaVu Sans Mono, Lucida Console, monospace;
   --button: linear-gradient(to bottom, #fff, #efefff);

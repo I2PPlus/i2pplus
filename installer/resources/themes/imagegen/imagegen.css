@@ -325,7 +325,7 @@ select::-ms-expand {
 /* light + classic */
 
 body.iframed.light, body.iframed.classic  {
-  color: #393947;
+  color: #4f4f63;
   background: transparent;
 }
 
