@@ -5063,14 +5063,14 @@ div.eventspanel {
   margin-top: -10px;
 }
 
-form[action="events"] {
-  border: var(--innerborder);
+#events form[action="events"] {
   margin-top: -11px;
-  padding: 10px 20px 10px;
   margin-bottom: 20px;
+  padding: 10px 20px 10px;
+  border: var(--innerborder);
 }
 
-form[action="events"] > br {
+#events form[action="events"] > br {
   display: none;
 }
 
@@ -8927,13 +8927,13 @@ p#enablefullstats, p#gatherstats {
   background-size: 28px !important;
 }
 
-form[action="events"] {
+#events form[action="events"] {
   padding: 10px 10px 10px 50px;
-  background: var(--log_icon) 12px center no-repeat;
+  background: #001 var(--log_icon) 12px center no-repeat;
   background-size: 28px;
 }
 
-form[action="events"] > * {
+#events form[action="events"] > * {
   vertical-align: middle;
 }
 
