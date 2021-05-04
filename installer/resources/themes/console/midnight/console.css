@@ -474,13 +474,13 @@ input.accept[value^="Create"]:active, button.accept[value^="Create"]:active {
 
 input.accept[value^="Filter"], button.accept[value^="Filter"] {
   padding: 5px 9px 5px 25px !important;
-  background: url(/themes/console/images/buttons/filter.png) 8px center no-repeat, var(--button) !important;
+  background: var(--filter) 8px center no-repeat, var(--button) !important;
   background-size: 14px, 100%, 100% !important;
 }
 
 input.accept[value^="Filter"]:hover, button.accept[value^="Filter"]:hover,
 input.accept[value^="Filter"]:focus, button.accept[value^="Filter"]:focus {
-  background: url(/themes/console/images/buttons/filter.png) 8px center no-repeat, var(--button_hover) !important;
+  background: var(--filter) 8px center no-repeat, var(--button_hover) !important;
   background-size: 14px, 100% !important;
 }
 
