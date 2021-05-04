@@ -4082,13 +4082,13 @@ h4.app {
 }
 
 h4.app2 {
-  clear: left;
   margin-top: 5px !important;
-  background: #fefeff url(/themes/console/light/images/globe.png) 8px center no-repeat;
-  background: url(/themes/console/images/info/globe.png) 8px center no-repeat, linear-gradient(to bottom, #fff 50%, #fafbff 50%);
+  padding-left: 32px;
+  clear: left;
+  background: #fefeff url(/themes/console/images/svg/planet.svg) 8px center no-repeat;
+  background: url(/themes/console/images/svg/planet.svg) 8px center no-repeat, linear-gradient(to bottom, #fff 50%, #fafbff 50%);
   background-size: 16px, 100%;
   background-blend-mode: luminosity, normal;
-  padding-left: 32px;
 }
 
 h4.app img, h4.app2 img {
@@ -9744,23 +9744,23 @@ input[type="file"]:hover {
 
 #newfamily .optionsingle {
   padding: 5px 5px 0 45px;
-  background: #fafbff url(/themes/console/images/info/label.png) 10px center no-repeat !important;
+  background: #fafbff url(/themes/console/images/svg/tag.svg) 10px center no-repeat !important;
   background-size: 28px, 100%, 100% !important;
 }
 
 #newfamily .optionsingle:hover {
-  background: #ffd url(/themes/console/images/info/label.png) 10px center no-repeat !important;
+  background: #ffd url(/themes/console/images/svg/tag.svg) 10px center no-repeat !important;
   background-size: 28px !important;
 }
 
 #joinfamily .optionsingle {
   padding: 5px 5px 0 45px;
-  background: #fafbff url(/themes/console/images/info/key.png) 10px center no-repeat !important;
+  background: #fafbff url(/themes/console/images/svg/key.svg) 10px center no-repeat !important;
   background-size: 28px, 100%, 100% !important;
 }
 
 #joinfamily .optionsingle:hover {
-  background: #ffd url(/themes/console/images/info/key.png) 10px center no-repeat !important;
+  background: #ffd url(/themes/console/images/svg/key.svg) 10px center no-repeat !important;
   background-size: 28px !important;
 }
 

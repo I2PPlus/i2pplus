@@ -9433,7 +9433,7 @@ input[type=file] {
 #newfamily .optionsingle {
   padding: 5px 5px 0 45px;
   box-shadow: inset 0 0 0 1px #010, inset 0 0 2px 1px #191939 !important;
-  background: #010 url(/themes/console/images/info/label.png) 10px center no-repeat !important;
+  background: #010 var(--tag) 10px center no-repeat !important;
   background-size: 28px, 100%, 100% !important;
 }
 

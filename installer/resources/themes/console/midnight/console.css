@@ -11361,7 +11361,7 @@ input[type="file"]:hover {
 #newfamily .optionsingle {
   padding: 5px 5px 0 45px;
   box-shadow: var(--highlight), inset 0 0 2px 1px #191939 !important;
-  background: url(/themes/console/images/info/label.png) 10px center no-repeat, var(--panel) !important;
+  background: var(--tag) 10px center no-repeat, var(--panel) !important;
   background-size: 28px, 100%, 100% !important;
 }
 
