@@ -922,11 +922,15 @@ input:focus::-moz-placeholder {
 }
 
 input.tunnelName, input.tunnelDescriptionText, #userAgents, .freetext.tunnelDescription,
-#websiteName, #localDest, #altlocaldest, .proxyList, #targetDestination, #leasesetKey, input[type=text]:not([readonly]) {
+#websiteName, #localDest, #altlocaldest, .proxyList, #targetDestination, #leasesetKey {
   width: 80%;
   width: calc(100% - 28px) !important;
   min-width: 280px !important;
   text-overflow: ellipsis;
+}
+
+input.tunnelName, input.tunnelDescriptionText, #userAgents, .freetext.tunnelDescription,
+#websiteName, #localDest, #altlocaldest, .proxyList, #targetDestination, #leasesetKey, input[type=text]:not([readonly]) {
   box-shadow: var(--highlight), inset 3px 3px 3px rgba(0,0,48,.2);
 }
 
@@ -1638,7 +1642,7 @@ select[disabled], select[disabled]:hover, select[disabled]:focus, select[disable
   width: calc(100% - 38px) !important;
 }
 
-#filterDefinition, .freetext.filemanager {
+#filterDefinition, .freetext.filemanager, #privKeyFile {
   width: calc(100% - 50px) !important;
 }
 
