@@ -12349,7 +12349,7 @@ th[aria-sort] {
 }
 }
 
-#peers img[src$="bound.svg"] {
+#peers img[src$="bound.svg"], #profiles img[src$="bound.svg"], #tunnels img[src$="bound.svg"] {
   opacity: 0;
 }
 
