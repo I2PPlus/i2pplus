@@ -92,15 +92,13 @@
 <div class="routersummaryouter" style="width: 200px; float: left; margin-right: 20px">
 <div class="routersummary" id="sidebar">
 <div style="height: 36px">
-<!--<a href="/" target="_top">-->
 <img src="<%=intl.getTheme(request.getHeader("User-Agent"))%>images/i2plogo.png" alt="<%=intl._t("I2P Router Console").replace("I2P", "I2P+")%>" title="<%=intl._t("I2P Router Console").replace("I2P", "I2P+")%>" width="200">
-<!--</a>-->
 </div>
 <hr>
 <h3>Setup Wizard</h3>
 <hr>
 <form action="" method="POST">
-<input type="submit" class="cancel" name="skip" value="<%=intl._t("Skip Setup")%>" >
+<input type="submit" class="cancel" name="skip" value="<%=intl._t("Skip Setup")%>">
 </form>
 </div>
 </div>
@@ -127,7 +125,7 @@
 <form action="" method="POST">
 <input type="hidden" name="nonce" value="<%=pageNonce%>">
 <input type="hidden" name="action" value="blah" >
-<input type="hidden" name="page" value="<%=(ipg + 1)%>" >
+<input type="hidden" name="page" value="<%=(ipg + 1)%>">
 <%
     if (ipg == 1) {
         // language selection
@@ -135,7 +133,7 @@
 <jsp:useBean class="net.i2p.router.web.helpers.ConfigUIHelper" id="uihelper" scope="request" />
 <jsp:setProperty name="uihelper" property="contextId" value="<%=i2pcontextId%>" />
 <%-- needed for CSS: --%><div id="config_ui">
-<%-- needed for lang setting in css.jsi: --%><input type="hidden" name="consoleNonce" value="<%=net.i2p.router.web.CSSHelper.getNonce()%>" >
+<%-- needed for lang setting in css.jsi: --%><input type="hidden" name="consoleNonce" value="<%=net.i2p.router.web.CSSHelper.getNonce()%>">
 <p class="infohelp" id="flags">
 Select the language to be used for the router console and web applications (<a href="/webmail" target="_blank" rel="noreferrer">webmail</a>, <a href="/torrents" target="_blank" rel="noreferrer">torrents</a>, <a href="/tunnelmgr" target="_blank" rel="noreferrer">tunnel manager</a> etc). If you wish to change the language in future, change the router console theme, or configure a password to access the console, you may do so on the <a href="/configui" target="_blank" rel="noreferrer">User Interface configuration page</a>.
 </p>
@@ -355,7 +353,7 @@ I2P+ requires a web browser configured to use the resident HTTP proxy in order t
 <%
     if (ipg != 1) {
 %>
-<input type="submit" class="back" name="prev" value="<%=intl._t("Previous")%>" >
+<input type="submit" class="back" name="prev" value="<%=intl._t("Previous")%>">
 <%
     }
     if (ipg != LAST_PAGE) {
@@ -363,19 +361,19 @@ I2P+ requires a web browser configured to use the resident HTTP proxy in order t
 <%
         if (ipg == 2) {
 %>
-<input type="submit" class="cancel" name="skipbw" value="<%=intl._t("Skip Bandwidth Test")%>" >
+<input type="submit" class="cancel" name="skipbw" value="<%=intl._t("Skip Bandwidth Test")%>">
 <%
         } else if (ipg == 3) {
 %>
-<input type="submit" class="cancel" name="cancelbw" value="<%=intl._t("Cancel Bandwidth Test")%>" >
+<input type="submit" class="cancel" name="cancelbw" value="<%=intl._t("Cancel Bandwidth Test")%>">
 <%
         }
 %>
-<input type="submit" class="go" name="next" value="<%=intl._t("Next")%>" >
+<input type="submit" class="go" name="next" value="<%=intl._t("Next")%>">
 <%
     } else {
 %>
-<input type="submit" class="accept" name="done" value="<%=intl._t("Finished")%>" >
+<input type="submit" class="accept" name="done" value="<%=intl._t("Finished")%>">
 <%
     }
 %>
