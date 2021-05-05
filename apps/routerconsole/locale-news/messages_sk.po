@@ -10,7 +10,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: I2P\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2018-06-16 12:58+0000\n"
+"POT-Creation-Date: 2021-05-05 19:40+0000\n"
 "PO-Revision-Date: 2017-06-30 21:33+0000\n"
 "Last-Translator: Roman 'Kaktuxista' Benji <romanbeno273@gmail.com>\n"
 "Language-Team: Slovak (http://www.transifex.com/otf/I2P/language/sk/)\n"
@@ -20,14 +20,15 @@ msgstr ""
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=3; plural=(n==1) ? 0 : (n>=2 && n<=4) ? 1 : 2;\n"
 
-msgid "Congratulations on getting I2P installed!"
-msgstr "Gratulácia k nainštalovaniu I2P!"
+msgid "I2P+ installation complete!"
+msgstr ""
 
-msgid "Welcome to I2P!"
+#, fuzzy
+msgid "Welcome to I2P+!"
 msgstr "Vitajte v I2P!"
 
-#, java-format
-msgid "Please {0}have patience{1} as I2P boots up and finds peers."
+#, fuzzy, java-format
+msgid "Please {0}have patience{1} as I2P+ boots up and finds peers."
 msgstr "Prosím {0}buďte trpezlivý{1}, kým sa I2P nabootuje a nájde peerov."
 
 #, java-format
@@ -60,10 +61,10 @@ msgstr ""
 "Viac informácii je možné nájsť na {0}I2P stránke o nastaveniach proxy v "
 "prehliadači{1}."
 
-#, java-format
+#, fuzzy, java-format
 msgid ""
-"Once you have a \"shared clients\" destination listed on the left, please {0}"
-"check out{1} our {2}FAQ{3}."
+"Once you have a \"Shared Clients\" destination indicated on the sidebar, "
+"please {0}check out{1} our {2}FAQ{3}."
 msgstr ""
 "Keď budete mať cieľ \"zdieľaných klientov\" vypísaný na ľavej strane, prosím "
 "{0}pozrite si{1} naše {2}FAQ{3}."
@@ -74,3 +75,6 @@ msgid ""
 msgstr ""
 "Nasmerujte vášho IRC klienta na {0}localhost:6668{1} a pozdravte nás na {2}"
 "#i2p{3}."
+
+#~ msgid "Congratulations on getting I2P installed!"
+#~ msgstr "Gratulácia k nainštalovaniu I2P!"

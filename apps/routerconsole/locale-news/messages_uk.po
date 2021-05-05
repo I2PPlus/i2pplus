@@ -12,7 +12,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: I2P\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2018-06-16 12:58+0000\n"
+"POT-Creation-Date: 2021-05-05 19:40+0000\n"
 "PO-Revision-Date: 2017-06-30 21:33+0000\n"
 "Last-Translator: Denis Lysenko <gribua@gmail.com>\n"
 "Language-Team: Ukrainian (Ukraine) (http://www.transifex.com/otf/I2P/"
@@ -24,14 +24,15 @@ msgstr ""
 "Plural-Forms: nplurals=3; plural=(n%10==1 && n%100!=11 ? 0 : n%10>=2 && n"
 "%10<=4 && (n%100<10 || n%100>=20) ? 1 : 2);\n"
 
-msgid "Congratulations on getting I2P installed!"
-msgstr "Ґратулюємо за успішне виконання установки I2P!"
+msgid "I2P+ installation complete!"
+msgstr ""
 
-msgid "Welcome to I2P!"
+#, fuzzy
+msgid "Welcome to I2P+!"
 msgstr "Ласкаво просимо в I2P!"
 
-#, java-format
-msgid "Please {0}have patience{1} as I2P boots up and finds peers."
+#, fuzzy, java-format
+msgid "Please {0}have patience{1} as I2P+ boots up and finds peers."
 msgstr ""
 "Будь ласка {0}майте терпіння{1} поки I2P завантажиться і визначить пірів."
 
@@ -65,10 +66,10 @@ msgstr ""
 "Додаткова інформація доступна на {0}I2P сторінці налагодення проксі "
 "браузера{1}."
 
-#, java-format
+#, fuzzy, java-format
 msgid ""
-"Once you have a \"shared clients\" destination listed on the left, please {0}"
-"check out{1} our {2}FAQ{3}."
+"Once you have a \"Shared Clients\" destination indicated on the sidebar, "
+"please {0}check out{1} our {2}FAQ{3}."
 msgstr ""
 "Як тільки ви побачите \"shared clients\" у списку зліва, будь ласка, {0}"
 "відвідайте{1} наш {2}FAQ{3}."
@@ -79,3 +80,6 @@ msgid ""
 msgstr ""
 "Вкажіть ваш IRC клієнт для {0}localhost:6668{1} та привітайте нас на {2}"
 "#i2p{3}."
+
+#~ msgid "Congratulations on getting I2P installed!"
+#~ msgstr "Ґратулюємо за успішне виконання установки I2P!"

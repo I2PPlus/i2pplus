@@ -46,7 +46,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: I2P\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2019-12-18 13:32+0000\n"
+"POT-Creation-Date: 2021-05-05 19:40+0000\n"
 "PO-Revision-Date: 2019-11-24 19:23+0000\n"
 "Last-Translator: ValdikSS <iam@valdikss.org.ru>\n"
 "Language-Team: Russian (Russia) (http://www.transifex.com/otf/I2P/language/"
@@ -60,162 +60,219 @@ msgstr ""
 "%100>=11 && n%100<=14)? 2 : 3);\n"
 
 #. * IPv4 OK, IPv6 OK or disabled or no address
-#: ../java/src/net/i2p/router/CommSystemFacade.java:370
+#: ../java/src/net/i2p/router/CommSystemFacade.java:377
 msgid "OK"
 msgstr "OK"
 
-#: ../java/src/net/i2p/router/CommSystemFacade.java:371
+#: ../java/src/net/i2p/router/CommSystemFacade.java:378
 msgid "IPv4: OK; IPv6: Testing"
 msgstr "IPv4: ОК; IPv6: проверяем"
 
-#: ../java/src/net/i2p/router/CommSystemFacade.java:372
+#: ../java/src/net/i2p/router/CommSystemFacade.java:379
 msgid "IPv4: OK; IPv6: Firewalled"
 msgstr "IPv4: ОК; IPv6: заблокирован брандмауэром"
 
-#: ../java/src/net/i2p/router/CommSystemFacade.java:373
+#: ../java/src/net/i2p/router/CommSystemFacade.java:380
 msgid "IPv4: Testing; IPv6: OK"
 msgstr "IPv4: проверяем; IPv6: ОК"
 
-#: ../java/src/net/i2p/router/CommSystemFacade.java:374
+#: ../java/src/net/i2p/router/CommSystemFacade.java:381
 msgid "IPv4: Firewalled; IPv6: OK"
 msgstr "IPv4: заблокирован брандмауэром; IPv6: ОК"
 
-#: ../java/src/net/i2p/router/CommSystemFacade.java:375
+#: ../java/src/net/i2p/router/CommSystemFacade.java:382
 msgid "IPv4: Disabled; IPv6: OK"
 msgstr "IPv4: отключен; IPv6: OK"
 
-#: ../java/src/net/i2p/router/CommSystemFacade.java:376
+#: ../java/src/net/i2p/router/CommSystemFacade.java:383
 msgid "IPv4: Symmetric NAT; IPv6: OK"
 msgstr "IPv4: симметричная NAT; IPv6: ОК"
 
 #. * IPv4 symmetric NAT, IPv6 firewalled or disabled or no address
-#: ../java/src/net/i2p/router/CommSystemFacade.java:378
+#: ../java/src/net/i2p/router/CommSystemFacade.java:385
 msgid "Symmetric NAT"
 msgstr "Симметричная NAT"
 
-#: ../java/src/net/i2p/router/CommSystemFacade.java:379
+#: ../java/src/net/i2p/router/CommSystemFacade.java:386
 msgid "IPv4: Symmetric NAT; IPv6: Testing"
 msgstr "IPv4: симметричная NAT; IPv6: проверяем"
 
-#: ../java/src/net/i2p/router/CommSystemFacade.java:380
+#: ../java/src/net/i2p/router/CommSystemFacade.java:387
 msgid "IPv4: Firewalled; IPv6: Testing"
 msgstr "IPv4: заблокирован брандмауэром; IPv6: проверяем"
 
 #. * IPv4 firewalled, IPv6 firewalled or disabled or no address
-#: ../java/src/net/i2p/router/CommSystemFacade.java:382
+#: ../java/src/net/i2p/router/CommSystemFacade.java:389
 msgid "Firewalled"
 msgstr "Заблокирован брандмауэром"
 
-#: ../java/src/net/i2p/router/CommSystemFacade.java:383
+#: ../java/src/net/i2p/router/CommSystemFacade.java:390
 msgid "IPv4: Testing; IPv6: Firewalled"
 msgstr "IPv4: проверяем; IPv6: заблокирован брандмауэром"
 
-#: ../java/src/net/i2p/router/CommSystemFacade.java:384
+#: ../java/src/net/i2p/router/CommSystemFacade.java:391
 msgid "IPv4: Disabled; IPv6: Testing"
 msgstr "IPv4: отключен; IPv6: проверяем"
 
-#: ../java/src/net/i2p/router/CommSystemFacade.java:385
+#: ../java/src/net/i2p/router/CommSystemFacade.java:392
 msgid "IPv4: Disabled; IPv6: Firewalled"
 msgstr "IPv4: отключен; IPv6: заблокирован брандмауэром"
 
-#: ../java/src/net/i2p/router/CommSystemFacade.java:386
+#: ../java/src/net/i2p/router/CommSystemFacade.java:393
 msgid "Disconnected"
 msgstr "Отключен от сети"
 
-#: ../java/src/net/i2p/router/CommSystemFacade.java:387
+#: ../java/src/net/i2p/router/CommSystemFacade.java:394
 msgid "Port Conflict"
 msgstr "Конфликт портов"
 
-#: ../java/src/net/i2p/router/CommSystemFacade.java:388
+#: ../java/src/net/i2p/router/CommSystemFacade.java:395
 msgid "Testing"
 msgstr "Проверяем"
 
+#. setTunnelStatus(_x("No participating tunnels" + ":<br>" + _x("Starting up")));
 #. NPE, too early
 #. if (_context.router().getRouterInfo().getBandwidthTier().equals("K"))
 #. setTunnelStatus("Not expecting tunnel requests: Advertised bandwidth too low");
 #. else
-#: ../java/src/net/i2p/router/RouterThrottleImpl.java:84
-#: ../java/src/net/i2p/router/RouterThrottleImpl.java:142
-#: ../java/src/net/i2p/router/RouterThrottleImpl.java:545
-msgid "Rejecting tunnels: Starting up"
-msgstr "Не принимаем туннели: маршрутизатор запускается"
+#. setTunnelStatus(_x("No participating tunnels" + ":<br>" + _x("Starting up")));
+#: ../java/src/net/i2p/router/RouterThrottleImpl.java:88
+#: ../java/src/net/i2p/router/RouterThrottleImpl.java:148
+#: ../java/src/net/i2p/router/RouterThrottleImpl.java:589
+msgid "Starting up"
+msgstr ""
 
-#: ../java/src/net/i2p/router/RouterThrottleImpl.java:189
-msgid "Rejecting tunnels: High message delay"
+#: ../java/src/net/i2p/router/RouterThrottleImpl.java:150
+#: ../java/src/net/i2p/router/tunnel/pool/BuildHandler.java:785
+#, fuzzy
+msgid "Declining all tunnel requests:<br>"
+msgstr "Игнорируем запросы туннелей: слишком высокая нагрузка"
+
+#: ../java/src/net/i2p/router/RouterThrottleImpl.java:150
+#: ../java/src/net/i2p/router/tunnel/pool/BuildHandler.java:785
+msgid "Hidden Mode"
+msgstr ""
+
+#: ../java/src/net/i2p/router/RouterThrottleImpl.java:197
+#: ../java/src/net/i2p/router/RouterThrottleImpl.java:215
+#: ../java/src/net/i2p/router/tunnel/pool/BuildHandler.java:813
+#: ../java/src/net/i2p/router/tunnel/pool/BuildHandler.java:844
+#, fuzzy
+msgid "Declining tunnel requests:<br>"
+msgstr "Игнорируем запросы туннелей: слишком высокая нагрузка"
+
+#: ../java/src/net/i2p/router/RouterThrottleImpl.java:197
+#, fuzzy
+msgid "High message delay"
 msgstr "Не принимаем туннели: высокая задержка сообщений"
 
-#: ../java/src/net/i2p/router/RouterThrottleImpl.java:202
-msgid "Rejecting tunnels: Limit reached"
-msgstr "Не принимаем туннели: достигнут предел числа туннелей"
+#: ../java/src/net/i2p/router/RouterThrottleImpl.java:210
+msgid "Declining requests: "
+msgstr ""
 
-#: ../java/src/net/i2p/router/RouterThrottleImpl.java:241
-msgid "Rejecting most tunnels: High number of requests"
+#: ../java/src/net/i2p/router/RouterThrottleImpl.java:210
+msgid "Limit reached"
+msgstr ""
+
+#: ../java/src/net/i2p/router/RouterThrottleImpl.java:215
+msgid "Participation disabled"
+msgstr ""
+
+#: ../java/src/net/i2p/router/RouterThrottleImpl.java:255
+#, fuzzy
+msgid "High number of requests"
+msgstr "Не принимаем туннели: высокое число запросов"
+
+#: ../java/src/net/i2p/router/RouterThrottleImpl.java:255
+#, fuzzy
+msgid "Rejecting most tunnel requests:<br>"
 msgstr "Не принимаем туннели: высокое число запросов"
 
 #. hard to do {0} from here
 #. setTunnelStatus("Accepting " + (100-(int)(100.0*probReject)) + "% of tunnels");
-#: ../java/src/net/i2p/router/RouterThrottleImpl.java:243
-#: ../java/src/net/i2p/router/RouterThrottleImpl.java:424
-msgid "Accepting most tunnels"
+#: ../java/src/net/i2p/router/RouterThrottleImpl.java:257
+#: ../java/src/net/i2p/router/RouterThrottleImpl.java:463
+#, fuzzy
+msgid "Accepting most tunnel requests"
 msgstr "Принимаем большинство туннелей"
 
-#: ../java/src/net/i2p/router/RouterThrottleImpl.java:245
-#: ../java/src/net/i2p/router/RouterThrottleImpl.java:426
-#: ../java/src/net/i2p/router/RouterThrottleImpl.java:561
-msgid "Accepting tunnels"
+#: ../java/src/net/i2p/router/RouterThrottleImpl.java:259
+#: ../java/src/net/i2p/router/RouterThrottleImpl.java:465
+#: ../java/src/net/i2p/router/RouterThrottleImpl.java:605
+#, fuzzy
+msgid "Accepting tunnel requests"
 msgstr "Принимаем туннели"
 
 #. .067KBps
 #. * also limited to 90% - see below
 #. always leave at least 4KBps free when allowing
-#: ../java/src/net/i2p/router/RouterThrottleImpl.java:350
-msgid "Rejecting tunnels: Bandwidth limit"
-msgstr "Не принимаем туннели: достигнут предел пропускной способности"
-
+#. private static final String LIMIT_STR = _x("Declining tunnel requests" + ":<br>" + "Bandwidth limit");
 #. hard to do {0} from here
 #. setTunnelStatus("Rejecting " + ((int)(100.0*probReject)) + "% of tunnels: Bandwidth limit");
-#: ../java/src/net/i2p/router/RouterThrottleImpl.java:420
-msgid "Rejecting most tunnels: Bandwidth limit"
+#. setTunnelStatus(_x("Declining most tunnel requests" + ":<br>" + "Bandwidth limit"));
+#: ../java/src/net/i2p/router/RouterThrottleImpl.java:365
+#: ../java/src/net/i2p/router/RouterThrottleImpl.java:459
+#, fuzzy
+msgid "Declining requests: Bandwidth limit"
 msgstr "Не принимаем туннели: достигнут предел пропускной способности"
 
-#: ../java/src/net/i2p/router/RouterThrottleImpl.java:550
-msgid "Rejecting tunnels: Shutting down"
-msgstr "Не принимаем туннели: маршрутизатор в процессе отключения"
+#: ../java/src/net/i2p/router/RouterThrottleImpl.java:594
+#: ../java/src/net/i2p/router/RouterThrottleImpl.java:607
+#, fuzzy
+msgid "Declining tunnel requests"
+msgstr "Игнорируем запросы туннелей: время выполнения превысило ожидаемое"
 
-#: ../java/src/net/i2p/router/RouterThrottleImpl.java:563
-msgid "Rejecting tunnels"
-msgstr "Не принимаем туннели"
+#: ../java/src/net/i2p/router/RouterThrottleImpl.java:594
+msgid "Shutting down"
+msgstr ""
 
-#: ../java/src/net/i2p/router/tunnel/pool/BuildHandler.java:260
+#: ../java/src/net/i2p/router/tunnel/pool/BuildHandler.java:277
 msgid "Dropping tunnel requests: Too slow"
 msgstr "Игнорируем запросы туннелей: время выполнения превысило ожидаемое"
 
-#: ../java/src/net/i2p/router/tunnel/pool/BuildHandler.java:270
+#: ../java/src/net/i2p/router/tunnel/pool/BuildHandler.java:286
 msgid "Dropping tunnel requests: High job lag"
 msgstr "Игнорируем запросы туннелей: большая задержка задач"
 
 #. don't even bother, since we are so overloaded locally
-#: ../java/src/net/i2p/router/tunnel/pool/BuildHandler.java:464
+#: ../java/src/net/i2p/router/tunnel/pool/BuildHandler.java:484
 msgid "Dropping tunnel requests: Overloaded"
 msgstr "Игнорируем запросы туннелей: слишком высокая нагрузка"
 
-#: ../java/src/net/i2p/router/tunnel/pool/BuildHandler.java:747
-msgid "Rejecting tunnels: Hidden mode"
-msgstr "Отклоняем туннели: скрытый режим"
-
-#: ../java/src/net/i2p/router/tunnel/pool/BuildHandler.java:775
-msgid "Rejecting tunnels: Request overload"
+#: ../java/src/net/i2p/router/tunnel/pool/BuildHandler.java:813
+#, fuzzy
+msgid "Request overload"
 msgstr "Не принимаем туннели: слишком много запросов"
 
-#: ../java/src/net/i2p/router/tunnel/pool/BuildHandler.java:806
-msgid "Rejecting tunnels: Connection limit"
-msgstr "Не принимаем туннели: достигнут предел числа соединений"
+#: ../java/src/net/i2p/router/tunnel/pool/BuildHandler.java:844
+#, fuzzy
+msgid "Connection limit reached"
+msgstr "Не принимаем туннели: достигнут предел числа туннелей"
 
-#: ../java/src/net/i2p/router/tunnel/pool/BuildHandler.java:1024
-#: ../java/src/net/i2p/router/tunnel/pool/BuildHandler.java:1057
+#: ../java/src/net/i2p/router/tunnel/pool/BuildHandler.java:1068
+#: ../java/src/net/i2p/router/tunnel/pool/BuildHandler.java:1101
 msgid "Dropping tunnel requests: High load"
 msgstr "Игнорируем запросы туннелей: высокая нагрузка"
 
-#: ../java/src/net/i2p/router/tunnel/pool/BuildHandler.java:1140
+#: ../java/src/net/i2p/router/tunnel/pool/BuildHandler.java:1184
 msgid "Dropping tunnel requests: Queue time"
-msgstr "Игнорируем запросы туннелей: слишком большое время пребывания в очереди"
+msgstr ""
+"Игнорируем запросы туннелей: слишком большое время пребывания в очереди"
+
+#~ msgid "Rejecting tunnels: Starting up"
+#~ msgstr "Не принимаем туннели: маршрутизатор запускается"
+
+#~ msgid "Rejecting most tunnels: Bandwidth limit"
+#~ msgstr "Не принимаем туннели: достигнут предел пропускной способности"
+
+#~ msgid "Rejecting tunnels: Shutting down"
+#~ msgstr "Не принимаем туннели: маршрутизатор в процессе отключения"
+
+#~ msgid "Rejecting tunnels"
+#~ msgstr "Не принимаем туннели"
+
+#~ msgid "Rejecting tunnels: Hidden mode"
+#~ msgstr "Отклоняем туннели: скрытый режим"
+
+#~ msgid "Rejecting tunnels: Connection limit"
+#~ msgstr "Не принимаем туннели: достигнут предел числа соединений"

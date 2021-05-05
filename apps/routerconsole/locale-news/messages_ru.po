@@ -11,7 +11,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: I2P\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2018-06-16 12:58+0000\n"
+"POT-Creation-Date: 2021-05-05 19:40+0000\n"
 "PO-Revision-Date: 2017-06-30 21:33+0000\n"
 "Last-Translator: rlagutin <inactive+drbeep@transifex.com>\n"
 "Language-Team: Russian (Russia) (http://www.transifex.com/otf/I2P/language/"
@@ -24,14 +24,15 @@ msgstr ""
 "%10<=4 && (n%100<12 || n%100>14) ? 1 : n%10==0 || (n%10>=5 && n%10<=9) || (n"
 "%100>=11 && n%100<=14)? 2 : 3);\n"
 
-msgid "Congratulations on getting I2P installed!"
-msgstr "Поздравляем с успешным завершением установки I2P!"
+msgid "I2P+ installation complete!"
+msgstr ""
 
-msgid "Welcome to I2P!"
+#, fuzzy
+msgid "Welcome to I2P+!"
 msgstr "Добро пожаловать в I2P!"
 
-#, java-format
-msgid "Please {0}have patience{1} as I2P boots up and finds peers."
+#, fuzzy, java-format
+msgid "Please {0}have patience{1} as I2P+ boots up and finds peers."
 msgstr ""
 "Немного терпения! {0}{1} I2P-маршрутизатору потребуется пара минут для "
 "запуска модулей и первого подключения к сети I2P."
@@ -65,10 +66,10 @@ msgid ""
 "More information can be found on the {0}I2P browser proxy setup page{1}."
 msgstr "Дополнительная информация есть на {0}странице настроек I2P-прокси{1}."
 
-#, java-format
+#, fuzzy, java-format
 msgid ""
-"Once you have a \"shared clients\" destination listed on the left, please {0}"
-"check out{1} our {2}FAQ{3}."
+"Once you have a \"Shared Clients\" destination indicated on the sidebar, "
+"please {0}check out{1} our {2}FAQ{3}."
 msgstr ""
 "{0}Не забудьте заглянуть{1} в наш {2}{3} <a href=\"http://www.i2p2.i2p/"
 "faq_ru.html\">FAQ</a>."
@@ -79,3 +80,6 @@ msgid ""
 msgstr ""
 "Подключите IRC-клиент к {0}localhost:6668{1} и поприветствуйте нас на {2}"
 "#i2p{3}."
+
+#~ msgid "Congratulations on getting I2P installed!"
+#~ msgstr "Поздравляем с успешным завершением установки I2P!"

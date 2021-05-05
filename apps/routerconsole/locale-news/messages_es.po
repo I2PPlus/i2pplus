@@ -12,7 +12,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: I2P\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2018-06-16 12:58+0000\n"
+"POT-Creation-Date: 2021-05-05 19:40+0000\n"
 "PO-Revision-Date: 2017-06-30 21:33+0000\n"
 "Last-Translator: difusion\n"
 "Language-Team: Spanish (http://www.transifex.com/otf/I2P/language/es/)\n"
@@ -22,14 +22,15 @@ msgstr ""
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=(n != 1);\n"
 
-msgid "Congratulations on getting I2P installed!"
-msgstr "&iexcl;Felicidades!, has instalado I2P con &eacute;xito."
+msgid "I2P+ installation complete!"
+msgstr ""
 
-msgid "Welcome to I2P!"
+#, fuzzy
+msgid "Welcome to I2P+!"
 msgstr "&iexcl;Bienvenido a I2P!"
 
-#, java-format
-msgid "Please {0}have patience{1} as I2P boots up and finds peers."
+#, fuzzy, java-format
+msgid "Please {0}have patience{1} as I2P+ boots up and finds peers."
 msgstr ""
 "¡Por favor, tenga {0}paciencia{1} mientras I2P se arranca y encuentra otros "
 "pares!"
@@ -64,10 +65,10 @@ msgstr ""
 "Puede encontrarse más información en la web{1} de configuración del proxy "
 "del navegador de {0}I2P"
 
-#, java-format
+#, fuzzy, java-format
 msgid ""
-"Once you have a \"shared clients\" destination listed on the left, please {0}"
-"check out{1} our {2}FAQ{3}."
+"Once you have a \"Shared Clients\" destination indicated on the sidebar, "
+"please {0}check out{1} our {2}FAQ{3}."
 msgstr ""
 "En cuanto veas a la izquierda una conexi&oacute;n llamada \"clientes "
 "diferentes\", puedes visitar nuestros {0}{1} {2}FAQ{3}."
@@ -78,3 +79,6 @@ msgid ""
 msgstr ""
 "Dirija su cliente de IRC hacia {0}localhost:6668{1} y salúdenos en {2}"
 "#i2p{3}."
+
+#~ msgid "Congratulations on getting I2P installed!"
+#~ msgstr "&iexcl;Felicidades!, has instalado I2P con &eacute;xito."

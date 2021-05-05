@@ -335,7 +335,6 @@ pre {
 
 .routersummary h3:active {
   box-shadow: var(--highlight),inset 3px 3px 3px rgba(0,0,0,.2);
-  background: #fff linear-gradient(to bottom, #fff3df, #fff9ef) !important;
   background: #f60 !important;
   transition: ease box-shadow .05s;
 }
@@ -358,7 +357,6 @@ pre {
 }
 
 .routersummary h3:active a, .routersummary h3 a:active {
-  color: #cf9233 !important;
   color: #ffecdf !important;
   text-shadow: 0 1px 1px #5f2d0c;
 }
@@ -375,24 +373,23 @@ pre {
   border: none;
   border-radius: 0;
   box-shadow: inset 0 0 0 1px #eef;
-  background: #eef;
   background: linear-gradient(to right, #ddf, #eef 10%, #fff 50%, #eef 90%, #ddf);
 }
 
 .routersummary h4::after {
   padding-top: 8px;
   padding-bottom: 8px;
-  content: "";
-  display: inline-block;
-  box-sizing: border-box;
   min-height: 12px;
+  display: inline-block;
   vertical-align: middle;
+  box-sizing: border-box;
+  content: "";
 }
 
 @supports not (-moz-appearance: none) {
-.routersummary h4 {
-  margin-bottom: -8px !important;
-}
+  .routersummary h4 {
+    margin-bottom: -8px !important;
+  }
 }
 
 .routersummary h4 a {
@@ -12254,6 +12251,29 @@ div.app a, div.app a:visited, #sitemap a:link, #sitemap a:visited, .warning a {
 
 /* setup wizard */
 
+#wizardpage .routersummary img[src$="i2plogo.png"], #wizardpage .routersummary h3 {
+  pointer-events: none;
+}
+
+#wizardpage .routersummary img[src$="i2plogo.png"] {
+  margin-top: 6px;
+  margin-bottom: 6px;
+}
+
+#wizardpage .routersummary div {
+  margin-bottom: 5px;
+}
+
+#wizardpage .routersummary div + hr, #wizardpage .routersummary h3 + hr {
+  display: none;
+}
+
+#wizardpage .routersummary h3 {
+  margin-top: 10px;
+  padding: 5px 3px;
+  pointer-events: none;
+}
+
 #wizardpage .yes, #wizardpage .no {
   font-size: 0;
   display: inline-block;
@@ -12267,6 +12287,23 @@ div.app a, div.app a:visited, #sitemap a:link, #sitemap a:visited, .warning a {
 
 #wizardpage .no {
   background: url(/themes/console/images/buttons/no.png) center center no-repeat;
+}
+
+#wizardpage #bandwidth + h3 {
+  border-width: 1px;
+}
+
+#wizardpage #bandwidth + h3 ~ p {
+  margin-top: -15px;
+  margin-bottom: -5px;
+  padding: 15px 15px 18px;
+  border-left: 1px solid #8d8daa;
+  border-right: 1px solid #8d8daa;
+}
+
+#wizardpage #bandwidthconfig + .wizardbuttons {
+  margin-top: -6px;
+  margin-bottom: -10px;
 }
 
 #bandwidthTestRunning {
