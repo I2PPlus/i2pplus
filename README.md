@@ -65,6 +65,8 @@ To build an unsigned update for an existing installation, run:
 
 Run 'ant' with no arguments to see other build options.
 
+### Docker
+For more information how to run I2P in Docker, see [Docker.md](Docker.md)
 ## Contact info
 
 Need help? See the IRC channel #saltR on the I2P IRC network

@@ -93,7 +93,7 @@ public class HomeHelper extends HelperBase {
 
 // I2P specific
         //"BobTheBuilder" + S + _x("Automated I2P development builds") + S + "http://bobthebuilder.i2p/" + S + I + "info/build.png" + S +
-        _x("I2P Bug Reports") + S + _x("Bug tracker") + S + "http://trac.i2p2.i2p/query?owner=~&amp;status=accepted&amp;status=assigned&amp;status=infoneeded&amp;status=infoneeded_new&amp;status=needs_work&amp;status=new&amp;status=open&amp;status=reopened&amp;status=started&amp;status=testing&amp;keywords=~&amp;group=priority&amp;col=id&amp;col=summary&amp;col=keywords&amp;col=status&amp;col=owner&amp;col=type&amp;col=priority&amp;col=changetime&amp;desc=1&amp;order=changetime" + S + I + "svg/bug.svg" + S +
+        _x("I2P Bug Reports") + S + _x("Bug tracker") + S + "http://git.idk.i2p/i2p-hackers/i2p.i2p/-/issues" + S + I + "svg/bug.svg" + S +
         _x("I2P FAQ") + S + _x("Frequently Asked Questions") + S + "http://i2p-projekt.i2p/faq" + S + I + "svg/faq.svg" + S +
         //_x("I2P Technical Docs") + S + _x("Technical documentation") + S + "http://i2p-projekt.i2p/how" + S + I + "education.png" + S +
         //_x("I2P Plugins") + S + _x("Add-on directory") + S + "http://i2pwiki.i2p/index.php?title=Plugins" + S + I + "info/plugin_link.png" + S +
