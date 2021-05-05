@@ -12,7 +12,6 @@
 <head>
 <%@include file="css.jsi" %>
 <%=intl.title("logs")%>
-<!--<script src="/js/scrollTo.js?<%=net.i2p.CoreVersion.VERSION%>" type="text/javascript"></script>-->
 </head>
 <body id="i2plogs">
 <script nonce="<%=cspNonce%>" type="text/javascript">progressx.show();</script>
