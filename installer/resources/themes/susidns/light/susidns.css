@@ -1422,14 +1422,23 @@ input.reload:hover, input.reload:focus {
   background-size: 14px, 100%;
 }
 
-input.search {
-  padding: 5px 8px 5px 24px;
-  background: url(/themes/console/images/svg/search.svg) no-repeat 6px center, linear-gradient(to bottom, #fff, #efefff);
+input.search[type=submit] {
+  padding: 5px;
+  width: 44px;
+  color: transparent;
+  text-shadow: none;
+  background: url(/themes/console/images/svg/search.svg) no-repeat center center, linear-gradient(to bottom, #fff, #efefff);
   background-size: 14px, 100%;
 }
 
-input.search:hover, input.search:focus {
-  background: url(/themes/console/images/svg/search.svg) no-repeat 6px center, linear-gradient(to bottom, #eee, #fff);
+@media screen and (max-width: 1499px) {
+  input.search[type=submit] {
+    padding: 6px 5px;
+  }
+}
+
+input.search[type=submit]:hover, input.search[type=submit]:focus {
+  background: url(/themes/console/images/svg/search.svg) no-repeat center center, linear-gradient(to bottom, #eee, #fff);
   background-size: 14px, 100%;
 }
 
@@ -1438,11 +1447,13 @@ input.search[type=text] {
   padding: 5px 5px 5px 26px !important;
   background: #fbfbff url(/themes/console/images/svg/search.svg) no-repeat 6px center;
   background-size: 14px !important;
+  background-blend-mode: luminosity;
 }
 
 input.search[type=text]:focus {
   background: #fff url(/themes/console/images/svg/search.svg) no-repeat 6px center !important;
   background-size: 14px !important;
+  background-blend-mode: normal;
 }
 
 #visualid .fakebutton {
