@@ -274,14 +274,14 @@ public final class ECIESAEADEngine {
         } else {
             decrypted = null;
             if (_log.shouldWarn())
-                _log.warn("ECIES decrypt fail, tag found but no state and too small (" + data.length + " bytes) for NewSessionReply");
+                _log.warn("ECIES decryption failure, tag found but no state and too small (" + data.length + " bytes) for NewSessionReply");
         }
         if (decrypted != null) {
             _context.statManager().updateFrequency("crypto.eciesAEAD.decryptExistingSession");
         } else {
             _context.statManager().updateFrequency("crypto.eciesAEAD.decryptFailed");
             if (_log.shouldWarn()) {
-                _log.warn("ECIES decrypt fail: known tag [" + st + "] but failed decrypt with key \n* Key: " + key);
+                _log.warn("ECIES decryption failure: known tag [" + st + "] but failed decrypt with key \n* Key: " + key);
             }
         }
         return decrypted;
@@ -333,7 +333,7 @@ public final class ECIESAEADEngine {
         } else {
             decrypted = null;
             if (_log.shouldDebug())
-                _log.debug("ECIES decrypt fail, too small (" + data.length + " bytes) for NewSession");
+                _log.debug("ECIES decryption failure, too small (" + data.length + " bytes) for NewSession");
         }
         return decrypted;
     }
@@ -613,7 +613,7 @@ public final class ECIESAEADEngine {
             state = oldState.clone();
         } catch (CloneNotSupportedException e) {
             if (_log.shouldWarn())
-                _log.warn("ECIES decrypt fail: clone()", e);
+                _log.warn("ECIES decryption failure: clone()", e);
             return null;
         }
 
@@ -632,17 +632,17 @@ public final class ECIESAEADEngine {
             return null;
         }
         if (_log.shouldDebug())
-            _log.debug("State before decrypt new session reply: " + state);
+            _log.debug("State before decryption of NewSessionReply: " + state);
         // rewrite in place, must restore below on failure
         System.arraycopy(k.getData(), 0, data, TAGLEN, KEYLEN);
         state.mixHash(tag, 0, TAGLEN);
         if (_log.shouldDebug())
-            _log.debug("State after mixhash tag before decrypt NewSessionReply: " + state);
+            _log.debug("State after mixhash tag before decryption of NewSessionReply: " + state);
         try {
             state.readMessage(data, 8, 48, ZEROLEN, 0);
         } catch (GeneralSecurityException gse) {
             if (_log.shouldWarn()) {
-                _log.warn("Decrypt fail NewSessionReply part 1 \n* General Security Exception:" +  gse.getMessage());
+                _log.warn("Decryption failure of NewSessionReply part 1 \n* General Security Exception:" +  gse.getMessage());
                 if (_log.shouldDebug())
                     _log.debug("State at failure: " + state);
             }
@@ -672,7 +672,7 @@ public final class ECIESAEADEngine {
             rcvr.decryptWithAd(hash, data, TAGLEN + KEYLEN + MACLEN, payload, 0, payload.length + MACLEN);
         } catch (GeneralSecurityException gse) {
             if (_log.shouldWarn()) {
-                _log.warn("Decrypt fail NewSessionReply part 2 \n* General Security Exception: " + gse.getMessage());
+                _log.warn("Decryption failure of NewSessionReply part 2 \n* General Security Exception: " + gse.getMessage());
                 if (_log.shouldDebug())
                     _log.debug("State at failure: " + state);
             }
@@ -854,7 +854,7 @@ public final class ECIESAEADEngine {
         try {
             return x_encrypt(cloves, target, to, priv, keyManager, callback);
         } catch (Exception e) {
-            _log.error("ECIES encrypt error", e);
+            _log.error("ECIES encryption error", e);
             return null;
         }
     }
@@ -897,7 +897,7 @@ public final class ECIESAEADEngine {
                 state = state.clone();
             } catch (CloneNotSupportedException e) {
                 if (_log.shouldWarn())
-                    _log.warn("ECIES encrypt fail: clone()", e);
+                    _log.warn("ECIES encryption failure: clone()", e);
                 return null;
             }
             if (_log.shouldDebug())
@@ -909,9 +909,9 @@ public final class ECIESAEADEngine {
         byte rv[] = encryptExistingSession(cloves, target, re, callback, keyManager);
         if (rv == null) {
             if (_log.shouldWarn())
-                _log.warn("ECIES ES encrypt fail");
+                _log.warn("ECIES ExistingSession encryption failure");
         } else if (_log.shouldDebug())
-            _log.debug("Encrypting as ES to " + target + " with key " + re.key + " and tag " + re.tag.toBase64() +
+            _log.debug("Encrypting as ExistingSession to " + target + " with key " + re.key + " and tag " + re.tag.toBase64() +
                        " fwd key: " + re.nextForwardKey +
                        " rev key: " + re.nextReverseKey +
                        "; " + rv.length + " bytes");
@@ -958,7 +958,7 @@ public final class ECIESAEADEngine {
         }
         state.start();
         if (_log.shouldDebug())
-            _log.debug("State before encrypt new session: " + state);
+            _log.debug("State before encrypting NewSession: " + state);
 
         byte[] payload = createPayload(cloves, cloves.getExpiration(), NS_OVERHEAD);
 

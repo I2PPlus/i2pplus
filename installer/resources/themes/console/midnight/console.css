@@ -50,11 +50,9 @@ body {
   color: #c9ceff;
   background: url(/themes/console/images/buttons/clean_hover.png) no-repeat,
               url(/themes/console/images/buttons/delete_hover.png) no-repeat,
-              url(/themes/console/images/buttons/restore_hover.png) no-repeat,
               url(/themes/console/images/buttons/update_hover.png) no-repeat,
-              url(images/dropdown_hover.svg),
               url(images/newtab.png);
-  background-size: 0, 0, 0, 0, 0, 0;
+  background-size: 0, 0, 0, 0;
 }
 
 @supports (-moz-appearance: none) {
@@ -784,19 +782,19 @@ input.back:focus {
 
 input.reload, button.reload {
   padding: 5px 9px 5px 25px !important;
-  background: url(/themes/console/images/buttons/restore.png) 8px center no-repeat, var(--button) !important;
+  background: var(--reset) 8px center no-repeat, var(--button) !important;
   background-size: 14px, 100% !important;
 }
 
 input.reload:hover, button.reload:hover,
 input.reload:focus, button.reload:focus {
-  background: url(/themes/console/images/buttons/restore_hover.png) 8px center no-repeat, var(--button_hover) !important;
+  background: var(--reset_hover) 8px center no-repeat, var(--button_hover) !important;
   background-size: 14px, 100% !important;
 }
 
 input.reload:active, button.reload:active {
   padding: 5px 9px 5px 25px !important;
-  background: url(/themes/console/images/buttons/restore_hover.png) 8px center no-repeat, var(--button_active) !important;
+  background: var(--reset_active) 8px center no-repeat, var(--button_active) !important;
   background-size: 14px, 100% !important;
 }
 
@@ -821,13 +819,13 @@ input.reload[value$="restart"]:active, button.reload[value$="restart"]:active {
 
 input.reload[value^="Update"], button.reload[value^="Update"] {
   padding: 5px 9px 5px 25px !important;
-  background: url(/themes/console/images/buttons/update.png) 8px center no-repeat, var(--button) !important;
+  background: var(--refresh) 8px center no-repeat, var(--button) !important;
   background-size: 14px, 100% !important;
 }
 
 input.reload[value^="Update"]:hover, button.reload[value^="Update"]:hover,
 input.reload[value^="Update"]:focus, button.reload[value^="Update"]:focus {
-  background: url(/themes/console/images/buttons/update_hover.png) 8px center no-repeat, var(--button_hover) !important;
+  background: var(--refresh_hover) 8px center no-repeat, var(--button_hover) !important;
   background-size: 14px, 100% !important;
 }
 
