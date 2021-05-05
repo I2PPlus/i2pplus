@@ -4488,7 +4488,7 @@ p#helptranslate {
   text-align: left !important;
   border-top: var(--innerborder);
   border-bottom: var(--innerborder);
-  background: url(/themes/console/images/info/notice.png) left 14px center no-repeat, #000;
+  background: url(images/favicon.svg) left 14px center no-repeat, #000;
   background-size: 28px;
 }
 
@@ -12867,7 +12867,8 @@ a:hover .sitemapLink {
 }
 
 #help_newusers {
-  background: url(/themes/console/images/info/notice.png) 15px center no-repeat, var(--helpsection);
+  background: url(images/favicon.svg) 15px center no-repeat, var(--helpsection);
+  background-size: 32px, 100px 4px;
 }
 
 #help_legal {
@@ -12904,7 +12905,7 @@ a:hover .sitemapLink {
 
 #sidebarhelp h2, #reachabilityhelp h2 {
   padding-left: 38px !important;
-  background: url(/themes/console/images/info/sidebar.png) 8px center no-repeat, var(--title) !important;
+  background: url(/themes/console/images/svg/sidebar.svg) 8px center no-repeat, var(--title) !important;
   background-size: 24px, 4px 100%, 100% !important;
 }
 
@@ -12922,7 +12923,7 @@ a:hover .sitemapLink {
 
 #newuserguide h2 {
   padding-left: 38px !important;
-  background: url(/themes/console/images/info/notice.png) 8px center no-repeat, var(--title) !important;
+  background: url(images/favicon.svg) 8px center no-repeat, var(--title) !important;
   background-size: 24px, 4px 100%, 100% !important;
 }
 

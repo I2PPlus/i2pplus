@@ -3392,7 +3392,7 @@ p#helptranslate {
   text-align: left !important;
   border-top: var(--border);
   border-bottom: var(--border);
-  background: #000 url(/themes/console/images/info/notice.png) left 14px center no-repeat;
+  background: #000 url(images/favicon.svg) left 14px center no-repeat;
   background-size: 28px !important;
 }
 
@@ -11299,7 +11299,8 @@ h1[class], h1 {
 
 .chatlink {
   padding: 0 3px 0 20px;
-  background: rgba(0,64,0,.3) url(/themes/snark/ubergine/images/comment.png) 2px center no-repeat;
+  background: rgba(0,64,0,.3) var(--chat) 2px center no-repeat;
+  background-size: 12px, 100% !important;
 }
 
 .consolelink {
@@ -11416,7 +11417,8 @@ h1[class], h1 {
 }
 
 #help_newusers {
-  background: url(/themes/console/images/info/notice.png) 15px center no-repeat, var(--helpbox);
+  background: url(images/favicon.svg) 15px center no-repeat, var(--helpbox);
+  background-size: 32px, 100%;
 }
 
 #help_legal {
@@ -11441,7 +11443,7 @@ h1[class], h1 {
 
 #sidebarhelp h2, #reachabilityhelp h2 {
   padding-left: 38px;
-  background: url(/themes/console/images/info/sidebar.png) 10px center no-repeat, linear-gradient(to bottom, rgba(0,0,0,0) 50%, #000 50%), var(--h3), var(--h3_fade) !important;
+  background: url(/themes/console/images/svg/sidebar.svg) 10px center no-repeat, linear-gradient(to bottom, rgba(0,0,0,0) 50%, #000 50%), var(--h3), var(--h3_fade) !important;
   background-size: 20px, 100%, 4px 100%, 100% !important;
 }
 
@@ -11453,7 +11455,7 @@ h1[class], h1 {
 
 #newuserguide h2 {
   padding-left: 38px;
-  background: url(/themes/console/images/info/notice.png) 10px center no-repeat, linear-gradient(to bottom, rgba(0,0,0,0) 50%, #000 50%), var(--h3), var(--h3_fade) !important;
+  background: url(images/favicon.svg) 10px center no-repeat, linear-gradient(to bottom, rgba(0,0,0,0) 50%, #000 50%), var(--h3), var(--h3_fade) !important;
   background-size: 20px, 100%, 4px 100%, 100% !important;
 }
 
