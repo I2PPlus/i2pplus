@@ -73,11 +73,11 @@ public class GarlicMessageParser {
                 CloveSet rv = _context.eciesEngine().decrypt(encData, encryptionKey, rskm);
                 if (rv != null) {
                     if (_log.shouldDebug())
-                        _log.debug("ECIES decrypt success, cloves: " + rv.getCloveCount());
+                        _log.debug("ECIES decryption success, cloves: " + rv.getCloveCount());
                     return rv;
                 } else {
                     if (_log.shouldWarn())
-                        _log.warn("ECIES decrypt fail");
+                        _log.warn("ECIES decryption failure");
                     return null;
                 }
             } else {
@@ -97,10 +97,10 @@ public class GarlicMessageParser {
             return null;
         } else {
             try {
-                CloveSet rv = readCloveSet(decrData, 0); 
+                CloveSet rv = readCloveSet(decrData, 0);
                 if (_log.shouldDebug())
                     _log.debug("Got cloves: " + rv.getCloveCount());
-                return rv; 
+                return rv;
             } catch (DataFormatException dfe) {
                 if (_log.shouldLog(Log.WARN))
                     _log.warn("Unable to read cloveSet", dfe);
@@ -133,9 +133,9 @@ public class GarlicMessageParser {
                 // unlikely, if we have two keys we should have a MuxedSKM
                 byte[] decrData = _context.elGamalAESEngine().decrypt(encData, elgKey, skm);
                 if (decrData != null) {
-                    rv = readCloveSet(decrData, 0); 
+                    rv = readCloveSet(decrData, 0);
                 } else {
-                    rv = null; 
+                    rv = null;
                 }
             }
         } catch (DataFormatException dfe) {
