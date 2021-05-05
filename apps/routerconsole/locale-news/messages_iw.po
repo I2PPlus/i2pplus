@@ -10,7 +10,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: I2P\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2018-06-16 12:58+0000\n"
+"POT-Creation-Date: 2021-05-05 19:40+0000\n"
 "PO-Revision-Date: 2017-06-30 21:33+0000\n"
 "Last-Translator: kytv <killyourtv@i2pmail.org>\n"
 "Language-Team: Hebrew (http://www.transifex.com/otf/I2P/language/he/)\n"
@@ -20,14 +20,15 @@ msgstr ""
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=(n != 1);\n"
 
-msgid "Congratulations on getting I2P installed!"
-msgstr "ברכותינו על כך שהתקנת I2P!"
+msgid "I2P+ installation complete!"
+msgstr ""
 
-msgid "Welcome to I2P!"
+#, fuzzy
+msgid "Welcome to I2P+!"
 msgstr "ברוך בואך אל I2P!"
 
 #, java-format
-msgid "Please {0}have patience{1} as I2P boots up and finds peers."
+msgid "Please {0}have patience{1} as I2P+ boots up and finds peers."
 msgstr ""
 
 #, java-format
@@ -54,11 +55,14 @@ msgstr ""
 
 #, java-format
 msgid ""
-"Once you have a \"shared clients\" destination listed on the left, please {0}"
-"check out{1} our {2}FAQ{3}."
+"Once you have a \"Shared Clients\" destination indicated on the sidebar, "
+"please {0}check out{1} our {2}FAQ{3}."
 msgstr ""
 
 #, java-format
 msgid ""
 "Point your IRC client to {0}localhost:6668{1} and say hi to us on {2}#i2p{3}."
 msgstr ""
+
+#~ msgid "Congratulations on getting I2P installed!"
+#~ msgstr "ברכותינו על כך שהתקנת I2P!"

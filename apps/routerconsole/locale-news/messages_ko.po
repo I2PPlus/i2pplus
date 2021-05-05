@@ -9,7 +9,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: I2P\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2018-06-16 12:58+0000\n"
+"POT-Creation-Date: 2021-05-05 19:40+0000\n"
 "PO-Revision-Date: 2017-06-30 21:33+0000\n"
 "Last-Translator: HelloKS <kqwe1859@gmail.com>\n"
 "Language-Team: Korean (http://www.transifex.com/otf/I2P/language/ko/)\n"
@@ -19,14 +19,15 @@ msgstr ""
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=1; plural=0;\n"
 
-msgid "Congratulations on getting I2P installed!"
-msgstr "I2P 설치를 축하드립니다!"
+msgid "I2P+ installation complete!"
+msgstr ""
 
-msgid "Welcome to I2P!"
+#, fuzzy
+msgid "Welcome to I2P+!"
 msgstr "I2P에 환영합니다!"
 
-#, java-format
-msgid "Please {0}have patience{1} as I2P boots up and finds peers."
+#, fuzzy, java-format
+msgid "Please {0}have patience{1} as I2P+ boots up and finds peers."
 msgstr "I2P가 시작되고 피어를 찾는 동안 {0} 기다려 주세요{1}."
 
 #, java-format
@@ -57,10 +58,10 @@ msgid ""
 msgstr ""
 "{0}I2P 브라우저 프록시 설정 페이지{1}에서 더 많은 정보를 얻을 수 있습니다."
 
-#, java-format
+#, fuzzy, java-format
 msgid ""
-"Once you have a \"shared clients\" destination listed on the left, please {0}"
-"check out{1} our {2}FAQ{3}."
+"Once you have a \"Shared Clients\" destination indicated on the sidebar, "
+"please {0}check out{1} our {2}FAQ{3}."
 msgstr ""
 "\"공유된 클라이언트\"의 행선지가 왼쪽에 있습니다. {2}FAQ{3}를 {0}참조해 주세"
 "요{1}."
@@ -71,3 +72,6 @@ msgid ""
 msgstr ""
 "IRC 클라이언트를 {0}localhost:6668{1}로 포인트 하고 {2}#i2p{3}에 접속해서 우"
 "리들에게 인사를 건네주세요."
+
+#~ msgid "Congratulations on getting I2P installed!"
+#~ msgstr "I2P 설치를 축하드립니다!"

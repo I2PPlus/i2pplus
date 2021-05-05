@@ -2,7 +2,7 @@
 # Copyright (C) 2009 The I2P Project
 # This file is distributed under the same license as the desktopgui package.
 # To contribute translations, see http://www.i2p2.de/newdevelopers
-# 
+#
 # Translators:
 # ducki2p <ducki2p@gmail.com>, 2011
 # foo <foo@bar>, 2009
@@ -12,14 +12,14 @@ msgid ""
 msgstr ""
 "Project-Id-Version: I2P\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2016-05-25 12:29+0000\n"
+"POT-Creation-Date: 2021-05-05 19:41+0000\n"
 "PO-Revision-Date: 2018-01-26 09:36+0000\n"
 "Last-Translator: Nathan Follens\n"
 "Language-Team: Dutch (http://www.transifex.com/otf/I2P/language/nl/)\n"
+"Language: nl\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"Language: nl\n"
 "Plural-Forms: nplurals=2; plural=(n != 1);\n"
 
 #: src/net/i2p/desktopgui/ExternalTrayManager.java:31
@@ -37,57 +37,57 @@ msgstr "I2P is aan het starten!"
 msgid "Starting"
 msgstr "Bezig met starten"
 
-#: src/net/i2p/desktopgui/InternalTrayManager.java:55
-#: src/net/i2p/desktopgui/InternalTrayManager.java:207
+#: src/net/i2p/desktopgui/InternalTrayManager.java:54
+#: src/net/i2p/desktopgui/InternalTrayManager.java:206
 msgid "Launch I2P Browser"
 msgstr "I2P-browser starten"
 
-#: src/net/i2p/desktopgui/InternalTrayManager.java:76
-#: src/net/i2p/desktopgui/InternalTrayManager.java:228
+#: src/net/i2p/desktopgui/InternalTrayManager.java:75
+#: src/net/i2p/desktopgui/InternalTrayManager.java:227
 msgid "Configure I2P System Tray"
 msgstr "I2P-systeemvak configureren"
 
-#: src/net/i2p/desktopgui/InternalTrayManager.java:77
-#: src/net/i2p/desktopgui/InternalTrayManager.java:229
+#: src/net/i2p/desktopgui/InternalTrayManager.java:76
+#: src/net/i2p/desktopgui/InternalTrayManager.java:228
 msgid "Disable"
 msgstr "Uitschakelen"
 
-#: src/net/i2p/desktopgui/InternalTrayManager.java:93
-#: src/net/i2p/desktopgui/InternalTrayManager.java:245
+#: src/net/i2p/desktopgui/InternalTrayManager.java:92
+#: src/net/i2p/desktopgui/InternalTrayManager.java:244
 msgid "Restart I2P"
 msgstr "I2P herstarten"
 
-#: src/net/i2p/desktopgui/InternalTrayManager.java:110
-#: src/net/i2p/desktopgui/InternalTrayManager.java:262
+#: src/net/i2p/desktopgui/InternalTrayManager.java:109
+#: src/net/i2p/desktopgui/InternalTrayManager.java:261
 msgid "Stop I2P"
 msgstr "I2P stoppen"
 
-#: src/net/i2p/desktopgui/InternalTrayManager.java:126
-#: src/net/i2p/desktopgui/InternalTrayManager.java:278
+#: src/net/i2p/desktopgui/InternalTrayManager.java:125
+#: src/net/i2p/desktopgui/InternalTrayManager.java:277
 msgid "Restart I2P Immediately"
 msgstr "I2P onmiddellijk herstarten"
 
-#: src/net/i2p/desktopgui/InternalTrayManager.java:143
-#: src/net/i2p/desktopgui/InternalTrayManager.java:295
+#: src/net/i2p/desktopgui/InternalTrayManager.java:142
+#: src/net/i2p/desktopgui/InternalTrayManager.java:294
 msgid "Stop I2P Immediately"
 msgstr "I2P onmiddellijk stoppen"
 
-#: src/net/i2p/desktopgui/InternalTrayManager.java:157
-#: src/net/i2p/desktopgui/InternalTrayManager.java:309
+#: src/net/i2p/desktopgui/InternalTrayManager.java:156
+#: src/net/i2p/desktopgui/InternalTrayManager.java:308
 msgid "Cancel I2P Shutdown"
 msgstr "Afsluiten I2P annuleren"
 
-#: src/net/i2p/desktopgui/InternalTrayManager.java:363
+#: src/net/i2p/desktopgui/InternalTrayManager.java:362
 #, java-format
 msgid "Shutdown in {0}"
 msgstr "Afsluiten over {0}"
 
-#: src/net/i2p/desktopgui/InternalTrayManager.java:365
+#: src/net/i2p/desktopgui/InternalTrayManager.java:364
 msgid "Shutdown imminent"
 msgstr "Wordt zo meteen afgesloten"
 
 #. status translations are in the console bundle
-#: src/net/i2p/desktopgui/InternalTrayManager.java:370
+#: src/net/i2p/desktopgui/InternalTrayManager.java:369
 msgid "Network"
 msgstr "Netwerk"
 

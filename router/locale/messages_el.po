@@ -16,7 +16,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: I2P\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2019-12-18 13:32+0000\n"
+"POT-Creation-Date: 2021-05-05 19:40+0000\n"
 "PO-Revision-Date: 2019-11-24 13:40+0000\n"
 "Last-Translator: LaScapigliata <ditri2000@hotmail.com>\n"
 "Language-Team: Greek (http://www.transifex.com/otf/I2P/language/el/)\n"
@@ -27,164 +27,220 @@ msgstr ""
 "Plural-Forms: nplurals=2; plural=(n != 1);\n"
 
 #. * IPv4 OK, IPv6 OK or disabled or no address
-#: ../java/src/net/i2p/router/CommSystemFacade.java:370
+#: ../java/src/net/i2p/router/CommSystemFacade.java:377
 msgid "OK"
 msgstr "ΟΚ"
 
-#: ../java/src/net/i2p/router/CommSystemFacade.java:371
+#: ../java/src/net/i2p/router/CommSystemFacade.java:378
 msgid "IPv4: OK; IPv6: Testing"
 msgstr ""
 
-#: ../java/src/net/i2p/router/CommSystemFacade.java:372
+#: ../java/src/net/i2p/router/CommSystemFacade.java:379
 msgid "IPv4: OK; IPv6: Firewalled"
 msgstr ""
 
-#: ../java/src/net/i2p/router/CommSystemFacade.java:373
+#: ../java/src/net/i2p/router/CommSystemFacade.java:380
 msgid "IPv4: Testing; IPv6: OK"
 msgstr ""
 
-#: ../java/src/net/i2p/router/CommSystemFacade.java:374
+#: ../java/src/net/i2p/router/CommSystemFacade.java:381
 msgid "IPv4: Firewalled; IPv6: OK"
 msgstr ""
 
-#: ../java/src/net/i2p/router/CommSystemFacade.java:375
+#: ../java/src/net/i2p/router/CommSystemFacade.java:382
 msgid "IPv4: Disabled; IPv6: OK"
 msgstr ""
 
-#: ../java/src/net/i2p/router/CommSystemFacade.java:376
+#: ../java/src/net/i2p/router/CommSystemFacade.java:383
 msgid "IPv4: Symmetric NAT; IPv6: OK"
 msgstr ""
 
 #. * IPv4 symmetric NAT, IPv6 firewalled or disabled or no address
-#: ../java/src/net/i2p/router/CommSystemFacade.java:378
+#: ../java/src/net/i2p/router/CommSystemFacade.java:385
 msgid "Symmetric NAT"
 msgstr "Συμμετρικό NAT"
 
-#: ../java/src/net/i2p/router/CommSystemFacade.java:379
+#: ../java/src/net/i2p/router/CommSystemFacade.java:386
 msgid "IPv4: Symmetric NAT; IPv6: Testing"
 msgstr ""
 
-#: ../java/src/net/i2p/router/CommSystemFacade.java:380
+#: ../java/src/net/i2p/router/CommSystemFacade.java:387
 msgid "IPv4: Firewalled; IPv6: Testing"
 msgstr ""
 
 #. * IPv4 firewalled, IPv6 firewalled or disabled or no address
-#: ../java/src/net/i2p/router/CommSystemFacade.java:382
+#: ../java/src/net/i2p/router/CommSystemFacade.java:389
 msgid "Firewalled"
 msgstr ""
 
-#: ../java/src/net/i2p/router/CommSystemFacade.java:383
+#: ../java/src/net/i2p/router/CommSystemFacade.java:390
 msgid "IPv4: Testing; IPv6: Firewalled"
 msgstr ""
 
-#: ../java/src/net/i2p/router/CommSystemFacade.java:384
+#: ../java/src/net/i2p/router/CommSystemFacade.java:391
 msgid "IPv4: Disabled; IPv6: Testing"
 msgstr ""
 
-#: ../java/src/net/i2p/router/CommSystemFacade.java:385
+#: ../java/src/net/i2p/router/CommSystemFacade.java:392
 msgid "IPv4: Disabled; IPv6: Firewalled"
 msgstr ""
 
-#: ../java/src/net/i2p/router/CommSystemFacade.java:386
+#: ../java/src/net/i2p/router/CommSystemFacade.java:393
 msgid "Disconnected"
 msgstr "Αποσυνδεδεμένος"
 
-#: ../java/src/net/i2p/router/CommSystemFacade.java:387
+#: ../java/src/net/i2p/router/CommSystemFacade.java:394
 msgid "Port Conflict"
 msgstr ""
 
-#: ../java/src/net/i2p/router/CommSystemFacade.java:388
+#: ../java/src/net/i2p/router/CommSystemFacade.java:395
 msgid "Testing"
 msgstr "Δοκιμάζει"
 
+#. setTunnelStatus(_x("No participating tunnels" + ":<br>" + _x("Starting up")));
 #. NPE, too early
 #. if (_context.router().getRouterInfo().getBandwidthTier().equals("K"))
 #. setTunnelStatus("Not expecting tunnel requests: Advertised bandwidth too low");
 #. else
-#: ../java/src/net/i2p/router/RouterThrottleImpl.java:84
-#: ../java/src/net/i2p/router/RouterThrottleImpl.java:142
-#: ../java/src/net/i2p/router/RouterThrottleImpl.java:545
-msgid "Rejecting tunnels: Starting up"
-msgstr "Απόρριψη τούνελ: Εκκίνηση"
+#. setTunnelStatus(_x("No participating tunnels" + ":<br>" + _x("Starting up")));
+#: ../java/src/net/i2p/router/RouterThrottleImpl.java:88
+#: ../java/src/net/i2p/router/RouterThrottleImpl.java:148
+#: ../java/src/net/i2p/router/RouterThrottleImpl.java:589
+msgid "Starting up"
+msgstr ""
 
-#: ../java/src/net/i2p/router/RouterThrottleImpl.java:189
-msgid "Rejecting tunnels: High message delay"
+#: ../java/src/net/i2p/router/RouterThrottleImpl.java:150
+#: ../java/src/net/i2p/router/tunnel/pool/BuildHandler.java:785
+#, fuzzy
+msgid "Declining all tunnel requests:<br>"
+msgstr "Απόρριψη αιτημάτων για τούνελ: Υπερφόρτωση"
+
+#: ../java/src/net/i2p/router/RouterThrottleImpl.java:150
+#: ../java/src/net/i2p/router/tunnel/pool/BuildHandler.java:785
+msgid "Hidden Mode"
+msgstr ""
+
+#: ../java/src/net/i2p/router/RouterThrottleImpl.java:197
+#: ../java/src/net/i2p/router/RouterThrottleImpl.java:215
+#: ../java/src/net/i2p/router/tunnel/pool/BuildHandler.java:813
+#: ../java/src/net/i2p/router/tunnel/pool/BuildHandler.java:844
+#, fuzzy
+msgid "Declining tunnel requests:<br>"
+msgstr "Απόρριψη αιτημάτων για τούνελ: Υπερφόρτωση"
+
+#: ../java/src/net/i2p/router/RouterThrottleImpl.java:197
+#, fuzzy
+msgid "High message delay"
 msgstr "Απόρριψη τούνελ : Υψηλή καθυστέρηση μηνύματος"
 
-#: ../java/src/net/i2p/router/RouterThrottleImpl.java:202
-msgid "Rejecting tunnels: Limit reached"
-msgstr "Απόρριψη τούνελ: Επίτευξη ορίου"
+#: ../java/src/net/i2p/router/RouterThrottleImpl.java:210
+msgid "Declining requests: "
+msgstr ""
 
-#: ../java/src/net/i2p/router/RouterThrottleImpl.java:241
-msgid "Rejecting most tunnels: High number of requests"
+#: ../java/src/net/i2p/router/RouterThrottleImpl.java:210
+msgid "Limit reached"
+msgstr ""
+
+#: ../java/src/net/i2p/router/RouterThrottleImpl.java:215
+msgid "Participation disabled"
+msgstr ""
+
+#: ../java/src/net/i2p/router/RouterThrottleImpl.java:255
+#, fuzzy
+msgid "High number of requests"
+msgstr "Απόρριψη των περισσοτέρων τούνελ : Υψηλός αριθμός αιτήσεων"
+
+#: ../java/src/net/i2p/router/RouterThrottleImpl.java:255
+#, fuzzy
+msgid "Rejecting most tunnel requests:<br>"
 msgstr "Απόρριψη των περισσοτέρων τούνελ : Υψηλός αριθμός αιτήσεων"
 
 #. hard to do {0} from here
 #. setTunnelStatus("Accepting " + (100-(int)(100.0*probReject)) + "% of tunnels");
-#: ../java/src/net/i2p/router/RouterThrottleImpl.java:243
-#: ../java/src/net/i2p/router/RouterThrottleImpl.java:424
-msgid "Accepting most tunnels"
+#: ../java/src/net/i2p/router/RouterThrottleImpl.java:257
+#: ../java/src/net/i2p/router/RouterThrottleImpl.java:463
+#, fuzzy
+msgid "Accepting most tunnel requests"
 msgstr "Αποδοχή των περισσοτέρων τούνελ"
 
-#: ../java/src/net/i2p/router/RouterThrottleImpl.java:245
-#: ../java/src/net/i2p/router/RouterThrottleImpl.java:426
-#: ../java/src/net/i2p/router/RouterThrottleImpl.java:561
-msgid "Accepting tunnels"
+#: ../java/src/net/i2p/router/RouterThrottleImpl.java:259
+#: ../java/src/net/i2p/router/RouterThrottleImpl.java:465
+#: ../java/src/net/i2p/router/RouterThrottleImpl.java:605
+#, fuzzy
+msgid "Accepting tunnel requests"
 msgstr "Αποδοχή τούνελ"
 
 #. .067KBps
 #. * also limited to 90% - see below
 #. always leave at least 4KBps free when allowing
-#: ../java/src/net/i2p/router/RouterThrottleImpl.java:350
-msgid "Rejecting tunnels: Bandwidth limit"
-msgstr "Απόρριψη τούνελ : Όριο εύρους ζώνης"
-
+#. private static final String LIMIT_STR = _x("Declining tunnel requests" + ":<br>" + "Bandwidth limit");
 #. hard to do {0} from here
 #. setTunnelStatus("Rejecting " + ((int)(100.0*probReject)) + "% of tunnels: Bandwidth limit");
-#: ../java/src/net/i2p/router/RouterThrottleImpl.java:420
-msgid "Rejecting most tunnels: Bandwidth limit"
-msgstr "Απόρριψη των περισοτέρων τούνελ : Όριο εύρους ζώνης"
+#. setTunnelStatus(_x("Declining most tunnel requests" + ":<br>" + "Bandwidth limit"));
+#: ../java/src/net/i2p/router/RouterThrottleImpl.java:365
+#: ../java/src/net/i2p/router/RouterThrottleImpl.java:459
+#, fuzzy
+msgid "Declining requests: Bandwidth limit"
+msgstr "Απόρριψη τούνελ : Όριο εύρους ζώνης"
 
-#: ../java/src/net/i2p/router/RouterThrottleImpl.java:550
-msgid "Rejecting tunnels: Shutting down"
-msgstr "Απόρριψη τούνελ : Κλείσιμο"
+#: ../java/src/net/i2p/router/RouterThrottleImpl.java:594
+#: ../java/src/net/i2p/router/RouterThrottleImpl.java:607
+#, fuzzy
+msgid "Declining tunnel requests"
+msgstr "Απόρριψη αιτημάτων για τούνελ: Καθυστέρηση"
 
-#: ../java/src/net/i2p/router/RouterThrottleImpl.java:563
-msgid "Rejecting tunnels"
-msgstr "Απόρριψη τούνελ"
+#: ../java/src/net/i2p/router/RouterThrottleImpl.java:594
+msgid "Shutting down"
+msgstr ""
 
-#: ../java/src/net/i2p/router/tunnel/pool/BuildHandler.java:260
+#: ../java/src/net/i2p/router/tunnel/pool/BuildHandler.java:277
 msgid "Dropping tunnel requests: Too slow"
 msgstr "Απόρριψη αιτημάτων για τούνελ: Καθυστέρηση"
 
-#: ../java/src/net/i2p/router/tunnel/pool/BuildHandler.java:270
+#: ../java/src/net/i2p/router/tunnel/pool/BuildHandler.java:286
 #, fuzzy
 msgid "Dropping tunnel requests: High job lag"
 msgstr "Απόρριψη αιτημάτων για τούνελ: Υψηλό φορτίο"
 
 #. don't even bother, since we are so overloaded locally
-#: ../java/src/net/i2p/router/tunnel/pool/BuildHandler.java:464
+#: ../java/src/net/i2p/router/tunnel/pool/BuildHandler.java:484
 msgid "Dropping tunnel requests: Overloaded"
 msgstr "Απόρριψη αιτημάτων για τούνελ: Υπερφόρτωση"
 
-#: ../java/src/net/i2p/router/tunnel/pool/BuildHandler.java:747
+#: ../java/src/net/i2p/router/tunnel/pool/BuildHandler.java:813
 #, fuzzy
-msgid "Rejecting tunnels: Hidden mode"
-msgstr "Απόρριψη τούνελ : Υψηλή καθυστέρηση μηνύματος"
-
-#: ../java/src/net/i2p/router/tunnel/pool/BuildHandler.java:775
-msgid "Rejecting tunnels: Request overload"
+msgid "Request overload"
 msgstr "Απόρριψη τούνελ: Υπερφόρτωση αιτημάτων"
 
-#: ../java/src/net/i2p/router/tunnel/pool/BuildHandler.java:806
-msgid "Rejecting tunnels: Connection limit"
-msgstr "Απόρριψη τούνελ: Όριο συνδέσεων"
+#: ../java/src/net/i2p/router/tunnel/pool/BuildHandler.java:844
+#, fuzzy
+msgid "Connection limit reached"
+msgstr "Απόρριψη τούνελ: Επίτευξη ορίου"
 
-#: ../java/src/net/i2p/router/tunnel/pool/BuildHandler.java:1024
-#: ../java/src/net/i2p/router/tunnel/pool/BuildHandler.java:1057
+#: ../java/src/net/i2p/router/tunnel/pool/BuildHandler.java:1068
+#: ../java/src/net/i2p/router/tunnel/pool/BuildHandler.java:1101
 msgid "Dropping tunnel requests: High load"
 msgstr "Απόρριψη αιτημάτων για τούνελ: Υψηλό φορτίο"
 
-#: ../java/src/net/i2p/router/tunnel/pool/BuildHandler.java:1140
+#: ../java/src/net/i2p/router/tunnel/pool/BuildHandler.java:1184
 msgid "Dropping tunnel requests: Queue time"
 msgstr "Απόρριψη αιτημάτων για τούνελ: Χρόνος ουράς αναμονής"
+
+#~ msgid "Rejecting tunnels: Starting up"
+#~ msgstr "Απόρριψη τούνελ: Εκκίνηση"
+
+#~ msgid "Rejecting most tunnels: Bandwidth limit"
+#~ msgstr "Απόρριψη των περισοτέρων τούνελ : Όριο εύρους ζώνης"
+
+#~ msgid "Rejecting tunnels: Shutting down"
+#~ msgstr "Απόρριψη τούνελ : Κλείσιμο"
+
+#~ msgid "Rejecting tunnels"
+#~ msgstr "Απόρριψη τούνελ"
+
+#, fuzzy
+#~ msgid "Rejecting tunnels: Hidden mode"
+#~ msgstr "Απόρριψη τούνελ : Υψηλή καθυστέρηση μηνύματος"
+
+#~ msgid "Rejecting tunnels: Connection limit"
+#~ msgstr "Απόρριψη τούνελ: Όριο συνδέσεων"

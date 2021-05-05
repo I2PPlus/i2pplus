@@ -20,7 +20,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: I2P\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2018-06-16 12:58+0000\n"
+"POT-Creation-Date: 2021-05-05 19:40+0000\n"
 "PO-Revision-Date: 2017-06-30 21:33+0000\n"
 "Last-Translator: Florian Maier <contact@marsmenschen.com>\n"
 "Language-Team: German (http://www.transifex.com/otf/I2P/language/de/)\n"
@@ -770,6 +770,9 @@ msgstr "Wallis und Futuna"
 
 msgid "Samoa"
 msgstr "Samoa"
+
+msgid "Kosovo"
+msgstr ""
 
 msgid "Yemen"
 msgstr "Jemen"

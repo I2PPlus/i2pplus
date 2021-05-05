@@ -9,7 +9,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: I2P\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2018-06-16 12:58+0000\n"
+"POT-Creation-Date: 2021-05-05 19:40+0000\n"
 "PO-Revision-Date: 2017-06-30 21:33+0000\n"
 "Last-Translator: 黃彥儒 <r1235613@gmail.com>\n"
 "Language-Team: Chinese (Taiwan) (http://www.transifex.com/otf/I2P/language/"
@@ -20,14 +20,15 @@ msgstr ""
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=1; plural=0;\n"
 
-msgid "Congratulations on getting I2P installed!"
-msgstr "恭喜您成功安裝了 I2P ！"
+msgid "I2P+ installation complete!"
+msgstr ""
 
-msgid "Welcome to I2P!"
+#, fuzzy
+msgid "Welcome to I2P+!"
 msgstr "歡迎來到 I2P！"
 
-#, java-format
-msgid "Please {0}have patience{1} as I2P boots up and finds peers."
+#, fuzzy, java-format
+msgid "Please {0}have patience{1} as I2P+ boots up and finds peers."
 msgstr "敬請{0}耐心等候{1} I2P 啟動以及尋找其他使用者。"
 
 #, java-format
@@ -54,10 +55,10 @@ msgid ""
 "More information can be found on the {0}I2P browser proxy setup page{1}."
 msgstr "您可以在 {0}I2P 瀏覽器之代理伺服器設定頁面{1}中找到更多資訊。"
 
-#, java-format
+#, fuzzy, java-format
 msgid ""
-"Once you have a \"shared clients\" destination listed on the left, please {0}"
-"check out{1} our {2}FAQ{3}."
+"Once you have a \"Shared Clients\" destination indicated on the sidebar, "
+"please {0}check out{1} our {2}FAQ{3}."
 msgstr ""
 "當您的左方出現「共享客戶端」目的地清單時，請 {0}參考{1}我們的 {2}FAQ{3}。"
 
@@ -67,3 +68,6 @@ msgid ""
 msgstr ""
 "將您的 IRC 客戶端連線指向 {0}localhost:6668{1} 並且在 {2}#i2p{3} 上面跟我們打"
 "聲招呼。"
+
+#~ msgid "Congratulations on getting I2P installed!"
+#~ msgstr "恭喜您成功安裝了 I2P ！"

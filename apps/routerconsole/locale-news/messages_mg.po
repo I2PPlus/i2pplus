@@ -11,7 +11,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: I2P\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2018-06-16 12:58+0000\n"
+"POT-Creation-Date: 2021-05-05 19:40+0000\n"
 "PO-Revision-Date: 2017-07-08 14:40+0000\n"
 "Last-Translator: zzzi2p\n"
 "Language-Team: Malagasy (http://www.transifex.com/otf/I2P/language/mg/)\n"
@@ -21,14 +21,15 @@ msgstr ""
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=(n > 1);\n"
 
-msgid "Congratulations on getting I2P installed!"
-msgstr "Arahabaina fa tontosa ny fametrahana an'i I2P!"
+msgid "I2P+ installation complete!"
+msgstr ""
 
-msgid "Welcome to I2P!"
+#, fuzzy
+msgid "Welcome to I2P+!"
 msgstr "Tongasoa eto amin'i I2P!"
 
-#, java-format
-msgid "Please {0}have patience{1} as I2P boots up and finds peers."
+#, fuzzy, java-format
+msgid "Please {0}have patience{1} as I2P+ boots up and finds peers."
 msgstr ""
 "Azafady{0}miandrasa  kely{1}mbola mamelona tena sy mitady olona "
 "hifandraisana i I2P."
@@ -63,10 +64,10 @@ msgstr ""
 "Misy filazana hafa koa azo jerena ao amin''ny {0}Pejy fanitsian''ny proxy "
 "hoan''ny I2P{1}."
 
-#, java-format
+#, fuzzy, java-format
 msgid ""
-"Once you have a \"shared clients\" destination listed on the left, please {0}"
-"check out{1} our {2}FAQ{3}."
+"Once you have a \"Shared Clients\" destination indicated on the sidebar, "
+"please {0}check out{1} our {2}FAQ{3}."
 msgstr ""
 "Rehefa mahita \"shared clients\" eo amin'ny  lisitra amin'ny ankavia , dia "
 "{0}jereo ny{1} misy ny {2}Fanontaniana mateti-pitranga{3}."
@@ -77,3 +78,6 @@ msgid ""
 msgstr ""
 "Tondroy ny fampiresahana IRC eo amin''ny {0}localhost:6668{1} dia miresaha "
 "aminay eo amin''ny {2}#i2p{3}."
+
+#~ msgid "Congratulations on getting I2P installed!"
+#~ msgstr "Arahabaina fa tontosa ny fametrahana an'i I2P!"

@@ -10,7 +10,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: I2P\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2018-06-16 12:58+0000\n"
+"POT-Creation-Date: 2021-05-05 19:40+0000\n"
 "PO-Revision-Date: 2017-09-19 18:30+0000\n"
 "Last-Translator: Allan Nordhøy <epost@anotheragency.no>\n"
 "Language-Team: Norwegian Bokmål (http://www.transifex.com/otf/I2P/language/"
@@ -21,14 +21,15 @@ msgstr ""
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=(n != 1);\n"
 
-msgid "Congratulations on getting I2P installed!"
-msgstr "Til lykke med installasjonen av I2P!"
+msgid "I2P+ installation complete!"
+msgstr ""
 
-msgid "Welcome to I2P!"
+#, fuzzy
+msgid "Welcome to I2P+!"
 msgstr "Velkommen til I2P!"
 
-#, java-format
-msgid "Please {0}have patience{1} as I2P boots up and finds peers."
+#, fuzzy, java-format
+msgid "Please {0}have patience{1} as I2P+ boots up and finds peers."
 msgstr ""
 "{0}vær tolmodig{1} i påvente av I2P-oppstart og tilknytning til likemenn."
 
@@ -60,10 +61,10 @@ msgid ""
 msgstr ""
 "Mer informasjon er å finne på {0}oppsettssiden for I2P-mellomtjener{1}."
 
-#, java-format
+#, fuzzy, java-format
 msgid ""
-"Once you have a \"shared clients\" destination listed on the left, please {0}"
-"check out{1} our {2}FAQ{3}."
+"Once you have a \"Shared Clients\" destination indicated on the sidebar, "
+"please {0}check out{1} our {2}FAQ{3}."
 msgstr ""
 "Når du har \"delte klienter\" mål opplistet til venstre, {0}sjekk{1} vår {2}"
 "O-S-S{3}."
@@ -74,3 +75,6 @@ msgid ""
 msgstr ""
 "Rett din IRC-klient inn mot {0}localhost:6668{1} og si hei til oss på {2}"
 "#i2p{3}."
+
+#~ msgid "Congratulations on getting I2P installed!"
+#~ msgstr "Til lykke med installasjonen av I2P!"

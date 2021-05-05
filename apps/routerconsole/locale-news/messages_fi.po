@@ -10,7 +10,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: I2P\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2018-06-16 12:58+0000\n"
+"POT-Creation-Date: 2021-05-05 19:40+0000\n"
 "PO-Revision-Date: 2017-06-30 21:33+0000\n"
 "Last-Translator: outolumo <outolumo@gmail.com>\n"
 "Language-Team: Finnish (http://www.transifex.com/otf/I2P/language/fi/)\n"
@@ -20,14 +20,15 @@ msgstr ""
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=(n != 1);\n"
 
-msgid "Congratulations on getting I2P installed!"
-msgstr "Onnittelut I2P:n asentamisesta!"
+msgid "I2P+ installation complete!"
+msgstr ""
 
-msgid "Welcome to I2P!"
+#, fuzzy
+msgid "Welcome to I2P+!"
 msgstr "Tervetuloa I2P:hen!"
 
-#, java-format
-msgid "Please {0}have patience{1} as I2P boots up and finds peers."
+#, fuzzy, java-format
+msgid "Please {0}have patience{1} as I2P+ boots up and finds peers."
 msgstr "Odota {0}kärsivällisesti{1} kuin I2P käynnistyy ja löytää vertaisia."
 
 #, java-format
@@ -56,10 +57,10 @@ msgid ""
 "More information can be found on the {0}I2P browser proxy setup page{1}."
 msgstr "Lisää tietoa löytyy {0}I2P-selaimen välityspalvelinasetussivulta{1}."
 
-#, java-format
+#, fuzzy, java-format
 msgid ""
-"Once you have a \"shared clients\" destination listed on the left, please {0}"
-"check out{1} our {2}FAQ{3}."
+"Once you have a \"Shared Clients\" destination indicated on the sidebar, "
+"please {0}check out{1} our {2}FAQ{3}."
 msgstr ""
 "Kun sinulla on \"shared clients\" listattuna vasemmalla, {0}tutustu{1} {2}"
 "UKK{3}-sivuun."
@@ -70,3 +71,6 @@ msgid ""
 msgstr ""
 "Osoita IRC-asiakasohjelmasi osoitteeseen {0}localhost:6668{1} ja tule "
 "tervehtimään meitä {2}#i2p{3}-kanavalle."
+
+#~ msgid "Congratulations on getting I2P installed!"
+#~ msgstr "Onnittelut I2P:n asentamisesta!"

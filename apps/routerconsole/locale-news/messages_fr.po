@@ -2,7 +2,7 @@
 # Copyright (C) 2009 The I2P Project
 # This file is distributed under the same license as the routerconsole package.
 # To contribute translations, see http://www.i2p2.de/newdevelopers
-# 
+#
 # Translators:
 # bassmax, 2014
 # AO <ao@localizationlab.org>, 2019
@@ -16,40 +16,46 @@ msgid ""
 msgstr ""
 "Project-Id-Version: I2P\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2013-07-13 21:46+0000\n"
+"POT-Creation-Date: 2021-05-05 19:40+0000\n"
 "PO-Revision-Date: 2019-12-03 16:10+0000\n"
 "Last-Translator: AO <ao@localizationlab.org>\n"
 "Language-Team: French (http://www.transifex.com/otf/I2P/language/fr/)\n"
+"Language: fr\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"Language: fr\n"
 "Plural-Forms: nplurals=2; plural=(n > 1);\n"
 
-msgid "Congratulations on getting I2P installed!"
-msgstr "Félicitations, vous avez installé I2P !"
+msgid "I2P+ installation complete!"
+msgstr ""
 
-msgid "Welcome to I2P!"
+#, fuzzy
+msgid "Welcome to I2P+!"
 msgstr "Bienvenue à I2P !"
 
-#, java-format
-msgid "Please {0}have patience{1} as I2P boots up and finds peers."
+#, fuzzy, java-format
+msgid "Please {0}have patience{1} as I2P+ boots up and finds peers."
 msgstr "Veuillez {0}patienter{1} pendant qu’I2P s’amorce et trouve des pairs."
 
 #, java-format
 msgid ""
-"While you are waiting, please {0}adjust your bandwidth settings{1} on the "
-"{2}configuration page{3}."
-msgstr "Pendant que vous patientez, veuillez {0}ajuster vos paramètres de bande passante{1} sur la {2}page de configuration{3}."
+"While you are waiting, please {0}adjust your bandwidth settings{1} on the {2}"
+"configuration page{3}."
+msgstr ""
+"Pendant que vous patientez, veuillez {0}ajuster vos paramètres de bande "
+"passante{1} sur la {2}page de configuration{3}."
 
-msgid ""
-"Also you can setup your browser to use the I2P proxy to reach eepsites."
-msgstr "Vous pouvez également configurer votre navigateur afin qu’il utilise le mandataire d’I2P pour consulter les sites eep."
+msgid "Also you can setup your browser to use the I2P proxy to reach eepsites."
+msgstr ""
+"Vous pouvez également configurer votre navigateur afin qu’il utilise le "
+"mandataire d’I2P pour consulter les sites eep."
 
 msgid ""
 "Just enter 127.0.0.1 (or localhost) port 4444 as a http proxy into your "
 "browser settings."
-msgstr "Saisissez juste 127.0.0.1 (ou localhost) port 4444 comme mandataire HTTP dans les paramètres de votre navigateur."
+msgstr ""
+"Saisissez juste 127.0.0.1 (ou localhost) port 4444 comme mandataire HTTP "
+"dans les paramètres de votre navigateur."
 
 msgid "Do not use SOCKS for this."
 msgstr "Ne pas utiliser SOCKS pour cela."
@@ -57,16 +63,24 @@ msgstr "Ne pas utiliser SOCKS pour cela."
 #, java-format
 msgid ""
 "More information can be found on the {0}I2P browser proxy setup page{1}."
-msgstr "Plus d’informations se trouvent sur la {0}page de configuration du mandataire d’I2P{1}."
+msgstr ""
+"Plus d’informations se trouvent sur la {0}page de configuration du "
+"mandataire d’I2P{1}."
+
+#, fuzzy, java-format
+msgid ""
+"Once you have a \"Shared Clients\" destination indicated on the sidebar, "
+"please {0}check out{1} our {2}FAQ{3}."
+msgstr ""
+"Une fois que vous aurez une destination « clients partagés » listée sur la "
+"gauche, veuillez {0}consulter{1} notre {2}FAQ{3}."
 
 #, java-format
 msgid ""
-"Once you have a \"shared clients\" destination listed on the left, please "
-"{0}check out{1} our {2}FAQ{3}."
-msgstr "Une fois que vous aurez une destination « clients partagés » listée sur la gauche, veuillez {0}consulter{1} notre {2}FAQ{3}."
-
-#, java-format
-msgid ""
-"Point your IRC client to {0}localhost:6668{1} and say hi to us on "
+"Point your IRC client to {0}localhost:6668{1} and say hi to us on {2}#i2p{3}."
+msgstr ""
+"Dirigez votre client IRC vers {0}localhost:6668{1} et dites-nous bonjour sur "
 "{2}#i2p{3}."
-msgstr "Dirigez votre client IRC vers {0}localhost:6668{1} et dites-nous bonjour sur {2}#i2p{3}."
+
+#~ msgid "Congratulations on getting I2P installed!"
+#~ msgstr "Félicitations, vous avez installé I2P !"

@@ -9,7 +9,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: I2P\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2018-06-16 12:58+0000\n"
+"POT-Creation-Date: 2021-05-05 19:40+0000\n"
 "PO-Revision-Date: 2017-06-30 21:33+0000\n"
 "Last-Translator: Khairul Agasta <khairuldroids@gmail.com>\n"
 "Language-Team: Indonesian (http://www.transifex.com/otf/I2P/language/id/)\n"
@@ -19,14 +19,15 @@ msgstr ""
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=1; plural=0;\n"
 
-msgid "Congratulations on getting I2P installed!"
-msgstr "Selamat atas terpasangnya I2P!"
+msgid "I2P+ installation complete!"
+msgstr ""
 
-msgid "Welcome to I2P!"
+#, fuzzy
+msgid "Welcome to I2P+!"
 msgstr "Selamat datang di I2P!"
 
-#, java-format
-msgid "Please {0}have patience{1} as I2P boots up and finds peers."
+#, fuzzy, java-format
+msgid "Please {0}have patience{1} as I2P+ boots up and finds peers."
 msgstr "Mohon {0}bersabar{1} karena I2P boot up dan menemukan peers."
 
 #, java-format
@@ -59,10 +60,10 @@ msgstr ""
 "Informasi lainnya dapat ditemukan pada {0}laman penyetalan proxy peramban "
 "I2P{1}."
 
-#, java-format
+#, fuzzy, java-format
 msgid ""
-"Once you have a \"shared clients\" destination listed on the left, please {0}"
-"check out{1} our {2}FAQ{3}."
+"Once you have a \"Shared Clients\" destination indicated on the sidebar, "
+"please {0}check out{1} our {2}FAQ{3}."
 msgstr ""
 "Ketika Anda memiliki tujuan \"klien berbagi\" dalam daftar di kiri, silahkan "
 "{0}baca{1} {2}FAQ{3} kami."
@@ -73,3 +74,6 @@ msgid ""
 msgstr ""
 "Arahkan klien IRC Anda ke {0}localhost:6668{1} dan katakan hi kepada kami di "
 "{2}#i2p{3}."
+
+#~ msgid "Congratulations on getting I2P installed!"
+#~ msgstr "Selamat atas terpasangnya I2P!"

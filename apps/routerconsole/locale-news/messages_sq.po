@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: I2P\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2018-06-16 12:58+0000\n"
+"POT-Creation-Date: 2021-05-05 19:40+0000\n"
 "PO-Revision-Date: 2019-01-28 21:25+0000\n"
 "Last-Translator: Besnik <besnik@programeshqip.org>\n"
 "Language-Team: Albanian (http://www.transifex.com/otf/I2P/language/sq/)\n"
@@ -18,29 +18,36 @@ msgstr ""
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=(n != 1);\n"
 
-msgid "Congratulations on getting I2P installed!"
-msgstr "Urime që arritët ta instaloni I2P-në!"
+msgid "I2P+ installation complete!"
+msgstr ""
 
-msgid "Welcome to I2P!"
+#, fuzzy
+msgid "Welcome to I2P+!"
 msgstr "Mirë se vini në I2P!"
 
-#, java-format
-msgid "Please {0}have patience{1} as I2P boots up and finds peers."
+#, fuzzy, java-format
+msgid "Please {0}have patience{1} as I2P+ boots up and finds peers."
 msgstr "Ju lutemi, {0}bëni durim{1} teksa I2P-ja bën nisjen dhe gjen ortakë."
 
 #, java-format
 msgid ""
 "While you are waiting, please {0}adjust your bandwidth settings{1} on the {2}"
 "configuration page{3}."
-msgstr "Teksa pritni, ju lutemi, {0}ujdisni rregullimet tuaja për bandën{1} te {2}faqja e formësimit{3}."
+msgstr ""
+"Teksa pritni, ju lutemi, {0}ujdisni rregullimet tuaja për bandën{1} te {2}"
+"faqja e formësimit{3}."
 
 msgid "Also you can setup your browser to use the I2P proxy to reach eepsites."
-msgstr "Mund ta rregulloni gjithashtu shfletuesin tuaj të përdorë ndërmjetësin I2P për të mbërritur në sajte eepsites."
+msgstr ""
+"Mund ta rregulloni gjithashtu shfletuesin tuaj të përdorë ndërmjetësin I2P "
+"për të mbërritur në sajte eepsites."
 
 msgid ""
 "Just enter 127.0.0.1 (or localhost) port 4444 as a http proxy into your "
 "browser settings."
-msgstr "Thjesht jepni 127.0.0.1 (ose localhost) porta 4444 si ndërmjetës http te rregullimet tuaja të shfletimit."
+msgstr ""
+"Thjesht jepni 127.0.0.1 (ose localhost) porta 4444 si ndërmjetës http te "
+"rregullimet tuaja të shfletimit."
 
 msgid "Do not use SOCKS for this."
 msgstr "Mos përdorni SOCKS për këtë."
@@ -48,15 +55,24 @@ msgstr "Mos përdorni SOCKS për këtë."
 #, java-format
 msgid ""
 "More information can be found on the {0}I2P browser proxy setup page{1}."
-msgstr "Më tepër të dhëna mund të gjeni te {0}faqja e rregullimeve të ndërmjetësit I2P për shfletues{1}."
+msgstr ""
+"Më tepër të dhëna mund të gjeni te {0}faqja e rregullimeve të ndërmjetësit "
+"I2P për shfletues{1}."
 
-#, java-format
+#, fuzzy, java-format
 msgid ""
-"Once you have a \"shared clients\" destination listed on the left, please {0}"
-"check out{1} our {2}FAQ{3}."
-msgstr "Pasi të keni majtas një vendmbërritje \"klientë të përbashkët\", ju lutemi, {0}shihni{1} {2}FAQ{3} tona."
+"Once you have a \"Shared Clients\" destination indicated on the sidebar, "
+"please {0}check out{1} our {2}FAQ{3}."
+msgstr ""
+"Pasi të keni majtas një vendmbërritje \"klientë të përbashkët\", ju lutemi, "
+"{0}shihni{1} {2}FAQ{3} tona."
 
 #, java-format
 msgid ""
 "Point your IRC client to {0}localhost:6668{1} and say hi to us on {2}#i2p{3}."
-msgstr "Drejtojeni klientin tuaj IRC te {0}localhost:6668{1} dhe na përshëndetni te kanali {2}#i2p{3}."
+msgstr ""
+"Drejtojeni klientin tuaj IRC te {0}localhost:6668{1} dhe na përshëndetni te "
+"kanali {2}#i2p{3}."
+
+#~ msgid "Congratulations on getting I2P installed!"
+#~ msgstr "Urime që arritët ta instaloni I2P-në!"

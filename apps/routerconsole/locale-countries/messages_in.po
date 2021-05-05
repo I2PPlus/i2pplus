@@ -10,7 +10,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: I2P\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2018-06-16 12:58+0000\n"
+"POT-Creation-Date: 2021-05-05 19:40+0000\n"
 "PO-Revision-Date: 2017-09-20 09:40+0000\n"
 "Last-Translator: Robert Dafis <robertdafis@gmail.com>\n"
 "Language-Team: Indonesian (http://www.transifex.com/otf/I2P/language/id/)\n"
@@ -760,6 +760,9 @@ msgstr "Wallis and Futuna"
 
 msgid "Samoa"
 msgstr "Samoa"
+
+msgid "Kosovo"
+msgstr ""
 
 msgid "Yemen"
 msgstr "Yaman"

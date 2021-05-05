@@ -2,22 +2,23 @@
 # Copyright (C) 2014 The I2P Project
 # This file is distributed under the same license as the streaming package.
 # To contribute translations, see http://www.i2p2.de/newdevelopers
-# 
+#
 # Translators:
 # Tashigi OP, 2018
 msgid ""
 msgstr ""
 "Project-Id-Version: I2P\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2015-03-29 14:30+0000\n"
+"POT-Creation-Date: 2021-05-05 19:41+0000\n"
 "PO-Revision-Date: 2018-09-20 19:01+0000\n"
 "Last-Translator: Tashigi OP\n"
 "Language-Team: Arabic (http://www.transifex.com/otf/I2P/language/ar/)\n"
+"Language: ar\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"Language: ar\n"
-"Plural-Forms: nplurals=6; plural=n==0 ? 0 : n==1 ? 1 : n==2 ? 2 : n%100>=3 && n%100<=10 ? 3 : n%100>=11 && n%100<=99 ? 4 : 5;\n"
+"Plural-Forms: nplurals=6; plural=n==0 ? 0 : n==1 ? 1 : n==2 ? 2 : n%100>=3 "
+"&& n%100<=10 ? 3 : n%100>=11 && n%100<=99 ? 4 : 5;\n"
 
 #: ../java/src/net/i2p/client/streaming/I2PSocketException.java:69
 msgid "Message timeout"
@@ -80,15 +81,15 @@ msgstr "انتهى تعيين عقد الوجهة"
 msgid "Destination lease set not found"
 msgstr "لم يتم العثور على عقد الوجهة"
 
-#: ../java/src/net/i2p/client/streaming/I2PSocketException.java:117
+#: ../java/src/net/i2p/client/streaming/I2PSocketException.java:121
 msgid "Local destination shutdown"
 msgstr "اغلاق الوجهة المحلية"
 
-#: ../java/src/net/i2p/client/streaming/I2PSocketException.java:120
+#: ../java/src/net/i2p/client/streaming/I2PSocketException.java:124
 msgid "Connection was reset"
 msgstr "تمت إعادة ضبط الاتصال"
 
 #. Translate this one here, can't do it later
-#: ../java/src/net/i2p/client/streaming/I2PSocketException.java:127
+#: ../java/src/net/i2p/client/streaming/I2PSocketException.java:131
 msgid "Failure code"
 msgstr "فشلت الشفرة"

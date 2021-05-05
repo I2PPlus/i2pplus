@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: I2P routerconsole\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2013-07-13 21:46+0000\n"
+"POT-Creation-Date: 2021-05-05 19:40+0000\n"
 "PO-Revision-Date: 2010-06-15 14:09+0100\n"
 "Last-Translator: duck <duck@mail.i2p>\n"
 "Language-Team: duck <duck@mail.i2p>\n"
@@ -18,14 +18,14 @@ msgstr ""
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=(n != 1)\n"
 
-msgid "Congratulations on getting I2P installed!"
+msgid "I2P+ installation complete!"
 msgstr ""
 
-msgid "Welcome to I2P!"
+msgid "Welcome to I2P+!"
 msgstr ""
 
 #, java-format
-msgid "Please {0}have patience{1} as I2P boots up and finds peers."
+msgid "Please {0}have patience{1} as I2P+ boots up and finds peers."
 msgstr ""
 
 #, java-format
@@ -52,8 +52,8 @@ msgstr ""
 
 #, java-format
 msgid ""
-"Once you have a \"shared clients\" destination listed on the left, please {0}"
-"check out{1} our {2}FAQ{3}."
+"Once you have a \"Shared Clients\" destination indicated on the sidebar, "
+"please {0}check out{1} our {2}FAQ{3}."
 msgstr ""
 
 #, java-format
