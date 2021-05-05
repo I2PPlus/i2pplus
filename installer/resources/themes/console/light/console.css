@@ -5157,13 +5157,15 @@ input.go:hover, button.go:hover, input[value="GO"]:hover, input.go:focus, button
 }
 
 input.go[value^="Create"], button.go[value^="Create"], #reseedcreatefile .go {
-  padding: 5px 9px 5px 24px;
-  background: url(/themes/console/images/buttons/create-file.png) no-repeat 8px center, var(--button);
+  padding: 5px 9px 5px 26px;
+  background: var(--wizard) no-repeat 8px center, var(--button);
+  background-size: 15px, 100% !important;
 }
 
 input.go[value^="Create"]:hover, button.go[value^="Create"]:hover,
 input.go[value^="Create"]:focus, button.go[value^="Create"]:focus {
-  background: url(/themes/console/images/buttons/create-file.png) no-repeat 8px center, var(--button_hover);
+  background: var(--wizard) no-repeat 8px center, var(--button_hover);
+  background-size: 15px, 100% !important;
 }
 
 input.back {
