@@ -5311,7 +5311,7 @@ p#helptranslate {
   text-align: left !important;
   border-top: 1px solid #aaafce;
   border-bottom: 1px solid #aaafce;
-  background: url(/themes/console/images/info/notice.png) left 14px center no-repeat, #fff;
+  background: url(images/favicon.svg) left 14px center no-repeat, #fff;
   background-size: 28px;
 }
 
@@ -10770,8 +10770,8 @@ div.app.js:hover::before {
 }
 
 #help_newusers {
-  background: #eef url(/themes/console/images/info/notice.png) 15px center no-repeat;
-  background: url(/themes/console/images/info/notice.png) 15px center no-repeat, linear-gradient(135deg, #fff, #f8f8ff);
+  background: #eef url(images/favicon.svg) 15px center no-repeat;
+  background: url(images/favicon.svg) 15px center no-repeat, linear-gradient(135deg, #fff, #f8f8ff);
 }
 
 #help_webhosting {
@@ -10787,7 +10787,7 @@ div.app.js:hover::before {
 
 #sidebarhelp h2, #reachabilityhelp h2 {
   padding-left: 38px;
-  background: url(/themes/console/images/info/sidebar.png) 8px center no-repeat, linear-gradient(to bottom, #fff 50%, #fafbff 50%) !important;
+  background: url(/themes/console/images/svg/sidebar.svg) 8px center no-repeat, linear-gradient(to bottom, #fff 50%, #fafbff 50%) !important;
   background-size: 24px, 100%, 100%, 100% !important;
 }
 
@@ -10823,7 +10823,7 @@ div.app.js:hover::before {
 
 #newuserguide h2 {
   padding-left: 38px;
-  background: url(/themes/console/images/svg/logs.svg) 8px center no-repeat, linear-gradient(to bottom, #fff 50%, #fafbff 50%) !important;
+  background: url(images/favicon.svg) 8px center no-repeat, linear-gradient(to bottom, #fff 50%, #fafbff 50%) !important;
   background-size: 24px, 100%, 100%, 100% !important;
 }
 

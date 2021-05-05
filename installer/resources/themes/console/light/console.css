@@ -58,9 +58,8 @@ body:not(old) {
   background: url(images/tile2.png),
   url(/themes/console/images/buttons/clean_hover.png) no-repeat,
   url(/themes/console/images/buttons/delete_hover.png) no-repeat,
-  url(/themes/console/images/buttons/update_hover.png) no-repeat,
-  url(/themes/console/images/info/notice.png) no-repeat, #a4a4cb;
-  background-size: 32px, 0, 0, 0, 0;
+  url(/themes/console/images/buttons/update_hover.png) no-repeat, #a4a4cb;
+  background-size: 32px, 0, 0, 0;
 }
 
 @supports (text-justify: auto) and (-moz-appearance: none) { /* Firefox 55+ */
@@ -6181,8 +6180,7 @@ p#helptranslate {
   top: 4px;
   text-align: left !important;
   border-top: 1px solid #8d8daa;
-  background: url(/themes/console/images/info/notice.png) left 14px center no-repeat, #fff;
-  background: url(/themes/console/images/info/notice.png) left 14px center no-repeat, var(--infohelp);
+  background: url(images/favicon.svg) left 14px center no-repeat, var(--infohelp);
   background-size: 28px;
 }
 
@@ -9123,7 +9121,7 @@ select[name="newlogclass"] {
 }
 
 #help p.infohelp {
-  padding-left: 50px;
+  padding: 15px 20px 15px 54px;
 }
 
 #help td {
@@ -12154,7 +12152,7 @@ h1.webapp {
 }
 
 #help_newusers {
-  background: url(/themes/console/images/info/notice.png) 15px center no-repeat, linear-gradient(135deg, #fff, #f8f8ff);
+  background: url(images/favicon.svg) 15px center no-repeat, linear-gradient(135deg, #fff, #f8f8ff);
   background-size: 32px, 100%;
 }
 
@@ -12183,7 +12181,7 @@ h1.webapp {
 
 #sidebarhelp h2, #reachabilityhelp h2 {
   padding-left: 38px;
-  background: url(/themes/console/images/info/sidebar.png) 8px center no-repeat, var(--h2) !important;
+  background: url(/themes/console/images/svg/sidebar.svg) 8px center no-repeat, var(--h2) !important;
   background-size: 24px, 100%, 100%, 100% !important;
 }
 
@@ -12219,7 +12217,7 @@ h1.webapp {
 
 #newuserguide h2 {
   padding-left: 38px;
-  background: url(/themes/console/images/info/notice.png) 8px center no-repeat, var(--h2) !important;
+  background: url(images/favicon.svg) 8px center no-repeat, var(--h2) !important;
   background-size: 24px, 100%, 100%, 100% !important;
 }
 
@@ -12364,13 +12362,14 @@ th[aria-sort] {
 }
 
 .chatlink {
-  padding: 0 3px 0 20px;
-  background: url(/themes/snark/ubergine/images/comment.png) 2px center no-repeat;
+  padding: 0 3px 0 18px;
+  background: var(--chat) 2px center no-repeat;
+  background-size: 12px;
 }
 
 .sitelink.external {
   padding: 0 3px 0 18px;
-  background: var(--globe) 3px center no-repeat;
+  background: var(--planet) 3px center no-repeat;
   background-size: 12px, 100% !important;
 }
 
