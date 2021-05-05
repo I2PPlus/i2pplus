@@ -674,6 +674,10 @@ _:-ms-lang(x), img.illustrate {
   padding-bottom: 18px;
 }
 
+#bk.iframed #published.page {
+  padding-bottom: 3px;
+}
+
 input[type=text], input[type=password], textarea {
   padding: 5px !important;
   font-family: var(--bodyfont);
@@ -1208,6 +1212,25 @@ div#book, #emptybook {
 
 #emptybook {
   padding: 0 8px;
+}
+
+#empty {
+  margin: -1px 0 10px;
+  height: 10px;
+  border: 1px solid #8d8daa;
+  border-bottom: none;
+  background: #fafaff;
+  position: relative;
+  z-index: 10;
+  border-bottom: 1px solid #8d8daa;
+}
+
+.iframed #empty {
+  margin-bottom: 20px;
+  height: 20px;
+  border: none;
+  border-top: 1px solid #8d8daa;
+  border-bottom: 1px solid #8d8daa;
 }
 
 p.book {

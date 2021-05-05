@@ -1817,7 +1817,13 @@ input#exporthosts:active {
 }
 
 #empty {
-  margin-top: 9px;
+  margin: 20px 0 30px;
+  height: 1px;
+  background: linear-gradient(to right, rgba(0,0,0,0), #26235c, rgba(0,0,0,0));
+}
+
+.iframed #published {
+  margin-bottom: 0;
 }
 
 @media screen and (max-width: 1200px) {
