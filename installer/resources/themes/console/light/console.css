@@ -121,6 +121,32 @@ tt, code, pre, textarea, #logs li, .bucket, .b32 {
   font-family: var(--monospaced)
 }
 
+a:hover, a:focus, a:active, .app:hover a, .app:focus a, .app:active a,
+input[type=submit]:hover, input[type=submit]:focus, input[type=submit]:active,
+input[type=reset]:hover, input[type=reset]:focus, input[type=reset]:active,
+button:hover, button:focus, button:active, select:hover, select:focus, select:active, .graphspanel a {
+  text-shadow: none;
+}
+
+a:link, a:visited {
+  color: #3b6bbf;
+  color: var(--a);
+  text-decoration: none;
+  font-weight: bold;
+  word-wrap: break-word;
+  outline: none;
+}
+
+a:link:hover, a:hover, a:focus, a:visited:hover {
+  color: #f60 !important;
+  text-decoration: none;
+  text-shadow: none;
+}
+
+a:active {
+  color: #f30 !important;
+}
+
 .routersummary a, .routersummary img[src$="i2plogo.png"], .routersummary h3, .confignav, *::before, *::after, div.app, .themechoice, .langselect, .langbox,
 .newsAuthor, #netdbcountrylist img, .viewfullentry, .sybil_routerinfo th img, .graphspanel, #themeoptions, #graphopts, #newsDisplay,
 #version a, #sb_internals, #sb_advanced, #sb_services, #sb_help, .sb_netstatus, .tunnelbuildstatus, .routersummary form, h1, h2, h3, h4, button, img {
@@ -2171,7 +2197,7 @@ h1, .confignav {
   transition: ease box-shadow .05s;
 }
 
-.tab:active a {
+.tab:active a, .tab a:active {
   color: #ffecdf !important;
   text-shadow: 0 1px 1px #5f2d0c;
 }
@@ -3838,32 +3864,6 @@ th code {
 
 a, h1, h2, h3, h4, th, input[type=submit], input[type=reset], button, select {
   text-shadow: 0 1px 1px #fff;
-}
-
-a:hover, a:focus, a:active, .app:hover a, .app:focus a, .app:active a,
-input[type=submit]:hover, input[type=submit]:focus, input[type=submit]:active,
-input[type=reset]:hover, input[type=reset]:focus, input[type=reset]:active,
-button:hover, button:focus, button:active, select:hover, select:focus, select:active, .graphspanel a {
-  text-shadow: none;
-}
-
-a:link, a:visited {
-  color: #3b6bbf;
-  color: var(--a);
-  text-decoration: none;
-  font-weight: bold;
-  word-wrap: break-word;
-  outline: none;
-}
-
-a:link:hover, a:hover, a:focus, a:visited:hover {
-  color: #f60 !important;
-  text-decoration: none;
-  text-shadow: none;
-}
-
-a:active {
-  color: #f30 !important;
 }
 
 .links li {
