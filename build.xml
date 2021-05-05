@@ -1770,7 +1770,8 @@
                The flags/ dir is the original set from famfamfam,
                which may be symlinked in package installs.
           -->
-          <fileset dir="installer/resources/" includes="icons/flags16x11/*" />
+<!-- don't bother updating flags unless and until there are new ones to add -->
+<!--          <fileset dir="installer/resources/" includes="icons/flags16x11/*" /> -->
           <!-- flags48x48 added in 0.9.32 -->
           <fileset dir="installer/resources/" includes="icons/flags48x48/*" />
           <!-- flags_svg added in I2P+ 0.9.47 -->
@@ -1791,38 +1792,38 @@
     <target name="updater200" depends="prepupdate, pack200, zipit200" />
     <target name="updater200WithMinifyCSS" depends="prepupdate, minifycss, pack200, zipit200" />
     <target name="updater200WithLicences" depends="prepupdate, preplicenses, pack200, zipit200" />
-    <target name="updater200WithGeoIP" depends="prepupdate, prepgeoupdate, preplicenses, pack200, zipit200" />
+    <target name="updater200WithGeoIP" depends="prepupdate, prepgeoupdate, pack200, zipit200" />
     <target name="updater200WithJetty" depends="prepjupdate, pack200, zipit200" />
     <target name="updater200WithJettyAndLicences" depends="prepjupdate, preplicenses, pack200, zipit200" />
-    <target name="updater200WithJettyAndJbigi" depends="prepjupdate, prepjbigiupdate, preplicenses, pack200, zipit200" />
+    <target name="updater200WithJettyAndJbigi" depends="prepjupdate, prepjbigiupdate, pack200, zipit200" />
     <target name="updater200WithJettyAndGeoIP" depends="prepjupdate, prepgeoupdate, pack200, zipit200" />
     <target name="updater200WithJettyAndGeoIPAndLicenses" depends="prepjupdate, prepgeoupdate, preplicenses, pack200, zipit200" />
-    <target name="updater200WithJettyFixes" depends="prepjupdatefixes, preplicenses, pack200, zipit200" />
-    <target name="updater200WithJettyFixesAndJbigi" depends="prepjupdatefixes, prepjbigiupdate, preplicenses, pack200, zipit200" />
-    <target name="updater200WithJbigi" depends="prepupdate, prepjbigiupdate, preplicenses, pack200, zipit200" />
+    <target name="updater200WithJettyFixes" depends="prepjupdatefixes, pack200, zipit200" />
+    <target name="updater200WithJettyFixesAndJbigi" depends="prepjupdatefixes, prepjbigiupdate, pack200, zipit200" />
+    <target name="updater200WithJbigi" depends="prepupdate, prepjbigiupdate, pack200, zipit200" />
     <target name="updater" depends="prepupdate, zipit" />
     <target name="updaterWithMinifyCSS" depends="prepupdate, minifycss, zipit" />
     <target name="updaterWithLicenses" depends="prepupdate, preplicenses, zipit" />
-    <target name="updaterRepack" depends="prepupdate, preplicenses, repack200, zipit" />
-    <target name="updaterWithJavadoc" depends="prepupdate, preplicenses, copyJavadoc, zipit" />
-    <target name="updater200WithJavadoc" depends="prepupdate, preplicenses, copyJavadoc, pack200, zipit200" />
-    <target name="updaterWithJavadocAndJetty" depends="prepjupdate, preplicenses, copyJavadoc, zipit" />
-    <target name="updater200WithJavadocAndJetty" depends="prepjupdate, preplicenses, copyJavadoc, pack200, zipit200" />
-    <target name="updaterWithGeoIP" depends="prepupdate, prepgeoupdate, preplicenses, zipit" />
-    <target name="updaterWithJetty" depends="prepjupdate, preplicenses, zipit" />
-    <target name="updaterWithJettyRepack" depends="prepjupdate, preplicenses, repack200, zipit" />
-    <target name="updaterWithJettyAndJbigi" depends="prepjupdate, prepjbigiupdate, preplicenses, zipit" />
-    <target name="updaterWithJettyAndJbigiRepack" depends="prepjupdate, prepjbigiupdate, preplicenses, repack200, zipit" />
-    <target name="updaterWithJettyAndGeoIPRepack" depends="prepjupdate, prepgeoupdate, preplicenses, repack200, zipit" />
+    <target name="updaterRepack" depends="prepupdate, repack200, zipit" />
+    <target name="updaterWithJavadoc" depends="prepupdate, copyJavadoc, zipit" />
+    <target name="updater200WithJavadoc" depends="prepupdate, copyJavadoc, pack200, zipit200" />
+    <target name="updaterWithJavadocAndJetty" depends="prepjupdate, copyJavadoc, zipit" />
+    <target name="updater200WithJavadocAndJetty" depends="prepjupdate, copyJavadoc, pack200, zipit200" />
+    <target name="updaterWithGeoIP" depends="prepupdate, prepgeoupdate, zipit" />
+    <target name="updaterWithJetty" depends="prepjupdate, zipit" />
+    <target name="updaterWithJettyRepack" depends="prepjupdate, repack200, zipit" />
+    <target name="updaterWithJettyAndJbigi" depends="prepjupdate, prepjbigiupdate, zipit" />
+    <target name="updaterWithJettyAndJbigiRepack" depends="prepjupdate, prepjbigiupdate, repack200, zipit" />
+    <target name="updaterWithJettyAndGeoIPRepack" depends="prepjupdate, prepgeoupdate, repack200, zipit" />
     <!--
          <target name="updaterWithJettyAndGeoIP" depends="prepjupdate, prepgeoupdate, preplicenses, zipit" />
     -->
     <target name="updaterWithJettyAndGeoIP" depends="prepjupdate, prepgeoupdate, zipit" />
     <target name="updaterWithJettyFixes" depends="prepjupdatefixes, preplicenses, zipit" />
-    <target name="updaterWithJettyFixesAndJbigi" depends="prepjupdatefixes, prepjbigiupdate, preplicenses, zipit" />
-    <target name="updaterWithJettyFixesAndGeoIP" depends="prepjupdatefixes, prepgeoupdate, preplicenses, zipit" />
-    <target name="updater200WithJettyFixesAndGeoIP" depends="prepjupdatefixes, prepgeoupdate, preplicenses, repack200, zipit" />
-    <target name="updaterWithJbigi" depends="prepupdate, prepjbigiupdate, preplicenses, zipit" />
+    <target name="updaterWithJettyFixesAndJbigi" depends="prepjupdatefixes, prepjbigiupdate, zipit" />
+    <target name="updaterWithJettyFixesAndGeoIP" depends="prepjupdatefixes, prepgeoupdate, zipit" />
+    <target name="updater200WithJettyFixesAndGeoIP" depends="prepjupdatefixes, prepgeoupdate, repack200, zipit" />
+    <target name="updaterWithJbigi" depends="prepupdate, prepjbigiupdate, zipit" />
     <target name="updaterSmall" depends="prepupdateSmall, zipit" />
     <target name="updaterRouter" depends="prepupdateRouter, zipit" />
 

@@ -71,7 +71,7 @@
 </head>
 <body id="bk">
 <style type="text/css">body{opacity:0}</style>
-<div class="page">
+<div<% if (book.getBook().equals("published")) { %> id="published"<% } %> class="page">
 <div id="navi" class="${book.getBook()}">
 <a class="abook router<%=(here.contains("router") ? " selected" : "")%>" href="addressbook?book=router&amp;filter=none"><%=intl._t("Router")%></a>&nbsp;
 <a class="abook master<%=(here.contains("master") ? " selected" : "")%>" href="addressbook?book=master&amp;filter=none"><%=intl._t("Master")%></a>&nbsp;
@@ -444,7 +444,7 @@
 <%
     /* book.notEmpty */
 %>
-<c:if test="${book.isEmpty}"></h3><div id="empty"></div></c:if>
+<c:if test="${book.isEmpty}"></h3></div><div id="empty"></div></c:if>
 <form method="POST" action="addressbook?book=${book.book}">
 <input type="hidden" name="book" value="${book.book}">
 <input type="hidden" name="serial" value="<%=susiNonce%>">
