@@ -329,12 +329,11 @@ pre {
 }
 
 .routersummary h3:hover {
-  background: linear-gradient(to bottom, #fff 50%, #ffe8bf 50%, #efd9b3 100%) !important;
   background: #fff linear-gradient(to bottom, #fff 50%, rgba(255, 232, 191, .6) 50%, rgba(239, 217, 179, .4) 100%) !important;
 }
 
 .routersummary h3:active {
-  box-shadow: var(--highlight),inset 3px 3px 3px rgba(0,0,0,.2);
+  box-shadow: var(--highlight), inset 4px 4px 4px rgba(0,0,0,.3);
   background: #f60 !important;
   transition: ease box-shadow .05s;
 }
