@@ -1993,8 +1993,6 @@ img[src$="details.png"] {
   padding: 0;
   word-wrap: break-word;
   text-align: center;
-  background: linear-gradient(to bottom, #fafaff, #f8f8ff, #fafaff);
-  background: #fafaff;
   opacity: 1 !important;
 }
 
@@ -2024,7 +2022,7 @@ img[src$="details.png"] {
   border: 1px solid #afafcf;
   box-shadow: var(--highlight);
   text-align: center;
-  background: linear-gradient(to bottom, #fafaff, #f2f2ff) !important;
+  background: linear-gradient(to bottom, #fafaff, #efefff) !important;
 }
 
 .newtorrentsection {
