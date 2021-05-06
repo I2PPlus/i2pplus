@@ -538,9 +538,6 @@
         <echo message="Revisions since ${release.number}:" />
         <echo message="${getrevisions6}" />
     </target>
-
-
-
     <!-- end git targets -->
 
     <!-- combined mtn/git targets -->
