@@ -3521,6 +3521,40 @@ h4.app img, h4.app2 img, #sitemap h3 img {
   filter: none !important;
   transition: ease all 1s;
   border-left: 1px solid #8d8daa;
+  display: none;
+}
+
+#home h4 a {
+  border-left: 1px solid #8d8daa;
+  padding: 10px 0 4px 16px;
+  margin: -8px -10px -10px 0;
+}
+
+#home h4 a::after {
+  content: "";
+  display: inline-block;
+  vertical-align: middle;
+  background: var(--settings) center center no-repeat;
+  background-size: 16px;
+  width: 16px;
+  height: 18px;
+  margin: -2px 10px 2px -6px;
+}
+
+@media screen and (max-width: 1499px) {
+  #home h4 a::after {
+    margin: -3px 10px 1px -6px;
+  }
+}
+
+#home h4 a:hover::after, #home h4 a:focus::after {
+  background: var(--settings_hover) center center no-repeat;
+  background-size: 16px;
+}
+
+#home h4 a:active::after {
+  transform: rotate(90deg);
+  transition: ease transform .15s;
 }
 
 #chooselang img {
