@@ -8977,7 +8977,7 @@ h3 .b32 {
 
 #tunnels h3#participating {
   padding-left: 34px !important;
-  background: url(/themes/console/images/info/share.png) 6px center no-repeat, var(--title) !important;
+  background: var(--share) 6px center no-repeat, var(--title) !important;
   background-size: 19px, 4px 100%, 100% !important;
 }
 
@@ -11125,7 +11125,7 @@ label:hover .optbox {
 }
 
 #bandwidthconfig .bw_share {
-  background: #000025 url(/themes/console/images/info/share.png) 10px calc(50% + 14px) no-repeat !important;
+  background: #000025 var(--share) 10px calc(50% + 14px) no-repeat !important;
 }
 
 #bandwidthconfig .bw_out, #bandwidthconfig .bw_in, #bandwidthconfig .bw_share {
@@ -11176,7 +11176,7 @@ tr:nth-child(3) .net_bwrate::before {
 
 tr:nth-child(4) .net_bwrate::before {
   width: 22px;
-  background:  url(/themes/console/images/info/share.png) left top no-repeat;
+  background:  var(--share) left top no-repeat;
   background-size: 16px !important;
 }
 
