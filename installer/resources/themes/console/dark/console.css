@@ -11337,7 +11337,7 @@ h1[class], h1 {
 }
 
 .chatlink:hover {
-  background: url(/themes/snark/ubergine/images/comment.png) 2px center no-repeat, linear-gradient(to bottom, #020 50%, #000 50%);
+  background: var(--chat) 2px center no-repeat, linear-gradient(to bottom, #020 50%, #000 50%);
 }
 
 .sitelink:active, .chatlink:active, .consolelink:active {
@@ -11576,12 +11576,13 @@ h3#scheduledjobs {
 }
 
 #homepage .main h4 a {
-  margin: -7px 0;
-  padding: 9px 4px 9px 11px;
+  margin: -9px 0;
+  padding: 10px 4px 10px 12px;
+  border-left: var(--border);
 }
 
 #homepage h4.app2 a {
-  padding: 7px 4px 8px 11px;
+  padding: 9px 4px 9px 12px;
 }
 
 #tunnels h3#exploratory a, #tunnels h3.server a, #tunnels h3.client a {
