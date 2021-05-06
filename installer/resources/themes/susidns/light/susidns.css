@@ -911,7 +911,7 @@ tr:hover .destaddress {
   padding-left: 5px;
 }
 
-.names a {
+.names a, .b32link a {
   width: 100%;
   display: inline-block;
 }
