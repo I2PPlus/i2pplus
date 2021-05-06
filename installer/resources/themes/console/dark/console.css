@@ -11576,12 +11576,13 @@ h3#scheduledjobs {
 }
 
 #homepage .main h4 a {
-  margin: -7px 0;
-  padding: 9px 4px 9px 11px;
+  margin: -9px 0;
+  padding: 10px 4px 10px 12px;
+  border-left: var(--border);
 }
 
 #homepage h4.app2 a {
-  padding: 7px 4px 8px 11px;
+  padding: 9px 4px 9px 12px;
 }
 
 #tunnels h3#exploratory a, #tunnels h3.server a, #tunnels h3.client a {
