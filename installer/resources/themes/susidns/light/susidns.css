@@ -225,7 +225,7 @@ code, tt, .destaddress {
   margin-top: 6px;
 }
 
-h3, h4, th, #filter span {
+h3, h4, th, #filter span, #paginate #current {
   color: #5b5b71;
 }
 
@@ -1684,7 +1684,6 @@ input#exporthosts {
   vertical-align: middle;
   text-align: center;
   font-size: 11.5pt !important;
-  color: #525660;
   border-left: 1px solid #8d8daa;
   border-right: 1px solid #8d8daa;
 }
