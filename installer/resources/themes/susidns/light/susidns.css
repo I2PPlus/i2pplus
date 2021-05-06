@@ -649,6 +649,10 @@ _:-ms-lang(x), img.illustrate {
   max-width: 600px;
 }
 
+svg {
+  opacity: .9;
+}
+
 .page {
   margin: -4px 0;
   padding: 10px 0;

@@ -2316,6 +2316,7 @@ label {
 label.disabled {
   cursor: not-allowed;
   opacity: .5;
+  pointer-events: none;
 }
 
 .main#config_clients label[for="0"] {
@@ -2348,8 +2349,9 @@ input[name="refreshInterval"] {
   text-align: right;
 }
 
-input:disabled {
+input:disabled, input[readonly] {
   cursor: default;
+  pointer-events: none;
 }
 
 input[type=text]:disabled, input[type=text]:disabled:active, input[readonly="readonly"] {
