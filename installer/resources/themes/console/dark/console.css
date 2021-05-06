@@ -11337,7 +11337,7 @@ h1[class], h1 {
 }
 
 .chatlink:hover {
-  background: url(/themes/snark/ubergine/images/comment.png) 2px center no-repeat, linear-gradient(to bottom, #020 50%, #000 50%);
+  background: var(--chat) 2px center no-repeat, linear-gradient(to bottom, #020 50%, #000 50%);
 }
 
 .sitelink:active, .chatlink:active, .consolelink:active {
