@@ -3723,7 +3723,7 @@ form[action="/createreseed"] > h3 {
 
 #exportfamily tr:nth-child(2) td:first-child {
   padding: 15px 15px 15px 50px;
-  background: #000 url(/themes/console/images/info/export_key.png) 12px center no-repeat;
+  background: #000 var(--joinfamily) 12px center no-repeat;
   background-size: 28px;
 }
 
@@ -4455,7 +4455,7 @@ h3#servicedebug a, h3#graphinfo a {
 
 #tunnels h3#participating {
   padding-left: 35px;
-  background: url(/themes/console/images/info/share.png) 6px center no-repeat,
+  background: var(--share) 6px center no-repeat,
               linear-gradient(to bottom, rgba(0,0,0,0) 50%, #000 50%),
               var(--h3), var(--h3_fade) !important;
   background-size: 18px, 100%, 4px 100%, 100% !important;
@@ -8816,12 +8816,16 @@ b.suboption {
 }
 
 #bandwidthconfig .bw_share {
-  background: #002500 url(/themes/console/images/info/share.png) 10px calc(50% + 14px) no-repeat !important;
+  background: #002500 var(--share) 10px calc(50% + 14px) no-repeat !important;
 }
 
 #bandwidthconfig .bw_out, #bandwidthconfig .bw_in, #bandwidthconfig .bw_share {
   margin: 10px 5px;
   background-size: 24px !important;
+}
+
+#bandwidthconfig .bw_share {
+  background-size: 28px !important;
 }
 
 #bandwidthconfig .optionsingle::after {
@@ -10585,7 +10589,7 @@ input[type=text]:focus::placeholder, #homesearch input.search:focus::placeholder
 }
 
 .net_bwrate::before, #bandwidthconfig tr:nth-child(4) .net_bwrate::before {
-  background: url(/themes/console/images/info/share.png) left center no-repeat;
+  background: var(--share) left center no-repeat;
   background-size: 18px !important;
 }
 

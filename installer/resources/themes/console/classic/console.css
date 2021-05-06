@@ -9070,7 +9070,7 @@ b.suboption {
 }
 
 #bandwidthconfig .bw_share {
-  background: #fafbff url(/themes/console/images/info/share.png) 10px calc(50% + 14px) no-repeat !important;
+  background: #fafbff url(/themes/console/images/svg/share.svg) 10px calc(50% + 14px) no-repeat !important;
 }
 
 #bandwidthconfig .bw_out, #bandwidthconfig .bw_in, #bandwidthconfig .bw_share {
@@ -9080,12 +9080,6 @@ b.suboption {
 #bandwidthconfig .optionsingle::after {
   min-height: 64px;
 }
-
-/*
-#bandwidthconfig .optionsingle input, #bandwidthconfig select {
-  margin-top: 16px !important;
-}
-*/
 
 .net_bw {
   display: inline-block;
