@@ -911,6 +911,11 @@ tr:hover .destaddress {
   padding-left: 5px;
 }
 
+.names a {
+  width: 100%;
+  display: inline-block;
+}
+
 #host_list .checkbox {
   width: 1%;
   white-space: nowrap;
