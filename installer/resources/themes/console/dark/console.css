@@ -11304,7 +11304,7 @@ h1[class], h1 {
 }
 
 .chatlink {
-  padding: 0 3px 0 20px;
+  padding: 0 3px 0 17px;
   background: rgba(0,64,0,.3) var(--chat) 2px center no-repeat;
   background-size: 12px, 100% !important;
 }
@@ -11317,7 +11317,7 @@ h1[class], h1 {
 
 .sitelink.external {
   padding: 0 3px 0 18px;
-  background: rgba(0,64,0,.3) var(--globe) 3px center no-repeat;
+  background: rgba(0,64,0,.3) var(--planet) 3px center no-repeat;
   background-size: 12px, 100% !important;
 }
 
@@ -11332,7 +11332,7 @@ h1[class], h1 {
 }
 
 .sitelink.external:hover {
-  background: var(--globe) 3px center no-repeat, linear-gradient(to bottom, #020 50%, #000 50%);
+  background: var(--planet) 3px center no-repeat, linear-gradient(to bottom, #020 50%, #000 50%);
   background-size: 12px, 100% !important;
 }
 
