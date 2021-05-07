@@ -17,7 +17,7 @@
 <body>
 <script nonce="<%=cspNonce%>" type="text/javascript">progressx.show();</script>
 <%@include file="summary.jsi" %>
-<h1 class="conf adv"><%=intl._t("Router Summary")%></h1>
+<h1 class="info"><%=intl._t("Router Summary")%></h1>
 <div class="main" id="routerinformation">
 <h3 class="tabletitle" id="version"><%=intl._t("I2P Version and Running Environment")%><span class="h3navlinks" style="float: right;"><a title="View Router Logs" href="/logs">View Logs</a></span></h3>
 <jsp:useBean class="net.i2p.router.web.helpers.LogsHelper" id="logsHelper" scope="request" />

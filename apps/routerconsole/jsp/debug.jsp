@@ -22,7 +22,7 @@
 <body>
 <script nonce="<%=cspNonce%>" type="text/javascript">progressx.show();</script>
 <%@include file="summary.jsi" %>
-<h1 class="conf adv">Debug</h1>
+<h1 class="conf adv debug">Debug</h1>
 <div class="main" id="debug">
 <div class="confignav">
 <span class="tab"><a href="#debug_portmapper">Port Mapper</a></span>
