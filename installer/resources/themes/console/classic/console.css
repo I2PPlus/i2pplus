@@ -12429,6 +12429,14 @@ from {
   opacity: 1;
 }
 
+.newsentry.lazyhide {
+  contain: none;
+}
+
+.newsentry.lazyshow {
+  transition: ease opacity .15s;
+}
+
 .leasesets_container .lazy.lazyhide, .leasesets_container .lazy.lazyhide td,
 .leasesets_container .lazy:not(.lazyshow) {
   opacity: 1;

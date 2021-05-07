@@ -57,10 +57,10 @@ class PumpedTunnelGateway extends TunnelGateway {
     private static final int cores = SystemVersion.getCores();
     private static final long mem = SystemVersion.getMaxMemory();
     private static final boolean isSlow = SystemVersion.isSlow();
-    private static final int MAX_OB_MSGS_PER_PUMP = (mem < 1024*1024*1024 || cores <= 4 || isSlow) ? 64 : 96;
+    private static final int MAX_OB_MSGS_PER_PUMP = (mem < 1024*1024*1024 || cores <= 4 || isSlow) ? 64 : 128;
     private static final int MAX_IB_MSGS_PER_PUMP = (mem < 1024*1024*1024 || cores <= 4 || isSlow) ? 24 : 48;
-    private static final int INITIAL_OB_QUEUE = (mem < 1024*1024*1024 || cores <= 4 || isSlow) ? 64 : 96;
-    private static final int MAX_IB_QUEUE = (mem < 1024*1024*1024 || cores <= 4 || isSlow) ? 1024 : 1384;
+    private static final int INITIAL_OB_QUEUE = (mem < 1024*1024*1024 || cores <= 4 || isSlow) ? 64 : 128;
+    private static final int MAX_IB_QUEUE = (mem < 1024*1024*1024 || cores <= 4 || isSlow) ? 1024 : 2048;
 
     /**
      * @param preprocessor this pulls Pending messages off a list, builds some

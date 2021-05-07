@@ -334,7 +334,7 @@ pre {
 }
 
 .routersummary h3:active {
-  box-shadow: var(--highlight),inset 3px 3px 3px rgba(0,0,0,.2);
+  box-shadow: var(--highlight), inset 3px 3px 3px rgba(0,0,0,.4);
   background: #fff linear-gradient(to bottom, #fff3df, #fff9ef) !important;
   background: #f60 !important;
   transition: ease box-shadow .05s;
@@ -1793,12 +1793,6 @@ to {
   box-shadow: inset 0 0 0 1px rgba(185,185,198,.65);
 }
 
-@supports not (-moz-appearance: none) {
-.news#news {
-  filter: none;
-}
-}
-
 .main#torrents {
   padding: 0;
   min-width: 576px;
@@ -2077,12 +2071,17 @@ hr + #newsStatus, hr + #newsStatus + #newsDisplay {
 .newsAuthor {
   padding-left: 15px;
   float: right;
-  background: url(/themes/console/images/info/author.png) left 2px center no-repeat;
-  background-size: 10px 10px;
+  background: var(--user) 2px center no-repeat;
+  background-size: 11px;
   font-size: 8pt !important;
-  opacity: .9;
   letter-spacing: .1em !important;
   text-transform: none;
+  animation: linear fade 1s 1s both;
+}
+
+@keyframes fade {
+  from {filter: opacity(0)}
+  to {filter: opacity(1)}
 }
 
 .newsDate {
@@ -2091,17 +2090,18 @@ hr + #newsStatus, hr + #newsStatus + #newsDisplay {
 }
 
 .news h3, #news h3 {
-  background: url(images/news.png) 8px center no-repeat #fcfcff !important;
-  background: url(images/news.png) 8px center no-repeat, var(--h3), linear-gradient(to right, #fafaff 5%, rgba(231, 231, 255, .8)) 15% !important;
+  margin-bottom: -1px;
+  padding: 6px 10px 5px 28px;
+  word-spacing: .05em;
+  letter-spacing: .08em;
+  text-transform: uppercase !important;
   text-align: left;
-  padding: 6px 10px 5px 30px;
+  font-size: 10pt !important;
   border: 1px solid #8d8daa;
   border-radius: 2px 2px 0 0;
-  font-size: 10pt !important;
-  letter-spacing: .08em;
-  word-spacing: .05em;
-  text-transform: uppercase !important;
-  margin-bottom: -1px;
+  background: var(--news) 6px center no-repeat, var(--h3),
+              linear-gradient(to right, #fafaff 5%, rgba(231, 231, 255, .8)) 15% !important;
+  background-size: 16px, 100%, 100% !important;
   filter: none;
 }
 
@@ -2177,24 +2177,19 @@ h1, .confignav {
 
 .tab {
   box-shadow: var(--highlight);
-  background: #f2f2ff;
   background: linear-gradient(to bottom, #fff 50%, rgba(255,255,255,.6) 50%, rgba(240,240,240,.4)) #e7e7ff;
-  transition: ease box-shadow .05s;
 }
 
 .tab:hover {
   position: relative;
   z-index: 30;
-  box-shadow: inset 0 0 0 1px #f90;
-  background: #fff;
+  box-shadow: inset 0 0 0 1px rgba(255,96,0,.7);
   background: #fff linear-gradient(to bottom, #fff 50%, rgba(255, 232, 191, .6) 50%, rgba(239, 217, 179, .4) 100%);
-  transition: ease box-shadow .05s;
 }
 
 .tab:active {
-  box-shadow: inset 3px 2px 2px #7f3000;
-  background: #f60;
-  transition: ease box-shadow .05s;
+  box-shadow: inset 0 0 0 1px rgba(255,96,0,.4), inset 4px 4px 2px rgba(0,0,0,.4);
+  background: linear-gradient(to bottom, #e50, #f60);
 }
 
 .tab:active a, .tab a:active {
@@ -2456,23 +2451,20 @@ h3#exploratory {
 
 #logs a.delete:hover::after {
   background: var(--close_hover) center center no-repeat;
-  background-size: 16px;
-}
-
-#tunnels h3 a[href^="/configtunnels#"]:active, #logs a.configure:active::after, #logs a.delete:active::after {
   background-size: 14px;
 }
 
-#tunnels h3 a[href^="/configtunnels#"]:hover, #logs h3.tabletitle a.delete:hover::after, #logs h3.tabletitle a.configure:hover::after {
+#tunnels h3 a[href^="/configtunnels#"]:active, #logs a.configure:active::after, #logs a.delete:active::after {
+  background-size: 12px;
 }
 
 #logs a.delete::after {
-  content: "";
-  background: var(--close) center center no-repeat;
-  background-size: 16px;
   width: 16px;
   height: 16px;
   display: inline-block;
+  background: var(--close) center center no-repeat;
+  background-size: 14px;
+  content: "";
 }
 
 h3#passwordheading {
@@ -2504,15 +2496,15 @@ p#clientconf.infohelp + .wideload {
 }
 
 p#enablefullstats {
-  border: 1px solid #8d8daa;
-  padding: 10px;
   margin-bottom: 13px;
+  padding: 10px;
+  border: 1px solid #8d8daa;
 }
 
 #configstats th {
-  text-transform: uppercase;
   letter-spacing: .08em;
   word-spacing: .1em;
+  text-transform: uppercase;
 }
 
 #configstats label b {
@@ -2854,7 +2846,7 @@ to {
 
 .main#config_update .messages {
   padding: 20px 15px 20px 50px;
-  background: url(/themes/console/images/svg/news.svg) 15px center no-repeat, url(/themes/snark/ubergine/images/hat.png) bottom right no-repeat, var(--infohelp);
+  background: var(--news) 15px center no-repeat, url(/themes/snark/ubergine/images/hat.png) bottom right no-repeat, var(--infohelp);
   background-size: 28px, auto 100%, 100% !important;
 }
 
@@ -2949,7 +2941,7 @@ td.optionsave, .formaction, form[action="configpeer"] tr:last-child td, table#ad
 
 #pluginupdater {
   padding: 15px 5px 15px 50px;
-  background: url(/themes/console/images/info/update.png) 15px center no-repeat, linear-gradient(to bottom, #fafaff 50%, rgba(220,220,255,.3)), repeating-linear-gradient(135deg, rgba(255,255,255,.5) 2px, rgba(221, 221, 255, .3) 3px, #fff 4px) !important;
+  background: var(--refresh) 15px center no-repeat, linear-gradient(to bottom, #fafaff 50%, rgba(220,220,255,.3)), repeating-linear-gradient(135deg, rgba(255,255,255,.5) 2px, rgba(221, 221, 255, .3) 3px, #fff 4px) !important;
   background-size: 28px, 100% !important;
 }
 
@@ -4957,6 +4949,7 @@ input[type=file]::file-selector-button {
   margin: 3px 10px 3px 3px;
   padding: 4px 10px;
   line-height: 140%;
+  font-family: var(--bodyfont);
   font-size: 9pt;
   color: var(--inklite);
   text-decoration: none;
@@ -5043,15 +5036,15 @@ input.accept[value^="Filter"]:focus, button.accept[value^="Filter"]:focus {
 }
 
 input.add, button.add {
-  padding: 5px 7px 5px 23px;
+  padding: 5px 7px 5px 22px;
   background: var(--add) no-repeat 8px center, var(--button);
-  background-size: 12px, 100% !important;
+  background-size: 11px, 100% !important;
 }
 
 input.add:hover, button.add:hover,
 input.add:focus, button.add:focus {
   background: var(--add) no-repeat 8px center, var(--button_hover);
-  background-size: 12px, 100% !important;
+  background-size: 11px, 100% !important;
 }
 
 input.add[value^="Adjust"], button.add[value^="Adjust"] {
@@ -5067,13 +5060,13 @@ input.add[value^="Adjust"]:focus, button.add[value^="Adjust"]:focus {
 input.cancel, button.cancel {
   padding: 5px 9px 5px 22px;
   background: var(--no) no-repeat 8px center, var(--button);
-  background-size: 11px, 100% !important;
+  background-size: 10px, 100% !important;
 }
 
 input.cancel:hover, button.cancel:hover,
 input.cancel:focus, button.cancel:focus {
   background: var(--no) no-repeat 8px center, var(--button_hover);
-  background-size: 11px, 100% !important;
+  background-size: 10px, 100% !important;
 }
 
 input.showconsole {
@@ -5106,22 +5099,22 @@ input.check:focus, button.check:focus {
 
 input.check[value$="updates"], button.check[value$="updates"] {
   padding: 5px 9px 5px 24px;
-  background: url(/themes/console/images/buttons/update.png) no-repeat 8px center, var(--button);
+  background: var(--refresh) no-repeat 8px center, var(--button);
 }
 
 input.check[value$="updates"]:hover, button.check[value$="updates"]:hover,
 input.check[value$="updates"]:focus, button.check[value$="updates"]:focus {
-  background: url(/themes/console/images/buttons/update_hover.png) no-repeat 8px center, var(--button_hover);
+  background: var(--refresh_hover) no-repeat 8px center, var(--button_hover);
 }
 
 input.delete, button.delete {
   padding: 5px 9px 5px 24px;
-  background: url(/themes/console/images/buttons/delete.png) no-repeat 8px center, var(--button);
+  background: var(--nuke) no-repeat 8px center, var(--button);
 }
 
 input.delete:hover, button.delete:hover,
 input.delete:focus, button.delete:focus {
-  background: url(/themes/console/images/buttons/delete_hover.png) no-repeat 8px center, var(--button_hover);
+  background: var(--nuke) no-repeat 8px center, var(--button_hover);
 }
 
 input.delete[value^="Ban"], button.delete[value^="Ban"] {
@@ -9431,11 +9424,11 @@ select[name="newlogclass"] {
 }
 
 .homelinkedit th:first-child, #sidebarconf th:first-child, #consolepass th:first-child {
-  text-align: center;
-  background: #f6f6ff url(/themes/console/images/buttons/delete.png) center center no-repeat !important;
-  background: url(/themes/console/images/buttons/delete.png) center center no-repeat, linear-gradient(to bottom, #fcfcff 51%, #fafaff 51%, #f6f6ff 100%) !important;
-  font-size: 0 !important;
   width: 5%;
+  text-align: center;
+  font-size: 0 !important;
+  background: var(--nuke) center center no-repeat, linear-gradient(to bottom, #fcfcff 51%, #fafaff 51%, #f6f6ff 100%) !important;
+  background-size: 16px, 100% !important;
 }
 
 .homelinkedit tr:nth-last-child(n+2) td:nth-child(2) {
@@ -11652,8 +11645,8 @@ button.control {
 
 .newsAuthor {
   padding: 0 0 0 14px;
-  font-size: 9pt;
-  background-size: 11px 11px;
+  font-size: 9.5pt;
+  background-size: 12px;
   background-position: left center !important;
 }
 
@@ -13490,6 +13483,14 @@ div.app:not(:hover) a:not(:hover):not(:focus):not(:active):visited,
 .lazy.lazyhide, .lazy.lazyhide td {
   opacity: 0;
   contain: strict;
+}
+
+.newsentry.lazyhide {
+  contain: none;
+}
+
+.newsentry.lazyshow {
+  transition: ease opacity .15s;
 }
 
 .lazy.lazyshow, .lazy.lazyshow td, #peers .lazy:not(.lazyhide) {

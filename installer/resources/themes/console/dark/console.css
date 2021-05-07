@@ -12865,6 +12865,14 @@ h1, .main h2, h4.app, h4.app2, .main h3 {
   contain: strict;
 }
 
+.newsentry.lazyhide {
+  contain: none;
+}
+
+.newsentry.lazyshow {
+  transition: ease opacity .15s;
+}
+
 .lazy.lazyshow, .lazy.lazyshow td, #peers .lazy:not(.lazyhide) {
   opacity: 1;
 }

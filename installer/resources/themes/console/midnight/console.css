@@ -14613,6 +14613,14 @@ h1, .main h2, h4.app, h4.app2, .main h3 {
   opacity: 1;
 }
 
+.newsentry.lazyhide {
+  contain: none;
+}
+
+.newsentry.lazyshow {
+  transition: ease opacity .15s;
+}
+
 .leasesets_container .lazy.lazyhide, .leasesets_container .lazy.lazyhide td,
 .leasesets_container .lazy:not(.lazyshow) {
   opacity: 1;
