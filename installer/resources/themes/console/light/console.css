@@ -1770,7 +1770,7 @@ to {
 
 @supports (background-blend-mode: multiply) {
   #warning2, .news#news {
-    background: url(/themes/snark/ubergine/images/hat.png) no-repeat scroll right bottom, var(--bg) #fafaff !important;
+    background: url(/themes/snark/ubergine/images/hat.png) no-repeat scroll right -4px bottom -2px, var(--bg) #fafaff !important;
     background-size: auto 150px, 4px !important;
     background-blend-mode: multiply, multiply, normal !important;
   }
@@ -1790,7 +1790,7 @@ to {
   color: #224;
   border: 1px solid #575775;
   border-radius: 0 0 2px 2px;
-  box-shadow: inset 0 0 0 1px rgba(185,185,198,.65);
+  box-shadow: inset 0 0 0 1px rgba(185,185,198,.65), inset 0 0 0 2px rgba(255,255,255,.2);
 }
 
 .main#torrents {
@@ -6702,25 +6702,25 @@ h3#udpcon {
 
 #tunnels h3.ping {
   padding-left: 32px;
-  background: var(--ping) 7px center no-repeat, var(--h3), linear-gradient(to right, #fafaff 5%, rgba(231, 231, 255, .8) 25%) !important;
+  background: var(--ping) 8px center no-repeat, var(--h3), linear-gradient(to right, #fafaff 5%, rgba(231, 231, 255, .8) 25%) !important;
   background-size: 18px, 100%, 100% !important;
 }
 
 #tunnels h3#participating {
   padding-left: 32px;
-  background: var(--share) 7px center no-repeat, var(--h3), linear-gradient(to right, #fafaff 5%, rgba(231, 231, 255, .8) 25%) !important;
+  background: var(--share) 8px center no-repeat, var(--h3), linear-gradient(to right, #fafaff 5%, rgba(231, 231, 255, .8) 25%) !important;
   background-size: 18px, 100%, 100% !important;
 }
 
 #tunnels h3#exploratory {
   padding-left: 32px;
-  background: var(--globe) 7px center no-repeat, var(--h3), linear-gradient(to right, #fafaff 5%, rgba(231, 231, 255, .8) 25%) !important;
+  background: var(--globe) 8px center no-repeat, var(--h3), linear-gradient(to right, #fafaff 5%, rgba(231, 231, 255, .8) 25%) !important;
   background-size: 18px, 100%, 100% !important;
 }
 
 #tunnels h3:last-of-type {
   padding-left: 32px;
-  background: var(--speed) 7px center no-repeat, var(--h3), linear-gradient(to right, #fafaff 5%, rgba(231, 231, 255, .8) 25%) !important;
+  background: var(--speed) 8px center no-repeat, var(--h3), linear-gradient(to right, #fafaff 5%, rgba(231, 231, 255, .8) 25%) !important;
   background-size: 18px, 100%, 100% !important;
 }
 
@@ -13480,17 +13480,19 @@ div.app:not(:hover) a:not(:hover):not(:focus):not(:active):visited,
 
 /* lazy loading */
 
-.lazy.lazyhide, .lazy.lazyhide td {
+.lazy.lazyhide, .lazy.lazyhide td, .newsentry.lazyhide {
   opacity: 0;
   contain: strict;
 }
 
 .newsentry.lazyhide {
   contain: none;
+  filter: saturate(0);
 }
 
 .newsentry.lazyshow {
-  transition: ease opacity .15s;
+  transition: ease opacity .05s, ease filter .15s;
+  filter: saturate(1);
 }
 
 .lazy.lazyshow, .lazy.lazyshow td, #peers .lazy:not(.lazyhide) {
@@ -13503,8 +13505,16 @@ div.app:not(:hover) a:not(:hover):not(:focus):not(:active):visited,
   contain: none;
 }
 
-#tunnelpeercount .lazy {
+#tunnelpeercount .lazy, .newsentry.lazy {
   contain: none;
+}
+
+
+@supports (content-visibility: auto) {
+  .newsentry.lazyhide {
+    contain: none !important;
+    opacity: 1;
+  }
 }
 
 /* end lazy loading */
