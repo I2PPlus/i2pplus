@@ -66,7 +66,7 @@ Java17:
   # remove this line once code is fixed
   allow_failure: true
   script:
-    - apt-get install openjdk-17-jdk
+    - apt-get install openjdk-17-jdk -y
 #    - ./installer/resources/makegeoip.sh
 #    - ant pkg // izpack fail
     - ant updater
