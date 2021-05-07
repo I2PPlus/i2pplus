@@ -4443,7 +4443,7 @@ h1.perf {
   background: var(--perf) 10px center no-repeat, var(--h1) #fafaff !important;
 }
 
-h1.nfo, h1.news {
+h1.nfo, h1.newspage {
   background: var(--info) 10px center no-repeat, var(--h1) #fafaff !important;
 }
 

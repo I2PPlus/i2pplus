@@ -11260,7 +11260,7 @@ h1.webapp {
   background: var(--webapp) 10px center no-repeat, var(--h1) !important;
 }
 
-h1.news {
+h1.newspage {
   background: var(--h1news) 10px center no-repeat, var(--h1) !important;
 }
 
