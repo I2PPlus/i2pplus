@@ -3710,8 +3710,8 @@ h2, h3, h4, .confignav {
   letter-spacing: .08em;
   color: #c9ceff;
   padding: 6px 10px 6px 30px;
-  background: var(--news) left 8px center no-repeat, linear-gradient(to bottom, #121225 50%, #00000d 50%) !important;
-  background-size: 16px, 100% !important;
+  background: var(--news) left 8px center no-repeat, var(--title) !important;
+  background-size: 16px, 4px 100%, 100% !important;
 }
 
 .news h3 {
@@ -3732,6 +3732,7 @@ h2, h3, h4, .confignav {
 
   #newspage h3 {
     padding-left: 27px !important;
+    background-size: 14px, 4px 100%, 100% !important;
   }
 }
 
