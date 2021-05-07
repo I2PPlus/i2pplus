@@ -1028,12 +1028,6 @@ h1 + .sorry, #console_404 .sorry {
 
 /* end main */
 
-#news h3 {
-  padding: 6px 8px 6px 10px;
-  letter-spacing: .08em !important;
-  word-spacing: normal !important;
-}
-
 #news h3 font {
   letter-spacing: .2em !important;
   text-transform: none;
@@ -1976,6 +1970,15 @@ h1, h4.app, h4.app2, #news h3 {
   background: var(--h1) !important;
   background-size: 4px 100%, 100%, 175px !important;
   background-blend-mode: normal, exclusion, exclusion;
+}
+
+#news h3 {
+  padding: 6px 8px 6px 30px;
+  word-spacing: normal !important;
+  letter-spacing: .08em !important;
+  background: var(--news) 8px center no-repeat, var(--h1) !important;
+  background-size: 16px, 4px 100%, 100%, 175px !important;
+  background-blend-mode: normal, normal, exclusion, exclusion;
 }
 
 button::-moz-focus-inner, input::-moz-focus-inner {
@@ -11213,8 +11216,8 @@ h1.perf {
   background: var(--perf) 10px center no-repeat, var(--h1) !important;
 }
 
-h1.nfo {
-  background: var(--info)10px center no-repeat, var(--h1) !important;
+h1.info {
+  background: var(--nfo)10px center no-repeat, var(--h1) !important;
 }
 
 h1.hlp {
@@ -11237,11 +11240,7 @@ h1.conf {
   background: var(--cog) 10px center no-repeat, var(--h1) !important;
 }
 
-h1.adv {
-  background: var(--info) 10px center no-repeat, var(--h1) !important;
-}
-
-h1.conf.adv {
+h1.conf.adv.debug {
   background: var(--debug) 10px center no-repeat, var(--h1) !important;
 }
 
@@ -11259,6 +11258,10 @@ h1.log {
 
 h1.webapp {
   background: var(--webapp) 10px center no-repeat, var(--h1) !important;
+}
+
+h1.news {
+  background: var(--h1news) 10px center no-repeat, var(--h1) !important;
 }
 
 h1[class], h1 {
