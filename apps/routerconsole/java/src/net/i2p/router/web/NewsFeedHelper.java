@@ -75,7 +75,7 @@ public class NewsFeedHelper extends HelperBase {
                 if (i > start && entry.updated > 0 && ageLimit > 0 &&
                     entry.updated < ctx.clock().now() - ageLimit)
                     break;
-                buf.append("<div class=\"newsentry\">\n<h3>");
+                buf.append("<div class=\"newsentry lazy\">\n<h3>");
                 if (entry.updated > 0) {
                     Date date = new Date(entry.updated);
                     buf.append("<span class=\"newsDate\">")
@@ -94,7 +94,7 @@ public class NewsFeedHelper extends HelperBase {
                        .append("</i></span>\n");
                 }
                 buf.append("</h3>\n<div class=\"newscontent\">\n")
-                   .append(entry.content)
+                   .append(entry.content.replace("<a href", "<a target=\"_blank\" href"))
                    .append("\n</div>\n</div>\n");
                 if (++i >= start + max)
                     break;
