@@ -1950,11 +1950,11 @@ td.tabletextarea {
 }
 
 .newscontent p {
-  font-size: 9pt;
-  text-align: justify !important;
-  line-height: 140%;
   margin: 0;
   padding: 0;
+  font-size: 9.3pt;
+  text-align: justify !important;
+  line-height: 140%;
   text-shadow: 0 0 1px #fff;
 }
 
@@ -1963,11 +1963,11 @@ td.tabletextarea {
 }
 
 .newscontent hr {
-  color: #225;
-  background: #225;
-  height: 1px;
-  border: 0 dotted #225;
   margin: 10px 0 5px;
+  height: 1px;
+  color: #225;
+  border: 0 dotted #225;
+  background: #225;
 }
 
 .newsentry + hr + i {
@@ -2106,9 +2106,9 @@ hr + #newsStatus, hr + #newsStatus + #newsDisplay {
 }
 
 @supports not (-moz-appearance: none) {
-.news h3, #news h3 {
-  padding: 7px 10px 5px 30px;
-}
+  .news h3, #news h3 {
+    padding: 7px 10px 5px 30px;
+  }
 }
 
 .newscontent h4, .newscontent h5, .newscontent h6 {
@@ -11422,8 +11422,8 @@ body, .main, .main td, .news p, #news p, .newscontent p, .tab, .tab2, .main li b
   margin-top: 12px;
 }
 
-.main[id^="config_"] th, h4#updateplugins {
-  font-size: 10.5pt !important;
+.main[id^="config_"] th, h4#updateplugins, #news p {
+  font-size: 10.1pt !important;
 }
 
 #helptoc b {
