@@ -1770,7 +1770,7 @@ to {
 
 @supports (background-blend-mode: multiply) {
   #warning2, .news#news {
-    background: url(/themes/snark/ubergine/images/hat.png) no-repeat scroll right bottom, var(--bg) #fafaff !important;
+    background: url(/themes/snark/ubergine/images/hat.png) no-repeat scroll right -4px bottom -2px, var(--bg) #fafaff !important;
     background-size: auto 150px, 4px !important;
     background-blend-mode: multiply, multiply, normal !important;
   }
@@ -1790,7 +1790,7 @@ to {
   color: #224;
   border: 1px solid #575775;
   border-radius: 0 0 2px 2px;
-  box-shadow: inset 0 0 0 1px rgba(185,185,198,.65);
+  box-shadow: inset 0 0 0 1px rgba(185,185,198,.65), inset 0 0 0 2px rgba(255,255,255,.2);
 }
 
 .main#torrents {
@@ -13480,17 +13480,19 @@ div.app:not(:hover) a:not(:hover):not(:focus):not(:active):visited,
 
 /* lazy loading */
 
-.lazy.lazyhide, .lazy.lazyhide td {
+.lazy.lazyhide, .lazy.lazyhide td, .newsentry.lazyhide {
   opacity: 0;
   contain: strict;
 }
 
 .newsentry.lazyhide {
   contain: none;
+  filter: saturate(0);
 }
 
 .newsentry.lazyshow {
-  transition: ease opacity .15s;
+  transition: ease opacity .05s, ease filter .15s;
+  filter: saturate(1);
 }
 
 .lazy.lazyshow, .lazy.lazyshow td, #peers .lazy:not(.lazyhide) {
@@ -13503,8 +13505,16 @@ div.app:not(:hover) a:not(:hover):not(:focus):not(:active):visited,
   contain: none;
 }
 
-#tunnelpeercount .lazy {
+#tunnelpeercount .lazy, .newsentry.lazy {
   contain: none;
+}
+
+
+@supports (content-visibility: auto) {
+  .newsentry.lazyhide {
+    contain: none !important;
+    opacity: 1;
+  }
 }
 
 /* end lazy loading */
