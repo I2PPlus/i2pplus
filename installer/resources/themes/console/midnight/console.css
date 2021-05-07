@@ -8977,7 +8977,7 @@ h3 .b32 {
 
 #tunnels h3#participating {
   padding-left: 34px !important;
-  background: var(--share) 6px center no-repeat, var(--title) !important;
+  background: var(--share) 8px center no-repeat, var(--title) !important;
   background-size: 19px, 4px 100%, 100% !important;
 }
 
