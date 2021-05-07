@@ -59,6 +59,17 @@ Java14:
 #    - ant pkg // izpack fail
     - ant updater
 
+Java17:
+  stage: build
+  image: openjdk:17
+  # currently not well supported, needs some code fixes
+  # remove this line once code is fixed
+  allow_failure: true
+  script:
+#    - ./installer/resources/makegeoip.sh
+#    - ant pkg // izpack fail
+    - ant updater
+
 testing:
   stage: test
   image: openjdk:8
