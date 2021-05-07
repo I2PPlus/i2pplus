@@ -61,7 +61,7 @@ Java14:
 
 Java17:
   stage: build
-  image: openjdk:17-impish
+  image: openjdk:17-hirsute
   # currently not well supported, needs some code fixes
   # remove this line once code is fixed
   allow_failure: true
