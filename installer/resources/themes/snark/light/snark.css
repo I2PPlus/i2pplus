@@ -378,12 +378,10 @@ button::-moz-focus-inner, input::-moz-focus-inner {
   min-width: 810px;
   height: 56px;
   width: auto;
-  font-family: var(--monospaced);
   font-size: 8.5pt;
   text-align: left;
   overflow: hidden;
-  color: #339;
-  color: rgba(51, 51, 153, 0.8);
+  color: rgba(51, 51, 153, .7);
   border-top: 1px solid #afafcf;
   border-bottom: 1px solid #afafcf;
   border-spacing: 0;
@@ -398,6 +396,10 @@ button::-moz-focus-inner, input::-moz-focus-inner {
   background-size: 60px auto, 100% 100%, calc(100% - 80px) calc(100% - 4px), 100% 100% !important;
   background-position: right bottom, center center, left bottom, center center !important;
   background-blend-mode: multiply, overlay, luminosity, normal;
+}
+
+#screenlog .infohash {
+  font-weight: bold !important;
 }
 
 .iframed .snarkMessages {
@@ -992,14 +994,14 @@ td {
 tr + .peerinfo:nth-child(even) {
   border-top: 1px solid #ccccf0;
   background: #e0e0ef;
-  background: repeating-linear-gradient(to right, rgba(255,255,255,.5) 2px, rgba(192,192,255,.8) 4px), #fff;
+  background: repeating-linear-gradient(to right, rgba(255,255,255,.5) 2px, rgba(192,192,255,.5) 4px), #fff;
   background-size: 4px 100%;
 }
 
 tr + .peerinfo:nth-child(odd) {
   border-top: 1px solid #ccccf0;
   background: #d1d1ef;
-  background: repeating-linear-gradient(to right, rgba(255,255,255,.5) 2px, rgba(220,220,255,.6) 4px), #fff;
+  background: repeating-linear-gradient(to right, rgba(192,192,255,.5) 2px, rgba(220,220,255,.5) 4px), #fff;
   background-size: 4px 100%;
 }
 
@@ -1549,9 +1551,8 @@ input:checked + .toggleview:active > img {
 
 .snarkMessages .infohash {
   font-size: 90%;
-  color: #3b6bbf;
-  color: rgba(59, 107, 191, .85);
-  font-weight: bold !important;
+  color: #151;
+  font-weight: bold;
 }
 
 .snarkMessages .infohash:hover {
@@ -1733,7 +1734,7 @@ a.control:active img {
 
 input[type=image], thead img {
   padding: 0 !important;
-  border-radius: 0;
+  border-radius: 0 !important;
   border: none;
   margin: 0 2px;
   opacity: 1;
