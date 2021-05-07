@@ -11217,7 +11217,7 @@ h1.perf {
 }
 
 h1.nfo {
-  background: var(--nfo)10px center no-repeat, var(--h1) !important;
+  background: var(--nfo) 10px center no-repeat, var(--h1) !important;
 }
 
 h1.hlp {
