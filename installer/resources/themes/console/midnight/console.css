@@ -13339,7 +13339,7 @@ h1.perf {
   background: var(--perf) 10px center no-repeat, var(--th) !important;
 }
 
-h1.nfo {
+h1.nfo, h1.news {
   background: var(--info) 10px center no-repeat, var(--th) !important;
 }
 

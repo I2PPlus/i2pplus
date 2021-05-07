@@ -11217,7 +11217,7 @@ h1.perf {
 }
 
 h1.nfo {
-  background: var(--nfo)10px center no-repeat, var(--h1) !important;
+  background: var(--nfo) 10px center no-repeat, var(--h1) !important;
 }
 
 h1.hlp {
@@ -11240,7 +11240,7 @@ h1.conf {
   background: var(--cog) 10px center no-repeat, var(--h1) !important;
 }
 
-h1.conf.adv.debug {
+h1.debug {
   background: var(--debug) 10px center no-repeat, var(--h1) !important;
 }
 
