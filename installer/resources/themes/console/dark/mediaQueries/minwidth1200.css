@@ -167,6 +167,10 @@
     padding: 8px 12px !important;
   }
 
+  #loggingoptions input[type=text], #loggingoptions select {
+    min-width: 240px !important;
+  }
+
   .log_debug, .log_info, .log_warn, .log_error, .log_crit, .log_omitted {
     margin-bottom: -3px;
     min-width: 40px;
