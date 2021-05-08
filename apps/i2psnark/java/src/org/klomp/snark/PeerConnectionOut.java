@@ -198,7 +198,7 @@ class PeerConnectionOut implements Runnable
         // Ignore, probably other side closed connection.
         if (_log.shouldLog(Log.INFO))
 //            _log.info("IOError sending to [" + peer + "]", ioe);
-            _log.info("IOError sending to [" + peer + "] \n* " + ioe.getMessage());
+            _log.info("Error sending to [" + peer + "] \n* " + ioe.getMessage());
       }
     catch (Throwable t)
       {
