@@ -59,6 +59,18 @@ Java14:
 #    - ant pkg // izpack fail
     - ant updater
 
+Java17:
+  stage: build
+  image: nitesh231/hirsute-hippo
+  # currently not well supported, needs some code fixes
+  # remove this line once code is fixed
+  allow_failure: true
+  script:
+    - apt-get install openjdk-17-jdk -y
+#    - ./installer/resources/makegeoip.sh
+#    - ant pkg // izpack fail
+    - ant updater
+
 testing:
   stage: test
   image: openjdk:8

@@ -82,7 +82,8 @@ public class FIFOBandwidthRefiller implements Runnable {
      *  Do not increase without adding a new Bloom filter size!
      *  See util/DecayingBloomFilter and tunnel/BloomFilterIVValidator.
      */
-    public static final int MAX_OUTBOUND_BANDWIDTH = 16384;
+//    public static final int MAX_OUTBOUND_BANDWIDTH = 16384;
+    public static final int MAX_OUTBOUND_BANDWIDTH = 32768;
 
     private static final float MAX_SHARE_PERCENTAGE = 0.90f;
     private static final float SHARE_LIMIT_FACTOR = 0.95f;
