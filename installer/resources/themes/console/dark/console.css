@@ -4196,7 +4196,7 @@ input[name="logfilename"], input[name="logformat"], input[name="logdateformat"],
 #loggingoptions textarea {
   margin-bottom: 8px;
   width: 99%;
-  width: calc(100% - 8px);
+  width: calc(100% - 6px);
   height: 120px;
   resize: none;
 }
@@ -4207,7 +4207,7 @@ input[name="logfilename"], input[name="logformat"], input[name="logdateformat"],
 }
 
 #loggingoptions select[name="newlogclass"] {
-  width: calc(100% - 185px);
+  width: calc(100% - 254px);
 }
 
 /* configsidebar */
