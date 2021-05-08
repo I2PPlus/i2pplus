@@ -43,7 +43,7 @@
 <td>
 <div class="optionsingle bw_in">
 <span class="bw_title"><%=intl._t("Download Speed")%></span>
-<input style="text-align: right; width: 5em;" name="inboundrate" type="text" size="5" maxlength="5" value="<jsp:getProperty name="nethelper" property="inboundBurstRate" />" >
+<input style="text-align: right; width: 5em;" name="inboundrate" type="text" size="5" maxlength="6" value="<jsp:getProperty name="nethelper" property="inboundBurstRate" />" >
 <%=intl._t("KBps In")%>
 </div>
 </td>
@@ -63,7 +63,7 @@ bursting up to
 <td>
 <div class="optionsingle bw_out">
 <span class="bw_title"><%=intl._t("Upload Speed")%></span>
-<input style="text-align: right; width: 5em;" name="outboundrate" type="text" size="5" maxlength="5" value="<jsp:getProperty name="nethelper" property="outboundBurstRate" />" >
+<input style="text-align: right; width: 5em;" name="outboundrate" type="text" size="5" maxlength="6" value="<jsp:getProperty name="nethelper" property="outboundBurstRate" />" >
 <%=intl._t("KBps Out")%>
 </div>
 </td>
