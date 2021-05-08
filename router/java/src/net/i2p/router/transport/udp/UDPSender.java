@@ -314,7 +314,7 @@ class UDPSender {
                     } catch (IOException ioe) {
                         if (_log.shouldLog(Log.WARN))
 //                            _log.warn("Error sending to " + packet.getPacket().getAddress(), ioe);
-                            _log.warn("Error sending to " + packet.getPacket().getAddress() + "\n* Error: " + ioe.getmessage());
+                            _log.warn("Error sending to " + packet.getPacket().getAddress() + "\n* Error: " + ioe.getMessage());
                         _context.statManager().addRateData("udp.sendException", 1);
                         if (_socket.isClosed()) {
                             if (_keepRunning) {
