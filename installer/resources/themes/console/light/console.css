@@ -18,6 +18,8 @@
   --monospaced: Droid Sans Mono, Noto Mono, DejaVu Sans Mono, Lucida Console, monospace;
   --button: linear-gradient(to bottom, #fff, #efefff);
   --button_hover: linear-gradient(to bottom, #eee, #fff);
+  --border: #575775;
+  --borderinner: #8d8daa;
 }
 
 html, body {
@@ -44,7 +46,7 @@ body {
 }
 
 .main {
-  scrollbar-color: #8d8daa rgba(255,255,255,.4);
+  scrollbar-color: var(--borderinner) rgba(255,255,255,.4);
 }
 
 .main textarea {
@@ -215,7 +217,7 @@ pre {
   font-size: 8pt;
   color: var(--ink);
   clear: left; /* fixes a bug in Opera */
-  border: 1px solid #575775;
+  border: 1px solid var(--border);
   border-radius: 2px;
   box-shadow: inset 0 0 0 1px rgba(185,185,198,.65);
   background: #fafaff;
@@ -1299,7 +1301,7 @@ to {
   float: left;
   text-align: center;
   color: #222;
-  border: 1px solid #575775;
+  border: 1px solid var(--border);
   border-radius: 2px;
   box-shadow: inset 0 0 0 1px rgba(185,185,198,.65);
   background: #f8f8ff;
@@ -1343,7 +1345,7 @@ to {
   text-align: justify;
   font-size: 10pt;
   color: var(--ink);
-  border: 1px solid #575775;
+  border: 1px solid var(--border);
   border-radius: 2px;
   box-shadow: inset 0 0 1px 0 #d00;
   background: #fafaff;
@@ -1388,7 +1390,7 @@ to {
   text-align: left;
   font-size: 115%;
   border: none;
-  border-bottom: 1px solid #575775;
+  border-bottom: 1px solid var(--border);
   border-radius: 2px 2px 0 0;
 }
 
@@ -1432,7 +1434,7 @@ to {
   font-size: 7pt;
   text-align: right !important;
   border-radius: 2px;
-  border: 1px solid #575775;
+  border: 1px solid var(--border);
   display: none;
 }
 
@@ -1592,7 +1594,7 @@ to {
   background: none;
   border-radius: 0;
   border: none;
-  border-bottom: 1px solid #575775 !important;
+  border-bottom: 1px solid var(--border) !important;
   padding-left: 0;
   margin-bottom: -5px;
 }
@@ -1619,7 +1621,7 @@ to {
 .sorry {
   margin: -11px 0 10px 214px;
   padding: 20px 25px 20px 70px;
-  border: 1px solid #575775;
+  border: 1px solid var(--border);
   border-radius: 0 0 2px 2px;
   text-align: justify;
   background: #fafaff url(/themes/console/images/info/errortriangle.png) 16px 40% no-repeat;
@@ -1744,7 +1746,7 @@ to {
   min-width: 546px;
   text-align: left;
   color: var(--ink);
-  border: 1px solid #575775;
+  border: 1px solid var(--border);
   border-radius: 0 0 2px 2px;
   box-shadow: inset 0 0 0 1px rgba(185,185,198,.65);
 }
@@ -1787,7 +1789,7 @@ to {
   line-height: 140%;
   font-size: 8pt;
   color: #224;
-  border: 1px solid #575775;
+  border: 1px solid var(--border);
   border-radius: 0 0 2px 2px;
   box-shadow: inset 0 0 0 1px rgba(185,185,198,.65), inset 0 0 0 2px rgba(255,255,255,.2);
 }
@@ -1864,7 +1866,7 @@ to {
   color: #7e7fb9;
   background: #7e7fb9;
   height: 1px;
-  border: 0 solid #8d8daa;
+  border: 0 solid var(--borderinner);
   margin: 10px 0;
 }
 
@@ -1941,7 +1943,7 @@ td.tabletextarea {
 .newscontent {
   margin: 0 0 14px;
   padding: 10px 15px;
-  border: 1px solid #8d8daa;
+  border: 1px solid var(--borderinner);
   border-radius: 0 0 2px 2px;
   box-shadow: var(--highlight);
   background: #eef !important;
@@ -1999,7 +2001,7 @@ td.tabletextarea {
 #graphopts a:hover, #graphopts a:visited:hover, #graphopts a:focus, #graphopts a:visited:focus,
 #fullhistory a:hover, #fullhistory a:focus, #fullhistory a:visited:hover, #fullhistory a:visited:focus,
 #routerinformation tr:nth-child(n+2) a:not(#revision):hover, #routerinformation tr:nth-child(n+2) a:focus {
-  border: 1px solid #8d8daa;
+  border: 1px solid var(--borderinner);
   background: #e2e2ff;
   background: linear-gradient(to bottom, #f8f8ff 50%, #e2e2ff 50%);
 }
@@ -2012,7 +2014,7 @@ td.tabletextarea {
 #routerinformation tr:nth-child(n+2) a:active {
   box-shadow: inset 3px 3px 3px rgba(41,61,95,.8);
   color: #559 !important;
-  border: 1px solid #8d8daa;
+  border: 1px solid var(--borderinner);
 }
 
 #routerinformation tr:nth-child(n+2) a:not(#revision){
@@ -2096,7 +2098,7 @@ hr + #newsStatus, hr + #newsStatus + #newsDisplay {
   text-transform: uppercase !important;
   text-align: left;
   font-size: 10pt !important;
-  border: 1px solid #8d8daa;
+  border: 1px solid var(--borderinner);
   border-radius: 2px 2px 0 0;
   background: var(--news) 6px center no-repeat, var(--h3),
               linear-gradient(to right, #fafaff 5%, rgba(231, 231, 255, .8)) 15% !important;
@@ -2145,7 +2147,7 @@ h1, .confignav {
   font-size: 9pt;
   font-weight: bold;
   color: var(--ink);
-  border: 1px solid #8d8daa;
+  border: 1px solid var(--borderinner);
   border-left: none;
   border-right: none;
   box-shadow: inset 0 0 0 1px rgba(185,185,198,.65);
@@ -2160,7 +2162,7 @@ h1, .confignav {
   display: inline-block;
   min-width: 60px !important;
   box-sizing: border-box;
-  border: 1px solid #8d8daa;
+  border: 1px solid var(--borderinner);
   background: #fff;
   filter: drop-shadow(0 0 1px rgba(220,220,255,.7));
 }
@@ -2233,7 +2235,7 @@ h1, .confignav {
 .configure h3, .graphspanel h3 {
   margin: 15px 0;
   text-align: left;
-  border: 1px solid #8d8daa;
+  border: 1px solid var(--borderinner);
   border-left-width: 5px;
   border-radius: 0 2px 2px 0;
 }
@@ -2287,7 +2289,7 @@ h3 a.script, th a.script {
   vertical-align: top;
   text-transform: capitalize;
   border: none;
-  border-left: 1px solid #8d8daa;
+  border-left: 1px solid var(--borderinner);
   border-radius: 0;
   background: #ddf;
   background: linear-gradient(to bottom, #f8f8ff 60%, #dedeff);
@@ -2307,7 +2309,7 @@ h3 a.script, th a.script {
 
 #tunnels h3 a:not(.lsview) {
   margin: -7px -5px -7px 0 !important;
-  border-bottom: 1px solid #8d8daa;
+  border-bottom: 1px solid var(--borderinner);
 }
 
 #tunnels h3 a:nth-child(n+2) {
@@ -2373,7 +2375,7 @@ h3#iptransport a::after, h3#advancedconfig a::after, h3#reseedsetup a::after {
 }
 
 h3#transports, h3#upnp {
-  border: 1px solid #8d8daa;
+  border: 1px solid var(--borderinner);
 }
 
 pre#activetransports {
@@ -2382,7 +2384,7 @@ pre#activetransports {
   display: inline-block;
   width: calc(100% - 12px);
   font-size: 9pt;
-  border: 1px solid #8d8daa;
+  border: 1px solid var(--borderinner);
   box-shadow: var(--highlight), inset 0 0 2px 1px #ddf;
   background: #fafaff;
 }
@@ -2394,7 +2396,7 @@ pre#activetransports b {
 #upnpscan {
   margin: -16px 0 5px;
   padding: 5px 10px;
-  border: 1px solid #8d8daa;
+  border: 1px solid var(--borderinner);
   background: #fafaff;
   background: repeating-linear-gradient(135deg, rgba(255, 255, 255, .5) 2px, rgba(240, 240, 255, .3) 3px, #fff 5px);
 }
@@ -2468,7 +2470,7 @@ h3#exploratory {
 
 h3#passwordheading {
   margin-bottom: -2px;
-  border: 1px solid #8d8daa;
+  border: 1px solid var(--borderinner);
   border-radius: 0;
   filter: none;
 }
@@ -2476,7 +2478,7 @@ h3#passwordheading {
 h3#langheading, h3#themeheading, h3#pluginmanage, h3#pconfig, h3#webappconfiguration, h3#advancedclientconfig, h3#i2pclientconfig, #config_stats h3, #config_keyring h3 {
   position: relative;
   z-index: 100;
-  border: 1px solid #8d8daa;
+  border: 1px solid var(--borderinner);
   border-radius: 0;
   box-shadow: var(--highlight);
   filter: none;
@@ -2497,7 +2499,7 @@ p#clientconf.infohelp + .wideload {
 p#enablefullstats {
   margin-bottom: 13px;
   padding: 10px;
-  border: 1px solid #8d8daa;
+  border: 1px solid var(--borderinner);
 }
 
 #configstats th {
@@ -2726,7 +2728,7 @@ h3#graphdisplay {
 }
 
 .main#graphs form {
-  border: 1px solid #8d8daa;
+  border: 1px solid var(--borderinner);
   padding: 10px;
   margin: -16px 0 5px;
 }
@@ -2835,7 +2837,7 @@ to {
   font-weight: bold;
   line-height: 130%;
   box-shadow: var(--highlight);
-  border: 1px solid #8d8daa;
+  border: 1px solid var(--borderinner);
   border-radius: 2px;
   background: #eef;
   background: url(/themes/snark/ubergine/images/hat.png) bottom right no-repeat, linear-gradient(to right, #fafaff, #eef);
@@ -2913,7 +2915,7 @@ table {
   margin: 1px 0 5px;
   width: 100%;
   font-size: 9pt;
-  border: 1px solid #8d8daa;
+  border: 1px solid var(--borderinner);
   border-collapse: collapse;
   background: #fafaff;
 }
@@ -2930,7 +2932,7 @@ table {
 td.optionsave {
   padding: 5px !important;
   text-align: right;
-  border-top: 1px solid #8d8daa !important;
+  border-top: 1px solid var(--borderinner) !important;
   background: #fafaff;
 }
 
@@ -2953,7 +2955,7 @@ td.optionsave, .formaction, form[action="configpeer"] tr:last-child td, table#ad
 }
 
 .configtable tr:last-child td {
-  border-top: 1px solid #8d8daa !important;
+  border-top: 1px solid var(--borderinner) !important;
 }
 
 .infowarn, .infohelp {
@@ -2963,8 +2965,8 @@ td.optionsave, .formaction, form[action="configpeer"] tr:last-child td, table#ad
 td.infohelp, #help tr:hover td.infohelp, #eventlog tr:hover .infohelp, td.infowarn, #help tr:hover td.infowarn {
   padding: 20px 15px 20px 50px !important;
   text-align: justify;
-  border-top: 1px solid #8d8daa !important;
-  border-bottom: 1px solid #8d8daa !important;
+  border-top: 1px solid var(--borderinner) !important;
+  border-bottom: 1px solid var(--borderinner) !important;
 }
 
 td.infohelp, #help tr:hover td.infohelp, #eventlog tr:hover .infohelp {
@@ -3038,7 +3040,7 @@ table#wrapperlogs {
   float: right;
   display: inline-block;
   vertical-align: middle;
-  border-left: 1px solid #8d8daa;
+  border-left: 1px solid var(--borderinner);
   box-shadow: var(--highlight);
 }
 
@@ -3360,7 +3362,7 @@ table[id$="logs"] td:empty {
 }
 
 table[id$="logs"] tr:first-child {
-  border-bottom: 1px solid #8d8daa;
+  border-bottom: 1px solid var(--borderinner);
 }
 
 table[id$="logs"] ul li:last-child {
@@ -3389,8 +3391,8 @@ th {
   text-align: left;
   font-size: 9pt;
   line-height: 110%;
-  border-bottom: 1px solid #8d8daa !important;
-  border-top: 1px solid #8d8daa !important;
+  border-bottom: 1px solid var(--borderinner) !important;
+  border-top: 1px solid var(--borderinner) !important;
   vertical-align: middle;
   background: #f6f6ff !important;
   background: linear-gradient(to bottom, #fcfcff 51%, #fafaff 51%, #f6f6ff 100%) !important;
@@ -3478,7 +3480,7 @@ td {
 h4.app, h4.app2 {
   margin: 0 auto 3px;
   padding: 7px 10px 6px 32px;
-  border: 1px solid #8d8daa;
+  border: 1px solid var(--borderinner);
   font-size: 11pt;
   text-transform: uppercase;
   letter-spacing: .08em;
@@ -3511,12 +3513,12 @@ h4.app img, h4.app2 img, #sitemap h3 img {
   opacity: 0.8;
   filter: none !important;
   transition: ease all 1s;
-  border-left: 1px solid #8d8daa;
+  border-left: 1px solid var(--borderinner);
   display: none;
 }
 
 #home h4 a {
-  border-left: 1px solid #8d8daa;
+  border-left: 1px solid var(--borderinner);
   padding: 10px 0 4px 16px;
   margin: -8px -10px -10px 0;
 }
@@ -3588,7 +3590,7 @@ div.app {
   float: left;
   min-width: 140px;
   text-align: center !important;
-  border: 1px solid #8d8daa;
+  border: 1px solid var(--borderinner);
   border: 1px solid #999adf;
   box-shadow: var(--highlight), inset 0 0 2px 1px #eef, 0 0 1px #ddf;
   background: #f8f8ff;
@@ -3715,7 +3717,7 @@ div.app img {
   font-size: 8pt;
   margin: 0;
   padding: 4px 6px;
-  border-top: 1px solid #8d8daa;
+  border-top: 1px solid var(--borderinner);
   border-top: 1px solid #999adf;
   box-shadow: var(--highlight), inset 0 0 2px 1px #eef;
   text-align: center;
@@ -3751,7 +3753,7 @@ table.search {
   border-spacing: 0;
   border-radius: 0 0 2px 2px;
   border: 1px solid #595a8f;
-  border-top: 1px solid #575775;
+  border-top: 1px solid var(--border);
   box-shadow: 0 1px 1px 1px rgba(220, 220, 255, .3), inset 0 0 0 1px rgba(185,185,198,.65);
   background: #fafaff !important;
   background: linear-gradient(to bottom, #fafaff 50%, rgba(255,255,255,.6) 50%, rgba(240,240,255,.4)), repeating-linear-gradient(135deg, rgba(255,255,255,.5) 2px, rgba(240, 240, 255, .3) 3px, #fff 4px) !important;
@@ -3942,7 +3944,7 @@ p {
 p.infohelp, p.sybilinfo, p#debugmode, p#upnpstatus, p#pluginconfigtext, p#gatherstats {
   padding: 20px 15px 20px 50px;
   line-height: 130%;
-  border: 1px solid #8d8daa;
+  border: 1px solid var(--borderinner);
   box-shadow: var(--highlight), inset 0 0 0 2px #bbc;
   background: url(/themes/console/images/svg/infohelp.svg) 15px center no-repeat,
               var(--infohelp);
@@ -4036,7 +4038,7 @@ p.sybilinfo.experimental {
 p.infowarn {
   padding: 20px 15px 20px 50px;
   line-height: 130%;
-  border: 1px solid #8d8daa;
+  border: 1px solid var(--borderinner);
   background: url(/themes/console/images/svg/infowarn.svg) 15px center no-repeat, var(--infohelp);
 }
 
@@ -4222,14 +4224,14 @@ p#enablefullstats, p#gatherstats {
 }
 
 p#gatherstats + form, ul.statlist {
-  border: 1px solid #8d8daa;
+  border: 1px solid var(--borderinner);
   padding: 10px;
   background: #fafaff;
   background: var(--p);
 }
 
 ul.statlist {
-  border: 1px solid #8d8daa;
+  border: 1px solid var(--borderinner);
   padding: 0 10px 10px;
   display: inline-block;
   width: calc(100% - 22px);
@@ -4428,7 +4430,7 @@ h1 {
   text-align: left;
   color: #54586F;
   text-shadow: 0 0 2px #fff;
-  border: 1px solid #575775;
+  border: 1px solid var(--border);
   border-radius: 2px 2px 0 0;
   box-shadow: inset 0 0 0 1px rgba(185,185,198,.65);
   background: var(--netwrk) 8px center no-repeat, var(--h1) #fafaff !important;
@@ -4527,7 +4529,7 @@ h2 {
   text-transform: uppercase !important;
   font-size: 13pt;
   color: var(--inklite);
-  border: 1px solid #8d8daa;
+  border: 1px solid var(--borderinner);
   border-radius: 2px;
   box-shadow: var(--highlight), 0 0 1px rgba(220,220,220,.3);
 }
@@ -4571,8 +4573,8 @@ h3, #routerinformation h2 {
   letter-spacing: .08em;
   font-size: 11pt;
   color: var(--inklite);
-  border: 1px solid #8d8daa;
-  border-left: 5px solid #8d8daa;
+  border: 1px solid var(--borderinner);
+  border-left: 5px solid var(--borderinner);
   box-shadow: var(--highlight), 0 0 1px rgba(220,220,220,.3);
 }
 
@@ -4584,7 +4586,7 @@ h3.tabletitle, h3.ptitle, #config_advanced h3.tabletitle, h3#bannedpeers, #route
   margin-bottom: -2px;
   text-align: left;
   border-radius: 0;
-  border: 1px solid #8d8daa;
+  border: 1px solid var(--borderinner);
   box-shadow: var(--highlight);
 }
 
@@ -4619,18 +4621,18 @@ h2, h3 {
 }
 
 #permabanned tr:nth-child(2) td, #ipv4 td, #ipv6 td {
-  border-bottom: 1px solid #8d8daa;
+  border-bottom: 1px solid var(--borderinner);
   background: #fff !important;
   background: linear-gradient(to bottom, #fff 50%, rgba(238, 238, 255, .2) 50%, #eef 100%) #fff !important;
 }
 
 #ipv6 td {
-  border-top: 1px solid #8d8daa;
+  border-top: 1px solid var(--borderinner);
 }
 
 #bannedips table {
   border: none;
-  border-bottom: 1px solid #8d8daa;
+  border-bottom: 1px solid var(--borderinner);
   margin: -1px 0 !important;
 }
 
@@ -4647,7 +4649,7 @@ h2, h3 {
 }
 
 #permabanned td:first-child {
-  border-left: 1px solid #8d8daa;
+  border-left: 1px solid var(--borderinner);
   text-align: right;
   padding-right: 10px;
   width: 49%;
@@ -4664,7 +4666,7 @@ h2, h3 {
 }
 
 #banneduntilrestart td {
-  border-right: 1px solid #8d8daa;
+  border-right: 1px solid var(--borderinner);
   text-align: right !important;
 }
 
@@ -4692,7 +4694,7 @@ h4 {
   font-size: 10pt;
   text-transform: uppercase;
   color: var(--inklite);
-  border: 1px solid #8d8daa;
+  border: 1px solid var(--borderinner);
   border-radius: 2px;
   box-shadow: var(--highlight);
   background: #eef;
@@ -4713,7 +4715,7 @@ h4 {
 }
 
 #certs h3 + p, #certs h4 + p:not(.infohelp) {
-  border: 1px solid #8d8daa;
+  border: 1px solid var(--borderinner);
   padding: 15px;
 }
 
@@ -4749,7 +4751,7 @@ h4 {
 
 #certs h4 + textarea {
   margin: -11px 0 !important;
-  border: 1px solid #8d8daa;
+  border: 1px solid var(--borderinner);
   box-shadow: none;
 }
 
@@ -5667,7 +5669,7 @@ textarea:focus {
   text-align: center;
   font-style: normal;
   font-size: 9pt;
-  border: 1px solid #8d8daa !important;
+  border: 1px solid var(--borderinner) !important;
   border-top: 0 !important;
   box-shadow: var(--highlight);
   background: #eef;
@@ -5676,7 +5678,7 @@ textarea:focus {
 
 .statusnotes + .statusnotes {
   margin-top: -6px;
-  border-top: 1px solid #8d8daa !important;
+  border-top: 1px solid var(--borderinner) !important;
 }
 
 h3 + .statusnotes {
@@ -5723,7 +5725,7 @@ h3 + .statusnotes {
 #jobs ol {
   margin-top: 1px;
   padding: 4px 2px 2px;
-  border: 1px solid #8d8daa;
+  border: 1px solid var(--borderinner);
   box-shadow: var(--highlight);
   background: #efefff;
   background: repeating-linear-gradient(135deg, rgba(255,255,255,.5) 2px, rgba(240, 240, 255, .3) 3px, #fff 5px), #fff;
@@ -5991,8 +5993,8 @@ td.spacer, th.spacer {
 
 .tablefooter tr, .tablefooter td {
   background: #f8f8ff;
-  border-top: 1px solid #8d8daa;
-  border-bottom: 1px solid #8d8daa !important;
+  border-top: 1px solid var(--borderinner);
+  border-bottom: 1px solid var(--borderinner) !important;
   padding: 8px 2px;
   font-size: 9pt;
   line-height: 110%;
@@ -6000,7 +6002,7 @@ td.spacer, th.spacer {
 
 .formaction {
   text-align: right;
-  border: 1px solid #8d8daa;
+  border: 1px solid var(--borderinner);
   margin-top: -15px;
   padding: 5px;
   background: #fafaff;
@@ -6019,12 +6021,11 @@ td.spacer, th.spacer {
   line-height: 120%;
   text-align: right;
   font-size: 90%;
-  color: #575775;
 }
 
 .footnote hr {
   margin: 24px 0 5px !important;
-  background: #575775;
+  background: var(--border);
   background: linear-gradient(to right, #77a, #669, #77a);
   height: 1px;
   border-bottom: 1px solid #fff;
@@ -6076,7 +6077,7 @@ body.iframed {
 
 #themeui.formaction, #langui.formaction {
   border: none;
-  border-top: 1px solid #8d8daa;
+  border-top: 1px solid var(--borderinner);
   background: none;
   margin: 5px -5px 0;
 }
@@ -6117,7 +6118,7 @@ body.iframed {
   text-overflow: ellipsis;
   white-space: nowrap;
   text-align: center;
-  border: 1px solid #8d8daa;
+  border: 1px solid var(--borderinner);
   border: 1px solid #999adf;
   box-shadow: var(--highlight);
   background: #f8f8ff;
@@ -6188,7 +6189,7 @@ body.iframed {
   position: relative;
   top: 4px;
   clear: both;
-  border-top: 1px solid #8d8daa;
+  border-top: 1px solid var(--borderinner);
   background: repeating-linear-gradient(45deg, rgba(252,252,255,.5) 2px, rgba(221, 221, 255, .3) 3px, #fafaff 5px), #fafaff;
 }
 
@@ -6207,7 +6208,7 @@ p#helptranslate {
   position: relative;
   top: 4px;
   text-align: left !important;
-  border-top: 1px solid #8d8daa;
+  border-top: 1px solid var(--borderinner);
   background: url(images/favicon.svg) left 14px center no-repeat, var(--infohelp);
   background-size: 28px;
 }
@@ -6262,7 +6263,7 @@ p#helptranslate {
 #themesettings, #langsettings {
   margin: -16px 0 0;
   padding: 4px 5px 0;
-  border: 1px solid #8d8daa;
+  border: 1px solid var(--borderinner);
   background: #fafaff;
   background: repeating-linear-gradient(135deg, rgba(255,255,255,.5) 2px, rgba(248,248,255,.3) 3px, #fafaff 4px);
 }
@@ -6423,7 +6424,7 @@ p#helptranslate {
   text-overflow: ellipsis;
   font-size: 9pt;
   text-transform: capitalize;
-  border-top: 1px solid #8d8daa;
+  border-top: 1px solid var(--borderinner);
   border-top: 1px solid #999adf;
   border-radius: 0 0 2px 2px;
   box-shadow: var(--highlight);
@@ -6452,7 +6453,7 @@ table#consolepass input {
 
 table#consolepass td#pw_adduser {
   padding: 5px 10px;
-  border-top: 1px solid #8d8daa;
+  border-top: 1px solid var(--borderinner);
 }
 
 td#pw_adduser input {
@@ -6495,7 +6496,7 @@ table#consolepass input[name="name"] {
 
 table#addkeyring tr:last-child td {
   padding: 5px;
-  border-top: 1px solid #8d8daa;
+  border-top: 1px solid var(--borderinner);
 }
 
 #refreshsidebar tr:first-child td {
@@ -6891,7 +6892,7 @@ p:empty { /* empty paragraph nuke */
   text-align: left !important;
   background: #fafaff;
   padding: 10px;
-  border: 1px solid #8d8daa;
+  border: 1px solid var(--borderinner);
 }
 
 .subheading b {
@@ -6907,7 +6908,7 @@ p:empty { /* empty paragraph nuke */
   font-weight: bold;
   text-align: center;
   color: var(--inklite);
-  border: 1px solid #8d8daa;
+  border: 1px solid var(--borderinner);
   box-shadow: 0 0 1px #e0e0eb;
   border-radius: 2px;
   background: #f2f2ff;
@@ -6958,7 +6959,7 @@ p:empty { /* empty paragraph nuke */
 #netdboverview table {
   margin: -1px 0;
   border: none;
-  border-bottom: 1px solid #8d8daa;
+  border-bottom: 1px solid var(--borderinner);
 }
 
 #netdboverview table th {
@@ -7004,7 +7005,7 @@ p:empty { /* empty paragraph nuke */
 }
 
 #netdbversions tr {
-  border-right: 1px solid #575775;
+  border-right: 1px solid var(--border);
 }
 
 #netdbversions th:first-child, #netdbversions td:first-child {
@@ -7021,7 +7022,7 @@ p:empty { /* empty paragraph nuke */
 }
 
 #netdbcountrylist tr {
-  border-left: 1px solid #575775;
+  border-left: 1px solid var(--border);
 }
 
 #netdboverview #netdbcountrylist td:first-child {
@@ -7058,7 +7059,7 @@ p:empty { /* empty paragraph nuke */
 }
 
 #netdbtiers td:first-child {
-  border-left: 1px solid #8d8daa;
+  border-left: 1px solid var(--borderinner);
 }
 
 @supports not (-moz-appearance: none) {
@@ -7067,7 +7068,7 @@ p:empty { /* empty paragraph nuke */
 }
 
 #netdbtiers th:first-child {
-  border-left: 1px solid #8d8daa;
+  border-left: 1px solid var(--borderinner);
 }
 }
 
@@ -7483,15 +7484,15 @@ b.netdb_transport {
 }
 
 #leasesetdebug td {
-  border-top: 1px solid #8d8daa !important;
-  border-bottom: 1px solid #8d8daa !important;
+  border-top: 1px solid var(--borderinner) !important;
+  border-bottom: 1px solid var(--borderinner) !important;
 }
 
 #leasesetdebug td:nth-child(odd) {
   width: 200px;
   text-align: right;
   border-right: 1px solid #e0e0eb;
-  border-right: 1px solid #8d8daa;
+  border-right: 1px solid var(--borderinner);
 }
 
 #leasesetdebug td:nth-child(even) {
@@ -7562,8 +7563,8 @@ b.netdb_transport {
 .leaseset td {
   line-height: 150%;
   background: linear-gradient(to bottom, #fff, #eef);
-  border-top: 1px solid #8d8daa;
-  border-bottom: 1px solid #8d8daa;
+  border-top: 1px solid var(--borderinner);
+  border-bottom: 1px solid var(--borderinner);
 }
 
 .leaseset td a[href$=".i2p"] {
@@ -7698,7 +7699,7 @@ img.unknownflag {
 
 #sybilnav, #sybils_summary {
   margin-bottom: 10px;
-  border: 1px solid #8d8daa;
+  border: 1px solid var(--borderinner);
   box-shadow: var(--highlight);
   background: repeating-linear-gradient(135deg, rgba(248,238,255,.5) 2px, rgba(240, 240, 255, .3) 3px, #fafaff 5px), #fafaff;
 }
@@ -7782,7 +7783,7 @@ h3.sybils {
 
 #netdb .sybilinfo_container:empty + hr, #netdb .sybilinfo_container + hr {
   height: 0 !important;
-  border-bottom: 1px solid #8d8daa !important;
+  border-bottom: 1px solid var(--borderinner) !important;
   opacity: 1 !important;
   margin: 0 !important;
 }
@@ -7818,11 +7819,11 @@ h3.sybils {
 }
 
 #netdb .sybil_routerinfo tr:first-child, #netdb .sybil_routerinfo th {
-  border-bottom: 1px solid #8d8daa !important;
+  border-bottom: 1px solid var(--borderinner) !important;
 }
 
 #netdb .sybil_routerinfo tr:nth-child(2), #netdb .sybil_routerinfo tr:nth-child(2) td {
-  border-top: 1px solid #8d8daa !important;
+  border-top: 1px solid var(--borderinner) !important;
 }
 
 .sybil_routerinfo th {
@@ -7899,7 +7900,7 @@ h3.sybils {
 p.sybil_info, p.family, p.threatpoints, p.hashdist, p#sybil_totals, p.notfound {
   margin: 3px 0;
   padding: 7px 5px 7px 30px;
-  border: 1px solid #8d8daa;
+  border: 1px solid var(--borderinner);
   box-shadow: var(--highlight);
   font-weight: bold;
   color: var(--inklite);
@@ -7954,7 +7955,7 @@ p.sybil_info + a[name] + table.sybil_routerinfo, p.hashdist + a[name] + table.sy
   padding: 0 10px;
   width: calc(100% - 22px);
   display: inline-block;
-  border: 1px solid #8d8daa;
+  border: 1px solid var(--borderinner);
   box-shadow: var(--highlight);
   background: #eef;
   background: repeating-linear-gradient(45deg, rgba(255,255,255,.5) 2px, rgba(221, 221, 255, .3) 3px, #fafaff 5px), #fafaff;
@@ -7971,13 +7972,13 @@ p.sybil_info + a[name] + table.sybil_routerinfo, p.hashdist + a[name] + table.sy
 
 @supports not (-moz-appearance: none) {
 .leaseset th:last-child, .leaseset td:last-child, .sybil_routerinfo th:last-child {
-  border-right: 1px solid #8d8daa !important;
+  border-right: 1px solid var(--borderinner) !important;
 }
 }
 
 .sybilinfo_params {
   padding: 0;
-  border: 1px solid #8d8daa;
+  border: 1px solid var(--borderinner);
 }
 
 .sybilinfo_familyname {
@@ -7991,7 +7992,7 @@ p.sybil_info + a[name] + table.sybil_routerinfo, p.hashdist + a[name] + table.sy
 
 #netdb .sybil_addresses {
   padding: 0;
-  border-bottom: 1px solid #8d8daa;
+  border-bottom: 1px solid var(--borderinner);
   line-height: 120%;
 }
 
@@ -8002,8 +8003,8 @@ p.sybil_info + a[name] + table.sybil_routerinfo, p.hashdist + a[name] + table.sy
 .sybil_addresses table {
   width: 100%;
   margin: 0;
-  border-top: 1px solid #8d8daa !important;
-  border-bottom: 1px solid #8d8daa !important;
+  border-top: 1px solid var(--borderinner) !important;
+  border-bottom: 1px solid var(--borderinner) !important;
 }
 
 .sybil_addresses td:first-child {
@@ -8072,7 +8073,7 @@ p.sybil_info + a[name] + table.sybil_routerinfo, p.hashdist + a[name] + table.sy
 .identicon {
   margin: -1px 0 -1px 2px !important;
   padding: 0 !important;
-  border-left: 1px solid #8d8daa;
+  border-left: 1px solid var(--borderinner);
   width: 28px;
   height: 28px;
   image-rendering: -webkit-optimize-contrast;
@@ -8333,7 +8334,7 @@ p.sybil_info + a[name] + table.sybil_routerinfo, p.hashdist + a[name] + table.sy
 #banlist {
   padding: 2px 5px 3px 0;
   display: block;
-  border: 1px solid #8d8daa;
+  border: 1px solid var(--borderinner);
   border-radius: 2px;
   background: #fafaff;
   text-align: center;
@@ -8358,7 +8359,7 @@ p.sybil_info + a[name] + table.sybil_routerinfo, p.hashdist + a[name] + table.sy
   line-height: 120%;
   list-style: none;
   font-size: 95%;
-  border: 1px solid #8d8daa;
+  border: 1px solid var(--borderinner);
   border-radius: 2px;
   box-shadow: var(--highlight), inset 0 0 1px 1px #ddf;
   background: #eef;
@@ -8392,8 +8393,8 @@ p.sybil_info + a[name] + table.sybil_routerinfo, p.hashdist + a[name] + table.sy
   top: 0;
   right: 0;
   line-height: 0;
-  border-left: 1px solid #8d8daa;
-  border-bottom: 1px solid #8d8daa;
+  border-left: 1px solid var(--borderinner);
+  border-bottom: 1px solid var(--borderinner);
   border-radius: 0 0 0 2px;
   box-shadow: var(--highlight), inset 0 0 1px 1px #ddf;
   background: #fff;
@@ -8709,7 +8710,7 @@ table#schedjobs {
 }
 
 #floodfills th {
-  border-right: 1px solid #8d8daa;
+  border-right: 1px solid var(--borderinner);
   box-shadow: var(--highlight), inset 0 0 1px 1px #ddf;
 }
 
@@ -8911,7 +8912,7 @@ table#schedjobs {
 
 #thresholds td {
   padding: 6px;
-  border: 1px solid #8d8daa;
+  border: 1px solid var(--borderinner);
 }
 
 #capabilities_key td {
@@ -9031,7 +9032,7 @@ table#schedjobs {
   right: 0;
   display: inline-block;
   font-size: 90%;
-  border: 1px solid #8d8daa;
+  border: 1px solid var(--borderinner);
   border-radius: 4px 0 0 0;
   box-shadow: var(--highlight);
   background: #eef;
@@ -9070,7 +9071,7 @@ select[name="newlogclass"] {
 
 #volunteer, #sidebarhelp, #configurationhelp, #reachabilityhelp, #advancedsettings, #themeoverride, #tunnman,
 #legal, #changelog, #faq, #reseedhelp, #troubleshoot, #newuserguide, #filterlist, #webhosting, #browserconfig, #glossary {
-  border: 1px solid #8d8daa;
+  border: 1px solid var(--borderinner);
   border-radius: 2px;
   margin-bottom: 10px;
   padding: 0 10px 5px;
@@ -9310,7 +9311,7 @@ select[name="newlogclass"] {
   text-align: right;
   margin: 0 0 0 -10px;
   padding: 7px 5px;
-  border-top: 1px solid #8d8daa;
+  border-top: 1px solid var(--borderinner);
 }
 
 #fullhistory a {
@@ -9341,7 +9342,7 @@ select[name="newlogclass"] {
   padding: 5px 0 0;
   columns: 2 auto;
   column-gap: 35px;
-  column-rule: 1px solid #8d8daa;
+  column-rule: 1px solid var(--borderinner);
 }
 
 #terms p {
@@ -9545,7 +9546,7 @@ h4#updateplugins {
   text-transform: none;
   font-size: 10pt;
   color: var(--inklite);
-  border: 1px solid #8d8daa;
+  border: 1px solid var(--borderinner);
   background: #fcfcff !important;
   background: linear-gradient(to bottom, #fff 50%, rgba(238, 238, 255, .2) 50%, #eef 100%) #fff !important;
 }
@@ -9573,7 +9574,7 @@ h3#displayevents {
 .main form[action="events"] {
   margin: -16px 0 -2px;
   padding: 10px 10px 10px 50px;
-  border: 1px solid #8d8daa;
+  border: 1px solid var(--borderinner);
   box-shadow: var(--highlight);
   background: #f2f2ff var(--log_icon) 15px center no-repeat;
   background-size: 28px;
@@ -9686,7 +9687,7 @@ a[href^="configpeer?peer"]:hover::after {
 .debug_container {
   padding: 10px 15px;
   margin-top: -16px;
-  border: 1px solid #8d8daa;
+  border: 1px solid var(--borderinner);
   box-shadow: var(--highlight);
   background: linear-gradient(to bottom, #fafaff, rgba(250,250,255,.3)),
               repeating-linear-gradient(135deg, rgba(255,255,255,.5) 2px, rgba(221, 221, 255, .3) 3px, #fff 4px) #efefff !important;
@@ -9953,7 +9954,7 @@ a[href^="configpeer?peer"]:hover::after {
 
 @supports not (-moz-appearance: none) {
 #jardump table {
-  border: 1px solid #8d8daa !important;
+  border: 1px solid var(--borderinner) !important;
   border-bottom: none !important;
   border-top: none !important;
 }
@@ -10150,7 +10151,7 @@ a[href^="configpeer?peer"]:hover::after {
 
 @supports not (-moz-appearance: none) {
 #jardump table {
-  border: 1px solid #8d8daa !important;
+  border: 1px solid var(--borderinner) !important;
   border-bottom: none !important;
   border-top: none !important;
   width: calc(100% - 1px) !important;
@@ -10190,7 +10191,7 @@ a[href^="configpeer?peer"]:hover::after {
 
 .optionlist, .optionsingle, #reseedssl {
   padding: 1px 2px;
-  border: 1px solid #8d8daa !important;
+  border: 1px solid var(--borderinner) !important;
   box-shadow: inset 0 0 0 2px #fff;
   background: #fff !important;
   column-gap: 2px;
@@ -10247,7 +10248,7 @@ b.suboption {
   display: inline-block;
   text-shadow: 0 1px 1px #fff;
   border-radius: 3px 3px 0 0;
-  border: 1px solid #8d8daa;
+  border: 1px solid var(--borderinner);
   border-bottom: none;
   box-shadow: var(--highlight);
   background: #fdfdff;
@@ -10640,7 +10641,7 @@ b.suboption {
 }
 
 #i2pupdates .optionsave {
-  border-bottom: 1px solid #8d8daa;
+  border-bottom: 1px solid var(--borderinner);
 }
 
 #i2pupdates textarea {
@@ -10773,7 +10774,7 @@ b.suboption {
 }
 
 #manualreseed th:last-child, #manualreseed td:last-child {
-  border-right: 1px solid #8d8daa;
+  border-right: 1px solid var(--borderinner);
 }
 }
 
@@ -11070,7 +11071,7 @@ form[action="configplugins"] input.reload {
 }
 
 #pluginconfig table {
-  border: 1px solid #8d8daa;
+  border: 1px solid var(--borderinner);
 }
 
 @media screen and (min-width: 1500px) {
@@ -11791,12 +11792,12 @@ th.options .optbox {
 }
 
 #help td:first-child, #tunnels td:first-child, #peers #ntcpconnections td:first-child {
-  border-left: 1px solid #8d8daa !important;
+  border-left: 1px solid var(--borderinner) !important;
 }
 
 .main .tunneldisplay tr:last-child td, .main #tunnelpeercount tr:nth-last-child(2) td,
 .main #udpconnections tr:nth-last-child(2) td, .main #ntcpconnections tr:nth-last-child(2) td {
-  border-bottom: 1px solid #8d8daa !important;
+  border-bottom: 1px solid var(--borderinner) !important;
 }
 
 /* /events */
@@ -12266,7 +12267,7 @@ h1.webapp {
 #sybilanalysis {
   margin: 14px 0 6px !important;
   padding: 10px 10px 8px 50px !important;
-  border: 1px solid #8d8daa;
+  border: 1px solid var(--borderinner);
   background: var(--sybil) 15px center no-repeat, var(--infohelp);
 }
 
@@ -12280,17 +12281,17 @@ div.app a, div.app a:visited, #sitemap a:link, #sitemap a:visited, .warning a {
 
 /* setup wizard */
 
-#wizardpage .routersummary img[src$="i2plogo.png"] {
-  margin-top: 6px;
-  margin-bottom: 6px;
+#wizardpage .routersummary div[style="height: 36px"] {
+  margin-top: 4px;
+  margin-bottom: 13px !important;
 }
 
 #wizardpage .routersummary div {
   margin-bottom: 5px;
 }
 
-#wizardpage .routersummary div + hr {
-  display: none;
+#wizardpage .routersummary div + hr, #wizardpage .routersummary h3 + hr {
+  display: none !important;
 }
 
 #wizardpage .routersummary h3 {
@@ -12307,10 +12308,45 @@ div.app a, div.app a:visited, #sitemap a:link, #sitemap a:visited, .warning a {
 
 #wizardpage .yes {
   background: var(--yes) center center no-repeat;
+  background-size: 11px !important;
 }
 
 #wizardpage .no {
-  background: url(/themes/console/images/buttons/no.png) center center no-repeat;
+  background: var(--no) center center no-repeat;
+  background-size: 10px !important;
+}
+
+#wizardpage #bandwidth ~ p {
+  margin: -20px 0;
+  padding: 15px;
+  border-left: 1px solid var(--borderinner);
+  border-right: 1px solid var(--borderinner);
+}
+
+#wizardpage #bandwidth ~ p a {
+  line-height: 2;
+}
+
+#wizardpage #bandwidth ~ p a::before {
+  content: "";
+  display: inline-block;
+  width: 18px;
+  height: 16px;
+  vertical-align: middle;
+  background: var(--link) left center no-repeat;
+  background-size: 12px;
+}
+
+#wizardpage #bandwidth ~ p:last-of-type {
+  padding-bottom: 30px;
+}
+
+#wizardpage #bandwidth + h3 {
+  border-left-width: 1px;
+}
+
+#wizardpage .wizardbuttons {
+  margin-bottom: -8px !important;
 }
 
 #bandwidthTestRunning {
@@ -12334,6 +12370,11 @@ div.app a, div.app a:visited, #sitemap a:link, #sitemap a:visited, .warning a {
   margin-top: -1px;
 }
 
+#wizardpage #bandwidthconfig + .wizardbuttons {
+  margin-top: -6px;
+}
+
+/* end wizard */
 #news a + tt {
   margin-left: 4px;
 }
@@ -12851,7 +12892,7 @@ i {
   overflow: hidden;
   vertical-align: middle;
   text-align: center;
-  border: 1px solid #8d8daa;
+  border: 1px solid var(--borderinner);
   box-shadow: var(--highlight), 0 0 1px 1px #ddf;
   animation: ease grid-fade 1s forwards;
   background: #fff !important;
