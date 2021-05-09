@@ -67,7 +67,7 @@ class ConnectionManager {
     private static final int MAX_PONG_PAYLOAD = 32;
     /** once over throttle limits, respond this many times before just dropping */
 //    private static final int DROP_OVER_LIMIT = 3;
-    private static final int DROP_OVER_LIMIT = 1;
+    private static final int DROP_OVER_LIMIT = 2;
 
     // https://stackoverflow.com/questions/16022624/examples-of-http-api-rate-limiting-http-response-headers
     // RFC 6585
