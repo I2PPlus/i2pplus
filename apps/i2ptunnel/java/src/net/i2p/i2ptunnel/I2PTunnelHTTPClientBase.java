@@ -308,7 +308,7 @@ public abstract class I2PTunnelHTTPClientBase extends I2PTunnelClientBase implem
         // force connect delay and bulk profile
         Properties opts = tunnel.getClientOptions();
 //        opts.setProperty("i2p.streaming.connectDelay", "200");
-        opts.setProperty("i2p.streaming.connectDelay", "100");
+        opts.setProperty("i2p.streaming.connectDelay", "150");
         opts.remove("i2p.streaming.maxWindowSize");
         _proxyList = new ArrayList<String>(4);
         _proxyNonce = new byte[PROXYNONCE_BYTES];
@@ -329,7 +329,7 @@ public abstract class I2PTunnelHTTPClientBase extends I2PTunnelClientBase implem
         // force connect delay and bulk profile
         Properties opts = tunnel.getClientOptions();
 //        opts.setProperty("i2p.streaming.connectDelay", "200");
-        opts.setProperty("i2p.streaming.connectDelay", "100");
+        opts.setProperty("i2p.streaming.connectDelay", "150");
         opts.remove("i2p.streaming.maxWindowSize");
         _proxyList = new ArrayList<String>(4);
         _proxyNonce = new byte[PROXYNONCE_BYTES];
