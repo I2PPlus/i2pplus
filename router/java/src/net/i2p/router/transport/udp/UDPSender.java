@@ -38,9 +38,9 @@ class UDPSender {
     private static final int MIN_QUEUE_SIZE = 128;
     private static final int MAX_QUEUE_SIZE = 768;
 //    private static final int CODEL_TARGET = 100;
-    private static final int CODEL_TARGET = 512;
+    private static final int CODEL_TARGET = 40;
 //    private static final int CODEL_INTERVAL = 500;
-    private static final int CODEL_INTERVAL = 1000;
+    private static final int CODEL_INTERVAL = 800;
 
     public boolean fullStats() {
         return _context.getBooleanProperty("stat.full");
