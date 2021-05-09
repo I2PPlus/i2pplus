@@ -185,11 +185,16 @@ class EventPumper implements Runnable {
      *  Outbound
      */
     public void registerConnect(NTCPConnection con) {
-        if (_log.shouldLog(Log.DEBUG))
-            _log.debug("Registering " + con + "...");
-        _context.statManager().addRateData("ntcp.registerConnect", 1);
-        _wantsConRegister.offer(con);
-        _selector.wakeup();
+        if (con != null) {
+            if (_log.shouldLog(Log.DEBUG))
+                _log.debug("Registering " + con + "...");
+            _context.statManager().addRateData("ntcp.registerConnect", 1);
+            _wantsConRegister.offer(con);
+            _selector.wakeup();
+        } else {
+            if (_log.shouldLog(Log.WARN))
+                _log.warn("Cannot register NTCP connection, ip address is null");
+        }
     }
 
     /**
