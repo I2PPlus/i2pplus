@@ -55,7 +55,7 @@ public class CoDelPriorityBlockingQueue<E extends CDPQEntry> extends PriBlocking
      *  Maybe need to make configurable per-instance.
      */
 //    private static final int TARGET = 15;
-    private static final int TARGET = 30;
+    private static final int TARGET = 20;
     private final long _target;
 
     /**
