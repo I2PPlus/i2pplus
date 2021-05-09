@@ -419,7 +419,7 @@ public class CommSystemFacadeImpl extends CommSystemFacade {
 
     /* We hope the routerinfos are read in and things have settled down by now, but it's not required to be so */
     // TODO: Run this job on a schedule so country count doesn't become stale
-    private static final int START_DELAY = SystemVersion.isSlow() ? 5*60*1000 : 5*1000;
+    private static final int START_DELAY = SystemVersion.isSlow() ? 5*60*1000 : 15*1000;
 //    private static final int LOOKUP_TIME = 30*60*1000;
     private static final int LOOKUP_TIME = 5*60*1000;
 
@@ -676,7 +676,8 @@ public class CommSystemFacadeImpl extends CommSystemFacade {
      */
 
     private static final int TIME_START_DELAY = 5*60*1000;
-    private static final int TIME_REPEAT_DELAY = 10*60*1000;
+//    private static final int TIME_REPEAT_DELAY = 10*60*1000;
+    private static final int TIME_REPEAT_DELAY = 8*60*1000;
 
     /** @since 0.7.12 */
     private void startTimestamper() {

@@ -31,11 +31,11 @@ class TunnelGatewayPumper implements Runnable {
      *  Wait just a little, but this lets the pumper queue back up.
      *  See additional comments in PTG.
      */
-    private static final long REQUEUE_TIME = 50;
-/*
+//    private static final long REQUEUE_TIME = 50;
+
     private static final long REQUEUE_TIME = (SystemVersion.getMaxMemory() < 1024*1024*1024 ||
-                                              SystemVersion.getCores() <= 4 || SystemVersion.isSlow()) ? 50 : 30;
-*/
+                                              SystemVersion.getCores() <= 4 || SystemVersion.isSlow()) ? 50 : 80;
+
     private static final TryCache<List<PendingGatewayMessage>> _bufferCache = new TryCache<>(new BufferFactory(), 16);
 
     private static class BufferFactory implements TryCache.ObjectFactory<List<PendingGatewayMessage>> {

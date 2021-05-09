@@ -8032,12 +8032,12 @@ th code {
   margin-top: 11px !important;
   padding: 8px 10px;
   font-size: 11.5pt;
-  background: var(--bug) right 5px center no-repeat,
+  background: var(--bug) right 6px center no-repeat,
               linear-gradient(to bottom, rgba(0,0,0,0) 50%, #000 50%),
               repeating-linear-gradient(to right, rgba(0,16,0,.5) 2px, rgba(0,16,0,.4) 4px),
               var(--h3_fade) !important;
-  background-size: 20px, 100%, 4px 100%, 100% !important;
-  background-blend-mode: difference, normal, normal, normal;
+  background-size: 18px, 100%, 4px 100%, 100% !important;
+
 }
 
 #debug h2#debug_portmapper {

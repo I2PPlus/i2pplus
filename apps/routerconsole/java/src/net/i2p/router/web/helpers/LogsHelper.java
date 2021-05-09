@@ -295,6 +295,7 @@ public class LogsHelper extends HelperBase {
             msg = msg.replace("[DHT Explore]", "[DHT Explore ]");
             //msg = msg.replace("false", "no");
             msg = msg.replace("false", "[&#10008;]"); // no (cross)
+            msg = msg.replace("[&#10008;] positives", "false positives");
             //msg = msg.replace("true", "yes");
             msg = msg.replace("true", "[&#10004;]"); // yes (tick)
             msg = msg.replace("[[&#10004;]]", "[&#10004;]");
