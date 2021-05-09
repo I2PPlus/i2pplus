@@ -1844,15 +1844,15 @@ public class PeerState {
                 _context.statManager().addRateData("udp.sendConfirmVolley", numSends);
                 _transport.succeeded(state);
                 if (_log.shouldDebug())
-                    _log.debug("Received partial ack of " + state.getMessageId() + " by " + _remotePeer
-                          + " newly-acked: " + ackedSize
-                          + ", now complete for: " + state);
+                    _log.debug("Received partial ack of " + state.getMessageId() + " by [" + _remotePeer.toBase32().substring(0,6)
+                          + "] \n* Status: Newly acked: " + ackedSize
+                          + " -> Now complete for: " + state);
             } else {
                 if (_log.shouldInfo())
-                    _log.info("Received partial ack of " + state.getMessageId() + " by " + _remotePeer
-                          + " after " + lifetime + " and " + numSends + " sends"
-                          + " complete? false"
-                          + " newly-acked: " + ackedSize
+                    _log.info("Received partial ack of " + state.getMessageId() + " by [" + _remotePeer.toBase32().substring(0,6)
+                          + "] \n* Status: Received after " + lifetime + "ms and " + numSends + " sends"
+                          + " -> Complete? false"
+                          + " -> Newly acked: " + ackedSize
                           + ' ' + bitfield
                           + " for: " + state);
             }

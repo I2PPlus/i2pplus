@@ -1149,11 +1149,11 @@ public class OutboundClientMessageOneShotJob extends JobImpl {
                     if (_deliveredLS.getDate() > oldls.getDate()) {
                         _cache.leaseSetCache.put(_hashPair, _deliveredLS);
                          if (_log.shouldInfo())
-                             _log.info(getJobId() + ": added to cache - got reply LS from " + _toString);
+                             _log.info("[Job " + getJobId() + "] Added to cache - got reply LeaseSet from " + _toString);
                     }
                 } else {
                     if (_log.shouldInfo())
-                         _log.info(getJobId() + ": added to cache - got reply LS from " + _toString);
+                         _log.info("[Job " + getJobId() + "] Added to cache - got reply LeaseSet from " + _toString);
                 }
             }
             // do we leak tags here?
