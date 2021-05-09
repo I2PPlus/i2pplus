@@ -68,9 +68,9 @@ class UDPPacket implements CDQEntry {
             int cores = SystemVersion.getCores();
             int csize = (int) Math.max(MIN_CACHE_SIZE, Math.min(MAX_CACHE_SIZE, maxMemory / (1024*1024)));
             if (maxMemory >= 1024*1024*1024 && cores >= 4 && !isSlow)
-                csize = 512;
+                csize = 1024;
             else if (maxMemory >= 768*1024*1024 && cores >= 4 && !isSlow)
-                csize = 384;
+                csize = 512;
             _packetFactory = new PacketFactory();
             _packetCache = new TryCache<>(_packetFactory, csize);
         } else {
