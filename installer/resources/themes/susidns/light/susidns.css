@@ -742,6 +742,7 @@ textarea[name="config"], textarea[name="content"], #subslog pre {
   padding-left: 10px !important;
   width: calc(100% - 18px) !important;
   line-height: 15px;
+  white-space: pre-wrap;
   box-shadow: inset 0 0 0 1px #fafaff;
   background: url(/themes/snark/ubergine/images/hat.png) right 10px bottom -8px no-repeat,
               linear-gradient(to right, #7e7fb9, #ccf 1px, #ccf 6px, #fafaff 6px) !important;

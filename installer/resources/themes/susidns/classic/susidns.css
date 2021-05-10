@@ -614,8 +614,9 @@ td.destinations textarea, td.destinations textarea:focus {
 }
 
 #subsLog pre {
-  font: normal 8pt "Noto Mono", "Droid Sans Mono", "Andale Mono", "DejaVu Sans Mono", "Lucida Console", monospace;
   padding: 8px 10px;
+  white-space: pre-wrap;
+  font: normal 8pt "Noto Mono", "Droid Sans Mono", "Andale Mono", "DejaVu Sans Mono", "Lucida Console", monospace;
 }
 
 .fakebutton, input[type=submit], input[type="reset"] {
