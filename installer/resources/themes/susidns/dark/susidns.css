@@ -1075,8 +1075,8 @@ textarea, #subslog pre {
   padding: 8px 12px;
   height: calc(100% - 105px);
   width: calc(100% - 26px);
-  border-radius: 0 0 2px 2px;
   white-space: pre-wrap;
+  border-radius: 0 0 2px 2px;
 }
 
 textarea[cols="70"] {

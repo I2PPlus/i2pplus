@@ -1071,6 +1071,7 @@ textarea, #subslog pre {
   padding-left: 10px !important;
   width: calc(100% - 17px) !important;
   height: auto;
+  white-space: pre-wrap;
   font-weight: normal;
   color: #c9ceff;
   background: #000 !important;
