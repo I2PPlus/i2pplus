@@ -523,8 +523,9 @@ class EventPumper implements Runnable {
             chan.configureBlocking(false);
 
             if (!_transport.allowConnection()) {
+                String ip = chan.socket().getInetAddress().toString().replace("/", "");
                 if (_log.shouldLog(Log.WARN))
-                    _log.warn("Refusing SessionRequest from " + chan.socket().getInetAddress() + " -> NTCP connection limit reached");
+                    _log.warn("Refusing SessionRequest from " + ip + " -> NTCP connection limit reached");
                 try { chan.close(); } catch (IOException ioe) { }
                 return;
             }
@@ -639,7 +640,8 @@ class EventPumper implements Runnable {
                             ByteArray ba = new ByteArray(ip);
                             count = _blockedIPs.increment(ba);
                             if (_log.shouldLog(Log.WARN))
-                                _log.warn("EOF on Inbound connection before receiving any data \n* Blocking IP address: " + Addresses.toString(ip) + " (count: " + count + ") -> " + con);
+                                _log.warn("EOF on Inbound connection before receiving any data " +
+                                          "\n* Blocking IP address: " + Addresses.toString(ip) + " (count: " + count + ") -> " + con);
                         } else {
                             count = 1;
                             if (_log.shouldLog(Log.WARN))
@@ -721,16 +723,18 @@ class EventPumper implements Runnable {
                     count = _blockedIPs.increment(ba);
                     if (_log.shouldLog(Log.WARN))
 //                        _log.warn("Blocking IP address " + Addresses.toString(ip) + " (count: " + count + "): " + con, ioe);
-                        _log.warn("Blocking IP address " + Addresses.toString(ip) + " (count: " + count + ") -> " + con + "\n* " +  ioe.getMessage());
+                        _log.warn("Blocking IP address " + Addresses.toString(ip) + " (count: " + count + ") -> " + con +
+                                  "\n* IO Error: " +  ioe.getMessage());
                 } else {
                     count = 1;
                     if (_log.shouldLog(Log.WARN))
-                        _log.warn("IOE on Inbound before receiving any data: " + con);
+                        _log.warn("IO Error on Inbound before receiving any data: " + con);
                 }
                 _context.statManager().addRateData("ntcp.dropInboundNoMessage", count);
             } else {
-                if (_log.shouldLog(Log.INFO))
-                    _log.info("Error reading on: " + con, ioe);
+                if (_log.shouldLog(Log.WARN))
+//                    _log.info("Error reading on: " + con, ioe);
+                    _log.warn("Error reading on: " + con + " (" + ioe.getMessage() + ")");
             }
             if (con.isEstablished()) {
                 _context.statManager().addRateData("ntcp.readError", 1);

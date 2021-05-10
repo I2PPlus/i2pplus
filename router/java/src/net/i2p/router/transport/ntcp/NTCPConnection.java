@@ -1769,7 +1769,9 @@ public class NTCPConnection implements Closeable {
 
     @Override
     public String toString() {
-        String fromIP = _chan.socket().getInetAddress().toString();
+        String fromIP = "unknown";
+        if (_chan.socket().getInetAddress() != null)
+            fromIP = _chan.socket().getInetAddress().toString();
         fromIP = fromIP.replace("/", "");
         return "[NTCP" + _version + "] Connection [ID " + _connID + "]\n* " +
                (_isInbound ? ("From: " + fromIP + ":" + _chan.socket().getPort() + ' ')
