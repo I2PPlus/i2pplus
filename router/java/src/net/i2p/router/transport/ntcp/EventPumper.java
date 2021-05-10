@@ -725,12 +725,13 @@ class EventPumper implements Runnable {
                 } else {
                     count = 1;
                     if (_log.shouldLog(Log.WARN))
-                        _log.warn("IOE on Inbound before receiving any data: " + con);
+                        _log.warn("IO Error on Inbound before receiving any data: " + con);
                 }
                 _context.statManager().addRateData("ntcp.dropInboundNoMessage", count);
             } else {
-                if (_log.shouldLog(Log.INFO))
-                    _log.info("Error reading on: " + con, ioe);
+                if (_log.shouldLog(Log.WARN))
+//                    _log.info("Error reading on: " + con, ioe);
+                    _log.warn("Error reading on: " + con + " (" + ioe.getMessage() + ")");
             }
             if (con.isEstablished()) {
                 _context.statManager().addRateData("ntcp.readError", 1);
