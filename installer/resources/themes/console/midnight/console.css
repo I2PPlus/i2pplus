@@ -48,11 +48,8 @@ body {
   text-align: center;
   font: 8.5pt/130% var(--bodyfont);
   color: #c9ceff;
-  background: url(/themes/console/images/buttons/clean_hover.png) no-repeat,
-              url(/themes/console/images/buttons/delete_hover.png) no-repeat,
-              url(/themes/console/images/buttons/update_hover.png) no-repeat,
-              url(images/newtab.png);
-  background-size: 0, 0, 0, 0;
+  background: url(images/newtab.png);
+  background-size: 0;
 }
 
 @supports (-moz-appearance: none) {
@@ -77,14 +74,14 @@ div.clearer {
 }
 
 ::selection {
+  color: white;
   background: #22296f !important;
   background: rgba(34, 41, 111, 0.9) !important;
-  color: white;
 }
 
 ::-moz-selection {
-  background: #22296f !important;
   color: white;
+  background: #22296f !important;
 }
 
 html, .main * {
@@ -99,7 +96,6 @@ html, .main * {
 /* standard buttons and inputs */
 
 .routersummary h3:hover {
-  background: linear-gradient(to bottom, #001020 50%, #000 50%) !important;
   background: linear-gradient(to right, rgba(64,0,64,.1), rgba(96,0,96,.2), rgba(64,0,64,.1)), linear-gradient(to bottom, #1d1a2d 50%, #000 50%) !important;
 }
 
@@ -111,17 +107,17 @@ input {
   margin: 5px;
   padding: 3px 2px;
   min-width: 110px;
-  color: #26235c;
   font: bold 9pt var(--bodyfont);
   text-decoration: none;
+  color: #26235c;
   background: #000;
 }
 
 input:hover, input:focus {
-  background: #000;
   color: #83529f !important;
   border: 1px solid #652787;
   box-shadow: inset 0 1px 1px 0 #c9ceff;
+  background: #000;
   cursor: pointer;
 }
 
@@ -825,7 +821,7 @@ input.reload[value^="Update"]:focus, button.reload[value^="Update"]:focus {
 
 input.reload[value^="Update"]:active, button.reload[value^="Update"]:active {
   padding: 5px 9px 5px 25px !important;
-  background: url(/themes/console/images/buttons/update_hover.png) 8px center no-repeat, var(--button_active) !important;
+  background: var(--refresh_hover) 8px center no-repeat, var(--button_active) !important;
   background-size: 14px, 100% !important;
 }
 
@@ -1539,16 +1535,17 @@ div.logo hr {
   display: inline-block;
   height: 22px;
   vertical-align: middle;
+  will-change: transform;
 }
 
 @media screen and (max-width: 1500px) {
-.routersummary h3 {
-  margin-bottom: -10px;
-}
+  .routersummary h3 {
+    margin-bottom: -10px;
+  }
 
-.routersummary h3::before {
-  height: 14px;
-}
+  .routersummary h3::before {
+    height: 14px;
+  }
 }
 
 .routersummary h3:hover {
@@ -1592,20 +1589,19 @@ div.logo hr {
   text-decoration: none !important;
   color: #2a1fbe;
   border: none;
-  background: #000010;
   background: linear-gradient(to right, #000010, #010010 15%, #010025 50%, #010010 85%, #000010) !important;
 }
 
 @media screen and (min-width: 1500px) {
-.routersummary h4 {
-  margin: -7px -10px -10px !important;
-}
+  .routersummary h4 {
+    margin: -7px -10px -10px !important;
+  }
 }
 
 @supports not (-moz-appearance: none) {
-.routersummary h4 {
-  box-shadow: none;
-}
+  .routersummary h4 {
+    box-shadow: none;
+  }
 }
 
 .routersummary h4.sb_update, .routersummary h4.sb_update {
@@ -1650,11 +1646,11 @@ div.logo hr {
 }
 
 #sb_internals td:first-child, #sb_advanced td:first-child, #sb_help td:first-child {
-  padding: 0 0 1px !important;
   margin: 0 -10px;
-  display: inline-block;
+  padding: 0 0 1px !important;
   width: 106% !important;
   max-width: 400px !important;
+  display: inline-block;
 }
 
 #sb_advanced td:first-child {
@@ -1668,10 +1664,10 @@ div.logo hr {
 
 #sb_general td::after, #sb_shortgeneral td::after, #sb_advancedgeneral td::after, #sb_bandwidth td::after,
 #sb_peers td::after, #sb_peersadvanced td::after, #sb_tunnels td::after, #sb_queue td::after {
-  content: "";
+  height: 16px !important;
   display: inline-block;
   vertical-align: bottom;
-  min-height: 16px !important;
+  content: "";
 }
 
 #sb_general td, #sb_shortgeneral td, #sb_advancedgeneral td {
@@ -1679,17 +1675,17 @@ div.logo hr {
 }
 
 #sb_localtunnels {
+  margin-top: -6px !important;
+  margin-bottom: -8px !important;
   width: 200px !important;
   border-collapse: separate;
   border-spacing: 0;
-  margin-top: -6px !important;
-  margin-bottom: -8px !important;
 }
 
 #sb_localtunnels a {
-  display: inline-block;
   width: 100%;
   max-width: 156px;
+  display: inline-block;
   overflow: hidden;
   text-overflow: ellipsis;
   white-space: nowrap;
@@ -2152,6 +2148,7 @@ p:empty + .sb_notice {
   border-collapse: separate;
   border-spacing: 0;
   box-shadow: inset 0 0 0 2px #000;
+  will-change: transform;
 }
 
 #sb_bandwidthgraph:hover {
@@ -2184,9 +2181,9 @@ a:active #sb_bandwidthgraph, a:active #sb_graphstats {
 /* status bar */
 
 @supports not (-moz-appearance: none) {
-#sb_memoryBar {
-  margin-bottom: -6px !important;
-}
+  #sb_memoryBar {
+    margin-bottom: -6px !important;
+  }
 }
 
 .percentBarOuter {
@@ -12893,80 +12890,80 @@ a:hover .sitemapLink {
 
 #configurationhelp h2, #advancedsettings h2, #filterlist h2 {
   padding-left: 38px !important;
-  background: var(--configure) 8px center no-repeat, var(--title) !important;
-  background-size: 24px, 4px 100%, 100% !important;
+  background: var(--settings_inert) 8px center no-repeat, var(--title) !important;
+  background-size: 22px, 4px 100%, 100% !important;
 }
 
 #sidebarhelp h2, #reachabilityhelp h2 {
   padding-left: 38px !important;
   background: url(/themes/console/images/svg/sidebar.svg) 8px center no-repeat, var(--title) !important;
-  background-size: 24px, 4px 100%, 100% !important;
+  background-size: 22px, 4px 100%, 100% !important;
 }
 
 #reseedhelp h2 {
   padding-left: 38px !important;
   background: var(--reseed) 8px center no-repeat, var(--title) !important;
-  background-size: 24px, 4px 100%, 100% !important;
+  background-size: 22px, 4px 100%, 100% !important;
 }
 
 #newuserguide h2 {
   padding-left: 38px !important;
   background: url(/themes/console/images/info/question.png) 8px center no-repeat, var(--title) !important;
-  background-size: 24px, 4px 100%, 100% !important;
+  background-size: 22px, 4px 100%, 100% !important;
 }
 
 #newuserguide h2 {
   padding-left: 38px !important;
   background: url(images/favicon.svg) 8px center no-repeat, var(--title) !important;
-  background-size: 24px, 4px 100%, 100% !important;
+  background-size: 22px, 4px 100%, 100% !important;
 }
 
 #troubleshoot h2 {
   padding-left: 38px !important;
   background: var(--wrench) 8px center no-repeat, var(--title) !important;
-  background-size: 24px, 4px 100%, 100% !important;
+  background-size: 22px, 4px 100%, 100% !important;
 }
 
 #legal h2 {
   padding-left: 38px !important;
   background: url(/themes/console/images/info/legal.png) 8px center no-repeat, var(--title) !important;
-  background-size: 24px, 4px 100%, 100% !important;
+  background-size: 22px, 4px 100%, 100% !important;
 }
 
 #changelog h2 {
   padding-left: 38px !important;
-  background: var(--changelog) 8px center no-repeat, var(--title) !important;
-  background-size: 24px, 4px 100%, 100% !important;
+  background: var(--changelog) 10px center no-repeat, var(--title) !important;
+  background-size: 22px, 4px 100%, 100% !important;
 }
 
 #faq h2, #glossary h2 {
   padding-left: 38px !important;
   background: var(--question) 8px center no-repeat, var(--title) !important;
-  background-size: 24px, 4px 100%, 100% !important;
+  background-size: 22px, 4px 100%, 100% !important;
 }
 
 #webhosting h2 {
   padding-left: 38px !important;
   background: var(--server) 8px center no-repeat, var(--title) !important;
-  background-size: 24px, 4px 100%, 100% !important;
+  background-size: 22px, 4px 100%, 100% !important;
 }
 
 #themeoverride h2 {
   padding-left: 38px !important;
   background: var(--ui) 8px center no-repeat, var(--title) !important;
-  background-size: 24px, 4px 100%, 100% !important;
+  background-size: 22px, 4px 100%, 100% !important;
 }
 
 #browserconfig h2 {
   padding-left: 38px !important;
   background: var(--firefox) 8px center no-repeat, var(--title) !important;
-  background-size: 24px, 4px 100%, 100% !important;
+  background-size: 22px, 4px 100%, 100% !important;
 }
 
 #tunnman h2 {
   padding-left: 38px !important;
   background: var(--hardhat) 8px center no-repeat, var(--title) !important;
-  background-size: 24px, 4px 100%, 100% !important;
+  background-size: 22px, 4px 100%, 100% !important;
 }
 
 /* end TOC */
@@ -12980,19 +12977,20 @@ a:hover .sitemapLink {
 }
 
 .sitelink {
-  padding: 0 3px 0 16px;
+  padding: 0 3px 0 17px;
   background: var(--link) 2px center no-repeat;
   background-size: 12px, 100% !important;
 }
 
 .chatlink {
-  padding: 0 3px 0 20px;
-  background: url(/themes/snark/ubergine/images/comment.png) 2px center no-repeat;
+  padding: 0 3px 0 17px;
+  background: var(--chat) 2px center no-repeat;
+  background-size: 12px, 100% !important;
 }
 
 .sitelink.external {
-  padding: 0 3px 0 18px;
-  background: var(--globe) 3px center no-repeat;
+  padding: 0 3px 0 19px;
+  background: var(--planet) 3px center no-repeat;
   background-size: 12px, 100% !important;
 }
 
