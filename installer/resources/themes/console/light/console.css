@@ -2361,17 +2361,27 @@ h3#iptransport a:not(old), h3#advancedconfig a:not(old), h3#reseedsetup a:not(ol
 }
 
 h3#iptransport a::after, h3#advancedconfig a::after, h3#reseedsetup a::after {
+  margin-top: -4px;
+  margin-bottom: -2px;
   padding: 0;
-  content: url(images/help.png);
+  width: 20px;
+  height: 20px;
   display: inline-block;
   vertical-align: middle;
-  cursor: help;
-  filter: hue-rotate(-20deg) saturate(200%) drop-shadow(0 0 1px #97a2ce);
-  mix-blend-mode: luminosity;
+  background: var(--helplink) center center no-repeat;
+  background-size: 20px;
+  content: "";
+}
+
+@media screen and (max-width: 1499px) {
+  h3#iptransport a::after, h3#advancedconfig a::after, h3#reseedsetup a::after {
+    margin-top: -1px;
+  }
 }
 
 #iptransport a:hover::after, #advancedconfig a:hover::after, #reseedsetup a:hover::after {
-  mix-blend-mode: normal !important;
+  background: var(--helplink_hover) center center no-repeat;
+  background-size: 20px;
 }
 
 h3#transports, h3#upnp {

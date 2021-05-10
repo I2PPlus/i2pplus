@@ -269,8 +269,11 @@ div.wideload {
 
 #sb_services a {
   text-align: right !important;
-  padding-right: 28px !important;
   background-position: right 6px center !important;
+}
+
+#sb_services a::before {
+  margin-left: 6px !important;
 }
 
 #sb_graphcontainer {
@@ -282,6 +285,11 @@ div.wideload {
   margin: -5px -5px -5px 0;
 }
 
+.tunnelBuildStatus::before {
+  margin-left: 4px !important;
+  width: 4px !important;
+  height: 9px !important;
+}
 
 @supports not (-moz-appearance: none) {
 #sb_bandwidthgraph {
@@ -781,10 +789,12 @@ div.app:hover .appimg .extlink::after {
   border-radius: 2px 0 2px 0;
 }
 
-div.news h3, #news h3 {
-  background: url(images/news.png) right 8px center no-repeat, linear-gradient(to left, #fff, #eef) !important;
-  background: url(images/news.png) right 8px center no-repeat, linear-gradient(to bottom, #fff 50%, rgba(255,255,255,.6) 50%, rgba(240,240,255,.4)), linear-gradient(to left, #fff 5%, rgba(231, 231, 255, 0.8) 15%) right center !important;
+div.news h3, #news h3, #newspage #news h3 {
   padding: 5px 30px 5px 10px;
+  background: var(--news) right 8px center no-repeat,
+              linear-gradient(to bottom, #fff 50%, rgba(255,255,255,.6) 50%, rgba(240,240,255,.4)),
+              linear-gradient(to left, #fff 5%, rgba(231, 231, 255, 0.8) 15%) right center !important;
+  background-size: 15px, 100%, 100% !important;
 }
 
 #newsStatus {
@@ -826,8 +836,8 @@ div.news h3, #news h3 {
 }
 
 #sb_localtunnels td:last-child {
-  text-align: left !important;
   padding-left: 1px;
+  text-align: left !important;
 }
 
 #leasesetdebug th:last-child, #leasesetsummary th:last-child,
