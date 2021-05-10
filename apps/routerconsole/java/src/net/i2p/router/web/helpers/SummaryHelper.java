@@ -893,7 +893,7 @@ public class SummaryHelper extends HelperBase {
         if (rs == null)
             return "0";
         Rate lagRate = rs.getRate(60*1000);
-        if (lagRate.getAverageValue() < 1)
+        if (lagRate.getAverageValue() < 2)
             return DataHelper.formatDuration2((double)lagRate.getAverageValue());
         else
           return DataHelper.formatDuration2((long)lagRate.getAverageValue());
