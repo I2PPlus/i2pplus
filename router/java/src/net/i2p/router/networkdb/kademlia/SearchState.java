@@ -188,7 +188,7 @@ class SearchState {
         StringBuilder buf = new StringBuilder(256);
         buf.append(" Search for [").append(_searchKey.toBase64().substring(0,6)).append("]");
         if (_successfulPeers.size() <= 0)
-            buf.append(" in progress");
+            buf.append(" in progress...");
         else
             buf.append(" completed");
         if (_aborted)
