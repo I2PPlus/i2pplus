@@ -264,17 +264,18 @@ class BuildHandler implements Runnable {
             }
 
             long now = _context.clock().now();
-            long dropBefore = now - (BuildRequestor.REQUEST_TIMEOUT/4);
-            int maxTunnels = 10000; // avoid NPE
-            if (_context.getProperty("router.maxParticipatingTunnels") != null)
-                maxTunnels = Integer.parseInt(_context.getProperty("router.maxParticipatingTunnels"));
+            long dropBefore = now - (BuildRequestor.REQUEST_TIMEOUT / 4);
+            String PROP_MAX_TUNNELS = _context.getProperty("router.maxParticipatingTunnels");
+            int DEFAULT_MAX_TUNNELS = 10000;
+            int maxTunnels = _context.getProperty(PROP_MAX_TUNNELS, DEFAULT_MAX_TUNNELS);
+
             if (state.recvTime <= dropBefore) {
                 if (_log.shouldLog(Log.WARN))
                     _log.warn("Not even trying to handle/decrypt the request " + state.msg.getUniqueId()
                               + ", since we received it a long time ago: " + (now - state.recvTime));
                 _context.statManager().addRateData("tunnel.dropLoadDelay", now - state.recvTime);
                 if (maxTunnels > 0)
-                    _context.throttle().setTunnelStatus(_x("Dropping tunnel requests: Too slow").replace("requests: ", "requests:<br>"));
+                    _context.throttle().setTunnelStatus(_x("Dropping tunnel requests: Too slow").replace("tunnel requests:", "requests:"));
                 return;
             }
 
