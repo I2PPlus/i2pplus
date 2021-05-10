@@ -54,14 +54,14 @@ public class FloodfillNetworkDatabaseFacade extends KademliaNetworkDatabaseFacad
      *  4 as of 0.9.2; 3 as of 0.9.9
      */
 //    public static final int MAX_TO_FLOOD = 3;
-    public static final int MAX_TO_FLOOD = 8;
+    public static final int MAX_TO_FLOOD = 5;
 
     private static final int FLOOD_PRIORITY = OutNetMessage.PRIORITY_NETDB_FLOOD;
     private static final int FLOOD_TIMEOUT = 30*1000;
     private static final long NEXT_RKEY_RI_ADVANCE_TIME = 45*60*1000;
     private static final long NEXT_RKEY_LS_ADVANCE_TIME = 10*60*1000;
 //    private static final int NEXT_FLOOD_QTY = 2;
-    private static final int NEXT_FLOOD_QTY = 4;
+    private static final int NEXT_FLOOD_QTY = 3;
 
     public FloodfillNetworkDatabaseFacade(RouterContext context) {
         super(context);
@@ -155,7 +155,7 @@ public class FloodfillNetworkDatabaseFacade extends KademliaNetworkDatabaseFacad
         if (!isInitialized()) {
             if (_log.shouldWarn())
 //                _log.warn("Attempted to publish our RouterInfo before NetDb initialized: " + localRouterInfo, new Exception("I did it"));
-                _log.warn("Attempted to publish our RouterInfo before NetDb initialized"); //+ localRouterInfo);
+                _log.warn("Attempted to publish our RouterInfo before NetDb initialized, will retry shortly..."); //+ localRouterInfo);
             return;
         }
         // no use sending if we have no addresses
