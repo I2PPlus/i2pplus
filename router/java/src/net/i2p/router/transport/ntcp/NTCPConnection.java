@@ -2,6 +2,7 @@ package net.i2p.router.transport.ntcp;
 
 import java.io.Closeable;
 import java.io.IOException;
+import java.net.InetAddress;
 import java.net.Inet6Address;
 import java.nio.ByteBuffer;
 import java.nio.channels.SelectionKey;
@@ -1769,10 +1770,13 @@ public class NTCPConnection implements Closeable {
 
     @Override
     public String toString() {
-        String fromIP = "unknown";
-        if (_chan.socket().getInetAddress() != null)
-            fromIP = _chan.socket().getInetAddress().toString();
-        fromIP = fromIP.replace("/", "");
+        String fromIP;
+        if (_isInbound) {
+            InetAddress addr = _chan.socket().getInetAddress();
+            fromIP = addr != null ? addr.getHostAddress() : "unknown";
+        } else {
+            fromIP = null;
+        }
         return "[NTCP" + _version + "] Connection [ID " + _connID + "]\n* " +
                (_isInbound ? ("From: " + fromIP + ":" + _chan.socket().getPort() + ' ')
                            : ("To: " + _remAddr.getHost() + ":" + _remAddr.getPort() + ' ')) + "[" +
