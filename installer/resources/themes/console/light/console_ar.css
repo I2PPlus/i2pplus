@@ -285,6 +285,11 @@ div.wideload {
   margin: -5px -5px -5px 0;
 }
 
+.tunnelBuildStatus::before {
+  margin-left: 4px !important;
+  width: 4px !important;
+  height: 9px !important;
+}
 
 @supports not (-moz-appearance: none) {
 #sb_bandwidthgraph {
