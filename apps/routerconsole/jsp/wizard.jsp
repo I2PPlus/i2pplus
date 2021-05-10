@@ -250,7 +250,7 @@ Select the language to be used for the router console and web applications (<a h
 <td>
 <div class="optionsingle bw_in">
 <span class="bw_title"><%=intl._t("Download Speed")%></span>
-<input style="text-align: right; width: 5em" name="inboundrate" type="text" size="5" maxlength="5" value="<jsp:getProperty name="nethelper" property="inboundBurstRate" />" >
+<input style="text-align: right; width: 5em" name="inboundrate" type="text" size="5" maxlength="5" value="<jsp:getProperty name="nethelper" property="inboundBurstRate" />">
 <%=intl._t("KBps In")%>
 </div>
 </td>
@@ -260,7 +260,7 @@ Select the language to be used for the router console and web applications (<a h
 <%--
 <!-- let's keep this simple...
 bursting up to
-<input name="inboundburstrate" type="text" size="5" value="<jsp:getProperty name="nethelper" property="inboundBurstRate" />" /> KBps for
+<input name="inboundburstrate" type="text" size="5" value="<jsp:getProperty name="nethelper" property="inboundBurstRate" />"> KBps for
 <jsp:getProperty name="nethelper" property="inboundBurstFactorBox" /><br>
 -->
 --%>
@@ -270,7 +270,7 @@ bursting up to
 <td>
 <div class="optionsingle bw_out">
 <span class="bw_title"><%=intl._t("Upload Speed")%></span>
-<input style="text-align: right; width: 5em" name="outboundrate" type="text" size="5" maxlength="5" value="<jsp:getProperty name="nethelper" property="outboundBurstRate" />" >
+<input style="text-align: right; width: 5em" name="outboundrate" type="text" size="5" maxlength="5" value="<jsp:getProperty name="nethelper" property="outboundBurstRate" />">
 <%=intl._t("KBps Out")%>
 </div>
 </td>
@@ -280,7 +280,7 @@ bursting up to
 <%--
 <!-- let's keep this simple...
  bursting up to
-<input name="outboundburstrate" type="text" size="2" value="<jsp:getProperty name="nethelper" property="outboundBurstRate" />" /> KBps for
+<input name="outboundburstrate" type="text" size="2" value="<jsp:getProperty name="nethelper" property="outboundBurstRate" />"> KBps for
 <jsp:getProperty name="nethelper" property="outboundBurstFactorBox" /><br>
 <i>KBps = kilobytes per second = 1024 bytes per second = 8192 bits per second.<br>
 A negative rate sets the default.</i><br>
@@ -323,9 +323,7 @@ A negative rate sets the default.</i><br>
     } else if (ipg == 5) {
         // Browser setup
 %>
-<p class="infohelp" id="webbrowser">
-I2P+ requires a web browser configured to use the resident HTTP proxy in order to browse websites on the I2P network.
-</p>
+<p class="infohelp" id="webbrowser">I2P+ requires a web browser configured to use the resident HTTP proxy in order to browse websites on the I2P network.</p>
 <h3><%=intl._t("Browser Setup")%></h3>
 <p>In order to access websites hosted on the I2P network, and optionally use the default outproxy to connect to websites on clearnet, you will need to configure your browser to use the I2P+ <b>HTTP</b> proxy, by default running on <code>127.0.0.1 port 4444</code>. For more help, see <a href="https://geti2p.net/htproxyports" target="_blank" rel="noreferrer">the configuration guide</a>, or <a href="/help/configuration#browserconfig">the mini-tutorial for Firefox</a>.</p>
 <%
