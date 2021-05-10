@@ -523,8 +523,9 @@ class EventPumper implements Runnable {
             chan.configureBlocking(false);
 
             if (!_transport.allowConnection()) {
+                String ip = chan.socket().getInetAddress().toString().replace("/", "");
                 if (_log.shouldLog(Log.WARN))
-                    _log.warn("Refusing SessionRequest from " + chan.socket().getInetAddress() + " -> NTCP connection limit reached");
+                    _log.warn("Refusing SessionRequest from " + ip + " -> NTCP connection limit reached");
                 try { chan.close(); } catch (IOException ioe) { }
                 return;
             }
@@ -639,7 +640,8 @@ class EventPumper implements Runnable {
                             ByteArray ba = new ByteArray(ip);
                             count = _blockedIPs.increment(ba);
                             if (_log.shouldLog(Log.WARN))
-                                _log.warn("EOF on Inbound connection before receiving any data \n* Blocking IP address: " + Addresses.toString(ip) + " (count: " + count + ") -> " + con);
+                                _log.warn("EOF on Inbound connection before receiving any data " +
+                                          "\n* Blocking IP address: " + Addresses.toString(ip) + " (count: " + count + ") -> " + con);
                         } else {
                             count = 1;
                             if (_log.shouldLog(Log.WARN))
@@ -721,7 +723,8 @@ class EventPumper implements Runnable {
                     count = _blockedIPs.increment(ba);
                     if (_log.shouldLog(Log.WARN))
 //                        _log.warn("Blocking IP address " + Addresses.toString(ip) + " (count: " + count + "): " + con, ioe);
-                        _log.warn("Blocking IP address " + Addresses.toString(ip) + " (count: " + count + ") -> " + con + "\n* " +  ioe.getMessage());
+                        _log.warn("Blocking IP address " + Addresses.toString(ip) + " (count: " + count + ") -> " + con +
+                                  "\n* IO Error: " +  ioe.getMessage());
                 } else {
                     count = 1;
                     if (_log.shouldLog(Log.WARN))
