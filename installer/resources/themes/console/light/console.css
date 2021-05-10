@@ -10726,13 +10726,14 @@ b.suboption {
 }
 
 #i2pupdates textarea, #i2pupdates input[type=text] {
-  width: calc(100% - 216px) !important;
+  margin: 5px 0 5px 10px !important;
+  width: calc(100% - 210px) !important;
   min-width: 0 !important;
-  margin: 5px 5px 5px 10px !important;
+  box-sizing: border-box;
 }
 
 #i2pupdates textarea {
-  margin: 8px 5px 8px 10px !important;
+  margin: 8px 0 8px 3px !important;
   height: 76px !important;
   min-height: 32px !important;
 }
