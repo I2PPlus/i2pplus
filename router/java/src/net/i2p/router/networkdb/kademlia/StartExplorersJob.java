@@ -75,9 +75,9 @@ class StartExplorersJob extends JobImpl {
     public String getName() { return "Start NetDb Explorers"; }
 
     public void runJob() {
-        String forceExplore = getContext().getProperty("router.exploreWhenFloodfill");
+        boolean forceExplore = getContext().getBooleanProperty(PROP_FORCE_EXPLORE);
         boolean isFF = _facade.floodfillEnabled();
-        if (!isFF || (forceExplore != null && forceExplore == "true")) {
+        if (!isFF || forceExplore) {
             if (!(getContext().jobQueue().getMaxLag() > MAX_LAG ||
                   getContext().throttle().getMessageDelay() > MAX_MSG_DELAY ||
                   // getContext().router().gracefulShutdownInProgress()
