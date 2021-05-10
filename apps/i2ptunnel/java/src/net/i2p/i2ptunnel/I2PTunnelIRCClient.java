@@ -66,7 +66,7 @@ public class I2PTunnelIRCClient extends I2PTunnelClientBase {
         Properties opts = tunnel.getClientOptions();
 //        opts.setProperty("i2p.streaming.connectDelay", "200");
         if (opts.getProperty("i2p.streaming.connectDelay") == null)
-            opts.setProperty("i2p.streaming.connectDelay", "100");
+            opts.setProperty("i2p.streaming.connectDelay", "150");
         opts.remove("i2p.streaming.maxWindowSize");
         if (opts.getProperty("i2cp.leaseSetEncType") == null)
             opts.setProperty("i2cp.leaseSetEncType", "4,0");

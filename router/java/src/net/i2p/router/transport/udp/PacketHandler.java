@@ -55,7 +55,7 @@ class PacketHandler {
      */
     private static final long GRACE_PERIOD = Router.CLOCK_FUDGE_FACTOR + 30*1000;
 //    private static final long MAX_SKEW = 90*24*60*60*1000L;
-    private static final long MAX_SKEW = 3*60*1000L;
+    private static final long MAX_SKEW = 24*60*60*1000L;
 
     private enum AuthType { NONE, INTRO, BOBINTRO, SESSION }
 
