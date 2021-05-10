@@ -266,9 +266,9 @@ class BuildHandler implements Runnable {
             long now = _context.clock().now();
             long dropBefore = now - (BuildRequestor.REQUEST_TIMEOUT / 4);
             String PROP_MAX_TUNNELS = _context.getProperty("router.maxParticipatingTunnels");
-            int DEFAULT_MAX_TUNNELS = 10000;
-            int maxTunnels = _context.getProperty(PROP_MAX_TUNNELS, DEFAULT_MAX_TUNNELS);
-
+            int maxTunnels = 1000;
+            if (PROP_MAX_TUNNELS != null)
+                maxTunnels = Integer.valueOf(PROP_MAX_TUNNELS);
             if (state.recvTime <= dropBefore) {
                 if (_log.shouldLog(Log.WARN))
                     _log.warn("Not even trying to handle/decrypt the request " + state.msg.getUniqueId()
