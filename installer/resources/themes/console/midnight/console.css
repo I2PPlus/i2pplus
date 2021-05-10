@@ -12977,19 +12977,20 @@ a:hover .sitemapLink {
 }
 
 .sitelink {
-  padding: 0 3px 0 16px;
+  padding: 0 3px 0 17px;
   background: var(--link) 2px center no-repeat;
   background-size: 12px, 100% !important;
 }
 
 .chatlink {
-  padding: 0 3px 0 20px;
-  background: url(/themes/snark/ubergine/images/comment.png) 2px center no-repeat;
+  padding: 0 3px 0 17px;
+  background: var(--chat) 2px center no-repeat;
+  background-size: 12px, 100% !important;
 }
 
 .sitelink.external {
-  padding: 0 3px 0 18px;
-  background: var(--globe) 3px center no-repeat;
+  padding: 0 3px 0 19px;
+  background: var(--planet) 3px center no-repeat;
   background-size: 12px, 100% !important;
 }
 
