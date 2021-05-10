@@ -274,7 +274,7 @@ class SyntheticREDQueue implements BandwidthEstimator {
      * Here we insert virtual null samples if necessary as in Westwood,
      * And use a very simple EWMA (exponential weighted moving average)
      * time-varying filter, as in kernel tcp_westwood.c
-     * 
+     *
      * @param time the time of the measurement
      * @param packets number of bytes acked
      * @param rtt current rtt
@@ -316,7 +316,7 @@ class SyntheticREDQueue implements BandwidthEstimator {
      * Here we insert virtual null samples if necessary as in Westwood,
      * And use a very simple EWMA (exponential weighted moving average)
      * time-varying filter, as in kernel tcp_westwood.c
-     * 
+     *
      * @param time the time of the measurement
      * @param deltaT at least WESTWOOD_RTT_MIN
      */
@@ -362,7 +362,7 @@ class SyntheticREDQueue implements BandwidthEstimator {
 
     @Override
     public synchronized String toString() {
-        return "SREDQ[" +
+        return "SyntheticREDQueue [" +
                 //" _bKFiltered " + _bKFiltered +
                 //" _tAck " + _tAck + "; " +
                 //" _tQSize " + _tQSize +
