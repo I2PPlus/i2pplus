@@ -64,8 +64,8 @@ class EventPumper implements Runnable {
      *  message, which is a 5-slot VTBM (~2700 bytes).
      *  The occasional larger message can use multiple buffers.
      */
-    private static final int BUF_SIZE = 8*1024;
-    private static final int MAX_CACHE_SIZE = 64;
+    private static final int BUF_SIZE = SystemVersion.getMaxMemory() < 1024*1024*1024 ? 8*1024 : 12*1024;
+    private static final int MAX_CACHE_SIZE = SystemVersion.getMaxMemory() < 1024*1024*1024 ? 64 : 96;
 
     private static class BufferFactory implements TryCache.ObjectFactory<ByteBuffer> {
         public ByteBuffer newInstance() {

@@ -1094,7 +1094,7 @@ th.snarkFileSize {
 
 .percentBarComplete {
   margin-bottom: -1px;
-  padding: 2px 0;
+  padding: 2px 0 0;
   display: inline-block;
   max-width: 84px;
   width: 84px;
@@ -1109,16 +1109,16 @@ th.snarkFileSize {
 }
 
 @supports not (-moz-appearance: none) {
-.percentBarComplete {
-  padding-top: 3px !important;
-  padding-bottom: 1px !important;
-}
+  .percentBarComplete {
+    padding-top: 3px !important;
+    padding-bottom: 1px !important;
+  }
 }
 
 @media screen and (min-width: 1500px) {
-.percentBarComplete {
-  padding: 2px 0 1px
-}
+  .percentBarComplete {
+    padding: 2px 0 .5px;
+  }
 }
 
 tr:hover .percentBarComplete {
@@ -3957,7 +3957,8 @@ td.snarkGraphicStatus img {
 }
 
 td.snarkTrackerDetails img {
-  max-height: 16px;
+  max-height: 14px !important;
+  margin-right: -10px !important;
 }
 
 .snarkTorrents tfoot tr:first-child th.snarkTorrentRateUp, .snarkTorrents tfoot tr:first-child th.snarkTorrentUploaded {
