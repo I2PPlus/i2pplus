@@ -376,7 +376,7 @@ h3 {
   border-radius: 2px;
   background: var(--title) !important;
   letter-spacing: .08em;
-  word-spacing: 0.1em;
+  word-spacing: .1em;
   text-shadow: 0 0 2px #010011;
   text-transform: uppercase;
   box-shadow: var(--highlight);
@@ -450,7 +450,7 @@ div#book p {
 h4 {
   font-size: 9pt;
   margin-top: -15px;
-  word-spacing: 0.1em;
+  word-spacing: .1em;
   border: 1px solid #26235c;
   padding: 8px 10px;
   margin-bottom: 30px !important;
@@ -1161,7 +1161,7 @@ input.export {
 
 .headline h3, h3 {
   padding: 10px 5px 10px 34px;
-  word-spacing: 0.1em;
+  word-spacing: .1em;
   letter-spacing: .08em;
   text-transform: uppercase;
   font-size: 11pt;

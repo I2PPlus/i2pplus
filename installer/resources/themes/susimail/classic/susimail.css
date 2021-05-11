@@ -204,7 +204,7 @@ a:link {
 }
 
 #mailbox a {
-  opacity: 0.85;
+  opacity: .85;
 }
 
 a:visited {
@@ -419,7 +419,7 @@ img.sort {
   vertical-align: middle;
   border-radius: 2px;
   box-shadow: inset 0 0 0 1px #414960;
-  opacity: 0.6;
+  opacity: .6;
   background: #fff;
 }
 
@@ -602,7 +602,7 @@ button:active, input[type=submit]:active, input[type="reset"]:active, #settings:
 input[disabled][type=submit], input[disabled][type=submit]:hover, input[disabled][type=submit]:active {
   border: 1px solid #bbb;
   background: linear-gradient(to bottom, #fff, #eef);
-  opacity: 0.3;
+  opacity: .3;
   filter: none;
   pointer-events: none;
 }
@@ -1121,7 +1121,7 @@ div#composemail {
   font-size: 14pt;
   text-align: left;
   letter-spacing: .08em;
-  word-spacing: 0.1em;
+  word-spacing: .1em;
   box-shadow: inset 0 0 0 1px #fff;
 }
 
@@ -1403,7 +1403,7 @@ tr:hover .listclock {
 
 .listTime {
   min-width: 58px;
-  opacity: 0.85;
+  opacity: .85;
 }
 
 /* end mail list date */
@@ -1449,7 +1449,7 @@ img.sort {
   white-space: nowrap;
   font-weight: 700;
   font-size: 140% !important;
-  opacity: 0.7;
+  opacity: .7;
 }
 
 #info {
@@ -1490,11 +1490,11 @@ img.sort {
   min-width: 64px;
   text-align: right;
   font-weight: 700;
-  opacity: 0.8;
+  opacity: .8;
 }
 
 tr:hover .listDate {
-  opacity: 0.9;
+  opacity: .9;
 }
 
 .listDate span {
@@ -1508,7 +1508,7 @@ tr:hover .listDate {
 .listTime {
   min-width: 40px;
   text-align: left;
-  opacity: 0.85;
+  opacity: .85;
 }
 
 /* custom radios/checkboxes to enforce color scheme when OS widgets are non-standard  */
@@ -1590,7 +1590,7 @@ input[type=checkbox][disabled], input[type=radio][disabled], input[type=checkbox
 input[type=checkbox][disabled]:checked, input[type=radio][disabled]:checked, input[type=checkbox][disabled]:checked:hover, input[type=radio][disabled]:checked:hover {
   filter: none !important;
   box-shadow: none !important;
-  opacity: 0.5;
+  opacity: .5;
 }
 }
 
@@ -1666,7 +1666,7 @@ input[type=checkbox][disabled]:checked, input[type=radio][disabled]:checked, inp
   white-space: pre-wrap;
   line-height: 130%;
   font-size: 9.5pt;
-  opacity: 0.9;
+  opacity: .9;
 }
 
 @media screen and (max-width: 1500px) {

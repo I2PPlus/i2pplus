@@ -450,7 +450,7 @@ img.sort {
   max-width: 10px !important;
   vertical-align: middle;
   font-size: 0;
-  opacity: 0.6;
+  opacity: .6;
   border: 1px solid #26225c;
   border-radius: 2px;
 }
@@ -701,7 +701,7 @@ input[name="user"]:focus, input[name="pass"]:focus, input[type=text]:focus, text
 }
 
 input::placeholder {
-  opacity: 0.7;
+  opacity: .7;
   font-style: italic;
 }
 
@@ -769,7 +769,7 @@ input.delete {
   font-size: 14pt;
   text-align:left;
   letter-spacing:.08em;
-  word-spacing: 0.1em;
+  word-spacing: .1em;
   text-shadow: 0 1px 1px #000;
   border: 1px solid #211e51;
   box-shadow: var(--highlight);
@@ -813,7 +813,7 @@ input.delete {
   background: rgba(0,0,68,.8);
   box-shadow: 0 1px 0 1px rgba(0,0,0,.6);
   margin: 10px 0 7px;
-  opacity: 0.5;
+  opacity: .5;
 }
 
 #dologin tr:last-child hr {
@@ -865,7 +865,7 @@ h3#config {
   font-size: 10pt;
   text-transform: uppercase;
   letter-spacing: .08em;
-  word-spacing: 0.1em;
+  word-spacing: .1em;
   background: #020017;
   border-radius: 0 0 2px 2px;
   background: linear-gradient(to right, rgba(0,0,16,0), rgba(16,0,16,0), rgba(0,0,16,0)), linear-gradient(to bottom, #191729 50%, #001 50%) !important;
@@ -1374,7 +1374,7 @@ input.prev:hover, input[name="next"]:hover, input.prev[disabled]:hover, input[na
 
 input[type=submit][disabled], input[type=submit][disabled]:hover, input[type=submit][disabled]:focus, input[type=submit][disabled]:active {
   padding: 5px 15px !important;
-  opacity: 0.5;
+  opacity: .5;
   box-shadow: none;
   cursor: default;
   mix-blend-mode: luminosity;
@@ -1541,7 +1541,7 @@ input[type=checkbox][disabled]:checked, input[type=radio][disabled]:checked, inp
   border: 1px solid #4f4b87 !important;
   box-shadow: none !important;
   background: #000;
-  opacity: 0.5 !important;
+  opacity: .5 !important;
   filter: none !important;
 }
 }
@@ -1571,7 +1571,7 @@ input[type=checkbox][disabled]:checked, input[type=radio][disabled]:checked, inp
 
 .listTime {
   min-width: 42px;
-  opacity: 0.85;
+  opacity: .85;
 }
 
 /* end timedate */
@@ -1681,7 +1681,7 @@ select:hover, select:focus, select:active {
   border: 1px solid #27235c;
   background: url(/themes/snark/light/images/delete.png) right 24px top 4px no-repeat #113;
   background-size: 14px 14px !important;
-  opacity: 0.9;
+  opacity: .9;
   background-blend-mode: luminosity;
   cursor: crosshair;
   animation: 2s hide-up 10s ease-out forwards;
@@ -1720,7 +1720,7 @@ to {
 
 .notifications p {
   letter-spacing: .07em;
-  word-spacing: 0.2em;
+  word-spacing: .2em;
   font-weight: 700;
   animation: fade-in 1s linear;
 }

@@ -121,7 +121,7 @@ a.control, input[type=submit], input.accept, th {
 }
 
 .snarkTorrents tt {
-  letter-spacing: 0.2em !important;
+  letter-spacing: .2em !important;
   font-weight: 700 !important;
 }
 

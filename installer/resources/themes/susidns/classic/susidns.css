@@ -333,7 +333,7 @@ p.footer {
   left: -24px;
   border: none;
   background: none;
-  opacity: 0.3;
+  opacity: .3;
   font-size: 8pt !important;
   display: none;
 }
@@ -346,7 +346,7 @@ div#filter {
   border: 1px solid #aaafce;
   padding: 6px 10px 5px;
   margin: 11px 0 -13px !important;
-  word-spacing: 0.2em;
+  word-spacing: .2em;
   background: #fff;
   text-align: center;
   position: relative;
@@ -784,7 +784,7 @@ textarea[name="config"], textarea[name="content"] {
 
 .headline h3 {
   padding: 10px 5px 10px 36px;
-  word-spacing: 0.1em;
+  word-spacing: .1em;
   letter-spacing: .08em;
   text-transform: uppercase;
   font-size: 12pt;
@@ -1168,7 +1168,7 @@ input[type=checkbox][disabled], input[type=radio][disabled], input[type=checkbox
 input[type=checkbox][disabled]:checked, input[type=radio][disabled]:checked, input[type=checkbox][disabled]:checked:hover, input[type=radio][disabled]:checked:hover {
   filter: none !important;
   box-shadow: none !important;
-  opacity: 0.5;
+  opacity: .5;
 }
 }
 

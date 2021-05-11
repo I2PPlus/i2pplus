@@ -244,7 +244,7 @@ th img {
 }
 
 .snarkConfigTitle, .toggleview, .snarkNav {
-	letter-spacing: 0.1em;
+	letter-spacing: .1em;
 	text-transform: uppercase;
 }
 
@@ -792,7 +792,7 @@ input[type=radio], input[type=checkbox] {
 }
 
 .knownTracker input[type=radio]:disabled {
-	opacity: 0.3;
+	opacity: .3;
 }
 
 input[type="image"]:hover, .control:hover {
@@ -855,7 +855,7 @@ select:hover, select:focus {
 }
 
 select:disabled {
-	opacity: 0.5;
+	opacity: .5;
 	cursor: not-allowed;
 }
 
@@ -984,7 +984,7 @@ input[type=checkbox][disabled]:checked, input[type=radio][disabled]:checked, inp
 	display: inline-block !important;
 	width: 19px !important;
 	height: 19px !important;
-	opacity: 0.5;
+	opacity: .5;
 }
 }
 
@@ -1018,7 +1018,7 @@ tt {
 
 .knownTracker input[disabled] {
 	display: inline;
-	opacity: 0.5;
+	opacity: .5;
 }
 
 .trackerconfig th:first-child, .knownTracker td:first-child, #addtracker td:first-child {
@@ -2243,7 +2243,7 @@ td.snarkTorrentDetails img, .snarkDirInfo td:first-child img:not(.thumb) {
 }
 
 .priority input[type=radio]:not(:checked):not(:hover) {
-	opacity: 0.7;
+	opacity: .7;
 }
 
 .priorityHigh, .priorityNormal, .prioritySkip {
