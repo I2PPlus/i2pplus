@@ -591,7 +591,7 @@ public class RouterThrottleImpl implements RouterThrottle {
 
     /** @since 0.8.12 */
     public void setShutdownStatus() {
-        setTunnelStatus(_x("Declining tunnel requests") + ":<br>" + _x("Shutting down") + "&hellip;");
+        setTunnelStatus(_x("Declining requests") + ": " + _x("Shutting down") + "&hellip;");
     }
 
     /** @since 0.8.12 */
