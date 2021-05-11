@@ -83,7 +83,7 @@ p.hl {
   font-size: 12pt;
   letter-spacing: 2pt;
   line-height: 18pt;
-  font-weight: bold;
+  font-weight: 700;
 }
 
 p.text {
@@ -101,7 +101,7 @@ p.error, p.info {
   margin: -1px -11px;
   box-shadow: inset 0 0 0 1px #fff;
   display: block;
-  font-weight: bold;
+  font-weight: 700;
   line-height: 120%;
 }
 
@@ -199,7 +199,7 @@ td#attachedfile {
 a:link {
   color: #6b6b94;
   text-decoration: none;
-  font-weight: bold;
+  font-weight: 700;
   word-wrap: break-word;
 }
 
@@ -210,20 +210,20 @@ a:link {
 a:visited {
   color: #575779;
   text-decoration: none;
-  font-weight: bold;
+  font-weight: 700;
 }
 
 a:hover, a:focus {
   color: #f60;
   text-decoration: none;
-  font-weight: bold;
+  font-weight: 700;
   outline: none;
 }
 
 a:active {
   color: #f93;
   text-decoration: none;
-  font-weight: bold;
+  font-weight: 700;
 }
 
 a.linkspam {
@@ -379,7 +379,7 @@ td.mailListDelete, td.mailListFlagged, td.mailListAttachment {
 }
 
 #mailbox td:nth-child(3) a {
-  font-weight: normal;
+  font-weight: 400;
 }
 
 #mailbox tr:hover td:nth-child(3) a {
@@ -428,7 +428,7 @@ img.sort {
 }
 
 #newmail td:first-child {
-  font-weight: bold;
+  font-weight: 700;
   padding-right: 10px;
 }
 
@@ -469,7 +469,7 @@ table {
 
 th {
   font-size: 10pt;
-  font-weight: bold;
+  font-weight: 700;
 }
 
 form {
@@ -538,7 +538,7 @@ input[type=text], input[type=password], textarea {
 
 input[type=submit], #settings {
   margin: 3px;
-  font-weight: normal !important;
+  font-weight: 400 !important;
 }
 
 input.new_upload, input.delete_attachment {
@@ -735,7 +735,7 @@ input.reload, input.refresh, .fakebutton {
 .fakebutton, .fakebutton:visited {
   padding-left: 24px;
   line-height: 1.3;
-  font-weight: normal !important;
+  font-weight: 400 !important;
   color: #333;
 }
 
@@ -1031,7 +1031,7 @@ div#composemail {
   width: 20px;
   text-align: right;
   padding-left: 10px;
-  font-weight: bold;
+  font-weight: 700;
 }
 
 /* login panel */
@@ -1060,7 +1060,7 @@ div#composemail {
 
 #dologin input[type=text] {
   text-align: left !important;
-  font-weight: normal;
+  font-weight: 400;
 }
 
 #dologin input[name="user"] {
@@ -1088,7 +1088,7 @@ div#composemail {
 
 #dologin td {
   padding: 3px;
-  font-weight: bold !important;
+  font-weight: 700 !important;
   color: #41444d;
 }
 
@@ -1311,7 +1311,7 @@ table#pagenav td {
   padding: 6px 3px 4px;
   white-space: nowrap;
   text-align: center;
-  font-weight: bold;
+  font-weight: 700;
   font-size: 10pt;
 }
 
@@ -1447,7 +1447,7 @@ img.sort {
 .pagenavcontrols td:nth-child(2) {
   width: 1%;
   white-space: nowrap;
-  font-weight: bold;
+  font-weight: 700;
   font-size: 140% !important;
   opacity: 0.7;
 }
@@ -1489,7 +1489,7 @@ img.sort {
   padding: 2px;
   min-width: 64px;
   text-align: right;
-  font-weight: bold;
+  font-weight: 700;
   opacity: 0.8;
 }
 
@@ -1618,7 +1618,7 @@ input[type=checkbox][disabled]:checked, input[type=radio][disabled]:checked, inp
   margin: 0;
   padding: 35px 20px 20px;
   text-align: center;
-  font-weight: bold;
+  font-weight: 700;
   font-style: italic;
   color: #900;
   border: 1px solid #700;

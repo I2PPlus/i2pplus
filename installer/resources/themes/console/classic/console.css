@@ -190,7 +190,7 @@ i {
 #warning_localhost p {
   margin-bottom: 0;
   padding: 20px 10px 0;
-  font-weight: bold;
+  font-weight: 700;
 }
 
 #warning_localhost + .proxyfooter {
@@ -269,7 +269,7 @@ i {
 }
 
 .warning table td:first-child {
-  font-weight: bold;
+  font-weight: 700;
   vertical-align: top;
 }
 
@@ -311,7 +311,7 @@ i {
 }
 
 #proxyNewHost td:first-child {
-  font-weight: bold;
+  font-weight: 700;
 }
 
 #proxyNewHost textarea {
@@ -376,7 +376,7 @@ img[src="/themes/console/images/i2plogo.png"] {
   min-width: 475px;
   word-wrap: break-word;
   text-align: justify;
-  font-weight: bold;
+  font-weight: 700;
   border: 1px solid #aaafce;
   box-shadow: inset 0 0 0 1px #fff, inset 0 0 1px 1px #900;
   background: #f2f2ff url(/themes/console/images/info/errortriangle.png) 20px 40% no-repeat;
@@ -401,7 +401,7 @@ img[src="/themes/console/images/i2plogo.png"] {
   margin-top: -15px;
   padding: 0 15px 5px;
   min-width: 540px;
-  font-weight: normal;
+  font-weight: 400;
   color: #41444d;
   box-shadow: inset 0 0 0 1px #f99;
   background: linear-gradient(to bottom, rgba(255, 255, 255, .8), rgba(255, 255, 255, .2)) repeat scroll 0 0 / 100%, rgba(0, 0, 0, 0) url(images/bg0.png) repeat scroll 0 0 / 120px 120px;
@@ -830,7 +830,7 @@ img[src="/themes/console/images/i2plogo.png"] {
   padding: 7px 5px;
   line-height: 110%;
   font-size: 8.5pt;
-  font-weight: bold;
+  font-weight: 700;
   border: 1px solid #aaafce;
   border-radius: 2px;
   box-shadow: 0 0 1px #bbb, inset 0 0 0 1px #fbb;
@@ -1153,7 +1153,7 @@ a:active #sb_bandwidthgraph {
   position: relative;
   z-index: 10;
   display: inline-block;
-  font-weight: bold;
+  font-weight: 700;
   border: 1px solid #aaafce;
   border-top: none;
   border-radius: 0 0 3px 3px;
@@ -1221,7 +1221,7 @@ a:active #sb_bandwidthgraph {
 .percentBarText {
   white-space: nowrap;
   text-align: center !important;
-  font-weight: bold !important;
+  font-weight: 700 !important;
   color: #41444d;
   text-shadow: 0 1px 1px rgba(255,255,255,.8);
   float: left;
@@ -1490,7 +1490,7 @@ p + .twocol {
 a:link {
   word-wrap: break-word;
   text-decoration: none;
-  font-weight: bold;
+  font-weight: 700;
 }
 
 .main a:visited[target="_blank"] {
@@ -1820,7 +1820,7 @@ input[type=file]::file-selector-button {
 }
 
 button a, button a:visited {
-  font-weight: normal !important;
+  font-weight: 400 !important;
   color: #333 !important;
 }
 
@@ -2609,7 +2609,7 @@ div.news hr:last-child {
   white-space: nowrap;
   margin-left: 10px;
   color: #663;
-  font-weight: bold;
+  font-weight: 700;
 }
 
 #news #newsDisplay, #news #newsStatus {
@@ -2634,7 +2634,7 @@ div.news hr:last-child {
   border: 1px solid #aaafce;
   font-size: 9pt;
   text-align: center;
-  font-weight: bold;
+  font-weight: 700;
   background: linear-gradient(to bottom, #fff, #fafbff);
   display: flex;
   justify-content: center;
@@ -3522,7 +3522,7 @@ div.configure h2:first-child {
   margin: -6px -15px 10px -16px;
   padding: 15px 10px;
   text-align: center;
-  font-weight: bold;
+  font-weight: 700;
   font-size: 9pt;
   border: 1px solid #aaafce;
   border-right: 0;
@@ -3532,7 +3532,7 @@ div.configure h2:first-child {
 #config_update .messages {
   padding-left: 48px;
   text-align: left;
-  font-weight: normal;
+  font-weight: 400;
   background: url(/themes/console/images/svg/news.svg) 10px center no-repeat #fff;
   background-size: 28px;
 }
@@ -4570,7 +4570,7 @@ h3#totaljobstats {
 }
 
 #schedjobs td:first-child {
-  font-weight: bold;
+  font-weight: 700;
 }
 
 #schedjobs ul {
@@ -4866,7 +4866,7 @@ p#enablefullstats {
 .tidylist code {
   text-align: left;
   font: 9pt Droid Sans Mono, Andale Mono, DejaVu Sans Mono, Lucida Console, monospace;
-  font-weight: bold;
+  font-weight: 700;
   color: #723;
 }
 
@@ -4992,7 +4992,7 @@ h3#graphdisplay {
   min-width: 100px;
   white-space: nowrap;
   padding: 13px 3px 13px 5px;
-  font-weight: bold;
+  font-weight: 700;
 }
 
 #graphs td:nth-child(2) {
@@ -5248,7 +5248,7 @@ img[src^="/flags"], img.unknownflag {
 
 .themechoice .optbox:hover + img ~ div.themelabel {
   color: #f60;
-  font-weight: bold;
+  font-weight: 700;
 }
 
 .themechoice:active .themelabel {
@@ -5260,7 +5260,7 @@ img[src^="/flags"], img.unknownflag {
 .themechoice .optbox:checked + img ~ div.themelabel {
   background: #ddf;
   color: #338;
-  font-weight: bold;
+  font-weight: 700;
 }
 
 .themechoice .optbox:checked + img, .themechoice .optbox:checked + img {
@@ -5278,7 +5278,7 @@ img[src^="/flags"], img.unknownflag {
 }
 
 .themechoice:active .optbox:checked + img ~ .themelabel {
-  font-weight: bold;
+  font-weight: 700;
   color: #f60 !important;
   box-shadow: none !important;
   background: linear-gradient(to right, #eef, #fff, #eef) !important;
@@ -5407,14 +5407,14 @@ p#helptranslate {
 .langselect:hover > input[name="lang"] + img + .ui_lang {
   color: #f60;
   border-top: 1px solid #f60;
-  font-weight: bold;
+  font-weight: 700;
   background: #fff !important;
 }
 
 .langselect input[name="lang"]:checked + img + .ui_lang {
   background: #ddf !important;
   color: #338;
-  font-weight: bold;
+  font-weight: 700;
   margin: -32px -4px 0;
   z-index: 2;
 }
@@ -5604,7 +5604,7 @@ td#pw_adduser input {
 }
 
 .netdbentry th {
-  font-weight: normal;
+  font-weight: 400;
 }
 
 .netdbentry th:nth-child(2) {
@@ -5622,7 +5622,7 @@ td#pw_adduser input {
   margin-left: 4px;
   padding: 1px 3px;
   font-family: "Droid Sans Mono", "Andale Mono", "DejaVu Sans Mono", "Lucida Console", monospace !important;
-  font-weight: bold;
+  font-weight: 700;
   color: #030 !important;
   border-radius: 3px;
 }
@@ -5695,7 +5695,7 @@ a.viewfullentry:hover {
 
 #leasesetdebug th, #leasesetsummary th {
   padding: 8px 5px;
-  font-weight: bold;
+  font-weight: 700;
   text-align: left;
 }
 
@@ -5742,7 +5742,7 @@ a.viewfullentry:hover {
 .leaseset th {
   padding: 5px;
   text-align: left;
-  font-weight: normal;
+  font-weight: 400;
 }
 
 .leaseset th:last-child, .leaseset td:nth-child(2) {
@@ -5770,7 +5770,7 @@ a.viewfullentry:hover {
   margin: 10px 0 7px;
   padding: 20px;
   text-align: center;
-  font-weight: bold;
+  font-weight: 700;
   border: 1px solid #aaafce;
   background: #eff1ff;
 }
@@ -5810,7 +5810,7 @@ a.viewfullentry:hover {
 .main#netdb code, .main#netdb tt {
   color: #03183f;
   font-family: Droid Sans, Open Sans, Noto Sans, Ubuntu, Segoe UI, Lucida Grande, DejaVu Sans, Verdana, Helvetica, sans-serif;
-  font-weight: normal;
+  font-weight: 400;
 }
 
 #sybilnav, #sybils_summary {
@@ -5882,14 +5882,14 @@ p.sybil_info, p.family, p.threatpoints, p.hashdist, p.notfound, p#sybil_totals {
   border: 1px solid #aaafce;
   padding: 5px 5px 5px 30px;
   margin: 3px 0;
-  font-weight: bold;
+  font-weight: 700;
   text-align: left;
   background: #ffe url(images/eye.png) 8px center no-repeat;
   background: url(images/eye.png) 8px center no-repeat, linear-gradient(to right, #fff 40%, #dde1ff);
 }
 
 p#sybil_totals {
-  font-weight: normal;
+  font-weight: 400;
 }
 
 p.family a {
@@ -5953,7 +5953,7 @@ p:empty { /* empty paragraph nuke */
   padding-right: 0 !important;
   white-space: nowrap;
   text-align: right;
-  font-weight: bold;
+  font-weight: 700;
 }
 
 #netdblookup td:nth-child(even) {
@@ -6097,7 +6097,7 @@ p:empty { /* empty paragraph nuke */
 }
 
 .main li .netdb_expiry {
-  font-weight: normal;
+  font-weight: 400;
   text-transform: lowercase;
   color: #41444d !important;
   font-style: italic;
@@ -6384,7 +6384,7 @@ h3.stats {
 
 .sybil_distance tr:nth-child(n+2):hover {
   background: #ffe;
-  font-weight: bold;
+  font-weight: 700;
 }
 
 /* /help */
@@ -6573,7 +6573,7 @@ p#fullhistory {
 }
 
 #portfaq th:first-child, #portfaq td:first-child {
-  font-weight: bold;
+  font-weight: 700;
   text-align: right;
   padding-top: 6px;
   padding-bottom: 6px;
@@ -6606,7 +6606,7 @@ p#fullhistory {
 }
 
 #portfaq td[colspan="3"] {
-  font-weight: normal;
+  font-weight: 400;
 }
 
 @media screen and (min-width: 1200px) {
@@ -6647,7 +6647,7 @@ p#fullhistory {
 #webhosting td:first-child {
   width: 1%;
   white-space: nowrap;
-  font-weight: bold;
+  font-weight: 700;
 }
 
 #webhosting #guides {
@@ -7552,13 +7552,13 @@ th code {
 }
 
 #netdb td code {
-  font-weight: normal !important;
+  font-weight: 400 !important;
 }
 
 .netdb_name {
   vertical-align: text-bottom;
   text-transform: capitalize;
-  font-weight: bold;
+  font-weight: 700;
   color: #335;
 }
 
@@ -7663,7 +7663,7 @@ th code {
 .sybil_addresses td:first-child {
   width: 1%;
   white-space: nowrap;
-  font-weight: bold;
+  font-weight: 700;
   padding-right: 15px;
 }
 
@@ -7884,7 +7884,7 @@ h2#debug_portmapper {
 }
 
 .bucket:hover {
-  font-weight: bold;
+  font-weight: 700;
 }
 
 .bucket::-moz-selection {
@@ -7916,7 +7916,7 @@ h2#debug_portmapper {
 }
 
 #portmapper td:first-child, #sockets td:first-child {
-  font-weight: bold;
+  font-weight: 700;
 }
 
 #portmapper th:last-child, #portmapper td:last-child, #sockets td:last-child {
@@ -7997,7 +7997,7 @@ h2#debug_portmapper {
 }
 
 .sha256 tt, .revision tt {
-  font-weight: normal !important;
+  font-weight: 400 !important;
 }
 
 .routerid tt {
@@ -8838,7 +8838,7 @@ _:-ms-lang(x), #peerdefs td:first-child {
 
 _:-ms-lang(x), .tunnels_client th:first-child::after {
   letter-spacing: -.05em;
-  font-weight: normal;
+  font-weight: 400;
 }
 
 /* end Edge/IE tweaks */
@@ -8872,7 +8872,7 @@ _:-ms-lang(x), .tunnels_client th:first-child::after {
   display: inline-block;
   margin: -2px 2px -2px 0;
   padding: 2px 5px;
-  font-weight: bold;
+  font-weight: 700;
   text-transform: uppercase;
   border-radius: 2px;
   background: #ddf;
@@ -8885,7 +8885,7 @@ _:-ms-lang(x), .tunnels_client th:first-child::after {
 /* graphs */
 
 #graphs td:first-child {
-  font-weight: normal;
+  font-weight: 400;
   text-align: left;
   padding: 5px 0 0;
 }
@@ -9093,7 +9093,7 @@ b.suboption {
 }
 
 .net_bwrate {
-  font-weight: bold;
+  font-weight: 700;
   font-size: 110%;
   display: inline-block;
   padding: 2px 2px 4px;
@@ -9121,7 +9121,7 @@ b.suboption {
 .bw_title {
   display: block;
   text-align: left;
-  font-weight: bold;
+  font-weight: 700;
   font-size: 11pt;
   margin: 2px -13px 0 -38px;
   padding: 4px 5px;
@@ -11101,7 +11101,7 @@ p#gatherstats {
 #filterlist .example {
   margin-right: 2px;
   color: darkgreen;
-  font-weight: bold;
+  font-weight: 700;
 }
 
 #pageloader {
@@ -11126,7 +11126,7 @@ p#gatherstats {
   margin: -5px 1px -6px;
   padding: 8px 0 6px;
   font-size: 18pt;
-  font-weight: bold;
+  font-weight: 700;
   letter-spacing: .1em;
   color: #535979;
   border: 1px solid #aaafce;
@@ -11444,7 +11444,7 @@ to {
   width: calc(100% - 22px);
   text-align: center;
   font-style: italic;
-  font-weight: bold;
+  font-weight: 700;
 }
 
 #servletError.iframed .logo {

@@ -132,7 +132,7 @@ label, select, select option, #configstats th b, .infohelp, .infowarn {
 }
 
 .messages li, code {
-  font-weight: normal !important;
+  font-weight: 400 !important;
   font-size: 11pt;
 }
 
@@ -194,7 +194,7 @@ ul.links li {
 
 @media screen and (min-width: 0) {
 a, b, .routersummary h3 a, .routersummary h4 {
-  font-weight: normal !important;
+  font-weight: 400 !important;
   font-size: 100%;
 }
 
@@ -208,12 +208,12 @@ body, p, #news p {
 }
 
 h1 {
-  font-weight: normal;
+  font-weight: 400;
 }
 
 h2, h2 a[name], h3, h4.app, h4.app2 {
   font-size: 14pt !important;
-  font-weight: normal !important;
+  font-weight: 400 !important;
   letter-spacing: 0.1em !important;
 }
 
@@ -242,7 +242,7 @@ input[type=submit]:focus, input[type="reset"]:focus, input.reload[value="Force g
   padding-top: 2px !important;
   display: inline-block;
   font-size: 12pt !important;
-  font-weight: normal !important;
+  font-weight: 400 !important;
   line-height: 140% !important;
   letter-spacing: .05em;
   background-position: 8px 6px, center center !important;
@@ -283,7 +283,7 @@ h3#pconfig {
 @media screen and (min-width: 800px) {
 label, select, select option, #configstats th b, p.infohelp, p.infowarn, td.infohelp, td.infowarn {
   font-size: 11pt !important;
-  font-weight: normal !important;
+  font-weight: 400 !important;
 }
 
 input[type=text], input[type=password], textarea {
@@ -353,7 +353,7 @@ span#newtab {
 
 .newsAuthor {
   font-size: 10pt !important;
-  font-weight: bold !important;
+  font-weight: 700 !important;
   background-position: 2px center;
 }
 

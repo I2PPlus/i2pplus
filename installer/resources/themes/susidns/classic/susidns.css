@@ -236,7 +236,7 @@ p {
 h3 {
   color: #41444d;
   font-size: 11pt;
-  font-weight: bold;
+  font-weight: 700;
   border: 1px solid #aaafce;
   margin: -1px -11px 10px;
   padding: 5px 10px;
@@ -259,7 +259,7 @@ h4 {
 a {
   color: #6b6b94;
   text-decoration: none;
-  font-weight: bold;
+  font-weight: 700;
 }
 
 a:visited {
@@ -373,7 +373,7 @@ div#filter {
 
 #filter span a {
   line-height: 140%;
-  font-weight: normal;
+  font-weight: 400;
   color: #333 !important;
 }
 
@@ -836,7 +836,7 @@ p.book {
   padding-right: 0 !important;
   width: 10%;
   white-space: nowrap;
-  font-weight: bold;
+  font-weight: 700;
   text-align: right;
 }
 
@@ -920,7 +920,7 @@ p.book {
 #host_list td.checkbox {
   width: 16px;
   white-space: nowrap;
-  font-weight: bold;
+  font-weight: 700;
 }
 
 #host_list td.b32link, #host_list td.helper {
@@ -987,7 +987,7 @@ p.book {
   white-space: nowrap;
   overflow: auto !important;
   font-family: "Droid Sans Mono", "Noto Mono", "Lucida Console", "DejaVu Sans Mono", monospace !important;
-  font-weight: normal;
+  font-weight: 400;
   color: #555;
   -webkit-user-select: all;
   -moz-user-select: all;
@@ -1254,7 +1254,7 @@ input#exporthosts {
 }
 
 #activefilter, .selected:not(.details) {
-  font-weight: bold;
+  font-weight: 700;
   color: #999;
   box-shadow: inset 0 0 0 1px #fff, inset 2px 2px 2px #aaa !important;
 }
@@ -1472,7 +1472,7 @@ div#messages:empty {
 p.messages {
   color: #fff;
   text-align: center;
-  font-weight: bold;
+  font-weight: 700;
 }
 
 @keyframes hide-up {

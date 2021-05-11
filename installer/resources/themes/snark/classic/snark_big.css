@@ -1,12 +1,12 @@
 @media screen and (min-width: 0) and (max-width: 4000px) {
 * {
-  font-weight: normal !important;
+  font-weight: 400 !important;
   font-family: "Noto Sans", "Droid Sans", "Roboto Sans", Ubuntu, "Segoe UI", "Lucida Grande", Helvetica, Arial, Verdana, sans-serif !important;
   line-height: 120% !important;
 }
 
 .snarkNav {
-  font-weight: bold !important;
+  font-weight: 700 !important;
 }
 
 .snarkAddInfo {
@@ -30,7 +30,7 @@ th#pagenav {
 }
 
 .snarkTorrentDownloaded, th.snarkTorrentUploaded, .snarkTorrentRateDown, th.snarkTorrentRateUp, .percentBarComplete {
-  font-weight: bold !important;
+  font-weight: 700 !important;
 }
 
 input[type], select, a.control {
@@ -50,7 +50,7 @@ a.control, input[type=submit], input.accept {
 }
 
 a.control, input[type=submit], input.accept, th, #trackerselect tr:first-child td {
-  font-weight: normal !important;
+  font-weight: 400 !important;
   font-size: 12pt !important;
 }
 

@@ -586,7 +586,7 @@ div.themechoice, div.langselect {
 .themelabel {
   padding: 3px !important;
   font-size: 10pt !important;
-  font-weight: bold;
+  font-weight: 700;
 }
 
 .h3navlinks {

@@ -104,7 +104,7 @@ p.hl {
   font-size: 12pt;
   letter-spacing: 2pt;
   line-height: 18pt;
-  font-weight: bold;
+  font-weight: 700;
 }
 
 p.text {
@@ -129,7 +129,7 @@ p.error {
   display: block !important;
   word-wrap: break-word;
   text-align: justify;
-  font-weight: bold;
+  font-weight: 700;
   color: #f33;
   border: 1px solid #652787;
   border-radius: 2px;
@@ -181,7 +181,7 @@ p.mailbody {
 div.topbuttons {
   margin: -1px -1px -10px -1px;
   padding: 7px 0 8px !important;
-  font-weight: bold;
+  font-weight: 700;
   border: 1px solid #27235c;
   border-radius: 2px 2px 0 0;
   background: #000010;
@@ -266,7 +266,7 @@ td.mailListSize {
 
 #mailbox th {
   padding: 8px 8px 8px 3px;
-  font-weight: bold !important;
+  font-weight: 700 !important;
   font-size: 8.5pt;
   font-size: 9pt;
   white-space: nowrap;
@@ -357,7 +357,7 @@ tr.bottombuttons:last-child td {
 a:link {
   color: #7171d1;
   text-decoration: none;
-  font-weight: bold;
+  font-weight: 700;
 }
 
 a:hover, a:visited:hover {
@@ -442,7 +442,7 @@ td.mailListSender {
 
 .mailListSender a, .mailListDate, .mailListSize {
   color: #c9ceff !important;
-  font-weight: normal !important;
+  font-weight: 400 !important;
 }
 
 img.sort {
@@ -477,7 +477,7 @@ tr.bottombuttons td {
 }
 
 td:first-child {
-  font-weight: bold;
+  font-weight: 700;
 }
 
 pre {
@@ -501,7 +501,7 @@ table {
 
 th {
   font-size: 9pt;
-  font-weight: bold;
+  font-weight: 700;
   background: #001;
   background: linear-gradient(to bottom, #080818, #001) !important;
   padding: 7px;
@@ -551,7 +551,7 @@ td#attachedfile {
 
 #mailhead {
   font-size: 9pt;
-  font-weight: bold;
+  font-weight: 700;
   background: #002;
   border: 1px solid #27235c;
   border-left: none;
@@ -570,7 +570,7 @@ td#attachedfile {
 }
 
 #mailhead td:last-child {
-  font-weight: normal;
+  font-weight: 400;
 }
 
 #composemail {
@@ -938,7 +938,7 @@ div#emptymailbox {
   padding: 5px 10px;
   width: 1%;
   white-space: nowrap;
-  font-weight: bold;
+  font-weight: 700;
 }
 
 .pagenav {
@@ -1580,7 +1580,7 @@ input[type=checkbox][disabled]:checked, input[type=radio][disabled]:checked, inp
   margin: 7px 0 2px 4px !important;
   padding: 6px 10px;
   display: inline-block;
-  font-weight: bold;
+  font-weight: 700;
   text-shadow: 0 1px 1px #000;
   border-radius: 3px;
   box-shadow: var(--highlight);
@@ -1614,7 +1614,7 @@ select {
 }
 
 select option {
-  font-weight: normal;
+  font-weight: 400;
   font-size: 9.5pt !important;
   color: #000;
   box-shadow: inset 0 0 20px 20px #000;
@@ -1721,7 +1721,7 @@ to {
 .notifications p {
   letter-spacing: .07em;
   word-spacing: 0.2em;
-  font-weight: bold;
+  font-weight: 700;
   animation: fade-in 1s linear;
 }
 

@@ -105,13 +105,13 @@ div.clearer {
 
 ::selection {
   background: #27377f !important;
-  color: white;
+  color: #fff;
   text-shadow: none;
 }
 
 ::-moz-selection {
   background: #27377f !important;
-  color: white;
+  color: #fff;
   text-shadow: none;
 }
 
@@ -134,7 +134,7 @@ a:link, a:visited {
   color: #3b6bbf;
   color: var(--a);
   text-decoration: none;
-  font-weight: bold;
+  font-weight: 700;
   word-wrap: break-word;
   outline: none;
 }
@@ -302,7 +302,7 @@ pre {
   background: #adadeb;
   height: 1px;
   border-bottom: 1px solid #afafcf;
-  margin: 8px -7px 8px -7px;
+  margin: 8px -7px;
   box-shadow: inset 0 1px 1px 1px #fff;
 }
 
@@ -348,7 +348,7 @@ pre {
   width: 100%;
   width: calc(100% - 4px);
   line-height: 110%;
-  word-spacing: -0.12em;
+  word-spacing: -.12em;
   text-transform: uppercase;
   text-decoration: none;
   color: var(--a);
@@ -633,7 +633,7 @@ a:active #sb_bandwidthgraph {
   position: relative;
   z-index: 10000;
   font-size: 110%;
-  font-weight: bold;
+  font-weight: 700;
   text-shadow: 0 1px 1px rgba(255,255,255,.9);
   border: 1px solid #f60;
   border-top: none;
@@ -753,7 +753,7 @@ a:active #sb_bandwidthgraph {
   float: left;
   white-space: nowrap;
   text-align: center !important;
-  font-weight: bold !important;
+  font-weight: 700 !important;
   color: var(--inklite);
   text-shadow: 0 1px 1px rgba(255,255,255,.8);
   opacity: 0;
@@ -841,7 +841,7 @@ to {
 }
 
 .sb_info .percentBarOuter:hover .percentBarText {
-  opacity: 0.8;
+  opacity: .8;
 }
 
 /*.sb_updatestatus + .percentBarOuter {
@@ -896,7 +896,7 @@ to {
   margin: -5px -5px -6px;
   padding: 5px 6px;
   line-height: 120%;
-  font-weight: bold;
+  font-weight: 700;
   border: 1px solid #89f;
   border-radius: 2px;
   box-shadow: 0 0 1px #bbb, var(--highlight);
@@ -1401,7 +1401,7 @@ to {
 
 #warning_localhost p {
   padding: 20px 10px 15px;
-  font-weight: bold;
+  font-weight: 700;
 }
 
 #jumplinks {
@@ -1430,7 +1430,7 @@ to {
 .proxyfooter {
   margin: 0 20px 10px 240px;
   padding: 20px 25px 20px 75px;
-  color: #f00;
+  color: red;
   font-size: 7pt;
   text-align: right !important;
   border-radius: 2px;
@@ -1576,7 +1576,7 @@ to {
 }
 
 #proxyNewHost td:first-child {
-  font-weight: bold;
+  font-weight: 700;
 }
 
 #proxyNewHost tr:last-child td:first-child {
@@ -1626,9 +1626,9 @@ to {
   text-align: justify;
   background: #fafaff url(/themes/console/images/info/errortriangle.png) 16px 40% no-repeat;
   background: url(/themes/console/images/info/errortriangle.png) 16px 40% no-repeat, linear-gradient(to top, rgba(250, 250, 255, .5), #f8f8ff 40px), repeating-linear-gradient(135deg, #fafaff 2px, rgba(248, 248, 255, .8) 3px, #fafaff 5px) #f8f8ff;
-  box-shadow: inset 0 0 1px #f00;
+  box-shadow: inset 0 0 1px red;
   word-wrap: break-word;
-  font-weight: bold;
+  font-weight: 700;
   min-width: 481px;
 }
 
@@ -1652,7 +1652,7 @@ to {
   background: #fafaff;
   background: linear-gradient(to bottom, rgba(252, 252, 255, .8), rgba(252, 252, 255, .5)) #fafaff;
   color: var(--ink);
-  font-weight: normal;
+  font-weight: 400;
 }
 
 #servletError #warning {
@@ -1712,7 +1712,7 @@ to {
 }
 
 #stacktrace p:first-child {
-  font-weight: bold;
+  font-weight: 700;
   font-size: 10pt;
   border-bottom: 1px solid #700;
   padding-bottom: 10px;
@@ -2145,7 +2145,7 @@ h1, .confignav {
   padding: 8px;
   text-align: center;
   font-size: 9pt;
-  font-weight: bold;
+  font-weight: 700;
   color: var(--ink);
   border: 1px solid var(--borderinner);
   border-left: none;
@@ -2844,7 +2844,7 @@ to {
 .messages {
   margin: 15px 0;
   padding: 15px;
-  font-weight: bold;
+  font-weight: 700;
   line-height: 130%;
   box-shadow: var(--highlight);
   border: 1px solid var(--borderinner);
@@ -2894,7 +2894,7 @@ to {
   line-height: 135%;
   list-style: none;
   text-align: justify !important;
-  font-weight: bold;
+  font-weight: 700;
   border: none !important;
   background: url(images/warning.png) left center no-repeat;
 }
@@ -3153,11 +3153,11 @@ table#wrapperlogs {
   vertical-align: top;
   text-align: center;
   color: #fff;
-  font-weight: bold;
+  font-weight: 700;
   font-size: 95%;
   border-radius: 2px;
   background: #55555f;
-  opacity: 0.8;
+  opacity: .8;
 }
 
 #criticallogs .log_debug, #criticallogs .log_info, #criticallogs .log_warn, #criticallogs .log_error, #criticallogs .log_crit, #criticallogs .log_omitted {
@@ -3347,7 +3347,7 @@ table#wrapperlogs {
   padding: 2px 4px;
   margin: -1px 1px -1px 0;
   display: inline-block;
-  font-weight: bold;
+  font-weight: 700;
   border-radius: 2px;
   color: #fff;
   text-transform: uppercase;
@@ -3518,9 +3518,9 @@ h4.app2 {
 }
 
 h4.app img, h4.app2 img, #sitemap h3 img {
-  margin: -8px 0 -8px 0;
+  margin: -8px 0;
   padding: 9px 0 7px 10px;
-  opacity: 0.8;
+  opacity: .8;
   filter: none !important;
   transition: ease all 1s;
   border-left: 1px solid var(--borderinner);
@@ -3570,7 +3570,7 @@ h4.app img, h4.app2 img, #sitemap h3 img {
 
 @media screen and (max-width: 1500px) {
 h4.app img, h4.app2 img, #sitemap h3 img {
-  margin: -7px 0 -6px 0;
+  margin: -7px 0 -6px;
   padding: 8px 0 6px 9px;
 }
 
@@ -3582,7 +3582,7 @@ h4.app img, h4.app2 img, #sitemap h3 img {
 
 h4.app:hover img, h4.app2:hover img, #sitemap h3:hover img, #sitemap h3 img:hover {
   opacity: 1;
-  transition: ease all 0.3s;
+  transition: ease all .3s;
 }
 
 .ag2 {
@@ -3844,7 +3844,7 @@ input.search[type=text]:focus {
 
 tt, code {
   font-size: 8.5pt;
-  font-weight: bold;
+  font-weight: 700;
   color: #050;
 }
 
@@ -3895,7 +3895,7 @@ code {
 }
 
 th code {
-  font-weight: bold;
+  font-weight: 700;
   margin-left: 3px;
 }
 
@@ -3923,7 +3923,7 @@ a, h1, h2, h3, h4, th, input[type=submit], input[type=reset], button, select {
   padding: 1px 4px;
   color: #910;
   font-size: 8.5pt !important;
-  font-weight: bold;
+  font-weight: 700;
   border-radius: 4px;
   box-shadow: inset 0 0 0 1px #eef;
   background: #eef;
@@ -3963,7 +3963,7 @@ p.infohelp, p.sybilinfo, p#debugmode, p#upnpstatus, p#pluginconfigtext, p#gather
 
 .infohelp#pagenav {
   text-align: center;
-  font-weight: bold;
+  font-weight: 700;
   background: #fff;
   background: var(--p);
 }
@@ -4307,16 +4307,14 @@ ul.statlist {
 }
 
 .statsName {
-  background: #ddf;
+  margin: 0 6px 10px 0 !important;
+  padding: 10px 10px 0 !important;
   width: calc(100% - 22px);
   min-width: 540px;
-  margin: 0 6px 10px 0 !important;
-  padding: 10px 10px 0 10px !important;
   display: inline-block;
-  background: #e8e8ff;
-  background: rgba(248,248,255,.6);
-  box-shadow: var(--highlight), inset 0 0 2px 1px #ddf, 0 0 1px #ddf;
   border: 1px solid #bbd;
+  box-shadow: var(--highlight), inset 0 0 2px 1px #ddf, 0 0 1px #ddf;
+  background: rgba(248,248,255,.6);
 }
 
 .statlist li br, .statlist li li br {
@@ -4329,7 +4327,7 @@ ul.statlist {
 
 .statlist li i {
   margin-left: 6px;
-  opacity: 0.8;
+  opacity: .8;
 }
 
 .statlist li li b {
@@ -4375,12 +4373,12 @@ ul.statlist {
 
 .statsName i {
   color: #004f28;
-  font-weight: bold;
+  font-weight: 700;
 }
 
 .statsName li i {
   color: inherit;
-  font-weight: normal;
+  font-weight: 400;
 }
 
 .statsViewGraphs {
@@ -4526,7 +4524,7 @@ span#newtab {
 }
 
 #newtabimg:hover {
-  opacity: 0.8;
+  opacity: .8;
   filter: drop-shadow(0 0 1px #f60);
 }
 
@@ -4576,7 +4574,7 @@ h2 img {
 }
 
 h3, #routerinformation h2 {
-  margin: 12px 0 15px 0;
+  margin: 12px 0 15px;
   padding: 7px 5px 6px 7px;
   word-spacing: .1em;
   text-transform: uppercase;
@@ -4697,7 +4695,7 @@ h2, h3 {
 /* end /configpeers */
 
 h4 {
-  margin: 5px 0 10px 0;
+  margin: 5px 0 10px;
   padding: 4px 6px;
   word-spacing: .1em;
   letter-spacing: .08em;
@@ -4707,7 +4705,6 @@ h4 {
   border: 1px solid var(--borderinner);
   border-radius: 2px;
   box-shadow: var(--highlight);
-  background: #eef;
   background: linear-gradient(to right, #fff, #eef);
 }
 
@@ -4777,7 +4774,7 @@ h4 {
 }
 
 .unbold {
-  font-weight: normal !important;
+  font-weight: 400 !important;
 }
 
 @media screen and (max-width: 1150px) {
@@ -4942,7 +4939,7 @@ button::-moz-focus-inner, input[type=submit]::-moz-focus-inner, input[type=reset
 }
 
 button a, button a:visited {
-  font-weight: normal !important;
+  font-weight: 400 !important;
   color: var(--inklite);
 }
 
@@ -5346,7 +5343,7 @@ button.download.control:hover, button.download.control:focus {
   display: inline-block;
   line-height: 120%;
   font-size: 9pt;
-  opacity: 0.9;
+  opacity: .9;
 }
 
 #updateAvailable + br + button + br + #updateAvailable::before {
@@ -5548,7 +5545,7 @@ th label b:hover, th label:hover {
 
 label.disabled, label.disabled:hover, label.disabled:active {
   color: #333337 !important;
-  opacity: 0.5 !important;
+  opacity: .5 !important;
   cursor: not-allowed !important;
 }
 
@@ -5673,9 +5670,9 @@ textarea:focus {
 }
 
 .statusnotes {
-  margin: -5px 0 5px 0;
+  margin: -5px 0 5px;
   padding: 8px 7px;
-  letter-spacing: 0em !important;
+  letter-spacing: 0 !important;
   text-align: center;
   font-style: normal;
   font-size: 9pt;
@@ -5779,7 +5776,7 @@ h3#activejobs + ol li::before, h3#scheduledjobs + ol li::before, h3#readyjobs + 
   display: inline-block;
   width: 18px;
   height: 12px;
-  font-weight: bold;
+  font-weight: 700;
   color: var(--inklite);
   background: var(--yes) 6px center no-repeat;
   background-size: 12px;
@@ -5810,7 +5807,7 @@ h3#scheduledjobs + ol li::before {
 
 #schedjobs td, #jobs #schedjobs tr:hover td {
   padding: 2px 4px;
-  font-weight: normal !important;
+  font-weight: 400 !important;
   color: var(--ink);
   background: #fcfcff !important;
 }
@@ -5986,7 +5983,7 @@ td.spacer, th.spacer {
 }
 
 .mediumtags {
-  font-weight: bold;
+  font-weight: 700;
 }
 
 .cells {
@@ -6242,12 +6239,12 @@ p#helptranslate {
 
 .themechoice .optbox:hover + img ~ .themelabel {
   color: #f60;
-  font-weight: bold;
+  font-weight: 700;
 }
 
 .themechoice .optbox:checked + img ~ .themelabel {
   color: #338 !important;
-  font-weight: bold;
+  font-weight: 700;
   background: #e2e2ff !important;
 }
 
@@ -6314,7 +6311,6 @@ p#helptranslate {
   min-height: 56px !important;
   position: relative;
   z-index: 999;
-  outline: 1px dotted #f00;
   opacity: 0;
 }
 
@@ -6356,7 +6352,7 @@ p#helptranslate {
 .langselect input[name="lang"]:checked + img + .ui_lang {
   margin: -32px -4px 0;
   z-index: 2;
-  font-weight: bold;
+  font-weight: 700;
   color: #338;
   background: #e2e2ff !important;
 }
@@ -6525,7 +6521,7 @@ table#addkeyring tr:last-child td {
 
 tt {
   font-size: 8.5pt !important;
-  font-weight: bold !important;
+  font-weight: 700 !important;
   letter-spacing: .1em;
 }
 
@@ -6915,7 +6911,7 @@ p:empty { /* empty paragraph nuke */
   margin-top: -6px;
   margin-bottom: 5px;
   padding: 10px 20px;
-  font-weight: bold;
+  font-weight: 700;
   text-align: center;
   color: var(--inklite);
   border: 1px solid var(--borderinner);
@@ -7095,7 +7091,7 @@ p:empty { /* empty paragraph nuke */
 }
 
 .netdbentry th {
-  font-weight: normal;
+  font-weight: 400;
 }
 
 .netdbentry th:last-child {
@@ -7167,12 +7163,12 @@ b.netdb_transport {
 }
 
 #netdb code {
-  font-weight: normal !important;
+  font-weight: 400 !important;
 }
 
 .netdb_name {
   text-transform: capitalize;
-  font-weight: bold;
+  font-weight: 700;
   color: var(--inklite);
 }
 
@@ -7297,7 +7293,7 @@ b.netdb_transport {
   text-overflow: ellipsis;
   vertical-align: middle;
   white-space: nowrap;
-  font-weight: bold !important;
+  font-weight: 700 !important;
   letter-spacing: .12em;
   color: #273;
   text-shadow: none;
@@ -7317,7 +7313,7 @@ b.netdb_transport {
 
 #netdb .leaseset th:nth-child(2) code, #netdb .leaseset th:nth-child(2) code:hover {
   width: auto;
-  letter-spacing: 0.1em !important;
+  letter-spacing: .1em !important;
 }
 
 #netdb .netdbentry th code:hover, #netdb .netdbentry th code:active, .leaseset th code:hover, .leaseset th code:active,
@@ -7482,7 +7478,7 @@ b.netdb_transport {
 #leasesetdebug th, #leasesetsummary th {
   padding: 8px;
   font-size: 11pt !important;
-  font-weight: bold;
+  font-weight: 700;
   text-align: left;
   text-transform: uppercase;
   letter-spacing: .08em;
@@ -7539,7 +7535,7 @@ b.netdb_transport {
 }
 
 .leaseset th {
-  font-weight: normal;
+  font-weight: 400;
   padding: 5px;
   text-align: left;
 }
@@ -7674,7 +7670,7 @@ b.netdb_transport {
 }
 
 .main li .netdb_expiry {
-  font-weight: normal;
+  font-weight: 400;
   text-transform: lowercase;
   font-style: italic;
 }
@@ -7912,7 +7908,7 @@ p.sybil_info, p.family, p.threatpoints, p.hashdist, p#sybil_totals, p.notfound {
   padding: 7px 5px 7px 30px;
   border: 1px solid var(--borderinner);
   box-shadow: var(--highlight);
-  font-weight: bold;
+  font-weight: 700;
   color: var(--inklite);
   text-align: left;
   background: var(--eye) 8px center no-repeat, repeating-linear-gradient(135deg, rgba(255,255,255,.5) 2px, rgba(240, 240, 255, .3) 3px, #fafaff 5px), #fafaff;
@@ -7935,7 +7931,7 @@ p.threatpoints.hot {
 }
 
 p#sybil_totals {
-  font-weight: normal;
+  font-weight: 400;
   background: var(--eye_static) 8px center no-repeat, repeating-linear-gradient(135deg, rgba(255,255,255,.5) 2px, rgba(240, 240, 255, .3) 3px, #fafaff 5px), #fafaff;
   background-size: 16px, 100%;
 }
@@ -8019,7 +8015,7 @@ p.sybil_info + a[name] + table.sybil_routerinfo, p.hashdist + a[name] + table.sy
 
 .sybil_addresses td:first-child {
   max-width: 155px;
-  font-weight: bold;
+  font-weight: 700;
   padding-right: 9px;
 }
 
@@ -8077,7 +8073,7 @@ p.sybil_info + a[name] + table.sybil_routerinfo, p.hashdist + a[name] + table.sy
 
 .sybil_distance tr:nth-child(n+2):hover {
   background: #ffe;
-  font-weight: bold;
+  font-weight: 700;
 }
 
 .identicon {
@@ -8145,7 +8141,7 @@ p.sybil_info + a[name] + table.sybil_routerinfo, p.hashdist + a[name] + table.sy
   padding-left: 10px;
   white-space: nowrap;
   text-align: right;
-  font-weight: bold;
+  font-weight: 700;
   color: var(--inklite);
 }
 
@@ -8213,7 +8209,7 @@ p.sybil_info + a[name] + table.sybil_routerinfo, p.hashdist + a[name] + table.sy
   display: inline-block;
   min-width: 44px;
   text-align: center;
-  font-weight: bold;
+  font-weight: 700;
   border: 1px solid #bbc;
   border-radius: 2px;
   box-shadow: var(--highlight);
@@ -8588,7 +8584,7 @@ table#schedjobs {
 }
 
 #schedjobs td:first-child {
-  font-weight: bold;
+  font-weight: 700;
   color: var(--inklite);
 }
 
@@ -8597,7 +8593,7 @@ table#schedjobs {
 }
 
 #jobstats tr:last-child {
-  font-weight: bold;
+  font-weight: 700;
 }
 
 #jobstats tr:last-child td {
@@ -8645,7 +8641,7 @@ table#schedjobs {
   max-width: 18px;
   text-align: center !important;
   text-transform: none !important;
-  font-weight: bold;
+  font-weight: 700;
   color: #4a415e !important;
   text-shadow: 0 1px 1px #fff;
   border: 1px solid #bbc;
@@ -9180,7 +9176,7 @@ select[name="newlogclass"] {
 
 #help code, #help tt {
   font-size: 9pt;
-  font-weight: normal;
+  font-weight: 400;
   color: #040;
 }
 
@@ -9212,7 +9208,7 @@ select[name="newlogclass"] {
 }
 
 #help li code {
-  font-weight: bold;
+  font-weight: 700;
   color: #050;
 }
 
@@ -9272,7 +9268,7 @@ select[name="newlogclass"] {
 }
 
 #faq code, #advancedsettings code {
-  font-weight: bold;
+  font-weight: 700;
   user-select: all;
   -moz-user-select: all;
   -webkit-user-select: all;
@@ -9283,7 +9279,7 @@ select[name="newlogclass"] {
 }
 
 #portfaq th:first-child, #portfaq td:first-child {
-  font-weight: bold;
+  font-weight: 700;
   text-align: right;
   padding-top: 6px;
   padding-bottom: 6px;
@@ -9312,7 +9308,7 @@ select[name="newlogclass"] {
 }
 
 #portfaq td[colspan="3"] {
-  font-weight: normal;
+  font-weight: 400;
 }
 
 /* end mini faq */
@@ -9391,7 +9387,7 @@ select[name="newlogclass"] {
 
 #routerinfo code {
   font-size: 9pt;
-  font-weight: normal;
+  font-weight: 400;
 }
 
 #routerinfo p {
@@ -9778,7 +9774,7 @@ a[href^="configpeer?peer"]:hover::after {
 }
 
 .bucket:hover {
-  font-weight: bold;
+  font-weight: 700;
 }
 
 .bucket::-moz-selection {
@@ -9830,7 +9826,7 @@ a[href^="configpeer?peer"]:hover::after {
 
 #debug .skm_key td:first-child, .debug_pubkey, .debug_sesskey {
   font-family: var(--monospaced);
-  font-weight: bold;
+  font-weight: 700;
   color: #070 !important;
 }
 
@@ -9892,7 +9888,7 @@ a[href^="configpeer?peer"]:hover::after {
 }
 
 #portmapper td:first-child, #sockets td:first-child {
-  font-weight: bold;
+  font-weight: 700;
 }
 
 #portmapper tr:hover td:first-child, #sockets tr:hover td:first-child {
@@ -9947,7 +9943,7 @@ a[href^="configpeer?peer"]:hover::after {
 }
 
 #jardump .subheading code {
-  font-weight: bold !important;
+  font-weight: 700 !important;
 }
 
 .subheading.routerfiles {
@@ -10030,12 +10026,12 @@ a[href^="configpeer?peer"]:hover::after {
 }
 
 .unsignedmod::-moz-selection {
-  background: #f00 !important;
+  background: red !important;
   color: #fff;
 }
 
 .unsignedmod::selection {
-  background: #f00 !important;
+  background: red !important;
   color: #fff;
 }
 
@@ -10060,7 +10056,7 @@ a[href^="configpeer?peer"]:hover::after {
 #jardump tt {
   letter-spacing: -.03em !important;
   font-size: 8pt !important;
-  font-weight: normal !important;
+  font-weight: 400 !important;
 }
 
 #jardump a tt {
@@ -10068,7 +10064,7 @@ a[href^="configpeer?peer"]:hover::after {
 }
 
 #jardump code {
-  font-weight: normal !important;
+  font-weight: 400 !important;
 }
 
 #jardump a:visited tt {
@@ -10145,7 +10141,7 @@ a[href^="configpeer?peer"]:hover::after {
   color: var(--inklite);
   text-align: right;
   font-style: italic;
-  font-weight: bold;
+  font-weight: 700;
 }
 
 .unsignedmod {
@@ -10358,7 +10354,7 @@ b.suboption {
   padding: 4px 5px;
   display: block;
   text-align: left;
-  font-weight: bold;
+  font-weight: 700;
   font-size: 11pt;
   color: var(--inklite);
   background: #fff;
@@ -10382,7 +10378,7 @@ b.suboption {
 .net_bwrate {
   padding: 0 2px 12px;
   width: 100%;
-  font-weight: bold;
+  font-weight: 700;
   font-size: 125%;
   color: var(--inklite);
 }
@@ -11058,7 +11054,7 @@ form[action="configplugins"] input.reload {
   min-width: 140px;
   display: inline-block;
   vertical-align: middle;
-  font-weight: bold;
+  font-weight: 700;
   border-radius: 15px;
   box-shadow: 0 0 0 1px #cfcfff;
   background: #e2e2ff;
@@ -11728,7 +11724,7 @@ _:-ms-lang(x), *, *:hover, *:focus, input, input:hover, input:focus, a:hover, a:
 
 _:-ms-lang(x), .tunnels_client th:first-child::after {
   letter-spacing: -.05em;
-  font-weight: normal;
+  font-weight: 400;
 }
 
 /* end Edge/IE tweaks */
@@ -11742,13 +11738,8 @@ _:-ms-lang(x), .tunnels_client th:first-child::after {
 }
 
 @keyframes highlight {
-from {
-  background: #efe;
-}
-
-to {
-  background: transparent;
-}
+  from {background: #efe}
+  to {background: transparent}
 }
 
 /* end highlight anchored links */
@@ -11756,19 +11747,19 @@ to {
 /* chrome/blink overrides */
 
 @supports not (-moz-appearance: none) {
-.main tr, #themeoptions {
-  box-shadow: none !important;
-}
+  .main tr, #themeoptions {
+    box-shadow: none !important;
+  }
 
-th.options .optbox {
-  vertical-align: sub !important;
-}
+  th.options .optbox {
+    vertical-align: sub !important;
+  }
 
-/* fix blink/webkit's broken column support for columns with only 2 children */
-#netconfig tr:nth-last-child(3) .optionlist, #netconfig tr:nth-last-child(5) .optionlist,
-#externali2cp .optionlist, #config_update .optionlist {
-  column-count: 1 !important;
-}
+  /* fix blink/webkit's broken column support for columns with only 2 children */
+  #netconfig tr:nth-last-child(3) .optionlist, #netconfig tr:nth-last-child(5) .optionlist,
+  #externali2cp .optionlist, #config_update .optionlist {
+    column-count: 1 !important;
+  }
 }
 
 /* end chrome overrides */
@@ -11920,7 +11911,7 @@ th.options .optbox {
   margin: 15px 0 5px;
   padding: 20px 0 10px;
   text-align: center;
-  font-weight: bold;
+  font-weight: 700;
   border: 1px solid #7789bf;
   background: #e8e8ff;
   background: rgba(248,248,255,.6);
@@ -12040,7 +12031,7 @@ h1.webapp {
 
 .sitemapLink:hover img {
   filter: drop-shadow(0 0 1px #f60);
-  transition: ease filter 0.3s;
+  transition: ease filter .3s;
 }
 
 .sitemapLink:active img {
@@ -12360,7 +12351,7 @@ div.app a, div.app a:visited, #sitemap a:link, #sitemap a:visited, .warning a {
   width: calc(100% - 22px);
   text-align: center;
   font-style: italic;
-  font-weight: bold;
+  font-weight: 700;
 }
 
 #setupwizard #langsettings {
@@ -12563,7 +12554,7 @@ p#gatherstats {
 .statvalue {
   padding: 0 2px 0 0;
   color: var(--inklite);
-  font-weight: bold;
+  font-weight: 700;
   font-style: italic;
 }
 
@@ -12642,7 +12633,7 @@ p#gatherstats {
   margin: 0 10px 5px 30px;
   padding-left: 10px;
   display: inline-block;
-  font-weight: bold;
+  font-weight: 700;
   border-left: 2px solid #040;
   border-left: 2px solid rgba(0,64,0,.7);
 }
@@ -12679,7 +12670,7 @@ p#gatherstats {
 #filterlist .example {
   margin-right: 2px;
   color: #040;
-  font-weight: bold;
+  font-weight: 700;
 }
 
 /* /help/webhosting */
@@ -12696,7 +12687,7 @@ p#gatherstats {
 #webhosting td:first-child {
   width: 1%;
   white-space: nowrap;
-  font-weight: bold;
+  font-weight: 700;
 }
 
 #webhosting #guides {
@@ -12717,7 +12708,7 @@ p#gatherstats {
 }
 
 #help code, #webhosting i {
-  font-weight: bold;
+  font-weight: 700;
 }
 
 i {
@@ -12728,8 +12719,8 @@ i {
   margin: -7px -10px -9px;
   padding: 7px 0 6px;
   font-size: 18pt;
-  font-weight: bold;
-  letter-spacing: 0.1em;
+  font-weight: 700;
+  letter-spacing: .1em;
   color: var(--inklite);
   opacity: .9;
 }
@@ -12755,7 +12746,7 @@ i {
 
 #sybilTask th {
   text-transform: uppercase;
-  letter-spacing: 0.1em;
+  letter-spacing: .1em;
   font-size: 11pt !important;
 }
 
@@ -13553,7 +13544,6 @@ div.app:not(:hover) a:not(:hover):not(:focus):not(:active):visited,
 #tunnelpeercount .lazy, .newsentry.lazy {
   contain: none;
 }
-
 
 @supports (content-visibility: auto) {
   .newsentry.lazyhide {

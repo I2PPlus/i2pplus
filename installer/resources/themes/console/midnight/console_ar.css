@@ -89,11 +89,11 @@ button.search {
 
 .routersummary h3, .routersummary h4, .routersummary a, .routersummary b {
   text-align: center;
-  font-weight: normal;
+  font-weight: 400;
 }
 
 .routersummary h3, .routersummary h3 a {
-  font-weight: bold !important;
+  font-weight: 700 !important;
   padding: 3px 2px !important;
 }
 
@@ -143,7 +143,7 @@ button.search {
 }
 
 .sb_updatestatus b {
-  font-weight: bold !important;
+  font-weight: 700 !important;
 }
 
 .sb_updatestatus, .sb_info .percentBarText {
@@ -551,7 +551,7 @@ div[lang="ar"] ul, div[lang="ar"] p {
 
 .sb_newsheadings td a {
   font-size: 9pt !important;
-  font-weight: bold;
+  font-weight: 700;
 }
 
 /* responsive layout */

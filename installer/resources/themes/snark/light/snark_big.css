@@ -1,17 +1,17 @@
 @media screen and (min-width: 0) and (max-width: 4000px) {
 * {
-  font-weight: normal !important;
+  font-weight: 400 !important;
   font-family: "Noto Sans", "Droid Sans", "Roboto Sans", Ubuntu, "Segoe UI", "Lucida Grande", Helvetica, Arial, Verdana, sans-serif !important;
   line-height: 120% !important;
 }
 
 .snarkNav:link, .iframed .snarkNav:link {
-  font-weight: bold !important;
+  font-weight: 700 !important;
   padding-bottom: 5px !important;
 }
 
 .iframed .snarkNav:link {
-  font-weight: bold !important;
+  font-weight: 700 !important;
   padding-top: 3px !important;
 }
 
@@ -21,7 +21,7 @@
 }
 
 .snarkMessages li, .iframed .snarkMessages li {
-  font-weight: normal !important;
+  font-weight: 400 !important;
 }
 
 input[type], select, select option, td, td a, .snarkMessages li, .snarkMessages li a, textarea, input.r, input[name="nofilter_dataDir"],
@@ -40,7 +40,7 @@ th#pagenav {
 }
 
 th.snarkTorrentDownloaded, th.snarkTorrentUploaded, th.snarkTorrentRateDown, th.snarkTorrentRateUp {
-  font-weight: bold !important;
+  font-weight: 700 !important;
 }
 
 input[type], select, a.control {
@@ -60,7 +60,7 @@ a.control, input[type=submit], input.accept {
 }
 
 a.control, input[type=submit], input.accept, th, #trackerselect tr:first-child td {
-  font-weight: normal !important;
+  font-weight: 400 !important;
   font-size: 12pt !important;
 }
 
@@ -87,7 +87,7 @@ a.control, input[type=submit], input.accept, th, #trackerselect tr:first-child t
 
 .snarkTorrentInfo th, .snarkDirInfo th, #totals, .snarkCommentInfo th, #configs th {
   font-size: 11pt !important;
-  font-weight: normal !important;
+  font-weight: 400 !important;
 }
 
 .snarkTorrents tt {

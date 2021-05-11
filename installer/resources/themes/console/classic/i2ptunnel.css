@@ -135,7 +135,7 @@ hr {
   text-align: center;
   text-decoration: none;
   font-style: normal;
-  font-weight: normal;
+  font-weight: 400;
   color: #5e626e;
   border: 1px solid #aaafce;
   border-radius: 2px;
@@ -283,7 +283,7 @@ select[disabled], select[disabled]:hover, select[disabled]:focus, select[disable
 a:link, a:visited {
   word-wrap: break-word;
   text-decoration: none;
-  font-weight: bold;
+  font-weight: 700;
   color: #6b6b94;
   color: #575779;
   outline: none;
@@ -464,7 +464,7 @@ td.infohelp {
 }
 
 .tunnelName a {
-  font-weight: bold;
+  font-weight: 700;
 }
 
 .tunnelType {
@@ -549,7 +549,7 @@ input[type=radio][disabled]:hover, input[type=radio][disabled]:focus {
 }
 
 .editDisabled .optbox:checked + span {
-  font-weight: bold;
+  font-weight: 700;
   text-decoration: underline;
 }
 
@@ -877,7 +877,7 @@ input[type="file"] {
   width: 400px;
   text-align: center;
   font-size: 11pt;
-  font-weight: bold;
+  font-weight: 700;
   border: 1px solid #900;
   border-radius: 2px;
   box-shadow: inset 0 0 0 1px #fff, 0 0 1px 1px #bbb;
@@ -905,7 +905,7 @@ input[type="file"] {
   min-width: 150px;
   white-space: nowrap;
   text-align: right;
-  font-weight: bold;
+  font-weight: 700;
 }
 
 #wizardTunnelTypes td:last-child {
@@ -947,12 +947,12 @@ input[type="file"] {
 }
 
 #wizardPanel input::-moz-placeholder {
-  font-weight: normal;
+  font-weight: 400;
   color: #999;
 }
 
 #wizardPanel ::-webkit-input-placeholder {
-  font-weight: normal;
+  font-weight: 400;
   color: #999;
 }
 
@@ -967,7 +967,7 @@ input[type="file"] {
   white-space: nowrap;
   display: inline-block;
   text-align: right;
-  font-weight: bold;
+  font-weight: 700;
 }
 
 #wizardPanel select {
@@ -1331,7 +1331,7 @@ input[type=radio], input[type=radio]:checked, input[type=radio][disabled], input
   padding: 30px;
   width: 400px;
   text-align: center;
-  font-weight: bold;
+  font-weight: 700;
   font-size: 11pt;
   border: 1px solid #900;
   border-radius: 2px;
@@ -1530,7 +1530,7 @@ input::placeholder {
 /* end server tunnel options */
 
 .unbold {
-  font-weight: normal;
+  font-weight: 400;
 }
 
 #notReady, #down {
@@ -1538,7 +1538,7 @@ input::placeholder {
   padding: 30px;
   width: 400px;
   text-align: center;
-  font-weight: bold;
+  font-weight: 700;
   font-size: 11pt;
   border: 1px solid #900;
   border-radius: 2px;

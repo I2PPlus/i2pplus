@@ -125,7 +125,7 @@ code, tt, .destaddress {
   top: -1px;
   vertical-align: middle;
   text-align: center;
-  font-weight: bold;
+  font-weight: 700;
   font-size: 9pt;
   border: 1px solid #8d8daa;
   border-radius: 2px 2px 0 0;
@@ -268,7 +268,7 @@ span.location {
   letter-spacing: normal;
   text-transform: none;
   font-size: 9pt;
-  font-weight: normal;
+  font-weight: 400;
 }
 
 .headline h4 {
@@ -475,13 +475,13 @@ h3 {
   letter-spacing: .08em;
   text-transform: uppercase;
   font-size: 11pt;
-  font-weight: bold;
+  font-weight: 700;
 }
 
 a {
   outline: none;
   text-decoration:none;
-  font-weight: bold;
+  font-weight: 700;
   color: #3b6bbf;
   color: #4d5f80;
 }
@@ -586,7 +586,7 @@ div#messages:empty {
 p.messages {
   color: #fff;
   text-align: center;
-  font-weight: bold;
+  font-weight: 700;
 }
 
 @keyframes hide-up {
@@ -792,7 +792,7 @@ textarea[name="destination"] {
 #filter {
   margin: -1px 0 11px;
   padding: 6px 15px;
-  font-weight: bold;
+  font-weight: 700;
   text-align: center;
 }
 
@@ -920,7 +920,7 @@ tr:hover .destaddress {
 #host_list .checkbox {
   width: 1%;
   white-space: nowrap;
-  font-weight: bold;
+  font-weight: 700;
 }
 
 #host_list .b32link, #host_list .helper {
@@ -960,7 +960,7 @@ tr:hover .destaddress {
   overflow: auto !important;
   white-space: nowrap;
   font-family: var(--monospaced);
-  font-weight: normal;
+  font-weight: 400;
   color: #5a5a6f;
 }
 
@@ -1011,7 +1011,7 @@ td.destinations textarea {
   min-width: 10px !important;
   white-space: nowrap;
   text-align: right;
-  font-weight: bold;
+  font-weight: 700;
 }
 
 #host_details td:last-child {
@@ -1303,7 +1303,7 @@ input[type=submit], input[type=reset], .fakebutton {
 }
 
 a.fakebutton {
-  font-weight: normal;
+  font-weight: 400;
   color: #4f4f63;
 }
 
@@ -1504,7 +1504,7 @@ input.search[type=text]:focus {
 
 form[action="addressbook"] table {
   width: 100% !important;
-  font-weight: bold;
+  font-weight: 700;
 }
 
 #filter {
@@ -1657,7 +1657,7 @@ input#exporthosts {
 }
 
 #activefilter, .selected {
-  font-weight: bold;
+  font-weight: 700;
   color: #999;
   box-shadow: var(--highlight), inset 2px 2px 2px #aaa !important;
 }
