@@ -804,7 +804,8 @@ public class NTCPConnection implements Closeable {
         int size = block.getTotalLength();
         if (size + NTCP2Payload.BLOCK_HEADER_SIZE > BUFFER_SIZE) {
             if (_log.shouldWarn())
-                _log.warn("RouterInfo too big: " + ri);
+                _log.warn("RouterInfo [" + ri + "] is too big for buffer (Size: " +
+                          (size + NTCP2Payload.BLOCK_HEADER_SIZE) + " / Max: " + BUFFER_SIZE + ")");
             return;
         }
         blocks.add(block);
@@ -852,7 +853,7 @@ public class NTCPConnection implements Closeable {
         // TODO add param to clear queues?
         // no synch needed, sendNTCP2() is synched
         if (_log.shouldInfo())
-            _log.info("Sending termination, reason: " + reason + ", vaild frames rcvd: " + validFramesRcvd + " on " + this);
+            _log.info("Sending termination, reason: " + reason + "; Valid frames received: " + validFramesRcvd + " on " + this);
         List<Block> blocks = new ArrayList<Block>(2);
         Block block = new NTCP2Payload.TerminationBlock(reason, validFramesRcvd);
         int plen = block.getTotalLength();
