@@ -843,14 +843,14 @@ input.delete {
   box-shadow: 0 0 1px #000, var(--highlight);
   background: #030;
   background: linear-gradient(to bottom, #003 50%, #000 50%) #000;
-  transition: ease all 0.2s;
+  transition: ease all .2s;
 }
 
 #dologin tr:last-child a:active {
   color: #337 !important;
   box-shadow: inset 3px 3px 3px #000;
   background: #000020;
-  transition: ease box-shadow 0.1s;
+  transition: ease box-shadow .1s;
 }
 
 #dologin tr:last-child td {

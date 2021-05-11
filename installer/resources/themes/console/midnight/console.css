@@ -151,7 +151,7 @@ input[type=text]:focus, input[type=password]:focus, textarea:focus {
   border: 1px solid #6466a5 !important;
   box-shadow: 0 0 0 1px rgba(101, 39, 135, .5), 0 0 2px 2px #202;
   background: #000;
-  transition: filter ease 0.3s;
+  transition: filter ease .3s;
 }
 
 button::-moz-focus-inner, input[type=submit]::-moz-focus-inner, input[type=reset]::-moz-focus-inner {
@@ -1473,7 +1473,7 @@ div.logo hr {
   height: auto;
   font-size: 0;
   opacity: .7;
-  transition: ease-out opacity 0.3s, ease filter 0.3s;
+  transition: ease-out opacity .3s, ease filter .3s;
   filter: sepia(100%) hue-rotate(180deg) drop-shadow(0 0 1px #652787);
 }
 
@@ -1483,18 +1483,18 @@ div.logo hr {
 
 .routersummary img[src*="i2plogo"]:hover {
   opacity: 1;
-  transition: ease-in opacity 0.3s, ease filter 0.3s;
+  transition: ease-in opacity .3s, ease filter .3s;
   filter: drop-shadow(0 0 2px #652787) saturate(100%);
 }
 
 .routersummary a:active img[src*="i2plogo"] {
   filter: drop-shadow(0 0 5px #450519) saturate(140%) !important;
-  transition: ease-out opacity 0.3s, ease filter 0.3s;
+  transition: ease-out opacity .3s, ease filter .3s;
 }
 
 .routersummary a[href="/"]:focus img, .routersummary a[href="/console"]:focus img {
   opacity: 1;
-  transition: ease-in opacity 0.3s, ease filter 0.3s;
+  transition: ease-in opacity .3s, ease filter .3s;
   filter: drop-shadow(0 0 3px #652787) saturate(200%);
 }
 
@@ -2168,12 +2168,12 @@ a:active #sb_bandwidthgraph, a:active #sb_graphstats {
   border-top: none;
   background: #001;
   opacity: 0;
-  transition: ease opacity 0.3s;
+  transition: ease opacity .3s;
 }
 
 #sb_graphcontainer:hover #sb_graphstats {
   opacity: 1;
-  transition: ease opacity 0.3s;
+  transition: ease opacity .3s;
 }
 
 /* end mini sidebar graph */
@@ -2204,7 +2204,7 @@ a:active #sb_bandwidthgraph, a:active #sb_graphstats {
 
 .percentBarOuter:hover .percentBarText {
   opacity: 1;
-  transition: ease opacity 0.2s;
+  transition: ease opacity .2s;
 }
 
 .percentBarInner {
@@ -2233,7 +2233,7 @@ a:active #sb_bandwidthgraph, a:active #sb_graphstats {
   vertical-align: middle;
   float: left;
   opacity: 0;
-  transition: ease opacity 0.2s;
+  transition: ease opacity .2s;
 }
 
 @supports not (-moz-appearance: none) {
@@ -3166,7 +3166,7 @@ to {
 
 #graphdisplay:hover + form, #graphdisplay + form:hover {
   display: block;
-  animation: ease 0.5s 0.2s graphfadein forwards;
+  animation: ease .5s .2s graphfadein forwards;
 }
 
 #graphs .messages {
@@ -3204,7 +3204,7 @@ to {
   margin: 5px 4px;
   text-align: center !important;
   opacity: .9;
-  transition: ease border 0.1s;
+  transition: ease border .1s;
 }
 
 .graphspanel a img:hover {
@@ -3215,7 +3215,7 @@ to {
   background: #000;
   opacity: 1;
   cursor: zoom-in;
-  transition: ease border 0.2s;
+  transition: ease border .2s;
 }
 
 .singlegraph img:hover {
@@ -4459,7 +4459,7 @@ tr#addnew {
 
 .themechoice:hover .optbox:checked + img {
   transform: scale(0.92);
-  animation: glo ease-in-out 1.5s infinite alternate 0.5s;
+  animation: glo ease-in-out 1.5s infinite alternate .5s;
 }
 
 #themeoptions {
@@ -4596,7 +4596,7 @@ td#themeselect {
 }
 
 .langselect:hover input[name="lang"]:checked + img {
-  animation: glo ease-in-out 1.5s infinite alternate 0.5s;
+  animation: glo ease-in-out 1.5s infinite alternate .5s;
 }
 
 .langselect input[name="lang"]:focus + img + div.ui_lang {
@@ -7675,7 +7675,7 @@ div.app:hover img, div.app:focus img {
   filter: saturate(100%);
   mix-blend-mode: normal;
   filter: saturate(100%) drop-shadow(0 0 3px #83529f);
-  animation: glo ease-in-out 1.5s infinite alternate 0.5s;
+  animation: glo ease-in-out 1.5s infinite alternate .5s;
 }
 
 @keyframes glo {
@@ -10630,7 +10630,7 @@ span#newtab {
 }
 
 #netconfig input[type=text] {
-  transition: ease width 0.1s;
+  transition: ease width .1s;
   will-change: transform;
 }
 
@@ -10638,7 +10638,7 @@ span#newtab {
 #netconfig .optbox:not(:checked) + input[type=text][name="udpHost1"]:not(:focus) {
   width: 140px !important;
   min-width: 140px !important;
-  transition: ease width 0.1s;
+  transition: ease width .1s;
 }
 
 /* end /confignet */

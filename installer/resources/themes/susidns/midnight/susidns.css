@@ -1375,7 +1375,7 @@ td.names:hover, #host_list td.b32link:hover, #host_list td.helper:hover, #host_l
 
 .info a:active img, .info a:focus img {
   transform: rotate(45deg) scale(0.8);
-  transition: ease all 0.1s 0s;
+  transition: ease all .1s 0s;
 }
 
 #host_list .checkbox {
