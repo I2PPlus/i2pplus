@@ -12201,76 +12201,70 @@ h1.webapp {
   background-size: 32px, 100%;
 }
 
-#configurationhelp h2, #advancedsettings h2, #filterlist h2 {
-  padding-left: 38px;
+#configurationhelp h2, #advancedsettings h2 {
   background: var(--configure) 8px center no-repeat, var(--h2) !important;
-  background-size: 24px, 100%, 100%, 100% !important;
+}
+
+#filterlist h2 {
+  background: var(--filter) 8px center no-repeat, var(--h2) !important;
 }
 
 #browserconfig h2 {
-  padding-left: 38px;
   background: var(--firefox) 8px center no-repeat, var(--h2) !important;
-  background-size: 24px, 100%, 100%, 100% !important;
 }
 
 #tunnman h2 {
-  padding-left: 38px;
   background: var(--hardhat) 8px center no-repeat, var(--h2) !important;
-  background-size: 24px, 100%, 100%, 100% !important;
 }
 
 #sidebarhelp h2, #reachabilityhelp h2 {
-  padding-left: 38px;
   background: url(/themes/console/images/svg/sidebar.svg) 8px center no-repeat, var(--h2) !important;
-  background-size: 24px, 100%, 100%, 100% !important;
 }
 
 #reseedhelp h2 {
-  padding-left: 38px;
   background: var(--reseed) 8px center no-repeat, var(--h2) !important;
-  background-size: 24px, 100%, 100%, 100% !important;
 }
 
 #faq h2, #glossary h2 {
-  padding-left: 38px;
   background: var(--question) 8px center no-repeat, var(--h2) !important;
-  background-size: 24px, 100%, 100%, 100% !important;
 }
 
 #troubleshoot h2 {
-  padding-left: 38px;
   background: var(--wrench) 8px center no-repeat, var(--h2) !important;
-  background-size: 24px, 100%, 100%, 100% !important;
 }
 
 #legal h2 {
-  padding-left: 38px;
   background: url(/themes/console/images/info/legal.png) 8px center no-repeat, var(--h2) !important;
-  background-size: 24px, 100%, 100%, 100% !important;
 }
 
 #changelog h2 {
-  padding-left: 38px;
   background: var(--changelog) 8px center no-repeat, var(--h2) !important;
-  background-size: 24px, 100%, 100%, 100% !important;
 }
 
 #newuserguide h2 {
-  padding-left: 38px;
   background: url(images/favicon.svg) 8px center no-repeat, var(--h2) !important;
-  background-size: 24px, 100%, 100%, 100% !important;
 }
 
 #webhosting h2 {
-  padding-left: 38px;
   background: var(--webserver) 8px center no-repeat, var(--h2) !important;
-  background-size: 24px, 100%, 100%, 100% !important;
 }
 
 #themeoverride h2 {
-  padding-left: 38px;
   background: var(--ui) 8px center no-repeat, var(--h2) !important;
-  background-size: 24px, 100%, 100%, 100% !important;
+}
+
+#help h2, #help #newuserguide h2 {
+    padding: 9px 8px 8px 36px !important;
+    font-size: 13pt !important;
+    background-size: 22px, 100%, 100%, 100% !important;
+}
+
+@media screen and (max-width: 1499px) {
+  #help h2, #help #newuserguide h2 {
+    padding: 9px 8px 7px 34px !important;
+    font-size: 12pt !important;
+    background-size: 20px, 100%, 100%, 100% !important;
+  }
 }
 
 /* end help toc */
