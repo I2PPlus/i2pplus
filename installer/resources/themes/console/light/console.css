@@ -1085,8 +1085,8 @@ to {
   vertical-align: baseline;
   line-height: 120%;
   text-shadow: 0 1px 1px #fff;
-  box-sizing: border-box;
   border: 1px solid #88f;
+  box-sizing: border-box;
   border-radius: 2px;
   box-shadow: var(--highlight), 0 0 1px rgba(96,96,96,.5);
 }
