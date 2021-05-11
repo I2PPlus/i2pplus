@@ -1079,16 +1079,22 @@ to {
 
 .sb_netstatus, .tunnelBuildStatus {
   margin: -4px -1px -5px;
-  padding: 6px 4px;
+  padding: 6px 3px;
   width: 100%;
   display: inline-block;
   vertical-align: baseline;
   line-height: 120%;
   text-shadow: 0 1px 1px #fff;
-  box-sizing: border-box;
   border: 1px solid #88f;
+  box-sizing: border-box;
   border-radius: 2px;
   box-shadow: var(--highlight), 0 0 1px rgba(96,96,96,.5);
+}
+
+@media screen and (max-width: 1499px) {
+  .sb_netstatus, .tunnelBuildStatus {
+    font-size: 90%;
+  }
 }
 
 .sb_netstatus a {
