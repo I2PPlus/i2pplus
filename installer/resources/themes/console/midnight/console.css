@@ -1473,7 +1473,7 @@ div.logo hr {
   height: auto;
   font-size: 0;
   opacity: .7;
-  transition: ease-out opacity 0.3s, ease filter 0.3s;
+  transition: ease-out opacity .3s, ease filter .3s;
   filter: sepia(100%) hue-rotate(180deg) drop-shadow(0 0 1px #652787);
 }
 
@@ -1483,18 +1483,18 @@ div.logo hr {
 
 .routersummary img[src*="i2plogo"]:hover {
   opacity: 1;
-  transition: ease-in opacity 0.3s, ease filter 0.3s;
+  transition: ease-in opacity .3s, ease filter .3s;
   filter: drop-shadow(0 0 2px #652787) saturate(100%);
 }
 
 .routersummary a:active img[src*="i2plogo"] {
   filter: drop-shadow(0 0 5px #450519) saturate(140%) !important;
-  transition: ease-out opacity 0.3s, ease filter 0.3s;
+  transition: ease-out opacity .3s, ease filter .3s;
 }
 
 .routersummary a[href="/"]:focus img, .routersummary a[href="/console"]:focus img {
   opacity: 1;
-  transition: ease-in opacity 0.3s, ease filter 0.3s;
+  transition: ease-in opacity .3s, ease filter .3s;
   filter: drop-shadow(0 0 3px #652787) saturate(200%);
 }
 
@@ -2168,12 +2168,12 @@ a:active #sb_bandwidthgraph, a:active #sb_graphstats {
   border-top: none;
   background: #001;
   opacity: 0;
-  transition: ease opacity 0.3s;
+  transition: ease opacity .3s;
 }
 
 #sb_graphcontainer:hover #sb_graphstats {
   opacity: 1;
-  transition: ease opacity 0.3s;
+  transition: ease opacity .3s;
 }
 
 /* end mini sidebar graph */
@@ -2204,7 +2204,7 @@ a:active #sb_bandwidthgraph, a:active #sb_graphstats {
 
 .percentBarOuter:hover .percentBarText {
   opacity: 1;
-  transition: ease opacity 0.2s;
+  transition: ease opacity .2s;
 }
 
 .percentBarInner {
@@ -2233,7 +2233,7 @@ a:active #sb_bandwidthgraph, a:active #sb_graphstats {
   vertical-align: middle;
   float: left;
   opacity: 0;
-  transition: ease opacity 0.2s;
+  transition: ease opacity .2s;
 }
 
 @supports not (-moz-appearance: none) {

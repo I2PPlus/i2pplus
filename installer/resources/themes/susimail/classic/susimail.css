@@ -1154,7 +1154,7 @@ div#composemail {
   box-shadow: 0 0 1px rgba(255,255,255,0);
   background: #efefff;
   background: linear-gradient(to right, #f2f2ff, #f6f6ff, #f2f2ff);
-  transition: ease all 0.1s;
+  transition: ease all .1s;
 }
 
 #dologin tr:last-child a:hover {
@@ -1163,7 +1163,7 @@ div#composemail {
   background: #f2f2ff;
   background: linear-gradient(to bottom, #fafaff 50%, #e8e8ff 50%) #f2f2ff;
   box-shadow: 0 0 1px #ccf;
-  transition: ease all 0.1s;
+  transition: ease all .1s;
 }
 
 #dologin tr:last-child a:active {
@@ -1171,7 +1171,7 @@ div#composemail {
   background: #e2e2ff;
   background: linear-gradient(to bottom, #eaeaff 50%, #d9d9ff 50%);
   box-shadow: inset 3px 3px 3px #779;
-  transition: ease all 0.1s;
+  transition: ease all .1s;
   color: rgba(65, 70, 95, .8) !important;
   color: #99a5df !important;
 }

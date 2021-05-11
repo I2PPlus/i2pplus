@@ -503,13 +503,13 @@ img[src="/imagegen/id?s=256&c="], img[src="/imagegen/id?s=20&c="] {
   background: #f8f8ff;
   background: linear-gradient(rgba(250,250,255,.5), rgba(246,246,255,.5)), url(/themes/console/classic/images/bg2.png);
   background-size: 100% 100%, 120px 120px;
-  transition: ease all 0.2s;
+  transition: ease all .2s;
 }
 
 .illustrate:hover {
   border: 1px solid #337;
   background: #fff;
-  transition: ease all 0.2s;
+  transition: ease all .2s;
 }
 
 .illustrate text:not(:hover) {
@@ -888,7 +888,7 @@ p.book {
 
 .info a:active img, .info a:focus img {
   transform: rotate(45deg) scale(0.8);
-  transition: ease all 0.1s 0s;
+  transition: ease all .1s 0s;
 }
 
 /* hostname list */
