@@ -587,7 +587,8 @@ class EventPumper implements Runnable {
             }
         } catch (IOException ioe) {   // this is the usual failure path for a timeout or connect refused
             if (_log.shouldLog(Log.INFO))
-                _log.info("Failed outbound " + con, ioe);
+//                _log.info("Failed outbound " + con, ioe);
+                _log.info("Failed outbound " + con + " (" + ioe.getMessage() + ")");
             con.closeOnTimeout("connect failed", ioe);
             _transport.markUnreachable(con.getRemotePeer().calculateHash());
             _context.statManager().addRateData("ntcp.connectFailedTimeoutIOE", 1);

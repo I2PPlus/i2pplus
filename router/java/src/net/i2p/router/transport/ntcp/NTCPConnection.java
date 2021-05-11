@@ -804,7 +804,8 @@ public class NTCPConnection implements Closeable {
         int size = block.getTotalLength();
         if (size + NTCP2Payload.BLOCK_HEADER_SIZE > BUFFER_SIZE) {
             if (_log.shouldWarn())
-                _log.warn("RouterInfo too big: " + ri);
+                _log.warn("RouterInfo [" + ri + "] is too big for buffer (Size: " +
+                          (size + NTCP2Payload.BLOCK_HEADER_SIZE) + " / Max: " + BUFFER_SIZE + ")");
             return;
         }
         blocks.add(block);
@@ -852,7 +853,7 @@ public class NTCPConnection implements Closeable {
         // TODO add param to clear queues?
         // no synch needed, sendNTCP2() is synched
         if (_log.shouldInfo())
-            _log.info("Sending termination, reason: " + reason + ", vaild frames rcvd: " + validFramesRcvd + " on " + this);
+            _log.info("Sending termination, reason: " + reason + "; Valid frames received: " + validFramesRcvd + " on " + this);
         List<Block> blocks = new ArrayList<Block>(2);
         Block block = new NTCP2Payload.TerminationBlock(reason, validFramesRcvd);
         int plen = block.getTotalLength();
@@ -914,9 +915,9 @@ public class NTCPConnection implements Closeable {
             StringBuilder buf = new StringBuilder(256);
             buf.append("Sending ").append(blocks.size())
                .append(" blocks in ").append(framelen)
-               .append(" byte NTCP2 frame:");
+               .append(" byte NTCP2 frame...");
             for (int i = 0; i < blocks.size(); i++) {
-                buf.append("\n    ").append(i).append(": ").append(blocks.get(i).toString());
+                buf.append("\n* Block ").append(i).append(": ").append(blocks.get(i).toString());
             }
             _log.debug(buf.toString());
         }
@@ -1449,7 +1450,7 @@ public class NTCPConnection implements Closeable {
                         releaseReadBuf(_dataBuf);
                     if (_framelen > BUFFER_SIZE) {
                         if (_log.shouldInfo())
-                            _log.info("Allocating big ByteArray: " + _framelen);
+                            _log.info("Allocating big ByteArray: " + _framelen + "bytes");
                         byte[] data = new byte[_framelen];
                         _dataBuf = new ByteArray(data);
                     } else {

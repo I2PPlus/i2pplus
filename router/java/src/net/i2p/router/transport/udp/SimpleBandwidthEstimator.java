@@ -72,7 +72,7 @@ class SimpleBandwidthEstimator implements BandwidthEstimator {
             _acked = 0;
             _tAck = now;
             if (_log.shouldDebug())
-                _log.debug("first sample bytes: " + acked + " deltaT: " + deltaT + ' ' + this);
+                _log.debug("First sample bytes: " + acked + "; DeltaT: " + deltaT + "\n* " + this);
         } else {
             _acked += acked;
             // anti-aliasing filter
@@ -120,7 +120,7 @@ class SimpleBandwidthEstimator implements BandwidthEstimator {
      * Here we insert virtual null samples if necessary as in Westwood,
      * And use a very simple EWMA (exponential weighted moving average)
      * time-varying filter, as in kernel tcp_westwood.c
-     * 
+     *
      * @param time the time of the measurement
      * @param packets number of bytes acked
      * @param rtt current rtt
@@ -137,7 +137,7 @@ class SimpleBandwidthEstimator implements BandwidthEstimator {
             }
             deltaT -= numrtts * rtt;
             if (_log.shouldDebug())
-                _log.debug("decayed " + numrtts + " times, new _bK_ns_est: " + _bK_ns_est + ' ' + this);
+                _log.debug("Decayed " + numrtts + " times; New _bK_ns_est: " + _bK_ns_est + "\n* " + this);
         }
         float bkdt;
         if (packets > 0) {
@@ -151,8 +151,8 @@ class SimpleBandwidthEstimator implements BandwidthEstimator {
         }
         _tAck = time;
         if (_log.shouldDebug())
-            _log.debug("computeBWE bytes: " + packets + " deltaT: " + deltaT +
-                       " bk/deltaT: " + bkdt + " _bK_ns_est: " + _bK_ns_est + ' ' + this);
+            _log.debug("ComputeBWE bytes: " + packets + "; DeltaT: " + deltaT +
+                       "; bK/DeltaT: " + bkdt + "; _bK_ns_est: " + _bK_ns_est + "\n* " + this);
     }
 
     /**
@@ -164,10 +164,10 @@ class SimpleBandwidthEstimator implements BandwidthEstimator {
 
     @Override
     public synchronized String toString() {
-        return "SBE[" +
+        return "SBE: " +
                 " _bKFiltered " + _bKFiltered +
-                " _tAck " + _tAck + "; " +
+                "; _tAck " + _tAck + " -> " +
                 DataHelper.formatSize2Decimal((long) (_bKFiltered * 1000), false) +
-                "Bps]";
+                "Bps";
     }
 }
