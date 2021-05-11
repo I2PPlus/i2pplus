@@ -577,7 +577,7 @@ a.viewfullentry::after, a[href^="viewprofile"]::after {
 
 .main#console .twocol {
   margin: 15px 35px 5px 0 !important;
-  background: rgba(0, 32, 0, 0.5);
+  background: rgba(0, 32, 0, .5);
   border-radius: 3px;
   padding-top: 10px;
   padding-bottom: 10px;

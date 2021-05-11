@@ -59,7 +59,7 @@ body, td, th, span, table a, input[type=submit], input[type=text], textarea {
 }
 
 .page, .snarknavbar {
-	filter: drop-shadow(0 0 1px rgba(128,128,128, 0.8));
+	filter: drop-shadow(0 0 1px rgba(128,128,128, .8));
 }
 
 .iframed .page, .iframed .snarknavbar {

@@ -106,12 +106,12 @@ table[id^="sb_"] td, #sb_localtunnels td {
 
 table[id^="sb_"] tr:nth-child(even) td {
   background: #eef;
-  background: rgba(238, 238, 255, 0.4);
+  background: rgba(238, 238, 255, .4);
 }
 
 table[id^="sb_"] tr:nth-child(odd) td {
   background: #ddf;
-  background: rgba(221, 221, 255, 0.4);
+  background: rgba(221, 221, 255, .4);
 }
 
 #sb_services {
@@ -157,7 +157,7 @@ table[id^="sb_"] tr:nth-child(odd) td {
 }
 
 #sb_memoryBar .percentBarInner {
-  background: linear-gradient(to bottom, rgba(255, 255, 255,.6), rgba(238, 238, 255, 0.6) 50%, rgba(180, 180, 255, 0.7) 50%, rgba(140, 140, 255, 0.7));
+  background: linear-gradient(to bottom, rgba(255, 255, 255,.6), rgba(238, 238, 255, .6) 50%, rgba(180, 180, 255, .7) 50%, rgba(140, 140, 255, .7));
 }
 
 h1 {

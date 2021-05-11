@@ -49,7 +49,7 @@ textarea:hover, textarea:focus {
 
 ::selection {
   background: #22296f !important;
-  background: rgba(34, 41, 111, 0.9) !important;
+  background: rgba(34, 41, 111, .9) !important;
   color: white;
 }
 
@@ -1094,8 +1094,8 @@ textarea:focus::placeholder {
 input[type=text]:focus, textarea[name="destination"]:focus {
   color: #c9ceff !important;
   border: 1px solid #6466a5 !important;
-  box-shadow: 0 0 0 1px rgba(101, 39, 135, 0.5);
-  box-shadow: 0 0 0 1px rgba(101, 39, 135, 0.5), 0 0 2px 2px #202;
+  box-shadow: 0 0 0 1px rgba(101, 39, 135, .5);
+  box-shadow: 0 0 0 1px rgba(101, 39, 135, .5), 0 0 2px 2px #202;
   background: #000;
   transition: filter ease 0.3s;
 }
