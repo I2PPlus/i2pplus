@@ -45,7 +45,7 @@ body, button, input, input[type=text], input[type=password], select, #debug .skm
 
 button, input, input[type=text], input[type=password], select {
   font-size: 9pt;
-  font-weight: bold;
+  font-weight: 700;
 }
 
 body {
@@ -124,7 +124,7 @@ div.app, .sitemaplink, #sitemapcontainer {
 a:link, a:visited {
   word-wrap: break-word;
   text-decoration: none;
-  font-weight: bold;
+  font-weight: 700;
   color: #494;
 }
 
@@ -617,7 +617,7 @@ pre {
 .sb_notice {
   margin: -5px -8px -7px;
   padding: 8px;
-  font-weight: bold;
+  font-weight: 700;
   box-shadow: var(--highlight), inset 0 0 2px 1px #040, 0 0 0 1px #030;
   background: #010;
 }
@@ -746,7 +746,7 @@ div.refresh {
   padding: 2px 8px;
   display: inline-block;
   font-size: 110%;
-  font-weight: bold;
+  font-weight: 700;
   color: #050;
   text-shadow: none;
   border: var(--softborder);
@@ -799,7 +799,7 @@ div.refresh {
 
 .percentBarText {
   width: 100%;
-  font-weight: bold;
+  font-weight: 700;
   text-align: center;
   vertical-align: middle;
   float: left;
@@ -1101,7 +1101,7 @@ div.news li {
   text-transform: capitalize;
   color: #494;
   font-size: 9.5pt;
-  font-weight: bold;
+  font-weight: 700;
   border-bottom: 1px dotted #252;
 }
 
@@ -1209,7 +1209,7 @@ div.widescroll { /* only scroll content, not entire page eg /peers */
 .confignav {
   margin: -1px -11px -1px;
   padding: 7px 7px 8px !important;
-  font-weight: bold !important;
+  font-weight: 700 !important;
   line-height: 136% !important;
   text-align: center;
   box-shadow: var(--highlight);
@@ -1304,7 +1304,7 @@ div.messages {
   margin: 12px 0 -1px 0;
   padding: 20px 10px 20px 50px;
   border: var(--border);
-  font-weight: bold;
+  font-weight: 700;
   font-size: 9.5pt;
   box-shadow: var(--highlight), inset 0 0 2px 0 #393 !important;
   background: #000;
@@ -1355,7 +1355,7 @@ div.messages li {
   margin: 0 5px 0 0 !important;
   padding: 0 10px 0 0 !important;
   text-align: justify !important;
-  font-weight: bold;
+  font-weight: 700;
   list-style: none !important;
   border: 0 !important;
 }
@@ -1546,7 +1546,7 @@ form[action="updategraphs"] {
   width: 10%;
   white-space: nowrap;
   padding: 13px 3px 13px 15px;
-  font-weight: bold;
+  font-weight: 700;
 }
 
 #graphs td:nth-child(2) {
@@ -1992,7 +1992,7 @@ button, button:visited {
   min-width: 75px;
   vertical-align: middle;
   text-align: center;
-  font-weight: bold;
+  font-weight: 700;
   font-size: 9pt;
   text-decoration: none;
   color: #494;
@@ -2329,7 +2329,7 @@ label.disabled {
 input[type=file] {
   margin: 5px 8px;
   padding: 0 !important;
-  font-weight: normal;
+  font-weight: 400;
   color: #ee9;
   box-shadow: none;
   border: none !important;
@@ -2490,7 +2490,7 @@ input[type=text]:focus, input[type=password]:focus {
 input[readonly]:focus {
   filter: none !important;
   color: #161 !important;
-  font-weight: normal;
+  font-weight: 400;
 }
 
 #consolepass input[name="name"], #externali2cp input[name="user"] {
@@ -2521,7 +2521,7 @@ textarea#advancedsettings:focus {
 
 textarea[readonly]:focus {
   box-shadow: inset 0 0 3px 3px #000;
-  font-weight: normal;
+  font-weight: 400;
 }
 
 input[type=submit], input[type=reset], select, button {
@@ -2666,7 +2666,7 @@ h3#scheduledjobs + ol li::before, #scheduledjobs + ol li::before {
 }
 
 .joblog table td:first-child {
-  font-weight: bold;
+  font-weight: 700;
 }
 
 .joblog p {
@@ -2755,13 +2755,13 @@ h3[id*="jobs"] {
 }
 
 #jobstats tr:last-child {
-  font-weight: bold;
+  font-weight: 700;
 }
 
 #schedjobs th:first-child, #jobstats th:first-child, #jobstats td:first-child {
   padding-left: 10px;
   text-align: left;
-  font-weight: bold;
+  font-weight: 700;
 }
 
 #schedjobs td:first-child {
@@ -2909,7 +2909,7 @@ ul.statlist li li:last-child::before {
 
 .statsLongName {
   line-height: 120%;
-  font-weight: bold;
+  font-weight: 700;
   color: #dd0;
 }
 
@@ -3101,7 +3101,7 @@ h3[id="udpcon"] {
 }
 
 #udpconnections table i {
-  font-weight: bold;
+  font-weight: 700;
   line-height: 150%;
   letter-spacing: .1em;
 }
@@ -3154,7 +3154,7 @@ h3[id="udpcon"] {
 }
 
 #ntcpconnections td[class="cells"]:last-child {
-  font-weight: bold !important;
+  font-weight: 700 !important;
 }
 
 #ntcpconnections {
@@ -3335,7 +3335,7 @@ tr#addnew, tr#addnew:hover {
 .themechoice .optbox:checked + img ~ .themelabel {
   background: #030 !important;
   color: #ee9;
-  font-weight: bold;
+  font-weight: 700;
   box-shadow: var(--highlight), inset 0 0 2px 1px #050 !important;
 }
 
@@ -3535,7 +3535,7 @@ td#themeselect {
 
 .langselect input[name="lang"]:checked + img + div.ui_lang {
   color: #ee9;
-  font-weight: bold;
+  font-weight: 700;
   box-shadow: var(--highlight), inset 0 0 2px 1px #050 !important;
   background: #030 !important;
 }
@@ -3916,7 +3916,7 @@ form[action="events"] > .formaction {
   padding-right: 0;
   width: 170px;
   white-space: nowrap;
-  font-weight: bold;
+  font-weight: 700;
 }
 
 #addkeyring tr:last-child {
@@ -4119,7 +4119,7 @@ form > table {
 }
 
 #tunnelconfig td:first-child {
-  font-weight: bold;
+  font-weight: 700;
 }
 
 .formaction#tunnelconfigsave {
@@ -4867,7 +4867,7 @@ ul#upnphelp li:last-child, #legal ul li:last-child {
 }
 
 #portfaq th:first-child, #portfaq td:first-child {
-  font-weight: bold;
+  font-weight: 700;
   text-align: right;
 }
 
@@ -4890,7 +4890,7 @@ ul#upnphelp li:last-child, #legal ul li:last-child {
 }
 
 #portfaq td[colspan="3"] {
-  font-weight: normal;
+  font-weight: 400;
 }
 
 #portfaq td:nth-child(2) {
@@ -5083,7 +5083,7 @@ th > img[src^="/imagegen"], .identicon { /* scale down header images */
   padding-right: 0;
   text-align: right;
   white-space: nowrap;
-  font-weight: bold;
+  font-weight: 700;
 }
 
 #netdblookup td:nth-child(even) {
@@ -5260,7 +5260,7 @@ th > img[src^="/imagegen"], .identicon { /* scale down header images */
 
 .netdb_leases .tunnel_peer tt, .netdb_leases .tunnel_peer tt {
   font-size: 8.5pt !important;
-  font-weight: bold !important;
+  font-weight: 700 !important;
 }
 
 .netdb_leases .tunnel_peer tt, .netdb_leases .tunnel_peer a {
@@ -5273,11 +5273,11 @@ th > img[src^="/imagegen"], .identicon { /* scale down header images */
   min-width: 40px;
   display: inline-block;
   line-height: 150%;
-  font-weight: bold;
+  font-weight: 700;
 }
 
 .main li .netdb_expiry {
-  font-weight: normal;
+  font-weight: 400;
   text-transform: lowercase;
   font-style: italic;
 }
@@ -6108,7 +6108,7 @@ span#distance {
 .netdbentry th {
   padding: 5px 6px;
   text-align: left;
-  font-weight: normal;
+  font-weight: 400;
 }
 
 .netdbentry th:last-child {
@@ -6250,7 +6250,7 @@ span#distance {
 }
 
 .unbold {
-  font-weight: normal !important;
+  font-weight: 400 !important;
 }
 
 #leasesetdebug, #leasesetsummary {
@@ -6261,7 +6261,7 @@ span#distance {
   padding: 3px 5px;
   position: static;
   text-align: left;
-  font-weight: normal;
+  font-weight: 400;
 }
 
 .leaseset th:last-child, .leaseset td:nth-child(2) {
@@ -6343,7 +6343,7 @@ span#distance {
   word-spacing: .1em;
   letter-spacing: .08em;
   font-size: 10pt;
-  font-weight: bold;
+  font-weight: 700;
   text-transform: uppercase;
 }
 
@@ -6515,7 +6515,7 @@ span#distance {
 p.sybil_info, p.family, p.threatpoints, p.hashdist, p#sybil_totals, p.notfound {
   margin: 3px 0;
   padding: 5px 5px 5px 33px;
-  font-weight: bold;
+  font-weight: 700;
   color: #cc0;
   border: var(--border);
   box-shadow: inset 0 0 0 1px #300;
@@ -6571,7 +6571,7 @@ p.family a:hover {
 }
 
 p#sybil_totals {
-  font-weight: normal;
+  font-weight: 400;
 }
 
 p.family + p.family, p.sybil_info + p.sybil_info {
@@ -6743,7 +6743,7 @@ textarea#advancedsettings {
   padding: 15px 15px 15px 50px !important;
   line-height: 130% !important;
   white-space: normal !important;
-  font-weight: normal !important;
+  font-weight: 400 !important;
   text-align: justify;
   border-bottom: var(--border);
   border-top: var(--border);
@@ -7839,12 +7839,12 @@ th code {
 }
 
 #netdb code {
-  font-weight: normal !important;
+  font-weight: 400 !important;
 }
 
 .netdb_name {
   text-transform: capitalize;
-  font-weight: bold;
+  font-weight: 700;
   color: #ee9;
 }
 
@@ -7946,7 +7946,7 @@ th code {
 
 .sybil_addresses td:first-child {
   max-width: 155px;
-  font-weight: bold;
+  font-weight: 700;
   padding-right: 9px;
 }
 
@@ -8134,11 +8134,11 @@ th code {
 
 .debug_version {
   color: #aa0;
-  font-weight: bold;
+  font-weight: 700;
 }
 
 #portmapper td:first-child, #sockets td:first-child {
-  font-weight: bold;
+  font-weight: 700;
 }
 
 #portmapper th:last-child, #portmapper td:last-child, #sockets td:last-child {
@@ -8304,7 +8304,7 @@ th code {
   padding-right: 8px !important;
   white-space: nowrap;
   text-align: right !important;
-  font-weight: bold;
+  font-weight: 700;
   font-style: italic;
 }
 
@@ -8435,7 +8435,7 @@ th code {
 
 _:-ms-lang(x), .tunnels_client th:first-child::after {
   letter-spacing: -.05em;
-  font-weight: normal;
+  font-weight: 400;
 }
 
 /* end Edge/IE tweaks */
@@ -8509,7 +8509,7 @@ th.options, #externali2cp th {
   margin: -2px 0 -2px 0;
   padding: 2px 5px;
   display: inline-block;
-  font-weight: bold;
+  font-weight: 700;
   text-transform: uppercase;
   border-radius: 2px;
   background: #030;
@@ -8524,7 +8524,7 @@ th.options, #externali2cp th {
 #graphs td:first-child {
   padding: 5px 0 0;
   text-align: left;
-  font-weight: normal;
+  font-weight: 400;
 }
 
 #graphs td b {
@@ -8851,7 +8851,7 @@ b.suboption {
 }
 
 .net_bwrate {
-  font-weight: bold;
+  font-weight: 700;
   font-size: 110%;
   display: inline-block;
   padding: 2px;
@@ -8884,7 +8884,7 @@ b.suboption {
 .bw_title {
   display: block;
   text-align: left;
-  font-weight: bold;
+  font-weight: 700;
   font-size: 11pt;
   margin: 2px -13px 0 -38px;
   padding: 2px 5px 4px;
@@ -9498,7 +9498,7 @@ input[type=file] {
   display: inline-block;
   min-width: 100px;
   text-align: left;
-  font-weight: bold;
+  font-weight: 700;
   border-radius: 2px 15px 15px 2px;
   box-shadow: 0 0 0 1px #010, 0 0 0 2px rgba(0,0,0,.7);
   background: #020 var(--plugin) 5px center no-repeat;
@@ -9537,7 +9537,7 @@ input[type=file] {
   right: 0;
   bottom: 0;
   text-align: center;
-  font-weight: bold;
+  font-weight: 700;
   font-style: italic;
   border: 1px solid #700;
   box-shadow: var(--highlight), inset 0 0 3px 1px #040, inset 0 0 0 4px #000;
@@ -9785,7 +9785,7 @@ input[type=file] {
   margin: 2px 5px 2px 7px;
   padding: 1px 4px 2px;
   font-family: -var(--bodyfont) !important;
-  font-weight: bold !important;
+  font-weight: 700 !important;
   letter-spacing: .12em;
   color: #bb0;
   text-shadow: none;
@@ -10020,7 +10020,7 @@ input[type=file] {
   padding: 1px 5px;
   display: inline-block;
   text-align: center !important;
-  font-weight: bold;
+  font-weight: 700;
   box-shadow: 0 0 0 1px #000;
   background: #020;
   background: var(--element) !important;
@@ -10288,7 +10288,7 @@ input[type=file] {
   padding: 20px 20px 0;
   width: calc(100% - 45px);
   line-height: 20px;
-  letter-spacing: 0.05em;
+  letter-spacing: .05em;
   text-shadow: 0 1px 1px #000;
   border-left: 5px solid #030;
   background: repeating-linear-gradient(to bottom, rgba(0,8,0,.6) 0, rgba(0,8,0,.6) 20px, rgba(0,20,0,.6) 20px, rgba(0,20,0,.6) 40px);
@@ -10442,7 +10442,7 @@ h3 .b32 {
 #embedurl {
   margin-bottom: 10px;
   padding: 10px;
-  font-weight: bold;
+  font-weight: 700;
   text-align: center;
   border: var(--border);
   background: #000;
@@ -10700,7 +10700,7 @@ a:hover .tier, a:focus .tier {
 /* logs */
 
 #logs pre, #logs li {
-  font-weight: bold;
+  font-weight: 700;
 }
 
 #criticallogs + .tabletitle {
@@ -10745,7 +10745,7 @@ a:hover .tier, a:focus .tier {
 
 #logs #enviro td {
   padding: 7px 10px;
-  font-weight: normal !important;
+  font-weight: 400 !important;
   border-right: 1px inset #131;
   box-shadow: var(--highlight);
 }
@@ -10764,7 +10764,7 @@ a:hover .tier, a:focus .tier {
 
 #criticallogs td , #routerlogs td, #eventlogs td, #wrapperlogs td {
   padding: 5px 10px;
-  font-weight: normal !important;
+  font-weight: 400 !important;
   border-top: var(--border);
 }
 
@@ -11158,7 +11158,7 @@ a[href^="/netdb"]:hover span {
 
 #debug .skm_key td:first-child, .debug_pubkey, .debug_sesskey {
   font-family: var(--monospaced);
-  font-weight: bold;
+  font-weight: 700;
   color: #bb0 !important;
 }
 
@@ -11191,7 +11191,7 @@ a[href^="/netdb"]:hover span {
   display: inline-block;
   float: left;
   font-size: 95%;
-  font-weight: bold;
+  font-weight: 700;
   color: #000;
   border-radius: 2px;
   background: #770;
@@ -11273,7 +11273,7 @@ h1[class], h1 {
   letter-spacing: .15em;
   text-transform: uppercase;
   text-align: left;
-  font-weight: bold;
+  font-weight: 700;
   font-style: normal;
   text-shadow: 0 0 1px #000, 0 0 2px #040, 0 0 3px #000;
   border-radius: 3px 3px 0 0;
@@ -11528,7 +11528,7 @@ h1[class], h1 {
 }
 
 .jobcount {
-  font-weight: normal;
+  font-weight: 400;
   font-size: 85%;
 }
 
@@ -11956,7 +11956,7 @@ p#gatherstats {
 .statvalue {
   padding: 0 2px 0 0;
   color: #ee9;
-  font-weight: bold;
+  font-weight: 700;
   font-style: italic;
 }
 
@@ -12012,7 +12012,7 @@ p#gatherstats {
 #filterlist .example {
   margin-right: 2px;
   color: #dd0;
-  font-weight: bold;
+  font-weight: 700;
 }
 
 #pageloader {
@@ -12037,7 +12037,7 @@ p#gatherstats {
   padding-left: 20px;
   width: 1%;
   white-space: nowrap;
-  font-weight: bold;
+  font-weight: 700;
 }
 
 #webhosting ul {
@@ -12058,7 +12058,7 @@ p#gatherstats {
 }
 
 #webhosting i {
-  font-weight: bold;
+  font-weight: 700;
 }
 
 i {
@@ -12071,7 +12071,7 @@ i {
   position: relative;
   letter-spacing: .1em;
   font-size: 18pt;
-  font-weight: bold;
+  font-weight: 700;
   color: #ffa;
   text-shadow: 0 0 1px #000;
   box-shadow: var(--highlight), inset 0 0 1px 1px #050;
@@ -12680,7 +12680,7 @@ h3 + table {
 }
 
 .unbold {
-  font-weight: normal;
+  font-weight: 400;
 }
 
 #sb_graphcontainer {

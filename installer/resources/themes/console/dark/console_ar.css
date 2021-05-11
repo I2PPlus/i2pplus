@@ -118,7 +118,7 @@ input.search, input.search:focus {
 
 .routersummary h3, .routersummary h4, .routersummary a, .routersummary b {
   text-align: center;
-  font-weight: normal;
+  font-weight: 400;
 }
 
 .routersummary h3 {
@@ -558,7 +558,7 @@ a.viewfullentry::after, a[href^="viewprofile"]::after {
 
 .sb_newsheadings td a {
   font-size: 9pt !important;
-  font-weight: bold;
+  font-weight: 700;
 }
 
 .percentBarOuter {
@@ -577,7 +577,7 @@ a.viewfullentry::after, a[href^="viewprofile"]::after {
 
 .main#console .twocol {
   margin: 15px 35px 5px 0 !important;
-  background: rgba(0, 32, 0, 0.5);
+  background: rgba(0, 32, 0, .5);
   border-radius: 3px;
   padding-top: 10px;
   padding-bottom: 10px;

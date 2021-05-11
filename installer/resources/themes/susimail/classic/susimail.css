@@ -83,7 +83,7 @@ p.hl {
   font-size: 12pt;
   letter-spacing: 2pt;
   line-height: 18pt;
-  font-weight: bold;
+  font-weight: 700;
 }
 
 p.text {
@@ -101,7 +101,7 @@ p.error, p.info {
   margin: -1px -11px;
   box-shadow: inset 0 0 0 1px #fff;
   display: block;
-  font-weight: bold;
+  font-weight: 700;
   line-height: 120%;
 }
 
@@ -199,31 +199,31 @@ td#attachedfile {
 a:link {
   color: #6b6b94;
   text-decoration: none;
-  font-weight: bold;
+  font-weight: 700;
   word-wrap: break-word;
 }
 
 #mailbox a {
-  opacity: 0.85;
+  opacity: .85;
 }
 
 a:visited {
   color: #575779;
   text-decoration: none;
-  font-weight: bold;
+  font-weight: 700;
 }
 
 a:hover, a:focus {
   color: #f60;
   text-decoration: none;
-  font-weight: bold;
+  font-weight: 700;
   outline: none;
 }
 
 a:active {
   color: #f93;
   text-decoration: none;
-  font-weight: bold;
+  font-weight: 700;
 }
 
 a.linkspam {
@@ -379,7 +379,7 @@ td.mailListDelete, td.mailListFlagged, td.mailListAttachment {
 }
 
 #mailbox td:nth-child(3) a {
-  font-weight: normal;
+  font-weight: 400;
 }
 
 #mailbox tr:hover td:nth-child(3) a {
@@ -419,7 +419,7 @@ img.sort {
   vertical-align: middle;
   border-radius: 2px;
   box-shadow: inset 0 0 0 1px #414960;
-  opacity: 0.6;
+  opacity: .6;
   background: #fff;
 }
 
@@ -428,7 +428,7 @@ img.sort {
 }
 
 #newmail td:first-child {
-  font-weight: bold;
+  font-weight: 700;
   padding-right: 10px;
 }
 
@@ -469,7 +469,7 @@ table {
 
 th {
   font-size: 10pt;
-  font-weight: bold;
+  font-weight: 700;
 }
 
 form {
@@ -538,7 +538,7 @@ input[type=text], input[type=password], textarea {
 
 input[type=submit], #settings {
   margin: 3px;
-  font-weight: normal !important;
+  font-weight: 400 !important;
 }
 
 input.new_upload, input.delete_attachment {
@@ -602,7 +602,7 @@ button:active, input[type=submit]:active, input[type="reset"]:active, #settings:
 input[disabled][type=submit], input[disabled][type=submit]:hover, input[disabled][type=submit]:active {
   border: 1px solid #bbb;
   background: linear-gradient(to bottom, #fff, #eef);
-  opacity: 0.3;
+  opacity: .3;
   filter: none;
   pointer-events: none;
 }
@@ -735,7 +735,7 @@ input.reload, input.refresh, .fakebutton {
 .fakebutton, .fakebutton:visited {
   padding-left: 24px;
   line-height: 1.3;
-  font-weight: normal !important;
+  font-weight: 400 !important;
   color: #333;
 }
 
@@ -1031,7 +1031,7 @@ div#composemail {
   width: 20px;
   text-align: right;
   padding-left: 10px;
-  font-weight: bold;
+  font-weight: 700;
 }
 
 /* login panel */
@@ -1060,7 +1060,7 @@ div#composemail {
 
 #dologin input[type=text] {
   text-align: left !important;
-  font-weight: normal;
+  font-weight: 400;
 }
 
 #dologin input[name="user"] {
@@ -1088,7 +1088,7 @@ div#composemail {
 
 #dologin td {
   padding: 3px;
-  font-weight: bold !important;
+  font-weight: 700 !important;
   color: #41444d;
 }
 
@@ -1121,7 +1121,7 @@ div#composemail {
   font-size: 14pt;
   text-align: left;
   letter-spacing: .08em;
-  word-spacing: 0.1em;
+  word-spacing: .1em;
   box-shadow: inset 0 0 0 1px #fff;
 }
 
@@ -1149,7 +1149,7 @@ div#composemail {
   display: inline-block;
   font-size: 90%;
   border: 1px solid rgba(255,255,255,0);
-  border: 1px solid rgba(119, 120, 159, 0.3);
+  border: 1px solid rgba(119, 120, 159, .3);
   border-radius: 25px;
   box-shadow: 0 0 1px rgba(255,255,255,0);
   background: #efefff;
@@ -1159,7 +1159,7 @@ div#composemail {
 
 #dologin tr:last-child a:hover {
   border: 1px solid #77789f;
-  border: 1px solid rgba(119, 120, 159, 0.5);
+  border: 1px solid rgba(119, 120, 159, .5);
   background: #f2f2ff;
   background: linear-gradient(to bottom, #fafaff 50%, #e8e8ff 50%) #f2f2ff;
   box-shadow: 0 0 1px #ccf;
@@ -1167,12 +1167,12 @@ div#composemail {
 }
 
 #dologin tr:last-child a:active {
-  border: 1px solid rgba(119, 120, 159, 0.3);
+  border: 1px solid rgba(119, 120, 159, .3);
   background: #e2e2ff;
   background: linear-gradient(to bottom, #eaeaff 50%, #d9d9ff 50%);
   box-shadow: inset 3px 3px 3px #779;
   transition: ease all 0.1s;
-  color: rgba(65, 70, 95, 0.8) !important;
+  color: rgba(65, 70, 95, .8) !important;
   color: #99a5df !important;
 }
 
@@ -1311,7 +1311,7 @@ table#pagenav td {
   padding: 6px 3px 4px;
   white-space: nowrap;
   text-align: center;
-  font-weight: bold;
+  font-weight: 700;
   font-size: 10pt;
 }
 
@@ -1403,7 +1403,7 @@ tr:hover .listclock {
 
 .listTime {
   min-width: 58px;
-  opacity: 0.85;
+  opacity: .85;
 }
 
 /* end mail list date */
@@ -1447,9 +1447,9 @@ img.sort {
 .pagenavcontrols td:nth-child(2) {
   width: 1%;
   white-space: nowrap;
-  font-weight: bold;
+  font-weight: 700;
   font-size: 140% !important;
-  opacity: 0.7;
+  opacity: .7;
 }
 
 #info {
@@ -1489,12 +1489,12 @@ img.sort {
   padding: 2px;
   min-width: 64px;
   text-align: right;
-  font-weight: bold;
-  opacity: 0.8;
+  font-weight: 700;
+  opacity: .8;
 }
 
 tr:hover .listDate {
-  opacity: 0.9;
+  opacity: .9;
 }
 
 .listDate span {
@@ -1508,7 +1508,7 @@ tr:hover .listDate {
 .listTime {
   min-width: 40px;
   text-align: left;
-  opacity: 0.85;
+  opacity: .85;
 }
 
 /* custom radios/checkboxes to enforce color scheme when OS widgets are non-standard  */
@@ -1530,7 +1530,7 @@ input[type=radio], input[type=radio]:checked, input[type=radio][disabled], input
 
 input[type=checkbox], input[type=checkbox]:checked, input[type=checkbox][disabled], input[type=checkbox][disabled]:checked {
   border-radius: 2px;
-  box-shadow: inset 1px 1px 1px rgba(204, 204, 204, 0.6);
+  box-shadow: inset 1px 1px 1px rgba(204, 204, 204, .6);
 }
 
 input[type=radio], input[type=radio]:checked, input[type=radio][disabled], input[type=radio][disabled]:checked {
@@ -1545,7 +1545,7 @@ input[type=checkbox]:not(:checked)::before, input[type=radio]:not(:checked)::bef
 }
 
 .optbox:not(:checked) {
-  box-shadow: inset 2px 2px 1px rgba(204, 204, 240, 0.6);
+  box-shadow: inset 2px 2px 1px rgba(204, 204, 240, .6);
 }
 
 input[type=checkbox]:checked::before {
@@ -1590,7 +1590,7 @@ input[type=checkbox][disabled], input[type=radio][disabled], input[type=checkbox
 input[type=checkbox][disabled]:checked, input[type=radio][disabled]:checked, input[type=checkbox][disabled]:checked:hover, input[type=radio][disabled]:checked:hover {
   filter: none !important;
   box-shadow: none !important;
-  opacity: 0.5;
+  opacity: .5;
 }
 }
 
@@ -1618,7 +1618,7 @@ input[type=checkbox][disabled]:checked, input[type=radio][disabled]:checked, inp
   margin: 0;
   padding: 35px 20px 20px;
   text-align: center;
-  font-weight: bold;
+  font-weight: 700;
   font-style: italic;
   color: #900;
   border: 1px solid #700;
@@ -1666,7 +1666,7 @@ input[type=checkbox][disabled]:checked, input[type=radio][disabled]:checked, inp
   white-space: pre-wrap;
   line-height: 130%;
   font-size: 9.5pt;
-  opacity: 0.9;
+  opacity: .9;
 }
 
 @media screen and (max-width: 1500px) {

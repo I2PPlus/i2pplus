@@ -104,7 +104,7 @@ p.hl {
   font-size: 12pt;
   letter-spacing: 2pt;
   line-height: 18pt;
-  font-weight: bold;
+  font-weight: 700;
 }
 
 p.text {
@@ -129,7 +129,7 @@ p.error {
   display: block !important;
   word-wrap: break-word;
   text-align: justify;
-  font-weight: bold;
+  font-weight: 700;
   color: #f33;
   border: 1px solid #652787;
   border-radius: 2px;
@@ -181,7 +181,7 @@ p.mailbody {
 div.topbuttons {
   margin: -1px -1px -10px -1px;
   padding: 7px 0 8px !important;
-  font-weight: bold;
+  font-weight: 700;
   border: 1px solid #27235c;
   border-radius: 2px 2px 0 0;
   background: #000010;
@@ -266,7 +266,7 @@ td.mailListSize {
 
 #mailbox th {
   padding: 8px 8px 8px 3px;
-  font-weight: bold !important;
+  font-weight: 700 !important;
   font-size: 8.5pt;
   font-size: 9pt;
   white-space: nowrap;
@@ -357,7 +357,7 @@ tr.bottombuttons:last-child td {
 a:link {
   color: #7171d1;
   text-decoration: none;
-  font-weight: bold;
+  font-weight: 700;
 }
 
 a:hover, a:visited:hover {
@@ -442,7 +442,7 @@ td.mailListSender {
 
 .mailListSender a, .mailListDate, .mailListSize {
   color: #c9ceff !important;
-  font-weight: normal !important;
+  font-weight: 400 !important;
 }
 
 img.sort {
@@ -450,7 +450,7 @@ img.sort {
   max-width: 10px !important;
   vertical-align: middle;
   font-size: 0;
-  opacity: 0.6;
+  opacity: .6;
   border: 1px solid #26225c;
   border-radius: 2px;
 }
@@ -477,7 +477,7 @@ tr.bottombuttons td {
 }
 
 td:first-child {
-  font-weight: bold;
+  font-weight: 700;
 }
 
 pre {
@@ -501,7 +501,7 @@ table {
 
 th {
   font-size: 9pt;
-  font-weight: bold;
+  font-weight: 700;
   background: #001;
   background: linear-gradient(to bottom, #080818, #001) !important;
   padding: 7px;
@@ -551,7 +551,7 @@ td#attachedfile {
 
 #mailhead {
   font-size: 9pt;
-  font-weight: bold;
+  font-weight: 700;
   background: #002;
   border: 1px solid #27235c;
   border-left: none;
@@ -570,7 +570,7 @@ td#attachedfile {
 }
 
 #mailhead td:last-child {
-  font-weight: normal;
+  font-weight: 400;
 }
 
 #composemail {
@@ -696,12 +696,12 @@ input[name="user"], input[name="pass"] {
 input[name="user"]:focus, input[name="pass"]:focus, input[type=text]:focus, textarea:focus {
   color: #c9ceff;
   border: 1px solid #6466a5 !important;
-  box-shadow: 0 0 0 1px rgba(101, 39, 135, 0.5);
-  box-shadow: 0 0 0 1px rgba(101, 39, 135, 0.5), 0 0 2px 2px #202;
+  box-shadow: 0 0 0 1px rgba(101, 39, 135, .5);
+  box-shadow: 0 0 0 1px rgba(101, 39, 135, .5), 0 0 2px 2px #202;
 }
 
 input::placeholder {
-  opacity: 0.7;
+  opacity: .7;
   font-style: italic;
 }
 
@@ -769,7 +769,7 @@ input.delete {
   font-size: 14pt;
   text-align:left;
   letter-spacing:.08em;
-  word-spacing: 0.1em;
+  word-spacing: .1em;
   text-shadow: 0 1px 1px #000;
   border: 1px solid #211e51;
   box-shadow: var(--highlight);
@@ -813,7 +813,7 @@ input.delete {
   background: rgba(0,0,68,.8);
   box-shadow: 0 1px 0 1px rgba(0,0,0,.6);
   margin: 10px 0 7px;
-  opacity: 0.5;
+  opacity: .5;
 }
 
 #dologin tr:last-child hr {
@@ -865,7 +865,7 @@ h3#config {
   font-size: 10pt;
   text-transform: uppercase;
   letter-spacing: .08em;
-  word-spacing: 0.1em;
+  word-spacing: .1em;
   background: #020017;
   border-radius: 0 0 2px 2px;
   background: linear-gradient(to right, rgba(0,0,16,0), rgba(16,0,16,0), rgba(0,0,16,0)), linear-gradient(to bottom, #191729 50%, #001 50%) !important;
@@ -938,7 +938,7 @@ div#emptymailbox {
   padding: 5px 10px;
   width: 1%;
   white-space: nowrap;
-  font-weight: bold;
+  font-weight: 700;
 }
 
 .pagenav {
@@ -1374,7 +1374,7 @@ input.prev:hover, input[name="next"]:hover, input.prev[disabled]:hover, input[na
 
 input[type=submit][disabled], input[type=submit][disabled]:hover, input[type=submit][disabled]:focus, input[type=submit][disabled]:active {
   padding: 5px 15px !important;
-  opacity: 0.5;
+  opacity: .5;
   box-shadow: none;
   cursor: default;
   mix-blend-mode: luminosity;
@@ -1532,7 +1532,7 @@ input[type=checkbox]:hover, input[type=radio]:hover, input[type=checkbox]:focus,
   width: 19px !important;
   height: 19px !important;
   border: 1px solid #6466a5 !important;
-  box-shadow: 0 0 0 1px rgba(101, 39, 135, 0.5), 0 0 2px 2px #202 !important;
+  box-shadow: 0 0 0 1px rgba(101, 39, 135, .5), 0 0 2px 2px #202 !important;
   filter: drop-shadow(0 0 1px #202) !important;
 }
 
@@ -1541,7 +1541,7 @@ input[type=checkbox][disabled]:checked, input[type=radio][disabled]:checked, inp
   border: 1px solid #4f4b87 !important;
   box-shadow: none !important;
   background: #000;
-  opacity: 0.5 !important;
+  opacity: .5 !important;
   filter: none !important;
 }
 }
@@ -1571,7 +1571,7 @@ input[type=checkbox][disabled]:checked, input[type=radio][disabled]:checked, inp
 
 .listTime {
   min-width: 42px;
-  opacity: 0.85;
+  opacity: .85;
 }
 
 /* end timedate */
@@ -1580,7 +1580,7 @@ input[type=checkbox][disabled]:checked, input[type=radio][disabled]:checked, inp
   margin: 7px 0 2px 4px !important;
   padding: 6px 10px;
   display: inline-block;
-  font-weight: bold;
+  font-weight: 700;
   text-shadow: 0 1px 1px #000;
   border-radius: 3px;
   box-shadow: var(--highlight);
@@ -1614,7 +1614,7 @@ select {
 }
 
 select option {
-  font-weight: normal;
+  font-weight: 400;
   font-size: 9.5pt !important;
   color: #000;
   box-shadow: inset 0 0 20px 20px #000;
@@ -1681,7 +1681,7 @@ select:hover, select:focus, select:active {
   border: 1px solid #27235c;
   background: url(/themes/snark/light/images/delete.png) right 24px top 4px no-repeat #113;
   background-size: 14px 14px !important;
-  opacity: 0.9;
+  opacity: .9;
   background-blend-mode: luminosity;
   cursor: crosshair;
   animation: 2s hide-up 10s ease-out forwards;
@@ -1720,8 +1720,8 @@ to {
 
 .notifications p {
   letter-spacing: .07em;
-  word-spacing: 0.2em;
-  font-weight: bold;
+  word-spacing: .2em;
+  font-weight: 700;
   animation: fade-in 1s linear;
 }
 

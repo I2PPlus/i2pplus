@@ -49,7 +49,7 @@ textarea:hover, textarea:focus {
 
 ::selection {
   background: #22296f !important;
-  background: rgba(34, 41, 111, 0.9) !important;
+  background: rgba(34, 41, 111, .9) !important;
   color: white;
 }
 
@@ -84,7 +84,7 @@ div#navi  {
   top: -1px;
   z-index: 999;
   text-align: center !important;
-  font-weight: bold;
+  font-weight: 700;
   font-size: 9pt;
   border-bottom: 1px solid #26235c;
   box-shadow: var(--highlight);
@@ -236,7 +236,7 @@ div#filter + div#search > form {
 
 #filter p, #search td {
   font-size: 9pt !important;
-  font-weight: bold;
+  font-weight: 700;
 }
 
 td.search > * {
@@ -371,12 +371,12 @@ h3 {
   padding: 7px 10px;
   color: #c9ceff;
   font-size: 10pt;
-  font-weight: bold;
+  font-weight: 700;
   border: 1px solid #26235c;
   border-radius: 2px;
   background: var(--title) !important;
   letter-spacing: .08em;
-  word-spacing: 0.1em;
+  word-spacing: .1em;
   text-shadow: 0 0 2px #010011;
   text-transform: uppercase;
   box-shadow: var(--highlight);
@@ -450,7 +450,7 @@ div#book p {
 h4 {
   font-size: 9pt;
   margin-top: -15px;
-  word-spacing: 0.1em;
+  word-spacing: .1em;
   border: 1px solid #26235c;
   padding: 8px 10px;
   margin-bottom: 30px !important;
@@ -469,7 +469,7 @@ div#messages > p.messages {
 a:link {
   color: #7171d1;
   text-decoration: none;
-  font-weight: bold;
+  font-weight: 700;
   outline: none;
 }
 
@@ -502,7 +502,7 @@ th {
 }
 
 table.book td:first-child {
-  font-weight: bold;
+  font-weight: 700;
 }
 
 td {
@@ -974,7 +974,7 @@ input {
   padding: 4px !important;
   font: bold 9pt var(--bodyfont);
   font-size: 9pt;
-  font-weight: bold;
+  font-weight: 700;
   text-align: left;
   color: #4e47bf;
   border: 1px solid #26225d;
@@ -1072,7 +1072,7 @@ textarea, #subslog pre {
   width: calc(100% - 17px) !important;
   height: auto;
   white-space: pre-wrap;
-  font-weight: normal;
+  font-weight: 400;
   color: #c9ceff;
   background: #000 !important;
 }
@@ -1094,8 +1094,8 @@ textarea:focus::placeholder {
 input[type=text]:focus, textarea[name="destination"]:focus {
   color: #c9ceff !important;
   border: 1px solid #6466a5 !important;
-  box-shadow: 0 0 0 1px rgba(101, 39, 135, 0.5);
-  box-shadow: 0 0 0 1px rgba(101, 39, 135, 0.5), 0 0 2px 2px #202;
+  box-shadow: 0 0 0 1px rgba(101, 39, 135, .5);
+  box-shadow: 0 0 0 1px rgba(101, 39, 135, .5), 0 0 2px 2px #202;
   background: #000;
   transition: filter ease 0.3s;
 }
@@ -1161,7 +1161,7 @@ input.export {
 
 .headline h3, h3 {
   padding: 10px 5px 10px 34px;
-  word-spacing: 0.1em;
+  word-spacing: .1em;
   letter-spacing: .08em;
   text-transform: uppercase;
   font-size: 11pt;
@@ -1226,7 +1226,7 @@ p.book {
   min-width: 10px !important;
   white-space: nowrap;
   text-align: right;
-  font-weight: bold;
+  font-weight: 700;
   border-right: 1px solid #17142f;
 }
 
@@ -1287,7 +1287,7 @@ p.book {
   padding: 4px 10px;
   font-family: var(--bodyfont);
   font-size: inherit !important;
-  font-weight: normal;
+  font-weight: 400;
   color: #c9ceff !important;
   border: none;
   box-shadow: none;
@@ -1381,7 +1381,7 @@ td.names:hover, #host_list td.b32link:hover, #host_list td.helper:hover, #host_l
 #host_list .checkbox {
   width: 16px;
   white-space: nowrap;
-  font-weight: bold;
+  font-weight: 700;
 }
 
 #host_list .b32link, #host_list .helper {
@@ -1421,7 +1421,7 @@ td.names:hover, #host_list td.b32link:hover, #host_list td.helper:hover, #host_l
   overflow: hidden !important;
   text-overflow: ellipsis;
   font-family: var(--monospaced) !important;
-  font-weight: normal;
+  font-weight: 400;
   text-shadow: 0 1px 1px #000;
   opacity: .7;
   -moz-user-select: all;
@@ -1633,7 +1633,7 @@ input[type=checkbox][disabled]:checked, input[type=radio][disabled]:checked, inp
 /* end custom radios/checkboxes */
 
 input::placeholder {
-  font-weight: normal;
+  font-weight: 400;
   font-style: italic;
   color: #c9ceff;
   opacity: .7;
@@ -1719,7 +1719,7 @@ input#exporthosts:active {
 }
 
 #activefilter, .selected {
-  font-weight: bold;
+  font-weight: 700;
   color: #999;
   box-shadow: var(--highlight), inset 2px 2px 2px rgba(0,0,0,.9) !important;
 }

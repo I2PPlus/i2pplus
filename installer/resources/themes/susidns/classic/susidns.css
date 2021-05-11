@@ -236,7 +236,7 @@ p {
 h3 {
   color: #41444d;
   font-size: 11pt;
-  font-weight: bold;
+  font-weight: 700;
   border: 1px solid #aaafce;
   margin: -1px -11px 10px;
   padding: 5px 10px;
@@ -259,7 +259,7 @@ h4 {
 a {
   color: #6b6b94;
   text-decoration: none;
-  font-weight: bold;
+  font-weight: 700;
 }
 
 a:visited {
@@ -333,7 +333,7 @@ p.footer {
   left: -24px;
   border: none;
   background: none;
-  opacity: 0.3;
+  opacity: .3;
   font-size: 8pt !important;
   display: none;
 }
@@ -346,7 +346,7 @@ div#filter {
   border: 1px solid #aaafce;
   padding: 6px 10px 5px;
   margin: 11px 0 -13px !important;
-  word-spacing: 0.2em;
+  word-spacing: .2em;
   background: #fff;
   text-align: center;
   position: relative;
@@ -373,7 +373,7 @@ div#filter {
 
 #filter span a {
   line-height: 140%;
-  font-weight: normal;
+  font-weight: 400;
   color: #333 !important;
 }
 
@@ -581,7 +581,7 @@ input[type=text], input[type=password], textarea {
 input[type=text]:focus, input[type=password]:focus, textarea:focus {
   color: #000;
   box-shadow: inset 0 0 0 1px #89f;
-  box-shadow: inset 0 0 0 1px #89f, 0 0 1px rgba(136, 153, 255, 0.4);
+  box-shadow: inset 0 0 0 1px #89f, 0 0 1px rgba(136, 153, 255, .4);
 }
 
 input[type=submit]::-moz-focus-inner, input[type="reset"]::-moz-focus-inner {
@@ -784,7 +784,7 @@ textarea[name="config"], textarea[name="content"] {
 
 .headline h3 {
   padding: 10px 5px 10px 36px;
-  word-spacing: 0.1em;
+  word-spacing: .1em;
   letter-spacing: .08em;
   text-transform: uppercase;
   font-size: 12pt;
@@ -836,7 +836,7 @@ p.book {
   padding-right: 0 !important;
   width: 10%;
   white-space: nowrap;
-  font-weight: bold;
+  font-weight: 700;
   text-align: right;
 }
 
@@ -920,7 +920,7 @@ p.book {
 #host_list td.checkbox {
   width: 16px;
   white-space: nowrap;
-  font-weight: bold;
+  font-weight: 700;
 }
 
 #host_list td.b32link, #host_list td.helper {
@@ -987,7 +987,7 @@ p.book {
   white-space: nowrap;
   overflow: auto !important;
   font-family: "Droid Sans Mono", "Noto Mono", "Lucida Console", "DejaVu Sans Mono", monospace !important;
-  font-weight: normal;
+  font-weight: 400;
   color: #555;
   -webkit-user-select: all;
   -moz-user-select: all;
@@ -1108,7 +1108,7 @@ input[type=radio], input[type=radio]:checked, input[type=radio][disabled], input
 
 input[type=checkbox], input[type=checkbox]:checked, input[type=checkbox][disabled], input[type=checkbox][disabled]:checked {
   border-radius: 2px;
-  box-shadow: inset 1px 1px 1px rgba(204, 204, 204, 0.6);
+  box-shadow: inset 1px 1px 1px rgba(204, 204, 204, .6);
 }
 
 input[type=radio], input[type=radio]:checked, input[type=radio][disabled], input[type=radio][disabled]:checked {
@@ -1123,7 +1123,7 @@ input[type=checkbox]:not(:checked)::before, input[type=radio]:not(:checked)::bef
 }
 
 .optbox:not(:checked) {
-  box-shadow: inset 2px 2px 1px rgba(204, 204, 240, 0.6);
+  box-shadow: inset 2px 2px 1px rgba(204, 204, 240, .6);
 }
 
 input[type=checkbox]:checked::before {
@@ -1168,7 +1168,7 @@ input[type=checkbox][disabled], input[type=radio][disabled], input[type=checkbox
 input[type=checkbox][disabled]:checked, input[type=radio][disabled]:checked, input[type=checkbox][disabled]:checked:hover, input[type=radio][disabled]:checked:hover {
   filter: none !important;
   box-shadow: none !important;
-  opacity: 0.5;
+  opacity: .5;
 }
 }
 
@@ -1254,7 +1254,7 @@ input#exporthosts {
 }
 
 #activefilter, .selected:not(.details) {
-  font-weight: bold;
+  font-weight: 700;
   color: #999;
   box-shadow: inset 0 0 0 1px #fff, inset 2px 2px 2px #aaa !important;
 }
@@ -1472,7 +1472,7 @@ div#messages:empty {
 p.messages {
   color: #fff;
   text-align: center;
-  font-weight: bold;
+  font-weight: 700;
 }
 
 @keyframes hide-up {

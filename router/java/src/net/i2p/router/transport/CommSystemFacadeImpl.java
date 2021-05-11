@@ -469,7 +469,7 @@ public class CommSystemFacadeImpl extends CommSystemFacade {
             long start = System.currentTimeMillis();
             _geoIP.blockingLookup();
             if (_log.shouldLog(Log.INFO))
-                _log.info("GeoIP lookup took " + (System.currentTimeMillis() - start) + "ms");
+                _log.info("GeoIP lookup for all routers in the NetDB took " + (System.currentTimeMillis() - start) + "ms");
         }
     }
 
@@ -715,7 +715,8 @@ public class CommSystemFacadeImpl extends CommSystemFacade {
      */
     private class NetMonitor extends SimpleTimer2.TimedEvent {
         private static final long SHORT_DELAY = 15*1000;
-        private static final long LONG_DELAY = 3*60*1000;
+//        private static final long LONG_DELAY = 3*60*1000;
+        private static final long LONG_DELAY = 90*1000;
 
         public NetMonitor() {
             super(_context.simpleTimer2(), 0);

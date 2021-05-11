@@ -30,7 +30,7 @@ h1, h2 ,h3, h4 {
 }
 
 h2, h3 {
-  background: linear-gradient(to bottom, #fff 50%, rgba(255,255,255,.6) 50%, rgba(240,240,255,.4)), linear-gradient(to left, #fff 5%, rgba(231, 231, 255, 0.8) 15%) !important;
+  background: linear-gradient(to bottom, #fff 50%, rgba(255,255,255,.6) 50%, rgba(240,240,255,.4)), linear-gradient(to left, #fff 5%, rgba(231, 231, 255, .8) 15%) !important;
 }
 
 .welcome h2 {
@@ -40,7 +40,7 @@ h2, h3 {
 #debug h2 {
   background: var(--bug) 6px center no-repeat,
               linear-gradient(to bottom, #fcfcff 50%, rgba(255,255,255,.6) 50%, rgba(240,240,255,.4)),
-              linear-gradient(to left, #fcfcff 5%, rgba(231, 231, 255, 0.8) 25%) !important;
+              linear-gradient(to left, #fcfcff 5%, rgba(231, 231, 255, .8) 25%) !important;
   background-size: 20px, 100%, 100% !important;
 }
 
@@ -299,7 +299,7 @@ div.wideload {
 
 .percentBarOuter {
   margin: -4px -3px -4px -5px;
-  background: linear-gradient(to left, rgba(0,255,0,.05) 50%, rgba(255,255,0,.05) 75%, rgba(255,128,0,.05) 90%, rgba(255,0,0,.1)), repeating-linear-gradient(to right, rgba(180, 180, 255,.7) 1px, rgba(180, 180, 255, 0.7) 2px, rgba(221, 221, 255, 0.7) 2px, rgba(221, 221, 255, 0.7) 4px);
+  background: linear-gradient(to left, rgba(0,255,0,.05) 50%, rgba(255,255,0,.05) 75%, rgba(255,128,0,.05) 90%, rgba(255,0,0,.1)), repeating-linear-gradient(to right, rgba(180, 180, 255,.7) 1px, rgba(180, 180, 255, .7) 2px, rgba(221, 221, 255, .7) 2px, rgba(221, 221, 255, .7) 4px);
 }
 
 .sb_info .percentBarOuter {
@@ -586,7 +586,7 @@ div.themechoice, div.langselect {
 .themelabel {
   padding: 3px !important;
   font-size: 10pt !important;
-  font-weight: bold;
+  font-weight: 700;
 }
 
 .h3navlinks {
@@ -757,7 +757,7 @@ table.search {
 }
 
 h4.app {
-  background: url(/themes/console/images/eepsite.png) 10px center no-repeat, linear-gradient(to bottom, #fff 50%, rgba(255,255,255,.6) 50%, rgba(240,240,255,.4)), linear-gradient(to left, #fff 5%, rgba(231, 231, 255, 0.8) 15%) right center !important;
+  background: url(/themes/console/images/eepsite.png) 10px center no-repeat, linear-gradient(to bottom, #fff 50%, rgba(255,255,255,.6) 50%, rgba(240,240,255,.4)), linear-gradient(to left, #fff 5%, rgba(231, 231, 255, .8) 15%) right center !important;
   background-size: 16px, 100%, 100% !important;
   margin-top: 15px;
 }
@@ -765,7 +765,7 @@ h4.app {
 h4.app2 {
   clear: left;
   margin-top: 10px !important;
-  background: var(--planet) 10px center no-repeat, linear-gradient(to bottom, #fff 50%, rgba(255,255,255,.6) 50%, rgba(240,240,255,.4)), linear-gradient(to left, #fff 5%, rgba(231, 231, 255, 0.8) 15%) right center !important;
+  background: var(--planet) 10px center no-repeat, linear-gradient(to bottom, #fff 50%, rgba(255,255,255,.6) 50%, rgba(240,240,255,.4)), linear-gradient(to left, #fff 5%, rgba(231, 231, 255, .8) 15%) right center !important;
   background-size: 16px, 100%, 100% !important;
 }
 
@@ -793,7 +793,7 @@ div.news h3, #news h3, #newspage #news h3 {
   padding: 5px 30px 5px 10px;
   background: var(--news) right 8px center no-repeat,
               linear-gradient(to bottom, #fff 50%, rgba(255,255,255,.6) 50%, rgba(240,240,255,.4)),
-              linear-gradient(to left, #fff 5%, rgba(231, 231, 255, 0.8) 15%) right center !important;
+              linear-gradient(to left, #fff 5%, rgba(231, 231, 255, .8) 15%) right center !important;
   background-size: 15px, 100%, 100% !important;
 }
 
@@ -1079,7 +1079,7 @@ pre#activetransports {
 }
 
 #faq h3 {
-  background: url(/themes/console/images/info/question.png) no-repeat, linear-gradient(to bottom, #fff 50%, rgba(255, 255, 255, 0.6) 50%, rgba(240, 240, 240, 0.4)) repeat scroll 0 0%, rgba(0, 0, 0, 0) linear-gradient(to left, #fff 5%, rgba(231, 231, 255, 0.8) 15%) !important;
+  background: url(/themes/console/images/info/question.png) no-repeat, linear-gradient(to bottom, #fff 50%, rgba(255, 255, 255, .6) 50%, rgba(240, 240, 240, .4)) repeat scroll 0 0%, rgba(0, 0, 0, 0) linear-gradient(to left, #fff 5%, rgba(231, 231, 255, .8) 15%) !important;
   background-position: right 6px center, right center, right center !important;
   padding-right: 30px;
   background-size: 18px 18px, 100%, 100% !important;

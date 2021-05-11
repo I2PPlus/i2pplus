@@ -4,7 +4,7 @@
 
 * {
   text-shadow: none !important;
-  font-weight: normal !important;
+  font-weight: 400 !important;
   font-size: 10.5pt !important;
   letter-spacing: 0 !important;
   word-spacing: 0 !important;
@@ -12,7 +12,7 @@
 }
 
 b {
-  font-weight: normal !important;
+  font-weight: 400 !important;
 }
 
 code, tt {
@@ -81,7 +81,7 @@ input[type=submit], input[type=reset], input[type="file"], button, button.search
 
 .routersummary table a:link, .routersummary table a:visited {
   font-size: 12pt;
-  font-weight: normal;
+  font-weight: 400;
   text-shadow: none;
 }
 
@@ -123,12 +123,12 @@ input[type=submit], input[type=reset], input[type="file"], button, button.search
 /* global overrides */
 
 a, b, .routersummary h3 a, .routersummary h4 {
-  font-weight: normal !important;
+  font-weight: 400 !important;
   font-size: 100%;
 }
 
 b, a, input, button, submit, i, th, thead, tfoot, h1, h2, h3, h4, .messages {
-  font-weight: normal !important;
+  font-weight: 400 !important;
   font-style: normal !important;
   text-shadow: none;
 }
@@ -161,12 +161,12 @@ h4 {
 
 h1, h2, h3, h4 {
   letter-spacing: .08em !important;
-  word-spacing: 0.1em !important;
+  word-spacing: .1em !important;
 }
 
 .infohelp, .infowarn, .infowarn b, #helptranslate {
-  letter-spacing: 0.1em !important;
-  word-spacing: 0.2em !important;
+  letter-spacing: .1em !important;
+  word-spacing: .2em !important;
 }
 
 .suboption {
@@ -207,7 +207,7 @@ div.main, div.news, h1, .sorry {
 }
 
 .joblog li i {
-  font-weight: normal;
+  font-weight: 400;
 }
 
 .joblog b {
@@ -231,7 +231,7 @@ table code {
 
 .themelabel, .ui_lang {
   font-size: 12pt !important;
-  font-weight: normal !important;
+  font-weight: 400 !important;
   overflow: hidden;
   text-overflow: hidden;
   padding-bottom: 4px !important;
@@ -392,7 +392,7 @@ h3#iptransport a::after, h3#advancedconfig a::after {
 }
 
 #console p, #console li {
-  letter-spacing: 0.15em !important;
+  letter-spacing: .15em !important;
   line-height: 160% !important;
 }
 
@@ -577,9 +577,9 @@ b.tunnel_cap, .tunnel_cap b {
 }
 
 .routerid tt, .routerid tt a {
-  letter-spacing: 0.1em !important;
-  font-weight: bold !important;
-  opacity: 0.85;
+  letter-spacing: .1em !important;
+  font-weight: 700 !important;
+  opacity: .85;
 }
 
 .routerid tt a:hover {

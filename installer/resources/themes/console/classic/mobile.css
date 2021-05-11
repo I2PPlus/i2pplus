@@ -83,12 +83,12 @@ table#sb_localtunnels td {
 
 table[id^="sb_"] tr:nth-child(even) td {
   background: #eef;
-  background: rgba(240, 240, 255, 0.5);
+  background: rgba(240, 240, 255, .5);
 }
 
 table[id^="sb_"] tr:nth-child(odd) td {
   background: #ddf;
-  background: rgba(220, 220, 255, 0.5);
+  background: rgba(220, 220, 255, .5);
 }
 
 table[id^="sb_"] tr:hover td {

@@ -36,7 +36,7 @@ h2 {
 h1, h2 {
   margin-bottom: 10px;
   letter-spacing: .08em;
-  word-spacing: 0.1em;
+  word-spacing: .1em;
   text-transform: uppercase;
   text-shadow: 1px 1px 1px #fff;
   box-shadow: inset 0 0 0 1px #fff, 0 0 1px #aaa;
@@ -117,7 +117,7 @@ table {
 th {
   height: 16px;
   text-align: center;
-  font-weight: normal;
+  font-weight: 400;
   border: 1px solid #77789f;
   border-radius: 2px;
   box-shadow: inset 0 0 0 1px #fff, 0 0 1px #aaa;
@@ -128,7 +128,7 @@ th.title {
   padding: 5px;
   white-space: nowrap;
   font-size: 11pt;
-  font-weight: bold;
+  font-weight: 700;
   background: linear-gradient(to right, #efefff, #fff 10%, #fff 90%, #efefff);
 }
 
@@ -193,11 +193,11 @@ form > * {
   margin: -1px auto 10px;
   padding: 4px 5px;
   width: 400px;
-  word-spacing: 0.1em;
-  letter-spacing: 0.2em;
+  word-spacing: .1em;
+  letter-spacing: .2em;
   text-transform: uppercase;
   font-size: 11pt;
-  font-weight: bold;
+  font-weight: 700;
   border: 1px solid #8d8daa;
   border-radius: 0 0 2px 2px;
   box-shadow: inset 0 0 0 1px #fff, 0 0 1px #aaa;
@@ -384,7 +384,7 @@ body.iframed.dark  {
   border-radius: 2px;
   min-width: 110px;
   font: 9pt "Droid Sans", "Open Sans", "Noto Sans", Ubuntu, "Segoe UI", "Bitstream Vera Sans", "DejaVu Sans", Verdana, "Lucida Grande", Helvetica, sans-serif;
-  font-weight: bold;
+  font-weight: 700;
   padding: 4px 18px 4px 4px !important;
   cursor: pointer;
   overflow: hidden;
@@ -464,21 +464,21 @@ body.iframed.dark  {
 .iframed.dark a:link {
   color: #494;
   text-decoration: none;
-  font-weight: bold;
+  font-weight: 700;
   word-wrap: break-word;
 }
 
 .iframed.dark a:visited {
   color: #7b7;
   text-decoration: none;
-  font-weight: bold;
+  font-weight: 700;
   word-wrap: break-word;
 }
 
 .iframed.dark a:hover, .iframed.dark a:focus {
   color: #f60 !important;
   text-decoration: none;
-  font-weight: bold;
+  font-weight: 700;
   word-wrap: break-word;
   outline: none;
 }
@@ -586,7 +586,7 @@ body.iframed.midnight {
 }
 
 .iframed.midnight select option {
-  font-weight: normal;
+  font-weight: 400;
   font-size: 9.5pt !important;
   color: #000;
   box-shadow: inset 0 0 20px 20px #000;
@@ -612,7 +612,7 @@ body.iframed.midnight {
 .iframed.midnight a:link {
   color: #7972d1;
   text-decoration: none;
-  font-weight: bold;
+  font-weight: 700;
   word-wrap: break-word;
 }
 

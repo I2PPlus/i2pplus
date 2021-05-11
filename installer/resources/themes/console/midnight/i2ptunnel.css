@@ -81,7 +81,7 @@ a, button, input, .control {
 
 a {
   text-decoration: none;
-  font-weight: bold;
+  font-weight: 700;
 }
 
 a:link, a:visited {
@@ -419,7 +419,7 @@ _:-ms-lang(x), .tunnelProperties {
   padding: 5px 5px 5px 25px !important;
   width: calc(100% - 20px);
   display: inline-block;
-  font-weight: bold;
+  font-weight: 700;
   border: 1px solid rgba(38,35,92,.3);
   border-radius: 3px;
   box-shadow: var(--highlight);
@@ -613,7 +613,7 @@ input[type=radio][disabled]:hover, input[type=radio][disabled]:focus {
 }
 
 .editDisabled .optbox:checked + span {
-  font-weight: bold;
+  font-weight: 700;
   text-decoration: underline;
 }
 
@@ -662,7 +662,7 @@ a.control, input.control {
   white-space: nowrap;
   text-decoration: none;
   text-align: center;
-  font-weight: bold;
+  font-weight: 700;
   font-style: normal;
   color: #7171d1 !important;
   border: 1px solid #26225c;
@@ -704,7 +704,7 @@ select {
   appearance: none;
   text-overflow: ellipsis;
   font: 8.5pt var(--bodyfont);
-  font-weight: bold;
+  font-weight: 700;
   color: #7171d1;
   border: 1px solid #26225c;
   background: var(--dropdown) center right 10px no-repeat, linear-gradient(to bottom, #11101c 50%, #000010 50%) !important;
@@ -723,7 +723,7 @@ select:hover, select:focus, select:active {
 }
 
 select option {
-  font-weight: normal;
+  font-weight: 400;
 }
 
 select option:hover, select option:focus, select option:checked {
@@ -741,7 +741,7 @@ input, select, button {
 
 button, input[type=submit], input[type="reset"], a.control {
   font-family: var(--bodyfont);
-  font-weight: bold;
+  font-weight: 700;
 }
 
 .buttons, .newTunnel {
@@ -833,13 +833,13 @@ textarea[name="accessList"]:focus {
 
 input::-moz-placeholder {
   color: #f00;
-  font-weight: bold;
+  font-weight: 700;
   opacity: 1;
 }
 
 ::-webkit-input-placeholder {
   color: #f00;
-  font-weight: bold;
+  font-weight: 700;
   opacity: 1;
 }
 
@@ -1035,7 +1035,7 @@ input.tunnelName, input.tunnelDescriptionText, #userAgents, .tunnelDescription, 
   padding: 30px;
   width: 400px;
   text-align: center;
-  font-weight: bold;
+  font-weight: 700;
   font-size: 11pt;
   border: 1px solid #005;
   box-shadow: var(--highlight), inset 0 0 4px 4px rgba(0,0,0,.4), 0 0 0 1px #000, 0 0 0 2px #001, 0 0 0 6px #002, 0 0 0 8px #003;
@@ -1085,7 +1085,7 @@ input.tunnelName, input.tunnelDescriptionText, #userAgents, .tunnelDescription, 
   min-width: 150px;
   white-space: nowrap;
   text-align: right;
-  font-weight: bold;
+  font-weight: 700;
 }
 
 #wizardTunnelTypes td:last-child {
@@ -1130,12 +1130,12 @@ input.tunnelName, input.tunnelDescriptionText, #userAgents, .tunnelDescription, 
 }
 
 #wizardPanel input::-moz-placeholder {
-  font-weight: normal;
+  font-weight: 400;
   color: #449;
 }
 
 #wizardPanel ::-webkit-input-placeholder {
-  font-weight: normal;
+  font-weight: 400;
   color: #449;
 }
 
@@ -1150,7 +1150,7 @@ input.tunnelName, input.tunnelDescriptionText, #userAgents, .tunnelDescription, 
   display: inline-block;
   white-space: nowrap;
   text-align: right;
-  font-weight: bold;
+  font-weight: 700;
 }
 
 #wizardPanel select {
@@ -1758,7 +1758,7 @@ input[type=checkbox][disabled]:checked, input[type=radio][disabled]:checked, inp
 select[disabled], select[disabled]:hover, select[disabled]:focus, select[disabled]:active {
   margin: 0 5px !important;
   padding: 0;
-  font-weight: normal !important;
+  font-weight: 400 !important;
   color: #c9ceff !important;
   border: none !important;
   box-shadow: none !important;
@@ -1834,7 +1834,7 @@ select[disabled], select[disabled]:hover, select[disabled]:focus, select[disable
 /* end server tunnel options */
 
 .unbold {
-  font-weight: normal;
+  font-weight: 400;
 }
 
 #accesslistDisabled ~ textarea[name="accessList"] {

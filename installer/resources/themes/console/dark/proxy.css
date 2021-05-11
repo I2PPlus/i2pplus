@@ -27,7 +27,7 @@ body, button, input, input[type=text], input[type=password], select, #debug .skm
 
 button, input, input[type=text], input[type=password], select {
   font-size: 9pt;
-  font-weight: bold;
+  font-weight: 700;
 }
 
 body#proxy_error {
@@ -53,7 +53,7 @@ h2, h3 {
 a:link, a:visited {
   color: #494;
   text-decoration: none;
-  font-weight: bold;
+  font-weight: 700;
   word-wrap: break-word;
 }
 
@@ -94,7 +94,7 @@ input[type=submit], input[type=reset], select, button {
   padding: 7px 8px;
   line-height: 120%;
   font-size: 9.5pt;
-  font-weight: bold;
+  font-weight: 700;
   color: #494;
   border: 1px solid #000;
   border-radius: 2px;
@@ -323,7 +323,7 @@ textarea {
 }
 
 #proxyNewHost td:first-child {
-  font-weight: bold;
+  font-weight: 700;
 }
 
 #proxyNewHost tr:last-child td:first-child {
@@ -370,7 +370,7 @@ textarea {
 
 #denied {
   padding: 30px 0;
-  font-weight: bold;
+  font-weight: 700;
 }
 
 /* end proxy errors */

@@ -4,7 +4,7 @@
 
 h1, h2, h3, h4 {
   text-shadow: none !important;
-  font-weight: normal !important;
+  font-weight: 400 !important;
 }
 
 .routersummary table td {
@@ -18,22 +18,22 @@ h1, h2, h3, h4 {
 .routersummary h3 a {
   font-size: 14pt !important;
   text-transform: uppercase !important;
-  letter-spacing: 0.15em !important;
+  letter-spacing: .15em !important;
 }
 
 .routersummary h4, .routersummary h4 a {
   font-size: 11pt !important;
-  font-weight: normal;
+  font-weight: 400;
 }
 
 .routersummary b {
   font-size: 10pt;
-  font-weight: normal;
+  font-weight: 400;
 }
 
 .routersummary a {
   font-size: 10pt;
-  font-weight: normal;
+  font-weight: 400;
 }
 
 .percentBarouter {
@@ -57,11 +57,11 @@ h1, h2, h3, h4 {
 
 .messages, .messages li, div.error, .error ul li {
   font-size: 11pt;
-  font-weight: normal !important;
+  font-weight: 400 !important;
 }
 
 b, a, a:link, a:hover, a:visited {
-  font-weight: normal;
+  font-weight: 400;
   font-size: 11pt !important;
 }
 
@@ -90,7 +90,7 @@ button, button:visited, input[type=submit], input[type="reset"], .cancel, .accep
 }
 
 select {
-  font-weight: normal !important;
+  font-weight: 400 !important;
   font-size: 11pt !important;
   min-height: 30px !important;
 }
@@ -103,7 +103,7 @@ select {
 code, pre, tt {
   font-family: "Droid Sans Mono", "Noto Mono", "Lucida Console", "DejaVu Sans Mono", monospace;
   font-size: 11pt;
-  font-weight: normal;
+  font-weight: 400;
 }
 
 .cells tt, .cells tt a {
@@ -120,7 +120,7 @@ code, pre, tt {
 
 .smallhead, th {
   font-size: 10pt;
-  font-weight: normal;
+  font-weight: 400;
 }
 
 table {
@@ -166,7 +166,7 @@ td.optionsave {
 
 #console div[lang="zh"], #console li, #console p {
   line-height: 170%;
-  letter-spacing: 0.15em;
+  letter-spacing: .15em;
   word-spacing: 0;
   font-size: 10.5pt !important;
 }
@@ -256,7 +256,7 @@ h1 {
 h2 {
   font-size: 16pt !important;
   text-shadow: none;
-  font-weight: normal;
+  font-weight: 400;
 }
 
 h3 {

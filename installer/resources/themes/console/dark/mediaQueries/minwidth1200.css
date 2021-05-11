@@ -111,7 +111,7 @@
 
   #stacktrace p:first-of-type::first-line {
     font-size: 110%;
-    font-weight: bold;
+    font-weight: 700;
     font-variant: super;
     text-decoration: underline;
   }

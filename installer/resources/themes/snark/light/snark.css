@@ -112,7 +112,7 @@ td.snarkTorrentPeerCount {
   width: 1%;
   white-space: nowrap;
   text-align: center;
-  font-weight: bold;
+  font-weight: 700;
   color: #5b5b71;
 }
 
@@ -262,7 +262,7 @@ button::-moz-focus-inner, input::-moz-focus-inner {
   text-decoration: none !important;
   text-transform: uppercase !important;
   font-size: 9pt;
-  font-weight: bold;
+  font-weight: 700;
   color: #559;
   border: 1px solid #afafcf;
   border-radius: 0;
@@ -399,7 +399,7 @@ button::-moz-focus-inner, input::-moz-focus-inner {
 }
 
 #screenlog .infohash {
-  font-weight: bold !important;
+  font-weight: 700 !important;
 }
 
 .iframed .snarkMessages {
@@ -435,7 +435,7 @@ button::-moz-focus-inner, input::-moz-focus-inner {
   padding: 0 20px 2px 5px;
   display: block;
   word-break: break-all;
-  font-weight: bold;
+  font-weight: 700;
   mix-blend-mode: multiply;
   background: rgba(255, 255, 255, .25);
   letter-spacing: 0;
@@ -508,7 +508,7 @@ a:link, a:visited {
   color: #3b6bbf;
   color: rgba(59, 107, 191, .85);
   text-decoration: none;
-  font-weight: bold;
+  font-weight: 700;
   word-wrap: break-word;
   font-size: 9pt;
 }
@@ -625,7 +625,7 @@ th.snarkTorrentStatus {
   background: #fff;
   background: linear-gradient(to bottom, #fafaff 50%, rgb(240, 240, 255)) #fafaff;
   vertical-align: middle;
-  font-weight: bold;
+  font-weight: 700;
   font-style: normal !important;
   color: #5b5b71 !important;
 }
@@ -692,7 +692,7 @@ th.snarkGraphicStatus, th.snarkTorrentStatus {
   width: 1% !important;
   white-space: nowrap;
   text-align: center !important;
-  font-weight: bold;
+  font-weight: 700;
   padding-left: 0 !important;
   padding-right: 0 !important;
 }
@@ -790,7 +790,7 @@ th.snarkGraphicStatus, th.snarkTorrentStatus {
 .snarkTorrentNoneLoaded, .snarkTorrentNoneLoaded:hover {
   text-align: center !important;
   font-size: 9pt;
-  font-weight: bold;
+  font-weight: 700;
   color: #272e3f !important;
   border-bottom: 1px solid #afafcf !important;
   box-shadow: inset 0 0 1px #fff;
@@ -867,7 +867,7 @@ tr:not(.peerinfo) .snarkTorrentUploaded:empty::after {
 #totals {
   display: inline-block;
   margin: 2px 0 2px 5px;
-  font-weight: bold !important;
+  font-weight: 700 !important;
   white-space: nowrap;
 }
 
@@ -956,7 +956,7 @@ td {
 #filterResults td {
   padding: 10px 8px !important;
   text-align: center;
-  font-weight: bold;
+  font-weight: 700;
   font-style: italic;
   border-top: 1px solid #afafcf !important;
   border-bottom: 1px solid #afafcf !important;
@@ -1015,7 +1015,7 @@ tr + .peerinfo:nth-child(odd) {
   width: 1%;
   white-space: nowrap;
   text-align: right;
-  font-weight: normal;
+  font-weight: 400;
 }
 
 th.snarkFileSize {
@@ -1101,7 +1101,7 @@ th.snarkFileSize {
   line-height: 120%;
   color: #808099;
   text-align: center;
-  font-weight: bold;
+  font-weight: 700;
   border-radius: 15px;
   border: 1px solid #ccd;
   box-shadow: inset 0 0 0 1px #e8e8ff;
@@ -1136,7 +1136,7 @@ tr:hover .percentBarComplete {
 
 .percentBarText {
   text-align: center;
-  font-weight: bold !important;
+  font-weight: 700 !important;
   line-height: 15px;
   white-space: nowrap;
   display: block;
@@ -1307,7 +1307,7 @@ video:hover::-webkit-media-controls-panel, video:focus::-webkit-media-controls-p
   display: inline-block;
   text-transform: uppercase;
   font-size: 10pt;
-  font-weight: bold;
+  font-weight: 700;
   color: #559 !important;
   border: 1px solid #afafcf;
   border-top: 0;
@@ -1542,7 +1542,7 @@ input:checked + .toggleview:active > img {
 .snarkMessages .infohash {
   font-size: 90%;
   color: #151;
-  font-weight: bold;
+  font-weight: 700;
 }
 
 .snarkMessages .infohash:hover {
@@ -1676,13 +1676,13 @@ a.control, a.controld {
   display: inline-block;
   min-width: 0 !important;
   white-space: nowrap;
-  font-weight: bold;
+  font-weight: 700;
   border-radius: 2px;
 }
 
 a.controld {
   color: #459;
-  font-weight: normal;
+  font-weight: 400;
   display: none;
 }
 
@@ -1694,7 +1694,7 @@ a.control img, a.control:hover img, a.control:focus img, a.control:active img {
 
 input[type=submit], a.control:not(.disabled) {
   color: #5b5b71;
-  font-weight: normal;
+  font-weight: 400;
   box-shadow: 0 2px 0 rgba(255,255,255,.85) inset, 0 0 10px rgba(0,0,0,.1) inset, 0 1px 1px rgba(0,0,0,.05), 0 7px 4px -4px rgba(0,0,0,.1);
   border: 1px solid #97a2ce;
   background: linear-gradient(to bottom, #fff, #efefff);
@@ -1762,7 +1762,7 @@ thead img.disable, img.disable:hover {
 }
 
 input[type=text] {
-  font-weight: bold;
+  font-weight: 700;
 }
 
 input[type=text]:disabled {
@@ -1813,7 +1813,7 @@ input.default {
 input.disabled, input.disabled:hover, input.disabled:active, a.controld {
   background: #fff !important;
   color: #459 !important;
-  font-weight: normal;
+  font-weight: 400;
   opacity: .6;
   cursor: not-allowed;
   display: none;
@@ -1867,7 +1867,7 @@ select::-ms-expand {
 textarea {
   background: #f8f8ff;
   color: #4f4f63;
-  font-weight: bold;
+  font-weight: 700;
   padding: 2px 4px;
   border-radius: 2px;
   border: 1px solid #afafcf;
@@ -2109,7 +2109,7 @@ form:last-child .configsectionpanel {
 
 .newtorrentsection td:first-child, .addtorrentsection td:first-child {
   min-width: 140px;
-  font-weight: bold;
+  font-weight: 700;
   color: #5b5b71;
 }
 
@@ -2141,7 +2141,7 @@ form:last-child .configsectionpanel {
   white-space: nowrap;
   overflow: hidden;
   text-overflow: ellipsis;
-  font-weight: bold;
+  font-weight: 700;
   text-align: center;
   color: #5b5b71;
 }
@@ -2176,7 +2176,7 @@ form:last-child .configsectionpanel {
 
 #trackerselect td:first-child, #trackerselect td:last-child {
   width: 30% !important;
-  font-weight: normal;
+  font-weight: 400;
 }
 
 #trackerselect tr:nth-child(n+2):hover td {
@@ -2227,13 +2227,13 @@ form:last-child .configsectionpanel {
 
 .configsection a {
   color: #55a;
-  font-weight: bold;
+  font-weight: 700;
 }
 
 code, tt {
   font-size: 8.5pt;
   color: #070;
-  font-weight: bold;
+  font-weight: 700;
   font-family: var(--monospaced);
 }
 
@@ -2371,16 +2371,16 @@ input:checked + label + hr + table, input:checked + label + hr + table + table {
 
 .debugConnection {
   font-family: var(--monospaced)
-  font-weight: bold !important;
+  font-weight: 700 !important;
   color: #030;
-  font-weight: bold;
+  font-weight: 700;
   margin-right: 5px;
 }
 
 .from, .to {
   font-family: sans-serif;
   font-size: 12pt;
-  font-weight: bold;
+  font-weight: 700;
   vertical-align: middle;
   line-height: 50%;
 }
@@ -2390,7 +2390,7 @@ input:checked + label + hr + table, input:checked + label + hr + table + table {
   white-space: nowrap;
   word-spacing: -0.1em;
   font-family: var(--monospaced)
-  font-weight: bold !important;
+  font-weight: 700 !important;
   color: #030;
 }
 
@@ -2403,7 +2403,7 @@ input:checked + label + hr + table, input:checked + label + hr + table + table {
 .dhtDebug th, .dhtDebug:hover {
   padding: 0 10px 10px !important;
   word-break: break-all;
-  font-weight: normal;
+  font-weight: 400;
   background: #efefff;
   background: repeating-linear-gradient(45deg, rgba(255,255,255,.5) 2px, rgba(230, 230, 255, .3) 3px, #fff 5px) #fff !important;
 }
@@ -2664,7 +2664,7 @@ hr.debug {
 #configs td:first-child {
   min-width: 220px !important;
   width: 30% !important;
-  font-weight: bold;
+  font-weight: 700;
   color: #5b5b71;
 }
 
@@ -2682,7 +2682,7 @@ hr.debug {
 #configs a {
   display: inline-block;
   white-space: nowrap;
-  font-weight: bold;
+  font-weight: 700;
 }
 
 #configs a[href="/config.jsp"] {
@@ -2804,7 +2804,7 @@ hr.debug {
 }
 
 .snarkCommentInfo td:first-child {
-  font-weight: bold;
+  font-weight: 700;
   color: #5b5b71;
   white-space: nowrap;
 }
@@ -2823,7 +2823,7 @@ hr.debug {
 
 .snarkCommentInfo textarea {
   font-family: "Droid Sans", "Open Sans", "Noto Sans", Ubuntu, "Segoe UI", "Bitstream Vera Sans", Verdana, "Lucida Grande", Helvetica, sans-serif !important;
-  font-weight: normal;
+  font-weight: 400;
   font-size: 10pt;
   width: 100%;
   min-height: 64px;
@@ -3035,7 +3035,7 @@ _:-ms-lang(x), *, *:hover, *:focus, input, input:hover, input:focus, a:hover, a:
 }
 
 .snarkMessages li, .snarkMessages li a {
-  font-weight: bold !important;
+  font-weight: 700 !important;
 }
 
 .pagenavcontrols, .iframed .pagenavcontrols {
@@ -3162,7 +3162,7 @@ body, td, .snarkMessages li, .snarkMessages a, button, input, select, .snarkAddI
 }
 
 .snarkTorrentName, .snarkTorrentName a {
-  font-weight: bold;
+  font-weight: 700;
 }
 
 .snarkGraphicStatus {
@@ -3181,7 +3181,7 @@ th.snarkTorrentStatus {
 
 .snarkTorrentStatus, .snarkTorrentStatus a {
   white-space: nowrap;
-  font-weight: bold;
+  font-weight: 700;
 }
 
 .snarkTorrentStatus b, .snarkTorrentStatus .showAlways {
@@ -3222,7 +3222,7 @@ b.alwaysShow {
 
 @media screen and (min-width: 1000px) {
 .iframed .snarkMessages li {
-  font-weight: bold !important;
+  font-weight: 700 !important;
 }
 
 .snarkNav:link, .snarkNav:visited {
@@ -3459,7 +3459,7 @@ b.alwaysShow {
 
 #configs td {
   text-align: left;
-  font-weight: normal !important;
+  font-weight: 400 !important;
   vertical-align: middle !important;
   padding-top: 4px;
   padding-bottom: 4px;
@@ -3521,7 +3521,7 @@ b.alwaysShow {
   display: block;
   white-space: normal;
   font-size: 10pt;
-  font-weight: bold;
+  font-weight: 700;
   filter: drop-shadow(0 0 1px #11f);
   opacity: 0;
   will-change: transform;
@@ -3658,7 +3658,7 @@ input[name="nofilter_commentsName"], input[name="i2cpOpts"], input[name="nofilte
   line-height: 160%;
   color: #fff;
   text-align: center;
-  font-weight: bold;
+  font-weight: 700;
   text-shadow: 0 1px 1px #557;
   border-radius: 4px;
   background: #aaf;
@@ -3969,7 +3969,7 @@ td.snarkTrackerDetails img {
   background: linear-gradient(to bottom, #fff 50%, #eef 50%);
   border-left: 1px solid #afafcf;
   box-shadow: var(--highlight);
-  font-weight: bold;
+  font-weight: 700;
   color: #559;
 }
 
@@ -4107,7 +4107,7 @@ td.snarkTrackerDetails {
 .pagenavcontrols {
   padding: 0;
   font-size: 9pt;
-  font-weight: bold;
+  font-weight: 700;
   color: #272e3f;
 }
 

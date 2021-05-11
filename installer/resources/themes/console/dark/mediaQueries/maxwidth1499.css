@@ -566,7 +566,7 @@
 
   table:not(:first-of-type).netdbentry tr:nth-child(2) td:nth-child(2)::before {
     display: inline;
-    font-weight: bold;
+    font-weight: 700;
     content: "Published: ";
   }
 

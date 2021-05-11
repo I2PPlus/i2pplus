@@ -1,12 +1,12 @@
 @media screen and (min-width: 0) and (max-width: 4000px) {
 * {
-  font-weight: normal !important;
+  font-weight: 400 !important;
   font-family: "Noto Sans", "Droid Sans", "Roboto Sans", Ubuntu, "Segoe UI", "Lucida Grande", Helvetica, Arial, Verdana, sans-serif !important;
   line-height: 120% !important;
 }
 
 .snarkNav, #pagenav {
-  font-weight: bold !important;
+  font-weight: 700 !important;
 }
 
 .iframed .snarkNav:link {
@@ -33,7 +33,7 @@
 
 .snarkAddInfo code, #pagenav, #trackerselect tr:first-child td, .clientid {
   font-size: 9.5pt !important;
-  font-weight: normal !important;
+  font-weight: 400 !important;
 }
 
 .clientid {
@@ -58,7 +58,7 @@ td.snarkTorrentDownloaded, td.snarkTorrentUploaded, td.snarkTorrentRateDown, td.
 }
 
 th.snarkTorrentDownloaded, th.snarkTorrentUploaded, th.snarkTorrentRateDown, th.snarkTorrentRateUp {
-  font-weight: bold !important;
+  font-weight: 700 !important;
 }
 
 input[type], select, a.control {
@@ -78,7 +78,7 @@ a.control, input[type=submit], input.accept {
 }
 
 a.control, input[type=submit], input.accept, th {
-  font-weight: normal !important;
+  font-weight: 400 !important;
   font-size: 12pt !important;
 }
 
@@ -104,7 +104,7 @@ a.control, input[type=submit], input.accept, th {
 #pagecount {
   padding-top: 3px;
   padding-bottom: 4px;
-  font-weight: bold !important;
+  font-weight: 700 !important;
 }
 
 .snarkTorrentUploaded {
@@ -121,8 +121,8 @@ a.control, input[type=submit], input.accept, th {
 }
 
 .snarkTorrents tt {
-  letter-spacing: 0.2em !important;
-  font-weight: bold !important;
+  letter-spacing: .2em !important;
+  font-weight: 700 !important;
 }
 
 .snarkTorrents td tt {

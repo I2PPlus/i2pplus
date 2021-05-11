@@ -121,7 +121,7 @@ label:hover {
 }
 
 .editDisabled .optbox:checked + span {
-  font-weight: bold;
+  font-weight: 700;
   text-decoration: underline;
 }
 
@@ -319,7 +319,7 @@ input[type=text][readonly] {
   white-space: nowrap;
   text-decoration: none;
   font-style: normal;
-  font-weight: normal;
+  font-weight: 400;
   color: #4f4f63;
   border: 1px solid #97a2ce;
   border-radius: 2px;
@@ -488,7 +488,7 @@ select::-ms-expand {
 a:link, a:visited {
   word-wrap: break-word;
   text-decoration: none;
-  font-weight: bold;
+  font-weight: 700;
   color: #4d5f80;
   outline: none;
 }
@@ -711,7 +711,7 @@ td.infohelp {
 }
 
 .tunnelName a {
-  font-weight: bold;
+  font-weight: 700;
 }
 
 .tunnelType {
@@ -993,7 +993,7 @@ input.tunnelName, input.tunnelDescriptionText, #userAgents, .freetext.tunnelDesc
   width: 400px;
   text-align: center;
   font-size: 11pt;
-  font-weight: bold;
+  font-weight: 700;
   border: 5px solid #900;
   border-image: repeating-linear-gradient(135deg, #dd0 0px, #dd0 20px, #900 20px, #900 40px, #dd0 40px) 5 repeat repeat;
   border-image-width: 5px;
@@ -1033,7 +1033,7 @@ input.tunnelName, input.tunnelDescriptionText, #userAgents, .freetext.tunnelDesc
 }
 
 #wizardTunnelTypes td:first-child, #wizardSummary td:first-child {
-  font-weight: bold;
+  font-weight: 700;
   width: 10%;
   min-width: 150px;
   text-align: right;
@@ -1071,12 +1071,12 @@ input.tunnelName, input.tunnelDescriptionText, #userAgents, .freetext.tunnelDesc
 
 #wizardPanel input::-moz-placeholder {
   color: #999;
-  font-weight: normal;
+  font-weight: 400;
 }
 
 #wizardPanel ::-webkit-input-placeholder {
   color: #999;
-  font-weight: normal;
+  font-weight: 400;
 }
 
 #wizardPanel .options {
@@ -1088,7 +1088,7 @@ input.tunnelName, input.tunnelDescriptionText, #userAgents, .freetext.tunnelDesc
   min-width: 150px;
   white-space: nowrap;
   display: inline-block;
-  font-weight: bold;
+  font-weight: 700;
   text-align: right;
   margin-right: 10px;
   color: #5b5b71;
@@ -1503,14 +1503,14 @@ tr {
 
 #ssl .configerror td {
   padding: 20px 10px 20px 52px;
-  font-weight: bold;
+  font-weight: 700;
   background: #ffe url(/themes/console/images/errortriangle.png) 12px center no-repeat;
   background-size: 28px auto;
 }
 
 .configerror code {
   color: #050;
-  font-weight: bold;
+  font-weight: 700;
   margin-left: 4px;
 }
 
@@ -1594,7 +1594,7 @@ tr {
 select[disabled], select[disabled]:hover, select[disabled]:focus, select[disabled]:active, #sigtype[disabled] {
   margin: 0 !important;
   padding: 2px 0 2px 3px !important;
-  font-weight: normal !important;
+  font-weight: 400 !important;
   color: #4f4f63 !important;
   border: none !important;
   box-shadow: none !important;
@@ -1691,7 +1691,7 @@ select[disabled], select[disabled]:hover, select[disabled]:focus, select[disable
 /* end server tunnel options */
 
 .unbold {
-  font-weight: normal;
+  font-weight: 400;
 }
 
 @keyframes showToggle {

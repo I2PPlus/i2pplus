@@ -76,7 +76,7 @@ div.clearer {
 ::selection {
   color: white;
   background: #22296f !important;
-  background: rgba(34, 41, 111, 0.9) !important;
+  background: rgba(34, 41, 111, .9) !important;
 }
 
 ::-moz-selection {
@@ -149,7 +149,7 @@ input[type=text], input[type=password] {
 input[type=text]:focus, input[type=password]:focus, textarea:focus {
   color: #c9ceff !important;
   border: 1px solid #6466a5 !important;
-  box-shadow: 0 0 0 1px rgba(101, 39, 135, 0.5), 0 0 2px 2px #202;
+  box-shadow: 0 0 0 1px rgba(101, 39, 135, .5), 0 0 2px 2px #202;
   background: #000;
   transition: filter ease 0.3s;
 }
@@ -196,7 +196,7 @@ label {
 input[type="file"] {
   margin: 5px 10px;
   padding: 0;
-  font-weight: normal;
+  font-weight: 400;
   color: #c9ceff;
   border: none;
   box-shadow: none;
@@ -264,7 +264,7 @@ select {
 }
 
 select option {
-  font-weight: normal;
+  font-weight: 400;
   font-size: 9.5pt !important;
   color: #000;
   box-shadow: inset 0 0 20px 20px #000;
@@ -1333,7 +1333,7 @@ div.logo hr {
 }
 
 #proxyNewHost td:first-child {
-  font-weight: bold;
+  font-weight: 700;
 }
 
 #proxyNewHost tr:last-child td:first-child {
@@ -1455,7 +1455,7 @@ div.logo hr {
 #wizardpage .routersummary img[src*="i2plogo"], #wizardpage .routersummary img[src*="i2plogo"]:hover, #wizardpage .routersummary img[src*="i2plogo"]:active {
   margin-left: -2px !important;
   width: 189px;
-  opacity: 0.7;
+  opacity: .7;
   filter: sepia(100%) hue-rotate(180deg) drop-shadow(0 0 1px #652787);
 }
 
@@ -1472,7 +1472,7 @@ div.logo hr {
   width: 190px;
   height: auto;
   font-size: 0;
-  opacity: 0.7;
+  opacity: .7;
   transition: ease-out opacity 0.3s, ease filter 0.3s;
   filter: sepia(100%) hue-rotate(180deg) drop-shadow(0 0 1px #652787);
 }
@@ -1573,7 +1573,7 @@ div.logo hr {
   padding: 1px 0 !important;
   width: calc(100% - 6px);
   display: inline-block;
-  letter-spacing: 0.1em;
+  letter-spacing: .1em;
   color: var(--a);
 }
 
@@ -1833,7 +1833,7 @@ div.logo hr {
   margin: -4px -7px -7px;
   padding: 7px 5px;
   line-height: 110%;
-  font-weight: bold;
+  font-weight: 700;
   border: var(--innerborder);
   box-shadow: var(--highlight), inset 0 0 1px 1px #a3a !important;
   background: #001;
@@ -2163,7 +2163,7 @@ a:active #sb_bandwidthgraph, a:active #sb_graphstats {
 #sb_graphstats {
   padding: 2px 8px;
   display: inline-block;
-  font-weight: bold;
+  font-weight: 700;
   border: 1px solid #83529f;
   border-top: none;
   background: #001;
@@ -2228,7 +2228,7 @@ a:active #sb_bandwidthgraph, a:active #sb_graphstats {
 
 .percentBarText {
   width: 100%;
-  font-weight: bold;
+  font-weight: 700;
   text-align: center;
   vertical-align: middle;
   float: left;
@@ -2832,7 +2832,7 @@ div.confignav {
   padding: 7px 5px 8px !important;
   line-height: 130% !important;
   text-align: center;
-  font-weight: bold !important;
+  font-weight: 700 !important;
   border: 1px solid #26235c;
   box-shadow: var(--highlight);
   background: #010010 url(images/titles.png) center center repeat-x !important;
@@ -3104,7 +3104,7 @@ h3#advancedconfig a:hover::after, h3#advancedconfig a:focus::after,
 div.messages {
   padding: 20px 10px;
   margin: -4px 0 12px;
-  font-weight: bold;
+  font-weight: 700;
   font-size: 9.5pt;
   color: #c9ceff !important;
   border: var(--innerborder);
@@ -3128,7 +3128,7 @@ div.messages span.notice {
 
 div.messages li {
   text-align: justify !important;
-  font-weight: bold;
+  font-weight: 700;
   list-style: none !important;
   margin: 0 5px 0 50px !important;
   padding: 0 10px 0 0 !important;
@@ -3142,7 +3142,7 @@ div.widepanel h3 {
   font-size: 10.5pt;
   text-align: left;
   letter-spacing: .08em;
-  word-spacing: 0.1em;
+  word-spacing: .1em;
   border-radius: 0;
   border: var(--innerborder);
 }
@@ -3203,7 +3203,7 @@ to {
   padding: 3px;
   margin: 5px 4px;
   text-align: center !important;
-  opacity: 0.9;
+  opacity: .9;
   transition: ease border 0.1s;
 }
 
@@ -3529,7 +3529,7 @@ a, button, input {
 a:link {
   color: var(--a);
   text-decoration: none;
-  font-weight: bold;
+  font-weight: 700;
   word-wrap: break-word;
   outline: none;
 }
@@ -3538,14 +3538,14 @@ a:visited {
   color: #4e47bf;
   color: var(--a);
   text-decoration: none;
-  font-weight: bold;
+  font-weight: 700;
   word-wrap: break-word;
 }
 
 a:hover, a:focus, .h3navlinks a:hover, .h3navlinks a:focus, a:hover .b32, a:focus .b32, .signingkey a:hover, .signingkey a:focus {
   color: #bf2295;
   text-decoration: none;
-  font-weight: bold;
+  font-weight: 700;
   word-wrap: break-word;
 }
 
@@ -3597,10 +3597,10 @@ h1 {
   padding: 13px 15px 12px;
   margin: 0 3px 0 212px !important;
   font-size: 17pt;
-  font-weight: bold;
+  font-weight: 700;
   font-style: normal;
   text-transform: uppercase;
-  letter-spacing: 0.15em;
+  letter-spacing: .15em;
   text-shadow: 0 0 2px #010011;
   white-space: normal;
   border: 1px solid #26235c;
@@ -3755,7 +3755,7 @@ h2, h3, h4, .confignav {
 .langbox img {
   margin: 0 !important;
   padding: 0;
-  opacity: 0.7;
+  opacity: .7;
   filter: drop-shadow(0 0 1px #000);
 }
 
@@ -3914,7 +3914,7 @@ div.joblog table {
 }
 
 div.joblog table td:first-child {
-  font-weight: bold;
+  font-weight: 700;
 }
 
 div.joblog p {
@@ -3975,7 +3975,7 @@ table#schedjobs {
   margin-bottom: 15px;
   padding-left: 10px;
   text-align: left;
-  font-weight: bold;
+  font-weight: 700;
 }
 
 #schedjobs tr, #schedjobs tr:hover {
@@ -4110,7 +4110,7 @@ h3[id$="con"] { /* peers h3 + tables */
   border-radius: 0;
   padding: 8px 10px;
   font-size: 10pt;
-  word-spacing: 0.1em;
+  word-spacing: .1em;
   letter-spacing: .08em;
   border: var(--innerborder);
   border: var(--innerborder);
@@ -4139,8 +4139,8 @@ h3[id="udpcon"] {
 
 #udpconnections i {
   line-height: 150%;
-  letter-spacing: 0.1em;
-  font-weight: bold;
+  letter-spacing: .1em;
+  font-weight: 700;
   font-size: 90%;
 }
 
@@ -4188,7 +4188,7 @@ h3[id="udpcon"] {
 
 #ntcpconnections td[class="cells"]:last-child {
   width: 100px;
-  font-weight: bold !important;
+  font-weight: 700 !important;
 }
 
 #ntcpconnections {
@@ -4223,7 +4223,7 @@ h3[id="udpcon"] {
 
 .sortup, .sortdown {
   box-shadow: var(--highlight);
-  opacity: 0.5;
+  opacity: .5;
 }
 
 .sortup img, .sortdown img, .sortupactive img, .sortdownactive img {
@@ -4258,7 +4258,7 @@ h3[id="udpcon"] {
   width: 16px;
   display: inline-block;
   border-radius: 1px;
-  background: rgba(237, 207, 255, 0.2);
+  background: rgba(237, 207, 255, .2);
 }
 
 .sortupactive {
@@ -4415,13 +4415,13 @@ tr#addnew {
 
 .themechoice img {
   padding: 3px 3px 4px;
-  opacity: 0.75;
+  opacity: .75;
 }
 
 .themechoice img {
   margin-bottom: 0;
   padding: 3px 3px 0;
-  opacity: 0.75;
+  opacity: .75;
 }
 
 .themechoice .optbox {
@@ -4442,7 +4442,7 @@ tr#addnew {
 }
 
 .themechoice .optbox:checked + img ~ .themelabel {
-  font-weight: bold;
+  font-weight: 700;
   color: #c9ceff;
   background: #040033 !important;
 }
@@ -4514,7 +4514,7 @@ p#helptranslate {
 h3#themeheading, h3#langheading, h3#passwordheading {
   margin-bottom: 0;
   padding: 8px 10px;
-  word-spacing: 0.1em;
+  word-spacing: .1em;
   letter-spacing: .08em;
   font-size: 10.5pt;
   border: var(--innerborder);
@@ -4591,7 +4591,7 @@ td#themeselect {
 
 .langselect input[name="lang"]:checked + img + div.ui_lang {
   color: #c9ceff;
-  font-weight: bold;
+  font-weight: 700;
   background: #040033 !important;
 }
 
@@ -4631,7 +4631,7 @@ td#themeselect {
   position: absolute;
   border: none !important;
   box-shadow: none;
-  opacity: 0.75;
+  opacity: .75;
   filter: drop-shadow(0 0 1px #000);
 }
 
@@ -4797,7 +4797,7 @@ table#consolepass input[type=password] {
 form[action="/createreseed"] > h3 {
   margin-bottom: -13px;
   padding: 10px;
-  word-spacing: 0.1em;
+  word-spacing: .1em;
   letter-spacing: .08em;
   font-size: 10.5pt;
   border: var(--innerborder);
@@ -5084,7 +5084,7 @@ form[action="events"] > .formaction {
 table#addkeyring td:first-child {
   width: 15%;
   white-space: nowrap;
-  font-weight: bold;
+  font-weight: 700;
   padding-right: 0;
 }
 
@@ -5331,7 +5331,7 @@ li.noevents {
 
 .statsLongName {
   color: #37a3df;
-  font-weight: bold;
+  font-weight: 700;
 }
 
 p#gatherstats {
@@ -5368,7 +5368,7 @@ form > table {
 }
 
 #tunnelconfig td:first-child {
-  font-weight: bold;
+  font-weight: 700;
 }
 
 #tunnelconfig td:nth-child(n+2) {
@@ -5781,7 +5781,7 @@ div#volunteer {
   font-size: 11pt;
   text-align: left;
   letter-spacing: .08em;
-  word-spacing: 0.1em;
+  word-spacing: .1em;
   border-radius: 0;
 }
 
@@ -5792,7 +5792,7 @@ div#volunteer {
 #sidebarhelp h3, #faq h3, #reseedhelp h3 {
   margin: 0 -21px 10px !important;
   padding: 8px 10px;
-  word-spacing: 0.1em;
+  word-spacing: .1em;
   letter-spacing: .08em;
   text-align: left;
   text-transform: uppercase;
@@ -5804,7 +5804,7 @@ div#volunteer {
 #changelog h2, #advancedsettings h2 {
   margin: 0 0 -11px !important;
   padding: 10px;
-  word-spacing: 0.1em;
+  word-spacing: .1em;
   letter-spacing: .08em;
   text-align: left;
   text-transform: uppercase;
@@ -5972,7 +5972,7 @@ ul#upnphelp li:last-child, #legal ul li:last-child {
 }
 
 #portfaq th:first-child, #portfaq td:first-child {
-  font-weight: bold;
+  font-weight: 700;
   text-align: right;
 }
 
@@ -5988,14 +5988,14 @@ ul#upnphelp li:last-child, #legal ul li:last-child {
 
 #portfaq th[colspan="3"] {
   padding-left: 10px !important;
-  word-spacing: 0.1em;
+  word-spacing: .1em;
   letter-spacing: .08em;
   text-align: left;
   font-size: 10.5pt !important;
 }
 
 #portfaq td[colspan="3"] {
-  font-weight: normal;
+  font-weight: 400;
 }
 
 #portfaq td:nth-child(2) {
@@ -6148,7 +6148,7 @@ ul#upnphelp li:last-child, #legal ul li:last-child {
 
 table[cellspacing="30"] > tbody > tr > th[colspan="3"] { /* netdb header */
   padding: 10px;
-  word-spacing: 0.1em;
+  word-spacing: .1em;
   letter-spacing: .08em;
   text-transform: uppercase;
   font-size: 11pt;
@@ -6184,7 +6184,7 @@ table[cellspacing="30"] > tbody > tr > th[colspan="3"] { /* netdb header */
   min-width: 140px;
   white-space: nowrap;
   text-align: right;
-  font-weight: bold;
+  font-weight: 700;
 }
 
 #netdblookup td:nth-child(even) {
@@ -6232,7 +6232,7 @@ table[cellspacing="30"] > tbody > tr > th[colspan="3"] { /* netdb header */
 }
 
 .sybil_distance tr:nth-child(n+2):hover {
-  font-weight: bold;
+  font-weight: 700;
   background: #002;
 }
 
@@ -6334,17 +6334,17 @@ table[cellspacing="30"] > tbody > tr > th[colspan="3"] { /* netdb header */
 
 .netdb_leases .tunnel_peer tt, .netdb_leases .tunnel_peer tt a {
   font-size: 8.5pt !important;
-  font-weight: bold !important;
+  font-weight: 700 !important;
 }
 
 .netdb_leases .tunnel_peer tt, .netdb_leases .tunnel_peer a {
-  letter-spacing: 0.1em !important;
+  letter-spacing: .1em !important;
   margin: 0 !important;
   padding: 0 !important;
 }
 
 .main li .netdb_expiry {
-  font-weight: normal;
+  font-weight: 400;
   text-transform: lowercase;
   font-style: italic;
 }
@@ -6397,7 +6397,7 @@ a[name="criticallogs"] + p + h3 + p + ul {
 
 #enviro td {
   padding: 8px 10px;
-  font-weight: normal !important;
+  font-weight: 400 !important;
 }
 
 #logs #enviro td:first-child {
@@ -6420,7 +6420,7 @@ a[name="criticallogs"] + p + h3 + p + ul {
 
 #criticallogs td , #routerlogs td, #eventlogs td, #wrapperlogs td {
   padding: 5px 10px;
-  font-weight: normal !important;
+  font-weight: 400 !important;
   border-top: var(--innerborder);
 }
 
@@ -6597,11 +6597,11 @@ font[color="#000099"] { /* info */
 
 #logs li font[color="#006600"]::before, .log_debug, .log_omitted {
   background: #c9ceff;
-  opacity: 0.8;
+  opacity: .8;
 }
 
 .log_omitted {
-  font-weight: bold;
+  font-weight: 700;
 }
 
 /* error */
@@ -6655,7 +6655,7 @@ font[color="#000099"] { /* info */
 }
 
 #profilelist td:nth-child(3) {
-  letter-spacing: 0.1em;
+  letter-spacing: .1em;
 }
 
 #profilelist th:last-child {
@@ -6950,7 +6950,7 @@ table#jardump {
 }
 
 #jardump .subheading code {
-  font-weight: bold;
+  font-weight: 700;
 }
 
 .subheading.routerfiles {
@@ -7082,7 +7082,7 @@ table#jardump {
 #jardump tt {
   letter-spacing: -.03em;
   font-size: 8pt !important;
-  font-weight: normal !important;
+  font-weight: 400 !important;
 }
 
 /* end jardump */
@@ -7259,7 +7259,7 @@ table#jardump {
 }
 
 #portmapper td:first-child, #sockets td:first-child {
-  font-weight: bold;
+  font-weight: 700;
 }
 
 .debug_container {
@@ -7439,7 +7439,7 @@ table#jardump {
   text-overflow: ellipsis;
   white-space: nowrap !important;
   color: #770;
-  font-weight: bold;
+  font-weight: 700;
   box-shadow: 0 0 0 1px #003, var(--highlight);
   background: #002;
   user-select: all;
@@ -7500,7 +7500,7 @@ h4.app, h4.app2 {
   text-align: left;
   text-transform: uppercase;
   letter-spacing: .08em;
-  word-spacing: 0.1em;
+  word-spacing: .1em;
   letter-spacing: 2px;
   border: 1px solid #26235c;
   background: url(/themes/console/images/eepsite.png) 10px center no-repeat, var(--title) !important;
@@ -7524,7 +7524,7 @@ h4.app a, h4.app2 a {
 
 h4.app img, h4.app2 img {
   margin-top: 1px;
-  opacity: 0.5;
+  opacity: .5;
 }
 
 #chooselang img {
@@ -7915,14 +7915,14 @@ span#distance {
 }
 
 .netdbentry th {
-  font-weight: normal;
+  font-weight: 400;
   text-align: left;
   padding: 4px 6px;
 }
 
 .netdbentry th code, .leaseset th code, .sybil_routerinfo th code {
   font-size: 9pt;
-  font-weight: bold;
+  font-weight: 700;
   margin-left: 5px;
 }
 
@@ -7951,7 +7951,7 @@ span#distance {
 }
 
 .netdbentry tr:last-child code {
-  font-weight: bold;
+  font-weight: 700;
 }
 
 #leasesetdebug, #leasesetsummary {
@@ -7960,7 +7960,7 @@ span#distance {
 }
 
 .leaseset th {
-  font-weight: normal;
+  font-weight: 400;
   padding: 5px;
   text-align: left;
 }
@@ -7977,11 +7977,11 @@ span#distance {
 }
 
 #leasesetdebug th, #leasesetsummary th {
-  font-weight: bold;
+  font-weight: 700;
   text-transform: uppercase;
   font-size: 10pt;
   letter-spacing: .08em;
-  word-spacing: 0.1em;
+  word-spacing: .1em;
   padding: 8px 10px;
 }
 
@@ -8055,7 +8055,7 @@ a[href^="viewprofile"]::after {
   margin-bottom: 10px;
   padding: 20px 15px 20px 50px !important;
   text-align: left;
-  font-weight: bold;
+  font-weight: 700;
   border: var(--innerborder);
   background: #000 var(--infohelp) 12px center no-repeat !important;
   background-size: 28px !important;
@@ -8173,7 +8173,7 @@ p.sybil_info, p.family, p.threatpoints, p.hashdist, p#sybil_totals, p.notfound {
   margin: 3px 0;
   padding: 5px 5px 5px 30px;
   text-align: left;
-  font-weight: bold;
+  font-weight: 700;
   border: var(--innerborder);
   box-shadow: inset 0 0 0 1px #211;
   background: var(--eye) 8px center no-repeat, linear-gradient(to right, #000, #001 80%, #002);
@@ -8197,7 +8197,7 @@ p.threatpoints.hot {
 }
 
 p#sybil_totals {
-  font-weight: normal;
+  font-weight: 400;
 }
 
 p.sybil_info, p.hashdist, p.family {
@@ -8262,7 +8262,7 @@ p.sybil_info + a[name] + .sybil_routerinfo, p.hashdist + a[name] + .sybil_router
   text-transform: uppercase;
   font-size: 10pt;
   letter-spacing: .08em;
-  word-spacing: 0.1em;
+  word-spacing: .1em;
 }
 
 .configtable td {
@@ -8312,7 +8312,7 @@ textarea#advancedsettings:focus {
   padding: 20px 15px 20px 50px !important;
   white-space: normal !important;
   text-align: justify;
-  font-weight: normal !important;
+  font-weight: 400 !important;
   border-top: var(--innerborder);
   border-bottom: var(--innerborder);
   background: #001 var(--infohelp) 12px center no-repeat !important;
@@ -8596,7 +8596,7 @@ input#hideme {
 h4.embeddedtitle#updateplugins {
   margin-top: -13px;
   padding: 5px 10px;
-  word-spacing: 0.1em;
+  word-spacing: .1em;
   letter-spacing: .08em;
   text-align: left;
   text-transform: uppercase;
@@ -8696,7 +8696,7 @@ table#configstats {
 }
 
 #configstats th b {
-  word-spacing: 0.1em;
+  word-spacing: .1em;
   letter-spacing: .08em;
   text-transform: uppercase;
   font-size: 10pt;
@@ -9001,17 +9001,17 @@ h3 .b32 {
 }
 
 img + tt {
-  letter-spacing: 0.15em;
+  letter-spacing: .15em;
 }
 
 .routerid tt, .routerid a tt {
-  font-weight: bold;
+  font-weight: 700;
 }
 
 .routerid tt {
   min-width: 32px;
   display: inline-block;
-  letter-spacing: 0.15em;
+  letter-spacing: .15em;
   text-align: center;
 }
 
@@ -9324,13 +9324,13 @@ b.netdb_transport {
 }
 
 #netdb code {
-  font-weight: normal !important;
+  font-weight: 400 !important;
 }
 
 .netdb_name {
   color: #dfe2ff;
   text-transform: capitalize;
-  font-weight: bold;
+  font-weight: 700;
 }
 
 .netdb_info {
@@ -9442,7 +9442,7 @@ b.netdb_transport {
   padding-right: 9px;
   width: 1%;
   white-space: nowrap;
-  font-weight: bold;
+  font-weight: 700;
 }
 
 .sybil_addresses table {
@@ -10232,7 +10232,7 @@ h3#pluginfromfile, h3#updateplugins, h3#pluginmanage, h3#bannedpeers, h3.ptitle,
   text-align: right;
   background: #003;
   width: 100%;
-  opacity: 0.7;
+  opacity: .7;
   border-top: 1px solid #000;
 }
 
@@ -10259,7 +10259,7 @@ h3#pluginfromfile, h3#updateplugins, h3#pluginmanage, h3#bannedpeers, h3.ptitle,
 
 _:-ms-lang(x), .tunnels_client th:first-child::after {
   letter-spacing: -.05em;
-  font-weight: normal;
+  font-weight: 400;
 }
 
 _:-ms-lang(x), table + .statusnotes {
@@ -10343,7 +10343,7 @@ th.options, table#externali2cp th {
   display: inline-block;
   margin: -2px 2px -2px 0;
   padding: 2px 5px;
-  font-weight: bold;
+  font-weight: 700;
   text-transform: uppercase;
   border-radius: 2px;
   background: #005;
@@ -10357,7 +10357,7 @@ th.options, table#externali2cp th {
 /* graphs */
 
 #graphs td:first-child {
-  font-weight: normal;
+  font-weight: 400;
   text-align: left;
   padding: 5px 0 0;
 }
@@ -10518,7 +10518,7 @@ b.suboption {
 .optionlist label, .optionlist .nowrap, #reseedconfig tr:nth-child(3) td label {
   background: var(--panel) !important;
   box-shadow: var(--highlight), inset 0 0 2px 1px #191939 !important;
-  opacity: 0.9;
+  opacity: .9;
 }
 
 #i2pupdates td, #manualreseed td:not(.infohelp), #reseedconfig td:not(.infohelp), #netconfig td:not(.infohelp):not(.infowarn):not(.optionsave), #graphs td {
@@ -11155,7 +11155,7 @@ label:hover .optbox {
 }
 
 .net_bwrate {
-  font-weight: bold;
+  font-weight: 700;
   font-size: 110%;
   display: inline-block;
   padding: 2px;
@@ -11208,7 +11208,7 @@ tr:nth-child(4) .net_bwrate::before {
 .bw_title {
   display: block;
   text-align: left;
-  font-weight: bold;
+  font-weight: 700;
   font-size: 11pt;
   margin: 2px -13px 0 -38px;
   padding: 2px 5px 4px;
@@ -11408,7 +11408,7 @@ input[type="file"]:hover {
 }
 
 #jobstats tr:last-child td {
-  font-weight: bold;
+  font-weight: 700;
 }
 
 .tunneldisplay .cells {
@@ -11567,7 +11567,7 @@ input[type="file"]:hover {
   margin: 2px 5px 2px 7px;
   padding: 2px 5px 3px;
   font-family: "Droid Sans", "Open Sans", "Noto Sans", Ubuntu, "Segoe UI", "Lucida Grande", Verdana, Helvetica, sans-serif !important;
-  font-weight: bold !important;
+  font-weight: 700 !important;
   font-size: 90%;
   letter-spacing: .12em;
   color: #090;
@@ -11834,7 +11834,7 @@ a.viewfullentry {
   display: inline-block;
   min-width: 50px;
   text-align: center !important;
-  font-weight: bold;
+  font-weight: 700;
   border: 1px solid #113;
   border-radius: 1px;
   box-shadow: var(--highlight);
@@ -12282,7 +12282,7 @@ input[type=checkbox][disabled]:checked, input[type=radio][disabled]:checked, inp
   right: 1px;
   width: auto;
   height: calc(100% - 2px);
-  opacity: 0.7;
+  opacity: .7;
 }
 
 #viewprofile tr {
@@ -12622,7 +12622,7 @@ html, body {
   margin-left: -7px;
   margin-right: -7px;
   padding-left: 28px;
-  letter-spacing: 0.12em;
+  letter-spacing: .12em;
   font-size: 10.5pt;
   border: 1px solid #26235c;
   background: url(/themes/console/images/eepsite.png) 5px center no-repeat, var(--title) !important;
@@ -13019,7 +13019,7 @@ a:hover .sitemapLink {
   padding: 10px;
   text-align: center;
   font-style: italic;
-  font-weight: bold;
+  font-weight: 700;
 }
 
 #wizardpage .messages, #wizard p.infohelp {
@@ -13304,7 +13304,7 @@ p#gatherstats {
 
 .statvalue {
   padding: 0 2px 0 0;
-  font-weight: bold;
+  font-weight: 700;
   font-style: italic;
   color: #ccd1ff;
 }
@@ -13485,7 +13485,7 @@ h1[class], h1 {
 #filterlist .example {
   margin-right: 2px;
   color: #393;
-  font-weight: bold;
+  font-weight: 700;
 }
 
 #pageloader {
@@ -13507,7 +13507,7 @@ h1[class], h1 {
 #webhosting td:first-child {
   width: 1%;
   white-space: nowrap;
-  font-weight: bold;
+  font-weight: 700;
 }
 
 #webhosting #guides {
@@ -13525,8 +13525,8 @@ h1[class], h1 {
   position: relative;
   z-index: 10;
   font-size: 18pt;
-  font-weight: bold;
-  letter-spacing: 0.1em;
+  font-weight: 700;
+  letter-spacing: .1em;
   box-shadow: var(--highlight), inset 0 0 1px 1px #339;
   opacity: .8;
 }
@@ -13563,7 +13563,7 @@ h1[class], h1 {
 #sybilTask th {
   padding-left: 8px;
   text-transform: uppercase;
-  letter-spacing: 0.1em;
+  letter-spacing: .1em;
   font-size: 11pt !important;
   text-align: left;
 }
@@ -14013,7 +14013,7 @@ to {
   min-width: 0 !important;
   display: inline-block;
   vertical-align: middle;
-  font-weight: bold !important;
+  font-weight: 700 !important;
   border: none !important;
   box-shadow: none !important;
   background: none !important;

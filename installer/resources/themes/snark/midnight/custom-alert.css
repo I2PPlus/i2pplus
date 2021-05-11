@@ -62,7 +62,7 @@ to {
    margin: -10px -10px 8px;
    padding: 6px 5px;
    font-size: 12pt;
-   font-weight: bold;
+   font-weight: 700;
    border-bottom: 1px solid #302b74;
    box-shadow: inset 0 0 0 1px #000;
    background: #002;
@@ -82,7 +82,7 @@ to {
    word-wrap: break-word;
    border: none;
    border-radius: 3px;
-   font-weight: bold;
+   font-weight: 700;
    cursor: pointer;
 }
 

@@ -3,9 +3,9 @@
 /* Author: dr|z3d */
 
 h1, h2, h3, h4 {
-  font-weight: normal !important;
+  font-weight: 400 !important;
   text-shadow: none;
-  word-spacing: 0.1em;
+  word-spacing: .1em;
 }
 
 h3 {
@@ -13,7 +13,7 @@ h3 {
 }
 
 b, a, input, button, input[type=submit], input[type="reset"], i, th, thead, tfoot, .mediumtags, .themelabel {
-  font-weight: normal !important;
+  font-weight: 400 !important;
   font-style: normal !important;
 }
 
@@ -25,7 +25,7 @@ button, input[type=submit], input[type="reset"] {
   padding: 3px 5px 3px 22px !important;
   display: inline-block;
   line-height: 140% !important;
-  letter-spacing: 0.15em;
+  letter-spacing: .15em;
   font-size: 10.5pt !important;
 }
 
@@ -68,11 +68,11 @@ button.control {
 
 .routersummary b {
   font-size: 9.5pt;
-  font-weight: normal !important;
+  font-weight: 400 !important;
 }
 
 .routersummary a {
-  word-spacing: 0.1em !important;
+  word-spacing: .1em !important;
   font-size: 10pt;
   line-height: 130%;
 }
@@ -138,12 +138,12 @@ th {
 
 td, .mediumtags {
   font-size: 10pt !important;
-  font-weight: normal !important;
+  font-weight: 400 !important;
 }
 
 .statusnotes {
   font-size: 10.5pt !important;
-  letter-spacing: 0.2em !important;
+  letter-spacing: .2em !important;
   text-shadow: none !important;
 }
 
@@ -162,13 +162,13 @@ code, tt, div {
 }
 
 .messages, .messages li, .infohelp, .infowarn  {
-  font-weight: normal !important;
+  font-weight: 400 !important;
   font-size: 11pt !important;
 }
 
 .tab, .tab2 {
   font-size: 11pt;
-  font-weight: normal;
+  font-weight: 400;
 }
 
 .ui_lang {
@@ -200,7 +200,7 @@ p#enablefullstats {
 #console p, #console li, #console b {
   font-size: 10.5pt !important;
   word-spacing: 0;
-  letter-spacing: 0.15em;
+  letter-spacing: .15em;
   line-height: 160%;
 }
 
@@ -243,11 +243,11 @@ p#enablefullstats {
 
 .tunnel_cap b, b.tunnel_cap {
   color: #fff !important;
-  font-weight: bold !important;
+  font-weight: 700 !important;
 }
 
 .cells tt, #profilelist tt, tt a {
-  font-weight: bold !important;
+  font-weight: 700 !important;
 }
 
 .formaction {
@@ -255,7 +255,7 @@ p#enablefullstats {
 }
 
 .netdb_name {
-  font-weight: normal;
+  font-weight: 400;
   color: #112;
 }
 

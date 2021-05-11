@@ -270,7 +270,7 @@ hr {
   padding: 0 10px;
   line-height: 210%;
   word-spacing: .1em;
-  font-weight: bold;
+  font-weight: 700;
   text-align: center;
   text-transform: capitalize;
 }
@@ -316,7 +316,7 @@ h3 {
   letter-spacing: .18em;
   word-spacing: .1em;
   font-size: 10pt;
-  font-weight: bold;
+  font-weight: 700;
   text-transform: uppercase;
   text-shadow: 0 0 2px #001100;
   color: #ee9;
@@ -396,7 +396,7 @@ div#messages {
   top: 0;
   z-index: 999;
   line-height: 120%;
-  font-weight: bold;
+  font-weight: 700;
   border: 1px solid #242;
   box-shadow: var(--highlight);
   background: #020 url(/themes/snark/dark/images/delete.png) right 6px top 6px no-repeat;
@@ -454,7 +454,7 @@ h4 {
 a:link, #filter a:visited {
   color: #494;
   text-decoration: none;
-  font-weight: bold;
+  font-weight: 700;
   outline: none;
 }
 
@@ -752,7 +752,7 @@ svg tspan {
 }
 
 svg tspan.c {
-  font-weight: normal;
+  font-weight: 400;
 }
 
 svg tspan:hover, svg .tooltip:hover .g {
@@ -967,7 +967,7 @@ input[type=submit], input[type=reset], .fakebutton {
   padding: 7px 12px !important;
   min-width: 92px !important;
   text-align: center;
-  font-weight: bold;
+  font-weight: 700;
   color: #494;
   border-radius: 2px;
   border: 1px solid #000;
@@ -983,7 +983,7 @@ input[type=file]::file-selector-button {
   padding: 7px 12px !important;
   min-width: 92px !important;
   text-align: center;
-  font-weight: bold;
+  font-weight: 700;
   color: #494;
   border-radius: 2px;
   border: 1px solid #000;
@@ -1063,7 +1063,7 @@ textarea, #subslog pre {
   height: 120px;
   resize: none;
   line-height: 140%;
-  font-weight: bold;
+  font-weight: 700;
   font-size: 8.5pt;
   color: #bb7;
   border: 1px solid #242;
@@ -1182,7 +1182,7 @@ p.book {
   width: 1%;
   white-space: nowrap;
   vertical-align: top;
-  font-weight: bold;
+  font-weight: 700;
   text-align: right;
 }
 
@@ -1271,7 +1271,7 @@ p.book {
   width: 21px !important;
   white-space: nowrap;
   text-align: center;
-  font-weight: bold;
+  font-weight: 700;
   border-right: none;
 }
 
@@ -1334,7 +1334,7 @@ p.book {
 
 #host_list .destaddress {
   white-space: nowrap;
-  font-weight: normal;
+  font-weight: 400;
   padding: 6px 0 !important;
   -moz-user-select: all;
   -webkit-user-select: all;
@@ -1396,7 +1396,7 @@ _:-ms-lang(x), * {
   padding: 7px 8px !important;
   height: 72px !important;
   font-size: 9pt;
-  font-weight: normal;
+  font-weight: 400;
   border: none !important;
   border-radius: 0;
   box-shadow: none;
@@ -1516,7 +1516,7 @@ input#exporthosts {
 }
 
 #activefilter, .selected {
-  font-weight: bold;
+  font-weight: 700;
   color: #999;
   box-shadow: var(--highlight), inset 2px 2px 2px rgba(0,0,0,.9) !important;
 }
