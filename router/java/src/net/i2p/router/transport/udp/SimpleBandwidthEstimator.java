@@ -72,7 +72,7 @@ class SimpleBandwidthEstimator implements BandwidthEstimator {
             _acked = 0;
             _tAck = now;
             if (_log.shouldDebug())
-                _log.debug("First sample bytes: " + acked + ", DeltaT: " + deltaT + ' ' + this);
+                _log.debug("First sample bytes: " + acked + "; DeltaT: " + deltaT + "\n* " + this);
         } else {
             _acked += acked;
             // anti-aliasing filter
@@ -137,7 +137,7 @@ class SimpleBandwidthEstimator implements BandwidthEstimator {
             }
             deltaT -= numrtts * rtt;
             if (_log.shouldDebug())
-                _log.debug("Decayed " + numrtts + " times, new _bK_ns_est: " + _bK_ns_est + ' ' + this);
+                _log.debug("Decayed " + numrtts + " times; New _bK_ns_est: " + _bK_ns_est + "\n* " + this);
         }
         float bkdt;
         if (packets > 0) {
@@ -151,8 +151,8 @@ class SimpleBandwidthEstimator implements BandwidthEstimator {
         }
         _tAck = time;
         if (_log.shouldDebug())
-            _log.debug("ComputeBWE bytes: " + packets + ", DeltaT: " + deltaT +
-                       ", bk/DeltaT: " + bkdt + ", _bK_ns_est: " + _bK_ns_est + ' ' + this);
+            _log.debug("ComputeBWE bytes: " + packets + "; DeltaT: " + deltaT +
+                       "; bK/DeltaT: " + bkdt + "; _bK_ns_est: " + _bK_ns_est + "\n* " + this);
     }
 
     /**
@@ -164,9 +164,9 @@ class SimpleBandwidthEstimator implements BandwidthEstimator {
 
     @Override
     public synchronized String toString() {
-        return "\n* SimpleBandwidthEstimator: " +
+        return "SBE: " +
                 " _bKFiltered " + _bKFiltered +
-                ", _tAck " + _tAck + " -> " +
+                "; _tAck " + _tAck + " -> " +
                 DataHelper.formatSize2Decimal((long) (_bKFiltered * 1000), false) +
                 "Bps";
     }
