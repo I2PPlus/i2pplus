@@ -124,8 +124,7 @@ public class NTCPConnection implements Closeable {
     /*
      *  Update frequency for send/recv rates in console peers page
      */
-//    private static final long STAT_UPDATE_TIME_MS = 30*1000;
-    private static final long STAT_UPDATE_TIME_MS = 60*1000;
+    private static final long STAT_UPDATE_TIME_MS = 30*1000;
 
     /*
      *  Should be longer than 2 * EventPumper.MAX_EXPIRE_IDLE_TIME so it doesn't
@@ -145,7 +144,7 @@ public class NTCPConnection implements Closeable {
     static final int BUFFER_SIZE = 16*1024;
     private static final int MAX_DATA_READ_BUFS = 16;
     private static final ByteCache _dataReadBufs = ByteCache.getInstance(SystemVersion.getMaxMemory() < 1024*1024*1024 ?
-                                                                         MAX_DATA_READ_BUFS : MAX_DATA_READ_BUFS + 8, BUFFER_SIZE);
+                                                                         MAX_DATA_READ_BUFS : MAX_DATA_READ_BUFS + 2, BUFFER_SIZE);
     private static final int INFO_PRIORITY = OutNetMessage.PRIORITY_MY_NETDB_STORE_LOW;
     private static final String FIXED_RI_VERSION = "0.9.12";
     private static final AtomicLong __connID = new AtomicLong();

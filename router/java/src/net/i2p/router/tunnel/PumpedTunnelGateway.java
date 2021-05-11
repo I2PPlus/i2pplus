@@ -57,9 +57,9 @@ class PumpedTunnelGateway extends TunnelGateway {
     private static final int cores = SystemVersion.getCores();
     private static final long mem = SystemVersion.getMaxMemory();
     private static final boolean isSlow = SystemVersion.isSlow();
-    private static final int MAX_OB_MSGS_PER_PUMP = (mem < 1024*1024*1024 || cores <= 4 || isSlow) ? 64 : 96;
-    private static final int MAX_IB_MSGS_PER_PUMP = (mem < 1024*1024*1024 || cores <= 4 || isSlow) ? 24 : 36;
-    private static final int INITIAL_OB_QUEUE = (mem < 1024*1024*1024 || cores <= 4 || isSlow) ? 64 : 80;
+    private static final int MAX_OB_MSGS_PER_PUMP = (mem < 1024*1024*1024 || cores <= 4 || isSlow) ? 64 : 72;
+    private static final int MAX_IB_MSGS_PER_PUMP = (mem < 1024*1024*1024 || cores <= 4 || isSlow) ? 24 : 28;
+    private static final int INITIAL_OB_QUEUE = (mem < 1024*1024*1024 || cores <= 4 || isSlow) ? 64 : 72;
     private static final int MAX_IB_QUEUE = (mem < 1024*1024*1024 || cores <= 4 || isSlow) ? 1024 : 1280;
 
     /**
@@ -74,16 +74,24 @@ class PumpedTunnelGateway extends TunnelGateway {
     public PumpedTunnelGateway(RouterContext context, QueuePreprocessor preprocessor,
                                Sender sender, Receiver receiver, TunnelGatewayPumper pumper) {
         super(context, preprocessor, sender, receiver);
+        _nextHop = receiver.getSendTo();
+        boolean backlogged = _context.commSystem().isBacklogged(_nextHop);
         if (getClass() == PumpedTunnelGateway.class) {
             // Unbounded priority queue for outbound
             // fixme lint PendingGatewayMessage is not a CDPQEntry
-            _prequeue = new CoDelPriorityBlockingQueue(context, "OBGW", INITIAL_OB_QUEUE);
-            _nextHop = receiver.getSendTo();
+            if (backlogged)
+                _prequeue = new CoDelPriorityBlockingQueue(context, "OBGW", INITIAL_OB_QUEUE / 4);
+            else
+                _prequeue = new CoDelPriorityBlockingQueue(context, "OBGW", INITIAL_OB_QUEUE);
+//            _nextHop = receiver.getSendTo();
             _isInbound = false;
         } else {  // extended by ThrottledPTG for IB
             // Bounded non-priority queue for inbound
-            _prequeue = new CoDelBlockingQueue<PendingGatewayMessage>(context, "IBGW", MAX_IB_QUEUE);
-            _nextHop = receiver.getSendTo();
+            if (backlogged)
+                _prequeue = new CoDelBlockingQueue<PendingGatewayMessage>(context, "IBGW", MAX_IB_QUEUE / 4);
+            else
+                _prequeue = new CoDelBlockingQueue<PendingGatewayMessage>(context, "IBGW", MAX_IB_QUEUE);
+//            _nextHop = receiver.getSendTo();
             _isInbound = true;
         }
         _pumper = pumper;
@@ -137,7 +145,8 @@ class PumpedTunnelGateway extends TunnelGateway {
             _log.info("Tunnel Gateway Pumper backlogged, queued to " + _nextHop + " : " + _prequeue.size() +
                       " Inbound? " + _isInbound);
         if (backlogged)
-            max = _isInbound ? 1 : 2;
+//            max = _isInbound ? 1 : 2;
+            max = _isInbound ? 2 : 4;
         else
             max = _isInbound ? MAX_IB_MSGS_PER_PUMP : MAX_OB_MSGS_PER_PUMP;
         _prequeue.drainTo(queueBuf, max);

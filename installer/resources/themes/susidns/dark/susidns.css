@@ -979,7 +979,7 @@ input[type=submit], input[type=reset], .fakebutton {
 }
 
 input[type=file]::file-selector-button {
-  margin: 5px 2px;
+  margin: 5px 10px 2px 0;
   padding: 7px 12px !important;
   min-width: 92px !important;
   text-align: center;
