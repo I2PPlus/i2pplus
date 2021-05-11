@@ -18,7 +18,7 @@ h1, h2, h3, h4 {
 .routersummary h3 a {
   font-size: 14pt !important;
   text-transform: uppercase !important;
-  letter-spacing: 0.15em !important;
+  letter-spacing: .15em !important;
 }
 
 .routersummary h4, .routersummary h4 a {
@@ -166,7 +166,7 @@ td.optionsave {
 
 #console div[lang="zh"], #console li, #console p {
   line-height: 170%;
-  letter-spacing: 0.15em;
+  letter-spacing: .15em;
   word-spacing: 0;
   font-size: 10.5pt !important;
 }

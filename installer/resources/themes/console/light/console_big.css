@@ -5,7 +5,7 @@
 h1, h2, h3, h4 {
   font-weight: 400 !important;
   text-shadow: none;
-  word-spacing: 0.1em;
+  word-spacing: .1em;
 }
 
 h3 {
@@ -25,7 +25,7 @@ button, input[type=submit], input[type="reset"] {
   padding: 3px 5px 3px 22px !important;
   display: inline-block;
   line-height: 140% !important;
-  letter-spacing: 0.15em;
+  letter-spacing: .15em;
   font-size: 10.5pt !important;
 }
 
@@ -72,7 +72,7 @@ button.control {
 }
 
 .routersummary a {
-  word-spacing: 0.1em !important;
+  word-spacing: .1em !important;
   font-size: 10pt;
   line-height: 130%;
 }
@@ -143,7 +143,7 @@ td, .mediumtags {
 
 .statusnotes {
   font-size: 10.5pt !important;
-  letter-spacing: 0.2em !important;
+  letter-spacing: .2em !important;
   text-shadow: none !important;
 }
 
@@ -200,7 +200,7 @@ p#enablefullstats {
 #console p, #console li, #console b {
   font-size: 10.5pt !important;
   word-spacing: 0;
-  letter-spacing: 0.15em;
+  letter-spacing: .15em;
   line-height: 160%;
 }
 

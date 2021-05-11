@@ -161,12 +161,12 @@ h4 {
 
 h1, h2, h3, h4 {
   letter-spacing: .08em !important;
-  word-spacing: 0.1em !important;
+  word-spacing: .1em !important;
 }
 
 .infohelp, .infowarn, .infowarn b, #helptranslate {
-  letter-spacing: 0.1em !important;
-  word-spacing: 0.2em !important;
+  letter-spacing: .1em !important;
+  word-spacing: .2em !important;
 }
 
 .suboption {
@@ -392,7 +392,7 @@ h3#iptransport a::after, h3#advancedconfig a::after {
 }
 
 #console p, #console li {
-  letter-spacing: 0.15em !important;
+  letter-spacing: .15em !important;
   line-height: 160% !important;
 }
 
@@ -577,9 +577,9 @@ b.tunnel_cap, .tunnel_cap b {
 }
 
 .routerid tt, .routerid tt a {
-  letter-spacing: 0.1em !important;
+  letter-spacing: .1em !important;
   font-weight: 700 !important;
-  opacity: 0.85;
+  opacity: .85;
 }
 
 .routerid tt a:hover {

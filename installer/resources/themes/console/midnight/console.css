@@ -1455,7 +1455,7 @@ div.logo hr {
 #wizardpage .routersummary img[src*="i2plogo"], #wizardpage .routersummary img[src*="i2plogo"]:hover, #wizardpage .routersummary img[src*="i2plogo"]:active {
   margin-left: -2px !important;
   width: 189px;
-  opacity: 0.7;
+  opacity: .7;
   filter: sepia(100%) hue-rotate(180deg) drop-shadow(0 0 1px #652787);
 }
 
@@ -1472,7 +1472,7 @@ div.logo hr {
   width: 190px;
   height: auto;
   font-size: 0;
-  opacity: 0.7;
+  opacity: .7;
   transition: ease-out opacity 0.3s, ease filter 0.3s;
   filter: sepia(100%) hue-rotate(180deg) drop-shadow(0 0 1px #652787);
 }
@@ -1573,7 +1573,7 @@ div.logo hr {
   padding: 1px 0 !important;
   width: calc(100% - 6px);
   display: inline-block;
-  letter-spacing: 0.1em;
+  letter-spacing: .1em;
   color: var(--a);
 }
 
@@ -3142,7 +3142,7 @@ div.widepanel h3 {
   font-size: 10.5pt;
   text-align: left;
   letter-spacing: .08em;
-  word-spacing: 0.1em;
+  word-spacing: .1em;
   border-radius: 0;
   border: var(--innerborder);
 }
@@ -3203,7 +3203,7 @@ to {
   padding: 3px;
   margin: 5px 4px;
   text-align: center !important;
-  opacity: 0.9;
+  opacity: .9;
   transition: ease border 0.1s;
 }
 
@@ -3600,7 +3600,7 @@ h1 {
   font-weight: 700;
   font-style: normal;
   text-transform: uppercase;
-  letter-spacing: 0.15em;
+  letter-spacing: .15em;
   text-shadow: 0 0 2px #010011;
   white-space: normal;
   border: 1px solid #26235c;
@@ -3755,7 +3755,7 @@ h2, h3, h4, .confignav {
 .langbox img {
   margin: 0 !important;
   padding: 0;
-  opacity: 0.7;
+  opacity: .7;
   filter: drop-shadow(0 0 1px #000);
 }
 
@@ -4110,7 +4110,7 @@ h3[id$="con"] { /* peers h3 + tables */
   border-radius: 0;
   padding: 8px 10px;
   font-size: 10pt;
-  word-spacing: 0.1em;
+  word-spacing: .1em;
   letter-spacing: .08em;
   border: var(--innerborder);
   border: var(--innerborder);
@@ -4139,7 +4139,7 @@ h3[id="udpcon"] {
 
 #udpconnections i {
   line-height: 150%;
-  letter-spacing: 0.1em;
+  letter-spacing: .1em;
   font-weight: 700;
   font-size: 90%;
 }
@@ -4223,7 +4223,7 @@ h3[id="udpcon"] {
 
 .sortup, .sortdown {
   box-shadow: var(--highlight);
-  opacity: 0.5;
+  opacity: .5;
 }
 
 .sortup img, .sortdown img, .sortupactive img, .sortdownactive img {
@@ -4415,13 +4415,13 @@ tr#addnew {
 
 .themechoice img {
   padding: 3px 3px 4px;
-  opacity: 0.75;
+  opacity: .75;
 }
 
 .themechoice img {
   margin-bottom: 0;
   padding: 3px 3px 0;
-  opacity: 0.75;
+  opacity: .75;
 }
 
 .themechoice .optbox {
@@ -4514,7 +4514,7 @@ p#helptranslate {
 h3#themeheading, h3#langheading, h3#passwordheading {
   margin-bottom: 0;
   padding: 8px 10px;
-  word-spacing: 0.1em;
+  word-spacing: .1em;
   letter-spacing: .08em;
   font-size: 10.5pt;
   border: var(--innerborder);
@@ -4631,7 +4631,7 @@ td#themeselect {
   position: absolute;
   border: none !important;
   box-shadow: none;
-  opacity: 0.75;
+  opacity: .75;
   filter: drop-shadow(0 0 1px #000);
 }
 
@@ -4797,7 +4797,7 @@ table#consolepass input[type=password] {
 form[action="/createreseed"] > h3 {
   margin-bottom: -13px;
   padding: 10px;
-  word-spacing: 0.1em;
+  word-spacing: .1em;
   letter-spacing: .08em;
   font-size: 10.5pt;
   border: var(--innerborder);
@@ -5781,7 +5781,7 @@ div#volunteer {
   font-size: 11pt;
   text-align: left;
   letter-spacing: .08em;
-  word-spacing: 0.1em;
+  word-spacing: .1em;
   border-radius: 0;
 }
 
@@ -5792,7 +5792,7 @@ div#volunteer {
 #sidebarhelp h3, #faq h3, #reseedhelp h3 {
   margin: 0 -21px 10px !important;
   padding: 8px 10px;
-  word-spacing: 0.1em;
+  word-spacing: .1em;
   letter-spacing: .08em;
   text-align: left;
   text-transform: uppercase;
@@ -5804,7 +5804,7 @@ div#volunteer {
 #changelog h2, #advancedsettings h2 {
   margin: 0 0 -11px !important;
   padding: 10px;
-  word-spacing: 0.1em;
+  word-spacing: .1em;
   letter-spacing: .08em;
   text-align: left;
   text-transform: uppercase;
@@ -5988,7 +5988,7 @@ ul#upnphelp li:last-child, #legal ul li:last-child {
 
 #portfaq th[colspan="3"] {
   padding-left: 10px !important;
-  word-spacing: 0.1em;
+  word-spacing: .1em;
   letter-spacing: .08em;
   text-align: left;
   font-size: 10.5pt !important;
@@ -6148,7 +6148,7 @@ ul#upnphelp li:last-child, #legal ul li:last-child {
 
 table[cellspacing="30"] > tbody > tr > th[colspan="3"] { /* netdb header */
   padding: 10px;
-  word-spacing: 0.1em;
+  word-spacing: .1em;
   letter-spacing: .08em;
   text-transform: uppercase;
   font-size: 11pt;
@@ -6338,7 +6338,7 @@ table[cellspacing="30"] > tbody > tr > th[colspan="3"] { /* netdb header */
 }
 
 .netdb_leases .tunnel_peer tt, .netdb_leases .tunnel_peer a {
-  letter-spacing: 0.1em !important;
+  letter-spacing: .1em !important;
   margin: 0 !important;
   padding: 0 !important;
 }
@@ -6597,7 +6597,7 @@ font[color="#000099"] { /* info */
 
 #logs li font[color="#006600"]::before, .log_debug, .log_omitted {
   background: #c9ceff;
-  opacity: 0.8;
+  opacity: .8;
 }
 
 .log_omitted {
@@ -6655,7 +6655,7 @@ font[color="#000099"] { /* info */
 }
 
 #profilelist td:nth-child(3) {
-  letter-spacing: 0.1em;
+  letter-spacing: .1em;
 }
 
 #profilelist th:last-child {
@@ -7500,7 +7500,7 @@ h4.app, h4.app2 {
   text-align: left;
   text-transform: uppercase;
   letter-spacing: .08em;
-  word-spacing: 0.1em;
+  word-spacing: .1em;
   letter-spacing: 2px;
   border: 1px solid #26235c;
   background: url(/themes/console/images/eepsite.png) 10px center no-repeat, var(--title) !important;
@@ -7524,7 +7524,7 @@ h4.app a, h4.app2 a {
 
 h4.app img, h4.app2 img {
   margin-top: 1px;
-  opacity: 0.5;
+  opacity: .5;
 }
 
 #chooselang img {
@@ -7981,7 +7981,7 @@ span#distance {
   text-transform: uppercase;
   font-size: 10pt;
   letter-spacing: .08em;
-  word-spacing: 0.1em;
+  word-spacing: .1em;
   padding: 8px 10px;
 }
 
@@ -8262,7 +8262,7 @@ p.sybil_info + a[name] + .sybil_routerinfo, p.hashdist + a[name] + .sybil_router
   text-transform: uppercase;
   font-size: 10pt;
   letter-spacing: .08em;
-  word-spacing: 0.1em;
+  word-spacing: .1em;
 }
 
 .configtable td {
@@ -8596,7 +8596,7 @@ input#hideme {
 h4.embeddedtitle#updateplugins {
   margin-top: -13px;
   padding: 5px 10px;
-  word-spacing: 0.1em;
+  word-spacing: .1em;
   letter-spacing: .08em;
   text-align: left;
   text-transform: uppercase;
@@ -8696,7 +8696,7 @@ table#configstats {
 }
 
 #configstats th b {
-  word-spacing: 0.1em;
+  word-spacing: .1em;
   letter-spacing: .08em;
   text-transform: uppercase;
   font-size: 10pt;
@@ -9001,7 +9001,7 @@ h3 .b32 {
 }
 
 img + tt {
-  letter-spacing: 0.15em;
+  letter-spacing: .15em;
 }
 
 .routerid tt, .routerid a tt {
@@ -9011,7 +9011,7 @@ img + tt {
 .routerid tt {
   min-width: 32px;
   display: inline-block;
-  letter-spacing: 0.15em;
+  letter-spacing: .15em;
   text-align: center;
 }
 
@@ -10232,7 +10232,7 @@ h3#pluginfromfile, h3#updateplugins, h3#pluginmanage, h3#bannedpeers, h3.ptitle,
   text-align: right;
   background: #003;
   width: 100%;
-  opacity: 0.7;
+  opacity: .7;
   border-top: 1px solid #000;
 }
 
@@ -10518,7 +10518,7 @@ b.suboption {
 .optionlist label, .optionlist .nowrap, #reseedconfig tr:nth-child(3) td label {
   background: var(--panel) !important;
   box-shadow: var(--highlight), inset 0 0 2px 1px #191939 !important;
-  opacity: 0.9;
+  opacity: .9;
 }
 
 #i2pupdates td, #manualreseed td:not(.infohelp), #reseedconfig td:not(.infohelp), #netconfig td:not(.infohelp):not(.infowarn):not(.optionsave), #graphs td {
@@ -12282,7 +12282,7 @@ input[type=checkbox][disabled]:checked, input[type=radio][disabled]:checked, inp
   right: 1px;
   width: auto;
   height: calc(100% - 2px);
-  opacity: 0.7;
+  opacity: .7;
 }
 
 #viewprofile tr {
@@ -12622,7 +12622,7 @@ html, body {
   margin-left: -7px;
   margin-right: -7px;
   padding-left: 28px;
-  letter-spacing: 0.12em;
+  letter-spacing: .12em;
   font-size: 10.5pt;
   border: 1px solid #26235c;
   background: url(/themes/console/images/eepsite.png) 5px center no-repeat, var(--title) !important;
@@ -13526,7 +13526,7 @@ h1[class], h1 {
   z-index: 10;
   font-size: 18pt;
   font-weight: 700;
-  letter-spacing: 0.1em;
+  letter-spacing: .1em;
   box-shadow: var(--highlight), inset 0 0 1px 1px #339;
   opacity: .8;
 }
@@ -13563,7 +13563,7 @@ h1[class], h1 {
 #sybilTask th {
   padding-left: 8px;
   text-transform: uppercase;
-  letter-spacing: 0.1em;
+  letter-spacing: .1em;
   font-size: 11pt !important;
   text-align: left;
 }

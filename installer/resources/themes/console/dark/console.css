@@ -10288,7 +10288,7 @@ input[type=file] {
   padding: 20px 20px 0;
   width: calc(100% - 45px);
   line-height: 20px;
-  letter-spacing: 0.05em;
+  letter-spacing: .05em;
   text-shadow: 0 1px 1px #000;
   border-left: 5px solid #030;
   background: repeating-linear-gradient(to bottom, rgba(0,8,0,.6) 0, rgba(0,8,0,.6) 20px, rgba(0,20,0,.6) 20px, rgba(0,20,0,.6) 40px);
