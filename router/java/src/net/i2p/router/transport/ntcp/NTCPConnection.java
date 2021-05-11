@@ -914,9 +914,9 @@ public class NTCPConnection implements Closeable {
             StringBuilder buf = new StringBuilder(256);
             buf.append("Sending ").append(blocks.size())
                .append(" blocks in ").append(framelen)
-               .append(" byte NTCP2 frame:");
+               .append(" byte NTCP2 frame...");
             for (int i = 0; i < blocks.size(); i++) {
-                buf.append("\n    ").append(i).append(": ").append(blocks.get(i).toString());
+                buf.append("\n* Block ").append(i).append(": ").append(blocks.get(i).toString());
             }
             _log.debug(buf.toString());
         }
