@@ -357,7 +357,7 @@ public class Router implements RouterClock.ClockShiftListener {
                 // So wait at least 60s to be sure.
                 if (isOnlyRouterRunning()) {
                     if (i > 0)
-                        System.err.println("INFO: No, there wasn't another router already running... proceeding with startup...");
+                        System.err.println("INFO: No other router running, proceeding with startup...");
                     break;
                 }
                 if (i < 13) {
