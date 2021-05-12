@@ -357,7 +357,7 @@ public class Router implements RouterClock.ClockShiftListener {
                 // So wait at least 60s to be sure.
                 if (isOnlyRouterRunning()) {
                     if (i > 0)
-                        System.err.println("INFO: No, there wasn't another router already running... proceeding with startup...");
+                        System.err.println("INFO: No other router running, proceeding with startup...");
                     break;
                 }
                 if (i < 13) {
@@ -462,12 +462,12 @@ public class Router implements RouterClock.ClockShiftListener {
 
         _shutdownHook = new ShutdownHook(_context);
         _gracefulShutdownDetector = new I2PAppThread(new GracefulShutdown(_context), "Graceful ShutdownHook", true);
-        _gracefulShutdownDetector.setPriority(Thread.NORM_PRIORITY + 1);
+        _gracefulShutdownDetector.setPriority(I2PThread.NORM_PRIORITY + 1);
         _gracefulShutdownDetector.start();
 
         _watchdog = new RouterWatchdog(_context);
         _watchdogThread = new I2PAppThread(_watchdog, "RouterWatchdog", true);
-        _watchdogThread.setPriority(Thread.NORM_PRIORITY + 1);
+        _watchdogThread.setPriority(I2PThread.NORM_PRIORITY + 1);
         _watchdogThread.start();
 
         if (SystemVersion.isWindows())
@@ -1845,7 +1845,7 @@ public class Router implements RouterClock.ClockShiftListener {
             _downtime = 1;
         }
         Thread t = new I2PThread(new Restarter(_context), "Router Restart");
-        t.setPriority(Thread.NORM_PRIORITY + 1);
+        t.setPriority(I2PThread.NORM_PRIORITY + 1);
         t.start();
     }
 

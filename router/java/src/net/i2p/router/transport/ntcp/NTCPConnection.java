@@ -143,8 +143,9 @@ public class NTCPConnection implements Closeable {
      */
     static final int BUFFER_SIZE = 16*1024;
     private static final int MAX_DATA_READ_BUFS = 16;
+//    private static final ByteCache _dataReadBufs = ByteCache.getInstance(MAX_DATA_READ_BUFS, BUFFER_SIZE);
     private static final ByteCache _dataReadBufs = ByteCache.getInstance(SystemVersion.getMaxMemory() < 1024*1024*1024 ?
-                                                                         MAX_DATA_READ_BUFS : MAX_DATA_READ_BUFS + 2, BUFFER_SIZE);
+                                                                         MAX_DATA_READ_BUFS : MAX_DATA_READ_BUFS / 2, BUFFER_SIZE);
     private static final int INFO_PRIORITY = OutNetMessage.PRIORITY_MY_NETDB_STORE_LOW;
     private static final String FIXED_RI_VERSION = "0.9.12";
     private static final AtomicLong __connID = new AtomicLong();
@@ -666,7 +667,8 @@ public class NTCPConnection implements Closeable {
             blocks.add(block);
             size += block.getTotalLength();
             // now add more (maybe)
-            if (size < NTCP2_PREFERRED_PAYLOAD_MAX) {
+//            if (size < NTCP2_PREFERRED_PAYLOAD_MAX) {
+            if (size < NTCP2_PREFERRED_PAYLOAD_MAX / 3 * 2) {
                 // keep adding as long as we will be under 5 KB
                 while (true) {
                     msg = _outbound.peek();

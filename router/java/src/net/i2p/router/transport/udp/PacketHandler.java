@@ -129,7 +129,7 @@ class PacketHandler {
         _keepReading = true;
         for (int i = 0; i < _handlers.length; i++) {
             I2PThread t = new I2PThread(_handlers[i], "UDPPktHandler " + (i+1) + '/' + _handlers.length, true);
-            t.setPriority(Thread.MAX_PRIORITY - 1);
+            t.setPriority(I2PThread.MAX_PRIORITY - 1);
             t.start();
         }
     }
