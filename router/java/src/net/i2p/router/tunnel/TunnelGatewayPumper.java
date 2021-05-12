@@ -32,9 +32,10 @@ class TunnelGatewayPumper implements Runnable {
      *  See additional comments in PTG.
      */
 //    private static final long REQUEUE_TIME = 50;
+    private static final long REQUEUE_TIME = 30;
 
-    private static final long REQUEUE_TIME = (SystemVersion.getMaxMemory() < 1024*1024*1024 ||
-                                              SystemVersion.getCores() <= 4 || SystemVersion.isSlow()) ? 50 : 80;
+/*    private static final long REQUEUE_TIME = (SystemVersion.getMaxMemory() < 1024*1024*1024 ||
+                                              SystemVersion.getCores() <= 4 || SystemVersion.isSlow()) ? 50 : 80;*/
 
     private static final TryCache<List<PendingGatewayMessage>> _bufferCache = new TryCache<>(new BufferFactory(), 16);
 
@@ -53,7 +54,7 @@ class TunnelGatewayPumper implements Runnable {
         _outbound = new LinkedHashSet<PumpedTunnelGateway>(16);
 //        new I2PThread(this, "Tunnel GW pumper ", true).start();
         I2PThread gwPumper = new I2PThread(this, "Tunnel GW pumper", true);
-        gwPumper.setPriority(Thread.MAX_PRIORITY - 1);
+        gwPumper.setPriority(I2PThread.MAX_PRIORITY - 1);
         gwPumper.start();
     }
 
