@@ -64,8 +64,10 @@ class EventPumper implements Runnable {
      *  message, which is a 5-slot VTBM (~2700 bytes).
      *  The occasional larger message can use multiple buffers.
      */
-    private static final int BUF_SIZE = SystemVersion.getMaxMemory() < 1024*1024*1024 ? 8*1024 : 12*1024;
-    private static final int MAX_CACHE_SIZE = SystemVersion.getMaxMemory() < 1024*1024*1024 ? 64 : 96;
+    private static final int BUF_SIZE = 8*1024;
+    private static final int MAX_CACHE_SIZE = 64;
+//    private static final int BUF_SIZE = SystemVersion.getMaxMemory() < 1024*1024*1024 ? 8*1024 : 12*1024;
+//    private static final int MAX_CACHE_SIZE = SystemVersion.getMaxMemory() < 1024*1024*1024 ? 64 : 96;
 
     private static class BufferFactory implements TryCache.ObjectFactory<ByteBuffer> {
         public ByteBuffer newInstance() {
@@ -86,10 +88,9 @@ class EventPumper implements Runnable {
      * the time to iterate across them to check a few flags shouldn't be a problem.
      */
 //    private static final long FAILSAFE_ITERATION_FREQ = 2*1000l;
-    private static final int FAILSAFE_ITERATION_FREQ = 10*60*1000;
+    private static final int FAILSAFE_ITERATION_FREQ = 15*1000;
     private static final int FAILSAFE_LOOP_COUNT = 512;
-//    private static final long SELECTOR_LOOP_DELAY = 200;
-    private static final long SELECTOR_LOOP_DELAY = 150;
+    private static final long SELECTOR_LOOP_DELAY = 200;
     private static final long BLOCKED_IP_FREQ = 3*60*1000;
 
     /** tunnel test now disabled, but this should be long enough to allow an active tunnel to get started */
@@ -146,7 +147,7 @@ class EventPumper implements Runnable {
             _selector = Selector.open();
             _alive = true;
             I2PThread t = new I2PThread(this, "NTCPPumper", true);
-            t.setPriority(I2PThread.MAX_PRIORITY - 1);
+            t.setPriority(I2PThread.MAX_PRIORITY);
             t.start();
         } catch (IOException ioe) {
             _log.log(Log.CRIT, "Error opening the NTCP selector", ioe);

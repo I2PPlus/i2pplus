@@ -163,7 +163,8 @@ public class NTCPConnection implements Closeable {
     private static final int SIP_IV_LENGTH = 8;
     private static final int NTCP2_FAIL_READ = 1024;
     private static final long NTCP2_FAIL_TIMEOUT = 10*1000;
-    private static final long NTCP2_TERMINATION_CLOSE_DELAY = 50;
+//    private static final long NTCP2_TERMINATION_CLOSE_DELAY = 50;
+    private static final long NTCP2_TERMINATION_CLOSE_DELAY = 30;
     // don't make combined messages too big, to minimize latency
     // Tunnel data msgs are 1024 + 4 + 9 + 3 = 1040, allow 5
     private static final int NTCP2_PREFERRED_PAYLOAD_MAX = 5 * 1040;
@@ -667,8 +668,8 @@ public class NTCPConnection implements Closeable {
             blocks.add(block);
             size += block.getTotalLength();
             // now add more (maybe)
-//            if (size < NTCP2_PREFERRED_PAYLOAD_MAX) {
-            if (size < NTCP2_PREFERRED_PAYLOAD_MAX / 3 * 2) {
+            if (size < NTCP2_PREFERRED_PAYLOAD_MAX) {
+//            if (size < NTCP2_PREFERRED_PAYLOAD_MAX / 3 * 2) {
                 // keep adding as long as we will be under 5 KB
                 while (true) {
                     msg = _outbound.peek();
@@ -676,7 +677,8 @@ public class NTCPConnection implements Closeable {
                         break;
                     m = msg.getMessage();
                     int msz = m.getMessageSize() - 7;
-                    if (size + msz > NTCP2_PREFERRED_PAYLOAD_MAX / 3 * 2)
+                    if (size + msz > NTCP2_PREFERRED_PAYLOAD_MAX)
+//                    if (size + msz > NTCP2_PREFERRED_PAYLOAD_MAX / 3 * 2)
                         break;
                     OutNetMessage msg2 = _outbound.poll();
                     if (msg2 == null)

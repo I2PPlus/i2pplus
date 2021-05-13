@@ -50,11 +50,13 @@ class PumpedTunnelGateway extends TunnelGateway {
 
 
 //    private static final int MAX_OB_MSGS_PER_PUMP = 64;
-    private static final int MAX_OB_MSGS_PER_PUMP = 48;
-    private static final int MAX_IB_MSGS_PER_PUMP = 24;
+    private static final int MAX_OB_MSGS_PER_PUMP = 32;
+//    private static final int MAX_IB_MSGS_PER_PUMP = 24;
+    private static final int MAX_IB_MSGS_PER_PUMP = 32;
 //    private static final int INITIAL_OB_QUEUE = 64;
-    private static final int INITIAL_OB_QUEUE = 48;
-    private static final int MAX_IB_QUEUE = 1024;
+    private static final int INITIAL_OB_QUEUE = 32;
+//    private static final int MAX_IB_QUEUE = 1024;
+    private static final int MAX_IB_QUEUE = 512;
 
 /*
     private static final int cores = SystemVersion.getCores();
