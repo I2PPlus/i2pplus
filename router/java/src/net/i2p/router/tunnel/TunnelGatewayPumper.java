@@ -6,123 +6,125 @@ import java.util.Iterator;
 import java.util.LinkedHashSet;
 import java.util.List;
 import java.util.Set;
-import net.i2p.util.ConcurrentHashSet;
-import net.i2p.util.TryCache;
+import java.util.concurrent.CopyOnWriteArrayList;
+
 import net.i2p.router.RouterContext;
 import net.i2p.util.I2PThread;
 import net.i2p.util.SimpleTimer;
-
 import net.i2p.util.SystemVersion;
 
 /**
- * straight pumping for multithreaded inbound receivers
- * queueing for outbound I2CP receivers
-**/
-
+ * Run through the tunnel gateways that have had messages added to them and push
+ * those messages through the preprocessing and sending process.
+ *
+ * TODO do we need this many threads?
+ * TODO this combines IBGWs and OBGWs, do we wish to separate the two
+ * and/or prioritize OBGWs (i.e. our outbound traffic) over IBGWs (participating)?
+ */
 class TunnelGatewayPumper implements Runnable {
     private final RouterContext _context;
+    private final Set<PumpedTunnelGateway> _wantsPumping;
     private final Set<PumpedTunnelGateway> _backlogged;
-    private final Set<PumpedTunnelGateway> _livepumps;
-    private final Set<PumpedTunnelGateway> _inbound;
-    private final Set<PumpedTunnelGateway> _outbound;
+    private final List<Thread> _threads;
     private volatile boolean _stop;
+    private static final int MIN_PUMPERS = 1;
+//    private static final int MAX_PUMPERS = 4;
+    private static final int MAX_PUMPERS = (SystemVersion.isSlow() || SystemVersion.getCores() <= 4 ||
+                                            SystemVersion.getMaxMemory() < 512*1024*1024) ? 2 : 3;
+    private final int _pumpers;
 
     /**
      *  Wait just a little, but this lets the pumper queue back up.
      *  See additional comments in PTG.
      */
 //    private static final long REQUEUE_TIME = 50;
-    private static final long REQUEUE_TIME = 30; //queues reduced in PTG (I2P+)
-
-/*    private static final long REQUEUE_TIME = (SystemVersion.getMaxMemory() < 1024*1024*1024 ||
-                                              SystemVersion.getCores() <= 4 || SystemVersion.isSlow()) ? 50 : 80;*/
-
-    private static final TryCache<List<PendingGatewayMessage>> _bufferCache = new TryCache<>(new BufferFactory(), 16);
-
-    private static class BufferFactory implements TryCache.ObjectFactory<List<PendingGatewayMessage>> {
-        public List<PendingGatewayMessage> newInstance() {
-            return new ArrayList<PendingGatewayMessage>(32);
-        }
-    }
+    private static final long REQUEUE_TIME = 30;
 
     /** Creates a new instance of TunnelGatewayPumper */
     public TunnelGatewayPumper(RouterContext ctx) {
         _context = ctx;
-        _backlogged = new ConcurrentHashSet<PumpedTunnelGateway>(16);
-        _livepumps = new ConcurrentHashSet<PumpedTunnelGateway>(16);
-        _inbound = new ConcurrentHashSet<PumpedTunnelGateway>(16);
-        _outbound = new LinkedHashSet<PumpedTunnelGateway>(16);
-//        new I2PThread(this, "Tunnel GW pumper ", true).start();
-        I2PThread gwPumper = new I2PThread(this, "TunnGwPumper", true);
-        gwPumper.setPriority(I2PThread.MAX_PRIORITY);
-        gwPumper.start();
+        _wantsPumping = new LinkedHashSet<PumpedTunnelGateway>(16);
+        _backlogged = new HashSet<PumpedTunnelGateway>(16);
+        _threads = new CopyOnWriteArrayList<Thread>();
+        if (ctx.getBooleanProperty("i2p.dummyTunnelManager")) {
+            _pumpers = 1;
+        } else {
+            long maxMemory = SystemVersion.getMaxMemory();
+            _pumpers = (int) Math.max(MIN_PUMPERS, Math.min(MAX_PUMPERS, 1 + (maxMemory / (32*1024*1024))));
+        }
+        for (int i = 0; i < _pumpers; i++) {
+            Thread t = new I2PThread(this, "TunnGWPumper " + (i+1) + '/' + _pumpers, true);
+            t.setPriority(I2PThread.MAX_PRIORITY);
+            _threads.add(t);
+            t.start();
+        }
     }
 
     public void stopPumping() {
-        _stop = true;
-        synchronized (_outbound) {
-            _outbound.notify();
+        _stop=true;
+        _wantsPumping.clear();
+        for (int i = 0; i < _pumpers; i++) {
+            PumpedTunnelGateway poison = new PoisonPTG(_context);
+            wantsPumping(poison);
         }
-        _backlogged.clear();
-        _livepumps.clear();
-        _inbound.clear();
-        _outbound.clear();
+        for (int i = 1; i <= 5 && !_wantsPumping.isEmpty(); i++) {
+            try {
+//                Thread.sleep(i * 50);
+                Thread.sleep(i * 10);
+            } catch (InterruptedException ie) {}
+        }
+        for (Thread t : _threads) {
+            t.interrupt();
+        }
+        _threads.clear();
+        _wantsPumping.clear();
     }
 
     public void wantsPumping(PumpedTunnelGateway gw) {
-        if (!_backlogged.contains(gw) && !_stop) {
-            if (gw._isInbound) {
-                if (_inbound.add(gw)) { // not queued up already
-                    // in the extremely unlikely case of a race
-                    // we will have an additional empty pump() blocking shortly
-                    // not as expensive as complicated logic here every time
-                    if (!_livepumps.add(gw)) // let others return early
-                        return; // somebody else working already
-                    List<PendingGatewayMessage> queueBuf = _bufferCache.acquire();
-                    while (_inbound.remove(gw) && !_stop) {
-                        _livepumps.add(gw);
-                        if (gw.pump(queueBuf)) { // extremely unlikely chance of race, pump() will block
-                            _backlogged.add(gw);
-                            _context.simpleTimer2().addEvent(new Requeue(gw), REQUEUE_TIME);
-                        }
-                        _livepumps.remove(gw); // _inbound added first, removed last.
-                    }
-                    _bufferCache.release(queueBuf);
-                }
-            } else {
-                 synchronized (_outbound) { // used reentrant
-                     if (_outbound.add(gw))
-                         _outbound.notify();
-                }
+        if (!_stop) {
+            synchronized (_wantsPumping) {
+                if ((!_backlogged.contains(gw)) && _wantsPumping.add(gw))
+                    _wantsPumping.notify();
             }
         }
     }
 
-   public void run() {
-        // this also needs a livepumps logic if it were multi-threaded
+    public void run() {
+        try {
+            run2();
+        } finally {
+            _threads.remove(Thread.currentThread());
+        }
+    }
+
+    private void run2() {
         PumpedTunnelGateway gw = null;
-        List<PendingGatewayMessage> queueBuf = _bufferCache.acquire();
+        List<PendingGatewayMessage> queueBuf = new ArrayList<PendingGatewayMessage>(32);
         boolean requeue = false;
         while (!_stop) {
             try {
-                synchronized (_outbound) {
-                    if (requeue) { // usually happens less than 1 / hour
+                synchronized (_wantsPumping) {
+                    if (requeue && gw != null) {
                         // in case another packet came in
-                        _outbound.remove(gw);
-                        _backlogged.add(gw);
-                        _context.simpleTimer2().addEvent(new Requeue(gw), REQUEUE_TIME);
+                        _wantsPumping.remove(gw);
+                        if (_backlogged.add(gw))
+                            _context.simpleTimer2().addEvent(new Requeue(gw), REQUEUE_TIME);
                     }
-                    while (_outbound.isEmpty()) { // spurios wakeup
-                        _outbound.wait();
-                        if (_stop)
-                            return;
+                    gw = null;
+                    if (_wantsPumping.isEmpty()) {
+                        _wantsPumping.wait();
+                    } else {
+                        Iterator<PumpedTunnelGateway> iter = _wantsPumping.iterator();
+                        gw = iter.next();
+                        iter.remove();
                     }
-                    Iterator<PumpedTunnelGateway> iter = _outbound.iterator();
-                    gw = iter.next();
-                    iter.remove();
                 }
             } catch (InterruptedException ie) {}
-            requeue = gw.pump(queueBuf); // if single thread: average queue length before this < 0.15 on busy router
+            if (gw != null) {
+                if (gw.getMessagesSent() == POISON_PTG)
+                    break;
+                requeue = gw.pump(queueBuf);
+            }
         }
     }
 
@@ -134,8 +136,23 @@ class TunnelGatewayPumper implements Runnable {
         }
 
         public void timeReached() {
-            _backlogged.remove(_ptg);
-            wantsPumping(_ptg);
+            synchronized (_wantsPumping) {
+                _backlogged.remove(_ptg);
+                if (_wantsPumping.add(_ptg))
+                    _wantsPumping.notify();
+            }
         }
+    }
+
+
+    private static final int POISON_PTG = -99999;
+
+    private static class PoisonPTG extends PumpedTunnelGateway {
+        public PoisonPTG(RouterContext ctx) {
+            super(ctx, null, null, null, null);
+        }
+
+        @Override
+        public int getMessagesSent() { return POISON_PTG; }
     }
 }
