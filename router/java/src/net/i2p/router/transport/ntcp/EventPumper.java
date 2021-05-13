@@ -110,8 +110,8 @@ class EventPumper implements Runnable {
 
 //    private static final int MIN_MINB = 4;
 //    private static final int MAX_MINB = 12;
-    private static final int MIN_MINB = 8;
-    private static final int MAX_MINB = 16;
+    private static final int MIN_MINB = 6;
+    private static final int MAX_MINB = 14;
     private static final int MIN_BUFS;
     static {
         long maxMemory = SystemVersion.getMaxMemory();

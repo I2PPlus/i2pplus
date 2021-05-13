@@ -143,9 +143,9 @@ public class NTCPConnection implements Closeable {
      */
     static final int BUFFER_SIZE = 16*1024;
     private static final int MAX_DATA_READ_BUFS = 16;
-//    private static final ByteCache _dataReadBufs = ByteCache.getInstance(MAX_DATA_READ_BUFS, BUFFER_SIZE);
-    private static final ByteCache _dataReadBufs = ByteCache.getInstance(SystemVersion.getMaxMemory() < 1024*1024*1024 ?
-                                                                         MAX_DATA_READ_BUFS : MAX_DATA_READ_BUFS / 2, BUFFER_SIZE);
+    private static final ByteCache _dataReadBufs = ByteCache.getInstance(MAX_DATA_READ_BUFS, BUFFER_SIZE);
+/*    private static final ByteCache _dataReadBufs = ByteCache.getInstance(SystemVersion.getMaxMemory() < 1024*1024*1024 ?
+                                                                         MAX_DATA_READ_BUFS : MAX_DATA_READ_BUFS / 2, BUFFER_SIZE);*/
     private static final int INFO_PRIORITY = OutNetMessage.PRIORITY_MY_NETDB_STORE_LOW;
     private static final String FIXED_RI_VERSION = "0.9.12";
     private static final AtomicLong __connID = new AtomicLong();
@@ -676,7 +676,7 @@ public class NTCPConnection implements Closeable {
                         break;
                     m = msg.getMessage();
                     int msz = m.getMessageSize() - 7;
-                    if (size + msz > NTCP2_PREFERRED_PAYLOAD_MAX)
+                    if (size + msz > NTCP2_PREFERRED_PAYLOAD_MAX / 3 * 2)
                         break;
                     OutNetMessage msg2 = _outbound.poll();
                     if (msg2 == null)
@@ -705,7 +705,7 @@ public class NTCPConnection implements Closeable {
             size += block.getTotalLength();
             _nextMetaTime = now + (META_FREQUENCY / 2) + _context.random().nextInt(META_FREQUENCY / 2);
             if (_log.shouldLog(Log.DEBUG))
-                _log.debug("Sending NTCP2 datetime block");
+                _log.debug("Sending NTCP2 datetime block...");
         }
         // 1024 is an estimate, do final check below
         if (_nextInfoTime <= now && size + 1024 <= BUFFER_SIZE) {
@@ -717,7 +717,7 @@ public class NTCPConnection implements Closeable {
                 size += sz;
                 _nextInfoTime = now + (INFO_FREQUENCY / 2) + _context.random().nextInt(INFO_FREQUENCY);
                 if (_log.shouldDebug())
-                    _log.debug("Sending NTCP2 RouterInfo block");
+                    _log.debug("Sending NTCP2 RouterInfo block...");
             } // else wait until next time
         }
         int availForPad = BUFFER_SIZE - (size + NTCP2Payload.BLOCK_HEADER_SIZE);
@@ -1603,12 +1603,13 @@ public class NTCPConnection implements Closeable {
                 _log.debug("Received padding options:" +
                           "\n* His padding options: " + hisPadding +
                           "\n* Our padding options: " + OUR_PADDING +
-                          "\n* Merged config:       " + _paddingConfig);
+                          "\n* Merged config: " + _paddingConfig);
         }
 
         public void gotTermination(int reason, long lastReceived) {
             if (_log.shouldInfo())
-                _log.info("Received Termination: " + reason + "\n* Total received: " + lastReceived + " on " + NTCPConnection.this);
+                _log.info("Received Termination: " + reason +
+                          "\n* Total received: " + lastReceived + " on " + NTCPConnection.this);
             // close() calls destroy() sets _terminated
             close();
         }
