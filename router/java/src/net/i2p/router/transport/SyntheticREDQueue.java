@@ -124,7 +124,7 @@ class SyntheticREDQueue implements BandwidthEstimator {
         _bwBpms = bwBps / 1000f;
         _tQSize = _tAck;
         if (_log.shouldDebug())
-            _log.debug("Configured " + bwBps + " BPS, min: " + minThB + " B, max: " + maxThB + " B");
+            _log.debug("Configured " + bwBps + " BPS; Min: " + minThB + "B; Max: " + maxThB + "B");
     }
 
     /**
@@ -172,7 +172,7 @@ class SyntheticREDQueue implements BandwidthEstimator {
             _tQSize = now;
             _newDataSize = acked;
             if (_log.shouldDebug())
-                _log.debug("first sample bytes: " + acked + " deltaT: " + deltaT + ' ' + this);
+                _log.debug("First sample bytes: " + acked + " deltaT: " + deltaT + ' ' + this);
             return true;
         } else {
             // update queue size average if necessary
@@ -184,7 +184,7 @@ class SyntheticREDQueue implements BandwidthEstimator {
                 // drop calculation
                 if (_avgQSize > _maxth) {
                     if (_log.shouldWarn())
-                        _log.warn("drop bytes (qsize): " + acked + ' ' + this);
+                        _log.warn("Drop bytes (qsize): " + acked + ' ' + this);
                     _count = 0;
                     return false;
                 }
@@ -195,7 +195,7 @@ class SyntheticREDQueue implements BandwidthEstimator {
                     float rand = _context.random().nextFloat();
                     if (rand < pa) {
                         if (_log.shouldWarn())
-                            _log.warn("drop bytes (prob): " + acked + " factor " + factor + " prob: " + pa + " deltaT: " + deltaT + ' ' + this);
+                            _log.warn("Drop bytes (prob): " + acked + "; Factor " + factor + "; Probability: " + pa + "; deltaT: " + deltaT + ' ' + this);
                         _count = 0;
                         return false;
                     }
@@ -210,7 +210,7 @@ class SyntheticREDQueue implements BandwidthEstimator {
             if (deltaT >= WESTWOOD_RTT_MIN)
                 computeBWE(now, (int) deltaT);
             if (_log.shouldDebug())
-                _log.debug("accept bytes: " + acked + " factor " + factor + ' ' + this);
+                _log.debug("Accept bytes: " + acked + "; Factor: " + factor + ' ' + this);
             return true;
         }
     }
@@ -362,13 +362,11 @@ class SyntheticREDQueue implements BandwidthEstimator {
 
     @Override
     public synchronized String toString() {
-        return "SyntheticREDQueue [" +
+        return "\n* Queue: " +
                 //" _bKFiltered " + _bKFiltered +
                 //" _tAck " + _tAck + "; " +
                 //" _tQSize " + _tQSize +
-                ' ' + DataHelper.formatSize2Decimal((long) (_bKFiltered * 1000), false) +
-                "Bps, avg_qsize " +
-                DataHelper.formatSize2((long) _avgQSize, false) +
-                "B]";
+                DataHelper.formatSize2Decimal((long) (_bKFiltered * 1000), false) +
+                "Bps -> Average size: " + DataHelper.formatSize2((long) _avgQSize, false) + "B";
     }
 }
