@@ -47,26 +47,11 @@ class PumpedTunnelGateway extends TunnelGateway {
      *  warning - these limit total messages per second throughput due to
      *  requeue delay in TunnelGatewayPumper to max * 1000 / REQUEUE_TIME
      */
+    private static final int MAX_OB_MSGS_PER_PUMP = 64;
+    private static final int MAX_IB_MSGS_PER_PUMP = 24;
+    private static final int INITIAL_OB_QUEUE = 64;
+    private static final int MAX_IB_QUEUE = 1024;
 
-
-//    private static final int MAX_OB_MSGS_PER_PUMP = 64;
-    private static final int MAX_OB_MSGS_PER_PUMP = 32;
-//    private static final int MAX_IB_MSGS_PER_PUMP = 24;
-    private static final int MAX_IB_MSGS_PER_PUMP = 16;
-//    private static final int INITIAL_OB_QUEUE = 64;
-    private static final int INITIAL_OB_QUEUE = 32;
-//    private static final int MAX_IB_QUEUE = 1024;
-    private static final int MAX_IB_QUEUE = 512;
-
-/*
-    private static final int cores = SystemVersion.getCores();
-    private static final long mem = SystemVersion.getMaxMemory();
-    private static final boolean isSlow = SystemVersion.isSlow();
-    private static final int MAX_OB_MSGS_PER_PUMP = (mem < 1024*1024*1024 || cores <= 4 || isSlow) ? 64 : 72;
-    private static final int MAX_IB_MSGS_PER_PUMP = (mem < 1024*1024*1024 || cores <= 4 || isSlow) ? 24 : 28;
-    private static final int INITIAL_OB_QUEUE = (mem < 1024*1024*1024 || cores <= 4 || isSlow) ? 64 : 72;
-    private static final int MAX_IB_QUEUE = (mem < 1024*1024*1024 || cores <= 4 || isSlow) ? 1024 : 1280;
-*/
     /**
      * @param preprocessor this pulls Pending messages off a list, builds some
      *                     full preprocessed messages, and pumps those into the sender

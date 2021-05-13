@@ -88,7 +88,7 @@ class EventPumper implements Runnable {
      * the time to iterate across them to check a few flags shouldn't be a problem.
      */
 //    private static final long FAILSAFE_ITERATION_FREQ = 2*1000l;
-    private static final int FAILSAFE_ITERATION_FREQ = 15*1000;
+    private static final int FAILSAFE_ITERATION_FREQ = 60*1000;
     private static final int FAILSAFE_LOOP_COUNT = 512;
     private static final long SELECTOR_LOOP_DELAY = 200;
     private static final long BLOCKED_IP_FREQ = 3*60*1000;
@@ -147,7 +147,7 @@ class EventPumper implements Runnable {
             _selector = Selector.open();
             _alive = true;
             I2PThread t = new I2PThread(this, "NTCPPumper", true);
-            t.setPriority(I2PThread.MAX_PRIORITY);
+            t.setPriority(I2PThread.MAX_PRIORITY - 1);
             t.start();
         } catch (IOException ioe) {
             _log.log(Log.CRIT, "Error opening the NTCP selector", ioe);

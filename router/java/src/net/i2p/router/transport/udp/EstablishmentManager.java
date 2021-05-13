@@ -100,7 +100,8 @@ class EstablishmentManager {
     private static final String PROP_MAX_CONCURRENT_ESTABLISH = "i2np.udp.maxConcurrentEstablish";
 
     /** max pending outbound connections (waiting because we are at MAX_CONCURRENT_ESTABLISH) */
-    private static final int MAX_QUEUED_OUTBOUND = 50;
+//    private static final int MAX_QUEUED_OUTBOUND = 50;
+    private static final int MAX_QUEUED_OUTBOUND = 100;
 
     /** max queued msgs per peer while the peer connection is queued */
     private static final int MAX_QUEUED_PER_PEER = 16;
