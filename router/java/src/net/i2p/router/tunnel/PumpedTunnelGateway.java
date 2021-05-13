@@ -52,7 +52,7 @@ class PumpedTunnelGateway extends TunnelGateway {
 //    private static final int MAX_OB_MSGS_PER_PUMP = 64;
     private static final int MAX_OB_MSGS_PER_PUMP = 32;
 //    private static final int MAX_IB_MSGS_PER_PUMP = 24;
-    private static final int MAX_IB_MSGS_PER_PUMP = 32;
+    private static final int MAX_IB_MSGS_PER_PUMP = 16;
 //    private static final int INITIAL_OB_QUEUE = 64;
     private static final int INITIAL_OB_QUEUE = 32;
 //    private static final int MAX_IB_QUEUE = 1024;

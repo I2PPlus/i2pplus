@@ -32,7 +32,7 @@ class TunnelGatewayPumper implements Runnable {
      *  See additional comments in PTG.
      */
 //    private static final long REQUEUE_TIME = 50;
-    private static final long REQUEUE_TIME = 20; //queues reduced in PTG (I2P+)
+    private static final long REQUEUE_TIME = 30; //queues reduced in PTG (I2P+)
 
 /*    private static final long REQUEUE_TIME = (SystemVersion.getMaxMemory() < 1024*1024*1024 ||
                                               SystemVersion.getCores() <= 4 || SystemVersion.isSlow()) ? 50 : 80;*/
