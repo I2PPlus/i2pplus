@@ -94,7 +94,7 @@ class PumpedTunnelGateway extends TunnelGateway {
     public void add(I2NPMessage msg, Hash toRouter, TunnelId toTunnel) {
         OutboundGatewayMessage cur = new OutboundGatewayMessage(msg, toRouter, toTunnel);
         if (_log.shouldLog(Log.DEBUG))
-            _log.debug("Outbound Tunnel Gateway Pumper added [Type " + msg.getType() + "] at priority: " + cur.getPriority());
+            _log.debug("Outbound PumpedTunnelGateway added [Type " + msg.getType() + "] at priority: " + cur.getPriority());
         add(cur);
     }
 
@@ -124,7 +124,7 @@ class PumpedTunnelGateway extends TunnelGateway {
         int max;
         boolean backlogged = _context.commSystem().isBacklogged(_nextHop);
         if (backlogged && _log.shouldLog(Log.INFO))
-            _log.info("Tunnel Gateway Pumper backlogged, queued to " + _nextHop + " : " + _prequeue.size() +
+            _log.info("PumpedTunnelGateway backlogged, queued to " + _nextHop + " : " + _prequeue.size() +
                       " Inbound? " + _isInbound);
         if (backlogged)
             max = _isInbound ? 1 : 2;
@@ -150,16 +150,18 @@ class PumpedTunnelGateway extends TunnelGateway {
         long afterExpire = 0;
         synchronized (_queue) {
             _queue.addAll(queueBuf);
-            afterAdded = System.currentTimeMillis();
-            if (debug)
+            if (debug) {
+                afterAdded = System.currentTimeMillis();
                 _log.debug("Added before direct flush preprocessing for " + toString() + ":\n* " + _queue);
+            }
             delayedFlush = _preprocessor.preprocessQueue(_queue, _sender, _receiver);
-            afterPreprocess = System.currentTimeMillis();
+            if (debug)
+                afterPreprocess = System.currentTimeMillis();
             if (delayedFlush)
                 delayAmount = _preprocessor.getDelayAmount();
             _lastFlush = _context.clock().now();
 
-            // expire any as necessary, even if its fragmented
+            // expire any as necessary, even if fragmented
             for (int i = 0; i < _queue.size(); i++) {
                 PendingGatewayMessage m = _queue.get(i);
                 if (m.getExpiration() + Router.CLOCK_FUDGE_FACTOR < _lastFlush) {
@@ -191,7 +193,7 @@ class PumpedTunnelGateway extends TunnelGateway {
         }
         queueBuf.clear();
         if (rv && _log.shouldLog(Log.INFO))
-            _log.info("Tunnel Gateway Pumper remaining to " + _nextHop + " : " + _prequeue.size() +
+            _log.info("PumpedTunnelGateway remaining to " + _nextHop + " : " + _prequeue.size() +
                       " Inbound? " + _isInbound + "; Backlogged? " + backlogged);
         return rv;
     }
