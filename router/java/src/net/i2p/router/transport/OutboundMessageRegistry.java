@@ -1,9 +1,9 @@
 package net.i2p.router.transport;
 /*
  * free (adj.): unencumbered; not under the control of others
- * Written by jrandom in 2003 and released into the public domain 
- * with no warranty of any kind, either expressed or implied.  
- * It probably won't make your computer catch on fire, or eat 
+ * Written by jrandom in 2003 and released into the public domain
+ * with no warranty of any kind, either expressed or implied.
+ * It probably won't make your computer catch on fire, or eat
  * your children, but it might.  Use at your own risk.
  *
  */
@@ -47,7 +47,7 @@ public class OutboundMessageRegistry {
     private final Set<OutNetMessage> _activeMessages;
     private final CleanupTask _cleanupTask;
     private final RouterContext _context;
-    
+
     public OutboundMessageRegistry(RouterContext context) {
         _context = context;
         _log = _context.logManager().getLog(OutboundMessageRegistry.class);
@@ -56,7 +56,7 @@ public class OutboundMessageRegistry {
         _activeMessages = new ConcurrentHashSet<OutNetMessage>(64);
         _cleanupTask = new CleanupTask();
     }
-    
+
     /**
      *  Does something @since 0.8.8
      */
@@ -64,27 +64,27 @@ public class OutboundMessageRegistry {
         synchronized (_selectors) {
             _selectors.clear();
         }
-        synchronized (_selectorToMessage) { 
+        synchronized (_selectorToMessage) {
             _selectorToMessage.clear();
         }
         // Calling the fail job for every active message would
         // be way too much at shutdown/restart, right?
         _activeMessages.clear();
     }
-    
+
     /**
      *  @since 0.8.8
      */
     public void restart() {
         shutdown();
     }
-    
+
     /**
      * Retrieve all messages that are waiting for the specified message.  In
      * addition, those matches may include instructions to either continue or not
      * continue waiting for further replies - if it should continue, the matched
      * message remains in the registry, but if it shouldn't continue, the matched
-     * message is removed from the registry.  
+     * message is removed from the registry.
      *
      * This is called only by InNetMessagePool.
      *
@@ -93,7 +93,7 @@ public class OutboundMessageRegistry {
      * Remove the lock if possible.
      *
      * @param message Payload received that may be a reply to something we sent
-     * @return non-null List of OutNetMessage describing messages that were waiting for 
+     * @return non-null List of OutNetMessage describing messages that were waiting for
      *         the payload
      */
     @SuppressWarnings("unchecked")
@@ -119,7 +119,7 @@ public class OutboundMessageRegistry {
                         i--;
                     }
                 }
-            }  
+            }
         }
 
         List<OutNetMessage> rv;
@@ -137,7 +137,7 @@ public class OutboundMessageRegistry {
                     } else {
                         o = _selectorToMessage.get(sel);
                     }
-                    
+
                     if (o instanceof OutNetMessage) {
                         msg = (OutNetMessage)o;
                         rv.add(msg);
@@ -160,7 +160,7 @@ public class OutboundMessageRegistry {
 
         return rv;
     }
-    
+
     /**
      *  Registers a new, empty OutNetMessage, with the reply and timeout jobs specified.
      *  The onTimeout job is called at replySelector.getExpiration() (if no reply is received by then)
@@ -181,7 +181,7 @@ public class OutboundMessageRegistry {
                        " and timeout job " + onTimeout);
         return msg;
     }
-    
+
     /**
      *  Register the message. Each message must have a non-null
      *  selector at msg.getReplySelector().
@@ -204,7 +204,7 @@ public class OutboundMessageRegistry {
         if (!_activeMessages.add(msg))
             return; // dont add dups
 
-        synchronized (_selectorToMessage) { 
+        synchronized (_selectorToMessage) {
             Object oldMsg = _selectorToMessage.put(sel, msg);
             if (oldMsg != null) {
                 List<OutNetMessage> multi = null;
@@ -220,14 +220,14 @@ public class OutboundMessageRegistry {
                     _selectorToMessage.put(sel, multi);
                 }
                 if (_log.shouldLog(Log.WARN))
-                    _log.warn("a single message selector [" + sel + "] with multiple messages ("+ multi + ")");
+                    _log.warn("A single message selector [" + sel + "] with multiple messages (" + multi + ")");
             }
         }
         synchronized (_selectors) { _selectors.add(sel); }
 
         _cleanupTask.scheduleExpiration(sel);
     }
-    
+
     /**
      *  @param msg may be be null, if non-null should have a non-null selector
      */
@@ -236,7 +236,7 @@ public class OutboundMessageRegistry {
         if (msg == null) return;
         MessageSelector sel = msg.getReplySelector();
         boolean stillActive = false;
-        synchronized (_selectorToMessage) { 
+        synchronized (_selectorToMessage) {
             Object old = _selectorToMessage.remove(sel);
             if (old != null) {
                 if (old instanceof List) {
@@ -257,7 +257,7 @@ public class OutboundMessageRegistry {
     /** @deprecated unused */
     @Deprecated
     public void renderStatusHTML(Writer out) throws IOException {}
-    
+
     private class CleanupTask extends SimpleTimer2.TimedEvent {
         /** LOCKING: _selectors */
         private long _nextExpire;

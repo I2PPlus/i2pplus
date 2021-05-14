@@ -47,7 +47,8 @@ class PacketHandler {
     private static final int MAX_QUEUE_SIZE = 256;
     private static final int MIN_NUM_HANDLERS = 1;  // if < 32MB
 //    private static final int MAX_NUM_HANDLERS = 1;
-    private static final int MAX_NUM_HANDLERS = SystemVersion.getMaxMemory() < 1024*1024*1024 ? 6 : Math.min(SystemVersion.getCores() * 2, 8);
+    private static final int MAX_NUM_HANDLERS = (SystemVersion.isSlow() || SystemVersion.getCores() <= 4 ||
+                                                 SystemVersion.getMaxMemory() < 512*1024*1024 ? 2 : Math.min(SystemVersion.getCores(), 3));
     /**
      *  Let packets be up to this much skewed.
      *  This is the same limit as in InNetMessagePool's MessageValidator.
@@ -174,7 +175,8 @@ class PacketHandler {
         }
         for (int i = 1; i <= 5 && !_inboundQueue.isEmpty(); i++) {
             try {
-                Thread.sleep(i * 50);
+//                Thread.sleep(i * 50);
+                Thread.sleep(i * 30);
             } catch (InterruptedException ie) {}
         }
         _inboundQueue.clear();

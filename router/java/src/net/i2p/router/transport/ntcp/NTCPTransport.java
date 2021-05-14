@@ -808,8 +808,10 @@ public class NTCPTransport extends TransportImpl {
     private static final int MIN_CONCURRENT_WRITERS = 2;  // unless < 32MB
 //    private static final int MAX_CONCURRENT_READERS = 4;
 //    private static final int MAX_CONCURRENT_WRITERS = 4;
-    private static final int MAX_CONCURRENT_READERS = SystemVersion.getMaxMemory() < 1024*1024*1024 ? 6 : Math.min(SystemVersion.getCores() * 2, 8);
-    private static final int MAX_CONCURRENT_WRITERS = SystemVersion.getMaxMemory() < 1024*1024*1024 ? 6 : Math.min(SystemVersion.getCores() * 2, 8);
+    private static final int MAX_CONCURRENT_READERS = (SystemVersion.isSlow() || SystemVersion.getCores() <= 4 ||
+                                                       SystemVersion.getMaxMemory() < 512*1024*1024) ? 2 : 3;
+    private static final int MAX_CONCURRENT_WRITERS = (SystemVersion.isSlow() || SystemVersion.getCores() <= 4 ||
+                                                       SystemVersion.getMaxMemory() < 512*1024*1024) ? 2 : 3;
 
     /**
      *  Called by TransportManager.

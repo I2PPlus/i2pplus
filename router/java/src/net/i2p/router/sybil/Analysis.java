@@ -99,7 +99,7 @@ public class Analysis extends JobImpl implements RouterApp {
     // so we don't always turn a temporary block into a permanent one.
     private static final double POINTS_BANLIST = 10.0;
     public static final boolean DEFAULT_BLOCK = true;
-    public static final double DEFAULT_BLOCK_THRESHOLD = 75.0;
+    public static final double DEFAULT_BLOCK_THRESHOLD = 35.0;
     public static final long DEFAULT_BLOCK_TIME = 7*24*60*60*1000L;
     public static final long DEFAULT_REMOVE_TIME = 10*24*60*60*1000L;
     public static final long SHORT_REMOVE_TIME = 2*24*60*60*1000L;
@@ -156,8 +156,11 @@ public class Analysis extends JobImpl implements RouterApp {
                     byte[] b = Base64.decode(s);
                     if (b != null && b.length == Hash.HASH_LENGTH) {
                         Hash h = Hash.create(b);
+                        RouterInfo ri = _context.netDb().lookupRouterInfoLocally(h);
+                        String routerhash = ri != null ? h.toBase64().substring(0,4) : "unknown";
                         long until = e.getValue().longValue();
-                        ban.banlistRouter(h, "<b>➜</b> Sybil Analysis", null, null, until);
+                        String reason = "<b>➜</b> Sybil Analysis [" + routerhash + "]";
+                        ban.banlistRouter(h, reason, null, null, until);
                     }
                 }
             }

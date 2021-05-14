@@ -113,10 +113,10 @@ public abstract class TransportImpl implements Transport {
         _context.statManager().createRequiredRateStat("transport.sendMessageSize", "Size of sent messages (bytes)", "Transport", RATES);
         _context.statManager().createRequiredRateStat("transport.receiveMessageSize", "Size of received messages (bytes)", "Transport", RATES);
         _context.statManager().createRateStat("transport.receiveMessageTime", "Time to read a received message (ms)", "Transport", RATES);
-        _context.statManager().createRateStat("transport.receiveMessageTimeSlow", "Time to read a received message (when it takes more than a second)", "Transport", RATES);
+        _context.statManager().createRateStat("transport.receiveMessageTimeSlow", "Time to read a received message (over 1s)", "Transport", RATES);
         _context.statManager().createRequiredRateStat("transport.sendProcessingTime", "Time to process and send a message (ms)", "Transport", RATES);
         //_context.statManager().createRateStat("transport.sendProcessingTime." + getStyle(), "Time to process and send a message (ms)", "Transport", new long[] { 60*1000l });
-        _context.statManager().createRateStat("transport.expiredOnQueueLifetime", "Time to process a message that expires on our outbound queue", "Transport", RATES );
+        _context.statManager().createRateStat("transport.expiredOnQueueLifetime", "Time to process message expired in outbound queue", "Transport", RATES );
 
         _currentAddresses = new CopyOnWriteArrayList<RouterAddress>();
         if (getStyle().equals("NTCP"))

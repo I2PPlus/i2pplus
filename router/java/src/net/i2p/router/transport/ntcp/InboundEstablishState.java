@@ -72,10 +72,10 @@ class InboundEstablishState extends EstablishBase implements NTCP2Payload.Payloa
     private NTCP2Options _hisPadding;
 
     // same as I2PTunnelRunner
-//    private static final int BUFFER_SIZE = 4*1024;
-    private static final int BUFFER_SIZE = SystemVersion.getMaxMemory() < 1024*1024*1024 ? 4*1024 : 8*1024;
-//    private static final int MAX_DATA_READ_BUFS = 32;
-    private static final int MAX_DATA_READ_BUFS = SystemVersion.getMaxMemory() < 1024*1024*1024 ? 40 : 64;
+    private static final int BUFFER_SIZE = 4*1024;
+    private static final int MAX_DATA_READ_BUFS = 32;
+//    private static final int BUFFER_SIZE = SystemVersion.getMaxMemory() < 1024*1024*1024 ? 4*1024 : 5*1024;
+//    private static final int MAX_DATA_READ_BUFS = SystemVersion.getMaxMemory() < 1024*1024*1024 ? 32 : 36;
     private static final ByteCache _dataReadBufs = ByteCache.getInstance(MAX_DATA_READ_BUFS, BUFFER_SIZE);
 
     // 287 - 64 = 223
@@ -192,7 +192,7 @@ class InboundEstablishState extends EstablishBase implements NTCP2Payload.Payloa
             if(ip != null)
                _context.blocklist().add(ip);
             if (getVersion() < 2)
-                fail("No support for NTCP2, banlisting [" + aliceHash.toBase64().substring(0,6) + "]");
+                fail("Banlisting incompatible router [" + aliceHash.toBase64().substring(0,6) + "] -> no NTCP2 support");
             else if (_log.shouldWarn())
                 _log.warn("Peer is banlisted forever [" + aliceHash.toBase64().substring(0,6) + "]");
             _msg3p2FailReason = NTCPConnection.REASON_BANNED;
@@ -223,11 +223,11 @@ class InboundEstablishState extends EstablishBase implements NTCP2Payload.Payloa
             if (getVersion() < 2)
                 fail("Clocks too skewed (" + diff + " ms)", null, true);
             else if (_log.shouldWarn())
-                _log.warn("Clocks too skewed (" + diff + " ms)");
+                _log.warn("Excessive clock skew (" + diff + "ms) from [" + aliceHash.toBase64().substring(0,6) + "]");
             _msg3p2FailReason = NTCPConnection.REASON_SKEW;
             return false;
         } else if (_log.shouldLog(Log.DEBUG)) {
-            _log.debug(prefix()+"Clock skew: " + diff + " ms");
+            _log.debug(prefix() + "Clock skew (" + diff + "ms) from [" + aliceHash.toBase64().substring(0,6) + "]");
         }
         return true;
     }

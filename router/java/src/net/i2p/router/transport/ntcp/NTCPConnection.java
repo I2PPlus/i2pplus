@@ -124,7 +124,8 @@ public class NTCPConnection implements Closeable {
     /*
      *  Update frequency for send/recv rates in console peers page
      */
-    private static final long STAT_UPDATE_TIME_MS = 30*1000;
+//    private static final long STAT_UPDATE_TIME_MS = 30*1000;
+    private static final long STAT_UPDATE_TIME_MS = 15*1000; // same as ajax refresh
 
     /*
      *  Should be longer than 2 * EventPumper.MAX_EXPIRE_IDLE_TIME so it doesn't
@@ -143,9 +144,9 @@ public class NTCPConnection implements Closeable {
      */
     static final int BUFFER_SIZE = 16*1024;
     private static final int MAX_DATA_READ_BUFS = 16;
-//    private static final ByteCache _dataReadBufs = ByteCache.getInstance(MAX_DATA_READ_BUFS, BUFFER_SIZE);
-    private static final ByteCache _dataReadBufs = ByteCache.getInstance(SystemVersion.getMaxMemory() < 1024*1024*1024 ?
-                                                                         MAX_DATA_READ_BUFS : MAX_DATA_READ_BUFS / 2, BUFFER_SIZE);
+    private static final ByteCache _dataReadBufs = ByteCache.getInstance(MAX_DATA_READ_BUFS, BUFFER_SIZE);
+/*    private static final ByteCache _dataReadBufs = ByteCache.getInstance(SystemVersion.getMaxMemory() < 1024*1024*1024 ?
+                                                                         MAX_DATA_READ_BUFS : MAX_DATA_READ_BUFS / 2, BUFFER_SIZE);*/
     private static final int INFO_PRIORITY = OutNetMessage.PRIORITY_MY_NETDB_STORE_LOW;
     private static final String FIXED_RI_VERSION = "0.9.12";
     private static final AtomicLong __connID = new AtomicLong();
@@ -162,8 +163,10 @@ public class NTCPConnection implements Closeable {
     private static final int PADDING_MAX = 64;
     private static final int SIP_IV_LENGTH = 8;
     private static final int NTCP2_FAIL_READ = 1024;
-    private static final long NTCP2_FAIL_TIMEOUT = 10*1000;
-    private static final long NTCP2_TERMINATION_CLOSE_DELAY = 50;
+//    private static final long NTCP2_FAIL_TIMEOUT = 10*1000;
+    private static final long NTCP2_FAIL_TIMEOUT = 8*1000;
+//    private static final long NTCP2_TERMINATION_CLOSE_DELAY = 50;
+    private static final long NTCP2_TERMINATION_CLOSE_DELAY = 30;
     // don't make combined messages too big, to minimize latency
     // Tunnel data msgs are 1024 + 4 + 9 + 3 = 1040, allow 5
     private static final int NTCP2_PREFERRED_PAYLOAD_MAX = 5 * 1040;
@@ -667,8 +670,8 @@ public class NTCPConnection implements Closeable {
             blocks.add(block);
             size += block.getTotalLength();
             // now add more (maybe)
-//            if (size < NTCP2_PREFERRED_PAYLOAD_MAX) {
-            if (size < NTCP2_PREFERRED_PAYLOAD_MAX / 3 * 2) {
+            if (size < NTCP2_PREFERRED_PAYLOAD_MAX) {
+//            if (size < NTCP2_PREFERRED_PAYLOAD_MAX / 3 * 2) {
                 // keep adding as long as we will be under 5 KB
                 while (true) {
                     msg = _outbound.peek();
@@ -677,6 +680,7 @@ public class NTCPConnection implements Closeable {
                     m = msg.getMessage();
                     int msz = m.getMessageSize() - 7;
                     if (size + msz > NTCP2_PREFERRED_PAYLOAD_MAX)
+//                    if (size + msz > NTCP2_PREFERRED_PAYLOAD_MAX / 3 * 2)
                         break;
                     OutNetMessage msg2 = _outbound.poll();
                     if (msg2 == null)
@@ -705,7 +709,7 @@ public class NTCPConnection implements Closeable {
             size += block.getTotalLength();
             _nextMetaTime = now + (META_FREQUENCY / 2) + _context.random().nextInt(META_FREQUENCY / 2);
             if (_log.shouldLog(Log.DEBUG))
-                _log.debug("Sending NTCP2 datetime block");
+                _log.debug("Sending NTCP2 datetime block...");
         }
         // 1024 is an estimate, do final check below
         if (_nextInfoTime <= now && size + 1024 <= BUFFER_SIZE) {
@@ -717,7 +721,7 @@ public class NTCPConnection implements Closeable {
                 size += sz;
                 _nextInfoTime = now + (INFO_FREQUENCY / 2) + _context.random().nextInt(INFO_FREQUENCY);
                 if (_log.shouldDebug())
-                    _log.debug("Sending NTCP2 RouterInfo block");
+                    _log.debug("Sending NTCP2 RouterInfo block...");
             } // else wait until next time
         }
         int availForPad = BUFFER_SIZE - (size + NTCP2Payload.BLOCK_HEADER_SIZE);
@@ -1195,8 +1199,8 @@ public class NTCPConnection implements Closeable {
 
 
 //    private static final int MAX_HANDLERS = 8;
-    private static final int MAX_HANDLERS = (SystemVersion.isSlow() || SystemVersion.getCores() <= 4  ||
-                                             SystemVersion.getMaxMemory() <= 256*1024*1024 ? 8 : Math.min(SystemVersion.getCores() * 2, 16));
+    private static final int MAX_HANDLERS = (SystemVersion.isSlow() || SystemVersion.getCores() <= 4 ||
+                                             SystemVersion.getMaxMemory() < 512*1024*1024 ? 2 : Math.min(SystemVersion.getCores(), 3));
 
     /**
      *  FIXME static queue mixes handlers from different contexts in multirouter JVM
@@ -1603,12 +1607,13 @@ public class NTCPConnection implements Closeable {
                 _log.debug("Received padding options:" +
                           "\n* His padding options: " + hisPadding +
                           "\n* Our padding options: " + OUR_PADDING +
-                          "\n* Merged config:       " + _paddingConfig);
+                          "\n* Merged config: " + _paddingConfig);
         }
 
         public void gotTermination(int reason, long lastReceived) {
             if (_log.shouldInfo())
-                _log.info("Received Termination: " + reason + "\n* Total received: " + lastReceived + " on " + NTCPConnection.this);
+                _log.info("Received Termination: " + reason +
+                          "\n* Total received: " + lastReceived + " on " + NTCPConnection.this);
             // close() calls destroy() sets _terminated
             close();
         }

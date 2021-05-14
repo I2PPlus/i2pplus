@@ -34,7 +34,8 @@ class MessageReceiver {
 //    private static final int MIN_THREADS = 2;  // unless < 32MB
     private static final int MIN_THREADS = 1;  // unless < 32MB
 //    private static final int MAX_THREADS = 5;
-    private static final int MAX_THREADS = SystemVersion.getMaxMemory() < 1024*1024*1024 ? 6 : Math.min(SystemVersion.getCores() * 2, 8);
+    private static final int MAX_THREADS = (SystemVersion.isSlow() || SystemVersion.getCores() <= 4 ||
+                                            SystemVersion.getMaxMemory() < 512*1024*1024) ? 2 : 3;
     private static final int MIN_QUEUE_SIZE = 32;  // unless < 32MB
     private static final int MAX_QUEUE_SIZE = 128;
     private final int _threadCount;
@@ -95,7 +96,8 @@ class MessageReceiver {
         }
         for (int i = 1; i <= 5 && !_completeMessages.isEmpty(); i++) {
             try {
-                Thread.sleep(i * 50);
+//                Thread.sleep(i * 50);
+                Thread.sleep(i * 30);
             } catch (InterruptedException ie) {}
         }
         _completeMessages.clear();
