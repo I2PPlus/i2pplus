@@ -156,8 +156,11 @@ public class Analysis extends JobImpl implements RouterApp {
                     byte[] b = Base64.decode(s);
                     if (b != null && b.length == Hash.HASH_LENGTH) {
                         Hash h = Hash.create(b);
+                        RouterInfo ri = _context.netDb().lookupRouterInfoLocally(h);
+                        String routerhash = ri != null ? h.toBase64().substring(0,4) : "unknown";
                         long until = e.getValue().longValue();
-                        ban.banlistRouter(h, "<b>➜</b> Sybil Analysis", null, null, until);
+                        String reason = "<b>➜</b> Sybil Analysis [" + routerhash + "]";
+                        ban.banlistRouter(h, reason, null, null, until);
                     }
                 }
             }
