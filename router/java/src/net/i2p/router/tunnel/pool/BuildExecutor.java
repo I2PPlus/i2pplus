@@ -48,7 +48,7 @@ class BuildExecutor implements Runnable {
     private volatile boolean _isRunning;
     private boolean _repoll;
 //    private static final int MAX_CONCURRENT_BUILDS = 13;
-    private static final int MAX_CONCURRENT_BUILDS = SystemVersion.isSlow() || SystemVersion.getCores() <= 4 ? 10 : Math.max(SystemVersion.getCores() * 3, 16);
+    private static final int MAX_CONCURRENT_BUILDS = SystemVersion.isSlow() || SystemVersion.getCores() <= 4 ? 10 : Math.max(SystemVersion.getCores() * 2, 16);
     /** accept replies up to a minute after we gave up on them */
     private static final long GRACE_PERIOD = 60*1000;
 

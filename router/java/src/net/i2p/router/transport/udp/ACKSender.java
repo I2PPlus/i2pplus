@@ -68,7 +68,8 @@ class ACKSender implements Runnable {
         _peersToACK.offer(poison);
         for (int i = 1; i <= 5 && !_peersToACK.isEmpty(); i++) {
             try {
-                Thread.sleep(i * 50);
+//                Thread.sleep(i * 50);
+                Thread.sleep(i * 30);
             } catch (InterruptedException ie) {}
         }
         _peersToACK.clear();

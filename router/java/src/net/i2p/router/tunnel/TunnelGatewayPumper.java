@@ -70,7 +70,7 @@ class TunnelGatewayPumper implements Runnable {
         for (int i = 1; i <= 5 && !_wantsPumping.isEmpty(); i++) {
             try {
 //                Thread.sleep(i * 50);
-                Thread.sleep(i * 10);
+                Thread.sleep(i * 30);
             } catch (InterruptedException ie) {}
         }
         for (Thread t : _threads) {
