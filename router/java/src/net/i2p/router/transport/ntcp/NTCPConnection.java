@@ -574,7 +574,7 @@ public class NTCPConnection implements Closeable {
                 } catch (RuntimeException e) {}  // java.nio.channels.CancelledKeyException
             }
             return true;
-        }    else {
+        } else {
             return false;
         }
     }
@@ -1100,7 +1100,7 @@ public class NTCPConnection implements Closeable {
                         _log.debug("I2NP message " + _messagesWritten + "/" + msg.getMessageId() + " sent after "
                                   + msg.getSendTime() + "/"
                                   + msg.getLifetime()
-                                  + " with " + buf.capacity() + " bytes\n* UniqueID: " + System.identityHashCode(msg)+" on " + toString());
+                                  + " with " + buf.capacity() + " bytes\n* UniqueID: " + System.identityHashCode(msg) + " on " + toString());
                     }
                     _transport.sendComplete(msg);
                 }
@@ -1200,7 +1200,7 @@ public class NTCPConnection implements Closeable {
 
 //    private static final int MAX_HANDLERS = 8;
     private static final int MAX_HANDLERS = (SystemVersion.isSlow() || SystemVersion.getCores() <= 4 ||
-                                             SystemVersion.getMaxMemory() < 512*1024*1024 ? 2 : Math.min(SystemVersion.getCores(), 3));
+                                             SystemVersion.getMaxMemory() < 512*1024*1024 ? 2 : 3);
 
     /**
      *  FIXME static queue mixes handlers from different contexts in multirouter JVM
