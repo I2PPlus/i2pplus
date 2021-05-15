@@ -59,7 +59,7 @@ public class CoDelBlockingQueue<E extends CDQEntry> extends LinkedBlockingQueue<
      *  I2P: Raise to 15 due to multithreading environment
      *
      */
-    private static final int TARGET = 15;
+    private static final int TARGET = 10;
     private final long _target;
 
     /**
@@ -67,7 +67,7 @@ public class CoDelBlockingQueue<E extends CDQEntry> extends LinkedBlockingQueue<
      *  A setting of 100 ms works well across a range of RTTs from 10 ms to 1 second
      *
      */
-    private static final int INTERVAL = 300;
+    private static final int INTERVAL = 200;
     private final long _interval;
     //private static final int MAXPACKET = 512;
 

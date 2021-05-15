@@ -574,7 +574,7 @@ public class NTCPConnection implements Closeable {
                 } catch (RuntimeException e) {}  // java.nio.channels.CancelledKeyException
             }
             return true;
-        }    else {
+        } else {
             return false;
         }
     }
@@ -650,7 +650,8 @@ public class NTCPConnection implements Closeable {
         synchronized (_currentOutbound) {
             if (!_currentOutbound.isEmpty()) {
                 if (_log.shouldLog(Log.INFO))
-                    _log.info("Attempt for multiple outbound messages with " + _currentOutbound.size() + " already waiting and " + _outbound.size() + " queued");
+                    _log.info("Attempt for multiple outbound messages with " + _currentOutbound.size() +
+                              " already waiting and " + _outbound.size() + " queued");
                 return;
             }
             OutNetMessage msg;
@@ -671,7 +672,6 @@ public class NTCPConnection implements Closeable {
             size += block.getTotalLength();
             // now add more (maybe)
             if (size < NTCP2_PREFERRED_PAYLOAD_MAX) {
-//            if (size < NTCP2_PREFERRED_PAYLOAD_MAX / 3 * 2) {
                 // keep adding as long as we will be under 5 KB
                 while (true) {
                     msg = _outbound.peek();
@@ -680,7 +680,6 @@ public class NTCPConnection implements Closeable {
                     m = msg.getMessage();
                     int msz = m.getMessageSize() - 7;
                     if (size + msz > NTCP2_PREFERRED_PAYLOAD_MAX)
-//                    if (size + msz > NTCP2_PREFERRED_PAYLOAD_MAX / 3 * 2)
                         break;
                     OutNetMessage msg2 = _outbound.poll();
                     if (msg2 == null)
@@ -1100,7 +1099,7 @@ public class NTCPConnection implements Closeable {
                         _log.debug("I2NP message " + _messagesWritten + "/" + msg.getMessageId() + " sent after "
                                   + msg.getSendTime() + "/"
                                   + msg.getLifetime()
-                                  + " with " + buf.capacity() + " bytes\n* UniqueID: " + System.identityHashCode(msg)+" on " + toString());
+                                  + " with " + buf.capacity() + " bytes\n* UniqueID: " + System.identityHashCode(msg) + " on " + toString());
                     }
                     _transport.sendComplete(msg);
                 }
@@ -1200,7 +1199,7 @@ public class NTCPConnection implements Closeable {
 
 //    private static final int MAX_HANDLERS = 8;
     private static final int MAX_HANDLERS = (SystemVersion.isSlow() || SystemVersion.getCores() <= 4 ||
-                                             SystemVersion.getMaxMemory() < 512*1024*1024 ? 2 : Math.min(SystemVersion.getCores(), 3));
+                                             SystemVersion.getMaxMemory() < 512*1024*1024 ? 2 : 3);
 
     /**
      *  FIXME static queue mixes handlers from different contexts in multirouter JVM

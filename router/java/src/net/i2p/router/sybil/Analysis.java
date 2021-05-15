@@ -156,10 +156,8 @@ public class Analysis extends JobImpl implements RouterApp {
                     byte[] b = Base64.decode(s);
                     if (b != null && b.length == Hash.HASH_LENGTH) {
                         Hash h = Hash.create(b);
-                        RouterInfo ri = _context.netDb().lookupRouterInfoLocally(h);
-                        String routerhash = ri != null ? h.toBase64().substring(0,4) : "unknown";
                         long until = e.getValue().longValue();
-                        String reason = "<b>➜</b> Sybil Analysis [" + routerhash + "]";
+                        String reason = "<b>➜</b> Sybil Analysis";
                         ban.banlistRouter(h, reason, null, null, until);
                     }
                 }
@@ -175,12 +173,12 @@ public class Analysis extends JobImpl implements RouterApp {
         Map<Hash, Points> points = backgroundAnalysis(_context.getBooleanProperty(PROP_NONFF));
         if (!points.isEmpty()) {
             try {
-                _log.info("Storing analysis");
+                _log.info("Storing Sybil analysis...");
                 _persister.store(now, points);
                 _persister.removeOld();
                 _log.info("Store complete");
             } catch (IOException ioe) {
-                _log.error("Failed to store analysis", ioe);
+                _log.error("Failed to store Sybil analysis", ioe);
             }
         }
         schedule();

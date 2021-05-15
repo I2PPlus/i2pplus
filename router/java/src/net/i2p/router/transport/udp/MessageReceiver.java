@@ -97,7 +97,7 @@ class MessageReceiver {
         for (int i = 1; i <= 5 && !_completeMessages.isEmpty(); i++) {
             try {
 //                Thread.sleep(i * 50);
-                Thread.sleep(i * 30);
+                Thread.sleep(i * 10);
             } catch (InterruptedException ie) {}
         }
         _completeMessages.clear();
