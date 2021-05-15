@@ -30,8 +30,8 @@ public class PriBlockingQueue<E extends PQEntry> extends PriorityBlockingQueue<E
 
     private final String STAT_FULL;
     protected static final long[] RATES = {60*1000, 10*60*1000, 60*60*1000};
-    protected static final int BACKLOG_SIZE = SystemVersion.getMaxMemory() < 1024*1024*1024 ? 256 : 128;
-    protected static final int MAX_SIZE = SystemVersion.getMaxMemory() < 1024*1024*1024 ? 512 : 1024;
+    protected static final int BACKLOG_SIZE = SystemVersion.getMaxMemory() < 1024*1024*1024 ? 256 : 0;
+    protected static final int MAX_SIZE = SystemVersion.getMaxMemory() < 1024*1024*1024 ? 512 : 16384;
 
     /**
      *  Bounded queue with a hardcoded failsafe max size,
