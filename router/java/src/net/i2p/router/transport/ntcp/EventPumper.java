@@ -133,12 +133,12 @@ class EventPumper implements Runnable {
         _transport = transport;
         _expireIdleWriteTime = MAX_EXPIRE_IDLE_TIME;
         _blockedIPs = new ObjectCounter<ByteArray>();
-        _context.statManager().createRateStat("ntcp.pumperKeySetSize", "Number of NTCP pumper KeySetSize events", "Transport [NTCP]", new long[] {10*60*1000} );
+        _context.statManager().createRateStat("ntcp.pumperKeySetSize", "Number of NTCP pumper KeySetSize events", "Transport [NTCP]", new long[] {60*1000, 10*60*1000} );
         //_context.statManager().createRateStat("ntcp.pumperKeysPerLoop", "", "Transport [NTCP]", new long[] {10*60*1000} );
-        _context.statManager().createRateStat("ntcp.pumperLoopsPerSecond", "Number of NTCP pumper loops/s", "Transport [NTCP]", new long[] {10*60*1000} );
-        _context.statManager().createRateStat("ntcp.zeroRead", "Number of NTCP zero length read events", "Transport [NTCP]", new long[] {10*60*1000} );
-        _context.statManager().createRateStat("ntcp.zeroReadDrop", "Number of NTCP zero length read events dropped", "Transport [NTCP]", new long[] {10*60*1000} );
-        _context.statManager().createRateStat("ntcp.dropInboundNoMessage", "Number of NTCP Inbound empty message drop events", "Transport [NTCP]", new long[] {10*60*1000} );
+        _context.statManager().createRateStat("ntcp.pumperLoopsPerSecond", "Number of NTCP pumper loops/s", "Transport [NTCP]", new long[] {60*1000, 10*60*1000} );
+        _context.statManager().createRateStat("ntcp.zeroRead", "Number of NTCP zero length read events", "Transport [NTCP]", new long[] {60*1000, 10*60*1000} );
+        _context.statManager().createRateStat("ntcp.zeroReadDrop", "Number of NTCP zero length read events dropped", "Transport [NTCP]", new long[] {60*1000, 10*60*1000} );
+        _context.statManager().createRateStat("ntcp.dropInboundNoMessage", "Number of NTCP Inbound empty message drop events", "Transport [NTCP]", new long[] {60*1000, 10*60*1000} );
         _nodelay = ctx.getBooleanPropertyDefaultTrue(PROP_NODELAY);
     }
 
