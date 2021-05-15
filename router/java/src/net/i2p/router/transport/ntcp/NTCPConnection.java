@@ -164,7 +164,7 @@ public class NTCPConnection implements Closeable {
     private static final int SIP_IV_LENGTH = 8;
     private static final int NTCP2_FAIL_READ = 1024;
 //    private static final long NTCP2_FAIL_TIMEOUT = 10*1000;
-    private static final long NTCP2_FAIL_TIMEOUT = 8*1000;
+    private static final long NTCP2_FAIL_TIMEOUT = 5*1000;
 //    private static final long NTCP2_TERMINATION_CLOSE_DELAY = 50;
     private static final long NTCP2_TERMINATION_CLOSE_DELAY = 30;
     // don't make combined messages too big, to minimize latency
