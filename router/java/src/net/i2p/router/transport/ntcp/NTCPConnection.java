@@ -650,7 +650,8 @@ public class NTCPConnection implements Closeable {
         synchronized (_currentOutbound) {
             if (!_currentOutbound.isEmpty()) {
                 if (_log.shouldLog(Log.INFO))
-                    _log.info("Attempt for multiple outbound messages with " + _currentOutbound.size() + " already waiting and " + _outbound.size() + " queued");
+                    _log.info("Attempt for multiple outbound messages with " + _currentOutbound.size() +
+                              " already waiting and " + _outbound.size() + " queued");
                 return;
             }
             OutNetMessage msg;
@@ -671,7 +672,6 @@ public class NTCPConnection implements Closeable {
             size += block.getTotalLength();
             // now add more (maybe)
             if (size < NTCP2_PREFERRED_PAYLOAD_MAX) {
-//            if (size < NTCP2_PREFERRED_PAYLOAD_MAX / 3 * 2) {
                 // keep adding as long as we will be under 5 KB
                 while (true) {
                     msg = _outbound.peek();
@@ -680,7 +680,6 @@ public class NTCPConnection implements Closeable {
                     m = msg.getMessage();
                     int msz = m.getMessageSize() - 7;
                     if (size + msz > NTCP2_PREFERRED_PAYLOAD_MAX)
-//                    if (size + msz > NTCP2_PREFERRED_PAYLOAD_MAX / 3 * 2)
                         break;
                     OutNetMessage msg2 = _outbound.poll();
                     if (msg2 == null)
