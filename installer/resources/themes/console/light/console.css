@@ -2290,7 +2290,7 @@ h3 a.script, th a.script {
   background: linear-gradient(to bottom, #f8f8ff 60%, #dedeff);
 }
 
-#bwlimiter a, #i2pclientconfig a, #config_logging h3 a, #graphdisplay a, #version a, #logs h3 a, #tunnels h3 a,
+#bwlimiter a, #i2pclientconfig a, #config_logging h3 a, #graphdisplay a, #version a, #tunnels h3 a,
 #advancedconfig a, #iptransport a, #reseedsetup a, #graphinfo a, #config_service h3 a, .h3navlinks a {
   margin: -7px -5px !important;
   padding: 9px 14px;
@@ -2356,6 +2356,7 @@ h3#iptransport a:not(old), h3#advancedconfig a:not(old), h3#reseedsetup a:not(ol
 }
 
 h3#iptransport a::after, h3#advancedconfig a::after, h3#reseedsetup a::after {
+  margin-top: -2px;
   padding: 2px 0 0;
   width: 20px;
   height: 20px;
@@ -2368,7 +2369,7 @@ h3#iptransport a::after, h3#advancedconfig a::after, h3#reseedsetup a::after {
 
 @media screen and (max-width: 1499px) {
   h3#iptransport a::after, h3#advancedconfig a::after, h3#reseedsetup a::after {
-    margin-top: 0;
+    margin-top: -1px;
   }
 }
 
