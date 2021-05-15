@@ -2255,11 +2255,11 @@ h3, th {
 
 .h3navlinks a {
   margin-left: 2px;
-  padding: 0 8px;
+  padding: 2px 8px;
   min-width: 52px;
-  text-transform: capitalize;
   letter-spacing: 0;
   text-align: center;
+  text-transform: capitalize;
 }
 
 .h3navlinks a:hover {
@@ -2356,9 +2356,8 @@ h3#iptransport a:not(old), h3#advancedconfig a:not(old), h3#reseedsetup a:not(ol
 }
 
 h3#iptransport a::after, h3#advancedconfig a::after, h3#reseedsetup a::after {
-  margin-top: -4px;
-  margin-bottom: -2px;
-  padding: 0;
+  margin-top: -2px;
+  padding: 2px 0 0;
   width: 20px;
   height: 20px;
   display: inline-block;
@@ -2370,7 +2369,7 @@ h3#iptransport a::after, h3#advancedconfig a::after, h3#reseedsetup a::after {
 
 @media screen and (max-width: 1499px) {
   h3#iptransport a::after, h3#advancedconfig a::after, h3#reseedsetup a::after {
-    margin-top: -1px;
+    margin-top: 0;
   }
 }
 
@@ -2441,7 +2440,7 @@ h3#exploratory {
 
 #logs a.delete::after, #logs a.configure::after {
   margin: -7px -8px -6px 0;
-  padding: 8px 4px 6px 20px;
+  padding: 8px 4px 8px 20px;
   border-left: 1px solid #aab;
 }
 
@@ -5654,8 +5653,8 @@ textarea:focus {
   filter: drop-shadow(0 0 1px #89f);
 }
 
-#tunnels h3, #tunnels h3 a, #config_reseed h3, #config_reseed h3 a {
-  height: 31px !important; /* hack to avoid button overflow */
+#tunnels h3, #tunnels h3 a, #config_reseed h3, #config_reseed h3 a, #config_advanced h3 a {
+  height: 33px !important; /* hack to avoid button overflow */
   position: relative;
   z-index: 999;
   overflow: hidden;
