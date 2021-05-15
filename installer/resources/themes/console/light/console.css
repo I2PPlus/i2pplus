@@ -2440,7 +2440,7 @@ h3#exploratory {
 
 #logs a.delete::after, #logs a.configure::after {
   margin: -7px -8px -6px 0;
-  padding: 8px 4px 6px 20px;
+  padding: 8px 4px 8px 20px;
   border-left: 1px solid #aab;
 }
 
