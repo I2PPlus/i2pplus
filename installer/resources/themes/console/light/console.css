@@ -3568,7 +3568,7 @@ h4.app img, h4.app2 img, #sitemap h3 img {
   padding-right: 6px;
 }
 
-@media screen and (max-width: 1500px) {
+@media screen and (max-width: 1499px) {
 h4.app img, h4.app2 img, #sitemap h3 img {
   margin: -7px 0 -6px;
   padding: 8px 0 6px 9px;
@@ -4115,7 +4115,7 @@ p#pluginconfigtext {
   background: var(--pluginconfig) 15px center no-repeat, var(--infohelp);
 }
 
-@media screen and (max-width: 1500px) {
+@media screen and (max-width: 1499px) {
   p#pluginconfigtext {
     margin-top: 11px;
   }
@@ -7229,7 +7229,7 @@ b.netdb_transport {
   list-style: none !important;
 }
 
-@media screen and (max-width: 1500px) {
+@media screen and (max-width: 1499px) {
   .netdbStats li {
     margin: 0 !important;
     min-width: 240px;
@@ -8377,7 +8377,7 @@ p.sybil_info + a[name] + table.sybil_routerinfo, p.hashdist + a[name] + table.sy
   page-break-inside: avoid;
 }
 
-@media screen and (max-width: 1500px) {
+@media screen and (max-width: 1499px) {
 #banlist li {
   padding-bottom: 0 !important;
 }
@@ -8435,7 +8435,7 @@ p.sybil_info + a[name] + table.sybil_routerinfo, p.hashdist + a[name] + table.sy
   background: none;
 }
 
-@media screen and (max-width: 1500px) {
+@media screen and (max-width: 1499px) {
   #banlist .routerid img {
     margin-right: -3px;
   }
@@ -9885,7 +9885,7 @@ a[href^="configpeer?peer"]:hover::after {
   margin-left: -24px;
 }
 
-@media screen and (max-width: 1500px) {
+@media screen and (max-width: 1499px) {
   .expiry ul {
     margin-left: -4px;
   }
@@ -11364,7 +11364,7 @@ form[action="events"] select + b, form[action="events"] input[type=submit] {
 }
 }
 
-@media screen and (max-width: 1500px) {
+@media screen and (max-width: 1499px) {
 body {
   margin: 4px;
 }
@@ -12007,7 +12007,7 @@ h1.webapp {
   min-width: 136px !important;
 }
 
-@media screen and (max-width: 1500px) {
+@media screen and (max-width: 1499px) {
 .sitemapLink, .sitemapLabel, #sitemap div.app, #sitemap .applabel {
   width: 160px !important;
   min-width: 160px !important;
@@ -12065,7 +12065,7 @@ h1.webapp {
   padding-right: 50px !important
 }
 
-@media screen and (max-width: 1500px) {
+@media screen and (max-width: 1499px) {
 #sitemap div.app img {
   padding-left: 62px !important;
   padding-right: 62px !important
@@ -12730,8 +12730,8 @@ i {
 
 #clock {
   margin: -7px -10px -9px;
-  padding: 7px 0 6px;
-  font-size: 18pt;
+  padding: 0 0 1px;
+  font-size: 17pt;
   font-weight: 700;
   letter-spacing: .1em;
   color: var(--inklite);
@@ -12746,11 +12746,10 @@ i {
   vertical-align: middle;
 }
 
-
-@media screen and (max-width: 1500px) {
-#clock {
-  font-size: 16pt;
-}
+@media screen and (max-width: 1499px) {
+  #clock {
+    font-size: 16pt;
+  }
 }
 
 #sybilTask {
