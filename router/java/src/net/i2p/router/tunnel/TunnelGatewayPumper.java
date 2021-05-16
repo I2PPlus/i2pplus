@@ -30,7 +30,7 @@ class TunnelGatewayPumper implements Runnable {
     private static final int MIN_PUMPERS = 1;
 //    private static final int MAX_PUMPERS = 4;
     private static final int MAX_PUMPERS = (SystemVersion.isSlow() || SystemVersion.getCores() <= 4 ||
-                                            SystemVersion.getMaxMemory() < 512*1024*1024) ? 2 : 3;
+                                            SystemVersion.getMaxMemory() < 512*1024*1024) ? 3 : Math.max(SystemVersion.getCores() / 2, 6);
     private final int _pumpers;
 
     /**
@@ -38,7 +38,7 @@ class TunnelGatewayPumper implements Runnable {
      *  See additional comments in PTG.
      */
 //    private static final long REQUEUE_TIME = 50;
-    private static final long REQUEUE_TIME = 30;
+    private static final long REQUEUE_TIME = 40;
 
     /** Creates a new instance of TunnelGatewayPumper */
     public TunnelGatewayPumper(RouterContext ctx) {
@@ -70,7 +70,7 @@ class TunnelGatewayPumper implements Runnable {
         for (int i = 1; i <= 5 && !_wantsPumping.isEmpty(); i++) {
             try {
 //                Thread.sleep(i * 50);
-                Thread.sleep(i * 30);
+                Thread.sleep(i * 40);
             } catch (InterruptedException ie) {}
         }
         for (Thread t : _threads) {

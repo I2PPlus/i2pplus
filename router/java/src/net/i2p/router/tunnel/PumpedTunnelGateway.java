@@ -47,14 +47,15 @@ class PumpedTunnelGateway extends TunnelGateway {
      *  warning - these limit total messages per second throughput due to
      *  requeue delay in TunnelGatewayPumper to max * 1000 / REQUEUE_TIME
      */
-//    private static final int MAX_OB_MSGS_PER_PUMP = 64;
-//    private static final int MAX_IB_MSGS_PER_PUMP = 24;
-//    private static final int INITIAL_OB_QUEUE = 64;
-//    private static final int MAX_IB_QUEUE = 1024;
-    private static final int MAX_OB_MSGS_PER_PUMP = SystemVersion.getMaxMemory() < 1024*1024*1024 ? 64 : 1024;
-    private static final int MAX_IB_MSGS_PER_PUMP = SystemVersion.getMaxMemory() < 1024*1024*1024 ? 24 : 1024;
-    private static final int INITIAL_OB_QUEUE = SystemVersion.getMaxMemory() < 1024*1024*1024 ? 64 : 4096;
-    private static final int MAX_IB_QUEUE = SystemVersion.getMaxMemory() < 1024*1024*1024 ? 1024 : 4096;
+    private static final int MAX_OB_MSGS_PER_PUMP = 64;
+    private static final int MAX_IB_MSGS_PER_PUMP = 24;
+    private static final int INITIAL_OB_QUEUE = 64;
+    private static final int MAX_IB_QUEUE = 1024;
+
+/*    private static final int MAX_OB_MSGS_PER_PUMP = SystemVersion.getMaxMemory() < 1024*1024*1024 ? 64 : 128;
+    private static final int MAX_IB_MSGS_PER_PUMP = SystemVersion.getMaxMemory() < 1024*1024*1024 ? 24 : 128;
+    private static final int INITIAL_OB_QUEUE = SystemVersion.getMaxMemory() < 1024*1024*1024 ? 64 : 128;
+    private static final int MAX_IB_QUEUE = SystemVersion.getMaxMemory() < 1024*1024*1024 ? 1024 : 128;*/
 
     /**
      * @param preprocessor this pulls Pending messages off a list, builds some
@@ -130,7 +131,7 @@ class PumpedTunnelGateway extends TunnelGateway {
         if (backlogged && _log.shouldLog(Log.INFO))
             _log.info("PumpedTunnelGateway backlogged, queued to " + _nextHop + " : " + _prequeue.size() +
                       " Inbound? " + _isInbound);
-        if (backlogged && SystemVersion.getMaxMemory() < 1024*1024*1024)
+        if (backlogged)
             max = _isInbound ? 1 : 2;
         else
             max = _isInbound ? MAX_IB_MSGS_PER_PUMP : MAX_OB_MSGS_PER_PUMP;

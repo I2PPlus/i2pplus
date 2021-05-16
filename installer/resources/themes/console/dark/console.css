@@ -11400,6 +11400,11 @@ h1[class], h1 {
   background-size: 32px, 100%;
 }
 
+#help_filter {
+  background: var(--filter) 15px center no-repeat, var(--helpbox);
+  background-size: 32px, 100%;
+}
+
 #help_configadv {
   background: var(--configure) 15px center no-repeat, var(--helpbox);
   background-size: 32px, 100%;
@@ -11431,7 +11436,8 @@ h1[class], h1 {
 }
 
 #help_legal {
-  background: url(/themes/console/images/info/legal.png) 15px center no-repeat, var(--helpbox);
+  background: var(--legal) 15px center no-repeat, var(--helpbox);
+  background-size: 32px, 100%;
 }
 
 #help_changelog {
@@ -11476,7 +11482,7 @@ h1[class], h1 {
 
 #legal h2 {
   padding-left: 38px;
-  background: url(/themes/console/images/info/legal.png) 10px center no-repeat, linear-gradient(to bottom, rgba(0,0,0,0) 50%, #000 50%), var(--h3), var(--h3_fade) !important;
+  background: var(--legal) 10px center no-repeat, linear-gradient(to bottom, rgba(0,0,0,0) 50%, #000 50%), var(--h3), var(--h3_fade) !important;
   background-size: 20px, 100%, 4px 100%, 100% !important;
 }
 

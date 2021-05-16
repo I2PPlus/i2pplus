@@ -2290,10 +2290,10 @@ h3 a.script, th a.script {
   background: linear-gradient(to bottom, #f8f8ff 60%, #dedeff);
 }
 
-#bwlimiter a, #i2pclientconfig a, #config_logging h3 a, #graphdisplay a, #version a, #logs h3 a, #tunnels h3 a,
+#bwlimiter a, #i2pclientconfig a, #config_logging h3 a, #graphdisplay a, #version a, #tunnels h3 a,
 #advancedconfig a, #iptransport a, #reseedsetup a, #graphinfo a, #config_service h3 a, .h3navlinks a {
   margin: -7px -5px !important;
-  padding: 7px 8px 6px;
+  padding: 9px 14px;
   box-shadow: var(--highlight);
   background: linear-gradient(to bottom, #fff 48%, #efefff 48%);
 }
@@ -2323,7 +2323,7 @@ h3 a.script, th a.script {
 }
 
 #advancedconfig a, #iptransport a, #reseedsetup a {
-  padding: 5px 8px 4px;
+  padding: 6px 8px;
 }
 
 #bwlimiter a:hover, #i2pclientconfig a:hover, #config_logging h3 a:hover, #graphdisplay a:hover, #version a:hover, #logs h3 a:hover,
@@ -2369,7 +2369,7 @@ h3#iptransport a::after, h3#advancedconfig a::after, h3#reseedsetup a::after {
 
 @media screen and (max-width: 1499px) {
   h3#iptransport a::after, h3#advancedconfig a::after, h3#reseedsetup a::after {
-    margin-top: 0;
+    margin-top: -1px;
   }
 }
 
@@ -2962,8 +2962,14 @@ td.optionsave, .formaction, form[action="configpeer"] tr:last-child td, table#ad
   border-top: 1px solid var(--borderinner) !important;
 }
 
-.infowarn, .infohelp {
+.infowarn, .infohelp, #pluginconfigtext {
   background-size: 28px, 100% !important;
+}
+
+@media screen and (max-width: 1499px) {
+  .infowarn, .infohelp, #pluginconfigtext {
+    background-size: 24px, 100% !important;
+  }
 }
 
 td.infohelp, #help tr:hover td.infohelp, #eventlog tr:hover .infohelp, td.infowarn, #help tr:hover td.infowarn {
@@ -3562,7 +3568,7 @@ h4.app img, h4.app2 img, #sitemap h3 img {
   padding-right: 6px;
 }
 
-@media screen and (max-width: 1500px) {
+@media screen and (max-width: 1499px) {
 h4.app img, h4.app2 img, #sitemap h3 img {
   margin: -7px 0 -6px;
   padding: 8px 0 6px 9px;
@@ -4105,11 +4111,11 @@ p#clientconf.infohelp, p#webappconfigtext.infohelp {
 p#pluginconfigtext {
   margin-top: 14px;
   padding: 20px 15px 20px 50px;
+  box-shadow: none;
   background: var(--pluginconfig) 15px center no-repeat, var(--infohelp);
-  background-size: 28px, 100%;
 }
 
-@media screen and (max-width: 1500px) {
+@media screen and (max-width: 1499px) {
   p#pluginconfigtext {
     margin-top: 11px;
   }
@@ -7223,7 +7229,7 @@ b.netdb_transport {
   list-style: none !important;
 }
 
-@media screen and (max-width: 1500px) {
+@media screen and (max-width: 1499px) {
   .netdbStats li {
     margin: 0 !important;
     min-width: 240px;
@@ -8371,7 +8377,7 @@ p.sybil_info + a[name] + table.sybil_routerinfo, p.hashdist + a[name] + table.sy
   page-break-inside: avoid;
 }
 
-@media screen and (max-width: 1500px) {
+@media screen and (max-width: 1499px) {
 #banlist li {
   padding-bottom: 0 !important;
 }
@@ -8429,7 +8435,7 @@ p.sybil_info + a[name] + table.sybil_routerinfo, p.hashdist + a[name] + table.sy
   background: none;
 }
 
-@media screen and (max-width: 1500px) {
+@media screen and (max-width: 1499px) {
   #banlist .routerid img {
     margin-right: -3px;
   }
@@ -9508,7 +9514,13 @@ select[name="newlogclass"] {
 }
 
 #pluginconfig {
-  margin-top: -14px;
+  margin-top: -15px;
+}
+
+@media screen and (max-width: 1499px) {
+  #pluginconfig {
+    margin-top: -14px;
+  }
 }
 
 #pluginconfig table {
@@ -9873,7 +9885,7 @@ a[href^="configpeer?peer"]:hover::after {
   margin-left: -24px;
 }
 
-@media screen and (max-width: 1500px) {
+@media screen and (max-width: 1499px) {
   .expiry ul {
     margin-left: -4px;
   }
@@ -11352,7 +11364,7 @@ form[action="events"] select + b, form[action="events"] input[type=submit] {
 }
 }
 
-@media screen and (max-width: 1500px) {
+@media screen and (max-width: 1499px) {
 body {
   margin: 4px;
 }
@@ -11995,7 +12007,7 @@ h1.webapp {
   min-width: 136px !important;
 }
 
-@media screen and (max-width: 1500px) {
+@media screen and (max-width: 1499px) {
 .sitemapLink, .sitemapLabel, #sitemap div.app, #sitemap .applabel {
   width: 160px !important;
   min-width: 160px !important;
@@ -12053,7 +12065,7 @@ h1.webapp {
   padding-right: 50px !important
 }
 
-@media screen and (max-width: 1500px) {
+@media screen and (max-width: 1499px) {
 #sitemap div.app img {
   padding-left: 62px !important;
   padding-right: 62px !important
@@ -12149,6 +12161,11 @@ h1.webapp {
   background-size: 32px, 100%;
 }
 
+#help_filter {
+  background: var(--filter) 15px center no-repeat, linear-gradient(135deg, #fff, #f8f8ff);
+  background-size: 32px, 100%;
+}
+
 #help_configadv {
   background: var(--configure) 15px center no-repeat, linear-gradient(135deg, #fff, #f8f8ff);
   background-size: 32px, 100%;
@@ -12175,7 +12192,8 @@ h1.webapp {
 }
 
 #help_legal {
-  background: url(/themes/console/images/info/legal.png) 15px center no-repeat, linear-gradient(135deg, #fff, #f8f8ff);
+  background: var(--legal) 15px center no-repeat, linear-gradient(135deg, #fff, #f8f8ff);
+  background-size: 32px, 100%;
 }
 
 #help_changelog {
@@ -12226,7 +12244,7 @@ h1.webapp {
 }
 
 #legal h2 {
-  background: url(/themes/console/images/info/legal.png) 8px center no-repeat, var(--h2) !important;
+  background: var(--legal) 8px center no-repeat, var(--h2) !important;
 }
 
 #changelog h2 {
@@ -12718,8 +12736,8 @@ i {
 
 #clock {
   margin: -7px -10px -9px;
-  padding: 7px 0 6px;
-  font-size: 18pt;
+  padding: 0 0 1px;
+  font-size: 17pt;
   font-weight: 700;
   letter-spacing: .1em;
   color: var(--inklite);
@@ -12734,11 +12752,10 @@ i {
   vertical-align: middle;
 }
 
-
-@media screen and (max-width: 1500px) {
-#clock {
-  font-size: 16pt;
-}
+@media screen and (max-width: 1499px) {
+  #clock {
+    font-size: 16pt;
+  }
 }
 
 #sybilTask {

@@ -28,7 +28,7 @@
 <li id="help_newusers"><a href="newusers"><b>New User Guide</b></a><br>A gentle introduction to I2P</li>
 <li id="help_reseed"><a href="reseed"><b>Reseeding</b></a><br>A guide to reseeding your I2P+ router</li>
 <li id="help_troubleshoot"><a href="troubleshoot"><b>Troubleshooting</b></a><br>What to do in the event I2P isn't working</li>
-<li id="help_configuration"><a href="tunnelfilter"><b>Tunnel Filtering</b></a><br>An introduction to tunnel access lists</li>
+<li id="help_filter"><a href="tunnelfilter"><b>Tunnel Filtering</b></a><br>An introduction to tunnel access lists</li>
 <li id="help_ui"><a href="ui"><b>User Interface</b></a><br>Information about the sidebar, network status messages, and theme overrides </li>
 <li id="help_webhosting"><a href="webhosting"><b>Webhosting on I2P</b></a><br>An introduction to hosting websites on the I2P network</li>
 </ul>

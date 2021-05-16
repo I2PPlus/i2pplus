@@ -10728,6 +10728,11 @@ div.app.js:hover::before {
   background: url(/themes/console/images/info/optimize.png) 15px center no-repeat, linear-gradient(135deg, #fff, #f8f8ff);
 }
 
+#help_filter {
+  background: #eef url(/themes/console/images/svg/configure.svg) 15px center no-repeat;
+  background: url(/themes/console/images/svg/configure.svg) 15px center no-repeat, linear-gradient(135deg, #fff, #f8f8ff);
+}
+
 #help_configadv {
   background: #eef url(/themes/console/images/svg/configure.svg) 15px center no-repeat;
   background: url(/themes/console/images/svg/configure.svg) 15px center no-repeat, linear-gradient(135deg, #fff, #f8f8ff);
@@ -10754,8 +10759,8 @@ div.app.js:hover::before {
 }
 
 #help_legal {
-  background: #eef url(/themes/console/images/info/legal.png) 15px center no-repeat;
-  background: url(/themes/console/images/info/legal.png) 15px center no-repeat, linear-gradient(135deg, #fff, #f8f8ff);
+  background: #eef url(/themes/console/images/svg/legal.svg) 15px center no-repeat;
+  background: url(/themes/console/images/svg/legal.svg) 15px center no-repeat, linear-gradient(135deg, #fff, #f8f8ff);
 }
 
 #help_changelog {
@@ -10805,7 +10810,7 @@ div.app.js:hover::before {
 
 #legal h2 {
   padding-left: 38px;
-  background: url(/themes/console/images/info/legal.png) 8px center no-repeat, linear-gradient(to bottom, #fff 50%, #fafbff 50%) !important;
+  background: url(/themes/console/images/svg/legal.svg) 8px center no-repeat, linear-gradient(to bottom, #fff 50%, #fafbff 50%) !important;
   background-size: 24px, 100%, 100%, 100% !important;
 }
 

@@ -12830,22 +12830,27 @@ a:hover .sitemapLink {
 
 #help_configuration {
   background: var(--configure) 15px center no-repeat, var(--helpsection);
-  background-size: 32px, 100px 4px;
+  background-size: 32px, 100% 4px;
 }
 
 #help_configadv {
   background: var(--configure) 15px center no-repeat, var(--helpsection);
-  background-size: 32px, 100px 4px;
+  background-size: 32px, 100% 4px;
+}
+
+#help_filter {
+  background: var(--filter) 15px center no-repeat, var(--helpsection);
+  background-size: 32px, 100% 4px;
 }
 
 #help_ui {
   background: var(--ui) 15px center no-repeat, var(--helpsection);
-  background-size: 32px, 100px 4px;
+  background-size: 32px, 100% 4px;
 }
 
 #help_reseed {
   background: var(--reseed) 15px center no-repeat, var(--helpsection);
-  background-size: 32px, 100px 4px;
+  background-size: 32px, 100% 4px;
 }
 
 #help_faq, #help_glossary {
@@ -12854,26 +12859,27 @@ a:hover .sitemapLink {
 
 #help_troubleshoot {
   background: var(--wrench) 15px center no-repeat, var(--helpsection);
-  background-size: 32px, 100px 4px;
+  background-size: 32px, 100% 4px;
 }
 
 #help_newusers {
   background: url(images/favicon.svg) 15px center no-repeat, var(--helpsection);
-  background-size: 32px, 100px 4px;
+  background-size: 32px, 100% 4px;
 }
 
 #help_legal {
-  background: url(/themes/console/images/info/legal.png) 15px center no-repeat, var(--helpsection);
+  background: var(--legal) 15px center no-repeat, var(--helpsection);
+  background-size: 32px, 100% 4px;
 }
 
 #help_changelog {
   background: var(--log_icon) 15px center no-repeat, var(--helpsection);
-  background-size: 32px, 100px 4px;
+  background-size: 32px, 100% 4px;
 }
 
 #help_webhosting {
   background: var(--webserver) 15px center no-repeat, var(--helpsection);
-  background-size: 32px, 100px 4px;
+  background-size: 32px, 100% 4px;
 }
 
 #help h2 {
@@ -12926,7 +12932,7 @@ a:hover .sitemapLink {
 
 #legal h2 {
   padding-left: 38px !important;
-  background: url(/themes/console/images/info/legal.png) 8px center no-repeat, var(--title) !important;
+  background: var(--legal) 8px center no-repeat, var(--title) !important;
   background-size: 22px, 4px 100%, 100% !important;
 }
 
