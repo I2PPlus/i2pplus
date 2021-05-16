@@ -145,8 +145,6 @@ public class NTCPConnection implements Closeable {
     static final int BUFFER_SIZE = 16*1024;
     private static final int MAX_DATA_READ_BUFS = 16;
     private static final ByteCache _dataReadBufs = ByteCache.getInstance(MAX_DATA_READ_BUFS, BUFFER_SIZE);
-/*    private static final ByteCache _dataReadBufs = ByteCache.getInstance(SystemVersion.getMaxMemory() < 1024*1024*1024 ?
-                                                                         MAX_DATA_READ_BUFS : MAX_DATA_READ_BUFS / 2, BUFFER_SIZE);*/
     private static final int INFO_PRIORITY = OutNetMessage.PRIORITY_MY_NETDB_STORE_LOW;
     private static final String FIXED_RI_VERSION = "0.9.12";
     private static final AtomicLong __connID = new AtomicLong();
@@ -164,12 +162,13 @@ public class NTCPConnection implements Closeable {
     private static final int SIP_IV_LENGTH = 8;
     private static final int NTCP2_FAIL_READ = 1024;
 //    private static final long NTCP2_FAIL_TIMEOUT = 10*1000;
-    private static final long NTCP2_FAIL_TIMEOUT = 5*1000;
+    private static final long NTCP2_FAIL_TIMEOUT = 8*1000;
 //    private static final long NTCP2_TERMINATION_CLOSE_DELAY = 50;
-    private static final long NTCP2_TERMINATION_CLOSE_DELAY = 30;
+    private static final long NTCP2_TERMINATION_CLOSE_DELAY = 40;
     // don't make combined messages too big, to minimize latency
     // Tunnel data msgs are 1024 + 4 + 9 + 3 = 1040, allow 5
-    private static final int NTCP2_PREFERRED_PAYLOAD_MAX = 5 * 1040;
+//    private static final int NTCP2_PREFERRED_PAYLOAD_MAX = 5 * 1040;
+    private static final int NTCP2_PREFERRED_PAYLOAD_MAX = 4 * 1040;
     static final int REASON_UNSPEC = 0;
     static final int REASON_TERMINATION = 1;
     static final int REASON_TIMEOUT = 2;
