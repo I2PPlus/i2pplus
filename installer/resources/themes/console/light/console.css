@@ -12161,6 +12161,11 @@ h1.webapp {
   background-size: 32px, 100%;
 }
 
+#help_filter {
+  background: var(--filter) 15px center no-repeat, linear-gradient(135deg, #fff, #f8f8ff);
+  background-size: 32px, 100%;
+}
+
 #help_configadv {
   background: var(--configure) 15px center no-repeat, linear-gradient(135deg, #fff, #f8f8ff);
   background-size: 32px, 100%;
@@ -12187,7 +12192,8 @@ h1.webapp {
 }
 
 #help_legal {
-  background: url(/themes/console/images/info/legal.png) 15px center no-repeat, linear-gradient(135deg, #fff, #f8f8ff);
+  background: var(--legal) 15px center no-repeat, linear-gradient(135deg, #fff, #f8f8ff);
+  background-size: 32px, 100%;
 }
 
 #help_changelog {
@@ -12238,7 +12244,7 @@ h1.webapp {
 }
 
 #legal h2 {
-  background: url(/themes/console/images/info/legal.png) 8px center no-repeat, var(--h2) !important;
+  background: var(--legal) 8px center no-repeat, var(--h2) !important;
 }
 
 #changelog h2 {
