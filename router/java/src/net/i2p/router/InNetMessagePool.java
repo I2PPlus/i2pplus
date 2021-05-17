@@ -81,9 +81,10 @@ public class InNetMessagePool implements Service {
      * true = INMP queue
      */
     private static final String PROP_DISPATCH_DIRECT = "router.dispatchDirect";
-    private static final boolean DEFAULT_DISPATCH_DIRECT = true;
+//    private static final boolean DEFAULT_DISPATCH_DIRECT = true;
+    private static final boolean DEFAULT_DISPATCH_DIRECT = false;
     private final boolean DISPATCH_DIRECT;
-    
+
     public InNetMessagePool(RouterContext context) {
         _context = context;
         _handlerJobBuilders = new HandlerJobBuilder[MAX_I2NP_MESSAGE_TYPE + 1];
@@ -104,7 +105,7 @@ public class InNetMessagePool implements Service {
         }
         _log = _context.logManager().getLog(InNetMessagePool.class);
         _context.statManager().createRateStat("inNetPool.dropped", "How often we drop a message", "InNetPool", new long[] { 60*1000, 60*60*1000l });
-        _context.statManager().createRateStat("inNetPool.droppedDeliveryStatusDelay", "How long after a delivery status message is created do we receive it back again (for messages too slow to be handled)", "InNetPool", new long[] { 60*1000, 60*60*1000l });
+        _context.statManager().createRateStat("inNetPool.droppedDeliveryStatusDelay", "Return of delivery status message for too slow messages (ms)", "InNetPool", new long[] { 60*1000, 60*60*1000l });
         _context.statManager().createRateStat("inNetPool.duplicate", "How often we receive a duplicate message", "InNetPool", new long[] { 60*1000, 60*60*1000l });
         _context.statManager().createRateStat("inNetPool.droppedDbLookupResponseMessage", "How often we drop a slow-to-arrive db search response", "InNetPool", new long[] { 60*1000, 60*60*1000l });
     }
@@ -152,10 +153,9 @@ public class InNetMessagePool implements Service {
         long exp = messageBody.getMessageExpiration();
 
         if (_log.shouldDebug())
-                _log.debug("Received " + messageBody.getClass().getSimpleName()
-                          + " [MsgID " + messageBody.getUniqueId()
-                          + "]"
-                          + "\n* Expires: " + new Date(exp));
+                _log.debug("Received " + messageBody.getClass().getSimpleName() +
+                           " [MsgID " + messageBody.getUniqueId() + "]" +
+                           "\n* Expires: " + new Date(exp));
 
         //if (messageBody instanceof DataMessage) {
         //    _context.statManager().getStatLog().addData(fromRouterHash.toBase64().substring(0,6), "udp.floodDataReceived", 1, 0);
@@ -177,15 +177,15 @@ public class InNetMessagePool implements Service {
             //if (messageBody instanceof TunnelCreateMessage)
             //    level = Log.INFO;
             if (_log.shouldLog(level))
-                _log.log(level, "Dropping " + messageBody.getClass().getSimpleName() + " [MsgID " + messageBody.getUniqueId() + "]"
-                          + "\n* Expires: " + new Date(exp) + " ("  + invalidReason + ") \n* " + messageBody);
+                _log.log(level, "Dropping " + messageBody.getClass().getSimpleName() + " [MsgID " + messageBody.getUniqueId() + "]" +
+                                "\n* Expires: " + new Date(exp) + " ("  + invalidReason + ") \n* " + messageBody);
             _context.statManager().addRateData("inNetPool.dropped", 1);
             // FIXME not necessarily a duplicate, could be expired too long ago / too far in future
             _context.statManager().addRateData("inNetPool.duplicate", 1);
             if (doHistory) {
                 history.droppedOtherMessage(messageBody, (fromRouter != null ? fromRouter.calculateHash() : fromRouterHash));
-                history.messageProcessingError(messageBody.getUniqueId(), 
-                                                                messageBody.getClass().getSimpleName(), 
+                history.messageProcessingError(messageBody.getUniqueId(),
+                                                                messageBody.getClass().getSimpleName(),
                                                                 "Duplicate/expired");
             }
             return -1;
@@ -267,19 +267,18 @@ public class InNetMessagePool implements Service {
 
                       default:
                         if (_log.shouldLog(Log.WARN))
-                            _log.warn("Message expiring on "
-                                      + messageBody.getMessageExpiration()
-                                      + " was not handled by a HandlerJobBuilder - DROPPING: " + messageBody,
-                                      new Exception("f00!"));
+                            _log.warn("Message expiring on " + messageBody.getMessageExpiration() +
+                                      " was not handled by a HandlerJobBuilder - DROPPING: " + messageBody);
+//                                      new Exception("f00!"));
                         _context.statManager().addRateData("inNetPool.dropped", 1);
                         break;
                     }  // switch
                 } else {
                     if (doHistory) {
                         String mtype = messageBody.getClass().getName();
-                        history.receiveMessage(mtype, messageBody.getUniqueId(), 
-                                                             messageBody.getMessageExpiration(), 
-                                                             fromRouterHash, true);	
+                        history.receiveMessage(mtype, messageBody.getUniqueId(),
+                                                             messageBody.getMessageExpiration(),
+                                                             fromRouterHash, true);
                     }
                     return 0; // no queue
                 }
@@ -288,9 +287,9 @@ public class InNetMessagePool implements Service {
 
         if (doHistory) {
             String mtype = messageBody.getClass().getName();
-            history.receiveMessage(mtype, messageBody.getUniqueId(), 
-                                                 messageBody.getMessageExpiration(), 
-                                                 fromRouterHash, true);	
+            history.receiveMessage(mtype, messageBody.getUniqueId(),
+                                                 messageBody.getMessageExpiration(),
+                                                 fromRouterHash, true);
         }
         return 0; // no queue
     }
