@@ -7451,6 +7451,23 @@ b.netdb_transport {
   background: linear-gradient(to bottom, #fff, #eef);
 }
 
+.configpeer img {
+  opacity: 0;
+}
+
+.configpeer::after {
+  margin: 0 0 0 -16px;
+  height: 16px;
+  width: 16px;
+  display: inline-block;
+  background: var(--edit) center center no-repeat;
+  content: "";
+}
+
+.configpeer:hover::after, .configpeer:focus::after {
+  background: var(--edit_hover) center center no-repeat;
+}
+
 .viewprofile img:hover, .viewfullentry img:hover, .familysearch img:hover, .configpeer img:hover, .profiledump img:hover,
 .viewprofile img:focus, .viewfullentry img:focus, .familysearch img:focus, .configpeer img:focus, .profiledump img:focus {
   border: 1px solid #f60;
@@ -13183,6 +13200,24 @@ i {
   background: var(--hardhat) 7px 6px no-repeat, var(--h3),
               linear-gradient(to right, #fafaff 5%, rgba(231, 231, 255, .8) 25%) !important;
   background-size: 18px, 100%, 100% !important;
+}
+
+#peercount a img, #participating a img {
+  opacity: 0;
+}
+
+#peercount a::after, #participating a::after {
+  margin: 1px 0 0 -16px;
+  height: 18px;
+  width: 18px;
+  display: inline-block;
+  background: var(--refresh) center center no-repeat;
+  content: "";
+}
+
+#peercount a:hover::after, #peercount a:focus::after,
+#participating a:hover::after, #participating a:focus::after {
+  background: var(--refresh_hover) center center no-repeat;
 }
 
 #tunnels #tunnelPeerCount .cells {
