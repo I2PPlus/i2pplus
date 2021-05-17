@@ -2203,7 +2203,7 @@ public class UDPTransport extends TransportImpl implements TimedWeightedPriority
             return;
         }
 
-        msg.timestamp("sending on UDP transport");
+        msg.timestamp("Sending on UDP transport");
         Hash to = tori.getIdentity().calculateHash();
         PeerState peer = getPeerState(to);
         if (_log.shouldLog(Log.DEBUG))
@@ -2228,7 +2228,7 @@ public class UDPTransport extends TransportImpl implements TimedWeightedPriority
                     return;
                 }
             }
-            msg.timestamp("enqueueing for an already established peer");
+            msg.timestamp("Enqueueing for an already established peer");
             if (_log.shouldLog(Log.DEBUG))
                 _log.debug("Add to fragments for " + to);
 
@@ -2240,7 +2240,7 @@ public class UDPTransport extends TransportImpl implements TimedWeightedPriority
         } else {
             if (_log.shouldLog(Log.DEBUG))
                 _log.debug("Establish new connection to " + to);
-            msg.timestamp("establishing a new connection");
+            msg.timestamp("Establishing a new connection");
             _establisher.establish(msg);
         }
     }

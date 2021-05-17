@@ -1448,7 +1448,7 @@ public class PeerState {
                 failedCount += state.getUnackedFragments();
                 OutNetMessage msg = state.getMessage();
                 if (msg != null) {
-                    msg.timestamp("expired in the active pool");
+                    msg.timestamp("Expired in the active pool");
                     _transport.failed(state);
                     if (_log.shouldInfo())
                         _log.info("Message expired: " + state + " to: " + this);

@@ -389,10 +389,8 @@ public class OutNetMessage implements CDPQEntry {
             buf.append("; with onFailedSend ").append(_onFailedSend);
         buf.append("; Priority: ").append(_priority);
         buf.append("\n* Expires: ").append(new Date(_expiration));
-        if (_timestamps != null && _timestampOrder != null) {
-            buf.append("\n* Timestamps: ");
+        if (_timestamps != null && _timestampOrder != null)
             renderTimestamps(buf);
-        }
         return buf.toString();
     }
 
@@ -403,19 +401,26 @@ public class OutNetMessage implements CDPQEntry {
     private void renderTimestamps(StringBuilder buf) {
             synchronized (this) {
                 long lastWhen = -1;
+                if (_timestampOrder.size() > 1)
+                    buf.append("\nTime stamps: ");
+                else
+                    buf.append("\n* Time: ");
                 for (int i = 0; i < _timestampOrder.size(); i++) {
                     String name = _timestampOrder.get(i);
                     Long when = _timestamps.get(name);
-                    buf.append("\n\t* ");
+                    if (_timestampOrder.size() > 1)
+                        buf.append("\n* ");
+                    buf.append(name);
+                    buf.append(": ").append(new Date(when.longValue()));
                     long diff = when.longValue() - lastWhen;
-                    if ( (lastWhen > 0) && (diff > 500) )
+                    buf.append(" (");
+                    if ((lastWhen > 0) && (diff > 500))
                         buf.append("**");
                     if (lastWhen > 0)
                         buf.append(diff);
                     else
                         buf.append(0);
-                    buf.append("ms: ").append(name);
-                    buf.append(": ").append(new Date(when.longValue()));
+                    buf.append ("ms ago)");
                     lastWhen = when.longValue();
                 }
             }

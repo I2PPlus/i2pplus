@@ -45,7 +45,7 @@ class GetBidsJob extends JobImpl {
     static void getBids(RouterContext context, TransportManager tmgr, OutNetMessage msg) {
         Log log = context.logManager().getLog(GetBidsJob.class);
         Hash to = msg.getTarget().getIdentity().getHash();
-        msg.timestamp("bid");
+        msg.timestamp("Bid");
 
         if (context.banlist().isBanlisted(to)) {
             if (log.shouldLog(Log.INFO))
