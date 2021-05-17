@@ -1240,7 +1240,7 @@ input#exporthosts {
   min-width: 0;
   display: inline-block;
   font-size: 0 !important;
-  background: url(/themes/console/images/info/arrow_down.png) center center no-repeat, linear-gradient(to bottom, #fff, #eef);
+  background: url(/themes/console/images/svg/inbound.svg) center center no-repeat, linear-gradient(to bottom, #fff, #eef);
   background-size: 16px 16px, 100% 100%;
 }
 

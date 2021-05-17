@@ -8793,7 +8793,7 @@ b.suboption {
 
 #bandwidthconfig td:first-child:not(.infohelp):not(.optionsave) {
   padding: 0 50px 0 5px;
-  background: #000800 url(/themes/console/images/info/arrow_right.png) right 12px center no-repeat !important;
+  background: #000800 url(/themes/console/images/svg/arrow_right.svg) right 12px center no-repeat !important;
   background-size: 24px !important;
   background-blend-mode: luminosity;
 }
@@ -8805,11 +8805,11 @@ b.suboption {
 }
 
 #bandwidthconfig .bw_out {
-  background: #002500 url(/themes/console/images/info/arrow_up.png) 10px calc(50% + 14px) no-repeat !important;
+  background: #002500 url(/themes/console/images/svg/outbound.svg) 10px calc(50% + 14px) no-repeat !important;
 }
 
 #bandwidthconfig .bw_in {
-  background: #002500 url(/themes/console/images/info/arrow_down.png) 10px calc(50% + 14px) no-repeat !important;
+  background: #002500 url(/themes/console/images/svg/inbound.svg) 10px calc(50% + 14px) no-repeat !important;
 }
 
 #bandwidthconfig .bw_share {
@@ -10578,11 +10578,11 @@ input[type=text]:focus::placeholder, #homesearch input.search:focus::placeholder
 }
 
 #bandwidthconfig tr:nth-child(2) .net_bwrate::before {
-  background: url(/themes/console/images/info/arrow_down.png) center center no-repeat;
+  background: url(/themes/console/images/svg/inbound.svg) center center no-repeat;
 }
 
 #bandwidthconfig tr:nth-child(3) .net_bwrate::before, #bandwidthconfig tr:nth-child(4) .net_bwrate::before {
-  background: url(/themes/console/images/info/arrow_up.png) center center no-repeat;
+  background: url(/themes/console/images/svg/outbound.svg) center center no-repeat;
 }
 
 .net_bwrate::before, #bandwidthconfig tr:nth-child(4) .net_bwrate::before {
