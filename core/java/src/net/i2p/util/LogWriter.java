@@ -23,8 +23,7 @@ abstract class LogWriter implements Runnable {
     private final static long CONFIG_READ_INTERVAL = 50 * 1000;
 //    final static long FLUSH_INTERVAL = 29 * 1000;
     final static long FLUSH_INTERVAL = 120 * 1000;
-//    private final static long MIN_FLUSH_INTERVAL = 2*1000;
-    private final static long MIN_FLUSH_INTERVAL = 15*1000;
+    private final static long MIN_FLUSH_INTERVAL = 2*1000;
     private final static long MAX_FLUSH_INTERVAL = 5*60*1000;
     // true for newest first on /logs page; false for oldest first
     private static final boolean BUFFER_DISPLAYED_REVERSE = true;
