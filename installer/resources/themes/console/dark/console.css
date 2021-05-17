@@ -12738,7 +12738,7 @@ h3 + table {
   position: relative;
 }
 
-.routersummary table:not(#sb_localtunnels):not(#sb_services):not(.sb_newsheadings)::before {
+.routersummary table:not(#sb_localtunnels):not(#sb_services):not(#sb_advanced)::before {
   width: 0;
   height: 1px;
   position: absolute;
@@ -12749,6 +12749,10 @@ h3 + table {
   content: "";
   animation: ease-in bar .15s reverse;
   will-change: transform;
+}
+
+.routersummary .sb_newsheadings table::before {
+  content: none !important;
 }
 
 @keyframes bar {
