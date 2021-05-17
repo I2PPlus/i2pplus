@@ -177,7 +177,7 @@ public class InNetMessagePool implements Service {
             //if (messageBody instanceof TunnelCreateMessage)
             //    level = Log.INFO;
             if (_log.shouldLog(level))
-                _log.log(level, "Dropping " + messageBody.getClass().getSimpleName() + " [MsgID " + messageBody.getUniqueId() + "]" +
+                _log.log(level, "Dropping " + messageBody.getClass().getSimpleName() /* + " [MsgID " + messageBody.getUniqueId() + "]" */ +
                                 "\n* Expires: " + new Date(exp) + " ("  + invalidReason + ") \n* " + messageBody);
             _context.statManager().addRateData("inNetPool.dropped", 1);
             // FIXME not necessarily a duplicate, could be expired too long ago / too far in future
