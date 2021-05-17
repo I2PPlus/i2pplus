@@ -25,11 +25,10 @@ body:not(old) {
   url(/themes/console/images/buttons/restart_hover.png) no-repeat,
   url(/themes/console/images/buttons/restore_hover.png) no-repeat,
   url(/themes/console/images/buttons/search_hover.png) no-repeat,
-  url(/themes/console/images/buttons/shutdown_hover.png) no-repeat,
   url(/themes/console/images/buttons/update_hover.png) no-repeat,
   url(/themes/console/images/svg/update.svg) no-repeat,
   url(images/dropdown_hover.png) #e2e2f3;
-  background-size: 90px 90px, 0 0, 0 0, 0 0, 0 0, 0 0, 0 0, 0 0, 0 0, 0 0, 0 0;
+  background-size: 90px, 0, 0, 0, 0, 0, 0, 0, 0, 0;
 }
 
 @supports (text-justify: auto) { /* Firefox 55+ */
