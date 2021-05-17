@@ -7652,6 +7652,10 @@ div.appgroup {
   height: 45px;
 }
 
+div.app img, .sitemapLink img {
+  filter: grayscale(1) saturate(2);
+}
+
 div.app img {
   margin: -3px 0 1px;
   padding: 9px 50px 35px;
@@ -7659,32 +7663,14 @@ div.app img {
   width: auto;
   max-height: 32px;
   max-width: 32px;
-  mix-blend-mode: luminosity;
 }
 
-div.app:hover img {
-  filter: drop-shadow(0 0 3px #83529f);
-  mix-blend-mode: normal;
-}
-
-div.app a:focus img {
-  filter: drop-shadow(0 0 3px #c96fff);
+div.app a:hover img, div.app a:focus img, .sitemapLink:hover img, a:focus > .sitemapLink img {
+  filter: drop-shadow(0 0 1px #83529f);
 }
 
 div.app:hover img, div.app:focus img {
-  filter: saturate(100%);
-  mix-blend-mode: normal;
-  filter: saturate(100%) drop-shadow(0 0 3px #83529f);
-  animation: glo ease-in-out 1.5s infinite alternate .5s;
-}
-
-@keyframes glo {
-0% {
-  filter: saturate(100%) drop-shadow(0 0 3px #83529f);
-}
-100% {
-  filter: saturate(200%) drop-shadow(0 0 4px #c96fff);
-}
+  filter: drop-shadow(0 0 3px #83529f);
 }
 
 div.app:active img {
@@ -8399,7 +8385,7 @@ h3#pluginfromfile, h3#updateplugins, h3#pluginmanage, h3#bannedpeers, h3.ptitle,
 }
 
 h3.tabletitle a {
-  padding-left: 12px !important;
+/*  padding-left: 12px !important;*/
   letter-spacing: normal;
   text-transform: lowercase;
 }
@@ -8426,6 +8412,10 @@ h3.tabletitle a {
 
 #logs h3.tabletitle a.configure {
   padding: 10px 16px 8px !important;
+}
+
+#logs h3.tabletitle a:last-child:not(:nth-child(2)) {
+  padding-right: 4px !important;
 }
 
 @media screen and (max-width: 1800px) {
@@ -12589,12 +12579,6 @@ html, body {
   padding: 12px 10px 10px;
   height: 32px;
   width: 32px;
-  mix-blend-mode: luminosity;
-}
-
-.sitemapLink:hover img {
-  mix-blend-mode: normal;
-  filter: drop-shadow(0 0 1px #83529f);
 }
 
 .sitemapLink:active img {
