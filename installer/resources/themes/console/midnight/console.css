@@ -11108,7 +11108,7 @@ label:hover .optbox {
 
 #bandwidthconfig tr:nth-last-child(n+3) td:first-child:not(.infohelp) {
   padding: 0 50px 0 5px;
-  background: #000010 url(/themes/console/images/info/arrow_right.png) right 12px center no-repeat !important;
+  background: #000010 url(/themes/console/images/svg/arrow_right.svg) right 12px center no-repeat !important;
   background-size: 24px !important;
   background-blend-mode: luminosity;
 }
@@ -11120,11 +11120,11 @@ label:hover .optbox {
 }
 
 #bandwidthconfig .bw_out {
-  background: #000025 url(/themes/console/images/info/arrow_up.png) 10px calc(50% + 14px) no-repeat !important;
+  background: #000025 url(/themes/console/images/svg/outbound.svg) 10px calc(50% + 14px) no-repeat !important;
 }
 
 #bandwidthconfig .bw_in {
-  background: #000025 url(/themes/console/images/info/arrow_down.png) 10px calc(50% + 14px) no-repeat !important;
+  background: #000025 url(/themes/console/images/svg/inbound.svg) 10px calc(50% + 14px) no-repeat !important;
 }
 
 #bandwidthconfig .bw_share {
@@ -11169,12 +11169,12 @@ tr:nth-child(2) .net_bwrate::before, tr:nth-child(3) .net_bwrate::before, tr:nth
   width: 18px;
   height: 16px;
   vertical-align: middle;
-  background:  url(/themes/console/images/info/arrow_down.png) left top no-repeat;
+  background:  url(/themes/console/images/svg/inbound.svg) left top no-repeat;
   background-size: 14px !important;
 }
 
 tr:nth-child(3) .net_bwrate::before {
-  background:  url(/themes/console/images/info/arrow_up.png) left top no-repeat;
+  background:  url(/themes/console/images/svg/outbound.svg) left top no-repeat;
 }
 
 tr:nth-child(4) .net_bwrate::before {
