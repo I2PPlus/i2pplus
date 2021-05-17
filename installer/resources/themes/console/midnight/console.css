@@ -8399,7 +8399,7 @@ h3#pluginfromfile, h3#updateplugins, h3#pluginmanage, h3#bannedpeers, h3.ptitle,
 }
 
 h3.tabletitle a {
-  padding-left: 12px !important;
+/*  padding-left: 12px !important;*/
   letter-spacing: normal;
   text-transform: lowercase;
 }
@@ -8426,6 +8426,10 @@ h3.tabletitle a {
 
 #logs h3.tabletitle a.configure {
   padding: 10px 16px 8px !important;
+}
+
+#logs h3.tabletitle a:last-child:not(:nth-child(2)) {
+  padding-right: 4px !important;
 }
 
 @media screen and (max-width: 1800px) {
