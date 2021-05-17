@@ -1849,15 +1849,16 @@ button:active, input[type=submit]:active, input[type=reset]:active {
 }
 
 input.accept, button.accept {
-  padding: 5px 8px 5px 23px;
-  background: #eee url(/themes/console/images/buttons/yes.svg) no-repeat 7px center;
-  background: url(/themes/console/images/buttons/yes.svg) no-repeat 7px center, linear-gradient(to bottom, #fff, #f4f5ff);
+  padding: 5px 8px 5px 22px;
+  background: #eee url(/themes/console/images/svg/yes.svg) no-repeat 7px center;
+  background: url(/themes/console/images/svg/yes.svg) no-repeat 7px center, linear-gradient(to bottom, #fff, #f4f5ff);
+  background-size: 12px, 100% !important
 }
 
 input.accept:hover, button.accept:hover,
 input.accept:focus, button.accept:focus {
-  background: #fff url(/themes/console/images/buttons/yes.svg) no-repeat 7px center;
-  background: url(/themes/console/images/buttons/yes.svg) no-repeat 7px center, linear-gradient(to bottom, #ddd, #fff);
+  background: #fff url(/themes/console/images/svg/yes.svg) no-repeat 7px center;
+  background: url(/themes/console/images/svg/yes.svg) no-repeat 7px center, linear-gradient(to bottom, #ddd, #fff);
 }
 
 input.accept[value^="Unban"], button.accept[value^="Unban"] {
@@ -1897,15 +1898,16 @@ input.accept[value^="Filter"]:focus, button.accept[value^="Filter"]:focus {
 }
 
 input.add, button.add {
-  padding: 5px 8px 5px 23px;
-  background: #eee url(/themes/console/images/buttons/add.png) no-repeat 7px center;
-  background: url(/themes/console/images/buttons/add.png) no-repeat 7px center, linear-gradient(to bottom, #fff, #f4f5ff);
+  padding: 5px 8px 5px 21px;
+  background: #eee url(/themes/console/images/svg/add.svg) no-repeat 7px center;
+  background: url(/themes/console/images/svg/add.svg) no-repeat 7px center, linear-gradient(to bottom, #fff, #f4f5ff);
+  background-size: 11px, 100% !important;
 }
 
 input.add:hover, button.add:hover,
 input.add:focus, button.add:focus {
-  background: #fff url(/themes/console/images/buttons/add.png) no-repeat 7px center;
-  background: url(/themes/console/images/buttons/add.png) no-repeat 7px center, linear-gradient(to bottom, #ddd, #fff);
+  background: #fff url(/themes/console/images/svg/add.svg) no-repeat 7px center;
+  background: url(/themes/console/images/svg/add.svg) no-repeat 7px center, linear-gradient(to bottom, #ddd, #fff);
 }
 
 input.add[value^="Adjust"], button.add[value^="Adjust"] {
@@ -1921,15 +1923,16 @@ input.add[value^="Adjust"]:focus, button.add[value^="Adjust"]:focus {
 }
 
 input.cancel, button.cancel {
-  padding: 5px 8px 5px 23px;
-  background: #eee url(/themes/console/images/buttons/no.svg) no-repeat 7px center;
-  background: url(/themes/console/images/buttons/no.svg) no-repeat 7px center, linear-gradient(to bottom, #fff, #f4f5ff);
+  padding: 5px 8px 5px 20px;
+  background: #eee url(/themes/console/images/svg/no.svg) no-repeat 7px center;
+  background: url(/themes/console/images/svg/no.svg) no-repeat 7px center, linear-gradient(to bottom, #fff, #f4f5ff);
+  background-size: 10px, 100% !important;
 }
 
 input.cancel:hover, button.cancel:hover,
 input.cancel:focus, button.cancel:focus {
-  background: #fff url(/themes/console/images/buttons/no.svg) no-repeat 7px center;
-  background: url(/themes/console/images/buttons/no.svg) no-repeat 7px center, linear-gradient(to bottom, #ddd, #fff);
+  background: #fff url(/themes/console/images/svg/no.svg) no-repeat 7px center;
+  background: url(/themes/console/images/svg/no.svg) no-repeat 7px center, linear-gradient(to bottom, #ddd, #fff);
 }
 
 input.accept[value^="Show"], button.accept[value^="Show"],
@@ -1968,14 +1971,14 @@ input.hideconsole:hover, input.hideconsole:focus {
 
 input.check, button.check {
   padding: 5px 8px 5px 23px;
-  background: #eee url(/themes/console/images/buttons/yes.svg) no-repeat 7px center;
-  background: url(/themes/console/images/buttons/yes.svg) no-repeat 7px center, linear-gradient(to bottom, #fff, #f4f5ff);
+  background: #eee url(/themes/console/images/svg/yes.svg) no-repeat 7px center;
+  background: url(/themes/console/images/svg/yes.svg) no-repeat 7px center, linear-gradient(to bottom, #fff, #f4f5ff);
 }
 
 input.check:hover, button.check:hover,
 input.check:focus, button.check:focus {
-  background: #fff url(/themes/console/images/buttons/yes.svg) no-repeat 7px center;
-  background: url(/themes/console/images/buttons/yes.svg) no-repeat 7px center, linear-gradient(to bottom, #ddd, #fff);
+  background: #fff url(/themes/console/images/svg/yes.svg) no-repeat 7px center;
+  background: url(/themes/console/images/svg/yes.svg) no-repeat 7px center, linear-gradient(to bottom, #ddd, #fff);
 }
 
 input.check[value$="updates"], button.check[value$="updates"] {
@@ -4515,7 +4518,7 @@ h3#activejobs + ol li::before {
 }
 
 h3#finishedjobs + ol li::before {
-  background: url(/themes/console/images/buttons/yes.svg) center center no-repeat;
+  background: url(/themes/console/images/svg/yes.svg) center center no-repeat;
   background-size: 12px 12px;
 }
 
@@ -9768,7 +9771,7 @@ input[type="file"]:hover {
 @media screen and (min-width: 1200px) {
 #jobstats td:first-child, #jobstats tr:hover td:first-child {
   padding: 6px 0 6px 26px;
-  background-image: url(/themes/console/images/buttons/yes.svg);
+  background-image: url(/themes/console/images/svg/yes.svg);
   background-size: 12px 12px;
   background-position: 8px center;
   background-repeat: no-repeat;
@@ -11393,11 +11396,11 @@ to {
 }
 
 #wizardpage .yes {
-  background: url(/themes/console/images/buttons/yes.svg) center center no-repeat;
+  background: url(/themes/console/images/svg/yes.svg) center center no-repeat;
 }
 
 #wizardpage .no {
-  background: url(/themes/console/images/buttons/no.svg) center center no-repeat;
+  background: url(/themes/console/images/svg/no.svg) center center no-repeat;
 }
 
 #wizard #langsettings {
