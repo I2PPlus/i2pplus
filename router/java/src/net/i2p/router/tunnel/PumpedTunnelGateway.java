@@ -52,11 +52,6 @@ class PumpedTunnelGateway extends TunnelGateway {
     private static final int INITIAL_OB_QUEUE = 64;
     private static final int MAX_IB_QUEUE = 1024;
 
-/*    private static final int MAX_OB_MSGS_PER_PUMP = SystemVersion.getMaxMemory() < 1024*1024*1024 ? 64 : 128;
-    private static final int MAX_IB_MSGS_PER_PUMP = SystemVersion.getMaxMemory() < 1024*1024*1024 ? 24 : 128;
-    private static final int INITIAL_OB_QUEUE = SystemVersion.getMaxMemory() < 1024*1024*1024 ? 64 : 128;
-    private static final int MAX_IB_QUEUE = SystemVersion.getMaxMemory() < 1024*1024*1024 ? 1024 : 128;*/
-
     /**
      * @param preprocessor this pulls Pending messages off a list, builds some
      *                     full preprocessed messages, and pumps those into the sender

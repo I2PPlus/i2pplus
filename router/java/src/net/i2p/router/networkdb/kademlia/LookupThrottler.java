@@ -20,10 +20,8 @@ class LookupThrottler {
     /** the id of this is -1 */
     private static final TunnelId DUMMY_ID = new TunnelId();
     /** this seems like plenty */
-//    private static final int MAX_LOOKUPS = 30;
-    private static final int MAX_LOOKUPS = 50;
-//    private static final long CLEAN_TIME = 2*60*1000;
-    private static final long CLEAN_TIME = 4*60*1000;
+    private static final int MAX_LOOKUPS = 30;
+    private static final long CLEAN_TIME = 2*60*1000;
 
     LookupThrottler() {
         this.counter = new ObjectCounter<ReplyTunnel>();

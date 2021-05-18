@@ -161,14 +161,11 @@ public class NTCPConnection implements Closeable {
     private static final int PADDING_MAX = 64;
     private static final int SIP_IV_LENGTH = 8;
     private static final int NTCP2_FAIL_READ = 1024;
-//    private static final long NTCP2_FAIL_TIMEOUT = 10*1000;
-    private static final long NTCP2_FAIL_TIMEOUT = 8*1000;
-//    private static final long NTCP2_TERMINATION_CLOSE_DELAY = 50;
-    private static final long NTCP2_TERMINATION_CLOSE_DELAY = 40;
+    private static final long NTCP2_FAIL_TIMEOUT = 10*1000;
+    private static final long NTCP2_TERMINATION_CLOSE_DELAY = 50;
     // don't make combined messages too big, to minimize latency
     // Tunnel data msgs are 1024 + 4 + 9 + 3 = 1040, allow 5
-//    private static final int NTCP2_PREFERRED_PAYLOAD_MAX = 5 * 1040;
-    private static final int NTCP2_PREFERRED_PAYLOAD_MAX = 4 * 1040;
+    private static final int NTCP2_PREFERRED_PAYLOAD_MAX = 5 * 1040;
     static final int REASON_UNSPEC = 0;
     static final int REASON_TERMINATION = 1;
     static final int REASON_TIMEOUT = 2;
