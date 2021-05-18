@@ -371,7 +371,7 @@ public abstract class TunnelPeerSelector extends ConnectChecker {
     }
 
     /** NTCP2 */
-    private static final String MIN_VERSION = "0.9.49";
+    private static final String MIN_VERSION = "0.9.36";
 
     /** warning, this is also called by ProfileOrganizer.isSelectable() */
     private static boolean shouldExclude(RouterInfo peer, String excl) {

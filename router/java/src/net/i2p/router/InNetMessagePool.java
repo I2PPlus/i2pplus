@@ -81,8 +81,7 @@ public class InNetMessagePool implements Service {
      * true = INMP queue
      */
     private static final String PROP_DISPATCH_DIRECT = "router.dispatchDirect";
-//    private static final boolean DEFAULT_DISPATCH_DIRECT = true;
-    private static final boolean DEFAULT_DISPATCH_DIRECT = false;
+    private static final boolean DEFAULT_DISPATCH_DIRECT = true;
     private final boolean DISPATCH_DIRECT;
 
     public InNetMessagePool(RouterContext context) {
