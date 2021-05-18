@@ -14408,6 +14408,10 @@ h3#bannedpeers {
   z-index: 1000;
 }
 
+#sidebar {
+  overflow: hidden;
+}
+
 .routersummary table {
   position: relative;
 }
@@ -14421,13 +14425,13 @@ h3#bannedpeers {
   display: block;
   background: linear-gradient(to left, #717, #404);
   content: "";
-  animation: ease-in bar .15s reverse;
+  animation: ease-in bar .1s reverse;
   will-change: transform;
   z-index: 99999;
 }
 
 @keyframes bar {
-  from {width: calc(100% + 2px)}
+  from {width: 300%}
 }
 
 #sb_localtunnels td[colspan="3"] {
