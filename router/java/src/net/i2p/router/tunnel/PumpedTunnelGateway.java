@@ -126,8 +126,12 @@ class PumpedTunnelGateway extends TunnelGateway {
         if (backlogged && _log.shouldLog(Log.INFO))
             _log.info("PumpedTunnelGateway backlogged, queued to " + _nextHop + " : " + _prequeue.size() +
                       " Inbound? " + _isInbound);
+/*
         if (backlogged)
             max = _isInbound ? 1 : 2;
+*/
+        if (backlogged)
+            max = _isInbound ? MAX_IB_MSGS_PER_PUMP / 2 : MAX_OB_MSGS_PER_PUMP / 2;
         else
             max = _isInbound ? MAX_IB_MSGS_PER_PUMP : MAX_OB_MSGS_PER_PUMP;
         _prequeue.drainTo(queueBuf, max);
