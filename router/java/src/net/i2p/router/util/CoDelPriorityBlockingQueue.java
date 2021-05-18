@@ -202,7 +202,7 @@ public class CoDelPriorityBlockingQueue<E extends CDPQEntry> extends PriBlocking
         boolean ok_to_drop = false;
         long sojurn = _now - entry.getEnqueueTime();
         _context.statManager().addRateData(STAT_DELAY, sojurn);
-        // I2P use isEmpty instead of size() < MAXPACKET
+        // I2P uses isEmpty instead of size() < MAXPACKET
         if (sojurn < _target || isEmpty()) {
             _first_above_time = 0;
         } else {
