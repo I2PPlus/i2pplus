@@ -7654,6 +7654,7 @@ div.appgroup {
 
 div.app img, .sitemapLink img {
   filter: grayscale(1) saturate(2);
+  filter: sepia(1) hue-rotate(180deg);
 }
 
 div.app img {
