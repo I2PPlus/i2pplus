@@ -35,7 +35,7 @@ class MessageReceiver {
     private static final int MIN_THREADS = 1;  // unless < 32MB
 //    private static final int MAX_THREADS = 5;
     private static final int MAX_THREADS = (SystemVersion.isSlow() || SystemVersion.getCores() <= 4 ||
-                                            SystemVersion.getMaxMemory() < 512*1024*1024) ? 4 : Math.max(SystemVersion.getCores() - 2, 6);
+                                            SystemVersion.getMaxMemory() < 512*1024*1024) ? 4 : 6;
     private static final int MIN_QUEUE_SIZE = 32;  // unless < 32MB
     private static final int MAX_QUEUE_SIZE = 128;
     private final int _threadCount;
@@ -50,19 +50,12 @@ class MessageReceiver {
         int cores = SystemVersion.getCores();
         boolean isSlow = SystemVersion.isSlow();
         _threadCount = MAX_THREADS;
-        int qsize;
-        if (maxMemory >= 1024*1024*1024 && cores >= 4 && !isSlow) {
-            qsize = 384;
-        } else if (maxMemory >= 512*1024*1024 && cores >= 4 && !isSlow) {
-            qsize = 192;
-        } else {
-            qsize = (int) Math.max(MIN_QUEUE_SIZE, Math.min(MAX_QUEUE_SIZE, maxMemory / (2*1024*1024)));
-        }
+        int qsize = (int) Math.max(MIN_QUEUE_SIZE, Math.min(MAX_QUEUE_SIZE, maxMemory / (2*1024*1024)));
         _completeMessages = new CoDelBlockingQueue<InboundMessageState>(ctx, "UDP-MessageReceiver", qsize);
 
         // the runners run forever, no need to have a cache
         //_cache = ByteCache.getInstance(64, I2NPMessage.MAX_SIZE);
-        _context.statManager().createRateStat("udp.inboundExpired", "Number of inbound messages expired before reception", "Transport [UDP]", UDPTransport.RATES);
+        _context.statManager().createRateStat("udp.inboundExpired", "Number of inbound messages expired before receipt", "Transport [UDP]", UDPTransport.RATES);
         //_context.statManager().createRateStat("udp.inboundRemaining", "How many messages were remaining when a message is pulled off the complete queue?", "Transport [UDP]", UDPTransport.RATES);
         //_context.statManager().createRateStat("udp.inboundReady", "How many messages were ready when a message is added to the complete queue?", "Transport [UDP]", UDPTransport.RATES);
         //_context.statManager().createRateStat("udp.inboundReadTime", "Time to parse in the completed fragments into a message?", "Transport [UDP]", UDPTransport.RATES);

@@ -44,6 +44,7 @@ import net.i2p.router.transport.FIFOBandwidthLimiter;
 import net.i2p.router.transport.FIFOBandwidthLimiter.Request;
 import net.i2p.router.transport.ntcp.NTCP2Payload.Block;
 import net.i2p.router.util.PriBlockingQueue;
+import net.i2p.router.util.CoDelPriorityBlockingQueue;
 import net.i2p.util.ByteCache;
 import net.i2p.util.ConcurrentHashSet;
 import net.i2p.util.HexDump;
@@ -92,8 +93,8 @@ public class NTCPConnection implements Closeable {
     /**
      * pending unprepared OutNetMessage instances
      */
-    //private final CoDelPriorityBlockingQueue<OutNetMessage> _outbound;
-    private final PriBlockingQueue<OutNetMessage> _outbound;
+    private final CoDelPriorityBlockingQueue<OutNetMessage> _outbound;
+//    private final PriBlockingQueue<OutNetMessage> _outbound;
     /**
      *  current prepared OutNetMessages, or empty - synchronize to modify or read
      */
@@ -257,7 +258,8 @@ public class NTCPConnection implements Closeable {
         _bwInRequests = new ConcurrentHashSet<Request>(2);
         _bwOutRequests = new ConcurrentHashSet<Request>(8);
         //_outbound = new CoDelPriorityBlockingQueue(ctx, "NTCP-Connection", 32);
-        _outbound = new PriBlockingQueue<OutNetMessage>(ctx, "NTCP-Connection", 32);
+//        _outbound = new PriBlockingQueue<OutNetMessage>(ctx, "NTCP-Connection", 32);
+        _outbound = new CoDelPriorityBlockingQueue<OutNetMessage>(ctx, "NTCP-Connection", 32);
         _currentOutbound = new ArrayList<OutNetMessage>(1);
         _isInbound = isIn;
         _inboundListener = new InboundListener();
@@ -1195,7 +1197,7 @@ public class NTCPConnection implements Closeable {
 
 //    private static final int MAX_HANDLERS = 8;
     private static final int MAX_HANDLERS = (SystemVersion.isSlow() || SystemVersion.getCores() <= 4 ||
-                                             SystemVersion.getMaxMemory() < 512*1024*1024) ? 4 : Math.max(SystemVersion.getCores() - 2, 6);
+                                             SystemVersion.getMaxMemory() < 512*1024*1024) ? 4 : 6;
 
     /**
      *  FIXME static queue mixes handlers from different contexts in multirouter JVM

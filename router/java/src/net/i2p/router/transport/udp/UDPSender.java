@@ -37,10 +37,8 @@ class UDPSender {
     // When full, packets back up into the PacketPusher thread, pre-CoDel.
     private static final int MIN_QUEUE_SIZE = 128;
     private static final int MAX_QUEUE_SIZE = 768;
-//    private static final int CODEL_TARGET = 100;
-    private static final int CODEL_TARGET = 15;
-//    private static final int CODEL_INTERVAL = 500;
-    private static final int CODEL_INTERVAL = 300;
+    private static final int CODEL_TARGET = 100;
+    private static final int CODEL_INTERVAL = 500;
 
     public boolean fullStats() {
         return _context.getBooleanProperty("stat.full");
@@ -57,12 +55,6 @@ class UDPSender {
         int qsize = (int) Math.max(MIN_QUEUE_SIZE, Math.min(MAX_QUEUE_SIZE, maxMemory / (1024*1024)));
         int target = CODEL_TARGET;
         int interval = CODEL_INTERVAL;
-
-        if (maxMemory >= 1024*1024*1024 && cores >= 4 && !isSlow) {
-            qsize = 768;
-        } else if (maxMemory >= 768*1024*1024 && cores >= 4 && !isSlow) {
-            qsize = 512;
-        }
         _outboundQueue = new CoDelBlockingQueue<UDPPacket>(ctx, "UDP-Sender", qsize, target, interval);
         _socket = socket;
         _runner = new Runner();
@@ -119,8 +111,7 @@ class UDPSender {
         _outboundQueue.offer(poison);
         for (int i = 1; i <= 5 && !_outboundQueue.isEmpty(); i++) {
             try {
-//                Thread.sleep(i * 50);
-                Thread.sleep(i * 30);
+                Thread.sleep(i * 50);
             } catch (InterruptedException ie) {}
         }
         _outboundQueue.clear();
