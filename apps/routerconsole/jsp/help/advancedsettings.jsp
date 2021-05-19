@@ -137,6 +137,12 @@
 <tr><th>router.publishPeerRankings={true|false}</th></tr>
 <tr><td>This setting determines whether stats about our router are sporadically published to the NetDb. [Default is false]</td></tr>
 
+<tr><th>router.codelInterval={n} <span class="plus">I2P+</span></th></tr>
+<tr><td>This setting (in milliseconds) determines how long a packet may stay in the CoDel queue before it is dropped. Default is 1000ms. [Restart required]</td></tr>
+
+<tr><th>router.codelTarget={n} <span class="plus">I2P+</span></th></tr>
+<tr><td>This setting (in milliseconds) allows you to manually configure the queue delay target value for the CoDel queue management system. Default is 50ms. [Restart required]</td></tr>
+
 <tr><th>router.refreshRouterDelay={n} <span class="plus">I2P+</span></th></tr>
 <tr><td>This setting (in milliseconds) allows you to manually configure the delay between router refresh updates run by the Refresh Routers Job. By default the pause between refreshes is determined by the size of the NetDb, and introduces some randomness in the timing to mitigate traffic analysis. For values lower than 2000 milliseconds, increasing the value of <code>router.refreshTimeout</code> is recommended. Note that setting this value below 2000 milliseconds will increase your network traffic and may introduce job lag, and is not recommended for sustained use.</td></tr>
 
