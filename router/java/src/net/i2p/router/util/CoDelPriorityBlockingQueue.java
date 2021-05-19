@@ -55,7 +55,8 @@ public class CoDelPriorityBlockingQueue<E extends CDPQEntry> extends PriBlocking
      *  Maybe need to make configurable per-instance.
      */
 //    private static final int TARGET = 15;
-    private static final int TARGET = 25;
+//    private static final int TARGET = 25;
+    private static final int TARGET = 50;
     private final long _target;
 
     /**
@@ -67,7 +68,8 @@ public class CoDelPriorityBlockingQueue<E extends CDPQEntry> extends PriBlocking
      *  Maybe need to make configurable per-instance.
      */
 //    private static final int INTERVAL = 300;
-    private static final int INTERVAL = 500;
+//    private static final int INTERVAL = 500;
+    private static final int INTERVAL = 1000;
     private final long _interval;
     //private static final int MAXPACKET = 512;
 
