@@ -6594,8 +6594,8 @@ h3#udpcon {
 }
 
 #ntcpconnections td:nth-child(n+6) span, #ntcpconnections .tablefooter td:nth-child(n+6) span {
-  display: inline-block;
   min-width: 40px;
+  display: inline-block;
   text-align: right;
 }
 
@@ -6604,10 +6604,10 @@ h3#udpcon {
 }
 
 .right {
-  text-align: right;
   margin: 0 1px;
+  width: 40%;
   display: inline-block;
-  width: 40%
+  text-align: right;
 }
 
 .left {
@@ -6639,15 +6639,15 @@ h3#udpcon {
 }
 
 #peerdefs td {
-  line-height: 150%;
   padding: 5px;
+  line-height: 150%;
 }
 
 .peer_arrow {
-  display: inline-block;
-  width: 22px;
-  text-align: center;
   margin: 2px 1px;
+  width: 22px;
+  display: inline-block;
+  text-align: center;
 }
 
 .backlogged {
@@ -6659,37 +6659,37 @@ h3#udpcon {
 }
 
 #peerdefs ul {
+  margin: 0;
+  width: 100%;
   display: inline-block;
   columns: 500px auto;
   column-gap: 0;
-  margin: 0;
-  width: 100%;
 }
 
 #peerdefs li {
-  display: inline-block;
-  width: calc(100% - 24px);
   margin: 3px;
   padding: 4px 8px;
+  width: calc(100% - 24px);
+  display: inline-block;
+  border: 1px solid #bbd;
+  box-shadow: var(--highlight), inset 0 0 2px 1px #ddf, 0 0 1px #ddf;
   background: #e8e8ff;
   background: rgba(248,248,255,.6);
-  box-shadow: var(--highlight), inset 0 0 2px 1px #ddf, 0 0 1px #ddf;
-  border: 1px solid #bbd;
+  -webkit-column-break-inside: avoid;
   break-inside: avoid;
   page-break-inside: avoid;
-  -webkit-column-break-inside: avoid;
 }
 
 #peers td.direction i {
-  display: inline-block;
-  border-top: 1px solid #ddf;
-  border-radius: 2px;
-  width: 100%;
   margin: 3px -3px -4px;
+  width: 100%;
+  display: inline-block;
+  text-align: center;
   font-style: normal;
   font-size: 90%;
-  text-align: center;
   color: #412;
+  border-top: 1px solid #ddf;
+  border-radius: 2px;
 }
 
 /* end peers */
@@ -6745,14 +6745,13 @@ h3#udpcon {
   padding: 3px 4px;
   float: right;
   line-height: 100%;
-  font-family: var(--monospaced);
   text-transform: none;
+  font-family: var(--monospaced);
   color: #171;
-  box-shadow: 0 0 0 1px #bbd, var(--highlight);
-  border-radius: 1px;
-  background: #eef;
-  background: linear-gradient(to bottom, #fff, #e2e2ff);
   text-shadow: 0 0 1px #fff, 0 0 2px #ddf;
+  border-radius: 1px;
+  box-shadow: 0 0 0 1px #bbd, var(--highlight);
+  background: linear-gradient(to bottom, #fff, #e2e2ff);
 }
 
 #tunnels a:hover .b32, #tunnels a:focus .b32 {
@@ -6779,11 +6778,6 @@ h3#udpcon {
   text-align: center !important;
   vertical-align: middle;
 }
-
-/*#tunnels .tunnel_cap:empty {
-  opacity: 0 !important;
-  display: none;
-}*/
 
 #tunnels .tunnel_cap:empty::after {
   content: "?";
@@ -6835,22 +6829,21 @@ h3#udpcon {
 }
 
 @media screen and (min-width: 1500px) {
-#tunnels td:last-child .routerid {
-  margin-left: -20px;
-}
+  #tunnels td:last-child .routerid {
+    margin-left: -20px;
+  }
 
-#tunnels td:last-child .tunnel_peer:not(.tunnel_local) + .tunnel_cap {
-  margin-left: -8px !important;
-}
+  #tunnels td:last-child .tunnel_peer:not(.tunnel_local) + .tunnel_cap {
+    margin-left: -8px !important;
+  }
 }
 
 .tunnel_local {
-  font-size: 8pt;
-  background: rgba(187, 187, 255, .3);
-  background: #dfdfff;
-  border-radius: 2px;
   text-align: center;
   text-transform: lowercase;
+  font-size: 8pt;
+  border-radius: 2px;
+  background: #dfdfff;
 }
 
 .tunnel_peer:empty {
@@ -6871,14 +6864,14 @@ h3#udpcon {
 }
 
 #tunnel_defs td:first-child, #tunnel_defs td:last-child {
-  font-size: 0;
-  width: 0;
   padding: 0;
+  width: 0;
+  font-size: 0;
 }
 
 #tunnels .routerid, .tunnel_local, #profiles .routerid, .leaseset .routerid, #peers .routerid {
-  background: linear-gradient(to bottom, #fff, #eef);
   border: 1px solid #bbd;
+  background: linear-gradient(to bottom, #fff, #eef);
 }
 
 /* end tunnels */
@@ -6897,10 +6890,10 @@ p:empty { /* empty paragraph nuke */
 }
 
 .subheading {
-  text-align: left !important;
-  background: #fafaff;
   padding: 10px;
+  text-align: left !important;
   border: 1px solid var(--borderinner);
+  background: #fafaff;
 }
 
 .subheading b {
@@ -6930,13 +6923,13 @@ p:empty { /* empty paragraph nuke */
 /* netdb overview */
 
 #netdboverview th, #netdblookup th {
+  padding: 8px 5px 8px 32px;
+  word-spacing: .1em;
+  letter-spacing: .08em;
   text-transform: uppercase;
   font-size: 11pt !important;
-  letter-spacing: .08em;
-  word-spacing: .1em;
   background:  var(--globe) 8px center no-repeat, var(--h2) !important;
   background-size: 18px 18px, 100%, 100% !important;
-  padding: 8px 5px 8px 32px;
 }
 
 #netdblookup input[type=checkbox] {
@@ -6971,14 +6964,13 @@ p:empty { /* empty paragraph nuke */
 }
 
 #netdboverview table th {
-  text-transform: none;
-  letter-spacing: 0;
+  padding: 8px 5px;
   word-spacing: 0;
+  letter-spacing: 0;
+  text-transform: none;
+  font-size: 9pt;
   background: #f6f6ff;
   background: linear-gradient(to bottom, #fcfcff 50%, rgba(255, 255, 255, .6) 50%, rgba(240, 240, 255, .4)) !important;
-  background-size: 100%;
-  padding: 8px 5px;
-  font-size: 9pt;
 }
 
 #netdboverview table td {
@@ -6995,16 +6987,16 @@ p:empty { /* empty paragraph nuke */
 }
 
 @media screen and (min-width: 1500px) {
-#netdboverview table th:last-child::after, #netdboverview table td:last-child::after {
-  content: "";
-  display: inline-block;
-  width: 5px;
+  #netdboverview table th:last-child::after, #netdboverview table td:last-child::after {
+    width: 5px;
+    display: inline-block;
+    content: "";
 }
 
-#netdboverview table th {
-  padding-top: 9px !important;
-  padding-bottom: 9px !important;
-}
+  #netdboverview table th {
+    padding-top: 9px !important;
+    padding-bottom: 9px !important;
+  }
 }
 
 #netdbtiers a {
@@ -7045,25 +7037,25 @@ p:empty { /* empty paragraph nuke */
 }
 
 @media screen and (min-width: 1500px) {
-#netdbcountrylist img {
-  width: 24px;
-  height: auto;
-}
+  #netdbcountrylist img {
+    width: 24px;
+    height: auto;
+  }
 }
 
 @supports (scroll-behavior: auto) {
-#netdboverview table td {
-  padding: 5px 10px;
-  box-shadow: var(--highlight) !important;
-  background: rgba(240,240,255,.4);
-  background: linear-gradient(to bottom, #fff, #eef);
-}
+  #netdboverview table td {
+    padding: 5px 10px;
+    box-shadow: var(--highlight) !important;
+    background: rgba(240,240,255,.4);
+    background: linear-gradient(to bottom, #fff, #eef);
+  }
 
-#netdboverview #netdbversions td:first-child, #netdboverview #netdbtransports td:first-child, #netdboverview #netdbcountrylist td:first-child,
-#netdbtiers td:first-child {
-  white-space: nowrap;
-  border-right: 1px solid #e0e0eb !important;
-}
+  #netdboverview #netdbversions td:first-child, #netdboverview #netdbtransports td:first-child, #netdboverview #netdbcountrylist td:first-child,
+  #netdbtiers td:first-child {
+    white-space: nowrap;
+    border-right: 1px solid #e0e0eb !important;
+  }
 }
 
 #netdbtiers td:first-child {
@@ -7071,13 +7063,13 @@ p:empty { /* empty paragraph nuke */
 }
 
 @supports not (-moz-appearance: none) {
-#netdbtiers {
-  margin-left: -1px !important;
-}
+  #netdbtiers {
+    margin-left: -1px !important;
+  }
 
-#netdbtiers th:first-child {
-  border-left: 1px solid var(--borderinner);
-}
+  #netdbtiers th:first-child {
+    border-left: 1px solid var(--borderinner);
+  }
 }
 
 #netdboverview td:nth-child(2) td:last-child {
@@ -11858,9 +11850,9 @@ _:-ms-lang(x), .tunnels_client th:first-child::after {
 }
 
 @supports (text-justify: auto) {
-#events tr {
-  box-shadow: var(--highlight) !important;
-}
+  #events tr {
+    box-shadow: var(--highlight) !important;
+  }
 }
 
 #events td:first-child span {
@@ -11912,15 +11904,15 @@ _:-ms-lang(x), .tunnels_client th:first-child::after {
 }
 
 #peerprofiles.widescroll {
-  position: relative;
-  padding-top: 108px;
   margin-top: -12px;
+  padding-top: 108px;
+  position: relative;
 }
 
 @media screen and (min-width: 1500px) {
-#peerprofiles.widescroll {
-  padding-top: 113px;
-}
+  #peerprofiles.widescroll {
+    padding-top: 113px;
+  }
 }
 
 #peer_thresholds {
