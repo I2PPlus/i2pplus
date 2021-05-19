@@ -131,7 +131,7 @@ class PumpedTunnelGateway extends TunnelGateway {
             max = _isInbound ? 1 : 2;
 */
         if (backlogged)
-            max = _isInbound ? MAX_IB_MSGS_PER_PUMP / 2 : MAX_OB_MSGS_PER_PUMP / 2;
+            max = _isInbound ? MAX_IB_MSGS_PER_PUMP / 4 : MAX_OB_MSGS_PER_PUMP / 4;
         else
             max = _isInbound ? MAX_IB_MSGS_PER_PUMP : MAX_OB_MSGS_PER_PUMP;
         _prequeue.drainTo(queueBuf, max);

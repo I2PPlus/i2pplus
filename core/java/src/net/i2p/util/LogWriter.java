@@ -22,7 +22,7 @@ abstract class LogWriter implements Runnable {
     /** every 10 seconds? why? Just have the gui force a reread after a change?? */
     private final static long CONFIG_READ_INTERVAL = 50 * 1000;
 //    final static long FLUSH_INTERVAL = 29 * 1000;
-    final static long FLUSH_INTERVAL = 120 * 1000;
+    final static long FLUSH_INTERVAL = 15 * 1000; // ajax refresh interval
     private final static long MIN_FLUSH_INTERVAL = 2*1000;
     private final static long MAX_FLUSH_INTERVAL = 5*60*1000;
     // true for newest first on /logs page; false for oldest first
