@@ -7451,16 +7451,19 @@ b.netdb_transport {
   background: linear-gradient(to bottom, #fff, #eef);
 }
 
-.configpeer img {
+#tunnels .configpeer img, #profiles .configpeer img, #peers .configpeer img {
   opacity: 0;
 }
 
-.configpeer::after {
+#tunnels .configpeer::after, #profiles .configpeer::after {
   margin: 0 0 0 -16px;
   height: 16px;
   width: 16px;
   display: inline-block;
+  border: 1px solid #bbc;
+  border-radius: 2px;
   background: var(--edit) center center no-repeat;
+  background-size: 12px;
   content: "";
 }
 
