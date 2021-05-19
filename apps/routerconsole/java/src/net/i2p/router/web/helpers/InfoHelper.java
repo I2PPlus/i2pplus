@@ -142,6 +142,22 @@ public class InfoHelper extends HelperBase {
             return "80";
     }
 
+    public String codelInterval() {
+        String interval = _context.getProperty("router.codelInterval");
+        if (interval != null)
+            return interval;
+        else
+            return "1000";
+    }
+
+    public String codelTarget() {
+        String target = _context.getProperty("router.codelTarget");
+        if (target != null)
+            return target;
+        else
+            return "50";
+    }
+
     private void renderStatusHTML(Writer out) throws IOException {
         StringBuilder buf = new StringBuilder(4*1024);
         Hash h = _context.routerHash();
@@ -183,6 +199,8 @@ public class InfoHelper extends HelperBase {
                        _t("Shared") + ":</b> " + bwShare() + "% (" + shareBW + "KB/s) &ensp;<a href=\"/config\">" +
                        _t("Configure") + "</a></td></tr>\n");
         }
+        buf.append("<tr><td><b>CoDel:</b></td><td><b>" + _t("Target") + ":</b> " + codelTarget() + "ms &ensp;<b>" +
+                   _t("Interval") + ":</b> " + codelInterval() + "ms</td></tr>\n");
         if (firstInstalled() != null && firstVersion() != null && lastUpdated() != null) {
             buf.append("<tr><td><b>" + _t("Installed") + ":</b></td><td>" + installDate + " (" + firstVersion() + ")" +
                        " &ensp;<span class=\"nowrap\"><b>" + _t("Location") + ":</b> " + appDir.toString() + "</span>" +
