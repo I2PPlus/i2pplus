@@ -3651,7 +3651,7 @@ h2, h2.welcome {
 }
 
 .welcome h2 {
-  background: url(/themes/console/images/eepsite.png) right 6px center no-repeat, var(--th) !important;
+  background: url(images/favicon.svg) right 6px center no-repeat, var(--th) !important;
   background-size: 24px, 100% !important;
 }
 
@@ -6954,7 +6954,7 @@ table#jardump {
 }
 
 .subheading.routerfiles {
-  background: url(/themes/console/images/eepsite.png) right 5px center no-repeat, linear-gradient(to right, #000, #000010 40%) !important;
+  background: url(images/favicon.svg) right 5px center no-repeat, linear-gradient(to right, #000, #000010 40%) !important;
   background-size: 16px auto, 100% !important;
   background-blend-mode: luminosity, normal;
 }
@@ -7503,7 +7503,7 @@ h4.app, h4.app2 {
   word-spacing: .1em;
   letter-spacing: 2px;
   border: 1px solid #26235c;
-  background: url(/themes/console/images/eepsite.png) 10px center no-repeat, var(--title) !important;
+  background: url(images/favicon.svg) 10px center no-repeat, var(--title) !important;
   background-size: 16px, 4px 100%, 100% !important;
   background-blend-mode: luminosity;
 }
@@ -12610,7 +12610,7 @@ html, body {
   letter-spacing: .12em;
   font-size: 10.5pt;
   border: 1px solid #26235c;
-  background: url(/themes/console/images/eepsite.png) 5px center no-repeat, var(--title) !important;
+  background: url(images/favicon.svg) 5px center no-repeat, var(--title) !important;
   background-size: 18px, 4px 100% !important;
 }
 
