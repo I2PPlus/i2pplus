@@ -402,7 +402,7 @@ public class OutNetMessage implements CDPQEntry {
             synchronized (this) {
                 long lastWhen = -1;
                 if (_timestampOrder.size() > 1)
-                    buf.append("\nTime stamps: ");
+                    buf.append("\nTimestamps: ");
                 else
                     buf.append("\n* Time: ");
                 for (int i = 0; i < _timestampOrder.size(); i++) {

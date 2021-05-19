@@ -138,9 +138,9 @@ a:active, a:visited:active {
   color: #f30 !important;
 }
 
-.routersummary a, .routersummary img[src$="i2plogo.png"], .routersummary h3, .confignav, *::before, *::after, div.app, .themechoice, .langselect, .langbox,
+#sidebar a, #sidebar img[src$="i2plogo.png"], #sidebar h3, .confignav, *::before, *::after, div.app, .themechoice, .langselect, .langbox,
 .newsAuthor, #netdbcountrylist img, .viewfullentry, .sybil_routerinfo th img, .graphspanel, #themeoptions, #graphopts, #newsDisplay,
-#version a, #sb_internals, #sb_advanced, #sb_services, #sb_help, .sb_netstatus, .tunnelbuildstatus, .routersummary form, h1, h2, h3, h4, button, img {
+#version a, #sb_internals, #sb_advanced, #sb_services, #sb_help, .sb_netstatus, .tunnelbuildstatus, #sidebar form, h1, h2, h3, h4, button, img {
   user-select: none;
 }
 
@@ -198,7 +198,7 @@ pre {
   border: 0;
 }
 
-.routersummary {
+#sidebar {
   margin-bottom: 2px;
   padding: 8px;
   width: 192px;
@@ -212,14 +212,14 @@ pre {
   background: #fafaff;
 }
 
-.routersummary div[style="height: 36px;"] {
+#sidebar div[style="height: 36px;"] {
   margin: 0;
   height: 35px !important;
   padding: 0 0 1px;
   text-align: center;
 }
 
-.routersummary img[src$="i2plogo.png"] {
+#sidebar img[src$="i2plogo.png"] {
   opacity: .7;
   transition: ease filter .3s, ease opacity .3s;
   margin: 0 !important;
@@ -229,46 +229,46 @@ pre {
   image-rendering: -webkit-optimize-contrast;
 }
 
-.routersummary img[src$="i2plogo.png"]:hover {
+#sidebar img[src$="i2plogo.png"]:hover {
   opacity: 1;
   transition: ease filter .3s, ease opacity .3s;
   filter: drop-shadow(0 0 1px #f60);
 }
 
-#error500 .routersummary img[src$="i2plogo.png"] {
+#error500 #sidebar img[src$="i2plogo.png"] {
   margin-bottom: -3px !important;
 }
 
-.routersummary a, .routersummary a:visited {
+#sidebar a, #sidebar a:visited {
   color: var(--a) !important;
 }
 
-.routersummary a:hover, .routersummary a:focus {
+#sidebar a:hover, #sidebar a:focus {
   color: #f60 !important;
 }
 
-.routersummary a:active {
+#sidebar a:active {
   color: #d30 !important;
 }
 
-.routersummary a[href="/"]:focus img, .routersummary a[href="/console"]:focus img {
+#sidebar a[href="/"]:focus img, #sidebar a[href="/console"]:focus img {
   filter: drop-shadow(0 0 1px #f60);
 }
 
-.routersummary a:active img[src$="i2plogo.png"] {
+#sidebar a:active img[src$="i2plogo.png"] {
   filter: drop-shadow(0 0 2px #d30);
 }
 
-.routersummary a[href="/"], .routersummary a[href="/console"] {
+#sidebar a[href="/"], #sidebar a[href="/console"] {
   outline: none !important;
 }
 
-.routersummary form {
+#sidebar form {
   margin: -2px -7px -3px;
   padding: 0 0 3px;
 }
 
-.routersummary form button.download {
+#sidebar form button.download {
   margin: -3px 0;
   padding: 5px 7px 5px 22px !important;
   display: inline-block;
@@ -277,16 +277,16 @@ pre {
   background-size: 15px 15px, 100% !important;
 }
 
-.routersummary form button.download:hover, .routersummary form button.download:focus {
+#sidebar form button.download:hover, #sidebar form button.download:focus {
   background: var(--download_hover) 6px center no-repeat, var(--button_hover);
   background-size: 15px 15px, 100% !important;
 }
 
-.routersummary input[type=text] {
+#sidebar input[type=text] {
   text-align: right !important;
 }
 
-.routersummary hr {
+#sidebar hr {
   color: #adadeb;
   background: #adadeb;
   height: 1px;
@@ -295,7 +295,7 @@ pre {
   box-shadow: inset 0 1px 1px 1px #fff;
 }
 
-.routersummary hr.b {
+#sidebar hr.b {
   margin-bottom: 5px;
   height: 0 !important;
   color: #fff;
@@ -303,7 +303,7 @@ pre {
   background: transparent;
 }
 
-.routersummary h3 {
+#sidebar h3 {
   margin: -9px -7px -2px;
   padding: 2px 0;
   letter-spacing: .04em;
@@ -319,19 +319,19 @@ pre {
   filter: none;
 }
 
-.routersummary h3:hover {
+#sidebar h3:hover {
   background: linear-gradient(to bottom, #fff 50%, #ffe8bf 50%, #efd9b3 100%) !important;
   background: #fff linear-gradient(to bottom, #fff 50%, rgba(255, 232, 191, .6) 50%, rgba(239, 217, 179, .4) 100%) !important;
 }
 
-.routersummary h3:active {
+#sidebar h3:active {
   box-shadow: var(--highlight), inset 3px 3px 3px rgba(0,0,0,.4);
   background: #fff linear-gradient(to bottom, #fff3df, #fff9ef) !important;
   background: #f60 !important;
   transition: ease box-shadow .05s;
 }
 
-.routersummary h3 a, .routersummary h3 a:visited {
+#sidebar h3 a, #sidebar h3 a:visited {
   padding: 3px 0 2px;
   display: inline-block;
   width: 100%;
@@ -343,18 +343,18 @@ pre {
   color: var(--a);
 }
 
-.routersummary h3:hover a, .routersummary h3 a:hover {
+#sidebar h3:hover a, #sidebar h3 a:hover {
   color: #f60 !important;
   text-shadow: 0 0 1px #fff;
 }
 
-.routersummary h3:active a, .routersummary h3 a:active {
+#sidebar h3:active a, #sidebar h3 a:active {
   color: #cf9233 !important;
   color: #ffecdf !important;
   text-shadow: 0 1px 1px #5f2d0c;
 }
 
-.routersummary h4 {
+#sidebar h4 {
   margin: -7px;
   padding: 6px 2px !important;
   line-height: 105%;
@@ -370,7 +370,7 @@ pre {
   background: linear-gradient(to right, #ddf, #eef 10%, #fff 50%, #eef 90%, #ddf);
 }
 
-.routersummary h4::after {
+#sidebar h4::after {
   padding-top: 8px;
   padding-bottom: 8px;
   content: "";
@@ -381,12 +381,12 @@ pre {
 }
 
 @supports not (-moz-appearance: none) {
-.routersummary h4 {
+#sidebar h4 {
   margin-bottom: -8px !important;
 }
 }
 
-.routersummary h4 a {
+#sidebar h4 a {
   vertical-align: baseline;
 }
 
@@ -407,11 +407,11 @@ h4.sb_info + hr + form {
   padding-top: 5px !important;
 }
 
-.routersummary ul {
+#sidebar ul {
   text-align: left !important;
 }
 
-.routersummary table {
+#sidebar table {
   margin: -8px -5px -5px;
   width: 202px !important;
   text-align: center !important;
@@ -881,7 +881,7 @@ to {
 }
 }
 
-.sb_notice, .routersummary #xhr hr + b {
+.sb_notice, #sidebar #xhr hr + b {
   margin: -5px -5px -6px;
   padding: 5px 6px;
   line-height: 120%;
@@ -1048,17 +1048,17 @@ to {
 
 /* end webapp navigation */
 
-.routersummary tr, .routersummary tr:nth-child(n+0) {
+#sidebar tr, #sidebar tr:nth-child(n+0) {
   background-image: none !important;
   background-color: transparent !important;
   border: 0 !important;
 }
 
-.routersummary a:hover {
+#sidebar a:hover {
   color: #f60;
 }
 
-.routersummary td {
+#sidebar td {
   padding: 0 2px;
   background-image: none !important;
   border: 0 !important;
@@ -1084,44 +1084,44 @@ to {
   vertical-align: baseline;
 }
 
-.routersummary .firewalled {
+#sidebar .firewalled {
   color: #676;
   background: repeating-linear-gradient(135deg, rgba(220,255,220,.3) 2px, rgba(255,255,220,.3) 3px, rgba(220,255,220,.3) 5px) !important;
 }
 
-.routersummary .error, .tunnelBuildStatus.rejecting {
+#sidebar .error, .tunnelBuildStatus.rejecting {
   color: #922;
   box-shadow: inset 0 0 0 1px rgba(200,0,0,.5), 0 0 1px rgba(96,96,96,.5);
   background: rgba(255,110,110,.1);
   background: repeating-linear-gradient(135deg, rgba(255,100,100,.05) 2px, rgba(255,200,200,.2) 3px, rgba(255,100,100,.05) 5px);
 }
 
-.routersummary .warn, .routersummary .clockskew {
+#sidebar .warn, #sidebar .clockskew {
   color: #773;
   background: rgba(255,255,200,.25);
   box-shadow: inset 0 0 0 1px #ff0, 0 0 1px rgba(96,96,96,.5);
 }
 
-.routersummary .testing, .tunnelBuildStatus.starting {
+#sidebar .testing, .tunnelBuildStatus.starting {
   color: #554;
   background: rgba(255,220,110,.1);
 }
 
-.routersummary .hidden, .routersummary .vmcomm, .tunnelBuildStatus.hidden {
+#sidebar .hidden, #sidebar .vmcomm, .tunnelBuildStatus.hidden {
   color: #777;
   background: rgba(220,220,220,.4);
 }
 
-.routersummary .vmcomm {
+#sidebar .vmcomm {
   border: 1px solid #97a2ce;
 }
 
-.routersummary .running, .tunnelBuildStatus.accepting {
+#sidebar .running, .tunnelBuildStatus.accepting {
   color: #383;
   background: rgba(220,255,220,.15);
 }
 
-.routersummary .running, .tunnelBuildStatus.active {
+#sidebar .running, .tunnelBuildStatus.active {
   background: rgba(220,255,220,.15);
   box-shadow: inset 0 0 0 1px rgba(0,255,0,.5), 0 0 1px rgba(96,96,96,.5);
 }
@@ -1719,7 +1719,7 @@ to {
   word-break: break-all;
 }
 
-#error500 .routersummary hr ~ a {
+#error500 #sidebar hr ~ a {
   padding: 5px 0 !important;
   display: inline-block;
   font-size: 9.5pt;
@@ -5361,12 +5361,12 @@ button.download.control:hover, button.download.control:focus {
   margin-top: 8px;
 }
 
-.routersummary button {
+#sidebar button {
   margin: 0 1px -3px;
   min-width: 87px;
 }
 
-.routersummary .reload, .routersummary .stop {
+#sidebar .reload, #sidebar .stop {
   text-indent: -99999px;
   background-size: 16px, 100% !important;
   min-width: 93px;
@@ -5374,64 +5374,64 @@ button.download.control:hover, button.download.control:focus {
 }
 
 @media screen and (min-width: 1500px) {
-.routersummary .reload, .routersummary .stop {
+#sidebar .reload, #sidebar .stop {
   padding-top: 6px !important;
   padding-bottom: 6px !important;
 }
 }
 
-.routersummary .reload {
+#sidebar .reload {
   background: var(--restart) center center no-repeat, var(--button) !important;
   background-size: 16px, 100% !important;
 }
 
-.routersummary .reload:hover, .routersummary .reload:focus {
+#sidebar .reload:hover, #sidebar .reload:focus {
   background: var(--shutdown_hover) 37% center no-repeat, var(--restart_hover) 63% center no-repeat, var(--button_hover) !important;
   background-size: 16px, 16px, 100% !important;
   border: 1px solid #f60;
 }
 
-.routersummary .reload:active, .routersummary .stop:active, .routersummary .download:active {
+#sidebar .reload:active, #sidebar .stop:active, #sidebar .download:active {
   box-shadow: var(--highlight), inset 2px 2px 2px #555;
 }
 
-.routersummary .reload[value="Reseed"] {
+#sidebar .reload[value="Reseed"] {
   text-indent: 0;
   text-align: left;
   min-width: 0;
   background: var(--download) center left 6px no-repeat, var(--button) !important;
 }
 
-.routersummary .reload[value="Reseed"]:hover, .routersummary .reload[value="Reseed"]:focus {
+#sidebar .reload[value="Reseed"]:hover, #sidebar .reload[value="Reseed"]:focus {
   background: var(--download_hover) center left 6px no-repeat, var(--button_hover) !important;
   padding: 5px 7px 5px 22px !important;
 }
 
-.routersummary .stop {
+#sidebar .stop {
   background: var(--shutdown) center center no-repeat, var(--button);
   background-size: 16px, 100% !important;
 }
 
-.routersummary .stop:hover, .routersummary .stop:focus {
+#sidebar .stop:hover, #sidebar .stop:focus {
   border: 1px solid #f60;
   background: var(--shutdown_hover) center center no-repeat, var(--button_hover);
   background-size: 16px, 100% !important;
 }
 
-.routersummary .download {
+#sidebar .download {
   background: var(--download) 6px center no-repeat, var(--button);
   background-size: 14px, 100% !important;
   padding: 5px 7px 5px 22px !important;
 }
 
-.routersummary .cancel {
+#sidebar .cancel {
   margin-top: 10px;
 }
 
 /* Show text on context specific buttons (eg deferred shutdown) */
 
-.routersummary .reload[value="restartImmediate"], .routersummary .stop[value="shutdownImmediate"],
-.routersummary .reload[value="Reseed"], .routersummary .reload[value="Reseed"]:hover, .routersummary .reload[value="Reseed"]:focus {
+#sidebar .reload[value="restartImmediate"], #sidebar .stop[value="shutdownImmediate"],
+#sidebar .reload[value="Reseed"], #sidebar .reload[value="Reseed"]:hover, #sidebar .reload[value="Reseed"]:focus {
   padding: 5px 7px 5px 22px !important;
   min-width: 0 !important;
   text-indent: 0;
@@ -5440,41 +5440,41 @@ button.download.control:hover, button.download.control:focus {
   background-size: 14px, 100% !important;
 }
 
-.routersummary .cancel {
+#sidebar .cancel {
   text-transform: capitalize;
 }
 
-.routersummary .reload[value="restartImmediate"] {
+#sidebar .reload[value="restartImmediate"] {
   background: var(--restart) center left 6px no-repeat, var(--button) !important;
   background-size: 12px, 100% !important;
 }
 
-.routersummary .reload[value="restartImmediate"]:hover, .routersummary .reload[value="restartImmediate"]:focus, .routersummary .reload[value="restartImmediate"]:active {
+#sidebar .reload[value="restartImmediate"]:hover, #sidebar .reload[value="restartImmediate"]:focus, #sidebar .reload[value="restartImmediate"]:active {
   background: var(--restart_hover) center left 6px no-repeat, var(--button_hover) !important;
   background-size: 12px, 100% !important;
 }
 
-.routersummary .stop[value="shutdownImmediate"] {
+#sidebar .stop[value="shutdownImmediate"] {
   background: var(--shutdown) center left 6px no-repeat, var(--button) !important;
   background-size: 12px, 100% !important;
 }
 
-.routersummary .stop[value="shutdownImmediate"]:hover, .routersummary .stop[value="shutdownImmediate"]:focus, .routersummary .stop[value="shutdownImmediate"]:active {
+#sidebar .stop[value="shutdownImmediate"]:hover, #sidebar .stop[value="shutdownImmediate"]:focus, #sidebar .stop[value="shutdownImmediate"]:active {
   background: var(--shutdown_hover) center left 6px no-repeat, var(--button_hover) !important;
   background-size: 12px, 100% !important;
 }
 
-.routersummary .reload[value="Reseed"] {
+#sidebar .reload[value="Reseed"] {
   background: url(/themes/console/images/buttons/download.png) center left 6px no-repeat, var(--button) !important;
   background-size: 14px, 100% !important;
 }
 
-.routersummary .reload[value="Reseed"]:hover, .routersummary .reload[value="Reseed"]:focus, .routersummary .reload[value="Reseed"]:active {
+#sidebar .reload[value="Reseed"]:hover, #sidebar .reload[value="Reseed"]:focus, #sidebar .reload[value="Reseed"]:active {
   background: var(--download) center left 6px no-repeat, var(--button_hover);
   background-size: 14px, 100% !important;
 }
 
-.routersummary .download:hover, .routersummary .download:focus, .routersummary .download:active {
+#sidebar .download:hover, #sidebar .download:focus, #sidebar .download:active {
   background: var(--download_hover) 6px center no-repeat, var(--button_hover);
   background-size: 14px, 100% !important;
   padding: 5px 7px 5px 22px !important;
@@ -6594,8 +6594,8 @@ h3#udpcon {
 }
 
 #ntcpconnections td:nth-child(n+6) span, #ntcpconnections .tablefooter td:nth-child(n+6) span {
-  display: inline-block;
   min-width: 40px;
+  display: inline-block;
   text-align: right;
 }
 
@@ -6604,10 +6604,10 @@ h3#udpcon {
 }
 
 .right {
-  text-align: right;
   margin: 0 1px;
+  width: 40%;
   display: inline-block;
-  width: 40%
+  text-align: right;
 }
 
 .left {
@@ -6639,15 +6639,15 @@ h3#udpcon {
 }
 
 #peerdefs td {
-  line-height: 150%;
   padding: 5px;
+  line-height: 150%;
 }
 
 .peer_arrow {
-  display: inline-block;
-  width: 22px;
-  text-align: center;
   margin: 2px 1px;
+  width: 22px;
+  display: inline-block;
+  text-align: center;
 }
 
 .backlogged {
@@ -6659,37 +6659,37 @@ h3#udpcon {
 }
 
 #peerdefs ul {
+  margin: 0;
+  width: 100%;
   display: inline-block;
   columns: 500px auto;
   column-gap: 0;
-  margin: 0;
-  width: 100%;
 }
 
 #peerdefs li {
-  display: inline-block;
-  width: calc(100% - 24px);
   margin: 3px;
   padding: 4px 8px;
+  width: calc(100% - 24px);
+  display: inline-block;
+  border: 1px solid #bbd;
+  box-shadow: var(--highlight), inset 0 0 2px 1px #ddf, 0 0 1px #ddf;
   background: #e8e8ff;
   background: rgba(248,248,255,.6);
-  box-shadow: var(--highlight), inset 0 0 2px 1px #ddf, 0 0 1px #ddf;
-  border: 1px solid #bbd;
+  -webkit-column-break-inside: avoid;
   break-inside: avoid;
   page-break-inside: avoid;
-  -webkit-column-break-inside: avoid;
 }
 
 #peers td.direction i {
-  display: inline-block;
-  border-top: 1px solid #ddf;
-  border-radius: 2px;
-  width: 100%;
   margin: 3px -3px -4px;
+  width: 100%;
+  display: inline-block;
+  text-align: center;
   font-style: normal;
   font-size: 90%;
-  text-align: center;
   color: #412;
+  border-top: 1px solid #ddf;
+  border-radius: 2px;
 }
 
 /* end peers */
@@ -6745,14 +6745,13 @@ h3#udpcon {
   padding: 3px 4px;
   float: right;
   line-height: 100%;
-  font-family: var(--monospaced);
   text-transform: none;
+  font-family: var(--monospaced);
   color: #171;
-  box-shadow: 0 0 0 1px #bbd, var(--highlight);
-  border-radius: 1px;
-  background: #eef;
-  background: linear-gradient(to bottom, #fff, #e2e2ff);
   text-shadow: 0 0 1px #fff, 0 0 2px #ddf;
+  border-radius: 1px;
+  box-shadow: 0 0 0 1px #bbd, var(--highlight);
+  background: linear-gradient(to bottom, #fff, #e2e2ff);
 }
 
 #tunnels a:hover .b32, #tunnels a:focus .b32 {
@@ -6779,11 +6778,6 @@ h3#udpcon {
   text-align: center !important;
   vertical-align: middle;
 }
-
-/*#tunnels .tunnel_cap:empty {
-  opacity: 0 !important;
-  display: none;
-}*/
 
 #tunnels .tunnel_cap:empty::after {
   content: "?";
@@ -6835,22 +6829,21 @@ h3#udpcon {
 }
 
 @media screen and (min-width: 1500px) {
-#tunnels td:last-child .routerid {
-  margin-left: -20px;
-}
+  #tunnels td:last-child .routerid {
+    margin-left: -20px;
+  }
 
-#tunnels td:last-child .tunnel_peer:not(.tunnel_local) + .tunnel_cap {
-  margin-left: -8px !important;
-}
+  #tunnels td:last-child .tunnel_peer:not(.tunnel_local) + .tunnel_cap {
+    margin-left: -8px !important;
+  }
 }
 
 .tunnel_local {
-  font-size: 8pt;
-  background: rgba(187, 187, 255, .3);
-  background: #dfdfff;
-  border-radius: 2px;
   text-align: center;
   text-transform: lowercase;
+  font-size: 8pt;
+  border-radius: 2px;
+  background: #dfdfff;
 }
 
 .tunnel_peer:empty {
@@ -6871,14 +6864,14 @@ h3#udpcon {
 }
 
 #tunnel_defs td:first-child, #tunnel_defs td:last-child {
-  font-size: 0;
-  width: 0;
   padding: 0;
+  width: 0;
+  font-size: 0;
 }
 
 #tunnels .routerid, .tunnel_local, #profiles .routerid, .leaseset .routerid, #peers .routerid {
-  background: linear-gradient(to bottom, #fff, #eef);
   border: 1px solid #bbd;
+  background: linear-gradient(to bottom, #fff, #eef);
 }
 
 /* end tunnels */
@@ -6897,10 +6890,10 @@ p:empty { /* empty paragraph nuke */
 }
 
 .subheading {
-  text-align: left !important;
-  background: #fafaff;
   padding: 10px;
+  text-align: left !important;
   border: 1px solid var(--borderinner);
+  background: #fafaff;
 }
 
 .subheading b {
@@ -6930,13 +6923,13 @@ p:empty { /* empty paragraph nuke */
 /* netdb overview */
 
 #netdboverview th, #netdblookup th {
+  padding: 8px 5px 8px 32px;
+  word-spacing: .1em;
+  letter-spacing: .08em;
   text-transform: uppercase;
   font-size: 11pt !important;
-  letter-spacing: .08em;
-  word-spacing: .1em;
   background:  var(--globe) 8px center no-repeat, var(--h2) !important;
   background-size: 18px 18px, 100%, 100% !important;
-  padding: 8px 5px 8px 32px;
 }
 
 #netdblookup input[type=checkbox] {
@@ -6971,14 +6964,13 @@ p:empty { /* empty paragraph nuke */
 }
 
 #netdboverview table th {
-  text-transform: none;
-  letter-spacing: 0;
+  padding: 8px 5px;
   word-spacing: 0;
+  letter-spacing: 0;
+  text-transform: none;
+  font-size: 9pt;
   background: #f6f6ff;
   background: linear-gradient(to bottom, #fcfcff 50%, rgba(255, 255, 255, .6) 50%, rgba(240, 240, 255, .4)) !important;
-  background-size: 100%;
-  padding: 8px 5px;
-  font-size: 9pt;
 }
 
 #netdboverview table td {
@@ -6995,16 +6987,16 @@ p:empty { /* empty paragraph nuke */
 }
 
 @media screen and (min-width: 1500px) {
-#netdboverview table th:last-child::after, #netdboverview table td:last-child::after {
-  content: "";
-  display: inline-block;
-  width: 5px;
+  #netdboverview table th:last-child::after, #netdboverview table td:last-child::after {
+    width: 5px;
+    display: inline-block;
+    content: "";
 }
 
-#netdboverview table th {
-  padding-top: 9px !important;
-  padding-bottom: 9px !important;
-}
+  #netdboverview table th {
+    padding-top: 9px !important;
+    padding-bottom: 9px !important;
+  }
 }
 
 #netdbtiers a {
@@ -7045,25 +7037,25 @@ p:empty { /* empty paragraph nuke */
 }
 
 @media screen and (min-width: 1500px) {
-#netdbcountrylist img {
-  width: 24px;
-  height: auto;
-}
+  #netdbcountrylist img {
+    width: 24px;
+    height: auto;
+  }
 }
 
 @supports (scroll-behavior: auto) {
-#netdboverview table td {
-  padding: 5px 10px;
-  box-shadow: var(--highlight) !important;
-  background: rgba(240,240,255,.4);
-  background: linear-gradient(to bottom, #fff, #eef);
-}
+  #netdboverview table td {
+    padding: 5px 10px;
+    box-shadow: var(--highlight) !important;
+    background: rgba(240,240,255,.4);
+    background: linear-gradient(to bottom, #fff, #eef);
+  }
 
-#netdboverview #netdbversions td:first-child, #netdboverview #netdbtransports td:first-child, #netdboverview #netdbcountrylist td:first-child,
-#netdbtiers td:first-child {
-  white-space: nowrap;
-  border-right: 1px solid #e0e0eb !important;
-}
+  #netdboverview #netdbversions td:first-child, #netdboverview #netdbtransports td:first-child, #netdboverview #netdbcountrylist td:first-child,
+  #netdbtiers td:first-child {
+    white-space: nowrap;
+    border-right: 1px solid #e0e0eb !important;
+  }
 }
 
 #netdbtiers td:first-child {
@@ -7071,13 +7063,13 @@ p:empty { /* empty paragraph nuke */
 }
 
 @supports not (-moz-appearance: none) {
-#netdbtiers {
-  margin-left: -1px !important;
-}
+  #netdbtiers {
+    margin-left: -1px !important;
+  }
 
-#netdbtiers th:first-child {
-  border-left: 1px solid var(--borderinner);
-}
+  #netdbtiers th:first-child {
+    border-left: 1px solid var(--borderinner);
+  }
 }
 
 #netdboverview td:nth-child(2) td:last-child {
@@ -7445,6 +7437,7 @@ b.netdb_transport {
   display: inline-block;
   width: 14px;
   height: 14px;
+  vertical-align: middle;
   line-height: 0;
   border: 1px solid #bbc;
   border-radius: 2px;
@@ -7456,15 +7449,26 @@ b.netdb_transport {
 }
 
 #tunnels .configpeer::after, #profiles .configpeer::after {
-  margin: 0 0 0 -16px;
-  height: 16px;
-  width: 16px;
+  margin: 0 0 0 -20px;
+  height: 18px;
+  width: 18px;
   display: inline-block;
+  vertical-align: middle;
   border: 1px solid #bbc;
   border-radius: 2px;
   background: var(--edit) center center no-repeat;
   background-size: 12px;
   content: "";
+}
+
+#profiles .configpeer::after {
+  margin-top: 2px;
+}
+
+@media screen and (max-width: 1499px) {
+  #profiles .configpeer::after {
+    margin-top: 3px;
+  }
 }
 
 .configpeer:hover::after, .configpeer:focus::after {
@@ -11448,17 +11452,17 @@ body {
 }
 
 @media screen and (min-width: 1500px) {
-body, .main, .main td, .news p, #news p, .newscontent p, .tab, .tab2, .main li b, .joblog li, .themelabel, .ui_lang, .routersummary button.download,
+body, .main, .main td, .news p, #news p, .newscontent p, .tab, .tab2, .main li b, .joblog li, .themelabel, .ui_lang, #sidebar button.download,
 #peerdefs, #profile_defs, #thresholds, #configinfo, .infohelp, .infowarn, button, input, select, #configinfo th, code, th, .statusnotes,
-#help code, #help tt, #console code, .percentBarText, .routersummary .reload[value="restartImmediate"], .routersummary .cancel {
+#help code, #help tt, #console code, .percentBarText, #sidebar .reload[value="restartImmediate"], #sidebar .cancel {
   font-size: 10pt !important;
 }
 
-.routersummary .reload[value="restartImmediate"] {
+#sidebar .reload[value="restartImmediate"] {
   margin-top: 2px;
 }
 
-.routersummary .cancel[value="cancelShutdown"] {
+#sidebar .cancel[value="cancelShutdown"] {
   margin-top: 12px;
 }
 
@@ -11479,7 +11483,7 @@ body, .main, .main td, .news p, #news p, .newscontent p, .tab, .tab2, .main li b
   column-gap: 50px;
 }
 
-.routersummary td, .routersummary a, .routersummary button, .routersummary h4, .routersummary h4 a, .news, pre, #help code, #help tt,
+#sidebar td, #sidebar a, #sidebar button, #sidebar h4, #sidebar h4 a, .news, pre, #help code, #help tt,
 #jardump tt, #jardump td, div.news, #logs li, tt, .cells tt, #profilelist tt, .leaseset tt, .links code, #console code,
 tt a, .cells tt, #profilelist tt, .cells tt a, #profilelist tt a, .leaseset td tt, .main[id^="config_"] .encDests th {
   font-size: 9pt !important;
@@ -11544,21 +11548,21 @@ tt {
   margin-left: 252px !important;
 }
 
-.routersummary {
+#sidebar {
   width: 228px !important;
   margin-bottom: 5px !important;
 }
 
-.routersummary div[style="height: 36px;"] {
+#sidebar div[style="height: 36px;"] {
   height: 39px !important;
   margin-top: 4px;
 }
 
-.routersummary table[id^="sb_"] {
+#sidebar table[id^="sb_"] {
   width: 238px !important;
 }
 
-.routersummary form {
+#sidebar form {
   margin-bottom: -2px;
 }
 
@@ -11570,7 +11574,7 @@ tt {
   width: 240px !important;
 }
 
-.routersummary h3::after {
+#sidebar h3::after {
   min-height: 18px;
   display: inline-block;
   vertical-align: middle;
@@ -11594,7 +11598,7 @@ h3#pconfig, h3#webappconfiguration, h3#i2pclientconfig, p#clientconf.infohelp, #
   margin-bottom: -15px;
 }
 
-.routersummary .reload, .routersummary .stop {
+#sidebar .reload, #sidebar .stop {
   margin: 0 3px -5px;
   min-width: 110px;
 }
@@ -11616,19 +11620,19 @@ h1 {
   font-size: 19pt;
 }
 
-.routersummary h3 a {
+#sidebar h3 a {
   padding: 4px 0 2px;
   font-size: 11pt !important;
 }
 
-.routersummary img[src$="i2plogo.png"] {
+#sidebar img[src$="i2plogo.png"] {
   margin-top: -5px !important;
   margin-left: -1px !important;
   width: 230px !important;
   transform: none !important;
 }
 
-#error500 .routersummary img[src$="i2plogo.png"] {
+#error500 #sidebar img[src$="i2plogo.png"] {
   margin-top: -1px !important;
 }
 
@@ -11846,9 +11850,9 @@ _:-ms-lang(x), .tunnels_client th:first-child::after {
 }
 
 @supports (text-justify: auto) {
-#events tr {
-  box-shadow: var(--highlight) !important;
-}
+  #events tr {
+    box-shadow: var(--highlight) !important;
+  }
 }
 
 #events td:first-child span {
@@ -11900,15 +11904,15 @@ _:-ms-lang(x), .tunnels_client th:first-child::after {
 }
 
 #peerprofiles.widescroll {
-  position: relative;
-  padding-top: 108px;
   margin-top: -12px;
+  padding-top: 108px;
+  position: relative;
 }
 
 @media screen and (min-width: 1500px) {
-#peerprofiles.widescroll {
-  padding-top: 113px;
-}
+  #peerprofiles.widescroll {
+    padding-top: 113px;
+  }
 }
 
 #peer_thresholds {
@@ -12316,20 +12320,20 @@ div.app a, div.app a:visited, #sitemap a:link, #sitemap a:visited, .warning a {
 
 /* setup wizard */
 
-#wizardpage .routersummary div[style="height: 36px"] {
+#wizardpage #sidebar div[style="height: 36px"] {
   margin-top: 4px;
   margin-bottom: 13px !important;
 }
 
-#wizardpage .routersummary div {
+#wizardpage #sidebar div {
   margin-bottom: 5px;
 }
 
-#wizardpage .routersummary div + hr, #wizardpage .routersummary h3 + hr {
+#wizardpage #sidebar div + hr, #wizardpage #sidebar h3 + hr {
   display: none !important;
 }
 
-#wizardpage .routersummary h3 {
+#wizardpage #sidebar h3 {
   margin-top: 10px;
   padding: 5px 3px;
 }
@@ -13394,11 +13398,11 @@ div.app:not(:hover) a:not(:hover):not(:focus):not(:active):visited,
   color: #4b689b !important;
 }
 
-.routersummary table {
+#sidebar table {
   position: relative;
 }
 
-.routersummary table:not(#sb_localtunnels):not(#sb_services)::before {
+#sidebar table:not(#sb_localtunnels):not(#sb_services)::before {
   width: 0;
   height: 1px;
   position: absolute;
