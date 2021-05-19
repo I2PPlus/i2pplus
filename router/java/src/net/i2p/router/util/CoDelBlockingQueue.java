@@ -51,6 +51,9 @@ public class CoDelBlockingQueue<E extends CDQEntry> extends LinkedBlockingQueue<
 
     private static final long[] CODEL_RATES = { 60*1000, 10*60*1000l, 60*60*1000l };
 
+    public static final String PROP_CODEL_TARGET = "router.codelTarget";
+    public static final String PROP_CODEL_INTERVAL = "router.codelInterval";
+
     /**
      *  Quote:
      *  Below a target of 5 ms, utilization suffers for some conditions and traffic loads;
@@ -61,7 +64,7 @@ public class CoDelBlockingQueue<E extends CDQEntry> extends LinkedBlockingQueue<
      */
 //    private static final int TARGET = 10;
 //    private static final int TARGET = 25;
-    private static final int TARGET = 50;
+    private static final int DEFAULT_CODEL_TARGET = 50;
     private final long _target;
 
     /**
@@ -71,7 +74,7 @@ public class CoDelBlockingQueue<E extends CDQEntry> extends LinkedBlockingQueue<
      */
 //    private static final int INTERVAL = 200;
 //    private static final int INTERVAL = 500;
-    private static final int INTERVAL = 1000;
+    private static final int DEFAULT_CODEL_INTERVAL = 1000;
     private final long _interval;
     //private static final int MAXPACKET = 512;
 
@@ -85,8 +88,14 @@ public class CoDelBlockingQueue<E extends CDQEntry> extends LinkedBlockingQueue<
      *
      *  @param name for stats
      */
+
+//    public CoDelBlockingQueue(I2PAppContext ctx, String name, int capacity) {
+//        this(ctx, name, capacity, TARGET, INTERVAL);
+//    }
+
     public CoDelBlockingQueue(I2PAppContext ctx, String name, int capacity) {
-        this(ctx, name, capacity, TARGET, INTERVAL);
+        this(ctx, name, capacity, ctx.getProperty(PROP_CODEL_TARGET, DEFAULT_CODEL_TARGET),
+                                  ctx.getProperty(PROP_CODEL_INTERVAL, DEFAULT_CODEL_INTERVAL));
     }
 
     /**
